@@ -1,7 +1,7 @@
 import SwiftUI
 import Charts
 
-/// Full detail view for unified personal records (strength + cardio).
+/// Full detail view for unified personal records (strength + cardio) with period-based chart.
 struct PersonalRecordsDetailView: View {
     let records: [ActivityPersonalRecord]
     let notice: String?
@@ -9,7 +9,6 @@ struct PersonalRecordsDetailView: View {
     let rewardHistory: [WorkoutRewardEvent]
 
     @State private var viewModel = PersonalRecordsDetailViewModel()
-    @State private var selectedKind: ActivityPersonalRecord.Kind?
     @Environment(\.appTheme) private var theme
 
     private var columns: [GridItem] {
@@ -29,29 +28,6 @@ struct PersonalRecordsDetailView: View {
         return hasher.finalize()
     }
 
-    private var availableKinds: [ActivityPersonalRecord.Kind] {
-        let kinds = Set(viewModel.personalRecords.map(\.kind))
-        return kinds.sorted { $0.sortOrder < $1.sortOrder }
-    }
-
-    private var selectedKindValue: ActivityPersonalRecord.Kind? {
-        if let selectedKind, availableKinds.contains(selectedKind) {
-            return selectedKind
-        }
-        return availableKinds.first
-    }
-
-    private var filteredRecords: [ActivityPersonalRecord] {
-        guard let selectedKind = selectedKindValue else { return [] }
-        return viewModel.personalRecords
-            .filter { $0.kind == selectedKind }
-            .sorted { $0.date > $1.date }
-    }
-
-    private var chartRecords: [ActivityPersonalRecord] {
-        filteredRecords.sorted { $0.date < $1.date }
-    }
-
     private var recentRewardHistory: [WorkoutRewardEvent] {
         Array(rewardHistory.prefix(30))
     }
@@ -65,14 +41,32 @@ struct PersonalRecordsDetailView: View {
                     if let notice, !notice.isEmpty {
                         noticeBanner(notice)
                     }
-                    if availableKinds.count > 1 {
+
+                    // Metric picker
+                    if viewModel.availableKinds.count > 1 {
                         metricPicker
                     }
+
+                    // Current best hero
+                    if let best = viewModel.currentBest {
+                        currentBestCard(best)
+                    }
+
+                    // Period picker
+                    periodPicker
+
+                    // Timeline chart
+                    timelineChart
+
+                    // Reward summary
                     if rewardSummary.totalPoints > 0 || rewardSummary.badgeCount > 0 {
                         rewardSummaryCard
                     }
-                    timelineChart
+
+                    // All-time records grid
                     prGrid
+
+                    // Achievement history
                     achievementHistorySection
                 }
             }
@@ -83,8 +77,8 @@ struct PersonalRecordsDetailView: View {
         .englishNavigationTitle("Personal Records")
         .task(id: recordsUpdateKey) {
             viewModel.load(records: records)
-            if selectedKindValue == nil {
-                selectedKind = availableKinds.first
+            if viewModel.selectedKind == nil {
+                viewModel.selectedKind = viewModel.availableKinds.first
             }
         }
     }
@@ -110,10 +104,10 @@ struct PersonalRecordsDetailView: View {
                 .font(.caption)
                 .foregroundStyle(DS.Color.textSecondary)
             Picker("Metric", selection: Binding(
-                get: { selectedKindValue ?? availableKinds.first },
-                set: { selectedKind = $0 }
+                get: { viewModel.resolvedKind ?? viewModel.availableKinds.first },
+                set: { viewModel.selectedKind = $0 }
             )) {
-                ForEach(availableKinds, id: \.self) { kind in
+                ForEach(viewModel.availableKinds, id: \.self) { kind in
                     Text(kind.displayName).tag(Optional(kind))
                 }
             }
@@ -122,66 +116,179 @@ struct PersonalRecordsDetailView: View {
         }
     }
 
+    private func currentBestCard(_ best: ActivityPersonalRecord) -> some View {
+        VStack(spacing: DS.Spacing.sm) {
+            HStack(spacing: DS.Spacing.xs) {
+                Image(systemName: best.kind.iconName)
+                    .foregroundStyle(best.kind.tintColor)
+                Text(String(localized: "Current Best"))
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(DS.Color.textSecondary)
+                Spacer(minLength: 0)
+                if best.isRecent {
+                    Text("NEW")
+                        .font(.system(size: 9, weight: .bold))
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, 5)
+                        .padding(.vertical, 2)
+                        .background(DS.Color.activity, in: Capsule())
+                }
+            }
+
+            HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xxs) {
+                Text(primaryValueText(for: best))
+                    .font(.system(size: 36, weight: .bold, design: .rounded))
+                    .foregroundStyle(theme.heroTextGradient)
+                    .minimumScaleFactor(0.6)
+                    .lineLimit(1)
+
+                if let unit = unitText(for: best) {
+                    Text(unit)
+                        .font(.subheadline)
+                        .foregroundStyle(DS.Color.textSecondary)
+                }
+
+                Spacer(minLength: 0)
+            }
+
+            HStack(spacing: DS.Spacing.xs) {
+                Text(best.localizedTitle)
+                    .font(.caption)
+                    .foregroundStyle(DS.Color.textSecondary)
+                if let subtitle = best.subtitle {
+                    Text("·")
+                        .font(.caption)
+                        .foregroundStyle(.tertiary)
+                    Text(subtitle)
+                        .font(.caption)
+                        .foregroundStyle(.tertiary)
+                }
+                Spacer(minLength: 0)
+                Text(best.date, style: .date)
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
+            }
+        }
+        .padding(DS.Spacing.md)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+        .accessibilityIdentifier("activity-personal-records-current-best")
+    }
+
+    private var periodPicker: some View {
+        Picker("Period", selection: $viewModel.selectedPeriod) {
+            ForEach(PersonalRecordsDetailViewModel.availablePeriods, id: \.self) { period in
+                Text(period.displayName).tag(period)
+            }
+        }
+        .pickerStyle(.segmented)
+        .accessibilityIdentifier("activity-personal-records-period-picker")
+    }
+
     private var timelineChart: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
             Text("PR Timeline")
                 .font(.subheadline.weight(.semibold))
                 .foregroundStyle(DS.Color.textSecondary)
 
-            Chart(chartRecords) { record in
-                PointMark(
-                    x: .value("Date", record.date),
-                    y: .value("Value", record.value)
-                )
-                .foregroundStyle(record.kind.tintColor)
-                .symbolSize(record.isRecent ? 80 : 40)
-                .annotation(position: .top, spacing: 4) {
-                    if record.isRecent {
-                        Text(record.localizedTitle)
-                            .font(.system(size: 8))
-                            .foregroundStyle(DS.Color.textSecondary)
-                            .lineLimit(1)
-                    }
-                }
-            }
-            .chartXAxis {
-                AxisMarks(values: .stride(by: .month)) { _ in
-                    AxisGridLine()
-                        .foregroundStyle(theme.accentColor.opacity(0.30))
-                    AxisValueLabel(format: .dateTime.month(.abbreviated))
-                        .foregroundStyle(theme.sandColor)
-                }
-            }
-            .chartYAxis {
-                AxisMarks { value in
-                    AxisGridLine()
-                        .foregroundStyle(theme.accentColor.opacity(0.30))
-                    AxisValueLabel {
-                        if let v = value.as(Double.self), let selectedKind = selectedKindValue {
-                            Text(chartAxisValue(v, for: selectedKind))
-                                .foregroundStyle(theme.sandColor)
+            if viewModel.chartData.isEmpty {
+                Text(String(localized: "No records in this period."))
+                    .font(.caption)
+                    .foregroundStyle(.tertiary)
+                    .frame(maxWidth: .infinity, minHeight: 220)
+            } else {
+                Chart(viewModel.chartData) { record in
+                    LineMark(
+                        x: .value("Date", record.date),
+                        y: .value("Value", record.value)
+                    )
+                    .foregroundStyle(record.kind.tintColor.opacity(0.5))
+                    .interpolationMethod(.catmullRom)
+
+                    PointMark(
+                        x: .value("Date", record.date),
+                        y: .value("Value", record.value)
+                    )
+                    .foregroundStyle(record.kind.tintColor)
+                    .symbolSize(record.isRecent ? 80 : 40)
+                    .annotation(position: .top, spacing: 4) {
+                        if record.isRecent {
+                            Text(record.localizedTitle)
+                                .font(.system(size: 8))
+                                .foregroundStyle(DS.Color.textSecondary)
+                                .lineLimit(1)
                         }
                     }
                 }
+                .chartXAxis {
+                    AxisMarks(values: .stride(by: chartXStride)) { _ in
+                        AxisGridLine()
+                            .foregroundStyle(theme.accentColor.opacity(0.30))
+                        AxisValueLabel(format: chartXFormat)
+                            .foregroundStyle(theme.sandColor)
+                    }
+                }
+                .chartYAxis {
+                    AxisMarks { value in
+                        AxisGridLine()
+                            .foregroundStyle(theme.accentColor.opacity(0.30))
+                        AxisValueLabel {
+                            if let v = value.as(Double.self), let kind = viewModel.resolvedKind {
+                                Text(chartAxisValue(v, for: kind))
+                                    .foregroundStyle(theme.sandColor)
+                            }
+                        }
+                    }
+                }
+                .frame(height: 220)
+                .clipped()
             }
-            .frame(height: 220)
         }
         .padding(DS.Spacing.md)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+        .id(viewModel.selectedPeriod)
+        .transition(.opacity)
         .accessibilityIdentifier("activity-personal-records-timeline-chart")
+    }
+
+    private var chartXStride: Calendar.Component {
+        switch viewModel.selectedPeriod {
+        case .day, .week: .day
+        case .month: .weekOfMonth
+        case .sixMonths: .month
+        case .year: .month
+        }
+    }
+
+    private var chartXFormat: Date.FormatStyle {
+        switch viewModel.selectedPeriod {
+        case .day, .week: .dateTime.day().month(.abbreviated)
+        case .month: .dateTime.day().month(.abbreviated)
+        case .sixMonths, .year: .dateTime.month(.abbreviated)
+        }
     }
 
     private var prGrid: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            if let selectedKind = selectedKindValue {
-                Text(selectedKind.displayName)
+            if let kind = viewModel.resolvedKind {
+                Text(
+                    String.localizedStringWithFormat(
+                        String(localized: "All %@ Records"),
+                        kind.displayName
+                    )
+                )
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(DS.Color.textSecondary)
             }
 
-            LazyVGrid(columns: columns, spacing: DS.Spacing.sm) {
-                ForEach(filteredRecords) { record in
-                    prCard(record)
+            if viewModel.allTimeRecords.isEmpty {
+                Text(String(localized: "No records yet."))
+                    .font(.caption)
+                    .foregroundStyle(.tertiary)
+            } else {
+                LazyVGrid(columns: columns, spacing: DS.Spacing.sm) {
+                    ForEach(viewModel.allTimeRecords) { record in
+                        prCard(record)
+                    }
                 }
             }
         }
@@ -316,6 +423,13 @@ struct PersonalRecordsDetailView: View {
                         .padding(.vertical, 2)
                         .background(DS.Color.activity, in: Capsule())
                 }
+            }
+
+            if let subtitle = record.subtitle {
+                Text(subtitle)
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
+                    .lineLimit(1)
             }
 
             HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xxs) {
