@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 90;
+	objectVersion = 77;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -918,6 +918,7 @@
 		CB61544B3F61242CC35F28DD /* WeeklyStatsDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29C0F2E62E831B9404324B88 /* WeeklyStatsDetailViewModel.swift */; };
 		CB714D6B48C893D83337164A /* BodyHeatmapSceneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 161C65AA6E053FFB9F3A3490 /* BodyHeatmapSceneView.swift */; };
 		CB7AF4CC068C93AD82C95135 /* MuscleGroup+View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF2611CED068D025B7ACA1B /* MuscleGroup+View.swift */; };
+		CB804E8319190CAF0D1A6AE7 /* WatchPlankTimerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F677006AE88ADC5D2818314 /* WatchPlankTimerTests.swift */; };
 		CBB0FCCCAA41C300B4117F82 /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95B20E679BF7D5A033E6F70A /* HealthKitManager.swift */; };
 		CC15BB6715F66698E3C4B2C2 /* DailySample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B8B2B8595BF9DB1E235A06 /* DailySample.swift */; };
 		CC81A1CFBF7EC13EB5532AF0 /* WhatsNewStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A285DE9A2F5124B8CA9DCB /* WhatsNewStore.swift */; };
@@ -1318,6 +1319,7 @@
 		0E380EC98B19E3059C141F1B /* WellnessViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WellnessViewModelTests.swift; sourceTree = "<group>"; };
 		0EED85BB2C38F5F373581B10 /* VisionSurfaceAccessibilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionSurfaceAccessibilityTests.swift; sourceTree = "<group>"; };
 		0F24C96476FF43C7EB0B8F20 /* AllDataViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllDataViewModelTests.swift; sourceTree = "<group>"; };
+		0F677006AE88ADC5D2818314 /* WatchPlankTimerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchPlankTimerTests.swift; sourceTree = "<group>"; };
 		0FA7833EB71B7220F7C732F8 /* CompoundWorkoutMode+View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CompoundWorkoutMode+View.swift"; sourceTree = "<group>"; };
 		106923875360920910260689 /* NotificationThrottleStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationThrottleStoreTests.swift; sourceTree = "<group>"; };
 		1089C74FBD124014ECD8FD70 /* HourlyScoreSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyScoreSnapshot.swift; sourceTree = "<group>"; };
@@ -2830,6 +2832,7 @@
 			isa = PBXGroup;
 			children = (
 				BC76D21EF92A15D38D958FAE /* WatchHomeSmokeTests.swift */,
+				0F677006AE88ADC5D2818314 /* WatchPlankTimerTests.swift */,
 				47F4DF4E39EAF86F61B046F1 /* WatchWorkoutFlowSmokeTests.swift */,
 				E23B66C197A08B499FD68D46 /* WatchWorkoutStartSmokeTests.swift */,
 			);
@@ -5534,6 +5537,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0CA5A7B4FCB4BB5F112439DE /* WatchHomeSmokeTests.swift in Sources */,
+				CB804E8319190CAF0D1A6AE7 /* WatchPlankTimerTests.swift in Sources */,
 				674A234182454D89875BBA61 /* WatchUITestBaseCase.swift in Sources */,
 				EBDEF18E638AB9E0DBF27ABD /* WatchWorkoutFlowSmokeTests.swift in Sources */,
 				86E9A025793961C1DA116BE4 /* WatchWorkoutStartSmokeTests.swift in Sources */,
