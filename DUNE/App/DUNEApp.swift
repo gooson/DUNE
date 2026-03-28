@@ -648,6 +648,7 @@ struct DUNEApp: App {
         WatchSessionManager.shared.registerModelContainer(modelContainer)
         WatchSessionManager.shared.syncWorkoutTemplatesToWatch(using: modelContainer)
         WatchSessionManager.shared.syncExerciseLibraryToWatch(using: modelContainer)
+        wireWatchWorkoutReceiver(modelContainer: modelContainer)
         WatchSessionManager.shared.activate()
         appRuntime.observerManager?.startObserving()
         appRuntime.scoreRefreshService.startListening(to: appRuntime.refreshCoordinator)
@@ -702,6 +703,52 @@ struct DUNEApp: App {
     }
 
     @MainActor
+    /// Wire Watch workout completion → ExerciseRecord creation on iPhone.
+    private func wireWatchWorkoutReceiver(modelContainer: ModelContainer) {
+        let library = ExerciseLibraryService.shared
+        WatchSessionManager.shared.onWorkoutReceived = { update in
+            let context = ModelContext(modelContainer)
+
+            let definition = library.exercise(byID: update.exerciseID)
+            let duration = (update.endTime ?? Date()).timeIntervalSince(update.startTime)
+
+            let record = ExerciseRecord(
+                date: update.startTime,
+                exerciseType: update.exerciseName,
+                duration: max(0, duration),
+                exerciseDefinitionID: update.exerciseID,
+                primaryMuscles: definition?.primaryMuscles ?? [],
+                secondaryMuscles: definition?.secondaryMuscles ?? [],
+                equipment: definition?.equipment,
+                rpe: update.rpe
+            )
+
+            var workoutSets: [WorkoutSet] = []
+            for setData in update.completedSets where setData.isCompleted {
+                let set = WorkoutSet(
+                    setNumber: setData.setNumber,
+                    weight: setData.weight,
+                    reps: setData.reps,
+                    duration: setData.duration,
+                    isCompleted: true,
+                    restDuration: setData.restDuration,
+                    rpe: setData.rpe
+                )
+                set.exerciseRecord = record
+                workoutSets.append(set)
+            }
+            record.sets = workoutSets
+
+            context.insert(record)
+            do {
+                try context.save()
+                AppLogger.data.debug("[WatchSync] Saved ExerciseRecord from Watch: \(update.exerciseName) with \(workoutSets.count) sets")
+            } catch {
+                AppLogger.data.error("[WatchSync] Failed to save Watch workout: \(error.localizedDescription)")
+            }
+        }
+    }
+
     private func scheduleWorkoutTitleBackfill() {
         let container = appRuntime.modelContainer
         Task(priority: .utility) {
