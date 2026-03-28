@@ -102,8 +102,8 @@ class UITestBaseCase: XCTestCase {
             strdup(appBundleID),
             nil
         ]
-        defer { args.compactMap { $0 }.forEach { free($0) } }
-        posix_spawn(&pid, "/usr/bin/xcrun", nil, nil, &args, nil)
+        defer { for arg in args where arg != nil { free(arg) } }
+        guard posix_spawn(&pid, "/usr/bin/xcrun", nil, nil, &args, nil) == 0 else { return }
         var status: Int32 = 0
         waitpid(pid, &status, 0)
     }
@@ -143,11 +143,8 @@ class UITestBaseCase: XCTestCase {
         addSystemPermissionMonitor()
 
         // Ensure the previous AUT instance is fully terminated before launching.
-        // If graceful terminate fails, force-kill via simctl to prevent cascade.
-        if !terminateIfRunning(app) {
-            Self.forceTerminateAppProcess()
-            _ = app.wait(for: .notRunning, timeout: 5)
-        }
+        // terminateIfRunning already includes force-kill fallback via simctl.
+        _ = terminateIfRunning(app)
         app.launch()
     }
 

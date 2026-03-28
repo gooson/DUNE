@@ -42,8 +42,8 @@ doesn't suppress terminate failures, so one stuck test poisons the entire test c
 
 ### Step 1: Add `forceTerminateAppProcess()` helper
 
-Add a private method that uses `Process` (Foundation) to run `xcrun simctl terminate booted <bundleID>`.
-This works because UI test runner executes on the host Mac, not in the simulator.
+Add a private method that uses `posix_spawn` to run `xcrun simctl terminate booted <bundleID>`.
+Foundation `Process` is unavailable in the iOS Simulator SDK, so `posix_spawn` is used instead.
 
 Bundle ID: `com.raftel.dailve` (matches `test-ui.sh` `BUNDLE_ID` variable).
 
@@ -73,7 +73,7 @@ Bundle ID: `com.raftel.dailve` (matches `test-ui.sh` `BUNDLE_ID` variable).
 
 ## Risks / Edge Cases
 
-- `Process` in XCUITest: XCUITest runs on the Mac host, so Foundation `Process` is available
+- `posix_spawn` in XCUITest: Foundation `Process` is unavailable in iOS Simulator SDK; `posix_spawn` works because it's a POSIX API bridged through Darwin
 - `xcrun simctl terminate booted` may fail if no simulator is booted — harmless, already guarded
 - Race between `terminate()` and `forceTerminateAppProcess()`: force-kill on an already-dead process is a no-op
 - `continueAfterFailure = true` in tearDown: only applies to the terminate call, restored immediately after
