@@ -3,11 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 90;
+	objectVersion = 77;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		003B0D733D96345054460AEB /* ExerciseRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CAA6A5B259A3FF1E4817D0E /* ExerciseRecord.swift */; };
+		005B9D5EE4212A02F78E2A9B /* ExerciseVariantMigration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D0C1BB1AB242A49913B7B8 /* ExerciseVariantMigration.swift */; };
 		00985232CD9E55CCD0C8998F /* CheckInjuryConflictUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02CBCE3C28E07A44605422B2 /* CheckInjuryConflictUseCase.swift */; };
 		00B20FD93DCD444876D3C6A6 /* WhatsNewStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C778AC3000DB2C08AA0084 /* WhatsNewStoreTests.swift */; };
 		01004FB8564810012CF2CE77 /* SleepExerciseCorrelation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1338E40DB4E7F0858B7A825F /* SleepExerciseCorrelation.swift */; };
@@ -970,6 +971,7 @@
 		D479C5AD96679D9999DB0062 /* CalculateSleepDeficitUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746915A82277B53BEC222BA2 /* CalculateSleepDeficitUseCase.swift */; };
 		D4F1EC938E5EA81C2C10EF48 /* DashboardSkeletonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432C23B035B5FCD208BDB301 /* DashboardSkeletonView.swift */; };
 		D518526ACB8D92902ED45374 /* ExerciseRecord+SetRPE.swift in Sources */ = {isa = PBXBuildFile; fileRef = 197E78E968E34D951AA6E419 /* ExerciseRecord+SetRPE.swift */; };
+		D528BF30D5E9DCC1181C0ADF /* ExerciseVariantMigration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D0C1BB1AB242A49913B7B8 /* ExerciseVariantMigration.swift */; };
 		D52E7D39424F548020B696DE /* CoachingMessageEnhancing.swift in Sources */ = {isa = PBXBuildFile; fileRef = B495F6AD03D8A874FD60D067 /* CoachingMessageEnhancing.swift */; };
 		D55B1EA16D66732719852B22 /* VisionFetchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6DB127ADF4DC168FD93EE2 /* VisionFetchResult.swift */; };
 		D5C1B5EF98E3627D9F0C5385 /* LifeRegressionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48EAEECCE6E1BA497534C92 /* LifeRegressionTests.swift */; };
@@ -1282,6 +1284,7 @@
 		0378F909F336C2DD2A455C66 /* VisionLifeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionLifeView.swift; sourceTree = "<group>"; };
 		039001E3DAE5F0A6DC801031 /* CardioInactivityPolicyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardioInactivityPolicyTests.swift; sourceTree = "<group>"; };
 		03CA299AE0A18366E54F0BFD /* TrainingVolumeSummaryCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingVolumeSummaryCard.swift; sourceTree = "<group>"; };
+		03D0C1BB1AB242A49913B7B8 /* ExerciseVariantMigration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseVariantMigration.swift; sourceTree = "<group>"; };
 		03E6B2B03FFC16AB4E83B91C /* BriefingEntryCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BriefingEntryCard.swift; sourceTree = "<group>"; };
 		043B80C4423F9E540C8577C4 /* AllDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllDataView.swift; sourceTree = "<group>"; };
 		04426AA09C83C5581442899A /* TrainingVolumeViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingVolumeViewModelTests.swift; sourceTree = "<group>"; };
@@ -3185,6 +3188,7 @@
 				6BFD37A72CB464A172C558C1 /* AppRefreshCoordinatorImpl.swift */,
 				5E3E9254B5E2E930385D12BF /* BedtimeWatchReminderScheduler.swift */,
 				40F00F3C32A6A8627722069F /* CloudMirroredSharedHealthDataService.swift */,
+				03D0C1BB1AB242A49913B7B8 /* ExerciseVariantMigration.swift */,
 				8CA4EBB9EF2B7FD183191D3D /* FormVoiceCoach.swift */,
 				E6A5766D67361910ECD63AB1 /* FoundationModelReportFormatter.swift */,
 				5A9E2E7297663FB3B6F1F488 /* HealthDataQAService.swift */,
@@ -4568,6 +4572,7 @@
 				A8ABC83ED757E4539F6D3C1D /* ExerciseTypeDetailViewModel.swift in Sources */,
 				C8D7DAF39B71242756CB91B1 /* ExerciseTypeSummaryRow.swift in Sources */,
 				E1679B5035565147FB561EB8 /* ExerciseTypeVolume+View.swift in Sources */,
+				005B9D5EE4212A02F78E2A9B /* ExerciseVariantMigration.swift in Sources */,
 				017DEE7F2BD575A637F922DD /* ExerciseView.swift in Sources */,
 				7178120B0538BE41CB25A785 /* ExerciseViewModel.swift in Sources */,
 				4EAB81E303563EEE850634FB /* FatigueAlgorithmSheet.swift in Sources */,
@@ -5043,6 +5048,7 @@
 				A1A31220D0B8B96F2D8943ED /* ExerciseRecord+WeeklyVolume.swift in Sources */,
 				AC8B3CE27D838CC28CC3711F /* ExerciseRecord.swift in Sources */,
 				DE82CCC97DD0EA7C681D616A /* ExerciseRecordSnapshot.swift in Sources */,
+				D528BF30D5E9DCC1181C0ADF /* ExerciseVariantMigration.swift in Sources */,
 				298A9C03B1702506266B9AE1 /* FatigueCalculationService.swift in Sources */,
 				A4CF5D2802D393C8366B9938 /* FatigueLevel+DisplayName.swift in Sources */,
 				16EAD101264E6874BFC6A884 /* FatigueLevel.swift in Sources */,

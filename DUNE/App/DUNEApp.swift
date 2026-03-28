@@ -629,6 +629,10 @@ struct DUNEApp: App {
 
         hasStartedRuntimeServices = true
         let modelContainer = appRuntime.modelContainer
+
+        // Migrate legacy variant exercise IDs to canonical base IDs (idempotent)
+        ExerciseVariantMigration.migrateIfNeeded(in: modelContainer.mainContext)
+
         WatchSessionManager.shared.registerModelContainer(modelContainer)
         WatchSessionManager.shared.syncWorkoutTemplatesToWatch(using: modelContainer)
         WatchSessionManager.shared.syncExerciseLibraryToWatch(using: modelContainer)
