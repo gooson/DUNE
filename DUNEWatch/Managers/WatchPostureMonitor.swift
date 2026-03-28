@@ -338,7 +338,7 @@ final class WatchPostureMonitor {
         let elapsedMinutes = Int(Date().timeIntervalSince(startDate) / 60)
 
         // Update counter and sync when threshold is crossed (foreground only).
-        // Actual notification delivery is handled by OS via scheduleSedentaryNotification().
+        // Actual notification delivery is handled by OS via scheduleStretchNotifications().
         if elapsedMinutes >= sedentaryThresholdMinutes {
             let periods = elapsedMinutes / sedentaryThresholdMinutes
             let expectedCount = stretchReminderCount + periods
