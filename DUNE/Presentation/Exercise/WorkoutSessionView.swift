@@ -443,16 +443,42 @@ struct WorkoutSessionView: View {
 
     private func durationIntensityInput(set: Binding<EditableSet>) -> some View {
         VStack(spacing: DS.Spacing.lg) {
-            stepperField(
-                label: "MINUTES",
-                value: set.duration,
-                placeholder: "0",
-                keyboardType: .numberPad,
-                stepButtons: [
-                    ("-1", { adjustIntValue(set.duration, by: -1, min: 0, max: 480) }),
-                    ("+1", { adjustIntValue(set.duration, by: 1, min: 0, max: 480) })
-                ]
-            )
+            VStack(spacing: DS.Spacing.sm) {
+                Text(set.wrappedValue.isCompleted
+                     ? String(localized: "COMPLETED")
+                     : String(localized: "ELAPSED"))
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.secondary)
+                    .tracking(1.2)
+
+                if set.wrappedValue.isCompleted {
+                    // Show recorded duration for completed sets (stored as seconds)
+                    let totalSecs = Int(set.wrappedValue.duration) ?? 0
+                    Text(String(format: "%d:%02d", totalSecs / 60, totalSecs % 60))
+                        .font(.system(size: 48, weight: .bold, design: .rounded))
+                        .monospacedDigit()
+                        .foregroundStyle(DS.Color.primaryText)
+                } else if let startDate = viewModel.setTimerStarts[set.wrappedValue.id] {
+                    // Live count-up timer — capture startDate outside TimelineView
+                    // to avoid observation dependency on the entire dictionary.
+                    TimelineView(.periodic(from: .now, by: 1)) { context in
+                        let elapsed = Int(context.date.timeIntervalSince(startDate))
+                        let mins = elapsed / 60
+                        let secs = elapsed % 60
+                        Text(String(format: "%d:%02d", mins, secs))
+                            .font(.system(size: 48, weight: .bold, design: .rounded))
+                            .monospacedDigit()
+                            .foregroundStyle(DS.Color.primaryText)
+                            .contentTransition(.numericText())
+                    }
+                } else {
+                    Text("0:00")
+                        .font(.system(size: 48, weight: .bold, design: .rounded))
+                        .monospacedDigit()
+                        .foregroundStyle(DS.Color.primaryText)
+                }
+            }
+            .frame(maxWidth: .infinity)
 
             Divider()
                 .padding(.horizontal, DS.Spacing.xl)
@@ -805,6 +831,18 @@ struct WorkoutSessionView: View {
     private func completeCurrentSet() {
         isInputFieldFocused = false
         guard viewModel.sets.indices.contains(currentSetIndex) else { return }
+
+        // For durationIntensity: stop timer and record elapsed seconds before validation
+        if viewModel.exercise.inputType == .durationIntensity {
+            if let elapsed = viewModel.stopTimer(for: viewModel.sets[currentSetIndex]) {
+                let secs = max(1, Int(elapsed.rounded()))
+                viewModel.sets[currentSetIndex].duration = "\(secs)"
+            } else if viewModel.sets[currentSetIndex].duration.isEmpty {
+                viewModel.validationError = String(localized: "Hold the plank for at least 1 second")
+                return
+            }
+        }
+
         guard viewModel.validateSetForCompletion(at: currentSetIndex) else { return }
 
         // Mark set as completed

@@ -158,6 +158,18 @@ Layer boundary: App → Presentation → Domain ← Data
 - Rule (performance-patterns.md): Calendar operations belong in ViewModel `loadData` or as a stored property, not inline in body
 - Fix: precompute `daysSinceLastAssessment: Int?` on a ViewModel and pass it down, or move to a @State + .task(id:) pattern
 
+### View reading raw ViewModel Date values for display arithmetic
+- Anti-pattern: View accesses `viewModel.setTimerStarts[id]` (a `[UUID: Date]` dict) and computes `context.date.timeIntervalSince($0)` inside a `TimelineView` body
+- This leaks timer arithmetic into the View and requires `setTimerStarts` to be `internal` instead of `private`
+- Preferred pattern: ViewModel exposes `timerStart(for id: UUID) -> Date?` accessor, or better, the View drives display entirely from `@State private var timerStart: Date?` and calls `viewModel.stopTimer()` only at completion time
+- The `stopTimer(for:)` mutation method on the ViewModel is correct — the display-side arithmetic is what belongs in View state, not ViewModel state
+
+### iOS/Watch rounding asymmetry for durationIntensity completion
+- iOS (`WorkoutSessionView.completeCurrentSet`): rounds elapsed seconds up to whole minutes, stores as string `"\(max(1, mins))"` on `EditableSet.duration`
+- Watch (`MetricsView.executeDurationCompleteSet`): passes raw `elapsedSeconds: TimeInterval` directly to `workoutManager.completeSet(duration:)`
+- These two paths produce different precision for the same exercise type — Watch saves sub-minute resolution, iOS saves minute-granular data
+- Rule: rounding policy for durationIntensity should be defined in a single shared place (ViewModel or Domain), not diverge between platforms
+
 ### Canonical layout verbatim repetition in Views
 - The sizeClass-split Summary Stats + Highlights block (iPad HStack / iPhone VStack) appears verbatim in all 3 detail views
 - Not yet extracted; a shared `AdaptiveScoreDetailSection` view wrapping this pattern would eliminate the repetition

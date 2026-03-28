@@ -94,6 +94,9 @@ final class WorkoutSessionViewModel {
     var sessionStartTime: Date = Date()
     var memo: String = ""
 
+    /// Per-set timer start dates for durationIntensity exercises.
+    var setTimerStarts: [UUID: Date] = [:]
+
     var isSaving = false
     var validationError: String?
 
@@ -193,6 +196,7 @@ final class WorkoutSessionViewModel {
         }
 
         sets.append(newSet)
+        startTimerIfNeeded(for: newSet)
     }
 
     /// Creates a new set pre-filled with the last completed set's values.
@@ -206,6 +210,25 @@ final class WorkoutSessionViewModel {
         newSet.distance = lastCompleted.distance
         newSet.level = lastCompleted.level
         sets.append(newSet)
+        startTimerIfNeeded(for: newSet)
+    }
+
+    /// Starts a live timer for the set if the exercise uses durationIntensity input.
+    private func startTimerIfNeeded(for set: EditableSet) {
+        guard exercise.inputType == .durationIntensity else { return }
+        setTimerStarts[set.id] = Date()
+    }
+
+    /// Stops the timer for the given set and records elapsed seconds.
+    /// Returns the elapsed duration in seconds, or nil if no timer was running or elapsed < 1s.
+    /// Keeps the start date in the dictionary until a valid duration is confirmed
+    /// to prevent double-tap from losing the timer reference.
+    func stopTimer(for set: EditableSet) -> TimeInterval? {
+        guard let start = setTimerStarts[set.id] else { return nil }
+        let elapsed = Date().timeIntervalSince(start)
+        guard elapsed >= 1 else { return nil }
+        setTimerStarts.removeValue(forKey: set.id)
+        return elapsed
     }
 
     var hasCompletedSet: Bool {
@@ -554,11 +577,20 @@ final class WorkoutSessionViewModel {
                     }
                 }
             }
-            if exercise.inputType == .durationDistance || exercise.inputType == .durationIntensity {
+            if exercise.inputType == .durationDistance {
                 let trimmed = set.duration.trimmingCharacters(in: .whitespaces)
                 if !trimmed.isEmpty {
                     guard let mins = Int(trimmed), mins > 0, mins <= maxDurationMinutes else {
                         validationError = String(localized: "Duration must be between 1 and \(maxDurationMinutes) minutes")
+                        return nil
+                    }
+                }
+            }
+            if exercise.inputType == .durationIntensity {
+                let trimmed = set.duration.trimmingCharacters(in: .whitespaces)
+                if !trimmed.isEmpty {
+                    guard let secs = Int(trimmed), secs >= 1, secs <= 7200 else {
+                        validationError = String(localized: "Duration must be between 1 second and 2 hours")
                         return nil
                     }
                 }
@@ -639,10 +671,17 @@ final class WorkoutSessionViewModel {
             let trimmedDistance = editableSet.distance.trimmingCharacters(in: .whitespaces)
 
             // Safe duration conversion with overflow guard
-            let durationSeconds: TimeInterval? = Int(trimmedDuration).flatMap { mins in
-                let secs = mins * 60
-                guard secs / 60 == mins else { return nil } // overflow check
-                return TimeInterval(secs)
+            let durationSeconds: TimeInterval?
+            if exercise.inputType == .durationIntensity {
+                // durationIntensity stores seconds directly from the live timer
+                durationSeconds = Int(trimmedDuration).map { TimeInterval($0) }
+            } else {
+                // Other types store minutes
+                durationSeconds = Int(trimmedDuration).flatMap { mins in
+                    let secs = mins * 60
+                    guard secs / 60 == mins else { return nil } // overflow check
+                    return TimeInterval(secs)
+                }
             }
 
             // Convert weight from display unit to internal kg
