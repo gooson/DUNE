@@ -26,8 +26,9 @@ struct SleepExerciseCorrelationCard: View {
                 }
 
                 if let correlation {
-                    if !sortedBands.isEmpty {
-                        Chart(sortedBands, id: \.band) { item in
+                    let bands = sortedBands
+                    if !bands.isEmpty {
+                        Chart(bands, id: \.band) { item in
                             BarMark(
                                 x: .value("Band", item.band.displayName),
                                 y: .value("Score", item.stats.avgScore)
@@ -66,9 +67,7 @@ struct SleepExerciseCorrelationCard: View {
                             .foregroundStyle(.tertiary)
                     }
                 } else {
-                    Text(String(localized: "Collecting sleep data..."))
-                        .font(.subheadline)
-                        .foregroundStyle(DS.Color.textSecondary)
+                    SleepDataPlaceholder()
                 }
             }
         }

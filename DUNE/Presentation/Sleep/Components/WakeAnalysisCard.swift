@@ -52,9 +52,7 @@ struct WakeAnalysisCard: View {
                         }
                     }
                 } else {
-                    Text(String(localized: "Collecting sleep data..."))
-                        .font(.subheadline)
-                        .foregroundStyle(DS.Color.textSecondary)
+                    SleepDataPlaceholder()
                 }
             }
         }
