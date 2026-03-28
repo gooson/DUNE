@@ -508,15 +508,19 @@ final class ActivityViewModel {
 
     /// Computes strength/manual+HealthKit merged personal records and notice text.
     private func recomputePersonalRecordsOnly() {
-        // Strength PRs: extract max weight per exercise
+        // Strength PRs: extract max weight + 1RM + rep-max + volume per exercise
         let prEntries = exerciseRecordSnapshots.compactMap { snapshot -> StrengthPRService.WorkoutEntry? in
             guard let name = snapshot.exerciseName, !name.isEmpty,
                   let weight = snapshot.totalWeight, weight > 0,
                   snapshot.completedSetCount > 0 else { return nil }
+            let sets = snapshot.completedSetSnapshots.map {
+                StrengthPRService.SetEntry(weight: $0.weight, reps: $0.reps)
+            }
             return StrengthPRService.WorkoutEntry(
                 exerciseName: name,
                 date: snapshot.date,
-                bestWeight: weight / Double(snapshot.completedSetCount)
+                bestWeight: weight / Double(snapshot.completedSetCount),
+                sets: sets
             )
         }
         let strengthRecords = StrengthPRService.extractPRs(from: prEntries)
@@ -528,7 +532,10 @@ final class ActivityViewModel {
             manualCardioEntries: manualCardioEntries
         )
 
-        let hasCardio = personalRecords.contains { $0.kind != .strengthWeight }
+        let strengthOnlyKinds: Set<ActivityPersonalRecord.Kind> = [
+            .strengthWeight, .estimated1RM, .repMax, .sessionVolume
+        ]
+        let hasCardio = personalRecords.contains { !strengthOnlyKinds.contains($0.kind) }
         if hasCardio {
             personalRecordNotice = nil
         } else if recentWorkouts.isEmpty {

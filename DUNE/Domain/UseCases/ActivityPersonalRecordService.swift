@@ -20,20 +20,81 @@ enum ActivityPersonalRecordService: Sendable {
     ) -> [ActivityPersonalRecord] {
         var result: [ActivityPersonalRecord] = []
 
-        // Strength PRs
-        for record in strengthRecords where isValid(record.maxWeight, for: .strengthWeight) {
-            result.append(
-                ActivityPersonalRecord(
-                    id: "strength-\(record.id)",
-                    kind: .strengthWeight,
-                    title: record.exerciseName,
-                    subtitle: "Strength",
-                    value: record.maxWeight,
-                    date: record.date,
-                    isRecent: record.isRecent,
-                    source: .manual
+        // Strength PRs (max weight, 1RM, rep-max, volume)
+        for record in strengthRecords {
+            // Max weight (existing)
+            if isValid(record.maxWeight, for: .strengthWeight) {
+                result.append(
+                    ActivityPersonalRecord(
+                        id: "strength-\(record.id)",
+                        kind: .strengthWeight,
+                        title: record.exerciseName,
+                        subtitle: "Strength",
+                        value: record.maxWeight,
+                        date: record.date,
+                        isRecent: record.isRecent,
+                        source: .manual
+                    )
                 )
-            )
+            }
+
+            // Estimated 1RM
+            if let est1RM = record.estimated1RM,
+               let est1RMDate = record.estimated1RMDate,
+               isValid(est1RM, for: .estimated1RM) {
+                let cal = Calendar.current
+                let days = cal.dateComponents([.day], from: est1RMDate, to: referenceDate).day ?? 0
+                result.append(
+                    ActivityPersonalRecord(
+                        id: "1rm-\(record.id)",
+                        kind: .estimated1RM,
+                        title: record.exerciseName,
+                        subtitle: "Epley",
+                        value: est1RM,
+                        date: est1RMDate,
+                        isRecent: days >= 0 && days <= 7,
+                        source: .manual
+                    )
+                )
+            }
+
+            // Rep-max PRs (3RM, 5RM, 10RM)
+            for repMax in record.repMaxEntries where isValid(repMax.weight, for: .repMax) {
+                let cal = Calendar.current
+                let days = cal.dateComponents([.day], from: repMax.date, to: referenceDate).day ?? 0
+                result.append(
+                    ActivityPersonalRecord(
+                        id: "rm\(repMax.reps)-\(record.id)",
+                        kind: .repMax,
+                        title: record.exerciseName,
+                        subtitle: "\(repMax.reps)RM",
+                        value: repMax.weight,
+                        date: repMax.date,
+                        isRecent: days >= 0 && days <= 7,
+                        source: .manual
+                    )
+                )
+            }
+
+            // Session volume
+            if let volume = record.bestSessionVolume,
+               let volumeDate = record.bestSessionVolumeDate,
+               isValid(volume, for: .sessionVolume) {
+                let cal = Calendar.current
+                let days = cal.dateComponents([.day], from: volumeDate, to: referenceDate).day ?? 0
+                result.append(
+                    ActivityPersonalRecord(
+                        id: "vol-\(record.id)",
+                        kind: .sessionVolume,
+                        title: record.exerciseName,
+                        subtitle: String(localized: "Session Volume"),
+                        value: volume,
+                        date: volumeDate,
+                        isRecent: days >= 0 && days <= 7,
+                        source: .manual
+                    )
+                )
+            }
         }
 
         // Cardio PRs from HealthKit-backed store
