@@ -27,7 +27,7 @@ struct WASOInfoSheet: View {
                 .font(.title3)
                 .foregroundStyle(DS.Color.sleep)
 
-            Text(String(localized: "What is WASO?"))
+            Text("What is WASO?")
                 .font(.headline)
 
             Spacer()
@@ -38,9 +38,9 @@ struct WASOInfoSheet: View {
 
     private var whatIsWASOSection: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            sectionHeader(icon: "moon.stars", title: String(localized: "Definition"))
+            sectionHeader(icon: "moon.stars", title: "Definition")
 
-            Text(String(localized: "WASO stands for Wake After Sleep Onset. It measures the total time you spend awake after initially falling asleep, until your final awakening."))
+            Text("WASO stands for Wake After Sleep Onset. It measures the total time you spend awake after initially falling asleep, until your final awakening.")
                 .font(.subheadline)
                 .foregroundStyle(DS.Color.textSecondary)
         }
@@ -50,9 +50,9 @@ struct WASOInfoSheet: View {
 
     private var howMeasuredSection: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            sectionHeader(icon: "applewatch", title: String(localized: "How It's Measured"))
+            sectionHeader(icon: "applewatch", title: "How It's Measured")
 
-            Text(String(localized: "Apple Watch detects awakenings during sleep using motion and heart rate sensors. Only awakenings lasting 5 minutes or longer are counted — brief stirrings are filtered out as normal sleep behavior."))
+            Text("Apple Watch detects awakenings during sleep using motion and heart rate sensors. Only awakenings lasting 5 minutes or longer are counted — brief stirrings are filtered out as normal sleep behavior.")
                 .font(.subheadline)
                 .foregroundStyle(DS.Color.textSecondary)
         }
@@ -62,9 +62,9 @@ struct WASOInfoSheet: View {
 
     private var scoringSection: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            sectionHeader(icon: "chart.bar", title: String(localized: "Scoring"))
+            sectionHeader(icon: "chart.bar", title: "Scoring")
 
-            Text(String(localized: "The WASO Score (0–100) reflects how uninterrupted your sleep was. Less time awake means a higher score. This score contributes 15% to your overall Sleep Score."))
+            Text("The WASO Score (0–100) reflects how uninterrupted your sleep was. Less time awake means a higher score. This score contributes 15% to your overall Sleep Score.")
                 .font(.subheadline)
                 .foregroundStyle(DS.Color.textSecondary)
         }
@@ -74,20 +74,20 @@ struct WASOInfoSheet: View {
 
     private var levelTableSection: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            sectionHeader(icon: "gauge.with.needle", title: String(localized: "Score Guide"))
+            sectionHeader(icon: "gauge.with.needle", title: "Score Guide")
 
             VStack(spacing: DS.Spacing.xs) {
-                levelRow(label: Labels.excellent, range: "< 10 min", color: DS.Color.scoreGood)
-                levelRow(label: Labels.good, range: "10–20 min", color: DS.Color.scoreFair)
-                levelRow(label: Labels.fair, range: "20–30 min", color: .orange)
-                levelRow(label: Labels.poor, range: "> 30 min", color: DS.Color.scoreWarning)
+                levelRow(label: "Excellent", range: "< 10 min", color: DS.Color.scoreGood)
+                levelRow(label: "Good", range: "10–20 min", color: DS.Color.scoreFair)
+                levelRow(label: "Fair", range: "20–30 min", color: .orange)
+                levelRow(label: "Poor", range: "> 30 min", color: DS.Color.scoreWarning)
             }
         }
     }
 
     // MARK: - Helpers
 
-    private func sectionHeader(icon: String, title: String) -> some View {
+    private func sectionHeader(icon: String, title: LocalizedStringKey) -> some View {
         HStack(spacing: DS.Spacing.xs) {
             Image(systemName: icon)
                 .font(.caption)
@@ -97,7 +97,7 @@ struct WASOInfoSheet: View {
         }
     }
 
-    private func levelRow(label: String, range: String, color: Color) -> some View {
+    private func levelRow(label: LocalizedStringKey, range: String, color: Color) -> some View {
         HStack {
             Circle()
                 .fill(color)
@@ -109,14 +109,5 @@ struct WASOInfoSheet: View {
                 .font(.subheadline.monospacedDigit())
                 .foregroundStyle(DS.Color.textSecondary)
         }
-    }
-
-    // MARK: - Labels
-
-    private enum Labels {
-        static let excellent = String(localized: "Excellent")
-        static let good = String(localized: "Good")
-        static let fair = String(localized: "Fair")
-        static let poor = String(localized: "Poor")
     }
 }

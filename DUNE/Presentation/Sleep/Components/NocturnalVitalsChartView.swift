@@ -35,14 +35,10 @@ struct NocturnalVitalsChartView: View {
                     .font(.callout)
                     .foregroundStyle(DS.Color.textSecondary)
 
-                if snapshot == nil {
-                    Text(String(localized: "Collecting sleep data..."))
-                        .font(.subheadline)
-                        .foregroundStyle(DS.Color.textSecondary)
-                }
-
                 if snapshot != nil {
                     trackPicker
+                } else {
+                    SleepDataPlaceholder()
                 }
 
                 if !activeBuckets.isEmpty {

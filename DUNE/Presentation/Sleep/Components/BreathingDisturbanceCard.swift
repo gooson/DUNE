@@ -53,9 +53,7 @@ struct BreathingDisturbanceCard: View {
                         }
                     }
                 } else {
-                    Text(String(localized: "Collecting sleep data..."))
-                        .font(.subheadline)
-                        .foregroundStyle(DS.Color.textSecondary)
+                    SleepDataPlaceholder()
                 }
             }
         }
@@ -63,12 +61,13 @@ struct BreathingDisturbanceCard: View {
     }
 
     private func riskBadge(_ riskLevel: BreathingDisturbanceAnalysis.RiskLevel) -> some View {
-        Text(riskLevel.displayName)
+        let color = riskColor(riskLevel)
+        return Text(riskLevel.displayName)
             .font(.caption2.bold())
             .padding(.horizontal, DS.Spacing.xs)
             .padding(.vertical, 2)
-            .background(riskColor(riskLevel).opacity(0.2), in: Capsule())
-            .foregroundStyle(riskColor(riskLevel))
+            .background(color.opacity(0.2), in: Capsule())
+            .foregroundStyle(color)
     }
 
     private func riskColor(_ riskLevel: BreathingDisturbanceAnalysis.RiskLevel) -> Color {
