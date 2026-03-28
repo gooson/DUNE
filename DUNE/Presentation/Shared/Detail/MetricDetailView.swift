@@ -434,6 +434,18 @@ struct MetricDetailView: View {
                 scrollDomain: viewModel.scrollDomain,
                 scrollPosition: $viewModel.scrollPosition
             )
+
+        case .breathingDisturbances:
+            DotLineChartView(
+                data: viewModel.chartData,
+                baseline: nil,
+                yAxisLabel: "/hr",
+                timePeriod: viewModel.selectedPeriod,
+                tintColor: DS.Color.sleep,
+                trendLine: trend,
+                scrollDomain: viewModel.scrollDomain,
+                scrollPosition: $viewModel.scrollPosition
+            )
         }
     }
 

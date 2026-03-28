@@ -133,6 +133,7 @@ struct MetricSummaryHeader: View {
         case .vo2Max:            value.formattedWithSeparator(fractionDigits: 1)
         case .heartRateRecovery: value.formattedWithSeparator()
         case .wristTemperature:  value.formattedWithSeparator(fractionDigits: 1, alwaysShowSign: true)
+        case .breathingDisturbances: value.formattedWithSeparator(fractionDigits: 1)
         }
     }
 

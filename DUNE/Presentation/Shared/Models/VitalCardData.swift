@@ -10,7 +10,8 @@ enum CardSection: String, Sendable {
         case .weight, .bmi, .bodyFat, .leanBodyMass:
             return .physical
         case .hrv, .rhr, .heartRate, .sleep, .exercise, .steps,
-             .spo2, .respiratoryRate, .vo2Max, .heartRateRecovery, .wristTemperature:
+             .spo2, .respiratoryRate, .vo2Max, .heartRateRecovery, .wristTemperature,
+             .breathingDisturbances:
             return .active
         }
     }

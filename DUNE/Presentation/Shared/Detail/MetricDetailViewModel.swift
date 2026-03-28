@@ -56,6 +56,7 @@ final class MetricDetailViewModel {
     private let bodyService: BodyCompositionQuerying
     private let heartRateService: HeartRateQuerying
     private let vitalsService: VitalsQuerying
+    private let breathingDisturbanceService: BreathingDisturbanceQuerying
 
     init(
         hrvService: HRVQuerying? = nil,
@@ -65,6 +66,7 @@ final class MetricDetailViewModel {
         bodyService: BodyCompositionQuerying? = nil,
         heartRateService: HeartRateQuerying? = nil,
         vitalsService: VitalsQuerying? = nil,
+        breathingDisturbanceService: BreathingDisturbanceQuerying? = nil,
         healthKitManager: HealthKitManager = .shared
     ) {
         self.hrvService = hrvService ?? HRVQueryService(manager: healthKitManager)
@@ -74,6 +76,7 @@ final class MetricDetailViewModel {
         self.bodyService = bodyService ?? BodyCompositionQueryService(manager: healthKitManager)
         self.heartRateService = heartRateService ?? HeartRateQueryService(manager: healthKitManager)
         self.vitalsService = vitalsService ?? VitalsQueryService(manager: healthKitManager)
+        self.breathingDisturbanceService = breathingDisturbanceService ?? BreathingDisturbanceQueryService(manager: healthKitManager)
     }
 
     func configure(
@@ -115,6 +118,7 @@ final class MetricDetailViewModel {
             case .vo2Max:            try await loadVitalsData(.vo2Max, requestID: requestID)
             case .heartRateRecovery: try await loadVitalsData(.heartRateRecovery, requestID: requestID)
             case .wristTemperature:  try await loadVitalsData(.wristTemperature, requestID: requestID)
+            case .breathingDisturbances: try await loadBreathingDisturbancesData(requestID: requestID)
             }
             guard isCurrentReloadRequest(requestID) else { return }
             buildHighlights()
@@ -621,6 +625,17 @@ final class MetricDetailViewModel {
 
         guard isCurrentReloadRequest(requestID) else { return }
         chartData = samples.map { ChartDataPoint(date: $0.date, value: $0.value) }
+        summaryStats = HealthDataAggregator.computeSummary(from: currentPeriodValues())
+    }
+
+    private func loadBreathingDisturbancesData(requestID: Int) async throws {
+        let range = extendedRange
+        let days = max(1, Calendar.current.dateComponents([.day], from: range.start, to: range.end).day ?? 30)
+        let allSamples = try await breathingDisturbanceService.fetchNightlyDisturbances(days: days)
+        guard isCurrentReloadRequest(requestID) else { return }
+        chartData = allSamples
+            .filter { $0.date >= range.start && $0.date <= range.end }
+            .map { ChartDataPoint(date: $0.date, value: $0.value) }
         summaryStats = HealthDataAggregator.computeSummary(from: currentPeriodValues())
     }
 

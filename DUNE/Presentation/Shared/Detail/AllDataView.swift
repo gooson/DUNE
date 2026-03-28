@@ -90,6 +90,7 @@ struct AllDataView: View {
         case .vo2Max:            "\(value.formattedWithSeparator(fractionDigits: 1)) ml/kg/min"
         case .heartRateRecovery: "\(value.formattedWithSeparator()) bpm"
         case .wristTemperature:  "\(value.formattedWithSeparator(fractionDigits: 1, alwaysShowSign: true)) °C"
+        case .breathingDisturbances: "\(value.formattedWithSeparator(fractionDigits: 1))/hr"
         }
     }
 }

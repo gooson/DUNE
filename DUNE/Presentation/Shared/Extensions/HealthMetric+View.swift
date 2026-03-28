@@ -38,6 +38,8 @@ extension HealthMetric {
             return value.formattedWithSeparator(fractionDigits: 1)
         case .wristTemperature:
             return value.formattedWithSeparator(fractionDigits: 1, alwaysShowSign: true) // show as delta from baseline
+        case .breathingDisturbances:
+            return value.formattedWithSeparator(fractionDigits: 1)
         }
     }
 
@@ -63,7 +65,7 @@ extension HealthMetric {
             return 1
         case .exercise where unit == "km":
             return 1
-        case .hrv, .rhr, .heartRate, .sleep, .exercise, .steps, .spo2, .heartRateRecovery:
+        case .hrv, .rhr, .heartRate, .sleep, .exercise, .steps, .spo2, .heartRateRecovery, .breathingDisturbances:
             return 0
         }
     }
@@ -124,6 +126,7 @@ extension HealthMetric.Category {
         case .vo2Max:             DS.Color.fitness
         case .heartRateRecovery:  DS.Color.fitness
         case .wristTemperature:   DS.Color.vitals
+        case .breathingDisturbances: DS.Color.sleep
         }
     }
 
@@ -144,6 +147,7 @@ extension HealthMetric.Category {
         case .vo2Max:             "figure.run"
         case .heartRateRecovery:  "heart.circle"
         case .wristTemperature:   "thermometer.medium"
+        case .breathingDisturbances: "lungs"
         }
     }
 
@@ -164,6 +168,7 @@ extension HealthMetric.Category {
         case .vo2Max:             String(localized: "VO2 Max")
         case .heartRateRecovery:  String(localized: "HR Recovery")
         case .wristTemperature:   String(localized: "Wrist Temp")
+        case .breathingDisturbances: String(localized: "Breathing Disturbances")
         }
     }
 
@@ -185,6 +190,7 @@ extension HealthMetric.Category {
         case .vo2Max:             "VO2 Max"
         case .heartRateRecovery:  "HR Recovery"
         case .wristTemperature:   "Wrist Temp"
+        case .breathingDisturbances: "Breathing Disturbances"
         }
     }
 
@@ -205,6 +211,7 @@ extension HealthMetric.Category {
         case .vo2Max:             "ml/kg/min"
         case .heartRateRecovery:  "bpm"
         case .wristTemperature:   "°C"
+        case .breathingDisturbances: "/hr"
         }
     }
 }

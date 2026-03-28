@@ -37,6 +37,7 @@ actor HealthKitManager: HealthKitManaging {
         HKQuantityType(.vo2Max),
         HKQuantityType(.heartRateRecoveryOneMinute),
         HKQuantityType(.appleSleepingWristTemperature),
+        HKQuantityType(.appleSleepingBreathingDisturbances),
     ]
 
     /// Exposed for `HKWorkoutBuilder` which requires a store reference at init.

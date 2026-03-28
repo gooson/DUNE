@@ -19,6 +19,7 @@ final class AllDataViewModel {
     private let bodyService: BodyCompositionQuerying
     private let heartRateService: HeartRateQuerying
     private let vitalsService: VitalsQuerying
+    private let breathingDisturbanceService: BreathingDisturbanceQuerying
 
     private var currentPage = 0
     private let pageSize = 30 // days per page
@@ -32,6 +33,7 @@ final class AllDataViewModel {
         bodyService: BodyCompositionQuerying? = nil,
         heartRateService: HeartRateQuerying? = nil,
         vitalsService: VitalsQuerying? = nil,
+        breathingDisturbanceService: BreathingDisturbanceQuerying? = nil,
         healthKitManager: HealthKitManager = .shared
     ) {
         self.hrvService = hrvService ?? HRVQueryService(manager: healthKitManager)
@@ -41,6 +43,7 @@ final class AllDataViewModel {
         self.bodyService = bodyService ?? BodyCompositionQueryService(manager: healthKitManager)
         self.heartRateService = heartRateService ?? HeartRateQueryService(manager: healthKitManager)
         self.vitalsService = vitalsService ?? VitalsQueryService(manager: healthKitManager)
+        self.breathingDisturbanceService = breathingDisturbanceService ?? BreathingDisturbanceQueryService(manager: healthKitManager)
     }
 
     func configure(category: HealthMetric.Category) {
@@ -254,6 +257,15 @@ final class AllDataViewModel {
         case .wristTemperature:
             let samples = try await vitalsService.fetchWristTemperatureCollection(days: fromDaysAgo)
             return samples
+                .map { ChartDataPoint(date: $0.date, value: $0.value) }
+                .sorted(by: { $0.date > $1.date })
+
+        case .breathingDisturbances:
+            let samples = try await breathingDisturbanceService.fetchNightlyDisturbances(days: fromDaysAgo)
+            let calendar = Calendar.current
+            let cutoff = calendar.date(byAdding: .day, value: -toDaysAgo, to: Date()) ?? Date()
+            return samples
+                .filter { $0.date <= cutoff }
                 .map { ChartDataPoint(date: $0.date, value: $0.value) }
                 .sorted(by: { $0.date > $1.date })
         }

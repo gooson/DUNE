@@ -28,6 +28,7 @@ struct HealthMetric: Identifiable, Hashable, Sendable {
         case vo2Max
         case heartRateRecovery
         case wristTemperature
+        case breathingDisturbances
     }
 
     var changeSignificance: Double {
