@@ -17,6 +17,8 @@ struct SetInputSheet: View {
 
     @State private var lastHapticDate: Date = .distantPast
     @State private var showPreviousSets = false
+    /// Stable Crown accumulator for duration (avoids Binding(get:set:) recreation per render).
+    @State private var crownDurationDouble: Double = 1
     @FocusState private var isCrownFocused: Bool
 
     var body: some View {
@@ -98,6 +100,15 @@ struct SetInputSheet: View {
             .padding(.horizontal, DS.Spacing.md)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .focusable(true)
+        .focused($isCrownFocused)
+        .digitalCrownRotation(
+            Binding(
+                get: { Double(reps) },
+                set: { reps = max(1, min(100, Int($0.rounded()))) }
+            ),
+            from: 1, through: 100, by: 1, sensitivity: .medium
+        )
         .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.setInputScreen)
         .toolbar { sharedToolbar }
         .onChange(of: reps) { _, newValue in
@@ -108,11 +119,13 @@ struct SetInputSheet: View {
             if clamped != newValue { reps = clamped }
         }
         .onAppear {
+            isCrownFocused = true
             reps = WatchSetInputPolicy.resolvedInitialReps(
                 lastSetReps: reps,
                 entryDefaultReps: WatchSetInputPolicy.defaultReps
             )
         }
+        .onDisappear { isCrownFocused = false }
     }
 
     // MARK: - Duration (durationIntensity / plank, wall sit, etc.)
@@ -127,16 +140,17 @@ struct SetInputSheet: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .focusable(true)
         .focused($isCrownFocused)
-        .digitalCrownRotation(
-            Binding(
-                get: { Double(durationMinutes) },
-                set: { durationMinutes = max(0, min(120, Int($0.rounded()))) }
-            ),
-            from: 0, through: 120, by: 1, sensitivity: .medium
-        )
+        .digitalCrownRotation($crownDurationDouble, from: 0, through: 120, by: 1, sensitivity: .medium)
         .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.setInputScreen)
         .toolbar { sharedToolbar }
-        .onAppear { isCrownFocused = true }
+        .onAppear {
+            crownDurationDouble = Double(durationMinutes)
+            isCrownFocused = true
+        }
+        .onChange(of: crownDurationDouble) { _, newValue in
+            let clamped = max(0, min(120, Int(newValue.rounded())))
+            if clamped != durationMinutes { durationMinutes = clamped }
+        }
         .onDisappear { isCrownFocused = false }
     }
 

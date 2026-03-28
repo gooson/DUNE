@@ -319,11 +319,11 @@ struct SessionSummaryView: View {
     /// Builds summary text for exercise breakdown: prefers duration for duration-based, volume for weight-based.
     private func exerciseSummaryText(setCount: Int, volume: Int, totalDurationMinutes: Int) -> String {
         if totalDurationMinutes > 0 {
-            return "\(setCount) sets · \(totalDurationMinutes)min"
+            return String(localized: "\(setCount) sets · \(totalDurationMinutes)min")
         } else if volume > 0 {
-            return "\(setCount) sets · \(volume.formattedWithSeparator)kg"
+            return String(localized: "\(setCount) sets · \(volume.formattedWithSeparator)kg")
         } else {
-            return "\(setCount) sets"
+            return String(localized: "\(setCount) sets")
         }
     }
 

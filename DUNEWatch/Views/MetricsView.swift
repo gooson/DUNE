@@ -373,10 +373,11 @@ struct MetricsView: View {
         let inputType = currentInputType
 
         if inputType == .durationIntensity {
-            // Duration-based exercises: prefill from last completed duration or default 1 min
+            // Duration-based exercises: prefill from last completed duration or default 1 min.
+            // Use rounding (not truncation) to avoid lossy round-trip: 90s → 2min, not 1min.
             if let lastSet = workoutManager.lastCompletedSetForCurrentExercise,
                let lastDuration = lastSet.duration, lastDuration > 0 {
-                durationMinutes = Int(lastDuration / 60)
+                durationMinutes = max(1, Int((lastDuration / 60).rounded()))
             } else {
                 durationMinutes = 1
             }
