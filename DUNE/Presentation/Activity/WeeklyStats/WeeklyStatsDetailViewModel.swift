@@ -64,7 +64,6 @@ final class WeeklyStatsDetailViewModel {
 
     var comparison: PeriodComparison?
     var chartDailyBreakdown: [DailyVolumePoint] = []
-    var dailyWeightVolume: [DailyWeightVolumePoint] = []
     var summaryStats: [ActivityStat] = []
     var isLoading = false
     var errorMessage: String?
@@ -132,35 +131,7 @@ final class WeeklyStatsDetailViewModel {
         guard isCurrentLoadRequest(requestID) else { return }
 
         comparison = result
-        dailyWeightVolume = Self.buildDailyWeightVolume(
-            from: filteredSnapshots, start: range.start, end: range.end
-        )
         rebuildSummaryStats(from: result, period: period, allSnapshots: manualSnapshots)
-    }
-
-    static func buildDailyWeightVolume(
-        from snapshots: [ManualExerciseSnapshot],
-        start: Date, end: Date
-    ) -> [DailyWeightVolumePoint] {
-        let calendar = Calendar.current
-        var dailyVolume: [Date: Double] = [:]
-
-        for snapshot in snapshots where snapshot.totalVolume > 0 {
-            let day = calendar.startOfDay(for: snapshot.date)
-            dailyVolume[day, default: 0] += snapshot.totalVolume
-        }
-
-        var result: [DailyWeightVolumePoint] = []
-        var current = calendar.startOfDay(for: start)
-        let endDay = calendar.startOfDay(for: end)
-        while current <= endDay {
-            result.append(DailyWeightVolumePoint(
-                date: current, volume: dailyVolume[current] ?? 0
-            ))
-            guard let next = calendar.date(byAdding: .day, value: 1, to: current) else { break }
-            current = next
-        }
-        return result
     }
 
     // MARK: - Private
@@ -170,7 +141,6 @@ final class WeeklyStatsDetailViewModel {
         loadTask?.cancel()
         comparison = nil
         chartDailyBreakdown = []
-        dailyWeightVolume = []
         summaryStats = []
         isLoading = false
     }
@@ -247,12 +217,4 @@ final class WeeklyStatsDetailViewModel {
             ),
         ]
     }
-}
-
-// MARK: - Daily Weight Volume Point
-
-struct DailyWeightVolumePoint: Identifiable, Sendable {
-    var id: Date { date }
-    let date: Date
-    let volume: Double // weight × reps (kg)
 }
