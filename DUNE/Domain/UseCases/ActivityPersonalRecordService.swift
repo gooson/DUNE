@@ -42,17 +42,15 @@ enum ActivityPersonalRecordService: Sendable {
             if let est1RM = record.estimated1RM,
                let est1RMDate = record.estimated1RMDate,
                isValid(est1RM, for: .estimated1RM) {
-                let cal = Calendar.current
-                let days = cal.dateComponents([.day], from: est1RMDate, to: referenceDate).day ?? 0
                 result.append(
                     ActivityPersonalRecord(
                         id: "1rm-\(record.id)",
                         kind: .estimated1RM,
                         title: record.exerciseName,
-                        subtitle: "Epley",
+                        subtitle: String(localized: "Epley"),
                         value: est1RM,
                         date: est1RMDate,
-                        isRecent: days >= 0 && days <= 7,
+                        isRecent: isRecent(est1RMDate, referenceDate: referenceDate),
                         source: .manual
                     )
                 )
@@ -60,17 +58,15 @@ enum ActivityPersonalRecordService: Sendable {
 
             // Rep-max PRs (3RM, 5RM, 10RM)
             for repMax in record.repMaxEntries where isValid(repMax.weight, for: .repMax) {
-                let cal = Calendar.current
-                let days = cal.dateComponents([.day], from: repMax.date, to: referenceDate).day ?? 0
                 result.append(
                     ActivityPersonalRecord(
                         id: "rm\(repMax.reps)-\(record.id)",
                         kind: .repMax,
                         title: record.exerciseName,
-                        subtitle: "\(repMax.reps)RM",
+                        subtitle: String(localized: "\(repMax.reps)RM"),
                         value: repMax.weight,
                         date: repMax.date,
-                        isRecent: days >= 0 && days <= 7,
+                        isRecent: isRecent(repMax.date, referenceDate: referenceDate),
                         source: .manual
                     )
                 )
@@ -80,8 +76,6 @@ enum ActivityPersonalRecordService: Sendable {
             if let volume = record.bestSessionVolume,
                let volumeDate = record.bestSessionVolumeDate,
                isValid(volume, for: .sessionVolume) {
-                let cal = Calendar.current
-                let days = cal.dateComponents([.day], from: volumeDate, to: referenceDate).day ?? 0
                 result.append(
                     ActivityPersonalRecord(
                         id: "vol-\(record.id)",
@@ -90,7 +84,7 @@ enum ActivityPersonalRecordService: Sendable {
                         subtitle: String(localized: "Session Volume"),
                         value: volume,
                         date: volumeDate,
-                        isRecent: days >= 0 && days <= 7,
+                        isRecent: isRecent(volumeDate, referenceDate: referenceDate),
                         source: .manual
                     )
                 )

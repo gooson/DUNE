@@ -16,7 +16,7 @@ struct StrengthPRServiceTests {
     private func entryWithSets(
         _ name: String,
         weight: Double,
-        sets: [StrengthPRService.SetEntry],
+        sets: [SetSnapshot],
         daysAgo: Int = 0
     ) -> StrengthPRService.WorkoutEntry {
         .init(
@@ -117,7 +117,7 @@ struct StrengthPRServiceTests {
     @Test("1RM estimated from set data using Epley formula")
     func estimated1RMFromSets() {
         let sets = [
-            StrengthPRService.SetEntry(weight: 100, reps: 5),
+            SetSnapshot(weight: 100, reps: 5),
         ]
         let entries = [entryWithSets("Squat", weight: 100, sets: sets)]
         let result = StrengthPRService.extractPRs(from: entries)
@@ -131,9 +131,9 @@ struct StrengthPRServiceTests {
     @Test("1RM picks best set across session")
     func estimated1RMBestSet() {
         let sets = [
-            StrengthPRService.SetEntry(weight: 80, reps: 8),   // 80*(1+8/30) = 101.33
-            StrengthPRService.SetEntry(weight: 100, reps: 3),  // 100*(1+3/30) = 110.0
-            StrengthPRService.SetEntry(weight: 60, reps: 10),  // 60*(1+10/30) = 80.0
+            SetSnapshot(weight: 80, reps: 8),   // 80*(1+8/30) = 101.33
+            SetSnapshot(weight: 100, reps: 3),  // 100*(1+3/30) = 110.0
+            SetSnapshot(weight: 60, reps: 10),  // 60*(1+10/30) = 80.0
         ]
         let entries = [entryWithSets("Bench Press", weight: 80, sets: sets)]
         let result = StrengthPRService.extractPRs(from: entries)
@@ -151,7 +151,7 @@ struct StrengthPRServiceTests {
     @Test("1RM skips sets with reps > 10")
     func estimated1RMSkipsHighReps() {
         let sets = [
-            StrengthPRService.SetEntry(weight: 50, reps: 15),  // > 10, skipped
+            SetSnapshot(weight: 50, reps: 15),  // > 10, skipped
         ]
         let entries = [entryWithSets("Lateral Raise", weight: 50, sets: sets)]
         let result = StrengthPRService.extractPRs(from: entries)
@@ -161,7 +161,7 @@ struct StrengthPRServiceTests {
     @Test("1RM = weight when reps = 1")
     func estimated1RMSingleRep() {
         let sets = [
-            StrengthPRService.SetEntry(weight: 150, reps: 1),
+            SetSnapshot(weight: 150, reps: 1),
         ]
         let entries = [entryWithSets("Deadlift", weight: 150, sets: sets)]
         let result = StrengthPRService.extractPRs(from: entries)
@@ -173,10 +173,10 @@ struct StrengthPRServiceTests {
     @Test("Rep-max tracks 3RM, 5RM, 10RM")
     func repMaxTracksTargetReps() {
         let sets = [
-            StrengthPRService.SetEntry(weight: 100, reps: 3),
-            StrengthPRService.SetEntry(weight: 80, reps: 5),
-            StrengthPRService.SetEntry(weight: 60, reps: 10),
-            StrengthPRService.SetEntry(weight: 50, reps: 8),  // Not tracked (8 not in [3,5,10])
+            SetSnapshot(weight: 100, reps: 3),
+            SetSnapshot(weight: 80, reps: 5),
+            SetSnapshot(weight: 60, reps: 10),
+            SetSnapshot(weight: 50, reps: 8),  // Not tracked (8 not in [3,5,10])
         ]
         let entries = [entryWithSets("Squat", weight: 80, sets: sets)]
         let result = StrengthPRService.extractPRs(from: entries)
@@ -192,8 +192,8 @@ struct StrengthPRServiceTests {
 
     @Test("Rep-max keeps highest weight for same rep count across sessions")
     func repMaxKeepsHighest() {
-        let sets1 = [StrengthPRService.SetEntry(weight: 80, reps: 5)]
-        let sets2 = [StrengthPRService.SetEntry(weight: 90, reps: 5)]
+        let sets1 = [SetSnapshot(weight: 80, reps: 5)]
+        let sets2 = [SetSnapshot(weight: 90, reps: 5)]
         let entries = [
             entryWithSets("Bench Press", weight: 80, sets: sets1, daysAgo: 7),
             entryWithSets("Bench Press", weight: 90, sets: sets2, daysAgo: 1),
@@ -206,8 +206,8 @@ struct StrengthPRServiceTests {
     @Test("Rep-max empty when no tracked rep counts match")
     func repMaxEmptyNoMatch() {
         let sets = [
-            StrengthPRService.SetEntry(weight: 80, reps: 8),
-            StrengthPRService.SetEntry(weight: 70, reps: 12),
+            SetSnapshot(weight: 80, reps: 8),
+            SetSnapshot(weight: 70, reps: 12),
         ]
         let entries = [entryWithSets("Curl", weight: 75, sets: sets)]
         let result = StrengthPRService.extractPRs(from: entries)
@@ -219,9 +219,9 @@ struct StrengthPRServiceTests {
     @Test("Session volume calculated as sum of weight x reps")
     func sessionVolumeCalculated() {
         let sets = [
-            StrengthPRService.SetEntry(weight: 100, reps: 5),   // 500
-            StrengthPRService.SetEntry(weight: 100, reps: 5),   // 500
-            StrengthPRService.SetEntry(weight: 80, reps: 8),    // 640
+            SetSnapshot(weight: 100, reps: 5),   // 500
+            SetSnapshot(weight: 100, reps: 5),   // 500
+            SetSnapshot(weight: 80, reps: 8),    // 640
         ]
         let entries = [entryWithSets("Squat", weight: 93, sets: sets)]
         let result = StrengthPRService.extractPRs(from: entries)
@@ -232,12 +232,12 @@ struct StrengthPRServiceTests {
     @Test("Volume picks best session across multiple sessions")
     func volumeBestSession() {
         let sets1 = [
-            StrengthPRService.SetEntry(weight: 100, reps: 3),   // 300
-            StrengthPRService.SetEntry(weight: 100, reps: 3),   // 300
+            SetSnapshot(weight: 100, reps: 3),   // 300
+            SetSnapshot(weight: 100, reps: 3),   // 300
         ]
         let sets2 = [
-            StrengthPRService.SetEntry(weight: 80, reps: 10),   // 800
-            StrengthPRService.SetEntry(weight: 80, reps: 10),   // 800
+            SetSnapshot(weight: 80, reps: 10),   // 800
+            SetSnapshot(weight: 80, reps: 10),   // 800
         ]
         let entries = [
             entryWithSets("Bench Press", weight: 100, sets: sets1, daysAgo: 7),
@@ -257,8 +257,8 @@ struct StrengthPRServiceTests {
     @Test("Volume skips zero-weight sets")
     func volumeSkipsZeroWeight() {
         let sets = [
-            StrengthPRService.SetEntry(weight: 0, reps: 10),    // Skipped
-            StrengthPRService.SetEntry(weight: 80, reps: 5),    // 400
+            SetSnapshot(weight: 0, reps: 10),    // Skipped
+            SetSnapshot(weight: 80, reps: 5),    // 400
         ]
         let entries = [entryWithSets("Pull-up", weight: 40, sets: sets)]
         let result = StrengthPRService.extractPRs(from: entries)

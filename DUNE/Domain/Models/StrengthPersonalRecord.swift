@@ -49,10 +49,10 @@ struct StrengthPersonalRecord: Sendable, Hashable, Identifiable {
         let daysDiff = calendar.dateComponents([.day], from: date, to: referenceDateForRecent).day ?? 0
         self.isRecent = daysDiff >= 0 && daysDiff <= 7
 
-        self.estimated1RM = estimated1RM
+        self.estimated1RM = estimated1RM.map { max(0, min(750, $0)) }
         self.estimated1RMDate = estimated1RMDate
         self.repMaxEntries = repMaxEntries
-        self.bestSessionVolume = bestSessionVolume
+        self.bestSessionVolume = bestSessionVolume.map { max(0, min(100_000, $0)) }
         self.bestSessionVolumeDate = bestSessionVolumeDate
     }
 }
