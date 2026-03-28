@@ -11,7 +11,7 @@ final class SleepViewModel {
     var latestSleepDate: Date?
 
     // Cached outputs (rebuilt in loadData — not recomputed per render)
-    private(set) var cachedOutput = CalculateSleepScoreUseCase.Output(score: 0, totalMinutes: 0, efficiency: 0)
+    private(set) var cachedOutput = CalculateSleepScoreUseCase.Output(score: 0, totalMinutes: 0, efficiency: 0, remRatio: 0, wasoMinutes: 0, wasoCount: 0)
     private(set) var stageBreakdown: [(stage: SleepStage.Stage, minutes: Double)] = []
     private(set) var deficitAnalysis: SleepDeficitAnalysis?
 

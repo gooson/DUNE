@@ -6,9 +6,11 @@ protocol SleepScoreCalculating: Sendable {
 
 struct CalculateSleepScoreUseCase: SleepScoreCalculating, Sendable {
     // Score weights (total = 100)
-    private let durationMaxScore = 40.0
-    private let deepSleepMaxScore = 30.0
-    private let efficiencyMaxScore = 30.0
+    private let durationMaxScore = 30.0
+    private let deepSleepMaxScore = 20.0
+    private let remSleepMaxScore = 15.0
+    private let efficiencyMaxScore = 20.0
+    private let wasoMaxScore = 15.0
 
     // Duration thresholds (hours)
     private let idealDurationRange = 7.0...9.0
@@ -19,7 +21,14 @@ struct CalculateSleepScoreUseCase: SleepScoreCalculating, Sendable {
     // Deep sleep thresholds (ratio)
     private let idealDeepSleepRange = 0.15...0.25
     private let idealDeepSleepCenter = 0.20
-    private let deepSleepPenaltyRate = 150.0
+    private let deepSleepPenaltyRate = 100.0
+
+    // REM sleep thresholds (ratio)
+    private let idealREMSleepRange = 0.20...0.25
+    private let idealREMSleepCenter = 0.225
+    private let remSleepPenaltyRate = 75.0
+
+    private let wasoAnalyzer = AnalyzeWASOUseCase()
 
     struct Input: Sendable {
         let stages: [SleepStage]
@@ -29,6 +38,9 @@ struct CalculateSleepScoreUseCase: SleepScoreCalculating, Sendable {
         let score: Int
         let totalMinutes: Double
         let efficiency: Double
+        let remRatio: Double
+        let wasoMinutes: Double
+        let wasoCount: Int
     }
 
     func execute(input: Input) -> Output {
@@ -47,10 +59,12 @@ struct CalculateSleepScoreUseCase: SleepScoreCalculating, Sendable {
         }
 
         guard totalMinutes > 0 else {
-            return Output(score: 0, totalMinutes: 0, efficiency: 0)
+            return Output(score: 0, totalMinutes: 0, efficiency: 0, remRatio: 0, wasoMinutes: 0, wasoCount: 0)
         }
 
         let hours = totalMinutes / 60
+
+        // Duration score (30pt)
         let durationScore: Double
         if idealDurationRange.contains(hours) {
             durationScore = durationMaxScore
@@ -60,6 +74,7 @@ struct CalculateSleepScoreUseCase: SleepScoreCalculating, Sendable {
             durationScore = max(0, durationMaxScore - abs(hours - idealDurationCenter) * durationPenaltyRate)
         }
 
+        // Deep sleep score (20pt)
         let deepMinutes = input.stages
             .filter { $0.stage == .deep }
             .map(\.duration)
@@ -72,9 +87,34 @@ struct CalculateSleepScoreUseCase: SleepScoreCalculating, Sendable {
             deepScore = max(0, deepSleepMaxScore - abs(deepRatio - idealDeepSleepCenter) * deepSleepPenaltyRate)
         }
 
+        // REM sleep score (15pt)
+        let remMinutes = input.stages
+            .filter { $0.stage == .rem }
+            .map(\.duration)
+            .reduce(0, +) / 60.0
+        let remRatio = remMinutes / totalMinutes
+        let remScore: Double
+        if idealREMSleepRange.contains(remRatio) {
+            remScore = remSleepMaxScore
+        } else {
+            remScore = max(0, remSleepMaxScore - abs(remRatio - idealREMSleepCenter) * remSleepPenaltyRate)
+        }
+
+        // Efficiency score (20pt)
         let efficiencyScore = min(efficiencyMaxScore, efficiency / 100 * efficiencyMaxScore)
 
-        let score = Int(min(100, durationScore + deepScore + efficiencyScore))
-        return Output(score: score, totalMinutes: totalMinutes, efficiency: efficiency)
+        // WASO score (15pt)
+        let wasoAnalysis = wasoAnalyzer.execute(stages: input.stages)
+        let wasoScore = Double(wasoAnalysis?.score ?? 100) / 100.0 * wasoMaxScore
+
+        let score = Int(min(100, durationScore + deepScore + remScore + efficiencyScore + wasoScore))
+        return Output(
+            score: score,
+            totalMinutes: totalMinutes,
+            efficiency: efficiency,
+            remRatio: remRatio,
+            wasoMinutes: wasoAnalysis?.totalWASOMinutes ?? 0,
+            wasoCount: wasoAnalysis?.awakeningCount ?? 0
+        )
     }
 }
