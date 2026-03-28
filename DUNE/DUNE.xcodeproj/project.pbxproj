@@ -507,7 +507,6 @@
 		716599A57AEA8E93613A630D /* VisionImmersiveExperienceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A8BF2DE11C7571470B24F6F /* VisionImmersiveExperienceViewModel.swift */; };
 		7178120B0538BE41CB25A785 /* ExerciseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EDE3D6055F41543ECE9A8B7 /* ExerciseViewModel.swift */; };
 		71841950064B7CF558B00578 /* OpenMeteoAirQualityServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CF970884ED29227973915AE /* OpenMeteoAirQualityServiceTests.swift */; };
-		720527BA02AE40E337004F0E /* CloudKitDiagnostics.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B51CF4D64F09F63205DD83 /* CloudKitDiagnostics.swift */; };
 		73122E3BA43FF103BE00126C /* CardioStartSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF5891EE9B8437AD351BA9E /* CardioStartSheet.swift */; };
 		734B3D25B864CA55015DE907 /* SharedHealthDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82DD86C6FF988A7E8FFCAD9 /* SharedHealthDataService.swift */; };
 		73E54F8EF3F53E92F9EAEA1B /* TimeOfDayCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01CDBF251188548E7F079F6 /* TimeOfDayCard.swift */; };
@@ -613,7 +612,6 @@
 		8C21AAC03404D9C28BDD0495 /* ScoreContribution.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46EF849C02D1DA6C830471C9 /* ScoreContribution.swift */; };
 		8C296903DC47BE5F27BF0C80 /* WatchWorkoutSurfaceAccessibilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE26E61907E53A9BA3F5EF8C /* WatchWorkoutSurfaceAccessibilityTests.swift */; };
 		8C6EEC914158E860F90617FF /* WorkoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E81462F17A5ED1F5A5C35FE6 /* WorkoutManager.swift */; };
-		8C84BDEBE6BD255CAA5F814B /* CloudKitDiagnostics.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B51CF4D64F09F63205DD83 /* CloudKitDiagnostics.swift */; };
 		8C8576A2131E6BE9B6F7937A /* BodyHistoryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ECD0C7738498A1FC6ED770C /* BodyHistoryDetailView.swift */; };
 		8C9CE9DDDCDD1298692B0ACA /* OpenMeteoAirQualityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 024E7E2FDC099CD98EF04E38 /* OpenMeteoAirQualityService.swift */; };
 		8CA25BEE3218C6C30ED3F88F /* HealthMetric.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDEE16B5E0F3639BD2C2DF24 /* HealthMetric.swift */; };
@@ -2036,7 +2034,6 @@
 		E14E3722A332E58612ECF22F /* CheckInjuryConflictUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckInjuryConflictUseCaseTests.swift; sourceTree = "<group>"; };
 		E23B66C197A08B499FD68D46 /* WatchWorkoutStartSmokeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchWorkoutStartSmokeTests.swift; sourceTree = "<group>"; };
 		E2515DFF6A1DFD4F81AFE686 /* FormCheckOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormCheckOverlay.swift; sourceTree = "<group>"; };
-		E2B51CF4D64F09F63205DD83 /* CloudKitDiagnostics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitDiagnostics.swift; sourceTree = "<group>"; };
 		E2CC6CFE1982A86EEF215462 /* GroupActivities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GroupActivities.framework; path = System/Library/Frameworks/GroupActivities.framework; sourceTree = SDKROOT; };
 		E2FFC6683D687D021BE57607 /* ConditionScoreDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionScoreDetailView.swift; sourceTree = "<group>"; };
 		E36420346FA8C392A9FED608 /* WorkoutQueryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutQueryService.swift; sourceTree = "<group>"; };
@@ -3140,7 +3137,6 @@
 				94F628FE2807351DB51A6E8B /* AIWorkoutTemplateGenerator.swift */,
 				6BFD37A72CB464A172C558C1 /* AppRefreshCoordinatorImpl.swift */,
 				5E3E9254B5E2E930385D12BF /* BedtimeWatchReminderScheduler.swift */,
-				E2B51CF4D64F09F63205DD83 /* CloudKitDiagnostics.swift */,
 				40F00F3C32A6A8627722069F /* CloudMirroredSharedHealthDataService.swift */,
 				8CA4EBB9EF2B7FD183191D3D /* FormVoiceCoach.swift */,
 				E6A5766D67361910ECD63AB1 /* FoundationModelReportFormatter.swift */,
@@ -4410,7 +4406,6 @@
 				0472205C949336F370480955 /* ChartSelectionInteraction.swift in Sources */,
 				2EC32A58D5121494C815E768 /* ChartSelectionOverlay.swift in Sources */,
 				00985232CD9E55CCD0C8998F /* CheckInjuryConflictUseCase.swift in Sources */,
-				720527BA02AE40E337004F0E /* CloudKitDiagnostics.swift in Sources */,
 				3C2E466F24B51DD60DDD40E4 /* CloudMirroredSharedHealthDataService.swift in Sources */,
 				B5A224A841FDFDD5FBA67D2D /* CloudSyncConsentView.swift in Sources */,
 				BCFCC97BECC929BA1AABC6AA /* CloudSyncWaitingView.swift in Sources */,
@@ -4938,7 +4933,6 @@
 				401B7FC98C17893D70C3E658 /* CardioSecondaryUnit.swift in Sources */,
 				F943094564F4745116347826 /* Chart3DContainerView.swift in Sources */,
 				4BD6CA5935222D0D7FFE72CC /* CheckInjuryConflictUseCase.swift in Sources */,
-				8C84BDEBE6BD255CAA5F814B /* CloudKitDiagnostics.swift in Sources */,
 				4AEAFE0A78D56919A6451092 /* CloudMirroredSharedHealthDataService.swift in Sources */,
 				138B0E90977631524BFBCED7 /* CoachingEngine.swift in Sources */,
 				A6A2094FFFA0B4235647944F /* CoachingInsight.swift in Sources */,
