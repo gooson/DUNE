@@ -77,6 +77,9 @@ struct PersonalRecordsDetailView: View {
         .englishNavigationTitle("Personal Records")
         .task(id: recordsUpdateKey) {
             viewModel.load(records: records)
+            if viewModel.selectedKind == nil {
+                viewModel.selectedKind = viewModel.availableKinds.first
+            }
         }
     }
 
@@ -217,10 +220,10 @@ struct PersonalRecordsDetailView: View {
                     }
                 }
                 .chartXAxis {
-                    AxisMarks(values: .stride(by: viewModel.chartXStrideComponent)) { _ in
+                    AxisMarks(values: .stride(by: chartXStride)) { _ in
                         AxisGridLine()
                             .foregroundStyle(theme.accentColor.opacity(0.30))
-                        AxisValueLabel(format: viewModel.chartXLabelFormat)
+                        AxisValueLabel(format: chartXFormat)
                             .foregroundStyle(theme.sandColor)
                     }
                 }
@@ -245,6 +248,23 @@ struct PersonalRecordsDetailView: View {
         .id(viewModel.selectedPeriod)
         .transition(.opacity)
         .accessibilityIdentifier("activity-personal-records-timeline-chart")
+    }
+
+    private var chartXStride: Calendar.Component {
+        switch viewModel.selectedPeriod {
+        case .day, .week: .day
+        case .month: .weekOfMonth
+        case .sixMonths: .month
+        case .year: .month
+        }
+    }
+
+    private var chartXFormat: Date.FormatStyle {
+        switch viewModel.selectedPeriod {
+        case .day, .week: .dateTime.day().month(.abbreviated)
+        case .month: .dateTime.day().month(.abbreviated)
+        case .sixMonths, .year: .dateTime.month(.abbreviated)
+        }
     }
 
     private var prGrid: some View {
