@@ -665,8 +665,8 @@ struct DUNEApp: App {
         }
         scheduleWorkoutTitleBackfill()
 
-        // Recover missing ExerciseRecords from iCloud
-        Task { await CloudKitDiagnostics.recoverFromCloudKit(modelContainer: modelContainer) }
+        // Diagnose local ExerciseRecord set data
+        Task { await CloudKitDiagnostics.diagnoseLocalRecords(modelContainer: modelContainer) }
     }
 
     @MainActor
