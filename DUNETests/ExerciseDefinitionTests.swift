@@ -6,10 +6,12 @@ import Testing
 struct ExerciseDefinitionTests {
     let library = ExerciseLibraryService()
 
-    @Test("Library exposes canonical visible exercises")
-    func loadsCanonicalVisibleExercises() {
+    @Test("Library exposes consolidated base exercises")
+    func loadsConsolidatedExercises() {
         let all = library.allExercises()
-        #expect(all.count >= 250)
+        // After variant consolidation: ~133 base exercises
+        #expect(all.count >= 100)
+        #expect(all.count < 200)
         #expect(all.contains { $0.id == "running" })
         #expect(!all.contains { $0.id == "running-intervals" })
         #expect(!all.contains { $0.id == "running-endurance" })
@@ -65,11 +67,11 @@ struct ExerciseDefinitionTests {
         #expect(found == nil)
     }
 
-    @Test("Variant exercise lookup remains available by exact ID")
-    func variantLookupByID() {
+    @Test("Removed variant ID resolves to base exercise via fallback")
+    func variantLookupResolvesToBase() {
         let found = library.exercise(byID: "running-recovery")
-        #expect(found?.id == "running-recovery")
-        #expect(found?.name == "Running Recovery")
+        #expect(found != nil, "Variant ID should resolve via fallback")
+        #expect(found?.id == "running", "Variant should resolve to base exercise")
     }
 
     @Test("Representative lookup resolves variants to canonical visible exercise")

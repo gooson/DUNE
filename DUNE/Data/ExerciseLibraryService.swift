@@ -54,7 +54,10 @@ struct ExerciseLibraryService: ExerciseLibraryQuerying {
     }
 
     func exercise(byID id: String) -> ExerciseDefinition? {
-        exerciseByID[id]
+        if let direct = exerciseByID[id] { return direct }
+        // Fallback: resolve removed variant ID to canonical base
+        let resolved = Self.resolvedExerciseID(for: id)
+        return resolved != id ? exerciseByID[resolved] : nil
     }
 
     func search(query: String) -> [ExerciseDefinition] {
@@ -147,5 +150,30 @@ struct ExerciseLibraryService: ExerciseLibraryQuerying {
         exercise.localizedName.localizedCaseInsensitiveContains(query)
             || exercise.name.localizedCaseInsensitiveContains(query)
             || (exercise.aliases ?? []).contains { $0.localizedCaseInsensitiveContains(query) }
+    }
+}
+
+// MARK: - Legacy Variant ID Resolution
+
+extension ExerciseLibraryService {
+    /// Explicit remaps for standalone exercises that were merged into different-named bases.
+    /// Suffix-based variants (e.g. "push-up-tempo" → "push-up") are handled dynamically
+    /// by `QuickStartCanonicalService.canonicalExerciseID(for:)`.
+    private static let standaloneMerges: [String: String] = [
+        "single-leg-press-machine": "leg-press",
+        "single-leg-extension-machine": "leg-extension",
+        "single-leg-curl-machine": "leg-curl",
+        "single-arm-shoulder-press-machine": "shoulder-press-machine",
+    ]
+
+    /// Resolves a potentially removed variant ID to its canonical base ID.
+    /// Handles both suffix-based variants and explicit standalone merges.
+    /// Returns the input unchanged if it is already a base exercise ID.
+    static func resolvedExerciseID(for id: String) -> String {
+        // 1. Check explicit standalone merges
+        if let merged = standaloneMerges[id] { return merged }
+        // 2. Use canonical suffix stripping
+        let canonical = QuickStartCanonicalService.canonicalExerciseID(for: id)
+        return canonical.isEmpty ? id : canonical
     }
 }
