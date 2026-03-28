@@ -267,18 +267,9 @@ final class ActivityViewModel {
             definition = record.exerciseDefinitionID.flatMap { library.exercise(byID: $0) }
         }
 
-        let allSets = record.sets ?? []
         let completedSets = record.completedSets
         let totalWeight = completedSets.trainingVolume()
         let totalReps = Swift.min(completedSets.compactMap(\.reps).reduce(0, +), 10_000)
-
-        if allSets.isEmpty && record.duration > 0 {
-            AppLogger.ui.debug("[Snapshot] \(record.exerciseType) has duration=\(record.duration) but sets=nil/empty → volume=nil")
-        } else if !completedSets.isEmpty && totalWeight == nil {
-            let weights = completedSets.map { $0.weight }
-            let reps = completedSets.map { $0.reps }
-            AppLogger.ui.debug("[Snapshot] \(record.exerciseType) sets=\(completedSets.count) but volume=nil weights=\(weights) reps=\(reps)")
-        }
         let durationSec = resolveManualDurationSeconds(for: record)
         let durationMin = durationSec.flatMap { $0 > 0 ? Swift.min($0 / 60.0, 480) : nil }
         let distKm = resolveManualDistanceMeters(for: record).flatMap { $0 > 0 ? Swift.min($0 / 1000.0, 500) : nil }
