@@ -155,7 +155,7 @@ struct DUNEApp: App {
         // SwiftData automatic lightweight migration handles all schema upgrades.
         // No explicit SchemaMigrationPlan is used — see AppSchemaVersions.swift.
         try ModelContainer(
-            for: AppMigrationPlan.currentSchema,
+            for: AppSchema.currentSchema,
             configurations: configuration
         )
     }

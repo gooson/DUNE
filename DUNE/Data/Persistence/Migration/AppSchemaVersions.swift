@@ -24,7 +24,7 @@ enum AppSchemaV17: VersionedSchema {
 // MARK: - Schema Reference
 
 /// Provides the current schema for ModelContainer initialization.
-/// NOT a SchemaMigrationPlan — automatic lightweight migration is used instead.
-enum AppMigrationPlan {
+/// Automatic lightweight migration is used — no explicit SchemaMigrationPlan.
+enum AppSchema {
     static let currentSchema = Schema(AppSchemaV17.models)
 }
