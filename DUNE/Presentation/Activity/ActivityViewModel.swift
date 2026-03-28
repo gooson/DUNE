@@ -657,10 +657,17 @@ final class ActivityViewModel {
         return .volume(value: "—")
     }
 
-    func loadActivityData() async {
+    func loadActivityData(records: [ExerciseRecord] = []) async {
         let requestID = beginLoadRequest()
         isLoading = true
         errorMessage = nil
+
+        // Seed exerciseRecordSnapshots immediately so rebuildWeeklyStats has data
+        // before the debounced refreshSuggestionFromRecords completes.
+        if exerciseRecordSnapshots.isEmpty, !records.isEmpty {
+            manualRecordsCache = records
+            exerciseRecordSnapshots = records.map { buildExerciseRecordSnapshot(from: $0) }
+        }
 
         // Only the active request may clear loading; stale cancelled requests must not
         // hide a newer in-flight refresh.
