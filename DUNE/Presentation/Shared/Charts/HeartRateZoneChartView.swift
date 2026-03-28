@@ -48,6 +48,7 @@ struct HeartRateZoneChartView: View {
             }
             .frame(height: 180)
             .clipped()
+            .chartDrawAnimation()
 
             // Zone legend with percentage
             HStack(spacing: DS.Spacing.md) {

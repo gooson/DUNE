@@ -22,6 +22,7 @@ struct HeartRateChartView: View {
             chart
                 .frame(height: chartHeight)
                 .clipped()
+                .chartDrawAnimation()
         }
     }
 
