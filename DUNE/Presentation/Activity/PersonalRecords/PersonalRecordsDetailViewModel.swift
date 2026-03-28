@@ -12,18 +12,20 @@ final class PersonalRecordsDetailViewModel {
     /// PR periods relevant for this view (day/week excluded — PRs are sparse).
     static let availablePeriods: [TimePeriod] = [.month, .sixMonths, .year]
 
-    // MARK: - Derived (cached)
+    // MARK: - Derived (single struct to avoid multi-property re-entrant updates)
 
-    private(set) var availableKinds: [ActivityPersonalRecord.Kind] = []
-    private(set) var resolvedKind: ActivityPersonalRecord.Kind?
-    private(set) var filteredRecords: [ActivityPersonalRecord] = []
-    private(set) var chartData: [ActivityPersonalRecord] = []
-    private(set) var currentBest: ActivityPersonalRecord?
-    private(set) var allTimeRecords: [ActivityPersonalRecord] = []
+    struct DerivedState {
+        var availableKinds: [ActivityPersonalRecord.Kind] = []
+        var resolvedKind: ActivityPersonalRecord.Kind?
+        var filteredRecords: [ActivityPersonalRecord] = []
+        var chartData: [ActivityPersonalRecord] = []
+        var currentBest: ActivityPersonalRecord?
+        var allTimeRecords: [ActivityPersonalRecord] = []
+        var chartXStrideComponent: Calendar.Component = .month
+        var chartXLabelFormat: Date.FormatStyle = .dateTime.month(.abbreviated)
+    }
 
-    /// Chart axis helpers — cached alongside period.
-    private(set) var chartXStrideComponent: Calendar.Component = .month
-    private(set) var chartXLabelFormat: Date.FormatStyle = .dateTime.month(.abbreviated)
+    private(set) var derived = DerivedState()
 
     func load(records: [ActivityPersonalRecord]) {
         personalRecords = records.sorted { lhs, rhs in
@@ -34,22 +36,24 @@ final class PersonalRecordsDetailViewModel {
         rebuildDerived()
     }
 
-    /// Called from View's .onChange when selectedPeriod or selectedKind changes.
+    /// Recompute all derived data in one assignment.
     func rebuildDerived() {
+        var next = DerivedState()
+
         // Available kinds
         let kinds = Set(personalRecords.map(\.kind))
-        availableKinds = kinds.sorted { $0.sortOrder < $1.sortOrder }
+        next.availableKinds = kinds.sorted { $0.sortOrder < $1.sortOrder }
 
         // Resolved kind
-        if let selectedKind, availableKinds.contains(selectedKind) {
-            resolvedKind = selectedKind
+        if let selectedKind, next.availableKinds.contains(selectedKind) {
+            next.resolvedKind = selectedKind
         } else {
-            resolvedKind = availableKinds.first
+            next.resolvedKind = next.availableKinds.first
         }
 
         // Filtered by kind (all-time)
         let byKind: [ActivityPersonalRecord]
-        if let kind = resolvedKind {
+        if let kind = next.resolvedKind {
             byKind = personalRecords.filter { $0.kind == kind }
         } else {
             byKind = []
@@ -57,38 +61,39 @@ final class PersonalRecordsDetailViewModel {
 
         // Filtered by kind + period, newest first
         let range = selectedPeriod.dateRange()
-        filteredRecords = byKind
+        next.filteredRecords = byKind
             .filter { $0.date >= range.start && $0.date <= range.end }
             .sorted { $0.date > $1.date }
 
         // Chart data: oldest first
-        chartData = filteredRecords.sorted { $0.date < $1.date }
+        next.chartData = next.filteredRecords.sorted { $0.date < $1.date }
 
         // Current best (all-time for the selected kind)
-        if let kind = resolvedKind {
+        if let kind = next.resolvedKind {
             if kind.isLowerBetter {
-                currentBest = byKind.min { $0.value < $1.value }
+                next.currentBest = byKind.min { $0.value < $1.value }
             } else {
-                currentBest = byKind.max { $0.value < $1.value }
+                next.currentBest = byKind.max { $0.value < $1.value }
             }
-        } else {
-            currentBest = nil
         }
 
         // All-time records sorted newest first
-        allTimeRecords = byKind.sorted { $0.date > $1.date }
+        next.allTimeRecords = byKind.sorted { $0.date > $1.date }
 
         // Chart axis format
         switch selectedPeriod {
         case .day, .week:
-            chartXStrideComponent = .day
-            chartXLabelFormat = .dateTime.day().month(.abbreviated)
+            next.chartXStrideComponent = .day
+            next.chartXLabelFormat = .dateTime.day().month(.abbreviated)
         case .month:
-            chartXStrideComponent = .weekOfMonth
-            chartXLabelFormat = .dateTime.day().month(.abbreviated)
+            next.chartXStrideComponent = .weekOfMonth
+            next.chartXLabelFormat = .dateTime.day().month(.abbreviated)
         case .sixMonths, .year:
-            chartXStrideComponent = .month
-            chartXLabelFormat = .dateTime.month(.abbreviated)
+            next.chartXStrideComponent = .month
+            next.chartXLabelFormat = .dateTime.month(.abbreviated)
         }
+
+        // Single atomic assignment
+        derived = next
     }
 }
