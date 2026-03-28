@@ -556,11 +556,25 @@ final class ActivityViewModel {
         let prevWeekStart = calendar.date(byAdding: .day, value: -14, to: Date()) ?? Date()
         let prevWeek = allSnapshots.filter { $0.date >= prevWeekStart && $0.date < weekAgo }
 
-        // Volume
+        // Volume: prefer weight×reps (kg), fall back to total sets
         let totalVolume = thisWeek.compactMap(\.totalWeight).reduce(0, +)
         let prevVolume = prevWeek.compactMap(\.totalWeight).reduce(0, +)
         let rawVolumeChange = prevVolume > 0 ? ((totalVolume - prevVolume) / prevVolume * 100) : nil
         let volumeChange = rawVolumeChange.flatMap { $0.isFinite ? $0 : nil }
+
+        // Fallback 1: total completed sets when no weight data
+        let totalSets = thisWeek.reduce(0) { $0 + $1.completedSetCount }
+        let prevSets = prevWeek.reduce(0) { $0 + $1.completedSetCount }
+        let rawSetsChange = prevSets > 0 ? (Double(totalSets - prevSets) / Double(prevSets) * 100) : nil
+        let setsChange = rawSetsChange.flatMap { $0.isFinite ? $0 : nil }
+
+        // Fallback 2: workout session count (manual + HealthKit combined)
+        let hkAllWeek = recentWorkouts.filter { $0.date >= weekAgo }
+        let totalSessions = thisWeek.count + hkAllWeek.filter { workout in
+            !thisWeek.contains { snapshot in
+                abs(snapshot.date.timeIntervalSince(workout.date)) < 120
+            }
+        }.count
 
         // Duration
         let totalDuration = thisWeek.compactMap(\.durationMinutes).reduce(0, +)
@@ -579,10 +593,10 @@ final class ActivityViewModel {
         )
 
         weeklyStats = [
-            .volume(
-                value: totalVolume > 0 ? totalVolume.formattedWithSeparator() : "—",
-                change: volumeChange.map { "\($0.formattedWithSeparator(alwaysShowSign: true))%" },
-                isPositive: volumeChange.map { $0 >= 0 }
+            buildVolumeStat(
+                totalVolume: totalVolume, volumeChange: volumeChange,
+                totalSets: totalSets, setsChange: setsChange,
+                totalSessions: totalSessions
             ),
             .calories(
                 value: totalCal > 0 ? totalCal.formattedWithSeparator() : "—"
@@ -596,6 +610,36 @@ final class ActivityViewModel {
                 value: activeDaySet.count.formattedWithSeparator
             ),
         ]
+    }
+
+    /// Build the Volume stat card with fallback: weight volume → set count → session count.
+    private func buildVolumeStat(
+        totalVolume: Double, volumeChange: Double?,
+        totalSets: Int, setsChange: Double?,
+        totalSessions: Int
+    ) -> ActivityStat {
+        if totalVolume > 0 {
+            return .volume(
+                value: totalVolume.formattedWithSeparator(),
+                change: volumeChange.map { "\($0.formattedWithSeparator(alwaysShowSign: true))%" },
+                isPositive: volumeChange.map { $0 >= 0 }
+            )
+        }
+        if totalSets > 0 {
+            return .volume(
+                value: totalSets.formattedWithSeparator,
+                unit: String(localized: "sets"),
+                change: setsChange.map { "\($0.formattedWithSeparator(alwaysShowSign: true))%" },
+                isPositive: setsChange.map { $0 >= 0 }
+            )
+        }
+        if totalSessions > 0 {
+            return .volume(
+                value: totalSessions.formattedWithSeparator,
+                unit: String(localized: "sessions")
+            )
+        }
+        return .volume(value: "—")
     }
 
     func loadActivityData() async {
