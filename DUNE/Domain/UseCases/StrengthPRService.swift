@@ -3,20 +3,15 @@ import Foundation
 /// Extracts personal records (1RM, rep-max, volume, max weight) per exercise from workout history.
 enum StrengthPRService: Sendable {
 
-    struct SetEntry: Sendable {
-        let weight: Double
-        let reps: Int
-    }
-
     struct WorkoutEntry: Sendable {
         let exerciseName: String
         let date: Date
         /// Best approximation of session weight: totalWeight / setCount (avg per set).
         let bestWeight: Double
         /// Per-set data for 1RM / rep-max / volume calculation.
-        let sets: [SetEntry]
+        let sets: [SetSnapshot]
 
-        init(exerciseName: String, date: Date, bestWeight: Double, sets: [SetEntry] = []) {
+        init(exerciseName: String, date: Date, bestWeight: Double, sets: [SetSnapshot] = []) {
             self.exerciseName = exerciseName
             self.date = date
             self.bestWeight = bestWeight
@@ -25,7 +20,7 @@ enum StrengthPRService: Sendable {
     }
 
     /// Standard rep counts tracked as rep-max PRs.
-    static let trackedRepCounts: [Int] = [3, 5, 10]
+    static let trackedRepCounts: Set<Int> = [3, 5, 10]
 
     /// Extracts per-exercise best weight PRs from workout entries.
     /// Also computes 1RM, rep-max, and session volume when set data is available.

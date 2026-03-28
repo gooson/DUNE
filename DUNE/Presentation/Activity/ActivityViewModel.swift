@@ -522,14 +522,11 @@ final class ActivityViewModel {
             guard let name = snapshot.exerciseName, !name.isEmpty,
                   let weight = snapshot.totalWeight, weight > 0,
                   snapshot.completedSetCount > 0 else { return nil }
-            let sets = snapshot.completedSetSnapshots.map {
-                StrengthPRService.SetEntry(weight: $0.weight, reps: $0.reps)
-            }
             return StrengthPRService.WorkoutEntry(
                 exerciseName: name,
                 date: snapshot.date,
                 bestWeight: weight / Double(snapshot.completedSetCount),
-                sets: sets
+                sets: snapshot.completedSetSnapshots
             )
         }
         let strengthRecords = StrengthPRService.extractPRs(from: prEntries)
@@ -541,10 +538,7 @@ final class ActivityViewModel {
             manualCardioEntries: manualCardioEntries
         )
 
-        let strengthOnlyKinds: Set<ActivityPersonalRecord.Kind> = [
-            .strengthWeight, .estimated1RM, .repMax, .sessionVolume
-        ]
-        let hasCardio = personalRecords.contains { !strengthOnlyKinds.contains($0.kind) }
+        let hasCardio = personalRecords.contains { !$0.kind.isStrengthKind }
         if hasCardio {
             personalRecordNotice = nil
         } else if recentWorkouts.isEmpty {

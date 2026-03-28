@@ -4,6 +4,13 @@ import Foundation
 struct SetSnapshot: Sendable {
     let weight: Double
     let reps: Int
+
+    /// Creates a validated snapshot; returns nil if values are out of bounds.
+    static func validated(weight: Double, reps: Int) -> SetSnapshot? {
+        guard weight > 0, weight <= 500, weight.isFinite,
+              reps >= 1, reps <= 100 else { return nil }
+        return SetSnapshot(weight: weight, reps: reps)
+    }
 }
 
 /// Lightweight snapshot of an exercise/workout record without SwiftData dependency.

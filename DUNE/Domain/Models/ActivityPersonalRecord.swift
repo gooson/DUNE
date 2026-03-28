@@ -18,6 +18,14 @@ struct ActivityPersonalRecord: Sendable, Hashable, Identifiable {
             self == .fastestPace
         }
 
+        var isStrengthKind: Bool {
+            switch self {
+            case .estimated1RM, .repMax, .sessionVolume, .strengthWeight: true
+            case .fastestPace, .longestDistance, .longestDuration,
+                 .highestCalories, .highestElevation: false
+            }
+        }
+
         var sortOrder: Int {
             switch self {
             case .estimated1RM: 0

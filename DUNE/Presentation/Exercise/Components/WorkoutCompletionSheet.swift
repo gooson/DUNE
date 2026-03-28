@@ -184,9 +184,11 @@ struct WorkoutCompletionSheet: View {
                     .foregroundStyle(theme.heroTextGradient)
                 if let prev = pr.previousValue, prev > 0 {
                     let delta = pr.value - prev
-                    Text("+\(delta.formattedWithSeparator()) kg")
-                        .font(.caption2.weight(.semibold))
-                        .foregroundStyle(DS.Color.activity)
+                    if delta > 0 {
+                        Text("+\(delta.formattedWithSeparator()) kg")
+                            .font(.caption2.weight(.semibold))
+                            .foregroundStyle(DS.Color.activity)
+                    }
                 }
             }
         }
