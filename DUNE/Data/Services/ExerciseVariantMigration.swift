@@ -12,10 +12,14 @@ enum ExerciseVariantMigration {
         category: "ExerciseVariantMigration"
     )
 
+    private static let migrationKey = "ExerciseVariantMigration.completed.v1"
+
     /// Migrates ExerciseRecord, ExerciseDefaultRecord, and WorkoutTemplate entries
     /// that reference removed variant IDs to their canonical base IDs.
     @MainActor
     static func migrateIfNeeded(in context: ModelContext) {
+        guard !UserDefaults.standard.bool(forKey: migrationKey) else { return }
+
         let library = ExerciseLibraryService.shared
         var totalMigrated = 0
 
@@ -27,6 +31,8 @@ enum ExerciseVariantMigration {
 
         // 3. WorkoutTemplate
         totalMigrated += migrateWorkoutTemplates(in: context, library: library)
+
+        UserDefaults.standard.set(true, forKey: migrationKey)
 
         if totalMigrated > 0 {
             logger.info("Migrated \(totalMigrated, privacy: .public) records from variant to base exercise IDs")
@@ -47,27 +53,13 @@ enum ExerciseVariantMigration {
         for record in records {
             guard let defID = record.exerciseDefinitionID, !defID.isEmpty else { continue }
 
-            // Already a known base exercise — skip
-            if library.exercise(byID: defID) != nil {
-                // exercise(byID:) already resolves variants, so if it returns non-nil
-                // and defID matches a base ID, no migration needed.
-                // But we need to check if defID itself is the base or a resolved variant.
-                let resolved = ExerciseLibraryService.resolvedExerciseID(for: defID)
-                guard resolved != defID else { continue }
+            let resolved = ExerciseLibraryService.resolvedExerciseID(for: defID)
+            guard resolved != defID else { continue }
 
-                if let base = library.exercise(byID: resolved) {
-                    record.exerciseDefinitionID = resolved
-                    record.exerciseType = base.localizedName
-                    count += 1
-                }
-            } else {
-                // exercise(byID:) returned nil — try resolving
-                let resolved = ExerciseLibraryService.resolvedExerciseID(for: defID)
-                if resolved != defID, let base = library.exercise(byID: resolved) {
-                    record.exerciseDefinitionID = resolved
-                    record.exerciseType = base.localizedName
-                    count += 1
-                }
+            if let base = library.exercise(byID: resolved) {
+                record.exerciseDefinitionID = resolved
+                record.exerciseType = base.localizedName
+                count += 1
             }
         }
         return count
