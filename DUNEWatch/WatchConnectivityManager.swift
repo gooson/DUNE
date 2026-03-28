@@ -214,9 +214,11 @@ final class WatchConnectivityManager: NSObject {
         updatePhoneWorkoutLifecycleContext(isActive: false, templateName: nil)
     }
 
-    /// Send completed set data back to iPhone
+    /// Send completed set data back to iPhone.
+    /// Uses sendMessage for immediate delivery + transferUserInfo as background fallback.
     func sendSetCompletion(_ setData: WatchSetData, exerciseID: String, exerciseName: String) {
-        guard WCSession.default.isReachable else { return }
+        let session = WCSession.default
+        guard session.activationState == .activated else { return }
 
         let update = WatchWorkoutUpdate(
             exerciseID: exerciseID,
@@ -231,28 +233,40 @@ final class WatchConnectivityManager: NSObject {
         do {
             let data = try JSONEncoder().encode(update)
             let message: [String: Any] = ["setCompleted": data]
-            WCSession.default.sendMessage(
-                message,
-                replyHandler: nil,
-                errorHandler: Self.makeWCErrorHandler("Failed to send set completion")
-            )
+
+            if session.isReachable {
+                session.sendMessage(
+                    message,
+                    replyHandler: nil,
+                    errorHandler: Self.makeWCErrorHandler("Failed to send set completion")
+                )
+            }
+
+            session.transferUserInfo(message)
         } catch {
             Self.logger.error("Failed to encode set completion: \(error.localizedDescription, privacy: .public)")
         }
     }
 
-    /// Send completed workout back to iPhone
+    /// Send completed workout back to iPhone.
+    /// Uses sendMessage for immediate delivery + transferUserInfo as background fallback.
     func sendWorkoutCompletion(_ update: WatchWorkoutUpdate) {
-        guard WCSession.default.isReachable else { return }
+        let session = WCSession.default
+        guard session.activationState == .activated else { return }
 
         do {
             let data = try JSONEncoder().encode(update)
             let message: [String: Any] = ["workoutComplete": data]
-            WCSession.default.sendMessage(
-                message,
-                replyHandler: nil,
-                errorHandler: Self.makeWCErrorHandler("Failed to send workout completion")
-            )
+
+            if session.isReachable {
+                session.sendMessage(
+                    message,
+                    replyHandler: nil,
+                    errorHandler: Self.makeWCErrorHandler("Failed to send workout completion")
+                )
+            }
+
+            session.transferUserInfo(message)
         } catch {
             Self.logger.error("Failed to encode workout: \(error.localizedDescription, privacy: .public)")
         }
