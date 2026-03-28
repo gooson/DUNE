@@ -24,7 +24,11 @@ final class WellnessViewModel {
     var postureScore: Int? {
         didSet {
             if let score = postureScore {
-                postureScore = max(0, min(100, score))
+                let clamped = max(0, min(100, score))
+                if clamped != score {
+                    postureScore = clamped  // only recurses once; recursive call hits clamped==score path
+                    return
+                }
             }
             if postureScore != oldValue { recalculateWellnessScore() }
         }
