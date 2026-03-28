@@ -19,7 +19,7 @@ extension ExerciseRecord {
         }
 
         let completedSets = self.completedSets
-        let totalWeight = completedSets.compactMap(\.weight).reduce(0, +)
+        let totalWeight = completedSets.trainingVolume()
         let totalReps = completedSets.compactMap(\.reps).reduce(0, +)
         let durationMinutes = duration > 0 ? min(duration / 60.0, 480) : nil
         let distanceKm = distance.flatMap { $0 > 0 ? min($0 / 1000.0, 500) : nil }
@@ -38,7 +38,7 @@ extension ExerciseRecord {
             primaryMuscles: primary,
             secondaryMuscles: secondary,
             completedSetCount: completedSets.count,
-            totalWeight: totalWeight > 0 ? totalWeight : nil,
+            totalWeight: totalWeight,
             totalReps: totalReps > 0 ? totalReps : nil,
             durationMinutes: durationMinutes,
             distanceKm: distanceKm,

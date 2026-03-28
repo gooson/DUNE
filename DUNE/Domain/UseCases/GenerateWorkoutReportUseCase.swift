@@ -65,10 +65,10 @@ struct GenerateWorkoutReportUseCase: WorkoutReportGenerating, Sendable {
         let totalDuration = Int(records.compactMap(\.durationMinutes).reduce(0, +))
         let activeDays = Set(records.map { Calendar.current.startOfDay(for: $0.date) }).count
 
+        // totalWeight is already volume (weight × reps), so use it directly
         let intensities = records.compactMap { record -> Double? in
-            guard let weight = record.totalWeight, weight > 0,
-                  let reps = record.totalReps, reps > 0 else { return nil }
-            return weight * Double(reps)
+            guard let weight = record.totalWeight, weight > 0 else { return nil }
+            return weight
         }
         let averageIntensity: Double
         if !intensities.isEmpty {
