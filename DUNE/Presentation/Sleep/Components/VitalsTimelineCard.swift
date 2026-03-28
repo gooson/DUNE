@@ -18,7 +18,8 @@ struct VitalsTimelineCard: View {
 
                     if let track = trackFor(selectedTrack, in: analysis), track.hasData {
                         trackChart(track: track, type: selectedTrack)
-                            .frame(height: 120)
+                            .padding(.top, 16)
+                            .frame(height: 136)
                             .clipped()
 
                         if let baseline = track.baseline {
@@ -38,12 +39,13 @@ struct VitalsTimelineCard: View {
                         Text(String(localized: "No data available for this vital"))
                             .font(.subheadline)
                             .foregroundStyle(DS.Color.textSecondary)
-                            .frame(height: 120)
+                            .frame(maxWidth: .infinity, minHeight: 120, alignment: .leading)
                     }
                 } else {
                     SleepDataPlaceholder()
                 }
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
         .accessibilityIdentifier("sleep-vitals-timeline-card")
     }
