@@ -13,7 +13,7 @@ private struct ChartDrawModifier: ViewModifier {
                         .frame(width: geo.size.width * drawProgress)
                 }
             }
-            .onAppear {
+            .task {
                 guard drawProgress == 0 else { return }
                 if reduceMotion {
                     drawProgress = 1

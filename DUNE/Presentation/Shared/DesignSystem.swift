@@ -196,9 +196,9 @@ enum DS {
         /// - Parameters:
         ///   - index: Position in sequence (0-based).
         ///   - base: Delay per item in seconds.
-        ///   - max: Maximum index to apply delay (items beyond appear simultaneously).
-        static func staggerDelay(index: Int, base: Double = 0.06, max: Int = 8) -> Double {
-            Double(min(index, max)) * base
+        ///   - maxIndex: Maximum index to apply delay (items beyond appear simultaneously).
+        static func staggerDelay(index: Int, base: Double = 0.06, maxIndex: Int = 12) -> Double {
+            Double(min(index, maxIndex)) * base
         }
     }
 

@@ -6,9 +6,11 @@ struct PressableCardStyle: ButtonStyle {
 
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .scaleEffect(configuration.isPressed ? 0.97 : 1.0)
+            .scaleEffect((!reduceMotion && configuration.isPressed) ? 0.97 : 1.0)
             .animation(
-                configuration.isPressed ? DS.Animation.pressDown : DS.Animation.pressUp,
+                reduceMotion
+                    ? .none
+                    : (configuration.isPressed ? DS.Animation.pressDown : DS.Animation.pressUp),
                 value: configuration.isPressed
             )
             .sensoryFeedback(.impact(weight: .light), trigger: configuration.isPressed)
