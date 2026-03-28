@@ -567,8 +567,6 @@ struct LifeViewModelTests {
             exerciseType: "running",
             duration: 1200,
             distance: 5,
-            isFromHealthKit: true,
-            healthKitWorkoutID: "hk-auto-1",
             exerciseDefinitionID: "running"
         )
 

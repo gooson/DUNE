@@ -4,7 +4,7 @@ import Testing
 
 @Suite("LifeAutoAchievementService")
 struct LifeAutoAchievementServiceTests {
-    @Test("Weekly workout count targets use HealthKit-linked entries only")
+    @Test("Weekly workout count targets count all entries")
     func weeklyWorkoutThresholds() {
         let referenceDate = day(2026, 3, 4, 12) // Wed
         let entries: [LifeAutoWorkoutEntry] = [
@@ -12,9 +12,7 @@ struct LifeAutoAchievementServiceTests {
             makeEntry(id: "hk-2", date: day(2026, 3, 2, 18)),
             makeEntry(id: "hk-3", date: day(2026, 3, 3, 8)),
             makeEntry(id: "hk-4", date: day(2026, 3, 4, 8)),
-            makeEntry(id: "hk-5", date: day(2026, 3, 5, 8)),
-            // Not HealthKit-linked: should be ignored
-            makeEntry(id: nil, date: day(2026, 3, 5, 18), isFromHealthKit: false, hasHealthKitLink: false)
+            makeEntry(id: "hk-5", date: day(2026, 3, 5, 8))
         ]
 
         let progresses = LifeAutoAchievementService.calculateProgresses(from: entries, referenceDate: referenceDate)
@@ -28,6 +26,21 @@ struct LifeAutoAchievementServiceTests {
         #expect(weekly5.title == String(localized: "Workout 5x / week"))
         #expect(weekly5.unit == String(localized: "workouts"))
         #expect(weekly5.progressText == String(localized: "\(Int(weekly5.currentValue))/\(Int(weekly5.targetValue)) workouts"))
+    }
+
+    @Test("Manual entries without HealthKit link are counted")
+    func manualEntriesCountedWithoutHealthKit() {
+        let referenceDate = day(2026, 3, 4, 12)
+        let entries: [LifeAutoWorkoutEntry] = [
+            makeEntry(id: nil, date: day(2026, 3, 2, 8)),
+            makeEntry(id: nil, date: day(2026, 3, 3, 9)),
+            makeEntry(id: nil, date: day(2026, 3, 4, 10))
+        ]
+
+        let progresses = LifeAutoAchievementService.calculateProgresses(from: entries, referenceDate: referenceDate)
+        let weekly5 = progress(progresses, id: "weeklyWorkout5")
+
+        #expect(weekly5.currentValue == 3)
     }
 
     @Test("Week boundary follows Monday start")
@@ -136,6 +149,20 @@ struct LifeAutoAchievementServiceTests {
         #expect(weekly5.currentValue == 2)
     }
 
+    @Test("Manual entries without sourceWorkoutID are deduped by timestamp and type")
+    func dedupManualEntries() {
+        let referenceDate = day(2026, 3, 4, 12)
+        let entries: [LifeAutoWorkoutEntry] = [
+            makeEntry(id: nil, date: day(2026, 3, 2, 8), activityID: "running"),
+            makeEntry(id: nil, date: day(2026, 3, 2, 8), activityID: "running"), // same timestamp+type = dup
+            makeEntry(id: nil, date: day(2026, 3, 2, 9), activityID: "running")  // different timestamp
+        ]
+
+        let progresses = LifeAutoAchievementService.calculateProgresses(from: entries, referenceDate: referenceDate)
+        let weekly5 = progress(progresses, id: "weeklyWorkout5")
+        #expect(weekly5.currentValue == 2)
+    }
+
     // MARK: - Helpers
 
     private func progress(_ progresses: [LifeAutoAchievementProgress], id: String) -> LifeAutoAchievementProgress {
@@ -162,9 +189,7 @@ struct LifeAutoAchievementServiceTests {
         distance: Double? = nil,
         hasSetData: Bool = false,
         primaryMuscles: [MuscleGroup] = [],
-        secondaryMuscles: [MuscleGroup] = [],
-        isFromHealthKit: Bool = false,
-        hasHealthKitLink: Bool = true
+        secondaryMuscles: [MuscleGroup] = []
     ) -> LifeAutoWorkoutEntry {
         LifeAutoWorkoutEntry(
             sourceWorkoutID: id,
@@ -174,9 +199,7 @@ struct LifeAutoAchievementServiceTests {
             distance: distance,
             hasSetData: hasSetData,
             primaryMuscles: primaryMuscles,
-            secondaryMuscles: secondaryMuscles,
-            isFromHealthKit: isFromHealthKit,
-            hasHealthKitLink: hasHealthKitLink
+            secondaryMuscles: secondaryMuscles
         )
     }
 
