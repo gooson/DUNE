@@ -192,7 +192,8 @@ struct TrainingVolumeAnalysisServiceTests {
             period: .week
         )
 
-        #expect(result.current.dailyBreakdown.count == 7)
+        // 8 days: [startOfDay(today) - 7 ... startOfDay(today)] inclusive
+        #expect(result.current.dailyBreakdown.count == 8)
     }
 
     @Test("Daily breakdown segments grouped by type")

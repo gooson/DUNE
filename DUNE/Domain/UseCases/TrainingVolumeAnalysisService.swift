@@ -18,8 +18,8 @@ enum TrainingVolumeAnalysisService {
         let today = calendar.startOfDay(for: Date())
         let days = period.days
 
-        guard let currentStart = calendar.date(byAdding: .day, value: -(days - 1), to: today),
-              let previousStart = calendar.date(byAdding: .day, value: -(days * 2 - 1), to: today),
+        guard let currentStart = calendar.date(byAdding: .day, value: -days, to: today),
+              let previousStart = calendar.date(byAdding: .day, value: -(days * 2), to: today),
               let previousEnd = calendar.date(byAdding: .day, value: -1, to: currentStart)
         else {
             return PeriodComparison(
@@ -38,9 +38,11 @@ enum TrainingVolumeAnalysisService {
             end: currentEnd
         )
 
+        // Filter uses `< currentStart` (exclusive) to avoid boundary gap.
+        // `previousEnd` (currentStart - 1 day) is passed as `end:` for daily breakdown date range only.
         let previousSummary = buildSummary(
-            workouts: workouts.filter { $0.date >= previousStart && $0.date <= previousEnd },
-            manualRecords: manualRecords.filter { $0.date >= previousStart && $0.date <= previousEnd },
+            workouts: workouts.filter { $0.date >= previousStart && $0.date < currentStart },
+            manualRecords: manualRecords.filter { $0.date >= previousStart && $0.date < currentStart },
             period: period,
             start: previousStart,
             end: previousEnd

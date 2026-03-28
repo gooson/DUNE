@@ -379,9 +379,9 @@ final class ActivityViewModel {
     /// Partitions all exercise snapshots (SwiftData + HealthKit) into current and previous week.
     private func partitionSnapshotsByWeek() -> (current: [ExerciseRecordSnapshot], previous: [ExerciseRecordSnapshot], weekAgo: Date, twoWeeksAgo: Date) {
         let calendar = Calendar.current
-        let now = Date()
-        let weekAgo = calendar.date(byAdding: .day, value: -7, to: now) ?? now
-        let twoWeeksAgo = calendar.date(byAdding: .day, value: -14, to: now) ?? now
+        let today = calendar.startOfDay(for: Date())
+        let weekAgo = calendar.date(byAdding: .day, value: -7, to: today) ?? today
+        let twoWeeksAgo = calendar.date(byAdding: .day, value: -14, to: today) ?? today
         let allSnapshots = allExerciseSnapshots
         let current = allSnapshots.filter { $0.date >= weekAgo }
         let previous = allSnapshots.filter { $0.date >= twoWeeksAgo && $0.date < weekAgo }
@@ -544,10 +544,11 @@ final class ActivityViewModel {
 
     private func rebuildWeeklyStats() {
         let calendar = Calendar.current
-        let weekAgo = calendar.date(byAdding: .day, value: -7, to: Date()) ?? Date()
+        let today = calendar.startOfDay(for: Date())
+        let weekAgo = calendar.date(byAdding: .day, value: -7, to: today) ?? today
         let allSnapshots = allExerciseSnapshots
         let thisWeek = allSnapshots.filter { $0.date >= weekAgo }
-        let prevWeekStart = calendar.date(byAdding: .day, value: -14, to: Date()) ?? Date()
+        let prevWeekStart = calendar.date(byAdding: .day, value: -14, to: today) ?? today
         let prevWeek = allSnapshots.filter { $0.date >= prevWeekStart && $0.date < weekAgo }
 
         // Volume: this week's weight×reps only
