@@ -566,7 +566,11 @@ final class ActivityViewModel {
         let hkCount = self.healthKitOnlySnapshots.count
         let weightCount = thisWeek.filter { $0.totalWeight != nil }.count
         let setCount = thisWeek.filter { $0.completedSetCount > 0 }.count
-        AppLogger.ui.debug("[WeeklyStats] snapshots=\(allSnapshots.count) (records=\(recCount) hk=\(hkCount)) thisWeek=\(thisWeek.count) volume=\(totalVolume) weightSnapshots=\(weightCount) setSnapshots=\(setCount)")
+        let recsThisWeek = self.exerciseRecordSnapshots.filter { $0.date >= weekAgo }
+        let recsWithSets = self.exerciseRecordSnapshots.filter { $0.completedSetCount > 0 }
+        let recsWithWeight = self.exerciseRecordSnapshots.filter { $0.totalWeight != nil }
+        AppLogger.ui.debug("[WeeklyStats] all=\(allSnapshots.count) (records=\(recCount) hk=\(hkCount)) thisWeek=\(thisWeek.count) volume=\(totalVolume) weightSnap=\(weightCount) setSnap=\(setCount)")
+        AppLogger.ui.debug("[WeeklyStats] records breakdown: thisWeek=\(recsThisWeek.count) withSets=\(recsWithSets.count)/\(recCount) withWeight=\(recsWithWeight.count)/\(recCount)")
         let prevVolume = prevWeek.compactMap(\.totalWeight).reduce(0, +)
         let rawVolumeChange = prevVolume > 0 ? ((totalVolume - prevVolume) / prevVolume * 100) : nil
         let volumeChange = rawVolumeChange.flatMap { $0.isFinite ? $0 : nil }
