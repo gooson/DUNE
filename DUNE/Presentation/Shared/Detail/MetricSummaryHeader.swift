@@ -143,9 +143,9 @@ struct MetricSummaryHeader: View {
             if let change {
                 let absChange = abs(change).formattedWithSeparator(fractionDigits: 1)
                 if change > 0 {
-                    Text("Your average is \(absChange)% higher than last period")
+                    Text(String(localized: "Your average is \(absChange)% higher than last period"))
                 } else {
-                    Text("Your average is \(absChange)% lower than last period")
+                    Text(String(localized: "Your average is \(absChange)% lower than last period"))
                 }
             }
         }

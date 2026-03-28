@@ -72,7 +72,7 @@ struct HeroScoreCard: View {
         .accessibilityLabel(accessibilityLabel)
         .accessibilityHint(accessibilityHint ?? "")
         .sensoryFeedback(.impact(weight: .light), trigger: isAppeared)
-        .onAppear {
+        .task(id: score) {
             let isFirst = !isAppeared
             isAppeared = true
             animatedScore = 0
@@ -83,25 +83,15 @@ struct HeroScoreCard: View {
                     animatedScore = score
                 }
                 // Glow pulse after counter finishes
-                Task { @MainActor in
-                    try? await Task.sleep(for: .milliseconds(isFirst ? 800 : 700))
-                    guard !Task.isCancelled else { return }
-                    showGlow = true
-                    try? await Task.sleep(for: .milliseconds(600))
-                    guard !Task.isCancelled else { return }
-                    showGlow = false
-                }
+                try? await Task.sleep(for: .milliseconds(isFirst ? 800 : 700))
+                guard !Task.isCancelled else { return }
+                showGlow = true
+                try? await Task.sleep(for: .milliseconds(600))
+                guard !Task.isCancelled else { return }
+                showGlow = false
             }
         }
-        .onChange(of: score) { _, newValue in
-            if reduceMotion {
-                animatedScore = newValue
-            } else {
-                withAnimation(DS.Animation.numeric) {
-                    animatedScore = newValue
-                }
-            }
-        }
+        // score changes handled by .task(id: score) above
     }
 
     private var scoreRing: some View {
