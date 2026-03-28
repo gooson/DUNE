@@ -205,6 +205,26 @@ Call recalculate in .task and .onChange, not in body
 - Array is 4 elements so impact is tiny, but pattern is incorrect — should use rawValue Int ordering or a static let
 - Fix: `private static let order: [PostureStatus] = [.normal, .caution, .warning, .unmeasurable]` static let; or assign Int raw values
 
+## Rich Animation PR Patterns (2026-03-28)
+
+### Unguarded Task in onAppear / onChange — no cancel on re-trigger
+- Pattern: `Task { @MainActor in try? await Task.sleep(...); state = true; ... }` with no stored reference
+- Risk: view disappears mid-sleep, or `onChange` fires again — two concurrent tasks race on the same `@State`
+- Seen in: `HeroScoreCard.showGlow` glow pulse task
+- Fix: `@State private var glowTask: Task<Void, Never>?`; assign + `.onDisappear { glowTask?.cancel() }`
+
+### GeometryReader inside `.mask` — per-frame layout during animation
+- `ChartDrawModifier` uses `GeometryReader { geo in Rectangle().frame(width: geo.size.width * progress) }` as mask
+- GeometryReader inside a mask triggers a layout sub-pass each animation frame (60–120 fps × 0.8s = 96 passes)
+- Applied to 6 chart types simultaneously on detail screens
+- Fix: `content.clipShape(Rectangle().scale(x: drawProgress, y: 1, anchor: .leading))` — no layout needed
+
+### Stagger animation: 12–13 concurrent spring animations on tab appear
+- DashboardView + ActivityView each apply `staggeredAppear(index: 0...11/12)` to all sections
+- All `onAppear` fire in same render pass; up to 25 overlapping springs at 60–120fps
+- Competes with HeroScoreCard count-up + chartDraw 0.8s animation
+- Mitigation: increase `baseDelay` to 0.08–0.10s, or lower `maxIndex` on non-hero sections
+
 ## ScoreRefreshService / HourlySparklineView Patterns (hourly-condition-tracking PR)
 
 ### Triple recordSnapshot() calls per refresh cycle — redundant DB writes + loadTodaySparklines() triple-fires

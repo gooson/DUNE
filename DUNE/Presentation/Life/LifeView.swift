@@ -191,10 +191,12 @@ private struct HabitListQueryView: View {
             heroSection
                 .reportTabHeroFrame()
                 .accessibilityIdentifier("life-hero-progress")
+                .staggeredAppear(index: 0)
 
             // Analytics section (chart + heatmap)
             if !habits.isEmpty {
                 analyticsSection
+                    .staggeredAppear(index: 1)
             }
 
             if isRegular {
@@ -202,9 +204,12 @@ private struct HabitListQueryView: View {
                     habitsSection(fillHeight: true)
                     autoAchievementsSection(fillHeight: true)
                 }
+                .staggeredAppear(index: 2)
             } else {
                 habitsSection()
+                    .staggeredAppear(index: 2)
                 autoAchievementsSection()
+                    .staggeredAppear(index: 3)
             }
         }
         .background {

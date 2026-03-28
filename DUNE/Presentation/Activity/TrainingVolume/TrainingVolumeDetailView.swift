@@ -12,6 +12,7 @@ struct TrainingVolumeDetailView: View {
         ScrollView {
             VStack(spacing: DS.Spacing.xl) {
                 periodPicker
+                    .staggeredAppear(index: 0)
 
                 if viewModel.isLoading && viewModel.comparison == nil {
                     ProgressView()
@@ -59,9 +60,11 @@ struct TrainingVolumeDetailView: View {
     private func content(_ comparison: PeriodComparison) -> some View {
         // Combined summary + comparison header
         combinedHeader(comparison)
+            .staggeredAppear(index: 1)
 
         // Donut chart
         VolumeDonutChartView(exerciseTypes: comparison.current.exerciseTypes)
+            .staggeredAppear(index: 2)
 
         // Stacked bar chart
         StackedVolumeBarChartView(
@@ -71,6 +74,7 @@ struct TrainingVolumeDetailView: View {
             typeNames: buildTypeNames(comparison.current.exerciseTypes),
             period: viewModel.selectedPeriod
         )
+        .staggeredAppear(index: 3)
 
         // Training Load
         if !viewModel.trainingLoadData.isEmpty {
@@ -78,6 +82,7 @@ struct TrainingVolumeDetailView: View {
                 data: viewModel.trainingLoadData,
                 period: viewModel.selectedPeriod
             )
+            .staggeredAppear(index: 4)
         }
 
         // RPE Trend
@@ -86,10 +91,12 @@ struct TrainingVolumeDetailView: View {
                 data: viewModel.rpeTrendData,
                 period: viewModel.selectedPeriod
             )
+            .staggeredAppear(index: 5)
         }
 
         // Exercise type list
         exerciseTypeList(comparison.current.exerciseTypes)
+            .staggeredAppear(index: 6)
     }
 
     // MARK: - Summary Header
