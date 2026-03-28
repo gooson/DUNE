@@ -391,9 +391,7 @@ final class LifeViewModel {
                 distance: record.distance,
                 hasSetData: record.hasSetData,
                 primaryMuscles: record.primaryMuscles,
-                secondaryMuscles: record.secondaryMuscles,
-                isFromHealthKit: record.isFromHealthKit,
-                hasHealthKitLink: linkedWorkoutID?.isEmpty == false
+                secondaryMuscles: record.secondaryMuscles
             )
         }
 

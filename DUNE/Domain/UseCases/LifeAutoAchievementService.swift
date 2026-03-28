@@ -9,8 +9,6 @@ struct LifeAutoWorkoutEntry: Sendable {
     let hasSetData: Bool
     let primaryMuscles: [MuscleGroup]
     let secondaryMuscles: [MuscleGroup]
-    let isFromHealthKit: Bool
-    let hasHealthKitLink: Bool
 }
 
 struct LifeAutoAchievementProgress: Identifiable, Sendable {
@@ -155,8 +153,7 @@ enum LifeAutoAchievementService {
         referenceDate: Date = Date()
     ) -> [LifeAutoAchievementProgress] {
         let calendar = mondayStartCalendar()
-        let filtered = entries.filter { $0.hasHealthKitLink || $0.isFromHealthKit }
-        let workouts = deduplicated(entries: filtered)
+        let workouts = deduplicated(entries: entries)
         let metricsByWeek = buildMetricsByWeek(from: workouts, calendar: calendar)
         let currentWeekStart = weekStart(for: referenceDate, calendar: calendar)
 
