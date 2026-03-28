@@ -1,5 +1,6 @@
 import Foundation
 import HealthKit
+import SwiftData
 @preconcurrency import WatchConnectivity
 import Observation
 import OSLog
@@ -112,6 +113,9 @@ final class WatchConnectivityManager: NSObject {
 
     /// Sync status for UI display
     private(set) var syncStatus: SyncStatus = .notConnected
+
+    /// ModelContainer for local SwiftData access (bulk sync).
+    var registeredModelContainer: ModelContainer?
 
     private var lastExerciseLibrarySyncRequestAt: Date?
     private var lastWorkoutTemplateSyncRequestAt: Date?
@@ -385,11 +389,14 @@ private struct ParsedWatchMessage: Sendable {
     let appTheme: String?
     let deleteWorkoutUUID: String?
 
+    let requestBulkSyncSince: TimeInterval?
+
     init(from message: [String: Any]) {
         workoutStateData = message["workoutState"] as? Data
         globalRestSeconds = message["globalRestSeconds"] as? Double
         appTheme = message["appTheme"] as? String
         deleteWorkoutUUID = message["deleteWorkoutUUID"] as? String
+        requestBulkSyncSince = message["requestWorkoutBulkSync"] as? TimeInterval
     }
 }
 
@@ -473,6 +480,74 @@ extension WatchConnectivityManager {
             }
         } else if let workoutUUIDString = parsed.deleteWorkoutUUID, !workoutUUIDString.isEmpty {
             Self.logger.error("Ignored invalid deleteWorkoutUUID payload: \(workoutUUIDString, privacy: .public)")
+        }
+
+        // Handle bulk sync request from iPhone
+        if let sinceTimestamp = parsed.requestBulkSyncSince {
+            let since = Date(timeIntervalSince1970: sinceTimestamp)
+            Task { await handleBulkSyncRequest(since: since) }
+        }
+    }
+
+    private func handleBulkSyncRequest(since: Date) async {
+        guard let container = registeredModelContainer else {
+            Self.logger.error("[BulkSync] No ModelContainer registered")
+            return
+        }
+
+        let context = ModelContext(container)
+        var descriptor = FetchDescriptor<ExerciseRecord>(
+            predicate: #Predicate { $0.date >= since },
+            sortBy: [SortDescriptor(\.date, order: .reverse)]
+        )
+        descriptor.fetchLimit = 100
+
+        let records: [ExerciseRecord]
+        do {
+            records = try context.fetch(descriptor)
+        } catch {
+            Self.logger.error("[BulkSync] Failed to fetch records: \(error.localizedDescription, privacy: .public)")
+            return
+        }
+
+        guard !records.isEmpty else {
+            Self.logger.info("[BulkSync] No records found since \(since)")
+            return
+        }
+
+        let updates: [WatchWorkoutUpdate] = records.compactMap { record in
+            let sets = (record.sets ?? []).filter(\.isCompleted).map { set in
+                WatchSetData(
+                    setNumber: set.setNumber,
+                    weight: set.weight,
+                    reps: set.reps,
+                    duration: set.duration,
+                    restDuration: set.restDuration,
+                    isCompleted: true,
+                    rpe: set.rpe
+                )
+            }
+            guard !sets.isEmpty || record.duration > 0 else { return nil }
+            return WatchWorkoutUpdate(
+                exerciseID: record.exerciseDefinitionID ?? "",
+                exerciseName: record.exerciseType,
+                completedSets: sets,
+                startTime: record.date,
+                endTime: record.date.addingTimeInterval(record.duration),
+                heartRateSamples: [],
+                rpe: record.rpe
+            )
+        }
+
+        guard !updates.isEmpty else { return }
+
+        do {
+            let data = try JSONEncoder().encode(updates)
+            let message: [String: Any] = ["bulkWorkouts": data]
+            WCSession.default.transferUserInfo(message)
+            Self.logger.debug("[BulkSync] Sent \(updates.count) workouts to iPhone")
+        } catch {
+            Self.logger.error("[BulkSync] Failed to encode bulk workouts: \(error.localizedDescription, privacy: .public)")
         }
     }
 
