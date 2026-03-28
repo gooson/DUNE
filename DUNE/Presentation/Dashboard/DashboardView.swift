@@ -103,145 +103,8 @@ struct DashboardView: View {
                             )
                         }
                     } else {
-                        // Hero
-                        if let score = viewModel.conditionScore {
-                            NavigationLink(value: score) {
-                                ConditionHeroView(
-                                    score: score,
-                                    recentScores: viewModel.recentScores,
-                                    weeklyGoalProgress: viewModel.weeklyGoalProgress,
-                                    trendBadges: viewModel.heroBaselineDetails,
-                                    hourlySparkline: viewModel.conditionSparkline.nonEmptyOrNil
-                                )
-                            }
-                            .reportTabHeroFrame()
-                            .buttonStyle(.plain)
-                            .accessibilityIdentifier("dashboard-hero-condition")
-                            .transition(Self.sectionTransition)
-                        } else if let status = viewModel.baselineStatus, !status.isReady {
-                            BaselineProgressView(status: status)
-                                .reportTabHeroFrame()
-                                .transition(Self.sectionTransition)
-                        }
-
-                        // Morning Briefing entry
-                        if let briefingData = viewModel.briefingData,
-                           !isBriefingDisabled {
-                            BriefingEntryCard(conditionStatus: briefingData.conditionStatus) {
-                                isShowingBriefing = true
-                            }
-                            .transition(Self.sectionTransition)
-                        }
-
-                        // Weather + coaching (merged when coaching is weather-category)
-                        Group {
-                            if let weather = viewModel.weatherSnapshot {
-                                NavigationLink(value: weather) {
-                                    WeatherCard(snapshot: weather, insightInfo: viewModel.weatherCardInsight)
-                                }
-                                .buttonStyle(.plain)
-                                .accessibilityIdentifier("dashboard-weather-card")
-                            } else {
-                                WeatherCardPlaceholder {
-                                    Task { await viewModel.requestLocationPermission() }
-                                }
-                            }
-                        }
-                        .transition(Self.sectionTransition)
-
-                        // Coaching (standalone when not merged into weather card)
-                        if let insight = viewModel.standaloneCoachingInsight {
-                            TodayCoachingCard(insight: insight)
-                                .transition(Self.sectionTransition)
-                        } else if viewModel.focusInsight == nil,
-                                  let coachingMessage = viewModel.coachingMessage {
-                            TodayCoachingCard(message: coachingMessage)
-                                .transition(Self.sectionTransition)
-                        }
-
-                        HealthDataQACard(isAvailable: HealthDataQAService.isAvailable) {
-                            isShowingHealthDataQA = true
-                        }
-
-                        // Insight Cards
-                        if !viewModel.insightCards.isEmpty {
-                            insightCardsSection
-                                .transition(Self.sectionTransition)
-                        }
-
-                        // Template nudge
-                        if let nudge = viewModel.templateNudgeRecommendation {
-                            TemplateNudgeCard(
-                                recommendation: nudge,
-                                onSaveAsTemplate: { templateNudgeToSave = nudge },
-                                onDismiss: {
-                                    withAnimation(DS.Animation.standard) {
-                                        viewModel.dismissTemplateNudge()
-                                    }
-                                }
-                            )
-                            .transition(Self.sectionTransition)
-                        }
-
-                        // Sleep deficit badge
-                        sleepDeficitSection
-
-                        // Pinned Metrics
-                        if !viewModel.pinnedCards.isEmpty {
-                            pinnedSection
-                                .transition(Self.sectionTransition)
-                        }
-
-                        // Last updated + error banner
-                        if let lastUpdated = viewModel.lastUpdated {
-                            Text("Updated \(lastUpdated, format: .relative(presentation: .named))")
-                                .font(.caption2)
-                                .foregroundStyle(.tertiary)
-                                .frame(maxWidth: .infinity, alignment: .trailing)
-                                .transition(.opacity)
-                        }
-
-                        if let error = viewModel.errorMessage {
-                            errorBanner(error)
-                                .transition(Self.errorBannerTransition)
-                        }
-
-                        // Condition (HRV, RHR)
-                        if !viewModel.conditionCards.isEmpty {
-                            cardSection(
-                                title: "Condition",
-                                icon: "heart.fill",
-                                iconColor: DS.Color.vitals,
-                                accessibilityIdentifier: "dashboard-section-condition",
-                                cards: viewModel.conditionCards
-                            )
-                            .transition(Self.sectionTransition)
-                        }
-
-                        // Activity (Steps, Exercise)
-                        if !viewModel.activityCards.isEmpty {
-                            cardSection(
-                                title: "Activity",
-                                icon: "figure.run",
-                                iconColor: DS.Color.activity,
-                                accessibilityIdentifier: "dashboard-section-activity",
-                                cards: viewModel.activityCards
-                            )
-                            .transition(Self.sectionTransition)
-                        }
-
-                        // Body (Weight, BMI, Sleep)
-                        if !viewModel.bodyCards.isEmpty {
-                            cardSection(
-                                title: "Body",
-                                icon: "bed.double.fill",
-                                iconColor: DS.Color.body,
-                                accessibilityIdentifier: "dashboard-section-body",
-                                cards: viewModel.bodyCards
-                            )
-                            .transition(Self.sectionTransition)
-                        }
-
+                        dashboardUpperContent
+                        dashboardLowerContent
                     }
                 }
                 .padding(sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.lg)
@@ -380,6 +243,167 @@ struct DashboardView: View {
         h.combine(viewModel.templateNudgeRecommendation != nil)
         h.combine(viewModel.pinnedCards.count)
         return h.finalize()
+    }
+
+    // MARK: - Dashboard Content (split for type-checker)
+
+    @ViewBuilder
+    private var dashboardUpperContent: some View {
+        // Hero
+        if let score = viewModel.conditionScore {
+            NavigationLink(value: score) {
+                ConditionHeroView(
+                    score: score,
+                    recentScores: viewModel.recentScores,
+                    weeklyGoalProgress: viewModel.weeklyGoalProgress,
+                    trendBadges: viewModel.heroBaselineDetails,
+                    hourlySparkline: viewModel.conditionSparkline.nonEmptyOrNil
+                )
+            }
+            .reportTabHeroFrame()
+            .buttonStyle(.plain)
+            .accessibilityIdentifier("dashboard-hero-condition")
+            .transition(Self.sectionTransition)
+            .staggeredAppear(index: 0)
+        } else if let status = viewModel.baselineStatus, !status.isReady {
+            BaselineProgressView(status: status)
+                .reportTabHeroFrame()
+                .transition(Self.sectionTransition)
+                .staggeredAppear(index: 0)
+        }
+
+        // Morning Briefing entry
+        if let briefingData = viewModel.briefingData,
+           !isBriefingDisabled {
+            BriefingEntryCard(conditionStatus: briefingData.conditionStatus) {
+                isShowingBriefing = true
+            }
+            .transition(Self.sectionTransition)
+            .staggeredAppear(index: 1)
+        }
+
+        // Weather + coaching (merged when coaching is weather-category)
+        Group {
+            if let weather = viewModel.weatherSnapshot {
+                NavigationLink(value: weather) {
+                    WeatherCard(snapshot: weather, insightInfo: viewModel.weatherCardInsight)
+                }
+                .buttonStyle(.plain)
+                .accessibilityIdentifier("dashboard-weather-card")
+            } else {
+                WeatherCardPlaceholder {
+                    Task { await viewModel.requestLocationPermission() }
+                }
+            }
+        }
+        .transition(Self.sectionTransition)
+        .staggeredAppear(index: 2)
+
+        // Coaching (standalone when not merged into weather card)
+        if let insight = viewModel.standaloneCoachingInsight {
+            TodayCoachingCard(insight: insight)
+                .transition(Self.sectionTransition)
+                .staggeredAppear(index: 3)
+        } else if viewModel.focusInsight == nil,
+                  let coachingMessage = viewModel.coachingMessage {
+            TodayCoachingCard(message: coachingMessage)
+                .transition(Self.sectionTransition)
+                .staggeredAppear(index: 3)
+        }
+
+        HealthDataQACard(isAvailable: HealthDataQAService.isAvailable) {
+            isShowingHealthDataQA = true
+        }
+        .staggeredAppear(index: 4)
+
+        // Insight Cards
+        if !viewModel.insightCards.isEmpty {
+            insightCardsSection
+                .transition(Self.sectionTransition)
+                .staggeredAppear(index: 5)
+        }
+    }
+
+    @ViewBuilder
+    private var dashboardLowerContent: some View {
+        // Template nudge
+        if let nudge = viewModel.templateNudgeRecommendation {
+            TemplateNudgeCard(
+                recommendation: nudge,
+                onSaveAsTemplate: { templateNudgeToSave = nudge },
+                onDismiss: {
+                    withAnimation(DS.Animation.standard) {
+                        viewModel.dismissTemplateNudge()
+                    }
+                }
+            )
+            .transition(Self.sectionTransition)
+            .staggeredAppear(index: 6)
+        }
+
+        // Sleep deficit badge
+        sleepDeficitSection
+            .staggeredAppear(index: 7)
+
+        // Pinned Metrics
+        if !viewModel.pinnedCards.isEmpty {
+            pinnedSection
+                .transition(Self.sectionTransition)
+                .staggeredAppear(index: 8)
+        }
+
+        // Last updated + error banner
+        if let lastUpdated = viewModel.lastUpdated {
+            Text("Updated \(lastUpdated, format: .relative(presentation: .named))")
+                .font(.caption2)
+                .foregroundStyle(.tertiary)
+                .frame(maxWidth: .infinity, alignment: .trailing)
+                .transition(.opacity)
+        }
+
+        if let error = viewModel.errorMessage {
+            errorBanner(error)
+                .transition(Self.errorBannerTransition)
+        }
+
+        // Condition (HRV, RHR)
+        if !viewModel.conditionCards.isEmpty {
+            cardSection(
+                title: "Condition",
+                icon: "heart.fill",
+                iconColor: DS.Color.vitals,
+                accessibilityIdentifier: "dashboard-section-condition",
+                cards: viewModel.conditionCards
+            )
+            .transition(Self.sectionTransition)
+            .staggeredAppear(index: 9)
+        }
+
+        // Activity (Steps, Exercise)
+        if !viewModel.activityCards.isEmpty {
+            cardSection(
+                title: "Activity",
+                icon: "figure.run",
+                iconColor: DS.Color.activity,
+                accessibilityIdentifier: "dashboard-section-activity",
+                cards: viewModel.activityCards
+            )
+            .transition(Self.sectionTransition)
+            .staggeredAppear(index: 10)
+        }
+
+        // Body (Weight, BMI, Sleep)
+        if !viewModel.bodyCards.isEmpty {
+            cardSection(
+                title: "Body",
+                icon: "bed.double.fill",
+                iconColor: DS.Color.body,
+                accessibilityIdentifier: "dashboard-section-body",
+                cards: viewModel.bodyCards
+            )
+            .transition(Self.sectionTransition)
+            .staggeredAppear(index: 11)
+        }
     }
 
     // MARK: - Sections
