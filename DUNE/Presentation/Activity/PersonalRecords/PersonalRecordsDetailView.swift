@@ -43,12 +43,12 @@ struct PersonalRecordsDetailView: View {
                     }
 
                     // Metric picker
-                    if viewModel.availableKinds.count > 1 {
+                    if viewModel.derived.availableKinds.count > 1 {
                         metricPicker
                     }
 
                     // Current best hero
-                    if let best = viewModel.currentBest {
+                    if let best = viewModel.derived.currentBest {
                         currentBestCard(best)
                     }
 
@@ -107,10 +107,10 @@ struct PersonalRecordsDetailView: View {
                 .font(.caption)
                 .foregroundStyle(DS.Color.textSecondary)
             Picker("Metric", selection: Binding(
-                get: { viewModel.resolvedKind ?? viewModel.availableKinds.first },
+                get: { viewModel.derived.resolvedKind ?? viewModel.derived.availableKinds.first },
                 set: { viewModel.selectedKind = $0 }
             )) {
-                ForEach(viewModel.availableKinds, id: \.self) { kind in
+                ForEach(viewModel.derived.availableKinds, id: \.self) { kind in
                     Text(kind.displayName).tag(Optional(kind))
                 }
             }
@@ -193,13 +193,13 @@ struct PersonalRecordsDetailView: View {
                 .font(.subheadline.weight(.semibold))
                 .foregroundStyle(DS.Color.textSecondary)
 
-            if viewModel.chartData.isEmpty {
+            if viewModel.derived.chartData.isEmpty {
                 Text(String(localized: "No records in this period."))
                     .font(.caption)
                     .foregroundStyle(.tertiary)
                     .frame(maxWidth: .infinity, minHeight: 220)
             } else {
-                Chart(viewModel.chartData) { record in
+                Chart(viewModel.derived.chartData) { record in
                     LineMark(
                         x: .value("Date", record.date),
                         y: .value("Value", record.value)
@@ -223,10 +223,10 @@ struct PersonalRecordsDetailView: View {
                     }
                 }
                 .chartXAxis {
-                    AxisMarks(values: .stride(by: viewModel.chartXStrideComponent)) { _ in
+                    AxisMarks(values: .stride(by: viewModel.derived.chartXStrideComponent)) { _ in
                         AxisGridLine()
                             .foregroundStyle(theme.accentColor.opacity(0.30))
-                        AxisValueLabel(format: viewModel.chartXLabelFormat)
+                        AxisValueLabel(format: viewModel.derived.chartXLabelFormat)
                             .foregroundStyle(theme.sandColor)
                     }
                 }
@@ -235,7 +235,7 @@ struct PersonalRecordsDetailView: View {
                         AxisGridLine()
                             .foregroundStyle(theme.accentColor.opacity(0.30))
                         AxisValueLabel {
-                            if let v = value.as(Double.self), let kind = viewModel.resolvedKind {
+                            if let v = value.as(Double.self), let kind = viewModel.derived.resolvedKind {
                                 Text(chartAxisValue(v, for: kind))
                                     .foregroundStyle(theme.sandColor)
                             }
@@ -253,11 +253,9 @@ struct PersonalRecordsDetailView: View {
         .accessibilityIdentifier("activity-personal-records-timeline-chart")
     }
 
-    // chartXStride and chartXFormat moved to PersonalRecordsDetailViewModel (cached)
-
     private var prGrid: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            if let kind = viewModel.resolvedKind {
+            if let kind = viewModel.derived.resolvedKind {
                 Text(
                     String.localizedStringWithFormat(
                         String(localized: "All %@ Records"),
@@ -268,13 +266,13 @@ struct PersonalRecordsDetailView: View {
                     .foregroundStyle(DS.Color.textSecondary)
             }
 
-            if viewModel.allTimeRecords.isEmpty {
+            if viewModel.derived.allTimeRecords.isEmpty {
                 Text(String(localized: "No records yet."))
                     .font(.caption)
                     .foregroundStyle(.tertiary)
             } else {
                 LazyVGrid(columns: columns, spacing: DS.Spacing.sm) {
-                    ForEach(viewModel.allTimeRecords) { record in
+                    ForEach(viewModel.derived.allTimeRecords) { record in
                         prCard(record)
                     }
                 }
