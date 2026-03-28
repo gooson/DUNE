@@ -9,13 +9,16 @@ enum TrainingVolumeAnalysisService {
     // MARK: - Public API
 
     /// Analyze training volume for the given period, producing current vs previous comparison.
+    /// - Parameter referenceDate: The end boundary for the "current" period. Defaults to `Date()`.
+    ///   Pass a past date to analyze a historical period (e.g. last week).
     static func analyze(
         workouts: [WorkoutSummary],
         manualRecords: [ManualExerciseSnapshot],
-        period: VolumePeriod
+        period: VolumePeriod,
+        referenceDate: Date = Date()
     ) -> PeriodComparison {
         let calendar = Calendar.current
-        let today = calendar.startOfDay(for: Date())
+        let today = calendar.startOfDay(for: referenceDate)
         let days = period.days
 
         guard let currentStart = calendar.date(byAdding: .day, value: -days, to: today),
@@ -28,7 +31,7 @@ enum TrainingVolumeAnalysisService {
             )
         }
 
-        let currentEnd = Date()
+        let currentEnd = referenceDate
 
         let currentSummary = buildSummary(
             workouts: workouts.filter { $0.date >= currentStart && $0.date <= currentEnd },

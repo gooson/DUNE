@@ -110,22 +110,11 @@ final class WeeklyStatsDetailViewModel {
             end: historyEnd
         )
 
-        let filteredWorkouts: [WorkoutSummary]
-        let filteredSnapshots: [ManualExerciseSnapshot]
-
-        if period == .lastWeek {
-            // For last week, filter manually since TrainingVolumeAnalysisService uses "current" = now-based
-            filteredWorkouts = workouts.filter { $0.date >= range.start && $0.date <= range.end }
-            filteredSnapshots = manualSnapshots.filter { $0.date >= range.start && $0.date <= range.end }
-        } else {
-            filteredWorkouts = workouts
-            filteredSnapshots = historySnapshots
-        }
-
         let result = TrainingVolumeAnalysisService.analyze(
-            workouts: filteredWorkouts,
-            manualRecords: filteredSnapshots,
-            period: period.volumePeriod
+            workouts: workouts,
+            manualRecords: historySnapshots,
+            period: period.volumePeriod,
+            referenceDate: range.end
         )
 
         guard isCurrentLoadRequest(requestID) else { return }
