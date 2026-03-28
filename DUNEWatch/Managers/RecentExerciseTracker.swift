@@ -23,6 +23,7 @@ enum RecentExerciseTracker {
         "pull-up",
         "overhead-press",
         "barbell-row",
+        "plank",
         "running",
         "stair-climber",
     ]

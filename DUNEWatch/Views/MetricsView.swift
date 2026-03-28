@@ -216,7 +216,7 @@ struct MetricsView: View {
                     durationInputCardContent
                 case .setsReps:
                     repsOnlyInputCardContent
-                default:
+                case .setsRepsWeight, .durationDistance, .roundsBased:
                     weightRepsInputCardContent
                 }
             }

@@ -47,7 +47,7 @@ struct SetInputSheet: View {
             durationContent
         case .setsReps:
             repsOnlyContent
-        default:
+        case .setsRepsWeight, .durationDistance, .roundsBased:
             weightRepsContent
         }
     }
@@ -288,6 +288,7 @@ struct SetInputSheet: View {
             let newValue = durationMinutes + delta
             if (0...120).contains(newValue) {
                 durationMinutes = newValue
+                crownDurationDouble = Double(newValue)
                 playDebouncedHaptic()
             }
         } label: {
@@ -312,7 +313,7 @@ struct SetInputSheet: View {
                             .frame(width: 36, alignment: .leading)
 
                         if let d = set.duration, d > 0 {
-                            Text("\(Int(d / 60))min")
+                            Text("\(max(1, Int((d / 60).rounded())))min")
                                 .font(.caption2.monospacedDigit())
                         } else {
                             if let w = set.weight, w > 0 {
