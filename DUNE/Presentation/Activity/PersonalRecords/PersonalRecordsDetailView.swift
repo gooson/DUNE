@@ -253,9 +253,8 @@ struct PersonalRecordsDetailView: View {
     private var chartXStride: Calendar.Component {
         switch viewModel.selectedPeriod {
         case .day, .week: .day
-        case .month: .weekOfMonth
-        case .sixMonths: .month
-        case .year: .month
+        case .month: .weekOfYear
+        case .sixMonths, .year: .month
         }
     }
 
