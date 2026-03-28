@@ -152,12 +152,10 @@ struct DUNEApp: App {
     private static let shouldResetUITestState = uiTestLaunchConfiguration.shouldResetState
 
     private static func makeModelContainer(configuration: ModelConfiguration) throws -> ModelContainer {
-        // All migration stages are .lightweight — SwiftData's automatic migration
-        // handles them without an explicit plan. The staged migration plan is removed
-        // because multiple VersionedSchemas (V2-V7, V11) reference live model types
-        // whose hashes drifted, causing 134504 "unknown model version" on every launch.
+        // SwiftData automatic lightweight migration handles all schema upgrades.
+        // No explicit SchemaMigrationPlan is used — see AppSchemaVersions.swift.
         try ModelContainer(
-            for: AppMigrationPlan.currentSchema,
+            for: AppSchema.currentSchema,
             configurations: configuration
         )
     }
@@ -166,8 +164,7 @@ struct DUNEApp: App {
         AppLogger.data.error("Falling back to in-memory ModelContainer due to persistent store failure")
         let fallbackConfiguration = ModelConfiguration(isStoredInMemoryOnly: true)
         do {
-            // Skip migration plan — in-memory stores have nothing to migrate.
-            return try makeFreshModelContainer(configuration: fallbackConfiguration)
+            return try makeModelContainer(configuration: fallbackConfiguration)
         } catch {
             // Absolute last resort — should never happen but prevents fatalError crash.
             AppLogger.data.error("In-memory ModelContainer failed: \(error). Creating minimal container.")
@@ -284,19 +281,6 @@ struct DUNEApp: App {
         }
     }
 
-    /// Create a ModelContainer WITHOUT the migration plan.
-    /// Used after store deletion when a fresh store needs no migration.
-    /// The staged migration plan contains VersionedSchemas that reference live model
-    /// types whose hashes have drifted since declaration (V2-V7, V11 reference live
-    /// types later modified). This causes 134504 "unknown model version" even on empty
-    /// stores. Bypassing the migration plan avoids plan-validation errors entirely.
-    private static func makeFreshModelContainer(configuration: ModelConfiguration) throws -> ModelContainer {
-        try ModelContainer(
-            for: AppMigrationPlan.currentSchema,
-            configurations: configuration
-        )
-    }
-
     private static func recoverModelContainer(after error: Error, configuration: ModelConfiguration) -> ModelContainer {
         let reflectedError = String(reflecting: error)
         guard PersistentStoreRecovery.shouldDeleteStore(after: error) else {
@@ -307,23 +291,23 @@ struct DUNEApp: App {
         AppLogger.data.error("Deleting persistent store after migration compatibility failure: \(reflectedError, privacy: .private)")
         deleteStoreFiles(at: configuration.url)
 
-        // Retry 1: fresh container WITHOUT migration plan (deleted store needs no migration).
+        // Retry 1: fresh container after store deletion.
         do {
-            let container = try makeFreshModelContainer(configuration: configuration)
-            AppLogger.data.info("ModelContainer recovered with fresh store (no migration plan).")
+            let container = try makeModelContainer(configuration: configuration)
+            AppLogger.data.info("ModelContainer recovered with fresh store.")
             return container
         } catch {
             AppLogger.data.error("Fresh ModelContainer retry failed: \(error)")
         }
 
-        // Retry 2: fresh container without CloudKit either.
+        // Retry 2: without CloudKit.
         do {
             let noCloudConfig = ModelConfiguration(
                 url: configuration.url,
                 cloudKitDatabase: .none
             )
-            let container = try makeFreshModelContainer(configuration: noCloudConfig)
-            AppLogger.data.info("ModelContainer recovered without CloudKit. Data will sync on next runtime rebuild.")
+            let container = try makeModelContainer(configuration: noCloudConfig)
+            AppLogger.data.info("ModelContainer recovered without CloudKit.")
             return container
         } catch {
             AppLogger.data.error("Fresh ModelContainer retry without CloudKit also failed: \(error)")
@@ -664,9 +648,6 @@ struct DUNEApp: App {
             await PostureReminderScheduler.shared.refreshSchedule()
         }
         scheduleWorkoutTitleBackfill()
-
-        // Diagnostic: check iCloud ExerciseRecord data
-        Task { await CloudKitDiagnostics.fetchAllExerciseRecords() }
     }
 
     @MainActor

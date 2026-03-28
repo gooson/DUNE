@@ -31,6 +31,7 @@ struct HeroScoreCard: View {
 
     @State private var animatedScore: Int = 0
     @State private var isAppeared = false
+    @State private var showGlow = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.horizontalSizeClass) private var sizeClass
     @Environment(\.appTheme) private var theme
@@ -81,6 +82,15 @@ struct HeroScoreCard: View {
                 withAnimation(DS.Animation.numeric.delay(isFirst ? 0.2 : 0.1)) {
                     animatedScore = score
                 }
+                // Glow pulse after counter finishes
+                Task { @MainActor in
+                    try? await Task.sleep(for: .milliseconds(isFirst ? 800 : 700))
+                    guard !Task.isCancelled else { return }
+                    showGlow = true
+                    try? await Task.sleep(for: .milliseconds(600))
+                    guard !Task.isCancelled else { return }
+                    showGlow = false
+                }
             }
         }
         .onChange(of: score) { _, newValue in
@@ -102,6 +112,14 @@ struct HeroScoreCard: View {
                 lineWidth: ringLineWidth,
                 size: ringSize,
                 useWarmGradient: true
+            )
+            .shadow(
+                color: statusColor.opacity(showGlow ? 0.5 : 0),
+                radius: showGlow ? 12 : 0
+            )
+            .animation(
+                reduceMotion ? .none : DS.Animation.emphasize,
+                value: showGlow
             )
 
             VStack(spacing: 2) {

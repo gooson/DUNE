@@ -89,6 +89,7 @@ struct BarChartView: View {
             .sensoryFeedback(.selection, trigger: selectedPoint?.date)
             .frame(height: chartHeight)
             .clipped()
+            .chartDrawAnimation()
             .accessibilityChartDescriptor(chartDescriptor)
     }
 

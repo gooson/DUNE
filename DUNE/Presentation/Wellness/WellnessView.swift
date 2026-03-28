@@ -84,6 +84,7 @@ struct WellnessView: View {
                             .reportTabHeroFrame()
                             .buttonStyle(.plain)
                             .accessibilityIdentifier("wellness-hero-score")
+                            .staggeredAppear(index: 0)
                         } else {
                             WellnessHeroCard(
                                 score: viewModel.wellnessScore,
@@ -93,6 +94,7 @@ struct WellnessView: View {
                                 hourlySparkline: viewModel.wellnessSparkline.nonEmptyOrNil
                             )
                             .reportTabHeroFrame()
+                            .staggeredAppear(index: 0)
                         }
 
                         // Sleep Prediction
@@ -107,6 +109,7 @@ struct WellnessView: View {
                             }
                         }
                         .accessibilityIdentifier("wellness-section-sleep-prediction")
+                        .staggeredAppear(index: 1)
 
                         // Physical section
                         if !viewModel.physicalCards.isEmpty {
@@ -117,6 +120,7 @@ struct WellnessView: View {
                             ) {
                                 cardGrid(cards: viewModel.physicalCards)
                             }
+                            .staggeredAppear(index: 2)
                         }
 
                         // Active Indicators section
@@ -128,6 +132,7 @@ struct WellnessView: View {
                             ) {
                                 cardGrid(cards: viewModel.activeCards)
                             }
+                            .staggeredAppear(index: 3)
                         }
 
                         // Watch Posture Summary
@@ -135,22 +140,26 @@ struct WellnessView: View {
                             summary: viewModel.watchPostureSummary,
                             isWatchAppInstalled: WatchSessionManager.shared.isWatchAppInstalled
                         )
+                        .staggeredAppear(index: 4)
 
                         // Posture Assessment (isolated @Query)
                         PostureAssessmentLinkView(
                             onCapture: { isShowingPostureCapture = true },
                             onRealtime: { isShowingRealtimePosture = true },
-                            onScoreUpdate: { viewModel.postureScore = $0.map { max(0, min(100, $0)) } }
+                            onScoreUpdate: { viewModel.postureScore = $0 }
                         )
+                        .staggeredAppear(index: 5)
 
                         // Injury Banner (isolated @Query — re-renders independently)
                         WellnessInjuryBannerView(
                             onEdit: { record in injuryViewModel.startEditing(record) },
                             onAdd: { startAddingInjury() }
                         )
+                        .staggeredAppear(index: 6)
 
                         // Body History link (isolated @Query — only renders when records exist)
                         BodyHistoryLinkView()
+                        .staggeredAppear(index: 7)
                     }
                 }
                 .padding(isRegular ? DS.Spacing.xxl : DS.Spacing.lg)
@@ -530,8 +539,8 @@ private struct PostureAssessmentLinkView: View {
                 }
             }
         }
-        .onChange(of: records.first?.overallScore, initial: true) { _, newValue in
-            onScoreUpdate?(newValue)
+        .task(id: records.first?.overallScore) {
+            onScoreUpdate?(records.first?.overallScore)
         }
     }
 

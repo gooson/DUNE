@@ -9,17 +9,20 @@ enum TrainingVolumeAnalysisService {
     // MARK: - Public API
 
     /// Analyze training volume for the given period, producing current vs previous comparison.
+    /// - Parameter referenceDate: The end boundary for the "current" period. Defaults to `Date()`.
+    ///   Pass a past date to analyze a historical period (e.g. last week).
     static func analyze(
         workouts: [WorkoutSummary],
         manualRecords: [ManualExerciseSnapshot],
-        period: VolumePeriod
+        period: VolumePeriod,
+        referenceDate: Date = Date()
     ) -> PeriodComparison {
         let calendar = Calendar.current
-        let today = calendar.startOfDay(for: Date())
+        let today = calendar.startOfDay(for: referenceDate)
         let days = period.days
 
-        guard let currentStart = calendar.date(byAdding: .day, value: -(days - 1), to: today),
-              let previousStart = calendar.date(byAdding: .day, value: -(days * 2 - 1), to: today),
+        guard let currentStart = calendar.date(byAdding: .day, value: -days, to: today),
+              let previousStart = calendar.date(byAdding: .day, value: -(days * 2), to: today),
               let previousEnd = calendar.date(byAdding: .day, value: -1, to: currentStart)
         else {
             return PeriodComparison(
@@ -28,7 +31,7 @@ enum TrainingVolumeAnalysisService {
             )
         }
 
-        let currentEnd = Date()
+        let currentEnd = referenceDate
 
         let currentSummary = buildSummary(
             workouts: workouts.filter { $0.date >= currentStart && $0.date <= currentEnd },
@@ -38,9 +41,11 @@ enum TrainingVolumeAnalysisService {
             end: currentEnd
         )
 
+        // Filter uses `< currentStart` (exclusive) to avoid boundary gap.
+        // `previousEnd` (currentStart - 1 day) is passed as `end:` for daily breakdown date range only.
         let previousSummary = buildSummary(
-            workouts: workouts.filter { $0.date >= previousStart && $0.date <= previousEnd },
-            manualRecords: manualRecords.filter { $0.date >= previousStart && $0.date <= previousEnd },
+            workouts: workouts.filter { $0.date >= previousStart && $0.date < currentStart },
+            manualRecords: manualRecords.filter { $0.date >= previousStart && $0.date < currentStart },
             period: period,
             start: previousStart,
             end: previousEnd
@@ -173,6 +178,7 @@ enum TrainingVolumeAnalysisService {
     ) -> [DailyVolumePoint] {
         let calendar = Calendar.current
         var dailySegments: [Date: [String: TimeInterval]] = [:]
+        var dailyVolume: [Date: Double] = [:]
 
         for workout in workouts {
             guard workout.duration > 0, workout.duration.isFinite else { continue }
@@ -186,6 +192,9 @@ enum TrainingVolumeAnalysisService {
             dailySegments[day, default: [:]][
                 "manual-\(record.exerciseType)", default: 0
             ] += record.duration
+            if record.totalVolume > 0, record.totalVolume.isFinite {
+                dailyVolume[day, default: 0] += record.totalVolume
+            }
         }
 
         // Fill all days in range
@@ -198,7 +207,11 @@ enum TrainingVolumeAnalysisService {
                 DailyVolumePoint.Segment(typeKey: $0.key, duration: $0.value)
             }
             .sorted { $0.duration > $1.duration } ?? []
-            result.append(DailyVolumePoint(date: current, segments: segments))
+            result.append(DailyVolumePoint(
+                date: current,
+                segments: segments,
+                totalVolume: dailyVolume[current] ?? 0
+            ))
             guard let next = calendar.date(byAdding: .day, value: 1, to: current) else { break }
             current = next
         }

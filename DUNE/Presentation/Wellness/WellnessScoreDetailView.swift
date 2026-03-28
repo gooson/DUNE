@@ -47,12 +47,14 @@ struct WellnessScoreDetailView: View {
             VStack(alignment: .leading, spacing: sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.xl) {
                 // 1. Score Hero
                 scoreHero
+                    .staggeredAppear(index: 0)
 
                 // 2. Time-of-Day Card
                 TimeOfDayCard(
                     currentAdjustment: wellnessScore.timeOfDayAdjustment,
                     baseScore: Double(wellnessScore.score) - wellnessScore.timeOfDayAdjustment
                 )
+                .staggeredAppear(index: 1)
 
                 // 3. Period Picker
                 Picker("Period", selection: $viewModel.selectedPeriod) {
@@ -62,6 +64,7 @@ struct WellnessScoreDetailView: View {
                 }
                 .pickerStyle(.segmented)
                 .sensoryFeedback(.selection, trigger: viewModel.selectedPeriod)
+                .staggeredAppear(index: 2)
 
                 // 4. Chart Header
                 ScoreDetailChartHeader(
@@ -69,6 +72,7 @@ struct WellnessScoreDetailView: View {
                     showTrendLine: $viewModel.showTrendLine,
                     tintColor: wellnessScore.status.color
                 )
+                .staggeredAppear(index: 3)
 
                 // 5. Main Trend Chart (DotLineChartView)
                 StandardCard {
@@ -94,6 +98,7 @@ struct WellnessScoreDetailView: View {
                     .transition(.opacity)
                 }
                 .animation(.easeInOut(duration: 0.25), value: viewModel.selectedPeriod)
+                .staggeredAppear(index: 4)
 
                 // 6. Summary Stats + 7. Highlights
                 if sizeClass == .regular {
@@ -107,12 +112,15 @@ struct WellnessScoreDetailView: View {
                                 .frame(maxWidth: .infinity)
                         }
                     }
+                    .staggeredAppear(index: 5)
                 } else {
                     if let summary = viewModel.summaryStats {
                         ScoreDetailSummaryStats(summary: summary)
+                            .staggeredAppear(index: 5)
                     }
                     if !viewModel.highlights.isEmpty {
                         ScoreDetailHighlights(highlights: viewModel.highlights)
+                            .staggeredAppear(index: 5)
                     }
                 }
 
@@ -124,6 +132,7 @@ struct WellnessScoreDetailView: View {
                         color: DS.Color.hrv,
                         unit: "ms"
                     )
+                    .staggeredAppear(index: 6)
 
                     SubScoreTrendChartView(
                         title: "Resting Heart Rate",
@@ -131,6 +140,7 @@ struct WellnessScoreDetailView: View {
                         color: DS.Color.heartRate,
                         unit: "bpm"
                     )
+                    .staggeredAppear(index: 6)
 
                     SubScoreTrendChartView(
                         title: "Sleep Duration",
@@ -139,6 +149,7 @@ struct WellnessScoreDetailView: View {
                         unit: "hrs",
                         fractionDigits: 1
                     )
+                    .staggeredAppear(index: 6)
                 }
 
                 // 9. Component Weights
@@ -151,21 +162,25 @@ struct WellnessScoreDetailView: View {
                         .init(label: Labels.posture, weight: "15%", score: wellnessScore.postureScore, color: DS.Color.posture),
                     ]
                 )
+                .staggeredAppear(index: 7)
 
                 // 10. Contributors
                 if let conditionScore, !conditionScore.contributions.isEmpty {
                     StandardCard {
                         ScoreContributorsView(contributions: conditionScore.contributions)
                     }
+                    .staggeredAppear(index: 7)
                 }
 
                 // 11. Calculation Cards
                 if let detail = conditionScore?.detail {
                     ConditionCalculationCard(detail: detail)
+                        .staggeredAppear(index: 7)
                 }
 
                 if let bodyDetail = bodyScoreDetail {
                     BodyCalculationCard(detail: bodyDetail)
+                        .staggeredAppear(index: 7)
                 }
 
                 // 12. Explainer
@@ -174,6 +189,7 @@ struct WellnessScoreDetailView: View {
                     title: "Calculation Method",
                     bullets: Labels.calculationBullets
                 )
+                .staggeredAppear(index: 7)
             }
             .padding(sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.lg)
         }

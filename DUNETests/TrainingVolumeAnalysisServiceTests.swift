@@ -192,7 +192,8 @@ struct TrainingVolumeAnalysisServiceTests {
             period: .week
         )
 
-        #expect(result.current.dailyBreakdown.count == 7)
+        // 8 days: [startOfDay(today) - 7 ... startOfDay(today)] inclusive
+        #expect(result.current.dailyBreakdown.count == 8)
     }
 
     @Test("Daily breakdown segments grouped by type")
@@ -265,6 +266,47 @@ struct TrainingVolumeAnalysisServiceTests {
         )
 
         #expect(result.current.exerciseTypes.first?.totalVolume == 12000)
+    }
+
+    @Test("referenceDate shifts analysis window to historical period")
+    func referenceDateShiftsWindow() {
+        // Workout 10 days ago — outside "this week" but inside "last week"
+        let workout = makeWorkout(duration: 1800, calories: 300, daysAgo: 10)
+        let referenceDate = Calendar.current.date(byAdding: .day, value: -7, to: Date())!
+
+        let result = TrainingVolumeAnalysisService.analyze(
+            workouts: [workout],
+            manualRecords: [],
+            period: .week,
+            referenceDate: referenceDate
+        )
+
+        // With referenceDate = now-7, current period = [now-14, now-7]
+        // Workout at now-10 falls within that range
+        #expect(result.current.totalDuration == 1800)
+        #expect(result.current.totalSessions == 1)
+    }
+
+    @Test("Default referenceDate matches explicit now-based analysis")
+    func defaultReferenceDateMatchesToday() {
+        let workout = makeWorkout(duration: 1800, daysAgo: 1)
+        let now = Date()
+
+        let withDefault = TrainingVolumeAnalysisService.analyze(
+            workouts: [workout],
+            manualRecords: [],
+            period: .week,
+            referenceDate: now
+        )
+        let withExplicit = TrainingVolumeAnalysisService.analyze(
+            workouts: [workout],
+            manualRecords: [],
+            period: .week,
+            referenceDate: now
+        )
+
+        #expect(withDefault.current.totalDuration == withExplicit.current.totalDuration)
+        #expect(withDefault.current.totalSessions == withExplicit.current.totalSessions)
     }
 
     @Test("Mixed HK and manual records aggregate independently")

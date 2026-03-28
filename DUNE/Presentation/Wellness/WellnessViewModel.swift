@@ -23,6 +23,9 @@ final class WellnessViewModel {
     var bodyScoreDetail: BodyScoreDetail?
     var postureScore: Int? {
         didSet {
+            if let score = postureScore {
+                postureScore = max(0, min(100, score))
+            }
             if postureScore != oldValue { recalculateWellnessScore() }
         }
     }

@@ -37,12 +37,14 @@ struct TrainingReadinessDetailView: View {
                 } else if let readiness = viewModel.readiness {
                     // 1. Score Hero
                     scoreHero(readiness)
+                        .staggeredAppear(index: 0)
 
                     // 2. Time-of-Day Card
                     TimeOfDayCard(
                         currentAdjustment: readiness.timeOfDayAdjustment,
                         baseScore: Double(readiness.score) - readiness.timeOfDayAdjustment
                     )
+                    .staggeredAppear(index: 1)
 
                     // 3. Period Picker
                     Picker("Period", selection: $viewModel.selectedPeriod) {
@@ -53,6 +55,7 @@ struct TrainingReadinessDetailView: View {
                     .pickerStyle(.segmented)
                     .accessibilityIdentifier("training-readiness-period-picker")
                     .sensoryFeedback(.selection, trigger: viewModel.selectedPeriod)
+                    .staggeredAppear(index: 2)
 
                     // 4. Chart Header
                     ScoreDetailChartHeader(
@@ -60,6 +63,7 @@ struct TrainingReadinessDetailView: View {
                         showTrendLine: $viewModel.showTrendLine,
                         tintColor: readiness.status.color
                     )
+                    .staggeredAppear(index: 3)
 
                     // 5. Main Trend Chart (DotLineChartView)
                     StandardCard {
@@ -86,6 +90,7 @@ struct TrainingReadinessDetailView: View {
                     }
                     .accessibilityIdentifier("trainingreadiness-chart-trend")
                     .animation(.easeInOut(duration: 0.25), value: viewModel.selectedPeriod)
+                    .staggeredAppear(index: 4)
 
                     // 6. Summary Stats + 7. Highlights
                     if sizeClass == .regular {
@@ -99,12 +104,15 @@ struct TrainingReadinessDetailView: View {
                                     .frame(maxWidth: .infinity)
                             }
                         }
+                        .staggeredAppear(index: 5)
                     } else {
                         if let summary = viewModel.summaryStats {
                             ScoreDetailSummaryStats(summary: summary)
+                                .staggeredAppear(index: 5)
                         }
                         if !viewModel.highlights.isEmpty {
                             ScoreDetailHighlights(highlights: viewModel.highlights)
+                                .staggeredAppear(index: 5)
                         }
                     }
 
@@ -117,6 +125,7 @@ struct TrainingReadinessDetailView: View {
                             unit: "ms"
                         )
                         .accessibilityIdentifier("training-readiness-subscore-hrv")
+                        .staggeredAppear(index: 6)
 
                         SubScoreTrendChartView(
                             title: "Resting Heart Rate",
@@ -125,6 +134,7 @@ struct TrainingReadinessDetailView: View {
                             unit: "bpm"
                         )
                         .accessibilityIdentifier("training-readiness-subscore-rhr")
+                        .staggeredAppear(index: 6)
 
                         SubScoreTrendChartView(
                             title: "Sleep Duration",
@@ -134,6 +144,7 @@ struct TrainingReadinessDetailView: View {
                             fractionDigits: 1
                         )
                         .accessibilityIdentifier("training-readiness-subscore-sleep")
+                        .staggeredAppear(index: 6)
                     }
 
                     // 9. Component Weights
@@ -147,6 +158,7 @@ struct TrainingReadinessDetailView: View {
                             .init(label: String(localized: "Trend Bonus"), weight: "10%", score: readiness.components.trendBonus, color: DS.Color.fitness),
                         ]
                     )
+                    .staggeredAppear(index: 7)
 
                     // 10. Calculation Card
                     CalculationMethodCard(
@@ -154,6 +166,7 @@ struct TrainingReadinessDetailView: View {
                         title: "Calculation Method",
                         bullets: calculationBullets(readiness)
                     )
+                    .staggeredAppear(index: 7)
                 } else {
                     ScoreDetailEmptyState(
                         icon: "figure.run",

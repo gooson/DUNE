@@ -141,6 +141,7 @@ struct DotLineChartView: View {
             .chartSelectionUITestProbe(lastSelectionProbeLabel)
             .frame(height: chartHeight)
             .clipped()
+            .chartDrawAnimation()
             .onAppear { cachedYDomain = Self.computeYDomain(from: data) }
             .onChange(of: data.count) { _, _ in cachedYDomain = Self.computeYDomain(from: data) }
     }

@@ -9,6 +9,7 @@ struct DailyVolumeChartView: View {
     enum Metric: CaseIterable, Identifiable {
         case duration
         case sessions
+        case volume
 
         var id: Self { self }
 
@@ -19,6 +20,7 @@ struct DailyVolumeChartView: View {
         private static let displayNames: [Metric: String] = [
             .duration: String(localized: "Duration"),
             .sessions: String(localized: "Sessions"),
+            .volume: String(localized: "Volume (kg)"),
         ]
     }
 
@@ -202,6 +204,7 @@ struct DailyVolumeChartView: View {
         switch selectedMetric {
         case .duration: point.totalDuration / 60.0
         case .sessions: Double(point.segments.count)
+        case .volume: point.totalVolume
         }
     }
 
@@ -217,6 +220,8 @@ struct DailyVolumeChartView: View {
             return "\(mins.formattedWithSeparator) min"
         case .sessions:
             return "\(point.segments.count) sessions"
+        case .volume:
+            return "\(point.totalVolume.formattedWithSeparator()) kg"
         }
     }
 

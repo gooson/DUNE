@@ -64,7 +64,6 @@ final class WeeklyStatsDetailViewModel {
 
     var comparison: PeriodComparison?
     var chartDailyBreakdown: [DailyVolumePoint] = []
-    var dailyWeightVolume: [DailyWeightVolumePoint] = []
     var summaryStats: [ActivityStat] = []
     var isLoading = false
     var errorMessage: String?
@@ -111,56 +110,17 @@ final class WeeklyStatsDetailViewModel {
             end: historyEnd
         )
 
-        let filteredWorkouts: [WorkoutSummary]
-        let filteredSnapshots: [ManualExerciseSnapshot]
-
-        if period == .lastWeek {
-            // For last week, filter manually since TrainingVolumeAnalysisService uses "current" = now-based
-            filteredWorkouts = workouts.filter { $0.date >= range.start && $0.date <= range.end }
-            filteredSnapshots = manualSnapshots.filter { $0.date >= range.start && $0.date <= range.end }
-        } else {
-            filteredWorkouts = workouts
-            filteredSnapshots = historySnapshots
-        }
-
         let result = TrainingVolumeAnalysisService.analyze(
-            workouts: filteredWorkouts,
-            manualRecords: filteredSnapshots,
-            period: period.volumePeriod
+            workouts: workouts,
+            manualRecords: historySnapshots,
+            period: period.volumePeriod,
+            referenceDate: range.end
         )
 
         guard isCurrentLoadRequest(requestID) else { return }
 
         comparison = result
-        dailyWeightVolume = Self.buildDailyWeightVolume(
-            from: filteredSnapshots, start: range.start, end: range.end
-        )
         rebuildSummaryStats(from: result, period: period, allSnapshots: manualSnapshots)
-    }
-
-    static func buildDailyWeightVolume(
-        from snapshots: [ManualExerciseSnapshot],
-        start: Date, end: Date
-    ) -> [DailyWeightVolumePoint] {
-        let calendar = Calendar.current
-        var dailyVolume: [Date: Double] = [:]
-
-        for snapshot in snapshots where snapshot.totalVolume > 0 {
-            let day = calendar.startOfDay(for: snapshot.date)
-            dailyVolume[day, default: 0] += snapshot.totalVolume
-        }
-
-        var result: [DailyWeightVolumePoint] = []
-        var current = calendar.startOfDay(for: start)
-        let endDay = calendar.startOfDay(for: end)
-        while current <= endDay {
-            result.append(DailyWeightVolumePoint(
-                date: current, volume: dailyVolume[current] ?? 0
-            ))
-            guard let next = calendar.date(byAdding: .day, value: 1, to: current) else { break }
-            current = next
-        }
-        return result
     }
 
     // MARK: - Private
@@ -170,7 +130,6 @@ final class WeeklyStatsDetailViewModel {
         loadTask?.cancel()
         comparison = nil
         chartDailyBreakdown = []
-        dailyWeightVolume = []
         summaryStats = []
         isLoading = false
     }
@@ -205,37 +164,20 @@ final class WeeklyStatsDetailViewModel {
 
     private func rebuildSummaryStats(from result: PeriodComparison, period: StatsPeriod, allSnapshots: [ManualExerciseSnapshot]) {
         let current = result.current
-        let calendar = Calendar.current
 
         let durationMin = current.totalDuration / 60.0
         let durationChange = result.durationChange
         let calChange = result.calorieChange
 
-        // Volume from manual records (weight × reps)
-        let periodVolume = current.exerciseTypes.compactMap(\.totalVolume).reduce(0, +)
+        // Volume from manual records (weight × reps) — no fallback
+        let totalVolume = current.exerciseTypes.compactMap(\.totalVolume).reduce(0, +)
         let prevVolume = result.previous?.exerciseTypes.compactMap(\.totalVolume).reduce(0, +) ?? 0
-        let rawVolChange = prevVolume > 0 ? ((periodVolume - prevVolume) / prevVolume * 100) : nil
+        let rawVolChange = prevVolume > 0 ? ((totalVolume - prevVolume) / prevVolume * 100) : nil
         let volChange = rawVolChange.flatMap { $0.isFinite ? $0 : nil }
-
-        // Fallback: weekly average from all records if this period has no volume
-        let totalVolume: Double
-        if periodVolume > 0 {
-            totalVolume = periodVolume
-        } else {
-            let allWithVolume = allSnapshots.filter { $0.totalVolume > 0 }
-            if let oldest = allWithVolume.map(\.date).min() {
-                let allVol = allWithVolume.reduce(0.0) { $0 + $1.totalVolume }
-                let daySpan = max(1, calendar.dateComponents([.day], from: oldest, to: Date()).day ?? 1)
-                let weeks = max(1.0, Double(daySpan) / 7.0)
-                totalVolume = allVol / weeks
-            } else {
-                totalVolume = 0
-            }
-        }
 
         summaryStats = [
             .volume(
-                value: totalVolume > 0 ? totalVolume.formattedWithSeparator() : "\u{2014}",
+                value: totalVolume >= 0.01 ? totalVolume.formattedWithSeparator() : "\u{2014}",
                 change: volChange.map { "\($0.formattedWithSeparator(alwaysShowSign: true))%" },
                 isPositive: volChange.map { $0 >= 0 }
             ),
@@ -264,12 +206,4 @@ final class WeeklyStatsDetailViewModel {
             ),
         ]
     }
-}
-
-// MARK: - Daily Weight Volume Point
-
-struct DailyWeightVolumePoint: Identifiable, Sendable {
-    var id: Date { date }
-    let date: Date
-    let volume: Double // weight × reps (kg)
 }
