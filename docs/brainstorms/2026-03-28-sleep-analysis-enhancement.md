@@ -186,7 +186,7 @@ DUNE도 수면 분석을 포괄적으로 고도화하여 **단순 점수 → 다
 
 2. Breathing Disturbances의 "Elevated" 기준을 Apple 내부 기준 그대로 사용할지, 자체 정의할지?
    - **결정**: 자체 정의 (`BreathingDisturbanceAnalysis.RiskLevel` enum).
-   - **근거**: Apple은 정확한 임계값을 공개하지 않음. 자체 `normal/mild/moderate/elevated` 4단계로 구현 완료.
+   - **근거**: Apple은 정확한 임계값을 공개하지 않음. 자체 `normal/mild/elevated` 3단계로 구현 완료 (< 5/hr, 5-10/hr, 10-15/hr).
 
 3. 야간 바이탈 대시보드에서 SpO2를 별도 트랙으로 표시할지, HR과 동일 축에 배치할지?
    - **결정**: 별도 트랙. `NocturnalVitalsChartView`에서 `VitalType.spO2`로 독립 case 구현.
