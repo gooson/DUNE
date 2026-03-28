@@ -156,7 +156,7 @@ struct MetricSummaryHeader: View {
 
     private func badgeColor(isPositive: Bool) -> Color {
         switch category {
-        case .rhr:
+        case .rhr, .heartRate:
             isPositive ? DS.Color.negative : DS.Color.positive
         default:
             isPositive ? DS.Color.positive : DS.Color.negative

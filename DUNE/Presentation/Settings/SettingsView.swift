@@ -9,7 +9,7 @@ struct SettingsView: View {
     @Environment(\.openURL) private var openURL
     @Environment(\.scenePhase) private var scenePhase
 
-    @State private var locationStatus: CLAuthorizationStatus = CLLocationManager().authorizationStatus
+    @State private var locationStatus: CLAuthorizationStatus = .notDetermined
     @State private var restSeconds: Double = WorkoutSettingsStore.shared.restSeconds
     @State private var setCount: Int = WorkoutSettingsStore.shared.setCount
     @State private var bodyWeightKg: Double = WorkoutSettingsStore.shared.bodyWeightKg

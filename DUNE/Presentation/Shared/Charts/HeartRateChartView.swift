@@ -52,12 +52,12 @@ struct HeartRateChartView: View {
 
     private var chart: some View {
         Chart {
-            ForEach(Array(samples.enumerated()), id: \.offset) { _, sample in
+            ForEach(samples, id: \.date) { sample in
                 AreaMark(
                     x: .value("Time", sample.date),
                     y: .value("BPM", sample.bpm)
                 )
-                .foregroundStyle(areaGradient)
+                .foregroundStyle(Self.areaGradient)
                 .interpolationMethod(.catmullRom)
 
                 LineMark(
@@ -137,13 +137,11 @@ struct HeartRateChartView: View {
 
     // MARK: - Helpers
 
-    private var areaGradient: LinearGradient {
-        LinearGradient(
-            colors: [DS.Color.rhr.opacity(0.3), DS.Color.rhr.opacity(0.05)],
-            startPoint: .top,
-            endPoint: .bottom
-        )
-    }
+    private static let areaGradient = LinearGradient(
+        colors: [DS.Color.rhr.opacity(0.3), DS.Color.rhr.opacity(0.05)],
+        startPoint: .top,
+        endPoint: .bottom
+    )
 
     private var yDomain: ClosedRange<Double> {
         let bpms = samples.map(\.bpm)
