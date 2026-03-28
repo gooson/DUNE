@@ -32,11 +32,14 @@ enum ExerciseVariantMigration {
         // 3. WorkoutTemplate
         totalMigrated += migrateWorkoutTemplates(in: context, library: library)
 
-        UserDefaults.standard.set(true, forKey: migrationKey)
-
         if totalMigrated > 0 {
+            // Flush mutations before marking complete so a kill between flag-write
+            // and auto-save doesn't permanently skip the migration.
+            try? context.save()
             logger.info("Migrated \(totalMigrated, privacy: .public) records from variant to base exercise IDs")
         }
+
+        UserDefaults.standard.set(true, forKey: migrationKey)
     }
 
     // MARK: - ExerciseRecord
