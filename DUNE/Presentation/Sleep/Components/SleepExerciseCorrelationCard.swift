@@ -35,11 +35,14 @@ struct SleepExerciseCorrelationCard: View {
                                 .foregroundStyle(DS.Color.textSecondary)
                         }
                     }
-                    .chartYScale(domain: 0...100)
+                    .chartYScale(domain: 0...110)
                     .chartYAxis {
-                        AxisMarks(position: .leading)
+                        AxisMarks(values: [0, 25, 50, 75, 100]) { _ in
+                            AxisGridLine()
+                            AxisValueLabel()
+                        }
                     }
-                    .frame(height: 140)
+                    .frame(height: 150)
                     .clipped()
                 }
 
