@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import Charts
 
 /// Detail view for This Week: period switching, summary stats, daily volume chart, exercise breakdown.
 struct WeeklyStatsDetailView: View {
@@ -69,7 +70,18 @@ struct WeeklyStatsDetailView: View {
                 .accessibilityIdentifier("activity-weeklystats-summary-grid")
         }
 
-            // Daily volume chart
+            // Weight volume chart (kg)
+            if viewModel.dailyWeightVolume.contains(where: { $0.volume > 0 }) {
+                WeightVolumeChartView(
+                    data: viewModel.dailyWeightVolume,
+                    period: viewModel.selectedPeriod.volumePeriod
+                )
+                .id("weightVolume-\(viewModel.selectedPeriod.rawValue)")
+                .transition(.opacity)
+                .animation(.easeInOut(duration: 0.2), value: viewModel.selectedPeriod)
+            }
+
+            // Daily duration chart
             DailyVolumeChartView(
                 dailyBreakdown: viewModel.chartDailyBreakdown,
                 period: viewModel.selectedPeriod.volumePeriod
@@ -133,5 +145,52 @@ struct WeeklyStatsDetailView: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, DS.Spacing.xl)
+    }
+}
+
+// MARK: - Weight Volume Bar Chart
+
+struct WeightVolumeChartView: View {
+    let data: [DailyWeightVolumePoint]
+    let period: VolumePeriod
+
+    @Environment(\.appTheme) private var theme
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+            Text("Volume (kg)")
+                .font(.subheadline.weight(.semibold))
+
+            Chart(data) { point in
+                BarMark(
+                    x: .value("Day", point.date, unit: .day),
+                    y: .value("Volume", point.volume)
+                )
+                .foregroundStyle(theme.accentColor.gradient)
+                .clipShape(RoundedRectangle(cornerRadius: 2))
+            }
+            .chartXAxis {
+                AxisMarks(values: .stride(by: .day, count: period == .week ? 1 : 7)) { _ in
+                    AxisValueLabel(format: .dateTime.day())
+                        .foregroundStyle(theme.sandColor)
+                }
+            }
+            .chartYAxis {
+                AxisMarks { value in
+                    AxisValueLabel {
+                        if let v = value.as(Double.self) {
+                            Text(v.formattedWithSeparator())
+                                .font(.caption2)
+                        }
+                    }
+                    AxisGridLine()
+                }
+            }
+            .chartYScale(domain: 0...max((data.map(\.volume).max() ?? 0) * 1.15, 1))
+            .frame(height: 180)
+            .clipped()
+        }
+        .padding(DS.Spacing.md)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
     }
 }

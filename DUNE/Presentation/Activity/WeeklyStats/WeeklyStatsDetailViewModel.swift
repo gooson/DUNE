@@ -17,19 +17,18 @@ final class WeeklyStatsDetailViewModel {
         var dateRange: (start: Date, end: Date) {
             let calendar = Calendar.current
             let now = Date()
-            let today = calendar.startOfDay(for: now)
             switch self {
             case .thisWeek:
-                let weekStart = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: today)) ?? today
-                return (weekStart, now)
+                // Rolling 7 days — matches Activity tab card
+                let start = calendar.date(byAdding: .day, value: -7, to: now) ?? now
+                return (start, now)
             case .lastWeek:
-                let thisWeekStart = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: today)) ?? today
-                let lastWeekStart = calendar.date(byAdding: .day, value: -7, to: thisWeekStart) ?? today
-                let lastWeekEnd = calendar.date(byAdding: .second, value: -1, to: thisWeekStart) ?? today
-                return (lastWeekStart, lastWeekEnd)
+                let start = calendar.date(byAdding: .day, value: -14, to: now) ?? now
+                let end = calendar.date(byAdding: .day, value: -7, to: now) ?? now
+                return (start, end)
             case .thisMonth:
-                let monthStart = calendar.date(from: calendar.dateComponents([.year, .month], from: today)) ?? today
-                return (monthStart, now)
+                let start = calendar.date(byAdding: .day, value: -30, to: now) ?? now
+                return (start, now)
             }
         }
 
@@ -65,6 +64,7 @@ final class WeeklyStatsDetailViewModel {
 
     var comparison: PeriodComparison?
     var chartDailyBreakdown: [DailyVolumePoint] = []
+    var dailyWeightVolume: [DailyWeightVolumePoint] = []
     var summaryStats: [ActivityStat] = []
     var isLoading = false
     var errorMessage: String?
@@ -132,7 +132,35 @@ final class WeeklyStatsDetailViewModel {
         guard isCurrentLoadRequest(requestID) else { return }
 
         comparison = result
-        rebuildSummaryStats(from: result, period: period)
+        dailyWeightVolume = Self.buildDailyWeightVolume(
+            from: filteredSnapshots, start: range.start, end: range.end
+        )
+        rebuildSummaryStats(from: result, period: period, allSnapshots: manualSnapshots)
+    }
+
+    static func buildDailyWeightVolume(
+        from snapshots: [ManualExerciseSnapshot],
+        start: Date, end: Date
+    ) -> [DailyWeightVolumePoint] {
+        let calendar = Calendar.current
+        var dailyVolume: [Date: Double] = [:]
+
+        for snapshot in snapshots where snapshot.totalVolume > 0 {
+            let day = calendar.startOfDay(for: snapshot.date)
+            dailyVolume[day, default: 0] += snapshot.totalVolume
+        }
+
+        var result: [DailyWeightVolumePoint] = []
+        var current = calendar.startOfDay(for: start)
+        let endDay = calendar.startOfDay(for: end)
+        while current <= endDay {
+            result.append(DailyWeightVolumePoint(
+                date: current, volume: dailyVolume[current] ?? 0
+            ))
+            guard let next = calendar.date(byAdding: .day, value: 1, to: current) else { break }
+            current = next
+        }
+        return result
     }
 
     // MARK: - Private
@@ -142,6 +170,7 @@ final class WeeklyStatsDetailViewModel {
         loadTask?.cancel()
         comparison = nil
         chartDailyBreakdown = []
+        dailyWeightVolume = []
         summaryStats = []
         isLoading = false
     }
@@ -174,18 +203,35 @@ final class WeeklyStatsDetailViewModel {
         }
     }
 
-    private func rebuildSummaryStats(from result: PeriodComparison, period: StatsPeriod) {
+    private func rebuildSummaryStats(from result: PeriodComparison, period: StatsPeriod, allSnapshots: [ManualExerciseSnapshot]) {
         let current = result.current
+        let calendar = Calendar.current
 
         let durationMin = current.totalDuration / 60.0
         let durationChange = result.durationChange
         let calChange = result.calorieChange
 
         // Volume from manual records (weight × reps)
-        let totalVolume = current.exerciseTypes.compactMap(\.totalVolume).reduce(0, +)
+        let periodVolume = current.exerciseTypes.compactMap(\.totalVolume).reduce(0, +)
         let prevVolume = result.previous?.exerciseTypes.compactMap(\.totalVolume).reduce(0, +) ?? 0
-        let rawVolChange = prevVolume > 0 ? ((totalVolume - prevVolume) / prevVolume * 100) : nil
+        let rawVolChange = prevVolume > 0 ? ((periodVolume - prevVolume) / prevVolume * 100) : nil
         let volChange = rawVolChange.flatMap { $0.isFinite ? $0 : nil }
+
+        // Fallback: weekly average from all records if this period has no volume
+        let totalVolume: Double
+        if periodVolume > 0 {
+            totalVolume = periodVolume
+        } else {
+            let allWithVolume = allSnapshots.filter { $0.totalVolume > 0 }
+            if let oldest = allWithVolume.map(\.date).min() {
+                let allVol = allWithVolume.reduce(0.0) { $0 + $1.totalVolume }
+                let daySpan = max(1, calendar.dateComponents([.day], from: oldest, to: Date()).day ?? 1)
+                let weeks = max(1.0, Double(daySpan) / 7.0)
+                totalVolume = allVol / weeks
+            } else {
+                totalVolume = 0
+            }
+        }
 
         summaryStats = [
             .volume(
@@ -218,4 +264,12 @@ final class WeeklyStatsDetailViewModel {
             ),
         ]
     }
+}
+
+// MARK: - Daily Weight Volume Point
+
+struct DailyWeightVolumePoint: Identifiable, Sendable {
+    var id: Date { date }
+    let date: Date
+    let volume: Double // weight × reps (kg)
 }
