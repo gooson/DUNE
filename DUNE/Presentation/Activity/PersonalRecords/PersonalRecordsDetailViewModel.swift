@@ -12,88 +12,73 @@ final class PersonalRecordsDetailViewModel {
     /// PR periods relevant for this view (day/week excluded — PRs are sparse).
     static let availablePeriods: [TimePeriod] = [.month, .sixMonths, .year]
 
-    // MARK: - Derived (single struct to avoid multi-property re-entrant updates)
-
-    struct DerivedState {
-        var availableKinds: [ActivityPersonalRecord.Kind] = []
-        var resolvedKind: ActivityPersonalRecord.Kind?
-        var filteredRecords: [ActivityPersonalRecord] = []
-        var chartData: [ActivityPersonalRecord] = []
-        var currentBest: ActivityPersonalRecord?
-        var allTimeRecords: [ActivityPersonalRecord] = []
-        var chartXStrideComponent: Calendar.Component = .month
-        var chartXLabelFormat: Date.FormatStyle = .dateTime.month(.abbreviated)
-    }
-
-    private(set) var derived = DerivedState()
-
     func load(records: [ActivityPersonalRecord]) {
         personalRecords = records.sorted { lhs, rhs in
             if lhs.date != rhs.date { return lhs.date > rhs.date }
             if lhs.kind.sortOrder != rhs.kind.sortOrder { return lhs.kind.sortOrder < rhs.kind.sortOrder }
             return lhs.value > rhs.value
         }
-        rebuildDerived()
     }
 
-    /// Recompute all derived data in one assignment.
-    func rebuildDerived() {
-        var next = DerivedState()
+    // MARK: - Derived Data (computed — no stored @Observable mutations)
 
-        // Available kinds
+    var availableKinds: [ActivityPersonalRecord.Kind] {
         let kinds = Set(personalRecords.map(\.kind))
-        next.availableKinds = kinds.sorted { $0.sortOrder < $1.sortOrder }
+        return kinds.sorted { $0.sortOrder < $1.sortOrder }
+    }
 
-        // Resolved kind
-        if let selectedKind, next.availableKinds.contains(selectedKind) {
-            next.resolvedKind = selectedKind
-        } else {
-            next.resolvedKind = next.availableKinds.first
+    var resolvedKind: ActivityPersonalRecord.Kind? {
+        if let selectedKind, availableKinds.contains(selectedKind) {
+            return selectedKind
         }
+        return availableKinds.first
+    }
 
-        // Filtered by kind (all-time)
-        let byKind: [ActivityPersonalRecord]
-        if let kind = next.resolvedKind {
-            byKind = personalRecords.filter { $0.kind == kind }
-        } else {
-            byKind = []
-        }
+    var filteredByKind: [ActivityPersonalRecord] {
+        guard let kind = resolvedKind else { return [] }
+        return personalRecords.filter { $0.kind == kind }
+    }
 
-        // Filtered by kind + period, newest first
+    /// Records filtered by kind AND period, sorted newest first.
+    var filteredRecords: [ActivityPersonalRecord] {
         let range = selectedPeriod.dateRange()
-        next.filteredRecords = byKind
+        return filteredByKind
             .filter { $0.date >= range.start && $0.date <= range.end }
             .sorted { $0.date > $1.date }
+    }
 
-        // Chart data: oldest first
-        next.chartData = next.filteredRecords.sorted { $0.date < $1.date }
+    /// Chart data: filtered records sorted oldest first (date ascending).
+    var chartData: [ActivityPersonalRecord] {
+        filteredRecords.sorted { $0.date < $1.date }
+    }
 
-        // Current best (all-time for the selected kind)
-        if let kind = next.resolvedKind {
-            if kind.isLowerBetter {
-                next.currentBest = byKind.min { $0.value < $1.value }
-            } else {
-                next.currentBest = byKind.max { $0.value < $1.value }
-            }
+    /// Current best record for the selected kind (across all time, not just period).
+    var currentBest: ActivityPersonalRecord? {
+        let allForKind = filteredByKind
+        guard let kind = resolvedKind else { return nil }
+        if kind.isLowerBetter {
+            return allForKind.min { $0.value < $1.value }
         }
+        return allForKind.max { $0.value < $1.value }
+    }
 
-        // All-time records sorted newest first
-        next.allTimeRecords = byKind.sorted { $0.date > $1.date }
+    /// All-time record grid (not period-filtered), sorted newest first.
+    var allTimeRecords: [ActivityPersonalRecord] {
+        filteredByKind.sorted { $0.date > $1.date }
+    }
 
-        // Chart axis format
+    var chartXStrideComponent: Calendar.Component {
         switch selectedPeriod {
-        case .day, .week:
-            next.chartXStrideComponent = .day
-            next.chartXLabelFormat = .dateTime.day().month(.abbreviated)
-        case .month:
-            next.chartXStrideComponent = .weekOfMonth
-            next.chartXLabelFormat = .dateTime.day().month(.abbreviated)
-        case .sixMonths, .year:
-            next.chartXStrideComponent = .month
-            next.chartXLabelFormat = .dateTime.month(.abbreviated)
+        case .day, .week: .day
+        case .month: .weekOfMonth
+        case .sixMonths, .year: .month
         }
+    }
 
-        // Single atomic assignment
-        derived = next
+    var chartXLabelFormat: Date.FormatStyle {
+        switch selectedPeriod {
+        case .day, .week, .month: .dateTime.day().month(.abbreviated)
+        case .sixMonths, .year: .dateTime.month(.abbreviated)
+        }
     }
 }
