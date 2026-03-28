@@ -10,6 +10,7 @@ struct MetricsView: View {
 
     @State private var weight: Double = 0
     @State private var reps: Int = WatchSetInputPolicy.defaultReps
+    @State private var durationMinutes: Int = 1
     /// Auto-estimated RPE for the just-completed set (shown on rest timer).
     @State private var estimatedRPE: Double?
     @State private var showInputSheet = false
@@ -25,6 +26,12 @@ struct MetricsView: View {
     @State private var cachedPreviousSets: [CompletedSetData] = []
     /// Last rest timer total used within this exercise (for carry-forward)
     @State private var lastRestTimerTotal: TimeInterval?
+
+    /// Resolved inputType for the current exercise entry.
+    private var currentInputType: ExerciseInputType {
+        workoutManager.currentEntry?.inputTypeRaw
+            .flatMap(ExerciseInputType.init(rawValue:)) ?? .setsRepsWeight
+    }
 
     var body: some View {
         Group {
@@ -66,8 +73,10 @@ struct MetricsView: View {
         }
         .sheet(isPresented: $showInputSheet) {
             SetInputSheet(
+                inputType: currentInputType,
                 weight: $weight,
                 reps: $reps,
+                durationMinutes: $durationMinutes,
                 previousSets: cachedPreviousSets
             )
         }
@@ -121,7 +130,7 @@ struct MetricsView: View {
             // Exercise name (large)
             exerciseHeader
 
-            // Weight × Reps — tap to edit
+            // Input card — adapts to inputType
             inputCard
 
             // Complete Set button (large touch target)
@@ -202,23 +211,13 @@ struct MetricsView: View {
             showInputSheet = true
         } label: {
             VStack(spacing: DS.Spacing.xxs) {
-                HStack(spacing: DS.Spacing.xs) {
-                    Text("\(weight, specifier: "%.1f")")
-                        .font(DS.Typography.metricValue)
-                    Text("kg")
-                        .font(DS.Typography.tileSubtitle)
-                        .foregroundStyle(.secondary)
-                }
-
-                HStack(spacing: DS.Spacing.xs) {
-                    Text("\u{00d7}")
-                        .font(DS.Typography.tileSubtitle)
-                        .foregroundStyle(.secondary)
-                    Text("\(reps)")
-                        .font(DS.Typography.metricValue)
-                    Text("reps")
-                        .font(DS.Typography.tileSubtitle)
-                        .foregroundStyle(.secondary)
+                switch currentInputType {
+                case .durationIntensity:
+                    durationInputCardContent
+                case .setsReps:
+                    repsOnlyInputCardContent
+                default:
+                    weightRepsInputCardContent
                 }
             }
             .foregroundStyle(DS.Color.positive)
@@ -237,6 +236,49 @@ struct MetricsView: View {
         }
         .buttonStyle(.plain)
         .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionMetricsInputCard)
+    }
+
+    private var weightRepsInputCardContent: some View {
+        Group {
+            HStack(spacing: DS.Spacing.xs) {
+                Text("\(weight, specifier: "%.1f")")
+                    .font(DS.Typography.metricValue)
+                Text("kg")
+                    .font(DS.Typography.tileSubtitle)
+                    .foregroundStyle(.secondary)
+            }
+
+            HStack(spacing: DS.Spacing.xs) {
+                Text("\u{00d7}")
+                    .font(DS.Typography.tileSubtitle)
+                    .foregroundStyle(.secondary)
+                Text("\(reps)")
+                    .font(DS.Typography.metricValue)
+                Text("reps")
+                    .font(DS.Typography.tileSubtitle)
+                    .foregroundStyle(.secondary)
+            }
+        }
+    }
+
+    private var repsOnlyInputCardContent: some View {
+        HStack(spacing: DS.Spacing.xs) {
+            Text("\(reps)")
+                .font(DS.Typography.metricValue)
+            Text("reps")
+                .font(DS.Typography.tileSubtitle)
+                .foregroundStyle(.secondary)
+        }
+    }
+
+    private var durationInputCardContent: some View {
+        HStack(spacing: DS.Spacing.xs) {
+            Text("\(durationMinutes)")
+                .font(DS.Typography.metricValue)
+            Text("min")
+                .font(DS.Typography.tileSubtitle)
+                .foregroundStyle(.secondary)
+        }
     }
 
     // MARK: - Complete Button
@@ -327,6 +369,20 @@ struct MetricsView: View {
 
     private func prefillFromEntry() {
         guard let entry = workoutManager.currentEntry else { return }
+
+        let inputType = currentInputType
+
+        if inputType == .durationIntensity {
+            // Duration-based exercises: prefill from last completed duration or default 1 min
+            if let lastSet = workoutManager.lastCompletedSetForCurrentExercise,
+               let lastDuration = lastSet.duration, lastDuration > 0 {
+                durationMinutes = Int(lastDuration / 60)
+            } else {
+                durationMinutes = 1
+            }
+            return
+        }
+
         let fallbackReps = WatchSetInputPolicy.resolvedInitialReps(
             lastSetReps: nil,
             entryDefaultReps: entry.defaultReps
@@ -374,6 +430,18 @@ struct MetricsView: View {
     }
 
     private func completeSet() {
+        let inputType = currentInputType
+
+        if inputType == .durationIntensity {
+            guard durationMinutes > 0 else {
+                showInputSheet = true
+                WKInterfaceDevice.current().play(.failure)
+                return
+            }
+            executeDurationCompleteSet()
+            return
+        }
+
         guard WatchSetInputPolicy.isValidForCompletion(reps: reps) else {
             reps = WatchSetInputPolicy.defaultReps
             showInputSheet = true
@@ -405,6 +473,24 @@ struct MetricsView: View {
             showLastSetOptions = true
         } else {
             // Go to rest first, input sheet comes after rest
+            showRestTimer = true
+        }
+    }
+
+    private func executeDurationCompleteSet() {
+        let wasLastSet = workoutManager.isLastSet
+        let durationSeconds = TimeInterval(durationMinutes) * 60
+
+        workoutManager.completeSet(weight: nil, reps: nil, duration: durationSeconds, rpe: nil)
+        refreshPreviousSetsCache()
+
+        estimatedRPE = nil
+
+        WKInterfaceDevice.current().play(.success)
+
+        if wasLastSet {
+            showLastSetOptions = true
+        } else {
             showRestTimer = true
         }
     }

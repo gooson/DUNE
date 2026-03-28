@@ -270,6 +270,7 @@ struct SessionSummaryView: View {
                    index < template.entries.count {
                     let entry = template.entries[index]
                     let volume = exerciseVolume(sets: sets)
+                    let totalDuration = exerciseTotalDuration(sets: sets)
                     HStack(spacing: DS.Spacing.sm) {
                         EquipmentIconView(equipment: entry.equipment, size: 16)
                             .frame(width: 16, height: 16)
@@ -278,9 +279,11 @@ struct SessionSummaryView: View {
                             Text(entry.exerciseName)
                                 .font(.caption2)
                                 .lineLimit(1)
-                            Text(volume > 0
-                                ? "\(sets.count) sets · \(volume.formattedWithSeparator)kg"
-                                : "\(sets.count) sets")
+                            Text(exerciseSummaryText(
+                                setCount: sets.count,
+                                volume: volume,
+                                totalDurationMinutes: totalDuration
+                            ))
                                 .font(DS.Typography.tinyLabel)
                                 .foregroundStyle(.secondary)
                         }
@@ -303,6 +306,25 @@ struct SessionSummaryView: View {
         }
         guard vol.isFinite else { return 0 }
         return min(Int(vol.rounded()), 50_000)
+    }
+
+    /// Calculates total duration in minutes for duration-based exercises.
+    private func exerciseTotalDuration(sets: [CompletedSetData]) -> Int {
+        let totalSeconds = sets.reduce(0.0) { total, set in
+            total + (set.duration ?? 0)
+        }
+        return Int((totalSeconds / 60).rounded())
+    }
+
+    /// Builds summary text for exercise breakdown: prefers duration for duration-based, volume for weight-based.
+    private func exerciseSummaryText(setCount: Int, volume: Int, totalDurationMinutes: Int) -> String {
+        if totalDurationMinutes > 0 {
+            return "\(setCount) sets · \(totalDurationMinutes)min"
+        } else if volume > 0 {
+            return "\(setCount) sets · \(volume.formattedWithSeparator)kg"
+        } else {
+            return "\(setCount) sets"
+        }
     }
 
     // MARK: - Save
@@ -454,6 +476,7 @@ struct SessionSummaryView: View {
                     setType: .working,
                     weight: setData.weight,
                     reps: setData.reps,
+                    duration: setData.duration,
                     isCompleted: true,
                     rpe: setData.rpe
                 )
@@ -524,7 +547,7 @@ struct SessionSummaryView: View {
                     setNumber: set.setNumber,
                     weight: set.weight,
                     reps: set.reps,
-                    duration: nil,
+                    duration: set.duration,
                     restDuration: set.restDuration,
                     isCompleted: true,
                     rpe: set.rpe
