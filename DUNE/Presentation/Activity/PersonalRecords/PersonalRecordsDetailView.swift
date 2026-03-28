@@ -248,8 +248,7 @@ struct PersonalRecordsDetailView: View {
         }
         .padding(DS.Spacing.md)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
-        .id(viewModel.selectedPeriod)
-        .transition(.opacity)
+        .animation(.easeInOut(duration: 0.25), value: viewModel.selectedPeriod)
         .accessibilityIdentifier("activity-personal-records-timeline-chart")
     }
 
