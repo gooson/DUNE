@@ -412,22 +412,30 @@ final class MetricDetailViewModel {
     }
 
     private func loadSleepEnhancedInsights(today: Date, calendar: Calendar, requestID: Int) async {
-        // WASO from today's stages (synchronous)
+        // Run three independent insight loads in parallel
+        async let wasoTask: Void = loadWASOAndNocturnalVitals(today: today, requestID: requestID)
+        async let breathingTask: Void = loadBreathingDisturbances(requestID: requestID)
+        async let correlationTask: Void = loadSleepExerciseCorrelation(today: today, calendar: calendar, requestID: requestID)
+        _ = await (wasoTask, breathingTask, correlationTask)
+    }
+
+    private func loadWASOAndNocturnalVitals(today: Date, requestID: Int) async {
         do {
             let todayStages = try await sleepService.fetchSleepStages(for: today)
             guard isCurrentReloadRequest(requestID) else { return }
             wasoAnalysis = wasoUseCase.execute(stages: todayStages)
 
-            // Nocturnal vitals from sleep window
-            if let sleepStart = todayStages.filter({ $0.stage != .awake }).map(\.startDate).min(),
-               let sleepEnd = todayStages.filter({ $0.stage != .awake }).map(\.endDate).max() {
+            // Nocturnal vitals from sleep window (use full stage range including awake bookends)
+            let allDates = todayStages.flatMap { [$0.startDate, $0.endDate] }
+            if let sleepStart = allDates.min(), let sleepEnd = allDates.max() {
                 await loadNocturnalVitals(sleepStart: sleepStart, sleepEnd: sleepEnd, requestID: requestID)
             }
         } catch {
             AppLogger.ui.error("[Sleep] WASO/stages fetch failed: \(error, privacy: .private)")
         }
+    }
 
-        // Breathing disturbances (30 days)
+    private func loadBreathingDisturbances(requestID: Int) async {
         do {
             let samples = try await breathingDisturbanceService.fetchNightlyDisturbances(days: 30)
             guard isCurrentReloadRequest(requestID) else { return }
@@ -435,9 +443,6 @@ final class MetricDetailViewModel {
         } catch {
             AppLogger.ui.error("[Sleep] Breathing disturbances fetch failed: \(error, privacy: .private)")
         }
-
-        // Sleep-exercise correlation (30 days)
-        await loadSleepExerciseCorrelation(today: today, calendar: calendar, requestID: requestID)
     }
 
     private func loadNocturnalVitals(sleepStart: Date, sleepEnd: Date, requestID: Int) async {
@@ -481,14 +486,29 @@ final class MetricDetailViewModel {
             let workouts = try await workoutService.fetchWorkouts(start: start, end: end)
             guard isCurrentReloadRequest(requestID) else { return }
 
-            // Build sleep days with scores
-            let sleepDays: [CorrelateSleepExerciseUseCase.Input.SleepDay] = sleepDurations.compactMap { day in
-                guard day.totalMinutes > 0 else { return nil }
-                let deepRatio = day.stageBreakdown[.deep, default: 0] / day.totalMinutes
-                let sleepMinutes = day.totalMinutes
-                let efficiency = sleepMinutes > 0 ? min(100, sleepMinutes / (sleepMinutes * 1.15) * 100) : 0
-                let score = Int(min(100, sleepMinutes / 480.0 * 70 + deepRatio * 100))
-                return .init(date: day.date, score: score, deepRatio: deepRatio, efficiency: efficiency)
+            // Build sleep days using sleepScoreUseCase for consistent scoring
+            let sleepDays: [CorrelateSleepExerciseUseCase.Input.SleepDay] = try await withThrowingTaskGroup(
+                of: CorrelateSleepExerciseUseCase.Input.SleepDay?.self
+            ) { [sleepService, sleepScoreUseCase] group in
+                for day in sleepDurations where day.totalMinutes > 0 {
+                    group.addTask {
+                        let stages = try await sleepService.fetchSleepStages(for: day.date)
+                        guard !stages.isEmpty else { return nil }
+                        let output = sleepScoreUseCase.execute(input: .init(stages: stages))
+                        let deepRatio = day.stageBreakdown[.deep, default: 0] / day.totalMinutes
+                        return .init(
+                            date: day.date,
+                            score: output.score,
+                            deepRatio: deepRatio,
+                            efficiency: output.efficiency
+                        )
+                    }
+                }
+                var results: [CorrelateSleepExerciseUseCase.Input.SleepDay] = []
+                for try await result in group {
+                    if let result { results.append(result) }
+                }
+                return results
             }
 
             // Build exercise days from workouts
