@@ -39,7 +39,7 @@ struct VitalsTimelineCard: View {
                         Text(String(localized: "No data available for this vital"))
                             .font(.subheadline)
                             .foregroundStyle(DS.Color.textSecondary)
-                            .frame(maxWidth: .infinity, minHeight: 120, alignment: .leading)
+                            .frame(maxWidth: .infinity, minHeight: 152, alignment: .leading)
                     }
                 } else {
                     SleepDataPlaceholder()
@@ -108,12 +108,16 @@ struct VitalsTimelineCard: View {
         }
         .chartYAxis {
             AxisMarks(position: .leading, values: .automatic(desiredCount: 3)) {
+                AxisGridLine(stroke: StrokeStyle(lineWidth: 0.5, dash: [3, 3]))
+                    .foregroundStyle(Color.secondary.opacity(0.3))
                 AxisValueLabel()
                     .font(.caption2)
             }
         }
         .chartXAxis {
             AxisMarks(values: .automatic(desiredCount: 5)) {
+                AxisGridLine(stroke: StrokeStyle(lineWidth: 0.5, dash: [3, 3]))
+                    .foregroundStyle(Color.secondary.opacity(0.3))
                 AxisValueLabel(format: .dateTime.day())
                     .font(.caption2)
             }
