@@ -9,6 +9,12 @@
 - WC DTO는 Watch SwiftData ExerciseRecord의 모든 링크 필드를 포함해야 함: WC가 CloudKit보다 먼저 도착하므로, WC 경로로 만든 iPhone ExerciseRecord에 누락된 필드가 있으면 CloudKit dedup이 이를 덮어쓰지 못함. 특히 `healthKitWorkoutID` 같은 외부 시스템 링크 필드는 WC DTO에 반드시 포함하고, iPhone receiver에서 ExerciseRecord 생성 시 설정할 것
 - WC/CloudKit 이중 경로 dedup은 2단계: (1) 고유 키(`healthKitWorkoutID`) 매칭 → (2) `exerciseType + date ±120s` 폴백. 고유 키가 있으면 날짜 윈도우 전에 먼저 검사
 
+## WC 메시지 전달 패턴 선택
+
+- "요청" 성격 메시지(`requestBulkSync` 등)에 `transferUserInfo` 사용 금지: 영구 큐 축적으로 중복 처리 발생. `sendMessage` + reachability 재시도 사용
+- "데이터" 성격 메시지(운동 완료, 세트 기록)에는 `transferUserInfo` 사용: 보장된 전달 필요
+- 설정/라이브러리 동기화에는 `updateApplicationContext` 사용: 최신값 덮어쓰기로 중복 무관
+
 ## UI 표시
 
 - bodyweight volume=0에서 "0kg" 표시 금지
