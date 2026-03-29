@@ -150,7 +150,7 @@ extension HealthInsight.InsightType {
         case .workoutPR: "Workout Records"
         case .lifeChecklistReminder: "Life Checklist"
         case .postureReminder: "Posture Reminder"
-        case .dailyDigest: "doc.text"
+        case .dailyDigest: "Daily Digest"
         }
     }
 

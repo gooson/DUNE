@@ -1590,9 +1590,7 @@ final class DashboardViewModel {
         }
     }
 
-    var currentTimeBand: DashboardTimeBand {
-        DashboardTimeBand.from(hour: Calendar.current.component(.hour, from: Date()))
-    }
+    private(set) var currentTimeBand: DashboardTimeBand = .morning
 
     /// Whether the daily digest should be visible (evening/night only, after generation).
     var shouldShowDailyDigest: Bool {
@@ -1639,11 +1637,11 @@ final class DashboardViewModel {
 
         // Sleep regularity from deficit analysis
         let sleepRegularity: SleepRegularityIndex?
-        if let deficit = sleepDeficitAnalysis {
+        if let deficit = sleepDeficitAnalysis, deficit.dailyDeficits.count >= 3 {
             let dayCount = deficit.dailyDeficits.count
             let sleepValues = deficit.dailyDeficits.map(\.actualMinutes)
-            let sleepMean = sleepValues.isEmpty ? 0 : sleepValues.reduce(0, +) / Double(sleepValues.count)
-            let sleepVariance = sleepValues.isEmpty ? 0 : sleepValues.reduce(0.0) { $0 + ($1 - sleepMean) * ($1 - sleepMean) } / Double(sleepValues.count)
+            let sleepMean = sleepValues.reduce(0, +) / Double(sleepValues.count)
+            let sleepVariance = sleepValues.reduce(0.0) { $0 + ($1 - sleepMean) * ($1 - sleepMean) } / Double(sleepValues.count)
             let bedtimeStd = sqrt(sleepVariance)
             sleepRegularity = SleepRegularityIndex(
                 score: max(0, min(100, Int((100.0 - bedtimeStd / 10.0).rounded()))),
@@ -1699,7 +1697,7 @@ final class DashboardViewModel {
                       let yesterday = yesterdayConditionScore else { return nil }
                 return today - yesterday
             }(),
-            workoutSummary: yesterdayWorkoutSummary,
+            workoutSummary: todayWorkoutDone ? (yesterdayWorkoutSummary ?? String(localized: "workout")) : nil,
             sleepMinutes: todaySleepMinutes > 0 ? todaySleepMinutes : nil,
             sleepDebtMinutes: sleepDeficitAnalysis?.weeklyDeficit,
             stepsCount: todayStepsValue > 0 ? Int(todayStepsValue) : nil,
@@ -1711,6 +1709,7 @@ final class DashboardViewModel {
 
     private func buildAdaptiveHeroMessage() {
         let hour = Calendar.current.component(.hour, from: Date())
+        currentTimeBand = DashboardTimeBand.from(hour: hour)
         let exerciseMetric = sortedMetrics.first { $0.category == .exercise }
         let workoutDone = exerciseMetric != nil && (exerciseMetric?.value ?? 0) > 0
         todayWorkoutDone = workoutDone

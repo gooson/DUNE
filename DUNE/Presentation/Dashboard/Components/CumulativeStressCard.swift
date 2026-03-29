@@ -131,12 +131,7 @@ struct CumulativeStressCard: View {
     // MARK: - Colors
 
     private var levelColor: Color {
-        switch stressScore.level {
-        case .low: DS.Color.positive
-        case .moderate: DS.Color.caution
-        case .elevated: .orange
-        case .high: DS.Color.negative
-        }
+        stressScore.level.color
     }
 
     private func factorColor(_ factor: CumulativeStressScore.Contribution.Factor) -> Color {
