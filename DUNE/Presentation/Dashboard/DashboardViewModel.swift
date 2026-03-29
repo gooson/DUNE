@@ -21,6 +21,18 @@ final class DashboardViewModel {
     var recentHighRPEStreak: Int = 0
     var templateNudgeRecommendation: WorkoutTemplateRecommendation?
     var heroBaselineDetails: [BaselineDetail] = []
+    private(set) var adaptiveHeroMessage: AdaptiveHeroMessage?
+
+    // Phase 2: Yesterday Recap data
+    private(set) var yesterdayWorkoutSummary: String?
+    private(set) var yesterdaySleepMinutes: Double?
+    private(set) var yesterdayConditionScore: Int?
+    private(set) var todayWorkoutDone = false
+    private(set) var shouldShowYesterdayRecap = false
+
+    // Phase 2: Pre-computed metric values for progress rings (avoid repeated body lookups)
+    private(set) var todayStepsValue: Double = 0
+    private(set) var todaySleepMinutes: Double = 0
     var pinnedCategories: [HealthMetric.Category]
     var baselineDeltasByMetricID: [String: MetricBaselineDelta] = [:]
     private(set) var sleepDeficitAnalysis: SleepDeficitAnalysis?
@@ -291,6 +303,8 @@ final class DashboardViewModel {
         enhanceCoachingMessageIfAvailable()
         heroBaselineDetails = buildHeroBaselineDetails()
         briefingData = buildBriefingData()
+        buildAdaptiveHeroMessage()
+        buildYesterdayRecap()
         hasLoadedOnce = true
         lastUpdated = Date()
         WidgetDataWriter.writeConditionScore(conditionScore)
@@ -1548,5 +1562,72 @@ final class DashboardViewModel {
             .filter { $0.average > 0 && $0.average.isFinite }
             .map { .init(date: $0.date, value: $0.average) }
             .sorted { $0.date < $1.date }
+    }
+
+    // MARK: - Adaptive Hero Message
+
+    private func buildAdaptiveHeroMessage() {
+        let hour = Calendar.current.component(.hour, from: Date())
+        let exerciseMetric = sortedMetrics.first { $0.category == .exercise }
+        let workoutDone = exerciseMetric != nil && (exerciseMetric?.value ?? 0) > 0
+        todayWorkoutDone = workoutDone
+        let sleepDebt = sleepDeficitAnalysis?.weeklyDeficit
+        adaptiveHeroMessage = coachingEngine.generateAdaptiveHeroMessage(
+            hour: hour,
+            conditionScore: conditionScore,
+            sleepDebtMinutes: sleepDebt,
+            todayWorkoutDone: workoutDone
+        )
+
+        // Pre-compute metric values for progress rings (avoids repeated body lookups)
+        todayStepsValue = sortedMetrics.first { $0.category == .steps }?.value ?? 0
+        todaySleepMinutes = sortedMetrics.first { $0.category == .sleep }?.value ?? 0
+    }
+
+    // MARK: - Yesterday Recap
+
+    private func buildYesterdayRecap() {
+        let calendar = Calendar.current
+        let hour = calendar.component(.hour, from: Date())
+        guard let yesterday = calendar.date(byAdding: .day, value: -1, to: Date()) else {
+            shouldShowYesterdayRecap = false
+            return
+        }
+
+        // Yesterday condition score from recentScores
+        let yesterdayStart = calendar.startOfDay(for: yesterday)
+        yesterdayConditionScore = recentScores.first {
+            calendar.isDate($0.date, inSameDayAs: yesterdayStart)
+        }?.score
+
+        // Yesterday sleep from deficit analysis daily data
+        yesterdaySleepMinutes = sleepDeficitAnalysis?.dailyDeficits.first {
+            calendar.isDate($0.date, inSameDayAs: yesterdayStart)
+        }?.actualMinutes
+
+        // Yesterday workout summary will be enriched from View's @Query
+        yesterdayWorkoutSummary = nil
+
+        // Pre-compute visibility (06-12 hours only)
+        shouldShowYesterdayRecap = hour >= 6 && hour < 12
+            && (yesterdayConditionScore != nil || yesterdaySleepMinutes != nil)
+    }
+
+    /// Enrich yesterday workout summary from exercise records (called from View).
+    func updateYesterdayWorkoutSummary(from records: [ExerciseRecord]) {
+        let calendar = Calendar.current
+        guard let yesterday = calendar.date(byAdding: .day, value: -1, to: Date()) else { return }
+        let yesterdayRecords = records.filter { calendar.isDate($0.date, inSameDayAs: yesterday) }
+        guard !yesterdayRecords.isEmpty else {
+            yesterdayWorkoutSummary = nil
+            return
+        }
+        let totalSeconds = yesterdayRecords.map(\.duration).reduce(0, +)
+        let totalMinutes = Int(totalSeconds / 60)
+        let h = totalMinutes / 60
+        let m = totalMinutes % 60
+        let durationText = h > 0 ? "\(h)h \(m)m" : "\(m)m"
+        let count = yesterdayRecords.count
+        yesterdayWorkoutSummary = "\(count) \(count == 1 ? String(localized: "exercise") : String(localized: "exercises")) · \(durationText)"
     }
 }

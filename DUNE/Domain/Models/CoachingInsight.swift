@@ -57,3 +57,9 @@ struct CoachingInsight: Sendable, Identifiable, Hashable {
         self.actionHint = actionHint
     }
 }
+
+/// Adaptive hero message that changes based on time of day and user state.
+struct AdaptiveHeroMessage: Sendable {
+    let icon: String
+    let message: String
+}

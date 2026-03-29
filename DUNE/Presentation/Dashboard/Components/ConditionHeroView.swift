@@ -7,6 +7,7 @@ struct ConditionHeroView: View {
     var weeklyGoalProgress: (completedDays: Int, goalDays: Int)? = nil
     var trendBadges: [BaselineDetail] = []
     var hourlySparkline: HourlySparklineData?
+    var adaptiveMessage: AdaptiveHeroMessage? = nil
 
     private enum Labels {
         static let scoreLabel = "CONDITION"
@@ -74,9 +75,20 @@ struct ConditionHeroView: View {
 
                     // Guide message with delta badge
                     HStack(spacing: DS.Spacing.xs) {
-                        Text(score.narrativeMessage)
-                            .font(.subheadline)
-                            .foregroundStyle(DS.Color.textSecondary)
+                        if let adaptive = adaptiveMessage {
+                            Image(systemName: adaptive.icon)
+                                .font(.caption)
+                                .foregroundStyle(score.status.color)
+
+                            Text(adaptive.message)
+                                .font(.subheadline)
+                                .foregroundStyle(DS.Color.textSecondary)
+                                .lineLimit(2)
+                        } else {
+                            Text(score.narrativeMessage)
+                                .font(.subheadline)
+                                .foregroundStyle(DS.Color.textSecondary)
+                        }
 
                         if let sparkline = hourlySparkline, sparkline.deltaDirection != .stable {
                             ScoreDeltaBadge(

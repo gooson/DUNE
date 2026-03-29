@@ -5,6 +5,7 @@ struct DashboardView: View {
     @State private var viewModel: DashboardViewModel
     @State private var isShowingPinnedEditor = false
     @State private var isShowingHealthDataQA = false
+    @State private var metricDetailNavigation: HealthMetric?
     @State private var templateNudgeToSave: WorkoutTemplateRecommendation?
     @State private var hasAppeared = false
     @State private var isShowingBriefing = false
@@ -187,6 +188,9 @@ struct DashboardView: View {
                 )
             }
         }
+        .navigationDestination(item: $metricDetailNavigation) { metric in
+            MetricDetailView(metric: metric)
+        }
         .sheet(isPresented: $isShowingHealthDataQA) {
             HealthDataQASheet(
                 viewModel: HealthDataQAViewModel(
@@ -248,6 +252,9 @@ struct DashboardView: View {
         h.combine(viewModel.pinnedCards.count)
         h.combine(viewModel.sleepDeficitAnalysis != nil)
         h.combine(viewModel.focusInsight != nil)
+        h.combine(viewModel.workoutSuggestion != nil)
+        h.combine(viewModel.shouldShowYesterdayRecap)
+        h.combine(viewModel.adaptiveHeroMessage != nil)
         return h.finalize()
     }
 
@@ -263,7 +270,8 @@ struct DashboardView: View {
                     recentScores: viewModel.recentScores,
                     weeklyGoalProgress: viewModel.weeklyGoalProgress,
                     trendBadges: viewModel.heroBaselineDetails,
-                    hourlySparkline: viewModel.conditionSparkline.nonEmptyOrNil
+                    hourlySparkline: viewModel.conditionSparkline.nonEmptyOrNil,
+                    adaptiveMessage: viewModel.adaptiveHeroMessage
                 )
             }
             .reportTabHeroFrame()
@@ -277,6 +285,47 @@ struct DashboardView: View {
                 .transition(Self.sectionTransition)
                 .staggeredAppear(index: 0)
         }
+
+        // Yesterday Recap (morning only)
+        if viewModel.shouldShowYesterdayRecap {
+            YesterdayRecapCard(
+                workoutSummary: viewModel.yesterdayWorkoutSummary,
+                sleepMinutes: viewModel.yesterdaySleepMinutes,
+                yesterdayScore: viewModel.yesterdayConditionScore,
+                todayScore: viewModel.conditionScore?.score
+            )
+            .transition(Self.sectionTransition)
+            .staggeredAppear(index: 1)
+        }
+
+        // Quick Actions Row
+        QuickActionsRow(
+            onLogWeight: {
+                if let weightMetric = viewModel.sortedMetrics.first(where: { $0.category == .weight }) {
+                    metricDetailNavigation = weightMetric
+                }
+            },
+            onOpenSleep: {
+                if let sleepMetric = viewModel.sortedMetrics.first(where: { $0.category == .sleep }) {
+                    metricDetailNavigation = sleepMetric
+                }
+            },
+            onOpenBriefing: { isShowingBriefing = true },
+            onOpenHealthQA: { isShowingHealthDataQA = true }
+        )
+        .staggeredAppear(index: 2)
+
+        // Daily Progress Rings
+        DailyProgressRingCard(
+            stepsProgress: stepsProgress,
+            stepsValue: stepsValueText,
+            sleepProgress: sleepProgress,
+            sleepValue: sleepValueText,
+            habitProgress: nil,
+            habitValue: nil
+        )
+        .transition(Self.sectionTransition)
+        .staggeredAppear(index: 3)
 
         // Today's Brief (weather + coaching + briefing entry)
         if !isBriefingDisabled || viewModel.weatherSnapshot != nil || viewModel.focusInsight != nil || viewModel.coachingMessage != nil {
@@ -293,7 +342,7 @@ struct DashboardView: View {
                 }
             )
             .transition(Self.sectionTransition)
-            .staggeredAppear(index: 1)
+            .staggeredAppear(index: 4)
         }
 
         // Recovery & Sleep (sleep deficit + sleep insights)
@@ -308,7 +357,19 @@ struct DashboardView: View {
             }
         )
         .transition(Self.sectionTransition)
-        .staggeredAppear(index: 2)
+        .staggeredAppear(index: 5)
+
+        // Exercise Intelligence Card
+        if let suggestion = viewModel.workoutSuggestion, !suggestion.isRestDay {
+            ExerciseIntelligenceCard(
+                suggestion: suggestion,
+                conditionScore: viewModel.conditionScore?.score,
+                sleepMinutes: viewModel.sortedMetrics.first(where: { $0.category == .sleep })?.value,
+                onStartWorkout: {} // Workout start requires tab switch — handled by user
+            )
+            .transition(Self.sectionTransition)
+            .staggeredAppear(index: 6)
+        }
 
         // Smart Insights (non-sleep insights + template nudge)
         SmartInsightsSection(
@@ -329,13 +390,13 @@ struct DashboardView: View {
             }
         )
         .transition(Self.sectionTransition)
-        .staggeredAppear(index: 3)
+        .staggeredAppear(index: 7)
 
         // Health Q&A
         HealthDataQACard(isAvailable: HealthDataQAService.isAvailable) {
             isShowingHealthDataQA = true
         }
-        .staggeredAppear(index: 4)
+        .staggeredAppear(index: 8)
     }
 
     @ViewBuilder
@@ -344,7 +405,7 @@ struct DashboardView: View {
         if !viewModel.pinnedCards.isEmpty {
             pinnedSection
                 .transition(Self.sectionTransition)
-                .staggeredAppear(index: 5)
+                .staggeredAppear(index: 9)
         }
 
         // Last updated + error banner
@@ -371,7 +432,7 @@ struct DashboardView: View {
                 cards: viewModel.conditionCards
             )
             .transition(Self.sectionTransition)
-            .staggeredAppear(index: 6)
+            .staggeredAppear(index: 10)
         }
 
         // Activity (Steps, Exercise)
@@ -384,7 +445,7 @@ struct DashboardView: View {
                 cards: viewModel.activityCards
             )
             .transition(Self.sectionTransition)
-            .staggeredAppear(index: 7)
+            .staggeredAppear(index: 11)
         }
 
         // Body (Weight, BMI, Sleep)
@@ -397,7 +458,7 @@ struct DashboardView: View {
                 cards: viewModel.bodyCards
             )
             .transition(Self.sectionTransition)
-            .staggeredAppear(index: 8)
+            .staggeredAppear(index: 12)
         }
     }
 
@@ -432,6 +493,19 @@ struct DashboardView: View {
         }
     }
 
+    // MARK: - Daily Progress Ring Data (using pre-computed ViewModel values)
+
+    private var stepsProgress: Double { viewModel.todayStepsValue / 10000 }
+    private var stepsValueText: String { Int(viewModel.todayStepsValue).formattedWithSeparator }
+    private var sleepProgress: Double { viewModel.todaySleepMinutes / 480 }
+
+    private var sleepValueText: String {
+        let minutes = viewModel.todaySleepMinutes
+        let h = Int(minutes) / 60
+        let m = Int(minutes) % 60
+        return m > 0 ? "\(h)h \(m)m" : "\(h)h"
+    }
+
     private var dashboardLoadTrigger: String {
         launchExperienceReady ? "\(refreshSignal)-\(canLoadHealthKitData)" : "blocked"
     }
@@ -439,6 +513,7 @@ struct DashboardView: View {
     private func loadDashboard() async {
         viewModel.recentHighRPEStreak = DashboardViewModel.computeHighRPEStreak(from: exerciseRecords)
         await viewModel.loadData(canLoadHealthKitData: canLoadHealthKitData)
+        viewModel.updateYesterdayWorkoutSummary(from: Array(exerciseRecords))
         guard !viewModel.isLoading else { return }
         if !hasAppeared {
             withAnimation(.easeOut(duration: 0.3)) {

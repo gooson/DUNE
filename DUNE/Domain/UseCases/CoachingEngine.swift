@@ -600,6 +600,108 @@ struct CoachingEngine: Sendable {
         )
     }
 
+    // MARK: - Adaptive Hero Message
+
+    /// Generates a time-of-day and state-aware hero message.
+    func generateAdaptiveHeroMessage(
+        hour: Int,
+        conditionScore: ConditionScore?,
+        sleepDebtMinutes: Double?,
+        todayWorkoutDone: Bool
+    ) -> AdaptiveHeroMessage {
+        let period = TimePeriod(hour: hour)
+        let isGoodCondition = conditionScore.map { $0.status == .excellent || $0.status == .good } ?? false
+        // weeklyDeficit is a 7-day cumulative value; 120 min (2h) weekly = mild threshold
+        let hasSleepDebt = (sleepDebtMinutes ?? 0) > 120
+
+        switch period {
+        case .morning:
+            if todayWorkoutDone {
+                return AdaptiveHeroMessage(
+                    icon: "checkmark.circle.fill",
+                    message: String(localized: "Early bird! Workout done — enjoy the rest of your day")
+                )
+            }
+            if isGoodCondition {
+                return AdaptiveHeroMessage(
+                    icon: "sun.max.fill",
+                    message: String(localized: "Good morning! Great condition for a workout today")
+                )
+            }
+            return AdaptiveHeroMessage(
+                icon: "moon.zzz.fill",
+                message: String(localized: "Take it easy this morning. Recovery comes first")
+            )
+
+        case .midday:
+            if todayWorkoutDone {
+                return AdaptiveHeroMessage(
+                    icon: "sparkles",
+                    message: String(localized: "Workout complete! Stretch and hydrate")
+                )
+            }
+            if isGoodCondition {
+                return AdaptiveHeroMessage(
+                    icon: "figure.run",
+                    message: String(localized: "Condition is great — still time for a solid session")
+                )
+            }
+            return AdaptiveHeroMessage(
+                icon: "cup.and.saucer.fill",
+                message: String(localized: "Moderate effort today — light walk or stretching is ideal")
+                )
+
+        case .afternoon:
+            if todayWorkoutDone {
+                return AdaptiveHeroMessage(
+                    icon: "hand.thumbsup.fill",
+                    message: String(localized: "Well done today! Rest up for tomorrow")
+                )
+            }
+            return AdaptiveHeroMessage(
+                icon: "sunset.fill",
+                message: String(localized: "Evening session? Even a short workout counts")
+            )
+
+        case .evening:
+            if hasSleepDebt {
+                return AdaptiveHeroMessage(
+                    icon: "bed.double.fill",
+                    message: String(localized: "Sleep debt is building — early bedtime is the best investment")
+                )
+            }
+            return AdaptiveHeroMessage(
+                icon: "moon.stars.fill",
+                message: String(localized: "Wind down for a restful night")
+            )
+
+        case .night:
+            return AdaptiveHeroMessage(
+                icon: "moon.fill",
+                message: String(localized: "Time to sleep. Tomorrow starts with good rest")
+            )
+        }
+    }
+
+    /// Time period for adaptive messaging.
+    private enum TimePeriod {
+        case morning    // 06-10
+        case midday     // 10-14
+        case afternoon  // 14-22
+        case evening    // 22-24
+        case night      // 00-06
+
+        init(hour: Int) {
+            switch hour {
+            case 6..<10: self = .morning
+            case 10..<14: self = .midday
+            case 14..<22: self = .afternoon
+            case 22..<24: self = .evening
+            default: self = .night
+            }
+        }
+    }
+
     // MARK: - Formatting
 
     private func formatHoursMinutes(_ minutes: Double) -> String {
