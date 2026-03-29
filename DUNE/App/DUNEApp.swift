@@ -652,6 +652,7 @@ struct DUNEApp: App {
             await PostureReminderScheduler.shared.refreshSchedule()
         }
         scheduleWorkoutTitleBackfill()
+        backfillHealthKitWorkoutIDs()
     }
 
     @MainActor
@@ -781,6 +782,90 @@ struct DUNEApp: App {
                 WorkoutTypeCorrectionStore.shared.backfillTitles(from: records)
             } catch {
                 AppLogger.data.error("Workout title backfill failed: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    /// Backfill healthKitWorkoutID for ExerciseRecords missing an HK link.
+    /// Matches by custom metadata key (com.dune.workout.exerciseName) + date proximity.
+    private func backfillHealthKitWorkoutIDs() {
+        let container = appRuntime.modelContainer
+        let manager = HealthKitManager.shared
+        Task(priority: .utility) {
+            guard manager.isAvailable else { return }
+
+            let context = ModelContext(container)
+
+            // Fetch records from the last 30 days with no healthKitWorkoutID
+            let thirtyDaysAgo = Calendar.current.date(byAdding: .day, value: -30, to: Date()) ?? Date()
+            var descriptor = FetchDescriptor<ExerciseRecord>(
+                predicate: #Predicate<ExerciseRecord> {
+                    $0.healthKitWorkoutID == nil && $0.date >= thirtyDaysAgo
+                }
+            )
+            descriptor.fetchLimit = 200
+
+            let unlinked: [ExerciseRecord]
+            do {
+                unlinked = try context.fetch(descriptor)
+            } catch {
+                AppLogger.data.error("[HKBackfill] Failed to fetch unlinked records: \(error.localizedDescription)")
+                return
+            }
+            guard !unlinked.isEmpty else { return }
+
+            // Query HKWorkouts from the same window
+            let predicate = HKQuery.predicateForSamples(
+                withStart: thirtyDaysAgo,
+                end: Date().addingTimeInterval(86400),
+                options: .strictStartDate
+            )
+            let queryDescriptor = HKSampleQueryDescriptor(
+                predicates: [.workout(predicate)],
+                sortDescriptors: [SortDescriptor(\.startDate, order: .reverse)]
+            )
+
+            let hkWorkouts: [HKWorkout]
+            do {
+                hkWorkouts = try await manager.execute(queryDescriptor)
+            } catch {
+                AppLogger.data.error("[HKBackfill] Failed to query HealthKit workouts: \(error.localizedDescription)")
+                return
+            }
+
+            // Build lookup: filter to app-family workouts only
+            let appBundleID = Bundle.main.bundleIdentifier ?? ""
+            let appWorkouts = hkWorkouts.filter {
+                WorkoutSourceClassifier.isFromAppFamily(
+                    sourceBundleIdentifier: $0.sourceRevision.source.bundleIdentifier,
+                    appBundleIdentifier: appBundleID
+                )
+            }
+
+            var linkedCount = 0
+            for record in unlinked {
+                // Find HKWorkout matching by exercise name metadata + date proximity (±5 min)
+                let match = appWorkouts.first { workout in
+                    let metadataName = workout.metadata?[HealthKitWorkoutTitle.metadataKey] as? String
+                    let nameMatch = metadataName == record.exerciseType
+                    let timeDistance = abs(workout.startDate.timeIntervalSince(record.date))
+                    return nameMatch && timeDistance < 300
+                }
+                if let match {
+                    let uuid = match.uuid.uuidString
+                    record.healthKitWorkoutID = uuid
+                    linkedCount += 1
+                    AppLogger.data.debug("[HKBackfill] Linked \(record.exerciseType) → \(uuid)")
+                }
+            }
+
+            if linkedCount > 0 {
+                do {
+                    try context.save()
+                    AppLogger.data.info("[HKBackfill] Linked \(linkedCount) records to HealthKit workouts")
+                } catch {
+                    AppLogger.data.error("[HKBackfill] Failed to save backfilled records: \(error.localizedDescription)")
+                }
             }
         }
     }
