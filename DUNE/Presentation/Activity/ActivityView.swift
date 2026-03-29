@@ -253,7 +253,8 @@ struct ActivityView: View {
                         SectionGroup(title: "Recent Workouts", icon: "clock.arrow.circlepath", iconColor: DS.Color.activity) {
                             ExerciseListSection(
                                 workouts: viewModel.recentWorkouts,
-                                exerciseRecords: recentRecords
+                                exerciseRecords: recentRecords,
+                                tombstonedIDs: DeletedWorkoutTombstoneStore.shared.tombstonedIDs
                             )
                         }
                         .staggeredAppear(index: 8)

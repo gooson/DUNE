@@ -241,12 +241,14 @@ struct ExerciseViewModelTests {
 
     @Test("Tombstoned HealthKit workouts are excluded from allExercises")
     func tombstonedWorkoutsExcluded() {
+        // Use a unique ID to avoid polluting other tests (no public remove API).
+        let tombstonedID = "HK-TOMBSTONED-\(UUID().uuidString)"
+
+        // Record tombstone on the shared singleton (same instance used by ExerciseViewModel)
+        DeletedWorkoutTombstoneStore.shared.recordDeletion(healthKitWorkoutID: tombstonedID)
+
         let vm = ExerciseViewModel()
         let now = Date()
-        let tombstonedID = "HK-TOMBSTONED-1"
-
-        // Simulate tombstone creation (as if user deleted this workout earlier)
-        DeletedWorkoutTombstoneStore.shared.recordDeletion(healthKitWorkoutID: tombstonedID)
 
         vm.healthKitWorkouts = [
             WorkoutSummary(id: tombstonedID, type: "Running", duration: 1800, calories: 200, distance: 5000, date: now),

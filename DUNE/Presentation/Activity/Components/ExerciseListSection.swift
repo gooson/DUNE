@@ -13,6 +13,7 @@ struct ExerciseListSection: View {
     let workouts: [WorkoutSummary]
     let exerciseRecords: [ExerciseRecord]
     let limit: Int
+    let tombstonedIDs: Set<String>
     @State private var isShowingExerciseView = false
 
     private let exerciseLibrary: ExerciseLibraryQuerying
@@ -21,11 +22,13 @@ struct ExerciseListSection: View {
         workouts: [WorkoutSummary],
         exerciseRecords: [ExerciseRecord] = [],
         limit: Int = 5,
+        tombstonedIDs: Set<String> = [],
         exerciseLibrary: ExerciseLibraryQuerying = ExerciseLibraryService.shared
     ) {
         self.workouts = workouts
         self.exerciseRecords = exerciseRecords
         self.limit = limit
+        self.tombstonedIDs = tombstonedIDs
         self.exerciseLibrary = exerciseLibrary
     }
 
@@ -120,10 +123,9 @@ struct ExerciseListSection: View {
         // If we dedup against all manual records, cardio records without sets can hide
         // HealthKit workouts while not being rendered themselves.
         let setRecords = recentListDedupRecords(from: exerciseRecords)
-        let tombstoned = DeletedWorkoutTombstoneStore.shared.tombstonedIDs
         let externalWorkouts = workouts.filteringAppDuplicates(
             against: setRecords,
-            tombstonedIDs: tombstoned
+            tombstonedIDs: tombstonedIDs
         )
 
         var result: [ExerciseListItem] = []
