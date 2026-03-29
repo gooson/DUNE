@@ -548,43 +548,48 @@ final class ActivityViewModel {
     }
 
     private func computeBadgeStats() -> BadgeEvaluationStats {
-        let allPRs = personalRecords
-        let totalPRCount = allPRs.count
-        let distinctKinds = Set(allPRs.map(\.kind)).count
+        let snapshots = allExerciseSnapshots
+        guard !snapshots.isEmpty else { return .empty }
 
-        // Total volume from session volume records
-        let totalVolume = allPRs
-            .filter { $0.kind == .sessionVolume }
-            .reduce(0.0) { $0 + $1.value }
+        // Single pass over PRs for kinds, improvement, pace
+        let allPRs = personalRecords
+        var distinctKinds = Set<ActivityPersonalRecord.Kind>()
+        var bestImprovement = 0.0
+        var bestPace = 0.0
+        for pr in allPRs {
+            distinctKinds.insert(pr.kind)
+            if pr.kind == .fastestPace, pr.value > 0 {
+                bestPace = bestPace == 0 ? pr.value : min(bestPace, pr.value)
+            }
+            if let prev = pr.previousValue, prev > 0, !pr.kind.isLowerBetter {
+                let improvement = ((pr.value - prev) / prev) * 100
+                bestImprovement = max(bestImprovement, improvement)
+            }
+        }
+
+        // PR count from reward history events (not display rows)
+        let totalPRCount = workoutRewardHistory.filter { $0.kind == .personalRecord }.count
+
+        // Cumulative volume from actual exercise snapshots (not PR peaks)
+        let totalVolume = snapshots.compactMap(\.totalWeight).reduce(0.0, +)
 
         // Streak
         let bestStreak = workoutStreak?.bestStreak ?? 0
 
-        // Workout count from snapshots
-        let totalWorkouts = allExerciseSnapshots
-            .map { Calendar.current.startOfDay(for: $0.date) }
-            .reduce(into: Set<Date>()) { $0.insert($1) }
-            .count
-
-        // Days since first workout
-        let firstDate = allExerciseSnapshots.map(\.date).min() ?? Date()
-        let daysSinceFirst = max(0, Calendar.current.dateComponents([.day], from: firstDate, to: Date()).day ?? 0)
-
-        // Best improvement percent (from delta values)
-        let bestImprovement = allPRs.compactMap { record -> Double? in
-            guard let prev = record.previousValue, prev > 0, !record.kind.isLowerBetter else { return nil }
-            return ((record.value - prev) / prev) * 100
-        }.max() ?? 0
-
-        // Best pace (seconds/km) — lower is better
-        let bestPace = allPRs
-            .filter { $0.kind == .fastestPace }
-            .map(\.value)
-            .min() ?? 0
+        // Single pass over snapshots for workout days + first date
+        let cal = Calendar.current
+        var uniqueDays = Set<Date>()
+        var firstDate = Date.distantFuture
+        for snapshot in snapshots {
+            uniqueDays.insert(cal.startOfDay(for: snapshot.date))
+            if snapshot.date < firstDate { firstDate = snapshot.date }
+        }
+        let totalWorkouts = uniqueDays.count
+        let daysSinceFirst = max(0, cal.dateComponents([.day], from: firstDate, to: Date()).day ?? 0)
 
         return BadgeEvaluationStats(
             totalPRCount: totalPRCount,
-            distinctPRKindCount: distinctKinds,
+            distinctPRKindCount: distinctKinds.count,
             totalVolumeKg: totalVolume,
             bestStreakDays: bestStreak,
             totalWorkoutCount: totalWorkouts,
