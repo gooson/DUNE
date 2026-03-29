@@ -36,7 +36,11 @@ final class ExerciseViewModel {
     private let personalRecordStore = PersonalRecordStore.shared
 
     private func invalidateCache() {
-        var externalWorkouts = healthKitWorkouts.filteringAppDuplicates(against: manualRecords)
+        let tombstoned = DeletedWorkoutTombstoneStore.shared.tombstonedIDs
+        var externalWorkouts = healthKitWorkouts.filteringAppDuplicates(
+            against: manualRecords,
+            tombstonedIDs: tombstoned
+        )
 
         // Detect milestones and personal records
         for i in externalWorkouts.indices {

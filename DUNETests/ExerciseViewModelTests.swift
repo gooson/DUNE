@@ -239,6 +239,26 @@ struct ExerciseViewModelTests {
         #expect(vm.allExercises[2].type == "Cycling")
     }
 
+    @Test("Tombstoned HealthKit workouts are excluded from allExercises")
+    func tombstonedWorkoutsExcluded() {
+        // Use a unique ID to avoid polluting other tests (no public remove API).
+        let tombstonedID = "HK-TOMBSTONED-\(UUID().uuidString)"
+
+        // Record tombstone on the shared singleton (same instance used by ExerciseViewModel)
+        DeletedWorkoutTombstoneStore.shared.recordDeletion(healthKitWorkoutID: tombstonedID)
+
+        let vm = ExerciseViewModel()
+        let now = Date()
+
+        vm.healthKitWorkouts = [
+            WorkoutSummary(id: tombstonedID, type: "Running", duration: 1800, calories: 200, distance: 5000, date: now),
+            WorkoutSummary(id: "HK-ALIVE-1", type: "Cycling", duration: 3600, calories: 400, distance: nil, date: now),
+        ]
+
+        #expect(vm.allExercises.count == 1)
+        #expect(vm.allExercises[0].type == "Cycling")
+    }
+
     @Test("Latest workout load wins over older response")
     func latestWorkoutLoadWinsOverOlderResponse() async {
         let now = Date()
@@ -424,6 +444,23 @@ struct ExerciseListSectionTests {
         let filtered = recentListDedupRecords(from: [noSetRecord, setRecord])
         #expect(filtered.count == 1)
         #expect(filtered.first?.id == setRecord.id)
+    }
+
+    @Test("filteringAppDuplicates excludes tombstoned IDs")
+    func filteringAppDuplicatesExcludesTombstoned() {
+        let now = Date()
+        let workouts: [WorkoutSummary] = [
+            WorkoutSummary(id: "alive", type: "Running", duration: 1800, calories: 200, distance: nil, date: now),
+            WorkoutSummary(id: "dead", type: "Cycling", duration: 3600, calories: 400, distance: nil, date: now),
+        ]
+
+        let filtered = workouts.filteringAppDuplicates(
+            against: [],
+            tombstonedIDs: ["dead"]
+        )
+
+        #expect(filtered.count == 1)
+        #expect(filtered[0].id == "alive")
     }
 
     @Test("recent dedup does not hide HealthKit cardio when only no-set manual records exist")

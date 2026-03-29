@@ -13,6 +13,7 @@ final class DeletedWorkoutTombstoneStore {
     /// Cached set for fast lookup without repeated UserDefaults reads.
     private var cache: [String: Date] = [:]
     private var isCacheLoaded = false
+    private var _tombstonedIDs: Set<String> = []
 
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
@@ -24,6 +25,7 @@ final class DeletedWorkoutTombstoneStore {
     func recordDeletion(healthKitWorkoutID: String) {
         ensureCache()
         cache[healthKitWorkoutID] = Date()
+        _tombstonedIDs.insert(healthKitWorkoutID)
         persist()
     }
 
@@ -31,6 +33,13 @@ final class DeletedWorkoutTombstoneStore {
     func isDeleted(healthKitWorkoutID: String) -> Bool {
         ensureCache()
         return cache[healthKitWorkoutID] != nil
+    }
+
+    /// All currently tombstoned HealthKit workout IDs (for batch filtering).
+    /// Cached to avoid Set allocation on every call.
+    var tombstonedIDs: Set<String> {
+        ensureCache()
+        return _tombstonedIDs
     }
 
     // MARK: - Private
@@ -45,6 +54,7 @@ final class DeletedWorkoutTombstoneStore {
         }
         cache = decoded
         cleanup()
+        _tombstonedIDs = Set(cache.keys)
     }
 
     private func persist() {
