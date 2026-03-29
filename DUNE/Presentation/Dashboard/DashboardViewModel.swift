@@ -298,7 +298,7 @@ final class DashboardViewModel {
     /// Copy sparkline data from ScoreRefreshService into stored property.
     /// Breaks the cross-observable chain that causes NavigationStack layout feedback loops
     /// when ScoreRefreshService updates during navigation transitions.
-    func syncSparklines() {
+    private func syncSparklines() {
         conditionSparkline = scoreRefreshService?.conditionSparkline ?? .empty
     }
 
