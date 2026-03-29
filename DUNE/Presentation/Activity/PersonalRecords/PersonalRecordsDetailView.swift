@@ -16,7 +16,7 @@ struct PersonalRecordsDetailView: View {
          GridItem(.flexible(), spacing: DS.Spacing.sm)]
     }
 
-    private let cardMinHeight: CGFloat = 148
+    private let cardMinHeight: CGFloat = 120
 
     private var recordsUpdateKey: Int {
         var hasher = Hasher()
@@ -26,10 +26,6 @@ struct PersonalRecordsDetailView: View {
             hasher.combine(record.date.timeIntervalSince1970)
         }
         return hasher.finalize()
-    }
-
-    private var recentRewardHistory: [WorkoutRewardEvent] {
-        Array(rewardHistory.prefix(30))
     }
 
     var body: some View {
@@ -42,9 +38,15 @@ struct PersonalRecordsDetailView: View {
                         noticeBanner(notice)
                     }
 
-                    // Metric picker
+                    // Chip bar metric picker
                     if viewModel.availableKinds.count > 1 {
-                        metricPicker
+                        PRChipBar(
+                            kinds: viewModel.availableKinds,
+                            selected: Binding(
+                                get: { viewModel.resolvedKind },
+                                set: { viewModel.selectedKind = $0 }
+                            )
+                        )
                     }
 
                     // Current best hero
@@ -55,19 +57,28 @@ struct PersonalRecordsDetailView: View {
                     // Period picker
                     periodPicker
 
-                    // Timeline chart
+                    // Enhanced timeline chart
                     timelineChart
 
-                    // Reward summary
+                    // Reward progress section
                     if rewardSummary.totalPoints > 0 || rewardSummary.badgeCount > 0 {
-                        rewardSummaryCard
+                        RewardProgressSection(
+                            summary: rewardSummary,
+                            badgeDefinitions: viewModel.badgeDefinitions,
+                            funComparisons: viewModel.funComparisons,
+                            levelTier: viewModel.levelTier,
+                            nextTier: viewModel.nextLevelTier,
+                            levelProgress: viewModel.levelProgress
+                        )
                     }
 
                     // All-time records grid
                     prGrid
 
-                    // Achievement history
-                    achievementHistorySection
+                    // Enhanced achievement history
+                    AchievementHistorySection(
+                        groupedHistory: viewModel.groupedHistory
+                    )
                 }
             }
             .padding()
@@ -77,6 +88,8 @@ struct PersonalRecordsDetailView: View {
         .englishNavigationTitle("Personal Records")
         .task(id: recordsUpdateKey) {
             viewModel.load(records: records)
+            viewModel.rewardSummary = rewardSummary
+            viewModel.rewardHistory = rewardHistory
             if viewModel.selectedKind == nil {
                 viewModel.selectedKind = viewModel.availableKinds.first
             }
@@ -96,24 +109,6 @@ struct PersonalRecordsDetailView: View {
         }
         .padding(DS.Spacing.sm)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
-    }
-
-    private var metricPicker: some View {
-        VStack(alignment: .leading, spacing: DS.Spacing.xs) {
-            Text("Metric")
-                .font(.caption)
-                .foregroundStyle(DS.Color.textSecondary)
-            Picker("Metric", selection: Binding(
-                get: { viewModel.resolvedKind ?? viewModel.availableKinds.first },
-                set: { viewModel.selectedKind = $0 }
-            )) {
-                ForEach(viewModel.availableKinds, id: \.self) { kind in
-                    Text(kind.displayName).tag(Optional(kind))
-                }
-            }
-            .pickerStyle(.segmented)
-            .accessibilityIdentifier("activity-personal-records-metric-picker")
-        }
     }
 
     private func currentBestCard(_ best: ActivityPersonalRecord) -> some View {
@@ -136,16 +131,22 @@ struct PersonalRecordsDetailView: View {
             }
 
             HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xxs) {
-                Text(primaryValueText(for: best))
+                Text(best.formattedValue)
                     .font(.system(size: 36, weight: .bold, design: .rounded))
                     .foregroundStyle(theme.heroTextGradient)
                     .minimumScaleFactor(0.6)
                     .lineLimit(1)
 
-                if let unit = unitText(for: best) {
+                if let unit = best.kind.unitLabel {
                     Text(unit)
                         .font(.subheadline)
                         .foregroundStyle(DS.Color.textSecondary)
+                }
+
+                if let delta = best.formattedDelta {
+                    Text(delta)
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle((best.deltaValue ?? 0) > 0 ? DS.Color.positive : DS.Color.negative)
                 }
 
                 Spacer(minLength: 0)
@@ -156,7 +157,7 @@ struct PersonalRecordsDetailView: View {
                     .font(.caption)
                     .foregroundStyle(DS.Color.textSecondary)
                 if let subtitle = best.subtitle {
-                    Text("·")
+                    Text("\u{00B7}")
                         .font(.caption)
                         .foregroundStyle(.tertiary)
                     Text(subtitle)
@@ -184,6 +185,8 @@ struct PersonalRecordsDetailView: View {
         .accessibilityIdentifier("activity-personal-records-period-picker")
     }
 
+    // MARK: - Enhanced Timeline Chart
+
     private var timelineChart: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
             Text("PR Timeline")
@@ -196,33 +199,54 @@ struct PersonalRecordsDetailView: View {
                     .foregroundStyle(.tertiary)
                     .frame(maxWidth: .infinity, minHeight: 220)
             } else {
+                let chartColor = viewModel.resolvedKind?.tintColor ?? DS.Color.activity
+
                 Chart(viewModel.chartData) { record in
+                    // Gradient area fill under the curve
+                    AreaMark(
+                        x: .value("Date", record.date),
+                        y: .value("Value", record.value)
+                    )
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: [chartColor.opacity(0.25), chartColor.opacity(0.02)],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
+                    .interpolationMethod(.catmullRom)
+
+                    // Smooth curved line
                     LineMark(
                         x: .value("Date", record.date),
                         y: .value("Value", record.value)
                     )
-                    .foregroundStyle(record.kind.tintColor.opacity(0.5))
+                    .foregroundStyle(chartColor.opacity(0.7))
                     .interpolationMethod(.catmullRom)
+                    .lineStyle(StrokeStyle(lineWidth: 2.5, lineCap: .round))
 
+                    // Data points
                     PointMark(
                         x: .value("Date", record.date),
                         y: .value("Value", record.value)
                     )
-                    .foregroundStyle(record.kind.tintColor)
-                    .symbolSize(record.isRecent ? 80 : 40)
-                    .annotation(position: .top, spacing: 4) {
-                        if record.isRecent {
-                            Text(record.localizedTitle)
-                                .font(.system(size: 8))
-                                .foregroundStyle(DS.Color.textSecondary)
-                                .lineLimit(1)
+                    .foregroundStyle(chartColor)
+                    .symbolSize(isLatestPoint(record) ? 100 : 50)
+                    .annotation(position: .top, spacing: 6) {
+                        if isLatestPoint(record) {
+                            Text(record.formattedValue)
+                                .font(.system(size: 10, weight: .semibold))
+                                .foregroundStyle(chartColor)
+                                .padding(.horizontal, 4)
+                                .padding(.vertical, 2)
+                                .background(.ultraThinMaterial, in: Capsule())
                         }
                     }
                 }
                 .chartXAxis {
                     AxisMarks(values: .stride(by: chartXStride)) { _ in
                         AxisGridLine()
-                            .foregroundStyle(theme.accentColor.opacity(0.30))
+                            .foregroundStyle(theme.accentColor.opacity(0.15))
                         AxisValueLabel(format: chartXFormat)
                             .foregroundStyle(theme.sandColor)
                     }
@@ -230,7 +254,7 @@ struct PersonalRecordsDetailView: View {
                 .chartYAxis {
                     AxisMarks { value in
                         AxisGridLine()
-                            .foregroundStyle(theme.accentColor.opacity(0.30))
+                            .foregroundStyle(theme.accentColor.opacity(0.15))
                         AxisValueLabel {
                             if let v = value.as(Double.self), let kind = viewModel.resolvedKind {
                                 Text(chartAxisValue(v, for: kind))
@@ -239,8 +263,9 @@ struct PersonalRecordsDetailView: View {
                         }
                     }
                 }
+                .chartYScale(domain: chartYDomain)
                 .padding(.top, 16)
-                .frame(height: 236)
+                .frame(height: 252)
                 .clipped()
             }
         }
@@ -249,6 +274,21 @@ struct PersonalRecordsDetailView: View {
         .id(viewModel.selectedPeriod)
         .transition(.opacity)
         .accessibilityIdentifier("activity-personal-records-timeline-chart")
+    }
+
+    private func isLatestPoint(_ record: ActivityPersonalRecord) -> Bool {
+        record.id == viewModel.chartData.last?.id
+    }
+
+    /// Extend Y-axis 10% above max for breathing room
+    private var chartYDomain: ClosedRange<Double> {
+        let values = viewModel.chartData.map(\.value)
+        guard let minVal = values.min(), let maxVal = values.max() else {
+            return 0...100
+        }
+        let range = maxVal - minVal
+        let padding = max(range * 0.1, 1)
+        return max(0, minVal - padding)...(maxVal + padding)
     }
 
     private var chartXStride: Calendar.Component {
@@ -266,6 +306,8 @@ struct PersonalRecordsDetailView: View {
         case .sixMonths, .year: .dateTime.month(.abbreviated)
         }
     }
+
+    // MARK: - All-Time Records Grid
 
     private var prGrid: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
@@ -292,115 +334,6 @@ struct PersonalRecordsDetailView: View {
                 }
             }
         }
-    }
-
-    private var rewardSummaryCard: some View {
-        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            Text(String(localized: "Reward Progress"))
-                .font(.subheadline.weight(.semibold))
-                .foregroundStyle(DS.Color.textSecondary)
-
-            HStack(spacing: DS.Spacing.sm) {
-                Label(
-                    String.localizedStringWithFormat(
-                        String(localized: "Lv %lld"),
-                        rewardSummary.level
-                    ),
-                    systemImage: "star.circle.fill"
-                )
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(.white)
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 6)
-                    .background(DS.Color.activity, in: Capsule())
-
-                Label(
-                    String.localizedStringWithFormat(
-                        String(localized: "%lld badges"),
-                        rewardSummary.badgeCount
-                    ),
-                    systemImage: "medal.fill"
-                )
-                    .font(.caption)
-                    .foregroundStyle(DS.Color.textSecondary)
-
-                Spacer(minLength: 0)
-
-                Text(
-                    String.localizedStringWithFormat(
-                        String(localized: "%lld pts"),
-                        rewardSummary.totalPoints
-                    )
-                )
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(.tertiary)
-            }
-        }
-        .padding(DS.Spacing.md)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
-        .accessibilityIdentifier("activity-personal-records-reward-summary")
-    }
-
-    private var achievementHistorySection: some View {
-        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            Text(String(localized: "Achievement History"))
-                .font(.subheadline.weight(.semibold))
-                .foregroundStyle(DS.Color.textSecondary)
-
-            if recentRewardHistory.isEmpty {
-                Text(String(localized: "No reward events yet. Complete workouts and hit milestones to build your timeline."))
-                    .font(.caption)
-                    .foregroundStyle(.tertiary)
-                    .padding(.vertical, DS.Spacing.xs)
-            } else {
-                VStack(spacing: DS.Spacing.xs) {
-                    ForEach(recentRewardHistory) { event in
-                        historyRow(event)
-                    }
-                }
-            }
-        }
-        .padding(DS.Spacing.md)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
-        .accessibilityIdentifier("activity-personal-records-achievement-history")
-    }
-
-    private func historyRow(_ event: WorkoutRewardEvent) -> some View {
-        HStack(alignment: .top, spacing: DS.Spacing.sm) {
-            Image(systemName: iconName(for: event.kind))
-                .font(.caption)
-                .foregroundStyle(color(for: event.kind))
-                .frame(width: 18, height: 18)
-
-            VStack(alignment: .leading, spacing: 2) {
-                Text(event.title)
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(DS.Color.textSecondary)
-                Text(eventDetailText(event))
-                    .font(.caption2)
-                    .foregroundStyle(.tertiary)
-                    .lineLimit(2)
-            }
-
-            Spacer(minLength: 0)
-
-            VStack(alignment: .trailing, spacing: 2) {
-                Text(event.date, style: .date)
-                    .font(.caption2)
-                    .foregroundStyle(.tertiary)
-                if event.pointsAwarded > 0 {
-                    Text(
-                        String.localizedStringWithFormat(
-                            String(localized: "+%lld pts"),
-                            event.pointsAwarded
-                        )
-                    )
-                        .font(.caption2.weight(.semibold))
-                        .foregroundStyle(DS.Color.activity)
-                }
-            }
-        }
-        .padding(.vertical, 4)
     }
 
     private func prCard(_ record: ActivityPersonalRecord) -> some View {
@@ -433,24 +366,17 @@ struct PersonalRecordsDetailView: View {
             }
 
             HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xxs) {
-                Text(primaryValueText(for: record))
+                Text(record.formattedValue)
                     .font(DS.Typography.cardScore)
                     .foregroundStyle(theme.heroTextGradient)
                     .minimumScaleFactor(0.7)
                     .lineLimit(1)
 
-                if let unit = unitText(for: record) {
+                if let unit = record.kind.unitLabel {
                     Text(unit)
                         .font(.caption)
                         .foregroundStyle(DS.Color.textSecondary)
                 }
-            }
-
-            if let context = contextText(for: record) {
-                Text(context)
-                    .font(.caption2)
-                    .foregroundStyle(DS.Color.textSecondary)
-                    .lineLimit(1)
             }
 
             Spacer(minLength: 0)
@@ -483,10 +409,6 @@ struct PersonalRecordsDetailView: View {
 
     // MARK: - Formatting
 
-    private func primaryValueText(for record: ActivityPersonalRecord) -> String {
-        record.formattedValue
-    }
-
     private func chartAxisValue(_ value: Double, for kind: ActivityPersonalRecord.Kind) -> String {
         switch kind {
         case .fastestPace:
@@ -502,71 +424,5 @@ struct PersonalRecordsDetailView: View {
              .highestCalories, .highestElevation:
             return value.formattedWithSeparator()
         }
-    }
-
-    private func unitText(for record: ActivityPersonalRecord) -> String? {
-        record.kind.unitLabel
-    }
-
-    private func contextText(for record: ActivityPersonalRecord) -> String? {
-        var parts: [String] = []
-        if let avg = record.heartRateAvg, avg > 0 {
-            parts.append("HR \(Int(avg).formattedWithSeparator)bpm")
-        }
-        if let steps = record.stepCount, steps > 0 {
-            parts.append("\(Int(steps).formattedWithSeparator) steps")
-        }
-
-        var weatherParts: [String] = []
-        if let condition = record.weatherCondition {
-            weatherParts.append(weatherConditionLabel(for: condition))
-        }
-        if let temp = record.weatherTemperature, temp.isFinite {
-            weatherParts.append("\(Int(temp).formattedWithSeparator)°")
-        }
-        if let humidity = record.weatherHumidity, humidity.isFinite, humidity >= 0 {
-            weatherParts.append("Humidity \(Int(humidity).formattedWithSeparator)%")
-        }
-        if let isIndoor = record.isIndoor {
-            weatherParts.append(isIndoor ? String(localized: "Indoor") : String(localized: "Outdoor"))
-        }
-        if !weatherParts.isEmpty {
-            parts.append(weatherParts.joined(separator: " "))
-        }
-
-        guard !parts.isEmpty else { return nil }
-        return parts.prefix(3).joined(separator: " · ")
-    }
-
-    private func iconName(for kind: WorkoutRewardEventKind) -> String {
-        switch kind {
-        case .milestone: "flag.checkered.circle.fill"
-        case .personalRecord: "trophy.fill"
-        case .badgeUnlocked: "medal.fill"
-        case .levelUp: "star.circle.fill"
-        }
-    }
-
-    private func color(for kind: WorkoutRewardEventKind) -> Color {
-        switch kind {
-        case .milestone: DS.Color.activity
-        case .personalRecord: .orange
-        case .badgeUnlocked: .yellow
-        case .levelUp: .mint
-        }
-    }
-
-    private func eventDetailText(_ event: WorkoutRewardEvent) -> String {
-        guard let activityType = WorkoutActivityType(rawValue: event.activityTypeRawValue) else {
-            return event.detail
-        }
-        if event.kind == .levelUp {
-            return event.detail
-        }
-        return String.localizedStringWithFormat(
-            String(localized: "%1$@: %2$@"),
-            activityType.displayName,
-            event.detail
-        )
     }
 }
