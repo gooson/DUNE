@@ -51,14 +51,15 @@ struct RecoverySleepCard: View {
     @ViewBuilder
     private var deficitRow: some View {
         if let deficit = sleepDeficit, hasValidDeficit {
+            let levelColor = deficit.level.color
             HStack(spacing: DS.Spacing.md) {
                 // Mini ring gauge
                 ZStack {
                     Circle()
-                        .stroke(deficit.level.color.opacity(DS.Opacity.border), lineWidth: 5)
+                        .stroke(levelColor.opacity(DS.Opacity.border), lineWidth: 5)
                     Circle()
                         .trim(from: 0, to: min(deficit.weeklyDeficit / 600.0, 1.0))
-                        .stroke(deficit.level.color, style: StrokeStyle(lineWidth: 5, lineCap: .round))
+                        .stroke(levelColor, style: StrokeStyle(lineWidth: 5, lineCap: .round))
                         .rotationEffect(.degrees(-90))
                 }
                 .frame(width: 32, height: 32)
@@ -70,10 +71,10 @@ struct RecoverySleepCard: View {
 
                         Text(deficit.level.label)
                             .font(.caption2)
-                            .foregroundStyle(deficit.level.color)
+                            .foregroundStyle(levelColor)
                             .padding(.horizontal, 6)
                             .padding(.vertical, 2)
-                            .background(deficit.level.color.opacity(0.12), in: Capsule())
+                            .background(levelColor.opacity(0.12), in: Capsule())
                     }
                 }
 
