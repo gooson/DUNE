@@ -99,9 +99,9 @@ final class ActivityViewModel {
     private let scoreRefreshService: ScoreRefreshService?
 
     /// Hourly sparkline data for the readiness hero card.
-    var readinessSparkline: HourlySparklineData {
-        scoreRefreshService?.readinessSparkline ?? .empty
-    }
+    /// Stored (not computed read-through to ScoreRefreshService) to avoid cross-observable
+    /// observation chain that causes NavigationStack layout feedback loops.
+    private(set) var readinessSparkline: HourlySparklineData = .empty
 
     /// Cached recovery modifiers from the most recent fetch.
     private var sleepModifier: Double = 1.0
@@ -714,7 +714,9 @@ final class ActivityViewModel {
                 wellnessScore: nil,
                 readinessScore: readiness.score
             )
+            await service.loadTodaySparklines()
         }
+        readinessSparkline = scoreRefreshService?.readinessSparkline ?? .empty
         guard isCurrentLoadRequest(requestID) else { return }
 
         // Compute derived stats (PRs, streak, frequency, weekly stats)

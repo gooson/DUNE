@@ -65,9 +65,9 @@ final class WellnessViewModel {
     private let scoreRefreshService: ScoreRefreshService?
 
     /// Hourly sparkline data for the wellness hero card.
-    var wellnessSparkline: HourlySparklineData {
-        scoreRefreshService?.wellnessSparkline ?? .empty
-    }
+    /// Stored (not computed read-through to ScoreRefreshService) to avoid cross-observable
+    /// observation chain that causes NavigationStack layout feedback loops.
+    private(set) var wellnessSparkline: HourlySparklineData = .empty
 
     // MARK: - Internal State
 
@@ -468,7 +468,9 @@ final class WellnessViewModel {
                 wellnessScore: wellness.score,
                 readinessScore: nil
             )
+            await service.loadTodaySparklines()
         }
+        wellnessSparkline = scoreRefreshService?.wellnessSparkline ?? .empty
         guard isCurrentLoadRequest(requestID) else { return }
 
         // Sort and split into sections (Correction #88: atomic update)
