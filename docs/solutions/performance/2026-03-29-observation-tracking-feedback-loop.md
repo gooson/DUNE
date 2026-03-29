@@ -92,9 +92,41 @@ When passing `@Observable` values through `.environment()`, always cache in `@St
 
 This pattern is only needed for `.environment()`. Regular body reads (`Text(viewModel.title)`) don't need caching because they don't propagate to child views.
 
+## Second Instance: Cross-Observable Sparkline Read-Through
+
+### Problem
+
+After the weatherAtmosphere fix, the feedback loop persisted when entering Settings. Root cause: `DashboardViewModel.conditionSparkline` was a computed property that read through to `ScoreRefreshService.conditionSparkline` (a different `@Observable`):
+
+```swift
+// FEEDBACK LOOP: cross-observable read-through
+var conditionSparkline: HourlySparklineData {
+    scoreRefreshService?.conditionSparkline ?? .empty
+}
+```
+
+SwiftUI observation tracked `ScoreRefreshService.conditionSparkline` through the computed property. When `ScoreRefreshService` updated the sparkline (from refresh stream or `recordSnapshot()` → `scheduleSparklineReload()`), it directly invalidated DashboardView, bypassing the `@State` ViewModel coalescing.
+
+### Fix
+
+Convert to stored property with explicit sync:
+
+```swift
+// SAFE: stored property, no cross-observable chain
+private(set) var conditionSparkline: HourlySparklineData = .empty
+
+private func syncSparklines() {
+    conditionSparkline = scoreRefreshService?.conditionSparkline ?? .empty
+}
+```
+
+Called at end of `loadData()`. Sparkline may be slightly behind `ScoreRefreshService` between refreshes — acceptable for hourly sparkline data.
+
 ## Lessons Learned
 
 1. `.environment()` has subtree-wide propagation — treat it differently from regular property reads
 2. `@Observable` + `.environment()` + async mutation = guaranteed feedback loop potential
-3. The `@State` cache + `.onChange` pattern is the standard SwiftUI fix for this class of issue
+3. The `@State` cache + `.onChange` pattern is the standard SwiftUI fix for `.environment()` cases
 4. Initial `@State` default must match the ViewModel's initial value to avoid flash of wrong state
+5. **Cross-observable computed read-throughs** also create feedback loops: when ViewModel A's computed property reads from `@Observable` B, SwiftUI tracks both. Updates to B invalidate the View even though A's `@State` wrapping should coalesce them
+6. Fix for cross-observable: convert computed → stored property with explicit sync at stable points (end of `loadData()`, `.onChange`, etc.)

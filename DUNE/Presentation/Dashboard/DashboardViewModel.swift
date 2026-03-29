@@ -118,10 +118,10 @@ final class DashboardViewModel {
     private let nudgeDismissStore: TemplateNudgeDismissStore
     private var loadRequestID = 0
 
-    /// Hourly sparkline data for the condition hero card, sourced from ScoreRefreshService.
-    var conditionSparkline: HourlySparklineData {
-        scoreRefreshService?.conditionSparkline ?? .empty
-    }
+    /// Hourly sparkline data for the condition hero card.
+    /// Stored (not computed read-through to ScoreRefreshService) to avoid cross-observable
+    /// observation chain that causes NavigationStack layout feedback loops.
+    private(set) var conditionSparkline: HourlySparklineData = .empty
 
     init(
         healthKitManager: HealthKitManager = .shared,
@@ -291,6 +291,15 @@ final class DashboardViewModel {
                 readinessScore: nil
             )
         }
+
+        syncSparklines()
+    }
+
+    /// Copy sparkline data from ScoreRefreshService into stored property.
+    /// Breaks the cross-observable chain that causes NavigationStack layout feedback loops
+    /// when ScoreRefreshService updates during navigation transitions.
+    private func syncSparklines() {
+        conditionSparkline = scoreRefreshService?.conditionSparkline ?? .empty
     }
 
     /// Load template nudge recommendation using existing templates from View's @Query.
