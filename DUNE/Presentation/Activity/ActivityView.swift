@@ -120,7 +120,6 @@ struct ActivityView: View {
     private let notificationRouteSignal: Int
     private let notificationPersonalRecordsSignal: Int
     @State private var heroFrame: CGRect?
-    @State private var sparklineTappedKind: ActivityPersonalRecord.Kind?
 
     private enum ScrollAnchor: Hashable {
         case top
@@ -268,8 +267,7 @@ struct ActivityView: View {
                                 PersonalRecordsSection(
                                     records: viewModel.personalRecords,
                                     notice: viewModel.personalRecordNotice,
-                                    rewardSummary: viewModel.workoutRewardSummary,
-                                    sparklineTappedKind: $sparklineTappedKind
+                                    rewardSummary: viewModel.workoutRewardSummary
                                 )
                             }
                             .buttonStyle(.plain)
@@ -675,9 +673,8 @@ struct ActivityView: View {
                 rewardSummary: viewModel.workoutRewardSummary,
                 rewardHistory: viewModel.workoutRewardHistory,
                 unlockedBadgeKeys: viewModel.unlockedBadgeKeys,
-                preselectedKind: preselectedKind ?? sparklineTappedKind
+                preselectedKind: preselectedKind
             )
-            .onAppear { sparklineTappedKind = nil }
         case .consistency:
             ConsistencyDetailView()
         case .exerciseMix:

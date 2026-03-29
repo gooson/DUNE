@@ -5,7 +5,6 @@ struct PersonalRecordsSection: View {
     let records: [ActivityPersonalRecord]
     let notice: String?
     let rewardSummary: WorkoutRewardSummary?
-    @Binding var sparklineTappedKind: ActivityPersonalRecord.Kind?
 
     @Environment(\.appTheme) private var theme
 
@@ -103,22 +102,20 @@ struct PersonalRecordsSection: View {
 
                 Spacer(minLength: 0)
 
-                // Sparkline (reuse MiniSparklineView)
+                // Sparkline — own NavigationLink so tap navigates with Kind pre-selected
                 let sparkData = sparklineData(for: record)
                 if sparkData.count >= 2 {
-                    MiniSparklineView(dataPoints: sparkData, color: record.kind.tintColor)
-                        .frame(width: 48, height: 24)
-                        .contentShape(Rectangle())
-                        .accessibilityHidden(false)
-                        .accessibilityLabel(
-                            String.localizedStringWithFormat(
-                                String(localized: "View %@ details"),
-                                record.kind.displayName
-                            )
+                    NavigationLink(value: ActivityDetailDestination.personalRecords(preselectedKind: record.kind)) {
+                        MiniSparklineView(dataPoints: sparkData, color: record.kind.tintColor)
+                            .frame(width: 48, height: 24)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel(
+                        String.localizedStringWithFormat(
+                            String(localized: "View %@ details"),
+                            record.kind.displayName
                         )
-                        .onTapGesture {
-                            sparklineTappedKind = record.kind
-                        }
+                    )
                 }
             }
 
