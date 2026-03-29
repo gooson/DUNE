@@ -228,4 +228,116 @@ struct PRVisualEnhancementTests {
             #expect(record.formattedDelta == nil)
         }
     }
+
+    // MARK: - Badge Evaluation Tests
+
+    @Suite("Badge Evaluation Logic")
+    struct BadgeEvaluationTests {
+
+        @Test("Zero stats unlocks no badges")
+        func zeroStatsNoBadges() {
+            let result = WorkoutBadgeDefinition.evaluateUnlocks(
+                stats: .empty,
+                currentUnlocked: []
+            )
+            #expect(result.isEmpty)
+        }
+
+        @Test("First PR threshold unlocks badge-first-pr")
+        func firstPRThreshold() {
+            let stats = BadgeEvaluationStats(
+                totalPRCount: 1, distinctPRKindCount: 1, totalVolumeKg: 0,
+                bestStreakDays: 0, totalWorkoutCount: 1, daysSinceFirstWorkout: 0,
+                bestImprovementPercent: 0, bestPacePerKm: 0
+            )
+            let result = WorkoutBadgeDefinition.evaluateUnlocks(stats: stats, currentUnlocked: [])
+            #expect(result.contains("badge-first-pr"))
+            #expect(result.contains("badge-first-workout"))
+            #expect(!result.contains("badge-10-prs"))
+        }
+
+        @Test("Volume thresholds progressive unlock")
+        func volumeProgressiveUnlock() {
+            let stats1k = BadgeEvaluationStats(
+                totalPRCount: 0, distinctPRKindCount: 0, totalVolumeKg: 1_000,
+                bestStreakDays: 0, totalWorkoutCount: 0, daysSinceFirstWorkout: 0,
+                bestImprovementPercent: 0, bestPacePerKm: 0
+            )
+            let result1k = WorkoutBadgeDefinition.evaluateUnlocks(stats: stats1k, currentUnlocked: [])
+            #expect(result1k.contains("badge-1k-volume"))
+            #expect(!result1k.contains("badge-10k-volume"))
+
+            let stats10k = BadgeEvaluationStats(
+                totalPRCount: 0, distinctPRKindCount: 0, totalVolumeKg: 10_000,
+                bestStreakDays: 0, totalWorkoutCount: 0, daysSinceFirstWorkout: 0,
+                bestImprovementPercent: 0, bestPacePerKm: 0
+            )
+            let result10k = WorkoutBadgeDefinition.evaluateUnlocks(stats: stats10k, currentUnlocked: [])
+            #expect(result10k.contains("badge-1k-volume"))
+            #expect(result10k.contains("badge-10k-volume"))
+        }
+
+        @Test("Streak thresholds")
+        func streakThresholds() {
+            let stats = BadgeEvaluationStats(
+                totalPRCount: 0, distinctPRKindCount: 0, totalVolumeKg: 0,
+                bestStreakDays: 30, totalWorkoutCount: 0, daysSinceFirstWorkout: 0,
+                bestImprovementPercent: 0, bestPacePerKm: 0
+            )
+            let result = WorkoutBadgeDefinition.evaluateUnlocks(stats: stats, currentUnlocked: [])
+            #expect(result.contains("badge-7-streak"))
+            #expect(result.contains("badge-30-streak"))
+            #expect(!result.contains("badge-100-streak"))
+        }
+
+        @Test("Sub 5-min pace badge")
+        func sub5MinPaceBadge() {
+            let stats = BadgeEvaluationStats(
+                totalPRCount: 0, distinctPRKindCount: 0, totalVolumeKg: 0,
+                bestStreakDays: 0, totalWorkoutCount: 0, daysSinceFirstWorkout: 0,
+                bestImprovementPercent: 0, bestPacePerKm: 280
+            )
+            let result = WorkoutBadgeDefinition.evaluateUnlocks(stats: stats, currentUnlocked: [])
+            #expect(result.contains("badge-sub5-pace"))
+        }
+
+        @Test("Pace at 0 does not unlock speed badge")
+        func noPaceNoBadge() {
+            let stats = BadgeEvaluationStats(
+                totalPRCount: 0, distinctPRKindCount: 0, totalVolumeKg: 0,
+                bestStreakDays: 0, totalWorkoutCount: 0, daysSinceFirstWorkout: 0,
+                bestImprovementPercent: 0, bestPacePerKm: 0
+            )
+            let result = WorkoutBadgeDefinition.evaluateUnlocks(stats: stats, currentUnlocked: [])
+            #expect(!result.contains("badge-sub5-pace"))
+        }
+
+        @Test("Max stats unlocks all 16 badges")
+        func maxStatsAllBadges() {
+            let stats = BadgeEvaluationStats(
+                totalPRCount: 100, distinctPRKindCount: 9, totalVolumeKg: 200_000,
+                bestStreakDays: 200, totalWorkoutCount: 500, daysSinceFirstWorkout: 730,
+                bestImprovementPercent: 150, bestPacePerKm: 240
+            )
+            let result = WorkoutBadgeDefinition.evaluateUnlocks(stats: stats, currentUnlocked: [])
+            #expect(result.count == 16)
+        }
+
+        @Test("Already unlocked badges are excluded")
+        func idempotent() {
+            let stats = BadgeEvaluationStats(
+                totalPRCount: 1, distinctPRKindCount: 1, totalVolumeKg: 0,
+                bestStreakDays: 0, totalWorkoutCount: 1, daysSinceFirstWorkout: 0,
+                bestImprovementPercent: 0, bestPacePerKm: 0
+            )
+            let first = WorkoutBadgeDefinition.evaluateUnlocks(stats: stats, currentUnlocked: [])
+            #expect(first.contains("badge-first-pr"))
+
+            let second = WorkoutBadgeDefinition.evaluateUnlocks(
+                stats: stats,
+                currentUnlocked: Set(first)
+            )
+            #expect(second.isEmpty)
+        }
+    }
 }
