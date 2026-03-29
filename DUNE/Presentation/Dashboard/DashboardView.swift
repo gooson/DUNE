@@ -136,6 +136,9 @@ struct DashboardView: View {
         .navigationDestination(for: WeatherSnapshot.self) { snapshot in
             WeatherDetailView(snapshot: snapshot)
         }
+        .navigationDestination(item: $weatherDetailNavigation) { snapshot in
+            WeatherDetailView(snapshot: snapshot)
+        }
         .waveRefreshable {
             guard launchExperienceReady else { return }
             await loadDashboard()
@@ -246,6 +249,8 @@ struct DashboardView: View {
         h.combine(viewModel.insightCards.count)
         h.combine(viewModel.templateNudgeRecommendation != nil)
         h.combine(viewModel.pinnedCards.count)
+        h.combine(viewModel.sleepDeficitAnalysis != nil)
+        h.combine(viewModel.focusInsight != nil)
         return h.finalize()
     }
 
@@ -276,84 +281,73 @@ struct DashboardView: View {
                 .staggeredAppear(index: 0)
         }
 
-        // Morning Briefing entry
-        if let briefingData = viewModel.briefingData,
-           !isBriefingDisabled {
-            BriefingEntryCard(conditionStatus: briefingData.conditionStatus) {
-                isShowingBriefing = true
-            }
+        // Today's Brief (weather + coaching + briefing entry)
+        if !isBriefingDisabled || viewModel.weatherSnapshot != nil || viewModel.focusInsight != nil || viewModel.coachingMessage != nil {
+            TodayBriefCard(
+                weatherSnapshot: viewModel.weatherSnapshot,
+                weatherInsight: viewModel.weatherCardInsight,
+                focusInsight: viewModel.focusInsight,
+                coachingMessage: viewModel.coachingMessage,
+                conditionStatus: viewModel.briefingData?.conditionStatus,
+                onOpenBriefing: { isShowingBriefing = true },
+                onOpenWeatherDetail: { navigateToWeatherDetail() },
+                onRequestLocationPermission: {
+                    Task { await viewModel.requestLocationPermission() }
+                }
+            )
             .transition(Self.sectionTransition)
             .staggeredAppear(index: 1)
         }
 
-        // Weather + coaching (merged when coaching is weather-category)
-        Group {
-            if let weather = viewModel.weatherSnapshot {
-                NavigationLink(value: weather) {
-                    WeatherCard(snapshot: weather, insightInfo: viewModel.weatherCardInsight)
-                }
-                .buttonStyle(.plain)
-                .accessibilityIdentifier("dashboard-weather-card")
-            } else {
-                WeatherCardPlaceholder {
-                    Task { await viewModel.requestLocationPermission() }
+        // Recovery & Sleep (sleep deficit + sleep insights)
+        RecoverySleepCard(
+            sleepDeficit: viewModel.sleepDeficitAnalysis,
+            sleepInsights: viewModel.sleepInsightCards,
+            sleepMetric: viewModel.sortedMetrics.first(where: { $0.category == .sleep }),
+            onDismissInsight: { id in
+                withAnimation(DS.Animation.standard) {
+                    viewModel.dismissInsightCard(id: id)
                 }
             }
-        }
+        )
         .transition(Self.sectionTransition)
         .staggeredAppear(index: 2)
 
-        // Coaching (standalone when not merged into weather card)
-        if let insight = viewModel.standaloneCoachingInsight {
-            TodayCoachingCard(insight: insight)
-                .transition(Self.sectionTransition)
-                .staggeredAppear(index: 3)
-        } else if viewModel.focusInsight == nil,
-                  let coachingMessage = viewModel.coachingMessage {
-            TodayCoachingCard(message: coachingMessage)
-                .transition(Self.sectionTransition)
-                .staggeredAppear(index: 3)
-        }
+        // Smart Insights (non-sleep insights + template nudge)
+        SmartInsightsSection(
+            insightCards: viewModel.nonSleepInsightCards,
+            templateNudge: viewModel.templateNudgeRecommendation,
+            onDismissInsight: { id in
+                withAnimation(DS.Animation.standard) {
+                    viewModel.dismissInsightCard(id: id)
+                }
+            },
+            onSaveTemplate: {
+                templateNudgeToSave = viewModel.templateNudgeRecommendation
+            },
+            onDismissNudge: {
+                withAnimation(DS.Animation.standard) {
+                    viewModel.dismissTemplateNudge()
+                }
+            }
+        )
+        .transition(Self.sectionTransition)
+        .staggeredAppear(index: 3)
 
+        // Health Q&A
         HealthDataQACard(isAvailable: HealthDataQAService.isAvailable) {
             isShowingHealthDataQA = true
         }
         .staggeredAppear(index: 4)
-
-        // Insight Cards
-        if !viewModel.insightCards.isEmpty {
-            insightCardsSection
-                .transition(Self.sectionTransition)
-                .staggeredAppear(index: 5)
-        }
     }
 
     @ViewBuilder
     private var dashboardLowerContent: some View {
-        // Template nudge
-        if let nudge = viewModel.templateNudgeRecommendation {
-            TemplateNudgeCard(
-                recommendation: nudge,
-                onSaveAsTemplate: { templateNudgeToSave = nudge },
-                onDismiss: {
-                    withAnimation(DS.Animation.standard) {
-                        viewModel.dismissTemplateNudge()
-                    }
-                }
-            )
-            .transition(Self.sectionTransition)
-            .staggeredAppear(index: 6)
-        }
-
-        // Sleep deficit badge
-        sleepDeficitSection
-            .staggeredAppear(index: 7)
-
         // Pinned Metrics
         if !viewModel.pinnedCards.isEmpty {
             pinnedSection
                 .transition(Self.sectionTransition)
-                .staggeredAppear(index: 8)
+                .staggeredAppear(index: 5)
         }
 
         // Last updated + error banner
@@ -380,7 +374,7 @@ struct DashboardView: View {
                 cards: viewModel.conditionCards
             )
             .transition(Self.sectionTransition)
-            .staggeredAppear(index: 9)
+            .staggeredAppear(index: 6)
         }
 
         // Activity (Steps, Exercise)
@@ -393,7 +387,7 @@ struct DashboardView: View {
                 cards: viewModel.activityCards
             )
             .transition(Self.sectionTransition)
-            .staggeredAppear(index: 10)
+            .staggeredAppear(index: 7)
         }
 
         // Body (Weight, BMI, Sleep)
@@ -406,7 +400,7 @@ struct DashboardView: View {
                 cards: viewModel.bodyCards
             )
             .transition(Self.sectionTransition)
-            .staggeredAppear(index: 11)
+            .staggeredAppear(index: 8)
         }
     }
 
@@ -464,17 +458,10 @@ struct DashboardView: View {
         await viewModel.loadTemplateNudge(existingTemplateSnapshots: snapshots)
     }
 
-    @ViewBuilder
-    private var sleepDeficitSection: some View {
-        if let deficit = viewModel.sleepDeficitAnalysis,
-           deficit.level != .insufficient,
-           let sleepMetric = viewModel.sortedMetrics.first(where: { $0.category == .sleep }) {
-            NavigationLink(value: sleepMetric) {
-                SleepDeficitBadgeView(analysis: deficit)
-            }
-            .buttonStyle(.plain)
-            .transition(Self.sectionTransition)
-        }
+    @State private var weatherDetailNavigation: WeatherSnapshot?
+
+    private func navigateToWeatherDetail() {
+        weatherDetailNavigation = viewModel.weatherSnapshot
     }
 
     private var notificationBellIcon: some View {
@@ -583,18 +570,6 @@ struct DashboardView: View {
         guard !cachedBuildNumber.isEmpty else { return }
         whatsNewStore.markOpened(build: cachedBuildNumber)
         showWhatsNewBadge = false
-    }
-
-    private var insightCardsSection: some View {
-        VStack(spacing: DS.Spacing.sm) {
-            ForEach(viewModel.insightCards) { card in
-                InsightCardView(data: card) {
-                    withAnimation(DS.Animation.standard) {
-                        viewModel.dismissInsightCard(id: card.id)
-                    }
-                }
-            }
-        }
     }
 
     private func cardSection(
