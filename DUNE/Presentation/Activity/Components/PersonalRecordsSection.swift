@@ -5,6 +5,7 @@ struct PersonalRecordsSection: View {
     let records: [ActivityPersonalRecord]
     let notice: String?
     let rewardSummary: WorkoutRewardSummary?
+    @Binding var sparklineTappedKind: ActivityPersonalRecord.Kind?
 
     @Environment(\.appTheme) private var theme
 
@@ -107,6 +108,17 @@ struct PersonalRecordsSection: View {
                 if sparkData.count >= 2 {
                     MiniSparklineView(dataPoints: sparkData, color: record.kind.tintColor)
                         .frame(width: 48, height: 24)
+                        .contentShape(Rectangle())
+                        .accessibilityHidden(false)
+                        .accessibilityLabel(
+                            String.localizedStringWithFormat(
+                                String(localized: "View %@ details"),
+                                record.kind.displayName
+                            )
+                        )
+                        .onTapGesture {
+                            sparklineTappedKind = record.kind
+                        }
                 }
             }
 

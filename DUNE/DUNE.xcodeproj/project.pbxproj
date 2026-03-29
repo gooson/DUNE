@@ -325,6 +325,7 @@
 		3FD9C82C64DD7DAC35F57539 /* QuickStartPopularityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91A24E617E5111FCEBBC54B4 /* QuickStartPopularityService.swift */; };
 		3FDA635B49D2DE0C9FD0EB71 /* VisionSpatialViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BBABF664A04D229394C769 /* VisionSpatialViewModelTests.swift */; };
 		3FF3CC03255814F4C735FE24 /* WorkoutTypeCorrectionStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDF35F18DF5FABC0AFD1C4DE /* WorkoutTypeCorrectionStoreTests.swift */; };
+		3FFBF71CB852EDA3BACAF8D8 /* PRShareService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 266A56E90CC6C626877B5F0A /* PRShareService.swift */; };
 		400E0542195AA636AB11F0AE /* VisionWellnessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93736A36B41BB3440ACB6EC7 /* VisionWellnessView.swift */; };
 		401B7FC98C17893D70C3E658 /* CardioSecondaryUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7200A349B95E024606A43625 /* CardioSecondaryUnit.swift */; };
 		408A0FB7C6C4C9B8D8AA83E5 /* TodaySettingsRegressionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F15D47756EA157E164DF6594 /* TodaySettingsRegressionTests.swift */; };
@@ -512,6 +513,7 @@
 		6AE71833945E421101FA4AD1 /* TrainingReadinessWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDED2D8C0A363DDF96B11FCA /* TrainingReadinessWidget.swift */; };
 		6BD5D660EAB30F8152AEEF0E /* CarouselHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617758F8775A4399B7916BD6 /* CarouselHomeView.swift */; };
 		6BF57EB99C3B4FB9F3DFF1BC /* HeartRateZoneCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FD44CF52F5DF6EEE2F9341F /* HeartRateZoneCalculatorTests.swift */; };
+		6CBDFA8B8FA4B94181D76E34 /* PRShareCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F01C1D54534C3C65291F4D /* PRShareCard.swift */; };
 		6CE77FC67B4548ED0DC8EC21 /* TrainingVolumeViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04426AA09C83C5581442899A /* TrainingVolumeViewModelTests.swift */; };
 		6DA940A4876020F09133B584 /* RecoveryOverviewSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4396F05A555F0310A8668BD /* RecoveryOverviewSection.swift */; };
 		6DABE99832AE5888B6DEC8E5 /* WellnessDashboardWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CEBBC039EF39B8F53DBC2C1 /* WellnessDashboardWidget.swift */; };
@@ -1421,6 +1423,7 @@
 		2595F1921594E0A2307D33CC /* ActiveRecoveryCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveRecoveryCard.swift; sourceTree = "<group>"; };
 		25E8414E67078AF8B563277A /* MuscleMap3DStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuscleMap3DStateTests.swift; sourceTree = "<group>"; };
 		25F443D5AE79C0567C25D789 /* MorningBriefingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MorningBriefingView.swift; sourceTree = "<group>"; };
+		266A56E90CC6C626877B5F0A /* PRShareService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PRShareService.swift; sourceTree = "<group>"; };
 		26934E168ED16A89EC602FE4 /* BaselineTrendBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaselineTrendBadge.swift; sourceTree = "<group>"; };
 		26B78B96442B63B1B1B7EF00 /* PostureHistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostureHistoryViewModel.swift; sourceTree = "<group>"; };
 		273C1DE8BC48E942B1DF704B /* VolumeDonutChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeDonutChartView.swift; sourceTree = "<group>"; };
@@ -2015,6 +2018,7 @@
 		C8E5858D7F6763E3E221F0B3 /* ChartModelsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartModelsTests.swift; sourceTree = "<group>"; };
 		C91B7F7B485757CCDC1CD2F8 /* OneRMEstimationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneRMEstimationService.swift; sourceTree = "<group>"; };
 		C96841558FBD75B40C651390 /* ActivityExercisePickerRegressionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityExercisePickerRegressionTests.swift; sourceTree = "<group>"; };
+		C9F01C1D54534C3C65291F4D /* PRShareCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PRShareCard.swift; sourceTree = "<group>"; };
 		CA283C60DB45272B367105DE /* ConsistencyCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsistencyCard.swift; sourceTree = "<group>"; };
 		CA3CF4C3686EE0524CFAAD67 /* WatchExerciseHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchExerciseHelpers.swift; sourceTree = "<group>"; };
 		CB50864805F4D6E860B99E58 /* MuscleMapDetailViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuscleMapDetailViewModelTests.swift; sourceTree = "<group>"; };
@@ -3363,6 +3367,8 @@
 			children = (
 				BF39B13EE76FD9D24320A94E /* AchievementHistorySection.swift */,
 				B313214BFE1CE7A39C569085 /* PRChipBar.swift */,
+				C9F01C1D54534C3C65291F4D /* PRShareCard.swift */,
+				266A56E90CC6C626877B5F0A /* PRShareService.swift */,
 				838B47C6FE23FBC8ABF9E504 /* RewardProgressSection.swift */,
 			);
 			path = Components;
@@ -4778,6 +4784,8 @@
 				7133F03FA44885B0CB3F5EB1 /* OpenMeteoService.swift in Sources */,
 				EEAD47271525912BE9C6A51C /* OutdoorFitnessLevel.swift in Sources */,
 				7622156873ECC58D79141540 /* PRChipBar.swift in Sources */,
+				6CBDFA8B8FA4B94181D76E34 /* PRShareCard.swift in Sources */,
+				3FFBF71CB852EDA3BACAF8D8 /* PRShareService.swift in Sources */,
 				8147BA9DA86B8803CDD20847 /* PeriodComparisonView.swift in Sources */,
 				1C2955BCF186C891A6257367 /* PeriodSwipeModifier.swift in Sources */,
 				A82CF78B8312E13074B255C1 /* PersistentStoreRecovery.swift in Sources */,

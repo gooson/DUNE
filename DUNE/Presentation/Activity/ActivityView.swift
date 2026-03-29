@@ -61,7 +61,7 @@ struct NotificationActivityDestination: Identifiable, Hashable {
         case .muscleMap3D:
             "muscle-map-3d-\(requestID)"
         case .personalRecords:
-            "personal-records-\(requestID)"
+            "personal-records-\(requestID)-\(destination.hashValue)"
         case .consistency:
             "consistency-\(requestID)"
         case .exerciseMix:
@@ -120,6 +120,7 @@ struct ActivityView: View {
     private let notificationRouteSignal: Int
     private let notificationPersonalRecordsSignal: Int
     @State private var heroFrame: CGRect?
+    @State private var sparklineTappedKind: ActivityPersonalRecord.Kind?
 
     private enum ScrollAnchor: Hashable {
         case top
@@ -263,11 +264,12 @@ struct ActivityView: View {
                         SectionGroup(title: "Personal Records", icon: "trophy.fill",
                                      iconColor: DS.Color.activity,
                                      infoAction: { showingPRInfo = true }) {
-                            NavigationLink(value: ActivityDetailDestination.personalRecords) {
+                            NavigationLink(value: ActivityDetailDestination.personalRecords()) {
                                 PersonalRecordsSection(
                                     records: viewModel.personalRecords,
                                     notice: viewModel.personalRecordNotice,
-                                    rewardSummary: viewModel.workoutRewardSummary
+                                    rewardSummary: viewModel.workoutRewardSummary,
+                                    sparklineTappedKind: $sparklineTappedKind
                                 )
                             }
                             .buttonStyle(.plain)
@@ -276,7 +278,7 @@ struct ActivityView: View {
                         .staggeredAppear(index: 9)
 
                         SectionGroup(title: "Achievement History", icon: "medal.fill", iconColor: DS.Color.activity) {
-                            NavigationLink(value: ActivityDetailDestination.personalRecords) {
+                            NavigationLink(value: ActivityDetailDestination.personalRecords()) {
                                 AchievementHistoryPreview(events: viewModel.workoutRewardHistory)
                             }
                             .frame(maxWidth: .infinity, alignment: .leading)
@@ -666,14 +668,16 @@ struct ActivityView: View {
             MuscleMapDetailView(fatigueStates: viewModel.fatigueStates)
         case .muscleMap3D:
             MuscleMap3DView(fatigueStates: viewModel.fatigueStates, highlightedMuscle: nil)
-        case .personalRecords:
+        case .personalRecords(let preselectedKind):
             PersonalRecordsDetailView(
                 records: viewModel.personalRecords,
                 notice: viewModel.personalRecordNotice,
                 rewardSummary: viewModel.workoutRewardSummary,
                 rewardHistory: viewModel.workoutRewardHistory,
-                unlockedBadgeKeys: viewModel.unlockedBadgeKeys
+                unlockedBadgeKeys: viewModel.unlockedBadgeKeys,
+                preselectedKind: preselectedKind ?? sparklineTappedKind
             )
+            .onAppear { sparklineTappedKind = nil }
         case .consistency:
             ConsistencyDetailView()
         case .exerciseMix:
@@ -801,7 +805,7 @@ struct ActivityView: View {
         guard notificationPersonalRecordsSignal > 0 else { return }
 
         notificationActivityDestination = NotificationActivityDestination(
-            destination: .personalRecords,
+            destination: .personalRecords(),
             requestID: notificationPersonalRecordsSignal
         )
     }
