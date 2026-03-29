@@ -16,30 +16,34 @@ struct VitalsTimelineCard: View {
                 if let analysis {
                     trackPicker
 
-                    if let track = trackFor(selectedTrack, in: analysis), track.hasData {
-                        trackChart(track: track, type: selectedTrack)
-                            .padding(.top, 16)
-                            .frame(height: 136)
-                            .clipped()
+                    let track = trackFor(selectedTrack, in: analysis)
+                    let hasData = track?.hasData == true
 
-                        if let baseline = track.baseline {
-                            HStack {
-                                Text(String(localized: "Baseline: \(String(format: "%.1f", baseline)) \(selectedTrack.unit)"))
-                                    .font(.caption)
-                                    .foregroundStyle(DS.Color.textSecondary)
-                                Spacer()
-                                if !analysis.anomalyDays.isEmpty {
-                                    Text(String(localized: "\(analysis.anomalyDays.count) anomaly days"))
-                                        .font(.caption.weight(.medium))
-                                        .foregroundStyle(.red)
-                                }
+                    ZStack {
+                        trackChart(track: track, type: selectedTrack)
+
+                        if !hasData {
+                            Text(String(localized: "No data available for this vital"))
+                                .font(.subheadline)
+                                .foregroundStyle(DS.Color.textSecondary)
+                        }
+                    }
+                    .padding(.top, 16)
+                    .frame(height: 136)
+                    .clipped()
+
+                    if hasData, let baseline = track?.baseline {
+                        HStack {
+                            Text(String(localized: "Baseline: \(String(format: "%.1f", baseline)) \(selectedTrack.unit)"))
+                                .font(.caption)
+                                .foregroundStyle(DS.Color.textSecondary)
+                            Spacer()
+                            if !analysis.anomalyDays.isEmpty {
+                                Text(String(localized: "\(analysis.anomalyDays.count) anomaly days"))
+                                    .font(.caption.weight(.medium))
+                                    .foregroundStyle(.red)
                             }
                         }
-                    } else {
-                        Text(String(localized: "No data available for this vital"))
-                            .font(.subheadline)
-                            .foregroundStyle(DS.Color.textSecondary)
-                            .frame(maxWidth: .infinity, minHeight: 152, alignment: .leading)
                     }
                 } else {
                     SleepDataPlaceholder()
@@ -73,37 +77,39 @@ struct VitalsTimelineCard: View {
         }
     }
 
-    private func trackChart(track: VitalsTimelineAnalysis.VitalTrack, type: VitalsTimelineAnalysis.VitalType) -> some View {
+    private func trackChart(track: VitalsTimelineAnalysis.VitalTrack?, type: VitalsTimelineAnalysis.VitalType) -> some View {
         Chart {
-            ForEach(track.dailySummaries) { summary in
-                AreaMark(
-                    x: .value("Date", summary.date),
-                    yStart: .value("Min", summary.min),
-                    yEnd: .value("Max", summary.max)
-                )
-                .foregroundStyle(DS.Color.sleep.opacity(0.15))
+            if let track {
+                ForEach(track.dailySummaries) { summary in
+                    AreaMark(
+                        x: .value("Date", summary.date),
+                        yStart: .value("Min", summary.min),
+                        yEnd: .value("Max", summary.max)
+                    )
+                    .foregroundStyle(DS.Color.sleep.opacity(0.15))
 
-                LineMark(
-                    x: .value("Date", summary.date),
-                    y: .value("Avg", summary.avg)
-                )
-                .foregroundStyle(DS.Color.sleep)
-                .lineStyle(StrokeStyle(lineWidth: 1.5))
-
-                if summary.isAnomaly {
-                    PointMark(
+                    LineMark(
                         x: .value("Date", summary.date),
                         y: .value("Avg", summary.avg)
                     )
-                    .foregroundStyle(.red)
-                    .symbolSize(20)
-                }
-            }
+                    .foregroundStyle(DS.Color.sleep)
+                    .lineStyle(StrokeStyle(lineWidth: 1.5))
 
-            if let baseline = track.baseline {
-                RuleMark(y: .value("Baseline", baseline))
-                    .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 4]))
-                    .foregroundStyle(DS.Color.textSecondary.opacity(0.5))
+                    if summary.isAnomaly {
+                        PointMark(
+                            x: .value("Date", summary.date),
+                            y: .value("Avg", summary.avg)
+                        )
+                        .foregroundStyle(.red)
+                        .symbolSize(20)
+                    }
+                }
+
+                if let baseline = track.baseline {
+                    RuleMark(y: .value("Baseline", baseline))
+                        .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 4]))
+                        .foregroundStyle(DS.Color.textSecondary.opacity(0.5))
+                }
             }
         }
         .chartYAxis {
@@ -116,7 +122,7 @@ struct VitalsTimelineCard: View {
         }
         .chartXAxis {
             AxisMarks(values: .automatic(desiredCount: 5)) {
-                AxisGridLine(stroke: StrokeStyle(lineWidth: 0.5, dash: [3, 3]))
+                AxisGridLine()
                     .foregroundStyle(Color.secondary.opacity(0.3))
                 AxisValueLabel(format: .dateTime.day())
                     .font(.caption2)
