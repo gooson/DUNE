@@ -608,6 +608,7 @@
 		867E38B3FD10A28FE7C729DC /* SharedHealthDataServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E351F3EEEA566A369A425F1 /* SharedHealthDataServiceTests.swift */; };
 		86D2CA73B5207AFD29C3FF62 /* PostureAssessmentRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FA7FFA256E26A384CEC6B4 /* PostureAssessmentRecord.swift */; };
 		86E9A025793961C1DA116BE4 /* WatchWorkoutStartSmokeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E23B66C197A08B499FD68D46 /* WatchWorkoutStartSmokeTests.swift */; };
+		86FAF983287958706F8E0584 /* DeletedWorkoutTombstoneStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A4BF33EF90B481000BDA86A /* DeletedWorkoutTombstoneStore.swift */; };
 		8735EF18D9C68DC1C500FCAD /* CorrectiveRecommendation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1B65075B95FE00626C0C62 /* CorrectiveRecommendation.swift */; };
 		876092CD3B47CBDD08165FEC /* WeightUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC70361E37EA9804C203C6AF /* WeightUnit.swift */; };
 		87A6891F7C5272F313D93156 /* NaturalLanguageWorkoutGenerating.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EDD11118DDEA1425D01D580 /* NaturalLanguageWorkoutGenerating.swift */; };
@@ -1822,6 +1823,7 @@
 		9909F5A1A22FA3CE72C4DD39 /* NotificationSettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettingsStore.swift; sourceTree = "<group>"; };
 		995009AE0CF4112E4D63A804 /* QuickStartAllExercisesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickStartAllExercisesView.swift; sourceTree = "<group>"; };
 		9A17E1B32410A97AC25B4136 /* HabitStreakServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitStreakServiceTests.swift; sourceTree = "<group>"; };
+		9A4BF33EF90B481000BDA86A /* DeletedWorkoutTombstoneStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletedWorkoutTombstoneStore.swift; sourceTree = "<group>"; };
 		9A92AD21513190FD67FA1D72 /* HabitLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitLog.swift; sourceTree = "<group>"; };
 		9AD0F1E7814C64EB2AE5C435 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		9ADAEE42D1125BAB71CF910F /* CompoundWorkoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompoundWorkoutView.swift; sourceTree = "<group>"; };
@@ -2568,6 +2570,7 @@
 			children = (
 				395CCEDF9133816B9202A46F /* Migration */,
 				4A7FA00196B924E2621DE339 /* Models */,
+				9A4BF33EF90B481000BDA86A /* DeletedWorkoutTombstoneStore.swift */,
 				93AABC7FE8215901B9294158 /* HealthSnapshotMirrorContainerFactory.swift */,
 				0507EEE5B37BA2413ACEBD37 /* InsightCardDismissStore.swift */,
 				24755D4B553B753207FC5061 /* NotificationInboxManager.swift */,
@@ -4545,6 +4548,7 @@
 				D32D27A7DA334BC162D02D9C /* DashboardView.swift in Sources */,
 				A3D897D9EB18E54FC8FA0839 /* DashboardViewModel.swift in Sources */,
 				15034F715ED3064BF173FACD /* Date+Validation.swift in Sources */,
+				86FAF983287958706F8E0584 /* DeletedWorkoutTombstoneStore.swift in Sources */,
 				E2083B30FB673ACBD3CA52B3 /* DesertDuneShape.swift in Sources */,
 				B8E998C754729692DBE3F9A9 /* DesertWaveBackground.swift in Sources */,
 				5708F7606C93E94AE491F0FE /* DesignSystem.swift in Sources */,
