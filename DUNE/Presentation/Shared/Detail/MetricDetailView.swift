@@ -111,6 +111,7 @@ struct MetricDetailView: View {
                         WakeAnalysisCard(analysis: viewModel.wasoAnalysis)
                         SleepDebtRecoveryCard(prediction: viewModel.debtRecoveryPrediction)
                     }
+                    .accessibilityIdentifier("sleep-section-quality")
                     .staggeredAppear(index: 4)
 
                     // Group 2: Sleep Patterns
@@ -126,6 +127,7 @@ struct MetricDetailView: View {
                         SleepRegularityCard(regularity: viewModel.sleepRegularity)
                         NapDetectionCard(analysis: viewModel.napAnalysis)
                     }
+                    .accessibilityIdentifier("sleep-section-patterns")
                     .staggeredAppear(index: 5)
 
                     // Group 3: Nocturnal Health
@@ -139,6 +141,7 @@ struct MetricDetailView: View {
                         VitalsTimelineCard(analysis: viewModel.vitalsTimeline)
                         BreathingDisturbanceCard(analysis: viewModel.breathingAnalysis)
                     }
+                    .accessibilityIdentifier("sleep-section-nocturnal")
                     .staggeredAppear(index: 6)
 
                     // Group 4: External Factors
@@ -151,6 +154,7 @@ struct MetricDetailView: View {
                         SleepExerciseCorrelationCard(correlation: viewModel.exerciseCorrelation)
                         SleepEnvironmentCard(analysis: viewModel.sleepEnvironment)
                     }
+                    .accessibilityIdentifier("sleep-section-external")
                     .staggeredAppear(index: 7)
                 }
 

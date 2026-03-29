@@ -169,6 +169,11 @@ enum AXID {
     static let conditionScoreDetailScreen = "condition-score-detail-screen"
     static func metricDetailScreen(_ category: String) -> String { "metric-detail-screen-\(category)" }
     static let metricDetailShowAllData = "metric-detail-show-all-data"
+    // Sleep detail sections
+    static let sleepSectionQuality = "sleep-section-quality"
+    static let sleepSectionPatterns = "sleep-section-patterns"
+    static let sleepSectionNocturnal = "sleep-section-nocturnal"
+    static let sleepSectionExternal = "sleep-section-external"
     static func allDataScreen(_ category: String) -> String { "all-data-screen-\(category)" }
     static let allDataEmptyState = "all-data-empty-state"
     static let weatherDetailScreen = "weather-detail-screen"
