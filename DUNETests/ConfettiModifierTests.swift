@@ -34,12 +34,13 @@ struct ConfettiModifierTests {
 
     // MARK: - Particle Physics
 
-    @Test("particle falls with gravity over time")
-    func particleFallsWithGravity() {
+    @Test("particle velocity increases downward with gravity")
+    func particleGravityEffect() {
         var particle = ConfettiFactory.burst(count: 1)[0]
-        let initialY = particle.y
+        let initialVelocityY = particle.velocityY
         particle.update(dt: 0.1, gravity: 1.2)
-        #expect(particle.y > initialY)
+        // Gravity adds positive (downward) velocity each frame
+        #expect(particle.velocityY > initialVelocityY)
     }
 
     @Test("particle expires when below screen")
