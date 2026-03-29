@@ -31,6 +31,9 @@ struct FoundationModelReportFormatter: WorkoutReportFormatting, Sendable {
             }
             return text
         } catch {
+            AppLogger.ai.error(
+                "[ReportFormatter] inference failed: \(String(describing: error), privacy: .private)"
+            )
             return await fallback.format(report: report)
         }
     }

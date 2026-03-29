@@ -88,9 +88,35 @@ struct AIWorkoutTemplateGenerator: NaturalLanguageWorkoutGenerating, Sendable {
             )
             throw error
         } catch {
-            AppLogger.exercise.error(
-                "AI workout template generation failed promptHash=\(trimmedPrompt, privacy: .private(mask: .hash)) error=\(String(describing: error), privacy: .private)"
+            AppLogger.ai.notice(
+                "[AIWorkoutTemplate] retrying after transient failure promptHash=\(trimmedPrompt, privacy: .private(mask: .hash)) error=\(String(describing: error), privacy: .private)"
             )
+            try? await Task.sleep(for: .seconds(1))
+            guard !Task.isCancelled else {
+                throw WorkoutTemplateGenerationError.generationFailed
+            }
+            do {
+                let retryTool = SearchExerciseTool(library: library)
+                let retrySession = LanguageModelSession(
+                    tools: [retryTool],
+                    instructions: buildInstructions(localeIdentifier: request.localeIdentifier)
+                )
+                let retryResponse = try await retrySession.respond(
+                    to: buildPrompt(
+                        prompt: trimmedPrompt,
+                        recentRecords: request.recentRecords,
+                        library: library,
+                        promptIntent: promptIntent
+                    ),
+                    generating: AIWorkoutTemplate.self
+                )
+                let retryGenerated = retryResponse.content
+                return try resolveGeneratedTemplate(retryGenerated, library: library)
+            } catch {
+                AppLogger.ai.error(
+                    "[AIWorkoutTemplate] inference failed after retry promptHash=\(trimmedPrompt, privacy: .private(mask: .hash)) error=\(String(describing: error), privacy: .private)"
+                )
+            }
             if let fallback = try? fallbackTemplate(
                 prompt: trimmedPrompt,
                 promptIntent: promptIntent,

@@ -49,20 +49,21 @@ actor HealthDataQAService: HealthDataQuestionAnswering {
         }
 
         do {
-            let session = try await activeSession()
-            let response = try await session.respond(
-                to: trimmedQuestion,
-                options: GenerationOptions(
-                    sampling: .greedy,
-                    temperature: 0.2,
-                    maximumResponseTokens: 220
-                )
-            )
-            let text = response.content.trimmingCharacters(in: .whitespacesAndNewlines)
-            guard !text.isEmpty else { return failureReply() }
-            return HealthDataQAReply(text: text, generatedAt: nowProvider(), isFallback: false)
+            return try await performInference(question: trimmedQuestion)
         } catch {
-            return failureReply()
+            AppLogger.ai.notice(
+                "[HealthDataQA] retrying after transient failure: \(String(describing: error), privacy: .private)"
+            )
+            try? await Task.sleep(for: .seconds(1))
+            guard !Task.isCancelled else { return failureReply() }
+            do {
+                return try await performInference(question: trimmedQuestion)
+            } catch {
+                AppLogger.ai.error(
+                    "[HealthDataQA] inference failed after retry: \(String(describing: error), privacy: .private)"
+                )
+                return failureReply()
+            }
         }
     }
 
@@ -106,6 +107,21 @@ actor HealthDataQAService: HealthDataQuestionAnswering {
 
     func makeRecoverySummary(days: Int) async -> String {
         await contextBuilder.makeRecoverySummary(days: days)
+    }
+
+    private func performInference(question: String) async throws -> HealthDataQAReply {
+        let session = try await activeSession()
+        let response = try await session.respond(
+            to: question,
+            options: GenerationOptions(
+                sampling: .greedy,
+                temperature: 0.2,
+                maximumResponseTokens: 220
+            )
+        )
+        let text = response.content.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !text.isEmpty else { return failureReply() }
+        return HealthDataQAReply(text: text, generatedAt: nowProvider(), isFallback: false)
     }
 
     private func activeSession() async throws -> LanguageModelSession {
