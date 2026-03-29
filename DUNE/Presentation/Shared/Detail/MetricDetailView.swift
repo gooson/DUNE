@@ -102,7 +102,7 @@ struct MetricDetailView: View {
                         title: "Sleep Quality",
                         icon: "bed.double.fill",
                         iconColor: DS.Color.sleep,
-                        subtitle: "Analyzes sleep score, sleep debt, and awakening patterns"
+                        subtitle: "Analyzes sleep debt, recovery forecast, and awakening patterns"
                     ) {
                         if let deficit = viewModel.deficitAnalysis,
                            deficit.level != .insufficient {
@@ -149,7 +149,7 @@ struct MetricDetailView: View {
                         title: "External Factors",
                         icon: "arrow.triangle.branch",
                         iconColor: DS.Color.sleep,
-                        subtitle: "Analyzes how exercise and environment affect your sleep"
+                        subtitle: "Explores how exercise and environment affect your sleep"
                     ) {
                         SleepExerciseCorrelationCard(correlation: viewModel.exerciseCorrelation)
                         SleepEnvironmentCard(analysis: viewModel.sleepEnvironment)

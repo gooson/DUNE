@@ -186,7 +186,6 @@ struct SectionGroup<Content: View>: View {
                     Text(subtitle)
                         .font(.caption)
                         .foregroundStyle(DS.Color.textTertiary)
-                        .padding(.leading, DS.Spacing.xs)
                 }
             }
             .padding(.horizontal, DS.Spacing.xs)
