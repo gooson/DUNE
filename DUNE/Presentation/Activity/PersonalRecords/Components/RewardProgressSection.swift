@@ -97,6 +97,14 @@ struct RewardProgressSection: View {
 
             ProgressView(value: levelProgress.fraction)
                 .tint(DS.Color.activity)
+                .accessibilityLabel(String(localized: "Level progress"))
+                .accessibilityValue(
+                    String.localizedStringWithFormat(
+                        String(localized: "%lld of %lld points"),
+                        Int64(levelProgress.current),
+                        Int64(levelProgress.needed)
+                    )
+                )
 
             // Milestone tier indicators
             ScrollView(.horizontal, showsIndicators: false) {

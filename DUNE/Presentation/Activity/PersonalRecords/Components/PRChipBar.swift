@@ -19,7 +19,7 @@ struct PRChipBar: View {
             }
             .onChange(of: selected) { _, newKind in
                 if let newKind {
-                    withAnimation(.easeInOut(duration: 0.25)) {
+                    withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
                         proxy.scrollTo(newKind, anchor: .center)
                     }
                 }
@@ -32,7 +32,7 @@ struct PRChipBar: View {
         let isSelected = kind == selected
 
         return Button {
-            withAnimation(.easeInOut(duration: 0.25)) {
+            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
                 selected = kind
             }
         } label: {
@@ -46,14 +46,9 @@ struct PRChipBar: View {
             .padding(.vertical, 8)
             .foregroundStyle(isSelected ? .white : DS.Color.textSecondary)
             .background {
-                if isSelected {
-                    Capsule()
-                        .fill(kind.tintColor)
-                        .matchedGeometryEffect(id: "chip-bg", in: chipAnimation)
-                } else {
-                    Capsule()
-                        .fill(.ultraThinMaterial)
-                }
+                Capsule()
+                    .fill(isSelected ? AnyShapeStyle(kind.tintColor) : AnyShapeStyle(.ultraThinMaterial))
+                    .matchedGeometryEffect(id: kind, in: chipAnimation, isSource: isSelected)
             }
         }
         .buttonStyle(.plain)

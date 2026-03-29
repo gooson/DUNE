@@ -15,7 +15,7 @@ struct AchievementHistorySection: View {
             if groupedHistory.isEmpty {
                 emptyState
             } else {
-                ForEach(Array(groupedHistory.enumerated()), id: \.offset) { _, group in
+                ForEach(groupedHistory, id: \.month) { group in
                     monthGroup(group)
                 }
             }
