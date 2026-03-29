@@ -117,6 +117,7 @@ final class WatchConnectivityManager: NSObject {
     /// ModelContainer for local SwiftData access (bulk sync).
     var registeredModelContainer: ModelContainer?
 
+    private static let bulkSyncThrottleInterval: TimeInterval = 60
     private var lastExerciseLibrarySyncRequestAt: Date?
     private var lastWorkoutTemplateSyncRequestAt: Date?
     private var deleteRequestProcessedAtByWorkoutID: [UUID: Date] = [:]
@@ -518,8 +519,6 @@ extension WatchConnectivityManager {
         }
     }
 
-    private static let bulkSyncThrottleInterval: TimeInterval = 60
-
     private func handleBulkSyncRequest(since: Date) async {
         let now = Date()
         if let last = lastBulkSyncProcessedAt,
@@ -527,7 +526,6 @@ extension WatchConnectivityManager {
             Self.logger.debug("[BulkSync] Throttled — last sync was \(Int(now.timeIntervalSince(last)))s ago")
             return
         }
-        lastBulkSyncProcessedAt = now
 
         guard let container = registeredModelContainer else {
             Self.logger.error("[BulkSync] No ModelContainer registered")
@@ -585,6 +583,7 @@ extension WatchConnectivityManager {
             let data = try JSONEncoder().encode(updates)
             let message: [String: Any] = ["bulkWorkouts": data]
             WCSession.default.transferUserInfo(message)
+            lastBulkSyncProcessedAt = now
             Self.logger.debug("[BulkSync] Sent \(updates.count) workouts to iPhone")
         } catch {
             Self.logger.error("[BulkSync] Failed to encode bulk workouts: \(error.localizedDescription, privacy: .public)")

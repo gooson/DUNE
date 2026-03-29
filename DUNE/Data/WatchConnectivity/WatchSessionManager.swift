@@ -40,6 +40,8 @@ final class WatchSessionManager: NSObject {
     /// Coalesces repeated refresh requests while a full rebuild is already running.
     private var exerciseLibrarySyncTask: Task<Void, Never>?
     private var exerciseLibrarySyncGeneration = 0
+    /// Pending bulk sync date when Watch was unreachable at request time.
+    private var pendingBulkSyncSince: Date?
 
     private override init() {
         super.init()
@@ -62,16 +64,20 @@ final class WatchSessionManager: NSObject {
     /// Request Watch to re-send all recent workout records (bulk recovery).
     /// Only sends via sendMessage when Watch is reachable — no transferUserInfo fallback
     /// to prevent persistent queue buildup across iPhone app launches.
-    func requestWorkoutBulkSync(since: Date = Calendar.current.date(byAdding: .day, value: -30, to: Date()) ?? Date()) {
+    /// - Returns: `true` if the request was sent, `false` if deferred or skipped.
+    @discardableResult
+    func requestWorkoutBulkSync(since: Date = Calendar.current.date(byAdding: .day, value: -30, to: Date()) ?? Date()) -> Bool {
         let session = WCSession.default
         guard session.activationState == .activated else {
             AppLogger.data.warning("[WatchSync] Session not activated for bulk sync request")
-            return
+            return false
         }
         guard session.isReachable else {
-            AppLogger.data.debug("[WatchSync] Watch not reachable, skipping bulk sync request")
-            return
+            pendingBulkSyncSince = since
+            AppLogger.data.debug("[WatchSync] Watch not reachable, deferring bulk sync request")
+            return false
         }
+        pendingBulkSyncSince = nil
         let sinceTimestamp = since.timeIntervalSince1970
         let message: [String: Any] = ["requestWorkoutBulkSync": sinceTimestamp]
 
@@ -81,6 +87,7 @@ final class WatchSessionManager: NSObject {
             errorHandler: Self.makeWCErrorHandler("Failed to send bulk sync request")
         )
         AppLogger.data.debug("[WatchSync] Requested bulk workout sync since \(since)")
+        return true
     }
 
     /// Send current workout state to Watch for display
@@ -408,6 +415,9 @@ extension WatchSessionManager: WCSessionDelegate {
     nonisolated func sessionReachabilityDidChange(_ session: WCSession) {
         Task { @MainActor in
             isReachable = session.isReachable
+            if session.isReachable, let since = pendingBulkSyncSince {
+                requestWorkoutBulkSync(since: since)
+            }
         }
     }
 
