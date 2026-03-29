@@ -33,6 +33,12 @@ final class DeletedWorkoutTombstoneStore {
         return cache[healthKitWorkoutID] != nil
     }
 
+    /// All currently tombstoned HealthKit workout IDs (for batch filtering).
+    var tombstonedIDs: Set<String> {
+        ensureCache()
+        return Set(cache.keys)
+    }
+
     // MARK: - Private
 
     private func ensureCache() {

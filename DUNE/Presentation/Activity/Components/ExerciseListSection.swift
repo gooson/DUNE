@@ -120,7 +120,11 @@ struct ExerciseListSection: View {
         // If we dedup against all manual records, cardio records without sets can hide
         // HealthKit workouts while not being rendered themselves.
         let setRecords = recentListDedupRecords(from: exerciseRecords)
-        let externalWorkouts = workouts.filteringAppDuplicates(against: setRecords)
+        let tombstoned = DeletedWorkoutTombstoneStore.shared.tombstonedIDs
+        let externalWorkouts = workouts.filteringAppDuplicates(
+            against: setRecords,
+            tombstonedIDs: tombstoned
+        )
 
         var result: [ExerciseListItem] = []
         result.reserveCapacity(externalWorkouts.count + exerciseRecords.count)
