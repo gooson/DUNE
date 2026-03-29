@@ -9,12 +9,8 @@ struct SmartInsightsSection: View {
     let onSaveTemplate: () -> Void
     let onDismissNudge: () -> Void
 
-    private var hasContent: Bool {
-        !insightCards.isEmpty || templateNudge != nil
-    }
-
     var body: some View {
-        if hasContent {
+        if !insightCards.isEmpty || templateNudge != nil {
             VStack(alignment: .leading, spacing: DS.Spacing.sm) {
                 header
 

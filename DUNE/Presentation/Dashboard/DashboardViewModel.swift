@@ -47,14 +47,10 @@ final class DashboardViewModel {
     }
 
     /// Sleep-category insight cards for RecoverySleepCard.
-    var sleepInsightCards: [InsightCardData] {
-        insightCards.filter { $0.category == .sleep }
-    }
+    private(set) var sleepInsightCards: [InsightCardData] = []
 
     /// Non-sleep insight cards for SmartInsightsSection.
-    var nonSleepInsightCards: [InsightCardData] {
-        insightCards.filter { $0.category != .sleep }
-    }
+    private(set) var nonSleepInsightCards: [InsightCardData] = []
 
     private(set) var pinnedMetrics: [HealthMetric] = []
     private(set) var activeDaysThisWeek = 0
@@ -105,6 +101,11 @@ final class DashboardViewModel {
         bodyCards = unpinned
             .filter { Self.bodyCategories.contains($0.category) }
             .map { buildVitalCardData(from: $0) }
+    }
+
+    private func rebuildInsightPartitions() {
+        sleepInsightCards = insightCards.filter { $0.category == .sleep }
+        nonSleepInsightCards = insightCards.filter { $0.category != .sleep }
     }
 
     private let healthKitManager: HealthKitManager
@@ -201,6 +202,7 @@ final class DashboardViewModel {
             coachingMessage = nil
             focusInsight = nil
             insightCards = []
+            rebuildInsightPartitions()
             heroBaselineDetails = []
             baselineDeltasByMetricID = [:]
             activeDaysThisWeek = 0
@@ -1276,6 +1278,7 @@ final class DashboardViewModel {
     func dismissInsightCard(id: String) {
         dismissStore.dismiss(cardID: id)
         insightCards.removeAll { $0.id == id }
+        rebuildInsightPartitions()
     }
 
     private func buildCoachingInsights() {
@@ -1309,6 +1312,7 @@ final class DashboardViewModel {
         insightCards = output.insightCards
             .filter { !dismissed.contains($0.id) }
             .map { InsightCardData(from: $0) }
+        rebuildInsightPartitions()
     }
 
     private func enhanceCoachingMessageIfAvailable() {

@@ -287,7 +287,7 @@ struct DashboardView: View {
                 coachingMessage: viewModel.coachingMessage,
                 conditionStatus: viewModel.briefingData?.conditionStatus,
                 onOpenBriefing: { isShowingBriefing = true },
-                onOpenWeatherDetail: { navigateToWeatherDetail() },
+                onOpenWeatherDetail: { weatherDetailNavigation = viewModel.weatherSnapshot },
                 onRequestLocationPermission: {
                     Task { await viewModel.requestLocationPermission() }
                 }
@@ -456,10 +456,6 @@ struct DashboardView: View {
     }
 
     @State private var weatherDetailNavigation: WeatherSnapshot?
-
-    private func navigateToWeatherDetail() {
-        weatherDetailNavigation = viewModel.weatherSnapshot
-    }
 
     private var notificationBellIcon: some View {
         ZStack(alignment: .topTrailing) {
