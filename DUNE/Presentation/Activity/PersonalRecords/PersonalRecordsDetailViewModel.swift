@@ -22,6 +22,94 @@ final class PersonalRecordsDetailViewModel {
 
     private(set) var personalRecords: [ActivityPersonalRecord] = []
 
+    // Reward & badge data (set externally from View's task)
+    var rewardSummary: WorkoutRewardSummary = .empty
+    var rewardHistory: [WorkoutRewardEvent] = []
+    var unlockedBadgeKeys: Set<String> = []
+
+    // MARK: - Derived Reward Properties
+
+    var levelTier: RewardLevelTier {
+        RewardLevelTier.tier(for: rewardSummary.level)
+    }
+
+    var nextLevelTier: RewardLevelTier? {
+        RewardLevelTier.nextTier(for: rewardSummary.level)
+    }
+
+    var levelProgress: (current: Int, needed: Int, fraction: Double) {
+        RewardLevelTier.levelProgress(totalPoints: rewardSummary.totalPoints, currentLevel: rewardSummary.level)
+    }
+
+    var badgeDefinitions: [WorkoutBadgeDefinition] {
+        WorkoutBadgeDefinition.allDefinitions(unlockedKeys: unlockedBadgeKeys)
+    }
+
+    var unlockedBadgeCount: Int {
+        badgeDefinitions.filter(\.isUnlocked).count
+    }
+
+    var totalBadgeCount: Int {
+        badgeDefinitions.count
+    }
+
+    var funComparisons: [FunComparison] {
+        // Aggregate monthly totals from records
+        let now = Date()
+        let monthStart = Calendar.current.date(from: Calendar.current.dateComponents([.year, .month], from: now)) ?? now
+        let monthRecords = personalRecords.filter { $0.date >= monthStart }
+
+        let totalVolume = monthRecords.filter { $0.kind == .sessionVolume }.reduce(0.0) { $0 + $1.value }
+        let totalDistance = monthRecords.filter { $0.kind == .longestDistance }.reduce(0.0) { $0 + $1.value }
+        let totalCalories = monthRecords.filter { $0.kind == .highestCalories }.reduce(0.0) { $0 + $1.value }
+
+        return FunComparison.generate(totalVolume: totalVolume, totalDistance: totalDistance, totalCalories: totalCalories)
+    }
+
+    /// Achievement history grouped by month.
+    var groupedHistory: [(month: String, events: [WorkoutRewardEvent])] {
+        let calendar = Calendar.current
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMMM yyyy"
+
+        var groups: [(month: String, events: [WorkoutRewardEvent])] = []
+        var currentMonth = ""
+        var currentEvents: [WorkoutRewardEvent] = []
+
+        let sorted = rewardHistory.sorted { $0.date > $1.date }.prefix(30)
+        for event in sorted {
+            let month = formatter.string(from: event.date)
+            if month != currentMonth {
+                if !currentEvents.isEmpty {
+                    groups.append((month: currentMonth, events: currentEvents))
+                }
+                currentMonth = month
+                currentEvents = [event]
+            } else {
+                currentEvents.append(event)
+            }
+        }
+        if !currentEvents.isEmpty {
+            groups.append((month: currentMonth, events: currentEvents))
+        }
+        return groups
+    }
+
+    // MARK: - Sparkline Data
+
+    /// Returns recent PR values for sparkline display (adaptive: 3-10 points).
+    func sparklineData(for kind: ActivityPersonalRecord.Kind) -> [Double] {
+        let byKind = personalRecords
+            .filter { $0.kind == kind }
+            .sorted { $0.date < $1.date }
+            .map(\.value)
+        let count = byKind.count
+        guard count >= 2 else { return byKind }
+        // Adaptive: show at most 10 points, at least 3
+        let maxPoints = min(10, max(3, count))
+        return Array(byKind.suffix(maxPoints))
+    }
+
     func load(records: [ActivityPersonalRecord]) {
         personalRecords = records.sorted { lhs, rhs in
             if lhs.date != rhs.date { return lhs.date > rhs.date }
