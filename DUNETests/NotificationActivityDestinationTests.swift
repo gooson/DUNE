@@ -5,8 +5,8 @@ import Testing
 struct NotificationActivityDestinationTests {
     @Test("repeated personal records routes get unique navigation IDs")
     func repeatedPersonalRecordsRoutesGetUniqueIDs() {
-        let first = NotificationActivityDestination(destination: .personalRecords, requestID: 1)
-        let second = NotificationActivityDestination(destination: .personalRecords, requestID: 2)
+        let first = NotificationActivityDestination(destination: .personalRecords(), requestID: 1)
+        let second = NotificationActivityDestination(destination: .personalRecords(), requestID: 2)
 
         #expect(first.id != second.id)
     }

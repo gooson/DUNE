@@ -4,7 +4,7 @@ import Foundation
 enum ActivityDetailDestination: Hashable {
     case muscleMap
     case muscleMap3D
-    case personalRecords
+    case personalRecords(preselectedKind: ActivityPersonalRecord.Kind? = nil)
     case consistency
     case exerciseMix
     case trainingReadiness

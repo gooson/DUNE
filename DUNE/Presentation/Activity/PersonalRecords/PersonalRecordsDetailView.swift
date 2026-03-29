@@ -8,8 +8,10 @@ struct PersonalRecordsDetailView: View {
     let rewardSummary: WorkoutRewardSummary
     let rewardHistory: [WorkoutRewardEvent]
     var unlockedBadgeKeys: Set<String> = []
+    var preselectedKind: ActivityPersonalRecord.Kind?
 
     @State private var viewModel = PersonalRecordsDetailViewModel()
+    @State private var shareImage: ShareableImage?
     @Environment(\.appTheme) private var theme
 
     private var columns: [GridItem] {
@@ -87,6 +89,9 @@ struct PersonalRecordsDetailView: View {
         .accessibilityIdentifier("activity-personal-records-detail-screen")
         .background { DetailWaveBackground() }
         .englishNavigationTitle("Personal Records")
+        .sheet(item: $shareImage) { shareable in
+            ShareImageSheet(image: shareable.image, title: "Personal Record")
+        }
         .task(id: recordsUpdateKey) {
             viewModel.load(records: records)
             viewModel.rewardSummary = rewardSummary
@@ -94,7 +99,7 @@ struct PersonalRecordsDetailView: View {
             viewModel.unlockedBadgeKeys = unlockedBadgeKeys
             viewModel.refreshRewardDerived()
             if viewModel.selectedKind == nil {
-                viewModel.selectedKind = viewModel.availableKinds.first
+                viewModel.selectedKind = preselectedKind ?? viewModel.availableKinds.first
             }
         }
     }
@@ -131,6 +136,19 @@ struct PersonalRecordsDetailView: View {
                         .padding(.vertical, 2)
                         .background(DS.Color.activity, in: Capsule())
                 }
+                Button {
+                    let data = PRShareService.buildShareData(from: best)
+                    if let image = PRShareService.renderShareImage(data: data, accentColor: best.kind.tintColor) {
+                        shareImage = ShareableImage(image: image)
+                    }
+                } label: {
+                    Image(systemName: "square.and.arrow.up")
+                        .font(.caption)
+                        .foregroundStyle(DS.Color.textSecondary)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(String(localized: "Share PR"))
+                .accessibilityIdentifier("activity-personal-records-share-button")
             }
 
             HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xxs) {
