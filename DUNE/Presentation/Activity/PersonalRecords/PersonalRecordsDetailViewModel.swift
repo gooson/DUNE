@@ -53,8 +53,15 @@ final class PersonalRecordsDetailViewModel {
         badgeDefinitions.count
     }
 
-    var funComparisons: [FunComparison] {
-        // Aggregate monthly totals from records
+    private(set) var funComparisons: [FunComparison] = []
+    private(set) var groupedHistory: [(month: String, events: [WorkoutRewardEvent])] = []
+
+    func refreshRewardDerived() {
+        refreshFunComparisons()
+        refreshGroupedHistory()
+    }
+
+    private func refreshFunComparisons() {
         let now = Date()
         let monthStart = Calendar.current.date(from: Calendar.current.dateComponents([.year, .month], from: now)) ?? now
         let monthRecords = personalRecords.filter { $0.date >= monthStart }
@@ -63,12 +70,10 @@ final class PersonalRecordsDetailViewModel {
         let totalDistance = monthRecords.filter { $0.kind == .longestDistance }.reduce(0.0) { $0 + $1.value }
         let totalCalories = monthRecords.filter { $0.kind == .highestCalories }.reduce(0.0) { $0 + $1.value }
 
-        return FunComparison.generate(totalVolume: totalVolume, totalDistance: totalDistance, totalCalories: totalCalories)
+        funComparisons = FunComparison.generate(totalVolume: totalVolume, totalDistance: totalDistance, totalCalories: totalCalories)
     }
 
-    /// Achievement history grouped by month.
-    var groupedHistory: [(month: String, events: [WorkoutRewardEvent])] {
-        let calendar = Calendar.current
+    private func refreshGroupedHistory() {
         let formatter = DateFormatter()
         formatter.dateFormat = "MMMM yyyy"
 
@@ -92,7 +97,7 @@ final class PersonalRecordsDetailViewModel {
         if !currentEvents.isEmpty {
             groups.append((month: currentMonth, events: currentEvents))
         }
-        return groups
+        groupedHistory = groups
     }
 
     // MARK: - Sparkline Data

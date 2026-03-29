@@ -174,26 +174,26 @@ struct WorkoutBadgeDefinition: Identifiable, Sendable, Hashable {
     static func allDefinitions(unlockedKeys: Set<String>, eventDates: [String: Date] = [:]) -> [WorkoutBadgeDefinition] {
         let defs: [(id: String, cat: WorkoutBadgeCategory, name: String, desc: String, icon: String)] = [
             // PR badges
-            ("badge-first-pr", .prRecord, "First PR", "Achieve your first personal record", "trophy.fill"),
-            ("badge-10-prs", .prRecord, "PR Collector", "Achieve 10 personal records", "trophy.circle.fill"),
-            ("badge-50-prs", .prRecord, "PR Master", "Achieve 50 personal records", "medal.star.fill"),
-            ("badge-all-kinds", .prRecord, "All-Rounder", "Set a PR in every category", "star.circle.fill"),
+            ("badge-first-pr", .prRecord, String(localized: "First PR"), String(localized: "Achieve your first personal record"), "trophy.fill"),
+            ("badge-10-prs", .prRecord, String(localized: "PR Collector"), String(localized: "Achieve 10 personal records"), "trophy.circle.fill"),
+            ("badge-50-prs", .prRecord, String(localized: "PR Master"), String(localized: "Achieve 50 personal records"), "medal.star.fill"),
+            ("badge-all-kinds", .prRecord, String(localized: "All-Rounder"), String(localized: "Set a PR in every category"), "star.circle.fill"),
             // Volume badges
-            ("badge-1k-volume", .volume, "1K Club", "Lift 1,000 kg total volume", "scalemass.fill"),
-            ("badge-10k-volume", .volume, "10K Club", "Lift 10,000 kg total volume", "dumbbell.fill"),
-            ("badge-100k-volume", .volume, "Iron Century", "Lift 100,000 kg total volume", "figure.strengthtraining.traditional"),
+            ("badge-1k-volume", .volume, String(localized: "1K Club"), String(localized: "Lift 1,000 kg total volume"), "scalemass.fill"),
+            ("badge-10k-volume", .volume, String(localized: "10K Club"), String(localized: "Lift 10,000 kg total volume"), "dumbbell.fill"),
+            ("badge-100k-volume", .volume, String(localized: "Iron Century"), String(localized: "Lift 100,000 kg total volume"), "figure.strengthtraining.traditional"),
             // Streak badges
-            ("badge-7-streak", .streak, "Week Warrior", "7-day workout streak", "flame.fill"),
-            ("badge-30-streak", .streak, "Monthly Master", "30-day workout streak", "flame.circle.fill"),
-            ("badge-100-streak", .streak, "Century Streak", "100-day workout streak", "bolt.heart.fill"),
+            ("badge-7-streak", .streak, String(localized: "Week Warrior"), String(localized: "7-day workout streak"), "flame.fill"),
+            ("badge-30-streak", .streak, String(localized: "Monthly Master"), String(localized: "30-day workout streak"), "flame.circle.fill"),
+            ("badge-100-streak", .streak, String(localized: "Century Streak"), String(localized: "100-day workout streak"), "bolt.heart.fill"),
             // Milestone badges
-            ("badge-first-workout", .milestone, "First Step", "Complete your first workout", "figure.walk"),
-            ("badge-100-workouts", .milestone, "Centurion", "Complete 100 workouts", "figure.run"),
-            ("badge-365-days", .milestone, "Year Strong", "1 year of training", "calendar.badge.checkmark"),
+            ("badge-first-workout", .milestone, String(localized: "First Step"), String(localized: "Complete your first workout"), "figure.walk"),
+            ("badge-100-workouts", .milestone, String(localized: "Centurion"), String(localized: "Complete 100 workouts"), "figure.run"),
+            ("badge-365-days", .milestone, String(localized: "Year Strong"), String(localized: "1 year of training"), "calendar.badge.checkmark"),
             // Improvement badges
-            ("badge-10pct-improve", .improvement, "Progress", "10% improvement on any lift", "arrow.up.right"),
-            ("badge-double-lift", .improvement, "Double Up", "Double your weight on any lift", "arrow.up.circle.fill"),
-            ("badge-sub5-pace", .improvement, "Speed Demon", "Sub 5-min/km pace", "hare.fill"),
+            ("badge-10pct-improve", .improvement, String(localized: "Progress"), String(localized: "10% improvement on any lift"), "arrow.up.right"),
+            ("badge-double-lift", .improvement, String(localized: "Double Up"), String(localized: "Double your weight on any lift"), "arrow.up.circle.fill"),
+            ("badge-sub5-pace", .improvement, String(localized: "Speed Demon"), String(localized: "Sub 5-min/km pace"), "hare.fill"),
         ]
 
         return defs.map { def in

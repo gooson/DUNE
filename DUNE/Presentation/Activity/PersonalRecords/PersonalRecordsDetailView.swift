@@ -90,6 +90,7 @@ struct PersonalRecordsDetailView: View {
             viewModel.load(records: records)
             viewModel.rewardSummary = rewardSummary
             viewModel.rewardHistory = rewardHistory
+            viewModel.refreshRewardDerived()
             if viewModel.selectedKind == nil {
                 viewModel.selectedKind = viewModel.availableKinds.first
             }
