@@ -101,6 +101,9 @@ actor HealthKitManager: HealthKitManaging {
     func execute<S: HKSample>(_ query: HKSampleQueryDescriptor<S>) async throws -> [S] {
         do {
             return try await query.result(for: store)
+        } catch let error as HKError where error.code == .errorAuthorizationNotDetermined {
+            logger.info("HK sample query skipped: authorization not yet requested")
+            return []
         } catch {
             logger.error("HK sample query failed: \(error.localizedDescription)")
             throw HealthKitError.queryFailed(error.localizedDescription)
@@ -110,6 +113,9 @@ actor HealthKitManager: HealthKitManaging {
     func executeStatistics(_ query: sending HKStatisticsQueryDescriptor) async throws -> HKStatistics? {
         do {
             return try await query.result(for: store)
+        } catch let error as HKError where error.code == .errorAuthorizationNotDetermined {
+            logger.info("HK statistics query skipped: authorization not yet requested")
+            return nil
         } catch {
             logger.error("HK statistics query failed: \(error.localizedDescription)")
             throw HealthKitError.queryFailed(error.localizedDescription)
@@ -121,6 +127,11 @@ actor HealthKitManager: HealthKitManaging {
     ) async throws -> HKStatisticsCollection {
         do {
             return try await query.result(for: store)
+        } catch let error as HKError where error.code == .errorAuthorizationNotDetermined {
+            // HKStatisticsCollection has no public empty initializer, so we must rethrow.
+            // Log at info (not error) since this is expected during deferred authorization.
+            logger.info("HK statistics collection query deferred: authorization not yet requested")
+            throw HealthKitError.queryFailed(error.localizedDescription)
         } catch {
             logger.error("HK statistics collection query failed: \(error.localizedDescription)")
             throw HealthKitError.queryFailed(error.localizedDescription)
