@@ -128,7 +128,9 @@ actor HealthKitManager: HealthKitManaging {
         do {
             return try await query.result(for: store)
         } catch let error as HKError where error.code == .errorAuthorizationNotDetermined {
-            logger.info("HK statistics collection query skipped: authorization not yet requested")
+            // HKStatisticsCollection has no public empty initializer, so we must rethrow.
+            // Log at info (not error) since this is expected during deferred authorization.
+            logger.info("HK statistics collection query deferred: authorization not yet requested")
             throw HealthKitError.queryFailed(error.localizedDescription)
         } catch {
             logger.error("HK statistics collection query failed: \(error.localizedDescription)")
