@@ -9,6 +9,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT_DIR"
 source "$ROOT_DIR/scripts/lib/regen-project.sh"
+source "$ROOT_DIR/scripts/lib/simulator-boot.sh"
 
 PROJECT_SPEC="DUNE/project.yml"
 PROJECT_FILE="DUNE/DUNE.xcodeproj"
@@ -153,27 +154,8 @@ RESOLVED_SIMULATOR_OS="$SIMULATOR_OS"
 if [[ -n "$DEVICE_INFO" ]]; then
     IFS=$'\t' read -r DEVICE_UDID RESOLVED_SIMULATOR_NAME RESOLVED_SIMULATOR_OS <<< "$DEVICE_INFO"
     DESTINATION="id=${DEVICE_UDID}"
-    xcrun simctl boot "$DEVICE_UDID" 2>/dev/null || true
-
-    # Wait for simulator to reach Booted state (timeout 120s)
-    BOOT_TIMEOUT=120
-    BOOT_ELAPSED=0
-    while [[ "$BOOT_ELAPSED" -lt "$BOOT_TIMEOUT" ]]; do
-        BOOT_STATE=$(xcrun simctl list devices | grep "$DEVICE_UDID" | grep -o "Booted" || true)
-        if [[ "$BOOT_STATE" == "Booted" ]]; then
-            break
-        fi
-        sleep 2
-        BOOT_ELAPSED=$((BOOT_ELAPSED + 2))
-    done
-
-    if [[ "$BOOT_ELAPSED" -ge "$BOOT_TIMEOUT" ]]; then
-        echo "ERROR: Simulator failed to boot within ${BOOT_TIMEOUT}s."
-        exit 1
-    fi
-
+    wait_for_simulator_boot "$DEVICE_UDID" "iOS"
     xcrun simctl terminate "$DEVICE_UDID" "$BUNDLE_ID" >/dev/null 2>&1 || true
-    echo "Simulator booted: $RESOLVED_SIMULATOR_NAME ($RESOLVED_SIMULATOR_OS) [$DEVICE_UDID] (${BOOT_ELAPSED}s)"
 else
     echo "Warning: Could not find simulator '$SIMULATOR_NAME' (OS $SIMULATOR_OS). xcodebuild will attempt to boot one."
 fi

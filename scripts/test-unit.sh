@@ -9,6 +9,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT_DIR"
 source "$ROOT_DIR/scripts/lib/regen-project.sh"
+source "$ROOT_DIR/scripts/lib/simulator-boot.sh"
 
 PROJECT_SPEC="DUNE/project.yml"
 PROJECT_FILE="DUNE/DUNE.xcodeproj"
@@ -176,45 +177,24 @@ if [[ "$MODE" != "ios" && -z "${DAILVE_WATCH_DESTINATION:-}" ]]; then
     WATCH_DESTINATION="$(resolve_sim_destination "watchOS" "watchOS-${WATCH_SIM_OS//./-}" "$WATCH_SIM_NAME" "$WATCH_SIM_OS" "26")"
 fi
 
-preboot_simulator() {
+preboot_from_destination() {
     local destination="$1"
     local label="$2"
     local udid
-
-    # Extract UDID from "platform=... Simulator,id=<UDID>" format
     udid=$(echo "$destination" | grep -oE 'id=[0-9A-Fa-f-]+' | cut -d= -f2) || true
     if [[ -z "$udid" ]]; then
         echo "Warning: Could not extract UDID from destination '$destination'. Skipping pre-boot."
         return
     fi
-
-    echo "Pre-booting ${label} simulator [$udid]..."
-    xcrun simctl boot "$udid" 2>/dev/null || true
-
-    # Wait for simulator to reach Booted state (timeout 120s)
-    local timeout=120
-    local elapsed=0
-    while [[ "$elapsed" -lt "$timeout" ]]; do
-        local state
-        state=$(xcrun simctl list devices | grep "$udid" | grep -o "Booted" || true)
-        if [[ "$state" == "Booted" ]]; then
-            echo "${label} simulator booted successfully (${elapsed}s)."
-            return
-        fi
-        sleep 2
-        elapsed=$((elapsed + 2))
-    done
-
-    echo "ERROR: ${label} simulator failed to boot within ${timeout}s."
-    exit 1
+    wait_for_simulator_boot "$udid" "$label"
 }
 
 if [[ "$MODE" != "watch" ]]; then
-    preboot_simulator "$IOS_DESTINATION" "iOS"
+    preboot_from_destination "$IOS_DESTINATION" "iOS"
 fi
 
 if [[ "$MODE" != "ios" ]]; then
-    preboot_simulator "$WATCH_DESTINATION" "watchOS"
+    preboot_from_destination "$WATCH_DESTINATION" "watchOS"
 fi
 
 IOS_LOG_FILE="$LOG_FILE"
