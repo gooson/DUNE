@@ -36,6 +36,7 @@ final class ActivityViewModel {
     var personalRecordNotice: String?
     var workoutRewardSummary: WorkoutRewardSummary = .empty
     var workoutRewardHistory: [WorkoutRewardEvent] = []
+    var unlockedBadgeKeys: Set<String> = []
     var workoutStreak: WorkoutStreak?
     var exerciseFrequencies: [ExerciseFrequency] = []
     var weeklyStats: [ActivityStat] = []
@@ -540,6 +541,57 @@ final class ActivityViewModel {
 
         workoutRewardSummary = personalRecordStore.rewardSummary()
         workoutRewardHistory = personalRecordStore.rewardHistory(limit: 40)
+
+        // Evaluate badges against cumulative stats
+        let badgeStats = computeBadgeStats()
+        unlockedBadgeKeys = personalRecordStore.evaluateBadges(stats: badgeStats)
+    }
+
+    private func computeBadgeStats() -> BadgeEvaluationStats {
+        let allPRs = personalRecords
+        let totalPRCount = allPRs.count
+        let distinctKinds = Set(allPRs.map(\.kind)).count
+
+        // Total volume from session volume records
+        let totalVolume = allPRs
+            .filter { $0.kind == .sessionVolume }
+            .reduce(0.0) { $0 + $1.value }
+
+        // Streak
+        let bestStreak = workoutStreak?.bestStreak ?? 0
+
+        // Workout count from snapshots
+        let totalWorkouts = allExerciseSnapshots
+            .map { Calendar.current.startOfDay(for: $0.date) }
+            .reduce(into: Set<Date>()) { $0.insert($1) }
+            .count
+
+        // Days since first workout
+        let firstDate = allExerciseSnapshots.map(\.date).min() ?? Date()
+        let daysSinceFirst = max(0, Calendar.current.dateComponents([.day], from: firstDate, to: Date()).day ?? 0)
+
+        // Best improvement percent (from delta values)
+        let bestImprovement = allPRs.compactMap { record -> Double? in
+            guard let prev = record.previousValue, prev > 0, !record.kind.isLowerBetter else { return nil }
+            return ((record.value - prev) / prev) * 100
+        }.max() ?? 0
+
+        // Best pace (seconds/km) — lower is better
+        let bestPace = allPRs
+            .filter { $0.kind == .fastestPace }
+            .map(\.value)
+            .min() ?? 0
+
+        return BadgeEvaluationStats(
+            totalPRCount: totalPRCount,
+            distinctPRKindCount: distinctKinds,
+            totalVolumeKg: totalVolume,
+            bestStreakDays: bestStreak,
+            totalWorkoutCount: totalWorkouts,
+            daysSinceFirstWorkout: daysSinceFirst,
+            bestImprovementPercent: bestImprovement,
+            bestPacePerKm: bestPace
+        )
     }
 
     private func rebuildWeeklyStats() {

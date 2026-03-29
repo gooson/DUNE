@@ -670,7 +670,8 @@ struct ActivityView: View {
                 records: viewModel.personalRecords,
                 notice: viewModel.personalRecordNotice,
                 rewardSummary: viewModel.workoutRewardSummary,
-                rewardHistory: viewModel.workoutRewardHistory
+                rewardHistory: viewModel.workoutRewardHistory,
+                unlockedBadgeKeys: viewModel.unlockedBadgeKeys
             )
         case .consistency:
             ConsistencyDetailView()
