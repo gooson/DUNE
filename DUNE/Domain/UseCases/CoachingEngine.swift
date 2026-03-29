@@ -611,7 +611,8 @@ struct CoachingEngine: Sendable {
     ) -> AdaptiveHeroMessage {
         let period = TimePeriod(hour: hour)
         let isGoodCondition = conditionScore.map { $0.status == .excellent || $0.status == .good } ?? false
-        let hasSleepDebt = (sleepDebtMinutes ?? 0) > 60
+        // weeklyDeficit is a 7-day cumulative value; 120 min (2h) weekly = mild threshold
+        let hasSleepDebt = (sleepDebtMinutes ?? 0) > 120
 
         switch period {
         case .morning:

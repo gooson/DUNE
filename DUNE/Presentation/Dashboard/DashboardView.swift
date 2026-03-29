@@ -5,7 +5,7 @@ struct DashboardView: View {
     @State private var viewModel: DashboardViewModel
     @State private var isShowingPinnedEditor = false
     @State private var isShowingHealthDataQA = false
-    @State private var weightDetailNavigation: HealthMetric?
+    @State private var metricDetailNavigation: HealthMetric?
     @State private var templateNudgeToSave: WorkoutTemplateRecommendation?
     @State private var hasAppeared = false
     @State private var isShowingBriefing = false
@@ -51,7 +51,6 @@ struct DashboardView: View {
     @State private var showNotificationHub = false
     @State private var showWhatsNew = false
     @State private var showSettings = false
-    @State private var sleepDetailNavigation: HealthMetric?
     @State private var heroFrame: CGRect?
     @State private var cachedWeatherAtmosphere: WeatherAtmosphere = .default
 
@@ -189,10 +188,7 @@ struct DashboardView: View {
                 )
             }
         }
-        .navigationDestination(item: $weightDetailNavigation) { metric in
-            MetricDetailView(metric: metric)
-        }
-        .navigationDestination(item: $sleepDetailNavigation) { metric in
+        .navigationDestination(item: $metricDetailNavigation) { metric in
             MetricDetailView(metric: metric)
         }
         .sheet(isPresented: $isShowingHealthDataQA) {
@@ -293,7 +289,7 @@ struct DashboardView: View {
         // Yesterday Recap (morning only)
         if viewModel.shouldShowYesterdayRecap {
             YesterdayRecapCard(
-                workoutSummary: yesterdayWorkoutSummaryText,
+                workoutSummary: viewModel.yesterdayWorkoutSummary,
                 sleepMinutes: viewModel.yesterdaySleepMinutes,
                 yesterdayScore: viewModel.yesterdayConditionScore,
                 todayScore: viewModel.conditionScore?.score
@@ -306,12 +302,12 @@ struct DashboardView: View {
         QuickActionsRow(
             onLogWeight: {
                 if let weightMetric = viewModel.sortedMetrics.first(where: { $0.category == .weight }) {
-                    weightDetailNavigation = weightMetric
+                    metricDetailNavigation = weightMetric
                 }
             },
             onOpenSleep: {
                 if let sleepMetric = viewModel.sortedMetrics.first(where: { $0.category == .sleep }) {
-                    sleepDetailNavigation = sleepMetric
+                    metricDetailNavigation = sleepMetric
                 }
             },
             onOpenBriefing: { isShowingBriefing = true },
@@ -325,8 +321,8 @@ struct DashboardView: View {
             stepsValue: stepsValueText,
             sleepProgress: sleepProgress,
             sleepValue: sleepValueText,
-            habitProgress: habitProgress,
-            habitValue: habitValueText
+            habitProgress: nil,
+            habitValue: nil
         )
         .transition(Self.sectionTransition)
         .staggeredAppear(index: 3)
@@ -497,47 +493,17 @@ struct DashboardView: View {
         }
     }
 
-    // MARK: - Daily Progress Ring Data
+    // MARK: - Daily Progress Ring Data (using pre-computed ViewModel values)
 
-    private var stepsProgress: Double {
-        let steps = viewModel.sortedMetrics.first(where: { $0.category == .steps })?.value ?? 0
-        return steps / 10000 // Default goal: 10,000 steps
-    }
-
-    private var stepsValueText: String {
-        let steps = Int(viewModel.sortedMetrics.first(where: { $0.category == .steps })?.value ?? 0)
-        return steps.formattedWithSeparator
-    }
-
-    private var sleepProgress: Double {
-        let minutes = viewModel.sortedMetrics.first(where: { $0.category == .sleep })?.value ?? 0
-        return minutes / 480 // Default goal: 8 hours = 480 min
-    }
+    private var stepsProgress: Double { viewModel.todayStepsValue / 10000 }
+    private var stepsValueText: String { Int(viewModel.todayStepsValue).formattedWithSeparator }
+    private var sleepProgress: Double { viewModel.todaySleepMinutes / 480 }
 
     private var sleepValueText: String {
-        let minutes = viewModel.sortedMetrics.first(where: { $0.category == .sleep })?.value ?? 0
+        let minutes = viewModel.todaySleepMinutes
         let h = Int(minutes) / 60
         let m = Int(minutes) % 60
         return m > 0 ? "\(h)h \(m)m" : "\(h)h"
-    }
-
-    // Habit progress: nil when no habit data available (shows 2-ring mode)
-    private var habitProgress: Double? { nil }
-    private var habitValueText: String? { nil }
-
-    // MARK: - Yesterday Recap Helpers
-
-    private var yesterdayWorkoutSummaryText: String? {
-        let calendar = Calendar.current
-        guard let yesterday = calendar.date(byAdding: .day, value: -1, to: Date()) else { return nil }
-        let records = exerciseRecords.filter { calendar.isDate($0.date, inSameDayAs: yesterday) }
-        guard !records.isEmpty else { return nil }
-        let totalSeconds = records.map(\.duration).reduce(0, +)
-        let totalMinutes = Int(totalSeconds / 60)
-        let h = totalMinutes / 60
-        let m = totalMinutes % 60
-        let durationText = h > 0 ? "\(h)h \(m)m" : "\(m)m"
-        return "\(records.count) \(records.count == 1 ? String(localized: "exercise") : String(localized: "exercises")) · \(durationText)"
     }
 
     private var dashboardLoadTrigger: String {
@@ -547,6 +513,7 @@ struct DashboardView: View {
     private func loadDashboard() async {
         viewModel.recentHighRPEStreak = DashboardViewModel.computeHighRPEStreak(from: exerciseRecords)
         await viewModel.loadData(canLoadHealthKitData: canLoadHealthKitData)
+        viewModel.updateYesterdayWorkoutSummary(from: Array(exerciseRecords))
         guard !viewModel.isLoading else { return }
         if !hasAppeared {
             withAnimation(.easeOut(duration: 0.3)) {

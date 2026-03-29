@@ -6,6 +6,13 @@ struct ExerciseIntelligenceCard: View {
     let sleepMinutes: Double?
     let onStartWorkout: () -> Void
 
+    private enum Labels {
+        static let readyModerate = String(localized: "ready for moderate+ intensity")
+        static let lightEffort = String(localized: "light effort recommended")
+        static let recoverySufficient = String(localized: "recovery sufficient")
+        static let recoveryLimited = String(localized: "recovery limited")
+    }
+
     var body: some View {
         InlineCard {
             VStack(alignment: .leading, spacing: DS.Spacing.md) {
@@ -49,9 +56,10 @@ struct ExerciseIntelligenceCard: View {
                         .lineLimit(3)
 
                     if let score = conditionScore {
+                        let intensityLabel = score >= 70 ? Labels.readyModerate : Labels.lightEffort
                         reasoningBullet(
                             icon: "heart.fill",
-                            text: String(localized: "Condition \(score) — \(score >= 70 ? String(localized: "ready for moderate+ intensity") : String(localized: "light effort recommended"))")
+                            text: String(localized: "Condition \(score) — \(intensityLabel)")
                         )
                     }
 
@@ -59,9 +67,10 @@ struct ExerciseIntelligenceCard: View {
                         let hours = Int(minutes) / 60
                         let mins = Int(minutes) % 60
                         let sleepText = mins > 0 ? "\(hours)h \(mins)m" : "\(hours)h"
+                        let recoveryLabel = minutes >= 420 ? Labels.recoverySufficient : Labels.recoveryLimited
                         reasoningBullet(
                             icon: "bed.double.fill",
-                            text: String(localized: "\(sleepText) sleep — \(minutes >= 420 ? String(localized: "recovery sufficient") : String(localized: "recovery limited"))")
+                            text: String(localized: "\(sleepText) sleep — \(recoveryLabel)")
                         )
                     }
                 }

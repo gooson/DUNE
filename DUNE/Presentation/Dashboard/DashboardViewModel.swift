@@ -28,6 +28,11 @@ final class DashboardViewModel {
     private(set) var yesterdaySleepMinutes: Double?
     private(set) var yesterdayConditionScore: Int?
     private(set) var todayWorkoutDone = false
+    private(set) var shouldShowYesterdayRecap = false
+
+    // Phase 2: Pre-computed metric values for progress rings (avoid repeated body lookups)
+    private(set) var todayStepsValue: Double = 0
+    private(set) var todaySleepMinutes: Double = 0
     var pinnedCategories: [HealthMetric.Category]
     var baselineDeltasByMetricID: [String: MetricBaselineDelta] = [:]
     private(set) var sleepDeficitAnalysis: SleepDeficitAnalysis?
@@ -1573,13 +1578,21 @@ final class DashboardViewModel {
             sleepDebtMinutes: sleepDebt,
             todayWorkoutDone: workoutDone
         )
+
+        // Pre-compute metric values for progress rings (avoids repeated body lookups)
+        todayStepsValue = sortedMetrics.first { $0.category == .steps }?.value ?? 0
+        todaySleepMinutes = sortedMetrics.first { $0.category == .sleep }?.value ?? 0
     }
 
     // MARK: - Yesterday Recap
 
     private func buildYesterdayRecap() {
         let calendar = Calendar.current
-        guard let yesterday = calendar.date(byAdding: .day, value: -1, to: Date()) else { return }
+        let hour = calendar.component(.hour, from: Date())
+        guard let yesterday = calendar.date(byAdding: .day, value: -1, to: Date()) else {
+            shouldShowYesterdayRecap = false
+            return
+        }
 
         // Yesterday condition score from recentScores
         let yesterdayStart = calendar.startOfDay(for: yesterday)
@@ -1592,15 +1605,29 @@ final class DashboardViewModel {
             calendar.isDate($0.date, inSameDayAs: yesterdayStart)
         }?.actualMinutes
 
-        // Yesterday workout from exercise metric — simplified: check if exercise metric has change data
-        // The detailed exercise summary will come from ExerciseRecord query in the View layer
-        yesterdayWorkoutSummary = nil // Will be enriched from View's @Query
+        // Yesterday workout summary will be enriched from View's @Query
+        yesterdayWorkoutSummary = nil
+
+        // Pre-compute visibility (06-12 hours only)
+        shouldShowYesterdayRecap = hour >= 6 && hour < 12
+            && (yesterdayConditionScore != nil || yesterdaySleepMinutes != nil)
     }
 
-    /// Whether Yesterday Recap card should be shown (06-12 hours only).
-    var shouldShowYesterdayRecap: Bool {
-        let hour = Calendar.current.component(.hour, from: Date())
-        guard hour >= 6, hour < 12 else { return false }
-        return yesterdayConditionScore != nil || yesterdaySleepMinutes != nil
+    /// Enrich yesterday workout summary from exercise records (called from View).
+    func updateYesterdayWorkoutSummary(from records: [ExerciseRecord]) {
+        let calendar = Calendar.current
+        guard let yesterday = calendar.date(byAdding: .day, value: -1, to: Date()) else { return }
+        let yesterdayRecords = records.filter { calendar.isDate($0.date, inSameDayAs: yesterday) }
+        guard !yesterdayRecords.isEmpty else {
+            yesterdayWorkoutSummary = nil
+            return
+        }
+        let totalSeconds = yesterdayRecords.map(\.duration).reduce(0, +)
+        let totalMinutes = Int(totalSeconds / 60)
+        let h = totalMinutes / 60
+        let m = totalMinutes % 60
+        let durationText = h > 0 ? "\(h)h \(m)m" : "\(m)m"
+        let count = yesterdayRecords.count
+        yesterdayWorkoutSummary = "\(count) \(count == 1 ? String(localized: "exercise") : String(localized: "exercises")) · \(durationText)"
     }
 }
