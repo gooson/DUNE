@@ -52,6 +52,7 @@
 		07BEBE3B2FE197BC549A057D /* PersistentStoreRecovery.swift in Sources */ = {isa = PBXBuildFile; fileRef = B48C93AD983B232D55F21464 /* PersistentStoreRecovery.swift */; };
 		07D02A91A856B4B4F91DB737 /* HealthDataQAService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9E2E7297663FB3B6F1F488 /* HealthDataQAService.swift */; };
 		07D0BDC712EB2EAEB7223B95 /* ActiveRecoverySuggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09EBE30760F9BE1C13DD97B /* ActiveRecoverySuggestion.swift */; };
+		081B738CE4E1639D6AF393A6 /* ConfettiModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F99463F5BF2A67CA6487C6 /* ConfettiModifier.swift */; };
 		082BBC572CE566E42D642883 /* WorkoutActivityType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD727EA537A7E6C6BC61DE2 /* WorkoutActivityType.swift */; };
 		089063B4B42453FC9E32B43D /* MuscleMap3DScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B8B67D8932F2086E6BD3BA /* MuscleMap3DScene.swift */; };
 		08A04C6B1FEF0F3D52DDB2DC /* WatchRPEEstimatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B173D17D2ABC6B0139BEB52 /* WatchRPEEstimatorTests.swift */; };
@@ -1097,6 +1098,7 @@
 		E86D6E7BF82BE2F8227AD198 /* SakuraBranchShapeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3E792A39A67B889F4C2E5E /* SakuraBranchShapeTests.swift */; };
 		E8AED14C22DD1668AEA61937 /* BreathingDisturbanceQueryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D44B8A288E16E46CA7A5E2E /* BreathingDisturbanceQueryService.swift */; };
 		E8B22256DBFAB85ECE387B06 /* WorkoutSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 985922DC24E5CE8B7199ADF2 /* WorkoutSet.swift */; };
+		E90C1D976F7C1477D8BF1D20 /* ConfettiModifierTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 947694D9ACDE099BA4065E25 /* ConfettiModifierTests.swift */; };
 		E96F2BF18FEB74A6A5E599E4 /* ExerciseFormState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602FCC44820092ABFF7D097B /* ExerciseFormState.swift */; };
 		E9F05F3810B9B38275FA57CA /* NotificationInboxStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2912E51E77899BB08DA96C73 /* NotificationInboxStoreTests.swift */; };
 		EAD08235FF95AF7AF4F321F0 /* ForestSilhouetteShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D8DBB9C95058AEFC28F4598 /* ForestSilhouetteShape.swift */; };
@@ -1829,6 +1831,7 @@
 		93E3DB094ADA63BA91DB144B /* WeatherProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherProvider.swift; sourceTree = "<group>"; };
 		9441173046C70D7C27B512F9 /* ExerciseDefinitionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseDefinitionTests.swift; sourceTree = "<group>"; };
 		945E60E17D909A3827EEC089 /* ExerciseFrequency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseFrequency.swift; sourceTree = "<group>"; };
+		947694D9ACDE099BA4065E25 /* ConfettiModifierTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfettiModifierTests.swift; sourceTree = "<group>"; };
 		9491661904C7358865145669 /* TrainingVolume3DView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingVolume3DView.swift; sourceTree = "<group>"; };
 		94F628FE2807351DB51A6E8B /* AIWorkoutTemplateGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIWorkoutTemplateGenerator.swift; sourceTree = "<group>"; };
 		9571EAEA2FCFBB9E071CB65A /* DesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystem.swift; sourceTree = "<group>"; };
@@ -1956,6 +1959,7 @@
 		B495F6AD03D8A874FD60D067 /* CoachingMessageEnhancing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoachingMessageEnhancing.swift; sourceTree = "<group>"; };
 		B4CCBDA07CB49AF2FCE5547A /* CalculateAverageBedtimeUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculateAverageBedtimeUseCaseTests.swift; sourceTree = "<group>"; };
 		B4D6A8721460B314436730F0 /* CloudSyncWaitingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSyncWaitingView.swift; sourceTree = "<group>"; };
+		B4F99463F5BF2A67CA6487C6 /* ConfettiModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfettiModifier.swift; sourceTree = "<group>"; };
 		B53C1171518D1C9CB3C2EAF8 /* RestTimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestTimerView.swift; sourceTree = "<group>"; };
 		B558BAFE0B7621F0766FA36C /* WellnessSectionGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WellnessSectionGroup.swift; sourceTree = "<group>"; };
 		B55B45AB2FE85038325352A1 /* OceanWaveBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OceanWaveBackground.swift; sourceTree = "<group>"; };
@@ -2446,6 +2450,7 @@
 			isa = PBXGroup;
 			children = (
 				45BAC024DC84EA77E99CDB6A /* ChartDrawModifier.swift */,
+				B4F99463F5BF2A67CA6487C6 /* ConfettiModifier.swift */,
 				C36B0B0AE5FD74696DED9783 /* ConfirmDeleteRecordModifier.swift */,
 				AF787B9E10126115CE14561B /* PressableModifier.swift */,
 				1FDBFBDC8165A74503A60D22 /* StaggeredAppearModifier.swift */,
@@ -3944,6 +3949,7 @@
 				4ED31F1292D8B7C32E304DC8 /* CompoundWorkoutViewModelTests.swift */,
 				6E736AA70B9072AF70B1B273 /* ConditionScoreDetailViewModelTests.swift */,
 				ED575155D1B85574E902CC69 /* ConditionScoreTests.swift */,
+				947694D9ACDE099BA4065E25 /* ConfettiModifierTests.swift */,
 				062A0B6552190E2F4301FC65 /* ConsistencyDetailViewModelTests.swift */,
 				0D9D9FA17FE45254EB02540A /* CorrectiveExerciseUseCaseTests.swift */,
 				5F99608D605707AD556DC674 /* CorrelateSleepExerciseUseCaseTests.swift */,
@@ -4572,6 +4578,7 @@
 				161BB7D358C3F7E11470BDE6 /* ConditionScore.swift in Sources */,
 				9B3ADA2A3EE4A3BB69B4F228 /* ConditionScoreDetailView.swift in Sources */,
 				0DB3789223B06D0082901C17 /* ConditionScoreDetailViewModel.swift in Sources */,
+				081B738CE4E1639D6AF393A6 /* ConfettiModifier.swift in Sources */,
 				BDC3418ADEAFC0C05E58EAD3 /* ConfirmDeleteRecordModifier.swift in Sources */,
 				B009200F6D97A81BD211F4A1 /* ConsistencyCard.swift in Sources */,
 				15C76D96446D3EED6943712B /* ConsistencyDetailView.swift in Sources */,
@@ -5466,6 +5473,7 @@
 				78854C55AA44801DB342BEF6 /* CompoundWorkoutViewModelTests.swift in Sources */,
 				FC0943D4FF8DA0E245BA51A3 /* ConditionScoreDetailViewModelTests.swift in Sources */,
 				17DAF57781589D20337E69A7 /* ConditionScoreTests.swift in Sources */,
+				E90C1D976F7C1477D8BF1D20 /* ConfettiModifierTests.swift in Sources */,
 				22BBD66736FF59C894EFBC53 /* ConsistencyDetailViewModelTests.swift in Sources */,
 				73EBF6C6163C24CB5A46A6E5 /* CorrectiveExerciseUseCaseTests.swift in Sources */,
 				7CF0B76EE2FBDE5583250AB8 /* CorrelateSleepExerciseUseCaseTests.swift in Sources */,

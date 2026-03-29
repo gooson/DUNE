@@ -35,6 +35,7 @@ struct WorkoutCompletionSheet: View {
     }
 
     @State private var showCelebration = false
+    @State private var celebrationTrigger = 0
     @State private var effort: Int?
     @Environment(\.appTheme) private var theme
 
@@ -130,9 +131,14 @@ struct WorkoutCompletionSheet: View {
                 }
             }
         }
-        .onAppear {
+        .confetti(trigger: celebrationTrigger)
+        .sensoryFeedback(.success, trigger: celebrationTrigger)
+        .task {
             withAnimation(DS.Animation.emphasize) {
                 showCelebration = true
+            }
+            if !prAchievements.isEmpty {
+                celebrationTrigger += 1
             }
         }
         .interactiveDismissDisabled(false)
