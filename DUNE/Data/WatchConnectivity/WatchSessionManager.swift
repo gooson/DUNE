@@ -60,25 +60,26 @@ final class WatchSessionManager: NSObject {
     }
 
     /// Request Watch to re-send all recent workout records (bulk recovery).
-    /// Uses sendMessage for immediate delivery + transferUserInfo as background fallback.
+    /// Only sends via sendMessage when Watch is reachable — no transferUserInfo fallback
+    /// to prevent persistent queue buildup across iPhone app launches.
     func requestWorkoutBulkSync(since: Date = Calendar.current.date(byAdding: .day, value: -30, to: Date()) ?? Date()) {
         let session = WCSession.default
         guard session.activationState == .activated else {
             AppLogger.data.warning("[WatchSync] Session not activated for bulk sync request")
             return
         }
+        guard session.isReachable else {
+            AppLogger.data.debug("[WatchSync] Watch not reachable, skipping bulk sync request")
+            return
+        }
         let sinceTimestamp = since.timeIntervalSince1970
         let message: [String: Any] = ["requestWorkoutBulkSync": sinceTimestamp]
 
-        if session.isReachable {
-            session.sendMessage(
-                message,
-                replyHandler: nil,
-                errorHandler: Self.makeWCErrorHandler("Failed to send bulk sync request")
-            )
-        } else {
-            session.transferUserInfo(message)
-        }
+        session.sendMessage(
+            message,
+            replyHandler: nil,
+            errorHandler: Self.makeWCErrorHandler("Failed to send bulk sync request")
+        )
         AppLogger.data.debug("[WatchSync] Requested bulk workout sync since \(since)")
     }
 

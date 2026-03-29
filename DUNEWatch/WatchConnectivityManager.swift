@@ -120,6 +120,7 @@ final class WatchConnectivityManager: NSObject {
     private var lastExerciseLibrarySyncRequestAt: Date?
     private var lastWorkoutTemplateSyncRequestAt: Date?
     private var deleteRequestProcessedAtByWorkoutID: [UUID: Date] = [:]
+    private var lastBulkSyncProcessedAt: Date?
     private var exerciseLibraryByCanonicalID: [String: WatchExerciseInfo] = [:]
 
     private override init() {
@@ -517,7 +518,17 @@ extension WatchConnectivityManager {
         }
     }
 
+    private static let bulkSyncThrottleInterval: TimeInterval = 60
+
     private func handleBulkSyncRequest(since: Date) async {
+        let now = Date()
+        if let last = lastBulkSyncProcessedAt,
+           now.timeIntervalSince(last) < Self.bulkSyncThrottleInterval {
+            Self.logger.debug("[BulkSync] Throttled — last sync was \(Int(now.timeIntervalSince(last)))s ago")
+            return
+        }
+        lastBulkSyncProcessedAt = now
+
         guard let container = registeredModelContainer else {
             Self.logger.error("[BulkSync] No ModelContainer registered")
             return
