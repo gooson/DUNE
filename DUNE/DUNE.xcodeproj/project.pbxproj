@@ -52,6 +52,7 @@
 		07BEBE3B2FE197BC549A057D /* PersistentStoreRecovery.swift in Sources */ = {isa = PBXBuildFile; fileRef = B48C93AD983B232D55F21464 /* PersistentStoreRecovery.swift */; };
 		07D02A91A856B4B4F91DB737 /* HealthDataQAService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9E2E7297663FB3B6F1F488 /* HealthDataQAService.swift */; };
 		07D0BDC712EB2EAEB7223B95 /* ActiveRecoverySuggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09EBE30760F9BE1C13DD97B /* ActiveRecoverySuggestion.swift */; };
+		081B738CE4E1639D6AF393A6 /* ConfettiModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F99463F5BF2A67CA6487C6 /* ConfettiModifier.swift */; };
 		082BBC572CE566E42D642883 /* WorkoutActivityType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD727EA537A7E6C6BC61DE2 /* WorkoutActivityType.swift */; };
 		089063B4B42453FC9E32B43D /* MuscleMap3DScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B8B67D8932F2086E6BD3BA /* MuscleMap3DScene.swift */; };
 		08A04C6B1FEF0F3D52DDB2DC /* WatchRPEEstimatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B173D17D2ABC6B0139BEB52 /* WatchRPEEstimatorTests.swift */; };
@@ -1930,6 +1931,7 @@
 		B495F6AD03D8A874FD60D067 /* CoachingMessageEnhancing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoachingMessageEnhancing.swift; sourceTree = "<group>"; };
 		B4CCBDA07CB49AF2FCE5547A /* CalculateAverageBedtimeUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculateAverageBedtimeUseCaseTests.swift; sourceTree = "<group>"; };
 		B4D6A8721460B314436730F0 /* CloudSyncWaitingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSyncWaitingView.swift; sourceTree = "<group>"; };
+		B4F99463F5BF2A67CA6487C6 /* ConfettiModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfettiModifier.swift; sourceTree = "<group>"; };
 		B53C1171518D1C9CB3C2EAF8 /* RestTimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestTimerView.swift; sourceTree = "<group>"; };
 		B558BAFE0B7621F0766FA36C /* WellnessSectionGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WellnessSectionGroup.swift; sourceTree = "<group>"; };
 		B55B45AB2FE85038325352A1 /* OceanWaveBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OceanWaveBackground.swift; sourceTree = "<group>"; };
@@ -2410,6 +2412,7 @@
 			isa = PBXGroup;
 			children = (
 				45BAC024DC84EA77E99CDB6A /* ChartDrawModifier.swift */,
+				B4F99463F5BF2A67CA6487C6 /* ConfettiModifier.swift */,
 				C36B0B0AE5FD74696DED9783 /* ConfirmDeleteRecordModifier.swift */,
 				AF787B9E10126115CE14561B /* PressableModifier.swift */,
 				1FDBFBDC8165A74503A60D22 /* StaggeredAppearModifier.swift */,
@@ -4528,6 +4531,7 @@
 				161BB7D358C3F7E11470BDE6 /* ConditionScore.swift in Sources */,
 				9B3ADA2A3EE4A3BB69B4F228 /* ConditionScoreDetailView.swift in Sources */,
 				0DB3789223B06D0082901C17 /* ConditionScoreDetailViewModel.swift in Sources */,
+				081B738CE4E1639D6AF393A6 /* ConfettiModifier.swift in Sources */,
 				BDC3418ADEAFC0C05E58EAD3 /* ConfirmDeleteRecordModifier.swift in Sources */,
 				B009200F6D97A81BD211F4A1 /* ConsistencyCard.swift in Sources */,
 				15C76D96446D3EED6943712B /* ConsistencyDetailView.swift in Sources */,
