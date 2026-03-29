@@ -388,7 +388,7 @@ struct SessionSummaryView: View {
         }
 
         // Send workout data to iPhone via WatchConnectivity as backup
-        sendWorkoutToPhone()
+        sendWorkoutToPhone(perExerciseHealthKitIDs: perExerciseIDs)
         recordExerciseUsage()
 
         hasSaved = true
@@ -534,7 +534,7 @@ struct SessionSummaryView: View {
     }
 
     /// Send workout summary to iPhone via WatchConnectivity message.
-    private func sendWorkoutToPhone() {
+    private func sendWorkoutToPhone(perExerciseHealthKitIDs: [Int: String]) {
         guard let template = workoutManager.templateSnapshot else { return }
 
         // Build WatchWorkoutUpdate from completed data
@@ -561,7 +561,8 @@ struct SessionSummaryView: View {
                 startTime: startDate,
                 endTime: endDate,
                 heartRateSamples: [],
-                rpe: effort
+                rpe: effort,
+                healthKitWorkoutID: perExerciseHealthKitIDs[exerciseIndex]
             )
 
             WatchConnectivityManager.shared.sendWorkoutCompletion(update)

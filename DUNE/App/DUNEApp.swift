@@ -703,6 +703,18 @@ struct DUNEApp: App {
         WatchSessionManager.shared.onWorkoutReceived = { update in
             let context = ModelContext(modelContainer)
 
+            // Dedup: skip if a record with matching healthKitWorkoutID already exists (CloudKit may have synced first)
+            if let hkID = update.healthKitWorkoutID, !hkID.isEmpty {
+                var hkDedup = FetchDescriptor<ExerciseRecord>(
+                    predicate: #Predicate<ExerciseRecord> { $0.healthKitWorkoutID == hkID }
+                )
+                hkDedup.fetchLimit = 1
+                if let existing = try? context.fetch(hkDedup), !existing.isEmpty {
+                    AppLogger.data.debug("[WatchSync] Skipped duplicate (HK ID match): \(update.exerciseName)")
+                    return
+                }
+            }
+
             // Dedup: skip if a record with same exercise + similar date already exists
             let startTime = update.startTime
             let exerciseName = update.exerciseName
@@ -726,6 +738,7 @@ struct DUNEApp: App {
                 date: update.startTime,
                 exerciseType: update.exerciseName,
                 duration: max(0, duration),
+                healthKitWorkoutID: update.healthKitWorkoutID,
                 exerciseDefinitionID: update.exerciseID,
                 primaryMuscles: definition?.primaryMuscles ?? [],
                 secondaryMuscles: definition?.secondaryMuscles ?? [],
