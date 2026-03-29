@@ -10,7 +10,7 @@ struct ConfettiParticle: Identifiable {
     var velocityY: Double
     var rotation: Double
     var rotationSpeed: Double
-    var color: Color
+    let colorIndex: Int
     var particleShape: ParticleShape
     var opacity: Double = 1.0
     var scale: Double = 1.0
@@ -37,17 +37,10 @@ struct ConfettiParticle: Identifiable {
 
     // MARK: - Factory
 
-    private static let colors: [Color] = [
-        DS.Color.activity,
-        .yellow,
-        .mint,
-        .orange,
-        .pink,
-        .cyan,
-    ]
-
+    /// Max particle count — bounded for Canvas main-thread performance.
     static func burst(count: Int = 60) -> [ConfettiParticle] {
         let shapes = ParticleShape.allCases
+        let colorCount = ConfettiColors.shadings.count
         return (0..<count).map { i in
             let angle = Double.random(in: -Double.pi * 0.8 ... -Double.pi * 0.2)
             let speed = Double.random(in: 0.6...1.4)
@@ -59,12 +52,41 @@ struct ConfettiParticle: Identifiable {
                 velocityY: sin(angle) * speed * 0.6,
                 rotation: Double.random(in: 0...360),
                 rotationSpeed: Double.random(in: -400...400),
-                color: colors[i % colors.count],
+                colorIndex: i % colorCount,
                 particleShape: shapes[i % shapes.count],
                 scale: Double.random(in: 0.6...1.0)
             )
         }
     }
+}
+
+// MARK: - Pre-resolved Colors (avoid per-particle Color→Shading resolve)
+
+private enum ConfettiColors {
+    static let shadings: [GraphicsContext.Shading] = [
+        .color(DS.Color.activity),
+        .color(.yellow),
+        .color(.mint),
+        .color(.orange),
+        .color(.pink),
+        .color(.cyan),
+    ]
+}
+
+// MARK: - Pre-resolved Paths (avoid per-frame heap allocation)
+
+private enum ConfettiPaths {
+    // Unit-size paths centered at origin; scaled per particle via context transform.
+    static let circle = Path(ellipseIn: CGRect(x: -0.5, y: -0.5, width: 1, height: 1))
+    static let rectangle = Path(CGRect(x: -0.5, y: -0.3, width: 1, height: 0.6))
+    static let triangle: Path = {
+        var p = Path()
+        p.move(to: CGPoint(x: 0, y: -0.5))
+        p.addLine(to: CGPoint(x: -0.5, y: 0.5))
+        p.addLine(to: CGPoint(x: 0.5, y: 0.5))
+        p.closeSubpath()
+        return p
+    }()
 }
 
 // MARK: - Particle Store (class-backed to avoid full-body re-renders)
@@ -157,23 +179,17 @@ private struct ConfettiModifier: ViewModifier {
         ctx.opacity = p.opacity
         ctx.translateBy(x: px, y: py)
         ctx.rotate(by: .degrees(p.rotation))
+        ctx.scaleBy(x: s, y: s)
+
+        let shading = ConfettiColors.shadings[p.colorIndex]
 
         switch p.particleShape {
         case .circle:
-            let rect = CGRect(x: -s / 2, y: -s / 2, width: s, height: s)
-            ctx.fill(Path(ellipseIn: rect), with: .color(p.color))
-
+            ctx.fill(ConfettiPaths.circle, with: shading)
         case .rectangle:
-            let rect = CGRect(x: -s / 2, y: -s * 0.3, width: s, height: s * 0.6)
-            ctx.fill(Path(rect), with: .color(p.color))
-
+            ctx.fill(ConfettiPaths.rectangle, with: shading)
         case .triangle:
-            var path = Path()
-            path.move(to: CGPoint(x: 0, y: -s / 2))
-            path.addLine(to: CGPoint(x: -s / 2, y: s / 2))
-            path.addLine(to: CGPoint(x: s / 2, y: s / 2))
-            path.closeSubpath()
-            ctx.fill(path, with: .color(p.color))
+            ctx.fill(ConfettiPaths.triangle, with: shading)
         }
     }
 }
