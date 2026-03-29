@@ -6,6 +6,7 @@ struct SectionGroup<Content: View>: View {
     let title: LocalizedStringKey
     let icon: String
     let iconColor: Color
+    var subtitle: LocalizedStringKey? = nil
     var infoAction: (() -> Void)? = nil
     var fillHeight: Bool = false
     @ViewBuilder let content: () -> Content
@@ -154,29 +155,38 @@ struct SectionGroup<Content: View>: View {
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.md) {
             // Section header
-            HStack(spacing: DS.Spacing.xs) {
-                // Theme accent bar
-                RoundedRectangle(cornerRadius: 1)
-                    .fill(theme.sectionAccentGradient)
-                    .frame(width: 2, height: 14)
+            VStack(alignment: .leading, spacing: 2) {
+                HStack(spacing: DS.Spacing.xs) {
+                    // Theme accent bar
+                    RoundedRectangle(cornerRadius: 1)
+                        .fill(theme.sectionAccentGradient)
+                        .frame(width: 2, height: 14)
 
-                Image(systemName: icon)
-                    .font(.subheadline)
-                    .foregroundStyle(iconColor)
+                    Image(systemName: icon)
+                        .font(.subheadline)
+                        .foregroundStyle(iconColor)
 
-                Text(title)
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(DS.Color.textSecondary)
+                    Text(title)
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(DS.Color.textSecondary)
 
-                if let infoAction {
-                    Spacer()
+                    if let infoAction {
+                        Spacer()
 
-                    Button(action: infoAction) {
-                        Image(systemName: "info.circle")
-                            .font(.subheadline)
-                            .foregroundStyle(DS.Color.textSecondary)
+                        Button(action: infoAction) {
+                            Image(systemName: "info.circle")
+                                .font(.subheadline)
+                                .foregroundStyle(DS.Color.textSecondary)
+                        }
                     }
+                }
+
+                if let subtitle {
+                    Text(subtitle)
+                        .font(.caption)
+                        .foregroundStyle(DS.Color.textTertiary)
+                        .padding(.leading, DS.Spacing.xs)
                 }
             }
             .padding(.horizontal, DS.Spacing.xs)
