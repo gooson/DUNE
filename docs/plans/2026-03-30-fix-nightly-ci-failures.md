@@ -1,7 +1,9 @@
 ---
+tags: [ci, testing, github-actions, simulator, timeout]
 topic: fix-nightly-ci-failures
 date: 2026-03-30
-status: draft
+category: plan
+status: implemented
 confidence: high
 related_solutions:
   - docs/solutions/testing/2026-03-08-ui-smoke-toolbar-tap-stability.md

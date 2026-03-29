@@ -2,6 +2,7 @@
 tags: [ci, github-actions, simulator, timeout, xcodebuild, test-infrastructure, pre-boot]
 category: testing
 date: 2026-03-30
+status: implemented
 severity: important
 related_files:
   - scripts/lib/simulator-boot.sh
