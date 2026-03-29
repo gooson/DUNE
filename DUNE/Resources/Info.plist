@@ -4,8 +4,14 @@
 <dict>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>com.apple.coredata.cloudkit.activity.export</string>
+		<string>com.apple.coredata.cloudkit.activity.import</string>
+	</array>
 	<key>UIBackgroundModes</key>
 	<array>
+		<string>processing</string>
 		<string>remote-notification</string>
 	</array>
 	<key>UILaunchScreen</key>

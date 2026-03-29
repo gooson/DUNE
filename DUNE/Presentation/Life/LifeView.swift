@@ -47,7 +47,7 @@ struct LifeView: View {
         ScrollViewReader { proxy in
             ScrollView {
                 Color.clear
-                    .frame(height: 0)
+                    .frame(width: 0, height: 0)
                     .id(ScrollAnchor.top)
 
                 VStack(spacing: isRegular ? DS.Spacing.xxl : DS.Spacing.xl) {
