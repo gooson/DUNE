@@ -133,7 +133,7 @@ struct WorkoutCompletionSheet: View {
         }
         .confetti(trigger: celebrationTrigger)
         .sensoryFeedback(.success, trigger: celebrationTrigger)
-        .onAppear {
+        .task {
             withAnimation(DS.Animation.emphasize) {
                 showCelebration = true
             }
