@@ -37,6 +37,8 @@ enum NotificationHubMetricResolver {
             nil
         case .postureReminder:
             nil
+        case .dailyDigest:
+            nil
         }
     }
 
@@ -482,6 +484,8 @@ struct NotificationHubView: View {
             DS.Color.tabLife
         case .postureReminder:
             DS.Color.body
+        case .dailyDigest:
+            DS.Color.warmGlow
         }
     }
 }

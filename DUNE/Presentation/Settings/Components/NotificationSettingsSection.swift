@@ -150,6 +150,7 @@ extension HealthInsight.InsightType {
         case .workoutPR: "Workout Records"
         case .lifeChecklistReminder: "Life Checklist"
         case .postureReminder: "Posture Reminder"
+        case .dailyDigest: "doc.text"
         }
     }
 
@@ -167,6 +168,7 @@ extension HealthInsight.InsightType {
         case .workoutPR: "trophy.fill"
         case .lifeChecklistReminder: "checklist"
         case .postureReminder: "figure.stand"
+        case .dailyDigest: "doc.text"
         }
     }
 }
