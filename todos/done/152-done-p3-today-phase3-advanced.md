@@ -1,9 +1,9 @@
 ---
 source: brainstorm/2026-03-29-today-tab-evolution
 priority: p3
-status: pending
+status: done
 created: 2026-03-29
-updated: 2026-03-29
+updated: 2026-03-30
 ---
 
 # Today Tab Phase 3: Advanced Features
