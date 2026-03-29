@@ -33,6 +33,10 @@ final class DashboardViewModel {
     // Phase 2: Pre-computed metric values for progress rings (avoid repeated body lookups)
     private(set) var todayStepsValue: Double = 0
     private(set) var todaySleepMinutes: Double = 0
+
+    // Phase 3: Cumulative stress + daily digest + time-aware ordering
+    private(set) var cumulativeStressScore: CumulativeStressScore?
+    private(set) var dailyDigest: DailyDigest?
     var pinnedCategories: [HealthMetric.Category]
     var baselineDeltasByMetricID: [String: MetricBaselineDelta] = [:]
     private(set) var sleepDeficitAnalysis: SleepDeficitAnalysis?
@@ -305,6 +309,8 @@ final class DashboardViewModel {
         briefingData = buildBriefingData()
         buildAdaptiveHeroMessage()
         buildYesterdayRecap()
+        buildCumulativeStressScore()
+        buildDailyDigest()
         hasLoadedOnce = true
         lastUpdated = Date()
         WidgetDataWriter.writeConditionScore(conditionScore)
@@ -1566,8 +1572,144 @@ final class DashboardViewModel {
 
     // MARK: - Adaptive Hero Message
 
+    // MARK: - Time-Aware Dashboard (Phase 3)
+
+    enum DashboardTimeBand: String, Sendable {
+        case morning   // 06-10
+        case daytime   // 10-17
+        case evening   // 17-22
+        case night     // 22-06
+
+        static func from(hour: Int) -> DashboardTimeBand {
+            switch hour {
+            case 6..<10: .morning
+            case 10..<17: .daytime
+            case 17..<22: .evening
+            default: .night
+            }
+        }
+    }
+
+    private(set) var currentTimeBand: DashboardTimeBand = .morning
+
+    /// Whether the daily digest should be visible (evening/night only, after generation).
+    var shouldShowDailyDigest: Bool {
+        dailyDigest != nil && (currentTimeBand == .evening || currentTimeBand == .night)
+    }
+
+    /// Whether quick actions should be visible (not shown at night).
+    var shouldShowQuickActions: Bool {
+        currentTimeBand != .night
+    }
+
+    /// Whether progress rings should be visible (not shown at night).
+    var shouldShowProgressRings: Bool {
+        currentTimeBand != .night
+    }
+
+    /// Whether today's brief should be visible (morning and daytime only).
+    var shouldShowTodaysBrief: Bool {
+        currentTimeBand == .morning || currentTimeBand == .daytime
+    }
+
+    /// Whether exercise intelligence card should be visible (morning and daytime only).
+    var shouldShowExerciseIntelligence: Bool {
+        currentTimeBand == .morning || currentTimeBand == .daytime
+    }
+
+    // MARK: - Cumulative Stress Score
+
+    private let stressUseCase = CalculateCumulativeStressUseCase()
+
+    private func buildCumulativeStressScore() {
+        // Use HRV data already fetched for condition score
+        guard let conditionScore else {
+            cumulativeStressScore = nil
+            return
+        }
+        // Build HRV daily averages from recent scores (we have 14-day window from condition)
+        // For stress score we ideally want 30 days, but use what we have
+        let dailyAverages = recentScores.compactMap { score -> CalculateCumulativeStressUseCase.Input.DailyAverage? in
+            guard let hrv = score.contributions.first(where: { $0.factor == .hrv }) else { return nil }
+            // Extract numeric value from detail string — use score as proxy
+            return .init(date: score.date, value: Double(score.score))
+        }
+
+        // Sleep regularity from deficit analysis
+        let sleepRegularity: SleepRegularityIndex?
+        if let deficit = sleepDeficitAnalysis, deficit.dailyDeficits.count >= 3 {
+            let dayCount = deficit.dailyDeficits.count
+            let sleepValues = deficit.dailyDeficits.map(\.actualMinutes)
+            let sleepMean = sleepValues.reduce(0, +) / Double(sleepValues.count)
+            let sleepVariance = sleepValues.reduce(0.0) { $0 + ($1 - sleepMean) * ($1 - sleepMean) } / Double(sleepValues.count)
+            let bedtimeStd = sqrt(sleepVariance)
+            sleepRegularity = SleepRegularityIndex(
+                score: max(0, min(100, Int((100.0 - bedtimeStd / 10.0).rounded()))),
+                bedtimeStdDevMinutes: bedtimeStd,
+                wakeTimeStdDevMinutes: bedtimeStd,
+                averageBedtime: DateComponents(hour: 23, minute: 0),
+                averageWakeTime: DateComponents(hour: 7, minute: 0),
+                dataPointCount: dayCount,
+                confidence: dayCount >= 14 ? .high : (dayCount >= 7 ? .medium : .low)
+            )
+        } else {
+            sleepRegularity = nil
+        }
+
+        // Training load from exercise metric
+        let exerciseMinutes = sortedMetrics.first { $0.category == .exercise }?.value ?? 0
+        let trainingDurations: CalculateCumulativeStressUseCase.Input.WeeklyTrainingDurations?
+        if exerciseMinutes > 0 {
+            // Use today's exercise as acute estimate, condition score history as chronic proxy
+            trainingDurations = .init(
+                acuteMinutes: exerciseMinutes * 7, // extrapolate to weekly
+                chronicWeeklyMinutes: max(exerciseMinutes * 7, 150) // fallback: 150 min/week
+            )
+        } else {
+            trainingDurations = nil
+        }
+
+        let input = CalculateCumulativeStressUseCase.Input(
+            hrvDailyAverages: dailyAverages,
+            sleepRegularity: sleepRegularity,
+            weeklyTrainingDurations: trainingDurations
+        )
+
+        cumulativeStressScore = stressUseCase.execute(input: input)
+    }
+
+    // MARK: - Daily Digest
+
+    private let digestUseCase = GenerateDailyDigestUseCase()
+
+    private func buildDailyDigest() {
+        let hour = Calendar.current.component(.hour, from: Date())
+        // Only generate after 17:00 (5 PM)
+        guard hour >= 17 else {
+            dailyDigest = nil
+            return
+        }
+
+        let metrics = DailyDigest.DigestMetrics(
+            conditionScore: conditionScore?.score,
+            conditionDelta: {
+                guard let today = conditionScore?.score,
+                      let yesterday = yesterdayConditionScore else { return nil }
+                return today - yesterday
+            }(),
+            workoutSummary: todayWorkoutDone ? (yesterdayWorkoutSummary ?? String(localized: "workout")) : nil,
+            sleepMinutes: todaySleepMinutes > 0 ? todaySleepMinutes : nil,
+            sleepDebtMinutes: sleepDeficitAnalysis?.weeklyDeficit,
+            stepsCount: todayStepsValue > 0 ? Int(todayStepsValue) : nil,
+            stressLevel: cumulativeStressScore?.level
+        )
+
+        dailyDigest = digestUseCase.execute(metrics: metrics)
+    }
+
     private func buildAdaptiveHeroMessage() {
         let hour = Calendar.current.component(.hour, from: Date())
+        currentTimeBand = DashboardTimeBand.from(hour: hour)
         let exerciseMetric = sortedMetrics.first { $0.category == .exercise }
         let workoutDone = exerciseMetric != nil && (exerciseMetric?.value ?? 0) > 0
         todayWorkoutDone = workoutDone
