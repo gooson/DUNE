@@ -11,11 +11,11 @@ struct ConfettiParticle: Identifiable {
     var rotation: Double
     var rotationSpeed: Double
     var color: Color
-    var shape: Shape
+    var particleShape: ParticleShape
     var opacity: Double = 1.0
     var scale: Double = 1.0
 
-    enum Shape: CaseIterable {
+    enum ParticleShape: CaseIterable {
         case circle, rectangle, triangle
     }
 
@@ -34,11 +34,9 @@ struct ConfettiParticle: Identifiable {
     }
 
     var isExpired: Bool { y > 1.2 || opacity <= 0 }
-}
 
-// MARK: - Particle Factory
+    // MARK: - Factory
 
-enum ConfettiFactory {
     private static let colors: [Color] = [
         DS.Color.activity,
         .yellow,
@@ -49,7 +47,8 @@ enum ConfettiFactory {
     ]
 
     static func burst(count: Int = 60) -> [ConfettiParticle] {
-        (0..<count).map { i in
+        let shapes = ParticleShape.allCases
+        return (0..<count).map { i in
             let angle = Double.random(in: -Double.pi * 0.8 ... -Double.pi * 0.2)
             let speed = Double.random(in: 0.6...1.4)
             return ConfettiParticle(
@@ -61,10 +60,38 @@ enum ConfettiFactory {
                 rotation: Double.random(in: 0...360),
                 rotationSpeed: Double.random(in: -400...400),
                 color: colors[i % colors.count],
-                shape: ConfettiParticle.Shape.allCases[i % 3],
+                particleShape: shapes[i % shapes.count],
                 scale: Double.random(in: 0.6...1.0)
             )
         }
+    }
+}
+
+// MARK: - Particle Store (class-backed to avoid full-body re-renders)
+
+@Observable
+private final class ParticleStore {
+    var particles: [ConfettiParticle] = []
+    var lastTime: Date?
+
+    func advance(now: Date) {
+        let dt: Double
+        if let last = lastTime {
+            dt = min(now.timeIntervalSince(last), 0.05) // cap at 50ms
+        } else {
+            dt = 0.016
+        }
+        lastTime = now
+
+        for i in particles.indices {
+            particles[i].update(dt: dt, gravity: 1.2)
+        }
+        particles.removeAll(where: \.isExpired)
+    }
+
+    func reset(with newParticles: [ConfettiParticle]) {
+        particles = newParticles
+        lastTime = nil
     }
 }
 
@@ -73,8 +100,7 @@ enum ConfettiFactory {
 private struct ConfettiModifier: ViewModifier {
     let trigger: Int
 
-    @State private var particles: [ConfettiParticle] = []
-    @State private var lastTime: Date?
+    @State private var store = ParticleStore()
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     // Fallback glow for reduce-motion users
@@ -83,16 +109,16 @@ private struct ConfettiModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .overlay {
-                if !particles.isEmpty {
+                if !store.particles.isEmpty {
                     TimelineView(.animation) { timeline in
                         Canvas { context, size in
-                            for particle in particles {
+                            for particle in store.particles {
                                 drawParticle(particle, in: context, size: size)
                             }
                         }
                         .allowsHitTesting(false)
                         .onChange(of: timeline.date) { _, now in
-                            advanceParticles(now: now)
+                            store.advance(now: now)
                         }
                     }
                     .ignoresSafeArea()
@@ -117,27 +143,9 @@ private struct ConfettiModifier: ViewModifier {
                         withAnimation(DS.Animation.standard) { showGlow = false }
                     }
                 } else {
-                    particles = ConfettiFactory.burst()
-                    lastTime = nil
+                    store.reset(with: ConfettiParticle.burst())
                 }
             }
-    }
-
-    private func advanceParticles(now: Date) {
-        let dt: Double
-        if let last = lastTime {
-            dt = min(now.timeIntervalSince(last), 0.05) // cap at 50ms
-        } else {
-            dt = 0.016
-        }
-        lastTime = now
-
-        for i in particles.indices.reversed() {
-            particles[i].update(dt: dt, gravity: 1.2)
-            if particles[i].isExpired {
-                particles.remove(at: i)
-            }
-        }
     }
 
     private func drawParticle(_ p: ConfettiParticle, in context: GraphicsContext, size: CGSize) {
@@ -150,7 +158,7 @@ private struct ConfettiModifier: ViewModifier {
         ctx.translateBy(x: px, y: py)
         ctx.rotate(by: .degrees(p.rotation))
 
-        switch p.shape {
+        switch p.particleShape {
         case .circle:
             let rect = CGRect(x: -s / 2, y: -s / 2, width: s, height: s)
             ctx.fill(Path(ellipseIn: rect), with: .color(p.color))

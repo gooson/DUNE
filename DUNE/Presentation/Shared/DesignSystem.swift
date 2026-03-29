@@ -191,8 +191,6 @@ enum DS {
         static let pressUp = SwiftUI.Animation.spring(duration: 0.4, bounce: 0.15)
         /// Chart draw reveal (left-to-right)
         static let chartDraw = SwiftUI.Animation.easeOut(duration: 0.8)
-        /// Celebration burst (confetti trigger)
-        static let celebrationBurst = SwiftUI.Animation.spring(duration: 0.3, bounce: 0.2)
 
         /// Stagger delay for sequential card/section appearance.
         /// - Parameters:
