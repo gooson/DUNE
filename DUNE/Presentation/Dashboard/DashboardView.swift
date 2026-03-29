@@ -5,6 +5,7 @@ struct DashboardView: View {
     @State private var viewModel: DashboardViewModel
     @State private var isShowingPinnedEditor = false
     @State private var isShowingHealthDataQA = false
+    @State private var weightDetailNavigation: HealthMetric?
     @State private var templateNudgeToSave: WorkoutTemplateRecommendation?
     @State private var hasAppeared = false
     @State private var isShowingBriefing = false
@@ -50,6 +51,7 @@ struct DashboardView: View {
     @State private var showNotificationHub = false
     @State private var showWhatsNew = false
     @State private var showSettings = false
+    @State private var sleepDetailNavigation: HealthMetric?
     @State private var heroFrame: CGRect?
     @State private var cachedWeatherAtmosphere: WeatherAtmosphere = .default
 
@@ -187,6 +189,12 @@ struct DashboardView: View {
                 )
             }
         }
+        .navigationDestination(item: $weightDetailNavigation) { metric in
+            MetricDetailView(metric: metric)
+        }
+        .navigationDestination(item: $sleepDetailNavigation) { metric in
+            MetricDetailView(metric: metric)
+        }
         .sheet(isPresented: $isShowingHealthDataQA) {
             HealthDataQASheet(
                 viewModel: HealthDataQAViewModel(
@@ -248,6 +256,9 @@ struct DashboardView: View {
         h.combine(viewModel.pinnedCards.count)
         h.combine(viewModel.sleepDeficitAnalysis != nil)
         h.combine(viewModel.focusInsight != nil)
+        h.combine(viewModel.workoutSuggestion != nil)
+        h.combine(viewModel.shouldShowYesterdayRecap)
+        h.combine(viewModel.adaptiveHeroMessage != nil)
         return h.finalize()
     }
 
@@ -263,7 +274,8 @@ struct DashboardView: View {
                     recentScores: viewModel.recentScores,
                     weeklyGoalProgress: viewModel.weeklyGoalProgress,
                     trendBadges: viewModel.heroBaselineDetails,
-                    hourlySparkline: viewModel.conditionSparkline.nonEmptyOrNil
+                    hourlySparkline: viewModel.conditionSparkline.nonEmptyOrNil,
+                    adaptiveMessage: viewModel.adaptiveHeroMessage
                 )
             }
             .reportTabHeroFrame()
@@ -277,6 +289,47 @@ struct DashboardView: View {
                 .transition(Self.sectionTransition)
                 .staggeredAppear(index: 0)
         }
+
+        // Yesterday Recap (morning only)
+        if viewModel.shouldShowYesterdayRecap {
+            YesterdayRecapCard(
+                workoutSummary: yesterdayWorkoutSummaryText,
+                sleepMinutes: viewModel.yesterdaySleepMinutes,
+                yesterdayScore: viewModel.yesterdayConditionScore,
+                todayScore: viewModel.conditionScore?.score
+            )
+            .transition(Self.sectionTransition)
+            .staggeredAppear(index: 1)
+        }
+
+        // Quick Actions Row
+        QuickActionsRow(
+            onLogWeight: {
+                if let weightMetric = viewModel.sortedMetrics.first(where: { $0.category == .weight }) {
+                    weightDetailNavigation = weightMetric
+                }
+            },
+            onOpenSleep: {
+                if let sleepMetric = viewModel.sortedMetrics.first(where: { $0.category == .sleep }) {
+                    sleepDetailNavigation = sleepMetric
+                }
+            },
+            onOpenBriefing: { isShowingBriefing = true },
+            onOpenHealthQA: { isShowingHealthDataQA = true }
+        )
+        .staggeredAppear(index: 2)
+
+        // Daily Progress Rings
+        DailyProgressRingCard(
+            stepsProgress: stepsProgress,
+            stepsValue: stepsValueText,
+            sleepProgress: sleepProgress,
+            sleepValue: sleepValueText,
+            habitProgress: habitProgress,
+            habitValue: habitValueText
+        )
+        .transition(Self.sectionTransition)
+        .staggeredAppear(index: 3)
 
         // Today's Brief (weather + coaching + briefing entry)
         if !isBriefingDisabled || viewModel.weatherSnapshot != nil || viewModel.focusInsight != nil || viewModel.coachingMessage != nil {
@@ -293,7 +346,7 @@ struct DashboardView: View {
                 }
             )
             .transition(Self.sectionTransition)
-            .staggeredAppear(index: 1)
+            .staggeredAppear(index: 4)
         }
 
         // Recovery & Sleep (sleep deficit + sleep insights)
@@ -308,7 +361,19 @@ struct DashboardView: View {
             }
         )
         .transition(Self.sectionTransition)
-        .staggeredAppear(index: 2)
+        .staggeredAppear(index: 5)
+
+        // Exercise Intelligence Card
+        if let suggestion = viewModel.workoutSuggestion, !suggestion.isRestDay {
+            ExerciseIntelligenceCard(
+                suggestion: suggestion,
+                conditionScore: viewModel.conditionScore?.score,
+                sleepMinutes: viewModel.sortedMetrics.first(where: { $0.category == .sleep })?.value,
+                onStartWorkout: {} // Workout start requires tab switch — handled by user
+            )
+            .transition(Self.sectionTransition)
+            .staggeredAppear(index: 6)
+        }
 
         // Smart Insights (non-sleep insights + template nudge)
         SmartInsightsSection(
@@ -329,13 +394,13 @@ struct DashboardView: View {
             }
         )
         .transition(Self.sectionTransition)
-        .staggeredAppear(index: 3)
+        .staggeredAppear(index: 7)
 
         // Health Q&A
         HealthDataQACard(isAvailable: HealthDataQAService.isAvailable) {
             isShowingHealthDataQA = true
         }
-        .staggeredAppear(index: 4)
+        .staggeredAppear(index: 8)
     }
 
     @ViewBuilder
@@ -344,7 +409,7 @@ struct DashboardView: View {
         if !viewModel.pinnedCards.isEmpty {
             pinnedSection
                 .transition(Self.sectionTransition)
-                .staggeredAppear(index: 5)
+                .staggeredAppear(index: 9)
         }
 
         // Last updated + error banner
@@ -371,7 +436,7 @@ struct DashboardView: View {
                 cards: viewModel.conditionCards
             )
             .transition(Self.sectionTransition)
-            .staggeredAppear(index: 6)
+            .staggeredAppear(index: 10)
         }
 
         // Activity (Steps, Exercise)
@@ -384,7 +449,7 @@ struct DashboardView: View {
                 cards: viewModel.activityCards
             )
             .transition(Self.sectionTransition)
-            .staggeredAppear(index: 7)
+            .staggeredAppear(index: 11)
         }
 
         // Body (Weight, BMI, Sleep)
@@ -397,7 +462,7 @@ struct DashboardView: View {
                 cards: viewModel.bodyCards
             )
             .transition(Self.sectionTransition)
-            .staggeredAppear(index: 8)
+            .staggeredAppear(index: 12)
         }
     }
 
@@ -430,6 +495,49 @@ struct DashboardView: View {
             cardGrid(cards: viewModel.pinnedCards)
                 .accessibilityIdentifier("dashboard-pinned-grid")
         }
+    }
+
+    // MARK: - Daily Progress Ring Data
+
+    private var stepsProgress: Double {
+        let steps = viewModel.sortedMetrics.first(where: { $0.category == .steps })?.value ?? 0
+        return steps / 10000 // Default goal: 10,000 steps
+    }
+
+    private var stepsValueText: String {
+        let steps = Int(viewModel.sortedMetrics.first(where: { $0.category == .steps })?.value ?? 0)
+        return steps.formattedWithSeparator
+    }
+
+    private var sleepProgress: Double {
+        let minutes = viewModel.sortedMetrics.first(where: { $0.category == .sleep })?.value ?? 0
+        return minutes / 480 // Default goal: 8 hours = 480 min
+    }
+
+    private var sleepValueText: String {
+        let minutes = viewModel.sortedMetrics.first(where: { $0.category == .sleep })?.value ?? 0
+        let h = Int(minutes) / 60
+        let m = Int(minutes) % 60
+        return m > 0 ? "\(h)h \(m)m" : "\(h)h"
+    }
+
+    // Habit progress: nil when no habit data available (shows 2-ring mode)
+    private var habitProgress: Double? { nil }
+    private var habitValueText: String? { nil }
+
+    // MARK: - Yesterday Recap Helpers
+
+    private var yesterdayWorkoutSummaryText: String? {
+        let calendar = Calendar.current
+        guard let yesterday = calendar.date(byAdding: .day, value: -1, to: Date()) else { return nil }
+        let records = exerciseRecords.filter { calendar.isDate($0.date, inSameDayAs: yesterday) }
+        guard !records.isEmpty else { return nil }
+        let totalSeconds = records.map(\.duration).reduce(0, +)
+        let totalMinutes = Int(totalSeconds / 60)
+        let h = totalMinutes / 60
+        let m = totalMinutes % 60
+        let durationText = h > 0 ? "\(h)h \(m)m" : "\(m)m"
+        return "\(records.count) \(records.count == 1 ? String(localized: "exercise") : String(localized: "exercises")) · \(durationText)"
     }
 
     private var dashboardLoadTrigger: String {

@@ -21,6 +21,13 @@ final class DashboardViewModel {
     var recentHighRPEStreak: Int = 0
     var templateNudgeRecommendation: WorkoutTemplateRecommendation?
     var heroBaselineDetails: [BaselineDetail] = []
+    private(set) var adaptiveHeroMessage: AdaptiveHeroMessage?
+
+    // Phase 2: Yesterday Recap data
+    private(set) var yesterdayWorkoutSummary: String?
+    private(set) var yesterdaySleepMinutes: Double?
+    private(set) var yesterdayConditionScore: Int?
+    private(set) var todayWorkoutDone = false
     var pinnedCategories: [HealthMetric.Category]
     var baselineDeltasByMetricID: [String: MetricBaselineDelta] = [:]
     private(set) var sleepDeficitAnalysis: SleepDeficitAnalysis?
@@ -291,6 +298,8 @@ final class DashboardViewModel {
         enhanceCoachingMessageIfAvailable()
         heroBaselineDetails = buildHeroBaselineDetails()
         briefingData = buildBriefingData()
+        buildAdaptiveHeroMessage()
+        buildYesterdayRecap()
         hasLoadedOnce = true
         lastUpdated = Date()
         WidgetDataWriter.writeConditionScore(conditionScore)
@@ -1548,5 +1557,50 @@ final class DashboardViewModel {
             .filter { $0.average > 0 && $0.average.isFinite }
             .map { .init(date: $0.date, value: $0.average) }
             .sorted { $0.date < $1.date }
+    }
+
+    // MARK: - Adaptive Hero Message
+
+    private func buildAdaptiveHeroMessage() {
+        let hour = Calendar.current.component(.hour, from: Date())
+        let exerciseMetric = sortedMetrics.first { $0.category == .exercise }
+        let workoutDone = exerciseMetric != nil && (exerciseMetric?.value ?? 0) > 0
+        todayWorkoutDone = workoutDone
+        let sleepDebt = sleepDeficitAnalysis?.weeklyDeficit
+        adaptiveHeroMessage = coachingEngine.generateAdaptiveHeroMessage(
+            hour: hour,
+            conditionScore: conditionScore,
+            sleepDebtMinutes: sleepDebt,
+            todayWorkoutDone: workoutDone
+        )
+    }
+
+    // MARK: - Yesterday Recap
+
+    private func buildYesterdayRecap() {
+        let calendar = Calendar.current
+        guard let yesterday = calendar.date(byAdding: .day, value: -1, to: Date()) else { return }
+
+        // Yesterday condition score from recentScores
+        let yesterdayStart = calendar.startOfDay(for: yesterday)
+        yesterdayConditionScore = recentScores.first {
+            calendar.isDate($0.date, inSameDayAs: yesterdayStart)
+        }?.score
+
+        // Yesterday sleep from deficit analysis daily data
+        yesterdaySleepMinutes = sleepDeficitAnalysis?.dailyDeficits.first {
+            calendar.isDate($0.date, inSameDayAs: yesterdayStart)
+        }?.actualMinutes
+
+        // Yesterday workout from exercise metric — simplified: check if exercise metric has change data
+        // The detailed exercise summary will come from ExerciseRecord query in the View layer
+        yesterdayWorkoutSummary = nil // Will be enriched from View's @Query
+    }
+
+    /// Whether Yesterday Recap card should be shown (06-12 hours only).
+    var shouldShowYesterdayRecap: Bool {
+        let hour = Calendar.current.component(.hour, from: Date())
+        guard hour >= 6, hour < 12 else { return false }
+        return yesterdayConditionScore != nil || yesterdaySleepMinutes != nil
     }
 }
