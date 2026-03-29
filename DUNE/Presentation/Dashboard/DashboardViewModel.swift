@@ -290,6 +290,9 @@ final class DashboardViewModel {
                 wellnessScore: nil,
                 readinessScore: nil
             )
+            // Reload sparklines synchronously (bypasses the 200ms debounce in
+            // scheduleSparklineReload) so the stored copy is up-to-date.
+            await service.loadTodaySparklines()
         }
 
         syncSparklines()
