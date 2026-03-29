@@ -258,9 +258,9 @@ actor SharedHealthDataServiceImpl: SharedHealthDataService {
         AppLogger.data.info("""
             [SharedHealthDataService] Snapshot built — \
             steps: \(todayStepsResult.value.map { String(format: "%.0f", $0) } ?? "nil", privacy: .public), \
-            exerciseToday: \(exerciseToday.map { String(format: "%.1f", $0) } ?? "nil", privacy: .public)min, \
-            exerciseRecent: \(exerciseRecent.map { String(format: "%.1f", $0.minutes) } ?? "nil", privacy: .public)min, \
-            weight: \(latestWeightResult.value.map { String(format: "%.1f", $0.value) } ?? "nil", privacy: .public)kg, \
+            exerciseToday: \(exerciseToday.map { String(format: "%.1fmin", $0) } ?? "nil", privacy: .public), \
+            exerciseRecent: \(exerciseRecent.map { String(format: "%.1fmin", $0.minutes) } ?? "nil", privacy: .public), \
+            weight: \(latestWeightResult.value.map { String(format: "%.1fkg", $0.value) } ?? "nil", privacy: .public), \
             bmi: \(latestBMIResult.value.map { String(format: "%.1f", $0.value) } ?? "nil", privacy: .public), \
             sleepDays: \(sleepDailyDurationsResult.value.count, privacy: .public), \
             failed: \(failedSources.map(\.rawValue).sorted(), privacy: .public)

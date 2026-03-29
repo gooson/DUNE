@@ -67,9 +67,9 @@ actor CloudMirroredSharedHealthDataService: SharedHealthDataService {
         AppLogger.data.info("""
             [CloudMirroredSnapshot] Loaded — \
             steps: \(snapshot.todaySteps.map { String(format: "%.0f", $0) } ?? "nil", privacy: .public), \
-            exerciseToday: \(snapshot.todayExerciseMinutes.map { String(format: "%.1f", $0) } ?? "nil", privacy: .public)min, \
-            exerciseRecent: \(snapshot.recentExercise.map { String(format: "%.1f", $0.minutes) } ?? "nil", privacy: .public)min, \
-            weight: \(snapshot.latestWeight.map { String(format: "%.1f", $0.value) } ?? "nil", privacy: .public)kg, \
+            exerciseToday: \(snapshot.todayExerciseMinutes.map { String(format: "%.1fmin", $0) } ?? "nil", privacy: .public), \
+            exerciseRecent: \(snapshot.recentExercise.map { String(format: "%.1fmin", $0.minutes) } ?? "nil", privacy: .public), \
+            weight: \(snapshot.latestWeight.map { String(format: "%.1fkg", $0.value) } ?? "nil", privacy: .public), \
             bmi: \(snapshot.latestBMI.map { String(format: "%.1f", $0.value) } ?? "nil", privacy: .public), \
             sleepDays: \(snapshot.sleepDailyDurations.count, privacy: .public), \
             sleepInput: \(snapshot.sleepScoreInput != nil ? "yes" : "nil", privacy: .public), \
