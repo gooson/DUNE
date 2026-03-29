@@ -235,7 +235,7 @@ struct CalculateCumulativeStressUseCase: Sendable {
         let recentValues = recentHalf.map(\.value)
 
         let olderMean = olderValues.reduce(0, +) / Double(olderValues.count)
-        let recentMean = recentValues.reduce(0, +) / Double(recentValues.count)
+        _ = recentValues.reduce(0, +) / Double(recentValues.count)
 
         guard olderMean > 0 else { return .insufficient }
 

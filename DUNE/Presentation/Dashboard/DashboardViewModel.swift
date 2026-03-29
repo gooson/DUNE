@@ -1607,14 +1607,14 @@ final class DashboardViewModel {
 
     private func buildCumulativeStressScore() {
         // Use HRV data already fetched for condition score
-        guard let conditionScore else {
+        guard conditionScore != nil else {
             cumulativeStressScore = nil
             return
         }
         // Build HRV daily averages from recent scores (we have 14-day window from condition)
         // For stress score we ideally want 30 days, but use what we have
         let dailyAverages = recentScores.compactMap { score -> CalculateCumulativeStressUseCase.Input.DailyAverage? in
-            guard let hrv = score.contributions.first(where: { $0.factor == .hrv }) else { return nil }
+            guard score.contributions.first(where: { $0.factor == .hrv }) != nil else { return nil }
             // Extract numeric value from detail string — use score as proxy
             return .init(date: score.date, value: Double(score.score))
         }
