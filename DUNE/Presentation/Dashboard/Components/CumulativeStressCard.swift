@@ -133,7 +133,7 @@ struct CumulativeStressCard: View {
     private var levelColor: Color {
         switch stressScore.level {
         case .low: DS.Color.positive
-        case .moderate: DS.Color.warning
+        case .moderate: DS.Color.caution
         case .elevated: .orange
         case .high: DS.Color.negative
         }

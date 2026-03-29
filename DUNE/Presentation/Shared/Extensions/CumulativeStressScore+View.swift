@@ -4,7 +4,7 @@ extension CumulativeStressScore.Level {
     var color: Color {
         switch self {
         case .low: DS.Color.positive
-        case .moderate: DS.Color.warning
+        case .moderate: DS.Color.caution
         case .elevated: .orange
         case .high: DS.Color.negative
         }

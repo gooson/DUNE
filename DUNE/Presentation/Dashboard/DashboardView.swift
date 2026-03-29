@@ -255,6 +255,9 @@ struct DashboardView: View {
         h.combine(viewModel.workoutSuggestion != nil)
         h.combine(viewModel.shouldShowYesterdayRecap)
         h.combine(viewModel.adaptiveHeroMessage != nil)
+        h.combine(viewModel.cumulativeStressScore != nil)
+        h.combine(viewModel.dailyDigest != nil)
+        h.combine(viewModel.currentTimeBand.rawValue)
         return h.finalize()
     }
 
@@ -298,7 +301,8 @@ struct DashboardView: View {
             .staggeredAppear(index: 1)
         }
 
-        // Quick Actions Row
+        // Quick Actions Row (hidden at night)
+        if viewModel.shouldShowQuickActions {
         QuickActionsRow(
             onLogWeight: {
                 if let weightMetric = viewModel.sortedMetrics.first(where: { $0.category == .weight }) {
@@ -314,8 +318,10 @@ struct DashboardView: View {
             onOpenHealthQA: { isShowingHealthDataQA = true }
         )
         .staggeredAppear(index: 2)
+        }
 
-        // Daily Progress Rings
+        // Daily Progress Rings (hidden at night)
+        if viewModel.shouldShowProgressRings {
         DailyProgressRingCard(
             stepsProgress: stepsProgress,
             stepsValue: stepsValueText,
@@ -326,9 +332,11 @@ struct DashboardView: View {
         )
         .transition(Self.sectionTransition)
         .staggeredAppear(index: 3)
+        }
 
-        // Today's Brief (weather + coaching + briefing entry)
-        if !isBriefingDisabled || viewModel.weatherSnapshot != nil || viewModel.focusInsight != nil || viewModel.coachingMessage != nil {
+        // Today's Brief (weather + coaching + briefing entry) — morning/daytime only
+        if viewModel.shouldShowTodaysBrief,
+           !isBriefingDisabled || viewModel.weatherSnapshot != nil || viewModel.focusInsight != nil || viewModel.coachingMessage != nil {
             TodayBriefCard(
                 weatherSnapshot: viewModel.weatherSnapshot,
                 weatherInsight: viewModel.weatherCardInsight,
@@ -359,8 +367,16 @@ struct DashboardView: View {
         .transition(Self.sectionTransition)
         .staggeredAppear(index: 5)
 
-        // Exercise Intelligence Card
-        if let suggestion = viewModel.workoutSuggestion, !suggestion.isRestDay {
+        // Cumulative Stress Score (Phase 3)
+        if let stressScore = viewModel.cumulativeStressScore {
+            CumulativeStressCard(stressScore: stressScore)
+                .transition(Self.sectionTransition)
+                .staggeredAppear(index: 6)
+        }
+
+        // Exercise Intelligence Card (morning/daytime only)
+        if viewModel.shouldShowExerciseIntelligence,
+           let suggestion = viewModel.workoutSuggestion, !suggestion.isRestDay {
             ExerciseIntelligenceCard(
                 suggestion: suggestion,
                 conditionScore: viewModel.conditionScore?.score,
@@ -391,6 +407,13 @@ struct DashboardView: View {
         )
         .transition(Self.sectionTransition)
         .staggeredAppear(index: 7)
+
+        // Daily Digest (evening/night only — Phase 3)
+        if let digest = viewModel.dailyDigest, viewModel.shouldShowDailyDigest {
+            DailyDigestCard(digest: digest)
+                .transition(Self.sectionTransition)
+                .staggeredAppear(index: 8)
+        }
 
         // Health Q&A
         HealthDataQACard(isAvailable: HealthDataQAService.isAvailable) {
