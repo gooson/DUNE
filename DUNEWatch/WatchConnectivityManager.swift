@@ -254,6 +254,10 @@ final class WatchConnectivityManager: NSObject {
         let session = WCSession.default
         guard session.activationState == .activated else { return }
 
+        if update.healthKitWorkoutID == nil {
+            Self.logger.debug("[WC] No healthKitWorkoutID for \(update.exerciseName, privacy: .public) — iPhone record will lack HK link")
+        }
+
         do {
             let data = try JSONEncoder().encode(update)
             let message: [String: Any] = ["workoutComplete": data]

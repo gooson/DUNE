@@ -585,6 +585,9 @@ extension WatchWorkoutUpdate {
         if let rpe = rpe, !(1...10).contains(rpe) {
             copy.rpe = nil
         }
+        if let id = healthKitWorkoutID, id.isEmpty || UUID(uuidString: id) == nil {
+            copy.healthKitWorkoutID = nil
+        }
         return copy
     }
 }

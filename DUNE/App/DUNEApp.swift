@@ -738,7 +738,7 @@ struct DUNEApp: App {
                 date: update.startTime,
                 exerciseType: update.exerciseName,
                 duration: max(0, duration),
-                healthKitWorkoutID: update.healthKitWorkoutID,
+                healthKitWorkoutID: update.healthKitWorkoutID.flatMap { UUID(uuidString: $0) != nil ? $0 : nil },
                 exerciseDefinitionID: update.exerciseID,
                 primaryMuscles: definition?.primaryMuscles ?? [],
                 secondaryMuscles: definition?.secondaryMuscles ?? [],
