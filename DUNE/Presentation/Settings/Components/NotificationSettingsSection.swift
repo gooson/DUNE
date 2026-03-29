@@ -11,6 +11,7 @@ struct NotificationSettingsSection: View {
     @AppStorage(BedtimeReminderLeadTime.watchStorageKey)
     private var appleWatchBedtimeReminderLeadTime: BedtimeReminderLeadTime = BedtimeReminderLeadTime.watchDefaultValue
     @AppStorage(PostureReminderScheduler.settingsKey) private var isPostureReminderEnabled = false
+    @AppStorage(DailyDigestScheduler.settingsKey) private var isDailyDigestEnabled = true
 
     /// Grouped insight types for display.
     private static let healthTypes: [HealthInsight.InsightType] = [
@@ -39,6 +40,9 @@ struct NotificationSettingsSection: View {
         .onChange(of: isPostureReminderEnabled) { _, _ in
             reschedulePostureReminder()
         }
+        .onChange(of: isDailyDigestEnabled) { _, _ in
+            rescheduleDailyDigest()
+        }
     }
 
     private var notificationsSection: some View {
@@ -47,7 +51,11 @@ struct NotificationSettingsSection: View {
                 notificationToggle(for: type)
             }
             notificationToggle(for: .workoutPR)
-            notificationToggle(for: .dailyDigest)
+            Toggle(isOn: $isDailyDigestEnabled) {
+                Label(HealthInsight.InsightType.dailyDigest.settingsDisplayName,
+                      systemImage: HealthInsight.InsightType.dailyDigest.settingsIcon)
+            }
+            .accessibilityIdentifier("settings-row-daily-digest")
         } header: {
             Text("Notifications")
         } footer: {
@@ -130,6 +138,12 @@ struct NotificationSettingsSection: View {
     private func reschedulePostureReminder() {
         Task {
             await PostureReminderScheduler.shared.refreshSchedule()
+        }
+    }
+
+    private func rescheduleDailyDigest() {
+        Task {
+            await DailyDigestScheduler.shared.refreshSchedule()
         }
     }
 }

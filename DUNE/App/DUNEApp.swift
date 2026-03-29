@@ -650,6 +650,7 @@ struct DUNEApp: App {
             await BedtimeReminderScheduler.shared.refreshSchedule()
             await AppleWatchBedtimeReminderScheduler.shared.refreshSchedule()
             await PostureReminderScheduler.shared.refreshSchedule()
+            await DailyDigestScheduler.shared.refreshSchedule()
         }
         scheduleWorkoutTitleBackfill()
         backfillHealthKitWorkoutIDs()
@@ -690,6 +691,7 @@ struct DUNEApp: App {
                     await BedtimeReminderScheduler.shared.refreshSchedule(force: true)
                     await AppleWatchBedtimeReminderScheduler.shared.refreshSchedule(force: true)
                     await PostureReminderScheduler.shared.refreshSchedule()
+                    await DailyDigestScheduler.shared.refreshSchedule()
                 }
             } catch {
                 AppLogger.notification.error("Deferred notification authorization failed: \(error.localizedDescription)")
