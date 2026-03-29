@@ -1592,30 +1592,14 @@ final class DashboardViewModel {
 
     private(set) var currentTimeBand: DashboardTimeBand = .morning
 
-    /// Whether the daily digest should be visible (evening/night only, after generation).
-    var shouldShowDailyDigest: Bool {
-        dailyDigest != nil && (currentTimeBand == .evening || currentTimeBand == .night)
-    }
-
-    /// Whether quick actions should be visible (not shown at night).
-    var shouldShowQuickActions: Bool {
-        currentTimeBand != .night
-    }
-
-    /// Whether progress rings should be visible (not shown at night).
-    var shouldShowProgressRings: Bool {
-        currentTimeBand != .night
-    }
-
-    /// Whether today's brief should be visible (morning and daytime only).
-    var shouldShowTodaysBrief: Bool {
-        currentTimeBand == .morning || currentTimeBand == .daytime
-    }
-
-    /// Whether exercise intelligence card should be visible (morning and daytime only).
-    var shouldShowExerciseIntelligence: Bool {
-        currentTimeBand == .morning || currentTimeBand == .daytime
-    }
+    // Time-band visibility flags — stored to avoid observation feedback loops.
+    // Computed properties reading currentTimeBand from body cause cascade invalidation
+    // during NavigationStack transitions (Correction: .environment() @Observable rule).
+    private(set) var shouldShowDailyDigest = false
+    private(set) var shouldShowQuickActions = true
+    private(set) var shouldShowProgressRings = true
+    private(set) var shouldShowTodaysBrief = true
+    private(set) var shouldShowExerciseIntelligence = true
 
     // MARK: - Cumulative Stress Score
 
@@ -1687,6 +1671,7 @@ final class DashboardViewModel {
         // Only generate after 17:00 (5 PM)
         guard hour >= 17 else {
             dailyDigest = nil
+            shouldShowDailyDigest = false
             return
         }
 
@@ -1705,11 +1690,22 @@ final class DashboardViewModel {
         )
 
         dailyDigest = digestUseCase.execute(metrics: metrics)
+        shouldShowDailyDigest = dailyDigest != nil && (currentTimeBand == .evening || currentTimeBand == .night)
+    }
+
+    private func updateTimeBandVisibility() {
+        let band = currentTimeBand
+        shouldShowQuickActions = band != .night
+        shouldShowProgressRings = band != .night
+        shouldShowTodaysBrief = band == .morning || band == .daytime
+        shouldShowExerciseIntelligence = band == .morning || band == .daytime
+        // shouldShowDailyDigest depends on dailyDigest being non-nil — set after buildDailyDigest()
     }
 
     private func buildAdaptiveHeroMessage() {
         let hour = Calendar.current.component(.hour, from: Date())
         currentTimeBand = DashboardTimeBand.from(hour: hour)
+        updateTimeBandVisibility()
         let exerciseMetric = sortedMetrics.first { $0.category == .exercise }
         let workoutDone = exerciseMetric != nil && (exerciseMetric?.value ?? 0) > 0
         todayWorkoutDone = workoutDone

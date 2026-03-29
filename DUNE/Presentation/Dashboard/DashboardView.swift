@@ -256,8 +256,9 @@ struct DashboardView: View {
         h.combine(viewModel.shouldShowYesterdayRecap)
         h.combine(viewModel.adaptiveHeroMessage != nil)
         h.combine(viewModel.cumulativeStressScore != nil)
-        h.combine(viewModel.dailyDigest != nil)
-        h.combine(viewModel.currentTimeBand.rawValue)
+        h.combine(viewModel.shouldShowDailyDigest)
+        h.combine(viewModel.shouldShowQuickActions)
+        h.combine(viewModel.shouldShowTodaysBrief)
         return h.finalize()
     }
 
