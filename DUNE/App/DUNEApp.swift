@@ -704,6 +704,13 @@ struct DUNEApp: App {
         WatchSessionManager.shared.onWorkoutReceived = { update in
             let context = ModelContext(modelContainer)
 
+            // Tombstone: skip if this workout was previously deleted by the user
+            if let hkID = update.healthKitWorkoutID, !hkID.isEmpty,
+               DeletedWorkoutTombstoneStore.shared.isDeleted(healthKitWorkoutID: hkID) {
+                AppLogger.data.debug("[WatchSync] Skipped tombstoned workout: \(update.exerciseName)")
+                return
+            }
+
             // Dedup: skip if a record with matching healthKitWorkoutID already exists (CloudKit may have synced first)
             if let hkID = update.healthKitWorkoutID, !hkID.isEmpty {
                 var hkDedup = FetchDescriptor<ExerciseRecord>(
@@ -853,6 +860,10 @@ struct DUNEApp: App {
                 }
                 if let match {
                     let uuid = match.uuid.uuidString
+                    // Skip if this HKWorkout was previously deleted by the user
+                    guard !DeletedWorkoutTombstoneStore.shared.isDeleted(healthKitWorkoutID: uuid) else {
+                        continue
+                    }
                     record.healthKitWorkoutID = uuid
                     linkedCount += 1
                     AppLogger.data.debug("[HKBackfill] Linked \(record.exerciseType) → \(uuid)")

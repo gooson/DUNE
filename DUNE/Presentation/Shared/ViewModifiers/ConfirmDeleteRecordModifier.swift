@@ -28,6 +28,11 @@ struct ConfirmDeleteRecordModifier: ViewModifier {
                         WorkoutActivityType.infer(from: record.exerciseType)
                         ?? (record.hasSetData ? .traditionalStrengthTraining : nil)
 
+                    // Record tombstone before delete to prevent re-creation via bulk sync/backfill
+                    if let hkID = hkWorkoutID, !hkID.isEmpty {
+                        DeletedWorkoutTombstoneStore.shared.recordDeletion(healthKitWorkoutID: hkID)
+                    }
+
                     // SwiftData delete first (authoritative action).
                     // Wrap in withAnimation so List/ForEach can properly diff the collection change.
                     // Without this, @Query fires synchronously and the UICollectionView count
