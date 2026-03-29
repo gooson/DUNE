@@ -66,7 +66,8 @@ struct NocturnalVitalsChartView: View {
                     .chartYAxis {
                         AxisMarks(position: .leading)
                     }
-                    .frame(height: 160)
+                    .padding(.top, 16)
+                    .frame(height: 176)
                     .clipped()
                 } else {
                     Text(String(localized: "No data available for this metric"))
