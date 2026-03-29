@@ -133,9 +133,6 @@ struct DashboardView: View {
         .navigationDestination(for: AllDataDestination.self) { destination in
             AllDataView(category: destination.category)
         }
-        .navigationDestination(for: WeatherSnapshot.self) { snapshot in
-            WeatherDetailView(snapshot: snapshot)
-        }
         .navigationDestination(item: $weatherDetailNavigation) { snapshot in
             WeatherDetailView(snapshot: snapshot)
         }
