@@ -6,6 +6,8 @@
 - WatchConnectivity DTO는 `Domain/Models/WatchConnectivityModels.swift` 단일 소스 유지
 - Watch 입력도 iOS 동일 수준 검증
 - Watch `isReachable`은 computed property
+- WC DTO는 Watch SwiftData ExerciseRecord의 모든 링크 필드를 포함해야 함: WC가 CloudKit보다 먼저 도착하므로, WC 경로로 만든 iPhone ExerciseRecord에 누락된 필드가 있으면 CloudKit dedup이 이를 덮어쓰지 못함. 특히 `healthKitWorkoutID` 같은 외부 시스템 링크 필드는 WC DTO에 반드시 포함하고, iPhone receiver에서 ExerciseRecord 생성 시 설정할 것
+- WC/CloudKit 이중 경로 dedup은 2단계: (1) 고유 키(`healthKitWorkoutID`) 매칭 → (2) `exerciseType + date ±120s` 폴백. 고유 키가 있으면 날짜 윈도우 전에 먼저 검사
 
 ## UI 표시
 
