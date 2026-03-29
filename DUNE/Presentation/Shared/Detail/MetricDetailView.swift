@@ -95,29 +95,67 @@ struct MetricDetailView: View {
                 }
                 .staggeredAppear(index: 3)
 
-                if metric.category == .sleep, let averageBedtime = viewModel.averageBedtime {
-                    AverageBedtimeCard(averageBedtime: averageBedtime)
-                        .staggeredAppear(index: 4)
-                }
-
-                // Sleep deficit gauge
-                if metric.category == .sleep, let deficit = viewModel.deficitAnalysis,
-                   deficit.level != .insufficient {
-                    SleepDeficitGaugeView(analysis: deficit)
-                        .staggeredAppear(index: 5)
-                }
-
-                // Sleep enhanced insights (always show cards when sleep category)
+                // Sleep sections grouped by category
                 if metric.category == .sleep {
-                    WakeAnalysisCard(analysis: viewModel.wasoAnalysis)
-                    BreathingDisturbanceCard(analysis: viewModel.breathingAnalysis)
-                    SleepRegularityCard(regularity: viewModel.sleepRegularity)
-                    NapDetectionCard(analysis: viewModel.napAnalysis)
-                    SleepDebtRecoveryCard(prediction: viewModel.debtRecoveryPrediction)
-                    SleepExerciseCorrelationCard(correlation: viewModel.exerciseCorrelation)
-                    NocturnalVitalsChartView(snapshot: viewModel.nocturnalVitals)
-                    VitalsTimelineCard(analysis: viewModel.vitalsTimeline)
-                    SleepEnvironmentCard(analysis: viewModel.sleepEnvironment)
+                    // Group 1: Sleep Quality
+                    SectionGroup(
+                        title: "Sleep Quality",
+                        icon: "bed.double.fill",
+                        iconColor: DS.Color.sleep,
+                        subtitle: "Analyzes sleep debt, recovery forecast, and awakening patterns"
+                    ) {
+                        if let deficit = viewModel.deficitAnalysis,
+                           deficit.level != .insufficient {
+                            SleepDeficitGaugeView(analysis: deficit)
+                        }
+                        WakeAnalysisCard(analysis: viewModel.wasoAnalysis)
+                        SleepDebtRecoveryCard(prediction: viewModel.debtRecoveryPrediction)
+                    }
+                    .accessibilityIdentifier("sleep-section-quality")
+                    .staggeredAppear(index: 4)
+
+                    // Group 2: Sleep Patterns
+                    SectionGroup(
+                        title: "Sleep Patterns",
+                        icon: "clock.badge.checkmark",
+                        iconColor: DS.Color.sleep,
+                        subtitle: "Tracks bedtime regularity and nap patterns"
+                    ) {
+                        if let averageBedtime = viewModel.averageBedtime {
+                            AverageBedtimeCard(averageBedtime: averageBedtime)
+                        }
+                        SleepRegularityCard(regularity: viewModel.sleepRegularity)
+                        NapDetectionCard(analysis: viewModel.napAnalysis)
+                    }
+                    .accessibilityIdentifier("sleep-section-patterns")
+                    .staggeredAppear(index: 5)
+
+                    // Group 3: Nocturnal Health
+                    SectionGroup(
+                        title: "Nocturnal Health",
+                        icon: "heart.text.clipboard",
+                        iconColor: DS.Color.sleep,
+                        subtitle: "Monitors heart rate, breathing, and oxygen levels during sleep"
+                    ) {
+                        NocturnalVitalsChartView(snapshot: viewModel.nocturnalVitals)
+                        VitalsTimelineCard(analysis: viewModel.vitalsTimeline)
+                        BreathingDisturbanceCard(analysis: viewModel.breathingAnalysis)
+                    }
+                    .accessibilityIdentifier("sleep-section-nocturnal")
+                    .staggeredAppear(index: 6)
+
+                    // Group 4: External Factors
+                    SectionGroup(
+                        title: "External Factors",
+                        icon: "arrow.triangle.branch",
+                        iconColor: DS.Color.sleep,
+                        subtitle: "Explores how exercise and environment affect your sleep"
+                    ) {
+                        SleepExerciseCorrelationCard(correlation: viewModel.exerciseCorrelation)
+                        SleepEnvironmentCard(analysis: viewModel.sleepEnvironment)
+                    }
+                    .accessibilityIdentifier("sleep-section-external")
+                    .staggeredAppear(index: 7)
                 }
 
                 // Exercise totals + Highlights
