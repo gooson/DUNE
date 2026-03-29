@@ -184,6 +184,8 @@ final class BackgroundNotificationEvaluator: Sendable {
             return nil
         case .postureReminder:
             return nil
+        case .dailyDigest:
+            return nil
         }
     }
 
