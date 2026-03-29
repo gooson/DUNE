@@ -47,6 +47,7 @@ struct YesterdayRecapCard: View {
                         }
                     }
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
             .accessibilityIdentifier("dashboard-yesterday-recap")
         }
