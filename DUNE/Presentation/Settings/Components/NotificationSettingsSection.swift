@@ -47,6 +47,7 @@ struct NotificationSettingsSection: View {
                 notificationToggle(for: type)
             }
             notificationToggle(for: .workoutPR)
+            notificationToggle(for: .dailyDigest)
         } header: {
             Text("Notifications")
         } footer: {
