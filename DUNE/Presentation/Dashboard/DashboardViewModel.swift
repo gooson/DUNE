@@ -973,7 +973,8 @@ final class DashboardViewModel {
             currentExerciseDate = today
             isCurrentHistorical = false
         } else if let latest = recentWorkouts.first {
-            let totalMinutes = latest.duration / 60.0
+            let latestDay = calendar.startOfDay(for: latest.date)
+            let totalMinutes = minutesByDay[latestDay] ?? (latest.duration / 60.0)
             metrics.append(HealthMetric(
                 id: "exercise",
                 name: String(localized: "Exercise"),
