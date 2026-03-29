@@ -110,7 +110,8 @@ struct DashboardView: View {
                     }
                 }
                 .padding(sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.lg)
-                .animation(reduceMotion ? .none : DS.Animation.standard, value: sectionVisibilityHash)
+                // animation on sectionVisibilityHash removed — causes NavigationStack
+                // feedback loop during Settings push (observation re-entrancy)
                 .coordinateSpace(name: TabHeroStartLine.coordinateSpace)
             }
             .onChange(of: scrollToTopSignal) { _, _ in
