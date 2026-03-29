@@ -20,6 +20,7 @@ struct WatchWorkoutUpdate: Codable, Sendable {
     let endTime: Date?
     var heartRateSamples: [WatchHeartRateSample]
     var rpe: Int?
+    var healthKitWorkoutID: String?
 }
 
 struct WatchSetData: Codable, Sendable {
