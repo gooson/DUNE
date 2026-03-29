@@ -36,6 +36,7 @@ final class ActivityViewModel {
     var personalRecordNotice: String?
     var workoutRewardSummary: WorkoutRewardSummary = .empty
     var workoutRewardHistory: [WorkoutRewardEvent] = []
+    var unlockedBadgeKeys: Set<String> = []
     var workoutStreak: WorkoutStreak?
     var exerciseFrequencies: [ExerciseFrequency] = []
     var weeklyStats: [ActivityStat] = []
@@ -540,6 +541,62 @@ final class ActivityViewModel {
 
         workoutRewardSummary = personalRecordStore.rewardSummary()
         workoutRewardHistory = personalRecordStore.rewardHistory(limit: 40)
+
+        // Evaluate badges against cumulative stats
+        let badgeStats = computeBadgeStats()
+        unlockedBadgeKeys = personalRecordStore.evaluateBadges(stats: badgeStats)
+    }
+
+    private func computeBadgeStats() -> BadgeEvaluationStats {
+        let snapshots = allExerciseSnapshots
+        guard !snapshots.isEmpty else { return .empty }
+
+        // Single pass over PRs for kinds, improvement, pace
+        let allPRs = personalRecords
+        var distinctKinds = Set<ActivityPersonalRecord.Kind>()
+        var bestImprovement = 0.0
+        var bestPace = 0.0
+        for pr in allPRs {
+            distinctKinds.insert(pr.kind)
+            if pr.kind == .fastestPace, pr.value > 0 {
+                bestPace = bestPace == 0 ? pr.value : min(bestPace, pr.value)
+            }
+            if let prev = pr.previousValue, prev > 0, !pr.kind.isLowerBetter {
+                let improvement = ((pr.value - prev) / prev) * 100
+                bestImprovement = max(bestImprovement, improvement)
+            }
+        }
+
+        // PR count from reward history events (not display rows)
+        let totalPRCount = workoutRewardHistory.filter { $0.kind == .personalRecord }.count
+
+        // Cumulative volume from actual exercise snapshots (not PR peaks)
+        let totalVolume = snapshots.compactMap(\.totalWeight).reduce(0.0, +)
+
+        // Streak
+        let bestStreak = workoutStreak?.bestStreak ?? 0
+
+        // Single pass over snapshots for workout days + first date
+        let cal = Calendar.current
+        var uniqueDays = Set<Date>()
+        var firstDate = Date.distantFuture
+        for snapshot in snapshots {
+            uniqueDays.insert(cal.startOfDay(for: snapshot.date))
+            if snapshot.date < firstDate { firstDate = snapshot.date }
+        }
+        let totalWorkouts = uniqueDays.count
+        let daysSinceFirst = max(0, cal.dateComponents([.day], from: firstDate, to: Date()).day ?? 0)
+
+        return BadgeEvaluationStats(
+            totalPRCount: totalPRCount,
+            distinctPRKindCount: distinctKinds.count,
+            totalVolumeKg: totalVolume,
+            bestStreakDays: bestStreak,
+            totalWorkoutCount: totalWorkouts,
+            daysSinceFirstWorkout: daysSinceFirst,
+            bestImprovementPercent: bestImprovement,
+            bestPacePerKm: bestPace
+        )
     }
 
     private func rebuildWeeklyStats() {

@@ -109,6 +109,27 @@ struct WorkoutRewardOutcome: Sendable {
     let summary: WorkoutRewardSummary
 }
 
+// MARK: - Badge Evaluation Stats
+
+/// Aggregated statistics used to evaluate badge unlock conditions.
+struct BadgeEvaluationStats: Sendable {
+    let totalPRCount: Int
+    let distinctPRKindCount: Int
+    let totalVolumeKg: Double
+    let bestStreakDays: Int
+    let totalWorkoutCount: Int
+    let daysSinceFirstWorkout: Int
+    let bestImprovementPercent: Double
+    /// Fastest pace in seconds per km (0 = no data).
+    let bestPacePerKm: Double
+
+    static let empty = BadgeEvaluationStats(
+        totalPRCount: 0, distinctPRKindCount: 0, totalVolumeKg: 0,
+        bestStreakDays: 0, totalWorkoutCount: 0, daysSinceFirstWorkout: 0,
+        bestImprovementPercent: 0, bestPacePerKm: 0
+    )
+}
+
 // MARK: - Level Tier System
 
 /// Named tier within the reward level progression.
@@ -206,6 +227,37 @@ struct WorkoutBadgeDefinition: Identifiable, Sendable, Hashable {
                 isUnlocked: unlockedKeys.contains(def.id),
                 unlockedDate: eventDates[def.id]
             )
+        }
+    }
+
+    /// Evaluates which badge IDs should be unlocked based on cumulative stats.
+    /// Returns only newly unlockable IDs (not already in `currentUnlocked`).
+    static func evaluateUnlocks(
+        stats: BadgeEvaluationStats,
+        currentUnlocked: Set<String>
+    ) -> [String] {
+        let rules: [(id: String, check: (BadgeEvaluationStats) -> Bool)] = [
+            ("badge-first-pr", { $0.totalPRCount >= 1 }),
+            ("badge-10-prs", { $0.totalPRCount >= 10 }),
+            ("badge-50-prs", { $0.totalPRCount >= 50 }),
+            ("badge-all-kinds", { $0.distinctPRKindCount >= 5 }),
+            ("badge-1k-volume", { $0.totalVolumeKg >= 1_000 }),
+            ("badge-10k-volume", { $0.totalVolumeKg >= 10_000 }),
+            ("badge-100k-volume", { $0.totalVolumeKg >= 100_000 }),
+            ("badge-7-streak", { $0.bestStreakDays >= 7 }),
+            ("badge-30-streak", { $0.bestStreakDays >= 30 }),
+            ("badge-100-streak", { $0.bestStreakDays >= 100 }),
+            ("badge-first-workout", { $0.totalWorkoutCount >= 1 }),
+            ("badge-100-workouts", { $0.totalWorkoutCount >= 100 }),
+            ("badge-365-days", { $0.daysSinceFirstWorkout >= 365 }),
+            ("badge-10pct-improve", { $0.bestImprovementPercent >= 10 }),
+            ("badge-double-lift", { $0.bestImprovementPercent >= 100 }),
+            ("badge-sub5-pace", { $0.bestPacePerKm > 0 && $0.bestPacePerKm <= 300 }),
+        ]
+
+        return rules.compactMap { rule in
+            guard !currentUnlocked.contains(rule.id), rule.check(stats) else { return nil }
+            return rule.id
         }
     }
 }

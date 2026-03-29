@@ -7,6 +7,7 @@ struct PersonalRecordsDetailView: View {
     let notice: String?
     let rewardSummary: WorkoutRewardSummary
     let rewardHistory: [WorkoutRewardEvent]
+    var unlockedBadgeKeys: Set<String> = []
 
     @State private var viewModel = PersonalRecordsDetailViewModel()
     @Environment(\.appTheme) private var theme
@@ -90,6 +91,7 @@ struct PersonalRecordsDetailView: View {
             viewModel.load(records: records)
             viewModel.rewardSummary = rewardSummary
             viewModel.rewardHistory = rewardHistory
+            viewModel.unlockedBadgeKeys = unlockedBadgeKeys
             viewModel.refreshRewardDerived()
             if viewModel.selectedKind == nil {
                 viewModel.selectedKind = viewModel.availableKinds.first

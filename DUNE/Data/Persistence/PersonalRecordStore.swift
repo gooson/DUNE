@@ -98,6 +98,31 @@ final class PersonalRecordStore: @unchecked Sendable {
         })
     }
 
+    /// Returns current set of unlocked badge keys (both legacy and new definition-based).
+    func unlockedBadgeKeySet() -> Set<String> {
+        Set(loadRewardState().unlockedBadges)
+    }
+
+    /// Evaluates all 16 badge definitions against cumulative stats.
+    /// Unlocks any newly qualifying badges and persists them.
+    /// Returns the set of all unlocked badge keys after evaluation.
+    @discardableResult
+    func evaluateBadges(stats: BadgeEvaluationStats) -> Set<String> {
+        var state = loadRewardState()
+        let currentUnlocked = Set(state.unlockedBadges)
+        let newlyUnlocked = WorkoutBadgeDefinition.evaluateUnlocks(
+            stats: stats,
+            currentUnlocked: currentUnlocked
+        )
+
+        if !newlyUnlocked.isEmpty {
+            state.unlockedBadges.append(contentsOf: newlyUnlocked)
+            saveRewardState(state)
+        }
+
+        return Set(state.unlockedBadges)
+    }
+
     /// Returns latest reward history events.
     func rewardHistory(limit: Int = 50) -> [WorkoutRewardEvent] {
         let state = loadRewardState()
