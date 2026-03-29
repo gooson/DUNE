@@ -9,6 +9,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT_DIR"
 source "$ROOT_DIR/scripts/lib/regen-project.sh"
+source "$ROOT_DIR/scripts/lib/simulator-boot.sh"
 
 PROJECT_SPEC="DUNE/project.yml"
 PROJECT_FILE="DUNE/DUNE.xcodeproj"
@@ -151,8 +152,7 @@ RESOLVED_WATCH_SIM_OS="$WATCH_SIM_OS"
 if [[ -n "$DEVICE_INFO" ]]; then
     IFS=$'\t' read -r DEVICE_UDID RESOLVED_WATCH_SIM_NAME RESOLVED_WATCH_SIM_OS <<< "$DEVICE_INFO"
     DESTINATION="id=${DEVICE_UDID}"
-    xcrun simctl boot "$DEVICE_UDID" 2>/dev/null || true
-    echo "Watch simulator booted: $RESOLVED_WATCH_SIM_NAME ($RESOLVED_WATCH_SIM_OS) [$DEVICE_UDID]"
+    wait_for_simulator_boot "$DEVICE_UDID" "watchOS"
 else
     echo "Warning: Could not find watch simulator '$WATCH_SIM_NAME' (OS $WATCH_SIM_OS). xcodebuild will attempt to boot one."
 fi

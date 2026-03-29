@@ -9,6 +9,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT_DIR"
 source "$ROOT_DIR/scripts/lib/regen-project.sh"
+source "$ROOT_DIR/scripts/lib/simulator-boot.sh"
 
 PROJECT_SPEC="DUNE/project.yml"
 PROJECT_FILE="DUNE/DUNE.xcodeproj"
@@ -174,6 +175,26 @@ fi
 
 if [[ "$MODE" != "ios" && -z "${DAILVE_WATCH_DESTINATION:-}" ]]; then
     WATCH_DESTINATION="$(resolve_sim_destination "watchOS" "watchOS-${WATCH_SIM_OS//./-}" "$WATCH_SIM_NAME" "$WATCH_SIM_OS" "26")"
+fi
+
+preboot_from_destination() {
+    local destination="$1"
+    local label="$2"
+    local udid
+    udid=$(echo "$destination" | grep -oE 'id=[0-9A-Fa-f-]+' | cut -d= -f2) || true
+    if [[ -z "$udid" ]]; then
+        echo "Warning: Could not extract UDID from destination '$destination'. Skipping pre-boot."
+        return
+    fi
+    wait_for_simulator_boot "$udid" "$label"
+}
+
+if [[ "$MODE" != "watch" ]]; then
+    preboot_from_destination "$IOS_DESTINATION" "iOS"
+fi
+
+if [[ "$MODE" != "ios" ]]; then
+    preboot_from_destination "$WATCH_DESTINATION" "watchOS"
 fi
 
 IOS_LOG_FILE="$LOG_FILE"

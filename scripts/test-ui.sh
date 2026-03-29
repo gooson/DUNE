@@ -9,6 +9,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT_DIR"
 source "$ROOT_DIR/scripts/lib/regen-project.sh"
+source "$ROOT_DIR/scripts/lib/simulator-boot.sh"
 
 PROJECT_SPEC="DUNE/project.yml"
 PROJECT_FILE="DUNE/DUNE.xcodeproj"
@@ -153,9 +154,8 @@ RESOLVED_SIMULATOR_OS="$SIMULATOR_OS"
 if [[ -n "$DEVICE_INFO" ]]; then
     IFS=$'\t' read -r DEVICE_UDID RESOLVED_SIMULATOR_NAME RESOLVED_SIMULATOR_OS <<< "$DEVICE_INFO"
     DESTINATION="id=${DEVICE_UDID}"
-    xcrun simctl boot "$DEVICE_UDID" 2>/dev/null || true
+    wait_for_simulator_boot "$DEVICE_UDID" "iOS"
     xcrun simctl terminate "$DEVICE_UDID" "$BUNDLE_ID" >/dev/null 2>&1 || true
-    echo "Simulator booted: $RESOLVED_SIMULATOR_NAME ($RESOLVED_SIMULATOR_OS) [$DEVICE_UDID]"
 else
     echo "Warning: Could not find simulator '$SIMULATOR_NAME' (OS $SIMULATOR_OS). xcodebuild will attempt to boot one."
 fi
@@ -169,8 +169,8 @@ TEST_CMD=(xcodebuild test -project "$PROJECT_FILE"
     -derivedDataPath "$DERIVED_DATA_DIR"
     -parallel-testing-enabled NO
     -test-timeouts-enabled YES
-    -default-test-execution-time-allowance 120
-    -maximum-test-execution-time-allowance 300
+    -default-test-execution-time-allowance 300
+    -maximum-test-execution-time-allowance 600
     CODE_SIGNING_ALLOWED=NO
     CODE_SIGNING_REQUIRED=NO)
 

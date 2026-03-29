@@ -139,6 +139,6 @@ struct WatchRPEEstimatorTests {
     // MARK: - Helpers
 
     private func makeSet(weight: Double, reps: Int, setNumber: Int = 1) -> CompletedSetData {
-        CompletedSetData(setNumber: setNumber, weight: weight, reps: reps, completedAt: Date())
+        CompletedSetData(setNumber: setNumber, weight: weight, reps: reps, duration: nil, completedAt: Date())
     }
 }
