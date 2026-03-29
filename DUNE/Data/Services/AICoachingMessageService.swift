@@ -52,6 +52,9 @@ struct AICoachingMessageService: CoachingMessageEnhancing, Sendable {
                 actionHint: insight.actionHint
             )
         } catch {
+            AppLogger.ai.error(
+                "[CoachingMessage] inference failed: \(String(describing: error), privacy: .private)"
+            )
             return insight
         }
     }
