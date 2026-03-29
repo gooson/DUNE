@@ -46,6 +46,16 @@ final class DashboardViewModel {
         return (insight.category == .weather && weatherSnapshot != nil) ? nil : insight
     }
 
+    /// Sleep-category insight cards for RecoverySleepCard.
+    var sleepInsightCards: [InsightCardData] {
+        insightCards.filter { $0.category == .sleep }
+    }
+
+    /// Non-sleep insight cards for SmartInsightsSection.
+    var nonSleepInsightCards: [InsightCardData] {
+        insightCards.filter { $0.category != .sleep }
+    }
+
     private(set) var pinnedMetrics: [HealthMetric] = []
     private(set) var activeDaysThisWeek = 0
     private(set) var isMirroredReadOnlyMode = false
