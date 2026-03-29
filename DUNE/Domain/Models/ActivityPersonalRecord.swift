@@ -56,6 +56,9 @@ struct ActivityPersonalRecord: Sendable, Hashable, Identifiable {
     let source: Source
     let workoutID: String?
 
+    // Delta from previous best (nil if first record for this kind).
+    let previousValue: Double?
+
     // Optional context for richer cards/detail.
     let heartRateAvg: Double?
     let heartRateMax: Double?
@@ -76,6 +79,7 @@ struct ActivityPersonalRecord: Sendable, Hashable, Identifiable {
         isRecent: Bool,
         source: Source,
         workoutID: String? = nil,
+        previousValue: Double? = nil,
         heartRateAvg: Double? = nil,
         heartRateMax: Double? = nil,
         heartRateMin: Double? = nil,
@@ -94,6 +98,7 @@ struct ActivityPersonalRecord: Sendable, Hashable, Identifiable {
         self.isRecent = isRecent
         self.source = source
         self.workoutID = workoutID
+        self.previousValue = previousValue
         self.heartRateAvg = heartRateAvg
         self.heartRateMax = heartRateMax
         self.heartRateMin = heartRateMin
@@ -102,6 +107,33 @@ struct ActivityPersonalRecord: Sendable, Hashable, Identifiable {
         self.weatherCondition = weatherCondition
         self.weatherHumidity = weatherHumidity
         self.isIndoor = isIndoor
+    }
+}
+
+extension ActivityPersonalRecord {
+    /// Delta from previous best. Positive means improvement.
+    var deltaValue: Double? {
+        guard let prev = previousValue else { return nil }
+        return kind.isLowerBetter ? prev - value : value - prev
+    }
+
+    /// Formatted delta string (e.g., "+5.2" or "-0:12").
+    var formattedDelta: String? {
+        guard let delta = deltaValue, abs(delta) > 0.01 else { return nil }
+        let sign = delta > 0 ? "+" : ""
+        switch kind {
+        case .fastestPace:
+            let totalSeconds = Int(abs(delta))
+            let minutes = totalSeconds / 60
+            let seconds = totalSeconds % 60
+            return "\(sign)\(minutes)'\(String(format: "%02d", seconds))\""
+        case .longestDistance:
+            return "\(sign)\((delta / 1000.0).formattedWithSeparator(fractionDigits: 1))km"
+        case .longestDuration:
+            return "\(sign)\(TimeInterval(abs(delta)).formattedDuration())"
+        default:
+            return "\(sign)\(delta.formattedWithSeparator())"
+        }
     }
 }
 

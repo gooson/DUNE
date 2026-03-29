@@ -13,7 +13,7 @@ struct PersonalRecordsSection: View {
          GridItem(.flexible(), spacing: DS.Spacing.sm)]
     }
 
-    private let cardMinHeight: CGFloat = 148
+    private let cardMinHeight: CGFloat = 120
 
     var body: some View {
         if records.isEmpty {
@@ -102,16 +102,13 @@ struct PersonalRecordsSection: View {
 
                 Spacer(minLength: 0)
 
-                Image(systemName: record.source == .healthKit ? "apple.logo" : "pencil")
-                    .font(.caption2)
-                    .foregroundStyle(.tertiary)
+                // Sparkline (reuse MiniSparklineView)
+                let sparkData = sparklineData(for: record)
+                if sparkData.count >= 2 {
+                    MiniSparklineView(dataPoints: sparkData, color: record.kind.tintColor)
+                        .frame(width: 48, height: 24)
+                }
             }
-
-            Text(record.kind.displayName)
-                .font(.caption2)
-                .fontWeight(.medium)
-                .foregroundStyle(.tertiary)
-                .lineLimit(1)
 
             HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xxs) {
                 Text(primaryValueText(for: record))
@@ -128,7 +125,11 @@ struct PersonalRecordsSection: View {
 
                 Spacer(minLength: 0)
 
-                if record.isRecent {
+                if let delta = record.formattedDelta {
+                    Text(delta)
+                        .font(.system(size: 10, weight: .semibold))
+                        .foregroundStyle((record.deltaValue ?? 0) > 0 ? DS.Color.positive : DS.Color.negative)
+                } else if record.isRecent {
                     Text("NEW")
                         .font(.system(size: 9, weight: .bold))
                         .foregroundStyle(.white)
@@ -138,22 +139,50 @@ struct PersonalRecordsSection: View {
                 }
             }
 
-            if let context = contextText(for: record) {
-                Text(context)
-                    .font(.caption2)
-                    .foregroundStyle(DS.Color.textSecondary)
-                    .lineLimit(1)
-            }
-
             Spacer(minLength: 0)
 
-            Text(record.date, style: .date)
-                .font(.caption2)
-                .foregroundStyle(.tertiary)
+            HStack(spacing: DS.Spacing.xxs) {
+                Text(record.date, style: .date)
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
+
+                Spacer(minLength: 0)
+
+                Image(systemName: record.source == .healthKit ? "apple.logo" : "pencil")
+                    .font(.system(size: 8))
+                    .foregroundStyle(.quaternary)
+            }
         }
         .frame(maxWidth: .infinity, minHeight: cardMinHeight, alignment: .topLeading)
         .padding(DS.Spacing.sm)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
+        .background {
+            ZStack(alignment: .leading) {
+                RoundedRectangle(cornerRadius: DS.Radius.sm)
+                    .fill(.ultraThinMaterial)
+                // Kind-specific accent edge
+                RoundedRectangle(cornerRadius: DS.Radius.sm)
+                    .fill(record.kind.tintColor.opacity(0.05))
+                UnevenRoundedRectangle(
+                    topLeadingRadius: DS.Radius.sm,
+                    bottomLeadingRadius: DS.Radius.sm,
+                    bottomTrailingRadius: 0,
+                    topTrailingRadius: 0
+                )
+                    .fill(record.kind.tintColor.opacity(0.2))
+                    .frame(width: 3)
+            }
+        }
+        .clipShape(RoundedRectangle(cornerRadius: DS.Radius.sm))
+    }
+
+    /// Builds sparkline data from all records matching the same kind.
+    private func sparklineData(for record: ActivityPersonalRecord) -> [Double] {
+        let byKind = records
+            .filter { $0.kind == record.kind }
+            .sorted { $0.date < $1.date }
+            .map(\.value)
+        guard byKind.count >= 2 else { return byKind }
+        return Array(byKind.suffix(min(10, max(3, byKind.count))))
     }
 
     private var emptyState: some View {
@@ -180,34 +209,4 @@ struct PersonalRecordsSection: View {
         record.kind.unitLabel
     }
 
-    private func contextText(for record: ActivityPersonalRecord) -> String? {
-        var parts: [String] = []
-
-        if let avg = record.heartRateAvg, avg > 0 {
-            parts.append("HR \(Int(avg).formattedWithSeparator)bpm")
-        }
-        if let steps = record.stepCount, steps > 0 {
-            parts.append("\(Int(steps).formattedWithSeparator) steps")
-        }
-
-        var weatherParts: [String] = []
-        if let condition = record.weatherCondition {
-            weatherParts.append(weatherConditionLabel(for: condition))
-        }
-        if let temp = record.weatherTemperature, temp.isFinite {
-            weatherParts.append("\(Int(temp).formattedWithSeparator)°")
-        }
-        if let humidity = record.weatherHumidity, humidity.isFinite, humidity >= 0 {
-            weatherParts.append("Humidity \(Int(humidity).formattedWithSeparator)%")
-        }
-        if let isIndoor = record.isIndoor {
-            weatherParts.append(isIndoor ? String(localized: "Indoor") : String(localized: "Outdoor"))
-        }
-        if !weatherParts.isEmpty {
-            parts.append(weatherParts.joined(separator: " "))
-        }
-
-        guard !parts.isEmpty else { return nil }
-        return parts.prefix(3).joined(separator: " · ")
-    }
 }
