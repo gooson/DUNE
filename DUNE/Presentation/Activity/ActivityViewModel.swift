@@ -9,6 +9,7 @@ import OSLog
 final class ActivityViewModel {
     private enum Scheduling {
         static let suggestionDebounceNanoseconds: UInt64 = 180_000_000
+        static let reportDebounceNanoseconds: UInt64 = 500_000_000
         static let suggestionYieldInterval = 80
         static let cardioSeedYieldInterval = 120
     }
@@ -434,9 +435,23 @@ final class ActivityViewModel {
     }
 
     /// Generates a weekly workout report from current exercise data.
-    func generateWeeklyReport() async {
+    /// - Parameter debounceNanoseconds: Delay before starting Foundation Models inference.
+    ///   Coalesces rapid SwiftData sync triggers to prevent ANE cancel/restart storms.
+    ///   Pass `0` in tests for immediate execution.
+    func generateWeeklyReport(
+        debounceNanoseconds: UInt64 = Scheduling.reportDebounceNanoseconds
+    ) async {
         weeklyReportRequestID += 1
         let requestID = weeklyReportRequestID
+
+        if debounceNanoseconds > 0 {
+            do {
+                try await Task.sleep(nanoseconds: debounceNanoseconds)
+            } catch {
+                return
+            }
+        }
+        guard !Task.isCancelled, requestID == weeklyReportRequestID else { return }
 
         let allSnapshots = allExerciseSnapshots
         guard !allSnapshots.isEmpty else {
