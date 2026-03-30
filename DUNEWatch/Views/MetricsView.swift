@@ -342,7 +342,8 @@ struct MetricsView: View {
             }
 
             Button {
-                workoutManager.advanceToNextExercise()
+                // finishCurrentExercise already advanced the index;
+                // just dismiss overlay and start the exercise
                 showNextExercise = false
                 prefillFromEntry()
                 WKInterfaceDevice.current().play(.notification)
