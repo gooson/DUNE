@@ -201,6 +201,19 @@ final class TemplateWorkoutViewModel {
         }
     }
 
+    /// Skip the current exercise during a transition overlay and advance to the next pending.
+    /// Returns `true` if there is a next pending exercise to propose, `false` if all are done.
+    @discardableResult
+    func skipAndAdvance() -> Bool {
+        exerciseStatuses[currentExerciseIndex] = .skipped
+        if let nextIndex = findNextPendingIndex(after: currentExerciseIndex) {
+            currentExerciseIndex = nextIndex
+            exerciseStatuses[nextIndex] = .inProgress
+            return true
+        }
+        return false
+    }
+
     /// Jump to a specific exercise
     func goToExercise(at index: Int) {
         guard exercises.indices.contains(index) else { return }
