@@ -237,6 +237,7 @@
 		2C59EFFBCFFE4521936762AD /* VolumeBreakdownSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848C57A57DA851A26B73A88C /* VolumeBreakdownSection.swift */; };
 		2C59F1E4DFC12B79C753D1A1 /* BreathingDisturbanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1BFA4D02E4E090B353CCB4C /* BreathingDisturbanceTests.swift */; };
 		2CAC0F22506CAA182D881FFF /* SimulatorAdvancedMockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F90F52E6F65856C74331CE /* SimulatorAdvancedMockData.swift */; };
+		2CE0298724134930DE4AEF90 /* 0.7.0.json in Resources */ = {isa = PBXBuildFile; fileRef = 307A9FD7B4E6E8A0DD2996EC /* 0.7.0.json */; };
 		2D261AFCAF88B77813229C3C /* HealthDataAggregatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8257DA6FE89D18ED202170D3 /* HealthDataAggregatorTests.swift */; };
 		2DB49087838DB9A67B02238E /* BriefingEntryCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E6B2B03FFC16AB4E83B91C /* BriefingEntryCard.swift */; };
 		2DD097C235D6D1BDEBF15E42 /* ThemePickerSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17E0DAB9C18EABB51852E9E0 /* ThemePickerSection.swift */; };
@@ -1484,6 +1485,7 @@
 		2ECD0C7738498A1FC6ED770C /* BodyHistoryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyHistoryDetailView.swift; sourceTree = "<group>"; };
 		2F6BCCC360255EBFACA74469 /* WorkoutWriteService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutWriteService.swift; sourceTree = "<group>"; };
 		305386DE1E55069D329E0F30 /* MetricSummaryHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricSummaryHeader.swift; sourceTree = "<group>"; };
+		307A9FD7B4E6E8A0DD2996EC /* 0.7.0.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = 0.7.0.json; sourceTree = "<group>"; };
 		30D5ED2C18827B1AE570C9E2 /* WorkoutSettingsStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSettingsStoreTests.swift; sourceTree = "<group>"; };
 		30EF0F73E853034311E3C4EF /* AppRefreshCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRefreshCoordinatorTests.swift; sourceTree = "<group>"; };
 		317AB5F66E8697A6F502B9E0 /* ExerciseTypeDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseTypeDetailViewModel.swift; sourceTree = "<group>"; };
@@ -2543,6 +2545,7 @@
 				29E3A0FE9A3DA9A85E1E5953 /* 0.4.0.json */,
 				1428C5EC6CC5A79F678989B7 /* 0.5.0.json */,
 				7D7468B52F244BA086D355B4 /* 0.6.0.json */,
+				307A9FD7B4E6E8A0DD2996EC /* 0.7.0.json */,
 				3B86E4DA2F54DAF3728251E2 /* catalog.json */,
 			);
 			path = "whats-new";
@@ -4440,6 +4443,7 @@
 				A667F9F7404F6203FDF4C1EB /* 0.4.0.json in Resources */,
 				F220EC17BE7809616F8E8880 /* 0.5.0.json in Resources */,
 				D704BC244762B2E43B7B3258 /* 0.6.0.json in Resources */,
+				2CE0298724134930DE4AEF90 /* 0.7.0.json in Resources */,
 				3D95DBEFE4CEC05E6A55412F /* Assets.xcassets in Resources */,
 				1730E2939253AC8AE0AF8FCC /* Colors.xcassets in Resources */,
 				12B7CC5C9237A51478D8EC2F /* Localizable.xcstrings in Resources */,
@@ -5776,7 +5780,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 0.6.0;
+				MARKETING_VERSION = 0.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.raftel.dailve.widget;
 				PRODUCT_NAME = DUNEWidget;
 				SDKROOT = iphoneos;
@@ -5808,7 +5812,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.6.0;
+				MARKETING_VERSION = 0.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.raftel.dailve;
 				PRODUCT_NAME = DUNE;
 				SDKROOT = iphoneos;
@@ -5996,7 +6000,7 @@
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "DUNE records your workout data to Health.";
 				INFOPLIST_KEY_NSMotionUsageDescription = "DUNE uses motion data to monitor your daily posture and walking patterns.";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.raftel.dailve;
-				MARKETING_VERSION = 0.6.0;
+				MARKETING_VERSION = 0.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.raftel.dailve.watchkitapp;
 				PRODUCT_NAME = DUNEWatch;
 				SDKROOT = watchos;
@@ -6021,7 +6025,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 0.6.0;
+				MARKETING_VERSION = 0.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.raftel.dailve.vision.widgets;
 				PRODUCT_NAME = DUNEVisionWidgets;
 				SDKROOT = xros;
@@ -6048,7 +6052,7 @@
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "DUNE records your workout data to Health.";
 				INFOPLIST_KEY_NSMotionUsageDescription = "DUNE uses motion data to monitor your daily posture and walking patterns.";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.raftel.dailve;
-				MARKETING_VERSION = 0.6.0;
+				MARKETING_VERSION = 0.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.raftel.dailve.watchkitapp;
 				PRODUCT_NAME = DUNEWatch;
 				SDKROOT = watchos;
@@ -6080,7 +6084,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.6.0;
+				MARKETING_VERSION = 0.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.raftel.dailve.vision;
 				PRODUCT_NAME = DUNEVision;
 				SDKROOT = xros;
@@ -6197,7 +6201,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.6.0;
+				MARKETING_VERSION = 0.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.raftel.dailve.vision;
 				PRODUCT_NAME = DUNEVision;
 				SDKROOT = xros;
@@ -6221,7 +6225,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 0.6.0;
+				MARKETING_VERSION = 0.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.raftel.dailve.vision.widgets;
 				PRODUCT_NAME = DUNEVisionWidgets;
 				SDKROOT = xros;
@@ -6249,7 +6253,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 0.6.0;
+				MARKETING_VERSION = 0.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.raftel.dailve.widget;
 				PRODUCT_NAME = DUNEWidget;
 				SDKROOT = iphoneos;
@@ -6300,7 +6304,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.6.0;
+				MARKETING_VERSION = 0.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.raftel.dailve;
 				PRODUCT_NAME = DUNE;
 				SDKROOT = iphoneos;
