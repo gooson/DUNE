@@ -427,7 +427,7 @@ struct SessionSummaryView: View {
     }
 
     /// MET-based calorie estimation using the average metValue of active exercises.
-    /// Uses CalorieEstimationService.defaultBodyWeightKg as the default body weight.
+    /// Delegates to CalorieEstimationService for the MET formula (single source of truth with iOS).
     private func estimatedSessionCaloriesMET() -> Double? {
         guard let template = workoutManager.templateSnapshot else { return nil }
         let exerciseLibrary = WatchConnectivityManager.shared.exerciseLibrary
@@ -453,14 +453,12 @@ struct SessionSummaryView: View {
         let estimatedRestSeconds = Double(Swift.max(totalSetsCount - 1, 0))
             * WatchConnectivityManager.shared.globalRestSeconds
 
-        let bodyWeightKg = 70.0 // CalorieEstimationService.defaultBodyWeightKg
-        let activeSeconds = Swift.max(sessionDuration - estimatedRestSeconds, 0)
-        guard activeSeconds > 0 else { return nil }
-
-        let hours = activeSeconds / 3600.0
-        let result = averageMET * bodyWeightKg * hours
-        guard result.isFinite, result >= 0 else { return nil }
-        return result
+        return CalorieEstimationService().estimate(
+            metValue: averageMET,
+            bodyWeightKg: CalorieEstimationService.defaultBodyWeightKg,
+            durationSeconds: sessionDuration,
+            restSeconds: estimatedRestSeconds
+        )
     }
 
     /// Creates individual HKWorkout per exercise via non-live HKWorkoutBuilder (parallel).
@@ -571,7 +569,6 @@ struct SessionSummaryView: View {
         let steps = workoutManager.steps
         let pace = workoutManager.currentPace
         let floors = workoutManager.floorsClimbed
-        let cardioCalorieSource: CalorieSource = activeCalories > 0 ? .healthKit : .manual
         let record = ExerciseRecord(
             date: startDate,
             exerciseType: exerciseType,
@@ -588,7 +585,7 @@ struct SessionSummaryView: View {
             exerciseDefinitionID: exerciseDefinitionID,
             primaryMuscles: primaryMuscles,
             secondaryMuscles: secondaryMuscles,
-            calorieSource: cardioCalorieSource,
+            calorieSource: activeCalories > 0 ? .healthKit : .manual,
             rpe: effort,
             autoIntensityRaw: workoutManager.cardioMachineAutoIntensityRaw
         )
