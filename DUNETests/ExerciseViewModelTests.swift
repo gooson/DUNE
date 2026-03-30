@@ -296,12 +296,40 @@ struct ExerciseViewModelTests {
         #expect(vm.allExercises[0].source == .manual)
     }
 
-    @Test("Empty stub without HealthKit link is still shown")
-    func emptyStubWithoutHKLinkStillShown() {
+    @Test("Empty stub without healthKitWorkoutID defers to matching HK workout by type+date")
+    func dedupEmptyStubWithoutHKIDDefersToHealthKit() {
         let vm = ExerciseViewModel()
         let now = Date()
 
-        // Empty stub without healthKitWorkoutID — standalone record
+        // Empty stub: no healthKitWorkoutID, but matches a HK workout by type+date
+        let stub = ExerciseRecord(
+            date: now,
+            exerciseType: "Walking",
+            duration: 0
+        )
+
+        vm.healthKitWorkouts = [
+            WorkoutSummary(
+                id: "HK-WALKING-NO-LINK", type: "Walking", activityType: .walking,
+                duration: 360, calories: 25, distance: nil, date: now,
+                heartRateAvg: 92
+            ),
+        ]
+        vm.manualRecords = [stub]
+
+        // HK workout should win — stub matched by type+date proximity
+        #expect(vm.allExercises.count == 1)
+        #expect(vm.allExercises[0].source == .healthKit)
+        #expect(vm.allExercises[0].duration == 360)
+        #expect(vm.allExercises[0].calories == 25)
+    }
+
+    @Test("Empty stub without matching HK workout is still shown")
+    func emptyStubWithoutMatchingHKStillShown() {
+        let vm = ExerciseViewModel()
+        let now = Date()
+
+        // Empty stub with no matching HK workout at all
         let stub = ExerciseRecord(
             date: now,
             exerciseType: "Walking",
