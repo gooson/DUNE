@@ -53,9 +53,7 @@ extension HealthMetric {
     }
 
     /// Unit label resolved from override or category default.
-    /// Sleep returns empty — its formatted value already includes time units.
     var resolvedUnitLabel: String {
-        if category == .sleep { return "" }
         let rawUnit = unit.isEmpty ? category.unitLabel : unit
         return Self.localizedUnitLabel(rawUnit)
     }
