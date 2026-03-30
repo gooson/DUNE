@@ -1552,6 +1552,23 @@
         }
       }
     },
+    "%@ steps today.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今日%@歩。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "오늘 %@걸음."
+          }
+        }
+      }
+    },
     "%lld unread notifications": {
       "extractionState": "stale",
       "localizations": {
@@ -17577,6 +17594,40 @@
         }
       }
     },
+    "Last night's sleep: %lld hours.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "昨夜の睡眠: %lld時間。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "어젯밤 수면: %lld시간."
+          }
+        }
+      }
+    },
+    "Last night's sleep: %lldh %lldm.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "昨夜の睡眠: %1$lld時間%2$lld分。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "어젯밤 수면: %1$lld시간 %2$lld분."
+          }
+        }
+      }
+    },
     "Last night's sleep score was %lld — outstanding. Well rested means your workout will be extra effective today.": {
       "extractionState": "manual",
       "localizations": {
@@ -29945,6 +29996,40 @@
         }
       }
     },
+    "Sleep debt remains at %lldh %lldm. Consider an earlier bedtime tonight.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "睡眠負債が%1$lld時間%2$lld分残っています。今夜は早めに就寝しましょう。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "수면 부채가 %1$lld시간 %2$lld분 남아 있습니다. 오늘은 일찍 잠자리에 드세요."
+          }
+        }
+      }
+    },
+    "Sleep debt: %lld minutes. Almost caught up!": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "睡眠負債: %lld分。もう少しで回復です！"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "수면 부채: %lld분. 거의 회복했습니다!"
+          }
+        }
+      }
+    },
     "Sleep deficit": {
       "extractionState": "manual",
       "localizations": {
@@ -33335,6 +33420,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "오늘은 쉬는 날이었습니다."
+          }
+        }
+      }
+    },
+    "Today's condition score was %lld (%@%lld from yesterday).": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今日のコンディションスコアは%1$lldでした（前日比%2$@%3$lld）。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "오늘 컨디션 점수는 %1$lld점이었습니다 (어제 대비 %2$@%3$lld)."
+          }
+        }
+      }
+    },
+    "Today's condition score was %lld.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今日のコンディションスコアは%lldでした。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "오늘 컨디션 점수는 %lld점이었습니다."
           }
         }
       }
@@ -37792,6 +37911,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "언제든 iCloud 없이 앱을 사용할 수 있어요. 데이터는 이 기기에만 남아요."
+          }
+        }
+      }
+    },
+    "You completed %@.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@を完了しました。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ 운동을 완료했습니다."
           }
         }
       }
