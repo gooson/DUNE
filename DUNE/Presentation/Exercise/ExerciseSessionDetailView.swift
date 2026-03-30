@@ -416,7 +416,10 @@ struct ExerciseSessionDetailView: View {
         }
 
         let recovery = try? await recoveryResult
-        guard !Task.isCancelled else { return }
+        guard !Task.isCancelled else {
+            isLoadingHR = false
+            return
+        }
         heartRateRecovery = recovery
         isLoadingHR = false
     }
