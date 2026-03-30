@@ -63,7 +63,6 @@ struct ExerciseView: View {
                 viewModel.manualRecords = manualRecords
                 updateSuggestion()
                 await viewModel.loadHealthKitWorkouts()
-                backfillEmptyRecords()
             }
             .onChange(of: manualRecords) { _, newValue in
                 rebuildRecordIndex()
@@ -326,49 +325,6 @@ struct ExerciseView: View {
 
     private func rebuildRecordIndex() {
         recordsByID = Dictionary(manualRecords.map { ($0.id, $0) }, uniquingKeysWith: { _, latest in latest })
-    }
-
-    /// Backfill empty ExerciseRecords with matching HealthKit workout data.
-    /// Fixes records synced from Watch with missing duration/calories.
-    private func backfillEmptyRecords() {
-        let workouts = viewModel.healthKitWorkouts
-        guard !workouts.isEmpty else { return }
-
-        var didUpdate = false
-        for record in manualRecords where !record.hasMeaningfulContent {
-            guard let match = findMatchingWorkout(for: record, in: workouts) else { continue }
-            if match.duration > 0 { record.duration = match.duration }
-            if let cal = match.calories, cal > 0 { record.calories = cal; record.calorieSourceRaw = CalorieSource.healthKit.rawValue }
-            if let dist = match.distance, dist > 0 { record.distance = dist }
-            if record.healthKitWorkoutID == nil || record.healthKitWorkoutID?.isEmpty == true {
-                record.healthKitWorkoutID = match.id
-            }
-            didUpdate = true
-        }
-
-        if didUpdate {
-            viewModel.manualRecords = manualRecords
-        }
-    }
-
-    /// Find a HealthKit workout matching a record by healthKitWorkoutID or type+date proximity.
-    private func findMatchingWorkout(
-        for record: ExerciseRecord,
-        in workouts: [WorkoutSummary]
-    ) -> WorkoutSummary? {
-        // Primary: exact healthKitWorkoutID match
-        if let hkID = record.healthKitWorkoutID, !hkID.isEmpty,
-           let match = workouts.first(where: { $0.id == hkID }) {
-            return match
-        }
-        // Fallback: type + date proximity (±2 min)
-        let recordActivity = WorkoutActivityType.infer(from: record.exerciseType)
-        return workouts.first { workout in
-            guard abs(record.date.timeIntervalSince(workout.date)) < 120 else { return false }
-            if record.exerciseType == workout.activityType.rawValue { return true }
-            if let inferred = recordActivity, inferred == workout.activityType { return true }
-            return false
-        }
     }
 
     private func findRecord(for item: ExerciseListItem) -> ExerciseRecord? {

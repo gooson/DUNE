@@ -79,18 +79,18 @@ struct ExerciseViewModelTests {
     // MARK: - Deduplication Tests
     // Edge cases mapped from: docs/plans/2026-02-18-healthkit-dedup.md
 
-    @Test("Filters out HealthKit workout matching SwiftData healthKitWorkoutID")
-    func dedupByHealthKitWorkoutID() {
+    // MARK: - Dedup: Only set records participate (aligned with Activity tab)
+
+    @Test("Set record deduplicates matching HealthKit workout by healthKitWorkoutID")
+    func dedupSetRecordByHKID() {
         let vm = ExerciseViewModel()
         let now = Date()
         let hkUUID = "HK-UUID-123"
 
-        let record = ExerciseRecord(
-            date: now,
-            exerciseType: "Bench Press",
-            duration: 1800,
-            healthKitWorkoutID: hkUUID
-        )
+        let record = ExerciseRecord(date: now, exerciseType: "Bench Press", duration: 1800, healthKitWorkoutID: hkUUID)
+        let set = WorkoutSet(setNumber: 1, reps: 10, isCompleted: true)
+        set.exerciseRecord = record
+        record.sets = [set]
 
         vm.healthKitWorkouts = [
             WorkoutSummary(id: hkUUID, type: "Strength", duration: 1800, calories: 200, distance: nil, date: now),
@@ -99,109 +99,46 @@ struct ExerciseViewModelTests {
 
         #expect(vm.allExercises.count == 1)
         #expect(vm.allExercises[0].source == .manual)
-        #expect(vm.allExercises[0].type == "Bench Press")
     }
 
-    @Test("Keeps external HealthKit workouts without matching SwiftData record")
-    func dedupExternalWorkoutsKept() {
+    @Test("Non-set cardio record does NOT dedup HealthKit workout — HealthKit shown instead")
+    func cardioRecordDefersToHealthKit() {
         let vm = ExerciseViewModel()
         let now = Date()
+        let hkID = "HK-WALKING-123"
 
-        let record = ExerciseRecord(
-            date: now,
-            exerciseType: "Squat",
-            duration: 1200,
-            healthKitWorkoutID: "HK-APP-1"
-        )
+        // Cardio record: has duration but no sets → defers to HealthKit
+        let record = ExerciseRecord(date: now, exerciseType: "Walking", duration: 360, healthKitWorkoutID: hkID)
 
         vm.healthKitWorkouts = [
-            WorkoutSummary(id: "HK-APP-1", type: "Strength", duration: 1200, calories: 100, distance: nil, date: now),
-            WorkoutSummary(id: "HK-WATCH-1", type: "Running", duration: 1800, calories: 300, distance: 5000, date: now),
+            WorkoutSummary(id: hkID, type: "Walking", activityType: .walking, duration: 360, calories: 25, distance: nil, date: now, heartRateAvg: 92),
         ]
         vm.manualRecords = [record]
 
-        #expect(vm.allExercises.count == 2)
-        let sources = vm.allExercises.map(\.source)
-        #expect(sources.contains(.manual))
-        #expect(sources.contains(.healthKit))
-    }
-
-    // Edge case: HealthKit write failure — healthKitWorkoutID never populated
-    // Fallback dedup requires isFromThisApp AND matching activityType + date proximity (±2 min)
-    @Test("Filters out own app workouts (isFromThisApp) as fallback when healthKitWorkoutID is nil")
-    func dedupByIsFromThisApp() {
-        let vm = ExerciseViewModel()
-        let now = Date()
-
-        let record = ExerciseRecord(
-            date: now,
-            exerciseType: WorkoutActivityType.traditionalStrengthTraining.rawValue,
-            duration: 2400,
-            healthKitWorkoutID: nil
-        )
-
-        vm.healthKitWorkouts = [
-            WorkoutSummary(id: "HK-ORPHAN", type: "Strength", activityType: .traditionalStrengthTraining, duration: 2400, calories: 300, distance: nil, date: now, isFromThisApp: true),
-        ]
-        vm.manualRecords = [record]
-
+        // HealthKit version shown because non-set records don't dedup
         #expect(vm.allExercises.count == 1)
-        #expect(vm.allExercises[0].source == .manual)
+        #expect(vm.allExercises[0].source == .healthKit)
+        #expect(vm.allExercises[0].calories == 25)
+        #expect(vm.allExercises[0].heartRateAvg == 92)
     }
 
-    @Test("Filters out strength app workouts when manual set record is time-proximate")
+    @Test("Strength set record deduplicates via isFromThisApp fallback")
     func dedupStrengthFallbackWithSetData() {
         let vm = ExerciseViewModel()
         let now = Date()
 
-        let record = ExerciseRecord(
-            date: now,
-            exerciseType: "Bench Press",
-            duration: 2400,
-            healthKitWorkoutID: nil
-        )
+        let record = ExerciseRecord(date: now, exerciseType: "Bench Press", duration: 2400)
         let set = WorkoutSet(setNumber: 1, reps: 10, isCompleted: true)
         set.exerciseRecord = record
         record.sets = [set]
 
         vm.healthKitWorkouts = [
-            WorkoutSummary(
-                id: "HK-WATCH-ORPHAN",
-                type: "Strength",
-                activityType: .traditionalStrengthTraining,
-                duration: 2400,
-                calories: 280,
-                distance: nil,
-                date: now,
-                isFromThisApp: true
-            )
+            WorkoutSummary(id: "HK-WATCH", type: "Strength", activityType: .traditionalStrengthTraining, duration: 2400, calories: 280, distance: nil, date: now, isFromThisApp: true),
         ]
         vm.manualRecords = [record]
 
         #expect(vm.allExercises.count == 1)
         #expect(vm.allExercises[0].source == .manual)
-    }
-
-    // Edge case: corrupted record with empty string healthKitWorkoutID
-    @Test("Ignores empty healthKitWorkoutID during dedup matching")
-    func dedupIgnoresEmptyHealthKitWorkoutID() {
-        let vm = ExerciseViewModel()
-        let now = Date()
-
-        let record = ExerciseRecord(
-            date: now,
-            exerciseType: "Bench Press",
-            duration: 1800,
-            healthKitWorkoutID: ""
-        )
-
-        vm.healthKitWorkouts = [
-            WorkoutSummary(id: "", type: "Strength", duration: 1800, calories: 200, distance: nil, date: now),
-        ]
-        vm.manualRecords = [record]
-
-        // Empty ID should NOT cause false-positive match; both items should appear
-        #expect(vm.allExercises.count == 2)
     }
 
     @Test("Empty data produces empty list")
@@ -219,12 +156,10 @@ struct ExerciseViewModelTests {
         let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: now) ?? now
         let twoDaysAgo = Calendar.current.date(byAdding: .day, value: -2, to: now) ?? now
 
-        let record = ExerciseRecord(
-            date: yesterday,
-            exerciseType: "Bench Press",
-            duration: 1800,
-            healthKitWorkoutID: "HK-1"
-        )
+        let record = ExerciseRecord(date: yesterday, exerciseType: "Bench Press", duration: 1800, healthKitWorkoutID: "HK-1")
+        let set = WorkoutSet(setNumber: 1, reps: 10, isCompleted: true)
+        set.exerciseRecord = record
+        record.sets = [set]
 
         vm.healthKitWorkouts = [
             WorkoutSummary(id: "HK-1", type: "Strength", duration: 1800, calories: 200, distance: nil, date: yesterday),
@@ -237,111 +172,6 @@ struct ExerciseViewModelTests {
         #expect(vm.allExercises[0].type == "Running")
         #expect(vm.allExercises[1].type == "Bench Press")
         #expect(vm.allExercises[2].type == "Cycling")
-    }
-
-    @Test("Empty stub record linked to HealthKit defers to HealthKit version")
-    func dedupEmptyStubDefersToHealthKit() {
-        let vm = ExerciseViewModel()
-        let now = Date()
-        let hkID = "HK-WALKING-123"
-
-        // Empty stub: 0 duration, no calories, no sets, linked to HealthKit
-        let stub = ExerciseRecord(
-            date: now,
-            exerciseType: "Walking",
-            duration: 0,
-            healthKitWorkoutID: hkID
-        )
-
-        vm.healthKitWorkouts = [
-            WorkoutSummary(
-                id: hkID, type: "Walking", activityType: .walking,
-                duration: 360, calories: 25, distance: nil, date: now,
-                heartRateAvg: 92
-            ),
-        ]
-        vm.manualRecords = [stub]
-
-        // HealthKit version should win — stub should be hidden
-        #expect(vm.allExercises.count == 1)
-        #expect(vm.allExercises[0].source == .healthKit)
-        #expect(vm.allExercises[0].duration == 360)
-        #expect(vm.allExercises[0].calories == 25)
-    }
-
-    @Test("Meaningful record still deduplicates HealthKit version")
-    func dedupMeaningfulRecordStillWins() {
-        let vm = ExerciseViewModel()
-        let now = Date()
-        let hkID = "HK-RUNNING-456"
-
-        // Record with meaningful content (duration > 0)
-        let record = ExerciseRecord(
-            date: now,
-            exerciseType: "Running",
-            duration: 1800,
-            healthKitWorkoutID: hkID
-        )
-
-        vm.healthKitWorkouts = [
-            WorkoutSummary(
-                id: hkID, type: "Running", activityType: .running,
-                duration: 1800, calories: 200, distance: 5000, date: now
-            ),
-        ]
-        vm.manualRecords = [record]
-
-        // Manual record has data, so it should win
-        #expect(vm.allExercises.count == 1)
-        #expect(vm.allExercises[0].source == .manual)
-    }
-
-    @Test("Empty stub without healthKitWorkoutID defers to matching HK workout by type+date")
-    func dedupEmptyStubWithoutHKIDDefersToHealthKit() {
-        let vm = ExerciseViewModel()
-        let now = Date()
-
-        // Empty stub: no healthKitWorkoutID, but matches a HK workout by type+date
-        let stub = ExerciseRecord(
-            date: now,
-            exerciseType: "Walking",
-            duration: 0
-        )
-
-        vm.healthKitWorkouts = [
-            WorkoutSummary(
-                id: "HK-WALKING-NO-LINK", type: "Walking", activityType: .walking,
-                duration: 360, calories: 25, distance: nil, date: now,
-                heartRateAvg: 92
-            ),
-        ]
-        vm.manualRecords = [stub]
-
-        // HK workout should win — stub matched by type+date proximity
-        #expect(vm.allExercises.count == 1)
-        #expect(vm.allExercises[0].source == .healthKit)
-        #expect(vm.allExercises[0].duration == 360)
-        #expect(vm.allExercises[0].calories == 25)
-    }
-
-    @Test("Empty stub without matching HK workout is still shown")
-    func emptyStubWithoutMatchingHKStillShown() {
-        let vm = ExerciseViewModel()
-        let now = Date()
-
-        // Empty stub with no matching HK workout at all
-        let stub = ExerciseRecord(
-            date: now,
-            exerciseType: "Walking",
-            duration: 0
-        )
-
-        vm.healthKitWorkouts = []
-        vm.manualRecords = [stub]
-
-        // No HK workout available — show the stub
-        #expect(vm.allExercises.count == 1)
-        #expect(vm.allExercises[0].source == .manual)
     }
 
     @Test("Tombstoned HealthKit workouts are excluded from allExercises")

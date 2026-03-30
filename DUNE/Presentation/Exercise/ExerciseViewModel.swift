@@ -38,12 +38,12 @@ final class ExerciseViewModel {
     private func invalidateCache() {
         let tombstoned = DeletedWorkoutTombstoneStore.shared.tombstonedIDs
 
-        // Only dedup HK workouts against records with meaningful content.
-        // Empty stubs (0 duration, no calories, no sets) should not suppress
-        // the richer HealthKit WorkoutSummary.
-        let dedupRecords = manualRecords.filter(\.hasMeaningfulContent)
+        // Dedup strategy aligned with Activity tab's ExerciseListSection:
+        // Only records with set data (strength exercises) participate in dedup.
+        // Non-set records (cardio/walking) always defer to HealthKit WorkoutSummary.
+        let setRecords = manualRecords.filter(\.hasSetData)
         var externalWorkouts = healthKitWorkouts.filteringAppDuplicates(
-            against: dedupRecords,
+            against: setRecords,
             tombstonedIDs: tombstoned
         )
 
@@ -63,39 +63,13 @@ final class ExerciseViewModel {
             items.append(.fromWorkoutSummary(workout))
         }
 
-        for record in manualRecords {
-            // Skip empty stubs that have a matching visible HealthKit workout.
-            // Match by healthKitWorkoutID (primary) or type+date proximity (fallback).
-            if !record.hasMeaningfulContent,
-               hasMatchingVisibleWorkout(for: record, in: externalWorkouts) {
-                continue
-            }
+        // Only add manual records with set data (strength exercises).
+        // Non-set records are represented by their HealthKit workout above.
+        for record in setRecords {
             items.append(.fromManualRecord(record, library: exerciseLibrary))
         }
 
         allExercises = items.sorted { $0.date > $1.date }
-    }
-
-    /// Whether a visible HealthKit workout covers this empty stub record,
-    /// making the stub redundant.
-    private func hasMatchingVisibleWorkout(
-        for record: ExerciseRecord,
-        in workouts: [WorkoutSummary]
-    ) -> Bool {
-        // Primary: exact healthKitWorkoutID match
-        if let hkID = record.healthKitWorkoutID, !hkID.isEmpty {
-            return workouts.contains { $0.id == hkID }
-        }
-        // Fallback: type + date proximity (±2 min), same as dedup logic
-        let recordActivity = WorkoutActivityType.infer(from: record.exerciseType)
-        return workouts.contains { workout in
-            guard abs(record.date.timeIntervalSince(workout.date)) < 120 else {
-                return false
-            }
-            if record.exerciseType == workout.activityType.rawValue { return true }
-            if let inferred = recordActivity, inferred == workout.activityType { return true }
-            return false
-        }
     }
 
     func loadHealthKitWorkouts() async {
