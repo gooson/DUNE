@@ -17,6 +17,7 @@ struct ExerciseSessionDetailView: View {
 
     @Environment(\.appTheme) private var theme
     @State private var heartRateSummary: HeartRateSummary?
+    @State private var heartRateRecovery: HeartRateRecovery?
     @State private var isLoadingHR = false
     @State private var hrError: String?
     @AppStorage(WeightUnit.storageKey) private var weightUnitRaw = WeightUnit.kg.rawValue
@@ -313,6 +314,10 @@ struct ExerciseSessionDetailView: View {
             } else {
                 placeholderView(icon: "waveform.path.ecg", title: "No heart rate data available")
             }
+
+            if let recovery = heartRateRecovery {
+                HeartRateRecoveryRow(recovery: recovery)
+            }
         }
         .padding(DS.Spacing.md)
         .chartSurface(cornerRadius: DS.Radius.md, topBloomHeight: 34)
@@ -392,8 +397,11 @@ struct ExerciseSessionDetailView: View {
 
         isLoadingHR = true
 
+        async let summaryResult = heartRateService.fetchHeartRateSummary(forWorkoutID: workoutID)
+        async let recoveryResult = heartRateService.fetchHeartRateRecovery(forWorkoutID: workoutID)
+
         do {
-            let summary = try await heartRateService.fetchHeartRateSummary(forWorkoutID: workoutID)
+            let summary = try await summaryResult
             guard !Task.isCancelled else {
                 isLoadingHR = false
                 return
@@ -406,6 +414,10 @@ struct ExerciseSessionDetailView: View {
             }
             hrError = String(localized: "Could not load heart rate data")
         }
+
+        let recovery = try? await recoveryResult
+        guard !Task.isCancelled else { return }
+        heartRateRecovery = recovery
         isLoadingHR = false
     }
 
