@@ -573,7 +573,9 @@ extension WatchConnectivityManager {
                 endTime: record.date.addingTimeInterval(record.duration),
                 heartRateSamples: [],
                 rpe: record.rpe,
-                healthKitWorkoutID: record.healthKitWorkoutID
+                healthKitWorkoutID: record.healthKitWorkoutID,
+                calories: record.bestCalories,
+                calorieSourceRaw: record.calorieSourceRaw
             )
         }
 

@@ -744,15 +744,28 @@ struct DUNEApp: App {
             let definition = library.exercise(byID: update.exerciseID)
             let duration = (update.endTime ?? Date()).timeIntervalSince(update.startTime)
 
+            let wcCalorieSource: CalorieSource
+            if let raw = update.calorieSourceRaw, let source = CalorieSource(rawValue: raw) {
+                wcCalorieSource = source
+            } else {
+                if let raw = update.calorieSourceRaw {
+                    AppLogger.data.warning("[WatchSync] Unknown calorieSource: \(raw, privacy: .public)")
+                }
+                wcCalorieSource = .manual
+            }
+            let validCalories = update.calories.flatMap { (0.0...10_000.0).contains($0) ? $0 : nil }
             let record = ExerciseRecord(
                 date: update.startTime,
                 exerciseType: update.exerciseName,
                 duration: max(0, duration),
+                calories: wcCalorieSource == .healthKit ? validCalories : nil,
                 healthKitWorkoutID: update.healthKitWorkoutID.flatMap { UUID(uuidString: $0) != nil ? $0 : nil },
                 exerciseDefinitionID: update.exerciseID,
                 primaryMuscles: definition?.primaryMuscles ?? [],
                 secondaryMuscles: definition?.secondaryMuscles ?? [],
                 equipment: definition?.equipment,
+                estimatedCalories: wcCalorieSource == .met ? validCalories : nil,
+                calorieSource: wcCalorieSource,
                 rpe: update.rpe
             )
 
