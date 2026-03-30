@@ -17,6 +17,7 @@ struct ExerciseSessionDetailView: View {
 
     @Environment(\.appTheme) private var theme
     @State private var heartRateSummary: HeartRateSummary?
+    @State private var heartRateRecovery: HeartRateRecovery?
     @State private var isLoadingHR = false
     @State private var hrError: String?
     @AppStorage(WeightUnit.storageKey) private var weightUnitRaw = WeightUnit.kg.rawValue
@@ -313,9 +314,45 @@ struct ExerciseSessionDetailView: View {
             } else {
                 placeholderView(icon: "waveform.path.ecg", title: "No heart rate data available")
             }
+
+            if let recovery = heartRateRecovery {
+                recoveryRow(recovery)
+            }
         }
         .padding(DS.Spacing.md)
         .chartSurface(cornerRadius: DS.Radius.md, topBloomHeight: 34)
+    }
+
+    @ViewBuilder
+    private func recoveryRow(_ recovery: HeartRateRecovery) -> some View {
+        if recovery.hrr1 > 0 {
+            let ratingColor = recovery.rating.color
+            HStack {
+                Label("Recovery", systemImage: "arrow.down.heart.fill")
+                    .font(.subheadline)
+                    .foregroundStyle(DS.Color.textSecondary)
+
+                Spacer()
+
+                HStack(spacing: DS.Spacing.xs) {
+                    Text("\(Int(recovery.hrr1))")
+                        .font(.subheadline.weight(.semibold).monospacedDigit())
+                    Text("bpm")
+                        .font(.caption)
+                        .foregroundStyle(DS.Color.textSecondary)
+                    Text(recovery.rating.displayName)
+                        .font(.caption.weight(.medium))
+                        .foregroundStyle(ratingColor)
+                        .padding(.horizontal, DS.Spacing.xs)
+                        .padding(.vertical, DS.Spacing.xxs)
+                        .background(
+                            ratingColor.opacity(0.15),
+                            in: Capsule()
+                        )
+                }
+            }
+            .padding(.top, DS.Spacing.xs)
+        }
     }
 
     /// Reusable placeholder view for empty/error states in the heart rate section.
@@ -392,8 +429,11 @@ struct ExerciseSessionDetailView: View {
 
         isLoadingHR = true
 
+        async let summaryResult = heartRateService.fetchHeartRateSummary(forWorkoutID: workoutID)
+        async let recoveryResult = heartRateService.fetchHeartRateRecovery(forWorkoutID: workoutID)
+
         do {
-            let summary = try await heartRateService.fetchHeartRateSummary(forWorkoutID: workoutID)
+            let summary = try await summaryResult
             guard !Task.isCancelled else {
                 isLoadingHR = false
                 return
@@ -406,6 +446,8 @@ struct ExerciseSessionDetailView: View {
             }
             hrError = String(localized: "Could not load heart rate data")
         }
+
+        heartRateRecovery = try? await recoveryResult
         isLoadingHR = false
     }
 
