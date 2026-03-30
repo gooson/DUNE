@@ -37,8 +37,13 @@ final class ExerciseViewModel {
 
     private func invalidateCache() {
         let tombstoned = DeletedWorkoutTombstoneStore.shared.tombstonedIDs
+
+        // Only dedup HK workouts against records with meaningful content.
+        // Empty stubs (0 duration, no calories, no sets) should not suppress
+        // the richer HealthKit WorkoutSummary.
+        let dedupRecords = manualRecords.filter(\.hasMeaningfulContent)
         var externalWorkouts = healthKitWorkouts.filteringAppDuplicates(
-            against: manualRecords,
+            against: dedupRecords,
             tombstonedIDs: tombstoned
         )
 
@@ -51,6 +56,9 @@ final class ExerciseViewModel {
             }
         }
 
+        // Build set of visible HK IDs to skip linked empty stubs
+        let visibleHKIDs = Set(externalWorkouts.map(\.id))
+
         var items: [ExerciseListItem] = []
         items.reserveCapacity(externalWorkouts.count + manualRecords.count)
 
@@ -59,6 +67,12 @@ final class ExerciseViewModel {
         }
 
         for record in manualRecords {
+            // Skip empty stubs whose linked HealthKit workout is now visible
+            if !record.hasMeaningfulContent,
+               let hkID = record.healthKitWorkoutID, !hkID.isEmpty,
+               visibleHKIDs.contains(hkID) {
+                continue
+            }
             items.append(.fromManualRecord(record, library: exerciseLibrary))
         }
 

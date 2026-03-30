@@ -129,6 +129,13 @@ final class ExerciseRecord {
         !(sets ?? []).isEmpty
     }
 
+    /// Whether this record carries user-visible content beyond a bare stub.
+    /// Empty stubs (0 duration, no calories, no sets) linked to HealthKit
+    /// should defer to the richer HealthKit WorkoutSummary.
+    var hasMeaningfulContent: Bool {
+        hasSetData || duration > 0 || bestCalories != nil
+    }
+
     /// Completed sets sorted by setNumber
     var completedSets: [WorkoutSet] {
         (sets ?? []).filter(\.isCompleted).sorted { $0.setNumber < $1.setNumber }

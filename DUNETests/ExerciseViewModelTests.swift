@@ -239,6 +239,83 @@ struct ExerciseViewModelTests {
         #expect(vm.allExercises[2].type == "Cycling")
     }
 
+    @Test("Empty stub record linked to HealthKit defers to HealthKit version")
+    func dedupEmptyStubDefersToHealthKit() {
+        let vm = ExerciseViewModel()
+        let now = Date()
+        let hkID = "HK-WALKING-123"
+
+        // Empty stub: 0 duration, no calories, no sets, linked to HealthKit
+        let stub = ExerciseRecord(
+            date: now,
+            exerciseType: "Walking",
+            duration: 0,
+            healthKitWorkoutID: hkID
+        )
+
+        vm.healthKitWorkouts = [
+            WorkoutSummary(
+                id: hkID, type: "Walking", activityType: .walking,
+                duration: 360, calories: 25, distance: nil, date: now,
+                heartRateAvg: 92
+            ),
+        ]
+        vm.manualRecords = [stub]
+
+        // HealthKit version should win — stub should be hidden
+        #expect(vm.allExercises.count == 1)
+        #expect(vm.allExercises[0].source == .healthKit)
+        #expect(vm.allExercises[0].duration == 360)
+        #expect(vm.allExercises[0].calories == 25)
+    }
+
+    @Test("Meaningful record still deduplicates HealthKit version")
+    func dedupMeaningfulRecordStillWins() {
+        let vm = ExerciseViewModel()
+        let now = Date()
+        let hkID = "HK-RUNNING-456"
+
+        // Record with meaningful content (duration > 0)
+        let record = ExerciseRecord(
+            date: now,
+            exerciseType: "Running",
+            duration: 1800,
+            healthKitWorkoutID: hkID
+        )
+
+        vm.healthKitWorkouts = [
+            WorkoutSummary(
+                id: hkID, type: "Running", activityType: .running,
+                duration: 1800, calories: 200, distance: 5000, date: now
+            ),
+        ]
+        vm.manualRecords = [record]
+
+        // Manual record has data, so it should win
+        #expect(vm.allExercises.count == 1)
+        #expect(vm.allExercises[0].source == .manual)
+    }
+
+    @Test("Empty stub without HealthKit link is still shown")
+    func emptyStubWithoutHKLinkStillShown() {
+        let vm = ExerciseViewModel()
+        let now = Date()
+
+        // Empty stub without healthKitWorkoutID — standalone record
+        let stub = ExerciseRecord(
+            date: now,
+            exerciseType: "Walking",
+            duration: 0
+        )
+
+        vm.healthKitWorkouts = []
+        vm.manualRecords = [stub]
+
+        // No HK workout available — show the stub
+        #expect(vm.allExercises.count == 1)
+        #expect(vm.allExercises[0].source == .manual)
+    }
+
     @Test("Tombstoned HealthKit workouts are excluded from allExercises")
     func tombstonedWorkoutsExcluded() {
         // Use a unique ID to avoid polluting other tests (no public remove API).
