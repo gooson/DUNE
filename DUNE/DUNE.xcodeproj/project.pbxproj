@@ -955,6 +955,7 @@
 		CB714D6B48C893D83337164A /* BodyHeatmapSceneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 161C65AA6E053FFB9F3A3490 /* BodyHeatmapSceneView.swift */; };
 		CB7AF4CC068C93AD82C95135 /* MuscleGroup+View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF2611CED068D025B7ACA1B /* MuscleGroup+View.swift */; };
 		CB804E8319190CAF0D1A6AE7 /* WatchPlankTimerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F677006AE88ADC5D2818314 /* WatchPlankTimerTests.swift */; };
+		CB8441BEF91C1A514252A476 /* HabitManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC6E1C2A562F13B576BFBB3F /* HabitManagementView.swift */; };
 		CBB0FCCCAA41C300B4117F82 /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95B20E679BF7D5A033E6F70A /* HealthKitManager.swift */; };
 		CC15BB6715F66698E3C4B2C2 /* DailySample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B8B2B8595BF9DB1E235A06 /* DailySample.swift */; };
 		CC81A1CFBF7EC13EB5532AF0 /* WhatsNewStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A285DE9A2F5124B8CA9DCB /* WhatsNewStore.swift */; };
@@ -1950,6 +1951,7 @@
 		AC40D34D792F7F04FF35704C /* SleepQueryServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepQueryServiceTests.swift; sourceTree = "<group>"; };
 		AC633D24FFCE79E199762DA7 /* SessionPagingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionPagingView.swift; sourceTree = "<group>"; };
 		AC68E7244D11028B93540364 /* ChartSelectionInteraction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartSelectionInteraction.swift; sourceTree = "<group>"; };
+		AC6E1C2A562F13B576BFBB3F /* HabitManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitManagementView.swift; sourceTree = "<group>"; };
 		ACB04D8D96C72679E7664716 /* DashboardViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewModelTests.swift; sourceTree = "<group>"; };
 		AD5F17FA77FFC37027EBB97A /* AppMigrationPlanTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMigrationPlanTests.swift; sourceTree = "<group>"; };
 		AD659CF967FC3E18CAA6E452 /* AnalyzeSleepEnvironmentUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyzeSleepEnvironmentUseCase.swift; sourceTree = "<group>"; };
@@ -2424,6 +2426,7 @@
 				A310B4212D28D0A2F364B013 /* HabitFormSheet.swift */,
 				E6B3C4D4532F36D377DAFC3F /* HabitHeatmapDetailView.swift */,
 				714D5DEBC94FFD751878BE04 /* HabitHeatmapView.swift */,
+				AC6E1C2A562F13B576BFBB3F /* HabitManagementView.swift */,
 				5C6DE0BC1CC33992D4FA1DEB /* HabitRowView.swift */,
 				C26594D42A6F70141D194137 /* HabitTemplateSheet.swift */,
 				53E4A27F1234863E9BA656F0 /* LifeView.swift */,
@@ -4726,6 +4729,7 @@
 				B119C183105573B0B7A82A5B /* HabitHeatmapDetailView.swift in Sources */,
 				EF91584848F4D68BE910A5B3 /* HabitHeatmapView.swift in Sources */,
 				620CE9213F1BA6809EC687EF /* HabitLog.swift in Sources */,
+				CB8441BEF91C1A514252A476 /* HabitManagementView.swift in Sources */,
 				C8363E02381E3BA5F1016B8C /* HabitRowView.swift in Sources */,
 				0201CA89E1D30EBD36900F45 /* HabitStreakService.swift in Sources */,
 				2A685D363E0544B2E2121B3F /* HabitTemplate.swift in Sources */,

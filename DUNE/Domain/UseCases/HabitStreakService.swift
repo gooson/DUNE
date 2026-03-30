@@ -1,6 +1,9 @@
 import Foundation
 
 enum HabitStreakService {
+    private static let skipMemoMarker = "[dune-life-cycle-skip]"
+    private static let snoozeMemoMarker = "[dune-life-cycle-snooze]"
+
     /// Calculate consecutive completion streak from reference date backwards.
     ///
     /// - Parameters:
@@ -39,6 +42,43 @@ enum HabitStreakService {
                 calendar: calendar
             )
         }
+    }
+
+    // MARK: - Longest Streak (Snapshot-based)
+
+    /// Calculates the longest consecutive daily streak for a habit from log snapshots.
+    static func longestStreak(logs: [HabitLogSnapshot], for habitID: UUID, calendar: Calendar = .current) -> Int {
+        let completionDates = logs
+            .filter { $0.habitID == habitID }
+            .filter { !isSkipOrSnooze($0) }
+            .map { calendar.startOfDay(for: $0.date) }
+
+        let uniqueDates = Set(completionDates).sorted()
+        guard !uniqueDates.isEmpty else { return 0 }
+
+        var maxStreak = 1
+        var currentStreak = 1
+
+        for i in 1..<uniqueDates.count {
+            let daysBetween = calendar.dateComponents([.day], from: uniqueDates[i - 1], to: uniqueDates[i]).day ?? 0
+            if daysBetween == 1 {
+                currentStreak += 1
+                maxStreak = Swift.max(maxStreak, currentStreak)
+            } else if daysBetween > 1 {
+                currentStreak = 1
+            }
+            // daysBetween == 0 means duplicate date after startOfDay normalization — skip
+        }
+
+        return maxStreak
+    }
+
+    /// Total number of completions (excluding skip/snooze).
+    static func totalCompletions(logs: [HabitLogSnapshot], for habitID: UUID) -> Int {
+        logs
+            .filter { $0.habitID == habitID }
+            .filter { !isSkipOrSnooze($0) }
+            .count
     }
 
     // MARK: - Daily Streak
@@ -149,5 +189,9 @@ enum HabitStreakService {
     private static func dayOffset(from reference: Date, to date: Date, calendar: Calendar) -> Int {
         let target = calendar.startOfDay(for: date)
         return calendar.dateComponents([.day], from: reference, to: target).day ?? 0
+    }
+
+    private static func isSkipOrSnooze(_ log: HabitLogSnapshot) -> Bool {
+        log.memo == skipMemoMarker || log.memo == snoozeMemoMarker
     }
 }

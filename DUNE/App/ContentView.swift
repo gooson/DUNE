@@ -230,6 +230,12 @@ struct ContentView: View {
                     .navigationDestination(for: NotificationPresentationDestination.self) { destination in
                         notificationDestinationView(for: destination)
                     }
+                    .navigationDestination(for: LifeRoute.self) { route in
+                        switch route {
+                        case .habitManagement:
+                            HabitManagementView()
+                        }
+                    }
                 }
                 .environment(\.wavePreset, .life)
                 .environment(\.waveColor, selectedTheme.tabLifeColor)

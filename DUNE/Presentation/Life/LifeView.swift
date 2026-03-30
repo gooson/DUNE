@@ -142,6 +142,12 @@ struct LifeView: View {
     }
 }
 
+// MARK: - Navigation Routes
+
+enum LifeRoute: Hashable {
+    case habitManagement
+}
+
 // MARK: - Isolated @Query Child View
 // Extracted to prevent SwiftData @Query observation from triggering parent ScrollView re-layout (Correction #179).
 
@@ -472,6 +478,9 @@ private struct HabitListQueryView: View {
                             }
                         }
                     }
+
+                    // Archived habits link
+                    ArchivedHabitCountView()
                 }
             }
         }
@@ -1344,6 +1353,41 @@ private struct TodayExerciseCheckView: View {
         let today = calendar.startOfDay(for: Date())
         // Check only first few records (sorted by date desc) — today's records are at the front
         exists = recentRecords.contains { calendar.isDate($0.date, inSameDayAs: today) }
+    }
+}
+
+// MARK: - Archived Habit Count (Isolated @Query)
+// Separate view to avoid triggering HabitListQueryView re-layout (Correction #179 pattern).
+
+private struct ArchivedHabitCountView: View {
+    @Query(
+        filter: #Predicate<HabitDefinition> { $0.isArchived }
+    ) private var archivedHabits: [HabitDefinition]
+
+    var body: some View {
+        if !archivedHabits.isEmpty {
+            NavigationLink(value: LifeRoute.habitManagement) {
+                HStack(spacing: DS.Spacing.sm) {
+                    Image(systemName: "archivebox")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+
+                    Text(String(localized: "\(archivedHabits.count) archived habits"))
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+
+                    Spacer()
+
+                    Image(systemName: "chevron.right")
+                        .font(.caption)
+                        .foregroundStyle(.tertiary)
+                }
+                .padding(DS.Spacing.md)
+                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.lg))
+            }
+            .buttonStyle(.plain)
+            .accessibilityIdentifier("life-archived-habits-link")
+        }
     }
 }
 
