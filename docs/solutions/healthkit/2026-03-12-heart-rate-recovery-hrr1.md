@@ -40,7 +40,16 @@ On-the-fly computation from HealthKit HR samples — no schema migration needed.
 | `Presentation/Exercise/HealthKitWorkoutDetailView.swift` | Recovery row display (HealthKit workouts) |
 | `Presentation/Exercise/HealthKitWorkoutDetailViewModel.swift` | Parallel fetch via `async let` |
 | `Presentation/Exercise/ExerciseSessionDetailView.swift` | Recovery row display (app-created sessions) |
-| `Presentation/Shared/Extensions/HeartRateRecovery+View.swift` | Rating → Color mapping + `HeartRateRecoveryRow` shared component |
+| `Presentation/Shared/Extensions/HeartRateRecovery+View.swift` | Rating → Color mapping + `HeartRateRecoveryRow` + `HeartRateRecoveryInfoSheet` |
+
+### Info Sheet (2026-03-30)
+
+`HeartRateRecoveryRow` includes an `info.circle` button that opens `HeartRateRecoveryInfoSheet` explaining:
+- **Definition**: What HRR₁ measures and why it matters
+- **How It's Measured**: Peak HR vs recovery HR at ~60s post-workout
+- **Rating Guide**: Good (>20 bpm), Normal (12-20), Low (<12)
+
+Pattern follows `WASOInfoSheet`: `ScrollView` + `VStack`, `InfoSheetHelpers.SectionHeader` reuse, `presentationDetents([.medium, .large])`. Rating colors driven from `HeartRateRecovery.Rating.color` for single-source consistency.
 
 ### Test Coverage
 
