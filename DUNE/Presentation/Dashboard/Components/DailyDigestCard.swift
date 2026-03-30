@@ -33,8 +33,8 @@ struct DailyDigestCard: View {
 
     private var summaryText: some View {
         Text(digest.summary)
-            .font(.subheadline)
+            .font(.caption)
             .foregroundStyle(.primary)
-            .fixedSize(horizontal: false, vertical: true)
+            .lineLimit(3)
     }
 }
