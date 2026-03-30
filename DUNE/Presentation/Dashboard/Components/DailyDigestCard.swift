@@ -10,6 +10,7 @@ struct DailyDigestCard: View {
                 header
                 summaryText
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
         .accessibilityIdentifier("dashboard-daily-digest")
     }
@@ -33,8 +34,8 @@ struct DailyDigestCard: View {
 
     private var summaryText: some View {
         Text(digest.summary)
-            .font(.caption)
+            .font(.subheadline)
             .foregroundStyle(.primary)
-            .lineLimit(3)
+            .fixedSize(horizontal: false, vertical: true)
     }
 }
