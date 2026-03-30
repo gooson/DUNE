@@ -790,7 +790,7 @@ struct ActivityViewModelTests {
         await vm.loadActivityData()
         // No SwiftData records — exerciseRecordSnapshots is empty
         vm.updateSuggestion(records: [])
-        await vm.generateWeeklyReport()
+        await vm.generateWeeklyReport(debounceNanoseconds: 0)
 
         #expect(vm.weeklyReport != nil, "Weekly report should include HealthKit-only workouts")
         if let report = vm.weeklyReport {
@@ -848,7 +848,7 @@ struct ActivityViewModelTests {
 
         await vm.loadActivityData()
         vm.updateSuggestion(records: [record])
-        await vm.generateWeeklyReport()
+        await vm.generateWeeklyReport(debounceNanoseconds: 0)
 
         #expect(vm.weeklyReport != nil)
         if let report = vm.weeklyReport {
