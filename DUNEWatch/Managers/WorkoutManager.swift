@@ -210,6 +210,21 @@ final class WorkoutManager: NSObject {
         return currentExerciseIndex >= snapshot.entries.count - 1
     }
 
+    /// Indices of exercises explicitly skipped by the user.
+    private(set) var skippedExerciseIndices: Set<Int> = []
+
+    /// Whether all remaining exercises are either completed (have sets) or skipped.
+    var isAllExercisesDone: Bool {
+        guard let snapshot = templateSnapshot else { return true }
+        for i in 0..<snapshot.entries.count {
+            let hasCompletedSets = i < completedSetsData.count && !completedSetsData[i].isEmpty
+            if !hasCompletedSets && !skippedExerciseIndices.contains(i) {
+                return false
+            }
+        }
+        return true
+    }
+
     /// Last completed set for the current exercise (for weight/reps pre-fill).
     var lastCompletedSetForCurrentExercise: CompletedSetData? {
         guard currentExerciseIndex < completedSetsData.count else { return nil }
@@ -626,8 +641,23 @@ final class WorkoutManager: NSObject {
         }
     }
 
-    func skipExercise() {
-        advanceToNextExercise()
+    /// Skip the current exercise and advance to the next non-skipped pending exercise.
+    /// Returns `true` if there is a next exercise to propose, `false` if all are done.
+    @discardableResult
+    func skipExercise() -> Bool {
+        guard let snapshot = templateSnapshot else { return false }
+        skippedExerciseIndices.insert(currentExerciseIndex)
+
+        // Find next non-skipped, non-completed exercise
+        for i in (currentExerciseIndex + 1)..<snapshot.entries.count {
+            let hasCompletedSets = i < completedSetsData.count && !completedSetsData[i].isEmpty
+            if !hasCompletedSets && !skippedExerciseIndices.contains(i) {
+                currentExerciseIndex = i
+                currentSetIndex = 0
+                return true
+            }
+        }
+        return false
     }
 
     // MARK: - Exercise Reordering
@@ -725,6 +755,7 @@ final class WorkoutManager: NSObject {
         currentSetIndex = 0
         completedSetsData = []
         extraSetsPerExercise = [:]
+        skippedExerciseIndices = []
         heartRate = 0
         activeCalories = 0
         distance = 0
