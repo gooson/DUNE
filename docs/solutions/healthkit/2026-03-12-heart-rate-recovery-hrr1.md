@@ -37,9 +37,10 @@ On-the-fly computation from HealthKit HR samples — no schema migration needed.
 |------|------|
 | `Domain/Models/HealthMetric.swift` | `HeartRateRecovery` model + `Rating` enum with `displayName` |
 | `Data/HealthKit/HeartRateQueryService.swift` | `fetchHeartRateRecovery` + static `computeRecovery` |
-| `Presentation/Exercise/HealthKitWorkoutDetailView.swift` | Recovery row display |
+| `Presentation/Exercise/HealthKitWorkoutDetailView.swift` | Recovery row display (HealthKit workouts) |
 | `Presentation/Exercise/HealthKitWorkoutDetailViewModel.swift` | Parallel fetch via `async let` |
-| `Presentation/Shared/Extensions/HeartRateRecovery+View.swift` | Rating → Color mapping |
+| `Presentation/Exercise/ExerciseSessionDetailView.swift` | Recovery row display (app-created sessions) |
+| `Presentation/Shared/Extensions/HeartRateRecovery+View.swift` | Rating → Color mapping + `HeartRateRecoveryRow` shared component |
 
 ### Test Coverage
 
