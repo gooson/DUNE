@@ -20,7 +20,6 @@ struct MetricsView: View {
     @State private var showNextExercise = false
     @State private var showEndConfirmation = false
     @State private var showLastSetOptions = false
-    @State private var transitionTask: Task<Void, Never>?
     @State private var didInitialAppear = false
     /// Deferred input sheet trigger to prevent double-present with onAppear
     @State private var pendingInputSheet = false
@@ -335,40 +334,52 @@ struct MetricsView: View {
                 .font(DS.Typography.metricLabel)
                 .foregroundStyle(.secondary)
 
-            if let next = nextEntryName {
+            if let next = proposedExerciseName {
                 Text(next)
                     .font(DS.Typography.exerciseName)
                     .lineLimit(2)
                     .multilineTextAlignment(.center)
             }
 
-            ProgressView()
-                .tint(DS.Color.positive)
-        }
-        .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionMetricsNextExercise)
-        .onAppear {
-            transitionTask?.cancel()
-            transitionTask = Task {
-                try? await Task.sleep(for: .seconds(3))
-                guard !Task.isCancelled else { return }
+            Button {
                 workoutManager.advanceToNextExercise()
                 showNextExercise = false
                 prefillFromEntry()
                 WKInterfaceDevice.current().play(.notification)
                 pendingInputSheet = true
+            } label: {
+                Text("Start")
+                    .frame(maxWidth: .infinity)
             }
+            .tint(DS.Color.positive)
+
+            Button {
+                let hasNext = workoutManager.skipExercise()
+                if hasNext {
+                    // Overlay stays visible with updated exercise name
+                    WKInterfaceDevice.current().play(.click)
+                } else {
+                    showNextExercise = false
+                    WKInterfaceDevice.current().play(.success)
+                    workoutManager.end()
+                }
+            } label: {
+                Text("Skip")
+                    .frame(maxWidth: .infinity)
+            }
+            .tint(.gray)
         }
-        .onDisappear {
-            transitionTask?.cancel()
-            transitionTask = nil
-        }
+        .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionMetricsNextExercise)
     }
 
-    private var nextEntryName: String? {
+    /// Name of the exercise currently proposed in the transition overlay.
+    /// After advanceToNextExercise or skipExercise, currentExerciseIndex already points
+    /// to the next candidate, so we read the current (not +1) entry.
+    private var proposedExerciseName: String? {
         guard let snapshot = workoutManager.templateSnapshot else { return nil }
-        let nextIndex = workoutManager.currentExerciseIndex + 1
-        guard nextIndex < snapshot.entries.count else { return nil }
-        return snapshot.entries[nextIndex].exerciseName
+        let idx = workoutManager.currentExerciseIndex
+        guard idx < snapshot.entries.count else { return nil }
+        return snapshot.entries[idx].exerciseName
     }
 
     // MARK: - Actions
@@ -513,7 +524,9 @@ struct MetricsView: View {
 
     private func finishCurrentExercise() {
         flushEstimatedRPE()
-        if workoutManager.isLastExercise {
+        // Advance to next non-skipped exercise for the transition to display
+        workoutManager.advanceToNextExercise()
+        if workoutManager.isAllExercisesDone {
             WKInterfaceDevice.current().play(.success)
             workoutManager.end()
         } else {
