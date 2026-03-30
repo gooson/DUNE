@@ -15,17 +15,25 @@ ExerciseRecord의 calories/estimatedCalories 필드가 모두 nil이며, HealthK
 ### 증상
 - Watch 운동 완료 후 SessionSummaryView에 칼로리 미표시
 - iPhone 운동 기록 목록(UnifiedWorkoutRow)에서 칼로리 "--"
-- HealthKit에 칼로리 데이터 없음
+- 3/28 이전에는 정상 동작했음
 
-### Root Cause
+### Root Cause (실제 발생 경위)
 
-5가지 연쇄 원인:
+**트리거**: WC receiver 연결 수정 (`e10474d4`, 2026-03-28)
 
-1. **HKLiveWorkoutBuilder 칼로리 미수집**: `.traditionalStrengthTraining`에서 Watch 모션 센서가 정확한 active energy를 추정 못해 `activeCalories ≈ 0`
-2. **nil 반환 조건**: `perExerciseAllocation()`에서 `activeCalories > 0 ? ... : nil` → 0이면 nil
-3. **MET 추정 미사용**: iOS는 `CalorieEstimationService`로 MET 기반 추정하지만 Watch에서는 미사용
-4. **metValue 미전송**: `WatchExerciseInfo` DTO에 metValue 필드 없어 Watch에서 MET 계산 불가
-5. **WC DTO 칼로리 누락**: `WatchWorkoutUpdate`에 calories 필드 없어 iPhone에도 전달 안 됨
+1. **이전 (3/28 전)**: `onWorkoutReceived` 콜백이 미연결 → Watch 운동 데이터는 **CloudKit sync**로만 iPhone에 도착
+2. CloudKit을 통해 Watch의 ExerciseRecord가 그대로 복제됨 → HK가 strength에서도 HR 기반 activeCalories를 제공하면 `calories` 필드에 값 존재
+3. **3/28 수정**: WC receiver 연결 → Watch 운동 완료 즉시 iPhone에 ExerciseRecord 생성
+4. **문제**: WC 경로가 CloudKit보다 빠르므로, **calories=nil인 WC 레코드가 먼저 삽입** → CloudKit dedup이 같은 운동의 칼로리 있는 레코드를 중복으로 판단하여 차단
+5. 결과: iPhone에 칼로리 없는 레코드만 남음
+
+### 구조적 원인 (WC DTO 결함)
+
+WC receiver 연결이 문제를 트리거했지만, 근본 원인은 `WatchWorkoutUpdate` DTO에 calories 필드가 없었던 것:
+
+1. **WC DTO 칼로리 누락**: `WatchWorkoutUpdate`에 calories/calorieSource 필드 자체가 없음
+2. **MET 추정 미사용**: Watch에서 `CalorieEstimationService` 미사용 (iOS에서만 사용)
+3. **metValue 미전송**: `WatchExerciseInfo` DTO에 metValue 필드 없어 Watch에서 MET 계산 불가
 
 ### iOS vs Watch 비교
 
