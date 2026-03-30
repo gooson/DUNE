@@ -126,9 +126,9 @@ struct HeartRateRecoveryInfoSheet: View {
             InfoSheetHelpers.SectionHeader(icon: "gauge.with.needle", title: "Rating Guide")
 
             VStack(spacing: DS.Spacing.xs) {
-                ratingRow(label: "Good", range: "> 20 bpm", color: .green)
-                ratingRow(label: "Normal", range: "12–20 bpm", color: .yellow)
-                ratingRow(label: "Low", range: "< 12 bpm", color: .red)
+                ratingRow(label: "Good", range: "> 20 bpm", color: HeartRateRecovery.Rating.good.color)
+                ratingRow(label: "Normal", range: "12–20 bpm", color: HeartRateRecovery.Rating.normal.color)
+                ratingRow(label: "Low", range: "< 12 bpm", color: HeartRateRecovery.Rating.low.color)
             }
         }
     }
