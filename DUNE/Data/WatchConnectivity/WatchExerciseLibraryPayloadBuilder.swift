@@ -229,7 +229,8 @@ enum WatchExerciseLibraryPayloadBuilder {
                 aliases: definition.aliases,
                 procedureSets: procedure?.sets ?? retained?.procedureSets,
                 procedureUpdatedAt: procedure?.updatedAt ?? retained?.procedureUpdatedAt,
-                progressionIncrementKg: progressionIncrement
+                progressionIncrementKg: progressionIncrement,
+                metValue: definition.metValue
             )
         }
     }

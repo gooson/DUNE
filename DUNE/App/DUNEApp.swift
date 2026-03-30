@@ -744,15 +744,19 @@ struct DUNEApp: App {
             let definition = library.exercise(byID: update.exerciseID)
             let duration = (update.endTime ?? Date()).timeIntervalSince(update.startTime)
 
+            let wcCalorieSource = update.calorieSourceRaw.flatMap { CalorieSource(rawValue: $0) } ?? .manual
             let record = ExerciseRecord(
                 date: update.startTime,
                 exerciseType: update.exerciseName,
                 duration: max(0, duration),
+                calories: wcCalorieSource == .healthKit ? update.calories : nil,
                 healthKitWorkoutID: update.healthKitWorkoutID.flatMap { UUID(uuidString: $0) != nil ? $0 : nil },
                 exerciseDefinitionID: update.exerciseID,
                 primaryMuscles: definition?.primaryMuscles ?? [],
                 secondaryMuscles: definition?.secondaryMuscles ?? [],
                 equipment: definition?.equipment,
+                estimatedCalories: wcCalorieSource == .met ? update.calories : nil,
+                calorieSource: wcCalorieSource,
                 rpe: update.rpe
             )
 

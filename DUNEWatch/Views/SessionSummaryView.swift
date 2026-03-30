@@ -164,6 +164,7 @@ struct SessionSummaryView: View {
                 statItem(title: "Sets", value: totalSets.formattedWithSeparator)
             }
 
+            statItem(title: "Calories", value: formattedCalories)
             statItem(title: "Avg HR", value: averageHR > 0 ? Int(averageHR).formattedWithSeparator : "--")
         }
         .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionSummaryStatsGrid)
@@ -184,6 +185,16 @@ struct SessionSummaryView: View {
         let floors = Int(workoutManager.floorsClimbed)
         guard floors > 0 else { return "--" }
         return "\(floors.formattedWithSeparator)"
+    }
+
+    private var formattedCalories: String {
+        if activeCalories > 0 {
+            return "\(Int(activeCalories).formattedWithSeparator) kcal"
+        }
+        if let met = estimatedSessionCaloriesMET(), met > 0 {
+            return "~\(Int(met).formattedWithSeparator) kcal"
+        }
+        return "--"
     }
 
     private func statItem(title: LocalizedStringKey, value: String) -> some View {
@@ -388,7 +399,7 @@ struct SessionSummaryView: View {
         }
 
         // Send workout data to iPhone via WatchConnectivity as backup
-        sendWorkoutToPhone(perExerciseHealthKitIDs: perExerciseIDs)
+        sendWorkoutToPhone(perExerciseHealthKitIDs: perExerciseIDs, allocation: allocation)
         recordExerciseUsage()
 
         hasSaved = true
@@ -397,17 +408,66 @@ struct SessionSummaryView: View {
     }
 
     /// Per-exercise time/calorie allocation (single source of truth — Correction #37, #148).
-    private func perExerciseAllocation() -> (duration: TimeInterval, calories: Double?) {
+    private func perExerciseAllocation() -> (duration: TimeInterval, calories: Double?, calorieSource: CalorieSource) {
         let activeCount = Double(Swift.max(completedSetsData.filter { !$0.isEmpty }.count, 1))
         let sessionDuration = Swift.max(endDate.timeIntervalSince(startDate), 1)
-        return (sessionDuration / activeCount, activeCalories > 0 ? activeCalories / activeCount : nil)
+        let perExerciseDuration = sessionDuration / activeCount
+
+        // Prefer HK active calories when available (typically cardio).
+        if activeCalories > 0 {
+            return (perExerciseDuration, activeCalories / activeCount, .healthKit)
+        }
+
+        // MET-based fallback for strength workouts where HK provides ~0 calories.
+        if let metCalories = estimatedSessionCaloriesMET(), metCalories > 0 {
+            return (perExerciseDuration, metCalories / activeCount, .met)
+        }
+
+        return (perExerciseDuration, nil, .manual)
+    }
+
+    /// MET-based calorie estimation using the average metValue of active exercises.
+    /// Uses CalorieEstimationService.defaultBodyWeightKg as the default body weight.
+    private func estimatedSessionCaloriesMET() -> Double? {
+        guard let template = workoutManager.templateSnapshot else { return nil }
+        let exerciseLibrary = WatchConnectivityManager.shared.exerciseLibrary
+        let libraryByID = Dictionary(
+            exerciseLibrary.map { ($0.id, $0) },
+            uniquingKeysWith: { first, _ in first }
+        )
+
+        // Collect MET values for active exercises (those with completed sets).
+        var metValues: [Double] = []
+        for (index, setsData) in completedSetsData.enumerated() {
+            guard index < template.entries.count, !setsData.isEmpty else { continue }
+            let entry = template.entries[index]
+            if let met = libraryByID[entry.exerciseDefinitionID]?.metValue, met > 0 {
+                metValues.append(met)
+            }
+        }
+        guard !metValues.isEmpty else { return nil }
+
+        let averageMET = metValues.reduce(0, +) / Double(metValues.count)
+        let sessionDuration = Swift.max(endDate.timeIntervalSince(startDate), 1)
+        let totalSetsCount = completedSetsData.reduce(0) { $0 + $1.count }
+        let estimatedRestSeconds = Double(Swift.max(totalSetsCount - 1, 0))
+            * WatchConnectivityManager.shared.globalRestSeconds
+
+        let bodyWeightKg = 70.0 // CalorieEstimationService.defaultBodyWeightKg
+        let activeSeconds = Swift.max(sessionDuration - estimatedRestSeconds, 0)
+        guard activeSeconds > 0 else { return nil }
+
+        let hours = activeSeconds / 3600.0
+        let result = averageMET * bodyWeightKg * hours
+        guard result.isFinite, result >= 0 else { return nil }
+        return result
     }
 
     /// Creates individual HKWorkout per exercise via non-live HKWorkoutBuilder (parallel).
     /// Each exercise gets a sequential, non-overlapping time window to avoid HealthKit dedup.
     /// Returns a dictionary mapping exercise index → HealthKit workout UUID.
     private func saveIndividualHealthKitWorkouts(
-        allocation: (duration: TimeInterval, calories: Double?)
+        allocation: (duration: TimeInterval, calories: Double?, calorieSource: CalorieSource)
     ) async -> [Int: String] {
         guard let template = workoutManager.templateSnapshot else { return [:] }
         let healthStore = workoutManager.healthStore
@@ -447,7 +507,7 @@ struct SessionSummaryView: View {
     /// Persist ExerciseRecord + WorkoutSet to SwiftData for each exercise in the session.
     private func saveWorkoutRecords(
         perExerciseHealthKitIDs: [Int: String],
-        allocation: (duration: TimeInterval, calories: Double?)
+        allocation: (duration: TimeInterval, calories: Double?, calorieSource: CalorieSource)
     ) {
         guard let template = workoutManager.templateSnapshot else { return }
 
@@ -460,10 +520,11 @@ struct SessionSummaryView: View {
                 date: startDate,
                 exerciseType: entry.exerciseName,
                 duration: allocation.duration,
-                calories: allocation.calories,
+                calories: allocation.calorieSource == .healthKit ? allocation.calories : nil,
                 healthKitWorkoutID: perExerciseHealthKitIDs[exerciseIndex],
                 exerciseDefinitionID: entry.exerciseDefinitionID,
-                calorieSource: activeCalories > 0 ? .healthKit : .manual,
+                estimatedCalories: allocation.calorieSource == .met ? allocation.calories : nil,
+                calorieSource: allocation.calorieSource,
                 rpe: effort
             )
 
@@ -510,6 +571,7 @@ struct SessionSummaryView: View {
         let steps = workoutManager.steps
         let pace = workoutManager.currentPace
         let floors = workoutManager.floorsClimbed
+        let cardioCalorieSource: CalorieSource = activeCalories > 0 ? .healthKit : .manual
         let record = ExerciseRecord(
             date: startDate,
             exerciseType: exerciseType,
@@ -526,7 +588,7 @@ struct SessionSummaryView: View {
             exerciseDefinitionID: exerciseDefinitionID,
             primaryMuscles: primaryMuscles,
             secondaryMuscles: secondaryMuscles,
-            calorieSource: activeCalories > 0 ? .healthKit : .manual,
+            calorieSource: cardioCalorieSource,
             rpe: effort,
             autoIntensityRaw: workoutManager.cardioMachineAutoIntensityRaw
         )
@@ -534,7 +596,10 @@ struct SessionSummaryView: View {
     }
 
     /// Send workout summary to iPhone via WatchConnectivity message.
-    private func sendWorkoutToPhone(perExerciseHealthKitIDs: [Int: String]) {
+    private func sendWorkoutToPhone(
+        perExerciseHealthKitIDs: [Int: String],
+        allocation: (duration: TimeInterval, calories: Double?, calorieSource: CalorieSource)
+    ) {
         guard let template = workoutManager.templateSnapshot else { return }
 
         // Build WatchWorkoutUpdate from completed data
@@ -562,7 +627,9 @@ struct SessionSummaryView: View {
                 endTime: endDate,
                 heartRateSamples: [],
                 rpe: effort,
-                healthKitWorkoutID: perExerciseHealthKitIDs[exerciseIndex]
+                healthKitWorkoutID: perExerciseHealthKitIDs[exerciseIndex],
+                calories: allocation.calories,
+                calorieSourceRaw: allocation.calorieSource.rawValue
             )
 
             WatchConnectivityManager.shared.sendWorkoutCompletion(update)

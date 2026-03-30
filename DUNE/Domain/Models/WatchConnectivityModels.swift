@@ -21,6 +21,8 @@ struct WatchWorkoutUpdate: Codable, Sendable {
     var heartRateSamples: [WatchHeartRateSample]
     var rpe: Int?
     var healthKitWorkoutID: String?
+    var calories: Double?
+    var calorieSourceRaw: String?
 }
 
 struct WatchSetData: Codable, Sendable {
@@ -62,6 +64,7 @@ struct WatchExerciseInfo: Codable, Sendable {
     let procedureSets: [WatchProcedureSetSnapshot]?
     let procedureUpdatedAt: Date?
     let progressionIncrementKg: Double?
+    let metValue: Double?
 
     init(
         id: String,
@@ -78,7 +81,8 @@ struct WatchExerciseInfo: Codable, Sendable {
         aliases: [String]? = nil,
         procedureSets: [WatchProcedureSetSnapshot]? = nil,
         procedureUpdatedAt: Date? = nil,
-        progressionIncrementKg: Double? = nil
+        progressionIncrementKg: Double? = nil,
+        metValue: Double? = nil
     ) {
         self.id = id
         self.name = name
@@ -95,6 +99,7 @@ struct WatchExerciseInfo: Codable, Sendable {
         self.procedureSets = procedureSets
         self.procedureUpdatedAt = procedureUpdatedAt
         self.progressionIncrementKg = progressionIncrementKg
+        self.metValue = metValue
     }
 
     private enum CodingKeys: String, CodingKey {
@@ -113,6 +118,7 @@ struct WatchExerciseInfo: Codable, Sendable {
         case procedureSets
         case procedureUpdatedAt
         case progressionIncrementKg
+        case metValue
     }
 
     init(from decoder: any Decoder) throws {
@@ -132,6 +138,7 @@ struct WatchExerciseInfo: Codable, Sendable {
         procedureSets = try container.decodeIfPresent([WatchProcedureSetSnapshot].self, forKey: .procedureSets)
         procedureUpdatedAt = try container.decodeIfPresent(Date.self, forKey: .procedureUpdatedAt)
         progressionIncrementKg = try container.decodeIfPresent(Double.self, forKey: .progressionIncrementKg)
+        metValue = try container.decodeIfPresent(Double.self, forKey: .metValue)
     }
 }
 

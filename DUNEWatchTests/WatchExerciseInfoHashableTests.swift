@@ -82,5 +82,28 @@ struct WatchExerciseInfoHashableTests {
         #expect(decoded.procedureSets == nil)
         #expect(decoded.procedureUpdatedAt == nil)
         #expect(decoded.progressionIncrementKg == nil)
+        #expect(decoded.metValue == nil)
+    }
+
+    @Test("Decoding payload with metValue preserves value")
+    func decodeWithMetValue() throws {
+        let data = Data(
+            """
+            {
+              "id": "bench-press",
+              "name": "Bench Press",
+              "inputType": "weight_reps",
+              "defaultSets": 3,
+              "defaultReps": 10,
+              "defaultWeightKg": 60,
+              "equipment": "barbell",
+              "cardioSecondaryUnit": null,
+              "metValue": 5.0
+            }
+            """.utf8
+        )
+
+        let decoded = try JSONDecoder().decode(WatchExerciseInfo.self, from: data)
+        #expect(decoded.metValue == 5.0)
     }
 }
