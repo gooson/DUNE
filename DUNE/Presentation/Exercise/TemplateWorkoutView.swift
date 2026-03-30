@@ -398,28 +398,31 @@ struct TemplateWorkoutView: View {
             Text(viewModel.currentExercise.localizedName)
                 .font(.title3.weight(.semibold))
 
-            HStack(spacing: DS.Spacing.xs) {
-                ForEach(viewModel.currentExercise.primaryMuscles, id: \.self) { muscle in
-                    Text(muscle.displayName)
-                        .font(.caption2.weight(.medium))
-                        .padding(.horizontal, DS.Spacing.sm)
-                        .padding(.vertical, DS.Spacing.xxs)
-                        .background(DS.Color.activity.opacity(0.15), in: Capsule())
-                        .foregroundStyle(DS.Color.activity)
+            HStack(spacing: DS.Spacing.md) {
+                Button {
+                    withAnimation(DS.Animation.snappy) {
+                        showTransition = false
+                    }
+                } label: {
+                    Text("Start")
+                        .font(.body.weight(.semibold))
+                        .frame(maxWidth: .infinity, minHeight: 44)
                 }
-            }
+                .buttonStyle(.borderedProminent)
+                .tint(DS.Color.activity)
 
-            Button {
-                withAnimation(DS.Animation.snappy) {
-                    showTransition = false
+                Button {
+                    withAnimation(DS.Animation.snappy) {
+                        skipTransitionExercise()
+                    }
+                } label: {
+                    Text("Skip")
+                        .font(.body.weight(.semibold))
+                        .frame(maxWidth: .infinity, minHeight: 44)
                 }
-            } label: {
-                Text("Start")
-                    .font(.body.weight(.semibold))
-                    .frame(maxWidth: .infinity, minHeight: 44)
+                .buttonStyle(.bordered)
+                .tint(DS.Color.textSecondary)
             }
-            .buttonStyle(.borderedProminent)
-            .tint(DS.Color.activity)
         }
         .padding(DS.Spacing.lg)
         .frame(maxWidth: .infinity)
@@ -457,6 +460,20 @@ struct TemplateWorkoutView: View {
                 }
             }
         }
+    }
+
+    /// Skip the proposed exercise from the transition overlay and propose the next one.
+    private func skipTransitionExercise() {
+        let hasNext = viewModel.skipAndAdvance()
+        if !hasNext {
+            showTransition = false
+            if viewModel.hasAnyCompleted {
+                finishWorkout()
+            } else {
+                dismiss()
+            }
+        }
+        // If hasNext, overlay stays visible with the updated currentExercise
     }
 
     private func finishWorkout() {
