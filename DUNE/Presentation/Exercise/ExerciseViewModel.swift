@@ -56,9 +56,6 @@ final class ExerciseViewModel {
             }
         }
 
-        // Build set of visible HK IDs to skip linked empty stubs
-        let visibleHKIDs = Set(externalWorkouts.map(\.id))
-
         var items: [ExerciseListItem] = []
         items.reserveCapacity(externalWorkouts.count + manualRecords.count)
 
@@ -67,16 +64,38 @@ final class ExerciseViewModel {
         }
 
         for record in manualRecords {
-            // Skip empty stubs whose linked HealthKit workout is now visible
+            // Skip empty stubs that have a matching visible HealthKit workout.
+            // Match by healthKitWorkoutID (primary) or type+date proximity (fallback).
             if !record.hasMeaningfulContent,
-               let hkID = record.healthKitWorkoutID, !hkID.isEmpty,
-               visibleHKIDs.contains(hkID) {
+               hasMatchingVisibleWorkout(for: record, in: externalWorkouts) {
                 continue
             }
             items.append(.fromManualRecord(record, library: exerciseLibrary))
         }
 
         allExercises = items.sorted { $0.date > $1.date }
+    }
+
+    /// Whether a visible HealthKit workout covers this empty stub record,
+    /// making the stub redundant.
+    private func hasMatchingVisibleWorkout(
+        for record: ExerciseRecord,
+        in workouts: [WorkoutSummary]
+    ) -> Bool {
+        // Primary: exact healthKitWorkoutID match
+        if let hkID = record.healthKitWorkoutID, !hkID.isEmpty {
+            return workouts.contains { $0.id == hkID }
+        }
+        // Fallback: type + date proximity (±2 min), same as dedup logic
+        let recordActivity = WorkoutActivityType.infer(from: record.exerciseType)
+        return workouts.contains { workout in
+            guard abs(record.date.timeIntervalSince(workout.date)) < 120 else {
+                return false
+            }
+            if record.exerciseType == workout.activityType.rawValue { return true }
+            if let inferred = recordActivity, inferred == workout.activityType { return true }
+            return false
+        }
     }
 
     func loadHealthKitWorkouts() async {
