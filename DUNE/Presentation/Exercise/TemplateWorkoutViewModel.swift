@@ -192,13 +192,22 @@ final class TemplateWorkoutViewModel {
         }
     }
 
-    /// Skip the current exercise
-    func skipCurrent() {
+    /// Skip the current exercise and advance to the next pending.
+    /// Returns `true` if there is a next pending exercise, `false` if all are done.
+    @discardableResult
+    func skipAndAdvance() -> Bool {
         exerciseStatuses[currentExerciseIndex] = .skipped
         if let nextIndex = findNextPendingIndex(after: currentExerciseIndex) {
             currentExerciseIndex = nextIndex
             exerciseStatuses[nextIndex] = .inProgress
+            return true
         }
+        return false
+    }
+
+    /// Skip the current exercise (used by tab-bar skip, where return value is not needed).
+    func skipCurrent() {
+        skipAndAdvance()
     }
 
     /// Jump to a specific exercise

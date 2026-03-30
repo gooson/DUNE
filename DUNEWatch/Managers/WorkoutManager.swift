@@ -210,6 +210,22 @@ final class WorkoutManager: NSObject {
         return currentExerciseIndex >= snapshot.entries.count - 1
     }
 
+    /// Indices of exercises explicitly skipped by the user.
+    private(set) var skippedExerciseIndices: Set<Int> = []
+
+    /// Whether all remaining exercises are either completed (have sets) or skipped.
+    var isAllExercisesDone: Bool {
+        guard let snapshot = templateSnapshot else { return true }
+        // Check if any exercise from the start is still pending
+        for i in 0..<snapshot.entries.count {
+            let hasCompletedSets = i < completedSetsData.count && !completedSetsData[i].isEmpty
+            if !hasCompletedSets && !skippedExerciseIndices.contains(i) {
+                return false
+            }
+        }
+        return true
+    }
+
     /// Last completed set for the current exercise (for weight/reps pre-fill).
     var lastCompletedSetForCurrentExercise: CompletedSetData? {
         guard currentExerciseIndex < completedSetsData.count else { return nil }
@@ -620,14 +636,42 @@ final class WorkoutManager: NSObject {
 
     func advanceToNextExercise() {
         guard let snapshot = templateSnapshot else { return }
-        if currentExerciseIndex < snapshot.entries.count - 1 {
+        // Skip-aware: find next non-skipped, non-completed exercise
+        if let nextIdx = nextPendingExerciseIndex(after: currentExerciseIndex) {
+            currentExerciseIndex = nextIdx
+            currentSetIndex = 0
+        } else if currentExerciseIndex < snapshot.entries.count - 1 {
+            // Fallback: simple increment (all remaining are skipped/completed)
             currentExerciseIndex += 1
             currentSetIndex = 0
         }
     }
 
-    func skipExercise() {
-        advanceToNextExercise()
+    /// Skip the current exercise and advance to the next non-skipped pending exercise.
+    /// Returns `true` if there is a next exercise to propose, `false` if all are done.
+    @discardableResult
+    func skipExercise() -> Bool {
+        guard templateSnapshot != nil else { return false }
+        skippedExerciseIndices.insert(currentExerciseIndex)
+
+        if let nextIdx = nextPendingExerciseIndex(after: currentExerciseIndex) {
+            currentExerciseIndex = nextIdx
+            currentSetIndex = 0
+            return true
+        }
+        return false
+    }
+
+    /// Find the next exercise index after `after` that is neither skipped nor completed.
+    private func nextPendingExerciseIndex(after index: Int) -> Int? {
+        guard let snapshot = templateSnapshot else { return nil }
+        for i in (index + 1)..<snapshot.entries.count {
+            let hasCompletedSets = i < completedSetsData.count && !completedSetsData[i].isEmpty
+            if !hasCompletedSets && !skippedExerciseIndices.contains(i) {
+                return i
+            }
+        }
+        return nil
     }
 
     // MARK: - Exercise Reordering
@@ -702,6 +746,14 @@ final class WorkoutManager: NSObject {
         if let v = extraAtIndex { extraSetsPerExercise[targetIndex] = v }
         if let v = extraAtTarget { extraSetsPerExercise[index] = v }
 
+        // Remap skippedExerciseIndices (swap membership at index <-> targetIndex)
+        let indexWasSkipped = skippedExerciseIndices.contains(index)
+        let targetWasSkipped = skippedExerciseIndices.contains(targetIndex)
+        skippedExerciseIndices.remove(index)
+        skippedExerciseIndices.remove(targetIndex)
+        if indexWasSkipped { skippedExerciseIndices.insert(targetIndex) }
+        if targetWasSkipped { skippedExerciseIndices.insert(index) }
+
         // Restore currentExerciseIndex to follow the same exercise
         if let newIndex = snapshot.entries.firstIndex(where: { $0.id == currentEntryID }) {
             currentExerciseIndex = newIndex
@@ -725,6 +777,7 @@ final class WorkoutManager: NSObject {
         currentSetIndex = 0
         completedSetsData = []
         extraSetsPerExercise = [:]
+        skippedExerciseIndices = []
         heartRate = 0
         activeCalories = 0
         distance = 0
