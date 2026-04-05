@@ -141,7 +141,6 @@ struct PostureHistoryView: View {
                     data: viewModel.chartData,
                     baseline: nil,
                     yAxisLabel: chartYLabel,
-                    period: chartPeriod,
                     tintColor: DS.Color.body
                 )
             } else if viewModel.chartData.count == 1 {
@@ -159,13 +158,6 @@ struct PostureHistoryView: View {
             return "\(filter.displayName) Score"
         }
         return String(localized: "Posture Score")
-    }
-
-    private var chartPeriod: DotLineChartView.Period {
-        let count = viewModel.chartData.count
-        if count <= 10 { return .week }
-        if count <= 30 { return .month }
-        return .quarter
     }
 
     private var singleDataPointView: some View {

@@ -5,7 +5,6 @@ struct DotLineChartView: View {
     let data: [ChartDataPoint]
     let baseline: Double?
     let yAxisLabel: String
-    var period: Period = .week
     var timePeriod: TimePeriod?
     var tintColor: Color = DS.Color.hrv
     var trendLine: [ChartDataPoint]?
@@ -21,19 +20,7 @@ struct DotLineChartView: View {
     @State private var selectionGestureState = ChartSelectionGestureState()
     @State private var lastSelectionProbeLabel = "none"
     @State private var cachedYDomain: ClosedRange<Double> = 0...100
-    enum Period: String, CaseIterable {
-        case week = "7D"
-        case month = "30D"
-        case quarter = "90D"
-
-        var days: Int {
-            switch self {
-            case .week: 7
-            case .month: 30
-            case .quarter: 90
-            }
-        }
-    }
+    @State private var cachedSpanDays: Int = 0
 
     var body: some View {
         Chart {
@@ -142,8 +129,14 @@ struct DotLineChartView: View {
             .frame(height: chartHeight)
             .clipped()
             .chartDrawAnimation()
-            .onAppear { cachedYDomain = Self.computeYDomain(from: data) }
-            .onChange(of: data.count) { _, _ in cachedYDomain = Self.computeYDomain(from: data) }
+            .onAppear {
+                cachedYDomain = Self.computeYDomain(from: data)
+                cachedSpanDays = Self.computeSpanDays(from: data)
+            }
+            .onChange(of: data.count) { _, _ in
+                cachedYDomain = Self.computeYDomain(from: data)
+                cachedSpanDays = Self.computeSpanDays(from: data)
+            }
     }
 
     private var chartDescriptor: StandardChartAccessibility {
@@ -168,7 +161,7 @@ struct DotLineChartView: View {
         if let timePeriod {
             return timePeriod.strideComponent
         }
-        if dataSpanDays > 180 { return .month }
+        if cachedSpanDays > 180 { return .month }
         return .day
     }
 
@@ -176,7 +169,7 @@ struct DotLineChartView: View {
         if let timePeriod {
             return timePeriod.strideCount
         }
-        let span = dataSpanDays
+        let span = cachedSpanDays
         if span <= 14 { return 2 }
         if span <= 60 { return 7 }
         if span <= 180 { return 14 }
@@ -187,14 +180,15 @@ struct DotLineChartView: View {
         if let timePeriod {
             return timePeriod.axisLabelFormat
         }
-        let span = dataSpanDays
+        let span = cachedSpanDays
         if span <= 14 { return .dateTime.day().month(.abbreviated) }
         if span <= 180 { return .dateTime.month(.narrow).day() }
         return .dateTime.month(.abbreviated)
     }
 
-    private var dataSpanDays: Int {
-        guard let first = data.first?.date, let last = data.last?.date else { return 0 }
+    private static func computeSpanDays(from data: [ChartDataPoint]) -> Int {
+        let dates = data.map(\.date)
+        guard let first = dates.min(), let last = dates.max() else { return 0 }
         return max(0, Calendar.current.dateComponents([.day], from: first, to: last).day ?? 0)
     }
 
