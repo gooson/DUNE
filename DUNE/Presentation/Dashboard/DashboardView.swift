@@ -51,7 +51,6 @@ struct DashboardView: View {
     @State private var showNotificationHub = false
     @State private var showWhatsNew = false
     @State private var showSettings = false
-    @State private var heroFrame: CGRect?
     @State private var cachedWeatherAtmosphere: WeatherAtmosphere = .default
 
     init(
@@ -110,8 +109,6 @@ struct DashboardView: View {
                     }
                 }
                 .padding(sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.lg)
-                // animation on sectionVisibilityHash removed — causes NavigationStack
-                // feedback loop during Settings push (observation re-entrancy)
                 .coordinateSpace(name: TabHeroStartLine.coordinateSpace)
             }
             .onChange(of: scrollToTopSignal) { _, _ in
@@ -120,9 +117,8 @@ struct DashboardView: View {
                 }
             }
         }
-        .onPreferenceChange(TabHeroFramePreferenceKey.self) { heroFrame = $0 }
         .environment(\.weatherAtmosphere, cachedWeatherAtmosphere)
-        .background {
+        .backgroundPreferenceValue(TabHeroFramePreferenceKey.self) { heroFrame in
             TabWaveBackground()
                 .environment(\.tabHeroStartLineInset, heroFrame.map(TabHeroStartLine.inset(for:)))
         }
@@ -242,29 +238,6 @@ struct DashboardView: View {
 
     private static let errorBannerTransition: AnyTransition =
         .opacity.combined(with: .move(edge: .top))
-
-    /// O(1) hash covering all section-visibility drivers.
-    private var sectionVisibilityHash: Int {
-        var h = Hasher()
-        h.combine(viewModel.sortedMetrics.count)
-        h.combine(viewModel.conditionScore != nil)
-        h.combine(viewModel.baselineStatus != nil)
-        h.combine(viewModel.weatherSnapshot != nil)
-        h.combine(viewModel.errorMessage != nil)
-        h.combine(viewModel.insightCards.count)
-        h.combine(viewModel.templateNudgeRecommendation != nil)
-        h.combine(viewModel.pinnedCards.count)
-        h.combine(viewModel.sleepDeficitAnalysis != nil)
-        h.combine(viewModel.focusInsight != nil)
-        h.combine(viewModel.workoutSuggestion != nil)
-        h.combine(viewModel.shouldShowYesterdayRecap)
-        h.combine(viewModel.adaptiveHeroMessage != nil)
-        h.combine(viewModel.cumulativeStressScore != nil)
-        h.combine(viewModel.shouldShowDailyDigest)
-        h.combine(viewModel.shouldShowQuickActions)
-        h.combine(viewModel.shouldShowTodaysBrief)
-        return h.finalize()
-    }
 
     // MARK: - Dashboard Content (split for type-checker)
 

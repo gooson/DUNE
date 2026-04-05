@@ -119,7 +119,6 @@ struct ActivityView: View {
     private let notificationWorkoutID: String?
     private let notificationRouteSignal: Int
     private let notificationPersonalRecordsSignal: Int
-    @State private var heroFrame: CGRect?
 
     private enum ScrollAnchor: Hashable {
         case top
@@ -323,8 +322,7 @@ struct ActivityView: View {
                 }
             }
         }
-        .onPreferenceChange(TabHeroFramePreferenceKey.self) { heroFrame = $0 }
-        .background {
+        .backgroundPreferenceValue(TabHeroFramePreferenceKey.self) { heroFrame in
             TabWaveBackground()
                 .environment(\.tabHeroStartLineInset, heroFrame.map(TabHeroStartLine.inset(for:)))
         }
