@@ -15,7 +15,6 @@ struct RecoverySleepCard: View {
                     header
                     deficitRow
                     insightRows
-                    detailLink
                 }
             }
             .accessibilityIdentifier("dashboard-recovery-sleep-card")
