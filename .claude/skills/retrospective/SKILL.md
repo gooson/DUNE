@@ -41,12 +41,12 @@ git log --oneline -20
 
 회고 결과를 시스템에 반영합니다:
 
-**3.1 CLAUDE.md Correction Log 업데이트**
+**3.1 docs/corrections-active.md 업데이트**
 
-개선할 점에서 반복 가능한 실수가 있다면 Correction Log에 추가합니다:
+개선할 점에서 반복 가능한 실수가 있다면 `docs/corrections-active.md`에 교정사항을 추가합니다 (CLAUDE.md 본문이 아닌 active 파일에 기록):
 
 ```markdown
-### YYYY-MM-DD: {교정 내용}
+### #{번호} YYYY-MM-DD: {교정 내용}
 ```
 
 **3.2 Rules 업데이트 제안** (필요시)

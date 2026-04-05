@@ -71,7 +71,7 @@ $ARGUMENTS 에 대한 구현을 수행합니다.
 - Unit Test: `xcodebuild test ... -only-testing DUNETests` (xcode-project skill 참조)
 - **UI Test** (UI 변경이 포함된 경우 필수):
   - `ui-test-expert` 에이전트로 UI 테스트 작성/업데이트
-  - `xcodebuild test -project DUNE/DUNE.xcodeproj -scheme DUNEUITests -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max,OS=26.3.1' -only-testing DUNEUITests`
+  - `xcodebuild test -project DUNE/DUNE.xcodeproj -scheme DUNEUITests -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max' -only-testing DUNEUITests`
   - 레이아웃 검증: 주요 요소의 존재, 접근성 식별자 확인 포함
   - UI 테스트가 통과해야 Quality Check 통과
 

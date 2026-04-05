@@ -17,6 +17,7 @@ description: "프로젝트 온보딩. CLAUDE.md, rules, skills, 구조를 종합
 - **.claude/skills/**: 사용 가능한 워크플로우
 - **.claude/agents/**: 전문 서브에이전트들
 - **docs/**: 문서 구조와 기존 문서
+- **Memory 파일**: 프로젝트 memory 디렉토리의 MEMORY.md와 관련 memory 파일 확인
 
 ### Step 2: 워크플로우 설명
 
