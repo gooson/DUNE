@@ -46,16 +46,11 @@ struct HabitManagementView: View {
         }
     }
 
-    private var logSnapshots: [HabitLogSnapshot] {
-        allLogs.map { log in
-            HabitLogSnapshot(
-                habitID: log.habitDefinition?.id ?? UUID(),
-                date: log.date,
-                value: log.value,
-                memo: log.memo
-            )
-        }
-    }
+    // Cached snapshots to avoid recomputing per-row (P2 review fix)
+    @State private var cachedLogSnapshots: [HabitLogSnapshot] = []
+    @State private var cachedStats: [UUID: (total: Int, bestStreak: Int)] = [:]
+
+    private var logSignature: Int { allLogs.count }
 
     var body: some View {
         ScrollView {
@@ -70,6 +65,27 @@ struct HabitManagementView: View {
             }
             .padding(DS.Spacing.lg)
         }
+        .task(id: logSignature) {
+            let snapshots = allLogs.map { log in
+                HabitLogSnapshot(
+                    habitID: log.habitDefinition?.id ?? UUID(),
+                    date: log.date,
+                    value: log.value,
+                    memo: log.memo
+                )
+            }
+            cachedLogSnapshots = snapshots
+
+            let allHabits = activeHabits + archivedHabits
+            var stats: [UUID: (total: Int, bestStreak: Int)] = [:]
+            for habit in allHabits {
+                stats[habit.id] = (
+                    total: HabitStreakService.totalCompletions(logs: snapshots, for: habit.id),
+                    bestStreak: HabitStreakService.longestStreak(logs: snapshots, for: habit.id)
+                )
+            }
+            cachedStats = stats
+        }
         .scrollBounceBehavior(.basedOnSize)
         .background { DetailWaveBackground() }
         .englishNavigationTitle("Habits")
@@ -78,7 +94,7 @@ struct HabitManagementView: View {
                 habitName: selection.name,
                 iconCategory: selection.iconCategory,
                 habitType: selection.habitType,
-                logs: logSnapshots.filter { $0.habitID == selection.id }
+                logs: cachedLogSnapshots.filter { $0.habitID == selection.id }
             )
         }
         .accessibilityIdentifier("habit-management-screen")
@@ -130,8 +146,9 @@ struct HabitManagementView: View {
     }
 
     private func habitRow(_ habit: HabitDefinition) -> some View {
-        let totalCount = HabitStreakService.totalCompletions(logs: logSnapshots, for: habit.id)
-        let bestStreak = HabitStreakService.longestStreak(logs: logSnapshots, for: habit.id)
+        let stats = cachedStats[habit.id]
+        let totalCount = stats?.total ?? 0
+        let bestStreak = stats?.bestStreak ?? 0
 
         return HStack(spacing: DS.Spacing.md) {
             // Icon
@@ -377,9 +394,10 @@ private struct HabitHistoryDetailSheet: View {
         switch habitType {
         case .duration:
             let minutes = Int(value)
-            return "\(minutes) min"
+            return String(localized: "\(minutes) min")
         case .count:
-            return "\(Int(value))x"
+            let count = Int(value)
+            return String(localized: "\(count)x")
         case .check:
             return ""
         }
