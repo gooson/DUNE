@@ -209,6 +209,17 @@ final class ScoreRefreshService {
         return (try? context.fetch(rollingDescriptor(from: startDate, fetchLimit: fetchLimit))) ?? []
     }
 
+    /// Fetch snapshots that have a non-nil stressScore within the given date range.
+    /// Used by CumulativeStressDetailViewModel for chart data.
+    func fetchStressSnapshots(from start: Date, to end: Date) async -> [HourlyScoreSnapshot] {
+        var descriptor = FetchDescriptor<HourlyScoreSnapshot>(
+            predicate: #Predicate { $0.date >= start && $0.date < end && $0.stressScore != nil },
+            sortBy: [SortDescriptor(\.date)]
+        )
+        descriptor.fetchLimit = 2000 // generous limit for 30d × ~24h
+        return (try? context.fetch(descriptor)) ?? []
+    }
+
     // MARK: - Private
 
     private func rollingDescriptor(from startDate: Date, fetchLimit: Int) -> FetchDescriptor<HourlyScoreSnapshot> {
