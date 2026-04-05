@@ -15,6 +15,8 @@ struct CumulativeStressDetailView: View {
     @State private var viewModel: CumulativeStressDetailViewModel
     @Environment(\.horizontalSizeClass) private var sizeClass
 
+    private var isRegular: Bool { sizeClass == .regular }
+
     init(stressScore: CumulativeStressScore, scoreRefreshService: ScoreRefreshService? = nil) {
         self.stressScore = stressScore
         self.scoreRefreshService = scoreRefreshService
@@ -23,9 +25,9 @@ struct CumulativeStressDetailView: View {
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.xl) {
+            VStack(alignment: .leading, spacing: isRegular ? DS.Spacing.xxl : DS.Spacing.xl) {
                 // 1. Hero + Insight + Contributors
-                if sizeClass == .regular {
+                if isRegular {
                     HStack(alignment: .top, spacing: DS.Spacing.xxl) {
                         scoreHero
                             .frame(maxWidth: .infinity)
@@ -52,13 +54,13 @@ struct CumulativeStressDetailView: View {
                         StandardCard {
                             contributorsView
                         }
-                        .staggeredAppear(index: 1)
+                        .staggeredAppear(index: 2)
                     }
                 }
 
                 // 2. Level Guide
                 CumulativeStressLevelGuide(currentLevel: stressScore.level)
-                    .staggeredAppear(index: 2)
+                    .staggeredAppear(index: 3)
 
                 // 3. Period Picker
                 Picker("Period", selection: $viewModel.selectedPeriod) {
@@ -68,7 +70,7 @@ struct CumulativeStressDetailView: View {
                 }
                 .pickerStyle(.segmented)
                 .sensoryFeedback(.selection, trigger: viewModel.selectedPeriod)
-                .staggeredAppear(index: 3)
+                .staggeredAppear(index: 4)
 
                 // 4. Chart Header
                 ScoreDetailChartHeader(
@@ -76,7 +78,7 @@ struct CumulativeStressDetailView: View {
                     showTrendLine: $viewModel.showTrendLine,
                     tintColor: stressScore.level.color
                 )
-                .staggeredAppear(index: 4)
+                .staggeredAppear(index: 5)
 
                 // 5. Main Trend Chart
                 StandardCard {
@@ -101,10 +103,10 @@ struct CumulativeStressDetailView: View {
                     .transition(.opacity)
                 }
                 .animation(.easeInOut(duration: 0.25), value: viewModel.selectedPeriod)
-                .staggeredAppear(index: 5)
+                .staggeredAppear(index: 6)
 
                 // 6. Summary Stats + 7. Highlights
-                if sizeClass == .regular {
+                if isRegular {
                     HStack(alignment: .top, spacing: DS.Spacing.lg) {
                         if let summary = viewModel.summaryStats {
                             ScoreDetailSummaryStats(summary: summary)
@@ -135,9 +137,9 @@ struct CumulativeStressDetailView: View {
                 StandardCard {
                     CumulativeStressExplainerSection()
                 }
-                .staggeredAppear(index: 7)
+                .staggeredAppear(index: 8)
             }
-            .padding(sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.lg)
+            .padding(isRegular ? DS.Spacing.xxl : DS.Spacing.lg)
         }
         .accessibilityIdentifier("cumulative-stress-detail-screen")
         .background { DetailWaveBackground() }
@@ -181,25 +183,25 @@ struct CumulativeStressDetailView: View {
     }
 
     private var insightSection: some View {
-        VStack(alignment: .leading, spacing: sizeClass == .regular ? DS.Spacing.md : DS.Spacing.sm) {
+        VStack(alignment: .leading, spacing: isRegular ? DS.Spacing.md : DS.Spacing.sm) {
             Text("Stress Insight")
-                .font(sizeClass == .regular ? .headline : .subheadline)
+                .font(isRegular ? .headline : .subheadline)
                 .fontWeight(.semibold)
 
             InlineCard {
-                HStack(alignment: .top, spacing: sizeClass == .regular ? DS.Spacing.lg : DS.Spacing.md) {
+                HStack(alignment: .top, spacing: isRegular ? DS.Spacing.lg : DS.Spacing.md) {
                     Image(systemName: stressScore.level.iconName)
-                        .font(sizeClass == .regular ? .title : .title2)
+                        .font(isRegular ? .title : .title2)
                         .foregroundStyle(stressScore.level.color)
-                        .frame(width: sizeClass == .regular ? 36 : 32)
+                        .frame(width: isRegular ? 36 : 32)
 
                     VStack(alignment: .leading, spacing: DS.Spacing.sm) {
                         Text(insightInterpretation)
-                            .font(sizeClass == .regular ? .body : .subheadline)
+                            .font(isRegular ? .body : .subheadline)
                             .fontWeight(.medium)
 
                         Text(insightGuidance)
-                            .font(sizeClass == .regular ? .subheadline : .caption)
+                            .font(isRegular ? .subheadline : .caption)
                             .foregroundStyle(DS.Color.textSecondary)
                             .fixedSize(horizontal: false, vertical: true)
                     }
@@ -291,7 +293,7 @@ struct CumulativeStressDetailView: View {
     // MARK: - Helpers
 
     private var chartHeight: CGFloat {
-        sizeClass == .regular ? 360 : 250
+        isRegular ? 360 : 250
     }
 
 }

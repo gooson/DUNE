@@ -63,7 +63,10 @@ struct CumulativeStressExplainerSection: View {
                     )
                 }
                 .padding(.top, DS.Spacing.md)
-                .transition(.opacity.combined(with: .move(edge: .top)))
+                .transition(.asymmetric(
+                    insertion: .opacity,
+                    removal: .opacity.combined(with: .move(edge: .top))
+                ))
             }
         }
     }
