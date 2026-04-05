@@ -154,6 +154,7 @@ struct DotLineChartView: View {
             default:         return .day
             }
         }
+        if cachedSpanDays > 180 { return .month }
         return .day
     }
 
