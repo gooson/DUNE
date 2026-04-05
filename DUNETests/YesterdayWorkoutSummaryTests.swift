@@ -3,6 +3,7 @@ import Foundation
 @testable import DUNE
 
 @Suite("Yesterday Workout Summary")
+@MainActor
 struct YesterdayWorkoutSummaryTests {
     private let calendar = Calendar.current
 
@@ -14,16 +15,14 @@ struct YesterdayWorkoutSummaryTests {
         exerciseType: String = "Bench Press",
         date: Date? = nil,
         duration: TimeInterval = 1800,
-        healthKitWorkoutID: String? = nil,
-        hasSetData: Bool = true
+        healthKitWorkoutID: String? = nil
     ) -> ExerciseRecord {
-        let record = ExerciseRecord(
+        ExerciseRecord(
             date: date ?? yesterday,
             exerciseType: exerciseType,
             duration: duration,
             healthKitWorkoutID: healthKitWorkoutID
         )
-        return record
     }
 
     private func makeWorkoutSummary(
@@ -49,7 +48,7 @@ struct YesterdayWorkoutSummaryTests {
     // MARK: - ExerciseRecord only (existing behavior)
 
     @Test("ExerciseRecords only — strength exercises counted")
-    func exerciseRecordsOnly() async {
+    func exerciseRecordsOnly() {
         let vm = DashboardViewModel()
         let records = [
             makeExerciseRecord(exerciseType: "Bench Press", duration: 1800),
@@ -65,9 +64,8 @@ struct YesterdayWorkoutSummaryTests {
     // MARK: - HealthKit WorkoutSummary only (cardio from Watch)
 
     @Test("HealthKit cardio workouts included via cached workouts")
-    func healthKitCardioOnly() async {
+    func healthKitCardioOnly() {
         let vm = DashboardViewModel()
-        // Simulate cached HealthKit workouts (normally set by fetchExerciseData)
         vm.setCachedHealthKitWorkoutsForTesting([
             makeWorkoutSummary(type: "Running", activityType: .running, duration: 1800),
         ])
@@ -81,7 +79,7 @@ struct YesterdayWorkoutSummaryTests {
     // MARK: - Both sources, dedup applied
 
     @Test("Mixed sources with dedup — no double counting")
-    func mixedSourcesDedup() async {
+    func mixedSourcesDedup() {
         let hkID = "hk-workout-123"
         let vm = DashboardViewModel()
         let records = [
@@ -91,7 +89,6 @@ struct YesterdayWorkoutSummaryTests {
                 healthKitWorkoutID: hkID
             ),
         ]
-        // Same workout exists in HealthKit — should be deduped
         vm.setCachedHealthKitWorkoutsForTesting([
             makeWorkoutSummary(id: hkID, type: "Running", activityType: .running, duration: 1800),
         ])
@@ -102,12 +99,11 @@ struct YesterdayWorkoutSummaryTests {
     }
 
     @Test("Mixed sources — ExerciseRecord strength + HealthKit cardio")
-    func strengthPlusCardio() async {
+    func strengthPlusCardio() {
         let vm = DashboardViewModel()
         let records = [
             makeExerciseRecord(exerciseType: "Bench Press", duration: 2400),
         ]
-        // Cardio from Watch — not in ExerciseRecord
         vm.setCachedHealthKitWorkoutsForTesting([
             makeWorkoutSummary(type: "Running", activityType: .running, duration: 1800),
         ])
@@ -121,14 +117,14 @@ struct YesterdayWorkoutSummaryTests {
     // MARK: - No yesterday data
 
     @Test("No yesterday data returns nil")
-    func noYesterdayData() async {
+    func noYesterdayData() {
         let vm = DashboardViewModel()
         vm.updateYesterdayWorkoutSummary(from: [])
         #expect(vm.yesterdayWorkoutSummary == nil)
     }
 
     @Test("Only today data returns nil for yesterday")
-    func onlyTodayData() async {
+    func onlyTodayData() {
         let vm = DashboardViewModel()
         let today = Date()
         let records = [
