@@ -10,16 +10,16 @@ struct WatchPostureSummaryCard: View {
     @Environment(\.appTheme) private var theme
 
     var body: some View {
+        let state = cardState
         StandardCard {
             VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-                // Header
-                header
+                header(state: state)
 
-                switch cardState {
+                switch state {
                 case .hasData(let data):
                     metricsRow(data)
                 case .monitoringDisabled, .notWorn, .watchNotInstalled:
-                    emptyState
+                    emptyStateView(state: state)
                 }
             }
         }
@@ -49,7 +49,7 @@ struct WatchPostureSummaryCard: View {
 
     // MARK: - Header
 
-    private var header: some View {
+    private func header(state: CardState) -> some View {
         HStack(spacing: DS.Spacing.xs) {
             Image(systemName: "applewatch")
                 .font(.caption)
@@ -59,7 +59,7 @@ struct WatchPostureSummaryCard: View {
                 .fontWeight(.medium)
                 .foregroundStyle(DS.Color.textSecondary)
             Spacer(minLength: 0)
-            if case .hasData = cardState {
+            if case .hasData = state {
                 Text("Today")
                     .font(.caption2)
                     .foregroundStyle(DS.Color.textTertiary)
@@ -103,17 +103,17 @@ struct WatchPostureSummaryCard: View {
 
     // MARK: - Empty State
 
-    private var emptyState: some View {
+    private func emptyStateView(state: CardState) -> some View {
         HStack(spacing: DS.Spacing.sm) {
-            Image(systemName: emptyStateIcon)
+            Image(systemName: emptyStateIcon(for: state))
                 .font(.title3)
                 .foregroundStyle(DS.Color.textTertiary)
             VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-                Text(emptyStateTitle)
+                Text(emptyStateTitle(for: state))
                     .font(.callout)
                     .fontWeight(.medium)
                     .foregroundStyle(DS.Color.textSecondary)
-                Text(emptyStateMessage)
+                Text(emptyStateMessage(for: state))
                     .font(.caption)
                     .foregroundStyle(DS.Color.textTertiary)
             }
@@ -121,42 +121,34 @@ struct WatchPostureSummaryCard: View {
         .padding(.vertical, DS.Spacing.xs)
     }
 
-    private var emptyStateIcon: String {
-        switch cardState {
-        case .watchNotInstalled:
-            return "applewatch.slash"
-        case .monitoringDisabled:
-            return "pause.circle"
-        case .notWorn:
-            return "applewatch.and.arrow.forward"
-        case .hasData:
-            return "figure.stand"
+    private func emptyStateIcon(for state: CardState) -> String {
+        switch state {
+        case .watchNotInstalled: "applewatch.slash"
+        case .monitoringDisabled: "pause.circle"
+        case .notWorn: "applewatch.and.arrow.forward"
+        case .hasData: "figure.stand"
         }
     }
 
-    private var emptyStateTitle: String {
-        switch cardState {
-        case .watchNotInstalled:
-            return String(localized: "Apple Watch required")
-        case .monitoringDisabled:
-            return String(localized: "Posture monitoring disabled")
-        case .notWorn:
-            return String(localized: "Wear your Apple Watch")
-        case .hasData:
-            return ""
+    private func emptyStateTitle(for state: CardState) -> String {
+        switch state {
+        case .watchNotInstalled: String(localized: "Apple Watch required")
+        case .monitoringDisabled: String(localized: "Posture monitoring disabled")
+        case .notWorn: String(localized: "Wear your Apple Watch")
+        case .hasData: ""
         }
     }
 
-    private var emptyStateMessage: String {
-        switch cardState {
+    private func emptyStateMessage(for state: CardState) -> String {
+        switch state {
         case .watchNotInstalled:
-            return String(localized: "Pair an Apple Watch to monitor your posture throughout the day.")
+            String(localized: "Pair an Apple Watch to monitor your posture throughout the day.")
         case .monitoringDisabled:
-            return String(localized: "Open DUNE on Apple Watch → tap ⚙️ at top right → enable Posture Monitoring.")
+            String(localized: "Open DUNE on Apple Watch → tap ⚙️ at top right → enable Posture Monitoring.")
         case .notWorn:
-            return String(localized: "Put on your Apple Watch to start tracking sitting time and walking posture.")
+            String(localized: "Put on your Apple Watch to start tracking sitting time and walking posture.")
         case .hasData:
-            return ""
+            ""
         }
     }
 
