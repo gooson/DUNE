@@ -8,6 +8,7 @@ struct SectionGroup<Content: View>: View {
     let iconColor: Color
     var subtitle: LocalizedStringKey? = nil
     var infoAction: (() -> Void)? = nil
+    var showChevron: Bool = false
     var fillHeight: Bool = false
     @ViewBuilder let content: () -> Content
 
@@ -179,6 +180,15 @@ struct SectionGroup<Content: View>: View {
                                 .font(.subheadline)
                                 .foregroundStyle(DS.Color.textSecondary)
                         }
+                    }
+
+                    if showChevron {
+                        if infoAction == nil { Spacer() }
+
+                        Image(systemName: "chevron.right")
+                            .font(.caption2)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(.tertiary)
                     }
                 }
 
