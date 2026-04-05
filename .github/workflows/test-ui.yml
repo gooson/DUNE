@@ -44,8 +44,8 @@ jobs:
           echo "── Available runtimes ──"
           xcrun simctl list runtimes
           echo ""
-          echo "── Available iOS simulators ──"
-          xcrun simctl list devices available | grep -A5 "iOS" | head -30
+          echo "── Available simulators ──"
+          xcrun simctl list devices available | grep -E "(iOS|watchOS)" -A5 | head -40
 
       - name: Install xcodegen
         run: brew install xcodegen
@@ -82,8 +82,8 @@ jobs:
           echo "── Available runtimes ──"
           xcrun simctl list runtimes
           echo ""
-          echo "── Available watchOS simulators ──"
-          xcrun simctl list devices available | grep -A5 "watchOS" | head -30
+          echo "── Available simulators ──"
+          xcrun simctl list devices available | grep -E "(iOS|watchOS)" -A5 | head -40
 
       - name: Install xcodegen
         run: brew install xcodegen
