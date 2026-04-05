@@ -1790,8 +1790,10 @@ final class DashboardViewModel {
 
     // MARK: - Testing Support
 
+    #if DEBUG
     /// Inject cached HealthKit workouts for unit tests.
     func setCachedHealthKitWorkoutsForTesting(_ workouts: [WorkoutSummary]) {
         cachedHealthKitWorkouts = workouts
     }
+    #endif
 }
