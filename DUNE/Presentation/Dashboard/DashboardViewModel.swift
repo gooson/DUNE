@@ -29,6 +29,8 @@ final class DashboardViewModel {
     private(set) var yesterdayConditionScore: Int?
     private(set) var todayWorkoutDone = false
     private(set) var shouldShowYesterdayRecap = false
+    /// Cached HealthKit workouts from last fetchExerciseData — used by yesterday recap.
+    private var cachedHealthKitWorkouts: [WorkoutSummary] = []
 
     // Phase 2: Pre-computed metric values for progress rings (avoid repeated body lookups)
     private(set) var todayStepsValue: Double = 0
@@ -932,6 +934,7 @@ final class DashboardViewModel {
 
         // 30 days for per-type cards (covers less frequent activities like cycling)
         let workouts = try await workoutService.fetchWorkouts(days: 30)
+        cachedHealthKitWorkouts = workouts
         guard !workouts.isEmpty else { return [] }
 
         let minutesByDay = Dictionary(grouping: workouts) {
@@ -1753,21 +1756,45 @@ final class DashboardViewModel {
             && (yesterdayConditionScore != nil || yesterdaySleepMinutes != nil)
     }
 
-    /// Enrich yesterday workout summary from exercise records (called from View).
+    /// Enrich yesterday workout summary from exercise records + HealthKit workouts (called from View).
+    ///
+    /// Merges SwiftData ExerciseRecords with cached HealthKit WorkoutSummaries to ensure
+    /// cardio workouts recorded via Apple Watch or third-party apps are included.
+    /// Uses `filteringAppDuplicates` to avoid double-counting.
     func updateYesterdayWorkoutSummary(from records: [ExerciseRecord]) {
         let calendar = Calendar.current
         guard let yesterday = calendar.date(byAdding: .day, value: -1, to: Date()) else { return }
         let yesterdayRecords = records.filter { calendar.isDate($0.date, inSameDayAs: yesterday) }
-        guard !yesterdayRecords.isEmpty else {
+
+        // HealthKit workouts from yesterday, deduped against ExerciseRecords
+        let yesterdayHKWorkouts = cachedHealthKitWorkouts
+            .filter { calendar.isDate($0.date, inSameDayAs: yesterday) }
+            .filteringAppDuplicates(against: yesterdayRecords)
+
+        let recordCount = yesterdayRecords.count
+        let hkCount = yesterdayHKWorkouts.count
+        let totalCount = recordCount + hkCount
+
+        guard totalCount > 0 else {
             yesterdayWorkoutSummary = nil
             return
         }
-        let totalSeconds = yesterdayRecords.map(\.duration).reduce(0, +)
-        let totalMinutes = Int(totalSeconds / 60)
+
+        let recordSeconds = yesterdayRecords.map(\.duration).reduce(0, +)
+        let hkSeconds = yesterdayHKWorkouts.map(\.duration).reduce(0, +)
+        let totalMinutes = Int((recordSeconds + hkSeconds) / 60)
         let h = totalMinutes / 60
         let m = totalMinutes % 60
         let durationText = h > 0 ? "\(h)h \(m)m" : "\(m)m"
-        let count = yesterdayRecords.count
-        yesterdayWorkoutSummary = "\(count) \(count == 1 ? String(localized: "exercise") : String(localized: "exercises")) · \(durationText)"
+        yesterdayWorkoutSummary = "\(totalCount) \(totalCount == 1 ? String(localized: "exercise") : String(localized: "exercises")) · \(durationText)"
     }
+
+    // MARK: - Testing Support
+
+    #if DEBUG
+    /// Inject cached HealthKit workouts for unit tests.
+    func setCachedHealthKitWorkoutsForTesting(_ workouts: [WorkoutSummary]) {
+        cachedHealthKitWorkouts = workouts
+    }
+    #endif
 }

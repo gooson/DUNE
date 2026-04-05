@@ -44,6 +44,14 @@ truncation이 발생합니다. 이를 방지하기 위해:
 - diff에 AI/Agent 관련 파일(.claude/agents/, .claude/skills/, prompt 파일 등)이 없으면 항상 스킵
 - 순수 앱 코드(View, ViewModel, Service 등)만 변경된 경우 5개 에이전트만 실행
 
+**역방향 스킵 — .claude/ only 변경**:
+- `.claude/` 하위 파일만 변경된 경우(앱 코드 변경 없음), Security/Performance/Architecture/Data Integrity/Simplicity 리뷰어를 스킵하고 Agent-Native 리뷰어만 실행
+- 혼합 변경(앱 코드 + .claude/)이면 전원 실행
+
+**binary diff 처리**:
+- `git diff --stat`에서 binary 파일(xcassets, 이미지 등)이 포함되면 diff에서 binary를 제외: `git diff HEAD -- ':!*.png' ':!*.jpg' ':!*.xcassets'`
+- binary 변경이 있으면 asset-catalog rules(`asset-catalog.md`) 준수 여부를 별도 체크
+
 **diff가 2000줄 이상이면 에이전트 대신 직접 리뷰**:
 - 에이전트에 git diff를 전달하면 토큰 한도(25000)를 초과하여 실패합니다
 - 대신 주 에이전트가 `git diff main...HEAD -- {path}` 로 폴더별로 나눠 읽고 직접 5관점 리뷰합니다
@@ -99,14 +107,45 @@ truncation이 발생합니다. 이를 방지하기 위해:
 4. 새 문자열이 `Localizable.xcstrings`에 en/ko/ja 3개 언어 번역과 함께 등록되었는가
 5. enum rawValue가 UI에 직접 렌더링되지 않고 `displayName` computed property를 경유하는가
 
-**스킵 조건**: diff에 Presentation/ 하위 파일 변경이 없으면 스킵.
+**스킵 조건**: diff에 Presentation/ 또는 Domain/Models/ 하위 파일 변경이 없으면 스킵. Domain/Models의 `displayName` computed property도 localization 대상이므로 반드시 포함.
 
 **출력**: 발견사항을 Step 3의 통합 결과에 `[L10N]` 태그로 병합합니다.
 
-### Step 3: 결과 통합
+### Step 3: 결과 통합 및 저장
 
 각 리뷰어의 발견사항을 우선순위별로 정리합니다.
 `.claude/skills/review/templates/review-report.md` 형식을 따릅니다.
+
+**결과를 파일에 저장합니다** (세션 간 연속성 보장):
+
+`/tmp/review-findings-{sanitized-branch}.json` (`{sanitized-branch}`는 `git branch --show-current`의 `/`를 `-`로 치환한 값) 에 다음 JSON 스키마로 저장:
+```json
+{
+  "branch": "feature/foo",
+  "timestamp": "2026-04-05T10:30:00+09:00",
+  "diff_lines": 523,
+  "reviewers_run": ["security", "performance", "architecture", "data-integrity", "simplicity"],
+  "reviewers_skipped": [{"name": "agent-native", "reason": ".claude/ 변경 없음"}],
+  "findings": [
+    {
+      "id": "sec-001",
+      "reviewer": "Security Sentinel",
+      "priority": "P1",
+      "status": "Open",
+      "title": "Input validation missing",
+      "file": "Domain/UseCases/Foo.swift",
+      "line": 42,
+      "issue": "사용자 입력이 검증 없이 사용됨",
+      "suggestion": "validateInputs() 추가"
+    }
+  ],
+  "summary": { "p1": 1, "p2": 0, "p3": 0 }
+}
+```
+
+status 값: `Open` | `Resolved` | `Stale after fix`
+
+이 파일은 `/triage`, `/ship`, `/run`의 Phase 4(Resolve)에서 참조됩니다.
 
 **Findings Lifecycle 관리 (필수)**:
 - 리뷰 이후 코드가 다시 바뀌면, 기존 finding을 그대로 carry 하지 말고 **현재 diff 기준으로 재확인**합니다

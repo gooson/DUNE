@@ -11,8 +11,8 @@ agent: ui-test-expert
 - **Framework**: XCTest (`XCUIApplication`, `XCUIElement`)
 - **Location**: `DUNE/DUNEUITests/`
 - **File naming**: `{Feature}UITests.swift`
-- **Run command**: `xcodebuild test -project DUNE/DUNE.xcodeproj -scheme DUNEUITests -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max,OS=26.3.1' -only-testing DUNEUITests -quiet`
-- **iPad command**: `xcodebuild test -project DUNE/DUNE.xcodeproj -scheme DUNEUITests -destination 'platform=iOS Simulator,name=iPad Pro 13-inch (M4),OS=26.3.1' -only-testing DUNEUITests -quiet`
+- **Run command**: `xcodebuild test -project DUNE/DUNE.xcodeproj -scheme DUNEUITests -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max' -only-testing DUNEUITests -quiet`
+- **iPad command**: `xcodebuild test -project DUNE/DUNE.xcodeproj -scheme DUNEUITests -destination 'platform=iOS Simulator,name=iPad Pro 13-inch (M5)' -only-testing DUNEUITests -quiet`
 
 ## Accessibility Identifier Convention
 
@@ -149,6 +149,25 @@ app.launchArguments = ["--uitesting"]
 ```
 
 앱 코드에서 이를 감지하여 mock 데이터를 사용하거나 HealthKit 쿼리를 건너뛸 수 있습니다.
+
+## Snapshot Testing Strategy
+
+이 프로젝트는 design system (DS 토큰)이 있으므로 snapshot 테스트의 가치가 높습니다. 하지만 현재는 XCTest 기반 UI 테스트만 사용합니다.
+
+**현재 접근법** (XCTest 존재 확인):
+- `waitForExistence()` + 접근성 식별자로 요소 존재 검증
+- 시각적 픽셀 비교는 수행하지 않음
+
+**Snapshot 테스트가 필요해질 경우**:
+- `swift-snapshot-testing` 라이브러리 도입 검토
+- 대상: design system 컴포넌트 (GlassCard, ProgressRing, WaveShape)
+- 기기별 캡처: iPhone (compact) + iPad (regular) sizeClass
+- Dark/Light mode 양쪽 캡처
+- CI에서 reference 이미지 관리 필요 (git LFS 또는 별도 저장소)
+
+**현재 대안** — 시뮬레이터 스크린샷 수동 확인:
+- UI 변경 후 시뮬레이터에서 직접 확인 (feedback_verify_with_simulator 메모리 참조)
+- 복잡한 레이아웃 변경 시 before/after 스크린샷 비교
 
 ## Anti-Patterns
 

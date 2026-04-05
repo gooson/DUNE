@@ -126,6 +126,11 @@ enum AXID {
     static let lifeHabitHistoryEmpty = "life-habit-history-empty"
     static let lifeHabitHistoryClose = "life-habit-history-close"
     static func lifeHabitHistoryRow(_ index: Int) -> String { "life-habit-history-row-\(index)" }
+    static let lifeArchivedHabitsLink = "life-archived-habits-link"
+    static let habitManagementScreen = "habit-management-screen"
+    static let habitManagementFilter = "habit-management-filter"
+    static func habitManagementRow(_ habitName: String) -> String { "habit-management-row-\(habitName)" }
+    static func habitManagementRestore(_ habitName: String) -> String { "habit-management-restore-\(habitName)" }
 
     // MARK: - Settings (active rows)
     static let settingsRowExerciseDefaults = "settings-row-exercisedefaults"
