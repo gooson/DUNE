@@ -11,9 +11,10 @@ description: "머지 완료된 워크트리와 로컬 브랜치를 일괄 정리
 
 ### Step 1: 현재 상태 스캔
 
-1. **워크트리 목록 조회**: `git worktree list`로 모든 worktree를 나열
-2. **로컬 브랜치 목록 조회**: `git branch`로 모든 로컬 브랜치 나열
-3. **main 최신화**: `git fetch origin main` (remote 상태 동기화)
+1. **GitHub CLI 인증 확인**: `gh auth status`로 인증 상태 확인. 미인증이면 사용자에게 `gh auth login` 안내 후 중단 (PR 머지 확인에 필수)
+2. **워크트리 목록 조회**: `git worktree list`로 모든 worktree를 나열
+3. **로컬 브랜치 목록 조회**: `git branch`로 모든 로컬 브랜치 나열
+4. **main 최신화**: `git fetch origin main` (remote 상태 동기화)
 
 ### Step 2: 워크트리 활성 세션 감지
 

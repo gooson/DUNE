@@ -43,6 +43,13 @@ final class WatchPostureMonitor {
         static let lowBatteryThreshold: Float = 0.20
         /// Maximum daily minutes for any single counter (24h = 1440 min).
         static let maxDailyMinutes = 1440
+        /// Debounce duration: non-stationary state must persist this long before cancelling stretch notifications.
+        static let activityDebounceSeconds: TimeInterval = 10
+        #if DEBUG
+        static let minimumThresholdMinutes = 1
+        #else
+        static let minimumThresholdMinutes = 15
+        #endif
     }
 
     // MARK: - Observable State
@@ -104,6 +111,8 @@ final class WatchPostureMonitor {
     private var summaryResetDate: Date?
     /// Throttle: last time posture summary was sent to iPhone.
     private var lastSummarySyncDate: Date?
+    /// Debounce: pending cancel task for stretch notifications when transitioning away from stationary.
+    private var pendingCancelTask: Task<Void, Never>?
 
     // MARK: - Init
 
@@ -124,6 +133,8 @@ final class WatchPostureMonitor {
     func startMonitoringIfEnabled() {
         guard isEnabled else {
             stopMonitoring()
+            // Send disabled-state summary so iOS can show appropriate guidance
+            syncSummaryToPhone(force: true)
             return
         }
         startMonitoring()
@@ -169,6 +180,8 @@ final class WatchPostureMonitor {
         stopDeviceMotionCollection()
         sedentaryCheckTask?.cancel()
         sedentaryCheckTask = nil
+        pendingCancelTask?.cancel()
+        pendingCancelTask = nil
         activityStateStartDate = nil
         cancelScheduledStretchNotifications()
 
@@ -182,11 +195,13 @@ final class WatchPostureMonitor {
             startMonitoring()
         } else {
             stopMonitoring()
+            // Notify iOS that monitoring was disabled
+            syncSummaryToPhone(force: true)
         }
     }
 
     func setSedentaryThreshold(minutes: Int) {
-        let clamped = max(15, min(120, minutes))
+        let clamped = max(Constants.minimumThresholdMinutes, min(120, minutes))
         userDefaults.set(clamped, forKey: SettingsKey.sedentaryThresholdMinutes)
         sedentaryThresholdMinutes = clamped
 
@@ -204,7 +219,8 @@ final class WatchPostureMonitor {
             walkingMinutes: walkingMinutesToday,
             averageGaitScore: cachedAverageGaitScore,
             stretchRemindersTriggered: stretchReminderCount,
-            date: summaryResetDate ?? Date()
+            date: summaryResetDate ?? Date(),
+            isMonitoringEnabled: isEnabled
         )
     }
 
@@ -222,7 +238,7 @@ final class WatchPostureMonitor {
     ) {
         manager.startActivityUpdates(to: queue) { activity in
             guard let activity else { return }
-            let state = mapActivity(activity)
+            guard let state = mapActivity(activity) else { return }
 
             Task { @MainActor in
                 shared.handleActivityChange(state)
@@ -252,15 +268,21 @@ final class WatchPostureMonitor {
         }
     }
 
-    nonisolated private static func mapActivity(_ activity: CMMotionActivity) -> PostureActivityState {
+    /// Maps CMMotionActivity to PostureActivityState. Returns nil for low-confidence
+    /// readings to prevent spurious state transitions that reset stretch notification timers.
+    nonisolated private static func mapActivity(_ activity: CMMotionActivity) -> PostureActivityState? {
+        guard activity.confidence != .low else { return nil }
         if activity.walking { return .walking }
         if activity.running { return .running }
         if activity.stationary { return .stationary }
         return .unknown
     }
 
-    private func handleActivityChange(_ newState: PostureActivityState) {
+    func handleActivityChange(_ newState: PostureActivityState) {
         let previousState = currentActivity
+
+        // Ignore duplicate state
+        guard newState != previousState else { return }
 
         // Accumulate elapsed time for previous state
         accumulateTimeForPreviousState(previousState)
@@ -270,18 +292,34 @@ final class WatchPostureMonitor {
 
         switch newState {
         case .stationary:
+            // Returning to stationary: cancel any pending debounce cancel and (re)schedule
+            pendingCancelTask?.cancel()
+            pendingCancelTask = nil
             scheduleStretchNotifications()
 
         case .walking:
-            cancelScheduledStretchNotifications()
+            debouncedCancelStretchNotifications()
             triggerGaitAnalysisIfReady()
 
         case .running, .unknown:
-            cancelScheduledStretchNotifications()
+            debouncedCancelStretchNotifications()
         }
 
         // Sync updated summary to iPhone on state transition
         syncSummaryToPhone()
+    }
+
+    /// Debounced cancel: waits `activityDebounceSeconds` before actually cancelling
+    /// scheduled stretch notifications. If the user returns to stationary within the
+    /// debounce window (e.g., brief wrist movement), the cancel is aborted.
+    private func debouncedCancelStretchNotifications() {
+        pendingCancelTask?.cancel()
+        pendingCancelTask = Task { [weak self] in
+            try? await Task.sleep(for: .seconds(Constants.activityDebounceSeconds))
+            guard !Task.isCancelled, let self else { return }
+            self.cancelScheduledStretchNotifications()
+            Self.logger.info("[PostureMonitor] Debounced cancel: stretch notifications removed")
+        }
     }
 
     /// Sends current daily summary to iPhone via WatchConnectivity.

@@ -172,6 +172,17 @@ All main tabs and the Exercise screen use `TabWaveBackground` with a key color:
 - `sizeClass == .compact` (iPhone): compact values
 - No custom breakpoints — relies on SwiftUI `horizontalSizeClass`
 
+## visionOS Considerations
+
+프로젝트에 DUNEVision 타겟이 있음 (`DUNEVision/`, visionOS 26.0+, Swift 6).
+
+- **App Icon**: visionOS는 전용 `.imagestack` asset 필요 (`VisionAppIcon`). iOS AppIcon의 visionos child 추가로는 동작하지 않음
+- **Material**: visionOS는 `.regularMaterial` 기본. `.ultraThinMaterial`은 시각적 차이가 iOS보다 큼 — glass window 위에서 투명도 과다
+- **Spacing**: visionOS는 터치 대신 시선+제스처. 탭 타겟 최소 60pt (iOS 44pt보다 큼)
+- **Typography**: visionOS에서 Dynamic Type은 iOS와 동일하게 동작하지만, 시야 거리가 다르므로 `.title` 이상 크기 권장
+- **Color**: 공간 UI에서 배경은 glass material이 기본. `surfacePrimary` 대신 material 위 콘텐츠에 집중
+- **공유 코드**: Domain 레이어 100% 재사용. Presentation은 DUNEVision/Presentation/ 에서 visionOS 전용 View 작성
+
 ## Key Rules
 
 1. **Correction #82**: No heavy computation in `Shape.path(in:)` — pre-compute at init

@@ -47,7 +47,7 @@ tags를 검색에 유용하게 작성합니다:
 ### Step 5: 관련 문서 업데이트
 
 필요시 다음을 업데이트합니다:
-- **CLAUDE.md Correction Log**: 반복 가능한 실수가 있다면 교정사항 추가
+- **docs/corrections-active.md**: 반복 가능한 실수가 있다면 교정사항 추가 (CLAUDE.md 본문이 아닌 active 파일에 기록)
 - **관련 TODO**: 해당 TODO의 상태를 `done`으로 업데이트
 - **.claude/rules/**: 새 규칙이 필요하면 추가 제안
 

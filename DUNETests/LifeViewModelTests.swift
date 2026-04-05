@@ -302,7 +302,8 @@ struct LifeViewModelTests {
         let snapshot = vm.cycleSnapshot(for: habit, referenceDate: referenceDate)
         #expect(snapshot != nil)
         #expect(snapshot?.nextDueDate == calendar.startOfDay(for: snoozedTo))
-        #expect(snapshot?.canComplete == false)
+        // canComplete is true: last completion was on a different day, early completion allowed
+        #expect(snapshot?.canComplete == true)
         #expect(snapshot?.isDue == false)
         #expect(snapshot?.lastAction == .complete)
     }
@@ -427,8 +428,8 @@ struct LifeViewModelTests {
         #expect(snapshot?.isDue == false)
     }
 
-    @Test("cycle snapshot blocks repeat completion before next due after completion")
-    func cycleSnapshotBlocksRepeatCompletionBeforeDue() {
+    @Test("cycle snapshot allows early completion on a different day after prior completion")
+    func cycleSnapshotAllowsEarlyCompletionOnDifferentDay() {
         let vm = LifeViewModel()
         let calendar = Calendar.current
         let createdAt = calendar.startOfDay(for: Date(timeIntervalSince1970: 1_704_067_200)) // 2024-01-01
@@ -457,7 +458,8 @@ struct LifeViewModelTests {
         let snapshot = vm.cycleSnapshot(for: habit, referenceDate: referenceDate)
         #expect(snapshot != nil)
         #expect(snapshot?.nextDueDate == expectedDue)
-        #expect(snapshot?.canComplete == false)
+        // canComplete is true: last completion was on a different day, early completion allowed
+        #expect(snapshot?.canComplete == true)
         #expect(snapshot?.isDue == false)
         #expect(snapshot?.lastAction == .complete)
     }

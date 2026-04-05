@@ -22610,7 +22610,7 @@
       }
     },
     "No posture data yet": {
-      "extractionState": "manual",
+      "extractionState": "stale",
       "localizations": {
         "ja": {
           "stringUnit": {
@@ -25054,6 +25054,23 @@
         }
       }
     },
+    "Posture monitoring disabled": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "姿勢モニタリングが無効です"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "자세 모니터링 비활성화됨"
+          }
+        }
+      }
+    },
     "Posture Reminder": {
       "extractionState": "stale",
       "localizations": {
@@ -25772,6 +25789,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "잠들기 전에 Apple Watch를 착용하세요."
+          }
+        }
+      }
+    },
+    "Put on your Apple Watch to start tracking sitting time and walking posture.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Watchを着けて、座り時間と歩行姿勢のトラッキングを始めましょう。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Watch를 착용하여 앉은 시간과 걸음걸이 추적을 시작하세요."
           }
         }
       }
@@ -37707,6 +37741,23 @@
         }
       }
     },
+    "Wear your Apple Watch": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Watchを着けてください"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Watch를 착용하세요"
+          }
+        }
+      }
+    },
     "Wear your Apple Watch for a few days to collect data, and you'll receive personalized coaching.": {
       "extractionState": "manual",
       "localizations": {
@@ -40022,53 +40073,36 @@
         }
       }
     },
-    "Archived": {
+    "Archived habits will appear here.": {
       "extractionState": "manual",
       "localizations": {
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "아카이브"
+            "value": "아카이브된 습관이 여기에 표시됩니다."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "アーカイブ"
+            "value": "アーカイブ済みの習慣がここに表示されます。"
           }
         }
       }
     },
-    "Restore": {
+    "%lld archived habits": {
       "extractionState": "manual",
       "localizations": {
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "복원"
+            "value": "아카이브된 습관 %lld개"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "復元"
-          }
-        }
-      }
-    },
-    "No Active Habits": {
-      "extractionState": "manual",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "활성 습관 없음"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "アクティブな習慣なし"
+            "value": "アーカイブ済み%lld個"
           }
         }
       }
@@ -40107,19 +40141,19 @@
         }
       }
     },
-    "Archived habits will appear here.": {
+    "Archived": {
       "extractionState": "manual",
       "localizations": {
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "아카이브된 습관이 여기에 표시됩니다."
+            "value": "아카이브"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "アーカイブ済みの習慣がここに表示されます。"
+            "value": "アーカイブ"
           }
         }
       }
@@ -40141,19 +40175,19 @@
         }
       }
     },
-    "%lld archived habits": {
+    "Restore": {
       "extractionState": "manual",
       "localizations": {
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "아카이브된 습관 %lld개"
+            "value": "복원"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "アーカイブ済み%lld個"
+            "value": "復元"
           }
         }
       }
@@ -40171,6 +40205,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld日連続"
+          }
+        }
+      }
+    },
+    "No Active Habits": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "활성 습관 없음"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "アクティブな習慣なし"
           }
         }
       }

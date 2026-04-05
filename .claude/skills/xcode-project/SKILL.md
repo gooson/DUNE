@@ -83,14 +83,14 @@ scripts/build-ios.sh
 ### 유닛 테스트
 ```bash
 xcodebuild test -project DUNE/DUNE.xcodeproj -scheme DUNETests \
-  -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max,OS=26.3.1' \
+  -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max' \
   -only-testing DUNETests
 ```
 
 ### UI 테스트
 ```bash
 xcodebuild test -project DUNE/DUNE.xcodeproj -scheme DUNEUITests \
-  -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max,OS=26.3.1' \
+  -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max' \
   -only-testing DUNEUITests
 ```
 
@@ -117,6 +117,19 @@ xcodebuild test -project DUNE/DUNE.xcodeproj -scheme DUNEUITests \
 ```yaml
 - path: Domain/Models/NewModel.swift
   group: Shared/Domain
+```
+
+### Watch 빌드
+```bash
+xcodebuild build -project DUNE/DUNE.xcodeproj -scheme DUNEWatch \
+  -destination 'platform=watchOS Simulator,name=Apple Watch Ultra 3 (49mm)'
+```
+
+### Watch 테스트 (해당 시)
+```bash
+# Watch 전용 테스트가 있는 경우
+xcodebuild test -project DUNE/DUNE.xcodeproj -scheme DUNEWatch \
+  -destination 'platform=watchOS Simulator,name=Apple Watch Ultra 3 (49mm)'
 ```
 
 ## Dependencies

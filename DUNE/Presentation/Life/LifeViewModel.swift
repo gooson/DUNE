@@ -600,9 +600,14 @@ final class LifeViewModel {
 
         let isDue = today >= dueDate
         let isOverdue = today > dueDate
-        // Early completion: always completable unless already completed in current cycle
-        let isCompletedThisCycle = lastAction == .complete && !isDue
-        let canComplete = !isCompletedThisCycle
+        // Early completion: allow completing before due date, only block same-day double-tap
+        let isCompletedToday: Bool
+        if lastAction == .complete, let completedAt = lastCompletedAt {
+            isCompletedToday = calendar.isDate(completedAt, inSameDayAs: today)
+        } else {
+            isCompletedToday = false
+        }
+        let canComplete = !isCompletedToday
 
         return HabitCycleSnapshot(
             nextDueDate: dueDate,

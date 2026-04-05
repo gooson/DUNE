@@ -59,6 +59,48 @@ DUNE/
 - Void async: `defer { isLoading = false }` 허용
 - Returning func: `defer` 금지, 명시적 리셋
 
+## Swift 6 Concurrency
+
+- Strict concurrency checking enabled — `Sendable` 준수 필수
+- `@MainActor` class: 모든 프로퍼티/메서드가 자동으로 MainActor isolated
+- `nonisolated` 명시: MainActor class에서 non-isolated 접근이 필요한 computed property에 사용
+- `@Sendable` closure: `Task { }` 내부에서 캡처하는 값은 Sendable이어야 함
+- `withThrowingTaskGroup` 내 `addTask`에서 actor-isolated 프로퍼티 직접 접근 금지 → capture list 사용
+
+## #Preview Patterns
+
+```swift
+// Basic view preview with NavigationStack wrapper
+#Preview {
+    NavigationStack {
+        SettingsView()
+    }
+}
+
+// Named preview for component variants
+#Preview("50%") {
+    ActivityRingView(progress: 0.5, ringColor: DS.Color.activity, size: 100)
+}
+
+// Preview with SwiftData model container
+#Preview {
+    ActivityView()
+        .modelContainer(for: [ExerciseRecord.self, WorkoutSet.self], inMemory: true)
+}
+
+// Component preview in parent context
+#Preview {
+    Form {
+        NotificationSettingsSection()
+    }
+}
+```
+
+- View마다 최소 1개 `#Preview` 필수
+- 복수 상태(empty, loaded, error)는 named preview로 분리: `#Preview("Empty") { ... }`
+- SwiftData 의존 View는 `inMemory: true` container 제공
+- 독립 component는 부모 context(Form, List, NavigationStack) 래핑
+
 ## SwiftUI Patterns
 
 - 상세 패턴: `.claude/rules/swiftui-patterns.md` 참조
