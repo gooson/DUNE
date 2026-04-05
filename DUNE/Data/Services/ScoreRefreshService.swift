@@ -59,7 +59,8 @@ final class ScoreRefreshService {
         readinessScore: Int?,
         hrvValue: Double? = nil,
         rhrValue: Double? = nil,
-        sleepScore: Double? = nil
+        sleepScore: Double? = nil,
+        stressScore: Int? = nil
     ) async {
         let now = Date()
         let hourDate = HourlyScoreSnapshot.hourTruncated(now)
@@ -71,6 +72,7 @@ final class ScoreRefreshService {
         let clampedHRV = hrvValue.flatMap { $0.isFinite && $0 >= 0 && $0 <= 500 ? $0 : nil }
         let clampedRHR = rhrValue.flatMap { $0.isFinite && $0 >= 20 && $0 <= 300 ? $0 : nil }
         let clampedSleep = sleepScore.flatMap { $0.isFinite && $0 >= 0 && $0 <= 100 ? $0 : nil }
+        let clampedStress = stressScore.map { Double(min(max($0, 0), 100)) }
 
         // Upsert: range predicate spanning the full hour (DST/rounding safe)
         let calendar = Calendar.current
@@ -104,6 +106,9 @@ final class ScoreRefreshService {
             if let v = clampedSleep, existing.sleepScore != v {
                 existing.sleepScore = v; changed = true
             }
+            if let v = clampedStress, existing.stressScore != v {
+                existing.stressScore = v; changed = true
+            }
             guard changed else {
                 lastRefreshedAt = now
                 scheduleSparklineReload()
@@ -113,7 +118,8 @@ final class ScoreRefreshService {
         } else {
             // All fields nil means nothing to record — skip insert entirely.
             guard clampedCondition != nil || clampedWellness != nil || clampedReadiness != nil
-                    || clampedHRV != nil || clampedRHR != nil || clampedSleep != nil else {
+                    || clampedHRV != nil || clampedRHR != nil || clampedSleep != nil
+                    || clampedStress != nil else {
                 return
             }
             let snap = HourlyScoreSnapshot(
@@ -123,7 +129,8 @@ final class ScoreRefreshService {
                 readinessScore: clampedReadiness,
                 hrvValue: clampedHRV,
                 rhrValue: clampedRHR,
-                sleepScore: clampedSleep
+                sleepScore: clampedSleep,
+                stressScore: clampedStress
             )
             context.insert(snap)
         }
