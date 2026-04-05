@@ -322,7 +322,8 @@ final class DashboardViewModel {
             await service.recordSnapshot(
                 conditionScore: conditionScore?.score,
                 wellnessScore: nil,
-                readinessScore: nil
+                readinessScore: nil,
+                stressScore: cumulativeStressScore?.score
             )
             // Reload sparklines synchronously (bypasses the 200ms debounce in
             // scheduleSparklineReload) so the stored copy is up-to-date.

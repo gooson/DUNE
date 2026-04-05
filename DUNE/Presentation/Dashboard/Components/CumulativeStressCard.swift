@@ -116,7 +116,7 @@ struct CumulativeStressCard: View {
             ForEach(Array(topContributions)) { contribution in
                 HStack(spacing: DS.Spacing.xxs) {
                     Circle()
-                        .fill(factorColor(contribution.factor))
+                        .fill(contribution.factor.color)
                         .frame(width: 6, height: 6)
 
                     Text(contribution.detail)
@@ -134,11 +134,4 @@ struct CumulativeStressCard: View {
         stressScore.level.color
     }
 
-    private func factorColor(_ factor: CumulativeStressScore.Contribution.Factor) -> Color {
-        switch factor {
-        case .hrvVariability: DS.Color.hrv
-        case .sleepConsistency: DS.Color.sleep
-        case .activityLoad: DS.Color.activity
-        }
-    }
 }
