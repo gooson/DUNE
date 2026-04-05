@@ -576,7 +576,7 @@ struct ActivityView: View {
             NavigationLink(value: ActivityDetailDestination.muscleMap) {
                 MuscleRecoveryMapView(
                     fatigueStates: viewModel.fatigueStates,
-                    onMuscleSelected: { muscle in selectedMuscle = muscle }
+                    onMuscleSelected: { _ in }
                 )
             }
             .buttonStyle(.plain)

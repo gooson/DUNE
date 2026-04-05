@@ -439,34 +439,7 @@ private struct WellnessInjuryBannerView: View {
     var body: some View {
         let activeInjuries = injuryRecords.filter(\.isActive)
         SectionGroup(title: "Injuries", icon: "bandage.fill", iconColor: DS.Color.caution, showChevron: !injuryRecords.isEmpty) {
-            if !injuryRecords.isEmpty {
-                NavigationLink(value: InjuryHistoryDestination()) {
-                    VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-                        if activeInjuries.isEmpty {
-                            InlineCard {
-                                HStack(spacing: DS.Spacing.sm) {
-                                    Image(systemName: "checkmark.circle")
-                                        .foregroundStyle(DS.Color.textSecondary)
-
-                                    Text("No active injuries")
-                                        .font(.caption)
-                                        .foregroundStyle(DS.Color.textSecondary)
-
-                                    Spacer()
-                                }
-                            }
-                        } else {
-                            ForEach(activeInjuries.prefix(3)) { record in
-                                InjuryCardView(record: record) {
-                                    onEdit(record)
-                                }
-                            }
-                        }
-                    }
-                }
-                .buttonStyle(.plain)
-                .accessibilityIdentifier("wellness-link-injuryhistory")
-            } else {
+            if activeInjuries.isEmpty {
                 InlineCard {
                     HStack(spacing: DS.Spacing.sm) {
                         Image(systemName: "checkmark.circle")
@@ -485,6 +458,22 @@ private struct WellnessInjuryBannerView: View {
                         .tint(theme.accentColor)
                     }
                 }
+            } else {
+                ForEach(activeInjuries.prefix(3)) { record in
+                    InjuryCardView(record: record) {
+                        onEdit(record)
+                    }
+                }
+
+                NavigationLink(value: InjuryHistoryDestination()) {
+                    Text("View All")
+                        .font(.caption)
+                        .fontWeight(.medium)
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.plain)
+                .tint(theme.accentColor)
+                .accessibilityIdentifier("wellness-link-injuryhistory")
             }
         }
     }
@@ -502,22 +491,17 @@ private struct PostureAssessmentLinkView: View {
 
     var body: some View {
         SectionGroup(title: "Posture Assessment", icon: "figure.stand", iconColor: DS.Color.body, showChevron: !records.isEmpty) {
-            if !records.isEmpty {
-                NavigationLink(value: PostureHistoryDestination()) {
-                    VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-                        // Action buttons: Camera Capture + Realtime Analysis
-                        actionButtons
+            // Action buttons: Camera Capture + Realtime Analysis
+            actionButtons
 
-                        // Recent records (up to 3)
-                        ForEach(records.prefix(3)) { record in
-                            recordRow(record)
-                        }
+            // Recent records (up to 3) — tap to navigate to individual detail
+            if !records.isEmpty {
+                ForEach(records.prefix(3)) { record in
+                    NavigationLink(value: PostureRecordDestination(id: record.id)) {
+                        recordRow(record)
                     }
+                    .buttonStyle(.plain)
                 }
-                .buttonStyle(.plain)
-            } else {
-                // Action buttons: Camera Capture + Realtime Analysis
-                actionButtons
             }
         }
         .task(id: records.first?.overallScore) {

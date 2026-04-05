@@ -361,8 +361,8 @@ struct DashboardView: View {
         }
 
         // Recovery & Sleep (sleep deficit + sleep insights)
-        if let sleepMetric = viewModel.sortedMetrics.first(where: { $0.category == .sleep }) {
-            SectionGroup(title: "Recovery & Sleep", icon: "bed.double.fill", iconColor: DS.Color.body, showChevron: true) {
+        SectionGroup(title: "Recovery & Sleep", icon: "bed.double.fill", iconColor: DS.Color.body, showChevron: viewModel.sortedMetrics.contains(where: { $0.category == .sleep })) {
+            if let sleepMetric = viewModel.sortedMetrics.first(where: { $0.category == .sleep }) {
                 NavigationLink(value: sleepMetric) {
                     RecoverySleepCard(
                         sleepDeficit: viewModel.sleepDeficitAnalysis,
@@ -376,23 +376,21 @@ struct DashboardView: View {
                     )
                 }
                 .buttonStyle(.plain)
-            }
-            .transition(Self.sectionTransition)
-            .staggeredAppear(index: 5)
-        } else {
-            RecoverySleepCard(
-                sleepDeficit: viewModel.sleepDeficitAnalysis,
-                sleepInsights: viewModel.sleepInsightCards,
-                sleepMetric: nil,
-                onDismissInsight: { id in
-                    withAnimation(DS.Animation.standard) {
-                        viewModel.dismissInsightCard(id: id)
+            } else {
+                RecoverySleepCard(
+                    sleepDeficit: viewModel.sleepDeficitAnalysis,
+                    sleepInsights: viewModel.sleepInsightCards,
+                    sleepMetric: nil,
+                    onDismissInsight: { id in
+                        withAnimation(DS.Animation.standard) {
+                            viewModel.dismissInsightCard(id: id)
+                        }
                     }
-                }
-            )
-            .transition(Self.sectionTransition)
-            .staggeredAppear(index: 5)
+                )
+            }
         }
+        .transition(Self.sectionTransition)
+        .staggeredAppear(index: 5)
 
         // Cumulative Stress Score (Phase 3)
         if let stressScore = viewModel.cumulativeStressScore {

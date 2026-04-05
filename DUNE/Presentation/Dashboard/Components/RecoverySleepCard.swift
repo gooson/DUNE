@@ -120,27 +120,4 @@ struct RecoverySleepCard: View {
             }
         }
     }
-
-    // MARK: - Detail Link
-
-    @ViewBuilder
-    private var detailLink: some View {
-        if let metric = sleepMetric {
-            Divider().opacity(0.3)
-
-            NavigationLink(value: metric) {
-                HStack {
-                    Spacer()
-                    Text("Sleep Details")
-                        .font(.caption.weight(.medium))
-                        .foregroundStyle(.tint)
-                    Image(systemName: "chevron.right")
-                        .font(.caption2.weight(.semibold))
-                        .foregroundStyle(.tint)
-                    Spacer()
-                }
-            }
-            .buttonStyle(.plain)
-        }
-    }
 }
