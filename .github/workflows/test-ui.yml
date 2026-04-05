@@ -18,6 +18,10 @@ concurrency:
   group: ${{ github.workflow }}-pr-${{ github.event.pull_request.number || github.run_id }}
   cancel-in-progress: true
 
+env:
+  SIMULATOR_BOOT_TIMEOUT: '300'
+  SIMULATOR_BOOT_RETRIES: '2'
+
 jobs:
   ios-ui-tests:
     if: github.event.pull_request.draft == false
@@ -30,6 +34,18 @@ jobs:
 
       - name: Select Xcode
         run: sudo xcode-select -s /Applications/Xcode_26.2.app/Contents/Developer
+
+      - name: Simulator diagnostics
+        if: always()
+        run: |
+          echo "── Xcode version ──"
+          xcodebuild -version
+          echo ""
+          echo "── Available runtimes ──"
+          xcrun simctl list runtimes
+          echo ""
+          echo "── Available simulators ──"
+          xcrun simctl list devices available | grep -E "(iOS|watchOS)" -A5 | head -40
 
       - name: Install xcodegen
         run: brew install xcodegen
@@ -56,6 +72,18 @@ jobs:
 
       - name: Select Xcode
         run: sudo xcode-select -s /Applications/Xcode_26.2.app/Contents/Developer
+
+      - name: Simulator diagnostics
+        if: always()
+        run: |
+          echo "── Xcode version ──"
+          xcodebuild -version
+          echo ""
+          echo "── Available runtimes ──"
+          xcrun simctl list runtimes
+          echo ""
+          echo "── Available simulators ──"
+          xcrun simctl list devices available | grep -E "(iOS|watchOS)" -A5 | head -40
 
       - name: Install xcodegen
         run: brew install xcodegen

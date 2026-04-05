@@ -15,6 +15,10 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  SIMULATOR_BOOT_TIMEOUT: '300'
+  SIMULATOR_BOOT_RETRIES: '2'
+
 jobs:
   unit-tests:
     runs-on: macos-15
@@ -26,6 +30,18 @@ jobs:
 
       - name: Select Xcode
         run: sudo xcode-select -s /Applications/Xcode_26.2.app/Contents/Developer
+
+      - name: Simulator diagnostics
+        if: always()
+        run: |
+          echo "── Xcode version ──"
+          xcodebuild -version
+          echo ""
+          echo "── Available runtimes ──"
+          xcrun simctl list runtimes
+          echo ""
+          echo "── Available simulators (iOS + watchOS) ──"
+          xcrun simctl list devices available | grep -E "(iOS|watchOS)" -A5 | head -40
 
       - name: Install xcodegen
         run: brew install xcodegen
