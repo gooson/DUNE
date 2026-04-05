@@ -9,6 +9,11 @@ $ARGUMENTS 에 대한 구조화된 구현 계획을 생성합니다.
 
 ## Process
 
+### Phase 0: Input Validation (입력 검증)
+
+1. **모호성 체크**: 요청에 구체적 목표(무엇을, 어디에, 왜)가 없으면 `/brainstorm` 먼저 실행을 권장하거나, 사용자에게 구체화를 요청합니다.
+2. **기존 계획 확인**: `docs/plans/` 에서 같은 주제의 기존 계획이 있는지 Glob으로 검색합니다. 존재하면 새로 만들지 않고 기존 계획을 참조/업데이트할지 사용자에게 확인합니다.
+
 ### Phase 1: Research (조사)
 
 1. **과거 해결책 검색**: docs/solutions/ 에서 관련 문서를 검색합니다
@@ -32,6 +37,8 @@ $ARGUMENTS 에 대한 구조화된 구현 계획을 생성합니다.
 | **Sequential Thinking** | 복잡한 설계 결정 분해 | 대안 비교 시 단계적 사고로 trade-off 분석 |
 
 **활용 우선순위**: Serena(코드 구조) → Context7(API 확인) → Sequential Thinking(설계 결정)
+
+**MCP 사용 불가 시 fallback**: MCP 서버가 연결되지 않은 경우 Grep/Glob/Read로 코드베이스를 직접 탐색하고, WebSearch로 API 문서를 조회합니다. MCP 없이도 계획 수립은 가능합니다.
 
 ### Phase 2: Design (설계)
 

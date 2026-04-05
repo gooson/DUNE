@@ -32,12 +32,12 @@ struct SomeViewModelTests { ... }
 ### Unit Tests
 - **Framework**: Swift Testing
 - **Coverage target**: Domain UseCases 100%, ViewModel validation 100%
-- **Run command**: `xcodebuild test -project DUNE.xcodeproj -scheme DUNETests -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max,OS=26.3.1' -only-testing DUNETests -quiet`
+- **Run command**: `xcodebuild test -project DUNE.xcodeproj -scheme DUNETests -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max' -only-testing DUNETests -quiet`
 
 ### UI Tests
 - **Framework**: XCTest
 - **Coverage target**: Critical user flows (launch, navigation)
-- **Run command**: `xcodebuild test -project DUNE.xcodeproj -scheme DUNEUITests -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max,OS=26.3.1' -only-testing DUNEUITests -quiet`
+- **Run command**: `xcodebuild test -project DUNE.xcodeproj -scheme DUNEUITests -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max' -only-testing DUNEUITests -quiet`
 
 ## Mocking Strategy
 
@@ -103,6 +103,30 @@ func scoreClamping(input: Int) {
     #expect(score.score >= 0 && score.score <= 100)
 }
 ```
+
+## Async Testing
+
+```swift
+@Test("Fetches data successfully")
+func fetchData() async throws {
+    let sut = SomeUseCase(service: MockService(result: .success(data)))
+    let result = try await sut.execute()
+    #expect(result.count == 3)
+}
+
+@Test("Handles cancellation gracefully")
+func cancellation() async {
+    let task = Task {
+        try await sut.execute()
+    }
+    task.cancel()
+    // Verify no crash, state is clean
+}
+```
+
+- `async throws` 테스트: `@Test` 함수에 직접 `async throws` 선언
+- Cancellation 테스트: `Task` 생성 → cancel → 상태 검증
+- Timeout: Swift Testing은 자체 timeout 없음 — 테스트 대상이 무한 대기하지 않도록 mock에서 즉시 반환
 
 ## New Code Checklist
 

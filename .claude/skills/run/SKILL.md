@@ -234,7 +234,7 @@ UI 테스트는 구현된 기능이 화면에 실제로 렌더링되고, 주요 
 5. **UI 테스트 실행**:
    ```bash
    xcodebuild test -project DUNE/DUNE.xcodeproj -scheme DUNEUITests \
-     -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max,OS=26.3.1' \
+     -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max' \
      -only-testing DUNEUITests
    ```
 
@@ -255,7 +255,7 @@ UI 테스트는 구현된 기능이 화면에 실제로 렌더링되고, 주요 
 
 ```bash
 xcodebuild test -project DUNE/DUNE.xcodeproj -scheme DUNEUITests \
-  -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max,OS=26.3.1' \
+  -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max' \
   -only-testing DUNEUITests
 ```
 
@@ -339,9 +339,9 @@ git diff main...HEAD --stat    # 리뷰 대상 diff 존재 확인
 리뷰 + 에이전트 결과를 통합 처리합니다:
 - **P1 (Critical)**: 즉시 자동 수정
 - **P2 (Important)**: 자동 수정
-- **P3 (Minor)**: 자동 수정
+- **P3 (Minor)**: 명확한 수정 방법이 있으면 자동 수정, 판단이 필요한 trade-off는 목록에 기록만
 
-모든 우선순위를 자동 수정합니다. 수정 후 Phase 3 (Review)를 다시 실행하여 P1이 0건인지 확인합니다.
+P1/P2는 자동 수정하고, P3는 기계적으로 적용 가능한 것만 수정합니다. 수정 후 Phase 3 (Review)를 다시 실행하여 P1이 0건인지 확인합니다.
 
 **자동 게이트**: P1이 모두 해결되어야 다음 단계로 진행합니다. 2회 시도 후에도 P1이 남으면 사용자에게 보고합니다.
 
@@ -492,6 +492,7 @@ Proof: {증빙 요약 — 파일 경로, 빌드 결과, PR URL 등}
 1. **오류 내용과 영향 범위를 사용자에게 즉시 보고**
 2. **자동 복구 시도**: 빌드 실패 → 에러 수정 후 재시도 (최대 2회)
 3. **복구 불가 시**: 이전 Phase 상태로 롤백하고 사용자에게 선택지 제시
+4. **중단 시에도 Execution Summary Report 생성**: 에러로 중단되더라도 완료된 Phase까지의 Summary Report를 반드시 출력. "이 보고서 없이 /run을 종료하지 않음" 규칙은 에러 중단에도 적용
    - 수동 수정 후 현재 Phase 재실행
    - 이전 Phase로 돌아가 계획 수정
    - 파이프라인 중단
