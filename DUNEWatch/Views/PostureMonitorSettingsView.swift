@@ -8,7 +8,11 @@ struct PostureMonitorSettingsView: View {
     @State private var thresholdMinutes = 45
     @State private var didLoadInitialValues = false
 
+    #if DEBUG
+    private static let thresholdOptions = [1, 5, 15, 30, 45, 60, 90, 120]
+    #else
     private static let thresholdOptions = [30, 45, 60, 90, 120]
+    #endif
 
     var body: some View {
         List {
