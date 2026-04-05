@@ -2,7 +2,7 @@ import SwiftUI
 
 /// Displays the daily posture summary received from Apple Watch.
 /// Shows sitting time, walking time, and stretch reminders triggered.
-/// When no data is available, shows a guidance message.
+/// When no data is available, shows a guidance message based on the monitoring state.
 struct WatchPostureSummaryCard: View {
     let summary: DailyPostureSummary?
     let isWatchAppInstalled: Bool
@@ -15,13 +15,36 @@ struct WatchPostureSummaryCard: View {
                 // Header
                 header
 
-                if let summary {
-                    metricsRow(summary)
-                } else {
+                switch cardState {
+                case .hasData(let data):
+                    metricsRow(data)
+                case .monitoringDisabled, .notWorn, .watchNotInstalled:
                     emptyState
                 }
             }
         }
+    }
+
+    // MARK: - Card State
+
+    private enum CardState {
+        case hasData(DailyPostureSummary)
+        case monitoringDisabled
+        case notWorn
+        case watchNotInstalled
+    }
+
+    private var cardState: CardState {
+        guard isWatchAppInstalled else { return .watchNotInstalled }
+        guard let summary else { return .notWorn }
+
+        if !summary.isMonitoringEnabled {
+            return .monitoringDisabled
+        }
+        if summary.hasNoActivityData {
+            return .notWorn
+        }
+        return .hasData(summary)
     }
 
     // MARK: - Header
@@ -36,7 +59,7 @@ struct WatchPostureSummaryCard: View {
                 .fontWeight(.medium)
                 .foregroundStyle(DS.Color.textSecondary)
             Spacer(minLength: 0)
-            if summary != nil {
+            if case .hasData = cardState {
                 Text("Today")
                     .font(.caption2)
                     .foregroundStyle(DS.Color.textTertiary)
@@ -99,21 +122,42 @@ struct WatchPostureSummaryCard: View {
     }
 
     private var emptyStateIcon: String {
-        isWatchAppInstalled ? "figure.stand" : "applewatch.slash"
+        switch cardState {
+        case .watchNotInstalled:
+            return "applewatch.slash"
+        case .monitoringDisabled:
+            return "pause.circle"
+        case .notWorn:
+            return "applewatch.and.arrow.forward"
+        case .hasData:
+            return "figure.stand"
+        }
     }
 
     private var emptyStateTitle: String {
-        if isWatchAppInstalled {
-            return String(localized: "No posture data yet")
+        switch cardState {
+        case .watchNotInstalled:
+            return String(localized: "Apple Watch required")
+        case .monitoringDisabled:
+            return String(localized: "Posture monitoring disabled")
+        case .notWorn:
+            return String(localized: "Wear your Apple Watch")
+        case .hasData:
+            return ""
         }
-        return String(localized: "Apple Watch required")
     }
 
     private var emptyStateMessage: String {
-        if isWatchAppInstalled {
+        switch cardState {
+        case .watchNotInstalled:
+            return String(localized: "Pair an Apple Watch to monitor your posture throughout the day.")
+        case .monitoringDisabled:
             return String(localized: "Open DUNE on Apple Watch → tap ⚙️ at top right → enable Posture Monitoring.")
+        case .notWorn:
+            return String(localized: "Put on your Apple Watch to start tracking sitting time and walking posture.")
+        case .hasData:
+            return ""
         }
-        return String(localized: "Pair an Apple Watch to monitor your posture throughout the day.")
     }
 
     // MARK: - Metric Item

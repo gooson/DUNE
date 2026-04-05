@@ -90,6 +90,14 @@ struct WatchPostureMonitorTests {
         #expect(summary.walkingMinutes == 0)
         #expect(summary.averageGaitScore == nil)
         #expect(summary.stretchRemindersTriggered == 0)
+        #expect(summary.isMonitoringEnabled == true)
+    }
+
+    @Test("buildDailySummary reflects monitoring disabled state")
+    func buildSummaryDisabled() {
+        let monitor = makeSUT(isEnabled: false)
+        let summary = monitor.buildDailySummary()
+        #expect(summary.isMonitoringEnabled == false)
     }
 
     // MARK: - Initial State

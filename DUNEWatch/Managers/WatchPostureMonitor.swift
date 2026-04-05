@@ -124,6 +124,8 @@ final class WatchPostureMonitor {
     func startMonitoringIfEnabled() {
         guard isEnabled else {
             stopMonitoring()
+            // Send disabled-state summary so iOS can show appropriate guidance
+            syncSummaryToPhone(force: true)
             return
         }
         startMonitoring()
@@ -182,6 +184,8 @@ final class WatchPostureMonitor {
             startMonitoring()
         } else {
             stopMonitoring()
+            // Notify iOS that monitoring was disabled
+            syncSummaryToPhone(force: true)
         }
     }
 
@@ -204,7 +208,8 @@ final class WatchPostureMonitor {
             walkingMinutes: walkingMinutesToday,
             averageGaitScore: cachedAverageGaitScore,
             stretchRemindersTriggered: stretchReminderCount,
-            date: summaryResetDate ?? Date()
+            date: summaryResetDate ?? Date(),
+            isMonitoringEnabled: isEnabled
         )
     }
 

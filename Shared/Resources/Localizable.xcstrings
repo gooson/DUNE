@@ -22674,7 +22674,7 @@
       }
     },
     "No posture data yet" : {
-      "extractionState" : "manual",
+      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -25122,6 +25122,23 @@
         }
       }
     },
+    "Posture monitoring disabled" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "姿勢モニタリングが無効です"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "자세 모니터링 비활성화됨"
+          }
+        }
+      }
+    },
     "Posture Reminder" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -25844,6 +25861,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "잠들기 전에 Apple Watch를 착용하세요."
+          }
+        }
+      }
+    },
+    "Put on your Apple Watch to start tracking sitting time and walking posture." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watchを着けて、座り時間と歩行姿勢のトラッキングを始めましょう。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watch를 착용하여 앉은 시간과 걸음걸이 추적을 시작하세요."
           }
         }
       }
@@ -37797,6 +37831,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "수면 추적을 위해 Apple Watch를 착용하고 주무시거나, 체성분 기록을 추가해 보세요."
+          }
+        }
+      }
+    },
+    "Wear your Apple Watch" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watchを着けてください"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watch를 착용하세요"
           }
         }
       }
