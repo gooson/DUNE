@@ -10,6 +10,7 @@ ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT_DIR"
 source "$ROOT_DIR/scripts/lib/regen-project.sh"
 source "$ROOT_DIR/scripts/lib/simulator-boot.sh"
+source "$ROOT_DIR/scripts/lib/simulator-worktree.sh"
 
 PROJECT_SPEC="DUNE/project.yml"
 PROJECT_FILE="DUNE/DUNE.xcodeproj"
@@ -66,9 +67,13 @@ while [[ $# -gt 0 ]]; do
             SMOKE_MODE=1
             shift
             ;;
+        --cleanup-simulators)
+            cleanup_worktree_simulators --current
+            exit 0
+            ;;
         *)
             echo "Unknown option: $1"
-            echo "Usage: $0 [--no-regen] [--stream-log | --no-stream-log] [--log-file <path>] [--skip-testing <target>] [--only-testing <target>] [--test-plan <name>] [--smoke]"
+            echo "Usage: $0 [--no-regen] [--stream-log | --no-stream-log] [--log-file <path>] [--skip-testing <target>] [--only-testing <target>] [--test-plan <name>] [--smoke] [--cleanup-simulators]"
             exit 2
             ;;
     esac
@@ -153,6 +158,7 @@ RESOLVED_SIMULATOR_OS="$SIMULATOR_OS"
 
 if [[ -n "$DEVICE_INFO" ]]; then
     IFS=$'\t' read -r DEVICE_UDID RESOLVED_SIMULATOR_NAME RESOLVED_SIMULATOR_OS <<< "$DEVICE_INFO"
+    DEVICE_UDID=$(ensure_worktree_simulator "$DEVICE_UDID" "$RESOLVED_SIMULATOR_NAME")
     DESTINATION="id=${DEVICE_UDID}"
     wait_for_simulator_boot "$DEVICE_UDID" "iOS"
     xcrun simctl terminate "$DEVICE_UDID" "$BUNDLE_ID" >/dev/null 2>&1 || true
