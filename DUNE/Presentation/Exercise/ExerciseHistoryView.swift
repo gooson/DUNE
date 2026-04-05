@@ -107,7 +107,6 @@ struct ExerciseHistoryView: View {
                     data: displayData,
                     baseline: nil,
                     yAxisLabel: metricYLabel,
-                    period: chartPeriod,
                     tintColor: DS.Color.activity,
                     trendLine: displayTrend.count >= 2 ? displayTrend : nil
                 )
@@ -131,13 +130,6 @@ struct ExerciseHistoryView: View {
         case .maxWeight, .totalVolume, .estimatedOneRM: true
         case .totalReps, .effort: false
         }
-    }
-
-    private var chartPeriod: DotLineChartView.Period {
-        let count = viewModel.chartData.count
-        if count <= 10 { return .week }
-        if count <= 30 { return .month }
-        return .quarter
     }
 
     private func convertedChartData(_ data: [ChartDataPoint]) -> [ChartDataPoint] {
