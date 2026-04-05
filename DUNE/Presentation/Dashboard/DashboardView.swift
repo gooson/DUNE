@@ -245,20 +245,18 @@ struct DashboardView: View {
     private var dashboardUpperContent: some View {
         // Hero
         if let score = viewModel.conditionScore {
-            SectionGroup(title: "Condition", icon: "heart.fill", iconColor: DS.Color.vitals, showChevron: true) {
-                NavigationLink(value: score) {
-                    ConditionHeroView(
-                        score: score,
-                        recentScores: viewModel.recentScores,
-                        weeklyGoalProgress: viewModel.weeklyGoalProgress,
-                        trendBadges: viewModel.heroBaselineDetails,
-                        hourlySparkline: viewModel.conditionSparkline.nonEmptyOrNil,
-                        adaptiveMessage: viewModel.adaptiveHeroMessage
-                    )
-                }
-                .buttonStyle(.plain)
+            NavigationLink(value: score) {
+                ConditionHeroView(
+                    score: score,
+                    recentScores: viewModel.recentScores,
+                    weeklyGoalProgress: viewModel.weeklyGoalProgress,
+                    trendBadges: viewModel.heroBaselineDetails,
+                    hourlySparkline: viewModel.conditionSparkline.nonEmptyOrNil,
+                    adaptiveMessage: viewModel.adaptiveHeroMessage
+                )
             }
             .reportTabHeroFrame()
+            .buttonStyle(.plain)
             .accessibilityIdentifier("dashboard-hero-condition")
             .transition(Self.sectionTransition)
             .staggeredAppear(index: 0)
@@ -334,45 +332,25 @@ struct DashboardView: View {
         }
 
         // Recovery & Sleep (sleep deficit + sleep insights)
-        SectionGroup(title: "Recovery & Sleep", icon: "bed.double.fill", iconColor: DS.Color.body, showChevron: viewModel.sortedMetrics.contains(where: { $0.category == .sleep })) {
-            if let sleepMetric = viewModel.sortedMetrics.first(where: { $0.category == .sleep }) {
-                NavigationLink(value: sleepMetric) {
-                    RecoverySleepCard(
-                        sleepDeficit: viewModel.sleepDeficitAnalysis,
-                        sleepInsights: viewModel.sleepInsightCards,
-                        sleepMetric: sleepMetric,
-                        onDismissInsight: { id in
-                            withAnimation(DS.Animation.standard) {
-                                viewModel.dismissInsightCard(id: id)
-                            }
-                        }
-                    )
+        RecoverySleepCard(
+            sleepDeficit: viewModel.sleepDeficitAnalysis,
+            sleepInsights: viewModel.sleepInsightCards,
+            sleepMetric: viewModel.sortedMetrics.first(where: { $0.category == .sleep }),
+            onDismissInsight: { id in
+                withAnimation(DS.Animation.standard) {
+                    viewModel.dismissInsightCard(id: id)
                 }
-                .buttonStyle(.plain)
-            } else {
-                RecoverySleepCard(
-                    sleepDeficit: viewModel.sleepDeficitAnalysis,
-                    sleepInsights: viewModel.sleepInsightCards,
-                    sleepMetric: nil,
-                    onDismissInsight: { id in
-                        withAnimation(DS.Animation.standard) {
-                            viewModel.dismissInsightCard(id: id)
-                        }
-                    }
-                )
             }
-        }
+        )
         .transition(Self.sectionTransition)
         .staggeredAppear(index: 5)
 
         // Cumulative Stress Score (Phase 3)
         if let stressScore = viewModel.cumulativeStressScore {
-            SectionGroup(title: "Cumulative Stress", icon: "waveform.path.ecg", iconColor: DS.Color.vitals, showChevron: true) {
-                NavigationLink(value: stressScore) {
-                    CumulativeStressCard(stressScore: stressScore)
-                }
-                .buttonStyle(.plain)
+            NavigationLink(value: stressScore) {
+                CumulativeStressCard(stressScore: stressScore)
             }
+            .buttonStyle(.plain)
             .transition(Self.sectionTransition)
             .staggeredAppear(index: 6)
         }

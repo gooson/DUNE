@@ -180,18 +180,16 @@ struct ActivityView: View {
                             .frame(maxWidth: .infinity, minHeight: 200)
                     } else {
                         // ① Training Readiness Hero Card
-                        SectionGroup(title: "Training Readiness", icon: "bolt.heart.fill", iconColor: DS.Color.activity, showChevron: true) {
-                            NavigationLink(value: ActivityDetailDestination.trainingReadiness) {
-                                TrainingReadinessHeroCard(
-                                    readiness: viewModel.trainingReadiness,
-                                    isCalibrating: viewModel.trainingReadiness?.isCalibrating ?? true,
-                                    hourlySparkline: viewModel.readinessSparkline.nonEmptyOrNil
-                                )
-                            }
-                            .buttonStyle(.plain)
+                        NavigationLink(value: ActivityDetailDestination.trainingReadiness) {
+                            TrainingReadinessHeroCard(
+                                readiness: viewModel.trainingReadiness,
+                                isCalibrating: viewModel.trainingReadiness?.isCalibrating ?? true,
+                                hourlySparkline: viewModel.readinessSparkline.nonEmptyOrNil
+                            )
                         }
                         .reportTabHeroFrame()
                         .accessibilityIdentifier("activity-hero-readiness")
+                        .buttonStyle(.plain)
                         .staggeredAppear(index: 0)
 
                         // ② Recovery Map + Weekly Stats (side-by-side on iPad)
@@ -215,7 +213,7 @@ struct ActivityView: View {
                         }
 
                         // ③.5 Injury Risk Assessment
-                        SectionGroup(title: "Injury Risk", icon: "shield.checkered", iconColor: DS.Color.activity, showChevron: true) {
+                        SectionGroup(title: "Injury Risk", icon: "shield.checkered", iconColor: DS.Color.activity) {
                             if viewModel.injuryRiskAssessment != nil {
                                 NavigationLink(value: ActivityDetailDestination.injuryRisk) {
                                     InjuryRiskCard(assessment: viewModel.injuryRiskAssessment)
@@ -237,7 +235,7 @@ struct ActivityView: View {
                             .staggeredAppear(index: 6)
 
                         // ⑥ Weekly Report
-                        SectionGroup(title: "Weekly Report", icon: "doc.text", iconColor: DS.Color.activity, showChevron: true) {
+                        SectionGroup(title: "Weekly Report", icon: "doc.text", iconColor: DS.Color.activity) {
                             if viewModel.weeklyReport != nil {
                                 NavigationLink(value: ActivityDetailDestination.weeklyReport) {
                                     WorkoutReportCard(report: viewModel.weeklyReport)
@@ -263,8 +261,7 @@ struct ActivityView: View {
                         // ⑨ Personal Records
                         SectionGroup(title: "Personal Records", icon: "trophy.fill",
                                      iconColor: DS.Color.activity,
-                                     infoAction: { showingPRInfo = true },
-                                     showChevron: true) {
+                                     infoAction: { showingPRInfo = true }) {
                             NavigationLink(value: ActivityDetailDestination.personalRecords()) {
                                 PersonalRecordsSection(
                                     records: viewModel.personalRecords,
@@ -277,7 +274,7 @@ struct ActivityView: View {
                         }
                         .staggeredAppear(index: 9)
 
-                        SectionGroup(title: "Achievement History", icon: "medal.fill", iconColor: DS.Color.activity, showChevron: true) {
+                        SectionGroup(title: "Achievement History", icon: "medal.fill", iconColor: DS.Color.activity) {
                             NavigationLink(value: ActivityDetailDestination.personalRecords()) {
                                 AchievementHistoryPreview(events: viewModel.workoutRewardHistory)
                             }
@@ -290,8 +287,7 @@ struct ActivityView: View {
                         // ⑩ Consistency
                         SectionGroup(title: "Consistency", icon: "flame.fill",
                                      iconColor: DS.Color.activity,
-                                     infoAction: { showingConsistencyInfo = true },
-                                     showChevron: true) {
+                                     infoAction: { showingConsistencyInfo = true }) {
                             NavigationLink(value: ActivityDetailDestination.consistency) {
                                 ConsistencyCard(streak: viewModel.workoutStreak)
                             }
@@ -303,8 +299,7 @@ struct ActivityView: View {
                         // ⑪ Exercise Mix
                         SectionGroup(title: "Exercise Mix", icon: "chart.bar.xaxis",
                                      iconColor: DS.Color.activity,
-                                     infoAction: { showingExerciseMixInfo = true },
-                                     showChevron: true) {
+                                     infoAction: { showingExerciseMixInfo = true }) {
                             NavigationLink(value: ActivityDetailDestination.exerciseMix) {
                                 ExerciseFrequencySection(frequencies: viewModel.exerciseFrequencies)
                             }
@@ -570,16 +565,26 @@ struct ActivityView: View {
     }
 
     private func recoveryMapSection(fillHeight: Bool = false) -> some View {
-        SectionGroup(title: "Muscle Map", icon: "figure.stand", iconColor: DS.Color.activity, showChevron: true, fillHeight: fillHeight) {
-            NavigationLink(value: ActivityDetailDestination.muscleMap) {
-                MuscleRecoveryMapView(
-                    fatigueStates: viewModel.fatigueStates,
-                    onMuscleSelected: { _ in }
-                )
-            }
-            .buttonStyle(.plain)
+        SectionGroup(title: "Muscle Map", icon: "figure.stand", iconColor: DS.Color.activity, fillHeight: fillHeight) {
+            MuscleRecoveryMapView(
+                fatigueStates: viewModel.fatigueStates,
+                onMuscleSelected: { muscle in selectedMuscle = muscle }
+            )
 
             HStack {
+                NavigationLink(value: ActivityDetailDestination.muscleMap) {
+                    HStack {
+                        Text("View Details")
+                            .font(.subheadline.weight(.medium))
+                            .foregroundStyle(DS.Color.activity)
+                        Image(systemName: "chevron.right")
+                            .font(.caption2.weight(.semibold))
+                            .foregroundStyle(DS.Color.activity)
+                    }
+                }
+                .buttonStyle(.plain)
+                .accessibilityIdentifier("activity-musclemap-detail-link")
+
                 Spacer()
 
                 NavigationLink(value: ActivityDetailDestination.muscleMap3D) {
@@ -596,7 +601,7 @@ struct ActivityView: View {
     }
 
     private func weeklyStatsSection(fillHeight: Bool = false) -> some View {
-        SectionGroup(title: "This Week", icon: "chart.bar.fill", iconColor: DS.Color.activity, showChevron: true, fillHeight: fillHeight) {
+        SectionGroup(title: "This Week", icon: "chart.bar.fill", iconColor: DS.Color.activity, fillHeight: fillHeight) {
             NavigationLink(value: ActivityDetailDestination.weeklyStats) {
                 WeeklyStatsGrid(stats: viewModel.weeklyStats)
             }
@@ -643,15 +648,12 @@ struct ActivityView: View {
     }
 
     private func trainingVolumeSection(fillHeight: Bool = false) -> some View {
-        SectionGroup(title: "Training Volume", icon: "chart.line.uptrend.xyaxis", iconColor: DS.Color.activity, showChevron: true, fillHeight: fillHeight) {
-            NavigationLink(value: TrainingVolumeDestination.overview) {
-                TrainingVolumeSummaryCard(
-                    trainingLoadData: viewModel.trainingLoadData,
-                    lastWorkoutMinutes: viewModel.lastWorkoutMinutes,
-                    lastWorkoutCalories: viewModel.lastWorkoutCalories
-                )
-            }
-            .buttonStyle(.plain)
+        SectionGroup(title: "Training Volume", icon: "chart.line.uptrend.xyaxis", iconColor: DS.Color.activity, fillHeight: fillHeight) {
+            TrainingVolumeSummaryCard(
+                trainingLoadData: viewModel.trainingLoadData,
+                lastWorkoutMinutes: viewModel.lastWorkoutMinutes,
+                lastWorkoutCalories: viewModel.lastWorkoutCalories
+            )
         }
     }
 

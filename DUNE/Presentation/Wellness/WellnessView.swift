@@ -71,19 +71,17 @@ struct WellnessView: View {
 
                         // Hero Card
                         if viewModel.wellnessScore != nil {
-                            SectionGroup(title: "Wellness Score", icon: "leaf.fill", iconColor: DS.Color.body, showChevron: true) {
-                                NavigationLink(value: WellnessScoreDestination()) {
-                                    WellnessHeroCard(
-                                        score: viewModel.wellnessScore,
-                                        sleepScore: viewModel.sleepScore,
-                                        conditionScore: viewModel.conditionScore,
-                                        bodyScore: viewModel.bodyScore,
-                                        hourlySparkline: viewModel.wellnessSparkline.nonEmptyOrNil
-                                    )
-                                }
-                                .buttonStyle(.plain)
+                            NavigationLink(value: WellnessScoreDestination()) {
+                                WellnessHeroCard(
+                                    score: viewModel.wellnessScore,
+                                    sleepScore: viewModel.sleepScore,
+                                    conditionScore: viewModel.conditionScore,
+                                    bodyScore: viewModel.bodyScore,
+                                    hourlySparkline: viewModel.wellnessSparkline.nonEmptyOrNil
+                                )
                             }
                             .reportTabHeroFrame()
+                            .buttonStyle(.plain)
                             .accessibilityIdentifier("wellness-hero-score")
                             .staggeredAppear(index: 0)
                         } else {
@@ -99,7 +97,7 @@ struct WellnessView: View {
                         }
 
                         // Sleep Prediction
-                        SectionGroup(title: "Tonight's Sleep", icon: "moon.zzz", iconColor: DS.Color.sleep, showChevron: true) {
+                        SectionGroup(title: "Tonight's Sleep", icon: "moon.zzz", iconColor: DS.Color.sleep) {
                             if viewModel.sleepPrediction != nil {
                                 NavigationLink(value: SleepPredictionDestination()) {
                                     SleepPredictionCard(prediction: viewModel.sleepPrediction)
@@ -436,42 +434,56 @@ private struct WellnessInjuryBannerView: View {
 
     var body: some View {
         let activeInjuries = injuryRecords.filter(\.isActive)
-        SectionGroup(title: "Injuries", icon: "bandage.fill", iconColor: DS.Color.caution, showChevron: !injuryRecords.isEmpty) {
-            if activeInjuries.isEmpty {
-                InlineCard {
-                    HStack(spacing: DS.Spacing.sm) {
-                        Image(systemName: "checkmark.circle")
-                            .foregroundStyle(DS.Color.textSecondary)
+        StandardCard {
+            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                HStack(spacing: DS.Spacing.xs) {
+                    Image(systemName: "bandage.fill")
+                        .font(.subheadline)
+                        .foregroundStyle(DS.Color.caution)
 
-                        Text("No active injuries")
-                            .font(.caption)
-                            .foregroundStyle(DS.Color.textSecondary)
+                    Text("Injuries")
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
 
-                        Spacer()
+                    Spacer()
 
-                        Button("Add") {
-                            onAdd()
+                    if !injuryRecords.isEmpty {
+                        NavigationLink(value: InjuryHistoryDestination()) {
+                            Text("View All")
+                                .font(.caption)
+                                .fontWeight(.medium)
                         }
-                        .font(.caption.weight(.medium))
+                        .accessibilityIdentifier("wellness-link-injuryhistory")
                         .tint(theme.accentColor)
                     }
                 }
-            } else {
-                ForEach(activeInjuries.prefix(3)) { record in
-                    InjuryCardView(record: record) {
-                        onEdit(record)
+
+                if activeInjuries.isEmpty {
+                    InlineCard {
+                        HStack(spacing: DS.Spacing.sm) {
+                            Image(systemName: "checkmark.circle")
+                                .foregroundStyle(DS.Color.textSecondary)
+
+                            Text("No active injuries")
+                                .font(.caption)
+                                .foregroundStyle(DS.Color.textSecondary)
+
+                            Spacer()
+
+                            Button("Add") {
+                                onAdd()
+                            }
+                            .font(.caption.weight(.medium))
+                            .tint(theme.accentColor)
+                        }
+                    }
+                } else {
+                    ForEach(activeInjuries.prefix(3)) { record in
+                        InjuryCardView(record: record) {
+                            onEdit(record)
+                        }
                     }
                 }
-
-                NavigationLink(value: InjuryHistoryDestination()) {
-                    Text("View All")
-                        .font(.caption)
-                        .fontWeight(.medium)
-                        .frame(maxWidth: .infinity)
-                }
-                .buttonStyle(.plain)
-                .tint(theme.accentColor)
-                .accessibilityIdentifier("wellness-link-injuryhistory")
             }
         }
     }
@@ -488,17 +500,40 @@ private struct PostureAssessmentLinkView: View {
     var onScoreUpdate: ((Int?) -> Void)?
 
     var body: some View {
-        SectionGroup(title: "Posture Assessment", icon: "figure.stand", iconColor: DS.Color.body, showChevron: !records.isEmpty) {
-            // Action buttons: Camera Capture + Realtime Analysis
-            actionButtons
+        StandardCard {
+            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                HStack(spacing: DS.Spacing.xs) {
+                    Image(systemName: "figure.stand")
+                        .font(.subheadline)
+                        .foregroundStyle(DS.Color.body)
 
-            // Recent records (up to 3) — tap to navigate to individual detail
-            if !records.isEmpty {
-                ForEach(records.prefix(3)) { record in
-                    NavigationLink(value: PostureRecordDestination(id: record.id)) {
-                        recordRow(record)
+                    Text("Posture Assessment")
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+
+                    Spacer()
+
+                    if !records.isEmpty {
+                        NavigationLink(value: PostureHistoryDestination()) {
+                            Text("View All")
+                                .font(.caption)
+                                .fontWeight(.medium)
+                        }
+                        .tint(theme.accentColor)
                     }
-                    .buttonStyle(.plain)
+                }
+
+                // Action buttons: Camera Capture + Realtime Analysis
+                actionButtons
+
+                // Recent records (up to 3) — tap to navigate to detail
+                if !records.isEmpty {
+                    ForEach(records.prefix(3)) { record in
+                        NavigationLink(value: PostureRecordDestination(id: record.id)) {
+                            recordRow(record)
+                        }
+                        .buttonStyle(.plain)
+                    }
                 }
             }
         }
@@ -598,17 +633,25 @@ private struct BodyHistoryLinkView: View {
 
     var body: some View {
         if !records.isEmpty {
-            SectionGroup(title: "Body Composition", icon: "figure.stand", iconColor: DS.Color.body, showChevron: true) {
-                NavigationLink(value: BodyHistoryDestination()) {
-                    HStack {
-                        Text(String(localized: "\(records.count) records"))
-                            .font(.caption)
-                            .foregroundStyle(DS.Color.textSecondary)
-                        Spacer()
-                    }
+            NavigationLink(value: BodyHistoryDestination()) {
+                HStack {
+                    Image(systemName: "figure.stand")
+                        .font(.subheadline)
+                        .foregroundStyle(DS.Color.body)
+                    Text("Body Composition History")
+                        .font(.subheadline)
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                        .font(.caption)
+                        .foregroundStyle(.tertiary)
                 }
-                .buttonStyle(.plain)
+                .padding(DS.Spacing.lg)
+                .background {
+                    RoundedRectangle(cornerRadius: DS.Radius.md)
+                        .fill(.thinMaterial)
+                }
             }
+            .buttonStyle(.plain)
             .accessibilityIdentifier("wellness-link-bodyhistory")
         }
     }
