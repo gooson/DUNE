@@ -386,6 +386,7 @@
 		4AC46A5C32F3D47A191E7AA8 /* ExerciseTypeDetailViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79E9DFABDB350ADDEBA9AA0 /* ExerciseTypeDetailViewModelTests.swift */; };
 		4ACDF3589BF2E41F2ECF6A34 /* DUNEWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 8200C20962601FEA8887E374 /* DUNEWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		4AEAFE0A78D56919A6451092 /* CloudMirroredSharedHealthDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F00F3C32A6A8627722069F /* CloudMirroredSharedHealthDataService.swift */; };
+		4B3168C602FD094FA848D37E /* HabitManagementSmokeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B85A984BF3860DCDEB5FC6E /* HabitManagementSmokeTests.swift */; };
 		4B5F3A35D0951F2A59E4D1CC /* GlassCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3FDB2DA9908F5F63BBE4303 /* GlassCard.swift */; };
 		4BD6CA5935222D0D7FFE72CC /* CheckInjuryConflictUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02CBCE3C28E07A44605422B2 /* CheckInjuryConflictUseCase.swift */; };
 		4C3E24E071FF96B5030C1DBB /* WaveShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9D6BE56DF7F329B9A53CB6 /* WaveShape.swift */; };
@@ -1476,6 +1477,7 @@
 		2B095A1810EBAAE41473515C /* InjuryInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjuryInfo.swift; sourceTree = "<group>"; };
 		2B5F3AD2099A4114ACF453CC /* VisionSharePlayWorkoutViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionSharePlayWorkoutViewModelTests.swift; sourceTree = "<group>"; };
 		2B632858B30C43510F577224 /* TrendAnalysisService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendAnalysisService.swift; sourceTree = "<group>"; };
+		2B85A984BF3860DCDEB5FC6E /* HabitManagementSmokeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitManagementSmokeTests.swift; sourceTree = "<group>"; };
 		2BA2939D992303BC0B042591 /* VisionSharePlayWorkoutViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionSharePlayWorkoutViewModel.swift; sourceTree = "<group>"; };
 		2C933851A534597EE763D048 /* TrainingVolumeDestination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingVolumeDestination.swift; sourceTree = "<group>"; };
 		2CC77233396CDCE9824DC38F /* NotificationHubView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationHubView.swift; sourceTree = "<group>"; };
@@ -4171,6 +4173,7 @@
 			children = (
 				793C30F25A62BBA20F7A4468 /* ActivitySmokeTests.swift */,
 				214A80561E45E0B5649186E7 /* DashboardSmokeTests.swift */,
+				2B85A984BF3860DCDEB5FC6E /* HabitManagementSmokeTests.swift */,
 				606C6F1EB73B5AA13662C421 /* LaunchExperienceSmokeTests.swift */,
 				9E37E4D6D8BA8C8B0A76CA57 /* LifeSmokeTests.swift */,
 				A07C9920925813361939D479 /* PostureCaptureDiagnosticsSmokeTests.swift */,
@@ -5708,6 +5711,7 @@
 				32304909E7D2D914B326CA33 /* ActivitySmokeTests.swift in Sources */,
 				F85B4DEA861F0849991E4038 /* ChartInteractionRegressionUITests.swift in Sources */,
 				5D423AC0730146F4887C4201 /* DashboardSmokeTests.swift in Sources */,
+				4B3168C602FD094FA848D37E /* HabitManagementSmokeTests.swift in Sources */,
 				7669E80C3515AFE2478A1EB9 /* HealthKitPermissionUITests.swift in Sources */,
 				0B495001260BF239928A8F5C /* LaunchExperienceSmokeTests.swift in Sources */,
 				1E7E5F36C42E4AF5A79F38A3 /* LaunchScreenTests.swift in Sources */,

@@ -442,19 +442,19 @@ private struct HabitListQueryView: View {
             iconColor: DS.Color.tabLife,
             fillHeight: fillHeight
         ) {
-            if habits.isEmpty {
-                EmptyStateView(
-                    icon: "checklist",
-                    title: "No Habits Yet",
-                    message: "Add your first habit to start tracking your daily routine.",
-                    actionTitle: "Add Habit",
-                    action: {
-                        viewModel.resetForm()
-                        viewModel.isShowingAddSheet = true
-                    }
-                )
-            } else {
-                VStack(spacing: DS.Spacing.sm) {
+            VStack(spacing: DS.Spacing.sm) {
+                if habits.isEmpty {
+                    EmptyStateView(
+                        icon: "checklist",
+                        title: "No Habits Yet",
+                        message: "Add your first habit to start tracking your daily routine.",
+                        actionTitle: "Add Habit",
+                        action: {
+                            viewModel.resetForm()
+                            viewModel.isShowingAddSheet = true
+                        }
+                    )
+                } else {
                     // Category filter chips
                     if activeCategories.count > 1 {
                         categoryFilterSection
@@ -478,10 +478,10 @@ private struct HabitListQueryView: View {
                             }
                         }
                     }
-
-                    // Archived habits link
-                    ArchivedHabitCountView()
                 }
+
+                // Archived habits link — shown regardless of active habit count
+                ArchivedHabitCountView()
             }
         }
         .accessibilityIdentifier("life-section-habits")
