@@ -9,6 +9,13 @@ $ARGUMENTS 에 대해 구조화된 brainstorm을 수행합니다.
 
 ## Process
 
+### Step 0: 기존 문서 확인
+
+$ARGUMENTS 관련 기존 brainstorm이 있는지 확인합니다:
+- `docs/brainstorms/` 에서 Glob으로 관련 문서 검색
+- 존재하면 사용자에게 "기존 brainstorm을 업데이트할지, 새로 시작할지" 확인
+- 업데이트 시 기존 문서를 읽고 Open Questions 중심으로 추가 탐색
+
 ### Step 1: 초기 분석
 
 $ARGUMENTS를 분석하여 다음을 파악합니다:

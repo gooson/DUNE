@@ -128,6 +128,75 @@ func cancellation() async {
 - Cancellation 테스트: `Task` 생성 → cancel → 상태 검증
 - Timeout: Swift Testing은 자체 timeout 없음 — 테스트 대상이 무한 대기하지 않도록 mock에서 즉시 반환
 
+## Mock Patterns (프로젝트 표준)
+
+### Pattern 1: Protocol Mock (가장 일반적)
+```swift
+private struct MockHRVService: HRVQuerying {
+    var samples: [HRVSample] = []
+    var todayRHR: Double?
+    func fetchHRVSamples(days: Int) async throws -> [HRVSample] { samples }
+    func fetchRestingHeartRate(for date: Date) async throws -> Double? { todayRHR }
+}
+```
+
+### Pattern 2: Actor Mock (call tracking 필요 시)
+```swift
+private actor MockRefreshService: SharedHealthDataService {
+    var invalidateCacheCallCount = 0
+    func invalidateCache() { invalidateCacheCallCount += 1 }
+}
+```
+
+### Pattern 3: Class Mock (handler injection + call counting)
+```swift
+private final class MockTranscriber: TranscriberProtocol {
+    var startCallCount = 0
+    var shouldThrowOnStart = false
+    var transcriptHandler: (@MainActor (String) -> Void)?
+
+    func start(onTranscript: @escaping @MainActor (String) -> Void) throws {
+        startCallCount += 1
+        transcriptHandler = onTranscript
+        if shouldThrowOnStart { throw TestError.mock }
+    }
+}
+```
+
+### Pattern 4: URLProtocol Stub (네트워크)
+```swift
+// DUNETests/Helpers/URLProtocolStub.swift 에 이미 구현됨
+let session = URLSession.stubbedSession()
+URLProtocolStub.setHandler { request in
+    let response = HTTPURLResponse(url: request.url!, statusCode: 200, ...)
+    return (response, jsonData)
+}
+```
+
+## Integration Test Sections
+
+통합 테스트는 별도 파일이 아닌 기존 테스트 파일 내 `// MARK: - Integration` 섹션으로 작성:
+
+```swift
+@Suite("OutdoorFitnessScore")
+struct OutdoorFitnessScoreTests {
+    // Unit tests...
+
+    // MARK: - Snapshot Integration
+    @Test("Full score pipeline from raw data to snapshot")
+    func fullPipeline() async throws {
+        let rawData = MockRawData.complete
+        let score = try await OutdoorFitnessScoreUseCase(service: MockService(data: rawData)).execute()
+        #expect(score.overall >= 0 && score.overall <= 100)
+        #expect(score.components.count == 4)
+    }
+}
+```
+
+- 여러 UseCase를 조합하는 end-to-end 검증
+- Mock 데이터로 전체 파이프라인 실행
+- SwiftData/HealthKit 실제 호출은 제외 (시뮬레이터 제한)
+
 ## New Code Checklist
 
 코드 작성 시 다음 테스트를 함께 작성:

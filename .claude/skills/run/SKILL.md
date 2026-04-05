@@ -85,7 +85,7 @@ Pipeline 시작 전에 아래를 반드시 수행합니다.
 
 1. 사용자 요청을 한 줄로 재정의합니다.
 2. 현재 브랜치와 워크트리 상태를 확인합니다. (`git status`, `git branch --show-current`)
-3. `/plan`, `/work`, `/review`, `/compound`, `/ship`의 `SKILL.md`를 **Read 도구로 직접 읽습니다**.
+3. `/plan`, `/work`, `/review`, `/compound`, `/ship`의 `SKILL.md`를 **각 Phase 진입 시점에** Read 도구로 읽습니다. Phase 0에서 5개를 한 번에 모두 읽지 않습니다 — 컨텍스트 소비를 분산시키기 위해 해당 Phase 시작 직전에 관련 SKILL.md를 읽습니다.
 4. **활성 교정사항 확인**: `docs/corrections-active.md`를 읽어 현재 주의해야 할 교정사항을 파악합니다.
 5. **TodoWrite로 전체 Phase 목록을 등록합니다**:
    - Phase 1: Plan
