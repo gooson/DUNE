@@ -149,6 +149,39 @@ struct DailyPostureSummary: Sendable, Codable, Equatable {
     let averageGaitScore: Int?
     let stretchRemindersTriggered: Int
     let date: Date
+    /// Whether posture monitoring is enabled on Watch. Defaults to `true` for backward compatibility.
+    let isMonitoringEnabled: Bool
+
+    init(
+        sedentaryMinutes: Int,
+        walkingMinutes: Int,
+        averageGaitScore: Int?,
+        stretchRemindersTriggered: Int,
+        date: Date,
+        isMonitoringEnabled: Bool = true
+    ) {
+        self.sedentaryMinutes = sedentaryMinutes
+        self.walkingMinutes = walkingMinutes
+        self.averageGaitScore = averageGaitScore
+        self.stretchRemindersTriggered = stretchRemindersTriggered
+        self.date = date
+        self.isMonitoringEnabled = isMonitoringEnabled
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        sedentaryMinutes = try container.decode(Int.self, forKey: .sedentaryMinutes)
+        walkingMinutes = try container.decode(Int.self, forKey: .walkingMinutes)
+        averageGaitScore = try container.decodeIfPresent(Int.self, forKey: .averageGaitScore)
+        stretchRemindersTriggered = try container.decode(Int.self, forKey: .stretchRemindersTriggered)
+        date = try container.decode(Date.self, forKey: .date)
+        isMonitoringEnabled = try container.decodeIfPresent(Bool.self, forKey: .isMonitoringEnabled) ?? true
+    }
+
+    /// Whether all data counters are zero (no activity detected — likely watch not worn).
+    var hasNoActivityData: Bool {
+        sedentaryMinutes == 0 && walkingMinutes == 0 && stretchRemindersTriggered == 0 && averageGaitScore == nil
+    }
 }
 
 /// Shared minute-formatting utility for posture UI components (Watch + iOS).

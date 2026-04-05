@@ -129,6 +129,9 @@ struct DashboardView: View {
         .navigationDestination(for: ConditionScore.self) { score in
             ConditionScoreDetailView(score: score, scoreRefreshService: scoreRefreshService)
         }
+        .navigationDestination(for: CumulativeStressScore.self) { stressScore in
+            CumulativeStressDetailView(stressScore: stressScore, scoreRefreshService: scoreRefreshService)
+        }
         .navigationDestination(for: HealthMetric.self) { metric in
             MetricDetailView(metric: metric)
         }
@@ -371,9 +374,12 @@ struct DashboardView: View {
 
         // Cumulative Stress Score (Phase 3)
         if let stressScore = viewModel.cumulativeStressScore {
-            CumulativeStressCard(stressScore: stressScore)
-                .transition(Self.sectionTransition)
-                .staggeredAppear(index: 6)
+            NavigationLink(value: stressScore) {
+                CumulativeStressCard(stressScore: stressScore)
+            }
+            .buttonStyle(.plain)
+            .transition(Self.sectionTransition)
+            .staggeredAppear(index: 6)
         }
 
         // Exercise Intelligence Card (morning/daytime only)

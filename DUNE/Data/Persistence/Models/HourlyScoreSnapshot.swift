@@ -27,6 +27,9 @@ final class HourlyScoreSnapshot {
     /// Sleep score component used (0-100)
     var sleepScore: Double?
 
+    /// Cumulative stress score (0-100, higher = more stress)
+    var stressScore: Double?
+
     /// When this snapshot was created/last updated
     var createdAt: Date = Date()
 
@@ -37,7 +40,8 @@ final class HourlyScoreSnapshot {
         readinessScore: Double? = nil,
         hrvValue: Double? = nil,
         rhrValue: Double? = nil,
-        sleepScore: Double? = nil
+        sleepScore: Double? = nil,
+        stressScore: Double? = nil
     ) {
         self.date = date
         self.conditionScore = conditionScore
@@ -46,6 +50,7 @@ final class HourlyScoreSnapshot {
         self.hrvValue = hrvValue
         self.rhrValue = rhrValue
         self.sleepScore = sleepScore
+        self.stressScore = stressScore
         self.createdAt = Date()
     }
 

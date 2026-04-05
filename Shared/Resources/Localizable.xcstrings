@@ -271,6 +271,16 @@
         }
       }
     },
+    "%@ (%@)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ (%2$@)"
+          }
+        }
+      }
+    },
     "%@ %@" : {
       "localizations" : {
         "en" : {
@@ -1143,6 +1153,23 @@
         }
       }
     },
+    "%lld archived habits" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アーカイブ済み%lld個"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "아카이브된 습관 %lld개"
+          }
+        }
+      }
+    },
     "%lld badges" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1189,6 +1216,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld일 연속 훈련"
+          }
+        }
+      }
+    },
+    "%lld day streak" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld日連続"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld일 연속"
           }
         }
       }
@@ -1701,6 +1745,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "오늘 %lld걸음"
+          }
+        }
+      }
+    },
+    "%lld times" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld回"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld회"
           }
         }
       }
@@ -3445,6 +3506,23 @@
         }
       }
     },
+    "Add habits from the Life tab to start tracking." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lifeタブから習慣を追加して追跡を始めましょう。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Life 탭에서 습관을 추가하여 추적을 시작하세요."
+          }
+        }
+      }
+    },
     "Add habits to start tracking your daily routine" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -4335,6 +4413,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "보관"
+          }
+        }
+      }
+    },
+    "Archived" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アーカイブ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "아카이브"
+          }
+        }
+      }
+    },
+    "Archived habits will appear here." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アーカイブ済みの習慣がここに表示されます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "아카이브된 습관이 여기에 표시됩니다."
           }
         }
       }
@@ -22067,6 +22179,23 @@
         }
       }
     },
+    "No Active Habits" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アクティブな習慣なし"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "활성 습관 없음"
+          }
+        }
+      }
+    },
     "No active injuries" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -22097,6 +22226,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "금주"
+          }
+        }
+      }
+    },
+    "No Archived Habits" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アーカイブ済み習慣なし"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "아카이브된 습관 없음"
           }
         }
       }
@@ -22674,7 +22820,7 @@
       }
     },
     "No posture data yet" : {
-      "extractionState" : "manual",
+      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -25122,6 +25268,23 @@
         }
       }
     },
+    "Posture monitoring disabled" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "姿勢モニタリングが無効です"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "자세 모니터링 비활성화됨"
+          }
+        }
+      }
+    },
     "Posture Reminder" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -25844,6 +26007,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "잠들기 전에 Apple Watch를 착용하세요."
+          }
+        }
+      }
+    },
+    "Put on your Apple Watch to start tracking sitting time and walking posture." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watchを着けて、座り時間と歩行姿勢のトラッキングを始めましょう。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watch를 착용하여 앉은 시간과 걸음걸이 추적을 시작하세요."
           }
         }
       }
@@ -27768,6 +27948,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "안정시 심박수 경고"
+          }
+        }
+      }
+    },
+    "Restore" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "復元"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "복원"
           }
         }
       }
@@ -37801,6 +37998,23 @@
         }
       }
     },
+    "Wear your Apple Watch" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watchを着けてください"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watch를 착용하세요"
+          }
+        }
+      }
+    },
     "Wear your Apple Watch for a few days to collect data, and you'll receive personalized coaching." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -40114,6 +40328,567 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "τ (타우): 근육 크기별 회복 속도 (대근육 72시간, 소근육 36시간)"
+          }
+        }
+      }
+    },
+    "How Stress Score Works": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ストレススコアの仕組み"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "스트레스 점수 계산 방법"
+          }
+        }
+      }
+    },
+    "What is Cumulative Stress?": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "累積ストレスとは？"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "장기 스트레스란?"
+          }
+        }
+      }
+    },
+    "A 30-day composite indicator that tracks how much physiological stress your body has accumulated from HRV variability, sleep patterns, and training load.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "HRV変動性、睡眠パターン、トレーニング負荷から、30日間に蓄積された生理的ストレスを追跡する総合指標です。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "HRV 변동성, 수면 패턴, 운동 부하를 기반으로 30일간 신체에 축적된 생리적 스트레스를 추적하는 종합 지표입니다."
+          }
+        }
+      }
+    },
+    "HRV Variability (40%)": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "HRV変動性（40%）"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "HRV 변동성 (40%)"
+          }
+        }
+      }
+    },
+    "Measures day-to-day fluctuation in your HRV. High variability suggests your autonomic nervous system is under inconsistent stress.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "HRVの日々の変動を測定します。変動が大きい場合、自律神経系が不安定なストレス状態であることを示唆します。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "HRV의 일별 변동을 측정합니다. 높은 변동성은 자율신경계가 불안정한 스트레스 상태임을 나타냅니다."
+          }
+        }
+      }
+    },
+    "Sleep Consistency (35%)": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "睡眠の一貫性（35%）"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "수면 일관성 (35%)"
+          }
+        }
+      }
+    },
+    "Evaluates regularity of your sleep patterns. Irregular sleep timing disrupts circadian rhythm and increases physiological stress.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "睡眠パターンの規則性を評価します。不規則な睡眠時間は概日リズムを乱し、生理的ストレスを増加させます。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "수면 패턴의 규칙성을 평가합니다. 불규칙한 수면 시간은 생체리듬을 교란하고 생리적 스트레스를 증가시킵니다."
+          }
+        }
+      }
+    },
+    "Activity Load (25%)": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "活動負荷（25%）"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "활동 부하 (25%)"
+          }
+        }
+      }
+    },
+    "Compares recent training volume to your chronic baseline. Both overtraining and sudden detraining contribute to stress accumulation.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最近のトレーニング量を慢性的な基準値と比較します。過度なトレーニングも急な休止も、ストレスの蓄積につながります。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "최근 운동량을 만성 기준치와 비교합니다. 과훈련과 갑작스런 운동 중단 모두 스트레스 축적에 기여합니다."
+          }
+        }
+      }
+    },
+    "Stress Levels": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ストレスレベル"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "스트레스 레벨"
+          }
+        }
+      }
+    },
+    "Your body is well-recovered. A great time to push for challenging workouts or goals.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "体が十分に回復しています。チャレンジングなワークアウトや目標に最適な時期です。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "몸이 잘 회복되었습니다. 도전적인 운동이나 목표에 적합한 시기입니다."
+          }
+        }
+      }
+    },
+    "Normal stress levels. Maintain your regular routine and keep up good sleep habits.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正常なストレスレベルです。通常のルーティンを維持し、良い睡眠習慣を続けましょう。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "정상적인 스트레스 수준입니다. 평소 루틴을 유지하고 좋은 수면 습관을 이어가세요."
+          }
+        }
+      }
+    },
+    "Stress is building up. Prioritize recovery, improve sleep consistency, and consider lighter training.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ストレスが蓄積されています。回復を優先し、睡眠の一貫性を改善し、軽めのトレーニングを検討しましょう。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "스트레스가 축적되고 있습니다. 회복을 우선시하고, 수면 일관성을 개선하며, 가벼운 운동을 고려하세요."
+          }
+        }
+      }
+    },
+    "High accumulated stress. Focus on rest, reduce training intensity, and ensure consistent sleep timing.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "高い蓄積ストレスです。休息に集中し、トレーニング強度を下げ、一定の睡眠時間を確保しましょう。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "높은 누적 스트레스입니다. 휴식에 집중하고, 운동 강도를 줄이며, 일정한 수면 시간을 유지하세요."
+          }
+        }
+      }
+    },
+    "Your stress levels are well-managed. Keep up your healthy habits.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ストレスがうまく管理されています。健康的な習慣を続けましょう。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "스트레스가 잘 관리되고 있습니다. 건강한 습관을 유지하세요."
+          }
+        }
+      }
+    },
+    "Stress is at a manageable level. Monitor your sleep and recovery.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "管理可能なレベルのストレスです。睡眠と回復をモニタリングしましょう。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "관리 가능한 수준의 스트레스입니다. 수면과 회복을 모니터링하세요."
+          }
+        }
+      }
+    },
+    "Accumulated stress is building. Consider extra recovery time.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "蓄積ストレスが増加しています。追加の回復時間を検討しましょう。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "누적 스트레스가 증가하고 있습니다. 추가 회복 시간을 고려하세요."
+          }
+        }
+      }
+    },
+    "High stress detected. Prioritize rest and reduce training intensity.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "高いストレスが検出されました。休息を優先し、トレーニング強度を下げましょう。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "높은 스트레스가 감지되었습니다. 휴식을 우선시하고 운동 강도를 줄이세요."
+          }
+        }
+      }
+    },
+    "Stress Insight": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ストレスインサイト"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "스트레스 인사이트"
+          }
+        }
+      }
+    },
+    "Your body is well-recovered": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "体が十分に回復しています"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "몸이 잘 회복되었습니다"
+          }
+        }
+      }
+    },
+    "Stress is within normal range": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ストレスは正常範囲内です"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "스트레스가 정상 범위입니다"
+          }
+        }
+      }
+    },
+    "Stress has been accumulating": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ストレスが蓄積されています"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "스트레스가 축적되고 있습니다"
+          }
+        }
+      }
+    },
+    "Significant stress buildup detected": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "かなりのストレスの蓄積が検出されました"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "상당한 스트레스 축적이 감지되었습니다"
+          }
+        }
+      }
+    },
+    "Great time for high-intensity training. Your recovery indicators show consistent patterns across HRV, sleep, and activity.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "高強度トレーニングに最適な時期です。HRV、睡眠、活動全般で一貫した回復パターンが見られます。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "고강도 운동에 적합한 시기입니다. HRV, 수면, 활동 전반에서 일관된 회복 패턴을 보이고 있습니다."
+          }
+        }
+      }
+    },
+    "Maintain your current routine. Pay attention to sleep consistency to keep stress from climbing further.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "現在のルーティンを維持してください。ストレスがさらに上昇しないよう、睡眠の一貫性に注意を払いましょう。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "현재 루틴을 유지하세요. 스트레스가 더 오르지 않도록 수면 일관성에 주의를 기울이세요."
+          }
+        }
+      }
+    },
+    "Consider adding extra recovery days. Focus on maintaining consistent sleep timing and reducing training volume temporarily.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "追加の回復日を検討しましょう。一定の睡眠時間の維持と一時的なトレーニング量の削減に集中しましょう。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "추가 회복일을 고려하세요. 일정한 수면 시간 유지와 일시적인 운동량 감소에 집중하세요."
+          }
+        }
+      }
+    },
+    "Prioritize rest over performance. Reduce training intensity, maintain strict sleep schedules, and consider active recovery only.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "パフォーマンスよりも休息を優先しましょう。トレーニング強度を下げ、厳格な睡眠スケジュールを維持し、アクティブリカバリーのみを検討してください。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "성과보다 휴식을 우선시하세요. 운동 강도를 줄이고, 엄격한 수면 스케줄을 유지하며, 가벼운 회복 운동만 고려하세요."
+          }
+        }
+      }
+    },
+    "Contributing Factors": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "寄与要因"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "기여 요소"
+          }
+        }
+      }
+    },
+    "Sleep Consistency": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "睡眠の一貫性"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "수면 일관성"
+          }
+        }
+      }
+    },
+    "Activity Load": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "活動負荷"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "활동 부하"
+          }
+        }
+      }
+    },
+    "Stress Components": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ストレス構成要素"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "스트레스 구성 요소"
+          }
+        }
+      }
+    },
+    "Most stressed": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最もストレスが高い日"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "가장 스트레스 높은 날"
+          }
+        }
+      }
+    },
+    "Least stressed": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最もストレスが低い日"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "가장 스트레스 낮은 날"
           }
         }
       }

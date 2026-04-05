@@ -40,13 +40,15 @@ struct GaitAnalyzerTests {
             walkingMinutes: 30,
             averageGaitScore: 75,
             stretchRemindersTriggered: 2,
-            date: Date(timeIntervalSince1970: 1_711_100_000)
+            date: Date(timeIntervalSince1970: 1_711_100_000),
+            isMonitoringEnabled: true
         )
 
         let data = try JSONEncoder().encode(summary)
         let decoded = try JSONDecoder().decode(DailyPostureSummary.self, from: data)
 
         #expect(decoded == summary)
+        #expect(decoded.isMonitoringEnabled == true)
     }
 
     @Test("DailyPostureSummary with nil gait score encodes correctly")
@@ -63,6 +65,58 @@ struct GaitAnalyzerTests {
         let decoded = try JSONDecoder().decode(DailyPostureSummary.self, from: data)
 
         #expect(decoded.averageGaitScore == nil)
+    }
+
+    @Test("DailyPostureSummary backward-compatible decoding without isMonitoringEnabled")
+    func summaryBackwardCompatible() throws {
+        let json = """
+        {"sedentaryMinutes":60,"walkingMinutes":15,"stretchRemindersTriggered":1,"date":0}
+        """
+        let data = Data(json.utf8)
+        let decoded = try JSONDecoder().decode(DailyPostureSummary.self, from: data)
+
+        #expect(decoded.sedentaryMinutes == 60)
+        #expect(decoded.walkingMinutes == 15)
+        #expect(decoded.isMonitoringEnabled == true)
+    }
+
+    @Test("DailyPostureSummary with monitoring disabled round-trips")
+    func summaryMonitoringDisabled() throws {
+        let summary = DailyPostureSummary(
+            sedentaryMinutes: 0,
+            walkingMinutes: 0,
+            averageGaitScore: nil,
+            stretchRemindersTriggered: 0,
+            date: Date(),
+            isMonitoringEnabled: false
+        )
+
+        let data = try JSONEncoder().encode(summary)
+        let decoded = try JSONDecoder().decode(DailyPostureSummary.self, from: data)
+
+        #expect(decoded.isMonitoringEnabled == false)
+        #expect(decoded.hasNoActivityData == true)
+    }
+
+    @Test("DailyPostureSummary hasNoActivityData detects empty data")
+    func summaryHasNoActivityData() {
+        let empty = DailyPostureSummary(
+            sedentaryMinutes: 0,
+            walkingMinutes: 0,
+            averageGaitScore: nil,
+            stretchRemindersTriggered: 0,
+            date: Date()
+        )
+        #expect(empty.hasNoActivityData == true)
+
+        let withSedentary = DailyPostureSummary(
+            sedentaryMinutes: 5,
+            walkingMinutes: 0,
+            averageGaitScore: nil,
+            stretchRemindersTriggered: 0,
+            date: Date()
+        )
+        #expect(withSedentary.hasNoActivityData == false)
     }
 
     @Test("PostureActivityState raw values are stable for serialization")

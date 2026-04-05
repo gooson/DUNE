@@ -506,7 +506,8 @@ extension WatchSessionManager {
                         walkingMinutes: summary.walkingMinutes,
                         averageGaitScore: nil,
                         stretchRemindersTriggered: summary.stretchRemindersTriggered,
-                        date: summary.date
+                        date: summary.date,
+                        isMonitoringEnabled: summary.isMonitoringEnabled
                     )
                 }
                 // Only accept if summary is from today
