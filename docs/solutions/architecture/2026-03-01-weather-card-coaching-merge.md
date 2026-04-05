@@ -41,17 +41,16 @@ struct WeatherCard: View {
 View body에서 `.category == .weather` 판정이 2곳에 중복 → ViewModel computed property로 통합.
 
 ```swift
-// DashboardViewModel
-var weatherCardInsight: WeatherCard.InsightInfo? {
-    guard let insight = focusInsight, insight.category == .weather,
-          weatherSnapshot != nil else { return nil }
-    return WeatherCard.InsightInfo(title: insight.title, message: insight.message, iconName: insight.iconName)
-}
+// DashboardViewModel — stored property (not computed), synced via syncWeatherCardInsight()
+// to avoid @Observable feedback loop during NavigationStack layout.
+private(set) var weatherCardInsight: WeatherCard.InsightInfo?
 
-var standaloneCoachingInsight: CoachingInsight? {
-    guard let insight = focusInsight else { return nil }
-    return (insight.category == .weather && weatherSnapshot != nil) ? nil : insight
+private func syncWeatherCardInsight() {
+    guard let insight = focusInsight, insight.category == .weather,
+          weatherSnapshot != nil else { weatherCardInsight = nil; return }
+    weatherCardInsight = WeatherCard.InsightInfo(...)
 }
+// Note: standaloneCoachingInsight was removed (unused after TodayBriefCard refactor)
 ```
 
 ### 4. 코칭 메시지에서 온도 제거
@@ -79,7 +78,7 @@ daily.precipitation_probability_max.flatMap { i < $0.count ? $0[i] : nil } ?? 0
 | File | Change |
 |------|--------|
 | `WeatherCard.swift` | InsightInfo struct, level computed, DRY accessibility |
-| `DashboardViewModel.swift` | weatherCardInsight, standaloneCoachingInsight |
+| `DashboardViewModel.swift` | weatherCardInsight (stored, synced); standaloneCoachingInsight removed |
 | `DashboardView.swift` | ViewModel property 사용으로 단순화 |
 | `CoachingEngine.swift` | 온도 접두사 제거 |
 | `OpenMeteoService.swift` | flatMap 패턴으로 force-unwrap 제거 |

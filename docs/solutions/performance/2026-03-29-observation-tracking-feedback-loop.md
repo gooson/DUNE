@@ -168,6 +168,31 @@ Applied to all 4 tab root views: DashboardView, ActivityView, WellnessView, Life
 
 Also removed the dead `sectionVisibilityHash` computed property (23 lines) which had ~17 unnecessary `@Observable` reads per body evaluation.
 
+## Fourth Instance: Async-Mutated Properties Read Directly in Body
+
+### Problem
+
+After instances 1–3, the feedback loop recurred after adding SectionGroup wrappers (PR #760) to DashboardView. The deeper view hierarchy (SectionGroup computes 3 gradients per instance) increased body evaluation cost, pushing latent observation tracking of async-mutated properties past SwiftUI's feedback loop detection threshold.
+
+The volatile properties:
+- `focusInsight` — mutated by `enhanceCoachingTask` (async)
+- `coachingMessage` — mutated by same task
+- `weatherSnapshot` — mutated by weather fetch
+- `weatherCardInsight` — computed property reading `focusInsight` (cross-property observation chain)
+
+All four were read directly in DashboardView body for the TodayBriefCard visibility check and props.
+
+### Fix
+
+1. Convert `weatherCardInsight` from computed to stored property with `syncWeatherCardInsight()` at stable points
+2. Cache all 4 volatile properties in `@State` with `.onChange` sync in DashboardView
+3. Extract cache-sync `.onChange` handlers into `DashboardCacheSync` ViewModifier to help the type-checker with the long modifier chain
+4. Remove dead `standaloneCoachingInsight` computed property
+
+### Key Insight
+
+**View hierarchy depth amplifies latent feedback loops.** Adding visual wrappers (SectionGroup) around existing content doesn't add new observation tracking, but increases body evaluation cost enough to trigger SwiftUI's feedback loop detector when combined with existing volatile observation subscriptions.
+
 ## Lessons Learned
 
 1. `.environment()` has subtree-wide propagation — treat it differently from regular property reads
@@ -179,3 +204,6 @@ Also removed the dead `sectionVisibilityHash` computed property (23 lines) which
 7. **`.onPreferenceChange` → `@State` in views with heavy `@Observable` tracking** is a latent feedback loop source. During navigation animations, geometry preferences change continuously. Each `@State` write triggers body re-evaluation, which re-tracks `@Observable` properties, amplifying any concurrent mutation into cascading invalidations
 8. **Use `.backgroundPreferenceValue` / `.overlayPreferenceValue`** instead of `.onPreferenceChange` + `@State` when the preference value only needs to flow to background/overlay views. These APIs confine re-evaluation to the closure scope without invalidating the parent body
 9. **Dead computed properties still register observation tracking** if accidentally called — remove them promptly after their sole consumer is deleted
+10. **Any `@Observable` property mutated by an async Task** that is read in body should be cached in `@State` + `.onChange`. The async mutation can fire during NavigationStack layout, creating re-entrant invalidation. This applies even to stored (non-computed) properties
+11. **View hierarchy depth amplifies latent feedback loops.** Adding wrappers (e.g., SectionGroup) that increase body evaluation cost can push previously-marginal observation tracking past the detection threshold
+12. **When caching 5+ properties**, extract `.onChange` handlers into a `ViewModifier` to prevent type-checker timeouts on the main body
