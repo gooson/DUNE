@@ -167,17 +167,4 @@ struct WatchPostureMonitorTests {
         // The pending cancel should have been cancelled; notifications still scheduled
     }
 
-    // MARK: - Confidence Filtering
-
-    @Test("mapActivity returns nil for low-confidence activities")
-    func lowConfidenceFiltered() {
-        // We can't directly create CMMotionActivity with specific confidence in tests
-        // (CoreMotion is read-only), so we test the logic conceptually.
-        // The actual filtering happens in the nonisolated mapActivity method.
-        // This test validates the method signature accepts Optional return.
-        let monitor = makeSUT()
-        // Simulating: if mapActivity returns nil, handleActivityChange is not called
-        // State should remain unchanged
-        #expect(monitor.currentActivity == .unknown)
-    }
 }

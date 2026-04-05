@@ -265,7 +265,7 @@ final class WatchPostureMonitor {
 
     /// Maps CMMotionActivity to PostureActivityState. Returns nil for low-confidence
     /// readings to prevent spurious state transitions that reset stretch notification timers.
-    nonisolated static func mapActivity(_ activity: CMMotionActivity) -> PostureActivityState? {
+    nonisolated private static func mapActivity(_ activity: CMMotionActivity) -> PostureActivityState? {
         guard activity.confidence != .low else { return nil }
         if activity.walking { return .walking }
         if activity.running { return .running }
