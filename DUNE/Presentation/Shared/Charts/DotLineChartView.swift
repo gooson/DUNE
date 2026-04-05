@@ -168,6 +168,7 @@ struct DotLineChartView: View {
         if let timePeriod {
             return timePeriod.strideComponent
         }
+        if dataSpanDays > 180 { return .month }
         return .day
     }
 
@@ -175,14 +176,26 @@ struct DotLineChartView: View {
         if let timePeriod {
             return timePeriod.strideCount
         }
-        return period == .week ? 1 : 7
+        let span = dataSpanDays
+        if span <= 14 { return 2 }
+        if span <= 60 { return 7 }
+        if span <= 180 { return 14 }
+        return 1 // .month component → every month
     }
 
     private var axisFormat: Date.FormatStyle {
         if let timePeriod {
             return timePeriod.axisLabelFormat
         }
-        return .dateTime.day().month(.abbreviated)
+        let span = dataSpanDays
+        if span <= 14 { return .dateTime.day().month(.abbreviated) }
+        if span <= 180 { return .dateTime.month(.narrow).day() }
+        return .dateTime.month(.abbreviated)
+    }
+
+    private var dataSpanDays: Int {
+        guard let first = data.first?.date, let last = data.last?.date else { return 0 }
+        return max(0, Calendar.current.dateComponents([.day], from: first, to: last).day ?? 0)
     }
 
     private var effectiveXDomain: ClosedRange<Date> {
