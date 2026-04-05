@@ -10,7 +10,6 @@ struct WellnessView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.appTheme) private var theme
     @Environment(\.horizontalSizeClass) private var sizeClass
-    @State private var heroFrame: CGRect?
 
     private let scrollToTopSignal: Int
 
@@ -172,8 +171,7 @@ struct WellnessView: View {
                 }
             }
         }
-        .onPreferenceChange(TabHeroFramePreferenceKey.self) { heroFrame = $0 }
-        .background {
+        .backgroundPreferenceValue(TabHeroFramePreferenceKey.self) { heroFrame in
             TabWaveBackground()
                 .environment(\.tabHeroStartLineInset, heroFrame.map(TabHeroStartLine.inset(for:)))
         }

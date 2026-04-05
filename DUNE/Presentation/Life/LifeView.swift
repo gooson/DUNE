@@ -30,7 +30,6 @@ struct LifeView: View {
 
     private let scrollToTopSignal: Int
     private let refreshSignal: Int
-    @State private var heroFrame: CGRect?
 
     private var isRegular: Bool { sizeClass == .regular }
 
@@ -72,8 +71,7 @@ struct LifeView: View {
                 }
             }
         }
-        .onPreferenceChange(TabHeroFramePreferenceKey.self) { heroFrame = $0 }
-        .background {
+        .backgroundPreferenceValue(TabHeroFramePreferenceKey.self) { heroFrame in
             TabWaveBackground()
                 .environment(\.tabHeroStartLineInset, heroFrame.map(TabHeroStartLine.inset(for:)))
         }
