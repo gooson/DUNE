@@ -7,6 +7,9 @@ severity: critical
 related_files:
   - DUNE/Presentation/Dashboard/DashboardView.swift
   - DUNE/Presentation/Dashboard/DashboardViewModel.swift
+  - DUNE/Presentation/Activity/ActivityView.swift
+  - DUNE/Presentation/Wellness/WellnessView.swift
+  - DUNE/Presentation/Life/LifeView.swift
 related_solutions:
   - docs/solutions/performance/2026-02-16-computed-property-caching-pattern.md
   - docs/solutions/architecture/2026-02-28-weather-display-integration.md
@@ -122,6 +125,49 @@ private func syncSparklines() {
 
 Called at end of `loadData()`. Sparkline may be slightly behind `ScoreRefreshService` between refreshes — acceptable for hourly sparkline data.
 
+## Third Instance: Preference→@State→Body Cascade During Navigation Push
+
+### Problem
+
+After fixes 1–2 and removal of the `sectionVisibilityHash` animation, the feedback loop recurred when entering Settings. Root cause: `@State heroFrame` updated via `.onPreferenceChange(TabHeroFramePreferenceKey.self)` created a continuous invalidation cycle during NavigationStack push animations.
+
+The cycle:
+1. NavigationStack push animation starts → content slides
+2. Hero card frame changes in coordinate space → `GeometryReader` reports new frame
+3. `.onPreferenceChange` fires → `heroFrame = newFrame` (writes to `@State`)
+4. `@State` mutation → DashboardView body re-evaluates → reads ~20 `@Observable` ViewModel properties
+5. If any ViewModel property changed from in-flight async work (enhanceCoachingTask, sparkline reload), observation triggers another invalidation
+6. NavigationStack receives repeated [layout] invalidations → feedback loop
+
+This pattern existed in ALL 4 tab root views (Dashboard, Activity, Wellness, Life) but manifested most severely in DashboardView due to its ~20 `@Observable` property reads amplifying the cascade.
+
+### Fix
+
+Replace the three-step pattern with `.backgroundPreferenceValue`:
+
+```swift
+// BEFORE: preference → @State → body re-eval → layout → preference (LOOP)
+@State private var heroFrame: CGRect?
+// ...
+.onPreferenceChange(TabHeroFramePreferenceKey.self) { heroFrame = $0 }
+.background {
+    TabWaveBackground()
+        .environment(\.tabHeroStartLineInset, heroFrame.map(TabHeroStartLine.inset(for:)))
+}
+
+// AFTER: preference read stays in background closure — no body re-eval
+.backgroundPreferenceValue(TabHeroFramePreferenceKey.self) { heroFrame in
+    TabWaveBackground()
+        .environment(\.tabHeroStartLineInset, heroFrame.map(TabHeroStartLine.inset(for:)))
+}
+```
+
+`backgroundPreferenceValue` reads the preference directly in the background view builder. When the preference changes, **only the background closure re-evaluates** — the parent view's body does NOT re-evaluate. No `@State` intermediate means no body invalidation.
+
+Applied to all 4 tab root views: DashboardView, ActivityView, WellnessView, LifeView.
+
+Also removed the dead `sectionVisibilityHash` computed property (23 lines) which had ~17 unnecessary `@Observable` reads per body evaluation.
+
 ## Lessons Learned
 
 1. `.environment()` has subtree-wide propagation — treat it differently from regular property reads
@@ -130,3 +176,6 @@ Called at end of `loadData()`. Sparkline may be slightly behind `ScoreRefreshSer
 4. Initial `@State` default must match the ViewModel's initial value to avoid flash of wrong state
 5. **Cross-observable computed read-throughs** also create feedback loops: when ViewModel A's computed property reads from `@Observable` B, SwiftUI tracks both. Updates to B invalidate the View even though A's `@State` wrapping should coalesce them
 6. Fix for cross-observable: convert computed → stored property with explicit sync at stable points (end of `loadData()`, `.onChange`, etc.)
+7. **`.onPreferenceChange` → `@State` in views with heavy `@Observable` tracking** is a latent feedback loop source. During navigation animations, geometry preferences change continuously. Each `@State` write triggers body re-evaluation, which re-tracks `@Observable` properties, amplifying any concurrent mutation into cascading invalidations
+8. **Use `.backgroundPreferenceValue` / `.overlayPreferenceValue`** instead of `.onPreferenceChange` + `@State` when the preference value only needs to flow to background/overlay views. These APIs confine re-evaluation to the closure scope without invalidating the parent body
+9. **Dead computed properties still register observation tracking** if accidentally called — remove them promptly after their sole consumer is deleted
