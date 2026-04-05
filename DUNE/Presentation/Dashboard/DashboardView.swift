@@ -52,6 +52,12 @@ struct DashboardView: View {
     @State private var showWhatsNew = false
     @State private var showSettings = false
     @State private var cachedWeatherAtmosphere: WeatherAtmosphere = .default
+    // Coaching properties are mutated asynchronously by enhanceCoachingTask.
+    // Caching in @State breaks the observation tracking during NavigationStack layout,
+    // preventing feedback loops. (4th instance — see docs/solutions/performance/2026-03-29)
+    @State private var cachedFocusInsight: CoachingInsight?
+    @State private var cachedCoachingMessage: String?
+    @State private var cachedWeatherSnapshot: WeatherSnapshot?
 
     init(
         sharedHealthDataService: SharedHealthDataService? = nil,
@@ -173,6 +179,15 @@ struct DashboardView: View {
         }
         .onChange(of: viewModel.weatherAtmosphere) { _, newValue in
             cachedWeatherAtmosphere = newValue
+        }
+        .onChange(of: viewModel.focusInsight) { _, newValue in
+            cachedFocusInsight = newValue
+        }
+        .onChange(of: viewModel.coachingMessage) { _, newValue in
+            cachedCoachingMessage = newValue
+        }
+        .onChange(of: viewModel.weatherSnapshot) { _, newValue in
+            cachedWeatherSnapshot = newValue
         }
         .onChange(of: viewModel.briefingData == nil) { _, isNil in
             if isNil { isShowingBriefing = false }
@@ -315,16 +330,18 @@ struct DashboardView: View {
         }
 
         // Today's Brief (weather + coaching + briefing entry) — morning/daytime only
+        // Read from @State caches to avoid observation tracking of volatile async-mutated
+        // properties (focusInsight, coachingMessage, weatherSnapshot) during layout.
         if viewModel.shouldShowTodaysBrief,
-           !isBriefingDisabled || viewModel.weatherSnapshot != nil || viewModel.focusInsight != nil || viewModel.coachingMessage != nil {
+           !isBriefingDisabled || cachedWeatherSnapshot != nil || cachedFocusInsight != nil || cachedCoachingMessage != nil {
             TodayBriefCard(
-                weatherSnapshot: viewModel.weatherSnapshot,
+                weatherSnapshot: cachedWeatherSnapshot,
                 weatherInsight: viewModel.weatherCardInsight,
-                focusInsight: viewModel.focusInsight,
-                coachingMessage: viewModel.coachingMessage,
+                focusInsight: cachedFocusInsight,
+                coachingMessage: cachedCoachingMessage,
                 conditionStatus: viewModel.briefingData?.conditionStatus,
                 onOpenBriefing: { isShowingBriefing = true },
-                onOpenWeatherDetail: { weatherDetailNavigation = viewModel.weatherSnapshot },
+                onOpenWeatherDetail: { weatherDetailNavigation = cachedWeatherSnapshot },
                 onRequestLocationPermission: {
                     Task { await viewModel.requestLocationPermission() }
                 }

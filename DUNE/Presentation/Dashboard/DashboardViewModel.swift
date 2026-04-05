@@ -52,17 +52,10 @@ final class DashboardViewModel {
     private(set) var weatherAtmosphere: WeatherAtmosphere = .default
 
     /// Weather-category coaching insight for merging into WeatherCard (display-ready).
-    var weatherCardInsight: WeatherCard.InsightInfo? {
-        guard let insight = focusInsight, insight.category == .weather,
-              weatherSnapshot != nil else { return nil }
-        return WeatherCard.InsightInfo(title: insight.title, message: insight.message, iconName: insight.iconName)
-    }
-
-    /// Coaching insight that should render as standalone card (non-weather or no weather data).
-    var standaloneCoachingInsight: CoachingInsight? {
-        guard let insight = focusInsight else { return nil }
-        return (insight.category == .weather && weatherSnapshot != nil) ? nil : insight
-    }
+    /// Stored (not computed read-through to focusInsight) to avoid cross-observable
+    /// observation chain that causes NavigationStack layout feedback loops
+    /// when enhanceCoachingTask updates focusInsight during navigation transitions.
+    private(set) var weatherCardInsight: WeatherCard.InsightInfo?
 
     /// Sleep-category insight cards for RecoverySleepCard.
     private(set) var sleepInsightCards: [InsightCardData] = []
@@ -219,6 +212,7 @@ final class DashboardViewModel {
             recentScores = []
             coachingMessage = nil
             focusInsight = nil
+            weatherCardInsight = nil
             insightCards = []
             rebuildInsightPartitions()
             heroBaselineDetails = []
@@ -305,6 +299,7 @@ final class DashboardViewModel {
             sortedMetrics = allMetrics.sorted { $0.changeSignificance > $1.changeSignificance }
         }
         buildCoachingInsights()
+        syncWeatherCardInsight()
         coachingMessage = focusInsight?.message ?? buildCoachingMessage()
         enhanceCoachingMessageIfAvailable()
         heroBaselineDetails = buildHeroBaselineDetails()
@@ -338,6 +333,20 @@ final class DashboardViewModel {
     /// when ScoreRefreshService updates during navigation transitions.
     private func syncSparklines() {
         conditionSparkline = scoreRefreshService?.conditionSparkline ?? .empty
+    }
+
+    /// Copy weather card insight from focusInsight into stored property.
+    /// Breaks the observation chain where body reads weatherCardInsight (computed) →
+    /// tracks focusInsight → enhanceCoachingTask mutates focusInsight during layout.
+    private func syncWeatherCardInsight() {
+        guard let insight = focusInsight, insight.category == .weather,
+              weatherSnapshot != nil else {
+            weatherCardInsight = nil
+            return
+        }
+        weatherCardInsight = WeatherCard.InsightInfo(
+            title: insight.title, message: insight.message, iconName: insight.iconName
+        )
     }
 
     /// Load template nudge recommendation using existing templates from View's @Query.
@@ -582,6 +591,7 @@ final class DashboardViewModel {
 
         // Recompute coaching with refreshed weather context.
         buildCoachingInsights()
+        syncWeatherCardInsight()
         coachingMessage = focusInsight?.message ?? buildCoachingMessage()
         enhanceCoachingMessageIfAvailable()
     }
@@ -1353,6 +1363,7 @@ final class DashboardViewModel {
                   focusInsight?.id == expectedInsightID else { return }
             focusInsight = enhanced
             coachingMessage = enhanced.message
+            syncWeatherCardInsight()
         }
     }
 
