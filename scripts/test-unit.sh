@@ -10,6 +10,7 @@ ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT_DIR"
 source "$ROOT_DIR/scripts/lib/regen-project.sh"
 source "$ROOT_DIR/scripts/lib/simulator-boot.sh"
+source "$ROOT_DIR/scripts/lib/simulator-worktree.sh"
 
 PROJECT_SPEC="DUNE/project.yml"
 PROJECT_FILE="DUNE/DUNE.xcodeproj"
@@ -58,9 +59,13 @@ while [[ $# -gt 0 ]]; do
             LOG_FILE="$2"
             shift 2
             ;;
+        --cleanup-simulators)
+            cleanup_worktree_simulators --current
+            exit 0
+            ;;
         *)
             echo "Unknown option: $1"
-            echo "Usage: $0 [--no-regen] [--ios-only | --watch-only] [--stream-log | --no-stream-log] [--log-file <path>]"
+            echo "Usage: $0 [--no-regen] [--ios-only | --watch-only] [--stream-log | --no-stream-log] [--log-file <path>] [--cleanup-simulators]"
             exit 2
             ;;
     esac
@@ -175,6 +180,14 @@ fi
 
 if [[ "$MODE" != "ios" && -z "${DAILVE_WATCH_DESTINATION:-}" ]]; then
     WATCH_DESTINATION="$(resolve_sim_destination "watchOS" "watchOS-${WATCH_SIM_OS//./-}" "$WATCH_SIM_NAME" "$WATCH_SIM_OS" "26")"
+fi
+
+if [[ "$MODE" != "watch" ]]; then
+    IOS_DESTINATION=$(apply_worktree_destination "$IOS_DESTINATION" "$IOS_SIM_NAME" "iOS")
+fi
+
+if [[ "$MODE" != "ios" ]]; then
+    WATCH_DESTINATION=$(apply_worktree_destination "$WATCH_DESTINATION" "$WATCH_SIM_NAME" "watchOS")
 fi
 
 preboot_from_destination() {
