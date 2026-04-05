@@ -227,14 +227,14 @@ struct VisionDashboardWorkspaceViewModelTests {
             ),
             SleepStage(
                 stage: .rem,
-                duration: 60 * 60,
+                duration: 96 * 60,
                 startDate: sleepStart.addingTimeInterval(90 * 60),
-                endDate: sleepStart.addingTimeInterval(150 * 60)
+                endDate: sleepStart.addingTimeInterval(186 * 60)
             ),
             SleepStage(
                 stage: .core,
-                duration: 330 * 60,
-                startDate: sleepStart.addingTimeInterval(150 * 60),
+                duration: 294 * 60,
+                startDate: sleepStart.addingTimeInterval(186 * 60),
                 endDate: sleepStart.addingTimeInterval(480 * 60)
             )
         ]
