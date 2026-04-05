@@ -241,14 +241,14 @@ struct CumulativeStressDetailView: View {
 
             ForEach(stressScore.contributions) { contribution in
                 HStack(spacing: DS.Spacing.sm) {
-                    Image(systemName: factorIcon(contribution.factor))
+                    Image(systemName: contribution.factor.iconName)
                         .font(.caption)
-                        .foregroundStyle(factorColor(contribution.factor))
+                        .foregroundStyle(contribution.factor.color)
                         .frame(width: 20)
 
                     VStack(alignment: .leading, spacing: 2) {
                         HStack {
-                            Text(factorLabel(contribution.factor))
+                            Text(contribution.factor.displayName)
                                 .font(.subheadline)
 
                             Spacer()
@@ -279,10 +279,10 @@ struct CumulativeStressDetailView: View {
             title: "Stress Components",
             components: stressScore.contributions.map { contribution in
                 .init(
-                    label: factorLabel(contribution.factor),
+                    label: contribution.factor.displayName,
                     weight: String(format: "%.0f%%", contribution.weight * 100),
                     score: Int(contribution.rawScore.rounded()),
-                    color: factorColor(contribution.factor)
+                    color: contribution.factor.color
                 )
             }
         )
@@ -294,27 +294,4 @@ struct CumulativeStressDetailView: View {
         sizeClass == .regular ? 360 : 250
     }
 
-    private func factorIcon(_ factor: CumulativeStressScore.Contribution.Factor) -> String {
-        switch factor {
-        case .hrvVariability: "waveform.path.ecg"
-        case .sleepConsistency: "moon.fill"
-        case .activityLoad: "figure.run"
-        }
-    }
-
-    private func factorColor(_ factor: CumulativeStressScore.Contribution.Factor) -> Color {
-        switch factor {
-        case .hrvVariability: DS.Color.hrv
-        case .sleepConsistency: DS.Color.sleep
-        case .activityLoad: DS.Color.activity
-        }
-    }
-
-    private func factorLabel(_ factor: CumulativeStressScore.Contribution.Factor) -> String {
-        switch factor {
-        case .hrvVariability: String(localized: "HRV Variability")
-        case .sleepConsistency: String(localized: "Sleep Consistency")
-        case .activityLoad: String(localized: "Activity Load")
-        }
-    }
 }
