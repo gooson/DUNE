@@ -648,7 +648,7 @@ final class MetricDetailViewModel {
         let end = today
 
         do {
-            guard await locationService.isAuthorized else { return }
+            guard locationService.isAuthorized else { return }
             let location = try await locationService.requestLocation()
             let latitude = location.coordinate.latitude
             let longitude = location.coordinate.longitude
