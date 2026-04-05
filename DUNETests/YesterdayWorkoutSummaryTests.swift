@@ -58,7 +58,7 @@ struct YesterdayWorkoutSummaryTests {
         let summary = vm.yesterdayWorkoutSummary
         #expect(summary != nil)
         #expect(summary?.contains("2") == true, "Should show 2 exercises")
-        #expect(summary?.contains("70m") == true, "Should show 70 minutes (1800+2400=4200s=70m)")
+        #expect(summary?.contains("1h 10m") == true, "Should show 1h 10m (1800+2400=4200s=70min)")
     }
 
     // MARK: - HealthKit WorkoutSummary only (cardio from Watch)
@@ -111,7 +111,7 @@ struct YesterdayWorkoutSummaryTests {
         let summary = vm.yesterdayWorkoutSummary
         #expect(summary != nil)
         #expect(summary?.contains("2") == true, "Should show 2 exercises (1 strength + 1 cardio)")
-        #expect(summary?.contains("70m") == true, "Should show 70 minutes (2400+1800=4200s=70m)")
+        #expect(summary?.contains("1h 10m") == true, "Should show 1h 10m (2400+1800=4200s=70min)")
     }
 
     // MARK: - No yesterday data
