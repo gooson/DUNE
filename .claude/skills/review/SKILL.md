@@ -118,7 +118,7 @@ truncation이 발생합니다. 이를 방지하기 위해:
 
 **결과를 파일에 저장합니다** (세션 간 연속성 보장):
 
-`/tmp/review-findings-{branch}.json` 에 다음 JSON 스키마로 저장:
+`/tmp/review-findings-{sanitized-branch}.json` (`{sanitized-branch}`는 `git branch --show-current`의 `/`를 `-`로 치환한 값) 에 다음 JSON 스키마로 저장:
 ```json
 {
   "branch": "feature/foo",

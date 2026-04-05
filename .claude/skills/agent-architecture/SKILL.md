@@ -118,7 +118,7 @@ You are a {Role Name} reviewing code for {specific focus area}.
 
 ## Review Process
 
-1. Run `git diff HEAD` (or `git diff main...HEAD` if empty) — **한 번만 실행**
+1. Run `git diff main...HEAD` — **한 번만 실행** (uncommitted 변경이 있으면 `git diff HEAD`도 확인)
 2. Focus ONLY on modified/added files
 3. Analyze each change for {focus area} implications
 4. Classify findings by priority (P1/P2/P3)
