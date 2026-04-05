@@ -317,32 +317,26 @@ private struct HabitListQueryView: View {
                 monthlyRates: monthlyRates
             )
 
-            SectionGroup(title: "Habit Heatmap", icon: "square.grid.3x3.fill", iconColor: DS.Color.tabLife, showChevron: true) {
-                Button {
-                    showingHeatmapDetail = true
-                } label: {
-                    HabitHeatmapView(data: heatmapData) {
-                        showingHeatmapDetail = true
-                    }
-                }
-                .buttonStyle(.plain)
+            HabitHeatmapView(data: heatmapData) {
+                showingHeatmapDetail = true
             }
 
             if weeklyReport != nil {
-                SectionGroup(title: "Weekly Report", icon: "doc.text.magnifyingglass", iconColor: DS.Color.tabLife, showChevron: true) {
-                    Button {
-                        showingReport = true
-                    } label: {
-                        HStack {
-                            Text("View Weekly Report")
-                                .font(.subheadline)
-                                .foregroundStyle(DS.Color.textSecondary)
-                            Spacer()
+                Button {
+                    showingReport = true
+                } label: {
+                    Label("View Weekly Report", systemImage: "doc.text.magnifyingglass")
+                        .font(.subheadline.bold())
+                        .foregroundStyle(DS.Color.tabLife)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, DS.Spacing.sm)
+                        .background {
+                            RoundedRectangle(cornerRadius: DS.Radius.sm)
+                                .fill(.ultraThinMaterial)
                         }
-                    }
-                    .buttonStyle(.plain)
-                    .accessibilityIdentifier("life-weekly-report-button")
                 }
+                .buttonStyle(.plain)
+                .accessibilityIdentifier("life-weekly-report-button")
             }
         }
         .navigationDestination(isPresented: $showingReport) {
