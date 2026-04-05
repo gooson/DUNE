@@ -34,8 +34,17 @@ _try_boot() {
         echo "simctl boot stderr: ${boot_err:0:200}"
     fi
 
+    # Poll with bootstatus first (faster, blocks until ready), fall back to list devices.
+    # bootstatus exits 0 when booted; we give it most of the remaining timeout.
+    if xcrun simctl bootstatus "$udid" -b 2>/dev/null; then
+        echo "${label} simulator booted (bootstatus confirmed)."
+        return 0
+    fi
+
+    # Fallback: poll simctl list devices. Use generous 30s sub-timeout because
+    # the CoreSimulator daemon can be slow to respond while booting.
     while [[ "$elapsed" -lt "$timeout" ]]; do
-        if timeout 5 xcrun simctl list devices 2>/dev/null | grep -F "$udid" | grep -q "Booted"; then
+        if timeout 30 xcrun simctl list devices 2>/dev/null | grep -F "$udid" | grep -q "Booted"; then
             echo "${label} simulator booted (${elapsed}s)."
             return 0
         fi
