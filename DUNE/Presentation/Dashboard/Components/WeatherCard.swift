@@ -5,7 +5,7 @@ import SwiftUI
 /// Tapping navigates to WeatherDetailView.
 struct WeatherCard: View {
     /// Display-ready coaching insight data (decoupled from Domain CoachingInsight).
-    struct InsightInfo {
+    struct InsightInfo: Equatable {
         let title: String
         let message: String
         let iconName: String

@@ -318,14 +318,9 @@ private struct HabitListQueryView: View {
             )
 
             SectionGroup(title: "Habit Heatmap", icon: "square.grid.3x3.fill", iconColor: DS.Color.tabLife, showChevron: true) {
-                Button {
+                HabitHeatmapView(data: heatmapData) {
                     showingHeatmapDetail = true
-                } label: {
-                    HabitHeatmapView(data: heatmapData) {
-                        showingHeatmapDetail = true
-                    }
                 }
-                .buttonStyle(.plain)
             }
 
             if weeklyReport != nil {

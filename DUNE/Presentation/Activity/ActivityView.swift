@@ -263,8 +263,7 @@ struct ActivityView: View {
                         // ⑨ Personal Records
                         SectionGroup(title: "Personal Records", icon: "trophy.fill",
                                      iconColor: DS.Color.activity,
-                                     infoAction: { showingPRInfo = true },
-                                     showChevron: true) {
+                                     infoAction: { showingPRInfo = true }) {
                             NavigationLink(value: ActivityDetailDestination.personalRecords()) {
                                 PersonalRecordsSection(
                                     records: viewModel.personalRecords,
@@ -290,8 +289,7 @@ struct ActivityView: View {
                         // ⑩ Consistency
                         SectionGroup(title: "Consistency", icon: "flame.fill",
                                      iconColor: DS.Color.activity,
-                                     infoAction: { showingConsistencyInfo = true },
-                                     showChevron: true) {
+                                     infoAction: { showingConsistencyInfo = true }) {
                             NavigationLink(value: ActivityDetailDestination.consistency) {
                                 ConsistencyCard(streak: viewModel.workoutStreak)
                             }
@@ -303,8 +301,7 @@ struct ActivityView: View {
                         // ⑪ Exercise Mix
                         SectionGroup(title: "Exercise Mix", icon: "chart.bar.xaxis",
                                      iconColor: DS.Color.activity,
-                                     infoAction: { showingExerciseMixInfo = true },
-                                     showChevron: true) {
+                                     infoAction: { showingExerciseMixInfo = true }) {
                             NavigationLink(value: ActivityDetailDestination.exerciseMix) {
                                 ExerciseFrequencySection(frequencies: viewModel.exerciseFrequencies)
                             }
@@ -571,15 +568,20 @@ struct ActivityView: View {
 
     private func recoveryMapSection(fillHeight: Bool = false) -> some View {
         SectionGroup(title: "Muscle Map", icon: "figure.stand", iconColor: DS.Color.activity, showChevron: true, fillHeight: fillHeight) {
-            NavigationLink(value: ActivityDetailDestination.muscleMap) {
-                MuscleRecoveryMapView(
-                    fatigueStates: viewModel.fatigueStates,
-                    onMuscleSelected: { _ in }
-                )
-            }
-            .buttonStyle(.plain)
+            MuscleRecoveryMapView(
+                fatigueStates: viewModel.fatigueStates,
+                onMuscleSelected: { muscle in selectedMuscle = muscle }
+            )
 
             HStack {
+                NavigationLink(value: ActivityDetailDestination.muscleMap) {
+                    Text("View Details")
+                        .font(.caption.weight(.medium))
+                }
+                .buttonStyle(.plain)
+                .tint(DS.Color.activity)
+                .accessibilityIdentifier("activity-musclemap-detail-link")
+
                 Spacer()
 
                 NavigationLink(value: ActivityDetailDestination.muscleMap3D) {

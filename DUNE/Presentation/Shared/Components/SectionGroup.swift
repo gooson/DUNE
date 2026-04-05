@@ -172,9 +172,11 @@ struct SectionGroup<Content: View>: View {
                         .fontWeight(.semibold)
                         .foregroundStyle(DS.Color.textSecondary)
 
-                    if let infoAction {
+                    if infoAction != nil || showChevron {
                         Spacer()
+                    }
 
+                    if let infoAction {
                         Button(action: infoAction) {
                             Image(systemName: "info.circle")
                                 .font(.subheadline)
@@ -183,8 +185,6 @@ struct SectionGroup<Content: View>: View {
                     }
 
                     if showChevron {
-                        if infoAction == nil { Spacer() }
-
                         Image(systemName: "chevron.right")
                             .font(.caption2)
                             .fontWeight(.semibold)

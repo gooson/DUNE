@@ -58,6 +58,7 @@ struct DashboardView: View {
     @State private var cachedFocusInsight: CoachingInsight?
     @State private var cachedCoachingMessage: String?
     @State private var cachedWeatherSnapshot: WeatherSnapshot?
+    @State private var cachedWeatherCardInsight: WeatherCard.InsightInfo?
 
     init(
         sharedHealthDataService: SharedHealthDataService? = nil,
@@ -177,21 +178,7 @@ struct DashboardView: View {
                 MorningBriefingView(data: briefingData)
             }
         }
-        .onChange(of: viewModel.weatherAtmosphere) { _, newValue in
-            cachedWeatherAtmosphere = newValue
-        }
-        .onChange(of: viewModel.focusInsight) { _, newValue in
-            cachedFocusInsight = newValue
-        }
-        .onChange(of: viewModel.coachingMessage) { _, newValue in
-            cachedCoachingMessage = newValue
-        }
-        .onChange(of: viewModel.weatherSnapshot) { _, newValue in
-            cachedWeatherSnapshot = newValue
-        }
-        .onChange(of: viewModel.briefingData == nil) { _, isNil in
-            if isNil { isShowingBriefing = false }
-        }
+        .modifier(DashboardCacheSync(viewModel: viewModel, cachedWeatherAtmosphere: $cachedWeatherAtmosphere, cachedFocusInsight: $cachedFocusInsight, cachedCoachingMessage: $cachedCoachingMessage, cachedWeatherSnapshot: $cachedWeatherSnapshot, cachedWeatherCardInsight: $cachedWeatherCardInsight, isShowingBriefing: $isShowingBriefing))
         .sheet(item: $templateNudgeToSave) { nudge in
             NavigationStack {
                 TemplateFormView(
@@ -336,12 +323,12 @@ struct DashboardView: View {
            !isBriefingDisabled || cachedWeatherSnapshot != nil || cachedFocusInsight != nil || cachedCoachingMessage != nil {
             TodayBriefCard(
                 weatherSnapshot: cachedWeatherSnapshot,
-                weatherInsight: viewModel.weatherCardInsight,
+                weatherInsight: cachedWeatherCardInsight,
                 focusInsight: cachedFocusInsight,
                 coachingMessage: cachedCoachingMessage,
                 conditionStatus: viewModel.briefingData?.conditionStatus,
                 onOpenBriefing: { isShowingBriefing = true },
-                onOpenWeatherDetail: { weatherDetailNavigation = cachedWeatherSnapshot },
+                onOpenWeatherDetail: { weatherDetailNavigation = viewModel.weatherSnapshot },
                 onRequestLocationPermission: {
                     Task { await viewModel.requestLocationPermission() }
                 }
@@ -804,6 +791,30 @@ private struct BaselineProgressView: View {
                     .foregroundStyle(DS.Color.textSecondary)
             }
         }
+    }
+}
+
+// MARK: - Cache Sync Modifier (extracted to help type-checker)
+
+/// Consolidates @Observable → @State cache synchronization into a single ViewModifier
+/// to reduce the modifier chain depth in the main body and help the type-checker.
+private struct DashboardCacheSync: ViewModifier {
+    let viewModel: DashboardViewModel
+    @Binding var cachedWeatherAtmosphere: WeatherAtmosphere
+    @Binding var cachedFocusInsight: CoachingInsight?
+    @Binding var cachedCoachingMessage: String?
+    @Binding var cachedWeatherSnapshot: WeatherSnapshot?
+    @Binding var cachedWeatherCardInsight: WeatherCard.InsightInfo?
+    @Binding var isShowingBriefing: Bool
+
+    func body(content: Content) -> some View {
+        content
+            .onChange(of: viewModel.weatherAtmosphere) { _, new in cachedWeatherAtmosphere = new }
+            .onChange(of: viewModel.focusInsight) { _, new in cachedFocusInsight = new }
+            .onChange(of: viewModel.coachingMessage) { _, new in cachedCoachingMessage = new }
+            .onChange(of: viewModel.weatherSnapshot) { _, new in cachedWeatherSnapshot = new }
+            .onChange(of: viewModel.weatherCardInsight) { _, new in cachedWeatherCardInsight = new }
+            .onChange(of: viewModel.briefingData == nil) { _, isNil in if isNil { isShowingBriefing = false } }
     }
 }
 
