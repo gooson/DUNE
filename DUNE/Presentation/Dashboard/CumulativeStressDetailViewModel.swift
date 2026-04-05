@@ -98,7 +98,6 @@ final class CumulativeStressDetailViewModel {
     private func triggerReload() {
         reloadRequestID += 1
         reloadTask?.cancel()
-        isLoading = false
         reloadTask = Task { await loadData() }
     }
 
