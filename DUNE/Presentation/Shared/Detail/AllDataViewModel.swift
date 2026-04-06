@@ -6,7 +6,9 @@ import OSLog
 @Observable
 @MainActor
 final class AllDataViewModel {
-    var dataPoints: [ChartDataPoint] = []
+    var dataPoints: [ChartDataPoint] = [] {
+        didSet { invalidateGroupedByDate() }
+    }
     var isLoading = false
     var hasMoreData = true
 
@@ -54,7 +56,6 @@ final class AllDataViewModel {
         resetPageRequests()
         currentPage = 0
         dataPoints = []
-        groupedByDate = []
         hasMoreData = true
         isLoading = false
         await loadNextPage()
@@ -76,7 +77,6 @@ final class AllDataViewModel {
                 hasMoreData = false
             } else {
                 dataPoints.append(contentsOf: newPoints)
-                invalidateGroupedByDate()
                 currentPage += 1
             }
         } catch {
