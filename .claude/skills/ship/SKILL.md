@@ -87,7 +87,16 @@ GitHub의 PR 머지 API를 통해 머지합니다. **로컬 머지나 자체 스
    - 변경이 있으면 `git add .claude/settings.local.json && git commit -m "chore: sync Claude local settings" && git push`
 5. 최종 상태를 사용자에게 표시
 
-### Step 5: 최종 xcodegen 실행
+### Step 5: 빌드 아티팩트 정리
+
+머지된 main 기준으로 깨끗한 상태를 만들기 위해 로컬 빌드 캐시를 제거합니다.
+
+1. **`scripts/hooks/cleanup-artifacts.sh` 실행**
+   - `.xcodebuild`, `DerivedData`, `.deriveddata` 등 빌드 아티팩트 일괄 삭제
+   - 이전 feature 브랜치의 빌드 캐시가 main과 충돌하는 것을 방지
+2. 삭제된 항목 수를 사용자에게 표시
+
+### Step 6: 최종 xcodegen 실행
 
 ship 완료 후, **머지 반영된 main 기준**으로 Xcode 프로젝트를 다시 생성합니다.
 (Step 4에서 이미 main으로 전환 + pull 완료된 상태이므로 중복 수행하지 않음)
