@@ -123,6 +123,7 @@ private struct StubBodyService: BodyCompositionQuerying {
 private actor StubHeartRateService: HeartRateQuerying {
     var historySamples: [VitalSample] = []
     private(set) var requestedIntervals: [DateComponents] = []
+    private(set) var cancellationAtResume: [Bool] = []
     private var suspendNext = false
     private var release: CheckedContinuation<Void, Never>?
     func suspendNextFetch() { suspendNext = true }
@@ -147,6 +148,7 @@ private actor StubHeartRateService: HeartRateQuerying {
             suspendNext = false
             await withCheckedContinuation { release = $0 }
         }
+        cancellationAtResume.append(Task.isCancelled)
         return historySamples
     }
     func fetchHeartRateZones(forWorkoutID workoutID: String, maxHR: Double) async throws -> [HeartRateZone] { [] }
@@ -187,6 +189,51 @@ struct MetricDetailViewModelTests {
             heartRateService: heartRate,
             historyService: history
         )
+    }
+
+    @Test("Weight history does not repeatedly shrink and expand the Y axis")
+    func historyYAxisRemainsStable() async {
+        let today = calendar.startOfDay(for: Date())
+        let first = today.addingTimeInterval(-400 * 86400)
+        let second = today.addingTimeInterval(-800 * 86400)
+        let vm = makeVM(body: StubBodyService(weightSamples: [
+            BodyCompositionSample(value: 75, date: today),
+            BodyCompositionSample(value: 65, date: first),
+            BodyCompositionSample(value: 74, date: second)
+        ]), history: DetailHistoryDates(oldest: second))
+        vm.configure(category: .weight, currentValue: 75, lastUpdated: today)
+        await vm.loadData()
+        let initial = vm.weightYDomain
+        vm.scrollPosition = first
+        await vm.loadVisibleHistoryIfNeeded()
+        let expanded = vm.weightYDomain
+        #expect(expanded.lowerBound < initial.lowerBound)
+        vm.scrollPosition = second
+        await vm.loadVisibleHistoryIfNeeded()
+        #expect(vm.weightYDomain == expanded)
+    }
+
+    @Test("Continuous scrolling starts prefetch immediately and does not cancel it")
+    func continuousScrollKeepsPrefetch() async {
+        let service = StubHeartRateService(historySamples: [VitalSample(value: 60, date: Date())])
+        let oldest = Date(timeIntervalSince1970: 1_293_840_000)
+        let vm = makeVM(heartRate: service, history: DetailHistoryDates(oldest: oldest))
+        vm.configure(category: .heartRate, currentValue: 60, lastUpdated: Date())
+        await vm.loadData()
+        await service.suspendNextFetch()
+        vm.scrollPosition = oldest
+        // No debounce sleep or explicit load call: the scroll itself starts the query.
+        while !(await service.isSuspended()) { await Task.yield() }
+        for offset in 1...10 {
+            vm.scrollPosition = oldest.addingTimeInterval(Double(offset) * 3600)
+            await Task.yield()
+        }
+        #expect(await service.requestedIntervals.count == 2)
+        await service.resumeFetch()
+        await vm.loadVisibleHistoryIfNeeded()
+        #expect(await service.cancellationAtResume == [false, false])
+        #expect(await service.requestedIntervals.count == 2)
+        #expect(!vm.isLoading)
     }
 
     @Test("A period reload cannot be superseded by scroll prefetch")

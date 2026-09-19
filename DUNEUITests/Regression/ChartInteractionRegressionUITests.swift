@@ -37,6 +37,21 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
         weightCard.tap()
 
         assertDetailChartScrollsToPastData(category: "weight")
+
+        // Match the reported rapid year-by-year navigation, not just one weekly drag.
+        let periods = app.segmentedControls.firstMatch
+        XCTAssertTrue(periods.waitForExistence(timeout: 5))
+        periods.buttons.element(boundBy: 4).tap()
+        let visibleRange = waitForElement(AXID.detailChartVisibleRange, timeout: 10)
+        let chart = waitForElement(AXID.detailChartSurface, timeout: 10)
+        for _ in 0..<5 {
+            let before = visibleRange.label
+            let start = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.15, dy: 0.55))
+            let end = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.85, dy: 0.55))
+            start.press(forDuration: 0.05, thenDragTo: end)
+            XCTAssertNotEqual(waitForLabelChange(of: visibleRange, from: before, timeout: 3), before)
+            XCTAssertTrue(chart.exists)
+        }
     }
 
     func testWeeklyStatsLongPressKeepsPeriodAndActivatesSelection() throws {

@@ -10,6 +10,7 @@ final class MetricDetailViewModel {
     var selectedPeriod: TimePeriod = .week {
         didSet {
             if oldValue != selectedPeriod {
+                cancelHistoryPrefetch()
                 loadedHistoryRange = nil
                 resetScrollPosition()
                 triggerReload()
@@ -18,12 +19,12 @@ final class MetricDetailViewModel {
     }
     var scrollPosition: Date = .now {
         didSet {
+            scheduleHistoryPrefetch()
             scrollDebounceTask?.cancel()
             scrollDebounceTask = Task { @MainActor in
                 try? await Task.sleep(for: .milliseconds(100))
                 guard !Task.isCancelled else { return }
                 invalidateScrollCache()
-                await loadVisibleHistoryIfNeeded()
             }
         }
     }
@@ -33,12 +34,20 @@ final class MetricDetailViewModel {
             invalidateScrollCache()
             if let minimum = chartData.map(\.value).min(), let maximum = chartData.map(\.value).max() {
                 let padding = max((maximum - minimum) * 0.15, 2)
-                weightYDomain = (minimum - padding)...(maximum + padding)
+                let candidate = (minimum - padding)...(maximum + padding)
+                if expandingHistoryYDomain, hasHistoryYDomain {
+                    weightYDomain = min(weightYDomain.lowerBound, candidate.lowerBound)...max(weightYDomain.upperBound, candidate.upperBound)
+                } else {
+                    weightYDomain = candidate
+                }
+                hasHistoryYDomain = true
             }
         }
     }
     // Data is bounded at query time for every metric, including weight.
     var visibleWeightChartData: [ChartDataPoint] { chartData }
+    private var expandingHistoryYDomain = false
+    private var hasHistoryYDomain = false
     private(set) var weightYDomain: ClosedRange<Double> = 0...100
     private(set) var earliestHistoryDate: Date?
     private var historyBoundsLoaded = false
@@ -107,6 +116,7 @@ final class MetricDetailViewModel {
         metricUnit: String? = nil
     ) {
         invalidateReloadRequests()
+        cancelHistoryPrefetch()
         scrollDebounceTask?.cancel()
         loadedHistoryRange = nil
         requestedHistoryRange = nil
@@ -123,7 +133,10 @@ final class MetricDetailViewModel {
 
     func loadData(historyNavigation: Bool = false) async {
         let requestID = beginReloadRequest()
+        expandingHistoryYDomain = historyNavigation
         if !historyNavigation {
+            hasHistoryYDomain = false
+            cancelHistoryPrefetch()
             loadedHistoryRange = nil
             historyReferenceDate = Date()
         }
@@ -173,7 +186,10 @@ final class MetricDetailViewModel {
                 }
             }
             guard isCurrentReloadRequest(requestID) else { return }
-            if !historyNavigation { buildHighlights() }
+            if !historyNavigation {
+                buildHighlights()
+                scheduleHistoryPrefetch()
+            }
         } catch {
             guard isCurrentReloadRequest(requestID) else { return }
             AppLogger.ui.error("MetricDetail load failed for \(self.category.rawValue): \(error.localizedDescription)")
@@ -286,20 +302,50 @@ final class MetricDetailViewModel {
         let calendar = Calendar.current
         // Align aggregate buckets so adjacent windows retain identical dates.
         let unit = selectedPeriod.aggregationUnit
-        let start = calendar.dateInterval(of: unit, for: position.addingTimeInterval(-span))?.start
-            ?? calendar.startOfDay(for: position.addingTimeInterval(-span))
-        let end = calendar.dateInterval(of: unit, for: position.addingTimeInterval(span * 2))?.end
-            ?? position.addingTimeInterval(span * 2)
+        let start = calendar.dateInterval(of: unit, for: position.addingTimeInterval(-span * 2))?.start
+            ?? calendar.startOfDay(for: position.addingTimeInterval(-span * 2))
+        let end = calendar.dateInterval(of: unit, for: position.addingTimeInterval(span * 3))?.end
+            ?? position.addingTimeInterval(span * 3)
         return (start, min(initialHistoryRange.end, end))
     }
 
-    func loadVisibleHistoryIfNeeded() async {
-        guard let loaded = loadedHistoryRange else { return }
+    private var historyPrefetchTask: Task<Void, Never>?
+    private var historyPrefetchID = 0
+
+    private var needsHistoryPrefetch: Bool {
+        guard let loaded = loadedHistoryRange else { return false }
         let span = selectedPeriod.visibleDomainSeconds
-        let lower = max(scrollDomain.lowerBound, scrollPosition.addingTimeInterval(-span * 0.5))
-        let upper = min(initialHistoryRange.end, scrollPosition.addingTimeInterval(span * 1.5))
-        guard lower < loaded.start || upper > loaded.end else { return }
-        await loadData(historyNavigation: true)
+        let lower = max(scrollDomain.lowerBound, scrollPosition.addingTimeInterval(-span))
+        let upper = min(initialHistoryRange.end, scrollPosition.addingTimeInterval(span * 2))
+        return lower < loaded.start || upper > loaded.end
+    }
+
+    /// Start before the viewport reaches the loaded edge. Continued dragging must
+    /// not cancel a useful query or wait for the trailing scroll debounce.
+    private func scheduleHistoryPrefetch() {
+        guard historyPrefetchTask == nil, needsHistoryPrefetch else { return }
+        historyPrefetchID += 1
+        let id = historyPrefetchID
+        historyPrefetchTask = Task { @MainActor in
+            repeat {
+                await loadData(historyNavigation: true)
+                guard id == historyPrefetchID, !Task.isCancelled else { return }
+                // Retry on a later scroll event, never spin on a failed query.
+                guard errorMessage == nil else { break }
+            } while needsHistoryPrefetch
+            if id == historyPrefetchID { historyPrefetchTask = nil }
+        }
+    }
+
+    private func cancelHistoryPrefetch() {
+        historyPrefetchID += 1
+        historyPrefetchTask?.cancel()
+        historyPrefetchTask = nil
+    }
+
+    func loadVisibleHistoryIfNeeded() async {
+        scheduleHistoryPrefetch()
+        await historyPrefetchTask?.value
     }
 
     // MARK: - Private Reload Trigger
