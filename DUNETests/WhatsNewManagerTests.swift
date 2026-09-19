@@ -269,12 +269,27 @@ struct WhatsNewManagerTests {
         }
     }
 
-    @Test("All seven releases are loaded from per-version JSON files")
+    @Test("0.8.0 release loads expected features")
+    func release080Features() throws {
+        let release = try #require(WhatsNewManager.shared.currentRelease(for: "0.8.0"))
+        #expect(Set(release.features.map(\.id)) == [
+            "healthMetricHistory", "smootherHistoryCharts",
+            "stressHistoryDetails", "clearerSectionNavigation"
+        ])
+        #expect(release.features.count == 4)
+        for feature in release.features {
+            #expect(!feature.titleKey.isEmpty)
+            #expect(!feature.summaryKey.isEmpty)
+            #expect(!feature.symbolName.isEmpty)
+        }
+    }
+
+    @Test("All eight releases are loaded from per-version JSON files")
     func allReleasesLoaded() {
         let manager = WhatsNewManager.shared
         let releases = manager.orderedReleases()
 
-        #expect(releases.count == 7)
+        #expect(releases.count == 8)
 
         let versions = releases.map(\.version)
         #expect(versions.contains("0.1.0"))
@@ -284,5 +299,6 @@ struct WhatsNewManagerTests {
         #expect(versions.contains("0.5.0"))
         #expect(versions.contains("0.6.0"))
         #expect(versions.contains("0.7.0"))
+        #expect(versions.first == "0.8.0")
     }
 }
