@@ -10,6 +10,7 @@ final class MetricDetailViewModel {
     var selectedPeriod: TimePeriod = .week {
         didSet {
             if oldValue != selectedPeriod {
+                loadedHistoryRange = nil
                 resetScrollPosition()
                 triggerReload()
             }
@@ -122,7 +123,10 @@ final class MetricDetailViewModel {
 
     func loadData(historyNavigation: Bool = false) async {
         let requestID = beginReloadRequest()
-        if !historyNavigation { historyReferenceDate = Date() }
+        if !historyNavigation {
+            loadedHistoryRange = nil
+            historyReferenceDate = Date()
+        }
         let currentSummary = summaryStats
         let headlineValue = currentValue
         requestedHistoryRange = historyNavigation ? historyWindow(around: scrollPosition) : initialHistoryRange

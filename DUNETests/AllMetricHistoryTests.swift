@@ -55,10 +55,12 @@ struct AllMetricHistoryTests {
         vm.configure(category: category, currentValue: 50, lastUpdated: dates[0])
         await vm.loadData()
         #expect(vm.scrollDomain.lowerBound <= dates[1])
+        let currentAverage = vm.summaryStats?.average
         vm.scrollPosition = dates[1]
         await vm.loadVisibleHistoryIfNeeded()
         #expect(vm.chartData.contains { $0.date == dates[1] && $0.value > 0 })
         #expect(vm.chartData.count < 100)
+        #expect(vm.summaryStats?.average == currentAverage)
         #expect(vm.chartData.allSatisfy { abs($0.date.timeIntervalSince(dates[1])) < 40 * 86400 })
         #expect(vm.scrollDomain.lowerBound <= dates[1])
         // Empty middle years must leave the domain scrollable.

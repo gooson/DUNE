@@ -179,6 +179,18 @@ struct MetricDetailViewModelTests {
         )
     }
 
+    @Test("Scrolling inside a loaded recent window does not refetch")
+    func recentScrollReusesWindow() async {
+        let service = StubHeartRateService(historySamples: [VitalSample(value: 60, date: Date())])
+        let vm = makeVM(heartRate: service)
+        vm.configure(category: .heartRate, currentValue: 60, lastUpdated: Date())
+        await vm.loadData()
+        let initialCount = await service.requestedIntervals.count
+        vm.scrollPosition = vm.scrollPosition.addingTimeInterval(-86400)
+        await vm.loadVisibleHistoryIfNeeded()
+        #expect(await service.requestedIntervals.count == initialCount)
+    }
+
     // MARK: - HRV
 
     @Test("HRV loads chart data from collection query")
