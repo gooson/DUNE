@@ -8,6 +8,12 @@ private enum MockServiceError: Error {
 
 private actor MockHRVService: HRVQuerying {
     var hrvSamplesCallCount = 0
+    private var holdFirst = false
+    private var firstRelease: CheckedContinuation<Void, Never>?
+    func holdFirstFetch() { holdFirst = true }
+    func firstIsSuspended() -> Bool { firstRelease != nil }
+    func releaseFirst() { firstRelease?.resume(); firstRelease = nil }
+
     var shouldFailSamples = false
     var delayNanoseconds: UInt64 = 0
 
@@ -41,6 +47,11 @@ private actor MockHRVService: HRVQuerying {
 
     func fetchHRVSamples(days: Int) async throws -> [HRVSample] {
         hrvSamplesCallCount += 1
+        let count = hrvSamplesCallCount
+        if holdFirst {
+            if count == 1 { await withCheckedContinuation { firstRelease = $0 } }
+            return [HRVSample(value: Double(count) * 40, date: Date())]
+        }
         if delayNanoseconds > 0 {
             try? await Task.sleep(nanoseconds: delayNanoseconds)
         }
@@ -140,6 +151,23 @@ struct SharedHealthDataServiceTests {
 
         let callCount = await hrvService.hrvSamplesCallCount
         #expect(callCount == 1)
+    }
+
+    @Test("An invalidated in-flight snapshot cannot overwrite its replacement")
+    func invalidationDuringFetch() async {
+        let hrv = MockHRVService(samples: [], todayRHR: nil, yesterdayRHR: nil, latestRHR: nil, rhrCollection: [])
+        await hrv.holdFirstFetch()
+        let service = SharedHealthDataServiceImpl(hrvService: hrv)
+        let oldTask = Task { await service.fetchSnapshot() }
+        while !(await hrv.firstIsSuspended()) { await Task.yield() }
+        await service.invalidateCache()
+        let fresh = await service.fetchSnapshot()
+        #expect(fresh.hrvSamples.first?.value == 80)
+        await hrv.releaseFirst()
+        _ = await oldTask.value
+        let cached = await service.fetchSnapshot()
+        #expect(cached.hrvSamples.first?.value == 80)
+        #expect(await hrv.hrvSamplesCallCount == 2)
     }
 
     @Test("invalidateCache forces refetch")

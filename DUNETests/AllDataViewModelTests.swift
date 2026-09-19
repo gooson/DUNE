@@ -102,8 +102,8 @@ private struct MockAllDataBodyService: BodyCompositionQuerying {
     func fetchBMI(for date: Date) async throws -> Double? { nil }
     func fetchLatestBMI(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
     func fetchBMI(start: Date, end: Date) async throws -> [BodyCompositionSample] { bmi }
-    func fetchBodyFat(start: Date, end: Date) async throws -> [BodyCompositionSample] { [] }
-    func fetchLeanBodyMass(start: Date, end: Date) async throws -> [BodyCompositionSample] { [] }
+    func fetchBodyFat(start: Date, end: Date) async throws -> [BodyCompositionSample] { fat }
+    func fetchLeanBodyMass(start: Date, end: Date) async throws -> [BodyCompositionSample] { lean }
     func fetchLatestBodyFat(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
     func fetchLatestLeanBodyMass(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
 }
@@ -159,20 +159,47 @@ struct AllDataViewModelTests {
         let samples = (0..<450).map {
             BodyCompositionSample(value: 70, date: old.addingTimeInterval(Double($0) * 86400))
         }
-        let vm = makeVM(body: MockAllDataBodyService(weight: samples))
+        let vm = makeVM(body: MockAllDataBodyService(weight: samples), history: HistoryDates(dates: samples.map(\.date)))
         vm.configure(category: .weight)
         await vm.loadInitialData()
-        #expect(vm.dataPoints.count == 200)
-        #expect(vm.hasMoreData)
-        await vm.loadNextPage()
-        #expect(vm.dataPoints.count == 400)
-        await vm.loadNextPage()
+        #expect(!vm.dataPoints.isEmpty)
+        for _ in 0..<20 where vm.hasMoreData { await vm.loadNextPage() }
         #expect(vm.dataPoints.count == 450)
         #expect(!vm.hasMoreData)
         #expect(Set(vm.dataPoints.map(\.date)).count == 450)
         #expect(vm.dataPoints.last?.date == old)
         await vm.loadInitialData()
-        #expect(vm.dataPoints.count == 200)
+        #expect(vm.dataPoints.count <= 30)
+    }
+
+    @Test("Range boundaries prevent repeated recent samples", arguments: [HealthMetric.Category.heartRate, .bodyFat, .leanBodyMass, .spo2, .respiratoryRate, .vo2Max, .heartRateRecovery, .wristTemperature])
+    func pagesDoNotDuplicate(category: HealthMetric.Category) async {
+        let dates = [day(1), day(29), day(30), day(59), day(900)]
+        let body = dates.map { BodyCompositionSample(value: 30, date: $0) }
+        let vitals = dates.map { VitalSample(value: 50, date: $0) }
+        let vm = makeVM(
+            body: MockAllDataBodyService(fat: body, lean: body),
+            heartRate: MockAllDataHeartRateService(history: vitals),
+            vitals: MockAllDataVitalsService(spo2: vitals, respiratory: vitals, vo2Max: vitals, recovery: vitals, wristTemp: vitals),
+            history: HistoryDates(dates: dates)
+        )
+        vm.configure(category: category)
+        await vm.loadInitialData()
+        for _ in 0..<6 where vm.hasMoreData { await vm.loadNextPage() }
+        #expect(vm.dataPoints.map(\.date) == dates)
+        #expect(!vm.hasMoreData)
+    }
+
+    @Test("HRV skips empty years and preserves the first record")
+    func hrvSkipsEmptyYears() async {
+        let dates = [day(1), day(4000)]
+        let vm = makeVM(hrv: MockAllDataHRVService(hrvSamples: dates.map { HRVSample(value: 40, date: $0) }), history: HistoryDates(dates: dates))
+        vm.configure(category: .hrv)
+        await vm.loadInitialData()
+        await vm.loadNextPage()
+        await vm.loadNextPage()
+        #expect(vm.dataPoints.map(\.date) == dates)
+        #expect(!vm.hasMoreData)
     }
 
     private let calendar = Calendar.current
@@ -189,7 +216,8 @@ struct AllDataViewModelTests {
         workout: MockAllDataWorkoutService = .init(),
         body: MockAllDataBodyService = .init(),
         heartRate: MockAllDataHeartRateService = .init(),
-        vitals: MockAllDataVitalsService = .init()
+        vitals: MockAllDataVitalsService = .init(),
+        history: HistoryDates = .init(dates: [])
     ) -> AllDataViewModel {
         AllDataViewModel(
             hrvService: hrv,
@@ -198,7 +226,8 @@ struct AllDataViewModelTests {
             workoutService: workout,
             bodyService: body,
             heartRateService: heartRate,
-            vitalsService: vitals
+            vitalsService: vitals,
+            historyService: history
         )
     }
 
@@ -283,7 +312,7 @@ struct AllDataViewModelTests {
             firstSamples: [HRVSample(value: 52, date: day(1))],
             secondSamples: []
         )
-        let vm = AllDataViewModel(hrvService: service)
+        let vm = AllDataViewModel(hrvService: service, historyService: HistoryDates(dates: []))
         vm.configure(category: .hrv)
 
         let firstTask = Task {
@@ -302,5 +331,13 @@ struct AllDataViewModelTests {
         #expect(vm.dataPoints.isEmpty)
         #expect(vm.hasMoreData == false)
         #expect(vm.isLoading == false)
+    }
+}
+
+private struct HistoryDates: MetricHistoryQuerying {
+    var dates: [Date]
+    func earliestDate(for category: HealthMetric.Category) async throws -> Date? { dates.min() }
+    func latestDate(for category: HealthMetric.Category, before end: Date) async throws -> Date? {
+        dates.filter { $0 < end }.max()
     }
 }
