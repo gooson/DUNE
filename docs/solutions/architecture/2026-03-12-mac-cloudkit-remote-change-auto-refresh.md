@@ -35,7 +35,7 @@ Notification 수신 시 `requestRefresh(source: .cloudKitRemoteChange)` 호출�
 
 - **기존 throttle 재사용**: `AppRefreshCoordinatorImpl`의 60초 throttle이 빈번한 remote change notification을 자연 제한
 - **iOS 영향 없음**: iOS에서도 notification이 발행되나 HealthKit observer가 이미 처리하고 throttle이 이중 갱신 차단
-- **ContentView 변경 불필요**: 이미 `refreshNeededStream`을 구독하므로 새 source도 자동 처리
+- **ContentView 변경 불필요**: 이미 `makeRefreshStream()`을 구독하므로 새 source도 자동 처리
 
 ## Prevention
 
