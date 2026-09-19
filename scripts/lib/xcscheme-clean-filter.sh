@@ -17,39 +17,9 @@ tmp="$(mktemp)"
 trap 'rm -f "$tmp"' EXIT
 cat > "$tmp"
 
-# version 1.3 → 1.7
-sed -i '' 's/version = "1.3"/version = "1.7"/' "$tmp"
-
-# Add runPostActionsOnFailure if missing (BuildAction closing tag)
-if ! grep -q 'runPostActionsOnFailure' "$tmp"; then
-    sed -i '' 's/buildImplicitDependencies = "YES">/buildImplicitDependencies = "YES"\
-      runPostActionsOnFailure = "NO">/' "$tmp"
-fi
-
-# Add onlyGenerateCoverageForSpecifiedTargets if missing (TestAction closing tag)
-if ! grep -q 'onlyGenerateCoverageForSpecifiedTargets' "$tmp"; then
-    sed -i '' 's/shouldUseLaunchSchemeArgsEnv = "YES">/shouldUseLaunchSchemeArgsEnv = "YES"\
-      onlyGenerateCoverageForSpecifiedTargets = "NO">/' "$tmp"
-fi
-
-# Add parallelizable = "NO" to TestableReference if missing
-if ! grep -q 'parallelizable' "$tmp"; then
-    sed -i '' 's/skipped = "NO">/skipped = "NO"\
-            parallelizable = "NO">/' "$tmp"
-fi
-
-# Add empty CommandLineArguments after </Testables> if missing (only for schemes with test targets)
-if ! grep -q 'CommandLineArguments' "$tmp" && grep -q 'TestableReference' "$tmp"; then
-    sed -i '' 's|      </Testables>|      </Testables>\
-      <CommandLineArguments>\
-      </CommandLineArguments>|' "$tmp"
-fi
-
-# Keep staged watch UI schemes aligned with Xcode's saved ordering.
-if grep -q 'BuildableName = "DUNEWatch.app"' "$tmp" \
-    && grep -q 'BuildableName = "DUNEWatchUITests.xctest"' "$tmp"; then
-    perl -0pi -e 's{(<TestAction\b[^>]*>\s*)(<TestPlans>.*?</TestPlans>\s*)(<MacroExpansion>.*?</MacroExpansion>\s*)}{$1$3$2}sg' "$tmp"
-    perl -0pi -e 's{<TestPlanReference\s+default = "YES"\s+reference = "([^"]+)">}{<TestPlanReference\n            reference = "$1"\n            default = "YES">}sg' "$tmp"
-fi
+# Use the same normalization as project generation and all build/test scripts.
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/regen-project.sh"
+normalize_xcscheme "$tmp"
 
 cat "$tmp"

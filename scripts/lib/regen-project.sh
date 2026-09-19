@@ -53,6 +53,15 @@ normalize_xcscheme() {
       <CommandLineArguments>\
       </CommandLineArguments>|' "$scheme_file"
     fi
+    # Xcode omits the Watch app's display name in launch/profile runnable
+    # references. Preserve names in build/test references and MacroExpansion.
+    perl -0pi -e 's{(<BuildableProductRunnable\b[^>]*>)(.*?)(</BuildableProductRunnable>)}{
+        my ($open, $body, $close) = ($1, $2, $3);
+        if ($body =~ /BuildableName = "DUNEWatch\.app"/) {
+            $body =~ s/^\h*BlueprintName = "DUNEWatch"\n//mg;
+        }
+        "$open$body$close"
+    }sge' "$scheme_file"
     # Xcode rewrites the watch UI test scheme with MacroExpansion before TestPlans.
     if grep -q 'BuildableName = "DUNEWatch.app"' "$scheme_file" \
         && grep -q 'BuildableName = "DUNEWatchUITests.xctest"' "$scheme_file"; then
