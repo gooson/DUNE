@@ -1,7 +1,7 @@
 import Foundation
 import Observation
 
-struct BodyCompositionListItem: Identifiable {
+struct BodyCompositionListItem: Identifiable, Sendable {
     let id: String
     let date: Date
     let weight: Double?
@@ -10,7 +10,7 @@ struct BodyCompositionListItem: Identifiable {
     let memo: String
     let source: Source
 
-    enum Source {
+    enum Source: Sendable {
         case manual
         case healthKit
     }
@@ -82,61 +82,83 @@ final class BodyCompositionViewModel {
         self.bodyCompositionService = bodyCompositionService ?? BodyCompositionQueryService(manager: .shared)
     }
 
+    private var healthKitRequestID = 0
+
     func loadHealthKitData() async {
+        healthKitRequestID += 1
+        let requestID = healthKitRequestID
         isLoadingHealthKit = true
+        defer {
+            if requestID == healthKitRequestID { isLoadingHealthKit = false }
+        }
         do {
-            async let weightTask = bodyCompositionService.fetchWeight(days: 90)
-            async let bodyFatTask = bodyCompositionService.fetchBodyFat(days: 90)
-            async let leanBodyMassTask = bodyCompositionService.fetchLeanBodyMass(days: 90)
-
+            let end = Date()
+            async let weightTask = bodyCompositionService.fetchWeight(start: .distantPast, end: end)
+            async let bodyFatTask = bodyCompositionService.fetchBodyFat(start: .distantPast, end: end)
+            async let leanBodyMassTask = bodyCompositionService.fetchLeanBodyMass(start: .distantPast, end: end)
             let (weights, bodyFats, leanBodyMasses) = try await (weightTask, bodyFatTask, leanBodyMassTask)
-            let historyWeights = weights.filter { !$0.isManagedByDuneSync }
-            let historyBodyFats = bodyFats.filter { !$0.isManagedByDuneSync }
-            let historyLeanBodyMasses = leanBodyMasses.filter { !$0.isManagedByDuneSync }
-
-            // Merge by date (group samples from same day)
-            var dateMap: [String: (weight: Double?, bodyFat: Double?, muscleMass: Double?, date: Date)] = [:]
-            let calendar = Calendar.current
-
-            for sample in historyWeights {
-                let key = dayKey(sample.date, calendar: calendar)
-                var entry = dateMap[key] ?? (weight: nil, bodyFat: nil, muscleMass: nil, date: sample.date)
-                entry.weight = sample.value
-                if sample.date > entry.date { entry.date = sample.date }
-                dateMap[key] = entry
-            }
-
-            for sample in historyBodyFats {
-                let key = dayKey(sample.date, calendar: calendar)
-                var entry = dateMap[key] ?? (weight: nil, bodyFat: nil, muscleMass: nil, date: sample.date)
-                entry.bodyFat = sample.value
-                if sample.date > entry.date { entry.date = sample.date }
-                dateMap[key] = entry
-            }
-
-            for sample in historyLeanBodyMasses {
-                let key = dayKey(sample.date, calendar: calendar)
-                var entry = dateMap[key] ?? (weight: nil, bodyFat: nil, muscleMass: nil, date: sample.date)
-                entry.muscleMass = sample.value
-                if sample.date > entry.date { entry.date = sample.date }
-                dateMap[key] = entry
-            }
-
-            healthKitItems = dateMap.map { key, entry in
-                BodyCompositionListItem(
-                    id: "hk-\(key)",
-                    date: entry.date,
-                    weight: entry.weight,
-                    bodyFatPercentage: entry.bodyFat,
-                    muscleMass: entry.muscleMass,
-                    memo: "",
-                    source: .healthKit
-                )
-            }.sorted { $0.date > $1.date }
+            try Task.checkCancellation()
+            guard requestID == healthKitRequestID else { return }
+            let items = await Task.detached(priority: .userInitiated) {
+                Self.mergeHistory(weights: weights, bodyFats: bodyFats, leanBodyMasses: leanBodyMasses)
+            }.value
+            guard !Task.isCancelled, requestID == healthKitRequestID else { return }
+            healthKitItems = items
+        } catch is CancellationError {
+            // Keep the currently displayed history when leaving or refreshing the screen.
         } catch {
             AppLogger.ui.error("Body composition HK load failed: \(error.localizedDescription)")
         }
-        isLoadingHealthKit = false
+    }
+
+    nonisolated static func mergeHistory(
+        weights: [BodyCompositionSample],
+        bodyFats: [BodyCompositionSample],
+        leanBodyMasses: [BodyCompositionSample]
+    ) -> [BodyCompositionListItem] {
+        let historyWeights = weights.filter { !$0.isManagedByDuneSync }.sorted { $0.date > $1.date }
+        let historyBodyFats = bodyFats.filter { !$0.isManagedByDuneSync }.sorted { $0.date > $1.date }
+        let historyLeanBodyMasses = leanBodyMasses.filter { !$0.isManagedByDuneSync }.sorted { $0.date > $1.date }
+
+        // Merge by date (group samples from same day)
+        var dateMap: [String: (weight: Double?, bodyFat: Double?, muscleMass: Double?, date: Date)] = [:]
+        let calendar = Calendar.current
+
+        for sample in historyWeights {
+            let key = dayKey(sample.date, calendar: calendar)
+            var entry = dateMap[key] ?? (weight: nil, bodyFat: nil, muscleMass: nil, date: sample.date)
+            if entry.weight == nil { entry.weight = sample.value }
+            if sample.date > entry.date { entry.date = sample.date }
+            dateMap[key] = entry
+        }
+
+        for sample in historyBodyFats {
+            let key = dayKey(sample.date, calendar: calendar)
+            var entry = dateMap[key] ?? (weight: nil, bodyFat: nil, muscleMass: nil, date: sample.date)
+            if entry.bodyFat == nil { entry.bodyFat = sample.value }
+            if sample.date > entry.date { entry.date = sample.date }
+            dateMap[key] = entry
+        }
+
+        for sample in historyLeanBodyMasses {
+            let key = dayKey(sample.date, calendar: calendar)
+            var entry = dateMap[key] ?? (weight: nil, bodyFat: nil, muscleMass: nil, date: sample.date)
+            if entry.muscleMass == nil { entry.muscleMass = sample.value }
+            if sample.date > entry.date { entry.date = sample.date }
+            dateMap[key] = entry
+        }
+
+        return dateMap.map { key, entry in
+            BodyCompositionListItem(
+                id: "hk-\(key)",
+                date: entry.date,
+                weight: entry.weight,
+                bodyFatPercentage: entry.bodyFat,
+                muscleMass: entry.muscleMass,
+                memo: "",
+                source: .healthKit
+            )
+        }.sorted { $0.date > $1.date }
     }
 
     func allItems(manualRecords: [BodyCompositionRecord]) -> [BodyCompositionListItem] {
@@ -246,7 +268,7 @@ final class BodyCompositionViewModel {
 
     // MARK: - Private
 
-    private func dayKey(_ date: Date, calendar: Calendar) -> String {
+    nonisolated private static func dayKey(_ date: Date, calendar: Calendar) -> String {
         let components = calendar.dateComponents([.year, .month, .day], from: date)
         return "\(components.year ?? 0)-\(components.month ?? 0)-\(components.day ?? 0)"
     }

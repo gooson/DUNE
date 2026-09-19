@@ -29,6 +29,19 @@ final class MetricDetailViewModel {
     var chartData: [ChartDataPoint] = [] {
         didSet { invalidateScrollCache() }
     }
+    var visibleWeightChartData: [ChartDataPoint] {
+        let buffer = selectedPeriod.visibleDomainSeconds
+        let start = scrollPosition.addingTimeInterval(-buffer)
+        let end = scrollPosition.addingTimeInterval(buffer * 2)
+        return chartData.filter { $0.date >= start && $0.date <= end }
+    }
+
+    var weightYDomain: ClosedRange<Double> {
+        guard let minimum = chartData.map(\.value).min(),
+              let maximum = chartData.map(\.value).max() else { return 0...100 }
+        let padding = max((maximum - minimum) * 0.15, 2)
+        return (minimum - padding)...(maximum + padding)
+    }
     var rangeData: [RangeDataPoint] = []
     var stackedData: [StackedDataPoint] = []
     var summaryStats: MetricSummary?
@@ -222,7 +235,8 @@ final class MetricDetailViewModel {
     var scrollDomain: ClosedRange<Date> {
         let range = extendedRange
         let upperBound = selectedPeriod.scrollDomainUpperBound(referenceDate: range.end)
-        return range.start...max(range.end, upperBound)
+        let start = category == .weight ? min(chartData.first?.date ?? range.start, range.start) : range.start
+        return start...max(range.end, upperBound)
     }
 
     // MARK: - Private Reload Trigger
@@ -872,29 +886,23 @@ final class MetricDetailViewModel {
         let range = extendedRange
         let prevRange = HealthDataAggregator.previousPeriodRange(for: selectedPeriod, offset: 0)
 
-        async let currentSamples = fetch(range.start, range.end)
+        async let currentSamples = fetch(category == .weight ? .distantPast : range.start, range.end)
         async let prevSamples = fetch(prevRange.start, prevRange.end)
 
         let current = try await currentSamples
         let previous = try await prevSamples
 
-        let raw = current
-            .map { ChartDataPoint(date: $0.date, value: $0.value) }
-            .sorted { $0.date < $1.date }
-
-        let aggregated: [ChartDataPoint]
-        if selectedPeriod == .day {
-            aggregated = raw
-        } else {
-            // Aggregate by day (or larger) to avoid duplicate points on the same day
-            // causing Catmull-Rom interpolation spikes outside intraday detail.
-            aggregated = HealthDataAggregator.aggregateByAverage(
+        let period = selectedPeriod
+        let aggregated = await Task.detached(priority: .userInitiated) {
+            let raw = current
+                .map { ChartDataPoint(date: $0.date, value: $0.value) }
+                .sorted { $0.date < $1.date }
+            if period == .day { return raw }
+            return HealthDataAggregator.aggregateByAverage(
                 raw,
-                unit: selectedPeriod == .sixMonths || selectedPeriod == .year
-                    ? selectedPeriod.aggregationUnit
-                    : .day
+                unit: period == .sixMonths || period == .year ? period.aggregationUnit : .day
             )
-        }
+        }.value
 
         // Compute from local `aggregated` rather than `self.chartData` to use
         // consistent data within this load cycle

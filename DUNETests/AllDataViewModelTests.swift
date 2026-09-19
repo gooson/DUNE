@@ -153,6 +153,28 @@ private struct MockAllDataVitalsService: VitalsQuerying {
 @Suite("AllDataViewModel")
 @MainActor
 struct AllDataViewModelTests {
+    @Test("Weight history crosses empty years and pages without duplicates")
+    func weightHistoryCrossesEmptyYears() async {
+        let old = Date(timeIntervalSince1970: 1_293_840_000)
+        let samples = (0..<450).map {
+            BodyCompositionSample(value: 70, date: old.addingTimeInterval(Double($0) * 86400))
+        }
+        let vm = makeVM(body: MockAllDataBodyService(weight: samples))
+        vm.configure(category: .weight)
+        await vm.loadInitialData()
+        #expect(vm.dataPoints.count == 200)
+        #expect(vm.hasMoreData)
+        await vm.loadNextPage()
+        #expect(vm.dataPoints.count == 400)
+        await vm.loadNextPage()
+        #expect(vm.dataPoints.count == 450)
+        #expect(!vm.hasMoreData)
+        #expect(Set(vm.dataPoints.map(\.date)).count == 450)
+        #expect(vm.dataPoints.last?.date == old)
+        await vm.loadInitialData()
+        #expect(vm.dataPoints.count == 200)
+    }
+
     private let calendar = Calendar.current
 
     private func day(_ daysAgo: Int) -> Date {

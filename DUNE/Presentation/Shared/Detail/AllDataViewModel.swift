@@ -23,6 +23,8 @@ final class AllDataViewModel {
     private let vitalsService: VitalsQuerying
     private let breathingDisturbanceService: BreathingDisturbanceQuerying
 
+    private var weightHistory: [ChartDataPoint]?
+    private let weightPageSize = 200
     private var currentPage = 0
     private let pageSize = 30 // days per page
     private var pageRequestID = 0
@@ -55,6 +57,7 @@ final class AllDataViewModel {
     func loadInitialData() async {
         resetPageRequests()
         currentPage = 0
+        weightHistory = nil
         dataPoints = []
         hasMoreData = true
         isLoading = false
@@ -66,6 +69,30 @@ final class AllDataViewModel {
         let requestID = beginPageRequest()
         isLoading = true
         defer { finishPageRequest(requestID) }
+
+        if category == .weight {
+            do {
+                if weightHistory == nil {
+                    let samples = try await bodyService.fetchWeight(start: .distantPast, end: Date())
+                    let points = await Task.detached(priority: .userInitiated) {
+                        samples.sorted { $0.date > $1.date }
+                            .map { ChartDataPoint(date: $0.date, value: $0.value) }
+                    }.value
+                    guard isCurrentPageRequest(requestID) else { return }
+                    weightHistory = points
+                }
+                guard isCurrentPageRequest(requestID), let history = weightHistory else { return }
+                let start = dataPoints.count
+                let end = min(start + weightPageSize, history.count)
+                dataPoints.append(contentsOf: history[start..<end])
+                hasMoreData = end < history.count
+            } catch {
+                guard isCurrentPageRequest(requestID) else { return }
+                AppLogger.ui.error("Weight history load failed: \(error.localizedDescription)")
+                hasMoreData = false
+            }
+            return
+        }
 
         let startDay = currentPage * pageSize
         let endDay = startDay + pageSize

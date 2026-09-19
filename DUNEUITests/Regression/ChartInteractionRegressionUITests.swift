@@ -21,6 +21,9 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
     }
 
     func testWeightDetailChartScrollsToPastData() throws {
+        app.terminate()
+        app.launchArguments.append("--uitest-long-weight-history")
+        app.launch()
         navigateToWellness()
 
         XCTAssertTrue(

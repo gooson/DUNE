@@ -3,6 +3,7 @@ import Testing
 @testable import DUNE
 
 private actor BodyCompositionHistoryServiceMock: BodyCompositionQuerying {
+    var requestedWeightStart: Date?
     var weights: [BodyCompositionSample]
     var bodyFats: [BodyCompositionSample]
     var leanMasses: [BodyCompositionSample]
@@ -20,7 +21,10 @@ private actor BodyCompositionHistoryServiceMock: BodyCompositionQuerying {
     func fetchWeight(days: Int) async throws -> [BodyCompositionSample] { weights }
     func fetchBodyFat(days: Int) async throws -> [BodyCompositionSample] { bodyFats }
     func fetchLeanBodyMass(days: Int) async throws -> [BodyCompositionSample] { leanMasses }
-    func fetchWeight(start: Date, end: Date) async throws -> [BodyCompositionSample] { weights }
+    func fetchWeight(start: Date, end: Date) async throws -> [BodyCompositionSample] {
+        requestedWeightStart = start
+        return weights.filter { $0.date >= start && $0.date <= end }
+    }
     func fetchLatestWeight(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
     func fetchBMI(for date: Date) async throws -> Double? { nil }
     func fetchLatestBMI(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
@@ -34,6 +38,24 @@ private actor BodyCompositionHistoryServiceMock: BodyCompositionQuerying {
 @Suite("BodyCompositionViewModel")
 @MainActor
 struct BodyCompositionViewModelTests {
+    @Test("Full history includes 2011 and uses the latest measurement per day")
+    func fullHistoryAndLatestMeasurement() async {
+        let old = Date(timeIntervalSince1970: 1_293_840_000)
+        let today = Calendar.current.startOfDay(for: Date())
+        let service = BodyCompositionHistoryServiceMock(weights: [
+            .init(value: 70, date: today.addingTimeInterval(2)),
+            .init(value: 71, date: today.addingTimeInterval(1)),
+            .init(value: 80, date: old)
+        ])
+        let vm = BodyCompositionViewModel(bodyCompositionService: service)
+        await vm.loadHealthKitData()
+        #expect(await service.requestedWeightStart == .distantPast)
+        #expect(vm.healthKitItems.count == 2)
+        #expect(vm.healthKitItems.first?.weight == 70)
+        #expect(vm.healthKitItems.last?.date == old)
+        #expect(!vm.isLoadingHealthKit)
+    }
+
     @Test("createValidatedRecord returns record with valid inputs")
     func validRecord() {
         let vm = BodyCompositionViewModel()

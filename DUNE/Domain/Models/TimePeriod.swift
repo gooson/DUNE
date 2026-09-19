@@ -84,6 +84,22 @@ enum TimePeriod: String, CaseIterable, Sendable {
         }
     }
 
+    /// Explicit ticks for the visible window and one buffer on each side.
+    /// A stride over a multi-year chart domain can create thousands of offscreen labels.
+    func visibleAxisDates(around position: Date, calendar: Calendar = .current) -> [Date] {
+        let start = position.addingTimeInterval(-visibleDomainSeconds)
+        let end = position.addingTimeInterval(visibleDomainSeconds * 2)
+        var date = calendar.dateInterval(of: strideComponent, for: start)?.start ?? start
+        var dates: [Date] = []
+        while date <= end, dates.count < 64 {
+            dates.append(date)
+            guard let next = calendar.date(byAdding: strideComponent, value: strideCount, to: date),
+                  next > date else { break }
+            date = next
+        }
+        return dates
+    }
+
     /// Calendar component for data aggregation grouping.
     var aggregationUnit: Calendar.Component {
         switch self {

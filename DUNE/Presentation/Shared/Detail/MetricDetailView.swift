@@ -373,12 +373,13 @@ struct MetricDetailView: View {
 
         case .weight:
             AreaLineChartView(
-                data: viewModel.chartData,
+                data: viewModel.visibleWeightChartData,
                 period: viewModel.selectedPeriod,
                 tintColor: DS.Color.body,
                 unitSuffix: "kg",
                 trendLine: trend,
                 scrollDomain: viewModel.scrollDomain,
+                fixedYDomain: viewModel.weightYDomain,
                 scrollPosition: $viewModel.scrollPosition
             )
 

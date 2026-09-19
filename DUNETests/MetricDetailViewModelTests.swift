@@ -107,7 +107,9 @@ private struct StubBodyService: BodyCompositionQuerying {
     func fetchWeight(days: Int) async throws -> [BodyCompositionSample] { weightSamples }
     func fetchBodyFat(days: Int) async throws -> [BodyCompositionSample] { [] }
     func fetchLeanBodyMass(days: Int) async throws -> [BodyCompositionSample] { [] }
-    func fetchWeight(start: Date, end: Date) async throws -> [BodyCompositionSample] { weightSamples }
+    func fetchWeight(start: Date, end: Date) async throws -> [BodyCompositionSample] {
+        weightSamples.filter { $0.date >= start && $0.date <= end }
+    }
     func fetchLatestWeight(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
     func fetchBMI(for date: Date) async throws -> Double? { nil }
     func fetchLatestBMI(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
@@ -263,6 +265,27 @@ struct MetricDetailViewModelTests {
     }
 
     // MARK: - Weight
+
+    @Test("Weight chart reaches 2011 while rendering only the visible buffer")
+    func weightChartFullHistoryWindow() async throws {
+        let oldest = calendar.startOfDay(for: Date(timeIntervalSince1970: 1_293_840_000))
+        let samples = (0..<5500).map {
+            BodyCompositionSample(value: 70 + Double($0 % 10), date: oldest.addingTimeInterval(Double($0) * 86400))
+        }
+        let vm = makeVM(body: StubBodyService(weightSamples: samples))
+        vm.configure(category: .weight, currentValue: 75, lastUpdated: Date())
+        await vm.loadData()
+        #expect(vm.chartData.count == 5500)
+        #expect(vm.scrollDomain.lowerBound <= oldest)
+        #expect(vm.visibleWeightChartData.count < 30)
+        let yDomain = vm.weightYDomain
+        vm.scrollPosition = oldest
+        #expect(vm.weightYDomain == yDomain)
+        #expect(vm.visibleWeightChartData.first?.date == oldest)
+        #expect(vm.visibleWeightChartData.count < 30)
+        #expect(vm.scrollPosition == oldest)
+        #expect(!vm.isLoading)
+    }
 
     @Test("Weight loads raw samples for week period")
     func weightLoadsSamples() async {
