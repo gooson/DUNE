@@ -24,7 +24,8 @@ struct MetricHistoryQueryService: MetricHistoryQuerying {
     private func sampleDate(for category: HealthMetric.Category, before end: Date, ascending: Bool) async throws -> Date? {
 #if DEBUG && targetEnvironment(simulator)
         if ProcessInfo.processInfo.arguments.contains("--uitesting"),
-           ProcessInfo.processInfo.arguments.contains("--uitest-long-weight-history"), category == .weight {
+           (ProcessInfo.processInfo.arguments.contains("--uitest-long-metric-history")
+            || (ProcessInfo.processInfo.arguments.contains("--uitest-long-weight-history") && category == .weight)) {
             let oldest = Date(timeIntervalSince1970: 1_293_840_000)
             return end > oldest ? (ascending ? oldest : end.addingTimeInterval(-1)) : nil
         }
@@ -54,6 +55,24 @@ struct MetricHistoryQueryService: MetricHistoryQuerying {
             )
             return try await manager.execute(query).first?.startDate
         }
+    }
+
+    static func longHistoryFixtureDates(start: Date, end: Date, interval: DateComponents) -> [Date]? {
+#if DEBUG && targetEnvironment(simulator)
+        guard ProcessInfo.processInfo.arguments.contains("--uitesting"),
+              ProcessInfo.processInfo.arguments.contains("--uitest-long-metric-history") else { return nil }
+        let calendar = Calendar.current
+        var date = max(calendar.startOfDay(for: start), Date(timeIntervalSince1970: 1_293_840_000))
+        var dates: [Date] = []
+        while date < end {
+            dates.append(date)
+            guard let next = calendar.date(byAdding: interval, to: date), next > date else { break }
+            date = next
+        }
+        return dates
+#else
+        return nil
+#endif
     }
 
     static func quantityIdentifier(for category: HealthMetric.Category) -> HKQuantityTypeIdentifier? {

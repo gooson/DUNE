@@ -6,16 +6,19 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
     override var initialTabSelectionArgument: String? { "train" }
 
     func testRHRDetailChartScrollsToPastData() throws {
+        launchLongMetricHistory()
         openDashboardMetricDetail("rhr")
         assertDetailChartScrollsToPastData(category: "rhr")
     }
 
     func testSleepDetailChartScrollsToPastData() throws {
+        launchLongMetricHistory()
         openDashboardMetricDetail("sleep")
         assertDetailChartScrollsToPastData(category: "sleep")
     }
 
     func testStepsDetailChartScrollsToPastData() throws {
+        launchLongMetricHistory()
         openDashboardMetricDetail("steps")
         assertDetailChartScrollsToPastData(category: "steps")
     }
@@ -186,6 +189,7 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
     }
 
     func testHRVDetailChartScrollsToPastData() throws {
+        launchLongMetricHistory()
         openWellnessMetricDetail(AXID.wellnessCardHRV)
         assertDetailChartScrollsToPastData(category: "hrv")
     }
@@ -521,6 +525,12 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
         return element.exists && element.isHittable
     }
 
+    private func launchLongMetricHistory() {
+        app.terminate()
+        app.launchArguments.append("--uitest-long-metric-history")
+        app.launch()
+    }
+
     private func assertDetailChartScrollsToPastData(category: String) {
         let detailScreen = waitForElement(AXID.metricDetailScreen(category), timeout: 15)
         XCTAssertTrue(detailScreen.exists, "\(category) detail should open from seeded navigation")
@@ -535,6 +545,16 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
             initialRange,
             "Horizontal drag on the \(category) chart should reveal an older visible range"
         )
+        if app.launchArguments.contains("--uitest-long-metric-history") {
+            for _ in 0..<6 {
+                let before = visibleRange.label
+                let start = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.15, dy: 0.55))
+                let end = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.85, dy: 0.55))
+                start.press(forDuration: 0.05, thenDragTo: end)
+                XCTAssertNotEqual(waitForLabelChange(of: visibleRange, from: before, timeout: 3), before)
+                XCTAssertTrue(chart.exists, "History replacement must retain the scroll surface")
+            }
+        }
     }
 
     private func visibleRangeValue(of element: XCUIElement) -> String {

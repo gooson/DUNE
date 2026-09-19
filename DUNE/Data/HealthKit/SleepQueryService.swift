@@ -312,42 +312,66 @@ struct SleepQueryService: SleepQuerying, Sendable {
         start: Date,
         end: Date
     ) async throws -> [(date: Date, totalMinutes: Double, stageBreakdown: [SleepStage.Stage: Double])] {
+        if let dates = MetricHistoryQueryService.longHistoryFixtureDates(start: start, end: end, interval: DateComponents(day: 1)) {
+            return dates.map { (date: $0, totalMinutes: 420, stageBreakdown: [.core: 300, .deep: 60, .rem: 60]) }
+        }
         if let mockData = SimulatorAdvancedMockDataProvider.current() {
             return mockData.sleepDailyDurations(start: start, end: end).map {
                 (date: $0.date, totalMinutes: $0.totalMinutes, stageBreakdown: $0.stageBreakdown)
             }
         }
-        guard manager.isAvailable else { return [] }
+        guard manager.isAvailable, start < end else { return [] }
         let calendar = Calendar.current
-        let dayCount = calendar.dateComponents([.day], from: start, to: end).day ?? 7
-
-        return try await withThrowingTaskGroup(
-            of: (Date, Double, [SleepStage.Stage: Double])?.self
-        ) { group in
-            for dayOffset in 0...dayCount {
-                guard let date = calendar.date(byAdding: .day, value: dayOffset, to: start) else { continue }
-                group.addTask { [self] in
-                    let stages = try await self.fetchSleepStages(for: date)
-                    let sleepStages = stages.filter { $0.stage != .awake }
-                    guard !sleepStages.isEmpty else { return nil }
-
-                    let totalMinutes = sleepStages.reduce(0.0) { $0 + $1.duration } / 60.0
-                    var breakdown: [SleepStage.Stage: Double] = [:]
-                    for stage in sleepStages {
-                        breakdown[stage.stage, default: 0] += stage.duration / 60.0
-                    }
-                    return (date, totalMinutes, breakdown)
-                }
-            }
-
+        let days = Self.sleepHistoryDays(start: start, end: end, calendar: calendar)
+        guard let first = days.first, let last = days.last,
+              let firstWindow = Self.sleepQueryWindow(for: first, calendar: calendar),
+              let lastWindow = Self.sleepQueryWindow(for: last, calendar: calendar) else { return [] }
+        let descriptor = HKSampleQueryDescriptor(
+            predicates: [.categorySample(
+                type: HKCategoryType(.sleepAnalysis),
+                predicate: HKQuery.predicateForSamples(withStart: firstWindow.start, end: lastWindow.extendedEnd, options: .strictStartDate)
+            )],
+            sortDescriptors: [SortDescriptor(\.startDate, order: .forward)]
+        )
+        // One query for the window instead of hundreds of simultaneous daily queries.
+        let samples = try await manager.execute(descriptor)
+        let processing = Task.detached(priority: .userInitiated) { [self] in
             var results: [(date: Date, totalMinutes: Double, stageBreakdown: [SleepStage.Stage: Double])] = []
-            for try await result in group {
-                if let result {
-                    results.append((date: result.0, totalMinutes: result.1, stageBreakdown: result.2))
-                }
+            var lower = 0
+            for date in days {
+                try Task.checkCancellation()
+                guard let window = Self.sleepQueryWindow(for: date, calendar: calendar) else { continue }
+                while lower < samples.count, samples[lower].startDate < window.start { lower += 1 }
+                var upper = lower
+                while upper < samples.count, samples[upper].startDate < window.extendedEnd { upper += 1 }
+                // Preserve exactly the same daily source deduplication and late-wake policy.
+                let stages = Self.trimLateWakeContinuation(
+                    deduplicateAndConvert(Array(samples[lower..<upper])), primaryWindowEnd: window.primaryEnd
+                ).filter { $0.stage != .awake }
+                guard !stages.isEmpty else { continue }
+                var breakdown: [SleepStage.Stage: Double] = [:]
+                for stage in stages { breakdown[stage.stage, default: 0] += stage.duration / 60 }
+                results.append((date, stages.reduce(0.0) { $0 + $1.duration / 60 }, breakdown))
             }
-            return results.sorted { $0.date < $1.date }
+            return results // oldest-first
         }
+        return try await withTaskCancellationHandler {
+            try await processing.value
+        } onCancel: {
+            processing.cancel()
+        }
+    }
+
+    static func sleepHistoryDays(start: Date, end: Date, calendar: Calendar = .current) -> [Date] {
+        guard start < end else { return [] }
+        var days: [Date] = []
+        var day = calendar.startOfDay(for: start)
+        while day < end {
+            days.append(day)
+            guard let next = calendar.date(byAdding: .day, value: 1, to: day), next > day else { break }
+            day = next
+        }
+        return days
     }
 
     func fetchLastNightSleepSummary(for date: Date) async throws -> SleepSummary? {

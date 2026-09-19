@@ -62,6 +62,9 @@ struct StepsQueryService: StepsQuerying, Sendable {
         end: Date,
         interval: DateComponents
     ) async throws -> [(date: Date, sum: Double)] {
+        if let dates = MetricHistoryQueryService.longHistoryFixtureDates(start: start, end: end, interval: interval) {
+            return dates.map { (date: $0, sum: 6000) }
+        }
         if let mockData = SimulatorAdvancedMockDataProvider.current() {
             return mockData.stepsCollection(start: start, end: end)
         }

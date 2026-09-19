@@ -127,6 +127,9 @@ struct HRVQueryService: HRVQuerying, Sendable {
         end: Date,
         interval: DateComponents
     ) async throws -> [(date: Date, average: Double)] {
+        if let dates = MetricHistoryQueryService.longHistoryFixtureDates(start: start, end: end, interval: interval) {
+            return dates.map { (date: $0, average: 50 + sin($0.timeIntervalSince1970 / 86400) * 5) }
+        }
         if let mockData = SimulatorAdvancedMockDataProvider.current() {
             return mockData.sharedHealthSnapshot.hrvSamples
                 .filter { $0.date >= start && $0.date < end }
@@ -161,6 +164,9 @@ struct HRVQueryService: HRVQuerying, Sendable {
         end: Date,
         interval: DateComponents
     ) async throws -> [(date: Date, min: Double, max: Double, average: Double)] {
+        if let dates = MetricHistoryQueryService.longHistoryFixtureDates(start: start, end: end, interval: interval) {
+            return dates.map { (date: $0, min: 55, max: 65, average: 60) }
+        }
         if let mockData = SimulatorAdvancedMockDataProvider.current() {
             return mockData.rhrCollection(start: start, end: end)
         }

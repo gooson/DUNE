@@ -5,6 +5,19 @@ import Foundation
 @Suite("SleepQueryService interval helpers")
 struct SleepQueryServiceTests {
 
+    @Test("Sleep history uses calendar days and an exclusive end across DST")
+    func historyDaysAcrossDST() throws {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = try #require(TimeZone(identifier: "America/Los_Angeles"))
+        let start = try #require(calendar.date(from: DateComponents(year: 2026, month: 3, day: 7)))
+        let end = try #require(calendar.date(from: DateComponents(year: 2026, month: 3, day: 10)))
+        let days = SleepQueryService.sleepHistoryDays(start: start, end: end, calendar: calendar)
+        #expect(days.count == 3)
+        #expect(days.map { calendar.component(.day, from: $0) } == [7, 8, 9])
+        #expect(days.allSatisfy { $0 < end })
+        #expect(SleepQueryService.sleepHistoryDays(start: end, end: start, calendar: calendar).isEmpty)
+    }
+
     // MARK: - sleep query window
 
     @Test("Sleep query window extends beyond noon for late wake stages")
