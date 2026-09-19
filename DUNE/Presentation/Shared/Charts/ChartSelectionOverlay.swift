@@ -346,7 +346,6 @@ private struct ChartSelectionUITestProbeModifier: ViewModifier {
                         label: label,
                         value: ""
                     )
-                    .accessibilityIdentifier(identifier)
                 }
             }
     }

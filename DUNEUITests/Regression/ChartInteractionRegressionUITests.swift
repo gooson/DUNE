@@ -8,6 +8,7 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
     func testConditionTrendFollowsHistoryScroll() throws {
         launchLongMetricHistory()
         navigateToDashboard()
+        dismissMorningBriefingIfNeeded()
         waitForElement(AXID.dashboardHeroCondition, timeout: 15).tap()
         assertScoreTrendFollowsHistoryScroll()
     }
@@ -32,9 +33,13 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
         if !trend.isHittable { app.scrollViews.firstMatch.swipeUp() }
         trend.tap()
         // Bring the complete plot above the tab bar before a horizontal drag.
-        app.scrollViews.firstMatch.swipeUp()
-        let probe = waitForElement("chart-trend-probe", timeout: 15)
-        let hasTrend = NSPredicate { _, _ in probe.label != "none" && !probe.label.isEmpty }
+        let screen = app.scrollViews.firstMatch
+        screen.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.75))
+            .press(forDuration: 0.05, thenDragTo: screen.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.4)))
+        // SwiftUI propagates the parent chart ID to UIKit overlays; use the probe label prefix.
+        let probe = app.otherElements.matching(NSPredicate(format: "label BEGINSWITH %@", "trend-endpoints:")).firstMatch
+        XCTAssertTrue(probe.waitForExistence(timeout: 15))
+        let hasTrend = NSPredicate { _, _ in probe.label != "trend-endpoints:none" && !probe.label.isEmpty }
         expectation(for: hasTrend, evaluatedWith: probe)
         waitForExpectations(timeout: 10)
         let initial = probe.label
@@ -42,7 +47,7 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
         let end = probe.coordinate(withNormalizedOffset: CGVector(dx: 0.85, dy: 0.65))
         start.press(forDuration: 0.05, thenDragTo: end)
         let changed = NSPredicate { _, _ in
-            probe.label != initial && probe.label != "none" && !probe.label.isEmpty
+            probe.label != initial && probe.label != "trend-endpoints:none" && !probe.label.isEmpty
         }
         expectation(for: changed, evaluatedWith: probe)
         waitForExpectations(timeout: 10)
