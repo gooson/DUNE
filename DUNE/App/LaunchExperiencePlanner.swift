@@ -17,12 +17,13 @@ struct LaunchAuthorizationRequestState: Equatable {
     let hasCompletedRequest: Bool
     let hasAttemptedThisLaunch: Bool
     let shouldBypassLaunchExperience: Bool
+    var revalidateEachLaunch: Bool = false
 }
 
 enum LaunchExperiencePlanner {
     static func shouldRequestAuthorization(for state: LaunchAuthorizationRequestState) -> Bool {
         state.isEligible
-            && !state.hasCompletedRequest
+            && (!state.hasCompletedRequest || state.revalidateEachLaunch)
             && !state.hasAttemptedThisLaunch
             && !state.shouldBypassLaunchExperience
     }

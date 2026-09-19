@@ -3,6 +3,32 @@ import Testing
 
 @Suite("LaunchExperiencePlanner")
 struct LaunchExperiencePlannerTests {
+    @Test("HealthKit revalidates persisted completion once per launch", arguments: [false, true])
+    func healthKitRevalidatesPersistedCompletion(completed: Bool) {
+        let state = LaunchAuthorizationRequestState(
+            isEligible: true,
+            hasCompletedRequest: completed,
+            hasAttemptedThisLaunch: false,
+            shouldBypassLaunchExperience: false,
+            revalidateEachLaunch: true
+        )
+        #expect(LaunchExperiencePlanner.shouldRequestAuthorization(for: state))
+    }
+
+    @Test("HealthKit revalidation still respects attempt, availability, and test bypass guards")
+    func healthKitRevalidationRespectsGuards() {
+        for (eligible, attempted, bypass) in [(true, true, false), (false, false, false), (true, false, true)] {
+            let state = LaunchAuthorizationRequestState(
+                isEligible: eligible,
+                hasCompletedRequest: true,
+                hasAttemptedThisLaunch: attempted,
+                shouldBypassLaunchExperience: bypass,
+                revalidateEachLaunch: true
+            )
+            #expect(!LaunchExperiencePlanner.shouldRequestAuthorization(for: state))
+        }
+    }
+
     @Test("Authorization requests run only when eligible and not yet completed this launch")
     func authorizationRequestsRunOnlyWhenEligible() {
         let shouldRequest = LaunchExperiencePlanner.shouldRequestAuthorization(
