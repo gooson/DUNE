@@ -292,7 +292,7 @@ struct ContentView: View {
         // Listen for refresh signals from coordinator (foreground + HK observer triggers)
         .task {
             guard let coordinator = refreshCoordinator else { return }
-            for await _ in coordinator.refreshNeededStream {
+            for await _ in await coordinator.makeRefreshStream() {
                 await MainActor.run {
                     refreshSignal += 1
                 }

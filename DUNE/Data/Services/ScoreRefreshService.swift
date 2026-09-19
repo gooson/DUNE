@@ -6,7 +6,7 @@ import OSLog
 /// Service that persists hourly score snapshots and exposes live sparkline data
 /// for hero cards across all tabs.
 ///
-/// Hooks into `AppRefreshCoordinating.refreshNeededStream` to capture scores
+/// Hooks into `AppRefreshCoordinating.makeRefreshStream()` to capture scores
 /// when HealthKit data changes, and persists hourly snapshots to SwiftData.
 @Observable
 @MainActor
@@ -43,7 +43,7 @@ final class ScoreRefreshService {
     func startListening(to coordinator: AppRefreshCoordinating) {
         listenTask?.cancel()
         listenTask = Task { [weak self] in
-            for await _ in coordinator.refreshNeededStream {
+            for await _ in await coordinator.makeRefreshStream() {
                 guard !Task.isCancelled else { return }
                 await self?.loadTodaySparklines()
             }

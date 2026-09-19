@@ -28,6 +28,97 @@ private actor MockRefreshService: SharedHealthDataService {
 @Suite("AppRefreshCoordinatorImpl")
 struct AppRefreshCoordinatorTests {
 
+    /// Bounds failed delivery assertions without sleeping to coordinate subscription setup.
+    private func firstEvent(in stream: AsyncStream<RefreshSource>) async -> RefreshSource? {
+        await withTaskGroup(of: RefreshSource?.self) { group in
+            group.addTask {
+                var iterator = stream.makeAsyncIterator()
+                return await iterator.next()
+            }
+            group.addTask {
+                try? await Task.sleep(for: .seconds(2))
+                return nil
+            }
+            let result = await group.next() ?? nil
+            group.cancelAll()
+            return result
+        }
+    }
+
+    @Test("Automatic refresh reaches both UI and score subscribers", arguments: [
+        RefreshSource.foreground, .healthKitObserver, .cloudKitRemoteChange
+    ])
+    func broadcastsAutomaticRefresh(source: RefreshSource) async {
+        let service = MockRefreshService()
+        let coordinator = AppRefreshCoordinatorImpl(
+            sharedHealthDataService: service, throttleInterval: 0, cloudKitThrottleInterval: 0
+        )
+        let uiStream = await coordinator.makeRefreshStream()
+        let scoreStream = await coordinator.makeRefreshStream()
+
+        #expect(await coordinator.requestRefresh(source: source))
+        async let uiEvent = firstEvent(in: uiStream)
+        async let scoreEvent = firstEvent(in: scoreStream)
+        let received = await (uiEvent, scoreEvent)
+
+        #expect(received.0 == source)
+        #expect(received.1 == source)
+        #expect(await service.invalidateCacheCallCount == 1)
+    }
+
+    @Test("Forced refresh reaches both subscribers even within the throttle window")
+    func broadcastsForcedRefresh() async {
+        let service = MockRefreshService()
+        let coordinator = AppRefreshCoordinatorImpl(sharedHealthDataService: service)
+        let uiStream = await coordinator.makeRefreshStream()
+        let scoreStream = await coordinator.makeRefreshStream()
+
+        await coordinator.forceRefresh()
+        async let uiEvent = firstEvent(in: uiStream)
+        async let scoreEvent = firstEvent(in: scoreStream)
+        let received = await (uiEvent, scoreEvent)
+        #expect(received.0 == .pullToRefresh)
+        #expect(received.1 == .pullToRefresh)
+        #expect(await service.invalidateCacheCallCount == 1)
+    }
+
+    @Test("Cancelling one subscriber leaves the other and a replacement subscription active")
+    func cancellationIsIsolated() async {
+        let coordinator = AppRefreshCoordinatorImpl(sharedHealthDataService: MockRefreshService())
+        let cancelledStream = await coordinator.makeRefreshStream()
+        let survivingStream = await coordinator.makeRefreshStream()
+        let listener = Task {
+            withUnsafeCurrentTask { $0?.cancel() }
+            var iterator = cancelledStream.makeAsyncIterator()
+            return await iterator.next()
+        }
+        #expect(await listener.value == nil)
+        let replacementStream = await coordinator.makeRefreshStream()
+
+        await coordinator.forceRefresh()
+        async let surviving = firstEvent(in: survivingStream)
+        async let replacement = firstEvent(in: replacementStream)
+        let received = await (surviving, replacement)
+        #expect(received.0 == .pullToRefresh)
+        #expect(received.1 == .pullToRefresh)
+    }
+
+    @Test("Throttled refresh and cache-only invalidation do not emit to subscribers")
+    func silentOperationsDoNotBroadcast() async {
+        let service = MockRefreshService()
+        let now = Date(timeIntervalSince1970: 1000)
+        let coordinator = AppRefreshCoordinatorImpl(sharedHealthDataService: service, nowProvider: { now })
+        let stream = await coordinator.makeRefreshStream()
+
+        #expect(await coordinator.requestRefresh(source: .foreground) == false)
+        await coordinator.invalidateCacheOnly()
+        await coordinator.forceRefresh()
+
+        // Any incorrectly emitted earlier event would appear before pullToRefresh.
+        #expect(await firstEvent(in: stream) == .pullToRefresh)
+        #expect(await service.invalidateCacheCallCount == 2)
+    }
+
     // MARK: - Throttling
 
     @Test("First request after throttle interval triggers refresh")
@@ -174,7 +265,7 @@ struct AppRefreshCoordinatorTests {
 
     // MARK: - Stream Emission
 
-    @Test("requestRefresh emits to refreshNeededStream")
+    @Test("requestRefresh emits to a registered stream")
     func requestRefreshEmitsToStream() async {
         let clock = MutableDate(Date(timeIntervalSince1970: 1000))
         let service = MockRefreshService()
@@ -184,17 +275,12 @@ struct AppRefreshCoordinatorTests {
             nowProvider: { clock.value }
         )
 
-        let expectation = Task<RefreshSource?, Never> {
-            var iterator = coordinator.refreshNeededStream.makeAsyncIterator()
-            return await iterator.next()
-        }
-
-        try? await Task.sleep(nanoseconds: 10_000_000) // 10ms
+        let stream = await coordinator.makeRefreshStream()
 
         clock.value = Date(timeIntervalSince1970: 1061)
         _ = await coordinator.requestRefresh(source: .healthKitObserver)
 
-        let emittedSource = await expectation.value
+        let emittedSource = await firstEvent(in: stream)
         #expect(emittedSource == .healthKitObserver)
     }
 
@@ -206,16 +292,11 @@ struct AppRefreshCoordinatorTests {
             throttleInterval: 60
         )
 
-        let expectation = Task<RefreshSource?, Never> {
-            var iterator = coordinator.refreshNeededStream.makeAsyncIterator()
-            return await iterator.next()
-        }
-
-        try? await Task.sleep(nanoseconds: 10_000_000)
+        let stream = await coordinator.makeRefreshStream()
 
         await coordinator.forceRefresh()
 
-        let emittedSource = await expectation.value
+        let emittedSource = await firstEvent(in: stream)
         #expect(emittedSource == .pullToRefresh)
     }
 
