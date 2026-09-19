@@ -2,7 +2,7 @@ import Foundation
 import Testing
 @testable import DUNE
 
-private struct MockAllDataHRVService: HRVQuerying {
+struct MockAllDataHRVService: HRVQuerying {
     var hrvSamples: [HRVSample] = []
     var rhrByDay: [Date: Double] = [:]
 
@@ -11,8 +11,12 @@ private struct MockAllDataHRVService: HRVQuerying {
     func fetchHRVSamples(days: Int) async throws -> [HRVSample] { hrvSamples }
     func fetchRestingHeartRate(for date: Date) async throws -> Double? { rhrByDay[key(date)] }
     func fetchLatestRestingHeartRate(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
-    func fetchHRVCollection(start: Date, end: Date, interval: DateComponents) async throws -> [(date: Date, average: Double)] { [] }
-    func fetchRHRCollection(start: Date, end: Date, interval: DateComponents) async throws -> [(date: Date, min: Double, max: Double, average: Double)] { [] }
+    func fetchHRVCollection(start: Date, end: Date, interval: DateComponents) async throws -> [(date: Date, average: Double)] {
+        hrvSamples.filter { $0.date >= start && $0.date < end }.map { (date: $0.date, average: $0.value) }.sorted { $0.date < $1.date }
+    }
+    func fetchRHRCollection(start: Date, end: Date, interval: DateComponents) async throws -> [(date: Date, min: Double, max: Double, average: Double)] {
+        rhrByDay.filter { $0.key >= start && $0.key < end }.map { (date: $0.key, min: $0.value, max: $0.value, average: $0.value) }.sorted { $0.date < $1.date }
+    }
 }
 
 private actor SequencedAllDataHRVService: HRVQuerying {
@@ -60,35 +64,42 @@ private actor SequencedAllDataHRVService: HRVQuerying {
     }
 }
 
-private struct MockAllDataSleepService: SleepQuerying {
+struct MockAllDataSleepService: SleepQuerying {
     var stagesByDay: [Date: [SleepStage]] = [:]
 
     private func key(_ date: Date) -> Date { Calendar.current.startOfDay(for: date) }
 
     func fetchSleepStages(for date: Date) async throws -> [SleepStage] { stagesByDay[key(date)] ?? [] }
     func fetchLatestSleepStages(withinDays days: Int) async throws -> (stages: [SleepStage], date: Date)? { nil }
-    func fetchDailySleepDurations(start: Date, end: Date) async throws -> [(date: Date, totalMinutes: Double, stageBreakdown: [SleepStage.Stage: Double])] { [] }
+    func fetchDailySleepDurations(start: Date, end: Date) async throws -> [(date: Date, totalMinutes: Double, stageBreakdown: [SleepStage.Stage: Double])] {
+        stagesByDay.filter { $0.key >= start && $0.key < end }.map { date, stages in
+            let minutes = stages.filter { $0.stage != .awake }.reduce(0.0) { $0 + $1.duration / 60 }
+            return (date: date, totalMinutes: minutes, stageBreakdown: [.core: minutes])
+        }.sorted { $0.date < $1.date }
+    }
     func fetchLastNightSleepSummary(for date: Date) async throws -> SleepSummary? { nil }
 }
 
-private struct MockAllDataStepsService: StepsQuerying {
+struct MockAllDataStepsService: StepsQuerying {
     var stepsByDay: [Date: Double] = [:]
 
     private func key(_ date: Date) -> Date { Calendar.current.startOfDay(for: date) }
 
     func fetchSteps(for date: Date) async throws -> Double? { stepsByDay[key(date)] }
     func fetchLatestSteps(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
-    func fetchStepsCollection(start: Date, end: Date, interval: DateComponents) async throws -> [(date: Date, sum: Double)] { [] }
+    func fetchStepsCollection(start: Date, end: Date, interval: DateComponents) async throws -> [(date: Date, sum: Double)] {
+        stepsByDay.filter { $0.key >= start && $0.key < end }.map { (date: $0.key, sum: $0.value) }.sorted { $0.date < $1.date }
+    }
 }
 
-private struct MockAllDataWorkoutService: WorkoutQuerying {
+struct MockAllDataWorkoutService: WorkoutQuerying {
     var workouts: [WorkoutSummary] = []
 
     func fetchWorkouts(days: Int) async throws -> [WorkoutSummary] { workouts }
-    func fetchWorkouts(start: Date, end: Date) async throws -> [WorkoutSummary] { workouts }
+    func fetchWorkouts(start: Date, end: Date) async throws -> [WorkoutSummary] { workouts.filter { $0.date >= start && $0.date < end } }
 }
 
-private struct MockAllDataBodyService: BodyCompositionQuerying {
+struct MockAllDataBodyService: BodyCompositionQuerying {
     var weight: [BodyCompositionSample] = []
     var bmi: [BodyCompositionSample] = []
     var fat: [BodyCompositionSample] = []
@@ -97,18 +108,18 @@ private struct MockAllDataBodyService: BodyCompositionQuerying {
     func fetchWeight(days: Int) async throws -> [BodyCompositionSample] { weight }
     func fetchBodyFat(days: Int) async throws -> [BodyCompositionSample] { fat }
     func fetchLeanBodyMass(days: Int) async throws -> [BodyCompositionSample] { lean }
-    func fetchWeight(start: Date, end: Date) async throws -> [BodyCompositionSample] { weight }
+    func fetchWeight(start: Date, end: Date) async throws -> [BodyCompositionSample] { weight.filter { $0.date >= start && $0.date < end } }
     func fetchLatestWeight(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
     func fetchBMI(for date: Date) async throws -> Double? { nil }
     func fetchLatestBMI(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
-    func fetchBMI(start: Date, end: Date) async throws -> [BodyCompositionSample] { bmi }
-    func fetchBodyFat(start: Date, end: Date) async throws -> [BodyCompositionSample] { fat }
-    func fetchLeanBodyMass(start: Date, end: Date) async throws -> [BodyCompositionSample] { lean }
+    func fetchBMI(start: Date, end: Date) async throws -> [BodyCompositionSample] { bmi.filter { $0.date >= start && $0.date < end } }
+    func fetchBodyFat(start: Date, end: Date) async throws -> [BodyCompositionSample] { fat.filter { $0.date >= start && $0.date < end } }
+    func fetchLeanBodyMass(start: Date, end: Date) async throws -> [BodyCompositionSample] { lean.filter { $0.date >= start && $0.date < end } }
     func fetchLatestBodyFat(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
     func fetchLatestLeanBodyMass(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
 }
 
-private struct MockAllDataHeartRateService: HeartRateQuerying {
+struct MockAllDataHeartRateService: HeartRateQuerying {
     var history: [VitalSample] = []
 
     func fetchHeartRateSamples(forWorkoutID workoutID: String) async throws -> [HeartRateSample] { [] }
@@ -117,12 +128,12 @@ private struct MockAllDataHeartRateService: HeartRateQuerying {
     }
     func fetchLatestHeartRate(withinDays days: Int) async throws -> VitalSample? { nil }
     func fetchHeartRateHistory(days: Int) async throws -> [VitalSample] { history }
-    func fetchHeartRateHistory(start: Date, end: Date) async throws -> [VitalSample] { history }
+    func fetchHeartRateHistory(start: Date, end: Date) async throws -> [VitalSample] { history.filter { $0.date >= start && $0.date < end } }
     func fetchHeartRateZones(forWorkoutID workoutID: String, maxHR: Double) async throws -> [HeartRateZone] { [] }
     func fetchHeartRateRecovery(forWorkoutID workoutID: String) async throws -> HeartRateRecovery? { nil }
 }
 
-private struct MockAllDataVitalsService: VitalsQuerying {
+struct MockAllDataVitalsService: VitalsQuerying {
     var spo2: [VitalSample] = []
     var respiratory: [VitalSample] = []
     var vo2Max: [VitalSample] = []
@@ -141,11 +152,11 @@ private struct MockAllDataVitalsService: VitalsQuerying {
     func fetchHeartRateRecoveryHistory(days: Int) async throws -> [VitalSample] { recovery }
     func fetchWristTemperatureCollection(days: Int) async throws -> [VitalSample] { wristTemp }
 
-    func fetchSpO2Collection(start: Date, end: Date) async throws -> [VitalSample] { spo2 }
-    func fetchRespiratoryRateCollection(start: Date, end: Date) async throws -> [VitalSample] { respiratory }
-    func fetchVO2MaxHistory(start: Date, end: Date) async throws -> [VitalSample] { vo2Max }
-    func fetchHeartRateRecoveryHistory(start: Date, end: Date) async throws -> [VitalSample] { recovery }
-    func fetchWristTemperatureCollection(start: Date, end: Date) async throws -> [VitalSample] { wristTemp }
+    func fetchSpO2Collection(start: Date, end: Date) async throws -> [VitalSample] { spo2.filter { $0.date >= start && $0.date < end } }
+    func fetchRespiratoryRateCollection(start: Date, end: Date) async throws -> [VitalSample] { respiratory.filter { $0.date >= start && $0.date < end } }
+    func fetchVO2MaxHistory(start: Date, end: Date) async throws -> [VitalSample] { vo2Max.filter { $0.date >= start && $0.date < end } }
+    func fetchHeartRateRecoveryHistory(start: Date, end: Date) async throws -> [VitalSample] { recovery.filter { $0.date >= start && $0.date < end } }
+    func fetchWristTemperatureCollection(start: Date, end: Date) async throws -> [VitalSample] { wristTemp.filter { $0.date >= start && $0.date < end } }
 
     func fetchWristTemperatureBaseline(days: Int) async throws -> Double? { nil }
 }
@@ -334,7 +345,7 @@ struct AllDataViewModelTests {
     }
 }
 
-private struct HistoryDates: MetricHistoryQuerying {
+struct HistoryDates: MetricHistoryQuerying {
     var dates: [Date]
     func earliestDate(for category: HealthMetric.Category) async throws -> Date? { dates.min() }
     func latestDate(for category: HealthMetric.Category, before end: Date) async throws -> Date? {

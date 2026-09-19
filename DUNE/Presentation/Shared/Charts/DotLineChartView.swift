@@ -85,7 +85,7 @@ struct DotLineChartView: View {
             .chartYScale(domain: cachedYDomain)
             .chartXScale(domain: effectiveXDomain)
             .chartXAxis {
-                AxisMarks(values: .stride(by: xStrideComponent, count: xStrideCount)) { _ in
+                AxisMarks(values: visibleAxisDates) { _ in
                     AxisValueLabel(format: axisFormat)
                         .foregroundStyle(theme.sandColor)
                     AxisGridLine()
@@ -133,7 +133,7 @@ struct DotLineChartView: View {
                 cachedYDomain = Self.computeYDomain(from: data)
                 cachedSpanDays = Self.computeSpanDays(from: data)
             }
-            .onChange(of: data.count) { _, _ in
+            .onChange(of: data) { _, _ in
                 cachedYDomain = Self.computeYDomain(from: data)
                 cachedSpanDays = Self.computeSpanDays(from: data)
             }
@@ -191,6 +191,16 @@ struct DotLineChartView: View {
         let dates = data.map(\.date)
         guard let first = dates.min(), let last = dates.max() else { return 0 }
         return max(0, Calendar.current.dateComponents([.day], from: first, to: last).day ?? 0)
+    }
+
+    private var visibleAxisDates: [Date] {
+        if let timePeriod {
+            return timePeriod.visibleAxisDates(around: scrollPosition?.wrappedValue ?? internalScrollPosition)
+        }
+        // Non-scrollable sparklines also use a bounded set of explicit ticks.
+        let dates = data.map(\.date).sorted()
+        let step = max(1, dates.count / 8)
+        return stride(from: 0, to: dates.count, by: step).prefix(10).map { dates[$0] }
     }
 
     private var effectiveXDomain: ClosedRange<Date> {

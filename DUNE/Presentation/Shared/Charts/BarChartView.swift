@@ -10,6 +10,7 @@ struct BarChartView: View {
     var valueLabel: String = "Value"
     var unitSuffix: String = ""
     var trendLine: [ChartDataPoint]?
+    var scrollDomain: ClosedRange<Date>?
     @Binding var scrollPosition: Date
 
     @ScaledMetric(relativeTo: .body) private var chartHeight: CGFloat = 220
@@ -50,9 +51,10 @@ struct BarChartView: View {
                         .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3]))
                 }
             }
+            .chartXScale(domain: resolvedXDomain(scrollDomain: scrollDomain, dates: data.map(\.date)))
             .chartYScale(domain: yDomain)
             .chartXAxis {
-                AxisMarks(values: .stride(by: period.strideComponent, count: period.strideCount)) { _ in
+                AxisMarks(values: period.visibleAxisDates(around: scrollPosition)) { _ in
                     AxisValueLabel(format: period.axisLabelFormat)
                         .foregroundStyle(theme.sandColor)
                     AxisGridLine()

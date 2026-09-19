@@ -165,7 +165,8 @@ struct MetricDetailViewModelTests {
         steps: StubStepsService = StubStepsService(),
         workout: StubWorkoutService = StubWorkoutService(),
         body: StubBodyService = StubBodyService(),
-        heartRate: HeartRateQuerying? = nil
+        heartRate: HeartRateQuerying? = nil,
+        history: MetricHistoryQuerying = DetailHistoryDates()
     ) -> MetricDetailViewModel {
         MetricDetailViewModel(
             hrvService: hrv,
@@ -173,7 +174,8 @@ struct MetricDetailViewModelTests {
             stepsService: steps,
             workoutService: workout,
             bodyService: body,
-            heartRateService: heartRate
+            heartRateService: heartRate,
+            historyService: history
         )
     }
 
@@ -272,17 +274,18 @@ struct MetricDetailViewModelTests {
         let samples = (0..<5500).map {
             BodyCompositionSample(value: 70 + Double($0 % 10), date: oldest.addingTimeInterval(Double($0) * 86400))
         }
-        let vm = makeVM(body: StubBodyService(weightSamples: samples))
+        let vm = makeVM(body: StubBodyService(weightSamples: samples), history: DetailHistoryDates(oldest: oldest))
         vm.configure(category: .weight, currentValue: 75, lastUpdated: Date())
         await vm.loadData()
-        #expect(vm.chartData.count == 5500)
+        #expect(vm.chartData.count < 40)
         #expect(vm.scrollDomain.lowerBound <= oldest)
-        #expect(vm.visibleWeightChartData.count < 30)
+        #expect(vm.visibleWeightChartData.count < 40)
         let yDomain = vm.weightYDomain
         vm.scrollPosition = oldest
         #expect(vm.weightYDomain == yDomain)
-        #expect(vm.visibleWeightChartData.first?.date == oldest)
-        #expect(vm.visibleWeightChartData.count < 30)
+        await vm.loadVisibleHistoryIfNeeded()
+        #expect(vm.visibleWeightChartData.contains { $0.date == oldest })
+        #expect(vm.visibleWeightChartData.count < 40)
         #expect(vm.scrollPosition == oldest)
         #expect(!vm.isLoading)
     }
@@ -620,5 +623,13 @@ struct MetricDetailViewModelTests {
         let start = calendar.date(bySettingHour: startHour, minute: startMinute, second: 0, of: referenceDate) ?? referenceDate
         let end = start.addingTimeInterval(Double(durationMinutes * 60))
         return SleepStage(stage: .core, duration: end.timeIntervalSince(start), startDate: start, endDate: end)
+    }
+}
+
+private struct DetailHistoryDates: MetricHistoryQuerying {
+    var oldest: Date? = nil
+    func earliestDate(for category: HealthMetric.Category) async throws -> Date? { oldest }
+    func latestDate(for category: HealthMetric.Category, before end: Date) async throws -> Date? {
+        oldest.flatMap { $0 < end ? $0 : nil }
     }
 }

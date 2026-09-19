@@ -69,7 +69,7 @@ struct RangeBarChartView: View {
             .chartYScale(domain: yDomain)
             .chartXScale(domain: effectiveXDomain)
             .chartXAxis {
-                AxisMarks(values: .stride(by: period.strideComponent, count: period.strideCount)) { _ in
+                AxisMarks(values: period.visibleAxisDates(around: scrollPosition)) { _ in
                     AxisValueLabel(format: period.axisLabelFormat)
                         .foregroundStyle(theme.sandColor)
                     AxisGridLine()

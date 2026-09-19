@@ -10,9 +10,9 @@ enum TimePeriod: String, CaseIterable, Sendable {
 
     /// The date range for this period ending now, shifted by `offset` periods backward (negative) or forward.
     /// `offset = 0` is the current period, `offset = -1` is the previous period, etc.
-    func dateRange(offset: Int = 0) -> (start: Date, end: Date) {
+    func dateRange(offset: Int = 0, referenceDate: Date = Date()) -> (start: Date, end: Date) {
         let calendar = Calendar.current
-        let now = Date()
+        let now = referenceDate
         let startOfToday = calendar.startOfDay(for: now)
 
         // First compute current period end/start

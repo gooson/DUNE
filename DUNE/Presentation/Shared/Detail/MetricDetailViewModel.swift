@@ -22,26 +22,30 @@ final class MetricDetailViewModel {
                 try? await Task.sleep(for: .milliseconds(100))
                 guard !Task.isCancelled else { return }
                 invalidateScrollCache()
+                await loadVisibleHistoryIfNeeded()
             }
         }
     }
     var showTrendLine: Bool = false
     var chartData: [ChartDataPoint] = [] {
-        didSet { invalidateScrollCache() }
+        didSet {
+            invalidateScrollCache()
+            if let minimum = chartData.map(\.value).min(), let maximum = chartData.map(\.value).max() {
+                let padding = max((maximum - minimum) * 0.15, 2)
+                weightYDomain = (minimum - padding)...(maximum + padding)
+            }
+        }
     }
-    var visibleWeightChartData: [ChartDataPoint] {
-        let buffer = selectedPeriod.visibleDomainSeconds
-        let start = scrollPosition.addingTimeInterval(-buffer)
-        let end = scrollPosition.addingTimeInterval(buffer * 2)
-        return chartData.filter { $0.date >= start && $0.date <= end }
-    }
+    // Data is bounded at query time for every metric, including weight.
+    var visibleWeightChartData: [ChartDataPoint] { chartData }
+    private(set) var weightYDomain: ClosedRange<Double> = 0...100
+    private(set) var earliestHistoryDate: Date?
+    private var historyBoundsLoaded = false
+    private var historyReferenceDate = Date()
+    private var loadedHistoryRange: (start: Date, end: Date)?
+    private var requestedHistoryRange: (start: Date, end: Date)?
+    private let historyService: any MetricHistoryQuerying
 
-    var weightYDomain: ClosedRange<Double> {
-        guard let minimum = chartData.map(\.value).min(),
-              let maximum = chartData.map(\.value).max() else { return 0...100 }
-        let padding = max((maximum - minimum) * 0.15, 2)
-        return (minimum - padding)...(maximum + padding)
-    }
     var rangeData: [RangeDataPoint] = []
     var stackedData: [StackedDataPoint] = []
     var summaryStats: MetricSummary?
@@ -80,8 +84,10 @@ final class MetricDetailViewModel {
         heartRateService: HeartRateQuerying? = nil,
         vitalsService: VitalsQuerying? = nil,
         breathingDisturbanceService: BreathingDisturbanceQuerying? = nil,
+        historyService: (any MetricHistoryQuerying)? = nil,
         healthKitManager: HealthKitManager = .shared
     ) {
+        self.historyService = historyService ?? MetricHistoryQueryService(manager: healthKitManager)
         self.hrvService = hrvService ?? HRVQueryService(manager: healthKitManager)
         self.sleepService = sleepService ?? SleepQueryService(manager: healthKitManager)
         self.stepsService = stepsService ?? StepsQueryService(manager: healthKitManager)
@@ -99,6 +105,12 @@ final class MetricDetailViewModel {
         workoutTypeName: String? = nil,
         metricUnit: String? = nil
     ) {
+        invalidateReloadRequests()
+        scrollDebounceTask?.cancel()
+        loadedHistoryRange = nil
+        requestedHistoryRange = nil
+        historyBoundsLoaded = false
+        earliestHistoryDate = nil
         self.category = category
         self.currentValue = currentValue
         self.hasConfiguredValue = true
@@ -108,8 +120,13 @@ final class MetricDetailViewModel {
         resetScrollPosition()
     }
 
-    func loadData() async {
+    func loadData(historyNavigation: Bool = false) async {
         let requestID = beginReloadRequest()
+        if !historyNavigation { historyReferenceDate = Date() }
+        let currentSummary = summaryStats
+        let headlineValue = currentValue
+        requestedHistoryRange = historyNavigation ? historyWindow(around: scrollPosition) : initialHistoryRange
+        let range = extendedRange
         isLoading = true
         errorMessage = nil
         defer { finishReloadRequest(requestID) }
@@ -134,7 +151,25 @@ final class MetricDetailViewModel {
             case .breathingDisturbances: try await loadBreathingDisturbancesData(requestID: requestID)
             }
             guard isCurrentReloadRequest(requestID) else { return }
-            buildHighlights()
+            if historyNavigation {
+                summaryStats = currentSummary
+                currentValue = headlineValue
+            }
+            loadedHistoryRange = range
+            invalidateScrollCache()
+            if !historyBoundsLoaded || !historyNavigation {
+                do {
+                    let earliest = try await historyService.earliestDate(for: category)
+                    guard isCurrentReloadRequest(requestID) else { return }
+                    earliestHistoryDate = earliest
+                    historyBoundsLoaded = true
+                } catch {
+                    // Keep already loaded data usable if the date-only query fails.
+                    AppLogger.ui.error("Metric history bounds failed: \(error.localizedDescription)")
+                }
+            }
+            guard isCurrentReloadRequest(requestID) else { return }
+            if !historyNavigation { buildHighlights() }
         } catch {
             guard isCurrentReloadRequest(requestID) else { return }
             AppLogger.ui.error("MetricDetail load failed for \(self.category.rawValue): \(error.localizedDescription)")
@@ -218,25 +253,49 @@ final class MetricDetailViewModel {
 
     /// Resets scroll position to show the current period (latest data at the right edge).
     private func resetScrollPosition() {
-        let range = selectedPeriod.dateRange(offset: 0)
+        let range = selectedPeriod.dateRange(offset: 0, referenceDate: historyReferenceDate)
         scrollPosition = range.start
     }
 
     // MARK: - Extended Range
 
-    /// Returns the extended date range including scroll buffer periods for historical scrolling.
-    private var extendedRange: (start: Date, end: Date) {
-        let currentRange = selectedPeriod.dateRange(offset: 0)
-        let bufferRange = selectedPeriod.dateRange(offset: -selectedPeriod.scrollBufferPeriods)
-        return (start: bufferRange.start, end: currentRange.end)
+    private var initialHistoryRange: (start: Date, end: Date) {
+        let current = selectedPeriod.dateRange(offset: 0, referenceDate: historyReferenceDate)
+        let buffer = selectedPeriod.dateRange(offset: -selectedPeriod.scrollBufferPeriods, referenceDate: historyReferenceDate)
+        return (buffer.start, current.end)
     }
 
-    /// The full scrollable date domain for charts with sparse data (weight, BMI, body fat, lean body mass).
+    private var extendedRange: (start: Date, end: Date) {
+        requestedHistoryRange ?? initialHistoryRange
+    }
+
+    /// The scroll domain describes all history; queries cover only a few screens.
     var scrollDomain: ClosedRange<Date> {
-        let range = extendedRange
-        let upperBound = selectedPeriod.scrollDomainUpperBound(referenceDate: range.end)
-        let start = category == .weight ? min(chartData.first?.date ?? range.start, range.start) : range.start
-        return start...max(range.end, upperBound)
+        let range = initialHistoryRange
+        let earliest = earliestHistoryDate ?? chartData.first?.date ?? range.start
+        let start = min(Calendar.current.startOfDay(for: earliest), range.start)
+        return start...max(range.end, selectedPeriod.scrollDomainUpperBound(referenceDate: range.end))
+    }
+
+    private func historyWindow(around position: Date) -> (start: Date, end: Date) {
+        let span = selectedPeriod.visibleDomainSeconds
+        let calendar = Calendar.current
+        // Align aggregate buckets so adjacent windows retain identical dates.
+        let unit = selectedPeriod.aggregationUnit
+        let start = calendar.dateInterval(of: unit, for: position.addingTimeInterval(-span))?.start
+            ?? calendar.startOfDay(for: position.addingTimeInterval(-span))
+        let end = calendar.dateInterval(of: unit, for: position.addingTimeInterval(span * 2))?.end
+            ?? position.addingTimeInterval(span * 2)
+        return (start, min(initialHistoryRange.end, end))
+    }
+
+    func loadVisibleHistoryIfNeeded() async {
+        guard let loaded = loadedHistoryRange else { return }
+        let span = selectedPeriod.visibleDomainSeconds
+        let lower = max(scrollDomain.lowerBound, scrollPosition.addingTimeInterval(-span * 0.5))
+        let upper = min(initialHistoryRange.end, scrollPosition.addingTimeInterval(span * 1.5))
+        guard lower < loaded.start || upper > loaded.end else { return }
+        await loadData(historyNavigation: true)
     }
 
     // MARK: - Private Reload Trigger
@@ -364,15 +423,7 @@ final class MetricDetailViewModel {
         }
         guard isCurrentReloadRequest(requestID) else { return }
 
-        if selectedPeriod == .day {
-            // Day mode: show raw sleep stages
-            let stages = try await sleepService.fetchSleepStages(for: Date())
-            let sleepStages = stages.filter { $0.stage != .awake }
-            let totalMinutes = sleepStages.reduce(0.0) { $0 + $1.duration } / 60.0
-            guard isCurrentReloadRequest(requestID) else { return }
-            chartData = [ChartDataPoint(date: Date(), value: totalMinutes)]
-            summaryStats = HealthDataAggregator.computeSummary(from: [totalMinutes])
-        } else {
+        do {
             // Week+ mode: daily sleep with stage breakdown
             async let currentSleep = sleepService.fetchDailySleepDurations(
                 start: range.start, end: range.end
@@ -807,11 +858,11 @@ final class MetricDetailViewModel {
         chartData = HealthDataAggregator.fillDateGaps(
             chartData, period: selectedPeriod, start: range.start, end: range.end
         )
-        updateStepsCurrentValue(from: raw)
+        if range.end >= initialHistoryRange.end { updateStepsCurrentValue(from: raw) }
     }
 
     private func updateStepsCurrentValue(from raw: [ChartDataPoint]) {
-        let currentRange = selectedPeriod.dateRange(offset: 0)
+        let currentRange = selectedPeriod.dateRange(offset: 0, referenceDate: historyReferenceDate)
 
         let resolvedValue: Double
         switch selectedPeriod {
@@ -886,7 +937,7 @@ final class MetricDetailViewModel {
         let range = extendedRange
         let prevRange = HealthDataAggregator.previousPeriodRange(for: selectedPeriod, offset: 0)
 
-        async let currentSamples = fetch(category == .weight ? .distantPast : range.start, range.end)
+        async let currentSamples = fetch(range.start, range.end)
         async let prevSamples = fetch(prevRange.start, prevRange.end)
 
         let current = try await currentSamples
@@ -906,7 +957,7 @@ final class MetricDetailViewModel {
 
         // Compute from local `aggregated` rather than `self.chartData` to use
         // consistent data within this load cycle
-        let currentRange = selectedPeriod.dateRange(offset: 0)
+        let currentRange = selectedPeriod.dateRange(offset: 0, referenceDate: historyReferenceDate)
         let currentValues = aggregated
             .filter { $0.date >= currentRange.start && $0.date <= currentRange.end }
             .map(\.value)
@@ -944,15 +995,20 @@ final class MetricDetailViewModel {
         case .wristTemperature:  samples = try await vitalsService.fetchWristTemperatureCollection(start: range.start, end: range.end)
         }
 
+        let period = selectedPeriod
+        let points = await Task.detached(priority: .userInitiated) {
+            let raw = samples.map { ChartDataPoint(date: $0.date, value: $0.value) }.sorted { $0.date < $1.date }
+            return period == .sixMonths || period == .year
+                ? HealthDataAggregator.aggregateByAverage(raw, unit: period.aggregationUnit) : raw
+        }.value
         guard isCurrentReloadRequest(requestID) else { return }
-        chartData = samples.map { ChartDataPoint(date: $0.date, value: $0.value) }
+        chartData = points
         summaryStats = HealthDataAggregator.computeSummary(from: currentPeriodValues())
     }
 
     private func loadBreathingDisturbancesData(requestID: Int) async throws {
         let range = extendedRange
-        let days = max(1, Calendar.current.dateComponents([.day], from: range.start, to: range.end).day ?? 30)
-        let allSamples = try await breathingDisturbanceService.fetchNightlyDisturbances(days: days)
+        let allSamples = try await breathingDisturbanceService.fetchNightlyDisturbances(start: range.start, end: range.end)
         guard isCurrentReloadRequest(requestID) else { return }
         chartData = allSamples
             .filter { $0.date >= range.start && $0.date <= range.end }
@@ -968,8 +1024,14 @@ final class MetricDetailViewModel {
             end: range.end,
             interval: interval
         )
+        let period = selectedPeriod
+        let points = await Task.detached(priority: .userInitiated) {
+            let raw = samples.map { ChartDataPoint(date: $0.date, value: $0.value) }.sorted { $0.date < $1.date }
+            return period == .sixMonths || period == .year
+                ? HealthDataAggregator.aggregateByAverage(raw, unit: period.aggregationUnit) : raw
+        }.value
         guard isCurrentReloadRequest(requestID) else { return }
-        chartData = samples.map { ChartDataPoint(date: $0.date, value: $0.value) }
+        chartData = points
         summaryStats = HealthDataAggregator.computeSummary(from: currentPeriodValues())
     }
 
@@ -985,7 +1047,7 @@ final class MetricDetailViewModel {
 
     /// Extracts values only from the current (offset=0) period for summary stats.
     private func currentPeriodValues() -> [Double] {
-        let currentRange = selectedPeriod.dateRange(offset: 0)
+        let currentRange = selectedPeriod.dateRange(offset: 0, referenceDate: historyReferenceDate)
         return chartData
             .filter { $0.date >= currentRange.start && $0.date <= currentRange.end }
             .map(\.value)
@@ -993,7 +1055,7 @@ final class MetricDetailViewModel {
 
     /// Extracts values from the current period using raw values and dates (for sleep).
     private func currentPeriodValues(from values: [Double], dates: [Date]) -> [Double] {
-        let currentRange = selectedPeriod.dateRange(offset: 0)
+        let currentRange = selectedPeriod.dateRange(offset: 0, referenceDate: historyReferenceDate)
         return zip(values, dates)
             .filter { $0.1 >= currentRange.start && $0.1 <= currentRange.end }
             .map(\.0)
@@ -1046,7 +1108,7 @@ final class MetricDetailViewModel {
 
     /// Returns chart data filtered to the current period only (for highlights).
     private func currentPeriodChartData() -> [ChartDataPoint] {
-        let currentRange = selectedPeriod.dateRange(offset: 0)
+        let currentRange = selectedPeriod.dateRange(offset: 0, referenceDate: historyReferenceDate)
         return chartData.filter { $0.date >= currentRange.start && $0.date <= currentRange.end }
     }
 
