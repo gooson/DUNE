@@ -126,6 +126,10 @@ struct DotLineChartView: View {
             }
             .accessibilityChartDescriptor(chartDescriptor)
             .chartSelectionUITestProbe(lastSelectionProbeLabel)
+            .chartSelectionUITestProbe(
+                trendLine.map { $0.map { String($0.date.timeIntervalSince1970) }.joined(separator: ",") } ?? "none",
+                identifier: "chart-trend-probe"
+            )
             .frame(height: chartHeight)
             .clipped()
             .chartDrawAnimation()

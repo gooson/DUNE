@@ -5,6 +5,48 @@
 final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
     override var initialTabSelectionArgument: String? { "train" }
 
+    func testConditionTrendFollowsHistoryScroll() throws {
+        launchLongMetricHistory()
+        navigateToDashboard()
+        waitForElement(AXID.dashboardHeroCondition, timeout: 15).tap()
+        assertScoreTrendFollowsHistoryScroll()
+    }
+
+    func testWellnessTrendFollowsHistoryScroll() throws {
+        launchLongMetricHistory()
+        navigateToWellness()
+        waitForElement(AXID.wellnessHeroScore, timeout: 15).tap()
+        assertScoreTrendFollowsHistoryScroll()
+    }
+
+    func testReadinessTrendFollowsHistoryScroll() throws {
+        launchLongMetricHistory()
+        navigateToActivity()
+        waitForElement(AXID.activityHeroReadiness, timeout: 15).tap()
+        assertScoreTrendFollowsHistoryScroll()
+    }
+
+    private func assertScoreTrendFollowsHistoryScroll() {
+        let trend = app.buttons["Trend"].firstMatch
+        XCTAssertTrue(trend.waitForExistence(timeout: 15))
+        if !trend.isHittable { app.scrollViews.firstMatch.swipeUp() }
+        trend.tap()
+        let probe = waitForElement("chart-trend-probe", timeout: 15)
+        let hasTrend = NSPredicate { _, _ in probe.label != "none" && !probe.label.isEmpty }
+        expectation(for: hasTrend, evaluatedWith: probe)
+        waitForExpectations(timeout: 10)
+        let initial = probe.label
+        let start = probe.coordinate(withNormalizedOffset: CGVector(dx: 0.15, dy: 0.65))
+        let end = probe.coordinate(withNormalizedOffset: CGVector(dx: 0.85, dy: 0.65))
+        start.press(forDuration: 0.05, thenDragTo: end)
+        let changed = NSPredicate { _, _ in
+            probe.label != initial && probe.label != "none" && !probe.label.isEmpty
+        }
+        expectation(for: changed, evaluatedWith: probe)
+        waitForExpectations(timeout: 10)
+        XCTAssertTrue(trend.exists)
+    }
+
     func testRHRDetailChartScrollsToPastData() throws {
         launchLongMetricHistory()
         openDashboardMetricDetail("rhr")
