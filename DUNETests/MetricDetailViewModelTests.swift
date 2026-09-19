@@ -107,7 +107,9 @@ private struct StubBodyService: BodyCompositionQuerying {
     func fetchWeight(days: Int) async throws -> [BodyCompositionSample] { weightSamples }
     func fetchBodyFat(days: Int) async throws -> [BodyCompositionSample] { [] }
     func fetchLeanBodyMass(days: Int) async throws -> [BodyCompositionSample] { [] }
-    func fetchWeight(start: Date, end: Date) async throws -> [BodyCompositionSample] { weightSamples }
+    func fetchWeight(start: Date, end: Date) async throws -> [BodyCompositionSample] {
+        weightSamples.filter { $0.date >= start && $0.date <= end }
+    }
     func fetchLatestWeight(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
     func fetchBMI(for date: Date) async throws -> Double? { nil }
     func fetchLatestBMI(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
@@ -121,6 +123,13 @@ private struct StubBodyService: BodyCompositionQuerying {
 private actor StubHeartRateService: HeartRateQuerying {
     var historySamples: [VitalSample] = []
     private(set) var requestedIntervals: [DateComponents] = []
+    private(set) var cancellationAtResume: [Bool] = []
+    private var suspendNext = false
+    private var release: CheckedContinuation<Void, Never>?
+    func suspendNextFetch() { suspendNext = true }
+    func isSuspended() -> Bool { release != nil }
+    func resumeFetch() { release?.resume(); release = nil }
+
 
     init(historySamples: [VitalSample] = []) {
         self.historySamples = historySamples
@@ -135,6 +144,11 @@ private actor StubHeartRateService: HeartRateQuerying {
     func fetchHeartRateHistory(start: Date, end: Date) async throws -> [VitalSample] { historySamples }
     func fetchHeartRateHistory(start: Date, end: Date, interval: DateComponents) async throws -> [VitalSample] {
         requestedIntervals.append(interval)
+        if suspendNext {
+            suspendNext = false
+            await withCheckedContinuation { release = $0 }
+        }
+        cancellationAtResume.append(Task.isCancelled)
         return historySamples
     }
     func fetchHeartRateZones(forWorkoutID workoutID: String, maxHR: Double) async throws -> [HeartRateZone] { [] }
@@ -163,7 +177,8 @@ struct MetricDetailViewModelTests {
         steps: StubStepsService = StubStepsService(),
         workout: StubWorkoutService = StubWorkoutService(),
         body: StubBodyService = StubBodyService(),
-        heartRate: HeartRateQuerying? = nil
+        heartRate: HeartRateQuerying? = nil,
+        history: MetricHistoryQuerying = DetailHistoryDates()
     ) -> MetricDetailViewModel {
         MetricDetailViewModel(
             hrvService: hrv,
@@ -171,8 +186,82 @@ struct MetricDetailViewModelTests {
             stepsService: steps,
             workoutService: workout,
             bodyService: body,
-            heartRateService: heartRate
+            heartRateService: heartRate,
+            historyService: history
         )
+    }
+
+    @Test("Weight history does not repeatedly shrink and expand the Y axis")
+    func historyYAxisRemainsStable() async {
+        let today = calendar.startOfDay(for: Date())
+        let first = today.addingTimeInterval(-400 * 86400)
+        let second = today.addingTimeInterval(-800 * 86400)
+        let vm = makeVM(body: StubBodyService(weightSamples: [
+            BodyCompositionSample(value: 75, date: today),
+            BodyCompositionSample(value: 65, date: first),
+            BodyCompositionSample(value: 74, date: second)
+        ]), history: DetailHistoryDates(oldest: second))
+        vm.configure(category: .weight, currentValue: 75, lastUpdated: today)
+        await vm.loadData()
+        let initial = vm.weightYDomain
+        vm.scrollPosition = first
+        await vm.loadVisibleHistoryIfNeeded()
+        let expanded = vm.weightYDomain
+        #expect(expanded.lowerBound < initial.lowerBound)
+        vm.scrollPosition = second
+        await vm.loadVisibleHistoryIfNeeded()
+        #expect(vm.weightYDomain == expanded)
+    }
+
+    @Test("Continuous scrolling starts prefetch immediately and does not cancel it")
+    func continuousScrollKeepsPrefetch() async {
+        let service = StubHeartRateService(historySamples: [VitalSample(value: 60, date: Date())])
+        let oldest = Date(timeIntervalSince1970: 1_293_840_000)
+        let vm = makeVM(heartRate: service, history: DetailHistoryDates(oldest: oldest))
+        vm.configure(category: .heartRate, currentValue: 60, lastUpdated: Date())
+        await vm.loadData()
+        await service.suspendNextFetch()
+        vm.scrollPosition = oldest
+        // No debounce sleep or explicit load call: the scroll itself starts the query.
+        while !(await service.isSuspended()) { await Task.yield() }
+        for offset in 1...10 {
+            vm.scrollPosition = oldest.addingTimeInterval(Double(offset) * 3600)
+            await Task.yield()
+        }
+        #expect(await service.requestedIntervals.count == 2)
+        await service.resumeFetch()
+        await vm.loadVisibleHistoryIfNeeded()
+        #expect(await service.cancellationAtResume == [false, false])
+        #expect(await service.requestedIntervals.count == 2)
+        #expect(!vm.isLoading)
+    }
+
+    @Test("A period reload cannot be superseded by scroll prefetch")
+    func periodReloadWinsOverScroll() async {
+        let service = StubHeartRateService(historySamples: [VitalSample(value: 60, date: Date())])
+        let vm = makeVM(heartRate: service)
+        vm.configure(category: .heartRate, currentValue: 60, lastUpdated: Date())
+        await vm.loadData()
+        await service.suspendNextFetch()
+        vm.selectedPeriod = .year
+        while !(await service.isSuspended()) { await Task.yield() }
+        await vm.loadVisibleHistoryIfNeeded()
+        #expect(await service.requestedIntervals.count == 2)
+        await service.resumeFetch()
+        while vm.isLoading { await Task.yield() }
+        #expect(vm.summaryStats?.count == 1)
+    }
+
+    @Test("Scrolling inside a loaded recent window does not refetch")
+    func recentScrollReusesWindow() async {
+        let service = StubHeartRateService(historySamples: [VitalSample(value: 60, date: Date())])
+        let vm = makeVM(heartRate: service)
+        vm.configure(category: .heartRate, currentValue: 60, lastUpdated: Date())
+        await vm.loadData()
+        let initialCount = await service.requestedIntervals.count
+        vm.scrollPosition = vm.scrollPosition.addingTimeInterval(-86400)
+        await vm.loadVisibleHistoryIfNeeded()
+        #expect(await service.requestedIntervals.count == initialCount)
     }
 
     // MARK: - HRV
@@ -263,6 +352,28 @@ struct MetricDetailViewModelTests {
     }
 
     // MARK: - Weight
+
+    @Test("Weight chart reaches 2011 while rendering only the visible buffer")
+    func weightChartFullHistoryWindow() async throws {
+        let oldest = calendar.startOfDay(for: Date(timeIntervalSince1970: 1_293_840_000))
+        let samples = (0..<5500).map {
+            BodyCompositionSample(value: 70 + Double($0 % 10), date: oldest.addingTimeInterval(Double($0) * 86400))
+        }
+        let vm = makeVM(body: StubBodyService(weightSamples: samples), history: DetailHistoryDates(oldest: oldest))
+        vm.configure(category: .weight, currentValue: 75, lastUpdated: Date())
+        await vm.loadData()
+        #expect(vm.chartData.count < 40)
+        #expect(vm.scrollDomain.lowerBound <= oldest)
+        #expect(vm.visibleWeightChartData.count < 40)
+        let yDomain = vm.weightYDomain
+        vm.scrollPosition = oldest
+        #expect(vm.weightYDomain == yDomain)
+        await vm.loadVisibleHistoryIfNeeded()
+        #expect(vm.visibleWeightChartData.contains { $0.date == oldest })
+        #expect(vm.visibleWeightChartData.count < 40)
+        #expect(vm.scrollPosition == oldest)
+        #expect(!vm.isLoading)
+    }
 
     @Test("Weight loads raw samples for week period")
     func weightLoadsSamples() async {
@@ -597,5 +708,13 @@ struct MetricDetailViewModelTests {
         let start = calendar.date(bySettingHour: startHour, minute: startMinute, second: 0, of: referenceDate) ?? referenceDate
         let end = start.addingTimeInterval(Double(durationMinutes * 60))
         return SleepStage(stage: .core, duration: end.timeIntervalSince(start), startDate: start, endDate: end)
+    }
+}
+
+private struct DetailHistoryDates: MetricHistoryQuerying {
+    var oldest: Date? = nil
+    func earliestDate(for category: HealthMetric.Category) async throws -> Date? { oldest }
+    func latestDate(for category: HealthMetric.Category, before end: Date) async throws -> Date? {
+        oldest.flatMap { $0 < end ? $0 : nil }
     }
 }

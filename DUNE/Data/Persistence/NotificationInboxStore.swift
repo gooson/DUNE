@@ -1,7 +1,8 @@
 import Foundation
 
 /// Persists alert history and read state in UserDefaults.
-/// Uses a dedicated serial queue to keep updates thread-safe.
+/// Serializes in-memory updates separately from persistence to avoid calling
+/// UserDefaults observers while holding the queue used by UI reads.
 final class NotificationInboxStore: @unchecked Sendable {
     static let shared = NotificationInboxStore()
 
@@ -12,14 +13,23 @@ final class NotificationInboxStore: @unchecked Sendable {
     private let defaults: UserDefaults
     private let queue: DispatchQueue
     private let encoder = JSONEncoder()
-    private let decoder = JSONDecoder()
+    private let persistenceQueue: DispatchQueue
+    private var cachedItems: [NotificationInboxItem]
 
     init(
         defaults: UserDefaults = .standard,
-        queue: DispatchQueue = DispatchQueue(label: "com.dune.notification-inbox-store")
+        queue: DispatchQueue = DispatchQueue(label: "com.dune.notification-inbox-store"),
+        persistenceQueue: DispatchQueue = DispatchQueue(label: "com.dune.notification-inbox-persistence")
     ) {
         self.defaults = defaults
         self.queue = queue
+        self.persistenceQueue = persistenceQueue
+        if let data = defaults.data(forKey: Keys.inbox),
+           let items = try? JSONDecoder().decode([NotificationInboxItem].self, from: data) {
+            cachedItems = items
+        } else {
+            cachedItems = []
+        }
     }
 
     func items() -> [NotificationInboxItem] {
@@ -122,21 +132,24 @@ final class NotificationInboxStore: @unchecked Sendable {
         queue.sync {
             let items = loadItemsLocked()
             guard !items.isEmpty else { return }
-            defaults.removeObject(forKey: Keys.inbox)
+            cachedItems = []
+            persistenceQueue.async { [self] in
+                defaults.removeObject(forKey: Keys.inbox)
+            }
         }
     }
 
     private func loadItemsLocked() -> [NotificationInboxItem] {
-        guard let data = defaults.data(forKey: Keys.inbox) else { return [] }
-        guard let decoded = try? decoder.decode([NotificationInboxItem].self, from: data) else {
-            defaults.removeObject(forKey: Keys.inbox)
-            return []
-        }
-        return decoded
+        cachedItems
     }
 
     private func saveItemsLocked(_ items: [NotificationInboxItem]) {
         guard let data = try? encoder.encode(items) else { return }
-        defaults.set(data, forKey: Keys.inbox)
+        cachedItems = items
+        // Enqueue while serialized to preserve mutation order, but never wait here.
+        // UserDefaults synchronously notifies SwiftUI observers on the writing thread.
+        persistenceQueue.async { [self] in
+            defaults.set(data, forKey: Keys.inbox)
+        }
     }
 }

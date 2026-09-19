@@ -4,6 +4,17 @@ import Testing
 
 @Suite("TimePeriod Model")
 struct TimePeriodTests {
+    @Test("Axis ticks stay bounded for every period across long history", arguments: TimePeriod.allCases)
+    func visibleAxisTicksAreBounded(period: TimePeriod) {
+        for position in [Date(timeIntervalSince1970: 1_293_840_000), Date()] {
+            let dates = period.visibleAxisDates(around: position)
+            #expect(!dates.isEmpty)
+            #expect(dates.count < 32)
+            #expect(dates == dates.sorted())
+            #expect(Set(dates).count == dates.count)
+            #expect(dates.contains { $0 >= position && $0 <= position.addingTimeInterval(period.visibleDomainSeconds) })
+        }
+    }
 
     // MARK: - dateRange
 

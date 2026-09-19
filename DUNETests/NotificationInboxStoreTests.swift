@@ -4,6 +4,41 @@ import Testing
 
 @Suite("NotificationInboxStore")
 struct NotificationInboxStoreTests {
+    @Test("UI reads remain available while persistence is blocked")
+    func readsDoNotWaitForPersistence() async {
+        let defaults = UserDefaults(suiteName: "InboxBlocked.\(UUID().uuidString)")!
+        let persistence = DispatchQueue(label: "test.inbox.persistence.blocked")
+        let store = NotificationInboxStore(defaults: defaults, persistenceQueue: persistence)
+        persistence.suspend()
+        let item = store.append(insight: sampleInsight(workoutID: "blocked"))
+        await MainActor.run {
+            #expect(store.unreadCount() == 1)
+            #expect(store.item(withID: item.id)?.id == item.id)
+            _ = store.markRead(id: item.id)
+            #expect(store.unreadCount() == 0)
+        }
+        persistence.resume()
+        await withCheckedContinuation { continuation in
+            persistence.async { continuation.resume() }
+        }
+        let reloaded = NotificationInboxStore(defaults: defaults)
+        #expect(reloaded.item(withID: item.id)?.isRead == true)
+    }
+
+    @Test("Persistence preserves append, deleteAll, and subsequent append ordering")
+    func persistenceOrdering() async {
+        let defaults = UserDefaults(suiteName: "InboxOrdering.\(UUID().uuidString)")!
+        let persistence = DispatchQueue(label: "test.inbox.persistence.ordering")
+        let store = NotificationInboxStore(defaults: defaults, persistenceQueue: persistence)
+        _ = store.append(insight: sampleInsight(workoutID: "old"))
+        store.deleteAll()
+        let retained = store.append(insight: sampleInsight(workoutID: "new"))
+        await withCheckedContinuation { continuation in
+            persistence.async { continuation.resume() }
+        }
+        let reloaded = NotificationInboxStore(defaults: defaults)
+        #expect(reloaded.items().map(\.id) == [retained.id])
+    }
 
     @Test("append stores unread item and keeps latest-first ordering")
     func appendAndSortLatestFirst() {

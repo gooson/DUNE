@@ -84,6 +84,18 @@ struct BodyCompositionQueryService: BodyCompositionQuerying, Sendable {
     }
 
     func fetchWeight(start: Date, end: Date) async throws -> [BodyCompositionSample] {
+#if DEBUG && targetEnvironment(simulator)
+        if ProcessInfo.processInfo.arguments.contains("--uitesting"),
+           ProcessInfo.processInfo.arguments.contains("--uitest-long-weight-history") {
+            let oldest = Date(timeIntervalSince1970: 1_293_840_000)
+            let count = max(0, Int(end.timeIntervalSince(oldest) / 86400))
+            return (0...count).compactMap { index in
+                let date = oldest.addingTimeInterval(Double(index) * 86400)
+                guard date >= start, date <= end else { return nil }
+                return BodyCompositionSample(value: 75 + sin(Double(index) / 30) * 3, date: date)
+            }
+        }
+#endif
         if let mockData = SimulatorAdvancedMockDataProvider.current() {
             return mockData.weightSamples(start: start, end: end)
         }

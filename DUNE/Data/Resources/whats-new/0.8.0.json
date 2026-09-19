@@ -1,0 +1,40 @@
+{
+  "version": "0.8.0",
+  "features": [
+    {
+      "id": "ios27Support",
+      "titleKey": "iOS 27 Support",
+      "summaryKey": "Refined for iOS 27, with the familiar experience you know.",
+      "symbolName": "iphone",
+      "area": "today"
+    },
+    {
+      "id": "healthMetricHistory",
+      "titleKey": "Health Metric History",
+      "summaryKey": "Explore older records across your health metrics, including records separated by long gaps.",
+      "symbolName": "clock.arrow.circlepath",
+      "area": "wellness"
+    },
+    {
+      "id": "smootherHistoryCharts",
+      "titleKey": "Smoother History Charts",
+      "summaryKey": "Browse past dates with earlier data loading and a steadier weight chart scale.",
+      "symbolName": "chart.xyaxis.line",
+      "area": "wellness"
+    },
+    {
+      "id": "stressHistoryDetails",
+      "titleKey": "Stress History Details",
+      "summaryKey": "Open your cumulative stress score to explore its history in a dedicated detail view.",
+      "symbolName": "waveform.path.ecg",
+      "area": "today"
+    },
+    {
+      "id": "clearerSectionNavigation",
+      "titleKey": "Clearer Section Navigation",
+      "summaryKey": "Use section header arrows to open more details across Today, Activity, Wellness, and Life.",
+      "symbolName": "chevron.right",
+      "area": "today"
+    }
+  ]
+}

@@ -3,7 +3,7 @@ import Foundation
 // MARK: - Base Data Point
 
 /// Single value data point for line/bar/area charts.
-struct ChartDataPoint: Identifiable, Sendable {
+struct ChartDataPoint: Identifiable, Sendable, Equatable {
     var id: Date { date }
     let date: Date
     let value: Double

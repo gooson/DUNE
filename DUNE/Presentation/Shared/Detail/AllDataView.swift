@@ -22,7 +22,7 @@ struct AllDataView: View {
                 ProgressView()
                     .frame(maxWidth: .infinity)
                     .listRowSeparator(.hidden)
-                    .task {
+                    .task(id: viewModel.dataPoints.count) {
                         await viewModel.loadNextPage()
                     }
             }

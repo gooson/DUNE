@@ -6,21 +6,27 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
     override var initialTabSelectionArgument: String? { "train" }
 
     func testRHRDetailChartScrollsToPastData() throws {
+        launchLongMetricHistory()
         openDashboardMetricDetail("rhr")
         assertDetailChartScrollsToPastData(category: "rhr")
     }
 
     func testSleepDetailChartScrollsToPastData() throws {
+        launchLongMetricHistory()
         openDashboardMetricDetail("sleep")
         assertDetailChartScrollsToPastData(category: "sleep")
     }
 
     func testStepsDetailChartScrollsToPastData() throws {
+        launchLongMetricHistory()
         openDashboardMetricDetail("steps")
         assertDetailChartScrollsToPastData(category: "steps")
     }
 
     func testWeightDetailChartScrollsToPastData() throws {
+        app.terminate()
+        app.launchArguments.append("--uitest-long-weight-history")
+        app.launch()
         navigateToWellness()
 
         XCTAssertTrue(
@@ -31,6 +37,21 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
         weightCard.tap()
 
         assertDetailChartScrollsToPastData(category: "weight")
+
+        // Match the reported rapid year-by-year navigation, not just one weekly drag.
+        let periods = app.segmentedControls.firstMatch
+        XCTAssertTrue(periods.waitForExistence(timeout: 5))
+        periods.buttons.element(boundBy: 4).tap()
+        let visibleRange = waitForElement(AXID.detailChartVisibleRange, timeout: 10)
+        let chart = waitForElement(AXID.detailChartSurface, timeout: 10)
+        for _ in 0..<5 {
+            let before = visibleRange.label
+            let start = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.15, dy: 0.55))
+            let end = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.85, dy: 0.55))
+            start.press(forDuration: 0.05, thenDragTo: end)
+            XCTAssertNotEqual(waitForLabelChange(of: visibleRange, from: before, timeout: 3), before)
+            XCTAssertTrue(chart.exists)
+        }
     }
 
     func testWeeklyStatsLongPressKeepsPeriodAndActivatesSelection() throws {
@@ -183,6 +204,7 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
     }
 
     func testHRVDetailChartScrollsToPastData() throws {
+        launchLongMetricHistory()
         openWellnessMetricDetail(AXID.wellnessCardHRV)
         assertDetailChartScrollsToPastData(category: "hrv")
     }
@@ -244,8 +266,8 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
         let initialRange = visibleRange.label
         XCTAssertEqual(selectionProbe.label, "none", "Selection probe should be empty before quick drag")
 
-        let start = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.80, dy: 0.55))
-        let end = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.20, dy: 0.55))
+        let start = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.20, dy: 0.55))
+        let end = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.80, dy: 0.55))
         start.press(forDuration: 0.05, thenDragTo: end)
 
         if visibleRange.label == initialRange {
@@ -277,8 +299,8 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
         selectionStart.press(forDuration: 0.45, thenDragTo: selectionEnd)
 
         let rangeAfterSelection = visibleRange.label
-        let scrollStart = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.80, dy: 0.55))
-        let scrollEnd = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.20, dy: 0.55))
+        let scrollStart = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.20, dy: 0.55))
+        let scrollEnd = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.80, dy: 0.55))
         scrollStart.press(forDuration: 0.05, thenDragTo: scrollEnd)
 
         if visibleRange.label == rangeAfterSelection {
@@ -300,19 +322,21 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
         let visibleRange = waitForElement(AXID.detailChartVisibleRange, timeout: 15)
         let chart = waitForElement(AXID.detailChartSurface, timeout: 15)
 
+        let rangeBeforeScroll = visibleRange.label
         let firstSelectionStart = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.42, dy: 0.55))
         let firstSelectionEnd = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.58, dy: 0.55))
         firstSelectionStart.press(forDuration: 0.45, thenDragTo: firstSelectionEnd)
 
-        let scrollStart = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.80, dy: 0.55))
-        let scrollEnd = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.20, dy: 0.55))
+        let scrollStart = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.20, dy: 0.55))
+        let scrollEnd = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.80, dy: 0.55))
         scrollStart.press(forDuration: 0.05, thenDragTo: scrollEnd)
 
         if app.descendants(matching: .any)[AXID.chartSelectionOverlay].firstMatch.exists {
             scrollStart.press(forDuration: 0.05, thenDragTo: scrollEnd)
         }
 
-        let rangeAfterScroll = visibleRange.label
+        let rangeAfterScroll = waitForLabelChange(of: visibleRange, from: rangeBeforeScroll, timeout: 3)
+        XCTAssertNotEqual(rangeAfterScroll, rangeBeforeScroll, "Drag must actually reach historical data")
         XCTAssertTrue(
             app.descendants(matching: .any)[AXID.chartSelectionOverlay].firstMatch.waitForNonExistence(timeout: 2),
             "Scrolling after selection should clear any stale chart overlay"
@@ -518,6 +542,12 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
         return element.exists && element.isHittable
     }
 
+    private func launchLongMetricHistory() {
+        app.terminate()
+        app.launchArguments.append("--uitest-long-metric-history")
+        app.launch()
+    }
+
     private func assertDetailChartScrollsToPastData(category: String) {
         let detailScreen = waitForElement(AXID.metricDetailScreen(category), timeout: 15)
         XCTAssertTrue(detailScreen.exists, "\(category) detail should open from seeded navigation")
@@ -532,6 +562,16 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
             initialRange,
             "Horizontal drag on the \(category) chart should reveal an older visible range"
         )
+        if app.launchArguments.contains("--uitest-long-metric-history") {
+            for _ in 0..<6 {
+                let before = visibleRange.label
+                let start = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.15, dy: 0.55))
+                let end = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.85, dy: 0.55))
+                start.press(forDuration: 0.05, thenDragTo: end)
+                XCTAssertNotEqual(waitForLabelChange(of: visibleRange, from: before, timeout: 3), before)
+                XCTAssertTrue(chart.exists, "History replacement must retain the scroll surface")
+            }
+        }
     }
 
     private func visibleRangeValue(of element: XCUIElement) -> String {

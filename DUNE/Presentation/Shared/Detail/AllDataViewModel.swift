@@ -23,8 +23,9 @@ final class AllDataViewModel {
     private let vitalsService: VitalsQuerying
     private let breathingDisturbanceService: BreathingDisturbanceQuerying
 
-    private var currentPage = 0
-    private let pageSize = 30 // days per page
+    private let historyService: any MetricHistoryQuerying
+    private var pageEnd = Date()
+    private let pageSize = 30 // calendar days per page
     private var pageRequestID = 0
 
     init(
@@ -36,8 +37,10 @@ final class AllDataViewModel {
         heartRateService: HeartRateQuerying? = nil,
         vitalsService: VitalsQuerying? = nil,
         breathingDisturbanceService: BreathingDisturbanceQuerying? = nil,
+        historyService: (any MetricHistoryQuerying)? = nil,
         healthKitManager: HealthKitManager = .shared
     ) {
+        self.historyService = historyService ?? MetricHistoryQueryService(manager: healthKitManager)
         self.hrvService = hrvService ?? HRVQueryService(manager: healthKitManager)
         self.sleepService = sleepService ?? SleepQueryService(manager: healthKitManager)
         self.stepsService = stepsService ?? StepsQueryService(manager: healthKitManager)
@@ -54,7 +57,7 @@ final class AllDataViewModel {
 
     func loadInitialData() async {
         resetPageRequests()
-        currentPage = 0
+        pageEnd = Calendar.current.date(byAdding: .day, value: 1, to: Calendar.current.startOfDay(for: Date())) ?? Date()
         dataPoints = []
         hasMoreData = true
         isLoading = false
@@ -67,17 +70,33 @@ final class AllDataViewModel {
         isLoading = true
         defer { finishPageRequest(requestID) }
 
-        let startDay = currentPage * pageSize
-        let endDay = startDay + pageSize
-
         do {
-            let newPoints = try await fetchData(fromDaysAgo: endDay, toDaysAgo: startDay)
-            guard isCurrentPageRequest(requestID) else { return }
-            if newPoints.isEmpty {
-                hasMoreData = false
-            } else {
-                dataPoints.append(contentsOf: newPoints)
-                currentPage += 1
+            var end = pageEnd
+            while isCurrentPageRequest(requestID) {
+                let start = Calendar.current.date(byAdding: .day, value: -pageSize, to: end) ?? end
+                let points = try await fetchData(start: start, end: end)
+                guard isCurrentPageRequest(requestID) else { return }
+                if !points.isEmpty {
+                    dataPoints.append(contentsOf: points)
+                    pageEnd = start
+                    return
+                }
+                // An empty month is not the end of history. Jump directly to the
+                // previous sample rather than issuing one query for every empty day.
+                guard let previous = try await historyService.latestDate(for: category, before: start) else {
+                    guard isCurrentPageRequest(requestID) else { return }
+                    hasMoreData = false
+                    return
+                }
+                guard previous < start else { throw HistoryError.invalidCursor }
+                let day = Calendar.current.startOfDay(for: previous)
+                end = Calendar.current.date(byAdding: .day, value: 1, to: day) ?? start
+                // Sleep samples can begin the evening before their reporting day.
+                if category == .sleep {
+                    end = min(start, end.addingTimeInterval(86400))
+                }
+                end = min(start, end)
+                await Task.yield()
             }
         } catch {
             guard isCurrentPageRequest(requestID) else { return }
@@ -85,6 +104,8 @@ final class AllDataViewModel {
             hasMoreData = false
         }
     }
+
+    private enum HistoryError: Error { case invalidCursor }
 
     // MARK: - Grouped Data
 
@@ -122,156 +143,78 @@ final class AllDataViewModel {
         }
     }
 
-    private func fetchData(fromDaysAgo: Int, toDaysAgo: Int) async throws -> [ChartDataPoint] {
+    private func fetchData(start: Date, end: Date) async throws -> [ChartDataPoint] {
+        let points: [ChartDataPoint]
         switch category {
         case .hrv:
-            let samples = try await hrvService.fetchHRVSamples(days: fromDaysAgo)
-            let calendar = Calendar.current
-            let cutoff = calendar.date(byAdding: .day, value: -toDaysAgo, to: Date()) ?? Date()
-            return samples
-                .filter { $0.date <= cutoff }
+            points = try await hrvService.fetchHRVSamples(start: start, end: end)
                 .map { ChartDataPoint(date: $0.date, value: $0.value) }
-
         case .rhr:
-            var points: [ChartDataPoint] = []
-            let calendar = Calendar.current
-            try await withThrowingTaskGroup(of: (Date, Double?).self) { group in
-                for dayOffset in toDaysAgo..<fromDaysAgo {
-                    guard let date = calendar.date(byAdding: .day, value: -dayOffset, to: Date()) else { continue }
-                    group.addTask { [hrvService] in
-                        let rhr = try await hrvService.fetchRestingHeartRate(for: date)
-                        return (date, rhr)
-                    }
-                }
-                for try await (date, rhr) in group {
-                    if let rhr { points.append(ChartDataPoint(date: date, value: rhr)) }
-                }
-            }
-            return points.sorted(by: { $0.date > $1.date })
-
+            points = try await hrvService.fetchRHRCollection(start: start, end: end, interval: DateComponents(day: 1))
+                .map { ChartDataPoint(date: $0.date, value: $0.average) }
         case .sleep:
-            var points: [ChartDataPoint] = []
-            let calendar = Calendar.current
-            try await withThrowingTaskGroup(of: ChartDataPoint?.self) { group in
-                for dayOffset in toDaysAgo..<fromDaysAgo {
-                    guard let referenceDate = calendar.date(byAdding: .day, value: -dayOffset, to: Date()) else { continue }
-                    let dayAnchor = calendar.startOfDay(for: referenceDate)
-                    group.addTask { [sleepService] in
-                        let stages = try await sleepService.fetchSleepStages(for: referenceDate)
-                        // Align with SleepSummary/score policy: sleep duration excludes awake stage.
-                        let sleepStages = stages.filter { $0.stage != .awake }
-                        let total = sleepStages.reduce(0.0) { $0 + $1.duration } / 60.0
-                        guard total > 0 else { return nil }
-
-                        let displayDate = sleepStages.min(by: { $0.startDate < $1.startDate })?.startDate
-                        return ChartDataPoint(date: dayAnchor, value: total, displayDate: displayDate)
+            let service = sleepService
+            points = try await withThrowingTaskGroup(of: ChartDataPoint?.self) { group in
+                var day = start
+                while day < end {
+                    let date = day
+                    group.addTask {
+                        let stages = try await service.fetchSleepStages(for: date).filter { $0.stage != .awake }
+                        let minutes = stages.reduce(0.0) { $0 + $1.duration } / 60
+                        guard minutes > 0 else { return nil }
+                        return ChartDataPoint(date: date, value: minutes, displayDate: stages.map(\.startDate).min())
                     }
+                    day = Calendar.current.date(byAdding: .day, value: 1, to: day) ?? end
                 }
+                var result: [ChartDataPoint] = []
                 for try await point in group {
-                    if let point { points.append(point) }
+                    if let point { result.append(point) }
                 }
+                return result
             }
-            return points.sorted(by: { $0.date > $1.date })
-
         case .steps:
-            var points: [ChartDataPoint] = []
-            let calendar = Calendar.current
-            try await withThrowingTaskGroup(of: (Date, Double?).self) { group in
-                for dayOffset in toDaysAgo..<fromDaysAgo {
-                    guard let date = calendar.date(byAdding: .day, value: -dayOffset, to: Date()) else { continue }
-                    group.addTask { [stepsService] in
-                        let steps = try await stepsService.fetchSteps(for: date)
-                        return (date, steps)
-                    }
-                }
-                for try await (date, steps) in group {
-                    if let steps { points.append(ChartDataPoint(date: date, value: steps)) }
-                }
-            }
-            return points.sorted(by: { $0.date > $1.date })
-
+            points = try await stepsService.fetchStepsCollection(start: start, end: end, interval: DateComponents(day: 1))
+                .map { ChartDataPoint(date: $0.date, value: $0.sum) }
         case .exercise:
-            let workouts = try await workoutService.fetchWorkouts(days: fromDaysAgo)
-            let calendar = Calendar.current
-            let cutoff = calendar.date(byAdding: .day, value: -toDaysAgo, to: Date()) ?? Date()
-            return workouts
-                .filter { $0.date <= cutoff }
+            points = try await workoutService.fetchWorkouts(start: start, end: end)
                 .map { ChartDataPoint(date: $0.date, value: $0.duration / 60.0) }
-                .sorted(by: { $0.date > $1.date })
-
         case .weight:
-            let samples = try await bodyService.fetchWeight(days: fromDaysAgo)
-            let calendar = Calendar.current
-            let cutoff = calendar.date(byAdding: .day, value: -toDaysAgo, to: Date()) ?? Date()
-            return samples
-                .filter { $0.date <= cutoff }
+            points = try await bodyService.fetchWeight(start: start, end: end)
                 .map { ChartDataPoint(date: $0.date, value: $0.value) }
-                .sorted(by: { $0.date > $1.date })
-
         case .bmi:
-            let start = Calendar.current.date(byAdding: .day, value: -fromDaysAgo, to: Date()) ?? Date()
-            let cutoff = Calendar.current.date(byAdding: .day, value: -toDaysAgo, to: Date()) ?? Date()
-            let samples = try await bodyService.fetchBMI(start: start, end: cutoff)
-            return samples
+            points = try await bodyService.fetchBMI(start: start, end: end)
                 .map { ChartDataPoint(date: $0.date, value: $0.value) }
-                .sorted(by: { $0.date > $1.date })
-
-        case .heartRate:
-            let samples = try await heartRateService.fetchHeartRateHistory(days: fromDaysAgo)
-            return samples
-                .map { ChartDataPoint(date: $0.date, value: $0.value) }
-                .sorted(by: { $0.date > $1.date })
-
         case .bodyFat:
-            let samples = try await bodyService.fetchBodyFat(days: fromDaysAgo)
-            return samples
+            points = try await bodyService.fetchBodyFat(start: start, end: end)
                 .map { ChartDataPoint(date: $0.date, value: $0.value) }
-                .sorted(by: { $0.date > $1.date })
-
         case .leanBodyMass:
-            let samples = try await bodyService.fetchLeanBodyMass(days: fromDaysAgo)
-            return samples
+            points = try await bodyService.fetchLeanBodyMass(start: start, end: end)
                 .map { ChartDataPoint(date: $0.date, value: $0.value) }
-                .sorted(by: { $0.date > $1.date })
-
+        case .heartRate:
+            points = try await heartRateService.fetchHeartRateHistory(start: start, end: end)
+                .map { ChartDataPoint(date: $0.date, value: $0.value) }
         case .spo2:
-            let samples = try await vitalsService.fetchSpO2Collection(days: fromDaysAgo)
-            return samples
+            points = try await vitalsService.fetchSpO2Collection(start: start, end: end)
                 .map { ChartDataPoint(date: $0.date, value: $0.value) }
-                .sorted(by: { $0.date > $1.date })
-
         case .respiratoryRate:
-            let samples = try await vitalsService.fetchRespiratoryRateCollection(days: fromDaysAgo)
-            return samples
+            points = try await vitalsService.fetchRespiratoryRateCollection(start: start, end: end)
                 .map { ChartDataPoint(date: $0.date, value: $0.value) }
-                .sorted(by: { $0.date > $1.date })
-
         case .vo2Max:
-            let samples = try await vitalsService.fetchVO2MaxHistory(days: fromDaysAgo)
-            return samples
+            points = try await vitalsService.fetchVO2MaxHistory(start: start, end: end)
                 .map { ChartDataPoint(date: $0.date, value: $0.value) }
-                .sorted(by: { $0.date > $1.date })
-
         case .heartRateRecovery:
-            let samples = try await vitalsService.fetchHeartRateRecoveryHistory(days: fromDaysAgo)
-            return samples
+            points = try await vitalsService.fetchHeartRateRecoveryHistory(start: start, end: end)
                 .map { ChartDataPoint(date: $0.date, value: $0.value) }
-                .sorted(by: { $0.date > $1.date })
-
         case .wristTemperature:
-            let samples = try await vitalsService.fetchWristTemperatureCollection(days: fromDaysAgo)
-            return samples
+            points = try await vitalsService.fetchWristTemperatureCollection(start: start, end: end)
                 .map { ChartDataPoint(date: $0.date, value: $0.value) }
-                .sorted(by: { $0.date > $1.date })
-
         case .breathingDisturbances:
-            let samples = try await breathingDisturbanceService.fetchNightlyDisturbances(days: fromDaysAgo)
-            let calendar = Calendar.current
-            let cutoff = calendar.date(byAdding: .day, value: -toDaysAgo, to: Date()) ?? Date()
-            return samples
-                .filter { $0.date <= cutoff }
+            points = try await breathingDisturbanceService.fetchNightlyDisturbances(start: start, end: end)
                 .map { ChartDataPoint(date: $0.date, value: $0.value) }
-                .sorted(by: { $0.date > $1.date })
         }
+        return await Task.detached(priority: .userInitiated) {
+            // Statistics buckets and raw samples follow the same half-open boundary.
+            points.filter { $0.date >= start && $0.date < end }.sorted { $0.date > $1.date }
+        }.value
     }
 }

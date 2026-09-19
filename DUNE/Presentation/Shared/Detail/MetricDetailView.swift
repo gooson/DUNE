@@ -44,7 +44,7 @@ struct MetricDetailView: View {
                 // intentionally resetting chart @State (e.g. selectedDate) for clean transition.
                 StandardCard {
                     Group {
-                        if viewModel.chartData.isEmpty && !viewModel.isLoading {
+                        if viewModel.chartData.isEmpty && viewModel.earliestHistoryDate == nil && !viewModel.isLoading {
                             chartEmptyState
                         } else {
                             chart
@@ -347,6 +347,7 @@ struct MetricDetailView: View {
                 valueLabel: "Sleep",
                 unitSuffix: " min",
                 trendLine: trend,
+                scrollDomain: viewModel.scrollDomain,
                 scrollPosition: $viewModel.scrollPosition
             )
 
@@ -357,6 +358,7 @@ struct MetricDetailView: View {
                 tintColor: DS.Color.steps,
                 valueLabel: "Steps",
                 trendLine: trend,
+                scrollDomain: viewModel.scrollDomain,
                 scrollPosition: $viewModel.scrollPosition
             )
 
@@ -368,17 +370,19 @@ struct MetricDetailView: View {
                 valueLabel: "Exercise",
                 unitSuffix: viewModel.metricUnit == "km" ? " km" : " min",
                 trendLine: trend,
+                scrollDomain: viewModel.scrollDomain,
                 scrollPosition: $viewModel.scrollPosition
             )
 
         case .weight:
             AreaLineChartView(
-                data: viewModel.chartData,
+                data: viewModel.visibleWeightChartData,
                 period: viewModel.selectedPeriod,
                 tintColor: DS.Color.body,
                 unitSuffix: "kg",
                 trendLine: trend,
                 scrollDomain: viewModel.scrollDomain,
+                fixedYDomain: viewModel.weightYDomain,
                 scrollPosition: $viewModel.scrollPosition
             )
 

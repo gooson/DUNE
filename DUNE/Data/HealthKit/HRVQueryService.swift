@@ -2,10 +2,18 @@ import HealthKit
 
 protocol HRVQuerying: Sendable {
     func fetchHRVSamples(days: Int) async throws -> [HRVSample]
+    func fetchHRVSamples(start: Date, end: Date) async throws -> [HRVSample]
     func fetchRestingHeartRate(for date: Date) async throws -> Double?
     func fetchLatestRestingHeartRate(withinDays days: Int) async throws -> (value: Double, date: Date)?
     func fetchHRVCollection(start: Date, end: Date, interval: DateComponents) async throws -> [(date: Date, average: Double)]
     func fetchRHRCollection(start: Date, end: Date, interval: DateComponents) async throws -> [(date: Date, min: Double, max: Double, average: Double)]
+}
+
+extension HRVQuerying {
+    func fetchHRVSamples(start: Date, end: Date) async throws -> [HRVSample] {
+        let days = max(1, Int(ceil(Date().timeIntervalSince(start) / 86400)))
+        return try await fetchHRVSamples(days: days).filter { $0.date >= start && $0.date < end }
+    }
 }
 
 struct HRVQueryService: HRVQuerying, Sendable {
@@ -19,17 +27,21 @@ struct HRVQueryService: HRVQuerying, Sendable {
         if let mockData = SimulatorAdvancedMockDataProvider.current() {
             return mockData.hrvSamples(days: days)
         }
+        let end = Date()
+        let start = Calendar.current.date(byAdding: .day, value: -days, to: end) ?? end
+        return try await fetchHRVSamples(start: start, end: end)
+    }
+
+    func fetchHRVSamples(start: Date, end: Date) async throws -> [HRVSample] {
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            let days = max(1, Int(ceil(mockData.referenceDate.timeIntervalSince(start) / 86400)))
+            return mockData.hrvSamples(days: days).filter { $0.date >= start && $0.date < end }
+        }
         guard manager.isAvailable else { return [] }
         try await manager.ensureNotDenied(for: HKQuantityType(.heartRateVariabilitySDNN))
-        let calendar = Calendar.current
-        let endDate = Date()
-        guard let startDate = calendar.date(byAdding: .day, value: -days, to: endDate) else {
-            return []
-        }
-
         let predicate = HKQuery.predicateForSamples(
-            withStart: startDate,
-            end: endDate,
+            withStart: start,
+            end: end,
             options: .strictStartDate
         )
 
@@ -115,6 +127,9 @@ struct HRVQueryService: HRVQuerying, Sendable {
         end: Date,
         interval: DateComponents
     ) async throws -> [(date: Date, average: Double)] {
+        if let dates = MetricHistoryQueryService.longHistoryFixtureDates(start: start, end: end, interval: interval) {
+            return dates.map { (date: $0, average: 50 + sin($0.timeIntervalSince1970 / 86400) * 5) }
+        }
         if let mockData = SimulatorAdvancedMockDataProvider.current() {
             return mockData.sharedHealthSnapshot.hrvSamples
                 .filter { $0.date >= start && $0.date < end }
@@ -149,6 +164,9 @@ struct HRVQueryService: HRVQuerying, Sendable {
         end: Date,
         interval: DateComponents
     ) async throws -> [(date: Date, min: Double, max: Double, average: Double)] {
+        if let dates = MetricHistoryQueryService.longHistoryFixtureDates(start: start, end: end, interval: interval) {
+            return dates.map { (date: $0, min: 55, max: 65, average: 60) }
+        }
         if let mockData = SimulatorAdvancedMockDataProvider.current() {
             return mockData.rhrCollection(start: start, end: end)
         }

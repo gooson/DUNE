@@ -18,6 +18,7 @@ struct DUNEApp: App {
     @State private var isLaunchExperienceReady = DUNEApp.shouldBypassLaunchExperienceForTests || DUNEApp.shouldSeedMockData
     @State private var isAdvancingLaunchExperience = false
     @State private var hasAttemptedHealthKitAuthorizationThisLaunch = false
+    @State private var hasCompletedHealthKitAuthorizationThisLaunch = false
     @State private var hasAttemptedNotificationAuthorizationThisLaunch = false
     @State private var isRequestingDeferredAuthorizations = false
     @State private var hasStartedRuntimeServices = false
@@ -482,7 +483,8 @@ struct DUNEApp: App {
                 isEligible: HKHealthStore.isHealthDataAvailable(),
                 hasCompletedRequest: hasRequestedHealthKitAuthorization,
                 hasAttemptedThisLaunch: hasAttemptedHealthKitAuthorizationThisLaunch,
-                shouldBypassLaunchExperience: Self.shouldBypassLaunchExperienceForTests
+                shouldBypassLaunchExperience: Self.shouldBypassLaunchExperienceForTests,
+                revalidateEachLaunch: true
             )
         )
     }
@@ -512,7 +514,7 @@ struct DUNEApp: App {
     }
 
     private var canLoadHealthKitData: Bool {
-        Self.shouldBypassLaunchExperienceForTests || hasRequestedHealthKitAuthorization
+        Self.shouldBypassLaunchExperienceForTests || hasCompletedHealthKitAuthorizationThisLaunch
     }
 
     private var nextLaunchExperienceStep: LaunchExperienceStep {
@@ -647,7 +649,9 @@ struct DUNEApp: App {
             try? await Task.sleep(nanoseconds: 3_000_000_000) // wait for Watch session
             WatchSessionManager.shared.requestWorkoutBulkSync()
         }
-        appRuntime.observerManager?.startObserving()
+        if hasCompletedHealthKitAuthorizationThisLaunch {
+            appRuntime.observerManager?.startObserving()
+        }
         appRuntime.scoreRefreshService.startListening(to: appRuntime.refreshCoordinator)
         Task {
             await BedtimeReminderScheduler.shared.refreshSchedule()
@@ -680,6 +684,12 @@ struct DUNEApp: App {
             do {
                 try await HealthKitManager.shared.requestAuthorization()
                 hasRequestedHealthKitAuthorization = true
+                // A persisted flag can outlive device permissions or the requested type set.
+                // Discard snapshots fetched before this launch's authorization completed.
+                await appRuntime.refreshCoordinator.invalidateCacheOnly()
+                hasCompletedHealthKitAuthorizationThisLaunch = true
+                appRuntime.observerManager?.startObserving()
+                await appRuntime.refreshCoordinator.forceRefresh()
             } catch {
                 AppLogger.healthKit.error("Deferred HealthKit authorization failed: \(error.localizedDescription)")
             }

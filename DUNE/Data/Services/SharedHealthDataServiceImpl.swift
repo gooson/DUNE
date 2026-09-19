@@ -18,6 +18,7 @@ actor SharedHealthDataServiceImpl: SharedHealthDataService {
     private var cachedSnapshot: SharedHealthSnapshot?
     private var cacheExpiresAt: Date?
     private var inFlightTask: Task<SharedHealthSnapshot, Never>?
+    private var cacheGeneration = 0
 
     init(
         healthKitManager: HealthKitManager = .shared,
@@ -56,20 +57,24 @@ actor SharedHealthDataServiceImpl: SharedHealthDataService {
             return await inFlightTask.value
         }
 
+        let generation = cacheGeneration
         let task = Task { [self] in
             await buildSnapshot(referenceDate: now)
         }
         inFlightTask = task
 
         let snapshot = await task.value
-        cachedSnapshot = snapshot
-        cacheExpiresAt = nowProvider().addingTimeInterval(cacheTTL)
-        inFlightTask = nil
+        if generation == cacheGeneration {
+            cachedSnapshot = snapshot
+            cacheExpiresAt = nowProvider().addingTimeInterval(cacheTTL)
+            inFlightTask = nil
+        }
 
         return snapshot
     }
 
     func invalidateCache() async {
+        cacheGeneration += 1
         cachedSnapshot = nil
         cacheExpiresAt = nil
         inFlightTask = nil

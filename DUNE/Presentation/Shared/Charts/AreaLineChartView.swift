@@ -10,6 +10,7 @@ struct AreaLineChartView: View {
     var unitSuffix: String = "kg"
     var trendLine: [ChartDataPoint]?
     var scrollDomain: ClosedRange<Date>?
+    var fixedYDomain: ClosedRange<Double>?
     @Binding var scrollPosition: Date
 
     @ScaledMetric(relativeTo: .body) private var chartHeight: CGFloat = 220
@@ -79,7 +80,7 @@ struct AreaLineChartView: View {
             .chartXScale(domain: effectiveXDomain)
             .chartYScale(domain: yDomain)
             .chartXAxis {
-                AxisMarks(values: .stride(by: period.strideComponent, count: period.strideCount)) { _ in
+                AxisMarks(values: period.visibleAxisDates(around: scrollPosition)) { _ in
                     AxisValueLabel(format: period.axisLabelFormat)
                         .foregroundStyle(theme.sandColor)
                     AxisGridLine()
@@ -141,6 +142,7 @@ struct AreaLineChartView: View {
 
     /// Y-axis domain with padding around min/max values.
     private var yDomain: ClosedRange<Double> {
+        if let fixedYDomain { return fixedYDomain }
         guard let minVal = data.map(\.value).min(),
               let maxVal = data.map(\.value).max() else {
             return 0...100

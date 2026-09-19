@@ -10,9 +10,9 @@ enum TimePeriod: String, CaseIterable, Sendable {
 
     /// The date range for this period ending now, shifted by `offset` periods backward (negative) or forward.
     /// `offset = 0` is the current period, `offset = -1` is the previous period, etc.
-    func dateRange(offset: Int = 0) -> (start: Date, end: Date) {
+    func dateRange(offset: Int = 0, referenceDate: Date = Date()) -> (start: Date, end: Date) {
         let calendar = Calendar.current
-        let now = Date()
+        let now = referenceDate
         let startOfToday = calendar.startOfDay(for: now)
 
         // First compute current period end/start
@@ -82,6 +82,22 @@ enum TimePeriod: String, CaseIterable, Sendable {
         case .sixMonths: 1  // Every month
         case .year: 2       // Every 2 months
         }
+    }
+
+    /// Explicit ticks for the visible window and one buffer on each side.
+    /// A stride over a multi-year chart domain can create thousands of offscreen labels.
+    func visibleAxisDates(around position: Date, calendar: Calendar = .current) -> [Date] {
+        let start = position.addingTimeInterval(-visibleDomainSeconds)
+        let end = position.addingTimeInterval(visibleDomainSeconds * 2)
+        var date = calendar.dateInterval(of: strideComponent, for: start)?.start ?? start
+        var dates: [Date] = []
+        while date <= end, dates.count < 64 {
+            dates.append(date)
+            guard let next = calendar.date(byAdding: strideComponent, value: strideCount, to: date),
+                  next > date else { break }
+            date = next
+        }
+        return dates
     }
 
     /// Calendar component for data aggregation grouping.

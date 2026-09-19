@@ -3,8 +3,16 @@ import HealthKit
 
 protocol BreathingDisturbanceQuerying: Sendable {
     func fetchNightlyDisturbances(days: Int) async throws -> [BreathingDisturbanceSample]
+    func fetchNightlyDisturbances(start: Date, end: Date) async throws -> [BreathingDisturbanceSample]
     func fetchLatestDisturbance(withinDays days: Int) async throws -> BreathingDisturbanceSample?
     func analyze(samples: [BreathingDisturbanceSample]) -> BreathingDisturbanceAnalysis
+}
+
+extension BreathingDisturbanceQuerying {
+    func fetchNightlyDisturbances(start: Date, end: Date) async throws -> [BreathingDisturbanceSample] {
+        let days = max(1, Int(ceil(Date().timeIntervalSince(start) / 86400)))
+        return try await fetchNightlyDisturbances(days: days).filter { $0.date >= start && $0.date < end }
+    }
 }
 
 struct BreathingDisturbanceQueryService: BreathingDisturbanceQuerying, Sendable {
@@ -21,12 +29,15 @@ struct BreathingDisturbanceQueryService: BreathingDisturbanceQuerying, Sendable 
     }
 
     func fetchNightlyDisturbances(days: Int) async throws -> [BreathingDisturbanceSample] {
+        let end = Date()
+        let start = Calendar.current.date(byAdding: .day, value: -days, to: end) ?? end
+        return try await fetchNightlyDisturbances(start: start, end: end)
+    }
+
+    func fetchNightlyDisturbances(start: Date, end: Date) async throws -> [BreathingDisturbanceSample] {
         let quantityType = HKQuantityType(.appleSleepingBreathingDisturbances)
         try await manager.ensureNotDenied(for: quantityType)
-
-        let now = Date()
-        let start = Calendar.current.date(byAdding: .day, value: -days, to: now)!
-        let predicate = HKQuery.predicateForSamples(withStart: start, end: now, options: .strictStartDate)
+        let predicate = HKQuery.predicateForSamples(withStart: start, end: end, options: .strictStartDate)
 
         let query = HKSampleQueryDescriptor(
             predicates: [.quantitySample(type: quantityType, predicate: predicate)],
