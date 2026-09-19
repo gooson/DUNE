@@ -123,6 +123,12 @@ private struct StubBodyService: BodyCompositionQuerying {
 private actor StubHeartRateService: HeartRateQuerying {
     var historySamples: [VitalSample] = []
     private(set) var requestedIntervals: [DateComponents] = []
+    private var suspendNext = false
+    private var release: CheckedContinuation<Void, Never>?
+    func suspendNextFetch() { suspendNext = true }
+    func isSuspended() -> Bool { release != nil }
+    func resumeFetch() { release?.resume(); release = nil }
+
 
     init(historySamples: [VitalSample] = []) {
         self.historySamples = historySamples
@@ -137,6 +143,10 @@ private actor StubHeartRateService: HeartRateQuerying {
     func fetchHeartRateHistory(start: Date, end: Date) async throws -> [VitalSample] { historySamples }
     func fetchHeartRateHistory(start: Date, end: Date, interval: DateComponents) async throws -> [VitalSample] {
         requestedIntervals.append(interval)
+        if suspendNext {
+            suspendNext = false
+            await withCheckedContinuation { release = $0 }
+        }
         return historySamples
     }
     func fetchHeartRateZones(forWorkoutID workoutID: String, maxHR: Double) async throws -> [HeartRateZone] { [] }
@@ -177,6 +187,22 @@ struct MetricDetailViewModelTests {
             heartRateService: heartRate,
             historyService: history
         )
+    }
+
+    @Test("A period reload cannot be superseded by scroll prefetch")
+    func periodReloadWinsOverScroll() async {
+        let service = StubHeartRateService(historySamples: [VitalSample(value: 60, date: Date())])
+        let vm = makeVM(heartRate: service)
+        vm.configure(category: .heartRate, currentValue: 60, lastUpdated: Date())
+        await vm.loadData()
+        await service.suspendNextFetch()
+        vm.selectedPeriod = .year
+        while !(await service.isSuspended()) { await Task.yield() }
+        await vm.loadVisibleHistoryIfNeeded()
+        #expect(await service.requestedIntervals.count == 2)
+        await service.resumeFetch()
+        while vm.isLoading { await Task.yield() }
+        #expect(vm.summaryStats?.count == 1)
     }
 
     @Test("Scrolling inside a loaded recent window does not refetch")
