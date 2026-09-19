@@ -40,6 +40,7 @@ struct ScoreDetailChartHeader: View {
                 )
             }
             .buttonStyle(.plain)
+            .accessibilityIdentifier("score-chart-trend-toggle")
             .sensoryFeedback(.selection, trigger: showTrendLine)
         }
     }

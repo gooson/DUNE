@@ -27,10 +27,12 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
     }
 
     private func assertScoreTrendFollowsHistoryScroll() {
-        let trend = app.buttons["Trend"].firstMatch
+        let trend = app.buttons["score-chart-trend-toggle"].firstMatch
         XCTAssertTrue(trend.waitForExistence(timeout: 15))
         if !trend.isHittable { app.scrollViews.firstMatch.swipeUp() }
         trend.tap()
+        // Bring the complete plot above the tab bar before a horizontal drag.
+        app.scrollViews.firstMatch.swipeUp()
         let probe = waitForElement("chart-trend-probe", timeout: 15)
         let hasTrend = NSPredicate { _, _ in probe.label != "none" && !probe.label.isEmpty }
         expectation(for: hasTrend, evaluatedWith: probe)
