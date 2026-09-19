@@ -251,8 +251,8 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
         let initialRange = visibleRange.label
         XCTAssertEqual(selectionProbe.label, "none", "Selection probe should be empty before quick drag")
 
-        let start = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.80, dy: 0.55))
-        let end = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.20, dy: 0.55))
+        let start = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.20, dy: 0.55))
+        let end = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.80, dy: 0.55))
         start.press(forDuration: 0.05, thenDragTo: end)
 
         if visibleRange.label == initialRange {
@@ -284,8 +284,8 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
         selectionStart.press(forDuration: 0.45, thenDragTo: selectionEnd)
 
         let rangeAfterSelection = visibleRange.label
-        let scrollStart = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.80, dy: 0.55))
-        let scrollEnd = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.20, dy: 0.55))
+        let scrollStart = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.20, dy: 0.55))
+        let scrollEnd = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.80, dy: 0.55))
         scrollStart.press(forDuration: 0.05, thenDragTo: scrollEnd)
 
         if visibleRange.label == rangeAfterSelection {
@@ -307,19 +307,21 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
         let visibleRange = waitForElement(AXID.detailChartVisibleRange, timeout: 15)
         let chart = waitForElement(AXID.detailChartSurface, timeout: 15)
 
+        let rangeBeforeScroll = visibleRange.label
         let firstSelectionStart = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.42, dy: 0.55))
         let firstSelectionEnd = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.58, dy: 0.55))
         firstSelectionStart.press(forDuration: 0.45, thenDragTo: firstSelectionEnd)
 
-        let scrollStart = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.80, dy: 0.55))
-        let scrollEnd = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.20, dy: 0.55))
+        let scrollStart = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.20, dy: 0.55))
+        let scrollEnd = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.80, dy: 0.55))
         scrollStart.press(forDuration: 0.05, thenDragTo: scrollEnd)
 
         if app.descendants(matching: .any)[AXID.chartSelectionOverlay].firstMatch.exists {
             scrollStart.press(forDuration: 0.05, thenDragTo: scrollEnd)
         }
 
-        let rangeAfterScroll = visibleRange.label
+        let rangeAfterScroll = waitForLabelChange(of: visibleRange, from: rangeBeforeScroll, timeout: 3)
+        XCTAssertNotEqual(rangeAfterScroll, rangeBeforeScroll, "Drag must actually reach historical data")
         XCTAssertTrue(
             app.descendants(matching: .any)[AXID.chartSelectionOverlay].firstMatch.waitForNonExistence(timeout: 2),
             "Scrolling after selection should clear any stale chart overlay"
