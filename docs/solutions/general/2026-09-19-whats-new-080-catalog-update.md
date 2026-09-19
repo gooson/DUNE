@@ -14,8 +14,8 @@ status: implemented
 ## Solution
 
 - 기존 0.7.0 업데이트 방식에 따라 `DUNE/project.yml`의 공유 MARKETING_VERSION을 0.8.0으로 변경했다. 빌드 번호는 기존 정책대로 1을 유지했다.
-- `DUNE/Data/Resources/whats-new/0.8.0.json`에 4개 기능을 추가하고 `catalog.json` 최상단에 등록했다.
-- `Shared/Resources/Localizable.xcstrings`에 소개·제목·설명 9개 키를 manual 상태로 추가했다. en/ko/ja 번역을 모두 포함했다.
+- `DUNE/Data/Resources/whats-new/0.8.0.json`에 iOS 27 지원 안내를 포함한 5개 기능을 추가하고 `catalog.json` 최상단에 등록했다.
+- `Shared/Resources/Localizable.xcstrings`에 소개·제목·설명 11개 키를 manual 상태로 추가했다. en/ko/ja 번역을 모두 포함했다.
 - 빌드 스크립트로 프로젝트를 재생성해 새 JSON의 번들 포함과 모든 타깃 버전을 반영했다.
 - `WhatsNewManagerTests`에 새 버전의 기능 ID·개수·문자열 확인을 추가하고 전체 릴리스 개수를 8개로 갱신했다.
 

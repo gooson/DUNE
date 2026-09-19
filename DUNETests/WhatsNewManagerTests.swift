@@ -274,9 +274,9 @@ struct WhatsNewManagerTests {
         let release = try #require(WhatsNewManager.shared.currentRelease(for: "0.8.0"))
         #expect(Set(release.features.map(\.id)) == [
             "healthMetricHistory", "smootherHistoryCharts",
-            "stressHistoryDetails", "clearerSectionNavigation"
+            "stressHistoryDetails", "clearerSectionNavigation", "ios27Support"
         ])
-        #expect(release.features.count == 4)
+        #expect(release.features.count == 5)
         for feature in release.features {
             #expect(!feature.titleKey.isEmpty)
             #expect(!feature.summaryKey.isEmpty)
