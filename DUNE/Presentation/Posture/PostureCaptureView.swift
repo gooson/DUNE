@@ -1,5 +1,6 @@
 #if !os(visionOS)
 import AVFoundation
+import SwiftData
 import SwiftUI
 
 struct PostureCaptureView: View {
