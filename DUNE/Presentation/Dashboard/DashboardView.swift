@@ -6,6 +6,7 @@ struct DashboardView: View {
     @State private var isShowingPinnedEditor = false
     @State private var isShowingHealthDataQA = false
     @State private var metricDetailNavigation: HealthMetric?
+    @State private var inspectedMetric: HealthMetric?
     @State private var templateNudgeToSave: WorkoutTemplateRecommendation?
     @State private var hasAppeared = false
     @State private var isShowingBriefing = false
@@ -193,13 +194,39 @@ struct DashboardView: View {
         .navigationDestination(item: $metricDetailNavigation) { metric in
             MetricDetailView(metric: metric)
         }
-        .sheet(isPresented: $isShowingHealthDataQA) {
-            HealthDataQASheet(
-                viewModel: HealthDataQAViewModel(
-                    service: HealthDataQAService(sharedHealthDataService: sharedHealthDataService),
-                    isAvailable: HealthDataQAService.isAvailable
+        .inspector(isPresented: Binding(
+            get: { inspectedMetric != nil || isShowingHealthDataQA },
+            set: { isPresented in
+                if !isPresented {
+                    inspectedMetric = nil
+                    isShowingHealthDataQA = false
+                }
+            }
+        )) {
+            if isShowingHealthDataQA {
+                HealthDataQASheet(
+                    viewModel: HealthDataQAViewModel(
+                        service: HealthDataQAService(sharedHealthDataService: sharedHealthDataService),
+                        isAvailable: HealthDataQAService.isAvailable
+                    )
                 )
-            )
+                .inspectorColumnWidth(min: 320, ideal: 420, max: 540)
+            } else if let metric = inspectedMetric {
+                NavigationStack {
+                    MetricDetailView(metric: metric)
+                        .id(metric.id)
+                        .navigationDestination(for: AllDataDestination.self) { destination in
+                            AllDataView(category: destination.category)
+                        }
+                        .toolbar {
+                            ToolbarItem(placement: .confirmationAction) {
+                                Button("Done") { inspectedMetric = nil }
+                                    .accessibilityIdentifier("dashboard-metric-inspector-close")
+                            }
+                        }
+                }
+                .inspectorColumnWidth(min: 320, ideal: 420, max: 540)
+            }
         }
         .englishNavigationTitle("Today")
         .toolbar {
@@ -286,12 +313,12 @@ struct DashboardView: View {
         QuickActionsRow(
             onLogWeight: {
                 if let weightMetric = viewModel.sortedMetrics.first(where: { $0.category == .weight }) {
-                    metricDetailNavigation = weightMetric
+                    openMetric(weightMetric)
                 }
             },
             onOpenSleep: {
                 if let sleepMetric = viewModel.sortedMetrics.first(where: { $0.category == .sleep }) {
-                    metricDetailNavigation = sleepMetric
+                    openMetric(sleepMetric)
                 }
             },
             onOpenBriefing: { isShowingBriefing = true },
@@ -663,10 +690,21 @@ struct DashboardView: View {
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
+    private func openMetric(_ metric: HealthMetric) {
+        if sizeClass == .regular {
+            isShowingHealthDataQA = false
+            inspectedMetric = metric
+        } else {
+            metricDetailNavigation = metric
+        }
+    }
+
     private func cardGrid(cards: [VitalCardData]) -> some View {
         LazyVGrid(columns: gridColumns, spacing: DS.Spacing.md) {
             ForEach(Array(cards.enumerated()), id: \.element.id) { index, card in
-                NavigationLink(value: card.metric) {
+                Button {
+                    openMetric(card.metric)
+                } label: {
                     VitalCard(data: card, animationIndex: index)
                 }
                 .buttonStyle(.plain)

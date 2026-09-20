@@ -2,6 +2,8 @@
 
 @MainActor
 final class TodaySettingsRegressionTests: SeededUITestBaseCase {
+    override var initialTabSelectionArgument: String? { "today" }
+
     private enum Fixture {
         static let benchPressID = "barbell-bench-press"
         static let deadliftID = "conventional-deadlift"
@@ -72,6 +74,22 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
 
         let metricDetail = app.descendants(matching: .any)[AXID.metricDetailScreen("sleep")].firstMatch
         XCTAssertTrue(metricDetail.waitForExistence(timeout: 5), "Metric detail should open from Today metric card")
+
+        if app.windows.firstMatch.horizontalSizeClass == .regular {
+            XCTAssertTrue(sleepCard.exists, "Today metric summary should remain alongside the inspector")
+            XCTAssertTrue(
+                app.waitAndTap("dashboard-metric-inspector-close"),
+                "Metric inspector should provide an accessible close action"
+            )
+            let inspectorDismissed = XCTNSPredicateExpectation(
+                predicate: NSPredicate(format: "exists == false"),
+                object: metricDetail
+            )
+            XCTAssertEqual(XCTWaiter.wait(for: [inspectorDismissed], timeout: 5), .completed)
+            XCTAssertTrue(sleepCard.isHittable, "Closing the inspector should preserve the selected metric summary")
+            sleepCard.tap()
+            XCTAssertTrue(metricDetail.waitForExistence(timeout: 5), "The same metric should reopen after inspector dismissal")
+        }
 
         let showAllData = app.descendants(matching: .any)[AXID.metricDetailShowAllData].firstMatch
         XCTAssertTrue(showAllData.waitForExistence(timeout: 5), "Show All Data link should exist in metric detail")

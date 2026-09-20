@@ -490,6 +490,9 @@ extension XCUIApplication {
             // Accept an explicitly requested destination only when both its
             // main content and toolbar action have actually rendered.
             switch initialTab {
+            case "today":
+                return self.descendants(matching: .any)[AXID.dashboardHeroCondition].firstMatch.exists
+                    && self.buttons[AXID.dashboardToolbarSettings].firstMatch.exists
             case "life":
                 return self.descendants(matching: .any)[AXID.lifeHeroProgress].firstMatch.exists
                     && self.buttons[AXID.lifeToolbarAdd].firstMatch.exists

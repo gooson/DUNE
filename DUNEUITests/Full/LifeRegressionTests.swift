@@ -78,17 +78,23 @@ final class LifeRegressionTests: SeededUITestBaseCase {
         openHistory(for: "Morning Stretch")
 
         let historyScreen = app.descendants(matching: .any)[AXID.lifeHabitHistoryScreen].firstMatch
-        XCTAssertTrue(historyScreen.waitForExistence(timeout: 8), "History sheet should open from the seeded habit actions menu")
+        XCTAssertTrue(historyScreen.waitForExistence(timeout: 8), "History should open from the seeded habit actions menu")
+
+        let habitSummary = app.descendants(matching: .any)[AXID.lifeHabitRow("Morning Stretch")].firstMatch
+        if app.windows.firstMatch.horizontalSizeClass == .regular {
+            XCTAssertTrue(habitSummary.exists, "Habit summary should remain alongside its history inspector")
+        }
 
         let firstRow = app.descendants(matching: .any)[AXID.lifeHabitHistoryRow(0)].firstMatch
         XCTAssertTrue(firstRow.waitForExistence(timeout: 5), "Seeded habit history should expose at least one action row")
 
         XCTAssertTrue(
             app.dismissModalIfPresent(cancelIdentifiers: [AXID.lifeHabitHistoryClose]),
-            "History sheet should dismiss through the shared modal helper"
+            "History should dismiss through its close action"
         )
         expectation(for: NSPredicate(format: "exists == false"), evaluatedWith: historyScreen)
         waitForExpectations(timeout: 5)
+        XCTAssertTrue(habitSummary.waitForExistence(timeout: 5), "Closing history should preserve the original habit summary")
     }
 
     func testHabitHistoryShowsEmptyStateForHabitWithoutLogs() throws {

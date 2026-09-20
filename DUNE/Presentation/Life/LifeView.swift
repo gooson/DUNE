@@ -252,14 +252,18 @@ private struct HabitListQueryView: View {
         .onAppear {
             recalculate()
         }
-        .sheet(item: $historySelection) { selection in
-            if let habit = habitsByID[selection.id] {
+        .inspector(isPresented: Binding(
+            get: { historySelection != nil },
+            set: { if !$0 { historySelection = nil } }
+        )) {
+            if let selection = historySelection, let habit = habitsByID[selection.id] {
                 HabitHistorySheet(
                     habitName: habit.name,
                     iconCategory: habit.iconCategory,
                     habitType: habit.habitType,
                     entries: viewModel.historyEntries(for: habit)
                 )
+                .inspectorColumnWidth(min: 300, ideal: 360, max: 460)
             }
         }
     }
