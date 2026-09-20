@@ -115,13 +115,29 @@ final class PostureAssessmentViewModel {
 
     // MARK: - Camera Setup
 
+    private var isCameraConfigured = false
+    private var isCameraActive = false
+    private var cameraGeneration = 0
+
     func setupCamera() {
+        guard !isCameraActive else { return }
+        cameraGeneration += 1
+        if isCameraConfigured {
+            isCameraActive = true
+            if case .idle = capturePhase { capturePhase = .preparing }
+            if case .error = capturePhase { capturePhase = .preparing }
+            setupGuidanceCallbacks()
+            captureService.startSession()
+            return
+        }
         do {
             let position: AVCaptureDevice.Position = cameraPosition == .front ? .front : .back
             try captureService.setupCamera(position: position)
             captureService.updateDeviceOrientation(deviceOrientation)
+            isCameraActive = true
             setupGuidanceCallbacks()
             captureService.startSession()
+            isCameraConfigured = true
             capturePhase = .preparing
         } catch {
             capturePhase = .error(String(localized: "Camera is not available"))
@@ -129,6 +145,14 @@ final class PostureAssessmentViewModel {
     }
 
     func stopCamera() {
+        // Invalidate queued frames/results before a display transfer can restart the view.
+        isCameraActive = false
+        cameraGeneration += 1
+        switch capturePhase {
+        case .countdown, .capturing, .analyzing: capturePhase = .preparing
+        default: break
+        }
+        autoReadyStartTime = nil
         countdownTask?.cancel()
         countdownTask = nil
         captureService.onFrameUpdate = nil
@@ -139,6 +163,7 @@ final class PostureAssessmentViewModel {
     // MARK: - Camera Switching
 
     func switchCamera() {
+        cameraGeneration += 1
         countdownTask?.cancel()
         countdownTask = nil
         autoReadyStartTime = nil
@@ -161,12 +186,14 @@ final class PostureAssessmentViewModel {
     // MARK: - Guidance Callbacks
 
     private func setupGuidanceCallbacks() {
+        let generation = cameraGeneration
         captureService.onFrameUpdate = { [weak self] state, keypoints, imageSize in
             Task { @MainActor [weak self] in
-                self?.guidanceState = state
-                self?.skeletonKeypoints = keypoints
-                self?.skeletonImageSize = imageSize
-                self?.handleAutoCapture(state)
+                guard let self, self.isCameraActive, self.cameraGeneration == generation else { return }
+                self.guidanceState = state
+                self.skeletonKeypoints = keypoints
+                self.skeletonImageSize = imageSize
+                self.handleAutoCapture(state)
             }
         }
         captureService.onDiagnosticsUpdate = { [weak self] diagnostics in
@@ -275,16 +302,22 @@ final class PostureAssessmentViewModel {
     }
 
     private func performCapture() async {
+        let generation = cameraGeneration
         capturePhase = .capturing
 
         do {
             let result = try await captureService.captureWithAveraging(frameCount: 3)
+            guard !Task.isCancelled, isCameraActive, generation == cameraGeneration else { return }
             capturePhase = .analyzing
             processResult(result)
+        } catch is CancellationError {
+            if isCameraActive, generation == cameraGeneration { capturePhase = .preparing }
         } catch let error as PostureCaptureError {
+            guard !Task.isCancelled, isCameraActive, generation == cameraGeneration else { return }
             capturePhase = .error(captureErrorMessage(error))
             hapticErrorCount += 1
         } catch {
+            guard !Task.isCancelled, isCameraActive, generation == cameraGeneration else { return }
             capturePhase = .error(String(localized: "An unexpected error occurred"))
             hapticErrorCount += 1
         }
@@ -356,6 +389,7 @@ final class PostureAssessmentViewModel {
     }
 
     func resetAll() {
+        cameraGeneration += 1
         countdownTask?.cancel()
         countdownTask = nil
         autoReadyStartTime = nil
@@ -371,7 +405,8 @@ final class PostureAssessmentViewModel {
         guidanceState = GuidanceState()
         skeletonKeypoints = []
         skeletonImageSize = .zero
-        capturePhase = .idle
+        capturePhase = isCameraActive ? .preparing : .idle
+        if isCameraActive { setupGuidanceCallbacks() }
     }
 
     // MARK: - Record Creation

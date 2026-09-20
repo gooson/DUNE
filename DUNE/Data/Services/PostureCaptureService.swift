@@ -316,6 +316,8 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
         }
 
         currentPosition = position
+        // On iPhone Duo, front + wide discovers the Virtual Front Camera, which
+        // switches physical sensors across displays while retaining this session.
         guard let device = AVCaptureDevice.default(
             .builtInWideAngleCamera,
             for: .video,
