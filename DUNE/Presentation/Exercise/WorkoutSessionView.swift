@@ -239,7 +239,7 @@ struct WorkoutSessionView: View {
             .padding(.top, templateInfo == nil ? DS.Spacing.sm : 0)
 
             HStack {
-                Text("Set \(currentSetIndex + 1) of \(totalSets)")
+                Text("Set \((currentSetIndex + 1).formattedWithSeparator) of \(totalSets.formattedWithSeparator)")
                     .font(.subheadline.weight(.medium))
                     .foregroundStyle(DS.Color.textSecondary)
 

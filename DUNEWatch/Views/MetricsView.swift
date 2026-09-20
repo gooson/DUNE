@@ -82,11 +82,9 @@ struct MetricsView: View {
                 reps: $reps,
                 durationMinutes: $durationMinutes,
                 usesAddedWeight: $usesAddedWeight,
-                previousSets: cachedPreviousSets
+                previousSets: cachedPreviousSets,
+                onWeightEdited: { sessionWeightOverride = $0 }
             )
-        }
-        .onChange(of: weight) { _, newValue in
-            if showInputSheet { sessionWeightOverride = newValue }
         }
         .confirmationDialog(
             "End Workout?",

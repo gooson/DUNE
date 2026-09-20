@@ -14,6 +14,7 @@ struct SetInputSheet: View {
     @Binding var usesAddedWeight: Bool
     /// Previously completed sets for the current exercise (newest last)
     var previousSets: [CompletedSetData] = []
+    var onWeightEdited: (Double) -> Void = { _ in }
     @Environment(\.dismiss) private var dismiss
 
     @State private var lastHapticDate: Date = .distantPast
@@ -75,6 +76,7 @@ struct SetInputSheet: View {
         .onChange(of: weight) { _, newValue in
             let clamped = min(max(newValue, 0), 500)
             if clamped != newValue { weight = clamped }
+            onWeightEdited(clamped)
         }
         .onChange(of: reps) { _, newValue in
             let clamped = min(
@@ -184,7 +186,10 @@ struct SetInputSheet: View {
         Toggle("Added Weight", isOn: Binding(
             get: { usesAddedWeight },
             set: { enabled in
-                if !enabled { weight = 0 }
+                if !enabled {
+                    weight = 0
+                    onWeightEdited(0)
+                }
                 usesAddedWeight = enabled
             }
         ))

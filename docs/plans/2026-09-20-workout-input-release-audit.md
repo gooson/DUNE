@@ -1,7 +1,7 @@
 ---
 topic: workout-input-release-audit
 date: 2026-09-20
-status: approved
+status: implemented
 confidence: high
 related_solutions:
   - docs/solutions/general/2026-03-28-watch-inputtype-aware-workout-session.md
@@ -44,3 +44,7 @@ related_solutions:
 ## Risks
 
 운반 운동의 거리+중량 등 기존 5개 입력 유형이 표현하지 못하는 운동은 조사 결과에 명시한다. 기존 기록의 해석을 바꾸는 자동 데이터 마이그레이션은 피한다.
+
+## 조사 결과
+
+상세 목록과 검증 제약: `docs/solutions/general/2026-09-20-workout-input-release-audit.md`. 조합 입력 유형이 필요한 4개 운동은 `todos/active/general/157-ready-p2-workout-combined-load-measurements.md`로 추적한다. 워치 UI 실제 실행은 런타임 부재로 미검증이다.
