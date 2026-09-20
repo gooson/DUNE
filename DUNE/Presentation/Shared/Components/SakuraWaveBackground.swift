@@ -30,7 +30,7 @@ struct SakuraWaveOverlayView: View {
     var crestWidth: CGFloat = 1.2
 
     @State private var phase: CGFloat = 0
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.waveReducedMotion) private var reduceMotion
 
     /// Harmonized seamless loop for mixed harmonic factors used by SakuraPetalShape.
     private static let phaseLoopTurns: CGFloat = 20
@@ -156,7 +156,7 @@ private struct SakuraPetalDriftView: View {
     let fallRange: Double
 
     @State private var driftPhase: CGFloat = 0
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.waveReducedMotion) private var reduceMotion
 
     private var petals: [PetalSpec] {
         let normalizedTopBias = min(max(topBias, 0), 1)

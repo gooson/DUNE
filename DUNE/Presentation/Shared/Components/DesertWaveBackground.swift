@@ -24,7 +24,7 @@ struct DesertDuneOverlayView: View {
     var crestWidth: CGFloat = 1.2
 
     @State private var phase: CGFloat = 0
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.waveReducedMotion) private var reduceMotion
 
     /// Ensure loop boundary continuity when ripple uses a non-1 phase multiplier (1.3).
     /// rippleDrift 1.3 (=13/10) needs 10 turns for phase 0 and target to match exactly.

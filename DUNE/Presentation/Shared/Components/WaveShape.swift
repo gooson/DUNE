@@ -86,7 +86,7 @@ struct WaveOverlayView: View {
     var bottomFade: CGFloat = 0
 
     @State private var phase: CGFloat = 0
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.waveReducedMotion) private var reduceMotion
 
     var body: some View {
         WaveShape(

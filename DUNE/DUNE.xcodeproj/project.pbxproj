@@ -878,6 +878,7 @@
 		B77564E8520C074F01830D3B /* LifeSmokeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E37E4D6D8BA8C8B0A76CA57 /* LifeSmokeTests.swift */; };
 		B7BDAE4185073979EDE45DCB /* AppSchemaVersions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58514E1E986A1EEBF81E6549 /* AppSchemaVersions.swift */; };
 		B7C6FDE69AAEDC914A63F636 /* PersonalRecordsInfoSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31EAF2A3A059B4BDC5773C2E /* PersonalRecordsInfoSheet.swift */; };
+		B7E8649D2656F3242507F156 /* ContourThemeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46CCA9D40E7CA8C86C4A16F1 /* ContourThemeTests.swift */; };
 		B865FA7B1ACD412424D0957D /* VisionVoiceWorkoutEntryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07FECB80D756564DC2CC5602 /* VisionVoiceWorkoutEntryViewModel.swift */; };
 		B88DCD9367DDA95AD307333C /* SleepDeficitAnalysis+View.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0905FCC9818C7656BC93A9E /* SleepDeficitAnalysis+View.swift */; };
 		B89AEB22CAD0D2B4A06726D9 /* VolumePeriod+View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B044B0538F537FC7B585375 /* VolumePeriod+View.swift */; };
@@ -1594,6 +1595,7 @@
 		45FD948E7B3B1199E83C4EAC /* UITestBaseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestBaseCase.swift; sourceTree = "<group>"; };
 		46042A019450D3D3F1655E11 /* WellnessHeroCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WellnessHeroCard.swift; sourceTree = "<group>"; };
 		46061CCAFFEBA38BF47935AD /* ExerciseLibraryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseLibraryService.swift; sourceTree = "<group>"; };
+		46CCA9D40E7CA8C86C4A16F1 /* ContourThemeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContourThemeTests.swift; sourceTree = "<group>"; };
 		46E220970D796A20052F08A0 /* PredictSleepQualityUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PredictSleepQualityUseCase.swift; sourceTree = "<group>"; };
 		46EF849C02D1DA6C830471C9 /* ScoreContribution.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreContribution.swift; sourceTree = "<group>"; };
 		46F2EFD9169B4451946FB6BD /* ExerciseDefinition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseDefinition.swift; sourceTree = "<group>"; };
@@ -3628,6 +3630,7 @@
 		C81273BD23227C3341E4B6DC /* Visual */ = {
 			isa = PBXGroup;
 			children = (
+				46CCA9D40E7CA8C86C4A16F1 /* ContourThemeTests.swift */,
 				6A84E266D1372F80DBD7DCEA /* SakuraThemeSnapshotTests.swift */,
 			);
 			path = Visual;
@@ -5774,6 +5777,7 @@
 				AC0E247E404351B90E1D74CA /* ActivityMuscleMapRegressionTests.swift in Sources */,
 				32304909E7D2D914B326CA33 /* ActivitySmokeTests.swift in Sources */,
 				F85B4DEA861F0849991E4038 /* ChartInteractionRegressionUITests.swift in Sources */,
+				B7E8649D2656F3242507F156 /* ContourThemeTests.swift in Sources */,
 				5D423AC0730146F4887C4201 /* DashboardSmokeTests.swift in Sources */,
 				4B3168C602FD094FA848D37E /* HabitManagementSmokeTests.swift in Sources */,
 				7669E80C3515AFE2478A1EB9 /* HealthKitPermissionUITests.swift in Sources */,

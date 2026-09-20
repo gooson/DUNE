@@ -43,6 +43,7 @@ Prefix 색상 resolver와 기존 exhaustive switch를 재사용한다. 새 테�
 | DUNE/Presentation/Shared/Components/ContourBackground.swift | 추가 | 공유 벡터 배경 |
 | DUNE/Presentation/Shared/Components/{WaveShape,GlassCard,SectionGroup,ProgressRingView}.swift | 수정 | 테마 연결 |
 | DUNEWatch/Views/WatchWaveBackground.swift, DUNE/project.yml | 수정 | Watch 공유 배경 |
+| DUNE/Presentation/Shared/Components/WavePreset.swift 및 기존 배경 | 수정 | 시스템 접근성을 유지하는 미리보기 모션 게이트 |
 | DUNE/Presentation/Settings/Components/ThemePickerSection.swift | 수정 | 카드 미리보기 |
 | Shared/Resources/Localizable.xcstrings, DUNEWatch/Resources/Localizable.xcstrings | 수정 | 번역 |
 | DUNETests/AppThemeTests.swift, DUNEUITests/Visual/ContourThemeTests.swift | 수정/추가 | 저장/자산/선택/UI 검증 |

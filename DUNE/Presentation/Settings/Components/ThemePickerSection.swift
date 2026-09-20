@@ -85,8 +85,12 @@ private struct ThemeCardPreview: View {
         .environment(\.appTheme, theme)
         .environment(\.wavePreset, .today)
         .environment(\.weatherAtmosphere, .default)
-        .environment(\.accessibilityReduceMotion, true)
+        .environment(\.waveAnimationEnabled, false)
         .environment(\.scenePhase, .inactive)
+        .transaction {
+            $0.animation = nil
+            $0.disablesAnimations = true
+        }
         // Decorative samples retain their composition; the actual selector title scales freely.
         .dynamicTypeSize(.medium)
     }

@@ -84,7 +84,21 @@ private struct AppThemeKey: EnvironmentKey {
     static let defaultValue: AppTheme = .desertWarm
 }
 
+private struct WaveAnimationEnabledKey: EnvironmentKey {
+    static let defaultValue = true
+}
+
 extension EnvironmentValues {
+    /// Disable ambient animation for static samples without overriding system accessibility.
+    var waveAnimationEnabled: Bool {
+        get { self[WaveAnimationEnabledKey.self] }
+        set { self[WaveAnimationEnabledKey.self] = newValue }
+    }
+
+    var waveReducedMotion: Bool {
+        accessibilityReduceMotion || !waveAnimationEnabled
+    }
+
     var wavePreset: WavePreset {
         get { self[WavePresetKey.self] }
         set { self[WavePresetKey.self] = newValue }
