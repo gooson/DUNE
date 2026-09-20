@@ -8,7 +8,7 @@ final class ContourThemeTests: SeededUITestBaseCase {
 
     func testContourLightAndDarkScreens() {
         capture("Contour Today Light")
-        navigateToSettings()
+        openSettings()
         let contour = themeButton("contourAtlas")
         XCTAssertTrue(contour.isSelected)
         capture("Contour Settings Light")
@@ -21,13 +21,13 @@ final class ContourThemeTests: SeededUITestBaseCase {
         app.launch()
         XCTAssertTrue(app.hasPrimaryNavigation(timeout: 15))
         capture("Contour Today Dark")
-        navigateToSettings()
+        openSettings()
         XCTAssertTrue(themeButton("contourAtlas").isSelected)
         capture("Contour Settings Dark")
     }
 
     func testThemeSwitchPersistsAcrossLaunch() {
-        navigateToSettings()
+        openSettings()
         let desert = themeButton("desertWarm", direction: .down)
         desert.tap()
         XCTAssertTrue(desert.isSelected)
@@ -42,7 +42,7 @@ final class ContourThemeTests: SeededUITestBaseCase {
         app.launchArguments = ["--uitesting", "--ui-test-style", "light"]
         app.launch()
         XCTAssertTrue(app.hasPrimaryNavigation(timeout: 15))
-        navigateToSettings()
+        openSettings()
         XCTAssertTrue(themeButton("contourAtlas").isSelected)
     }
 
@@ -55,6 +55,25 @@ final class ContourThemeTests: SeededUITestBaseCase {
         let button = app.buttons[identifier]
         XCTAssertTrue(button.waitForExistence(timeout: 5))
         return button
+    }
+
+    private func openSettings() {
+        let candidates = app.buttons.matching(identifier: AXID.dashboardToolbarSettings)
+        let visible = NSPredicate { _, _ in
+            MainActor.assumeIsolated {
+                candidates.allElementsBoundByIndex.contains { $0.isHittable }
+            }
+        }
+        XCTAssertEqual(
+            XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: visible, object: nil)], timeout: 10),
+            .completed
+        )
+        guard let button = candidates.allElementsBoundByIndex.first(where: { $0.isHittable }) else {
+            XCTFail("A visible Settings button is required")
+            return
+        }
+        button.tap()
+        XCTAssertTrue(app.navigationBars["Settings"].waitForExistence(timeout: 5))
     }
 
     private func capture(_ name: String) {
