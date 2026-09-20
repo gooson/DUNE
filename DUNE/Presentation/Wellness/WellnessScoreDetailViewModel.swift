@@ -16,7 +16,9 @@ final class WellnessScoreDetailViewModel {
             }
         }
     }
-    var scrollPosition: Date = .now
+    var scrollPosition: Date = .now {
+        didSet { recalculateTrendLine() }
+    }
     var showTrendLine: Bool = false {
         didSet { recalculateTrendLine() }
     }
@@ -65,29 +67,29 @@ final class WellnessScoreDetailViewModel {
     }
 
     func loadData() async {
-        guard !isLoading else { return }
+        guard !Task.isCancelled else { return }
+        let requestID = beginReloadRequest()
+        let period = selectedPeriod
         isLoading = true
         errorMessage = nil
         highlights = []
+        defer { finishReloadRequest(requestID) }
 
         do {
-            if selectedPeriod == .day {
-                await loadHourlyData()
+            if period == .day {
+                await loadHourlyData(requestID: requestID)
             } else {
-                try await loadWellnessData()
+                try await loadWellnessData(requestID: requestID, period: period)
             }
-            guard !Task.isCancelled else {
-                isLoading = false
-                return
-            }
+            guard isCurrentReloadRequest(requestID) else { return }
             buildHighlights()
             recalculateTrendLine()
         } catch {
+            guard isCurrentReloadRequest(requestID) else { return }
             AppLogger.ui.error("WellnessDetail load failed: \(error.localizedDescription)")
             errorMessage = String(localized: "Could not load data.")
         }
 
-        isLoading = false
     }
 
     // MARK: - Scroll Position
@@ -127,23 +129,46 @@ final class WellnessScoreDetailViewModel {
     // MARK: - Private
 
     private var reloadTask: Task<Void, Never>?
+    private var reloadRequestID = 0
 
     private func triggerReload() {
+        reloadRequestID += 1
         reloadTask?.cancel()
         isLoading = false
         reloadTask = Task { await loadData() }
     }
 
+    private func beginReloadRequest() -> Int {
+        reloadRequestID += 1
+        return reloadRequestID
+    }
+
+    private func isCurrentReloadRequest(_ requestID: Int) -> Bool {
+        requestID == reloadRequestID && !Task.isCancelled
+    }
+
+    private func finishReloadRequest(_ requestID: Int) {
+        if requestID == reloadRequestID {
+            isLoading = false
+        }
+    }
+
     // MARK: - Hourly Data (Day Period)
 
-    private func loadHourlyData() async {
+    private func loadHourlyData(requestID: Int) async {
+        guard isCurrentReloadRequest(requestID) else { return }
         guard let service = scoreRefreshService else {
             chartData = []
             summaryStats = nil
+            hrvTrend = []
+            rhrTrend = []
+            sleepTrend = []
+            recalculateScrollDomain()
             return
         }
 
         let snapshots = await service.fetchRollingSnapshots(hoursBack: 48)
+        guard isCurrentReloadRequest(requestID) else { return }
         let now = Date()
         let currentStart = now.addingTimeInterval(-ScoreRefreshService.rollingWindowSeconds)
 
@@ -170,13 +195,13 @@ final class WellnessScoreDetailViewModel {
         recalculateScrollDomain()
     }
 
-    private func loadWellnessData() async throws {
+    private func loadWellnessData(requestID: Int, period: TimePeriod) async throws {
         let calendar = Calendar.current
         let range = extendedRange
         let daysInRange = max(1, calendar.dateComponents([.day], from: range.start, to: range.end).day ?? 14)
 
         // Previous period
-        let prevRange = HealthDataAggregator.previousPeriodRange(for: selectedPeriod, offset: 0)
+        let prevRange = HealthDataAggregator.previousPeriodRange(for: period, offset: 0)
         let prevDays = max(1, calendar.dateComponents([.day], from: prevRange.start, to: prevRange.end).day ?? 14)
 
         // Fetch HRV once for full window (current + previous), partition by date later
@@ -205,8 +230,10 @@ final class WellnessScoreDetailViewModel {
         let (allRHR, allSleep) = try await (rhrTask, sleepTask)
         let (prevRHR, prevSleep) = try await (prevRHRTask, prevSleepTask)
 
+        guard isCurrentReloadRequest(requestID) else { return }
+
         // Build sub-score arrays using shared helpers
-        let currentPeriodRange = selectedPeriod.dateRange(offset: 0)
+        let currentPeriodRange = period.dateRange(offset: 0)
         let currentHRV = HealthDataAggregator.buildHRVDailyAverages(from: allHRV, start: range.start, end: range.end, calendar: calendar)
         let currentRHR = HealthDataAggregator.buildRHRDailyPoints(from: allRHR)
         let currentSleep = allSleep
@@ -221,9 +248,9 @@ final class WellnessScoreDetailViewModel {
         let allScores = buildWellnessTrend(hrv: currentHRV, rhr: currentRHR, sleep: currentSleep)
         chartData = allScores
 
-        if selectedPeriod == .sixMonths || selectedPeriod == .year {
+        if period == .sixMonths || period == .year {
             chartData = HealthDataAggregator.aggregateByAverage(
-                chartData, unit: selectedPeriod.aggregationUnit
+                chartData, unit: period.aggregationUnit
             )
         }
 

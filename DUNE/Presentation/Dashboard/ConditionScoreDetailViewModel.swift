@@ -15,7 +15,9 @@ final class ConditionScoreDetailViewModel {
             }
         }
     }
-    var scrollPosition: Date = .now
+    var scrollPosition: Date = .now {
+        didSet { recalculateTrendLine() }
+    }
     var showTrendLine: Bool = false {
         didSet { recalculateTrendLine() }
     }

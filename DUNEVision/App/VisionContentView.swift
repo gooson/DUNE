@@ -180,7 +180,7 @@ struct VisionContentView: View {
         }
         .task {
             guard let coordinator = refreshCoordinator else { return }
-            for await _ in coordinator.refreshNeededStream {
+            for await _ in await coordinator.makeRefreshStream() {
                 await MainActor.run {
                     refreshSignal += 1
                 }

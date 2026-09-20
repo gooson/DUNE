@@ -47,11 +47,8 @@ enum HabitStreakService {
     // MARK: - Longest Streak (Snapshot-based)
 
     /// Calculates the longest consecutive daily streak for a habit from log snapshots.
-    static func longestStreak(logs: [HabitLogSnapshot], for habitID: UUID, calendar: Calendar = .current) -> Int {
-        let completionDates = logs
-            .filter { $0.habitID == habitID }
-            .filter { !isSkipOrSnooze($0) }
-            .map { calendar.startOfDay(for: $0.date) }
+    static func longestStreak(logs: [HabitLogSnapshot], for habitID: UUID, goalValue: Double, calendar: Calendar = .current) -> Int {
+        let completionDates = completedDates(logs: logs, for: habitID, goalValue: goalValue, calendar: calendar)
 
         let uniqueDates = Set(completionDates).sorted()
         guard !uniqueDates.isEmpty else { return 0 }
@@ -73,12 +70,28 @@ enum HabitStreakService {
         return maxStreak
     }
 
-    /// Total number of completions (excluding skip/snooze).
-    static func totalCompletions(logs: [HabitLogSnapshot], for habitID: UUID) -> Int {
-        logs
-            .filter { $0.habitID == habitID }
-            .filter { !isSkipOrSnooze($0) }
-            .count
+    /// Count completed days, not individual increments.
+    static func totalCompletions(logs: [HabitLogSnapshot], for habitID: UUID, goalValue: Double) -> Int {
+        completedDates(logs: logs, for: habitID, goalValue: goalValue).count
+    }
+
+    /// A day is complete only when its valid increments reach the habit goal.
+    static func completedDates(
+        logs: [HabitLogSnapshot],
+        for habitID: UUID,
+        goalValue: Double,
+        calendar: Calendar = .current
+    ) -> [Date] {
+        guard goalValue > 0, goalValue.isFinite else { return [] }
+        var totals: [Date: Double] = [:]
+        for log in logs where log.habitID == habitID {
+            guard !isSkipOrSnooze(log), log.value > 0, log.value.isFinite else { continue }
+            let day = calendar.startOfDay(for: log.date)
+            // Clamp to the goal to avoid overflow when summing imported values.
+            let total = totals[day, default: 0]
+            totals[day] = total + min(log.value, goalValue - total)
+        }
+        return totals.filter { $0.value >= goalValue }.map(\.key).sorted()
     }
 
     // MARK: - Daily Streak

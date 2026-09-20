@@ -32,7 +32,7 @@ background-thread publish 경고를 반복했다.
 
 1. `ExerciseDefaultRecord.isPreferred` 필드가 추가됐지만 migration plan은 여전히 `AppSchemaV12`를 최신 버전으로 유지했다.
    결과적으로 배포 당시 V12 checksum과 현재 live model checksum이 갈라져 기존 macOS store가 어떤 declared schema에도 매칭되지 않았다.
-2. `refreshNeededStream` 소비 루프가 main actor 보장 없이 `refreshSignal`을 갱신해, CloudKit remote change 이후 SwiftUI state publish가 background executor에서 발생할 수 있었다.
+2. `makeRefreshStream()` 소비 루프가 main actor 보장 없이 `refreshSignal`을 갱신해, CloudKit remote change 이후 SwiftUI state publish가 background executor에서 발생할 수 있었다.
 
 ## Solution
 
@@ -78,7 +78,7 @@ static let migrateV12toV13 = MigrationStage.lightweight(
 ```
 
 ```swift
-for await _ in coordinator.refreshNeededStream {
+for await _ in await coordinator.makeRefreshStream() {
     await MainActor.run {
         refreshSignal += 1
     }

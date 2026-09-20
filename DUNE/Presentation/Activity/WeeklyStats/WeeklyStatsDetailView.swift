@@ -39,7 +39,8 @@ struct WeeklyStatsDetailView: View {
                     equipmentRawValue: record.resolvedEquipmentRaw,
                     duration: record.duration,
                     calories: record.estimatedCalories ?? record.calories ?? 0,
-                    totalVolume: record.totalVolume
+                    totalVolume: record.totalVolume,
+                    healthKitWorkoutID: record.healthKitWorkoutID
                 )
             }
             await viewModel.loadData(manualSnapshots: snapshots)

@@ -4,6 +4,22 @@ import Testing
 
 @Suite("WorkoutElapsedTime")
 struct WorkoutElapsedTimeTests {
+    @Test("Completed duration excludes pauses and stays frozen while viewing the summary")
+    func completedDurationIsFrozen() {
+        let start = Date(timeIntervalSince1970: 1000)
+        let end = start.addingTimeInterval(600)
+        let completed = WorkoutElapsedTime.activeElapsedTime(
+            startDate: start, pausedDuration: 120,
+            pauseStart: end.addingTimeInterval(-30), isPaused: true, now: end
+        )
+        #expect(completed == 450)
+        let displayed = WorkoutElapsedTime.activeElapsedTime(
+            startDate: start, pausedDuration: 150, pauseStart: nil, isPaused: false,
+            now: end.addingTimeInterval(300), completedDuration: completed
+        )
+        #expect(displayed == 450)
+    }
+
     @Test("Elapsed time without pauses uses wall-clock duration")
     func elapsedWithoutPause() {
         let now = Date()

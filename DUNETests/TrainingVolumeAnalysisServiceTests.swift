@@ -5,6 +5,39 @@ import Testing
 @Suite("TrainingVolumeAnalysisService")
 struct TrainingVolumeAnalysisServiceTests {
 
+    @Test("Linked HealthKit workouts count once while local set volume survives", arguments: [1, 9])
+    func linkedWorkout(daysAgo: Int) {
+        let workout = makeWorkout(daysAgo: daysAgo)
+        var record = makeManualRecord(duration: 1800, calories: 300, daysAgo: daysAgo)
+        record.healthKitWorkoutID = workout.id
+        let result = TrainingVolumeAnalysisService.analyze(
+            workouts: [workout], manualRecords: [record], period: .week
+        )
+        let summary = daysAgo == 1 ? result.current : result.previous!
+        #expect(summary.totalDuration == 1800)
+        #expect(summary.totalCalories == 300)
+        #expect(summary.totalSessions == 1)
+        #expect(summary.exerciseTypes.first?.totalVolume == 5000)
+        #expect(summary.dailyBreakdown.reduce(0) { $0 + $1.totalDuration } == 1800)
+        let history = TrainingVolumeAnalysisService.buildHistoryDailyBreakdown(
+            workouts: [workout], manualRecords: [record], start: record.date, end: Date()
+        )
+        #expect(history.reduce(0) { $0 + $1.totalDuration } == 1800)
+        #expect(history.reduce(0) { $0 + $1.totalVolume } == 5000)
+    }
+
+    @Test("An invalid local record does not hide its linked HealthKit workout")
+    func invalidLinkedRecord() {
+        let workout = makeWorkout(daysAgo: 1)
+        var record = makeManualRecord(duration: 0, daysAgo: 1)
+        record.healthKitWorkoutID = workout.id
+        let result = TrainingVolumeAnalysisService.analyze(
+            workouts: [workout], manualRecords: [record], period: .week
+        )
+        #expect(result.current.totalDuration == workout.duration)
+        #expect(result.current.totalSessions == 1)
+    }
+
     // MARK: - Helpers
 
     private func makeWorkout(

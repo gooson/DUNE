@@ -40,6 +40,44 @@ struct HabitAnalyticsServiceTests {
         )
     }
 
+    @Test("Partial days, split increments and duplicate logs agree across habit statistics")
+    func goalAwareCompletion() {
+        let id = UUID()
+        let habit = makeHabit(id: id, goalValue: 10)
+        let logs = [
+            makeLog(habitID: id, day: 17, value: 1),
+            makeLog(habitID: id, day: 18, value: 1),
+            makeLog(habitID: id, day: 19, value: 1),
+            makeLog(habitID: id, day: 20, value: 4),
+            makeLog(habitID: id, day: 20, value: 6),
+            makeLog(habitID: id, day: 21, value: 10),
+            makeLog(habitID: id, day: 21, value: 10),
+            makeLog(habitID: id, day: 22, value: 100, memo: "[dune-life-cycle-skip]"),
+            makeLog(habitID: id, day: 22, value: .infinity),
+            makeLog(habitID: id, day: 22, value: .nan),
+            makeLog(habitID: id, day: 22, value: -10),
+        ]
+        #expect(HabitStreakService.totalCompletions(logs: logs, for: id, goalValue: 10) == 2)
+        #expect(HabitStreakService.longestStreak(logs: logs, for: id, goalValue: 10) == 2)
+        let reference = makeDate(day: 21)
+        let report = HabitAnalyticsService.weeklyReport(logs: logs, habits: [habit], referenceDate: reference)
+        #expect(report.totalCompletions == 2)
+        let weekly = HabitAnalyticsService.weeklyCompletionRates(logs: logs, habits: [habit], weekCount: 1, referenceDate: reference)
+        #expect(weekly.first?.completedCount == 2)
+        let monthly = HabitAnalyticsService.monthlyCompletionRates(logs: logs, habits: [habit], monthCount: 1, referenceDate: reference)
+        #expect(monthly.first?.completedCount == 2)
+        let heatmap = HabitAnalyticsService.dailyCompletionCounts(logs: logs, habits: [habit], dayCount: 7, referenceDate: makeDate(day: 22))
+        #expect(heatmap.reduce(0) { $0 + $1.completionCount } == 2)
+    }
+
+    @Test("Invalid goals never produce completed days", arguments: [0.0, -1, Double.nan, Double.infinity])
+    func invalidGoal(goal: Double) {
+        let id = UUID()
+        #expect(HabitStreakService.completedDates(
+            logs: [makeLog(habitID: id, day: 20, value: 10)], for: id, goalValue: goal
+        ).isEmpty)
+    }
+
     // MARK: - Daily Completion Counts (Heatmap)
 
     @Test("Heatmap returns correct completion counts")
@@ -53,6 +91,7 @@ struct HabitAnalyticsServiceTests {
 
         let result = HabitAnalyticsService.dailyCompletionCounts(
             logs: logs,
+            habits: [makeHabit(id: habitID)],
             dayCount: 5,
             referenceDate: makeDate(day: 22)
         )
@@ -60,7 +99,7 @@ struct HabitAnalyticsServiceTests {
         #expect(result.count == 5)
 
         let day20 = result.first { calendar.isDate($0.date, inSameDayAs: makeDate(day: 20)) }
-        #expect(day20?.completionCount == 2)
+        #expect(day20?.completionCount == 1)
 
         let day19 = result.first { calendar.isDate($0.date, inSameDayAs: makeDate(day: 19)) }
         #expect(day19?.completionCount == 1)
@@ -80,6 +119,7 @@ struct HabitAnalyticsServiceTests {
 
         let result = HabitAnalyticsService.dailyCompletionCounts(
             logs: logs,
+            habits: [makeHabit(id: habitID)],
             dayCount: 5,
             referenceDate: makeDate(day: 22)
         )

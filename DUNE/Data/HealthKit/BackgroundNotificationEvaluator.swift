@@ -22,6 +22,45 @@ struct StepGoalResolver {
     }
 }
 
+/// Sleep observer events trigger a full-night query, never a sum of anchor deltas.
+struct SleepNotificationResolver {
+    let sleepService: SleepQuerying
+
+    func evaluate(
+        now: Date = Date(),
+        cachedDurations: [CalculateSleepDeficitUseCase.Input.DayDuration] = []
+    ) async -> HealthInsight? {
+        do {
+            guard let summary = try await sleepService.fetchLastNightSleepSummary(for: now),
+                  summary.totalSleepMinutes.isFinite,
+                  summary.totalSleepMinutes > 0 else { return nil }
+
+            if !cachedDurations.isEmpty {
+                let calendar = Calendar.current
+                let today = calendar.startOfDay(for: now)
+                var durationsByDay = Dictionary(
+                    cachedDurations.map { (calendar.startOfDay(for: $0.date), $0) },
+                    uniquingKeysWith: { _, latest in latest }
+                )
+                durationsByDay[today] = .init(date: today, totalMinutes: summary.totalSleepMinutes)
+                let durations = durationsByDay.values.sorted { $0.date < $1.date }
+                let cutoff = calendar.date(byAdding: .day, value: -14, to: today) ?? today
+                let analysis = CalculateSleepDeficitUseCase().execute(input: .init(
+                    recentDurations: durations.filter { $0.date >= cutoff },
+                    longTermDurations: durations
+                ))
+                if let debt = EvaluateHealthInsightUseCase.evaluateSleepDebt(analysis: analysis) {
+                    return debt
+                }
+            }
+            return EvaluateHealthInsightUseCase.evaluateSleepComplete(totalMinutes: summary.totalSleepMinutes)
+        } catch {
+            AppLogger.notification.error("[BGEvaluator] Failed to resolve last night's sleep: \(error.localizedDescription)")
+            return nil
+        }
+    }
+}
+
 /// Bridges HealthKit observer callbacks to the notification system.
 /// When an HKObserverQuery fires, fetches new samples via anchored query,
 /// evaluates them for insights, and sends local notifications if criteria are met.
@@ -35,6 +74,7 @@ final class BackgroundNotificationEvaluator: Sendable {
     private let throttleStore: NotificationThrottleStore
     private let anchorStore: HealthKitAnchorStore
     private let stepGoalResolver: StepGoalResolver
+    private let sleepResolver: SleepNotificationResolver
 
     init(
         store: HKHealthStore,
@@ -43,6 +83,7 @@ final class BackgroundNotificationEvaluator: Sendable {
         throttleStore: NotificationThrottleStore = .shared,
         anchorStore: HealthKitAnchorStore = .shared,
         stepsService: StepsQuerying? = nil,
+        sleepService: SleepQuerying? = nil,
         healthKitManager: HealthKitManager = .shared
     ) {
         self.store = store
@@ -50,6 +91,9 @@ final class BackgroundNotificationEvaluator: Sendable {
         self.settingsStore = settingsStore
         self.throttleStore = throttleStore
         self.anchorStore = anchorStore
+        self.sleepResolver = SleepNotificationResolver(
+            sleepService: sleepService ?? SleepQueryService(manager: healthKitManager)
+        )
         self.stepGoalResolver = StepGoalResolver(
             stepsService: stepsService ?? StepsQueryService(manager: healthKitManager)
         )
@@ -68,12 +112,16 @@ final class BackgroundNotificationEvaluator: Sendable {
         // Check throttle
         guard throttleStore.canSend(for: insightType) else { return }
 
-        // Fetch new samples via anchored query
-        let samples = await fetchNewSamples(for: sampleType)
-        guard !samples.isEmpty else { return }
-
-        // Evaluate and send
-        let insight = await evaluate(samples: samples, sampleType: sampleType, insightType: insightType)
+        let insight: HealthInsight?
+        if sampleType == HKCategoryType(.sleepAnalysis) {
+            // A sleep night spans midnight and may arrive in several batches.
+            // Re-query even when the anchored delta is empty (e.g. deletion/correction).
+            insight = await sleepResolver.evaluate(cachedDurations: loadCachedSleepDurations())
+        } else {
+            let samples = await fetchNewSamples(for: sampleType)
+            guard !samples.isEmpty else { return }
+            insight = await evaluate(samples: samples, sampleType: sampleType, insightType: insightType)
+        }
         guard let insight else { return }
 
         // Body composition types: atomically buffer + build merged notification
@@ -169,7 +217,7 @@ final class BackgroundNotificationEvaluator: Sendable {
         case .rhrAnomaly:
             return evaluateRHRSamples(samples)
         case .sleepComplete, .sleepDebt:
-            return evaluateSleepSamples(samples)
+            return await sleepResolver.evaluate(cachedDurations: loadCachedSleepDurations())
         case .stepGoal:
             return await stepGoalResolver.evaluate(from: samples)
         case .weightUpdate:
@@ -218,62 +266,6 @@ final class BackgroundNotificationEvaluator: Sendable {
             todayValue: value,
             recentDailyAverages: baseline
         )
-    }
-
-    private func evaluateSleepSamples(_ samples: [HKSample]) -> HealthInsight? {
-        let categorySamples = samples.compactMap { $0 as? HKCategorySample }
-        // Sum all asleep stage durations (exclude inBed to avoid double-counting).
-        // Matches SleepQueryService.fetchLastNightSleepSummary pattern.
-        let asleepSamples = categorySamples.filter {
-            let v = $0.value
-            return v == HKCategoryValueSleepAnalysis.asleepUnspecified.rawValue
-                || v == HKCategoryValueSleepAnalysis.asleepCore.rawValue
-                || v == HKCategoryValueSleepAnalysis.asleepDeep.rawValue
-                || v == HKCategoryValueSleepAnalysis.asleepREM.rawValue
-        }
-        guard !asleepSamples.isEmpty else { return nil }
-
-        let totalMinutes = asleepSamples.reduce(0.0) {
-            $0 + $1.endDate.timeIntervalSince($1.startDate) / 60.0
-        }
-        guard totalMinutes > 0 else { return nil }
-
-        if let sleepDebtInsight = evaluateSleepDebtIfNeeded(latestSleepMinutes: totalMinutes) {
-            return sleepDebtInsight
-        }
-
-        return EvaluateHealthInsightUseCase.evaluateSleepComplete(totalMinutes: totalMinutes)
-    }
-
-    private func evaluateSleepDebtIfNeeded(latestSleepMinutes: Double) -> HealthInsight? {
-        let cachedDurations = loadCachedSleepDurations()
-        guard !cachedDurations.isEmpty else { return nil }
-
-        let calendar = Calendar.current
-        let today = calendar.startOfDay(for: Date())
-        let mergedDurations = mergeSleepDurations(
-            cachedDurations,
-            with: .init(date: today, totalMinutes: latestSleepMinutes)
-        )
-
-        let fourteenDaysAgo = calendar.date(byAdding: .day, value: -14, to: today) ?? today
-        let recentDurations = mergedDurations.filter { $0.date >= fourteenDaysAgo }
-
-        let analysis = CalculateSleepDeficitUseCase().execute(input: .init(
-            recentDurations: recentDurations,
-            longTermDurations: mergedDurations
-        ))
-
-        return EvaluateHealthInsightUseCase.evaluateSleepDebt(analysis: analysis)
-    }
-
-    private func mergeSleepDurations(
-        _ existing: [CalculateSleepDeficitUseCase.Input.DayDuration],
-        with latest: CalculateSleepDeficitUseCase.Input.DayDuration
-    ) -> [CalculateSleepDeficitUseCase.Input.DayDuration] {
-        var map = Dictionary(uniqueKeysWithValues: existing.map { (Calendar.current.startOfDay(for: $0.date), $0) })
-        map[Calendar.current.startOfDay(for: latest.date)] = latest
-        return map.values.sorted { $0.date < $1.date }
     }
 
     private func evaluateWeightSamples(_ samples: [HKSample]) -> HealthInsight? {

@@ -17,6 +17,7 @@ enum TrainingVolumeAnalysisService {
         period: VolumePeriod,
         referenceDate: Date = Date()
     ) -> PeriodComparison {
+        let workouts = excludingLinkedWorkouts(workouts, manualRecords: manualRecords)
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: referenceDate)
         let days = period.days
@@ -61,7 +62,7 @@ enum TrainingVolumeAnalysisService {
         end: Date
     ) -> [DailyVolumePoint] {
         buildDailyBreakdown(
-            workouts: workouts,
+            workouts: excludingLinkedWorkouts(workouts, manualRecords: manualRecords),
             manualRecords: manualRecords,
             start: start,
             end: end
@@ -220,6 +221,19 @@ enum TrainingVolumeAnalysisService {
 
     // MARK: - Helpers
 
+    /// Keep the local exercise detail and set volume when both stores contain the same workout.
+    private static func excludingLinkedWorkouts(
+        _ workouts: [WorkoutSummary],
+        manualRecords: [ManualExerciseSnapshot]
+    ) -> [WorkoutSummary] {
+        let linkedIDs = Set(manualRecords.compactMap { record -> String? in
+            guard record.duration > 0, record.duration.isFinite,
+                  let id = record.healthKitWorkoutID, !id.isEmpty else { return nil }
+            return id
+        })
+        return workouts.filter { !linkedIDs.contains($0.id) }
+    }
+
     private static func emptySummary(
         period: VolumePeriod,
         start: Date,
@@ -266,4 +280,5 @@ struct ManualExerciseSnapshot: Sendable {
     let duration: TimeInterval
     let calories: Double
     let totalVolume: Double // weight × reps sum
+    var healthKitWorkoutID: String? = nil
 }
