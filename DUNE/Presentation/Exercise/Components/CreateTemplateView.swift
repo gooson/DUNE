@@ -210,7 +210,8 @@ struct TemplateFormView: View {
     }
 
     private func strengthDefaultsEditor(entry: Binding<TemplateEntry>) -> some View {
-        VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+        let inputType = entry.wrappedValue.inputTypeRaw.flatMap(ExerciseInputType.init(rawValue:))
+        return VStack(alignment: .leading, spacing: DS.Spacing.xs) {
             HStack(spacing: DS.Spacing.md) {
                 HStack(spacing: DS.Spacing.xs) {
                     Text("Sets")
@@ -244,24 +245,25 @@ struct TemplateFormView: View {
             }
 
             HStack(spacing: DS.Spacing.md) {
-                HStack(spacing: DS.Spacing.xs) {
-                    Text("Weight")
-                        .font(.caption)
-                        .foregroundStyle(DS.Color.textSecondary)
-                    TextField(
-                        "—",
-                        value: entry.defaultWeightKg,
-                        format: .number.precision(.fractionLength(0...1))
-                    )
-                    .keyboardType(.decimalPad)
-                    .frame(width: 56)
-                    .multilineTextAlignment(.trailing)
-                    .textFieldStyle(.roundedBorder)
-                    Text("kg")
-                        .font(.caption)
-                        .foregroundStyle(DS.Color.textSecondary)
+                if inputType == .setsRepsWeight || inputType == .setsReps || inputType == nil {
+                    HStack(spacing: DS.Spacing.xs) {
+                        Text(inputType == .setsReps ? String(localized: "Added Weight") : String(localized: "Weight"))
+                            .font(.caption)
+                            .foregroundStyle(DS.Color.textSecondary)
+                        TextField(
+                            "—",
+                            value: entry.defaultWeightKg,
+                            format: .number.precision(.fractionLength(0...1))
+                        )
+                        .keyboardType(.decimalPad)
+                        .frame(width: 56)
+                        .multilineTextAlignment(.trailing)
+                        .textFieldStyle(.roundedBorder)
+                        Text("kg")
+                            .font(.caption)
+                            .foregroundStyle(DS.Color.textSecondary)
+                    }
                 }
-
                 Spacer()
 
                 HStack(spacing: DS.Spacing.xs) {

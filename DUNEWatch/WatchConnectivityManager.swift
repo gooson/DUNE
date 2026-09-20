@@ -176,6 +176,16 @@ final class WatchConnectivityManager: NSObject {
                     defaultWeightKg: nil,
                     equipment: "bodyweight",
                     cardioSecondaryUnit: nil
+                ),
+                WatchExerciseInfo(
+                    id: "crunch",
+                    name: "Crunch",
+                    inputType: "setsReps",
+                    defaultSets: 3,
+                    defaultReps: 10,
+                    defaultWeightKg: nil,
+                    equipment: "bodyweight",
+                    cardioSecondaryUnit: nil
                 )
             ])
             activeWorkout = nil

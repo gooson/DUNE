@@ -67,15 +67,19 @@ struct CompoundWorkoutView: View {
         .englishNavigationTitle(config.mode.rawValue.capitalized)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                Button {
-                    weightUnitRaw = (weightUnit == .kg ? WeightUnit.lb : WeightUnit.kg).rawValue
-                } label: {
-                    Text(weightUnit.displayName.uppercased())
-                        .font(.caption.weight(.bold))
-                        .padding(.horizontal, DS.Spacing.sm)
-                        .padding(.vertical, DS.Spacing.xxs)
-                        .background(DS.Color.activity.opacity(0.15), in: Capsule())
+            if viewModel.exerciseViewModels.contains(where: { $0.supportsWeight }) {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        let newUnit: WeightUnit = weightUnit == .kg ? .lb : .kg
+                        for session in viewModel.exerciseViewModels {
+                            session.convertWeightUnit(from: weightUnit, to: newUnit)
+                        }
+                        weightUnitRaw = newUnit.rawValue
+                    } label: {
+                        Text(weightUnit.displayName.uppercased())
+                            .font(.caption.weight(.bold))
+                    }
+                    .accessibilityIdentifier("workout-weight-unit-button")
                 }
             }
             ToolbarItem(placement: .confirmationAction) {
@@ -261,6 +265,11 @@ struct CompoundWorkoutView: View {
                     weightUnit: weightUnit,
                     cardioUnit: exercise.cardioSecondaryUnit,
                     onComplete: {
+                        if !vm.sets[index].isCompleted,
+                           !vm.validateSetForCompletion(at: index, weightUnit: weightUnit) {
+                            viewModel.validationError = vm.validationError
+                            return
+                        }
                         let completed = vm.toggleSetCompletion(at: index)
                         if completed {
                             setTimer.start(seconds: Int(WorkoutSettingsStore.shared.restSeconds))

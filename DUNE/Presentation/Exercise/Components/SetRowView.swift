@@ -8,6 +8,9 @@ struct SetRowView: View {
     let cardioUnit: CardioSecondaryUnit?
     let onComplete: () -> Void
     var onFillFromPrevious: (() -> Void)?
+    @State private var addedWeightEnabled = false
+
+    private var showsAddedWeight: Bool { addedWeightEnabled || !editableSet.weight.isEmpty }
 
     var body: some View {
         HStack(spacing: DS.Spacing.sm) {
@@ -59,6 +62,12 @@ struct SetRowView: View {
                 : Color.clear,
             in: RoundedRectangle(cornerRadius: DS.Radius.sm)
         )
+        .onChange(of: editableSet.weight, initial: true) { _, weight in
+            if !weight.isEmpty { addedWeightEnabled = true }
+        }
+        .onChange(of: editableSet.id) { _, _ in
+            addedWeightEnabled = !editableSet.weight.isEmpty
+        }
     }
 
     @ViewBuilder
@@ -73,7 +82,12 @@ struct SetRowView: View {
                 Text("\(w)×\(r)")
             case .setsReps:
                 let r = prev.reps.map { "\($0)" } ?? "—"
-                Text("×\(r)")
+                if let weight = prev.weight, weight > 0 {
+                    let w = weightUnit.fromKg(weight).formatted(.number.precision(.fractionLength(0...1)))
+                    Text("\(w)×\(r)")
+                } else {
+                    Text("×\(r)")
+                }
             case .durationDistance:
                 let unit = cardioUnit ?? .km
                 let d = prev.duration.map { "\(Int($0 / 60).formattedWithSeparator)m" } ?? "—"
@@ -99,7 +113,7 @@ struct SetRowView: View {
                 }()
                 Text(secondary.isEmpty ? d : "\(d) \(secondary)")
             case .durationIntensity:
-                let d = prev.duration.map { "\(Int($0 / 60).formattedWithSeparator)m" } ?? "—"
+                let d = prev.duration.map { "\(Int($0).formattedWithSeparator)s" } ?? "—"
                 Text(d)
             case .roundsBased:
                 let r = prev.reps.map { "\($0)r" } ?? "—"
@@ -130,6 +144,28 @@ struct SetRowView: View {
 
         case .setsReps:
             HStack(spacing: DS.Spacing.xs) {
+                if showsAddedWeight {
+                    TextField(weightUnit.displayName, text: $editableSet.weight)
+                        .keyboardType(.decimalPad)
+                        .textFieldStyle(.roundedBorder)
+                        .frame(maxWidth: 70)
+                        .accessibilityLabel("Added Weight")
+                        .accessibilityIdentifier("set-row-field-\(editableSet.setNumber)-weight")
+                }
+                Button {
+                    if showsAddedWeight {
+                        addedWeightEnabled = false
+                        editableSet.weight = ""
+                    } else {
+                        addedWeightEnabled = true
+                    }
+                } label: {
+                    Image(systemName: showsAddedWeight ? "minus.circle" : "plus.circle")
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(showsAddedWeight ? String(localized: "Remove Weight") : String(localized: "Add Weight"))
+                .accessibilityIdentifier("set-row-toggle-weight-\(editableSet.setNumber)")
+
                 TextField("reps", text: $editableSet.reps)
                     .keyboardType(.numberPad)
                     .textFieldStyle(.roundedBorder)
@@ -172,7 +208,7 @@ struct SetRowView: View {
             }
 
         case .durationIntensity:
-            TextField("min", text: $editableSet.duration)
+            TextField("sec", text: $editableSet.duration)
                 .keyboardType(.numberPad)
                 .textFieldStyle(.roundedBorder)
                 .frame(maxWidth: 60)

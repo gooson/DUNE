@@ -11,14 +11,17 @@ struct SetInputSheet: View {
     @Binding var weight: Double
     @Binding var reps: Int
     @Binding var durationMinutes: Int
+    @Binding var usesAddedWeight: Bool
     /// Previously completed sets for the current exercise (newest last)
     var previousSets: [CompletedSetData] = []
+    var onWeightEdited: (Double) -> Void = { _ in }
     @Environment(\.dismiss) private var dismiss
 
     @State private var lastHapticDate: Date = .distantPast
     @State private var showPreviousSets = false
     /// Stable Crown accumulator for duration (avoids Binding(get:set:) recreation per render).
     @State private var crownDurationDouble: Double = 1
+    @State private var crownRepsDouble: Double = 10
     @FocusState private var isCrownFocused: Bool
 
     var body: some View {
@@ -46,32 +49,34 @@ struct SetInputSheet: View {
         case .durationIntensity:
             durationContent
         case .setsReps:
+            if usesAddedWeight { weightRepsContent } else { repsOnlyContent }
+        case .roundsBased:
             repsOnlyContent
-        case .setsRepsWeight, .durationDistance, .roundsBased:
+        case .setsRepsWeight, .durationDistance:
             weightRepsContent
         }
     }
 
-    // MARK: - Weight + Reps (setsRepsWeight, roundsBased)
+    // MARK: - Weight + Reps
 
     private var weightRepsContent: some View {
-        ScrollView {
-            VStack(spacing: DS.Spacing.lg) {
-                weightSection
-                Divider()
-                repsSection
-            }
-            .padding(.horizontal, DS.Spacing.md)
+        VStack(spacing: DS.Spacing.sm) {
+            if inputType == .setsReps { addedWeightToggle }
+            weightSection
+            Divider()
+            repsSection
         }
+        .padding(.horizontal, DS.Spacing.md)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .focusable(true)
         .focused($isCrownFocused)
-        .digitalCrownRotation($weight, from: 0, through: 500, by: 2.5, sensitivity: .medium)
+        .digitalCrownRotation($weight, from: 0, through: 500, by: 0.5, sensitivity: .medium)
         .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.setInputScreen)
         .toolbar { sharedToolbar }
         .onChange(of: weight) { _, newValue in
             let clamped = min(max(newValue, 0), 500)
             if clamped != newValue { weight = clamped }
+            onWeightEdited(clamped)
         }
         .onChange(of: reps) { _, newValue in
             let clamped = min(
@@ -93,30 +98,30 @@ struct SetInputSheet: View {
     // MARK: - Reps Only (setsReps / bodyweight)
 
     private var repsOnlyContent: some View {
-        ScrollView {
-            VStack(spacing: DS.Spacing.lg) {
-                repsSection
-            }
-            .padding(.horizontal, DS.Spacing.md)
+        VStack(spacing: DS.Spacing.sm) {
+            if inputType == .setsReps { addedWeightToggle }
+            repsSection
         }
+        .padding(.horizontal, DS.Spacing.md)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .focusable(true)
         .focused($isCrownFocused)
         .digitalCrownRotation(
-            Binding(
-                get: { Double(reps) },
-                set: { reps = max(1, min(100, Int($0.rounded()))) }
-            ),
-            from: 1, through: 100, by: 1, sensitivity: .medium
+            $crownRepsDouble,
+            from: 1, through: Double(WatchSetInputPolicy.maximumEditableReps), by: 1, sensitivity: .medium
         )
         .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.setInputScreen)
         .toolbar { sharedToolbar }
+        .onChange(of: crownRepsDouble) { _, value in
+            reps = max(1, min(WatchSetInputPolicy.maximumEditableReps, Int(value.rounded())))
+        }
         .onChange(of: reps) { _, newValue in
             let clamped = min(
                 max(newValue, WatchSetInputPolicy.minimumReps),
                 WatchSetInputPolicy.maximumEditableReps
             )
             if clamped != newValue { reps = clamped }
+            crownRepsDouble = Double(clamped)
         }
         .onAppear {
             isCrownFocused = true
@@ -124,6 +129,7 @@ struct SetInputSheet: View {
                 lastSetReps: reps,
                 entryDefaultReps: WatchSetInputPolicy.defaultReps
             )
+            crownRepsDouble = Double(reps)
         }
         .onDisappear { isCrownFocused = false }
     }
@@ -176,27 +182,42 @@ struct SetInputSheet: View {
 
     // MARK: - Weight Section
 
-    private var weightSection: some View {
-        VStack(spacing: DS.Spacing.sm) {
-            Text("\(weight, specifier: "%.1f")")
-                .font(.system(.largeTitle, design: .rounded).monospacedDigit().bold())
-                .foregroundStyle(DS.Color.positive)
-                .contentTransition(.numericText())
-
-            Text("kg")
-                .font(DS.Typography.metricLabel)
-                .foregroundStyle(.secondary)
-
-            HStack(spacing: DS.Spacing.md) {
-                weightButton("-2.5", delta: -2.5)
-                weightButton("+2.5", delta: 2.5)
+    private var addedWeightToggle: some View {
+        Toggle("Added Weight", isOn: Binding(
+            get: { usesAddedWeight },
+            set: { enabled in
+                if !enabled {
+                    weight = 0
+                    onWeightEdited(0)
+                }
+                usesAddedWeight = enabled
             }
+        ))
+            .accessibilityIdentifier("watch-set-input-added-weight")
+    }
+
+    private var weightSection: some View {
+        HStack(spacing: DS.Spacing.xs) {
+            weightButton("-2.5", delta: -2.5)
+            VStack(spacing: 0) {
+                Text("\(weight, specifier: "%.1f")")
+                    .font(.system(.title3, design: .rounded).monospacedDigit().bold())
+                    .foregroundStyle(DS.Color.positive)
+                    .contentTransition(.numericText())
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
+                Text("kg")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+            }
+            .frame(maxWidth: .infinity)
+            weightButton("+2.5", delta: 2.5)
         }
     }
 
     private func weightButton(_ label: String, delta: Double) -> some View {
         Button {
-            let newValue = weight + delta
+            let newValue = min(500, max(0, weight + delta))
             if (0...500).contains(newValue) {
                 weight = newValue
                 playDebouncedHaptic()
@@ -204,7 +225,7 @@ struct SetInputSheet: View {
         } label: {
             Text(label)
                 .font(.caption.weight(.medium))
-                .frame(maxWidth: .infinity, minHeight: 32)
+                .frame(width: 44, height: 44)
         }
         .buttonStyle(.bordered)
         .tint(.secondary)
@@ -248,7 +269,7 @@ struct SetInputSheet: View {
             Spacer()
 
             Button {
-                if reps < 100 {
+                if reps < WatchSetInputPolicy.maximumEditableReps {
                     reps += 1
                     playDebouncedHaptic()
                 }
@@ -268,7 +289,7 @@ struct SetInputSheet: View {
     private var durationSection: some View {
         VStack(spacing: DS.Spacing.sm) {
             Text("\(durationMinutes)")
-                .font(.system(.largeTitle, design: .rounded).monospacedDigit().bold())
+                .font(.system(.title2, design: .rounded).monospacedDigit().bold())
                 .foregroundStyle(DS.Color.positive)
                 .contentTransition(.numericText())
 
@@ -294,7 +315,7 @@ struct SetInputSheet: View {
         } label: {
             Text(label)
                 .font(.caption.weight(.medium))
-                .frame(maxWidth: .infinity, minHeight: 32)
+                .frame(maxWidth: .infinity, minHeight: 44)
         }
         .buttonStyle(.bordered)
         .tint(.secondary)
@@ -313,9 +334,10 @@ struct SetInputSheet: View {
                             .frame(width: 36, alignment: .leading)
 
                         if let d = set.duration, d > 0 {
-                            Text("\(max(1, Int((d / 60).rounded())))min")
+                            Text(Duration.seconds(d).formatted(.time(pattern: .minuteSecond)))
                                 .font(.caption2.monospacedDigit())
-                        } else {
+                        }
+                        Group {
                             if let w = set.weight, w > 0 {
                                 Text("\(w, specifier: "%.1f")kg")
                                     .font(.caption2.monospacedDigit())

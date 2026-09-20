@@ -4,6 +4,25 @@ import Testing
 
 @Suite("WatchExerciseHelpers")
 struct WatchExerciseHelpersTests {
+    @Test("Session metadata follows the library instead of a stale weighted template")
+    func resolvesStaleCrunchTemplate() {
+        let old = entry(exerciseID: "crunch", name: "Crunch")
+        let latest = exercise(id: "crunch", inputType: "setsReps", equipment: "bodyweight")
+        let result = resolvedWatchEntry(old, exercise: latest)
+        #expect(result.id == old.id)
+        #expect(result.inputTypeRaw == "setsReps")
+        #expect(result.equipment == "bodyweight")
+        #expect(result.defaultWeightKg == old.defaultWeightKg)
+    }
+
+    @Test("Offline templates preserve defaults and normalize old aliases")
+    func resolvesOfflineTemplate() {
+        var old = entry()
+        old.inputTypeRaw = "bodyweight_reps"
+        let result = resolvedWatchEntry(old, exercise: nil)
+        #expect(result.inputTypeRaw == "setsReps")
+        #expect(result.defaultSets == old.defaultSets)
+    }
     private func exercise(
         id: String,
         name: String = "Bench Press",

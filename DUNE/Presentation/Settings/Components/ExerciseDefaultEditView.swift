@@ -21,6 +21,10 @@ struct ExerciseDefaultEditView: View {
     /// Correction #50: Confirmation before CloudKit delete
     @State private var showClearConfirmation: Bool = false
 
+    private var supportsWeight: Bool {
+        exercise.inputType == .setsRepsWeight || exercise.inputType == .setsReps
+    }
+
     private let maxWeightKg = 500.0
     private let maxReps = 1000
     private let library = ExerciseLibraryService.shared
@@ -36,14 +40,16 @@ struct ExerciseDefaultEditView: View {
     var body: some View {
         Form {
             Section {
-                HStack {
-                    Label("Default Weight", systemImage: "scalemass")
-                    Spacer()
-                    TextField("kg", text: $weightText)
-                        .keyboardType(.decimalPad)
-                        .multilineTextAlignment(.trailing)
-                        .frame(width: 80)
-                        .accessibilityIdentifier("exercise-default-edit-weight")
+                if supportsWeight {
+                    HStack {
+                        Label("Default Weight", systemImage: "scalemass")
+                        Spacer()
+                        TextField("kg", text: $weightText)
+                            .keyboardType(.decimalPad)
+                            .multilineTextAlignment(.trailing)
+                            .frame(width: 80)
+                            .accessibilityIdentifier("exercise-default-edit-weight")
+                    }
                 }
 
                 if exercise.inputType == .setsRepsWeight || exercise.inputType == .setsReps {
@@ -117,7 +123,7 @@ struct ExerciseDefaultEditView: View {
 
     private func loadExistingValues() {
         guard let record = existingRecord else { return }
-        if let weight = record.defaultWeight {
+        if supportsWeight, let weight = record.defaultWeight {
             weightText = weight.formatted(.number.precision(.fractionLength(0...1)))
         }
         if let reps = record.defaultReps {
@@ -133,7 +139,7 @@ struct ExerciseDefaultEditView: View {
 
         // Parse weight (Correction #38: trim + isEmpty check)
         let trimmedWeight = weightText.trimmingCharacters(in: .whitespaces)
-        let weight: Double? = if !trimmedWeight.isEmpty, let parsed = Double(trimmedWeight) {
+        let weight: Double? = if supportsWeight, !trimmedWeight.isEmpty, let parsed = Double(trimmedWeight), parsed.isFinite {
             parsed > 0 ? Swift.min(parsed, maxWeightKg) : nil
         } else {
             nil
