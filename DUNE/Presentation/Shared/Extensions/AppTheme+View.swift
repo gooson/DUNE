@@ -286,6 +286,17 @@ extension AppTheme {
 // MARK: - Display Name
 
 extension AppTheme {
+    /// Opaque contour surfaces need a readable neutral instead of translucent tertiary text.
+    var secondaryTextColor: Color {
+        self == .contourAtlas ? sandColor : DS.Color.textSecondary
+    }
+
+    var tertiaryTextStyle: AnyShapeStyle {
+        self == .contourAtlas ? AnyShapeStyle(sandColor) : AnyShapeStyle(.tertiary)
+    }
+}
+
+extension AppTheme {
     var displayName: String {
         switch self {
         case .desertWarm:  String(localized: "Desert Warm")

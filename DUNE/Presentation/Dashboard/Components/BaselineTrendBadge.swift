@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct BaselineTrendBadge: View {
+    @Environment(\.appTheme) private var theme
     let detail: BaselineDetail
     let inversePolarity: Bool
 
@@ -35,7 +36,7 @@ struct BaselineTrendBadge: View {
         HStack(spacing: DS.Spacing.xs) {
             Text(detail.label)
                 .font(.caption2)
-                .foregroundStyle(.tertiary)
+                .foregroundStyle(theme.tertiaryTextStyle)
 
             HStack(spacing: 2) {
                 Image(systemName: iconName)

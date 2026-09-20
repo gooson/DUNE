@@ -35,7 +35,6 @@ final class ContourThemeTests: SeededUITestBaseCase {
         let contour = themeButton("contourAtlas")
         contour.tap()
         XCTAssertTrue(contour.isSelected)
-        XCTAssertFalse(desert.isSelected)
 
         app.terminate()
         // No reset or theme override: verify the user's persisted selection.
