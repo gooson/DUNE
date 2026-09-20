@@ -28,7 +28,7 @@ final class ContourThemeTests: SeededUITestBaseCase {
 
     func testThemeSwitchPersistsAcrossLaunch() {
         openSettings()
-        let desert = themeButton("desertWarm", direction: .down)
+        let desert = themeButton("desertWarm")
         desert.tap()
         XCTAssertTrue(desert.isSelected)
 
@@ -51,7 +51,9 @@ final class ContourThemeTests: SeededUITestBaseCase {
         direction: ScrollDirection = .up
     ) -> XCUIElement {
         let identifier = "settings-theme-\(rawValue)"
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded(identifier, maxSwipes: 16, direction: direction))
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(
+            identifier, maxSwipes: 8, direction: direction, timeoutPerCheck: 0.2
+        ))
         let button = app.buttons[identifier]
         XCTAssertTrue(button.waitForExistence(timeout: 5))
         return button
