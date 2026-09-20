@@ -336,7 +336,7 @@ final class LifeViewModel {
             let isCompleted = effectiveValue >= habit.goalValue
 
             let streak = HabitStreakService.calculateStreak(
-                completedDates: streakDates(habit: habit, todayCompleted: isCompleted, today: today),
+                completedDates: streakDates(habit: habit, todayCompleted: isAutoCompleted, today: today),
                 frequency: habit.frequency,
                 referenceDate: referenceDate
             )

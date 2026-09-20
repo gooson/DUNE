@@ -58,7 +58,7 @@ final class TrainingVolumeViewModel {
                 duration: record.duration,
                 calories: record.estimatedCalories ?? record.calories ?? 0,
                 totalVolume: record.totalVolume,
-                    healthKitWorkoutID: record.healthKitWorkoutID
+                healthKitWorkoutID: record.healthKitWorkoutID
             )
         }
         let manualLoadSnapshots = manualRecords.map(makeExerciseSnapshot)
