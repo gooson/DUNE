@@ -375,6 +375,7 @@
 		483EFF17D10CFCB0DBE2F56C /* WorkoutPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A6409B6D1F44020E024AD83 /* WorkoutPreviewView.swift */; };
 		48426FF1EF259AE8C1C95420 /* WorkoutSourceClassifierTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FB20D0332CD38333D0B84D7 /* WorkoutSourceClassifierTests.swift */; };
 		4849F78131DD92D2D12420FE /* AppRefreshCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0645CDC034E79FDF4FD65870 /* AppRefreshCoordinator.swift */; };
+		48A3E5CCA6BD32B4677BA54D /* ContourBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42468472DC99785D919840E1 /* ContourBackground.swift */; };
 		48DE836DA322881D4FADE46D /* ScoreContributorsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF579A9A174455A12FC98E4E /* ScoreContributorsView.swift */; };
 		490F8CE40C3C06C263D4B793 /* Comparable+Clamped.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3897C53EAD361B927BF3ED1 /* Comparable+Clamped.swift */; };
 		494BC0DB8DBDA569E28C5AD6 /* BackgroundNotificationEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8145B825EB89E83F3FF7278D /* BackgroundNotificationEvaluator.swift */; };
@@ -626,6 +627,7 @@
 		851D39E1ACD64471F666F096 /* CumulativeStressExplainerSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF1A2828363CD3EFB566C5B0 /* CumulativeStressExplainerSection.swift */; };
 		851EBC33F4660E48851BB292 /* ActivityViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BB1E8F32CD7A47312B29431 /* ActivityViewModelTests.swift */; };
 		859B77E27807125C750586B5 /* WellnessSmokeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E939EC2882FFF467DEA00F2C /* WellnessSmokeTests.swift */; };
+		859DEC45A140E53056BDDA09 /* ContourBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42468472DC99785D919840E1 /* ContourBackground.swift */; };
 		86036D6DCA45A36FA5EE3E00 /* WellnessScore+View.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0968CD4A6C3CE457CF16287 /* WellnessScore+View.swift */; };
 		861F647BE0120BB0AEED3197 /* TemplateReportFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF266E2685360157FC15D35C /* TemplateReportFormatter.swift */; };
 		86256A00D673157EAE65DAD4 /* BodyPart.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF967E3F8E93D54A406F60D8 /* BodyPart.swift */; };
@@ -1569,6 +1571,7 @@
 		40F1C7D985CBE9A1A2707165 /* NapAnalysis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NapAnalysis.swift; sourceTree = "<group>"; };
 		40FE064D7141F7D8DE93C3B5 /* AnalyzeWASOUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyzeWASOUseCase.swift; sourceTree = "<group>"; };
 		416EC91A97D7FF65DA53209C /* SakuraWaveBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SakuraWaveBackground.swift; sourceTree = "<group>"; };
+		42468472DC99785D919840E1 /* ContourBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContourBackground.swift; sourceTree = "<group>"; };
 		424D952A2911AD8D8D5813BF /* AggregateNocturnalVitalsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AggregateNocturnalVitalsUseCase.swift; sourceTree = "<group>"; };
 		427C7E6163F6AEC8A616164A /* PostureAssessment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostureAssessment.swift; sourceTree = "<group>"; };
 		428F307DBAA382F251B2BD44 /* exercises.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = exercises.json; sourceTree = "<group>"; };
@@ -3479,6 +3482,7 @@
 				CD368331A74E7D7C21FE142B /* ChangeBadge.swift */,
 				B4D6A8721460B314436730F0 /* CloudSyncWaitingView.swift */,
 				C2F880FF56CE58665042C654 /* ConditionCalculationCard.swift */,
+				42468472DC99785D919840E1 /* ContourBackground.swift */,
 				92018A060F149756D8999EC8 /* DesertDuneShape.swift */,
 				90C9C146EC95C12731A23396 /* DesertWaveBackground.swift */,
 				E743CADEF2F1D599A6EBA074 /* DetailScoreHero.swift */,
@@ -4664,6 +4668,7 @@
 				CCCE3613451D73D2254DDBF2 /* ConsistencyDetailViewModel.swift in Sources */,
 				D055B2F29BF3D797B256C789 /* ConsistencyInfoSheet.swift in Sources */,
 				283877D1823947D0F1488673 /* ContentView.swift in Sources */,
+				48A3E5CCA6BD32B4677BA54D /* ContourBackground.swift in Sources */,
 				FDADA1008418B267FEE52880 /* CorrectiveExerciseUseCase.swift in Sources */,
 				B4BBB4D4023FF4D157B18F9E /* CorrectiveExercisesSectionView.swift in Sources */,
 				045075C2AB4C83BF33CB71FB /* CorrectiveRecommendation.swift in Sources */,
@@ -5428,6 +5433,7 @@
 				6BD5D660EAB30F8152AEEF0E /* CarouselHomeView.swift in Sources */,
 				3D39B909E331E1AC2517DBB0 /* CarouselRoutineCardView.swift in Sources */,
 				B43DF330B53C48C8E8862121 /* ContentView.swift in Sources */,
+				859DEC45A140E53056BDDA09 /* ContourBackground.swift in Sources */,
 				F15E3C53FF28ABE6C64801F9 /* ControlsView.swift in Sources */,
 				FA6EBF2BE47BB0911F648141 /* CustomExercise.swift in Sources */,
 				16BB4C65D3021918243F35E9 /* DUNEWatchApp.swift in Sources */,
