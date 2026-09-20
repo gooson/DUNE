@@ -186,6 +186,7 @@ struct TabWaveBackground: View {
             }
         }
         .id(theme)
+        .modifier(HingeBrandBackground())
     }
 }
 
@@ -207,6 +208,32 @@ struct DetailWaveBackground: View {
             }
         }
         .id(theme)
+        .modifier(HingeBrandBackground())
+    }
+}
+
+/// A discrete, decorative response only: hinge angle never drives layout or content.
+private struct HingeBrandBackground: ViewModifier {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var isPartiallyOpen = false
+
+    @ViewBuilder
+    func body(content: Content) -> some View {
+        #if canImport(SwiftUI, _version: 8.0.85)
+        if #available(iOS 27.1, macOS 27.1, visionOS 27.1, watchOS 27.1, *) {
+            content
+                .saturation(!reduceMotion && isPartiallyOpen ? 0.85 : 1)
+                .animation(reduceMotion ? nil : .easeInOut(duration: 0.25), value: isPartiallyOpen)
+                .onHingeChange(isEnabled: !reduceMotion) { _, context in
+                    let partiallyOpen = context.hinge?.status == .partiallyOpen
+                    if isPartiallyOpen != partiallyOpen { isPartiallyOpen = partiallyOpen }
+                }
+        } else {
+            content
+        }
+        #else
+        content
+        #endif
     }
 }
 
