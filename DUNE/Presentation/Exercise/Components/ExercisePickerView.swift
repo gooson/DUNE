@@ -21,6 +21,7 @@ struct ExercisePickerView: View {
     @Query(sort: \WorkoutTemplate.updatedAt, order: .reverse) private var templates: [WorkoutTemplate]
     @Query(sort: \UserCategory.sortOrder) private var userCategories: [UserCategory]
     @State private var searchText = ""
+    @FocusState private var isQuickSearchFocused: Bool
     @State private var selectedCategory: ExerciseCategory?
     @State private var selectedUserCategoryName: String?
     @State private var selectedMuscle: MuscleGroup?
@@ -361,7 +362,15 @@ struct ExercisePickerView: View {
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled()
                     .submitLabel(.search)
+                    .focused($isQuickSearchFocused)
+                    .onSubmit { isQuickSearchFocused = false }
                     .accessibilityIdentifier("picker-search-field")
+
+                if isQuickSearchFocused {
+                    Button("Done") { isQuickSearchFocused = false }
+                        .buttonStyle(.borderless)
+                        .accessibilityIdentifier("picker-search-done")
+                }
 
                 if !searchText.isEmpty {
                     Button {

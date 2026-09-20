@@ -815,6 +815,20 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
     }
 
     private func dismissSearchKeyboardIfPresent() {
+        let pickerDone = app.buttons["picker-search-done"].firstMatch
+        if pickerDone.exists && pickerDone.isHittable {
+            pickerDone.tap()
+            return
+        }
+
+        if app.textFields[AXID.pickerSearchField].firstMatch.exists {
+            XCTAssertTrue(pickerDone.waitForExistence(timeout: 3), "Quick-start search should expose its Done action")
+            XCTAssertTrue(pickerDone.isHittable, "Quick-start search Done should be reachable")
+            pickerDone.tap()
+            return
+        }
+
+        // Full-mode searchable uses the system keyboard rather than the inline action.
         let keyboard = app.keyboards.firstMatch
         guard keyboard.waitForExistence(timeout: 1) else { return }
 
