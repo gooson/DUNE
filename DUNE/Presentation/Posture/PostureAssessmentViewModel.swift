@@ -265,6 +265,7 @@ final class PostureAssessmentViewModel {
         countdownTask?.cancel()
         autoReadyStartTime = nil
         isManualCountdown = manual
+        let generation = cameraGeneration
 
         countdownTask = Task {
             do {
@@ -294,7 +295,7 @@ final class PostureAssessmentViewModel {
                 guard !Task.isCancelled else { return }
                 await performCapture()
             } catch {
-                if case .countdown = capturePhase {
+                if generation == cameraGeneration, case .countdown = capturePhase {
                     capturePhase = .preparing
                 }
             }

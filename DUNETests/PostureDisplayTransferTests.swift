@@ -4,6 +4,19 @@ import Testing
 @Suite("Posture display transfer")
 @MainActor
 struct PostureDisplayTransferTests {
+    @Test("A cancelled countdown cannot reset a new display's countdown")
+    func staleCountdown() async {
+        let model = PostureAssessmentViewModel()
+        model.capturePhase = .preparing
+        model.startCountdown()
+        await Task.yield()
+        model.stopCamera()
+        model.startCountdown()
+        for _ in 0..<5 { await Task.yield() }
+        #expect(model.capturePhase == .countdown(3))
+        model.stopCamera()
+    }
+
     @Test("An interrupted countdown returns to preparation")
     func interruptedCountdown() {
         let model = PostureAssessmentViewModel()
