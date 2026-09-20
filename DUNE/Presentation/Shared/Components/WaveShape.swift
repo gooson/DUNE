@@ -86,7 +86,7 @@ struct WaveOverlayView: View {
     var bottomFade: CGFloat = 0
 
     @State private var phase: CGFloat = 0
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.waveReducedMotion) private var reduceMotion
 
     var body: some View {
         WaveShape(
@@ -183,6 +183,7 @@ struct TabWaveBackground: View {
             case .sakuraCalm:  SakuraTabWaveBackground()
             case .arcticDawn:  OceanLegacyArcticTabWaveBackground()
             case .solarPop:    SolarTabWaveBackground()
+            case .contourAtlas: ContourBackground(style: .tab)
             }
         }
         .id(theme)
@@ -204,6 +205,7 @@ struct DetailWaveBackground: View {
             case .sakuraCalm:  SakuraDetailWaveBackground()
             case .arcticDawn:  OceanLegacyArcticDetailWaveBackground()
             case .solarPop:    SolarDetailWaveBackground()
+            case .contourAtlas: ContourBackground(style: .detail)
             }
         }
         .id(theme)
@@ -225,6 +227,7 @@ struct SheetWaveBackground: View {
             case .sakuraCalm:  SakuraSheetWaveBackground()
             case .arcticDawn:  OceanLegacyArcticSheetWaveBackground()
             case .solarPop:    SolarSheetWaveBackground()
+            case .contourAtlas: ContourBackground(style: .sheet)
             }
         }
         .id(theme)

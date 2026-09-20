@@ -157,8 +157,10 @@ struct SettingsView: View {
     // MARK: - Appearance
 
     private var appearanceSection: some View {
-        Section("Appearance") {
+        Section {
             ThemePickerSection()
+        } header: {
+            Text("Appearance")
                 .accessibilityIdentifier("settings-section-appearance")
         }
     }

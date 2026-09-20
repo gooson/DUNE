@@ -1174,7 +1174,7 @@ private enum ArcticAuroraPalette {
 struct OceanLegacyArcticTabWaveBackground: View {
     @Environment(\.wavePreset) private var preset
     @Environment(\.appTheme) private var theme
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.waveReducedMotion) private var reduceMotion
     @Environment(\.scenePhase) private var scenePhase
     @State private var isLowPowerModeEnabled = ProcessInfo.processInfo.isLowPowerModeEnabled
 
@@ -1426,7 +1426,7 @@ struct OceanLegacyArcticTabWaveBackground: View {
 
 struct OceanLegacyArcticDetailWaveBackground: View {
     @Environment(\.appTheme) private var theme
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.waveReducedMotion) private var reduceMotion
     @Environment(\.scenePhase) private var scenePhase
     @State private var isLowPowerModeEnabled = ProcessInfo.processInfo.isLowPowerModeEnabled
 
@@ -1648,7 +1648,7 @@ struct OceanLegacyArcticDetailWaveBackground: View {
 
 struct OceanLegacyArcticSheetWaveBackground: View {
     @Environment(\.appTheme) private var theme
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.waveReducedMotion) private var reduceMotion
     @Environment(\.scenePhase) private var scenePhase
     @State private var isLowPowerModeEnabled = ProcessInfo.processInfo.isLowPowerModeEnabled
 
@@ -1923,7 +1923,7 @@ struct SolarFlareOverlayView: View {
     var strokeWidth: CGFloat = 1.1
 
     @State private var phase: CGFloat = 0
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.waveReducedMotion) private var reduceMotion
 
     private var targetPhase: CGFloat {
         (reverseDirection ? -1 : 1) * 2 * .pi
@@ -1980,7 +1980,7 @@ private struct SolarSunBurstOverlay: View {
     var coreScale: CGFloat = 1.0
 
     @State private var phase: CGFloat = 0
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.waveReducedMotion) private var reduceMotion
     @Environment(\.appTheme) private var theme
 
     private var intensityValue: Double {

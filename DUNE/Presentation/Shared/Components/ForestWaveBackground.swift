@@ -32,7 +32,7 @@ struct ForestWaveOverlayView: View {
     var crestWidth: CGFloat = 1.6
 
     @State private var phase: CGFloat = 0
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.waveReducedMotion) private var reduceMotion
 
     /// Seamless loop turns. Harmonic multipliers (0.55, 1.3, 1.8, 2.2) require
     /// LCM = 20 turns so every component completes an integer number of cycles.
