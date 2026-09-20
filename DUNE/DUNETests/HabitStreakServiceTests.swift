@@ -15,13 +15,13 @@ struct HabitStreakServiceTests {
     // MARK: - Longest Streak
 
     @Test func emptyLogs() {
-        let result = HabitStreakService.longestStreak(logs: [], for: habitID)
+        let result = HabitStreakService.longestStreak(logs: [], for: habitID, goalValue: 1)
         #expect(result == 0)
     }
 
     @Test func singleLog() {
         let logs = [makeLog(daysAgo: 0)]
-        let result = HabitStreakService.longestStreak(logs: logs, for: habitID)
+        let result = HabitStreakService.longestStreak(logs: logs, for: habitID, goalValue: 1)
         #expect(result == 1)
     }
 
@@ -31,7 +31,7 @@ struct HabitStreakServiceTests {
             makeLog(daysAgo: 1),
             makeLog(daysAgo: 2)
         ]
-        let result = HabitStreakService.longestStreak(logs: logs, for: habitID)
+        let result = HabitStreakService.longestStreak(logs: logs, for: habitID, goalValue: 1)
         #expect(result == 3)
     }
 
@@ -44,7 +44,7 @@ struct HabitStreakServiceTests {
             makeLog(daysAgo: 5),
             makeLog(daysAgo: 6)
         ]
-        let result = HabitStreakService.longestStreak(logs: logs, for: habitID)
+        let result = HabitStreakService.longestStreak(logs: logs, for: habitID, goalValue: 1)
         #expect(result == 3)
     }
 
@@ -58,7 +58,7 @@ struct HabitStreakServiceTests {
             makeLog(daysAgo: 6),
             makeLog(daysAgo: 7)
         ]
-        let result = HabitStreakService.longestStreak(logs: logs, for: habitID)
+        let result = HabitStreakService.longestStreak(logs: logs, for: habitID, goalValue: 1)
         #expect(result == 5)
     }
 
@@ -71,7 +71,7 @@ struct HabitStreakServiceTests {
             makeLog(daysAgo: 4)
         ]
         // After filtering: days 0, 2, 4 → no consecutive → longest = 1
-        let result = HabitStreakService.longestStreak(logs: logs, for: habitID)
+        let result = HabitStreakService.longestStreak(logs: logs, for: habitID, goalValue: 1)
         #expect(result == 1)
     }
 
@@ -81,17 +81,17 @@ struct HabitStreakServiceTests {
             makeLog(daysAgo: 0),
             HabitLogSnapshot(habitID: otherID, date: Date(), value: 1.0, memo: nil)
         ]
-        let result = HabitStreakService.longestStreak(logs: logs, for: habitID)
+        let result = HabitStreakService.longestStreak(logs: logs, for: habitID, goalValue: 1)
         #expect(result == 1)
 
-        let otherResult = HabitStreakService.longestStreak(logs: logs, for: otherID)
+        let otherResult = HabitStreakService.longestStreak(logs: logs, for: otherID, goalValue: 1)
         #expect(otherResult == 1)
     }
 
     // MARK: - Total Completions
 
     @Test func totalCompletionsEmpty() {
-        let result = HabitStreakService.totalCompletions(logs: [], for: habitID)
+        let result = HabitStreakService.totalCompletions(logs: [], for: habitID, goalValue: 1)
         #expect(result == 0)
     }
 
@@ -103,7 +103,7 @@ struct HabitStreakServiceTests {
             makeLog(daysAgo: 3, memo: "[dune-life-cycle-snooze]"),
             makeLog(daysAgo: 4)
         ]
-        let result = HabitStreakService.totalCompletions(logs: logs, for: habitID)
+        let result = HabitStreakService.totalCompletions(logs: logs, for: habitID, goalValue: 1)
         #expect(result == 3)
     }
 
@@ -114,7 +114,7 @@ struct HabitStreakServiceTests {
             makeLog(daysAgo: 1),
             HabitLogSnapshot(habitID: otherID, date: Date(), value: 1.0, memo: nil)
         ]
-        let result = HabitStreakService.totalCompletions(logs: logs, for: habitID)
+        let result = HabitStreakService.totalCompletions(logs: logs, for: habitID, goalValue: 1)
         #expect(result == 2)
     }
 }

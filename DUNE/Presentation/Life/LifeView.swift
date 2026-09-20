@@ -1086,7 +1086,7 @@ private struct HabitListQueryView: View {
             logs: logSnapshots, habits: habitSnapshots
         )
         heatmapData = HabitAnalyticsService.dailyCompletionCounts(
-            logs: logSnapshots
+            logs: logSnapshots, habits: habitSnapshots
         )
         weeklyReport = HabitAnalyticsService.weeklyReport(
             logs: logSnapshots, habits: habitSnapshots
