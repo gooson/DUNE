@@ -76,20 +76,26 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         XCTAssertTrue(metricDetail.waitForExistence(timeout: 5), "Metric detail should open from Today metric card")
 
         if app.windows.firstMatch.horizontalSizeClass == .regular {
-            XCTAssertTrue(sleepCard.exists, "Today metric summary should remain alongside the inspector")
             XCTAssertTrue(
-                app.waitAndTap("dashboard-metric-inspector-close"),
-                "Metric inspector should provide an accessible close action"
+                app.scrollViews["dashboard-root-scroll"].firstMatch.exists,
+                "Today dashboard should remain alongside the inspector\n\(app.debugDescription)"
             )
-            let inspectorDismissed = XCTNSPredicateExpectation(
-                predicate: NSPredicate(format: "exists == false"),
-                object: metricDetail
-            )
-            XCTAssertEqual(XCTWaiter.wait(for: [inspectorDismissed], timeout: 5), .completed)
-            XCTAssertTrue(sleepCard.isHittable, "Closing the inspector should preserve the selected metric summary")
-            sleepCard.tap()
-            XCTAssertTrue(metricDetail.waitForExistence(timeout: 5), "The same metric should reopen after inspector dismissal")
         }
+        XCTAssertTrue(
+            app.waitAndTap("dashboard-metric-inspector-close"),
+            "Metric inspector should provide an accessible close action\n\(app.debugDescription)"
+        )
+        let inspectorDismissed = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "exists == false"),
+            object: metricDetail
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [inspectorDismissed], timeout: 5), .completed)
+        XCTAssertTrue(
+            app.scrollToHittableElementIfNeeded(AXID.dashboardMetricCard("sleep"), maxSwipes: 8),
+            "Closing the inspector should leave the selected metric accessible on Today"
+        )
+        sleepCard.tap()
+        XCTAssertTrue(metricDetail.waitForExistence(timeout: 5), "The same metric should reopen after inspector dismissal")
 
         let showAllData = app.descendants(matching: .any)[AXID.metricDetailShowAllData].firstMatch
         XCTAssertTrue(showAllData.waitForExistence(timeout: 5), "Show All Data link should exist in metric detail")

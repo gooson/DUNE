@@ -85,7 +85,9 @@ final class LifeRegressionTests: SeededUITestBaseCase {
             XCTAssertTrue(habitSummary.exists, "Habit summary should remain alongside its history inspector")
         }
 
-        let firstRow = app.descendants(matching: .any)[AXID.lifeHabitHistoryRow(0)].firstMatch
+        let firstRow = historyScreen.descendants(matching: .any)
+            .matching(NSPredicate(format: "identifier BEGINSWITH %@", "life-habit-history-row-"))
+            .firstMatch
         XCTAssertTrue(firstRow.waitForExistence(timeout: 5), "Seeded habit history should expose at least one action row")
 
         XCTAssertTrue(

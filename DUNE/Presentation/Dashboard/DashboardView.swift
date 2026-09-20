@@ -5,7 +5,6 @@ struct DashboardView: View {
     @State private var viewModel: DashboardViewModel
     @State private var isShowingPinnedEditor = false
     @State private var isShowingHealthDataQA = false
-    @State private var metricDetailNavigation: HealthMetric?
     @State private var inspectedMetric: HealthMetric?
     @State private var templateNudgeToSave: WorkoutTemplateRecommendation?
     @State private var hasAppeared = false
@@ -119,6 +118,8 @@ struct DashboardView: View {
                 .padding(sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.lg)
                 .coordinateSpace(name: TabHeroStartLine.coordinateSpace)
             }
+            .accessibilityElement(children: .contain)
+            .accessibilityIdentifier("dashboard-root-scroll")
             .onChange(of: scrollToTopSignal) { _, _ in
                 withAnimation(DS.Animation.standard) {
                     proxy.scrollTo(ScrollAnchor.top, anchor: .top)
@@ -191,9 +192,6 @@ struct DashboardView: View {
                 )
             }
         }
-        .navigationDestination(item: $metricDetailNavigation) { metric in
-            MetricDetailView(metric: metric)
-        }
         .inspector(isPresented: Binding(
             get: { inspectedMetric != nil || isShowingHealthDataQA },
             set: { isPresented in
@@ -213,17 +211,19 @@ struct DashboardView: View {
                 .inspectorColumnWidth(min: 320, ideal: 420, max: 540)
             } else if let metric = inspectedMetric {
                 NavigationStack {
-                    MetricDetailView(metric: metric)
-                        .id(metric.id)
-                        .navigationDestination(for: AllDataDestination.self) { destination in
-                            AllDataView(category: destination.category)
+                    VStack(spacing: 0) {
+                        HStack {
+                            Spacer()
+                            Button("Done") { inspectedMetric = nil }
+                                .accessibilityIdentifier("dashboard-metric-inspector-close")
                         }
-                        .toolbar {
-                            ToolbarItem(placement: .confirmationAction) {
-                                Button("Done") { inspectedMetric = nil }
-                                    .accessibilityIdentifier("dashboard-metric-inspector-close")
+                        .padding(DS.Spacing.md)
+                        MetricDetailView(metric: metric)
+                            .id(metric.id)
+                            .navigationDestination(for: AllDataDestination.self) { destination in
+                                AllDataView(category: destination.category)
                             }
-                        }
+                    }
                 }
                 .inspectorColumnWidth(min: 320, ideal: 420, max: 540)
             }
@@ -691,12 +691,8 @@ struct DashboardView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private func openMetric(_ metric: HealthMetric) {
-        if sizeClass == .regular {
-            isShowingHealthDataQA = false
-            inspectedMetric = metric
-        } else {
-            metricDetailNavigation = metric
-        }
+        isShowingHealthDataQA = false
+        inspectedMetric = metric
     }
 
     private func cardGrid(cards: [VitalCardData]) -> some View {

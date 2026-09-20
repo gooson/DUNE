@@ -1179,6 +1179,7 @@ private struct HabitHistorySheet: View {
         }
         .background { SheetWaveBackground() }
         .presentationDetents([.medium, .large])
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier("life-habit-history-screen")
     }
 
