@@ -2,7 +2,7 @@
 tags: [swiftui, theme, contour, accessibility, preview, watchos]
 category: solution
 date: 2026-09-20
-status: draft
+status: implemented
 related_files:
   - DUNE/Presentation/Shared/Components/ContourBackground.swift
   - DUNE/Presentation/Settings/Components/ThemePickerSection.swift
@@ -12,7 +12,7 @@ related_solutions: [2026-03-04-adding-new-theme]
 
 # Contour Atlas 테마와 정적 카드 미리보기
 
-> `codex/contour-atlas-theme` 구현 기록. 아직 main에 머지되지 않은 초안이다.
+> Contour Atlas 테마의 구현과 검증 기록.
 
 ## Problem
 
