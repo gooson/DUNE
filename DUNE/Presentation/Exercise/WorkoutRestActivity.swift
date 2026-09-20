@@ -6,10 +6,14 @@ import OSLog
 @MainActor
 final class WorkoutRestActivity {
     private var activityID: String?
+    // Shared across owners so a recreated view cannot adopt an activity being dismissed.
+    private static var endingIDs = Set<String>()
 
     func start(sessionStartedAt: Date, exerciseName: String, setNumber: Int, endDate: Date, totalDuration: Int) {
         if let existing = Activity<WorkoutRestAttributes>.activities.first(where: {
             $0.attributes.sessionStartedAt == sessionStartedAt && $0.attributes.setNumber == setNumber
+                && !Self.endingIDs.contains($0.id)
+                && ($0.activityState == .active || $0.activityState == .stale)
         }) {
             activityID = existing.id
             update(endDate: endDate, totalDuration: totalDuration)
@@ -45,7 +49,12 @@ final class WorkoutRestActivity {
         }.map(\.id))
         if let activityID { ids.insert(activityID) }
         activityID = nil
-        for id in ids { Task { await Self.endActivity(id: id) } }
+        for id in ids where Self.endingIDs.insert(id).inserted {
+            Task {
+                await Self.endActivity(id: id)
+                Self.endingIDs.remove(id)
+            }
+        }
     }
 
     // Resolve ActivityKit handles inside the async operation; never transfer a retained
