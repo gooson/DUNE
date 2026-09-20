@@ -5,10 +5,8 @@ struct ThemePickerSection: View {
     @AppStorage(AppTheme.storageKey) private var selectedTheme: AppTheme = .desertWarm
 
     var body: some View {
-        VStack(alignment: .leading, spacing: DS.Spacing.md) {
-            ForEach(AppTheme.allCases, id: \.self) { appTheme in
-                themeRow(appTheme)
-            }
+        ForEach(AppTheme.allCases, id: \.self) { appTheme in
+            themeRow(appTheme)
         }
     }
 
