@@ -26,13 +26,13 @@ struct WorkoutTemplateListView: View {
             WeeklyWorkoutPlanView(onStartTemplate: onStartTemplate)
         }
         .toolbar {
-            ToolbarItem(placement: .secondaryAction) {
+            ToolbarItem(placement: .topBarTrailing) {
                 Button { showingWeeklyPlan = true } label: {
                     Label("Weekly Workout Plan", systemImage: "calendar")
                 }
                 .accessibilityIdentifier("workout-weekly-plan-open")
             }
-            ToolbarItem(placement: .primaryAction) {
+            ToolbarItem(placement: .topBarTrailing) {
                 Button {
                     showingCreateSheet = true
                 } label: {

@@ -65,10 +65,12 @@ struct WeeklyWorkoutPlanView: View {
                                 Label(template.name, systemImage: "play.fill")
                             }
                             .buttonStyle(.borderedProminent)
+                            .accessibilityIdentifier("weekly-plan-selected-template")
                         } else {
                             Text("Template unavailable").foregroundStyle(.secondary)
                         }
                         Button("Remove from Plan", role: .destructive) { assign(nil, to: selectedDate) }
+                            .accessibilityIdentifier("weekly-plan-remove")
                     }
                     Text("Plans are saved on this device.")
                         .font(.caption)
@@ -90,6 +92,8 @@ struct WeeklyWorkoutPlanView: View {
                 }
                 .padding(DS.Spacing.lg)
             }
+            .accessibilityElement(children: .contain)
+            .accessibilityIdentifier("weekly-plan-template-list")
         }
         .navigationTitle("Weekly Workout Plan")
         .navigationBarTitleDisplayMode(.inline)
