@@ -10,6 +10,8 @@ struct WorkoutSessionView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.horizontalSizeClass) private var sizeClass
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     @AppStorage(WeightUnit.storageKey) private var weightUnitRaw = WeightUnit.kg.rawValue
     @State private var viewModel: WorkoutSessionViewModel
@@ -19,6 +21,7 @@ struct WorkoutSessionView: View {
     @State private var showingShareSheet = false
     @State private var savedRecord: ExerciseRecord?
     @State private var effortSuggestion: EffortSuggestion?
+    @State private var didPrepareSession = false
     @FocusState private var isInputFieldFocused: Bool
 
     // Set-by-set flow state
@@ -81,23 +84,13 @@ struct WorkoutSessionView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            // Top bar: progress + timer
             topBar
-
-            // Main content area — switches between input and rest
-            ZStack {
-                if showRestTimer {
-                    restTimerContent
-                        .transition(.opacity)
-                } else {
-                    setInputContent
-                        .transition(.opacity)
-                }
+            AdaptivePaneView {
+                ScrollView { sessionOverview }
+                    .frame(maxHeight: sizeClass == .regular ? .infinity : 160)
+            } secondary: {
+                sessionControls
             }
-            .animation(.easeInOut(duration: 0.3), value: showRestTimer)
-
-            // Bottom action button
-            bottomAction
         }
         .background { DetailWaveBackground() }
         .sensoryFeedback(.success, trigger: setCompleteCount)
@@ -129,15 +122,17 @@ struct WorkoutSessionView: View {
             }
         }
         .onAppear {
-            viewModel.loadPreviousSets(from: exerciseRecords, weightUnit: weightUnit)
-            if let templateEntry {
-                viewModel.applyTemplateDefaults(templateEntry, weightUnit: weightUnit)
+            if !didPrepareSession {
+                viewModel.loadPreviousSets(from: exerciseRecords, weightUnit: weightUnit)
+                if let templateEntry {
+                    viewModel.applyTemplateDefaults(templateEntry, weightUnit: weightUnit)
+                }
+                if draftToRestore != nil {
+                    WorkoutSessionViewModel.clearDraft()
+                }
+                skipToFirstIncompleteSet()
+                didPrepareSession = true
             }
-            if draftToRestore != nil {
-                WorkoutSessionViewModel.clearDraft()
-            }
-            // Skip already-completed sets (draft restore)
-            skipToFirstIncompleteSet()
             startSessionTimer()
         }
         .onDisappear {
@@ -167,7 +162,7 @@ struct WorkoutSessionView: View {
         }
         .sheet(isPresented: $showLastSetOptions) {
             allSetsDoneSheet
-                .presentationDetents([.height(200)])
+                .presentationDetents([.medium, .large])
                 .presentationDragIndicator(.visible)
                 .interactiveDismissDisabled()
         }
@@ -268,6 +263,49 @@ struct WorkoutSessionView: View {
 
     // MARK: - Set Input Content
 
+    private var sessionControls: some View {
+        ScrollView {
+            VStack(spacing: DS.Spacing.lg) {
+                if showRestTimer {
+                    restTimerContent
+                } else {
+                    setInputContent
+                }
+                bottomAction
+            }
+            .frame(maxWidth: .infinity)
+        }
+        .scrollDismissesKeyboard(.interactively)
+        .animation(reduceMotion ? nil : DS.Animation.standard, value: showRestTimer)
+    }
+
+    private var sessionOverview: some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.lg) {
+            Label(exercise.localizedName, systemImage: exercise.resolvedActivityType.iconName)
+                .font(.title2.bold())
+            Text("Previous Workout")
+                .font(DS.Typography.sectionTitle)
+            if viewModel.previousSets.isEmpty {
+                Text("No previous sets for this exercise")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            } else {
+                ForEach(Array(viewModel.previousSets.enumerated()), id: \.offset) { index, previous in
+                    HStack {
+                        Text("Set \(index + 1)")
+                            .font(.subheadline)
+                        Spacer()
+                        previousBadge(previous)
+                    }
+                    .padding(.vertical, DS.Spacing.sm)
+                }
+            }
+        }
+        .padding(DS.Spacing.lg)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .accessibilityIdentifier("workout-session-overview")
+    }
+
     private var setInputContent: some View {
         VStack(spacing: DS.Spacing.xl) {
             Spacer()
@@ -305,6 +343,14 @@ struct WorkoutSessionView: View {
                     .font(.caption)
             } else if let r = prev.reps {
                 Text("\(r.formattedWithSeparator) reps")
+                    .font(.caption)
+            }
+            if let duration = prev.duration, duration.isFinite, duration >= 0 {
+                Text(Duration.seconds(duration).formatted(.time(pattern: .minuteSecond)))
+                    .font(.caption.monospacedDigit())
+            }
+            if let distance = prev.distance, distance.isFinite, distance >= 0 {
+                Text(Measurement(value: distance, unit: UnitLength.kilometers).formatted())
                     .font(.caption)
             }
         }

@@ -1,6 +1,50 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "Previous Workout" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Previous Workout"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이전 운동 기록"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "前回のワークアウト"
+          }
+        }
+      }
+    },
+    "No previous sets for this exercise" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No previous sets for this exercise"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 운동의 이전 세트 기록이 없어요"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "この種目の前回のセット記録はありません"
+          }
+        }
+      }
+    },
     "Start Your Habit Routine" : {
       "localizations" : {
         "en" : {
@@ -5117,23 +5161,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "자동 연결"
-          }
-        }
-      }
-    },
-    "Auto Workout Achievements" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "自動ワークアウト実績"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "자동 운동 업적"
           }
         }
       }
@@ -35252,22 +35279,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "오늘의 인사이트"
-          }
-        }
-      }
-    },
-    "Today's Progress" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "今日の進捗"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "오늘의 진행"
           }
         }
       }

@@ -270,6 +270,7 @@ enum AXID {
 
     // MARK: - Workout Session
     static let workoutSessionScreen = "workout-session-screen"
+    static let workoutSessionOverview = "workout-session-overview"
     static let workoutSessionDone = "workout-session-done"
     static let workoutSessionCompleteSet = "workout-session-complete-set"
     static let workoutSessionLastSetSheet = "workout-session-last-set-sheet"
@@ -472,10 +473,10 @@ extension XCUIApplication {
     func hasPrimaryNavigation(timeout: TimeInterval = 8) -> Bool {
         let tabIDs = ["tab-today", "tab-activity", "tab-wellness", "tab-life"]
         let tabPredicate = NSPredicate(format: "identifier IN %@", tabIDs)
-        let startsOnLife: Bool = {
+        let initialTab: String? = {
             guard let argumentIndex = launchArguments.firstIndex(of: "--uitest-initial-tab"),
-                  launchArguments.indices.contains(argumentIndex + 1) else { return false }
-            return launchArguments[argumentIndex + 1] == "life"
+                  launchArguments.indices.contains(argumentIndex + 1) else { return nil }
+            return launchArguments[argumentIndex + 1]
         }()
 
         let navigationReady = NSPredicate { _, _ in
@@ -486,11 +487,18 @@ extension XCUIApplication {
             }
 
             // Duo's vertical system tabs may not expose a TabBar or the tab IDs.
-            // Accept the explicitly requested Life destination only when both its
+            // Accept an explicitly requested destination only when both its
             // main content and toolbar action have actually rendered.
-            return startsOnLife
-                && self.descendants(matching: .any)[AXID.lifeHeroProgress].firstMatch.exists
-                && self.buttons[AXID.lifeToolbarAdd].firstMatch.exists
+            switch initialTab {
+            case "life":
+                return self.descendants(matching: .any)[AXID.lifeHeroProgress].firstMatch.exists
+                    && self.buttons[AXID.lifeToolbarAdd].firstMatch.exists
+            case "train":
+                return self.descendants(matching: .any)[AXID.activityRootScroll].firstMatch.exists
+                    && self.buttons[AXID.activityToolbarAdd].firstMatch.exists
+            default:
+                return false
+            }
         }
         let expectation = XCTNSPredicateExpectation(predicate: navigationReady, object: self)
         return XCTWaiter.wait(for: [expectation], timeout: timeout) == .completed

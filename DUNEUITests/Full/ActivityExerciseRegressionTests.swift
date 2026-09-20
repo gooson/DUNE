@@ -342,6 +342,19 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
 
         let completeSetButton = app.buttons[AXID.workoutSessionCompleteSet].firstMatch
         XCTAssertTrue(completeSetButton.waitForExistence(timeout: 5), "Complete Set button should exist")
+        XCTAssertTrue(
+            app.descendants(matching: .any)[AXID.workoutSessionOverview].firstMatch.exists,
+            "Previous workout overview should coexist with current set controls"
+        )
+
+        let repsField = app.textFields[AXID.workoutSessionField("reps")].firstMatch
+        XCTAssertTrue(repsField.waitForExistence(timeout: 5), "Current set repetitions should be editable")
+        repsField.tap()
+        XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 3), "Repetition entry should open the keyboard")
+        XCTAssertTrue(
+            completeSetButton.isHittable,
+            "Complete Set should remain accessible while entering repetitions\n\(app.debugDescription)"
+        )
         completeSetButton.tap()
 
         let doneButton = app.descendants(matching: .any)[AXID.workoutSessionDone].firstMatch
