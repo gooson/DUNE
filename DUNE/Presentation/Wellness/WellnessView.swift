@@ -185,7 +185,7 @@ struct WellnessView: View {
             MetricComparisonView(metrics: comparisonMetrics)
         }
         .toolbar {
-            ToolbarItem(placement: .secondaryAction) {
+            ToolbarItem(placement: .topBarTrailing) {
                 Button {
                     isShowingComparison = true
                 } label: {

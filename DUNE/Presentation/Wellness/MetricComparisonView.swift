@@ -20,7 +20,10 @@ struct MetricComparisonView: View {
         NavigationStack {
             VStack(spacing: DS.Spacing.md) {
                 Picker("Period", selection: $period) {
-                    ForEach(TimePeriod.allCases, id: \.self) { Text($0.displayName).tag($0) }
+                    ForEach(TimePeriod.allCases, id: \.self) {
+                        Text($0.displayName).tag($0)
+                            .accessibilityIdentifier("metric-comparison-period-\($0.rawValue)")
+                    }
                 }
                 .pickerStyle(.segmented)
                 .accessibilityIdentifier("metric-comparison-period")
@@ -40,6 +43,7 @@ struct MetricComparisonView: View {
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Done") { dismiss() }
+                        .accessibilityIdentifier("metric-comparison-done")
                 }
             }
         }
@@ -62,6 +66,7 @@ struct MetricComparisonView: View {
             }
             .padding(DS.Spacing.md)
         }
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier(identifier)
     }
 }
@@ -77,30 +82,44 @@ private struct ComparisonMetricChart: View {
         return dates.start...dates.end
     }
 
+    private var chartUnit: String {
+        metric.category == .sleep ? String(localized: "Minutes") : (viewModel.metricUnit.isEmpty ? metric.unit : viewModel.metricUnit)
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.md) {
             Text(metric.name).font(.headline)
             Text(range.lowerBound.formatted(date: .abbreviated, time: .omitted) + " – " + range.upperBound.formatted(date: .abbreviated, time: .omitted))
                 .font(.caption)
                 .foregroundStyle(.secondary)
+                .accessibilityIdentifier("comparison-date-range")
             if viewModel.isLoading {
                 ProgressView().frame(maxWidth: .infinity, minHeight: 220)
             } else if let message = viewModel.errorMessage {
                 Text(message).foregroundStyle(.secondary)
                 Button("Retry") { Task { await viewModel.loadData() } }
             } else {
-                let points = viewModel.chartData.filter { range.contains($0.date) && $0.value.isFinite }
+                let points = viewModel.chartData.filter {
+                    range.contains($0.date) && $0.value.isFinite && (metric.category != .sleep || $0.value > 0)
+                }
                 if points.isEmpty {
                     ContentUnavailableView("No Data", systemImage: "chart.xyaxis.line")
                 } else {
                     Chart(points) { point in
-                        LineMark(x: .value("Date", point.date), y: .value(metric.unit, point.value))
-                            .foregroundStyle(metric.category.themeColor)
-                        PointMark(x: .value("Date", point.date), y: .value(metric.unit, point.value))
-                            .foregroundStyle(metric.category.themeColor)
+                        if metric.category == .sleep {
+                            BarMark(x: .value("Date", point.date), y: .value(chartUnit, point.value))
+                                .foregroundStyle(metric.category.themeColor)
+                                .accessibilityValue("\(point.value.formatted()) \(chartUnit)")
+                        } else {
+                            LineMark(x: .value("Date", point.date), y: .value(chartUnit, point.value))
+                                .foregroundStyle(metric.category.themeColor)
+                            PointMark(x: .value("Date", point.date), y: .value(chartUnit, point.value))
+                                .foregroundStyle(metric.category.themeColor)
+                                .accessibilityValue("\(point.value.formatted()) \(chartUnit)")
+                        }
                     }
                     .chartXScale(domain: range)
-                    .chartYAxisLabel(viewModel.metricUnit.isEmpty ? metric.unit : viewModel.metricUnit)
+                    .chartYAxisLabel(chartUnit)
                     .frame(height: 220)
                     .clipped()
                     .accessibilityLabel(Text(metric.name))
