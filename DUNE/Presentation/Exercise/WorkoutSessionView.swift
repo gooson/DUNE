@@ -106,16 +106,18 @@ struct WorkoutSessionView: View {
         .englishNavigationTitle(exercise.name)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    let newUnit: WeightUnit = weightUnit == .kg ? .lb : .kg
-                    viewModel.convertWeightUnit(from: weightUnit, to: newUnit)
-                    weightUnitRaw = newUnit.rawValue
-                } label: {
-                    Text(weightUnit.displayName.uppercased())
-                        .font(.caption.weight(.bold))
+            if viewModel.supportsWeight {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        let newUnit: WeightUnit = weightUnit == .kg ? .lb : .kg
+                        viewModel.convertWeightUnit(from: weightUnit, to: newUnit)
+                        weightUnitRaw = newUnit.rawValue
+                    } label: {
+                        Text(weightUnit.displayName.uppercased())
+                            .font(.caption.weight(.bold))
+                    }
+                    .accessibilityIdentifier("workout-weight-unit-button")
                 }
-                .accessibilityIdentifier("workout-weight-unit-button")
             }
             ToolbarItem(placement: .confirmationAction) {
                 Button("Done") { saveWorkout() }

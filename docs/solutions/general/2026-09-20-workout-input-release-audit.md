@@ -30,7 +30,7 @@ status: implemented-with-verification-limits
 | 복합 운동 일부만 저장 | 검증 실패 운동이 조용히 누락 | 완료 운동 하나라도 실패하면 전체 저장 중단, 재시도 허용 |
 | 폰 공유 row의 분/초 혼용 | 90초가 잘못 저장/복원 | 시간/라운드 세트는 초, 유산소는 분 |
 | 세트 진행 문구 번역 키 불일치 | 한국어에서도 Set 1 of 5 노출 | 기존 번역 카탈로그와 보간 타입 일치 |
-| KG 버튼의 중복 capsule | 상단 뒤로가기와 큰 장식 영역 중첩 | native trailing toolbar label, 내부 capsule/padding 제거 |
+| KG 버튼의 중복 capsule | 상단 뒤로가기와 큰 장식 영역 중첩 | native trailing toolbar label, 내부 capsule/padding 제거; 중량 미지원 세션은 단위 버튼 숨김 |
 | 기본 설정/루틴에 무조건 중량 노출 | 시간/HIIT에 불필요한 필드 | 입력 유형에 따라 중량 필드 제한 |
 
 ## Verification

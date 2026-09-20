@@ -67,18 +67,20 @@ struct CompoundWorkoutView: View {
         .englishNavigationTitle(config.mode.rawValue.capitalized)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    let newUnit: WeightUnit = weightUnit == .kg ? .lb : .kg
-                    for session in viewModel.exerciseViewModels {
-                        session.convertWeightUnit(from: weightUnit, to: newUnit)
+            if viewModel.exerciseViewModels.contains(where: { $0.supportsWeight }) {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        let newUnit: WeightUnit = weightUnit == .kg ? .lb : .kg
+                        for session in viewModel.exerciseViewModels {
+                            session.convertWeightUnit(from: weightUnit, to: newUnit)
+                        }
+                        weightUnitRaw = newUnit.rawValue
+                    } label: {
+                        Text(weightUnit.displayName.uppercased())
+                            .font(.caption.weight(.bold))
                     }
-                    weightUnitRaw = newUnit.rawValue
-                } label: {
-                    Text(weightUnit.displayName.uppercased())
-                        .font(.caption.weight(.bold))
+                    .accessibilityIdentifier("workout-weight-unit-button")
                 }
-                .accessibilityIdentifier("workout-weight-unit-button")
             }
             ToolbarItem(placement: .confirmationAction) {
                 Button("Finish") {
