@@ -26,6 +26,38 @@ final class LifeSmokeTests: UITestBaseCase {
 
     // MARK: - Habit Form
 
+    func testEmptyStarterAddCancelPreservesEmptyState() throws {
+        XCTAssertTrue(elementExists(AXID.lifeHeroProgress, timeout: 8), "Empty starter should appear")
+        XCTAssertTrue(app.waitAndTap("life-empty-add"), "Empty starter should offer Add Habit")
+
+        let nameField = app.textFields[AXID.habitFormName].firstMatch
+        XCTAssertTrue(nameField.waitForExistence(timeout: 3), "Add Habit should open the habit form")
+        XCTAssertTrue(
+            app.dismissModalIfPresent(cancelIdentifiers: [AXID.habitFormCancel]),
+            "Cancel should dismiss the habit form without creating a habit"
+        )
+
+        let addButton = app.buttons["life-empty-add"].firstMatch
+        XCTAssertTrue(addButton.waitForExistence(timeout: 3), "Cancel should preserve the empty starter")
+        XCTAssertTrue(addButton.isHittable, "Empty starter should remain actionable after cancel")
+        XCTAssertTrue(app.buttons["life-empty-template"].exists, "Template entry should remain available")
+    }
+
+    func testEmptyStarterOpensTemplates() throws {
+        XCTAssertTrue(app.waitAndTap("life-empty-template"), "Empty starter should offer From Template")
+        XCTAssertTrue(elementExists("habit-template-list", timeout: 3), "Template picker should appear")
+        XCTAssertTrue(
+            app.dismissModalIfPresent(cancelIdentifiers: ["habit-template-cancel"]),
+            "Template picker should dismiss without creating a habit"
+        )
+
+        XCTAssertTrue(
+            app.buttons["life-empty-template"].waitForExistence(timeout: 3),
+            "Cancel should return to the empty starter"
+        )
+        XCTAssertTrue(app.buttons["life-empty-add"].isHittable, "Add Habit should remain actionable")
+    }
+
     func testHabitFormOpens() throws {
         XCTAssertTrue(app.waitAndTap(AXID.lifeToolbarAdd), "Add button should exist")
 
@@ -94,6 +126,8 @@ final class LifeSeededSmokeTests: SeededUITestBaseCase {
             elementExists(AXID.lifeHeroProgress, timeout: 15),
             "Life hero progress card should exist when habits are seeded"
         )
+        XCTAssertFalse(app.buttons["life-empty-add"].exists, "Seeded habits should not show the empty starter")
+        XCTAssertFalse(app.buttons["life-empty-template"].exists, "Seeded habits should not show the empty template entry")
     }
 
     func testHabitActionsMenuOpensEditSheet() throws {

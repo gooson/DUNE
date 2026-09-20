@@ -53,7 +53,8 @@ struct LifeView: View {
                     // Isolated @Query child — prevents parent re-layout (Correction #179)
                     HabitListQueryView(
                         viewModel: viewModel,
-                        refreshSignal: refreshSignal + localRefreshSignal
+                        refreshSignal: refreshSignal + localRefreshSignal,
+                        onOpenTemplates: { isShowingTemplateSheet = true }
                     )
                 }
                 .padding(isRegular ? DS.Spacing.xxl : DS.Spacing.lg)
@@ -159,10 +160,12 @@ private struct HabitListQueryView: View {
 
     @Bindable var viewModel: LifeViewModel
     let refreshSignal: Int
+    let onOpenTemplates: () -> Void
 
     @Environment(\.modelContext) private var modelContext
     @Environment(\.appTheme) private var theme
     @Environment(\.horizontalSizeClass) private var sizeClass
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     // Correction #68: O(1) lookup instead of O(N) per row
     @State private var habitsByID: [UUID: HabitDefinition] = [:]
@@ -192,7 +195,13 @@ private struct HabitListQueryView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.lg) {
             // Hero: completion rate
-            heroSection
+            Group {
+                if habits.isEmpty {
+                    starterSection
+                } else {
+                    heroSection
+                }
+            }
                 .reportTabHeroFrame()
                 .accessibilityIdentifier("life-hero-progress")
                 .staggeredAppear(index: 0)
@@ -203,17 +212,17 @@ private struct HabitListQueryView: View {
                     .staggeredAppear(index: 1)
             }
 
-            if isRegular {
-                HStack(alignment: .top, spacing: DS.Spacing.md) {
-                    habitsSection(fillHeight: true)
-                    autoAchievementsSection(fillHeight: true)
-                }
-                .staggeredAppear(index: 2)
-            } else {
-                habitsSection()
-                    .staggeredAppear(index: 2)
+            if habits.isEmpty {
+                ArchivedHabitCountView()
                 autoAchievementsSection()
-                    .staggeredAppear(index: 3)
+            } else {
+                let layout = isRegular && !dynamicTypeSize.isAccessibilitySize
+                    ? AnyLayout(HStackLayout(alignment: .top, spacing: DS.Spacing.md))
+                    : AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.lg))
+                layout {
+                    habitsSection()
+                    autoAchievementsSection(useTwoColumnCards: false)
+                }
             }
         }
         .background {
@@ -588,19 +597,18 @@ private struct HabitListQueryView: View {
 
     // MARK: - Auto Achievements
 
-    private func autoAchievementsSection(fillHeight: Bool = false) -> some View {
+    private func autoAchievementsSection(useTwoColumnCards: Bool = true) -> some View {
         let groups = autoAchievementGroups
         let customGoals = viewModel.autoLinkedProgresses
         let customCompletedCount = customGoals.filter(\.isCompleted).count
         let completedGoals = groups.reduce(0) { $0 + $1.completedCount } + customCompletedCount
         let totalGoals = groups.reduce(0) { $0 + $1.metrics.count } + customGoals.count
-        let useTwoColumnCards = isRegular && !fillHeight
+        let showTwoColumns = isRegular && !dynamicTypeSize.isAccessibilitySize && useTwoColumnCards
 
         return SectionGroup(
-            title: "Auto Workout Achievements",
+            title: "Weekly Workout Achievements",
             icon: "figure.run",
-            iconColor: DS.Color.activity,
-            fillHeight: fillHeight
+            iconColor: DS.Color.activity
         ) {
             VStack(alignment: .leading, spacing: DS.Spacing.sm) {
                 HStack(alignment: .firstTextBaseline) {
@@ -624,7 +632,7 @@ private struct HabitListQueryView: View {
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                     }
-                } else if useTwoColumnCards {
+                } else if showTwoColumns {
                     LazyVGrid(
                         columns: [GridItem(.flexible(), spacing: DS.Spacing.md), GridItem(.flexible())],
                         spacing: DS.Spacing.md
@@ -839,6 +847,39 @@ private struct HabitListQueryView: View {
 
     // MARK: - Hero
 
+    private var starterSection: some View {
+        StandardCard {
+            VStack(alignment: .leading, spacing: DS.Spacing.md) {
+                Label("Start Your Habit Routine", systemImage: "checklist")
+                    .font(DS.Typography.sectionTitle)
+                Text("Add your first habit to start tracking your daily routine.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+                ViewThatFits(in: .horizontal) {
+                    HStack(spacing: DS.Spacing.md) { starterActions }
+                    VStack(alignment: .leading, spacing: DS.Spacing.sm) { starterActions }
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+    }
+
+    @ViewBuilder
+    private var starterActions: some View {
+        Button("Add Habit") {
+            viewModel.resetForm()
+            viewModel.isShowingAddSheet = true
+        }
+        .buttonStyle(.borderedProminent)
+        .tint(theme.accentColor)
+        .accessibilityIdentifier("life-empty-add")
+
+        Button("From Template", action: onOpenTemplates)
+            .buttonStyle(.bordered)
+            .accessibilityIdentifier("life-empty-template")
+    }
+
     private var heroSection: some View {
         HeroCard(tintColor: DS.Color.tabLife) {
             HStack(spacing: isRegular ? DS.Spacing.xxl : DS.Spacing.xl) {
@@ -846,7 +887,7 @@ private struct HabitListQueryView: View {
 
                 VStack(alignment: .leading, spacing: DS.Spacing.sm) {
                     HStack(spacing: DS.Spacing.xs) {
-                        Text("Today's Progress")
+                        Text("Today's Habits")
                             .font(isRegular ? .title3 : .headline)
                             .fontWeight(.semibold)
 
