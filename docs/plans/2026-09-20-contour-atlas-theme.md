@@ -2,7 +2,7 @@
 tags: [theme, contour, accessibility, settings]
 date: 2026-09-20
 category: plan
-status: approved
+status: implemented
 confidence: high
 related_solutions: [2026-03-04-adding-new-theme]
 ---
@@ -45,6 +45,9 @@ Prefix 색상 resolver와 기존 exhaustive switch를 재사용한다. 새 테�
 | DUNEWatch/Views/WatchWaveBackground.swift, DUNE/project.yml | 수정 | Watch 공유 배경 |
 | DUNE/Presentation/Shared/Components/WavePreset.swift 및 기존 배경 | 수정 | 시스템 접근성을 유지하는 미리보기 모션 게이트 |
 | DUNE/Presentation/Settings/Components/ThemePickerSection.swift | 수정 | 카드 미리보기 |
+| DUNE/Presentation/Settings/SettingsView.swift | 수정 | 테마별 Form 행과 섹션 접근성 분리 |
+| DUNE/Presentation/Dashboard/Components/{ConditionHeroView,BaselineTrendBadge,YesterdayRecapCard}.swift | 수정 | Contour 보조 텍스트 대비 |
+| DUNE/App/DUNEApp.swift | 수정 | 테스트 데이터 시딩 후 지정 테마 복원 |
 | Shared/Resources/Localizable.xcstrings, DUNEWatch/Resources/Localizable.xcstrings | 수정 | 번역 |
 | DUNETests/AppThemeTests.swift, DUNEUITests/Visual/ContourThemeTests.swift | 수정/추가 | 저장/자산/선택/UI 검증 |
 
@@ -83,3 +86,13 @@ Prefix 색상 resolver와 기존 exhaustive switch를 재사용한다. 새 테�
 ## Confidence Assessment
 
 High: 기존 prefix 구조를 유지하며 새 테마에 변경을 한정한다.
+
+## Execution Results
+
+- iOS + embedded Watch 빌드 통과.
+- iPhone 17 / iOS 27: 라이트·다크/설정 캡처, 테마 전환/재실행 지속성 2개 UI 테스트 통과.
+- iPad Pro 13-inch (M5) / iOS 27: 라이트·다크/설정 1개 UI 테스트 통과.
+- AppThemeTests 9개 통과: 저장 호환성, 자산 존재, 대비 검증 포함.
+- 캡처 확인 후 Today 보조 텍스트 대비 보강.
+- Watch 실화면, iOS 26 런타임, 최대 Dynamic Type/가로 모드 검증은 미실시.
+- 기능 브랜치에 구현/검증 커밋 보존. main 머지는 이 작업의 범위에 포함하지 않음.
