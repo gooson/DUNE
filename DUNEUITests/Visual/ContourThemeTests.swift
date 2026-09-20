@@ -3,7 +3,7 @@ import XCTest
 @MainActor
 final class ContourThemeTests: SeededUITestBaseCase {
     override var additionalLaunchArguments: [String] {
-        ["--ui-test-theme", "contourAtlas", "--ui-test-style", "light"]
+        ["--ui-test-theme", "contourAtlas", "--ui-test-style", "light", "-morningBriefingDisabled", "YES"]
     }
 
     func testContourLightAndDarkScreens() {
@@ -16,7 +16,8 @@ final class ContourThemeTests: SeededUITestBaseCase {
         app.terminate()
         app.launchArguments = [
             "--uitesting", "--ui-reset", "--seed-mock",
-            "--ui-test-theme", "contourAtlas", "--ui-test-style", "dark"
+            "--ui-test-theme", "contourAtlas", "--ui-test-style", "dark",
+            "-morningBriefingDisabled", "YES"
         ]
         app.launch()
         XCTAssertTrue(app.hasPrimaryNavigation(timeout: 15))
@@ -38,7 +39,7 @@ final class ContourThemeTests: SeededUITestBaseCase {
 
         app.terminate()
         // No reset or theme override: verify the user's persisted selection.
-        app.launchArguments = ["--uitesting", "--ui-test-style", "light"]
+        app.launchArguments = ["--uitesting", "--ui-test-style", "light", "-morningBriefingDisabled", "YES"]
         app.launch()
         XCTAssertTrue(app.hasPrimaryNavigation(timeout: 15))
         openSettings()
