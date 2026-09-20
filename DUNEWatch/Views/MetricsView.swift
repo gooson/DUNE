@@ -9,10 +9,12 @@ struct MetricsView: View {
     @Environment(\.appTheme) private var theme
 
     @State private var weight: Double = 0
+    @State private var usesAddedWeight = false
+    @State private var sessionWeightOverride: Double?
     @State private var reps: Int = WatchSetInputPolicy.defaultReps
     @State private var durationMinutes: Int = 1
     /// Start date of the current duration-intensity set (live timer).
-    @State private var setTimerStart: Date?
+    @State private var setTimerStart: TimeInterval?
     /// Auto-estimated RPE for the just-completed set (shown on rest timer).
     @State private var estimatedRPE: Double?
     @State private var showInputSheet = false
@@ -30,7 +32,7 @@ struct MetricsView: View {
 
     /// Resolved inputType for the current exercise entry.
     private var currentInputType: ExerciseInputType {
-        workoutManager.currentEntry?.inputTypeRaw
+        TemplateExerciseProfile.normalizedInputTypeRaw(workoutManager.currentEntry?.inputTypeRaw)
             .flatMap(ExerciseInputType.init(rawValue:)) ?? .setsRepsWeight
     }
 
@@ -54,6 +56,7 @@ struct MetricsView: View {
         .onChange(of: workoutManager.currentExerciseIndex) { _, _ in
             lastRestTimerTotal = nil
             estimatedRPE = nil
+            sessionWeightOverride = nil
             prefillFromEntry()
             refreshPreviousSetsCache()
         }
@@ -63,7 +66,7 @@ struct MetricsView: View {
             // Only show input sheet on first appear, not after rest/transition
             if !didInitialAppear {
                 didInitialAppear = true
-                showInputSheet = true
+                showInputSheet = currentInputType != .durationIntensity
             }
         }
         .onChange(of: pendingInputSheet) { _, shouldShow in
@@ -78,8 +81,12 @@ struct MetricsView: View {
                 weight: $weight,
                 reps: $reps,
                 durationMinutes: $durationMinutes,
+                usesAddedWeight: $usesAddedWeight,
                 previousSets: cachedPreviousSets
             )
+        }
+        .onChange(of: weight) { _, newValue in
+            if showInputSheet { sessionWeightOverride = newValue }
         }
         .confirmationDialog(
             "End Workout?",
@@ -217,8 +224,11 @@ struct MetricsView: View {
                 case .durationIntensity:
                     durationInputCardContent
                 case .setsReps:
+                    if usesAddedWeight { weightRepsInputCardContent } else { repsOnlyInputCardContent }
+                case .roundsBased:
                     repsOnlyInputCardContent
-                case .setsRepsWeight, .durationDistance, .roundsBased:
+                    durationInputCardContent
+                case .setsRepsWeight, .durationDistance:
                     weightRepsInputCardContent
                 }
             }
@@ -277,7 +287,7 @@ struct MetricsView: View {
 
     private var durationInputCardContent: some View {
         TimelineView(.periodic(from: .now, by: 1)) { context in
-            let elapsed = Int(setTimerStart.map { context.date.timeIntervalSince($0) } ?? 0)
+            let elapsed = Int(setTimerStart.map { max(0, workoutManager.activeElapsedTime(at: context.date) - $0) } ?? 0)
             let mins = elapsed / 60
             let secs = elapsed % 60
             Text(String(format: "%d:%02d", mins, secs))
@@ -393,11 +403,22 @@ struct MetricsView: View {
 
         let inputType = currentInputType
 
+        defer {
+            if inputType == .setsReps || inputType == .setsRepsWeight {
+                if let sessionWeightOverride { weight = sessionWeightOverride }
+            } else {
+                weight = 0
+            }
+            usesAddedWeight = inputType == .setsReps && weight > 0
+        }
+
         if inputType == .durationIntensity {
             // Start the live timer for this set.
-            setTimerStart = Date()
+            setTimerStart = workoutManager.activeElapsedTime
             return
         }
+
+        if inputType == .roundsBased { setTimerStart = workoutManager.activeElapsedTime }
 
         let fallbackReps = WatchSetInputPolicy.resolvedInitialReps(
             lastSetReps: nil,
@@ -415,13 +436,17 @@ struct MetricsView: View {
 
         // Use previous set's weight/reps if available, otherwise fall back to template default
         if let lastSet = workoutManager.lastCompletedSetForCurrentExercise {
-            weight = lastSet.weight ?? entry.defaultWeightKg ?? 0
+            weight = WatchSetInputPolicy.resolvedWeight(
+                previousWeight: lastSet.weight, defaultWeight: entry.defaultWeightKg, hasPreviousSet: true
+            )
             reps = WatchSetInputPolicy.resolvedInitialReps(
                 lastSetReps: lastSet.reps,
                 entryDefaultReps: entry.defaultReps
             )
         } else {
-            weight = entry.defaultWeightKg ?? 0
+            weight = WatchSetInputPolicy.resolvedWeight(
+                previousWeight: nil, defaultWeight: entry.defaultWeightKg, hasPreviousSet: false
+            )
             reps = fallbackReps
         }
     }
@@ -453,7 +478,7 @@ struct MetricsView: View {
                 WKInterfaceDevice.current().play(.failure)
                 return
             }
-            let elapsed = Date().timeIntervalSince(start)
+            let elapsed = max(0, workoutManager.activeElapsedTime - start)
             guard elapsed >= 1, elapsed <= 7200 else {
                 WKInterfaceDevice.current().play(.failure)
                 return
@@ -479,11 +504,15 @@ struct MetricsView: View {
             ? workoutManager.completedSetsData[workoutManager.currentExerciseIndex]
             : []
 
-        workoutManager.completeSet(weight: weight > 0 ? weight : nil, reps: reps > 0 ? reps : nil, rpe: nil)
+        let recordedWeight = WatchSetInputPolicy.completedWeight(weight, inputType: currentInputType)
+        let duration = currentInputType == .roundsBased
+            ? setTimerStart.map { max(1, min(7200, workoutManager.activeElapsedTime - $0)) }
+            : nil
+        workoutManager.completeSet(weight: recordedWeight, reps: reps > 0 ? reps : nil, duration: duration, rpe: nil)
         refreshPreviousSetsCache()
 
         // Auto-estimate RPE for the just-completed set
-        estimatedRPE = WatchRPEEstimator.estimateRPE(weight: weight, reps: reps, completedSets: priorSets)
+        estimatedRPE = WatchRPEEstimator.estimateRPE(weight: recordedWeight ?? 0, reps: reps, completedSets: priorSets)
 
         // Haptic on set completion
         WKInterfaceDevice.current().play(.success)

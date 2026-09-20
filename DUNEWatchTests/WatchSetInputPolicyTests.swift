@@ -3,6 +3,27 @@ import Testing
 
 @Suite("WatchSetInputPolicy")
 struct WatchSetInputPolicyTests {
+    @Test("Removing added weight does not restore the template default")
+    func removedWeightStaysRemoved() {
+        #expect(WatchSetInputPolicy.resolvedWeight(previousWeight: nil, defaultWeight: 20, hasPreviousSet: true) == 0)
+        #expect(WatchSetInputPolicy.resolvedWeight(previousWeight: nil, defaultWeight: 20, hasPreviousSet: false) == 20)
+    }
+
+    @Test("Invalid weights cannot enter a session", arguments: [Double.nan, .infinity, -1, 501])
+    func invalidWeights(value: Double) {
+        #expect(WatchSetInputPolicy.resolvedWeight(previousWeight: value, defaultWeight: 20, hasPreviousSet: true) == 0)
+        #expect(WatchSetInputPolicy.completedWeight(value, inputType: .setsReps) == nil)
+    }
+
+    @Test("Only strength and optionally weighted bodyweight sets store load")
+    func weightCapability() {
+        #expect(WatchSetInputPolicy.completedWeight(5, inputType: .setsReps) == 5)
+        #expect(WatchSetInputPolicy.completedWeight(5, inputType: .setsRepsWeight) == 5)
+        #expect(WatchSetInputPolicy.completedWeight(0, inputType: .setsReps) == nil)
+        for type in [ExerciseInputType.durationDistance, .durationIntensity, .roundsBased] {
+            #expect(WatchSetInputPolicy.completedWeight(5, inputType: type) == nil)
+        }
+    }
     @Test("resolvedInitialReps prefers last set reps when valid")
     func resolvedInitialRepsPrefersLastSet() {
         let resolved = WatchSetInputPolicy.resolvedInitialReps(lastSetReps: 6, entryDefaultReps: 10)

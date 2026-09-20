@@ -382,7 +382,11 @@ final class WorkoutManager: NSObject {
     private func startStrengthSession(with snapshot: WorkoutSessionTemplate) async throws {
         self.workoutMode = .strength
         self.cardioSecondaryUnit = nil
-        self.templateSnapshot = snapshot
+        var resolvedSnapshot = snapshot
+        resolvedSnapshot.entries = snapshot.entries.map {
+            resolvedWatchEntry($0, exercise: WatchConnectivityManager.shared.exerciseInfo(for: $0.exerciseDefinitionID))
+        }
+        self.templateSnapshot = resolvedSnapshot
         self.currentExerciseIndex = 0
         self.currentSetIndex = 0
         self.completedSetsData = Array(repeating: [], count: snapshot.entries.count)
@@ -594,7 +598,9 @@ final class WorkoutManager: NSObject {
 
     func completeSet(weight: Double?, reps: Int?, duration: TimeInterval? = nil, rpe: Double? = nil) {
         // Validate input ranges before recording (mirrors iPhone validation rules)
-        let validatedWeight: Double? = weight.flatMap { (0...500).contains($0) ? $0 : nil }
+        let inputType = TemplateExerciseProfile.normalizedInputTypeRaw(currentEntry?.inputTypeRaw)
+            .flatMap(ExerciseInputType.init(rawValue:)) ?? .setsRepsWeight
+        let validatedWeight = weight.flatMap { WatchSetInputPolicy.completedWeight($0, inputType: inputType) }
         let validatedReps: Int? = reps.flatMap { (0...1000).contains($0) ? $0 : nil }
         let validatedDuration: TimeInterval? = duration.flatMap { (0...7200).contains($0) ? $0 : nil }
         let validatedRPE: Double? = rpe.flatMap { RPELevel.validate($0) }
