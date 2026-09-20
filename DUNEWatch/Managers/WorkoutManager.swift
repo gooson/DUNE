@@ -39,6 +39,7 @@ final class WorkoutManager: NSObject {
     private(set) var startDate: Date?
     /// Total paused time accumulated during current session.
     private var pausedDuration: TimeInterval = 0
+    private var completedDuration: TimeInterval?
     /// Pause start timestamp while session is currently paused.
     private var pauseStart: Date?
 
@@ -169,7 +170,8 @@ final class WorkoutManager: NSObject {
             pausedDuration: pausedDuration,
             pauseStart: pauseStart,
             isPaused: isPaused,
-            now: now
+            now: now,
+            completedDuration: completedDuration
         )
     }
 
@@ -414,6 +416,7 @@ final class WorkoutManager: NSObject {
         self.healthKitWorkoutUUID = nil
         self.isRecoveredSession = false
         self.isSimulatedSessionActive = false
+        self.completedDuration = nil
         self.pausedDuration = 0
         self.pauseStart = nil
         self.resetCardioInactivityTracking(clearInteractionTimestamp: true)
@@ -470,6 +473,7 @@ final class WorkoutManager: NSObject {
             isSessionEnded = false
             startDate = nil
             isSimulatedSessionActive = false
+            completedDuration = nil
             pausedDuration = 0
             pauseStart = nil
             stopInactivityMonitoring()
@@ -488,6 +492,7 @@ final class WorkoutManager: NSObject {
         isFinalizingWorkout = false
         startDate = Date()
         lastMachineLevelSampleDate = supportsMachineLevel ? startDate : nil
+        completedDuration = nil
         pausedDuration = 0
         pauseStart = nil
         resetCardioInactivityTracking(clearInteractionTimestamp: true)
@@ -534,9 +539,11 @@ final class WorkoutManager: NSObject {
     }
 
     func end() {
-        guard !isSessionEnded else { return }
-        captureMachineLevelSegment(until: Date())
-        endPause(at: Date())
+        guard !isSessionEnded, session != nil || isSimulatedSessionActive else { return }
+        let endDate = Date()
+        completedDuration = activeElapsedTime(at: endDate)
+        captureMachineLevelSegment(until: endDate)
+        endPause(at: endDate)
 
         if isSimulatedSessionActive {
             isPaused = false
@@ -799,6 +806,7 @@ final class WorkoutManager: NSObject {
         isRecoveredSession = false
         startDate = nil
         healthKitWorkoutUUID = nil
+        completedDuration = nil
         pausedDuration = 0
         pauseStart = nil
         cardioInactivityPrompt = nil
@@ -1160,6 +1168,7 @@ extension WorkoutManager: HKWorkoutSessionDelegate {
             case .paused:
                 beginPause(at: date)
             case .ended:
+                if completedDuration == nil { completedDuration = activeElapsedTime(at: date) }
                 endPause(at: date)
                 isSessionEnded = true
                 isFinalizingWorkout = true
@@ -1391,8 +1400,10 @@ enum WorkoutElapsedTime {
         pausedDuration: TimeInterval,
         pauseStart: Date?,
         isPaused: Bool,
-        now: Date
+        now: Date,
+        completedDuration: TimeInterval? = nil
     ) -> TimeInterval {
+        if let completedDuration { return completedDuration }
         guard let startDate else { return 0 }
         var elapsed = now.timeIntervalSince(startDate) - pausedDuration
         if isPaused, let pauseStart {

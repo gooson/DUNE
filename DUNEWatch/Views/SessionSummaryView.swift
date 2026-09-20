@@ -413,7 +413,7 @@ struct SessionSummaryView: View {
     /// Per-exercise time/calorie allocation (single source of truth — Correction #37, #148).
     private func perExerciseAllocation() -> (duration: TimeInterval, calories: Double?, calorieSource: CalorieSource) {
         let activeCount = Double(Swift.max(completedSetsData.filter { !$0.isEmpty }.count, 1))
-        let sessionDuration = Swift.max(endDate.timeIntervalSince(startDate), 1)
+        let sessionDuration = Swift.max(workoutManager.activeElapsedTime(at: endDate), 1)
         let perExerciseDuration = sessionDuration / activeCount
 
         // Prefer HK active calories when available (typically cardio).
@@ -451,7 +451,7 @@ struct SessionSummaryView: View {
         guard !metValues.isEmpty else { return nil }
 
         let averageMET = metValues.reduce(0, +) / Double(metValues.count)
-        let sessionDuration = Swift.max(endDate.timeIntervalSince(startDate), 1)
+        let sessionDuration = Swift.max(workoutManager.activeElapsedTime(at: endDate), 1)
         let totalSetsCount = completedSetsData.reduce(0) { $0 + $1.count }
         let estimatedRestSeconds = Double(Swift.max(totalSetsCount - 1, 0))
             * WatchConnectivityManager.shared.globalRestSeconds
@@ -534,7 +534,7 @@ struct SessionSummaryView: View {
     }
 
     private func saveCardioRecord(healthKitWorkoutID: String?) {
-        let sessionDuration = Swift.max(endDate.timeIntervalSince(startDate), 1)
+        let sessionDuration = Swift.max(workoutManager.activeElapsedTime(at: endDate), 1)
         let distanceKm = workoutManager.distanceKm
 
         var exerciseType = "Cardio"
@@ -606,7 +606,7 @@ struct SessionSummaryView: View {
     // MARK: - Computed
 
     private var formattedDuration: String {
-        let interval = endDate.timeIntervalSince(startDate)
+        let interval = workoutManager.activeElapsedTime(at: endDate)
         let totalMinutes = Int(interval) / 60
         if totalMinutes >= 60 {
             let hours = totalMinutes / 60
