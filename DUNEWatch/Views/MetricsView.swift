@@ -72,7 +72,7 @@ struct MetricsView: View {
         .onChange(of: pendingInputSheet) { _, shouldShow in
             if shouldShow {
                 pendingInputSheet = false
-                showInputSheet = true
+                showInputSheet = currentInputType != .durationIntensity
             }
         }
         .sheet(isPresented: $showInputSheet) {
@@ -426,7 +426,9 @@ struct MetricsView: View {
         )
 
         if let plannedSet = workoutManager.currentPlannedSetForCurrentExercise {
-            weight = plannedSet.weight ?? entry.defaultWeightKg ?? 0
+            weight = WatchSetInputPolicy.resolvedWeight(
+                previousWeight: plannedSet.weight, defaultWeight: entry.defaultWeightKg, hasPreviousSet: true
+            )
             reps = WatchSetInputPolicy.resolvedInitialReps(
                 lastSetReps: plannedSet.reps,
                 entryDefaultReps: entry.defaultReps

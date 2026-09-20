@@ -249,7 +249,7 @@ func resolvedDefaults(for exercise: WatchExerciseInfo) -> (weight: Double?, reps
 
     let latest = RecentExerciseTracker.latestSet(exerciseID: exercise.id)
     let reps = latest?.reps ?? exercise.defaultReps ?? 10
-    let weight = latest.map { $0.weight } ?? exercise.defaultWeightKg
+    let weight: Double? = if let latest { latest.weight } else { exercise.defaultWeightKg }
     return (weight: weight, reps: reps)
 }
 

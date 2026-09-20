@@ -52,5 +52,6 @@ struct WatchSetInputPolicyTests {
     func isValidForCompletionAllowsPositiveRange() {
         #expect(WatchSetInputPolicy.isValidForCompletion(reps: 1))
         #expect(WatchSetInputPolicy.isValidForCompletion(reps: 1000))
+        #expect(WatchSetInputPolicy.maximumEditableReps == WatchSetInputPolicy.maximumCompletionReps)
     }
 }

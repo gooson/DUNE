@@ -56,14 +56,14 @@ struct SetInputSheet: View {
         }
     }
 
-    // MARK: - Weight + Reps (setsRepsWeight, roundsBased)
+    // MARK: - Weight + Reps
 
     private var weightRepsContent: some View {
         VStack(spacing: DS.Spacing.sm) {
-                if inputType == .setsReps { addedWeightToggle }
-                weightSection
-                Divider()
-                repsSection
+            if inputType == .setsReps { addedWeightToggle }
+            weightSection
+            Divider()
+            repsSection
         }
         .padding(.horizontal, DS.Spacing.md)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
@@ -97,8 +97,8 @@ struct SetInputSheet: View {
 
     private var repsOnlyContent: some View {
         VStack(spacing: DS.Spacing.sm) {
-                if inputType == .setsReps { addedWeightToggle }
-                repsSection
+            if inputType == .setsReps { addedWeightToggle }
+            repsSection
         }
         .padding(.horizontal, DS.Spacing.md)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
@@ -106,12 +106,12 @@ struct SetInputSheet: View {
         .focused($isCrownFocused)
         .digitalCrownRotation(
             $crownRepsDouble,
-            from: 1, through: 100, by: 1, sensitivity: .medium
+            from: 1, through: Double(WatchSetInputPolicy.maximumEditableReps), by: 1, sensitivity: .medium
         )
         .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.setInputScreen)
         .toolbar { sharedToolbar }
         .onChange(of: crownRepsDouble) { _, value in
-            reps = max(1, min(100, Int(value.rounded())))
+            reps = max(1, min(WatchSetInputPolicy.maximumEditableReps, Int(value.rounded())))
         }
         .onChange(of: reps) { _, newValue in
             let clamped = min(
@@ -192,20 +192,21 @@ struct SetInputSheet: View {
     }
 
     private var weightSection: some View {
-        VStack(spacing: DS.Spacing.sm) {
-            Text("\(weight, specifier: "%.1f")")
-                .font(.system(.title2, design: .rounded).monospacedDigit().bold())
-                .foregroundStyle(DS.Color.positive)
-                .contentTransition(.numericText())
-
-            Text("kg")
-                .font(DS.Typography.metricLabel)
-                .foregroundStyle(.secondary)
-
-            HStack(spacing: DS.Spacing.md) {
-                weightButton("-0.5", delta: -0.5)
-                weightButton("+0.5", delta: 0.5)
+        HStack(spacing: DS.Spacing.xs) {
+            weightButton("-2.5", delta: -2.5)
+            VStack(spacing: 0) {
+                Text("\(weight, specifier: "%.1f")")
+                    .font(.system(.title3, design: .rounded).monospacedDigit().bold())
+                    .foregroundStyle(DS.Color.positive)
+                    .contentTransition(.numericText())
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
+                Text("kg")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
             }
+            .frame(maxWidth: .infinity)
+            weightButton("+2.5", delta: 2.5)
         }
     }
 
@@ -219,7 +220,7 @@ struct SetInputSheet: View {
         } label: {
             Text(label)
                 .font(.caption.weight(.medium))
-                .frame(maxWidth: .infinity, minHeight: 44)
+                .frame(width: 44, height: 44)
         }
         .buttonStyle(.bordered)
         .tint(.secondary)
@@ -263,7 +264,7 @@ struct SetInputSheet: View {
             Spacer()
 
             Button {
-                if reps < 100 {
+                if reps < WatchSetInputPolicy.maximumEditableReps {
                     reps += 1
                     playDebouncedHaptic()
                 }
@@ -328,9 +329,10 @@ struct SetInputSheet: View {
                             .frame(width: 36, alignment: .leading)
 
                         if let d = set.duration, d > 0 {
-                            Text("\(max(1, Int((d / 60).rounded())))min")
+                            Text(Duration.seconds(d).formatted(.time(pattern: .minuteSecond)))
                                 .font(.caption2.monospacedDigit())
-                        } else {
+                        }
+                        Group {
                             if let w = set.weight, w > 0 {
                                 Text("\(w, specifier: "%.1f")kg")
                                     .font(.caption2.monospacedDigit())
