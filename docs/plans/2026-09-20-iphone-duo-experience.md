@@ -64,3 +64,5 @@ status: draft
 
 - 1단계: Xcode 27.1 Duo 시뮬레이터 빌드 성공. Life 빈 상태 추가/취소, 템플릿 열기/취소, seeded hero UI 테스트 3개 통과.
 - 2–3단계: 적응형 운동 화면 구현 중. 전체 접힘 전환과 키보드 연속성은 미검증.
+
+- F05: 종료 시각 기준 타이머, 휴식 초안 호환 복원, 잠금 화면/Dynamic Island Live Activity 연결. Duo SDK 빌드 성공, 타이머/운동 세션 유닛 테스트 58개 통과. Live Activity 시각 및 외부 화면 실동작은 추가 확인 대상.

@@ -36,6 +36,7 @@ struct WellnessDashboardWidgetEntryView: View {
 struct DUNEWidgetBundle: WidgetBundle {
     var body: some Widget {
         WellnessDashboardWidget()
+        WorkoutRestLiveActivity()
     }
 }
 

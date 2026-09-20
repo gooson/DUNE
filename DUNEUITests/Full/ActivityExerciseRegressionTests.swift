@@ -823,15 +823,31 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             keyboard.buttons["search"]
         ]
 
-        if let button = exactCandidates.first(where: \.exists) {
+        if let button = exactCandidates.first(where: { $0.exists && $0.isHittable }) {
             button.tap()
             return
         }
 
         let searchButton = keyboard.buttons.matching(NSPredicate(format: "label CONTAINS[c] 'search'")).firstMatch
-        if searchButton.exists {
+        if searchButton.exists && searchButton.isHittable {
             searchButton.tap()
+            return
         }
+
+        // Duo can expose an offscreen Search key. The picker explicitly uses
+        // scrollDismissesKeyboard(.immediately), so use its identified list.
+        let pickerList = app.descendants(matching: .any)[AXID.pickerRootList].firstMatch
+        XCTAssertTrue(pickerList.waitForExistence(timeout: 3), "Picker list should be available to dismiss the keyboard")
+        pickerList.swipeUp()
+        let keyboardDismissed = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "exists == false"),
+            object: keyboard
+        )
+        XCTAssertEqual(
+            XCTWaiter.wait(for: [keyboardDismissed], timeout: 3),
+            .completed,
+            "Scrolling the picker should dismiss the offscreen search keyboard"
+        )
     }
 
     private func openTemplateList() {

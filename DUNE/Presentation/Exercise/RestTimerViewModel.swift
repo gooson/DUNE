@@ -10,6 +10,12 @@ final class RestTimerViewModel {
     var completionCount: Int = 0
 
     private var timerTask: Task<Void, Never>?
+    private(set) var endDate: Date?
+    @ObservationIgnored private let now: () -> Date
+
+    init(now: @escaping () -> Date = Date.init) {
+        self.now = now
+    }
 
     var formattedTime: String {
         let minutes = secondsRemaining / 60
@@ -19,29 +25,41 @@ final class RestTimerViewModel {
 
     var progress: Double {
         guard defaultDuration > 0 else { return 0 }
-        return 1.0 - Double(secondsRemaining) / Double(defaultDuration)
+        return min(1, max(0, 1.0 - Double(secondsRemaining) / Double(defaultDuration)))
     }
 
     func start(seconds: Int? = nil) {
-        timerTask?.cancel()
-        let duration = seconds ?? defaultDuration
-        secondsRemaining = duration
-        defaultDuration = duration
-        isRunning = true
+        let duration = min(3600, max(0, seconds ?? defaultDuration))
+        restore(endDate: now().addingTimeInterval(TimeInterval(duration)), totalDuration: duration)
+    }
 
-        timerTask = Task {
-            while secondsRemaining > 0, !Task.isCancelled {
-                do {
-                    try await Task.sleep(for: .seconds(1))
-                } catch {
-                    // Sleep interrupted (cancellation or system)
-                    break
-                }
-                guard !Task.isCancelled else { break }
-                secondsRemaining -= 1
+    /// Recompute from the deadline after background suspension instead of counting wakeups.
+    func restore(endDate: Date, totalDuration: Int) {
+        stop()
+        defaultDuration = min(3600, max(0, totalDuration))
+        let currentDate = now()
+        let remaining = endDate.timeIntervalSince(currentDate)
+        self.endDate = currentDate.addingTimeInterval(
+            remaining.isFinite ? min(Double(defaultDuration), max(0, remaining)) : 0
+        )
+        isRunning = true
+        refresh()
+        guard isRunning else { return }
+        timerTask = Task { [weak self] in
+            while !Task.isCancelled {
+                do { try await Task.sleep(for: .seconds(1)) } catch { return }
+                guard !Task.isCancelled, let self, self.isRunning else { return }
+                self.refresh()
             }
-            guard !Task.isCancelled else { return }
-            isRunning = false
+        }
+    }
+
+    func refresh() {
+        guard isRunning, let endDate else { return }
+        let remaining = endDate.timeIntervalSince(now())
+        secondsRemaining = remaining.isFinite ? Int(min(3600, max(0, remaining.rounded(.up)))) : 0
+        if secondsRemaining == 0 {
+            stop()
             completionCount += 1
         }
     }
@@ -50,9 +68,16 @@ final class RestTimerViewModel {
         timerTask?.cancel()
         timerTask = nil
         isRunning = false
+        endDate = nil
     }
 
     func addTime(_ seconds: Int) {
-        secondsRemaining += seconds
+        guard isRunning, let deadline = endDate else { return }
+        refresh()
+        guard isRunning else { return }
+        let adjustment = min(3600 - defaultDuration, max(-secondsRemaining, seconds))
+        defaultDuration += adjustment
+        endDate = deadline.addingTimeInterval(TimeInterval(adjustment))
+        refresh()
     }
 }

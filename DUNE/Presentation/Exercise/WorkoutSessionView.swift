@@ -131,19 +131,39 @@ struct WorkoutSessionView: View {
                     WorkoutSessionViewModel.clearDraft()
                 }
                 skipToFirstIncompleteSet()
+                if let draft = draftToRestore,
+                   let endDate = draft.restEndDate,
+                   endDate.timeIntervalSince1970.isFinite,
+                   let duration = draft.restTotalDuration, (0...3600).contains(duration),
+                   let index = draft.restingSetIndex,
+                   viewModel.sets.indices.contains(index), viewModel.sets[index].isCompleted {
+                    currentSetIndex = index
+                    showRestTimer = true
+                    restTimer.restore(endDate: endDate, totalDuration: duration)
+                }
                 didPrepareSession = true
             }
             startSessionTimer()
+            if showRestTimer { startRestActivity() }
         }
         .onDisappear {
             sessionTimerTask?.cancel()
             sessionTimerTask = nil
+            restActivity.end(sessionStartedAt: viewModel.sessionStartTime)
+        }
+        .onChange(of: restTimer.completionCount) { _, _ in
+            finishRest()
         }
         .onChange(of: scenePhase) { _, newPhase in
+            if newPhase == .active { restTimer.refresh() }
             if newPhase == .background || newPhase == .inactive {
                 // Skip draft saving in template mode — each exercise is ephemeral
                 guard templateInfo == nil else { return }
-                viewModel.saveDraft()
+                viewModel.saveDraft(
+                    restEndDate: showRestTimer ? restTimer.endDate : nil,
+                    restTotalDuration: showRestTimer ? restTotalSeconds : nil,
+                    restingSetIndex: showRestTimer ? currentSetIndex : nil
+                )
             }
         }
         .confirmationDialog(
@@ -650,9 +670,10 @@ struct WorkoutSessionView: View {
         }
     }
 
-    @State private var restSecondsRemaining: Int = 0
-    @State private var restTotalSeconds: Int = 90
-    @State private var restTimerTask: Task<Void, Never>?
+    @State private var restTimer = RestTimerViewModel()
+    @State private var restActivity = WorkoutRestActivity()
+    private var restSecondsRemaining: Int { restTimer.secondsRemaining }
+    private var restTotalSeconds: Int { restTimer.defaultDuration }
 
     private var completedSetSummary: some View {
         let set = viewModel.sets[currentSetIndex]
@@ -682,7 +703,7 @@ struct WorkoutSessionView: View {
                 .trim(from: 0, to: restProgress)
                 .stroke(DS.Color.activity, style: StrokeStyle(lineWidth: 8, lineCap: .round))
                 .rotationEffect(.degrees(-90))
-                .animation(.linear(duration: 1), value: restSecondsRemaining)
+                .animation(reduceMotion ? nil : .linear(duration: 1), value: restSecondsRemaining)
 
             VStack(spacing: DS.Spacing.xxs) {
                 Text(restTimeString)
@@ -710,8 +731,10 @@ struct WorkoutSessionView: View {
             Button {
                 let maxRestSeconds = 3600 // 1 hour cap
                 guard restTotalSeconds + 30 <= maxRestSeconds else { return }
-                restSecondsRemaining += 30
-                restTotalSeconds += 30
+                restTimer.addTime(30)
+                if let endDate = restTimer.endDate {
+                    restActivity.update(endDate: endDate, totalDuration: restTotalSeconds)
+                }
             } label: {
                 Text("+30s")
                     .font(.body.weight(.medium))
@@ -907,31 +930,22 @@ struct WorkoutSessionView: View {
 
     private func startRest() {
         let seconds = Int(viewModel.resolveRestDuration(forSetAt: currentSetIndex))
-        restTotalSeconds = seconds
-        restSecondsRemaining = seconds
         showRestTimer = true
-        startRestCountdown()
+        restTimer.start(seconds: seconds)
+        startRestActivity()
     }
 
-    private func startRestCountdown() {
-        restTimerTask?.cancel()
-        restTimerTask = Task {
-            while restSecondsRemaining > 0, !Task.isCancelled {
-                do {
-                    try await Task.sleep(for: .seconds(1))
-                } catch { break }
-                guard !Task.isCancelled else { return }
-                restSecondsRemaining -= 1
-            }
-            guard !Task.isCancelled else { return }
-            finishRest()
-        }
+    private func startRestActivity() {
+        guard restTimer.isRunning, let endDate = restTimer.endDate else { return }
+        restActivity.start(sessionStartedAt: viewModel.sessionStartTime, exerciseName: exercise.localizedName, setNumber: currentSetIndex + 1,
+                           endDate: endDate, totalDuration: restTotalSeconds)
     }
 
     private func finishRest() {
+        guard showRestTimer else { return }
         let completedSetIndex = currentSetIndex
-        restTimerTask?.cancel()
-        restTimerTask = nil
+        restTimer.stop()
+        restActivity.end(sessionStartedAt: viewModel.sessionStartTime)
         showRestTimer = false
         restTimerCompleted += 1
 
@@ -977,10 +991,10 @@ struct WorkoutSessionView: View {
     // MARK: - Save
 
     private func saveWorkout() {
-        restTimerTask?.cancel()
-        restTimerTask = nil
         isInputFieldFocused = false
         guard let record = viewModel.createValidatedRecord(weightUnit: weightUnit) else { return }
+        restTimer.stop()
+        restActivity.end(sessionStartedAt: viewModel.sessionStartTime)
 
         // Auto intensity — called BEFORE modelContext.insert so @Query history excludes this record
         let intensityService = WorkoutIntensityService()

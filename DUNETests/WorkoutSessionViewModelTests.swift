@@ -26,6 +26,25 @@ struct WorkoutSessionViewModelTests {
         )
     }
 
+    @Test("Rest draft fields survive encoding and older drafts remain readable")
+    func restDraftCompatibility() throws {
+        let started = Date(timeIntervalSince1970: 1000)
+        let draft = WorkoutSessionDraft(
+            exerciseDefinition: makeExercise(), sets: [], sessionStartTime: started,
+            memo: "draft", savedAt: started, restEndDate: started.addingTimeInterval(90),
+            restTotalDuration: 90, restingSetIndex: 0
+        )
+        let encoded = try JSONEncoder().encode(draft)
+        let restored = try JSONDecoder().decode(WorkoutSessionDraft.self, from: encoded)
+        #expect(restored.restEndDate == draft.restEndDate)
+        #expect(restored.restingSetIndex == 0)
+        var legacy = try #require(JSONSerialization.jsonObject(with: encoded) as? [String: Any])
+        for key in ["restEndDate", "restTotalDuration", "restingSetIndex"] { legacy.removeValue(forKey: key) }
+        let oldDraft = try JSONDecoder().decode(WorkoutSessionDraft.self, from: JSONSerialization.data(withJSONObject: legacy))
+        #expect(oldDraft.restEndDate == nil)
+        #expect(oldDraft.memo == "draft")
+    }
+
     @Test("Initial state has default number of empty sets")
     func initialState() {
         let exercise = makeExercise()
