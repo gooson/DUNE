@@ -28,6 +28,7 @@ struct WorkoutSessionView: View {
     @State private var showEndConfirmation = false
     @State private var restTimerCompleted = 0
     @State private var setCompleteCount = 0
+    @State private var addedWeightSetIDs: Set<UUID> = []
 
     @Query private var exerciseRecords: [ExerciseRecord]
 
@@ -318,17 +319,24 @@ struct WorkoutSessionView: View {
     private var currentSetInputFields: some View {
         if viewModel.sets.indices.contains(currentSetIndex) {
             let setBinding = $viewModel.sets[currentSetIndex]
+            let setID = setBinding.wrappedValue.id
+            let showsAddedWeight = addedWeightSetIDs.contains(setID) || !setBinding.wrappedValue.weight.isEmpty
 
             VStack(spacing: DS.Spacing.lg) {
                 switch exercise.inputType {
                 case .setsRepsWeight:
                     weightRepsInput(set: setBinding)
                 case .setsReps:
-                    Button(setBinding.wrappedValue.weight.isEmpty ? String(localized: "Add Weight") : String(localized: "Remove Weight")) {
-                        setBinding.wrappedValue.weight = setBinding.wrappedValue.weight.isEmpty ? "0" : ""
+                    Button(showsAddedWeight ? String(localized: "Remove Weight") : String(localized: "Add Weight")) {
+                        if showsAddedWeight {
+                            addedWeightSetIDs.remove(setID)
+                            setBinding.wrappedValue.weight = ""
+                        } else {
+                            addedWeightSetIDs.insert(setID)
+                        }
                     }
                     .accessibilityIdentifier("workout-session-toggle-weight")
-                    if setBinding.wrappedValue.weight.isEmpty {
+                    if !showsAddedWeight {
                         repsOnlyInput(set: setBinding)
                     } else {
                         Text("Added Weight")
@@ -346,6 +354,12 @@ struct WorkoutSessionView: View {
 
                 SetRPEPickerView(rpe: setBinding.rpe)
                     .padding(.horizontal, DS.Spacing.md)
+            }
+            .onChange(of: setBinding.wrappedValue.weight, initial: true) { _, weight in
+                if !weight.isEmpty { addedWeightSetIDs.insert(setID) }
+            }
+            .onChange(of: setID) { _, newID in
+                if !setBinding.wrappedValue.weight.isEmpty { addedWeightSetIDs.insert(newID) }
             }
         }
     }

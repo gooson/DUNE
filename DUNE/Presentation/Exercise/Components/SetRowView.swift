@@ -8,6 +8,9 @@ struct SetRowView: View {
     let cardioUnit: CardioSecondaryUnit?
     let onComplete: () -> Void
     var onFillFromPrevious: (() -> Void)?
+    @State private var addedWeightEnabled = false
+
+    private var showsAddedWeight: Bool { addedWeightEnabled || !editableSet.weight.isEmpty }
 
     var body: some View {
         HStack(spacing: DS.Spacing.sm) {
@@ -59,6 +62,12 @@ struct SetRowView: View {
                 : Color.clear,
             in: RoundedRectangle(cornerRadius: DS.Radius.sm)
         )
+        .onChange(of: editableSet.weight, initial: true) { _, weight in
+            if !weight.isEmpty { addedWeightEnabled = true }
+        }
+        .onChange(of: editableSet.id) { _, _ in
+            addedWeightEnabled = !editableSet.weight.isEmpty
+        }
     }
 
     @ViewBuilder
@@ -135,7 +144,7 @@ struct SetRowView: View {
 
         case .setsReps:
             HStack(spacing: DS.Spacing.xs) {
-                if !editableSet.weight.isEmpty {
+                if showsAddedWeight {
                     TextField(weightUnit.displayName, text: $editableSet.weight)
                         .keyboardType(.decimalPad)
                         .textFieldStyle(.roundedBorder)
@@ -144,12 +153,17 @@ struct SetRowView: View {
                         .accessibilityIdentifier("set-row-field-\(editableSet.setNumber)-weight")
                 }
                 Button {
-                    editableSet.weight = editableSet.weight.isEmpty ? "0" : ""
+                    if showsAddedWeight {
+                        addedWeightEnabled = false
+                        editableSet.weight = ""
+                    } else {
+                        addedWeightEnabled = true
+                    }
                 } label: {
-                    Image(systemName: editableSet.weight.isEmpty ? "plus.circle" : "minus.circle")
+                    Image(systemName: showsAddedWeight ? "minus.circle" : "plus.circle")
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel(editableSet.weight.isEmpty ? String(localized: "Add Weight") : String(localized: "Remove Weight"))
+                .accessibilityLabel(showsAddedWeight ? String(localized: "Remove Weight") : String(localized: "Add Weight"))
                 .accessibilityIdentifier("set-row-toggle-weight-\(editableSet.setNumber)")
 
                 TextField("reps", text: $editableSet.reps)

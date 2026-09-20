@@ -719,7 +719,7 @@ struct WorkoutSessionViewModelTests {
         let record = vm.createValidatedRecord()
         #expect((record != nil) == valid)
         if valid {
-            #expect(record?.completedSets.first?.weight == Double(weight))
+            #expect(record?.completedSets.first?.weight == (weight == "0" ? nil : Double(weight)))
         }
     }
 
@@ -745,6 +745,16 @@ struct WorkoutSessionViewModelTests {
         #expect(vm.sets[2].weight.isEmpty)
         let record = try #require(vm.createValidatedRecord(weightUnit: .lb))
         #expect(abs(try #require(record.completedSets.first?.weight) - 100) < 0.001)
+    }
+
+    @Test("Large pound prefills remain valid editable numbers")
+    func poundPrefillDoesNotContainGrouping() {
+        let vm = WorkoutSessionViewModel(exercise: makeExercise(), defaultSetCount: 1)
+        vm.previousSets = [PreviousSetInfo(weight: 500, reps: 10, duration: nil, distance: nil, restDuration: nil)]
+        vm.fillSetFromPrevious(at: 0, weightUnit: .lb)
+        #expect(!vm.sets[0].weight.contains(","))
+        #expect(Double(vm.sets[0].weight) != nil)
+        #expect(vm.validateSetForCompletion(at: 0, weightUnit: .lb))
     }
 
     @Test("Timed sets preserve seconds through previous-session fill and save", arguments: [ExerciseInputType.durationIntensity, .roundsBased])

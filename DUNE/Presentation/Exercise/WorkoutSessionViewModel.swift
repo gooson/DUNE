@@ -139,7 +139,7 @@ final class WorkoutSessionViewModel {
 
         if supportsWeight, let defaultWeightKg = entry.defaultWeightKg {
             let displayWeight = weightUnit.fromKg(defaultWeightKg)
-            let weightString = displayWeight.formatted(.number.precision(.fractionLength(0...1)))
+            let weightString = formattedEditableWeight(displayWeight)
             for index in sets.indices {
                 sets[index].weight = weightString
             }
@@ -167,13 +167,13 @@ final class WorkoutSessionViewModel {
             let prev = previousSets[previousIndex]
             if supportsWeight, let weight = prev.weight {
                 let displayWeight = weightUnit.fromKg(weight)
-                newSet.weight = displayWeight.formatted(.number.precision(.fractionLength(0...1)))
+                newSet.weight = formattedEditableWeight(displayWeight)
             }
             if let normalizedReps = normalizedRepsValue(from: prev.reps) {
                 newSet.reps = "\(normalizedReps)"
             }
             if let duration = prev.duration {
-                newSet.duration = "\(Int(exercise.inputType == .durationDistance ? duration / 60 : duration))"
+                newSet.duration = "\(Int(exercise.inputType == .durationIntensity || exercise.inputType == .roundsBased ? duration : duration / 60))"
             }
             if let distance = prev.distance {
                 newSet.distance = distance.formatted(.number.precision(.fractionLength(0...2)))
@@ -353,7 +353,7 @@ final class WorkoutSessionViewModel {
         guard let prev = previousSetInfo(for: sets[index].setNumber) else { return }
         if supportsWeight, let weight = prev.weight {
             let displayWeight = weightUnit.fromKg(weight)
-            sets[index].weight = displayWeight.formatted(.number.precision(.fractionLength(0...1)))
+            sets[index].weight = formattedEditableWeight(displayWeight)
         } else {
             sets[index].weight = ""
         }
@@ -363,7 +363,7 @@ final class WorkoutSessionViewModel {
             sets[index].reps = "\(WorkoutDefaults.defaultReps)"
         }
         if let duration = prev.duration {
-            sets[index].duration = "\(Int(exercise.inputType == .durationDistance ? duration / 60 : duration))"
+            sets[index].duration = "\(Int(exercise.inputType == .durationIntensity || exercise.inputType == .roundsBased ? duration : duration / 60))"
         }
         if let distance = prev.distance {
             sets[index].distance = distance.formatted(.number.precision(.fractionLength(0...2)))
@@ -702,7 +702,9 @@ final class WorkoutSessionViewModel {
             }
 
             // Convert weight from display unit to internal kg
-            let weightKg: Double? = !supportsWeight || trimmedWeight.isEmpty ? nil : Double(trimmedWeight).map { weightUnit.toKg($0) }
+            let parsedWeightKg = !supportsWeight || trimmedWeight.isEmpty
+                ? nil : Double(trimmedWeight).map { weightUnit.toKg($0) }
+            let weightKg = exercise.inputType == .setsReps && parsedWeightKg == 0 ? nil : parsedWeightKg
 
             // Convert distance based on cardio secondary unit
             let distanceKm: Double?
@@ -827,7 +829,12 @@ final class WorkoutSessionViewModel {
         let clampedIncreaseKg = min(incrementKg, maxIncreaseKg)
         let roundedWeightKg = roundToPlateStepKg(baseKg + clampedIncreaseKg)
         let displayWeight = unit.fromKg(roundedWeightKg)
-        return displayWeight.formatted(.number.precision(.fractionLength(0...1)))
+        return formattedEditableWeight(displayWeight)
+    }
+
+    private func formattedEditableWeight(_ value: Double) -> String {
+        value.formatted(.number.locale(Locale(identifier: "en_US_POSIX"))
+            .grouping(.never).precision(.fractionLength(0...1)))
     }
 
     private func roundToPlateStepKg(_ value: Double) -> Double {
