@@ -72,18 +72,16 @@ final class HealthKitObserverManager: Sendable {
         let typeName = sampleType.identifier
 
         let query = HKObserverQuery(sampleType: sampleType, predicate: nil) { [coordinator, notificationEvaluator] _, completionHandler, error in
-            // completionHandler MUST be called to receive future notifications
-            defer { completionHandler() }
-
             if let error {
                 AppLogger.healthKit.error("[ObserverManager] Observer error for \(typeName): \(error.localizedDescription)")
+                completionHandler()
                 return
             }
 
             // Correction #92: error identification log
             AppLogger.healthKit.info("[ObserverManager] Change detected: \(typeName)")
 
-            Task {
+            Self.processUpdate(completion: completionHandler) {
                 async let refreshTask: Void = {
                     _ = await coordinator.requestRefresh(source: .healthKitObserver)
                 }()
@@ -107,6 +105,19 @@ final class HealthKitObserverManager: Sendable {
         store.execute(query)
 
         AppLogger.healthKit.info("[ObserverManager] Registered observer for \(typeName)")
+    }
+
+    /// Keep HealthKit's background delivery alive until all asynchronous work finishes.
+    @discardableResult
+    static func processUpdate(
+        completion: @escaping () -> Void,
+        operation: @escaping @Sendable () async -> Void
+    ) -> Task<Void, Never> {
+        let completion = ObserverCompletion(completion)
+        return Task {
+            defer { completion.finish() }
+            await operation()
+        }
     }
 
     private func enableBackgroundDelivery(for sampleType: HKSampleType, frequency: HKUpdateFrequency) {
@@ -158,5 +169,25 @@ extension HKUpdateFrequency {
         case .weekly: return "weekly"
         @unknown default: return "unknown"
         }
+    }
+}
+
+/// HealthKit supplies a non-Sendable callback. Transfer its single invocation to the task;
+/// the lock ensures the callback can only be consumed once across threads.
+private final class ObserverCompletion: @unchecked Sendable {
+    private let lock = NSLock()
+    private var handler: (() -> Void)?
+
+    init(_ handler: @escaping () -> Void) {
+        self.handler = handler
+    }
+
+    func finish() {
+        let callback = lock.withLock {
+            let callback = handler
+            handler = nil
+            return callback
+        }
+        callback?()
     }
 }
