@@ -6,6 +6,7 @@ struct WorkoutTemplateListView: View {
     @Query(sort: \WorkoutTemplate.updatedAt, order: .reverse) private var templates: [WorkoutTemplate]
 
     @State private var showingCreateSheet = false
+    @State private var showingWeeklyPlan = false
     @State private var templateToEdit: WorkoutTemplate?
     @State private var templateToDelete: WorkoutTemplate?
     let onStartTemplate: (WorkoutTemplate) -> Void
@@ -21,7 +22,16 @@ struct WorkoutTemplateListView: View {
         .englishNavigationTitle("Templates")
         .navigationBarTitleDisplayMode(.inline)
         .background { DetailWaveBackground() }
+        .navigationDestination(isPresented: $showingWeeklyPlan) {
+            WeeklyWorkoutPlanView(onStartTemplate: onStartTemplate)
+        }
         .toolbar {
+            ToolbarItem(placement: .secondaryAction) {
+                Button { showingWeeklyPlan = true } label: {
+                    Label("Weekly Workout Plan", systemImage: "calendar")
+                }
+                .accessibilityIdentifier("workout-weekly-plan-open")
+            }
             ToolbarItem(placement: .primaryAction) {
                 Button {
                     showingCreateSheet = true
