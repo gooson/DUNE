@@ -18,6 +18,41 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
         navigateToWellness()
     }
 
+    func testCompareMetricsSharesPeriodAndDismisses() throws {
+        XCTAssertTrue(app.waitAndTapToolbarAction("wellness-compare-metrics"),
+                      "Wellness should expose metric comparison directly or in toolbar overflow\n\(app.debugDescription)")
+
+        let firstPane = app.scrollViews["metric-comparison-first"].firstMatch
+        let secondPane = app.scrollViews["metric-comparison-second"].firstMatch
+        XCTAssertTrue(firstPane.waitForExistence(timeout: 5), "First metric pane should appear")
+        XCTAssertTrue(secondPane.waitForExistence(timeout: 5), "Second metric pane should appear")
+
+        let firstRange = firstPane.staticTexts["comparison-date-range"].firstMatch
+        let secondRange = secondPane.staticTexts["comparison-date-range"].firstMatch
+        XCTAssertTrue(firstRange.waitForExistence(timeout: 5), "First metric should show its date range")
+        XCTAssertTrue(secondRange.waitForExistence(timeout: 5), "Second metric should show its date range")
+        let initialRange = firstRange.label
+        XCTAssertFalse(initialRange.isEmpty, "Comparison dates should be readable")
+        XCTAssertEqual(initialRange, secondRange.label, "Both metrics should use the same initial dates")
+
+        XCTAssertTrue(app.waitAndTap("metric-comparison-period-M"), "Shared period picker should offer month")
+        let rangesUpdated = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
+            firstRange.exists && secondRange.exists
+                && firstRange.label != initialRange
+                && firstRange.label == secondRange.label
+        }, object: nil)
+        XCTAssertEqual(XCTWaiter.wait(for: [rangesUpdated], timeout: 5), .completed,
+                       "Changing the shared period should update both date ranges together")
+
+        XCTAssertTrue(app.waitAndTap("metric-comparison-done"), "Comparison should expose Done")
+        let comparisonDismissed = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "exists == false"), object: firstPane
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [comparisonDismissed], timeout: 5), .completed)
+        XCTAssertTrue(app.buttons[AXID.wellnessToolbarAdd].waitForExistence(timeout: 5),
+                      "Done should return to Wellness")
+    }
+
     func testWellnessRootRendersAndHeroOpensScoreDetail() throws {
         XCTAssertTrue(waitForElement(AXID.wellnessHeroScore, timeout: 15).exists, "Wellness hero should exist")
         XCTAssertTrue(app.scrollToElementIfNeeded(AXID.wellnessCardHRV, maxSwipes: 4), "Active section should expose the HRV card")

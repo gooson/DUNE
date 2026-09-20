@@ -470,6 +470,45 @@ extension XCUIApplication {
         return true
     }
 
+    /// Reveals secondary toolbar actions moved into the system overflow menu.
+    @discardableResult
+    func waitAndTapToolbarAction(_ identifier: String, timeout: TimeInterval = 5) -> Bool {
+        let target = descendants(matching: .any)[identifier].firstMatch
+        if target.exists && target.isHittable {
+            target.tap()
+            return true
+        }
+
+        let overflowPredicate = NSPredicate(
+            format: "identifier IN %@ OR label IN %@",
+            ["ellipsis", "ellipsis.circle", "More", "more"],
+            ["More", "More Actions", "더 보기", "その他"]
+        )
+        let overflowQueries = [
+            toolbars.buttons.matching(overflowPredicate),
+            navigationBars.buttons.matching(overflowPredicate),
+            buttons.matching(overflowPredicate)
+        ]
+        let ready = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
+            (target.exists && target.isHittable)
+                || overflowQueries.contains { $0.allElementsBoundByIndex.contains { $0.isHittable } }
+        }, object: nil)
+        guard XCTWaiter.wait(for: [ready], timeout: timeout) == .completed else { return false }
+
+        if target.exists && target.isHittable {
+            target.tap()
+            return true
+        }
+        guard let overflow = overflowQueries.lazy
+            .flatMap({ $0.allElementsBoundByIndex })
+            .first(where: { $0.isHittable }) else { return false }
+        overflow.tap()
+
+        guard target.waitForExistence(timeout: timeout), target.isHittable else { return false }
+        target.tap()
+        return true
+    }
+
     func hasPrimaryNavigation(timeout: TimeInterval = 8) -> Bool {
         let tabIDs = ["tab-today", "tab-activity", "tab-wellness", "tab-life"]
         let tabPredicate = NSPredicate(format: "identifier IN %@", tabIDs)
@@ -499,6 +538,9 @@ extension XCUIApplication {
             case "train":
                 return self.descendants(matching: .any)[AXID.activityRootScroll].firstMatch.exists
                     && self.buttons[AXID.activityToolbarAdd].firstMatch.exists
+            case "wellness":
+                return self.descendants(matching: .any)[AXID.wellnessHeroScore].firstMatch.exists
+                    && self.buttons[AXID.wellnessToolbarAdd].firstMatch.exists
             default:
                 return false
             }

@@ -26,6 +26,42 @@ final class LifeSmokeTests: UITestBaseCase {
 
     // MARK: - Habit Form
 
+    func testEmptyStarterRemainsActionableAtMaximumAccessibilityTextSize() throws {
+        let textSizeArguments = [
+            "-UIPreferredContentSizeCategoryName",
+            "UICTContentSizeCategoryAccessibilityXXXL"
+        ]
+        var configuration = launchConfiguration
+        configuration.additionalArguments.append(contentsOf: textSizeArguments)
+        launchApp(with: configuration)
+        XCTAssertEqual(Array(app.launchArguments.suffix(2)), textSizeArguments,
+                       "This launch must explicitly request the largest accessibility text category")
+        XCTAssertTrue(app.hasPrimaryNavigation(timeout: 8), "Life should load at maximum accessibility text size")
+
+        XCTAssertTrue(
+            app.scrollToHittableElementIfNeeded("life-empty-template", maxSwipes: 5),
+            "Template entry should remain reachable at maximum accessibility text size\n\(app.debugDescription)"
+        )
+        XCTAssertTrue(
+            app.scrollToHittableElementIfNeeded("life-empty-add", maxSwipes: 5, direction: .down),
+            "Add Habit should remain reachable at maximum accessibility text size\n\(app.debugDescription)"
+        )
+        app.buttons["life-empty-add"].firstMatch.tap()
+        XCTAssertTrue(app.textFields[AXID.habitFormName].firstMatch.waitForExistence(timeout: 5),
+                      "The starter should open the habit form at maximum accessibility text size")
+        XCTAssertTrue(app.dismissModalIfPresent(cancelIdentifiers: [AXID.habitFormCancel]),
+                      "Cancel should dismiss the form without creating a habit")
+
+        XCTAssertTrue(
+            app.scrollToHittableElementIfNeeded("life-empty-add", maxSwipes: 5, direction: .down),
+            "Cancel should preserve the actionable empty starter"
+        )
+        XCTAssertTrue(
+            app.scrollToHittableElementIfNeeded("life-empty-template", maxSwipes: 5),
+            "The empty starter should retain its template action after cancellation"
+        )
+    }
+
     func testEmptyStarterAddCancelPreservesEmptyState() throws {
         XCTAssertTrue(elementExists(AXID.lifeHeroProgress, timeout: 8), "Empty starter should appear")
         XCTAssertTrue(app.waitAndTap("life-empty-add"), "Empty starter should offer Add Habit\n\(app.debugDescription)")
