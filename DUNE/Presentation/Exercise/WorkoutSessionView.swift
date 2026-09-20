@@ -12,6 +12,11 @@ struct WorkoutSessionView: View {
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.horizontalSizeClass) private var sizeClass
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.openWindow) private var openWindow
+    @Environment(\.supportsMultipleWindows) private var supportsMultipleWindows
+
+    @ScaledMetric(relativeTo: .largeTitle) private var inputFontSize = 48
+    @ScaledMetric(relativeTo: .largeTitle) private var timerDiameter = 180
 
     @AppStorage(WeightUnit.storageKey) private var weightUnitRaw = WeightUnit.kg.rawValue
     @State private var viewModel: WorkoutSessionViewModel
@@ -22,6 +27,7 @@ struct WorkoutSessionView: View {
     @State private var savedRecord: ExerciseRecord?
     @State private var effortSuggestion: EffortSuggestion?
     @State private var didPrepareSession = false
+    @State private var showingInsights = false
     @FocusState private var isInputFieldFocused: Bool
 
     // Set-by-set flow state
@@ -87,7 +93,9 @@ struct WorkoutSessionView: View {
             topBar
             AdaptivePaneView {
                 ScrollView { sessionOverview }
-                    .frame(maxHeight: sizeClass == .regular ? .infinity : 160)
+                    .frame(maxHeight: sizeClass == .regular ? .infinity : (isInputFieldFocused ? 0 : 120))
+                    .clipped()
+                    .accessibilityHidden(sizeClass != .regular && isInputFieldFocused)
             } secondary: {
                 sessionControls
             }
@@ -98,6 +106,16 @@ struct WorkoutSessionView: View {
         .englishNavigationTitle(exercise.name)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button("Workout Insights", systemImage: "chart.bar.xaxis") {
+                    if supportsMultipleWindows {
+                        openWindow(id: "workout-insights")
+                    } else {
+                        showingInsights = true
+                    }
+                }
+                .accessibilityIdentifier("workout-session-insights")
+            }
             ToolbarItem(placement: .topBarLeading) {
                 Button {
                     weightUnitRaw = (weightUnit == .kg ? WeightUnit.lb : WeightUnit.kg).rawValue
@@ -209,6 +227,19 @@ struct WorkoutSessionView: View {
             )
             .presentationDetents([.large])
         }
+        .sheet(isPresented: $showingInsights) {
+            NavigationStack {
+                VStack(spacing: 0) {
+                    HStack {
+                        Spacer()
+                        Button("Done") { showingInsights = false }
+                    }
+                    .padding()
+                    WeeklyStatsDetailView()
+                }
+            }
+            .presentationDetents([.large])
+        }
     }
 
     // MARK: - Top Bar
@@ -284,18 +315,26 @@ struct WorkoutSessionView: View {
     // MARK: - Set Input Content
 
     private var sessionControls: some View {
-        ScrollView {
-            VStack(spacing: DS.Spacing.lg) {
-                if showRestTimer {
-                    restTimerContent
-                } else {
-                    setInputContent
+        VStack(spacing: 0) {
+            ScrollView {
+                VStack(spacing: DS.Spacing.lg) {
+                    if showRestTimer {
+                        restTimerContent
+                    } else {
+                        setInputContent
+                    }
                 }
-                bottomAction
+                .frame(maxWidth: .infinity)
             }
-            .frame(maxWidth: .infinity)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .clipped()
+            .contentShape(Rectangle())
+            .accessibilityElement(children: .contain)
+            .accessibilityIdentifier("workout-session-controls")
+            .scrollDismissesKeyboard(.interactively)
+            bottomAction
+                .background(.regularMaterial)
         }
-        .scrollDismissesKeyboard(.interactively)
         .animation(reduceMotion ? nil : DS.Animation.standard, value: showRestTimer)
     }
 
@@ -328,29 +367,10 @@ struct WorkoutSessionView: View {
 
     private var setInputContent: some View {
         VStack(spacing: DS.Spacing.xl) {
-            Spacer()
-
-            // Exercise info
-            VStack(spacing: DS.Spacing.xs) {
-                Image(systemName: exercise.resolvedActivityType.iconName)
-                    .font(.largeTitle)
-                    .foregroundStyle(exercise.resolvedActivityType.color)
-
-                Text(exercise.localizedName)
-                    .font(.title2.weight(.bold))
-
-                // Previous set info
-                if let prev = viewModel.previousSetInfo(for: currentSetIndex + 1) {
-                    previousBadge(prev)
-                }
-            }
-
-            // Weight / Reps input
             currentSetInputFields
-
-            Spacer()
         }
         .padding(.horizontal, DS.Spacing.lg)
+        .padding(.vertical, DS.Spacing.md)
     }
 
     @ViewBuilder
@@ -521,7 +541,7 @@ struct WorkoutSessionView: View {
                     // Show recorded duration for completed sets (stored as seconds)
                     let totalSecs = Int(set.wrappedValue.duration) ?? 0
                     Text(String(format: "%d:%02d", totalSecs / 60, totalSecs % 60))
-                        .font(.system(size: 48, weight: .bold, design: .rounded))
+                        .font(.system(size: inputFontSize, weight: .bold, design: .rounded))
                         .monospacedDigit()
                         .foregroundStyle(DS.Color.primaryText)
                 } else if let startDate = viewModel.setTimerStarts[set.wrappedValue.id] {
@@ -532,14 +552,14 @@ struct WorkoutSessionView: View {
                         let mins = elapsed / 60
                         let secs = elapsed % 60
                         Text(String(format: "%d:%02d", mins, secs))
-                            .font(.system(size: 48, weight: .bold, design: .rounded))
+                            .font(.system(size: inputFontSize, weight: .bold, design: .rounded))
                             .monospacedDigit()
                             .foregroundStyle(DS.Color.primaryText)
                             .contentTransition(.numericText())
                     }
                 } else {
                     Text("0:00")
-                        .font(.system(size: 48, weight: .bold, design: .rounded))
+                        .font(.system(size: inputFontSize, weight: .bold, design: .rounded))
                         .monospacedDigit()
                         .foregroundStyle(DS.Color.primaryText)
                 }
@@ -599,7 +619,7 @@ struct WorkoutSessionView: View {
                 .foregroundStyle(DS.Color.textSecondary)
 
             TextField(placeholder, text: value)
-                .font(.system(size: 48, weight: .bold, design: .rounded))
+                .font(.system(size: inputFontSize, weight: .bold, design: .rounded))
                 .multilineTextAlignment(.center)
                 .keyboardType(keyboardType)
                 .submitLabel(.done)
@@ -707,12 +727,12 @@ struct WorkoutSessionView: View {
 
             VStack(spacing: DS.Spacing.xxs) {
                 Text(restTimeString)
-                    .font(.system(size: 48, weight: .bold, design: .rounded))
+                    .font(.system(size: inputFontSize, weight: .bold, design: .rounded))
                     .monospacedDigit()
                     .contentTransition(.numericText())
             }
         }
-        .frame(width: 180, height: 180)
+        .frame(width: min(timerDiameter, 320), height: min(timerDiameter, 320))
     }
 
     private var restProgress: Double {

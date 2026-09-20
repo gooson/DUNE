@@ -1,5 +1,10 @@
 import Foundation
 
+extension Notification.Name {
+    /// Broadcast for auxiliary scenes; AsyncStream is consumed by the main scene.
+    static let appHealthDataDidRefresh = Notification.Name("appHealthDataDidRefresh")
+}
+
 /// Source that triggered a data refresh.
 enum RefreshSource: String, Sendable {
     case foreground

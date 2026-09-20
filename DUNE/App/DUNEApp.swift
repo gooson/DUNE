@@ -372,6 +372,23 @@ struct DUNEApp: App {
             }
         }
         .modelContainer(appRuntime.modelContainer)
+
+        WindowGroup("Workout Insights", id: "workout-insights") {
+            Group {
+                if isLaunchExperienceReady && canLoadHealthKitData {
+                    NavigationStack {
+                        WeeklyStatsDetailView()
+                    }
+                } else {
+                    Text("Finish setup in the main window to view your workout insights.")
+                        .padding()
+                }
+            }
+            .environment(\.appTheme, selectedTheme)
+            .tint(selectedTheme.accentColor)
+            .preferredColorScheme(Self.forcedUITestColorScheme)
+        }
+        .modelContainer(appRuntime.modelContainer)
     }
 
     private var appContent: some View {

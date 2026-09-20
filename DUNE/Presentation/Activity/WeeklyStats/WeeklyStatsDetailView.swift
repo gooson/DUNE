@@ -6,8 +6,30 @@ struct WeeklyStatsDetailView: View {
     @Query(sort: \ExerciseRecord.date, order: .reverse) private var recentRecords: [ExerciseRecord]
     @State private var viewModel = WeeklyStatsDetailViewModel()
     @Environment(\.horizontalSizeClass) private var sizeClass
+    @Environment(\.scenePhase) private var scenePhase
+    @State private var refreshRevision = 0
 
     private var isRegular: Bool { sizeClass == .regular }
+
+    private struct LoadInput: Equatable {
+        let period: WeeklyStatsDetailViewModel.StatsPeriod
+        let snapshots: [ManualExerciseSnapshot]
+        let revision: Int
+    }
+
+    private var loadInput: LoadInput {
+        LoadInput(period: viewModel.selectedPeriod, snapshots: recentRecords.map { record in
+            ManualExerciseSnapshot(
+                date: record.date,
+                exerciseType: record.exerciseType,
+                categoryRawValue: ActivityCategory.strength.rawValue,
+                equipmentRawValue: record.resolvedEquipmentRaw,
+                duration: record.duration,
+                calories: record.estimatedCalories ?? record.calories ?? 0,
+                totalVolume: record.totalVolume
+            )
+        }, revision: refreshRevision)
+    }
 
     var body: some View {
         ScrollView {
@@ -30,19 +52,20 @@ struct WeeklyStatsDetailView: View {
         .accessibilityIdentifier("activity-weeklystats-detail-screen")
         .background { DetailWaveBackground() }
         .englishNavigationTitle(viewModel.selectedPeriod.rawValue)
-        .task(id: viewModel.selectedPeriod) {
-            let snapshots = recentRecords.map { record in
-                ManualExerciseSnapshot(
-                    date: record.date,
-                    exerciseType: record.exerciseType,
-                    categoryRawValue: ActivityCategory.strength.rawValue,
-                    equipmentRawValue: record.resolvedEquipmentRaw,
-                    duration: record.duration,
-                    calories: record.estimatedCalories ?? record.calories ?? 0,
-                    totalVolume: record.totalVolume
-                )
-            }
-            await viewModel.loadData(manualSnapshots: snapshots)
+        .task(id: loadInput) {
+            await viewModel.loadData(manualSnapshots: loadInput.snapshots)
+        }
+        .refreshable {
+            await viewModel.loadData(manualSnapshots: loadInput.snapshots)
+        }
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active { refreshRevision += 1 }
+        }
+        .onReceive(NotificationCenter.default.mainThreadPublisher(for: .appHealthDataDidRefresh)) { _ in
+            refreshRevision += 1
+        }
+        .onReceive(NotificationCenter.default.mainThreadPublisher(for: .NSCalendarDayChanged)) { _ in
+            refreshRevision += 1
         }
     }
 

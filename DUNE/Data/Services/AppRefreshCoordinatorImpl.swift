@@ -62,6 +62,7 @@ actor AppRefreshCoordinatorImpl: AppRefreshCoordinating {
         lastRefreshDate = now
         await sharedHealthDataService.invalidateCache()
         continuation.yield(source)
+        NotificationCenter.default.post(name: .appHealthDataDidRefresh, object: nil)
 
         AppLogger.ui.info("[AppRefreshCoordinator] Refresh triggered by \(source.rawValue)")
         return true
@@ -73,6 +74,7 @@ actor AppRefreshCoordinatorImpl: AppRefreshCoordinating {
         lastCloudKitRefreshDate = now
         await sharedHealthDataService.invalidateCache()
         continuation.yield(.pullToRefresh)
+        NotificationCenter.default.post(name: .appHealthDataDidRefresh, object: nil)
 
         AppLogger.ui.info("[AppRefreshCoordinator] Force refresh triggered")
     }
