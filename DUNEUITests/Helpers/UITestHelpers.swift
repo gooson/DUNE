@@ -470,18 +470,30 @@ extension XCUIApplication {
     }
 
     func hasPrimaryNavigation(timeout: TimeInterval = 8) -> Bool {
-        if tabBars.firstMatch.waitForExistence(timeout: timeout) {
-            return true
-        }
-
         let tabIDs = ["tab-today", "tab-activity", "tab-wellness", "tab-life"]
-        for tabID in tabIDs {
-            if buttons[tabID].waitForExistence(timeout: 1) {
+        let tabPredicate = NSPredicate(format: "identifier IN %@", tabIDs)
+        let startsOnLife: Bool = {
+            guard let argumentIndex = launchArguments.firstIndex(of: "--uitest-initial-tab"),
+                  launchArguments.indices.contains(argumentIndex + 1) else { return false }
+            return launchArguments[argumentIndex + 1] == "life"
+        }()
+
+        let navigationReady = NSPredicate { _, _ in
+            if self.tabBars.firstMatch.exists
+                || self.descendants(matching: .any).matching(tabPredicate).firstMatch.exists
+                || self.descendants(matching: .any)[AXID.sidebarNavList].firstMatch.exists {
                 return true
             }
-        }
 
-        return false
+            // Duo's vertical system tabs may not expose a TabBar or the tab IDs.
+            // Accept the explicitly requested Life destination only when both its
+            // main content and toolbar action have actually rendered.
+            return startsOnLife
+                && self.descendants(matching: .any)[AXID.lifeHeroProgress].firstMatch.exists
+                && self.buttons[AXID.lifeToolbarAdd].firstMatch.exists
+        }
+        let expectation = XCTNSPredicateExpectation(predicate: navigationReady, object: self)
+        return XCTWaiter.wait(for: [expectation], timeout: timeout) == .completed
     }
 
     /// Navigate to a tab by its visible title (iPhone)

@@ -28,7 +28,7 @@ final class LifeSmokeTests: UITestBaseCase {
 
     func testEmptyStarterAddCancelPreservesEmptyState() throws {
         XCTAssertTrue(elementExists(AXID.lifeHeroProgress, timeout: 8), "Empty starter should appear")
-        XCTAssertTrue(app.waitAndTap("life-empty-add"), "Empty starter should offer Add Habit")
+        XCTAssertTrue(app.waitAndTap("life-empty-add"), "Empty starter should offer Add Habit\n\(app.debugDescription)")
 
         let nameField = app.textFields[AXID.habitFormName].firstMatch
         XCTAssertTrue(nameField.waitForExistence(timeout: 3), "Add Habit should open the habit form")
@@ -44,7 +44,7 @@ final class LifeSmokeTests: UITestBaseCase {
     }
 
     func testEmptyStarterOpensTemplates() throws {
-        XCTAssertTrue(app.waitAndTap("life-empty-template"), "Empty starter should offer From Template")
+        XCTAssertTrue(app.waitAndTap("life-empty-template"), "Empty starter should offer From Template\n\(app.debugDescription)")
         XCTAssertTrue(elementExists("habit-template-list", timeout: 3), "Template picker should appear")
         XCTAssertTrue(
             app.dismissModalIfPresent(cancelIdentifiers: ["habit-template-cancel"]),

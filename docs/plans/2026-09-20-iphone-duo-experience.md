@@ -34,7 +34,7 @@ status: draft
 
 ## Implementation Steps / Progress
 
-- [ ] 1. D01–D03: Life 빈 상태 높이·시작 행동·집계 명확성.
+- [x] 1. D01–D03: Life 빈 상태 높이·시작 행동·집계 명확성.
 - [ ] 2. D04–D07, D12–D14: 접힘/비대칭 safe area/입력·모달/접근성 기반.
 - [ ] 3. F01/F02/F09 + D09: 운동 거치·이전 기록·좁은 창 대응.
 - [ ] 4. F05: 시간 기반 휴식 상태와 Live Activity 연속성.
@@ -62,4 +62,5 @@ status: draft
 
 ## Validation Ledger
 
-아직 구현·검증 완료한 항목 없음.
+- 1단계: Xcode 27.1 Duo 시뮬레이터 빌드 성공. Life 빈 상태 추가/취소, 템플릿 열기/취소, seeded hero UI 테스트 3개 통과.
+- 2–3단계: 적응형 운동 화면 구현 중. 전체 접힘 전환과 키보드 연속성은 미검증.

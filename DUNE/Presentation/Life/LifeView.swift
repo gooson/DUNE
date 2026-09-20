@@ -203,6 +203,7 @@ private struct HabitListQueryView: View {
                 }
             }
                 .reportTabHeroFrame()
+                .accessibilityElement(children: .contain)
                 .accessibilityIdentifier("life-hero-progress")
                 .staggeredAppear(index: 0)
 
