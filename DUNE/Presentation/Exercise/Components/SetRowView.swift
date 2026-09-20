@@ -73,7 +73,12 @@ struct SetRowView: View {
                 Text("\(w)×\(r)")
             case .setsReps:
                 let r = prev.reps.map { "\($0)" } ?? "—"
-                Text("×\(r)")
+                if let weight = prev.weight, weight > 0 {
+                    let w = weightUnit.fromKg(weight).formatted(.number.precision(.fractionLength(0...1)))
+                    Text("\(w)×\(r)")
+                } else {
+                    Text("×\(r)")
+                }
             case .durationDistance:
                 let unit = cardioUnit ?? .km
                 let d = prev.duration.map { "\(Int($0 / 60).formattedWithSeparator)m" } ?? "—"
@@ -99,7 +104,7 @@ struct SetRowView: View {
                 }()
                 Text(secondary.isEmpty ? d : "\(d) \(secondary)")
             case .durationIntensity:
-                let d = prev.duration.map { "\(Int($0 / 60).formattedWithSeparator)m" } ?? "—"
+                let d = prev.duration.map { "\(Int($0).formattedWithSeparator)s" } ?? "—"
                 Text(d)
             case .roundsBased:
                 let r = prev.reps.map { "\($0)r" } ?? "—"
@@ -130,6 +135,23 @@ struct SetRowView: View {
 
         case .setsReps:
             HStack(spacing: DS.Spacing.xs) {
+                if !editableSet.weight.isEmpty {
+                    TextField(weightUnit.displayName, text: $editableSet.weight)
+                        .keyboardType(.decimalPad)
+                        .textFieldStyle(.roundedBorder)
+                        .frame(maxWidth: 70)
+                        .accessibilityLabel("Added Weight")
+                        .accessibilityIdentifier("set-row-field-\(editableSet.setNumber)-weight")
+                }
+                Button {
+                    editableSet.weight = editableSet.weight.isEmpty ? "0" : ""
+                } label: {
+                    Image(systemName: editableSet.weight.isEmpty ? "plus.circle" : "minus.circle")
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(editableSet.weight.isEmpty ? String(localized: "Add Weight") : String(localized: "Remove Weight"))
+                .accessibilityIdentifier("set-row-toggle-weight-\(editableSet.setNumber)")
+
                 TextField("reps", text: $editableSet.reps)
                     .keyboardType(.numberPad)
                     .textFieldStyle(.roundedBorder)
@@ -172,7 +194,7 @@ struct SetRowView: View {
             }
 
         case .durationIntensity:
-            TextField("min", text: $editableSet.duration)
+            TextField("sec", text: $editableSet.duration)
                 .keyboardType(.numberPad)
                 .textFieldStyle(.roundedBorder)
                 .frame(maxWidth: 60)

@@ -156,11 +156,16 @@ final class CompoundWorkoutViewModel {
         guard !isSaving else { return [] }
         isSaving = true
 
+        validationError = nil
         var records: [ExerciseRecord] = []
-        for vm in exerciseViewModels {
-            if let record = vm.createValidatedRecord(weightUnit: weightUnit) {
-                records.append(record)
+        for vm in exerciseViewModels where vm.hasCompletedSet {
+            guard let record = vm.createValidatedRecord(weightUnit: weightUnit) else {
+                validationError = vm.validationError
+                for session in exerciseViewModels { session.didFinishSaving() }
+                isSaving = false
+                return []
             }
+            records.append(record)
         }
 
         if records.isEmpty {

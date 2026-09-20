@@ -67,16 +67,18 @@ struct CompoundWorkoutView: View {
         .englishNavigationTitle(config.mode.rawValue.capitalized)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
+            ToolbarItem(placement: .topBarTrailing) {
                 Button {
-                    weightUnitRaw = (weightUnit == .kg ? WeightUnit.lb : WeightUnit.kg).rawValue
+                    let newUnit: WeightUnit = weightUnit == .kg ? .lb : .kg
+                    for session in viewModel.exerciseViewModels {
+                        session.convertWeightUnit(from: weightUnit, to: newUnit)
+                    }
+                    weightUnitRaw = newUnit.rawValue
                 } label: {
                     Text(weightUnit.displayName.uppercased())
                         .font(.caption.weight(.bold))
-                        .padding(.horizontal, DS.Spacing.sm)
-                        .padding(.vertical, DS.Spacing.xxs)
-                        .background(DS.Color.activity.opacity(0.15), in: Capsule())
                 }
+                .accessibilityIdentifier("workout-weight-unit-button")
             }
             ToolbarItem(placement: .confirmationAction) {
                 Button("Finish") {
@@ -261,6 +263,11 @@ struct CompoundWorkoutView: View {
                     weightUnit: weightUnit,
                     cardioUnit: exercise.cardioSecondaryUnit,
                     onComplete: {
+                        if !vm.sets[index].isCompleted,
+                           !vm.validateSetForCompletion(at: index, weightUnit: weightUnit) {
+                            viewModel.validationError = vm.validationError
+                            return
+                        }
                         let completed = vm.toggleSetCompletion(at: index)
                         if completed {
                             setTimer.start(seconds: Int(WorkoutSettingsStore.shared.restSeconds))

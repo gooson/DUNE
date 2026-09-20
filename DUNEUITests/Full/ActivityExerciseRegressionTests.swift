@@ -323,6 +323,30 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         )
     }
 
+    func testCrunchCanAddAndRemoveWeightDuringSession() throws {
+        openExerciseSingleExercisePicker()
+        startQuickStartExerciseFromDetail(search: "Crunch", exerciseID: "crunch")
+        let toggle = app.buttons["workout-session-toggle-weight"].firstMatch
+        XCTAssertTrue(toggle.waitForExistence(timeout: 10))
+        XCTAssertFalse(app.textFields[AXID.workoutSessionField("kg")].exists)
+        toggle.tap()
+        let weight = app.textFields[AXID.workoutSessionField("kg")].firstMatch
+        XCTAssertTrue(weight.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.fillTextInput(AXID.workoutSessionField("kg"), with: "10"))
+        let keyboardDone = app.buttons["workout-keyboard-done-button"].firstMatch
+        if keyboardDone.exists { keyboardDone.tap() }
+        let unit = app.buttons["workout-weight-unit-button"].firstMatch
+        XCTAssertTrue(unit.waitForExistence(timeout: 5))
+        unit.tap()
+        let pounds = app.textFields[AXID.workoutSessionField("lb")].firstMatch
+        XCTAssertTrue(pounds.waitForExistence(timeout: 5))
+        let poundsValue = try XCTUnwrap(Double(try XCTUnwrap(pounds.value as? String)))
+        XCTAssertEqual(poundsValue, 22.0462, accuracy: 0.001)
+        toggle.tap()
+        XCTAssertFalse(pounds.exists)
+        XCTAssertTrue(app.textFields[AXID.workoutSessionField("reps")].exists)
+    }
+
     func testManualWorkoutSessionSavesAndDismissesCompletionSheet() throws {
         openExerciseSingleExercisePicker()
         startQuickStartExerciseFromDetail(search: "Bench Press", exerciseID: Fixture.benchPressID)
