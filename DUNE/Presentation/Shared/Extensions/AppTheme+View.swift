@@ -18,6 +18,8 @@ extension AppTheme {
             "Arctic"
         case .solarPop:
             "Solar"
+        case .contourAtlas:
+            "Contour"
         }
     }
 
@@ -268,7 +270,7 @@ extension AppTheme {
     var usesGlassBorder: Bool {
         switch self {
         case .sakuraCalm, .arcticDawn, .solarPop: true
-        case .desertWarm, .oceanCool, .forestGreen: false
+        case .desertWarm, .oceanCool, .forestGreen, .contourAtlas: false
         }
     }
 }
@@ -292,6 +294,7 @@ extension AppTheme {
         case .sakuraCalm:  String(localized: "Sakura Calm")
         case .arcticDawn:  String(localized: "Arctic Dawn")
         case .solarPop:    String(localized: "Solar Pop")
+        case .contourAtlas: String(localized: "Contour Atlas")
         }
     }
 }

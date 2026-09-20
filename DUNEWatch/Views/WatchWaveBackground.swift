@@ -104,6 +104,15 @@ struct WatchWaveBackground: View {
     private var isSolar: Bool { theme == .solarPop }
 
     var body: some View {
+        if theme == .contourAtlas {
+            ContourBackground(style: .watch)
+        } else {
+            legacyBackground
+        }
+    }
+
+    @ViewBuilder
+    private var legacyBackground: some View {
         let resolvedColor = color ?? theme.accentColor
         let baseWaveColor: Color = {
             if isArctic { return Color("ArcticDeep") }

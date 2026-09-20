@@ -194,6 +194,7 @@ private enum GlassCardGradients {
         case .sakuraCalm:  sakuraHeroBorder
         case .arcticDawn:  arcticHeroBorder
         case .solarPop:    solarHeroBorder
+        case .contourAtlas: clearBorder
         }
     }
     static func darkBorder(for theme: AppTheme) -> LinearGradient {
@@ -204,6 +205,7 @@ private enum GlassCardGradients {
         case .sakuraCalm:  sakuraDarkBorder
         case .arcticDawn:  arcticDarkBorder
         case .solarPop:    solarDarkBorder
+        case .contourAtlas: clearBorder
         }
     }
     static func bottomSeparator(for theme: AppTheme) -> LinearGradient {
@@ -214,6 +216,7 @@ private enum GlassCardGradients {
         case .sakuraCalm:  sakuraBottomSeparator
         case .arcticDawn:  arcticBottomSeparator
         case .solarPop:    solarBottomSeparator
+        case .contourAtlas: clearBorder
         }
     }
 
@@ -253,7 +256,7 @@ private enum GlassCardGradients {
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
-        case .desertWarm, .oceanCool, .forestGreen:
+        case .desertWarm, .oceanCool, .forestGreen, .contourAtlas:
             clearBorder
         }
     }
@@ -294,7 +297,7 @@ private enum GlassCardGradients {
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
-        case .desertWarm, .oceanCool, .forestGreen:
+        case .desertWarm, .oceanCool, .forestGreen, .contourAtlas:
             clearBorder
         }
     }
@@ -334,7 +337,7 @@ private enum GlassCardGradients {
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
-        case .desertWarm, .oceanCool, .forestGreen:
+        case .desertWarm, .oceanCool, .forestGreen, .contourAtlas:
             clearBorder
         }
     }
@@ -371,7 +374,7 @@ private enum GlassCardGradients {
                 startPoint: .top,
                 endPoint: .bottom
             )
-        case .desertWarm, .oceanCool, .forestGreen:
+        case .desertWarm, .oceanCool, .forestGreen, .contourAtlas:
             clearBorder
         }
     }
@@ -408,7 +411,7 @@ private enum GlassCardGradients {
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
-        case .desertWarm, .oceanCool, .forestGreen:
+        case .desertWarm, .oceanCool, .forestGreen, .contourAtlas:
             clearBorder
         }
     }
@@ -431,38 +434,43 @@ struct HeroCard<Content: View>: View {
             .frame(maxWidth: .infinity)
             .padding(cardPadding)
             .background {
-                RoundedRectangle(cornerRadius: cornerRadius)
-                    .fill(.ultraThinMaterial)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: cornerRadius)
-                            .fill(
-                                LinearGradient(
-                                    colors: [
-                                        theme.accentColor.opacity(DS.Opacity.medium),
-                                        tintColor.opacity(DS.Opacity.light)
-                                    ],
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
+                if theme == .contourAtlas {
+                    ContourCardSurface(cornerRadius: cornerRadius, emphasized: true)
+                } else {
+                    RoundedRectangle(cornerRadius: cornerRadius)
+                        .fill(.ultraThinMaterial)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: cornerRadius)
+                                .fill(
+                                    LinearGradient(
+                                        colors: [
+                                            theme.accentColor.opacity(DS.Opacity.medium),
+                                            tintColor.opacity(DS.Opacity.light)
+                                        ],
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    )
                                 )
-                            )
-                    )
-                    .overlay(
-                        RoundedRectangle(cornerRadius: cornerRadius)
-                            .fill(GlassCardGradients.heroSurface(for: theme, colorScheme: colorScheme))
-                    )
-                    .overlay(alignment: .top) {
-                        RoundedRectangle(cornerRadius: cornerRadius)
-                            .fill(GlassCardGradients.topBloom(for: theme, colorScheme: colorScheme))
-                            .frame(height: sizeClass == .regular ? 72 : 58)
-                    }
-                    // Accent border — top-leading highlight fades to subtle bottom-trailing
-                    .overlay(
-                        RoundedRectangle(cornerRadius: cornerRadius)
-                            .strokeBorder(
-                                GlassCardGradients.heroBorder(for: theme),
-                                lineWidth: 1
-                            )
-                    )
+                        )
+                        .overlay(
+                            RoundedRectangle(cornerRadius: cornerRadius)
+                                .fill(GlassCardGradients.heroSurface(for: theme, colorScheme: colorScheme))
+                        )
+                        .overlay(alignment: .top) {
+                            RoundedRectangle(cornerRadius: cornerRadius)
+                                .fill(GlassCardGradients.topBloom(for: theme, colorScheme: colorScheme))
+                                .frame(height: sizeClass == .regular ? 72 : 58)
+                        }
+                        // Accent border — top-leading highlight fades to subtle bottom-trailing
+                        .overlay(
+                            RoundedRectangle(cornerRadius: cornerRadius)
+                                .strokeBorder(
+                                    GlassCardGradients.heroBorder(for: theme),
+                                    lineWidth: 1
+                                )
+                        )
+
+                }
             }
     }
 }
@@ -485,35 +493,40 @@ struct StandardCard<Content: View>: View {
         content()
             .padding(resolvedPadding)
             .background {
-                RoundedRectangle(cornerRadius: cornerRadius)
-                    .fill(.thinMaterial)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: cornerRadius)
-                            .fill(GlassCardGradients.standardSurface(for: theme, colorScheme: colorScheme))
-                    )
-                    .overlay(alignment: .top) {
-                        RoundedRectangle(cornerRadius: cornerRadius)
-                            .fill(GlassCardGradients.topBloom(for: theme, colorScheme: colorScheme))
-                            .frame(height: sizeClass == .regular ? 52 : 42)
-                    }
-                    .overlay(
-                        RoundedRectangle(cornerRadius: cornerRadius)
-                            .strokeBorder(
-                                theme.usesGlassBorder
-                                    ? GlassCardGradients.cardBorder(for: theme, colorScheme: colorScheme)
-                                    : (colorScheme == .dark
-                                        ? GlassCardGradients.darkBorder(for: theme)
-                                        : GlassCardGradients.clearBorder),
-                                lineWidth: 1
-                            )
-                    )
-                    .shadow(
-                        color: colorScheme == .dark
-                            ? theme.accentColor.opacity(DS.Opacity.light)
-                            : .black.opacity(DS.Opacity.subtle),
-                        radius: 10,
-                        y: 2
-                    )
+                if theme == .contourAtlas {
+                    ContourCardSurface(cornerRadius: cornerRadius, emphasized: false)
+                } else {
+                    RoundedRectangle(cornerRadius: cornerRadius)
+                        .fill(.thinMaterial)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: cornerRadius)
+                                .fill(GlassCardGradients.standardSurface(for: theme, colorScheme: colorScheme))
+                        )
+                        .overlay(alignment: .top) {
+                            RoundedRectangle(cornerRadius: cornerRadius)
+                                .fill(GlassCardGradients.topBloom(for: theme, colorScheme: colorScheme))
+                                .frame(height: sizeClass == .regular ? 52 : 42)
+                        }
+                        .overlay(
+                            RoundedRectangle(cornerRadius: cornerRadius)
+                                .strokeBorder(
+                                    theme.usesGlassBorder
+                                        ? GlassCardGradients.cardBorder(for: theme, colorScheme: colorScheme)
+                                        : (colorScheme == .dark
+                                            ? GlassCardGradients.darkBorder(for: theme)
+                                            : GlassCardGradients.clearBorder),
+                                    lineWidth: 1
+                                )
+                        )
+                        .shadow(
+                            color: colorScheme == .dark
+                                ? theme.accentColor.opacity(DS.Opacity.light)
+                                : .black.opacity(DS.Opacity.subtle),
+                            radius: 10,
+                            y: 2
+                        )
+
+                }
             }
     }
 }
@@ -533,21 +546,26 @@ struct InlineCard<Content: View>: View {
         content()
             .padding(cardPadding)
             .background {
-                RoundedRectangle(cornerRadius: cornerRadius)
-                    .fill(.ultraThinMaterial)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: cornerRadius)
-                            .fill(GlassCardGradients.inlineSurface(for: theme, colorScheme: colorScheme))
-                    )
-                    .overlay(
-                        RoundedRectangle(cornerRadius: cornerRadius)
-                            .strokeBorder(
-                                theme.usesGlassBorder
-                                    ? GlassCardGradients.cardBorder(for: theme, colorScheme: colorScheme)
-                                    : GlassCardGradients.clearBorder,
-                                lineWidth: theme.usesGlassBorder ? 0.9 : 0
-                            )
-                    )
+                if theme == .contourAtlas {
+                    ContourCardSurface(cornerRadius: cornerRadius, emphasized: false)
+                } else {
+                    RoundedRectangle(cornerRadius: cornerRadius)
+                        .fill(.ultraThinMaterial)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: cornerRadius)
+                                .fill(GlassCardGradients.inlineSurface(for: theme, colorScheme: colorScheme))
+                        )
+                        .overlay(
+                            RoundedRectangle(cornerRadius: cornerRadius)
+                                .strokeBorder(
+                                    theme.usesGlassBorder
+                                        ? GlassCardGradients.cardBorder(for: theme, colorScheme: colorScheme)
+                                        : GlassCardGradients.clearBorder,
+                                    lineWidth: theme.usesGlassBorder ? 0.9 : 0
+                                )
+                        )
+
+                }
             }
             .overlay(alignment: .bottom) {
                 GlassCardGradients.bottomSeparator(for: theme)
@@ -555,4 +573,36 @@ struct InlineCard<Content: View>: View {
                     .padding(.horizontal, DS.Spacing.md)
             }
     }
+}
+
+/// Opaque limestone/graphite surface keeps topographic decoration behind the data.
+struct ContourCardSurface: View {
+    let cornerRadius: CGFloat
+    var emphasized = false
+
+    var body: some View {
+        RoundedRectangle(cornerRadius: cornerRadius)
+            .fill(ContourPalette.surface)
+            .overlay {
+                RoundedRectangle(cornerRadius: cornerRadius)
+                    .strokeBorder(ContourPalette.ink.opacity(0.18), lineWidth: 0.75)
+            }
+            .overlay(alignment: .topLeading) {
+                if emphasized {
+                    Capsule()
+                        .fill(ContourPalette.accent)
+                        .frame(width: 32, height: 3)
+                        .padding(.leading, cornerRadius)
+                }
+            }
+    }
+}
+
+#Preview("Contour Card") {
+    HeroCard(tintColor: .clear) {
+        Text("Condition")
+    }
+    .environment(\.appTheme, .contourAtlas)
+    .padding()
+    .background { ContourBackground() }
 }

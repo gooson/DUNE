@@ -22,7 +22,7 @@ struct SectionGroup<Content: View>: View {
         case .sakuraCalm: 0.95
         case .arcticDawn: 0.85
         case .solarPop:   0.9
-        case .desertWarm, .oceanCool, .forestGreen: 0.6
+        case .desertWarm, .oceanCool, .forestGreen, .contourAtlas: 0.6
         }
     }
 
@@ -62,7 +62,7 @@ struct SectionGroup<Content: View>: View {
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
-        case .desertWarm, .oceanCool, .forestGreen:
+        case .desertWarm, .oceanCool, .forestGreen, .contourAtlas:
             theme.cardBackgroundGradient
         }
     }
@@ -99,7 +99,7 @@ struct SectionGroup<Content: View>: View {
                 startPoint: .top,
                 endPoint: .bottom
             )
-        case .desertWarm, .oceanCool, .forestGreen:
+        case .desertWarm, .oceanCool, .forestGreen, .contourAtlas:
             LinearGradient(
                 colors: [theme.accentColor.opacity(0.08), .clear],
                 startPoint: .top,
@@ -140,7 +140,7 @@ struct SectionGroup<Content: View>: View {
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
-        case .desertWarm, .oceanCool, .forestGreen:
+        case .desertWarm, .oceanCool, .forestGreen, .contourAtlas:
             LinearGradient(
                 colors: [
                     theme.accentColor.opacity(colorScheme == .dark ? 0.26 : 0.12),
@@ -196,21 +196,25 @@ struct SectionGroup<Content: View>: View {
         .padding(outerPadding)
         .frame(maxHeight: fillHeight ? .infinity : nil, alignment: .top)
         .background {
-            RoundedRectangle(cornerRadius: cornerRadius)
-                .fill(.thinMaterial)
-                .overlay(
-                    RoundedRectangle(cornerRadius: cornerRadius)
-                        .fill(sectionSurfaceGradient)
-                )
-                .overlay(alignment: .top) {
-                    RoundedRectangle(cornerRadius: cornerRadius)
-                        .fill(sectionTopBloom)
-                        .frame(height: sizeClass == .regular ? 56 : 42)
-                }
-                .overlay(
-                    RoundedRectangle(cornerRadius: cornerRadius)
-                        .strokeBorder(sectionBorderGradient, lineWidth: borderWidth)
-                )
+            if theme == .contourAtlas {
+                ContourCardSurface(cornerRadius: cornerRadius)
+            } else {
+                RoundedRectangle(cornerRadius: cornerRadius)
+                    .fill(.thinMaterial)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: cornerRadius)
+                            .fill(sectionSurfaceGradient)
+                    )
+                    .overlay(alignment: .top) {
+                        RoundedRectangle(cornerRadius: cornerRadius)
+                            .fill(sectionTopBloom)
+                            .frame(height: sizeClass == .regular ? 56 : 42)
+                    }
+                    .overlay(
+                        RoundedRectangle(cornerRadius: cornerRadius)
+                            .strokeBorder(sectionBorderGradient, lineWidth: borderWidth)
+                    )
+            }
         }
     }
 }
