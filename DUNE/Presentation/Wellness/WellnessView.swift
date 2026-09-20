@@ -6,6 +6,7 @@ struct WellnessView: View {
     @State private var bodyViewModel = BodyCompositionViewModel()
     @State private var injuryViewModel = InjuryViewModel()
     @State private var isShowingPostureCapture = false
+    @State private var isShowingComparison = false
     @State private var isShowingRealtimePosture = false
     @Environment(\.modelContext) private var modelContext
     @Environment(\.appTheme) private var theme
@@ -32,6 +33,11 @@ struct WellnessView: View {
         self.scrollToTopSignal = scrollToTopSignal
         self.refreshSignal = refreshSignal
         self.scoreRefreshService = scoreRefreshService
+    }
+
+    private var comparisonMetrics: [HealthMetric] {
+        var seen = Set<String>()
+        return (viewModel.physicalCards + viewModel.activeCards).map(\.metric).filter { seen.insert($0.id).inserted }
     }
 
     var body: some View {
@@ -175,7 +181,19 @@ struct WellnessView: View {
             TabWaveBackground()
                 .environment(\.tabHeroStartLineInset, heroFrame.map(TabHeroStartLine.inset(for:)))
         }
+        .sheet(isPresented: $isShowingComparison) {
+            MetricComparisonView(metrics: comparisonMetrics)
+        }
         .toolbar {
+            ToolbarItem(placement: .secondaryAction) {
+                Button {
+                    isShowingComparison = true
+                } label: {
+                    Label("Compare Metrics", systemImage: "chart.xyaxis.line")
+                }
+                .disabled(comparisonMetrics.count < 2)
+                .accessibilityIdentifier("wellness-compare-metrics")
+            }
             ToolbarItem(placement: .primaryAction) {
                 Menu {
                     Button {

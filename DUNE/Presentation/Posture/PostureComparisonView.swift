@@ -8,13 +8,19 @@ struct PostureComparisonView: View {
     @State private var zoomImage: ZoomableImageItem?
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: DS.Spacing.lg) {
-                scoreComparison
-                imageComparison
-                metricDeltas
+        AdaptivePaneView {
+            ScrollView {
+                VStack(spacing: DS.Spacing.lg) {
+                    scoreComparison
+                    imageComparison
+                }
+                .padding(.horizontal, DS.Spacing.lg)
             }
-            .padding(.horizontal, DS.Spacing.lg)
+        } secondary: {
+            ScrollView {
+                metricDeltas
+                    .padding(.horizontal, DS.Spacing.lg)
+            }
         }
         .englishNavigationTitle("Comparison")
         .navigationBarTitleDisplayMode(.inline)
