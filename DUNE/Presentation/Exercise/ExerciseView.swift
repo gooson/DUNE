@@ -21,6 +21,7 @@ struct ExerciseView: View {
     @State private var recordToDelete: ExerciseRecord?
     @State private var healthKitWorkoutToDelete: WorkoutSummary?
     @State private var recordsByID: [UUID: ExerciseRecord] = [:]
+    @State private var inspectedExerciseID: String?
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \ExerciseRecord.date, order: .reverse) private var manualRecords: [ExerciseRecord]
     @Query(sort: \CustomExercise.createdAt, order: .reverse) private var customExercises: [CustomExercise]
@@ -64,6 +65,11 @@ struct ExerciseView: View {
                 updateSuggestion()
                 await viewModel.loadHealthKitWorkouts()
             }
+            .onChange(of: viewModel.allExercises.map(\.id)) { _, ids in
+                if let selectedID = inspectedExerciseID, !ids.contains(selectedID) {
+                    inspectedExerciseID = nil
+                }
+            }
             .onChange(of: manualRecords) { _, newValue in
                 rebuildRecordIndex()
                 WorkoutTypeCorrectionStore.shared.backfillTitles(from: newValue)
@@ -95,6 +101,26 @@ struct ExerciseView: View {
                 Text("\(workout.localizedTitle) on \(workout.date.formatted(date: .abbreviated, time: .omitted)) will be permanently deleted from all your devices.")
             }
             .confirmDeleteRecord($recordToDelete, context: modelContext)
+            .inspector(isPresented: Binding(
+                get: { inspectedExerciseID != nil },
+                set: { if !$0 { inspectedExerciseID = nil } }
+            )) {
+                NavigationStack {
+                    VStack(spacing: 0) {
+                        HStack {
+                            Spacer()
+                            Button("Done") { inspectedExerciseID = nil }
+                                .accessibilityIdentifier("exercise-inspector-close")
+                        }
+                        .padding()
+                        if let item = viewModel.allExercises.first(where: { $0.id == inspectedExerciseID }) {
+                            exerciseDetail(item)
+                                .id(item.id)
+                        }
+                    }
+                }
+                .inspectorColumnWidth(min: 320, ideal: 420, max: 540)
+            }
     }
 
     @ToolbarContentBuilder
@@ -193,24 +219,14 @@ struct ExerciseView: View {
 
                     ForEach(viewModel.allExercises) { item in
                         Group {
-                            if item.source == .manual, let record = findRecord(for: item) {
-                                NavigationLink {
-                                    ExerciseSessionDetailView(
-                                        record: record,
-                                        activityType: item.activityType,
-                                        displayName: item.displayName,
-                                        equipment: item.equipment
-                                    )
-                                } label: {
+                            if (item.source == .manual && findRecord(for: item) != nil)
+                                || (item.source == .healthKit && item.workoutSummary != nil) {
+                                Button { inspectedExerciseID = item.id } label: {
                                     UnifiedWorkoutRow(item: item, style: .full)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .contentShape(Rectangle())
                                 }
-                                .accessibilityIdentifier(exerciseRowIdentifier(for: item))
-                            } else if item.source == .healthKit, let summary = item.workoutSummary {
-                                NavigationLink {
-                                    HealthKitWorkoutDetailView(workout: summary)
-                                } label: {
-                                    UnifiedWorkoutRow(item: item, style: .full)
-                                }
+                                .buttonStyle(.plain)
                                 .accessibilityIdentifier(exerciseRowIdentifier(for: item))
                             } else {
                                 UnifiedWorkoutRow(item: item, style: .full)
@@ -259,6 +275,22 @@ struct ExerciseView: View {
                 .accessibilityIdentifier("exercise-view-screen")
                 .scrollContentBackground(.hidden)
             }
+        }
+    }
+
+    @ViewBuilder
+    private func exerciseDetail(_ item: ExerciseListItem) -> some View {
+        if item.source == .manual, let record = findRecord(for: item) {
+            ExerciseSessionDetailView(
+                record: record,
+                activityType: item.activityType,
+                displayName: item.displayName,
+                equipment: item.equipment
+            )
+        } else if let summary = item.workoutSummary {
+            HealthKitWorkoutDetailView(workout: summary)
+        } else {
+            ContentUnavailableView("No Data", systemImage: "list.clipboard")
         }
     }
 

@@ -240,7 +240,29 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         benchPressRow.tap()
 
         let historyLink = app.descendants(matching: .any)[AXID.exerciseSessionViewHistory].firstMatch
-        XCTAssertTrue(historyLink.waitForExistence(timeout: 10), "View history link should exist")
+        let inspectorClose = app.buttons["exercise-inspector-close"].firstMatch
+        XCTAssertTrue(inspectorClose.waitForExistence(timeout: 5), "Selected workout inspector should expose Done\n\(app.debugDescription)")
+        XCTAssertTrue(inspectorClose.isHittable, "Workout inspector Done should be reachable\n\(app.debugDescription)")
+        inspectorClose.tap()
+        let inspectorDismissed = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "exists == false"), object: inspectorClose
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [inspectorDismissed], timeout: 5), .completed,
+                       "Done should close the selected workout inspector")
+        XCTAssertTrue(
+            app.descendants(matching: .any)[AXID.exerciseViewScreen].firstMatch.waitForExistence(timeout: 5),
+            "Closing the inspector should return to the workout list"
+        )
+        XCTAssertTrue(
+            app.scrollToHittableElementIfNeeded(AXID.exerciseRow(Fixture.benchPressID), maxSwipes: 8),
+            "The selected workout should remain accessible after closing its inspector"
+        )
+        benchPressRow.tap()
+        let detailScroll = app.scrollViews["exercise-session-detail-scroll"].firstMatch
+        XCTAssertTrue(detailScroll.waitForExistence(timeout: 5), "Selected workout details should appear\n\(app.debugDescription)")
+        for _ in 0..<6 where !historyLink.isHittable { detailScroll.swipeUp() }
+        XCTAssertTrue(historyLink.exists && historyLink.isHittable,
+                      "Reopening the same workout should make its history reachable\n\(app.debugDescription)")
         historyLink.tap()
 
         XCTAssertTrue(
@@ -332,13 +354,44 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             "Workout session screen should open"
         )
 
-        let weightIncrease = app.buttons["+2.5"].firstMatch
-        XCTAssertTrue(weightIncrease.waitForExistence(timeout: 5), "Weight increment button should exist")
-        weightIncrease.tap()
+        let sessionControls = app.scrollViews["workout-session-controls"].firstMatch
+        XCTAssertTrue(
+            sessionControls.waitForExistence(timeout: 5),
+            "Workout controls should expose their scroll container\n\(app.debugDescription)"
+        )
+        let doneButton = app.buttons[AXID.workoutSessionDone].firstMatch
+        XCTAssertTrue(doneButton.waitForExistence(timeout: 5), "Session Done should exist before editing")
+        XCTAssertFalse(doneButton.isEnabled, "Starting a session should not complete its first set")
 
-        let repsIncrease = app.buttons["+1"].firstMatch
-        XCTAssertTrue(repsIncrease.waitForExistence(timeout: 5), "Reps increment button should exist")
+        let weightIncrease = sessionControls.buttons["+2.5"].firstMatch
+        XCTAssertTrue(weightIncrease.waitForExistence(timeout: 5), "Weight increment button should exist in current set controls")
+        for _ in 0..<4 where !weightIncrease.isHittable {
+            sessionControls.swipeUp()
+        }
+        XCTAssertTrue(
+            waitForHittable(weightIncrease, timeout: 5),
+            "Weight increment should be hittable before tapping. Controls: \(sessionControls.debugDescription)\n\(app.debugDescription)"
+        )
+        weightIncrease.tap()
+        XCTAssertFalse(
+            doneButton.isEnabled,
+            "Incrementing weight must not complete a set\n\(app.debugDescription)"
+        )
+
+        let repsIncrease = sessionControls.buttons["+1"].firstMatch
+        for _ in 0..<5 where !repsIncrease.isHittable {
+            sessionControls.swipeUp()
+        }
+        XCTAssertTrue(
+            repsIncrease.waitForExistence(timeout: 5),
+            "Reps increment button should exist after scrolling. Controls: \(sessionControls.debugDescription)\n\(app.debugDescription)"
+        )
+        XCTAssertTrue(
+            repsIncrease.isHittable,
+            "Reps increment should be reachable within the workout controls. Controls: \(sessionControls.debugDescription)\n\(app.debugDescription)"
+        )
         repsIncrease.tap()
+        XCTAssertFalse(doneButton.isEnabled, "Incrementing repetitions must not complete a set\n\(app.debugDescription)")
 
         let completeSetButton = app.buttons[AXID.workoutSessionCompleteSet].firstMatch
         XCTAssertTrue(completeSetButton.waitForExistence(timeout: 5), "Complete Set button should exist")
@@ -348,7 +401,14 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         )
 
         let repsField = app.textFields[AXID.workoutSessionField("reps")].firstMatch
+        for _ in 0..<3 where !repsField.isHittable {
+            sessionControls.swipeDown()
+        }
         XCTAssertTrue(repsField.waitForExistence(timeout: 5), "Current set repetitions should be editable")
+        XCTAssertTrue(repsField.isHittable, "Repetition input should be reachable within the workout controls")
+        let incrementedReps = try XCTUnwrap(repsField.value as? String, "Repetitions should expose an input value")
+        XCTAssertFalse(incrementedReps.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty, "Incrementing repetitions should populate the field")
+        XCTAssertGreaterThan(Int(incrementedReps) ?? 0, 0, "Incremented repetitions should be valid before completing the set")
         repsField.tap()
         XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 3), "Repetition entry should open the keyboard")
         XCTAssertTrue(
@@ -357,9 +417,16 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         )
         completeSetButton.tap()
 
-        let doneButton = app.descendants(matching: .any)[AXID.workoutSessionDone].firstMatch
         XCTAssertTrue(doneButton.waitForExistence(timeout: 5), "Done button should exist")
-        XCTAssertTrue(doneButton.isEnabled, "Done button should enable after one completed set")
+        let setCompleted = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "enabled == true"),
+            object: doneButton
+        )
+        XCTAssertEqual(
+            XCTWaiter.wait(for: [setCompleted], timeout: 5),
+            .completed,
+            "Done should enable after completing a set. Alerts: \(app.alerts.debugDescription)\n\(app.debugDescription)"
+        )
         doneButton.tap()
 
         XCTAssertTrue(
@@ -374,6 +441,46 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             app.descendants(matching: .any)[AXID.exerciseViewScreen].firstMatch.waitForExistence(timeout: 10),
             "Completion sheet dismissal should return to Exercise root"
         )
+    }
+
+    func testWeeklyPlanAssignsTemplateToSelectedDay() throws {
+        openTemplateList()
+        XCTAssertTrue(app.waitAndTapToolbarAction("workout-weekly-plan-open"),
+                      "Templates should expose weekly planning directly or in toolbar overflow\n\(app.debugDescription)")
+        let plan = app.descendants(matching: .any)["weekly-workout-plan"].firstMatch
+        XCTAssertTrue(plan.waitForExistence(timeout: 8), "Weekly plan should open")
+
+        let remove = app.buttons["weekly-plan-remove"].firstMatch
+        if remove.exists {
+            remove.tap()
+        }
+
+        let assignTemplate = plan.buttons.matching(NSPredicate(
+            format: "identifier BEGINSWITH %@ AND label CONTAINS %@",
+            "weekly-plan-template-", Fixture.singleTemplate
+        )).firstMatch
+        XCTAssertTrue(assignTemplate.waitForExistence(timeout: 5), "Seeded template should be available for assignment")
+        let templateList = app.scrollViews["weekly-plan-template-list"].firstMatch
+        XCTAssertTrue(templateList.waitForExistence(timeout: 5), "Template pane should expose its scroll container")
+        for _ in 0..<4 where !assignTemplate.isHittable {
+            templateList.swipeUp()
+        }
+        XCTAssertTrue(assignTemplate.isHittable, "Template assignment should be accessible without dragging")
+        assignTemplate.tap()
+
+        let selectedTemplate = app.buttons["weekly-plan-selected-template"].firstMatch
+        for _ in 0..<4 where !selectedTemplate.isHittable {
+            templateList.swipeDown()
+        }
+        XCTAssertTrue(selectedTemplate.waitForExistence(timeout: 5), "Selected day should expose its assigned workout")
+        XCTAssertTrue(selectedTemplate.label.contains(Fixture.singleTemplate), "Selected day should use the chosen template")
+        XCTAssertTrue(app.waitAndTap("weekly-plan-remove"), "Assigned workout should be removable from the plan")
+        let assignmentRemoved = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "exists == false"), object: selectedTemplate
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [assignmentRemoved], timeout: 5), .completed,
+                       "Removing the assignment should restore the selected day to a rest day")
+        XCTAssertTrue(assignTemplate.exists, "Removing a plan assignment must preserve the template")
     }
 
     func testTemplateListSupportsCreateEditAndTemplateStart() throws {

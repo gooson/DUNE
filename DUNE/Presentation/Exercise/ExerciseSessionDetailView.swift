@@ -41,6 +41,8 @@ struct ExerciseSessionDetailView: View {
             }
             .padding(.horizontal, DS.Spacing.lg)
         }
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("exercise-session-detail-scroll")
         .background { DetailWaveBackground() }
         .englishNavigationTitle(record.exerciseType)
         .navigationBarTitleDisplayMode(.inline)
