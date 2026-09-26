@@ -19,10 +19,15 @@ _ensure_worktree_cache() {
 
     _WT_TOPLEVEL="$(git rev-parse --show-toplevel 2>/dev/null)" || { _WT_IS_WORKTREE="no"; return; }
 
+    # Codex worktrees can share a basename (e.g. <id>/Health).
+    # Include the full path identity so concurrent worktrees never reuse a device.
+    local path_hash
+    path_hash=$(printf '%s' "$_WT_TOPLEVEL" | shasum -a 256) || return 1
+    _WT_BASENAME="$(basename "$_WT_TOPLEVEL")-${path_hash:0:12}"
+
     # In a worktree, .git is a file (not a directory) pointing to the main repo
     if [[ -f "$_WT_TOPLEVEL/.git" ]]; then
         _WT_IS_WORKTREE="yes"
-        _WT_BASENAME="$(basename "$_WT_TOPLEVEL")"
         return
     fi
 
@@ -36,7 +41,6 @@ _ensure_worktree_cache() {
 
     if [[ "$resolved_common" != "$resolved_git_dir" ]]; then
         _WT_IS_WORKTREE="yes"
-        _WT_BASENAME="$(basename "$_WT_TOPLEVEL")"
     else
         _WT_IS_WORKTREE="no"
     fi
@@ -48,7 +52,7 @@ _is_git_worktree() {
     [[ "$_WT_IS_WORKTREE" == "yes" ]]
 }
 
-# Get the worktree basename (e.g., "determined-maxwell").
+# Get the path-qualified worktree key (e.g., "Health-a1b2c3d4e5f6").
 _worktree_basename() {
     _ensure_worktree_cache
     echo "$_WT_BASENAME"
