@@ -111,13 +111,23 @@ actor HealthDataQAService: HealthDataQuestionAnswering {
 
     private func performInference(question: String) async throws -> HealthDataQAReply {
         let session = try await activeSession()
+        // Xcode 27 renamed this label; CI still builds with the Xcode 26 SDK.
+        #if compiler(>=6.4)
+        let options = GenerationOptions(
+            samplingMode: .greedy,
+            temperature: 0.2,
+            maximumResponseTokens: 220
+        )
+        #else
+        let options = GenerationOptions(
+            sampling: .greedy,
+            temperature: 0.2,
+            maximumResponseTokens: 220
+        )
+        #endif
         let response = try await session.respond(
             to: question,
-            options: GenerationOptions(
-                sampling: .greedy,
-                temperature: 0.2,
-                maximumResponseTokens: 220
-            )
+            options: options
         )
         let text = response.content.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty else { return failureReply() }
