@@ -54,3 +54,11 @@ related_solutions:
 ## Research / Confidence
 
 기존 solutions, brainstorm, todos를 검색했다. 해당 미완료 TODO는 없다. Apple HKUpdateFrequency 문서상 hourly는 시간당 최대 1회이며 immediate는 변경 감지를 요청한다. 감시 등록 복구는 코드로 검증 가능하나 OS 백그라운드 깨우기는 실기기 확인이 필요하다.
+
+## Execution Notes
+
+- 앱 빌드 통과. Work 품질 점검에서 발견한 delivery 설정 실패 후 재시도 누락은 수정하고 테스트했다.
+- iOS 27.0: Swift Testing 2,241개/244 suite 및 XCTest 9개 통과. Observer/LaunchExperience/CardioSession suite 모두 통과했다.
+- 최초 전체 단위 실행은 CardioSession 테스트가 실제 HealthKit VO₂ Max 쿼리를 호출하며 정체됐다. 기존 mock을 helper 기본값으로 연결한 뒤 통과했다.
+- 전체 UI 실행은 12개 통과, 기존 picker 테스트의 180초 제한 초과 1건을 확인한 후 다른 Health 작업의 단독 검증 조정으로 중단됐다. 전체 UI gate는 아직 미완료다.
+- 테스트 조정 중에는 새 시뮬레이터 실행을 보류하고, 재개 후 timeout 케이스와 전체 회귀를 확인한다. 실기기 background delivery는 아직 미검증이다.
