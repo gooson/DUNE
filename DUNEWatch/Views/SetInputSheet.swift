@@ -91,6 +91,7 @@ struct SetInputSheet: View {
         .focusable(true)
         .focused($isCrownFocused)
         .digitalCrownRotation($weight, from: 0, through: 500, by: 0.5, sensitivity: .medium)
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.setInputScreen)
         .toolbar { sharedToolbar }
         .onChange(of: weight) { _, newValue in
@@ -130,6 +131,7 @@ struct SetInputSheet: View {
             $crownRepsDouble,
             from: 1, through: Double(WatchSetInputPolicy.maximumEditableReps), by: 1, sensitivity: .medium
         )
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.setInputScreen)
         .toolbar { sharedToolbar }
         .onChange(of: crownRepsDouble) { _, value in
@@ -167,6 +169,7 @@ struct SetInputSheet: View {
         .focusable(true)
         .focused($isCrownFocused)
         .digitalCrownRotation($crownDurationDouble, from: 0, through: 120, by: 1, sensitivity: .medium)
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.setInputScreen)
         .toolbar { sharedToolbar }
         .onAppear {

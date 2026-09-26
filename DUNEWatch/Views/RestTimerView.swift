@@ -155,7 +155,8 @@ struct RestTimerView: View {
         }) {
             rpeOverlay
                 .padding(DS.Spacing.md)
-                .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.restTimerRPEBadge)
+                .accessibilityElement(children: .contain)
+                .accessibilityIdentifier("watch-rest-timer-rpe-sheet")
         }
         .onAppear {
             if let estimatedRPE {

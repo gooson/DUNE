@@ -388,7 +388,14 @@ class WatchUITestBaseCase: XCTestCase {
         openAllExercises()
 
         let exercise = app.descendants(matching: .any)[WatchAXID.quickStartExerciseSquat].firstMatch
+        // The search field, category picker and popular rows fill a small Watch
+        // viewport. Lazy list rows become accessible only after scrolling.
+        for _ in 0..<6 {
+            if exercise.exists && exercise.isHittable { break }
+            app.swipeUp()
+        }
         XCTAssertTrue(exercise.waitForExistence(timeout: 5), "Fixture exercise should be visible")
+        XCTAssertTrue(exercise.isHittable, "Fixture exercise should be reachable after scrolling")
         exercise.tap()
 
         XCTAssertTrue(elementExists(WatchAXID.workoutPreviewScreen, timeout: 5), "Workout preview root should render")
