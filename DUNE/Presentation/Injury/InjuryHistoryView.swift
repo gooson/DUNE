@@ -194,7 +194,7 @@ struct InjuryHistoryView: View {
                 metadataLayout {
                     Text(record.severity.displayName)
                         .font(.caption2)
-                        .foregroundStyle(record.severity.color)
+                        .foregroundStyle(.primary)
                     if !dynamicTypeSize.isAccessibilitySize {
                         Text("·")
                             .foregroundStyle(.quaternary)
@@ -220,7 +220,7 @@ struct InjuryHistoryView: View {
                     .padding(.horizontal, DS.Spacing.sm)
                     .padding(.vertical, DS.Spacing.xxs)
                     .background(record.severity.color.opacity(0.12), in: Capsule())
-                    .foregroundStyle(record.severity.color)
+                    .foregroundStyle(.primary)
             }
         }
     }
@@ -334,7 +334,7 @@ private struct InjuryDetailView: View {
 
                         Text(record.severity.displayName)
                             .font(.caption)
-                            .foregroundStyle(record.severity.color)
+                            .foregroundStyle(.primary)
 
                         Text(record.severity.severityDescription)
                             .font(.caption2)
@@ -349,7 +349,7 @@ private struct InjuryDetailView: View {
                         .padding(.horizontal, DS.Spacing.sm)
                         .padding(.vertical, DS.Spacing.xxs)
                         .background((record.isActive ? record.severity.color : Color.green).opacity(0.12), in: Capsule())
-                        .foregroundStyle(record.isActive ? record.severity.color : .green)
+                        .foregroundStyle(.primary)
                 }
             }
         }
