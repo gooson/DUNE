@@ -213,7 +213,6 @@ struct HabitManagementView: View {
         }
         .padding(DS.Spacing.md)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.lg))
-        .accessibilityIdentifier("habit-management-row-\(habit.name)")
     }
 
     // MARK: - Archived Actions

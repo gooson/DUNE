@@ -1206,6 +1206,7 @@ private struct HabitHistorySheet: View {
     let entries: [LifeViewModel.HabitHistoryEntry]
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
         VStack(spacing: 0) {
@@ -1288,45 +1289,71 @@ private struct HabitHistorySheet: View {
     }
 
     private func entryRow(_ entry: LifeViewModel.HabitHistoryEntry, today: Date) -> some View {
-        HStack(spacing: DS.Spacing.sm) {
-            // Action icon
-            Image(systemName: iconName(for: entry.action))
-                .font(.body)
-                .foregroundStyle(color(for: entry.action))
-                .frame(width: 32, height: 32)
-                .background {
-                    Circle()
-                        .fill(color(for: entry.action).opacity(0.12))
+        Group {
+            if dynamicTypeSize.isAccessibilitySize {
+                VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                    HStack(alignment: .top, spacing: DS.Spacing.sm) {
+                        entryActionIcon(entry)
+                        entryContent(entry)
+                    }
+                    entryDate(entry, today: today, alignment: .leading)
+                        .padding(.leading, 32 + DS.Spacing.sm)
                 }
-
-            // Content
-            VStack(alignment: .leading, spacing: 2) {
-                Text(actionTitle(for: entry))
-                    .font(.subheadline)
-                    .fontWeight(.medium)
-
-                if entry.action == .complete {
-                    Text(valueDescription(for: entry))
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+            } else {
+                HStack(spacing: DS.Spacing.sm) {
+                    entryActionIcon(entry)
+                    entryContent(entry)
+                    Spacer()
+                    entryDate(entry, today: today, alignment: .trailing)
                 }
-            }
-
-            Spacer()
-
-            // Date
-            VStack(alignment: .trailing, spacing: 2) {
-                Text(relativeDate(entry.date, today: today))
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                Text(entry.date.formatted(date: .abbreviated, time: .omitted))
-                    .font(.caption2)
-                    .foregroundStyle(.tertiary)
             }
         }
         .padding(.vertical, DS.Spacing.sm)
         .accessibilityElement(children: .combine)
         .accessibilityIdentifier("life-habit-history-row-\(entry.id.uuidString.prefix(8))")
+    }
+
+    private func entryActionIcon(_ entry: LifeViewModel.HabitHistoryEntry) -> some View {
+        Image(systemName: iconName(for: entry.action))
+            .font(.body)
+            .foregroundStyle(color(for: entry.action))
+            .frame(width: 32, height: 32)
+            .background {
+                Circle()
+                    .fill(color(for: entry.action).opacity(0.12))
+            }
+    }
+
+    private func entryContent(_ entry: LifeViewModel.HabitHistoryEntry) -> some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(actionTitle(for: entry))
+                .font(.subheadline)
+                .fontWeight(.medium)
+                .fixedSize(horizontal: false, vertical: true)
+
+            if entry.action == .complete {
+                Text(valueDescription(for: entry))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+    }
+
+    private func entryDate(
+        _ entry: LifeViewModel.HabitHistoryEntry,
+        today: Date,
+        alignment: HorizontalAlignment
+    ) -> some View {
+        VStack(alignment: alignment, spacing: 2) {
+            Text(relativeDate(entry.date, today: today))
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            Text(entry.date.formatted(date: .abbreviated, time: .omitted))
+                .font(.caption2)
+                .foregroundStyle(.tertiary)
+        }
+        .fixedSize(horizontal: false, vertical: true)
     }
 
     // MARK: - Empty State
