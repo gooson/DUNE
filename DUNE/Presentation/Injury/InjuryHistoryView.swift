@@ -236,6 +236,7 @@ private struct InjuryDetailDestination: Hashable {
 }
 
 private struct InjuryDetailView: View {
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     let record: InjuryRecord?
     @State private var detailViewModel = InjuryViewModel()
     @State private var isShowingEditSheet = false
@@ -309,13 +310,19 @@ private struct InjuryDetailView: View {
     private func summaryCard(_ record: InjuryRecord) -> some View {
         StandardCard {
             VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-                HStack(alignment: .center, spacing: DS.Spacing.sm) {
+                let layout = dynamicTypeSize.isAccessibilitySize
+                    ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.sm))
+                    : AnyLayout(HStackLayout(alignment: .center, spacing: DS.Spacing.sm))
+                layout {
                     Image(systemName: record.severity.iconName)
                         .font(.title3)
                         .foregroundStyle(record.severity.color)
 
                     VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-                        HStack(spacing: DS.Spacing.xs) {
+                        let titleLayout = dynamicTypeSize.isAccessibilitySize
+                            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.xs))
+                            : AnyLayout(HStackLayout(spacing: DS.Spacing.xs))
+                        titleLayout {
                             Text(record.bodyPart.displayName)
                                 .font(.headline)
                             if let side = record.bodySide {
@@ -333,8 +340,9 @@ private struct InjuryDetailView: View {
                             .font(.caption2)
                             .foregroundStyle(DS.Color.textSecondary)
                     }
+                    .frame(maxWidth: .infinity, alignment: .leading)
 
-                    Spacer()
+                    if !dynamicTypeSize.isAccessibilitySize { Spacer() }
 
                     Text(record.isActive ? String(localized: "Active") : String(localized: "Recovered"))
                         .font(.caption2.weight(.semibold))
