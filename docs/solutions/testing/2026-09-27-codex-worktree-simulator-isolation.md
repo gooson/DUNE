@@ -37,6 +37,8 @@ UI 회귀 테스트에서 화면 전환 확인 실패와 XCTest 응답 지연이
 
 새 이름 `iPhone 18 Pro-wt-Health-a05933c9ea72`의 기기 생성과 부팅까지 확인했다. 이후 호스트 load average가 950까지 상승해 단일 UI 실행도 정상 시작을 확인하지 못한 채 중단했다. 따라서 UI 회귀 및 최초 화면 전환 assertion 해결 여부는 미검증이다. 코드 리뷰의 해시 실패 fallback 지적은 수정했고 재리뷰 추가 findings는 0건이다.
 
+후속 격리 재검증(`Test-DUNEUITests-2026.09.27_02-37-54-+0900.xcresult`)에서는 기존 테스트와 앱 코드를 수정하지 않고 운동 화면 진입, 템플릿 폼 진입, picker 표시까지 진행했다. 결과 번들의 실패 원인은 `Test exceeded execution time allowance of 3 minutes`이며 1개 테스트 실패로 기록됐다. 최초 화면 assertion은 통과했지만 전체 테스트 성공은 아니다. 단독 실행 환경에서 남은 회귀 게이트를 확인해야 한다.
+
 ## Prevention / Lessons Learned
 
 동시 작업 리소스의 식별자로 마지막 폴더명만 사용하지 않는다. 격리 여부는 이름의 `wt` 표기가 아니라 각 작업의 실제 UDID와 전체 경로 키로 확인한다. UI timeout 진단에서는 앱 로직과 XCTest/호스트 지연을 구분한다. 기존 프로젝트 규칙 변경은 필요 없다.
