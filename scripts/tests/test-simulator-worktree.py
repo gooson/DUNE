@@ -27,10 +27,10 @@ class SimulatorWorktreeTests(unittest.TestCase):
     def git(self, cwd, *args):
         return subprocess.run(["git", *args], cwd=cwd, check=True, capture_output=True)
 
-    def shell(self, cwd, command):
+    def shell(self, cwd, command, check=True):
         return subprocess.run(
             ["bash", "-c", 'source "$1"; ' + command, "test", str(SCRIPT)],
-            cwd=cwd, check=True, capture_output=True, text=True,
+            cwd=cwd, check=check, capture_output=True, text=True,
         )
 
     def test_same_basename_has_distinct_stable_device_names(self):
@@ -58,6 +58,20 @@ class SimulatorWorktreeTests(unittest.TestCase):
         result = self.shell(self.repo,
                             "ensure_worktree_simulator AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE 'iPhone Test'")
         self.assertEqual(result.stdout.strip(), "AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE")
+
+    def test_hash_failure_does_not_fall_back_to_shared_device(self):
+        commands = [
+            "ensure_worktree_simulator AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE 'iPhone Test'",
+            "apply_worktree_destination 'id=AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE' 'iPhone Test' iOS",
+            "cleanup_worktree_simulators --current",
+        ]
+        for command in commands:
+            with self.subTest(command=command):
+                result = self.shell(self.worktrees[0], "shasum() { return 1; }; " + command,
+                                    check=False)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertEqual(result.stdout, "")
+                self.assertIn("Cannot compute worktree identity", result.stderr)
 
 
 if __name__ == "__main__":

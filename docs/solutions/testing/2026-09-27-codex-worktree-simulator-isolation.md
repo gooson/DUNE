@@ -27,12 +27,15 @@ UI 회귀 테스트에서 화면 전환 확인 실패와 XCTest 응답 지연이
 - 기기 생성/검색과 현재 워크트리 정리가 같은 키를 사용한다.
 - 기존 basename-only 기기는 다른 실행이 사용할 수 있으므로 자동 삭제하거나 종료하지 않는다.
 - main checkout은 기존대로 원본 기기를 사용한다.
+- 해시 계산 실패 시 공유 기기로 fallback하지 않고 오류를 반환한다.
 
 ## Validation
 
-`python3 scripts/tests/test-simulator-worktree.py`: 동일 basename의 두 실제 Git worktree에서 서로 다른 안정적인 기기 이름, 정리 범위, main checkout passthrough를 검증하며 3개 테스트 통과.
+`python3 scripts/tests/test-simulator-worktree.py`: 동일 basename의 두 실제 Git worktree에서 서로 다른 안정적인 기기 이름, 정리 범위, main checkout passthrough, 해시 실패 시 안전한 중단을 검증하며 4개 테스트 통과.
 
 `bash -n scripts/lib/simulator-worktree.sh` 통과. 실제 UI 재검증은 별도 로그로 기록한다. 미검증 UI 성공을 이 문서의 격리 테스트 결과와 혼동하지 않는다.
+
+새 이름 `iPhone 18 Pro-wt-Health-a05933c9ea72`의 기기 생성과 부팅까지 확인했다. 이후 호스트 load average가 950까지 상승해 단일 UI 실행도 정상 시작을 확인하지 못한 채 중단했다. 따라서 UI 회귀 및 최초 화면 전환 assertion 해결 여부는 미검증이다. 코드 리뷰의 해시 실패 fallback 지적은 수정했고 재리뷰 추가 findings는 0건이다.
 
 ## Prevention / Lessons Learned
 
