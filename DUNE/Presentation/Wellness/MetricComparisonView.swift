@@ -145,7 +145,11 @@ private struct ComparisonMetricChart: View {
                             AxisMarks(values: weeklyAxisDates) {
                                 AxisGridLine()
                                 AxisTick()
-                                AxisValueLabel(format: .dateTime.month(.abbreviated).day())
+                                if dynamicTypeSize.isAccessibilitySize {
+                                    AxisValueLabel(format: .dateTime.month(.defaultDigits).day())
+                                } else {
+                                    AxisValueLabel(format: .dateTime.month(.abbreviated).day())
+                                }
                             }
                         } else {
                             AxisMarks(values: .automatic(desiredCount: axisCount)) {
