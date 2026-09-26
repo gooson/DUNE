@@ -947,21 +947,23 @@ extension XCUIApplication {
     ) -> Bool {
         let textField = textFields[identifier].firstMatch
         if textField.waitForExistence(timeout: timeout) {
-            clearAndType(in: textField, value: value, clearExisting: clearExisting)
-            return true
+            return clearAndType(in: textField, value: value, clearExisting: clearExisting)
         }
 
         let textView = textViews[identifier].firstMatch
         if textView.waitForExistence(timeout: timeout) {
-            clearAndType(in: textView, value: value, clearExisting: clearExisting)
-            return true
+            return clearAndType(in: textView, value: value, clearExisting: clearExisting)
         }
 
         return false
     }
 
-    private func clearAndType(in element: XCUIElement, value: String, clearExisting: Bool) {
+    private func clearAndType(in element: XCUIElement, value: String, clearExisting: Bool) -> Bool {
         element.tap()
+        if !waitForKeyboardFocus(in: element) {
+            element.tap()
+            guard waitForKeyboardFocus(in: element) else { return false }
+        }
 
         if clearExisting {
             let existingValue = (element.value as? String) ?? ""
@@ -972,6 +974,18 @@ extension XCUIApplication {
         }
 
         element.typeText(value)
+        return true
+    }
+
+    private func waitForKeyboardFocus(in element: XCUIElement) -> Bool {
+        let focused = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "hasKeyboardFocus == true"),
+            object: element
+        )
+        // SwiftUI can display an insertion caret and keyboard without reporting
+        // hasKeyboardFocus on the exposed accessibility element.
+        return XCTWaiter.wait(for: [focused], timeout: 2) == .completed
+            || keyboards.firstMatch.exists
     }
 
     private func switchState(of element: XCUIElement) -> Bool? {
