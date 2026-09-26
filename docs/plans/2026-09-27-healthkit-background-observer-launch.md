@@ -2,7 +2,7 @@
 tags: [healthkit, background-delivery, launch, notifications]
 date: 2026-09-27
 category: plan
-status: approved
+status: implemented
 confidence: high
 related_solutions:
   - ../solutions/general/2026-09-19-healthkit-launch-authorization-revalidation.md
@@ -68,3 +68,5 @@ related_solutions:
 - 사용자가 원격 CI 대신 로컬 테스트만 계속하도록 명시했다. 기존 다른 작업의 짧은 검증 이후 로컬 전체 UI를 재개한다.
 
 - 사용자의 최종 지시로 전체 UI gate를 관련 테스트 통과로 축소했다. 전체 UI 실행은 중단했고 통과로 기록하지 않는다. 포커스 속성의 거짓 음성을 키보드 표시 확인으로 보완한 후 cardio 및 quick-start 검색 시나리오 2개가 모두 통과했다 (`ui-focus-fallback-targeted.log`).
+
+- 5관점 리뷰 P1/P2/P3=0. 최종 품질 리뷰의 P3(포커스 확인 최대 2초)는 우선 필드 포커스를 확인하는 trade-off로 기록하고 유지했다. 해결책은 `docs/solutions/general/2026-09-27-healthkit-background-observer-launch.md`에 저장했다.
