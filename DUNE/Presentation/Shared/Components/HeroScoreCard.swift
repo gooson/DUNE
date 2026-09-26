@@ -48,7 +48,14 @@ struct HeroScoreCard: View {
         static let subScoreBarWidthCompact: CGFloat = 36
     }
 
-    private var ringSize: CGFloat { isRegular ? Layout.ringSizeRegular : Layout.ringSizeCompact }
+    private var ringSize: CGFloat {
+        isRegular || dynamicTypeSize.isAccessibilitySize ? Layout.ringSizeRegular : Layout.ringSizeCompact
+    }
+    private var ringContentSize: CGFloat {
+        let innerDiameter = ringSize - ringLineWidth * 2
+        // Keep the text rectangle inside the circular opening at large text sizes.
+        return dynamicTypeSize.isAccessibilitySize ? innerDiameter / sqrt(2) : innerDiameter
+    }
     private var ringLineWidth: CGFloat { isRegular ? Layout.ringLineWidthRegular : Layout.ringLineWidthCompact }
     private var subScoreBarWidth: CGFloat {
         isRegular ? Layout.subScoreBarWidthRegular : Layout.subScoreBarWidthCompact
@@ -132,7 +139,7 @@ struct HeroScoreCard: View {
                     .foregroundStyle(theme.sandColor)
                     .tracking(1)
             }
-            .frame(width: ringSize - ringLineWidth * 2, height: ringSize - ringLineWidth * 2)
+            .frame(width: ringContentSize, height: ringContentSize)
         }
     }
 
