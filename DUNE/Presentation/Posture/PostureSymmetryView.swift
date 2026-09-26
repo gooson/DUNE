@@ -18,6 +18,7 @@ struct PostureSymmetryView: View {
             .padding(.horizontal, DS.Spacing.lg)
         }
         .englishNavigationTitle("Symmetry Analysis")
+        .accessibilityIdentifier("posture-symmetry-screen")
         .navigationBarTitleDisplayMode(.inline)
         .background { DetailWaveBackground() }
         .environment(\.waveColor, DS.Color.body)

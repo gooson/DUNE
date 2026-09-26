@@ -264,8 +264,10 @@ struct PostureDetailView: View {
             }
             .padding(DS.Spacing.md)
             .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+        .accessibilityIdentifier("posture-symmetry-link")
     }
 
     // MARK: - Memo

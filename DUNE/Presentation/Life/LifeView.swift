@@ -138,6 +138,8 @@ struct LifeView: View {
             }
         }
         .englishNavigationTitle("Life")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbarBackground(.regularMaterial, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
     }
 }
