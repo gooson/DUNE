@@ -25,7 +25,7 @@ final class LifeRegressionTests: SeededUITestBaseCase {
 
         let addButton = app.descendants(matching: .any)[AXID.lifeToolbarAdd].firstMatch
         XCTAssertTrue(addButton.waitForExistence(timeout: 5), "Life add button should exist")
-        addButton.tap()
+        XCTAssertTrue(app.openLifeNewHabitForm(), "New Habit action should open from the Life toolbar")
 
         let nameField = app.textFields[AXID.habitFormName].firstMatch
         XCTAssertTrue(nameField.waitForExistence(timeout: 5), "Habit form should appear from the Life toolbar")
