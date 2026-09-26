@@ -597,6 +597,7 @@ struct ActivityView: View {
             }
             .padding(.vertical, DS.Spacing.xs)
         }
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier("activity-section-musclemap")
     }
 

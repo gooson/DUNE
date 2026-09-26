@@ -38,3 +38,5 @@ related_files:
 ## UI 회귀 검증
 
 `fatigue-regression` 시나리오는 제보된 두 운동의 실제 세트 값을 독립된 테스트 저장소에 넣는다. 일반 mock 운동을 섞지 않고 실제 Activity snapshot 생성 및 계산 경로를 통과시킨다. `FatigueCalculationRegressionTests`는 가슴의 L1, 6일 전, 주간 10세트와 계산 화면의 0.9/0.8 부하, 최종 0.02를 검증하고 스크린샷을 남긴다.
+
+UI 테스트 시나리오에서는 DEBUG 빌드의 Activity HealthKit 조회를 비활성화하여 권한·실제 데이터에 의존하는 로딩을 방지한다. 실제 화면 검증에서 근육 지도 영역 ID가 자식 버튼 ID를 덮어쓰는 문제도 확인하여, 해당 영역을 `.accessibilityElement(children: .contain)`으로 지정했다.
