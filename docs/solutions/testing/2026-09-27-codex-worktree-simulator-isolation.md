@@ -1,6 +1,7 @@
 ---
 tags: [codex, worktree, simulator, ui-testing, isolation, basename-collision]
 category: testing
+status: implemented
 date: 2026-09-27
 severity: important
 related_files:

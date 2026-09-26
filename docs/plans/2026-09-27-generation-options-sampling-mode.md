@@ -1,6 +1,8 @@
 ---
 topic: GenerationOptions samplingMode 전환
+tags: [foundation-models, deprecation, simulator-isolation]
 date: 2026-09-27
+category: plan
 status: approved
 confidence: high
 related_solutions: [architecture/2026-03-09-health-data-qa-tool-calling.md]
@@ -16,8 +18,13 @@ HealthDataQAService의 deprecated `sampling:` 초기화 인자를 `samplingMode:
 컴파일러와 Apple 공식 문서가 안내하는 인자명 교체를 적용한다. 경고 억제나 별도 래퍼는 불필요하다.
 
 ## Affected Files
-- `DUNE/Data/Services/HealthDataQAService.swift`: 초기화 인자명 한 곳 수정
-- 본 계획서 및 해결책 문서
+
+| File | Change |
+|------|--------|
+| `DUNE/Data/Services/HealthDataQAService.swift` | 초기화 인자명 한 곳 수정 |
+| `scripts/lib/simulator-worktree.sh` | 검증 중 발견한 동일 basename 워크트리의 기기 이름 충돌 수정 |
+| `scripts/tests/test-simulator-worktree.py` | 격리 키와 실패 처리 회귀 검증 |
+| 본 계획서 및 해결책 문서 | 구현 범위와 검증 결과 기록 |
 
 ## Implementation Steps
 1. 작업 브랜치 생성 후 인자명을 교체하고 diff 확인 및 커밋.
