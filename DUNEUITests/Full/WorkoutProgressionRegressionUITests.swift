@@ -52,6 +52,22 @@ final class WorkoutProgressionRegressionUITests: ActivityExerciseSeededUITestBas
         XCTAssertEqual(try enteredWeight(), Fixture.startingWeight, "Meeting the target without a user effort rating must not raise the weight")
     }
 
+    func testCompletionEffortRequiresExplicitConfirmation() throws {
+        openSeededStrengthTemplate()
+        completeFirstSetAndSkipRest()
+        XCTAssertTrue(app.waitAndTap(AXID.workoutSessionCompleteSet))
+        XCTAssertTrue(app.waitAndTap(AXID.workoutSessionFinish))
+        XCTAssertTrue(waitForElement(AXID.workoutCompletionSheet, timeout: 15).exists)
+
+        let confirm = app.buttons["workout-effort-confirm"].firstMatch
+        XCTAssertTrue(confirm.waitForExistence(timeout: 5), "A displayed effort must remain unselected until confirmed")
+        XCTAssertTrue(app.staticTexts["workout-effort-selection-status"].firstMatch.exists)
+        confirm.tap()
+        XCTAssertTrue(confirm.waitForNonExistence(timeout: 5), "Confirming the displayed effort must select it")
+        XCTAssertTrue(app.waitAndTap(AXID.workoutCompletionDone))
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.workoutCompletionSheet].firstMatch.waitForNonExistence(timeout: 10))
+    }
+
     private func openSeededStrengthTemplate() {
         XCTAssertTrue(app.descendants(matching: .any)[AXID.activityHeroReadiness].firstMatch.waitForExistence(timeout: 15))
         XCTAssertTrue(app.waitAndTap(AXID.activityToolbarAdd))

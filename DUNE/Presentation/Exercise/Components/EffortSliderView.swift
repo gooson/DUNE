@@ -10,6 +10,7 @@ struct EffortSliderView: View {
 
     private var currentEffort: Int { effort ?? suggestion?.suggestedEffort ?? 5 }
     private var currentCategory: EffortCategory { EffortCategory(effort: currentEffort) }
+    private var selectionStatus: LocalizedStringKey { effort == nil ? "Not selected" : "Selected" }
 
     var body: some View {
         VStack(spacing: DS.Spacing.lg) {
@@ -30,6 +31,8 @@ struct EffortSliderView: View {
 
             // Category labels
             categoryLabels
+
+            selectionControl
 
             // History context
             if let suggestion, suggestion.lastEffort != nil || suggestion.averageEffort != nil {
@@ -99,13 +102,34 @@ struct EffortSliderView: View {
         }
         .padding(.horizontal, DS.Spacing.sm)
         .task {
-            guard !didInitialize, let suggestion else { return }
-            sliderValue = Double(suggestion.suggestedEffort)
+            guard !didInitialize else { return }
+            sliderValue = Double(currentEffort)
             didInitialize = true
         }
     }
 
     // MARK: - Category Labels
+
+    private var selectionControl: some View {
+        HStack(spacing: DS.Spacing.sm) {
+            Text(selectionStatus)
+                .font(.caption)
+                .foregroundStyle(DS.Color.textSecondary)
+                .accessibilityValue(Text(selectionStatus))
+                .accessibilityIdentifier("workout-effort-selection-status")
+
+            Spacer(minLength: 0)
+
+            if effort == nil {
+                Button("Use this effort") {
+                    effort = currentEffort
+                }
+                .font(.caption.weight(.semibold))
+                .accessibilityIdentifier("workout-effort-confirm")
+            }
+        }
+        .padding(.horizontal, DS.Spacing.sm)
+    }
 
     private var categoryLabels: some View {
         HStack {
