@@ -122,6 +122,8 @@ struct HeroScoreCard: View {
             VStack(spacing: 2) {
                 Text("\(animatedScore)")
                     .font(DS.Typography.heroScore)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.5)
                     .foregroundStyle(theme.detailScoreGradient)
                     .contentTransition(.numericText())
 
@@ -130,6 +132,7 @@ struct HeroScoreCard: View {
                     .foregroundStyle(theme.sandColor)
                     .tracking(1)
             }
+            .frame(width: ringSize - ringLineWidth * 2, height: ringSize - ringLineWidth * 2)
         }
     }
 
