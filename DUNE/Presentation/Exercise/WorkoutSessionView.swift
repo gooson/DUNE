@@ -273,30 +273,30 @@ struct WorkoutSessionView: View {
     // MARK: - Set Input Content
 
     private var setInputContent: some View {
-        VStack(spacing: DS.Spacing.xl) {
-            Spacer()
+        ScrollView {
+            VStack(spacing: DS.Spacing.xl) {
 
-            // Exercise info
-            VStack(spacing: DS.Spacing.xs) {
-                Image(systemName: exercise.resolvedActivityType.iconName)
-                    .font(.largeTitle)
-                    .foregroundStyle(exercise.resolvedActivityType.color)
+                // Exercise info
+                VStack(spacing: DS.Spacing.xs) {
+                    Image(systemName: exercise.resolvedActivityType.iconName)
+                        .font(.largeTitle)
+                        .foregroundStyle(exercise.resolvedActivityType.color)
 
-                Text(exercise.localizedName)
-                    .font(.title2.weight(.bold))
+                    Text(exercise.localizedName)
+                        .font(.title2.weight(.bold))
 
-                // Previous set info
-                if let prev = viewModel.previousSetInfo(for: currentSetIndex + 1) {
-                    previousBadge(prev)
+                    // Previous set info
+                    if let prev = viewModel.previousSetInfo(for: currentSetIndex + 1) {
+                        previousBadge(prev)
+                    }
                 }
+
+                // Weight / Reps input
+                currentSetInputFields
+
             }
-
-            // Weight / Reps input
-            currentSetInputFields
-
-            Spacer()
+            .padding(DS.Spacing.lg)
         }
-        .padding(.horizontal, DS.Spacing.lg)
     }
 
     @ViewBuilder
@@ -336,6 +336,7 @@ struct WorkoutSessionView: View {
                             .foregroundStyle(.secondary)
                     }
                     .accessibilityIdentifier("workout-session-planned-reps")
+                    .accessibilityLabel(Text("Planned reps: \(target)"))
                 }
                 if viewModel.recommendationSetIndex == currentSetIndex,
                    let recommendation = viewModel.pendingWeightRecommendation {
@@ -346,11 +347,14 @@ struct WorkoutSessionView: View {
                             .accessibilityIdentifier("workout-session-recommendation-reason")
                         let weight = weightUnit.fromKg(recommendation.weight)
                             .formatted(.number.precision(.fractionLength(0...1)))
-                        Button("Apply \(weight) \(weightUnit.displayName)") {
-                            _ = viewModel.applyWeightRecommendation(weightUnit: weightUnit)
+                        let enteredWeight = Double(setBinding.wrappedValue.weight).map { weightUnit.toKg($0) }
+                        if enteredWeight.map({ abs($0 - recommendation.weight) > 0.01 }) ?? true {
+                            Button("Apply \(weight) \(weightUnit.displayName)") {
+                                _ = viewModel.applyWeightRecommendation(weightUnit: weightUnit)
+                            }
+                            .buttonStyle(.bordered)
+                            .accessibilityIdentifier("workout-session-apply-recommendation")
                         }
-                        .buttonStyle(.bordered)
-                        .accessibilityIdentifier("workout-session-apply-recommendation")
                     }
                     .padding(DS.Spacing.md)
                     .frame(maxWidth: .infinity, alignment: .leading)

@@ -12,18 +12,17 @@ final class WorkoutProgressionRegressionUITests: ActivityExerciseSeededUITestBas
     func testMissedTargetKeepsPlanAndRequiresApplyingLowerWeight() throws {
         openSeededStrengthTemplate()
 
-        let plannedReps = waitForElement(AXID.workoutSessionPlannedReps)
-        XCTAssertTrue(plannedReps.label.contains(String(Fixture.plannedReps)))
+        assertPlannedRepsAreEight()
         XCTAssertEqual(try enteredWeight(), Fixture.startingWeight)
 
         XCTAssertTrue(app.fillTextInput(AXID.workoutSessionField("reps"), with: "6"))
         dismissWorkoutKeyboard()
         XCTAssertEqual(app.textFields[AXID.workoutSessionField("reps")].value as? String, "6")
-        XCTAssertTrue(plannedReps.label.contains(String(Fixture.plannedReps)), "Editing actual reps must preserve the planned target")
+        assertPlannedRepsAreEight()
 
         completeFirstSetAndSkipRest()
 
-        XCTAssertTrue(waitForElement(AXID.workoutSessionPlannedReps).label.contains(String(Fixture.plannedReps)))
+        assertPlannedRepsAreEight()
         XCTAssertTrue(waitForElement(AXID.workoutSessionRecommendationReason).exists)
         let applyButton = app.buttons[AXID.workoutSessionApplyRecommendation].firstMatch
         XCTAssertTrue(applyButton.waitForExistence(timeout: 5))
@@ -36,12 +35,12 @@ final class WorkoutProgressionRegressionUITests: ActivityExerciseSeededUITestBas
     func testMeetingTargetDoesNotAutomaticallyIncreaseNextSetWeight() throws {
         openSeededStrengthTemplate()
 
-        XCTAssertTrue(waitForElement(AXID.workoutSessionPlannedReps).label.contains(String(Fixture.plannedReps)))
+        assertPlannedRepsAreEight()
         XCTAssertEqual(try enteredWeight(), Fixture.startingWeight)
         completeFirstSetAndSkipRest()
 
         XCTAssertTrue(waitForElement(AXID.workoutSessionRecommendationReason).exists)
-        XCTAssertTrue(app.buttons[AXID.workoutSessionApplyRecommendation].firstMatch.waitForExistence(timeout: 5))
+        XCTAssertFalse(app.buttons[AXID.workoutSessionApplyRecommendation].firstMatch.exists)
         XCTAssertEqual(try enteredWeight(), Fixture.startingWeight, "Meeting the target without a user effort rating must not raise the weight")
     }
 
@@ -82,6 +81,20 @@ final class WorkoutProgressionRegressionUITests: ActivityExerciseSeededUITestBas
         let field = app.textFields[AXID.workoutSessionField("kg")].firstMatch
         XCTAssertTrue(field.waitForExistence(timeout: 5))
         return try XCTUnwrap(Double(try XCTUnwrap(field.value as? String)))
+    }
+
+    private func assertPlannedRepsAreEight() {
+        let stepper = waitForElement(AXID.workoutSessionPlannedReps)
+        let displayedText = [stepper.label, stepper.value.map { String(describing: $0) } ?? ""]
+            + stepper.descendants(matching: .staticText).allElementsBoundByIndex.flatMap { text in
+                [text.label, text.value.map { String(describing: $0) } ?? ""]
+            }
+        let target = String(Fixture.plannedReps)
+        let isolatedTarget = "(?<![0-9])\(target)(?![0-9])"
+        XCTAssertTrue(
+            displayedText.contains { $0.range(of: isolatedTarget, options: .regularExpression) != nil },
+            "Planned reps should display \(target); observed \(displayedText). Stepper: \(stepper.debugDescription)"
+        )
     }
 
     private func dismissWorkoutKeyboard() {

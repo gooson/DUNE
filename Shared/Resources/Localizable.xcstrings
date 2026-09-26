@@ -1,6 +1,28 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "Suggested effort: %lld/10" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suggested effort: %lld/10"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "추천 체감 강도: %lld/10"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "体感強度の目安: %lld/10"
+          }
+        }
+      }
+    },
     "Apply %@ %@" : {
       "localizations" : {
         "en" : {
@@ -27258,26 +27280,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "최근 운동을 불러올 수 없습니다."
-          }
-        }
-      }
-    },
-    "Recommended %@/10 from your recent history" : {
-
-    },
-    "Recommended %lld/10 from your recent history" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "最近の履歴にもとづくおすすめ %lld/10"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "최근 기록 기반 추천 %lld/10"
           }
         }
       }

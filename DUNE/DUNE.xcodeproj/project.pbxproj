@@ -285,6 +285,7 @@
 		3639E18201EEAB25A9A23101 /* ExerciseDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F2EFD9169B4451946FB6BD /* ExerciseDefinition.swift */; };
 		364DF4D01C8C4F5982650784 /* CardioSecondaryUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7200A349B95E024606A43625 /* CardioSecondaryUnit.swift */; };
 		366F0248851F549E28B75936 /* ForestSilhouetteShapeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAECC1B47F0D4072F87ECBFF /* ForestSilhouetteShapeTests.swift */; };
+		36AAF8472C410E9B70F247AC /* WatchSetRPEEntryUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20CE898DF6F55DE61368118 /* WatchSetRPEEntryUITests.swift */; };
 		36B9F327C0F438EBC052B20F /* WorkoutTemplateListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B916AEC4875C9E95AC4F53C /* WorkoutTemplateListView.swift */; };
 		36F2AB5EF8CCDA5749035ED2 /* SleepExerciseCorrelationCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 023F2A7199D07AEE4AAEF35E /* SleepExerciseCorrelationCard.swift */; };
 		374C014253A22B6C1408158C /* ExerciseFormAnalyzerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2455A00C419DB65D8743E4D8 /* ExerciseFormAnalyzerTests.swift */; };
@@ -2259,6 +2260,7 @@
 		F1476EAA26BD1FF4B625DA34 /* CumulativeStressScore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CumulativeStressScore.swift; sourceTree = "<group>"; };
 		F15D47756EA157E164DF6594 /* TodaySettingsRegressionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodaySettingsRegressionTests.swift; sourceTree = "<group>"; };
 		F161CCB00727D7B5C88AA2F9 /* ActivityMuscleMapRegressionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityMuscleMapRegressionTests.swift; sourceTree = "<group>"; };
+		F20CE898DF6F55DE61368118 /* WatchSetRPEEntryUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchSetRPEEntryUITests.swift; sourceTree = "<group>"; };
 		F2440341D6480E1B5BF84D08 /* ExercisePickerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExercisePickerSheet.swift; sourceTree = "<group>"; };
 		F2FD94C170C13DBBADDB9291 /* WorkoutBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutBadgeView.swift; sourceTree = "<group>"; };
 		F326023BC8A9578FCA77DB1F /* SleepDataPlaceholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepDataPlaceholder.swift; sourceTree = "<group>"; };
@@ -2987,6 +2989,7 @@
 			children = (
 				BC76D21EF92A15D38D958FAE /* WatchHomeSmokeTests.swift */,
 				0F677006AE88ADC5D2818314 /* WatchPlankTimerTests.swift */,
+				F20CE898DF6F55DE61368118 /* WatchSetRPEEntryUITests.swift */,
 				47F4DF4E39EAF86F61B046F1 /* WatchWorkoutFlowSmokeTests.swift */,
 				E23B66C197A08B499FD68D46 /* WatchWorkoutStartSmokeTests.swift */,
 			);
@@ -5796,6 +5799,7 @@
 			files = (
 				0CA5A7B4FCB4BB5F112439DE /* WatchHomeSmokeTests.swift in Sources */,
 				CB804E8319190CAF0D1A6AE7 /* WatchPlankTimerTests.swift in Sources */,
+				36AAF8472C410E9B70F247AC /* WatchSetRPEEntryUITests.swift in Sources */,
 				674A234182454D89875BBA61 /* WatchUITestBaseCase.swift in Sources */,
 				EBDEF18E638AB9E0DBF27ABD /* WatchWorkoutFlowSmokeTests.swift in Sources */,
 				86E9A025793961C1DA116BE4 /* WatchWorkoutStartSmokeTests.swift in Sources */,

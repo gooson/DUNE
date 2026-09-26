@@ -293,9 +293,15 @@ struct CompoundWorkoutView: View {
                 }
 
                 if let target = vm.sets[index].plannedReps {
-                    Text("Planned reps: \(target)")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                    Stepper(value: Binding(
+                        get: { vm.sets[index].plannedReps ?? target },
+                        set: { vm.sets[index].plannedReps = $0 }
+                    ), in: 1...1000) {
+                        Text("Planned reps: \(target)")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    .disabled(vm.sets[index].isCompleted)
                 }
                 if vm.sets[index].isCompleted {
                     SetRPEPickerView(rpe: Binding(
@@ -305,6 +311,7 @@ struct CompoundWorkoutView: View {
                             vm.sets[index].rpeSourceRaw = $0 == nil ? nil : "user"
                         }
                     ))
+                    .id(vm.sets[index].id)
                     .padding(.horizontal, DS.Spacing.sm)
                     .padding(.bottom, DS.Spacing.xs)
                 }

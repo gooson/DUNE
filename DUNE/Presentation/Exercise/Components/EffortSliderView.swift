@@ -142,7 +142,7 @@ struct EffortSliderView: View {
         HStack(spacing: DS.Spacing.xs) {
             Image(systemName: "sparkles")
                 .font(.caption2)
-            Text("Recommended \(suggestion.suggestedEffort)/10 from your recent history")
+            Text("Suggested effort: \(suggestion.suggestedEffort)/10")
                 .font(.caption.weight(.medium))
                 .lineLimit(1)
         }
