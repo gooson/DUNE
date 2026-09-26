@@ -102,6 +102,7 @@ struct WorkoutCompletionSheet: View {
                                     .padding(.vertical, DS.Spacing.md)
                                     .background(DS.Color.activity, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
                             }
+                            .accessibilityIdentifier("workout-completion-share")
                         }
 
                         Button {

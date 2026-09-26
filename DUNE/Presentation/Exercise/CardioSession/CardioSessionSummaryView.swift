@@ -27,6 +27,7 @@ struct CardioSessionSummaryView: View {
                 .padding(DS.Spacing.lg)
                 .background(.regularMaterial)
         }
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier("cardio-session-summary-screen")
         .background { DetailWaveBackground() }
         .englishNavigationTitle("Summary")
