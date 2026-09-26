@@ -59,12 +59,51 @@ struct FatigueCalculationServiceTests {
         let record = snapshot(
             hoursAgo: 0,
             primaryMuscles: [.chest],
-            totalWeight: 100,
+            totalWeight: 2_500,
             totalReps: 25
         )
         let load = service.sessionLoad(from: record)
         #expect(load > 0.3)
         #expect(load < 0.4)
+    }
+
+    @Test("volume load does not multiply repetitions twice", arguments: [0, 25, 80])
+    func volumeDoesNotDependOnRepCount(reps: Int) {
+        let record = snapshot(hoursAgo: 0, primaryMuscles: [.chest],
+                              totalWeight: 6_200, totalReps: reps)
+        #expect(abs(service.sessionLoad(from: record) - 6_200.0 / 7_000) < 0.000001)
+    }
+
+    @Test("invalid volume falls back to finite set load", arguments: [Double.nan, .infinity, -1, 0])
+    func invalidVolume(volume: Double) {
+        let record = snapshot(hoursAgo: 0, primaryMuscles: [.chest], sets: 10,
+                              totalWeight: volume, totalReps: 80)
+        #expect(service.sessionLoad(from: record) == 1.0)
+    }
+
+    @Test("reported chest sessions recover after six days without inflated volume")
+    func chestPressRegression() {
+        let referenceDate = Date(timeIntervalSince1970: 1_789_880_000)
+        let weights = [85.0, 90, 85, 85, 80, 75, 70, 70, 65, 65]
+        let sessions = [(hours: 149.0, reps: [10, 8, 8, 8, 8, 8, 8, 8, 8, 6]),
+                        (hours: 317.1, reps: [10, 8, 8, 6, 8, 6, 6, 6, 8, 6])]
+        let records = sessions.map { session in
+            ExerciseRecordSnapshot(
+                date: referenceDate.addingTimeInterval(-session.hours * 3600),
+                primaryMuscles: [.chest], secondaryMuscles: [], completedSetCount: 10,
+                totalWeight: zip(weights, session.reps).reduce(0) { $0 + $1.0 * Double($1.1) },
+                totalReps: session.reps.reduce(0, +)
+            )
+        }
+        #expect(abs(service.sessionLoad(from: records[0]) - 0.885714) < 0.000001)
+        #expect(abs(service.sessionLoad(from: records[1]) - 0.8) < 0.000001)
+        let score = service.computeCompoundFatigue(
+            for: [.chest], from: records, sleepModifier: 0.90,
+            readinessModifier: 1.05, referenceDate: referenceDate
+        )[0]
+        #expect(score.breakdown.workoutContributions.count == 2)
+        #expect(abs(score.normalizedScore - 0.020) < 0.001)
+        #expect(score.level == .fullyRecovered)
     }
 
     @Test("cardio session load uses distance × sqrt(duration)")
@@ -256,13 +295,13 @@ struct FatigueCalculationServiceTests {
     @Test("normalized score is capped at 1.0")
     func normalizedScoreCapped() {
         // Extreme volume to guarantee saturation well above threshold (10 for small muscles)
-        // sessionLoad = 500 * 500 / 70 / 100 = 35.7 per session
+        // sessionLoad = 250_000 / 70 / 100 = 35.7 per session
         let records = (0..<10).map { day in
             snapshot(
                 hoursAgo: Double(day * 24),
                 primaryMuscles: [.biceps], // small muscle, threshold = 10
                 sets: 30,
-                totalWeight: 500,
+                totalWeight: 250_000,
                 totalReps: 500
             )
         }

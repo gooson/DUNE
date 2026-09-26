@@ -681,7 +681,13 @@ final class ActivityViewModel {
         // hide a newer in-flight refresh.
         defer { finishLoadRequest(requestID) }
 
+        #if DEBUG
+        // Keep the recorded-volume UI regression independent of device HealthKit data.
         let healthKitAvailable = healthKitManager.isAvailable
+            && UITestSeedScenario.current() != .fatigueRegression
+        #else
+        let healthKitAvailable = healthKitManager.isAvailable
+        #endif
         isMirroredReadOnlyMode = !healthKitAvailable
         async let sharedSnapshotTask: SharedHealthSnapshot? = sharedHealthDataService?.fetchSnapshot()
 
