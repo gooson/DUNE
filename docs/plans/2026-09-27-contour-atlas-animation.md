@@ -83,3 +83,19 @@ SwiftUI `phaseAnimator`로 캐시된 Shape의 transform만 움직인다. 8초/11
 ## Confidence Assessment
 
 High: 단일 공유 View에 제한된 변경이며 앞선 빌드와 테마 UI 2개는 통과했다. 이번 실행에서 전체 UI 게이트와 다관점 리뷰를 추가한다.
+
+## Execution Evidence (2026-09-27)
+
+- 브랜치: `codex/contour-atlas-animation`.
+- 구현: `8f478952`, lifecycle UI 테스트: `91d401b0`; origin에 push 완료.
+- `scripts/build-ios.sh`: 통과. UI 타깃 pre-commit `build-for-testing`: 통과.
+- Work의 `swift-ui-expert`, `apple-ux-expert`: 코드 수준 actionable P1/P2/P3 없음. 정식 Phase 3 리뷰와 별개다.
+- 시각 검증: 독립 iPhone 18 Pro / iOS 27.0의 Today 라이트 화면 두 시점 캡처에서 등고선 위치 변화와 카드 위치 유지를 확인했다. 실기기 FPS/전력, 동작 줄이기 설정의 실제 전환은 미검증이다.
+- 전체 UI 회귀: 첫 `ActivityExercisePickerRegressionTests/testFullPickerSupportsFilterSelectorsAndSelectionFromTemplateForm`이 `activity-recent-seeall` 탭 뒤 app idle 대기에서 180초 제한을 초과했다. 정상 종료되지 않은 실행기를 정리했다.
+- 관련 과거 기록: `docs/solutions/testing/2026-03-29-ui-test-force-kill-cascade-prevention.md`. 이 테스트는 컨투어 테마를 지정하지 않는다. 이번 결과만으로 컨투어 회귀로 판정하지 않는다.
+- 복구 1: 시뮬레이터 재부팅 후 실패 케이스와 ContourThemeTests를 한정 실행했으나 테스트 런너 시작 전 멈춰 종료했다.
+- 복구 2: 새 빈 시뮬레이터에서 동일 검증을 실행했으나 부팅·빌드 후 테스트 시작 전 대기가 반복되어 종료했다.
+- 로그(로컬): `/tmp/contour-run-build.log`, `/tmp/contour-run-ui-full.log`, `/tmp/contour-run-ui-retry.log`, `/tmp/contour-run-ui-clean.log`.
+- 게이트 상태: Phase 0/1 completed, Phase 2/2.5 failed(UI gate), Phase 3 이후 skipped(선행 UI 게이트 실패). 새 lifecycle 테스트는 컴파일됐지만 실행 통과 증거가 없다. PR 생성·merge는 수행하지 않았다.
+- TODO 검색: 해당 애니메이션 작업에 대응하는 활성 TODO 없음. 기존 TODO의 상태를 임의 변경하지 않는다.
+- 재개 조건: 시뮬레이터 런너/기존 운동 선택 회귀를 복구하고 full DUNEUITests를 통과시킨 뒤 Phase 3부터 진행한다. 관련 테스트만 통과한 결과로 full gate를 대체하지 않는다.

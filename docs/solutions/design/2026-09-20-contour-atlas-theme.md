@@ -22,7 +22,7 @@ related_solutions: [2026-03-04-adding-new-theme]
 
 - `AppTheme.contourAtlas`와 `Contour` prefix, light/dark 26개 색상 자산을 추가했다.
 - `ContourLines`는 비정형 닫힌 등고선을 unit-space 좌표로 한 번 계산한다. `path(in:)`에서는 좌표 변환만 수행한다.
-- `ContourBackground`를 Tab/Detail/Sheet와 Watch에서 공유한다. iOS 배경은 캐시된 등고선에 8초 주기의 scale/rotation/offset을 적용하며, Tab 보조 레이어는 11초 주기로 움직인다. Watch는 선 개수를 줄이고 정적으로 유지한다.
+- `ContourBackground`를 Tab/Detail/Sheet와 Watch에서 공유한다. iOS 배경은 캐시된 등고선에 편도 8초(왕복 16초)의 scale/rotation/offset을 적용하며, Tab 보조 레이어는 편도 11초(왕복 22초)로 움직인다. Watch는 선 개수를 줄이고 정적으로 유지한다.
 - `waveReducedMotion` 또는 비활성 scene에서는 정적으로 표시한다. 설정 미리보기는 `waveAnimationEnabled = false`를 존중한다. Scene 전환은 짧은 opacity 전환으로 연결하며 동작 줄이기에서는 전환 애니메이션도 생략한다.
 - Hero/Standard/Inline/Section 카드에 불투명 석회색/먹색 표면을 적용한다. 상태/지표 색의 구분을 유지하고 라임은 작은 강조에 사용한다.
 - 설정에서는 실제 `TabWaveBackground`, `StandardCard`, `ProgressRingView`를 재사용한다. 예시 숫자는 접근성 트리에서 제외하며 선택 이름은 Dynamic Type을 유지한다.
