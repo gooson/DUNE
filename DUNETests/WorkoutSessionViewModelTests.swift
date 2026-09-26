@@ -712,4 +712,110 @@ struct WorkoutSessionViewModelTests {
         #expect(record != nil)
         #expect(record?.completedSets.first?.restDuration == nil)
     }
+    @Test("Editing a completed set persists the latest weight, reps, and RPE")
+    func completedSetEditsAreSaved() throws {
+        let vm = WorkoutSessionViewModel(exercise: makeExercise(), defaultSetCount: 1)
+        vm.sets[0].weight = "50"
+        vm.sets[0].reps = "8"
+        vm.sets[0].isCompleted = true
+        #expect(vm.completedSetCount == 1)
+        vm.sets[0].weight = "55"
+        vm.sets[0].reps = "10"
+        vm.sets[0].rpe = 8
+        let record = try #require(vm.createValidatedRecord())
+        #expect(record.completedSets.first?.weight == 55)
+        #expect(record.completedSets.first?.reps == 10)
+        #expect(record.completedSets.first?.rpe == 8)
+    }
+
+    @Test("Bodyweight sets accept optional load and reject invalid load", arguments: ["", "0", "12.5", "-1", "501", "nan"])
+    func optionalBodyweightLoad(weight: String) throws {
+        let vm = WorkoutSessionViewModel(exercise: makeExercise(inputType: .setsReps), defaultSetCount: 1)
+        vm.sets[0].weight = weight
+        vm.sets[0].isCompleted = true
+        let valid = ["", "0", "12.5"].contains(weight)
+        #expect(vm.validateSetForCompletion(at: 0) == valid)
+        let record = vm.createValidatedRecord()
+        #expect((record != nil) == valid)
+        if valid {
+            #expect(record?.completedSets.first?.weight == (weight == "0" ? nil : Double(weight)))
+        }
+    }
+
+    @Test("Unsupported hidden weight is never saved")
+    func cardioDropsHiddenWeight() throws {
+        let vm = WorkoutSessionViewModel(exercise: makeExercise(inputType: .durationDistance), defaultSetCount: 1)
+        vm.sets[0].weight = "100"
+        vm.sets[0].duration = "10"
+        vm.sets[0].isCompleted = true
+        let record = try #require(vm.createValidatedRecord())
+        #expect(record.completedSets.first?.weight == nil)
+    }
+
+    @Test("Changing weight units preserves all entered physical weights")
+    func weightUnitConversion() throws {
+        let vm = WorkoutSessionViewModel(exercise: makeExercise(), defaultSetCount: 3)
+        vm.sets[0].weight = "100"
+        vm.sets[0].isCompleted = true
+        vm.sets[1].weight = "12.5"
+        vm.convertWeightUnit(from: .kg, to: .lb)
+        #expect(abs(WeightUnit.lb.toKg(try #require(Double(vm.sets[0].weight))) - 100) < 0.001)
+        #expect(abs(WeightUnit.lb.toKg(try #require(Double(vm.sets[1].weight))) - 12.5) < 0.001)
+        #expect(vm.sets[2].weight.isEmpty)
+        let record = try #require(vm.createValidatedRecord(weightUnit: .lb))
+        #expect(abs(try #require(record.completedSets.first?.weight) - 100) < 0.001)
+    }
+
+    @Test("Large pound prefills remain valid editable numbers")
+    func poundPrefillDoesNotContainGrouping() {
+        let vm = WorkoutSessionViewModel(exercise: makeExercise(), defaultSetCount: 1)
+        vm.previousSets = [PreviousSetInfo(weight: 500, reps: 10, duration: nil, distance: nil, restDuration: nil)]
+        vm.fillSetFromPrevious(at: 0, weightUnit: .lb)
+        #expect(!vm.sets[0].weight.contains(","))
+        #expect(Double(vm.sets[0].weight) != nil)
+        #expect(vm.validateSetForCompletion(at: 0, weightUnit: .lb))
+    }
+
+    @Test("Timed sets preserve seconds through previous-session fill and save", arguments: [ExerciseInputType.durationIntensity, .roundsBased])
+    func timedSetSecondsRoundtrip(inputType: ExerciseInputType) throws {
+        let vm = WorkoutSessionViewModel(exercise: makeExercise(inputType: inputType), defaultSetCount: 1)
+        vm.previousSets = [PreviousSetInfo(weight: nil, reps: 3, duration: 90, distance: nil, restDuration: nil)]
+        vm.fillSetFromPrevious(at: 0)
+        #expect(vm.sets[0].duration == "90")
+        vm.sets[0].isCompleted = true
+        let record = try #require(vm.createValidatedRecord())
+        #expect(record.completedSets.first?.duration == 90)
+    }
+
+    @Test("Previous bodyweight sets clear an existing added load")
+    func bodyweightHistoryClearsLoad() {
+        let vm = WorkoutSessionViewModel(exercise: makeExercise(inputType: .setsReps), defaultSetCount: 1)
+        vm.sets[0].weight = "20"
+        vm.previousSets = [PreviousSetInfo(weight: nil, reps: 10, duration: nil, distance: nil, restDuration: nil)]
+        vm.fillSetFromPrevious(at: 0)
+        #expect(vm.sets[0].weight.isEmpty)
+    }
+
+    @Test("Unweighted and unsupported inputs never suggest adding more weight", arguments: [ExerciseInputType.setsReps, .roundsBased])
+    func noUnweightedLevelUp(inputType: ExerciseInputType) {
+        let vm = WorkoutSessionViewModel(exercise: makeExercise(inputType: inputType), defaultSetCount: 1)
+        vm.sets[0].reps = "10"
+        vm.sets[0].isCompleted = true
+        #expect(!vm.shouldSuggestLevelUp)
+        if inputType == .roundsBased {
+            vm.sets[0].weight = "50"
+            #expect(!vm.shouldSuggestLevelUp)
+        }
+    }
+
+    @Test("Timed completion rejects invalid seconds", arguments: [ExerciseInputType.durationIntensity, .roundsBased])
+    func invalidTimedCompletion(inputType: ExerciseInputType) {
+        let vm = WorkoutSessionViewModel(exercise: makeExercise(inputType: inputType), defaultSetCount: 1)
+        vm.sets[0].reps = "3"
+        vm.sets[0].duration = "0"
+        #expect(!vm.validateSetForCompletion(at: 0))
+        vm.sets[0].duration = "90"
+        #expect(vm.validateSetForCompletion(at: 0))
+    }
+
 }

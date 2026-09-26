@@ -5,6 +5,55 @@
 final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
     override var initialTabSelectionArgument: String? { "train" }
 
+    func testConditionTrendFollowsHistoryScroll() throws {
+        launchLongMetricHistory()
+        navigateToDashboard()
+        dismissMorningBriefingIfNeeded()
+        waitForElement(AXID.dashboardHeroCondition, timeout: 15).tap()
+        assertScoreTrendFollowsHistoryScroll()
+    }
+
+    func testWellnessTrendFollowsHistoryScroll() throws {
+        launchLongMetricHistory()
+        navigateToWellness()
+        waitForElement(AXID.wellnessHeroScore, timeout: 15).tap()
+        assertScoreTrendFollowsHistoryScroll()
+    }
+
+    func testReadinessTrendFollowsHistoryScroll() throws {
+        launchLongMetricHistory()
+        navigateToActivity()
+        waitForElement(AXID.activityHeroReadiness, timeout: 15).tap()
+        assertScoreTrendFollowsHistoryScroll()
+    }
+
+    private func assertScoreTrendFollowsHistoryScroll() {
+        let trend = app.buttons["score-chart-trend-toggle"].firstMatch
+        XCTAssertTrue(trend.waitForExistence(timeout: 15))
+        if !trend.isHittable { app.scrollViews.firstMatch.swipeUp() }
+        trend.tap()
+        // Bring the complete plot above the tab bar before a horizontal drag.
+        let screen = app.scrollViews.firstMatch
+        screen.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.75))
+            .press(forDuration: 0.05, thenDragTo: screen.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.4)))
+        // SwiftUI propagates the parent chart ID to UIKit overlays; use the probe label prefix.
+        let probe = app.otherElements.matching(NSPredicate(format: "label BEGINSWITH %@", "trend-endpoints:")).firstMatch
+        XCTAssertTrue(probe.waitForExistence(timeout: 15))
+        let hasTrend = NSPredicate { _, _ in probe.label != "trend-endpoints:none" && !probe.label.isEmpty }
+        expectation(for: hasTrend, evaluatedWith: probe)
+        waitForExpectations(timeout: 10)
+        let initial = probe.label
+        let start = probe.coordinate(withNormalizedOffset: CGVector(dx: 0.15, dy: 0.65))
+        let end = probe.coordinate(withNormalizedOffset: CGVector(dx: 0.85, dy: 0.65))
+        start.press(forDuration: 0.05, thenDragTo: end)
+        let changed = NSPredicate { _, _ in
+            probe.label != initial && probe.label != "trend-endpoints:none" && !probe.label.isEmpty
+        }
+        expectation(for: changed, evaluatedWith: probe)
+        waitForExpectations(timeout: 10)
+        XCTAssertTrue(trend.exists)
+    }
+
     func testRHRDetailChartScrollsToPastData() throws {
         launchLongMetricHistory()
         openDashboardMetricDetail("rhr")

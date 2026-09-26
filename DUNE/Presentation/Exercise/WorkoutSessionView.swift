@@ -38,6 +38,7 @@ struct WorkoutSessionView: View {
     @State private var showEndConfirmation = false
     @State private var restTimerCompleted = 0
     @State private var setCompleteCount = 0
+    @State private var addedWeightSetIDs: Set<UUID> = []
 
     @Query private var exerciseRecords: [ExerciseRecord]
 
@@ -120,15 +121,17 @@ struct WorkoutSessionView: View {
                 }
                 .accessibilityIdentifier("workout-session-insights")
             }
-            ToolbarItem(placement: .topBarLeading) {
-                Button {
-                    weightUnitRaw = (weightUnit == .kg ? WeightUnit.lb : WeightUnit.kg).rawValue
-                } label: {
-                    Text(weightUnit.displayName.uppercased())
-                        .font(.caption.weight(.bold))
-                        .padding(.horizontal, DS.Spacing.sm)
-                        .padding(.vertical, DS.Spacing.xxs)
-                        .background(DS.Color.activity.opacity(0.15), in: Capsule())
+            if viewModel.supportsWeight {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button {
+                        let newUnit: WeightUnit = weightUnit == .kg ? .lb : .kg
+                        viewModel.convertWeightUnit(from: weightUnit, to: newUnit)
+                        weightUnitRaw = newUnit.rawValue
+                    } label: {
+                        Text(weightUnit.displayName.uppercased())
+                            .font(.caption.weight(.bold))
+                    }
+                    .accessibilityIdentifier("workout-weight-unit-button")
                 }
             }
             ToolbarItem(placement: .confirmationAction) {
@@ -288,7 +291,7 @@ struct WorkoutSessionView: View {
             .padding(.top, templateInfo == nil ? DS.Spacing.sm : 0)
 
             HStack {
-                Text("Set \(currentSetIndex + 1) of \(totalSets)")
+                Text("Set \((currentSetIndex + 1).formattedWithSeparator) of \(totalSets.formattedWithSeparator)")
                     .font(.subheadline.weight(.medium))
                     .foregroundStyle(DS.Color.textSecondary)
 
@@ -385,7 +388,7 @@ struct WorkoutSessionView: View {
         HStack(spacing: DS.Spacing.xs) {
             Image(systemName: "clock.arrow.circlepath")
                 .font(.caption2)
-            if let w = prev.weight, let r = prev.reps {
+            if viewModel.supportsWeight, let w = prev.weight, w > 0, let r = prev.reps {
                 Text("\(weightUnit.fromKg(w), specifier: "%.1f")\(weightUnit.displayName) × \(r.formattedWithSeparator)")
                     .font(.caption)
             } else if let r = prev.reps {
@@ -411,13 +414,31 @@ struct WorkoutSessionView: View {
     private var currentSetInputFields: some View {
         if viewModel.sets.indices.contains(currentSetIndex) {
             let setBinding = $viewModel.sets[currentSetIndex]
+            let setID = setBinding.wrappedValue.id
+            let showsAddedWeight = addedWeightSetIDs.contains(setID) || !setBinding.wrappedValue.weight.isEmpty
 
             VStack(spacing: DS.Spacing.lg) {
                 switch exercise.inputType {
                 case .setsRepsWeight:
                     weightRepsInput(set: setBinding)
                 case .setsReps:
-                    repsOnlyInput(set: setBinding)
+                    Button(showsAddedWeight ? String(localized: "Remove Weight") : String(localized: "Add Weight")) {
+                        if showsAddedWeight {
+                            addedWeightSetIDs.remove(setID)
+                            setBinding.wrappedValue.weight = ""
+                        } else {
+                            addedWeightSetIDs.insert(setID)
+                        }
+                    }
+                    .accessibilityIdentifier("workout-session-toggle-weight")
+                    if !showsAddedWeight {
+                        repsOnlyInput(set: setBinding)
+                    } else {
+                        Text("Added Weight")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        weightRepsInput(set: setBinding)
+                    }
                 case .durationDistance:
                     durationDistanceInput(set: setBinding)
                 case .durationIntensity:
@@ -428,6 +449,12 @@ struct WorkoutSessionView: View {
 
                 SetRPEPickerView(rpe: setBinding.rpe)
                     .padding(.horizontal, DS.Spacing.md)
+            }
+            .onChange(of: setBinding.wrappedValue.weight, initial: true) { _, weight in
+                if !weight.isEmpty { addedWeightSetIDs.insert(setID) }
+            }
+            .onChange(of: setID) { _, newID in
+                if !setBinding.wrappedValue.weight.isEmpty { addedWeightSetIDs.insert(newID) }
             }
         }
     }
@@ -443,8 +470,8 @@ struct WorkoutSessionView: View {
                 placeholder: "0",
                 keyboardType: .decimalPad,
                 stepButtons: [
-                    ("-2.5", { adjustDecimalValue(set.weight, by: -2.5, min: 0, max: 500) }),
-                    ("+2.5", { adjustDecimalValue(set.weight, by: 2.5, min: 0, max: 500) })
+                    ("-2.5", { adjustDecimalValue(set.weight, by: -2.5, min: 0, max: weightUnit.fromKg(500)) }),
+                    ("+2.5", { adjustDecimalValue(set.weight, by: 2.5, min: 0, max: weightUnit.fromKg(500)) })
                 ]
             )
 
@@ -708,7 +735,7 @@ struct WorkoutSessionView: View {
         return HStack(spacing: DS.Spacing.sm) {
             Image(systemName: "checkmark.circle.fill")
                 .foregroundStyle(DS.Color.activity)
-            if !set.weight.isEmpty, !set.reps.isEmpty {
+            if viewModel.supportsWeight, let weight = Double(set.weight), weight > 0, !set.reps.isEmpty {
                 Text("\(set.weight)\(weightUnit.displayName) × \(formattedReps) reps")
                     .font(.headline)
             } else if !set.reps.isEmpty {
@@ -939,7 +966,7 @@ struct WorkoutSessionView: View {
             }
         }
 
-        guard viewModel.validateSetForCompletion(at: currentSetIndex) else { return }
+        guard viewModel.validateSetForCompletion(at: currentSetIndex, weightUnit: weightUnit) else { return }
 
         // Mark set as completed
         viewModel.sets[currentSetIndex].isCompleted = true

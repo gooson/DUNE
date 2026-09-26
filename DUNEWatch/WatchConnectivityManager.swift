@@ -176,6 +176,16 @@ final class WatchConnectivityManager: NSObject {
                     defaultWeightKg: nil,
                     equipment: "bodyweight",
                     cardioSecondaryUnit: nil
+                ),
+                WatchExerciseInfo(
+                    id: "crunch",
+                    name: "Crunch",
+                    inputType: "setsReps",
+                    defaultSets: 3,
+                    defaultReps: 10,
+                    defaultWeightKg: nil,
+                    equipment: "bodyweight",
+                    cardioSecondaryUnit: nil
                 )
             ])
             activeWorkout = nil
@@ -553,30 +563,9 @@ extension WatchConnectivityManager {
         }
 
         let updates: [WatchWorkoutUpdate] = records.compactMap { record in
-            let sets = (record.sets ?? []).filter(\.isCompleted).map { set in
-                WatchSetData(
-                    setNumber: set.setNumber,
-                    weight: set.weight,
-                    reps: set.reps,
-                    duration: set.duration,
-                    restDuration: set.restDuration,
-                    isCompleted: true,
-                    rpe: set.rpe
-                )
-            }
-            guard !sets.isEmpty || record.duration > 0 else { return nil }
-            return WatchWorkoutUpdate(
-                exerciseID: record.exerciseDefinitionID ?? "",
-                exerciseName: record.exerciseType,
-                completedSets: sets,
-                startTime: record.date,
-                endTime: record.date.addingTimeInterval(record.duration),
-                heartRateSamples: [],
-                rpe: record.rpe,
-                healthKitWorkoutID: record.healthKitWorkoutID,
-                calories: record.bestCalories,
-                calorieSourceRaw: record.calorieSourceRaw
-            )
+            let update = WatchWorkoutRecordBuilder.makeUpdate(from: record)
+            guard !update.completedSets.isEmpty || record.duration > 0 else { return nil }
+            return update
         }
 
         guard !updates.isEmpty else { return }

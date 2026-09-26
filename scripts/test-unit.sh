@@ -11,6 +11,7 @@ cd "$ROOT_DIR"
 source "$ROOT_DIR/scripts/lib/regen-project.sh"
 source "$ROOT_DIR/scripts/lib/simulator-boot.sh"
 source "$ROOT_DIR/scripts/lib/simulator-worktree.sh"
+TEST_SUMMARY="$ROOT_DIR/scripts/lib/test-log-summary.py"
 
 PROJECT_SPEC="DUNE/project.yml"
 PROJECT_FILE="DUNE/DUNE.xcodeproj"
@@ -238,6 +239,8 @@ run_suite() {
         CODE_SIGNING_ALLOWED=NO
         CODE_SIGNING_REQUIRED=NO)
 
+    mkdir -p "$(dirname "$log_file")"
+
     if [[ "$STREAM_LOGS" -eq 1 ]]; then
         echo "Streaming logs to console and $log_file"
     fi
@@ -252,17 +255,13 @@ run_suite() {
     fi
     set -e
 
-    if [[ "$test_exit" -ne 0 ]]; then
-        echo ""
-        echo "${suite_name} failed. Summary:"
-        grep -a -n -E "TEST (SUCCEEDED|FAILED)|error:|failed|Executed" "$log_file" | tail -n 120 || true
-        echo ""
+    if ! python3 "$TEST_SUMMARY" "$log_file" "$test_exit" "$suite_name"; then
+        echo "${suite_name}: summary unavailable (xcodebuild exit ${test_exit})"
         echo "Full log: $log_file"
+    fi
+    if [[ "$test_exit" -ne 0 ]]; then
         exit "$test_exit"
     fi
-
-    echo "${suite_name} passed."
-    grep -a -n -E "TEST (SUCCEEDED|FAILED)|Executed" "$log_file" | tail -n 20 || true
 }
 
 if [[ "$MODE" == "ios" || "$MODE" == "all" ]]; then

@@ -51,7 +51,20 @@ struct HabitManagementView: View {
     @State private var cachedLogSnapshots: [HabitLogSnapshot] = []
     @State private var cachedStats: [UUID: (total: Int, bestStreak: Int)] = [:]
 
-    private var logSignature: Int { allLogs.count }
+    private var logSignature: Int {
+        var hasher = Hasher()
+        for log in allLogs {
+            hasher.combine(log.habitDefinition?.id)
+            hasher.combine(log.date)
+            hasher.combine(log.value)
+            hasher.combine(log.memo)
+        }
+        for habit in activeHabits + archivedHabits {
+            hasher.combine(habit.id)
+            hasher.combine(habit.goalValue)
+        }
+        return hasher.finalize()
+    }
 
     var body: some View {
         ScrollView {
@@ -81,8 +94,8 @@ struct HabitManagementView: View {
             var stats: [UUID: (total: Int, bestStreak: Int)] = [:]
             for habit in allHabits {
                 stats[habit.id] = (
-                    total: HabitStreakService.totalCompletions(logs: snapshots, for: habit.id),
-                    bestStreak: HabitStreakService.longestStreak(logs: snapshots, for: habit.id)
+                    total: HabitStreakService.totalCompletions(logs: snapshots, for: habit.id, goalValue: habit.goalValue),
+                    bestStreak: HabitStreakService.longestStreak(logs: snapshots, for: habit.id, goalValue: habit.goalValue)
                 )
             }
             cachedStats = stats

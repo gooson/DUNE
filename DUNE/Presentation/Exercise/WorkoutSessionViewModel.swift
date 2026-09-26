@@ -140,9 +140,9 @@ final class WorkoutSessionViewModel {
 
         templateRestDuration = entry.restDuration
 
-        if let defaultWeightKg = entry.defaultWeightKg {
+        if supportsWeight, let defaultWeightKg = entry.defaultWeightKg {
             let displayWeight = weightUnit.fromKg(defaultWeightKg)
-            let weightString = displayWeight.formatted(.number.precision(.fractionLength(0...1)))
+            let weightString = formattedEditableWeight(displayWeight)
             for index in sets.indices {
                 sets[index].weight = weightString
             }
@@ -168,15 +168,15 @@ final class WorkoutSessionViewModel {
         let previousIndex = newSetNumber - 1
         if previousIndex < previousSets.count {
             let prev = previousSets[previousIndex]
-            if let weight = prev.weight {
+            if supportsWeight, let weight = prev.weight {
                 let displayWeight = weightUnit.fromKg(weight)
-                newSet.weight = displayWeight.formatted(.number.precision(.fractionLength(0...1)))
+                newSet.weight = formattedEditableWeight(displayWeight)
             }
             if let normalizedReps = normalizedRepsValue(from: prev.reps) {
                 newSet.reps = "\(normalizedReps)"
             }
             if let duration = prev.duration {
-                newSet.duration = "\(Int(duration / 60))"
+                newSet.duration = "\(Int(exercise.inputType == .durationIntensity || exercise.inputType == .roundsBased ? duration : duration / 60))"
             }
             if let distance = prev.distance {
                 newSet.distance = distance.formatted(.number.precision(.fractionLength(0...2)))
@@ -315,7 +315,7 @@ final class WorkoutSessionViewModel {
     /// Applies progressive overload across sessions by incrementing the first set's weight
     /// when all previous session sets achieved their target reps.
     private func applyInterSessionOverload(weightUnit: WeightUnit) {
-        guard !previousSets.isEmpty else { return }
+        guard supportsWeight, !previousSets.isEmpty else { return }
 
         let allMet = previousSets.enumerated().allSatisfy { index, prev in
             guard let reps = prev.reps else { return false }
@@ -354,9 +354,11 @@ final class WorkoutSessionViewModel {
     func fillSetFromPrevious(at index: Int, weightUnit: WeightUnit = .kg) {
         guard sets.indices.contains(index) else { return }
         guard let prev = previousSetInfo(for: sets[index].setNumber) else { return }
-        if let weight = prev.weight {
+        if supportsWeight, let weight = prev.weight {
             let displayWeight = weightUnit.fromKg(weight)
-            sets[index].weight = displayWeight.formatted(.number.precision(.fractionLength(0...1)))
+            sets[index].weight = formattedEditableWeight(displayWeight)
+        } else {
+            sets[index].weight = ""
         }
         if let normalizedReps = normalizedRepsValue(from: prev.reps) {
             sets[index].reps = "\(normalizedReps)"
@@ -364,7 +366,7 @@ final class WorkoutSessionViewModel {
             sets[index].reps = "\(WorkoutDefaults.defaultReps)"
         }
         if let duration = prev.duration {
-            sets[index].duration = "\(Int(duration / 60))"
+            sets[index].duration = "\(Int(exercise.inputType == .durationIntensity || exercise.inputType == .roundsBased ? duration : duration / 60))"
         }
         if let distance = prev.distance {
             sets[index].distance = distance.formatted(.number.precision(.fractionLength(0...2)))
@@ -379,7 +381,7 @@ final class WorkoutSessionViewModel {
     @discardableResult
     func applyProgressiveOverloadForNextSet(afterCompletingSetAt index: Int, weightUnit: WeightUnit = .kg) -> Bool {
         let nextIndex = index + 1
-        guard sets.indices.contains(index), sets.indices.contains(nextIndex) else { return false }
+        guard supportsWeight, sets.indices.contains(index), sets.indices.contains(nextIndex) else { return false }
 
         let completed = sets[index]
         let completedWeightDisplay = Double(completed.weight.trimmingCharacters(in: .whitespaces))
@@ -408,7 +410,8 @@ final class WorkoutSessionViewModel {
 
     /// True when all sets are completed and at least 90% met their target reps.
     var shouldSuggestLevelUp: Bool {
-        guard !sets.isEmpty, completedSetCount == sets.count else { return false }
+        guard supportsWeight, !sets.isEmpty, completedSetCount == sets.count,
+              sets.contains(where: { (Double($0.weight) ?? 0) > 0 }) else { return false }
         let achieved = sets.indices.filter { i in
             guard let reps = normalizedRepsString(from: sets[i].reps).flatMap(Int.init) else { return false }
             return reps >= targetRepsForSet(at: i)
@@ -418,7 +421,7 @@ final class WorkoutSessionViewModel {
 
     // MARK: - Per-Set Validation
 
-    func validateSetForCompletion(at index: Int) -> Bool {
+    func validateSetForCompletion(at index: Int, weightUnit: WeightUnit = .kg) -> Bool {
         guard sets.indices.contains(index) else { return false }
 
         let set = sets[index]
@@ -430,11 +433,35 @@ final class WorkoutSessionViewModel {
             }
         }
 
+        if supportsWeight {
+            let trimmed = set.weight.trimmingCharacters(in: .whitespaces)
+            let maxDisplay = weightUnit.fromKg(maxWeightKg)
+            if !trimmed.isEmpty {
+                guard let weight = Double(trimmed), weight.isFinite, (0...maxDisplay).contains(weight) else {
+                    validationError = String(localized: "Weight must be between 0 and \(Int(maxDisplay))\(weightUnit.displayName)")
+                    return false
+                }
+            }
+        }
+
         if exercise.inputType == .roundsBased {
             let trimmedReps = set.reps.trimmingCharacters(in: .whitespaces)
             guard !trimmedReps.isEmpty, let rounds = Int(trimmedReps), rounds > 0, rounds <= maxReps else {
                 validationError = String(localized: "Rounds must be between 1 and \(maxReps)")
                 return false
+            }
+        }
+
+        if exercise.inputType == .durationIntensity || exercise.inputType == .roundsBased {
+            let trimmed = set.duration.trimmingCharacters(in: .whitespaces)
+            if !trimmed.isEmpty {
+                let maximum = exercise.inputType == .durationIntensity ? 7200 : maxDurationMinutes * 60
+                guard let seconds = Int(trimmed), (1...maximum).contains(seconds) else {
+                    validationError = exercise.inputType == .durationIntensity
+                        ? String(localized: "Duration must be between 1 second and 2 hours")
+                        : String(localized: "Duration must be between 1 and \(maxDurationMinutes * 60) seconds")
+                    return false
+                }
             }
         }
 
@@ -464,21 +491,11 @@ final class WorkoutSessionViewModel {
         return Double(restSets) * defaultRestSeconds
     }
 
-    // MARK: - Summary (cached to avoid redundant filter calls)
+    // MARK: - Summary
 
-    private var _cachedCompletedSets: [EditableSet]?
-    private var _cachedSetsSnapshot: [EditableSet]?
-
+    // Completed rows remain editable; always read their current values when saving.
     private var cachedCompletedSets: [EditableSet] {
-        if _cachedSetsSnapshot?.count == sets.count,
-           _cachedSetsSnapshot?.elementsEqual(sets, by: { $0.id == $1.id && $0.isCompleted == $1.isCompleted }) == true,
-           let cached = _cachedCompletedSets {
-            return cached
-        }
-        let completed = sets.filter(\.isCompleted)
-        _cachedCompletedSets = completed
-        _cachedSetsSnapshot = sets
-        return completed
+        sets.filter(\.isCompleted)
     }
 
     var completedSetCount: Int {
@@ -573,7 +590,7 @@ final class WorkoutSessionViewModel {
                     return nil
                 }
             }
-            if exercise.inputType == .setsRepsWeight {
+            if supportsWeight {
                 let trimmed = set.weight.trimmingCharacters(in: .whitespaces)
                 if !trimmed.isEmpty {
                     let maxDisplay = weightUnit.fromKg(maxWeightKg)
@@ -678,8 +695,8 @@ final class WorkoutSessionViewModel {
 
             // Safe duration conversion with overflow guard
             let durationSeconds: TimeInterval?
-            if exercise.inputType == .durationIntensity {
-                // durationIntensity stores seconds directly from the live timer
+            if exercise.inputType == .durationIntensity || exercise.inputType == .roundsBased {
+                // Timed sets and rounds store seconds.
                 durationSeconds = Int(trimmedDuration).map { TimeInterval($0) }
             } else {
                 // Other types store minutes
@@ -691,7 +708,9 @@ final class WorkoutSessionViewModel {
             }
 
             // Convert weight from display unit to internal kg
-            let weightKg: Double? = trimmedWeight.isEmpty ? nil : Double(trimmedWeight).map { weightUnit.toKg($0) }
+            let parsedWeightKg = !supportsWeight || trimmedWeight.isEmpty
+                ? nil : Double(trimmedWeight).map { weightUnit.toKg($0) }
+            let weightKg = exercise.inputType == .setsReps && parsedWeightKg == 0 ? nil : parsedWeightKg
 
             // Convert distance based on cardio secondary unit
             let distanceKm: Double?
@@ -743,6 +762,24 @@ final class WorkoutSessionViewModel {
     /// Call from View after successfully inserting record into ModelContext
     func didFinishSaving() {
         isSaving = false
+    }
+
+    var supportsWeight: Bool {
+        exercise.inputType == .setsRepsWeight || exercise.inputType == .setsReps
+    }
+
+    /// Convert every entered set, including completed rows, before changing the display unit.
+    /// Invalid text is left intact so validation can report it rather than silently discard it.
+    func convertWeightUnit(from oldUnit: WeightUnit, to newUnit: WeightUnit) {
+        guard oldUnit != newUnit else { return }
+        for index in sets.indices {
+            let trimmed = sets[index].weight.trimmingCharacters(in: .whitespaces)
+            guard let value = Double(trimmed), value.isFinite else { continue }
+            let converted = newUnit.fromKg(oldUnit.toKg(value))
+            sets[index].weight = converted.formatted(
+                .number.locale(Locale(identifier: "en_US_POSIX")).grouping(.never).precision(.fractionLength(0...4))
+            )
+        }
     }
 
     private var usesDefaultReps: Bool {
@@ -798,7 +835,12 @@ final class WorkoutSessionViewModel {
         let clampedIncreaseKg = min(incrementKg, maxIncreaseKg)
         let roundedWeightKg = roundToPlateStepKg(baseKg + clampedIncreaseKg)
         let displayWeight = unit.fromKg(roundedWeightKg)
-        return displayWeight.formatted(.number.precision(.fractionLength(0...1)))
+        return formattedEditableWeight(displayWeight)
+    }
+
+    private func formattedEditableWeight(_ value: Double) -> String {
+        value.formatted(.number.locale(Locale(identifier: "en_US_POSIX"))
+            .grouping(.never).precision(.fractionLength(0...1)))
     }
 
     private func roundToPlateStepKg(_ value: Double) -> Double {

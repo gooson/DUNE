@@ -336,7 +336,7 @@ final class LifeViewModel {
             let isCompleted = effectiveValue >= habit.goalValue
 
             let streak = HabitStreakService.calculateStreak(
-                completedDates: streakDates(habit: habit, todayCompleted: isCompleted, today: today),
+                completedDates: streakDates(habit: habit, todayCompleted: isAutoCompleted, today: today),
                 frequency: habit.frequency,
                 referenceDate: referenceDate
             )
@@ -496,9 +496,10 @@ final class LifeViewModel {
     }
 
     private func streakDates(habit: HabitDefinition, todayCompleted: Bool, today: Date) -> [Date] {
-        var dates = (habit.logs ?? [])
-            .filter { action(for: $0) == .complete }
-            .map(\.date)
+        let logs = (habit.logs ?? []).map {
+            HabitLogSnapshot(habitID: habit.id, date: $0.date, value: $0.value, memo: $0.memo)
+        }
+        var dates = HabitStreakService.completedDates(logs: logs, for: habit.id, goalValue: habit.goalValue)
 
         if todayCompleted, !dates.contains(where: { Calendar.current.isDate($0, inSameDayAs: today) }) {
             dates.append(today)

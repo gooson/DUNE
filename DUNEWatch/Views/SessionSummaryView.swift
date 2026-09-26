@@ -386,7 +386,7 @@ struct SessionSummaryView: View {
         } else {
             perExerciseIDs = [:]
         }
-        saveWorkoutRecords(perExerciseHealthKitIDs: perExerciseIDs, allocation: allocation)
+        let records = saveWorkoutRecords(perExerciseHealthKitIDs: perExerciseIDs, allocation: allocation)
 
         // Explicit save before reset — reset() triggers view transition
         // which can prevent SwiftData auto-save from flushing.
@@ -399,7 +399,10 @@ struct SessionSummaryView: View {
         }
 
         // Send workout data to iPhone via WatchConnectivity as backup
-        sendWorkoutToPhone(perExerciseHealthKitIDs: perExerciseIDs, allocation: allocation)
+        for record in records {
+            let update = WatchWorkoutRecordBuilder.makeUpdate(from: record)
+            WatchConnectivityManager.shared.sendWorkoutCompletion(update)
+        }
         recordExerciseUsage()
 
         hasSaved = true
@@ -410,7 +413,7 @@ struct SessionSummaryView: View {
     /// Per-exercise time/calorie allocation (single source of truth — Correction #37, #148).
     private func perExerciseAllocation() -> (duration: TimeInterval, calories: Double?, calorieSource: CalorieSource) {
         let activeCount = Double(Swift.max(completedSetsData.filter { !$0.isEmpty }.count, 1))
-        let sessionDuration = Swift.max(endDate.timeIntervalSince(startDate), 1)
+        let sessionDuration = Swift.max(workoutManager.activeElapsedTime(at: endDate), 1)
         let perExerciseDuration = sessionDuration / activeCount
 
         // Prefer HK active calories when available (typically cardio).
@@ -448,7 +451,7 @@ struct SessionSummaryView: View {
         guard !metValues.isEmpty else { return nil }
 
         let averageMET = metValues.reduce(0, +) / Double(metValues.count)
-        let sessionDuration = Swift.max(endDate.timeIntervalSince(startDate), 1)
+        let sessionDuration = Swift.max(workoutManager.activeElapsedTime(at: endDate), 1)
         let totalSetsCount = completedSetsData.reduce(0) { $0 + $1.count }
         let estimatedRestSeconds = Double(Swift.max(totalSetsCount - 1, 0))
             * WatchConnectivityManager.shared.globalRestSeconds
@@ -506,52 +509,32 @@ struct SessionSummaryView: View {
     private func saveWorkoutRecords(
         perExerciseHealthKitIDs: [Int: String],
         allocation: (duration: TimeInterval, calories: Double?, calorieSource: CalorieSource)
-    ) {
-        guard let template = workoutManager.templateSnapshot else { return }
+    ) -> [ExerciseRecord] {
+        guard let template = workoutManager.templateSnapshot else { return [] }
+        var records: [ExerciseRecord] = []
 
         for (exerciseIndex, setsData) in completedSetsData.enumerated() {
             guard exerciseIndex < template.entries.count, !setsData.isEmpty else { continue }
-
             let entry = template.entries[exerciseIndex]
-
-            let record = ExerciseRecord(
-                date: startDate,
-                exerciseType: entry.exerciseName,
-                duration: allocation.duration,
-                calories: allocation.calorieSource == .healthKit ? allocation.calories : nil,
-                healthKitWorkoutID: perExerciseHealthKitIDs[exerciseIndex],
+            let record = WatchWorkoutRecordBuilder.makeRecord(
+                exerciseName: entry.exerciseName,
                 exerciseDefinitionID: entry.exerciseDefinitionID,
-                estimatedCalories: allocation.calorieSource == .met ? allocation.calories : nil,
+                sets: setsData,
+                startDate: startDate,
+                duration: allocation.duration,
+                calories: allocation.calories,
                 calorieSource: allocation.calorieSource,
-                rpe: effort
+                effort: effort,
+                healthKitWorkoutID: perExerciseHealthKitIDs[exerciseIndex]
             )
-
             modelContext.insert(record)
-
-            var workoutSets: [WorkoutSet] = []
-            for setData in setsData {
-                let workoutSet = WorkoutSet(
-                    setNumber: setData.setNumber,
-                    setType: .working,
-                    weight: setData.weight,
-                    reps: setData.reps,
-                    duration: setData.duration,
-                    isCompleted: true,
-                    rpe: setData.rpe
-                )
-                workoutSet.exerciseRecord = record
-                modelContext.insert(workoutSet)
-                workoutSets.append(workoutSet)
-            }
-            record.sets = workoutSets
-
-            // Compute session effort from set-level RPE (same as iOS)
-            record.applySetBasedRPE()
+            records.append(record)
         }
+        return records
     }
 
     private func saveCardioRecord(healthKitWorkoutID: String?) {
-        let sessionDuration = Swift.max(endDate.timeIntervalSince(startDate), 1)
+        let sessionDuration = Swift.max(workoutManager.activeElapsedTime(at: endDate), 1)
         let distanceKm = workoutManager.distanceKm
 
         var exerciseType = "Cardio"
@@ -592,47 +575,6 @@ struct SessionSummaryView: View {
         modelContext.insert(record)
     }
 
-    /// Send workout summary to iPhone via WatchConnectivity message.
-    private func sendWorkoutToPhone(
-        perExerciseHealthKitIDs: [Int: String],
-        allocation: (duration: TimeInterval, calories: Double?, calorieSource: CalorieSource)
-    ) {
-        guard let template = workoutManager.templateSnapshot else { return }
-
-        // Build WatchWorkoutUpdate from completed data
-        for (exerciseIndex, setsData) in completedSetsData.enumerated() {
-            guard exerciseIndex < template.entries.count, !setsData.isEmpty else { continue }
-            let entry = template.entries[exerciseIndex]
-
-            let watchSets = setsData.map { set in
-                WatchSetData(
-                    setNumber: set.setNumber,
-                    weight: set.weight,
-                    reps: set.reps,
-                    duration: set.duration,
-                    restDuration: set.restDuration,
-                    isCompleted: true,
-                    rpe: set.rpe
-                )
-            }
-
-            let update = WatchWorkoutUpdate(
-                exerciseID: entry.exerciseDefinitionID,
-                exerciseName: entry.exerciseName,
-                completedSets: watchSets,
-                startTime: startDate,
-                endTime: endDate,
-                heartRateSamples: [],
-                rpe: effort,
-                healthKitWorkoutID: perExerciseHealthKitIDs[exerciseIndex],
-                calories: allocation.calories,
-                calorieSourceRaw: allocation.calorieSource.rawValue
-            )
-
-            WatchConnectivityManager.shared.sendWorkoutCompletion(update)
-        }
-    }
-
     /// Record usage for personalization in Quick Start popular ranking.
     private func recordExerciseUsage() {
         guard let template = workoutManager.templateSnapshot else { return }
@@ -664,7 +606,7 @@ struct SessionSummaryView: View {
     // MARK: - Computed
 
     private var formattedDuration: String {
-        let interval = endDate.timeIntervalSince(startDate)
+        let interval = workoutManager.activeElapsedTime(at: endDate)
         let totalMinutes = Int(interval) / 60
         if totalMinutes >= 60 {
             let hours = totalMinutes / 60

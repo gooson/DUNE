@@ -2,6 +2,25 @@ import XCTest
 
 @MainActor
 final class WatchWorkoutFlowSmokeTests: WatchUITestBaseCase {
+    func testCrunchCanAddAndRemoveWeight() throws {
+        openAllExercises()
+        XCTAssertTrue(tapElement("watch-quickstart-exercise-crunch", timeout: 5))
+        XCTAssertTrue(tapElement(WatchAXID.workoutPreviewStartButton, timeout: 5))
+        XCTAssertTrue(elementExists(WatchAXID.setInputScreen, timeout: 10))
+        let toggle = app.switches["watch-set-input-added-weight"].firstMatch
+        XCTAssertTrue(toggle.waitForExistence(timeout: 5))
+        XCTAssertFalse(elementExists("watch-set-input-weight-increment", timeout: 1))
+        toggle.tap()
+        XCTAssertTrue(tapElement("watch-set-input-weight-increment", timeout: 5))
+        toggle.tap()
+        XCTAssertFalse(elementExists("watch-set-input-weight-increment", timeout: 1))
+        XCTAssertTrue(tapElement(WatchAXID.setInputDoneButton, timeout: 5))
+        XCTAssertTrue(tapElement(WatchAXID.sessionMetricsCompleteSetButton, timeout: 5))
+        XCTAssertTrue(tapElement(WatchAXID.restTimerSkipButton, timeout: 5))
+        XCTAssertTrue(elementExists(WatchAXID.setInputScreen, timeout: 5))
+        XCTAssertFalse(elementExists("watch-set-input-weight-increment", timeout: 1))
+    }
+
     func testControlsSurfaceIsReachableDuringStrengthWorkout() throws {
         relaunchApp(withAdditionalArguments: ["--ui-watch-strength-start-controls"])
         startFixtureStrengthWorkout()

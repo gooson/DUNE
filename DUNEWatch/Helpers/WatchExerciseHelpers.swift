@@ -1,5 +1,14 @@
 import Foundation
 
+/// Use the same current metadata for preview and the actual session, including legacy templates.
+func resolvedWatchEntry(_ entry: TemplateEntry, exercise: WatchExerciseInfo?) -> TemplateEntry {
+    var resolved = entry
+    resolved.inputTypeRaw = TemplateExerciseProfile.normalizedInputTypeRaw(exercise?.inputType ?? entry.inputTypeRaw)
+    resolved.cardioSecondaryUnitRaw = exercise?.cardioSecondaryUnit ?? entry.cardioSecondaryUnitRaw
+    resolved.equipment = exercise?.equipment ?? entry.equipment
+    return resolved
+}
+
 // MARK: - Shared Exercise Helpers
 // Used by CarouselHomeView and QuickStartAllExercisesView.
 // Extracted per Correction #37/#167 to prevent drift between copies.
@@ -240,7 +249,7 @@ func resolvedDefaults(for exercise: WatchExerciseInfo) -> (weight: Double?, reps
 
     let latest = RecentExerciseTracker.latestSet(exerciseID: exercise.id)
     let reps = latest?.reps ?? exercise.defaultReps ?? 10
-    let weight = latest?.weight ?? exercise.defaultWeightKg
+    let weight: Double? = if let latest { latest.weight } else { exercise.defaultWeightKg }
     return (weight: weight, reps: reps)
 }
 

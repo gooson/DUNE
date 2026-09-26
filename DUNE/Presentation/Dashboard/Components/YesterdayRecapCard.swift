@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct YesterdayRecapCard: View {
+    @Environment(\.appTheme) private var theme
     let workoutSummary: String?
     let sleepMinutes: Double?
     let yesterdayScore: Int?
@@ -14,12 +15,12 @@ struct YesterdayRecapCard: View {
                     HStack(spacing: DS.Spacing.xs) {
                         Image(systemName: "clock.arrow.circlepath")
                             .font(.caption)
-                            .foregroundStyle(.tertiary)
+                            .foregroundStyle(theme.tertiaryTextStyle)
 
                         Text("Yesterday")
                             .font(.caption)
                             .fontWeight(.semibold)
-                            .foregroundStyle(.tertiary)
+                            .foregroundStyle(theme.tertiaryTextStyle)
                     }
 
                     HStack(spacing: DS.Spacing.md) {
@@ -38,12 +39,12 @@ struct YesterdayRecapCard: View {
                         HStack(spacing: DS.Spacing.xs) {
                             Text(conditionTransitionText)
                                 .font(.caption)
-                                .foregroundStyle(DS.Color.textSecondary)
+                                .foregroundStyle(theme.secondaryTextColor)
 
                             Text(delta > 0 ? "+\(delta)" : "\(delta)")
                                 .font(.caption)
                                 .fontWeight(.semibold)
-                                .foregroundStyle(delta > 0 ? DS.Color.positive : delta < 0 ? DS.Color.negative : DS.Color.textSecondary)
+                                .foregroundStyle(delta > 0 ? DS.Color.positive : delta < 0 ? DS.Color.negative : theme.secondaryTextColor)
                         }
                     }
                 }
@@ -67,7 +68,7 @@ struct YesterdayRecapCard: View {
         HStack(spacing: DS.Spacing.xxs) {
             Image(systemName: icon)
                 .font(.system(size: 11))
-                .foregroundStyle(DS.Color.textSecondary)
+                .foregroundStyle(theme.secondaryTextColor)
 
             Text(text)
                 .font(.caption)

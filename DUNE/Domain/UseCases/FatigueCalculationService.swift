@@ -146,14 +146,12 @@ struct FatigueCalculationService: FatigueCalculating, Sendable {
     /// Calculates raw load for one workout session (before decay and engagement).
     func sessionLoad(from record: ExerciseRecordSnapshot) -> Double {
         // Strategy 1: Weight-based (strength training with set data)
-        if let weight = record.totalWeight, weight > 0,
-           let reps = record.totalReps, reps > 0 {
-            // Volume = totalWeight * totalReps / bodyWeight (normalized)
-            let volume = (weight * Double(reps)) / defaultBodyWeight
-            guard volume.isFinite, !volume.isNaN else { return fallbackLoad(from: record) }
-            // Scale down to reasonable range (a 100kg squat 5x5 = 100*25/70 ≈ 35.7)
-            // Dividing by 100 gives ~0.36 per session
-            return volume / 100.0
+        if let volume = record.totalWeight, volume > 0 {
+            // totalWeight already sums weight × reps across completed sets.
+            // Multiplying by totalReps again would inflate load by the rep count.
+            guard volume.isFinite else { return fallbackLoad(from: record) }
+            // 100kg × 25 reps / 70kg / 100 ≈ 0.36 load units.
+            return volume / defaultBodyWeight / 100.0
         }
 
         // Strategy 2: Cardio (distance + duration)

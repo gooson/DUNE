@@ -8,6 +8,22 @@ struct LifeViewModelTests {
 
     // MARK: - createValidatedHabit
 
+    @Test("Streak excludes partial earlier days even when today reaches the goal")
+    func streakRequiresDailyGoal() {
+        let vm = LifeViewModel()
+        let today = Calendar.current.startOfDay(for: Date())
+        let habit = HabitDefinition(name: "Count", iconCategory: .health, habitType: .count,
+                                    goalValue: 10, goalUnit: nil, frequency: .daily)
+        habit.logs = (0..<3).map { offset in
+            let date = Calendar.current.date(byAdding: .day, value: -offset, to: today)!
+            let log = HabitLog(date: date, value: offset == 0 ? 10 : 1)
+            log.habitDefinition = habit
+            return log
+        }
+        vm.calculateProgresses(habits: [habit], todayExerciseExists: false)
+        #expect(vm.habitProgresses.first?.streak == 1)
+    }
+
     @Test("createValidatedHabit returns habit with valid inputs")
     func validHabit() {
         let vm = LifeViewModel()

@@ -82,12 +82,12 @@ struct ConditionHeroView: View {
 
                             Text(adaptive.message)
                                 .font(.subheadline)
-                                .foregroundStyle(DS.Color.textSecondary)
+                                .foregroundStyle(theme.secondaryTextColor)
                                 .lineLimit(2)
                         } else {
                             Text(score.narrativeMessage)
                                 .font(.subheadline)
-                                .foregroundStyle(DS.Color.textSecondary)
+                                .foregroundStyle(theme.secondaryTextColor)
                         }
 
                         if let sparkline = hourlySparkline, sparkline.deltaDirection != .stable {
@@ -106,7 +106,7 @@ struct ConditionHeroView: View {
 
                             Text(sparkline.includesYesterday ? "24h" : "Today")
                                 .font(.caption2)
-                                .foregroundStyle(.tertiary)
+                                .foregroundStyle(theme.tertiaryTextStyle)
                         }
                     } else if !recentScores.isEmpty {
                         HStack(spacing: DS.Spacing.xs) {
@@ -115,7 +115,7 @@ struct ConditionHeroView: View {
 
                             Text("7d")
                                 .font(.caption2)
-                                .foregroundStyle(.tertiary)
+                                .foregroundStyle(theme.tertiaryTextStyle)
                         }
                     }
 
@@ -124,11 +124,11 @@ struct ConditionHeroView: View {
                             HStack(spacing: DS.Spacing.xs) {
                                 Text("Weekly Goal")
                                     .font(.caption2)
-                                    .foregroundStyle(.tertiary)
+                                    .foregroundStyle(theme.tertiaryTextStyle)
                                 Spacer()
                                 Text("\(weeklyGoalProgress.completedDays)/\(weeklyGoalProgress.goalDays)")
                                     .font(.caption2)
-                                    .foregroundStyle(DS.Color.textSecondary)
+                                    .foregroundStyle(theme.secondaryTextColor)
                                     .monospacedDigit()
                             }
                             ProgressView(

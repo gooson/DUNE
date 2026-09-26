@@ -114,7 +114,7 @@ actor HealthDataQAService: HealthDataQuestionAnswering {
         let response = try await session.respond(
             to: question,
             options: GenerationOptions(
-                samplingMode: .greedy,
+                sampling: .greedy,
                 temperature: 0.2,
                 maximumResponseTokens: 220
             )

@@ -29,7 +29,7 @@ struct ExerciseSetColumnHeaders: View {
                 }
             }
         case .durationIntensity:
-            Text("MIN").frame(maxWidth: 60)
+            Text("SEC").frame(maxWidth: 60)
         case .roundsBased:
             HStack(spacing: DS.Spacing.xs) {
                 Text("REPS").frame(maxWidth: 60)

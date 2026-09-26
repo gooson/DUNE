@@ -19,7 +19,7 @@ private actor MockPersistentStoreRemoteChangeRefreshCoordinator: AppRefreshCoord
 
     func invalidateCacheOnly() async {}
 
-    nonisolated var refreshNeededStream: AsyncStream<RefreshSource> {
+    func makeRefreshStream() async -> AsyncStream<RefreshSource> {
         AsyncStream { continuation in
             continuation.finish()
         }

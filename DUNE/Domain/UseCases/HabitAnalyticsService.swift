@@ -74,7 +74,7 @@ enum HabitAnalyticsService {
         let calendar = Calendar.current
         guard !habits.isEmpty else { return [] }
 
-        let validLogs = logs.filter { isCompletionLog($0) }
+        let validLogs = completionLogs(logs, habits: habits)
         var results: [WeeklyCompletionRate] = []
 
         for weekOffset in 0..<weekCount {
@@ -116,7 +116,7 @@ enum HabitAnalyticsService {
         let calendar = Calendar.current
         guard !habits.isEmpty else { return [] }
 
-        let validLogs = logs.filter { isCompletionLog($0) }
+        let validLogs = completionLogs(logs, habits: habits)
         var results: [MonthlyCompletionRate] = []
 
         for monthOffset in 0..<monthCount {
@@ -151,13 +151,14 @@ enum HabitAnalyticsService {
 
     static func dailyCompletionCounts(
         logs: [HabitLogSnapshot],
+        habits: [HabitSnapshot],
         dayCount: Int = 90,
         referenceDate: Date = Date()
     ) -> [DailyCompletionCount] {
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: referenceDate)
 
-        let validLogs = logs.filter { isCompletionLog($0) }
+        let validLogs = completionLogs(logs, habits: habits)
 
         // Group logs by day
         var countByDay: [Date: Int] = [:]
@@ -197,7 +198,7 @@ enum HabitAnalyticsService {
         let thisWeekEnd = calendar.date(byAdding: .day, value: 7, to: thisWeekStart) ?? thisWeekStart
         let lastWeekStart = calendar.date(byAdding: .day, value: -7, to: thisWeekStart) ?? thisWeekStart
 
-        let validLogs = logs.filter { isCompletionLog($0) }
+        let validLogs = completionLogs(logs, habits: habits)
         let thisWeekLogs = validLogs.filter { $0.date >= thisWeekStart && $0.date < thisWeekEnd }
         let lastWeekLogs = validLogs.filter { $0.date >= lastWeekStart && $0.date < thisWeekStart }
 
@@ -251,12 +252,12 @@ enum HabitAnalyticsService {
 
     // MARK: - Helpers
 
-    private static func isCompletionLog(_ log: HabitLogSnapshot) -> Bool {
-        guard log.value > 0 else { return false }
-        if let memo = log.memo {
-            return memo != "[dune-life-cycle-skip]" && memo != "[dune-life-cycle-snooze]"
+    private static func completionLogs(_ logs: [HabitLogSnapshot], habits: [HabitSnapshot]) -> [HabitLogSnapshot] {
+        habits.flatMap { habit in
+            HabitStreakService.completedDates(logs: logs, for: habit.id, goalValue: habit.goalValue).map { date in
+                HabitLogSnapshot(habitID: habit.id, date: date, value: habit.goalValue, memo: nil)
+            }
         }
-        return true
     }
 
     private static func weeklyGoalCount(for habit: HabitSnapshot) -> Int {

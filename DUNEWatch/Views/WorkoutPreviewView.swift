@@ -293,7 +293,8 @@ struct WorkoutPreviewView: View {
                                     HStack(spacing: DS.Spacing.xs) {
                                         if profile.showsStrengthDefaultsEditor {
                                             Text("\(entry.defaultSets)\u{00d7}\(entry.defaultReps)")
-                                            if let kg = entry.defaultWeightKg, kg > 0 {
+                                            if resolvedInputType(for: entry) != ExerciseInputType.roundsBased.rawValue,
+                                               let kg = entry.defaultWeightKg, kg > 0 {
                                                 Text("\u{00b7} \(kg, specifier: "%.1f")kg")
                                             }
                                         } else {
@@ -379,7 +380,9 @@ struct WorkoutPreviewView: View {
 
         let reorderedSnapshot = WorkoutSessionTemplate(
             name: snapshot.name,
-            entries: reorderedEntries,
+            entries: reorderedEntries.map {
+                resolvedWatchEntry($0, exercise: connectivity.exerciseInfo(for: $0.exerciseDefinitionID))
+            },
             procedureSetsByExerciseID: snapshot.procedureSetsByExerciseID
         )
 

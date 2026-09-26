@@ -437,6 +437,10 @@ struct DUNEApp: App {
                         into: appRuntime.modelContainer.mainContext,
                         scenario: Self.uiTestLaunchConfiguration.scenario
                     )
+                    // Seeding resets preferences; restore the explicit visual-test theme afterwards.
+                    if let forcedTheme = Self.forcedUITestTheme {
+                        selectedTheme = forcedTheme
+                    }
                     hasSeededMockData = true
                 }
         }

@@ -130,6 +130,12 @@ struct ProgressRingView: View {
                     .init(color: base, location: 0.82),
                     .init(color: tipColor, location: 1)
                 ]
+            case .contourAtlas:
+                return [
+                    .init(color: base, location: 0),
+                    .init(color: base, location: 0.82),
+                    .init(color: tipColor, location: 1)
+                ]
             case .solarPop:
                 return [
                     .init(color: solarAccent06, location: 0),

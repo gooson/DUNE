@@ -201,4 +201,21 @@ struct CompoundWorkoutViewModelTests {
         #expect(vm.exerciseViewModels[0].sets.count == initialSetCount + 1)
         #expect(vm.exerciseViewModels[1].sets.count == initialSetCount + 1)
     }
+    @Test("Invalid completed exercise prevents partial save and allows retry")
+    func invalidExercisePreventsPartialSave() {
+        let vm = CompoundWorkoutViewModel(config: makeConfig())
+        for session in vm.exerciseViewModels {
+            session.sets[0].weight = "50"
+            session.sets[0].reps = "10"
+            session.sets[0].isCompleted = true
+        }
+        vm.exerciseViewModels[1].sets[0].weight = "-1"
+        #expect(vm.createAllRecords().isEmpty)
+        #expect(vm.validationError != nil)
+        #expect(!vm.isSaving)
+        #expect(vm.exerciseViewModels.allSatisfy { !$0.isSaving })
+        vm.exerciseViewModels[1].sets[0].weight = "40"
+        #expect(vm.createAllRecords().count == 2)
+    }
+
 }

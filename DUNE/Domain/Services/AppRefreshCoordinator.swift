@@ -29,6 +29,7 @@ protocol AppRefreshCoordinating: Sendable {
     /// Invalidate cache without triggering UI reload (background delivery).
     func invalidateCacheOnly() async
 
-    /// Stream that emits when UI should reload. ContentView listens to this.
-    var refreshNeededStream: AsyncStream<RefreshSource> { get }
+    /// Registers an independent subscription to refresh events.
+    /// Each consumer must request its own stream; cancellation only ends that subscription.
+    func makeRefreshStream() async -> AsyncStream<RefreshSource>
 }

@@ -6,6 +6,19 @@ import Testing
 struct ExerciseDefinitionTests {
     let library = ExerciseLibraryService()
 
+    @Test("Bodyweight, external-load and hold exercises expose the appropriate fields")
+    func recordingInputSemantics() {
+        for id in ["crunch", "push-up", "pull-up", "stability-ball-crunch"] {
+            #expect(library.exercise(byID: id)?.inputType == .setsReps)
+        }
+        for id in ["cable-crunch", "medicine-ball-russian-twist", "medicine-ball-slam"] {
+            #expect(library.exercise(byID: id)?.inputType == .setsRepsWeight)
+        }
+        for id in ["plank", "pull-up-bar-isometric-hold", "dip-station-support-hold"] {
+            #expect(library.exercise(byID: id)?.inputType == .durationIntensity)
+        }
+    }
+
     @Test("Library exposes consolidated base exercises")
     func loadsConsolidatedExercises() {
         let all = library.allExercises()

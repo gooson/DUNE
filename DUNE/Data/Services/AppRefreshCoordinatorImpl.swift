@@ -15,8 +15,7 @@ actor AppRefreshCoordinatorImpl: AppRefreshCoordinating {
     // Initialized to .distantPast so the first CloudKit notification always passes.
     private var lastCloudKitRefreshDate: Date = .distantPast
 
-    private let continuation: AsyncStream<RefreshSource>.Continuation
-    nonisolated let refreshNeededStream: AsyncStream<RefreshSource>
+    private var subscribers: [UUID: AsyncStream<RefreshSource>.Continuation] = [:]
 
     init(
         sharedHealthDataService: SharedHealthDataService,
@@ -30,9 +29,32 @@ actor AppRefreshCoordinatorImpl: AppRefreshCoordinating {
         self.nowProvider = nowProvider
         self.lastRefreshDate = nowProvider()
 
+    }
+
+    deinit {
+        for continuation in subscribers.values {
+            continuation.finish()
+        }
+    }
+
+    func makeRefreshStream() -> AsyncStream<RefreshSource> {
+        let id = UUID()
         let (stream, continuation) = AsyncStream<RefreshSource>.makeStream()
-        self.refreshNeededStream = stream
-        self.continuation = continuation
+        continuation.onTermination = { [weak self] _ in
+            Task { await self?.removeSubscriber(id) }
+        }
+        subscribers[id] = continuation
+        return stream
+    }
+
+    private func removeSubscriber(_ id: UUID) {
+        subscribers.removeValue(forKey: id)
+    }
+
+    private func broadcast(_ source: RefreshSource) {
+        for continuation in subscribers.values {
+            continuation.yield(source)
+        }
     }
 
     func requestRefresh(source: RefreshSource) async -> Bool {
@@ -61,7 +83,7 @@ actor AppRefreshCoordinatorImpl: AppRefreshCoordinating {
         // CloudKit-triggered refresh isn't followed by a redundant foreground refresh.
         lastRefreshDate = now
         await sharedHealthDataService.invalidateCache()
-        continuation.yield(source)
+        broadcast(source)
         NotificationCenter.default.post(name: .appHealthDataDidRefresh, object: nil)
 
         AppLogger.ui.info("[AppRefreshCoordinator] Refresh triggered by \(source.rawValue)")
@@ -73,7 +95,7 @@ actor AppRefreshCoordinatorImpl: AppRefreshCoordinating {
         lastRefreshDate = now
         lastCloudKitRefreshDate = now
         await sharedHealthDataService.invalidateCache()
-        continuation.yield(.pullToRefresh)
+        broadcast(.pullToRefresh)
         NotificationCenter.default.post(name: .appHealthDataDidRefresh, object: nil)
 
         AppLogger.ui.info("[AppRefreshCoordinator] Force refresh triggered")
