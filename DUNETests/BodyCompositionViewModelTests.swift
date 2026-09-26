@@ -211,6 +211,18 @@ struct BodyCompositionViewModelTests {
         #expect(vm.newWeight == "72.0")
     }
 
+    @Test("history editing does not present a second sheet")
+    func historyEditingUsesLocalPresentation() {
+        let vm = BodyCompositionViewModel()
+        let record = BodyCompositionRecord(weight: 72.0)
+        vm.startEditing(record, presentsSheet: false)
+        #expect(vm.editingRecord === record)
+        #expect(vm.newWeight == "72.0")
+        #expect(!vm.isShowingEditSheet)
+        vm.startEditing(record)
+        #expect(vm.isShowingEditSheet)
+    }
+
     // MARK: - HealthKit + Manual Merge
 
     @Test("allItems merges and sorts by date descending")

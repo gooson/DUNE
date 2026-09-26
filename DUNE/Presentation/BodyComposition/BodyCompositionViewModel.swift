@@ -246,14 +246,14 @@ final class BodyCompositionViewModel {
         return (weight: weight, bodyFat: bodyFat, muscleMass: muscleMass)
     }
 
-    func startEditing(_ record: BodyCompositionRecord) {
+    func startEditing(_ record: BodyCompositionRecord, presentsSheet: Bool = true) {
         editingRecord = record
         newWeight = record.weight.map { String(format: "%.1f", $0) } ?? ""
         newBodyFat = record.bodyFatPercentage.map { String(format: "%.1f", $0) } ?? ""
         newMuscleMass = record.muscleMass.map { String(format: "%.1f", $0) } ?? ""
         newMemo = record.memo
         selectedDate = record.date
-        isShowingEditSheet = true
+        isShowingEditSheet = presentsSheet
     }
 
     func resetForm() {

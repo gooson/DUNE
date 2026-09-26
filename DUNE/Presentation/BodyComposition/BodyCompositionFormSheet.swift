@@ -30,15 +30,21 @@ struct BodyCompositionFormSheet: View {
                     )
                     .accessibilityIdentifier("body-form-date")
 
-                    TextField("Weight (kg)", text: $viewModel.newWeight)
-                        .keyboardType(.decimalPad)
-                        .accessibilityIdentifier("body-form-weight")
-                    TextField("Body Fat (%)", text: $viewModel.newBodyFat)
-                        .keyboardType(.decimalPad)
-                        .accessibilityIdentifier("body-form-fat")
-                    TextField("Muscle Mass (kg)", text: $viewModel.newMuscleMass)
-                        .keyboardType(.decimalPad)
-                        .accessibilityIdentifier("body-form-muscle")
+                    Section("Weight (kg)") {
+                        TextField("Weight (kg)", text: $viewModel.newWeight)
+                            .keyboardType(.decimalPad)
+                            .accessibilityIdentifier("body-form-weight")
+                    }
+                    Section("Body Fat (%)") {
+                        TextField("Body Fat (%)", text: $viewModel.newBodyFat)
+                            .keyboardType(.decimalPad)
+                            .accessibilityIdentifier("body-form-fat")
+                    }
+                    Section("Muscle Mass (kg)") {
+                        TextField("Muscle Mass (kg)", text: $viewModel.newMuscleMass)
+                            .keyboardType(.decimalPad)
+                            .accessibilityIdentifier("body-form-muscle")
+                    }
                     TextField("Memo", text: $viewModel.newMemo)
                 }
                 .scrollContentBackground(.hidden)
