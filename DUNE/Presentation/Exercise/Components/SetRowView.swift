@@ -9,6 +9,11 @@ struct SetRowView: View {
     let onComplete: () -> Void
     var onFillFromPrevious: (() -> Void)?
     @State private var addedWeightEnabled = false
+    @FocusState private var focusedInput: InputField?
+
+    private enum InputField: Hashable {
+        case weight, reps, duration, distance, level
+    }
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     private var isAccessibilitySize: Bool { dynamicTypeSize.isAccessibilitySize }
@@ -68,6 +73,7 @@ struct SetRowView: View {
 
             // Completion checkbox
             Button {
+                focusedInput = nil
                 onComplete()
             } label: {
                 VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
@@ -161,12 +167,14 @@ struct SetRowView: View {
         case .setsRepsWeight:
             fieldLayout {
                 TextField(weightUnit.displayName, text: $editableSet.weight)
+                    .focused($focusedInput, equals: .weight)
                     .keyboardType(.decimalPad)
                     .textFieldStyle(.roundedBorder)
                     .accessibilityIdentifier("set-row-field-\(editableSet.setNumber)-weight")
                     .modifier(SetInputFieldLayout(title: Text(weightUnit.displayName), compactWidth: 70))
 
                 TextField("reps", text: $editableSet.reps)
+                    .focused($focusedInput, equals: .reps)
                     .keyboardType(.numberPad)
                     .textFieldStyle(.roundedBorder)
                     .accessibilityIdentifier("set-row-field-\(editableSet.setNumber)-reps")
@@ -177,6 +185,7 @@ struct SetRowView: View {
             fieldLayout {
                 if showsAddedWeight {
                     TextField(weightUnit.displayName, text: $editableSet.weight)
+                        .focused($focusedInput, equals: .weight)
                         .keyboardType(.decimalPad)
                         .textFieldStyle(.roundedBorder)
                         .accessibilityLabel("Added Weight")
@@ -198,6 +207,7 @@ struct SetRowView: View {
                 .accessibilityIdentifier("set-row-toggle-weight-\(editableSet.setNumber)")
 
                 TextField("reps", text: $editableSet.reps)
+                    .focused($focusedInput, equals: .reps)
                     .keyboardType(.numberPad)
                     .textFieldStyle(.roundedBorder)
                     .accessibilityIdentifier("set-row-field-\(editableSet.setNumber)-reps")
@@ -207,6 +217,7 @@ struct SetRowView: View {
         case .durationDistance:
             fieldLayout {
                 TextField("min", text: $editableSet.duration)
+                    .focused($focusedInput, equals: .duration)
                     .keyboardType(.numberPad)
                     .textFieldStyle(.roundedBorder)
                     .accessibilityIdentifier("set-row-field-\(editableSet.setNumber)-duration")
@@ -216,12 +227,14 @@ struct SetRowView: View {
                 if unit != .timeOnly {
                     if unit.usesDistanceField {
                         TextField(unit.placeholder, text: $editableSet.distance)
+                            .focused($focusedInput, equals: .distance)
                             .keyboardType(unit.keyboardType)
                             .textFieldStyle(.roundedBorder)
                             .accessibilityIdentifier("set-row-field-\(editableSet.setNumber)-distance")
                             .modifier(SetInputFieldLayout(title: Text(unit.placeholder), compactWidth: 70))
                     } else if unit.usesRepsField {
                         TextField(unit.placeholder, text: $editableSet.reps)
+                            .focused($focusedInput, equals: .reps)
                             .keyboardType(.numberPad)
                             .textFieldStyle(.roundedBorder)
                             .accessibilityIdentifier("set-row-field-\(editableSet.setNumber)-reps")
@@ -229,6 +242,7 @@ struct SetRowView: View {
 
                         if unit == .floors {
                             TextField("lvl", text: $editableSet.level)
+                                .focused($focusedInput, equals: .level)
                                 .keyboardType(.numberPad)
                                 .textFieldStyle(.roundedBorder)
                                 .accessibilityIdentifier("set-row-field-\(editableSet.setNumber)-level")
@@ -240,6 +254,7 @@ struct SetRowView: View {
 
         case .durationIntensity:
             TextField("sec", text: $editableSet.duration)
+                .focused($focusedInput, equals: .duration)
                 .keyboardType(.numberPad)
                 .textFieldStyle(.roundedBorder)
                 .accessibilityIdentifier("set-row-field-\(editableSet.setNumber)-duration")
@@ -248,12 +263,14 @@ struct SetRowView: View {
         case .roundsBased:
             fieldLayout {
                 TextField("reps", text: $editableSet.reps)
+                    .focused($focusedInput, equals: .reps)
                     .keyboardType(.numberPad)
                     .textFieldStyle(.roundedBorder)
                     .accessibilityIdentifier("set-row-field-\(editableSet.setNumber)-reps")
                     .modifier(SetInputFieldLayout(title: Text("reps"), compactWidth: 60))
 
                 TextField("sec", text: $editableSet.duration)
+                    .focused($focusedInput, equals: .duration)
                     .keyboardType(.numberPad)
                     .textFieldStyle(.roundedBorder)
                     .accessibilityIdentifier("set-row-field-\(editableSet.setNumber)-duration")
