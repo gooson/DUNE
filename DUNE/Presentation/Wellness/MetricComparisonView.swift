@@ -95,6 +95,14 @@ private struct ComparisonMetricChart: View {
         return dates.start...dates.end
     }
 
+    private var weeklyAxisDates: [Date] {
+        // Keep sparse weekly ticks inside the domain instead of relying on automatic date strides.
+        let dayOffsets = axisCount == 2 ? [1, 4] : [0, 2, 4, 6]
+        return dayOffsets.compactMap {
+            Calendar.current.date(byAdding: .day, value: $0, to: range.lowerBound)
+        }
+    }
+
     private var chartUnit: String {
         metric.category == .sleep ? String(localized: "Minutes") : (viewModel.metricUnit.isEmpty ? metric.unit : viewModel.metricUnit)
     }
@@ -133,10 +141,18 @@ private struct ComparisonMetricChart: View {
                     }
                     .chartXScale(domain: range)
                     .chartXAxis {
-                        AxisMarks(values: .automatic(desiredCount: axisCount)) {
-                            AxisGridLine()
-                            AxisTick()
-                            AxisValueLabel()
+                        if period == .week {
+                            AxisMarks(values: weeklyAxisDates) {
+                                AxisGridLine()
+                                AxisTick()
+                                AxisValueLabel(format: .dateTime.month(.abbreviated).day())
+                            }
+                        } else {
+                            AxisMarks(values: .automatic(desiredCount: axisCount)) {
+                                AxisGridLine()
+                                AxisTick()
+                                AxisValueLabel()
+                            }
                         }
                     }
                     .chartYAxis {
