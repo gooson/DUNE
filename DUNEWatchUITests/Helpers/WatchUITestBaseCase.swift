@@ -39,6 +39,7 @@ enum WatchAXID {
     static let restTimerRPERate = "watch-rest-timer-rpe-rate"
     static let restTimerRPEConfirm = "watch-rest-timer-rpe-confirm"
     static let lastSetRPEAction = "watch-last-set-rpe-action"
+    static let lastSetRPEActionLabels = ["Rate RPE", "RPE 기록", "RPEを記録", "Confirm RPE", "RPE 확정", "RPEを確定"]
     static let lastSetRPESheet = "watch-last-set-rpe-sheet"
     static let lastSetRPEDecrement = "watch-last-set-rpe-decrement"
     static let lastSetRPEIncrement = "watch-last-set-rpe-increment"
@@ -174,6 +175,12 @@ class WatchUITestBaseCase: XCTestCase {
                 exactLabels: WatchAXID.sessionMetricsLastSetFinishLabels,
                 timeout: timeout
             ) != nil
+        case WatchAXID.lastSetRPEAction:
+            return waitForButton(
+                identifier: identifier,
+                exactLabels: WatchAXID.lastSetRPEActionLabels,
+                timeout: timeout
+            ) != nil
         case WatchAXID.sessionControlsEndButton:
             return waitForButton(
                 identifier: identifier,
@@ -240,6 +247,15 @@ class WatchUITestBaseCase: XCTestCase {
             guard let button = waitForButton(
                 identifier: identifier,
                 exactLabels: WatchAXID.sessionMetricsLastSetFinishLabels,
+                timeout: timeout
+            ) else {
+                return false
+            }
+            element = button
+        case WatchAXID.lastSetRPEAction:
+            guard let button = waitForButton(
+                identifier: identifier,
+                exactLabels: WatchAXID.lastSetRPEActionLabels,
                 timeout: timeout
             ) else {
                 return false

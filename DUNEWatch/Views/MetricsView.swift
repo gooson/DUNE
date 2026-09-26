@@ -192,6 +192,7 @@ struct MetricsView: View {
             .accessibilityIdentifier("watch-last-set-rpe-confirm")
         }
         .padding(DS.Spacing.md)
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier("watch-last-set-rpe-sheet")
     }
 
