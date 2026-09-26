@@ -7,7 +7,7 @@
 - 명령 실행/대기는 셸 도구에 맡긴다. 실행만을 위한 모델이나 별도 agent를 생성하지 않는다.
 - 표준 실행기: `scripts/test-unit.sh`, `scripts/test-ui.sh`, `scripts/test-watch-ui.sh`. 기본 파일 로그와 요약을 사용하고, 로그 전체를 `cat`하지 않는다. CI streaming 기본 동작은 유지한다.
 - 정상 결과는 종료 상태·로그 경로·보고된 테스트 수만 확인한다. 실패 시 제한된 오류 요약 → 해당 로그 구간 → 관련 소스 순서로 읽는다. 요약에서 수를 알 수 없으면 unknown이며 0건 성공으로 간주하지 않는다.
-- 개발 중 `test-ui.sh --only-testing <target/class/method>` 또는 `--smoke`로 빠르게 확인할 수 있다. 최종 게이트는 source skill이 요구하는 full suite/device 범위를 유지한다. 단위 테스트의 `--ios-only`/`--watch-only`는 실제 변경 범위와 최종 요구조건에 맞게 사용한다.
+- 개발 중 `test-ui.sh --only-testing <target/class/method>` 또는 `--smoke`로 빠르게 확인할 수 있다. 둘을 함께 주면 명시적 선택과 smoke의 합집합을 실행한다. `/run`의 최종 범위는 `.codex/skill-compat.md`의 변경 범위 기반 UI 게이트를 적용하고, 그 외는 source skill이 요구하는 범위를 유지한다. full 판정을 smoke/targeted로 대신하지 않는다. 단위 테스트의 `--ios-only`/`--watch-only`는 실제 변경 범위와 최종 요구조건에 맞게 사용한다.
 - simulator 부팅 등 환경 오류와 앱/테스트 실패를 먼저 구분한다. 근거 없이 같은 명령을 반복하지 않는다. 실제 수정 후 관련 실패를 재확인하고 필요한 전체 검증을 완료한다.
 - 제스처/차트/레이아웃 관련 source 규칙의 seeded/mock 재현 의무는 유지한다. 요소 존재만으로 시각적 레이아웃 전체를 검증했다고 보고하지 않는다.
 

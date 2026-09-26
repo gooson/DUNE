@@ -10,6 +10,10 @@ on:
       - 'DUNEUITests/**'
       - 'DUNEWatchUITests/**'
       - 'scripts/test-ui.sh'
+      - 'scripts/plan-ui-tests.py'
+      - 'scripts/lib/verify-ui-test-log.py'
+      - 'scripts/tests/test_plan_ui_tests.py'
+      - 'scripts/tests/test_ui_test_runner.py'
       - 'scripts/test-watch-ui.sh'
       - 'scripts/lib/regen-project.sh'
       - '.github/workflows/test-ui.yml'
@@ -23,6 +27,18 @@ env:
   SIMULATOR_BOOT_RETRIES: '2'
 
 jobs:
+  ui-gate-contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Verify UI selection and execution evidence contracts
+        run: |
+          python3 -B -m unittest discover -s scripts/tests -p test_plan_ui_tests.py -v
+          python3 -B -m unittest discover -s scripts/tests -p test_ui_test_runner.py -v
+          bash -n scripts/test-ui.sh
+
   ios-ui-tests:
     if: github.event.pull_request.draft == false
     runs-on: macos-15
