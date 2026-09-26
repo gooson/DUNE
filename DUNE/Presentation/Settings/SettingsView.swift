@@ -8,6 +8,7 @@ struct SettingsView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.openURL) private var openURL
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     @State private var locationStatus: CLAuthorizationStatus = .notDetermined
     @State private var restSeconds: Double = WorkoutSettingsStore.shared.restSeconds
@@ -170,18 +171,25 @@ struct SettingsView: View {
 
     // MARK: - Data & Privacy
 
+    private var valueRowLayout: AnyLayout {
+        dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.xs))
+            : AnyLayout(HStackLayout())
+    }
+
     private var simulatorMockDataSection: some View {
         Section {
-            HStack {
+            valueRowLayout {
                 Text("Preset")
-                Spacer()
+                if !dynamicTypeSize.isAccessibilitySize { Spacer() }
                 Text("Advanced Athlete")
                     .foregroundStyle(DS.Color.textSecondary)
             }
 
-            HStack {
+            valueRowLayout {
                 Text("Status")
-                Spacer()
+                    .accessibilityIdentifier("settings-mock-status-label")
+                if !dynamicTypeSize.isAccessibilitySize { Spacer() }
                 Text(isSimulatorMockEnabled ? "Enabled" : "Disabled")
                     .foregroundStyle(isSimulatorMockEnabled ? Color.accentColor : DS.Color.textSecondary)
             }
@@ -251,9 +259,10 @@ struct SettingsView: View {
                 guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
                 openURL(url)
             } label: {
-                HStack {
+                valueRowLayout {
                     Label("Location Access", systemImage: "location")
-                    Spacer()
+                        .fixedSize(horizontal: false, vertical: true)
+                    if !dynamicTypeSize.isAccessibilitySize { Spacer() }
                     Text(locationStatusText)
                         .foregroundStyle(DS.Color.textSecondary)
                 }
