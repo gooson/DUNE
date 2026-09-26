@@ -38,25 +38,27 @@ struct TemplateWorkoutView: View {
     }
 
     var body: some View {
-        ZStack(alignment: .bottom) {
-            ScrollView {
-                VStack(alignment: .leading, spacing: DS.Spacing.lg) {
-                    exerciseProgressHeader
-                    currentExerciseContent
-                    actionButtons
+        ScrollView {
+            VStack(alignment: .leading, spacing: DS.Spacing.lg) {
+                exerciseProgressHeader
+                currentExerciseContent
+                actionButtons
+            }
+            .padding(.horizontal, DS.Spacing.lg)
+            .padding(.bottom, DS.Spacing.lg)
+        }
+        .scrollDismissesKeyboard(.interactively)
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            VStack(spacing: 0) {
+                if restTimer.isRunning {
+                    RestTimerView(timer: restTimer)
+                        .transition(.move(edge: .bottom).combined(with: .opacity))
                 }
-                .padding(.horizontal, DS.Spacing.lg)
-                .padding(.bottom, restTimer.isRunning ? 140 : 80)
-            }
 
-            if restTimer.isRunning {
-                RestTimerView(timer: restTimer)
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
-            }
-
-            if showTransition {
-                transitionOverlay
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                if showTransition {
+                    transitionOverlay
+                        .transition(.move(edge: .bottom).combined(with: .opacity))
+                }
             }
         }
         .background { DetailWaveBackground() }

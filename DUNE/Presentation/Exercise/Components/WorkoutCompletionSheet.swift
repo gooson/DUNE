@@ -41,83 +41,83 @@ struct WorkoutCompletionSheet: View {
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: DS.Spacing.xl) {
-                // Celebration header
-                VStack(spacing: DS.Spacing.md) {
-                    Image(systemName: "checkmark.circle.fill")
-                        .font(.system(size: 56))
-                        .foregroundStyle(DS.Color.activity)
-                        .scaleEffect(showCelebration ? 1.0 : 0.5)
-                        .opacity(showCelebration ? 1.0 : 0)
+            ScrollView {
+                VStack(spacing: DS.Spacing.xl) {
+                    // Celebration header
+                    VStack(spacing: DS.Spacing.md) {
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(.system(size: 56))
+                            .foregroundStyle(DS.Color.activity)
+                            .scaleEffect(showCelebration ? 1.0 : 0.5)
+                            .opacity(showCelebration ? 1.0 : 0)
 
-                    Text("Workout Complete!")
-                        .font(.title2.weight(.bold))
+                        Text("Workout Complete!")
+                            .font(.title2.weight(.bold))
 
-                    Text("\(exerciseName) \u{00B7} \(setCount.formattedWithSeparator) sets")
-                        .font(.subheadline)
-                        .foregroundStyle(DS.Color.textSecondary)
-                }
-                .padding(.top, DS.Spacing.lg)
-                .accessibilityIdentifier("workout-completion-sheet")
+                        Text("\(exerciseName) \u{00B7} \(setCount.formattedWithSeparator) sets")
+                            .font(.subheadline)
+                            .foregroundStyle(DS.Color.textSecondary)
+                    }
+                    .padding(.top, DS.Spacing.lg)
+                    .accessibilityIdentifier("workout-completion-sheet")
 
-                // PR achievements section
-                if !prAchievements.isEmpty {
-                    prSection
-                }
+                    // PR achievements section
+                    if !prAchievements.isEmpty {
+                        prSection
+                    }
 
-                Spacer()
 
-                // Effort slider (replaces IntensityBadge + RPEInput)
-                EffortSliderView(
-                    effort: $effort,
-                    suggestion: effortSuggestion
-                )
-                .padding(.horizontal, DS.Spacing.lg)
+                    // Effort slider (replaces IntensityBadge + RPEInput)
+                    EffortSliderView(
+                        effort: $effort,
+                        suggestion: effortSuggestion
+                    )
+                    .padding(.horizontal, DS.Spacing.lg)
 
-                Spacer()
 
-                // Share card preview
-                if let image = shareImage {
-                    Image(uiImage: image)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(maxHeight: 180)
-                        .clipShape(RoundedRectangle(cornerRadius: DS.Radius.md))
-                        .shadow(color: .black.opacity(0.2), radius: 8, y: 4)
-                }
-
-                // Action buttons
-                VStack(spacing: DS.Spacing.sm) {
+                    // Share card preview
                     if let image = shareImage {
-                        ShareLink(
-                            item: Image(uiImage: image),
-                            preview: SharePreview(
-                                "\(exerciseName) Workout",
-                                image: Image(uiImage: image)
-                            )
-                        ) {
-                            Label("Share Workout", systemImage: "square.and.arrow.up")
-                                .font(.body.weight(.semibold))
-                                .foregroundStyle(.white)
+                        Image(uiImage: image)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(maxHeight: 180)
+                            .clipShape(RoundedRectangle(cornerRadius: DS.Radius.md))
+                            .shadow(color: .black.opacity(0.2), radius: 8, y: 4)
+                    }
+
+                    // Action buttons
+                    VStack(spacing: DS.Spacing.sm) {
+                        if let image = shareImage {
+                            ShareLink(
+                                item: Image(uiImage: image),
+                                preview: SharePreview(
+                                    "\(exerciseName) Workout",
+                                    image: Image(uiImage: image)
+                                )
+                            ) {
+                                Label("Share Workout", systemImage: "square.and.arrow.up")
+                                    .font(.body.weight(.semibold))
+                                    .foregroundStyle(.white)
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.vertical, DS.Spacing.md)
+                                    .background(DS.Color.activity, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
+                            }
+                        }
+
+                        Button {
+                            onDismiss(effort)
+                        } label: {
+                            Text("Done")
+                                .font(.body.weight(.medium))
+                                .foregroundStyle(DS.Color.textSecondary)
                                 .frame(maxWidth: .infinity)
                                 .padding(.vertical, DS.Spacing.md)
-                                .background(DS.Color.activity, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
                         }
+                        .accessibilityIdentifier("workout-completion-done")
                     }
-
-                    Button {
-                        onDismiss(effort)
-                    } label: {
-                        Text("Done")
-                            .font(.body.weight(.medium))
-                            .foregroundStyle(DS.Color.textSecondary)
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, DS.Spacing.md)
-                    }
-                    .accessibilityIdentifier("workout-completion-done")
+                    .padding(.horizontal, DS.Spacing.lg)
+                    .padding(.bottom, DS.Spacing.lg)
                 }
-                .padding(.horizontal, DS.Spacing.lg)
-                .padding(.bottom, DS.Spacing.lg)
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

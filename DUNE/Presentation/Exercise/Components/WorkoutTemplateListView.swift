@@ -107,6 +107,7 @@ struct WorkoutTemplateListView: View {
                     onStartTemplate(template)
                 } label: {
                     templateRow(template)
+                        .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
                 .accessibilityIdentifier(templateRowAccessibilityIdentifier(for: template))

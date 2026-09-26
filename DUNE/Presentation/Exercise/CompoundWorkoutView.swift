@@ -33,29 +33,31 @@ struct CompoundWorkoutView: View {
     }
 
     var body: some View {
-        ZStack(alignment: .bottom) {
-            ScrollView {
-                VStack(alignment: .leading, spacing: DS.Spacing.lg) {
-                    roundIndicator
-                    exerciseTabs
-                    currentExerciseSection
-                    actionButtons
-                    workoutSummary
+        ScrollView {
+            VStack(alignment: .leading, spacing: DS.Spacing.lg) {
+                roundIndicator
+                exerciseTabs
+                currentExerciseSection
+                actionButtons
+                workoutSummary
+            }
+            .padding(.horizontal, DS.Spacing.lg)
+            .padding(.bottom, DS.Spacing.lg)
+        }
+        .scrollDismissesKeyboard(.interactively)
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            VStack(spacing: 0) {
+                // Rest timer overlay
+                if setTimer.isRunning {
+                    RestTimerView(timer: setTimer)
+                        .transition(.move(edge: .bottom).combined(with: .opacity))
                 }
-                .padding(.horizontal, DS.Spacing.lg)
-                .padding(.bottom, timerVisible ? 140 : 80)
-            }
 
-            // Rest timer overlay
-            if setTimer.isRunning {
-                RestTimerView(timer: setTimer)
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
-            }
-
-            // Transition timer overlay (between exercises)
-            if viewModel.isTransitioning {
-                transitionOverlay
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                // Transition timer overlay (between exercises)
+                if viewModel.isTransitioning {
+                    transitionOverlay
+                        .transition(.move(edge: .bottom).combined(with: .opacity))
+                }
             }
         }
         .accessibilityIdentifier("compound-workout-screen")

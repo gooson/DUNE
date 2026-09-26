@@ -5,6 +5,8 @@ import SwiftUI
 struct MetricComparisonView: View {
     let metrics: [HealthMetric]
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @State private var availableWidth: CGFloat = 0
     @State private var firstID: String
     @State private var secondID: String
     @State private var period: TimePeriod = .week
@@ -18,27 +20,32 @@ struct MetricComparisonView: View {
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: DS.Spacing.md) {
+            ScrollView {
+                VStack(spacing: DS.Spacing.md) {
                 Picker("Period", selection: $period) {
                     ForEach(TimePeriod.allCases, id: \.self) {
                         Text($0.displayName).tag($0)
                             .accessibilityIdentifier("metric-comparison-period-\($0.rawValue)")
                     }
                 }
-                .pickerStyle(.segmented)
+                .pickerStyle(.menu)
                 .accessibilityIdentifier("metric-comparison-period")
 
                 Text("Same dates; separate scales. Trends do not establish cause.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
 
-                AdaptivePaneView {
+                let layout = availableWidth >= 760 && !dynamicTypeSize.isAccessibilitySize
+                    ? AnyLayout(HStackLayout(alignment: .top, spacing: DS.Spacing.md))
+                    : AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.md))
+                layout {
                     pane(selection: $firstID, title: "First Metric", identifier: "metric-comparison-first")
-                } secondary: {
                     pane(selection: $secondID, title: "Second Metric", identifier: "metric-comparison-second")
                 }
+                }
+                .padding(DS.Spacing.md)
             }
-            .padding(DS.Spacing.md)
+            .onGeometryChange(for: CGFloat.self) { $0.size.width } action: { availableWidth = $0 }
             .navigationTitle("Compare Metrics")
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
@@ -51,8 +58,7 @@ struct MetricComparisonView: View {
     }
 
     private func pane(selection: Binding<String>, title: LocalizedStringKey, identifier: String) -> some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: DS.Spacing.md) {
+        VStack(alignment: .leading, spacing: DS.Spacing.md) {
                 Picker(title, selection: selection) {
                     ForEach(metrics) { metric in
                         Text(metric.name).tag(metric.id)
@@ -63,9 +69,9 @@ struct MetricComparisonView: View {
                     ComparisonMetricChart(metric: metric, period: period, referenceDate: referenceDate)
                         .id(metric.id)
                 }
-            }
-            .padding(DS.Spacing.md)
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(DS.Spacing.md)
         .accessibilityElement(children: .contain)
         .accessibilityIdentifier(identifier)
     }
@@ -76,6 +82,13 @@ private struct ComparisonMetricChart: View {
     let period: TimePeriod
     let referenceDate: Date
     @State private var viewModel = MetricDetailViewModel()
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @ScaledMetric(relativeTo: .caption) private var chartHeight: CGFloat = 220
+    @State private var availableWidth: CGFloat = 0
+
+    private var axisCount: Int {
+        dynamicTypeSize.isAccessibilitySize || availableWidth < 360 ? 2 : 4
+    }
 
     private var range: ClosedRange<Date> {
         let dates = period.dateRange(referenceDate: referenceDate)
@@ -119,13 +132,27 @@ private struct ComparisonMetricChart: View {
                         }
                     }
                     .chartXScale(domain: range)
+                    .chartXAxis {
+                        AxisMarks(values: .automatic(desiredCount: axisCount)) {
+                            AxisGridLine()
+                            AxisTick()
+                            AxisValueLabel()
+                        }
+                    }
+                    .chartYAxis {
+                        AxisMarks(values: .automatic(desiredCount: axisCount)) {
+                            AxisGridLine()
+                            AxisTick()
+                            AxisValueLabel()
+                        }
+                    }
                     .chartYAxisLabel(chartUnit)
-                    .frame(height: 220)
-                    .clipped()
+                    .frame(height: max(220, chartHeight))
                     .accessibilityLabel(Text(metric.name))
                 }
             }
         }
+        .onGeometryChange(for: CGFloat.self) { $0.size.width } action: { availableWidth = $0 }
         .task(id: period) {
             viewModel.configure(category: metric.category, currentValue: metric.value,
                                 lastUpdated: metric.date, workoutTypeName: metric.workoutTypeKey,

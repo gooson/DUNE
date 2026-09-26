@@ -38,6 +38,7 @@ struct SettingsView: View {
         .scrollContentBackground(.hidden)
         .background { DetailWaveBackground() }
         .englishNavigationTitle("Settings")
+        .toolbar(.hidden, for: .tabBar)
         .onChange(of: restSeconds) { _, newValue in
             store.restSeconds = newValue
             WatchSessionManager.shared.syncWorkoutSettingsToWatch()

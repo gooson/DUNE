@@ -54,9 +54,6 @@ struct ExerciseView: View {
             .navigationDestination(item: $compoundConfig) { config in
                 CompoundWorkoutView(config: config)
             }
-            .fullScreenCover(item: $templateConfig) { config in
-                TemplateWorkoutContainerView(config: config)
-            }
             .task {
                 pendingDraft = WorkoutSessionDraft.load()
                 rebuildRecordIndex()
@@ -129,6 +126,9 @@ struct ExerciseView: View {
             NavigationLink {
                 WorkoutTemplateListView { template in
                     startFromTemplate(template)
+                }
+                .fullScreenCover(item: $templateConfig) { config in
+                    TemplateWorkoutContainerView(config: config)
                 }
             } label: {
                 Image(systemName: "list.clipboard")

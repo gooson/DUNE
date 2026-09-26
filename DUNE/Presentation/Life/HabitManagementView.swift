@@ -16,6 +16,7 @@ struct HabitManagementView: View {
 
     @Environment(\.modelContext) private var modelContext
     @Environment(\.appTheme) private var theme
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     @State private var filter: HabitFilter = .active
     @State private var historySelection: HabitHistoryItem?
@@ -150,7 +151,10 @@ struct HabitManagementView: View {
         let totalCount = stats?.total ?? 0
         let bestStreak = stats?.bestStreak ?? 0
 
-        return HStack(spacing: DS.Spacing.md) {
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.md))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.md))
+        return layout {
             // Icon
             Image(systemName: habit.iconCategory.iconName)
                 .font(.title3)
@@ -162,9 +166,9 @@ struct HabitManagementView: View {
             VStack(alignment: .leading, spacing: 2) {
                 Text(habit.name)
                     .font(.subheadline.weight(.medium))
-                    .lineLimit(1)
+                    .fixedSize(horizontal: false, vertical: true)
 
-                HStack(spacing: DS.Spacing.sm) {
+                VStack(alignment: .leading, spacing: DS.Spacing.xs) {
                     Label(
                         String(localized: "\(totalCount) times"),
                         systemImage: "checkmark.circle"

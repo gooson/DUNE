@@ -35,6 +35,7 @@ struct HeroScoreCard: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.horizontalSizeClass) private var sizeClass
     @Environment(\.appTheme) private var theme
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     private var isRegular: Bool { sizeClass == .regular }
 
@@ -55,16 +56,22 @@ struct HeroScoreCard: View {
 
     var body: some View {
         HeroCard(tintColor: statusColor) {
-            HStack(spacing: isRegular ? DS.Spacing.xxl : DS.Spacing.xl) {
-                scoreRing
-                scoreInfo
+            ViewThatFits(in: .horizontal) {
+                if !dynamicTypeSize.isAccessibilitySize {
+                    HStack(spacing: isRegular ? DS.Spacing.xxl : DS.Spacing.xl) {
+                        scoreRing
+                        scoreInfo
+                        chevron
+                    }
+                }
 
-                Spacer(minLength: 0)
-
-                if showsChevron {
-                    Image(systemName: "chevron.right")
-                        .font(.caption)
-                        .foregroundStyle(.quaternary)
+                VStack(alignment: .leading, spacing: DS.Spacing.lg) {
+                    HStack {
+                        scoreRing
+                        Spacer(minLength: 0)
+                        chevron
+                    }
+                    scoreInfo
                 }
             }
         }
@@ -174,11 +181,31 @@ struct HeroScoreCard: View {
                 }
             }
 
-            HStack(spacing: DS.Spacing.md) {
-                ForEach(Array(subScores.enumerated()), id: \.offset) { _, item in
-                    subScoreItem(item)
+            ViewThatFits(in: .horizontal) {
+                HStack(spacing: DS.Spacing.md) {
+                    subScoreItems
+                }
+                .fixedSize(horizontal: true, vertical: false)
+
+                VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                    subScoreItems
                 }
             }
+        }
+    }
+
+    @ViewBuilder
+    private var chevron: some View {
+        if showsChevron {
+            Image(systemName: "chevron.right")
+                .font(.caption)
+                .foregroundStyle(.quaternary)
+        }
+    }
+
+    private var subScoreItems: some View {
+        ForEach(Array(subScores.enumerated()), id: \.offset) { _, item in
+            subScoreItem(item)
         }
     }
 
@@ -208,6 +235,7 @@ struct HeroScoreCard: View {
                     .fontWeight(.medium)
                     .foregroundStyle(item.value != nil ? AnyShapeStyle(theme.sandColor) : AnyShapeStyle(.quaternary))
                     .monospacedDigit()
+                    .fixedSize(horizontal: true, vertical: false)
             }
         }
     }

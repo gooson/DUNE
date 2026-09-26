@@ -69,13 +69,12 @@ struct HabitRowView: View {
 
                 // Content
                 VStack(alignment: .leading, spacing: DS.Spacing.xs) {
-                    HStack {
+                    VStack(alignment: .leading, spacing: DS.Spacing.xs) {
                         Text(progress.name)
                             .font(.subheadline)
                             .fontWeight(.medium)
                             .accessibilityIdentifier(rowIdentifier)
-
-                        Spacer()
+                            .fixedSize(horizontal: false, vertical: true)
 
                         HStack(spacing: DS.Spacing.xs) {
                             streakBadge

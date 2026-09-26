@@ -138,6 +138,7 @@ struct LifeView: View {
             }
         }
         .englishNavigationTitle("Life")
+        .toolbarBackground(.visible, for: .navigationBar)
     }
 }
 
@@ -178,6 +179,7 @@ private struct HabitListQueryView: View {
     @State private var weeklyRates: [WeeklyCompletionRate] = []
     @State private var monthlyRates: [MonthlyCompletionRate] = []
     @State private var heatmapData: [DailyCompletionCount] = []
+    @State private var availableContentWidth: CGFloat = 0
     @State private var weeklyReport: WeeklyHabitReport?
     @State private var showingReport = false
     @State private var showingHeatmapDetail = false
@@ -217,7 +219,7 @@ private struct HabitListQueryView: View {
                 ArchivedHabitCountView()
                 autoAchievementsSection()
             } else {
-                let layout = isRegular && !dynamicTypeSize.isAccessibilitySize
+                let layout = isRegular && availableContentWidth >= 700 && !dynamicTypeSize.isAccessibilitySize
                     ? AnyLayout(HStackLayout(alignment: .top, spacing: DS.Spacing.md))
                     : AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.lg))
                 layout {
@@ -225,6 +227,11 @@ private struct HabitListQueryView: View {
                     autoAchievementsSection(useTwoColumnCards: false)
                 }
             }
+        }
+        .onGeometryChange(for: CGFloat.self) { geometry in
+            geometry.size.width
+        } action: { width in
+            availableContentWidth = width
         }
         .background {
             // Isolated @Query child — keeps today's exercise lookup off the main body path.

@@ -5,6 +5,7 @@ import SwiftData
 struct CardioSessionSummaryView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     let viewModel: CardioSessionViewModel
     let exercise: ExerciseDefinition
@@ -14,20 +15,19 @@ struct CardioSessionSummaryView: View {
     @State private var hasSaved = false
 
     var body: some View {
-        VStack(spacing: DS.Spacing.xl) {
-            Spacer()
-
-            completionHeader
-
-            metricsGrid
-
-            Spacer()
-
+        ScrollView {
+            VStack(spacing: DS.Spacing.xl) {
+                completionHeader
+                metricsGrid
+            }
+            .padding(DS.Spacing.lg)
+        }
+        .safeAreaInset(edge: .bottom) {
             saveButton
+                .padding(DS.Spacing.lg)
+                .background(.regularMaterial)
         }
         .accessibilityIdentifier("cardio-session-summary-screen")
-        .padding(.horizontal, DS.Spacing.lg)
-        .padding(.bottom, DS.Spacing.lg)
         .background { DetailWaveBackground() }
         .englishNavigationTitle("Summary")
         .navigationBarTitleDisplayMode(.inline)
@@ -53,9 +53,15 @@ struct CardioSessionSummaryView: View {
 
     // MARK: - Metrics Grid
 
+    private var metricRowLayout: AnyLayout {
+        dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(spacing: DS.Spacing.md))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.md))
+    }
+
     private var metricsGrid: some View {
         VStack(spacing: DS.Spacing.md) {
-            HStack(spacing: DS.Spacing.md) {
+            metricRowLayout {
                 summaryCard(
                     title: "Duration",
                     value: viewModel.formattedElapsed,
@@ -73,7 +79,7 @@ struct CardioSessionSummaryView: View {
                 }
             }
 
-            HStack(spacing: DS.Spacing.md) {
+            metricRowLayout {
                 if viewModel.showsDistance {
                     summaryCard(
                         title: "Avg Pace",
@@ -98,7 +104,7 @@ struct CardioSessionSummaryView: View {
                 )
             }
 
-            HStack(spacing: DS.Spacing.md) {
+            metricRowLayout {
                 summaryCard(
                     title: "Steps",
                     value: summaryStepsValue,
@@ -129,7 +135,7 @@ struct CardioSessionSummaryView: View {
             let hasVO2Max = viewModel.cardioFitnessVO2Max != nil
 
             if hasElevation || hasVO2Max {
-                HStack(spacing: DS.Spacing.md) {
+                metricRowLayout {
                     if hasElevation {
                         summaryCard(
                             title: "Elevation Gain",

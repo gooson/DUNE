@@ -393,11 +393,12 @@ struct ExercisePickerView: View {
         Section {
             ForEach(templates) { template in
                 Button {
-                    dismissPicker {
-                        onStartTemplate(template)
-                    }
+                    // The presenting owner queues the template before dismissing
+                    // its picker, so onDismiss cannot run before the selection.
+                    onStartTemplate(template)
                 } label: {
                     templateRow(template)
+                        .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
                 .accessibilityIdentifier(templateRowIdentifier(template))

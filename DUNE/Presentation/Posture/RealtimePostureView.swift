@@ -10,18 +10,24 @@ struct RealtimePostureView: View {
     var body: some View {
         NavigationStack {
             ZStack {
+                Color.black.ignoresSafeArea()
+
                 // Camera preview
-                CameraPreviewView(
-                    session: viewModel.captureSession,
-                    captureDevice: viewModel.captureServiceDevice,
-                    isMirrored: viewModel.cameraPosition == .front,
-                    deviceOrientation: viewModel.deviceOrientation,
-                    onPreviewRotationAngleChange: viewModel.updatePreviewRotationAngle
-                )
-                .ignoresSafeArea()
+                if viewModel.isActive {
+                    CameraPreviewView(
+                        session: viewModel.captureSession,
+                        captureDevice: viewModel.captureServiceDevice,
+                        isMirrored: viewModel.cameraPosition == .front,
+                        deviceOrientation: viewModel.deviceOrientation,
+                        onPreviewRotationAngleChange: viewModel.updatePreviewRotationAngle
+                    )
+                    .ignoresSafeArea()
+                } else {
+                    cameraUnavailable
+                }
 
                 // Skeleton overlay (reuse existing BodyGuideOverlay)
-                if !viewModel.skeletonKeypoints.isEmpty {
+                if viewModel.isActive, !viewModel.skeletonKeypoints.isEmpty {
                     BodyGuideOverlay(
                         captureType: .front,
                         guidanceState: viewModel.guidanceState,
@@ -32,7 +38,7 @@ struct RealtimePostureView: View {
                 }
 
                 // Angle overlay
-                if !viewModel.currentAngles.isEmpty {
+                if viewModel.isActive, !viewModel.currentAngles.isEmpty {
                     AngleOverlay(
                         angles: viewModel.currentAngles,
                         keypoints: viewModel.skeletonKeypoints,
@@ -43,10 +49,12 @@ struct RealtimePostureView: View {
                 // Score badge (top-left) + exercise mode button (top-right area)
                 VStack {
                     HStack {
-                        RealtimeScoreBadge(
-                            score: viewModel.smoothedScore,
-                            is3DActive: viewModel.is3DActive
-                        )
+                        if viewModel.isActive {
+                            RealtimeScoreBadge(
+                                score: viewModel.smoothedScore,
+                                is3DActive: viewModel.is3DActive
+                            )
+                        }
                         Spacer()
                         exerciseModeButton
                     }
@@ -56,7 +64,7 @@ struct RealtimePostureView: View {
                     Spacer()
 
                     // Form check overlay (when exercise selected)
-                    if let formState = viewModel.formState,
+                    if viewModel.isActive, let formState = viewModel.formState,
                        let exercise = viewModel.selectedExercise {
                         FormCheckOverlay(
                             formState: formState,
@@ -66,13 +74,13 @@ struct RealtimePostureView: View {
                     }
 
                     // Guidance hint when no body detected
-                    if let hint = viewModel.guidanceState.primaryHint {
+                    if viewModel.isActive, let hint = viewModel.guidanceState.primaryHint {
                         Text(hint.displayMessage)
                             .font(.subheadline)
                             .foregroundStyle(.white.opacity(0.9))
                             .padding(.horizontal, 32)
                             .padding(.vertical, 8)
-                            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 8))
+                            .background(.black.opacity(0.75), in: RoundedRectangle(cornerRadius: 8))
                             .padding(.bottom, viewModel.isFormMode ? 16 : 80)
                     }
                 }
@@ -84,12 +92,12 @@ struct RealtimePostureView: View {
                     Button(String(localized: "Close")) { dismiss() }
                 }
                 ToolbarItemGroup(placement: .topBarTrailing) {
-                    if viewModel.isFormMode {
+                    if viewModel.isActive, viewModel.isFormMode {
                         Button {
                             viewModel.toggleVoiceCoaching()
                         } label: {
                             Image(systemName: viewModel.isVoiceCoachingEnabled ? "speaker.wave.2.fill" : "speaker.slash")
-                                .foregroundStyle(.white)
+                                .foregroundStyle(.primary)
                         }
                         .accessibilityLabel(Text("Voice coaching"))
                     }
@@ -98,9 +106,10 @@ struct RealtimePostureView: View {
                         viewModel.switchCamera()
                     } label: {
                         Image(systemName: "camera.rotate")
-                            .foregroundStyle(.white)
+                            .foregroundStyle(.primary)
                     }
                     .accessibilityLabel(Text("Switch camera"))
+                    .disabled(!viewModel.isActive)
                 }
             }
             .task {
@@ -121,6 +130,24 @@ struct RealtimePostureView: View {
         }
     }
 
+    private var cameraUnavailable: some View {
+        VStack(spacing: DS.Spacing.md) {
+            Image(systemName: "camera.fill")
+                .font(.largeTitle)
+            Text("Camera is not available")
+                .font(.headline)
+                .multilineTextAlignment(.center)
+            Button("Try Again") {
+                viewModel.stop()
+                viewModel.start()
+            }
+            .buttonStyle(.borderedProminent)
+        }
+        .foregroundStyle(.white)
+        .padding(DS.Spacing.xl)
+        .accessibilityIdentifier("realtime-camera-unavailable")
+    }
+
     private var exerciseModeButton: some View {
         Button {
             viewModel.showExercisePicker = true
@@ -133,7 +160,7 @@ struct RealtimePostureView: View {
             .foregroundStyle(.white)
             .padding(.horizontal, 10)
             .padding(.vertical, 6)
-            .background(.ultraThinMaterial, in: Capsule())
+            .background(.black.opacity(0.75), in: Capsule())
         }
     }
 }

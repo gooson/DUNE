@@ -40,6 +40,8 @@ struct SetRowView: View {
             // Input fields based on exercise type
             inputFields
 
+            Spacer(minLength: 0)
+
             // Completion checkbox
             Button {
                 onComplete()
@@ -49,6 +51,7 @@ struct SetRowView: View {
                     .foregroundStyle(editableSet.isCompleted ? DS.Color.activity : .secondary)
             }
             .buttonStyle(.plain)
+            .frame(width: 28)
             .accessibilityIdentifier("set-row-complete-\(editableSet.setNumber)")
         }
         .padding(.vertical, DS.Spacing.xs)

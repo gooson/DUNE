@@ -11,6 +11,7 @@ struct WorkoutSessionView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.horizontalSizeClass) private var sizeClass
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.openWindow) private var openWindow
     @Environment(\.supportsMultipleWindows) private var supportsMultipleWindows
@@ -91,13 +92,16 @@ struct WorkoutSessionView: View {
     var body: some View {
         VStack(spacing: 0) {
             topBar
-            AdaptivePaneView {
-                ScrollView { sessionOverview }
-                    .frame(maxHeight: sizeClass == .regular ? .infinity : (isInputFieldFocused ? 0 : 120))
-                    .clipped()
-                    .accessibilityHidden(sizeClass != .regular && isInputFieldFocused)
-            } secondary: {
-                sessionControls
+            GeometryReader { geometry in
+                if geometry.size.width >= 700 && !dynamicTypeSize.isAccessibilitySize {
+                    HStack(alignment: .top, spacing: DS.Spacing.md) {
+                        ScrollView { sessionOverview }
+                            .frame(width: geometry.size.width * 0.35)
+                        sessionControls(showsOverview: false)
+                    }
+                } else {
+                    sessionControls(showsOverview: true)
+                }
             }
         }
         .background { DetailWaveBackground() }
@@ -314,10 +318,13 @@ struct WorkoutSessionView: View {
 
     // MARK: - Set Input Content
 
-    private var sessionControls: some View {
+    private func sessionControls(showsOverview: Bool) -> some View {
         VStack(spacing: 0) {
             ScrollView {
                 VStack(spacing: DS.Spacing.lg) {
+                    if showsOverview && !isInputFieldFocused {
+                        sessionOverview
+                    }
                     if showRestTimer {
                         restTimerContent
                     } else {
