@@ -31,6 +31,7 @@ related_solutions:
 | DUNETests/LaunchExperiencePlannerTests.swift | modify | 최초 설치/재실행/테스트/미지원 분기 |
 | DUNETests/HealthKitObserverManagerTests.swift | modify | 체성분 전달 정책 회귀 |
 | DUNETests/CardioSessionViewModelTests.swift | modify | 전체 단위 테스트에서 발견한 live HealthKit 의존을 기존 mock으로 격리 |
+| DUNEUITests/Helpers/UITestHelpers.swift | modify | 입력 전 포커스를 확인하고 제한적으로 재탭하여 UI 회귀의 입력 실패 방지 |
 
 ## Implementation Steps
 
@@ -62,3 +63,8 @@ related_solutions:
 - 최초 전체 단위 실행은 CardioSession 테스트가 실제 HealthKit VO₂ Max 쿼리를 호출하며 정체됐다. 기존 mock을 helper 기본값으로 연결한 뒤 통과했다.
 - 전체 UI 실행은 12개 통과, 기존 picker 테스트의 180초 제한 초과 1건을 확인한 후 다른 Health 작업의 단독 검증 조정으로 중단됐다. 전체 UI gate는 아직 미완료다.
 - 테스트 조정 중에는 새 시뮬레이터 실행을 보류하고, 재개 후 timeout 케이스와 전체 회귀를 확인한다. 실기기 background delivery는 아직 미검증이다.
+
+- 재개한 전체 UI에서 cardio 검색창 키보드 포커스 누락을 확인했다. 해당 케이스 단독 재실행은 97초에 통과했다. UI helper에 입력 전 포커스 확인과 최대 1회 재탭을 추가하여 검증한다.
+- 사용자가 원격 CI 대신 로컬 테스트만 계속하도록 명시했다. 기존 다른 작업의 짧은 검증 이후 로컬 전체 UI를 재개한다.
+
+- 사용자의 최종 지시로 전체 UI gate를 관련 테스트 통과로 축소했다. 전체 UI 실행은 중단했고 통과로 기록하지 않는다. 포커스 속성의 거짓 음성을 키보드 표시 확인으로 보완한 후 cardio 및 quick-start 검색 시나리오 2개가 모두 통과했다 (`ui-focus-fallback-targeted.log`).
