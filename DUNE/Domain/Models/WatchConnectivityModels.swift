@@ -27,7 +27,7 @@ struct WatchWorkoutUpdate: Codable, Sendable {
     var effortSourceRaw: String?
 
     init(exerciseID: String, exerciseName: String, completedSets: [WatchSetData], startTime: Date,
-         endTime: Date?, heartRateSamples: [WatchHeartRateSample], rpe: Int?,
+         endTime: Date?, heartRateSamples: [WatchHeartRateSample], rpe: Int? = nil,
          healthKitWorkoutID: String? = nil, calories: Double? = nil, calorieSourceRaw: String? = nil,
          plannedSetCount: Int? = nil, effortSourceRaw: String? = nil) {
         self.exerciseID = exerciseID

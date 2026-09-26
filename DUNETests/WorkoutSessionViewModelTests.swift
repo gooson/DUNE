@@ -169,6 +169,21 @@ struct WorkoutSessionViewModelTests {
         vm.fillSetFromPrevious(at: 0)
         #expect(vm.sets[0].weight == "60")
         #expect(vm.sets[0].reps == "10")
+        #expect(vm.sets[0].plannedReps == 10)
+    }
+
+    @Test("History uses its saved target to plan a new set")
+    func historyUsesSavedTarget() {
+        let vm = WorkoutSessionViewModel(exercise: makeExercise(), defaultSetCount: 1)
+        vm.previousSets = [PreviousSetInfo(
+            weight: 60, reps: 7, duration: nil, distance: nil, restDuration: nil,
+            plannedReps: 10, rpe: 9, rpeSourceRaw: "user"
+        )]
+        vm.fillSetFromPrevious(at: 0)
+        #expect(vm.sets[0].plannedReps == 10)
+        #expect(vm.sets[0].reps == "7")
+        #expect(vm.sets[0].rpe == nil)
+        #expect(vm.sets[0].rpeSourceRaw == nil)
     }
 
     @Test("fillSetFromPrevious copies duration and distance")
@@ -190,55 +205,231 @@ struct WorkoutSessionViewModelTests {
         #expect(vm.sets[0].distance == "5.5")
     }
 
-    @Test("applyProgressiveOverloadForNextSet increases by equipment policy when target reps met")
-    func progressiveOverloadIncreasesWeight() {
-        let exercise = makeExercise()
-        let vm = WorkoutSessionViewModel(exercise: exercise, defaultSetCount: 2)
+    @Test("Editing actual reps leaves the planned target and persisted target unchanged")
+    func actualRepsDoNotChangeTarget() throws {
+        let vm = WorkoutSessionViewModel(exercise: makeExercise(), defaultSetCount: 1)
+        #expect(vm.sets[0].plannedReps == WorkoutDefaults.defaultReps)
+        vm.sets[0].reps = "7"
         vm.sets[0].weight = "60"
-        vm.sets[0].reps = "10"
-        vm.previousSets = [
-            PreviousSetInfo(weight: 57.5, reps: 10, duration: nil, distance: nil, restDuration: nil)
-        ]
-
-        let updated = vm.applyProgressiveOverloadForNextSet(afterCompletingSetAt: 0, weightUnit: .kg)
-
-        #expect(updated)
-        #expect(vm.sets[1].weight == "62.5")
+        vm.sets[0].isCompleted = true
+        let record = try #require(vm.createValidatedRecord())
+        #expect(vm.sets[0].plannedReps == WorkoutDefaults.defaultReps)
+        #expect(record.plannedSetCount == 1)
+        #expect(record.completedSets[0].reps == 7)
+        #expect(record.completedSets[0].plannedReps == WorkoutDefaults.defaultReps)
     }
 
-
-
-    @Test("applyProgressiveOverloadForNextSet caps jump to 10 percent for light weights")
-    func progressiveOverloadCapsLargeJump() {
-        let exercise = makeExercise(equipment: .dumbbell)
-        let vm = WorkoutSessionViewModel(exercise: exercise, defaultSetCount: 2)
-        vm.sets[0].weight = "10"
-        vm.sets[0].reps = "12"
-        vm.previousSets = [
-            PreviousSetInfo(weight: 10, reps: 12, duration: nil, distance: nil, restDuration: nil)
-        ]
-
-        let updated = vm.applyProgressiveOverloadForNextSet(afterCompletingSetAt: 0, weightUnit: .kg)
-
-        #expect(updated)
-        #expect(vm.sets[1].weight == "11")
-    }
-
-    @Test("applyProgressiveOverloadForNextSet keeps next set unchanged when reps are below target")
-    func progressiveOverloadBlockedOnFailure() {
-        let exercise = makeExercise()
-        let vm = WorkoutSessionViewModel(exercise: exercise, defaultSetCount: 2)
+    @Test("Missed target offers a reduction but never edits the next entered weight")
+    func nextSetRecommendationIsExplicit() {
+        let vm = WorkoutSessionViewModel(exercise: makeExercise(), defaultSetCount: 2)
         vm.sets[0].weight = "60"
         vm.sets[0].reps = "7"
+        vm.sets[0].rpe = 9
+        vm.sets[0].rpeSourceRaw = "user"
+        vm.sets[0].isCompleted = true
+        vm.sets[1].weight = "57.5"
+
+        vm.prepareNextSetRecommendation(afterCompletingSetAt: 0)
+
+        #expect(vm.pendingWeightRecommendation?.reason == .highEffort)
+        #expect(vm.recommendationSetIndex == 1)
+        #expect(vm.sets[1].weight == "57.5")
+        #expect(vm.applyWeightRecommendation())
+        #expect(vm.sets[1].weight == "55")
+        #expect(vm.pendingWeightRecommendation == nil)
+    }
+
+    @Test("A weight entered after recommendation invalidates explicit apply")
+    func manuallyEditedNextWeightIsProtected() {
+        let vm = WorkoutSessionViewModel(exercise: makeExercise(), defaultSetCount: 2)
+        vm.sets[0].weight = "60"
+        vm.sets[0].reps = "7"
+        vm.sets[0].isCompleted = true
+        vm.prepareNextSetRecommendation(afterCompletingSetAt: 0)
+        vm.sets[1].weight = "52.5"
+        #expect(!vm.applyWeightRecommendation())
+        #expect(vm.sets[1].weight == "52.5")
+        #expect(vm.pendingWeightRecommendation == nil)
+    }
+
+    @Test("Changing the destination target invalidates a pending recommendation")
+    func changedTargetInvalidatesRecommendation() {
+        let vm = WorkoutSessionViewModel(exercise: makeExercise(), defaultSetCount: 2)
+        vm.sets[0].weight = "60"
+        vm.sets[0].reps = "7"
+        vm.sets[0].isCompleted = true
         vm.sets[1].weight = "60"
-        vm.previousSets = [
-            PreviousSetInfo(weight: 60, reps: 10, duration: nil, distance: nil, restDuration: nil)
-        ]
-
-        let updated = vm.applyProgressiveOverloadForNextSet(afterCompletingSetAt: 0, weightUnit: .kg)
-
-        #expect(!updated)
+        vm.prepareNextSetRecommendation(afterCompletingSetAt: 0)
+        vm.sets[1].plannedReps = 8
+        #expect(!vm.applyWeightRecommendation())
         #expect(vm.sets[1].weight == "60")
+        #expect(vm.pendingWeightRecommendation == nil)
+    }
+
+    @Test("Unknown RPE source does not qualify a completed session for level up")
+    func missingSourceBlocksLevelUp() {
+        let vm = WorkoutSessionViewModel(exercise: makeExercise(), defaultSetCount: 1)
+        vm.sets[0].weight = "60"
+        vm.sets[0].rpe = 7
+        vm.sets[0].isCompleted = true
+        #expect(!vm.shouldSuggestLevelUp)
+        vm.sets[0].rpeSourceRaw = "estimated"
+        #expect(!vm.shouldSuggestLevelUp)
+        vm.sets[0].rpeSourceRaw = "user"
+        #expect(vm.shouldSuggestLevelUp)
+        vm.sets[0].reps = "7"
+        #expect(!vm.shouldSuggestLevelUp)
+    }
+
+    @Test("Draft roundtrip preserves targets and RPE provenance")
+    func draftMetadataRoundtrip() throws {
+        defer { WorkoutSessionDraft.clear() }
+        let vm = WorkoutSessionViewModel(exercise: makeExercise(), defaultSetCount: 1)
+        vm.sets[0].plannedReps = 8
+        vm.sets[0].reps = "6"
+        vm.sets[0].rpe = 9
+        vm.sets[0].rpeSourceRaw = "user"
+        vm.saveDraft()
+
+        let draft = try #require(WorkoutSessionDraft.load())
+        let restored = WorkoutSessionViewModel(exercise: makeExercise(), defaultSetCount: 1)
+        restored.restoreFromDraft(draft)
+        #expect(restored.sets[0].plannedReps == 8)
+        #expect(restored.sets[0].reps == "6")
+        #expect(restored.sets[0].rpe == 9)
+        #expect(restored.sets[0].rpeSourceRaw == "user")
+    }
+
+    @Test("History and template initialization preserve restored draft entries")
+    func restoredDraftSurvivesInitialization() throws {
+        let exercise = makeExercise()
+        let original = WorkoutSessionViewModel(exercise: exercise, defaultSetCount: 1)
+        original.sets[0].weight = "47.5"
+        original.sets[0].reps = "6"
+        original.sets[0].plannedReps = 8
+        original.sets[0].rpe = 9
+        original.sets[0].rpeSourceRaw = "user"
+        original.templateRestDuration = 75
+        original.saveDraft()
+        defer { WorkoutSessionDraft.clear() }
+        let draft = try #require(WorkoutSessionDraft.load())
+
+        let restored = WorkoutSessionViewModel(exercise: exercise, defaultSetCount: 1)
+        restored.restoreFromDraft(draft)
+        let previous = ExerciseRecord(
+            date: Date(), exerciseType: exercise.name,
+            exerciseDefinitionID: exercise.id, plannedSetCount: 1
+        )
+        previous.sets = [WorkoutSet(
+            setNumber: 1, weight: 60, reps: 10, isCompleted: true,
+            rpe: 7, plannedReps: 10, rpeSourceRaw: "user"
+        )]
+        let entry = TemplateEntry(
+            exerciseDefinitionID: exercise.id, exerciseName: exercise.localizedName,
+            defaultSets: 1, defaultReps: 12, defaultWeightKg: 80,
+            restDuration: 120, equipment: exercise.equipment.rawValue
+        )
+
+        restored.loadPreviousSets(from: [previous])
+        restored.applyTemplateDefaults(entry)
+        #expect(restored.previousSets.count == 1)
+        #expect(restored.sets.count == 1)
+        #expect(restored.sets[0].weight == "47.5")
+        #expect(restored.sets[0].reps == "6")
+        #expect(restored.sets[0].plannedReps == 8)
+        #expect(restored.sets[0].rpe == 9)
+        #expect(restored.sets[0].rpeSourceRaw == "user")
+        #expect(restored.templateRestDuration == 75)
+        #expect(restored.pendingWeightRecommendation == nil)
+
+        restored.fillSetFromPrevious(at: 0)
+        #expect(restored.sets[0].weight == "60")
+        #expect(restored.sets[0].plannedReps == 10)
+    }
+
+    @Test("Legacy draft does not infer a target from performed reps")
+    func legacyDraftTargetStaysUnknown() throws {
+        let original = WorkoutSessionDraft(
+            exerciseDefinition: makeExercise(),
+            sets: [.init(
+                setNumber: 1, weight: "60", reps: "7", duration: "", distance: "",
+                level: nil, isCompleted: true, setTypeRaw: SetType.working.rawValue,
+                restDuration: nil
+            )],
+            sessionStartTime: Date(), memo: "", savedAt: Date()
+        )
+        var json = try #require(JSONSerialization.jsonObject(with: JSONEncoder().encode(original)) as? [String: Any])
+        var rows = try #require(json["sets"] as? [[String: Any]])
+        rows[0].removeValue(forKey: "plannedReps")
+        rows[0].removeValue(forKey: "rpeSourceRaw")
+        rows[0].removeValue(forKey: "rpe")
+        json["sets"] = rows
+        let legacy = try JSONDecoder().decode(
+            WorkoutSessionDraft.self,
+            from: JSONSerialization.data(withJSONObject: json)
+        )
+        let vm = WorkoutSessionViewModel(exercise: makeExercise(), defaultSetCount: 1)
+        vm.restoreFromDraft(legacy)
+        #expect(vm.sets[0].plannedReps == nil)
+        #expect(vm.sets[0].reps == "7")
+        #expect(vm.sets[0].rpeSourceRaw == nil)
+    }
+
+    @Test("Previous completed workout offers progression without changing first set weight")
+    func previousWorkoutRecommendation() {
+        let vm = WorkoutSessionViewModel(exercise: makeExercise(), defaultSetCount: 1)
+        let record = ExerciseRecord(
+            date: Date(), exerciseType: "Bench Press",
+            exerciseDefinitionID: "test-bench-press", plannedSetCount: 1
+        )
+        record.sets = [WorkoutSet(
+            setNumber: 1, weight: 60, reps: 10, isCompleted: true,
+            rpe: 7, plannedReps: 10, rpeSourceRaw: "user"
+        )]
+        vm.loadPreviousSets(from: [record])
+        #expect(vm.sets[0].weight == "60")
+        #expect(vm.sets[0].plannedReps == 10)
+        #expect(vm.pendingWeightRecommendation?.reason == .readyToProgress)
+        #expect(vm.applyWeightRecommendation())
+        #expect(vm.sets[0].weight == "62.5")
+    }
+
+    @Test("Partial and legacy workouts do not offer an intersession increase")
+    func incompleteOrUnknownPreviousWorkout() {
+        let vm = WorkoutSessionViewModel(exercise: makeExercise(), defaultSetCount: 1)
+        let record = ExerciseRecord(
+            date: Date(), exerciseType: "Bench Press",
+            exerciseDefinitionID: "test-bench-press", plannedSetCount: 2
+        )
+        record.sets = [WorkoutSet(
+            setNumber: 1, weight: 60, reps: 10, isCompleted: true,
+            rpe: 7, plannedReps: 10, rpeSourceRaw: "user"
+        )]
+        vm.loadPreviousSets(from: [record])
+        #expect(vm.pendingWeightRecommendation?.reason == .insufficientData)
+        #expect(vm.sets[0].weight == "60")
+        record.plannedSetCount = 1
+        record.sets?[0].rpeSourceRaw = nil
+        vm.loadPreviousSets(from: [record])
+        #expect(vm.pendingWeightRecommendation?.reason == .insufficientData)
+        #expect(vm.sets[0].weight == "60")
+    }
+
+    @Test("Pound recommendation converts kilograms only when explicitly applied")
+    func poundRecommendation() throws {
+        let vm = WorkoutSessionViewModel(exercise: makeExercise(), defaultSetCount: 2)
+        vm.convertWeightUnit(from: .kg, to: .lb)
+        vm.sets[0].weight = "132.2774"
+        vm.sets[0].reps = "7"
+        vm.sets[0].isCompleted = true
+        vm.sets[1].weight = "130"
+        vm.prepareNextSetRecommendation(afterCompletingSetAt: 0, weightUnit: .lb)
+        #expect(vm.sets[1].weight == "130")
+        let targetKg = try #require(vm.pendingWeightRecommendation?.weight)
+        #expect(abs(targetKg - 55) < 0.01)
+        #expect(vm.applyWeightRecommendation(weightUnit: .lb))
+        let appliedLb = try #require(Double(vm.sets[1].weight))
+        #expect(abs(WeightUnit.lb.toKg(appliedLb) - 55) < 0.05)
     }
 
     @Test("createValidatedRecord returns nil with no completed sets")
