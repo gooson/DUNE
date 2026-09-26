@@ -171,6 +171,7 @@ final class WorkoutSessionViewModel {
     func applyTemplateDefaults(_ entry: TemplateEntry, weightUnit: WeightUnit = .kg) {
         currentWeightUnit = weightUnit
         guard !restoredFromDraft else { return }
+        clearRecommendation()
         let profile = TemplateExerciseProfile(exercise: exercise)
         guard profile.showsStrengthDefaultsEditor else {
             templateRestDuration = nil
@@ -681,8 +682,7 @@ final class WorkoutSessionViewModel {
     }
 
     func restoreFromDraft(_ draft: WorkoutSessionDraft) {
-        clearRecommendation()
-        restoredFromDraft = true
+        markDraftRestored()
         sessionStartTime = draft.sessionStartTime
         memo = draft.memo
         templateRestDuration = draft.templateRestDuration

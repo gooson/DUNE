@@ -394,6 +394,65 @@ struct WorkoutSessionViewModelTests {
         #expect(vm.sets[0].weight == "62.5")
     }
 
+    @Test("Template defaults clear a prior history recommendation when replacing the plan")
+    func templateClearsHistoryRecommendation() {
+        let exercise = makeExercise()
+        let vm = WorkoutSessionViewModel(exercise: exercise, defaultSetCount: 1)
+        let previous = ExerciseRecord(
+            date: Date(), exerciseType: exercise.name,
+            exerciseDefinitionID: exercise.id, plannedSetCount: 1
+        )
+        previous.sets = [WorkoutSet(
+            setNumber: 1, weight: 60, reps: 10, isCompleted: true,
+            rpe: 7, plannedReps: 10, rpeSourceRaw: "user"
+        )]
+        vm.loadPreviousSets(from: [previous])
+        #expect(vm.pendingWeightRecommendation?.reason == .readyToProgress)
+
+        let entry = TemplateEntry(
+            exerciseDefinitionID: exercise.id, exerciseName: exercise.localizedName,
+            defaultSets: 1, defaultReps: 8, defaultWeightKg: 80,
+            restDuration: 120, equipment: exercise.equipment.rawValue
+        )
+        vm.applyTemplateDefaults(entry)
+
+        #expect(vm.sets[0].weight == "80")
+        #expect(vm.sets[0].plannedReps == 8)
+        #expect(vm.pendingWeightRecommendation == nil)
+        #expect(vm.recommendationSetIndex == nil)
+        #expect(!vm.applyWeightRecommendation())
+        #expect(vm.sets[0].weight == "80")
+    }
+
+    @Test("Direct draft restore marker protects manually restored sets")
+    func directDraftRestoreMarker() {
+        let exercise = makeExercise()
+        let vm = WorkoutSessionViewModel(exercise: exercise, defaultSetCount: 1)
+        vm.sets[0].weight = "45"
+        vm.sets[0].reps = "6"
+        vm.sets[0].plannedReps = 8
+        vm.markDraftRestored()
+
+        let previous = ExerciseRecord(
+            date: Date(), exerciseType: exercise.name,
+            exerciseDefinitionID: exercise.id, plannedSetCount: 1
+        )
+        previous.sets = [WorkoutSet(
+            setNumber: 1, weight: 60, reps: 10, isCompleted: true,
+            rpe: 7, plannedReps: 10, rpeSourceRaw: "user"
+        )]
+        vm.loadPreviousSets(from: [previous])
+        vm.applyTemplateDefaults(TemplateEntry(
+            exerciseDefinitionID: exercise.id, exerciseName: exercise.localizedName,
+            defaultSets: 1, defaultReps: 12, defaultWeightKg: 80,
+            restDuration: 120, equipment: exercise.equipment.rawValue
+        ))
+        #expect(vm.sets[0].weight == "45")
+        #expect(vm.sets[0].reps == "6")
+        #expect(vm.sets[0].plannedReps == 8)
+        #expect(vm.pendingWeightRecommendation == nil)
+    }
+
     @Test("Partial and legacy workouts do not offer an intersession increase")
     func incompleteOrUnknownPreviousWorkout() {
         let vm = WorkoutSessionViewModel(exercise: makeExercise(), defaultSetCount: 1)
