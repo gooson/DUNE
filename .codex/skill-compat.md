@@ -58,6 +58,7 @@ Claude skill 문서를 그대로 유지하면서 Codex에서 실행 semantics를
 5. 완료 증빙: 변경 경로/판정 이유, 실제 명령·plan·기기, 결과 로그, 수행/skip 수, 관련 suite 실행 여부를 기록한다. UI가 필요한데 미실행/0개/unknown count/필수 suite 누락/실패면 게이트 실패다. 정당한 UI 면제는 `skipped`로 기록하고 “UI 통과/레이아웃 확인 완료”라고 보고하지 않는다.
 6. 수정 중에는 실패 관련 테스트부터 확인한다. 최종 변경 상태에 필요한 범위가 모두 통과해야 Review/Ship로 진행한다. 동일 성공 증거 재사용은 `.codex/token-efficiency.md` 조건을 따르며 targeted 성공을 full 증거로 승격하지 않는다.
 7. 자동 판정 범위를 축소한 경우 근거와 대체 검증을 Proof Ledger에 남긴다. 인프라 변경은 실행기 fixture/구문/parity 검증도 수행한다. 빌드, 리뷰, Compound, Ship의 다른 게이트는 유지한다.
+   - 실행기/판정기만 변경하고 앱 소스·프로젝트·UI test body·seed/helper가 동일한 경우: 전체 화면 회귀 대신 CLI 분기/선택/실행 증거의 fixture 테스트와 변경된 CLI 조합의 실제 smoke+명시적 테스트 실행으로 검증할 수 있다. `git diff`로 앱 관련 변경 없음, 실제 명령과 통과 수를 기록한다. 앱 시작/설치/seed/병렬화/기기 선택 로직까지 변경했거나 영향이 불명확하면 이 예외를 적용하지 않는다. 중단한 full 실행은 통과 증거가 아니다.
 
 ### /plan
 

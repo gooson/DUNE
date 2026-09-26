@@ -76,7 +76,8 @@ PR CI는 smoke, nightly는 full 회귀로 분리돼 있으나 Codex `/run`은 �
 - Python unittest 및 shell mock 실행: 실제 runner argv를 확인하되 simulator 부팅은 하지 않는다.
 - 판정기 fixture와 임시 Git 저장소로 미커밋/신규/rename 회귀를 검증한다.
 - `bash -n`, parity 검사, `git diff --check`.
-- 실제 `scripts/build-ios.sh`, UI 실행기 자체 변경이므로 이번 작업은 기존 full iOS UI 게이트 실행.
+- 실제 `scripts/build-ios.sh`, 실행기의 변경된 `--smoke + --only-testing` 조합 실행. 앱/프로젝트/UI test body/seed/helper 변경이 없는 CLI 선택 변경이므로 도구 fixture와 실제 조합 검증을 필수 게이트로 한다.
+- 처음 시도한 full iOS 실행은 환경 복구 후 첫 회귀 케이스가 96초에 통과했으나 전체 완료 전에 범위를 조정했다. 중단한 full은 통과로 보고하지 않는다.
 - 이후 Phase에서 같은 증거 재사용은 파일/환경 일치 조건을 확인한다.
 
 ## Risks

@@ -31,6 +31,7 @@ TEST_PLAN=""
 STREAM_LOGS=0
 SMOKE_MODE=0
 DRY_RUN=0
+CLEANUP_MODE=0
 
 if [[ "${CI:-}" == "true" ]]; then
     STREAM_LOGS=1
@@ -75,8 +76,8 @@ while [[ $# -gt 0 ]]; do
             shift
             ;;
         --cleanup-simulators)
-            cleanup_worktree_simulators --current
-            exit 0
+            CLEANUP_MODE=1
+            shift
             ;;
         *)
             echo "Unknown option: $1"
@@ -85,6 +86,15 @@ while [[ $# -gt 0 ]]; do
             ;;
     esac
 done
+
+if [[ "$CLEANUP_MODE" -eq 1 ]]; then
+    if [[ "$DRY_RUN" -eq 1 ]]; then
+        echo "--dry-run cannot be combined with --cleanup-simulators" >&2
+        exit 2
+    fi
+    cleanup_worktree_simulators --current
+    exit 0
+fi
 
 resolve_test_plan() {
     local requested_plan="$1"

@@ -36,6 +36,15 @@ def dry_verify_command(result: subprocess.CompletedProcess[str]) -> list[str]:
 
 
 class RunnerArgvTests(unittest.TestCase):
+    def test_dry_run_cannot_cleanup_in_either_option_order(self) -> None:
+        for args in [("--dry-run", "--cleanup-simulators"),
+                     ("--cleanup-simulators", "--dry-run")]:
+            with self.subTest(args=args):
+                result = subprocess.run(["bash", str(RUNNER), *args], cwd=ROOT,
+                                        text=True, capture_output=True)
+                self.assertEqual(result.returncode, 2)
+                self.assertIn("cannot be combined", result.stderr)
+
     def test_default_is_full_target(self) -> None:
         result, command = dry_run()
         self.assertEqual(result.returncode, 0, result.stderr)
