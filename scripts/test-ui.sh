@@ -12,6 +12,7 @@ source "$ROOT_DIR/scripts/lib/regen-project.sh"
 source "$ROOT_DIR/scripts/lib/simulator-boot.sh"
 source "$ROOT_DIR/scripts/lib/simulator-worktree.sh"
 TEST_SUMMARY="$ROOT_DIR/scripts/lib/test-log-summary.py"
+TEST_VERIFY="$ROOT_DIR/scripts/lib/verify-ui-test-log.py"
 
 PROJECT_SPEC="DUNE/project.yml"
 PROJECT_FILE="DUNE/DUNE.xcodeproj"
@@ -29,6 +30,7 @@ ONLY_TESTING=()
 TEST_PLAN=""
 STREAM_LOGS=0
 SMOKE_MODE=0
+DRY_RUN=0
 
 if [[ "${CI:-}" == "true" ]]; then
     STREAM_LOGS=1
@@ -68,13 +70,17 @@ while [[ $# -gt 0 ]]; do
             SMOKE_MODE=1
             shift
             ;;
+        --dry-run)
+            DRY_RUN=1
+            shift
+            ;;
         --cleanup-simulators)
             cleanup_worktree_simulators --current
             exit 0
             ;;
         *)
             echo "Unknown option: $1"
-            echo "Usage: $0 [--no-regen] [--stream-log | --no-stream-log] [--log-file <path>] [--skip-testing <target>] [--only-testing <target>] [--test-plan <name>] [--smoke] [--cleanup-simulators]"
+            echo "Usage: $0 [--no-regen] [--stream-log | --no-stream-log] [--log-file <path>] [--skip-testing <target>] [--only-testing <target>] [--test-plan <name>] [--smoke] [--dry-run] [--cleanup-simulators]"
             exit 2
             ;;
     esac
@@ -96,7 +102,7 @@ resolve_test_plan() {
         esac
     fi
 
-    if [[ "$SMOKE_MODE" -eq 1 ]]; then
+    if [[ "$SMOKE_MODE" -eq 1 && "${#ONLY_TESTING[@]}" -eq 0 ]]; then
         echo "DUNEUITests-PR"
     else
         echo "DUNEUITests-Full"
@@ -105,10 +111,33 @@ resolve_test_plan() {
 
 TEST_PLAN="$(resolve_test_plan "$TEST_PLAN")"
 
-mkdir -p "$LOG_DIR" "$DERIVED_DATA_DIR"
-regen_project
+for target in ${ONLY_TESTING[@]+"${ONLY_TESTING[@]}"} ${SKIP_TESTING[@]+"${SKIP_TESTING[@]}"}; do
+    if [[ ! "$target" =~ ^DUNEUITests(/[A-Za-z_][A-Za-z_0-9]*){0,2}$ ]]; then
+        echo "Invalid UI test selector: $target" >&2
+        exit 2
+    fi
+done
+
+PLAN_FILE="DUNEUITests/${TEST_PLAN}.xctestplan"
+if [[ ! -f "$PLAN_FILE" ]]; then
+    echo "Unknown UI test plan: $TEST_PLAN" >&2
+    exit 2
+fi
+if [[ "${#ONLY_TESTING[@]}" -gt 0 ]]; then
+    PLAN_CHECK=(python3 "$TEST_VERIFY" --check-plan "$PLAN_FILE")
+    for target in ${ONLY_TESTING[@]+"${ONLY_TESTING[@]}"}; do
+        PLAN_CHECK+=(--only "$target")
+    done
+    "${PLAN_CHECK[@]}"
+fi
+
+if [[ "$DRY_RUN" -eq 0 ]]; then
+    mkdir -p "$LOG_DIR" "$DERIVED_DATA_DIR"
+    regen_project
+fi
 
 # Boot simulator if not already booted (UI tests need it)
+if [[ "$DRY_RUN" -eq 0 ]]; then
 echo "Ensuring simulator '$SIMULATOR_NAME' is booted..."
 DEVICE_INFO=$(xcrun simctl list devices available -j \
     | python3 -c "
@@ -166,6 +195,7 @@ if [[ -n "$DEVICE_INFO" ]]; then
 else
     echo "Warning: Could not find simulator '$SIMULATOR_NAME' (OS $SIMULATOR_OS). xcodebuild will attempt to boot one."
 fi
+fi
 
 echo "Running UI tests with scheme '$SCHEME' for destination '$DESTINATION'..."
 
@@ -184,43 +214,69 @@ TEST_CMD=(xcodebuild test -project "$PROJECT_FILE"
 TEST_CMD+=(-testPlan "$TEST_PLAN")
 echo "Using test plan: $TEST_PLAN"
 
+if [[ "$SMOKE_MODE" -eq 1 ]]; then
+    SMOKE_ONLY=(
+        DUNEUITests/DashboardSmokeTests
+        DUNEUITests/ActivitySmokeTests
+        DUNEUITests/WellnessSmokeTests/testWellnessTabLoads
+        DUNEUITests/LifeSmokeTests
+    )
+    SMOKE_SKIP=(
+        DUNEUITests/ActivitySmokeTests/testPullToRefreshShowsWaveIndicator
+        DUNEUITests/LifeSmokeTests/testWeeklyFrequencyShowsStepper
+        DUNEUITests/WellnessSmokeTests/testBodyFormSaveEnablesAfterInput
+        DUNEUITests/WellnessSmokeTests/testInjuryRecoveredToggleShowsEndDate
+        DUNEUITests/SettingsSmokeTests/testAppearanceSectionExists
+        DUNEUITests/SettingsSmokeTests/testDataPrivacySectionExists
+        DUNEUITests/SettingsSmokeTests/testAboutSectionExists
+        DUNEUITests/SettingsSmokeTests/testPreferredExercisesLinkExists
+        DUNEUITests/SettingsSmokeTests/testNavigateToPreferredExercises
+        DUNEUITests/SettingsSmokeTests/testWhatsNewLinkExists
+        DUNEUITests/SettingsSmokeTests/testNavigateToWhatsNew
+        DUNEUITests/SettingsSmokeTests/testWhatsNewNotificationsDetailShowsArtwork
+        DUNEUITests/SettingsSmokeTests/testWhatsNewSleepDebtDetailExists
+        DUNEUITests/SettingsSmokeTests/testWhatsNewWidgetDetailExists
+        DUNEUITests/SettingsSmokeTests/testWhatsNewMuscleMapDetailExists
+    )
+    for target in "${SMOKE_ONLY[@]}"; do
+        TEST_CMD+=(-only-testing "$target")
+    done
+    for skip in "${SMOKE_SKIP[@]}"; do
+        overridden=0
+        for target in ${ONLY_TESTING[@]+"${ONLY_TESTING[@]}"}; do
+            if [[ "$skip" == "$target" || "$skip" == "$target/"* ]]; then
+                overridden=1
+                break
+            fi
+        done
+        if [[ "$overridden" -eq 0 ]]; then
+            TEST_CMD+=(-skip-testing "$skip")
+        fi
+    done
+    echo "Smoke mode enabled: running iOS smoke suite"
+fi
+
 if [[ "${#ONLY_TESTING[@]}" -gt 0 ]]; then
-    for target in "${ONLY_TESTING[@]}"; do
+    for target in ${ONLY_TESTING[@]+"${ONLY_TESTING[@]}"}; do
         TEST_CMD+=(-only-testing "$target")
         echo "Only testing: $target"
     done
-else
-    if [[ "$SMOKE_MODE" -eq 1 ]]; then
-        TEST_CMD+=(-only-testing DUNEUITests/DashboardSmokeTests)
-        TEST_CMD+=(-only-testing DUNEUITests/ActivitySmokeTests)
-        TEST_CMD+=(-only-testing DUNEUITests/WellnessSmokeTests/testWellnessTabLoads)
-        TEST_CMD+=(-only-testing DUNEUITests/LifeSmokeTests)
-        TEST_CMD+=(-skip-testing DUNEUITests/ActivitySmokeTests/testPullToRefreshShowsWaveIndicator)
-        TEST_CMD+=(-skip-testing DUNEUITests/LifeSmokeTests/testWeeklyFrequencyShowsStepper)
-        TEST_CMD+=(-skip-testing DUNEUITests/WellnessSmokeTests/testBodyFormSaveEnablesAfterInput)
-        TEST_CMD+=(-skip-testing DUNEUITests/WellnessSmokeTests/testInjuryRecoveredToggleShowsEndDate)
-        TEST_CMD+=(-skip-testing DUNEUITests/SettingsSmokeTests/testAppearanceSectionExists)
-        TEST_CMD+=(-skip-testing DUNEUITests/SettingsSmokeTests/testDataPrivacySectionExists)
-        TEST_CMD+=(-skip-testing DUNEUITests/SettingsSmokeTests/testAboutSectionExists)
-        TEST_CMD+=(-skip-testing DUNEUITests/SettingsSmokeTests/testPreferredExercisesLinkExists)
-        TEST_CMD+=(-skip-testing DUNEUITests/SettingsSmokeTests/testNavigateToPreferredExercises)
-        TEST_CMD+=(-skip-testing DUNEUITests/SettingsSmokeTests/testWhatsNewLinkExists)
-        TEST_CMD+=(-skip-testing DUNEUITests/SettingsSmokeTests/testNavigateToWhatsNew)
-        TEST_CMD+=(-skip-testing DUNEUITests/SettingsSmokeTests/testWhatsNewNotificationsDetailShowsArtwork)
-        TEST_CMD+=(-skip-testing DUNEUITests/SettingsSmokeTests/testWhatsNewSleepDebtDetailExists)
-        TEST_CMD+=(-skip-testing DUNEUITests/SettingsSmokeTests/testWhatsNewWidgetDetailExists)
-        TEST_CMD+=(-skip-testing DUNEUITests/SettingsSmokeTests/testWhatsNewMuscleMapDetailExists)
-        echo "Smoke mode enabled: running iOS smoke suite only"
-    else
-        TEST_CMD+=(-only-testing DUNEUITests)
-    fi
+elif [[ "$SMOKE_MODE" -eq 0 ]]; then
+    TEST_CMD+=(-only-testing DUNEUITests)
 fi
 
 if [[ "${#SKIP_TESTING[@]}" -gt 0 ]]; then
-    for skip in "${SKIP_TESTING[@]}"; do
+    for skip in ${SKIP_TESTING[@]+"${SKIP_TESTING[@]}"}; do
         TEST_CMD+=(-skip-testing "$skip")
         echo "Skipping: $skip"
     done
+fi
+
+if [[ "$DRY_RUN" -eq 1 ]]; then
+    printf 'DRY_RUN_COMMAND='
+    printf '%q ' "${TEST_CMD[@]}"
+    printf '\n'
+    exit 0
 fi
 
 if [[ "$STREAM_LOGS" -eq 1 ]]; then
@@ -241,5 +297,15 @@ set -e
 if ! python3 "$TEST_SUMMARY" "$LOG_FILE" "$TEST_EXIT" "UI tests"; then
     echo "UI tests: summary unavailable (xcodebuild exit ${TEST_EXIT})"
     echo "Full log: $LOG_FILE"
+fi
+if [[ "$TEST_EXIT" -eq 0 ]]; then
+    VERIFY_CMD=(python3 "$TEST_VERIFY" --log "$LOG_FILE")
+    for target in ${ONLY_TESTING[@]+"${ONLY_TESTING[@]}"}; do
+        VERIFY_CMD+=(--only "$target")
+    done
+    for skip in ${SKIP_TESTING[@]+"${SKIP_TESTING[@]}"}; do
+        VERIFY_CMD+=(--skip "$skip")
+    done
+    "${VERIFY_CMD[@]}" || exit 1
 fi
 exit "$TEST_EXIT"
