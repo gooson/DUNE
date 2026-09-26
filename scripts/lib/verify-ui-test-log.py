@@ -8,7 +8,7 @@ import sys
 from pathlib import Path
 
 
-COUNT = re.compile(r"Executed (\d+) tests?, with (\d+) failures?")
+COUNT = re.compile(r"Executed (\d+) tests?, with (?:(\d+) tests? skipped and )?(\d+) failures?")
 CASE = re.compile(r"Test Case '-\[DUNEUITests\.([A-Za-z_][\w]*) ([A-Za-z_][\w]*)\]' passed")
 ALT_CASE = re.compile(r"Test Case 'DUNEUITests\.([A-Za-z_][\w]*)\.([A-Za-z_][\w]*)\(\)' passed")
 
@@ -46,7 +46,7 @@ def verify(path: Path, selectors: list[str], skips: list[str]) -> None:
         for line in log:
             count = COUNT.search(line)
             if count:
-                counts.append((int(count.group(1)), int(count.group(2))))
+                counts.append((int(count.group(1)), int(count.group(3))))
             case = CASE.search(line) or ALT_CASE.search(line)
             if case:
                 cases.add(f"DUNEUITests/{case.group(1)}/{case.group(2)}")

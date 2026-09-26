@@ -28,6 +28,13 @@ def values(command: list[str], flag: str) -> list[str]:
     return [command[i + 1] for i, part in enumerate(command[:-1]) if part == flag]
 
 
+def dry_verify_command(result: subprocess.CompletedProcess[str]) -> list[str]:
+    command = next((line.removeprefix("DRY_RUN_VERIFY_COMMAND=")
+                    for line in result.stdout.splitlines()
+                    if line.startswith("DRY_RUN_VERIFY_COMMAND=")), "")
+    return shlex.split(command)
+
+
 class RunnerArgvTests(unittest.TestCase):
     def test_default_is_full_target(self) -> None:
         result, command = dry_run()
@@ -41,6 +48,9 @@ class RunnerArgvTests(unittest.TestCase):
         self.assertEqual(values(command, "-testPlan"), ["DUNEUITests-PR"])
         self.assertIn(SMOKE, values(command, "-only-testing"))
         self.assertIn(DEFAULT_SKIP, values(command, "-skip-testing"))
+        verify = dry_verify_command(result)
+        self.assertEqual(values(verify, "--only"), values(command, "-only-testing"))
+        self.assertEqual(values(verify, "--skip"), values(command, "-skip-testing"))
 
     def test_smoke_and_explicit_union_uses_full_plan(self) -> None:
         result, command = dry_run("--smoke", "--only-testing", EXTRA)
@@ -48,6 +58,9 @@ class RunnerArgvTests(unittest.TestCase):
         self.assertEqual(values(command, "-testPlan"), ["DUNEUITests-Full"])
         self.assertIn(SMOKE, values(command, "-only-testing"))
         self.assertIn(EXTRA, values(command, "-only-testing"))
+        verify = dry_verify_command(result)
+        self.assertEqual(values(verify, "--only"), values(command, "-only-testing"))
+        self.assertEqual(values(verify, "--skip"), values(command, "-skip-testing"))
 
     def test_explicit_suite_overrides_smoke_default_skip(self) -> None:
         result, command = dry_run("--smoke", "--only-testing", "DUNEUITests/ActivitySmokeTests")
@@ -99,6 +112,14 @@ class LogVerifierTests(unittest.TestCase):
             with self.subTest(ending=ending):
                 log = case + "Executed 1 test, with 0 failures\n" + ending
                 self.assertNotEqual(self.verify(log).returncode, 0)
+
+    def test_final_skipped_summary_is_authoritative(self) -> None:
+        case = "Test Case '-[DUNEUITests.DashboardSmokeTests testLaunch]' passed\n"
+        success = case + "Executed 3 tests, with 1 test skipped and 0 failures (0 unexpected)\n"
+        self.assertEqual(self.verify(success).returncode, 0)
+        failed = (case + "Executed 3 tests, with 0 failures\n"
+                  "Executed 3 tests, with 1 test skipped and 1 failure (0 unexpected)\n")
+        self.assertNotEqual(self.verify(failed).returncode, 0)
 
     def test_started_or_failed_case_is_not_execution_evidence(self) -> None:
         for status in ("started", "failed"):

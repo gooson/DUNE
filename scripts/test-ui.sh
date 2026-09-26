@@ -272,9 +272,25 @@ if [[ "${#SKIP_TESTING[@]}" -gt 0 ]]; then
     done
 fi
 
+# Verify the exact selectors and skips passed to xcodebuild, including smoke defaults.
+VERIFY_CMD=(python3 "$TEST_VERIFY" --log "$LOG_FILE")
+for ((i=0; i<${#TEST_CMD[@]}; i++)); do
+    case "${TEST_CMD[i]}" in
+        -only-testing)
+            VERIFY_CMD+=(--only "${TEST_CMD[i+1]}")
+            ;;
+        -skip-testing)
+            VERIFY_CMD+=(--skip "${TEST_CMD[i+1]}")
+            ;;
+    esac
+done
+
 if [[ "$DRY_RUN" -eq 1 ]]; then
     printf 'DRY_RUN_COMMAND='
     printf '%q ' "${TEST_CMD[@]}"
+    printf '\n'
+    printf 'DRY_RUN_VERIFY_COMMAND='
+    printf '%q ' "${VERIFY_CMD[@]}"
     printf '\n'
     exit 0
 fi
@@ -299,13 +315,6 @@ if ! python3 "$TEST_SUMMARY" "$LOG_FILE" "$TEST_EXIT" "UI tests"; then
     echo "Full log: $LOG_FILE"
 fi
 if [[ "$TEST_EXIT" -eq 0 ]]; then
-    VERIFY_CMD=(python3 "$TEST_VERIFY" --log "$LOG_FILE")
-    for target in ${ONLY_TESTING[@]+"${ONLY_TESTING[@]}"}; do
-        VERIFY_CMD+=(--only "$target")
-    done
-    for skip in ${SKIP_TESTING[@]+"${SKIP_TESTING[@]}"}; do
-        VERIFY_CMD+=(--skip "$skip")
-    done
     "${VERIFY_CMD[@]}" || exit 1
 fi
 exit "$TEST_EXIT"
