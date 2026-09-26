@@ -6,6 +6,23 @@ import Testing
 
 @Suite("HealthKitObserverManager")
 struct HealthKitObserverManagerTests {
+    @Test("Authorization retry re-enables failed delivery without duplicating queries")
+    @MainActor
+    func retriesDeliveryAfterAuthorization() {
+        let store = ObserverStoreSpy()
+        store.state.withLock { $0.deliverySucceeds = false }
+        let manager = HealthKitObserverManager(store: store, coordinator: ObserverRefreshStub())
+        manager.startObserving()
+        #expect(store.state.withLock { $0.deliveryAttempts } == 8)
+
+        store.state.withLock { $0.deliverySucceeds = true }
+        manager.startObserving()
+        #expect(store.state.withLock { $0.deliveryAttempts } == 16)
+        #expect(store.state.withLock { $0.successfulDeliveries } == 8)
+        #expect(store.state.withLock { $0.executed.count } == 8)
+        manager.stopObserving()
+    }
+
     @Test("Launch registration is synchronous, idempotent, and fully stopped before restart")
     @MainActor
     func registrationLifecycle() {
@@ -69,6 +86,9 @@ private final class ObserverStoreSpy: HealthKitObserverStoring {
         var executed: [HKQuery] = []
         var stopped: [HKQuery] = []
         var frequencies: [String: HKUpdateFrequency] = [:]
+        var deliverySucceeds = true
+        var deliveryAttempts = 0
+        var successfulDeliveries = 0
     }
 
     let state = Mutex(State())
@@ -86,8 +106,13 @@ private final class ObserverStoreSpy: HealthKitObserverStoring {
         frequency: HKUpdateFrequency,
         withCompletion completion: @escaping @Sendable (Bool, Error?) -> Void
     ) {
-        state.withLock { $0.frequencies[type.identifier] = frequency }
-        completion(true, nil)
+        let success = state.withLock {
+            $0.frequencies[type.identifier] = frequency
+            $0.deliveryAttempts += 1
+            if $0.deliverySucceeds { $0.successfulDeliveries += 1 }
+            return $0.deliverySucceeds
+        }
+        completion(success, success ? nil : NSError(domain: HKErrorDomain, code: HKError.errorAuthorizationDenied.rawValue))
     }
 }
 

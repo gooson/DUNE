@@ -55,13 +55,12 @@ final class HealthKitObserverManager {
     /// Restore at launch after a previous authorization request, or after the first request completes.
     /// HealthKit controls access to types without read permission.
     func startObserving() {
-        guard queries.isEmpty else {
-            AppLogger.healthKit.info("[ObserverManager] Already observing — skipping duplicate registration")
-            return
-        }
-
+        let needsQueries = queries.isEmpty
         for entry in Self.observedTypes {
-            registerObserver(for: entry.type)
+            if needsQueries {
+                registerObserver(for: entry.type)
+            }
+            // Retry after foreground authorization in case launch-time delivery setup failed.
             enableBackgroundDelivery(for: entry.type, frequency: entry.frequency)
         }
     }
