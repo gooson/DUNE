@@ -7,6 +7,8 @@ struct InjuryStatisticsView: View {
     let volumeComparisons: [InjuryVolumeComparison]
 
     @Environment(\.appTheme) private var theme
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @ScaledMetric(relativeTo: .caption) private var axisEdgePadding: CGFloat = 8
     @ScaledMetric(relativeTo: .caption) private var frequencyRowHeight: CGFloat = 44
     @ScaledMetric(relativeTo: .caption) private var frequencyAxisHeight: CGFloat = 40
 
@@ -34,13 +36,19 @@ struct InjuryStatisticsView: View {
 
     // MARK: - Overview
 
+    private var overviewRowLayout: AnyLayout {
+        dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.md))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.md))
+    }
+
     private var overviewSection: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.md) {
             Text("Overview")
                 .font(DS.Typography.sectionTitle)
                 .frame(maxWidth: .infinity, alignment: .leading)
 
-            HStack(spacing: DS.Spacing.md) {
+            overviewRowLayout {
                 StatCard(
                     title: "Total",
                     value: statistics.totalCount.formattedWithSeparator,
@@ -54,7 +62,7 @@ struct InjuryStatisticsView: View {
                 )
             }
 
-            HStack(spacing: DS.Spacing.md) {
+            overviewRowLayout {
                 StatCard(
                     title: "Avg Recovery",
                     value: statistics.averageRecoveryDays.map { "\(Int($0.rounded()).formattedWithSeparator)d" } ?? "—",
@@ -101,6 +109,10 @@ struct InjuryStatisticsView: View {
                     .foregroundStyle(DS.Color.caution.gradient)
                     .cornerRadius(4)
                 }
+                .chartXScale(
+                    domain: 0...max(1, statistics.frequencyByBodyPart.map(\.count).max() ?? 1),
+                    range: .plotDimension(padding: axisEdgePadding)
+                )
                 .chartXAxis {
                     AxisMarks(values: .stride(by: frequencyTickStride)) { _ in
                         AxisValueLabel()
@@ -215,6 +227,8 @@ private struct VolumeBar: View {
     var isNA: Bool = false
 
     @Environment(\.appTheme) private var theme
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @ScaledMetric(relativeTo: .caption) private var axisEdgePadding: CGFloat = 8
 
     var body: some View {
         VStack(spacing: DS.Spacing.xs) {
