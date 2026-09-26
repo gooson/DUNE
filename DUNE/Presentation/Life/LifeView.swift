@@ -348,15 +348,25 @@ private struct HabitListQueryView: View {
                 Button {
                     showingReport = true
                 } label: {
-                    Label("View Weekly Report", systemImage: "doc.text.magnifyingglass")
-                        .font(.subheadline.bold())
-                        .foregroundStyle(DS.Color.tabLife)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, DS.Spacing.sm)
-                        .background {
-                            RoundedRectangle(cornerRadius: DS.Radius.sm)
-                                .fill(.ultraThinMaterial)
-                        }
+                    let layout = dynamicTypeSize.isAccessibilitySize
+                        ? AnyLayout(VStackLayout(spacing: DS.Spacing.xs))
+                        : AnyLayout(HStackLayout(spacing: DS.Spacing.xs))
+                    layout {
+                        Image(systemName: "doc.text.magnifyingglass")
+                            .accessibilityHidden(true)
+                        Text("View Weekly Report")
+                            .lineLimit(nil)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .multilineTextAlignment(.center)
+                    }
+                    .font(.subheadline.bold())
+                    .foregroundStyle(DS.Color.tabLife)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, DS.Spacing.sm)
+                    .background {
+                        RoundedRectangle(cornerRadius: DS.Radius.sm)
+                            .fill(.ultraThinMaterial)
+                    }
                 }
                 .buttonStyle(.plain)
                 .accessibilityIdentifier("life-weekly-report-button")

@@ -7,6 +7,7 @@ struct HabitRowView: View {
     let trailingAccessory: AnyView?
 
     @Environment(\.appTheme) private var theme
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var inputText: String = ""
     @State private var isEditing = false
 
@@ -206,8 +207,14 @@ struct HabitRowView: View {
 
     // MARK: - Duration/Value Type
 
+    private var inputLayout: AnyLayout {
+        dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.sm))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.sm))
+    }
+
     private func valueInput(unit: String) -> some View {
-        HStack(spacing: DS.Spacing.sm) {
+        inputLayout {
             ProgressView(
                 value: Swift.min(progress.todayValue, progress.goalValue),
                 total: progress.goalValue
@@ -215,11 +222,11 @@ struct HabitRowView: View {
             .tint(progress.isCompleted ? DS.Color.positive : progress.iconCategory.themeColor)
 
             if isEditing {
-                HStack(spacing: DS.Spacing.xs) {
+                inputLayout {
                     TextField("0", text: $inputText)
                         .keyboardType(.decimalPad)
                         .textFieldStyle(.roundedBorder)
-                        .frame(width: 60)
+                        .frame(width: dynamicTypeSize.isAccessibilitySize ? nil : 60)
 
                     Button("Save") {
                         if let value = Double(inputText.trimmingCharacters(in: .whitespaces)), value > 0 {
@@ -239,6 +246,8 @@ struct HabitRowView: View {
                         .font(.caption)
                         .foregroundStyle(.secondary)
                         .monospacedDigit()
+                        .lineLimit(nil)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
                 .buttonStyle(.plain)
             }
@@ -248,7 +257,7 @@ struct HabitRowView: View {
     // MARK: - Count Type
 
     private var countInput: some View {
-        HStack(spacing: DS.Spacing.sm) {
+        inputLayout {
             ProgressView(
                 value: Swift.min(progress.todayValue, progress.goalValue),
                 total: progress.goalValue
@@ -272,6 +281,7 @@ struct HabitRowView: View {
                     .fontWeight(.medium)
                     .monospacedDigit()
                     .frame(minWidth: 40)
+                    .fixedSize(horizontal: false, vertical: true)
 
                 Button {
                     let newValue = progress.todayValue + 1
@@ -330,7 +340,8 @@ struct HabitRowView: View {
                         .font(.caption2)
                     Text("Starts \(startDate.formatted(date: .abbreviated, time: .omitted))")
                         .font(.caption2)
-                        .lineLimit(1)
+                        .lineLimit(nil)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
                 .foregroundStyle(.secondary)
             } else if progress.cycleStartPoint == .firstCompletion {
@@ -339,7 +350,8 @@ struct HabitRowView: View {
                         .font(.caption2)
                     Text("Starts on first completion")
                         .font(.caption2)
-                        .lineLimit(1)
+                        .lineLimit(nil)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
                 .foregroundStyle(.secondary)
             }
@@ -349,7 +361,8 @@ struct HabitRowView: View {
                     .font(.caption2)
                 Text("Next due \(nextDueDate.formatted(date: .abbreviated, time: .omitted))")
                     .font(.caption2)
-                    .lineLimit(1)
+                    .lineLimit(nil)
+                    .fixedSize(horizontal: false, vertical: true)
             }
             .foregroundStyle(.secondary)
         }
