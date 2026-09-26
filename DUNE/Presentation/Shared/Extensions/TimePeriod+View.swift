@@ -54,7 +54,7 @@ extension TimePeriod {
         case .week:
             endExclusive = calendar.date(byAdding: .day, value: 7, to: scrollDate) ?? scrollDate
         case .month:
-            endExclusive = calendar.date(byAdding: .month, value: 1, to: scrollDate) ?? scrollDate
+            endExclusive = scrollDate.addingTimeInterval(visibleDomainSeconds)
         case .sixMonths:
             endExclusive = calendar.date(byAdding: .month, value: 6, to: scrollDate) ?? scrollDate
         case .year:

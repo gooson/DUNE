@@ -210,9 +210,21 @@ struct TimePeriodTests {
         #expect(TimePeriod.month.visibleRangeLabel(from: start) == expected)
     }
 
+    @Test("short months label the actual fixed 31-day viewport", arguments: [2, 9])
+    func shortMonthLabelUsesVisibleDomain(month: Int) {
+        let calendar = Calendar.current
+        let start = calendar.date(from: DateComponents(year: 2026, month: month, day: 1))!
+        let inclusiveEnd = start.addingTimeInterval(TimePeriod.month.visibleDomainSeconds - 1)
+        let formatter = DateFormatter()
+        formatter.setLocalizedDateFormatFromTemplate("yMMMd")
+
+        #expect(TimePeriod.month.visibleRangeLabel(from: start)
+                == "\(formatter.string(from: start)) – \(formatter.string(from: inclusiveEnd))")
+    }
+
     @Test("calendar-aligned month label preserves the single month heading")
     func alignedMonthLabelPreservesMonthHeading() {
-        let start = Calendar.current.date(from: DateComponents(year: 2026, month: 9, day: 1))!
+        let start = Calendar.current.date(from: DateComponents(year: 2026, month: 1, day: 1))!
         let formatter = DateFormatter()
         formatter.setLocalizedDateFormatFromTemplate("yMMMM")
 
