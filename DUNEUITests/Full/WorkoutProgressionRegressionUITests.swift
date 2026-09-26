@@ -55,8 +55,7 @@ final class WorkoutProgressionRegressionUITests: ActivityExerciseSeededUITestBas
     func testCompletionEffortRequiresExplicitConfirmation() throws {
         openSeededStrengthTemplate()
         completeFirstSetAndSkipRest()
-        XCTAssertTrue(app.waitAndTap(AXID.workoutSessionCompleteSet))
-        XCTAssertTrue(app.waitAndTap(AXID.workoutSessionFinish))
+        XCTAssertTrue(app.waitAndTap(AXID.workoutSessionDone))
         XCTAssertTrue(waitForElement(AXID.workoutCompletionSheet, timeout: 15).exists)
 
         let confirm = app.buttons["workout-effort-confirm"].firstMatch
