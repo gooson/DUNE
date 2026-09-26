@@ -12,6 +12,7 @@ struct DotLineChartView: View {
     var scrollPosition: Binding<Date>?
 
     @ScaledMetric(relativeTo: .body) private var chartHeight: CGFloat = 220
+    @ScaledMetric(relativeTo: .caption) private var axisEdgePadding: CGFloat = 8
 
     @Environment(\.appTheme) private var theme
 
@@ -82,8 +83,11 @@ struct DotLineChartView: View {
                 timePeriod: timePeriod,
                 scrollPosition: scrollPosition ?? $internalScrollPosition
             ))
-            .chartYScale(domain: cachedYDomain)
+            .chartYScale(domain: cachedYDomain, range: .plotDimension(padding: axisEdgePadding))
             .chartXScale(domain: effectiveXDomain)
+            .chartPlotStyle { plot in
+                plot.clipped()
+            }
             .chartXAxis {
                 AxisMarks(values: visibleAxisDates) { _ in
                     AxisValueLabel(format: axisFormat)
@@ -131,7 +135,6 @@ struct DotLineChartView: View {
                 identifier: "chart-trend-probe"
             )
             .frame(height: chartHeight)
-            .clipped()
             .chartDrawAnimation()
             .onAppear {
                 cachedYDomain = Self.computeYDomain(from: data)
