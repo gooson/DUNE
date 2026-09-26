@@ -46,6 +46,33 @@ final class ContourThemeTests: SeededUITestBaseCase {
         XCTAssertTrue(themeButton("contourAtlas").isSelected)
     }
 
+    func testContourRemainsInteractiveAfterBackgroundResume() {
+        XCTAssertTrue(app.navigationBars["Today"].waitForExistence(timeout: 5))
+
+        XCUIDevice.shared.press(.home)
+        let backgrounded = NSPredicate { _, _ in
+            MainActor.assumeIsolated {
+                self.app.state == .runningBackground || self.app.state == .runningBackgroundSuspended
+            }
+        }
+        XCTAssertEqual(
+            XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: backgrounded, object: nil)], timeout: 10),
+            .completed,
+            "Contour theme app should enter the background"
+        )
+
+        app.activate()
+        XCTAssertTrue(app.wait(for: .runningForeground, timeout: 10))
+        XCTAssertTrue(app.navigationBars["Today"].waitForExistence(timeout: 5))
+        capture("Contour Today Resumed")
+
+        navigateToActivity()
+        XCTAssertTrue(app.navigationBars["Activity"].waitForExistence(timeout: 5))
+        navigateToDashboard()
+        openSettings()
+        XCTAssertTrue(themeButton("contourAtlas").isSelected)
+    }
+
     private func themeButton(
         _ rawValue: String,
         direction: ScrollDirection = .up
