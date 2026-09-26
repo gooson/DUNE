@@ -6,6 +6,7 @@ struct CompoundWorkoutView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.appTheme) private var theme
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     @AppStorage(WeightUnit.storageKey) private var weightUnitRaw = WeightUnit.kg.rawValue
     @State private var viewModel: CompoundWorkoutViewModel
@@ -40,24 +41,17 @@ struct CompoundWorkoutView: View {
                 currentExerciseSection
                 actionButtons
                 workoutSummary
+                if dynamicTypeSize.isAccessibilitySize {
+                    timerPanels
+                }
             }
             .padding(.horizontal, DS.Spacing.lg)
             .padding(.bottom, DS.Spacing.lg)
         }
         .scrollDismissesKeyboard(.interactively)
         .safeAreaInset(edge: .bottom, spacing: 0) {
-            VStack(spacing: 0) {
-                // Rest timer overlay
-                if setTimer.isRunning {
-                    RestTimerView(timer: setTimer)
-                        .transition(.move(edge: .bottom).combined(with: .opacity))
-                }
-
-                // Transition timer overlay (between exercises)
-                if viewModel.isTransitioning {
-                    transitionOverlay
-                        .transition(.move(edge: .bottom).combined(with: .opacity))
-                }
+            if !dynamicTypeSize.isAccessibilitySize {
+                timerPanels
             }
         }
         .accessibilityIdentifier("compound-workout-screen")
@@ -134,8 +128,21 @@ struct CompoundWorkoutView: View {
         }
     }
 
-    private var timerVisible: Bool {
-        setTimer.isRunning || viewModel.isTransitioning
+    // Keep large text panels in the same scrollable region as the inputs.
+    private var timerPanels: some View {
+        VStack(spacing: 0) {
+            // Rest timer overlay
+            if setTimer.isRunning {
+                RestTimerView(timer: setTimer)
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+            }
+
+            // Transition timer overlay (between exercises)
+            if viewModel.isTransitioning {
+                transitionOverlay
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+            }
+        }
     }
 
     // MARK: - Round Indicator

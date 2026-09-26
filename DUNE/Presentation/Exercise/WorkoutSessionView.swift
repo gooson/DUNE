@@ -10,7 +10,6 @@ struct WorkoutSessionView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @Environment(\.scenePhase) private var scenePhase
-    @Environment(\.horizontalSizeClass) private var sizeClass
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.openWindow) private var openWindow
