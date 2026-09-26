@@ -34,6 +34,22 @@ struct CumulativeStressDetailViewModelTests {
         #expect(vm.currentScore?.level == .moderate)
     }
 
+    @Test("initial monthly viewport includes the complete current day", arguments: [1, 3, 9])
+    func monthlyViewportIncludesToday(month: Int) {
+        let calendar = Calendar.current
+        let now = calendar.date(from: DateComponents(year: 2026, month: month, day: 27, hour: 12))!
+        let today = calendar.startOfDay(for: now)
+        let tomorrow = calendar.date(byAdding: .day, value: 1, to: today)!
+        let vm = CumulativeStressDetailViewModel(nowProvider: { now })
+
+        vm.configure(stressScore: makeStressScore(score: 9, level: .low))
+
+        let visibleEnd = vm.scrollPosition.addingTimeInterval(vm.selectedPeriod.visibleDomainSeconds)
+        #expect(vm.scrollPosition <= today)
+        #expect(visibleEnd == tomorrow)
+        #expect(vm.scrollDomain.upperBound == tomorrow)
+    }
+
     // MARK: - Period Change
 
     @Test("changing period resets scroll position")

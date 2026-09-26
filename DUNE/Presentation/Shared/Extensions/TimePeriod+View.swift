@@ -75,6 +75,10 @@ extension TimePeriod {
             formatter.setLocalizedDateFormatFromTemplate("Md")
             return "\(formatter.string(from: scrollDate)) – \(formatter.string(from: displayEnd))"
         case .month:
+            if !calendar.isDate(scrollDate, equalTo: displayEnd, toGranularity: .month) {
+                formatter.setLocalizedDateFormatFromTemplate("yMMMd")
+                return "\(formatter.string(from: scrollDate)) – \(formatter.string(from: displayEnd))"
+            }
             formatter.setLocalizedDateFormatFromTemplate("yMMMM")
             return formatter.string(from: scrollDate)
         case .sixMonths:

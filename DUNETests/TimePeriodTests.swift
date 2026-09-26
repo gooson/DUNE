@@ -197,6 +197,28 @@ struct TimePeriodTests {
         #expect(TimePeriod.week.visibleRangeLabel(from: scrollDate) == expected)
     }
 
+    @Test("rolling month label includes both months and the inclusive last day")
+    func rollingMonthLabelIncludesDateRange() {
+        let calendar = Calendar.current
+        let start = calendar.date(from: DateComponents(year: 2026, month: 8, day: 27))!
+        let lastDay = calendar.date(from: DateComponents(year: 2026, month: 9, day: 26))!
+        let formatter = DateFormatter()
+        formatter.setLocalizedDateFormatFromTemplate("yMMMd")
+
+        let expected = "\(formatter.string(from: start)) – \(formatter.string(from: lastDay))"
+
+        #expect(TimePeriod.month.visibleRangeLabel(from: start) == expected)
+    }
+
+    @Test("calendar-aligned month label preserves the single month heading")
+    func alignedMonthLabelPreservesMonthHeading() {
+        let start = Calendar.current.date(from: DateComponents(year: 2026, month: 9, day: 1))!
+        let formatter = DateFormatter()
+        formatter.setLocalizedDateFormatFromTemplate("yMMMM")
+
+        #expect(TimePeriod.month.visibleRangeLabel(from: start) == formatter.string(from: start))
+    }
+
     @Test("scrollDomainUpperBound aligns week charts to next day boundary")
     func scrollDomainUpperBoundUsesNextDayBoundary() {
         let calendar = Calendar.current

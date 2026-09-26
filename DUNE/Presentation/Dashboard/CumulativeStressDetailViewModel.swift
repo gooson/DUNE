@@ -66,15 +66,17 @@ final class CumulativeStressDetailViewModel {
     }
 
     private func resetScrollPosition() {
-        let range = selectedPeriod.dateRange(offset: 0)
-        scrollPosition = range.start
+        // Include today's complete chart bucket, whose mark is centered within the day.
+        let upperBound = selectedPeriod.scrollDomainUpperBound(referenceDate: nowProvider())
+        scrollPosition = upperBound.addingTimeInterval(-selectedPeriod.visibleDomainSeconds)
     }
 
     // MARK: - Extended Range
 
     private var extendedRange: (start: Date, end: Date) {
-        let currentRange = selectedPeriod.dateRange(offset: 0)
-        let bufferRange = selectedPeriod.dateRange(offset: -selectedPeriod.scrollBufferPeriods)
+        let now = nowProvider()
+        let currentRange = selectedPeriod.dateRange(offset: 0, referenceDate: now)
+        let bufferRange = selectedPeriod.dateRange(offset: -selectedPeriod.scrollBufferPeriods, referenceDate: now)
         return (start: bufferRange.start, end: currentRange.end)
     }
 
