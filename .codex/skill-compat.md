@@ -24,7 +24,7 @@ Claude skill 문서를 그대로 유지하면서 Codex에서 실행 semantics를
 ## 공통 위임 / 컨텍스트 정책
 
 - 위임 시 `.codex/agent-map.md`의 모델과 추론 강도를 `spawn_agent`의 `model`, `reasoning_effort`에 **명시**한다. `fork_turns="none"`으로 대화 전체를 복제하지 않는다. 문서의 모델 배정은 실제 호출 인자를 생략할 근거가 아니다.
-- prompt에는 절대 workspace 경로, 단일 목표, 대상 파일/관련 diff 경로, 관련 규칙, 편집 가능 범위, 완료 조건, 이미 수행한 검증만 전달한다. source agent prompt와 필수 프로젝트 규칙은 계속 적용한다.
+- prompt에는 절대 workspace 경로, 단일 목표, 대상 파일/관련 diff 경로, 편집 가능 범위, 완료 조건, 이미 수행한 검증을 전달한다. **해당 `.claude/agents/<role>.md`의 정확한 절대 경로와 읽으라는 지시**, 관련 필수 규칙 경로를 포함한다. `fork_turns="none"`은 parent가 읽은 role prompt를 상속하지 않는다.
 - parent가 해야 할 독립 작업이 없으면 agent 생성 비용을 피하고 inline으로 처리한다. 이 경우 실제 parent 모델 사용임을 구분하며 모델이 전환됐다고 보고하지 않는다.
 - 여러 agent가 같은 파일을 수정하지 않게 소유 범위를 나눈다. 출력은 변경 파일, 검증 결과, P1/P2/P3 findings, 남은 불확실성만 반환한다. 전체 diff/로그를 재출력하지 않는다.
 - 해당 phase의 skill은 처음 진입할 때 한 번 읽고, 내용이 바뀌었거나 컨텍스트에서 사라졌을 때만 다시 읽는다. source의 필수 절차는 유지하되 동일 절차를 parent/child가 반복 서술하지 않는다.
@@ -60,6 +60,7 @@ Claude skill 문서를 그대로 유지하면서 Codex에서 실행 semantics를
 - `max_turns: 6`은 런타임에 해당 인자가 없으면 하드 제한이라고 주장하지 않는다. 한정된 diff/관련 파일과 findings-only 출력으로 작업을 제한한다.
 - 5~6개 관점에 필요한 diff를 한 번 수집하고 각 reviewer에는 담당 변경과 관련 호출부를 전달한다. cross-file 영향 검증을 막을 정도로 파일 범위를 제한하지 않는다.
 - `.claude/` 또는 `.codex/` 변경이 없으면 `reviewer-agent-native`는 기본 스킵 후보다.
+- `.claude/`와 `.codex/` 하위 지침만 변경된 경우 source의 역방향 스킵을 적용해 Agent-Native만 실행한다. 앱/실행 스크립트와 혼합된 변경은 이에 해당하지 않는다.
 
 ### /compound
 

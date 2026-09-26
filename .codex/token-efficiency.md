@@ -21,6 +21,7 @@ python3 scripts/codex-check.py check parity --context 'adapter-check-v1' -- pyth
 ```
 
 - 이름, 명령 argv, context, worktree/HEAD, tracked 및 nonignored untracked 파일 내용이 일치하고 성공 로그가 남아 있어야 한다. 실패/중단/실행 중 변경/증거 누락이면 재사용하지 않는다.
+- 기본 모드는 HEAD/index도 비교한다. Git revision/index에 의존하지 않는 순수 빌드/테스트임을 확인한 경우에만 run/check 모두 `--content-only`를 명시해 내용이 동일한 commit 후에도 재사용한다. Git 기반 버전 생성, 변경분 검사 등은 기본 모드를 유지한다. 모드가 다르면 재사용하지 않는다.
 - context는 같은 phase 이름이 아니라 **실행 환경 식별자**다. Xcode 검증은 Xcode/SDK 버전, simulator UDID/runtime, scheme/test plan, locale, launch/seed 조건, 관련 환경 변수의 안전한 식별자를 포함한다. 비밀 값은 기록하지 않는다.
 - ignored 파일, 외부 의존성, simulator/app 데이터, 환경 변수는 worktree fingerprint만으로 보장되지 않는다. 재사용 직전에 그대로인지 확인하고 context를 갱신한다. 확인 불가, flaky 테스트, 권한/상태 변경이면 `run`으로 다시 실행한다.
 - helper는 gate 범위를 판단하지 않는다. smoke/관련 테스트 증거를 full suite로, iPhone 증거를 iPad/watch 증거로 사용하지 않는다. 실행 전후 파일 변경이 있으면 명령 자체가 성공해도 재사용 증거로 인정하지 않는다.
@@ -29,7 +30,7 @@ python3 scripts/codex-check.py check parity --context 'adapter-check-v1' -- pyth
 
 ## Review / Quality 재사용
 
-- 이전 리뷰의 base/대상 diff, 관점, 결과/미해결 findings를 기록한다. 동일 diff·규칙·관점의 완료된 결과만 다음 phase에서 참조한다. 코드 변경 후에는 관련 관점을 재검토한다.
+- 이전 리뷰의 base/대상 diff, 관점, 결과/미해결 findings를 기록한다. 동일 diff·규칙·관점의 완료된 결과만 다음 phase에서 참조한다. `/run` Resolve의 P1/P2 수정 또는 P3 자동 수정 후에는 source가 요구하는 Phase 3 전체 재리뷰를 수행한다. 그 외 개별 검토에서만 변경 관련 관점을 선별할 수 있다.
 - 자동 테스트 receipt는 사람/agent의 리뷰를 증명하지 않는다. 리뷰 결과가 없으면 각 필수 관점을 수행한다. PR의 통합/크래시 검증은 이전 findings와 이후 diff를 함께 확인한다.
 - 단계별 출력에는 수행 또는 재사용 여부와 실제 증거 경로를 한 줄로 남긴다. parent와 child가 같은 검증을 중복 수행하지 않게 소유자를 지정한다.
 

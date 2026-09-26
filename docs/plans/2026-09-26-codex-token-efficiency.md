@@ -2,7 +2,7 @@
 tags: [codex, tokens, model-routing, testing]
 date: 2026-09-26
 category: plan
-status: approved
+status: implemented
 ---
 
 # Codex 실행 비용 절감
