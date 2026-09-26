@@ -11,6 +11,7 @@ cd "$ROOT_DIR"
 source "$ROOT_DIR/scripts/lib/regen-project.sh"
 source "$ROOT_DIR/scripts/lib/simulator-boot.sh"
 source "$ROOT_DIR/scripts/lib/simulator-worktree.sh"
+TEST_SUMMARY="$ROOT_DIR/scripts/lib/test-log-summary.py"
 
 PROJECT_SPEC="DUNE/project.yml"
 PROJECT_FILE="DUNE/DUNE.xcodeproj"
@@ -205,6 +206,7 @@ if [[ "$STREAM_LOGS" -eq 1 ]]; then
     echo "Streaming logs to console and $LOG_FILE"
 fi
 
+mkdir -p "$(dirname "$LOG_FILE")"
 set +e
 if [[ "$STREAM_LOGS" -eq 1 ]]; then
     "${TEST_CMD[@]}" 2>&1 | tee "$LOG_FILE"
@@ -215,14 +217,8 @@ else
 fi
 set -e
 
-if [[ "$TEST_EXIT" -ne 0 ]]; then
-    echo ""
-    echo "Watch UI tests failed. Summary:"
-    grep -a -n -E "TEST (SUCCEEDED|FAILED)|error:|failed|Executed" "$LOG_FILE" | tail -n 120 || true
-    echo ""
+if ! python3 "$TEST_SUMMARY" "$LOG_FILE" "$TEST_EXIT" "Watch UI tests"; then
+    echo "Watch UI tests: summary unavailable (xcodebuild exit ${TEST_EXIT})"
     echo "Full log: $LOG_FILE"
-    exit "$TEST_EXIT"
 fi
-
-echo "Watch UI tests passed."
-grep -a -n -E "TEST (SUCCEEDED|FAILED)|Executed" "$LOG_FILE" | tail -n 20 || true
+exit "$TEST_EXIT"
