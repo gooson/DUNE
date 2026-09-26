@@ -23,21 +23,28 @@ struct SettingsView: View {
     private let whatsNewManager = WhatsNewManager.shared
 
     var body: some View {
-        Form {
-            workoutDefaultsSection
-            exerciseDefaultsSection
-            NotificationSettingsSection()
-            morningBriefingSection
-            appearanceSection
-            if SimulatorAdvancedMockDataModeStore.isSimulatorAvailable {
-                simulatorMockDataSection
+        GeometryReader { geometry in
+            Form {
+                workoutDefaultsSection
+                exerciseDefaultsSection
+                NotificationSettingsSection()
+                morningBriefingSection
+                appearanceSection
+                if SimulatorAdvancedMockDataModeStore.isSimulatorAvailable {
+                    simulatorMockDataSection
+                }
+                dataPrivacySection
+                aboutSection
             }
-            dataPrivacySection
-            aboutSection
+            .scrollContentBackground(.hidden)
+            .contentMargins(.top, geometry.safeAreaInsets.top + DS.Spacing.md, for: .scrollContent)
+            .contentMargins(.leading, geometry.safeAreaInsets.leading + DS.Spacing.lg, for: .scrollContent)
+            .contentMargins(.bottom, geometry.safeAreaInsets.bottom + DS.Spacing.lg, for: .scrollContent)
+            .contentMargins(.trailing, geometry.safeAreaInsets.trailing + DS.Spacing.lg, for: .scrollContent)
         }
-        .scrollContentBackground(.hidden)
         .background { DetailWaveBackground() }
         .englishNavigationTitle("Settings")
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar(.hidden, for: .tabBar)
         .onChange(of: restSeconds) { _, newValue in
             store.restSeconds = newValue
@@ -60,37 +67,32 @@ struct SettingsView: View {
 
     private var workoutDefaultsSection: some View {
         Section {
-            HStack {
-                Label("Rest Time", systemImage: "timer")
-                Spacer()
-                Text(restTimeLabel)
-                    .foregroundStyle(DS.Color.textSecondary)
-                Stepper("", value: $restSeconds, in: WorkoutSettingsStore.restSecondsRange, step: 15)
-                    .labelsHidden()
+            Stepper(value: $restSeconds, in: WorkoutSettingsStore.restSecondsRange, step: 15) {
+                VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                    Label("Rest Time", systemImage: "timer")
+                        .labelStyle(.titleAndIcon)
+                    Text(restTimeLabel)
+                        .foregroundStyle(DS.Color.textSecondary)
+                }
             }
             .accessibilityIdentifier("settings-row-resttime")
 
-            HStack {
-                Label("Default Sets", systemImage: "list.number")
-                Spacer()
-                Text("\(setCount)")
-                    .foregroundStyle(DS.Color.textSecondary)
-                Stepper("", value: $setCount, in: WorkoutSettingsStore.setCountRange)
-                    .labelsHidden()
+            Stepper(value: $setCount, in: WorkoutSettingsStore.setCountRange) {
+                VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                    Label("Default Sets", systemImage: "list.number")
+                        .labelStyle(.titleAndIcon)
+                    Text("\(setCount)")
+                        .foregroundStyle(DS.Color.textSecondary)
+                }
             }
 
-            HStack {
-                Label("Body Weight", systemImage: "figure.stand")
-                Spacer()
-                Text("\(bodyWeightKg.formatted(.number.precision(.fractionLength(1)))) kg")
-                    .foregroundStyle(DS.Color.textSecondary)
-                Stepper(
-                    "",
-                    value: $bodyWeightKg,
-                    in: WorkoutSettingsStore.bodyWeightRange,
-                    step: 0.5
-                )
-                .labelsHidden()
+            Stepper(value: $bodyWeightKg, in: WorkoutSettingsStore.bodyWeightRange, step: 0.5) {
+                VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                    Label("Body Weight", systemImage: "figure.stand")
+                        .labelStyle(.titleAndIcon)
+                    Text("\(bodyWeightKg.formatted(.number.precision(.fractionLength(1)))) kg")
+                        .foregroundStyle(DS.Color.textSecondary)
+                }
             }
         } header: {
             Text("Workout Defaults")
