@@ -11,6 +11,7 @@ struct MetricsView: View {
     @State private var weight: Double = 0
     @State private var usesAddedWeight = false
     @State private var sessionWeightOverride: Double?
+    @State private var nextSetReductionKg: Double?
     @State private var reps: Int = WatchSetInputPolicy.defaultReps
     @State private var durationMinutes: Int = 1
     /// Start date of the current duration-intensity set (live timer).
@@ -65,6 +66,7 @@ struct MetricsView: View {
             estimatedRPE = nil
             rpeWasAdjusted = false
             sessionWeightOverride = nil
+            nextSetReductionKg = nil
             prefillFromEntry()
             refreshPreviousSetsCache()
         }
@@ -97,7 +99,11 @@ struct MetricsView: View {
                 durationMinutes: $durationMinutes,
                 usesAddedWeight: $usesAddedWeight,
                 previousSets: cachedPreviousSets,
-                onWeightEdited: { sessionWeightOverride = $0 }
+                suggestedWeightKg: nextSetReductionKg,
+                onWeightEdited: { edited in
+                    sessionWeightOverride = edited
+                    nextSetReductionKg = nil
+                }
             )
         }
         .sheet(isPresented: $showLastSetRPEInput, onDismiss: {
@@ -574,6 +580,7 @@ struct MetricsView: View {
             ? setTimerStart.map { max(1, min(7200, workoutManager.activeElapsedTime - $0)) }
             : nil
         workoutManager.completeSet(weight: recordedWeight, reps: reps > 0 ? reps : nil, duration: duration, rpe: nil)
+        nextSetReductionKg = nil
         refreshPreviousSetsCache()
 
         // Auto-estimate RPE for the just-completed set
@@ -596,6 +603,7 @@ struct MetricsView: View {
         let wasLastSet = workoutManager.isLastSet
 
         workoutManager.completeSet(weight: nil, reps: nil, duration: elapsedSeconds, rpe: nil)
+        nextSetReductionKg = nil
         refreshPreviousSetsCache()
         setTimerStart = nil
 
@@ -649,6 +657,15 @@ struct MetricsView: View {
 
         showRestTimer = false
         workoutManager.advanceToNextSet()
+        nextSetReductionKg = WatchSetInputPolicy.reducedWeight(
+            after: workoutManager.lastCompletedSetForCurrentExercise,
+            nextSetTypeRaw: workoutManager.currentPlannedSetForCurrentExercise?.setTypeRaw,
+            equipmentRaw: workoutManager.currentEntry?.equipment,
+            progressionIncrementKg: workoutManager.currentEntry.flatMap {
+                WatchConnectivityManager.shared.exerciseInfo(for: $0.exerciseDefinitionID)?.progressionIncrementKg
+            },
+            inputType: currentInputType
+        )
         prefillFromEntry()
 
         // Haptic on rest complete → defer input sheet to avoid double-present

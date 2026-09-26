@@ -31,7 +31,7 @@ func exerciseSubtitle(for exercise: WatchExerciseInfo) -> String {
     let plannedSets = resolvedProcedureSets(for: exercise)
     let defaults = resolvedDefaults(for: exercise)
     return exerciseSubtitle(
-        sets: plannedSets?.count ?? exercise.defaultSets,
+        sets: plannedSetCount(for: plannedSets) ?? exercise.defaultSets,
         reps: defaults.reps,
         weight: defaults.weight
     )
@@ -340,7 +340,7 @@ func snapshotFromExercise(_ exercise: WatchExerciseInfo) -> WorkoutSessionTempla
     let entry = TemplateEntry(
         exerciseDefinitionID: exercise.id,
         exerciseName: exercise.name,
-        defaultSets: plannedSets?.count ?? exercise.defaultSets,
+        defaultSets: plannedSetCount(for: plannedSets) ?? exercise.defaultSets,
         defaultReps: defaults.reps,
         defaultWeightKg: defaults.weight,
         equipment: exercise.equipment,
@@ -352,6 +352,16 @@ func snapshotFromExercise(_ exercise: WatchExerciseInfo) -> WorkoutSessionTempla
         entries: [entry],
         procedureSetsByExerciseID: plannedSets.map { [exercise.id: $0] }
     )
+}
+
+private func plannedSetCount(for sets: [WatchProcedureSetSnapshot]?) -> Int? {
+    guard let sets, !sets.isEmpty else { return nil }
+    let savedCount = sets.first?.plannedSetCount
+    if let savedCount, savedCount >= sets.count, savedCount <= 20,
+       sets.allSatisfy({ $0.plannedSetCount == savedCount }) {
+        return savedCount
+    }
+    return min(sets.count, 20)
 }
 
 /// Lightweight view snapshot used to render routine cards from either SwiftData or WatchConnectivity.

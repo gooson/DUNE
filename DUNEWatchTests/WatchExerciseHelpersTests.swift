@@ -344,6 +344,40 @@ struct WatchExerciseHelpersTests {
         #expect(plannedSets[1].weight == 82.5)
     }
 
+    @Test("Quick Start keeps three planned sets after only two were completed")
+    func partialProcedureKeepsPlannedCount() throws {
+        let info = exercise(
+            id: UUID().uuidString,
+            defaultSets: 2,
+            procedureSets: [1, 2].map { number in
+                WatchProcedureSetSnapshot(
+                    setNumber: number, weight: 40, reps: 8, plannedReps: 8,
+                    plannedSetCount: 3
+                )
+            },
+            procedureUpdatedAt: .distantFuture
+        )
+        let snapshot = snapshotFromExercise(info)
+        #expect(snapshot.entries.first?.defaultSets == 3)
+        #expect(snapshot.procedureSetsByExerciseID?[info.id]?.count == 2)
+    }
+
+    @Test("Oversized procedure metadata safely caps the editable plan")
+    func oversizedProcedureCapsPlan() {
+        let info = exercise(
+            id: UUID().uuidString,
+            procedureSets: (1...21).map { number in
+                WatchProcedureSetSnapshot(
+                    setNumber: number, weight: 40, reps: 8, plannedSetCount: 21
+                )
+            },
+            procedureUpdatedAt: .distantFuture
+        )
+        let snapshot = snapshotFromExercise(info)
+        #expect(snapshot.entries.first?.defaultSets == 20)
+        #expect(snapshot.procedureSetsByExerciseID?[info.id]?.count == 21)
+    }
+
     @Test("snapshotFromExercise preserves cardio metadata")
     func snapshotFromExercisePreservesCardioMetadata() {
         let cardioExercise = exercise(

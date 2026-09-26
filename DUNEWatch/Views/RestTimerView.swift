@@ -177,8 +177,6 @@ struct RestTimerView: View {
                     let newValue = adjustedRPE - RPELevel.step
                     if RPELevel.range.contains(newValue) {
                         adjustedRPE = newValue
-                        onRPEAdjusted?(newValue)
-                        hasConfirmedRPE = true
                         WKInterfaceDevice.current().play(.click)
                     }
                 } label: {
@@ -203,8 +201,6 @@ struct RestTimerView: View {
                     let newValue = adjustedRPE + RPELevel.step
                     if RPELevel.range.contains(newValue) {
                         adjustedRPE = newValue
-                        onRPEAdjusted?(newValue)
-                        hasConfirmedRPE = true
                         WKInterfaceDevice.current().play(.click)
                     }
                 } label: {
