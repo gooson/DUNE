@@ -12,7 +12,7 @@ related_brainstorms: [2026-03-08-apple-on-device-ml-sdk-research.md]
 # Implementation Plan: GenerationOptions 경고 제거
 
 ## Context / Requirements
-HealthDataQAService의 deprecated `sampling:` 초기화 인자를 `samplingMode:`로 교체한다. 기존 greedy, temperature 0.2, 최대 220 토큰을 유지한다.
+HealthDataQAService의 deprecated `sampling:` 초기화 인자를 최신 SDK에서 `samplingMode:`로 교체한다. 기존 greedy, temperature 0.2, 최대 220 토큰을 유지한다. CI의 Xcode 26.2는 이전 인자명만 지원하므로 `#if compiler(>=6.4)`로 Xcode 27과 이전 SDK 호출을 분리한다.
 
 ## Approach
 컴파일러와 Apple 공식 문서가 안내하는 인자명 교체를 적용한다. 경고 억제나 별도 래퍼는 불필요하다.

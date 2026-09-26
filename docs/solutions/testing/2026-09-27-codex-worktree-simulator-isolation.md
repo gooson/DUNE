@@ -44,4 +44,6 @@ UI 회귀 테스트에서 화면 전환 확인 실패와 XCTest 응답 지연이
 
 ## Prevention / Lessons Learned
 
+Ship 단계 CI에서 Xcode 26.2는 `GenerationOptions(samplingMode:)`를 아직 지원하지 않는 것도 확인했다. HealthDataQAService는 Swift 6.4/Xcode 27 이상에서 새 인자명, 이전 컴파일러에서는 기존 인자명을 사용한다. 양쪽의 greedy/temperature/token 설정은 동일하다. 런타임 OS availability만으로는 이전 SDK의 심볼 부재를 해결할 수 없으므로 컴파일 조건을 사용한다.
+
 동시 작업 리소스의 식별자로 마지막 폴더명만 사용하지 않는다. 격리 여부는 이름의 `wt` 표기가 아니라 각 작업의 실제 UDID와 전체 경로 키로 확인한다. UI timeout 진단에서는 앱 로직과 XCTest/호스트 지연을 구분한다. 기존 프로젝트 규칙 변경은 필요 없다.
