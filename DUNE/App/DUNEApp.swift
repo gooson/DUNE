@@ -807,6 +807,30 @@ struct DUNEApp: App {
             }
             record.sets = workoutSets
 
+            // Match the local save path when WC delivery wins the CloudKit race.
+            let historyCutoff = record.date.addingTimeInterval(-30 * 24 * 60 * 60)
+            let recordDate = record.date
+            let exerciseID = update.exerciseID
+            let historyDescriptor = FetchDescriptor<ExerciseRecord>(
+                predicate: #Predicate<ExerciseRecord> {
+                    $0.exerciseDefinitionID == exerciseID
+                        && $0.date >= historyCutoff && $0.date < recordDate
+                }
+            )
+            do {
+                let history = try context.fetch(historyDescriptor)
+                record.refreshAutoIntensity(
+                    exerciseType: definition?.inputType ?? .setsRepsWeight,
+                    history: history
+                )
+            } catch {
+                AppLogger.data.error("[WatchSync] Could not load intensity history: \(error.localizedDescription)")
+                record.refreshAutoIntensity(
+                    exerciseType: definition?.inputType ?? .setsRepsWeight,
+                    history: []
+                )
+            }
+
             context.insert(record)
             do {
                 try context.save()

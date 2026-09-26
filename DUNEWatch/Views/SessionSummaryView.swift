@@ -525,6 +525,12 @@ struct SessionSummaryView: View {
                 calories: allocation.calories,
                 calorieSource: allocation.calorieSource,
                 effort: effort,
+                inputType: WatchConnectivityManager.shared.exerciseInfo(for: entry.exerciseDefinitionID)
+                    .flatMap { ExerciseInputType(rawValue: $0.inputType) }
+                    ?? TemplateExerciseProfile.normalizedInputTypeRaw(entry.inputTypeRaw)
+                        .flatMap(ExerciseInputType.init(rawValue:))
+                    ?? .setsRepsWeight,
+                history: exerciseRecords,
                 plannedSetCount: workoutManager.plannedSetCount(for: exerciseIndex),
                 healthKitWorkoutID: perExerciseHealthKitIDs[exerciseIndex]
             )

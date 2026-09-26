@@ -12,6 +12,8 @@ enum WatchWorkoutRecordBuilder {
         calories: Double?,
         calorieSource: CalorieSource,
         effort: Int,
+        inputType: ExerciseInputType,
+        history: [ExerciseRecord],
         plannedSetCount: Int? = nil,
         healthKitWorkoutID: String?
     ) -> ExerciseRecord {
@@ -45,6 +47,7 @@ enum WatchWorkoutRecordBuilder {
             return set
         }
         // Set RPE remains available for analysis; the summary's chosen effort is final.
+        record.refreshAutoIntensity(exerciseType: inputType, history: history)
         return record
     }
 

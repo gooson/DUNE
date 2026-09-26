@@ -8,20 +8,29 @@ import Testing
 struct WatchWorkoutRecordBuilderTests {
     private let startDate = Date(timeIntervalSince1970: 1_800_000_000)
 
-    private func makeRecord(duration: TimeInterval = 600, restDuration: TimeInterval? = 90) -> ExerciseRecord {
-        WatchWorkoutRecordBuilder.makeRecord(
+    private func makeRecord(
+        duration: TimeInterval = 600,
+        restDuration: TimeInterval? = 90,
+        effort: Int = 3,
+        startDate: Date? = nil,
+        history: [ExerciseRecord] = []
+    ) -> ExerciseRecord {
+        let recordStartDate = startDate ?? self.startDate
+        return WatchWorkoutRecordBuilder.makeRecord(
             exerciseName: "Squat",
             exerciseDefinitionID: "barbell-squat",
             sets: [CompletedSetData(
                 setNumber: 1, weight: 60, reps: 10, duration: 45,
-                completedAt: startDate.addingTimeInterval(45), restDuration: restDuration, rpe: 10,
+                completedAt: recordStartDate.addingTimeInterval(45), restDuration: restDuration, rpe: 10,
                 plannedReps: 12, rpeSourceRaw: "estimated"
             )],
-            startDate: startDate,
+            startDate: recordStartDate,
             duration: duration,
             calories: 80,
             calorieSource: .met,
-            effort: 3,
+            effort: effort,
+            inputType: .setsRepsWeight,
+            history: history,
             plannedSetCount: 3,
             healthKitWorkoutID: UUID().uuidString
         )
@@ -38,6 +47,18 @@ struct WatchWorkoutRecordBuilderTests {
         #expect(update.completedSets.first?.rpe == 10)
         #expect(record.effortSourceRaw == "user")
         #expect(update.effortSourceRaw == "user")
+        #expect(record.autoIntensityRaw == 0.3)
+    }
+
+    @Test("Recent strength history contributes to automatic intensity while chosen effort stays final")
+    func strengthHistoryAndFinalEffort() {
+        let earlier = makeRecord(startDate: startDate.addingTimeInterval(-2 * 24 * 60 * 60))
+        let recent = makeRecord(startDate: startDate.addingTimeInterval(-24 * 60 * 60))
+        let record = makeRecord(effort: 9, history: [earlier, recent])
+
+        #expect(record.rpe == 9)
+        let rawScore = record.autoIntensityRaw ?? -1
+        #expect(rawScore > 0.8 && rawScore < 0.9)
     }
 
     @Test("Planned warmup type survives local record and wire update")
@@ -54,6 +75,8 @@ struct WatchWorkoutRecordBuilderTests {
             calories: nil,
             calorieSource: .manual,
             effort: 5,
+            inputType: .setsRepsWeight,
+            history: [],
             plannedSetCount: 2,
             healthKitWorkoutID: nil
         )
@@ -118,6 +141,7 @@ struct WatchWorkoutRecordBuilderTests {
         let bulk = WatchWorkoutRecordBuilder.makeUpdate(from: restored)
         #expect(try restoredContext.fetchCount(FetchDescriptor<WorkoutSet>()) == 1)
         #expect(bulk.rpe == 3)
+        #expect(restored.autoIntensityRaw == 0.3)
         #expect(bulk.completedSets.first?.restDuration == 90)
         #expect(bulk.completedSets.first?.plannedReps == 12)
         #expect(bulk.completedSets.first?.rpeSourceRaw == "estimated")
