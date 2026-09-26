@@ -74,7 +74,13 @@ struct EffortSliderView: View {
     private var effortSlider: some View {
         VStack(spacing: DS.Spacing.xs) {
             Slider(
-                value: $sliderValue,
+                value: Binding(
+                    get: { sliderValue },
+                    set: { value in
+                        sliderValue = value
+                        effort = Int(round(value))
+                    }
+                ),
                 in: 1...10,
                 step: 1
             ) {
@@ -90,15 +96,11 @@ struct EffortSliderView: View {
             }
             .tint(currentCategory.color)
             .sensoryFeedback(.selection, trigger: Int(sliderValue))
-            .onChange(of: sliderValue) { _, newValue in
-                effort = Int(round(newValue))
-            }
         }
         .padding(.horizontal, DS.Spacing.sm)
         .task {
             guard !didInitialize, let suggestion else { return }
             sliderValue = Double(suggestion.suggestedEffort)
-            effort = suggestion.suggestedEffort
             didInitialize = true
         }
     }

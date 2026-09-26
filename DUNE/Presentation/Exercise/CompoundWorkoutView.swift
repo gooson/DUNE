@@ -122,7 +122,10 @@ struct CompoundWorkoutView: View {
                 onDismiss: { effort in
                     if let effort, (1...10).contains(effort) {
                         for record in savedRecords {
-                            record.rpe = effort
+                            record.applyUserEffort(effort)
+                            if let exercise = config.exercises.first(where: { $0.id == record.exerciseDefinitionID }) {
+                                record.refreshAutoIntensity(exerciseType: exercise.inputType, history: exerciseRecords)
+                            }
                         }
                     }
                     dismiss()
@@ -289,10 +292,18 @@ struct CompoundWorkoutView: View {
                     }
                 }
 
+                if let target = vm.sets[index].plannedReps {
+                    Text("Planned reps: \(target)")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
                 if vm.sets[index].isCompleted {
                     SetRPEPickerView(rpe: Binding(
                         get: { vm.sets[index].rpe },
-                        set: { vm.sets[index].rpe = $0 }
+                        set: {
+                            vm.sets[index].rpe = $0
+                            vm.sets[index].rpeSourceRaw = $0 == nil ? nil : "user"
+                        }
                     ))
                     .padding(.horizontal, DS.Spacing.sm)
                     .padding(.bottom, DS.Spacing.xs)
@@ -466,13 +477,16 @@ struct CompoundWorkoutView: View {
         // Auto-compute session effort from per-set RPE
         for record in records {
             record.applySetBasedRPE()
+            if let exercise = config.exercises.first(where: { $0.id == record.exerciseDefinitionID }) {
+                record.refreshAutoIntensity(exerciseType: exercise.inputType, history: exerciseRecords)
+            }
         }
 
         let exerciseIDs = Set(records.compactMap(\.exerciseDefinitionID))
         let recentEfforts = exerciseRecords
             .filter { record in
                 guard let id = record.exerciseDefinitionID else { return false }
-                return exerciseIDs.contains(id) && record.rpe != nil
+                return !records.contains(where: { $0.id == record.id }) && exerciseIDs.contains(id) && record.rpe != nil
             }
             .sorted { $0.date > $1.date }
             .prefix(5)

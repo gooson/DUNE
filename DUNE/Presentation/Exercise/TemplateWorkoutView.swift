@@ -132,7 +132,10 @@ struct TemplateWorkoutView: View {
                 onDismiss: { effort in
                     if let effort, (1...10).contains(effort) {
                         for record in savedRecords {
-                            record.rpe = effort
+                            record.applyUserEffort(effort)
+                            if let exercise = viewModel.exerciseViewModels.map(\.exercise).first(where: { $0.id == record.exerciseDefinitionID }) {
+                                record.refreshAutoIntensity(exerciseType: exercise.inputType, history: exerciseRecords)
+                            }
                         }
                     }
                     dismiss()
@@ -328,10 +331,18 @@ struct TemplateWorkoutView: View {
                     }
                 }
 
+                if let target = vm.sets[index].plannedReps {
+                    Text("Planned reps: \(target)")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
                 if vm.sets[index].isCompleted {
                     SetRPEPickerView(rpe: Binding(
                         get: { vm.sets[index].rpe },
-                        set: { vm.sets[index].rpe = $0 }
+                        set: {
+                            vm.sets[index].rpe = $0
+                            vm.sets[index].rpeSourceRaw = $0 == nil ? nil : "user"
+                        }
                     ))
                     .padding(.horizontal, DS.Spacing.sm)
                     .padding(.bottom, DS.Spacing.xs)
@@ -446,6 +457,8 @@ struct TemplateWorkoutView: View {
         let exercise = viewModel.currentExercise
         guard let record = viewModel.createRecordForCurrent(weightUnit: weightUnit) else { return }
 
+        record.applySetBasedRPE(using: intensityService)
+        record.refreshAutoIntensity(exerciseType: exercise.inputType, history: exerciseRecords)
         modelContext.insert(record)
         WorkoutHealthKitWriter.write(record: record, exercise: exercise)
         savedRecords.append(record)
@@ -529,7 +542,7 @@ struct TemplateWorkoutView: View {
         let recentEfforts = exerciseRecords
             .filter { record in
                 guard let id = record.exerciseDefinitionID else { return false }
-                return exerciseIDs.contains(id) && record.rpe != nil
+                return !savedRecords.contains(where: { $0.id == record.id }) && exerciseIDs.contains(id) && record.rpe != nil
             }
             .sorted { $0.date > $1.date }
             .prefix(5)

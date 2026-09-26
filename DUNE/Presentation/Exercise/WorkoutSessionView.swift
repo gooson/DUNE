@@ -190,7 +190,8 @@ struct WorkoutSessionView: View {
                 effortSuggestion: effortSuggestion,
                 onDismiss: { selectedEffort in
                     if let effort = selectedEffort, (1...10).contains(effort) {
-                        savedRecord?.rpe = effort
+                        savedRecord?.applyUserEffort(effort)
+                        savedRecord?.refreshAutoIntensity(exerciseType: exercise.inputType, history: exerciseRecords)
                     }
                     dismiss()
                 }
@@ -325,6 +326,36 @@ struct WorkoutSessionView: View {
             let showsAddedWeight = addedWeightSetIDs.contains(setID) || !setBinding.wrappedValue.weight.isEmpty
 
             VStack(spacing: DS.Spacing.lg) {
+                if let target = setBinding.wrappedValue.plannedReps {
+                    Stepper(value: Binding(
+                        get: { setBinding.wrappedValue.plannedReps ?? target },
+                        set: { setBinding.wrappedValue.plannedReps = $0 }
+                    ), in: 1...1000) {
+                        Text("Planned reps: \(target)")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
+                    .accessibilityIdentifier("workout-session-planned-reps")
+                }
+                if viewModel.recommendationSetIndex == currentSetIndex,
+                   let recommendation = viewModel.pendingWeightRecommendation {
+                    VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                        Text(recommendation.reason.displayName)
+                            .font(.caption)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .accessibilityIdentifier("workout-session-recommendation-reason")
+                        let weight = weightUnit.fromKg(recommendation.weight)
+                            .formatted(.number.precision(.fractionLength(0...1)))
+                        Button("Apply \(weight) \(weightUnit.displayName)") {
+                            _ = viewModel.applyWeightRecommendation(weightUnit: weightUnit)
+                        }
+                        .buttonStyle(.bordered)
+                        .accessibilityIdentifier("workout-session-apply-recommendation")
+                    }
+                    .padding(DS.Spacing.md)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+                }
                 switch exercise.inputType {
                 case .setsRepsWeight:
                     weightRepsInput(set: setBinding)
@@ -354,7 +385,14 @@ struct WorkoutSessionView: View {
                     roundsBasedInput(set: setBinding)
                 }
 
-                SetRPEPickerView(rpe: setBinding.rpe)
+                SetRPEPickerView(rpe: Binding(
+                    get: { setBinding.wrappedValue.rpe },
+                    set: {
+                        setBinding.wrappedValue.rpe = $0
+                        setBinding.wrappedValue.rpeSourceRaw = $0 == nil ? nil : "user"
+                    }
+                ))
+                    .id(setID)
                     .padding(.horizontal, DS.Spacing.md)
             }
             .onChange(of: setBinding.wrappedValue.weight, initial: true) { _, weight in
@@ -710,6 +748,7 @@ struct WorkoutSessionView: View {
             }
             .buttonStyle(.borderedProminent)
             .tint(DS.Color.activity)
+            .accessibilityIdentifier("workout-session-skip-rest")
 
             Button {
                 showEndConfirmation = true
@@ -874,7 +913,7 @@ struct WorkoutSessionView: View {
 
         // Mark set as completed
         viewModel.sets[currentSetIndex].isCompleted = true
-        _ = viewModel.applyProgressiveOverloadForNextSet(afterCompletingSetAt: currentSetIndex, weightUnit: weightUnit)
+        viewModel.prepareNextSetRecommendation(afterCompletingSetAt: currentSetIndex, weightUnit: weightUnit)
         setCompleteCount += 1
 
         let isLast = currentSetIndex >= totalSets - 1
@@ -926,6 +965,7 @@ struct WorkoutSessionView: View {
 
         // Prefill from previous set's values
         prefillCurrentSet()
+        viewModel.prepareNextSetRecommendation(afterCompletingSetAt: completedSetIndex, weightUnit: weightUnit)
     }
 
     private func addExtraSet() {
@@ -965,10 +1005,10 @@ struct WorkoutSessionView: View {
 
         // Auto intensity — called BEFORE modelContext.insert so @Query history excludes this record
         let intensityService = WorkoutIntensityService()
-        let intensityResult = calculateAutoIntensity(for: record, service: intensityService)
-        if let score = intensityResult?.rawScore, score.isFinite, (0...1).contains(score) {
-            record.autoIntensityRaw = score
-        }
+        record.applySetBasedRPE(using: intensityService)
+        let intensityResult = record.refreshAutoIntensity(
+            exerciseType: exercise.inputType, history: exerciseRecords, using: intensityService
+        )
 
         modelContext.insert(record)
         savedRecord = record
@@ -985,11 +1025,8 @@ struct WorkoutSessionView: View {
         }
 
         // Standalone / last exercise: show effort + share sheet
-        // Derive session effort from set-level RPE if available
-        record.applySetBasedRPE(using: intensityService)
-
         let recentEfforts = exerciseRecords
-            .filter { $0.exerciseDefinitionID == exercise.id && $0.rpe != nil }
+            .filter { $0.id != record.id && $0.exerciseDefinitionID == exercise.id && $0.rpe != nil }
             .sorted { $0.date > $1.date }
             .prefix(5)
             .compactMap(\.rpe)
@@ -1006,53 +1043,6 @@ struct WorkoutSessionView: View {
         } else {
             dismiss()
         }
-    }
-
-    private func calculateAutoIntensity(for record: ExerciseRecord, service: WorkoutIntensityService) -> WorkoutIntensityResult? {
-        let currentInput = buildIntensityInput(from: record)
-
-        // History: same exercise, last 30 sessions, oldest-first (Correction #156)
-        let thirtyDaysAgo = Calendar.current.date(byAdding: .day, value: -30, to: Date()) ?? Date()
-        let history: [IntensitySessionInput] = exerciseRecords
-            .filter { $0.exerciseDefinitionID == exercise.id && $0.date >= thirtyDaysAgo }
-            .sorted { $0.date < $1.date }
-            .map { buildIntensityInput(from: $0) }
-
-        // Estimated 1RM for strength exercises
-        var estimated1RM: Double?
-        if exercise.inputType == .setsRepsWeight {
-            let oneRMSessions = history.map { session in
-                OneRMSessionInput(
-                    date: session.date,
-                    sets: session.sets.map { OneRMSetInput(weight: $0.weight, reps: $0.reps) }
-                )
-            }
-            estimated1RM = OneRMEstimationService().analyze(sessions: oneRMSessions).currentBest
-        }
-
-        return service.calculateIntensity(
-            current: currentInput,
-            history: history,
-            estimated1RM: estimated1RM
-        )
-    }
-
-    private func buildIntensityInput(from record: ExerciseRecord) -> IntensitySessionInput {
-        IntensitySessionInput(
-            date: record.date,
-            exerciseType: exercise.inputType,
-            sets: record.completedSets.map { set in
-                IntensitySetInput(
-                    weight: set.weight,
-                    reps: set.reps,
-                    duration: set.duration,
-                    distance: set.distance,
-                    manualIntensity: set.intensity,
-                    setType: set.setType
-                )
-            },
-            rpe: record.rpe
-        )
     }
 
     private func buildShareData(from record: ExerciseRecord) -> WorkoutShareData {
