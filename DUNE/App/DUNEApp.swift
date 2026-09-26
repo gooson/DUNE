@@ -345,6 +345,14 @@ struct DUNEApp: App {
                     }
                 }
             }
+            .transaction { transaction in
+#if DEBUG
+                if Self.isRunningUITests && ProcessInfo.processInfo.arguments.contains("--ui-disable-animations") {
+                    transaction.animation = nil
+                    transaction.disablesAnimations = true
+                }
+#endif
+            }
             .tint(selectedTheme.accentColor)
             .preferredColorScheme(Self.forcedUITestColorScheme)
             .onChange(of: showConsentSheet) { oldValue, newValue in
