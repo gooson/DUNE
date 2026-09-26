@@ -79,7 +79,7 @@ related_brainstorms:
 - Verification: effort 재계산/사용자 override 테스트, UI 시나리오.
 
 ### Step 4: 전체 검증·리뷰·문서화·배포
-- scripts/build-ios.sh, scripts/test-unit.sh, scripts/test-ui.sh 전체 회귀 실행.
+- scripts/build-ios.sh, scripts/test-unit.sh를 실행하고 UI는 이번 변경 관련 테스트만 실행한다. 전체 UI 회귀는 2026-09-27 사용자의 명시적 지시에 따라 실행하지 않는다.
 - 리뷰 및 품질 에이전트 결과 수정 후 재검증한다. 해결책 문서, PR, merge 및 정리까지 진행한다.
 
 ## Edge Cases
@@ -100,7 +100,7 @@ related_brainstorms:
 - Unit: 공통 정책, VM 목표 고정, draft roundtrip, effort 우선순위/재계산, Watch local/sync 일치.
 - Persistence: optional 필드/관계 검증, legacy schema → current reopen 및 새 필드 저장 후 두 번째 reopen.
 - UI: seeded 운동 시작 → 실제 reps 변경 → 목표 유지 → 높은 RPE → 무단 증량 없음, 추천 적용.
-- Full gates: iOS build, iOS/watch unit suite, 기존 DUNEUITests 전체. 환경 차단 시 실제 오류/로그와 미통과 게이트를 명시한다.
+- Gates: iOS build, iOS/watch unit suite, WorkoutProgressionRegressionUITests 2개 및 WatchSetRPEEntryUITests 3개. 전체 UI 실행은 사용자의 명시적 범위 변경으로 중단했으며 전체 통과로 보고하지 않는다. 환경 차단 시 실제 오류/로그와 미통과 게이트를 명시한다.
 
 ## Risks
 
