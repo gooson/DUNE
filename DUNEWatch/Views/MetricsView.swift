@@ -53,6 +53,7 @@ struct MetricsView: View {
                     onRPEAdjusted: { adjusted in
                         estimatedRPE = adjusted
                         rpeWasAdjusted = true
+                        workoutManager.recordSetRPE(adjusted, source: "user")
                     }
                 )
             } else if showNextExercise {
@@ -186,6 +187,7 @@ struct MetricsView: View {
             Button("Confirm RPE") {
                 estimatedRPE = lastSetRPEInput
                 rpeWasAdjusted = true
+                workoutManager.recordSetRPE(lastSetRPEInput, source: "user")
                 showLastSetRPEInput = false
             }
             .buttonStyle(.borderedProminent)

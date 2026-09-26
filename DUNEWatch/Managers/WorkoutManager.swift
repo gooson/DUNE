@@ -645,6 +645,7 @@ final class WorkoutManager: NSObject {
         let validated = RPELevel.validate(rpe)
         completedSetsData[currentExerciseIndex][lastIdx].rpe = validated
         completedSetsData[currentExerciseIndex][lastIdx].rpeSourceRaw = validated == nil ? nil : source
+        persistRecoveryState()
     }
 
     func advanceToNextSet() {
