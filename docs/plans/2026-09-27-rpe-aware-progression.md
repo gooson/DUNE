@@ -49,6 +49,7 @@ related_brainstorms:
 | Data/Persistence/Migration/AppSchemaVersions.swift | Modify | additive schema 버전 |
 | Domain/Models/WatchConnectivityModels.swift | Modify | optional 전송 metadata |
 | Presentation/Exercise/WorkoutSessionViewModel.swift | Modify | 목표 스냅샷·draft·추천 |
+| Presentation/Activity/ActivityView.swift | Modify | 단일 운동 템플릿의 목표·무게·세트 수 전달 |
 | Presentation/Exercise/{WorkoutSession,TemplateWorkout,CompoundWorkout}View.swift | Modify | 최종 effort 저장·추천 표시 |
 | Presentation/Shared/Extensions/ExerciseRecord+SetRPE.swift | Modify | 명시적 effort 보존 |
 | DUNEWatch/Managers 및 Helpers, Views/MetricsView.swift | Modify | 목표·RPE 출처 저장 및 공통 정책 |
@@ -67,12 +68,14 @@ related_brainstorms:
 ### Step 2: iPhone/Watch 연결
 - 생성/템플릿/이전 기록에서 목표를 정하고 실제 reps 변경 시 목표가 변하지 않게 한다.
 - draft, 완료 기록, Watch recovery·전송·절차 이력까지 metadata를 전달한다.
+- 부분 완료 기록도 원래 계획 세트 수를 유지하고, Activity 단일 템플릿 시작 경로에서 template entry를 보존한다.
 - Verification: VM/DTO/Watch roundtrip 및 기존 legacy decode, 저장소 재오픈 테스트.
 
 ### Step 3: 강도 저장 순서와 사용자 표시
 - 세트 평균과 직접 선택한 세션 effort를 구분하고 사용자 값이 우선되도록 한다.
 - 자동 강도 계산은 최종 effort와 동일 history를 사용한다. 새 기록 제외를 ID로 고정한다.
 - 추천 이유/적용 및 목표 표시를 기존 화면에 통합하고 번역·접근성 ID를 추가한다.
+- Watch 다음 세트 감량도 공통 정책으로 판단해 입력 시트에서 명시적으로 적용한다. RPE 시트의 임시 조절은 확정 전까지 저장하지 않는다.
 - Verification: effort 재계산/사용자 override 테스트, UI 시나리오.
 
 ### Step 4: 전체 검증·리뷰·문서화·배포

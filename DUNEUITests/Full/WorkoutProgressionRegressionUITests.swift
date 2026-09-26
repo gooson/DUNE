@@ -15,7 +15,15 @@ final class WorkoutProgressionRegressionUITests: ActivityExerciseSeededUITestBas
         assertPlannedRepsAreEight()
         XCTAssertEqual(try enteredWeight(), Fixture.startingWeight)
 
-        XCTAssertTrue(app.fillTextInput(AXID.workoutSessionField("reps"), with: "6"))
+        let actualReps = app.textFields[AXID.workoutSessionField("reps")].firstMatch
+        XCTAssertTrue(actualReps.waitForExistence(timeout: 5))
+        actualReps.tap()
+        // Center-aligned numeric fields can place the caret before the existing
+        // digit. Tap the trailing edge before deleting so replacement is real.
+        actualReps.coordinate(withNormalizedOffset: CGVector(dx: 0.95, dy: 0.5)).tap()
+        let existing = (actualReps.value as? String) ?? ""
+        actualReps.typeText(String(repeating: XCUIKeyboardKey.delete.rawValue, count: existing.count))
+        actualReps.typeText("6")
         dismissWorkoutKeyboard()
         XCTAssertEqual(app.textFields[AXID.workoutSessionField("reps")].value as? String, "6")
         assertPlannedRepsAreEight()
