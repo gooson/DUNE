@@ -179,8 +179,8 @@ struct CardioSessionViewModelTests {
             locationService: location,
             motionService: motion,
             calorieService: calorieService,
-            stepsService: stepsService,
-            vitalsService: vitalsService
+            stepsService: stepsService ?? MockStepsService(todaySteps: 0),
+            vitalsService: vitalsService ?? MockVitalsService()
         )
     }
 

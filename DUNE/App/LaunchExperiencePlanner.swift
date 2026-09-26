@@ -21,6 +21,15 @@ struct LaunchAuthorizationRequestState: Equatable {
 }
 
 enum LaunchExperiencePlanner {
+    /// Request history permits restoring observers, but does not prove read authorization.
+    static func shouldRestoreHealthKitObservers(
+        isHealthDataAvailable: Bool,
+        hasRequestedAuthorization: Bool,
+        isRunningTests: Bool
+    ) -> Bool {
+        isHealthDataAvailable && hasRequestedAuthorization && !isRunningTests
+    }
+
     static func shouldRequestAuthorization(for state: LaunchAuthorizationRequestState) -> Bool {
         state.isEligible
             && (!state.hasCompletedRequest || state.revalidateEachLaunch)
