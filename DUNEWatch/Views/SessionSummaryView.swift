@@ -525,6 +525,7 @@ struct SessionSummaryView: View {
                 calories: allocation.calories,
                 calorieSource: allocation.calorieSource,
                 effort: effort,
+                plannedSetCount: workoutManager.plannedSetCount(for: exerciseIndex),
                 healthKitWorkoutID: perExerciseHealthKitIDs[exerciseIndex]
             )
             modelContext.insert(record)
@@ -596,7 +597,12 @@ struct SessionSummaryView: View {
                     WatchProcedureSetSnapshot(
                         setNumber: $0.setNumber,
                         weight: $0.weight,
-                        reps: $0.reps
+                        reps: $0.reps,
+                        plannedReps: $0.plannedReps,
+                        rpe: $0.rpe,
+                        rpeSourceRaw: $0.rpeSourceRaw,
+                        setTypeRaw: $0.setTypeRaw ?? SetType.working.rawValue,
+                        plannedSetCount: workoutManager.plannedSetCount(for: exerciseIndex)
                     )
                 }
             )

@@ -14,13 +14,15 @@ struct WatchWorkoutRecordBuilderTests {
             exerciseDefinitionID: "barbell-squat",
             sets: [CompletedSetData(
                 setNumber: 1, weight: 60, reps: 10, duration: 45,
-                completedAt: startDate.addingTimeInterval(45), restDuration: restDuration, rpe: 10
+                completedAt: startDate.addingTimeInterval(45), restDuration: restDuration, rpe: 10,
+                plannedReps: 12, rpeSourceRaw: "estimated"
             )],
             startDate: startDate,
             duration: duration,
             calories: 80,
             calorieSource: .met,
             effort: 3,
+            plannedSetCount: 3,
             healthKitWorkoutID: UUID().uuidString
         )
     }
@@ -34,6 +36,29 @@ struct WatchWorkoutRecordBuilderTests {
         #expect(update.rpe == 3)
         #expect(record.sets?.first?.rpe == 10)
         #expect(update.completedSets.first?.rpe == 10)
+        #expect(record.effortSourceRaw == "user")
+        #expect(update.effortSourceRaw == "user")
+    }
+
+    @Test("Planned warmup type survives local record and wire update")
+    func warmupTypeSurvives() {
+        let record = WatchWorkoutRecordBuilder.makeRecord(
+            exerciseName: "Squat",
+            exerciseDefinitionID: "squat",
+            sets: [CompletedSetData(
+                setNumber: 1, weight: 20, reps: 10, duration: nil,
+                completedAt: startDate, setTypeRaw: SetType.warmup.rawValue
+            )],
+            startDate: startDate,
+            duration: 60,
+            calories: nil,
+            calorieSource: .manual,
+            effort: 5,
+            plannedSetCount: 2,
+            healthKitWorkoutID: nil
+        )
+        #expect(record.sets?.first?.setType == .warmup)
+        #expect(WatchWorkoutRecordBuilder.makeUpdate(from: record).completedSets.first?.setTypeRaw == SetType.warmup.rawValue)
     }
 
     @Test("Rest durations survive record mapping and wire encoding", arguments: [nil, 0, 90, 120] as [Double?])
@@ -49,6 +74,11 @@ struct WatchWorkoutRecordBuilderTests {
         #expect(decoded.healthKitWorkoutID == record.healthKitWorkoutID)
         #expect(decoded.calories == 80)
         #expect(decoded.calorieSourceRaw == CalorieSource.met.rawValue)
+        #expect(decoded.plannedSetCount == 3)
+        #expect(decoded.effortSourceRaw == "user")
+        #expect(decoded.completedSets.first?.plannedReps == 12)
+        #expect(decoded.completedSets.first?.rpeSourceRaw == "estimated")
+        #expect(decoded.completedSets.first?.setTypeRaw == SetType.working.rawValue)
     }
 
     @Test("Per-exercise wire durations sum to the session duration", arguments: [1, 3])
@@ -89,6 +119,10 @@ struct WatchWorkoutRecordBuilderTests {
         #expect(try restoredContext.fetchCount(FetchDescriptor<WorkoutSet>()) == 1)
         #expect(bulk.rpe == 3)
         #expect(bulk.completedSets.first?.restDuration == 90)
+        #expect(bulk.completedSets.first?.plannedReps == 12)
+        #expect(bulk.completedSets.first?.rpeSourceRaw == "estimated")
+        #expect(bulk.plannedSetCount == 3)
+        #expect(bulk.effortSourceRaw == "user")
         #expect(bulk.startTime == immediate.startTime)
         #expect(bulk.endTime == immediate.endTime)
         #expect(bulk.healthKitWorkoutID == immediate.healthKitWorkoutID)

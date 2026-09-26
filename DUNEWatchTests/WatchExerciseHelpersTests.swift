@@ -139,7 +139,7 @@ struct WatchExerciseHelpersTests {
         #expect(defaults.weight == 100)
     }
 
-    @Test("resolvedDefaults prefers procedure first set and applies progression overlay")
+    @Test("Legacy procedure defaults keep the first completed weight")
     func resolvedDefaultsPrefersProcedureSnapshot() {
         let target = exercise(
             id: "\(UUID().uuidString)-bench",
@@ -157,7 +157,7 @@ struct WatchExerciseHelpersTests {
 
         let defaults = resolvedDefaults(for: target)
         #expect(defaults.reps == 10)
-        #expect(defaults.weight == 82.5)
+        #expect(defaults.weight == 80)
     }
 
     @Test("resolvedProcedureSets prefers newer local procedure over synced payload")
@@ -184,7 +184,7 @@ struct WatchExerciseHelpersTests {
 
         let procedure = resolvedProcedureSets(for: target)
         #expect(procedure?.count == 3)
-        #expect(procedure?.first?.weight == 82.5)
+        #expect(procedure?.first?.weight == 80)
         #expect(procedure?[1].weight == 82.5)
     }
 
@@ -362,6 +362,83 @@ struct WatchExerciseHelpersTests {
 
         #expect(entry.inputTypeRaw == ExerciseInputType.durationDistance.rawValue)
         #expect(entry.cardioSecondaryUnitRaw == "floors")
+    }
+
+    @Test("Legacy procedure without targets and RPE source keeps its weight")
+    func legacyProcedureDoesNotProgress() {
+        let previous = WatchProcedureSetSnapshot(setNumber: 1, weight: 50, reps: 10)
+        let info = exercise(
+            id: UUID().uuidString,
+            procedureSets: [previous],
+            procedureUpdatedAt: .distantFuture,
+            progressionIncrementKg: 2.5
+        )
+        #expect(resolvedProcedureSets(for: info)?.first?.weight == 50)
+    }
+
+    @Test("High or estimated RPE never increases the Watch preview")
+    func highOrEstimatedRPEDoesNotProgress() {
+        for (rpe, source) in [(9.0, "user"), (7.0, "estimated")] {
+            let previous = WatchProcedureSetSnapshot(
+                setNumber: 1, weight: 50, reps: 10, plannedReps: 10,
+                rpe: rpe, rpeSourceRaw: source, setTypeRaw: SetType.working.rawValue,
+                plannedSetCount: 1
+            )
+            let info = exercise(
+                id: UUID().uuidString,
+                procedureSets: [previous],
+                procedureUpdatedAt: .distantFuture,
+                progressionIncrementKg: 2.5
+            )
+            #expect(resolvedProcedureSets(for: info)?.first?.weight == 50)
+        }
+    }
+
+    @Test("A complete, confirmed plan increases only the first preview weight")
+    func completePlanProgresses() throws {
+        let previous = [1, 2].map { number in
+            WatchProcedureSetSnapshot(
+                setNumber: number, weight: 50, reps: 10, plannedReps: 8,
+                rpe: 7, rpeSourceRaw: "user", setTypeRaw: SetType.working.rawValue,
+                plannedSetCount: 2
+            )
+        }
+        let info = exercise(
+            id: UUID().uuidString,
+            procedureSets: previous,
+            procedureUpdatedAt: .distantFuture,
+            progressionIncrementKg: 2.5
+        )
+        let result = try #require(resolvedProcedureSets(for: info))
+        #expect(result[0].weight == 52.5)
+        #expect(result[1].weight == 50)
+        #expect(result[0].plannedReps == 8)
+        #expect(result[0].rpeSourceRaw == "user")
+    }
+
+    @Test("A warmup stays unchanged when the first working set qualifies")
+    func warmupFirstProgressesWorkingSet() throws {
+        let previous = [
+            WatchProcedureSetSnapshot(
+                setNumber: 1, weight: 20, reps: 10, setTypeRaw: SetType.warmup.rawValue,
+                plannedSetCount: 2
+            ),
+            WatchProcedureSetSnapshot(
+                setNumber: 2, weight: 50, reps: 10, plannedReps: 10,
+                rpe: 7, rpeSourceRaw: "user", setTypeRaw: SetType.working.rawValue,
+                plannedSetCount: 2
+            )
+        ]
+        let info = exercise(
+            id: UUID().uuidString,
+            procedureSets: previous,
+            procedureUpdatedAt: .distantFuture,
+            progressionIncrementKg: 2.5
+        )
+        let result = try #require(resolvedProcedureSets(for: info))
+        #expect(result[0].weight == 20)
+        #expect(result[0].setTypeRaw == SetType.warmup.rawValue)
+        #expect(result[1].weight == 52.5)
     }
 
     @Test("mergedRoutineTemplates prefers local template when IDs overlap")

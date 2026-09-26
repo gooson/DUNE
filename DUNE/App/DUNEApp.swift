@@ -783,19 +783,24 @@ struct DUNEApp: App {
                 equipment: definition?.equipment,
                 estimatedCalories: wcCalorieSource == .met ? validCalories : nil,
                 calorieSource: wcCalorieSource,
-                rpe: update.rpe
+                rpe: update.rpe,
+                plannedSetCount: update.plannedSetCount,
+                effortSourceRaw: update.effortSourceRaw
             )
 
             var workoutSets: [WorkoutSet] = []
             for setData in update.completedSets where setData.isCompleted {
                 let set = WorkoutSet(
                     setNumber: setData.setNumber,
+                    setType: setData.setTypeRaw.flatMap(SetType.init(rawValue:)) ?? .working,
                     weight: setData.weight,
                     reps: setData.reps,
                     duration: setData.duration,
                     isCompleted: true,
                     restDuration: setData.restDuration,
-                    rpe: setData.rpe
+                    rpe: setData.rpe,
+                    plannedReps: setData.plannedReps,
+                    rpeSourceRaw: setData.rpeSourceRaw
                 )
                 set.exerciseRecord = record
                 workoutSets.append(set)

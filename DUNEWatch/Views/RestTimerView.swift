@@ -79,9 +79,18 @@ struct RestTimerView: View {
             .frame(width: 100, height: 100)
 
             // RPE estimation badge (shown only when available)
-            if estimatedRPE != nil {
+            if estimatedRPE != nil || showRPEAdjust {
                 rpeOverlay
                     .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.restTimerRPEBadge)
+            } else {
+                Button("Rate RPE") {
+                    adjustedRPE = 8
+                    showRPEAdjust = true
+                    onRPEAdjusted?(adjustedRPE)
+                }
+                .font(.caption.weight(.semibold))
+                .buttonStyle(.bordered)
+                .accessibilityIdentifier("watch-rest-timer-rpe-rate")
             }
 
             // +30s / Skip / End buttons
@@ -185,17 +194,26 @@ struct RestTimerView: View {
                     .tint(.secondary)
                 }
             } else {
-                // Collapsed: tap to expand
-                Button {
-                    withAnimation(.easeInOut(duration: 0.2)) {
-                        showRPEAdjust = true
+                HStack(spacing: DS.Spacing.sm) {
+                    Button {
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            showRPEAdjust = true
+                        }
+                    } label: {
+                        Text("RPE \(RPELevel.format(adjustedRPE))")
+                            .font(.caption.weight(.semibold).monospacedDigit())
+                            .foregroundStyle(rpeColor)
                     }
-                } label: {
-                    Text("RPE \(RPELevel.format(adjustedRPE))")
-                        .font(.caption.weight(.semibold).monospacedDigit())
-                        .foregroundStyle(rpeColor)
+                    .buttonStyle(.plain)
+
+                    Button("Confirm RPE") {
+                        onRPEAdjusted?(adjustedRPE)
+                        WKInterfaceDevice.current().play(.success)
+                    }
+                    .font(.caption2.weight(.semibold))
+                    .buttonStyle(.bordered)
+                    .accessibilityIdentifier("watch-rest-timer-rpe-confirm")
                 }
-                .buttonStyle(.plain)
             }
         }
     }
