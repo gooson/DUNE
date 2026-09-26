@@ -5,6 +5,7 @@ enum UITestSeedScenario: String {
     case empty = "empty"
     case defaultSeeded = "default-seeded"
     case activityExerciseSeeded = "activity-exercise-seeded"
+    case fatigueRegression = "fatigue-regression"
 
     static func current(arguments: [String] = ProcessInfo.processInfo.arguments) -> UITestSeedScenario {
         guard let index = arguments.firstIndex(of: "--ui-scenario"),
@@ -39,6 +40,8 @@ enum TestDataSeeder {
         case .activityExerciseSeeded:
             seedDefaultRecords(into: context)
             seedActivityExerciseFixtures(into: context)
+        case .fatigueRegression:
+            seedFatigueRegression(into: context)
         }
     }
 
@@ -74,7 +77,7 @@ enum TestDataSeeder {
         SimulatorAdvancedMockDataModeStore.setEnabled(false, defaults: defaults)
         SimulatorAdvancedMockDataModeStore.setReferenceDate(nil, defaults: defaults)
 
-        guard scenario != .empty else { return }
+        guard scenario != .empty, scenario != .fatigueRegression else { return }
 
         SimulatorAdvancedMockDataModeStore.setReferenceDate(referenceDate, defaults: defaults)
         SimulatorAdvancedMockDataModeStore.setEnabled(true, defaults: defaults)
@@ -82,7 +85,7 @@ enum TestDataSeeder {
 
     static func weatherSnapshot(for scenario: UITestSeedScenario) -> WeatherSnapshot? {
         switch scenario {
-        case .empty:
+        case .empty, .fatigueRegression:
             nil
         case .defaultSeeded, .activityExerciseSeeded:
             makeWeatherSnapshot()
@@ -94,7 +97,7 @@ enum TestDataSeeder {
         fetchedAt: Date = Date()
     ) -> SharedHealthSnapshot? {
         switch scenario {
-        case .empty:
+        case .empty, .fatigueRegression:
             nil
         case .defaultSeeded, .activityExerciseSeeded:
             makeSharedHealthSnapshot(fetchedAt: fetchedAt)
@@ -219,6 +222,35 @@ enum TestDataSeeder {
         seedHabitDefinitions(into: context)
         seedNotificationInbox(scenario: .defaultSeeded)
         try? context.save()
+    }
+
+    @MainActor
+    private static func seedFatigueRegression(into context: ModelContext) {
+        let now = Date()
+        let weights = [85.0, 90, 85, 85, 80, 75, 70, 70, 65, 65]
+        let sessions = [(hours: 149.0, reps: [10, 8, 8, 8, 8, 8, 8, 8, 8, 6]),
+                        (hours: 317.1, reps: [10, 8, 8, 6, 8, 6, 6, 6, 8, 6])]
+        for session in sessions {
+            let record = ExerciseRecord(
+                date: now.addingTimeInterval(-session.hours * 3600),
+                exerciseType: "strength", duration: 18 * 60,
+                exerciseDefinitionID: "chest-press-machine",
+                primaryMuscles: [.chest], equipment: .machine
+            )
+            context.insert(record)
+            record.sets = zip(weights, session.reps).enumerated().map { index, values in
+                let set = WorkoutSet(setNumber: index + 1, weight: values.0,
+                                     reps: values.1, isCompleted: true)
+                set.exerciseRecord = record
+                context.insert(set)
+                return set
+            }
+        }
+        do {
+            try context.save()
+        } catch {
+            assertionFailure("Failed to seed fatigue regression: \(error)")
+        }
     }
 
     @MainActor
