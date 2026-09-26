@@ -23,6 +23,7 @@ enum LifeHabitLogSync {
 struct LifeView: View {
     @State private var viewModel = LifeViewModel()
     @State private var localRefreshSignal = 0
+    @State private var historySelection: HabitHistorySelection?
     @State private var isShowingTemplateSheet = false
     @Environment(\.modelContext) private var modelContext
     @Environment(\.horizontalSizeClass) private var sizeClass
@@ -54,7 +55,8 @@ struct LifeView: View {
                     HabitListQueryView(
                         viewModel: viewModel,
                         refreshSignal: refreshSignal + localRefreshSignal,
-                        onOpenTemplates: { isShowingTemplateSheet = true }
+                        onOpenTemplates: { isShowingTemplateSheet = true },
+                        historySelection: $historySelection
                     )
                 }
                 .padding(isRegular ? DS.Spacing.xxl : DS.Spacing.lg)
@@ -137,6 +139,21 @@ struct LifeView: View {
                 )
             }
         }
+        // Inspector owns the screen, not the vertically unbounded scroll content.
+        .inspector(isPresented: Binding(
+            get: { historySelection != nil },
+            set: { if !$0 { historySelection = nil } }
+        )) {
+            if let selection = historySelection {
+                HabitHistorySheet(
+                    habitName: selection.habitName,
+                    iconCategory: selection.iconCategory,
+                    habitType: selection.habitType,
+                    entries: selection.entries
+                )
+                .inspectorColumnWidth(min: 300, ideal: 360, max: 460)
+            }
+        }
         .englishNavigationTitle("Life")
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackground(.regularMaterial, for: .navigationBar)
@@ -148,6 +165,14 @@ struct LifeView: View {
 
 enum LifeRoute: Hashable {
     case habitManagement
+}
+
+private struct HabitHistorySelection: Identifiable {
+    let id: UUID
+    let habitName: String
+    let iconCategory: HabitIconCategory
+    let habitType: HabitType
+    let entries: [LifeViewModel.HabitHistoryEntry]
 }
 
 // MARK: - Isolated @Query Child View
@@ -174,7 +199,7 @@ private struct HabitListQueryView: View {
     @State private var habitsByID: [UUID: HabitDefinition] = [:]
     // Correction #102: cached today exercise check (avoid body-path Calendar ops)
     @State private var cachedTodayExerciseExists = false
-    @State private var historySelection: HabitHistorySelection?
+    @Binding var historySelection: HabitHistorySelection?
     @State private var actionSelection: HabitActionSelection?
     @State private var heroAppeared = false
     @State private var selectedCategoryFilter: HabitIconCategory?
@@ -185,10 +210,6 @@ private struct HabitListQueryView: View {
     @State private var weeklyReport: WeeklyHabitReport?
     @State private var showingReport = false
     @State private var showingHeatmapDetail = false
-
-    private struct HabitHistorySelection: Identifiable {
-        let id: UUID
-    }
 
     private struct HabitActionSelection: Identifiable {
         let id: UUID
@@ -260,20 +281,6 @@ private struct HabitListQueryView: View {
         }
         .onAppear {
             recalculate()
-        }
-        .inspector(isPresented: Binding(
-            get: { historySelection != nil },
-            set: { if !$0 { historySelection = nil } }
-        )) {
-            if let selection = historySelection, let habit = habitsByID[selection.id] {
-                HabitHistorySheet(
-                    habitName: habit.name,
-                    iconCategory: habit.iconCategory,
-                    habitType: habit.habitType,
-                    entries: viewModel.historyEntries(for: habit)
-                )
-                .inspectorColumnWidth(min: 300, ideal: 360, max: 460)
-            }
         }
     }
 
@@ -597,7 +604,7 @@ private struct HabitListQueryView: View {
 
         Button {
             performHabitAction(deferred: deferred) {
-                historySelection = HabitHistorySelection(id: progress.id)
+                presentHistory(for: progress.id)
             }
         } label: {
             Label("History", systemImage: "clock.badge.checkmark")
@@ -1111,10 +1118,27 @@ private struct HabitListQueryView: View {
         }
     }
 
+    private func presentHistory(for id: UUID) {
+        guard let habit = habitsByID[id] else {
+            historySelection = nil
+            return
+        }
+        historySelection = HabitHistorySelection(
+            id: id,
+            habitName: habit.name,
+            iconCategory: habit.iconCategory,
+            habitType: habit.habitType,
+            entries: viewModel.historyEntries(for: habit)
+        )
+    }
+
     private func recalculate() {
         // Correction #68: rebuild O(1) lookup dictionary
         // Correction #104: uniquingKeysWith instead of uniqueKeysWithValues
         habitsByID = Dictionary(habits.map { ($0.id, $0) }, uniquingKeysWith: { _, last in last })
+        if let selection = historySelection {
+            presentHistory(for: selection.id)
+        }
         viewModel.calculateProgresses(
             habits: habits,
             todayExerciseExists: cachedTodayExerciseExists
