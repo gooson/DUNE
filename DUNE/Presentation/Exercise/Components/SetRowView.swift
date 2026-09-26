@@ -9,13 +9,30 @@ struct SetRowView: View {
     let onComplete: () -> Void
     var onFillFromPrevious: (() -> Void)?
     @State private var addedWeightEnabled = false
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
+    private var isAccessibilitySize: Bool { dynamicTypeSize.isAccessibilitySize }
+    private var rowLayout: AnyLayout {
+        isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.sm))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.sm))
+    }
+    private var fieldLayout: AnyLayout {
+        isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.xs))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.xs))
+    }
 
     private var showsAddedWeight: Bool { addedWeightEnabled || !editableSet.weight.isEmpty }
 
     var body: some View {
-        HStack(spacing: DS.Spacing.sm) {
+        rowLayout {
             // Set number + type indicator
             VStack(spacing: 0) {
+                if isAccessibilitySize {
+                    Text("SET")
+                        .font(.caption)
+                }
                 Text("\(editableSet.setNumber)")
                     .font(.caption.weight(.bold))
                     .foregroundStyle(editableSet.setType == .working ? .secondary : editableSet.setType.tintColor)
@@ -25,17 +42,21 @@ struct SetRowView: View {
                         .foregroundStyle(editableSet.setType.tintColor)
                 }
             }
-            .frame(width: 24)
+            .frame(width: isAccessibilitySize ? nil : 24)
 
             // Previous set info (tap to fill)
             Button {
                 onFillFromPrevious?()
             } label: {
-                previousLabel
-                    .font(.caption)
-                    .foregroundStyle(.tertiary)
-                    .frame(width: 56, alignment: .leading)
-                    .lineLimit(1)
+                VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                    if isAccessibilitySize { Text("PREV") }
+                    previousLabel
+                }
+                .font(.caption)
+                .foregroundStyle(.tertiary)
+                .frame(width: isAccessibilitySize ? nil : 56, alignment: .leading)
+                .lineLimit(isAccessibilitySize ? nil : 1)
+                .fixedSize(horizontal: false, vertical: isAccessibilitySize)
             }
             .buttonStyle(.plain)
             .disabled(previousSet == nil || onFillFromPrevious == nil)
@@ -43,18 +64,25 @@ struct SetRowView: View {
             // Input fields based on exercise type
             inputFields
 
-            Spacer(minLength: 0)
+            if !isAccessibilitySize { Spacer(minLength: 0) }
 
             // Completion checkbox
             Button {
                 onComplete()
             } label: {
-                Image(systemName: editableSet.isCompleted ? "checkmark.circle.fill" : "circle")
-                    .font(.title3)
-                    .foregroundStyle(editableSet.isCompleted ? DS.Color.activity : .secondary)
+                VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                    Image(systemName: editableSet.isCompleted ? "checkmark.circle.fill" : "circle")
+                        .font(.title3)
+                        .foregroundStyle(editableSet.isCompleted ? DS.Color.activity : .secondary)
+                    if isAccessibilitySize {
+                        Text("Complete Set")
+                            .font(.caption)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                }
             }
             .buttonStyle(.plain)
-            .frame(width: 28)
+            .frame(width: isAccessibilitySize ? nil : 28)
             .accessibilityIdentifier("set-row-complete-\(editableSet.setNumber)")
         }
         .padding(.vertical, DS.Spacing.xs)
@@ -131,29 +159,29 @@ struct SetRowView: View {
     private var inputFields: some View {
         switch inputType {
         case .setsRepsWeight:
-            HStack(spacing: DS.Spacing.xs) {
+            fieldLayout {
                 TextField(weightUnit.displayName, text: $editableSet.weight)
                     .keyboardType(.decimalPad)
                     .textFieldStyle(.roundedBorder)
-                    .frame(maxWidth: 70)
                     .accessibilityIdentifier("set-row-field-\(editableSet.setNumber)-weight")
+                    .modifier(SetInputFieldLayout(title: Text(weightUnit.displayName), compactWidth: 70))
 
                 TextField("reps", text: $editableSet.reps)
                     .keyboardType(.numberPad)
                     .textFieldStyle(.roundedBorder)
-                    .frame(maxWidth: 60)
                     .accessibilityIdentifier("set-row-field-\(editableSet.setNumber)-reps")
+                    .modifier(SetInputFieldLayout(title: Text("reps"), compactWidth: 60))
             }
 
         case .setsReps:
-            HStack(spacing: DS.Spacing.xs) {
+            fieldLayout {
                 if showsAddedWeight {
                     TextField(weightUnit.displayName, text: $editableSet.weight)
                         .keyboardType(.decimalPad)
                         .textFieldStyle(.roundedBorder)
-                        .frame(maxWidth: 70)
                         .accessibilityLabel("Added Weight")
                         .accessibilityIdentifier("set-row-field-\(editableSet.setNumber)-weight")
+                        .modifier(SetInputFieldLayout(title: Text(weightUnit.displayName), compactWidth: 70))
                 }
                 Button {
                     if showsAddedWeight {
@@ -172,17 +200,17 @@ struct SetRowView: View {
                 TextField("reps", text: $editableSet.reps)
                     .keyboardType(.numberPad)
                     .textFieldStyle(.roundedBorder)
-                    .frame(maxWidth: 70)
                     .accessibilityIdentifier("set-row-field-\(editableSet.setNumber)-reps")
+                    .modifier(SetInputFieldLayout(title: Text("reps"), compactWidth: 70))
             }
 
         case .durationDistance:
-            HStack(spacing: DS.Spacing.xs) {
+            fieldLayout {
                 TextField("min", text: $editableSet.duration)
                     .keyboardType(.numberPad)
                     .textFieldStyle(.roundedBorder)
-                    .frame(maxWidth: 60)
                     .accessibilityIdentifier("set-row-field-\(editableSet.setNumber)-duration")
+                    .modifier(SetInputFieldLayout(title: Text("min"), compactWidth: 60))
 
                 let unit = cardioUnit ?? .km
                 if unit != .timeOnly {
@@ -190,21 +218,21 @@ struct SetRowView: View {
                         TextField(unit.placeholder, text: $editableSet.distance)
                             .keyboardType(unit.keyboardType)
                             .textFieldStyle(.roundedBorder)
-                            .frame(maxWidth: 70)
                             .accessibilityIdentifier("set-row-field-\(editableSet.setNumber)-distance")
+                            .modifier(SetInputFieldLayout(title: Text(unit.placeholder), compactWidth: 70))
                     } else if unit.usesRepsField {
                         TextField(unit.placeholder, text: $editableSet.reps)
                             .keyboardType(.numberPad)
                             .textFieldStyle(.roundedBorder)
-                            .frame(maxWidth: 70)
                             .accessibilityIdentifier("set-row-field-\(editableSet.setNumber)-reps")
+                            .modifier(SetInputFieldLayout(title: Text(unit.placeholder), compactWidth: 70))
 
                         if unit == .floors {
                             TextField("lvl", text: $editableSet.level)
                                 .keyboardType(.numberPad)
                                 .textFieldStyle(.roundedBorder)
-                                .frame(maxWidth: 56)
                                 .accessibilityIdentifier("set-row-field-\(editableSet.setNumber)-level")
+                                .modifier(SetInputFieldLayout(title: Text("lvl"), compactWidth: 56))
                         }
                     }
                 }
@@ -214,23 +242,43 @@ struct SetRowView: View {
             TextField("sec", text: $editableSet.duration)
                 .keyboardType(.numberPad)
                 .textFieldStyle(.roundedBorder)
-                .frame(maxWidth: 60)
                 .accessibilityIdentifier("set-row-field-\(editableSet.setNumber)-duration")
+                .modifier(SetInputFieldLayout(title: Text("sec"), compactWidth: 60))
 
         case .roundsBased:
-            HStack(spacing: DS.Spacing.xs) {
+            fieldLayout {
                 TextField("reps", text: $editableSet.reps)
                     .keyboardType(.numberPad)
                     .textFieldStyle(.roundedBorder)
-                    .frame(maxWidth: 60)
                     .accessibilityIdentifier("set-row-field-\(editableSet.setNumber)-reps")
+                    .modifier(SetInputFieldLayout(title: Text("reps"), compactWidth: 60))
 
                 TextField("sec", text: $editableSet.duration)
                     .keyboardType(.numberPad)
                     .textFieldStyle(.roundedBorder)
-                    .frame(maxWidth: 60)
                     .accessibilityIdentifier("set-row-field-\(editableSet.setNumber)-duration")
+                    .modifier(SetInputFieldLayout(title: Text("sec"), compactWidth: 60))
             }
+        }
+    }
+}
+
+private struct SetInputFieldLayout: ViewModifier {
+    let title: Text
+    let compactWidth: CGFloat
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
+    func body(content: Content) -> some View {
+        if dynamicTypeSize.isAccessibilitySize {
+            VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                title
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+                content.frame(maxWidth: .infinity)
+            }
+        } else {
+            content.frame(maxWidth: compactWidth)
         }
     }
 }

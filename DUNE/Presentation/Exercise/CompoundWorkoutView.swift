@@ -247,21 +247,23 @@ struct CompoundWorkoutView: View {
 
     private func setListFor(vm: WorkoutSessionViewModel, exercise: ExerciseDefinition) -> some View {
         VStack(spacing: 0) {
-            // Column headers
-            HStack(spacing: DS.Spacing.sm) {
-                Text("SET")
-                    .frame(width: 24)
-                Text("PREV")
-                    .frame(width: 56, alignment: .leading)
-                ExerciseSetColumnHeaders(exercise: exercise, weightUnit: weightUnit)
-                Spacer()
-                Text("")
-                    .frame(width: 28)
+            if !dynamicTypeSize.isAccessibilitySize {
+                // Column headers
+                HStack(spacing: DS.Spacing.sm) {
+                    Text("SET")
+                        .frame(width: 24)
+                    Text("PREV")
+                        .frame(width: 56, alignment: .leading)
+                    ExerciseSetColumnHeaders(exercise: exercise, weightUnit: weightUnit)
+                    Spacer()
+                    Text("")
+                        .frame(width: 28)
+                }
+                .font(.caption2.weight(.bold))
+                .foregroundStyle(DS.Color.textSecondary)
+                .padding(.horizontal, DS.Spacing.sm)
+                .padding(.bottom, DS.Spacing.xs)
             }
-            .font(.caption2.weight(.bold))
-            .foregroundStyle(DS.Color.textSecondary)
-            .padding(.horizontal, DS.Spacing.sm)
-            .padding(.bottom, DS.Spacing.xs)
 
             ForEach(vm.sets.indices, id: \.self) { index in
                 SetRowView(
