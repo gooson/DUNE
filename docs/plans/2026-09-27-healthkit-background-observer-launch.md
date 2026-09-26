@@ -30,6 +30,7 @@ related_solutions:
 | DUNE/Data/HealthKit/HealthKitObserverManager.swift | modify | 동기 등록/직렬화 및 체성분 immediate |
 | DUNETests/LaunchExperiencePlannerTests.swift | modify | 최초 설치/재실행/테스트/미지원 분기 |
 | DUNETests/HealthKitObserverManagerTests.swift | modify | 체성분 전달 정책 회귀 |
+| DUNETests/CardioSessionViewModelTests.swift | modify | 전체 단위 테스트에서 발견한 live HealthKit 의존을 기존 mock으로 격리 |
 
 ## Implementation Steps
 
