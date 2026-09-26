@@ -48,6 +48,7 @@ struct BodyCompositionFormSheet: View {
                     TextField("Memo", text: $viewModel.newMemo)
                 }
                 .scrollContentBackground(.hidden)
+                .scrollDismissesKeyboard(.interactively)
                 .englishNavigationTitle(isEdit ? "Edit Record" : "Add Record")
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
