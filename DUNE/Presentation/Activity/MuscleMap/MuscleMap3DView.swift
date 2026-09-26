@@ -72,10 +72,12 @@ struct MuscleMap3DView: View {
             // Overlay controls
             if showControls {
                 overlayControls
+                    .environment(\.colorScheme, .dark)
                     .transition(.opacity)
             }
         }
         .background(Color.black)
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier("activity-musclemap-3d-screen")
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackground(.hidden, for: .navigationBar)
