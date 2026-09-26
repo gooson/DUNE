@@ -230,6 +230,16 @@ struct DUNEApp: App {
 
         let scoreRefreshService = ScoreRefreshService(modelContainer: modelContainer)
 
+        // Background launches may never create an active scene. Restore observers before
+        // returning the runtime; foreground authorization revalidation remains separate.
+        if LaunchExperiencePlanner.shouldRestoreHealthKitObservers(
+            isHealthDataAvailable: healthKitAvailable,
+            hasRequestedAuthorization: UserDefaults.standard.bool(forKey: "hasRequestedHealthKitAuthorization"),
+            isRunningTests: Self.isRunningXCTest
+        ) {
+            observerManager?.startObserving()
+        }
+
         return AppRuntime(
             cloudSyncEnabled: resolvedCloudSyncEnabled,
             modelContainer: modelContainer,
@@ -464,7 +474,7 @@ struct DUNEApp: App {
 
         let previousObserverManager = appRuntime.observerManager
         if let previousObserverManager {
-            await previousObserverManager.stopObserving()
+            previousObserverManager.stopObserving()
         }
 
         appRuntime = Self.makeAppRuntime(

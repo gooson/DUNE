@@ -3,6 +3,22 @@ import Testing
 
 @Suite("LaunchExperiencePlanner")
 struct LaunchExperiencePlannerTests {
+    @Test("Returning installs restore observers without this-launch authorization or an active scene")
+    func returningInstallRestoresObservers() {
+        #expect(LaunchExperiencePlanner.shouldRestoreHealthKitObservers(
+            isHealthDataAvailable: true, hasRequestedAuthorization: true, isRunningTests: false
+        ))
+    }
+
+    @Test("Observer restoration respects first install, availability, and XCTest isolation")
+    func observerRestorationGuards() {
+        for (available, requested, testing) in [(true, false, false), (false, true, false), (true, true, true)] {
+            #expect(!LaunchExperiencePlanner.shouldRestoreHealthKitObservers(
+                isHealthDataAvailable: available, hasRequestedAuthorization: requested, isRunningTests: testing
+            ))
+        }
+    }
+
     @Test("HealthKit revalidates persisted completion once per launch", arguments: [false, true])
     func healthKitRevalidatesPersistedCompletion(completed: Bool) {
         let state = LaunchAuthorizationRequestState(
