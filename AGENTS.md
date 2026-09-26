@@ -127,6 +127,7 @@ A skill is a set of local instructions to follow that is stored in a `SKILL.md` 
   - `.codex/agent-memory/README.md`
 - 공통 실행 규칙(`Task tool`, `TodoWrite`, read-only review, memory policy)은 `.codex/skill-compat.md` 를 canonical source로 사용합니다.
 - agent별 모델/추론/edit policy/memory source는 `.codex/agent-map.md` 를 canonical source로 사용합니다.
+- 모델 분담과 토큰 절감 실행은 `.codex/skill-compat.md`의 공통 정책을 따릅니다. 위임 시 `.codex/agent-map.md`의 모델을 실제 호출 인자로 전달하며, 테스트/검증 재사용 시에만 `.codex/token-efficiency.md`를 읽습니다. 문서 배정은 현재 작업이나 앱 전역 모델을 자동 변경하지 않습니다.
 - `.claude/agents/*.md` 또는 핵심 skill 목록이 바뀌면 Codex adapter 문서를 함께 갱신하고 `python3 scripts/check-codex-claude-parity.py` 로 drift를 검사합니다.
 
 ## Permission Parity (`.claude/settings.local.json`)

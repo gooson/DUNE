@@ -19,6 +19,8 @@
 
 ## Read Order
 
+agent-map에 지정된 해당 역할의 memory만 읽는다. 관련 항목을 검색하고 본문은 필요한 범위만 읽는다. 모든 역할의 memory를 일괄 로드하지 않는다.
+
 1. `.claude/agent-memory/<agent>/MEMORY.md`
 2. 관련 solution / correction 문서
 3. `.codex/agent-memory/<agent>.md` (존재할 때)
