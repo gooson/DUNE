@@ -22,7 +22,8 @@ related_solutions: [2026-03-04-adding-new-theme]
 
 - `AppTheme.contourAtlas`와 `Contour` prefix, light/dark 26개 색상 자산을 추가했다.
 - `ContourLines`는 비정형 닫힌 등고선을 unit-space 좌표로 한 번 계산한다. `path(in:)`에서는 좌표 변환만 수행한다.
-- `ContourBackground`를 Tab/Detail/Sheet와 Watch에서 공유한다. Watch는 선 개수를 줄이며 모든 Contour 배경은 정적이다.
+- `ContourBackground`를 Tab/Detail/Sheet와 Watch에서 공유한다. iOS 배경은 캐시된 등고선에 8초 주기의 scale/rotation/offset을 적용하며, Tab 보조 레이어는 11초 주기로 움직인다. Watch는 선 개수를 줄이고 정적으로 유지한다.
+- `waveReducedMotion` 또는 비활성 scene에서는 정적으로 표시한다. 설정 미리보기는 `waveAnimationEnabled = false`를 존중한다. Scene 전환은 짧은 opacity 전환으로 연결하며 동작 줄이기에서는 전환 애니메이션도 생략한다.
 - Hero/Standard/Inline/Section 카드에 불투명 석회색/먹색 표면을 적용한다. 상태/지표 색의 구분을 유지하고 라임은 작은 강조에 사용한다.
 - 설정에서는 실제 `TabWaveBackground`, `StandardCard`, `ProgressRingView`를 재사용한다. 예시 숫자는 접근성 트리에서 제외하며 선택 이름은 Dynamic Type을 유지한다.
 - 시스템 `accessibilityReduceMotion`은 읽기 전용이다. `waveAnimationEnabled`와 결합한 `waveReducedMotion`으로 미리보기의 반복 애니메이션 시작을 차단한다. 기본값은 true라 기존 화면의 모션 정책은 유지된다.
@@ -45,6 +46,15 @@ related_solutions: [2026-03-04-adding-new-theme]
 새로움은 색상 수보다 재질과 형태의 차이에서 얻을 수 있다. 고정 등고선과 불투명 카드의 조합은 데이터 가독성을 유지하면서 기존 물결/유리 표현과 구별된다.
 
 ## Validation
+
+### 2026-09-27 애니메이션 개선
+
+- `scripts/build-ios.sh --no-regen`: 최종 코드 빌드 통과.
+- iPhone 18 Pro / iOS 27.0: `ContourThemeTests` 2개 통과 (라이트·다크 화면, 테마 전환과 재실행 유지).
+- SwiftUI 리뷰에서 발견한 scene 전환 위치 튐을 identity 시작 위치와 opacity 전환으로 개선했다.
+- 한계: 위 UI 테스트는 화면 표시와 설정 회귀를 검증하며, 시간에 따른 움직임이나 실제 기기의 프레임 성능을 측정하지 않는다.
+
+### 최초 테마 구현
 
 - iOS + embedded Watch 시뮬레이터 빌드 통과.
 - 26개 자산 JSON 및 두 String Catalog의 en/ko/ja 테마 이름 확인.
