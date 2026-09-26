@@ -22,7 +22,10 @@ _ensure_worktree_cache() {
     # Codex worktrees can share a basename (e.g. <id>/Health).
     # Include the full path identity so concurrent worktrees never reuse a device.
     local path_hash
-    path_hash=$(printf '%s' "$_WT_TOPLEVEL" | shasum -a 256) || return 1
+    path_hash=$(printf '%s' "$_WT_TOPLEVEL" | shasum -a 256) || {
+        echo >&2 "Error: Cannot compute worktree identity for simulator isolation."
+        return 1
+    }
     _WT_BASENAME="$(basename "$_WT_TOPLEVEL")-${path_hash:0:12}"
 
     # In a worktree, .git is a file (not a directory) pointing to the main repo
@@ -54,7 +57,7 @@ _is_git_worktree() {
 
 # Get the path-qualified worktree key (e.g., "Health-a1b2c3d4e5f6").
 _worktree_basename() {
-    _ensure_worktree_cache
+    _ensure_worktree_cache || return 1
     echo "$_WT_BASENAME"
 }
 
@@ -132,6 +135,7 @@ ensure_worktree_simulator() {
         return 0
     fi
 
+    _ensure_worktree_cache || return 1
     if ! _is_git_worktree; then
         echo "$source_udid"
         return 0
@@ -185,6 +189,7 @@ apply_worktree_destination() {
     local sim_name="$2"
     local platform="$3"
 
+    _ensure_worktree_cache || return 1
     if ! _is_git_worktree; then
         echo "$destination"
         return 0
@@ -211,6 +216,7 @@ cleanup_worktree_simulators() {
 
     case "$mode" in
         --current)
+            _ensure_worktree_cache || return 1
             if ! _is_git_worktree; then
                 echo "Not in a worktree. Nothing to clean up."
                 return 0
