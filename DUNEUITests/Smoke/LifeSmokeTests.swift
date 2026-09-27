@@ -27,7 +27,7 @@ final class LifeSmokeTests: UITestBaseCase {
     // MARK: - Habit Form
 
     func testHabitFormOpens() throws {
-        XCTAssertTrue(app.openNewHabitForm(), "New Habit menu action should open the habit form")
+        XCTAssertTrue(app.openLifeNewHabitForm(), "New Habit menu action should open the habit form")
 
         // Habit form sheet should appear
         let nameField = app.textFields[AXID.habitFormName]
@@ -41,7 +41,7 @@ final class LifeSmokeTests: UITestBaseCase {
 
     func testHabitFormCancelDismisses() throws {
         let addButton = app.buttons[AXID.lifeToolbarAdd].firstMatch
-        XCTAssertTrue(app.openNewHabitForm(), "New Habit menu action should open the habit form")
+        XCTAssertTrue(app.openLifeNewHabitForm(), "New Habit menu action should open the habit form")
 
         let cancelButton = app.descendants(matching: .any)[AXID.habitFormCancel].firstMatch
         XCTAssertTrue(cancelButton.waitForExistence(timeout: 3), "Habit form cancel button should exist")
@@ -52,7 +52,7 @@ final class LifeSmokeTests: UITestBaseCase {
     }
 
     func testSaveEmptyHabitKeepsFormPresented() throws {
-        XCTAssertTrue(app.openNewHabitForm(), "New Habit menu action should open the habit form")
+        XCTAssertTrue(app.openLifeNewHabitForm(), "New Habit menu action should open the habit form")
 
         let nameField = app.textFields[AXID.habitFormName].firstMatch
         XCTAssertTrue(nameField.waitForExistence(timeout: 3), "Habit name field should appear")
@@ -63,7 +63,7 @@ final class LifeSmokeTests: UITestBaseCase {
     }
 
     func testWeeklyFrequencyShowsStepper() throws {
-        XCTAssertTrue(app.openNewHabitForm(), "New Habit menu action should open the habit form")
+        XCTAssertTrue(app.openLifeNewHabitForm(), "New Habit menu action should open the habit form")
 
         XCTAssertTrue(
             app.scrollToElementInPrimaryFormIfNeeded(AXID.habitFormFrequencyWeekly, maxSwipes: 5),

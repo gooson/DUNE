@@ -273,6 +273,10 @@ enum AXID {
     static let workoutSessionScreen = "workout-session-screen"
     static let workoutSessionDone = "workout-session-done"
     static let workoutSessionCompleteSet = "workout-session-complete-set"
+    static let workoutSessionPlannedReps = "workout-session-planned-reps"
+    static let workoutSessionRecommendationReason = "workout-session-recommendation-reason"
+    static let workoutSessionApplyRecommendation = "workout-session-apply-recommendation"
+    static let workoutSessionSkipRest = "workout-session-skip-rest"
     static let workoutSessionLastSetSheet = "workout-session-last-set-sheet"
     static let workoutSessionAddSet = "workout-session-add-set"
     static let workoutSessionFinish = "workout-session-finish"
@@ -471,7 +475,7 @@ extension XCUIApplication {
     }
 
     @discardableResult
-    func openNewHabitForm(timeout: TimeInterval = 5) -> Bool {
+    func openLifeNewHabitForm(timeout: TimeInterval = 5) -> Bool {
         guard waitAndTap(AXID.lifeToolbarAdd, timeout: timeout) else { return false }
         guard waitAndTap(AXID.lifeToolbarNewHabit, timeout: timeout) else { return false }
         return textFields[AXID.habitFormName].firstMatch.waitForExistence(timeout: timeout)

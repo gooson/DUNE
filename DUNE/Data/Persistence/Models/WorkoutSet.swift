@@ -15,6 +15,10 @@ final class WorkoutSet {
     var isCompleted: Bool = false
     var restDuration: TimeInterval?
     var rpe: Double? = nil
+    /// Planned target; `reps` remains the actual performed count.
+    var plannedReps: Int?
+    /// `user` or `estimated`. nil means the source is unknown for legacy sets.
+    var rpeSourceRaw: String?
 
     init(
         setNumber: Int = 0,
@@ -26,7 +30,9 @@ final class WorkoutSet {
         intensity: Int? = nil,
         isCompleted: Bool = false,
         restDuration: TimeInterval? = nil,
-        rpe: Double? = nil
+        rpe: Double? = nil,
+        plannedReps: Int? = nil,
+        rpeSourceRaw: String? = nil
     ) {
         self.id = UUID()
         self.setNumber = setNumber
@@ -39,6 +45,8 @@ final class WorkoutSet {
         self.isCompleted = isCompleted
         self.restDuration = restDuration
         self.rpe = rpe
+        self.plannedReps = plannedReps
+        self.rpeSourceRaw = rpeSourceRaw
     }
 
     var setType: SetType {
