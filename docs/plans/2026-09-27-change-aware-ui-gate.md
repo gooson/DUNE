@@ -2,7 +2,7 @@
 tags: [testing, ui-test, run, selective-testing]
 date: 2026-09-27
 category: plan
-status: approved
+status: implemented
 confidence: medium
 related_solutions:
   - docs/solutions/testing/2026-03-04-pr-fast-gate-and-nightly-regression-split.md
@@ -23,6 +23,7 @@ PR CI는 smoke, nightly는 full 회귀로 분리돼 있으나 Codex `/run`은 �
 - UI 실행기 기본 full 및 CI/nightly 동작은 유지한다. 명시적 선택과 smoke를 함께 주면 둘 다 실행한다.
 - 0개/미확인 실행은 UI 게이트 성공으로 인정하지 않는다.
 - 사용자 요청에 따른 Codex 정책 예외를 어댑터에 명시하고 Claude 원본 정책과 구분한다.
+- 같은 원인의 자동 재시도는 근거 있는 변화 확인 후 최대 1회로 제한하고, 반복 polling·무관한 실패 수정·전체 재리뷰를 막는다.
 
 ## Approach
 
@@ -47,8 +48,6 @@ PR CI는 smoke, nightly는 full 회귀로 분리돼 있으나 Codex `/run`은 �
 | scripts/lib/* | 필요 시 추가 | 선택 목록/실행 증거 검사 |
 | scripts/plan-ui-tests.py | 추가 | 변경 범위와 실행 명령 출력 |
 | scripts/tests/* | 추가 | argv, 분류, Git rename/dirty/untracked, 0개 실행 회귀 |
-| DUNEUITests/Smoke/ActivitySmokeTests.swift | 수정 | 실데이터 로딩에 의존하던 콘텐츠 smoke를 기존 seed fixture로 고정 |
-| DUNEUITests/Smoke/LifeSmokeTests.swift | 수정 | 현재 추가 메뉴를 거쳐 폼에 진입하도록 경로 정정 |
 | AGENTS.md | 수정 | 사용자 승인된 Codex UI 게이트 예외 안내 |
 | .codex/skill-compat.md | 수정 | `/run` Phase 2.5 범위/증빙 정책 |
 | .codex/token-efficiency.md | 수정 | 선택 범위와 결과 재사용 계약 일치 |
@@ -75,13 +74,11 @@ PR CI는 smoke, nightly는 full 회귀로 분리돼 있으나 Codex `/run`은 �
 
 ## Testing Strategy
 
-- Python unittest 및 shell mock 실행: 실제 runner argv를 확인하되 simulator 부팅은 하지 않는다.
-- 판정기 fixture와 임시 Git 저장소로 미커밋/신규/rename 회귀를 검증한다.
+- Python unittest 및 shell dry-run: 실제 runner argv를 확인하되 simulator 부팅은 하지 않는다.
+- 판정기 fixture와 임시 Git 저장소로 미커밋/신규/rename, 기능 선택, 공유 변경 상향, 도구 전용 UI skip 회귀를 검증한다.
 - `bash -n`, parity 검사, `git diff --check`.
-- 실제 `scripts/build-ios.sh`, 실행기의 변경된 `--smoke + --only-testing` 조합 실행. 앱/프로젝트/UI test body/seed/helper 변경이 없는 CLI 선택 변경이므로 도구 fixture와 실제 조합 검증을 필수 게이트로 한다.
-- 처음 시도한 full iOS 실행은 환경 복구 후 첫 회귀 케이스가 96초에 통과했으나 전체 완료 전에 범위를 조정했다. 중단한 full은 통과로 보고하지 않는다.
-- 실제 smoke 실패 첨부에서 Activity의 ActivityIndicator-only 화면과 Life의 추가 메뉴를 확인했다. 앱 코드를 변경하지 않고 Activity seed 및 Life 테스트 탐색 경로를 수정하며, 변경된 두 클래스 전체와 공통 smoke를 재실행한다. 기대값/timeout 완화나 실패 테스트 제외는 하지 않는다.
-- 이후 Phase에서 같은 증거 재사용은 파일/환경 일치 조건을 확인한다.
+- 앱·프로젝트·UI 테스트·seed/helper의 최종 diff가 없음을 확인한다. CLI 선택 및 로그 검증 변경의 완료 조건은 해당 계약 테스트다.
+- 앱 기능 변경은 관련 suite와 smoke, 공유/불명확 변경은 full을 유지한다. 도구 변경과 앱 변경이 섞이면 앱 검증을 면제하지 않는다.
 
 ## Risks
 
@@ -94,6 +91,13 @@ PR CI는 smoke, nightly는 full 회귀로 분리돼 있으나 Codex `/run`은 �
 ## Confidence Assessment
 
 Medium. 기존 실행기와 CI를 재사용하며 정책은 보수적으로 시작한다. 성능 개선률은 측정 전 주장하지 않는다.
+
+## Scope Correction (2026-09-27)
+
+전체 UI의 불필요한 실행을 줄이는 작업에서 실제 smoke 실패 복구까지 범위를 넓힌 판단을 철회했다.
+Activity/Life 테스트 수정은 모두 원복한다. 이전 UI 실행은 실패 또는 중단됐으며 통과 증거로 사용하지 않는다.
+사용자의 정정에 따라 이번 도구 작업은 Python 계약 테스트·dry-run·구문·parity·diff 리뷰로 검증하고 UI는 skipped로 기록한다.
+시뮬레이터 복구와 기존 앱 UI 테스트 수정은 이번 완료 조건에 포함하지 않는다.
 
 ## References
 

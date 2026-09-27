@@ -28,8 +28,10 @@ FEATURE_SUITES = {
     "Sleep": ["SleepDetailSmokeTests", "WellnessSmokeTests", "WellnessRegressionTests",
               "TodaySettingsRegressionTests", "ChartInteractionRegressionUITests"],
 }
-IOS_INFRA = {"scripts/test-ui.sh", "scripts/lib/ui-test-selection.sh",
-             "scripts/lib/verify-ui-test-log.py", "scripts/tests/test_ui_test_runner.py"}
+UI_GATE_TOOLING = {"scripts/test-ui.sh", "scripts/plan-ui-tests.py",
+                   "scripts/lib/verify-ui-test-log.py", "scripts/tests/test_ui_test_runner.py",
+                   "scripts/tests/test_plan_ui_tests.py"}
+UI_WORKFLOW = ".github/workflows/test-ui.yml"
 WATCH_INFRA = {"scripts/test-watch-ui.sh"}
 DOC_FILES = {"AGENTS.md", "CLAUDE.md", "README.md", "CHANGELOG.md"}
 LEVEL = {"skip": 0, "targeted": 1, "full": 2}
@@ -60,7 +62,30 @@ def known_classes(root: Path) -> set[str]:
     return classes
 
 
-def make_plan(paths: list[str], root: Path) -> dict:
+def workflow_execution_unchanged(root: Path, base: str) -> bool:
+    """Allow job-selection edits only when both existing UI job bodies are intact."""
+    def execution_jobs(text: str) -> list[str]:
+        jobs = []
+        for key in ("env", "defaults"):
+            match = re.search(r"^" + key + r":[^\n]*\n(?:[ \t]+.*\n|\n)*", text, re.M)
+            jobs.append(match[0].strip() if match else "")
+        for name in ("ios-ui-tests", "watch-ui-tests"):
+            match = re.search(r"^  " + name + r":\n(.*?)(?=^  \S|\Z)", text, re.M | re.S)
+            if not match:
+                return []
+            # Only the job-level condition/dependency are selection, not execution.
+            jobs.append(re.sub(r"^    (?:if|needs):[^\n]*\n", "", match[1], flags=re.M).strip())
+        return jobs
+
+    try:
+        before = execution_jobs(git(root, "show", f"{base}:{UI_WORKFLOW}").decode())
+        after = execution_jobs((root / UI_WORKFLOW).read_text())
+    except (OSError, UnicodeError, subprocess.CalledProcessError):
+        return False
+    return bool(before) and before == after
+
+
+def make_plan(paths: list[str], root: Path, *, workflow_selection_only: bool = False) -> dict:
     platforms = {name: {"mode": "skip", "selectors": []} for name in ("ios", "watch")}
     reasons = []
     additional = set()
@@ -78,9 +103,10 @@ def make_plan(paths: list[str], root: Path) -> dict:
             reason = "documentation: no app runtime change"
         elif path.startswith(("DUNETests/", "DUNEWatchTests/")) and path.endswith(".swift"):
             reason = "unit test source only: run the affected unit tests"
-        elif path in IOS_INFRA:
-            require("ios", "full")
-            reason = "iOS UI runner infrastructure"
+        elif path in UI_GATE_TOOLING or (path == UI_WORKFLOW and workflow_selection_only):
+            reason = "UI gate tooling: contract tests and diff review; no automatic app UI run"
+            additional.add("Run UI gate Python contract tests, bash -n and selection dry-runs.")
+            additional.add("Review tooling diff: launch/install/seed/device/CI execution changes need affected integration tests; uncertain app impact needs full.")
         elif path in WATCH_INFRA or path.startswith(("DUNEWatch/", "DUNEWatchUITests/")):
             require("watch", "full")
             reason = "watch app/test change: separate watch full gate"
@@ -146,7 +172,8 @@ def main() -> int:
     root = Path(__file__).resolve().parent.parent
     try:
         merge_base, paths = changed_files(root, args.base)
-        plan = make_plan(paths, root)
+        plan = make_plan(paths, root, workflow_selection_only=(
+            UI_WORKFLOW in paths and workflow_execution_unchanged(root, merge_base)))
     except (OSError, UnicodeError, subprocess.CalledProcessError) as error:
         print(f"UI gate planning failed: {error}", file=sys.stderr)
         return 1

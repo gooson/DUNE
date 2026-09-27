@@ -121,6 +121,7 @@ A skill is a set of local instructions to follow that is stored in a `SKILL.md` 
 ## Codex Adapter Layer
 
 - 사용자 요청으로 개선한 Codex `/run` UI 게이트는 `.codex/skill-compat.md`의 **변경 범위 기반 UI 게이트**를 따른다. 이 명시적 예외는 Claude 원본의 S11 및 Phase 2.5 전체 UI 강제 실행보다 우선한다. `.claude/**` 원본은 변경하지 않으며, Claude에서 직접 실행하는 `/run` 정책은 유지된다.
+- 무의미한 재시도·토큰 낭비 방지는 `.codex/skill-compat.md`의 **재시도와 범위 확장 제한**을 따른다. 같은 실패는 원인에 대응한 변화가 확인된 경우에만 최대 1회 재시도한다. 이 제한은 phase/turn 전환 후에도 유지하고, 무관한 UI 실패 수정·전체 재검증으로 작업 범위를 넓히지 않는다.
 
 - `.claude/**` 는 **수정하지 않는 source of truth** 입니다. Codex 전용 번역/보강은 `.codex/**` 와 `AGENTS.md` 에만 기록합니다.
 - Codex 실행 adapter 문서는 다음 3개를 기준으로 유지합니다.

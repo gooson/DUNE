@@ -3,7 +3,7 @@
 /// Smoke tests for the Activity tab.
 /// Verifies key UI elements exist and the screen renders without crashing.
 @MainActor
-final class ActivitySmokeTests: SeededUITestBaseCase {
+final class ActivitySmokeTests: UITestBaseCase {
     override func setUpWithError() throws {
         try super.setUpWithError()
         navigateToActivity()

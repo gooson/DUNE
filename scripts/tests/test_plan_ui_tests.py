@@ -79,8 +79,25 @@ class PlanTests(unittest.TestCase):
         self.assertEqual(plan["commands"], [])
         self.assertIn("unit tests", plan["changes"][0]["reason"])
 
-    def test_infrastructure_and_helpers_are_full(self):
-        for path in ("scripts/test-ui.sh", "DUNEUITests/Helpers/UITestBaseCase.swift"):
+    def test_gate_tooling_requires_contracts_without_app_ui(self):
+        plan = self.plan(*MODULE.UI_GATE_TOOLING)
+        self.assertEqual(plan["commands"], [])
+        self.assertEqual(plan["platforms"]["ios"]["mode"], "skip")
+        self.assertEqual(plan["platforms"]["watch"]["mode"], "skip")
+        self.assertTrue(any("contract tests" in item for item in plan["additional_validation"]))
+        self.assertTrue(any("launch/install/seed" in item for item in plan["additional_validation"]))
+
+    def test_tooling_does_not_hide_app_changes(self):
+        plan = self.plan("scripts/plan-ui-tests.py", "DUNE/App/ContentView.swift")
+        self.assertEqual(plan["platforms"]["ios"]["mode"], "full")
+
+    def test_workflow_requires_execution_evidence_before_skip(self):
+        self.assertEqual(self.plan(MODULE.UI_WORKFLOW)["platforms"]["ios"]["mode"], "full")
+        self.assertEqual(MODULE.make_plan([MODULE.UI_WORKFLOW], ROOT,
+                                         workflow_selection_only=True)["commands"], [])
+
+    def test_shared_helpers_and_unknown_tooling_are_full(self):
+        for path in ("scripts/lib/simulator-boot.sh", "DUNEUITests/Helpers/UITestBaseCase.swift"):
             with self.subTest(path=path):
                 self.assertEqual(self.plan(path)["platforms"]["ios"]["mode"], "full")
 
@@ -146,6 +163,25 @@ class GitChangeTests(unittest.TestCase):
         self.git("commit", "-m", "upstream")
         self.git("switch", "feature")
         self.assertEqual(MODULE.changed_files(self.root, "main")[1], [])
+
+    def test_workflow_execution_change_cannot_be_skipped(self):
+        original = ("jobs:\n  ios-ui-tests:\n    if: true\n    runs-on: macos-15\n"
+                    "    steps:\n      - run: scripts/test-ui.sh --smoke\n"
+                    "  watch-ui-tests:\n    runs-on: macos-15\n"
+                    "    steps:\n      - run: scripts/test-watch-ui.sh --smoke\n")
+        self.write(MODULE.UI_WORKFLOW, original)
+        self.git("add", ".")
+        self.git("commit", "-m", "workflow baseline")
+        self.write(MODULE.UI_WORKFLOW, original.replace("if: true", "needs: scope\n    if: false"))
+        self.assertTrue(MODULE.workflow_execution_unchanged(self.root, "HEAD"))
+        for content in (original.replace("--smoke", "--smoke --no-regen"),
+                        original.replace("macos-15", "macos-14"),
+                        "env:\n  DAILVE_IOS_OS: '27.0'\n" + original,
+                        original.replace("  watch-ui-tests:", "  renamed-job:")):
+            self.write(MODULE.UI_WORKFLOW, content)
+            self.assertFalse(MODULE.workflow_execution_unchanged(self.root, "HEAD"))
+        (self.root / MODULE.UI_WORKFLOW).unlink()
+        self.assertFalse(MODULE.workflow_execution_unchanged(self.root, "HEAD"))
 
 
 if __name__ == "__main__":
