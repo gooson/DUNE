@@ -5,13 +5,10 @@ final class WatchPlankTimerTests: WatchUITestBaseCase {
     func testPlankShowsLiveTimer() throws {
         openAllExercises()
 
-        let plankPredicate = NSPredicate(format: "label CONTAINS[c] 'Plank' OR label CONTAINS[c] '플랭크'")
-        let plankButton = app.buttons.matching(plankPredicate).firstMatch
-        if !plankButton.waitForExistence(timeout: 3) {
-            app.swipeUp()
-            _ = plankButton.waitForExistence(timeout: 3)
+        guard let plankButton = findQuickStartExercise(identifier: WatchAXID.quickStartExercisePlank) else {
+            XCTFail("Fixture Plank should be hittable in the All Exercises list")
+            return
         }
-        XCTAssertTrue(plankButton.exists, "Plank should be visible in exercise list")
         plankButton.tap()
 
         // Workout preview

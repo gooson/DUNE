@@ -509,6 +509,7 @@ struct ExercisePickerView: View {
             }
         }
         .padding(.vertical, DS.Spacing.xxs)
+        .contentShape(Rectangle())
     }
 
     private func exerciseRow(_ exercise: ExerciseDefinition) -> some View {

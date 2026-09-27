@@ -474,9 +474,11 @@ extension XCUIApplication {
         return true
     }
 
-    func openLifeNewHabitForm() -> Bool {
-        guard waitAndTap(AXID.lifeToolbarAdd) else { return false }
-        return waitAndTap(AXID.lifeToolbarNewHabit)
+    @discardableResult
+    func openLifeNewHabitForm(timeout: TimeInterval = 5) -> Bool {
+        guard waitAndTap(AXID.lifeToolbarAdd, timeout: timeout) else { return false }
+        guard waitAndTap(AXID.lifeToolbarNewHabit, timeout: timeout) else { return false }
+        return textFields[AXID.habitFormName].firstMatch.waitForExistence(timeout: timeout)
     }
 
     func hasPrimaryNavigation(timeout: TimeInterval = 8) -> Bool {
