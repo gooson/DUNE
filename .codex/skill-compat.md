@@ -31,6 +31,18 @@ Claude skill 문서를 그대로 유지하면서 Codex에서 실행 semantics를
 - 필수 프로젝트 문서/규칙은 유지한다. 선택적 reference, memory, 과거 solution은 검색으로 관련 부분만 읽으며 모든 skill/agent 문서를 일괄 로드하지 않는다.
 - 테스트 실행, 결과 재사용, 비용 측정이 필요할 때만 `.codex/token-efficiency.md`를 읽는다.
 
+### 재시도와 범위 확장 제한
+
+사용자가 요청한 무의미한 재시도 방지 규칙이다. Claude 원본의 반복 실행 지시보다 이 Codex 실행 한도를 우선한다.
+
+- 실행 전 현재 변경에 필요한 검증인지 확인한다. 문서/도구 작업에서 관성적으로 앱 빌드·전체 UI·smoke를 실행하지 않는다. 필요한 최소 검증을 통과했으면 새 변경/실패 근거 없이 범위를 넓히지 않는다.
+- 실패하면 `작업 / 실패 지점·원인 / 새로 확인된 변화 / 재시도 횟수 / 다음 조치`를 짧게 기록한다. 명령 표기, 로그 경로, 모델, phase 또는 대화 turn이 바뀌어도 같은 원인에는 같은 횟수를 적용한다.
+- 같은 원인에 대한 자동 재시도는 **최대 1회**다. 원인에 대응한 코드 수정 또는 실패한 의존성의 정상 동작 확인이 먼저 있어야 한다. 시간 경과, 일시적인 부하 하락, 단순 목록 조회 성공, 막연한 기대만으로 재실행하지 않는다. 새 실패 원인으로 횟수를 초기화하려면 기존 원인이 해소됐다는 증거가 있어야 한다.
+- 재시도에서도 같은 원인이 남으면 해당 실행 경로를 중단하고 원인·미검증 범위·정확한 재개 조건을 기록한다. 독립적으로 가능한 작업은 계속한다. 환경 실패를 코드 실패/테스트 통과로 보고하지 않으며, 필요한 검증이 막힌 상태로 게이트를 통과시키지 않는다.
+- 진행 중인 실행은 복제 실행하지 않는다. 해당 도구의 대기 기능을 사용하고 새 출력이 없으면 반복 로그 읽기·프로세스 조회를 하지 않는다. 상태 조회가 필요할 때는 30~60초 간격으로 하며, 같은 상태가 2회 이어지면 정한 timeout/완료 이벤트를 기다린다. 사용자에게 필요한 진행 안내는 별도로 유지한다.
+- 무관한 기존 실패는 이번 작업의 diff에 원인이 있는지 먼저 확인한다. 관계가 없으면 별도 이슈로 기록하고 현재 작업의 검증 범위를 다시 확정한다. 완료 조건을 맞추려고 관계없는 앱/테스트를 수정하거나 검증 중 실행기 파일을 수정하지 않는다.
+- 이미 유효한 검증/리뷰가 있으면 같은 내용을 다시 실행하지 않는다. 수정 후 재리뷰는 바뀐 부분과 영향을 받는 관점만 수행하고 기존 결과의 유효 범위를 함께 기록한다. 실행만을 위한 agent 생성, 변화 없는 agent 재호출, 해결 근거 없는 모델 상향을 하지 않는다.
+
 ### /run
 
 - Phase tracking은 사용 가능한 계획 도구 또는 phase 상태 기록으로 관리한다.
@@ -38,8 +50,28 @@ Claude skill 문서를 그대로 유지하면서 Codex에서 실행 semantics를
 - Proof Ledger는 별도 파일이 아니라 각 phase 완료 메시지와 최종 summary에 집계한다.
 - review/quality 단계는 공통 위임 정책과 agent-map을 따른다. 각 필수 관점의 판단/결과는 유지한다.
 - Work의 테스트와 Quality 결과를 뒤 phase에서 다시 사용할 때는 `.codex/token-efficiency.md`의 증거 일치 조건을 확인한다. 유효한 동일 검증은 재실행 대신 evidence 경로를 기록한다. 이는 phase 생략이 아니며, 변경/누락된 검증은 실행한다.
-- `/run` 안의 `/work`는 구현/QC까지만 담당하고 Compound/Ship는 parent가 한 번 수행한다. 최종 full UI 회귀 게이트를 smoke로 대체하지 않는다.
+- `/run` 안의 `/work`는 구현/QC까지만 담당하고 Compound/Ship는 parent가 한 번 수행한다. UI 최종 범위는 아래 변경 범위 기반 UI 게이트로 결정한다. full로 판정된 검증은 smoke로 대체하지 않는다.
 - Ship 단계는 auth/network/remote 조건이 충족될 때만 실제 `gh` 작업을 수행한다. 막히면 manual recovery를 출력한다.
+
+#### 변경 범위 기반 UI 게이트
+
+사용자가 승인한 UI 검증 비용 개선에 따른 Codex 전용 실행 예외다. Claude 원본 S11 및 Phase 2.5의 무조건 full 요구를 다음 범위 판정으로 대체한다. Phase 자체나 결과 보고는 생략하지 않는다. `.claude/**` 원본과 Claude 실행 정책은 유지한다.
+
+1. Phase 1에서 `python3 scripts/plan-ui-tests.py --base main`으로 계획하고, Phase 2.5 및 Resolve 후 최종 변경 상태에서 다시 실행한다. 출력 JSON은 로그 디렉터리에 저장한다. base가 다른 작업은 실제 PR base를 지정한다. merge-base부터 tracked 현재 상태, untracked 파일, 삭제/rename 양쪽 경로가 포함된다. Git 실패를 변경 없음으로 취급하지 않는다.
+2. 파일별 이유, 플랫폼별 `skip/targeted/full`, 명령 argv를 검토한다. 판정기는 의존성 분석/테스트 실행/통과 인증기가 아니다. 변경 symbol의 다른 feature 소비자를 `rg` 또는 심볼 도구로 확인하고, 선택 범위를 벗어나거나 영향이 불명확하면 full로 상향한다. 새 화면/동작의 테스트가 없으면 작성한다. View 파일명만으로 판단하지 않는다.
+3. 기본 범위:
+   - 문서/지침 Markdown만 변경: UI `skipped`, 경로와 근거 기록. 앱 리소스 안의 Markdown은 면제하지 않는다.
+   - unit test Swift 파일만 변경: 관련 unit 검증, UI `skipped`.
+   - UI 게이트 판정기/CLI 선택/로그 검증 및 해당 계약 테스트만 변경: Python 계약 테스트, shell 구문, dry-run argv와 diff 리뷰로 검증하고 앱 UI는 `skipped`. 도구 수정 자체를 이유로 전체 UI나 공통 smoke를 실행하지 않는다. 판정기의 정확한 tooling 경로 목록은 검증 의무를 표시하며, 실행/설치/seed/기기 선택/CI 실행 환경 변경이 포함되면 영향을 받는 통합 검증으로 상향한다.
+   - 매핑된 feature 화면/ViewModel: 관련 UI suite + 공통 smoke 합집합. `test-ui.sh --smoke --only-testing DUNEUITests/ClassName`를 사용한다. CLI는 디렉터리명이 아닌 실제 class/method selector를 받는다.
+   - App/Domain/Data/Shared, 내비게이션/전역 테마/저장/프로젝트 설정, 공유 test helper 또는 미매핑 변경: 영향 플랫폼 full. watch는 별도 runner로 검증한다. 공유 소스/플랫폼이 불명확하면 iOS/watch 모두 full로 올리고 widget/visionOS 등 추가 타깃도 확인한다.
+   - 화면 영향이 없는 순수 계산 로직: 자동 면제하지 않는다. 호출부 분석으로 UI/저장/공유 소비자에 영향이 없음을 증명하고 관련 단위 테스트 통과를 기록한 경우에만 UI `skipped` 판단 가능하다. 근거가 부족하면 full 유지.
+   - nightly/릴리스 전: 전체 회귀 유지. HealthKit 권한 등 full plan의 기존 manual 제외는 별도 실제 기기 검증을 요구한다.
+4. `--smoke`만 실행해서 변경 기능 검증을 대체하지 않는다. 테스트 선택이 새 동작 커버리지를 증명하지 않는다. 제스처/차트의 seeded lifecycle, 번역/Dynamic Type/iPad/watch 등 해당 변경의 기존 검증 의무를 유지한다.
+5. 완료 증빙: 변경 경로/판정 이유, 실제 명령·plan·기기, 결과 로그, 수행/skip 수, 관련 suite 실행 여부를 기록한다. UI가 필요한데 미실행/0개/unknown count/필수 suite 누락/실패면 게이트 실패다. 정당한 UI 면제는 `skipped`로 기록하고 “UI 통과/레이아웃 확인 완료”라고 보고하지 않는다.
+6. 수정 중에는 실패 관련 테스트부터 확인한다. 최종 변경 상태에 필요한 범위가 모두 통과해야 Review/Ship로 진행한다. 동일 성공 증거 재사용은 `.codex/token-efficiency.md` 조건을 따르며 targeted 성공을 full 증거로 승격하지 않는다.
+7. 자동 판정 범위를 축소한 경우 근거와 대체 검증을 Proof Ledger에 남긴다. 인프라 변경은 실행기 fixture/구문/parity 검증도 수행한다. 빌드, 리뷰, Compound, Ship의 다른 게이트는 유지한다.
+   - 앱 소스·프로젝트·UI test body·seed/helper가 동일한 CLI 선택 변경은 fixture와 dry-run 검증 결과 및 앱 관련 diff 없음으로 증빙한다. 검증 도중 발견한 무관한 기존 UI 실패를 수정하느라 작업 범위를 확장하지 않는다. 중단한 UI 실행은 통과 증거가 아니며 이번 도구 작업의 완료 조건으로 삼지 않는다.
 
 ### /plan
 
@@ -89,6 +121,6 @@ Claude skill 문서를 그대로 유지하면서 Codex에서 실행 semantics를
 
 - `agent: ui-test-expert`는 agent-map의 실제 모델 배정을 사용한다. 테스트 실행 자체에는 agent가 필요 없다.
 - Unit/UI/watch 테스트는 기존 `scripts/test-unit.sh`, `scripts/test-ui.sh`, `scripts/test-watch-ui.sh`를 표준 경로로 사용한다. 기본 파일 로그/요약을 유지하고 필요한 때만 streaming한다.
-- 개발 중 관련 테스트를 먼저 실행하고 source skill의 최종 필수 범위를 검증한다. 동일한 전체 검증의 재사용 조건은 `.codex/token-efficiency.md`를 따른다.
+- 개발 중 관련 테스트를 먼저 실행하고 `/run`은 위 변경 범위 기반 UI 게이트, 그 외는 source skill의 최종 필수 범위를 검증한다. 동일 검증의 재사용 조건은 `.codex/token-efficiency.md`를 따른다.
 - UI 변경에서는 `swift-ui-expert`, `apple-ux-expert`, `ui-test-expert` 3개 관점을 분리해 판단한다.
 - UI 테스트 작성 요청이 아닌 단순 UI 리뷰에서는 `ui-test-expert`를 findings-only로 사용할 수 있다.

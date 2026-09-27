@@ -1,0 +1,105 @@
+---
+tags: [testing, ui-test, run, selective-testing]
+date: 2026-09-27
+category: plan
+status: implemented
+confidence: medium
+related_solutions:
+  - docs/solutions/testing/2026-03-04-pr-fast-gate-and-nightly-regression-split.md
+---
+
+# Implementation Plan: 변경 범위 기반 UI 테스트 게이트
+
+## Context
+
+PR CI는 smoke, nightly는 full 회귀로 분리돼 있으나 Codex `/run`은 항상 full UI를 요구한다.
+변경 위험에 따라 검증을 선택하고 근거를 남겨 반복 비용을 줄인다. `.claude/**`는 수정하지 않는다.
+
+## Requirements
+
+- 문서만 변경하면 UI 생략, 기능 변경은 관련 suite와 smoke의 합집합, 공유/불명확 변경은 full.
+- diff는 merge-base부터 현재 tracked 작업 상태 및 untracked 파일까지 포함한다. 삭제/rename 원본도 놓치지 않는다.
+- View 파일명만으로 분류하지 않으며 Domain/Data/Shared 변경은 보수적으로 full 처리한다.
+- UI 실행기 기본 full 및 CI/nightly 동작은 유지한다. 명시적 선택과 smoke를 함께 주면 둘 다 실행한다.
+- 0개/미확인 실행은 UI 게이트 성공으로 인정하지 않는다.
+- 사용자 요청에 따른 Codex 정책 예외를 어댑터에 명시하고 Claude 원본 정책과 구분한다.
+- 같은 원인의 자동 재시도는 근거 있는 변화 확인 후 최대 1회로 제한하고, 반복 polling·무관한 실패 수정·전체 재리뷰를 막는다.
+
+## Approach
+
+`scripts/plan-ui-tests.py`가 변경 경로, 이유, 플랫폼별 범위와 argv 명령을 JSON으로 출력한다.
+자동으로 테스트를 실행하거나 성공을 선언하지 않는다. 호출자는 결과를 검토해 범위를 상향하고 실행 증거를 기록한다.
+초기 매핑은 기존 feature 디렉터리와 suite를 재사용한다. 런타임 의존성을 자동 증명할 수 없으므로
+공유 소비자 확인을 요구하고, 불확실하면 full로 상향한다. 순수 로직의 UI 면제는 의존성/단위 테스트 증거를 갖춘 명시적 판단에만 허용한다.
+
+### Alternative Approaches Considered
+
+| 접근 | 장점 | 단점 | 선택 |
+|------|------|------|------|
+| 항상 full | 단순 | 작은 변경에도 비용 큼 | 고위험/nightly에 유지 |
+| 항상 smoke | 빠름 | 변경 기능 누락 | 사용하지 않음 |
+| 보수적 범위 선택 | 관련 기능 + 공통 경로 검증 | 매핑 관리 필요 | 채택 |
+
+## Affected Files
+
+| File | Change Type | Description |
+|------|-------------|-------------|
+| scripts/test-ui.sh | 수정 | smoke + 명시 선택 병합 및 실행 증거 검증 |
+| scripts/lib/* | 필요 시 추가 | 선택 목록/실행 증거 검사 |
+| scripts/plan-ui-tests.py | 추가 | 변경 범위와 실행 명령 출력 |
+| scripts/tests/* | 추가 | argv, 분류, Git rename/dirty/untracked, 0개 실행 회귀 |
+| AGENTS.md | 수정 | 사용자 승인된 Codex UI 게이트 예외 안내 |
+| .codex/skill-compat.md | 수정 | `/run` Phase 2.5 범위/증빙 정책 |
+| .codex/token-efficiency.md | 수정 | 선택 범위와 결과 재사용 계약 일치 |
+| docs/solutions/testing/* | 추가 | 최종 계약과 검증 결과 |
+
+## Implementation Steps
+
+1. 실행기의 smoke와 명시적 선택 합집합을 구현하고 shell argv fixture 테스트로 검증한다.
+2. 보수적 변경 분류기를 추가하고 feature/shared/unknown/삭제/rename/mixed 변경을 테스트한다.
+3. Codex 어댑터 정책을 갱신하고 parity 검사와 정책 충돌 검색을 수행한다.
+4. 실제 iOS 빌드/UI 게이트, 6관점 리뷰, 해결, 문서화, PR/머지를 진행한다.
+
+## Edge Cases
+
+| Case | Handling |
+|------|----------|
+| base ref 없음 / Git 실패 | 오류로 종료, skip 선언 금지 |
+| 신규/삭제/rename 파일 | untracked 포함, rename은 양쪽 경로 포함 |
+| 미등록 feature 또는 test helper | full fallback |
+| Shared/watch 혼합 변경 | 필요한 플랫폼 full, 지원 외 타깃은 별도 검증 의무 표시 |
+| smoke plan이 명시적 suite 제외 | 명시적 선택과 smoke 병합 시 Full plan 사용 |
+| 테스트 이름 오타 / 0개 실행 | 실패 처리, 요구 suite 증거 대조 |
+| 문서 파일이 앱 리소스에 포함 | 앱 경로의 문서를 일반 docs 면제에 포함하지 않음 |
+
+## Testing Strategy
+
+- Python unittest 및 shell dry-run: 실제 runner argv를 확인하되 simulator 부팅은 하지 않는다.
+- 판정기 fixture와 임시 Git 저장소로 미커밋/신규/rename, 기능 선택, 공유 변경 상향, 도구 전용 UI skip 회귀를 검증한다.
+- `bash -n`, parity 검사, `git diff --check`.
+- 앱·프로젝트·UI 테스트·seed/helper의 최종 diff가 없음을 확인한다. CLI 선택 및 로그 검증 변경의 완료 조건은 해당 계약 테스트다.
+- 앱 기능 변경은 관련 suite와 smoke, 공유/불명확 변경은 full을 유지한다. 도구 변경과 앱 변경이 섞이면 앱 검증을 면제하지 않는다.
+
+## Risks
+
+| Risk | Probability | Impact | Mitigation |
+|------|-------------|--------|------------|
+| 디렉터리와 의존 범위 불일치 | 중 | 회귀 누락 | 수동 소비자 확인 + 불명확 full |
+| smoke skip이 명시 선택을 가림 | 중 | 테스트 누락 | 명시 선택 우선, fixture 검증 |
+| 시뮬레이터/기존 테스트 실패 | 중 | 게이트 차단 | 환경/제품 실패 분리, 실패 증거 보존 |
+
+## Confidence Assessment
+
+Medium. 기존 실행기와 CI를 재사용하며 정책은 보수적으로 시작한다. 성능 개선률은 측정 전 주장하지 않는다.
+
+## Scope Correction (2026-09-27)
+
+전체 UI의 불필요한 실행을 줄이는 작업에서 실제 smoke 실패 복구까지 범위를 넓힌 판단을 철회했다.
+Activity/Life 테스트 수정은 모두 원복한다. 이전 UI 실행은 실패 또는 중단됐으며 통과 증거로 사용하지 않는다.
+사용자의 정정에 따라 이번 도구 작업은 Python 계약 테스트·dry-run·구문·parity·diff 리뷰로 검증하고 UI는 skipped로 기록한다.
+시뮬레이터 복구와 기존 앱 UI 테스트 수정은 이번 완료 조건에 포함하지 않는다.
+
+## References
+
+- Apple: https://developer.apple.com/documentation/xcode/organizing-tests-to-improve-feedback
+- Apple: https://developer.apple.com/library/archive/technotes/tn2339/_index.html
