@@ -12,6 +12,9 @@ final class WatchHomeSmokeTests: WatchUITestBaseCase {
 
     func testAllExercisesShowsFixtureSurface() throws {
         openAllExercises()
-        XCTAssertTrue(elementExists(WatchAXID.quickStartExerciseSquat, timeout: 5))
+        XCTAssertNotNil(
+            findFixtureStrengthExercise(),
+            "Fixture Squat should be hittable in the All Exercises list"
+        )
     }
 }

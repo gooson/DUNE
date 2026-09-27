@@ -377,11 +377,49 @@ class WatchUITestBaseCase: XCTestCase {
         ensureQuickStartVisible()
     }
 
+    func findFixtureStrengthExercise(maxSwipes: Int = 6) -> XCUIElement? {
+        // watchOS exposes the List as a CollectionView with the screen identifier.
+        let scrollContainers = [
+            app.tables[WatchAXID.quickStartList].firstMatch,
+            app.collectionViews[WatchAXID.quickStartList].firstMatch,
+            app.scrollViews[WatchAXID.quickStartList].firstMatch,
+            app.tables[WatchAXID.quickStartScreen].firstMatch,
+            app.collectionViews[WatchAXID.quickStartScreen].firstMatch,
+            app.scrollViews[WatchAXID.quickStartScreen].firstMatch
+        ]
+        guard let scrollContainer = scrollContainers.first(where: { $0.exists }) else {
+            attachQuickStartHierarchy()
+            return nil
+        }
+
+        let exercise = scrollContainer.descendants(matching: .any)[WatchAXID.quickStartExerciseSquat].firstMatch
+        for swipeIndex in 0...maxSwipes {
+            if exercise.exists && exercise.isHittable {
+                return exercise
+            }
+            if swipeIndex < maxSwipes {
+                scrollContainer.swipeUp()
+            }
+        }
+
+        attachQuickStartHierarchy()
+        return nil
+    }
+
+    private func attachQuickStartHierarchy() {
+        let attachment = XCTAttachment(string: app.debugDescription)
+        attachment.name = "All-Exercises-accessibility-hierarchy"
+        attachment.lifetime = .keepAlways
+        add(attachment)
+    }
+
     func startFixtureStrengthWorkout() {
         openAllExercises()
 
-        let exercise = app.descendants(matching: .any)[WatchAXID.quickStartExerciseSquat].firstMatch
-        XCTAssertTrue(exercise.waitForExistence(timeout: 5), "Fixture exercise should be visible")
+        guard let exercise = findFixtureStrengthExercise() else {
+            XCTFail("Fixture Squat should be hittable in the All Exercises list")
+            return
+        }
         exercise.tap()
 
         XCTAssertTrue(elementExists(WatchAXID.workoutPreviewScreen, timeout: 5), "Workout preview root should render")
