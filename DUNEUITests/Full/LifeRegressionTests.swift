@@ -78,8 +78,11 @@ final class LifeRegressionTests: SeededUITestBaseCase {
         let historyScreen = app.descendants(matching: .any)[AXID.lifeHabitHistoryScreen].firstMatch
         XCTAssertTrue(historyScreen.waitForExistence(timeout: 8), "History sheet should open from the seeded habit actions menu")
 
-        let firstRow = app.descendants(matching: .any)[AXID.lifeHabitHistoryRow(0)].firstMatch
+        let firstRow = app.descendants(matching: .any)
+            .matching(NSPredicate(format: "identifier BEGINSWITH %@", "life-habit-history-row-"))
+            .firstMatch
         XCTAssertTrue(firstRow.waitForExistence(timeout: 5), "Seeded habit history should expose at least one action row")
+        XCTAssertTrue(firstRow.label.contains("Completed"), "Seeded Morning Stretch history should show its completion")
 
         XCTAssertTrue(
             app.dismissModalIfPresent(cancelIdentifiers: [AXID.lifeHabitHistoryClose]),
