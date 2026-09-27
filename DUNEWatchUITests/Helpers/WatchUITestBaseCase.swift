@@ -535,7 +535,7 @@ class WatchUITestBaseCase: XCTestCase {
 
     private func addSystemPermissionMonitor() {
         _ = addUIInterruptionMonitor(withDescription: "Watch System Alert") { alert in
-            for label in ["Allow", "OK", "Continue"] {
+            for label in ["Don't Allow", "허용 안 함", "許可しない", "Allow", "허용", "許可", "OK", "확인", "Continue", "계속", "続ける"] {
                 let button = alert.buttons[label]
                 if button.exists {
                     button.tap()
