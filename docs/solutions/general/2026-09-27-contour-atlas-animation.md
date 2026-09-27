@@ -2,7 +2,7 @@
 tags: [swiftui, contour-atlas, phase-animator, reduce-motion, scene-phase]
 category: general
 date: 2026-09-27
-status: draft
+status: implemented
 severity: minor
 related_files:
   - DUNE/Presentation/Shared/Components/ContourBackground.swift
@@ -50,3 +50,13 @@ Contour Atlas는 다른 움직이는 테마와 달리 등고선이 정적으로 
 ## 최종 게이트 변경
 
 사용자가 전체 UI 결과를 기다리지 않고 스모크 통과를 기준으로 ship하도록 명시했다. 따라서 전체 UI 통과는 주장하지 않으며, 현재 브랜치의 스모크 결과를 최종 게이트로 사용한다. PR: https://github.com/gooson/DUNE/pull/776 .
+
+## Life 스모크 복구
+
+첫 iOS 스모크에서 23개 중 3개가 실패했다. Life 추가 버튼이 메뉴를 여는 현재 UI를 테스트가 반영하지 못한 것이 원인이었다. `life-toolbar-new-habit` 식별자와 공통 `openLifeNewHabitForm()` helper로 `+ → New Habit` 경로를 사용하며 기존 폼 검증은 유지한다. 전체 Life 회귀의 같은 진입 경로도 동기화했다.
+
+취소된 전체 iOS UI 실행은 완료된 21개 중 2개 실패였고, 부가 Watch 스모크는 5개 중 3개 실패였다. 전체/Watch UI의 성공을 주장하지 않으며 사용자 지정 최종 게이트는 iOS 스모크다.
+
+## 최종 ship 결정
+
+사용자는 스모크 통과 미확인 및 PR 미머지 상태를 안내받은 뒤 `/ship`을 명시적으로 요청했다. 추가 테스트를 실행하지 않고 기존 검증 결과를 공개한 상태로 ship한다. 코드 HEAD `87482d16`의 GitHub 빌드는 통과했다. 로컬 스모크는 시뮬레이터/런너 지연으로 중단되어 통과로 기록하지 않는다. 이전 리뷰의 미해결 P1/P2는 없다.
