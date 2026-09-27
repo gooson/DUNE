@@ -144,3 +144,19 @@ SwiftUI 및 Apple UX Work 품질 에이전트는 초기 구현 diff에서 P1/P2/
 - 수정 후 5관점 재리뷰와 SwiftUI/Apple UX 전문 리뷰는 actionable findings 0건. 최신 main 동기화 후 CI 설정 삭제가 없음을 확인했다.
 - GitHub 인증 복구 후 PR https://github.com/gooson/DUNE/pull/781 생성. nightly 워크플로는 한 번 dispatch 후 원래 disabled 상태로 복원했다.
 - 추가 생성 기기: iPad `85A9967F-5A6F-49CF-8FEA-010EAD540837`, Watch `F2070FCD-297A-4F53-B621-D87D4288042D`. 원본 기기는 보존한다.
+
+
+### 기기별 공통 smoke 적용 정정
+
+최종 iPad 공통 smoke에서 `DashboardSmokeTests.testAllTabsExist`가 실패했다. 이 테스트와 `testTabBarExists`는 `app.tabBars`를 전제로 하며 후자는 메시지에도 iPhone 전용임을 명시한다. Dashboard/탭 내비게이션 코드는 이번 PR에서 변경하지 않았다. 이 무관한 기존 테스트를 수정하지 않고 기기별 범위를 정정한다.
+
+- iPhone: 공통 smoke + LifeSmokeTests + LifeRegressionTests + ActivityExercisePickerRegressionTests.
+- iPad: LifeSmokeTests + LifeRegressionTests + ActivityExercisePickerRegressionTests (기능 호환성). `--smoke`는 사용하지 않는다.
+- Watch: 전체 UI suite.
+- iPad 공통 smoke 실행은 중단했으며 성공으로 보고하지 않는다. iPhone 전용 assertion은 iPhone 최종 게이트에 그대로 포함된다.
+- 최종 로그: `/tmp/dune-final-iphone-scoped.log`, `/tmp/dune-final-ipad-related.log`, `/tmp/dune-final-watch-v3.log`.
+
+
+### 최종 Watch 게이트 완료
+
+`/tmp/dune-final-watch-v3.log`: 전체 13 tests, 0 failures, xcodebuild exit 0. 원래 CI 실패 3개와 추가 Crunch 토글 경로를 모두 포함한다. iPhone/iPad의 최종 집계는 PR #781 Validation에 기록한다.

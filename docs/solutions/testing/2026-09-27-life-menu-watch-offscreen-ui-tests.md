@@ -59,7 +59,7 @@ Watch는 `quickStartList` 또는 `quickStartScreen` AXID를 가진 table/collect
 - 최초 수정 Watch 전체 실행은 10개 중 9개 통과했고 원래 CI의 3개 실패는 모두 통과했다. 남은 Crunch 탐색도 동일 헬퍼로 수정했다.
 - main 병합 후 앱 빌드 성공: `/tmp/dune-merge-main.log`.
 - 최종 코드 5관점 리뷰 및 종합 코드 품질 검토에서 P1/P2/P3=0.
-- 전체 최종 런타임 결과는 계획서 실행 기록에 별도로 기록한다. 부분 통과나 빌드 성공을 전체 UI 통과로 취급하지 않는다.
+- 최종 Watch 전체 UI suite는 13/13 통과했다 (`/tmp/dune-final-watch-v3.log`). iPhone/iPad 최종 결과는 PR #781 및 계획서 실행 기록에 별도로 기록한다. 부분 통과나 빌드 성공을 전체 UI 통과로 취급하지 않는다.
 
 ## iPad 회귀에서 추가 확인한 동일 패턴
 
