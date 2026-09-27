@@ -12,9 +12,11 @@ struct HabitReminderSyncView: View {
     private var logs: [HabitLog]
     @Environment(\.scenePhase) private var scenePhase
     @State private var viewModel = LifeViewModel()
+    @State private var refreshGeneration = 0
 
     private var scheduleSignature: Int {
         var hasher = Hasher()
+        hasher.combine(refreshGeneration)
         for habit in habits {
             hasher.combine(habit.id)
             hasher.combine(habit.name)
@@ -43,12 +45,21 @@ struct HabitReminderSyncView: View {
         Color.clear
             .frame(width: 0, height: 0)
             .accessibilityHidden(true)
-            .onChange(of: scheduleSignature, initial: true) { _, _ in synchronize() }
+            .task(id: scheduleSignature) {
+                // Cloud imports can deliver many related changes in successive updates.
+                do {
+                    try await Task.sleep(for: .milliseconds(200))
+                } catch {
+                    return
+                }
+                guard !Task.isCancelled else { return }
+                synchronize()
+            }
             .onChange(of: scenePhase) { _, phase in
-                if phase == .active { synchronize() }
+                if phase == .active { refreshGeneration += 1 }
             }
             .onReceive(NotificationCenter.default.mainThreadPublisher(for: .habitReminderAuthorizationGranted)) { _ in
-                synchronize()
+                refreshGeneration += 1
             }
     }
 
