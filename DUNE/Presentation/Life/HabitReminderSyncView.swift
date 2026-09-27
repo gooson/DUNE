@@ -8,14 +8,14 @@ extension Notification.Name {
 /// Keeps persisted habits scheduled even when the Life tab has not been opened.
 struct HabitReminderSyncView: View {
     @Query private var habits: [HabitDefinition]
-    @Query private var logs: [HabitLog]
+    @Query(filter: #Predicate<HabitLog> { $0.habitDefinition?.frequencyTypeRaw == "interval" })
+    private var logs: [HabitLog]
     @Environment(\.scenePhase) private var scenePhase
     @State private var viewModel = LifeViewModel()
-    @State private var knownHabitIDs: Set<UUID> = []
 
     private var scheduleSignature: Int {
         var hasher = Hasher()
-        for habit in habits.sorted(by: { $0.id.uuidString < $1.id.uuidString }) {
+        for habit in habits {
             hasher.combine(habit.id)
             hasher.combine(habit.name)
             hasher.combine(habit.isArchived)
@@ -28,7 +28,8 @@ struct HabitReminderSyncView: View {
             hasher.combine(habit.reminderHour)
             hasher.combine(habit.reminderMinute)
         }
-        for log in logs.sorted(by: { $0.id.uuidString < $1.id.uuidString }) {
+        // Interval anchors may be arbitrarily old; filtering by a date window would lose them.
+        for log in logs {
             hasher.combine(log.id)
             hasher.combine(log.habitDefinition?.id)
             hasher.combine(log.date)
@@ -53,12 +54,9 @@ struct HabitReminderSyncView: View {
 
     private func synchronize() {
         let currentIDs = Set(habits.map(\.id))
-        for id in knownHabitIDs.subtracting(currentIDs) {
-            viewModel.cancelPendingReminders(habitID: id)
-        }
+        viewModel.cleanupOrphanedReminders(validHabitIDs: currentIDs)
         for habit in habits {
             viewModel.refreshReminderSchedule(for: habit)
         }
-        knownHabitIDs = currentIDs
     }
 }

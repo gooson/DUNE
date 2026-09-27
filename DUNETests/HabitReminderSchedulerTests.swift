@@ -178,6 +178,29 @@ struct HabitReminderSchedulerTests {
         ])
     }
 
+    @Test("Orphan cleanup removes only reminders for deleted habits")
+    func orphanCleanup() async {
+        let validID = habitID
+        let orphanID = UUID(uuidString: "C10FA905-8F51-4B3D-90BB-9D116195AA8D")!
+        let validReminder = "dune.life.habit.\(validID.uuidString).0d"
+        let orphanReminder = "dune.life.habit.\(orphanID.uuidString).1d"
+        let unrelatedReminder = "com.raftel.dune.bedtime-reminder"
+        let malformedReminder = "dune.life.habit.not-a-uuid.0d"
+        let client = PausingHabitNotificationClient(shouldPauseFirstAdd: false)
+        client.seedPendingRequests(identifiers: [
+            validReminder, orphanReminder, unrelatedReminder, malformedReminder
+        ])
+        let scheduler = HabitReminderScheduler(client: client)
+
+        scheduler.enqueueOrphanCleanup(validHabitIDs: [validID])
+        await scheduler.waitForPendingOperations()
+
+        #expect(Set(client.pending.map(\.identifier)) == [
+            validReminder, unrelatedReminder, malformedReminder
+        ])
+        #expect(client.events == ["remove:1"])
+    }
+
     private func date(_ year: Int, _ month: Int, _ day: Int, _ hour: Int, _ minute: Int) throws -> Date {
         try #require(calendar.date(from: DateComponents(
             year: year,
@@ -195,7 +218,21 @@ private final class PausingHabitNotificationClient: HabitReminderNotificationSch
     private(set) var events: [String] = []
     private var firstAddContinuation: CheckedContinuation<Void, Never>?
     private var firstAddStarted: CheckedContinuation<Void, Never>?
-    private var shouldPauseFirstAdd = true
+    private var shouldPauseFirstAdd: Bool
+
+    init(shouldPauseFirstAdd: Bool = true) {
+        self.shouldPauseFirstAdd = shouldPauseFirstAdd
+    }
+
+    func seedPendingRequests(identifiers: [String]) {
+        pending = identifiers.map { identifier in
+            UNNotificationRequest(
+                identifier: identifier,
+                content: UNMutableNotificationContent(),
+                trigger: nil
+            )
+        }
+    }
 
     func pendingNotificationRequests() async -> [UNNotificationRequest] {
         pending

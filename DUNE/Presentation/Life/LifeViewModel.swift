@@ -276,6 +276,11 @@ final class LifeViewModel {
         HabitReminderScheduler.shared.enqueueRemoval(habitID: habitID)
     }
 
+    /// Reconcile pending habit reminders after loading the current SwiftData habits.
+    func cleanupOrphanedReminders(validHabitIDs: Set<UUID>) {
+        HabitReminderScheduler.shared.enqueueOrphanCleanup(validHabitIDs: validHabitIDs)
+    }
+
     // MARK: - Progress Calculation
 
     func calculateProgresses(
@@ -884,6 +889,25 @@ final class HabitReminderScheduler {
         }
     }
 
+    func enqueueOrphanCleanup(validHabitIDs: Set<UUID>) {
+        let previous = pendingOperation
+        let operationID = UUID()
+        latestOperationID = operationID
+        pendingOperation = Task { [client] in
+            await previous?.value
+            let pending = await client.pendingNotificationRequests()
+            let orphanIDs = pending.compactMap { request -> String? in
+                guard let habitID = Self.habitID(from: request.identifier),
+                      !validHabitIDs.contains(habitID) else { return nil }
+                return request.identifier
+            }
+            if !orphanIDs.isEmpty {
+                client.removePendingNotificationRequests(withIdentifiers: orphanIDs)
+            }
+            finishOperation(operationID)
+        }
+    }
+
     private func finishOperation(_ operationID: UUID) {
         if latestOperationID == operationID {
             pendingOperation = nil
@@ -910,5 +934,15 @@ final class HabitReminderScheduler {
 
     private static func notificationID(for habitID: UUID, offsetInDays: Int) -> String {
         "dune.life.habit.\(habitID.uuidString).\(offsetInDays)d"
+    }
+
+    private static func habitID(from notificationID: String) -> UUID? {
+        let prefix = "dune.life.habit."
+        guard notificationID.hasPrefix(prefix) else { return nil }
+        let remainder = notificationID.dropFirst(prefix.count)
+        guard let separator = remainder.firstIndex(of: "."),
+              separator != remainder.startIndex,
+              remainder.index(after: separator) != remainder.endIndex else { return nil }
+        return UUID(uuidString: String(remainder[..<separator]))
     }
 }
