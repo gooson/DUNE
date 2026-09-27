@@ -42,6 +42,10 @@ final class ExerciseRecord {
     var autoIntensityRaw: Double?
     /// VO2 Max (cardio fitness) captured at workout time (ml/kg/min). nil if unavailable.
     var cardioFitnessVO2Max: Double?
+    /// Number of sets planned when this workout began. nil for legacy records.
+    var plannedSetCount: Int?
+    /// `user` or `setAverage`. nil means the source is unknown.
+    var effortSourceRaw: String?
 
     init(
         date: Date = Date(),
@@ -67,7 +71,9 @@ final class ExerciseRecord {
         calorieSource: CalorieSource = .manual,
         rpe: Int? = nil,
         autoIntensityRaw: Double? = nil,
-        cardioFitnessVO2Max: Double? = nil
+        cardioFitnessVO2Max: Double? = nil,
+        plannedSetCount: Int? = nil,
+        effortSourceRaw: String? = nil
     ) {
         self.id = UUID()
         self.date = date
@@ -95,6 +101,8 @@ final class ExerciseRecord {
         self.rpe = rpe
         self.autoIntensityRaw = autoIntensityRaw
         self.cardioFitnessVO2Max = cardioFitnessVO2Max
+        self.plannedSetCount = plannedSetCount
+        self.effortSourceRaw = effortSourceRaw
     }
 
     // MARK: - Computed Accessors

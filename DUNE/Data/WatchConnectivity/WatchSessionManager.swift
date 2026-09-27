@@ -597,6 +597,12 @@ extension WatchWorkoutUpdate {
         if let rpe = rpe, !(1...10).contains(rpe) {
             copy.rpe = nil
         }
+        if let count = copy.plannedSetCount, !(1...1000).contains(count) {
+            copy.plannedSetCount = nil
+        }
+        if let source = copy.effortSourceRaw, !["user", "setAverage"].contains(source) {
+            copy.effortSourceRaw = nil
+        }
         if let id = healthKitWorkoutID, id.isEmpty || UUID(uuidString: id) == nil {
             copy.healthKitWorkoutID = nil
         }
@@ -610,7 +616,8 @@ extension WatchSetData {
         if let reps, !(0...1000).contains(reps) { return false }
         if let duration, !(0...28800).contains(duration) { return false }
         if let restDuration, !(0...3600).contains(restDuration) { return false }
-        if let rpe, !RPELevel.range.contains(rpe) { return false }
+        if let rpe, RPELevel.validate(rpe) == nil { return false }
+        if let plannedReps, !(1...1000).contains(plannedReps) { return false }
         return true
     }
 }

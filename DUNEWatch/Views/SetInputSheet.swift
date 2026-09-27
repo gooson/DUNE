@@ -14,6 +14,7 @@ struct SetInputSheet: View {
     @Binding var usesAddedWeight: Bool
     /// Previously completed sets for the current exercise (newest last)
     var previousSets: [CompletedSetData] = []
+    var suggestedWeightKg: Double? = nil
     var onWeightEdited: (Double) -> Void = { _ in }
     @Environment(\.dismiss) private var dismiss
 
@@ -23,6 +24,11 @@ struct SetInputSheet: View {
     @State private var crownDurationDouble: Double = 1
     @State private var crownRepsDouble: Double = 10
     @FocusState private var isCrownFocused: Bool
+
+    private var actionableSuggestedWeightKg: Double? {
+        guard let suggestedWeightKg, suggestedWeightKg < weight else { return nil }
+        return suggestedWeightKg
+    }
 
     var body: some View {
         if showPreviousSets {
@@ -60,10 +66,24 @@ struct SetInputSheet: View {
     // MARK: - Weight + Reps
 
     private var weightRepsContent: some View {
-        VStack(spacing: DS.Spacing.sm) {
+        VStack(spacing: actionableSuggestedWeightKg == nil ? DS.Spacing.sm : DS.Spacing.xs) {
             if inputType == .setsReps { addedWeightToggle }
             weightSection
-            Divider()
+            if let suggestedWeightKg = actionableSuggestedWeightKg {
+                Button {
+                    weight = suggestedWeightKg
+                    onWeightEdited(suggestedWeightKg)
+                } label: {
+                    Text("Use \(suggestedWeightKg, specifier: "%.1f") kg")
+                        .font(.caption.weight(.semibold))
+                        .frame(maxWidth: .infinity, minHeight: 24)
+                }
+                .buttonStyle(.bordered)
+                .tint(DS.Color.caution)
+                .accessibilityIdentifier("watch-set-input-use-lighter-weight")
+            } else {
+                Divider()
+            }
             repsSection
         }
         .padding(.horizontal, DS.Spacing.md)
@@ -71,6 +91,7 @@ struct SetInputSheet: View {
         .focusable(true)
         .focused($isCrownFocused)
         .digitalCrownRotation($weight, from: 0, through: 500, by: 0.5, sensitivity: .medium)
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.setInputScreen)
         .toolbar { sharedToolbar }
         .onChange(of: weight) { _, newValue in
@@ -110,6 +131,7 @@ struct SetInputSheet: View {
             $crownRepsDouble,
             from: 1, through: Double(WatchSetInputPolicy.maximumEditableReps), by: 1, sensitivity: .medium
         )
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.setInputScreen)
         .toolbar { sharedToolbar }
         .onChange(of: crownRepsDouble) { _, value in
@@ -147,6 +169,7 @@ struct SetInputSheet: View {
         .focusable(true)
         .focused($isCrownFocused)
         .digitalCrownRotation($crownDurationDouble, from: 0, through: 120, by: 1, sensitivity: .medium)
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.setInputScreen)
         .toolbar { sharedToolbar }
         .onAppear {

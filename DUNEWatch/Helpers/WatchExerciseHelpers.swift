@@ -31,7 +31,7 @@ func exerciseSubtitle(for exercise: WatchExerciseInfo) -> String {
     let plannedSets = resolvedProcedureSets(for: exercise)
     let defaults = resolvedDefaults(for: exercise)
     return exerciseSubtitle(
-        sets: plannedSets?.count ?? exercise.defaultSets,
+        sets: plannedSetCount(for: plannedSets) ?? exercise.defaultSets,
         reps: defaults.reps,
         weight: defaults.weight
     )
@@ -243,7 +243,7 @@ func prioritizedWatchExercises(
 /// Resolves weight/reps defaults from latest set or exercise defaults.
 func resolvedDefaults(for exercise: WatchExerciseInfo) -> (weight: Double?, reps: Int) {
     if let firstPlannedSet = resolvedProcedureSets(for: exercise)?.first {
-        let reps = firstPlannedSet.reps ?? exercise.defaultReps ?? 10
+        let reps = firstPlannedSet.plannedReps ?? firstPlannedSet.reps ?? exercise.defaultReps ?? 10
         return (weight: firstPlannedSet.weight, reps: reps)
     }
 
@@ -272,19 +272,39 @@ private func applyingProgressionOverlay(
     to sets: [WatchProcedureSetSnapshot],
     incrementKg: Double?
 ) -> [WatchProcedureSetSnapshot] {
-    guard let incrementKg, incrementKg > 0 else { return sets }
-    guard sets.allSatisfy({ ($0.reps ?? 0) > 0 }) else { return sets }
-    guard let first = sets.first, let firstWeight = first.weight, firstWeight > 0 else { return sets }
+    guard let incrementKg else { return sets }
+    let inputs = sets.map { set in
+        ProgressionSetInput(
+            weight: set.weight,
+            reps: set.reps,
+            plannedReps: set.plannedReps,
+            rpe: set.rpe,
+            rpeSourceRaw: set.rpeSourceRaw,
+            setType: set.setTypeRaw.flatMap(SetType.init(rawValue:)) ?? .working,
+            isCompleted: true
+        )
+    }
+    guard let recommendation = WorkoutProgressionService().nextSession(
+        sets: inputs,
+        plannedSetCount: sets.first?.plannedSetCount,
+        incrementKg: incrementKg
+    ), recommendation.reason == .readyToProgress else { return sets }
 
-    let clampedIncreaseKg = min(incrementKg, firstWeight * 0.10)
-    let step = incrementKg <= 1.0 ? 1.0 : 2.5
-    let roundedWeightKg = ((firstWeight + clampedIncreaseKg) / step).rounded() * step
+    guard let firstWorkingIndex = sets.firstIndex(where: {
+        ($0.setTypeRaw.flatMap(SetType.init(rawValue:)) ?? .working) == .working
+    }) else { return sets }
+    let first = sets[firstWorkingIndex]
 
     var updatedSets = sets
-    updatedSets[0] = WatchProcedureSetSnapshot(
+    updatedSets[firstWorkingIndex] = WatchProcedureSetSnapshot(
         setNumber: first.setNumber,
-        weight: roundedWeightKg,
-        reps: first.reps
+        weight: recommendation.weight,
+        reps: first.reps,
+        plannedReps: first.plannedReps,
+        rpe: first.rpe,
+        rpeSourceRaw: first.rpeSourceRaw,
+        setTypeRaw: first.setTypeRaw,
+        plannedSetCount: first.plannedSetCount
     )
     return updatedSets
 }
@@ -320,7 +340,7 @@ func snapshotFromExercise(_ exercise: WatchExerciseInfo) -> WorkoutSessionTempla
     let entry = TemplateEntry(
         exerciseDefinitionID: exercise.id,
         exerciseName: exercise.name,
-        defaultSets: plannedSets?.count ?? exercise.defaultSets,
+        defaultSets: plannedSetCount(for: plannedSets) ?? exercise.defaultSets,
         defaultReps: defaults.reps,
         defaultWeightKg: defaults.weight,
         equipment: exercise.equipment,
@@ -332,6 +352,16 @@ func snapshotFromExercise(_ exercise: WatchExerciseInfo) -> WorkoutSessionTempla
         entries: [entry],
         procedureSetsByExerciseID: plannedSets.map { [exercise.id: $0] }
     )
+}
+
+private func plannedSetCount(for sets: [WatchProcedureSetSnapshot]?) -> Int? {
+    guard let sets, !sets.isEmpty else { return nil }
+    let savedCount = sets.first?.plannedSetCount
+    if let savedCount, savedCount >= sets.count, savedCount <= 20,
+       sets.allSatisfy({ $0.plannedSetCount == savedCount }) {
+        return savedCount
+    }
+    return min(sets.count, 20)
 }
 
 /// Lightweight view snapshot used to render routine cards from either SwiftData or WatchConnectivity.

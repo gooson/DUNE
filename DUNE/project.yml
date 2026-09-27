@@ -196,9 +196,12 @@ targets:
       - path: Domain/Models/WorkoutIntensity.swift
       - path: Domain/Models/PostureMetric.swift
       - path: Domain/UseCases/WorkoutIntensityService.swift
+      - path: Domain/UseCases/OneRMEstimationService.swift
+      - path: Domain/UseCases/WorkoutProgressionService.swift
       - path: Domain/UseCases/CalorieEstimationService.swift
       # Shared Presentation helpers for set-level RPE
       - path: Presentation/Shared/Extensions/ExerciseRecord+SetRPE.swift
+      - path: Presentation/Shared/Extensions/ExerciseRecord+Intensity.swift
       # Shared HealthKit mapping (needed for cardio workout configuration)
       - path: Data/HealthKit/WorkoutActivityType+HealthKit.swift
       - path: Data/HealthKit/ExerciseCategory+HealthKit.swift

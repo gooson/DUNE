@@ -203,6 +203,11 @@ final class WorkoutManager: NSObject {
         return entry.defaultSets + extra
     }
 
+    func plannedSetCount(for exerciseIndex: Int) -> Int? {
+        guard let entries = templateSnapshot?.entries, entries.indices.contains(exerciseIndex) else { return nil }
+        return entries[exerciseIndex].defaultSets + (extraSetsPerExercise[exerciseIndex] ?? 0)
+    }
+
     var isLastSet: Bool {
         return currentSetIndex >= effectiveTotalSets - 1
     }
@@ -605,13 +610,18 @@ final class WorkoutManager: NSObject {
         let validatedDuration: TimeInterval? = duration.flatMap { (0...7200).contains($0) ? $0 : nil }
         let validatedRPE: Double? = rpe.flatMap { RPELevel.validate($0) }
 
+        let planned = currentPlannedSetForCurrentExercise
+        let plannedReps = planned?.plannedReps ?? planned?.reps ?? currentEntry?.defaultReps
         let data = CompletedSetData(
             setNumber: currentSetIndex + 1,
             weight: validatedWeight,
             reps: validatedReps,
             duration: validatedDuration,
             completedAt: Date(),
-            rpe: validatedRPE
+            rpe: validatedRPE,
+            plannedReps: plannedReps,
+            rpeSourceRaw: validatedRPE == nil ? nil : "user",
+            setTypeRaw: planned?.setTypeRaw ?? SetType.working.rawValue
         )
         if currentExerciseIndex < completedSetsData.count {
             completedSetsData[currentExerciseIndex].append(data)
@@ -628,11 +638,14 @@ final class WorkoutManager: NSObject {
     }
 
     /// Record auto-estimated or user-adjusted RPE on the last completed set.
-    func recordSetRPE(_ rpe: Double) {
+    func recordSetRPE(_ rpe: Double, source: String) {
         guard currentExerciseIndex < completedSetsData.count else { return }
         let lastIdx = completedSetsData[currentExerciseIndex].count - 1
         guard lastIdx >= 0 else { return }
-        completedSetsData[currentExerciseIndex][lastIdx].rpe = RPELevel.validate(rpe)
+        let validated = RPELevel.validate(rpe)
+        completedSetsData[currentExerciseIndex][lastIdx].rpe = validated
+        completedSetsData[currentExerciseIndex][lastIdx].rpeSourceRaw = validated == nil ? nil : source
+        persistRecoveryState()
     }
 
     func advanceToNextSet() {
@@ -1432,6 +1445,9 @@ struct CompletedSetData: Codable, Sendable {
     var restDuration: TimeInterval?
     /// Per-set RPE (Rate of Perceived Exertion), Modified Borg scale 6.0-10.0.
     var rpe: Double?
+    var plannedReps: Int? = nil
+    var rpeSourceRaw: String? = nil
+    var setTypeRaw: String? = nil
 }
 
 /// Plain struct snapshot of WorkoutTemplate data.
