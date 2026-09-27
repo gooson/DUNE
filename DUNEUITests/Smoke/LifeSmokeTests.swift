@@ -6,6 +6,16 @@
 final class LifeSmokeTests: UITestBaseCase {
     override var initialTabSelectionArgument: String? { "life" }
 
+    private func openNewHabitForm() -> Bool {
+        guard app.waitAndTap(AXID.lifeToolbarAdd) else { return false }
+        let newHabit = app.buttons.matching(
+            NSPredicate(format: "label IN %@", ["New Habit", "새 습관", "新しい習慣"])
+        ).firstMatch
+        guard newHabit.waitForExistence(timeout: 5) else { return false }
+        newHabit.tap()
+        return true
+    }
+
     override func setUpWithError() throws {
         try super.setUpWithError()
     }
@@ -27,7 +37,7 @@ final class LifeSmokeTests: UITestBaseCase {
     // MARK: - Habit Form
 
     func testHabitFormOpens() throws {
-        XCTAssertTrue(app.waitAndTap(AXID.lifeToolbarAdd), "Add button should exist")
+        XCTAssertTrue(openNewHabitForm(), "New Habit action should open from the add menu")
 
         // Habit form sheet should appear
         let nameField = app.textFields[AXID.habitFormName]
@@ -41,7 +51,7 @@ final class LifeSmokeTests: UITestBaseCase {
 
     func testHabitFormCancelDismisses() throws {
         let addButton = app.buttons[AXID.lifeToolbarAdd].firstMatch
-        XCTAssertTrue(app.waitAndTap(AXID.lifeToolbarAdd), "Add button should exist")
+        XCTAssertTrue(openNewHabitForm(), "New Habit action should open from the add menu")
 
         let cancelButton = app.descendants(matching: .any)[AXID.habitFormCancel].firstMatch
         XCTAssertTrue(cancelButton.waitForExistence(timeout: 3), "Habit form cancel button should exist")
@@ -52,7 +62,7 @@ final class LifeSmokeTests: UITestBaseCase {
     }
 
     func testSaveEmptyHabitKeepsFormPresented() throws {
-        XCTAssertTrue(app.waitAndTap(AXID.lifeToolbarAdd), "Add button should exist")
+        XCTAssertTrue(openNewHabitForm(), "New Habit action should open from the add menu")
 
         let nameField = app.textFields[AXID.habitFormName].firstMatch
         XCTAssertTrue(nameField.waitForExistence(timeout: 3), "Habit name field should appear")
@@ -63,7 +73,7 @@ final class LifeSmokeTests: UITestBaseCase {
     }
 
     func testWeeklyFrequencyShowsStepper() throws {
-        XCTAssertTrue(app.waitAndTap(AXID.lifeToolbarAdd), "Add button should exist")
+        XCTAssertTrue(openNewHabitForm(), "New Habit action should open from the add menu")
 
         XCTAssertTrue(
             app.scrollToElementInPrimaryFormIfNeeded(AXID.habitFormFrequencyWeekly, maxSwipes: 5),

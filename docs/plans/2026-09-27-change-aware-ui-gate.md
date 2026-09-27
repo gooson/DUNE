@@ -47,6 +47,8 @@ PR CI는 smoke, nightly는 full 회귀로 분리돼 있으나 Codex `/run`은 �
 | scripts/lib/* | 필요 시 추가 | 선택 목록/실행 증거 검사 |
 | scripts/plan-ui-tests.py | 추가 | 변경 범위와 실행 명령 출력 |
 | scripts/tests/* | 추가 | argv, 분류, Git rename/dirty/untracked, 0개 실행 회귀 |
+| DUNEUITests/Smoke/ActivitySmokeTests.swift | 수정 | 실데이터 로딩에 의존하던 콘텐츠 smoke를 기존 seed fixture로 고정 |
+| DUNEUITests/Smoke/LifeSmokeTests.swift | 수정 | 현재 추가 메뉴를 거쳐 폼에 진입하도록 경로 정정 |
 | AGENTS.md | 수정 | 사용자 승인된 Codex UI 게이트 예외 안내 |
 | .codex/skill-compat.md | 수정 | `/run` Phase 2.5 범위/증빙 정책 |
 | .codex/token-efficiency.md | 수정 | 선택 범위와 결과 재사용 계약 일치 |
@@ -78,6 +80,7 @@ PR CI는 smoke, nightly는 full 회귀로 분리돼 있으나 Codex `/run`은 �
 - `bash -n`, parity 검사, `git diff --check`.
 - 실제 `scripts/build-ios.sh`, 실행기의 변경된 `--smoke + --only-testing` 조합 실행. 앱/프로젝트/UI test body/seed/helper 변경이 없는 CLI 선택 변경이므로 도구 fixture와 실제 조합 검증을 필수 게이트로 한다.
 - 처음 시도한 full iOS 실행은 환경 복구 후 첫 회귀 케이스가 96초에 통과했으나 전체 완료 전에 범위를 조정했다. 중단한 full은 통과로 보고하지 않는다.
+- 실제 smoke 실패 첨부에서 Activity의 ActivityIndicator-only 화면과 Life의 추가 메뉴를 확인했다. 앱 코드를 변경하지 않고 Activity seed 및 Life 테스트 탐색 경로를 수정하며, 변경된 두 클래스 전체와 공통 smoke를 재실행한다. 기대값/timeout 완화나 실패 테스트 제외는 하지 않는다.
 - 이후 Phase에서 같은 증거 재사용은 파일/환경 일치 조건을 확인한다.
 
 ## Risks
