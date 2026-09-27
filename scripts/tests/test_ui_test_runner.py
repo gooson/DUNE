@@ -1,6 +1,7 @@
 """Contract tests for the iOS UI runner's argv and execution evidence."""
 
 import shlex
+import os
 import subprocess
 import sys
 import tempfile
@@ -36,6 +37,13 @@ def dry_verify_command(result: subprocess.CompletedProcess[str]) -> list[str]:
 
 
 class RunnerArgvTests(unittest.TestCase):
+    def test_dry_run_does_not_verify_or_wait_for_simulator_lock(self) -> None:
+        result = subprocess.run(["bash", str(RUNNER), "--dry-run"], cwd=ROOT,
+                                env={**os.environ, "DUNE_SIM_TEST_LOCK_FD": "invalid"},
+                                text=True, capture_output=True, timeout=10)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertNotIn("simulator test lock", result.stderr)
+
     def test_dry_run_cannot_cleanup_in_either_option_order(self) -> None:
         for args in [("--dry-run", "--cleanup-simulators"),
                      ("--cleanup-simulators", "--dry-run")]:

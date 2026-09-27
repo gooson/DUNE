@@ -8,11 +8,7 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT_DIR"
-if [[ -n "${DUNE_SIM_TEST_LOCK_FD:-}" ]]; then
-    python3 "$ROOT_DIR/scripts/lib/simulator-test-lock.py" "$ROOT_DIR" --verify
-else
-    exec python3 "$ROOT_DIR/scripts/lib/simulator-test-lock.py" "$ROOT_DIR" -- "$ROOT_DIR/scripts/test-ui.sh" "$@"
-fi
+ORIGINAL_ARGS=("$@")
 source "$ROOT_DIR/scripts/lib/regen-project.sh"
 source "$ROOT_DIR/scripts/lib/simulator-boot.sh"
 source "$ROOT_DIR/scripts/lib/simulator-worktree.sh"
@@ -91,6 +87,14 @@ while [[ $# -gt 0 ]]; do
             ;;
     esac
 done
+
+if [[ "$DRY_RUN" -eq 0 ]]; then
+    if [[ -n "${DUNE_SIM_TEST_LOCK_FD:-}" ]]; then
+        python3 "$ROOT_DIR/scripts/lib/simulator-test-lock.py" "$ROOT_DIR" --verify
+    else
+        exec python3 "$ROOT_DIR/scripts/lib/simulator-test-lock.py" "$ROOT_DIR" -- "$ROOT_DIR/scripts/test-ui.sh" ${ORIGINAL_ARGS[@]+"${ORIGINAL_ARGS[@]}"}
+    fi
+fi
 
 if [[ "$CLEANUP_MODE" -eq 1 ]]; then
     if [[ "$DRY_RUN" -eq 1 ]]; then

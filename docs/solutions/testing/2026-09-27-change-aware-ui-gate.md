@@ -57,7 +57,7 @@ Codex 정책은 `.codex/skill-compat.md` 및 `AGENTS.md`에 반영한다. `.clau
 
 ## Validation
 
-- Python 계약 테스트 39개 통과: Git dirty/untracked/rename/base, feature/full/skip 분류, workflow 실행 변경, shell argv 합집합, dry-run 부작용, 0개/누락/실패 증거 검증.
+- Python 계약 테스트 40개 통과: Git dirty/untracked/rename/base, feature/full/skip 분류, workflow 실행 변경, shell argv 합집합, dry-run 부작용/시뮬레이터 잠금 비의존, 0개/누락/실패 증거 검증.
 - shell 구문, Codex/Claude parity, diff whitespace 통과.
 - workflow YAML 파싱 및 실제 scope step 로컬 실행: 도구 전용 변경에서 `ios=false`, `watch=false` 확인.
 - 최종 앱·프로젝트·UI 테스트 net diff 없음. 이번 작업의 UI 게이트는 skipped이며 앞선 실패/중단을 통과 증거로 사용하지 않는다.
