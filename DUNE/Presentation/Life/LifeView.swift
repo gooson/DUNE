@@ -84,6 +84,7 @@ struct LifeView: View {
                     } label: {
                         Label("New Habit", systemImage: "plus")
                     }
+                    .accessibilityIdentifier("life-toolbar-new-habit")
 
                     Button {
                         isShowingTemplateSheet = true
