@@ -971,6 +971,7 @@
 		C805696A86C3A501A219AA3D /* ExerciseDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F2EFD9169B4451946FB6BD /* ExerciseDefinition.swift */; };
 		C8363E02381E3BA5F1016B8C /* HabitRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C6DE0BC1CC33992D4FA1DEB /* HabitRowView.swift */; };
 		C87F315285B70A14E03F9ACF /* TodayPinnedMetricsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C690F0174B90F16E6C94F39 /* TodayPinnedMetricsStore.swift */; };
+		C8B64A15359492FEDE6E5458 /* HabitReminderSchedulerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 415032E654D24958864A6204 /* HabitReminderSchedulerTests.swift */; };
 		C8D7DAF39B71242756CB91B1 /* ExerciseTypeSummaryRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D78294462431799CDD5ECAB /* ExerciseTypeSummaryRow.swift */; };
 		C90594F0D883AE3E26FC76AC /* WorkoutDeleteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486D277A5644DFF74E92345E /* WorkoutDeleteService.swift */; };
 		C946C9E3A46C767594333031 /* CumulativeStressScore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1476EAA26BD1FF4B625DA34 /* CumulativeStressScore.swift */; };
@@ -1591,6 +1592,7 @@
 		40F00F3C32A6A8627722069F /* CloudMirroredSharedHealthDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudMirroredSharedHealthDataService.swift; sourceTree = "<group>"; };
 		40F1C7D985CBE9A1A2707165 /* NapAnalysis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NapAnalysis.swift; sourceTree = "<group>"; };
 		40FE064D7141F7D8DE93C3B5 /* AnalyzeWASOUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyzeWASOUseCase.swift; sourceTree = "<group>"; };
+		415032E654D24958864A6204 /* HabitReminderSchedulerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitReminderSchedulerTests.swift; sourceTree = "<group>"; };
 		416EC91A97D7FF65DA53209C /* SakuraWaveBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SakuraWaveBackground.swift; sourceTree = "<group>"; };
 		42468472DC99785D919840E1 /* ContourBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContourBackground.swift; sourceTree = "<group>"; };
 		424D952A2911AD8D8D5813BF /* AggregateNocturnalVitalsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AggregateNocturnalVitalsUseCase.swift; sourceTree = "<group>"; };
@@ -4084,6 +4086,7 @@
 				50F38B2F8A2AA492F908E406 /* GenerateWorkoutReportUseCaseTests.swift */,
 				CB7323A508B439AFC9547CFD /* HabitAnalyticsServiceTests.swift */,
 				6770AE6BC1FC25D2F1C4C54A /* HabitCycleSnapshotTests.swift */,
+				415032E654D24958864A6204 /* HabitReminderSchedulerTests.swift */,
 				9A17E1B32410A97AC25B4136 /* HabitStreakServiceTests.swift */,
 				6231431C8771D9773B1FE09D /* HabitTypeTests.swift */,
 				8257DA6FE89D18ED202170D3 /* HealthDataAggregatorTests.swift */,
@@ -5649,6 +5652,7 @@
 				9E787E6B86E522571E860E02 /* GenerateWorkoutReportUseCaseTests.swift in Sources */,
 				580ED2ADC23624CEA86E1943 /* HabitAnalyticsServiceTests.swift in Sources */,
 				E62C449B536CC36046C86D7F /* HabitCycleSnapshotTests.swift in Sources */,
+				C8B64A15359492FEDE6E5458 /* HabitReminderSchedulerTests.swift in Sources */,
 				462AAA0EBA82076B85E31C8D /* HabitStreakServiceTests.swift in Sources */,
 				3B75E5D1F813E1A7C0FF286D /* HabitTypeTests.swift in Sources */,
 				2D261AFCAF88B77813229C3C /* HealthDataAggregatorTests.swift in Sources */,
