@@ -973,8 +973,7 @@ private struct HabitListQueryView: View {
             if let log = viewModel.createCycleActionLog(for: habit, action: .complete) {
                 insertLog(log, into: habit)
                 viewModel.didFinishSaving()
-                // Cancel pending reminders on early completion, reschedule for next cycle
-                viewModel.cancelPendingReminders(for: habit)
+                // Rescheduling queues removal before adding the next cycle's reminders.
                 viewModel.refreshReminderSchedule(for: habit)
             }
             recalculate()
