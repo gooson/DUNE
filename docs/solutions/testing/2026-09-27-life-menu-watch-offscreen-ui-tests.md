@@ -6,6 +6,7 @@ severity: important
 related_files:
   - DUNEUITests/Helpers/UITestHelpers.swift
   - DUNEWatchUITests/Helpers/WatchUITestBaseCase.swift
+  - DUNEUITests/Full/ActivityExercisePickerRegressionTests.swift
 related_solutions:
   - testing/2026-03-09-e2e-phase5-life-regression.md
   - testing/2026-03-12-watch-ui-smoke-surface-fallback-hardening.md
@@ -59,6 +60,10 @@ Watch는 `quickStartList` 또는 `quickStartScreen` AXID를 가진 table/collect
 - main 병합 후 앱 빌드 성공: `/tmp/dune-merge-main.log`.
 - 최종 코드 5관점 리뷰 및 종합 코드 품질 검토에서 P1/P2/P3=0.
 - 전체 최종 런타임 결과는 계획서 실행 기록에 별도로 기록한다. 부분 통과나 빌드 성공을 전체 UI 통과로 취급하지 않는다.
+
+## iPad 회귀에서 추가 확인한 동일 패턴
+
+iPad 전체 검증에서 Quick Start의 Popular 섹션 조회가 실패했다. 기존 스크롤 헬퍼는 `picker-root-list`를 Table로만 찾았으나, 로그에서 동일 ID의 일반 요소는 존재하고 Table은 없었다. 두 헬퍼가 정확한 목록 AXID를 사용하도록 수정하고 Popular 섹션까지 스크롤한 후 seeded 템플릿 행으로 복귀하도록 했다. 특정 UI 타입 가정과 화면 밖 요소 가정을 함께 제거하며 기존 assertion과 fixture는 유지한다.
 
 ## Prevention
 

@@ -260,7 +260,7 @@ final class ActivityExercisePickerRegressionTests: ActivityExerciseSeededUITestB
         timeoutPerCheck: TimeInterval = 0.25
     ) -> Bool {
         let element = app.descendants(matching: .any)[identifier].firstMatch
-        let pickerList = app.tables[AXID.pickerRootList].firstMatch
+        let pickerList = app.descendants(matching: .any)[AXID.pickerRootList].firstMatch
 
         guard pickerList.waitForExistence(timeout: 5) else {
             return element.exists
@@ -298,7 +298,7 @@ final class ActivityExercisePickerRegressionTests: ActivityExerciseSeededUITestB
             return false
         }
 
-        let pickerList = app.tables[AXID.pickerRootList].firstMatch
+        let pickerList = app.descendants(matching: .any)[AXID.pickerRootList].firstMatch
         guard pickerList.waitForExistence(timeout: 5) else {
             return element.exists && element.isHittable
         }
