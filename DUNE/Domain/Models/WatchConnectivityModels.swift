@@ -23,6 +23,48 @@ struct WatchWorkoutUpdate: Codable, Sendable {
     var healthKitWorkoutID: String?
     var calories: Double?
     var calorieSourceRaw: String?
+    var plannedSetCount: Int?
+    var effortSourceRaw: String?
+
+    init(exerciseID: String, exerciseName: String, completedSets: [WatchSetData], startTime: Date,
+         endTime: Date?, heartRateSamples: [WatchHeartRateSample], rpe: Int? = nil,
+         healthKitWorkoutID: String? = nil, calories: Double? = nil, calorieSourceRaw: String? = nil,
+         plannedSetCount: Int? = nil, effortSourceRaw: String? = nil) {
+        self.exerciseID = exerciseID
+        self.exerciseName = exerciseName
+        self.completedSets = completedSets
+        self.startTime = startTime
+        self.endTime = endTime
+        self.heartRateSamples = heartRateSamples
+        self.rpe = rpe
+        self.healthKitWorkoutID = healthKitWorkoutID
+        self.calories = calories
+        self.calorieSourceRaw = calorieSourceRaw
+        self.plannedSetCount = plannedSetCount
+        self.effortSourceRaw = effortSourceRaw
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case exerciseID, exerciseName, completedSets, startTime, endTime
+        case heartRateSamples, rpe, healthKitWorkoutID, calories, calorieSourceRaw
+        case plannedSetCount, effortSourceRaw
+    }
+
+    init(from decoder: any Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        exerciseID = try values.decode(String.self, forKey: .exerciseID)
+        exerciseName = try values.decode(String.self, forKey: .exerciseName)
+        completedSets = try values.decode([WatchSetData].self, forKey: .completedSets)
+        startTime = try values.decode(Date.self, forKey: .startTime)
+        endTime = try values.decodeIfPresent(Date.self, forKey: .endTime)
+        heartRateSamples = try values.decode([WatchHeartRateSample].self, forKey: .heartRateSamples)
+        rpe = try values.decodeIfPresent(Int.self, forKey: .rpe)
+        healthKitWorkoutID = try values.decodeIfPresent(String.self, forKey: .healthKitWorkoutID)
+        calories = try values.decodeIfPresent(Double.self, forKey: .calories)
+        calorieSourceRaw = try values.decodeIfPresent(String.self, forKey: .calorieSourceRaw)
+        plannedSetCount = try values.decodeIfPresent(Int.self, forKey: .plannedSetCount)
+        effortSourceRaw = try values.decodeIfPresent(String.self, forKey: .effortSourceRaw)
+    }
 }
 
 struct WatchSetData: Codable, Sendable {
@@ -33,6 +75,43 @@ struct WatchSetData: Codable, Sendable {
     var restDuration: TimeInterval?
     let isCompleted: Bool
     var rpe: Double?
+    var plannedReps: Int?
+    var rpeSourceRaw: String?
+    var setTypeRaw: String?
+
+    init(setNumber: Int, weight: Double?, reps: Int?, duration: TimeInterval?,
+         restDuration: TimeInterval?, isCompleted: Bool, rpe: Double? = nil,
+         plannedReps: Int? = nil, rpeSourceRaw: String? = nil, setTypeRaw: String? = nil) {
+        self.setNumber = setNumber
+        self.weight = weight
+        self.reps = reps
+        self.duration = duration
+        self.restDuration = restDuration
+        self.isCompleted = isCompleted
+        self.rpe = rpe
+        self.plannedReps = plannedReps
+        self.rpeSourceRaw = rpeSourceRaw
+        self.setTypeRaw = setTypeRaw
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case setNumber, weight, reps, duration, restDuration, isCompleted, rpe
+        case plannedReps, rpeSourceRaw, setTypeRaw
+    }
+
+    init(from decoder: any Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        setNumber = try values.decode(Int.self, forKey: .setNumber)
+        weight = try values.decodeIfPresent(Double.self, forKey: .weight)
+        reps = try values.decodeIfPresent(Int.self, forKey: .reps)
+        duration = try values.decodeIfPresent(TimeInterval.self, forKey: .duration)
+        restDuration = try values.decodeIfPresent(TimeInterval.self, forKey: .restDuration)
+        isCompleted = try values.decode(Bool.self, forKey: .isCompleted)
+        rpe = try values.decodeIfPresent(Double.self, forKey: .rpe)
+        plannedReps = try values.decodeIfPresent(Int.self, forKey: .plannedReps)
+        rpeSourceRaw = try values.decodeIfPresent(String.self, forKey: .rpeSourceRaw)
+        setTypeRaw = try values.decodeIfPresent(String.self, forKey: .setTypeRaw)
+    }
 }
 
 struct WatchHeartRateSample: Codable, Sendable {
@@ -45,6 +124,40 @@ struct WatchProcedureSetSnapshot: Codable, Sendable, Hashable {
     let setNumber: Int
     let weight: Double?
     let reps: Int?
+    let plannedReps: Int?
+    let rpe: Double?
+    let rpeSourceRaw: String?
+    let setTypeRaw: String?
+    let plannedSetCount: Int?
+
+    init(setNumber: Int, weight: Double?, reps: Int?, plannedReps: Int? = nil,
+         rpe: Double? = nil, rpeSourceRaw: String? = nil, setTypeRaw: String? = nil,
+         plannedSetCount: Int? = nil) {
+        self.setNumber = setNumber
+        self.weight = weight
+        self.reps = reps
+        self.plannedReps = plannedReps
+        self.rpe = rpe
+        self.rpeSourceRaw = rpeSourceRaw
+        self.setTypeRaw = setTypeRaw
+        self.plannedSetCount = plannedSetCount
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case setNumber, weight, reps, plannedReps, rpe, rpeSourceRaw, setTypeRaw, plannedSetCount
+    }
+
+    init(from decoder: any Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        setNumber = try values.decode(Int.self, forKey: .setNumber)
+        weight = try values.decodeIfPresent(Double.self, forKey: .weight)
+        reps = try values.decodeIfPresent(Int.self, forKey: .reps)
+        plannedReps = try values.decodeIfPresent(Int.self, forKey: .plannedReps)
+        rpe = try values.decodeIfPresent(Double.self, forKey: .rpe)
+        rpeSourceRaw = try values.decodeIfPresent(String.self, forKey: .rpeSourceRaw)
+        setTypeRaw = try values.decodeIfPresent(String.self, forKey: .setTypeRaw)
+        plannedSetCount = try values.decodeIfPresent(Int.self, forKey: .plannedSetCount)
+    }
 }
 
 /// Compact exercise metadata used by Watch UI.

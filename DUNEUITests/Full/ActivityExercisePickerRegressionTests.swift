@@ -149,9 +149,9 @@ final class ActivityExercisePickerRegressionTests: ActivityExerciseSeededUITestB
 
     private func openExerciseViewFromRecentWorkouts() {
         ensureActivityRoot()
-        XCTAssertTrue(app.scrollToElementIfNeeded(AXID.activityRecentSeeAll, maxSwipes: 10))
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.activityRecentSeeAll, maxSwipes: 10))
 
-        let seeAllButton = app.descendants(matching: .any)[AXID.activityRecentSeeAll].firstMatch
+        let seeAllButton = app.buttons[AXID.activityRecentSeeAll].firstMatch
         XCTAssertTrue(seeAllButton.waitForExistence(timeout: 5), "Recent workouts See All should be reachable")
         seeAllButton.tap()
 

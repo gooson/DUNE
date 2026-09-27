@@ -12,6 +12,9 @@ enum WatchWorkoutRecordBuilder {
         calories: Double?,
         calorieSource: CalorieSource,
         effort: Int,
+        inputType: ExerciseInputType,
+        history: [ExerciseRecord],
+        plannedSetCount: Int? = nil,
         healthKitWorkoutID: String?
     ) -> ExerciseRecord {
         let record = ExerciseRecord(
@@ -23,23 +26,28 @@ enum WatchWorkoutRecordBuilder {
             exerciseDefinitionID: exerciseDefinitionID,
             estimatedCalories: calorieSource == .met ? calories : nil,
             calorieSource: calorieSource,
-            rpe: effort
+            rpe: effort,
+            plannedSetCount: plannedSetCount,
+            effortSourceRaw: "user"
         )
         record.sets = sets.map { data in
             let set = WorkoutSet(
                 setNumber: data.setNumber,
-                setType: .working,
+                setType: data.setTypeRaw.flatMap(SetType.init(rawValue:)) ?? .working,
                 weight: data.weight,
                 reps: data.reps,
                 duration: data.duration,
                 isCompleted: true,
                 restDuration: data.restDuration,
-                rpe: data.rpe
+                rpe: data.rpe,
+                plannedReps: data.plannedReps,
+                rpeSourceRaw: data.rpeSourceRaw
             )
             set.exerciseRecord = record
             return set
         }
         // Set RPE remains available for analysis; the summary's chosen effort is final.
+        record.refreshAutoIntensity(exerciseType: inputType, history: history)
         return record
     }
 
@@ -56,7 +64,10 @@ enum WatchWorkoutRecordBuilder {
                     duration: set.duration,
                     restDuration: set.restDuration,
                     isCompleted: true,
-                    rpe: set.rpe
+                    rpe: set.rpe,
+                    plannedReps: set.plannedReps,
+                    rpeSourceRaw: set.rpeSourceRaw,
+                    setTypeRaw: set.setTypeRaw
                 )
             },
             startTime: record.date,
@@ -65,7 +76,9 @@ enum WatchWorkoutRecordBuilder {
             rpe: record.rpe,
             healthKitWorkoutID: record.healthKitWorkoutID,
             calories: record.bestCalories,
-            calorieSourceRaw: record.calorieSourceRaw
+            calorieSourceRaw: record.calorieSourceRaw,
+            plannedSetCount: record.plannedSetCount,
+            effortSourceRaw: record.effortSourceRaw
         )
     }
 }

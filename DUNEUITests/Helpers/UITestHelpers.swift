@@ -113,6 +113,7 @@ enum AXID {
     // MARK: - Life Tab (active: hero, toolbar-add, habits section, actions, history)
     static let lifeHeroProgress = "life-hero-progress"
     static let lifeToolbarAdd = "life-toolbar-add"
+    static let lifeToolbarNewHabit = "life-toolbar-new-habit"
     static let lifeSectionHabits = "life-section-habits"
     static let lifeHabitToggle = "life-habit-toggle"
     static func lifeHabitRow(_ habitName: String) -> String { "life-habit-row-\(habitName)" }
@@ -272,6 +273,10 @@ enum AXID {
     static let workoutSessionScreen = "workout-session-screen"
     static let workoutSessionDone = "workout-session-done"
     static let workoutSessionCompleteSet = "workout-session-complete-set"
+    static let workoutSessionPlannedReps = "workout-session-planned-reps"
+    static let workoutSessionRecommendationReason = "workout-session-recommendation-reason"
+    static let workoutSessionApplyRecommendation = "workout-session-apply-recommendation"
+    static let workoutSessionSkipRest = "workout-session-skip-rest"
     static let workoutSessionLastSetSheet = "workout-session-last-set-sheet"
     static let workoutSessionAddSet = "workout-session-add-set"
     static let workoutSessionFinish = "workout-session-finish"
@@ -467,6 +472,11 @@ extension XCUIApplication {
         guard element.exists || element.waitForExistence(timeout: remainingTime) else { return false }
         element.tap()
         return true
+    }
+
+    func openLifeNewHabitForm() -> Bool {
+        guard waitAndTap(AXID.lifeToolbarAdd) else { return false }
+        return waitAndTap(AXID.lifeToolbarNewHabit)
     }
 
     func hasPrimaryNavigation(timeout: TimeInterval = 8) -> Bool {

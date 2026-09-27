@@ -1,3 +1,4 @@
+import Foundation
 import Testing
 @testable import DUNE
 
@@ -62,6 +63,60 @@ struct TemplateWorkoutViewModelTests {
     }
 
     // MARK: - Initialization Tests
+
+    @Test("Draft save and restore preserve target and RPE source independently of actual reps")
+    func draftMetadataRoundTrip() throws {
+        defer { TemplateWorkoutDraft.clear() }
+        let config = Self.makeConfig(count: 1)
+        let vm = TemplateWorkoutViewModel(config: config)
+        vm.currentViewModel.sets[0].reps = "7"
+        vm.currentViewModel.sets[0].plannedReps = 10
+        vm.currentViewModel.sets[0].rpe = 8.5
+        vm.currentViewModel.sets[0].rpeSourceRaw = "user"
+        vm.saveDraft()
+
+        let draft = try #require(TemplateWorkoutDraft.load())
+        let restored = TemplateWorkoutViewModel(config: config)
+        #expect(restored.restoreFromDraft(draft))
+        let set = restored.currentViewModel.sets[0]
+        #expect(set.reps == "7")
+        #expect(set.plannedReps == 10)
+        #expect(set.rpe == 8.5)
+        #expect(set.rpeSourceRaw == "user")
+    }
+
+    @Test("Legacy draft decodes absent target and RPE metadata as unknown")
+    func legacyDraftMetadataUnknown() throws {
+        let config = Self.makeConfig(count: 1)
+        let draft = TemplateWorkoutDraft(
+            exerciseIDs: config.exercises.map(\.id),
+            exerciseSets: [[TemplateWorkoutDraft.DraftSet(
+                setNumber: 1, weight: "", reps: "7", duration: "", distance: "",
+                level: "", isCompleted: false, setTypeRaw: SetType.working.rawValue,
+                restDuration: nil
+            )]],
+            exerciseStatusRaws: ["inProgress"],
+            currentExerciseIndex: 0,
+            sessionStartTime: Date(),
+            savedAt: Date()
+        )
+        var payload = try #require(JSONSerialization.jsonObject(with: JSONEncoder().encode(draft)) as? [String: Any])
+        var exerciseSets = try #require(payload["exerciseSets"] as? [[[String: Any]]])
+        exerciseSets[0][0].removeValue(forKey: "plannedReps")
+        exerciseSets[0][0].removeValue(forKey: "rpe")
+        exerciseSets[0][0].removeValue(forKey: "rpeSourceRaw")
+        payload["exerciseSets"] = exerciseSets
+
+        let decoded = try JSONDecoder().decode(
+            TemplateWorkoutDraft.self, from: JSONSerialization.data(withJSONObject: payload)
+        )
+        let restored = TemplateWorkoutViewModel(config: config)
+        #expect(restored.restoreFromDraft(decoded))
+        #expect(restored.currentViewModel.sets[0].reps == "7")
+        #expect(restored.currentViewModel.sets[0].plannedReps == nil)
+        #expect(restored.currentViewModel.sets[0].rpe == nil)
+        #expect(restored.currentViewModel.sets[0].rpeSourceRaw == nil)
+    }
 
     @Test("Init creates correct number of exercise VMs")
     func initCreatesViewModels() {

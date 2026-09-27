@@ -36,6 +36,14 @@ enum WatchAXID {
     static let setInputScreen = "watch-set-input-screen"
     static let setInputDoneButton = "watch-set-input-done"
     static let restTimerRPEBadge = "watch-rest-timer-rpe-badge"
+    static let restTimerRPERate = "watch-rest-timer-rpe-rate"
+    static let restTimerRPEConfirm = "watch-rest-timer-rpe-confirm"
+    static let lastSetRPEAction = "watch-last-set-rpe-action"
+    static let lastSetRPEActionLabels = ["Rate RPE", "RPE 기록", "RPEを記録", "Confirm RPE", "RPE 확정", "RPEを確定"]
+    static let lastSetRPESheet = "watch-last-set-rpe-sheet"
+    static let lastSetRPEDecrement = "watch-last-set-rpe-decrement"
+    static let lastSetRPEIncrement = "watch-last-set-rpe-increment"
+    static let lastSetRPEConfirm = "watch-last-set-rpe-confirm"
     static let sessionSummaryScreen = "watch-session-summary-screen"
     static let sessionSummaryEffortButton = "watch-summary-effort-button"
     static let sessionSummaryDoneButton = "watch-session-summary-done"
@@ -167,6 +175,12 @@ class WatchUITestBaseCase: XCTestCase {
                 exactLabels: WatchAXID.sessionMetricsLastSetFinishLabels,
                 timeout: timeout
             ) != nil
+        case WatchAXID.lastSetRPEAction:
+            return waitForButton(
+                identifier: identifier,
+                exactLabels: WatchAXID.lastSetRPEActionLabels,
+                timeout: timeout
+            ) != nil
         case WatchAXID.sessionControlsEndButton:
             return waitForButton(
                 identifier: identifier,
@@ -233,6 +247,15 @@ class WatchUITestBaseCase: XCTestCase {
             guard let button = waitForButton(
                 identifier: identifier,
                 exactLabels: WatchAXID.sessionMetricsLastSetFinishLabels,
+                timeout: timeout
+            ) else {
+                return false
+            }
+            element = button
+        case WatchAXID.lastSetRPEAction:
+            guard let button = waitForButton(
+                identifier: identifier,
+                exactLabels: WatchAXID.lastSetRPEActionLabels,
                 timeout: timeout
             ) else {
                 return false
@@ -381,7 +404,14 @@ class WatchUITestBaseCase: XCTestCase {
         openAllExercises()
 
         let exercise = app.descendants(matching: .any)[WatchAXID.quickStartExerciseSquat].firstMatch
+        // The search field, category picker and popular rows fill a small Watch
+        // viewport. Lazy list rows become accessible only after scrolling.
+        for _ in 0..<6 {
+            if exercise.exists && exercise.isHittable { break }
+            app.swipeUp()
+        }
         XCTAssertTrue(exercise.waitForExistence(timeout: 5), "Fixture exercise should be visible")
+        XCTAssertTrue(exercise.isHittable, "Fixture exercise should be reachable after scrolling")
         exercise.tap()
 
         XCTAssertTrue(elementExists(WatchAXID.workoutPreviewScreen, timeout: 5), "Workout preview root should render")
@@ -505,7 +535,7 @@ class WatchUITestBaseCase: XCTestCase {
 
     private func addSystemPermissionMonitor() {
         _ = addUIInterruptionMonitor(withDescription: "Watch System Alert") { alert in
-            for label in ["Allow", "OK", "Continue"] {
+            for label in ["Don't Allow", "허용 안 함", "許可しない", "Allow", "허용", "許可", "OK", "확인", "Continue", "계속", "続ける"] {
                 let button = alert.buttons[label]
                 if button.exists {
                     button.tap()

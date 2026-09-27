@@ -11,17 +11,22 @@ struct MetricsView: View {
     @State private var weight: Double = 0
     @State private var usesAddedWeight = false
     @State private var sessionWeightOverride: Double?
+    @State private var nextSetReductionKg: Double?
     @State private var reps: Int = WatchSetInputPolicy.defaultReps
     @State private var durationMinutes: Int = 1
     /// Start date of the current duration-intensity set (live timer).
     @State private var setTimerStart: TimeInterval?
     /// Auto-estimated RPE for the just-completed set (shown on rest timer).
     @State private var estimatedRPE: Double?
+    @State private var rpeWasAdjusted = false
     @State private var showInputSheet = false
     @State private var showRestTimer = false
     @State private var showNextExercise = false
     @State private var showEndConfirmation = false
     @State private var showLastSetOptions = false
+    @State private var showLastSetRPEInput = false
+    @State private var pendingLastSetRPEInput = false
+    @State private var lastSetRPEInput = 8.0
     @State private var didInitialAppear = false
     /// Deferred input sheet trigger to prevent double-present with onAppear
     @State private var pendingInputSheet = false
@@ -45,7 +50,11 @@ struct MetricsView: View {
                     onSkip: { total in handleRestComplete(timerTotal: total) },
                     onEnd: { showEndConfirmation = true },
                     estimatedRPE: estimatedRPE,
-                    onRPEAdjusted: { estimatedRPE = $0 }
+                    onRPEAdjusted: { adjusted in
+                        estimatedRPE = adjusted
+                        rpeWasAdjusted = true
+                        workoutManager.recordSetRPE(adjusted, source: "user")
+                    }
                 )
             } else if showNextExercise {
                 nextExerciseTransition
@@ -56,7 +65,9 @@ struct MetricsView: View {
         .onChange(of: workoutManager.currentExerciseIndex) { _, _ in
             lastRestTimerTotal = nil
             estimatedRPE = nil
+            rpeWasAdjusted = false
             sessionWeightOverride = nil
+            nextSetReductionKg = nil
             prefillFromEntry()
             refreshPreviousSetsCache()
         }
@@ -75,6 +86,12 @@ struct MetricsView: View {
                 showInputSheet = currentInputType != .durationIntensity
             }
         }
+        .onChange(of: showLastSetOptions) { wasPresented, isPresented in
+            if wasPresented, !isPresented, pendingLastSetRPEInput {
+                pendingLastSetRPEInput = false
+                showLastSetRPEInput = true
+            }
+        }
         .sheet(isPresented: $showInputSheet) {
             SetInputSheet(
                 inputType: currentInputType,
@@ -83,8 +100,17 @@ struct MetricsView: View {
                 durationMinutes: $durationMinutes,
                 usesAddedWeight: $usesAddedWeight,
                 previousSets: cachedPreviousSets,
-                onWeightEdited: { sessionWeightOverride = $0 }
+                suggestedWeightKg: nextSetReductionKg,
+                onWeightEdited: { edited in
+                    sessionWeightOverride = edited
+                    nextSetReductionKg = nil
+                }
             )
+        }
+        .sheet(isPresented: $showLastSetRPEInput, onDismiss: {
+            showLastSetOptions = true
+        }) {
+            lastSetRPESheet
         }
         .confirmationDialog(
             "End Workout?",
@@ -111,6 +137,13 @@ struct MetricsView: View {
             isPresented: $showLastSetOptions,
             titleVisibility: .visible
         ) {
+            if estimatedRPE == nil {
+                Button("Rate RPE") { presentLastSetRPEInput() }
+                    .accessibilityIdentifier("watch-last-set-rpe-action")
+            } else {
+                Button("Confirm RPE") { presentLastSetRPEInput() }
+                    .accessibilityIdentifier("watch-last-set-rpe-action")
+            }
             Button("+1 Set") {
                 addExtraSet()
             }
@@ -122,6 +155,47 @@ struct MetricsView: View {
         } message: {
             Text("Add another set or move on?")
         }
+    }
+
+    private func presentLastSetRPEInput() {
+        lastSetRPEInput = estimatedRPE ?? 8
+        pendingLastSetRPEInput = true
+    }
+
+    private var lastSetRPESheet: some View {
+        VStack(spacing: DS.Spacing.sm) {
+            Text("RPE \(RPELevel.format(lastSetRPEInput))")
+                .font(.headline.monospacedDigit())
+
+            HStack(spacing: DS.Spacing.md) {
+                Button {
+                    lastSetRPEInput = max(RPELevel.range.lowerBound, lastSetRPEInput - RPELevel.step)
+                } label: {
+                    Image(systemName: "minus")
+                }
+                .accessibilityIdentifier("watch-last-set-rpe-decrement")
+
+                Button {
+                    lastSetRPEInput = min(RPELevel.range.upperBound, lastSetRPEInput + RPELevel.step)
+                } label: {
+                    Image(systemName: "plus")
+                }
+                .accessibilityIdentifier("watch-last-set-rpe-increment")
+            }
+            .buttonStyle(.bordered)
+
+            Button("Confirm RPE") {
+                estimatedRPE = lastSetRPEInput
+                rpeWasAdjusted = true
+                workoutManager.recordSetRPE(lastSetRPEInput, source: "user")
+                showLastSetRPEInput = false
+            }
+            .buttonStyle(.borderedProminent)
+            .accessibilityIdentifier("watch-last-set-rpe-confirm")
+        }
+        .padding(DS.Spacing.md)
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("watch-last-set-rpe-sheet")
     }
 
     // MARK: - Set Entry (Redesigned)
@@ -428,7 +502,7 @@ struct MetricsView: View {
                 previousWeight: plannedSet.weight, defaultWeight: entry.defaultWeightKg, hasPreviousSet: true
             )
             reps = WatchSetInputPolicy.resolvedInitialReps(
-                lastSetReps: plannedSet.reps,
+                lastSetReps: plannedSet.plannedReps ?? plannedSet.reps,
                 entryDefaultReps: entry.defaultReps
             )
             return
@@ -509,10 +583,12 @@ struct MetricsView: View {
             ? setTimerStart.map { max(1, min(7200, workoutManager.activeElapsedTime - $0)) }
             : nil
         workoutManager.completeSet(weight: recordedWeight, reps: reps > 0 ? reps : nil, duration: duration, rpe: nil)
+        nextSetReductionKg = nil
         refreshPreviousSetsCache()
 
         // Auto-estimate RPE for the just-completed set
         estimatedRPE = WatchRPEEstimator.estimateRPE(weight: recordedWeight ?? 0, reps: reps, completedSets: priorSets)
+        rpeWasAdjusted = false
 
         // Haptic on set completion
         WKInterfaceDevice.current().play(.success)
@@ -530,10 +606,12 @@ struct MetricsView: View {
         let wasLastSet = workoutManager.isLastSet
 
         workoutManager.completeSet(weight: nil, reps: nil, duration: elapsedSeconds, rpe: nil)
+        nextSetReductionKg = nil
         refreshPreviousSetsCache()
         setTimerStart = nil
 
         estimatedRPE = nil
+        rpeWasAdjusted = false
 
         WKInterfaceDevice.current().play(.success)
 
@@ -547,9 +625,10 @@ struct MetricsView: View {
     /// Flush any pending estimated RPE to the last completed set.
     private func flushEstimatedRPE() {
         if let rpe = estimatedRPE {
-            workoutManager.recordSetRPE(rpe)
+            workoutManager.recordSetRPE(rpe, source: rpeWasAdjusted ? "user" : "estimated")
         }
         estimatedRPE = nil
+        rpeWasAdjusted = false
     }
 
     private func finishCurrentExercise() {
@@ -581,6 +660,15 @@ struct MetricsView: View {
 
         showRestTimer = false
         workoutManager.advanceToNextSet()
+        nextSetReductionKg = WatchSetInputPolicy.reducedWeight(
+            after: workoutManager.lastCompletedSetForCurrentExercise,
+            nextSetTypeRaw: workoutManager.currentPlannedSetForCurrentExercise?.setTypeRaw,
+            equipmentRaw: workoutManager.currentEntry?.equipment,
+            progressionIncrementKg: workoutManager.currentEntry.flatMap {
+                WatchConnectivityManager.shared.exerciseInfo(for: $0.exerciseDefinitionID)?.progressionIncrementKg
+            },
+            inputType: currentInputType
+        )
         prefillFromEntry()
 
         // Haptic on rest complete → defer input sheet to avoid double-present
