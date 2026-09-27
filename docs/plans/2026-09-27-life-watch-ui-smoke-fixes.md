@@ -77,7 +77,7 @@ Life 원인은 확정, Watch는 런타임 검증 전까지 중간 신뢰도다. 
 ### 확인된 원인과 구현
 
 - 원본 Watch 테스트를 로컬에서 재현했다. xcresult 접근성 계층에서 목록은 `CollectionView[watch-quickstart-screen]`, 화면에 노출된 운동은 `watch-quickstart-exercise-plank`였다. Squat은 화면 아래에 있었다. root AXID는 목록 ID를 덮지만 운동 행 ID는 유지되므로 Watch 제품 코드는 수정하지 않았다.
-- `openNewHabitForm()`이 Life의 `+ → New Habit → name field`를 공통 처리한다.
+- `openLifeNewHabitForm()`이 Life의 `+ → New Habit → name field`를 공통 처리한다.
 - `findQuickStartExercise(identifier:maxSwipes:)`가 정확한 목록/screen ID의 scroll container 안에서 정확한 운동 행 ID와 hittability를 검사한다. 최대 6회 스크롤하며 실패 시 계층을 첨부한다.
 - Watch full 첫 실행에서 발견한 동일한 Crunch 탐색 실패를 수정하고 Plank 진입에도 같은 helper를 적용했다.
 
@@ -108,3 +108,15 @@ SwiftUI 및 Apple UX Work 품질 에이전트는 초기 구현 diff에서 P1/P2/
 
 - [XCUIElement.isHittable](https://developer.apple.com/documentation/xcuiautomation/xcuielement/ishittable)
 - [XCUIElement.exists](https://developer.apple.com/documentation/xcuiautomation/xcuielement/exists)
+
+
+## 재개 기록 — 최종 검증 진행
+
+- 사용자 요청으로 남은 절차를 재개했다. 최신 `origin/main` (`947650ab`)을 병합하면서 main의 Life 메뉴 helper 이름과 Watch 권한 alert 처리를 보존했다. 병합 커밋: `562500ac`.
+- 병합 후 `scripts/build-ios.sh`는 성공했다 (`/tmp/dune-merge-main.log`).
+- 최종 코드 diff를 5개 리뷰 에이전트(Security, Performance, Architecture, Data Integrity, Simplicity)가 각각 재검토했고 P1/P2/P3=0이다. Agent-Native는 설정/프롬프트 변경이 없어 해당 없음이다.
+- `app-quality-gate`와 최종 `pr-reviewer`도 코드 지적 사항 0건을 반환했다. 앞서 수행한 SwiftUI/UX 검토 후 제품 UI 코드의 추가 변경은 없으며 최신 main 대비 최종 diff는 테스트/문서뿐이다.
+- Compound: `docs/solutions/testing/2026-09-27-life-menu-watch-offscreen-ui-tests.md`. 별도 규칙 승격이나 직접 연결된 활성 TODO는 없다.
+- 최종 iPhone 전체 UI 로그: `/tmp/dune-final-iphone-full.log`. Watch와 iPad 전체 테스트는 저장소 공유 잠금으로 직렬 실행한다 (`/tmp/dune-final-watch-full.log`, `/tmp/dune-final-ipad-full.log`).
+- 병합 전 실행 `/tmp/dune-resume-iphone-full.log`은 최종 검증에서 제외한다.
+- Git SSH push는 성공했다. GitHub CLI 인증은 401, connector PR 쓰기는 403, 사용 가능한 브라우저는 로그아웃 상태여서 사용자에게 인증 복구를 요청했다. 테스트와 문서화는 계속 진행한다. 인증 차단을 우회하는 로컬 main 머지는 수행하지 않는다.
