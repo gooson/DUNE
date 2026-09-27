@@ -120,3 +120,27 @@ SwiftUI 및 Apple UX Work 품질 에이전트는 초기 구현 diff에서 P1/P2/
 - 최종 iPhone 전체 UI 로그: `/tmp/dune-final-iphone-full.log`. Watch와 iPad 전체 테스트는 저장소 공유 잠금으로 직렬 실행한다 (`/tmp/dune-final-watch-full.log`, `/tmp/dune-final-ipad-full.log`).
 - 병합 전 실행 `/tmp/dune-resume-iphone-full.log`은 최종 검증에서 제외한다.
 - Git SSH push는 성공했다. GitHub CLI 인증은 401, connector PR 쓰기는 403, 사용 가능한 브라우저는 로그아웃 상태여서 사용자에게 인증 복구를 요청했다. 테스트와 문서화는 계속 진행한다. 인증 차단을 우회하는 로컬 main 머지는 수행하지 않는다.
+
+
+## 최종 범위 재확정 (main f2118028 정책 반영)
+
+최신 main의 `.codex/skill-compat.md` 변경 범위 기반 UI 게이트를 적용했다. `python3 scripts/plan-ui-tests.py --base origin/main` 원본 판정은 UI 테스트/공유 helper 파일 변경 때문에 iOS/watch full이다 (`/tmp/dune-ui-scope.json`). 심볼 소비자를 `rg`로 확인하여 iOS만 아래 범위로 축소한다.
+
+- `openLifeNewHabitForm` 변경은 LifeSmokeTests 4개 호출과 LifeRegressionTests 1개 호출에 한정된다. 기존 `waitAndTap` 등 공유 동작은 변경하지 않았다.
+- `ExercisePickerView.templateRow` 변경은 quick-start 템플릿 버튼의 `contentShape(Rectangle())` 한 줄이다. 템플릿 실행 callback을 전달하는 Activity 경로를 Picker 회귀에서 검증한다. 일반 운동 선택의 callback/저장/내비게이션 로직은 변경하지 않았다.
+- `HabitHistorySheet` 변경은 화면/빈 상태 AXID를 실제 Text에 옮기는 것뿐이다. LifeRegressionTests가 빈 기록, seeded 기록, 닫기와 새 습관 생성을 검증한다.
+- App/Domain/Data/Shared/seed/project 변경은 이번 PR diff에 없다. 최신 main에서 병합한 실행기/정책은 별도 변경이며 보존한다.
+- 최종 iOS: iPhone/iPad 각각 `scripts/test-ui.sh --smoke --only-testing DUNEUITests/LifeSmokeTests --only-testing DUNEUITests/LifeRegressionTests --only-testing DUNEUITests/ActivityExercisePickerRegressionTests`. 명시적 LifeSmokeTests 선택으로 weekly 케이스도 제외하지 않는다. 공통 smoke와 관련 클래스의 합집합을 실행한다.
+- 최종 Watch: `scripts/test-watch-ui.sh` 전체 suite. 공유 Watch helper와 모든 fixture 호출부를 검증한다.
+- 수정 전 전체 CI `36288920161`는 iOS/Watch unit 성공, Watch UI 12/13 성공이었다. 마지막 Crunch 실패는 실제 nested switch 탭으로 해결해 로컬 단독 1/1 성공했다. iOS 전체 실행과 로컬 iPad 전체 실행은 위 정책에 따라 종료했으며 전체 통과 증거로 사용하지 않는다.
+
+### 추가 실패 해결 증거
+
+- iPad template 버튼 중앙 좌표는 label의 투명 영역이었다. 이전/이후 영상 프레임에서 picker가 그대로 남았다. `contentShape(Rectangle())` 추가 후 같은 테스트가 통과했다. 콜백 순서 변경은 하지 않았다.
+- Life 기록 화면은 내용이 실제로 표시되지만 root VStack AXID가 빈 상태/닫기 ID를 덮었다. ID를 header/empty Text로 옮겼다. 기록 행 테스트는 존재하지 않는 `row-0` 대신 실제 UUID-prefix 행과 `Completed` 내용을 확인한다.
+- 위 iPad 실패 3개 모두 통과: `/tmp/dune-ipad-three-fixed.log`, 3 tests / 0 failures.
+- Watch 바깥 Switch 중앙 탭은 값이 0으로 남았고, nested Switch 탭은 1로 변경됐다. 상태의 문자열 `1`/`0` 전환과 중량 버튼 추가/제거를 함께 검증했다. `/tmp/dune-watch-crunch-fixed-retry.log`, 1 test / 0 failures.
+- 제품 수정 후 앱 빌드 성공: `/tmp/dune-ui-surface-build.log`. Watch test compile 성공: `/tmp/dune-watch-toggle-compile.log`.
+- 수정 후 5관점 재리뷰와 SwiftUI/Apple UX 전문 리뷰는 actionable findings 0건. 최신 main 동기화 후 CI 설정 삭제가 없음을 확인했다.
+- GitHub 인증 복구 후 PR https://github.com/gooson/DUNE/pull/781 생성. nightly 워크플로는 한 번 dispatch 후 원래 disabled 상태로 복원했다.
+- 추가 생성 기기: iPad `85A9967F-5A6F-49CF-8FEA-010EAD540837`, Watch `F2070FCD-297A-4F53-B621-D87D4288042D`. 원본 기기는 보존한다.

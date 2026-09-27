@@ -65,6 +65,13 @@ Watch는 `quickStartList` 또는 `quickStartScreen` AXID를 가진 table/collect
 
 iPad 전체 검증에서 Quick Start의 Popular 섹션 조회가 실패했다. 기존 스크롤 헬퍼는 `picker-root-list`를 Table로만 찾았으나, 로그에서 동일 ID의 일반 요소는 존재하고 Table은 없었다. 두 헬퍼가 정확한 목록 AXID를 사용하도록 수정하고 Popular 섹션까지 스크롤한 후 seeded 템플릿 행으로 복귀하도록 했다. 특정 UI 타입 가정과 화면 밖 요소 가정을 함께 제거하며 기존 assertion과 fixture는 유지한다.
 
+## 추가 UI 계약 확인
+
+- iPad에서 plain Button의 넓은 템플릿 행 중앙이 Spacer 영역에 놓여 탭이 무시됐다. `templateRow` label에 `.contentShape(Rectangle())`를 추가했고 같은 중앙 탭 테스트가 통과했다. 비동기 dismissal race라는 초기 가설은 영상 증거로 제외했다.
+- Life 기록 시트의 부모 VStack 접근성 ID가 빈 상태/닫기 ID를 덮었다. 화면 anchor를 습관 이름 Text로, 빈 상태 ID를 No History Text로 옮겼다. 기록 행은 실제 UUID-prefix ID를 찾고 seeded Completed 내용을 검증한다. 관련 iPad 3개 모두 통과했다.
+- Watch Toggle은 AXID를 가진 바깥 Switch와 내부 실제 Switch를 노출했다. 바깥 중앙 탭은 값 0을 유지했다. 내부 Switch를 선택하고 문자열 상태 `1`/`0` 전환을 기다리도록 수정한 뒤 Crunch 중량 추가·제거 테스트가 통과했다.
+- 전체 회귀에서 발견한 실패가 이번 변경과 무관하면 무한히 범위를 확장하지 않는다. 최신 main의 변경 범위 정책과 심볼 소비자 분석으로 최종 범위를 기록한다.
+
 ## Prevention
 
 - Button을 Menu로 바꾸면 테스트도 실제 메뉴 action을 선택하도록 수정한다.
