@@ -13,7 +13,7 @@ daily/weekly 습관은 cycleSnapshot이 nil이므로 시간 설정이 있어도 
 
 ## Approach
 
-daily/weekly는 지정 요일이 없는 목표 빈도이므로 설정 시각의 매일 반복 reminder를 사용한다. interval은 기존 예정일/사전 알림 의미를 유지한다. 예약 변경을 직렬화하고 저장된 기존 습관도 Life 진입 시 복구한다. 권한은 기존 앱 시작 권한 흐름을 유지한다.
+daily/weekly는 지정 요일이 없는 목표 빈도이므로 설정 시각의 매일 반복 reminder를 사용한다. interval은 기존 예정일/사전 알림 의미를 유지한다. 예약 변경을 직렬화하고 저장된 기존 습관도 앱 진입/복귀 시 복구한다. 권한은 기존 앱 시작 권한 흐름을 유지하고 허용 완료 시 재예약한다.
 
 ## Affected Files
 
@@ -21,8 +21,11 @@ daily/weekly는 지정 요일이 없는 목표 빈도이므로 설정 시각의 
 |------|--------|
 | DUNE/Presentation/Life/LifeViewModel.swift | 빈도별 요청 생성 및 예약 순서 보장 |
 | DUNE/Presentation/Life/LifeView.swift | 중복 취소 제거, 기존 예약 복구 |
-| DUNE/Presentation/Life/HabitManagementView.swift | 보관/복원 예약 정합성 필요 시 수정 |
+| DUNE/Presentation/Life/HabitReminderSyncView.swift | 앱 전역 습관 변경 관찰 및 orphan 정리 |
+| DUNE/App/ContentView.swift, DUNE/App/DUNEApp.swift | 전역 관찰 및 권한 완료 연결 |
 | DUNETests/HabitReminderSchedulerTests.swift | 요청 내용, 날짜, 순서 회귀 테스트 |
+| DUNEUITests/Smoke/LifeSmokeTests.swift, DUNEUITests/Helpers/UITestHelpers.swift | 알림 시간 선택기 생성/편집 UI 검증 |
+| DUNE/DUNE.xcodeproj/project.pbxproj | 신규 Swift 파일 자동 등록 |
 
 ## Implementation Steps
 
