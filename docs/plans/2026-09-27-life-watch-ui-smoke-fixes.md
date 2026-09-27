@@ -33,7 +33,8 @@ Actions run 36265810957에서 iOS 23개 중 Life 3개, Watch 5개 중 fixture �
 | DUNEUITests/Full/LifeRegressionTests.swift | modify | 동일 진입 계약 |
 | DUNEWatchUITests/Helpers/WatchUITestBaseCase.swift | modify | 제한된 fixture 행 탐색 |
 | DUNEWatchUITests/Smoke/WatchHomeSmokeTests.swift | modify | 실제 목록 탐색 검증 |
-| DUNEWatch/Views/QuickStartAllExercisesView.swift | conditional | AXID 전파가 재현되면 root anchor 수정 |
+| DUNEWatchUITests/Smoke/WatchWorkoutFlowSmokeTests.swift | modify | 화면 밖 Crunch 행도 동일 탐색 계약 사용 |
+| DUNEWatchUITests/Smoke/WatchPlankTimerTests.swift | modify | 문자열/전체 화면 swipe 대신 정확한 행 탐색 |
 
 ## Implementation Steps
 
@@ -70,3 +71,40 @@ Actions run 36265810957에서 iOS 23개 중 Life 3개, Watch 5개 중 fixture �
 ## Confidence
 
 Life 원인은 확정, Watch는 런타임 검증 전까지 중간 신뢰도다. 관련 brainstorm/TODO 검색에서 이 CI 실패에 직접 배정된 활성 TODO는 없었다.
+
+## 실행 기록 — UI 게이트 미통과
+
+### 확인된 원인과 구현
+
+- 원본 Watch 테스트를 로컬에서 재현했다. xcresult 접근성 계층에서 목록은 `CollectionView[watch-quickstart-screen]`, 화면에 노출된 운동은 `watch-quickstart-exercise-plank`였다. Squat은 화면 아래에 있었다. root AXID는 목록 ID를 덮지만 운동 행 ID는 유지되므로 Watch 제품 코드는 수정하지 않았다.
+- `openNewHabitForm()`이 Life의 `+ → New Habit → name field`를 공통 처리한다.
+- `findQuickStartExercise(identifier:maxSwipes:)`가 정확한 목록/screen ID의 scroll container 안에서 정확한 운동 행 ID와 hittability를 검사한다. 최대 6회 스크롤하며 실패 시 계층을 첨부한다.
+- Watch full 첫 실행에서 발견한 동일한 Crunch 탐색 실패를 수정하고 Plank 진입에도 같은 helper를 적용했다.
+
+### 검증 증거
+
+| 검증 | 결과 | 로그 |
+|------|------|------|
+| scripts/build-ios.sh --no-regen (commit hook) | BUILD SUCCEEDED | /tmp/dune-life-build.log |
+| Watch UI target build-for-testing | TEST BUILD SUCCEEDED, 후속 Crunch 수정도 compile 성공 | /tmp/dune-watch-compile.log 및 commit 68da63bc hook |
+| 원본 Watch fixture 테스트 | 1개 실패, 화면 밖 Squat 재현 | .deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.09.27_10-41-08-+0900.xcresult |
+| Watch full, 최초 수정 | 10개 중 9개 통과; 원래 CI 실패 3개 모두 통과; Crunch 1개 실패 | /tmp/dune-watch-full.log |
+| Watch full, Crunch 수정 후 | 첫 fixture 테스트 통과 후 home app launch/idle timeout; 중단 exit 75 | /tmp/dune-watch-full-retry.log |
+| Life targeted 첫 시도 | 시뮬레이터 launch 진행 정지로 중단, 완료 테스트 수 확인 불가 | /tmp/dune-life-targeted.log |
+| Life targeted 재시도 | launchd 응답 실패 후 부팅 복구, 앱 launch 진행 정지로 중단 | /tmp/dune-life-targeted-retry.log |
+| iPad full 시도/복구 | clone Creating 상태 오류 및 기존 device data missing으로 테스트 시작 불가 | 실행 도구 출력 |
+
+SwiftUI 및 Apple UX Work 품질 에이전트는 초기 구현 diff에서 P1/P2/P3=0을 반환했다. 이는 정식 Phase 3의 5관점 리뷰를 대체하지 않는다. UI gate가 실패하여 Phase 3 이후 리뷰/Compound/Ship는 시작하지 않았으며 PR도 생성하지 않았다. 전체 iPhone/iPad 회귀와 최종 Watch 전체 통과는 미확인이다.
+
+### 환경 복구 및 보존
+
+- Xcode 27.0, iOS/watchOS 27.0. 전용 기기 재부팅, 기존 fixture, 실제 XCTest UI 경로를 사용했다. timeout 증가나 테스트 skip으로 통과 처리하지 않았다.
+- `launchd failed to respond`, `device remained in Creating state`, `device data is no longer present`가 반복됐다. 재부팅 후에도 Apple 로고/앱 launch 단계 지연이 지속됐으며 이번 작업의 테스트와 멈춘 진단 수집 프로세스만 종료했다.
+- 다른 작업에 영향을 주는 전역 CoreSimulator 재시작은 수행하지 않았다. 머지 전 중단이므로 시뮬레이터는 재현용으로 보존한다. 원본/기존 기기는 삭제하지 않는다.
+- 생성 성공이 확인된 기기: Watch `9A773B25-40EB-46C2-9205-41DD9D2A9E0E`, Watch 재실행 `73EEFC88-8A36-4CE3-AD67-4728E5C292B8`, iPhone `BDB4A049-432C-4C16-9D4F-5B50D671B506`, 새 iPad create `177CECAD-61DC-4AB1-8D51-31EDBA60322D` (이후 helper 조회/부팅 실패). 생성 전 목록은 `/tmp/dune-ui-baseline-simulators.json`이다.
+- 다음 실행은 CoreSimulator 정상화 후 Life targeted → 전체 iPhone/iPad UI 및 Watch full → Phase 3부터 진행한다.
+
+### 공식 API 참고
+
+- [XCUIElement.isHittable](https://developer.apple.com/documentation/xcuiautomation/xcuielement/ishittable)
+- [XCUIElement.exists](https://developer.apple.com/documentation/xcuiautomation/xcuielement/exists)
