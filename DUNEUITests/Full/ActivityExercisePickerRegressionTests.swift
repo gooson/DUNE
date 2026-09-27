@@ -18,16 +18,22 @@ final class ActivityExercisePickerRegressionTests: ActivityExerciseSeededUITestB
             "Quick start picker should expose the recent section"
         )
         XCTAssertTrue(
-            app.descendants(matching: .any)[AXID.pickerSectionPopular].firstMatch.waitForExistence(timeout: 8),
-            "Quick start picker should expose the popular section"
-        )
-        XCTAssertTrue(
             app.descendants(matching: .any)[AXID.pickerSectionTemplates].firstMatch.waitForExistence(timeout: 8),
             "Quick start picker should expose the templates section when seeded templates exist"
         )
+        XCTAssertTrue(
+            scrollPickerToElementIfNeeded(AXID.pickerSectionPopular),
+            "Quick start picker should expose the popular section"
+        )
 
         let templateRow = app.descendants(matching: .any)[AXID.pickerTemplateRow(Fixture.singleTemplateID)].firstMatch
-        XCTAssertTrue(templateRow.waitForExistence(timeout: 8), "Seeded single template row should exist in picker")
+        XCTAssertTrue(
+            scrollPickerToHittableElementIfNeeded(
+                AXID.pickerTemplateRow(Fixture.singleTemplateID),
+                direction: .down
+            ),
+            "Seeded single template row should be reachable in picker"
+        )
         templateRow.tap()
 
         XCTAssertTrue(
