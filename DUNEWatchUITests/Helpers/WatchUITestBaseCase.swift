@@ -15,6 +15,8 @@ enum WatchAXID {
     static let quickStartSectionPreferred = "watch-quickstart-section-preferred"
     static let quickStartSectionPopular = "watch-quickstart-section-popular"
     static let quickStartExerciseSquat = "watch-quickstart-exercise-ui-test-squat"
+    static let quickStartExerciseCrunch = "watch-quickstart-exercise-crunch"
+    static let quickStartExercisePlank = "watch-quickstart-exercise-plank"
     static let workoutPreviewScreen = "watch-workout-preview-screen"
     static let workoutPreviewStrengthList = "watch-workout-preview-strength-list"
     static let workoutPreviewStartButton = "watch-workout-start-button"
@@ -377,7 +379,7 @@ class WatchUITestBaseCase: XCTestCase {
         ensureQuickStartVisible()
     }
 
-    func findFixtureStrengthExercise(maxSwipes: Int = 6) -> XCUIElement? {
+    func findQuickStartExercise(identifier: String, maxSwipes: Int = 6) -> XCUIElement? {
         // watchOS exposes the List as a CollectionView with the screen identifier.
         let scrollContainers = [
             app.tables[WatchAXID.quickStartList].firstMatch,
@@ -392,7 +394,7 @@ class WatchUITestBaseCase: XCTestCase {
             return nil
         }
 
-        let exercise = scrollContainer.descendants(matching: .any)[WatchAXID.quickStartExerciseSquat].firstMatch
+        let exercise = scrollContainer.descendants(matching: .any)[identifier].firstMatch
         for swipeIndex in 0...maxSwipes {
             if exercise.exists && exercise.isHittable {
                 return exercise
@@ -416,7 +418,7 @@ class WatchUITestBaseCase: XCTestCase {
     func startFixtureStrengthWorkout() {
         openAllExercises()
 
-        guard let exercise = findFixtureStrengthExercise() else {
+        guard let exercise = findQuickStartExercise(identifier: WatchAXID.quickStartExerciseSquat) else {
             XCTFail("Fixture Squat should be hittable in the All Exercises list")
             return
         }

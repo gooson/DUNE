@@ -4,7 +4,11 @@ import XCTest
 final class WatchWorkoutFlowSmokeTests: WatchUITestBaseCase {
     func testCrunchCanAddAndRemoveWeight() throws {
         openAllExercises()
-        XCTAssertTrue(tapElement("watch-quickstart-exercise-crunch", timeout: 5))
+        guard let crunch = findQuickStartExercise(identifier: WatchAXID.quickStartExerciseCrunch) else {
+            XCTFail("Fixture Crunch should be hittable in the All Exercises list")
+            return
+        }
+        crunch.tap()
         XCTAssertTrue(tapElement(WatchAXID.workoutPreviewStartButton, timeout: 5))
         XCTAssertTrue(elementExists(WatchAXID.setInputScreen, timeout: 10))
         let toggle = app.switches["watch-set-input-added-weight"].firstMatch
