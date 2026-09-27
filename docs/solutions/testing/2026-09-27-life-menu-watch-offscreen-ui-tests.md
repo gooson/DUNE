@@ -85,3 +85,8 @@ iPad 전체 검증에서 Quick Start의 Popular 섹션 조회가 실패했다. �
 ## Lessons Learned
 
 SwiftUI List의 접근성 타입이나 루트 식별자는 런타임에 달라질 수 있다. 화면 계층의 실제 증거와 사용자 동작을 기준으로 테스트를 고치면 제품 코드를 불필요하게 변경하지 않고 회귀 계약을 유지할 수 있다.
+
+
+## Final validation boundary
+
+Final Watch full suite passed 13/13 and iPad related suites passed 13/13. iPhone selected coverage produced 30 passes and one Settings accessibility snapshot timeout out of 31 tests. The single isolated retry repeated the timeout. Settings/Dashboard/navigation are unchanged in this PR; causality is not established, and this is not evidence of a passing common-smoke gate. PR #781 remains unmerged until the separate Settings failure is diagnosed and the required smoke validation succeeds. Logs: `/tmp/dune-final-iphone-scoped.log`, `/tmp/dune-final-settings-retry.log`, `/tmp/dune-final-ipad-related.log`, `/tmp/dune-final-watch-v3.log`.

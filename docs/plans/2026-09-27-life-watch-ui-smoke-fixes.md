@@ -160,3 +160,13 @@ SwiftUI 및 Apple UX Work 품질 에이전트는 초기 구현 diff에서 P1/P2/
 ### 최종 Watch 게이트 완료
 
 `/tmp/dune-final-watch-v3.log`: 전체 13 tests, 0 failures, xcodebuild exit 0. 원래 CI 실패 3개와 추가 Crunch 토글 경로를 모두 포함한다. iPhone/iPad의 최종 집계는 PR #781 Validation에 기록한다.
+
+
+### 최종 iOS 게이트 결과와 Ship 보류
+
+- iPad 관련 3개 suite: 13 tests, 0 failures, exit 0 (`/tmp/dune-final-ipad-related.log`).
+- iPhone 공통 smoke + 관련 suite: xcresult 기준 31 tests, 30 passed, 1 failed, 0 skipped. 실패는 `DashboardSmokeTests.testNavigateToSettings`의 접근성 스냅샷 조회 시간 초과다 (`/tmp/dune-final-iphone-scoped.log`, `/tmp/dune-final-iphone-summary.json`). 다른 테스트에서 접근성 조회가 정상 작동한 근거로 해당 메서드만 1회 재검증했으나 같은 오류가 반복됐다 (`/tmp/dune-final-settings-retry.log`).
+- Settings/Dashboard/내비게이션 변경은 이번 PR diff에 없다. 따라서 이번 수정의 회귀라고 단정하지 않으며, 기존 main에서 재현한 증거도 없으므로 확정된 기존 버그라고 주장하지 않는다. 별도 미해결 항목: 설정 진입 후 60초 idle 대기와 AX snapshot timeout의 원인 확인.
+- 최종 PR reviewer는 코드 findings 0건을 유지하되 필수 공통 smoke 실패를 이유로 Ship 보류를 권고했다. 관련 없는 실패를 수정하거나 반복 실행하여 범위를 확장하지 않는다.
+- 재개 조건: Settings 실패 원인에 대응한 수정 또는 실패한 의존성의 정상 동작 증거를 확보한 뒤 해당 smoke 검증을 통과시킬 것. 추가 변경의 영향 범위에 필요한 검증만 다시 수행한다.
+- PR #781은 열린 상태로 보존하며 머지·브랜치 삭제·머지 후 simulator/cache 정리는 수행하지 않는다. Watch 전체 13/13, iPad 관련 13/13, iPhone 나머지 30건의 증거는 보존한다.
