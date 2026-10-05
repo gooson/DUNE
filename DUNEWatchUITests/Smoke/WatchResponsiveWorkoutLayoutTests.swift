@@ -80,6 +80,36 @@ final class WatchResponsiveWorkoutLayoutTests: WatchUITestBaseCase {
         ], screenshot: "active-machine-level")
     }
 
+    func testKoreanXXXLRestTimerKeepsPrimaryActionsReachable() throws {
+        relaunchApp(withAdditionalArguments: [
+            "-AppleLanguages", "(ko)",
+            "-AppleLocale", "ko_KR",
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryXXXL"
+        ])
+        startFixtureStrengthWorkout()
+        completeOneSetAndReachRestTimer()
+
+        let countdown = app.staticTexts["watch-rest-timer-countdown"]
+        XCTAssertTrue(countdown.waitForExistence(timeout: 5))
+        XCTAssertTrue(countdown.isHittable, "Remaining rest time should be visible without scrolling")
+        let rpe = app.buttons[WatchAXID.restTimerRPERate]
+        XCTAssertTrue(rpe.waitForExistence(timeout: 5), "RPE entry should remain discoverable at large text sizes")
+        XCTAssertTrue(rpe.isHittable, "RPE entry should be reachable without scrolling")
+
+        let actions = ["watch-rest-timer-add-time", WatchAXID.restTimerSkipButton]
+        let scrollView = app.scrollViews.firstMatch
+        for _ in 0..<3 where !actions.allSatisfy({ app.buttons[$0].isHittable }) && scrollView.exists {
+            scrollView.swipeUp()
+        }
+        for identifier in actions {
+            let button = app.buttons[identifier]
+            XCTAssertTrue(button.waitForExistence(timeout: 5), "Missing \(identifier)")
+            XCTAssertTrue(button.isHittable, "\(identifier) should be reachable with bounded scrolling")
+            XCTAssertGreaterThanOrEqual(button.frame.height, 44, "\(identifier) should have a practical touch target")
+        }
+        addScreenshotAttachment(named: defaultArtifactName(suffix: "korean-xxxl-rest-actions"))
+    }
+
     private func openPreview(for exerciseID: String) {
         openAllExercises()
         let identifier = "watch-quickstart-exercise-\(exerciseID)"
