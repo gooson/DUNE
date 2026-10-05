@@ -4,6 +4,9 @@
 
 ## 실행과 출력
 
+- 지침 크기 진단: `python3 scripts/codex-context.py inventory`. 본문 없이 파일 수·총 bytes·상위 10개만 출력한다. 필수 문서를 생략하는 도구가 아니며, bytes를 토큰 절감률로 환산하지 않는다.
+- 리뷰 입력 수집: `python3 scripts/codex-context.py snapshot --base main`. 실제 PR base를 사용한다. 시스템 임시 디렉터리의 manifest와 branch/staged/unstaged patch를 공유하고 본문 전체를 채팅에 재출력하지 않는다. `check <디렉터리>`가 실패하면 기존 snapshot으로 리뷰 완료를 선언하지 않는다. untracked 내용은 manifest의 경로에서 별도로 읽는다. 더 이상 사용하지 않는 snapshot 디렉터리는 작업 종료 시 정리할 수 있다.
+
 - 명령 실행/대기는 셸 도구에 맡긴다. 실행만을 위한 모델이나 별도 agent를 생성하지 않는다.
 - 표준 실행기: `scripts/test-unit.sh`, `scripts/test-ui.sh`, `scripts/test-watch-ui.sh`. 기본 파일 로그와 요약을 사용하고, 로그 전체를 `cat`하지 않는다. CI streaming 기본 동작은 유지한다.
 - 정상 결과는 종료 상태·로그 경로·보고된 테스트 수만 확인한다. 실패 시 제한된 오류 요약 → 해당 로그 구간 → 관련 소스 순서로 읽는다. 요약에서 수를 알 수 없으면 unknown이며 0건 성공으로 간주하지 않는다.

@@ -30,6 +30,7 @@ Claude skill 문서를 그대로 유지하면서 Codex에서 실행 semantics를
 - 해당 phase의 skill은 처음 진입할 때 한 번 읽고, 내용이 바뀌었거나 컨텍스트에서 사라졌을 때만 다시 읽는다. source의 필수 절차는 유지하되 동일 절차를 parent/child가 반복 서술하지 않는다.
 - 필수 프로젝트 문서/규칙은 유지한다. 선택적 reference, memory, 과거 solution은 검색으로 관련 부분만 읽으며 모든 skill/agent 문서를 일괄 로드하지 않는다.
 - 테스트 실행, 결과 재사용, 비용 측정이 필요할 때만 `.codex/token-efficiency.md`를 읽는다.
+- 여러 reviewer/phase가 변경 정보를 공유할 때 `python3 scripts/codex-context.py snapshot --base <실제-base>`로 한 번 저장하고 반환된 디렉터리를 전달한다. `manifest.json`과 담당 patch 구간만 읽는다. 재사용 전 `python3 scripts/codex-context.py check <디렉터리>`로 최신성을 확인한다. untracked/binary 본문과 관련 호출부는 별도로 확인하며, snapshot은 리뷰·테스트 통과 증거가 아니다. 이 수집 작업 자체에는 agent를 생성하지 않는다.
 
 ### 재시도와 범위 확장 제한
 
