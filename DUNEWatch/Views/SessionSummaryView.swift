@@ -31,13 +31,13 @@ struct SessionSummaryView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: DS.Spacing.lg) {
-                // Header
-                Image(systemName: "checkmark.circle.fill")
-                    .font(.system(size: 32))
-                    .foregroundStyle(DS.Color.positive)
-
-                Text("Workout Complete")
-                    .font(DS.Typography.exerciseName)
+                HStack(spacing: DS.Spacing.sm) {
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.title3)
+                        .foregroundStyle(DS.Color.positive)
+                    Text("Workout Complete")
+                        .font(DS.Typography.exerciseName)
+                }
 
                 Divider()
 
@@ -61,20 +61,21 @@ struct SessionSummaryView: View {
                     exerciseBreakdown
                 }
 
-                // Done button
-                Button {
-                    saveAndDismiss()
-                } label: {
-                    Text(workoutManager.isFinalizingWorkout && !isSaving ? "Finishing..." : "Done")
-                        .font(DS.Typography.tileTitle)
-                        .frame(maxWidth: .infinity)
-                }
-                .buttonStyle(.borderedProminent)
-                .tint(DS.Color.positive)
-                .disabled(isSaving || workoutManager.isFinalizingWorkout)
-                .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionSummaryDoneButton)
-                .padding(.top, DS.Spacing.md)
             }
+            .padding(.horizontal, DS.Spacing.xs)
+        }
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            Button {
+                saveAndDismiss()
+            } label: {
+                Text(workoutManager.isFinalizingWorkout && !isSaving ? "Finishing..." : "Done")
+                    .font(DS.Typography.tileTitle)
+                    .frame(maxWidth: .infinity, minHeight: 44)
+            }
+            .buttonStyle(.borderedProminent)
+            .tint(DS.Color.positive)
+            .disabled(isSaving || workoutManager.isFinalizingWorkout)
+            .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionSummaryDoneButton)
             .padding(.horizontal, DS.Spacing.xs)
         }
         .background { WatchWaveBackground(color: DS.Color.positive) }
