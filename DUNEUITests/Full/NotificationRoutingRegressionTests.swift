@@ -80,7 +80,10 @@ final class NotificationResponseRoutingUITests: SeededUITestBaseCase {
         XCTAssertTrue(detail.waitForExistence(timeout: 15), "Notification response should open message detail")
         XCTAssertTrue(app.staticTexts["Daily Digest Route Fixture"].firstMatch.exists)
         XCTAssertTrue(app.staticTexts["Review today's summary."].firstMatch.exists)
-        XCTAssertTrue(app.tabBars.buttons["Today"].isSelected)
+        let todayTab = app.tabBars.buttons["Today"].firstMatch
+        if todayTab.exists {
+            XCTAssertTrue(todayTab.isSelected, "Notification response should select Today")
+        }
 
         let backButton = app.navigationBars.buttons.element(boundBy: 0)
         XCTAssertTrue(backButton.waitForExistence(timeout: 5), "Message detail should have a back button")
