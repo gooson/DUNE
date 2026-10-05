@@ -31,7 +31,13 @@ struct ConditionHeroView: View {
         static let sparklineHeightCompact: CGFloat = 44
     }
 
-    private var ringSize: CGFloat { isRegular ? Layout.ringSizeRegular : Layout.ringSizeCompact }
+    private var ringSize: CGFloat {
+        isRegular || dynamicTypeSize.isAccessibilitySize ? Layout.ringSizeRegular : Layout.ringSizeCompact
+    }
+    private var ringContentSize: CGFloat {
+        let innerDiameter = ringSize - ringLineWidth * 2
+        return dynamicTypeSize.isAccessibilitySize ? innerDiameter / sqrt(2) : innerDiameter
+    }
     private var ringLineWidth: CGFloat { isRegular ? Layout.ringLineWidthRegular : Layout.ringLineWidthCompact }
 
     var body: some View {
@@ -91,6 +97,8 @@ struct ConditionHeroView: View {
             VStack(spacing: 2) {
                 Text("\(animatedScore)")
                     .font(DS.Typography.cardScore)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.5)
                     .foregroundStyle(theme.detailScoreGradient)
                     .contentTransition(.numericText())
 
@@ -99,6 +107,7 @@ struct ConditionHeroView: View {
                     .foregroundStyle(theme.sandColor)
                     .tracking(1)
             }
+            .frame(width: ringContentSize, height: ringContentSize)
         }
     }
 
