@@ -43,6 +43,10 @@ final class NotificationInboxManager: @unchecked Sendable {
         store.items()
     }
 
+    func item(withID id: String) -> NotificationInboxItem? {
+        store.item(withID: id)
+    }
+
     func unreadCount() -> Int {
         store.unreadCount()
     }

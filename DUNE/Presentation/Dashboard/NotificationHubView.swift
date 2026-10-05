@@ -262,11 +262,11 @@ struct NotificationHubView: View {
             guard navigationRequestID > 0,
                   handledNavigationRequestID != navigationRequestID,
                   let requestedItemID else { return }
-            handledNavigationRequestID = navigationRequestID
             await Task.yield()
             guard !Task.isCancelled,
-                  let item = inboxManager.items().first(where: { $0.id == requestedItemID }) else { return }
+                  let item = inboxManager.item(withID: requestedItemID) else { return }
             handleTap(on: item)
+            handledNavigationRequestID = navigationRequestID
         }
         .onReceive(NotificationCenter.default.mainThreadPublisher(for: NotificationInboxManager.inboxDidChangeNotification)) { _ in
             reload()
