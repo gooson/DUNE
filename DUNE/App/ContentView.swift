@@ -4,6 +4,7 @@ enum NotificationPresentationDestination: Hashable {
     case personalRecords(requestID: Int)
     case sleepDetail(requestID: Int)
     case postureAssessment(requestID: Int)
+    case notificationHub(itemID: String?, requestID: Int)
 }
 
 enum NotificationPresentationPlan: Equatable {
@@ -85,7 +86,6 @@ struct NotificationPresentationPaths {
 struct NotificationPresentationState {
     var selectedSection: AppSection
     var notificationOpenWorkoutID: String?
-    var notificationHubItemID: String?
     var paths: NotificationPresentationPaths
     var notificationPresentationRequestID: Int
     var notificationRouteSignal: Int
@@ -112,9 +112,10 @@ struct NotificationPresentationState {
             notificationOpenWorkoutID = workoutID
             notificationRouteSignal += 1
         case .openNotificationHub:
-            paths.clearAll()
+            paths.setPath([
+                .notificationHub(itemID: request.itemID, requestID: notificationPresentationRequestID)
+            ], for: .today)
             selectedSection = .today
-            notificationHubItemID = request.itemID
             notificationHubSignal += 1
         case .openSleepDetailInWellness(let requestID):
             paths.clearAll(except: .wellness)
@@ -140,7 +141,6 @@ struct ContentView: View {
     @State private var refreshSignal = 0
     @State private var foregroundTask: Task<Void, Never>?
     @State private var notificationOpenWorkoutID: String?
-    @State private var notificationHubItemID: String?
     @State private var isShowingLaunchPostureCapture = PostureCaptureService.shouldAutoOpenCaptureOnLaunch
     @State private var todayNavPath = NavigationPath()
     @State private var trainNavPath = NavigationPath()
@@ -179,7 +179,8 @@ struct ContentView: View {
                         scrollToTopSignal: todayScrollToTopSignal,
                         refreshSignal: refreshSignal,
                         notificationHubSignal: notificationHubSignal,
-                        notificationHubItemID: notificationHubItemID,
+                        notificationHubIsActive: notificationHubSignal > 0 && !todayNavPath.isEmpty,
+                        onOpenNotifications: openNotificationHubManually,
                         launchExperienceReady: launchExperienceReady,
                         canLoadHealthKitData: canLoadHealthKitData
                     )
@@ -380,6 +381,12 @@ struct ContentView: View {
             NotificationSleepDetailPushView(sharedHealthDataService: sharedHealthDataService)
         case .postureAssessment:
             PostureHistoryView()
+        case .notificationHub(let itemID, let requestID):
+            NotificationHubView(
+                sharedHealthDataService: sharedHealthDataService,
+                requestedItemID: itemID,
+                navigationRequestID: requestID
+            )
         }
     }
 
@@ -396,7 +403,6 @@ struct ContentView: View {
         NotificationPresentationState(
             selectedSection: selectedSection,
             notificationOpenWorkoutID: notificationOpenWorkoutID,
-            notificationHubItemID: notificationHubItemID,
             paths: currentNotificationPresentationPaths,
             notificationPresentationRequestID: notificationPresentationRequestID,
             notificationRouteSignal: notificationRouteSignal,
@@ -408,7 +414,6 @@ struct ContentView: View {
     private func applyNotificationPresentationState(_ state: NotificationPresentationState) {
         selectedSection = state.selectedSection
         notificationOpenWorkoutID = state.notificationOpenWorkoutID
-        notificationHubItemID = state.notificationHubItemID
         todayNavPath = state.paths.today
         trainNavPath = state.paths.train
         wellnessNavPath = state.paths.wellness
@@ -423,6 +428,19 @@ struct ContentView: View {
         var state = currentNotificationPresentationState
         state.apply(request)
         applyNotificationPresentationState(state)
+    }
+
+    @MainActor
+    private func openNotificationHubManually() {
+        notificationPresentationRequestID += 1
+        var path = NavigationPath()
+        path.append(NotificationPresentationDestination.notificationHub(
+            itemID: nil,
+            requestID: notificationPresentationRequestID
+        ))
+        todayNavPath = path
+        selectedSection = .today
+        notificationHubSignal += 1
     }
 
     #if DEBUG

@@ -44,14 +44,12 @@ struct DashboardView: View {
 
     private let refreshSignal: Int
     private let notificationHubSignal: Int
-    private let notificationHubItemID: String?
+    private let notificationHubIsActive: Bool
+    private let onOpenNotifications: () -> Void
     private let launchExperienceReady: Bool
     private let canLoadHealthKitData: Bool
     private let sharedHealthDataService: SharedHealthDataService?
     private let scoreRefreshService: ScoreRefreshService?
-    @State private var showNotificationHub = false
-    @State private var requestedNotificationItemID: String?
-    @State private var latestHubPresentationSignal = 0
     @State private var showWhatsNew = false
     @State private var showSettings = false
     @State private var cachedWeatherAtmosphere: WeatherAtmosphere = .default
@@ -69,7 +67,8 @@ struct DashboardView: View {
         scrollToTopSignal: Int = 0,
         refreshSignal: Int = 0,
         notificationHubSignal: Int = 0,
-        notificationHubItemID: String? = nil,
+        notificationHubIsActive: Bool = false,
+        onOpenNotifications: @escaping () -> Void = {},
         launchExperienceReady: Bool = true,
         canLoadHealthKitData: Bool = true
     ) {
@@ -82,7 +81,8 @@ struct DashboardView: View {
         self.scrollToTopSignal = scrollToTopSignal
         self.refreshSignal = refreshSignal
         self.notificationHubSignal = notificationHubSignal
-        self.notificationHubItemID = notificationHubItemID
+        self.notificationHubIsActive = notificationHubIsActive
+        self.onOpenNotifications = onOpenNotifications
         self.launchExperienceReady = launchExperienceReady
         self.canLoadHealthKitData = canLoadHealthKitData
     }
@@ -212,13 +212,6 @@ struct DashboardView: View {
             whatsNewToolbarItem
             settingsToolbarItem
         }
-        .navigationDestination(isPresented: $showNotificationHub) {
-            NotificationHubView(
-                sharedHealthDataService: sharedHealthDataService,
-                requestedItemID: requestedNotificationItemID,
-                navigationRequestID: notificationHubSignal
-            )
-        }
         .navigationDestination(isPresented: $showWhatsNew) {
             WhatsNewView(
                 releases: cachedWhatsNewReleases,
@@ -231,7 +224,7 @@ struct DashboardView: View {
         }
         .onChange(of: viewModel.briefingData != nil) { _, hasData in
             if hasData,
-               !showNotificationHub,
+               !notificationHubIsActive,
                !isBriefingDisabled,
                MorningBriefingViewModel.shouldShowBriefing() {
                 isShowingBriefing = true
@@ -239,19 +232,7 @@ struct DashboardView: View {
         }
         .onChange(of: notificationHubSignal) { _, newValue in
             guard newValue > 0 else { return }
-            latestHubPresentationSignal = newValue
             isShowingBriefing = false
-            requestedNotificationItemID = notificationHubItemID
-            if showNotificationHub {
-                showNotificationHub = false
-                Task { @MainActor in
-                    await Task.yield()
-                    guard latestHubPresentationSignal == newValue else { return }
-                    showNotificationHub = true
-                }
-            } else {
-                showNotificationHub = true
-            }
         }
     }
 
@@ -601,8 +582,7 @@ struct DashboardView: View {
     private var notificationsToolbarItem: some ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {
             Button {
-                requestedNotificationItemID = nil
-                showNotificationHub = true
+                onOpenNotifications()
             } label: {
                 notificationBellIcon
             }
