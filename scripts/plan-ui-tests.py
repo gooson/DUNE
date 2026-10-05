@@ -31,8 +31,7 @@ FEATURE_SUITES = {
 UI_GATE_TOOLING = {"scripts/test-ui.sh", "scripts/plan-ui-tests.py",
                    "scripts/lib/verify-ui-test-log.py", "scripts/tests/test_ui_test_runner.py",
                    "scripts/tests/test_plan_ui_tests.py", "scripts/test-watch-ui.sh",
-                   "scripts/lib/test-log-summary.py", "scripts/tests/test_test_log_summary.py",
-                   "scripts/tests/test_ui_result.py"}
+                   "scripts/lib/test-log-summary.py", "scripts/tests/test_test_log_summary.py"}
 CODEX_TOOLING = {"scripts/codex-context.py", "scripts/codex-pipeline.py", "scripts/codex-check.py",
                  "scripts/check-codex-claude-parity.py", "scripts/tests/test_codex_context.py",
                  "scripts/tests/test_codex_pipeline.py", "scripts/tests/test-codex-check.py"}

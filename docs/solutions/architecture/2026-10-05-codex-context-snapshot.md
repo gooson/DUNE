@@ -9,7 +9,7 @@ related_files: [scripts/codex-context.py, scripts/tests/test_codex_context.py, s
 
 # 토큰 낭비 분석과 반복 작업 스크립트화
 
-구현 완료 범위는 리뷰 컨텍스트 수집 스크립트와 Codex adapter 연결이다. 아래 UI 테스트와 스킬 파이프라인 개선 항목은 코드·지침 조사에 기반한 후속 제안이며 아직 구현하지 않았다.
+리뷰 snapshot, UI 결과 JSON/검증, pipeline 상태·증거·재시도·문서 hash 관리, tooling 범위 판정과 Codex adapter 연결을 구현했다. 아래 분석 표는 구현 전 확인한 비용 발생 경로이고, 현재 사용법과 한계는 Solution에 정리한다.
 
 ## Problem
 
@@ -37,7 +37,7 @@ related_files: [scripts/codex-context.py, scripts/tests/test_codex_context.py, s
 | 같은 실패 재시도 | 최대 1회 조건부 재시도 규칙은 문서에 있고 실행기가 이력을 강제하지 않는다 | 실행 식별자·실패 원인·원인에 대응한 변화·재시도 횟수를 파일로 보존. 단순 재실행이나 phase 전환으로 초기화하지 않음 |
 | 결과 판정 반복 | iOS는 `verify-ui-test-log.py`로 선택 테스트 실행 여부를 검사한다. watch 실행기는 요약 후 xcodebuild 종료 코드를 반환한다 | 공통 결과 JSON으로 실제 실행·skip·실패 수와 필수 suite 누락 여부를 제공하고 watch 검증도 보강 |
 
-### UI 테스트 개선 우선순위 — 미구현
+### UI 테스트 개선 기준
 
 1. **실패 요약과 공통 결과 JSON**: 성공 시 상태·실행 수·로그 경로만, 실패 시 최초 원인·실패 테스트·필요한 로그 구간만 반환한다. 실행 수 unknown/0, 필수 suite 누락, 환경 실패를 통과로 처리하지 않는다.
 2. **실행·대기·재시도 이력 통합**: 동일 실행을 중복 시작하지 않고 완료 결과를 한 번 수집한다. timeout/중단 상태를 보존하고 근거 없는 재시도는 차단한다. 사람의 원인 판단이 필요한 부분까지 문자열 일치로 확정하지 않는다.
@@ -61,14 +61,14 @@ related_files: [scripts/codex-context.py, scripts/tests/test_codex_context.py, s
 
 필수 리뷰 관점 자체를 없애는 것이 목적은 아니다. 같은 대상·관점·환경을 새 근거 없이 다시 실행하는 비용을 먼저 줄인다. 서로 다른 전문 관점이나 Ship 직전 통합 검증은 이름이 비슷하다는 이유로 합치지 않는다.
 
-### 스킬 개선 설계와 우선순위 — 미구현
+### 스킬 개선 설계와 우선순위
 
 1. **실행 상태 파일과 증거 검사기**: phase 이름과 독립된 검증 식별자로 완료 결과를 저장한다. 뒤 phase는 재실행 전에 증거의 범위와 최신성을 검사한다. 기존 `codex-check.py` receipt와 `codex-context.py` snapshot을 참조하고 fingerprint 구현을 복제하지 않는다.
 2. **리뷰·품질 실행 담당 통합**: `/run` 안에서는 parent가 관점별 담당과 완료 결과를 관리한다. Work에서 수행한 관점은 Phase 3.5에서 유효성을 확인하고, 변경이 생기면 영향받는 관점만 추가 검토한다. standalone `/work`의 필수 검증은 유지한다.
 3. **공통 결과와 보고 생성**: UI 결과 JSON, 리뷰 findings, 검증 receipt를 상태 파일에서 연결한다. 시작·완료·실패의 필수 안내와 최종 요약을 같은 기록에서 생성하여 결과를 반복 집계하는 비용을 줄인다.
 4. **문서 읽기 이력과 실행 명세**: 읽은 문서 경로·내용 hash를 기록해 변경 여부를 확인한다. hash가 같아도 내용이 현재 컨텍스트에 없거나 필수 원문 확인이 필요한 경우 다시 읽는다. 생성된 실행 명세에는 원문 위치·적용된 adapter 예외를 남기고 source 변경 시 무효화한다.
 
-실행 상태 파일의 최소 정보는 다음과 같다. 경로와 스키마는 구현 시 확정한다.
+실행 상태 파일의 최소 정보는 다음과 같다. 구현은 `.codex-checks/pipeline/`의 검증·phase·문서별 JSON으로 나눈다. 검증 ID가 작업/검증 식별자를 담당하고 context에 실제 base·환경 등 외부 조건을 포함한다.
 
 | 정보 | 목적 |
 |---|---|
@@ -82,9 +82,36 @@ related_files: [scripts/codex-context.py, scripts/tests/test_codex_context.py, s
 
 수용 검증은 작은 fixture로 수행한다: 동일 증거는 재사용되고, 소스·환경·범위 변경 또는 증거 누락/훼손은 거부되어야 한다. 실행 중 중복 시작, 중단을 성공으로 오인, phase 전환으로 재시도 횟수 초기화가 없어야 한다. 검증만을 위해 전체 앱 파이프라인을 추가 실행하지 않는다.
 
-전체 개선 순서는 **UI 실패 요약·결과 JSON → 실행 상태·증거 검사기 → 중복 품질 호출·대기·재시도 통합 → 범위 판정 및 문서 로딩 정밀화**로 제안한다. `.claude/**` 원본은 보존하고 Codex 전용 실행 변경은 `.codex/**`와 스크립트에 반영한다. 현재 문서 갱신만으로 이 개선들이 적용된 것은 아니다.
+전체 개선 순서는 **UI 실패 요약·결과 JSON → 실행 상태·증거 검사기 → 중복 품질 호출·대기·재시도 통합 → 범위 판정 및 문서 로딩 정밀화**로 제안한다. `.claude/**` 원본은 보존하고 Codex 전용 실행 변경은 `.codex/**`와 스크립트에 반영한다. 실행기는 명시적 CLI 호출로 동작하며 공용 hook이나 독립적인 자율 파이프라인으로 설치하지 않았다.
 
 ## Solution
+
+| 구현 | 현재 동작 |
+|---|---|
+| `codex-context.py` | instruction inventory, branch/index/worktree snapshot, 변경·patch hash 확인 |
+| `test-log-summary.py` | 최초 오류 + 최근 서로 다른 오류의 제한된 요약 |
+| `verify-ui-test-log.py` 및 iOS/watch runner | `<log>.result.json` 저장, 종료 코드·실행 수·passed case·요청 selector를 fail-closed 검증 |
+| `codex-pipeline.py run/check` | 명시적 실행, 로그 저장, worktree lock, 동일 성공 재실행 차단, 내용/명령/context/scope/hash 검사 |
+| `codex-pipeline.py recover` | lock이 없는 abandoned running 상태를 이유와 함께 interrupted로 기록; 성공으로 승격하지 않음 |
+| `codex-pipeline.py phase/report/status` | 검증 또는 실제 리뷰 파일 참조, 변경 후 stale 표시, 근거 있는 skip, compact 집계 |
+| `codex-pipeline.py doc` | 읽은 문서 hash 기록/확인; 원문 이해의 증거로 취급하지 않음 |
+| planner / CI / adapter | 정확한 도구 경로의 계약 테스트, 동일 결과 phase 간 재사용, 전문 검토 담당 통합 |
+
+```sh
+python3 scripts/codex-pipeline.py run tooling-contracts --context python-local --scope tooling --content-only -- python3 -B -m unittest discover -s scripts/tests
+python3 scripts/codex-pipeline.py check tooling-contracts --context python-local --scope tooling --content-only -- python3 -B -m unittest discover -s scripts/tests
+python3 scripts/codex-pipeline.py phase Work passed --evidence tooling-contracts
+python3 scripts/codex-pipeline.py doc remember .codex/skill-compat.md
+python3 scripts/codex-pipeline.py doc check .codex/skill-compat.md
+python3 scripts/codex-pipeline.py report
+```
+
+같은 검증 ID는 phase/turn이 바뀌어도 유지한다. 실패 후에는 `--retry-cause`, `--remediation`, `--retry-evidence <worktree 내 파일>`과 코드 내용 또는 context 변화가 필요하며 1회만 재시도한다. 자동 재시도는 없다. `--timeout <초>`는 중단 상태와 process group 종료를 처리한다. 강제 종료 뒤에는 실제 남은 프로세스를 확인하고 `recover <ID> --reason <확인 근거>`를 사용한다. 이 명령은 알 수 없는 PID를 종료하거나 원인이 해결됐다고 판단하지 않는다.
+
+전문가 리뷰는 실제 findings 파일을 `phase <관점> passed --review-file <파일> --source agent --context <기준-diff> --scope <관점>`로 기록한다. hash/내용 최신성만 검사하므로 open P1/P2가 없는지와 필수 관점이 모두 완료됐는지는 실행자가 판단한다. 단일 성공 receipt를 여러 의무가 있는 phase 전체의 인증으로 사용하지 않는다.
+
+원문·adapter를 자동 병합한 새 지침 파일은 만들지 않는다. parent가 적용한 절차와 근거를 phase 기록/리뷰 파일로 남긴다. 문서 hash가 같아도 컨텍스트에 내용이 없으면 다시 읽는다. 상태 저장과 명령 실행을 담당하는 도구가 개발·리뷰의 의미적 판단을 대체하지 않는다.
+
 
 ```sh
 python3 scripts/codex-context.py inventory

@@ -2,7 +2,7 @@
 tags: [codex, pipeline, token-efficiency, ui-testing]
 date: 2026-10-05
 category: plan
-status: approved
+status: implemented
 ---
 
 # 토큰 효율적인 검증 파이프라인
@@ -19,6 +19,7 @@ UI 실패 원인과 검증 결과를 기계적으로 요약하고 phase 간 증�
 | scripts/test-ui.sh, test-watch-ui.sh | 결과 JSON과 fail-closed 검증 연결; 실행 argv/기기 설정 유지 |
 | scripts/codex-pipeline.py, scripts/tests/test_codex_pipeline.py | lock/원자적 상태/증거 검사/재시도/문서 읽기 이력 |
 | scripts/plan-ui-tests.py, scripts/tests/test_plan_ui_tests.py | 명시적인 비앱 tooling 경로 분류 |
+| .github/workflows/test-ui.yml | 정확한 도구 경로 trigger와 Python 계약 테스트 추가; UI job 실행 설정 유지 |
 | scripts/codex-context.py, scripts/tests/test_codex_context.py | 앞선 변경 포함, 리뷰 입력 공유 |
 | .codex/skill-compat.md, .codex/token-efficiency.md | 실행 상태 도구를 phase와 연결 |
 | docs/solutions/architecture/2026-10-05-codex-context-snapshot.md | 최종 구현과 사용법 반영 |
