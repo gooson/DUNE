@@ -345,16 +345,7 @@ struct DUNEApp: App {
     }
 
     private var workoutInsightsContent: some View {
-        Group {
-            if isLaunchExperienceReady && canLoadHealthKitData {
-                NavigationStack {
-                    WeeklyStatsDetailView()
-                }
-            } else {
-                Text("Finish setup in the main window to view your workout insights.")
-                    .padding()
-            }
-        }
+        WorkoutInsightsWindowView(isReady: isLaunchExperienceReady && canLoadHealthKitData)
         .environment(\.appTheme, selectedTheme)
         .tint(selectedTheme.accentColor)
         .preferredColorScheme(Self.forcedUITestColorScheme)
@@ -1024,6 +1015,33 @@ struct DUNEApp: App {
         guard !Task.isCancelled, isShowingLaunchSplash else { return }
         isShowingLaunchSplash = false
         isResolvingLaunchSplash = false
+    }
+}
+
+private struct WorkoutInsightsWindowView: View {
+    let isReady: Bool
+    @Environment(\.dismissWindow) private var dismissWindow
+
+    var body: some View {
+        NavigationStack {
+            Group {
+                if isReady {
+                    WeeklyStatsDetailView()
+                } else {
+                    Text("Finish setup in the main window to view your workout insights.")
+                        .padding()
+                }
+            }
+            .safeAreaInset(edge: .bottom, spacing: 0) {
+                HStack {
+                    Spacer()
+                    Button("Close") { dismissWindow(id: "workout-insights") }
+                        .accessibilityIdentifier("workout-insights-close")
+                }
+                .padding(DS.Spacing.md)
+                .background(.bar)
+            }
+        }
     }
 }
 

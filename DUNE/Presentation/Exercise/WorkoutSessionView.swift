@@ -240,6 +240,7 @@ struct WorkoutSessionView: View {
                     HStack {
                         Spacer()
                         Button("Done") { showingInsights = false }
+                            .accessibilityIdentifier("workout-insights-close")
                     }
                     .padding()
                     WeeklyStatsDetailView()
