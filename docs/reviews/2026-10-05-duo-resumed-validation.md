@@ -139,3 +139,7 @@ XCTest 원본 [요약 화면](assets/2026-10-05-duo/phone-sheet-insights-maxax-s
 닫기 후 [운동 화면](assets/2026-10-05-duo/phone-sheet-workout-maxax-title-before.png)에는 운동 이름 마지막 글자 ‘스’가 혼자 줄바꿈되는 문제가 남았다. 최대 AX에서는 장식 아이콘을 제거하고 운동 이름이 전체 너비를 사용하도록 수정했다. 표준 앱 빌드 `accessible-workout-title-build.log` 통과; 수정 후 픽셀 판정은 다음 캡처 결과에서 기록한다.
 
 `DUNEUITests-DuoFunctional` 플랜을 추가했다. 고급 목업으로 XCTest 원본 이미지/계층을 저장하며 host ACK나 수동 접힘 대기는 활성화하지 않는다. 실제 접힘을 수행한 것처럼 기록하지 않는다. 현재 실제 preset은 Closed, 시스템 글자 크기는 accessibility-extra-extra-extra-large다. 이번 시점 Computer Use 상태 확인은 Mac 잠금으로 실패했으며 사용자에게 해제를 요청했다. 백그라운드 XCTest 실행은 계속 가능하다.
+
+추가 원본 검토에서 [일별 차트 제목/선택기](assets/2026-10-05-duo/weekly-chart-header-maxax-before.png)의 좁은 가로 배치로 제목이 과도하게 줄바꿈되고 지표 이름이 생략되는 문제를 확인했다. [차트 축](assets/2026-10-05-duo/weekly-chart-axes-maxax-before.png)도 기본 axis 글자와 고정 높이로 최대 AX에서 요일이 촘촘하게 붙어 있다. AX에서 제목과 메뉴를 세로 배치하고 차트 높이를 글자 크기에 맞춰 확대하며, 축은 caption2와 넓은 날짜 간격을 사용하도록 수정했다. Xcode 27.1 표준 앱 빌드 `daily-chart-ax-build.log` 통과. 지표 메뉴의 실제 선택과 수정 후 픽셀 판정은 후속 UI 결과에서 기록한다.
+
+남은 Life 주간 보고서·Cloud consent·자세 비교 및 수정된 운동 제목/차트 검증을 한 번의 선택 실행으로 제출했다. 최초 네 case 실행은 공용 저장소 잠금 대기 상태에서 테스트를 시작하지 않았다. 새 차트 검증을 추가하기 위해 그 대기 PID 34553만 종료(exit 143)하고 다섯 case 선택으로 대체했다. 이 종료를 앱 테스트 실패나 재시도 성공으로 집계하지 않는다. 다른 worktree에서 실행 중인 smoke/notification 테스트가 같은 저장소 mutex를 보유하고 있으므로 잠금을 우회하거나 다른 실행을 중단하지 않았다.

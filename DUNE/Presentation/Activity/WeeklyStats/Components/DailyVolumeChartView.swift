@@ -25,6 +25,8 @@ struct DailyVolumeChartView: View {
     }
 
     @Environment(\.appTheme) private var theme
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @ScaledMetric(relativeTo: .caption2) private var chartHeight: CGFloat = 160
 
     @State private var selectedMetric: Metric = .duration
     @State private var selectedDate: Date?
@@ -42,34 +44,21 @@ struct DailyVolumeChartView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            HStack(alignment: .top) {
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Daily Breakdown")
-                        .font(.subheadline.weight(.semibold))
-
-                    if isScrollable {
-                        VStack(alignment: .leading, spacing: 0) {
-                            Text(visibleRangeLabel)
-                                .font(.caption2)
-                                .foregroundStyle(DS.Color.textSecondary)
-                                .contentTransition(.numericText())
-
-                            Color.clear
-                                .frame(width: 1, height: 1)
-                                .accessibilityElement(children: .ignore)
-                                .accessibilityLabel(visibleRangeLabel)
-                                .accessibilityIdentifier("weeklystats-chart-visible-range")
-                        }
-                    }
+            if dynamicTypeSize.isAccessibilitySize {
+                VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                    chartHeading
+                    metricPicker
+                        .pickerStyle(.menu)
+                        .labelsHidden()
                 }
-                Spacer()
-                Picker("Metric", selection: $selectedMetric) {
-                    ForEach(Metric.allCases) { metric in
-                        Text(metric.displayName).tag(metric)
-                    }
+            } else {
+                HStack(alignment: .top) {
+                    chartHeading
+                    Spacer()
+                    metricPicker
+                        .pickerStyle(.segmented)
+                        .frame(maxWidth: 180)
                 }
-                .pickerStyle(.segmented)
-                .frame(maxWidth: 180)
             }
 
             if dailyBreakdown.isEmpty {
@@ -79,7 +68,7 @@ struct DailyVolumeChartView: View {
                     .frame(maxWidth: .infinity, minHeight: 120, alignment: .center)
             } else {
                 chartView
-                    .frame(height: 160)
+                    .frame(height: chartHeight)
                     .clipped()
                     .overlay { chartAccessibilitySurface }
                     .id(selectedMetric)
@@ -94,6 +83,36 @@ struct DailyVolumeChartView: View {
     }
 
     // MARK: - Chart
+
+    private var chartHeading: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text("Daily Breakdown")
+                .font(.subheadline.weight(.semibold))
+                .fixedSize(horizontal: false, vertical: true)
+            if isScrollable {
+                VStack(alignment: .leading, spacing: 0) {
+                    Text(visibleRangeLabel)
+                        .font(.caption2)
+                        .foregroundStyle(DS.Color.textSecondary)
+                        .contentTransition(.numericText())
+                    Color.clear
+                        .frame(width: 1, height: 1)
+                        .accessibilityElement(children: .ignore)
+                        .accessibilityLabel(visibleRangeLabel)
+                        .accessibilityIdentifier("weeklystats-chart-visible-range")
+                }
+            }
+        }
+    }
+
+    private var metricPicker: some View {
+        Picker("Metric", selection: $selectedMetric) {
+            ForEach(Metric.allCases) { metric in
+                Text(metric.displayName).tag(metric)
+            }
+        }
+        .accessibilityIdentifier("weeklystats-chart-metric-picker")
+    }
 
     private var chartView: some View {
         Chart(dailyBreakdown) { point in
@@ -111,16 +130,20 @@ struct DailyVolumeChartView: View {
             }
         }
         .chartXAxis {
-            AxisMarks(values: .stride(by: .day, count: period.chartAxisStrideCount)) { _ in
+            AxisMarks(values: .stride(by: .day, count: dynamicTypeSize.isAccessibilitySize
+                                     ? max(2, period.chartAxisStrideCount)
+                                     : period.chartAxisStrideCount)) { _ in
                 AxisGridLine()
                     .foregroundStyle(theme.accentColor.opacity(0.30))
                 AxisValueLabel(format: axisFormat, centered: true)
+                    .font(.caption2)
                     .foregroundStyle(theme.sandColor)
             }
         }
         .chartYAxis {
             AxisMarks(position: .leading) { _ in
                 AxisValueLabel()
+                    .font(.caption2)
                     .foregroundStyle(theme.sandColor)
                 AxisGridLine()
                     .foregroundStyle(theme.accentColor.opacity(0.30))
