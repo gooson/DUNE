@@ -37,6 +37,10 @@ final class LifeSmokeTests: UITestBaseCase {
             app.scrollToElementInPrimaryFormIfNeeded(AXID.habitFormType, maxSwipes: 4),
             "Habit type picker should appear"
         )
+        XCTAssertTrue(
+            app.scrollToElementInPrimaryFormIfNeeded(AXID.habitFormReminderTime, maxSwipes: 6),
+            "Reminder time picker should appear in the new habit form"
+        )
     }
 
     func testHabitFormCancelDismisses() throws {
@@ -108,6 +112,10 @@ final class LifeSeededSmokeTests: SeededUITestBaseCase {
 
         let nameField = app.textFields[AXID.habitFormName].firstMatch
         XCTAssertTrue(nameField.waitForExistence(timeout: 3), "Edit habit sheet should appear from the actions menu")
+        XCTAssertTrue(
+            app.scrollToElementInPrimaryFormIfNeeded(AXID.habitFormReminderTime, maxSwipes: 6),
+            "Reminder time picker should appear in the edit habit form"
+        )
         XCTAssertTrue(app.dismissModalIfPresent(cancelIdentifiers: [AXID.habitFormCancel]), "Edit habit sheet should dismiss via shared helper")
     }
 

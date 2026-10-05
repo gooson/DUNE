@@ -715,6 +715,7 @@ struct DUNEApp: App {
                 let granted = try await notificationService.requestAuthorization()
                 hasRequestedNotificationAuthorization = true
                 if granted {
+                    NotificationCenter.default.post(name: .habitReminderAuthorizationGranted, object: nil)
                     await BedtimeReminderScheduler.shared.refreshSchedule(force: true)
                     await AppleWatchBedtimeReminderScheduler.shared.refreshSchedule(force: true)
                     await PostureReminderScheduler.shared.refreshSchedule()
