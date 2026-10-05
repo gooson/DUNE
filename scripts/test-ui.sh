@@ -105,6 +105,13 @@ if [[ "$CLEANUP_MODE" -eq 1 ]]; then
     exit 0
 fi
 
+# The simulator lock is held for real runs. Clear prior evidence before any
+# selector, test-plan, project, or simulator preflight can fail.
+RESULT_FILE="${LOG_FILE}.result.json"
+if [[ "$DRY_RUN" -eq 0 ]]; then
+    rm -f "$RESULT_FILE"
+fi
+
 resolve_test_plan() {
     local requested_plan="$1"
 
@@ -292,7 +299,7 @@ if [[ "${#SKIP_TESTING[@]}" -gt 0 ]]; then
 fi
 
 # Verify the exact selectors and skips passed to xcodebuild, including smoke defaults.
-VERIFY_CMD=(python3 "$TEST_VERIFY" --log "$LOG_FILE")
+VERIFY_CMD=(python3 "$TEST_VERIFY" --log "$LOG_FILE" --target DUNEUITests --result-json "$RESULT_FILE")
 for ((i=0; i<${#TEST_CMD[@]}; i++)); do
     case "${TEST_CMD[i]}" in
         -only-testing)
@@ -333,7 +340,8 @@ if ! python3 "$TEST_SUMMARY" "$LOG_FILE" "$TEST_EXIT" "UI tests"; then
     echo "UI tests: summary unavailable (xcodebuild exit ${TEST_EXIT})"
     echo "Full log: $LOG_FILE"
 fi
-if [[ "$TEST_EXIT" -eq 0 ]]; then
-    "${VERIFY_CMD[@]}" || exit 1
-fi
+"${VERIFY_CMD[@]}" --exit-status "$TEST_EXIT" || {
+    if [[ "$TEST_EXIT" -ne 0 ]]; then exit "$TEST_EXIT"; fi
+    exit 1
+}
 exit "$TEST_EXIT"

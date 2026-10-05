@@ -1,12 +1,17 @@
 name: Build iOS
 
 on:
+  # Workflow-only edits use static validation; dispatch explicitly to exercise CI.
+  workflow_dispatch:
   pull_request:
     branches: [main]
     paths:
       - 'DUNE/**'
-      - 'scripts/**'
-      - '.github/workflows/build-ios.yml'
+      - 'DUNEWatch/**'
+      - 'DUNEWidget/**'
+      - 'Shared/**'
+      - 'scripts/build-ios.sh'
+      - 'scripts/lib/regen-project.sh'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
