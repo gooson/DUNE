@@ -20,6 +20,9 @@ class UITestBaseCase: XCTestCase {
 
         var launchArguments: [String] {
             var args = ["--uitesting"]
+            if ProcessInfo.processInfo.environment["DUNE_VISUAL_AUDIT_STATIC"] == "1" {
+                args.append("--ui-disable-animations")
+            }
             if resetState {
                 args.append("--ui-reset")
             }
@@ -111,6 +114,7 @@ class UITestBaseCase: XCTestCase {
 
     override func tearDownWithError() throws {
         if let app {
+            VisualAudit.capture("before teardown \(name)")
             if let failureCount = testRun?.failureCount, failureCount > 0 {
                 addScreenshotAttachment(named: defaultArtifactName(suffix: "failure"))
             }
@@ -129,10 +133,15 @@ class UITestBaseCase: XCTestCase {
         continueAfterFailure = false
 
         launchApp()
+        if VisualAudit.isEnabled,
+           ProcessInfo.processInfo.environment["DUNE_VISUAL_AUDIT_ORIENTATION"] == "landscapeLeft" {
+            XCUIDevice.shared.orientation = .landscapeLeft
+        }
 
         if !app.hasPrimaryNavigation(timeout: 8) {
-            throw XCTSkip("Primary navigation (tab bar/sidebar) not found")
+            throw VisualAudit.unavailable("Primary navigation (tab bar/sidebar) not found")
         }
+        VisualAudit.capture("root after setup \(name)")
     }
 
     func launchApp(with configuration: LaunchConfiguration? = nil) {
@@ -147,23 +156,42 @@ class UITestBaseCase: XCTestCase {
         // terminateIfRunning already includes force-kill fallback via simctl.
         _ = terminateIfRunning(app)
         app.launch()
+        // A separately opened Insights scene can be restored in front of the
+        // reset fixture. Close it through its UI before checking primary navigation.
+        let restoredInsightsClose = app.buttons["workout-insights-close"].firstMatch
+        if restoredInsightsClose.exists && restoredInsightsClose.isHittable {
+            restoredInsightsClose.auditTap()
+            let dismissed = XCTNSPredicateExpectation(
+                predicate: NSPredicate(format: "exists == false"), object: restoredInsightsClose
+            )
+            XCTAssertEqual(XCTWaiter.wait(for: [dismissed], timeout: 10), .completed,
+                           "Restored Insights must close before the primary fixture can be audited")
+        }
     }
 
     // MARK: - Navigation Helpers
 
     func navigateToDashboard() {
+        let root = app.descendants(matching: .any)[AXID.dashboardHeroCondition].firstMatch
+        if root.exists && root.isHittable { return }
         app.navigateToTab("Today")
     }
 
     func navigateToActivity() {
+        let root = app.descendants(matching: .any)[AXID.activityHeroReadiness].firstMatch
+        if root.exists && root.isHittable { return }
         app.navigateToTab("Activity")
     }
 
     func navigateToWellness() {
+        let root = app.descendants(matching: .any)[AXID.wellnessHeroScore].firstMatch
+        if root.exists && root.isHittable { return }
         app.navigateToTab("Wellness")
     }
 
     func navigateToLife() {
+        let root = app.descendants(matching: .any)[AXID.lifeHeroProgress].firstMatch
+        if root.exists && root.isHittable { return }
         app.navigateToTab("Life")
     }
 
@@ -195,7 +223,7 @@ class UITestBaseCase: XCTestCase {
 
         let segment = control.buttons.element(boundBy: index)
         XCTAssertTrue(segment.waitForExistence(timeout: timeout), "Segment \(index) should exist in '\(identifier)'")
-        segment.tap()
+        segment.auditTap()
         return segment
     }
 

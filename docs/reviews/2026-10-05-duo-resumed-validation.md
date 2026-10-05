@@ -178,3 +178,5 @@ XCTest 원본 [요약 화면](assets/2026-10-05-duo/phone-sheet-insights-maxax-s
 이번 delta 소스 검토: phone 시트는 기존 상태 보유 모델을 유지하며 저장/HealthKit/CloudKit 쿼리를 바꾸지 않는다. AX 분기는 레이아웃·장식·식별자에 한정되고 새로운 네트워크나 데이터 삭제 경로를 만들지 않는다. 차트 날짜 stride·axis anchor의 마지막 후보는 시각 확인이 남아 있다. 테스트 query는 존재와 hittability·목적지 전환을 함께 확인하고 missing selector를 전체 pass로 승격하지 않았다.
 
 여전히 미완료: 실제 partiallyOpen/openFlat의 기본·최대 AX와 회전 전수 검사, 접는 동안 운동 초안·휴식 countdown 연속성, 최종 축 anchor 픽셀 확인, 이전 버전에서 이미 복원된 보조 창의 업그레이드 복귀 및 전체 최종 UI 게이트. 이번 네이티브 캡처는 Closed cover 1398×2034이며 비활성 inner 캡처가 첨부됐다고 펼침 검사를 수행한 것은 아니다. Mac 잠금 해제 요청은 아직 응답 대기이며 GUI preset 조작을 재시도하지 않았다. 선택 실행은 종료됐으며 백그라운드 테스트를 계속 돌리지 않는다. 계정 주간 한도 85% 사용/15% 잔여 확인; 작업별 정확한 토큰 수는 unknown이다.
+
+중간 저장: 제품 수정 `e17d049c`, `0420ba16`, `cd4b42d9`. 후속으로 선택 실행이 사용한 TestDataSeeder의 DEBUG 합성 fixture, Activity/Life/Today/Wellness 회귀 테스트 및 공용 native-capture/launch helper를 의존성 단위로 함께 저장한다. 기존 관련 audit 변경을 포함하는 파일이므로 새 기능 테스트만 추가된 것으로 설명하지 않는다. fixture는 명시적 opt-in이고 실제 카메라 사진·실제 건강 데이터는 포함하지 않는다. 해당 범위는 이번 UI 타깃에서 컴파일됐으며 실행/픽셀 합격 범위는 위 case와 원본에 한정한다. 미선택 audit 메서드를 전체 통과로 보고하지 않는다. 다른 picker/muscle-map/PR 테스트와 기존 9월 문서·전체 assets는 이 저장 범위 밖으로 보존한다.
