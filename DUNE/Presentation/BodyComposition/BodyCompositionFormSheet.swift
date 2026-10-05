@@ -10,6 +10,15 @@ struct BodyCompositionFormSheet: View {
 
     private enum InputField: Hashable {
         case weight, bodyFat, muscleMass, memo
+
+        var identifier: String {
+            switch self {
+            case .weight: "body-form-weight"
+            case .bodyFat: "body-form-fat"
+            case .muscleMass: "body-form-muscle"
+            case .memo: "body-form-memo"
+            }
+        }
     }
 
     var body: some View {
@@ -60,6 +69,17 @@ struct BodyCompositionFormSheet: View {
                 .scrollDismissesKeyboard(.interactively)
                 .toolbar {
                     ToolbarItemGroup(placement: .keyboard) {
+                        if let field = focusedField {
+                            Button("Clear Input") {
+                                switch field {
+                                case .weight: viewModel.newWeight = ""
+                                case .bodyFat: viewModel.newBodyFat = ""
+                                case .muscleMass: viewModel.newMuscleMass = ""
+                                case .memo: viewModel.newMemo = ""
+                                }
+                            }
+                            .accessibilityIdentifier("\(field.identifier)-clear")
+                        }
                         Spacer()
                         Button("Done") { focusedField = nil }
                             .accessibilityIdentifier("body-form-keyboard-done")

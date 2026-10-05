@@ -24,6 +24,7 @@ struct TemplateFormView: View {
     @State private var showingExercisePicker = false
     @State private var isGeneratingTemplate = false
     @State private var validationError: String?
+    @FocusState private var focusedWeightEntryID: UUID?
 
     @Query private var customExercises: [CustomExercise]
 
@@ -135,6 +136,21 @@ struct TemplateFormView: View {
                         .fontWeight(.semibold)
                         .disabled(templateName.trimmingCharacters(in: .whitespaces).isEmpty || entries.isEmpty)
                         .accessibilityIdentifier("template-form-save")
+                }
+            }
+            .toolbar {
+                ToolbarItemGroup(placement: .keyboard) {
+                    if let entryID = focusedWeightEntryID {
+                        Button("Clear Input") {
+                            if let index = entries.firstIndex(where: { $0.id == entryID }) {
+                                entries[index].defaultWeightKg = nil
+                            }
+                        }
+                        .accessibilityIdentifier("template-entry-\(entryID)-weight-clear")
+                    }
+                    Spacer()
+                    Button("Done") { focusedWeightEntryID = nil }
+                        .accessibilityIdentifier("template-form-keyboard-done")
                 }
             }
             .sheet(isPresented: $showingExercisePicker) {
@@ -305,6 +321,7 @@ struct TemplateFormView: View {
                 .frame(width: dynamicTypeSize.isAccessibilitySize ? nil : 56)
                 .multilineTextAlignment(.trailing)
                 .textFieldStyle(.roundedBorder)
+                .focused($focusedWeightEntryID, equals: entry.wrappedValue.id)
                 .accessibilityIdentifier("template-entry-\(entry.wrappedValue.id)-weight")
                 Text("kg")
                     .font(.caption)
