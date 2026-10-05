@@ -44,11 +44,13 @@ struct DashboardView: View {
 
     private let refreshSignal: Int
     private let notificationHubSignal: Int
+    private let notificationHubItemID: String?
     private let launchExperienceReady: Bool
     private let canLoadHealthKitData: Bool
     private let sharedHealthDataService: SharedHealthDataService?
     private let scoreRefreshService: ScoreRefreshService?
     @State private var showNotificationHub = false
+    @State private var requestedNotificationItemID: String?
     @State private var showWhatsNew = false
     @State private var showSettings = false
     @State private var cachedWeatherAtmosphere: WeatherAtmosphere = .default
@@ -66,6 +68,7 @@ struct DashboardView: View {
         scrollToTopSignal: Int = 0,
         refreshSignal: Int = 0,
         notificationHubSignal: Int = 0,
+        notificationHubItemID: String? = nil,
         launchExperienceReady: Bool = true,
         canLoadHealthKitData: Bool = true
     ) {
@@ -78,6 +81,7 @@ struct DashboardView: View {
         self.scrollToTopSignal = scrollToTopSignal
         self.refreshSignal = refreshSignal
         self.notificationHubSignal = notificationHubSignal
+        self.notificationHubItemID = notificationHubItemID
         self.launchExperienceReady = launchExperienceReady
         self.canLoadHealthKitData = canLoadHealthKitData
     }
@@ -208,7 +212,11 @@ struct DashboardView: View {
             settingsToolbarItem
         }
         .navigationDestination(isPresented: $showNotificationHub) {
-            NotificationHubView(sharedHealthDataService: sharedHealthDataService)
+            NotificationHubView(
+                sharedHealthDataService: sharedHealthDataService,
+                requestedItemID: requestedNotificationItemID,
+                navigationRequestID: notificationHubSignal
+            )
         }
         .navigationDestination(isPresented: $showWhatsNew) {
             WhatsNewView(
@@ -229,6 +237,7 @@ struct DashboardView: View {
         }
         .onChange(of: notificationHubSignal) { _, newValue in
             guard newValue > 0 else { return }
+            requestedNotificationItemID = notificationHubItemID
             showNotificationHub = true
         }
     }
@@ -579,6 +588,7 @@ struct DashboardView: View {
     private var notificationsToolbarItem: some ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {
             Button {
+                requestedNotificationItemID = nil
                 showNotificationHub = true
             } label: {
                 notificationBellIcon

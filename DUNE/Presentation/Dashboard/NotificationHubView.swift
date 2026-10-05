@@ -160,18 +160,27 @@ enum NotificationHubMetricResolver {
 /// Latest-first notification inbox accessed from the Today tab toolbar.
 struct NotificationHubView: View {
     let sharedHealthDataService: SharedHealthDataService?
+    let requestedItemID: String?
+    let navigationRequestID: Int
 
     @State private var items: [NotificationInboxItem] = []
     @State private var unreadCount = 0
     @State private var destination: HubDestination?
     @State private var showDeleteAllConfirmation = false
     @State private var animatedIDs: Set<String> = []
+    @State private var handledNavigationRequestID: Int?
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     private let inboxManager = NotificationInboxManager.shared
 
-    init(sharedHealthDataService: SharedHealthDataService? = nil) {
+    init(
+        sharedHealthDataService: SharedHealthDataService? = nil,
+        requestedItemID: String? = nil,
+        navigationRequestID: Int = 0
+    ) {
         self.sharedHealthDataService = sharedHealthDataService
+        self.requestedItemID = requestedItemID
+        self.navigationRequestID = navigationRequestID
     }
 
     private enum HubDestination: Hashable, Identifiable {
@@ -248,6 +257,16 @@ struct NotificationHubView: View {
         }
         .task {
             reload()
+        }
+        .task(id: navigationRequestID) {
+            guard navigationRequestID > 0,
+                  handledNavigationRequestID != navigationRequestID,
+                  let requestedItemID else { return }
+            handledNavigationRequestID = navigationRequestID
+            await Task.yield()
+            guard !Task.isCancelled,
+                  let item = inboxManager.items().first(where: { $0.id == requestedItemID }) else { return }
+            handleTap(on: item)
         }
         .onReceive(NotificationCenter.default.mainThreadPublisher(for: NotificationInboxManager.inboxDidChangeNotification)) { _ in
             reload()

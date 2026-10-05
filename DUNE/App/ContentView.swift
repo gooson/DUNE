@@ -85,6 +85,7 @@ struct NotificationPresentationPaths {
 struct NotificationPresentationState {
     var selectedSection: AppSection
     var notificationOpenWorkoutID: String?
+    var notificationHubItemID: String?
     var paths: NotificationPresentationPaths
     var notificationPresentationRequestID: Int
     var notificationRouteSignal: Int
@@ -113,6 +114,7 @@ struct NotificationPresentationState {
         case .openNotificationHub:
             paths.clearAll()
             selectedSection = .today
+            notificationHubItemID = request.itemID
             notificationHubSignal += 1
         case .openSleepDetailInWellness(let requestID):
             paths.clearAll(except: .wellness)
@@ -138,6 +140,7 @@ struct ContentView: View {
     @State private var refreshSignal = 0
     @State private var foregroundTask: Task<Void, Never>?
     @State private var notificationOpenWorkoutID: String?
+    @State private var notificationHubItemID: String?
     @State private var isShowingLaunchPostureCapture = PostureCaptureService.shouldAutoOpenCaptureOnLaunch
     @State private var todayNavPath = NavigationPath()
     @State private var trainNavPath = NavigationPath()
@@ -146,6 +149,9 @@ struct ContentView: View {
     @State private var notificationPresentationRequestID = 0
     @State private var notificationRouteSignal = 0
     @State private var notificationHubSignal = 0
+    #if DEBUG
+    @State private var didOpenUITestNotification = false
+    #endif
     private let notificationInboxManager = NotificationInboxManager.shared
 
     init(
@@ -173,6 +179,7 @@ struct ContentView: View {
                         scrollToTopSignal: todayScrollToTopSignal,
                         refreshSignal: refreshSignal,
                         notificationHubSignal: notificationHubSignal,
+                        notificationHubItemID: notificationHubItemID,
                         launchExperienceReady: launchExperienceReady,
                         canLoadHealthKitData: canLoadHealthKitData
                     )
@@ -314,6 +321,11 @@ struct ContentView: View {
                     handleNotificationNavigationRequest(request)
                 }
             }
+            #if DEBUG
+            await MainActor.run {
+                openUITestNotificationIfRequested()
+            }
+            #endif
         }
         #if !os(visionOS)
         .fullScreenCover(isPresented: $isShowingLaunchPostureCapture) {
@@ -384,6 +396,7 @@ struct ContentView: View {
         NotificationPresentationState(
             selectedSection: selectedSection,
             notificationOpenWorkoutID: notificationOpenWorkoutID,
+            notificationHubItemID: notificationHubItemID,
             paths: currentNotificationPresentationPaths,
             notificationPresentationRequestID: notificationPresentationRequestID,
             notificationRouteSignal: notificationRouteSignal,
@@ -395,6 +408,7 @@ struct ContentView: View {
     private func applyNotificationPresentationState(_ state: NotificationPresentationState) {
         selectedSection = state.selectedSection
         notificationOpenWorkoutID = state.notificationOpenWorkoutID
+        notificationHubItemID = state.notificationHubItemID
         todayNavPath = state.paths.today
         trainNavPath = state.paths.train
         wellnessNavPath = state.paths.wellness
@@ -410,6 +424,22 @@ struct ContentView: View {
         state.apply(request)
         applyNotificationPresentationState(state)
     }
+
+    #if DEBUG
+    @MainActor
+    private func openUITestNotificationIfRequested() {
+        guard !didOpenUITestNotification else { return }
+        let arguments = ProcessInfo.processInfo.arguments
+        guard arguments.contains("--uitesting"),
+              let index = arguments.firstIndex(of: "--ui-open-notification-title"),
+              arguments.indices.contains(index + 1) else { return }
+        didOpenUITestNotification = true
+        guard let item = notificationInboxManager.items().first(where: { $0.title == arguments[index + 1] }) else { return }
+        notificationInboxManager.handleNotificationResponse(
+            userInfo: notificationInboxManager.notificationUserInfo(for: item)
+        )
+    }
+    #endif
 }
 
 struct NotificationSleepDetailPushView: View {

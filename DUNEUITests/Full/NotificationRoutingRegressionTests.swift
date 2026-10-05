@@ -63,3 +63,31 @@ final class NotificationRoutingRegressionTests: SeededUITestBaseCase {
         rowTitle.tap()
     }
 }
+
+@MainActor
+final class NotificationResponseRoutingUITests: SeededUITestBaseCase {
+    override var uiScenario: LaunchScenario? { .notificationRoutingSeeded }
+
+    override var additionalLaunchArguments: [String] {
+        [
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+            "--ui-open-notification-title", "Daily Digest Route Fixture"
+        ]
+    }
+
+    func testNotificationResponseOpensMatchingMessageAndBackReturnsToHub() {
+        let detail = app.descendants(matching: .any)["notification-message-detail-screen"].firstMatch
+        XCTAssertTrue(detail.waitForExistence(timeout: 15), "Notification response should open message detail")
+        XCTAssertTrue(app.staticTexts["Daily Digest Route Fixture"].firstMatch.exists)
+        XCTAssertTrue(app.staticTexts["Review today's summary."].firstMatch.exists)
+        XCTAssertTrue(app.tabBars.buttons["Today"].isSelected)
+
+        let backButton = app.navigationBars.buttons.element(boundBy: 0)
+        XCTAssertTrue(backButton.waitForExistence(timeout: 5), "Message detail should have a back button")
+        backButton.tap()
+
+        let hub = app.descendants(matching: .any)[AXID.notificationHubScreen].firstMatch
+        XCTAssertTrue(hub.waitForExistence(timeout: 8), "Back should return to the notification hub")
+        XCTAssertTrue(app.staticTexts["Daily Digest Route Fixture"].firstMatch.exists)
+    }
+}
