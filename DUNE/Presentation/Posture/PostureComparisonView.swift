@@ -211,7 +211,13 @@ struct PostureComparisonView: View {
     }
 
     private func metricDeltaRow(_ delta: MetricDelta) -> some View {
-        HStack(spacing: DS.Spacing.md) {
+        let rowLayout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.sm))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.md))
+        let valuesLayout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.xs))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.xs))
+        return rowLayout {
             Image(systemName: delta.type.iconName)
                 .font(.subheadline)
                 .foregroundStyle(deltaColor(delta))
@@ -221,7 +227,7 @@ struct PostureComparisonView: View {
                 Text(delta.type.displayName)
                     .font(.subheadline.weight(.medium))
 
-                HStack(spacing: DS.Spacing.xs) {
+                valuesLayout {
                     if let oldVal = delta.oldValue {
                         Text(formattedPostureMetricValue(oldVal, unit: delta.unit))
                             .font(.caption)
@@ -248,7 +254,9 @@ struct PostureComparisonView: View {
                 }
             }
 
-            Spacer()
+            if !dynamicTypeSize.isAccessibilitySize {
+                Spacer()
+            }
 
             if let scoreDelta = delta.scoreDelta {
                 Text(scoreDelta >= 0 ? "+\(scoreDelta)" : "\(scoreDelta)")
