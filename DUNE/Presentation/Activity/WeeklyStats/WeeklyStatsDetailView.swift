@@ -7,6 +7,7 @@ struct WeeklyStatsDetailView: View {
     @State private var viewModel = WeeklyStatsDetailViewModel()
     @Environment(\.horizontalSizeClass) private var sizeClass
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var refreshRevision = 0
 
     private var isRegular: Bool { sizeClass == .regular }
@@ -88,10 +89,10 @@ struct WeeklyStatsDetailView: View {
     private func contentSection(_ comparison: PeriodComparison) -> some View {
         VStack(spacing: DS.Spacing.lg) {
             // Summary stats grid
-        if !viewModel.summaryStats.isEmpty {
-            summaryGrid
-                .accessibilityIdentifier("activity-weeklystats-summary-grid")
-        }
+            if !viewModel.summaryStats.isEmpty {
+                summaryGrid
+                    .accessibilityIdentifier("activity-weeklystats-summary-grid")
+            }
 
             // Daily breakdown chart (Duration / Sessions / Volume)
             DailyVolumeChartView(
@@ -113,10 +114,10 @@ struct WeeklyStatsDetailView: View {
 
     private var summaryGrid: some View {
         LazyVGrid(
-            columns: [
-                GridItem(.flexible(), spacing: DS.Spacing.sm),
-                GridItem(.flexible(), spacing: DS.Spacing.sm)
-            ],
+            columns: Array(
+                repeating: GridItem(.flexible(), spacing: DS.Spacing.sm),
+                count: dynamicTypeSize.isAccessibilitySize ? 1 : 2
+            ),
             spacing: DS.Spacing.sm
         ) {
             ForEach(viewModel.summaryStats) { stat in
