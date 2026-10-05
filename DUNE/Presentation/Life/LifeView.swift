@@ -84,6 +84,7 @@ struct LifeView: View {
                     } label: {
                         Label("New Habit", systemImage: "plus")
                     }
+                    .accessibilityIdentifier("life-toolbar-new-habit")
 
                     Button {
                         isShowingTemplateSheet = true
@@ -1132,7 +1133,6 @@ private struct HabitHistorySheet: View {
         }
         .background { SheetWaveBackground() }
         .presentationDetents([.medium, .large])
-        .accessibilityIdentifier("life-habit-history-screen")
     }
 
     // MARK: - Header
@@ -1151,6 +1151,7 @@ private struct HabitHistorySheet: View {
             VStack(alignment: .leading, spacing: 2) {
                 Text(habitName)
                     .font(.headline)
+                    .accessibilityIdentifier("life-habit-history-screen")
                 Text(String(localized: "\(entries.count) records"))
                     .font(.caption)
                     .foregroundStyle(.secondary)
@@ -1249,6 +1250,7 @@ private struct HabitHistorySheet: View {
             Text("No History")
                 .font(.headline)
                 .foregroundStyle(.secondary)
+                .accessibilityIdentifier("life-habit-history-empty")
             Text("Complete this habit to start building your history")
                 .font(.subheadline)
                 .foregroundStyle(.tertiary)
@@ -1256,7 +1258,6 @@ private struct HabitHistorySheet: View {
             Spacer()
         }
         .padding(DS.Spacing.xl)
-        .accessibilityIdentifier("life-habit-history-empty")
     }
 
     // MARK: - Helpers

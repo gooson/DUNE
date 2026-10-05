@@ -113,6 +113,7 @@ enum AXID {
     // MARK: - Life Tab (active: hero, toolbar-add, habits section, actions, history)
     static let lifeHeroProgress = "life-hero-progress"
     static let lifeToolbarAdd = "life-toolbar-add"
+    static let lifeToolbarNewHabit = "life-toolbar-new-habit"
     static let lifeSectionHabits = "life-section-habits"
     static let lifeHabitToggle = "life-habit-toggle"
     static func lifeHabitRow(_ habitName: String) -> String { "life-habit-row-\(habitName)" }
@@ -472,6 +473,13 @@ extension XCUIApplication {
         guard element.exists || element.waitForExistence(timeout: remainingTime) else { return false }
         element.tap()
         return true
+    }
+
+    @discardableResult
+    func openLifeNewHabitForm(timeout: TimeInterval = 5) -> Bool {
+        guard waitAndTap(AXID.lifeToolbarAdd, timeout: timeout) else { return false }
+        guard waitAndTap(AXID.lifeToolbarNewHabit, timeout: timeout) else { return false }
+        return textFields[AXID.habitFormName].firstMatch.waitForExistence(timeout: timeout)
     }
 
     func hasPrimaryNavigation(timeout: TimeInterval = 8) -> Bool {
