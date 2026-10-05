@@ -8,7 +8,7 @@ final class WatchContourThemeTests: WatchUITestBaseCase {
 
     func testContourAtlasHomeAndAllExercisesRender() throws {
         ensureHomeVisible()
-        XCTAssertTrue(elementExists(WatchAXID.homeCarousel, timeout: 5))
+        XCTAssertTrue(elementExists(WatchAXID.homeAllExercisesCard, timeout: 5))
         addScreenshotAttachment(named: "ContourAtlas-Watch-Home")
 
         openAllExercises()
