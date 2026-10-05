@@ -5,6 +5,9 @@ struct PostureComparisonView: View {
     let newer: PostureAssessmentRecord
     let viewModel: PostureHistoryViewModel
 
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @ScaledMetric(relativeTo: .title3) private var scoreRingSize: CGFloat = 72
+
     @State private var zoomImage: ZoomableImageItem?
 
     var body: some View {
@@ -16,11 +19,13 @@ struct PostureComparisonView: View {
                 }
                 .padding(.horizontal, DS.Spacing.lg)
             }
+            .accessibilityIdentifier("posture-comparison-photos-scroll")
         } secondary: {
             ScrollView {
                 metricDeltas
                     .padding(.horizontal, DS.Spacing.lg)
             }
+            .accessibilityIdentifier("posture-comparison-metrics-scroll")
         }
         .englishNavigationTitle("Comparison")
         .navigationBarTitleDisplayMode(.inline)
@@ -32,7 +37,10 @@ struct PostureComparisonView: View {
     // MARK: - Score Comparison
 
     private var scoreComparison: some View {
-        HStack(spacing: DS.Spacing.lg) {
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(spacing: DS.Spacing.lg))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.lg))
+        return layout {
             scoreColumn(
                 label: older.date.formatted(.dateTime.month(.abbreviated).day()),
                 score: older.overallScore
@@ -63,7 +71,7 @@ struct PostureComparisonView: View {
             ZStack {
                 Circle()
                     .stroke(.quaternary, lineWidth: 6)
-                    .frame(width: 72, height: 72)
+                    .frame(width: scoreRingSize, height: scoreRingSize)
 
                 Circle()
                     .trim(from: 0, to: min(1, max(0, CGFloat(score) / 100.0)))
@@ -71,7 +79,7 @@ struct PostureComparisonView: View {
                         scoreColor(score),
                         style: StrokeStyle(lineWidth: 6, lineCap: .round)
                     )
-                    .frame(width: 72, height: 72)
+                    .frame(width: scoreRingSize, height: scoreRingSize)
                     .rotationEffect(.degrees(-90))
 
                 Text("\(score)")

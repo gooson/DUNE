@@ -2,6 +2,7 @@ import SwiftUI
 
 struct WeeklyHabitReportView: View {
     let report: WeeklyHabitReport
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
         ScrollView {
@@ -13,6 +14,7 @@ struct WeeklyHabitReportView: View {
             }
             .padding(DS.Spacing.md)
         }
+        .accessibilityIdentifier("life-weekly-report-scroll")
         .background { DetailWaveBackground() }
         .englishNavigationTitle("Weekly Report")
         .navigationBarTitleDisplayMode(.inline)
@@ -45,7 +47,10 @@ struct WeeklyHabitReportView: View {
     // MARK: - Comparison
 
     private var comparisonCard: some View {
-        HStack(spacing: DS.Spacing.lg) {
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(spacing: DS.Spacing.lg))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.lg))
+        return layout {
             VStack(spacing: DS.Spacing.xs) {
                 Text("This Week")
                     .font(.caption)
@@ -81,6 +86,7 @@ struct WeeklyHabitReportView: View {
     private var bestHabitsCard: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
             Label("Best Habits", systemImage: "star.fill")
+                .accessibilityIdentifier("life-weekly-report-best")
                 .font(.headline)
                 .foregroundStyle(DS.Color.positive)
 
@@ -107,6 +113,7 @@ struct WeeklyHabitReportView: View {
     private var worstHabitsCard: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
             Label("Needs Improvement", systemImage: "arrow.up.right")
+                .accessibilityIdentifier("life-weekly-report-improvement")
                 .font(.headline)
                 .foregroundStyle(DS.Color.negative)
 
