@@ -150,6 +150,15 @@ final class WatchConnectivityManager: NSObject {
             return false
         }
 
+#if DEBUG
+        let arguments = ProcessInfo.processInfo.arguments
+        if let themeIndex = arguments.firstIndex(of: "--ui-theme"),
+           arguments.indices.contains(themeIndex + 1),
+           let theme = AppTheme.resolvedTheme(fromPersistedRawValue: arguments[themeIndex + 1]) {
+            syncedThemeRawValue = theme.rawValue
+        }
+#endif
+
         switch resolvedUITestScenario {
         case .empty:
             setExerciseLibrary([])
