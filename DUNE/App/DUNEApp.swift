@@ -345,10 +345,18 @@ struct DUNEApp: App {
     }
 
     private var workoutInsightsContent: some View {
-        WorkoutInsightsWindowView(isReady: isLaunchExperienceReady && canLoadHealthKitData)
+        WorkoutInsightsWindowView(
+            isReady: isLaunchExperienceReady && canLoadHealthKitData
+                && (!Self.shouldSeedMockData || hasSeededMockData)
+        )
         .environment(\.appTheme, selectedTheme)
         .tint(selectedTheme.accentColor)
         .preferredColorScheme(Self.forcedUITestColorScheme)
+        .task {
+#if DEBUG
+            seedMockDataIfNeeded()
+#endif
+        }
     }
 
     private var windowContent: some View {
@@ -456,18 +464,26 @@ struct DUNEApp: App {
         } else {
             Color.clear
                 .task {
-                    guard !hasSeededMockData else { return }
-                    TestDataSeeder.seed(
-                        into: appRuntime.modelContainer.mainContext,
-                        scenario: Self.uiTestLaunchConfiguration.scenario
-                    )
-                    // Seeding resets preferences; restore the explicit visual-test theme afterwards.
-                    if let forcedTheme = Self.forcedUITestTheme {
-                        selectedTheme = forcedTheme
-                    }
-                    hasSeededMockData = true
+                    seedMockDataIfNeeded()
                 }
         }
+    }
+
+    @MainActor
+    private func seedMockDataIfNeeded() {
+        guard Self.shouldSeedMockData, !hasSeededMockData else { return }
+        // A restored auxiliary scene can appear before the main scene.
+        // Both scenes share this synchronous, once-per-launch fixture gate.
+        TestDataSeeder.seed(
+            into: appRuntime.modelContainer.mainContext,
+            scenario: Self.uiTestLaunchConfiguration.scenario
+        )
+        // Seeding resets preferences; restore the explicit visual-test theme afterwards.
+        if let forcedTheme = Self.forcedUITestTheme {
+            selectedTheme = forcedTheme
+        }
+        hasSeededMockData = true
+        AppLogger.data.info("UI test fixtures ready")
     }
     #else
     // Stub to keep the `else if` branch compiling in Release builds.

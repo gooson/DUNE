@@ -77,6 +77,16 @@ status: in-progress
 
 동일 실패를 자동 반복하지 않는다. 물리 조작이 가능한 잠금 해제, 수정된 코드에서 직접 원인 해소 확인, 명시적 검증 범위 확정을 재개 조건으로 남긴다.
 
+## 잠금 해제 후 목업 초기화 수정
+
+사용자가 지적한 `Unable to load data`는 복원된 Insights scene이 먼저 열리면서 primary에만 있던 `TestDataSeeder.seed`를 거치지 않은 결과였다. 이 함수가 고급 목업 모드를 활성화한다. 활성화 전 WorkoutQueryService가 실제 HealthKit을 조회해 검증용 unsigned 빌드의 `Missing com.apple.developer.healthkit entitlement` 오류가 발생했다. 권한 서명이 본질적인 해결 대상이라는 초기 설명을 정정한다. 고급 목업 활성화 순서가 원인이다.
+
+primary와 Insights가 MainActor의 동기 초기화 함수를 공유하도록 수정했다. 테스트 seed 플래그가 있는 경우 Insights는 초기화 완료 전에 통계를 만들지 않는다. 중복 seed는 guard로 막고 일반 실행의 HealthKit 동작은 유지한다.
+
+Xcode 27.1 시뮬레이터 빌드 통과: `/tmp/duo-unlocked-20261005/fixture-gate-simulator-build.log`. 처음 destination을 빠뜨린 실기기 빌드는 이번 PID 8605만 중단했으며 통과 증거로 사용하지 않는다. 전용 UUID에 수정 앱을 설치하고 기존 Insights 복원 경로만 직접 검증했다. PID 11589의 정보 로그에 `UI test fixtures ready`가 있으며 Weekly stats/HealthKit 오류는 관측되지 않았다. [수정 후 닫힌 화면](assets/2026-10-05-duo/restored-insights-advanced-mock.png)에 목업 볼륨 6,360kg, 시간 374분 및 Close가 표시된다. 이번 데이터 로딩 오류의 해소 증거이며 Close 동작이나 전체 레이아웃 합격 증거는 아니다.
+
+잠금 해제 후 Device Hub의 실제 Closed/Book/Open preset을 AX로 선택하고 내부·외부 디스플레이를 캡처했다. 초기 세 preset 캡처는 수정 전 오류 화면이므로 데이터 화면의 전수 검사로 인정하지 않는다. 좌표 조작은 `noWindowsAvailable`을 반환했으며 창 축소 미리보기 캡처 문제가 남았다. 동일 좌표 조작과 이미 예산을 소진한 UI 테스트를 반복하지 않았다. 원본은 `/tmp/duo-unlocked-20261005`에 보존한다. Body 저장·Insights Close·운동/타이머 연속성·기본/최대 AX 전수 검증은 여전히 미완료다.
+
 ## 최종 컴파일 및 리뷰 기록
 
 - Xcode 27.1 표준 앱 빌드: `app-final-scene-and-breakdown.log`, `app-final-scene-owner.log` 통과. 리뷰의 조건부 P2(기존 Insights 재사용 시 이전 opener 유지)는 기존 Insights session의 opener를 새 출발 창으로 갱신하고 정확한 session 활성화를 요청하도록 수정했다. 소스 수준 해소이며 실제 여러 창 검증 대기.
