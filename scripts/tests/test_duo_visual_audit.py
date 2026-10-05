@@ -1,0 +1,177 @@
+"""File-only contracts for the Duo VisualAudit host handshake."""
+
+import importlib.util
+import io
+import json
+from pathlib import Path
+import subprocess
+import tempfile
+import threading
+import time
+import unittest
+from unittest.mock import patch
+from unittest.mock import MagicMock
+
+
+SCRIPT = Path(__file__).resolve().parents[1] / "duo-visual-audit.py"
+SPEC = importlib.util.spec_from_file_location("duo_visual_audit", SCRIPT)
+audit = importlib.util.module_from_spec(SPEC)
+SPEC.loader.exec_module(audit)
+APP_ID = "11111111-2222-3333-4444-555555555555"
+PORTS = ("Port:\nDisplay class: 0\nUUID: AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA\n"
+         "Default width: 1398\nDefault height: 2034\n"
+         "Port:\nDisplay class: 0\nUUID: BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB\n"
+         "Default width: 2007\nDefault height: 2853\n")
+
+
+class CaptureContracts(unittest.TestCase):
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp.cleanup)
+        self.base = Path(self.temp.name)
+        self.output = self.base / "output"
+        self.output.mkdir()
+        self.container = self.base / "Application"
+        self.ack = self.container / APP_ID / "tmp" / "dune-visual-audit-aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee.ack"
+        self.ack.parent.mkdir(parents=True)
+        self.ack.with_suffix(".ack.txt").write_text("hierarchy")
+        self.captures = io.StringIO()
+        self.checkpoints = io.StringIO()
+
+    def line(self, action="ordinary", seconds=30, ack=None):
+        return (f"DUNE_VISUAL_AUDIT_READY {action} [Test.swift:10] "
+                f"DEADLINE={time.time() + seconds} ACK={ack or self.ack}\n")
+
+    def run_checkpoint(self, line, display="all"):
+        return audit.capture_checkpoint(line, 1, self.output, "DEVICE", display,
+                                        self.container.resolve(), self.captures, self.checkpoints)
+
+    def ledger(self):
+        return json.loads(self.checkpoints.getvalue().splitlines()[-1])
+
+    @staticmethod
+    def screenshot(argv, **_kwargs):
+        Path(argv[-1]).write_bytes(b"PNG")
+        return subprocess.CompletedProcess(argv, 0)
+
+    @patch.object(audit.subprocess, "run")
+    @patch.object(audit.subprocess, "check_output", return_value=PORTS)
+    def test_successful_two_display_capture_ack_and_hierarchy(self, enumerate_mock, screenshot_mock):
+        screenshot_mock.side_effect = self.screenshot
+        self.run_checkpoint(self.line())
+        self.assertTrue(self.ack.is_file())
+        self.assertEqual((self.output / "001-hierarchy.txt").read_text(), "hierarchy")
+        self.assertEqual(len(list(self.output.glob("*.png"))), 2)
+        self.assertEqual(len(self.captures.getvalue().splitlines()), 2)
+        self.assertTrue(self.ledger()["valid_evidence"])
+        self.assertTrue(self.ledger()["acknowledged"])
+        self.assertEqual(enumerate_mock.call_count, 1)
+
+    @patch.object(audit.subprocess, "run")
+    @patch.object(audit.subprocess, "check_output")
+    def test_expired_deadline_fails_without_simulator_calls(self, enumerate_mock, screenshot_mock):
+        with self.assertRaisesRegex(RuntimeError, "expired"):
+            self.run_checkpoint(self.line(seconds=-1))
+        enumerate_mock.assert_not_called()
+        screenshot_mock.assert_not_called()
+        self.assertFalse(self.ack.exists())
+        self.assertFalse(self.ledger()["valid_evidence"])
+
+    @patch.object(audit.subprocess, "run", side_effect=subprocess.TimeoutExpired("screenshot", 1))
+    @patch.object(audit.subprocess, "check_output", return_value=PORTS)
+    def test_screenshot_timeout_fails_closed(self, _enumerate_mock, _screenshot_mock):
+        (self.output / "001-1398x2034.png").write_bytes(b"stale")
+        with self.assertRaisesRegex(RuntimeError, "Capture failed"):
+            self.run_checkpoint(self.line())
+        self.assertFalse(self.ack.exists())
+        self.assertFalse((self.output / "001-1398x2034.png").exists())
+        self.assertFalse(self.ledger()["valid_evidence"])
+        self.assertIn("\t124\t0", self.captures.getvalue())
+
+    @patch.object(audit.subprocess, "run", return_value=subprocess.CompletedProcess([], 0))
+    @patch.object(audit.subprocess, "check_output", return_value=PORTS)
+    def test_zero_exit_without_new_image_is_not_valid_evidence(self, _enumerate_mock, _screenshot_mock):
+        with self.assertRaisesRegex(RuntimeError, "Capture failed"):
+            self.run_checkpoint(self.line())
+        self.assertFalse(self.ack.exists())
+        self.assertFalse(self.ledger()["valid_evidence"])
+        self.assertIn("\t0\t0", self.captures.getvalue())
+
+    @patch.object(audit.subprocess, "run")
+    @patch.object(audit.subprocess, "check_output", return_value=PORTS)
+    def test_no_matching_display_fails_closed(self, _enumerate_mock, screenshot_mock):
+        with self.assertRaisesRegex(RuntimeError, "No matching"):
+            self.run_checkpoint(self.line(), display="999x999")
+        screenshot_mock.assert_not_called()
+        self.assertFalse(self.ledger()["valid_evidence"])
+
+    @patch.object(audit.subprocess, "run")
+    @patch.object(audit.subprocess, "check_output")
+    def test_unsafe_ack_path_fails_before_capture(self, enumerate_mock, screenshot_mock):
+        unsafe = self.base / "dune-visual-audit-aaaaaaaa.ack"
+        with self.assertRaisesRegex(RuntimeError, "Unexpected capture acknowledgement path"):
+            self.run_checkpoint(self.line(ack=unsafe))
+        enumerate_mock.assert_not_called()
+        screenshot_mock.assert_not_called()
+        self.assertFalse(unsafe.exists())
+        self.assertFalse(self.ledger()["valid_evidence"])
+
+    @patch.object(audit.subprocess, "run")
+    @patch.object(audit.subprocess, "check_output", return_value=PORTS)
+    def test_fold_checkpoint_waits_for_sequence_release_then_captures(self, _enumerate_mock, screenshot_mock):
+        screenshot_mock.side_effect = self.screenshot
+        observed = []
+
+        def release():
+            pending_path = self.output / "pending.json"
+            for _ in range(100):
+                if pending_path.exists():
+                    pending = json.loads(pending_path.read_text())
+                    observed.append(pending)
+                    Path(pending["release_file"]).touch()
+                    return
+                time.sleep(0.01)
+
+        thread = threading.Thread(target=release)
+        thread.start()
+        try:
+            with patch("sys.stdout", new_callable=io.StringIO) as printed:
+                self.run_checkpoint("runner: " + self.line("FOLD:partiallyOpen", seconds=120))
+            self.assertIn("FOLD_PENDING partiallyOpen", printed.getvalue())
+            self.assertEqual(observed[0]["sequence"], 1)
+            self.assertEqual(observed[0]["state"], "partiallyOpen")
+            self.assertFalse((self.output / "pending.json").exists())
+            self.assertTrue(self.ledger()["valid_evidence"])
+            self.assertEqual(len(list(self.output.glob("*.png"))), 2)
+        finally:
+            thread.join(timeout=2)
+
+    @patch.object(audit.subprocess, "run")
+    @patch.object(audit.subprocess, "check_output")
+    def test_fold_without_capture_budget_fails_and_clears_pending(self, enumerate_mock, screenshot_mock):
+        with self.assertRaisesRegex(RuntimeError, "insufficient time"):
+            self.run_checkpoint(self.line("FOLD:openFlat", seconds=10))
+        self.assertFalse((self.output / "pending.json").exists())
+        self.assertFalse(self.ledger()["valid_evidence"])
+        enumerate_mock.assert_not_called()
+        screenshot_mock.assert_not_called()
+
+    @patch.object(audit.subprocess, "Popen")
+    def test_interruption_terminates_child_process(self, popen_mock):
+        class InterruptedOutput:
+            def __iter__(self):
+                raise KeyboardInterrupt
+
+        process = MagicMock()
+        process.stdout = InterruptedOutput()
+        popen_mock.return_value = process
+        with patch.object(audit.sys, "argv", ["duo-visual-audit.py", str(self.output),
+                                            "DEVICE", "all", "fake-runner"]):
+            with self.assertRaises(KeyboardInterrupt):
+                audit.main()
+        process.terminate.assert_called_once()
+        process.wait.assert_called_once()
+
+
+if __name__ == "__main__":
+    unittest.main()
