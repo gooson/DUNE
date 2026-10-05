@@ -43,16 +43,26 @@ class TestLogSummaryTests(unittest.TestCase):
         lines = ["noise\n"] * 10_000
         lines += [f"error: failure {number} {'x' * 500}\n" for number in range(30)]
         summary, _ = self.summarize("".join(lines), 1)
-        self.assertIn("Showing last 12 of 30 matching lines", summary)
-        self.assertNotIn("failure 0", summary)
+        self.assertIn("Showing first and up to 11 recent distinct lines of 30 matching lines", summary)
+        self.assertIn("failure 0", summary)
         self.assertIn("failure 29", summary)
         self.assertLess(len(summary), 5_000)
+
+    def test_repeated_failure_lines_are_deduplicated(self) -> None:
+        summary, _ = self.summarize("error: first\n" + "error: repeated\n" * 100, 1)
+        self.assertEqual(summary.count("error: first"), 1)
+        self.assertEqual(summary.count("error: repeated"), 1)
 
     def test_success_with_swift_testing_count(self) -> None:
         summary, _ = self.summarize("Test run with 5 tests passed after 1.2 seconds.\n", 0)
         self.assertIn("UI tests: passed", summary)
         self.assertIn("Last reported test count: 5", summary)
         self.assertNotIn("Failure details:", summary)
+
+    def test_xctest_skipped_count_is_reported(self) -> None:
+        summary, _ = self.summarize("Executed 3 tests, with 1 test skipped and 0 failures\n", 0)
+        self.assertIn("Last reported test count: 3", summary)
+        self.assertIn("Last reported skips: 1", summary)
 
     def test_mixed_framework_output_does_not_claim_total(self) -> None:
         summary, _ = self.summarize(

@@ -17,6 +17,7 @@ source "$ROOT_DIR/scripts/lib/regen-project.sh"
 source "$ROOT_DIR/scripts/lib/simulator-boot.sh"
 source "$ROOT_DIR/scripts/lib/simulator-worktree.sh"
 TEST_SUMMARY="$ROOT_DIR/scripts/lib/test-log-summary.py"
+TEST_VERIFY="$ROOT_DIR/scripts/lib/verify-ui-test-log.py"
 
 PROJECT_SPEC="DUNE/project.yml"
 PROJECT_FILE="DUNE/DUNE.xcodeproj"
@@ -108,6 +109,25 @@ resolve_test_plan() {
 }
 
 TEST_PLAN="$(resolve_test_plan "$TEST_PLAN")"
+
+for target in ${ONLY_TESTING[@]+"${ONLY_TESTING[@]}"} ${SKIP_TESTING[@]+"${SKIP_TESTING[@]}"}; do
+    if [[ ! "$target" =~ ^DUNEWatchUITests(/[A-Za-z_][A-Za-z_0-9]*){0,2}$ ]]; then
+        echo "Invalid watch UI test selector: $target" >&2
+        exit 2
+    fi
+done
+PLAN_FILE="DUNEWatchUITests/${TEST_PLAN}.xctestplan"
+if [[ ! -f "$PLAN_FILE" ]]; then
+    echo "Unknown watch UI test plan: $TEST_PLAN" >&2
+    exit 2
+fi
+if [[ "${#ONLY_TESTING[@]}" -gt 0 ]]; then
+    PLAN_CHECK=(python3 "$TEST_VERIFY" --check-plan "$PLAN_FILE" --target DUNEWatchUITests)
+    for target in "${ONLY_TESTING[@]}"; do
+        PLAN_CHECK+=(--only "$target")
+    done
+    "${PLAN_CHECK[@]}"
+fi
 
 mkdir -p "$LOG_DIR" "$DERIVED_DATA_DIR"
 regen_project
@@ -207,11 +227,21 @@ if [[ "${#SKIP_TESTING[@]}" -gt 0 ]]; then
     done
 fi
 
+RESULT_FILE="${LOG_FILE}.result.json"
+VERIFY_CMD=(python3 "$TEST_VERIFY" --log "$LOG_FILE" --target DUNEWatchUITests --result-json "$RESULT_FILE")
+for ((i=0; i<${#TEST_CMD[@]}; i++)); do
+    case "${TEST_CMD[i]}" in
+        -only-testing) VERIFY_CMD+=(--only "${TEST_CMD[i+1]}") ;;
+        -skip-testing) VERIFY_CMD+=(--skip "${TEST_CMD[i+1]}") ;;
+    esac
+done
+
 if [[ "$STREAM_LOGS" -eq 1 ]]; then
     echo "Streaming logs to console and $LOG_FILE"
 fi
 
 mkdir -p "$(dirname "$LOG_FILE")"
+rm -f "$RESULT_FILE"
 set +e
 if [[ "$STREAM_LOGS" -eq 1 ]]; then
     "${TEST_CMD[@]}" 2>&1 | tee "$LOG_FILE"
@@ -226,4 +256,8 @@ if ! python3 "$TEST_SUMMARY" "$LOG_FILE" "$TEST_EXIT" "Watch UI tests"; then
     echo "Watch UI tests: summary unavailable (xcodebuild exit ${TEST_EXIT})"
     echo "Full log: $LOG_FILE"
 fi
+"${VERIFY_CMD[@]}" --exit-status "$TEST_EXIT" || {
+    if [[ "$TEST_EXIT" -ne 0 ]]; then exit "$TEST_EXIT"; fi
+    exit 1
+}
 exit "$TEST_EXIT"
