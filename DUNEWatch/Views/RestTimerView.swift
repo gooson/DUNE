@@ -7,7 +7,6 @@ struct RestTimerView: View {
     let duration: TimeInterval
     let onComplete: (_ timerTotal: TimeInterval) -> Void
     let onSkip: (_ timerTotal: TimeInterval) -> Void
-    let onEnd: () -> Void
     /// Auto-estimated RPE for the just-completed set (nil = silent skip).
     var estimatedRPE: Double?
     /// Called only after a user confirms or adjusts RPE.
@@ -37,11 +36,12 @@ struct RestTimerView: View {
     @State private var showRPEInput = false
     @State private var hasConfirmedRPE = false
     @State private var pendingTimerCompletion = false
+    @State private var didFinish = false
 
     var body: some View {
         GeometryReader { geometry in
-            let ringSize = min(80, max(60, geometry.size.height * 0.38))
-            let spacing = min(DS.Spacing.xs, max(DS.Spacing.xxs, geometry.size.height * 0.02))
+            let ringSize = min(88, max(64, geometry.size.height * 0.40))
+            let spacing = min(DS.Spacing.sm, max(DS.Spacing.xs, geometry.size.height * 0.025))
 
             ViewThatFits(in: .vertical) {
                 timerContent(ringSize: ringSize, actionSpacing: spacing)
@@ -71,10 +71,17 @@ struct RestTimerView: View {
             if let estimatedRPE {
                 adjustedRPE = estimatedRPE
             }
-            startCountdown()
+            if targetDate == .distantFuture {
+                startCountdown()
+            } else if remainingSeconds == 0 {
+                timerFinished()
+            }
+        }
+        .onChange(of: workoutManager.isActive) { _, isActive in
+            if !isActive { cancelCountdown() }
         }
         .onDisappear {
-            cancelCountdown()
+            if !workoutManager.isActive { cancelCountdown() }
         }
     }
 
@@ -119,73 +126,67 @@ struct RestTimerView: View {
             }
             .frame(width: ringSize, height: ringSize)
 
-            if let estimatedRPE {
+            Button {
+                adjustedRPE = estimatedRPE ?? 8
+                showRPEInput = true
+            } label: {
                 HStack(spacing: DS.Spacing.xs) {
-                    if !hasConfirmedRPE {
-                        Text("Suggested")
-                            .font(.caption2)
-                            .foregroundStyle(.secondary)
-                    }
-                    Button {
-                        adjustedRPE = estimatedRPE
-                        showRPEInput = true
-                    } label: {
+                    Image(systemName: "pencil")
+                        .foregroundStyle(DS.Color.positive)
+                    if let estimatedRPE {
                         Text("RPE \(RPELevel.format(estimatedRPE))")
-                            .font(.caption.weight(.semibold).monospacedDigit())
+                            .monospacedDigit()
+                        if !hasConfirmedRPE {
+                            Text("Suggested")
+                                .foregroundStyle(.secondary)
+                        }
+                    } else {
+                        Text("Rate RPE")
                     }
-                    .buttonStyle(.bordered)
-                    .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.restTimerRPEBadge)
+                    Spacer(minLength: 0)
+                    Image(systemName: "chevron.right")
+                        .foregroundStyle(.secondary)
                 }
-            } else {
-                Button("Rate RPE") {
-                    adjustedRPE = 8
-                    showRPEInput = true
-                }
-                .font(.caption.weight(.semibold))
-                .buttonStyle(.bordered)
-                .accessibilityIdentifier("watch-rest-timer-rpe-rate")
+                .font(.caption2.weight(.semibold))
+                .frame(maxWidth: .infinity, minHeight: 44)
+                .padding(.horizontal, DS.Spacing.md)
+                .contentShape(Rectangle())
             }
+            .buttonStyle(.plain)
+            .background(DS.Color.positive.opacity(DS.Opacity.light), in: RoundedRectangle(cornerRadius: DS.Radius.md))
+            .accessibilityIdentifier(
+                estimatedRPE == nil
+                    ? "watch-rest-timer-rpe-rate"
+                    : WatchWorkoutSurfaceAccessibility.restTimerRPEBadge
+            )
 
-            // +30s / Skip / End buttons
-            HStack(spacing: actionSpacing) {
+            HStack(spacing: DS.Spacing.sm) {
                 Button {
                     addTime(30)
                 } label: {
                     Text("+30s")
-                        .font(.caption2.weight(.medium))
-                        .frame(minHeight: 32)
+                        .font(.caption.weight(.semibold))
+                        .frame(minWidth: 64, minHeight: 44)
                 }
                 .buttonStyle(.bordered)
                 .tint(.secondary)
-                .frame(maxWidth: .infinity)
+                .disabled(totalSeconds + 30 > Self.maxDurationSeconds)
                 .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.restTimerAddTimeButton)
 
                 Button {
+                    didFinish = true
                     let total = TimeInterval(totalSeconds)
                     cancelCountdown()
                     onSkip(total)
                 } label: {
                     Text("Skip")
                         .font(.caption.weight(.semibold))
-                        .frame(minHeight: 36)
+                        .frame(maxWidth: .infinity, minHeight: 44)
                 }
-                .buttonStyle(.bordered)
+                .buttonStyle(.borderedProminent)
                 .tint(DS.Color.positive)
                 .frame(maxWidth: .infinity)
                 .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.restTimerSkipButton)
-
-                Button(role: .destructive) {
-                    cancelCountdown()
-                    onEnd()
-                } label: {
-                    Text("End")
-                        .font(.caption2.weight(.medium))
-                        .frame(minHeight: 32)
-                }
-                .buttonStyle(.bordered)
-                .tint(DS.Color.negative)
-                .frame(maxWidth: .infinity)
-                .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.restTimerEndButton)
             }
         }
     }
@@ -272,10 +273,7 @@ struct RestTimerView: View {
         let secs = remainingSeconds
         let mins = secs / 60
         let remainder = secs % 60
-        if mins > 0 {
-            return String(format: "%d:%02d", mins, remainder)
-        }
-        return "\(secs)"
+        return String(format: "%d:%02d", mins, remainder)
     }
 
     // MARK: - Countdown
@@ -286,6 +284,7 @@ struct RestTimerView: View {
         targetDate = Date().addingTimeInterval(TimeInterval(total))
 
         didPlayWarning = false
+        didFinish = false
         countdownTask?.cancel()
         countdownTask = Task {
             while !Task.isCancelled {
@@ -325,11 +324,13 @@ struct RestTimerView: View {
     }
 
     private func timerFinished() {
+        guard !didFinish else { return }
         if showRPEInput {
             pendingTimerCompletion = true
             cancelCountdown()
             return
         }
+        didFinish = true
         let total = TimeInterval(totalSeconds)
         cancelCountdown()
         WKInterfaceDevice.current().play(.notification)

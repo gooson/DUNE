@@ -18,11 +18,9 @@ struct MetricsView: View {
     @State private var setTimerStart: TimeInterval?
     /// Auto-estimated RPE for the just-completed set (shown on rest timer).
     @State private var estimatedRPE: Double?
-    @State private var rpeWasAdjusted = false
     @State private var showInputSheet = false
     @State private var showRestTimer = false
     @State private var showNextExercise = false
-    @State private var showEndConfirmation = false
     @State private var showLastSetOptions = false
     @State private var showLastSetRPEInput = false
     @State private var pendingLastSetRPEInput = false
@@ -48,11 +46,9 @@ struct MetricsView: View {
                     duration: currentRestDuration,
                     onComplete: { total in handleRestComplete(timerTotal: total) },
                     onSkip: { total in handleRestComplete(timerTotal: total) },
-                    onEnd: { showEndConfirmation = true },
                     estimatedRPE: estimatedRPE,
                     onRPEAdjusted: { adjusted in
                         estimatedRPE = adjusted
-                        rpeWasAdjusted = true
                         workoutManager.recordSetRPE(adjusted, source: "user")
                     }
                 )
@@ -65,7 +61,6 @@ struct MetricsView: View {
         .onChange(of: workoutManager.currentExerciseIndex) { _, _ in
             lastRestTimerTotal = nil
             estimatedRPE = nil
-            rpeWasAdjusted = false
             sessionWeightOverride = nil
             nextSetReductionKg = nil
             prefillFromEntry()
@@ -111,25 +106,6 @@ struct MetricsView: View {
             showLastSetOptions = true
         }) {
             lastSetRPESheet
-        }
-        .confirmationDialog(
-            "End Workout?",
-            isPresented: $showEndConfirmation,
-            titleVisibility: .visible
-        ) {
-            Button("End Workout") {
-                flushEstimatedRPE()
-                showRestTimer = false
-                showNextExercise = false
-                workoutManager.end()
-            }
-            Button("Cancel", role: .cancel) {}
-        } message: {
-            if workoutManager.completedSetsData.flatMap({ $0 }).isEmpty {
-                Text("No sets recorded. End without saving?")
-            } else {
-                Text("Save and finish this workout?")
-            }
         }
         // Last set options: +1 Set or Finish Exercise
         .confirmationDialog(
@@ -186,7 +162,6 @@ struct MetricsView: View {
 
             Button("Confirm RPE") {
                 estimatedRPE = lastSetRPEInput
-                rpeWasAdjusted = true
                 workoutManager.recordSetRPE(lastSetRPEInput, source: "user")
                 showLastSetRPEInput = false
             }
@@ -204,9 +179,6 @@ struct MetricsView: View {
     /// ScrollView in a non-last vertical page tab cannot receive crown events.
     private var setEntryView: some View {
         VStack(spacing: DS.Spacing.md) {
-            // Progress bar
-            sessionProgressBar
-
             // Exercise name (large)
             exerciseHeader
 
@@ -221,26 +193,6 @@ struct MetricsView: View {
         }
         .padding(.horizontal, DS.Spacing.md)
         .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionMetricsScreen)
-    }
-
-    // MARK: - Progress
-
-    private var sessionProgressBar: some View {
-        GeometryReader { geo in
-            let total = workoutManager.totalExercises
-            let progress = total > 0 ? Double(workoutManager.currentExerciseIndex) / Double(total) : 0
-
-            RoundedRectangle(cornerRadius: DS.Radius.xs)
-                .fill(.tertiary)
-                .frame(height: 3)
-                .overlay(alignment: .leading) {
-                    RoundedRectangle(cornerRadius: DS.Radius.xs)
-                        .fill(DS.Color.positive)
-                        .frame(width: geo.size.width * progress, height: 3)
-                }
-        }
-        .frame(height: 3)
-        .padding(.bottom, DS.Spacing.xxs)
     }
 
     // MARK: - Header
@@ -258,29 +210,7 @@ struct MetricsView: View {
                     .font(DS.Typography.tileSubtitle)
                     .foregroundStyle(.secondary)
 
-                // Set progress dots
-                HStack(spacing: DS.Spacing.xs) {
-                    ForEach(0..<workoutManager.effectiveTotalSets, id: \.self) { i in
-                        Circle()
-                            .fill(dotColor(for: i))
-                            .frame(width: DS.Spacing.md, height: DS.Spacing.md)
-                    }
-                }
             }
-        }
-    }
-
-    private func dotColor(for setIndex: Int) -> Color {
-        let completedCount = workoutManager.completedSetsData.indices.contains(workoutManager.currentExerciseIndex)
-            ? workoutManager.completedSetsData[workoutManager.currentExerciseIndex].count
-            : 0
-
-        if setIndex < completedCount {
-            return DS.Color.positive
-        } else if setIndex == workoutManager.currentSetIndex {
-            return DS.Color.positive.opacity(0.4)
-        } else {
-            return .secondary.opacity(0.3)
         }
     }
 
@@ -588,7 +518,9 @@ struct MetricsView: View {
 
         // Auto-estimate RPE for the just-completed set
         estimatedRPE = WatchRPEEstimator.estimateRPE(weight: recordedWeight ?? 0, reps: reps, completedSets: priorSets)
-        rpeWasAdjusted = false
+        if let estimatedRPE {
+            workoutManager.recordSetRPE(estimatedRPE, source: "estimated")
+        }
 
         // Haptic on set completion
         WKInterfaceDevice.current().play(.success)
@@ -611,7 +543,6 @@ struct MetricsView: View {
         setTimerStart = nil
 
         estimatedRPE = nil
-        rpeWasAdjusted = false
 
         WKInterfaceDevice.current().play(.success)
 
@@ -622,17 +553,12 @@ struct MetricsView: View {
         }
     }
 
-    /// Flush any pending estimated RPE to the last completed set.
-    private func flushEstimatedRPE() {
-        if let rpe = estimatedRPE {
-            workoutManager.recordSetRPE(rpe, source: rpeWasAdjusted ? "user" : "estimated")
-        }
+    private func clearEstimatedRPE() {
         estimatedRPE = nil
-        rpeWasAdjusted = false
     }
 
     private func finishCurrentExercise() {
-        flushEstimatedRPE()
+        clearEstimatedRPE()
         // Advance to next non-skipped exercise for the transition to display
         workoutManager.advanceToNextExercise()
         if workoutManager.isAllExercisesDone {
@@ -645,7 +571,7 @@ struct MetricsView: View {
     }
 
     private func addExtraSet() {
-        flushEstimatedRPE()
+        clearEstimatedRPE()
         workoutManager.addExtraSet()
         WKInterfaceDevice.current().play(.start)
         showRestTimer = true
@@ -656,7 +582,7 @@ struct MetricsView: View {
         lastRestTimerTotal = timerTotal
 
         // Save estimated/adjusted RPE to the just-completed set before advancing
-        flushEstimatedRPE()
+        clearEstimatedRPE()
 
         showRestTimer = false
         workoutManager.advanceToNextSet()
