@@ -16,6 +16,15 @@ on:
       - 'scripts/tests/test_plan_ui_tests.py'
       - 'scripts/tests/test_ui_test_runner.py'
       - 'scripts/test-watch-ui.sh'
+      - 'scripts/lib/test-log-summary.py'
+      - 'scripts/tests/test_test_log_summary.py'
+      - 'scripts/codex-context.py'
+      - 'scripts/codex-pipeline.py'
+      - 'scripts/codex-check.py'
+      - 'scripts/check-codex-claude-parity.py'
+      - 'scripts/tests/test_codex_context.py'
+      - 'scripts/tests/test_codex_pipeline.py'
+      - 'scripts/tests/test-codex-check.py'
       - 'scripts/lib/regen-project.sh'
       - 'scripts/lib/simulator-boot.sh'
       - 'scripts/lib/simulator-worktree.sh'
@@ -59,7 +68,13 @@ jobs:
         run: |
           python3 -B -m unittest discover -s scripts/tests -p test_plan_ui_tests.py -v
           python3 -B -m unittest discover -s scripts/tests -p test_ui_test_runner.py -v
+          for pattern in test_test_log_summary.py test_codex_context.py test_codex_pipeline.py; do
+            python3 -B -m unittest discover -s scripts/tests -p "$pattern"
+          done
+          python3 -B scripts/tests/test-codex-check.py
+          python3 scripts/check-codex-claude-parity.py
           bash -n scripts/test-ui.sh
+          bash -n scripts/test-watch-ui.sh
 
   ios-ui-tests:
     needs: ui-gate-contracts

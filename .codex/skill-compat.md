@@ -30,6 +30,7 @@ Claude skill 문서를 그대로 유지하면서 Codex에서 실행 semantics를
 - 해당 phase의 skill은 처음 진입할 때 한 번 읽고, 내용이 바뀌었거나 컨텍스트에서 사라졌을 때만 다시 읽는다. source의 필수 절차는 유지하되 동일 절차를 parent/child가 반복 서술하지 않는다.
 - 필수 프로젝트 문서/규칙은 유지한다. 선택적 reference, memory, 과거 solution은 검색으로 관련 부분만 읽으며 모든 skill/agent 문서를 일괄 로드하지 않는다.
 - 테스트 실행, 결과 재사용, 비용 측정이 필요할 때만 `.codex/token-efficiency.md`를 읽는다.
+- 여러 reviewer/phase가 변경 정보를 공유할 때 `python3 scripts/codex-context.py snapshot --base <실제-base>`로 한 번 저장하고 반환된 디렉터리를 전달한다. `manifest.json`과 담당 patch 구간만 읽는다. 재사용 전 `python3 scripts/codex-context.py check <디렉터리>`로 최신성을 확인한다. untracked/binary 본문과 관련 호출부는 별도로 확인하며, snapshot은 리뷰·테스트 통과 증거가 아니다. 이 수집 작업 자체에는 agent를 생성하지 않는다.
 
 ### 재시도와 범위 확장 제한
 
@@ -51,6 +52,8 @@ Claude skill 문서를 그대로 유지하면서 Codex에서 실행 semantics를
 - review/quality 단계는 공통 위임 정책과 agent-map을 따른다. 각 필수 관점의 판단/결과는 유지한다.
 - Work의 테스트와 Quality 결과를 뒤 phase에서 다시 사용할 때는 `.codex/token-efficiency.md`의 증거 일치 조건을 확인한다. 유효한 동일 검증은 재실행 대신 evidence 경로를 기록한다. 이는 phase 생략이 아니며, 변경/누락된 검증은 실행한다.
 - `/run` 안의 `/work`는 구현/QC까지만 담당하고 Compound/Ship는 parent가 한 번 수행한다. UI 최종 범위는 아래 변경 범위 기반 UI 게이트로 결정한다. full로 판정된 검증은 smoke로 대체하지 않는다.
+- `/run` parent가 검증/리뷰 관점별 실행 담당을 한 번 배정한다. Work에서 완료한 전문 검토는 Phase 3.5에서 증거·대상·환경의 유효성을 확인해 재사용하고, 이후 변경으로 영향을 받는 관점만 다시 수행한다. Phase 3.5의 적용 여부 판단과 결과 보고는 유지하며, standalone `/work`의 검증 의무는 바꾸지 않는다.
+- phase 상태·증거·문서 확인 이력은 `scripts/codex-pipeline.py`로 기록/검사한다(사용법은 `.codex/token-efficiency.md`). 기록의 존재만으로 완료를 선언하지 않는다. 원문과 adapter를 이번 실행에 적용한 판단은 parent가 유지하며, 문서 hash 확인은 원문 읽기/이해의 대체가 아니다. tool의 compact report를 바탕으로 필수 시작/완료 안내와 최종 증빙을 집계하고 같은 로그/절차를 반복 서술하지 않는다.
 - Ship 단계는 auth/network/remote 조건이 충족될 때만 실제 `gh` 작업을 수행한다. 막히면 manual recovery를 출력한다.
 
 #### 변경 범위 기반 UI 게이트
@@ -63,6 +66,7 @@ Claude skill 문서를 그대로 유지하면서 Codex에서 실행 semantics를
    - 문서/지침 Markdown만 변경: UI `skipped`, 경로와 근거 기록. 앱 리소스 안의 Markdown은 면제하지 않는다.
    - unit test Swift 파일만 변경: 관련 unit 검증, UI `skipped`.
    - UI 게이트 판정기/CLI 선택/로그 검증 및 해당 계약 테스트만 변경: Python 계약 테스트, shell 구문, dry-run argv와 diff 리뷰로 검증하고 앱 UI는 `skipped`. 도구 수정 자체를 이유로 전체 UI나 공통 smoke를 실행하지 않는다. 판정기의 정확한 tooling 경로 목록은 검증 의무를 표시하며, 실행/설치/seed/기기 선택/CI 실행 환경 변경이 포함되면 영향을 받는 통합 검증으로 상향한다.
+   - Codex snapshot/receipt/pipeline/parity 도구와 정확히 매핑된 계약 테스트만 변경: 해당 Python 계약·parity 검증과 diff 리뷰를 수행한다. watch 실행기의 로그/결과 검증만 변경한 경우도 tooling 검증 대상이다. 파일 경로 면제는 잠정 분류이며 실행 명령·설치·seed·기기·CI 변경이 없는지 확인해야 한다. 미매핑 script는 기존 full fallback을 유지한다.
    - 매핑된 feature 화면/ViewModel: 관련 UI suite + 공통 smoke 합집합. `test-ui.sh --smoke --only-testing DUNEUITests/ClassName`를 사용한다. CLI는 디렉터리명이 아닌 실제 class/method selector를 받는다.
    - App/Domain/Data/Shared, 내비게이션/전역 테마/저장/프로젝트 설정, 공유 test helper 또는 미매핑 변경: 영향 플랫폼 full. watch는 별도 runner로 검증한다. 공유 소스/플랫폼이 불명확하면 iOS/watch 모두 full로 올리고 widget/visionOS 등 추가 타깃도 확인한다.
    - 화면 영향이 없는 순수 계산 로직: 자동 면제하지 않는다. 호출부 분석으로 UI/저장/공유 소비자에 영향이 없음을 증명하고 관련 단위 테스트 통과를 기록한 경우에만 UI `skipped` 판단 가능하다. 근거가 부족하면 full 유지.
