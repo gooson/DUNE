@@ -14,6 +14,7 @@ struct TemplateFormView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @Environment(\.appTheme) private var theme
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     let mode: TemplateFormMode
 
@@ -212,76 +213,122 @@ struct TemplateFormView: View {
     private func strengthDefaultsEditor(entry: Binding<TemplateEntry>) -> some View {
         let inputType = entry.wrappedValue.inputTypeRaw.flatMap(ExerciseInputType.init(rawValue:))
         return VStack(alignment: .leading, spacing: DS.Spacing.xs) {
-            HStack(spacing: DS.Spacing.md) {
-                HStack(spacing: DS.Spacing.xs) {
-                    Text("Sets")
-                        .font(.caption)
-                        .foregroundStyle(DS.Color.textSecondary)
-                    Stepper(
-                        "\(entry.wrappedValue.defaultSets)",
-                        value: entry.defaultSets,
-                        in: 1...20
-                    )
-                    .labelsHidden()
-                    Text("\(entry.wrappedValue.defaultSets)")
-                        .font(.caption.weight(.medium).monospacedDigit())
-                        .frame(width: 20)
-                }
-
-                HStack(spacing: DS.Spacing.xs) {
-                    Text("Reps")
-                        .font(.caption)
-                        .foregroundStyle(DS.Color.textSecondary)
-                    Stepper(
-                        "\(entry.wrappedValue.defaultReps)",
-                        value: entry.defaultReps,
-                        in: 1...100
-                    )
-                    .labelsHidden()
-                    Text("\(entry.wrappedValue.defaultReps)")
-                        .font(.caption.weight(.medium).monospacedDigit())
-                        .frame(width: 24)
+            Group {
+                if dynamicTypeSize.isAccessibilitySize {
+                    VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                        setsControl(entry: entry)
+                        repsControl(entry: entry)
+                    }
+                } else {
+                    HStack(spacing: DS.Spacing.md) {
+                        setsControl(entry: entry)
+                        repsControl(entry: entry)
+                    }
                 }
             }
 
-            HStack(spacing: DS.Spacing.md) {
-                if inputType == .setsRepsWeight || inputType == .setsReps || inputType == nil {
-                    HStack(spacing: DS.Spacing.xs) {
-                        Text(inputType == .setsReps ? String(localized: "Added Weight") : String(localized: "Weight"))
-                            .font(.caption)
-                            .foregroundStyle(DS.Color.textSecondary)
-                        TextField(
-                            "—",
-                            value: entry.defaultWeightKg,
-                            format: .number.precision(.fractionLength(0...1))
-                        )
-                        .keyboardType(.decimalPad)
-                        .frame(width: 56)
-                        .multilineTextAlignment(.trailing)
-                        .textFieldStyle(.roundedBorder)
-                        Text("kg")
-                            .font(.caption)
-                            .foregroundStyle(DS.Color.textSecondary)
+            Group {
+                if dynamicTypeSize.isAccessibilitySize {
+                    VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                        if inputType == .setsRepsWeight || inputType == .setsReps || inputType == nil {
+                            weightControl(entry: entry, inputType: inputType)
+                        }
+                        restControl(entry: entry)
                     }
-                }
-                Spacer()
-
-                HStack(spacing: DS.Spacing.xs) {
-                    Text("Rest")
-                        .font(.caption)
-                        .foregroundStyle(DS.Color.textSecondary)
-                    Picker("", selection: restDurationBinding(for: entry)) {
-                        Text("Default").tag(nil as TimeInterval?)
-                        Text("30s").tag(30.0 as TimeInterval?)
-                        Text("60s").tag(60.0 as TimeInterval?)
-                        Text("90s").tag(90.0 as TimeInterval?)
-                        Text("2m").tag(120.0 as TimeInterval?)
-                        Text("3m").tag(180.0 as TimeInterval?)
+                } else {
+                    HStack(spacing: DS.Spacing.md) {
+                        if inputType == .setsRepsWeight || inputType == .setsReps || inputType == nil {
+                            weightControl(entry: entry, inputType: inputType)
+                        }
+                        Spacer()
+                        restControl(entry: entry)
                     }
-                    .pickerStyle(.menu)
-                    .labelsHidden()
                 }
             }
+        }
+    }
+
+    private func setsControl(entry: Binding<TemplateEntry>) -> some View {
+        HStack(spacing: DS.Spacing.xs) {
+            Text("Sets")
+                .font(.caption)
+                .foregroundStyle(DS.Color.textSecondary)
+            Stepper(
+                "\(entry.wrappedValue.defaultSets)",
+                value: entry.defaultSets,
+                in: 1...20
+            )
+            .labelsHidden()
+            .accessibilityIdentifier("template-entry-\(entry.wrappedValue.id)-sets")
+            Text("\(entry.wrappedValue.defaultSets)")
+                .font(.caption.weight(.medium).monospacedDigit())
+                .frame(width: dynamicTypeSize.isAccessibilitySize ? nil : 20)
+        }
+    }
+
+    private func repsControl(entry: Binding<TemplateEntry>) -> some View {
+        HStack(spacing: DS.Spacing.xs) {
+            Text("Reps")
+                .font(.caption)
+                .foregroundStyle(DS.Color.textSecondary)
+            Stepper(
+                "\(entry.wrappedValue.defaultReps)",
+                value: entry.defaultReps,
+                in: 1...100
+            )
+            .labelsHidden()
+            .accessibilityIdentifier("template-entry-\(entry.wrappedValue.id)-reps")
+            Text("\(entry.wrappedValue.defaultReps)")
+                .font(.caption.weight(.medium).monospacedDigit())
+                .frame(width: dynamicTypeSize.isAccessibilitySize ? nil : 24)
+        }
+    }
+
+    private func weightControl(
+        entry: Binding<TemplateEntry>,
+        inputType: ExerciseInputType?
+    ) -> some View {
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.xs))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.xs))
+        return layout {
+            Text(inputType == .setsReps ? String(localized: "Added Weight") : String(localized: "Weight"))
+                .font(.caption)
+                .foregroundStyle(DS.Color.textSecondary)
+            HStack(spacing: DS.Spacing.xs) {
+                TextField(
+                    "—",
+                    value: entry.defaultWeightKg,
+                    format: .number.precision(.fractionLength(0...1))
+                )
+                .keyboardType(.decimalPad)
+                .frame(width: dynamicTypeSize.isAccessibilitySize ? nil : 56)
+                .multilineTextAlignment(.trailing)
+                .textFieldStyle(.roundedBorder)
+                .accessibilityIdentifier("template-entry-\(entry.wrappedValue.id)-weight")
+                Text("kg")
+                    .font(.caption)
+                    .foregroundStyle(DS.Color.textSecondary)
+            }
+        }
+    }
+
+    private func restControl(entry: Binding<TemplateEntry>) -> some View {
+        HStack(spacing: DS.Spacing.xs) {
+            Text("Rest")
+                .font(.caption)
+                .foregroundStyle(DS.Color.textSecondary)
+            Picker("Rest", selection: restDurationBinding(for: entry)) {
+                Text("Default").tag(nil as TimeInterval?)
+                Text("30s").tag(30.0 as TimeInterval?)
+                Text("60s").tag(60.0 as TimeInterval?)
+                Text("90s").tag(90.0 as TimeInterval?)
+                Text("2m").tag(120.0 as TimeInterval?)
+                Text("3m").tag(180.0 as TimeInterval?)
+            }
+            .pickerStyle(.menu)
+            .labelsHidden()
+            .accessibilityIdentifier("template-entry-\(entry.wrappedValue.id)-rest")
         }
     }
 
