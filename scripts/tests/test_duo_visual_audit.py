@@ -129,6 +129,13 @@ class CaptureContracts(unittest.TestCase):
                     pending = json.loads(pending_path.read_text())
                     observed.append(pending)
                     Path(pending["release_file"]).touch()
+                    break
+                time.sleep(0.01)
+            refresh = self.ack.with_suffix(".ack.refresh")
+            for _ in range(100):
+                if refresh.exists():
+                    self.ack.with_suffix(".ack.txt").write_text("postfold hierarchy")
+                    self.ack.with_suffix(".ack.ready").touch()
                     return
                 time.sleep(0.01)
 
@@ -143,6 +150,9 @@ class CaptureContracts(unittest.TestCase):
             self.assertFalse((self.output / "pending.json").exists())
             self.assertTrue(self.ledger()["valid_evidence"])
             self.assertEqual(len(list(self.output.glob("*.png"))), 2)
+            self.assertEqual((self.output / "001-hierarchy.txt").read_text(), "postfold hierarchy")
+            self.assertFalse(self.ack.with_suffix(".ack.refresh").exists())
+            self.assertFalse(self.ack.with_suffix(".ack.ready").exists())
         finally:
             thread.join(timeout=2)
 
@@ -155,6 +165,36 @@ class CaptureContracts(unittest.TestCase):
         self.assertFalse(self.ledger()["valid_evidence"])
         enumerate_mock.assert_not_called()
         screenshot_mock.assert_not_called()
+
+    @patch.object(audit.subprocess, "run")
+    @patch.object(audit.subprocess, "check_output")
+    def test_fold_refresh_timeout_has_invalid_ledger_and_no_ack(self, enumerate_mock, screenshot_mock):
+        def release():
+            pending_path = self.output / "pending.json"
+            for _ in range(100):
+                if pending_path.exists():
+                    pending = json.loads(pending_path.read_text())
+                    Path(pending["release_file"]).touch()
+                    return
+                time.sleep(0.01)
+
+        thread = threading.Thread(target=release)
+        thread.start()
+        original_refresh = audit.refresh_fold_hierarchy
+        try:
+            with patch.object(audit, "refresh_fold_hierarchy",
+                              side_effect=lambda ack, deadline: original_refresh(ack, deadline, timeout=0.05)):
+                with patch("sys.stdout", new_callable=io.StringIO):
+                    with self.assertRaisesRegex(RuntimeError, "refresh timed out"):
+                        self.run_checkpoint(self.line("FOLD:openFlat", seconds=120))
+            self.assertFalse(self.ack.exists())
+            self.assertFalse(self.ack.with_suffix(".ack.refresh").exists())
+            self.assertFalse(self.ack.with_suffix(".ack.ready").exists())
+            self.assertFalse(self.ledger()["valid_evidence"])
+            enumerate_mock.assert_not_called()
+            screenshot_mock.assert_not_called()
+        finally:
+            thread.join(timeout=2)
 
     @patch.object(audit.subprocess, "Popen")
     def test_interruption_terminates_child_process(self, popen_mock):
@@ -171,6 +211,14 @@ class CaptureContracts(unittest.TestCase):
                 audit.main()
         process.terminate.assert_called_once()
         process.wait.assert_called_once()
+
+
+class DiagnosticOutputTests(unittest.TestCase):
+    def test_error_selector_stack_frames_do_not_flood_output(self):
+        self.assertFalse(audit.should_report_line("7 -[IDEScheme operation:outError:error:] (in IDEFoundation)"))
+        self.assertFalse(audit.should_report_line("note: compiling views"))
+        for diagnostic in ["error: build failed", "/tmp/App.swift:42:12: error: invalid member", "Test Case 'case' passed", "** TEST FAILED **", "Executed 2 tests, with 0 failures"]:
+            self.assertTrue(audit.should_report_line(diagnostic), diagnostic)
 
 
 if __name__ == "__main__":

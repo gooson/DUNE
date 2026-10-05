@@ -5,6 +5,7 @@ Usage: duo-visual-audit.py OUTPUT DEVICE_UUID all|WIDTHxHEIGHT|DISPLAY_UUID scri
 Set DEVELOPER_DIR explicitly. The test plan must opt into DUNE_VISUAL_AUDIT and
 DUNE_VISUAL_AUDIT_HOST_ONLY. `FOLD:<state>` checkpoints print FOLD_PENDING and
 pause until the operator changes Device Hub state and creates the release file.
+The host then requests a fresh XCTest hierarchy before capturing both displays.
 """
 from pathlib import Path
 import json
@@ -71,7 +72,8 @@ def fold_state(action):
 def wait_for_fold_release(output, sequence, state, test_deadline):
     release = output / f"fold-release-{sequence:03}.signal"
     release.unlink(missing_ok=True)  # A reused output directory cannot release this run.
-    release_deadline = min(time.time() + 90, test_deadline - 27)
+    # Preserve time for the hierarchy refresh and both display screenshots.
+    release_deadline = min(time.time() + 80, test_deadline - 37)
     if release_deadline <= time.time():
         raise RuntimeError("Fold checkpoint has insufficient time to capture after release")
     pending = {"sequence": sequence, "state": state, "release_file": str(release),
@@ -91,6 +93,23 @@ def wait_for_fold_release(output, sequence, state, test_deadline):
         (output / "pending.json").unlink(missing_ok=True)
 
 
+def refresh_fold_hierarchy(acknowledgement, test_deadline, timeout=8):
+    refresh = acknowledgement.with_suffix(".ack.refresh")
+    ready = acknowledgement.with_suffix(".ack.ready")
+    ready.unlink(missing_ok=True)  # Never accept a stale response.
+    refresh.touch()
+    refresh_deadline = min(time.time() + timeout, test_deadline - 27)
+    try:
+        while time.time() < refresh_deadline:
+            if ready.is_file():
+                return
+            time.sleep(0.05)
+        raise RuntimeError("Fold hierarchy refresh timed out before capture")
+    finally:
+        refresh.unlink(missing_ok=True)
+        ready.unlink(missing_ok=True)
+
+
 def capture_checkpoint(line, sequence, output, device, requested_display,
                        container_root, captures, checkpoints):
     started = time.monotonic()
@@ -108,6 +127,7 @@ def capture_checkpoint(line, sequence, output, device, requested_display,
         state = fold_state(action.removeprefix("DUNE_VISUAL_AUDIT_READY "))
         if state:
             wait_for_fold_release(output, sequence, state, test_deadline)
+            refresh_fold_hierarchy(acknowledgement, test_deadline)
         remaining = test_deadline - time.time() - 2
         if remaining <= 0:
             raise RuntimeError("Checkpoint expired before capture; discard its screenshots")
@@ -160,6 +180,12 @@ def capture_checkpoint(line, sequence, output, device, requested_display,
         checkpoints.flush()
 
 
+def should_report_line(line):
+    # Stack traces contain Objective-C selector fragments such as `error:`;
+    # report diagnostics rather than flooding the conversation with those frames.
+    return bool(re.search(r"^error:|:\d+(?::\d+)?: error:|^Test Case |^\*\* TEST|^Executed ", line))
+
+
 def main():
     if len(sys.argv) < 5:
         raise SystemExit(__doc__)
@@ -178,7 +204,7 @@ def main():
                 log.write(line)
                 log.flush()
                 if "DUNE_VISUAL_AUDIT_READY " not in line:
-                    if any(marker in line for marker in ("error:", "Test Case ", "** TEST", "Executed ")):
+                    if should_report_line(line):
                         print(line.strip(), flush=True)
                     continue
                 sequence += 1
