@@ -139,6 +139,8 @@ untracked 파일은 경로만 제공한다. binary 본문과 untracked 내용은
 - 출력량을 줄이기 위해 필수 검증이나 관련 호출부 확인을 생략하지 않는다.
 - 앱 변경이 없는 이 도구 작업에는 Python 계약 테스트와 parity 검증을 사용한다.
 - UI 테스트는 대기 시간과 모델 호출·로그 입력량을 별도로 측정한다. 개선 효과를 측정하려고 전체 UI 파이프라인을 추가 실행하지 않는다.
+- PR #783에서 로컬 UI gate는 skipped였지만 `build-ios.yml`의 `scripts/**` trigger 때문에 원격 앱 빌드가 실행됐다. 후속 수정에서 Build iOS/Unit Tests의 포괄적인 script trigger를 제거하고 앱·공유 소스 및 실제 빌드/테스트 실행 의존 스크립트만 지정했다. 로그 요약/Codex 도구는 Python 계약으로 검증한다.
+- workflow 파일만 바뀐 경우 정적 검증을 수행하고 앱 빌드를 자동 실행하지 않는다. 실행 환경 자체를 바꾸어 통합 검증이 필요한 경우에는 추가한 `workflow_dispatch`를 명시적으로 사용한다. `DUNEWatch`, `DUNEWidget`, `Shared`는 실제 앱 의존성이므로 앱 검증 trigger에 포함한다.
 
 ## Verification
 
