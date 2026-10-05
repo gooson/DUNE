@@ -87,79 +87,99 @@ struct WorkoutPreviewView: View {
         let cardioUnit = resolvedCardioSecondaryUnit ?? fallbackCardioSecondaryUnit(for: activityType)
         let supportsOutdoor = cardioUnit?.usesDistanceField == true && cardioUnit?.isIndoorOnly != true
 
-        return ScrollView {
-            VStack(spacing: DS.Spacing.lg) {
-                Image(systemName: activityType.iconName)
-                    .font(.system(size: 40))
-                    .foregroundStyle(DS.Color.activity)
-                    .padding(.top, DS.Spacing.lg)
+        return GeometryReader { geometry in
+            let spacing = min(DS.Spacing.md, max(DS.Spacing.xs, geometry.size.height * 0.025))
+            let iconSize = min(32, max(20, geometry.size.height * 0.14))
 
-                Text(LocalizedStringKey(activityType.typeName))
-                    .font(DS.Typography.exerciseName)
+            VStack(spacing: spacing) {
+                ScrollView {
+                    HStack(spacing: spacing) {
+                        Image(systemName: activityType.iconName)
+                            .font(.system(size: iconSize))
+                            .foregroundStyle(DS.Color.activity)
+
+                        Text(LocalizedStringKey(activityType.typeName))
+                            .font(DS.Typography.exerciseName)
+                            .multilineTextAlignment(.leading)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.horizontal, DS.Spacing.lg)
+                }
+                .scrollBounceBehavior(.basedOnSize)
 
                 if let cardioUnit, cardioUnit.supportsMachineLevel,
                    let range = cardioUnit.machineLevelRange {
                     machineLevelPicker(range: range)
+                        .padding(.horizontal, DS.Spacing.lg)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
 
-                if supportsOutdoor {
-                    Button {
-                        startCardio(
-                            activityType: activityType,
-                            isOutdoor: false,
-                            secondaryUnit: cardioUnit
-                        )
-                    } label: {
-                        Label(String(localized: "Indoor"), systemImage: "building.fill")
-                            .frame(maxWidth: .infinity, minHeight: 44)
+                VStack(spacing: DS.Spacing.xs) {
+                    if supportsOutdoor {
+                        Button {
+                            startCardio(
+                                activityType: activityType,
+                                isOutdoor: false,
+                                secondaryUnit: cardioUnit
+                            )
+                        } label: {
+                            cardioButtonLabel(String(localized: "Indoor"), systemImage: "building.fill")
+                        }
+                        .buttonStyle(.bordered)
+                        .disabled(isStarting)
+                        .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.workoutPreviewCardioIndoorButton)
+                    } else {
+                        Button {
+                            startCardio(
+                                activityType: activityType,
+                                isOutdoor: false,
+                                secondaryUnit: cardioUnit
+                            )
+                        } label: {
+                            cardioButtonLabel(String(localized: "Indoor"), systemImage: "building.fill")
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .tint(DS.Color.activity)
+                        .disabled(isStarting)
+                        .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.workoutPreviewCardioIndoorButton)
                     }
-                    .buttonStyle(.bordered)
-                    .disabled(isStarting)
-                    .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.workoutPreviewCardioIndoorButton)
-                } else {
-                    Button {
-                        startCardio(
-                            activityType: activityType,
-                            isOutdoor: false,
-                            secondaryUnit: cardioUnit
-                        )
-                    } label: {
-                        Label(String(localized: "Indoor"), systemImage: "building.fill")
-                            .frame(maxWidth: .infinity, minHeight: 44)
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .tint(DS.Color.activity)
-                    .disabled(isStarting)
-                    .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.workoutPreviewCardioIndoorButton)
-                }
 
-                if supportsOutdoor {
-                    Button {
-                        startCardio(
-                            activityType: activityType,
-                            isOutdoor: true,
-                            secondaryUnit: cardioUnit
-                        )
-                    } label: {
-                        Label(String(localized: "Outdoor"), systemImage: "sun.max.fill")
-                            .frame(maxWidth: .infinity, minHeight: 44)
+                    if supportsOutdoor {
+                        Button {
+                            startCardio(
+                                activityType: activityType,
+                                isOutdoor: true,
+                                secondaryUnit: cardioUnit
+                            )
+                        } label: {
+                            Label(String(localized: "Outdoor"), systemImage: "sun.max.fill")
+                                .frame(maxWidth: .infinity, minHeight: 44)
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .tint(DS.Color.positive)
+                        .disabled(isStarting)
+                        .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.workoutPreviewCardioOutdoorButton)
                     }
-                    .buttonStyle(.borderedProminent)
-                    .tint(DS.Color.positive)
-                    .disabled(isStarting)
-                    .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.workoutPreviewCardioOutdoorButton)
                 }
-
-                if isStarting {
-                    ProgressView()
-                        .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.workoutPreviewStarting)
-                        .padding(.top, DS.Spacing.sm)
-                }
+                .padding(.horizontal, DS.Spacing.lg)
+                .fixedSize(horizontal: false, vertical: true)
             }
-            .padding(.horizontal, DS.Spacing.lg)
         }
-        .scrollBounceBehavior(.basedOnSize)
         .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.workoutPreviewCardio)
+    }
+
+    private func cardioButtonLabel(_ title: String, systemImage: String) -> some View {
+        HStack {
+            if isStarting {
+                ProgressView()
+                    .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.workoutPreviewStarting)
+            } else {
+                Image(systemName: systemImage)
+            }
+            Text(title)
+        }
+        .frame(maxWidth: .infinity, minHeight: 44)
     }
 
     private func startCardio(
@@ -209,12 +229,7 @@ struct WorkoutPreviewView: View {
     // MARK: - Machine Level Picker
 
     private func machineLevelPicker(range: ClosedRange<Int>) -> some View {
-        VStack(spacing: DS.Spacing.xs) {
-            Text("Level")
-                .font(DS.Typography.metricLabel)
-                .foregroundStyle(.secondary)
-
-            HStack(spacing: DS.Spacing.lg) {
+        HStack(spacing: DS.Spacing.sm) {
                 Button {
                     if selectedLevel > range.lowerBound {
                         selectedLevel -= 1
@@ -226,12 +241,20 @@ struct WorkoutPreviewView: View {
                 }
                 .buttonStyle(.bordered)
                 .disabled(selectedLevel <= range.lowerBound)
+                .accessibilityIdentifier("watch-workout-preview-level-decrease")
 
-                Text("\(selectedLevel)")
-                    .font(DS.Typography.secondaryMetric)
-                    .foregroundStyle(DS.Color.activity)
-                    .contentTransition(.numericText())
-                    .frame(minWidth: 36)
+                VStack(spacing: 0) {
+                    Text("Level")
+                        .font(DS.Typography.metricLabel)
+                        .foregroundStyle(.secondary)
+
+                    Text("\(selectedLevel)")
+                        .font(DS.Typography.secondaryMetric)
+                        .foregroundStyle(DS.Color.activity)
+                        .contentTransition(.numericText())
+                        .accessibilityIdentifier("watch-workout-preview-level-value")
+                }
+                .frame(minWidth: 36)
 
                 Button {
                     if selectedLevel < range.upperBound {
@@ -245,19 +268,19 @@ struct WorkoutPreviewView: View {
                 .buttonStyle(.borderedProminent)
                 .tint(DS.Color.activity)
                 .disabled(selectedLevel >= range.upperBound)
-            }
-            .focusable(true)
-            .focused($levelFocused)
-            .digitalCrownRotation(
-                detent: $selectedLevel,
-                from: range.lowerBound,
-                through: range.upperBound,
-                by: 1,
-                sensitivity: .low,
-                isContinuous: false,
-                isHapticFeedbackEnabled: true
-            )
+                .accessibilityIdentifier("watch-workout-preview-level-increase")
         }
+        .focusable(true)
+        .focused($levelFocused)
+        .digitalCrownRotation(
+            detent: $selectedLevel,
+            from: range.lowerBound,
+            through: range.upperBound,
+            by: 1,
+            sensitivity: .low,
+            isContinuous: false,
+            isHapticFeedbackEnabled: true
+        )
         .onAppear {
             levelFocused = true
         }
