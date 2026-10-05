@@ -327,61 +327,69 @@ struct DUNEApp: App {
     }
 
     var body: some Scene {
-        WindowGroup {
-            Group {
-                if Self.isRunningUnitTests {
-                    Color.clear
-                } else if Self.shouldSeedMockData {
-                    // UI test with mock data — seed and skip splash
-                    seedableAppContent
-                } else {
-                    ZStack {
-                        if !isShowingLaunchSplash || isResolvingLaunchSplash {
-                            appContent
-                                .transition(.opacity)
-                        }
+        Self.makeWindowGroup(content: windowContent)
+            .modelContainer(appRuntime.modelContainer)
+    }
 
-                        if isShowingLaunchSplash {
-                            LaunchSplashView(isResolving: isResolvingLaunchSplash)
-                                .allowsHitTesting(!isResolvingLaunchSplash)
-                        }
+    // SwiftUI may evaluate its lazy scene builder on AsyncRenderer. Build the
+    // content on MainActor, then let the nonisolated builder return that value.
+    nonisolated private static func makeWindowGroup<Content: View>(content: Content) -> WindowGroup<Content> {
+        WindowGroup { content }
+    }
+
+    private var windowContent: some View {
+        Group {
+            if Self.isRunningUnitTests {
+                Color.clear
+            } else if Self.shouldSeedMockData {
+                // UI test with mock data — seed and skip splash
+                seedableAppContent
+            } else {
+                ZStack {
+                    if !isShowingLaunchSplash || isResolvingLaunchSplash {
+                        appContent
+                            .transition(.opacity)
                     }
-                    .task(id: isShowingLaunchSplash) {
-                        if isShowingLaunchSplash {
-                            await dismissLaunchSplashAfterMinimumDuration()
-                        } else {
-                            runPostSplashSetupIfNeeded()
-                        }
+
+                    if isShowingLaunchSplash {
+                        LaunchSplashView(isResolving: isResolvingLaunchSplash)
+                            .allowsHitTesting(!isResolvingLaunchSplash)
                     }
                 }
-            }
-            .tint(selectedTheme.accentColor)
-            .preferredColorScheme(Self.forcedUITestColorScheme)
-            .onChange(of: showConsentSheet) { oldValue, newValue in
-                guard oldValue, !newValue else { return }
-                Task { await advanceLaunchExperienceFlowIfNeeded() }
-            }
-            .onChange(of: scenePhase) { _, newPhase in
-                guard newPhase == .active else { return }
-                Task {
-                    await refreshAppRuntimeIfNeeded()
-                    await requestDeferredAuthorizationsIfNeeded()
-                }
-            }
-            .onReceive(NotificationCenter.default.mainThreadPublisher(for: NSUbiquitousKeyValueStore.didChangeExternallyNotification)) { notification in
-                let shouldHandle = shouldHandleCloudSyncNotification(notification)
-                guard shouldHandle else { return }
-                Task { @MainActor in
-                    await refreshAppRuntimeIfNeeded()
-                }
-            }
-            .onReceive(NotificationCenter.default.mainThreadPublisher(for: .NSPersistentStoreRemoteChange)) { _ in
-                Task { @MainActor in
-                    await PersistentStoreRemoteChangeRefresh.request(using: appRuntime.refreshCoordinator)
+                .task(id: isShowingLaunchSplash) {
+                    if isShowingLaunchSplash {
+                        await dismissLaunchSplashAfterMinimumDuration()
+                    } else {
+                        runPostSplashSetupIfNeeded()
+                    }
                 }
             }
         }
-        .modelContainer(appRuntime.modelContainer)
+        .tint(selectedTheme.accentColor)
+        .preferredColorScheme(Self.forcedUITestColorScheme)
+        .onChange(of: showConsentSheet) { oldValue, newValue in
+            guard oldValue, !newValue else { return }
+            Task { await advanceLaunchExperienceFlowIfNeeded() }
+        }
+        .onChange(of: scenePhase) { _, newPhase in
+            guard newPhase == .active else { return }
+            Task {
+                await refreshAppRuntimeIfNeeded()
+                await requestDeferredAuthorizationsIfNeeded()
+            }
+        }
+        .onReceive(NotificationCenter.default.mainThreadPublisher(for: NSUbiquitousKeyValueStore.didChangeExternallyNotification)) { notification in
+            let shouldHandle = shouldHandleCloudSyncNotification(notification)
+            guard shouldHandle else { return }
+            Task { @MainActor in
+                await refreshAppRuntimeIfNeeded()
+            }
+        }
+        .onReceive(NotificationCenter.default.mainThreadPublisher(for: .NSPersistentStoreRemoteChange)) { _ in
+            Task { @MainActor in
+                await PersistentStoreRemoteChangeRefresh.request(using: appRuntime.refreshCoordinator)
+            }
+        }
     }
 
     private var appContent: some View {
