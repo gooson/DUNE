@@ -140,6 +140,16 @@ untracked 파일은 경로만 제공한다. binary 본문과 untracked 내용은
 - 앱 변경이 없는 이 도구 작업에는 Python 계약 테스트와 parity 검증을 사용한다.
 - UI 테스트는 대기 시간과 모델 호출·로그 입력량을 별도로 측정한다. 개선 효과를 측정하려고 전체 UI 파이프라인을 추가 실행하지 않는다.
 
+## Verification
+
+- 최종 구현에서 `python3 -B -m unittest discover -s scripts/tests`: 82개 통과. 기존 공통 receipt 구현은 `python3 -B scripts/tests/test-codex-check.py`: 12개 통과 후 변경 없음. 총 94개 검증 증거를 확보했다.
+- `bash -n scripts/test-ui.sh scripts/test-watch-ui.sh`, parity 검사, `git diff --check` 통과. iOS dry-run과 iOS/watch shell mock으로 선택 argv·결과 JSON·exit code·preflight 무효화를 검증했다.
+- 6관점 리뷰와 최종 PR 리뷰 수행. 복구·재시도·증거·성능·문서 관련 P2 10건을 해결했고 최종 open P1/P2/P3는 0건이다.
+- 실제 저장소에서 pipeline `run/check`, 의무별 phase 증거 등록, 문서 hash remember/check를 확인했다. 자동 테스트 증거는 동일 내용에서만 재사용했다.
+- UI fixture가 공용 simulator lock을 기다리는 문제가 있어 실패 원인을 확인하고 mock lock으로 격리했다. 실제 시뮬레이터 조작은 하지 않았다.
+- 실제 PR base `origin/main` 기준 앱 소스·프로젝트·UI test body·seed·기기 실행 조건·UI CI job 본문 변경 없음. UI 판정은 iOS/watch 모두 skipped이며 앱 화면 검증 통과를 주장하지 않는다.
+- 별도 대상 TODO 없음. `.claude` 원본 변경이나 추가 rule promotion 없이 Codex adapter에 실행 차이만 기록했다.
+
 ## Lessons Learned
 
 이미 스크립트화된 검증을 중복 구현하기보다 반복되는 입력 수집부터 자동화한다. 공유 입력의 최신성 검사는 출력 절약만큼 중요하다. 실제 토큰 절감은 동일 범위 작업의 사용량 기록으로 별도 측정해야 한다.
