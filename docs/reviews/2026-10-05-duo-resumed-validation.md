@@ -124,3 +124,18 @@ Body를 기존 복원 실패와 분리하기 위한 전용 시뮬레이터의 DU
 최종 앱 표준 빌드(`app-final-presentation-router.log`) **BUILD SUCCEEDED**. 공유 Presentation 이동 및 프로젝트 참조가 포함된 소스의 컴파일 통과이다. UI 실행/전수 픽셀 게이트는 여전히 미통과다.
 
 중간 커밋: `b60218a9` 캡처 refresh/계약, `26d6260a` 큰 글자 통계, `fbec0138` 창 복귀/번역/테스트 플랜. 검증 결과와 원본 증거는 본 문서 및 동명 assets 디렉터리에 보존한다. Mac 잠금 해제 전 실제 preset 조작이나 같은 실패 경로 재실행을 하지 않았다.
+
+## phone 통계 시트와 잠금 상태 기능 검증 후속
+
+phone의 Workout Insights 진입은 운동 scene 안의 기존 시트를 사용하도록 바꿨다. Duo에서 SwiftUI의 multiple-window 지원 값만으로 보조 창을 만들면 UIKit의 phone 활성화·폐기 요청이 거부되므로, 실제 기기 idiom도 함께 확인한다. iPad의 별도 창 경로는 유지한다. 이 변경은 새 통계 진입 경로의 동작을 해결하며, 이전 버전에서 이미 복원된 보조 창의 폐기 성공을 증명하지 않는다.
+
+Xcode 27.1 표준 앱 빌드 `phone-insights-sheet-build.log` 통과 후 전용 Duo에서 **2개 실행·2개 passed·0 skipped·0 failures, exit 0**을 확인했다. [실행 receipt](assets/2026-10-05-duo/background-phone-sheet-workout-result.json).
+
+- `testWorkoutDraftAndRestTimerAtMaximumAccessibilityTextSize`: 144.421초. kg/reps 수정·미완료 초안, 완료 요약, 휴식 +30초·실제 감소·Skip, 다음 세트 입력란과 Done 접근을 확인했다. 남은 다음 세트 helper도 올바른 컨테이너와 스크롤 방향으로 수정된 소스에서 전체 case가 통과했다. 실제 접힘 전환은 수행하지 않았다.
+- `testWorkoutInsightsReturnsToInteractiveWorkoutAtMaximumAccessibilityTextSize`: 74.518초. 고급 목업 통계 로딩·오류 부재, 통계 시트 닫기 버튼 소실, 운동 컨트롤 hittability 및 세트 완료 버튼 접근을 확인했다.
+
+XCTest 원본 [요약 화면](assets/2026-10-05-duo/phone-sheet-insights-maxax-summary.png)과 [breakdown 화면](assets/2026-10-05-duo/phone-sheet-insights-maxax-breakdown.png)을 직접 검토했다. 최대 AX의 요약은 한 열이며 breakdown 퍼센트의 여러 줄 분할과 운동 아이콘/이름 겹침이 해소됐다. 스크롤 중 화면 상단 경계에 걸린 제목은 viewport 밖 부분이며 행 자체 잘림과 구분한다.
+
+닫기 후 [운동 화면](assets/2026-10-05-duo/phone-sheet-workout-maxax-title-before.png)에는 운동 이름 마지막 글자 ‘스’가 혼자 줄바꿈되는 문제가 남았다. 최대 AX에서는 장식 아이콘을 제거하고 운동 이름이 전체 너비를 사용하도록 수정했다. 표준 앱 빌드 `accessible-workout-title-build.log` 통과; 수정 후 픽셀 판정은 다음 캡처 결과에서 기록한다.
+
+`DUNEUITests-DuoFunctional` 플랜을 추가했다. 고급 목업으로 XCTest 원본 이미지/계층을 저장하며 host ACK나 수동 접힘 대기는 활성화하지 않는다. 실제 접힘을 수행한 것처럼 기록하지 않는다. 현재 실제 preset은 Closed, 시스템 글자 크기는 accessibility-extra-extra-extra-large다. 이번 시점 Computer Use 상태 확인은 Mac 잠금으로 실패했으며 사용자에게 해제를 요청했다. 백그라운드 XCTest 실행은 계속 가능하다.

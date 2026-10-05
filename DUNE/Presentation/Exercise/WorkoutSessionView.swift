@@ -116,7 +116,11 @@ struct WorkoutSessionView: View {
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button("Workout Insights", systemImage: "chart.bar.xaxis") {
-                    if supportsMultipleWindows {
+                    // The phone scene APIs reject activation/destruction even
+                    // when SwiftUI reports multiple-window support on Duo.
+                    // Keep insights in the workout's scene so dismissal can
+                    // preserve the active draft and rest timer.
+                    if supportsMultipleWindows && UIDevice.current.userInterfaceIdiom != .phone {
                         if !AppWindowRouter.shared.openInsights(from: windowSession, openWindow: openWindow) {
                             showingInsights = true
                         }
@@ -357,8 +361,15 @@ struct WorkoutSessionView: View {
 
     private var sessionOverview: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.lg) {
-            Label(exercise.localizedName, systemImage: exercise.resolvedActivityType.iconName)
-                .font(.title2.bold())
+            if dynamicTypeSize.isAccessibilitySize {
+                Text(exercise.localizedName)
+                    .font(.title2.bold())
+                    .fixedSize(horizontal: false, vertical: true)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            } else {
+                Label(exercise.localizedName, systemImage: exercise.resolvedActivityType.iconName)
+                    .font(.title2.bold())
+            }
             Text("Previous Workout")
                 .font(DS.Typography.sectionTitle)
             if viewModel.previousSets.isEmpty {
