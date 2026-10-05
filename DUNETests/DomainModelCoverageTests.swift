@@ -209,6 +209,16 @@ struct NotificationHubMetricResolverTests {
         #expect(metric?.value == 70.5)
     }
 
+    @Test("Merged body composition does not open a misleading single metric")
+    func mergedBodyCompositionHasNoSingleMetric() {
+        let item = makeItem(
+            insightType: .weightUpdate,
+            body: "Body fat: 18%\nWeight: 75kg"
+        )
+
+        #expect(NotificationHubMetricResolver.metric(for: item) == nil)
+    }
+
     @Test("Sleep parsing supports Korean hour-minute format")
     func parseSleepKoreanHourMinute() {
         let item = makeItem(

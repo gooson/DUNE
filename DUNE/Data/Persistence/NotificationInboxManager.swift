@@ -99,7 +99,7 @@ final class NotificationInboxManager: @unchecked Sendable {
         _ = store.markRead(id: itemID)
         postInboxDidChange()
 
-        guard let route = preferredRoute(for: existing) else { return existing }
+        guard let route = resolvedRoute(for: existing) else { return existing }
         emitNavigationRequest(.init(itemID: itemID, route: route))
         return existing
     }
@@ -127,13 +127,8 @@ final class NotificationInboxManager: @unchecked Sendable {
 
         if let itemID {
             let openedItem = open(itemID: itemID)
-            if let openedItem, preferredRoute(for: openedItem) != nil {
-                AppLogger.notification.debug("[InboxManager] Routed via preferredRoute for itemID=\(itemID)")
-                return
-            }
-            if openedItem?.insightType == .workoutPR {
-                AppLogger.notification.debug("[InboxManager] Routing workoutPR to activityPersonalRecords")
-                emitNavigationRequest(.init(itemID: itemID, route: .activityPersonalRecords))
+            if let openedItem, resolvedRoute(for: openedItem) != nil {
+                AppLogger.notification.debug("[InboxManager] Routed via resolvedRoute for itemID=\(itemID)")
                 return
             }
             if let route = parseRoute(userInfo: userInfo) {
@@ -196,6 +191,8 @@ final class NotificationInboxManager: @unchecked Sendable {
         case .notificationHub:
             break // Hub route is resolved at navigation time; no payload needed in userInfo
         case .sleepDetail:
+            userInfo[UserInfoKeys.routeKind] = route.destination.rawValue
+        case .postureAssessment:
             userInfo[UserInfoKeys.routeKind] = route.destination.rawValue
         }
         return userInfo
@@ -266,11 +263,18 @@ final class NotificationInboxManager: @unchecked Sendable {
             return .notificationHub
         case .sleepDetail:
             return .sleepDetail
+        case .postureAssessment:
+            return .postureAssessment
         }
     }
 
-    private func preferredRoute(for item: NotificationInboxItem) -> NotificationRoute? {
-        guard let route = item.route else { return nil }
+    func resolvedRoute(for item: NotificationInboxItem) -> NotificationRoute? {
+        guard let route = item.route else {
+            if item.insightType == .workoutPR { return .activityPersonalRecords }
+            if item.insightType == .postureReminder { return .postureAssessment }
+            if item.insightType == .dailyDigest { return .notificationHub }
+            return nil
+        }
 
         guard item.insightType == .workoutPR else {
             return route

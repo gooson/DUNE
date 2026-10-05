@@ -266,6 +266,8 @@ final class NotificationThrottleStore: @unchecked Sendable {
                 routeKey = "hub"
             case .sleepDetail:
                 routeKey = "sleepDetail"
+            case .postureAssessment:
+                routeKey = "postureAssessment"
             }
         } else {
             routeKey = "none"

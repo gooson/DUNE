@@ -46,6 +46,7 @@ final class DailyDigestScheduler {
         content.body = String(localized: "Your daily health summary is ready. Tap to review.")
         content.sound = .default
         content.userInfo = NotificationResponsePayload(
+            routeKind: NotificationRoute.notificationHub.destination.rawValue,
             insightType: HealthInsight.InsightType.dailyDigest.rawValue
         ).userInfo
 

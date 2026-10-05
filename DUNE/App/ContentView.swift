@@ -3,6 +3,7 @@ import SwiftUI
 enum NotificationPresentationDestination: Hashable {
     case personalRecords(requestID: Int)
     case sleepDetail(requestID: Int)
+    case postureAssessment(requestID: Int)
 }
 
 enum NotificationPresentationPlan: Equatable {
@@ -24,6 +25,8 @@ enum NotificationPresentationPlanner {
             return .openNotificationHub
         case .sleepDetail:
             return .openSleepDetailInWellness(requestID: requestID)
+        case .postureAssessment:
+            return .push(.postureAssessment(requestID: requestID))
         }
     }
 
@@ -363,6 +366,8 @@ struct ContentView: View {
             )
         case .sleepDetail:
             NotificationSleepDetailPushView(sharedHealthDataService: sharedHealthDataService)
+        case .postureAssessment:
+            PostureHistoryView()
         }
     }
 
@@ -407,7 +412,7 @@ struct ContentView: View {
     }
 }
 
-private struct NotificationSleepDetailPushView: View {
+struct NotificationSleepDetailPushView: View {
     @State private var viewModel: WellnessViewModel
 
     init(sharedHealthDataService: SharedHealthDataService?) {
@@ -428,6 +433,7 @@ private struct NotificationSleepDetailPushView: View {
                 )
             }
         }
+        .accessibilityIdentifier("notification-sleep-detail-screen")
         .task {
             viewModel.loadData()
         }

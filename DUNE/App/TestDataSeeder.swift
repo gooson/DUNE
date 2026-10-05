@@ -5,6 +5,7 @@ enum UITestSeedScenario: String {
     case empty = "empty"
     case defaultSeeded = "default-seeded"
     case activityExerciseSeeded = "activity-exercise-seeded"
+    case notificationRoutingSeeded = "notification-routing-seeded"
     case fatigueRegression = "fatigue-regression"
 
     static func current(arguments: [String] = ProcessInfo.processInfo.arguments) -> UITestSeedScenario {
@@ -35,8 +36,8 @@ enum TestDataSeeder {
         switch scenario {
         case .empty:
             return
-        case .defaultSeeded:
-            seedDefaultRecords(into: context)
+        case .defaultSeeded, .notificationRoutingSeeded:
+            seedDefaultRecords(into: context, scenario: scenario)
         case .activityExerciseSeeded:
             seedDefaultRecords(into: context)
             seedActivityExerciseFixtures(into: context)
@@ -87,7 +88,7 @@ enum TestDataSeeder {
         switch scenario {
         case .empty, .fatigueRegression:
             nil
-        case .defaultSeeded, .activityExerciseSeeded:
+        case .defaultSeeded, .activityExerciseSeeded, .notificationRoutingSeeded:
             makeWeatherSnapshot()
         }
     }
@@ -99,7 +100,7 @@ enum TestDataSeeder {
         switch scenario {
         case .empty, .fatigueRegression:
             nil
-        case .defaultSeeded, .activityExerciseSeeded:
+        case .defaultSeeded, .activityExerciseSeeded, .notificationRoutingSeeded:
             makeSharedHealthSnapshot(fetchedAt: fetchedAt)
         }
     }
@@ -212,7 +213,10 @@ enum TestDataSeeder {
     }
 
     @MainActor
-    private static func seedDefaultRecords(into context: ModelContext) {
+    private static func seedDefaultRecords(
+        into context: ModelContext,
+        scenario: UITestSeedScenario = .defaultSeeded
+    ) {
         configureTodayDefaults()
         seedSharedHealthSnapshot(into: context)
         seedExerciseDefaults(into: context)
@@ -220,7 +224,7 @@ enum TestDataSeeder {
         seedBodyCompositionRecords(into: context)
         seedInjuryRecords(into: context)
         seedHabitDefinitions(into: context)
-        seedNotificationInbox(scenario: .defaultSeeded)
+        seedNotificationInbox(scenario: scenario)
         try? context.save()
     }
 
@@ -507,6 +511,38 @@ enum TestDataSeeder {
                 date: calendar.date(byAdding: .minute, value: -45, to: now) ?? now
             )
         ]
+
+        if scenario == .notificationRoutingSeeded {
+            insights.insert(contentsOf: [
+                HealthInsight(
+                    type: .sleepComplete,
+                    title: "Bedtime Route Fixture",
+                    body: "Wear your Apple Watch to bed to track sleep.",
+                    severity: .informational,
+                    route: .sleepDetail
+                ),
+                HealthInsight(
+                    type: .postureReminder,
+                    title: "Posture Route Fixture",
+                    body: "Time for a posture check-up.",
+                    severity: .informational
+                ),
+                HealthInsight(
+                    type: .dailyDigest,
+                    title: "Daily Digest Route Fixture",
+                    body: "Review today's summary.",
+                    severity: .informational
+                ),
+                HealthInsight(
+                    type: .lifeChecklistReminder,
+                    title: "Life Checklist Route Fixture",
+                    body: "Review your checklist.",
+                    severity: .informational,
+                    route: .notificationHub
+                )
+            ], at: 0)
+            return insights
+        }
 
         guard scenario == .activityExerciseSeeded else {
             return insights
