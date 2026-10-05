@@ -18,6 +18,7 @@ struct ConditionHeroView: View {
     @Environment(\.appTheme) private var theme
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.horizontalSizeClass) private var sizeClass
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     private var isRegular: Bool { sizeClass == .regular }
 
@@ -35,120 +36,20 @@ struct ConditionHeroView: View {
 
     var body: some View {
         HeroCard(tintColor: score.status.color) {
-            HStack(spacing: isRegular ? DS.Spacing.xxl : DS.Spacing.xl) {
-                // Compact ring
-                ZStack {
-                    ProgressRingView(
-                        progress: Double(score.score) / 100.0,
-                        ringColor: score.status.color,
-                        lineWidth: ringLineWidth,
-                        size: ringSize,
-                        useWarmGradient: true,
-                        gradientTipColor: score.status.nextTierColor
-                    )
-
-                    VStack(spacing: 2) {
-                        Text("\(animatedScore)")
-                            .font(DS.Typography.cardScore)
-                            .foregroundStyle(theme.detailScoreGradient)
-                            .contentTransition(.numericText())
-
-                        Text(Labels.scoreLabel)
-                            .font(.system(size: 9, weight: .semibold, design: .rounded))
-                            .foregroundStyle(theme.sandColor)
-                            .tracking(1)
+            Group {
+                if dynamicTypeSize.isAccessibilitySize {
+                    VStack(alignment: .leading, spacing: DS.Spacing.lg) {
+                        scoreRing
+                            .frame(maxWidth: .infinity)
+                        scoreDetails
+                    }
+                } else {
+                    HStack(spacing: isRegular ? DS.Spacing.xxl : DS.Spacing.xl) {
+                        scoreRing
+                        scoreDetails
+                        Spacer(minLength: 0)
                     }
                 }
-
-                // Score info + sparkline
-                VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-                    // Status label with SF Symbol
-                    HStack(spacing: DS.Spacing.xs) {
-                        Text(score.status.label)
-                            .font(isRegular ? .title3 : .headline)
-                            .fontWeight(.semibold)
-
-                        Image(systemName: score.status.iconName)
-                            .font(.subheadline)
-                            .foregroundStyle(score.status.color)
-                    }
-
-                    // Guide message with delta badge
-                    HStack(spacing: DS.Spacing.xs) {
-                        if let adaptive = adaptiveMessage {
-                            Image(systemName: adaptive.icon)
-                                .font(.caption)
-                                .foregroundStyle(score.status.color)
-
-                            Text(adaptive.message)
-                                .font(.subheadline)
-                                .foregroundStyle(theme.secondaryTextColor)
-                                .lineLimit(2)
-                        } else {
-                            Text(score.narrativeMessage)
-                                .font(.subheadline)
-                                .foregroundStyle(theme.secondaryTextColor)
-                        }
-
-                        if let sparkline = hourlySparkline, sparkline.deltaDirection != .stable {
-                            ScoreDeltaBadge(
-                                delta: sparkline.delta,
-                                direction: sparkline.deltaDirection
-                            )
-                        }
-                    }
-
-                    // Hourly sparkline (today) or 7-day sparkline (fallback)
-                    if let sparkline = hourlySparkline, !sparkline.points.isEmpty {
-                        HStack(spacing: DS.Spacing.xs) {
-                            HourlySparklineView(data: sparkline, tintColor: score.status.color)
-                                .frame(height: isRegular ? Layout.sparklineHeightRegular : Layout.sparklineHeightCompact)
-
-                            Text(sparkline.includesYesterday ? "24h" : "Today")
-                                .font(.caption2)
-                                .foregroundStyle(theme.tertiaryTextStyle)
-                        }
-                    } else if !recentScores.isEmpty {
-                        HStack(spacing: DS.Spacing.xs) {
-                            TrendChartView(scores: recentScores)
-                                .frame(height: isRegular ? Layout.sparklineHeightRegular : Layout.sparklineHeightCompact)
-
-                            Text("7d")
-                                .font(.caption2)
-                                .foregroundStyle(theme.tertiaryTextStyle)
-                        }
-                    }
-
-                    if let weeklyGoalProgress {
-                        VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-                            HStack(spacing: DS.Spacing.xs) {
-                                Text("Weekly Goal")
-                                    .font(.caption2)
-                                    .foregroundStyle(theme.tertiaryTextStyle)
-                                Spacer()
-                                Text("\(weeklyGoalProgress.completedDays)/\(weeklyGoalProgress.goalDays)")
-                                    .font(.caption2)
-                                    .foregroundStyle(theme.secondaryTextColor)
-                                    .monospacedDigit()
-                            }
-                            ProgressView(
-                                value: Double(weeklyGoalProgress.completedDays),
-                                total: Double(max(1, weeklyGoalProgress.goalDays))
-                            )
-                            .tint(DS.Color.activity)
-                        }
-                    }
-
-                    if !trendBadges.isEmpty {
-                        VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-                            ForEach(Array(trendBadges.enumerated()), id: \.offset) { _, detail in
-                                BaselineTrendBadge(detail: detail)
-                            }
-                        }
-                    }
-                }
-
-                Spacer(minLength: 0)
             }
         }
         .accessibilityElement(children: .combine)
@@ -171,6 +72,121 @@ struct ConditionHeroView: View {
             } else {
                 withAnimation(DS.Animation.numeric) {
                     animatedScore = newValue
+                }
+            }
+        }
+    }
+
+    private var scoreRing: some View {
+        ZStack {
+            ProgressRingView(
+                progress: Double(score.score) / 100.0,
+                ringColor: score.status.color,
+                lineWidth: ringLineWidth,
+                size: ringSize,
+                useWarmGradient: true,
+                gradientTipColor: score.status.nextTierColor
+            )
+
+            VStack(spacing: 2) {
+                Text("\(animatedScore)")
+                    .font(DS.Typography.cardScore)
+                    .foregroundStyle(theme.detailScoreGradient)
+                    .contentTransition(.numericText())
+
+                Text(Labels.scoreLabel)
+                    .font(.system(size: 9, weight: .semibold, design: .rounded))
+                    .foregroundStyle(theme.sandColor)
+                    .tracking(1)
+            }
+        }
+    }
+
+    private var scoreDetails: some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+            // Status label with SF Symbol
+            HStack(spacing: DS.Spacing.xs) {
+                Text(score.status.label)
+                    .font(isRegular ? .title3 : .headline)
+                    .fontWeight(.semibold)
+
+                Image(systemName: score.status.iconName)
+                    .font(.subheadline)
+                    .foregroundStyle(score.status.color)
+            }
+
+            // Guide message with delta badge
+            HStack(spacing: DS.Spacing.xs) {
+                if let adaptive = adaptiveMessage {
+                    Image(systemName: adaptive.icon)
+                        .font(.caption)
+                        .foregroundStyle(score.status.color)
+
+                    Text(adaptive.message)
+                        .font(.subheadline)
+                        .foregroundStyle(theme.secondaryTextColor)
+                        .fixedSize(horizontal: false, vertical: true)
+                } else {
+                    Text(score.narrativeMessage)
+                        .font(.subheadline)
+                        .foregroundStyle(theme.secondaryTextColor)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+
+                if let sparkline = hourlySparkline, sparkline.deltaDirection != .stable {
+                    ScoreDeltaBadge(
+                        delta: sparkline.delta,
+                        direction: sparkline.deltaDirection
+                    )
+                }
+            }
+
+            // Hourly sparkline (today) or 7-day sparkline (fallback)
+            if let sparkline = hourlySparkline, !sparkline.points.isEmpty {
+                HStack(spacing: DS.Spacing.xs) {
+                    HourlySparklineView(data: sparkline, tintColor: score.status.color)
+                        .frame(height: isRegular ? Layout.sparklineHeightRegular : Layout.sparklineHeightCompact)
+
+                    Text(sparkline.includesYesterday ? "24h" : "Today")
+                        .font(.caption2)
+                        .foregroundStyle(theme.tertiaryTextStyle)
+                }
+            } else if !recentScores.isEmpty {
+                HStack(spacing: DS.Spacing.xs) {
+                    TrendChartView(scores: recentScores)
+                        .frame(height: isRegular ? Layout.sparklineHeightRegular : Layout.sparklineHeightCompact)
+
+                    Text("7d")
+                        .font(.caption2)
+                        .foregroundStyle(theme.tertiaryTextStyle)
+                }
+            }
+
+            if let weeklyGoalProgress {
+                VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                    HStack(spacing: DS.Spacing.xs) {
+                        Text("Weekly Goal")
+                            .font(.caption2)
+                            .foregroundStyle(theme.tertiaryTextStyle)
+                        Spacer()
+                        Text("\(weeklyGoalProgress.completedDays)/\(weeklyGoalProgress.goalDays)")
+                            .font(.caption2)
+                            .foregroundStyle(theme.secondaryTextColor)
+                            .monospacedDigit()
+                    }
+                    ProgressView(
+                        value: Double(weeklyGoalProgress.completedDays),
+                        total: Double(max(1, weeklyGoalProgress.goalDays))
+                    )
+                    .tint(DS.Color.activity)
+                }
+            }
+
+            if !trendBadges.isEmpty {
+                VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                    ForEach(Array(trendBadges.enumerated()), id: \.offset) { _, detail in
+                        BaselineTrendBadge(detail: detail)
+                    }
                 }
             }
         }
