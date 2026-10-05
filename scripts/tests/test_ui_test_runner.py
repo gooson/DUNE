@@ -38,6 +38,18 @@ def dry_verify_command(result: subprocess.CompletedProcess[str]) -> list[str]:
     return shlex.split(command)
 
 
+def fake_lock_verifier(directory: Path) -> Path:
+    """Keep fixture runs independent of the repository's live simulator lock."""
+    fake_bin = directory / "bin"
+    fake_bin.mkdir()
+    python = fake_bin / "python3"
+    python.write_text("#!/bin/sh\ncase \"$1:$3\" in "
+                      "*/simulator-test-lock.py:--verify) exit 0 ;; esac\n"
+                      f'exec "{sys.executable}" "$@"\n')
+    python.chmod(0o755)
+    return fake_bin
+
+
 class RunnerArgvTests(unittest.TestCase):
     def test_dry_run_does_not_verify_or_wait_for_simulator_lock(self) -> None:
         result = subprocess.run(["bash", str(RUNNER), "--dry-run"], cwd=ROOT,
@@ -179,14 +191,19 @@ class LogVerifierTests(unittest.TestCase):
             selector = "DUNEUITests/DashboardSmokeTests/testAppLaunchesOnDashboard"
             log.write_text("Test Case '-[DUNEUITests.DashboardSmokeTests testAppLaunchesOnDashboard]' passed\n"
                            "Executed 2 tests, with 1 test skipped and 0 failures\n")
+            skip = "DUNEUITests/UnusedTests/testUnused"
             command = [sys.executable, str(VERIFIER), "--log", str(log), "--only", selector,
-                       "--result-json", str(output)]
+                       "--skip", skip, "--result-json", str(output)]
             self.assertEqual(subprocess.run(command, capture_output=True).returncode, 0)
             data = json.loads(output.read_text())
             self.assertEqual(data["status"], "passed")
             self.assertEqual(data["counts"], {"executed": 2, "passed": 1, "skipped": 1, "failed": 0})
             self.assertEqual(data["passed_cases"], 1)
             self.assertEqual(data["log_path"], str(log.resolve()))
+            self.assertEqual(data["requested_selectors"], [selector])
+            self.assertEqual(data["skipped_selectors"], [skip])
+            self.assertEqual(data["evidence_scope"],
+                             {"kind": "selector_execution", "complete_test_inventory": False})
             self.assertEqual(list(output.parent.glob(".*.json.*")), [])
 
             log.write_text("Executed 0 tests, with 0 failures\n")
@@ -214,12 +231,39 @@ class LogVerifierTests(unittest.TestCase):
 
 
 class RunnerIntegrationTests(unittest.TestCase):
+    def test_preflight_failure_invalidates_old_receipt_for_both_runners(self) -> None:
+        for runner, target in ((RUNNER, "DUNEUITests"), (WATCH_RUNNER, "DUNEWatchUITests")):
+            for arguments in (("--only-testing", target + "/Bad-Selector"),
+                              ("--test-plan", "NoSuchPlan")):
+                with self.subTest(runner=runner.name, arguments=arguments):
+                    with tempfile.TemporaryDirectory() as directory:
+                        fake_bin = fake_lock_verifier(Path(directory))
+                        log = Path(directory) / "old log.log"
+                        receipt = Path(str(log) + ".result.json")
+                        receipt.write_text('{"status":"passed"}')
+                        run = subprocess.run(["bash", str(runner), "--no-regen", "--log-file",
+                                              str(log), *arguments], cwd=ROOT,
+                                             env={**os.environ, "DUNE_SIM_TEST_LOCK_FD": "fixture",
+                                                  "PATH": str(fake_bin) + os.pathsep + os.environ["PATH"]},
+                                             text=True, capture_output=True, timeout=10)
+                        self.assertNotEqual(run.returncode, 0)
+                        self.assertFalse(receipt.exists(), run.stderr)
+
+    def test_ios_dry_run_keeps_prior_receipt(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            log = Path(directory) / "old log.log"
+            receipt = Path(str(log) + ".result.json")
+            receipt.write_text('{"status":"passed"}')
+            run = subprocess.run(["bash", str(RUNNER), "--dry-run", "--log-file", str(log)],
+                                 cwd=ROOT, text=True, capture_output=True, timeout=10)
+            self.assertEqual(run.returncode, 0, run.stderr)
+            self.assertEqual(receipt.read_text(), '{"status":"passed"}')
+
     def run_fixture(self, runner: Path, log_text: str, target: str, selector: str | None,
                     exit_code: int = 0, *extra: str) -> tuple[subprocess.CompletedProcess[str], dict]:
         with tempfile.TemporaryDirectory() as directory:
             base = Path(directory)
-            fake_bin = base / "bin"
-            fake_bin.mkdir()
+            fake_bin = fake_lock_verifier(base)
             fixture = base / "fixture.log"
             fixture.write_text(log_text)
             (fake_bin / "xcrun").write_text("#!/bin/sh\necho '{\"devices\":{}}'\n")
@@ -228,7 +272,8 @@ class RunnerIntegrationTests(unittest.TestCase):
                 fake.chmod(0o755)
             log = base / "output with spaces.log"
             env = {**os.environ, "PATH": str(fake_bin) + os.pathsep + os.environ["PATH"],
-                   "FAKE_TEST_LOG": str(fixture), "FAKE_TEST_EXIT": str(exit_code)}
+                   "FAKE_TEST_LOG": str(fixture), "FAKE_TEST_EXIT": str(exit_code),
+                   "DUNE_SIM_TEST_LOCK_FD": "fixture"}
             args = ["bash", str(runner), "--no-regen", "--no-stream-log", "--log-file", str(log)]
             if selector:
                 args += ["--only-testing", selector]

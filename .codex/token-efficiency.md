@@ -17,11 +17,11 @@
 
 ## 동일 검증 증거
 
-`scripts/codex-check.py`는 명령을 실행하는 `run`과 성공 증거만 확인하는 `check`를 제공한다. 테스트를 자동으로 건너뛰지 않는다. 동일한 작업의 뒤 phase에서 이미 수행한 검증을 재사용할 때만 `check`를 명시적으로 호출한다.
+새 `/run` 작업의 검증 진입점은 아래 `scripts/codex-pipeline.py`로 통일한다. `scripts/codex-check.py`는 기존 작업의 receipt 호환성과 공통 fingerprint 구현을 위해 유지한다. 두 CLI는 저장소가 다르므로 동일 검증을 양쪽에서 실행하지 않는다. 기존 receipt로 시작한 작업은 그 작업 동안 기존 도구로 마무리한다.
 
 ```sh
-python3 scripts/codex-check.py run parity --context 'adapter-check-v1' -- python3 scripts/check-codex-claude-parity.py
-python3 scripts/codex-check.py check parity --context 'adapter-check-v1' -- python3 scripts/check-codex-claude-parity.py
+python3 scripts/codex-pipeline.py run parity --context 'adapter-check-v1' --scope adapter -- python3 scripts/check-codex-claude-parity.py
+python3 scripts/codex-pipeline.py check parity --context 'adapter-check-v1' --scope adapter -- python3 scripts/check-codex-claude-parity.py
 ```
 
 - 이름, 명령 argv, context, worktree/HEAD, tracked 및 nonignored untracked 파일 내용이 일치하고 성공 로그가 남아 있어야 한다. 실패/중단/실행 중 변경/증거 누락이면 재사용하지 않는다.
@@ -45,7 +45,7 @@ python3 scripts/codex-check.py check parity --context 'adapter-check-v1' -- pyth
 ```sh
 python3 scripts/codex-pipeline.py run tooling-contracts --context python-local --scope tooling --content-only -- python3 -B -m unittest discover -s scripts/tests
 python3 scripts/codex-pipeline.py check tooling-contracts --context python-local --scope tooling --content-only -- python3 -B -m unittest discover -s scripts/tests
-python3 scripts/codex-pipeline.py phase Work passed --evidence tooling-contracts
+python3 scripts/codex-pipeline.py phase Work/tooling-contracts passed --evidence tooling-contracts
 python3 scripts/codex-pipeline.py doc remember .codex/skill-compat.md
 python3 scripts/codex-pipeline.py doc check .codex/skill-compat.md
 python3 scripts/codex-pipeline.py report
@@ -53,10 +53,12 @@ python3 scripts/codex-pipeline.py report
 
 - `run`은 명령을 한 번 실행하고 파일 로그·짧은 결과를 반환한다. 기다리는 동안 원래 도구 session을 사용하며 별도 로그 polling을 하지 않는다. worktree lock으로 동시 실행을 거부한다. 이미 유효한 성공이 있으면 재실행도 거부하므로 `check`를 사용한다.
 - `--timeout <초>`로 제한하고 timeout/interrupt를 성공과 구분한다. 자동 재시도는 하지 않는다. 실패 후 재실행에는 `--retry-cause`, `--remediation`, `--retry-evidence <worktree 내 파일>`과 내용 또는 context 변화가 필요하다. 스크립트가 원인 해소를 의미적으로 판단하지 않으므로 실행자가 근거를 확인한다. 같은 ID의 실패 이력을 phase/turn 전환으로 지우지 않는다.
-- wrapper가 강제 종료되어 running이 남으면 실제 남은 프로세스를 확인한 뒤 `recover <ID> --reason <확인 근거>`로 interrupted 상태를 기록한다. 활성 lock이 있으면 복구도 거부한다. 이 명령은 알 수 없는 PID를 종료하지 않으며 성공 증거를 만들지 않는다.
+- wrapper가 강제 종료되어 running이 남으면 실제 남은 프로세스를 확인한 뒤 `recover <ID> --reason <확인 근거>`로 interrupted 상태를 기록한다. 활성 lock 또는 기록된 process group이 살아 있거나 liveness를 확인할 수 없으면 복구를 거부한다. 이 명령은 알 수 없는 PID를 종료하지 않으며 성공 증거를 만들지 않는다.
+- 해결되지 않은 실패는 최대 1회만 재시도한다. 성공으로 원인 해소가 확인된 뒤의 새 실패는 새 한도를 적용한다. HEAD/index/receipt 모드만 바뀐 것은 내용 변경 근거로 인정하지 않는다. 성공을 대체하는 새 성공이 저장되면 이전 성공 로그는 정리하되 실패 로그와 시도 메타데이터는 보존한다.
 - `phase <이름> passed --evidence <ID>`는 현재 유효한 성공 증거를 참조한다. scope와 환경이 해당 phase의 필수 범위를 충족하는지는 실행자가 확인한다. 여러 의무가 있으면 검증 항목별 phase 이름으로 기록하고 일부 성공을 전체 완료로 보고하지 않는다.
 - 전문가 결과는 `phase <관점> passed --review-file <파일> --source agent --context <기준-diff> --scope <관점> --content-only`로 보존한다. 실제 검토 후 findings/미해결 항목이 있는 파일만 등록한다. 도구는 파일 무결성과 소스 최신성을 검사하며 내용의 승인 여부를 판단하지 않는다. open P1/P2가 있으면 passed로 등록하지 않는다.
 - `phase <이름> skipped --reason <근거>`는 정당한 면제 기록에만 사용한다. `report`/`status`에서 stale 증거는 재사용 불가다. 외부 상태·ignored 파일은 context와 별도 확인이 필요하다.
+- fingerprint는 안전을 위해 worktree 전체를 포함한다. `--scope`는 설명/일치 조건이며 의존성 추론이나 부분 hash 옵션이 아니다. 문서만 추가해도 기존 증거는 stale이 된다. 리뷰의 영향 밖 변경이라면 기존 findings와 이후 diff를 사람이/agent가 재확인한 근거 파일을 작성하고 해당 관점의 review 기록을 새로 등록한다. 이 절차는 기존 검토를 다시 전부 수행하라는 뜻이 아니며, 오래된 자동 테스트 receipt를 임의로 갱신하는 데 사용하지 않는다.
 - 문서를 실제 읽은 뒤 `doc remember`로 hash를 기록한다. `doc check`는 변경 유무만 확인하며 원문 이해를 증명하지 않는다. 내용이 컨텍스트에서 사라졌다면 다시 읽는다. 별도의 원문 복제본이나 자동 축약본을 source of truth로 만들지 않는다.
 
 ## 절감 효과 확인

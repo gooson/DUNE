@@ -100,7 +100,7 @@ related_files: [scripts/codex-context.py, scripts/tests/test_codex_context.py, s
 ```sh
 python3 scripts/codex-pipeline.py run tooling-contracts --context python-local --scope tooling --content-only -- python3 -B -m unittest discover -s scripts/tests
 python3 scripts/codex-pipeline.py check tooling-contracts --context python-local --scope tooling --content-only -- python3 -B -m unittest discover -s scripts/tests
-python3 scripts/codex-pipeline.py phase Work passed --evidence tooling-contracts
+python3 scripts/codex-pipeline.py phase Work/tooling-contracts passed --evidence tooling-contracts
 python3 scripts/codex-pipeline.py doc remember .codex/skill-compat.md
 python3 scripts/codex-pipeline.py doc check .codex/skill-compat.md
 python3 scripts/codex-pipeline.py report
@@ -108,9 +108,15 @@ python3 scripts/codex-pipeline.py report
 
 같은 검증 ID는 phase/turn이 바뀌어도 유지한다. 실패 후에는 `--retry-cause`, `--remediation`, `--retry-evidence <worktree 내 파일>`과 코드 내용 또는 context 변화가 필요하며 1회만 재시도한다. 자동 재시도는 없다. `--timeout <초>`는 중단 상태와 process group 종료를 처리한다. 강제 종료 뒤에는 실제 남은 프로세스를 확인하고 `recover <ID> --reason <확인 근거>`를 사용한다. 이 명령은 알 수 없는 PID를 종료하거나 원인이 해결됐다고 판단하지 않는다.
 
+리뷰에서 발견한 복구·증거 경계를 보강했다. 기록된 process group이 살아 있거나 liveness가 불명확하면 복구/새 실행을 허용하지 않는다. retry 근거 파일은 ignored 경로라도 hash를 재검사한다. HEAD/index/receipt 모드만 변경해 재시도 조건을 만족할 수 없고, 성공으로 이전 원인이 해소된 뒤의 새 실패에는 새 한도를 적용한다. report는 fingerprint를 모드별 한 번 계산하고, 특정 ID의 status는 나머지 증거를 검사하지 않는다. 대체된 성공 로그만 정리하고 실패 로그·시도 메타데이터는 보존한다.
+
 전문가 리뷰는 실제 findings 파일을 `phase <관점> passed --review-file <파일> --source agent --context <기준-diff> --scope <관점>`로 기록한다. hash/내용 최신성만 검사하므로 open P1/P2가 없는지와 필수 관점이 모두 완료됐는지는 실행자가 판단한다. 단일 성공 receipt를 여러 의무가 있는 phase 전체의 인증으로 사용하지 않는다.
 
 원문·adapter를 자동 병합한 새 지침 파일은 만들지 않는다. parent가 적용한 절차와 근거를 phase 기록/리뷰 파일로 남긴다. 문서 hash가 같아도 컨텍스트에 내용이 없으면 다시 읽는다. 상태 저장과 명령 실행을 담당하는 도구가 개발·리뷰의 의미적 판단을 대체하지 않는다.
+
+새 작업의 실행 진입점은 `codex-pipeline.py` 하나로 사용한다. `codex-check.py`는 기존 receipt와 공통 구현 호환용이며 양쪽에서 같은 명령을 실행하지 않는다. `--scope`는 의존 파일 필터가 아니므로 문서 변경을 포함한 worktree 변화도 보수적으로 stale 처리한다. 영향받지 않은 전문가 결과는 이전 findings와 이후 diff의 재확인 근거를 작성해 새로 등록할 수 있지만 자동 테스트 receipt의 hash를 수정해 성공으로 승격하지 않는다.
+
+UI JSON은 요청 selectors/skips의 실행 증거다. target 전체를 선택한 경우 모든 발견 가능한 테스트의 인벤토리와 비교하지 않으며, 의도적으로 제외한 테스트는 기존 skip 계약을 유지한다. 따라서 `passed`만으로 전체 테스트 발견·시각적 레이아웃 검증을 인증하지 않는다. 새 실행의 preflight 전에 이전 결과 JSON을 무효화하여 과거 성공을 현재 실행 결과로 혼동하지 않게 한다.
 
 
 ```sh

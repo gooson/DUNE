@@ -94,7 +94,50 @@ def stop_group(process):
     process.wait()
 
 
-def check_record(root, store, name, context, scope, command, content_only):
+def group_alive(pgid):
+    if not isinstance(pgid, int) or pgid <= 0:
+        raise ValueError("running check lacks a recorded process group")
+    try:
+        os.killpg(pgid, 0)
+    except ProcessLookupError:
+        return False
+    except PermissionError:
+        return True
+    return True
+
+
+def unresolved_runs(store):
+    for path in store.glob("check-*.json"):
+        record = read_json(path, {})
+        attempts = record.get("attempts", [])
+        if attempts and attempts[-1].get("status") == "running":
+            last = attempts[-1]
+            if group_alive(last.get("child_pgid")):
+                raise ValueError(f"running check still has a live process group: {record.get('id')}")
+            raise ValueError(f"unfinished check requires recover: {record.get('id')}")
+
+
+def cached_fingerprint(root, content_only, cache):
+    key = ("fingerprint", content_only)
+    if cache is not None and key in cache:
+        return cache[key]
+    value = CHECK.fingerprint(root, content_only)
+    if cache is not None:
+        cache[key] = value
+    return value
+
+
+def cached_file_hash(path, cache):
+    key = ("file", str(path))
+    if cache is not None and key in cache:
+        return cache[key]
+    value = CHECK.file_hash(path)
+    if cache is not None:
+        cache[key] = value
+    return value
+
+
+def check_record(root, store, name, context, scope, command, content_only, cache=None):
     record = read_json(store / f"check-{key_for(name)}.json", {})
     attempts = record.get("attempts", [])
     if record.get("id") != name or not attempts:
@@ -107,14 +150,18 @@ def check_record(root, store, name, context, scope, command, content_only):
     log = safe_path(store / last["log"])
     if log.parent != store or not log.name.startswith(f"check-{key_for(name)}-") or log.suffix != ".log" or not log.exists():
         raise ValueError("check log missing")
-    if CHECK.file_hash(log) != last.get("log_hash"):
+    if cached_file_hash(log, cache) != last.get("log_hash"):
         raise ValueError("check log changed")
-    if last.get("before") != last.get("after") or last.get("after") != CHECK.fingerprint(root, content_only):
+    if last.get("before") != last.get("after") or last.get("after") != cached_fingerprint(root, content_only, cache):
         raise ValueError("check fingerprint stale")
+    retry = last.get("retry_evidence")
+    if retry and cached_file_hash(document_path(root, retry["file"]), cache) != retry["hash"]:
+        raise ValueError("retry evidence changed")
     return last
 
 
 def run_check(root, store, args):
+    unresolved_runs(store)
     path = store / f"check-{key_for(args.id)}.json"
     record = read_json(path, {"schema_version": 1, "worktree": str(root),
                               "id": args.id, "attempts": []})
@@ -133,21 +180,30 @@ def run_check(root, store, args):
             else:
                 raise ValueError("successful evidence already valid; reuse it")
         else:
-            if sum(attempt["status"] != "success" for attempt in attempts) >= 2:
+            failures = 0
+            for prior in reversed(attempts):
+                if prior["status"] == "success":
+                    break
+                failures += 1
+            if failures >= 2:
                 raise ValueError("retry limit reached for this check ID")
             if not args.retry_cause or not args.remediation or not args.retry_evidence:
                 raise ValueError("retry requires --retry-cause, --remediation, and --retry-evidence")
-            current = CHECK.fingerprint(root, args.content_only)
-            if current == last.get("after", last.get("before")) and args.context == last.get("context"):
+            current_content = CHECK.fingerprint(root, True)
+            if current_content == last.get("after_content") and args.context == last.get("context"):
                 raise ValueError("retry requires changed content or context")
+            if "after_content" not in last and args.context == last.get("context"):
+                raise ValueError("older failure lacks content change evidence; change context explicitly")
     elif args.retry_cause or args.remediation or args.retry_evidence:
         raise ValueError("retry evidence is only valid after failure")
 
     log_name = f"check-{key_for(args.id)}-{uuid.uuid4().hex}.log"
     log_path = safe_path(store / log_name)
     before = CHECK.fingerprint(root, args.content_only)
+    before_content = before if args.content_only else CHECK.fingerprint(root, True)
     attempt = {"status": "running", "command": args.command, "context": args.context,
                "scope": args.scope, "content_only": args.content_only, "before": before,
+               "before_content": before_content,
                "log": log_name, "started": time.time()}
     if args.retry_cause:
         evidence = document_path(root, args.retry_evidence)
@@ -168,6 +224,8 @@ def run_check(root, store, args):
         with log_path.open("wb") as log:
             process = subprocess.Popen(args.command, cwd=root, stdout=log,
                                        stderr=subprocess.STDOUT, start_new_session=True)
+            attempt.update(child_pid=process.pid, child_pgid=process.pid)
+            write_json(path, record)
             try:
                 exit_code = process.wait(timeout=args.timeout)
                 status = "success" if exit_code == 0 else "failed"
@@ -178,11 +236,13 @@ def run_check(root, store, args):
             if status in ("timeout", "interrupted"):
                 stop_group(process)
         after = CHECK.fingerprint(root, args.content_only)
+        after_content = after if args.content_only else CHECK.fingerprint(root, True)
         if after != before:
             if status == "success":
                 status = "failed"
             attempt["reason"] = "worktree changed during command"
         attempt.update(status=status, exit_code=exit_code, after=after,
+                       after_content=after_content,
                        log_hash=CHECK.file_hash(log_path), ended=time.time())
     except (OSError, ValueError) as error:
         attempt.update(status="failed", reason=str(error), ended=time.time())
@@ -191,6 +251,20 @@ def run_check(root, store, args):
     finally:
         for sig, handler in previous.items():
             signal.signal(sig, handler)
+        write_json(path, record)
+    if attempt["status"] == "success":
+        for prior in attempts[:-1]:
+            if prior["status"] != "success":
+                continue
+            if not prior.get("log_pruned"):
+                old_log = safe_path(store / prior["log"])
+                if old_log.parent == store and old_log.name.startswith(f"check-{key_for(args.id)}-") and old_log.suffix == ".log":
+                    old_log.unlink(missing_ok=True)
+                    prior["log_pruned"] = True
+            if "command" in prior:
+                prior["command_hash"] = hashlib.sha256(
+                    json.dumps(prior.pop("command"), separators=(",", ":")).encode()
+                ).hexdigest()
         write_json(path, record)
     print(f"{attempt['status']}: {args.id}; log: {log_path}")
     if attempt["status"] != "success":
@@ -212,23 +286,23 @@ def document_path(root, value):
     return path
 
 
-def phase_status(root, store, phase):
+def phase_status(root, store, phase, cache=None):
     record = read_json(store / f"phase-{key_for(phase)}.json", {})
     if record.get("phase") != phase:
         raise ValueError("phase not recorded")
     if record.get("status") == "skipped":
-        if CHECK.fingerprint(root, record["content_only"]) != record["fingerprint"]:
+        if cached_fingerprint(root, record["content_only"], cache) != record["fingerprint"]:
             raise ValueError("skip decision stale")
     if record.get("status") == "passed":
         if "evidence" in record:
             evidence = record["evidence"]
             check_record(root, store, evidence["id"], evidence["context"], evidence["scope"],
-                         evidence["command"], evidence["content_only"])
+                         evidence["command"], evidence["content_only"], cache)
         elif "review" in record:
             review = record["review"]
-            if CHECK.file_hash(document_path(root, review["file"])) != review["hash"]:
+            if cached_file_hash(document_path(root, review["file"]), cache) != review["hash"]:
                 raise ValueError("review evidence changed")
-            if CHECK.fingerprint(root, review["content_only"]) != review["fingerprint"]:
+            if cached_fingerprint(root, review["content_only"], cache) != review["fingerprint"]:
                 raise ValueError("review evidence stale")
         else:
             raise ValueError("passed phase lacks evidence")
@@ -342,8 +416,11 @@ def main():
                 last = record["attempts"][-1]
                 if last.get("status") != "running":
                     raise ValueError("check is not recorded as running")
+                if group_alive(last.get("child_pgid")):
+                    raise ValueError("recorded process group is still alive")
                 last.update(status="interrupted", reason=args.reason,
-                            after=CHECK.fingerprint(root, last["content_only"]), ended=time.time())
+                            after=CHECK.fingerprint(root, last["content_only"]),
+                            after_content=CHECK.fingerprint(root, True), ended=time.time())
                 log = safe_path(store / last["log"])
                 if log.is_file():
                     last["log_hash"] = CHECK.file_hash(log)
@@ -351,8 +428,11 @@ def main():
                 print(f"recovered interrupted check: {args.id}")
             else:
                 result = {"checks": [], "phases": []}
+                cache = {}
                 for path in sorted(store.glob("check-*.json")):
                     state = read_json(path, {})
+                    if args.action == "status" and args.id and state.get("id") != args.id:
+                        continue
                     last = state.get("attempts", [])[-1:]
                     if last:
                         item = {"id": state.get("id"), "status": last[0].get("status"),
@@ -360,20 +440,19 @@ def main():
                         if item["status"] == "success":
                             try:
                                 check_record(root, store, item["id"], last[0]["context"], last[0]["scope"],
-                                             last[0]["command"], last[0]["content_only"])
+                                             last[0]["command"], last[0]["content_only"], cache)
                             except (ValueError, OSError) as error:
                                 item.update(status="stale", reason=str(error))
                         result["checks"].append(item)
                 for path in sorted(store.glob("phase-*.json")):
                     state = read_json(path, {})
+                    if args.action == "status" and args.id and state.get("phase") != args.id:
+                        continue
                     try:
-                        phase_status(root, store, state["phase"])
+                        phase_status(root, store, state["phase"], cache)
                     except (ValueError, OSError) as error:
                         state.update(status="stale", reason=str(error))
                     result["phases"].append(state)
-                if args.action == "status" and args.id:
-                    result["checks"] = [item for item in result["checks"] if item["id"] == args.id]
-                    result["phases"] = [item for item in result["phases"] if item["phase"] == args.id]
                 print(json.dumps(result, sort_keys=True))
     except (OSError, ValueError, KeyError, IndexError, TypeError, subprocess.SubprocessError) as error:
         print(f"pipeline invalid: {error}", file=sys.stderr)

@@ -85,6 +85,11 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+# The simulator lock is held here. Clear prior evidence before any preflight
+# can fail and leave a stale successful result for this log path.
+RESULT_FILE="${LOG_FILE}.result.json"
+rm -f "$RESULT_FILE"
+
 resolve_test_plan() {
     local requested_plan="$1"
 
@@ -227,7 +232,6 @@ if [[ "${#SKIP_TESTING[@]}" -gt 0 ]]; then
     done
 fi
 
-RESULT_FILE="${LOG_FILE}.result.json"
 VERIFY_CMD=(python3 "$TEST_VERIFY" --log "$LOG_FILE" --target DUNEWatchUITests --result-json "$RESULT_FILE")
 for ((i=0; i<${#TEST_CMD[@]}; i++)); do
     case "${TEST_CMD[i]}" in
@@ -241,7 +245,6 @@ if [[ "$STREAM_LOGS" -eq 1 ]]; then
 fi
 
 mkdir -p "$(dirname "$LOG_FILE")"
-rm -f "$RESULT_FILE"
 set +e
 if [[ "$STREAM_LOGS" -eq 1 ]]; then
     "${TEST_CMD[@]}" 2>&1 | tee "$LOG_FILE"
