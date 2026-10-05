@@ -28,6 +28,9 @@ GeometryReader의 safe-area 내부 제안 크기와 유연한 레이아웃을 �
 | DUNEWatch/Views/WorkoutPreviewView.swift | 시작 액션/레벨/헤더 적응형 배치 |
 | DUNEWatch/Views/ControlsView.swift | 다중 제어 액션의 작은 화면 대응 |
 | DUNEWatch/Views/RestTimerView.swift | 고정 링과 액션의 높이/폭 대응 |
+| DUNEWatch/Views/Cardio/CardioSecondaryPage.swift | 머신 레벨 조절의 고정 높이 스택 대응 |
+| DUNEWatchUITests/Smoke/WatchResponsiveWorkoutLayoutTests.swift | 크기별 최초 viewport 회귀 |
+| DUNEWatchUITests/Helpers/WatchUITestBaseCase.swift | 버튼 bounds assertion |
 | DUNEWatchUITests/Smoke/WatchWorkoutStartSmokeTests.swift | 천국의 계단과 유사 cardio 시작 화면 bounds 검증 |
 | DUNEWatch/WatchConnectivityManager.swift | 필요 시 deterministic cardio fixture |
 
@@ -53,8 +56,9 @@ GeometryReader의 safe-area 내부 제안 크기와 유연한 레이아웃을 �
 
 ## Research
 - docs/brainstorms의 stair-climber/level 모델과 todos 검색: 이번 레이아웃 수정과 동일한 진행 항목 없음.
-- Apple 공식 Supporting multiple watch sizes 및 ViewThatFits 문서 확인: safe area와 가용 공간 기반 배치.
+- Apple 공식 [Supporting multiple watch sizes](https://developer.apple.com/documentation/watchos-apps/supporting-multiple-watch-sizes) 및 [ViewThatFits](https://developer.apple.com/documentation/swiftui/viewthatfits) 문서 확인: safe area와 가용 공간 기반 배치.
 
 ## Execution
+- 사용자 후속 지시: "핵심만 확인해", "토큰 낭비 최소화해". 40mm 핵심 8개 테스트와 49mm 시작 화면 표본으로 검증을 축소한다. 전체 iOS 빌드/UI, 42/44mm 중복 실행, 추가 리뷰 agent는 생략하고 실제 watch 빌드와 직접 diff 리뷰를 사용한다. 전체 회귀 통과로 보고하지 않는다.
 - Phase 0 완료: clean detached HEAD, 기준 simulator 목록 /tmp/watch-layout-baseline-devices.json.
 - Phase 1 완료: 계획서 및 초기 UI 범위 /tmp/watch-layout-ui-plan-initial.json.
