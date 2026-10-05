@@ -1038,6 +1038,7 @@ struct DUNEApp: App {
 private struct WorkoutInsightsWindowView: View {
     let isReady: Bool
     @Environment(\.openWindow) private var openWindow
+    @Environment(\.dismissWindow) private var dismissWindow
     @State private var windowSession: UISceneSession?
     @State private var windowError: String?
 
@@ -1055,7 +1056,9 @@ private struct WorkoutInsightsWindowView: View {
                 HStack {
                     Spacer()
                     Button("Close") {
-                        AppWindowRouter.shared.closeInsights(windowSession, openWindow: openWindow) {
+                        AppWindowRouter.shared.closeInsights(
+                            windowSession, openWindow: openWindow, dismissWindow: dismissWindow
+                        ) {
                             windowError = $0
                         }
                     }

@@ -87,6 +87,24 @@ Xcode 27.1 시뮬레이터 빌드 통과: `/tmp/duo-unlocked-20261005/fixture-ga
 
 잠금 해제 후 Device Hub의 실제 Closed/Book/Open preset을 AX로 선택하고 내부·외부 디스플레이를 캡처했다. 초기 세 preset 캡처는 수정 전 오류 화면이므로 데이터 화면의 전수 검사로 인정하지 않는다. 좌표 조작은 `noWindowsAvailable`을 반환했으며 창 축소 미리보기 캡처 문제가 남았다. 동일 좌표 조작과 이미 예산을 소진한 UI 테스트를 반복하지 않았다. 원본은 `/tmp/duo-unlocked-20261005`에 보존한다. Body 저장·Insights Close·운동/타이머 연속성·기본/최대 AX 전수 검증은 여전히 미완료다.
 
+## 잠금 상태의 백그라운드 XCTest 실행
+
+사용자 요청에 따라 host 캡처/ACK 및 수동 접힘 대기를 요구하지 않는 최대 AX 기능 테스트 세 개를 기존 회귀 테스트에 추가했다. `DUNEUITests-Full`에서 선택 실행했으며 고급 목업을 사용한다. Mac 잠금 상태에서도 앱 실행·요소 탐색·탭·스크롤이 실행됨을 로그와 XCTest 원본 PNG로 확인했다. 직접 Computer Use가 잠금에 막혔다는 이유로 모든 UI 자동화가 불가능하다고 설명한 것은 잘못이었다. 공개 Xcode 27.1 `simctl`의 io/ui/help에는 실제 접힘 전환 명령이 없으므로 이 기능 테스트를 접힘 전환 검증으로 승격하지 않는다.
+
+첫 실행에서 restored Insights Close 대기가 실패했다. 런타임 로그에 UIKit 창 전환 요청의 `This functionality is not supported for this device idiom`을 확인했다. phone에서는 현재 scene의 SwiftUI `dismissWindow()`를 사용하도록 변경했고 표준 시뮬레이터 빌드는 통과했다(`/tmp/duo-unlocked-20261005/swiftui-phone-close-build.log`). **이 변경의 닫기 동작은 아직 미통과**다. Apple API 근거: https://developer.apple.com/documentation/swiftui/dismisswindowaction/callasfunction()
+
+단일 Close 재검증은 Recent workouts See All 경로에서 실패했다. 이 실행은 메인 setup에 도달했지만 setup의 restored Close 분기는 optional이므로 닫기 성공 증거가 아니다. 중간 안내에서 복원 창 닫기가 통과했다고 한 설명을 정정했다. 기존 경로 실패는 별도 미해결 항목으로 유지하고 기능 검증은 상단 Quick Start에서 직접 시작하도록 분리했다.
+
+직접 경로 실행 결과는 **3개 실행, 0 passed, 3 failures, 0 skipped, exit 65**다. [실패 receipt](assets/2026-10-05-duo/background-functional-result.json)를 보존한다.
+
+- 운동 초안/타이머: kg 입력란에 도달하지 못함. [실패 화면](assets/2026-10-05-duo/background-workout-input-failure.png)에 reps와 RPE 및 완료 버튼이 보인다. kg가 viewport 위쪽인지, scroll helper가 다른 컨테이너/방향을 택한 것인지 추가 구분이 필요하며 이 캡처만으로 앱의 입력란이 사라졌다고 단정하지 않는다. 타이머 검증은 미도달이다.
+- Insights: 목업 통계와 breakdown에 도달했으나 Close 탭 뒤 버튼 소실 조건 실패. [실패 화면](assets/2026-10-05-duo/background-insights-close-failure.png) 및 추출한 AX debug description에 Close가 남아 있다. UIKit 대신 SwiftUI를 사용했다는 사실을 닫기 성공으로 처리하지 않는다.
+- Body: 앞서 닫히지 않은 Insights가 복원되어 setup 실패. Body 입력/저장은 미도달이다.
+
+원본 로그·XCTest result bundle 경로 및 추출한 3개 실패 PNG/AX/synthesized-event 자료는 `/tmp/duo-unlocked-20261005`에 있다. 이번에는 결과 정리가 완료됐으며 마지막 실행을 강제 종료하지 않았다. 변하지 않은 같은 실패 경로는 반복하지 않는다.
+
+Body를 기존 복원 실패와 분리하기 위한 전용 시뮬레이터의 DUNE 앱 제거는 자동 승인 검토에서 기존 SwiftData/설정 삭제 위험으로 거부됐다. 앱 제거와 이후 독립 Body 실행은 **실행되지 않았다**. 사용자에게 해당 앱만 초기화하는 승인을 요청했다. 다른 시뮬레이터를 삭제하거나 이 거부를 우회하지 않았다. 새 기능 테스트는 기존 dirty audit 테스트/공유 helper에 의존하여 작업 파일에 보존했고, 이 증거 커밋에서 이전 dirty 테스트 전체를 일괄 스테이징하지 않는다.
+
 ## 최종 컴파일 및 리뷰 기록
 
 - Xcode 27.1 표준 앱 빌드: `app-final-scene-and-breakdown.log`, `app-final-scene-owner.log` 통과. 리뷰의 조건부 P2(기존 Insights 재사용 시 이전 opener 유지)는 기존 Insights session의 opener를 새 출발 창으로 갱신하고 정확한 session 활성화를 요청하도록 수정했다. 소스 수준 해소이며 실제 여러 창 검증 대기.

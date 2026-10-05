@@ -116,6 +116,7 @@ final class AppWindowRouter: NSObject {
     func closeInsights(
         _ insights: UISceneSession?,
         openWindow: OpenWindowAction,
+        dismissWindow: DismissWindowAction,
         onFailure: @escaping @MainActor (String) -> Void
     ) {
         guard let insights else {
@@ -135,6 +136,15 @@ final class AppWindowRouter: NSObject {
         let primary = primaries.first { $0.persistentIdentifier == openerID }
             ?? primaries.first { $0.scene?.activationState == .foregroundActive }
             ?? primaries.sorted { $0.persistentIdentifier < $1.persistentIdentifier }.first
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            // UIKit scene activation rejects the phone idiom even when SwiftUI
+            // supports windows. Dismiss only this auxiliary scene through SwiftUI.
+            if primary == nil {
+                openWindow(id: Self.primaryWindowID)
+            }
+            dismissWindow()
+            return
+        }
         let request = PendingClose(insights: insights, primaryID: primary?.persistentIdentifier, onFailure: onFailure)
         pendingClose = request
         let requestID = request.requestID
