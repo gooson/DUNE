@@ -58,6 +58,8 @@ private struct CardioSessionPagingView: View {
                 WKInterfaceDevice.current().play(.start)
             case .confirmation:
                 WKInterfaceDevice.current().play(.notification)
+            case .stairMachineExitSuggestion:
+                WKInterfaceDevice.current().play(.notification)
             case nil:
                 break
             }
@@ -82,6 +84,13 @@ private struct CardioSessionPagingView: View {
                         workoutManager.keepCardioWorkoutRunning()
                     }
                     Button("End Now", role: .destructive) {
+                        workoutManager.end()
+                    }
+                case .stairMachineExitSuggestion:
+                    Button("Keep Going") {
+                        workoutManager.keepCardioWorkoutRunning()
+                    }
+                    Button("End Workout", role: .destructive) {
                         workoutManager.end()
                     }
                 case nil:
@@ -113,6 +122,8 @@ private struct CardioSessionPagingView: View {
             return String(localized: "No movement detected")
         case .confirmation:
             return String(localized: "End workout soon?")
+        case .stairMachineExitSuggestion:
+            return String(localized: "Done with stairs?")
         case nil:
             return ""
         }
@@ -125,6 +136,8 @@ private struct CardioSessionPagingView: View {
         case .confirmation:
             let countdown = workoutManager.cardioAutoEndCountdown ?? 0
             return String(localized: "Ending in \(countdown)s unless you continue.")
+        case .stairMachineExitSuggestion:
+            return String(localized: "End this workout?")
         case nil:
             return ""
         }
