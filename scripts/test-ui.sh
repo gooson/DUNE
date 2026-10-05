@@ -21,6 +21,8 @@ SCHEME="DUNEUITests"
 SIMULATOR_NAME="${DAILVE_IOS_SIMULATOR:-iPhone 17}"
 SIMULATOR_OS="${DAILVE_IOS_OS:-26.2}"
 DESTINATION="platform=iOS Simulator,name=${SIMULATOR_NAME},OS=${SIMULATOR_OS}"
+SIMULATOR_UDID=""
+SIMULATOR_UDID_REQUESTED=0
 DERIVED_DATA_DIR="${DAILVE_UI_TEST_DERIVED_DATA_DIR:-.deriveddata/ui-tests}"
 LOG_DIR=".xcodebuild"
 LOG_FILE="$LOG_DIR/ui-test.log"
@@ -68,6 +70,15 @@ while [[ $# -gt 0 ]]; do
             TEST_PLAN="$2"
             shift 2
             ;;
+        --simulator-udid)
+            if [[ $# -lt 2 ]]; then
+                echo "--simulator-udid requires a UUID" >&2
+                exit 2
+            fi
+            SIMULATOR_UDID="$2"
+            SIMULATOR_UDID_REQUESTED=1
+            shift 2
+            ;;
         --smoke)
             SMOKE_MODE=1
             shift
@@ -82,11 +93,19 @@ while [[ $# -gt 0 ]]; do
             ;;
         *)
             echo "Unknown option: $1"
-            echo "Usage: $0 [--no-regen] [--stream-log | --no-stream-log] [--log-file <path>] [--skip-testing <target>] [--only-testing <target>] [--test-plan <name>] [--smoke] [--dry-run] [--cleanup-simulators]"
+            echo "Usage: $0 [--no-regen] [--stream-log | --no-stream-log] [--log-file <path>] [--skip-testing <target>] [--only-testing <target>] [--test-plan <name>] [--simulator-udid <UUID>] [--smoke] [--dry-run] [--cleanup-simulators]"
             exit 2
             ;;
     esac
 done
+
+if [[ "$SIMULATOR_UDID_REQUESTED" -eq 1 ]]; then
+    if [[ ! "$SIMULATOR_UDID" =~ ^[[:xdigit:]]{8}-[[:xdigit:]]{4}-[[:xdigit:]]{4}-[[:xdigit:]]{4}-[[:xdigit:]]{12}$ ]]; then
+        echo "Invalid simulator UDID: $SIMULATOR_UDID" >&2
+        exit 2
+    fi
+    DESTINATION="id=${SIMULATOR_UDID}"
+fi
 
 if [[ "$DRY_RUN" -eq 0 ]]; then
     if [[ -n "${DUNE_SIM_TEST_LOCK_FD:-}" ]]; then
@@ -157,6 +176,28 @@ if [[ "${#ONLY_TESTING[@]}" -gt 0 ]]; then
     "${PLAN_CHECK[@]}"
 fi
 
+if [[ "$DRY_RUN" -eq 0 && -n "$SIMULATOR_UDID" ]]; then
+    # An explicit device request is strict: never choose another device or clone it.
+    if ! xcrun simctl list devices available -j | python3 -c '
+import json, sys
+requested = sys.argv[1].lower()
+try:
+    devices = json.load(sys.stdin)["devices"]
+except (ValueError, KeyError, TypeError):
+    sys.exit(1)
+for runtime, entries in devices.items():
+    if not runtime.rsplit(".", 1)[-1].startswith("iOS-"):
+        continue
+    for device in entries:
+        if device.get("udid", "").lower() == requested and device.get("isAvailable", True):
+            sys.exit(0)
+sys.exit(1)
+' "$SIMULATOR_UDID"; then
+        echo "Requested iOS simulator is unavailable: $SIMULATOR_UDID" >&2
+        exit 2
+    fi
+fi
+
 if [[ "$DRY_RUN" -eq 0 ]]; then
     mkdir -p "$LOG_DIR" "$DERIVED_DATA_DIR"
     regen_project
@@ -164,6 +205,11 @@ fi
 
 # Boot simulator if not already booted (UI tests need it)
 if [[ "$DRY_RUN" -eq 0 ]]; then
+if [[ -n "$SIMULATOR_UDID" ]]; then
+    echo "Ensuring requested iOS simulator '$SIMULATOR_UDID' is booted..."
+    wait_for_simulator_boot "$SIMULATOR_UDID" "iOS"
+    xcrun simctl terminate "$SIMULATOR_UDID" "$BUNDLE_ID" >/dev/null 2>&1 || true
+else
 echo "Ensuring simulator '$SIMULATOR_NAME' is booted..."
 DEVICE_INFO=$(xcrun simctl list devices available -j \
     | python3 -c "
@@ -220,6 +266,7 @@ if [[ -n "$DEVICE_INFO" ]]; then
     xcrun simctl terminate "$DEVICE_UDID" "$BUNDLE_ID" >/dev/null 2>&1 || true
 else
     echo "Warning: Could not find simulator '$SIMULATOR_NAME' (OS $SIMULATOR_OS). xcodebuild will attempt to boot one."
+fi
 fi
 fi
 
