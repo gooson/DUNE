@@ -222,6 +222,7 @@ enum AXID {
     static let habitFormFrequency = "habit-form-frequency"
     static let habitFormFrequencyDaily = "habit-form-frequency-daily"
     static let habitFormFrequencyWeekly = "habit-form-frequency-weekly"
+    static let habitFormReminderTime = "habit-form-reminder-time"
 
     // MARK: - Exercise (Activity sub-view)
     static let exerciseToolbarTemplates = "exercise-toolbar-templates"
