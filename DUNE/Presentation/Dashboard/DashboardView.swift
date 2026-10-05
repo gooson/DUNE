@@ -51,6 +51,7 @@ struct DashboardView: View {
     private let scoreRefreshService: ScoreRefreshService?
     @State private var showNotificationHub = false
     @State private var requestedNotificationItemID: String?
+    @State private var latestHubPresentationSignal = 0
     @State private var showWhatsNew = false
     @State private var showSettings = false
     @State private var cachedWeatherAtmosphere: WeatherAtmosphere = .default
@@ -238,9 +239,19 @@ struct DashboardView: View {
         }
         .onChange(of: notificationHubSignal) { _, newValue in
             guard newValue > 0 else { return }
+            latestHubPresentationSignal = newValue
             isShowingBriefing = false
             requestedNotificationItemID = notificationHubItemID
-            showNotificationHub = true
+            if showNotificationHub {
+                showNotificationHub = false
+                Task { @MainActor in
+                    await Task.yield()
+                    guard latestHubPresentationSignal == newValue else { return }
+                    showNotificationHub = true
+                }
+            } else {
+                showNotificationHub = true
+            }
         }
     }
 

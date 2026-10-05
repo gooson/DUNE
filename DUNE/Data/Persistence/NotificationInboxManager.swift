@@ -162,6 +162,9 @@ final class NotificationInboxManager: @unchecked Sendable {
             )
             let item = recordSentInsight(insight)
             _ = open(itemID: item.id)
+            if resolvedRoute(for: item) == nil {
+                emitNavigationRequest(.init(itemID: item.id, route: .notificationHub))
+            }
             return
         }
 
