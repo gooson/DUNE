@@ -93,7 +93,7 @@ struct ControlsView: View {
                         Button {
                             showReorderSheet = true
                         } label: {
-                            controlLabel(String(localized: "Reorder"), systemImage: "arrow.up.arrow.down")
+                            controlLabel("Reorder", systemImage: "arrow.up.arrow.down")
                         }
                         .tint(.secondary)
                         .accessibilityIdentifier("watch-session-controls-reorder-button")
@@ -103,7 +103,7 @@ struct ControlsView: View {
         }
     }
 
-    private func controlLabel(_ title: String, systemImage: String) -> some View {
+    private func controlLabel(_ title: LocalizedStringKey, systemImage: String) -> some View {
         VStack(spacing: DS.Spacing.xxs) {
             Image(systemName: systemImage)
                 .font(.title3)
