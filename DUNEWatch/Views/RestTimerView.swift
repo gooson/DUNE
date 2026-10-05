@@ -130,6 +130,9 @@ struct RestTimerView: View {
                     VStack(spacing: DS.Spacing.xxs) {
                         Text(timeString)
                             .font(DS.Typography.countdownValue)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.7)
+                            .frame(maxWidth: ringSize - 12)
                             .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.restTimerCountdown)
 
                         HStack(spacing: DS.Spacing.xxs) {
