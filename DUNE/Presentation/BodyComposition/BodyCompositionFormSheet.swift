@@ -66,25 +66,28 @@ struct BodyCompositionFormSheet: View {
                     }
                 }
             }
-            .englishNavigationTitle(isEdit ? "Edit Record" : "Add Record")
-            .navigationBarTitleDisplayMode(.inline)
-        }
-        .toolbar {
-            ToolbarItem(placement: .cancellationAction) {
-                Button("Cancel") { dismiss() }
-                    .accessibilityIdentifier("body-form-cancel")
-            }
-            ToolbarItem(placement: .confirmationAction) {
-                Button("Save") {
-                    Task {
-                        if await onSave() {
-                            saveCount += 1
+            .safeAreaInset(edge: .bottom, spacing: 0) {
+                HStack {
+                    Button("Cancel") { dismiss() }
+                        .accessibilityIdentifier("body-form-cancel")
+                    Spacer()
+                    Button("Save") {
+                        focusedField = nil
+                        Task {
+                            if await onSave() {
+                                saveCount += 1
+                            }
                         }
                     }
+                    .buttonStyle(.borderedProminent)
+                    .disabled(viewModel.isSaving || (viewModel.newWeight.isEmpty && viewModel.newBodyFat.isEmpty && viewModel.newMuscleMass.isEmpty))
+                    .accessibilityIdentifier("body-form-save")
                 }
-                .disabled(viewModel.isSaving || (viewModel.newWeight.isEmpty && viewModel.newBodyFat.isEmpty && viewModel.newMuscleMass.isEmpty))
-                .accessibilityIdentifier("body-form-save")
+                .padding(DS.Spacing.md)
+                .background(.bar)
             }
+            .englishNavigationTitle(isEdit ? "Edit Record" : "Add Record")
+            .navigationBarTitleDisplayMode(.inline)
         }
         .sensoryFeedback(.success, trigger: saveCount)
         .background { SheetWaveBackground() }
