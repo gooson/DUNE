@@ -98,3 +98,27 @@ final class NotificationResponseRoutingUITests: SeededUITestBaseCase {
         XCTAssertTrue(app.staticTexts["Daily Digest Route Fixture"].firstMatch.exists)
     }
 }
+
+@MainActor
+final class NotificationMetricResponseRoutingUITests: SeededUITestBaseCase {
+    override var uiScenario: LaunchScenario? { .notificationRoutingSeeded }
+
+    override var additionalLaunchArguments: [String] {
+        [
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+            "--ui-open-notification-title", "Sleep Debt Alert"
+        ]
+    }
+
+    func testRouteLessNotificationOpensMetricDetail() {
+        let detail = app.descendants(matching: .any)[AXID.metricDetailScreen("sleep")].firstMatch
+        XCTAssertTrue(detail.waitForExistence(timeout: 15), "Route-less alert should open its sleep metric detail")
+
+        let backButton = app.navigationBars.buttons.element(boundBy: 0)
+        XCTAssertTrue(backButton.waitForExistence(timeout: 5))
+        backButton.tap()
+
+        let hub = app.descendants(matching: .any)[AXID.notificationHubScreen].firstMatch
+        XCTAssertTrue(hub.waitForExistence(timeout: 8), "Back should return to the notification hub")
+    }
+}
