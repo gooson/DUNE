@@ -105,6 +105,14 @@ Xcode 27.1 시뮬레이터 빌드 통과: `/tmp/duo-unlocked-20261005/fixture-ga
 
 Body를 기존 복원 실패와 분리하기 위한 전용 시뮬레이터의 DUNE 앱 제거는 자동 승인 검토에서 기존 SwiftData/설정 삭제 위험으로 거부됐다. 앱 제거와 이후 독립 Body 실행은 **실행되지 않았다**. 사용자에게 해당 앱만 초기화하는 승인을 요청했다. 다른 시뮬레이터를 삭제하거나 이 거부를 우회하지 않았다. 새 기능 테스트는 기존 dirty audit 테스트/공유 helper에 의존하여 작업 파일에 보존했고, 이 증거 커밋에서 이전 dirty 테스트 전체를 일괄 스테이징하지 않는다.
 
+## 승인된 앱 초기화 후 독립 검증
+
+사용자의 `초기화해` 승인 후 전용 UUID `5A2A5D3F-3D53-4326-99DE-47823CA256FA`의 `com.raftel.dailve` 앱만 `simctl uninstall`로 제거했다(exit 0). 다른 시뮬레이터나 전체 기기를 초기화하지 않았다. 표준 UI runner가 같은 기기에 테스트 앱을 재설치하고 고급 목업으로 실행했다.
+
+`testBodyHistoryEditAndSaveAtMaximumAccessibilityTextSize`는 **44.754초, 1개 실행·1개 passed·0 skipped·0 failures, exit 0**으로 통과했다. [성공 receipt](assets/2026-10-05-duo/background-isolated-body-result.json). 최대 AX에서 88.8kg로 값 교체, 숫자 키보드 Done, Fat/Muscle 입력란 접근, 하단 Save의 hittability, 저장 뒤 88.8kg 표시·history의 hittability·모든 편집 sheet 소실을 확인했다. 이 성공은 깨끗한 목업 앱 설치에서의 Body 기능 검증이며 기존 Insights 복원/닫기 문제를 해결했다고 뜻하지 않는다. Mac 잠금 상태의 XCTest 실행이다.
+
+운동 실패 화면과 helper 코드를 대조해 일반 helper가 위쪽 입력란으로도 아래 방향 swipe만 반복하는 문제를 확인했다. workout 전용 컨테이너와 target frame에 따라 방향을 고르는 helper로 최초 입력/초안 검증을 수정했다. 한 번 재검증하여 kg/reps 수정·초안 유지, 첫 완료 세트 요약, +30s로 휴식 연장, countdown label 변화 및 감소, Skip Rest까지 진행했다. **전체 case는 158.872초 후 다음 세트 kg 접근에서 실패**했다. 다음 세트 검사에 남아 있던 같은 일반 helper 호출도 수정했지만 동일 원인의 재시도 예산을 소진했으므로 추가 실행하지 않았다. 원본 로그는 `/tmp/duo-unlocked-20261005/background-workout-scroll-ui.log`; 이 partial assertion 진행을 전체 case 통과로 처리하지 않는다. 실제 접힘 전환은 실행하지 않았다.
+
 ## 최종 컴파일 및 리뷰 기록
 
 - Xcode 27.1 표준 앱 빌드: `app-final-scene-and-breakdown.log`, `app-final-scene-owner.log` 통과. 리뷰의 조건부 P2(기존 Insights 재사용 시 이전 opener 유지)는 기존 Insights session의 opener를 새 출발 창으로 갱신하고 정확한 session 활성화를 요청하도록 수정했다. 소스 수준 해소이며 실제 여러 창 검증 대기.
