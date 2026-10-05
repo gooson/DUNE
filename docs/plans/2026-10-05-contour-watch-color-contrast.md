@@ -3,7 +3,7 @@ tags: [watchos, theme, contrast]
 category: plan
 topic: contour-watch-color-contrast
 date: 2026-10-05
-status: approved
+status: implemented
 confidence: high
 related_solutions: [2026-09-20-contour-atlas-theme, 2026-10-05-contour-watch-color-contrast]
 ---
@@ -45,7 +45,7 @@ related_solutions: [2026-09-20-contour-atlas-theme, 2026-10-05-contour-watch-col
 
 - Python 검사: 26개 변형, 흰색/ink/accent/sand/bronze 대 배경/카드의 대비 ≥ 4.5:1.
 - 자산 컴파일 및 `scripts/build-ios.sh` 통합 빌드.
-- `scripts/plan-ui-tests.py --base main` 결과를 저장한다. 공용 자산 경로는 기본적으로
+- `scripts/plan-ui-tests.py --base origin/main` 결과를 저장한다. 공용 자산 경로는 기본적으로
   iOS/watch full 판정 대상이나 universal 항목이 byte-equivalent이고 watch idiom만
   추가되는 것을 구조적으로 증명하면 iOS UI를 면제한다. watch full은 유지한다.
 - watch 테마 테스트가 홈과 운동 목록을 렌더링하며 스크린샷을 보존하는지 확인한다.
@@ -64,3 +64,7 @@ related_solutions: [2026-09-20-contour-atlas-theme, 2026-10-05-contour-watch-col
 ## Confidence
 
 높음: 실제 워치용 자산 컴파일과 대비 검사 통과. 실제 화면 확인은 파이프라인에서 추가한다.
+
+## 최종 검증 범위
+
+사용자의 핵심 작업·속도 우선 요청으로 추가 전체 재실행은 취소했다. 기존 13개 UI 테스트 통과와 수정한 테마 테스트 1개 통과, 화면 캡처 확인을 최종 증빙으로 유지한다.

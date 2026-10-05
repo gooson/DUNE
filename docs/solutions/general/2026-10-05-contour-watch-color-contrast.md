@@ -44,7 +44,15 @@ watchOS는 시스템 Dark Mode를 지원하지 않으므로 어두운 시스템 
 - `actool --platform watchsimulator --target-device watch` 컴파일 통과.
 - `xcodebuild build -scheme DUNEWatch -destination 'generic/platform=watchOS Simulator'`
   빌드 통과 (`/tmp/contour-watch-build.log`).
-- 실제 워치 화면 캡처 및 iPhone에서 테마 동기화 후 시각 확인은 미수행.
+- `scripts/build-ios.sh`: iOS/embedded Watch 통합 빌드 성공.
+- Watch UI 전체 실행: 기존 13개 통과, 새 테마 테스트의 컨테이너 AXID 검사 1개 실패.
+  실제 버튼 AXID로 수정 후 해당 테스트 1개 통과 (`/tmp/contour-watch-ui-retry.log`).
+- Apple Watch Series 12 (42mm), watchOS 27.0: 홈과 운동 목록 캡처에서
+  어두운 배경과 흰 글씨 표시를 직접 확인.
+- 추가 전체 재실행은 사용자의 핵심 작업·속도 우선 요청으로 대기 중 취소했다.
+  최종 상태에서 단일 전체 실행 통과라고 주장하지 않는다.
+- 보안/성능/아키텍처/데이터 정합성/단순성 및 SwiftUI/UX 리뷰: P1/P2/P3 0건.
+- iPhone에서 실제 워치로 테마 동기화하는 실기기 흐름은 미검증.
 
 ## Reference
 
