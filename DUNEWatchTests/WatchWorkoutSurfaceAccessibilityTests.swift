@@ -41,6 +41,7 @@ struct WatchWorkoutSurfaceAccessibilityTests {
             WatchWorkoutSurfaceAccessibility.restTimerScreen,
             WatchWorkoutSurfaceAccessibility.restTimerCountdown,
             WatchWorkoutSurfaceAccessibility.restTimerAddTimeButton,
+            WatchWorkoutSurfaceAccessibility.restTimerEndButton,
             WatchWorkoutSurfaceAccessibility.restTimerSkipButton,
             WatchWorkoutSurfaceAccessibility.setInputScreen,
             WatchWorkoutSurfaceAccessibility.setInputDoneButton,

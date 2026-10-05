@@ -69,12 +69,12 @@ final class WatchWorkoutFlowSmokeTests: WatchUITestBaseCase {
         assertFirstViewportButtons([
             WatchAXID.restTimerRPERate,
             "watch-rest-timer-add-time",
-            WatchAXID.restTimerSkipButton
+            WatchAXID.restTimerSkipButton,
+            WatchAXID.restTimerEndButton
         ], screenshot: "strength-rest-timer")
-        XCTAssertFalse(app.buttons["watch-rest-timer-end"].exists, "End belongs on Controls during rest")
     }
 
-    func testRestTimerContinuesAfterCancellingEndFromControls() throws {
+    func testRestTimerContinuesAfterCancellingEnd() throws {
         startFixtureStrengthWorkout()
         completeOneSetAndReachRestTimer()
         let countdown = app.staticTexts["watch-rest-timer-countdown"]
@@ -84,23 +84,18 @@ final class WatchWorkoutFlowSmokeTests: WatchUITestBaseCase {
             return
         }
 
-        openControlsPage()
-        XCTAssertTrue(tapElement(WatchAXID.sessionControlsEndButton, timeout: 5))
-        let cancel = app.buttons["watch-session-end-cancel"]
+        XCTAssertTrue(tapElement(WatchAXID.restTimerEndButton, timeout: 5))
+        // watchOS exposes a confirmation dialog's cancel role as its system close button.
+        let cancel = app.buttons["AX_ActionContentControllerCancelButton"]
         XCTAssertTrue(cancel.waitForExistence(timeout: 5), "End confirmation should offer cancellation")
         cancel.tap()
-        XCTAssertTrue(elementExists(WatchAXID.sessionControlsScreen, timeout: 5), "Workout should remain active")
-
-        for _ in 0..<4 where !elementExists(WatchAXID.restTimerScreen, timeout: 1) {
-            app.swipeUp()
-        }
-        XCTAssertTrue(elementExists(WatchAXID.restTimerScreen, timeout: 5), "Rest timer should resume after cancellation")
+        XCTAssertTrue(elementExists(WatchAXID.restTimerScreen, timeout: 5), "Workout should remain active")
         XCTAssertTrue(countdown.waitForExistence(timeout: 5))
         guard let resumedSeconds = restSeconds(from: countdown.label) else {
             XCTFail("Countdown should still expose minutes and seconds: \(countdown.label)")
             return
         }
-        XCTAssertLessThan(resumedSeconds, initialSeconds, "Rest time should advance while Controls is visible")
+        XCTAssertLessThan(resumedSeconds, initialSeconds, "Rest time should advance while confirmation is visible")
         let resumedValue = countdown.label
         XCTAssertEqual(
             XCTWaiter.wait(
@@ -140,6 +135,9 @@ final class WatchWorkoutFlowSmokeTests: WatchUITestBaseCase {
     func testSingleExerciseWorkoutCanReachSummarySurface() throws {
         completeFixtureStrengthWorkoutToSummary()
 
+        if elementExists(WatchAXID.sessionSummaryEffortSheet, timeout: 3) {
+            XCTAssertTrue(tapElement(WatchAXID.sessionSummaryEffortDoneButton, timeout: 5))
+        }
         XCTAssertTrue(elementExists(WatchAXID.sessionSummaryScreen, timeout: 8))
         XCTAssertTrue(elementExists(WatchAXID.sessionSummaryEffortButton, timeout: 5))
         XCTAssertTrue(elementExists(WatchAXID.sessionSummaryDoneButton, timeout: 5))

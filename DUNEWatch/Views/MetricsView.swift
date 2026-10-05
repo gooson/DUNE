@@ -581,7 +581,7 @@ struct MetricsView: View {
         workoutManager.recordRestDuration(timerTotal)
         lastRestTimerTotal = timerTotal
 
-        // Save estimated/adjusted RPE to the just-completed set before advancing
+        // RPE was recorded on completion or when the user adjusted it.
         clearEstimatedRPE()
 
         showRestTimer = false

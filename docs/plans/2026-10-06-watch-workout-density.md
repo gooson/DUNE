@@ -21,7 +21,7 @@ related_brainstorms:
 ### Functional
 
 - 휴식 중 남은 시간을 최우선으로 보여주고 RPE 입력은 발견 가능하게 유지한다.
-- 휴식 동작은 큰 `Skip`과 `+30s`를 중심으로 배치한다. 운동 종료는 기존 Controls 페이지에 남긴다.
+- 휴식 동작은 큰 `Skip`과 `+30s`를 중심으로 배치한다. 종료는 휴식 화면 상단에서 확인창으로 접근한다.
 - `End` 확인을 취소해도 countdown, 경고 햅틱, 자동 완료가 유지된다.
 - 근력 세트 화면의 중복 진행 표현을 줄이고 완료 버튼을 유지한다.
 - 완료 요약에서 핵심 통계와 저장 동작을 상세 내역보다 먼저 보여준다.
@@ -34,7 +34,7 @@ related_brainstorms:
 
 ## Approach
 
-`RestTimerView`에서 3열 텍스트 버튼과 중복 종료 동작을 제거하고, 타이머 중심의 세로 위계로 재배치한다. RPE는 작은 명시적 입력 행으로 둔다. 종료는 기존 `ControlsView`의 확인 동작을 사용한다. `MetricsView`는 막대/점 중 하나만 남겨 현재 세트를 더 명확히 하고, `SessionSummaryView`는 저장 버튼을 핵심 통계 직후로 이동한다. 전역 DS 간격을 일괄 확대하지 않는다.
+`RestTimerView`에서 3열 텍스트 버튼을 없애고, 타이머 중심의 세로 위계로 재배치한다. RPE는 타이머 옆의 작은 입력 타일로 둔다. 종료는 화면 상단 아이콘에서 확인창을 거쳐 실행한다. `MetricsView`는 막대와 점 표시를 제거하고 현재 세트 문구 하나로 진행 상태를 전달한다. `SessionSummaryView`의 저장 버튼은 하단에 고정한다. 전역 DS 간격을 일괄 확대하지 않는다.
 
 ### Alternative Approaches Considered
 
@@ -43,15 +43,15 @@ related_brainstorms:
 | 모든 Watch 간격 토큰 확대 | 변경량 적음 | 작은 화면 overflow 및 다른 화면 회귀 | 선택 안 함 |
 | RPE를 별도 페이지에 숨김 | 휴식 화면이 단순해짐 | 이전 RPE 가시성 회귀 | 선택 안 함 |
 | 휴식 종료 버튼 유지·크기만 축소 | 기능 위치 유지 | 3열 조작과 오터치 문제 지속 | 선택 안 함 |
-| 휴식 종료를 Controls에서만 제공 | 휴식 화면의 동작 수 감소 | Crown으로 한 페이지 이동 필요 | 선택 |
+| 휴식 종료를 Controls에서만 제공 | 휴식 화면의 동작 수 감소 | 휴식 중 세로 페이지 이동이 안정적이지 않음 | 시뮬레이터 검증 후 제외 |
 
 ## Affected Files
 
 | File | Change Type | Description |
 |------|-------------|-------------|
 | `DUNEWatch/Views/RestTimerView.swift` | Modify | 타이머/RPE/동작 위계와 종료 취소 버그 수정 |
-| `DUNEWatch/Views/MetricsView.swift` | Modify | 중복 세트 진행 표현 정리, rest 종료 콜백 제거 |
-| `DUNEWatch/Views/SessionSummaryView.swift` | Modify | 저장 동작을 핵심 통계 뒤로 이동 |
+| `DUNEWatch/Views/MetricsView.swift` | Modify | 중복 세트 진행 표현 정리, RPE 기록 유지 |
+| `DUNEWatch/Views/SessionSummaryView.swift` | Modify | 저장 동작을 하단에 고정 |
 | `DUNEWatch/Resources/Localizable.xcstrings` | If needed | 새/변경 라벨 3개 언어 번역 |
 | `DUNEWatchUITests/Smoke/WatchWorkoutFlowSmokeTests.swift` | Modify | 휴식 CTA, 큰 글씨, Controls 종료 흐름 검증 |
 | `DUNEWatchUITests/Smoke/WatchResponsiveWorkoutLayoutTests.swift` | Modify | 휴식 화면 핵심 조작 viewport 검증 |
@@ -62,19 +62,19 @@ related_brainstorms:
 ### Step 1: 휴식 화면과 종료 흐름
 
 - **Files**: `RestTimerView.swift`, `MetricsView.swift`, Watch strings if needed
-- **Changes**: 타이머를 시각적 중심으로 확대, RPE를 보조 행으로 유지, 3열 버튼을 분리하고 End를 Controls로 이동. 종료 취소에 앞선 countdown cancel을 제거한다.
-- **Verification**: RPE 입력/건너뛰기/+30초가 남고, Controls에서 종료 확인을 취소하면 타이머가 계속 진행한다.
+- **Changes**: 타이머를 시각적 중심으로 확대, RPE를 옆 타일로 유지, 3열 버튼을 2열로 줄이고 End를 상단으로 이동. 종료 확인을 취소해도 countdown을 유지한다.
+- **Verification**: RPE 입력/건너뛰기/+30초가 남고, 휴식 중 종료 확인을 취소하면 타이머가 계속 진행한다.
 
 ### Step 2: 세트/요약 정보 위계
 
 - **Files**: `MetricsView.swift`, `SessionSummaryView.swift`
-- **Changes**: 중복 진행 표시를 하나로 줄이고 완료 저장을 상세 내역 위로 이동.
+- **Changes**: 중복 진행 표시를 하나로 줄이고 완료 저장을 하단에 고정.
 - **Verification**: 현재 세트·완료 CTA 및 요약 핵심 통계·저장 CTA가 최초 화면에 접근 가능하다.
 
 ### Step 3: 화면 검증
 
 - **Files**: Watch UI tests and selectors as necessary
-- **Changes**: seeded strength flow에서 휴식 레이아웃·RPE·Skip, 큰 글씨 접근, Controls 종료 확인 취소를 고정한다.
+- **Changes**: seeded strength flow에서 휴식 레이아웃·RPE·Skip, 큰 글씨 접근, 휴식 중 종료 확인 취소를 고정한다.
 - **Verification**: `scripts/build-ios.sh`, 변경 범위 판정 결과가 요구하는 Watch UI suite, 관련 unit tests 통과. 시뮬레이터 접근 실패 시 로그와 미검증 범위를 명확히 기록한다.
 
 ## Edge Cases
@@ -86,7 +86,7 @@ related_brainstorms:
 | +30초 총 600초 제한 | 한도에서 비활성 상태를 표시 |
 | 확인창 취소/타이머 만료 경합 | 확인 전 countdown을 멈추지 않으며, 확정 종료만 task 취소 |
 | 작은 화면/큰 글씨/긴 번역 | ViewThatFits/ScrollView fallback 및 터치 영역 확인 |
-| 화면 전환 중 countdown | 기존 onDisappear 취소·완료 콜백 유지 |
+| 화면 전환 중 countdown | 운동이 살아 있으면 타이머를 지속하고 종료 때 취소 |
 
 ## Testing Strategy
 
@@ -100,7 +100,7 @@ related_brainstorms:
 
 | Risk | Probability | Impact | Mitigation |
 |------|-------------|--------|------------|
-| Crown 세로 페이지 이동과 휴식 조작 충돌 | Medium | Medium | Controls 이동을 기존 vertical TabView에서 테스트 |
+| Crown 세로 페이지 이동과 휴식 조작 충돌 | Medium | Medium | 휴식 화면에서 바로 종료 확인을 열 수 있게 배치 |
 | 새 위계가 작은 Watch에서 overflow | Medium | High | 최소 크기/큰 글씨 viewport 테스트 |
 | RPE 진입점이 숨겨짐 | Medium | Medium | 버튼을 최초 화면에 유지하고 UI selector로 고정 |
 | CoreSimulator 서비스 접근 실패 | Medium | High | 한 번 원인 확인 후 권한 경로로 복구, 동일 실패 무의미 재시도 금지 |

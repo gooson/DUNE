@@ -50,6 +50,7 @@ enum WatchWorkoutSurfaceAccessibility {
     static let restTimerScreen = "watch-rest-timer-screen"
     static let restTimerCountdown = "watch-rest-timer-countdown"
     static let restTimerAddTimeButton = "watch-rest-timer-add-time"
+    static let restTimerEndButton = "watch-rest-timer-end"
     static let restTimerSkipButton = "watch-rest-timer-skip"
 
     static let setInputScreen = "watch-set-input-screen"

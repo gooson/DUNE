@@ -42,6 +42,7 @@ enum WatchAXID {
     static let sessionControlsPauseResumeButton = "watch-session-pause-resume-button"
     static let sessionControlsPauseResumeLabels = ["Pause", "일시정지", "一時停止", "Resume", "재개", "再開"]
     static let restTimerScreen = "watch-rest-timer-screen"
+    static let restTimerEndButton = "watch-rest-timer-end"
     static let restTimerSkipButton = "watch-rest-timer-skip"
     static let restTimerSkipLabels = ["Skip", "건너뛰기", "スキップ"]
     static let setInputScreen = "watch-set-input-screen"
@@ -58,6 +59,8 @@ enum WatchAXID {
     static let sessionSummaryScreen = "watch-session-summary-screen"
     static let sessionSummaryEffortButton = "watch-summary-effort-button"
     static let sessionSummaryDoneButton = "watch-session-summary-done"
+    static let sessionSummaryEffortSheet = "watch-session-summary-effort-sheet"
+    static let sessionSummaryEffortDoneButton = "watch-session-summary-effort-done"
     static let sessionSummaryDoneLabels = ["Done", "완료", "完了", "Finishing...", "마무리 중...", "完了処理中..."]
 }
 
