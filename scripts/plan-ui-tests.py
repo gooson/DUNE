@@ -30,9 +30,12 @@ FEATURE_SUITES = {
 }
 UI_GATE_TOOLING = {"scripts/test-ui.sh", "scripts/plan-ui-tests.py",
                    "scripts/lib/verify-ui-test-log.py", "scripts/tests/test_ui_test_runner.py",
-                   "scripts/tests/test_plan_ui_tests.py"}
+                   "scripts/tests/test_plan_ui_tests.py", "scripts/test-watch-ui.sh",
+                   "scripts/lib/test-log-summary.py", "scripts/tests/test_test_log_summary.py"}
+CODEX_TOOLING = {"scripts/codex-context.py", "scripts/codex-pipeline.py", "scripts/codex-check.py",
+                 "scripts/check-codex-claude-parity.py", "scripts/tests/test_codex_context.py",
+                 "scripts/tests/test_codex_pipeline.py", "scripts/tests/test-codex-check.py"}
 UI_WORKFLOW = ".github/workflows/test-ui.yml"
-WATCH_INFRA = {"scripts/test-watch-ui.sh"}
 DOC_FILES = {"AGENTS.md", "CLAUDE.md", "README.md", "CHANGELOG.md"}
 LEVEL = {"skip": 0, "targeted": 1, "full": 2}
 
@@ -107,7 +110,11 @@ def make_plan(paths: list[str], root: Path, *, workflow_selection_only: bool = F
             reason = "UI gate tooling: contract tests and diff review; no automatic app UI run"
             additional.add("Run UI gate Python contract tests, bash -n and selection dry-runs.")
             additional.add("Review tooling diff: launch/install/seed/device/CI execution changes need affected integration tests; uncertain app impact needs full.")
-        elif path in WATCH_INFRA or path.startswith(("DUNEWatch/", "DUNEWatchUITests/")):
+        elif path in CODEX_TOOLING:
+            reason = "Codex verification tooling: Python contracts and diff review; no app runtime change"
+            additional.add("Run Codex tooling contract tests and parity check; inspect evidence/retry safety.")
+            additional.add("Tooling classification is provisional: if commands change app launch/install/seed/device/CI execution, run affected integration tests.")
+        elif path.startswith(("DUNEWatch/", "DUNEWatchUITests/")):
             require("watch", "full")
             reason = "watch app/test change: separate watch full gate"
             if path.startswith("DUNEWatch/"):

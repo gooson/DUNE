@@ -91,6 +91,19 @@ class PlanTests(unittest.TestCase):
         plan = self.plan("scripts/plan-ui-tests.py", "DUNE/App/ContentView.swift")
         self.assertEqual(plan["platforms"]["ios"]["mode"], "full")
 
+    def test_codex_tooling_is_an_exact_allowlist_with_contract_obligation(self):
+        plan = self.plan(*MODULE.CODEX_TOOLING)
+        self.assertEqual(plan["commands"], [])
+        self.assertTrue(any("contract tests" in item for item in plan["additional_validation"]))
+        for path in ("scripts/codex-new.py", "scripts/tests/test_unknown.py",
+                     "scripts/lib/simulator-worktree.sh"):
+            self.assertEqual(self.plan(path)["platforms"]["ios"]["mode"], "full")
+
+    def test_codex_tooling_mixed_with_watch_app_still_requires_both(self):
+        plan = self.plan("scripts/codex-pipeline.py", "DUNEWatch/ContentView.swift")
+        self.assertEqual(plan["platforms"]["ios"]["mode"], "full")
+        self.assertEqual(plan["platforms"]["watch"]["mode"], "full")
+
     def test_workflow_requires_execution_evidence_before_skip(self):
         self.assertEqual(self.plan(MODULE.UI_WORKFLOW)["platforms"]["ios"]["mode"], "full")
         self.assertEqual(MODULE.make_plan([MODULE.UI_WORKFLOW], ROOT,
