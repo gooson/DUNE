@@ -2,7 +2,8 @@
 tags: [habits, local-notifications, concurrency, lifecycle]
 date: 2026-09-27
 category: solution
-status: draft
+status: implemented
+updated: 2026-10-05
 ---
 
 # 습관 알림 예약 누락과 복구
@@ -19,15 +20,28 @@ daily/weekly 습관은 cycleSnapshot이 nil인데 scheduler가 nextDueDate를 �
 - ContentView의 HabitReminderSyncView가 앱 진입·복귀·권한 허용·저장 데이터 변경을 관찰한다. 200ms cancellable task로 연속 이벤트를 병합하고 interval 기록만 조회한다. 오래된 anchor 보존을 위해 날짜 제한은 두지 않는다.
 - 예약 ID와 현재 습관 ID를 대조해 삭제된 습관 요청만 제거한다. 보관 습관은 빈 요청으로 기존 예약을 제거한다.
 
-## Validation / Remaining Work
+## Validation
 
-- 최종 iOS/포함 Watch 빌드 통과: `/tmp/habit-reminder-build-verified.log`.
-- 알림 회귀 테스트 6개 작성: 빈도별 요청, 시간 경계, 보관, 직렬 실행, orphan 정리. **실행 통과는 미확인**.
-- 전체 단위 테스트가 기존 DashboardViewModel Fallback 테스트에서 진행되지 않아 종료했다. 사용자의 후속 지시로 검증을 관련 테스트로 제한했다.
-- 관련 4개 suite 실행은 시뮬레이터 destination 인식 실패(exit 70), 재시도는 런너 무응답으로 종료(exit 143). `/tmp/habit-reminder-targeted-tests.log`.
-- UI 전체 실행은 사용자 범위 축소에 따라 종료했다. 생성/편집 picker 확인을 추가했으나 실행 결과는 미확인이다.
-- Work 단계 SwiftUI/UX/종합 품질 검토에서 orphan 정리와 이벤트 병합을 반영했다. 정식 Review/Resolve/Ship 게이트는 미진입, PR/머지 없음.
-- 후속 실행: HabitReminderSchedulerTests, HabitReminderOffsetTests, HabitCycleSnapshotTests, LifeViewModelTests 및 Life 생성/편집 UI 테스트만 검증한다.
+- 2026-10-05 최신 origin/main 통합 후 관련 단위 테스트 **53개 / 4개 suite 통과**: HabitReminderSchedulerTests, HabitReminderOffsetTests, HabitCycleSnapshotTests, LifeViewModelTests. 로그: `/tmp/habit-finish-unit.log`.
+- 관련 UI 테스트 **3개 통과**: LifeSmokeTests.testHabitFormOpens, LifeSeededSmokeTests.testHabitActionsMenuOpensEditSheet, testHabitActionsMenuArchivesHabit. 로그: `/tmp/habit-finish-ui.log`.
+- iOS 앱 빌드 및 최신 통합 소스의 테스트 빌드 통과. 이번 변경에 모델 스키마·Watch 코드 변경은 없다.
+- 보안·데이터 정합성·아키텍처·성능·단순성 및 PR 통합 최종 리뷰: P1=0, P2=0, P3=0. 이전 orphan 정리·이벤트 병합 지적은 해결했다.
+- 전체 범위 판정기는 App 파일 때문에 보수적으로 full을 출력하지만, 사용자 지시(필요한 테스트만)에 따라 실제 변경 소비자인 Life 생성·편집·보관과 scheduler/cycle/VM에 검증을 한정했다. 전체 단위/UI 테스트는 재실행하지 않았다.
+- 이전 시뮬레이터 장애로 인한 미검증 상태는 위 성공 결과로 해소했다. 실기기의 권한·집중 모드에 따른 실제 수신은 이 테스트가 인증하지 않는다.
+
+## Pipeline Proof
+
+| 단계 | 결과 |
+|------|------|
+| Init / Plan | 작업 브랜치 및 영향 파일·경계 조건 계획 기록 |
+| Work / UI | 구현 커밋, 관련 단위 53개 및 UI 3개 통과 |
+| Review / Quality / Resolve | 최종 diff 리뷰 5관점+통합, 미해결 finding 0건 |
+| Compound / Pre-Ship | 최종 구현 문서 동기화, 최신 main 통합, clean 상태 확인 |
+| Ship | 검증 완료 커밋을 PR로 생성하고 GitHub merge 전략으로 통합 |
+
+## Change Verification Guide
+
+Life에서 매일 또는 매주 습관의 알림 시간을 가까운 미래로 지정한 뒤 저장한다. 시스템 알림을 허용하고 앱을 백그라운드로 보낸 뒤 수신을 확인한다. 기존 습관은 앱을 다시 열면 예약이 복구되며, 보관한 습관의 예정 알림은 제거된다.
 
 ## Prevention
 

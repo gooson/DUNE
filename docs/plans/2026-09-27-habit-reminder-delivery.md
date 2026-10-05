@@ -2,7 +2,8 @@
 tags: [habits, notifications, concurrency]
 date: 2026-09-27
 category: plan
-status: approved
+status: implemented
+updated: 2026-10-05
 ---
 
 # 습관 알림 예약 복구
