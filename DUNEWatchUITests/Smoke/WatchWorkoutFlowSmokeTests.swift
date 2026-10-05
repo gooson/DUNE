@@ -51,6 +51,10 @@ final class WatchWorkoutFlowSmokeTests: WatchUITestBaseCase {
         XCTAssertTrue(elementExists(WatchAXID.sessionControlsScreen, timeout: 5))
         XCTAssertTrue(elementExists(WatchAXID.sessionControlsEndButton, timeout: 5))
         XCTAssertTrue(elementExists(WatchAXID.sessionControlsPauseResumeButton, timeout: 5))
+        assertFirstViewportButtons([
+            WatchAXID.sessionControlsEndButton,
+            WatchAXID.sessionControlsPauseResumeButton
+        ], screenshot: "strength-controls")
     }
 
     func testRestTimerAppearsAfterCompletingFirstSet() throws {
@@ -59,6 +63,7 @@ final class WatchWorkoutFlowSmokeTests: WatchUITestBaseCase {
 
         XCTAssertTrue(elementExists(WatchAXID.restTimerScreen, timeout: 5))
         XCTAssertTrue(elementExists(WatchAXID.restTimerSkipButton, timeout: 5))
+        assertFirstViewportButtons([WatchAXID.restTimerSkipButton], screenshot: "strength-rest-timer")
     }
 
     func testSingleExerciseWorkoutCanReachSummarySurface() throws {

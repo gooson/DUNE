@@ -20,6 +20,15 @@ enum WatchAXID {
     static let workoutPreviewScreen = "watch-workout-preview-screen"
     static let workoutPreviewStrengthList = "watch-workout-preview-strength-list"
     static let workoutPreviewStartButton = "watch-workout-start-button"
+    static let workoutPreviewCardio = "watch-workout-preview-cardio"
+    static let workoutPreviewCardioIndoorButton = "watch-workout-cardio-indoor-button"
+    static let workoutPreviewCardioOutdoorButton = "watch-workout-cardio-outdoor-button"
+    static let workoutPreviewLevelDecrease = "watch-workout-preview-level-decrease"
+    static let workoutPreviewLevelValue = "watch-workout-preview-level-value"
+    static let workoutPreviewLevelIncrease = "watch-workout-preview-level-increase"
+    static let cardioLevelDecrease = "watch-cardio-level-decrease"
+    static let cardioLevelValue = "watch-cardio-level-value"
+    static let cardioLevelIncrease = "watch-cardio-level-increase"
     static let workoutPreviewStartLabels = ["Start", "시작", "開始"]
     static let sessionPagingRoot = "watch-session-paging-root"
     static let sessionMetricsScreen = "watch-session-metrics-screen"
@@ -58,6 +67,7 @@ class WatchUITestBaseCase: XCTestCase {
     enum LaunchScenario: String {
         case empty = "empty"
         case defaultSeeded = "default-seeded"
+        case responsiveLayout = "responsive-layout"
     }
 
     struct LaunchConfiguration {
@@ -564,6 +574,29 @@ class WatchUITestBaseCase: XCTestCase {
         attachment.name = name
         attachment.lifetime = lifetime
         add(attachment)
+    }
+
+    /// Checks the actual accessible button frame before the test performs any scrolling.
+    func assertFirstViewportButtons(_ identifiers: [String], screenshot: String) {
+        for identifier in identifiers {
+            XCTAssertTrue(app.buttons[identifier].waitForExistence(timeout: 5), "Missing \(identifier)")
+        }
+        addScreenshotAttachment(named: defaultArtifactName(suffix: screenshot))
+
+        let screen = app.frame
+        XCTAssertGreaterThan(screen.width, 0)
+        XCTAssertGreaterThan(screen.height, 0)
+        for identifier in identifiers {
+            let button = app.buttons[identifier]
+            let frame = button.frame
+            XCTAssertTrue(button.isHittable, "\(identifier) must be tappable without scrolling")
+            XCTAssertGreaterThan(frame.width, 0, "\(identifier) must have a real frame")
+            XCTAssertGreaterThan(frame.height, 0, "\(identifier) must have a real frame")
+            XCTAssertGreaterThanOrEqual(frame.minX, screen.minX - 1, "\(identifier) clips at left edge: \(frame), screen: \(screen)")
+            XCTAssertGreaterThanOrEqual(frame.minY, screen.minY - 1, "\(identifier) clips at top edge: \(frame), screen: \(screen)")
+            XCTAssertLessThanOrEqual(frame.maxX, screen.maxX + 1, "\(identifier) clips at right edge: \(frame), screen: \(screen)")
+            XCTAssertLessThanOrEqual(frame.maxY, screen.maxY + 1, "\(identifier) clips at bottom edge: \(frame), screen: \(screen)")
+        }
     }
 
     private func addSystemPermissionMonitor() {

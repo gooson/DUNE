@@ -12,5 +12,6 @@ final class WatchWorkoutStartSmokeTests: WatchUITestBaseCase {
         dismissSetInputSheetIfNeeded()
         XCTAssertTrue(elementExists(WatchAXID.sessionMetricsScreen, timeout: 5))
         XCTAssertTrue(elementExists(WatchAXID.sessionMetricsCompleteSetButton, timeout: 5))
+        addScreenshotAttachment(named: defaultArtifactName(suffix: "active-strength-metrics"))
     }
 }
