@@ -230,6 +230,7 @@ struct DashboardView: View {
         }
         .onChange(of: viewModel.briefingData != nil) { _, hasData in
             if hasData,
+               notificationHubSignal == 0,
                !isBriefingDisabled,
                MorningBriefingViewModel.shouldShowBriefing() {
                 isShowingBriefing = true
@@ -237,6 +238,7 @@ struct DashboardView: View {
         }
         .onChange(of: notificationHubSignal) { _, newValue in
             guard newValue > 0 else { return }
+            isShowingBriefing = false
             requestedNotificationItemID = notificationHubItemID
             showNotificationHub = true
         }

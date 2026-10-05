@@ -85,6 +85,10 @@ final class NotificationResponseRoutingUITests: SeededUITestBaseCase {
             XCTAssertTrue(todayTab.isSelected, "Notification response should select Today")
         }
 
+        let briefingDismiss = app.buttons[AXID.dashboardMorningBriefingDismiss].firstMatch
+        let briefingClosed = XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == false"), object: briefingDismiss)
+        XCTAssertEqual(XCTWaiter.wait(for: [briefingClosed], timeout: 5), .completed)
+
         let backButton = app.navigationBars.buttons.element(boundBy: 0)
         XCTAssertTrue(backButton.waitForExistence(timeout: 5), "Message detail should have a back button")
         backButton.tap()
