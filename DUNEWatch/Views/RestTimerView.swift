@@ -39,7 +39,47 @@ struct RestTimerView: View {
     @State private var pendingTimerCompletion = false
 
     var body: some View {
-        VStack(spacing: DS.Spacing.xs) {
+        GeometryReader { geometry in
+            let ringSize = min(80, max(60, geometry.size.height * 0.38))
+            let spacing = min(DS.Spacing.xs, max(DS.Spacing.xxs, geometry.size.height * 0.02))
+
+            ViewThatFits(in: .vertical) {
+                timerContent(ringSize: ringSize, actionSpacing: spacing)
+
+                ScrollView {
+                    timerContent(ringSize: ringSize, actionSpacing: spacing)
+                        .frame(maxWidth: .infinity)
+                }
+                .scrollBounceBehavior(.basedOnSize)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.restTimerScreen)
+        .sheet(isPresented: $showRPEInput, onDismiss: {
+            if pendingTimerCompletion {
+                pendingTimerCompletion = false
+                timerFinished()
+            }
+        }) {
+            rpeOverlay
+                .padding(DS.Spacing.md)
+                .accessibilityElement(children: .contain)
+                .accessibilityIdentifier("watch-rest-timer-rpe-sheet")
+        }
+        .onAppear {
+            if let estimatedRPE {
+                adjustedRPE = estimatedRPE
+            }
+            startCountdown()
+        }
+        .onDisappear {
+            cancelCountdown()
+        }
+    }
+
+    private func timerContent(ringSize: CGFloat, actionSpacing: CGFloat) -> some View {
+        VStack(spacing: actionSpacing) {
             Text("Rest")
                 .font(DS.Typography.metricLabel)
                 .foregroundStyle(.secondary)
@@ -77,7 +117,7 @@ struct RestTimerView: View {
                     }
                 }
             }
-            .frame(width: 80, height: 80)
+            .frame(width: ringSize, height: ringSize)
 
             if let estimatedRPE {
                 HStack(spacing: DS.Spacing.xs) {
@@ -107,7 +147,7 @@ struct RestTimerView: View {
             }
 
             // +30s / Skip / End buttons
-            HStack(spacing: DS.Spacing.md) {
+            HStack(spacing: actionSpacing) {
                 Button {
                     addTime(30)
                 } label: {
@@ -117,6 +157,7 @@ struct RestTimerView: View {
                 }
                 .buttonStyle(.bordered)
                 .tint(.secondary)
+                .frame(maxWidth: .infinity)
                 .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.restTimerAddTimeButton)
 
                 Button {
@@ -130,6 +171,7 @@ struct RestTimerView: View {
                 }
                 .buttonStyle(.bordered)
                 .tint(DS.Color.positive)
+                .frame(maxWidth: .infinity)
                 .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.restTimerSkipButton)
 
                 Button(role: .destructive) {
@@ -142,30 +184,9 @@ struct RestTimerView: View {
                 }
                 .buttonStyle(.bordered)
                 .tint(DS.Color.negative)
+                .frame(maxWidth: .infinity)
                 .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.restTimerEndButton)
             }
-        }
-        .accessibilityElement(children: .contain)
-        .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.restTimerScreen)
-        .sheet(isPresented: $showRPEInput, onDismiss: {
-            if pendingTimerCompletion {
-                pendingTimerCompletion = false
-                timerFinished()
-            }
-        }) {
-            rpeOverlay
-                .padding(DS.Spacing.md)
-                .accessibilityElement(children: .contain)
-                .accessibilityIdentifier("watch-rest-timer-rpe-sheet")
-        }
-        .onAppear {
-            if let estimatedRPE {
-                adjustedRPE = estimatedRPE
-            }
-            startCountdown()
-        }
-        .onDisappear {
-            cancelCountdown()
         }
     }
 

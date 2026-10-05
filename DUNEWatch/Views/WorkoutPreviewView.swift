@@ -91,82 +91,126 @@ struct WorkoutPreviewView: View {
             let spacing = min(DS.Spacing.md, max(DS.Spacing.xs, geometry.size.height * 0.025))
             let iconSize = min(32, max(20, geometry.size.height * 0.14))
 
-            VStack(spacing: spacing) {
-                ScrollView {
-                    HStack(spacing: spacing) {
-                        Image(systemName: activityType.iconName)
-                            .font(.system(size: iconSize))
-                            .foregroundStyle(DS.Color.activity)
+            ViewThatFits(in: .vertical) {
+                cardioContent(
+                    activityType: activityType,
+                    cardioUnit: cardioUnit,
+                    supportsOutdoor: supportsOutdoor,
+                    spacing: spacing,
+                    iconSize: iconSize,
+                    scrollHeader: true
+                )
 
-                        Text(LocalizedStringKey(activityType.typeName))
-                            .font(DS.Typography.exerciseName)
-                            .multilineTextAlignment(.leading)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding(.horizontal, DS.Spacing.lg)
+                ScrollView {
+                    cardioContent(
+                        activityType: activityType,
+                        cardioUnit: cardioUnit,
+                        supportsOutdoor: supportsOutdoor,
+                        spacing: spacing,
+                        iconSize: iconSize,
+                        scrollHeader: false
+                    )
                 }
                 .scrollBounceBehavior(.basedOnSize)
-
-                if let cardioUnit, cardioUnit.supportsMachineLevel,
-                   let range = cardioUnit.machineLevelRange {
-                    machineLevelPicker(range: range)
-                        .padding(.horizontal, DS.Spacing.lg)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-
-                VStack(spacing: DS.Spacing.xs) {
-                    if supportsOutdoor {
-                        Button {
-                            startCardio(
-                                activityType: activityType,
-                                isOutdoor: false,
-                                secondaryUnit: cardioUnit
-                            )
-                        } label: {
-                            cardioButtonLabel(String(localized: "Indoor"), systemImage: "building.fill")
-                        }
-                        .buttonStyle(.bordered)
-                        .disabled(isStarting)
-                        .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.workoutPreviewCardioIndoorButton)
-                    } else {
-                        Button {
-                            startCardio(
-                                activityType: activityType,
-                                isOutdoor: false,
-                                secondaryUnit: cardioUnit
-                            )
-                        } label: {
-                            cardioButtonLabel(String(localized: "Indoor"), systemImage: "building.fill")
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .tint(DS.Color.activity)
-                        .disabled(isStarting)
-                        .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.workoutPreviewCardioIndoorButton)
-                    }
-
-                    if supportsOutdoor {
-                        Button {
-                            startCardio(
-                                activityType: activityType,
-                                isOutdoor: true,
-                                secondaryUnit: cardioUnit
-                            )
-                        } label: {
-                            Label(String(localized: "Outdoor"), systemImage: "sun.max.fill")
-                                .frame(maxWidth: .infinity, minHeight: 44)
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .tint(DS.Color.positive)
-                        .disabled(isStarting)
-                        .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.workoutPreviewCardioOutdoorButton)
-                    }
-                }
-                .padding(.horizontal, DS.Spacing.lg)
-                .fixedSize(horizontal: false, vertical: true)
             }
         }
         .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.workoutPreviewCardio)
+    }
+
+    private func cardioContent(
+        activityType: WorkoutActivityType,
+        cardioUnit: CardioSecondaryUnit?,
+        supportsOutdoor: Bool,
+        spacing: CGFloat,
+        iconSize: CGFloat,
+        scrollHeader: Bool
+    ) -> some View {
+        VStack(spacing: spacing) {
+            if scrollHeader {
+                ScrollView {
+                    cardioHeader(activityType: activityType, iconSize: iconSize, spacing: spacing)
+                }
+                .scrollBounceBehavior(.basedOnSize)
+            } else {
+                cardioHeader(activityType: activityType, iconSize: iconSize, spacing: spacing)
+            }
+
+            if let cardioUnit, cardioUnit.supportsMachineLevel,
+               let range = cardioUnit.machineLevelRange {
+                machineLevelPicker(range: range)
+                    .padding(.horizontal, DS.Spacing.lg)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
+            cardioActionButtons(
+                activityType: activityType,
+                cardioUnit: cardioUnit,
+                supportsOutdoor: supportsOutdoor
+            )
+            .padding(.horizontal, DS.Spacing.lg)
+            .fixedSize(horizontal: false, vertical: true)
+        }
+    }
+
+    private func cardioHeader(
+        activityType: WorkoutActivityType,
+        iconSize: CGFloat,
+        spacing: CGFloat
+    ) -> some View {
+        HStack(spacing: spacing) {
+            Image(systemName: activityType.iconName)
+                .font(.system(size: iconSize))
+                .foregroundStyle(DS.Color.activity)
+
+            Text(LocalizedStringKey(activityType.typeName))
+                .font(DS.Typography.exerciseName)
+                .multilineTextAlignment(.leading)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.horizontal, DS.Spacing.lg)
+    }
+
+    private func cardioActionButtons(
+        activityType: WorkoutActivityType,
+        cardioUnit: CardioSecondaryUnit?,
+        supportsOutdoor: Bool
+    ) -> some View {
+        VStack(spacing: DS.Spacing.xs) {
+            if supportsOutdoor {
+                Button {
+                    startCardio(activityType: activityType, isOutdoor: false, secondaryUnit: cardioUnit)
+                } label: {
+                    cardioButtonLabel(String(localized: "Indoor"), systemImage: "building.fill")
+                }
+                .buttonStyle(.bordered)
+                .disabled(isStarting)
+                .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.workoutPreviewCardioIndoorButton)
+            } else {
+                Button {
+                    startCardio(activityType: activityType, isOutdoor: false, secondaryUnit: cardioUnit)
+                } label: {
+                    cardioButtonLabel(String(localized: "Indoor"), systemImage: "building.fill")
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(DS.Color.activity)
+                .disabled(isStarting)
+                .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.workoutPreviewCardioIndoorButton)
+            }
+
+            if supportsOutdoor {
+                Button {
+                    startCardio(activityType: activityType, isOutdoor: true, secondaryUnit: cardioUnit)
+                } label: {
+                    Label(String(localized: "Outdoor"), systemImage: "sun.max.fill")
+                        .frame(maxWidth: .infinity, minHeight: 44)
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(DS.Color.positive)
+                .disabled(isStarting)
+                .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.workoutPreviewCardioOutdoorButton)
+            }
+        }
     }
 
     private func cardioButtonLabel(_ title: String, systemImage: String) -> some View {

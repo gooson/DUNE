@@ -45,7 +45,14 @@ struct CardioSecondaryPage: View {
     @ViewBuilder
     private func profileContent(now: Date) -> some View {
         if workoutManager.supportsMachineLevel {
-            machineLevelContent
+            ViewThatFits(in: .vertical) {
+                machineLevelContent
+
+                ScrollView {
+                    machineLevelContent
+                }
+                .scrollBounceBehavior(.basedOnSize)
+            }
         } else {
             switch profile {
             case .running:
@@ -61,19 +68,8 @@ struct CardioSecondaryPage: View {
     }
 
     private var machineLevelContent: some View {
-        VStack(spacing: DS.Spacing.lg) {
-            VStack(spacing: DS.Spacing.xxs) {
-                Text(workoutManager.formattedCurrentMachineLevel)
-                    .font(DS.Typography.primaryMetric)
-                    .foregroundStyle(DS.Color.activity)
-                    .contentTransition(.numericText())
-
-                Text("Current")
-                    .font(DS.Typography.metricLabel)
-                    .foregroundStyle(.secondary)
-            }
-
-            HStack(spacing: DS.Spacing.lg) {
+        VStack(spacing: DS.Spacing.sm) {
+            HStack(spacing: DS.Spacing.sm) {
                 Button {
                     workoutManager.adjustMachineLevel(by: -1)
                 } label: {
@@ -82,6 +78,20 @@ struct CardioSecondaryPage: View {
                         .frame(maxWidth: .infinity, minHeight: 40)
                 }
                 .buttonStyle(.bordered)
+                .accessibilityIdentifier("watch-cardio-level-decrease")
+
+                VStack(spacing: DS.Spacing.xxs) {
+                    Text(workoutManager.formattedCurrentMachineLevel)
+                        .font(DS.Typography.primaryMetric)
+                        .foregroundStyle(DS.Color.activity)
+                        .contentTransition(.numericText())
+                        .accessibilityIdentifier("watch-cardio-level-value")
+
+                    Text("Current")
+                        .font(DS.Typography.metricLabel)
+                        .foregroundStyle(.secondary)
+                }
+                .frame(minWidth: 44)
 
                 Button {
                     workoutManager.adjustMachineLevel(by: 1)
@@ -92,6 +102,7 @@ struct CardioSecondaryPage: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .tint(DS.Color.activity)
+                .accessibilityIdentifier("watch-cardio-level-increase")
             }
 
             HStack(spacing: DS.Spacing.lg) {

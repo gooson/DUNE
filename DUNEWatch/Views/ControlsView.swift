@@ -11,73 +11,18 @@ struct ControlsView: View {
     @State private var showReorderSheet = false
 
     var body: some View {
-        VStack(spacing: DS.Spacing.lg) {
-            // End Workout
-            Button(role: .destructive) {
-                showEndConfirmation = true
-            } label: {
-                VStack(spacing: DS.Spacing.xxs) {
-                    Image(systemName: "xmark")
-                        .font(.title3)
-                    Text("End")
-                        .font(DS.Typography.metricLabel)
-                }
-                .frame(maxWidth: .infinity)
-            }
-            .tint(DS.Color.negative)
-            .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionControlsEndButton)
+        GeometryReader { geometry in
+            let spacing = min(DS.Spacing.lg, max(DS.Spacing.xs, geometry.size.height * 0.035))
 
-            // Pause / Resume
-            Button {
-                if workoutManager.isPaused {
-                    workoutManager.resume()
-                } else {
-                    workoutManager.pause()
-                }
-            } label: {
-                VStack(spacing: DS.Spacing.xxs) {
-                    Image(systemName: workoutManager.isPaused ? "play.fill" : "pause.fill")
-                        .font(.title3)
-                    Text(workoutManager.isPaused ? "Resume" : "Pause")
-                        .font(DS.Typography.metricLabel)
-                }
-                .frame(maxWidth: .infinity)
-            }
-            .tint(DS.Color.caution)
-            .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionControlsPauseResumeButton)
+            ViewThatFits(in: .vertical) {
+                controlsGrid(spacing: spacing)
 
-            // Skip Exercise (strength only)
-            if showSkip, !workoutManager.isCardioMode, !workoutManager.isLastExercise {
-                Button {
-                    workoutManager.skipExercise()
-                } label: {
-                    VStack(spacing: DS.Spacing.xxs) {
-                        Image(systemName: "forward.fill")
-                            .font(.title3)
-                        Text("Skip")
-                            .font(DS.Typography.metricLabel)
-                    }
-                    .frame(maxWidth: .infinity)
+                ScrollView {
+                    controlsGrid(spacing: spacing)
                 }
-                .tint(.secondary)
-                .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionControlsSkipButton)
+                .scrollBounceBehavior(.basedOnSize)
             }
-
-            // Reorder Exercises (strength only, 2+ non-completed)
-            if showSkip, !workoutManager.isCardioMode, workoutManager.canReorderExercises {
-                Button {
-                    showReorderSheet = true
-                } label: {
-                    VStack(spacing: DS.Spacing.xxs) {
-                        Image(systemName: "arrow.up.arrow.down")
-                            .font(.title3)
-                        Text(String(localized: "Reorder"))
-                            .font(DS.Typography.metricLabel)
-                    }
-                    .frame(maxWidth: .infinity)
-                }
-                .tint(.secondary)
-            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .sheet(isPresented: $showReorderSheet) {
             WatchExerciseReorderView()
@@ -102,5 +47,71 @@ struct ControlsView: View {
                 Text("Save and finish this workout?")
             }
         }
+    }
+
+    private func controlsGrid(spacing: CGFloat) -> some View {
+        VStack(spacing: spacing) {
+            HStack(spacing: spacing) {
+                Button(role: .destructive) {
+                    showEndConfirmation = true
+                } label: {
+                    controlLabel("End", systemImage: "xmark")
+                }
+                .tint(DS.Color.negative)
+                .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionControlsEndButton)
+
+                Button {
+                    if workoutManager.isPaused {
+                        workoutManager.resume()
+                    } else {
+                        workoutManager.pause()
+                    }
+                } label: {
+                    controlLabel(
+                        workoutManager.isPaused ? "Resume" : "Pause",
+                        systemImage: workoutManager.isPaused ? "play.fill" : "pause.fill"
+                    )
+                }
+                .tint(DS.Color.caution)
+                .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionControlsPauseResumeButton)
+            }
+
+            if showSkip, !workoutManager.isCardioMode,
+               !workoutManager.isLastExercise || workoutManager.canReorderExercises {
+                HStack(spacing: spacing) {
+                    if !workoutManager.isLastExercise {
+                        Button {
+                            workoutManager.skipExercise()
+                        } label: {
+                            controlLabel("Skip", systemImage: "forward.fill")
+                        }
+                        .tint(.secondary)
+                        .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionControlsSkipButton)
+                    }
+
+                    if workoutManager.canReorderExercises {
+                        Button {
+                            showReorderSheet = true
+                        } label: {
+                            controlLabel(String(localized: "Reorder"), systemImage: "arrow.up.arrow.down")
+                        }
+                        .tint(.secondary)
+                        .accessibilityIdentifier("watch-session-controls-reorder-button")
+                    }
+                }
+            }
+        }
+    }
+
+    private func controlLabel(_ title: String, systemImage: String) -> some View {
+        VStack(spacing: DS.Spacing.xxs) {
+            Image(systemName: systemImage)
+                .font(.title3)
+            Text(title)
+                .font(DS.Typography.metricLabel)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .frame(maxWidth: .infinity, minHeight: 48)
     }
 }
