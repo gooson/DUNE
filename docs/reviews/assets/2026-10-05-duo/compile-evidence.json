@@ -1,0 +1,26 @@
+{
+  "scope": "compile-only; UI/fold validation pending",
+  "head": "fbec0138faa84121a39769893269c59cea9a50fb",
+  "developer_dir": "/Users/shanks/Downloads/Xcode27.1.app/Contents/Developer",
+  "app_build": {
+    "script": "scripts/build-ios.sh",
+    "destination": "generic/platform=iOS Simulator",
+    "log": "/tmp/duo-resume-20261005/app-final-presentation-router.log",
+    "observed_exit": 0,
+    "result": "BUILD SUCCEEDED"
+  },
+  "ui_test_compile": {
+    "script": "scripts/build-target.sh --scheme DUNEUITests --platform ios --build-for-testing",
+    "log": "/tmp/duo-resume-20261005/uitests-final-compile.log",
+    "observed_exit": 0,
+    "result": "TEST BUILD SUCCEEDED",
+    "note": "Router private variable rename/file relocation followed this check; final app build validates those changes. No UI test execution pass is claimed."
+  },
+  "app_source_sha256": {
+    "DUNE/Presentation/Shared/Components/AppWindowRouter.swift": "7914bb6470a6da741f24bed3a3e7d17801f164b86c65fcf4aab2aec444aa578f",
+    "DUNE/App/DUNEApp.swift": "6b8499fa17eee34d05fdb6f83a3e9b827fb02b71854a99a45fcab41576e1da02",
+    "DUNE/Presentation/Exercise/WorkoutSessionView.swift": "1afae28d4329ae4059db49402553a6e0e9d3b6d18ec5132737ddab713bbc2bd5",
+    "DUNE/Presentation/Activity/WeeklyStats/Components/ExerciseTypeBreakdownView.swift": "000555389387596e866c29996859dae6e09a7da4d28f060a9cf3b559b4965256",
+    "DUNE/Presentation/Activity/WeeklyStats/WeeklyStatsDetailView.swift": "225d33fa0ce8dee0f8f510dd3b287a7fb5658bec4321f4ea89d61c5e4e9264c8"
+  }
+}
