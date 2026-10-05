@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 0,
+  "requested_selectors": [
+    "DUNEUITests/LifeRegressionTests/testVisualAuditWeeklyReport",
+    "DUNEUITests/TodaySettingsRegressionTests/testCloudSyncConsentHookPresentsAndDismissesSheet",
+    "DUNEUITests/WellnessRegressionTests/testPostureComparison",
+    "DUNEUITests/ActivityExerciseRegressionTests/testWorkoutDraftAndRestTimerAtMaximumAccessibilityTextSize",
+    "DUNEUITests/ActivityExerciseRegressionTests/testWorkoutInsightsReturnsToInteractiveWorkoutAtMaximumAccessibilityTextSize"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 3,
+    "passed": 3,
+    "skipped": 0,
+    "failed": 0
+  },
+  "passed_cases": 3,
+  "failures": [
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/TodaySettingsRegressionTests/testCloudSyncConsentHookPresentsAndDismissesSheet",
+    "DUNEUITests/WellnessRegressionTests/testPostureComparison"
+  ],
+  "log_path": "/private/tmp/duo-unlocked-20261005/remaining-functional-ui.log"
+}

@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/CloudSyncConsentRegressionTests/testCloudSyncConsentHookPresentsAndDismissesSheet",
+    "DUNEUITests/PostureVisualAuditTests/testPostureComparison",
+    "DUNEUITests/LifeRegressionTests/testVisualAuditWeeklyReport",
+    "DUNEUITests/ActivityExerciseRegressionTests/testWorkoutInsightsReturnsToInteractiveWorkoutAtMaximumAccessibilityTextSize"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 4,
+    "passed": 2,
+    "skipped": 0,
+    "failed": 2
+  },
+  "passed_cases": 2,
+  "failures": [
+    "674: /Users/shanks/.codex/worktrees/712d/Health/DUNEUITests/Full/TodaySettingsRegressionTests.swift:528: error: -[DUNEUITests.CloudSyncConsentRegressionTests testCloudSyncConsentHookPresentsAndDismissesSheet] : XCTAssertTrue failed - Keep Local Only button should exist",
+    "692: Test Case '-[DUNEUITests.CloudSyncConsentRegressionTests testCloudSyncConsentHookPresentsAndDismissesSheet]' failed (16.163 seconds).",
+    "693: Test Suite 'CloudSyncConsentRegressionTests' failed at 2026-10-05 20:31:30.696.",
+    "1334: /Users/shanks/.codex/worktrees/712d/Health/DUNEUITests/Full/WellnessRegressionTests.swift:398: error: -[DUNEUITests.PostureVisualAuditTests testPostureComparison] : XCTAssertTrue failed",
+    "1352: Test Case '-[DUNEUITests.PostureVisualAuditTests testPostureComparison]' failed (89.811 seconds).",
+    "1353: Test Suite 'PostureVisualAuditTests' failed at 2026-10-05 20:33:41.443.",
+    "1355: Test Suite 'DUNEUITests.xctest' failed at 2026-10-05 20:33:41.444.",
+    "1357: Test Suite 'Selected tests' failed at 2026-10-05 20:33:41.444.",
+    "1376: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log reports 2 failures",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/CloudSyncConsentRegressionTests/testCloudSyncConsentHookPresentsAndDismissesSheet",
+    "DUNEUITests/PostureVisualAuditTests/testPostureComparison"
+  ],
+  "log_path": "/private/tmp/duo-unlocked-20261005/remaining-corrected-layout-ui.log"
+}

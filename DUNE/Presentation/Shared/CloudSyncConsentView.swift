@@ -44,6 +44,7 @@ struct CloudSyncConsentView: View {
             .padding(.horizontal, 24)
             .padding(.bottom, 24)
         }
+        .accessibilityIdentifier("cloud-sync-consent-view")
         .safeAreaInset(edge: .bottom) {
             VStack(spacing: 12) {
                 Button {
@@ -53,9 +54,9 @@ struct CloudSyncConsentView: View {
                         .font(.headline)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 14)
-                        .accessibilityIdentifier("cloud-sync-consent-enable-button")
                 }
                 .buttonStyle(.borderedProminent)
+                .accessibilityIdentifier("cloud-sync-consent-enable-button")
 
                 Button {
                     updateCloudSyncPreference(false)
@@ -65,20 +66,19 @@ struct CloudSyncConsentView: View {
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 8)
                         .contentShape(Rectangle())
-                        .accessibilityIdentifier("cloud-sync-consent-local-button")
                 }
                 .buttonStyle(.plain)
                 .foregroundStyle(DS.Color.textSecondary)
+                .accessibilityIdentifier("cloud-sync-consent-local-button")
             }
             .padding(.horizontal, 24)
             .padding(.top, 16)
             .padding(.bottom, 24)
-            .background(DS.Color.cardBackground.opacity(0.94))
+            .background(DS.Color.cardBackground)
         }
         .background { SheetWaveBackground() }
         .interactiveDismissDisabled()
         .presentationDetents([.large])
-        .accessibilityIdentifier("cloud-sync-consent-view")
     }
 
     private func updateCloudSyncPreference(_ isEnabled: Bool) {

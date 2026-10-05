@@ -143,3 +143,38 @@ XCTest 원본 [요약 화면](assets/2026-10-05-duo/phone-sheet-insights-maxax-s
 추가 원본 검토에서 [일별 차트 제목/선택기](assets/2026-10-05-duo/weekly-chart-header-maxax-before.png)의 좁은 가로 배치로 제목이 과도하게 줄바꿈되고 지표 이름이 생략되는 문제를 확인했다. [차트 축](assets/2026-10-05-duo/weekly-chart-axes-maxax-before.png)도 기본 axis 글자와 고정 높이로 최대 AX에서 요일이 촘촘하게 붙어 있다. AX에서 제목과 메뉴를 세로 배치하고 차트 높이를 글자 크기에 맞춰 확대하며, 축은 caption2와 넓은 날짜 간격을 사용하도록 수정했다. Xcode 27.1 표준 앱 빌드 `daily-chart-ax-build.log` 통과. 지표 메뉴의 실제 선택과 수정 후 픽셀 판정은 후속 UI 결과에서 기록한다.
 
 남은 Life 주간 보고서·Cloud consent·자세 비교 및 수정된 운동 제목/차트 검증을 한 번의 선택 실행으로 제출했다. 최초 네 case 실행은 공용 저장소 잠금 대기 상태에서 테스트를 시작하지 않았다. 새 차트 검증을 추가하기 위해 그 대기 PID 34553만 종료(exit 143)하고 다섯 case 선택으로 대체했다. 이 종료를 앱 테스트 실패나 재시도 성공으로 집계하지 않는다. 다른 worktree에서 실행 중인 smoke/notification 테스트가 같은 저장소 mutex를 보유하고 있으므로 잠금을 우회하거나 다른 실행을 중단하지 않았다.
+
+## 자동 캡처 실행과 원본 재검토
+
+`remaining-functional-ui.log`: 실제 **3개 실행·3개 passed·0 skipped·0 assertion failures**, xcodebuild exit 0. 그러나 요청한 다섯 selector 중 두 개의 실행 증거가 없어서 표준 runner는 exit 1, receipt 상태 failed로 처리했다. [원본 receipt](assets/2026-10-05-duo/remaining-functional-missing-selectors-result.json)를 수정하지 않고 보존한다. `TodaySettingsRegressionTests`/`WellnessRegressionTests`라고 지정한 두 메서드의 실제 클래스는 각각 **CloudSyncConsentRegressionTests**/**PostureVisualAuditTests**였다. 잘못된 선택은 실행자의 오류이며 해당 화면 통과로 처리하지 않는다.
+
+- 운동 초안/휴식: 173.131초 passed. 수정 후 [운동 제목](assets/2026-10-05-duo/workout-title-maxax-after.png)에서 `바벨 / 벤치프레스`로 줄바꿈되어 마지막 ‘스’만 분리되는 문제가 해소됨을 직접 확인했다. 이전 운동 기록의 아래 부분은 스크롤 viewport 하단에 걸린 것이므로 별도 입력란 잘림으로 판단하지 않는다.
+- 통계 시트: 122.323초 passed. AX 지표 메뉴 접근·볼륨 선택에 따른 라벨 갱신·닫기 버튼 소실·운동 hittability까지 확인했다. [메뉴 원본](assets/2026-10-05-duo/weekly-chart-metric-menu-maxax-after.png)에 소요 시간·세션·볼륨 (kg) 모두 온전히 표시된다.
+- Life 주간 리포트: 40.627초 passed. 목적지 및 best/improvement 구간 접근을 확인했다. 이 통과는 원본의 모든 글자 배치 합격을 뜻하지 않는다.
+
+추가 시각 finding 두 개:
+
+1. [차트 하단 원본](assets/2026-10-05-duo/weekly-chart-first-axis-maxax-intermediate.png)의 첫 요일 `월`이 plot 왼쪽 경계에서 잘림. x 축 plot range에 글자 크기와 함께 증가하는 가장자리 여백을 추가했다. 이전 메뉴/간격 수정의 성공을 축 잘림 해소로 승격하지 않는다.
+2. [Life 개선 구간](assets/2026-10-05-duo/life-weekly-report-improvement-maxax-before.png)의 `Improvement`가 아이콘에 빼앗긴 폭 때문에 단어 안에서 분할됨. AX에서는 장식 아이콘 대신 제목에 전체 폭을 주고 습관 이름·완료율도 세로로 배치했다. 제목 helper는 LocalizedStringKey를 받아 기존 번역을 유지한다.
+
+두 보정의 표준 앱 빌드 `chart-edge-life-ax-build.log`는 통과했다. 제목 캡처용 식별자를 이후 추가했으며 후속 UI 실행에서 함께 컴파일/검증한다. 올바른 클래스명으로 제출한 두 case도 새 공용 잠금 대기 상태에서 아직 시작하지 않았으므로, 이번 보정 검증 두 case를 합쳐 네 개 선택 실행으로 대체했다(대기 PID 61306만 종료, exit 143). 이번 source는 동의/자세 비교 내용이나 fixture 데이터를 바꾸지 않는다. 수정 후 네 case 실행/픽셀 결과는 다음에 기록한다.
+
+## 최종 보정 결과와 남은 검증
+
+`remaining-corrected-layout-ui.log`: **4개 실행·2개 passed·2개 failed·0 skipped, exit 65**. [실패 receipt](assets/2026-10-05-duo/remaining-corrected-layout-result.json).
+
+- 통계 기능 127.746초 passed. [제목/메뉴](assets/2026-10-05-duo/weekly-chart-heading-maxax-after.png)에서 일별 상세의 전체 폭·메뉴 배치를 확인했다. 다만 [첫 축 글자](assets/2026-10-05-duo/weekly-chart-edge-padding-still-clipped.png)는 여백 추가 후에도 잘려 **축 픽셀 검증 실패**로 유지한다. 비효과적 plot padding을 제거하고 첫/마지막 axis label의 anchor를 안쪽으로 지정하며 centered를 false로 변경했다. 공개 API 근거: [AxisValueLabel](https://developer.apple.com/documentation/charts/axisvaluelabel/init(format:centered:anchor:multilabelalignment:collisionresolution:offsetsmarks:orientation:horizontalspacing:verticalspacing:)), [AxisValue index/count](https://developer.apple.com/documentation/charts/axisvalue). 이 최종 anchor 후보는 빌드만 검증됐으며 픽셀 합격을 주장하지 않는다.
+- Life 보고서 40.933초 passed. [개선 구간](assets/2026-10-05-duo/life-weekly-report-improvement-maxax-after.png)에서 `Improvement`가 단어 중간에서 나뉘지 않고 습관 이름과 완료율도 분리됨을 확인했다. [우수 습관](assets/2026-10-05-duo/life-weekly-report-best-maxax-after.png)도 같은 배치다.
+- 동의 16.163초 failed. [AX 계층](assets/2026-10-05-duo/cloud-consent-identifiers-before.txt)의 두 버튼 모두 `cloud-sync-consent-view`를 물려받아 고유 ID query가 실패했다. screen ID를 ScrollView 본문에 붙이고 각 ID는 Button 자체로 이동했다. [수정 전](assets/2026-10-05-duo/cloud-consent-maxax-identifiers-before.png)의 하단 배경으로 본문이 비치는 문제도 불투명 배경으로 수정했다.
+- 자세 비교 89.811초 failed. [계층](assets/2026-10-05-duo/posture-comparison-action-above-viewport.txt)의 Compare Selected y=-251.7로 위쪽에 있으나 helper가 계속 swipeUp했다. target 위치에 따라 방향을 고르게 수정했다. [이력 원본](assets/2026-10-05-duo/posture-history-maxax-before.png)의 날짜/metrics/memo 좁은 폭 분절과 고정 40pt 링에서 점수가 넘치는 것도 AX 세로 배치 및 글자와 함께 커지는 링으로 보정했다. AX 통계 카드와 History/Compare Selected 헤더도 한 열/세로 배치를 사용한다.
+
+표준 앱 빌드 `consent-posture-source-build.log` 통과 후 위 두 실제 실패 case만 한 번 조건부 재검증했다. **2개 실행·2개 passed·0 skipped·0 failed, exit 0**, 누락 selector 없음. [성공 receipt](assets/2026-10-05-duo/consent-posture-correction-result.json).
+
+- Cloud consent 17.105초: 고유 ID 버튼 존재·hittability·실제 탭·시트 소실 통과. [최종 화면](assets/2026-10-05-duo/cloud-consent-maxax-after.png)에서 footer 뒤 본문 비침도 해소됐다. 이 case는 강제 동의 hook의 empty 시나리오이며 고급 통계 데이터 검증과 구분한다.
+- Posture comparison 110.262초: 합성 기록 두 개 선택, [Compare Selected 접근](assets/2026-10-05-duo/posture-compare-selected-maxax-after.png), 실제 Comparison 목적지 및 사진/metrics pane 각각의 hittability·스크롤 통과. [이력 행](assets/2026-10-05-duo/posture-history-record-maxax-after.png)의 점수·날짜·8 metrics·memo 분절을 검토했고, [비교 수치](assets/2026-10-05-duo/posture-comparison-metric-units-maxax-after.png)의 19.0°/6.0°가 단위와 한 줄로 표시된다. pane 상단 viewport 밖의 내용과 내부 잘림을 구분한다. 실제 카메라/의학적 자세 분석은 검증하지 않는다.
+
+과거 ‘자세 fixture 없음’을 이유로 무조건 XCTFail하던 prerequisite 메서드는 합성 fixture를 실제 검사하는 PostureVisualAuditTests로 대체되어 제거했다. 이 제거는 비교 목적지 테스트를 생략한 것이 아니다.
+
+이번 delta 소스 검토: phone 시트는 기존 상태 보유 모델을 유지하며 저장/HealthKit/CloudKit 쿼리를 바꾸지 않는다. AX 분기는 레이아웃·장식·식별자에 한정되고 새로운 네트워크나 데이터 삭제 경로를 만들지 않는다. 차트 날짜 stride·axis anchor의 마지막 후보는 시각 확인이 남아 있다. 테스트 query는 존재와 hittability·목적지 전환을 함께 확인하고 missing selector를 전체 pass로 승격하지 않았다.
+
+여전히 미완료: 실제 partiallyOpen/openFlat의 기본·최대 AX와 회전 전수 검사, 접는 동안 운동 초안·휴식 countdown 연속성, 최종 축 anchor 픽셀 확인, 이전 버전에서 이미 복원된 보조 창의 업그레이드 복귀 및 전체 최종 UI 게이트. 이번 네이티브 캡처는 Closed cover 1398×2034이며 비활성 inner 캡처가 첨부됐다고 펼침 검사를 수행한 것은 아니다. Mac 잠금 해제 요청은 아직 응답 대기이며 GUI preset 조작을 재시도하지 않았다. 선택 실행은 종료됐으며 백그라운드 테스트를 계속 돌리지 않는다. 계정 주간 한도 85% 사용/15% 잔여 확인; 작업별 정확한 토큰 수는 unknown이다.

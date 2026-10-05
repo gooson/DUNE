@@ -89,6 +89,7 @@ struct DailyVolumeChartView: View {
             Text("Daily Breakdown")
                 .font(.subheadline.weight(.semibold))
                 .fixedSize(horizontal: false, vertical: true)
+                .accessibilityIdentifier("weeklystats-chart-heading")
             if isScrollable {
                 VStack(alignment: .leading, spacing: 0) {
                     Text(visibleRangeLabel)
@@ -132,10 +133,12 @@ struct DailyVolumeChartView: View {
         .chartXAxis {
             AxisMarks(values: .stride(by: .day, count: dynamicTypeSize.isAccessibilitySize
                                      ? max(2, period.chartAxisStrideCount)
-                                     : period.chartAxisStrideCount)) { _ in
+                                     : period.chartAxisStrideCount)) { value in
                 AxisGridLine()
                     .foregroundStyle(theme.accentColor.opacity(0.30))
-                AxisValueLabel(format: axisFormat, centered: true)
+                AxisValueLabel(format: axisFormat, centered: false,
+                               anchor: value.index == 0 ? .topLeading
+                                   : (value.index == value.count - 1 ? .topTrailing : .top))
                     .font(.caption2)
                     .foregroundStyle(theme.sandColor)
             }

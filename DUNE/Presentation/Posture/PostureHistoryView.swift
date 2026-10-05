@@ -7,6 +7,8 @@ struct PostureHistoryView: View {
     private var records: [PostureAssessmentRecord]
     @Environment(\.modelContext) private var modelContext
     @Environment(\.appTheme) private var theme
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @ScaledMetric(relativeTo: .caption2) private var scoreDiameter: CGFloat = 40
 
     @State private var isCompareMode = false
     @State private var recordToDelete: PostureAssessmentRecord?
@@ -231,7 +233,9 @@ struct PostureHistoryView: View {
     // MARK: - Stats
 
     private var statsCards: some View {
-        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: DS.Spacing.md) {
+        LazyVGrid(columns: Array(repeating: GridItem(.flexible()),
+                               count: dynamicTypeSize.isAccessibilitySize ? 1 : 2),
+                  spacing: DS.Spacing.md) {
             statCard(
                 title: "Average",
                 value: "\(Int(viewModel.averageScore.rounded()))",
@@ -286,10 +290,13 @@ struct PostureHistoryView: View {
 
     private var historyList: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            HStack {
+            let layout = dynamicTypeSize.isAccessibilitySize
+                ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.sm))
+                : AnyLayout(HStackLayout())
+            layout {
                 Text("History")
                     .font(.headline)
-                Spacer()
+                if !dynamicTypeSize.isAccessibilitySize { Spacer() }
                 if isCompareMode && viewModel.canCompare,
                    let pair = viewModel.comparisonPair {
                     NavigationLink(
@@ -325,7 +332,10 @@ struct PostureHistoryView: View {
     @ViewBuilder
     private func recordRowContent(_ record: PostureAssessmentRecord) -> some View {
         if isCompareMode {
-            HStack(spacing: DS.Spacing.md) {
+            let layout = dynamicTypeSize.isAccessibilitySize
+                ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.sm))
+                : AnyLayout(HStackLayout(spacing: DS.Spacing.md))
+            layout {
                 Image(systemName: viewModel.comparisonSelection.contains(record.id)
                     ? "checkmark.circle.fill"
                     : "circle")
@@ -347,30 +357,40 @@ struct PostureHistoryView: View {
     }
 
     private func rowBody(_ record: PostureAssessmentRecord) -> some View {
-        HStack(spacing: DS.Spacing.md) {
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.sm))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.md))
+        return layout {
             scoreCircle(record.overallScore)
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(record.date, style: .date)
                     .font(.subheadline.weight(.medium))
+                    .fixedSize(horizontal: false, vertical: true)
 
-                HStack(spacing: DS.Spacing.xs) {
+                let metadataLayout = dynamicTypeSize.isAccessibilitySize
+                    ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.xs))
+                    : AnyLayout(HStackLayout(spacing: DS.Spacing.xs))
+                metadataLayout {
                     Text(String(localized: "\(record.allMetrics.count) metrics"))
                         .font(.caption)
                         .foregroundStyle(DS.Color.textSecondary)
 
                     if !record.memo.isEmpty {
-                        Text("\u{00B7}")
-                            .foregroundStyle(DS.Color.textSecondary)
+                        if !dynamicTypeSize.isAccessibilitySize {
+                            Text("\u{00B7}")
+                                .foregroundStyle(DS.Color.textSecondary)
+                        }
                         Text(record.memo)
                             .font(.caption)
                             .foregroundStyle(DS.Color.textSecondary)
-                            .lineLimit(1)
+                            .lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 1)
+                            .fixedSize(horizontal: false, vertical: true)
                     }
                 }
             }
 
-            Spacer()
+            if !dynamicTypeSize.isAccessibilitySize { Spacer() }
 
             if !isCompareMode {
                 Image(systemName: "chevron.right")
@@ -384,7 +404,7 @@ struct PostureHistoryView: View {
         ZStack {
             Circle()
                 .stroke(.quaternary, lineWidth: 4)
-                .frame(width: 40, height: 40)
+                .frame(width: scoreDiameter, height: scoreDiameter)
 
             Circle()
                 .trim(from: 0, to: min(1, max(0, CGFloat(score) / 100.0)))
@@ -392,7 +412,7 @@ struct PostureHistoryView: View {
                     scoreColor(score),
                     style: StrokeStyle(lineWidth: 4, lineCap: .round)
                 )
-                .frame(width: 40, height: 40)
+                .frame(width: scoreDiameter, height: scoreDiameter)
                 .rotationEffect(.degrees(-90))
 
             Text("\(score)")
