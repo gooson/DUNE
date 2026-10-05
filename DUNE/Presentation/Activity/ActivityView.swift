@@ -81,6 +81,12 @@ struct NotificationActivityDestination: Identifiable, Hashable {
 /// Activity tab — Hero-first layout.
 /// Layout: Hero → Muscle Map → Weekly Stats → Search+Suggestion+Templates → Volume → Workouts → PRs → Consistency → Frequency.
 struct ActivityView: View {
+    private struct ExerciseStartConfiguration: Identifiable {
+        let id = UUID()
+        let exercise: ExerciseDefinition
+        var templateEntry: TemplateEntry? = nil
+    }
+
     private enum PendingQuickStartAction {
         case exercise(ExerciseDefinition)
         case template(WorkoutTemplate)
@@ -90,7 +96,7 @@ struct ActivityView: View {
     @State private var showingExercisePicker = false
     @State private var showingAIWorkoutBuilder = false
     @State private var saveRecommendationAsTemplate: WorkoutTemplateRecommendation?
-    @State private var selectedExercise: ExerciseDefinition?
+    @State private var exerciseStartConfiguration: ExerciseStartConfiguration?
     @State private var pendingQuickStartAction: PendingQuickStartAction?
     @State private var templateConfig: TemplateWorkoutConfig?
     @State private var selectedMuscle: MuscleGroup?
@@ -429,8 +435,8 @@ struct ActivityView: View {
         .sheet(isPresented: $showingExerciseMixInfo) {
             ExerciseMixInfoSheet()
         }
-        .sheet(item: $selectedExercise) { exercise in
-            ExerciseStartView(exercise: exercise)
+        .sheet(item: $exerciseStartConfiguration) { configuration in
+            ExerciseStartView(exercise: configuration.exercise, templateEntry: configuration.templateEntry)
                 .interactiveDismissDisabled()
                 .presentationDetents([.large])
                 .presentationDragIndicator(.hidden)
@@ -486,7 +492,7 @@ struct ActivityView: View {
 
         if entries.count == 1 {
             if let definition = resolveExercise(from: entries[0]) {
-                selectedExercise = definition
+                exerciseStartConfiguration = ExerciseStartConfiguration(exercise: definition, templateEntry: entries[0])
             }
             return
         }
@@ -512,7 +518,7 @@ struct ActivityView: View {
         guard !exercises.isEmpty else { return }
 
         if exercises.count == 1 {
-            selectedExercise = exercises[0]
+            exerciseStartConfiguration = ExerciseStartConfiguration(exercise: exercises[0])
             return
         }
 
@@ -558,7 +564,7 @@ struct ActivityView: View {
 
         switch pendingQuickStartAction {
         case .exercise(let exercise):
-            selectedExercise = exercise
+            exerciseStartConfiguration = ExerciseStartConfiguration(exercise: exercise)
         case .template(let template):
             startFromTemplate(template)
         }
@@ -620,7 +626,9 @@ struct ActivityView: View {
                 library: library,
                 recentExerciseIDs: recentExerciseIDs,
                 popularExerciseIDs: popularExerciseIDs,
-                onStartExercise: { exercise in selectedExercise = exercise },
+                onStartExercise: { exercise in
+                    exerciseStartConfiguration = ExerciseStartConfiguration(exercise: exercise)
+                },
                 onStartRecommendation: startRecommendation,
                 onSaveRecommendationAsTemplate: { recommendation in
                     saveRecommendationAsTemplate = recommendation

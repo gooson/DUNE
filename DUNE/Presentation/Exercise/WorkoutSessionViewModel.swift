@@ -16,6 +16,10 @@ struct EditableSet: Identifiable {
     var restDuration: TimeInterval?
     /// Set-level RPE (6.0-10.0, 0.5 step). Nil if not rated.
     var rpe: Double?
+    /// Planned reps stay fixed when performed reps are edited. Nil for unknown legacy plans.
+    var plannedReps: Int?
+    /// `user` or `estimated`; nil means the origin is unknown.
+    var rpeSourceRaw: String?
 }
 
 /// Previous session data for inline display
@@ -26,6 +30,10 @@ struct PreviousSetInfo: Sendable {
     let distance: Double?
     let intensity: Int?
     let restDuration: TimeInterval?
+    let plannedReps: Int?
+    let rpe: Double?
+    let rpeSourceRaw: String?
+    let setType: SetType
 
     init(
         weight: Double?,
@@ -33,7 +41,11 @@ struct PreviousSetInfo: Sendable {
         duration: TimeInterval?,
         distance: Double?,
         intensity: Int? = nil,
-        restDuration: TimeInterval?
+        restDuration: TimeInterval?,
+        plannedReps: Int? = nil,
+        rpe: Double? = nil,
+        rpeSourceRaw: String? = nil,
+        setType: SetType = .working
     ) {
         self.weight = weight
         self.reps = reps
@@ -41,6 +53,10 @@ struct PreviousSetInfo: Sendable {
         self.distance = distance
         self.intensity = intensity
         self.restDuration = restDuration
+        self.plannedReps = plannedReps
+        self.rpe = rpe
+        self.rpeSourceRaw = rpeSourceRaw
+        self.setType = setType
     }
 }
 
@@ -68,6 +84,9 @@ struct WorkoutSessionDraft: Codable {
         let isCompleted: Bool
         let setTypeRaw: String
         let restDuration: TimeInterval?
+        var plannedReps: Int? = nil
+        var rpe: Double? = nil
+        var rpeSourceRaw: String? = nil
     }
 
     private static let userDefaultsKey = "com.raftel.dailve.workoutDraft"
@@ -110,7 +129,28 @@ final class WorkoutSessionViewModel {
     private let maxStairLevel = 30
     private let maxMemoLength = 500
     private let defaultRestSeconds: TimeInterval = WorkoutDefaults.restSeconds
-    private let maxProgressiveIncreaseRatio = 0.10
+    private let progressionService = WorkoutProgressionService()
+    private var currentWeightUnit: WeightUnit = .kg
+
+    private struct RecommendationContext {
+        let targetID: UUID
+        let targetWeight: String
+        let targetPlannedReps: Int?
+        let targetSetType: SetType
+        let sourceID: UUID?
+        let sourceWeight: String?
+        let sourceReps: String?
+        let sourcePlannedReps: Int?
+        let sourceRPE: Double?
+        let sourceRPESourceRaw: String?
+        let sourceSetType: SetType?
+        let unit: WeightUnit
+    }
+
+    private var recommendationContext: RecommendationContext?
+    private var restoredFromDraft = false
+    private(set) var pendingWeightRecommendation: WeightRecommendation?
+    private(set) var recommendationSetIndex: Int?
 
     /// Body weight for calorie estimation (fetched externally, uses store default)
     var bodyWeightKg: Double = WorkoutDefaults.bodyWeightKg
@@ -132,6 +172,9 @@ final class WorkoutSessionViewModel {
     }
 
     func applyTemplateDefaults(_ entry: TemplateEntry, weightUnit: WeightUnit = .kg) {
+        currentWeightUnit = weightUnit
+        guard !restoredFromDraft else { return }
+        clearRecommendation()
         let profile = TemplateExerciseProfile(exercise: exercise)
         guard profile.showsStrengthDefaultsEditor else {
             templateRestDuration = nil
@@ -152,22 +195,26 @@ final class WorkoutSessionViewModel {
         let repsString = "\(entry.defaultReps)"
         for index in sets.indices {
             sets[index].reps = repsString
+            sets[index].plannedReps = normalizedRepsValue(from: entry.defaultReps)
         }
     }
 
     // MARK: - Set Management
 
     func addSet(weightUnit: WeightUnit = .kg) {
+        currentWeightUnit = weightUnit
         let newSetNumber = sets.count + 1
         var newSet = EditableSet(setNumber: newSetNumber)
         if usesDefaultReps {
             newSet.reps = "\(WorkoutDefaults.defaultReps)"
+            newSet.plannedReps = WorkoutDefaults.defaultReps
         }
 
         // Auto-fill from previous session if available
         let previousIndex = newSetNumber - 1
         if previousIndex < previousSets.count {
             let prev = previousSets[previousIndex]
+            newSet.setType = prev.setType
             if supportsWeight, let weight = prev.weight {
                 let displayWeight = weightUnit.fromKg(weight)
                 newSet.weight = formattedEditableWeight(displayWeight)
@@ -175,6 +222,8 @@ final class WorkoutSessionViewModel {
             if let normalizedReps = normalizedRepsValue(from: prev.reps) {
                 newSet.reps = "\(normalizedReps)"
             }
+            newSet.plannedReps = normalizedRepsValue(from: prev.plannedReps)
+                ?? normalizedRepsValue(from: prev.reps)
             if let duration = prev.duration {
                 newSet.duration = "\(Int(exercise.inputType == .durationIntensity || exercise.inputType == .roundsBased ? duration : duration / 60))"
             }
@@ -191,6 +240,7 @@ final class WorkoutSessionViewModel {
             if usesDefaultReps {
                 let normalized = normalizedRepsString(from: lastSet.reps)
                 newSet.reps = normalized ?? "\(WorkoutDefaults.defaultReps)"
+                newSet.plannedReps = lastSet.plannedReps
             } else {
                 newSet.reps = lastSet.reps
             }
@@ -209,6 +259,7 @@ final class WorkoutSessionViewModel {
         var newSet = EditableSet(setNumber: newSetNumber)
         newSet.weight = lastCompleted.weight
         newSet.reps = lastCompleted.reps
+        newSet.plannedReps = lastCompleted.plannedReps
         newSet.duration = lastCompleted.duration
         newSet.distance = lastCompleted.distance
         newSet.level = lastCompleted.level
@@ -240,6 +291,7 @@ final class WorkoutSessionViewModel {
 
     func removeSet(at index: Int) {
         guard sets.indices.contains(index) else { return }
+        clearRecommendation()
         sets.remove(at: index)
         // Renumber remaining sets
         for i in sets.indices {
@@ -249,6 +301,7 @@ final class WorkoutSessionViewModel {
 
     func toggleSetCompletion(at index: Int) -> Bool {
         guard sets.indices.contains(index) else { return false }
+        clearRecommendation()
         sets[index].isCompleted.toggle()
         return sets[index].isCompleted
     }
@@ -257,6 +310,8 @@ final class WorkoutSessionViewModel {
 
     func loadPreviousSets(from records: [ExerciseRecord], weightUnit: WeightUnit = .kg) {
         guard !isSaving else { return }
+        currentWeightUnit = weightUnit
+        clearRecommendation()
         let exactMatches = records
             .filter { $0.exerciseDefinitionID == exercise.id }
             .sorted { $0.date > $1.date }
@@ -293,9 +348,16 @@ final class WorkoutSessionViewModel {
                 duration: set.duration,
                 distance: set.distance,
                 intensity: set.intensity,
-                restDuration: set.restDuration
+                restDuration: set.restDuration,
+                plannedReps: set.plannedReps,
+                rpe: set.rpe,
+                rpeSourceRaw: set.rpeSourceRaw,
+                setType: set.setType
             )
         }
+
+        // A restored draft is already the source of truth for every editable field.
+        guard !restoredFromDraft else { return }
 
         // Match set count to previous session if it had more sets
         while sets.count < previousSets.count {
@@ -307,25 +369,25 @@ final class WorkoutSessionViewModel {
             fillSetFromPrevious(at: i, weightUnit: weightUnit)
         }
 
-        // Inter-session progressive overload: if all previous sets met target reps,
-        // increment the first set's weight for the new session
-        applyInterSessionOverload(weightUnit: weightUnit)
-    }
-
-    /// Applies progressive overload across sessions by incrementing the first set's weight
-    /// when all previous session sets achieved their target reps.
-    private func applyInterSessionOverload(weightUnit: WeightUnit) {
-        guard supportsWeight, !previousSets.isEmpty else { return }
-
-        let allMet = previousSets.enumerated().allSatisfy { index, prev in
-            guard let reps = prev.reps else { return false }
-            let target = targetRepsForSet(at: index)
-            return reps >= target
+        guard supportsWeight,
+              let firstWorkingIndex = previousSets.firstIndex(where: { $0.setType == .working }),
+              sets.indices.contains(firstWorkingIndex),
+              !sets[firstWorkingIndex].isCompleted,
+              sets[firstWorkingIndex].setType == .working else { return }
+        let priorInputs = previousSets.map { previous in
+            ProgressionSetInput(
+                weight: previous.weight, reps: previous.reps,
+                plannedReps: previous.plannedReps, rpe: previous.rpe,
+                rpeSourceRaw: previous.rpeSourceRaw, setType: previous.setType,
+                isCompleted: true
+            )
         }
-        guard allMet else { return }
-
-        guard let firstWeight = previousSets.first?.weight, firstWeight > 0 else { return }
-        sets[0].weight = incrementedWeightDisplay(fromKg: firstWeight, unit: weightUnit)
+        let recommendation = progressionService.nextSession(
+            sets: priorInputs,
+            plannedSetCount: lastSession.plannedSetCount,
+            incrementKg: progressionIncrementKg
+        )
+        setRecommendation(recommendation, for: firstWorkingIndex, sourceIndex: nil, unit: weightUnit)
     }
 
     func previousSetInfo(for setNumber: Int) -> PreviousSetInfo? {
@@ -353,7 +415,9 @@ final class WorkoutSessionViewModel {
 
     func fillSetFromPrevious(at index: Int, weightUnit: WeightUnit = .kg) {
         guard sets.indices.contains(index) else { return }
+        currentWeightUnit = weightUnit
         guard let prev = previousSetInfo(for: sets[index].setNumber) else { return }
+        sets[index].setType = prev.setType
         if supportsWeight, let weight = prev.weight {
             let displayWeight = weightUnit.fromKg(weight)
             sets[index].weight = formattedEditableWeight(displayWeight)
@@ -365,6 +429,8 @@ final class WorkoutSessionViewModel {
         } else if usesDefaultReps {
             sets[index].reps = "\(WorkoutDefaults.defaultReps)"
         }
+        sets[index].plannedReps = normalizedRepsValue(from: prev.plannedReps)
+            ?? normalizedRepsValue(from: prev.reps)
         if let duration = prev.duration {
             sets[index].duration = "\(Int(exercise.inputType == .durationIntensity || exercise.inputType == .roundsBased ? duration : duration / 60))"
         }
@@ -376,47 +442,118 @@ final class WorkoutSessionViewModel {
         }
     }
 
-    /// Applies conservative progressive overload from the completed set to the next set.
-    /// - Returns: true when the next-set weight was updated.
-    @discardableResult
-    func applyProgressiveOverloadForNextSet(afterCompletingSetAt index: Int, weightUnit: WeightUnit = .kg) -> Bool {
+    /// Offers the shared within-session recommendation without changing entered weights.
+    func prepareNextSetRecommendation(afterCompletingSetAt index: Int, weightUnit: WeightUnit = .kg) {
+        currentWeightUnit = weightUnit
+        clearRecommendation()
         let nextIndex = index + 1
-        guard supportsWeight, sets.indices.contains(index), sets.indices.contains(nextIndex) else { return false }
-
+        guard supportsWeight, sets.indices.contains(index), sets.indices.contains(nextIndex),
+              !sets[nextIndex].isCompleted,
+              sets[nextIndex].setType == .working else { return }
         let completed = sets[index]
-        let completedWeightDisplay = Double(completed.weight.trimmingCharacters(in: .whitespaces))
-        guard let completedWeightDisplay, completedWeightDisplay > 0 else { return false }
+        let recommendation = progressionService.nextSet(
+            after: progressionInput(for: completed, unit: weightUnit),
+            incrementKg: progressionIncrementKg
+        )
+        setRecommendation(recommendation, for: nextIndex, sourceIndex: index, unit: weightUnit)
+    }
 
-        let completedReps = normalizedRepsString(from: completed.reps).flatMap(Int.init)
-        guard let completedReps else { return false }
-
-        let targetReps = targetRepsForSet(at: index)
-        guard completedReps >= targetReps else { return false }
-
-        let currentWeightKg = weightUnit.toKg(completedWeightDisplay)
-        let formatted = incrementedWeightDisplay(fromKg: currentWeightKg, unit: weightUnit)
-
-        let isNextWeightEmpty = sets[nextIndex].weight.trimmingCharacters(in: .whitespaces).isEmpty
-        if isNextWeightEmpty || sets[nextIndex].weight == completed.weight {
-            sets[nextIndex].weight = formatted
-            return true
+    /// Applies a pending recommendation only while its source and destination remain unchanged.
+    @discardableResult
+    func applyWeightRecommendation(weightUnit: WeightUnit = .kg) -> Bool {
+        guard let recommendation = pendingWeightRecommendation,
+              let index = recommendationSetIndex,
+              let context = recommendationContext,
+              sets.indices.contains(index),
+              !sets[index].isCompleted,
+              sets[index].id == context.targetID,
+              sets[index].weight == context.targetWeight,
+              sets[index].plannedReps == context.targetPlannedReps,
+              sets[index].setType == context.targetSetType,
+              weightUnit == context.unit,
+              recommendation.weight.isFinite,
+              recommendation.weight > 0,
+              recommendation.weight <= maxWeightKg else {
+            clearRecommendation()
+            return false
         }
-        return false
+        if let sourceID = context.sourceID {
+            let sourceIndex = index - 1
+            guard sets.indices.contains(sourceIndex) else {
+                clearRecommendation()
+                return false
+            }
+            let source = sets[sourceIndex]
+            guard source.id == sourceID, source.isCompleted,
+                  source.weight == context.sourceWeight,
+                  source.reps == context.sourceReps,
+                  source.plannedReps == context.sourcePlannedReps,
+                  source.rpe == context.sourceRPE,
+                  source.rpeSourceRaw == context.sourceRPESourceRaw,
+                  source.setType == context.sourceSetType else {
+                clearRecommendation()
+                return false
+            }
+        }
+        sets[index].weight = formattedEditableWeight(weightUnit.fromKg(recommendation.weight))
+        clearRecommendation()
+        return true
+    }
+
+    private func setRecommendation(
+        _ recommendation: WeightRecommendation?,
+        for index: Int,
+        sourceIndex: Int?,
+        unit: WeightUnit
+    ) {
+        guard let recommendation, sets.indices.contains(index) else { return }
+        let source = sourceIndex.flatMap { sets.indices.contains($0) ? sets[$0] : nil }
+        recommendationContext = RecommendationContext(
+            targetID: sets[index].id,
+            targetWeight: sets[index].weight,
+            targetPlannedReps: sets[index].plannedReps,
+            targetSetType: sets[index].setType,
+            sourceID: source?.id,
+            sourceWeight: source?.weight,
+            sourceReps: source?.reps,
+            sourcePlannedReps: source?.plannedReps,
+            sourceRPE: source?.rpe,
+            sourceRPESourceRaw: source?.rpeSourceRaw,
+            sourceSetType: source?.setType,
+            unit: unit
+        )
+        pendingWeightRecommendation = recommendation
+        recommendationSetIndex = index
+    }
+
+    private func clearRecommendation() {
+        pendingWeightRecommendation = nil
+        recommendationSetIndex = nil
+        recommendationContext = nil
+    }
+
+    private func progressionInput(for set: EditableSet, unit: WeightUnit) -> ProgressionSetInput {
+        let displayWeight = Double(set.weight.trimmingCharacters(in: .whitespaces))
+        let weightKg = displayWeight.map { unit.toKg($0) }
+        let reps = normalizedRepsString(from: set.reps).flatMap(Int.init)
+        return ProgressionSetInput(
+            weight: weightKg, reps: reps, plannedReps: set.plannedReps,
+            rpe: set.rpe, rpeSourceRaw: set.rpeSourceRaw,
+            setType: set.setType, isCompleted: set.isCompleted
+        )
     }
 
     // MARK: - Level-Up Suggestion
 
-    private let levelUpMinimumRepsAchievementRate = 0.9
-
-    /// True when all sets are completed and at least 90% met their target reps.
+    /// True when the shared policy can increase a fully completed planned session.
     var shouldSuggestLevelUp: Bool {
-        guard supportsWeight, !sets.isEmpty, completedSetCount == sets.count,
-              sets.contains(where: { (Double($0.weight) ?? 0) > 0 }) else { return false }
-        let achieved = sets.indices.filter { i in
-            guard let reps = normalizedRepsString(from: sets[i].reps).flatMap(Int.init) else { return false }
-            return reps >= targetRepsForSet(at: i)
-        }.count
-        return Double(achieved) / Double(sets.count) >= levelUpMinimumRepsAchievementRate
+        guard supportsWeight, !sets.isEmpty, completedSetCount == sets.count else { return false }
+        let recommendation = progressionService.nextSession(
+            sets: sets.map { progressionInput(for: $0, unit: currentWeightUnit) },
+            plannedSetCount: sets.count,
+            incrementKg: progressionIncrementKg
+        )
+        return recommendation?.reason == .readyToProgress
     }
 
     // MARK: - Per-Set Validation
@@ -530,7 +667,10 @@ final class WorkoutSessionViewModel {
                 level: set.level,
                 isCompleted: set.isCompleted,
                 setTypeRaw: set.setType.rawValue,
-                restDuration: set.restDuration
+                restDuration: set.restDuration,
+                plannedReps: set.plannedReps,
+                rpe: set.rpe,
+                rpeSourceRaw: set.rpeSourceRaw
             )
         }
         let draft = WorkoutSessionDraft(
@@ -548,6 +688,7 @@ final class WorkoutSessionViewModel {
     }
 
     func restoreFromDraft(_ draft: WorkoutSessionDraft) {
+        markDraftRestored()
         sessionStartTime = draft.sessionStartTime
         memo = draft.memo
         templateRestDuration = draft.templateRestDuration
@@ -561,8 +702,17 @@ final class WorkoutSessionViewModel {
             editable.isCompleted = draftSet.isCompleted
             editable.setType = SetType(rawValue: draftSet.setTypeRaw) ?? .working
             editable.restDuration = draftSet.restDuration
+            editable.plannedReps = normalizedRepsValue(from: draftSet.plannedReps)
+            editable.rpe = draftSet.rpe.flatMap(RPELevel.validate)
+            editable.rpeSourceRaw = draftSet.rpeSourceRaw
             return editable
         }
+    }
+
+    /// Shared by compound/template draft restoration, which restores each exercise separately.
+    func markDraftRestored() {
+        restoredFromDraft = true
+        clearRecommendation()
     }
 
     static func clearDraft() {
@@ -682,7 +832,8 @@ final class WorkoutSessionViewModel {
             secondaryMuscles: exercise.secondaryMuscles,
             equipment: exercise.equipment,
             estimatedCalories: calories,
-            calorieSource: .met
+            calorieSource: .met,
+            plannedSetCount: sets.count
         )
 
         // Create WorkoutSet objects for completed sets
@@ -747,7 +898,10 @@ final class WorkoutSessionViewModel {
                 intensity: levelValue,
                 isCompleted: true,
                 restDuration: editableSet.restDuration,
-                rpe: editableSet.rpe.flatMap(RPELevel.validate)
+                rpe: editableSet.rpe.flatMap(RPELevel.validate),
+                plannedReps: usesDefaultReps ? normalizedRepsValue(from: editableSet.plannedReps) : nil,
+                rpeSourceRaw: editableSet.rpe.flatMap(RPELevel.validate) == nil
+                    ? nil : editableSet.rpeSourceRaw
             )
             // Explicit bidirectional link for CloudKit reliability
             workoutSet.exerciseRecord = record
@@ -772,6 +926,8 @@ final class WorkoutSessionViewModel {
     /// Invalid text is left intact so validation can report it rather than silently discard it.
     func convertWeightUnit(from oldUnit: WeightUnit, to newUnit: WeightUnit) {
         guard oldUnit != newUnit else { return }
+        clearRecommendation()
+        currentWeightUnit = newUnit
         for index in sets.indices {
             let trimmed = sets[index].weight.trimmingCharacters(in: .whitespaces)
             guard let value = Double(trimmed), value.isFinite else { continue }
@@ -811,31 +967,10 @@ final class WorkoutSessionViewModel {
     }
 
     private var progressionIncrementKg: Double {
-        if isLowerBodyCompound {
-            return 5.0
-        }
-        switch exercise.equipment {
-        case .dumbbell:
-            return 1.0
-        case .kettlebell, .band, .trx, .medicineBall, .stabilityBall, .bodyweight, .other:
-            return 1.0
-        default:
-            return 2.5
-        }
-    }
-
-    private var isLowerBodyCompound: Bool {
-        let lowerMuscles: Set<MuscleGroup> = [.quadriceps, .hamstrings, .glutes]
-        return !Set(exercise.primaryMuscles).intersection(lowerMuscles).isEmpty
-    }
-
-    private func incrementedWeightDisplay(fromKg baseKg: Double, unit: WeightUnit) -> String {
-        let incrementKg = progressionIncrementKg
-        let maxIncreaseKg = baseKg * maxProgressiveIncreaseRatio
-        let clampedIncreaseKg = min(incrementKg, maxIncreaseKg)
-        let roundedWeightKg = roundToPlateStepKg(baseKg + clampedIncreaseKg)
-        let displayWeight = unit.fromKg(roundedWeightKg)
-        return formattedEditableWeight(displayWeight)
+        WorkoutProgressionService.incrementKg(
+            equipment: exercise.equipment,
+            primaryMuscles: exercise.primaryMuscles
+        )
     }
 
     private func formattedEditableWeight(_ value: Double) -> String {
@@ -843,19 +978,4 @@ final class WorkoutSessionViewModel {
             .grouping(.never).precision(.fractionLength(0...1)))
     }
 
-    private func roundToPlateStepKg(_ value: Double) -> Double {
-        let step = progressionIncrementKg <= 1.0 ? 1.0 : 2.5
-        guard step > 0 else { return value }
-        return (value / step).rounded() * step
-    }
-
-    private func targetRepsForSet(at index: Int) -> Int {
-        if previousSets.indices.contains(index), let previousReps = normalizedRepsValue(from: previousSets[index].reps) {
-            return previousReps
-        }
-        if sets.indices.contains(index), let currentReps = normalizedRepsString(from: sets[index].reps).flatMap(Int.init) {
-            return currentReps
-        }
-        return WorkoutDefaults.defaultReps
-    }
 }

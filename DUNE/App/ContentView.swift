@@ -247,6 +247,7 @@ struct ContentView: View {
         .environment(\.appTheme, selectedTheme)
         .tint(selectedTheme.accentColor)
         .tabViewStyle(.sidebarAdaptable)
+        .background { HabitReminderSyncView() }
         // Foreground refresh: scenePhase .background → .active (Correction #16/#60)
         .onChange(of: scenePhase) { oldPhase, newPhase in
             if newPhase == .active {

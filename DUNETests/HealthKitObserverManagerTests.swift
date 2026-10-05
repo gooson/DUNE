@@ -1,10 +1,67 @@
 import Foundation
+import HealthKit
 import Synchronization
 import Testing
 @testable import DUNE
 
 @Suite("HealthKitObserverManager")
 struct HealthKitObserverManagerTests {
+    @Test("Authorization retry re-enables failed delivery without duplicating queries")
+    @MainActor
+    func retriesDeliveryAfterAuthorization() {
+        let store = ObserverStoreSpy()
+        store.state.withLock { $0.deliverySucceeds = false }
+        let manager = HealthKitObserverManager(store: store, coordinator: ObserverRefreshStub())
+        manager.startObserving()
+        #expect(store.state.withLock { $0.deliveryAttempts } == 8)
+
+        store.state.withLock { $0.deliverySucceeds = true }
+        manager.startObserving()
+        #expect(store.state.withLock { $0.deliveryAttempts } == 16)
+        #expect(store.state.withLock { $0.successfulDeliveries } == 8)
+        #expect(store.state.withLock { $0.executed.count } == 8)
+        manager.stopObserving()
+    }
+
+    @Test("Launch registration is synchronous, idempotent, and fully stopped before restart")
+    @MainActor
+    func registrationLifecycle() {
+        let store = ObserverStoreSpy()
+        let manager = HealthKitObserverManager(store: store, coordinator: ObserverRefreshStub())
+
+        manager.startObserving()
+        let initialQueries = store.state.withLock { $0.executed }
+        #expect(initialQueries.count == 8)
+        manager.startObserving()
+        #expect(store.state.withLock { $0.executed.count } == 8)
+        #expect(store.state.withLock { $0.frequencies.count } == 8)
+
+        manager.stopObserving()
+        #expect(store.state.withLock { $0.stopped.map(ObjectIdentifier.init) } == initialQueries.map(ObjectIdentifier.init))
+        manager.stopObserving()
+        #expect(store.state.withLock { $0.stopped.count } == 8)
+
+        manager.startObserving()
+        #expect(store.state.withLock { $0.executed.count } == 16)
+        manager.stopObserving()
+        #expect(store.state.withLock { $0.stopped.count } == 16)
+    }
+
+    @Test("Body composition requests immediate delivery while steps and workouts remain hourly")
+    @MainActor
+    func bodyCompositionDeliveryFrequency() {
+        let store = ObserverStoreSpy()
+        let manager = HealthKitObserverManager(store: store, coordinator: ObserverRefreshStub())
+        manager.startObserving()
+        let frequencies = store.state.withLock { $0.frequencies }
+        for identifier: HKQuantityTypeIdentifier in [.bodyMass, .bodyFatPercentage, .bodyMassIndex] {
+            #expect(frequencies[HKQuantityType(identifier).identifier] == .immediate)
+        }
+        #expect(frequencies[HKQuantityType(.stepCount).identifier] == .hourly)
+        #expect(frequencies[HKSampleType.workoutType().identifier] == .hourly)
+        manager.stopObserving()
+    }
+
     @Test("Observer completion waits for asynchronous work and fires once", arguments: [false, true])
     func completionWaits(cancel: Bool) async {
         let gate = ObserverWorkGate()
@@ -21,6 +78,50 @@ struct HealthKitObserverManagerTests {
         await gate.release()
         await task.value
         #expect(completions.withLock { $0 } == 1)
+    }
+}
+
+private final class ObserverStoreSpy: HealthKitObserverStoring {
+    struct State {
+        var executed: [HKQuery] = []
+        var stopped: [HKQuery] = []
+        var frequencies: [String: HKUpdateFrequency] = [:]
+        var deliverySucceeds = true
+        var deliveryAttempts = 0
+        var successfulDeliveries = 0
+    }
+
+    let state = Mutex(State())
+
+    func execute(_ query: HKQuery) {
+        state.withLock { $0.executed.append(query) }
+    }
+
+    func stop(_ query: HKQuery) {
+        state.withLock { $0.stopped.append(query) }
+    }
+
+    func enableBackgroundDelivery(
+        for type: HKObjectType,
+        frequency: HKUpdateFrequency,
+        withCompletion completion: @escaping @Sendable (Bool, Error?) -> Void
+    ) {
+        let success = state.withLock {
+            $0.frequencies[type.identifier] = frequency
+            $0.deliveryAttempts += 1
+            if $0.deliverySucceeds { $0.successfulDeliveries += 1 }
+            return $0.deliverySucceeds
+        }
+        completion(success, success ? nil : NSError(domain: HKErrorDomain, code: HKError.errorAuthorizationDenied.rawValue))
+    }
+}
+
+private struct ObserverRefreshStub: AppRefreshCoordinating {
+    func requestRefresh(source: RefreshSource) async -> Bool { false }
+    func forceRefresh() async {}
+    func invalidateCacheOnly() async {}
+    func makeRefreshStream() async -> AsyncStream<RefreshSource> {
+        AsyncStream { $0.finish() }
     }
 }
 

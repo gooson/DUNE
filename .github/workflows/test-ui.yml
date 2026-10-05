@@ -9,9 +9,25 @@ on:
       - 'DUNEWatch/**'
       - 'DUNEUITests/**'
       - 'DUNEWatchUITests/**'
+      - 'Shared/**'
       - 'scripts/test-ui.sh'
+      - 'scripts/plan-ui-tests.py'
+      - 'scripts/lib/verify-ui-test-log.py'
+      - 'scripts/tests/test_plan_ui_tests.py'
+      - 'scripts/tests/test_ui_test_runner.py'
       - 'scripts/test-watch-ui.sh'
+      - 'scripts/lib/test-log-summary.py'
+      - 'scripts/tests/test_test_log_summary.py'
+      - 'scripts/codex-context.py'
+      - 'scripts/codex-pipeline.py'
+      - 'scripts/codex-check.py'
+      - 'scripts/check-codex-claude-parity.py'
+      - 'scripts/tests/test_codex_context.py'
+      - 'scripts/tests/test_codex_pipeline.py'
+      - 'scripts/tests/test-codex-check.py'
       - 'scripts/lib/regen-project.sh'
+      - 'scripts/lib/simulator-boot.sh'
+      - 'scripts/lib/simulator-worktree.sh'
       - '.github/workflows/test-ui.yml'
 
 concurrency:
@@ -23,8 +39,46 @@ env:
   SIMULATOR_BOOT_RETRIES: '2'
 
 jobs:
+  ui-gate-contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      ios: ${{ steps.scope.outputs.ios }}
+      watch: ${{ steps.scope.outputs.watch }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Determine affected UI platforms
+        id: scope
+        env:
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          python3 scripts/plan-ui-tests.py --base "$PR_BASE_SHA" > "$RUNNER_TEMP/ui-scope.json"
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          plan = json.loads((Path(os.environ["RUNNER_TEMP"]) / "ui-scope.json").read_text())
+          with open(os.environ["GITHUB_OUTPUT"], "a") as output:
+              for platform, scope in plan["platforms"].items():
+                  print(f"{platform}={str(scope['mode'] != 'skip').lower()}", file=output)
+          PY
+      - name: Verify UI selection and execution evidence contracts
+        run: |
+          python3 -B -m unittest discover -s scripts/tests -p test_plan_ui_tests.py -v
+          python3 -B -m unittest discover -s scripts/tests -p test_ui_test_runner.py -v
+          for pattern in test_test_log_summary.py test_codex_context.py test_codex_pipeline.py; do
+            python3 -B -m unittest discover -s scripts/tests -p "$pattern"
+          done
+          python3 -B scripts/tests/test-codex-check.py
+          python3 scripts/check-codex-claude-parity.py
+          bash -n scripts/test-ui.sh
+          bash -n scripts/test-watch-ui.sh
+
   ios-ui-tests:
-    if: github.event.pull_request.draft == false
+    needs: ui-gate-contracts
+    if: github.event.pull_request.draft == false && needs.ui-gate-contracts.outputs.ios == 'true'
     runs-on: macos-15
     timeout-minutes: 60
 
@@ -62,7 +116,8 @@ jobs:
           retention-days: 7
 
   watch-ui-tests:
-    if: github.event.pull_request.draft == false
+    needs: ui-gate-contracts
+    if: github.event.pull_request.draft == false && needs.ui-gate-contracts.outputs.watch == 'true'
     runs-on: macos-15
     timeout-minutes: 60
 

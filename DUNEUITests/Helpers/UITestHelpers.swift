@@ -113,6 +113,7 @@ enum AXID {
     // MARK: - Life Tab (active: hero, toolbar-add, habits section, actions, history)
     static let lifeHeroProgress = "life-hero-progress"
     static let lifeToolbarAdd = "life-toolbar-add"
+    static let lifeToolbarNewHabit = "life-toolbar-new-habit"
     static let lifeSectionHabits = "life-section-habits"
     static let lifeHabitToggle = "life-habit-toggle"
     static func lifeHabitRow(_ habitName: String) -> String { "life-habit-row-\(habitName)" }
@@ -221,6 +222,7 @@ enum AXID {
     static let habitFormFrequency = "habit-form-frequency"
     static let habitFormFrequencyDaily = "habit-form-frequency-daily"
     static let habitFormFrequencyWeekly = "habit-form-frequency-weekly"
+    static let habitFormReminderTime = "habit-form-reminder-time"
 
     // MARK: - Exercise (Activity sub-view)
     static let exerciseToolbarTemplates = "exercise-toolbar-templates"
@@ -273,6 +275,10 @@ enum AXID {
     static let workoutSessionOverview = "workout-session-overview"
     static let workoutSessionDone = "workout-session-done"
     static let workoutSessionCompleteSet = "workout-session-complete-set"
+    static let workoutSessionPlannedReps = "workout-session-planned-reps"
+    static let workoutSessionRecommendationReason = "workout-session-recommendation-reason"
+    static let workoutSessionApplyRecommendation = "workout-session-apply-recommendation"
+    static let workoutSessionSkipRest = "workout-session-skip-rest"
     static let workoutSessionLastSetSheet = "workout-session-last-set-sheet"
     static let workoutSessionAddSet = "workout-session-add-set"
     static let workoutSessionFinish = "workout-session-finish"
@@ -468,6 +474,13 @@ extension XCUIApplication {
         guard element.exists || element.waitForExistence(timeout: remainingTime) else { return false }
         element.tap()
         return true
+    }
+
+    @discardableResult
+    func openLifeNewHabitForm(timeout: TimeInterval = 5) -> Bool {
+        guard waitAndTap(AXID.lifeToolbarAdd, timeout: timeout) else { return false }
+        guard waitAndTap(AXID.lifeToolbarNewHabit, timeout: timeout) else { return false }
+        return textFields[AXID.habitFormName].firstMatch.waitForExistence(timeout: timeout)
     }
 
     /// Reveals secondary toolbar actions moved into the system overflow menu.
@@ -1008,21 +1021,23 @@ extension XCUIApplication {
     ) -> Bool {
         let textField = textFields[identifier].firstMatch
         if textField.waitForExistence(timeout: timeout) {
-            clearAndType(in: textField, value: value, clearExisting: clearExisting)
-            return true
+            return clearAndType(in: textField, value: value, clearExisting: clearExisting)
         }
 
         let textView = textViews[identifier].firstMatch
         if textView.waitForExistence(timeout: timeout) {
-            clearAndType(in: textView, value: value, clearExisting: clearExisting)
-            return true
+            return clearAndType(in: textView, value: value, clearExisting: clearExisting)
         }
 
         return false
     }
 
-    private func clearAndType(in element: XCUIElement, value: String, clearExisting: Bool) {
+    private func clearAndType(in element: XCUIElement, value: String, clearExisting: Bool) -> Bool {
         element.tap()
+        if !waitForKeyboardFocus(in: element) {
+            element.tap()
+            guard waitForKeyboardFocus(in: element) else { return false }
+        }
 
         if clearExisting {
             let existingValue = (element.value as? String) ?? ""
@@ -1033,6 +1048,18 @@ extension XCUIApplication {
         }
 
         element.typeText(value)
+        return true
+    }
+
+    private func waitForKeyboardFocus(in element: XCUIElement) -> Bool {
+        let focused = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "hasKeyboardFocus == true"),
+            object: element
+        )
+        // SwiftUI can display an insertion caret and keyboard without reporting
+        // hasKeyboardFocus on the exposed accessibility element.
+        return XCTWaiter.wait(for: [focused], timeout: 2) == .completed
+            || keyboards.firstMatch.exists
     }
 
     private func switchState(of element: XCUIElement) -> Bool? {

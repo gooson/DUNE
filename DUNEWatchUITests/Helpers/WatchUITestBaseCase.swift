@@ -15,9 +15,20 @@ enum WatchAXID {
     static let quickStartSectionPreferred = "watch-quickstart-section-preferred"
     static let quickStartSectionPopular = "watch-quickstart-section-popular"
     static let quickStartExerciseSquat = "watch-quickstart-exercise-ui-test-squat"
+    static let quickStartExerciseCrunch = "watch-quickstart-exercise-crunch"
+    static let quickStartExercisePlank = "watch-quickstart-exercise-plank"
     static let workoutPreviewScreen = "watch-workout-preview-screen"
     static let workoutPreviewStrengthList = "watch-workout-preview-strength-list"
     static let workoutPreviewStartButton = "watch-workout-start-button"
+    static let workoutPreviewCardio = "watch-workout-preview-cardio"
+    static let workoutPreviewCardioIndoorButton = "watch-workout-cardio-indoor-button"
+    static let workoutPreviewCardioOutdoorButton = "watch-workout-cardio-outdoor-button"
+    static let workoutPreviewLevelDecrease = "watch-workout-preview-level-decrease"
+    static let workoutPreviewLevelValue = "watch-workout-preview-level-value"
+    static let workoutPreviewLevelIncrease = "watch-workout-preview-level-increase"
+    static let cardioLevelDecrease = "watch-cardio-level-decrease"
+    static let cardioLevelValue = "watch-cardio-level-value"
+    static let cardioLevelIncrease = "watch-cardio-level-increase"
     static let workoutPreviewStartLabels = ["Start", "시작", "開始"]
     static let sessionPagingRoot = "watch-session-paging-root"
     static let sessionMetricsScreen = "watch-session-metrics-screen"
@@ -36,6 +47,14 @@ enum WatchAXID {
     static let setInputScreen = "watch-set-input-screen"
     static let setInputDoneButton = "watch-set-input-done"
     static let restTimerRPEBadge = "watch-rest-timer-rpe-badge"
+    static let restTimerRPERate = "watch-rest-timer-rpe-rate"
+    static let restTimerRPEConfirm = "watch-rest-timer-rpe-confirm"
+    static let lastSetRPEAction = "watch-last-set-rpe-action"
+    static let lastSetRPEActionLabels = ["Rate RPE", "RPE 기록", "RPEを記録", "Confirm RPE", "RPE 확정", "RPEを確定"]
+    static let lastSetRPESheet = "watch-last-set-rpe-sheet"
+    static let lastSetRPEDecrement = "watch-last-set-rpe-decrement"
+    static let lastSetRPEIncrement = "watch-last-set-rpe-increment"
+    static let lastSetRPEConfirm = "watch-last-set-rpe-confirm"
     static let sessionSummaryScreen = "watch-session-summary-screen"
     static let sessionSummaryEffortButton = "watch-summary-effort-button"
     static let sessionSummaryDoneButton = "watch-session-summary-done"
@@ -48,6 +67,7 @@ class WatchUITestBaseCase: XCTestCase {
     enum LaunchScenario: String {
         case empty = "empty"
         case defaultSeeded = "default-seeded"
+        case responsiveLayout = "responsive-layout"
     }
 
     struct LaunchConfiguration {
@@ -167,6 +187,12 @@ class WatchUITestBaseCase: XCTestCase {
                 exactLabels: WatchAXID.sessionMetricsLastSetFinishLabels,
                 timeout: timeout
             ) != nil
+        case WatchAXID.lastSetRPEAction:
+            return waitForButton(
+                identifier: identifier,
+                exactLabels: WatchAXID.lastSetRPEActionLabels,
+                timeout: timeout
+            ) != nil
         case WatchAXID.sessionControlsEndButton:
             return waitForButton(
                 identifier: identifier,
@@ -233,6 +259,15 @@ class WatchUITestBaseCase: XCTestCase {
             guard let button = waitForButton(
                 identifier: identifier,
                 exactLabels: WatchAXID.sessionMetricsLastSetFinishLabels,
+                timeout: timeout
+            ) else {
+                return false
+            }
+            element = button
+        case WatchAXID.lastSetRPEAction:
+            guard let button = waitForButton(
+                identifier: identifier,
+                exactLabels: WatchAXID.lastSetRPEActionLabels,
                 timeout: timeout
             ) else {
                 return false
@@ -377,11 +412,49 @@ class WatchUITestBaseCase: XCTestCase {
         ensureQuickStartVisible()
     }
 
+    func findQuickStartExercise(identifier: String, maxSwipes: Int = 6) -> XCUIElement? {
+        // watchOS exposes the List as a CollectionView with the screen identifier.
+        let scrollContainers = [
+            app.tables[WatchAXID.quickStartList].firstMatch,
+            app.collectionViews[WatchAXID.quickStartList].firstMatch,
+            app.scrollViews[WatchAXID.quickStartList].firstMatch,
+            app.tables[WatchAXID.quickStartScreen].firstMatch,
+            app.collectionViews[WatchAXID.quickStartScreen].firstMatch,
+            app.scrollViews[WatchAXID.quickStartScreen].firstMatch
+        ]
+        guard let scrollContainer = scrollContainers.first(where: { $0.exists }) else {
+            attachQuickStartHierarchy()
+            return nil
+        }
+
+        let exercise = scrollContainer.descendants(matching: .any)[identifier].firstMatch
+        for swipeIndex in 0...maxSwipes {
+            if exercise.exists && exercise.isHittable {
+                return exercise
+            }
+            if swipeIndex < maxSwipes {
+                scrollContainer.swipeUp()
+            }
+        }
+
+        attachQuickStartHierarchy()
+        return nil
+    }
+
+    private func attachQuickStartHierarchy() {
+        let attachment = XCTAttachment(string: app.debugDescription)
+        attachment.name = "All-Exercises-accessibility-hierarchy"
+        attachment.lifetime = .keepAlways
+        add(attachment)
+    }
+
     func startFixtureStrengthWorkout() {
         openAllExercises()
 
-        let exercise = app.descendants(matching: .any)[WatchAXID.quickStartExerciseSquat].firstMatch
-        XCTAssertTrue(exercise.waitForExistence(timeout: 5), "Fixture exercise should be visible")
+        guard let exercise = findQuickStartExercise(identifier: WatchAXID.quickStartExerciseSquat) else {
+            XCTFail("Fixture Squat should be hittable in the All Exercises list")
+            return
+        }
         exercise.tap()
 
         XCTAssertTrue(elementExists(WatchAXID.workoutPreviewScreen, timeout: 5), "Workout preview root should render")
@@ -503,9 +576,32 @@ class WatchUITestBaseCase: XCTestCase {
         add(attachment)
     }
 
+    /// Checks the actual accessible button frame before the test performs any scrolling.
+    func assertFirstViewportButtons(_ identifiers: [String], screenshot: String) {
+        for identifier in identifiers {
+            XCTAssertTrue(app.buttons[identifier].waitForExistence(timeout: 5), "Missing \(identifier)")
+        }
+        addScreenshotAttachment(named: defaultArtifactName(suffix: screenshot))
+
+        let screen = app.frame
+        XCTAssertGreaterThan(screen.width, 0)
+        XCTAssertGreaterThan(screen.height, 0)
+        for identifier in identifiers {
+            let button = app.buttons[identifier]
+            let frame = button.frame
+            XCTAssertTrue(button.isHittable, "\(identifier) must be tappable without scrolling")
+            XCTAssertGreaterThan(frame.width, 0, "\(identifier) must have a real frame")
+            XCTAssertGreaterThan(frame.height, 0, "\(identifier) must have a real frame")
+            XCTAssertGreaterThanOrEqual(frame.minX, screen.minX - 1, "\(identifier) clips at left edge: \(frame), screen: \(screen)")
+            XCTAssertGreaterThanOrEqual(frame.minY, screen.minY - 1, "\(identifier) clips at top edge: \(frame), screen: \(screen)")
+            XCTAssertLessThanOrEqual(frame.maxX, screen.maxX + 1, "\(identifier) clips at right edge: \(frame), screen: \(screen)")
+            XCTAssertLessThanOrEqual(frame.maxY, screen.maxY + 1, "\(identifier) clips at bottom edge: \(frame), screen: \(screen)")
+        }
+    }
+
     private func addSystemPermissionMonitor() {
         _ = addUIInterruptionMonitor(withDescription: "Watch System Alert") { alert in
-            for label in ["Allow", "OK", "Continue"] {
+            for label in ["Don't Allow", "허용 안 함", "許可しない", "Allow", "허용", "許可", "OK", "확인", "Continue", "계속", "続ける"] {
                 let button = alert.buttons[label]
                 if button.exists {
                     button.tap()

@@ -22,6 +22,9 @@ struct CompoundWorkoutDraft: Codable {
         let isCompleted: Bool
         let setTypeRaw: String
         let restDuration: TimeInterval?
+        var plannedReps: Int? = nil
+        var rpe: Double? = nil
+        var rpeSourceRaw: String? = nil
     }
 
     private static let userDefaultsKey = "com.raftel.dailve.compound_workout_draft"
@@ -203,7 +206,10 @@ final class CompoundWorkoutViewModel {
                     level: set.level,
                     isCompleted: set.isCompleted,
                     setTypeRaw: set.setType.rawValue,
-                    restDuration: set.restDuration
+                    restDuration: set.restDuration,
+                    plannedReps: set.plannedReps,
+                    rpe: set.rpe,
+                    rpeSourceRaw: set.rpeSourceRaw
                 )
             }
         }
@@ -239,8 +245,12 @@ final class CompoundWorkoutViewModel {
                 editable.isCompleted = draftSet.isCompleted
                 editable.setType = SetType(rawValue: draftSet.setTypeRaw) ?? .working
                 editable.restDuration = draftSet.restDuration
+                editable.plannedReps = draftSet.plannedReps
+                editable.rpe = draftSet.rpe.flatMap(RPELevel.validate)
+                editable.rpeSourceRaw = draftSet.rpeSourceRaw
                 return editable
             }
+            vm.markDraftRestored()
         }
         return true
     }

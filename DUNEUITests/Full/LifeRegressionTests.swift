@@ -23,9 +23,7 @@ final class LifeRegressionTests: SeededUITestBaseCase {
         XCTAssertTrue(app.scrollToElementIfNeeded(AXID.lifeSectionHabits, maxSwipes: 4), "Habits section should be reachable")
         XCTAssertTrue(elementExists(AXID.lifeSectionHabits, timeout: 5), "Habits section should render in seeded state")
 
-        let addButton = app.descendants(matching: .any)[AXID.lifeToolbarAdd].firstMatch
-        XCTAssertTrue(addButton.waitForExistence(timeout: 5), "Life add button should exist")
-        addButton.tap()
+        XCTAssertTrue(app.openLifeNewHabitForm(), "New Habit menu action should open the habit form")
 
         let nameField = app.textFields[AXID.habitFormName].firstMatch
         XCTAssertTrue(nameField.waitForExistence(timeout: 5), "Habit form should appear from the Life toolbar")
@@ -85,10 +83,11 @@ final class LifeRegressionTests: SeededUITestBaseCase {
             XCTAssertTrue(habitSummary.exists, "Habit summary should remain alongside its history inspector")
         }
 
-        let firstRow = historyScreen.descendants(matching: .any)
+        let firstRow = app.descendants(matching: .any)
             .matching(NSPredicate(format: "identifier BEGINSWITH %@", "life-habit-history-row-"))
             .firstMatch
         XCTAssertTrue(firstRow.waitForExistence(timeout: 5), "Seeded habit history should expose at least one action row")
+        XCTAssertTrue(firstRow.label.contains("Completed"), "Seeded Morning Stretch history should show its completion")
 
         XCTAssertTrue(
             app.dismissModalIfPresent(cancelIdentifiers: [AXID.lifeHabitHistoryClose]),

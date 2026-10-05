@@ -230,6 +230,16 @@ struct DUNEApp: App {
 
         let scoreRefreshService = ScoreRefreshService(modelContainer: modelContainer)
 
+        // Background launches may never create an active scene. Restore observers before
+        // returning the runtime; foreground authorization revalidation remains separate.
+        if LaunchExperiencePlanner.shouldRestoreHealthKitObservers(
+            isHealthDataAvailable: healthKitAvailable,
+            hasRequestedAuthorization: UserDefaults.standard.bool(forKey: "hasRequestedHealthKitAuthorization"),
+            isRunningTests: Self.isRunningXCTest
+        ) {
+            observerManager?.startObserving()
+        }
+
         return AppRuntime(
             cloudSyncEnabled: resolvedCloudSyncEnabled,
             modelContainer: modelContainer,
@@ -317,86 +327,100 @@ struct DUNEApp: App {
     }
 
     var body: some Scene {
-        WindowGroup {
-            Group {
-                if Self.isRunningUnitTests {
-                    Color.clear
-                } else if Self.shouldSeedMockData {
-                    // UI test with mock data — seed and skip splash
-                    seedableAppContent
-                } else {
-                    ZStack {
-                        if !isShowingLaunchSplash || isResolvingLaunchSplash {
-                            appContent
-                                .transition(.opacity)
-                        }
+        Self.makeWindowGroup(content: windowContent)
+            .modelContainer(appRuntime.modelContainer)
 
-                        if isShowingLaunchSplash {
-                            LaunchSplashView(isResolving: isResolvingLaunchSplash)
-                                .allowsHitTesting(!isResolvingLaunchSplash)
-                        }
+        Self.makeInsightsWindowGroup(content: workoutInsightsContent)
+            .modelContainer(appRuntime.modelContainer)
+    }
+
+    // SwiftUI may evaluate its lazy scene builder on AsyncRenderer. Build the
+    // content on MainActor, then let the nonisolated builder return that value.
+    nonisolated private static func makeWindowGroup<Content: View>(content: Content) -> WindowGroup<Content> {
+        WindowGroup { content }
+    }
+
+    nonisolated private static func makeInsightsWindowGroup<Content: View>(content: Content) -> WindowGroup<Content> {
+        WindowGroup("Workout Insights", id: "workout-insights") { content }
+    }
+
+    private var workoutInsightsContent: some View {
+        Group {
+            if isLaunchExperienceReady && canLoadHealthKitData {
+                NavigationStack {
+                    WeeklyStatsDetailView()
+                }
+            } else {
+                Text("Finish setup in the main window to view your workout insights.")
+                    .padding()
+            }
+        }
+        .environment(\.appTheme, selectedTheme)
+        .tint(selectedTheme.accentColor)
+        .preferredColorScheme(Self.forcedUITestColorScheme)
+    }
+
+    private var windowContent: some View {
+        Group {
+            if Self.isRunningUnitTests {
+                Color.clear
+            } else if Self.shouldSeedMockData {
+                // UI test with mock data — seed and skip splash
+                seedableAppContent
+            } else {
+                ZStack {
+                    if !isShowingLaunchSplash || isResolvingLaunchSplash {
+                        appContent
+                            .transition(.opacity)
                     }
-                    .task(id: isShowingLaunchSplash) {
-                        if isShowingLaunchSplash {
-                            await dismissLaunchSplashAfterMinimumDuration()
-                        } else {
-                            runPostSplashSetupIfNeeded()
-                        }
+
+                    if isShowingLaunchSplash {
+                        LaunchSplashView(isResolving: isResolvingLaunchSplash)
+                            .allowsHitTesting(!isResolvingLaunchSplash)
+                    }
+                }
+                .task(id: isShowingLaunchSplash) {
+                    if isShowingLaunchSplash {
+                        await dismissLaunchSplashAfterMinimumDuration()
+                    } else {
+                        runPostSplashSetupIfNeeded()
                     }
                 }
             }
-            .transaction { transaction in
+        }
+        .transaction { transaction in
 #if DEBUG
-                if Self.isRunningUITests && ProcessInfo.processInfo.arguments.contains("--ui-disable-animations") {
-                    transaction.animation = nil
-                    transaction.disablesAnimations = true
-                }
+            if Self.isRunningUITests && ProcessInfo.processInfo.arguments.contains("--ui-disable-animations") {
+                transaction.animation = nil
+                transaction.disablesAnimations = true
+            }
 #endif
-            }
-            .tint(selectedTheme.accentColor)
-            .preferredColorScheme(Self.forcedUITestColorScheme)
-            .onChange(of: showConsentSheet) { oldValue, newValue in
-                guard oldValue, !newValue else { return }
-                Task { await advanceLaunchExperienceFlowIfNeeded() }
-            }
-            .onChange(of: scenePhase) { _, newPhase in
-                guard newPhase == .active else { return }
-                Task {
-                    await refreshAppRuntimeIfNeeded()
-                    await requestDeferredAuthorizationsIfNeeded()
-                }
-            }
-            .onReceive(NotificationCenter.default.mainThreadPublisher(for: NSUbiquitousKeyValueStore.didChangeExternallyNotification)) { notification in
-                let shouldHandle = shouldHandleCloudSyncNotification(notification)
-                guard shouldHandle else { return }
-                Task { @MainActor in
-                    await refreshAppRuntimeIfNeeded()
-                }
-            }
-            .onReceive(NotificationCenter.default.mainThreadPublisher(for: .NSPersistentStoreRemoteChange)) { _ in
-                Task { @MainActor in
-                    await PersistentStoreRemoteChangeRefresh.request(using: appRuntime.refreshCoordinator)
-                }
+        }
+        .tint(selectedTheme.accentColor)
+        .preferredColorScheme(Self.forcedUITestColorScheme)
+        .onChange(of: showConsentSheet) { oldValue, newValue in
+            guard oldValue, !newValue else { return }
+            Task { await advanceLaunchExperienceFlowIfNeeded() }
+        }
+        .onChange(of: scenePhase) { _, newPhase in
+            guard newPhase == .active else { return }
+            Task {
+                await refreshAppRuntimeIfNeeded()
+                await requestDeferredAuthorizationsIfNeeded()
             }
         }
-        .modelContainer(appRuntime.modelContainer)
-
-        WindowGroup("Workout Insights", id: "workout-insights") {
-            Group {
-                if isLaunchExperienceReady && canLoadHealthKitData {
-                    NavigationStack {
-                        WeeklyStatsDetailView()
-                    }
-                } else {
-                    Text("Finish setup in the main window to view your workout insights.")
-                        .padding()
-                }
+        .onReceive(NotificationCenter.default.mainThreadPublisher(for: NSUbiquitousKeyValueStore.didChangeExternallyNotification)) { notification in
+            let shouldHandle = shouldHandleCloudSyncNotification(notification)
+            guard shouldHandle else { return }
+            Task { @MainActor in
+                await refreshAppRuntimeIfNeeded()
             }
-            .environment(\.appTheme, selectedTheme)
-            .tint(selectedTheme.accentColor)
-            .preferredColorScheme(Self.forcedUITestColorScheme)
         }
-        .modelContainer(appRuntime.modelContainer)
+        .onReceive(NotificationCenter.default.mainThreadPublisher(for: .NSPersistentStoreRemoteChange)) { _ in
+            Task { @MainActor in
+                await PersistentStoreRemoteChangeRefresh.request(using: appRuntime.refreshCoordinator)
+            }
+        }
     }
 
     private var appContent: some View {
@@ -489,7 +513,7 @@ struct DUNEApp: App {
 
         let previousObserverManager = appRuntime.observerManager
         if let previousObserverManager {
-            await previousObserverManager.stopObserving()
+            previousObserverManager.stopObserving()
         }
 
         appRuntime = Self.makeAppRuntime(
@@ -730,6 +754,7 @@ struct DUNEApp: App {
                 let granted = try await notificationService.requestAuthorization()
                 hasRequestedNotificationAuthorization = true
                 if granted {
+                    NotificationCenter.default.post(name: .habitReminderAuthorizationGranted, object: nil)
                     await BedtimeReminderScheduler.shared.refreshSchedule(force: true)
                     await AppleWatchBedtimeReminderScheduler.shared.refreshSchedule(force: true)
                     await PostureReminderScheduler.shared.refreshSchedule()
@@ -808,24 +833,53 @@ struct DUNEApp: App {
                 equipment: definition?.equipment,
                 estimatedCalories: wcCalorieSource == .met ? validCalories : nil,
                 calorieSource: wcCalorieSource,
-                rpe: update.rpe
+                rpe: update.rpe,
+                plannedSetCount: update.plannedSetCount,
+                effortSourceRaw: update.effortSourceRaw
             )
 
             var workoutSets: [WorkoutSet] = []
             for setData in update.completedSets where setData.isCompleted {
                 let set = WorkoutSet(
                     setNumber: setData.setNumber,
+                    setType: setData.setTypeRaw.flatMap(SetType.init(rawValue:)) ?? .working,
                     weight: setData.weight,
                     reps: setData.reps,
                     duration: setData.duration,
                     isCompleted: true,
                     restDuration: setData.restDuration,
-                    rpe: setData.rpe
+                    rpe: setData.rpe,
+                    plannedReps: setData.plannedReps,
+                    rpeSourceRaw: setData.rpeSourceRaw
                 )
                 set.exerciseRecord = record
                 workoutSets.append(set)
             }
             record.sets = workoutSets
+
+            // Match the local save path when WC delivery wins the CloudKit race.
+            let historyCutoff = record.date.addingTimeInterval(-30 * 24 * 60 * 60)
+            let recordDate = record.date
+            let exerciseID = update.exerciseID
+            let historyDescriptor = FetchDescriptor<ExerciseRecord>(
+                predicate: #Predicate<ExerciseRecord> {
+                    $0.exerciseDefinitionID == exerciseID
+                        && $0.date >= historyCutoff && $0.date < recordDate
+                }
+            )
+            do {
+                let history = try context.fetch(historyDescriptor)
+                record.refreshAutoIntensity(
+                    exerciseType: definition?.inputType ?? .setsRepsWeight,
+                    history: history
+                )
+            } catch {
+                AppLogger.data.error("[WatchSync] Could not load intensity history: \(error.localizedDescription)")
+                record.refreshAutoIntensity(
+                    exerciseType: definition?.inputType ?? .setsRepsWeight,
+                    history: []
+                )
+            }
 
             context.insert(record)
             do {

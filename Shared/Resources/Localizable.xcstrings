@@ -5172,6 +5172,29 @@
         }
       }
     },
+    "Apply %@ %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apply %@ %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ %@を適用"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ %@ 적용"
+          }
+        }
+      }
+    },
     "Apply sunscreen and wear a hat for outdoor workouts. Exercise in the shade when possible." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -12270,6 +12293,29 @@
         }
       }
     },
+    "Effort was high. Consider a lighter set." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Effort was high. Consider a lighter set."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "体感強度が高めでした。次のセットは重量を下げてもよいでしょう。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "체감 강도가 높았어요. 다음 세트는 무게를 낮춰도 좋아요."
+          }
+        }
+      }
+    },
     "Elapsed Time" : {
 
     },
@@ -19103,6 +19149,52 @@
         }
       }
     },
+    "Keep this weight for the next set." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keep this weight for the next set."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "次のセットはこの重量を維持しましょう。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "다음 세트는 이 무게를 유지해요."
+          }
+        }
+      }
+    },
+    "Keep this weight until your targets and effort are recorded." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keep this weight until your targets and effort are recorded."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "目標と体感強度が記録されるまで、この重量を維持しましょう。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "목표와 체감 강도가 기록될 때까지 이 무게를 유지해요."
+          }
+        }
+      }
+    },
     "Keep your back straight" : {
       "localizations" : {
         "en" : {
@@ -24820,6 +24912,29 @@
         }
       }
     },
+    "Not selected" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not selected"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未選択"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "선택 안 함"
+          }
+        }
+      }
+    },
     "Not Set" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -26178,6 +26293,32 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "고정됨"
+          }
+        }
+      }
+    },
+    "Planned reps: %@" : {
+
+    },
+    "Planned reps: %lld" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Planned reps: %lld"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "目標回数: %lld回"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "목표 횟수: %lld회"
           }
         }
       }
@@ -27780,26 +27921,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "최근 운동을 불러올 수 없습니다."
-          }
-        }
-      }
-    },
-    "Recommended %@/10 from your recent history" : {
-
-    },
-    "Recommended %lld/10 from your recent history" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "最近の履歴にもとづくおすすめ %lld/10"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "최근 기록 기반 추천 %lld/10"
           }
         }
       }
@@ -30876,6 +30997,29 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "오늘 탭 상단에 표시할 지표를 최대 3개 선택하세요."
+          }
+        }
+      }
+    },
+    "Selected" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selected"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選択済み"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "선택됨"
           }
         }
       }
@@ -34963,6 +35107,32 @@
         }
       }
     },
+    "Suggested effort: %@/10" : {
+
+    },
+    "Suggested effort: %lld/10" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suggested effort: %lld/10"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "体感強度の目安: %lld/10"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "추천 체감 강도: %lld/10"
+          }
+        }
+      }
+    },
     "Suggested Routines" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -35660,6 +35830,29 @@
     },
     "The notification target has been deleted or is not synced." : {
 
+    },
+    "The planned reps were not reached. Consider a lighter set." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The planned reps were not reached. Consider a lighter set."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "目標回数に届きませんでした。次のセットは重量を下げてもよいでしょう。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "목표 횟수에 미치지 못했어요. 다음 세트는 무게를 낮춰도 좋아요."
+          }
+        }
+      }
     },
     "The remaining number was treated as minutes." : {
       "localizations" : {
@@ -38204,6 +38397,29 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "NEW 배지로 최근 성과를 빠르게 확인하세요"
+          }
+        }
+      }
+    },
+    "Use this effort" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use this effort"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "この強度を選択"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 강도 선택"
           }
         }
       }
@@ -41589,6 +41805,29 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "오늘은 쉬어가세요"
+          }
+        }
+      }
+    },
+    "Your completed plan and effort support a small increase." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your completed plan and effort support a small increase."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "目標を達成し、体感強度にも余裕があるため、重量を少し上げてもよいでしょう。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "목표를 달성했고 체감 강도에 여유가 있어 무게를 조금 올려도 좋아요."
           }
         }
       }

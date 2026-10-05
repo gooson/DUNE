@@ -45,15 +45,18 @@ struct BreathingDisturbanceQueryService: BreathingDisturbanceQuerying, Sendable 
         )
         let results = try await manager.execute(query)
 
-        return results.compactMap { sample -> BreathingDisturbanceSample? in
-            let value = sample.quantity.doubleValue(for: .count().unitDivided(by: .hour()))
-            guard validRange.contains(value) else { return nil }
-            return BreathingDisturbanceSample(
-                value: value,
-                date: sample.startDate,
-                isElevated: value >= elevatedThreshold
-            )
-        }
+        return results.compactMap { disturbanceSample(from: $0) }
+    }
+
+    func disturbanceSample(from sample: HKQuantitySample) -> BreathingDisturbanceSample? {
+        // HealthKit stores this metric in count units, despite its per-hour display meaning.
+        let value = sample.quantity.doubleValue(for: .count())
+        guard validRange.contains(value) else { return nil }
+        return BreathingDisturbanceSample(
+            value: value,
+            date: sample.startDate,
+            isElevated: value >= elevatedThreshold
+        )
     }
 
     func fetchLatestDisturbance(withinDays days: Int) async throws -> BreathingDisturbanceSample? {

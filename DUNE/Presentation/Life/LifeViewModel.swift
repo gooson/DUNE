@@ -253,24 +253,32 @@ final class LifeViewModel {
 
     func refreshReminderSchedule(for habit: HabitDefinition, referenceDate: Date = Date()) {
         let snapshot = cycleSnapshot(for: habit, referenceDate: referenceDate)
-        let offsets = HabitReminderScheduler.reminderOffsets(for: habit.frequency)
-        Task {
-            await HabitReminderScheduler.reschedule(
-                habitID: habit.id,
-                habitName: habit.name,
-                nextDueDate: snapshot?.nextDueDate,
-                reminderOffsetsInDays: offsets,
-                reminderHour: habit.reminderHour,
-                reminderMinute: habit.reminderMinute
-            )
-        }
+        let requests = HabitReminderScheduler.makeRequests(
+            habitID: habit.id,
+            habitName: habit.name,
+            frequency: habit.frequency,
+            nextDueDate: snapshot?.nextDueDate,
+            isArchived: habit.isArchived,
+            reminderHour: habit.reminderHour,
+            reminderMinute: habit.reminderMinute,
+            now: referenceDate
+        )
+        HabitReminderScheduler.shared.enqueueRefresh(habitID: habit.id, requests: requests)
     }
 
-    /// Cancel all pending reminders for this habit (called after early completion).
+    /// Cancel all pending reminders for a deleted or archived habit.
     func cancelPendingReminders(for habit: HabitDefinition) {
-        Task {
-            await HabitReminderScheduler.removeAllReminders(habitID: habit.id)
-        }
+        cancelPendingReminders(habitID: habit.id)
+    }
+
+    /// Use an ID after deleting a habit, when its model is no longer available.
+    func cancelPendingReminders(habitID: UUID) {
+        HabitReminderScheduler.shared.enqueueRemoval(habitID: habitID)
+    }
+
+    /// Reconcile pending habit reminders after loading the current SwiftData habits.
+    func cleanupOrphanedReminders(validHabitIDs: Set<UUID>) {
+        HabitReminderScheduler.shared.enqueueOrphanCleanup(validHabitIDs: validHabitIDs)
     }
 
     // MARK: - Progress Calculation
@@ -729,11 +737,43 @@ final class LifeViewModel {
     }
 }
 
-enum HabitReminderScheduler {
+@MainActor
+protocol HabitReminderNotificationScheduling {
+    func pendingNotificationRequests() async -> [UNNotificationRequest]
+    func add(_ request: UNNotificationRequest) async throws
+    func removePendingNotificationRequests(withIdentifiers identifiers: [String])
+}
+
+@MainActor
+private struct SystemHabitReminderNotifications: HabitReminderNotificationScheduling {
+    func pendingNotificationRequests() async -> [UNNotificationRequest] {
+        await UNUserNotificationCenter.current().pendingNotificationRequests()
+    }
+
+    func add(_ request: UNNotificationRequest) async throws {
+        try await UNUserNotificationCenter.current().add(request)
+    }
+
+    func removePendingNotificationRequests(withIdentifiers identifiers: [String]) {
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: identifiers)
+    }
+}
+
+@MainActor
+final class HabitReminderScheduler {
+    static let shared = HabitReminderScheduler(client: SystemHabitReminderNotifications())
+
+    private let client: any HabitReminderNotificationScheduling
+    private var pendingOperation: Task<Void, Never>?
+    private var latestOperationID: UUID?
+
+    init(client: any HabitReminderNotificationScheduling) {
+        self.client = client
+    }
 
     // MARK: - Interval-Proportional Offsets
 
-    static func reminderOffsets(for frequency: HabitFrequency) -> [Int] {
+    nonisolated static func reminderOffsets(for frequency: HabitFrequency) -> [Int] {
         switch frequency {
         case .daily:
             return [0]
@@ -750,81 +790,159 @@ enum HabitReminderScheduler {
         }
     }
 
-    // MARK: - Schedule
+    // MARK: - Request Generation
 
-    static func reschedule(
+    static func makeRequests(
         habitID: UUID,
         habitName: String,
+        frequency: HabitFrequency,
         nextDueDate: Date?,
-        reminderOffsetsInDays: [Int],
+        isArchived: Bool,
         reminderHour: Int = 9,
-        reminderMinute: Int = 0
-    ) async {
-        let center = UNUserNotificationCenter.current()
-
-        // Remove all existing reminders for this habit (use broad prefix match)
-        await removeAllReminders(habitID: habitID)
-
-        guard let nextDueDate else { return }
-
-        let calendar = Calendar.current
-        let now = Date()
+        reminderMinute: Int = 0,
+        now: Date = Date(),
+        calendar: Calendar = .current
+    ) -> [UNNotificationRequest] {
+        guard !isArchived else { return [] }
         let hour = max(0, min(reminderHour, 23))
         let minute = max(0, min(reminderMinute, 59))
 
-        for offset in reminderOffsetsInDays {
-            guard let candidateDate = calendar.date(byAdding: .day, value: -offset, to: nextDueDate) else {
-                continue
-            }
-
-            var components = calendar.dateComponents([.year, .month, .day], from: candidateDate)
+        switch frequency {
+        case .daily, .weekly:
+            var components = DateComponents()
             components.hour = hour
             components.minute = minute
-
-            guard let triggerDate = calendar.date(from: components), triggerDate > now else { continue }
-
-            let content = UNMutableNotificationContent()
-            content.title = String(localized: "Life Checklist")
-            if offset == 0 {
-                content.body = String(localized: "\(habitName) is due today")
-            } else if offset == 1 {
-                content.body = String(localized: "\(habitName) is due in 1 day")
-            } else {
-                content.body = String(localized: "\(habitName) is due in \(offset) days")
-            }
-            content.sound = .default
-            content.userInfo = NotificationResponsePayload(
-                routeKind: NotificationRoute.notificationHub.destination.rawValue,
-                insightType: HealthInsight.InsightType.lifeChecklistReminder.rawValue
-            ).userInfo
-
-            let request = UNNotificationRequest(
-                identifier: notificationID(for: habitID, offsetInDays: offset),
+            let content = reminderContent(habitName: habitName, offset: 0)
+            return [UNNotificationRequest(
+                identifier: notificationID(for: habitID, offsetInDays: 0),
                 content: content,
-                trigger: UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
-            )
+                trigger: UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
+            )]
+        case .interval:
+            guard let nextDueDate else { return [] }
+            return reminderOffsets(for: frequency).compactMap { offset in
+                guard let candidateDate = calendar.date(byAdding: .day, value: -offset, to: nextDueDate) else {
+                    return nil
+                }
 
-            do {
-                try await center.add(request)
-            } catch {
-                AppLogger.notification.error("[LifeReminder] Failed to schedule habit reminder: \(error.localizedDescription)")
+                var components = calendar.dateComponents([.year, .month, .day], from: candidateDate)
+                components.hour = hour
+                components.minute = minute
+
+                guard let triggerDate = calendar.date(from: components), triggerDate > now else { return nil }
+
+                return UNNotificationRequest(
+                    identifier: notificationID(for: habitID, offsetInDays: offset),
+                    content: reminderContent(habitName: habitName, offset: offset),
+                    trigger: UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
+                )
             }
         }
     }
 
-    // MARK: - Cancel All Reminders
+    private static func reminderContent(habitName: String, offset: Int) -> UNMutableNotificationContent {
+        let content = UNMutableNotificationContent()
+        content.title = String(localized: "Life Checklist")
+        if offset == 0 {
+            content.body = String(localized: "\(habitName) is due today")
+        } else if offset == 1 {
+            content.body = String(localized: "\(habitName) is due in 1 day")
+        } else {
+            content.body = String(localized: "\(habitName) is due in \(offset) days")
+        }
+        content.sound = .default
+        content.userInfo = NotificationResponsePayload(
+            routeKind: NotificationRoute.notificationHub.destination.rawValue,
+            insightType: HealthInsight.InsightType.lifeChecklistReminder.rawValue
+        ).userInfo
+        return content
+    }
 
-    static func removeAllReminders(habitID: UUID) async {
-        let center = UNUserNotificationCenter.current()
+    // MARK: - Ordered Notification Updates
+
+    func enqueueRefresh(habitID: UUID, requests: [UNNotificationRequest]) {
+        let previous = pendingOperation
+        let operationID = UUID()
+        latestOperationID = operationID
+        pendingOperation = Task { [client] in
+            await previous?.value
+            await Self.removeAllReminders(habitID: habitID, client: client)
+            for request in requests {
+                do {
+                    try await client.add(request)
+                } catch {
+                    AppLogger.notification.error("[LifeReminder] Failed to schedule habit reminder: \(error.localizedDescription)")
+                }
+            }
+            finishOperation(operationID)
+        }
+    }
+
+    func enqueueRemoval(habitID: UUID) {
+        let previous = pendingOperation
+        let operationID = UUID()
+        latestOperationID = operationID
+        pendingOperation = Task { [client] in
+            await previous?.value
+            await Self.removeAllReminders(habitID: habitID, client: client)
+            finishOperation(operationID)
+        }
+    }
+
+    func enqueueOrphanCleanup(validHabitIDs: Set<UUID>) {
+        let previous = pendingOperation
+        let operationID = UUID()
+        latestOperationID = operationID
+        pendingOperation = Task { [client] in
+            await previous?.value
+            let pending = await client.pendingNotificationRequests()
+            let orphanIDs = pending.compactMap { request -> String? in
+                guard let habitID = Self.habitID(from: request.identifier),
+                      !validHabitIDs.contains(habitID) else { return nil }
+                return request.identifier
+            }
+            if !orphanIDs.isEmpty {
+                client.removePendingNotificationRequests(withIdentifiers: orphanIDs)
+            }
+            finishOperation(operationID)
+        }
+    }
+
+    private func finishOperation(_ operationID: UUID) {
+        if latestOperationID == operationID {
+            pendingOperation = nil
+            latestOperationID = nil
+        }
+    }
+
+    /// Wait for queued updates; intended for deterministic tests and lifecycle barriers.
+    func waitForPendingOperations() async {
+        await pendingOperation?.value
+    }
+
+    private static func removeAllReminders(
+        habitID: UUID,
+        client: any HabitReminderNotificationScheduling
+    ) async {
         let prefix = "dune.life.habit.\(habitID.uuidString)."
-        let pending = await center.pendingNotificationRequests()
+        let pending = await client.pendingNotificationRequests()
         let matching = pending.filter { $0.identifier.hasPrefix(prefix) }.map(\.identifier)
         if !matching.isEmpty {
-            center.removePendingNotificationRequests(withIdentifiers: matching)
+            client.removePendingNotificationRequests(withIdentifiers: matching)
         }
     }
 
     private static func notificationID(for habitID: UUID, offsetInDays: Int) -> String {
         "dune.life.habit.\(habitID.uuidString).\(offsetInDays)d"
+    }
+
+    private static func habitID(from notificationID: String) -> UUID? {
+        let prefix = "dune.life.habit."
+        guard notificationID.hasPrefix(prefix) else { return nil }
+        let remainder = notificationID.dropFirst(prefix.count)
+        guard let separator = remainder.firstIndex(of: "."),
+              separator != remainder.startIndex,
+              remainder.index(after: separator) != remainder.endIndex else { return nil }
+        return UUID(uuidString: String(remainder[..<separator]))
     }
 }

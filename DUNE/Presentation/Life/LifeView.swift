@@ -87,6 +87,7 @@ struct LifeView: View {
                     } label: {
                         Label("New Habit", systemImage: "plus")
                     }
+                    .accessibilityIdentifier("life-toolbar-new-habit")
 
                     Button {
                         isShowingTemplateSheet = true
@@ -1045,8 +1046,7 @@ private struct HabitListQueryView: View {
             if let log = viewModel.createCycleActionLog(for: habit, action: .complete) {
                 insertLog(log, into: habit)
                 viewModel.didFinishSaving()
-                // Cancel pending reminders on early completion, reschedule for next cycle
-                viewModel.cancelPendingReminders(for: habit)
+                // Rescheduling queues removal before adding the next cycle's reminders.
                 viewModel.refreshReminderSchedule(for: habit)
             }
             recalculate()
@@ -1223,8 +1223,6 @@ private struct HabitHistorySheet: View {
         }
         .background { SheetWaveBackground() }
         .presentationDetents([.medium, .large])
-        .accessibilityElement(children: .contain)
-        .accessibilityIdentifier("life-habit-history-screen")
     }
 
     // MARK: - Header
@@ -1243,6 +1241,7 @@ private struct HabitHistorySheet: View {
             VStack(alignment: .leading, spacing: 2) {
                 Text(habitName)
                     .font(.headline)
+                    .accessibilityIdentifier("life-habit-history-screen")
                 Text(String(localized: "\(entries.count) records"))
                     .font(.caption)
                     .foregroundStyle(.secondary)
@@ -1367,6 +1366,7 @@ private struct HabitHistorySheet: View {
             Text("No History")
                 .font(.headline)
                 .foregroundStyle(.secondary)
+                .accessibilityIdentifier("life-habit-history-empty")
             Text("Complete this habit to start building your history")
                 .font(.subheadline)
                 .foregroundStyle(.tertiary)
@@ -1374,7 +1374,6 @@ private struct HabitHistorySheet: View {
             Spacer()
         }
         .padding(DS.Spacing.xl)
-        .accessibilityIdentifier("life-habit-history-empty")
     }
 
     // MARK: - Helpers

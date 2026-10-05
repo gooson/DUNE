@@ -170,7 +170,12 @@ enum WatchExerciseLibraryPayloadBuilder {
             return WatchProcedureSetSnapshot(
                 setNumber: set.setNumber,
                 weight: set.weight,
-                reps: set.reps
+                reps: set.reps,
+                plannedReps: set.plannedReps,
+                rpe: set.rpe,
+                rpeSourceRaw: set.rpeSourceRaw,
+                setTypeRaw: set.setTypeRaw,
+                plannedSetCount: record.plannedSetCount
             )
         }
         .sorted { $0.setNumber < $1.setNumber }
@@ -187,17 +192,10 @@ enum WatchExerciseLibraryPayloadBuilder {
             return nil
         }
 
-        let lowerMuscles: Set<MuscleGroup> = [.quadriceps, .hamstrings, .glutes]
-        if !Set(definition.primaryMuscles).intersection(lowerMuscles).isEmpty {
-            return 5.0
-        }
-
-        switch definition.equipment {
-        case .dumbbell, .kettlebell, .band, .trx, .medicineBall, .stabilityBall, .bodyweight, .other:
-            return 1.0
-        default:
-            return 2.5
-        }
+        return WorkoutProgressionService.incrementKg(
+            equipment: definition.equipment,
+            primaryMuscles: definition.primaryMuscles
+        )
     }
 
     private static func makePayload(

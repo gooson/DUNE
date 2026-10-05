@@ -1,15 +1,22 @@
 name: Unit Tests
 
 on:
+  # Workflow-only edits use static validation; dispatch explicitly to exercise CI.
+  workflow_dispatch:
   pull_request:
     branches: [main]
     paths:
       - 'DUNE/**'
       - 'DUNEWatch/**'
+      - 'DUNEWidget/**'
+      - 'Shared/**'
       - 'DUNETests/**'
       - 'DUNEWatchTests/**'
-      - 'scripts/**'
-      - '.github/workflows/test-unit.yml'
+      - 'scripts/test-unit.sh'
+      - 'scripts/lib/regen-project.sh'
+      - 'scripts/lib/simulator-boot.sh'
+      - 'scripts/lib/simulator-worktree.sh'
+      - 'scripts/lib/simulator-test-lock.py'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

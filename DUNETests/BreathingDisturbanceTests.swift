@@ -1,9 +1,33 @@
 import Testing
 @testable import DUNE
 import Foundation
+import HealthKit
 
 @Suite("BreathingDisturbanceAnalysis")
 struct BreathingDisturbanceTests {
+
+    @Test("Count-unit HealthKit samples preserve values and elevation boundaries",
+          arguments: [0.0, 4.5, 9.99, 10.0, 12.5, 100.0, 100.1])
+    func countUnitConversion(value: Double) throws {
+        let start = Date(timeIntervalSince1970: 1_800_000_000)
+        let sample = HKQuantitySample(
+            type: HKQuantityType(.appleSleepingBreathingDisturbances),
+            quantity: HKQuantity(unit: .count(), doubleValue: value),
+            start: start,
+            end: start.addingTimeInterval(8 * 3600)
+        )
+
+        let result = BreathingDisturbanceQueryService().disturbanceSample(from: sample)
+
+        if value > 100 {
+            #expect(result == nil)
+        } else {
+            let converted = try #require(result)
+            #expect(converted.value == value)
+            #expect(converted.date == start)
+            #expect(converted.isElevated == (value >= 10))
+        }
+    }
 
     // MARK: - Risk Classification
 

@@ -1,18 +1,30 @@
 import HealthKit
 
+protocol HealthKitObserverStoring: Sendable {
+    func execute(_ query: HKQuery)
+    func stop(_ query: HKQuery)
+    func enableBackgroundDelivery(
+        for type: HKObjectType,
+        frequency: HKUpdateFrequency,
+        withCompletion completion: @escaping @Sendable (Bool, Error?) -> Void
+    )
+}
+
+extension HKHealthStore: HealthKitObserverStoring {}
+
 /// Manages HKObserverQuery registrations and HealthKit background delivery.
 ///
 /// Observes 8 HealthKit data types. On change, requests a coordinated refresh
 /// through `AppRefreshCoordinator` (which handles throttling) and evaluates
 /// new samples for background notification delivery.
-final class HealthKitObserverManager: Sendable {
-    private let store: HKHealthStore
+@MainActor
+final class HealthKitObserverManager {
+    private let store: any HealthKitObserverStoring
     private let coordinator: AppRefreshCoordinating
     private let notificationEvaluator: BackgroundNotificationEvaluator?
 
-    /// Observer queries are stored here so they remain alive.
-    /// Access is serialized through the internal actor.
-    private let state = StateActor()
+    /// Registration, retention, and stopping are synchronous on the same actor.
+    private var queries: [HKObserverQuery] = []
 
     /// Sample types to observe with their background delivery frequency.
     private static let observedTypes: [(type: HKSampleType, frequency: HKUpdateFrequency)] = [
@@ -20,16 +32,17 @@ final class HealthKitObserverManager: Sendable {
         (HKQuantityType(.heartRateVariabilitySDNN), .immediate),
         (HKQuantityType(.restingHeartRate), .immediate),
         (HKCategoryType(.sleepAnalysis), .immediate),
+        // Infrequent body composition measurements should not wait for an hourly batch.
+        (HKQuantityType(.bodyMass), .immediate),
+        (HKQuantityType(.bodyFatPercentage), .immediate),
+        (HKQuantityType(.bodyMassIndex), .immediate),
         // Secondary metrics — hourly delivery
         (HKQuantityType(.stepCount), .hourly),
-        (HKQuantityType(.bodyMass), .hourly),
-        (HKQuantityType(.bodyFatPercentage), .hourly),
-        (HKQuantityType(.bodyMassIndex), .hourly),
         (HKSampleType.workoutType(), .hourly),
     ]
 
     init(
-        store: HKHealthStore,
+        store: any HealthKitObserverStoring,
         coordinator: AppRefreshCoordinating,
         notificationEvaluator: BackgroundNotificationEvaluator? = nil
     ) {
@@ -39,30 +52,25 @@ final class HealthKitObserverManager: Sendable {
     }
 
     /// Registers observer queries for all tracked types and enables background delivery.
-    /// Call once at app launch (after HealthKit authorization).
-    /// Types without read permission are silently skipped.
+    /// Restore at launch after a previous authorization request, or after the first request completes.
+    /// HealthKit controls access to types without read permission.
     func startObserving() {
-        Task {
-            let alreadyObserving = await state.isObserving
-            guard !alreadyObserving else {
-                AppLogger.healthKit.info("[ObserverManager] Already observing — skipping duplicate registration")
-                return
-            }
-            await state.setObserving(true)
-
-            for entry in Self.observedTypes {
+        let needsQueries = queries.isEmpty
+        for entry in Self.observedTypes {
+            if needsQueries {
                 registerObserver(for: entry.type)
-                enableBackgroundDelivery(for: entry.type, frequency: entry.frequency)
             }
+            // Retry after foreground authorization in case launch-time delivery setup failed.
+            enableBackgroundDelivery(for: entry.type, frequency: entry.frequency)
         }
     }
 
     /// Stops all observer queries. Call on dealloc or explicit cleanup.
-    func stopObserving() async {
-        let queries = await state.removeAllQueries()
+    func stopObserving() {
         for query in queries {
             store.stop(query)
         }
+        queries.removeAll()
         AppLogger.healthKit.info("[ObserverManager] Stopped all observer queries")
     }
 
@@ -98,10 +106,7 @@ final class HealthKitObserverManager: Sendable {
             }
         }
 
-        Task {
-            await state.addQuery(query, for: typeName)
-        }
-
+        queries.append(query)
         store.execute(query)
 
         AppLogger.healthKit.info("[ObserverManager] Registered observer for \(typeName)")
@@ -109,7 +114,7 @@ final class HealthKitObserverManager: Sendable {
 
     /// Keep HealthKit's background delivery alive until all asynchronous work finishes.
     @discardableResult
-    static func processUpdate(
+    nonisolated static func processUpdate(
         completion: @escaping () -> Void,
         operation: @escaping @Sendable () async -> Void
     ) -> Task<Void, Never> {
@@ -129,31 +134,6 @@ final class HealthKitObserverManager: Sendable {
             } else if success {
                 AppLogger.healthKit.info("[ObserverManager] Background delivery enabled for \(typeName) (\(frequency.logDescription))")
             }
-        }
-    }
-}
-
-// MARK: - State Actor
-
-extension HealthKitObserverManager {
-    /// Thread-safe storage for active observer queries.
-    private actor StateActor {
-        private var queries: [String: HKObserverQuery] = [:]
-        private(set) var isObserving = false
-
-        func setObserving(_ value: Bool) {
-            isObserving = value
-        }
-
-        func addQuery(_ query: HKObserverQuery, for key: String) {
-            queries[key] = query
-        }
-
-        func removeAllQueries() -> [HKObserverQuery] {
-            let all = Array(queries.values)
-            queries.removeAll()
-            isObserving = false
-            return all
         }
     }
 }

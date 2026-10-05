@@ -79,6 +79,7 @@ final class WatchConnectivityManager: NSObject {
     private enum UITestScenario: String {
         case empty = "empty"
         case defaultSeeded = "default-seeded"
+        case responsiveLayout = "responsive-layout"
     }
 
     static let shared = WatchConnectivityManager()
@@ -150,13 +151,22 @@ final class WatchConnectivityManager: NSObject {
             return false
         }
 
+#if DEBUG
+        let arguments = ProcessInfo.processInfo.arguments
+        if let themeIndex = arguments.firstIndex(of: "--ui-theme"),
+           arguments.indices.contains(themeIndex + 1),
+           let theme = AppTheme.resolvedTheme(fromPersistedRawValue: arguments[themeIndex + 1]) {
+            syncedThemeRawValue = theme.rawValue
+        }
+#endif
+
         switch resolvedUITestScenario {
         case .empty:
             setExerciseLibrary([])
             workoutTemplates = []
             activeWorkout = nil
-        case .defaultSeeded:
-            setExerciseLibrary([
+        case .defaultSeeded, .responsiveLayout:
+            var exercises = [
                 WatchExerciseInfo(
                     id: "ui-test-squat",
                     name: "UI Test Squat",
@@ -187,7 +197,27 @@ final class WatchConnectivityManager: NSObject {
                     equipment: "bodyweight",
                     cardioSecondaryUnit: nil
                 )
-            ])
+            ]
+            if resolvedUITestScenario == .responsiveLayout {
+                exercises.append(contentsOf: [
+                    WatchExerciseInfo(
+                        id: "stair-climber", name: "Stair Climber", inputType: "durationDistance",
+                        defaultSets: 1, defaultReps: nil, defaultWeightKg: nil,
+                        isPreferred: true, equipment: "stair-climber", cardioSecondaryUnit: "floors"
+                    ),
+                    WatchExerciseInfo(
+                        id: "elliptical", name: "Elliptical", inputType: "durationDistance",
+                        defaultSets: 1, defaultReps: nil, defaultWeightKg: nil,
+                        isPreferred: true, equipment: "elliptical", cardioSecondaryUnit: "none"
+                    ),
+                    WatchExerciseInfo(
+                        id: "running", name: "Running", inputType: "durationDistance",
+                        defaultSets: 1, defaultReps: nil, defaultWeightKg: nil,
+                        isPreferred: true, equipment: "treadmill", cardioSecondaryUnit: "km"
+                    )
+                ])
+            }
+            setExerciseLibrary(exercises)
             activeWorkout = nil
         }
 

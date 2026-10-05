@@ -10,7 +10,7 @@ struct RestTimerView: View {
     let onEnd: () -> Void
     /// Auto-estimated RPE for the just-completed set (nil = silent skip).
     var estimatedRPE: Double?
-    /// Called when user adjusts RPE via ± buttons.
+    /// Called only after a user confirms or adjusts RPE.
     var onRPEAdjusted: ((Double) -> Void)?
 
     @Environment(WorkoutManager.self) private var workoutManager
@@ -34,11 +34,52 @@ struct RestTimerView: View {
     @State private var didPlayWarning = false
     /// Local RPE value for adjustment (initialized from estimatedRPE).
     @State private var adjustedRPE: Double = 8.0
-    /// Whether RPE adjustment controls are expanded.
-    @State private var showRPEAdjust = false
+    @State private var showRPEInput = false
+    @State private var hasConfirmedRPE = false
+    @State private var pendingTimerCompletion = false
 
     var body: some View {
-        VStack(spacing: DS.Spacing.sm) {
+        GeometryReader { geometry in
+            let ringSize = min(80, max(60, geometry.size.height * 0.38))
+            let spacing = min(DS.Spacing.xs, max(DS.Spacing.xxs, geometry.size.height * 0.02))
+
+            ViewThatFits(in: .vertical) {
+                timerContent(ringSize: ringSize, actionSpacing: spacing)
+
+                ScrollView {
+                    timerContent(ringSize: ringSize, actionSpacing: spacing)
+                        .frame(maxWidth: .infinity)
+                }
+                .scrollBounceBehavior(.basedOnSize)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.restTimerScreen)
+        .sheet(isPresented: $showRPEInput, onDismiss: {
+            if pendingTimerCompletion {
+                pendingTimerCompletion = false
+                timerFinished()
+            }
+        }) {
+            rpeOverlay
+                .padding(DS.Spacing.md)
+                .accessibilityElement(children: .contain)
+                .accessibilityIdentifier("watch-rest-timer-rpe-sheet")
+        }
+        .onAppear {
+            if let estimatedRPE {
+                adjustedRPE = estimatedRPE
+            }
+            startCountdown()
+        }
+        .onDisappear {
+            cancelCountdown()
+        }
+    }
+
+    private func timerContent(ringSize: CGFloat, actionSpacing: CGFloat) -> some View {
+        VStack(spacing: actionSpacing) {
             Text("Rest")
                 .font(DS.Typography.metricLabel)
                 .foregroundStyle(.secondary)
@@ -76,16 +117,37 @@ struct RestTimerView: View {
                     }
                 }
             }
-            .frame(width: 100, height: 100)
+            .frame(width: ringSize, height: ringSize)
 
-            // RPE estimation badge (shown only when available)
-            if estimatedRPE != nil {
-                rpeOverlay
+            if let estimatedRPE {
+                HStack(spacing: DS.Spacing.xs) {
+                    if !hasConfirmedRPE {
+                        Text("Suggested")
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                    }
+                    Button {
+                        adjustedRPE = estimatedRPE
+                        showRPEInput = true
+                    } label: {
+                        Text("RPE \(RPELevel.format(estimatedRPE))")
+                            .font(.caption.weight(.semibold).monospacedDigit())
+                    }
+                    .buttonStyle(.bordered)
                     .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.restTimerRPEBadge)
+                }
+            } else {
+                Button("Rate RPE") {
+                    adjustedRPE = 8
+                    showRPEInput = true
+                }
+                .font(.caption.weight(.semibold))
+                .buttonStyle(.bordered)
+                .accessibilityIdentifier("watch-rest-timer-rpe-rate")
             }
 
             // +30s / Skip / End buttons
-            HStack(spacing: DS.Spacing.md) {
+            HStack(spacing: actionSpacing) {
                 Button {
                     addTime(30)
                 } label: {
@@ -95,6 +157,7 @@ struct RestTimerView: View {
                 }
                 .buttonStyle(.bordered)
                 .tint(.secondary)
+                .frame(maxWidth: .infinity)
                 .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.restTimerAddTimeButton)
 
                 Button {
@@ -108,6 +171,7 @@ struct RestTimerView: View {
                 }
                 .buttonStyle(.bordered)
                 .tint(DS.Color.positive)
+                .frame(maxWidth: .infinity)
                 .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.restTimerSkipButton)
 
                 Button(role: .destructive) {
@@ -120,83 +184,64 @@ struct RestTimerView: View {
                 }
                 .buttonStyle(.bordered)
                 .tint(DS.Color.negative)
+                .frame(maxWidth: .infinity)
                 .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.restTimerEndButton)
             }
-        }
-        .accessibilityElement(children: .contain)
-        .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.restTimerScreen)
-        .onAppear {
-            showRPEAdjust = false
-            if let estimatedRPE {
-                adjustedRPE = estimatedRPE
-            }
-            startCountdown()
-        }
-        .onDisappear {
-            cancelCountdown()
         }
     }
 
     // MARK: - RPE Overlay
 
     private var rpeOverlay: some View {
-        VStack(spacing: DS.Spacing.xxs) {
-            if showRPEAdjust {
-                // Expanded: ± buttons + value
-                HStack(spacing: DS.Spacing.sm) {
-                    Button {
-                        let newValue = adjustedRPE - RPELevel.step
-                        if RPELevel.range.contains(newValue) {
-                            adjustedRPE = newValue
-                            onRPEAdjusted?(newValue)
-                            WKInterfaceDevice.current().play(.click)
-                        }
-                    } label: {
-                        Image(systemName: "minus")
-                            .font(.caption2.weight(.semibold))
-                            .frame(minWidth: 32, minHeight: 28)
-                    }
-                    .buttonStyle(.bordered)
-                    .tint(.secondary)
-
-                    VStack(spacing: 0) {
-                        Text("RPE \(RPELevel.format(adjustedRPE))")
-                            .font(.caption.weight(.semibold).monospacedDigit())
-                            .foregroundStyle(rpeColor)
-                            .contentTransition(.numericText())
-                        Text(RPELevel(value: adjustedRPE).displayLabel)
-                            .font(.system(size: 9))
-                            .foregroundStyle(.secondary)
-                    }
-
-                    Button {
-                        let newValue = adjustedRPE + RPELevel.step
-                        if RPELevel.range.contains(newValue) {
-                            adjustedRPE = newValue
-                            onRPEAdjusted?(newValue)
-                            WKInterfaceDevice.current().play(.click)
-                        }
-                    } label: {
-                        Image(systemName: "plus")
-                            .font(.caption2.weight(.semibold))
-                            .frame(minWidth: 32, minHeight: 28)
-                    }
-                    .buttonStyle(.bordered)
-                    .tint(.secondary)
-                }
-            } else {
-                // Collapsed: tap to expand
+        VStack(spacing: DS.Spacing.sm) {
+            HStack(spacing: DS.Spacing.sm) {
                 Button {
-                    withAnimation(.easeInOut(duration: 0.2)) {
-                        showRPEAdjust = true
+                    let newValue = adjustedRPE - RPELevel.step
+                    if RPELevel.range.contains(newValue) {
+                        adjustedRPE = newValue
+                        WKInterfaceDevice.current().play(.click)
                     }
                 } label: {
+                    Image(systemName: "minus")
+                        .font(.caption2.weight(.semibold))
+                        .frame(minWidth: 32, minHeight: 28)
+                }
+                .buttonStyle(.bordered)
+                .tint(.secondary)
+
+                VStack(spacing: 0) {
                     Text("RPE \(RPELevel.format(adjustedRPE))")
                         .font(.caption.weight(.semibold).monospacedDigit())
                         .foregroundStyle(rpeColor)
+                        .contentTransition(.numericText())
+                    Text(RPELevel(value: adjustedRPE).displayLabel)
+                        .font(.system(size: 9))
+                        .foregroundStyle(.secondary)
                 }
-                .buttonStyle(.plain)
+
+                Button {
+                    let newValue = adjustedRPE + RPELevel.step
+                    if RPELevel.range.contains(newValue) {
+                        adjustedRPE = newValue
+                        WKInterfaceDevice.current().play(.click)
+                    }
+                } label: {
+                    Image(systemName: "plus")
+                        .font(.caption2.weight(.semibold))
+                        .frame(minWidth: 32, minHeight: 28)
+                }
+                .buttonStyle(.bordered)
+                .tint(.secondary)
             }
+            Button("Confirm RPE") {
+                onRPEAdjusted?(adjustedRPE)
+                hasConfirmedRPE = true
+                showRPEInput = false
+                WKInterfaceDevice.current().play(.success)
+            }
+            .font(.caption2.weight(.semibold))
+            .buttonStyle(.bordered)
+            .accessibilityIdentifier("watch-rest-timer-rpe-confirm")
         }
     }
 
@@ -280,6 +325,11 @@ struct RestTimerView: View {
     }
 
     private func timerFinished() {
+        if showRPEInput {
+            pendingTimerCompletion = true
+            cancelCountdown()
+            return
+        }
         let total = TimeInterval(totalSeconds)
         cancelCountdown()
         WKInterfaceDevice.current().play(.notification)

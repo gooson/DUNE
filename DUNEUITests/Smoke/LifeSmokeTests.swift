@@ -95,7 +95,7 @@ final class LifeSmokeTests: UITestBaseCase {
     }
 
     func testHabitFormOpens() throws {
-        XCTAssertTrue(app.waitAndTap(AXID.lifeToolbarAdd), "Add button should exist")
+        XCTAssertTrue(app.openLifeNewHabitForm(), "New Habit menu action should open the habit form")
 
         // Habit form sheet should appear
         let nameField = app.textFields[AXID.habitFormName]
@@ -105,11 +105,15 @@ final class LifeSmokeTests: UITestBaseCase {
             app.scrollToElementInPrimaryFormIfNeeded(AXID.habitFormType, maxSwipes: 4),
             "Habit type picker should appear"
         )
+        XCTAssertTrue(
+            app.scrollToElementInPrimaryFormIfNeeded(AXID.habitFormReminderTime, maxSwipes: 6),
+            "Reminder time picker should appear in the new habit form"
+        )
     }
 
     func testHabitFormCancelDismisses() throws {
         let addButton = app.buttons[AXID.lifeToolbarAdd].firstMatch
-        XCTAssertTrue(app.waitAndTap(AXID.lifeToolbarAdd), "Add button should exist")
+        XCTAssertTrue(app.openLifeNewHabitForm(), "New Habit menu action should open the habit form")
 
         let cancelButton = app.descendants(matching: .any)[AXID.habitFormCancel].firstMatch
         XCTAssertTrue(cancelButton.waitForExistence(timeout: 3), "Habit form cancel button should exist")
@@ -120,7 +124,7 @@ final class LifeSmokeTests: UITestBaseCase {
     }
 
     func testSaveEmptyHabitKeepsFormPresented() throws {
-        XCTAssertTrue(app.waitAndTap(AXID.lifeToolbarAdd), "Add button should exist")
+        XCTAssertTrue(app.openLifeNewHabitForm(), "New Habit menu action should open the habit form")
 
         let nameField = app.textFields[AXID.habitFormName].firstMatch
         XCTAssertTrue(nameField.waitForExistence(timeout: 3), "Habit name field should appear")
@@ -131,7 +135,7 @@ final class LifeSmokeTests: UITestBaseCase {
     }
 
     func testWeeklyFrequencyShowsStepper() throws {
-        XCTAssertTrue(app.waitAndTap(AXID.lifeToolbarAdd), "Add button should exist")
+        XCTAssertTrue(app.openLifeNewHabitForm(), "New Habit menu action should open the habit form")
 
         XCTAssertTrue(
             app.scrollToElementInPrimaryFormIfNeeded(AXID.habitFormFrequencyWeekly, maxSwipes: 5),
@@ -178,6 +182,10 @@ final class LifeSeededSmokeTests: SeededUITestBaseCase {
 
         let nameField = app.textFields[AXID.habitFormName].firstMatch
         XCTAssertTrue(nameField.waitForExistence(timeout: 3), "Edit habit sheet should appear from the actions menu")
+        XCTAssertTrue(
+            app.scrollToElementInPrimaryFormIfNeeded(AXID.habitFormReminderTime, maxSwipes: 6),
+            "Reminder time picker should appear in the edit habit form"
+        )
         XCTAssertTrue(app.dismissModalIfPresent(cancelIdentifiers: [AXID.habitFormCancel]), "Edit habit sheet should dismiss via shared helper")
     }
 
