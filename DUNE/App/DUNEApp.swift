@@ -337,11 +337,11 @@ struct DUNEApp: App {
     // SwiftUI may evaluate its lazy scene builder on AsyncRenderer. Build the
     // content on MainActor, then let the nonisolated builder return that value.
     nonisolated private static func makeWindowGroup<Content: View>(content: Content) -> WindowGroup<Content> {
-        WindowGroup { content }
+        WindowGroup(id: AppWindowRouter.primaryWindowID) { content }
     }
 
     nonisolated private static func makeInsightsWindowGroup<Content: View>(content: Content) -> WindowGroup<Content> {
-        WindowGroup("Workout Insights", id: "workout-insights") { content }
+        WindowGroup("Workout Insights", id: AppWindowRouter.insightsWindowID) { content }
     }
 
     private var workoutInsightsContent: some View {
@@ -389,6 +389,7 @@ struct DUNEApp: App {
         }
         .tint(selectedTheme.accentColor)
         .preferredColorScheme(Self.forcedUITestColorScheme)
+        .background { AppWindowSceneReader(kind: .primary) }
         .onChange(of: showConsentSheet) { oldValue, newValue in
             guard oldValue, !newValue else { return }
             Task { await advanceLaunchExperienceFlowIfNeeded() }
@@ -1020,7 +1021,9 @@ struct DUNEApp: App {
 
 private struct WorkoutInsightsWindowView: View {
     let isReady: Bool
-    @Environment(\.dismissWindow) private var dismissWindow
+    @Environment(\.openWindow) private var openWindow
+    @State private var windowSession: UISceneSession?
+    @State private var windowError: String?
 
     var body: some View {
         NavigationStack {
@@ -1035,12 +1038,27 @@ private struct WorkoutInsightsWindowView: View {
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 HStack {
                     Spacer()
-                    Button("Close") { dismissWindow(id: "workout-insights") }
-                        .accessibilityIdentifier("workout-insights-close")
+                    Button("Close") {
+                        AppWindowRouter.shared.closeInsights(windowSession, openWindow: openWindow) {
+                            windowError = $0
+                        }
+                    }
+                    .accessibilityIdentifier("workout-insights-close")
                 }
                 .padding(DS.Spacing.md)
                 .background(.bar)
             }
+        }
+        .background {
+            AppWindowSceneReader(kind: .insights) { windowSession = $0 }
+        }
+        .alert("Error", isPresented: Binding(
+            get: { windowError != nil },
+            set: { if !$0 { windowError = nil } }
+        )) {
+            Button("OK", role: .cancel) { windowError = nil }
+        } message: {
+            Text(windowError ?? "")
         }
     }
 }

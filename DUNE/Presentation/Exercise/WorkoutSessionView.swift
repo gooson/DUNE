@@ -28,6 +28,7 @@ struct WorkoutSessionView: View {
     @State private var effortSuggestion: EffortSuggestion?
     @State private var didPrepareSession = false
     @State private var showingInsights = false
+    @State private var windowSession: UISceneSession?
     @FocusState private var isInputFieldFocused: Bool
 
     // Set-by-set flow state
@@ -105,6 +106,9 @@ struct WorkoutSessionView: View {
             }
         }
         .background { DetailWaveBackground() }
+        .background {
+            AppWindowSceneReader(kind: nil) { windowSession = $0 }
+        }
         .sensoryFeedback(.success, trigger: setCompleteCount)
         .sensoryFeedback(.success, trigger: restTimerCompleted)
         .englishNavigationTitle(exercise.name)
@@ -113,7 +117,9 @@ struct WorkoutSessionView: View {
             ToolbarItem(placement: .topBarTrailing) {
                 Button("Workout Insights", systemImage: "chart.bar.xaxis") {
                     if supportsMultipleWindows {
-                        openWindow(id: "workout-insights")
+                        if !AppWindowRouter.shared.openInsights(from: windowSession, openWindow: openWindow) {
+                            showingInsights = true
+                        }
                     } else {
                         showingInsights = true
                     }
@@ -789,6 +795,8 @@ struct WorkoutSessionView: View {
                     .font(.headline)
             }
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityIdentifier("workout-session-completed-set-summary")
         .padding(.horizontal, DS.Spacing.lg)
         .padding(.vertical, DS.Spacing.md)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
@@ -807,6 +815,7 @@ struct WorkoutSessionView: View {
 
             VStack(spacing: DS.Spacing.xxs) {
                 Text(restTimeString)
+                    .accessibilityIdentifier("workout-session-rest-countdown")
                     .font(.system(size: inputFontSize, weight: .bold, design: .rounded))
                     .monospacedDigit()
                     .contentTransition(.numericText())
@@ -842,6 +851,7 @@ struct WorkoutSessionView: View {
             }
             .buttonStyle(.bordered)
             .tint(.secondary)
+            .accessibilityIdentifier("workout-session-add-rest")
 
             Button {
                 finishRest()
