@@ -58,30 +58,32 @@ struct BodyCompositionFormSheet: View {
                 }
                 .scrollContentBackground(.hidden)
                 .scrollDismissesKeyboard(.interactively)
-                .englishNavigationTitle(isEdit ? "Edit Record" : "Add Record")
-                .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItemGroup(placement: .keyboard) {
                         Spacer()
                         Button("Done") { focusedField = nil }
                             .accessibilityIdentifier("body-form-keyboard-done")
                     }
-                    ToolbarItem(placement: .cancellationAction) {
-                        Button("Cancel") { dismiss() }
-                            .accessibilityIdentifier("body-form-cancel")
-                    }
-                    ToolbarItem(placement: .confirmationAction) {
-                        Button("Save") {
-                            Task {
-                                if await onSave() {
-                                    saveCount += 1
-                                }
-                            }
+                }
+            }
+            .englishNavigationTitle(isEdit ? "Edit Record" : "Add Record")
+            .navigationBarTitleDisplayMode(.inline)
+        }
+        .toolbar {
+            ToolbarItem(placement: .cancellationAction) {
+                Button("Cancel") { dismiss() }
+                    .accessibilityIdentifier("body-form-cancel")
+            }
+            ToolbarItem(placement: .confirmationAction) {
+                Button("Save") {
+                    Task {
+                        if await onSave() {
+                            saveCount += 1
                         }
-                        .disabled(viewModel.isSaving || (viewModel.newWeight.isEmpty && viewModel.newBodyFat.isEmpty && viewModel.newMuscleMass.isEmpty))
-                        .accessibilityIdentifier("body-form-save")
                     }
                 }
+                .disabled(viewModel.isSaving || (viewModel.newWeight.isEmpty && viewModel.newBodyFat.isEmpty && viewModel.newMuscleMass.isEmpty))
+                .accessibilityIdentifier("body-form-save")
             }
         }
         .sensoryFeedback(.success, trigger: saveCount)
