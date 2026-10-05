@@ -49,6 +49,7 @@ final class PostureReminderScheduler {
         content.body = String(localized: "Regular posture assessments help you track improvements and catch issues early.")
         content.sound = .default
         content.userInfo = NotificationResponsePayload(
+            routeKind: NotificationRoute.postureAssessment.destination.rawValue,
             insightType: HealthInsight.InsightType.postureReminder.rawValue
         ).userInfo
 
