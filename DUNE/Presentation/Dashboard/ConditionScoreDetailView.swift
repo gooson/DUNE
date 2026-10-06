@@ -149,6 +149,7 @@ struct ConditionScoreDetailView: View {
                         unit: "ms",
                         fractionDigits: 1
                     )
+                    .accessibilityIdentifier("condition-subscore-hrv")
                     .staggeredAppear(index: 7)
 
                     SubScoreTrendChartView(
@@ -157,6 +158,7 @@ struct ConditionScoreDetailView: View {
                         color: DS.Color.heartRate,
                         unit: "bpm"
                     )
+                    .accessibilityIdentifier("condition-subscore-rhr")
                     .staggeredAppear(index: 7)
                 }
 
