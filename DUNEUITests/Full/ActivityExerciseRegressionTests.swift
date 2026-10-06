@@ -4,6 +4,7 @@
 final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCase {
     private enum Fixture {
         static let benchPressID = "barbell-bench-press"
+        static let benchPressLocalizedName = "바벨 벤치프레스"
         static let deadliftID = "conventional-deadlift"
         static let manualStrengthTypeKey = "manual-strength"
         static let runningID = "running"
@@ -363,6 +364,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         configuration.additionalArguments.append(contentsOf: ["-UIPreferredContentSizeCategoryName", contentSize])
         let hostOrientation = VisualAudit.isEnabled
             && ProcessInfo.processInfo.environment["DUNE_VISUAL_AUDIT_HOST_ONLY"] == "1"
+            && ProcessInfo.processInfo.environment["DUNE_VISUAL_AUDIT_FOLD"] == "1"
         if hostOrientation { executionTimeAllowance = 600 }
         if !hostOrientation { XCUIDevice.shared.orientation = .portrait }
         defer { XCUIDevice.shared.orientation = .portrait }
@@ -565,6 +567,15 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
     }
 
     func testTrainingReadinessDetailShowsTrendAndSubscoreSections() throws {
+        if VisualAudit.isEnabled {
+            var configuration = launchConfiguration
+            configuration.additionalArguments += [
+                "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+                "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+            ]
+            launchApp(with: configuration)
+            XCTAssertTrue(app.hasPrimaryNavigation(timeout: 8))
+        }
         openTrainingReadinessDetail()
 
         XCTAssertTrue(
@@ -590,6 +601,28 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             app.descendants(matching: .any)[AXID.trainingReadinessSubscoreSleep].firstMatch.waitForExistence(timeout: 15),
             "Sleep subscore chart should appear after leaving day mode"
         )
+        if VisualAudit.isEnabled {
+            let scroll = app.scrollViews[AXID.activityTrainingReadinessDetailScreen].firstMatch
+            XCTAssertTrue(scroll.waitForExistence(timeout: 5), "Readiness detail should own its scroll viewport")
+            for (identifier, checkpoint) in [
+                (AXID.trainingReadinessChartTrend, "trend and axes"),
+                (AXID.trainingReadinessSubscoreHRV, "HRV subscore"),
+                (AXID.trainingReadinessSubscoreRHR, "RHR subscore"),
+                (AXID.trainingReadinessSubscoreSleep, "Sleep subscore")
+            ] {
+                let section = app.descendants(matching: .any)[identifier].firstMatch
+                for _ in 0..<14 {
+                    let viewport = scroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 8)
+                    if section.exists && viewport.contains(CGPoint(x: section.frame.midX, y: section.frame.midY)) { break }
+                    if section.exists && section.frame.midY < viewport.midY { scroll.swipeDown(velocity: .slow) }
+                    else { scroll.swipeUp(velocity: .slow) }
+                }
+                let viewport = scroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 8)
+                XCTAssertTrue(section.exists && viewport.contains(CGPoint(x: section.frame.midX, y: section.frame.midY)),
+                              "Readiness \(checkpoint) should reach the visible viewport")
+                VisualAudit.capture("Readiness maximum AX \(checkpoint) viewport")
+            }
+        }
     }
 
     func testActivityDetailRoutesOpenExpectedScreens() throws {
@@ -703,6 +736,15 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
     }
 
     func testPersonalRecordsDetailShowsTimelineRewardsAndHistory() throws {
+        if VisualAudit.isEnabled {
+            var configuration = launchConfiguration
+            configuration.additionalArguments += [
+                "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+                "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+            ]
+            launchApp(with: configuration)
+            XCTAssertTrue(app.hasPrimaryNavigation(timeout: 8))
+        }
         openActivityDetail(
             sectionIdentifier: AXID.activitySectionPR,
             destinationIdentifier: AXID.activityPersonalRecordsDetailScreen,
@@ -725,6 +767,27 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             app.descendants(matching: .any)[AXID.activityPersonalRecordsAchievementHistory].firstMatch.waitForExistence(timeout: 15),
             "Personal Records detail should show the achievement history"
         )
+        if VisualAudit.isEnabled {
+            let scroll = app.scrollViews[AXID.activityPersonalRecordsDetailScreen].firstMatch
+            XCTAssertTrue(scroll.waitForExistence(timeout: 5), "Personal Records should own its scroll viewport")
+            for (identifier, checkpoint) in [
+                (AXID.activityPersonalRecordsTimelineChart, "timeline endpoint and axes"),
+                (AXID.activityPersonalRecordsRewardProgress, "reward progress"),
+                (AXID.activityPersonalRecordsAchievementHistory, "achievement history")
+            ] {
+                let section = app.descendants(matching: .any)[identifier].firstMatch
+                for _ in 0..<16 {
+                    let viewport = scroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 8)
+                    if section.exists && viewport.contains(CGPoint(x: section.frame.midX, y: section.frame.midY)) { break }
+                    if section.exists && section.frame.midY < viewport.midY { scroll.swipeDown(velocity: .slow) }
+                    else { scroll.swipeUp(velocity: .slow) }
+                }
+                let viewport = scroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 8)
+                XCTAssertTrue(section.exists && viewport.contains(CGPoint(x: section.frame.midX, y: section.frame.midY)),
+                              "Personal Records \(checkpoint) should reach the visible viewport")
+                VisualAudit.capture("Personal Records maximum AX \(checkpoint) viewport")
+            }
+        }
     }
 
     func testConsistencyDetailShowsCalendarAndHistorySections() throws {
@@ -904,6 +967,11 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
     }
 
     private func verifyManualWorkoutCompletion(showsShareSheet: Bool) throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments.append(contentsOf: [
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US"
+        ])
+        launchApp(with: configuration)
         openExerciseSingleExercisePicker()
         startQuickStartExerciseFromDetail(search: "Bench Press", exerciseID: Fixture.benchPressID)
 
@@ -923,12 +991,9 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
 
         let weightIncrease = sessionControls.buttons["+2.5"].firstMatch
         XCTAssertTrue(weightIncrease.waitForExistence(timeout: 5), "Weight increment button should exist in current set controls")
-        for _ in 0..<4 where !weightIncrease.isHittable {
-            sessionControls.swipeUp()
-        }
         XCTAssertTrue(
-            waitForHittable(weightIncrease, timeout: 5),
-            "Weight increment should be hittable before tapping. Controls: \(sessionControls.debugDescription)\n\(app.debugDescription)"
+            scrollToWorkoutControl("+2.5", mustFitInViewport: true),
+            "The whole weight increment should be revealed before hit testing and tapping"
         )
         weightIncrease.auditTap()
         for _ in 0..<6 where !doneButton.exists {
@@ -941,16 +1006,13 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         )
 
         let repsIncrease = sessionControls.buttons["+1"].firstMatch
-        for _ in 0..<5 where !repsIncrease.isHittable {
-            sessionControls.swipeUp()
-        }
         XCTAssertTrue(
             repsIncrease.waitForExistence(timeout: 5),
             "Reps increment button should exist after scrolling. Controls: \(sessionControls.debugDescription)\n\(app.debugDescription)"
         )
         XCTAssertTrue(
-            repsIncrease.isHittable,
-            "Reps increment should be reachable within the workout controls. Controls: \(sessionControls.debugDescription)\n\(app.debugDescription)"
+            scrollToWorkoutControl("+1", mustFitInViewport: true),
+            "The whole reps increment should be revealed before hit testing and tapping"
         )
         repsIncrease.auditTap()
         // Duo collapses the navigation toolbar while the controls scroll.
@@ -969,11 +1031,9 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         )
 
         let repsField = app.textFields[AXID.workoutSessionField("reps")].firstMatch
-        for _ in 0..<3 where !repsField.isHittable {
-            sessionControls.swipeUp()
-        }
         XCTAssertTrue(repsField.waitForExistence(timeout: 5), "Current set repetitions should be editable")
-        XCTAssertTrue(repsField.isHittable, "Repetition input should be reachable within the workout controls")
+        XCTAssertTrue(scrollToWorkoutControl(AXID.workoutSessionField("reps"), mustFitInViewport: true),
+                      "The whole repetitions input should be revealed before tapping")
         let incrementedReps = try XCTUnwrap(repsField.value as? String, "Repetitions should expose an input value")
         XCTAssertFalse(incrementedReps.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty, "Incrementing repetitions should populate the field")
         XCTAssertGreaterThan(Int(incrementedReps) ?? 0, 0, "Incremented repetitions should be valid before completing the set")
@@ -983,6 +1043,11 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             completeSetButton.isHittable,
             "Complete Set should remain accessible while entering repetitions\n\(app.debugDescription)"
         )
+        XCTAssertTrue(app.windows.firstMatch.frame.contains(completeSetButton.frame),
+                      "The whole completion control must remain on screen while editing")
+        XCTAssertLessThanOrEqual(completeSetButton.frame.maxY, app.keyboards.firstMatch.frame.minY,
+                                 "The completion control must stay above the keyboard")
+        VisualAudit.capture("Workout complete set fully above active keyboard")
         completeSetButton.auditTap()
 
         for _ in 0..<6 where !(doneButton.exists && doneButton.isHittable) {
@@ -1004,12 +1069,38 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             app.descendants(matching: .any)[AXID.workoutCompletionSheet].firstMatch.waitForExistence(timeout: 10),
             "Workout completion sheet should appear"
         )
+        // ExerciseDefinition stores this resource name independently of the
+        // interface locale; the saved summary uses localizedName, not name.
+        let completionSummary = app.staticTexts["\(Fixture.benchPressLocalizedName) · 1 set"].firstMatch
+        XCTAssertTrue(completionSummary.waitForExistence(timeout: 5),
+                      "Completion should display the saved exercise and set count")
 
         if showsShareSheet {
             XCTAssertTrue(app.scrollToHittableElementIfNeeded("workout-completion-share", maxSwipes: 6))
             app.buttons["workout-completion-share"].firstMatch.auditTap()
+            let sharePreviewTitle = app.descendants(matching: .any).matching(
+                NSPredicate(format: "label == %@", "\(Fixture.benchPressLocalizedName) Workout")
+            ).firstMatch
+            XCTAssertTrue(sharePreviewTitle.waitForExistence(timeout: 10),
+                          "The system share sheet should show the workout preview title\n\(app.debugDescription)")
+            // The completion sheet's Close remains in the AX tree underneath
+            // the popover. Target the observed system share header, not that
+            // earlier label match in the presenting sheet.
+            let shareDismiss = app.buttons["header.closeButton"].firstMatch
+            XCTAssertTrue(shareDismiss.waitForExistence(timeout: 5) && shareDismiss.isHittable,
+                          "The system share sheet should provide an accessible dismiss control\n\(app.debugDescription)")
             VisualAudit.capture("Workout system share sheet; no recipient selected")
-            return
+            shareDismiss.auditTap()
+            let shareDismissed = XCTNSPredicateExpectation(
+                predicate: NSPredicate(format: "exists == false"), object: sharePreviewTitle
+            )
+            XCTAssertEqual(XCTWaiter.wait(for: [shareDismissed], timeout: 8), .completed,
+                           "Dismissing system share should remove its preview")
+            XCTAssertTrue(app.descendants(matching: .any)[AXID.workoutCompletionSheet].firstMatch
+                .waitForExistence(timeout: 5), "Share cancellation should return to workout completion")
+            XCTAssertTrue(completionSummary.waitForExistence(timeout: 5),
+                          "Share cancellation should preserve the exercise and set summary")
+            VisualAudit.capture("Workout completion after dismissing system share")
         }
 
         let completionDoneButton = app.descendants(matching: .any)[AXID.workoutCompletionDone].firstMatch
@@ -1063,8 +1154,34 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
     }
 
     func testTemplateListSupportsCreateEditAndTemplateStart() throws {
-        executionTimeAllowance = 240
+        if VisualAudit.isEnabled {
+            executionTimeAllowance = 600
+            var configuration = launchConfiguration
+            configuration.additionalArguments += [
+                "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+                "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+            ]
+            launchApp(with: configuration)
+            XCTAssertTrue(app.hasPrimaryNavigation(timeout: 8))
+        }
         openTemplateList()
+
+        func revealWholeRow(_ row: XCUIElement, in list: XCUIElement, preferUp: Bool, maxDrags: Int = 16) -> Bool {
+            guard list.waitForExistence(timeout: 5) else { return false }
+            for _ in 0..<maxDrags {
+                let viewport = list.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 80)
+                if row.exists && viewport.contains(row.frame) && row.isHittable { return true }
+                let moveUp = row.exists ? row.frame.midY >= viewport.midY : preferUp
+                let startY: CGFloat = moveUp ? 0.72 : 0.28
+                let endY: CGFloat = moveUp ? 0.47 : 0.53
+                list.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: startY))
+                    .press(forDuration: 0.05, thenDragTo: list.coordinate(
+                        withNormalizedOffset: CGVector(dx: 0.5, dy: endY)
+                    ), withVelocity: .slow, thenHoldForDuration: 0.2)
+            }
+            let viewport = list.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 80)
+            return row.exists && viewport.contains(row.frame) && row.isHittable
+        }
 
         let addButton = app.descendants(matching: .any)[AXID.workoutTemplateListAdd].firstMatch
         XCTAssertTrue(addButton.waitForExistence(timeout: 5), "Template add button should exist")
@@ -1077,7 +1194,24 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         XCTAssertTrue(saveButton.waitForExistence(timeout: 5), "Template save button should exist")
         XCTAssertFalse(saveButton.isEnabled, "Template save should be disabled without name and entries")
 
-        app.descendants(matching: .any)[AXID.templateFormAddExercise].firstMatch.auditTap()
+        let addExercise = app.buttons[AXID.templateFormAddExercise].firstMatch
+        let formScroll = app.collectionViews[AXID.templateFormScreen].firstMatch
+        XCTAssertTrue(formScroll.waitForExistence(timeout: 5), "Template form should expose its scroll viewport")
+        for _ in 0..<12 {
+            let viewport = formScroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 12)
+            if addExercise.exists && viewport.contains(addExercise.frame) && addExercise.isHittable { break }
+            if addExercise.exists && addExercise.frame.midY < viewport.midY {
+                formScroll.swipeDown(velocity: .slow)
+            } else {
+                formScroll.swipeUp(velocity: .slow)
+            }
+        }
+        XCTAssertTrue(addExercise.exists && addExercise.isHittable
+                      && formScroll.frame.intersection(app.windows.firstMatch.frame)
+                        .insetBy(dx: 8, dy: 12).contains(addExercise.frame),
+                      "The whole Add Exercise button should be revealed before tapping")
+        VisualAudit.capture("Template form revealed Add Exercise row at maximum AX")
+        addExercise.auditTap()
 
         let createCustomButton = app.descendants(matching: .any)[AXID.pickerCreateCustomButton].firstMatch
         XCTAssertTrue(createCustomButton.waitForExistence(timeout: 8), "Create custom button should exist in full picker")
@@ -1091,8 +1225,34 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             app.fillTextInput(AXID.createCustomExerciseName, with: Fixture.customExercise),
             "Custom exercise name should be editable"
         )
+        let keyboard = app.keyboards.firstMatch
+        if keyboard.exists {
+            let returnKey = keyboard.buttons["Return"].firstMatch
+            XCTAssertTrue(returnKey.waitForExistence(timeout: 3) && returnKey.isHittable,
+                          "The custom exercise name keyboard should expose Return")
+            returnKey.auditTap()
+            let keyboardDismissed = XCTNSPredicateExpectation(
+                predicate: NSPredicate(format: "exists == false"), object: keyboard
+            )
+            XCTAssertEqual(XCTWaiter.wait(for: [keyboardDismissed], timeout: 5), .completed,
+                           "Return should dismiss the keyboard before revealing muscles")
+        }
+        XCTAssertEqual(app.textFields[AXID.createCustomExerciseName].firstMatch.value as? String,
+                       Fixture.customExercise, "Dismissing the keyboard should preserve the custom name")
         let shouldersChip = app.buttons[AXID.createCustomExerciseMuscle("shoulders")].firstMatch
-        XCTAssertTrue(shouldersChip.waitForExistence(timeout: 5), "Shoulders chip should exist")
+        let customForm = app.collectionViews[AXID.createCustomExerciseScreen].firstMatch
+        XCTAssertTrue(revealWholeRow(shouldersChip, in: customForm, preferUp: true, maxDrags: 20),
+                      "The whole Shoulders chip should be revealed below the form's input controls")
+        if VisualAudit.isEnabled {
+            let musclesHeading = app.staticTexts["Primary Muscles"].firstMatch
+            XCTAssertTrue(musclesHeading.exists, "The muscle section heading should provide a text-height reference")
+            XCTAssertEqual(shouldersChip.label, "Shoulders", "The full muscle label should remain exposed")
+            XCTAssertLessThanOrEqual(shouldersChip.frame.height, musclesHeading.frame.height,
+                                     "Shoulders should not stack into more lines than the two-word section heading")
+            XCTAssertGreaterThan(shouldersChip.frame.width, shouldersChip.frame.height,
+                                 "The Shoulders chip should stay wider than its text stack")
+        }
+        VisualAudit.capture("Custom exercise Shoulders chip fully revealed above keyboard area")
         shouldersChip.auditTap()
         app.descendants(matching: .any)[AXID.createCustomExerciseCreate].firstMatch.auditTap()
 
@@ -1100,15 +1260,21 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             app.descendants(matching: .any)[AXID.templateFormScreen].firstMatch.waitForExistence(timeout: 8),
             "Template form should return after custom exercise creation"
         )
+        let templateName = app.textFields[AXID.templateFormName].firstMatch
+        XCTAssertTrue(revealWholeRow(templateName, in: formScroll, preferUp: false),
+                      "Template name should be reachable after returning from custom exercise creation")
         XCTAssertTrue(app.fillTextInput(AXID.templateFormName, with: Fixture.createdTemplate), "Template name should be editable")
         XCTAssertTrue(saveButton.isEnabled, "Template save should enable after required inputs")
         saveButton.auditTap()
 
         let createdTemplateRow = app.buttons[AXID.workoutTemplateRow(Fixture.createdTemplate)].firstMatch
-        XCTAssertTrue(createdTemplateRow.waitForExistence(timeout: 8), "Created template should appear in list")
+        let templateList = app.collectionViews[AXID.workoutTemplateListScreen].firstMatch
+        XCTAssertTrue(revealWholeRow(createdTemplateRow, in: templateList, preferUp: false),
+                      "Created template should appear as a whole row in the list")
 
         let seedCell = app.buttons[AXID.workoutTemplateRow(Fixture.singleTemplate)].firstMatch
-        XCTAssertTrue(seedCell.waitForExistence(timeout: 8), "Seeded single template should exist")
+        XCTAssertTrue(revealWholeRow(seedCell, in: templateList, preferUp: true),
+                      "Seeded single template should be fully reachable for editing")
         seedCell.swipeRight()
 
         let editButton = app.buttons[AXID.workoutTemplateEdit(Fixture.singleTemplate)].firstMatch
@@ -1119,13 +1285,23 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             app.descendants(matching: .any)[AXID.templateFormScreen].firstMatch.waitForExistence(timeout: 8),
             "Edit template form should appear"
         )
+        XCTAssertTrue(revealWholeRow(templateName, in: formScroll, preferUp: false),
+                      "Existing template name should be reachable for editing")
         XCTAssertTrue(app.fillTextInput(AXID.templateFormName, with: Fixture.updatedTemplate), "Seeded template name should be editable")
         app.buttons[AXID.templateFormSave].firstMatch.auditTap()
 
-        XCTAssertTrue(app.buttons[AXID.workoutTemplateRow(Fixture.updatedTemplate)].firstMatch.waitForExistence(timeout: 8), "Updated template should appear")
+        let updatedRow = app.buttons[AXID.workoutTemplateRow(Fixture.updatedTemplate)].firstMatch
+        XCTAssertTrue(revealWholeRow(updatedRow, in: templateList, preferUp: false),
+                      "Updated template should appear as a whole row")
 
         let circuitTemplate = app.buttons[AXID.workoutTemplateRow(Fixture.circuitTemplate)].firstMatch
-        XCTAssertTrue(circuitTemplate.waitForExistence(timeout: 8), "Seeded multi template should exist")
+        XCTAssertTrue(revealWholeRow(circuitTemplate, in: templateList, preferUp: true),
+                      "Seeded circuit template should be fully reachable before starting")
+        XCTAssertTrue(circuitTemplate.label.contains("Squat") && circuitTemplate.label.contains("Bench Press"),
+                      "Seeded circuit should list both expected exercises before starting")
+        if VisualAudit.isEnabled {
+            VisualAudit.capture("Circuit Builder list row with Squat and Bench Press")
+        }
         circuitTemplate.auditTap()
         if VisualAudit.isEnabled {
             let container = app.descendants(matching: .any)[AXID.templateWorkoutContainerScreen].firstMatch
@@ -1140,6 +1316,15 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             app.descendants(matching: .any)[AXID.templateWorkoutContainerScreen].firstMatch.waitForExistence(timeout: 10),
             "Template workout container should open for multi-exercise template"
         )
+        if VisualAudit.isEnabled {
+            let sessionProgress = app.staticTexts.matching(NSPredicate(
+                format: "identifier == %@ AND label == %@", AXID.workoutSessionScreen, "Exercise 1 of 2"
+            )).firstMatch
+            XCTAssertTrue(app.navigationBars[Fixture.circuitTemplate].firstMatch.waitForExistence(timeout: 5)
+                          || sessionProgress.waitForExistence(timeout: 2),
+                          "The presented container should retain the selected circuit identity")
+            VisualAudit.capture("Circuit Builder workout container with first exercise")
+        }
         let transitionStart = app.buttons[AXID.templateWorkoutTransitionStart].firstMatch
         let workoutSessionDone = app.buttons[AXID.workoutSessionDone].firstMatch
         XCTAssertTrue(
@@ -1147,6 +1332,10 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             "Template workflow should expose a transition start CTA or enter the workout session directly"
         )
         if transitionStart.exists {
+            if VisualAudit.isEnabled {
+                XCTAssertTrue(app.windows.firstMatch.frame.insetBy(dx: 4, dy: 4).contains(transitionStart.frame),
+                              "The whole template Start action should fit in the window")
+            }
             transitionStart.auditTap()
         }
 
@@ -1154,6 +1343,94 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             workoutSessionDone.waitForExistence(timeout: 10),
             "Starting the template transition should enter the workout session lane"
         )
+        XCTAssertTrue(app.staticTexts["Exercise 1 of 2"].firstMatch.waitForExistence(timeout: 5),
+                      "The workout should retain two-exercise template progress")
+        XCTAssertTrue(app.staticTexts["바벨 스쿼트"].firstMatch.waitForExistence(timeout: 5),
+                      "The workout session should begin with the circuit's first library exercise")
+        VisualAudit.capture("Circuit Builder first workout session with two-exercise progress")
+    }
+
+    func testVisualAuditCustomMuscleChipFoldReadability() throws {
+        guard VisualAudit.isEnabled,
+              ProcessInfo.processInfo.environment["DUNE_VISUAL_AUDIT_FOLD"] == "1" else {
+            throw XCTSkip("Opt-in native custom muscle chip fold audit only")
+        }
+        executionTimeAllowance = 600
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ]
+        launchApp(with: configuration)
+        XCTAssertTrue(app.hasPrimaryNavigation(timeout: 8))
+        openTemplateList()
+
+        func revealWhole(_ element: XCUIElement, in scroll: XCUIElement, maxDrags: Int = 20) -> Bool {
+            guard scroll.waitForExistence(timeout: 5) else { return false }
+            let navigationTitle = scroll.identifier == AXID.templateFormScreen ? "New Template" : "New Exercise"
+            let navigationBar = app.navigationBars[navigationTitle].firstMatch
+            func viewport() -> CGRect {
+                let base = scroll.frame.intersection(app.windows.firstMatch.frame)
+                let top = max(base.minY, navigationBar.exists ? navigationBar.frame.maxY + 4 : base.minY + 80)
+                return CGRect(x: base.minX + 8, y: top, width: max(0, base.width - 16),
+                              height: max(0, base.maxY - 12 - top))
+            }
+            for attempt in 0..<maxDrags {
+                let visible = viewport()
+                if element.exists && visible.contains(element.frame) && element.isHittable { return true }
+                let moveUp = element.exists ? element.frame.midY >= visible.midY : attempt < maxDrags / 2
+                let startY: CGFloat = moveUp ? 0.72 : 0.28
+                let endY: CGFloat = moveUp ? 0.47 : 0.53
+                scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: startY))
+                    .press(forDuration: 0.05, thenDragTo: scroll.coordinate(
+                        withNormalizedOffset: CGVector(dx: 0.5, dy: endY)
+                    ), withVelocity: .slow, thenHoldForDuration: 0.2)
+            }
+            return element.exists && viewport().contains(element.frame) && element.isHittable
+        }
+
+        let listAdd = app.buttons[AXID.workoutTemplateListAdd].firstMatch
+        XCTAssertTrue(listAdd.waitForExistence(timeout: 5) && listAdd.isHittable)
+        listAdd.auditTap()
+        let form = app.collectionViews[AXID.templateFormScreen].firstMatch
+        let addExercise = app.buttons[AXID.templateFormAddExercise].firstMatch
+        XCTAssertTrue(revealWhole(addExercise, in: form), "Add Exercise should be wholly reachable in the form")
+        addExercise.auditTap()
+        let createCustom = app.buttons[AXID.pickerCreateCustomButton].firstMatch
+        XCTAssertTrue(createCustom.waitForExistence(timeout: 8) && createCustom.isHittable)
+        createCustom.auditTap()
+
+        let customForm = app.collectionViews[AXID.createCustomExerciseScreen].firstMatch
+        let shoulders = app.buttons[AXID.createCustomExerciseMuscle("shoulders")].firstMatch
+        XCTAssertTrue(revealWhole(shoulders, in: customForm), "Shoulders should be reachable in the custom form")
+        let heading = app.staticTexts["Primary Muscles"].firstMatch
+        XCTAssertTrue(heading.exists && heading.frame.height > 0,
+                      "The two-word section heading should provide a measured text-height reference")
+        let headingHeight = heading.frame.height
+
+        for state in ["closed", "openFlat", "partiallyOpen"] {
+            VisualAudit.capture("FOLD:\(state)")
+            XCTAssertTrue(revealWhole(shoulders, in: customForm),
+                          "The whole Shoulders chip should remain reachable after \(state)")
+            XCTAssertEqual(shoulders.label, "Shoulders", "The full muscle label should remain exposed")
+            XCTAssertLessThanOrEqual(shoulders.frame.height, headingHeight,
+                                     "Shoulders should not form a multi-character vertical stack in \(state)")
+            XCTAssertGreaterThan(shoulders.frame.width, shoulders.frame.height,
+                                 "The Shoulders chip should remain wider than its label stack in \(state)")
+            VisualAudit.capture("Custom exercise \(state) full Shoulders chip and label")
+        }
+
+        let customCancel = app.navigationBars["New Exercise"].buttons["Cancel"].firstMatch
+        XCTAssertTrue(customCancel.waitForExistence(timeout: 5) && customCancel.isHittable)
+        customCancel.auditTap()
+        let pickerCancel = app.buttons[AXID.pickerCancelButton].firstMatch
+        XCTAssertTrue(pickerCancel.waitForExistence(timeout: 5) && pickerCancel.isHittable)
+        pickerCancel.auditTap()
+        let formCancel = app.buttons[AXID.templateFormCancel].firstMatch
+        XCTAssertTrue(formCancel.waitForExistence(timeout: 5) && formCancel.isHittable)
+        formCancel.auditTap()
+        XCTAssertTrue(app.collectionViews[AXID.workoutTemplateListScreen].firstMatch.waitForExistence(timeout: 8),
+                      "Cancel should return to the template list without saving a test exercise")
     }
 
     func testTemplateWorkoutContainerCloseDismissesFullScreenFlow() throws {
@@ -1276,6 +1553,15 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
     }
 
     func testCardioFlowReachesSummary() throws {
+        if VisualAudit.isEnabled {
+            var configuration = launchConfiguration
+            configuration.additionalArguments += [
+                "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+                "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+            ]
+            launchApp(with: configuration)
+            XCTAssertTrue(app.hasPrimaryNavigation(timeout: 8))
+        }
         openExerciseSingleExercisePicker()
         XCTAssertTrue(app.fillTextInput(AXID.pickerSearchField, with: "Running"), "Picker search should accept Running")
         dismissSearchKeyboardIfPresent()
@@ -1326,15 +1612,32 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             )).firstMatch
             if allow.exists { allow.tap() }
         }
+        if VisualAudit.isEnabled {
+            XCTAssertTrue(app.staticTexts["Workout Complete!"].firstMatch.waitForExistence(timeout: 8),
+                          "Summary title should render after the permission dialog is handled")
+        }
         let save = app.buttons["cardio-session-summary-save"].firstMatch
         XCTAssertTrue(waitForHittable(save, timeout: 5), "Summary Save must be reachable\n\(app.debugDescription)")
-        VisualAudit.capture("Cardio summary with reachable Save")
+        XCTAssertTrue(app.windows.firstMatch.frame.insetBy(dx: 4, dy: 4).contains(save.frame),
+                      "The whole summary Save action should fit above the window edge")
+        VisualAudit.capture("Cardio summary top title and full Save after permission dismissal")
         if VisualAudit.isEnabled {
             let summaryScroll = app.descendants(matching: .any)[AXID.cardioSessionSummaryScreen].firstMatch.scrollViews.firstMatch
-            for index in 1...3 {
-                summaryScroll.swipeUp()
+            XCTAssertTrue(summaryScroll.waitForExistence(timeout: 5), "Cardio summary should own a metric scroll view")
+            for (metric, checkpoint) in [("Steps", "steps"), ("Cadence", "cadence")] {
+                let label = app.staticTexts[metric].firstMatch
+                for _ in 0..<8 {
+                    let viewport = summaryScroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 8)
+                    if label.exists && viewport.contains(CGPoint(x: label.frame.midX, y: label.frame.midY)) { break }
+                    summaryScroll.swipeUp(velocity: .slow)
+                }
+                let viewport = summaryScroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 8)
+                XCTAssertTrue(label.exists && viewport.contains(CGPoint(x: label.frame.midX, y: label.frame.midY)),
+                              "Cardio summary \(checkpoint) should reach the visible scroll viewport")
                 XCTAssertTrue(save.isHittable, "Save should remain reachable while reviewing summary metrics")
-                VisualAudit.capture("Cardio summary lower metrics \(index)")
+                XCTAssertTrue(app.windows.firstMatch.frame.insetBy(dx: 4, dy: 4).contains(save.frame),
+                              "Summary Save should remain wholly visible while metrics scroll")
+                VisualAudit.capture("Cardio summary lower \(checkpoint) and full Save")
             }
         }
     }
@@ -1498,11 +1801,19 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
                 "Recent workouts See All should be reachable and tappable"
             )
             XCTAssertTrue(seeAllButton.waitForExistence(timeout: 5), "Recent workouts See All should exist")
+            // A partially visible row can be reported as hittable while its
+            // center is under the collapsed navigation bar. Reveal the whole
+            // action in the interior of the scroll viewport before tapping.
+            let rootScroll = app.scrollViews[AXID.activityRootScroll].firstMatch
             for _ in 0..<2 {
-                if !waitForHittable(seeAllButton, timeout: 2) {
-                    _ = app.scrollToHittableElementIfNeeded(AXID.activityRecentSeeAll, maxSwipes: 3)
+                for _ in 0..<8 {
+                    let viewport = rootScroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 80)
+                    if seeAllButton.isHittable && viewport.contains(seeAllButton.frame) { break }
+                    if seeAllButton.frame.midY < viewport.midY { rootScroll.swipeDown(velocity: .slow) }
+                    else { rootScroll.swipeUp(velocity: .slow) }
                 }
-                guard seeAllButton.isHittable else { continue }
+                let viewport = rootScroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 80)
+                guard seeAllButton.isHittable && viewport.contains(seeAllButton.frame) else { continue }
                 seeAllButton.auditTap()
 
                 if exerciseScreen.waitForExistence(timeout: 10) ||
@@ -1658,13 +1969,13 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             if controlExists && fits && control.isHittable { return true }
             if controlExists && containerFrame.height > 0 {
                 let delta = controlFrame.midY - viewport.midY
-                let travel = min(max(abs(delta), 30), containerFrame.height * 0.45) / containerFrame.height
+                let travel = min(max(abs(delta), 20), containerFrame.height * 0.25) / containerFrame.height
                 let startY: CGFloat = delta < 0 ? 0.3 : 0.7
                 let endY = startY + (delta < 0 ? travel : -travel)
                 container.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: startY))
                     .press(forDuration: 0.05, thenDragTo: container.coordinate(
                         withNormalizedOffset: CGVector(dx: 0.5, dy: endY)
-                    ))
+                    ), withVelocity: .slow, thenHoldForDuration: 0.2)
             } else if controlExists && controlFrame.midY < containerFrame.midY {
                 container.swipeDown(velocity: .slow)
             } else {
@@ -1684,7 +1995,19 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         XCTAssertTrue(controls.waitForExistence(timeout: 5), "Active workout controls must remain available")
         for (field, expected) in [("kg", weight), ("reps", reps)] {
             let identifier = AXID.workoutSessionField(field)
-            XCTAssertTrue(scrollToWorkoutControl(identifier, mustFitInViewport: true),
+            VisualAudit.capture("Workout \(field) viewport before bounded input reveal")
+            let revealed = scrollToWorkoutControl(identifier, mustFitInViewport: true)
+            if !VisualAudit.isEnabled {
+                let image = XCTAttachment(screenshot: app.screenshot())
+                image.name = "Workout \(field) input after bounded reveal"
+                image.lifetime = .keepAlways
+                add(image)
+                let hierarchy = XCTAttachment(string: app.debugDescription)
+                hierarchy.name = "Workout \(field) viewport hierarchy"
+                hierarchy.lifetime = .keepAlways
+                add(hierarchy)
+            }
+            XCTAssertTrue(revealed,
                           "The full \(field) input must remain visible after folding")
             XCTAssertEqual(app.textFields[identifier].firstMatch.value as? String, expected,
                            "\(field) input must survive each fold transition")
