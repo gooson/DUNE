@@ -63,3 +63,62 @@ final class NotificationRoutingRegressionTests: SeededUITestBaseCase {
         rowTitle.tap()
     }
 }
+
+@MainActor
+final class NotificationResponseRoutingUITests: SeededUITestBaseCase {
+    override var uiScenario: LaunchScenario? { .notificationRoutingSeeded }
+
+    override var additionalLaunchArguments: [String] {
+        [
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+            "--ui-open-notification-title", "Daily Digest Route Fixture"
+        ]
+    }
+
+    func testNotificationResponseOpensMatchingMessageAndBackReturnsToHub() {
+        let detail = app.descendants(matching: .any)["notification-message-detail-screen"].firstMatch
+        XCTAssertTrue(detail.waitForExistence(timeout: 15), "Notification response should open message detail")
+        XCTAssertTrue(app.staticTexts["Daily Digest Route Fixture"].firstMatch.exists)
+        XCTAssertTrue(app.staticTexts["Review today's summary."].firstMatch.exists)
+        let todayTab = app.tabBars.buttons["Today"].firstMatch
+        if todayTab.exists {
+            XCTAssertTrue(todayTab.isSelected, "Notification response should select Today")
+        }
+
+        let briefingDismiss = app.buttons[AXID.dashboardMorningBriefingDismiss].firstMatch
+        let briefingClosed = XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == false"), object: briefingDismiss)
+        XCTAssertEqual(XCTWaiter.wait(for: [briefingClosed], timeout: 5), .completed)
+
+        let backButton = app.navigationBars.buttons.element(boundBy: 0)
+        XCTAssertTrue(backButton.waitForExistence(timeout: 5), "Message detail should have a back button")
+        backButton.tap()
+
+        let hub = app.descendants(matching: .any)[AXID.notificationHubScreen].firstMatch
+        XCTAssertTrue(hub.waitForExistence(timeout: 8), "Back should return to the notification hub")
+        XCTAssertTrue(app.staticTexts["Daily Digest Route Fixture"].firstMatch.exists)
+    }
+}
+
+@MainActor
+final class NotificationMetricResponseRoutingUITests: SeededUITestBaseCase {
+    override var uiScenario: LaunchScenario? { .notificationRoutingSeeded }
+
+    override var additionalLaunchArguments: [String] {
+        [
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+            "--ui-open-notification-title", "Sleep Debt Alert"
+        ]
+    }
+
+    func testRouteLessNotificationOpensMetricDetail() {
+        let detail = app.descendants(matching: .any)[AXID.metricDetailScreen("sleep")].firstMatch
+        XCTAssertTrue(detail.waitForExistence(timeout: 15), "Route-less alert should open its sleep metric detail")
+
+        let backButton = app.navigationBars.buttons.element(boundBy: 0)
+        XCTAssertTrue(backButton.waitForExistence(timeout: 5))
+        backButton.tap()
+
+        let hub = app.descendants(matching: .any)[AXID.notificationHubScreen].firstMatch
+        XCTAssertTrue(hub.waitForExistence(timeout: 8), "Back should return to the notification hub")
+    }
+}

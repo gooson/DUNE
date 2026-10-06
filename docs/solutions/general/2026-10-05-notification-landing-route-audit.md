@@ -13,6 +13,7 @@ related_files:
   - DUNE/Presentation/Posture/PostureHistoryView.swift
 related_solutions:
   - docs/solutions/architecture/2026-03-08-tab-scoped-notification-push-preserves-navigation-bar.md
+  - docs/solutions/general/2026-10-06-os-notification-tap-detail-routing.md
 ---
 
 # 알림별 랜딩 경로와 알림함 푸시 일치
@@ -37,6 +38,7 @@ related_solutions:
 - 수치 상세가 없는 일일 요약·체크리스트 알림은 알림 내용을 보여 주는 상세 화면으로 연결한다. 새 일일 요약 payload에는 알림함 경로를 명시하고, 이전 무경로 payload도 같은 경로로 해석한다.
 - 여러 줄로 합쳐진 체성분 알림은 첫 수치만 뽑아 잘못된 수치 상세를 만들지 않고 전체 알림 내용을 보여 준다.
 - 항목별 경로 결정은 `NotificationInboxManager.resolvedRoute(for:)`에 모아 시스템 탭과 알림함의 해석이 어긋나지 않게 했다.
+- 이후 OS 탭의 `.notificationHub` 경로는 항목 ID를 보존해 알림함을 표시한 뒤 해당 행의 상세까지 자동으로 연다. 수동 알림함과 같은 Today 경로를 사용한다.
 
 ## Prevention
 
