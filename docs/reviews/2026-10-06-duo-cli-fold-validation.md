@@ -57,3 +57,30 @@ CLI probe와 계약 테스트의 성공은 전체 화면 감사의 통과가 아
 ## 최대 글자 실제 접힘 결과
 
 `fold-maxax`: **2 executed / 2 passed / 0 failed / 0 skipped, exit 0**. 휴식은 179.598초, 입력은 421.091초였다. system content size accessibility-extra-extra-extra-large, 현재 입력 우선 배치 앱을 사용했다. Book/Open/Closed readback과 입력·휴식 assertion을 통과했다. [결과](assets/2026-10-06-duo-cli/fold-maxax-result.json), [ledger](assets/2026-10-06-duo-cli/fold-maxax/checkpoints.jsonl). 최대 AX에서는 스크롤 위치에 따라 timer 윗부분이 viewport 밖에 있다. 숫자 전체의 도달성을 후속 full-frame assertion과 캡처로 검증하며 이 기존 캡처만으로 전체 시각 합격을 선언하지 않는다.
+
+## 완전 펼침 실제 앱 회전 결과
+
+`rotation-inner`: **2 executed / 2 passed / 0 failed / 0 skipped, exit 0**. 기본 및 최대 AX 각각 물리 portrait→landscapeLeft→portrait의 공식 readback을 확인했다. app window가 951×669 → 669×951 → 951×669로 변하고 복원됐으며 kg 62.5, reps 11, 미완료 Done 상태와 현재 세트 action을 유지했다. [결과](assets/2026-10-06-duo-cli/rotation-inner-result.json), [ledger](assets/2026-10-06-duo-cli/rotation-inner/checkpoints.jsonl), [실제 PNG 크기](assets/2026-10-06-duo-cli/rotation-inner-native-sizes.json). 앱 viewport 조건을 제거하거나 orientation setter 성공만으로 통과시키지 않았다.
+
+## 실행 자원과 범위
+
+계정 주간 usedPercent는 재개 시 33%, 물리 회전 검사 완료 후 36%로 조회됐다. 계정 전체 수치이며 이 작업의 정확한 사용 토큰 또는 비용은 unknown이다. 실행 자체를 위한 agent를 만들지 않고 표준 runner의 기존 session을 대기했다. 완료한 build·호스트 계약은 소스 변경이 없으면 재사용하고, 앱 source 또는 실제 제어 경로/viewport assertion이 달라진 검증만 실행했다. 이전 실패를 이름만 바꿔 같은 경로로 반복하지 않았다.
+
+최초 전체 화면 인벤토리의 UNVERIFIED 선언을 일괄 합격으로 변경하지 않는다. 이번 물리 전환 성공은 연결된 workout selector와 캡처 조건의 근거다.
+
+## 최종 배치의 기본 접힘 결과
+
+`fold-default-active`: **2 executed / 2 passed / 0 failed / 0 skipped, exit 0**. `3a49f100` source에서 기본 글자 크기, 90°/180°/0°의 실제 readback과 기능 assertion을 통과했다. 각 자세에서 timer 텍스트 전체 frame이 active scroll viewport 안에 들어오는 것을 추가 확인하고 full countdown PNG를 저장했다. [결과](assets/2026-10-06-duo-cli/fold-default-active-result.json), [ledger](assets/2026-10-06-duo-cli/fold-default-active/checkpoints.jsonl). 휴식은 311.529초였다. Native Book/Open/Closed의 full countdown 이미지에서 숫자·링·완료 세트·현재 휴식 버튼이 보였으며, 인접 overview 일부가 viewport 밖에 있는 것과 구분했다.
+
+## 잔여 실패 분리 및 후속 수정
+
+- inner-routes: Body history 최대 AX 편집/저장과 metric comparison은 각각 90.719초/75.418초로 통과했다. 3D case는 regular 너비의 근육 tap이 옆 열 상세를 선택하는 정상 동작을 자동 3D 진입으로 오인해 실패했다. 실제 3D 버튼으로 진입하는 테스트를 수정했다. 재검증 전에는 3D 렌더링 완료로 기록하지 않는다. [원본 결과](assets/2026-10-06-duo-cli/inner-routes-result.json).
+- native 009/012에서 최대 AX weekly 지표의 숫자 ellipsis·변화율 세로 분절 및 근육 상세 고정 두 열을 확인했다. WeeklyStatsGrid/MuscleDetailPopover를 AX 크기에서 한 열로, 값/단위/변화율 및 상세 header를 세로 배치했다. 앱 재빌드/후속 native 검증은 아직 진행 중이다.
+- fold-maxax-countdown은 세 자세의 전체 countdown frame/capture까지 진행했지만 next-set 검사에서 600초 초과했고, SDK cleanup도 정체했다. 확인한 해당 Xcode PID만 종료한 결과 exit 143이며 실패 원본을 보존한다. 이전 maxAX 기능 case 통과를 이 실패의 통과로 대체하지 않는다. [실패 결과](assets/2026-10-06-duo-cli/fold-maxax-countdown-result.json).
+- stdout 읽기와 SDK cleanup을 분리하고 종료 뒤 60초 감시를 추가했다. 다음 case 시작 시 감시를 해제하며, 격리해 생성한 runner group만 정리/reap한다. 원인 불명의 기능 timeout을 해결했다는 뜻은 아니다. 정상 종료, EOF 정체, 다음 case 재개, descendant pipe 해제/다른 runner 생존을 포함한 **29 host contracts**가 통과했다.
+- 운동 control 탐색은 각 루프의 frame을 한 번씩 읽고 화면 안에 있을 때만 hit testing을 요청하도록 중복 AX 조회를 줄였다. 가시성/입력값/완료 조건은 유지하며, Skip 직후 native/AX checkpoint를 추가해 재발 시 실제 next-set 화면을 남긴다.
+
+- 실제 90° 반접힘 고정 회전은 기본 158.666초 / 최대 AX 159.213초, **2/2 passed / exit 0**이다. 실제 방향 readback·fresh AX·paired native·전체 KG/REPS frame 포함·값 62.5/11 보존을 검사했다. native 029에서 최대 AX 숫자 전체를 직접 확인했다. 증감 버튼의 아래 부분은 ScrollView 밖에 있고 스크롤로 접근하는 내용이며 숫자 고정 clipping과 구분한다. [결과](assets/2026-10-06-duo-cli/rotation-partial-result.json).
+
+- 지표 카드와 Dynamic Type 아이콘 크기까지 포함한 최종 소스의 표준 Xcode 27.1 build는 **exit 0 / BUILD SUCCEEDED**다. `ax-metric-cards-final-build.log`를 보존한다. 후속 UI route의 native 확인을 완료하기 전 시각 수정 합격으로 확장하지 않는다.
+- 계정 공용 주간 사용량은 이번 확인에서 38%다. 작업 단독 토큰은 제공되지 않아 unknown이며 사용량 백분율을 작업 토큰 절감률로 환산하지 않는다.

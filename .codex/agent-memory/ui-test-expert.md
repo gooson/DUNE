@@ -16,3 +16,14 @@
 - 기본 글자 크기의 실제 90°→180°→0° 입력/휴식 UI case는 각각 통과했다. 이는 모든 화면·최대 AX·회전·이전 OS scene session 복원 완료를 의미하지 않는다.
 - 검토한 [serve-sim source](https://github.com/EvanBacon/serve-sim/tree/c60d583747b88a15616eeecec56f287ef5759769/packages/serve-sim/Sources/SimDuoHID)의 `orientation-picker-control` guest event를 task-local binary로 빌드한 경로는 같은 Duo에서 portrait→landscapeLeft→portrait 공식 readback을 통과했다. legacy orientation 이벤트와 구분한다. source pin `c60d583747b88a15616eeecec56f287ef5759769`, Xcode 27.1, 명시적 UDID 및 simulator lock을 유지한다. helper의 UI enum과 CoreDevice physical landscape 이름은 반대이며, 임시 wrapper는 physical landscapeLeft에 enum 3을 보낸다.
 - `scripts/duo-visual-audit.py`의 `DAILVE_DUO_ORIENTATION_CLI`는 검토된 외부 driver 지정용이다. 실행 성공 뒤에도 공식 get 조회를 강제하며, 앱 viewport 회전/UI 기능 합격은 별도 testcase 결과로 판단한다.
+
+## SDK 정리 정체와 실제 기능 실패를 분리한다
+
+- 테스트 timeout/Selected tests 종료 뒤에도 Xcode 결과 작성이 멈추면 stdout 무기한 읽기로 대기하지 않는다. host의 60초 cleanup watchdog을 사용한다. 다음 testcase started가 오면 deadline을 해제해 진행 중인 검사를 중단하지 않는다.
+- host가 start_new_session으로 만든 runner process group만 종료하고 SIGTERM 뒤 남은 descendant를 정리·reap한다. 다른 worktree/시뮬레이터 작업을 임의 PID로 종료하지 않는다. 종료 이유/returncode/checkpoint 수는 runner-result.json에 남긴다. 로컬 프로세스 계약은 정상 완료, stdout EOF 정체, 다음 case 재개, descendant pipe 해제와 다른 runner 생존을 검사한다. 실제 SDK 실패가 해결됐다는 증거와 구분한다.
+- 2026-10-06 최대 AX full countdown fold case는 세 자세의 숫자 frame/capture 뒤 next-set 검사에서 600초 초과했다. 실패 receipt를 보존한다. 이전 기능 통과나 native 숫자 확인으로 이 실행을 통과 처리하지 않는다. 원인이 증명되기 전 HID/GUI/앱 원인으로 단정하지 않는다.
+
+## Duo regular 너비의 근육 상세와 3D 진입은 별도다
+
+- MuscleMapDetailView는 regular 너비에서 근육 tap을 옆 열의 상세 선택으로 처리한다. 실제 3D 진입은 별도 3D Muscle Map 버튼이다. compact에서는 근육 tap으로 바로 진입한다. 3D 테스트가 regular에서도 자동 진입을 기대하면 false failure가 된다.
+- 버튼 존재/ARView AX 존재만으로 렌더링 합격을 선언하지 않는다. 진입 후 native PNG에서 모델과 overlay를 확인한다. 최대 AX의 고정 두 열 지표 카드는 숫자 잘림/부호 세로 분절 여부를 별도로 검사한다.

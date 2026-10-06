@@ -3,8 +3,10 @@
 import importlib.util
 import io
 import json
+import select
 from pathlib import Path
 import subprocess
+import sys
 import tempfile
 import threading
 import time
@@ -232,6 +234,54 @@ class DiagnosticOutputTests(unittest.TestCase):
         self.assertFalse(audit.should_report_line("note: compiling views"))
         for diagnostic in ["error: build failed", "/tmp/App.swift:42:12: error: invalid member", "Test Case 'case' passed", "** TEST FAILED **", "Executed 2 tests, with 0 failures"]:
             self.assertTrue(audit.should_report_line(diagnostic), diagnostic)
+
+
+class RunnerCleanupContracts(unittest.TestCase):
+    def runner(self, code):
+        process = subprocess.Popen([sys.executable, "-u", "-c", code],
+                                   stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                                   text=True, start_new_session=True)
+        self.addCleanup(process.stdout.close)
+        self.addCleanup(lambda: audit.stop_runner(process) if process.poll() is None else None)
+        return process
+
+    def test_completed_runner_preserves_output(self):
+        process = self.runner("print(\"Test Suite 'Selected tests' passed\"); print('receipt')")
+        self.assertEqual(list(audit.runner_lines(process, cleanup_timeout=1)),
+                         ["Test Suite 'Selected tests' passed\n", "receipt\n"])
+        self.assertEqual(process.wait(), 0)
+
+    def test_cleanup_hang_is_bounded_and_owned_runner_is_reaped(self):
+        process = self.runner("import time; print(\"Test Suite 'Selected tests' failed\"); time.sleep(30)")
+        with self.assertRaisesRegex(TimeoutError, "cleanup exceeded"):
+            list(audit.runner_lines(process, cleanup_timeout=0.1))
+        audit.stop_runner(process)
+        self.assertIsNotNone(process.returncode)
+
+    def test_stdout_eof_does_not_hide_cleanup_hang(self):
+        process = self.runner("import os,time; print(\"Test Suite 'Selected tests' passed\"); os.close(1); os.close(2); time.sleep(30)")
+        with self.assertRaises(TimeoutError):
+            list(audit.runner_lines(process, cleanup_timeout=0.1))
+
+    def test_new_case_clears_cleanup_deadline(self):
+        process = self.runner("import time; print('exceeded execution time allowance'); print(\"Test Case 'next' started.\"); time.sleep(0.3); print(\"Test Case 'next' passed\")")
+        lines = list(audit.runner_lines(process, cleanup_timeout=0.1))
+        self.assertIn("Test Case 'next' passed\n", lines)
+        self.assertEqual(process.wait(), 0)
+
+    def test_cleanup_releases_descendant_pipe_without_stopping_other_runner(self):
+        bystander = self.runner("import time; time.sleep(30)")
+        process = self.runner(
+            "import subprocess,sys,time; "
+            "subprocess.Popen([sys.executable,'-u','-c',"
+            "\"import signal,time; signal.signal(signal.SIGTERM,signal.SIG_IGN); print('ready',flush=True); time.sleep(30)\"]); "
+            "time.sleep(30)"
+        )
+        self.assertEqual(process.stdout.readline(), "ready\n")
+        audit.stop_runner(process)
+        self.assertTrue(select.select([process.stdout], [], [], 1)[0])
+        self.assertEqual(process.stdout.read(), "")
+        self.assertIsNone(bystander.poll())
 
 
 class HingeCLIContracts(unittest.TestCase):

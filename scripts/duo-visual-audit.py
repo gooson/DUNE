@@ -16,9 +16,12 @@ from pathlib import Path
 import json
 import math
 import os
+import queue
 import re
+import signal
 import subprocess
 import sys
+import threading
 import time
 
 
@@ -287,6 +290,72 @@ def should_report_line(line):
     return bool(re.search(r"^error:|:\d+(?::\d+)?: error:|^Test Case |^\*\* TEST|^Executed ", line))
 
 
+def runner_lines(process, cleanup_timeout=60):
+    """Keep a stalled SDK result writer from blocking stdout iteration forever."""
+    pending = queue.Queue()
+
+    def read_output():
+        try:
+            for line in process.stdout:
+                pending.put(line)
+        except BaseException as exc:
+            pending.put(exc)
+        finally:
+            pending.put(None)
+
+    threading.Thread(target=read_output, daemon=True).start()
+    cleanup_deadline = None
+    stream_finished = False
+    while not (stream_finished and process.poll() is not None):
+        if cleanup_deadline is not None and time.monotonic() >= cleanup_deadline:
+            raise TimeoutError(f"SDK runner cleanup exceeded {cleanup_timeout}s after test execution ended")
+        try:
+            item = pending.get(timeout=0.2)
+        except queue.Empty:
+            continue
+        if item is None:
+            stream_finished = True
+            continue
+        if isinstance(item, BaseException):
+            raise item
+        if re.match(r"^Test Case .* started\.", item):
+            cleanup_deadline = None
+        elif "exceeded execution time allowance" in item or re.match(
+            r"^Test Suite 'Selected tests' (?:passed|failed)", item
+        ):
+            cleanup_deadline = time.monotonic() + cleanup_timeout
+        yield item
+
+
+def stop_runner(process):
+    # start_new_session isolates this runner and its descendants from other jobs.
+    owns_group = isinstance(process.pid, int) and process.pid > 0
+    if owns_group:
+        try:
+            owns_group = os.getpgid(process.pid) == process.pid
+        except ProcessLookupError:
+            return
+    try:
+        if owns_group:
+            os.killpg(process.pid, signal.SIGTERM)
+        else:
+            process.terminate()
+        try:
+            process.wait(timeout=5)
+        except subprocess.TimeoutExpired:
+            if not owns_group:
+                process.kill()
+                process.wait(timeout=5)
+    finally:
+        if owns_group:
+            # A shell may exit before a stuck xcodebuild descendant releases pipes/lock FD.
+            try:
+                os.killpg(process.pid, signal.SIGKILL)
+            except ProcessLookupError:
+                pass
+            process.wait(timeout=5)
+
+
 def main():
     if len(sys.argv) < 5:
         raise SystemExit(__doc__)
@@ -299,11 +368,12 @@ def main():
     lock_fd = os.environ.get("DUNE_SIM_TEST_LOCK_FD")
     inherited_fds = (int(lock_fd),) if lock_fd else ()
     process = subprocess.Popen(sys.argv[4:], stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-                               text=True, bufsize=1, pass_fds=inherited_fds)
+                               text=True, bufsize=1, pass_fds=inherited_fds, start_new_session=True)
     sequence = 0
+    termination = None
     try:
         with (output / "run.log").open("w") as log, (output / "captures.tsv").open("w") as captures, (output / "checkpoints.jsonl").open("w") as checkpoints:
-            for line in process.stdout:
+            for line in runner_lines(process):
                 log.write(line)
                 log.flush()
                 if "DUNE_VISUAL_AUDIT_READY " not in line:
@@ -314,14 +384,18 @@ def main():
                 capture_checkpoint(line, sequence, output, device, requested_display,
                                    container_root, captures, checkpoints)
         return process.wait()
-    except BaseException:
-        process.terminate()
-        try:
-            process.wait(timeout=5)
-        except subprocess.TimeoutExpired:
-            process.kill()
-            process.wait()
+    except BaseException as exc:
+        termination = str(exc) or type(exc).__name__
+        stop_runner(process)
         raise
+    finally:
+        returncode = process.poll()
+        (output / "runner-result.json").write_text(json.dumps({
+            "pid": process.pid if isinstance(process.pid, int) else None,
+            "returncode": returncode if isinstance(returncode, int) else None,
+            "termination": termination,
+            "checkpoints_attempted": sequence,
+        }) + "\n")
 
 
 if __name__ == "__main__":

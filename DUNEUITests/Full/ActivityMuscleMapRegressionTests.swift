@@ -117,6 +117,7 @@ final class ActivityMuscleMapRegressionTests: ActivityExerciseSeededUITestBaseCa
             viewer.waitForExistence(timeout: 10),
             "3D viewer (ARView container) should exist"
         )
+        VisualAudit.capture("3D viewer after explicit navigation")
     }
 
     // MARK: - Helpers
@@ -144,6 +145,14 @@ final class ActivityMuscleMapRegressionTests: ActivityExerciseSeededUITestBaseCa
         tapFrontChestMuscle()
 
         let screen3D = app.descendants(matching: .any)[AXID.activityMuscleMap3DScreen].firstMatch
+        // Regular-width layouts keep muscle selection in the adjacent detail pane.
+        let open3D = app.buttons.matching(NSPredicate(format: "label IN %@", ["3D Muscle Map", "3D 근육맵"])).firstMatch
+        if !screen3D.exists && open3D.exists {
+            let primaryScroll = app.scrollViews.firstMatch
+            for _ in 0..<4 where !open3D.isHittable { primaryScroll.swipeUp() }
+            XCTAssertTrue(open3D.isHittable, "The explicit 3D entry must be reachable")
+            open3D.auditTap()
+        }
         XCTAssertTrue(screen3D.waitForExistence(timeout: 10), "3D view should appear")
     }
 

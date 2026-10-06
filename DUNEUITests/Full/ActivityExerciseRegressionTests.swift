@@ -478,6 +478,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         skipRest.auditTap()
         XCTAssertTrue(completeSet.waitForExistence(timeout: 5) && completeSet.isEnabled,
                       "The next set should be actionable after skipping rest")
+        VisualAudit.capture("Next set immediately after skipping rest")
         // Seeded later sets may already contain values from an earlier workout.
         // Folding must preserve the active draft; it must not overwrite those
         // existing defaults with the just-completed set.
@@ -1604,20 +1605,24 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         let container = app.scrollViews["workout-session-controls"].firstMatch
         guard container.waitForExistence(timeout: 5) else { return false }
         for _ in 0..<maxSwipes {
-            let viewport = container.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 8)
-            if control.exists && control.isHittable
-                && (mustFitInViewport ? viewport.contains(control.frame)
-                    : viewport.contains(CGPoint(x: control.frame.midX, y: control.frame.midY))) { return true }
-            if control.exists && container.frame.height > 0 {
-                let delta = control.frame.midY - viewport.midY
-                let travel = min(max(abs(delta), 30), container.frame.height * 0.45) / container.frame.height
+            let containerFrame = container.frame
+            let viewport = containerFrame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 8)
+            let controlExists = control.exists
+            let controlFrame = controlExists ? control.frame : .zero
+            let fits = mustFitInViewport ? viewport.contains(controlFrame)
+                : viewport.contains(CGPoint(x: controlFrame.midX, y: controlFrame.midY))
+            // Query hit testing only once geometry places the target on screen.
+            if controlExists && fits && control.isHittable { return true }
+            if controlExists && containerFrame.height > 0 {
+                let delta = controlFrame.midY - viewport.midY
+                let travel = min(max(abs(delta), 30), containerFrame.height * 0.45) / containerFrame.height
                 let startY: CGFloat = delta < 0 ? 0.3 : 0.7
                 let endY = startY + (delta < 0 ? travel : -travel)
                 container.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: startY))
                     .press(forDuration: 0.05, thenDragTo: container.coordinate(
                         withNormalizedOffset: CGVector(dx: 0.5, dy: endY)
                     ))
-            } else if control.exists && control.frame.midY < container.frame.midY {
+            } else if controlExists && controlFrame.midY < containerFrame.midY {
                 container.swipeDown(velocity: .slow)
             } else {
                 container.swipeUp(velocity: .slow)
@@ -1636,8 +1641,8 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         XCTAssertTrue(controls.waitForExistence(timeout: 5), "Active workout controls must remain available")
         for (field, expected) in [("kg", weight), ("reps", reps)] {
             let identifier = AXID.workoutSessionField(field)
-            XCTAssertTrue(scrollToWorkoutControl(identifier),
-                          "\(field) input must remain reachable after folding")
+            XCTAssertTrue(scrollToWorkoutControl(identifier, mustFitInViewport: true),
+                          "The full \(field) input must remain visible after folding")
             XCTAssertEqual(app.textFields[identifier].firstMatch.value as? String, expected,
                            "\(field) input must survive each fold transition")
         }

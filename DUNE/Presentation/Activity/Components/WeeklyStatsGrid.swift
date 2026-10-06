@@ -1,13 +1,14 @@
 import SwiftUI
 
-/// Weekly training statistics displayed in a 2-column grid.
+/// Weekly training statistics, with a single column at accessibility text sizes.
 struct WeeklyStatsGrid: View {
     let stats: [ActivityStat]
 
-    @Environment(\.horizontalSizeClass) private var sizeClass
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     private var columns: [GridItem] {
-        [GridItem(.flexible(), spacing: DS.Spacing.sm),
+        if dynamicTypeSize.isAccessibilitySize { return [GridItem(.flexible())] }
+        return [GridItem(.flexible(), spacing: DS.Spacing.sm),
          GridItem(.flexible(), spacing: DS.Spacing.sm)]
     }
 
@@ -46,6 +47,7 @@ struct ActivityStatCardView: View {
     let stat: ActivityStat
 
     @Environment(\.appTheme) private var theme
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
         StandardCard {
@@ -60,12 +62,16 @@ struct ActivityStatCardView: View {
                         .font(.caption)
                         .fontWeight(.medium)
                         .foregroundStyle(DS.Color.textSecondary)
+                        .fixedSize(horizontal: false, vertical: true)
 
                     Spacer(minLength: 0)
                 }
 
                 // Value + change
-                HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xs) {
+                let valueLayout = dynamicTypeSize.isAccessibilitySize
+                    ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.xs))
+                    : AnyLayout(HStackLayout(alignment: .firstTextBaseline, spacing: DS.Spacing.xs))
+                valueLayout {
                     Text(stat.value)
                         .font(DS.Typography.cardScore)
                         .foregroundStyle(theme.heroTextGradient)
@@ -78,7 +84,7 @@ struct ActivityStatCardView: View {
                             .foregroundStyle(DS.Color.textSecondary)
                     }
 
-                    Spacer(minLength: 0)
+                    if !dynamicTypeSize.isAccessibilitySize { Spacer(minLength: 0) }
 
                     if let change = stat.change {
                         changeLabel(change, isPositive: stat.changeIsPositive ?? false)
@@ -96,6 +102,7 @@ struct ActivityStatCardView: View {
             Text(change)
                 .font(.caption2)
                 .fontWeight(.medium)
+                .fixedSize(horizontal: false, vertical: true)
         }
         .foregroundStyle(isPositive ? DS.Color.positive : DS.Color.negative)
     }
