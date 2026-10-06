@@ -1606,6 +1606,20 @@ final class DashboardViewModel {
         }
     }
 
+    private static func dashboardHour() -> Int {
+        #if DEBUG
+        let arguments = ProcessInfo.processInfo.arguments
+        if arguments.contains("--uitesting"),
+           let index = arguments.firstIndex(of: "--ui-dashboard-hour"),
+           arguments.indices.contains(index + 1),
+           let hour = Int(arguments[index + 1]),
+           (0...23).contains(hour) {
+            return hour
+        }
+        #endif
+        return Calendar.current.component(.hour, from: Date())
+    }
+
     private(set) var currentTimeBand: DashboardTimeBand = .morning
 
     // Time-band visibility flags — stored to avoid observation feedback loops.
@@ -1683,7 +1697,7 @@ final class DashboardViewModel {
     private let digestUseCase = GenerateDailyDigestUseCase()
 
     private func buildDailyDigest() {
-        let hour = Calendar.current.component(.hour, from: Date())
+        let hour = Self.dashboardHour()
         // Only generate after 17:00 (5 PM)
         guard hour >= 17 else {
             dailyDigest = nil
@@ -1719,7 +1733,7 @@ final class DashboardViewModel {
     }
 
     private func buildAdaptiveHeroMessage() {
-        let hour = Calendar.current.component(.hour, from: Date())
+        let hour = Self.dashboardHour()
         currentTimeBand = DashboardTimeBand.from(hour: hour)
         updateTimeBandVisibility()
         let exerciseMetric = sortedMetrics.first { $0.category == .exercise }
@@ -1742,7 +1756,7 @@ final class DashboardViewModel {
 
     private func buildYesterdayRecap() {
         let calendar = Calendar.current
-        let hour = calendar.component(.hour, from: Date())
+        let hour = Self.dashboardHour()
         guard let yesterday = calendar.date(byAdding: .day, value: -1, to: Date()) else {
             shouldShowYesterdayRecap = false
             return

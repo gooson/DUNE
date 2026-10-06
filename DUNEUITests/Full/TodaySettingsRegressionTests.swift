@@ -106,6 +106,10 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
     }
 
     func testWeatherCardOpensWeatherDetail() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += ["--ui-dashboard-hour", "12", "-morningBriefingDisabled", "YES"]
+        launchApp(with: configuration)
+        XCTAssertTrue(app.hasPrimaryNavigation(timeout: 8), "Seeded Today should load with a fixed daytime fixture")
         dismissMorningBriefingIfNeeded()
 
         let weatherCard = app.descendants(matching: .any)[AXID.dashboardWeatherCard].firstMatch
@@ -314,8 +318,15 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
 
     func testVisualAuditMorningBriefing() throws {
         guard VisualAudit.isEnabled else { throw XCTSkip("Opt-in visual audit only") }
+        // Reset only this scenario's presentation gate. At night the manual
+        // entry is hidden, and an earlier test may already have marked today.
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-lastBriefingDate", "1900-01-01", "-morningBriefingDisabled", "NO"
+        ]
+        launchApp(with: configuration)
         let briefing = app.descendants(matching: .any)[AXID.dashboardMorningBriefingScreen].firstMatch
-        if !briefing.exists {
+        if !briefing.waitForExistence(timeout: 8) {
             XCTAssertTrue(app.scrollToHittableElementIfNeeded("briefing-entry-card", maxSwipes: 8),
                           "UNVERIFIED: briefing entry unavailable at this time or with these fixtures")
             app.descendants(matching: .any)["briefing-entry-card"].firstMatch.auditTap()
