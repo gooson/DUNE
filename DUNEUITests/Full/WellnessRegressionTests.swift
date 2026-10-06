@@ -397,6 +397,35 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
         captureScrollContent("Posture detail", count: 5)
     }
 
+    func testPostureDetailScoreAcrossFoldStatesAtMaximumTextSize() throws {
+        guard ProcessInfo.processInfo.environment["DUNE_VISUAL_AUDIT_FOLD"] == "1" else {
+            throw XCTSkip("Opt-in fold and native posture score audit only")
+        }
+        executionTimeAllowance = 600
+        var configuration = launchConfiguration
+        configuration.additionalArguments.append(contentsOf: [
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ])
+        launchApp(with: configuration)
+        openHistory()
+        let row = app.buttons.matching(NSPredicate(format: "label CONTAINS %@", "8 metrics")).firstMatch
+        reveal(row)
+        XCTAssertTrue(row.exists && row.isHittable, "Synthetic posture record should be reachable")
+        row.auditTap()
+        for state in ["closed", "partiallyOpen", "openFlat"] {
+            VisualAudit.capture("FOLD:\(state)")
+            let scoreLabel = "Posture score 86 out of 100"
+            XCTAssertTrue(app.scrollToHittableElementIfNeeded(scoreLabel, maxSwipes: 16, direction: .down),
+                          "Posture score should remain reachable after \(state)")
+            let score = app.descendants(matching: .any)[scoreLabel].firstMatch
+            XCTAssertEqual(score.label, scoreLabel, "Folding should preserve the synthetic score")
+            XCTAssertTrue(app.windows.firstMatch.frame.insetBy(dx: 2, dy: 2).contains(score.frame),
+                          "The complete score card should fit in the \(state) window")
+            // The combined label cannot prove the ring's painted text fits.
+            VisualAudit.capture("Posture \(state) complete score card at maximum AX")
+        }
+    }
+
     func testPostureCardAtMaximumAccessibilitySize() throws {
         var configuration = launchConfiguration
         configuration.additionalArguments.append(contentsOf: [
@@ -460,6 +489,56 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
         )
         VisualAudit.capture("Posture symmetry top")
         captureScrollContent("Posture symmetry", count: 3)
+    }
+
+    func testPostureSymmetryValuesAcrossFoldStatesAtMaximumTextSize() throws {
+        guard ProcessInfo.processInfo.environment["DUNE_VISUAL_AUDIT_FOLD"] == "1" else {
+            throw XCTSkip("Opt-in fold and native symmetry value audit only")
+        }
+        executionTimeAllowance = 600
+        var configuration = launchConfiguration
+        configuration.additionalArguments.append(contentsOf: [
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ])
+        launchApp(with: configuration)
+        openHistory()
+        let row = app.buttons.matching(NSPredicate(format: "label CONTAINS %@", "8 metrics")).firstMatch
+        reveal(row)
+        XCTAssertTrue(row.exists && row.isHittable)
+        row.auditTap()
+        let symmetry = app.buttons["posture-symmetry-link"].firstMatch
+        reveal(symmetry)
+        XCTAssertTrue(symmetry.exists && symmetry.isHittable)
+        symmetry.auditTap()
+
+        let values = [
+            ("shoulderAsymmetry", "left", "50.0 cm"), ("shoulderAsymmetry", "right", "48.0 cm"),
+            ("hipAsymmetry", "left", "0.0 cm"), ("hipAsymmetry", "right", "-1.0 cm"),
+            ("kneeAlignment", "left", "8.1°"), ("kneeAlignment", "right", "2.7°")
+        ]
+        for state in ["closed", "partiallyOpen", "openFlat"] {
+            VisualAudit.capture("FOLD:\(state)")
+            let scroll = app.scrollViews["posture-symmetry-screen"].firstMatch
+            XCTAssertTrue(scroll.waitForExistence(timeout: 8), "Symmetry should remain open after folding")
+            for (metric, side, expected) in values {
+                let value = app.staticTexts["posture-symmetry-value-\(metric)-\(side)"].firstMatch
+                XCTAssertTrue(value.waitForExistence(timeout: 5), "Every synthetic symmetry value should exist")
+                for _ in 0..<16 {
+                    let viewport = scroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 8)
+                    if viewport.contains(value.frame) && value.isHittable { break }
+                    if value.frame.midY < viewport.midY { scroll.swipeDown(velocity: .slow) }
+                    else { scroll.swipeUp(velocity: .slow) }
+                }
+                XCTAssertEqual(value.label, expected, "Folding must preserve the value and unit")
+                XCTAssertTrue(value.isHittable && scroll.frame.intersection(app.windows.firstMatch.frame)
+                    .insetBy(dx: 8, dy: 8).contains(value.frame), "The whole symmetry value should be visible")
+                let sideLabel = app.staticTexts["posture-symmetry-side-\(metric)-\(side)"].firstMatch
+                XCTAssertTrue(sideLabel.exists && sideLabel.frame.height > 0)
+                XCTAssertLessThanOrEqual(value.frame.height, sideLabel.frame.height * 1.75,
+                                         "A numeric value and unit must remain one line, not wrap character by character")
+                VisualAudit.capture("Posture \(state) symmetry \(metric) \(side) complete value")
+            }
+        }
     }
 
     func testCameraAndRealtimeAvailability() throws {

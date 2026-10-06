@@ -4,6 +4,7 @@ import SwiftUI
 struct PostureSymmetryView: View {
     let record: PostureAssessmentRecord
     @State private var viewModel = PostureSymmetryViewModel()
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
         ScrollView {
@@ -58,41 +59,56 @@ struct PostureSymmetryView: View {
     private func symmetryCard(_ detail: SymmetryDetail) -> some View {
         VStack(alignment: .leading, spacing: DS.Spacing.md) {
             // Metric title + status
-            HStack {
-                Image(systemName: detail.metric.iconName)
-                    .foregroundStyle(detail.status.color)
-                Text(detail.metric.displayName)
-                    .font(.subheadline.weight(.medium))
-                Spacer()
+            let titleLayout = dynamicTypeSize.isAccessibilitySize
+                ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.xs))
+                : AnyLayout(HStackLayout())
+            titleLayout {
+                HStack {
+                    Image(systemName: detail.metric.iconName)
+                        .foregroundStyle(detail.status.color)
+                    Text(detail.metric.displayName)
+                        .font(.subheadline.weight(.medium))
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                if !dynamicTypeSize.isAccessibilitySize { Spacer() }
                 Label(detail.status.displayName, systemImage: detail.status.iconName)
                     .font(.caption.weight(.medium))
                     .foregroundStyle(detail.status.color)
             }
 
             // Left-right bar comparison
-            HStack(spacing: DS.Spacing.md) {
-                // Left side
-                VStack(alignment: .trailing, spacing: 4) {
-                    Text("L")
-                        .font(.caption2.weight(.bold))
-                        .foregroundStyle(.secondary)
-                    Text(formattedPostureMetricValue(detail.leftValue, unit: detail.unit))
-                        .font(.callout.weight(.semibold).monospacedDigit())
-                }
-                .frame(width: 60, alignment: .trailing)
+            if dynamicTypeSize.isAccessibilitySize {
+                VStack(spacing: DS.Spacing.sm) {
+                    HStack(spacing: DS.Spacing.xs) {
+                        sideLabel("L", metric: detail.metric, side: "left")
+                        metricValue(detail.leftValue, detail: detail, side: "left")
+                        Spacer(minLength: 0)
+                    }
 
-                // Visual bar
-                symmetryBar(detail)
+                    symmetryBar(detail)
 
-                // Right side
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("R")
-                        .font(.caption2.weight(.bold))
-                        .foregroundStyle(.secondary)
-                    Text(formattedPostureMetricValue(detail.rightValue, unit: detail.unit))
-                        .font(.callout.weight(.semibold).monospacedDigit())
+                    HStack(spacing: DS.Spacing.xs) {
+                        Spacer(minLength: 0)
+                        sideLabel("R", metric: detail.metric, side: "right")
+                        metricValue(detail.rightValue, detail: detail, side: "right")
+                    }
                 }
-                .frame(width: 60, alignment: .leading)
+            } else {
+                HStack(spacing: DS.Spacing.md) {
+                    VStack(alignment: .trailing, spacing: 4) {
+                        sideLabel("L", metric: detail.metric, side: "left")
+                        metricValue(detail.leftValue, detail: detail, side: "left")
+                    }
+                    .frame(width: 60, alignment: .trailing)
+
+                    symmetryBar(detail)
+
+                    VStack(alignment: .leading, spacing: 4) {
+                        sideLabel("R", metric: detail.metric, side: "right")
+                        metricValue(detail.rightValue, detail: detail, side: "right")
+                    }
+                    .frame(width: 60, alignment: .leading)
+                }
             }
 
             // Difference summary
@@ -108,6 +124,20 @@ struct PostureSymmetryView: View {
         }
         .padding(DS.Spacing.md)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
+    }
+
+    private func sideLabel(_ label: LocalizedStringKey, metric: PostureMetricType, side: String) -> some View {
+        Text(label)
+            .font(.caption2.weight(.bold))
+            .foregroundStyle(.secondary)
+            .accessibilityIdentifier("posture-symmetry-side-\(metric.rawValue)-\(side)")
+    }
+
+    private func metricValue(_ value: Double, detail: SymmetryDetail, side: String) -> some View {
+        Text(formattedPostureMetricValue(value, unit: detail.unit))
+            .font(.callout.weight(.semibold).monospacedDigit())
+            .fixedSize(horizontal: dynamicTypeSize.isAccessibilitySize, vertical: false)
+            .accessibilityIdentifier("posture-symmetry-value-\(detail.metric.rawValue)-\(side)")
     }
 
     // MARK: - Symmetry Bar
