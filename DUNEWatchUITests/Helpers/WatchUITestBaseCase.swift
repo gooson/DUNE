@@ -583,7 +583,7 @@ class WatchUITestBaseCase: XCTestCase {
     /// Checks the actual accessible button frame before the test performs any scrolling.
     func assertFirstViewportButtons(_ identifiers: [String], screenshot: String) {
         for identifier in identifiers {
-            XCTAssertTrue(app.buttons[identifier].waitForExistence(timeout: 5), "Missing \(identifier)")
+            XCTAssertTrue(app.buttons[identifier].firstMatch.waitForExistence(timeout: 5), "Missing \(identifier)")
         }
         addScreenshotAttachment(named: defaultArtifactName(suffix: screenshot))
 
@@ -591,7 +591,8 @@ class WatchUITestBaseCase: XCTestCase {
         XCTAssertGreaterThan(screen.width, 0)
         XCTAssertGreaterThan(screen.height, 0)
         for identifier in identifiers {
-            let button = app.buttons[identifier]
+            // watchOS may expose a toolbar button and its nested control with the same identifier.
+            let button = app.buttons[identifier].firstMatch
             let frame = button.frame
             XCTAssertTrue(button.isHittable, "\(identifier) must be tappable without scrolling")
             XCTAssertGreaterThan(frame.width, 0, "\(identifier) must have a real frame")

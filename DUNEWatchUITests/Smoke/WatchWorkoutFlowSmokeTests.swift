@@ -86,7 +86,7 @@ final class WatchWorkoutFlowSmokeTests: WatchUITestBaseCase {
 
         XCTAssertTrue(tapElement(WatchAXID.restTimerEndButton, timeout: 5))
         // watchOS exposes a confirmation dialog's cancel role as its system close button.
-        let cancel = app.buttons["AX_ActionContentControllerCancelButton"]
+        let cancel = app.buttons["AX_ActionContentControllerCancelButton"].firstMatch
         XCTAssertTrue(cancel.waitForExistence(timeout: 5), "End confirmation should offer cancellation")
         cancel.tap()
         XCTAssertTrue(elementExists(WatchAXID.restTimerScreen, timeout: 5), "Workout should remain active")
