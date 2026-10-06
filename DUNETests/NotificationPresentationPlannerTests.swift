@@ -40,6 +40,18 @@ struct NotificationPresentationPlannerStandaloneTests {
         #expect(plan == .openNotificationHub)
     }
 
+    @Test("daily digest opens its summary in Today")
+    func dailyDigestRoute() {
+        let plan = NotificationPresentationPlanner.plan(for: .dailyDigest, requestID: 7)
+        #expect(plan == .openDailyDigestInToday(requestID: 7))
+    }
+
+    @Test("life checklist opens the Life tab")
+    func lifeChecklistRoute() {
+        let plan = NotificationPresentationPlanner.plan(for: .lifeChecklist, requestID: 8)
+        #expect(plan == .openLifeChecklist)
+    }
+
     @Test("activityPersonalRecords route produces push plan with personalRecords destination")
     func activityPersonalRecordsRoute() throws {
         let route = NotificationRoute.activityPersonalRecords
@@ -119,6 +131,31 @@ struct NotificationPresentationStateReducerTests {
         #expect(state.notificationHubSignal == 1)
         #expect(state.notificationRouteSignal == 0)
         #expect(state.notificationPresentationRequestID == 1)
+    }
+
+    @Test("daily digest replaces Today navigation with its summary")
+    func dailyDigestRouteAppliesState() {
+        var state = makeState(selectedSection: .life)
+        state.paths.life = makePath(count: 1)
+
+        state.apply(NotificationNavigationRequest(itemID: "digest-item", route: .dailyDigest))
+
+        #expect(state.selectedSection == .today)
+        #expect(state.paths.today.count == 1)
+        #expect(state.paths.life.isEmpty)
+    }
+
+    @Test("life checklist selects Life and reveals the checklist")
+    func lifeChecklistRouteAppliesState() {
+        var state = makeState(selectedSection: .today)
+        state.paths.today = makePath(count: 1)
+
+        state.apply(NotificationNavigationRequest(itemID: "life-item", route: .lifeChecklist))
+
+        #expect(state.selectedSection == .life)
+        #expect(state.paths.today.isEmpty)
+        #expect(state.paths.life.isEmpty)
+        #expect(state.lifeChecklistSignal == 1)
     }
 
     @Test("a second hub request replaces the selected item and increments its signal")
@@ -201,7 +238,8 @@ struct NotificationPresentationStateReducerTests {
             paths: NotificationPresentationPaths(),
             notificationPresentationRequestID: 0,
             notificationRouteSignal: 0,
-            notificationHubSignal: 0
+            notificationHubSignal: 0,
+            lifeChecklistSignal: 0
         )
     }
 

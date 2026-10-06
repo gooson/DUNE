@@ -4,6 +4,7 @@ enum NotificationPresentationDestination: Hashable {
     case personalRecords(requestID: Int)
     case sleepDetail(requestID: Int)
     case postureAssessment(requestID: Int)
+    case dailyDigest(requestID: Int)
     case notificationHub(itemID: String?, requestID: Int)
 }
 
@@ -12,6 +13,8 @@ enum NotificationPresentationPlan: Equatable {
     case openWorkoutInActivity(workoutID: String)
     case openNotificationHub
     case openSleepDetailInWellness(requestID: Int)
+    case openDailyDigestInToday(requestID: Int)
+    case openLifeChecklist
 }
 
 enum NotificationPresentationPlanner {
@@ -28,6 +31,10 @@ enum NotificationPresentationPlanner {
             return .openSleepDetailInWellness(requestID: requestID)
         case .postureAssessment:
             return .push(.postureAssessment(requestID: requestID))
+        case .dailyDigest:
+            return .openDailyDigestInToday(requestID: requestID)
+        case .lifeChecklist:
+            return .openLifeChecklist
         }
     }
 
@@ -35,7 +42,8 @@ enum NotificationPresentationPlanner {
         switch plan {
         case .push(let destination):
             [destination]
-        case .openWorkoutInActivity, .openNotificationHub, .openSleepDetailInWellness:
+        case .openWorkoutInActivity, .openNotificationHub, .openSleepDetailInWellness,
+             .openDailyDigestInToday, .openLifeChecklist:
             []
         }
     }
@@ -90,6 +98,7 @@ struct NotificationPresentationState {
     var notificationPresentationRequestID: Int
     var notificationRouteSignal: Int
     var notificationHubSignal: Int
+    var lifeChecklistSignal: Int
 
     mutating func apply(_ request: NotificationNavigationRequest) {
         notificationPresentationRequestID += 1
@@ -121,6 +130,14 @@ struct NotificationPresentationState {
             paths.clearAll(except: .wellness)
             selectedSection = .wellness
             paths.setPath([.sleepDetail(requestID: requestID)], for: .wellness)
+        case .openDailyDigestInToday(let requestID):
+            paths.setPath([.dailyDigest(requestID: requestID)], for: .today)
+            selectedSection = .today
+            notificationHubSignal += 1
+        case .openLifeChecklist:
+            paths.clearAll()
+            selectedSection = .life
+            lifeChecklistSignal += 1
         }
     }
 }
@@ -149,6 +166,7 @@ struct ContentView: View {
     @State private var notificationPresentationRequestID = 0
     @State private var notificationRouteSignal = 0
     @State private var notificationHubSignal = 0
+    @State private var lifeChecklistSignal = 0
     #if DEBUG
     @State private var didOpenUITestNotification = false
     #endif
@@ -236,7 +254,8 @@ struct ContentView: View {
                 NavigationStack(path: $lifeNavPath) {
                     LifeView(
                         scrollToTopSignal: lifeScrollToTopSignal,
-                        refreshSignal: refreshSignal
+                        refreshSignal: refreshSignal,
+                        checklistSignal: lifeChecklistSignal
                     )
                     .navigationDestination(for: NotificationPresentationDestination.self) { destination in
                         notificationDestinationView(for: destination)
@@ -381,9 +400,16 @@ struct ContentView: View {
             NotificationSleepDetailPushView(sharedHealthDataService: sharedHealthDataService)
         case .postureAssessment:
             PostureHistoryView()
+        case .dailyDigest:
+            DailyDigestNotificationView(
+                sharedHealthDataService: sharedHealthDataService,
+                scoreRefreshService: scoreRefreshService,
+                canLoadHealthKitData: canLoadHealthKitData
+            )
         case .notificationHub(let itemID, let requestID):
             NotificationHubView(
                 sharedHealthDataService: sharedHealthDataService,
+                canLoadHealthKitData: canLoadHealthKitData,
                 requestedItemID: itemID,
                 navigationRequestID: requestID
             )
@@ -406,7 +432,8 @@ struct ContentView: View {
             paths: currentNotificationPresentationPaths,
             notificationPresentationRequestID: notificationPresentationRequestID,
             notificationRouteSignal: notificationRouteSignal,
-            notificationHubSignal: notificationHubSignal
+            notificationHubSignal: notificationHubSignal,
+            lifeChecklistSignal: lifeChecklistSignal
         )
     }
 
@@ -421,6 +448,7 @@ struct ContentView: View {
         notificationPresentationRequestID = state.notificationPresentationRequestID
         notificationRouteSignal = state.notificationRouteSignal
         notificationHubSignal = state.notificationHubSignal
+        lifeChecklistSignal = state.lifeChecklistSignal
     }
 
     @MainActor

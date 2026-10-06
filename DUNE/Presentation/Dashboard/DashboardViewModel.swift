@@ -192,7 +192,7 @@ final class DashboardViewModel {
         }
     }
 
-    func loadData(canLoadHealthKitData: Bool = true) async {
+    func loadData(canLoadHealthKitData: Bool = true, forceDailyDigest: Bool = false) async {
         let requestID = beginLoadRequest()
         isLoading = true
         defer { finishLoadRequest(requestID) }
@@ -307,7 +307,7 @@ final class DashboardViewModel {
         buildAdaptiveHeroMessage()
         buildYesterdayRecap()
         buildCumulativeStressScore()
-        buildDailyDigest()
+        buildDailyDigest(force: forceDailyDigest)
         hasLoadedOnce = true
         lastUpdated = Date()
         WidgetDataWriter.writeConditionScore(conditionScore)
@@ -1682,10 +1682,10 @@ final class DashboardViewModel {
 
     private let digestUseCase = GenerateDailyDigestUseCase()
 
-    private func buildDailyDigest() {
+    private func buildDailyDigest(force: Bool = false) {
         let hour = Calendar.current.component(.hour, from: Date())
-        // Only generate after 17:00 (5 PM)
-        guard hour >= 17 else {
+        // The notification detail can request a digest before the evening card appears.
+        guard hour >= 17 || force else {
             dailyDigest = nil
             shouldShowDailyDigest = false
             return
@@ -1706,7 +1706,7 @@ final class DashboardViewModel {
         )
 
         dailyDigest = digestUseCase.execute(metrics: metrics)
-        shouldShowDailyDigest = dailyDigest != nil && (currentTimeBand == .evening || currentTimeBand == .night)
+        shouldShowDailyDigest = dailyDigest != nil && (force || currentTimeBand == .evening || currentTimeBand == .night)
     }
 
     private func updateTimeBandVisibility() {

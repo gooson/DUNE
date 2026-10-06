@@ -306,7 +306,7 @@ struct NotificationInboxManagerTests {
         #expect(manager.consumePendingNavigationRequest()?.route == .postureAssessment)
     }
 
-    @Test("Daily digest without an item ID opens the notification hub")
+    @Test("Daily digest without an item ID opens the summary")
     func dailyDigestFallbackRoute() {
         let manager = NotificationInboxManager(store: makeStore(), badgeUpdater: { _ in })
         manager.handleNotificationResponse(
@@ -315,7 +315,51 @@ struct NotificationInboxManagerTests {
             fallbackBody: "Review your daily health summary"
         )
 
-        #expect(manager.consumePendingNavigationRequest()?.route == .notificationHub)
+        #expect(manager.consumePendingNavigationRequest()?.route == .dailyDigest)
+    }
+
+    @Test("Legacy digest and checklist items bypass the old notification-only destination")
+    func legacySummaryAndChecklistRoutes() {
+        let manager = NotificationInboxManager(store: makeStore(), badgeUpdater: { _ in })
+        for (type, expectedRoute) in [
+            (HealthInsight.InsightType.dailyDigest, NotificationRoute.dailyDigest),
+            (.lifeChecklistReminder, .lifeChecklist)
+        ] {
+            let item = manager.recordSentInsight(HealthInsight(
+                type: type,
+                title: "Legacy reminder",
+                body: "Tap to review",
+                severity: .informational,
+                route: .notificationHub
+            ))
+
+            #expect(manager.resolvedRoute(for: item) == expectedRoute)
+            manager.handleNotificationResponse(userInfo: [
+                "notificationItemID": item.id,
+                "notificationInsightType": type.rawValue,
+                "notificationRouteKind": NotificationRoute.notificationHub.destination.rawValue
+            ])
+            #expect(manager.consumePendingNavigationRequest()?.route == expectedRoute)
+        }
+    }
+
+    @Test("Already scheduled legacy reminders route by insight type")
+    func legacyScheduledReminderRoutes() {
+        let manager = NotificationInboxManager(store: makeStore(), badgeUpdater: { _ in })
+        for (type, expectedRoute) in [
+            (HealthInsight.InsightType.dailyDigest, NotificationRoute.dailyDigest),
+            (.lifeChecklistReminder, .lifeChecklist)
+        ] {
+            manager.handleNotificationResponse(
+                userInfo: [
+                    "notificationInsightType": type.rawValue,
+                    "notificationRouteKind": NotificationRoute.notificationHub.destination.rawValue
+                ],
+                fallbackTitle: "Legacy reminder",
+                fallbackBody: "Tap to review"
+            )
+            #expect(manager.consumePendingNavigationRequest()?.route == expectedRoute)
+        }
     }
 
     @Test("handleNotificationResponse marks non-routed notification as read")
