@@ -98,12 +98,14 @@ class UITestBaseCase: XCTestCase {
     /// Force-terminate the AUT via `xcrun simctl terminate`.
     /// Uses `posix_spawn` because Foundation `Process` is unavailable in the iOS Simulator SDK.
     private static func forceTerminateAppProcess() {
+        guard let simulatorID = ProcessInfo.processInfo.environment["SIMULATOR_UDID"],
+              UUID(uuidString: simulatorID) != nil else { return }
         var pid = pid_t()
         var args: [UnsafeMutablePointer<CChar>?] = [
             strdup("/usr/bin/xcrun"),
             strdup("simctl"),
             strdup("terminate"),
-            strdup("booted"),
+            strdup(simulatorID),
             strdup(appBundleID),
             nil
         ]
