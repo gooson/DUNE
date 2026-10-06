@@ -504,16 +504,16 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         )
 
         XCTAssertTrue(
-            app.descendants(matching: .any)[AXID.activityPersonalRecordsMetricPicker].firstMatch.waitForExistence(timeout: 15),
-            "Personal Records detail should expose the metric picker"
+            app.descendants(matching: .any)[AXID.activityPersonalRecordsPeriodPicker].firstMatch.waitForExistence(timeout: 15),
+            "Personal Records detail should expose the period picker"
         )
         XCTAssertTrue(
             app.descendants(matching: .any)[AXID.activityPersonalRecordsTimelineChart].firstMatch.waitForExistence(timeout: 15),
             "Personal Records detail should render the timeline chart"
         )
         XCTAssertTrue(
-            app.descendants(matching: .any)[AXID.activityPersonalRecordsRewardSummary].firstMatch.waitForExistence(timeout: 15),
-            "Personal Records detail should show the reward summary"
+            app.descendants(matching: .any)[AXID.activityPersonalRecordsRewardProgress].firstMatch.waitForExistence(timeout: 15),
+            "Personal Records detail should show reward progress"
         )
         XCTAssertTrue(
             app.descendants(matching: .any)[AXID.activityPersonalRecordsAchievementHistory].firstMatch.waitForExistence(timeout: 15),
@@ -1524,11 +1524,9 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         let dashboardHero = app.descendants(matching: .any)[AXID.dashboardHeroCondition].firstMatch
         XCTAssertTrue(dashboardHero.waitForExistence(timeout: 12), "Dashboard hero should appear before opening notifications")
 
-        dismissMorningBriefingIfNeeded()
-
         let notificationsButton = app.descendants(matching: .any)[AXID.dashboardToolbarNotifications].firstMatch
         XCTAssertTrue(notificationsButton.waitForExistence(timeout: 5), "Notifications button should exist on the dashboard")
-        XCTAssertTrue(waitForHittable(notificationsButton, timeout: 8), "Notifications button should be tappable")
+        XCTAssertTrue(waitForNotificationButton(notificationsButton), "Notifications button should be tappable")
         notificationsButton.auditTap()
 
         let hub = app.descendants(matching: .any)[AXID.notificationHubScreen].firstMatch
@@ -1603,26 +1601,19 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         return first.exists || second.exists
     }
 
-    private func dismissMorningBriefingIfNeeded() {
+    private func waitForNotificationButton(_ button: XCUIElement, timeout: TimeInterval = 12) -> Bool {
         let briefingScreen = app.descendants(matching: .any)[AXID.dashboardMorningBriefingScreen].firstMatch
-        let deadline = Date().addingTimeInterval(2)
+        let dismissButton = app.descendants(matching: .any)[AXID.dashboardMorningBriefingDismiss].firstMatch
+        let deadline = Date().addingTimeInterval(timeout)
+
         while Date() < deadline {
-            if briefingScreen.exists { break }
+            if button.isHittable { return true }
+            if briefingScreen.exists && dismissButton.isHittable {
+                dismissButton.tap()
+            }
             RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.1))
         }
-        guard briefingScreen.exists else { return }
-
-        let dismissButton = app.descendants(matching: .any)[AXID.dashboardMorningBriefingDismiss].firstMatch
-        XCTAssertTrue(dismissButton.waitForExistence(timeout: 2), "Morning Briefing dismiss button should exist")
-        dismissButton.auditTap()
-
-        let predicate = NSPredicate(format: "exists == false")
-        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: briefingScreen)
-        XCTAssertEqual(
-            XCTWaiter.wait(for: [expectation], timeout: 5),
-            .completed,
-            "Morning Briefing should dismiss before opening notifications"
-        )
+        return button.isHittable
     }
 
 }

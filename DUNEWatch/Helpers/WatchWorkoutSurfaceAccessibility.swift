@@ -50,8 +50,8 @@ enum WatchWorkoutSurfaceAccessibility {
     static let restTimerScreen = "watch-rest-timer-screen"
     static let restTimerCountdown = "watch-rest-timer-countdown"
     static let restTimerAddTimeButton = "watch-rest-timer-add-time"
-    static let restTimerSkipButton = "watch-rest-timer-skip"
     static let restTimerEndButton = "watch-rest-timer-end"
+    static let restTimerSkipButton = "watch-rest-timer-skip"
 
     static let setInputScreen = "watch-set-input-screen"
     static let setInputDoneButton = "watch-set-input-done"
@@ -72,6 +72,7 @@ enum WatchWorkoutSurfaceAccessibility {
     static let sessionSummaryStatsGrid = "watch-session-summary-stats"
     static let sessionSummaryEffortButton = "watch-summary-effort-button"
     static let sessionSummaryDoneButton = "watch-session-summary-done"
+    static let sessionSummarySaveStatus = "watch-session-summary-save-status"
     static let sessionSummaryExerciseBreakdown = "watch-session-summary-breakdown"
     static let sessionSummaryEffortSheet = "watch-session-summary-effort-sheet"
     static let sessionSummaryEffortDoneButton = "watch-session-summary-effort-done"

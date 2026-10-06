@@ -7,6 +7,7 @@ class UITestBaseCase: XCTestCase {
         case empty = "empty"
         case defaultSeeded = "default-seeded"
         case activityExerciseSeeded = "activity-exercise-seeded"
+        case notificationRoutingSeeded = "notification-routing-seeded"
         case fatigueRegression = "fatigue-regression"
     }
 

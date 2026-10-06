@@ -3,6 +3,8 @@ import SwiftUI
 enum NotificationPresentationDestination: Hashable {
     case personalRecords(requestID: Int)
     case sleepDetail(requestID: Int)
+    case postureAssessment(requestID: Int)
+    case notificationHub(itemID: String?, requestID: Int)
 }
 
 enum NotificationPresentationPlan: Equatable {
@@ -24,6 +26,8 @@ enum NotificationPresentationPlanner {
             return .openNotificationHub
         case .sleepDetail:
             return .openSleepDetailInWellness(requestID: requestID)
+        case .postureAssessment:
+            return .push(.postureAssessment(requestID: requestID))
         }
     }
 
@@ -108,7 +112,9 @@ struct NotificationPresentationState {
             notificationOpenWorkoutID = workoutID
             notificationRouteSignal += 1
         case .openNotificationHub:
-            paths.clearAll()
+            paths.setPath([
+                .notificationHub(itemID: request.itemID, requestID: notificationPresentationRequestID)
+            ], for: .today)
             selectedSection = .today
             notificationHubSignal += 1
         case .openSleepDetailInWellness(let requestID):
@@ -143,6 +149,9 @@ struct ContentView: View {
     @State private var notificationPresentationRequestID = 0
     @State private var notificationRouteSignal = 0
     @State private var notificationHubSignal = 0
+    #if DEBUG
+    @State private var didOpenUITestNotification = false
+    #endif
     private let notificationInboxManager = NotificationInboxManager.shared
 
     init(
@@ -170,6 +179,8 @@ struct ContentView: View {
                         scrollToTopSignal: todayScrollToTopSignal,
                         refreshSignal: refreshSignal,
                         notificationHubSignal: notificationHubSignal,
+                        notificationHubIsActive: notificationHubSignal > 0 && !todayNavPath.isEmpty,
+                        onOpenNotifications: openNotificationHubManually,
                         launchExperienceReady: launchExperienceReady,
                         canLoadHealthKitData: canLoadHealthKitData
                     )
@@ -311,6 +322,11 @@ struct ContentView: View {
                     handleNotificationNavigationRequest(request)
                 }
             }
+            #if DEBUG
+            await MainActor.run {
+                openUITestNotificationIfRequested()
+            }
+            #endif
         }
         #if !os(visionOS)
         .fullScreenCover(isPresented: $isShowingLaunchPostureCapture) {
@@ -363,6 +379,14 @@ struct ContentView: View {
             )
         case .sleepDetail:
             NotificationSleepDetailPushView(sharedHealthDataService: sharedHealthDataService)
+        case .postureAssessment:
+            PostureHistoryView()
+        case .notificationHub(let itemID, let requestID):
+            NotificationHubView(
+                sharedHealthDataService: sharedHealthDataService,
+                requestedItemID: itemID,
+                navigationRequestID: requestID
+            )
         }
     }
 
@@ -405,9 +429,38 @@ struct ContentView: View {
         state.apply(request)
         applyNotificationPresentationState(state)
     }
+
+    @MainActor
+    private func openNotificationHubManually() {
+        notificationPresentationRequestID += 1
+        var path = NavigationPath()
+        path.append(NotificationPresentationDestination.notificationHub(
+            itemID: nil,
+            requestID: notificationPresentationRequestID
+        ))
+        todayNavPath = path
+        selectedSection = .today
+        notificationHubSignal += 1
+    }
+
+    #if DEBUG
+    @MainActor
+    private func openUITestNotificationIfRequested() {
+        guard !didOpenUITestNotification else { return }
+        let arguments = ProcessInfo.processInfo.arguments
+        guard arguments.contains("--uitesting"),
+              let index = arguments.firstIndex(of: "--ui-open-notification-title"),
+              arguments.indices.contains(index + 1) else { return }
+        didOpenUITestNotification = true
+        guard let item = notificationInboxManager.items().first(where: { $0.title == arguments[index + 1] }) else { return }
+        notificationInboxManager.handleNotificationResponse(
+            userInfo: notificationInboxManager.notificationUserInfo(for: item)
+        )
+    }
+    #endif
 }
 
-private struct NotificationSleepDetailPushView: View {
+struct NotificationSleepDetailPushView: View {
     @State private var viewModel: WellnessViewModel
 
     init(sharedHealthDataService: SharedHealthDataService?) {
@@ -428,6 +481,7 @@ private struct NotificationSleepDetailPushView: View {
                 )
             }
         }
+        .accessibilityIdentifier("notification-sleep-detail-screen")
         .task {
             viewModel.loadData()
         }

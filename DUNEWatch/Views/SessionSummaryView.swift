@@ -6,6 +6,7 @@ import WatchKit
 struct SessionSummaryView: View {
     @Environment(WorkoutManager.self) private var workoutManager
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.scenePhase) private var scenePhase
     @Query private var exerciseRecords: [ExerciseRecord]
 
     let startDate: Date
@@ -17,7 +18,12 @@ struct SessionSummaryView: View {
 
     @State private var hasSaved = false
     @State private var isSaving = false
+    @State private var didStartAutomaticSave = false
     @State private var saveError: String?
+    @State private var didCreateRecords = false
+    @State private var savedRecords: [ExerciseRecord] = []
+    @State private var savedEffort: Int?
+    @State private var didSendCompletionUpdate = false
     @State private var effort: Int = WatchEffortInputPolicy.defaultEffort
     @State private var didInitializeEffort = false
     @State private var lastEffortHapticDate: Date = .distantPast
@@ -31,13 +37,29 @@ struct SessionSummaryView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: DS.Spacing.lg) {
-                // Header
-                Image(systemName: "checkmark.circle.fill")
-                    .font(.system(size: 32))
-                    .foregroundStyle(DS.Color.positive)
-
-                Text("Workout Complete")
-                    .font(DS.Typography.exerciseName)
+                HStack(spacing: DS.Spacing.sm) {
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.title3)
+                        .foregroundStyle(DS.Color.positive)
+                    VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                        Text("Workout Complete")
+                            .font(DS.Typography.exerciseName)
+                        if saveError != nil {
+                            Text("Save Error")
+                                .foregroundStyle(DS.Color.negative)
+                                .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionSummarySaveStatus)
+                        } else if hasSaved {
+                            Text("Saved")
+                                .foregroundStyle(DS.Color.positive)
+                                .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionSummarySaveStatus)
+                        } else if isSaving || workoutManager.isFinalizingWorkout {
+                            Text("Saving...")
+                                .foregroundStyle(.secondary)
+                                .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionSummarySaveStatus)
+                        }
+                    }
+                    .font(.caption2)
+                }
 
                 Divider()
 
@@ -61,20 +83,21 @@ struct SessionSummaryView: View {
                     exerciseBreakdown
                 }
 
-                // Done button
-                Button {
-                    saveAndDismiss()
-                } label: {
-                    Text(workoutManager.isFinalizingWorkout && !isSaving ? "Finishing..." : "Done")
-                        .font(DS.Typography.tileTitle)
-                        .frame(maxWidth: .infinity)
-                }
-                .buttonStyle(.borderedProminent)
-                .tint(DS.Color.positive)
-                .disabled(isSaving || workoutManager.isFinalizingWorkout)
-                .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionSummaryDoneButton)
-                .padding(.top, DS.Spacing.md)
             }
+            .padding(.horizontal, DS.Spacing.xs)
+        }
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            Button {
+                finishSummary()
+            } label: {
+                Text("Done")
+                    .font(DS.Typography.tileTitle)
+                    .frame(maxWidth: .infinity, minHeight: 44)
+            }
+            .buttonStyle(.borderedProminent)
+            .tint(DS.Color.positive)
+            .disabled(isSaving || workoutManager.isFinalizingWorkout)
+            .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionSummaryDoneButton)
             .padding(.horizontal, DS.Spacing.xs)
         }
         .background { WatchWaveBackground(color: DS.Color.positive) }
@@ -85,8 +108,13 @@ struct SessionSummaryView: View {
             get: { saveError != nil },
             set: { if !$0 { saveError = nil } }
         )) {
-            Button("Dismiss Without Saving") {
-                workoutManager.reset()
+            Button("Retry") {
+                retrySave()
+            }
+            if hasSaved {
+                Button("Done") { workoutManager.reset() }
+            } else {
+                Button("Dismiss Without Saving") { workoutManager.reset() }
             }
         } message: {
             Text(saveError ?? "")
@@ -112,6 +140,10 @@ struct SessionSummaryView: View {
                 didPresentEffortInput = true
                 showEffortInput = true
             }
+            if !didStartAutomaticSave {
+                didStartAutomaticSave = true
+                startSaving()
+            }
         }
         .onChange(of: effortSuggestion?.suggestedEffort) { _, _ in
             initializeSuggestedEffortIfNeeded()
@@ -121,6 +153,12 @@ struct SessionSummaryView: View {
                 startEffortInputAutoCloseTimer()
             } else {
                 cancelEffortInputAutoCloseTimer()
+                if persistEffortIfNeeded() { sendCompletionUpdateIfNeeded() }
+            }
+        }
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .background {
+                if persistEffortIfNeeded() { sendCompletionUpdateIfNeeded() }
             }
         }
         .onDisappear {
@@ -340,20 +378,45 @@ struct SessionSummaryView: View {
 
     // MARK: - Save
 
-    private func saveAndDismiss() {
+    private func finishSummary() {
+        if hasSaved {
+            if persistEffortIfNeeded() {
+                sendCompletionUpdateIfNeeded()
+                workoutManager.reset()
+            }
+            return
+        }
+        startSaving(dismissOnSuccess: true)
+    }
+
+    private func retrySave() {
+        saveError = nil
+        if hasSaved {
+            _ = persistEffortIfNeeded()
+        } else {
+            startSaving()
+        }
+    }
+
+    private func startSaving(dismissOnSuccess: Bool = false) {
         guard !isSaving, !hasSaved else { return }
+        saveError = nil
         isSaving = true
         Task {
-            await saveAndDismissAsync()
+            await saveSession(dismissOnSuccess: dismissOnSuccess)
         }
     }
 
     @MainActor
-    private func saveAndDismissAsync() async {
-        // Cardio sessions: HKWorkout is saved by HKLiveWorkoutBuilder — no SwiftData records to save.
+    private func saveSession(dismissOnSuccess: Bool) async {
+        // Cardio HKWorkout is finalized by HKLiveWorkoutBuilder before its record is saved.
         if workoutManager.isCardioMode {
             await workoutManager.waitForWorkoutFinalization()
-            saveCardioRecord(healthKitWorkoutID: workoutManager.healthKitWorkoutUUID)
+            if !didCreateRecords {
+                savedRecords = [saveCardioRecord(healthKitWorkoutID: workoutManager.healthKitWorkoutUUID)]
+                didCreateRecords = true
+            }
+            savedRecords.forEach { $0.rpe = effort }
             do {
                 try modelContext.save()
             } catch {
@@ -362,8 +425,10 @@ struct SessionSummaryView: View {
                 return
             }
             hasSaved = true
+            savedEffort = effort
+            saveError = nil
             isSaving = false
-            workoutManager.reset()
+            if dismissOnSuccess { workoutManager.reset() }
             return
         }
 
@@ -376,17 +441,16 @@ struct SessionSummaryView: View {
         // Wait for HKWorkout finalization (builder discard for strength).
         await workoutManager.waitForWorkoutFinalization()
 
-        // Compute per-exercise allocation once (DRY — Correction #37, #148).
-        let allocation = perExerciseAllocation()
-
-        // Save individual HKWorkout per exercise and collect UUIDs (strength only).
-        let perExerciseIDs: [Int: String]
-        if workoutManager.workoutMode == .strength {
-            perExerciseIDs = await saveIndividualHealthKitWorkouts(allocation: allocation)
-        } else {
-            perExerciseIDs = [:]
+        if !didCreateRecords {
+            // Cache the created workouts and records so a SwiftData retry cannot duplicate them.
+            let allocation = perExerciseAllocation()
+            let perExerciseIDs = workoutManager.workoutMode == .strength
+                ? await saveIndividualHealthKitWorkouts(allocation: allocation)
+                : [:]
+            savedRecords = saveWorkoutRecords(perExerciseHealthKitIDs: perExerciseIDs, allocation: allocation)
+            didCreateRecords = true
         }
-        let records = saveWorkoutRecords(perExerciseHealthKitIDs: perExerciseIDs, allocation: allocation)
+        savedRecords.forEach { $0.rpe = effort }
 
         // Explicit save before reset — reset() triggers view transition
         // which can prevent SwiftData auto-save from flushing.
@@ -398,16 +462,51 @@ struct SessionSummaryView: View {
             return
         }
 
-        // Send workout data to iPhone via WatchConnectivity as backup
-        for record in records {
-            let update = WatchWorkoutRecordBuilder.makeUpdate(from: record)
-            WatchConnectivityManager.shared.sendWorkoutCompletion(update)
-        }
         recordExerciseUsage()
 
         hasSaved = true
+        savedEffort = effort
+        saveError = nil
         isSaving = false
-        workoutManager.reset()
+        if !showEffortInput || scenePhase == .background {
+            sendCompletionUpdateIfNeeded()
+        }
+        if dismissOnSuccess { workoutManager.reset() }
+    }
+
+    /// Send the first backup after the effort prompt closes, so it includes the chosen rating.
+    private func sendCompletionUpdateIfNeeded() {
+        guard hasSaved, !workoutManager.isCardioMode, !didSendCompletionUpdate else { return }
+        for record in savedRecords {
+            WatchConnectivityManager.shared.sendWorkoutCompletion(
+                WatchWorkoutRecordBuilder.makeUpdate(from: record)
+            )
+        }
+        didSendCompletionUpdate = true
+    }
+
+    /// An effort edit may happen after automatic save; keep the persisted record in sync.
+    @discardableResult
+    private func persistEffortIfNeeded() -> Bool {
+        guard hasSaved, savedEffort != effort else { return true }
+        savedRecords.forEach { $0.rpe = effort }
+        do {
+            try modelContext.save()
+        } catch {
+            saveError = String(localized: "Failed to save workout data. Please try again.")
+            return false
+        }
+        savedEffort = effort
+        saveError = nil
+        if !workoutManager.isCardioMode {
+            for record in savedRecords {
+                WatchConnectivityManager.shared.sendWorkoutCompletion(
+                    WatchWorkoutRecordBuilder.makeUpdate(from: record)
+                )
+            }
+            didSendCompletionUpdate = true
+        }
+        return true
     }
 
     /// Per-exercise time/calorie allocation (single source of truth — Correction #37, #148).
@@ -540,7 +639,7 @@ struct SessionSummaryView: View {
         return records
     }
 
-    private func saveCardioRecord(healthKitWorkoutID: String?) {
+    private func saveCardioRecord(healthKitWorkoutID: String?) -> ExerciseRecord {
         let sessionDuration = Swift.max(workoutManager.activeElapsedTime(at: endDate), 1)
         let distanceKm = workoutManager.distanceKm
 
@@ -580,6 +679,7 @@ struct SessionSummaryView: View {
             autoIntensityRaw: workoutManager.cardioMachineAutoIntensityRaw
         )
         modelContext.insert(record)
+        return record
     }
 
     /// Record usage for personalization in Quick Start popular ranking.

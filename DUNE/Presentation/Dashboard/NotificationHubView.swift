@@ -44,6 +44,7 @@ enum NotificationHubMetricResolver {
 
     static func metric(for item: NotificationInboxItem) -> HealthMetric? {
         guard let category = category(for: item.insightType) else { return nil }
+        guard !isMergedBodyComposition(item) else { return nil }
 
         let parsedValue = metricValue(for: item)
         let unit = switch category {
@@ -63,6 +64,11 @@ enum NotificationHubMetricResolver {
             category: category,
             isHistorical: true
         )
+    }
+
+    static func isMergedBodyComposition(_ item: NotificationInboxItem) -> Bool {
+        [.weightUpdate, .bodyFatUpdate, .bmiUpdate].contains(item.insightType)
+            && item.body.contains("\n")
     }
 
     private static func metricValue(for item: NotificationInboxItem) -> Double? {
@@ -154,18 +160,27 @@ enum NotificationHubMetricResolver {
 /// Latest-first notification inbox accessed from the Today tab toolbar.
 struct NotificationHubView: View {
     let sharedHealthDataService: SharedHealthDataService?
+    let requestedItemID: String?
+    let navigationRequestID: Int
 
     @State private var items: [NotificationInboxItem] = []
     @State private var unreadCount = 0
     @State private var destination: HubDestination?
     @State private var showDeleteAllConfirmation = false
     @State private var animatedIDs: Set<String> = []
+    @State private var handledNavigationRequestID: Int?
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     private let inboxManager = NotificationInboxManager.shared
 
-    init(sharedHealthDataService: SharedHealthDataService? = nil) {
+    init(
+        sharedHealthDataService: SharedHealthDataService? = nil,
+        requestedItemID: String? = nil,
+        navigationRequestID: Int = 0
+    ) {
         self.sharedHealthDataService = sharedHealthDataService
+        self.requestedItemID = requestedItemID
+        self.navigationRequestID = navigationRequestID
     }
 
     private enum HubDestination: Hashable, Identifiable {
@@ -173,6 +188,9 @@ struct NotificationHubView: View {
         case settings
         case unavailable(itemID: String)
         case personalRecords(itemID: String)
+        case sleepDetail(itemID: String)
+        case postureAssessment(itemID: String)
+        case message(itemID: String, title: String, body: String)
 
         var id: String {
             switch self {
@@ -185,6 +203,12 @@ struct NotificationHubView: View {
                 return "unavailable-\(itemID)"
             case .personalRecords(let itemID):
                 return "personal-records-\(itemID)"
+            case .sleepDetail(let itemID):
+                return "sleep-detail-\(itemID)"
+            case .postureAssessment(let itemID):
+                return "posture-assessment-\(itemID)"
+            case .message(let itemID, _, _):
+                return "message-\(itemID)"
             }
         }
     }
@@ -223,10 +247,26 @@ struct NotificationHubView: View {
                 NotificationDestinationUnavailableView(itemID: itemID)
             case .personalRecords:
                 NotificationPersonalRecordsPushView(sharedHealthDataService: sharedHealthDataService)
+            case .sleepDetail:
+                NotificationSleepDetailPushView(sharedHealthDataService: sharedHealthDataService)
+            case .postureAssessment:
+                PostureHistoryView()
+            case .message(_, let title, let body):
+                NotificationMessageDetailView(title: title, message: body)
             }
         }
         .task {
             reload()
+        }
+        .task(id: navigationRequestID) {
+            guard navigationRequestID > 0,
+                  handledNavigationRequestID != navigationRequestID,
+                  let requestedItemID else { return }
+            await Task.yield()
+            guard !Task.isCancelled,
+                  let item = inboxManager.item(withID: requestedItemID) else { return }
+            handleTap(on: item)
+            handledNavigationRequestID = navigationRequestID
         }
         .onReceive(NotificationCenter.default.mainThreadPublisher(for: NotificationInboxManager.inboxDidChangeNotification)) { _ in
             reload()
@@ -338,34 +378,36 @@ struct NotificationHubView: View {
     }
 
     private func handleTap(on item: NotificationInboxItem) {
-        // Routes that need tab switch (workoutDetail) use open() → ContentView handles via notification
-        // Routes that can be handled locally use openLocally() → no navigation request emitted
-        let isLocalRoute = item.route?.destination == .activityPersonalRecords
-            || (item.route == nil && item.insightType == .workoutPR)
-
-        if isLocalRoute {
-            guard let opened = inboxManager.openLocally(itemID: item.id) else {
+        let route = inboxManager.resolvedRoute(for: item)?.destination
+        if route == .workoutDetail {
+            if inboxManager.open(itemID: item.id) == nil {
                 destination = .unavailable(itemID: item.id)
-                return
             }
-            destination = .personalRecords(itemID: opened.id)
             return
         }
 
-        guard let opened = inboxManager.open(itemID: item.id) else {
+        guard let opened = inboxManager.openLocally(itemID: item.id) else {
             destination = .unavailable(itemID: item.id)
             return
         }
 
-        // Other routes (workoutDetail) → delegate to ContentView for tab switch
-        guard opened.route == nil else {
-            return
-        }
-
-        if let metric = NotificationHubMetricResolver.metric(for: opened) {
-            destination = .metric(metric, itemID: opened.id)
-        } else {
-            destination = .unavailable(itemID: opened.id)
+        switch route {
+        case .activityPersonalRecords:
+            destination = .personalRecords(itemID: opened.id)
+        case .sleepDetail:
+            destination = .sleepDetail(itemID: opened.id)
+        case .postureAssessment:
+            destination = .postureAssessment(itemID: opened.id)
+        case .notificationHub:
+            destination = .message(itemID: opened.id, title: opened.title, body: opened.body)
+        case .workoutDetail:
+            break
+        case nil:
+            if let metric = NotificationHubMetricResolver.metric(for: opened) {
+                destination = .metric(metric, itemID: opened.id)
+            } else {
+                destination = .message(itemID: opened.id, title: opened.title, body: opened.body)
+            }
         }
     }
 
@@ -442,14 +484,22 @@ struct NotificationHubView: View {
     }
 
     private func destinationHint(for item: NotificationInboxItem) -> (title: String, symbol: String) {
-        if item.route?.destination == .workoutDetail {
+        let route = inboxManager.resolvedRoute(for: item)?.destination
+        if route == .workoutDetail {
             return (String(localized: "Workout Detail"), "figure.strengthtraining.traditional")
         }
-        if item.route?.destination == .activityPersonalRecords || item.insightType == .workoutPR {
+        if route == .activityPersonalRecords {
             return (String(localized: "Personal Records"), "trophy.fill")
         }
+        if route == .sleepDetail {
+            return (String(localized: "Sleep Details"), "moon.zzz")
+        }
+        if route == .postureAssessment {
+            return (String(localized: "Posture Assessment"), "figure.stand")
+        }
 
-        guard let category = NotificationHubMetricResolver.category(for: item.insightType) else {
+        guard let category = NotificationHubMetricResolver.category(for: item.insightType),
+              !NotificationHubMetricResolver.isMergedBodyComposition(item) else {
             return (String(localized: "Notification Detail"), "arrow.triangle.branch")
         }
 
@@ -487,6 +537,30 @@ struct NotificationHubView: View {
         case .dailyDigest:
             DS.Color.warmGlow
         }
+    }
+}
+
+private struct NotificationMessageDetailView: View {
+    let title: String
+    let message: String
+
+    var body: some View {
+        ScrollView {
+            StandardCard {
+                VStack(alignment: .leading, spacing: DS.Spacing.md) {
+                    Text(title)
+                        .font(.title3.weight(.semibold))
+                    Text(message)
+                        .font(.body)
+                        .foregroundStyle(.secondary)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .padding(DS.Spacing.lg)
+        }
+        .accessibilityIdentifier("notification-message-detail-screen")
+        .background { DetailWaveBackground() }
+        .englishNavigationTitle("Notification")
     }
 }
 

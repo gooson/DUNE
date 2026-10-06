@@ -12,6 +12,7 @@ struct PostureHistoryView: View {
 
     @State private var isCompareMode = false
     @State private var recordToDelete: PostureAssessmentRecord?
+    @State private var isShowingPostureCapture = false
 
     var body: some View {
         ScrollView {
@@ -31,6 +32,14 @@ struct PostureHistoryView: View {
         .englishNavigationTitle("Posture History")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
+            #if !os(visionOS)
+            ToolbarItem(placement: .primaryAction) {
+                Button("Capture") {
+                    isShowingPostureCapture = true
+                }
+                .accessibilityIdentifier("posture-history-capture-button")
+            }
+            #endif
             if records.count >= 2 {
                 ToolbarItem(placement: .primaryAction) {
                     Button {
@@ -50,6 +59,12 @@ struct PostureHistoryView: View {
             }
         }
         .background { DetailWaveBackground() }
+        .accessibilityIdentifier("posture-history-screen")
+        #if !os(visionOS)
+        .fullScreenCover(isPresented: $isShowingPostureCapture) {
+            PostureCaptureView()
+        }
+        #endif
         .environment(\.waveColor, DS.Color.body)
         .onAppear { viewModel.loadHistory(from: records) }
         .onChange(of: records.count) { _, _ in viewModel.loadHistory(from: records) }

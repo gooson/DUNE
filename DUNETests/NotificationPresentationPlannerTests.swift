@@ -52,6 +52,12 @@ struct NotificationPresentationPlannerStandaloneTests {
         }
         #expect(requestID == 5)
     }
+
+    @Test("postureAssessment route pushes assessment on the current tab")
+    func postureAssessmentRoute() {
+        let plan = NotificationPresentationPlanner.plan(for: .postureAssessment, requestID: 6)
+        #expect(plan == .push(.postureAssessment(requestID: 6)))
+    }
 }
 
 @Suite("NotificationPresentationPaths standalone")
@@ -106,13 +112,24 @@ struct NotificationPresentationStateReducerTests {
         state.apply(NotificationNavigationRequest(itemID: "hub-item", route: .notificationHub))
 
         #expect(state.selectedSection == .today)
-        #expect(state.paths.today.isEmpty)
+        #expect(state.paths.today.count == 1)
         #expect(state.paths.train.isEmpty)
         #expect(state.paths.wellness.isEmpty)
         #expect(state.paths.life.isEmpty)
         #expect(state.notificationHubSignal == 1)
         #expect(state.notificationRouteSignal == 0)
         #expect(state.notificationPresentationRequestID == 1)
+    }
+
+    @Test("a second hub request replaces the selected item and increments its signal")
+    func notificationHubRepeatedRequest() {
+        var state = makeState(selectedSection: .today)
+
+        state.apply(NotificationNavigationRequest(itemID: "first", route: .notificationHub))
+        state.apply(NotificationNavigationRequest(itemID: "second", route: .notificationHub))
+
+        #expect(state.notificationHubSignal == 2)
+        #expect(state.paths.today.count == 1)
     }
 
     @Test("workoutDetail route switches to Train and emits route signal")
@@ -165,6 +182,16 @@ struct NotificationPresentationStateReducerTests {
         #expect(state.notificationRouteSignal == 0)
         #expect(state.notificationHubSignal == 0)
         #expect(state.notificationPresentationRequestID == 1)
+    }
+
+    @Test("postureAssessment route keeps the current tab and pushes assessment")
+    func postureAssessmentRouteAppliesState() {
+        var state = makeState(selectedSection: .today)
+        state.apply(NotificationNavigationRequest(itemID: "posture-item", route: .postureAssessment))
+
+        #expect(state.selectedSection == .today)
+        #expect(!state.paths.today.isEmpty)
+        #expect(state.paths.wellness.isEmpty)
     }
 
     private func makeState(selectedSection: AppSection) -> NotificationPresentationState {

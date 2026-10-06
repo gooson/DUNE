@@ -877,6 +877,14 @@
         }
       }
     },
+    "Done with stairs?" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Done with stairs?" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "階段運動を終えますか？" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "계단 운동을 마칠까요?" } }
+      }
+    },
     "DUNE" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -977,6 +985,14 @@
             "value" : "운동 종료"
           }
         }
+      }
+    },
+    "End this workout?" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "End this workout?" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "このワークアウトを終了しますか？" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "이 운동을 종료할까요?" } }
       }
     },
     "End workout soon?" : {
@@ -1307,6 +1323,14 @@
     },
     "kcal" : {
 
+    },
+    "Keep Going" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Keep Going" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "続ける" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "계속 운동" } }
+      }
     },
     "Keep Running" : {
       "extractionState" : "manual",
@@ -2012,6 +2036,14 @@
         }
       }
     },
+    "Retry" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Retry" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "再試行" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "재시도" } }
+      }
+    },
     "ROUTINE" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2087,6 +2119,22 @@
             "value" : "저장 오류"
           }
         }
+      }
+    },
+    "Saved" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Saved" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "保存済み" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "저장됨" } }
+      }
+    },
+    "Saving..." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Saving..." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "保存中..." } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "저장 중..." } }
       }
     },
     "Set %@" : {

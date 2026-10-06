@@ -244,6 +244,78 @@ struct NotificationInboxManagerTests {
         let createdItem = items.first
         #expect(createdItem?.insightType == .sleepComplete)
         #expect(createdItem?.isRead == true)
+        #expect(createdItem?.route == .sleepDetail)
+        #expect(manager.consumePendingNavigationRequest()?.route == .sleepDetail)
+    }
+
+    @Test("A route-less legacy notification creates an item and opens its hub detail")
+    func routeLessFallbackOpensHubDetail() throws {
+        let manager = NotificationInboxManager(store: makeStore(), badgeUpdater: { _ in })
+
+        manager.handleNotificationResponse(
+            userInfo: ["notificationInsightType": HealthInsight.InsightType.sleepDebt.rawValue],
+            fallbackTitle: "Sleep Debt Alert",
+            fallbackBody: "Rest tonight"
+        )
+
+        let item = try #require(manager.items().first)
+        let request = try #require(manager.consumePendingNavigationRequest())
+        #expect(item.isRead)
+        #expect(request.itemID == item.id)
+        #expect(request.route == .notificationHub)
+    }
+
+    @Test("Posture reminder without an item ID opens posture assessment")
+    func postureReminderFallbackRoute() {
+        let manager = NotificationInboxManager(store: makeStore(), badgeUpdater: { _ in })
+        manager.handleNotificationResponse(
+            userInfo: ["notificationInsightType": "postureReminder"],
+            fallbackTitle: "Time for a posture check-up",
+            fallbackBody: "Check your posture"
+        )
+
+        #expect(manager.items().first?.isRead == true)
+        #expect(manager.consumePendingNavigationRequest()?.route == .postureAssessment)
+    }
+
+    @Test("A saved posture reminder without a route still opens posture assessment")
+    func legacyPostureReminderRoute() throws {
+        let suiteName = "NotificationInboxManagerLegacyTests.\(UUID().uuidString)"
+        let defaults = try #require(UserDefaults(suiteName: suiteName))
+        defer { defaults.removePersistentDomain(forName: suiteName) }
+        let item = NotificationInboxItem(
+            id: UUID().uuidString,
+            insightType: .postureReminder,
+            title: "Posture reminder",
+            body: "Check your posture",
+            createdAt: Date(),
+            isRead: false,
+            openedAt: nil,
+            route: nil,
+            source: .localNotification
+        )
+        let key = "\(Bundle.main.bundleIdentifier ?? "com.dailve").notificationInbox.items"
+        defaults.set(try JSONEncoder().encode([item]), forKey: key)
+        let manager = NotificationInboxManager(
+            store: NotificationInboxStore(defaults: defaults),
+            badgeUpdater: { _ in }
+        )
+
+        _ = manager.open(itemID: item.id)
+
+        #expect(manager.consumePendingNavigationRequest()?.route == .postureAssessment)
+    }
+
+    @Test("Daily digest without an item ID opens the notification hub")
+    func dailyDigestFallbackRoute() {
+        let manager = NotificationInboxManager(store: makeStore(), badgeUpdater: { _ in })
+        manager.handleNotificationResponse(
+            userInfo: ["notificationInsightType": "dailyDigest"],
+            fallbackTitle: "Today's Summary",
+            fallbackBody: "Review your daily health summary"
+        )
+
+        #expect(manager.consumePendingNavigationRequest()?.route == .notificationHub)
     }
 
     @Test("handleNotificationResponse marks non-routed notification as read")
