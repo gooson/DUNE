@@ -667,6 +667,15 @@ enum TestDataSeeder {
             .contains("--ui-visual-stress-fixture")
             ? [.init(factor: .hrv, impact: .neutral, detail: "Synthetic visual audit HRV contribution")]
             : []
+        let conditionComponentDetail: ConditionScoreDetail? = ProcessInfo.processInfo.arguments
+            .contains("--ui-visual-condition-components-fixture")
+            ? ConditionScoreDetail(
+                todayHRV: 60, baselineHRV: 40, zScore: 2,
+                stdDev: 10, effectiveStdDev: 10, daysInBaseline: 14,
+                todayDate: today, rawScore: 100, todayRHR: 54,
+                baselineRHR: 54, rhrDeltaFromBaseline: 0, rhrBaselineDays: 14
+            )
+            : nil
         let recentScores: [ConditionScore] = (0..<7).compactMap { offset in
             guard let date = calendar.date(byAdding: .day, value: -offset, to: today) else { return nil }
             return ConditionScore(
@@ -701,7 +710,8 @@ enum TestDataSeeder {
             yesterdaySleepStages: yesterdaySleepStages,
             latestSleepStages: nil,
             sleepDailyDurations: sleepDailyDurations,
-            conditionScore: ConditionScore(score: 84, date: today),
+            conditionScore: ConditionScore(score: conditionComponentDetail == nil ? 84 : 100,
+                                           date: today, detail: conditionComponentDetail),
             baselineStatus: nil,
             recentConditionScores: recentScores,
             failedSources: [],
