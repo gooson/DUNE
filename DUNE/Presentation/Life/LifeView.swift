@@ -195,6 +195,8 @@ private struct HabitListQueryView: View {
     @Environment(\.appTheme) private var theme
     @Environment(\.horizontalSizeClass) private var sizeClass
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @ScaledMetric(relativeTo: .caption) private var compactCompletionRingSize: CGFloat = 64
+    @ScaledMetric(relativeTo: .caption) private var regularCompletionRingSize: CGFloat = 80
 
     // Correction #68: O(1) lookup instead of O(N) per row
     @State private var habitsByID: [UUID: HabitDefinition] = [:]
@@ -914,7 +916,10 @@ private struct HabitListQueryView: View {
 
     private var heroSection: some View {
         HeroCard(tintColor: DS.Color.tabLife) {
-            HStack(spacing: isRegular ? DS.Spacing.xxl : DS.Spacing.xl) {
+            let layout = dynamicTypeSize.isAccessibilitySize
+                ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.md))
+                : AnyLayout(HStackLayout(spacing: isRegular ? DS.Spacing.xxl : DS.Spacing.xl))
+            layout {
                 completionRing
 
                 VStack(alignment: .leading, spacing: DS.Spacing.sm) {
@@ -944,7 +949,9 @@ private struct HabitListQueryView: View {
                     }
                 }
 
-                Spacer(minLength: 0)
+                if !dynamicTypeSize.isAccessibilitySize {
+                    Spacer(minLength: 0)
+                }
             }
         }
         .accessibilityElement(children: .combine)
@@ -979,13 +986,14 @@ private struct HabitListQueryView: View {
             progress: progress,
             ringColor: DS.Color.tabLife,
             lineWidth: isRegular ? 10 : 8,
-            size: isRegular ? 80 : 64
+            size: isRegular ? regularCompletionRingSize : compactCompletionRingSize
         )
         .overlay {
             Text("\(Int(progress * 100))%")
                 .font(.caption)
                 .fontWeight(.semibold)
                 .monospacedDigit()
+                .fixedSize()
                 .foregroundStyle(theme.sandColor)
                 .contentTransition(.numericText())
         }
