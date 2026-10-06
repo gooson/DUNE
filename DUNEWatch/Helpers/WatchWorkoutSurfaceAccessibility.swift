@@ -72,6 +72,7 @@ enum WatchWorkoutSurfaceAccessibility {
     static let sessionSummaryStatsGrid = "watch-session-summary-stats"
     static let sessionSummaryEffortButton = "watch-summary-effort-button"
     static let sessionSummaryDoneButton = "watch-session-summary-done"
+    static let sessionSummarySaveStatus = "watch-session-summary-save-status"
     static let sessionSummaryExerciseBreakdown = "watch-session-summary-breakdown"
     static let sessionSummaryEffortSheet = "watch-session-summary-effort-sheet"
     static let sessionSummaryEffortDoneButton = "watch-session-summary-effort-done"

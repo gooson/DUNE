@@ -2036,6 +2036,14 @@
         }
       }
     },
+    "Retry" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Retry" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "再試行" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "재시도" } }
+      }
+    },
     "ROUTINE" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2111,6 +2119,22 @@
             "value" : "저장 오류"
           }
         }
+      }
+    },
+    "Saved" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Saved" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "保存済み" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "저장됨" } }
+      }
+    },
+    "Saving..." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Saving..." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "保存中..." } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "저장 중..." } }
       }
     },
     "Set %@" : {

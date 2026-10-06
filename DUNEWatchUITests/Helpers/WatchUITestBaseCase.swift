@@ -59,6 +59,7 @@ enum WatchAXID {
     static let sessionSummaryScreen = "watch-session-summary-screen"
     static let sessionSummaryEffortButton = "watch-summary-effort-button"
     static let sessionSummaryDoneButton = "watch-session-summary-done"
+    static let sessionSummarySaveStatus = "watch-session-summary-save-status"
     static let sessionSummaryEffortSheet = "watch-session-summary-effort-sheet"
     static let sessionSummaryEffortDoneButton = "watch-session-summary-effort-done"
     static let sessionSummaryDoneLabels = ["Done", "완료", "完了", "Finishing...", "마무리 중...", "完了処理中..."]

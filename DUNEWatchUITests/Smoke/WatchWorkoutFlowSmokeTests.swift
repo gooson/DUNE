@@ -141,7 +141,24 @@ final class WatchWorkoutFlowSmokeTests: WatchUITestBaseCase {
         XCTAssertTrue(elementExists(WatchAXID.sessionSummaryScreen, timeout: 8))
         XCTAssertTrue(elementExists(WatchAXID.sessionSummaryEffortButton, timeout: 5))
         XCTAssertTrue(elementExists(WatchAXID.sessionSummaryDoneButton, timeout: 5))
+        let saveStatus = app.staticTexts[WatchAXID.sessionSummarySaveStatus]
+        XCTAssertEqual(
+            XCTWaiter.wait(
+                for: [XCTNSPredicateExpectation(
+                    predicate: NSPredicate(format: "label IN %@", ["Saved", "저장됨", "保存済み"]),
+                    object: saveStatus
+                )],
+                timeout: 15
+            ),
+            .completed,
+            "Workout should save while its summary remains open"
+        )
         assertFirstViewportButtons([WatchAXID.sessionSummaryDoneButton], screenshot: "strength-summary-done")
+
+        // Leave the summary without tapping Done, as a user who lowers their wrist might.
+        app.terminate()
+        app.launch()
+        XCTAssertTrue(elementExists(WatchAXID.homeRoot, timeout: 10), "Ended workout should not reopen as active")
     }
 
     private func restSeconds(from label: String) -> Int? {

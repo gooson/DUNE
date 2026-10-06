@@ -57,6 +57,7 @@ struct WatchWorkoutSurfaceAccessibilityTests {
             WatchWorkoutSurfaceAccessibility.sessionSummaryStatsGrid,
             WatchWorkoutSurfaceAccessibility.sessionSummaryEffortButton,
             WatchWorkoutSurfaceAccessibility.sessionSummaryDoneButton,
+            WatchWorkoutSurfaceAccessibility.sessionSummarySaveStatus,
             WatchWorkoutSurfaceAccessibility.sessionSummaryExerciseBreakdown,
             WatchWorkoutSurfaceAccessibility.sessionSummaryEffortSheet,
             WatchWorkoutSurfaceAccessibility.sessionSummaryEffortDoneButton
