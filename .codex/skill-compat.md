@@ -115,13 +115,9 @@ Claude skill 문서를 그대로 유지하면서 Codex에서 실행 semantics를
 
 #### Ship 시뮬레이터 정리
 
-- 테스트 실행 전 존재하는 simulator UDID 목록을 기준선으로 기록한다. 해당 worktree/branch 작업에서 새로 생성한 simulator의 UDID, 이름, worktree 절대 경로, branch 및 생성 명령 성공 기록을 남긴다. **작업 시작 전에 존재하던 기기는 사용·재사용 여부와 무관하게 삭제 대상에서 제외한다.** clone 실패로 fallback한 원본도 제외한다.
-- Step 1에서 생성 전 기준선과 생성 성공 기록을 대조하여 해당 worktree/branch 작업에서 새로 생성하고 사용한 UDID만 수집한다. 신규 생성 여부를 확인할 증거가 없으면 삭제하지 않는다. Step 3의 **원격 머지 성공을 확인한 직후**, Step 4의 checkout 및 worktree 제거 전에 아래 정리를 수행한다. `/run`에서 호출된 Ship에도 동일하게 적용한다.
-- 새로 생성하고 사용한 simulator가 없으면 정리를 건너뛴다. 머지 실패 시에는 디버깅/재시도를 위해 유지한다.
-- `xcrun simctl list devices -j`로 각 UDID의 존재와 이름을 확인하고, 현재 작업 전용으로 소유가 확인된 기기만 정리한다. 이미 삭제된 UDID는 완료로 취급한다. 기본 기기, 다른 작업이 사용하는 기기, 소유 관계가 불명확한 기기는 보존하고 이유를 보고한다.
-- 현재 helper는 worktree의 basename으로 이름을 구성하므로 서로 다른 경로가 모두 `Health`로 끝나면 이름이 충돌한다. `git worktree list --porcelain`과 생성/사용 기록을 대조하며, 이름의 `-wt-Health` 포함 여부만으로 소유를 판단하지 않는다. 사용 기록만으로 독점 소유가 입증되지 않으면 삭제하지 않는다.
-- 확인된 UDID마다 `xcrun simctl shutdown "$udid"` 후 Shutdown 상태를 확인하고 `xcrun simctl delete "$udid"`를 실행한다. 이미 Shutdown인 상태는 허용한다. 종료 또는 삭제가 실패하면 해당 기기는 미정리로 기록하고 나머지 대상 및 Ship 후속 단계를 계속한다.
-- Ship에서는 `--cleanup-all`, `simctl delete all`, 이름 패턴 기반 `--cleanup-current` / `--cleanup-simulators`를 사용하지 않는다. 삭제 후 전체 기기 목록을 다시 조회하여 해당 UDID가 사라졌는지 확인한다.
+- `scripts/lib/simulator-worktree.sh`는 clone 이름에 워크트리 부모 디렉터리와 경로 해시를 넣는다(예: `iPhone 17-wt-Health-8d4b-...`). clone 전 기기 목록을 기준선으로 확인하고, 생성 성공 후 `.codex-checks/worktree-simulators.json`에 신규 UDID, 정확한 이름, 워크트리 절대 경로와 기준선 검증 여부를 기록한다. clone 실패로 fallback한 원본과 기존 기기는 기록하지 않는다.
+- Step 1에서 기록 파일과 `simulator-orphans` 복구 표식(`.codex-checks` 및 임시 디렉터리 fallback)을 확인한다. 등록과 롤백이 모두 실패한 기기는 복구 표식으로 남으며 자동 삭제하지 않는다. 생성 기록이 없는 기기는 이름이 비슷해도 삭제하지 않는다. Step 3의 **원격 머지 성공을 확인한 직후**, Step 4의 checkout 및 worktree 제거 전에 `python3 scripts/lib/simulator-test-lock.py "$PWD" -- bash scripts/lib/simulator-worktree.sh --cleanup-current`를 실행해 진행 중인 테스트와 직렬화한다. `/run`에서 호출된 Ship에도 동일하게 적용한다. 머지 실패 시에는 기기를 유지한다.
+- 정리 명령은 기록의 worktree/UDID/이름을 현재 `simctl` 목록과 대조하고 종료·삭제·삭제 확인을 수행한다. 복구 표식이 있는 기기는 수동 확인 대상으로 보고하고 삭제하지 않는다. 실패하거나 소유가 불명확한 기기는 보존하며 나머지는 계속 처리한다. `--cleanup-all`과 `simctl delete all`은 Ship에서 사용하지 않는다. 기록을 읽지 못하거나 미정리 기기·복구 표식이 남으면 Step 4 이후 로컬 정리를 중단하여 worktree의 기록과 복구 경로를 보존한다. 원격 머지는 완료됐고 로컬 정리는 미완료임을 보고한다.
 - 최종 결과에 삭제한 기기 수와 남은 기기/사유를 포함한다. 목록 조회나 삭제 실패를 정리 성공으로 보고하지 않는다.
 
 ### /ui-testing

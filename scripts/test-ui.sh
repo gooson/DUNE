@@ -120,7 +120,7 @@ if [[ "$CLEANUP_MODE" -eq 1 ]]; then
         echo "--dry-run cannot be combined with --cleanup-simulators" >&2
         exit 2
     fi
-    cleanup_worktree_simulators --current
+    cleanup_worktree_simulators --owned
     exit 0
 fi
 
