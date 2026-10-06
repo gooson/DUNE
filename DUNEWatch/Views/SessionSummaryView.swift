@@ -468,7 +468,9 @@ struct SessionSummaryView: View {
         savedEffort = effort
         saveError = nil
         isSaving = false
-        if !showEffortInput { sendCompletionUpdateIfNeeded() }
+        if !showEffortInput || scenePhase == .background {
+            sendCompletionUpdateIfNeeded()
+        }
         if dismissOnSuccess { workoutManager.reset() }
     }
 
