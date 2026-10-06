@@ -54,3 +54,16 @@ Mac 잠금으로 Device Hub의 실제 접힘 preset 조작이 막힌 것을 모�
 Duo에서는 화면 밖 `Compare Selected`도 hittable로 판단됐고, full swipe가 짧은 View All 버튼을 오가며 지나칠 수 있었다. viewport 안의 실제 tap point도 확인해야 한다. 짧은 위치 보정 drag는 후속 후보이며 실행 통과 전이다.
 
 실제 Book/Open/Closed에서 입력 초안은 유지됐지만 결합된 fold case는 실패했다. 실제 전환 후 XCTest의 idle 대기가 오래 걸려 이미 시작된 휴식이 만료될 수 있다. opt-in 입력/휴식 case를 분리하고 휴식 case에만 기존 세트의 긴 휴식 값을 seed하는 후보를 준비했다. 아직 runtime 성공은 아니다. 타이머 중 fold 전환을 assertion 없이 성공으로 보고하지 않는다. native PNG의 실제 크기는 port default 크기가 담긴 파일명 대신 header로 확인한다.
+
+
+## 2026-10-06 시각 결함과 초안 수명 주기 보완
+
+[후속 검증](../../reviews/2026-10-06-duo-followup-validation.md)에서 자세 비교, 카드, 일별 축 및 Training Volume 축의 native pixels를 확인했다. root 자세 카드도 큰 글자에서 제목/동작/기록을 세로로 배치해야 한다. 점수 링만 확대하면 옆 텍스트가 좁아 단어가 쪼개질 수 있다. workout overview에 현재 입력이 중복 포함돼 입력이 두 번 표시되는 코드도 제거했다.
+
+원본 relaunch 실패 화면에 unfinished banner 자체가 없었다. 입력 값을 바꿀 때도 draft를 저장하고, 복원 직후에는 삭제하지 않도록 변경했다. queued observer가 commit 뒤 clear를 되돌리지 않게 guard를 둔다. template 세션은 제외한다. DEBUG `--ui-reset`은 수동 운동 draft도 지우고, reset 없이 재실행한 persistence audit는 기존 draft를 보존한다. 최종 renderer/relaunch/Resume/무게 유지 UI 검사는 **179.416초, 1 passed / exit 0**이다. 실제 이전 scene session의 OS 복원과는 구분한다.
+
+현재 visible domain 기반 두 날짜와 inward anchor는 축 양끝 잘림/겹침을 해결했다. 기능 assertion만으로 판정하지 않고 native PNG를 확인했다. 회전은 방향 설정 활성화만으로 viewport가 바뀌지 않았다. 실제 viewport 크기 변화를 요구하도록 검사 조건을 보완했으며 이전 실패를 성공으로 바꾸지 않았다. 실제 Book/Open 조작은 Mac 잠금 해제 대기다.
+
+Prevention: 테스트 이름/기기 자세/실행 기기의 상태/원본 PNG를 연결한다. 프리셋 호출이 실패하면 host release를 생성하지 않는다. localized label 대신 Button의 고유 identifier를 쓴다. actor/view 상태가 복원되더라도 persisted draft는 최종 commit/discard까지 유지한다.
+
+최대 AX 운동 추천·공유 기록 행에서는 이름에 한 줄 제한을 유지하면 거의 한 글자만 남았다. AX에만 세로 배치와 전체 이름 줄바꿈을 적용했고 위 후속 문서의 native PNG에서 전체 이름·세트·무게·횟수·날짜를 확인했다. List 컨테이너의 hittable 여부는 내부 행의 표시 여부와 같지 않다. 가상화된 행은 뒤로 스크롤한 최종 화면에서 사라질 수 있으므로 등장 순간을 누적 관찰해야 한다. 최초·보정 실패 receipt를 보존했고 누적 관찰의 최종 assertion은 1 passed / exit 0으로 통과했다. 기능 검사의 범위와 실제 시각 판정 및 미완료 접힘/회전 범위를 구분한다.

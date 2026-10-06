@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/ActivityExerciseRegressionTests/testLegacyPhoneInsightsContentRecoversPrimaryWorkoutUI",
+    "DUNEUITests/ActivityExerciseRegressionTests/testWorkoutDraftAcrossRotationAtDefaultTextSize",
+    "DUNEUITests/ActivityExerciseRegressionTests/testWorkoutDraftAcrossRotationAtMaximumAccessibilityTextSize"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 3,
+    "passed": 0,
+    "skipped": 0,
+    "failed": 3
+  },
+  "passed_cases": 0,
+  "failures": [
+    "723: /Users/shanks/.codex/worktrees/712d/Health/DUNEUITests/Full/ActivityExerciseRegressionTests.swift:61: error: -[DUNEUITests.ActivityExerciseRegressionTests testLegacyPhoneInsightsContentRecoversPrimaryWorkoutUI] : XCTAssertTrue failed - Recovery must retain the persisted workout draft",
+    "741: Test Case '-[DUNEUITests.ActivityExerciseRegressionTests testLegacyPhoneInsightsContentRecoversPrimaryWorkoutUI]' failed (164.770 seconds).",
+    "1106: /Users/shanks/.codex/worktrees/712d/Health/DUNEUITests/Full/ActivityExerciseRegressionTests.swift:329: error: -[DUNEUITests.ActivityExerciseRegressionTests testWorkoutDraftAcrossRotationAtDefaultTextSize] : XCTAssertEqual failed: (\"XCTWaiterResult(rawValue: 2)\") is not equal to (\"XCTWaiterResult(raw…",
+    "1124: Test Case '-[DUNEUITests.ActivityExerciseRegressionTests testWorkoutDraftAcrossRotationAtDefaultTextSize]' failed (86.871 seconds).",
+    "1638: /Users/shanks/.codex/worktrees/712d/Health/DUNEUITests/Full/ActivityExerciseRegressionTests.swift:329: error: -[DUNEUITests.ActivityExerciseRegressionTests testWorkoutDraftAcrossRotationAtMaximumAccessibilityTextSize] : XCTAssertEqual failed: (\"XCTWaiterResult(rawValue: 2)\") is not equal to (\"XCTWai…",
+    "1656: Test Case '-[DUNEUITests.ActivityExerciseRegressionTests testWorkoutDraftAcrossRotationAtMaximumAccessibilityTextSize]' failed (96.841 seconds).",
+    "1657: Test Suite 'ActivityExerciseRegressionTests' failed at 2026-10-06 13:57:40.476.",
+    "1659: Test Suite 'DUNEUITests.xctest' failed at 2026-10-06 13:57:40.476.",
+    "1661: Test Suite 'Selected tests' failed at 2026-10-06 13:57:40.476.",
+    "1681: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log has no positive passed-test count",
+    "UI test log has no identifiable passed UI test cases",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/ActivityExerciseRegressionTests/testLegacyPhoneInsightsContentRecoversPrimaryWorkoutUI",
+    "DUNEUITests/ActivityExerciseRegressionTests/testWorkoutDraftAcrossRotationAtDefaultTextSize",
+    "DUNEUITests/ActivityExerciseRegressionTests/testWorkoutDraftAcrossRotationAtMaximumAccessibilityTextSize"
+  ],
+  "log_path": "/private/tmp/duo-finish-20261006/orientation-correction-ui.log"
+}
