@@ -341,7 +341,7 @@ struct WorkoutSessionView: View {
                         } else {
                             setInputContent
                         }
-                        if scrollsChrome { bottomAction }
+                        if scrollsChrome && !isInputFieldFocused { bottomAction }
                         if showsOverview && !isInputFieldFocused {
                             sessionOverview
                         }
@@ -366,7 +366,7 @@ struct WorkoutSessionView: View {
                     }
                 }
             }
-            if !scrollsChrome {
+            if !scrollsChrome || isInputFieldFocused {
                 bottomAction.background(.regularMaterial)
             }
         }
