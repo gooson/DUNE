@@ -440,7 +440,12 @@ class WatchUITestBaseCase: XCTestCase {
                 // A full Watch swipe can jump over several 48pt rows on 40mm devices.
                 let start = scrollContainer.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.75))
                 let end = scrollContainer.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.48))
-                start.press(forDuration: 0.1, thenDragTo: end)
+                start.press(
+                    forDuration: 0.1,
+                    thenDragTo: end,
+                    withVelocity: .slow,
+                    thenHoldForDuration: 0.1
+                )
             }
         }
 
