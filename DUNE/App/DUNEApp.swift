@@ -254,6 +254,7 @@ struct DUNEApp: App {
 #if DEBUG
         if Self.shouldResetUITestState {
             TestDataSeeder.resetUserDefaults()
+            WorkoutSessionDraft.clear()
         }
 #endif
 
@@ -327,7 +328,7 @@ struct DUNEApp: App {
     }
 
     var body: some Scene {
-        Self.makeWindowGroup(content: windowContent)
+        Self.makeWindowGroup(content: primarySceneContent)
             .modelContainer(appRuntime.modelContainer)
 
         Self.makeInsightsWindowGroup(content: workoutInsightsContent)
@@ -344,18 +345,49 @@ struct DUNEApp: App {
         WindowGroup("Workout Insights", id: AppWindowRouter.insightsWindowID) { content }
     }
 
-    private var workoutInsightsContent: some View {
-        WorkoutInsightsWindowView(
-            isReady: isLaunchExperienceReady && canLoadHealthKitData
-                && (!Self.shouldSeedMockData || hasSeededMockData)
-        )
-        .environment(\.appTheme, selectedTheme)
-        .tint(selectedTheme.accentColor)
-        .preferredColorScheme(Self.forcedUITestColorScheme)
-        .task {
+    @ViewBuilder
+    private var primarySceneContent: some View {
 #if DEBUG
-            seedMockDataIfNeeded()
+        if Self.isRunningUITests && ProcessInfo.processInfo.arguments.contains("--ui-legacy-insights-content") {
+            workoutInsightsContent
+        } else {
+            windowContent
+        }
+#else
+        windowContent
 #endif
+    }
+
+    @ViewBuilder
+    private var workoutInsightsContent: some View {
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            // Keep the legacy scene identifier restorable, but recover into the
+            // main UI on phones. The persisted workout draft remains resumable;
+            // unsupported scene activation/destruction cannot strand this scene.
+            windowContent
+                .overlay(alignment: .topLeading) {
+#if DEBUG
+                    if Self.isRunningUITests {
+                        Color.clear.frame(width: 1, height: 1)
+                            .accessibilityElement(children: .ignore)
+                            .accessibilityLabel("Recovered workout window")
+                            .accessibilityIdentifier("legacy-insights-recovered")
+                    }
+#endif
+                }
+        } else {
+            WorkoutInsightsWindowView(
+                isReady: isLaunchExperienceReady && canLoadHealthKitData
+                    && (!Self.shouldSeedMockData || hasSeededMockData)
+            )
+            .environment(\.appTheme, selectedTheme)
+            .tint(selectedTheme.accentColor)
+            .preferredColorScheme(Self.forcedUITestColorScheme)
+            .task {
+#if DEBUG
+                seedMockDataIfNeeded()
+#endif
+            }
         }
     }
 

@@ -7,6 +7,14 @@ struct UnifiedWorkoutRow: View {
     let style: Style
 
     @Environment(\.appTheme) private var theme
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @ScaledMetric(relativeTo: .caption2) private var muscleBadgeFontSize: CGFloat = 9
+
+    private var rowLayout: AnyLayout {
+        dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.md))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.md))
+    }
 
     enum Style {
         /// Train dashboard — InlineCard, compact info, weekday+time date
@@ -28,7 +36,7 @@ struct UnifiedWorkoutRow: View {
     // MARK: - Compact (Train Dashboard)
 
     private var compactContent: some View {
-        HStack(spacing: DS.Spacing.md) {
+        rowLayout {
             activityIcon(size: 28, font: .body)
 
             VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
@@ -65,7 +73,7 @@ struct UnifiedWorkoutRow: View {
                 muscleBadges
             }
 
-            Spacer()
+            if !dynamicTypeSize.isAccessibilitySize { Spacer() }
 
             compactTrailing
         }
@@ -74,7 +82,7 @@ struct UnifiedWorkoutRow: View {
     // MARK: - Full (Exercise Tab)
 
     private var fullContent: some View {
-        HStack(spacing: DS.Spacing.md) {
+        rowLayout {
             activityIcon(size: 32, font: .title3)
 
             VStack(alignment: .leading, spacing: DS.Spacing.xs) {
@@ -103,7 +111,7 @@ struct UnifiedWorkoutRow: View {
                 }
             }
 
-            Spacer()
+            if !dynamicTypeSize.isAccessibilitySize { Spacer() }
 
             fullTrailing
         }
@@ -131,7 +139,9 @@ struct UnifiedWorkoutRow: View {
         HStack(spacing: DS.Spacing.xs) {
             Text(item.displayName)
                 .font(style == .compact ? .subheadline.weight(.medium) : .headline)
-                .lineLimit(1)
+                .lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 1)
+                .fixedSize(horizontal: false, vertical: true)
+                .layoutPriority(1)
 
             sourceBadge
         }
@@ -148,7 +158,10 @@ struct UnifiedWorkoutRow: View {
 
     /// Full-style metrics: duration + HR + pace + elevation
     private var metricsRow: some View {
-        HStack(spacing: DS.Spacing.sm) {
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.sm))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.sm))
+        return layout {
             Text(item.formattedDuration)
                 .font(.subheadline)
                 .foregroundStyle(DS.Color.textSecondary)
@@ -188,10 +201,13 @@ struct UnifiedWorkoutRow: View {
     private var muscleBadges: some View {
         if !item.primaryMuscles.isEmpty {
             let badgeColor = item.activityType.color
-            HStack(spacing: DS.Spacing.xxs) {
+            let layout = dynamicTypeSize.isAccessibilitySize
+                ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.xxs))
+                : AnyLayout(HStackLayout(spacing: DS.Spacing.xxs))
+            layout {
                 ForEach(item.primaryMuscles.prefix(3), id: \.self) { muscle in
                     Text(muscle.displayName)
-                        .font(.system(size: 9, weight: .medium))
+                        .font(.system(size: muscleBadgeFontSize, weight: .medium))
                         .padding(.horizontal, DS.Spacing.xs)
                         .padding(.vertical, 1)
                         .background(badgeColor.opacity(0.12), in: Capsule())
@@ -205,7 +221,7 @@ struct UnifiedWorkoutRow: View {
     // MARK: - Trailing
 
     private var compactTrailing: some View {
-        VStack(alignment: .trailing, spacing: DS.Spacing.xxs) {
+        VStack(alignment: dynamicTypeSize.isAccessibilitySize ? .leading : .trailing, spacing: DS.Spacing.xxs) {
             Text(item.formattedDuration)
                 .font(.subheadline)
                 .fontWeight(.medium)
@@ -219,7 +235,7 @@ struct UnifiedWorkoutRow: View {
     }
 
     private var fullTrailing: some View {
-        VStack(alignment: .trailing, spacing: DS.Spacing.xs) {
+        VStack(alignment: dynamicTypeSize.isAccessibilitySize ? .leading : .trailing, spacing: DS.Spacing.xs) {
             if let cal = item.calories, cal > 0, cal < 5_000 {
                 Text("\(Int(cal).formattedWithSeparator) kcal")
                     .font(.subheadline)

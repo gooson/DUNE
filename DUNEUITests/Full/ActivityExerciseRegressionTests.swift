@@ -34,6 +34,41 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         try verifyWorkoutInsightsReturnsToWorkout(useQuickStart: true)
     }
 
+    func testLegacyPhoneInsightsContentRecoversPrimaryWorkoutUI() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments.append("--ui-legacy-insights-content")
+        launchApp(with: configuration)
+        XCTAssertTrue(app.descendants(matching: .any)["legacy-insights-recovered"].firstMatch
+            .waitForExistence(timeout: 8), "The legacy scene content must recover the phone UI")
+        XCTAssertTrue(app.hasPrimaryNavigation(timeout: 8))
+        XCTAssertFalse(app.buttons["workout-insights-close"].firstMatch.exists,
+                       "A recovered phone scene must not depend on unsupported window closing")
+        openQuickStartPicker()
+        startQuickStartExerciseFromDetail(search: "Bench Press", exerciseID: Fixture.benchPressID)
+        XCTAssertTrue(scrollToWorkoutControl(AXID.workoutSessionField("kg")))
+        let weight = app.textFields[AXID.workoutSessionField("kg")].firstMatch
+        let original = try XCTUnwrap(Double(weight.value as? String ?? ""))
+        XCTAssertTrue(scrollToWorkoutControl("+2.5"))
+        app.buttons["+2.5"].firstMatch.auditTap()
+        XCTAssertEqual(try XCTUnwrap(Double(weight.value as? String ?? "")), original + 2.5, accuracy: 0.01)
+        VisualAudit.capture("Recovered legacy phone scene accepts workout input")
+        XCUIDevice.shared.press(.home)
+        configuration.resetState = false
+        launchApp(with: configuration)
+        XCTAssertTrue(app.hasPrimaryNavigation(timeout: 8))
+        openExerciseViewFromRecentWorkouts(maxSwipes: 24)
+        let resume = app.buttons["exercise-resume-draft"].firstMatch
+        XCTAssertTrue(resume.waitForExistence(timeout: 8), "Recovery must retain the persisted workout draft")
+        resume.auditTap()
+        let start = app.buttons[AXID.exerciseStartButton].firstMatch
+        XCTAssertTrue(start.waitForExistence(timeout: 8), "Resume must offer the exercise start screen")
+        start.auditTap()
+        XCTAssertTrue(scrollToWorkoutControl(AXID.workoutSessionField("kg")))
+        XCTAssertEqual(try XCTUnwrap(Double(app.textFields[AXID.workoutSessionField("kg")]
+            .firstMatch.value as? String ?? "")), original + 2.5, accuracy: 0.01)
+        VisualAudit.capture("Recovered legacy phone content resumes persisted workout draft")
+    }
+
     private func verifyWorkoutInsightsReturnsToWorkout(useQuickStart: Bool = false) throws {
         if useQuickStart {
             openQuickStartPicker()
@@ -248,6 +283,82 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         try verifyWorkoutDraftAndRest(performFoldTransitions: false)
     }
 
+    func testWorkoutDraftAcrossRotationAtDefaultTextSize() throws {
+        try verifyWorkoutDraftAcrossRotation(contentSize: "UICTContentSizeCategoryL")
+    }
+
+    func testTrainingVolumeSummaryAtMaximumAccessibilityTextSize() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments.append(contentsOf: [
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ])
+        launchApp(with: configuration)
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.activitySectionVolume, maxSwipes: 24))
+        let card = app.buttons[AXID.activitySectionVolume].firstMatch
+        let viewport = app.scrollViews[AXID.activityRootScroll].firstMatch.frame
+            .intersection(app.windows.firstMatch.frame)
+        XCTAssertTrue(card.exists && card.isHittable)
+        XCTAssertTrue(viewport.contains(CGPoint(x: card.frame.midX, y: card.frame.midY)))
+        VisualAudit.capture("Maximum AX training volume summary labels")
+        card.auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.activityTrainingVolumeDetailScreen]
+            .firstMatch.waitForExistence(timeout: 10))
+    }
+
+    func testExerciseHistoryAtMaximumAccessibilityTextSize() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments.append(contentsOf: [
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ])
+        launchApp(with: configuration)
+        openExerciseViewFromRecentWorkouts(maxSwipes: 24)
+        VisualAudit.capture("Maximum AX complete suggested exercise names")
+        let list = app.collectionViews[AXID.exerciseViewScreen].firstMatch
+        XCTAssertTrue(list.waitForExistence(timeout: 5), "The exercise history collection must exist")
+        let benchPressRow = app.descendants(matching: .any)[AXID.exerciseRow(Fixture.benchPressID)].firstMatch
+        var sawBenchPress = benchPressRow.exists
+        for index in 1...3 {
+            list.swipeUp(velocity: .slow)
+            sawBenchPress = sawBenchPress || benchPressRow.exists
+            VisualAudit.capture("Maximum AX workout history full names and metrics \(index)")
+        }
+        XCTAssertTrue(sawBenchPress, "Scrolling must reveal the seeded Bench Press history row")
+    }
+
+    func testWorkoutDraftAcrossRotationAtMaximumAccessibilityTextSize() throws {
+        try verifyWorkoutDraftAcrossRotation(contentSize: "UICTContentSizeCategoryAccessibilityXXXL")
+    }
+
+    private func verifyWorkoutDraftAcrossRotation(contentSize: String) throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments.append(contentsOf: ["-UIPreferredContentSizeCategoryName", contentSize])
+        XCUIDevice.shared.orientation = .portrait
+        defer { XCUIDevice.shared.orientation = .portrait }
+        launchApp(with: configuration)
+        openQuickStartPicker()
+        startQuickStartExerciseFromDetail(search: "Bench Press", exerciseID: Fixture.benchPressID)
+        XCTAssertTrue(scrollToWorkoutControl("+2.5"))
+        app.buttons["+2.5"].firstMatch.auditTap()
+        XCTAssertTrue(scrollToWorkoutControl("+1"))
+        app.buttons["+1"].firstMatch.auditTap()
+        let weight = try XCTUnwrap(app.textFields[AXID.workoutSessionField("kg")].firstMatch.value as? String)
+        let reps = try XCTUnwrap(app.textFields[AXID.workoutSessionField("reps")].firstMatch.value as? String)
+        VisualAudit.capture("Workout portrait before rotation \(contentSize)")
+        let window = app.windows.firstMatch
+        let initialViewport = window.frame.size
+        XCUIDevice.shared.orientation = .landscapeLeft
+        let landscape = XCTNSPredicateExpectation(
+            predicate: NSPredicate { _, _ in window.frame.size != initialViewport }, object: window
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [landscape], timeout: 8), .completed,
+                       "The active workout viewport must actually rotate")
+        assertActiveWorkoutInputsAfterFold(weight: weight, reps: reps)
+        VisualAudit.capture("Workout rotated viewport preserves inputs \(contentSize)")
+        XCUIDevice.shared.orientation = .portrait
+        assertActiveWorkoutInputsAfterFold(weight: weight, reps: reps)
+        VisualAudit.capture("Workout portrait after rotation \(contentSize)")
+    }
+
     private enum FoldAuditPhase { case draft, rest }
 
     private func verifyWorkoutDraftAndRest(
@@ -290,6 +401,8 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         assertCompletedSetSummaryDuringRest(weight: weightDraft, reps: repsDraft)
 
         let addRest = app.buttons["workout-session-add-rest"].firstMatch
+        XCTAssertTrue(scrollToWorkoutControl("workout-session-add-rest"),
+                      "Rest controls must be reachable in the workout scroll viewport")
         XCTAssertTrue(addRest.waitForExistence(timeout: 5) && addRest.isHittable,
                       "The active rest timer should expose +30s")
         var additions = 0
@@ -333,6 +446,8 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         }
 
         let skipRest = app.buttons[AXID.workoutSessionSkipRest].firstMatch
+        XCTAssertTrue(scrollToWorkoutControl(AXID.workoutSessionSkipRest),
+                      "Rest Skip must be reachable after the viewport changes")
         XCTAssertTrue(skipRest.waitForExistence(timeout: 5) && skipRest.isHittable,
                       "Rest Skip should remain actionable after folding")
         skipRest.auditTap()
@@ -1303,14 +1418,14 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         XCTAssertTrue(picker.waitForExistence(timeout: 8), "Quick Start picker should appear")
     }
 
-    private func openExerciseViewFromRecentWorkouts() {
+    private func openExerciseViewFromRecentWorkouts(maxSwipes: Int = 10) {
         ensureActivityRoot()
         let seeAllButton = app.buttons[AXID.activityRecentSeeAll].firstMatch
         let exerciseScreen = app.descendants(matching: .any)[AXID.exerciseViewScreen].firstMatch
         let exerciseToolbarAdd = app.descendants(matching: .any)[AXID.exerciseToolbarAdd].firstMatch
         for _ in 0..<2 {
             XCTAssertTrue(
-                app.scrollToHittableElementIfNeeded(AXID.activityRecentSeeAll, maxSwipes: 10),
+                app.scrollToHittableElementIfNeeded(AXID.activityRecentSeeAll, maxSwipes: maxSwipes),
                 "Recent workouts See All should be reachable and tappable"
             )
             XCTAssertTrue(seeAllButton.waitForExistence(timeout: 5), "Recent workouts See All should exist")
@@ -1462,14 +1577,27 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         let container = app.scrollViews["workout-session-controls"].firstMatch
         guard container.waitForExistence(timeout: 5) else { return false }
         for _ in 0..<maxSwipes {
-            if control.exists && control.isHittable { return true }
-            if control.exists && control.frame.midY < container.frame.midY {
+            let viewport = container.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 8)
+            if control.exists && control.isHittable
+                && viewport.contains(CGPoint(x: control.frame.midX, y: control.frame.midY)) { return true }
+            if control.exists && container.frame.height > 0 {
+                let delta = control.frame.midY - viewport.midY
+                let travel = min(max(abs(delta), 30), container.frame.height * 0.45) / container.frame.height
+                let startY: CGFloat = delta < 0 ? 0.3 : 0.7
+                let endY = startY + (delta < 0 ? travel : -travel)
+                container.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: startY))
+                    .press(forDuration: 0.05, thenDragTo: container.coordinate(
+                        withNormalizedOffset: CGVector(dx: 0.5, dy: endY)
+                    ))
+            } else if control.exists && control.frame.midY < container.frame.midY {
                 container.swipeDown(velocity: .slow)
             } else {
                 container.swipeUp(velocity: .slow)
             }
         }
+        let viewport = container.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 8)
         return control.exists && control.isHittable
+            && viewport.contains(CGPoint(x: control.frame.midX, y: control.frame.midY))
     }
 
     private func assertActiveWorkoutInputsAfterFold(weight: String, reps: String) {

@@ -2,7 +2,7 @@ import Foundation
 import Observation
 
 /// Editable set data for the workout session UI (not persisted until save)
-struct EditableSet: Identifiable {
+struct EditableSet: Identifiable, Equatable {
     let id = UUID()
     var setNumber: Int
     var weight: String = ""

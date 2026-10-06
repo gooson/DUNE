@@ -8,6 +8,7 @@ private struct ExerciseStartConfig: Identifiable {
 }
 
 struct ExerciseView: View {
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var viewModel = ExerciseViewModel()
     @State private var showingExercisePicker = false
     @State private var exerciseStartConfig: ExerciseStartConfig?
@@ -36,7 +37,9 @@ struct ExerciseView: View {
         return base
             .toolbar { toolbarContent }
             .sheet(isPresented: $showingExercisePicker) { exercisePickerSheet }
-            .sheet(item: $exerciseStartConfig) { config in
+            .sheet(item: $exerciseStartConfig, onDismiss: {
+                pendingDraft = WorkoutSessionDraft.load()
+            }) { config in
                 exerciseStartSheet(config: config)
                     .presentationDetents([.large])
                     .presentationDragIndicator(.hidden)
@@ -456,33 +459,42 @@ struct ExerciseView: View {
     }
 
     private func draftBanner(_ draft: WorkoutSessionDraft) -> some View {
-        HStack(spacing: DS.Spacing.sm) {
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.sm))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.sm))
+        return layout {
             Image(systemName: "exclamationmark.triangle.fill")
                 .foregroundStyle(.orange)
             VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                 Text("Unfinished Workout")
                     .font(.subheadline.weight(.medium))
+                    .fixedSize(horizontal: false, vertical: true)
                 Text("\(draft.exerciseDefinition.localizedName) - \(draft.sets.filter(\.isCompleted).count.formattedWithSeparator) sets")
                     .font(.caption)
                     .foregroundStyle(DS.Color.textSecondary)
+                    .fixedSize(horizontal: false, vertical: true)
             }
-            Spacer()
-            Button("Resume") {
-                presentExerciseStart(draft.exerciseDefinition)
-            }
-            .font(.caption.weight(.semibold))
-            .buttonStyle(.borderedProminent)
-            .tint(DS.Color.activity)
+            if !dynamicTypeSize.isAccessibilitySize { Spacer() }
+            HStack(spacing: DS.Spacing.sm) {
+                Button("Resume") {
+                    presentExerciseStart(draft.exerciseDefinition)
+                }
+                .font(.caption.weight(.semibold))
+                .buttonStyle(.borderedProminent)
+                .tint(DS.Color.activity)
+                .accessibilityIdentifier("exercise-resume-draft")
 
-            Button {
-                WorkoutSessionViewModel.clearDraft()
-                pendingDraft = nil
-            } label: {
-                Image(systemName: "xmark")
-                    .font(.caption)
-                    .foregroundStyle(DS.Color.textSecondary)
+                Button {
+                    WorkoutSessionViewModel.clearDraft()
+                    pendingDraft = nil
+                } label: {
+                    Image(systemName: "xmark")
+                        .font(.caption)
+                        .foregroundStyle(DS.Color.textSecondary)
+                }
+                .buttonStyle(.plain)
+                .accessibilityIdentifier("exercise-discard-draft")
             }
-            .buttonStyle(.plain)
         }
         .padding(DS.Spacing.md)
         .listRowInsets(EdgeInsets())

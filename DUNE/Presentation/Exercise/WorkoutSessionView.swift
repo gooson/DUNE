@@ -34,6 +34,7 @@ struct WorkoutSessionView: View {
     // Set-by-set flow state
     @State private var currentSetIndex = 0
     @State private var showRestTimer = false
+    @State private var didCommitWorkout = false
     @State private var showLastSetOptions = false
     @State private var showEndConfirmation = false
     @State private var restTimerCompleted = 0
@@ -161,9 +162,6 @@ struct WorkoutSessionView: View {
                 if let templateEntry {
                     viewModel.applyTemplateDefaults(templateEntry, weightUnit: weightUnit)
                 }
-                if draftToRestore != nil {
-                    WorkoutSessionViewModel.clearDraft()
-                }
                 skipToFirstIncompleteSet()
                 if let draft = draftToRestore,
                    let endDate = draft.restEndDate,
@@ -191,15 +189,13 @@ struct WorkoutSessionView: View {
         .onChange(of: scenePhase) { _, newPhase in
             if newPhase == .active { restTimer.refresh() }
             if newPhase == .background || newPhase == .inactive {
-                // Skip draft saving in template mode — each exercise is ephemeral
-                guard templateInfo == nil else { return }
-                viewModel.saveDraft(
-                    restEndDate: showRestTimer ? restTimer.endDate : nil,
-                    restTotalDuration: showRestTimer ? restTotalSeconds : nil,
-                    restingSetIndex: showRestTimer ? currentSetIndex : nil
-                )
+                persistSessionDraft()
             }
         }
+        .onChange(of: viewModel.sets) { _, _ in persistSessionDraft() }
+        .onChange(of: viewModel.memo) { _, _ in persistSessionDraft() }
+        .onChange(of: restTimer.endDate) { _, _ in persistSessionDraft() }
+        .onChange(of: showRestTimer) { _, _ in persistSessionDraft() }
         .confirmationDialog(
             isTemplateIntermediate ? "End Exercise?" : "End Workout?",
             isPresented: $showEndConfirmation,
@@ -386,9 +382,6 @@ struct WorkoutSessionView: View {
                     }
                     .padding(.vertical, DS.Spacing.sm)
                 }
-
-                // Weight / Reps input
-                currentSetInputFields
 
             }
         }
@@ -730,6 +723,8 @@ struct WorkoutSessionView: View {
                     Button(action: button.1) {
                         Text(button.0)
                             .font(.body.weight(.medium))
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.8)
                             .frame(maxWidth: .infinity, minHeight: 40)
                     }
                     .buttonStyle(.bordered)
@@ -847,7 +842,10 @@ struct WorkoutSessionView: View {
     }
 
     private var restControls: some View {
-        HStack(spacing: DS.Spacing.md) {
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(spacing: DS.Spacing.md))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.md))
+        return layout {
             Button {
                 let maxRestSeconds = 3600 // 1 hour cap
                 guard restTotalSeconds + 30 <= maxRestSeconds else { return }
@@ -858,6 +856,7 @@ struct WorkoutSessionView: View {
             } label: {
                 Text("+30s")
                     .font(.body.weight(.medium))
+                    .fixedSize(horizontal: false, vertical: true)
                     .frame(maxWidth: .infinity, minHeight: 48)
             }
             .buttonStyle(.bordered)
@@ -869,6 +868,7 @@ struct WorkoutSessionView: View {
             } label: {
                 Text("Skip")
                     .font(.body.weight(.semibold))
+                    .fixedSize(horizontal: false, vertical: true)
                     .frame(maxWidth: .infinity, minHeight: 48)
             }
             .buttonStyle(.borderedProminent)
@@ -880,6 +880,7 @@ struct WorkoutSessionView: View {
             } label: {
                 Text("End")
                     .font(.body.weight(.medium))
+                    .fixedSize(horizontal: false, vertical: true)
                     .frame(maxWidth: .infinity, minHeight: 48)
             }
             .buttonStyle(.bordered)
@@ -1113,9 +1114,21 @@ struct WorkoutSessionView: View {
 
     // MARK: - Save
 
+    private func persistSessionDraft() {
+        // Scene transitions can be delayed or omitted when another display is
+        // active. Save edited inputs too, and retain resumed drafts until commit.
+        guard didPrepareSession, templateInfo == nil, !didCommitWorkout else { return }
+        viewModel.saveDraft(
+            restEndDate: showRestTimer ? restTimer.endDate : nil,
+            restTotalDuration: showRestTimer ? restTotalSeconds : nil,
+            restingSetIndex: showRestTimer ? currentSetIndex : nil
+        )
+    }
+
     private func saveWorkout() {
         isInputFieldFocused = false
         guard let record = viewModel.createValidatedRecord(weightUnit: weightUnit) else { return }
+        didCommitWorkout = true
         restTimer.stop()
         restActivity.end(sessionStartedAt: viewModel.sessionStartTime)
 
