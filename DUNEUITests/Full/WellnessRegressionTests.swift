@@ -447,13 +447,38 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
 
     private func reveal(_ element: XCUIElement) {
         let scroll = app.scrollViews.firstMatch
-        for _ in 0..<14 where !(element.exists && element.isHittable) {
-            if element.exists && element.frame.midY < scroll.frame.midY {
+        for _ in 0..<18 {
+            // Duo may report offscreen descendants as hittable. The target's
+            // tap point must also lie inside the visible scroll viewport.
+            let viewport = scroll.frame.intersection(app.windows.firstMatch.frame)
+                .insetBy(dx: 12, dy: 90)
+            if element.exists && element.isHittable
+                && viewport.contains(CGPoint(x: element.frame.midX, y: element.frame.midY)) {
+                break
+            }
+            if element.exists && scroll.frame.height > 0 {
+                let delta = element.frame.midY - viewport.midY
+                let travel = min(max(abs(delta), 30), scroll.frame.height * 0.45)
+                    / scroll.frame.height
+                let startY: CGFloat = delta < 0 ? 0.3 : 0.7
+                let endY = startY + (delta < 0 ? travel : -travel)
+                // Full swipes oscillate past a short header button at maximum
+                // text size. Move only toward its measured visible position.
+                scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: startY))
+                    .press(forDuration: 0.05, thenDragTo: scroll.coordinate(
+                        withNormalizedOffset: CGVector(dx: 0.5, dy: endY)
+                    ))
+            } else if element.exists && element.frame.midY < scroll.frame.midY {
                 scroll.swipeDown(velocity: .slow)
             } else {
                 scroll.swipeUp(velocity: .slow)
             }
         }
+        let viewport = scroll.frame.intersection(app.windows.firstMatch.frame)
+            .insetBy(dx: 12, dy: 90)
+        XCTAssertTrue(element.exists && element.isHittable
+                      && viewport.contains(CGPoint(x: element.frame.midX, y: element.frame.midY)),
+                      "Posture target must have a visible tap point")
         VisualAudit.capture("Posture route target viewport")
     }
 

@@ -1,0 +1,82 @@
+The following is a diff from the previous accessibility tree for Window: "DUNE Duo Visual Audit" with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 19-63
+~					5 row (selectable) Expanded
+~					6 row (selected) DUNE Duo Visual Audit
+27.1
+Simulator
+~					7 row (selectable) R2-D2 (18 Pro Max)
+27.0.1
+iPhone 18 Pro Max
+~					8 row (selectable) iPhone 18 Pro
+27.0
+Simulator
+~					9 row (selectable) iPhone 18 Pro Max
+27.0
+Simulator
+~					10 row (selectable) Apple Watch Series 12 (42mm)
+27.0
+Simulator
+~					11 row (selectable) Apple Watch Ultra 4 (49mm)
+27.0
+Simulator
+~					12 row (selectable) shanks의 iPad (M4)
+27.0.1
+iPad Pro 13-inch (M4)
+~					13 row (selectable) iPhone Duo
+27.1
+Simulator
+~					14 row (selectable) Collapsed
+~			17 splitter (settable, float) 248
++				101 container
++					102 text Description: 세트 1 / 5, ID: workout-session-screen, Secondary Actions: Cancel
++					103 text Description: 1:58, ID: workout-session-screen, Secondary Actions: Cancel
++					104 text Description: 바벨 벤치프레스, ID: workout-session-overview, Secondary Actions: Cancel
++					105 text Description: 이전 운동 기록, ID: workout-session-overview, Secondary Actions: Cancel
++					106 text Description: Set 1, ID: workout-session-overview, Secondary Actions: Cancel
++					107 image Description: 원형 화살표가 있는 시계, ID: workout-session-overview, Secondary Actions: Cancel
++					108 text Description: 60.0kg × 10, ID: workout-session-overview, Secondary Actions: Cancel
++					109 text Description: Set 2, ID: workout-session-overview, Secondary Actions: Cancel
++					110 image Description: 원형 화살표가 있는 시계, ID: workout-session-overview, Secondary Actions: Cancel
++					111 text Description: 60.0kg × 10, ID: workout-session-overview, Secondary Actions: Cancel
++					112 text Description: Set 3, ID: workout-session-overview, Secondary Actions: Cancel
++					113 image Description: 원형 화살표가 있는 시계, ID: workout-session-overview, Secondary Actions: Cancel
++					114 text Description: 60.0kg × 10, ID: workout-session-overview, Secondary Actions: Cancel
++					115 button Description: 목표 횟수: 10회, 목표 횟수: 10회, 감소, Value: 10, ID: workout-session-overview-Decrement, Secondary Actions: Cancel
++					116 button Description: 목표 횟수: 10회, 목표 횟수: 10회, 증가, Value: 10, ID: workout-session-overview-Increment, Secondary Actions: Cancel
++					117 text Description: 목표와 체감 강도가 기록될 때까지 이 무게를 유지해요., ID: workout-session-overview, Secondary Actions: Cancel
++					118 button Description: 60 kg 적용, ID: workout-session-overview, Secondary Actions: Cancel
++					119 text Description: KG, ID: workout-session-overview, Secondary Actions: Cancel
++					120 text field (settable) Value: 62.5, Placeholder: 0, ID: workout-session-overview, Secondary Actions: Cancel
++					121 button Description: -2.5, ID: workout-session-overview, Secondary Actions: Cancel
++					122 button Description: +2.5, ID: workout-session-overview, Secondary Actions: Cancel
++					123 text Description: REPS, ID: workout-session-overview, Secondary Actions: Cancel
++					124 text field (settable) Value: 11, Placeholder: 0, ID: workout-session-overview, Secondary Actions: Cancel
++					125 button Description: -1, ID: workout-session-overview, Secondary Actions: Cancel
++					126 button Description: +1, ID: workout-session-overview, Secondary Actions: Cancel
++					127 button Description: RPE, 탭하여 평가, ID: workout-session-overview, Secondary Actions: Cancel
++					128 button Description: RPE 도움말, ID: workout-session-overview, Secondary Actions: Cancel
++					129 button Description: 목표 횟수: 10회, 목표 횟수: 10회, 감소, Value: 10, ID: workout-session-planned-reps-Decrement, Secondary Actions: Cancel
++					130 button Description: 목표 횟수: 10회, 목표 횟수: 10회, 증가, Value: 10, ID: workout-session-planned-reps-Increment, Secondary Actions: Cancel
++					131 text Description: 목표와 체감 강도가 기록될 때까지 이 무게를 유지해요., ID: workout-session-recommendation-reason, Secondary Actions: Cancel
++					132 button Description: 60 kg 적용, ID: workout-session-apply-recommendation, Secondary Actions: Cancel
++					133 text Description: KG, Secondary Actions: Cancel
++					134 text field (settable) Value: 62.5, Placeholder: 0, ID: workout-session-field-kg, Secondary Actions: Cancel
++					135 button Description: -2.5, Secondary Actions: Cancel
++					136 button Description: +2.5, Secondary Actions: Cancel
++					137 text Description: REPS, Secondary Actions: Cancel
++					138 text field (settable) Value: 11, Placeholder: 0, ID: workout-session-field-reps, Secondary Actions: Cancel
++					139 button Description: -1, Secondary Actions: Cancel
++					140 button Description: +1, Secondary Actions: Cancel
++					141 button Description: RPE, 탭하여 평가, Secondary Actions: Cancel
++					142 button Description: RPE 도움말, ID: questionmark.circle, Secondary Actions: Cancel
++					143 button (selected) Description: 세트 완료, ID: workout-session-complete-set, Secondary Actions: Cancel
+~				64 button app.grid.3x3
+~				65 button camera.viewfinder
+~				66 button record.circle
+~				67 button
+~				68 button
+~				69 button
+~				70 button
+~		71 splitter (settable, float) 1669
+~		74 toggle button Help: Sort and Filter, Value: off
+~		77 toggle button (disabled) Description: Resize mode, Help: Enter resize mode, Value: off

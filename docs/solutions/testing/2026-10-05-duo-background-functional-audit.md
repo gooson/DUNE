@@ -46,3 +46,11 @@ Mac 잠금으로 Device Hub의 실제 접힘 preset 조작이 막힌 것을 모�
 ## Lessons Learned
 
 고급 목업을 제공하는 것만으로 충분하지 않으며 복원되는 모든 scene이 초기화 gate를 거쳐야 한다. UI 기능 검사는 잠긴 Mac에서도 실행할 수 있었지만, 실제 접힘 전환과 전수 시각 판정은 별도 증거가 필요했다.
+
+## 2026-10-06 후속 검증
+
+[최신 main 병합 기록](../../reviews/2026-10-06-duo-main-sync-validation.md)에서 알림 운동 상세와 운동 통계 복귀가 통과했고, Personal Records의 제한된 scroll budget을 최대 AX 콘텐츠 길이에 맞게 늘린 뒤 해당 상세까지 78.509초에 통과했다. 전체 suite의 budget이나 공통 helper를 무조건 늘리지 않았다.
+
+Duo에서는 화면 밖 `Compare Selected`도 hittable로 판단됐고, full swipe가 짧은 View All 버튼을 오가며 지나칠 수 있었다. viewport 안의 실제 tap point도 확인해야 한다. 짧은 위치 보정 drag는 후속 후보이며 실행 통과 전이다.
+
+실제 Book/Open/Closed에서 입력 초안은 유지됐지만 결합된 fold case는 실패했다. 실제 전환 후 XCTest의 idle 대기가 오래 걸려 이미 시작된 휴식이 만료될 수 있다. opt-in 입력/휴식 case를 분리하고 휴식 case에만 기존 세트의 긴 휴식 값을 seed하는 후보를 준비했다. 아직 runtime 성공은 아니다. 타이머 중 fold 전환을 assertion 없이 성공으로 보고하지 않는다. native PNG의 실제 크기는 port default 크기가 담긴 파일명 대신 header로 확인한다.

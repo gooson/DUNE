@@ -219,7 +219,23 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
               ProcessInfo.processInfo.environment["DUNE_VISUAL_AUDIT_FOLD"] == "1" else {
             throw XCTSkip("Opt-in fold continuity audit only")
         }
-        try verifyWorkoutDraftAndRest(performFoldTransitions: true)
+        // Real Device Hub transitions include host capture handshakes.
+        // Keep the larger allowance confined to this opt-in diagnostic case.
+        executionTimeAllowance = 600
+        try verifyWorkoutDraftAndRest(performFoldTransitions: true, foldPhase: .draft)
+    }
+
+    func testVisualAuditRestTimerAcrossFoldStates() throws {
+        guard VisualAudit.isEnabled,
+              ProcessInfo.processInfo.environment["DUNE_VISUAL_AUDIT_FOLD"] == "1" else {
+            throw XCTSkip("Opt-in fold continuity audit only")
+        }
+        executionTimeAllowance = 600
+        var configuration = launchConfiguration
+        configuration.additionalArguments.append("--ui-fold-audit-long-rest")
+        launchApp(with: configuration)
+        XCTAssertTrue(app.hasPrimaryNavigation(timeout: 8))
+        try verifyWorkoutDraftAndRest(performFoldTransitions: true, foldPhase: .rest)
     }
 
     func testWorkoutDraftAndRestTimerAtMaximumAccessibilityTextSize() throws {
@@ -232,14 +248,17 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         try verifyWorkoutDraftAndRest(performFoldTransitions: false)
     }
 
-    private func verifyWorkoutDraftAndRest(performFoldTransitions: Bool) throws {
+    private enum FoldAuditPhase { case draft, rest }
+
+    private func verifyWorkoutDraftAndRest(
+        performFoldTransitions: Bool,
+        foldPhase: FoldAuditPhase? = nil
+    ) throws {
         let foldCheckpoints = performFoldTransitions
             ? ["FOLD:partiallyOpen", "FOLD:openFlat", "FOLD:closed"] : []
-        if performFoldTransitions {
-            openExerciseSingleExercisePicker()
-        } else {
-            openQuickStartPicker()
-        }
+        // Fold continuity starts from the same toolbar route as the functional
+        // check; navigating the long history surface is a separate regression.
+        openQuickStartPicker()
         startQuickStartExerciseFromDetail(search: "Bench Press", exerciseID: Fixture.benchPressID)
         let weight = app.textFields[AXID.workoutSessionField("kg")].firstMatch
         let reps = app.textFields[AXID.workoutSessionField("reps")].firstMatch
@@ -257,10 +276,13 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         XCTAssertEqual(try XCTUnwrap(Int(repsDraft)), originalReps + 1)
 
         assertActiveWorkoutInputsAfterFold(weight: weightDraft, reps: repsDraft)
-        for checkpoint in foldCheckpoints {
-            VisualAudit.capture(checkpoint)
-            assertActiveWorkoutInputsAfterFold(weight: weightDraft, reps: repsDraft)
+        if foldPhase != .rest {
+            for checkpoint in foldCheckpoints {
+                VisualAudit.capture(checkpoint)
+                assertActiveWorkoutInputsAfterFold(weight: weightDraft, reps: repsDraft)
+            }
         }
+        if foldPhase == .draft { return }
 
         let completeSet = app.buttons[AXID.workoutSessionCompleteSet].firstMatch
         XCTAssertTrue(completeSet.waitForExistence(timeout: 5) && completeSet.isHittable)
@@ -500,7 +522,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         openActivityDetail(
             sectionIdentifier: AXID.activitySectionPR,
             destinationIdentifier: AXID.activityPersonalRecordsDetailScreen,
-            maxSwipes: 10
+            maxSwipes: 24
         )
 
         XCTAssertTrue(

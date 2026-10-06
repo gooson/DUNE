@@ -465,7 +465,12 @@ enum TestDataSeeder {
                     setNumber: setNum,
                     weight: Double(60 + index * 20),
                     reps: Swift.max(1, 10 - index),
-                    isCompleted: true
+                    isCompleted: true,
+                    // Opt-in fold evidence must survive XCTest's idle wait
+                    // after a real display transition. Normal fixtures retain
+                    // the app's default rest behavior.
+                    restDuration: ProcessInfo.processInfo.arguments.contains("--ui-fold-audit-long-rest")
+                        && exercise.defID == "barbell-bench-press" ? 600 : nil
                 )
                 set.exerciseRecord = record
                 context.insert(set)
