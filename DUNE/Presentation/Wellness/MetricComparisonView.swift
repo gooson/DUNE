@@ -22,14 +22,14 @@ struct MetricComparisonView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: DS.Spacing.md) {
-                Picker("Period", selection: $period) {
-                    ForEach(TimePeriod.allCases, id: \.self) {
-                        Text($0.displayName).tag($0)
-                            .accessibilityIdentifier("metric-comparison-period-\($0.rawValue)")
-                    }
+                if dynamicTypeSize.isAccessibilitySize {
+                    Text("Compare Metrics")
+                        .font(.title.bold())
+                        .fixedSize(horizontal: false, vertical: true)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .accessibilityIdentifier("metric-comparison-title")
                 }
-                .pickerStyle(.menu)
-                .accessibilityIdentifier("metric-comparison-period")
+                periodControl
 
                 Text("Same dates; separate scales. Trends do not establish cause.")
                     .font(.caption)
@@ -46,7 +46,7 @@ struct MetricComparisonView: View {
                 .padding(DS.Spacing.md)
             }
             .onGeometryChange(for: CGFloat.self) { $0.size.width } action: { availableWidth = $0 }
-            .navigationTitle("Compare Metrics")
+            .navigationTitle(dynamicTypeSize.isAccessibilitySize ? "" : String(localized: "Compare Metrics"))
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Done") { dismiss() }
@@ -55,6 +55,46 @@ struct MetricComparisonView: View {
             }
         }
         .presentationDetents([.large])
+    }
+
+    @ViewBuilder
+    private var periodControl: some View {
+        if dynamicTypeSize.isAccessibilitySize {
+            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                Text("Period").font(.headline)
+                ForEach(TimePeriod.allCases, id: \.self) { option in
+                    Button {
+                        period = option
+                    } label: {
+                        HStack {
+                            Text(option.displayName).fixedSize(horizontal: false, vertical: true)
+                            Spacer(minLength: DS.Spacing.sm)
+                            if period == option {
+                                Image(systemName: "checkmark")
+                            }
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(DS.Spacing.sm)
+                        .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+                    .foregroundStyle(period == option ? .primary : .secondary)
+                    .accessibilityAddTraits(period == option ? .isSelected : [])
+                    .accessibilityIdentifier("metric-comparison-period-\(option.rawValue)")
+                }
+            }
+            .accessibilityElement(children: .contain)
+            .accessibilityIdentifier("metric-comparison-period-options")
+        } else {
+            Picker("Period", selection: $period) {
+                ForEach(TimePeriod.allCases, id: \.self) {
+                    Text($0.displayName).tag($0)
+                        .accessibilityIdentifier("metric-comparison-period-\($0.rawValue)")
+                }
+            }
+            .pickerStyle(.menu)
+            .accessibilityIdentifier("metric-comparison-period")
+        }
     }
 
     private func pane(selection: Binding<String>, title: LocalizedStringKey, identifier: String) -> some View {

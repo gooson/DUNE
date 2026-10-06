@@ -36,6 +36,11 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
         XCTAssertEqual(initialRange, secondRange.label, "Both metrics should use the same initial dates")
 
         if VisualAudit.isEnabled {
+            let title = app.staticTexts["metric-comparison-title"]
+            if title.exists {
+                XCTAssertTrue(app.windows.firstMatch.frame.contains(title.frame),
+                              "The full comparison title should fit at accessibility text sizes")
+            }
             for name in ["charts"] {
                 VisualAudit.capture("Metric comparison \(name) initial viewport")
                 for index in 1...3 {
@@ -46,10 +51,29 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
         }
 
         let comparisonScroll = app.scrollViews.firstMatch
-        for _ in 0..<12 where !app.buttons["metric-comparison-period"].isHittable {
-            comparisonScroll.swipeDown()
+        let inlinePeriods = app.descendants(matching: .any)["metric-comparison-period-options"].firstMatch
+        let month = app.buttons["metric-comparison-period-M"]
+        if inlinePeriods.exists {
+            for _ in 0..<12 {
+                let visible = comparisonScroll.frame.intersection(app.windows.firstMatch.frame)
+                let monthFrame = month.frame
+                if month.isHittable && visible.contains(monthFrame) { break }
+                if monthFrame.maxY > visible.maxY {
+                    comparisonScroll.swipeUp(velocity: .slow)
+                } else {
+                    comparisonScroll.swipeDown(velocity: .slow)
+                }
+            }
+            XCTAssertTrue(month.isHittable, "Month should be reachable without a popup at accessibility text sizes")
+            XCTAssertTrue(comparisonScroll.frame.intersection(app.windows.firstMatch.frame).contains(month.frame),
+                          "The whole month button should remain within the scroll viewport")
+            VisualAudit.capture("Comparison inline month fully visible before selection")
+        } else {
+            for _ in 0..<12 where !app.buttons["metric-comparison-period"].isHittable {
+                comparisonScroll.swipeDown()
+            }
+            XCTAssertTrue(app.waitAndTap("metric-comparison-period"), "Period menu should open")
         }
-        XCTAssertTrue(app.waitAndTap("metric-comparison-period"), "Period menu should open")
         XCTAssertTrue(app.waitAndTap("metric-comparison-period-M"), "Shared period picker should offer month")
         let rangesUpdated = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
             firstRange.exists && secondRange.exists
@@ -58,6 +82,10 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
         }, object: nil)
         XCTAssertEqual(XCTWaiter.wait(for: [rangesUpdated], timeout: 5), .completed,
                        "Changing the shared period should update both date ranges together")
+        if inlinePeriods.exists {
+            XCTAssertTrue(month.isSelected, "The shared period should indicate the current selection")
+            VisualAudit.capture("Comparison inline month selected with shared dates updated")
+        }
 
         XCTAssertTrue(app.waitAndTap("metric-comparison-done"), "Comparison should expose Done")
         let comparisonDismissed = XCTNSPredicateExpectation(
