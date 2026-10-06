@@ -369,6 +369,25 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
         captureScrollContent("Posture detail", count: 5)
     }
 
+    func testPostureCardAtMaximumAccessibilitySize() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments.append(contentsOf: [
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ])
+        launchApp(with: configuration)
+        let capture = app.buttons["wellness-button-posture-capture"].firstMatch
+        reveal(capture)
+        XCTAssertTrue(capture.exists && capture.isHittable)
+        VisualAudit.capture("Maximum AX posture card actions")
+        let record = app.buttons.matching(NSPredicate(
+            format: "identifier BEGINSWITH %@", "wellness-posture-record-"
+        )).firstMatch
+        reveal(record)
+        XCTAssertTrue(record.exists && record.isHittable)
+        VisualAudit.capture("Maximum AX posture card score and complete metrics label")
+        openHistory()
+    }
+
     func testPostureComparison() throws {
         openHistory()
         let compare = app.buttons["Compare"].firstMatch
@@ -437,7 +456,7 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
     }
 
     private func openHistory() {
-        let viewAll = app.buttons["View All"].firstMatch
+        let viewAll = app.buttons["wellness-link-posturehistory"].firstMatch
         reveal(viewAll)
         XCTAssertTrue(viewAll.exists && viewAll.isHittable, "Posture history entry should be reachable")
         viewAll.auditTap()

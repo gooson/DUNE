@@ -10,6 +10,8 @@ struct TrainingVolumeSummaryCard: View {
     let lastWorkoutCalories: Double
 
     @Environment(\.appTheme) private var theme
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @ScaledMetric(relativeTo: .caption2) private var chartHeight: CGFloat = 50
 
     var body: some View {
         NavigationLink(value: TrainingVolumeDestination.overview) {
@@ -71,14 +73,15 @@ struct TrainingVolumeSummaryCard: View {
             .clipShape(RoundedRectangle(cornerRadius: 2))
         }
         .chartXAxis {
-            AxisMarks(values: .stride(by: .day, count: 7)) { _ in
+            AxisMarks(values: .stride(by: .day, count: dynamicTypeSize.isAccessibilitySize ? 14 : 7)) { _ in
                 AxisValueLabel(format: .dateTime.day())
+                    .font(.caption2)
                     .foregroundStyle(theme.sandColor)
             }
         }
         .chartYAxis(.hidden)
         .chartYScale(domain: 0...Swift.max((trainingLoadData.map(\.load).max() ?? 0) * 1.15, 1))
-        .frame(height: 50)
+        .frame(height: chartHeight)
         .clipped()
     }
 }

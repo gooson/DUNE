@@ -131,16 +131,24 @@ struct DailyVolumeChartView: View {
             }
         }
         .chartXAxis {
-            AxisMarks(values: .stride(by: .day, count: dynamicTypeSize.isAccessibilitySize
-                                     ? max(2, period.chartAxisStrideCount)
-                                     : period.chartAxisStrideCount)) { value in
-                AxisGridLine()
-                    .foregroundStyle(theme.accentColor.opacity(0.30))
-                AxisValueLabel(format: axisFormat, centered: false,
-                               anchor: value.index == 0 ? .topLeading
-                                   : (value.index == value.count - 1 ? .topTrailing : .top))
-                    .font(.caption2)
-                    .foregroundStyle(theme.sandColor)
+            if dynamicTypeSize.isAccessibilitySize {
+                AxisMarks(values: accessibleAxisDates) { value in
+                    AxisGridLine()
+                        .foregroundStyle(theme.accentColor.opacity(0.30))
+                    AxisValueLabel(format: axisFormat, centered: false,
+                                   anchor: value.index == 0 ? .topLeading : .topTrailing,
+                                   collisionResolution: .greedy)
+                        .font(.caption2)
+                        .foregroundStyle(theme.sandColor)
+                }
+            } else {
+                AxisMarks(values: .stride(by: .day, count: period.chartAxisStrideCount)) { _ in
+                    AxisGridLine()
+                        .foregroundStyle(theme.accentColor.opacity(0.30))
+                    AxisValueLabel(format: axisFormat)
+                        .font(.caption2)
+                        .foregroundStyle(theme.sandColor)
+                }
             }
         }
         .chartYAxis {
@@ -194,6 +202,18 @@ struct DailyVolumeChartView: View {
 
     private var isScrollable: Bool {
         dailyBreakdown.count > period.days
+    }
+
+    // AxisValue indices describe the entire data domain, not the scrolled viewport.
+    // Keep two labels inside the visible window and anchor them toward its center.
+    private var accessibleAxisDates: [Date] {
+        let calendar = Calendar.current
+        let start = isScrollable ? max(scrollPosition, xDomain.lowerBound) : xDomain.lowerBound
+        let end = min(start.addingTimeInterval(period.visibleDomainSeconds), xDomain.upperBound)
+        let first = calendar.date(byAdding: .day, value: 1, to: calendar.startOfDay(for: start)) ?? start
+        let last = calendar.date(byAdding: .day, value: -1, to: calendar.startOfDay(for: end)) ?? end
+        guard first < last else { return [start] }
+        return [first, last]
     }
 
     private var chartAccessibilitySurface: some View {

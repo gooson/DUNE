@@ -512,6 +512,8 @@ private struct PostureAssessmentLinkView: View {
     @Query(sort: \PostureAssessmentRecord.date, order: .reverse)
     private var records: [PostureAssessmentRecord]
     @Environment(\.appTheme) private var theme
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @ScaledMetric(relativeTo: .caption2) private var scoreDiameter: CGFloat = 40
 
     let onCapture: () -> Void
     let onRealtime: () -> Void
@@ -520,16 +522,22 @@ private struct PostureAssessmentLinkView: View {
     var body: some View {
         StandardCard {
             VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-                HStack(spacing: DS.Spacing.xs) {
-                    Image(systemName: "figure.stand")
-                        .font(.subheadline)
-                        .foregroundStyle(DS.Color.body)
+                let headerLayout = dynamicTypeSize.isAccessibilitySize
+                    ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.sm))
+                    : AnyLayout(HStackLayout(spacing: DS.Spacing.xs))
+                headerLayout {
+                    HStack(spacing: DS.Spacing.xs) {
+                        Image(systemName: "figure.stand")
+                            .font(.subheadline)
+                            .foregroundStyle(DS.Color.body)
 
-                    Text("Posture Assessment")
-                        .font(.subheadline)
-                        .fontWeight(.semibold)
+                        Text("Posture Assessment")
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
 
-                    Spacer()
+                    if !dynamicTypeSize.isAccessibilitySize { Spacer() }
 
                     if !records.isEmpty {
                         NavigationLink(value: PostureHistoryDestination()) {
@@ -538,6 +546,7 @@ private struct PostureAssessmentLinkView: View {
                                 .fontWeight(.medium)
                         }
                         .tint(theme.accentColor)
+                        .accessibilityIdentifier("wellness-link-posturehistory")
                     }
                 }
 
@@ -551,6 +560,7 @@ private struct PostureAssessmentLinkView: View {
                             recordRow(record)
                         }
                         .buttonStyle(.plain)
+                        .accessibilityIdentifier("wellness-posture-record-\(record.id.uuidString)")
                     }
                 }
             }
@@ -563,7 +573,10 @@ private struct PostureAssessmentLinkView: View {
     // MARK: - Action Buttons
 
     private var actionButtons: some View {
-        HStack(spacing: DS.Spacing.sm) {
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(spacing: DS.Spacing.sm))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.sm))
+        return layout {
             Button {
                 onCapture()
             } label: {
@@ -572,6 +585,7 @@ private struct PostureAssessmentLinkView: View {
                         .font(.caption)
                     Text("Capture")
                         .font(.caption.weight(.medium))
+                        .fixedSize(horizontal: false, vertical: true)
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, DS.Spacing.sm)
@@ -579,6 +593,7 @@ private struct PostureAssessmentLinkView: View {
             }
             .buttonStyle(.plain)
             .tint(DS.Color.body)
+            .accessibilityIdentifier("wellness-button-posture-capture")
 
             Button {
                 onRealtime()
@@ -588,6 +603,7 @@ private struct PostureAssessmentLinkView: View {
                         .font(.caption)
                     Text("Realtime")
                         .font(.caption.weight(.medium))
+                        .fixedSize(horizontal: false, vertical: true)
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, DS.Spacing.sm)
@@ -595,6 +611,7 @@ private struct PostureAssessmentLinkView: View {
             }
             .buttonStyle(.plain)
             .tint(DS.Color.body)
+            .accessibilityIdentifier("wellness-button-posture-realtime")
         }
     }
 
@@ -602,11 +619,14 @@ private struct PostureAssessmentLinkView: View {
 
     private func recordRow(_ record: PostureAssessmentRecord) -> some View {
         InlineCard {
-            HStack(spacing: DS.Spacing.md) {
+            let layout = dynamicTypeSize.isAccessibilitySize
+                ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.md))
+                : AnyLayout(HStackLayout(spacing: DS.Spacing.md))
+            layout {
                 ZStack {
                     Circle()
                         .stroke(.quaternary, lineWidth: 4)
-                        .frame(width: 40, height: 40)
+                        .frame(width: scoreDiameter, height: scoreDiameter)
 
                     Circle()
                         .trim(from: 0, to: CGFloat(record.overallScore) / 100.0)
@@ -614,28 +634,31 @@ private struct PostureAssessmentLinkView: View {
                             scoreColor(record.overallScore),
                             style: StrokeStyle(lineWidth: 4, lineCap: .round)
                         )
-                        .frame(width: 40, height: 40)
+                        .frame(width: scoreDiameter, height: scoreDiameter)
                         .rotationEffect(.degrees(-90))
 
                     Text("\(record.overallScore)")
                         .font(.caption2.bold())
                 }
+                .frame(width: scoreDiameter, height: scoreDiameter)
 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(record.date.formatted(.dateTime.month(.abbreviated).day()))
                         .font(.caption)
                         .fontWeight(.medium)
+                        .fixedSize(horizontal: false, vertical: true)
 
                     Text(String(localized: "\(record.allMetrics.count) metrics measured"))
                         .font(.caption2)
                         .foregroundStyle(DS.Color.textSecondary)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
-
-                Spacer()
+                .frame(maxWidth: .infinity, alignment: .leading)
 
                 Image(systemName: "chevron.right")
                     .font(.caption2)
                     .foregroundStyle(.tertiary)
+                    .frame(maxWidth: dynamicTypeSize.isAccessibilitySize ? .infinity : nil, alignment: .trailing)
             }
         }
     }
