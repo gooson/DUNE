@@ -54,7 +54,13 @@ struct WorkoutCompletionSheet: View {
                         Text("Workout Complete!")
                             .font(.title2.weight(.bold))
 
-                        Text("\(exerciseName) \u{00B7} \(setCount.formattedWithSeparator) sets")
+                        Group {
+                            if setCount == 1 {
+                                Text("\(exerciseName) \u{00B7} \(setCount.formattedWithSeparator) set")
+                            } else {
+                                Text("\(exerciseName) \u{00B7} \(setCount.formattedWithSeparator) sets")
+                            }
+                        }
                             .font(.subheadline)
                             .foregroundStyle(DS.Color.textSecondary)
                     }
