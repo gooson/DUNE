@@ -6,6 +6,7 @@ struct InjuryFormSheet: View {
     let onSave: () -> Void
     @Environment(\.appTheme) private var theme
     @Environment(\.dismiss) private var dismiss
+    @ScaledMetric(relativeTo: .title3) private var severityIconWidth: CGFloat = 28
     @State private var saveCount = 0
 
     var body: some View {
@@ -61,7 +62,7 @@ struct InjuryFormSheet: View {
                                     Image(systemName: severity.iconName)
                                         .font(.title3)
                                         .foregroundStyle(severity.color)
-                                        .frame(width: 28)
+                                        .frame(width: severityIconWidth)
 
                                     VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                                         Text(severity.displayName)
