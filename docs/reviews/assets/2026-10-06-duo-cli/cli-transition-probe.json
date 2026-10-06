@@ -1,0 +1,71 @@
+{
+  "device": "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+  "source_commit": "7acb090dd7d28fb0aea8e1907211ceff15aa450e",
+  "initial_angle": 0.0,
+  "states": [
+    {
+      "state": "book",
+      "target_angle": 90,
+      "actual_angle": 90.0,
+      "captures": [
+        {
+          "path": "/tmp/duo-hinge-control-20261006/probe/book-A0AA5A9F-66C1-4C09-9029-BB249EFBB820.png",
+          "native_size": [
+            2853,
+            2007
+          ]
+        },
+        {
+          "path": "/tmp/duo-hinge-control-20261006/probe/book-0FB3E4CC-FDEA-4DFF-A2B0-F2B874AB99EA.png",
+          "native_size": [
+            2034,
+            1398
+          ]
+        }
+      ]
+    },
+    {
+      "state": "open",
+      "target_angle": 180,
+      "actual_angle": 180.0,
+      "captures": [
+        {
+          "path": "/tmp/duo-hinge-control-20261006/probe/open-A0AA5A9F-66C1-4C09-9029-BB249EFBB820.png",
+          "native_size": [
+            2853,
+            2007
+          ]
+        },
+        {
+          "path": "/tmp/duo-hinge-control-20261006/probe/open-0FB3E4CC-FDEA-4DFF-A2B0-F2B874AB99EA.png",
+          "native_size": [
+            2034,
+            1398
+          ]
+        }
+      ]
+    },
+    {
+      "state": "closed",
+      "target_angle": 0,
+      "actual_angle": 0.0,
+      "captures": [
+        {
+          "path": "/tmp/duo-hinge-control-20261006/probe/closed-A0AA5A9F-66C1-4C09-9029-BB249EFBB820.png",
+          "native_size": [
+            2007,
+            2853
+          ]
+        },
+        {
+          "path": "/tmp/duo-hinge-control-20261006/probe/closed-0FB3E4CC-FDEA-4DFF-A2B0-F2B874AB99EA.png",
+          "native_size": [
+            1398,
+            2034
+          ]
+        }
+      ]
+    }
+  ],
+  "restored": true
+}

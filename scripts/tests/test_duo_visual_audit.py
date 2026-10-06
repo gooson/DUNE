@@ -324,5 +324,95 @@ class HingeCLIContracts(unittest.TestCase):
         run_mock.assert_not_called()
 
 
+class OrientationCLIContracts(unittest.TestCase):
+    line = CaptureContracts.line
+    ledger = CaptureContracts.ledger
+    screenshot = staticmethod(CaptureContracts.screenshot)
+
+    def setUp(self):
+        CaptureContracts.setUp(self)
+
+    def orientation_checkpoint(self):
+        return audit.capture_checkpoint(self.line("ORIENT:landscapeLeft", seconds=120), 1,
+                                        self.output, APP_ID, "all", self.container.resolve(),
+                                        self.captures, self.checkpoints)
+
+    @patch.object(audit.subprocess, "run")
+    @patch.object(audit.subprocess, "check_output", return_value=PORTS)
+    def test_verified_orientation_requires_fresh_hierarchy_and_both_screens(self, _ports, run_mock):
+        def commands(argv, **kwargs):
+            if "orientation" in argv:
+                payload = {"result": {"deviceOrientation": "landscapeLeft"}}
+                return subprocess.CompletedProcess(argv, 0, json.dumps(payload), "")
+            return self.screenshot(argv, **kwargs)
+
+        run_mock.side_effect = commands
+        with patch.object(audit, "refresh_fold_hierarchy") as refresh:
+            self.orientation_checkpoint()
+        refresh.assert_called_once()
+        self.assertEqual(len(self.captures.getvalue().splitlines()), 2)
+        self.assertTrue(self.ledger()["acknowledged"])
+        receipt = json.loads((self.output / "001-orientation.json").read_text())
+        self.assertEqual(receipt["actual_orientation"], "landscapeLeft")
+        self.assertTrue(receipt["verified"])
+
+    @patch.object(audit.subprocess, "run")
+    @patch.object(audit.subprocess, "check_output")
+    def test_orientation_mismatch_is_not_acknowledged(self, ports, run_mock):
+        run_mock.return_value = subprocess.CompletedProcess([], 0, json.dumps({
+            "result": {"deviceOrientation": "portrait"}
+        }), "")
+        with patch.object(audit, "refresh_fold_hierarchy") as refresh:
+            with self.assertRaisesRegex(RuntimeError, "Orientation readback mismatch"):
+                self.orientation_checkpoint()
+        refresh.assert_not_called()
+        ports.assert_not_called()
+        self.assertFalse(self.ack.exists())
+        self.assertFalse(self.ledger()["valid_evidence"])
+
+    @patch.object(audit.subprocess, "run", side_effect=subprocess.TimeoutExpired("devicectl", 12))
+    def test_orientation_timeout_is_not_acknowledged(self, _run):
+        with self.assertRaises(subprocess.TimeoutExpired):
+            self.orientation_checkpoint()
+        self.assertFalse(self.ack.exists())
+        self.assertFalse(self.ledger()["valid_evidence"])
+
+    def test_unknown_orientation_is_refused(self):
+        with self.assertRaisesRegex(RuntimeError, "Unknown orientation"):
+            audit.orientation_state("ORIENT:invalid")
+
+    @patch.object(audit.subprocess, "run")
+    def test_guest_driver_still_requires_official_readback(self, run_mock):
+        cli = self.output / "orientation-driver"
+        cli.write_text("#!/bin/sh\nexit 0\n")
+        cli.chmod(0o700)
+        run_mock.side_effect = [
+            subprocess.CompletedProcess([], 0, "", ""),
+            subprocess.CompletedProcess([], 0, json.dumps({
+                "result": {"deviceOrientation": "landscapeLeft"}
+            }), ""),
+        ]
+        with patch.dict(audit.os.environ, {"DAILVE_DUO_ORIENTATION_CLI": str(cli)}):
+            audit.set_device_orientation(self.output, 1, "landscapeLeft", APP_ID, time.time() + 120)
+        self.assertEqual(run_mock.call_args_list[0].args[0],
+                         [str(cli.resolve()), "-d", APP_ID, "landscapeLeft"])
+        self.assertEqual(run_mock.call_args_list[1].args[0][:5],
+                         ["xcrun", "devicectl", "device", "orientation", "get"])
+        self.assertTrue(json.loads((self.output / "001-orientation.json").read_text())["verified"])
+
+    @patch.object(audit.subprocess, "run")
+    def test_guest_driver_failure_does_not_read_or_ack(self, run_mock):
+        cli = self.output / "orientation-driver"
+        cli.write_text("#!/bin/sh\nexit 1\n")
+        cli.chmod(0o700)
+        run_mock.return_value = subprocess.CompletedProcess([], 1, "", "dispatch failed")
+        with patch.dict(audit.os.environ, {"DAILVE_DUO_ORIENTATION_CLI": str(cli)}):
+            with self.assertRaisesRegex(RuntimeError, "Orientation set failed"):
+                self.orientation_checkpoint()
+        self.assertEqual(run_mock.call_count, 1)
+        self.assertFalse(self.ack.exists())
+        self.assertFalse(self.ledger()["valid_evidence"])
+
+
 if __name__ == "__main__":
     unittest.main()

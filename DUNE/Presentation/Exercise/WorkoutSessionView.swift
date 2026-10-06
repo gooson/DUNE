@@ -332,13 +332,13 @@ struct WorkoutSessionView: View {
         VStack(spacing: 0) {
             ScrollView {
                 VStack(spacing: DS.Spacing.lg) {
-                    if showsOverview && !isInputFieldFocused {
-                        sessionOverview
-                    }
                     if showRestTimer {
                         restTimerContent
                     } else {
                         setInputContent
+                    }
+                    if showsOverview && !isInputFieldFocused {
+                        sessionOverview
                     }
                 }
                 .frame(maxWidth: .infinity)

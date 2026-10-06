@@ -332,9 +332,13 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
     private func verifyWorkoutDraftAcrossRotation(contentSize: String) throws {
         var configuration = launchConfiguration
         configuration.additionalArguments.append(contentsOf: ["-UIPreferredContentSizeCategoryName", contentSize])
-        XCUIDevice.shared.orientation = .portrait
+        let hostOrientation = VisualAudit.isEnabled
+            && ProcessInfo.processInfo.environment["DUNE_VISUAL_AUDIT_HOST_ONLY"] == "1"
+        if hostOrientation { executionTimeAllowance = 600 }
+        if !hostOrientation { XCUIDevice.shared.orientation = .portrait }
         defer { XCUIDevice.shared.orientation = .portrait }
         launchApp(with: configuration)
+        if hostOrientation { VisualAudit.capture("ORIENT:portrait") }
         openQuickStartPicker()
         startQuickStartExerciseFromDetail(search: "Bench Press", exerciseID: Fixture.benchPressID)
         XCTAssertTrue(scrollToWorkoutControl("+2.5"))
@@ -346,7 +350,11 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         VisualAudit.capture("Workout portrait before rotation \(contentSize)")
         let window = app.windows.firstMatch
         let initialViewport = window.frame.size
-        XCUIDevice.shared.orientation = .landscapeLeft
+        if hostOrientation {
+            VisualAudit.capture("ORIENT:landscapeLeft")
+        } else {
+            XCUIDevice.shared.orientation = .landscapeLeft
+        }
         let landscape = XCTNSPredicateExpectation(
             predicate: NSPredicate { _, _ in window.frame.size != initialViewport }, object: window
         )
@@ -354,7 +362,16 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
                        "The active workout viewport must actually rotate")
         assertActiveWorkoutInputsAfterFold(weight: weight, reps: reps)
         VisualAudit.capture("Workout rotated viewport preserves inputs \(contentSize)")
-        XCUIDevice.shared.orientation = .portrait
+        if hostOrientation {
+            VisualAudit.capture("ORIENT:portrait")
+        } else {
+            XCUIDevice.shared.orientation = .portrait
+        }
+        let restored = XCTNSPredicateExpectation(
+            predicate: NSPredicate { _, _ in window.frame.size == initialViewport }, object: window
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [restored], timeout: 8), .completed,
+                       "Portrait must restore the original workout viewport")
         assertActiveWorkoutInputsAfterFold(weight: weight, reps: reps)
         VisualAudit.capture("Workout portrait after rotation \(contentSize)")
     }
@@ -443,6 +460,14 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             )
             previousSeconds = currentSeconds
             previousSampleTime = sampleTime
+            XCTAssertTrue(scrollToWorkoutControl("workout-session-rest-countdown", mustFitInViewport: true),
+                          "The running countdown must remain reachable after folding")
+            let countdown = app.staticTexts["workout-session-rest-countdown"].firstMatch
+            let controls = app.scrollViews["workout-session-controls"].firstMatch
+            let visible = controls.frame.intersection(app.windows.firstMatch.frame)
+            XCTAssertTrue(visible.contains(countdown.frame),
+                          "The full countdown must fit in the active scroll viewport")
+            VisualAudit.capture("Full rest countdown after \(checkpoint)")
         }
 
         let skipRest = app.buttons[AXID.workoutSessionSkipRest].firstMatch
@@ -1572,14 +1597,17 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         add(attachment)
     }
 
-    private func scrollToWorkoutControl(_ identifier: String, maxSwipes: Int = 8) -> Bool {
+    private func scrollToWorkoutControl(
+        _ identifier: String, maxSwipes: Int = 8, mustFitInViewport: Bool = false
+    ) -> Bool {
         let control = app.descendants(matching: .any)[identifier].firstMatch
         let container = app.scrollViews["workout-session-controls"].firstMatch
         guard container.waitForExistence(timeout: 5) else { return false }
         for _ in 0..<maxSwipes {
             let viewport = container.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 8)
             if control.exists && control.isHittable
-                && viewport.contains(CGPoint(x: control.frame.midX, y: control.frame.midY)) { return true }
+                && (mustFitInViewport ? viewport.contains(control.frame)
+                    : viewport.contains(CGPoint(x: control.frame.midX, y: control.frame.midY))) { return true }
             if control.exists && container.frame.height > 0 {
                 let delta = control.frame.midY - viewport.midY
                 let travel = min(max(abs(delta), 30), container.frame.height * 0.45) / container.frame.height
@@ -1597,7 +1625,8 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         }
         let viewport = container.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 8)
         return control.exists && control.isHittable
-            && viewport.contains(CGPoint(x: control.frame.midX, y: control.frame.midY))
+            && (mustFitInViewport ? viewport.contains(control.frame)
+                : viewport.contains(CGPoint(x: control.frame.midX, y: control.frame.midY)))
     }
 
     private func assertActiveWorkoutInputsAfterFold(weight: String, reps: String) {

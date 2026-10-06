@@ -75,3 +75,9 @@ Mac 잠금 해제를 요청한 상태다. 잠금 상태에서 가능한 백그�
 검사 보정 기록: collection `isHittable` 실패는 exists 기반 보정 1회에서 해소됐고 이후 스크롤 캡처를 완료했다. 새 실패는 마지막 화면에서 가상화로 제거된 첫 record를 요구한 후조건이다. 해당 record가 중간 capture 004에 실제 표시된 AX/PNG를 근거로 누적 관찰로 수정했으며, 이 후조건 실패에 대한 검증은 `history-observed-row-ui` 단일 실행으로 제한한다.
 
 최종 상태: 이번 차트·자세·휴식·초안 복구·운동 이름 수정은 표준 빌드, 관련 기능 검사와 선택한 native PNG로 확인했다. 전체 화면/자세/회전 감사는 완료하지 않았다. 실제 Book/Open/Closed 입력·휴식 전체 case, 내부 화면의 기본/최대 AX·회전 및 실제 이전 OS scene session 복원이 남아 있다. GUI는 Mac 잠금 해제 요청에 대한 응답을 기다린다.
+
+## 2026-10-06 CLI 자동화로 재개
+
+Mac GUI 조작을 필수로 둔 이전 대기 판단을 수정했다. 검토한 pinned hinge source를 사용해 실제 90°/180°/0°를 설정·조회했고, 기본 글자 입력/휴식 두 fold case는 2 passed / exit 0으로 완료됐다. 최신 세트 화면의 compact 배치와 최대 AX 검증은 [CLI 후속 보고서](2026-10-06-duo-cli-fold-validation.md)에 별도로 기록한다. 앞의 무효 release/실패 증거는 그대로 유지한다.
+
+공식 orientation setter는 존재하지만 이 환경에서 성공 응답 뒤 실제 방향 조회가 portrait로 유지됐다. setter 응답과 실제 전환을 구분하는 실패 증거를 보존하고 다른 물리 방향 전달 경로를 조사했다. `.codex/agent-memory/ui-test-expert.md`, `.codex/agent-map.md`, `AGENTS.md`에 향후 실행의 메모리 경로와 실제 readback 기준을 연결했다. 전체 감사 완료를 뜻하지 않는다.

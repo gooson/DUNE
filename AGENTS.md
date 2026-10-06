@@ -167,3 +167,8 @@ Codex는 아래 allow list를 Claude와 동일 기준으로 취급합니다(단,
 - skill/agent 문서에서 상대 경로가 나오면 해당 문서가 위치한 디렉토리를 기준으로 해석합니다.
 - 추가 참조가 필요할 때는 참조된 파일만 최소 단위로 읽습니다.
 - `.claude/worktrees/*/.claude` 경로로 작업 중인 경우에도 위 규칙을 동일하게 적용합니다.
+
+## Duo Simulator Automation Memory
+
+- Duo 전환/회전 작업은 `.codex/agent-memory/ui-test-expert.md`를 먼저 읽습니다.
+- GUI 잠금이나 `simctl`의 접힘 명령 부재만으로 백그라운드 전환 검증이 불가능하다고 판단하지 않습니다. 검토한 CLI와 공식 `devicectl` 하위 명령을 확인하고, 실제 상태 readback과 viewport/PNG로 성공을 검증합니다.

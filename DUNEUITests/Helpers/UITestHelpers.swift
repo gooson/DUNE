@@ -31,7 +31,8 @@ enum VisualAudit {
                 return
             }
         }
-        let deadline = Date().addingTimeInterval(action.hasPrefix("FOLD:") ? 120 : 30)
+        let requiresMotion = action.hasPrefix("FOLD:") || action.hasPrefix("ORIENT:")
+        let deadline = Date().addingTimeInterval(requiresMotion ? 120 : 30)
         let handshake = hostOnly ? " DEADLINE=\(deadline.timeIntervalSince1970) ACK=\(acknowledgement.path)" : ""
         print("DUNE_VISUAL_AUDIT_READY \(action) [\(file):\(line)]\(handshake)")
         fflush(stdout)
@@ -40,7 +41,7 @@ enum VisualAudit {
             // This is an opt-in diagnostic handshake, not a functional-test delay.
             var refreshedForFold = false
             while !FileManager.default.fileExists(atPath: acknowledgement.path), Date() < deadline {
-                if action.hasPrefix("FOLD:"), !refreshedForFold,
+                if requiresMotion, !refreshedForFold,
                    FileManager.default.fileExists(atPath: refreshURL.path) {
                     try? FileManager.default.removeItem(at: refreshURL)
                     hierarchyText = XCUIApplication().debugDescription

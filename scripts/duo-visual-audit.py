@@ -8,6 +8,9 @@ pause until the operator changes Device Hub state and creates the release file.
 The host then requests a fresh XCTest hierarchy before capturing both displays.
 Set DAILVE_DUO_HINGE_CLI to a reviewed hinge executable to set and verify the
 angle automatically without Device Hub UI interaction.
+ORIENT checkpoints verify physical orientation through devicectl. Set
+DAILVE_DUO_ORIENTATION_CLI to a reviewed guest HID driver if the official setter
+does not change the Duo motion controller's readback.
 """
 from pathlib import Path
 import json
@@ -21,6 +24,56 @@ import time
 
 FOLD_STATES = {"closed", "partiallyOpen", "openFlat"}
 FOLD_ANGLES = {"closed": 0, "partiallyOpen": 90, "openFlat": 180}
+ORIENTATION_STATES = {"portrait", "landscapeLeft", "landscapeRight"}
+
+
+def orientation_state(action):
+    match = re.match(r"^ORIENT:([^\s]+)(?:\s|$)", action)
+    if not match:
+        return None
+    state = match.group(1)
+    if state not in ORIENTATION_STATES:
+        raise RuntimeError(f"Unknown orientation: {state}")
+    return state
+
+
+def set_device_orientation(output, sequence, orientation, device, test_deadline):
+    if not re.fullmatch(r"[A-Fa-f0-9]{8}(?:-[A-Fa-f0-9]{4}){3}-[A-Fa-f0-9]{12}", device):
+        raise RuntimeError("Orientation control requires an explicit simulator UDID")
+    receipt = {"device": device, "target_orientation": orientation, "verified": False}
+    try:
+        cli = None
+        if configured := os.environ.get("DAILVE_DUO_ORIENTATION_CLI"):
+            cli = Path(configured).resolve(strict=True)
+            if not cli.is_file() or not os.access(cli, os.X_OK):
+                raise RuntimeError("Configured orientation CLI is not an executable file")
+            receipt["cli"] = str(cli)
+        prefix = ["xcrun", "devicectl", "device", "orientation"]
+        for command in ["set", "get"]:
+            budget = test_deadline - time.time() - 37
+            if budget <= 0:
+                raise RuntimeError("Orientation change has insufficient capture budget")
+            args = prefix + [command, "--device", device]
+            if command == "set":
+                args.append(orientation)
+            args += ["--timeout", "10", "--json-output", "-"]
+            if command == "set" and cli:
+                args = [str(cli), "-d", device, orientation]
+            result = subprocess.run(args, capture_output=True, text=True, timeout=min(12, budget))
+            if result.returncode:
+                raise RuntimeError(f"Orientation {command} failed ({result.returncode}): {result.stderr[-600:]}")
+            if command == "get":
+                actual = json.loads(result.stdout)["result"]["deviceOrientation"]
+                receipt["actual_orientation"] = actual
+                if actual != orientation:
+                    raise RuntimeError(f"Orientation readback mismatch: target={orientation}, actual={actual}")
+        receipt["verified"] = True
+        print(f"ORIENTATION_VERIFIED target={orientation} actual={actual}", flush=True)
+    except Exception as exc:
+        receipt["error"] = str(exc)
+        raise
+    finally:
+        (output / f"{sequence:03}-orientation.json").write_text(json.dumps(receipt) + "\n")
 
 
 def set_fold_with_cli(output, sequence, state, device, test_deadline):
@@ -166,20 +219,24 @@ def capture_checkpoint(line, sequence, output, device, requested_display,
         test_deadline = float(deadline_match.group(1))
         acknowledgement = validate_ack_path(deadline_match.group(2), container_root)
         state = fold_state(action.removeprefix("DUNE_VISUAL_AUDIT_READY "))
+        orientation = orientation_state(action.removeprefix("DUNE_VISUAL_AUDIT_READY "))
         if state:
             if os.environ.get("DAILVE_DUO_HINGE_CLI"):
                 set_fold_with_cli(output, sequence, state, device, test_deadline)
             else:
                 wait_for_fold_release(output, sequence, state, test_deadline)
             refresh_fold_hierarchy(acknowledgement, test_deadline)
+        elif orientation:
+            set_device_orientation(output, sequence, orientation, device, test_deadline)
+            refresh_fold_hierarchy(acknowledgement, test_deadline)
         remaining = test_deadline - time.time() - 2
         if remaining <= 0:
             raise RuntimeError("Checkpoint expired before capture; discard its screenshots")
-        deadline = started + min(25, remaining) if not state else time.monotonic() + min(25, remaining)
+        deadline = started + min(25, remaining) if not (state or orientation) else time.monotonic() + min(25, remaining)
         displays = resolve_displays(device, requested_display, deadline)
         # Fold checkpoints need both built-in screens, even when one is black.
-        if state and (requested_display != "all" or len(displays) != 2):
-            raise RuntimeError("Fold checkpoint requires both built-in Duo displays")
+        if (state or orientation) and (requested_display != "all" or len(displays) != 2):
+            raise RuntimeError("Motion checkpoint requires both built-in Duo displays")
         succeeded = True
         for display, suffix in displays:
             destination = output / f"{sequence:03}{suffix}.png"
