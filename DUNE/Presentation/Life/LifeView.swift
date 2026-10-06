@@ -1,6 +1,10 @@
 import SwiftUI
 import SwiftData
 
+private enum LifeScrollAnchor: Hashable {
+    case checklist
+}
+
 enum LifeHabitLogSync {
     static func insert(_ log: HabitLog, into habit: HabitDefinition) {
         if habit.logs == nil {
@@ -30,6 +34,7 @@ struct LifeView: View {
 
     private let scrollToTopSignal: Int
     private let refreshSignal: Int
+    private let checklistSignal: Int
 
     private var isRegular: Bool { sizeClass == .regular }
 
@@ -37,9 +42,10 @@ struct LifeView: View {
         case top
     }
 
-    init(scrollToTopSignal: Int = 0, refreshSignal: Int = 0) {
+    init(scrollToTopSignal: Int = 0, refreshSignal: Int = 0, checklistSignal: Int = 0) {
         self.scrollToTopSignal = scrollToTopSignal
         self.refreshSignal = refreshSignal
+        self.checklistSignal = checklistSignal
     }
 
     var body: some View {
@@ -68,6 +74,13 @@ struct LifeView: View {
             .onChange(of: scrollToTopSignal) { _, _ in
                 withAnimation(DS.Animation.standard) {
                     proxy.scrollTo(ScrollAnchor.top, anchor: .top)
+                }
+            }
+            .task(id: checklistSignal) {
+                guard checklistSignal > 0 else { return }
+                await Task.yield()
+                withAnimation(DS.Animation.standard) {
+                    proxy.scrollTo(LifeScrollAnchor.checklist, anchor: .top)
                 }
             }
         }
@@ -484,6 +497,7 @@ private struct HabitListQueryView: View {
             }
         }
         .accessibilityIdentifier("life-section-habits")
+        .id(LifeScrollAnchor.checklist)
         .confirmationDialog(
             "More actions",
             isPresented: Binding(

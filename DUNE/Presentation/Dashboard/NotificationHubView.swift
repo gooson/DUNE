@@ -160,6 +160,7 @@ enum NotificationHubMetricResolver {
 /// Latest-first notification inbox accessed from the Today tab toolbar.
 struct NotificationHubView: View {
     let sharedHealthDataService: SharedHealthDataService?
+    let canLoadHealthKitData: Bool
     let requestedItemID: String?
     let navigationRequestID: Int
 
@@ -175,10 +176,12 @@ struct NotificationHubView: View {
 
     init(
         sharedHealthDataService: SharedHealthDataService? = nil,
+        canLoadHealthKitData: Bool = true,
         requestedItemID: String? = nil,
         navigationRequestID: Int = 0
     ) {
         self.sharedHealthDataService = sharedHealthDataService
+        self.canLoadHealthKitData = canLoadHealthKitData
         self.requestedItemID = requestedItemID
         self.navigationRequestID = navigationRequestID
     }
@@ -190,6 +193,7 @@ struct NotificationHubView: View {
         case personalRecords(itemID: String)
         case sleepDetail(itemID: String)
         case postureAssessment(itemID: String)
+        case dailyDigest(itemID: String)
         case message(itemID: String, title: String, body: String)
 
         var id: String {
@@ -207,6 +211,8 @@ struct NotificationHubView: View {
                 return "sleep-detail-\(itemID)"
             case .postureAssessment(let itemID):
                 return "posture-assessment-\(itemID)"
+            case .dailyDigest(let itemID):
+                return "daily-digest-\(itemID)"
             case .message(let itemID, _, _):
                 return "message-\(itemID)"
             }
@@ -251,6 +257,11 @@ struct NotificationHubView: View {
                 NotificationSleepDetailPushView(sharedHealthDataService: sharedHealthDataService)
             case .postureAssessment:
                 PostureHistoryView()
+            case .dailyDigest:
+                DailyDigestNotificationView(
+                    sharedHealthDataService: sharedHealthDataService,
+                    canLoadHealthKitData: canLoadHealthKitData
+                )
             case .message(_, let title, let body):
                 NotificationMessageDetailView(title: title, message: body)
             }
@@ -379,7 +390,7 @@ struct NotificationHubView: View {
 
     private func handleTap(on item: NotificationInboxItem) {
         let route = inboxManager.resolvedRoute(for: item)?.destination
-        if route == .workoutDetail {
+        if route == .workoutDetail || route == .lifeChecklist {
             if inboxManager.open(itemID: item.id) == nil {
                 destination = .unavailable(itemID: item.id)
             }
@@ -398,9 +409,11 @@ struct NotificationHubView: View {
             destination = .sleepDetail(itemID: opened.id)
         case .postureAssessment:
             destination = .postureAssessment(itemID: opened.id)
+        case .dailyDigest:
+            destination = .dailyDigest(itemID: opened.id)
         case .notificationHub:
             destination = .message(itemID: opened.id, title: opened.title, body: opened.body)
-        case .workoutDetail:
+        case .workoutDetail, .lifeChecklist:
             break
         case nil:
             if let metric = NotificationHubMetricResolver.metric(for: opened) {
@@ -496,6 +509,12 @@ struct NotificationHubView: View {
         }
         if route == .postureAssessment {
             return (String(localized: "Posture Assessment"), "figure.stand")
+        }
+        if route == .dailyDigest {
+            return (String(localized: "Today's Summary"), "doc.text")
+        }
+        if route == .lifeChecklist {
+            return (String(localized: "Life Checklist"), "checklist")
         }
 
         guard let category = NotificationHubMetricResolver.category(for: item.insightType),

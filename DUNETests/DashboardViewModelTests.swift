@@ -367,6 +367,23 @@ private func makeTestWeatherSnapshot(
 @MainActor
 struct DashboardViewModelTests {
 
+    @Test("Notification can generate the current digest outside the evening time band")
+    func forcedDailyDigest() async {
+        let vm = DashboardViewModel(
+            hrvService: MockHRVService(),
+            sleepService: MockSleepService(),
+            workoutService: MockWorkoutService(),
+            stepsService: MockStepsService(todaySteps: 3_200),
+            bodyService: MockBodyService(),
+            coachingMessageEnhancer: nil
+        )
+
+        await vm.loadData(forceDailyDigest: true)
+
+        #expect(vm.dailyDigest?.metrics.stepsCount == 3_200)
+        #expect(vm.shouldShowDailyDigest)
+    }
+
     // MARK: - HRV Fallback
 
     @Test("HRV shows latest sample even if not today")
