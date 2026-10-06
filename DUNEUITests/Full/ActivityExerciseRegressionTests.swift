@@ -19,6 +19,35 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         static let notificationMissingRouteID = "ui-test-activity-workout-missing"
     }
 
+    func testWeeklyStatsValuesAtMaximumAccessibilityTextSize() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments.append(contentsOf: [
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ])
+        launchApp(with: configuration)
+        XCTAssertTrue(app.hasPrimaryNavigation(timeout: 8))
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("activity-section-weeklystats", maxSwipes: 12))
+        let scroll = app.scrollViews["activity-root-scroll"].firstMatch
+        XCTAssertTrue(scroll.exists)
+        for stat in ["volume", "calories", "duration", "activeDays"] {
+            let value = app.staticTexts["activity-weekly-stat-value-\(stat)"].firstMatch
+            for _ in 0..<12 {
+                let viewport = scroll.frame.intersection(app.windows.firstMatch.frame)
+                if value.exists && viewport.contains(value.frame) { break }
+                if value.exists && value.frame.midY < viewport.midY {
+                    scroll.swipeDown(velocity: .slow)
+                } else {
+                    scroll.swipeUp(velocity: .slow)
+                }
+            }
+            XCTAssertTrue(value.exists, "Seeded weekly \(stat) should render")
+            XCTAssertFalse(value.label.isEmpty)
+            XCTAssertTrue(scroll.frame.intersection(app.windows.firstMatch.frame).contains(value.frame),
+                          "The full weekly \(stat) value should fit in the scroll viewport")
+            VisualAudit.capture("Weekly \(stat) value at maximum accessibility size")
+        }
+    }
+
     func testVisualAuditWorkoutInsights() throws {
         guard VisualAudit.isEnabled else { throw XCTSkip("Opt-in visual audit only") }
         try verifyWorkoutInsightsReturnsToWorkout()
@@ -280,7 +309,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         ])
         launchApp(with: configuration)
         XCTAssertTrue(app.hasPrimaryNavigation(timeout: 8))
-        try verifyWorkoutDraftAndRest(performFoldTransitions: false)
+        try verifyWorkoutDraftAndRest(performFoldTransitions: false, expectsAutomaticInputScroll: true)
     }
 
     func testWorkoutDraftAcrossRotationAtDefaultTextSize() throws {
@@ -380,7 +409,8 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
 
     private func verifyWorkoutDraftAndRest(
         performFoldTransitions: Bool,
-        foldPhase: FoldAuditPhase? = nil
+        foldPhase: FoldAuditPhase? = nil,
+        expectsAutomaticInputScroll: Bool = false
     ) throws {
         let foldCheckpoints = performFoldTransitions
             ? ["FOLD:partiallyOpen", "FOLD:openFlat", "FOLD:closed"] : []
@@ -413,6 +443,10 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         if foldPhase == .draft { return }
 
         let completeSet = app.buttons[AXID.workoutSessionCompleteSet].firstMatch
+        if app.scrollViews["workout-session-controls"].buttons[AXID.workoutSessionCompleteSet].firstMatch.exists {
+            XCTAssertTrue(scrollToWorkoutControl(AXID.workoutSessionCompleteSet, mustFitInViewport: true),
+                          "The whole current set action should be reachable before completing it")
+        }
         XCTAssertTrue(completeSet.waitForExistence(timeout: 5) && completeSet.isHittable)
         completeSet.auditTap()
         assertCompletedSetSummaryDuringRest(weight: weightDraft, reps: repsDraft)
@@ -479,15 +513,24 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         XCTAssertTrue(completeSet.waitForExistence(timeout: 5) && completeSet.isEnabled,
                       "The next set should be actionable after skipping rest")
         VisualAudit.capture("Next set immediately after skipping rest")
+        if expectsAutomaticInputScroll {
+            let nextInputsViewport = app.scrollViews["workout-session-controls"].firstMatch.frame
+                .intersection(app.windows.firstMatch.frame)
+            for field in ["kg", "reps"] {
+                XCTAssertTrue(nextInputsViewport.contains(app.textFields[AXID.workoutSessionField(field)].firstMatch.frame),
+                              "The next-set \(field) value should be fully visible immediately after rest")
+            }
+        }
         // Seeded later sets may already contain values from an earlier workout.
         // Folding must preserve the active draft; it must not overwrite those
         // existing defaults with the just-completed set.
         for field in ["kg", "reps"] {
             let identifier = AXID.workoutSessionField(field)
-            XCTAssertTrue(scrollToWorkoutControl(identifier),
-                          "Next-set \(field) draft should be reachable")
+            XCTAssertTrue(scrollToWorkoutControl(identifier, mustFitInViewport: true),
+                          "The whole next-set \(field) draft should be reachable")
             XCTAssertFalse((app.textFields[identifier].firstMatch.value as? String ?? "").isEmpty,
                            "Next-set \(field) draft should remain usable")
+            VisualAudit.capture("Next-set \(field) fully visible after skipping rest")
         }
         let done = app.buttons[AXID.workoutSessionDone].firstMatch
         let controls = app.scrollViews["workout-session-controls"].firstMatch

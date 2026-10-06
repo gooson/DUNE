@@ -93,7 +93,8 @@ struct WorkoutSessionView: View {
 
     var body: some View {
         GeometryReader { geometry in
-            let scrollsChrome = dynamicTypeSize.isAccessibilitySize && geometry.size.height < 400
+            // Keep room for both values when large-text header/footer would squeeze the inputs.
+            let scrollsChrome = dynamicTypeSize.isAccessibilitySize && geometry.size.height < 700
             VStack(spacing: 0) {
                 if !scrollsChrome { topBar }
                 if geometry.size.width >= 700 && !dynamicTypeSize.isAccessibilitySize {
@@ -331,27 +332,40 @@ struct WorkoutSessionView: View {
 
     private func sessionControls(showsOverview: Bool, scrollsChrome: Bool = false) -> some View {
         VStack(spacing: 0) {
-            ScrollView {
-                VStack(spacing: DS.Spacing.lg) {
-                    if scrollsChrome { topBar }
-                    if showRestTimer {
-                        restTimerContent
-                    } else {
-                        setInputContent
+            ScrollViewReader { scrollProxy in
+                ScrollView {
+                    VStack(spacing: DS.Spacing.lg) {
+                        if scrollsChrome { topBar }
+                        if showRestTimer {
+                            restTimerContent
+                        } else {
+                            setInputContent
+                        }
+                        if scrollsChrome { bottomAction }
+                        if showsOverview && !isInputFieldFocused {
+                            sessionOverview
+                        }
                     }
-                    if showsOverview && !isInputFieldFocused {
-                        sessionOverview
-                    }
-                    if scrollsChrome { bottomAction }
+                    .frame(maxWidth: .infinity)
                 }
-                .frame(maxWidth: .infinity)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .clipped()
+                .contentShape(Rectangle())
+                .accessibilityElement(children: .contain)
+                .accessibilityIdentifier("workout-session-controls")
+                .scrollDismissesKeyboard(.interactively)
+                .onChange(of: showRestTimer) { wasResting, isResting in
+                    if wasResting && !isResting && dynamicTypeSize.isAccessibilitySize
+                        && exercise.inputType == .setsRepsWeight
+                        && viewModel.sets.indices.contains(currentSetIndex) {
+                        var transaction = Transaction(animation: nil)
+                        transaction.disablesAnimations = true
+                        withTransaction(transaction) {
+                            scrollProxy.scrollTo("workout-paired-inputs", anchor: .top)
+                        }
+                    }
+                }
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .clipped()
-            .contentShape(Rectangle())
-            .accessibilityElement(children: .contain)
-            .accessibilityIdentifier("workout-session-controls")
-            .scrollDismissesKeyboard(.interactively)
             if !scrollsChrome {
                 bottomAction.background(.regularMaterial)
             }
@@ -553,6 +567,7 @@ struct WorkoutSessionView: View {
             Divider()
                 .padding(.horizontal, DS.Spacing.xl)
         }
+        .id("workout-paired-inputs")
     }
 
     private func repsOnlyInput(set: Binding<EditableSet>) -> some View {

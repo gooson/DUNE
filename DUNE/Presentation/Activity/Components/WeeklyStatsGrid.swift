@@ -73,6 +73,7 @@ struct ActivityStatCardView: View {
                     : AnyLayout(HStackLayout(alignment: .firstTextBaseline, spacing: DS.Spacing.xs))
                 valueLayout {
                     Text(stat.value)
+                        .accessibilityIdentifier("activity-weekly-stat-value-\(stat.id)")
                         .font(DS.Typography.cardScore)
                         .foregroundStyle(theme.heroTextGradient)
                         .minimumScaleFactor(0.7)
@@ -100,6 +101,7 @@ struct ActivityStatCardView: View {
             Image(systemName: isPositive ? "arrow.up.right" : "arrow.down.right")
                 .font(.system(size: 9, weight: .semibold))
             Text(change)
+                .accessibilityIdentifier("activity-weekly-stat-change-\(stat.id)")
                 .font(.caption2)
                 .fontWeight(.medium)
                 .fixedSize(horizontal: false, vertical: true)
