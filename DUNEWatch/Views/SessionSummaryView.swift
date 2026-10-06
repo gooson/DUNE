@@ -23,6 +23,7 @@ struct SessionSummaryView: View {
     @State private var didCreateRecords = false
     @State private var savedRecords: [ExerciseRecord] = []
     @State private var savedEffort: Int?
+    @State private var didSendCompletionUpdate = false
     @State private var effort: Int = WatchEffortInputPolicy.defaultEffort
     @State private var didInitializeEffort = false
     @State private var lastEffortHapticDate: Date = .distantPast
@@ -152,12 +153,12 @@ struct SessionSummaryView: View {
                 startEffortInputAutoCloseTimer()
             } else {
                 cancelEffortInputAutoCloseTimer()
-                _ = persistEffortIfNeeded()
+                if persistEffortIfNeeded() { sendCompletionUpdateIfNeeded() }
             }
         }
         .onChange(of: scenePhase) { _, phase in
             if phase == .background {
-                _ = persistEffortIfNeeded()
+                if persistEffortIfNeeded() { sendCompletionUpdateIfNeeded() }
             }
         }
         .onDisappear {
@@ -379,7 +380,10 @@ struct SessionSummaryView: View {
 
     private func finishSummary() {
         if hasSaved {
-            if persistEffortIfNeeded() { workoutManager.reset() }
+            if persistEffortIfNeeded() {
+                sendCompletionUpdateIfNeeded()
+                workoutManager.reset()
+            }
             return
         }
         startSaving(dismissOnSuccess: true)
@@ -458,18 +462,25 @@ struct SessionSummaryView: View {
             return
         }
 
-        // Send workout data to iPhone via WatchConnectivity as backup
-        for record in savedRecords {
-            let update = WatchWorkoutRecordBuilder.makeUpdate(from: record)
-            WatchConnectivityManager.shared.sendWorkoutCompletion(update)
-        }
         recordExerciseUsage()
 
         hasSaved = true
         savedEffort = effort
         saveError = nil
         isSaving = false
+        if !showEffortInput { sendCompletionUpdateIfNeeded() }
         if dismissOnSuccess { workoutManager.reset() }
+    }
+
+    /// Send the first backup after the effort prompt closes, so it includes the chosen rating.
+    private func sendCompletionUpdateIfNeeded() {
+        guard hasSaved, !workoutManager.isCardioMode, !didSendCompletionUpdate else { return }
+        for record in savedRecords {
+            WatchConnectivityManager.shared.sendWorkoutCompletion(
+                WatchWorkoutRecordBuilder.makeUpdate(from: record)
+            )
+        }
+        didSendCompletionUpdate = true
     }
 
     /// An effort edit may happen after automatic save; keep the persisted record in sync.
