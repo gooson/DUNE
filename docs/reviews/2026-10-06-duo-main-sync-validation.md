@@ -93,3 +93,11 @@ Personal Records는 78.509초에 실제 PR 상세의 period picker/timeline/rewa
 같은 후속 소스의 표준 앱 빌드 `/tmp/duo-resume-20261006/audit-followup-app-build.log`도 Xcode 27.1 generic iOS Simulator에서 **BUILD SUCCEEDED / exit 0**이다.
 
 후속 변경 검토: DEBUG seeder만 긴 휴식 flag를 읽고, Bench Press 합성 세트에만 적용한다. 실제 timer 구현·앱 기본 rest·CloudKit schema는 변경하지 않았다. 입력 case는 rest 시작 전에 끝나고 휴식 case는 타이머 phase에서만 3개 actual fold checkpoint를 사용한다. 두 case의 각 제한은 기존 runner 최대 600초를 넘지 않는다. 자세 drag의 normalized y는 0.25..0.75 내에 제한되며 실제 viewport tap-point assert를 유지한다. 자동 재시도 한도 및 미해결 시각 결함은 보존한다.
+
+## 최종 main 기준과 보존 상태
+
+검사 도중 `origin/main`이 `0ab0847d`(#792)까지 진행돼 이 변경도 `b646fe4e`에서 병합했다. 시뮬레이터 소유 registry/안전한 Ship 정리, 3개 test runner의 명시 cleanup 경로와 관련 계약 테스트 및 adapter 지침이 변경됐다. 앱/프로젝트/UITest source에는 추가 변화가 없음을 `git diff --name-only c4eb4623 HEAD -- DUNE DUNETests DUNEUITests DUNEWatch`의 빈 결과로 확인했다. 기존 UI 결과는 위 개별 실행 범위와 당시 소스 기준이며 full/최종 runtime 성공으로 승격하지 않는다.
+
+`python3 -B scripts/tests/test-simulator-worktree.py`: `/tmp/duo-resume-20261006/simulator-registry-contracts.log`, **14개 / OK / exit 0 / 3.613초**. fake simctl/임시 git worktree 기반이며 실제 전용 Duo나 다른 장치를 삭제하지 않았다. 원래 tracked dirty 6개는 두 번째 병합 뒤에도 초기 binary patch와 일치했다.
+
+중간 커밋: main 최초 병합 `6a5eb872`, 후속 코드·원본 증거 `c4eb4623`, 추가 main 도구 병합 `b646fe4e`. Ship/PR/원격 push는 수행하지 않았다. 전체 감사는 미완료이며 남은 결함과 미검증 후보를 본 기록에 유지한다.
