@@ -26,7 +26,13 @@ _ensure_worktree_cache() {
         echo >&2 "Error: Cannot compute worktree identity for simulator isolation."
         return 1
     }
-    _WT_BASENAME="$(basename "$_WT_TOPLEVEL")-${path_hash:0:12}"
+    # Show the worktree directory (e.g. 8d4b) as well as a path hash. The
+    # directory is useful in Simulator.app; the hash prevents name collisions.
+    local worktree_label
+    worktree_label=$(basename "$(dirname "$_WT_TOPLEVEL")" | tr -cs '[:alnum:]' '-')
+    worktree_label="${worktree_label#-}"
+    worktree_label="${worktree_label%-}"
+    _WT_BASENAME="$(basename "$_WT_TOPLEVEL")-${worktree_label}-${path_hash:0:12}"
 
     # In a worktree, .git is a file (not a directory) pointing to the main repo
     if [[ -f "$_WT_TOPLEVEL/.git" ]]; then
@@ -55,7 +61,7 @@ _is_git_worktree() {
     [[ "$_WT_IS_WORKTREE" == "yes" ]]
 }
 
-# Get the path-qualified worktree key (e.g., "Health-a1b2c3d4e5f6").
+# Get the path-qualified worktree key (e.g., "Health-8d4b-a1b2c3d4e5f6").
 _worktree_basename() {
     _ensure_worktree_cache || return 1
     echo "$_WT_BASENAME"
@@ -150,12 +156,28 @@ ensure_worktree_simulator() {
     existing_udid=$(_find_simulator_by_name "$clone_name") || true
 
     if [[ -n "$existing_udid" ]]; then
+        if python3 "$_WT_TOPLEVEL/scripts/lib/worktree-simulator-registry.py" is-orphan \
+            "$_WT_TOPLEVEL" "$existing_udid"; then
+            echo >&2 "Error: Simulator '$clone_name' [$existing_udid] has an unresolved orphan marker."
+            return 1
+        fi
+        if ! python3 "$_WT_TOPLEVEL/scripts/lib/worktree-simulator-registry.py" is-recorded \
+            "$_WT_TOPLEVEL" "$existing_udid" "$clone_name"; then
+            echo >&2 "Warning: Reusing unrecorded simulator '$clone_name' [$existing_udid]; Ship will preserve it."
+        fi
         echo >&2 "Reusing worktree simulator '$clone_name' [$existing_udid]"
         echo "$existing_udid"
         return 0
     fi
 
     # Clone the source simulator (must be shutdown first)
+    local baseline_file
+    baseline_file=$(mktemp)
+    if ! xcrun simctl list devices -j >"$baseline_file"; then
+        rm -f "$baseline_file"
+        echo >&2 "Error: Could not capture simulator baseline before clone."
+        return 1
+    fi
     echo >&2 "Creating worktree simulator '$clone_name' from [$source_udid]..."
     xcrun simctl shutdown "$source_udid" 2>/dev/null || true
     _wait_for_shutdown "$source_udid" 15
@@ -169,6 +191,7 @@ ensure_worktree_simulator() {
     rm -f "$clone_err_file"
 
     if [[ $clone_exit -ne 0 || -z "$new_udid" ]]; then
+        rm -f "$baseline_file"
         [[ -n "$clone_err" ]] && echo >&2 "Clone error: $clone_err"
         echo >&2 "Warning: Failed to clone simulator. Falling back to source [$source_udid]."
         # Re-boot the source since we shut it down
@@ -176,6 +199,28 @@ ensure_worktree_simulator() {
         echo "$source_udid"
         return 0
     fi
+
+    if ! python3 "$_WT_TOPLEVEL/scripts/lib/worktree-simulator-registry.py" record \
+        "$_WT_TOPLEVEL" "$new_udid" "$clone_name" "$baseline_file"; then
+        echo >&2 "Error: Could not record ownership of worktree simulator [$new_udid]."
+        if python3 "$_WT_TOPLEVEL/scripts/lib/worktree-simulator-registry.py" rollback-safe \
+            "$_WT_TOPLEVEL" "$new_udid" "$clone_name" "$baseline_file"; then
+            xcrun simctl shutdown "$new_udid" 2>/dev/null || true
+            xcrun simctl delete "$new_udid" 2>/dev/null || \
+                echo >&2 "Warning: rollback delete failed for [$new_udid]."
+        fi
+        rm -f "$baseline_file"
+        if ! python3 "$_WT_TOPLEVEL/scripts/lib/worktree-simulator-registry.py" absent \
+            "$_WT_TOPLEVEL" "$new_udid"; then
+            python3 "$_WT_TOPLEVEL/scripts/lib/worktree-simulator-registry.py" mark-orphan \
+                "$_WT_TOPLEVEL" "$new_udid" "$clone_name" || \
+                echo >&2 "ERROR: Could not persist orphan marker for [$new_udid]."
+            echo >&2 "ERROR: Untracked simulator '$clone_name' [$new_udid] remains or could not be verified."
+            echo >&2 "Review this UDID manually before removing the worktree."
+        fi
+        return 1
+    fi
+    rm -f "$baseline_file"
 
     echo >&2 "Created worktree simulator '$clone_name' [$new_udid]"
     echo "$new_udid"
@@ -209,25 +254,26 @@ apply_worktree_destination() {
 }
 
 # Delete worktree simulators.
-# Usage: cleanup_worktree_simulators [--current | --all]
+# Usage: cleanup_worktree_simulators [--owned | --current | --all]
 cleanup_worktree_simulators() {
-    local mode="${1:---current}"
+    local mode="${1:---owned}"
     local pattern
 
     case "$mode" in
-        --current)
+        --owned|--current)
             _ensure_worktree_cache || return 1
             if ! _is_git_worktree; then
                 echo "Not in a worktree. Nothing to clean up."
                 return 0
             fi
-            pattern="-wt-$(_worktree_basename)"
+            python3 "$_WT_TOPLEVEL/scripts/lib/worktree-simulator-registry.py" cleanup "$_WT_TOPLEVEL"
+            return $?
             ;;
         --all)
             pattern="-wt-"
             ;;
         *)
-            echo "Usage: cleanup_worktree_simulators [--current | --all]"
+            echo "Usage: cleanup_worktree_simulators [--owned | --current | --all]"
             return 1
             ;;
     esac
@@ -259,13 +305,13 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
             cleanup_worktree_simulators --all
             ;;
         --cleanup-current)
-            cleanup_worktree_simulators --current
+            cleanup_worktree_simulators --owned
             ;;
         --help|-h)
             echo "Usage: $(basename "$0") [--cleanup-all | --cleanup-current]"
             echo ""
             echo "  --cleanup-all      Delete all worktree simulators (*-wt-*)"
-            echo "  --cleanup-current  Delete simulators for current worktree only"
+            echo "  --cleanup-current  Delete recorded simulators created by this worktree"
             ;;
         *)
             echo "Usage: $(basename "$0") [--cleanup-all | --cleanup-current]"
