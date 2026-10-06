@@ -449,6 +449,16 @@ class WatchUITestBaseCase: XCTestCase {
             }
         }
 
+        // If a list snaps past a middle row, scan back toward the top once.
+        for _ in 0..<maxSwipes {
+            let start = scrollContainer.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.48))
+            let end = scrollContainer.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.75))
+            start.press(forDuration: 0.1, thenDragTo: end, withVelocity: .slow, thenHoldForDuration: 0.1)
+            if exercise.exists && exercise.isHittable {
+                return exercise
+            }
+        }
+
         attachQuickStartHierarchy()
         return nil
     }
