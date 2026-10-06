@@ -66,7 +66,7 @@ while [[ $# -gt 0 ]]; do
             shift 2
             ;;
         --cleanup-simulators)
-            cleanup_worktree_simulators --current
+            cleanup_worktree_simulators --owned
             exit 0
             ;;
         *)
