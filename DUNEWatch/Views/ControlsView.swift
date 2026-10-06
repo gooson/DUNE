@@ -38,6 +38,7 @@ struct ControlsView: View {
                 workoutManager.end()
             }
             Button("Cancel", role: .cancel) {}
+                .accessibilityIdentifier("watch-session-end-cancel")
         } message: {
             if workoutManager.isCardioMode {
                 Text("Save and finish this workout?")

@@ -42,6 +42,7 @@ enum WatchAXID {
     static let sessionControlsPauseResumeButton = "watch-session-pause-resume-button"
     static let sessionControlsPauseResumeLabels = ["Pause", "일시정지", "一時停止", "Resume", "재개", "再開"]
     static let restTimerScreen = "watch-rest-timer-screen"
+    static let restTimerEndButton = "watch-rest-timer-end"
     static let restTimerSkipButton = "watch-rest-timer-skip"
     static let restTimerSkipLabels = ["Skip", "건너뛰기", "スキップ"]
     static let setInputScreen = "watch-set-input-screen"
@@ -58,6 +59,9 @@ enum WatchAXID {
     static let sessionSummaryScreen = "watch-session-summary-screen"
     static let sessionSummaryEffortButton = "watch-summary-effort-button"
     static let sessionSummaryDoneButton = "watch-session-summary-done"
+    static let sessionSummarySaveStatus = "watch-session-summary-save-status"
+    static let sessionSummaryEffortSheet = "watch-session-summary-effort-sheet"
+    static let sessionSummaryEffortDoneButton = "watch-session-summary-effort-done"
     static let sessionSummaryDoneLabels = ["Done", "완료", "完了", "Finishing...", "마무리 중...", "完了処理中..."]
 }
 
@@ -433,7 +437,25 @@ class WatchUITestBaseCase: XCTestCase {
                 return exercise
             }
             if swipeIndex < maxSwipes {
-                scrollContainer.swipeUp()
+                // A full Watch swipe can jump over several 48pt rows on 40mm devices.
+                let start = scrollContainer.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.75))
+                let end = scrollContainer.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.48))
+                start.press(
+                    forDuration: 0.1,
+                    thenDragTo: end,
+                    withVelocity: .slow,
+                    thenHoldForDuration: 0.1
+                )
+            }
+        }
+
+        // If a list snaps past a middle row, scan back toward the top once.
+        for _ in 0..<maxSwipes {
+            let start = scrollContainer.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.48))
+            let end = scrollContainer.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.75))
+            start.press(forDuration: 0.1, thenDragTo: end, withVelocity: .slow, thenHoldForDuration: 0.1)
+            if exercise.exists && exercise.isHittable {
+                return exercise
             }
         }
 
@@ -579,7 +601,7 @@ class WatchUITestBaseCase: XCTestCase {
     /// Checks the actual accessible button frame before the test performs any scrolling.
     func assertFirstViewportButtons(_ identifiers: [String], screenshot: String) {
         for identifier in identifiers {
-            XCTAssertTrue(app.buttons[identifier].waitForExistence(timeout: 5), "Missing \(identifier)")
+            XCTAssertTrue(app.buttons[identifier].firstMatch.waitForExistence(timeout: 5), "Missing \(identifier)")
         }
         addScreenshotAttachment(named: defaultArtifactName(suffix: screenshot))
 
@@ -587,7 +609,8 @@ class WatchUITestBaseCase: XCTestCase {
         XCTAssertGreaterThan(screen.width, 0)
         XCTAssertGreaterThan(screen.height, 0)
         for identifier in identifiers {
-            let button = app.buttons[identifier]
+            // watchOS may expose a toolbar button and its nested control with the same identifier.
+            let button = app.buttons[identifier].firstMatch
             let frame = button.frame
             XCTAssertTrue(button.isHittable, "\(identifier) must be tappable without scrolling")
             XCTAssertGreaterThan(frame.width, 0, "\(identifier) must have a real frame")

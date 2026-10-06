@@ -32,6 +32,7 @@ struct WorkoutPreviewView: View {
         }
         .background { WatchWaveBackground() }
         .navigationTitle(snapshot.name)
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.workoutPreviewScreen)
         .alert(String(localized: "Error"), isPresented: .init(
             get: { errorMessage != nil },
@@ -114,6 +115,7 @@ struct WorkoutPreviewView: View {
                 .scrollBounceBehavior(.basedOnSize)
             }
         }
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.workoutPreviewCardio)
     }
 
