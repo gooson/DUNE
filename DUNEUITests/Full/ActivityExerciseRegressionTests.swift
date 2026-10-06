@@ -190,16 +190,16 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         )
 
         XCTAssertTrue(
-            app.descendants(matching: .any)[AXID.activityPersonalRecordsMetricPicker].firstMatch.waitForExistence(timeout: 15),
-            "Personal Records detail should expose the metric picker"
+            app.descendants(matching: .any)[AXID.activityPersonalRecordsPeriodPicker].firstMatch.waitForExistence(timeout: 15),
+            "Personal Records detail should expose the period picker"
         )
         XCTAssertTrue(
             app.descendants(matching: .any)[AXID.activityPersonalRecordsTimelineChart].firstMatch.waitForExistence(timeout: 15),
             "Personal Records detail should render the timeline chart"
         )
         XCTAssertTrue(
-            app.descendants(matching: .any)[AXID.activityPersonalRecordsRewardSummary].firstMatch.waitForExistence(timeout: 15),
-            "Personal Records detail should show the reward summary"
+            app.descendants(matching: .any)[AXID.activityPersonalRecordsRewardProgress].firstMatch.waitForExistence(timeout: 15),
+            "Personal Records detail should show reward progress"
         )
         XCTAssertTrue(
             app.descendants(matching: .any)[AXID.activityPersonalRecordsAchievementHistory].firstMatch.waitForExistence(timeout: 15),
