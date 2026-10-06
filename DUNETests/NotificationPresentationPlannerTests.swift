@@ -112,13 +112,24 @@ struct NotificationPresentationStateReducerTests {
         state.apply(NotificationNavigationRequest(itemID: "hub-item", route: .notificationHub))
 
         #expect(state.selectedSection == .today)
-        #expect(state.paths.today.isEmpty)
+        #expect(state.paths.today.count == 1)
         #expect(state.paths.train.isEmpty)
         #expect(state.paths.wellness.isEmpty)
         #expect(state.paths.life.isEmpty)
         #expect(state.notificationHubSignal == 1)
         #expect(state.notificationRouteSignal == 0)
         #expect(state.notificationPresentationRequestID == 1)
+    }
+
+    @Test("a second hub request replaces the selected item and increments its signal")
+    func notificationHubRepeatedRequest() {
+        var state = makeState(selectedSection: .today)
+
+        state.apply(NotificationNavigationRequest(itemID: "first", route: .notificationHub))
+        state.apply(NotificationNavigationRequest(itemID: "second", route: .notificationHub))
+
+        #expect(state.notificationHubSignal == 2)
+        #expect(state.paths.today.count == 1)
     }
 
     @Test("workoutDetail route switches to Train and emits route signal")

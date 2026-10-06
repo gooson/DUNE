@@ -248,6 +248,23 @@ struct NotificationInboxManagerTests {
         #expect(manager.consumePendingNavigationRequest()?.route == .sleepDetail)
     }
 
+    @Test("A route-less legacy notification creates an item and opens its hub detail")
+    func routeLessFallbackOpensHubDetail() throws {
+        let manager = NotificationInboxManager(store: makeStore(), badgeUpdater: { _ in })
+
+        manager.handleNotificationResponse(
+            userInfo: ["notificationInsightType": HealthInsight.InsightType.sleepDebt.rawValue],
+            fallbackTitle: "Sleep Debt Alert",
+            fallbackBody: "Rest tonight"
+        )
+
+        let item = try #require(manager.items().first)
+        let request = try #require(manager.consumePendingNavigationRequest())
+        #expect(item.isRead)
+        #expect(request.itemID == item.id)
+        #expect(request.route == .notificationHub)
+    }
+
     @Test("Posture reminder without an item ID opens posture assessment")
     func postureReminderFallbackRoute() {
         let manager = NotificationInboxManager(store: makeStore(), badgeUpdater: { _ in })

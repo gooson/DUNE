@@ -57,6 +57,7 @@ enum TestDataSeeder {
             SimulatorAdvancedMockDataModeStore.storageKey,
             SimulatorAdvancedMockDataModeStore.referenceDateStorageKey,
             "\(bundleID).notificationInbox.items",
+            "\(bundleID).workoutRewards.state",
             "\(bundleID).today.pinnedMetricCategories",
             "\(bundleID).whatsNew.lastOpenedBuild"
         ]
@@ -328,6 +329,12 @@ enum TestDataSeeder {
         context.insert(multiTemplate)
 
         seedNotificationInbox(scenario: .activityExerciseSeeded)
+        if let workout = mockWorkoutSummary(
+            for: .activityExerciseSeeded,
+            workoutID: activityExerciseMockWorkoutID
+        ) {
+            _ = PersonalRecordStore.shared.evaluateReward(for: workout, newPRTypes: [.fastestPace])
+        }
         try? context.save()
     }
 

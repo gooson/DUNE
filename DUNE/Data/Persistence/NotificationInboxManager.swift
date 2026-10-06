@@ -43,6 +43,10 @@ final class NotificationInboxManager: @unchecked Sendable {
         store.items()
     }
 
+    func item(withID id: String) -> NotificationInboxItem? {
+        store.item(withID: id)
+    }
+
     func unreadCount() -> Int {
         store.unreadCount()
     }
@@ -158,6 +162,9 @@ final class NotificationInboxManager: @unchecked Sendable {
             )
             let item = recordSentInsight(insight)
             _ = open(itemID: item.id)
+            if resolvedRoute(for: item) == nil {
+                emitNavigationRequest(.init(itemID: item.id, route: .notificationHub))
+            }
             return
         }
 
