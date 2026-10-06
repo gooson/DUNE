@@ -92,9 +92,10 @@ struct WorkoutSessionView: View {
     }
 
     var body: some View {
-        VStack(spacing: 0) {
-            topBar
-            GeometryReader { geometry in
+        GeometryReader { geometry in
+            let scrollsChrome = dynamicTypeSize.isAccessibilitySize && geometry.size.height < 400
+            VStack(spacing: 0) {
+                if !scrollsChrome { topBar }
                 if geometry.size.width >= 700 && !dynamicTypeSize.isAccessibilitySize {
                     HStack(alignment: .top, spacing: DS.Spacing.md) {
                         ScrollView { sessionOverview }
@@ -102,7 +103,7 @@ struct WorkoutSessionView: View {
                         sessionControls(showsOverview: false)
                     }
                 } else {
-                    sessionControls(showsOverview: true)
+                    sessionControls(showsOverview: true, scrollsChrome: scrollsChrome)
                 }
             }
         }
@@ -328,10 +329,11 @@ struct WorkoutSessionView: View {
 
     // MARK: - Set Input Content
 
-    private func sessionControls(showsOverview: Bool) -> some View {
+    private func sessionControls(showsOverview: Bool, scrollsChrome: Bool = false) -> some View {
         VStack(spacing: 0) {
             ScrollView {
                 VStack(spacing: DS.Spacing.lg) {
+                    if scrollsChrome { topBar }
                     if showRestTimer {
                         restTimerContent
                     } else {
@@ -340,6 +342,7 @@ struct WorkoutSessionView: View {
                     if showsOverview && !isInputFieldFocused {
                         sessionOverview
                     }
+                    if scrollsChrome { bottomAction }
                 }
                 .frame(maxWidth: .infinity)
             }
@@ -349,8 +352,9 @@ struct WorkoutSessionView: View {
             .accessibilityElement(children: .contain)
             .accessibilityIdentifier("workout-session-controls")
             .scrollDismissesKeyboard(.interactively)
-            bottomAction
-                .background(.regularMaterial)
+            if !scrollsChrome {
+                bottomAction.background(.regularMaterial)
+            }
         }
         .animation(reduceMotion ? nil : DS.Animation.standard, value: showRestTimer)
     }

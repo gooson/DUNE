@@ -27,3 +27,10 @@
 
 - MuscleMapDetailView는 regular 너비에서 근육 tap을 옆 열의 상세 선택으로 처리한다. 실제 3D 진입은 별도 3D Muscle Map 버튼이다. compact에서는 근육 tap으로 바로 진입한다. 3D 테스트가 regular에서도 자동 진입을 기대하면 false failure가 된다.
 - 버튼 존재/ARView AX 존재만으로 렌더링 합격을 선언하지 않는다. 진입 후 native PNG에서 모델과 overlay를 확인한다. 최대 AX의 고정 두 열 지표 카드는 숫자 잘림/부호 세로 분절 여부를 별도로 검사한다.
+
+## 각 route group의 시작 자세를 독립 확인한다
+
+- 회전 case가 실패하면 portrait 복원 코드에 도달하지 않을 수 있다. 다음 route group이 이전 방향을 상속한다고 가정하지 않는다. 준비 단계에서 검토한 driver로 portrait 설정 후 공식 get readback receipt를 남긴다. 다른 방향에서 통과한 route는 해당 방향의 추가 증거일 뿐 계획된 portrait 합격으로 전파하지 않는다.
+- Closed landscape/maxAX 실제 window 678×466에서 고정 workout 진행 header/footer가 control viewport를 122pt로 줄였고 전체 KG frame 검사에 실패했다. 가용 높이 400pt 미만+AX 크기에서는 header/footer도 본문과 함께 스크롤하는 수정으로 대응한다. 재검증 전 전체 시각 합격으로 기록하지 않는다.
+- 3D는 ARView 로드뿐 아니라 summary overlay가 모델을 덮는지 native를 확인한다. AX 크기에서는 viewer와 scroll controls를 분리하고 frame 불교차·mode 도달성을 검사한다. 기본 크기의 immersive overlay는 별도 조건으로 검증한다.
+- 실제 SDK cleanup watchdog의 일부 SIGKILL group 요청이 OS PermissionError를 반환했다. 이때 원래 timeout을 다른 traceback으로 가리지 않고 cleanup_error/parent returncode를 별도 기록한다. 격리 runner의 종료와 모든 descendant 종료를 혼동하지 않는다. 다른 작업 PID를 대신 종료하지 않는다.

@@ -371,6 +371,7 @@ def main():
                                text=True, bufsize=1, pass_fds=inherited_fds, start_new_session=True)
     sequence = 0
     termination = None
+    cleanup_error = None
     try:
         with (output / "run.log").open("w") as log, (output / "captures.tsv").open("w") as captures, (output / "checkpoints.jsonl").open("w") as checkpoints:
             for line in runner_lines(process):
@@ -386,7 +387,11 @@ def main():
         return process.wait()
     except BaseException as exc:
         termination = str(exc) or type(exc).__name__
-        stop_runner(process)
+        try:
+            stop_runner(process)
+        except (OSError, subprocess.TimeoutExpired) as cleanup:
+            # Preserve the execution failure when the OS denies descendant cleanup.
+            cleanup_error = str(cleanup)
         raise
     finally:
         returncode = process.poll()
@@ -394,6 +399,7 @@ def main():
             "pid": process.pid if isinstance(process.pid, int) else None,
             "returncode": returncode if isinstance(returncode, int) else None,
             "termination": termination,
+            "cleanup_error": cleanup_error,
             "checkpoints_attempted": sequence,
         }) + "\n")
 

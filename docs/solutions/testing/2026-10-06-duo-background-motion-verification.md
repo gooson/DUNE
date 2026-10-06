@@ -50,7 +50,7 @@ GUI 제약, 물리 이벤트 전달, 상태 readback, 앱 viewport 변화, 기�
 
 ## SDK 정리 감시
 
-`scripts/duo-visual-audit.py`는 stdout을 별도 reader로 읽고 테스트 allowance 초과/Selected tests 종료 뒤 SDK cleanup이 60초 이상 정체하면 자신의 isolated runner group을 종료한다. 다음 testcase 시작은 감시를 해제한다. 결과는 `runner-result.json`에 기록한다. 29개 계약은 정상 완료, EOF 정체, 다음 case 보호, descendant pipe 해제 및 다른 runner 생존을 확인한다. 기능 timeout 자체의 원인 해결과는 구분한다.
+`scripts/duo-visual-audit.py`는 stdout을 별도 reader로 읽고 테스트 allowance 초과/Selected tests 종료 뒤 SDK cleanup이 60초 이상 정체하면 자신의 isolated runner group을 종료한다. 다음 testcase 시작은 감시를 해제한다. 결과는 `runner-result.json`에 기록한다. OS가 descendant 종료를 거부하면 원래 실패와 cleanup_error를 분리해 남긴다. 각 route group은 앞선 테스트의 성공적 방향 복원을 가정하지 말고 시작 portrait readback을 독립 확인한다. 30개 계약은 정상 완료, EOF 정체, 다음 case 보호, descendant pipe 해제 및 다른 runner 생존을 확인한다. 기능 timeout 자체의 원인 해결과는 구분한다.
 
 ## Prevention
 
@@ -59,7 +59,7 @@ GUI 제약, 물리 이벤트 전달, 상태 readback, 앱 viewport 변화, 기�
 - setter JSON, 실제 물리 상태, 활성 화면, 앱 viewport, 기능 assertion을 별도로 기록한다.
 - paired PNG의 실제 header 크기를 읽는다. 파일명 또는 한 화면 크기만으로 Book/Open을 분류하지 않는다.
 - 기존 실패 evidence를 보존하고 동일 실패를 이름만 바꿔 반복하지 않는다.
-- native PNG를 직접 확인한다. 29개 호스트 계약 테스트는 앱 시각 QA 전체 성공을 증명하지 않는다.
+- native PNG를 직접 확인한다. 30개 호스트 계약 테스트는 앱 시각 QA 전체 성공을 증명하지 않는다.
 
 ## Lessons Learned
 

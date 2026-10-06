@@ -84,3 +84,22 @@ CLI probe와 계약 테스트의 성공은 전체 화면 감사의 통과가 아
 
 - 지표 카드와 Dynamic Type 아이콘 크기까지 포함한 최종 소스의 표준 Xcode 27.1 build는 **exit 0 / BUILD SUCCEEDED**다. `ax-metric-cards-final-build.log`를 보존한다. 후속 UI route의 native 확인을 완료하기 전 시각 수정 합격으로 확장하지 않는다.
 - 계정 공용 주간 사용량은 이번 확인에서 38%다. 작업 단독 토큰은 제공되지 않아 unknown이며 사용량 백분율을 작업 토큰 절감률로 환산하지 않는다.
+
+## 한정된 재검증
+
+600초 기능 timeout은 증명된 원인이 없어 해결됐다고 단정하지 않는다. 중복 frame/hit testing을 줄이고 Skip 직후 checkpoint를 추가한 변경을 근거로 같은 최대 AX 휴식 selector를 **1회만** 재검증한다. 또 regular 3D 진입 수정의 Open/maxAX selector를 1회 재검증한다. 기존 실패 receipt를 유지하고, 재검증이 실패하면 같은 조건을 이름만 바꿔 추가 반복하지 않는다.
+
+## Closed landscape 최대 AX에서 발견한 짧은 viewport
+
+기본 크기 Closed 회전은 통과했으나 maxAX는 전체 KG frame 조건에 실패했다. 실제 window는 678×466, control viewport는 662×122, KG field 높이는 99.7pt였다. 고정 진행 header/footer가 본문 높이를 소비하고 탐색 drag가 위/아래로 번갈아 움직인 원본을 보존한다. [결과](assets/2026-10-06-duo-cli/rotation-closed-result.json), [AX](assets/2026-10-06-duo-cli/rotation-closed/029-hierarchy.txt).
+
+WorkoutSessionView는 전체 가용 높이 400pt 미만과 accessibility text size가 함께 성립할 때 진행 표시와 Complete Set도 controls ScrollView에 포함하도록 수정했다. 높이/AX 조건 밖의 기존 header/footer 및 두 열 overview 정책은 유지한다. 입력/완료값과 frame assertion은 제거하지 않았다. 표준 build 및 같은 Closed/maxAX 회전 selector의 한정 재검증은 진행 중이다.
+
+- partial-routes 첫 실행은 앞선 Closed 회전 실패 후 landscapeLeft 상태를 상속했다. 90°의 tall inner viewport에서 수행한 추가 조건으로 기록하며 Book/portrait 증거로 전파하지 않는다. 남은 route group에는 실제 portrait readback을 독립 확인하는 preflight를 추가했다. Book/portrait은 별도 실행한다.
+- 수정된 explicit 3D 진입은 첫 partial route에서 68.063초로 통과했고 native 008에 실제 모델이 렌더링됐다. 모델 아래쪽은 summary overlay와 겹치므로 ARView 존재/모델 로드 확인을 전체 3D 시각 합격으로 확대하지 않는다.
+
+## 3D 최대 AX의 모델 가림 수정
+
+첫 partial route native에서 최대 AX summary overlay가 모델의 아래쪽을 덮는 것을 확인했다. AX 크기의 3D 화면은 넓을 때 viewer와 scroll controls를 옆 열로, 좁을 때 viewer와 아래 scroll controls로 분리했다. AX summary도 세로 배치해 텍스트를 보존한다. 기본 크기의 immersive overlay는 유지한다. viewer/controls frame 불교차 및 mode picker 도달성을 UI 테스트에 추가했다. 최종 소스 표준 Xcode 27.1 build가 exit 0 / BUILD SUCCEEDED이며 actual Closed/Open/Book native 검사는 진행 중이다.
+
+partial-routes는 개별 UI case 3개가 통과했으나 Selected tests 종료 뒤 cleanup 60초를 초과해 host exit 1이다. runner receipt에는 parent returncode -15와 원래 cleanup timeout이 있다. SIGKILL group cleanup의 OS PermissionError도 발생해 후속 수정은 이 오류가 원래 원인을 가리지 않도록 별도 cleanup_error로 저장한다. 이 실행을 최종 exit 0으로 보고하지 않는다. 독립된 다음 route group 시작은 확인했다. **30 host contracts**가 통과했다.

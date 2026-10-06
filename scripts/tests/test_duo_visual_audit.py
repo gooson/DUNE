@@ -227,6 +227,22 @@ class CaptureContracts(unittest.TestCase):
                 self.assertEqual(audit.main(), 0)
             self.assertEqual(popen_mock.call_args.kwargs["pass_fds"], (lock.fileno(),))
 
+    @patch.object(audit, "stop_runner", side_effect=PermissionError("descendant cleanup denied"))
+    @patch.object(audit, "runner_lines", side_effect=TimeoutError("SDK cleanup exceeded"))
+    @patch.object(audit.subprocess, "Popen")
+    def test_cleanup_denial_preserves_original_timeout_and_receipt(self, popen_mock, _lines, _stop):
+        process = MagicMock()
+        process.pid = 123
+        process.poll.return_value = -15
+        popen_mock.return_value = process
+        with patch.object(audit.sys, "argv", ["duo-visual-audit.py", str(self.output), "DEVICE", "all", "fake-runner"]):
+            with self.assertRaisesRegex(TimeoutError, "SDK cleanup exceeded"):
+                audit.main()
+        receipt = json.loads((self.output / "runner-result.json").read_text())
+        self.assertEqual(receipt["cleanup_error"], "descendant cleanup denied")
+        self.assertEqual(receipt["termination"], "SDK cleanup exceeded")
+        self.assertEqual(receipt["returncode"], -15)
+
 
 class DiagnosticOutputTests(unittest.TestCase):
     def test_error_selector_stack_frames_do_not_flood_output(self):
