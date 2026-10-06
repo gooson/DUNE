@@ -31,6 +31,21 @@
 ## 각 route group의 시작 자세를 독립 확인한다
 
 - 회전 case가 실패하면 portrait 복원 코드에 도달하지 않을 수 있다. 다음 route group이 이전 방향을 상속한다고 가정하지 않는다. 준비 단계에서 검토한 driver로 portrait 설정 후 공식 get readback receipt를 남긴다. 다른 방향에서 통과한 route는 해당 방향의 추가 증거일 뿐 계획된 portrait 합격으로 전파하지 않는다.
-- Closed landscape/maxAX 실제 window 678×466에서 고정 workout 진행 header/footer가 control viewport를 122pt로 줄였고 전체 KG frame 검사에 실패했다. 가용 높이 400pt 미만+AX 크기에서는 header/footer도 본문과 함께 스크롤하는 수정으로 대응한다. 재검증 전 전체 시각 합격으로 기록하지 않는다.
+- Closed landscape/maxAX 실제 window 678×466에서 고정 workout 진행 header/footer가 control viewport를 122pt로 줄였고 전체 KG frame 검사에 실패했다. 초기 가용 높이 400pt 미만+AX 크기 대응은 Closed landscape 회전 검사를 통과했지만 portrait의 휴식 종료 후 footer 복귀까지 수용하지 못했다. 최종 조건은 700pt 미만+AX다. 변경된 조건의 접힘·회전 검사는 별도 결과로 판단한다.
 - 3D는 ARView 로드뿐 아니라 summary overlay가 모델을 덮는지 native를 확인한다. AX 크기에서는 viewer와 scroll controls를 분리하고 frame 불교차·mode 도달성을 검사한다. 기본 크기의 immersive overlay는 별도 조건으로 검증한다.
 - 실제 SDK cleanup watchdog의 일부 SIGKILL group 요청이 OS PermissionError를 반환했다. 이때 원래 timeout을 다른 traceback으로 가리지 않고 cleanup_error/parent returncode를 별도 기록한다. 격리 runner의 종료와 모든 descendant 종료를 혼동하지 않는다. 다른 작업 PID를 대신 종료하지 않는다.
+
+
+## 메뉴·제목과 지속 animation의 실제 native를 검사한다
+
+- Book portrait/maxAX의 metric comparison system menu는 x=-76.8pt로 화면 밖에 열려 month activation point가 실패했다. 버튼 존재만으로 선택 가능을 주장하지 않는다. AX 크기의 기간 선택은 본문 내 button 목록으로 배치하고 전체 scroll viewport 포함·tap·selected trait·두 metric의 같은 날짜 갱신·Done 복귀를 확인한다.
+- 같은 native에서 navigation title이 ellipsis로 생략됐다. 최대 AX 제목은 본문에 줄바꿈 가능한 Text로 표시한다. 기간 메뉴 개선만 통과한 실행을 제목 수정까지 통과했다고 확장하지 않는다.
+- 타이머 숫자/elapsed assertion이 통과했는데 gesture만 오래 걸리면 XCTest의 실제 animation idle 로그를 확인한다. 매초 갱신되는 1초 ring animation을 의심해 0.25초로 바꾼 단독 smoke는 통과했지만, 실제 fold에서는 ring이 사라진 next-set gesture에서도 같은 idle 대기와 600초 timeout이 재발했다. 가설이 입증되지 않아 원래 1초로 되돌렸다. 이 실험을 최종 원인/해결책으로 기록하지 않는다. idle 대기 자체를 끄거나 testcase timeout을 늘려 통과시키지 않는다.
+- 2026-10-06 Closed landscape/maxAX 전체 입력 회전 수정은 173.237초 exit 0, Open portrait/maxAX 3D는 90.136초 exit 0이었다. Rest fold 재검증도 445.019초 exit 0으로 next set까지 통과했다. 이 휴식 결과는 강화된 다음 세트 전체 field 조건 추가 전 앱이며 새 조건의 증거로 재사용하지 않는다.
+- 원본 failures, individual testcase 결과, host SDK cleanup 결과 및 현재 source 적용 범위를 보고서에 각각 유지한다. 새 기능/화면을 추가로 검사하면서도 기존 UNVERIFIED 전체 인벤토리를 일괄 통과 처리하지 않는다.
+
+## 휴식 종료 후 footer 복귀에 따른 viewport 축소를 검증한다
+
+- Closed portrait/maxAX는 휴식 중 body가 467pt였으나 Complete Set 고정 footer가 복귀하면 334pt로 줄었다. 두 숫자 입력의 합친 높이는 377pt였다. auto-center만으로 물리적으로 두 입력을 수용할 수 없었다.
+- AX에서 전체 높이 700pt 미만일 때 header/footer를 scroll에 포함하고 현재 action을 history보다 먼저 둔다. 휴식 종료 시 weight/reps 영역 위쪽으로 animation 없이 이동한다. 입력 binding·timer deadline·Skip 동작은 유지한다.
+- 수정 후 Closed portrait 강화 검사는 175.391초, 1/1 passed, exit 0으로 Skip 직후 두 입력 전체 frame을 추가 swipe 없이 확인했고 native KG 60 / REPS 10 및 증감 버튼을 확인했다. 최종 실제 90°→180°→0° 휴식은 275.743초 exit 0으로 whole countdown·완료 세트·Skip·다음 kg/reps 전체 frame·Done까지 통과했다. 높이 조건 변경 후 Book maxAX 물리 회전도 156.163초 exit 0으로 입력값 62.5/11을 유지했다. 회전의 전체 field 도달성과 두 field 동시 표시를 혼동하지 않는다.

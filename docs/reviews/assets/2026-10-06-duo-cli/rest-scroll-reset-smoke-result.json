@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/ActivityExerciseRegressionTests/testWorkoutDraftAndRestTimerAtMaximumAccessibilityTextSize"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 1,
+    "passed": 0,
+    "skipped": 0,
+    "failed": 1
+  },
+  "passed_cases": 0,
+  "failures": [
+    "838: /Users/shanks/.codex/worktrees/712d/Health/DUNEUITests/Full/ActivityExerciseRegressionTests.swift:514: error: -[DUNEUITests.ActivityExerciseRegressionTests testWorkoutDraftAndRestTimerAtMaximumAccessibilityTextSize] : XCTAssertTrue failed - The next-set reps value should be fully visible immediately…",
+    "854: Test Case '-[DUNEUITests.ActivityExerciseRegressionTests testWorkoutDraftAndRestTimerAtMaximumAccessibilityTextSize]' failed (175.281 seconds).",
+    "855: Test Suite 'ActivityExerciseRegressionTests' failed at 2026-10-06 20:15:09.838.",
+    "857: Test Suite 'DUNEUITests.xctest' failed at 2026-10-06 20:15:09.842.",
+    "859: Test Suite 'Selected tests' failed at 2026-10-06 20:15:09.842.",
+    "877: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log has no positive passed-test count",
+    "UI test log has no identifiable passed UI test cases",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/ActivityExerciseRegressionTests/testWorkoutDraftAndRestTimerAtMaximumAccessibilityTextSize"
+  ],
+  "log_path": "/private/tmp/duo-hinge-control-20261006/rest-scroll-reset-smoke-ui.log"
+}
