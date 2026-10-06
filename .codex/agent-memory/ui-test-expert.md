@@ -49,3 +49,22 @@
 - Closed portrait/maxAX는 휴식 중 body가 467pt였으나 Complete Set 고정 footer가 복귀하면 334pt로 줄었다. 두 숫자 입력의 합친 높이는 377pt였다. auto-center만으로 물리적으로 두 입력을 수용할 수 없었다.
 - AX에서 전체 높이 700pt 미만일 때 header/footer를 scroll에 포함하고 현재 action을 history보다 먼저 둔다. 휴식 종료 시 weight/reps 영역 위쪽으로 animation 없이 이동한다. 입력 binding·timer deadline·Skip 동작은 유지한다.
 - 수정 후 Closed portrait 강화 검사는 175.391초, 1/1 passed, exit 0으로 Skip 직후 두 입력 전체 frame을 추가 swipe 없이 확인했고 native KG 60 / REPS 10 및 증감 버튼을 확인했다. 최종 실제 90°→180°→0° 휴식은 275.743초 exit 0으로 whole countdown·완료 세트·Skip·다음 kg/reps 전체 frame·Done까지 통과했다. 높이 조건 변경 후 Book maxAX 물리 회전도 156.163초 exit 0으로 입력값 62.5/11을 유지했다. 회전의 전체 field 도달성과 두 field 동시 표시를 혼동하지 않는다.
+
+
+## 사용자 기기 격리와 잔여 화면 진단 (2026-10-06)
+
+- 사용자가 iPad Simulator를 사용하면 GUI focus·창·메뉴·keyboard 조작을 금지하고 전용 UDID만 CLI/XCTest 대상으로 지정한다. `booted` fallback은 사용자 기기까지 포함할 수 있어 사용하지 않는다. 현재 테스트/동작 결과와 native 시각 검토는 별도 기록한다.
+- `auditTap` 캡처는 tap **후** 화면이다. Injury 저장 버튼 뒤 캡처는 편집 화면 증거가 아니라 저장 후 상세일 수 있다. 실제 편집 native005에서 title3-scaled 28pt 아이콘 열과 설명 사이 16.7pt 간격을 확인했다.
+- Health fixture가 있는 것과 component detail이 채워진 것은 다르다. 기본 Condition mock은 detail nil로 `--`를 표시한다. 숫자 clipping 검사는 opt-in DEBUG fixture로 세 자리 100 및 가중치 70/30을 확인하되 기본 mock의 의미를 바꾸지 않는다. Weather와 briefing은 각각 시간/날짜/disabled 설정을 고정한다.
+- UI locale이 English여도 exercise library의 실제 fixture 이름은 한국어일 수 있다. 리소스 값을 사용한다. UIKit share caption의 정확한 제목은 StaticText가 아니라 Other 노드에 나타날 수 있으므로 실제 AX 타입과 exact label로 조회한다. 제목의 존재와 전체 share→Close→Done 복귀는 별도 검증이다.
+- Form의 화면 아래 행은 lazy AX snapshot에 없을 수 있다. 존재하지 않는 Add Exercise에 즉시 auditTap하지 않는다. 실제 form scroll viewport를 제한된 느린 scroll로 이동하고 전체 frame 포함을 확인한 뒤 탭한다. 소스에 선언된 행과 화면 내부 clipping을 구분한다.
+- 고정 20/28/32pt icon 열은 자동 확대된 glyph와 겹칠 수 있다. glyph의 font 기준 ScaledMetric을 적용하고 실제 native 간격을 확인한다. Stress 세 자세의 전체 설명과 아이콘·가중치 간격은 별도 강화 검사와 18 native 검토를 통과했다.
+- 공통 SubScoreTrendChartView의 소비자는 Condition 2, Readiness 3, Wellness 3이다. section 중앙만 캡처하면 큰 Sleep plot의 하단 눈금이 viewport 밖일 수 있다. 각각 전체 plot frame을 드러내고 native의 Y눈금/양쪽 날짜까지 검토해야 한다.
+- 일반 iPhone에는 Duo의 두 display가 없다. host-only 캡처 handshake와 Duo orientation driver를 혼동하지 않는다. Full plan에서 일반 폰은 XCUIDevice orientation을 사용하고, Duo driver는 explicit fold opt-in 조건을 함께 확인한다. 이 설정 수정의 최종 기능 결과는 별도 실행 receipt로 판단한다.
+
+## 후속 native gate 교정 (2026-10-07)
+
+- 큰 swipe는 전체 그래프를 위아래로 지나칠 수 있다. 작은 방향 drag로 실제 plot 전체를 노출하며, 화면보다 큰 Life chart는 제목과 아래 축을 분리해 검사한다. 테스트 여백을 임의80pt로 정하면 실제 보이는 Form 하단 버튼도 실패할 수 있다. 실제 nav-bar 아래와 Form/window 하단으로 유효 영역을 계산한다.
+- share popup의 Close는 아래 presenter의 같은 label과 혼동된다. 실제 UIKit `header.closeButton`과 exact caption/AX 타입을 사용한다. 직접 템플릿 세션의 실제 progress는 `Exercise 1 of 2`이며 대문자 가정을 하지 않는다. SDK cleanup timeout은 실제 testcase pass와 별개로 기록한다.
+- Primary Muscles의 adaptive90 grid는 최대 AX에서 완전한 접근성 label이 있어도 Shoulders를 네 줄 글자별로 쌓는다. AX 단일열과 최소44pt 선택 높이를 적용하고 native로 확인한다. 상대 heading-height/aspect 검사는 English/maxAX 시각 감사에서만 요구해 일반 locale/글자 크기 테스트를 실패시키지 않는다.
+- source를 실행 전에 동결한다. 빌드 도중 추가한 FOLD 분기가 해당 binary에 포함됐다고 추정하지 않는다. 이미 통과한 긴 기능 경로는 유지하고 미포함 delta만 짧은 별도 selector로 검사한다. 일반 폰의 host-only 캡처에는 FOLD opt-in이 없으면 XCUIDevice 회전을 유지한다.

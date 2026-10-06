@@ -72,3 +72,22 @@ Claude source rules는 수정하지 않는다. 향후 Codex 실행 지침에 sim
 설치된 device type이 모든 runtime과 호환되는 것은 아니다. 이 환경에서 iOS 27.1 runtime은 Duo를 지원하고 iPhone 18 Pro는 iOS 27.0에서 지원한다. Xcode 27.1 빌드 요구와 검사 runtime은 별도로 기록한다. iOS 18.6도 available이므로 이전 OS session 미검증을 runtime 부재로 설명하지 않는다. 실제 upgrade session fixture와 카메라 실기기 검증은 별도의 증거가 필요하다.
 
 증거는 [잔여 검증 보고서](../../reviews/2026-10-06-duo-remaining-route-coverage.md)와 해당 native assets에 보존한다. 이 문서는 155개 route 선언의 전수 실행, 모든 점수/글자/접힘 조합, 실제 카메라 정확도의 완료를 주장하지 않는다.
+
+## 후속 차트·입력 검증에서 확인한 교정
+
+- 최대 AX에서는 chart 바깥의 제목·평균·기간 선택을 세로로 배치하고, 확대된 축 글자에 맞춰 plot 높이를 확보한다. clipping은 plot에 한정한다. 공통 SubScore는 Readiness·Wellness·Condition 세 소비자를 각각 검사해 Y눈금 세 개와 양끝 날짜가 온전히 보이는 native 결과를 확인했다.
+- PR 끝점의 확대된 불투명 캡슐을 chart 경계에 맞추면 오른쪽 Y눈금을 가릴 수 있다. 수평 overflow를 plot에, 수직 overflow를 chart에 맞춘 뒤 실제 `1'50"`와 인접 `3'20"`가 함께 보이는 결과를 확인했다.
+- root에 대한 큰 swipe를 반복하면 보일 수 있는 그래프도 위아래로 지나친다. 목표 frame과 실제 viewport를 매번 다시 읽고, 작은 방향 drag로 전체 plot 또는 필요한 아래 축을 노출한다. 화면보다 큰 그래프에는 전체 frame 포함을 억지로 요구하지 않고 제목과 아래 축의 검사를 분리한다.
+- 키보드가 열린 Form에서 다음 lazy 행이 아직 생성되지 않았다면 `exists`나 `isHittable`만 반복하지 않는다. 입력 값 보존과 Return 이후 키보드 종료를 확인하고, Form 안에서 해당 행 전체를 노출한다.
+- system share에 같은 Close 문자열을 가진 아래 화면 버튼이 남아 있을 수 있다. 실제 UIKit hierarchy에 나타난 `header.closeButton`을 지정해 popup 종료를 검사한다. caption도 StaticText라고 가정하지 않고 실제 Other 타입과 정확한 label을 확인한다.
+- host-only 캡처는 fold 제어의 근거가 아니다. 일반 iPhone은 XCUIDevice 회전을 사용하고 Duo host 회전은 명시적인 FOLD opt-in이 함께 있을 때만 사용한다. 일반 iPhone 기본 글자 회전 검사는 137.723초/1건/exit0으로 통과했다.
+
+정상 테스트 종료, SDK cleanup 종료, native 렌더링 판정은 별도 항목으로 기록한다. 실패 원본을 유지하고 새로운 원인이 확인됐을 때만 해당 selector를 수정·재검증한다.
+
+### 근육 선택과 단수 문구의 후속 교정
+
+사용자 운동의 Primary Muscles adaptive90 grid는 AX에서 Shoulders를 네 줄 글자별로 쌓았다. AX에서는 full-width 한 열과44pt 최소 높이를 사용하며 일반 크기의 adaptive grid를 유지한다. Book native에서 Chest/Back/Shoulders/Biceps가 모두 온전한 한 줄로 읽혔고 템플릿 생성·편집·첫 운동 실행은258.100초 testcase 통과였다. 해당 실행의 SDK cleanup timeout과 wrapper -15는 기능 통과와 별도로 보존한다.
+
+완료 요약의 영어1sets는 단수 localized key로 교정했다. 이미 separator로 포맷된 String 두 인자를 유지하며 en/ko/ja 번역을 함께 등록했다. 최종 Xcode27.1 standard generic Simulator 빌드와 카탈로그 JSON/인자 검사를 통과했다. 공유 복귀의218.467초 전체동작 결과는 이 사소한 문구 교정 전 실행이며 교정 후 native 통과로 확대하지 않는다.
+
+후속 짧은 근육 칩 검사는 실제 Closed/Open/Book과 취소 복귀를249.517초/1건/skip0/exit0으로 완료했고 세native를 검토했다. 최초 임의80pt 하단 여백 오류는 실제nav-bar/하단12pt 경계로 교정했다. 이는 긴 템플릿 전체 흐름의 재실행을 대신한 해당 미검증 delta 검사다.

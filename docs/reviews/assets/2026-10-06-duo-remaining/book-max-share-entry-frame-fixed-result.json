@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditWorkoutSharePreview"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 1,
+    "passed": 0,
+    "skipped": 0,
+    "failed": 1
+  },
+  "passed_cases": 0,
+  "failures": [
+    "719: /Users/shanks/.codex/worktrees/712d/Health/DUNEUITests/Full/ActivityExerciseRegressionTests.swift:1089: error: -[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditWorkoutSharePreview] : XCTAssertTrue failed - The system share sheet should show the workout preview title",
+    "1097: Test Case '-[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditWorkoutSharePreview]' failed (198.710 seconds).",
+    "1098: Test Suite 'ActivityExerciseRegressionTests' failed at 2026-10-06 23:03:56.542.",
+    "1100: Test Suite 'DUNEUITests.xctest' failed at 2026-10-06 23:03:56.546.",
+    "1102: Test Suite 'Selected tests' failed at 2026-10-06 23:03:56.546.",
+    "1120: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log has no positive passed-test count",
+    "UI test log has no identifiable passed UI test cases",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditWorkoutSharePreview"
+  ],
+  "log_path": "/private/tmp/duo-remaining-20261006/book-max-share-entry-frame-fixed-ui.log"
+}

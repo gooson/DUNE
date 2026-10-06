@@ -1,0 +1,7 @@
+# Custom muscle fold viewport correction — 2026-10-07
+
+The focused test's first native failure is test geometry, not app layout. In capture `005-hierarchy.txt`, the New Template Form spans y=8–669 and `template-form-add-exercise` spans y=521.7–615.0. The focused helper's symmetric 80-point inset ended at y=589, so it could never accept the fully visible button even at the form's natural scroll limit. The actual navigation bar ends around y=82, and the button bottom leaves 54 points before the window edge.
+
+Changed only the focused test's reveal helper to use the actual `New Template` or `New Exercise` navigation bar bottom plus 4 points for its top boundary, and the form/window bottom minus 12 points for its bottom boundary; horizontal clearance remains 8 points. It retains bounded 25%-height slow directed drags and requires the entire element frame plus hittability. This allows the observed y=521.7–615 Add Exercise row without admitting controls behind the top navigation chrome.
+
+The full template test's extra English/max-AX Shoulders label and numeric geometry assertions are now gated by `VisualAudit.isEnabled`. Its whole-chip reveal, selection, creation, edit, and Circuit checks are unchanged; this avoids a false failure in ordinary nonvisual text sizes or locales. `xcrun swiftc -frontend -parse DUNEUITests/Full/ActivityExerciseRegressionTests.swift` passed. Parent owns one focused corrected retry; the original failed receipt remains valid evidence.

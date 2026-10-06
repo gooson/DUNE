@@ -1,0 +1,4991 @@
+{
+  "scope": "selected Duo native and XCTest evidence; not a complete screen/condition matrix",
+  "phases": [
+    {
+      "phase": "book-max-activity-remaining",
+      "pose": {
+        "device": "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+        "hinge_angle": 90.0,
+        "content_size": "accessibility-extra-extra-extra-large",
+        "source_head": "c672a27b0542d633cee18051b805a6f2b0ac8e44",
+        "tracked_diff_sha256": "114905706a9e87c811150dde9aa503221bd9490822a05b8b9b9f7e9c390f829e",
+        "new_route_tests_sha256": "395839441aafe4ab43f69805b1095ddbc2ec645228fff4daac09103a7a73d2b8"
+      },
+      "runner": {
+        "pid": 21565,
+        "returncode": -15,
+        "termination": "SDK runner cleanup exceeded 60s after test execution ended",
+        "cleanup_error": "[Errno 1] Operation not permitted",
+        "checkpoints_attempted": 35
+      },
+      "test_receipt": null,
+      "cases": [
+        {
+          "case": "-[DUNEUITests.ActivityExerciseRegressionTests testCardioFlowReachesSummary]",
+          "status": "passed",
+          "seconds": 200.604
+        },
+        {
+          "case": "-[DUNEUITests.ActivityExerciseRegressionTests testPersonalRecordsDetailShowsTimelineRewardsAndHistory]",
+          "status": "passed",
+          "seconds": 103.744
+        },
+        {
+          "case": "-[DUNEUITests.ActivityExerciseRegressionTests testTemplateListSupportsCreateEditAndTemplateStart]",
+          "status": "failed",
+          "seconds": 82.866
+        },
+        {
+          "case": "-[DUNEUITests.ActivityExerciseRegressionTests testTrainingReadinessDetailShowsTrendAndSubscoreSections]",
+          "status": "passed",
+          "seconds": 80.991
+        }
+      ],
+      "original_directory": "/tmp/duo-remaining-20261006/book-max-activity-remaining"
+    },
+    {
+      "phase": "book-max-briefing-date-fixed",
+      "pose": {
+        "device": "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+        "hinge_angle": 90.0,
+        "content_size": "accessibility-extra-extra-extra-large",
+        "source_head": "6ee93725aea0c16b2523506fb053f93b6a787359",
+        "tracked_diff_sha256": "9464b9d1f9408f1c151f7d2f307ca887390655ccd40995f86384d4e02ceea397",
+        "new_route_tests_sha256": "395839441aafe4ab43f69805b1095ddbc2ec645228fff4daac09103a7a73d2b8"
+      },
+      "runner": {
+        "pid": 39911,
+        "returncode": 0,
+        "termination": null,
+        "cleanup_error": null,
+        "checkpoints_attempted": 11
+      },
+      "test_receipt": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/TodaySettingsRegressionTests/testVisualAuditMorningBriefing"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/private/tmp/duo-remaining-20261006/book-max-briefing-date-fixed-ui.log"
+      },
+      "cases": [
+        {
+          "case": "-[DUNEUITests.TodaySettingsRegressionTests testVisualAuditMorningBriefing]",
+          "status": "passed",
+          "seconds": 82.819
+        }
+      ],
+      "original_directory": "/tmp/duo-remaining-20261006/book-max-briefing-date-fixed"
+    },
+    {
+      "phase": "book-max-briefing-icon-width-fixed",
+      "pose": {
+        "device": "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+        "hinge_angle": 90.0,
+        "content_size": "accessibility-extra-extra-extra-large",
+        "source_head": "6456c0548b8e8eabeeecdb9c3bcc0ae94e0d79a4",
+        "tracked_diff_sha256": "8c39d4f81181890c88250eafddd27608a79bb043b1dd0d2e42ceaf47d0d6bca1",
+        "new_route_tests_sha256": "cf2ad344eb99fb954ec3007c9c84986abded04baa5e69f0aa49917f747af8024"
+      },
+      "runner": {
+        "pid": 52210,
+        "returncode": 0,
+        "termination": null,
+        "cleanup_error": null,
+        "checkpoints_attempted": 11
+      },
+      "test_receipt": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/TodaySettingsRegressionTests/testVisualAuditMorningBriefing"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/private/tmp/duo-remaining-20261006/book-max-briefing-icon-width-fixed-ui.log"
+      },
+      "cases": [
+        {
+          "case": "-[DUNEUITests.TodaySettingsRegressionTests testVisualAuditMorningBriefing]",
+          "status": "passed",
+          "seconds": 75.469
+        }
+      ],
+      "original_directory": "/tmp/duo-remaining-20261006/book-max-briefing-icon-width-fixed"
+    },
+    {
+      "phase": "book-max-condition-populated-fixed",
+      "pose": {
+        "device": "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+        "hinge_angle": 90.0,
+        "content_size": "accessibility-extra-extra-extra-large",
+        "source_head": "6ee93725aea0c16b2523506fb053f93b6a787359",
+        "tracked_diff_sha256": "cdead5b62ec588987af745c77694263014f53c611194d1e3802fc313a8b46fdd",
+        "new_route_tests_sha256": "395839441aafe4ab43f69805b1095ddbc2ec645228fff4daac09103a7a73d2b8"
+      },
+      "runner": {
+        "pid": 3451,
+        "returncode": 0,
+        "termination": null,
+        "cleanup_error": null,
+        "checkpoints_attempted": 6
+      },
+      "test_receipt": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/DuoScoreComponentLayoutTests/testConditionCompositionScoresFitAtMaximumTextSize"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/private/tmp/duo-remaining-20261006/book-max-condition-populated-fixed-ui.log"
+      },
+      "cases": [
+        {
+          "case": "-[DUNEUITests.DuoScoreComponentLayoutTests testConditionCompositionScoresFitAtMaximumTextSize]",
+          "status": "passed",
+          "seconds": 71.9
+        }
+      ],
+      "original_directory": "/tmp/duo-remaining-20261006/book-max-condition-populated-fixed"
+    },
+    {
+      "phase": "book-max-injury-icon-width-fixed",
+      "pose": {
+        "device": "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+        "hinge_angle": 90.0,
+        "content_size": "accessibility-extra-extra-extra-large",
+        "source_head": "6ee93725aea0c16b2523506fb053f93b6a787359",
+        "tracked_diff_sha256": "94f993ad76e9696e9b97cb10a0d8956db53f8a5756da890cb1f07a25de725b46",
+        "new_route_tests_sha256": "395839441aafe4ab43f69805b1095ddbc2ec645228fff4daac09103a7a73d2b8"
+      },
+      "runner": {
+        "pid": 92988,
+        "returncode": 0,
+        "termination": null,
+        "cleanup_error": null,
+        "checkpoints_attempted": 7
+      },
+      "test_receipt": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/WellnessRegressionTests/testInjuryHistoryRowOpensDetailAndEditForm"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/private/tmp/duo-remaining-20261006/book-max-injury-icon-width-fixed-ui.log"
+      },
+      "cases": [
+        {
+          "case": "-[DUNEUITests.WellnessRegressionTests testInjuryHistoryRowOpensDetailAndEditForm]",
+          "status": "passed",
+          "seconds": 66.114
+        }
+      ],
+      "original_directory": "/tmp/duo-remaining-20261006/book-max-injury-icon-width-fixed"
+    },
+    {
+      "phase": "book-max-life-restore-fixed",
+      "pose": {
+        "device": "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+        "hinge_angle": 90.0,
+        "content_size": "accessibility-extra-extra-extra-large",
+        "source_head": "2cfbc4b8b5a1bb4e9d9b66f50a13a3d4ec8fe7f0",
+        "tracked_diff_sha256": "ffe05ef0930919c9b067efd0f0e678550509a765b5846d234d783edcf7d3f8d6",
+        "new_route_tests_sha256": "848cfa49db9585a9f947eeea988c0b09eff623de1bbadbe8f10bd222795ecf53"
+      },
+      "runner": {
+        "pid": 87989,
+        "returncode": 0,
+        "termination": null,
+        "cleanup_error": null,
+        "checkpoints_attempted": 16
+      },
+      "test_receipt": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/DuoLifeArchiveRestoreTests/testArchivedHabitRestoresToActiveLifeList"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/private/tmp/duo-remaining-20261006/book-max-life-restore-fixed-ui.log"
+      },
+      "cases": [
+        {
+          "case": "-[DUNEUITests.DuoLifeArchiveRestoreTests testArchivedHabitRestoresToActiveLifeList]",
+          "status": "passed",
+          "seconds": 114.938
+        }
+      ],
+      "original_directory": "/tmp/duo-remaining-20261006/book-max-life-restore-fixed"
+    },
+    {
+      "phase": "book-max-life-restore-template-fixed",
+      "pose": {
+        "device": "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+        "hinge_angle": 90.0,
+        "content_size": "accessibility-extra-extra-extra-large",
+        "source_head": "2e26907fcaad1f45d3f1e5be9fbd377a31252d53",
+        "tracked_diff_sha256": "1d28b11b41110a68d8af8e094b6bcb8a5e74c3634c2792dd42cb0f036ef7bfeb",
+        "new_route_tests_sha256": "c1558af1f92a420ad1bb1035232c06ca676ab5a9e74df90b9b6dc8ee28bd24b1"
+      },
+      "runner": {
+        "pid": 5035,
+        "returncode": 65,
+        "termination": null,
+        "cleanup_error": null,
+        "checkpoints_attempted": 39
+      },
+      "test_receipt": {
+        "schema_version": 1,
+        "status": "failed",
+        "target": "DUNEUITests",
+        "run_exit_status": 65,
+        "requested_selectors": [
+          "DUNEUITests/DuoLifeArchiveRestoreTests/testArchivedHabitRestoresToActiveLifeList",
+          "DUNEUITests/DuoLifeStarterTemplateTests/testEmptyStarterTemplateCreatesHabitAndRendersHabitsSection",
+          "DUNEUITests/LifeRegressionTests/testVisualAuditHabitHeatmap",
+          "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditWorkoutSharePreview"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 4,
+          "passed": 2,
+          "skipped": 0,
+          "failed": 2
+        },
+        "passed_cases": 2,
+        "failures": [
+          "652: /Users/shanks/.codex/worktrees/712d/Health/DUNEUITests/Full/ActivityExerciseRegressionTests.swift:982: error: -[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditWorkoutSharePreview] : XCTAssertTrue failed - Complete Set should remain accessible while entering repetitions",
+          "905: Test Case '-[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditWorkoutSharePreview]' failed (235.426 seconds).",
+          "906: Test Suite 'ActivityExerciseRegressionTests' failed at 2026-10-06 21:44:19.961.",
+          "1397: /Users/shanks/.codex/worktrees/712d/Health/DUNEUITests/Full/DuoRemainingRouteTests.swift:73: error: -[DUNEUITests.DuoLifeArchiveRestoreTests testArchivedHabitRestoresToActiveLifeList] : XCTAssertTrue failed - Archived habits entry should be reachable after archiving",
+          "1413: Test Case '-[DUNEUITests.DuoLifeArchiveRestoreTests testArchivedHabitRestoresToActiveLifeList]' failed (162.552 seconds).",
+          "1414: Test Suite 'DuoLifeArchiveRestoreTests' failed at 2026-10-06 21:47:02.522.",
+          "1987: Test Suite 'DUNEUITests.xctest' failed at 2026-10-06 21:50:07.688.",
+          "1989: Test Suite 'Selected tests' failed at 2026-10-06 21:50:07.691.",
+          "2008: ** TEST FAILED **",
+          "xcodebuild exited 65",
+          "UI test log reports 2 failures",
+          "requested UI test selector has no execution evidence"
+        ],
+        "required_selectors_missing": [
+          "DUNEUITests/DuoLifeArchiveRestoreTests/testArchivedHabitRestoresToActiveLifeList",
+          "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditWorkoutSharePreview"
+        ],
+        "log_path": "/private/tmp/duo-remaining-20261006/book-max-life-restore-template-fixed-ui.log"
+      },
+      "cases": [
+        {
+          "case": "-[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditWorkoutSharePreview]",
+          "status": "failed",
+          "seconds": 235.426
+        },
+        {
+          "case": "-[DUNEUITests.DuoLifeArchiveRestoreTests testArchivedHabitRestoresToActiveLifeList]",
+          "status": "failed",
+          "seconds": 162.552
+        },
+        {
+          "case": "-[DUNEUITests.DuoLifeStarterTemplateTests testEmptyStarterTemplateCreatesHabitAndRendersHabitsSection]",
+          "status": "passed",
+          "seconds": 105.533
+        },
+        {
+          "case": "-[DUNEUITests.LifeRegressionTests testVisualAuditHabitHeatmap]",
+          "status": "passed",
+          "seconds": 79.601
+        },
+        {
+          "case": "-[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditWorkoutSharePreview]",
+          "status": "failed",
+          "seconds": 235.426
+        },
+        {
+          "case": "-[DUNEUITests.DuoLifeArchiveRestoreTests testArchivedHabitRestoresToActiveLifeList]",
+          "status": "failed",
+          "seconds": 162.552
+        }
+      ],
+      "original_directory": "/tmp/duo-remaining-20261006/book-max-life-restore-template-fixed"
+    },
+    {
+      "phase": "book-max-life-settings-final",
+      "pose": {
+        "device": "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+        "hinge_angle": 90.0,
+        "content_size": "accessibility-extra-extra-extra-large",
+        "source_head": "67cd93ae0b484f7bf65e922f9ac6d262fa682b03"
+      },
+      "runner": {
+        "pid": 67307,
+        "returncode": 0,
+        "termination": null,
+        "cleanup_error": null,
+        "checkpoints_attempted": 44
+      },
+      "test_receipt": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/TodaySettingsRegressionTests/testSettingsShowsPhaseTwoRows",
+          "DUNEUITests/LifeRegressionTests/testVisualAuditHabitManagement",
+          "DUNEUITests/LifeRegressionTests/testVisualAuditHabitHeatmap"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 3,
+          "passed": 3,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 3,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/private/tmp/duo-remaining-20261006/book-max-life-settings-final-ui.log"
+      },
+      "cases": [
+        {
+          "case": "-[DUNEUITests.LifeRegressionTests testVisualAuditHabitHeatmap]",
+          "status": "passed",
+          "seconds": 103.384
+        },
+        {
+          "case": "-[DUNEUITests.LifeRegressionTests testVisualAuditHabitManagement]",
+          "status": "passed",
+          "seconds": 196.023
+        },
+        {
+          "case": "-[DUNEUITests.TodaySettingsRegressionTests testSettingsShowsPhaseTwoRows]",
+          "status": "passed",
+          "seconds": 293.773
+        }
+      ],
+      "original_directory": "/tmp/duo-remaining-20261006/book-max-life-settings-final"
+    },
+    {
+      "phase": "book-max-posture-routes",
+      "pose": {
+        "device": "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+        "hinge_angle": 90.0,
+        "content_size": "accessibility-extra-extra-extra-large",
+        "source_head": "67cd93ae0b484f7bf65e922f9ac6d262fa682b03",
+        "tracked_diff_sha256": "d82b81c7a4ba9ebc821387c919af5648d1fa2ee217b5a080f607cc53c7559dce",
+        "new_route_tests_sha256": "063a9ab372dff8b79c1cb4a40573aa2c79c13cdfa8f219654f49974b5fa46693"
+      },
+      "runner": {
+        "pid": 86115,
+        "returncode": 0,
+        "termination": null,
+        "cleanup_error": null,
+        "checkpoints_attempted": 53
+      },
+      "test_receipt": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/PostureVisualAuditTests/testPostureHistoryAndDetail",
+          "DUNEUITests/PostureVisualAuditTests/testPostureComparison",
+          "DUNEUITests/PostureVisualAuditTests/testPostureSymmetry",
+          "DUNEUITests/PostureVisualAuditTests/testCameraAndRealtimeAvailability"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 4,
+          "passed": 4,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 4,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/private/tmp/duo-remaining-20261006/book-max-posture-routes-ui.log"
+      },
+      "cases": [
+        {
+          "case": "-[DUNEUITests.PostureVisualAuditTests testCameraAndRealtimeAvailability]",
+          "status": "passed",
+          "seconds": 112.407
+        },
+        {
+          "case": "-[DUNEUITests.PostureVisualAuditTests testPostureComparison]",
+          "status": "passed",
+          "seconds": 213.626
+        },
+        {
+          "case": "-[DUNEUITests.PostureVisualAuditTests testPostureHistoryAndDetail]",
+          "status": "passed",
+          "seconds": 166.889
+        },
+        {
+          "case": "-[DUNEUITests.PostureVisualAuditTests testPostureSymmetry]",
+          "status": "passed",
+          "seconds": 162.522
+        }
+      ],
+      "original_directory": "/tmp/duo-remaining-20261006/book-max-posture-routes"
+    },
+    {
+      "phase": "book-max-pr-endpoint-axis-clearance",
+      "pose": {
+        "device": "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+        "hinge_angle": 90.0,
+        "content_size": "accessibility-extra-extra-extra-large",
+        "source_head": "c8a28451e2352332b6b1e532e7f4ae357db12e1d",
+        "tracked_diff_sha256": "90f08388d3ae0b026958d1089d5aa814f6c17eaccaab58614da7ba995be0c1c9",
+        "new_route_tests_sha256": "44d6716da428a23b7cdb219905ac9c456ea48626496167b5225d6126250754bb"
+      },
+      "runner": {
+        "pid": 8705,
+        "returncode": 0,
+        "termination": null,
+        "cleanup_error": null,
+        "checkpoints_attempted": 6
+      },
+      "test_receipt": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/ActivityExerciseRegressionTests/testPersonalRecordsDetailShowsTimelineRewardsAndHistory"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/private/tmp/duo-remaining-20261006/book-max-pr-endpoint-axis-clearance-ui.log"
+      },
+      "cases": [
+        {
+          "case": "-[DUNEUITests.ActivityExerciseRegressionTests testPersonalRecordsDetailShowsTimelineRewardsAndHistory]",
+          "status": "passed",
+          "seconds": 103.838
+        }
+      ],
+      "original_directory": "/tmp/duo-remaining-20261006/book-max-pr-endpoint-axis-clearance"
+    },
+    {
+      "phase": "book-max-readiness-subscore-complete",
+      "pose": {
+        "device": "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+        "hinge_angle": 90.0,
+        "content_size": "accessibility-extra-extra-extra-large",
+        "source_head": "c8a28451e2352332b6b1e532e7f4ae357db12e1d",
+        "tracked_diff_sha256": "78a3e704559e958e85aefb38d4b91360ef8846058422a12251ee6995fdc72e33",
+        "new_route_tests_sha256": "cf2ad344eb99fb954ec3007c9c84986abded04baa5e69f0aa49917f747af8024"
+      },
+      "runner": {
+        "pid": 75927,
+        "returncode": 0,
+        "termination": null,
+        "cleanup_error": null,
+        "checkpoints_attempted": 9
+      },
+      "test_receipt": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/DuoScoreComponentLayoutTests/testReadinessSubscoreChartsFitAtMaximumTextSize"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/private/tmp/duo-remaining-20261006/book-max-readiness-subscore-complete-ui.log"
+      },
+      "cases": [
+        {
+          "case": "-[DUNEUITests.DuoScoreComponentLayoutTests testReadinessSubscoreChartsFitAtMaximumTextSize]",
+          "status": "passed",
+          "seconds": 112.239
+        }
+      ],
+      "original_directory": "/tmp/duo-remaining-20261006/book-max-readiness-subscore-complete"
+    },
+    {
+      "phase": "book-max-share-caption-type-fixed",
+      "pose": {
+        "device": "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+        "hinge_angle": 90.0,
+        "content_size": "accessibility-extra-extra-extra-large",
+        "source_head": "6456c0548b8e8eabeeecdb9c3bcc0ae94e0d79a4",
+        "tracked_diff_sha256": "8b3394c44644af01e70daf59d685fbc6b40da47879d06db6ced9c0e848bf8f88",
+        "new_route_tests_sha256": "cf2ad344eb99fb954ec3007c9c84986abded04baa5e69f0aa49917f747af8024"
+      },
+      "runner": {
+        "pid": 46224,
+        "returncode": -15,
+        "termination": "SDK runner cleanup exceeded 60s after test execution ended",
+        "cleanup_error": null,
+        "checkpoints_attempted": 10
+      },
+      "test_receipt": null,
+      "cases": [
+        {
+          "case": "-[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditWorkoutSharePreview]",
+          "status": "failed",
+          "seconds": 188.145
+        }
+      ],
+      "original_directory": "/tmp/duo-remaining-20261006/book-max-share-caption-type-fixed"
+    },
+    {
+      "phase": "book-max-share-control-reveal-fixed",
+      "pose": {
+        "device": "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+        "hinge_angle": 90.0,
+        "content_size": "accessibility-extra-extra-extra-large",
+        "source_head": "c8a28451e2352332b6b1e532e7f4ae357db12e1d",
+        "tracked_diff_sha256": "6423b1468ac4297597aaa39245e5a54fc748529428e03d869c72a0b895b0c402",
+        "new_route_tests_sha256": "cf2ad344eb99fb954ec3007c9c84986abded04baa5e69f0aa49917f747af8024"
+      },
+      "runner": {
+        "pid": 85786,
+        "returncode": 65,
+        "termination": null,
+        "cleanup_error": null,
+        "checkpoints_attempted": 17
+      },
+      "test_receipt": {
+        "schema_version": 1,
+        "status": "failed",
+        "target": "DUNEUITests",
+        "run_exit_status": 65,
+        "requested_selectors": [
+          "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditWorkoutSharePreview"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 0,
+          "skipped": 0,
+          "failed": 1
+        },
+        "passed_cases": 0,
+        "failures": [
+          "1014: /Users/shanks/.codex/worktrees/712d/Health/DUNEUITests/Full/ActivityExerciseRegressionTests.swift:1089: error: -[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditWorkoutSharePreview] : XCTAssertTrue failed - The system share sheet should provide an accessible dismiss control",
+          "1393: Test Case '-[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditWorkoutSharePreview]' failed (268.283 seconds).",
+          "1394: Test Suite 'ActivityExerciseRegressionTests' failed at 2026-10-06 23:57:09.573.",
+          "1396: Test Suite 'DUNEUITests.xctest' failed at 2026-10-06 23:57:09.580.",
+          "1398: Test Suite 'Selected tests' failed at 2026-10-06 23:57:09.581.",
+          "1416: ** TEST FAILED **",
+          "xcodebuild exited 65",
+          "UI test log has no positive passed-test count",
+          "UI test log has no identifiable passed UI test cases",
+          "requested UI test selector has no execution evidence"
+        ],
+        "required_selectors_missing": [
+          "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditWorkoutSharePreview"
+        ],
+        "log_path": "/private/tmp/duo-remaining-20261006/book-max-share-control-reveal-fixed-ui.log"
+      },
+      "cases": [
+        {
+          "case": "-[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditWorkoutSharePreview]",
+          "status": "failed",
+          "seconds": 268.283
+        },
+        {
+          "case": "-[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditWorkoutSharePreview]",
+          "status": "failed",
+          "seconds": 268.283
+        }
+      ],
+      "original_directory": "/tmp/duo-remaining-20261006/book-max-share-control-reveal-fixed"
+    },
+    {
+      "phase": "book-max-share-entry-frame-fixed",
+      "pose": {
+        "device": "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+        "hinge_angle": 90.0,
+        "content_size": "accessibility-extra-extra-extra-large",
+        "source_head": "6ee93725aea0c16b2523506fb053f93b6a787359",
+        "tracked_diff_sha256": "cdead5b62ec588987af745c77694263014f53c611194d1e3802fc313a8b46fdd",
+        "new_route_tests_sha256": "395839441aafe4ab43f69805b1095ddbc2ec645228fff4daac09103a7a73d2b8"
+      },
+      "runner": {
+        "pid": 96870,
+        "returncode": 65,
+        "termination": null,
+        "cleanup_error": null,
+        "checkpoints_attempted": 17
+      },
+      "test_receipt": {
+        "schema_version": 1,
+        "status": "failed",
+        "target": "DUNEUITests",
+        "run_exit_status": 65,
+        "requested_selectors": [
+          "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditWorkoutSharePreview"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 0,
+          "skipped": 0,
+          "failed": 1
+        },
+        "passed_cases": 0,
+        "failures": [
+          "719: /Users/shanks/.codex/worktrees/712d/Health/DUNEUITests/Full/ActivityExerciseRegressionTests.swift:1089: error: -[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditWorkoutSharePreview] : XCTAssertTrue failed - The system share sheet should show the workout preview title",
+          "1097: Test Case '-[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditWorkoutSharePreview]' failed (198.710 seconds).",
+          "1098: Test Suite 'ActivityExerciseRegressionTests' failed at 2026-10-06 23:03:56.542.",
+          "1100: Test Suite 'DUNEUITests.xctest' failed at 2026-10-06 23:03:56.546.",
+          "1102: Test Suite 'Selected tests' failed at 2026-10-06 23:03:56.546.",
+          "1120: ** TEST FAILED **",
+          "xcodebuild exited 65",
+          "UI test log has no positive passed-test count",
+          "UI test log has no identifiable passed UI test cases",
+          "requested UI test selector has no execution evidence"
+        ],
+        "required_selectors_missing": [
+          "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditWorkoutSharePreview"
+        ],
+        "log_path": "/private/tmp/duo-remaining-20261006/book-max-share-entry-frame-fixed-ui.log"
+      },
+      "cases": [
+        {
+          "case": "-[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditWorkoutSharePreview]",
+          "status": "failed",
+          "seconds": 198.71
+        },
+        {
+          "case": "-[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditWorkoutSharePreview]",
+          "status": "failed",
+          "seconds": 198.71
+        }
+      ],
+      "original_directory": "/tmp/duo-remaining-20261006/book-max-share-entry-frame-fixed"
+    },
+    {
+      "phase": "book-max-share-keyboard-fixed",
+      "pose": {
+        "device": "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+        "hinge_angle": 90.0,
+        "content_size": "accessibility-extra-extra-extra-large",
+        "source_head": "f05f923a37f2d248aa86309c42ef3992a45b99ca",
+        "tracked_diff_sha256": "5653343d7d30bf603fb872225e7a2c2c7f6ff5bc327fa0b9741c68fbe4fd4578",
+        "new_route_tests_sha256": "848cfa49db9585a9f947eeea988c0b09eff623de1bbadbe8f10bd222795ecf53"
+      },
+      "runner": {
+        "pid": 73178,
+        "returncode": 65,
+        "termination": null,
+        "cleanup_error": null,
+        "checkpoints_attempted": 16
+      },
+      "test_receipt": {
+        "schema_version": 1,
+        "status": "failed",
+        "target": "DUNEUITests",
+        "run_exit_status": 65,
+        "requested_selectors": [
+          "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditWorkoutSharePreview"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 0,
+          "skipped": 0,
+          "failed": 1
+        },
+        "passed_cases": 0,
+        "failures": [
+          "582: /Users/shanks/.codex/worktrees/712d/Health/DUNEUITests/Full/ActivityExerciseRegressionTests.swift:1020: error: -[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditWorkoutSharePreview] : XCTAssertTrue failed - Completion should display the saved exercise and set count",
+          "598: Test Case '-[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditWorkoutSharePreview]' failed (199.040 seconds).",
+          "599: Test Suite 'ActivityExerciseRegressionTests' failed at 2026-10-06 22:11:26.242.",
+          "601: Test Suite 'DUNEUITests.xctest' failed at 2026-10-06 22:11:26.255.",
+          "603: Test Suite 'Selected tests' failed at 2026-10-06 22:11:26.255.",
+          "621: ** TEST FAILED **",
+          "xcodebuild exited 65",
+          "UI test log has no positive passed-test count",
+          "UI test log has no identifiable passed UI test cases",
+          "requested UI test selector has no execution evidence"
+        ],
+        "required_selectors_missing": [
+          "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditWorkoutSharePreview"
+        ],
+        "log_path": "/private/tmp/duo-remaining-20261006/book-max-share-keyboard-fixed-ui.log"
+      },
+      "cases": [
+        {
+          "case": "-[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditWorkoutSharePreview]",
+          "status": "failed",
+          "seconds": 199.04
+        },
+        {
+          "case": "-[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditWorkoutSharePreview]",
+          "status": "failed",
+          "seconds": 199.04
+        }
+      ],
+      "original_directory": "/tmp/duo-remaining-20261006/book-max-share-keyboard-fixed"
+    },
+    {
+      "phase": "book-max-share-resource-name-fixed",
+      "pose": {
+        "device": "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+        "hinge_angle": 90.0,
+        "content_size": "accessibility-extra-extra-extra-large",
+        "source_head": "6ee93725aea0c16b2523506fb053f93b6a787359",
+        "tracked_diff_sha256": "4c0a5d4f709372884c4f33646e0744f7f02027dcb4f590c3132fbb1adbce6a40",
+        "new_route_tests_sha256": "395839441aafe4ab43f69805b1095ddbc2ec645228fff4daac09103a7a73d2b8"
+      },
+      "runner": {
+        "pid": 44656,
+        "returncode": 65,
+        "termination": null,
+        "cleanup_error": null,
+        "checkpoints_attempted": 6
+      },
+      "test_receipt": {
+        "schema_version": 1,
+        "status": "failed",
+        "target": "DUNEUITests",
+        "run_exit_status": 65,
+        "requested_selectors": [
+          "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditWorkoutSharePreview"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 0,
+          "skipped": 0,
+          "failed": 1
+        },
+        "passed_cases": 0,
+        "failures": [
+          "697: /Users/shanks/.codex/worktrees/712d/Health/DUNEUITests/Full/ActivityExerciseRegressionTests.swift:1549: error: -[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditWorkoutSharePreview] : failed - Exercise screen should appear",
+          "713: Test Case '-[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditWorkoutSharePreview]' failed (193.194 seconds).",
+          "714: Test Suite 'ActivityExerciseRegressionTests' failed at 2026-10-06 22:37:19.870.",
+          "716: Test Suite 'DUNEUITests.xctest' failed at 2026-10-06 22:37:19.873.",
+          "718: Test Suite 'Selected tests' failed at 2026-10-06 22:37:19.873.",
+          "736: ** TEST FAILED **",
+          "xcodebuild exited 65",
+          "UI test log has no positive passed-test count",
+          "UI test log has no identifiable passed UI test cases",
+          "requested UI test selector has no execution evidence"
+        ],
+        "required_selectors_missing": [
+          "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditWorkoutSharePreview"
+        ],
+        "log_path": "/private/tmp/duo-remaining-20261006/book-max-share-resource-name-fixed-ui.log"
+      },
+      "cases": [
+        {
+          "case": "-[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditWorkoutSharePreview]",
+          "status": "failed",
+          "seconds": 193.194
+        },
+        {
+          "case": "-[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditWorkoutSharePreview]",
+          "status": "failed",
+          "seconds": 193.194
+        }
+      ],
+      "original_directory": "/tmp/duo-remaining-20261006/book-max-share-resource-name-fixed"
+    },
+    {
+      "phase": "book-max-share-system-close-scoped",
+      "pose": {
+        "device": "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+        "hinge_angle": 90.0,
+        "content_size": "accessibility-extra-extra-extra-large",
+        "source_head": "f734a14dc67ed0f07f6c38e50c458c9fef2b1cb9",
+        "tracked_diff_sha256": "9b54fea01b61aa834a76d8b89eb3b6261d6a9b4809d88e35e27629f082c6d004",
+        "new_route_tests_sha256": "44d6716da428a23b7cdb219905ac9c456ea48626496167b5225d6126250754bb"
+      },
+      "runner": {
+        "pid": 23773,
+        "returncode": 0,
+        "termination": null,
+        "cleanup_error": null,
+        "checkpoints_attempted": 21
+      },
+      "test_receipt": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditWorkoutSharePreview"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/private/tmp/duo-remaining-20261006/book-max-share-system-close-scoped-ui.log"
+      },
+      "cases": [
+        {
+          "case": "-[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditWorkoutSharePreview]",
+          "status": "passed",
+          "seconds": 218.467
+        }
+      ],
+      "original_directory": "/tmp/duo-remaining-20261006/book-max-share-system-close-scoped"
+    },
+    {
+      "phase": "book-max-shared-score-consumers",
+      "pose": {
+        "device": "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+        "hinge_angle": 90.0,
+        "content_size": "accessibility-extra-extra-extra-large",
+        "source_head": "6ee93725aea0c16b2523506fb053f93b6a787359",
+        "tracked_diff_sha256": "8d06e842d4050408f9cab66cced359815e52e53021f18244f3553b1a4639c3cf",
+        "new_route_tests_sha256": "395839441aafe4ab43f69805b1095ddbc2ec645228fff4daac09103a7a73d2b8"
+      },
+      "runner": {
+        "pid": 68087,
+        "returncode": 65,
+        "termination": null,
+        "cleanup_error": null,
+        "checkpoints_attempted": 19
+      },
+      "test_receipt": {
+        "schema_version": 1,
+        "status": "failed",
+        "target": "DUNEUITests",
+        "run_exit_status": 65,
+        "requested_selectors": [
+          "DUNEUITests/DuoScoreComponentLayoutTests/testConditionCompositionScoresFitAtMaximumTextSize",
+          "DUNEUITests/DuoScoreComponentLayoutTests/testWellnessCompositionScoresFitAtMaximumTextSize",
+          "DUNEUITests/DuoScoreComponentLayoutTests/testReadinessCompositionScoresFitAtMaximumTextSize"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 3,
+          "passed": 2,
+          "skipped": 0,
+          "failed": 1
+        },
+        "passed_cases": 2,
+        "failures": [
+          "184: /Users/shanks/.codex/worktrees/712d/Health/DUNEUITests/Full/DuoScoreComponentLayoutTests.swift:84: error: -[DUNEUITests.DuoScoreComponentLayoutTests testConditionCompositionScoresFitAtMaximumTextSize] : XCTAssertFalse failed - Condition should expose at least one populated component score",
+          "200: Test Case '-[DUNEUITests.DuoScoreComponentLayoutTests testConditionCompositionScoresFitAtMaximumTextSize]' failed (50.933 seconds).",
+          "759: Test Suite 'DuoScoreComponentLayoutTests' failed at 2026-10-06 22:47:13.970.",
+          "761: Test Suite 'DUNEUITests.xctest' failed at 2026-10-06 22:47:13.978.",
+          "763: Test Suite 'Selected tests' failed at 2026-10-06 22:47:13.978.",
+          "781: ** TEST FAILED **",
+          "xcodebuild exited 65",
+          "UI test log reports 1 failures",
+          "requested UI test selector has no execution evidence"
+        ],
+        "required_selectors_missing": [
+          "DUNEUITests/DuoScoreComponentLayoutTests/testConditionCompositionScoresFitAtMaximumTextSize"
+        ],
+        "log_path": "/private/tmp/duo-remaining-20261006/book-max-shared-score-consumers-ui.log"
+      },
+      "cases": [
+        {
+          "case": "-[DUNEUITests.DuoScoreComponentLayoutTests testConditionCompositionScoresFitAtMaximumTextSize]",
+          "status": "failed",
+          "seconds": 50.933
+        },
+        {
+          "case": "-[DUNEUITests.DuoScoreComponentLayoutTests testReadinessCompositionScoresFitAtMaximumTextSize]",
+          "status": "passed",
+          "seconds": 97.809
+        },
+        {
+          "case": "-[DUNEUITests.DuoScoreComponentLayoutTests testWellnessCompositionScoresFitAtMaximumTextSize]",
+          "status": "passed",
+          "seconds": 78.417
+        },
+        {
+          "case": "-[DUNEUITests.DuoScoreComponentLayoutTests testConditionCompositionScoresFitAtMaximumTextSize]",
+          "status": "failed",
+          "seconds": 50.933
+        }
+      ],
+      "original_directory": "/tmp/duo-remaining-20261006/book-max-shared-score-consumers"
+    },
+    {
+      "phase": "book-max-template-form-lazy-reveal-fixed",
+      "pose": {
+        "device": "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+        "hinge_angle": 90.0,
+        "content_size": "accessibility-extra-extra-extra-large",
+        "source_head": "c8a28451e2352332b6b1e532e7f4ae357db12e1d",
+        "tracked_diff_sha256": "90f08388d3ae0b026958d1089d5aa814f6c17eaccaab58614da7ba995be0c1c9",
+        "new_route_tests_sha256": "44d6716da428a23b7cdb219905ac9c456ea48626496167b5225d6126250754bb"
+      },
+      "runner": {
+        "pid": 11838,
+        "returncode": -15,
+        "termination": "SDK runner cleanup exceeded 60s after test execution ended",
+        "cleanup_error": "[Errno 1] Operation not permitted",
+        "checkpoints_attempted": 20
+      },
+      "test_receipt": null,
+      "cases": [
+        {
+          "case": "-[DUNEUITests.ActivityExerciseRegressionTests testTemplateListSupportsCreateEditAndTemplateStart]",
+          "status": "failed",
+          "seconds": 255.315
+        }
+      ],
+      "original_directory": "/tmp/duo-remaining-20261006/book-max-template-form-lazy-reveal-fixed"
+    },
+    {
+      "phase": "book-max-template-pr-remediation",
+      "pose": {
+        "device": "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+        "hinge_angle": 90.0,
+        "content_size": "accessibility-extra-extra-extra-large",
+        "source_head": "c8a28451e2352332b6b1e532e7f4ae357db12e1d",
+        "tracked_diff_sha256": "e668f340840821d7c6c4d283e9435db24bbb5b5d0e753607bf6aa3069b324100",
+        "new_route_tests_sha256": "cf2ad344eb99fb954ec3007c9c84986abded04baa5e69f0aa49917f747af8024"
+      },
+      "runner": {
+        "pid": 64098,
+        "returncode": -15,
+        "termination": "SDK runner cleanup exceeded 60s after test execution ended",
+        "cleanup_error": "[Errno 1] Operation not permitted",
+        "checkpoints_attempted": 15
+      },
+      "test_receipt": null,
+      "cases": [
+        {
+          "case": "-[DUNEUITests.ActivityExerciseRegressionTests testPersonalRecordsDetailShowsTimelineRewardsAndHistory]",
+          "status": "passed",
+          "seconds": 105.387
+        },
+        {
+          "case": "-[DUNEUITests.ActivityExerciseRegressionTests testTemplateListSupportsCreateEditAndTemplateStart]",
+          "status": "failed",
+          "seconds": 125.51
+        }
+      ],
+      "original_directory": "/tmp/duo-remaining-20261006/book-max-template-pr-remediation"
+    },
+    {
+      "phase": "book-max-template-session-identity-fixed",
+      "pose": {
+        "device": "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+        "hinge_angle": 90.0,
+        "content_size": "accessibility-extra-extra-extra-large",
+        "source_head": "33d91e8d9de9f99c209e6a7a9980c4bd93b8cabc",
+        "tracked_diff_sha256": "47fdbc73be8bf117389fe42eef7cb3962ed6cad39cb6bab0990239c0a4d129cd",
+        "new_route_tests_sha256": "44d6716da428a23b7cdb219905ac9c456ea48626496167b5225d6126250754bb"
+      },
+      "runner": {
+        "pid": 29880,
+        "returncode": -15,
+        "termination": "SDK runner cleanup exceeded 60s after test execution ended",
+        "cleanup_error": "[Errno 1] Operation not permitted",
+        "checkpoints_attempted": 22
+      },
+      "test_receipt": null,
+      "cases": [
+        {
+          "case": "-[DUNEUITests.ActivityExerciseRegressionTests testTemplateListSupportsCreateEditAndTemplateStart]",
+          "status": "passed",
+          "seconds": 258.1
+        }
+      ],
+      "original_directory": "/tmp/duo-remaining-20261006/book-max-template-session-identity-fixed"
+    },
+    {
+      "phase": "book-max-today-injury-routes",
+      "pose": {
+        "device": "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+        "hinge_angle": 90.0,
+        "content_size": "accessibility-extra-extra-extra-large",
+        "source_head": "878869b8cf9fcff3633ec1b24148692b623e1cf5",
+        "tracked_diff_sha256": "2caa624ef5ea914c150d7f70756f257019225cbd694d9f221fad1f2d61519b81",
+        "new_route_tests_sha256": "fb4ae4a5d2e468d5b96c9e3b739a91c2e79cb99fd05e05b03b3189c4a7bfb99e"
+      },
+      "runner": {
+        "pid": 33215,
+        "returncode": -15,
+        "termination": "Command '['xcrun', 'simctl', 'io', '5A2A5D3F-3D53-4326-99DE-47823CA256FA', 'enumerate']' timed out after 8 seconds",
+        "cleanup_error": "[Errno 1] Operation not permitted",
+        "checkpoints_attempted": 12
+      },
+      "test_receipt": null,
+      "cases": [
+        {
+          "case": "-[DUNEUITests.TodaySettingsRegressionTests testVisualAuditCumulativeStress]",
+          "status": "passed",
+          "seconds": 129.162
+        }
+      ],
+      "original_directory": "/tmp/duo-remaining-20261006/book-max-today-injury-routes"
+    },
+    {
+      "phase": "book-max-today-injury-unexecuted",
+      "pose": {
+        "device": "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+        "hinge_angle": 90.0,
+        "content_size": "accessibility-extra-extra-extra-large",
+        "source_head": "6ee93725aea0c16b2523506fb053f93b6a787359",
+        "tracked_diff_sha256": "2fd72cea57f04d6560443894fadee93779794fee38520e766a71c4514e775008",
+        "new_route_tests_sha256": "848cfa49db9585a9f947eeea988c0b09eff623de1bbadbe8f10bd222795ecf53"
+      },
+      "runner": {
+        "pid": 31204,
+        "returncode": -15,
+        "termination": "SDK runner cleanup exceeded 60s after test execution ended",
+        "cleanup_error": "[Errno 1] Operation not permitted",
+        "checkpoints_attempted": 18
+      },
+      "test_receipt": null,
+      "cases": [
+        {
+          "case": "-[DUNEUITests.TodaySettingsRegressionTests testWeatherCardOpensWeatherDetail]",
+          "status": "failed",
+          "seconds": 35.432
+        },
+        {
+          "case": "-[DUNEUITests.WellnessRegressionTests testInjuryHistoryRowOpensDetailAndEditForm]",
+          "status": "passed",
+          "seconds": 51.864
+        },
+        {
+          "case": "-[DUNEUITests.WellnessRegressionTests testInjuryStatisticsRouteOpensFromHistory]",
+          "status": "passed",
+          "seconds": 53.25
+        }
+      ],
+      "original_directory": "/tmp/duo-remaining-20261006/book-max-today-injury-unexecuted"
+    },
+    {
+      "phase": "book-max-weather-daytime-fixed",
+      "pose": {
+        "device": "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+        "hinge_angle": 90.0,
+        "content_size": "accessibility-extra-extra-extra-large",
+        "source_head": "6ee93725aea0c16b2523506fb053f93b6a787359",
+        "tracked_diff_sha256": "94f993ad76e9696e9b97cb10a0d8956db53f8a5756da890cb1f07a25de725b46",
+        "new_route_tests_sha256": "395839441aafe4ab43f69805b1095ddbc2ec645228fff4daac09103a7a73d2b8"
+      },
+      "runner": {
+        "pid": 91376,
+        "returncode": 0,
+        "termination": null,
+        "cleanup_error": null,
+        "checkpoints_attempted": 3
+      },
+      "test_receipt": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/TodaySettingsRegressionTests/testWeatherCardOpensWeatherDetail"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/private/tmp/duo-remaining-20261006/book-max-weather-daytime-fixed-ui.log"
+      },
+      "cases": [
+        {
+          "case": "-[DUNEUITests.TodaySettingsRegressionTests testWeatherCardOpensWeatherDetail]",
+          "status": "passed",
+          "seconds": 39.097
+        }
+      ],
+      "original_directory": "/tmp/duo-remaining-20261006/book-max-weather-daytime-fixed"
+    },
+    {
+      "phase": "closed-max-condition-subscore-axes-fixed",
+      "pose": {
+        "device": "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+        "hinge_angle": 0.0,
+        "content_size": "accessibility-extra-extra-extra-large",
+        "source_head": "6456c0548b8e8eabeeecdb9c3bcc0ae94e0d79a4",
+        "tracked_diff_sha256": "8c39d4f81181890c88250eafddd27608a79bb043b1dd0d2e42ceaf47d0d6bca1",
+        "new_route_tests_sha256": "cf2ad344eb99fb954ec3007c9c84986abded04baa5e69f0aa49917f747af8024"
+      },
+      "runner": {
+        "pid": 59409,
+        "returncode": -15,
+        "termination": "SDK runner cleanup exceeded 60s after test execution ended",
+        "cleanup_error": "[Errno 1] Operation not permitted",
+        "checkpoints_attempted": 4
+      },
+      "test_receipt": null,
+      "cases": [
+        {
+          "case": "-[DUNEUITests.DuoScoreComponentLayoutTests testConditionSubscoreChartsFitAtMaximumTextSize]",
+          "status": "failed",
+          "seconds": 118.359
+        }
+      ],
+      "original_directory": "/tmp/duo-remaining-20261006/closed-max-condition-subscore-axes-fixed"
+    },
+    {
+      "phase": "closed-max-condition-subscore-reveal-fixed",
+      "pose": {
+        "device": "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+        "hinge_angle": 0.0,
+        "content_size": "accessibility-extra-extra-extra-large",
+        "source_head": "c8a28451e2352332b6b1e532e7f4ae357db12e1d",
+        "tracked_diff_sha256": "90f08388d3ae0b026958d1089d5aa814f6c17eaccaab58614da7ba995be0c1c9",
+        "new_route_tests_sha256": "44d6716da428a23b7cdb219905ac9c456ea48626496167b5225d6126250754bb"
+      },
+      "runner": {
+        "pid": 5083,
+        "returncode": 0,
+        "termination": null,
+        "cleanup_error": null,
+        "checkpoints_attempted": 7
+      },
+      "test_receipt": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/DuoScoreComponentLayoutTests/testConditionSubscoreChartsFitAtMaximumTextSize"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/private/tmp/duo-remaining-20261006/closed-max-condition-subscore-reveal-fixed-ui.log"
+      },
+      "cases": [
+        {
+          "case": "-[DUNEUITests.DuoScoreComponentLayoutTests testConditionSubscoreChartsFitAtMaximumTextSize]",
+          "status": "passed",
+          "seconds": 105.403
+        }
+      ],
+      "original_directory": "/tmp/duo-remaining-20261006/closed-max-condition-subscore-reveal-fixed"
+    },
+    {
+      "phase": "closed-max-wellness-subscore-axes-fixed",
+      "pose": {
+        "device": "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+        "hinge_angle": 0.0,
+        "content_size": "accessibility-extra-extra-extra-large",
+        "source_head": "6456c0548b8e8eabeeecdb9c3bcc0ae94e0d79a4",
+        "tracked_diff_sha256": "8c39d4f81181890c88250eafddd27608a79bb043b1dd0d2e42ceaf47d0d6bca1",
+        "new_route_tests_sha256": "cf2ad344eb99fb954ec3007c9c84986abded04baa5e69f0aa49917f747af8024"
+      },
+      "runner": {
+        "pid": 55104,
+        "returncode": -15,
+        "termination": "SDK runner cleanup exceeded 60s after test execution ended",
+        "cleanup_error": "[Errno 1] Operation not permitted",
+        "checkpoints_attempted": 4
+      },
+      "test_receipt": null,
+      "cases": [
+        {
+          "case": "-[DUNEUITests.DuoScoreComponentLayoutTests testWellnessSubscoreChartsFitAtMaximumTextSize]",
+          "status": "failed",
+          "seconds": 113.87
+        }
+      ],
+      "original_directory": "/tmp/duo-remaining-20261006/closed-max-wellness-subscore-axes-fixed"
+    },
+    {
+      "phase": "closed-max-wellness-subscore-reveal-fixed",
+      "pose": {
+        "device": "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+        "hinge_angle": 0.0,
+        "content_size": "accessibility-extra-extra-extra-large",
+        "source_head": "c8a28451e2352332b6b1e532e7f4ae357db12e1d",
+        "tracked_diff_sha256": "6423b1468ac4297597aaa39245e5a54fc748529428e03d869c72a0b895b0c402",
+        "new_route_tests_sha256": "44d6716da428a23b7cdb219905ac9c456ea48626496167b5225d6126250754bb"
+      },
+      "runner": {
+        "pid": 1919,
+        "returncode": 0,
+        "termination": null,
+        "cleanup_error": null,
+        "checkpoints_attempted": 9
+      },
+      "test_receipt": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/DuoScoreComponentLayoutTests/testWellnessSubscoreChartsFitAtMaximumTextSize"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/private/tmp/duo-remaining-20261006/closed-max-wellness-subscore-reveal-fixed-ui.log"
+      },
+      "cases": [
+        {
+          "case": "-[DUNEUITests.DuoScoreComponentLayoutTests testWellnessSubscoreChartsFitAtMaximumTextSize]",
+          "status": "passed",
+          "seconds": 116.784
+        }
+      ],
+      "original_directory": "/tmp/duo-remaining-20261006/closed-max-wellness-subscore-reveal-fixed"
+    },
+    {
+      "phase": "custom-muscle-max-all-poses-final",
+      "pose": {
+        "device": "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+        "hinge_angle": 90.0,
+        "content_size": "accessibility-extra-extra-extra-large",
+        "source_head": "33d91e8d9de9f99c209e6a7a9980c4bd93b8cabc",
+        "tracked_diff_sha256": "75728886edd08a61a954eb3aee949bce69f3cbc0a27ef17cb9e4d555ebc160c3",
+        "new_route_tests_sha256": "44d6716da428a23b7cdb219905ac9c456ea48626496167b5225d6126250754bb"
+      },
+      "runner": {
+        "pid": 42710,
+        "returncode": -15,
+        "termination": "SDK runner cleanup exceeded 60s after test execution ended",
+        "cleanup_error": "[Errno 1] Operation not permitted",
+        "checkpoints_attempted": 5
+      },
+      "test_receipt": null,
+      "cases": [
+        {
+          "case": "-[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditCustomMuscleChipFoldReadability]",
+          "status": "failed",
+          "seconds": 124.814
+        }
+      ],
+      "original_directory": "/tmp/duo-remaining-20261006/custom-muscle-max-all-poses-final"
+    },
+    {
+      "phase": "custom-muscle-max-all-poses-viewport-fixed",
+      "pose": {
+        "device": "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+        "hinge_angle": 90.0,
+        "content_size": "accessibility-extra-extra-extra-large",
+        "source_head": "8537ad350e02b3b0d4e3aa52c3f9579a3fc8a21e",
+        "tracked_diff_sha256": "f0bf1c1afb05f92dde35b103e3e29a1556913a5d3d48b2d5ee6f960b4c30763a",
+        "new_route_tests_sha256": "44d6716da428a23b7cdb219905ac9c456ea48626496167b5225d6126250754bb"
+      },
+      "runner": {
+        "pid": 48685,
+        "returncode": 0,
+        "termination": null,
+        "cleanup_error": null,
+        "checkpoints_attempted": 16
+      },
+      "test_receipt": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditCustomMuscleChipFoldReadability"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/private/tmp/duo-remaining-20261006/custom-muscle-max-all-poses-viewport-fixed-ui.log"
+      },
+      "cases": [
+        {
+          "case": "-[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditCustomMuscleChipFoldReadability]",
+          "status": "passed",
+          "seconds": 249.517
+        }
+      ],
+      "original_directory": "/tmp/duo-remaining-20261006/custom-muscle-max-all-poses-viewport-fixed"
+    },
+    {
+      "phase": "life-inner-lower-axes-complete",
+      "pose": {
+        "device": "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+        "hinge_angle": 90.0,
+        "content_size": "accessibility-extra-extra-extra-large",
+        "source_head": "f734a14dc67ed0f07f6c38e50c458c9fef2b1cb9",
+        "tracked_diff_sha256": "d824b0d4a2d92d8a663171397bf9d9ec6fbcb52c9279f7812bce818bde99c9a5",
+        "new_route_tests_sha256": "44d6716da428a23b7cdb219905ac9c456ea48626496167b5225d6126250754bb"
+      },
+      "runner": {
+        "pid": 20451,
+        "returncode": 0,
+        "termination": null,
+        "cleanup_error": null,
+        "checkpoints_attempted": 12
+      },
+      "test_receipt": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/DuoLifeNumericLayoutTests/testInnerChartLowerAxesAtMaximumTextSize"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/private/tmp/duo-remaining-20261006/life-inner-lower-axes-complete-ui.log"
+      },
+      "cases": [
+        {
+          "case": "-[DUNEUITests.DuoLifeNumericLayoutTests testInnerChartLowerAxesAtMaximumTextSize]",
+          "status": "passed",
+          "seconds": 109.675
+        }
+      ],
+      "original_directory": "/tmp/duo-remaining-20261006/life-inner-lower-axes-complete"
+    },
+    {
+      "phase": "life-max-chart-capture-recovered",
+      "pose": {
+        "device": "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+        "hinge_angle": 0.0,
+        "content_size": "accessibility-extra-extra-extra-large",
+        "source_head": "6456c0548b8e8eabeeecdb9c3bcc0ae94e0d79a4",
+        "tracked_diff_sha256": "52a289ae06ed03825124c9983eaf62b39b91cf77a1131a11802062a4458bad60",
+        "new_route_tests_sha256": "395839441aafe4ab43f69805b1095ddbc2ec645228fff4daac09103a7a73d2b8"
+      },
+      "runner": {
+        "pid": 40993,
+        "returncode": -15,
+        "termination": "SDK runner cleanup exceeded 60s after test execution ended",
+        "cleanup_error": "[Errno 1] Operation not permitted",
+        "checkpoints_attempted": 5
+      },
+      "test_receipt": null,
+      "cases": [
+        {
+          "case": "-[DUNEUITests.DuoLifeNumericLayoutTests testNumericHeroAndChartPeriodsAcrossFoldStates]",
+          "status": "failed",
+          "seconds": 82.683
+        }
+      ],
+      "original_directory": "/tmp/duo-remaining-20261006/life-max-chart-capture-recovered"
+    },
+    {
+      "phase": "life-max-chart-header-date-fixed",
+      "pose": {
+        "device": "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+        "hinge_angle": 0.0,
+        "content_size": "accessibility-extra-extra-extra-large",
+        "source_head": "6ee93725aea0c16b2523506fb053f93b6a787359",
+        "tracked_diff_sha256": "94f993ad76e9696e9b97cb10a0d8956db53f8a5756da890cb1f07a25de725b46",
+        "new_route_tests_sha256": "395839441aafe4ab43f69805b1095ddbc2ec645228fff4daac09103a7a73d2b8"
+      },
+      "runner": {
+        "pid": 88408,
+        "returncode": -15,
+        "termination": "Capture failed or expired at checkpoint 2",
+        "cleanup_error": "[Errno 1] Operation not permitted",
+        "checkpoints_attempted": 2
+      },
+      "test_receipt": null,
+      "cases": [],
+      "original_directory": "/tmp/duo-remaining-20261006/life-max-chart-header-date-fixed"
+    },
+    {
+      "phase": "life-max-chart-title-query-fixed",
+      "pose": {
+        "device": "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+        "hinge_angle": 0.0,
+        "content_size": "accessibility-extra-extra-extra-large",
+        "source_head": "c8a28451e2352332b6b1e532e7f4ae357db12e1d",
+        "tracked_diff_sha256": "6423b1468ac4297597aaa39245e5a54fc748529428e03d869c72a0b895b0c402",
+        "new_route_tests_sha256": "cf2ad344eb99fb954ec3007c9c84986abded04baa5e69f0aa49917f747af8024"
+      },
+      "runner": {
+        "pid": 80014,
+        "returncode": 0,
+        "termination": null,
+        "cleanup_error": null,
+        "checkpoints_attempted": 26
+      },
+      "test_receipt": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/DuoLifeNumericLayoutTests/testNumericHeroAndChartPeriodsAcrossFoldStates"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/private/tmp/duo-remaining-20261006/life-max-chart-title-query-fixed-ui.log"
+      },
+      "cases": [
+        {
+          "case": "-[DUNEUITests.DuoLifeNumericLayoutTests testNumericHeroAndChartPeriodsAcrossFoldStates]",
+          "status": "passed",
+          "seconds": 219.407
+        }
+      ],
+      "original_directory": "/tmp/duo-remaining-20261006/life-max-chart-title-query-fixed"
+    },
+    {
+      "phase": "life-max-numeric-all-poses",
+      "pose": {
+        "device": "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+        "hinge_angle": 0.0,
+        "content_size": "accessibility-extra-extra-extra-large",
+        "source_head": "878869b8cf9fcff3633ec1b24148692b623e1cf5",
+        "tracked_diff_sha256": "2caa624ef5ea914c150d7f70756f257019225cbd694d9f221fad1f2d61519b81",
+        "new_route_tests_sha256": "cf2ba3218465c54a191e1e4578d53a42988ec4a9e54fea80279a046cba48f583"
+      },
+      "runner": {
+        "pid": 48919,
+        "returncode": -15,
+        "termination": "SDK runner cleanup exceeded 60s after test execution ended",
+        "cleanup_error": null,
+        "checkpoints_attempted": 3
+      },
+      "test_receipt": null,
+      "cases": [
+        {
+          "case": "-[DUNEUITests.DuoLifeNumericLayoutTests testNumericHeroAndChartPeriodsAcrossFoldStates]",
+          "status": "failed",
+          "seconds": 65.784
+        }
+      ],
+      "original_directory": "/tmp/duo-remaining-20261006/life-max-numeric-all-poses"
+    },
+    {
+      "phase": "life-max-numeric-frame-fixed",
+      "pose": {
+        "device": "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+        "hinge_angle": 0.0,
+        "content_size": "accessibility-extra-extra-extra-large",
+        "source_head": "6ee93725aea0c16b2523506fb053f93b6a787359",
+        "tracked_diff_sha256": "2fd72cea57f04d6560443894fadee93779794fee38520e766a71c4514e775008",
+        "new_route_tests_sha256": "848cfa49db9585a9f947eeea988c0b09eff623de1bbadbe8f10bd222795ecf53"
+      },
+      "runner": {
+        "pid": 13309,
+        "returncode": 0,
+        "termination": null,
+        "cleanup_error": null,
+        "checkpoints_attempted": 26
+      },
+      "test_receipt": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/DuoLifeNumericLayoutTests/testNumericHeroAndChartPeriodsAcrossFoldStates"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/private/tmp/duo-remaining-20261006/life-max-numeric-frame-fixed-ui.log"
+      },
+      "cases": [
+        {
+          "case": "-[DUNEUITests.DuoLifeNumericLayoutTests testNumericHeroAndChartPeriodsAcrossFoldStates]",
+          "status": "passed",
+          "seconds": 217.31
+        }
+      ],
+      "original_directory": "/tmp/duo-remaining-20261006/life-max-numeric-frame-fixed"
+    },
+    {
+      "phase": "posture-max-score-all-poses",
+      "pose": {
+        "device": "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+        "hinge_angle": 0.0,
+        "content_size": "accessibility-extra-extra-extra-large",
+        "source_head": "878869b8cf9fcff3633ec1b24148692b623e1cf5",
+        "tracked_diff_sha256": "2caa624ef5ea914c150d7f70756f257019225cbd694d9f221fad1f2d61519b81",
+        "new_route_tests_sha256": "cf2ba3218465c54a191e1e4578d53a42988ec4a9e54fea80279a046cba48f583"
+      },
+      "runner": {
+        "pid": 54542,
+        "returncode": 0,
+        "termination": null,
+        "cleanup_error": null,
+        "checkpoints_attempted": 13
+      },
+      "test_receipt": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/PostureVisualAuditTests/testPostureDetailScoreAcrossFoldStatesAtMaximumTextSize"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/private/tmp/duo-remaining-20261006/posture-max-score-all-poses-ui.log"
+      },
+      "cases": [
+        {
+          "case": "-[DUNEUITests.PostureVisualAuditTests testPostureDetailScoreAcrossFoldStatesAtMaximumTextSize]",
+          "status": "passed",
+          "seconds": 140.204
+        }
+      ],
+      "original_directory": "/tmp/duo-remaining-20261006/posture-max-score-all-poses"
+    },
+    {
+      "phase": "posture-max-symmetry-all-poses",
+      "pose": {
+        "device": "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+        "hinge_angle": 0.0,
+        "content_size": "accessibility-extra-extra-extra-large",
+        "source_head": "878869b8cf9fcff3633ec1b24148692b623e1cf5",
+        "tracked_diff_sha256": "e645ea682c2b241dba713f819904811e1f97e17c07122710c270e705cc49f763",
+        "new_route_tests_sha256": "848cfa49db9585a9f947eeea988c0b09eff623de1bbadbe8f10bd222795ecf53"
+      },
+      "runner": {
+        "pid": 60671,
+        "returncode": 0,
+        "termination": null,
+        "cleanup_error": null,
+        "checkpoints_attempted": 30
+      },
+      "test_receipt": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/PostureVisualAuditTests/testPostureSymmetryValuesAcrossFoldStatesAtMaximumTextSize"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/private/tmp/duo-remaining-20261006/posture-max-symmetry-all-poses-ui.log"
+      },
+      "cases": [
+        {
+          "case": "-[DUNEUITests.PostureVisualAuditTests testPostureSymmetryValuesAcrossFoldStatesAtMaximumTextSize]",
+          "status": "passed",
+          "seconds": 291.31
+        }
+      ],
+      "original_directory": "/tmp/duo-remaining-20261006/posture-max-symmetry-all-poses"
+    },
+    {
+      "phase": "stress-max-contributor-details-fixed",
+      "pose": {
+        "device": "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+        "hinge_angle": 0.0,
+        "content_size": "accessibility-extra-extra-extra-large",
+        "source_head": "6ee93725aea0c16b2523506fb053f93b6a787359",
+        "tracked_diff_sha256": "cdead5b62ec588987af745c77694263014f53c611194d1e3802fc313a8b46fdd",
+        "new_route_tests_sha256": "395839441aafe4ab43f69805b1095ddbc2ec645228fff4daac09103a7a73d2b8"
+      },
+      "runner": {
+        "pid": 6832,
+        "returncode": 0,
+        "termination": null,
+        "cleanup_error": null,
+        "checkpoints_attempted": 33
+      },
+      "test_receipt": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/DuoScoreComponentLayoutTests/testStressContributorsAndCompositionAcrossFoldStates"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/private/tmp/duo-remaining-20261006/stress-max-contributor-details-fixed-ui.log"
+      },
+      "cases": [
+        {
+          "case": "-[DUNEUITests.DuoScoreComponentLayoutTests testStressContributorsAndCompositionAcrossFoldStates]",
+          "status": "passed",
+          "seconds": 294.93
+        }
+      ],
+      "original_directory": "/tmp/duo-remaining-20261006/stress-max-contributor-details-fixed"
+    },
+    {
+      "phase": "stress-max-numeric-all-poses",
+      "pose": {
+        "device": "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+        "hinge_angle": 0.0,
+        "content_size": "accessibility-extra-extra-extra-large",
+        "source_head": "6ee93725aea0c16b2523506fb053f93b6a787359",
+        "tracked_diff_sha256": "287c6ff8356d189ca2f97630fafa5e6e149c651acfc6e24acbfd8cc0a3332e1c",
+        "new_route_tests_sha256": "395839441aafe4ab43f69805b1095ddbc2ec645228fff4daac09103a7a73d2b8"
+      },
+      "runner": {
+        "pid": 55018,
+        "returncode": 0,
+        "termination": null,
+        "cleanup_error": null,
+        "checkpoints_attempted": 24
+      },
+      "test_receipt": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/DuoScoreComponentLayoutTests/testStressContributorsAndCompositionAcrossFoldStates"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/private/tmp/duo-remaining-20261006/stress-max-numeric-all-poses-ui.log"
+      },
+      "cases": [
+        {
+          "case": "-[DUNEUITests.DuoScoreComponentLayoutTests testStressContributorsAndCompositionAcrossFoldStates]",
+          "status": "passed",
+          "seconds": 277.689
+        }
+      ],
+      "original_directory": "/tmp/duo-remaining-20261006/stress-max-numeric-all-poses"
+    }
+  ],
+  "native_originals": [
+    {
+      "path": "book-max-activity-remaining/010-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-activity-remaining/010-2007x2853.png",
+      "bytes": 1186187,
+      "sha256": "8ec46f91d2ccd8867cc75f06232d40c535b55351c9d793f4b28bacb7542448e4"
+    },
+    {
+      "path": "book-max-activity-remaining/011-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-activity-remaining/011-2007x2853.png",
+      "bytes": 1329339,
+      "sha256": "0b433e6329fc35af98a227f8066b97a462fab88e2737bebaf01826a93593ed7d"
+    },
+    {
+      "path": "book-max-activity-remaining/012-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-activity-remaining/012-2007x2853.png",
+      "bytes": 1274189,
+      "sha256": "0b7e0f023df58dd1c13b84f69e913d490f6f7a9669c9dec586d54bd77ad76939"
+    },
+    {
+      "path": "book-max-activity-remaining/013-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-activity-remaining/013-2007x2853.png",
+      "bytes": 1064541,
+      "sha256": "10bb419faee6eebc0781b54ea9d32abbc0562d5134858b8fbf405d44fdaf85e6"
+    },
+    {
+      "path": "book-max-activity-remaining/014-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-activity-remaining/014-2007x2853.png",
+      "bytes": 1102105,
+      "sha256": "4adb6ad7ee3bbb0d167f61a09d67a493e4914bbedb40ad9b448a09d5f652e93f"
+    },
+    {
+      "path": "book-max-activity-remaining/015-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-activity-remaining/015-2007x2853.png",
+      "bytes": 1013065,
+      "sha256": "ea9ba9487a90f942e7af6dd344b4992f04cb3c0bcfafd4348e6279cae96996b7"
+    },
+    {
+      "path": "book-max-activity-remaining/019-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-activity-remaining/019-2007x2853.png",
+      "bytes": 1285366,
+      "sha256": "015d13b00cc58ac96920a5e7f16092a5b4a9a6e1f4f2b342afa1d6a06240a6a4"
+    },
+    {
+      "path": "book-max-activity-remaining/020-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-activity-remaining/020-2007x2853.png",
+      "bytes": 1273766,
+      "sha256": "5a9c46476506418915a174f83f3172fd24ef314097094fea648bb463e0d933c4"
+    },
+    {
+      "path": "book-max-activity-remaining/021-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-activity-remaining/021-2007x2853.png",
+      "bytes": 1640342,
+      "sha256": "0989875ee46a374eb7a76d238848cb74f7bbc4f58dbb92abdff142e62d857a0c"
+    },
+    {
+      "path": "book-max-activity-remaining/026-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-activity-remaining/026-2007x2853.png",
+      "bytes": 652855,
+      "sha256": "6b843fb06ee551ad228517f021e6e4b9b8e2359a22facce786999172b565a1e7"
+    },
+    {
+      "path": "book-max-activity-remaining/027-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-activity-remaining/027-2007x2853.png",
+      "bytes": 653756,
+      "sha256": "e94318ff8d447923adbed3855d81ba9e3f6a4697ba7d3ff9126b2ec44c6361b6"
+    },
+    {
+      "path": "book-max-activity-remaining/031-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-activity-remaining/031-2007x2853.png",
+      "bytes": 1330065,
+      "sha256": "507f0ed29adf30fcb2cca27efac540e5d3cc7af9f77394540778be894799ef2c"
+    },
+    {
+      "path": "book-max-activity-remaining/032-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-activity-remaining/032-2007x2853.png",
+      "bytes": 1060315,
+      "sha256": "c6d1ab199502565ce5225efeca5a63c8e7fcfb37b9c7f6c7784d178ee8ae5353"
+    },
+    {
+      "path": "book-max-activity-remaining/033-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-activity-remaining/033-2007x2853.png",
+      "bytes": 1110787,
+      "sha256": "d9aab3f61f0c0690f9e8ccba58f7b34287e72f67f2c05d6844e33e6aec0ea860"
+    },
+    {
+      "path": "book-max-activity-remaining/034-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-activity-remaining/034-2007x2853.png",
+      "bytes": 1081435,
+      "sha256": "3f2bff4c972c047b8d6d628837df42a8a503dff19f5bfa39d20db0b8f5f71692"
+    },
+    {
+      "path": "book-max-briefing-date-fixed/002-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-briefing-date-fixed/002-2007x2853.png",
+      "bytes": 2763319,
+      "sha256": "c327cab120d7eea766436ceae664d971f575ae4324c07bc82e6be49e19e11ecc"
+    },
+    {
+      "path": "book-max-briefing-date-fixed/003-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-briefing-date-fixed/003-2007x2853.png",
+      "bytes": 3120870,
+      "sha256": "6e6458780aa859d36ae4eafa4cd04716fef6adcac16c48fcc6ab59fc60681271"
+    },
+    {
+      "path": "book-max-briefing-date-fixed/004-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-briefing-date-fixed/004-2007x2853.png",
+      "bytes": 3086284,
+      "sha256": "76e844110e78156a7a6b83845d48a17b32c1e963f8809619e2cff47382d6a25d"
+    },
+    {
+      "path": "book-max-briefing-date-fixed/005-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-briefing-date-fixed/005-2007x2853.png",
+      "bytes": 3076021,
+      "sha256": "5e4d22f0749db493d261a16735a01ab302156fccc15fd4bde55eb8dac7ec29eb"
+    },
+    {
+      "path": "book-max-briefing-date-fixed/006-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-briefing-date-fixed/006-2007x2853.png",
+      "bytes": 3076634,
+      "sha256": "05b97f688e26c4d5fe1e20f7105811d02996c315f9079f8ebc6912b6b5c351fc"
+    },
+    {
+      "path": "book-max-briefing-date-fixed/007-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-briefing-date-fixed/007-2007x2853.png",
+      "bytes": 3086686,
+      "sha256": "ae43c710851ddf85f91e6995d7dbf3d7bbcc5a02b35b77286fb555bf37f00786"
+    },
+    {
+      "path": "book-max-briefing-date-fixed/008-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-briefing-date-fixed/008-2007x2853.png",
+      "bytes": 2776910,
+      "sha256": "d017290bc326e9a36f876c9336d8f670fb0daf9fbe351f7988b572641375c096"
+    },
+    {
+      "path": "book-max-briefing-date-fixed/009-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-briefing-date-fixed/009-2007x2853.png",
+      "bytes": 4547581,
+      "sha256": "14130c40dbf8ef9e0d5af4022fdd27df7ad31d3d9f55b1deebf5e025ada35f4c"
+    },
+    {
+      "path": "book-max-briefing-icon-width-fixed/002-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-briefing-icon-width-fixed/002-2007x2853.png",
+      "bytes": 2836473,
+      "sha256": "3b350e9931565034b15903dcf65a91a620607533bacd6ba34187e0724dea3054"
+    },
+    {
+      "path": "book-max-briefing-icon-width-fixed/003-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-briefing-icon-width-fixed/003-2007x2853.png",
+      "bytes": 3046166,
+      "sha256": "2acc334f3380f28151710f19468b98bdae8eef971c130915bff160ee1a1edee0"
+    },
+    {
+      "path": "book-max-briefing-icon-width-fixed/004-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-briefing-icon-width-fixed/004-2007x2853.png",
+      "bytes": 3063870,
+      "sha256": "812fa6459215ba59929a38dee9b2162c5fa9b4ff78a16ed4070fb24c2c4ae3ba"
+    },
+    {
+      "path": "book-max-briefing-icon-width-fixed/005-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-briefing-icon-width-fixed/005-2007x2853.png",
+      "bytes": 3095317,
+      "sha256": "2f778ff3146920f63cdb97dd70e07cfc18928c75c4642a61ed99bcf7d58abcdd"
+    },
+    {
+      "path": "book-max-briefing-icon-width-fixed/006-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-briefing-icon-width-fixed/006-2007x2853.png",
+      "bytes": 3078685,
+      "sha256": "78c172956d1d973fc07842c00fa4647f7ce74800e2bdfa51bb2812b46bf73299"
+    },
+    {
+      "path": "book-max-briefing-icon-width-fixed/007-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-briefing-icon-width-fixed/007-2007x2853.png",
+      "bytes": 3081301,
+      "sha256": "c8a1328f002afe0bfd1c795f338e60627270f7e3b41519fd79c4faf706714495"
+    },
+    {
+      "path": "book-max-briefing-icon-width-fixed/008-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-briefing-icon-width-fixed/008-2007x2853.png",
+      "bytes": 2829573,
+      "sha256": "df96517e2309c403431fc63dd7c3bdd16325abe32762c5fee1ebf8aaee8a2b43"
+    },
+    {
+      "path": "book-max-briefing-icon-width-fixed/009-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-briefing-icon-width-fixed/009-2007x2853.png",
+      "bytes": 4546317,
+      "sha256": "f6e481ab3219af277fcb6b9409f2265f56bce9e1ddd62325d21260c7cdf378e6"
+    },
+    {
+      "path": "book-max-condition-populated-fixed/003-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-condition-populated-fixed/003-2007x2853.png",
+      "bytes": 1283710,
+      "sha256": "7580651012fd5151dc1b6b746f90c54983979b8e764c0c71e49b9201ed71043c"
+    },
+    {
+      "path": "book-max-condition-populated-fixed/004-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-condition-populated-fixed/004-2007x2853.png",
+      "bytes": 1170103,
+      "sha256": "472f76b30e1ce89fc70961c420fb88813a43b04ff24e6bb9599e3004a7988b86"
+    },
+    {
+      "path": "book-max-condition-populated-fixed/005-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-condition-populated-fixed/005-2007x2853.png",
+      "bytes": 1174803,
+      "sha256": "8bee7cb129eface8eb356276da002f345ac957cc92c0a164b736b16bdab0e22a"
+    },
+    {
+      "path": "book-max-injury-icon-width-fixed/005-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-injury-icon-width-fixed/005-2007x2853.png",
+      "bytes": 837177,
+      "sha256": "fda6d66601ff693ca1b68c2bfebbdf8c1fa6c63a37972d42ea8d474874ec5c44"
+    },
+    {
+      "path": "book-max-injury-icon-width-fixed/006-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-injury-icon-width-fixed/006-2007x2853.png",
+      "bytes": 709135,
+      "sha256": "5cdadeca2f6271fd4f5c009a9da41e5a3cfcc27a988bdec22d9c247b8f028dfa"
+    },
+    {
+      "path": "book-max-injury-icon-width-fixed/007-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-injury-icon-width-fixed/007-2007x2853.png",
+      "bytes": 709135,
+      "sha256": "5cdadeca2f6271fd4f5c009a9da41e5a3cfcc27a988bdec22d9c247b8f028dfa"
+    },
+    {
+      "path": "book-max-life-restore-fixed/002-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-life-restore-fixed/002-2007x2853.png",
+      "bytes": 2268789,
+      "sha256": "299fe1f5b79ce8ea2d7d993ddc79cc21779cf7048323df0234a59d8347e94b93"
+    },
+    {
+      "path": "book-max-life-restore-fixed/003-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-life-restore-fixed/003-2007x2853.png",
+      "bytes": 2203357,
+      "sha256": "cb73d00d8d3fc0e4cdd58b792bd5997fa21d2ecabc64b6910d3e78819d28d1f8"
+    },
+    {
+      "path": "book-max-life-restore-fixed/004-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-life-restore-fixed/004-2007x2853.png",
+      "bytes": 2773513,
+      "sha256": "b88add9a107c07133059732932da23addeac86558ff9574fe8cb6419a6eb7b8e"
+    },
+    {
+      "path": "book-max-life-restore-fixed/005-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-life-restore-fixed/005-2007x2853.png",
+      "bytes": 1494433,
+      "sha256": "cc12da6f5fc593ab7c82f9b559b456f68f3e4b1c192819e702e3cd74defe9bda"
+    },
+    {
+      "path": "book-max-life-restore-fixed/006-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-life-restore-fixed/006-2007x2853.png",
+      "bytes": 1496391,
+      "sha256": "afde454f5593916b55e45bfbf9815b99f3260e8bed42191500d3ba97b481a8ca"
+    },
+    {
+      "path": "book-max-life-restore-fixed/007-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-life-restore-fixed/007-2007x2853.png",
+      "bytes": 1449619,
+      "sha256": "8c550812b0247ff3e7fd385a686c4f88ec05950e7f099eaf332545b445c48cee"
+    },
+    {
+      "path": "book-max-life-restore-fixed/008-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-life-restore-fixed/008-2007x2853.png",
+      "bytes": 1446383,
+      "sha256": "8d49cebed92b183ec64113e29f410ddfecc0253f332c44949d586ee8b1fc8cd8"
+    },
+    {
+      "path": "book-max-life-restore-fixed/009-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-life-restore-fixed/009-2007x2853.png",
+      "bytes": 1429361,
+      "sha256": "b7cb0c1153684ee64e02210d08c90bdd31ec2e1661fb6ca794e5032e7a6da456"
+    },
+    {
+      "path": "book-max-life-restore-fixed/010-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-life-restore-fixed/010-2007x2853.png",
+      "bytes": 1430271,
+      "sha256": "724a1f5ef60e7eaa16ea6def2a3ce352d7c369fe581f1b0d234fd6fef70f76e3"
+    },
+    {
+      "path": "book-max-life-restore-fixed/011-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-life-restore-fixed/011-2007x2853.png",
+      "bytes": 1475440,
+      "sha256": "ab8e13120619de2eb66582c255cbb2f86c00d24bb47d419b353c5914b5f3ee02"
+    },
+    {
+      "path": "book-max-life-restore-fixed/012-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-life-restore-fixed/012-2007x2853.png",
+      "bytes": 1476964,
+      "sha256": "bba30126a179daee955d3886a4e319da2a59d0ac7e4ba419fa507f61fc3922be"
+    },
+    {
+      "path": "book-max-life-restore-fixed/013-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-life-restore-fixed/013-2007x2853.png",
+      "bytes": 2079516,
+      "sha256": "74825e752a4973e88482962febca628ec9071deb2a3a2154d19d83f53c2cb9be"
+    },
+    {
+      "path": "book-max-life-restore-fixed/014-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-life-restore-fixed/014-2007x2853.png",
+      "bytes": 1977206,
+      "sha256": "abe7bde8af91d7b4213aeb7ee032f09423ed4e08a30347a696cccceeb40972dd"
+    },
+    {
+      "path": "book-max-life-restore-fixed/015-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-life-restore-fixed/015-2007x2853.png",
+      "bytes": 1984137,
+      "sha256": "abc1c6ade28814a155ecd3571ff4ec8ed8314cc0cc89a0d0d43fbd593befcaec"
+    },
+    {
+      "path": "book-max-life-restore-fixed/016-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-life-restore-fixed/016-2007x2853.png",
+      "bytes": 1995364,
+      "sha256": "76c4f9557f3c519dc13b6bdc3da5c30c834c5c93141a257ecff3f39b78d72b13"
+    },
+    {
+      "path": "book-max-life-restore-template-fixed/013-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-life-restore-template-fixed/013-2007x2853.png",
+      "bytes": 898812,
+      "sha256": "f2c09abc3b766888a3c59dcfee472a98756f5b87428714c7a2ebbefc1201fbad"
+    },
+    {
+      "path": "book-max-life-restore-template-fixed/014-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-life-restore-template-fixed/014-2007x2853.png",
+      "bytes": 2725293,
+      "sha256": "d706155fc3de2ef4d1b320cc9e06b22498d135354d74fbbea7020eaaa4bdaab3"
+    },
+    {
+      "path": "book-max-life-restore-template-fixed/017-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-life-restore-template-fixed/017-2007x2853.png",
+      "bytes": 2112873,
+      "sha256": "f41d70a0738366a4688d48e549c5405be16b9cae45e21531c5465a1c0b1a7cdc"
+    },
+    {
+      "path": "book-max-life-restore-template-fixed/021-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-life-restore-template-fixed/021-2007x2853.png",
+      "bytes": 1885721,
+      "sha256": "e176677df53a4c03c44fe8014b4764a655b26e1edf3c8ffea3137563ff27b9fd"
+    },
+    {
+      "path": "book-max-life-restore-template-fixed/022-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-life-restore-template-fixed/022-2007x2853.png",
+      "bytes": 2165754,
+      "sha256": "ba80c122e0faa69e0030173024ed1e99657a375d0d057ad8a61933f576a4def9"
+    },
+    {
+      "path": "book-max-life-restore-template-fixed/025-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-life-restore-template-fixed/025-2007x2853.png",
+      "bytes": 2413763,
+      "sha256": "7cfc5a8d6a3160b2538498a55bcc392ae677bbcdf798436b108a07cc92fc0811"
+    },
+    {
+      "path": "book-max-life-restore-template-fixed/027-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-life-restore-template-fixed/027-2007x2853.png",
+      "bytes": 2504148,
+      "sha256": "4f90176d00f4b30acd15eb69c600aa7ca95d69976962b0cb6c80df1ddab7f018"
+    },
+    {
+      "path": "book-max-life-restore-template-fixed/032-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-life-restore-template-fixed/032-2007x2853.png",
+      "bytes": 1165585,
+      "sha256": "9b0376400e285dc97d4f2a6012e9720d3a47b19d629f062e7bddabb3ec13fb3d"
+    },
+    {
+      "path": "book-max-life-restore-template-fixed/033-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-life-restore-template-fixed/033-2007x2853.png",
+      "bytes": 1144305,
+      "sha256": "1ec70511a888ec08167bbca774006aa10e7d410d52aef8a31fb368e31b707199"
+    },
+    {
+      "path": "book-max-life-restore-template-fixed/034-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-life-restore-template-fixed/034-2007x2853.png",
+      "bytes": 1003563,
+      "sha256": "aaa7dda7f2a7112ec883d6549f3b5c4fbe7324f8a8cf3dd213c1e1b56abec06a"
+    },
+    {
+      "path": "book-max-life-restore-template-fixed/035-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-life-restore-template-fixed/035-2007x2853.png",
+      "bytes": 994472,
+      "sha256": "8c9ac7364d3c8c107b44ffa60d7d0c0fe0cf85cecf495a361d41f03f3c7f8e8d"
+    },
+    {
+      "path": "book-max-life-restore-template-fixed/036-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-life-restore-template-fixed/036-2007x2853.png",
+      "bytes": 1002561,
+      "sha256": "cd092f0b9557d3612a76add0728a0bdcd44bf41f715fe345921fff2ea384ef39"
+    },
+    {
+      "path": "book-max-life-restore-template-fixed/037-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-life-restore-template-fixed/037-2007x2853.png",
+      "bytes": 998863,
+      "sha256": "fe90b081cb023faa42b302b960fee86777cf4b7472bf84a4ab344e0d35ea4cc6"
+    },
+    {
+      "path": "book-max-life-settings-final/002-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-life-settings-final/002-2007x2853.png",
+      "bytes": 1956014,
+      "sha256": "378ddfa206a7590674d40ab1645da3a1a7ba279c377cff84a35b2aad50d050ee"
+    },
+    {
+      "path": "book-max-life-settings-final/004-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-life-settings-final/004-2007x2853.png",
+      "bytes": 1168208,
+      "sha256": "55e69581e8ed505b9a04cb1c90077b037147aeee09d16dc7e2c451a14cdbd10f"
+    },
+    {
+      "path": "book-max-life-settings-final/009-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-life-settings-final/009-2007x2853.png",
+      "bytes": 998332,
+      "sha256": "eae6eb95803983bd2e996e7023314a466291ab886a773a7627c7b4b214e80a17"
+    },
+    {
+      "path": "book-max-life-settings-final/019-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-life-settings-final/019-2007x2853.png",
+      "bytes": 1878924,
+      "sha256": "01d5671ff983d92b5b04323810bfc14e4b63ecdfb5bcfea50518f143100f114d"
+    },
+    {
+      "path": "book-max-life-settings-final/021-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-life-settings-final/021-2007x2853.png",
+      "bytes": 1866593,
+      "sha256": "ee6e24d1291d5c6fd77420f3cb31c57ba75f31cf164dfa34f3a4e4442f732e76"
+    },
+    {
+      "path": "book-max-life-settings-final/023-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-life-settings-final/023-2007x2853.png",
+      "bytes": 1452986,
+      "sha256": "94a07e34e131e4f152f03bcb8b4cd9eecffd2a770543827a84b9938df62facce"
+    },
+    {
+      "path": "book-max-life-settings-final/028-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-life-settings-final/028-2007x2853.png",
+      "bytes": 1449170,
+      "sha256": "9dbdddb83225b70d8d4a24c93752ff66b58fad2b9fa69311e89ccf56d23028be"
+    },
+    {
+      "path": "book-max-life-settings-final/031-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-life-settings-final/031-2007x2853.png",
+      "bytes": 1454343,
+      "sha256": "9d7e451255d6ec83d36eb6513b0a3016dc7c2b4014f5fb931ac3f96420c20c50"
+    },
+    {
+      "path": "book-max-life-settings-final/035-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-life-settings-final/035-2007x2853.png",
+      "bytes": 957752,
+      "sha256": "28d7cef726a5af32736efa5b4fd7492f2eeceb1b449020514c4d963221ba9730"
+    },
+    {
+      "path": "book-max-life-settings-final/038-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-life-settings-final/038-2007x2853.png",
+      "bytes": 770306,
+      "sha256": "4d0224b3e0bd0415415f585ac02f7bfe62836dbc63866173ca762b061306ddeb"
+    },
+    {
+      "path": "book-max-life-settings-final/039-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-life-settings-final/039-2007x2853.png",
+      "bytes": 1084591,
+      "sha256": "d8dd4c7a5dd2c89509ad2a8bae52d2fa8a4f21e21598c55eb67242b79c8a7fdf"
+    },
+    {
+      "path": "book-max-life-settings-final/043-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-life-settings-final/043-2007x2853.png",
+      "bytes": 918836,
+      "sha256": "e81cd1eb531f7340a7110f73ab0389a23479fb85cab2ea93f63de5e39854598e"
+    },
+    {
+      "path": "book-max-posture-routes/003-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-posture-routes/003-2007x2853.png",
+      "bytes": 226452,
+      "sha256": "7c5441f576b947d071b96ed474b88b96ffaa01128cb5fc2bce7bf48641357130"
+    },
+    {
+      "path": "book-max-posture-routes/004-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-posture-routes/004-2007x2853.png",
+      "bytes": 226452,
+      "sha256": "7c5441f576b947d071b96ed474b88b96ffaa01128cb5fc2bce7bf48641357130"
+    },
+    {
+      "path": "book-max-posture-routes/008-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-posture-routes/008-2007x2853.png",
+      "bytes": 250762,
+      "sha256": "7048835a37be951f17dfe94b7e8e0476771b3a4af8787f00334ef9ccb9a14644"
+    },
+    {
+      "path": "book-max-posture-routes/010-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-posture-routes/010-2007x2853.png",
+      "bytes": 491227,
+      "sha256": "dad877a3081fcc5dbae4fa0666f8db1d53f4a77217bffda54ae20978170d2675"
+    },
+    {
+      "path": "book-max-posture-routes/014-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-posture-routes/014-2007x2853.png",
+      "bytes": 1370573,
+      "sha256": "2c2a2bbd67f78f0ddfbe85b637dad6ef2764b025f8c3b44c677c9e0f8c080366"
+    },
+    {
+      "path": "book-max-posture-routes/016-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-posture-routes/016-2007x2853.png",
+      "bytes": 949133,
+      "sha256": "6e5c818a66ce70db29e5170150f844015660830ea196b3c2e3764251e65c1118"
+    },
+    {
+      "path": "book-max-posture-routes/018-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-posture-routes/018-2007x2853.png",
+      "bytes": 1264588,
+      "sha256": "81a30768fa599c5f0f82fdaa930972cfd44f6d54d1f0108b69312716b16ba39b"
+    },
+    {
+      "path": "book-max-posture-routes/024-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-posture-routes/024-2007x2853.png",
+      "bytes": 1376666,
+      "sha256": "53d1e0d695f4e7aff698fc165b8a9b5ba4c5d249d98f2baab71cf1366847589b"
+    },
+    {
+      "path": "book-max-posture-routes/025-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-posture-routes/025-2007x2853.png",
+      "bytes": 1789112,
+      "sha256": "cbb5d6206b42fb6f9ff7458d6ea273850a989c53a674872eaef2edecc4db6fc4"
+    },
+    {
+      "path": "book-max-posture-routes/026-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-posture-routes/026-2007x2853.png",
+      "bytes": 1600542,
+      "sha256": "871249325fc7210c2cfdb95941ad263a4e47a1ea4e2973c7bf70a0a7e9ff66f3"
+    },
+    {
+      "path": "book-max-posture-routes/034-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-posture-routes/034-2007x2853.png",
+      "bytes": 1377395,
+      "sha256": "d19a1a26ed2c05531965bc7ea87a5c6eccc3db782ebfcf36d8c86e160b8ecb24"
+    },
+    {
+      "path": "book-max-posture-routes/036-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-posture-routes/036-2007x2853.png",
+      "bytes": 1272698,
+      "sha256": "05a0d734407adaab286111906fda5138f71c6c67988f6171d07c9559731865a1"
+    },
+    {
+      "path": "book-max-posture-routes/039-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-posture-routes/039-2007x2853.png",
+      "bytes": 1370806,
+      "sha256": "bf0606385e634c687d7f68724c7a93ec11e30fc8ac96a3279883be10148b31d5"
+    },
+    {
+      "path": "book-max-posture-routes/046-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-posture-routes/046-2007x2853.png",
+      "bytes": 1380850,
+      "sha256": "77a6b75f9cd73ed5496de35133648a4c987446b2b3267d5cb1bff9d624814840"
+    },
+    {
+      "path": "book-max-posture-routes/048-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-posture-routes/048-2007x2853.png",
+      "bytes": 1128786,
+      "sha256": "f4ea5faa2d1bae79da453cffeaa1df0bbc01756a2cab461eed23a40ab84d2d5f"
+    },
+    {
+      "path": "book-max-posture-routes/049-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-posture-routes/049-2007x2853.png",
+      "bytes": 1128530,
+      "sha256": "73d5bc67677263f8e714dd741d415899313a3977b4437fc6d0ea5d59604ffe9b"
+    },
+    {
+      "path": "book-max-posture-routes/050-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-posture-routes/050-2007x2853.png",
+      "bytes": 993986,
+      "sha256": "46014c33f79a7dd2d0c295f8d0a5fe4d662a16a762dece244adc5019d39a8ac8"
+    },
+    {
+      "path": "book-max-posture-routes/051-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-posture-routes/051-2007x2853.png",
+      "bytes": 1079040,
+      "sha256": "ca8ad14931e1628f9ec0ed047703e96c6ec852408ab5df8e2c5aaee612911165"
+    },
+    {
+      "path": "book-max-posture-routes/052-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-posture-routes/052-2007x2853.png",
+      "bytes": 1072469,
+      "sha256": "33357f3996cab056c423efd23483adc8a6afb7fdb6b9ab8d4538dd75108b0e2c"
+    },
+    {
+      "path": "book-max-pr-endpoint-axis-clearance/003-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-pr-endpoint-axis-clearance/003-2007x2853.png",
+      "bytes": 1279346,
+      "sha256": "056fa66e23d311b9cdae62680fb46350a21c14286ffc511c90b654a8a058d639"
+    },
+    {
+      "path": "book-max-pr-endpoint-axis-clearance/004-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-pr-endpoint-axis-clearance/004-2007x2853.png",
+      "bytes": 1268371,
+      "sha256": "cd22b9070231eb810201b6051ee908902464804971b0096f2dd9cabf826b7599"
+    },
+    {
+      "path": "book-max-readiness-subscore-complete/003-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-readiness-subscore-complete/003-2007x2853.png",
+      "bytes": 1173161,
+      "sha256": "a348543624a50d111c0af258f0d529fa14fbf1c546371e319a470c78f2cbf378"
+    },
+    {
+      "path": "book-max-readiness-subscore-complete/004-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-readiness-subscore-complete/004-2007x2853.png",
+      "bytes": 1075111,
+      "sha256": "7d050e74e374deb0905e57d58f9d9a6e896a8717d18b61ca7dc014e73150ac52"
+    },
+    {
+      "path": "book-max-readiness-subscore-complete/005-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-readiness-subscore-complete/005-2007x2853.png",
+      "bytes": 1081129,
+      "sha256": "fe3a725d3249b5bde079d0511ddd793b39c65e6dba704dfced41d25696513df2"
+    },
+    {
+      "path": "book-max-readiness-subscore-complete/006-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-readiness-subscore-complete/006-2007x2853.png",
+      "bytes": 1100265,
+      "sha256": "ee0b27920f51069b27cf83c85553f7d4b2d504499772191a2a9d0cd3f29a6e42"
+    },
+    {
+      "path": "book-max-readiness-subscore-complete/007-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-readiness-subscore-complete/007-2007x2853.png",
+      "bytes": 1045025,
+      "sha256": "c193d5cfe403b256d5ef643a4f96f3b41c6d76a6f75551dbacba25233d154871"
+    },
+    {
+      "path": "book-max-readiness-subscore-complete/008-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-readiness-subscore-complete/008-2007x2853.png",
+      "bytes": 1076287,
+      "sha256": "ff24876e5ef7e628e6282c1f8dbbf5301551a5cc20e8ba1723ac7a93e138c835"
+    },
+    {
+      "path": "book-max-share-caption-type-fixed/008-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-share-caption-type-fixed/008-2007x2853.png",
+      "bytes": 1040645,
+      "sha256": "1619cfa662a2749838cc6521e7c466a122502f3363cae29298e09f4d51f06772"
+    },
+    {
+      "path": "book-max-share-caption-type-fixed/009-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-share-caption-type-fixed/009-2007x2853.png",
+      "bytes": 1252969,
+      "sha256": "3fbabb600fb0f0125909338a785918408153aebc68d8586d17b28c4d2276c575"
+    },
+    {
+      "path": "book-max-share-caption-type-fixed/010-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-share-caption-type-fixed/010-2007x2853.png",
+      "bytes": 1108322,
+      "sha256": "2df5c39f0cf7b9c3b7db6de1c2192547b0071dde33c64ffbacf5a04bfa3e8f65"
+    },
+    {
+      "path": "book-max-share-control-reveal-fixed/013-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-share-control-reveal-fixed/013-2007x2853.png",
+      "bytes": 885299,
+      "sha256": "1e36971a8f1f09ba81c5914cd0c6a5edc82649dc02c623b82ae6168dbc6a8f11"
+    },
+    {
+      "path": "book-max-share-control-reveal-fixed/015-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-share-control-reveal-fixed/015-2007x2853.png",
+      "bytes": 1043929,
+      "sha256": "f7680db2b08cae412d87e6e191436b3c3302229a271b4dfcba5c3edc28351acf"
+    },
+    {
+      "path": "book-max-share-control-reveal-fixed/016-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-share-control-reveal-fixed/016-2007x2853.png",
+      "bytes": 973471,
+      "sha256": "413ac1f3679e2f0b68989d592248cf3a5f9b80f198ad066b88bce4def9b1facf"
+    },
+    {
+      "path": "book-max-share-control-reveal-fixed/017-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-share-control-reveal-fixed/017-2007x2853.png",
+      "bytes": 966509,
+      "sha256": "696b20961585762142f4ea671f519e0434e687387d0c8278e3c6b71f17e3ea1c"
+    },
+    {
+      "path": "book-max-share-entry-frame-fixed/013-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-share-entry-frame-fixed/013-2007x2853.png",
+      "bytes": 876678,
+      "sha256": "86247e0a6befae8f4c333d558d28c75f3af39694642a042e670e6f9cf15df45b"
+    },
+    {
+      "path": "book-max-share-entry-frame-fixed/015-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-share-entry-frame-fixed/015-2007x2853.png",
+      "bytes": 1049075,
+      "sha256": "2db4a0950405c8519e8b1278b0bb572b553314ebc88fcc5a1df2dc2c17e1de26"
+    },
+    {
+      "path": "book-max-share-entry-frame-fixed/016-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-share-entry-frame-fixed/016-2007x2853.png",
+      "bytes": 1133529,
+      "sha256": "8c126b68b33d323b702e649045f6176a0f69a6f2023a1d9cef7712f5d0f75fa6"
+    },
+    {
+      "path": "book-max-share-entry-frame-fixed/017-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-share-entry-frame-fixed/017-2007x2853.png",
+      "bytes": 976688,
+      "sha256": "e9049409e3cea22a300bf9eedd0ecadb072fd9ee80b817ef0af1ab7d423a698b"
+    },
+    {
+      "path": "book-max-share-keyboard-fixed/013-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-share-keyboard-fixed/013-2007x2853.png",
+      "bytes": 868651,
+      "sha256": "7c08ac5a0615be074455496924e014a6c8d12608f377970ed8c34e98388e6312"
+    },
+    {
+      "path": "book-max-share-keyboard-fixed/015-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-share-keyboard-fixed/015-2007x2853.png",
+      "bytes": 1039243,
+      "sha256": "1dde3a0a23192a22b781b40a2154958ff1a5c8b0a89f0e58415ee418a3411c6c"
+    },
+    {
+      "path": "book-max-share-keyboard-fixed/016-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-share-keyboard-fixed/016-2007x2853.png",
+      "bytes": 1044312,
+      "sha256": "6aa211fdf125bb4c631fafe2fc83bc2ba68a9c20b419d67cdeae691e095b3203"
+    },
+    {
+      "path": "book-max-share-resource-name-fixed/002-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-share-resource-name-fixed/002-2007x2853.png",
+      "bytes": 2315114,
+      "sha256": "601ce7f0ca8cd9e11c11ffccce8889646313806b2617f7818476f4698984b40f"
+    },
+    {
+      "path": "book-max-share-resource-name-fixed/003-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-share-resource-name-fixed/003-2007x2853.png",
+      "bytes": 2315114,
+      "sha256": "601ce7f0ca8cd9e11c11ffccce8889646313806b2617f7818476f4698984b40f"
+    },
+    {
+      "path": "book-max-share-resource-name-fixed/004-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-share-resource-name-fixed/004-2007x2853.png",
+      "bytes": 2315267,
+      "sha256": "d2b3f80545d812f163e8e2c2a6c6d071fa894863e67ea14cc6ccd4a8cad2d406"
+    },
+    {
+      "path": "book-max-share-resource-name-fixed/005-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-share-resource-name-fixed/005-2007x2853.png",
+      "bytes": 2315267,
+      "sha256": "d2b3f80545d812f163e8e2c2a6c6d071fa894863e67ea14cc6ccd4a8cad2d406"
+    },
+    {
+      "path": "book-max-share-resource-name-fixed/006-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-share-resource-name-fixed/006-2007x2853.png",
+      "bytes": 2315101,
+      "sha256": "795332ed5943a5d6582c2693ccda40766c6932f682f8e6a51594d80d53d7d67f"
+    },
+    {
+      "path": "book-max-share-system-close-scoped/013-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-share-system-close-scoped/013-2007x2853.png",
+      "bytes": 875674,
+      "sha256": "0924bc5fd6c80dc7017e1a10f4454b01c8623fee04651223db6d883ef980a065"
+    },
+    {
+      "path": "book-max-share-system-close-scoped/015-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-share-system-close-scoped/015-2007x2853.png",
+      "bytes": 1044652,
+      "sha256": "e8cbbf78567f8c69e685a3040cd84d922796e14df9ea95f7a6cf35b548e0a13d"
+    },
+    {
+      "path": "book-max-share-system-close-scoped/016-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-share-system-close-scoped/016-2007x2853.png",
+      "bytes": 968941,
+      "sha256": "c87b985440b16066bb424c46c5da789e3a33c8bf4f20c847f26cebe53b298887"
+    },
+    {
+      "path": "book-max-share-system-close-scoped/017-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-share-system-close-scoped/017-2007x2853.png",
+      "bytes": 966569,
+      "sha256": "9d9fa9ddf72563c26b01b171c369d4c5330ef850d719b3a30577b847cdba4e9c"
+    },
+    {
+      "path": "book-max-share-system-close-scoped/019-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-share-system-close-scoped/019-2007x2853.png",
+      "bytes": 1150921,
+      "sha256": "d12eb196a31e0e3c66aae4be9ed25c834a97d6eb242fe320a869cbcd6d2ad4be"
+    },
+    {
+      "path": "book-max-share-system-close-scoped/020-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-share-system-close-scoped/020-2007x2853.png",
+      "bytes": 1029438,
+      "sha256": "847630516967845c9a48106a40682eb683101272c89eb1f79f72faafe71819dc"
+    },
+    {
+      "path": "book-max-share-system-close-scoped/021-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-share-system-close-scoped/021-2007x2853.png",
+      "bytes": 1020286,
+      "sha256": "875c96278b28112d42938a6e5807fd7333f8aec3c01990599e3d7d1bee90c145"
+    },
+    {
+      "path": "book-max-shared-score-consumers/003-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-shared-score-consumers/003-2007x2853.png",
+      "bytes": 1625903,
+      "sha256": "f9bc75ba40755b257731c680456f7dfe46b539700c068a18f64b77240185a8aa"
+    },
+    {
+      "path": "book-max-shared-score-consumers/006-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-shared-score-consumers/006-2007x2853.png",
+      "bytes": 1234428,
+      "sha256": "ad74b8a4db0f2c10420a82932e3f74d2af8fed6a6acb7710f17fd7ab60dc78ac"
+    },
+    {
+      "path": "book-max-shared-score-consumers/007-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-shared-score-consumers/007-2007x2853.png",
+      "bytes": 1234457,
+      "sha256": "d2c454e30e8153c042167d353225d9f227c715a25ea73fce92b00fe4596df94e"
+    },
+    {
+      "path": "book-max-shared-score-consumers/008-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-shared-score-consumers/008-2007x2853.png",
+      "bytes": 1234151,
+      "sha256": "9eaf6e387fa71b84b27607a01ff3658ab7fbc07c68e6a409edb582f48a4a152d"
+    },
+    {
+      "path": "book-max-shared-score-consumers/009-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-shared-score-consumers/009-2007x2853.png",
+      "bytes": 1325099,
+      "sha256": "371cd11486671cf0a929235beccbb87ce48b1d0d34d79c9043afd3588e690186"
+    },
+    {
+      "path": "book-max-shared-score-consumers/010-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-shared-score-consumers/010-2007x2853.png",
+      "bytes": 1320005,
+      "sha256": "7232d7a6aea1310a18e55011f41751b5536ceeb73dcf7e06ede067dd568e9b2c"
+    },
+    {
+      "path": "book-max-shared-score-consumers/013-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-shared-score-consumers/013-2007x2853.png",
+      "bytes": 4539316,
+      "sha256": "730e57687642b2f8dd0c6a782bb0e86879ba1d265a29b1747616ef50017c5df4"
+    },
+    {
+      "path": "book-max-shared-score-consumers/014-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-shared-score-consumers/014-2007x2853.png",
+      "bytes": 1339589,
+      "sha256": "c5c4bee2cdfc1488d18b292c8e934578c97277c7d06fe45d619e794c8487983a"
+    },
+    {
+      "path": "book-max-shared-score-consumers/015-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-shared-score-consumers/015-2007x2853.png",
+      "bytes": 1152819,
+      "sha256": "821ddcb30e79099c129c30eeaf08e497bb7a040887464821adfb9458169b6b8f"
+    },
+    {
+      "path": "book-max-template-form-lazy-reveal-fixed/005-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-template-form-lazy-reveal-fixed/005-2007x2853.png",
+      "bytes": 902797,
+      "sha256": "dce2baba305ff4f41f0d67f16b3cbaf42828b51e8435c14057f7b53dd9793c26"
+    },
+    {
+      "path": "book-max-template-form-lazy-reveal-fixed/010-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-template-form-lazy-reveal-fixed/010-2007x2853.png",
+      "bytes": 817880,
+      "sha256": "3659888d12d7881199bc2cce82463e0dc301db4711c6e17750c41e1b141d65ef"
+    },
+    {
+      "path": "book-max-template-form-lazy-reveal-fixed/013-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-template-form-lazy-reveal-fixed/013-2007x2853.png",
+      "bytes": 995997,
+      "sha256": "1725c8756ab26d85dfc8facdb38391eac989fb166711631a3b1e37b3baaa8378"
+    },
+    {
+      "path": "book-max-template-form-lazy-reveal-fixed/018-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-template-form-lazy-reveal-fixed/018-2007x2853.png",
+      "bytes": 431773,
+      "sha256": "5bce1c89cd0440aa3006c65e6d0337e4c97f11dac18e293b02adaeae96de5836"
+    },
+    {
+      "path": "book-max-template-form-lazy-reveal-fixed/019-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-template-form-lazy-reveal-fixed/019-2007x2853.png",
+      "bytes": 1349629,
+      "sha256": "2e84f3c0d1899c15c346a8394bb5f065adac29ec379568a7fedefc802707f3fc"
+    },
+    {
+      "path": "book-max-template-form-lazy-reveal-fixed/020-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-template-form-lazy-reveal-fixed/020-2007x2853.png",
+      "bytes": 1114667,
+      "sha256": "0eb37798ddd5c50c806e2d98a44f2bfb3bd7a0b91900501c7448728cff0742e7"
+    },
+    {
+      "path": "book-max-template-pr-remediation/003-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-template-pr-remediation/003-2007x2853.png",
+      "bytes": 1279476,
+      "sha256": "2283ab65e372ded9d81a04e762fc495fe06e475006043d8a4cf1f16091020af3"
+    },
+    {
+      "path": "book-max-template-pr-remediation/004-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-template-pr-remediation/004-2007x2853.png",
+      "bytes": 1260401,
+      "sha256": "179bdadfb8bf3f1e472220636d9875089b736c1b42c74778353da194310bddbe"
+    },
+    {
+      "path": "book-max-template-pr-remediation/005-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-template-pr-remediation/005-2007x2853.png",
+      "bytes": 1604365,
+      "sha256": "6a0d41ca733b5b6a17921839a933a0b8d03c96aa98929733037190064d6a3698"
+    },
+    {
+      "path": "book-max-template-pr-remediation/011-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-template-pr-remediation/011-2007x2853.png",
+      "bytes": 947484,
+      "sha256": "1cefbd4ecc68c5e98e0e152b4c14455ac2aa0eb9db022448d310ecb2f9e9ce02"
+    },
+    {
+      "path": "book-max-template-session-identity-fixed/010-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-template-session-identity-fixed/010-2007x2853.png",
+      "bytes": 834810,
+      "sha256": "2e417d2ae85cb144394f628af81e3dee0a7eee6ed9f822ade5a5f6b325fae311"
+    },
+    {
+      "path": "book-max-template-session-identity-fixed/018-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-template-session-identity-fixed/018-2007x2853.png",
+      "bytes": 432223,
+      "sha256": "49231b6facbe73269d33a5b82deec939391a09978856b81bf88d42eff836c658"
+    },
+    {
+      "path": "book-max-template-session-identity-fixed/020-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-template-session-identity-fixed/020-2007x2853.png",
+      "bytes": 1117615,
+      "sha256": "f88da2aa61f903260129daeffc0d72840117407f7e89a6ae95f06e8a8475936a"
+    },
+    {
+      "path": "book-max-template-session-identity-fixed/021-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-template-session-identity-fixed/021-2007x2853.png",
+      "bytes": 1116159,
+      "sha256": "5c6a81c17dcb6bfadacd2af5161f973301cd33e121b97dc373fe66682d43845b"
+    },
+    {
+      "path": "book-max-today-injury-routes/003-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-today-injury-routes/003-2007x2853.png",
+      "bytes": 1550487,
+      "sha256": "c4fcf83b99031710910cf4ef8bd522f3c4567436e7553b21234d5bc4f6606536"
+    },
+    {
+      "path": "book-max-today-injury-routes/004-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-today-injury-routes/004-2007x2853.png",
+      "bytes": 1446763,
+      "sha256": "8120dc6c0f08a5157fa99fe34cdbc5850753926a170cade7106d8e3da2736104"
+    },
+    {
+      "path": "book-max-today-injury-routes/005-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-today-injury-routes/005-2007x2853.png",
+      "bytes": 1503230,
+      "sha256": "165dde8835b0aea85274216f8a30dfa011a926218eebb9c797a06a79828be0cd"
+    },
+    {
+      "path": "book-max-today-injury-routes/006-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-today-injury-routes/006-2007x2853.png",
+      "bytes": 1526355,
+      "sha256": "98659f3ce6488f011fa61037fe2e83437384a7bb373f9804ccfc7c98f0c33cf8"
+    },
+    {
+      "path": "book-max-today-injury-routes/007-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-today-injury-routes/007-2007x2853.png",
+      "bytes": 1279507,
+      "sha256": "307f9e1b69ed2b517735bc2e2ae49c66f95843732db63bdb94ee43e3c9fe3f52"
+    },
+    {
+      "path": "book-max-today-injury-routes/008-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-today-injury-routes/008-2007x2853.png",
+      "bytes": 1468944,
+      "sha256": "c15d313e633a524a16ed751a03aa1291df2704db41d7e246cf21ff2190d10d9a"
+    },
+    {
+      "path": "book-max-today-injury-routes/009-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-today-injury-routes/009-2007x2853.png",
+      "bytes": 1550873,
+      "sha256": "9bdb78835a67b8cd6e77be6c58fe7ff58f9fed0a79ad7808a976f6bd869dd7c7"
+    },
+    {
+      "path": "book-max-today-injury-routes/010-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-today-injury-routes/010-2007x2853.png",
+      "bytes": 1551443,
+      "sha256": "185e912c4061f1a58aaa199c39a8fb7c6e8191a63b4f86d16aba983d10050a5e"
+    },
+    {
+      "path": "book-max-today-injury-routes/011-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-today-injury-routes/011-2007x2853.png",
+      "bytes": 4438392,
+      "sha256": "932f8c443b667a91a33112e1361afc3b601fb982172e17fd4c238089e86bbdf5"
+    },
+    {
+      "path": "book-max-today-injury-unexecuted/001-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-today-injury-unexecuted/001-2007x2853.png",
+      "bytes": 4540056,
+      "sha256": "695df042b8d84a7cb30a9166bf4008d7caf1c13a1f0d8c15c4bbccd89ae54f14"
+    },
+    {
+      "path": "book-max-today-injury-unexecuted/002-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-today-injury-unexecuted/002-2007x2853.png",
+      "bytes": 4547913,
+      "sha256": "58dda4f0a204b1f6ba0a929a2889c5c81f2c5e812335b9e92d832ab711ab0a86"
+    },
+    {
+      "path": "book-max-today-injury-unexecuted/005-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-today-injury-unexecuted/005-2007x2853.png",
+      "bytes": 788928,
+      "sha256": "16ab0c2056115b2a629f1b550916cf0f1eee0b79c11e861fa9a5e213fd55823a"
+    },
+    {
+      "path": "book-max-today-injury-unexecuted/007-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-today-injury-unexecuted/007-2007x2853.png",
+      "bytes": 849440,
+      "sha256": "2323d5ace19099f5618b69a209e7e10eb331f24f136923de1bd1eb42464b4cf5"
+    },
+    {
+      "path": "book-max-today-injury-unexecuted/008-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-today-injury-unexecuted/008-2007x2853.png",
+      "bytes": 708356,
+      "sha256": "d7b39b8bb130612dd3984d9f27741c39062690e9faa2d1ad28336986f586c16b"
+    },
+    {
+      "path": "book-max-today-injury-unexecuted/009-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-today-injury-unexecuted/009-2007x2853.png",
+      "bytes": 708356,
+      "sha256": "d7b39b8bb130612dd3984d9f27741c39062690e9faa2d1ad28336986f586c16b"
+    },
+    {
+      "path": "book-max-today-injury-unexecuted/013-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-today-injury-unexecuted/013-2007x2853.png",
+      "bytes": 1017801,
+      "sha256": "2f6051844e154cf4af5c6b057faa280d6b91dcbb91c0cd1281d926d2d4c657b7"
+    },
+    {
+      "path": "book-max-today-injury-unexecuted/014-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-today-injury-unexecuted/014-2007x2853.png",
+      "bytes": 1114418,
+      "sha256": "bd17c1f474645e1e57e787ae329f916fd47b4f3265fff7d1c266d251aff54b76"
+    },
+    {
+      "path": "book-max-today-injury-unexecuted/015-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-today-injury-unexecuted/015-2007x2853.png",
+      "bytes": 1052725,
+      "sha256": "ae6043d823e9de586a7eb5aadeeeaf3bcb607bd4db69de6e5a72e1a499f9b689"
+    },
+    {
+      "path": "book-max-today-injury-unexecuted/016-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-today-injury-unexecuted/016-2007x2853.png",
+      "bytes": 1052745,
+      "sha256": "2b3cbba6705eebaa6ac47b8e285909f9f8c8208285b1291c3d715089b7ec3cd6"
+    },
+    {
+      "path": "book-max-today-injury-unexecuted/017-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-today-injury-unexecuted/017-2007x2853.png",
+      "bytes": 1050763,
+      "sha256": "966a7766f51344d5c318e5375db0ab394a0dd6b0d6ab4324484828f3d8f3a042"
+    },
+    {
+      "path": "book-max-weather-daytime-fixed/002-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-weather-daytime-fixed/002-2007x2853.png",
+      "bytes": 1199969,
+      "sha256": "b34cb605672bcfc3b85a8c065bb63a9b7dfbef6aca13f5f10b22dbcb251e83e1"
+    },
+    {
+      "path": "book-max-weather-daytime-fixed/003-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "book-max-weather-daytime-fixed/003-2007x2853.png",
+      "bytes": 1201052,
+      "sha256": "b7a85640003ee59d8f590761150d78025847944daf9c8b1e137c1ea52cbe5104"
+    },
+    {
+      "path": "closed-max-condition-subscore-axes-fixed/002-1398x2034.png",
+      "bytes": 1108765,
+      "sha256": "11b0c3040472ec06d6164742f04e48dc6c243ccd66234fcb0ba0668bc2f4d027"
+    },
+    {
+      "path": "closed-max-condition-subscore-axes-fixed/002-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "closed-max-condition-subscore-axes-fixed/003-1398x2034.png",
+      "bytes": 1105160,
+      "sha256": "c3366ffc60ea673d05170b5dd1fbc94ef53cb2436f47ea349f135bde64be9192"
+    },
+    {
+      "path": "closed-max-condition-subscore-axes-fixed/003-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "closed-max-condition-subscore-axes-fixed/004-1398x2034.png",
+      "bytes": 1301204,
+      "sha256": "7cdb53ecd1bc2bb577813689dc6c5630342c0a1a88cb931525242d6d357fd845"
+    },
+    {
+      "path": "closed-max-condition-subscore-axes-fixed/004-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "closed-max-condition-subscore-reveal-fixed/003-1398x2034.png",
+      "bytes": 1103248,
+      "sha256": "c20d80c58a7ad1070d3cfd8e84e09321d8fee899af87fb92007e2df99747df3d"
+    },
+    {
+      "path": "closed-max-condition-subscore-reveal-fixed/003-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "closed-max-condition-subscore-reveal-fixed/004-1398x2034.png",
+      "bytes": 1156364,
+      "sha256": "0372f2eca14df0fdc64758b1f7220a2383d6bddbbf26194abd367df30df71829"
+    },
+    {
+      "path": "closed-max-condition-subscore-reveal-fixed/004-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "closed-max-condition-subscore-reveal-fixed/005-1398x2034.png",
+      "bytes": 1161993,
+      "sha256": "a576b62ac94702e93334d4b821f1769703a7b1676f64196a40ffe431e827b38f"
+    },
+    {
+      "path": "closed-max-condition-subscore-reveal-fixed/005-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "closed-max-condition-subscore-reveal-fixed/006-1398x2034.png",
+      "bytes": 1154503,
+      "sha256": "1e90fe7e0b1e101a0d3295ba9659bd1dd4e172a6f65971b765ee4ca7620c3cb7"
+    },
+    {
+      "path": "closed-max-condition-subscore-reveal-fixed/006-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "closed-max-wellness-subscore-axes-fixed/002-1398x2034.png",
+      "bytes": 1148197,
+      "sha256": "62781c0214990991468be73eed52f1697192f263343bd09821867031e80b97f6"
+    },
+    {
+      "path": "closed-max-wellness-subscore-axes-fixed/002-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "closed-max-wellness-subscore-axes-fixed/003-1398x2034.png",
+      "bytes": 1103188,
+      "sha256": "7ddcf69b08d3a788ec93497886623503fad13e4337e4ce007b8556fe148e4112"
+    },
+    {
+      "path": "closed-max-wellness-subscore-axes-fixed/003-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "closed-max-wellness-subscore-axes-fixed/004-1398x2034.png",
+      "bytes": 1287201,
+      "sha256": "7d76c6493339cb849778abdb8e7ff762bc20cee64123e9aabfd8d4b4de98260f"
+    },
+    {
+      "path": "closed-max-wellness-subscore-axes-fixed/004-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "closed-max-wellness-subscore-reveal-fixed/003-1398x2034.png",
+      "bytes": 1108467,
+      "sha256": "1e7f8555de35267398d88e3bafd105d8ed37bcab1173e9fd37dbe31ee6a21c85"
+    },
+    {
+      "path": "closed-max-wellness-subscore-reveal-fixed/003-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "closed-max-wellness-subscore-reveal-fixed/004-1398x2034.png",
+      "bytes": 1098496,
+      "sha256": "bfc1605bd0ccab615b69b107e5080f37e9666d1bdadc7c780df2fa9e245f6b63"
+    },
+    {
+      "path": "closed-max-wellness-subscore-reveal-fixed/004-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "closed-max-wellness-subscore-reveal-fixed/005-1398x2034.png",
+      "bytes": 1149947,
+      "sha256": "4106e9db3e09bc5b24e1345219e52f339ff57996ed5a8bac1abda92ff39d78ad"
+    },
+    {
+      "path": "closed-max-wellness-subscore-reveal-fixed/005-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "closed-max-wellness-subscore-reveal-fixed/006-1398x2034.png",
+      "bytes": 1179650,
+      "sha256": "e91b576344861d1544babb4946d57ece7e2898d8f175ad675c3cc161f92312a3"
+    },
+    {
+      "path": "closed-max-wellness-subscore-reveal-fixed/006-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "closed-max-wellness-subscore-reveal-fixed/007-1398x2034.png",
+      "bytes": 1157459,
+      "sha256": "3e646b2c6c17670c99015711867b3273d893f7e31186a57a1df92d4a785dd5bc"
+    },
+    {
+      "path": "closed-max-wellness-subscore-reveal-fixed/007-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "closed-max-wellness-subscore-reveal-fixed/008-1398x2034.png",
+      "bytes": 1155933,
+      "sha256": "64af85ad104e739bad6b736986f0846fe41f50b3998236f1a78fd941fe184c81"
+    },
+    {
+      "path": "closed-max-wellness-subscore-reveal-fixed/008-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "custom-muscle-max-all-poses-final/005-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "custom-muscle-max-all-poses-final/005-2007x2853.png",
+      "bytes": 945520,
+      "sha256": "eff2eae323e268ff4f8ba03511eb30215ce9ae443f248b3f2399e0a659f28223"
+    },
+    {
+      "path": "custom-muscle-max-all-poses-viewport-fixed/008-1398x2034.png",
+      "bytes": 528080,
+      "sha256": "ab787c858183183a79a766513e0add6113e76acaae922f6544a931accba9fa93"
+    },
+    {
+      "path": "custom-muscle-max-all-poses-viewport-fixed/008-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "custom-muscle-max-all-poses-viewport-fixed/010-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "custom-muscle-max-all-poses-viewport-fixed/010-2007x2853.png",
+      "bytes": 887564,
+      "sha256": "4f40057fc13f4c310730fc9f65d7ea9abd7b0f4aefdabb8cac42a269c8b5e261"
+    },
+    {
+      "path": "custom-muscle-max-all-poses-viewport-fixed/012-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "custom-muscle-max-all-poses-viewport-fixed/012-2007x2853.png",
+      "bytes": 843339,
+      "sha256": "0404576d25a880fd29df45f36dbed744bbeab39566a683a743922b449dae19f9"
+    },
+    {
+      "path": "custom-muscle-max-all-poses-viewport-fixed/016-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "custom-muscle-max-all-poses-viewport-fixed/016-2007x2853.png",
+      "bytes": 364364,
+      "sha256": "e0a4a6b8450f014fa9440a959ec7e664a4c4fdb7d87da9ce4a02cc03ad203a04"
+    },
+    {
+      "path": "life-inner-lower-axes-complete/004-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "life-inner-lower-axes-complete/004-2007x2853.png",
+      "bytes": 1001790,
+      "sha256": "16a587b25d6ad97d523996e89dd0a44ea26dc018bf27bd00f9dbab221b36fd14"
+    },
+    {
+      "path": "life-inner-lower-axes-complete/006-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "life-inner-lower-axes-complete/006-2007x2853.png",
+      "bytes": 1012078,
+      "sha256": "8d96b8078efbac05d8aa9b2240d3a6b5e53441cf3d5ed75f877c2c927e85da53"
+    },
+    {
+      "path": "life-inner-lower-axes-complete/009-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "life-inner-lower-axes-complete/009-2007x2853.png",
+      "bytes": 950473,
+      "sha256": "a56681d1e79f03af08bfb61bebd2c422a7fa4b969b688e00b2a55f032b916000"
+    },
+    {
+      "path": "life-inner-lower-axes-complete/011-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "life-inner-lower-axes-complete/011-2007x2853.png",
+      "bytes": 981376,
+      "sha256": "904bfb83ff23fffe548d5f06eac97a5dece458d0a54f3e4f7beb571a633ce318"
+    },
+    {
+      "path": "life-max-chart-capture-recovered/002-1398x2034.png",
+      "bytes": 1680310,
+      "sha256": "f12920205e76f16f5571db8171d72ed3ef156b9583397630e7db591610c2bccd"
+    },
+    {
+      "path": "life-max-chart-capture-recovered/002-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "life-max-chart-capture-recovered/003-1398x2034.png",
+      "bytes": 1678188,
+      "sha256": "55665afe38b6452790acc8c0b69058cc29f24eed5de4a57b99de36ce974afce8"
+    },
+    {
+      "path": "life-max-chart-capture-recovered/003-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "life-max-chart-capture-recovered/004-1398x2034.png",
+      "bytes": 1141678,
+      "sha256": "1a4b6195b2218299ee4bf1bce32cbb6b391ba6f6d97f83d113dfc02f1e9f0efb"
+    },
+    {
+      "path": "life-max-chart-capture-recovered/004-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "life-max-chart-capture-recovered/005-1398x2034.png",
+      "bytes": 1572722,
+      "sha256": "f3d14df04c74056b324752357f51bc8c23861e943cff2e923bbb6c1ca7a44a73"
+    },
+    {
+      "path": "life-max-chart-capture-recovered/005-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "life-max-chart-header-date-fixed/001-1398x2034.png",
+      "bytes": 1678630,
+      "sha256": "6adfa61c0cc61a3486701b1fb44e728b1b7977ff3675ce12d8bd7ab5a38018e4"
+    },
+    {
+      "path": "life-max-chart-header-date-fixed/001-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "life-max-chart-header-date-fixed/002-1398x2034.png",
+      "bytes": 1676566,
+      "sha256": "6966159d6b64f3df8c0a34716e57999dbc611128b4f37331633cab8ef8da3e08"
+    },
+    {
+      "path": "life-max-chart-header-date-fixed/002-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "life-max-chart-title-query-fixed/003-1398x2034.png",
+      "bytes": 1678115,
+      "sha256": "7bf3c73407670453ade319755d53c57008d2a144d16ebc950a2a92dbe2d8eeb4"
+    },
+    {
+      "path": "life-max-chart-title-query-fixed/003-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "life-max-chart-title-query-fixed/005-1398x2034.png",
+      "bytes": 1120981,
+      "sha256": "b58b37c8cf79e9c91bbc612ffc75b724c906d1b971ff39ad8a8445e9eb6da9fc"
+    },
+    {
+      "path": "life-max-chart-title-query-fixed/005-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "life-max-chart-title-query-fixed/006-1398x2034.png",
+      "bytes": 1208292,
+      "sha256": "59bdcd7138aeb62e493121764ada0219ab1b18383d6fe979879a8fe773b50fd3"
+    },
+    {
+      "path": "life-max-chart-title-query-fixed/006-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "life-max-chart-title-query-fixed/008-1398x2034.png",
+      "bytes": 1152632,
+      "sha256": "898e0bbcc8a0fad27df043de37c825cf8046f8c119b4784ec884da7ee627c8b0"
+    },
+    {
+      "path": "life-max-chart-title-query-fixed/008-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "life-max-chart-title-query-fixed/009-1398x2034.png",
+      "bytes": 1193086,
+      "sha256": "42d37735249b4bf1ae6fc94c8ca2666cd15cb038966a554e31673549ab126942"
+    },
+    {
+      "path": "life-max-chart-title-query-fixed/009-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "life-max-chart-title-query-fixed/011-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "life-max-chart-title-query-fixed/011-2007x2853.png",
+      "bytes": 2724571,
+      "sha256": "966b51f31663691ad1f59597c39c9a8a4d854f40518fb84086d40a908b678e94"
+    },
+    {
+      "path": "life-max-chart-title-query-fixed/013-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "life-max-chart-title-query-fixed/013-2007x2853.png",
+      "bytes": 2247121,
+      "sha256": "392f9cb8f9f1249983d78513d336671ce175b3d100be54526794d08056e130f4"
+    },
+    {
+      "path": "life-max-chart-title-query-fixed/014-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "life-max-chart-title-query-fixed/014-2007x2853.png",
+      "bytes": 974629,
+      "sha256": "dca3e2c6dd102189783b523b5519502bce8cc6dbb02a2eaaa5fbbadbbb1232a7"
+    },
+    {
+      "path": "life-max-chart-title-query-fixed/016-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "life-max-chart-title-query-fixed/016-2007x2853.png",
+      "bytes": 2244300,
+      "sha256": "ffc6aafd025beb07d952f0ac11e4c44e6360ed18d3ccf31d1f922a676c19467f"
+    },
+    {
+      "path": "life-max-chart-title-query-fixed/017-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "life-max-chart-title-query-fixed/017-2007x2853.png",
+      "bytes": 1010937,
+      "sha256": "1a4a801f0786fa91afafa4fc9fb20e066053a9301c9c05a8b50849f171b805d0"
+    },
+    {
+      "path": "life-max-chart-title-query-fixed/019-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "life-max-chart-title-query-fixed/019-2007x2853.png",
+      "bytes": 2693830,
+      "sha256": "8b44edfa87d105798e27fa06231926bc9c3bf319186a9034046d9328778b07e0"
+    },
+    {
+      "path": "life-max-chart-title-query-fixed/021-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "life-max-chart-title-query-fixed/021-2007x2853.png",
+      "bytes": 2298178,
+      "sha256": "77205484331c82c5d76bbd25ae0c39987154f762f46810730babdc3cc088a75c"
+    },
+    {
+      "path": "life-max-chart-title-query-fixed/022-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "life-max-chart-title-query-fixed/022-2007x2853.png",
+      "bytes": 942444,
+      "sha256": "4280e9e02c7409630b273edc007a8805aba0b3d1a0bedd22d8f1e35b86563640"
+    },
+    {
+      "path": "life-max-chart-title-query-fixed/024-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "life-max-chart-title-query-fixed/024-2007x2853.png",
+      "bytes": 2160935,
+      "sha256": "3ac187176c2669b5afc547d3e18a58110bb4fa3821035fbdd1d5ab0c77df4fb3"
+    },
+    {
+      "path": "life-max-chart-title-query-fixed/025-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "life-max-chart-title-query-fixed/025-2007x2853.png",
+      "bytes": 950384,
+      "sha256": "59b663cf3edbb748072d9de74b5ce0ba610fdc611c10dc1004507c1ee025c0dc"
+    },
+    {
+      "path": "life-max-numeric-all-poses/001-1398x2034.png",
+      "bytes": 1676418,
+      "sha256": "d9f92e0f46c7344eae7f962dc1059f7071894df59263c9bf99bebdc56b83c242"
+    },
+    {
+      "path": "life-max-numeric-all-poses/001-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "life-max-numeric-all-poses/002-1398x2034.png",
+      "bytes": 1683644,
+      "sha256": "03f020263a1aa03c0928de9a600b5d1d01d4e41cd1da946d854d95a2763819cb"
+    },
+    {
+      "path": "life-max-numeric-all-poses/002-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "life-max-numeric-all-poses/003-1398x2034.png",
+      "bytes": 1685560,
+      "sha256": "7c29b4596d367eea37916542164197e00ae300b0641bb8ab341d6840fe42496e"
+    },
+    {
+      "path": "life-max-numeric-all-poses/003-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "life-max-numeric-frame-fixed/003-1398x2034.png",
+      "bytes": 1676493,
+      "sha256": "aa039d7bb5a6ac36b336e12c6fc295236a4ed1b7ba42ea1e6a1cfca273bd6112"
+    },
+    {
+      "path": "life-max-numeric-frame-fixed/003-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "life-max-numeric-frame-fixed/005-1398x2034.png",
+      "bytes": 1147985,
+      "sha256": "23e2526385bfa7b88e1640989afe88e4cd6fb2dddbc4f784e96df44cf8d54194"
+    },
+    {
+      "path": "life-max-numeric-frame-fixed/005-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "life-max-numeric-frame-fixed/006-1398x2034.png",
+      "bytes": 1153845,
+      "sha256": "4c57bfc1a0def133375eca02092a75fa37225c7cdf47c948e2bba3c4334f864a"
+    },
+    {
+      "path": "life-max-numeric-frame-fixed/006-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "life-max-numeric-frame-fixed/008-1398x2034.png",
+      "bytes": 1148023,
+      "sha256": "3ac578d44825febbb6a32051687ecbd36b9099571e6e5d3ae644e40e02c604cb"
+    },
+    {
+      "path": "life-max-numeric-frame-fixed/008-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "life-max-numeric-frame-fixed/009-1398x2034.png",
+      "bytes": 1179102,
+      "sha256": "e5e4731088eb485b02c77d10caf10b7528150d2caf297cd28ca293b58405d9a4"
+    },
+    {
+      "path": "life-max-numeric-frame-fixed/009-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "life-max-numeric-frame-fixed/011-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "life-max-numeric-frame-fixed/011-2007x2853.png",
+      "bytes": 2719165,
+      "sha256": "6bd7ca49aa0c69a58c549b07f7667593604baabc99d522fb3f1cf971628cbe1c"
+    },
+    {
+      "path": "life-max-numeric-frame-fixed/013-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "life-max-numeric-frame-fixed/013-2007x2853.png",
+      "bytes": 1017834,
+      "sha256": "5ab378a633c4fdd2144957acad05aeb07f2a3263720a66bb849870c00962d462"
+    },
+    {
+      "path": "life-max-numeric-frame-fixed/014-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "life-max-numeric-frame-fixed/014-2007x2853.png",
+      "bytes": 1185344,
+      "sha256": "bf1359d5b4b2de783709077259cbc13bbb849cc263b52eae46dfc0e282df4554"
+    },
+    {
+      "path": "life-max-numeric-frame-fixed/016-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "life-max-numeric-frame-fixed/016-2007x2853.png",
+      "bytes": 988184,
+      "sha256": "64da7d70268dafc653b5f9d12d7bf4edca9800883243caf786aded537c713eb6"
+    },
+    {
+      "path": "life-max-numeric-frame-fixed/017-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "life-max-numeric-frame-fixed/017-2007x2853.png",
+      "bytes": 1162600,
+      "sha256": "0beaa4609a4c6fea8a6ece44ef44e65401083411378506e2663a5a95980d5d3f"
+    },
+    {
+      "path": "life-max-numeric-frame-fixed/019-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "life-max-numeric-frame-fixed/019-2007x2853.png",
+      "bytes": 2645898,
+      "sha256": "35381a7e942d78b3a798fc30ab395910274cd543a8d23466a89582a867b62e1e"
+    },
+    {
+      "path": "life-max-numeric-frame-fixed/021-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "life-max-numeric-frame-fixed/021-2007x2853.png",
+      "bytes": 977956,
+      "sha256": "b3ec49640dea2d714ee735d4f7f3583a433445fc475c61855eb245aef108355d"
+    },
+    {
+      "path": "life-max-numeric-frame-fixed/022-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "life-max-numeric-frame-fixed/022-2007x2853.png",
+      "bytes": 1226832,
+      "sha256": "ce402e77ff0399e34dfab15faffdca210b96635c5ba1a3c437c5af3ae6b9c33f"
+    },
+    {
+      "path": "life-max-numeric-frame-fixed/024-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "life-max-numeric-frame-fixed/024-2007x2853.png",
+      "bytes": 1004803,
+      "sha256": "e03dc141765057778cae38d87044cd6d6df7bd07566e317cd6b3527bcc6fd357"
+    },
+    {
+      "path": "life-max-numeric-frame-fixed/025-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "life-max-numeric-frame-fixed/025-2007x2853.png",
+      "bytes": 1198080,
+      "sha256": "dbd109dae936ef2c83c7b717cdf65666bdab4c160d53e04b2f1b63a96483f576"
+    },
+    {
+      "path": "phone-default-capture-handshake-fixed/010-1206x2622.png",
+      "bytes": 739952,
+      "sha256": "b9814011cfb7cf38940b82007171000236f4439f252371b102b8cea004df6803"
+    },
+    {
+      "path": "phone-default-capture-handshake-fixed/011-1206x2622.png",
+      "bytes": 636591,
+      "sha256": "f6447517edcea2130132af213814a7a165fc33aad4162cf1135e4152c5ccbe30"
+    },
+    {
+      "path": "phone-default-capture-handshake-fixed/012-1206x2622.png",
+      "bytes": 644517,
+      "sha256": "6302c00c6c71bb6ed4228cac7bde11ebabea669fc1afb0a2ea923ee09c421226"
+    },
+    {
+      "path": "phone-default-capture-handshake-fixed/013-1206x2622.png",
+      "bytes": 598538,
+      "sha256": "17a88f2890a4dfc104803bc70ab486060feeed4d827bd328baba3bb91ce63ae3"
+    },
+    {
+      "path": "phone-default-capture-handshake-fixed/014-1206x2622.png",
+      "bytes": 729018,
+      "sha256": "a2ecf60c64f610df5be9323aed5cc7d9fc8e2f6a8c00a9cbccda3589b42d2824"
+    },
+    {
+      "path": "phone-default-capture-handshake-fixed/015-1206x2622.png",
+      "bytes": 729072,
+      "sha256": "14502d15d4695c63898805e71bcd9707b06f38669fb8ab3a510329f1d9b60dcc"
+    },
+    {
+      "path": "phone-default-capture-handshake-fixed/016-1206x2622.png",
+      "bytes": 729498,
+      "sha256": "fcfb793b3183487f714f9f6588772fdaec2b6c2894e6df3b640b6680e752c9f1"
+    },
+    {
+      "path": "posture-max-score-all-poses/008-1398x2034.png",
+      "bytes": 1074481,
+      "sha256": "e4d2ae0699e48a2b5139a37baaedee70b5d022a6ec9e32ec04122047c675a52b"
+    },
+    {
+      "path": "posture-max-score-all-poses/008-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "posture-max-score-all-poses/010-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "posture-max-score-all-poses/010-2007x2853.png",
+      "bytes": 1370516,
+      "sha256": "73495d12dc63fe4615d5020eb9cfdd97d492a69aeef6e239b802b25939cff918"
+    },
+    {
+      "path": "posture-max-score-all-poses/012-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "posture-max-score-all-poses/012-2007x2853.png",
+      "bytes": 1232313,
+      "sha256": "4a6653c2b9948f149c90c91e338aacfde7a9e14d7c63e15d38439ff7d7b8c7e8"
+    },
+    {
+      "path": "posture-max-symmetry-all-poses/010-1398x2034.png",
+      "bytes": 1098573,
+      "sha256": "42a6e947d166265b9882626961f22ef2f560140a75ac3bdfc5a7232638bfe083"
+    },
+    {
+      "path": "posture-max-symmetry-all-poses/010-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "posture-max-symmetry-all-poses/011-1398x2034.png",
+      "bytes": 1169180,
+      "sha256": "2c400efb00b41c90b7b5cf5cc02503929b79d92bfca0753702c0408141022e3b"
+    },
+    {
+      "path": "posture-max-symmetry-all-poses/011-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "posture-max-symmetry-all-poses/012-1398x2034.png",
+      "bytes": 1171668,
+      "sha256": "0393e17f1ccff24b3cbce59410717a74f569c8e39f41de6780ed29050bc13bf6"
+    },
+    {
+      "path": "posture-max-symmetry-all-poses/012-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "posture-max-symmetry-all-poses/013-1398x2034.png",
+      "bytes": 1176750,
+      "sha256": "6b772914f40fde088d7de3cf1270ed2a5e718e92448a79400b2c1ae3c93e5115"
+    },
+    {
+      "path": "posture-max-symmetry-all-poses/013-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "posture-max-symmetry-all-poses/014-1398x2034.png",
+      "bytes": 1170639,
+      "sha256": "ff389d5681698d5a1766b7498e8e1d34094a0e7e86ff9b5500d67ece48b5294f"
+    },
+    {
+      "path": "posture-max-symmetry-all-poses/014-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "posture-max-symmetry-all-poses/015-1398x2034.png",
+      "bytes": 1162890,
+      "sha256": "417ae8515087f68da9963a3b375ecae6238b3c5cad343f8bf993691d7ae9cae4"
+    },
+    {
+      "path": "posture-max-symmetry-all-poses/015-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "posture-max-symmetry-all-poses/017-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "posture-max-symmetry-all-poses/017-2007x2853.png",
+      "bytes": 1620847,
+      "sha256": "e9ccc1427d1306b9125389193c9ec33abf816450e4a4db56773dd400be2ee3e9"
+    },
+    {
+      "path": "posture-max-symmetry-all-poses/018-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "posture-max-symmetry-all-poses/018-2007x2853.png",
+      "bytes": 1627614,
+      "sha256": "ea870fab654c5cec50c2cbd6e3ec8d2df38b607dbcbec9b125fb7dacb73ee16e"
+    },
+    {
+      "path": "posture-max-symmetry-all-poses/019-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "posture-max-symmetry-all-poses/019-2007x2853.png",
+      "bytes": 1616251,
+      "sha256": "76d7b975f06068d9a0b0b3333b9e20ffcf05de0d6c2d69cc6435c8f1f19ec185"
+    },
+    {
+      "path": "posture-max-symmetry-all-poses/020-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "posture-max-symmetry-all-poses/020-2007x2853.png",
+      "bytes": 1118149,
+      "sha256": "e34a60fcb55d036ca9b8389eb97624025121356715adb14f896fd394333f9e8a"
+    },
+    {
+      "path": "posture-max-symmetry-all-poses/021-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "posture-max-symmetry-all-poses/021-2007x2853.png",
+      "bytes": 1113617,
+      "sha256": "ab61ebbc92d9b607d079a669f3efe7ce33080bd59c81abedd27ab960905ced41"
+    },
+    {
+      "path": "posture-max-symmetry-all-poses/022-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "posture-max-symmetry-all-poses/022-2007x2853.png",
+      "bytes": 1118459,
+      "sha256": "c93a154a13cdfbf11bb1b6fe9ebc120d3698db453dddfbd1354a605b78adbe4c"
+    },
+    {
+      "path": "posture-max-symmetry-all-poses/024-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "posture-max-symmetry-all-poses/024-2007x2853.png",
+      "bytes": 1594985,
+      "sha256": "f5a92983828076b3481fbd710ff8c115a01d0f20e3a05ed0bea11c2dba1dce1a"
+    },
+    {
+      "path": "posture-max-symmetry-all-poses/025-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "posture-max-symmetry-all-poses/025-2007x2853.png",
+      "bytes": 1623626,
+      "sha256": "534b2486894588dc3528e447db3f23d016b695afb2d504d65e80dfa5817d3eda"
+    },
+    {
+      "path": "posture-max-symmetry-all-poses/026-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "posture-max-symmetry-all-poses/026-2007x2853.png",
+      "bytes": 1592963,
+      "sha256": "fbe8bc06513fb5b635a394d34c0f5726b0ee65f1ba6f652e745b7f84c551e92f"
+    },
+    {
+      "path": "posture-max-symmetry-all-poses/027-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "posture-max-symmetry-all-poses/027-2007x2853.png",
+      "bytes": 1060924,
+      "sha256": "8f60c4d093046aeb840d5f90edf8560af09bdb56c147370e11d32b5b463a34ae"
+    },
+    {
+      "path": "posture-max-symmetry-all-poses/028-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "posture-max-symmetry-all-poses/028-2007x2853.png",
+      "bytes": 1063011,
+      "sha256": "6a737688ed09a62252d6a4877d1cc048d6dc4d5b10028592e4734898512e5653"
+    },
+    {
+      "path": "posture-max-symmetry-all-poses/029-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "posture-max-symmetry-all-poses/029-2007x2853.png",
+      "bytes": 1066230,
+      "sha256": "78e57e87e81af5c16086c664aab79e0125ef88b46be744bde3cba90498aa234e"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/004-1398x2034.png",
+      "bytes": 1332243,
+      "sha256": "d7ae8d9167d7ec7fad46927e611cb6329b92d9021701c959c9f3d81135de9acc"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/004-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/005-1398x2034.png",
+      "bytes": 1344634,
+      "sha256": "3b785c0574bdf882773883502ac987a3f499ed6c55295e3ebd8210cb925c5752"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/005-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/006-1398x2034.png",
+      "bytes": 1342412,
+      "sha256": "e8625837a290cd7dfe557ee5bfe79d3d2db3106b3921fc4d96ecbc447577db8b"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/006-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/007-1398x2034.png",
+      "bytes": 1370009,
+      "sha256": "a902dae62e06bd5b9a10c13d8d69a5c39c097f8a47effe92c3fb09cd0d146689"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/007-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/008-1398x2034.png",
+      "bytes": 1363318,
+      "sha256": "d5435f0ffa8258a0b3ba359ab5c40255f29c4834c6546e70a293111521077dcc"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/008-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/009-1398x2034.png",
+      "bytes": 1380181,
+      "sha256": "1b5f9d61dc2b49ce12a5184582a8c7b0cfe8e42831d506308d5da8afc33847df"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/009-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/010-1398x2034.png",
+      "bytes": 1131039,
+      "sha256": "578fe801cc7e2802098f66e076876fb82c4e67f452e8286129b6441bcc449a5b"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/010-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/011-1398x2034.png",
+      "bytes": 1190177,
+      "sha256": "29bf5eb542c6c93f3240cddbb9744ed1ae437f86b6009a754cc1d1af024f6e47"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/011-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/012-1398x2034.png",
+      "bytes": 1182634,
+      "sha256": "acba4cd177802a336c22d8ed493ea5a6fba8c4a59656001369795e901e9d0123"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/012-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/014-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/014-2007x2853.png",
+      "bytes": 1913688,
+      "sha256": "89fe448630753a5ac145f6230235174e57a2aae22dd9407423cb0378f4fc70b8"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/015-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/015-2007x2853.png",
+      "bytes": 1910408,
+      "sha256": "61e32a864a7ab6012a680b5bc5f0bdbc0857f482df2d5fa5cb6cc882aeb0a826"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/016-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/016-2007x2853.png",
+      "bytes": 1907286,
+      "sha256": "6ea1e33af320a4c8953c42e531c1902cd53d02d7464bcffa09df2d30e7fd2c0f"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/017-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/017-2007x2853.png",
+      "bytes": 1937946,
+      "sha256": "42fac029fc1f1b7c1b251beeefae3a955a7d39786a44e019214eb28e7047f5ef"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/018-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/018-2007x2853.png",
+      "bytes": 1927739,
+      "sha256": "647b86800ed2ecdcf6c0ca60c296b9cdb00828913d322612764161d27855cf53"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/019-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/019-2007x2853.png",
+      "bytes": 1428014,
+      "sha256": "3d1bcc5041d6b080335d432e39d3d839ff40b115630618ad8f392010d375a823"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/020-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/020-2007x2853.png",
+      "bytes": 1187600,
+      "sha256": "f2a739fe210e2dcd15fb6064bbf4da4e34143263b3ce66d5e57cfa320c30c8eb"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/021-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/021-2007x2853.png",
+      "bytes": 1211701,
+      "sha256": "4b02ee574eebcad9da9e01ae3ec6cf4b23d6dda16f799aa2c5212473ecad1dae"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/022-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/022-2007x2853.png",
+      "bytes": 1210260,
+      "sha256": "bc69d0ac7bfcac583b968f5bebfab75e0998b9a78bfe9a2de85310627519642e"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/024-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/024-2007x2853.png",
+      "bytes": 1704565,
+      "sha256": "a5e2eaad41990ecd28a2792ba3106bed9dac095470be2cf3a1e6133d3ebe2b12"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/025-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/025-2007x2853.png",
+      "bytes": 1712602,
+      "sha256": "c564b7d3de5cce3928380b804f8256e2bdc20b5b66c0edebc15d013b82822a01"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/026-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/026-2007x2853.png",
+      "bytes": 1304891,
+      "sha256": "3c5d9d7ac04d7aba28d8a7b68a7f5ac74cf0199fbb5de0f41149f9dc88d3f3a8"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/027-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/027-2007x2853.png",
+      "bytes": 1281547,
+      "sha256": "91d47ab42a908caeaddcf21dc57c1cf2758c0d2d943fcfd1440387bbe4c7e30b"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/028-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/028-2007x2853.png",
+      "bytes": 1301359,
+      "sha256": "3af41430d0e367e07946abe302402a50872ebee886a569544f440f3f54e2a34c"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/029-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/029-2007x2853.png",
+      "bytes": 1293625,
+      "sha256": "2be5b45596e06f3ed008c6c83a24df8c2e59c00fc52c95085c40728732f1988f"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/030-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/030-2007x2853.png",
+      "bytes": 1163176,
+      "sha256": "adce4f35589ce3a25bc7ee37120c3c494620850cdf1085db36e57b6a4c2f1e96"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/031-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/031-2007x2853.png",
+      "bytes": 1167783,
+      "sha256": "cda7cb049e68917736b1ccb8fd6d45b957365205d488596a3be81650880add8c"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/032-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "stress-max-contributor-details-fixed/032-2007x2853.png",
+      "bytes": 1165705,
+      "sha256": "247046b72f583d0a98ba55da7da39d0ab4660252dbc437ff948330de92de562e"
+    },
+    {
+      "path": "stress-max-numeric-all-poses/004-1398x2034.png",
+      "bytes": 1389577,
+      "sha256": "70e49e61859f42a2c1faac553382f3c0e7bb6b5c4e4442127af083b3349d6c28"
+    },
+    {
+      "path": "stress-max-numeric-all-poses/004-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "stress-max-numeric-all-poses/005-1398x2034.png",
+      "bytes": 1377670,
+      "sha256": "b0081e4cf931747f1eb77a7e3d03365a3185025e769cbf24d86bd9fd3583b730"
+    },
+    {
+      "path": "stress-max-numeric-all-poses/005-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "stress-max-numeric-all-poses/006-1398x2034.png",
+      "bytes": 1368050,
+      "sha256": "86d987ec2edd1a7bd9878845087203a1ea59238e5732f3d645ed923b0869f56f"
+    },
+    {
+      "path": "stress-max-numeric-all-poses/006-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "stress-max-numeric-all-poses/007-1398x2034.png",
+      "bytes": 1168031,
+      "sha256": "3fb5b0376efa51653d57079ead5f8ad9925e5bd340f00b92ed709819a7cc19fc"
+    },
+    {
+      "path": "stress-max-numeric-all-poses/007-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "stress-max-numeric-all-poses/008-1398x2034.png",
+      "bytes": 1166573,
+      "sha256": "cad8cf14d3d13acd8e4d63dac9f6eeee735229578dbae061af3fd8e20a17125a"
+    },
+    {
+      "path": "stress-max-numeric-all-poses/008-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "stress-max-numeric-all-poses/009-1398x2034.png",
+      "bytes": 1190404,
+      "sha256": "7d98f7f8c4edd20295b0b305e46fd256820e4d8e3000a4f6c701d72a0a516d56"
+    },
+    {
+      "path": "stress-max-numeric-all-poses/009-2007x2853.png",
+      "bytes": 106123,
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e"
+    },
+    {
+      "path": "stress-max-numeric-all-poses/011-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "stress-max-numeric-all-poses/011-2007x2853.png",
+      "bytes": 1890412,
+      "sha256": "fc9753f6f942cdaf5afdf29a8add22cc40a675fca99cedf8fd48a3eaa21a067e"
+    },
+    {
+      "path": "stress-max-numeric-all-poses/012-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "stress-max-numeric-all-poses/012-2007x2853.png",
+      "bytes": 1519491,
+      "sha256": "f3b5d9b900aecf030553b70658f834945034ca271d2b9d6484409283550b404e"
+    },
+    {
+      "path": "stress-max-numeric-all-poses/013-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "stress-max-numeric-all-poses/013-2007x2853.png",
+      "bytes": 1486519,
+      "sha256": "aa61a8db4af15568d4c2cb5e8ab00a298fe05a90189a84459cac4269caef5174"
+    },
+    {
+      "path": "stress-max-numeric-all-poses/014-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "stress-max-numeric-all-poses/014-2007x2853.png",
+      "bytes": 1231910,
+      "sha256": "cc29fb5f2a61eec8c8215da7e0f4722d84cd0b4247d4983d4e8ca470cc93157a"
+    },
+    {
+      "path": "stress-max-numeric-all-poses/015-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "stress-max-numeric-all-poses/015-2007x2853.png",
+      "bytes": 1231306,
+      "sha256": "d5223708cd231a64a5929a25fdd2c8ecdb461da9e68914684f6aadf5c1284257"
+    },
+    {
+      "path": "stress-max-numeric-all-poses/016-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "stress-max-numeric-all-poses/016-2007x2853.png",
+      "bytes": 1241433,
+      "sha256": "cf0da2bd8a271b475d66260722347ea488925cce679c6fdb8380d9d707bf2d9a"
+    },
+    {
+      "path": "stress-max-numeric-all-poses/018-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "stress-max-numeric-all-poses/018-2007x2853.png",
+      "bytes": 1733232,
+      "sha256": "ab8e81539738f5f483ce10b144e0a32a37c125a2954c931327e41faeb7becfba"
+    },
+    {
+      "path": "stress-max-numeric-all-poses/019-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "stress-max-numeric-all-poses/019-2007x2853.png",
+      "bytes": 1306008,
+      "sha256": "dd6dcc72bf3ffd7a3f7c7e0eb2ae8c82b13a7c601aced311a22335845c2a376d"
+    },
+    {
+      "path": "stress-max-numeric-all-poses/020-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "stress-max-numeric-all-poses/020-2007x2853.png",
+      "bytes": 1294606,
+      "sha256": "aeb23929de68cfa3d81615525d83407491e0fffeb6505adcd5c7cdb94fcb2590"
+    },
+    {
+      "path": "stress-max-numeric-all-poses/021-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "stress-max-numeric-all-poses/021-2007x2853.png",
+      "bytes": 1163715,
+      "sha256": "62f91139ca72c75dc2daca58bd122d5ec1da59f8ee6a3d1030a6af5deab1ca76"
+    },
+    {
+      "path": "stress-max-numeric-all-poses/022-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "stress-max-numeric-all-poses/022-2007x2853.png",
+      "bytes": 1162882,
+      "sha256": "43254bd9262814239c882a692954ab5e130cef3a6d65309ec6e3d2b3a0bec349"
+    },
+    {
+      "path": "stress-max-numeric-all-poses/023-1398x2034.png",
+      "bytes": 53236,
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958"
+    },
+    {
+      "path": "stress-max-numeric-all-poses/023-2007x2853.png",
+      "bytes": 1164102,
+      "sha256": "e8c03b1582587595806397b20975b3f2a25db54d6471601acd4b71b66fe23d7c"
+    }
+  ],
+  "native_storage": "unmodified local files; large PNGs retained locally, not added to Git"
+}
