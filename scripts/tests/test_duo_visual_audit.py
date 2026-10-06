@@ -212,6 +212,19 @@ class CaptureContracts(unittest.TestCase):
         process.terminate.assert_called_once()
         process.wait.assert_called_once()
 
+    @patch.object(audit.subprocess, "Popen")
+    def test_outer_simulator_lock_is_inherited_by_test_runner(self, popen_mock):
+        process = MagicMock()
+        process.stdout = []
+        process.wait.return_value = 0
+        popen_mock.return_value = process
+        with (self.base / "lock").open("w") as lock:
+            with patch.dict(audit.os.environ, {"DUNE_SIM_TEST_LOCK_FD": str(lock.fileno())}), \
+                    patch.object(audit.sys, "argv", ["duo-visual-audit.py", str(self.output),
+                                                   "DEVICE", "all", "fake-runner"]):
+                self.assertEqual(audit.main(), 0)
+            self.assertEqual(popen_mock.call_args.kwargs["pass_fds"], (lock.fileno(),))
+
 
 class DiagnosticOutputTests(unittest.TestCase):
     def test_error_selector_stack_frames_do_not_flood_output(self):
@@ -219,6 +232,96 @@ class DiagnosticOutputTests(unittest.TestCase):
         self.assertFalse(audit.should_report_line("note: compiling views"))
         for diagnostic in ["error: build failed", "/tmp/App.swift:42:12: error: invalid member", "Test Case 'case' passed", "** TEST FAILED **", "Executed 2 tests, with 0 failures"]:
             self.assertTrue(audit.should_report_line(diagnostic), diagnostic)
+
+
+class HingeCLIContracts(unittest.TestCase):
+    line = CaptureContracts.line
+    ledger = CaptureContracts.ledger
+    screenshot = staticmethod(CaptureContracts.screenshot)
+
+    def setUp(self):
+        CaptureContracts.setUp(self)
+        self.cli = self.base / "hinge"
+        self.cli.write_text("#!/bin/sh\n")
+        self.cli.chmod(0o700)
+
+    def automatic_checkpoint(self):
+        return audit.capture_checkpoint(self.line("FOLD:partiallyOpen", seconds=120), 1,
+                                        self.output, APP_ID, "all", self.container.resolve(),
+                                        self.captures, self.checkpoints)
+
+    @patch.object(audit.time, "sleep")
+    @patch.object(audit.subprocess, "run")
+    @patch.object(audit.subprocess, "check_output", return_value=PORTS)
+    def test_verified_cli_fold_refreshes_then_captures(self, _ports, run_mock, _sleep):
+        def commands(argv, **kwargs):
+            if argv[0] == str(self.cli.resolve()):
+                return subprocess.CompletedProcess(argv, 0, "90.0" if argv[-1] == "get" else "", "")
+            return self.screenshot(argv, **kwargs)
+
+        def refresh(ack, _deadline):
+            ack.with_suffix(".ack.txt").write_text("verified postfold hierarchy")
+
+        run_mock.side_effect = commands
+        with patch.dict(audit.os.environ, {"DAILVE_DUO_HINGE_CLI": str(self.cli)}), \
+                patch.object(audit, "refresh_fold_hierarchy", side_effect=refresh), \
+                patch.object(audit, "wait_for_fold_release") as manual_wait:
+            self.automatic_checkpoint()
+        manual_wait.assert_not_called()
+        self.assertTrue(self.ledger()["valid_evidence"])
+        receipt = json.loads((self.output / "001-fold.json").read_text())
+        self.assertEqual(receipt["actual_angle"], 90.0)
+        self.assertTrue(receipt["verified"])
+        self.assertEqual(run_mock.call_args_list[0].args[0], [str(self.cli.resolve()), "-d", APP_ID, "90"])
+        self.assertEqual((self.output / "001-hierarchy.txt").read_text(), "verified postfold hierarchy")
+
+    @patch.object(audit.time, "sleep")
+    @patch.object(audit.subprocess, "run")
+    @patch.object(audit.subprocess, "check_output")
+    def test_wrong_readback_never_refreshes_captures_or_acknowledges(self, ports, run_mock, _sleep):
+        run_mock.return_value = subprocess.CompletedProcess([], 0, "0.0", "")
+        with patch.dict(audit.os.environ, {"DAILVE_DUO_HINGE_CLI": str(self.cli)}), \
+                patch.object(audit, "refresh_fold_hierarchy") as refresh:
+            with self.assertRaisesRegex(RuntimeError, "readback mismatch"):
+                self.automatic_checkpoint()
+        ports.assert_not_called()
+        refresh.assert_not_called()
+        self.assertFalse(self.ack.exists())
+        self.assertFalse(self.ledger()["valid_evidence"])
+        self.assertFalse(json.loads((self.output / "001-fold.json").read_text())["verified"])
+
+    @patch.object(audit.time, "sleep")
+    @patch.object(audit.subprocess, "run")
+    def test_nonfinite_readback_cannot_be_valid_evidence(self, run_mock, _sleep):
+        run_mock.return_value = subprocess.CompletedProcess([], 0, "nan", "")
+        with patch.dict(audit.os.environ, {"DAILVE_DUO_HINGE_CLI": str(self.cli)}):
+            with self.assertRaisesRegex(RuntimeError, "finite angle"):
+                self.automatic_checkpoint()
+        receipt = json.loads((self.output / "001-fold.json").read_text())
+        self.assertIsNone(receipt["actual_angle"])
+        self.assertFalse(self.ack.exists())
+
+    @patch.object(audit.subprocess, "run", return_value=subprocess.CompletedProcess([], 1, "", "dispatch failed"))
+    def test_failed_setter_does_not_read_back_or_acknowledge(self, run_mock):
+        with patch.dict(audit.os.environ, {"DAILVE_DUO_HINGE_CLI": str(self.cli)}):
+            with self.assertRaisesRegex(RuntimeError, "Hinge 90 failed"):
+                self.automatic_checkpoint()
+        self.assertEqual(run_mock.call_count, 1)
+        self.assertFalse(self.ack.exists())
+
+    @patch.object(audit.subprocess, "run")
+    def test_expired_fold_budget_never_dispatches(self, run_mock):
+        with patch.dict(audit.os.environ, {"DAILVE_DUO_HINGE_CLI": str(self.cli)}):
+            with self.assertRaisesRegex(RuntimeError, "insufficient capture budget"):
+                audit.set_fold_with_cli(self.output, 1, "openFlat", APP_ID, time.time() + 10)
+        run_mock.assert_not_called()
+
+    @patch.object(audit.subprocess, "run")
+    def test_ambiguous_booted_device_is_refused(self, run_mock):
+        with patch.dict(audit.os.environ, {"DAILVE_DUO_HINGE_CLI": str(self.cli)}):
+            with self.assertRaisesRegex(RuntimeError, "explicit simulator UDID"):
+                audit.set_fold_with_cli(self.output, 1, "closed", "booted", time.time() + 120)
+        run_mock.assert_not_called()
 
 
 if __name__ == "__main__":

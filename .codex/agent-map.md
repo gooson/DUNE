@@ -155,5 +155,5 @@
 - Preferred execution: 공통 위임 정책 (`.codex/skill-compat.md`)
 - Codex model/reasoning: `gpt-6-sol`, `medium`
 - Edit policy: review-only in Review/Quality, test patching allowed in Work/Resolve
-- Memory read: `.claude/skills/ui-testing/SKILL.md`
+- Memory read: `.claude/skills/ui-testing/SKILL.md` + `.codex/agent-memory/ui-test-expert.md`
 - Memory write: `.codex/agent-memory/ui-test-expert.md`

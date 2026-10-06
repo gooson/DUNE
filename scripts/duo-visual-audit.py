@@ -6,9 +6,13 @@ Set DEVELOPER_DIR explicitly. The test plan must opt into DUNE_VISUAL_AUDIT and
 DUNE_VISUAL_AUDIT_HOST_ONLY. `FOLD:<state>` checkpoints print FOLD_PENDING and
 pause until the operator changes Device Hub state and creates the release file.
 The host then requests a fresh XCTest hierarchy before capturing both displays.
+Set DAILVE_DUO_HINGE_CLI to a reviewed hinge executable to set and verify the
+angle automatically without Device Hub UI interaction.
 """
 from pathlib import Path
 import json
+import math
+import os
 import re
 import subprocess
 import sys
@@ -16,6 +20,43 @@ import time
 
 
 FOLD_STATES = {"closed", "partiallyOpen", "openFlat"}
+FOLD_ANGLES = {"closed": 0, "partiallyOpen": 90, "openFlat": 180}
+
+
+def set_fold_with_cli(output, sequence, state, device, test_deadline):
+    cli = Path(os.environ["DAILVE_DUO_HINGE_CLI"]).resolve(strict=True)
+    if not cli.is_file() or not os.access(cli, os.X_OK):
+        raise RuntimeError("Configured hinge CLI is not an executable file")
+    if not re.fullmatch(r"[A-Fa-f0-9]{8}(?:-[A-Fa-f0-9]{4}){3}-[A-Fa-f0-9]{12}", device):
+        raise RuntimeError("Automatic hinge control requires an explicit simulator UDID")
+    target = FOLD_ANGLES[state]
+    receipt = {"device": device, "state": state, "target_angle": target,
+               "cli": str(cli), "actual_angle": None, "verified": False}
+    try:
+        for command in [str(target), "get"]:
+            budget = test_deadline - time.time() - 37
+            if budget <= 0:
+                raise RuntimeError("Automatic fold has insufficient capture budget")
+            result = subprocess.run([str(cli), "-d", device, command],
+                                    capture_output=True, text=True, timeout=min(20, budget))
+            if result.returncode:
+                raise RuntimeError(f"Hinge {command} failed ({result.returncode}): {result.stderr[-600:]}")
+            if command == "get":
+                actual = float(result.stdout.strip())
+                if not math.isfinite(actual):
+                    raise RuntimeError("Hinge readback is not a finite angle")
+                receipt["actual_angle"] = actual
+                if abs(actual - target) > 1:
+                    raise RuntimeError(f"Hinge readback mismatch: target={target}, actual={actual}")
+            else:
+                time.sleep(0.5)
+        receipt["verified"] = True
+        print(f"FOLD_VERIFIED {state} target={target} actual={receipt['actual_angle']}", flush=True)
+    except Exception as exc:
+        receipt["error"] = str(exc)
+        raise
+    finally:
+        (output / f"{sequence:03}-fold.json").write_text(json.dumps(receipt) + "\n")
 
 
 def resolve_displays(device, requested_display, deadline):
@@ -126,7 +167,10 @@ def capture_checkpoint(line, sequence, output, device, requested_display,
         acknowledgement = validate_ack_path(deadline_match.group(2), container_root)
         state = fold_state(action.removeprefix("DUNE_VISUAL_AUDIT_READY "))
         if state:
-            wait_for_fold_release(output, sequence, state, test_deadline)
+            if os.environ.get("DAILVE_DUO_HINGE_CLI"):
+                set_fold_with_cli(output, sequence, state, device, test_deadline)
+            else:
+                wait_for_fold_release(output, sequence, state, test_deadline)
             refresh_fold_hierarchy(acknowledgement, test_deadline)
         remaining = test_deadline - time.time() - 2
         if remaining <= 0:
@@ -195,8 +239,10 @@ def main():
         Path.home() / "Library/Developer/CoreSimulator/Devices" / device
         / "data/Containers/Data/Application"
     ).resolve()
+    lock_fd = os.environ.get("DUNE_SIM_TEST_LOCK_FD")
+    inherited_fds = (int(lock_fd),) if lock_fd else ()
     process = subprocess.Popen(sys.argv[4:], stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-                               text=True, bufsize=1)
+                               text=True, bufsize=1, pass_fds=inherited_fds)
     sequence = 0
     try:
         with (output / "run.log").open("w") as log, (output / "captures.tsv").open("w") as captures, (output / "checkpoints.jsonl").open("w") as checkpoints:
