@@ -9,6 +9,16 @@ struct PostureDetailView: View {
     @State private var zoomImage: ZoomableImageItem?
     @State private var pdfURL: URL?
     @State private var correctiveRecommendations: [CorrectiveRecommendation] = []
+    @ScaledMetric(relativeTo: .caption) private var scaledScoreRingDiameter: CGFloat = 120
+    @ScaledMetric(relativeTo: .largeTitle) private var scaledScoreFontSize: CGFloat = 36
+
+    private var scoreRingDiameter: CGFloat {
+        min(scaledScoreRingDiameter, 220)
+    }
+
+    private var scoreFontSize: CGFloat {
+        min(scaledScoreFontSize, 72)
+    }
 
     var body: some View {
         ScrollView {
@@ -74,17 +84,17 @@ struct PostureDetailView: View {
             ZStack {
                 Circle()
                     .stroke(.quaternary, lineWidth: 12)
-                    .frame(width: 120, height: 120)
+                    .frame(width: scoreRingDiameter, height: scoreRingDiameter)
 
                 Circle()
                     .trim(from: 0, to: min(1, max(0, CGFloat(record.overallScore) / 100.0)))
                     .stroke(scoreColor(record.overallScore), style: StrokeStyle(lineWidth: 12, lineCap: .round))
-                    .frame(width: 120, height: 120)
+                    .frame(width: scoreRingDiameter, height: scoreRingDiameter)
                     .rotationEffect(.degrees(-90))
 
                 VStack(spacing: 2) {
                     Text("\(record.overallScore)")
-                        .font(.system(size: 36, weight: .bold, design: .rounded))
+                        .font(.system(size: scoreFontSize, weight: .bold, design: .rounded))
 
                     Text("/ 100")
                         .font(.caption)
