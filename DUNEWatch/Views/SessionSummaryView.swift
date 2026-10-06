@@ -504,6 +504,7 @@ struct SessionSummaryView: View {
                     WatchWorkoutRecordBuilder.makeUpdate(from: record)
                 )
             }
+            didSendCompletionUpdate = true
         }
         return true
     }
