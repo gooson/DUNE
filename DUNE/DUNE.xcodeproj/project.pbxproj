@@ -278,6 +278,7 @@
 		33CE324FBF4B54F1E9E63575 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A6273FCB6ADC519B4E4776B5 /* CoreMotion.framework */; };
 		34180C1AC523F3B8D62DE772 /* NotificationActivityDestinationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F42FA08F3EBC0232355BD823 /* NotificationActivityDestinationTests.swift */; };
 		341831B22CED501A6090869C /* WatchSyncStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28A4FB04270066E80309BA5 /* WatchSyncStatusView.swift */; };
+		3429DAF690599AD290846862 /* CloudKitSetupBackgroundTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A8349854385F4E381F0E9A4 /* CloudKitSetupBackgroundTask.swift */; };
 		3443D7E4CB14C80FF9CBFBAA /* ActivityViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31FF504B9539F2837320D522 /* ActivityViewModel.swift */; };
 		350D9B096069432FC6DD2EAF /* ExerciseRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CAA6A5B259A3FF1E4817D0E /* ExerciseRecord.swift */; };
 		352ED91E2AFBCB7D9230D6C5 /* NotificationCenterMainThreadPublisherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C92728229474AF34F191464 /* NotificationCenterMainThreadPublisherTests.swift */; };
@@ -335,6 +336,7 @@
 		3F4293D8A2E153166D08ECDD /* PersonalRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A72F9D5496419C6A5E27102 /* PersonalRecord.swift */; };
 		3F725014A01EF8C77C4A7B57 /* ScoreDetailSummaryStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 804B390B5A2BE1485E939239 /* ScoreDetailSummaryStats.swift */; };
 		3F79C8021D0F7B57D71D3CD5 /* ChartSelectionInteractionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F40EB4E81DB71F266DF52565 /* ChartSelectionInteractionTests.swift */; };
+		3FA5F0D79A253BA35BEB06A5 /* CloudKitSetupBackgroundTaskTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69723BB5109CE4677B084D3C /* CloudKitSetupBackgroundTaskTests.swift */; };
 		3FB7009D7A883550AAAE42FF /* HourlyScoreSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0E2C0BBB1A66B6D276B90E2 /* HourlyScoreSnapshotTests.swift */; };
 		3FD9C82C64DD7DAC35F57539 /* QuickStartPopularityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91A24E617E5111FCEBBC54B4 /* QuickStartPopularityService.swift */; };
 		3FDA635B49D2DE0C9FD0EB71 /* VisionSpatialViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BBABF664A04D229394C769 /* VisionSpatialViewModelTests.swift */; };
@@ -1754,6 +1756,7 @@
 		68F8855C398891B0D9A3D259 /* PostureHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostureHistoryView.swift; sourceTree = "<group>"; };
 		68FDD2541D8E466F9909EAE5 /* TemplateExerciseResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateExerciseResolver.swift; sourceTree = "<group>"; };
 		6913BEF115596695B5BB3599 /* WeeklyHabitReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyHabitReportView.swift; sourceTree = "<group>"; };
+		69723BB5109CE4677B084D3C /* CloudKitSetupBackgroundTaskTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitSetupBackgroundTaskTests.swift; sourceTree = "<group>"; };
 		697B8D595876443714958C03 /* SleepDebtInfoSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepDebtInfoSheet.swift; sourceTree = "<group>"; };
 		69D95DAA5C92BD3AA8E2A0AB /* PostureReminderSchedulerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostureReminderSchedulerTests.swift; sourceTree = "<group>"; };
 		6A3E792A39A67B889F4C2E5E /* SakuraBranchShapeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SakuraBranchShapeTests.swift; sourceTree = "<group>"; };
@@ -1934,6 +1937,7 @@
 		995009AE0CF4112E4D63A804 /* QuickStartAllExercisesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickStartAllExercisesView.swift; sourceTree = "<group>"; };
 		9A17E1B32410A97AC25B4136 /* HabitStreakServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitStreakServiceTests.swift; sourceTree = "<group>"; };
 		9A4BF33EF90B481000BDA86A /* DeletedWorkoutTombstoneStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletedWorkoutTombstoneStore.swift; sourceTree = "<group>"; };
+		9A8349854385F4E381F0E9A4 /* CloudKitSetupBackgroundTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitSetupBackgroundTask.swift; sourceTree = "<group>"; };
 		9A92AD21513190FD67FA1D72 /* HabitLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitLog.swift; sourceTree = "<group>"; };
 		9A9C22621504F4C5CEF9D260 /* DailyProgressRingCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyProgressRingCard.swift; sourceTree = "<group>"; };
 		9AD0F1E7814C64EB2AE5C435 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
@@ -3028,6 +3032,7 @@
 				F467B610ADF2DCFFB1F4AA1A /* AppLogger.swift */,
 				82D9603559E91C8D43509B25 /* AppNotificationCenterDelegate.swift */,
 				D90465CABA4963C635ADAD0B /* AppSection.swift */,
+				9A8349854385F4E381F0E9A4 /* CloudKitSetupBackgroundTask.swift */,
 				3F7483B0DEF534D4B2732250 /* ContentView.swift */,
 				805BE0A77A9483D9EBD405DD /* DUNEApp.swift */,
 				70958B798BE16A2F43E97F94 /* LaunchExperiencePlanner.swift */,
@@ -4072,6 +4077,7 @@
 				F40EB4E81DB71F266DF52565 /* ChartSelectionInteractionTests.swift */,
 				E14E3722A332E58612ECF22F /* CheckInjuryConflictUseCaseTests.swift */,
 				31DD906EA557254014A18169 /* CloudKitDateRoundtripTests.swift */,
+				69723BB5109CE4677B084D3C /* CloudKitSetupBackgroundTaskTests.swift */,
 				791722B9EE0B8158AF9BE9C1 /* CloudMirroredSharedHealthDataServiceTests.swift */,
 				8B42EB9CDCBEAE86A5456EE2 /* CoachingEngineTests.swift */,
 				4ED31F1292D8B7C32E304DC8 /* CompoundWorkoutViewModelTests.swift */,
@@ -4701,6 +4707,7 @@
 				0472205C949336F370480955 /* ChartSelectionInteraction.swift in Sources */,
 				2EC32A58D5121494C815E768 /* ChartSelectionOverlay.swift in Sources */,
 				00985232CD9E55CCD0C8998F /* CheckInjuryConflictUseCase.swift in Sources */,
+				3429DAF690599AD290846862 /* CloudKitSetupBackgroundTask.swift in Sources */,
 				3C2E466F24B51DD60DDD40E4 /* CloudMirroredSharedHealthDataService.swift in Sources */,
 				B5A224A841FDFDD5FBA67D2D /* CloudSyncConsentView.swift in Sources */,
 				BCFCC97BECC929BA1AABC6AA /* CloudSyncWaitingView.swift in Sources */,
@@ -5641,6 +5648,7 @@
 				3F79C8021D0F7B57D71D3CD5 /* ChartSelectionInteractionTests.swift in Sources */,
 				97DD10C2ED96D3E10A46243A /* CheckInjuryConflictUseCaseTests.swift in Sources */,
 				ADB31E7E1D7A35100B2E2E19 /* CloudKitDateRoundtripTests.swift in Sources */,
+				3FA5F0D79A253BA35BEB06A5 /* CloudKitSetupBackgroundTaskTests.swift in Sources */,
 				2929AE54801029332A24E9C4 /* CloudMirroredSharedHealthDataServiceTests.swift in Sources */,
 				A50E53C911338ED02BE66AE7 /* CoachingEngineTests.swift in Sources */,
 				78854C55AA44801DB342BEF6 /* CompoundWorkoutViewModelTests.swift in Sources */,
