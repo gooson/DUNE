@@ -13,6 +13,7 @@ struct PersonalRecordsDetailView: View {
     @State private var viewModel = PersonalRecordsDetailViewModel()
     @State private var shareImage: ShareableImage?
     @Environment(\.appTheme) private var theme
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     private var columns: [GridItem] {
         [GridItem(.flexible(), spacing: DS.Spacing.sm),
@@ -253,14 +254,23 @@ struct PersonalRecordsDetailView: View {
                     )
                     .foregroundStyle(chartColor)
                     .symbolSize(isLatestPoint(record) ? 100 : 50)
-                    .annotation(position: .top, spacing: 6) {
+                    .annotation(position: .top, spacing: 6, overflowResolution:
+                                    dynamicTypeSize.isAccessibilitySize
+                                    ? .init(x: .fit(to: .plot), y: .fit(to: .chart))
+                                    : .automatic) {
                         if isLatestPoint(record) {
                             Text(record.formattedValue)
-                                .font(.system(size: 10, weight: .semibold))
-                                .foregroundStyle(chartColor)
+                                .font(dynamicTypeSize.isAccessibilitySize
+                                      ? .caption.weight(.semibold)
+                                      : .system(size: 10, weight: .semibold))
+                                .foregroundStyle(dynamicTypeSize.isAccessibilitySize ? Color.primary : chartColor)
+                                .fixedSize()
                                 .padding(.horizontal, 4)
                                 .padding(.vertical, 2)
-                                .background(.ultraThinMaterial, in: Capsule())
+                                .background(dynamicTypeSize.isAccessibilitySize
+                                            ? AnyShapeStyle(DS.Color.surfacePrimary)
+                                            : AnyShapeStyle(.ultraThinMaterial), in: Capsule())
+                                .accessibilityIdentifier("personal-records-timeline-latest-value")
                         }
                     }
                 }

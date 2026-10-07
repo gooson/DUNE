@@ -5,6 +5,7 @@ struct SuggestedWorkoutCard: View {
     let onStartExercise: (ExerciseDefinition) -> Void
 
     @Environment(\.appTheme) private var theme
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var selectedExercise: ExerciseDefinition?
 
     var body: some View {
@@ -38,21 +39,27 @@ struct SuggestedWorkoutCard: View {
                 Button {
                     selectedExercise = exercise.definition
                 } label: {
-                    HStack(spacing: DS.Spacing.sm) {
+                    let layout = dynamicTypeSize.isAccessibilitySize
+                        ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.xs))
+                        : AnyLayout(HStackLayout(spacing: DS.Spacing.sm))
+                    layout {
                         Text(exercise.definition.localizedName)
                             .font(.subheadline)
                             .foregroundStyle(theme.sandColor)
-                            .lineLimit(1)
+                            .lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 1)
+                            .fixedSize(horizontal: false, vertical: true)
 
-                        Spacer()
+                        if !dynamicTypeSize.isAccessibilitySize { Spacer() }
 
-                        Text("\(exercise.suggestedSets.formattedWithSeparator) sets")
-                            .font(.caption)
-                            .foregroundStyle(DS.Color.textSecondary)
+                        HStack {
+                            Text("\(exercise.suggestedSets.formattedWithSeparator) sets")
+                                .font(.caption)
+                                .foregroundStyle(DS.Color.textSecondary)
 
-                        Image(systemName: "chevron.right")
-                            .font(.caption2)
-                            .foregroundStyle(.tertiary)
+                            Image(systemName: "chevron.right")
+                                .font(.caption2)
+                                .foregroundStyle(.tertiary)
+                        }
                     }
                     .padding(.vertical, DS.Spacing.xxs)
                 }

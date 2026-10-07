@@ -1,0 +1,264 @@
+{
+  "open": {
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "angle": {
+    "exit": 0,
+    "stdout": "180.0\n",
+    "stderr": ""
+  },
+  "before": {
+    "exit": 0,
+    "stdout": "{\n  \"info\" : {\n    \"arguments\" : [\n      \"devicectl\",\n      \"device\",\n      \"orientation\",\n      \"get\",\n      \"--device\",\n      \"5A2A5D3F-3D53-4326-99DE-47823CA256FA\",\n      \"--timeout\",\n      \"10\",\n      \"--json-output\",\n      \"-\"\n    ],\n    \"commandType\" : \"devicectl.device.orientation.get\",\n    \"environment\" : {\n      \"TERM\" : \"dumb\"\n    },\n    \"jsonVersion\" : 5,\n    \"outcome\" : \"success\",\n    \"version\" : \"651.13.4\"\n  },\n  \"result\" : {\n    \"deviceIdentifier\" : \"5A2A5D3F-3D53-4326-99DE-47823CA256FA\",\n    \"deviceIsOrientationLocked\" : false,\n    \"deviceOrientation\" : \"portrait\",\n    \"deviceOrientationNonFlat\" : \"portrait\"\n  }\n}\n",
+    "stderr": "Current Device Orientation: portrait\n",
+    "json": {
+      "info": {
+        "arguments": [
+          "devicectl",
+          "device",
+          "orientation",
+          "get",
+          "--device",
+          "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+          "--timeout",
+          "10",
+          "--json-output",
+          "-"
+        ],
+        "commandType": "devicectl.device.orientation.get",
+        "environment": {
+          "TERM": "dumb"
+        },
+        "jsonVersion": 5,
+        "outcome": "success",
+        "version": "651.13.4"
+      },
+      "result": {
+        "deviceIdentifier": "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+        "deviceIsOrientationLocked": false,
+        "deviceOrientation": "portrait",
+        "deviceOrientationNonFlat": "portrait"
+      }
+    }
+  },
+  "set": {
+    "exit": 0,
+    "stdout": "{\n  \"info\" : {\n    \"arguments\" : [\n      \"devicectl\",\n      \"device\",\n      \"orientation\",\n      \"set\",\n      \"--device\",\n      \"5A2A5D3F-3D53-4326-99DE-47823CA256FA\",\n      \"landscapeLeft\",\n      \"--timeout\",\n      \"10\",\n      \"--json-output\",\n      \"-\"\n    ],\n    \"commandType\" : \"devicectl.device.orientation.set\",\n    \"environment\" : {\n      \"TERM\" : \"dumb\"\n    },\n    \"jsonVersion\" : 5,\n    \"outcome\" : \"success\",\n    \"version\" : \"651.13.4\"\n  },\n  \"result\" : {\n    \"deviceIdentifier\" : \"5A2A5D3F-3D53-4326-99DE-47823CA256FA\",\n    \"deviceIsOrientationLocked\" : false,\n    \"deviceOrientation\" : \"landscapeLeft\",\n    \"deviceOrientationNonFlat\" : \"landscapeLeft\"\n  }\n}\n",
+    "stderr": "New Device Orientation: landscapeLeft\n",
+    "json": {
+      "info": {
+        "arguments": [
+          "devicectl",
+          "device",
+          "orientation",
+          "set",
+          "--device",
+          "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+          "landscapeLeft",
+          "--timeout",
+          "10",
+          "--json-output",
+          "-"
+        ],
+        "commandType": "devicectl.device.orientation.set",
+        "environment": {
+          "TERM": "dumb"
+        },
+        "jsonVersion": 5,
+        "outcome": "success",
+        "version": "651.13.4"
+      },
+      "result": {
+        "deviceIdentifier": "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+        "deviceIsOrientationLocked": false,
+        "deviceOrientation": "landscapeLeft",
+        "deviceOrientationNonFlat": "landscapeLeft"
+      }
+    }
+  },
+  "observations": [
+    {
+      "exit": 0,
+      "stdout": "{\n  \"info\" : {\n    \"arguments\" : [\n      \"devicectl\",\n      \"device\",\n      \"orientation\",\n      \"get\",\n      \"--device\",\n      \"5A2A5D3F-3D53-4326-99DE-47823CA256FA\",\n      \"--timeout\",\n      \"10\",\n      \"--json-output\",\n      \"-\"\n    ],\n    \"commandType\" : \"devicectl.device.orientation.get\",\n    \"environment\" : {\n      \"TERM\" : \"dumb\"\n    },\n    \"jsonVersion\" : 5,\n    \"outcome\" : \"success\",\n    \"version\" : \"651.13.4\"\n  },\n  \"result\" : {\n    \"deviceIdentifier\" : \"5A2A5D3F-3D53-4326-99DE-47823CA256FA\",\n    \"deviceIsOrientationLocked\" : false,\n    \"deviceOrientation\" : \"portrait\",\n    \"deviceOrientationNonFlat\" : \"portrait\"\n  }\n}\n",
+      "stderr": "Current Device Orientation: portrait\n",
+      "json": {
+        "info": {
+          "arguments": [
+            "devicectl",
+            "device",
+            "orientation",
+            "get",
+            "--device",
+            "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+            "--timeout",
+            "10",
+            "--json-output",
+            "-"
+          ],
+          "commandType": "devicectl.device.orientation.get",
+          "environment": {
+            "TERM": "dumb"
+          },
+          "jsonVersion": 5,
+          "outcome": "success",
+          "version": "651.13.4"
+        },
+        "result": {
+          "deviceIdentifier": "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+          "deviceIsOrientationLocked": false,
+          "deviceOrientation": "portrait",
+          "deviceOrientationNonFlat": "portrait"
+        }
+      }
+    },
+    {
+      "exit": 0,
+      "stdout": "{\n  \"info\" : {\n    \"arguments\" : [\n      \"devicectl\",\n      \"device\",\n      \"orientation\",\n      \"get\",\n      \"--device\",\n      \"5A2A5D3F-3D53-4326-99DE-47823CA256FA\",\n      \"--timeout\",\n      \"10\",\n      \"--json-output\",\n      \"-\"\n    ],\n    \"commandType\" : \"devicectl.device.orientation.get\",\n    \"environment\" : {\n      \"TERM\" : \"dumb\"\n    },\n    \"jsonVersion\" : 5,\n    \"outcome\" : \"success\",\n    \"version\" : \"651.13.4\"\n  },\n  \"result\" : {\n    \"deviceIdentifier\" : \"5A2A5D3F-3D53-4326-99DE-47823CA256FA\",\n    \"deviceIsOrientationLocked\" : false,\n    \"deviceOrientation\" : \"portrait\",\n    \"deviceOrientationNonFlat\" : \"portrait\"\n  }\n}\n",
+      "stderr": "Current Device Orientation: portrait\n",
+      "json": {
+        "info": {
+          "arguments": [
+            "devicectl",
+            "device",
+            "orientation",
+            "get",
+            "--device",
+            "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+            "--timeout",
+            "10",
+            "--json-output",
+            "-"
+          ],
+          "commandType": "devicectl.device.orientation.get",
+          "environment": {
+            "TERM": "dumb"
+          },
+          "jsonVersion": 5,
+          "outcome": "success",
+          "version": "651.13.4"
+        },
+        "result": {
+          "deviceIdentifier": "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+          "deviceIsOrientationLocked": false,
+          "deviceOrientation": "portrait",
+          "deviceOrientationNonFlat": "portrait"
+        }
+      }
+    },
+    {
+      "exit": 0,
+      "stdout": "{\n  \"info\" : {\n    \"arguments\" : [\n      \"devicectl\",\n      \"device\",\n      \"orientation\",\n      \"get\",\n      \"--device\",\n      \"5A2A5D3F-3D53-4326-99DE-47823CA256FA\",\n      \"--timeout\",\n      \"10\",\n      \"--json-output\",\n      \"-\"\n    ],\n    \"commandType\" : \"devicectl.device.orientation.get\",\n    \"environment\" : {\n      \"TERM\" : \"dumb\"\n    },\n    \"jsonVersion\" : 5,\n    \"outcome\" : \"success\",\n    \"version\" : \"651.13.4\"\n  },\n  \"result\" : {\n    \"deviceIdentifier\" : \"5A2A5D3F-3D53-4326-99DE-47823CA256FA\",\n    \"deviceIsOrientationLocked\" : false,\n    \"deviceOrientation\" : \"portrait\",\n    \"deviceOrientationNonFlat\" : \"portrait\"\n  }\n}\n",
+      "stderr": "Current Device Orientation: portrait\n",
+      "json": {
+        "info": {
+          "arguments": [
+            "devicectl",
+            "device",
+            "orientation",
+            "get",
+            "--device",
+            "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+            "--timeout",
+            "10",
+            "--json-output",
+            "-"
+          ],
+          "commandType": "devicectl.device.orientation.get",
+          "environment": {
+            "TERM": "dumb"
+          },
+          "jsonVersion": 5,
+          "outcome": "success",
+          "version": "651.13.4"
+        },
+        "result": {
+          "deviceIdentifier": "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+          "deviceIsOrientationLocked": false,
+          "deviceOrientation": "portrait",
+          "deviceOrientationNonFlat": "portrait"
+        }
+      }
+    },
+    {
+      "exit": 0,
+      "stdout": "{\n  \"info\" : {\n    \"arguments\" : [\n      \"devicectl\",\n      \"device\",\n      \"orientation\",\n      \"get\",\n      \"--device\",\n      \"5A2A5D3F-3D53-4326-99DE-47823CA256FA\",\n      \"--timeout\",\n      \"10\",\n      \"--json-output\",\n      \"-\"\n    ],\n    \"commandType\" : \"devicectl.device.orientation.get\",\n    \"environment\" : {\n      \"TERM\" : \"dumb\"\n    },\n    \"jsonVersion\" : 5,\n    \"outcome\" : \"success\",\n    \"version\" : \"651.13.4\"\n  },\n  \"result\" : {\n    \"deviceIdentifier\" : \"5A2A5D3F-3D53-4326-99DE-47823CA256FA\",\n    \"deviceIsOrientationLocked\" : false,\n    \"deviceOrientation\" : \"portrait\",\n    \"deviceOrientationNonFlat\" : \"portrait\"\n  }\n}\n",
+      "stderr": "Current Device Orientation: portrait\n",
+      "json": {
+        "info": {
+          "arguments": [
+            "devicectl",
+            "device",
+            "orientation",
+            "get",
+            "--device",
+            "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+            "--timeout",
+            "10",
+            "--json-output",
+            "-"
+          ],
+          "commandType": "devicectl.device.orientation.get",
+          "environment": {
+            "TERM": "dumb"
+          },
+          "jsonVersion": 5,
+          "outcome": "success",
+          "version": "651.13.4"
+        },
+        "result": {
+          "deviceIdentifier": "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+          "deviceIsOrientationLocked": false,
+          "deviceOrientation": "portrait",
+          "deviceOrientationNonFlat": "portrait"
+        }
+      }
+    }
+  ],
+  "ports": {
+    "exit": 0,
+    "stdout": "Port:\n    UUID: 0053952E-A60F-416A-AB27-5BBDFDBC77E3\n    Class: Unknown\n    Port Identifier: com.apple.display.captureservice\n    Power state: On\n\nPort:\n    UUID: A0AA5A9F-66C1-4C09-9029-BB249EFBB820\n    Class: Display\n    Port Identifier: com.apple.framebuffer.display\n    Power state: On\n    Display class: 0\n    Default width: 2007\n    Default height: 2853\n    Default pixel format: 'BGRA'\n    IOSurface port:\n        width              = 2007\n        height             = 2853\n        bytes per row      = 8064\n        size               = 23019520\n        pixel format       = 'BGRA'\n        bytes per element  = 4\n        CPU cache mode     = Default cache\n        Pixel size casting = Yes\n\nPort:\n    UUID: 918CD3E8-0318-4703-815F-A5F34B19E897\n    Class: Display\n    Port Identifier: com.apple.framebuffer.display\n    Power state: On\n    Display class: 1\n    Default width: 720\n    Default height: 480\n    Default pixel format: 'BGRA'\n\nPort:\n    UUID: 0FB3E4CC-FDEA-4DFF-A2B0-F2B874AB99EA\n    Class: Display\n    Port Identifier: com.apple.framebuffer.display\n    Power state: On\n    Display class: 0\n    Default width: 1398\n    Default height: 2034\n    Default pixel format: 'BGRA'\n    IOSurface port:\n        width              = 1398\n        height             = 2034\n        bytes per row      = 5632\n        size               = 11468800\n        pixel format       = 'BGRA'\n        bytes per element  = 4\n        CPU cache mode     = Default cache\n        Pixel size casting = Yes\n\nPort:\n    UUID: AD3C44EC-90A9-49C3-8B76-1E645C7CA77E\n    Class: Display\n    Port Identifier: com.apple.framebuffer.display\n    Power state: On\n    Display class: 1\n    Default width: 720\n    Default height: 480\n    Default pixel format: 'BGRA'\n\nPort:\n    UUID: 7778F564-F6BB-4392-9D83-969669CF1229\n    Class: Display\n    Port Identifier: com.apple.framebuffer.display\n    Power state: On\n    Display class: 1\n    Default width: 7680\n    Default height: 4320\n    Default pixel format: 'BGRA'\n\nPort:\n    UUID: DEA56A77-6CF6-4BB5-9CC7-3F5DDA3D8F78\n    Class: DisplayAdapter\n    Port Identifier: com.apple.framebuffer.server\n    Power state: On\n    Creatable Screen Properties:\n    Connected Screens:\n    (5) Resizable:\n        Screen ID: 5\n        Name: Resizable\n        Unique ID: 4C78519F-D924-47FC-89A1-595B0899914F\n        Device Name: resizable\n        Seed: 3416\n        Screen Type: Scene\n        Pixel Size: {7680, 4320}\n        Dot Pitch: 120\n        Mask URL: (none)\n        Mask ID: (none)\n        Chrome ID: (none)\n        Preferred UI Scale: 3\n        Pixel Format: 'BGRA'\n        Colorspace: sRGB\n        HDR Mode: SDR\n        Refresh Rate: 6000\n        UI Orientation: Ambiguous\n    (2) TVOut:\n        Screen ID: 2\n        Name: TVOut\n        Unique ID: 36BB14A4-7498-41CB-B195-B4AB5004430C\n        Device Name: external-0\n        Seed: 3417\n        Screen Type: TVOut\n        Pixel Size: {720, 480}\n        Dot Pitch: 72\n        Mask URL: (none)\n        Mask ID: (none)\n        Chrome ID: (none)\n        Preferred UI Scale: 1\n        Pixel Format: 'BGRA'\n        Colorspace: sRGB\n        HDR Mode: SDR\n        Refresh Rate: 6000\n        UI Orientation: Ambiguous\n    (1) LCD:\n        Screen ID: 1\n        Name: LCD\n        Unique ID: FD9E0C8A-40D5-4811-843E-F56531821857\n        Device Name: primary\n        Seed: 3418\n        Screen Type: Integrated\n        Pixel Size: {1398, 2034}\n        Dot Pitch: 460\n        Mask URL: file:///Library/Developer/DeviceKit/FramebufferMasks/1C896A2B-F0D7-405C-8D0F-66E4B80AD044.pdf\n        Mask ID: 1C896A2B-F0D7-405C-8D0F-66E4B80AD044\n        Chrome ID: com.apple.dt.devicekit.chrome.phone15\n        Preferred UI Scale: 3\n        Pixel Format: 'BGRA'\n        Colorspace: DCI-P3\n        HDR Mode: SDR\n        Refresh Rate: 6000\n        UI Orientation: Landscape Left\n    (4) Wireless:\n        Screen ID: 4\n        Name: Wireless\n        Unique ID: 25A7DD5F-BE69-4CF0-83F8-E6102E219446\n        Device Name: wireless0\n        Seed: 3419\n        Screen Type: CarPlay\n        Pixel Size: {720, 480}\n        Dot Pitch: 72\n        Mask URL: (none)\n        Mask ID: (none)\n        Chrome ID: (none)\n        Preferred UI Scale: 1\n        Pixel Format: 'BGRA'\n        Colorspace: sRGB\n        HDR Mode: SDR\n        Refresh Rate: 6000\n        UI Orientation: Ambiguous\n    (3) LCD-1:\n        Screen ID: 3\n        Name: LCD-1\n        Unique ID: 20C30BF6-F140-4F17-A209-EE5B6E99DBA9\n        Device Name: primary-1\n        Seed: 3420\n        Screen Type: Integrated\n        Pixel Size: {2007, 2853}\n        Dot Pitch: 460\n        Mask URL: file:///Library/Developer/DeviceKit/FramebufferMasks/BF0DC480-5EE2-4EC1-B02B-C75E94759832.pdf\n        Mask ID: BF0DC480-5EE2-4EC1-B02B-C75E94759832\n        Chrome ID: com.apple.dt.devicekit.chrome.phone14\n        Preferred UI Scale: 3\n        Pixel Format: 'BGRA'\n        Colorspace: sRGB\n        HDR Mode: SDR\n        Refresh Rate: 6000\n        UI Orientation: Landscape Left\n\nPort:\n    UUID: E5654E99-2F5D-4C03-8647-86B07ED4EB99\n    Class: Accelerator\n    Port Identifier: com.apple.accelerator.metal\n    Power state: On\n\nPort:\n    UUID: B19889FC-FF69-4F8D-9517-3C47DA55C22C\n    Class: Accelerator\n    Port Identifier: com.apple.accelerator.iosurface\n    Power state: On\n\nPort:\n    UUID: 543A40E8-0E9A-46A7-B69F-A88C1B43FAF4\n    Class: LegacyHID\n    Port Identifier: com.apple.CoreSimulator.HID.LegacyHID\n    Power state: On\n\nPort:\n    UUID: B179DA39-1EE3-441E-BA7E-E24FC6790D02\n    Class: StreamProcessor\n    Port Identifier: com.apple.SimStreamProcessor.default\n    Power state: On\n    Stream processor device\n    Specification:\n        SimStreamProcessorSpecificationPerformanceHint = SimStreamProcessorSpecificationPerformanceHint_MaximizePerformance\n        SimStreamProcessorSpecificationRendererHint = SimStreamProcessorSpecificationRendererHint_OpenGL\n        SimStreamProcessorSpecificationEmulationHint = SimStreamProcessorSpecificationEmulationHint_NoEmulation\n    Renderer private name: Apple M2 Max\n    Renderer version: 4.1 Metal - 91.7\n    Denylisted: No\n    Memory regions:\n\nPort:\n    UUID: 7B662895-7EF9-496F-BFD4-06E88F1D0A90\n    Class: StreamProcessor\n    Port Identifier: com.apple.SimStreamProcessor.default\n    Power state: On\n    Stream processor device\n    Specification:\n        SimStreamProcessorSpecificationPerformanceHint = SimStreamProcessorSpecificationPerformanceHint_MaximizePerformance\n        SimStreamProcessorSpecificationRendererHint = SimStreamProcessorSpecificationRendererHint_Metal\n        SimStreamProcessorSpecificationEmulationHint = SimStreamProcessorSpecificationEmulationHint_NoEmulation\n    Renderer private name: Apple M2 Max\n    Renderer version: 1.3\n    Denylisted: No\n    Memory regions:\n\nPort:\n    UUID: CF5450AF-AAE0-4DAD-8C2A-E7D6A98238C2\n    Class: StreamProcessor\n    Port Identifier: com.apple.SimStreamProcessor.default\n    Power state: On\n    Stream processor device\n    Specification:\n        SimStreamProcessorSpecificationPerformanceHint = SimStreamProcessorSpecificationPerformanceHint_Default\n        SimStreamProcessorSpecificationRendererHint = SimStreamProcessorSpecificationRendererHint_OpenGL\n        SimStreamProcessorSpecificationEmulationHint = SimStreamProcessorSpecificationEmulationHint_SerialProcessing\n    Renderer private name: Apple Software Renderer\n    Renderer version: 4.1 APPLE-24.0.2\n    Denylisted: No\n    Memory regions:\n\nPort:\n    UUID: DFBE4D96-8F74-4E96-942E-8956CA72A6FA\n    Class: Audio\n    Port Identifier: com.apple.CoreSimulator.Audio.HostRoute\n    Power state: On\n    Guest Audio Input -> Default Host Audio Device\n    Guest Audio Output -> Default Host Audio Device\n    Host Audio Devices:\n        1E6D2077-0000-0000-021F-0104B5502178: LG HDR 5K (0 In / 2 Out)\n        4C2D350D-0000-0000-271B-0104A5462778: C32F391 (0 In / 2 Out)\n        AppleUSBAudioEngine:Apple Inc.:Studio Display:00008030-00087508143A802E:6,7: Studio\u00a0Display \ub9c8\uc774\ud06c (1 In / 0 Out)\n        AppleUSBAudioEngine:Apple Inc.:Studio Display:00008030-00087508143A802E:8,9: Studio\u00a0Display \uc2a4\ud53c\ucee4 (0 In / 8 Out)\n        AppleUSBAudioEngine:CalDigit, Inc.:CalDigit Thunderbolt 3 Audio:22200000:1: CalDigit Thunderbolt 3 Audio (0 In / 2 Out)\n        AppleUSBAudioEngine:CalDigit, Inc.:CalDigit Thunderbolt 3 Audio:22200000:2: CalDigit Thunderbolt 3 Audio (2 In / 0 Out)\n        BuiltInHeadphoneOutputDevice: \uc678\uc7a5 \ud5e4\ub4dc\ud3f0 (0 In / 2 Out)\n        BuiltInSpeakerDevice: Mac Studio \uc2a4\ud53c\ucee4 (0 In / 2 Out)\n\nPort:\n    UUID: 02B3C71F-B901-4FEB-9013-422E374FDD07\n    Class: Unknown\n    Port Identifier: com.apple.gputools.service.simulator\n    Power state: On\n\nPort:\n    UUID: F15B49E4-4EB0-45B1-A722-D8B60F0A8885\n    Class: Unknown\n    Port Identifier: com.apple.gputools.GPUToolsAgentService.simulator\n    Power state: On\n\n",
+    "stderr": ""
+  },
+  "restore": {
+    "exit": 0,
+    "stdout": "{\n  \"info\" : {\n    \"arguments\" : [\n      \"devicectl\",\n      \"device\",\n      \"orientation\",\n      \"set\",\n      \"--device\",\n      \"5A2A5D3F-3D53-4326-99DE-47823CA256FA\",\n      \"portrait\",\n      \"--timeout\",\n      \"10\",\n      \"--json-output\",\n      \"-\"\n    ],\n    \"commandType\" : \"devicectl.device.orientation.set\",\n    \"environment\" : {\n      \"TERM\" : \"dumb\"\n    },\n    \"jsonVersion\" : 5,\n    \"outcome\" : \"success\",\n    \"version\" : \"651.13.4\"\n  },\n  \"result\" : {\n    \"deviceIdentifier\" : \"5A2A5D3F-3D53-4326-99DE-47823CA256FA\",\n    \"deviceIsOrientationLocked\" : false,\n    \"deviceOrientation\" : \"portrait\",\n    \"deviceOrientationNonFlat\" : \"portrait\"\n  }\n}\n",
+    "stderr": "New Device Orientation: portrait\n",
+    "json": {
+      "info": {
+        "arguments": [
+          "devicectl",
+          "device",
+          "orientation",
+          "set",
+          "--device",
+          "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+          "portrait",
+          "--timeout",
+          "10",
+          "--json-output",
+          "-"
+        ],
+        "commandType": "devicectl.device.orientation.set",
+        "environment": {
+          "TERM": "dumb"
+        },
+        "jsonVersion": 5,
+        "outcome": "success",
+        "version": "651.13.4"
+      },
+      "result": {
+        "deviceIdentifier": "5A2A5D3F-3D53-4326-99DE-47823CA256FA",
+        "deviceIsOrientationLocked": false,
+        "deviceOrientation": "portrait",
+        "deviceOrientationNonFlat": "portrait"
+      }
+    }
+  },
+  "close": {
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  }
+}

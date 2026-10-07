@@ -1,0 +1,4 @@
+Test Case '-[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditRestTimerAcrossFoldStates]' started.
+Test Case '-[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditRestTimerAcrossFoldStates]' exceeded execution time allowance of 10분. The test may have hung; check Xcode's test report for additional diagnostics. If the test requires additional time, use -[XCTestCase executionTimeAllowance] or one of xcodebuild's command-line overrides.
+    raise TimeoutError(f"SDK runner cleanup exceeded {cleanup_timeout}s after test execution ended")
+TimeoutError: SDK runner cleanup exceeded 60s after test execution ended

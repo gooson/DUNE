@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditWorkoutPreservesInputsAcrossFoldStates"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 0,
+    "passed": 0,
+    "skipped": 0,
+    "failed": 0
+  },
+  "passed_cases": 0,
+  "failures": [
+    "749: /Users/shanks/.codex/worktrees/712d/Health/DUNEUITests/Full/ActivityExerciseRegressionTests.swift:276: error: -[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditWorkoutPreservesInputsAcrossFoldStates] : Failed to tap \"workout-session-add-rest\" Button: No matches found for first query match…",
+    "813: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log has no positive passed-test count",
+    "UI test log has no identifiable passed UI test cases",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditWorkoutPreservesInputsAcrossFoldStates"
+  ],
+  "log_path": "/private/tmp/duo-resume-20261006/fold-maxax-allowance-ui.log"
+}

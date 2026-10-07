@@ -1,5 +1,125 @@
 @preconcurrency import XCTest
 
+/// Temporary opt-in evidence collection. Attachments require human visual review;
+/// their presence does not imply that clipping or layout checks have passed.
+enum VisualAudit {
+    static var isEnabled: Bool {
+        ProcessInfo.processInfo.environment["DUNE_VISUAL_AUDIT"] == "1"
+    }
+
+    static func capture(_ action: String, file: String = #fileID, line: UInt = #line) {
+        guard isEnabled else { return }
+        // Navigation and keyboard transitions can outlive XCTest's idle signal.
+        // Capture the settled destination rather than a slide animation frame.
+        Thread.sleep(forTimeInterval: 0.8)
+        let hostOnly = ProcessInfo.processInfo.environment["DUNE_VISUAL_AUDIT_HOST_ONLY"] == "1"
+        let acknowledgement = FileManager.default.temporaryDirectory
+            .appendingPathComponent("dune-visual-audit-\(UUID().uuidString).ack")
+        var hierarchyText = XCUIApplication().debugDescription
+        let hierarchyURL = acknowledgement.appendingPathExtension("txt")
+        let refreshURL = acknowledgement.appendingPathExtension("refresh")
+        let readyURL = acknowledgement.appendingPathExtension("ready")
+        defer {
+            try? FileManager.default.removeItem(at: refreshURL)
+            try? FileManager.default.removeItem(at: readyURL)
+        }
+        if hostOnly {
+            do {
+                try hierarchyText.write(to: hierarchyURL, atomically: true, encoding: .utf8)
+            } catch {
+                XCTFail("Could not preserve visual audit hierarchy: \(error)")
+                return
+            }
+        }
+        let requiresMotion = action.hasPrefix("FOLD:") || action.hasPrefix("ORIENT:")
+        let deadline = Date().addingTimeInterval(requiresMotion ? 120 : 30)
+        let handshake = hostOnly ? " DEADLINE=\(deadline.timeIntervalSince1970) ACK=\(acknowledgement.path)" : ""
+        print("DUNE_VISUAL_AUDIT_READY \(action) [\(file):\(line)]\(handshake)")
+        fflush(stdout)
+        if hostOnly {
+            // Hold the current viewport until the host has captured both displays.
+            // This is an opt-in diagnostic handshake, not a functional-test delay.
+            var refreshedForFold = false
+            while !FileManager.default.fileExists(atPath: acknowledgement.path), Date() < deadline {
+                if requiresMotion, !refreshedForFold,
+                   FileManager.default.fileExists(atPath: refreshURL.path) {
+                    try? FileManager.default.removeItem(at: refreshURL)
+                    hierarchyText = XCUIApplication().debugDescription
+                    do {
+                        try hierarchyText.write(to: hierarchyURL, atomically: true, encoding: .utf8)
+                        guard FileManager.default.createFile(atPath: readyURL.path, contents: nil) else {
+                            XCTFail("Could not acknowledge fold hierarchy refresh: \(action)")
+                            return
+                        }
+                    } catch {
+                        XCTFail("Could not refresh fold hierarchy: \(error)")
+                        return
+                    }
+                    refreshedForFold = true
+                }
+                Thread.sleep(forTimeInterval: 0.05)
+            }
+            guard FileManager.default.fileExists(atPath: acknowledgement.path) else {
+                XCTFail("Host did not acknowledge visual capture: \(action)")
+                return
+            }
+            try? FileManager.default.removeItem(at: acknowledgement)
+            try? FileManager.default.removeItem(at: hierarchyURL)
+        }
+        XCTContext.runActivity(named: "Visual audit: \(action) [\(file):\(line)]") { activity in
+            let screens = hostOnly ? [] : XCUIScreen.screens
+            let requestedIndex = ProcessInfo.processInfo.environment["DUNE_VISUAL_AUDIT_SCREEN_INDEX"].flatMap(Int.init)
+            let validIndex = requestedIndex.flatMap { screens.indices.contains($0) ? $0 : nil }
+            for (index, screen) in screens.enumerated() where validIndex == nil || validIndex == index {
+                let screenshot = screen.screenshot()
+                let image = screenshot.image
+                let pixelWidth = image.cgImage?.width ?? Int(image.size.width * image.scale)
+                let pixelHeight = image.cgImage?.height ?? Int(image.size.height * image.scale)
+                let screenMetadata = "screen-\(index)-\(pixelWidth)x\(pixelHeight)"
+                print("DUNE_VISUAL_AUDIT \(screenMetadata) \(action) [\(file):\(line)]")
+                let attachment = XCTAttachment(data: screenshot.pngRepresentation,
+                                               uniformTypeIdentifier: "public.png")
+                attachment.name = "\(screenMetadata)-\(action)"
+                attachment.lifetime = .keepAlways
+                activity.add(attachment)
+            }
+            let hierarchy = XCTAttachment(string: hierarchyText)
+            hierarchy.name = "hierarchy-\(action)-\(file)-\(line)"
+            hierarchy.lifetime = .keepAlways
+            activity.add(hierarchy)
+        }
+    }
+
+    static func unavailable(_ reason: String) -> Error {
+        if isEnabled {
+            capture("unavailable: \(reason)")
+            return NSError(domain: "DUNEVisualAudit", code: 1,
+                           userInfo: [NSLocalizedDescriptionKey: "Visual audit coverage unavailable: \(reason)"])
+        }
+        return XCTSkip(reason)
+    }
+}
+
+extension XCUIElement {
+    func auditTap(file: String = #fileID, line: UInt = #line) {
+        guard VisualAudit.isEnabled else {
+            tap()
+            return
+        }
+        let target = identifier.isEmpty ? label : identifier
+        tap()
+        VisualAudit.capture("tap \(target)", file: file, line: line)
+    }
+}
+
+// Preserve existing coordinate fallbacks while capturing their evidence too.
+extension XCUICoordinate {
+    func auditTap(file: String = #fileID, line: UInt = #line) {
+        tap()
+        VisualAudit.capture("coordinate tap", file: file, line: line)
+    }
+}
+
 // MARK: - Accessibility Identifier Constants (3-tier: {tab}-{section}-{element})
 
 enum ScrollDirection {
@@ -271,6 +391,7 @@ enum AXID {
 
     // MARK: - Workout Session
     static let workoutSessionScreen = "workout-session-screen"
+    static let workoutSessionOverview = "workout-session-overview"
     static let workoutSessionDone = "workout-session-done"
     static let workoutSessionCompleteSet = "workout-session-complete-set"
     static let workoutSessionPlannedReps = "workout-session-planned-reps"
@@ -380,34 +501,34 @@ extension XCTestCase {
                 // Location: "Allow While Using App" (preferred) or "Allow Once"
                 let allowWhileUsing = alert.buttons["Allow While Using App"]
                 if allowWhileUsing.exists {
-                    allowWhileUsing.tap()
+                    allowWhileUsing.auditTap()
                     return true
                 }
 
                 let allowOnce = alert.buttons["Allow Once"]
                 if allowOnce.exists {
-                    allowOnce.tap()
+                    allowOnce.auditTap()
                     return true
                 }
 
                 // Generic "Allow" (HealthKit, Notifications with allow, etc.)
                 let allow = alert.buttons["Allow"]
                 if allow.exists {
-                    allow.tap()
+                    allow.auditTap()
                     return true
                 }
 
                 // "OK" button
                 let ok = alert.buttons["OK"]
                 if ok.exists {
-                    ok.tap()
+                    ok.auditTap()
                     return true
                 }
 
                 // Notifications: "Don't Allow" (we don't need push for UI tests)
                 let dontAllow = alert.buttons["Don't Allow"]
                 if dontAllow.exists {
-                    dontAllow.tap()
+                    dontAllow.auditTap()
                     return true
                 }
 
@@ -462,7 +583,7 @@ extension XCUIApplication {
         for button in buttonCandidates {
             let remainingTime = max(0, deadline.timeIntervalSinceNow)
             if button.exists || button.waitForExistence(timeout: remainingTime) {
-                button.tap()
+                button.auditTap()
                 return true
             }
         }
@@ -470,7 +591,7 @@ extension XCUIApplication {
         let element = descendants(matching: .any)[identifier].firstMatch
         let remainingTime = max(0, deadline.timeIntervalSinceNow)
         guard element.exists || element.waitForExistence(timeout: remainingTime) else { return false }
-        element.tap()
+        element.auditTap()
         return true
     }
 
@@ -481,58 +602,122 @@ extension XCUIApplication {
         return textFields[AXID.habitFormName].firstMatch.waitForExistence(timeout: timeout)
     }
 
-    func hasPrimaryNavigation(timeout: TimeInterval = 8) -> Bool {
-        if tabBars.firstMatch.waitForExistence(timeout: timeout) {
+    /// Reveals secondary toolbar actions moved into the system overflow menu.
+    @discardableResult
+    func waitAndTapToolbarAction(_ identifier: String, timeout: TimeInterval = 5) -> Bool {
+        let target = descendants(matching: .any)[identifier].firstMatch
+        if target.exists && target.isHittable {
+            target.auditTap()
             return true
         }
 
+        let overflowPredicate = NSPredicate(
+            format: "identifier IN %@ OR label IN %@",
+            ["ellipsis", "ellipsis.circle", "More", "more"],
+            ["More", "More Actions", "더 보기", "その他"]
+        )
+        let overflowQueries = [
+            toolbars.buttons.matching(overflowPredicate),
+            navigationBars.buttons.matching(overflowPredicate),
+            buttons.matching(overflowPredicate)
+        ]
+        let ready = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
+            (target.exists && target.isHittable)
+                || overflowQueries.contains { $0.allElementsBoundByIndex.contains { $0.isHittable } }
+        }, object: nil)
+        guard XCTWaiter.wait(for: [ready], timeout: timeout) == .completed else { return false }
+
+        if target.exists && target.isHittable {
+            target.auditTap()
+            return true
+        }
+        guard let overflow = overflowQueries.lazy
+            .flatMap({ $0.allElementsBoundByIndex })
+            .first(where: { $0.isHittable }) else { return false }
+        overflow.auditTap()
+
+        guard target.waitForExistence(timeout: timeout), target.isHittable else { return false }
+        target.auditTap()
+        return true
+    }
+
+    func hasPrimaryNavigation(timeout: TimeInterval = 8) -> Bool {
         let tabIDs = ["tab-today", "tab-activity", "tab-wellness", "tab-life"]
-        for tabID in tabIDs {
-            if buttons[tabID].waitForExistence(timeout: 1) {
+        let tabPredicate = NSPredicate(format: "identifier IN %@", tabIDs)
+        let initialTab: String? = {
+            guard let argumentIndex = launchArguments.firstIndex(of: "--uitest-initial-tab"),
+                  launchArguments.indices.contains(argumentIndex + 1) else { return nil }
+            return launchArguments[argumentIndex + 1]
+        }()
+
+        let navigationReady = NSPredicate { _, _ in
+            if self.tabBars.firstMatch.exists
+                || self.descendants(matching: .any).matching(tabPredicate).firstMatch.exists
+                || self.descendants(matching: .any)[AXID.sidebarNavList].firstMatch.exists {
                 return true
             }
-        }
 
-        return false
+            // Duo's vertical system tabs may not expose a TabBar or the tab IDs.
+            // Accept an explicitly requested destination only when both its
+            // main content and toolbar action have actually rendered.
+            switch initialTab {
+            case "today":
+                return self.descendants(matching: .any)[AXID.dashboardHeroCondition].firstMatch.exists
+                    && self.buttons[AXID.dashboardToolbarSettings].firstMatch.exists
+            case "life":
+                return self.descendants(matching: .any)[AXID.lifeHeroProgress].firstMatch.exists
+                    && self.buttons[AXID.lifeToolbarAdd].firstMatch.exists
+            case "train":
+                return self.descendants(matching: .any)[AXID.activityRootScroll].firstMatch.exists
+                    && self.buttons[AXID.activityToolbarAdd].firstMatch.exists
+            case "wellness":
+                return self.descendants(matching: .any)[AXID.wellnessHeroScore].firstMatch.exists
+                    && self.buttons[AXID.wellnessToolbarAdd].firstMatch.exists
+            default:
+                return false
+            }
+        }
+        let expectation = XCTNSPredicateExpectation(predicate: navigationReady, object: self)
+        return XCTWaiter.wait(for: [expectation], timeout: timeout) == .completed
     }
 
     /// Navigate to a tab by its visible title (iPhone)
     func navigateToTab(_ tabTitle: String) {
         let titledTabButton = tabBars.buttons[tabTitle].firstMatch
         if titledTabButton.exists || titledTabButton.waitForExistence(timeout: 1) {
-            titledTabButton.tap()
+            titledTabButton.auditTap()
             return
         }
 
         if let tabID = tabAccessibilityID(for: tabTitle) {
             let identifiedTab = descendants(matching: .any)[tabID].firstMatch
             if identifiedTab.waitForExistence(timeout: 3) {
-                identifiedTab.tap()
+                identifiedTab.auditTap()
                 return
             }
 
             let tabBarButton = tabBars.buttons[tabID].firstMatch
             if tabBarButton.exists || tabBarButton.waitForExistence(timeout: 1) {
-                tabBarButton.tap()
+                tabBarButton.auditTap()
                 return
             }
 
             let floatingTabButton = buttons[tabID].firstMatch
             if floatingTabButton.exists || floatingTabButton.waitForExistence(timeout: 1) {
-                floatingTabButton.tap()
+                floatingTabButton.auditTap()
                 return
             }
         }
 
         let titledTabBarButton = tabBars.buttons[tabTitle].firstMatch
         if titledTabBarButton.waitForExistence(timeout: 3) {
-            titledTabBarButton.tap()
+            titledTabBarButton.auditTap()
             return
         }
 
         let titledFloatingButton = buttons[tabTitle].firstMatch
         if titledFloatingButton.waitForExistence(timeout: 3) {
-            titledFloatingButton.tap()
+            titledFloatingButton.auditTap()
             return
         }
 
@@ -540,7 +725,7 @@ extension XCUIApplication {
             let iconPredicate = NSPredicate(format: "identifier == %@", iconID)
             let iconTab = buttons.matching(iconPredicate).firstMatch
             if iconTab.exists || iconTab.waitForExistence(timeout: 1) {
-                iconTab.tap()
+                iconTab.auditTap()
                 return
             }
         }
@@ -553,7 +738,7 @@ extension XCUIApplication {
 
         let item = descendants(matching: .any)[sectionId].firstMatch
         if item.waitForExistence(timeout: 3) {
-            item.tap()
+            item.auditTap()
             return true
         }
 
@@ -573,7 +758,8 @@ extension XCUIApplication {
         timeoutPerCheck: TimeInterval = 1
     ) -> Bool {
         let element = descendants(matching: .any)[identifier].firstMatch
-        for _ in 0..<maxSwipes where !element.waitForExistence(timeout: timeoutPerCheck) {
+        for _ in 0..<maxSwipes {
+            if element.waitForExistence(timeout: timeoutPerCheck) { return true }
             let scrollContainer = preferredScrollContainer()
             switch direction {
             case .up:
@@ -603,7 +789,8 @@ extension XCUIApplication {
             )
         }
 
-        for _ in 0..<maxSwipes where !(element.exists && element.isHittable) {
+        for _ in 0..<maxSwipes {
+            if element.exists && element.isHittable { return true }
             let scrollContainer = preferredScrollContainer()
             switch direction {
             case .up:
@@ -752,7 +939,7 @@ extension XCUIApplication {
             maxSwipes: maxSwipes,
             timeoutPerCheck: timeoutPerCheck
         ) {
-            actionsButton.tap()
+            actionsButton.auditTap()
             return true
         }
 
@@ -846,13 +1033,13 @@ extension XCUIApplication {
         ].compactMap { $0 }
 
         for target in tapTargets where target.exists {
-            target.tap()
+            target.auditTap()
             if waitForSwitchState(of: toggle, expected: isOn, timeout: 1.5) {
                 return true
             }
         }
 
-        toggle.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+        toggle.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).auditTap()
         return waitForSwitchState(of: toggle, expected: isOn, timeout: 1.5)
     }
 
@@ -872,13 +1059,13 @@ extension XCUIApplication {
             ].map { keyboard.buttons[$0] }
 
             if let button = keyboardButtons.first(where: \.exists) {
-                button.tap()
+                button.auditTap()
             } else if let toolbarDone = toolbars.buttons.matching(NSPredicate(format: "label == 'Done'")).allElementsBoundByIndex.first(where: \.exists) {
-                toolbarDone.tap()
+                toolbarDone.auditTap()
             } else if navigationBars.firstMatch.exists {
-                navigationBars.firstMatch.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+                navigationBars.firstMatch.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).auditTap()
             } else {
-                coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.2)).tap()
+                coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.2)).auditTap()
             }
 
             if !keyboard.waitForExistence(timeout: 0.5) {
@@ -897,7 +1084,7 @@ extension XCUIApplication {
         for identifier in cancelIdentifiers {
             let button = descendants(matching: .any)[identifier].firstMatch
             if button.waitForExistence(timeout: timeout) {
-                button.tap()
+                button.auditTap()
                 return true
             }
         }
@@ -905,7 +1092,7 @@ extension XCUIApplication {
         for label in ["Cancel", "Done", "Close"] {
             let button = buttons[label].firstMatch
             if button.waitForExistence(timeout: 1) {
-                button.tap()
+                button.auditTap()
                 return true
             }
         }
@@ -967,22 +1154,34 @@ extension XCUIApplication {
     }
 
     private func clearAndType(in element: XCUIElement, value: String, clearExisting: Bool) -> Bool {
-        element.tap()
+        element.auditTap()
         if !waitForKeyboardFocus(in: element) {
-            element.tap()
+            element.auditTap()
             guard waitForKeyboardFocus(in: element) else { return false }
         }
 
         if clearExisting {
             let existingValue = (element.value as? String) ?? ""
             if !existingValue.isEmpty, !existingValue.hasPrefix("Optional(") {
-                let deleteText = String(repeating: XCUIKeyboardKey.delete.rawValue, count: existingValue.count)
-                element.typeText(deleteText)
+                let clearInput = buttons["\(element.identifier)-clear"].firstMatch
+                if clearInput.exists && clearInput.isHittable {
+                    clearInput.auditTap()
+                } else {
+                    element.typeKey("a", modifierFlags: .command)
+                    element.typeText(XCUIKeyboardKey.delete.rawValue)
+                }
+                // Never append a replacement when selection failed. Numeric fields
+                // can expose a localized placeholder as value after being cleared.
+                let clearedValue = (element.value as? String) ?? ""
+                guard clearedValue.isEmpty || clearedValue == element.placeholderValue else { return false }
             }
         }
 
         element.typeText(value)
-        return true
+        let expectedValue = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "value == %@", value), object: element
+        )
+        return XCTWaiter.wait(for: [expectedValue], timeout: 3) == .completed
     }
 
     private func waitForKeyboardFocus(in element: XCUIElement) -> Bool {

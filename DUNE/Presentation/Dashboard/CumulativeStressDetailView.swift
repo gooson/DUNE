@@ -14,6 +14,8 @@ struct CumulativeStressDetailView: View {
 
     @State private var viewModel: CumulativeStressDetailViewModel
     @Environment(\.horizontalSizeClass) private var sizeClass
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @ScaledMetric(relativeTo: .caption) private var contributorIconWidth: CGFloat = 20
 
     private var isRegular: Bool { sizeClass == .regular }
 
@@ -246,34 +248,57 @@ struct CumulativeStressDetailView: View {
                     Image(systemName: contribution.factor.iconName)
                         .font(.caption)
                         .foregroundStyle(contribution.factor.color)
-                        .frame(width: 20)
+                        .frame(width: contributorIconWidth)
+                        .accessibilityIdentifier("stress-contribution-icon-\(contribution.factor.rawValue)")
 
                     VStack(alignment: .leading, spacing: 2) {
-                        HStack {
+                        if dynamicTypeSize.isAccessibilitySize {
                             Text(contribution.factor.displayName)
                                 .font(.subheadline)
+                                .fixedSize(horizontal: false, vertical: true)
 
-                            Spacer()
+                            HStack {
+                                Text(String(format: "%.0f%%", contribution.weight * 100))
+                                    .font(.caption)
+                                    .foregroundStyle(.tertiary)
+                                Spacer()
+                                contributorScore(contribution)
+                            }
+                        } else {
+                            HStack {
+                                Text(contribution.factor.displayName)
+                                    .font(.subheadline)
 
-                            Text(String(format: "%.0f%%", contribution.weight * 100))
-                                .font(.caption)
-                                .foregroundStyle(.tertiary)
+                                Spacer()
 
-                            Text("\(Int(contribution.rawScore.rounded()))")
-                                .font(.caption)
-                                .fontWeight(.medium)
-                                .monospacedDigit()
-                                .frame(width: 32, alignment: .trailing)
+                                Text(String(format: "%.0f%%", contribution.weight * 100))
+                                    .font(.caption)
+                                    .foregroundStyle(.tertiary)
+
+                                contributorScore(contribution)
+                                    .frame(width: 32, alignment: .trailing)
+                            }
                         }
 
                         Text(contribution.detail)
                             .font(.caption)
                             .foregroundStyle(DS.Color.textSecondary)
-                            .lineLimit(2)
+                            .lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 2)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .accessibilityIdentifier("stress-contribution-detail-\(contribution.factor.rawValue)")
                     }
                 }
             }
         }
+    }
+
+    private func contributorScore(_ contribution: CumulativeStressScore.Contribution) -> some View {
+        Text("\(Int(contribution.rawScore.rounded()))")
+            .font(.caption)
+            .fontWeight(.medium)
+            .monospacedDigit()
+            .fixedSize(horizontal: dynamicTypeSize.isAccessibilitySize, vertical: false)
+            .accessibilityIdentifier("stress-contribution-score-\(contribution.factor.rawValue)")
     }
 
     private var stressComposition: some View {

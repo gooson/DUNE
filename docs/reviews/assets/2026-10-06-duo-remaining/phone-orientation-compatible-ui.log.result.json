@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/ActivityExerciseRegressionTests/testWorkoutDraftAcrossRotationAtDefaultTextSize",
+    "DUNEUITests/ActivityExerciseRegressionTests/testWorkoutDraftAcrossRotationAtMaximumAccessibilityTextSize"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": null,
+    "passed": null,
+    "skipped": null,
+    "failed": null
+  },
+  "passed_cases": 0,
+  "failures": [
+    "232: /Users/shanks/.codex/worktrees/712d/Health/DUNEUITests/Full/DuoScoreComponentLayoutTests.swift:144:32: error: value of type 'XCUIElement' has no member 'allElementsBoundByIndex'",
+    "236: |                                `- error: value of type 'XCUIElement' has no member 'allElementsBoundByIndex'",
+    "256: Testing failed:",
+    "260: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log has no executed-test count",
+    "UI test log has no identifiable passed UI test cases",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/ActivityExerciseRegressionTests/testWorkoutDraftAcrossRotationAtDefaultTextSize",
+    "DUNEUITests/ActivityExerciseRegressionTests/testWorkoutDraftAcrossRotationAtMaximumAccessibilityTextSize"
+  ],
+  "log_path": "/private/tmp/duo-remaining-20261006/phone-orientation-compatible-ui.log"
+}

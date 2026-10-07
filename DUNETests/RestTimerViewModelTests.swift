@@ -62,4 +62,63 @@ struct RestTimerViewModelTests {
         let vm = RestTimerViewModel()
         #expect(vm.defaultDuration == 30)
     }
+    @Test("Background suspension uses elapsed wall time and completes only once")
+    func suspendedCountdown() {
+        var now = Date(timeIntervalSince1970: 1000)
+        let vm = RestTimerViewModel(now: { now })
+        vm.start(seconds: 90)
+        now.addTimeInterval(75)
+        vm.refresh()
+        #expect(vm.secondsRemaining == 15)
+        now.addTimeInterval(100)
+        vm.refresh()
+        vm.refresh()
+        #expect(vm.secondsRemaining == 0)
+        #expect(vm.completionCount == 1)
+        #expect(!vm.isRunning)
+    }
+
+    @Test("Extending rest preserves elapsed time and bounds progress")
+    func extendedCountdown() {
+        var now = Date(timeIntervalSince1970: 1000)
+        let vm = RestTimerViewModel(now: { now })
+        vm.start(seconds: 60)
+        now.addTimeInterval(20)
+        vm.addTime(30)
+        #expect(vm.secondsRemaining == 70)
+        #expect(vm.defaultDuration == 90)
+        #expect((0...1).contains(vm.progress))
+        vm.stop()
+    }
+
+    @Test("Restore expired deadline completes without restarting a full rest")
+    func restoreExpired() {
+        let now = Date(timeIntervalSince1970: 1000)
+        let vm = RestTimerViewModel(now: { now })
+        vm.restore(endDate: now.addingTimeInterval(-1), totalDuration: 90)
+        #expect(vm.completionCount == 1)
+        #expect(vm.secondsRemaining == 0)
+    }
+
+    @Test("Extreme duration and extension remain bounded")
+    func durationBounds() {
+        let vm = RestTimerViewModel()
+        vm.start(seconds: Int.max)
+        vm.addTime(Int.max)
+        #expect(vm.secondsRemaining <= 3600)
+        vm.addTime(Int.min)
+        #expect(!vm.isRunning)
+        #expect(vm.secondsRemaining == 0)
+    }
+
+    @Test("Restore clamps a malformed future deadline to the total duration")
+    func restoreFutureDeadline() {
+        let now = Date(timeIntervalSince1970: 1000)
+        let vm = RestTimerViewModel(now: { now })
+        vm.restore(endDate: now.addingTimeInterval(100_000), totalDuration: 90)
+        #expect(vm.secondsRemaining == 90)
+        #expect(vm.endDate == now.addingTimeInterval(90))
+        vm.stop()
+    }
+
 }

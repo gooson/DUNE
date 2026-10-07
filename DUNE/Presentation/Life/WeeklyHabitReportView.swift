@@ -2,6 +2,7 @@ import SwiftUI
 
 struct WeeklyHabitReportView: View {
     let report: WeeklyHabitReport
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
         ScrollView {
@@ -13,6 +14,7 @@ struct WeeklyHabitReportView: View {
             }
             .padding(DS.Spacing.md)
         }
+        .accessibilityIdentifier("life-weekly-report-scroll")
         .background { DetailWaveBackground() }
         .englishNavigationTitle("Weekly Report")
         .navigationBarTitleDisplayMode(.inline)
@@ -45,7 +47,10 @@ struct WeeklyHabitReportView: View {
     // MARK: - Comparison
 
     private var comparisonCard: some View {
-        HStack(spacing: DS.Spacing.lg) {
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(spacing: DS.Spacing.lg))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.lg))
+        return layout {
             VStack(spacing: DS.Spacing.xs) {
                 Text("This Week")
                     .font(.caption)
@@ -80,7 +85,8 @@ struct WeeklyHabitReportView: View {
 
     private var bestHabitsCard: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            Label("Best Habits", systemImage: "star.fill")
+            reportHeading("Best Habits", systemImage: "star.fill")
+                .accessibilityIdentifier("life-weekly-report-best")
                 .font(.headline)
                 .foregroundStyle(DS.Color.positive)
 
@@ -106,7 +112,8 @@ struct WeeklyHabitReportView: View {
 
     private var worstHabitsCard: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            Label("Needs Improvement", systemImage: "arrow.up.right")
+            reportHeading("Needs Improvement", systemImage: "arrow.up.right")
+                .accessibilityIdentifier("life-weekly-report-improvement")
                 .font(.headline)
                 .foregroundStyle(DS.Color.negative)
 
@@ -130,14 +137,29 @@ struct WeeklyHabitReportView: View {
 
     // MARK: - Helpers
 
+    @ViewBuilder
+    private func reportHeading(_ title: LocalizedStringKey, systemImage: String) -> some View {
+        if dynamicTypeSize.isAccessibilitySize {
+            Text(title)
+                .fixedSize(horizontal: false, vertical: true)
+        } else {
+            Label(title, systemImage: systemImage)
+        }
+    }
+
     private func habitRow(name: String, rate: Double) -> some View {
-        HStack {
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.xxs))
+            : AnyLayout(HStackLayout())
+        return layout {
             Text(name)
                 .font(.subheadline)
-            Spacer()
+                .fixedSize(horizontal: false, vertical: true)
+            if !dynamicTypeSize.isAccessibilitySize { Spacer() }
             Text("\(Int(rate * 100))%")
                 .font(.subheadline.bold())
                 .foregroundStyle(rateColor(rate))
+                .fixedSize(horizontal: true, vertical: false)
         }
         .padding(.vertical, DS.Spacing.xxs)
     }

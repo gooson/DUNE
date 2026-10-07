@@ -8,6 +8,7 @@ struct ExercisePickerSheet: View {
     let onSelect: (ExerciseFormRule?) -> Void
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
         NavigationStack {
@@ -17,14 +18,7 @@ struct ExercisePickerSheet: View {
                     onSelect(nil)
                     dismiss()
                 } label: {
-                    HStack {
-                        Label("General Posture", systemImage: "figure.stand")
-                        Spacer()
-                        if selectedExerciseID == nil {
-                            Image(systemName: "checkmark")
-                                .foregroundStyle(DS.Color.warmGlow)
-                        }
-                    }
+                    exerciseLabel("General Posture", icon: "figure.stand", selected: selectedExerciseID == nil)
                 }
                 .tint(.primary)
 
@@ -34,18 +28,11 @@ struct ExercisePickerSheet: View {
                             onSelect(exercise)
                             dismiss()
                         } label: {
-                            HStack {
-                                Label {
-                                    Text(LocalizedStringKey(exercise.displayName))
-                                } icon: {
-                                    Image(systemName: iconName(for: exercise))
-                                }
-                                Spacer()
-                                if selectedExerciseID == exercise.exerciseID {
-                                    Image(systemName: "checkmark")
-                                        .foregroundStyle(DS.Color.warmGlow)
-                                }
-                            }
+                            exerciseLabel(
+                                LocalizedStringKey(exercise.displayName),
+                                icon: iconName(for: exercise),
+                                selected: selectedExerciseID == exercise.exerciseID
+                            )
                         }
                         .tint(.primary)
                     }
@@ -60,6 +47,22 @@ struct ExercisePickerSheet: View {
             }
         }
         .presentationDetents([.medium])
+    }
+
+    private func exerciseLabel(_ title: LocalizedStringKey, icon: String, selected: Bool) -> some View {
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.sm))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.sm))
+        return layout {
+            Image(systemName: icon)
+            Text(title)
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            if selected {
+                Image(systemName: "checkmark")
+                    .foregroundStyle(DS.Color.warmGlow)
+            }
+        }
     }
 
     private func iconName(for exercise: ExerciseFormRule) -> String {

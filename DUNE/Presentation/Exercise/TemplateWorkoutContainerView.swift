@@ -39,6 +39,7 @@ struct TemplateWorkoutContainerView: View {
     var body: some View {
         NavigationStack {
             content
+                .accessibilityElement(children: .contain)
                 .accessibilityIdentifier("template-workout-container-screen")
             .confirmationDialog(
                 "End Template?",

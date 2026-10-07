@@ -8,6 +8,7 @@ struct MuscleMap3DView: View {
 
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var mode: MuscleMap3DMode = .recovery
     @State private var selectedMuscle: MuscleGroup?
     @AppStorage("muscleMap3D.anatomyLayer") private var anatomyLayerRawValue = MuscleMap3DAnatomyLayer.muscles.rawValue
@@ -55,27 +56,31 @@ struct MuscleMap3DView: View {
     }
 
     var body: some View {
-        ZStack {
-            // Full-screen 3D viewer
-            MuscleMap3DViewer(
-                fatigueStates: fatigueStates,
-                mode: mode,
-                anatomyLayer: anatomyLayer,
-                colorScheme: colorScheme,
-                selectedMuscle: $selectedMuscle,
-                shellOpacity: Float(shellOpacity),
-                resetToken: resetToken
-            )
-            .ignoresSafeArea()
-            .accessibilityIdentifier("musclemap-3d-viewer")
-
-            // Overlay controls
-            if showControls {
-                overlayControls
-                    .transition(.opacity)
+        Group {
+            if dynamicTypeSize.isAccessibilitySize && showControls {
+                GeometryReader { geometry in
+                    let isWide = geometry.size.width >= 700
+                    let layout = isWide
+                        ? AnyLayout(HStackLayout(spacing: DS.Spacing.md))
+                        : AnyLayout(VStackLayout(spacing: DS.Spacing.md))
+                    layout {
+                        viewer.frame(height: isWide ? nil : max(180, geometry.size.height * 0.55))
+                        accessibleControls.frame(width: isWide ? geometry.size.width * 0.42 : nil)
+                    }
+                }
+            } else {
+                ZStack {
+                    viewer.ignoresSafeArea()
+                    if showControls {
+                        overlayControls
+                            .environment(\.colorScheme, .dark)
+                            .transition(.opacity)
+                    }
+                }
             }
         }
         .background(Color.black)
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier("activity-musclemap-3d-screen")
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackground(.hidden, for: .navigationBar)
@@ -107,34 +112,59 @@ struct MuscleMap3DView: View {
 
     // MARK: - Overlay Controls
 
+    private var viewer: some View {
+        MuscleMap3DViewer(
+            fatigueStates: fatigueStates,
+            mode: mode,
+            anatomyLayer: anatomyLayer,
+            colorScheme: colorScheme,
+            selectedMuscle: $selectedMuscle,
+            shellOpacity: Float(shellOpacity),
+            resetToken: resetToken
+        )
+        .accessibilityIdentifier("musclemap-3d-viewer")
+    }
+
+    private var accessibleControls: some View {
+        ScrollView { controlsPanel }
+            .environment(\.colorScheme, .dark)
+            .accessibilityIdentifier("musclemap-3d-controls")
+    }
+
     private var overlayControls: some View {
         VStack {
             Spacer()
-
-            VStack(spacing: DS.Spacing.md) {
-                // Info card at bottom
-                summaryStrip
-                    .accessibilityIdentifier("musclemap-3d-summary-card")
-
-                // Mode + Layer controls
-                HStack(spacing: DS.Spacing.sm) {
-                    compactModePicker
-                        .accessibilityIdentifier("musclemap-3d-mode-picker")
-                    compactLayerPicker
-                        .accessibilityIdentifier("musclemap-3d-layer-picker")
-                }
-
-                // Muscle selection strip
-                muscleSelectionStrip
-                    .accessibilityIdentifier("musclemap-3d-muscle-strip")
-            }
-            .padding(.horizontal, DS.Spacing.md)
-            .padding(.bottom, DS.Spacing.sm)
+            controlsPanel
         }
     }
 
+    private var controlsPanel: some View {
+        VStack(spacing: DS.Spacing.md) {
+            // Info card at bottom
+            summaryStrip
+                .accessibilityIdentifier("musclemap-3d-summary-card")
+
+            // Mode + Layer controls
+            HStack(spacing: DS.Spacing.sm) {
+                compactModePicker
+                    .accessibilityIdentifier("musclemap-3d-mode-picker")
+                compactLayerPicker
+                    .accessibilityIdentifier("musclemap-3d-layer-picker")
+            }
+
+            // Muscle selection strip
+            muscleSelectionStrip
+                .accessibilityIdentifier("musclemap-3d-muscle-strip")
+        }
+        .padding(.horizontal, DS.Spacing.md)
+        .padding(.bottom, DS.Spacing.sm)
+    }
+
     private var summaryStrip: some View {
-        HStack(spacing: DS.Spacing.md) {
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.md))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.md))
+        return layout {
             Image(systemName: selectedMuscle?.iconName ?? "figure.strengthtraining.traditional")
                 .font(.title3)
                 .foregroundStyle(DS.Color.activity)
@@ -143,17 +173,19 @@ struct MuscleMap3DView: View {
                 Text(selectedMuscle?.displayName ?? String(localized: "No Data"))
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(.white)
+                    .fixedSize(horizontal: false, vertical: true)
                 Text(summaryValue(for: selectedState))
                     .font(.caption)
                     .foregroundStyle(.white.opacity(0.7))
             }
 
-            Spacer()
+            if !dynamicTypeSize.isAccessibilitySize { Spacer() }
 
             VStack(alignment: .trailing, spacing: 2) {
                 Text(primaryMetricValue)
                     .font(.subheadline.weight(.bold))
                     .foregroundStyle(.white)
+                    .fixedSize(horizontal: false, vertical: true)
                 Text(mode == .recovery ? String(localized: "Recovery") : String(localized: "Volume"))
                     .font(.caption2)
                     .foregroundStyle(.white.opacity(0.5))

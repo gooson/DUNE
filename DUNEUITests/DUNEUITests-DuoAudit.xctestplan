@@ -1,0 +1,51 @@
+{
+  "configurations": [
+    {
+      "id": "ED00A851-9D70-4ED8-9EC7-4D2F3C59E417",
+      "name": "Duo Visual Audit",
+      "options": {}
+    }
+  ],
+  "defaultOptions": {
+    "targetForVariableExpansion": {
+      "containerPath": "container:DUNE.xcodeproj",
+      "identifier": "DUNEUITests",
+      "name": "DUNEUITests"
+    },
+    "environmentVariableEntries": [
+      {
+        "key": "DUNE_VISUAL_AUDIT",
+        "value": "1",
+        "enabled": true
+      },
+      {
+        "key": "DUNE_VISUAL_AUDIT_HOST_ONLY",
+        "value": "1",
+        "enabled": true
+      },
+      {
+        "key": "DUNE_VISUAL_AUDIT_STATIC",
+        "value": "1",
+        "enabled": true
+      },
+      {
+        "key": "DUNE_VISUAL_AUDIT_FOLD",
+        "value": "1",
+        "enabled": true
+      }
+    ]
+  },
+  "testTargets": [
+    {
+      "skippedTests": [
+        "HealthKitPermissionUITests"
+      ],
+      "target": {
+        "containerPath": "container:DUNE.xcodeproj",
+        "identifier": "DUNEUITests",
+        "name": "DUNEUITests"
+      }
+    }
+  ],
+  "version": 1
+}

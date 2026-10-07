@@ -109,6 +109,7 @@ private struct BriefingSectionCard: View {
     let title: String
     let message: String
     let accentColor: Color
+    @ScaledMetric(relativeTo: .title2) private var iconWidth: CGFloat = 32
 
     var body: some View {
         InlineCard {
@@ -116,7 +117,7 @@ private struct BriefingSectionCard: View {
                 Image(systemName: iconName)
                     .font(.title2)
                     .foregroundStyle(accentColor)
-                    .frame(width: 32)
+                    .frame(width: iconWidth)
 
                 VStack(alignment: .leading, spacing: DS.Spacing.xs) {
                     Text(title)

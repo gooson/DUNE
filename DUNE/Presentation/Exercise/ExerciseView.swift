@@ -8,6 +8,7 @@ private struct ExerciseStartConfig: Identifiable {
 }
 
 struct ExerciseView: View {
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var viewModel = ExerciseViewModel()
     @State private var showingExercisePicker = false
     @State private var exerciseStartConfig: ExerciseStartConfig?
@@ -21,6 +22,7 @@ struct ExerciseView: View {
     @State private var recordToDelete: ExerciseRecord?
     @State private var healthKitWorkoutToDelete: WorkoutSummary?
     @State private var recordsByID: [UUID: ExerciseRecord] = [:]
+    @State private var inspectedExerciseID: String?
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \ExerciseRecord.date, order: .reverse) private var manualRecords: [ExerciseRecord]
     @Query(sort: \CustomExercise.createdAt, order: .reverse) private var customExercises: [CustomExercise]
@@ -35,7 +37,9 @@ struct ExerciseView: View {
         return base
             .toolbar { toolbarContent }
             .sheet(isPresented: $showingExercisePicker) { exercisePickerSheet }
-            .sheet(item: $exerciseStartConfig) { config in
+            .sheet(item: $exerciseStartConfig, onDismiss: {
+                pendingDraft = WorkoutSessionDraft.load()
+            }) { config in
                 exerciseStartSheet(config: config)
                     .presentationDetents([.large])
                     .presentationDragIndicator(.hidden)
@@ -53,9 +57,6 @@ struct ExerciseView: View {
             .navigationDestination(item: $compoundConfig) { config in
                 CompoundWorkoutView(config: config)
             }
-            .fullScreenCover(item: $templateConfig) { config in
-                TemplateWorkoutContainerView(config: config)
-            }
             .task {
                 pendingDraft = WorkoutSessionDraft.load()
                 rebuildRecordIndex()
@@ -63,6 +64,11 @@ struct ExerciseView: View {
                 viewModel.manualRecords = manualRecords
                 updateSuggestion()
                 await viewModel.loadHealthKitWorkouts()
+            }
+            .onChange(of: viewModel.allExercises.map(\.id)) { _, ids in
+                if let selectedID = inspectedExerciseID, !ids.contains(selectedID) {
+                    inspectedExerciseID = nil
+                }
             }
             .onChange(of: manualRecords) { _, newValue in
                 rebuildRecordIndex()
@@ -95,6 +101,26 @@ struct ExerciseView: View {
                 Text("\(workout.localizedTitle) on \(workout.date.formatted(date: .abbreviated, time: .omitted)) will be permanently deleted from all your devices.")
             }
             .confirmDeleteRecord($recordToDelete, context: modelContext)
+            .inspector(isPresented: Binding(
+                get: { inspectedExerciseID != nil },
+                set: { if !$0 { inspectedExerciseID = nil } }
+            )) {
+                NavigationStack {
+                    VStack(spacing: 0) {
+                        HStack {
+                            Spacer()
+                            Button("Done") { inspectedExerciseID = nil }
+                                .accessibilityIdentifier("exercise-inspector-close")
+                        }
+                        .padding()
+                        if let item = viewModel.allExercises.first(where: { $0.id == inspectedExerciseID }) {
+                            exerciseDetail(item)
+                                .id(item.id)
+                        }
+                    }
+                }
+                .inspectorColumnWidth(min: 320, ideal: 420, max: 540)
+            }
     }
 
     @ToolbarContentBuilder
@@ -103,6 +129,9 @@ struct ExerciseView: View {
             NavigationLink {
                 WorkoutTemplateListView { template in
                     startFromTemplate(template)
+                }
+                .fullScreenCover(item: $templateConfig) { config in
+                    TemplateWorkoutContainerView(config: config)
                 }
             } label: {
                 Image(systemName: "list.clipboard")
@@ -193,24 +222,14 @@ struct ExerciseView: View {
 
                     ForEach(viewModel.allExercises) { item in
                         Group {
-                            if item.source == .manual, let record = findRecord(for: item) {
-                                NavigationLink {
-                                    ExerciseSessionDetailView(
-                                        record: record,
-                                        activityType: item.activityType,
-                                        displayName: item.displayName,
-                                        equipment: item.equipment
-                                    )
-                                } label: {
+                            if (item.source == .manual && findRecord(for: item) != nil)
+                                || (item.source == .healthKit && item.workoutSummary != nil) {
+                                Button { inspectedExerciseID = item.id } label: {
                                     UnifiedWorkoutRow(item: item, style: .full)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .contentShape(Rectangle())
                                 }
-                                .accessibilityIdentifier(exerciseRowIdentifier(for: item))
-                            } else if item.source == .healthKit, let summary = item.workoutSummary {
-                                NavigationLink {
-                                    HealthKitWorkoutDetailView(workout: summary)
-                                } label: {
-                                    UnifiedWorkoutRow(item: item, style: .full)
-                                }
+                                .buttonStyle(.plain)
                                 .accessibilityIdentifier(exerciseRowIdentifier(for: item))
                             } else {
                                 UnifiedWorkoutRow(item: item, style: .full)
@@ -259,6 +278,22 @@ struct ExerciseView: View {
                 .accessibilityIdentifier("exercise-view-screen")
                 .scrollContentBackground(.hidden)
             }
+        }
+    }
+
+    @ViewBuilder
+    private func exerciseDetail(_ item: ExerciseListItem) -> some View {
+        if item.source == .manual, let record = findRecord(for: item) {
+            ExerciseSessionDetailView(
+                record: record,
+                activityType: item.activityType,
+                displayName: item.displayName,
+                equipment: item.equipment
+            )
+        } else if let summary = item.workoutSummary {
+            HealthKitWorkoutDetailView(workout: summary)
+        } else {
+            ContentUnavailableView("No Data", systemImage: "list.clipboard")
         }
     }
 
@@ -424,33 +459,42 @@ struct ExerciseView: View {
     }
 
     private func draftBanner(_ draft: WorkoutSessionDraft) -> some View {
-        HStack(spacing: DS.Spacing.sm) {
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.sm))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.sm))
+        return layout {
             Image(systemName: "exclamationmark.triangle.fill")
                 .foregroundStyle(.orange)
             VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                 Text("Unfinished Workout")
                     .font(.subheadline.weight(.medium))
+                    .fixedSize(horizontal: false, vertical: true)
                 Text("\(draft.exerciseDefinition.localizedName) - \(draft.sets.filter(\.isCompleted).count.formattedWithSeparator) sets")
                     .font(.caption)
                     .foregroundStyle(DS.Color.textSecondary)
+                    .fixedSize(horizontal: false, vertical: true)
             }
-            Spacer()
-            Button("Resume") {
-                presentExerciseStart(draft.exerciseDefinition)
-            }
-            .font(.caption.weight(.semibold))
-            .buttonStyle(.borderedProminent)
-            .tint(DS.Color.activity)
+            if !dynamicTypeSize.isAccessibilitySize { Spacer() }
+            HStack(spacing: DS.Spacing.sm) {
+                Button("Resume") {
+                    presentExerciseStart(draft.exerciseDefinition)
+                }
+                .font(.caption.weight(.semibold))
+                .buttonStyle(.borderedProminent)
+                .tint(DS.Color.activity)
+                .accessibilityIdentifier("exercise-resume-draft")
 
-            Button {
-                WorkoutSessionViewModel.clearDraft()
-                pendingDraft = nil
-            } label: {
-                Image(systemName: "xmark")
-                    .font(.caption)
-                    .foregroundStyle(DS.Color.textSecondary)
+                Button {
+                    WorkoutSessionViewModel.clearDraft()
+                    pendingDraft = nil
+                } label: {
+                    Image(systemName: "xmark")
+                        .font(.caption)
+                        .foregroundStyle(DS.Color.textSecondary)
+                }
+                .buttonStyle(.plain)
+                .accessibilityIdentifier("exercise-discard-draft")
             }
-            .buttonStyle(.plain)
         }
         .padding(DS.Spacing.md)
         .listRowInsets(EdgeInsets())

@@ -6,6 +6,8 @@ struct MuscleMapDetailView: View {
     let fatigueStates: [MuscleFatigueState]
     let library: ExerciseLibraryQuerying
 
+    @Environment(\.horizontalSizeClass) private var sizeClass
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var viewModel = MuscleMapDetailViewModel()
     @State private var showing3DMap = false
     @State private var selected3DMuscle: MuscleGroup?
@@ -16,21 +18,34 @@ struct MuscleMapDetailView: View {
     }
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: DS.Spacing.lg) {
+        AdaptivePaneView {
+            ScrollView {
+                VStack(spacing: DS.Spacing.lg) {
                 // Muscle map (expanded)
                 MuscleRecoveryMapView(
                     fatigueStates: fatigueStates,
                     isExpanded: true,
                     onMuscleSelected: { muscle in
-                        withAnimation(DS.Animation.snappy) {
+                        withAnimation(reduceMotion ? nil : DS.Animation.snappy) {
                             viewModel.selectedMuscle = viewModel.selectedMuscle == muscle ? nil : muscle
                         }
                         selected3DMuscle = muscle
-                        showing3DMap = true
+                        if sizeClass != .regular { showing3DMap = true }
                     }
                 )
 
+                    Button {
+                        showing3DMap = true
+                    } label: {
+                        Label("3D Muscle Map", systemImage: "cube")
+                    }
+                    .buttonStyle(.bordered)
+                }
+                .padding(DS.Spacing.lg)
+            }
+        } secondary: {
+            ScrollView {
+                VStack(spacing: DS.Spacing.lg) {
                 // Selected muscle inline detail
                 if let muscle = viewModel.selectedMuscle {
                     MuscleDetailPopover(
@@ -76,7 +91,8 @@ struct MuscleMapDetailView: View {
                 }
                 .accessibilityIdentifier("musclemap-detail-recovery-section")
             }
-            .padding(.horizontal, DS.Spacing.lg)
+                .padding(.horizontal, DS.Spacing.lg)
+            }
         }
         .accessibilityIdentifier("activity-musclemap-detail-screen")
         .background { DetailWaveBackground() }

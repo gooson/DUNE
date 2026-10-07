@@ -4,6 +4,7 @@ import SwiftData
 struct CreateCustomExerciseView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Query(sort: \UserCategory.sortOrder) private var userCategories: [UserCategory]
 
     let onCreated: (ExerciseDefinition) -> Void
@@ -109,7 +110,9 @@ struct CreateCustomExerciseView: View {
 
                 // Muscles
                 Section("Primary Muscles") {
-                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 90))], spacing: DS.Spacing.sm) {
+                    LazyVGrid(columns: dynamicTypeSize.isAccessibilitySize
+                              ? [GridItem(.flexible())]
+                              : [GridItem(.adaptive(minimum: 90))], spacing: DS.Spacing.sm) {
                         ForEach(MuscleGroup.allCases, id: \.self) { muscle in
                             muscleChip(muscle)
                         }
@@ -164,6 +167,10 @@ struct CreateCustomExerciseView: View {
         } label: {
             Text(muscle.displayName)
                 .font(.caption.weight(.medium))
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: dynamicTypeSize.isAccessibilitySize ? .infinity : nil,
+                       minHeight: dynamicTypeSize.isAccessibilitySize ? 44 : nil,
+                       alignment: .leading)
                 .padding(.horizontal, DS.Spacing.sm)
                 .padding(.vertical, DS.Spacing.xs)
                 .background(

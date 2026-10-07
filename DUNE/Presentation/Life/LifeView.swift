@@ -27,6 +27,7 @@ enum LifeHabitLogSync {
 struct LifeView: View {
     @State private var viewModel = LifeViewModel()
     @State private var localRefreshSignal = 0
+    @State private var historySelection: HabitHistorySelection?
     @State private var isShowingTemplateSheet = false
     @Environment(\.modelContext) private var modelContext
     @Environment(\.horizontalSizeClass) private var sizeClass
@@ -59,7 +60,9 @@ struct LifeView: View {
                     // Isolated @Query child — prevents parent re-layout (Correction #179)
                     HabitListQueryView(
                         viewModel: viewModel,
-                        refreshSignal: refreshSignal + localRefreshSignal
+                        refreshSignal: refreshSignal + localRefreshSignal,
+                        onOpenTemplates: { isShowingTemplateSheet = true },
+                        historySelection: $historySelection
                     )
                 }
                 .padding(isRegular ? DS.Spacing.xxl : DS.Spacing.lg)
@@ -150,7 +153,25 @@ struct LifeView: View {
                 )
             }
         }
+        // Inspector owns the screen, not the vertically unbounded scroll content.
+        .inspector(isPresented: Binding(
+            get: { historySelection != nil },
+            set: { if !$0 { historySelection = nil } }
+        )) {
+            if let selection = historySelection {
+                HabitHistorySheet(
+                    habitName: selection.habitName,
+                    iconCategory: selection.iconCategory,
+                    habitType: selection.habitType,
+                    entries: selection.entries
+                )
+                .inspectorColumnWidth(min: 300, ideal: 360, max: 460)
+            }
+        }
         .englishNavigationTitle("Life")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbarBackground(.regularMaterial, for: .navigationBar)
+        .toolbarBackground(.visible, for: .navigationBar)
     }
 }
 
@@ -158,6 +179,14 @@ struct LifeView: View {
 
 enum LifeRoute: Hashable {
     case habitManagement
+}
+
+private struct HabitHistorySelection: Identifiable {
+    let id: UUID
+    let habitName: String
+    let iconCategory: HabitIconCategory
+    let habitType: HabitType
+    let entries: [LifeViewModel.HabitHistoryEntry]
 }
 
 // MARK: - Isolated @Query Child View
@@ -173,29 +202,30 @@ private struct HabitListQueryView: View {
 
     @Bindable var viewModel: LifeViewModel
     let refreshSignal: Int
+    let onOpenTemplates: () -> Void
 
     @Environment(\.modelContext) private var modelContext
     @Environment(\.appTheme) private var theme
     @Environment(\.horizontalSizeClass) private var sizeClass
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @ScaledMetric(relativeTo: .caption) private var compactCompletionRingSize: CGFloat = 64
+    @ScaledMetric(relativeTo: .caption) private var regularCompletionRingSize: CGFloat = 80
 
     // Correction #68: O(1) lookup instead of O(N) per row
     @State private var habitsByID: [UUID: HabitDefinition] = [:]
     // Correction #102: cached today exercise check (avoid body-path Calendar ops)
     @State private var cachedTodayExerciseExists = false
-    @State private var historySelection: HabitHistorySelection?
+    @Binding var historySelection: HabitHistorySelection?
     @State private var actionSelection: HabitActionSelection?
     @State private var heroAppeared = false
     @State private var selectedCategoryFilter: HabitIconCategory?
     @State private var weeklyRates: [WeeklyCompletionRate] = []
     @State private var monthlyRates: [MonthlyCompletionRate] = []
     @State private var heatmapData: [DailyCompletionCount] = []
+    @State private var availableContentWidth: CGFloat = 0
     @State private var weeklyReport: WeeklyHabitReport?
     @State private var showingReport = false
     @State private var showingHeatmapDetail = false
-
-    private struct HabitHistorySelection: Identifiable {
-        let id: UUID
-    }
 
     private struct HabitActionSelection: Identifiable {
         let id: UUID
@@ -206,8 +236,15 @@ private struct HabitListQueryView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.lg) {
             // Hero: completion rate
-            heroSection
+            Group {
+                if habits.isEmpty {
+                    starterSection
+                } else {
+                    heroSection
+                }
+            }
                 .reportTabHeroFrame()
+                .accessibilityElement(children: .contain)
                 .accessibilityIdentifier("life-hero-progress")
                 .staggeredAppear(index: 0)
 
@@ -217,18 +254,23 @@ private struct HabitListQueryView: View {
                     .staggeredAppear(index: 1)
             }
 
-            if isRegular {
-                HStack(alignment: .top, spacing: DS.Spacing.md) {
-                    habitsSection(fillHeight: true)
-                    autoAchievementsSection(fillHeight: true)
-                }
-                .staggeredAppear(index: 2)
-            } else {
-                habitsSection()
-                    .staggeredAppear(index: 2)
+            if habits.isEmpty {
+                ArchivedHabitCountView()
                 autoAchievementsSection()
-                    .staggeredAppear(index: 3)
+            } else {
+                let layout = isRegular && availableContentWidth >= 700 && !dynamicTypeSize.isAccessibilitySize
+                    ? AnyLayout(HStackLayout(alignment: .top, spacing: DS.Spacing.md))
+                    : AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.lg))
+                layout {
+                    habitsSection()
+                    autoAchievementsSection(useTwoColumnCards: false)
+                }
             }
+        }
+        .onGeometryChange(for: CGFloat.self) { geometry in
+            geometry.size.width
+        } action: { width in
+            availableContentWidth = width
         }
         .background {
             // Isolated @Query child — keeps today's exercise lookup off the main body path.
@@ -255,16 +297,6 @@ private struct HabitListQueryView: View {
         }
         .onAppear {
             recalculate()
-        }
-        .sheet(item: $historySelection) { selection in
-            if let habit = habitsByID[selection.id] {
-                HabitHistorySheet(
-                    habitName: habit.name,
-                    iconCategory: habit.iconCategory,
-                    habitType: habit.habitType,
-                    entries: viewModel.historyEntries(for: habit)
-                )
-            }
         }
     }
 
@@ -339,15 +371,25 @@ private struct HabitListQueryView: View {
                 Button {
                     showingReport = true
                 } label: {
-                    Label("View Weekly Report", systemImage: "doc.text.magnifyingglass")
-                        .font(.subheadline.bold())
-                        .foregroundStyle(DS.Color.tabLife)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, DS.Spacing.sm)
-                        .background {
-                            RoundedRectangle(cornerRadius: DS.Radius.sm)
-                                .fill(.ultraThinMaterial)
-                        }
+                    let layout = dynamicTypeSize.isAccessibilitySize
+                        ? AnyLayout(VStackLayout(spacing: DS.Spacing.xs))
+                        : AnyLayout(HStackLayout(spacing: DS.Spacing.xs))
+                    layout {
+                        Image(systemName: "doc.text.magnifyingglass")
+                            .accessibilityHidden(true)
+                        Text("View Weekly Report")
+                            .lineLimit(nil)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .multilineTextAlignment(.center)
+                    }
+                    .font(.subheadline.bold())
+                    .foregroundStyle(DS.Color.tabLife)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, DS.Spacing.sm)
+                    .background {
+                        RoundedRectangle(cornerRadius: DS.Radius.sm)
+                            .fill(.ultraThinMaterial)
+                    }
                 }
                 .buttonStyle(.plain)
                 .accessibilityIdentifier("life-weekly-report-button")
@@ -579,7 +621,7 @@ private struct HabitListQueryView: View {
 
         Button {
             performHabitAction(deferred: deferred) {
-                historySelection = HabitHistorySelection(id: progress.id)
+                presentHistory(for: progress.id)
             }
         } label: {
             Label("History", systemImage: "clock.badge.checkmark")
@@ -603,19 +645,18 @@ private struct HabitListQueryView: View {
 
     // MARK: - Auto Achievements
 
-    private func autoAchievementsSection(fillHeight: Bool = false) -> some View {
+    private func autoAchievementsSection(useTwoColumnCards: Bool = true) -> some View {
         let groups = autoAchievementGroups
         let customGoals = viewModel.autoLinkedProgresses
         let customCompletedCount = customGoals.filter(\.isCompleted).count
         let completedGoals = groups.reduce(0) { $0 + $1.completedCount } + customCompletedCount
         let totalGoals = groups.reduce(0) { $0 + $1.metrics.count } + customGoals.count
-        let useTwoColumnCards = isRegular && !fillHeight
+        let showTwoColumns = isRegular && !dynamicTypeSize.isAccessibilitySize && useTwoColumnCards
 
         return SectionGroup(
-            title: "Auto Workout Achievements",
+            title: "Weekly Workout Achievements",
             icon: "figure.run",
-            iconColor: DS.Color.activity,
-            fillHeight: fillHeight
+            iconColor: DS.Color.activity
         ) {
             VStack(alignment: .leading, spacing: DS.Spacing.sm) {
                 HStack(alignment: .firstTextBaseline) {
@@ -639,7 +680,7 @@ private struct HabitListQueryView: View {
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                     }
-                } else if useTwoColumnCards {
+                } else if showTwoColumns {
                     LazyVGrid(
                         columns: [GridItem(.flexible(), spacing: DS.Spacing.md), GridItem(.flexible())],
                         spacing: DS.Spacing.md
@@ -854,14 +895,50 @@ private struct HabitListQueryView: View {
 
     // MARK: - Hero
 
+    private var starterSection: some View {
+        StandardCard {
+            VStack(alignment: .leading, spacing: DS.Spacing.md) {
+                Label("Start Your Habit Routine", systemImage: "checklist")
+                    .font(DS.Typography.sectionTitle)
+                Text("Add your first habit to start tracking your daily routine.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+                ViewThatFits(in: .horizontal) {
+                    HStack(spacing: DS.Spacing.md) { starterActions }
+                    VStack(alignment: .leading, spacing: DS.Spacing.sm) { starterActions }
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+    }
+
+    @ViewBuilder
+    private var starterActions: some View {
+        Button("Add Habit") {
+            viewModel.resetForm()
+            viewModel.isShowingAddSheet = true
+        }
+        .buttonStyle(.borderedProminent)
+        .tint(theme.accentColor)
+        .accessibilityIdentifier("life-empty-add")
+
+        Button("From Template", action: onOpenTemplates)
+            .buttonStyle(.bordered)
+            .accessibilityIdentifier("life-empty-template")
+    }
+
     private var heroSection: some View {
         HeroCard(tintColor: DS.Color.tabLife) {
-            HStack(spacing: isRegular ? DS.Spacing.xxl : DS.Spacing.xl) {
+            let layout = dynamicTypeSize.isAccessibilitySize
+                ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.md))
+                : AnyLayout(HStackLayout(spacing: isRegular ? DS.Spacing.xxl : DS.Spacing.xl))
+            layout {
                 completionRing
 
                 VStack(alignment: .leading, spacing: DS.Spacing.sm) {
                     HStack(spacing: DS.Spacing.xs) {
-                        Text("Today's Progress")
+                        Text("Today's Habits")
                             .font(isRegular ? .title3 : .headline)
                             .fontWeight(.semibold)
 
@@ -886,7 +963,9 @@ private struct HabitListQueryView: View {
                     }
                 }
 
-                Spacer(minLength: 0)
+                if !dynamicTypeSize.isAccessibilitySize {
+                    Spacer(minLength: 0)
+                }
             }
         }
         .accessibilityElement(children: .combine)
@@ -921,13 +1000,14 @@ private struct HabitListQueryView: View {
             progress: progress,
             ringColor: DS.Color.tabLife,
             lineWidth: isRegular ? 10 : 8,
-            size: isRegular ? 80 : 64
+            size: isRegular ? regularCompletionRingSize : compactCompletionRingSize
         )
         .overlay {
             Text("\(Int(progress * 100))%")
                 .font(.caption)
                 .fontWeight(.semibold)
                 .monospacedDigit()
+                .fixedSize()
                 .foregroundStyle(theme.sandColor)
                 .contentTransition(.numericText())
         }
@@ -1060,10 +1140,27 @@ private struct HabitListQueryView: View {
         }
     }
 
+    private func presentHistory(for id: UUID) {
+        guard let habit = habitsByID[id] else {
+            historySelection = nil
+            return
+        }
+        historySelection = HabitHistorySelection(
+            id: id,
+            habitName: habit.name,
+            iconCategory: habit.iconCategory,
+            habitType: habit.habitType,
+            entries: viewModel.historyEntries(for: habit)
+        )
+    }
+
     private func recalculate() {
         // Correction #68: rebuild O(1) lookup dictionary
         // Correction #104: uniquingKeysWith instead of uniqueKeysWithValues
         habitsByID = Dictionary(habits.map { ($0.id, $0) }, uniquingKeysWith: { _, last in last })
+        if let selection = historySelection {
+            presentHistory(for: selection.id)
+        }
         viewModel.calculateProgresses(
             habits: habits,
             todayExerciseExists: cachedTodayExerciseExists
@@ -1131,6 +1228,7 @@ private struct HabitHistorySheet: View {
     let entries: [LifeViewModel.HabitHistoryEntry]
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
         VStack(spacing: 0) {
@@ -1212,45 +1310,71 @@ private struct HabitHistorySheet: View {
     }
 
     private func entryRow(_ entry: LifeViewModel.HabitHistoryEntry, today: Date) -> some View {
-        HStack(spacing: DS.Spacing.sm) {
-            // Action icon
-            Image(systemName: iconName(for: entry.action))
-                .font(.body)
-                .foregroundStyle(color(for: entry.action))
-                .frame(width: 32, height: 32)
-                .background {
-                    Circle()
-                        .fill(color(for: entry.action).opacity(0.12))
+        Group {
+            if dynamicTypeSize.isAccessibilitySize {
+                VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                    HStack(alignment: .top, spacing: DS.Spacing.sm) {
+                        entryActionIcon(entry)
+                        entryContent(entry)
+                    }
+                    entryDate(entry, today: today, alignment: .leading)
+                        .padding(.leading, 32 + DS.Spacing.sm)
                 }
-
-            // Content
-            VStack(alignment: .leading, spacing: 2) {
-                Text(actionTitle(for: entry))
-                    .font(.subheadline)
-                    .fontWeight(.medium)
-
-                if entry.action == .complete {
-                    Text(valueDescription(for: entry))
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+            } else {
+                HStack(spacing: DS.Spacing.sm) {
+                    entryActionIcon(entry)
+                    entryContent(entry)
+                    Spacer()
+                    entryDate(entry, today: today, alignment: .trailing)
                 }
-            }
-
-            Spacer()
-
-            // Date
-            VStack(alignment: .trailing, spacing: 2) {
-                Text(relativeDate(entry.date, today: today))
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                Text(entry.date.formatted(date: .abbreviated, time: .omitted))
-                    .font(.caption2)
-                    .foregroundStyle(.tertiary)
             }
         }
         .padding(.vertical, DS.Spacing.sm)
         .accessibilityElement(children: .combine)
         .accessibilityIdentifier("life-habit-history-row-\(entry.id.uuidString.prefix(8))")
+    }
+
+    private func entryActionIcon(_ entry: LifeViewModel.HabitHistoryEntry) -> some View {
+        Image(systemName: iconName(for: entry.action))
+            .font(.body)
+            .foregroundStyle(color(for: entry.action))
+            .frame(width: 32, height: 32)
+            .background {
+                Circle()
+                    .fill(color(for: entry.action).opacity(0.12))
+            }
+    }
+
+    private func entryContent(_ entry: LifeViewModel.HabitHistoryEntry) -> some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(actionTitle(for: entry))
+                .font(.subheadline)
+                .fontWeight(.medium)
+                .fixedSize(horizontal: false, vertical: true)
+
+            if entry.action == .complete {
+                Text(valueDescription(for: entry))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+    }
+
+    private func entryDate(
+        _ entry: LifeViewModel.HabitHistoryEntry,
+        today: Date,
+        alignment: HorizontalAlignment
+    ) -> some View {
+        VStack(alignment: alignment, spacing: 2) {
+            Text(relativeDate(entry.date, today: today))
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            Text(entry.date.formatted(date: .abbreviated, time: .omitted))
+                .font(.caption2)
+                .foregroundStyle(.tertiary)
+        }
+        .fixedSize(horizontal: false, vertical: true)
     }
 
     // MARK: - Empty State

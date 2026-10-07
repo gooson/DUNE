@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 143,
+  "requested_selectors": [
+    "DUNEUITests/ActivityExerciseRegressionTests/testTemplateEntryDefaultsRemainEditableAtMaximumAccessibilityTextSize",
+    "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditWorkoutInsights",
+    "DUNEUITests/PostureVisualAuditTests/testPostureComparison",
+    "DUNEUITests/LifeRegressionTests/testVisualAuditWeeklyReport",
+    "DUNEUITests/CloudSyncConsentRegressionTests/testCloudSyncConsentHookPresentsAndDismissesSheet"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 5,
+    "passed": 0,
+    "skipped": 2,
+    "failed": 3
+  },
+  "passed_cases": 2,
+  "failures": [
+    "2621: /Users/shanks/.codex/worktrees/712d/Health/DUNEUITests/Full/TodaySettingsRegressionTests.swift:524: error: -[DUNEUITests.CloudSyncConsentRegressionTests testCloudSyncConsentHookPresentsAndDismissesSheet] : XCTAssertTrue failed - Consent hook should present cloud sync consent sheet",
+    "2637: Test Case '-[DUNEUITests.CloudSyncConsentRegressionTests testCloudSyncConsentHookPresentsAndDismissesSheet]' failed (17.415 seconds).",
+    "2638: Test Suite 'CloudSyncConsentRegressionTests' failed at 2026-10-05 17:43:16.606.",
+    "2719: /Users/shanks/.codex/worktrees/712d/Health/DUNEUITests/Full/LifeRegressionTests.swift:0: error: -[DUNEUITests.LifeRegressionTests testVisualAuditWeeklyReport] : failed: caught error: \"Error Domain=DUNEVisualAudit Code=1 \"Visual audit coverage unavailable: Primary navigation (tab bar/sidebar) not fou…",
+    "2734: Test Case '-[DUNEUITests.LifeRegressionTests testVisualAuditWeeklyReport]' failed (22.753 seconds).",
+    "2735: Test Suite 'LifeRegressionTests' failed at 2026-10-05 17:43:39.360.",
+    "2816: /Users/shanks/.codex/worktrees/712d/Health/DUNEUITests/Full/WellnessRegressionTests.swift:0: error: -[DUNEUITests.PostureVisualAuditTests testPostureComparison] : failed: caught error: \"Error Domain=DUNEVisualAudit Code=1 \"Visual audit coverage unavailable: Primary navigation (tab bar/sidebar) not f…",
+    "2831: Test Case '-[DUNEUITests.PostureVisualAuditTests testPostureComparison]' failed (22.924 seconds).",
+    "2832: Test Suite 'PostureVisualAuditTests' failed at 2026-10-05 17:44:02.286.",
+    "2834: Test Suite 'DUNEUITests.xctest' failed at 2026-10-05 17:44:02.287.",
+    "2836: Test Suite 'Selected tests' failed at 2026-10-05 17:44:02.288.",
+    "xcodebuild exited 143",
+    "UI test log has no positive passed-test count",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/PostureVisualAuditTests/testPostureComparison",
+    "DUNEUITests/LifeRegressionTests/testVisualAuditWeeklyReport",
+    "DUNEUITests/CloudSyncConsentRegressionTests/testCloudSyncConsentHookPresentsAndDismissesSheet"
+  ],
+  "log_path": "/private/tmp/duo-resume-20261005/open-maxax-clear-window-correction/ui.log"
+}

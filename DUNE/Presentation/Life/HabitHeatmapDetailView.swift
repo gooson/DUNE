@@ -124,7 +124,7 @@ struct HabitHeatmapDetailView: View {
                 HStack {
                     Text(stat.name)
                         .font(.subheadline)
-                        .frame(width: 30, alignment: .leading)
+                        .fixedSize(horizontal: true, vertical: false)
 
                     GeometryReader { geometry in
                         let barWidth = maxTotal > 0
@@ -141,7 +141,7 @@ struct HabitHeatmapDetailView: View {
                     Text("\(stat.count)")
                         .font(.caption.monospacedDigit())
                         .foregroundStyle(.secondary)
-                        .frame(width: 30, alignment: .trailing)
+                        .fixedSize(horizontal: true, vertical: false)
                 }
             }
         }
@@ -235,36 +235,16 @@ struct HabitHeatmapGridView: View {
     ]
 
     var body: some View {
-        HStack(alignment: .top, spacing: 4) {
-            // Day labels column
-            VStack(spacing: cellSpacing) {
-                ForEach(0..<rows, id: \.self) { row in
-                    Text(Self.dayLabels[row])
-                        .font(.system(size: 9))
-                        .foregroundStyle(.secondary)
-                        .frame(maxHeight: .infinity)
-                }
+        HabitHeatmapLayout(columnCount: columns.count, spacing: cellSpacing) {
+            ForEach(0..<rows, id: \.self) { row in
+                Text(Self.dayLabels[row])
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                    .fixedSize()
             }
-            .fixedSize(horizontal: true, vertical: false)
-
-            // Grid columns — each column is one week
-            HStack(spacing: cellSpacing) {
-                ForEach(columns, id: \.index) { col in
-                    VStack(spacing: cellSpacing) {
-                        ForEach(col.items) { item in
-                            RoundedRectangle(cornerRadius: 2)
-                                .fill(cellColor(for: item))
-                                .aspectRatio(1, contentMode: .fit)
-                        }
-                        // Fill remaining rows in incomplete last column
-                        if col.items.count < rows {
-                            ForEach(0..<(rows - col.items.count), id: \.self) { _ in
-                                Color.clear
-                                    .aspectRatio(1, contentMode: .fit)
-                            }
-                        }
-                    }
-                }
+            ForEach(paddedData) { item in
+                RoundedRectangle(cornerRadius: 2)
+                    .fill(cellColor(for: item))
             }
         }
     }
@@ -342,6 +322,47 @@ struct HabitHeatmapLegend: View {
             Text("More")
                 .font(.caption2)
                 .foregroundStyle(.secondary)
+        }
+    }
+}
+
+/// Resolves square cells from the proposed width, including inside a Button label.
+private struct HabitHeatmapLayout: Layout {
+    let columnCount: Int
+    let spacing: CGFloat
+
+    private func metrics(width: CGFloat?, subviews: Subviews) -> (width: CGFloat, label: CGFloat, cell: CGFloat, row: CGFloat) {
+        let labels = subviews.prefix(7).map { $0.sizeThatFits(.unspecified) }
+        let label = labels.map(\.width).max() ?? 0
+        let width = max(label + spacing, width ?? 320)
+        let count = max(1, columnCount)
+        let cell = max(1, (width - label - spacing - CGFloat(count - 1) * spacing) / CGFloat(count))
+        let row = max(cell, labels.map(\.height).max() ?? 0)
+        return (width, label, cell, row)
+    }
+
+    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+        let sizes = metrics(width: proposal.width, subviews: subviews)
+        return CGSize(width: sizes.width, height: 7 * sizes.row + 6 * spacing)
+    }
+
+    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
+        let sizes = metrics(width: bounds.width, subviews: subviews)
+        for index in subviews.indices {
+            if index < 7 {
+                subviews[index].place(
+                    at: CGPoint(x: bounds.minX, y: bounds.minY + CGFloat(index) * (sizes.row + spacing) + sizes.row / 2),
+                    anchor: .leading,
+                    proposal: .unspecified
+                )
+            } else {
+                let item = index - 7
+                subviews[index].place(
+                    at: CGPoint(x: bounds.minX + sizes.label + spacing + CGFloat(item / 7) * (sizes.cell + spacing),
+                                y: bounds.minY + CGFloat(item % 7) * (sizes.row + spacing) + (sizes.row - sizes.cell) / 2),
+                    proposal: ProposedViewSize(width: sizes.cell, height: sizes.cell)
+                )
+            }
         }
     }
 }

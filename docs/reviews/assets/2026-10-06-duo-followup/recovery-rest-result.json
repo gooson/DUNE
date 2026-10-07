@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/PostureVisualAuditTests/testPostureCardAtMaximumAccessibilitySize",
+    "DUNEUITests/ActivityExerciseRegressionTests/testLegacyPhoneInsightsContentRecoversPrimaryWorkoutUI",
+    "DUNEUITests/ActivityExerciseRegressionTests/testWorkoutDraftAndRestTimerAtMaximumAccessibilityTextSize"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 3,
+    "passed": 2,
+    "skipped": 0,
+    "failed": 1
+  },
+  "passed_cases": 2,
+  "failures": [
+    "696: /Users/shanks/.codex/worktrees/712d/Health/DUNEUITests/Full/ActivityExerciseRegressionTests.swift:1348: error: -[DUNEUITests.ActivityExerciseRegressionTests testLegacyPhoneInsightsContentRecoversPrimaryWorkoutUI] : XCTAssertTrue failed - Recent workouts See All should be reachable and tappable",
+    "714: Test Case '-[DUNEUITests.ActivityExerciseRegressionTests testLegacyPhoneInsightsContentRecoversPrimaryWorkoutUI]' failed (136.602 seconds).",
+    "1584: Test Suite 'ActivityExerciseRegressionTests' failed at 2026-10-06 13:40:02.739.",
+    "2119: Test Suite 'DUNEUITests.xctest' failed at 2026-10-06 13:41:28.100.",
+    "2121: Test Suite 'Selected tests' failed at 2026-10-06 13:41:28.101.",
+    "2139: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log reports 1 failures",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/ActivityExerciseRegressionTests/testLegacyPhoneInsightsContentRecoversPrimaryWorkoutUI"
+  ],
+  "log_path": "/private/tmp/duo-finish-20261006/recovery-rest-ui.log"
+}

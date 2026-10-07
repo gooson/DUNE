@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/ActivityExerciseRegressionTests/testWorkoutInsightsReturnsToInteractiveWorkoutAtMaximumAccessibilityTextSize",
+    "DUNEUITests/PostureVisualAuditTests/testPostureComparison",
+    "DUNEUITests/ActivityExerciseRegressionTests/testPersonalRecordsDetailShowsTimelineRewardsAndHistory",
+    "DUNEUITests/ActivityExerciseRegressionTests/testNotificationWorkoutRouteOpensMockWorkoutDetail"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 4,
+    "passed": 2,
+    "skipped": 0,
+    "failed": 2
+  },
+  "passed_cases": 2,
+  "failures": [
+    "4285: /Users/shanks/.codex/worktrees/712d/Health/DUNEUITests/Full/ActivityExerciseRegressionTests.swift:1247: error: -[DUNEUITests.ActivityExerciseRegressionTests testPersonalRecordsDetailShowsTimelineRewardsAndHistory] : XCTAssertTrue failed - activity-section-pr should be reachable before opening detail",
+    "4303: Test Case '-[DUNEUITests.ActivityExerciseRegressionTests testPersonalRecordsDetailShowsTimelineRewardsAndHistory]' failed (51.417 seconds).",
+    "4741: Test Suite 'ActivityExerciseRegressionTests' failed at 2026-10-06 12:37:02.950.",
+    "5232: /Users/shanks/.codex/worktrees/712d/Health/DUNEUITests/Full/WellnessRegressionTests.swift:388: error: -[DUNEUITests.PostureVisualAuditTests testPostureComparison] : XCTAssertTrue failed - Compare Selected must reach the comparison destination",
+    "5250: Test Case '-[DUNEUITests.PostureVisualAuditTests testPostureComparison]' failed (104.789 seconds).",
+    "5251: Test Suite 'PostureVisualAuditTests' failed at 2026-10-06 12:38:47.757.",
+    "5253: Test Suite 'DUNEUITests.xctest' failed at 2026-10-06 12:38:47.757.",
+    "5255: Test Suite 'Selected tests' failed at 2026-10-06 12:38:47.757.",
+    "5274: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log reports 2 failures",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/PostureVisualAuditTests/testPostureComparison",
+    "DUNEUITests/ActivityExerciseRegressionTests/testPersonalRecordsDetailShowsTimelineRewardsAndHistory"
+  ],
+  "log_path": "/private/tmp/duo-resume-20261006/main-affected-ui.log"
+}

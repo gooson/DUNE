@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "target": "DUNEUITests",
+  "run_exit_status": 0,
+  "requested_selectors": [
+    "DUNEUITests/TodaySettingsRegressionTests/testSettingsShowsPhaseTwoRows",
+    "DUNEUITests/LifeRegressionTests/testVisualAuditHabitManagement",
+    "DUNEUITests/LifeRegressionTests/testVisualAuditHabitHeatmap"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 3,
+    "passed": 3,
+    "skipped": 0,
+    "failed": 0
+  },
+  "passed_cases": 3,
+  "failures": [],
+  "required_selectors_missing": [],
+  "log_path": "/private/tmp/duo-remaining-20261006/book-max-life-settings-final-ui.log"
+}

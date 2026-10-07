@@ -1,0 +1,255 @@
+Attributes: Application, 0x10a133840, pid: 4483, label: 'DUNE'
+Element subtree:
+ →Application, 0x10a133840, pid: 4483, label: 'DUNE'
+    Window, 0x10a132bc0, {{0.0, -0.0}, {951.0, 669.0}}
+      Other, 0x10a132580, {{0.0, -0.0}, {951.0, 669.0}}
+      Other, 0x10a130280, {{0.0, -0.0}, {951.0, 669.0}}
+        Other, 0x10a131680, {{0.0, -0.0}, {951.0, 669.0}}
+          Other, 0x10a1303c0, {{-951.0, -669.0}, {2853.0, 2007.0}}, identifier: 'PopoverDismissRegion', label: 'dismiss popup'
+          Other, 0x10a132d00, {{0.0, -0.0}, {951.0, 669.0}}
+            Other, 0x10a1308c0, {{0.0, -0.0}, {951.0, 669.0}}
+              Other, 0x10a132440, {{0.0, -0.0}, {867.0, 635.0}}
+              Other, 0x10a132940, {{0.0, -0.0}, {951.0, 669.0}}
+                Other, 0x10a133ac0, {{0.0, -0.0}, {951.0, 669.0}}
+                  Other, 0x10a130b40, {{0.0, -0.0}, {951.0, 669.0}}
+                    Other, 0x10a130f00, {{0.0, -0.0}, {951.0, 669.0}}
+                      Other, 0x10a131900, {{0.0, -0.0}, {951.0, 669.0}}
+                        Other, 0x10a130dc0, {{0.0, -0.0}, {951.0, 669.0}}
+                          Other, 0x10a131a40, {{0.0, -0.0}, {951.0, 669.0}}
+                            NavigationBar, 0x10a133c00, {{0.0, 24.0}, {951.0, 58.0}}, identifier: 'Body Records'
+                              StaticText, 0x10a132e40, {{20.0, 37.7}, {110.7, 20.7}}, label: 'Body Records'
+                            Other, 0x10a131540, {{0.0, -0.0}, {951.0, 669.0}}
+                              Other, 0x1135fa6c0, {{0.0, -0.0}, {951.0, 669.0}}
+                                Other, 0x1135fa800, {{0.0, -0.0}, {951.0, 669.0}}
+                                  Other, 0x1135fa940, {{0.0, -0.0}, {951.0, 669.0}}
+                                    Other, 0x1135faa80, {{0.0, 82.0}, {867.0, 1.0}}, identifier: 'body-history-detail-screen'
+                                    ScrollView, 0x1135fabc0, {{0.0, 83.0}, {951.0, 586.0}}
+                                      Other, 0x1135fad00, {{0.0, 83.0}, {867.0, 1323.0}}
+                                        Other, 0x1135fae40, {{28.0, 111.0}, {810.0, 1061.3}}
+                                          StaticText, 0x1135faf80, {{28.0, 111.0}, {113.3, 18.0}}, identifier: 'body-history-row-manual-0', label: 'October 6, 2026'
+                                          StaticText, 0x1135fb0c0, {{28.0, 133.0}, {41.3, 14.3}}, identifier: 'body-history-row-manual-0', label: '75.0 kg'
+                                          StaticText, 0x1135fb200, {{81.3, 133.0}, {34.7, 14.3}}, identifier: 'body-history-row-manual-0', label: '18.0%'
+                                          StaticText, 0x1135fb340, {{128.0, 133.0}, {42.3, 14.3}}, identifier: 'body-history-row-manual-0', label: '32.0 kg'
+                                          Image, 0x1135fb480, {{827.0, 128.0}, {11.0, 2.3}}, identifier: 'body-history-row-manual-0', label: 'More'
+                                          StaticText, 0x1135f92c0, {{50.3, 179.3}, {113.3, 18.0}}, identifier: 'body-history-row-healthkit-1', label: 'October 6, 2026'
+                                          Image, 0x1135f9400, {{29.3, 192.0}, {11.7, 11.0}}, identifier: 'body-history-row-healthkit-1', label: 'Love'
+                                          StaticText, 0x1135f9540, {{50.3, 201.3}, {41.7, 14.3}}, identifier: 'body-history-row-healthkit-1', label: '78.3 kg'
+                                          StaticText, 0x1135f97c0, {{104.0, 201.3}, {33.3, 14.3}}, identifier: 'body-history-row-healthkit-1', label: '17.8%'
+                                          StaticText, 0x1135f9900, {{149.3, 201.3}, {40.7, 14.3}}, identifier: 'body-history-row-healthkit-1', label: '63.1 kg'
+                                          StaticText, 0x1135fb700, {{50.3, 247.7}, {113.7, 18.0}}, identifier: 'body-history-row-healthkit-2', label: 'October 4, 2026'
+                                          Image, 0x1135fb5c0, {{29.3, 260.3}, {11.7, 11.0}}, identifier: 'body-history-row-healthkit-2', label: 'Love'
+                                          StaticText, 0x1135f8a00, {{50.3, 269.7}, {41.7, 14.3}}, identifier: 'body-history-row-healthkit-2', label: '78.3 kg'
+                                          StaticText, 0x1135f8c80, {{104.0, 269.7}, {32.3, 14.3}}, identifier: 'body-history-row-healthkit-2', label: '17.7%'
+                                          StaticText, 0x1135f8dc0, {{148.3, 269.7}, {42.3, 14.3}}, identifier: 'body-history-row-healthkit-2', label: '63.2 kg'
+                                          StaticText, 0x1135fb840, {{50.3, 316.0}, {113.3, 18.0}}, identifier: 'body-history-row-healthkit-3', label: 'October 2, 2026'
+                                          Image, 0x1135fb980, {{29.3, 328.7}, {11.7, 11.0}}, identifier: 'body-history-row-healthkit-3', label: 'Love'
+                                          StaticText, 0x1135fbd40, {{50.3, 338.0}, {41.7, 14.3}}, identifier: 'body-history-row-healthkit-3', label: '78.2 kg'
+                                          StaticText, 0x1135fbe80, {{104.0, 338.0}, {32.3, 14.3}}, identifier: 'body-history-row-healthkit-3', label: '17.7%'
+                                          StaticText, 0x1135f9b80, {{148.3, 338.0}, {42.7, 14.3}}, identifier: 'body-history-row-healthkit-3', label: '63.3 kg'
+                                          StaticText, 0x1135fa080, {{50.3, 384.3}, {142.0, 18.0}}, identifier: 'body-history-row-healthkit-4', label: 'September 30, 2026'
+                                          Image, 0x1135fa1c0, {{29.3, 397.0}, {11.7, 11.0}}, identifier: 'body-history-row-healthkit-4', label: 'Love'
+                                          StaticText, 0x1135fa300, {{50.3, 406.3}, {41.7, 14.3}}, identifier: 'body-history-row-healthkit-4', label: '78.0 kg'
+                                          StaticText, 0x1135fa440, {{104.0, 406.3}, {33.0, 14.3}}, identifier: 'body-history-row-healthkit-4', label: '17.5%'
+                                          StaticText, 0x1135f9f40, {{149.0, 406.3}, {42.7, 14.3}}, identifier: 'body-history-row-healthkit-4', label: '63.3 kg'
+                                          StaticText, 0x1135fbc00, {{28.0, 452.7}, {141.7, 18.0}}, identifier: 'body-history-row-manual-1', label: 'September 29, 2026'
+                                          StaticText, 0x1135f8f00, {{28.0, 474.7}, {40.7, 14.3}}, identifier: 'body-history-row-manual-1', label: '74.7 kg'
+                                          StaticText, 0x1135f9040, {{80.7, 474.7}, {34.7, 14.3}}, identifier: 'body-history-row-manual-1', label: '18.2%'
+                                          StaticText, 0x1135f9a40, {{127.3, 474.7}, {40.3, 14.3}}, identifier: 'body-history-row-manual-1', label: '32.1 kg'
+                                          Image, 0x1135f9680, {{827.0, 469.7}, {11.0, 2.3}}, identifier: 'body-history-row-manual-1', label: 'More'
+                                          StaticText, 0x1135f9e00, {{50.3, 521.0}, {141.7, 18.0}}, identifier: 'body-history-row-healthkit-6', label: 'September 28, 2026'
+                                          Image, 0x1135fa580, {{29.3, 533.7}, {11.7, 11.0}}, identifier: 'body-history-row-healthkit-6', label: 'Love'
+                                          StaticText, 0x1135f9cc0, {{50.3, 543.0}, {40.3, 14.3}}, identifier: 'body-history-row-healthkit-6', label: '77.9 kg'
+                                          StaticText, 0x1135fbac0, {{102.7, 543.0}, {33.0, 14.3}}, identifier: 'body-history-row-healthkit-6', label: '17.5%'
+                                          StaticText, 0x1135f9180, {{147.7, 543.0}, {42.3, 14.3}}, identifier: 'body-history-row-healthkit-6', label: '63.5 kg'
+                                          StaticText, 0x1135f8b40, {{50.3, 589.3}, {141.7, 18.0}}, identifier: 'body-history-row-healthkit-7', label: 'September 26, 2026'
+                                          Image, 0x10a0ec000, {{29.3, 602.0}, {11.7, 11.0}}, identifier: 'body-history-row-healthkit-7', label: 'Love'
+                                          StaticText, 0x10a0ec140, {{50.3, 611.3}, {40.3, 14.3}}, identifier: 'body-history-row-healthkit-7', label: '77.9 kg'
+                                          StaticText, 0x10a0ec280, {{102.7, 611.3}, {33.3, 14.3}}, identifier: 'body-history-row-healthkit-7', label: '17.4%'
+                                          StaticText, 0x10a0ec3c0, {{148.0, 611.3}, {42.7, 14.3}}, identifier: 'body-history-row-healthkit-7', label: '63.6 kg'
+                                          StaticText, 0x10a0ec500, {{50.3, 657.7}, {141.7, 18.0}}, identifier: 'body-history-row-healthkit-8', label: 'September 24, 2026'
+                                          Image, 0x10a0ec640, {{29.3, 670.3}, {11.7, 11.0}}, identifier: 'body-history-row-healthkit-8', label: 'Love'
+                                          StaticText, 0x10a0ec780, {{50.3, 679.7}, {40.3, 14.3}}, identifier: 'body-history-row-healthkit-8', label: '77.6 kg'
+                                          StaticText, 0x10a0ec8c0, {{102.7, 679.7}, {33.0, 14.3}}, identifier: 'body-history-row-healthkit-8', label: '17.3%'
+                                          StaticText, 0x10a0eca00, {{147.7, 679.7}, {42.7, 14.3}}, identifier: 'body-history-row-healthkit-8', label: '63.6 kg'
+                                          StaticText, 0x10a0ecb40, {{28.0, 726.0}, {141.7, 18.0}}, identifier: 'body-history-row-manual-2', label: 'September 22, 2026'
+                                          StaticText, 0x10a0ecc80, {{28.0, 748.0}, {41.3, 14.3}}, identifier: 'body-history-row-manual-2', label: '74.4 kg'
+                                          StaticText, 0x10a0ecdc0, {{81.3, 748.0}, {35.0, 14.3}}, identifier: 'body-history-row-manual-2', label: '18.4%'
+                                          StaticText, 0x10a0ecf00, {{128.3, 748.0}, {42.3, 14.3}}, identifier: 'body-history-row-manual-2', label: '32.2 kg'
+                                          Image, 0x10a0ed040, {{827.0, 743.0}, {11.0, 2.3}}, identifier: 'body-history-row-manual-2', label: 'More'
+                                          StaticText, 0x10a0ed180, {{50.3, 794.3}, {141.7, 18.0}}, identifier: 'body-history-row-healthkit-10', label: 'September 22, 2026'
+                                          Image, 0x10a0ed2c0, {{29.3, 807.0}, {11.7, 11.0}}, identifier: 'body-history-row-healthkit-10', label: 'Love'
+                                          StaticText, 0x10a0ed400, {{50.3, 816.3}, {40.3, 14.3}}, identifier: 'body-history-row-healthkit-10', label: '77.6 kg'
+                                          StaticText, 0x10a0ed540, {{102.7, 816.3}, {33.0, 14.3}}, identifier: 'body-history-row-healthkit-10', label: '17.2%'
+                                          StaticText, 0x10a0ed680, {{147.7, 816.3}, {41.7, 14.3}}, identifier: 'body-history-row-healthkit-10', label: '63.7 kg'
+                                          StaticText, 0x10a0ed7c0, {{50.3, 862.7}, {141.7, 18.0}}, identifier: 'body-history-row-healthkit-11', label: 'September 20, 2026'
+                                          Image, 0x10a0ed900, {{29.3, 875.3}, {11.7, 11.0}}, identifier: 'body-history-row-healthkit-11', label: 'Love'
+                                          StaticText, 0x10a0eda40, {{50.3, 884.7}, {40.3, 14.3}}, identifier: 'body-history-row-healthkit-11', label: '77.5 kg'
+                                          StaticText, 0x10a0edb80, {{102.7, 884.7}, {33.0, 14.3}}, identifier: 'body-history-row-healthkit-11', label: '17.2%'
+                                          StaticText, 0x10a0edcc0, {{147.7, 884.7}, {42.7, 14.3}}, identifier: 'body-history-row-healthkit-11', label: '63.9 kg'
+                                          StaticText, 0x10a0ede00, {{50.3, 931.0}, {139.7, 18.0}}, identifier: 'body-history-row-healthkit-12', label: 'September 18, 2026'
+                                          Image, 0x10a0edf40, {{29.3, 943.7}, {11.7, 11.0}}, identifier: 'body-history-row-healthkit-12', label: 'Love'
+                                          StaticText, 0x10a0ee080, {{50.3, 953.0}, {40.3, 14.3}}, identifier: 'body-history-row-healthkit-12', label: '77.3 kg'
+                                          StaticText, 0x10a0ee1c0, {{102.7, 953.0}, {33.0, 14.3}}, identifier: 'body-history-row-healthkit-12', label: '17.0%'
+                                          StaticText, 0x10a0ee300, {{147.7, 953.0}, {42.7, 14.3}}, identifier: 'body-history-row-healthkit-12', label: '63.9 kg'
+                                          StaticText, 0x10a0ee440, {{50.3, 999.3}, {139.7, 18.0}}, identifier: 'body-history-row-healthkit-13', label: 'September 16, 2026'
+                                          Image, 0x10a0ee580, {{29.3, 1012.0}, {11.7, 11.0}}, identifier: 'body-history-row-healthkit-13', label: 'Love'
+                                          StaticText, 0x10a0ee6c0, {{50.3, 1021.3}, {40.3, 14.3}}, identifier: 'body-history-row-healthkit-13', label: '77.2 kg'
+                                          StaticText, 0x10a0ee800, {{102.7, 1021.3}, {33.0, 14.3}}, identifier: 'body-history-row-healthkit-13', label: '17.0%'
+                                          StaticText, 0x10a0ee940, {{147.7, 1021.3}, {42.7, 14.3}}, identifier: 'body-history-row-healthkit-13', label: '64.0 kg'
+                                          StaticText, 0x10a0eea80, {{50.3, 1067.7}, {139.7, 18.0}}, identifier: 'body-history-row-healthkit-14', label: 'September 14, 2026'
+                                          Image, 0x10a0eebc0, {{29.3, 1080.3}, {11.7, 11.0}}, identifier: 'body-history-row-healthkit-14', label: 'Love'
+                                          StaticText, 0x10a0eed00, {{50.3, 1089.7}, {38.3, 14.3}}, identifier: 'body-history-row-healthkit-14', label: '77.1 kg'
+                                          StaticText, 0x10a0eee40, {{100.7, 1089.7}, {33.0, 14.3}}, identifier: 'body-history-row-healthkit-14', label: '17.0%'
+                                          StaticText, 0x10a0eef80, {{145.7, 1089.7}, {40.7, 14.3}}, identifier: 'body-history-row-healthkit-14', label: '64.1 kg'
+                                          StaticText, 0x10a0ef0c0, {{50.3, 1136.0}, {139.3, 18.0}}, identifier: 'body-history-row-healthkit-15', label: 'September 12, 2026'
+                                          Image, 0x10a0ef200, {{29.3, 1148.7}, {11.7, 11.0}}, identifier: 'body-history-row-healthkit-15', label: 'Love'
+                                          StaticText, 0x10a0ef340, {{50.3, 1158.0}, {41.7, 14.3}}, identifier: 'body-history-row-healthkit-15', label: '76.9 kg'
+                                          StaticText, 0x10a0ef480, {{104.0, 1158.0}, {35.0, 14.3}}, identifier: 'body-history-row-healthkit-15', label: '16.8%'
+                                          StaticText, 0x10a0ef5c0, {{151.0, 1158.0}, {40.7, 14.3}}, identifier: 'body-history-row-healthkit-15', label: '64.1 kg'
+                                      Other, 0x10a0ef700, {{918.0, 83.0}, {30.0, 531.0}}, label: 'Vertical scroll bar, 3 pages', value: 0%
+                                        Other, 0x10a0ef840, {{945.0, 86.0}, {3.0, 226.7}}
+                                      Other, 0x10a0ef980, {{918.0, 83.0}, {30.0, 531.0}}, label: 'Vertical scroll bar, 3 pages', value: 0%
+                                        Other, 0x10a0efac0, {{945.0, 86.0}, {3.0, 226.7}}
+                            Toolbar, 0x10a0efc00, {{0.0, -0.0}, {951.0, 669.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                              Other, 0x10a0efd40, {{0.0, -0.0}, {951.0, 669.0}}
+                Other, 0x10a0efe80, {{0.0, -0.0}, {951.0, 669.0}}
+                  Toolbar, 0x10a108000, {{0.0, -0.0}, {951.0, 669.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                    Other, 0x10a108140, {{0.0, -0.0}, {951.0, 669.0}}
+                      Other, 0x10a108280, {{0.0, -0.0}, {951.0, 669.0}}
+                        Other, 0x10a1083c0, {{0.0, -0.0}, {951.0, 669.0}}
+                          Other, 0x10a108500, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x10a108640, {{879.0, 120.0}, {48.0, 48.0}}
+                              Other, 0x10a108780, {{879.0, 120.0}, {48.0, 48.0}}
+                                Other, 0x10a1088c0, {{884.0, 125.0}, {38.0, 38.0}}
+                                  Other, 0x10a108a00, {{884.0, 125.0}, {38.0, 38.0}}
+                                    Button, 0x10a108b40, {{884.0, 125.0}, {38.0, 38.0}}, identifier: 'BackButton'
+                        Other, 0x10a108c80, {{0.0, -0.0}, {951.0, 669.0}}
+                          Other, 0x10a108dc0, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x10a108f00, {{879.0, 433.0}, {48.0, 212.0}}
+                              Other, 0x10a109040, {{879.0, 433.0}, {48.0, 212.0}}
+                                Other, 0x10a109180, {{879.0, 433.0}, {48.0, 212.0}}
+                                  Other, 0x10a1092c0, {{879.0, 433.0}, {48.0, 212.0}}
+                                    Other, 0x10a109400, {{879.0, 433.0}, {48.0, 212.0}}
+                                      Other, 0x10a109540, {{879.0, 433.0}, {48.0, 212.0}}
+                                        Other, 0x10a109680, {{879.0, 433.0}, {44.0, 58.0}}
+                                        Other, 0x10a1097c0, {{879.0, 433.0}, {48.0, 212.0}}
+                                          Button, 0x10a109900, {{881.0, 435.0}, {44.0, 58.0}}, identifier: 'tab-today', label: 'Today'
+                                            Image, 0x10a109a40, {{890.3, 447.3}, {25.3, 31.7}}, identifier: 'heart.text.clipboard.fill', label: 'Heart on a text clipboard, filled'
+                                          Button, 0x10a109b80, {{881.0, 485.0}, {44.0, 58.0}}, identifier: 'tab-activity', label: 'Activity'
+                                            Image, 0x10a109cc0, {{891.3, 498.7}, {23.3, 28.7}}, identifier: 'flame.fill', label: 'Flame'
+                                          Button, 0x10a109e00, {{881.0, 535.0}, {44.0, 58.0}}, identifier: 'tab-wellness', label: 'Wellness', Selected
+                                            Image, 0x10a109f40, {{888.7, 551.3}, {28.7, 25.3}}, identifier: 'leaf.fill', label: 'Leaf'
+                                          Button, 0x10a10a080, {{881.0, 585.0}, {44.0, 58.0}}, identifier: 'tab-life', label: 'Life'
+                                            Image, 0x10a10a1c0, {{887.0, 600.3}, {32.0, 27.3}}, identifier: 'checklist', label: 'Checklist with checkmarks'
+                                        Other, 0x10a10a300, {{879.0, 433.0}, {48.0, 212.0}}
+                                        Other, 0x10a10a440, {{879.0, 433.0}, {48.0, 212.0}}
+                                          Other, 0x10a10a580, {{879.0, 433.0}, {48.0, 212.0}}
+                                            Other, 0x10a10a6c0, {{879.0, 433.0}, {48.0, 212.0}}
+                                              Other, 0x10a10a800, {{879.0, 433.0}, {48.0, 212.0}}
+                                                Other, 0x10a10a940, {{879.0, 433.0}, {48.0, 212.0}}
+                                                  Other, 0x10a10aa80, {{879.0, 433.0}, {48.0, 212.0}}
+                                        Other, 0x10a10abc0, {{881.0, 535.0}, {44.0, 58.0}}
+                                          Other, 0x10a10ad00, {{881.0, 535.0}, {44.0, 58.0}}
+                                            Other, 0x10a10ae40, {{881.0, 535.0}, {44.0, 58.0}}
+                                            Other, 0x10a10af80, {{881.0, 535.0}, {44.0, 58.0}}
+                                              Other, 0x10a10b0c0, {{881.0, 535.0}, {44.0, 58.0}}
+                                                Other, 0x10a10b200, {{881.0, 535.0}, {44.0, 58.0}}
+                                                  Other, 0x10a10b340, {{881.0, 535.0}, {44.0, 58.0}}
+                                                Other, 0x10a10b480, {{881.0, 535.0}, {44.0, 58.0}}
+                                              Other, 0x10a10b5c0, {{881.0, 535.0}, {44.0, 58.0}}
+              Other, 0x10a10b700, {{433.5, 317.5}, {0.0, 0.0}}
+      Other, 0x10a10b840, {{0.0, -0.0}, {951.0, 669.0}}
+        Other, 0x10a10b980, {{-951.0, -669.0}, {2853.0, 2007.0}}, identifier: 'PopoverDismissRegion', label: 'dismiss popup'
+        Other, 0x10a10bac0, {{149.0, 8.0}, {653.0, 661.0}}
+          Other, 0x10a10bc00, {{149.0, 8.0}, {653.0, 661.0}}
+            Other, 0x10a10bd40, {{149.0, 8.0}, {653.0, 661.0}}
+              Other, 0x10a10be80, {{149.0, 8.0}, {653.0, 661.0}}
+                Other, 0x113600000, {{149.0, 8.0}, {653.0, 661.0}}
+                  NavigationBar, 0x113600140, {{149.0, 24.0}, {653.0, 58.0}}, identifier: 'Edit Record'
+                    StaticText, 0x113600280, {{429.7, 37.7}, {91.7, 20.7}}, label: 'Edit Record'
+                  Other, 0x1136003c0, {{149.0, 8.0}, {653.0, 661.0}}
+                    Other, 0x113600500, {{149.0, 8.0}, {653.0, 661.0}}
+                      Other, 0x113600640, {{149.0, 8.0}, {653.0, 661.0}}
+                        Other, 0x113600780, {{149.0, 8.0}, {653.0, 661.0}}
+                          Other, 0x1136008c0, {{149.0, 82.0}, {653.0, 1.0}}, identifier: 'body-form-screen'
+                          CollectionView, 0x113600a00, {{149.0, 83.0}, {653.0, 586.0}}
+                            Other, 0x113600b40, {{133.0, -1133.0}, {685.0, 1290.7}}
+                            Cell, 0x113600c80, {{165.0, 74.0}, {621.0, 66.0}}
+                              Other, 0x113600dc0, {{165.0, 74.0}, {621.0, 66.0}}
+                                Other, 0x113600f00, {{165.0, 74.0}, {621.0, 66.0}}
+                              Other, 0x113601040, {{165.0, 74.0}, {621.0, 66.0}}
+                                Other, 0x113601180, {{165.0, 74.0}, {621.0, 66.0}}
+                                  Other, 0x1136012c0, {{165.0, 74.0}, {621.0, 66.0}}
+                                    StaticText, 0x113601400, {{185.0, 96.8}, {94.0, 20.3}}, label: 'Date & Time'
+                                    DatePicker, 0x113601540, {{576.7, 89.0}, {189.3, 36.0}}, identifier: 'body-form-date'
+                                      Button, 0x113601680, {{576.7, 89.0}, {189.3, 36.0}}, label: 'Date and Time Picker', value: 00:00, Oct 6, 2026
+                                        Button, 0x1136017c0, {{576.7, 89.0}, {115.3, 36.0}}, label: 'Oct 6, 2026'
+                                        Button, 0x113601900, {{696.0, 89.0}, {70.0, 36.0}}, label: '00:00'
+                            Other, 0x113601a40, {{133.0, 157.7}, {685.0, 110.0}}
+                            Cell, 0x113601b80, {{165.0, 157.7}, {621.0, 40.3}}
+                              Other, 0x113601cc0, {{165.0, 157.7}, {621.0, 40.3}}
+                              Other, 0x113601e00, {{165.0, 157.7}, {621.0, 40.3}}
+                                Other, 0x113601f40, {{165.0, 157.7}, {621.0, 40.3}}
+                                  Other, 0x113602080, {{165.0, 157.7}, {621.0, 40.3}}
+                                    StaticText, 0x1136021c0, {{165.0, 157.7}, {621.0, 40.3}}, label: 'Weight (kg)'
+                            Cell, 0x113602300, {{165.0, 198.0}, {621.0, 52.0}}
+                              Other, 0x113602440, {{165.0, 198.0}, {621.0, 52.0}}
+                                Other, 0x113602580, {{165.0, 198.0}, {621.0, 52.0}}
+                              Other, 0x1136026c0, {{165.0, 198.0}, {621.0, 52.0}}
+                                Other, 0x113602800, {{165.0, 198.0}, {621.0, 52.0}}
+                                  Other, 0x113602940, {{165.0, 198.0}, {621.0, 52.0}}
+                                    TextField, 0x113602a80, {{185.0, 213.0}, {581.0, 22.0}}, identifier: 'body-form-weight', placeholderValue: 'Weight (kg)', value: 88.8
+                            Other, 0x113602bc0, {{133.0, 267.3}, {685.0, 110.0}}
+                            Cell, 0x113602d00, {{165.0, 267.3}, {621.0, 40.3}}
+                              Other, 0x113602e40, {{165.0, 267.3}, {621.0, 40.3}}
+                              Other, 0x113602f80, {{165.0, 267.3}, {621.0, 40.3}}
+                                Other, 0x1136030c0, {{165.0, 267.3}, {621.0, 40.3}}
+                                  Other, 0x113603200, {{165.0, 267.3}, {621.0, 40.3}}
+                                    StaticText, 0x113603340, {{165.0, 267.3}, {621.0, 40.3}}, label: 'Body Fat (%)'
+                            Cell, 0x113603480, {{165.0, 307.7}, {621.0, 52.0}}
+                              Other, 0x1136035c0, {{165.0, 307.7}, {621.0, 52.0}}
+                                Other, 0x113603700, {{165.0, 307.7}, {621.0, 52.0}}
+                              Other, 0x113603840, {{165.0, 307.7}, {621.0, 52.0}}
+                                Other, 0x113603980, {{165.0, 307.7}, {621.0, 52.0}}
+                                  Other, 0x113603ac0, {{165.0, 307.7}, {621.0, 52.0}}
+                                    TextField, 0x113603c00, {{185.0, 322.7}, {581.0, 22.0}}, identifier: 'body-form-fat', placeholderValue: 'Body Fat (%)', value: 18.0
+                            Other, 0x113603d40, {{133.0, 377.3}, {685.0, 110.0}}
+                            Cell, 0x113603e80, {{165.0, 377.3}, {621.0, 40.3}}
+                              Other, 0x113608000, {{165.0, 377.3}, {621.0, 40.3}}
+                              Other, 0x113608140, {{165.0, 377.3}, {621.0, 40.3}}
+                                Other, 0x113608280, {{165.0, 377.3}, {621.0, 40.3}}
+                                  Other, 0x1136083c0, {{165.0, 377.3}, {621.0, 40.3}}
+                                    StaticText, 0x113608500, {{165.0, 377.3}, {621.0, 40.3}}, label: 'Muscle Mass (kg)'
+                            Cell, 0x113608640, {{165.0, 417.7}, {621.0, 52.0}}
+                              Other, 0x113608780, {{165.0, 417.7}, {621.0, 52.0}}
+                                Other, 0x1136088c0, {{165.0, 417.7}, {621.0, 52.0}}
+                              Other, 0x113608a00, {{165.0, 417.7}, {621.0, 52.0}}
+                                Other, 0x113608b40, {{165.0, 417.7}, {621.0, 52.0}}
+                                  Other, 0x113608c80, {{165.0, 417.7}, {621.0, 52.0}}
+                                    TextField, 0x113608dc0, {{185.0, 432.7}, {581.0, 22.0}}, identifier: 'body-form-muscle', placeholderValue: 'Muscle Mass (kg)', value: 32.0
+                            Other, 0x113608f00, {{133.0, 487.0}, {685.0, 1261.7}}
+                            Cell, 0x113609040, {{165.0, 504.7}, {621.0, 52.0}}
+                              Other, 0x113609180, {{165.0, 504.7}, {621.0, 52.0}}
+                                Other, 0x1136092c0, {{165.0, 504.7}, {621.0, 52.0}}
+                              Other, 0x113609400, {{165.0, 504.7}, {621.0, 52.0}}
+                                Other, 0x113609540, {{165.0, 504.7}, {621.0, 52.0}}
+                                  Other, 0x113609680, {{165.0, 504.7}, {621.0, 52.0}}
+                                    TextField, 0x1136097c0, {{185.0, 519.7}, {581.0, 22.0}}, placeholderValue: 'Memo'
+                            Other, 0x113609900, {{769.0, 83.0}, {30.0, 493.7}}, label: 'Vertical scroll bar, 2 pages', value: 100%
+                              Other, 0x113609a40, {{796.0, 120.0}, {3.0, 453.7}}
+                            Other, 0x113609b80, {{769.0, 83.0}, {30.0, 493.7}}, label: 'Vertical scroll bar, 2 pages', value: 100%
+                              Other, 0x113609cc0, {{796.0, 120.0}, {3.0, 453.7}}
+                          Button, 0x113609e00, {{161.0, 595.7}, {52.7, 20.3}}, identifier: 'body-form-cancel', label: 'Cancel'
+                          Button, 0x113609f40, {{729.0, 588.7}, {61.0, 34.3}}, identifier: 'body-form-save', label: 'Save'
+                  Toolbar, 0x11360a080, {{149.0, 8.0}, {653.0, 661.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                    Other, 0x11360a1c0, {{149.0, 8.0}, {653.0, 661.0}}
+    Window, 0x11360a300, {{0.0, -0.0}, {951.0, 669.0}}
+      Other, 0x11360a440, {{0.0, -0.0}, {951.0, 669.0}}
+        Other, 0x11360a580, {{0.0, -0.0}, {951.0, 669.0}}
+Path to element:
+ →Application, 0x10a133840, pid: 4483, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x11360a6c0, pid: 4483, label: 'DUNE'
+  }

@@ -10,6 +10,13 @@ struct WorkoutSessionView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.openWindow) private var openWindow
+    @Environment(\.supportsMultipleWindows) private var supportsMultipleWindows
+
+    @ScaledMetric(relativeTo: .largeTitle) private var inputFontSize = 48
+    @ScaledMetric(relativeTo: .largeTitle) private var timerDiameter = 180
 
     @AppStorage(WeightUnit.storageKey) private var weightUnitRaw = WeightUnit.kg.rawValue
     @State private var viewModel: WorkoutSessionViewModel
@@ -19,11 +26,15 @@ struct WorkoutSessionView: View {
     @State private var showingShareSheet = false
     @State private var savedRecord: ExerciseRecord?
     @State private var effortSuggestion: EffortSuggestion?
+    @State private var didPrepareSession = false
+    @State private var showingInsights = false
+    @State private var windowSession: UISceneSession?
     @FocusState private var isInputFieldFocused: Bool
 
     // Set-by-set flow state
     @State private var currentSetIndex = 0
     @State private var showRestTimer = false
+    @State private var didCommitWorkout = false
     @State private var showLastSetOptions = false
     @State private var showEndConfirmation = false
     @State private var restTimerCompleted = 0
@@ -81,33 +92,49 @@ struct WorkoutSessionView: View {
     }
 
     var body: some View {
-        VStack(spacing: 0) {
-            // Top bar: progress + timer
-            topBar
-
-            // Main content area — switches between input and rest
-            ZStack {
-                if showRestTimer {
-                    restTimerContent
-                        .transition(.opacity)
+        GeometryReader { geometry in
+            // Keep room for both values when large-text header/footer would squeeze the inputs.
+            let scrollsChrome = dynamicTypeSize.isAccessibilitySize && geometry.size.height < 700
+            VStack(spacing: 0) {
+                if !scrollsChrome { topBar }
+                if geometry.size.width >= 700 && !dynamicTypeSize.isAccessibilitySize {
+                    HStack(alignment: .top, spacing: DS.Spacing.md) {
+                        ScrollView { sessionOverview }
+                            .frame(width: geometry.size.width * 0.35)
+                        sessionControls(showsOverview: false)
+                    }
                 } else {
-                    setInputContent
-                        .transition(.opacity)
+                    sessionControls(showsOverview: true, scrollsChrome: scrollsChrome)
                 }
             }
-            .animation(.easeInOut(duration: 0.3), value: showRestTimer)
-
-            // Bottom action button
-            bottomAction
         }
         .background { DetailWaveBackground() }
+        .background {
+            AppWindowSceneReader(kind: nil) { windowSession = $0 }
+        }
         .sensoryFeedback(.success, trigger: setCompleteCount)
         .sensoryFeedback(.success, trigger: restTimerCompleted)
         .englishNavigationTitle(exercise.name)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button("Workout Insights", systemImage: "chart.bar.xaxis") {
+                    // The phone scene APIs reject activation/destruction even
+                    // when SwiftUI reports multiple-window support on Duo.
+                    // Keep insights in the workout's scene so dismissal can
+                    // preserve the active draft and rest timer.
+                    if supportsMultipleWindows && UIDevice.current.userInterfaceIdiom != .phone {
+                        if !AppWindowRouter.shared.openInsights(from: windowSession, openWindow: openWindow) {
+                            showingInsights = true
+                        }
+                    } else {
+                        showingInsights = true
+                    }
+                }
+                .accessibilityIdentifier("workout-session-insights")
+            }
             if viewModel.supportsWeight {
-                ToolbarItem(placement: .topBarTrailing) {
+                ToolbarItem(placement: .topBarLeading) {
                     Button {
                         let newUnit: WeightUnit = weightUnit == .kg ? .lb : .kg
                         viewModel.convertWeightUnit(from: weightUnit, to: newUnit)
@@ -132,28 +159,45 @@ struct WorkoutSessionView: View {
             }
         }
         .onAppear {
-            viewModel.loadPreviousSets(from: exerciseRecords, weightUnit: weightUnit)
-            if let templateEntry {
-                viewModel.applyTemplateDefaults(templateEntry, weightUnit: weightUnit)
+            if !didPrepareSession {
+                viewModel.loadPreviousSets(from: exerciseRecords, weightUnit: weightUnit)
+                if let templateEntry {
+                    viewModel.applyTemplateDefaults(templateEntry, weightUnit: weightUnit)
+                }
+                skipToFirstIncompleteSet()
+                if let draft = draftToRestore,
+                   let endDate = draft.restEndDate,
+                   endDate.timeIntervalSince1970.isFinite,
+                   let duration = draft.restTotalDuration, (0...3600).contains(duration),
+                   let index = draft.restingSetIndex,
+                   viewModel.sets.indices.contains(index), viewModel.sets[index].isCompleted {
+                    currentSetIndex = index
+                    showRestTimer = true
+                    restTimer.restore(endDate: endDate, totalDuration: duration)
+                }
+                didPrepareSession = true
             }
-            if draftToRestore != nil {
-                WorkoutSessionViewModel.clearDraft()
-            }
-            // Skip already-completed sets (draft restore)
-            skipToFirstIncompleteSet()
             startSessionTimer()
+            if showRestTimer { startRestActivity() }
         }
         .onDisappear {
             sessionTimerTask?.cancel()
             sessionTimerTask = nil
+            restActivity.end(sessionStartedAt: viewModel.sessionStartTime)
+        }
+        .onChange(of: restTimer.completionCount) { _, _ in
+            finishRest()
         }
         .onChange(of: scenePhase) { _, newPhase in
+            if newPhase == .active { restTimer.refresh() }
             if newPhase == .background || newPhase == .inactive {
-                // Skip draft saving in template mode — each exercise is ephemeral
-                guard templateInfo == nil else { return }
-                viewModel.saveDraft()
+                persistSessionDraft()
             }
         }
+        .onChange(of: viewModel.sets) { _, _ in persistSessionDraft() }
+        .onChange(of: viewModel.memo) { _, _ in persistSessionDraft() }
+        .onChange(of: restTimer.endDate) { _, _ in persistSessionDraft() }
+        .onChange(of: showRestTimer) { _, _ in persistSessionDraft() }
         .confirmationDialog(
             isTemplateIntermediate ? "End Exercise?" : "End Workout?",
             isPresented: $showEndConfirmation,
@@ -170,7 +214,7 @@ struct WorkoutSessionView: View {
         }
         .sheet(isPresented: $showLastSetOptions) {
             allSetsDoneSheet
-                .presentationDetents([.height(200)])
+                .presentationDetents([.medium, .large])
                 .presentationDragIndicator(.visible)
                 .interactiveDismissDisabled()
         }
@@ -196,6 +240,20 @@ struct WorkoutSessionView: View {
                     dismiss()
                 }
             )
+            .presentationDetents([.large])
+        }
+        .sheet(isPresented: $showingInsights) {
+            NavigationStack {
+                VStack(spacing: 0) {
+                    HStack {
+                        Spacer()
+                        Button("Done") { showingInsights = false }
+                            .accessibilityIdentifier("workout-insights-close")
+                    }
+                    .padding()
+                    WeeklyStatsDetailView()
+                }
+            }
             .presentationDetents([.large])
         }
     }
@@ -272,31 +330,90 @@ struct WorkoutSessionView: View {
 
     // MARK: - Set Input Content
 
-    private var setInputContent: some View {
-        ScrollView {
-            VStack(spacing: DS.Spacing.xl) {
-
-                // Exercise info
-                VStack(spacing: DS.Spacing.xs) {
-                    Image(systemName: exercise.resolvedActivityType.iconName)
-                        .font(.largeTitle)
-                        .foregroundStyle(exercise.resolvedActivityType.color)
-
-                    Text(exercise.localizedName)
-                        .font(.title2.weight(.bold))
-
-                    // Previous set info
-                    if let prev = viewModel.previousSetInfo(for: currentSetIndex + 1) {
-                        previousBadge(prev)
+    private func sessionControls(showsOverview: Bool, scrollsChrome: Bool = false) -> some View {
+        VStack(spacing: 0) {
+            ScrollViewReader { scrollProxy in
+                ScrollView {
+                    VStack(spacing: DS.Spacing.lg) {
+                        if scrollsChrome { topBar }
+                        if showRestTimer {
+                            restTimerContent
+                        } else {
+                            setInputContent
+                        }
+                        if scrollsChrome && !isInputFieldFocused { bottomAction }
+                        if showsOverview && !isInputFieldFocused {
+                            sessionOverview
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .clipped()
+                .contentShape(Rectangle())
+                .accessibilityElement(children: .contain)
+                .accessibilityIdentifier("workout-session-controls")
+                .scrollDismissesKeyboard(.interactively)
+                .onChange(of: showRestTimer) { wasResting, isResting in
+                    if wasResting && !isResting && dynamicTypeSize.isAccessibilitySize
+                        && exercise.inputType == .setsRepsWeight
+                        && viewModel.sets.indices.contains(currentSetIndex) {
+                        var transaction = Transaction(animation: nil)
+                        transaction.disablesAnimations = true
+                        withTransaction(transaction) {
+                            scrollProxy.scrollTo("workout-paired-inputs", anchor: .top)
+                        }
                     }
                 }
+            }
+            if !scrollsChrome || isInputFieldFocused {
+                bottomAction.background(.regularMaterial)
+            }
+        }
+        .animation(reduceMotion ? nil : DS.Animation.standard, value: showRestTimer)
+    }
 
-                // Weight / Reps input
-                currentSetInputFields
+    private var sessionOverview: some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.lg) {
+            if dynamicTypeSize.isAccessibilitySize {
+                Text(exercise.localizedName)
+                    .font(.title2.bold())
+                    .fixedSize(horizontal: false, vertical: true)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            } else {
+                Label(exercise.localizedName, systemImage: exercise.resolvedActivityType.iconName)
+                    .font(.title2.bold())
+            }
+            Text("Previous Workout")
+                .font(DS.Typography.sectionTitle)
+            if viewModel.previousSets.isEmpty {
+                Text("No previous sets for this exercise")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            } else {
+                ForEach(Array(viewModel.previousSets.enumerated()), id: \.offset) { index, previous in
+                    HStack {
+                        Text("Set \(index + 1)")
+                            .font(.subheadline)
+                        Spacer()
+                        previousBadge(previous)
+                    }
+                    .padding(.vertical, DS.Spacing.sm)
+                }
 
             }
-            .padding(DS.Spacing.lg)
         }
+        .padding(DS.Spacing.lg)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .accessibilityIdentifier("workout-session-overview")
+    }
+
+    private var setInputContent: some View {
+        VStack(spacing: DS.Spacing.xl) {
+            currentSetInputFields
+        }
+        .padding(.horizontal, DS.Spacing.lg)
+        .padding(.vertical, DS.Spacing.md)
     }
 
     @ViewBuilder
@@ -309,6 +426,14 @@ struct WorkoutSessionView: View {
                     .font(.caption)
             } else if let r = prev.reps {
                 Text("\(r.formattedWithSeparator) reps")
+                    .font(.caption)
+            }
+            if let duration = prev.duration, duration.isFinite, duration >= 0 {
+                Text(Duration.seconds(duration).formatted(.time(pattern: .minuteSecond)))
+                    .font(.caption.monospacedDigit())
+            }
+            if let distance = prev.distance, distance.isFinite, distance >= 0 {
+                Text(Measurement(value: distance, unit: UnitLength.kilometers).formatted())
                     .font(.caption)
             }
         }
@@ -442,6 +567,7 @@ struct WorkoutSessionView: View {
             Divider()
                 .padding(.horizontal, DS.Spacing.xl)
         }
+        .id("workout-paired-inputs")
     }
 
     private func repsOnlyInput(set: Binding<EditableSet>) -> some View {
@@ -524,7 +650,7 @@ struct WorkoutSessionView: View {
                     // Show recorded duration for completed sets (stored as seconds)
                     let totalSecs = Int(set.wrappedValue.duration) ?? 0
                     Text(String(format: "%d:%02d", totalSecs / 60, totalSecs % 60))
-                        .font(.system(size: 48, weight: .bold, design: .rounded))
+                        .font(.system(size: inputFontSize, weight: .bold, design: .rounded))
                         .monospacedDigit()
                         .foregroundStyle(DS.Color.primaryText)
                 } else if let startDate = viewModel.setTimerStarts[set.wrappedValue.id] {
@@ -535,14 +661,14 @@ struct WorkoutSessionView: View {
                         let mins = elapsed / 60
                         let secs = elapsed % 60
                         Text(String(format: "%d:%02d", mins, secs))
-                            .font(.system(size: 48, weight: .bold, design: .rounded))
+                            .font(.system(size: inputFontSize, weight: .bold, design: .rounded))
                             .monospacedDigit()
                             .foregroundStyle(DS.Color.primaryText)
                             .contentTransition(.numericText())
                     }
                 } else {
                     Text("0:00")
-                        .font(.system(size: 48, weight: .bold, design: .rounded))
+                        .font(.system(size: inputFontSize, weight: .bold, design: .rounded))
                         .monospacedDigit()
                         .foregroundStyle(DS.Color.primaryText)
                 }
@@ -602,7 +728,7 @@ struct WorkoutSessionView: View {
                 .foregroundStyle(DS.Color.textSecondary)
 
             TextField(placeholder, text: value)
-                .font(.system(size: 48, weight: .bold, design: .rounded))
+                .font(.system(size: inputFontSize, weight: .bold, design: .rounded))
                 .multilineTextAlignment(.center)
                 .keyboardType(keyboardType)
                 .submitLabel(.done)
@@ -616,6 +742,8 @@ struct WorkoutSessionView: View {
                     Button(action: button.1) {
                         Text(button.0)
                             .font(.body.weight(.medium))
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.8)
                             .frame(maxWidth: .infinity, minHeight: 40)
                     }
                     .buttonStyle(.bordered)
@@ -673,9 +801,10 @@ struct WorkoutSessionView: View {
         }
     }
 
-    @State private var restSecondsRemaining: Int = 0
-    @State private var restTotalSeconds: Int = 90
-    @State private var restTimerTask: Task<Void, Never>?
+    @State private var restTimer = RestTimerViewModel()
+    @State private var restActivity = WorkoutRestActivity()
+    private var restSecondsRemaining: Int { restTimer.secondsRemaining }
+    private var restTotalSeconds: Int { restTimer.defaultDuration }
 
     private var completedSetSummary: some View {
         let set = viewModel.sets[currentSetIndex]
@@ -691,6 +820,8 @@ struct WorkoutSessionView: View {
                     .font(.headline)
             }
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityIdentifier("workout-session-completed-set-summary")
         .padding(.horizontal, DS.Spacing.lg)
         .padding(.vertical, DS.Spacing.md)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
@@ -705,16 +836,17 @@ struct WorkoutSessionView: View {
                 .trim(from: 0, to: restProgress)
                 .stroke(DS.Color.activity, style: StrokeStyle(lineWidth: 8, lineCap: .round))
                 .rotationEffect(.degrees(-90))
-                .animation(.linear(duration: 1), value: restSecondsRemaining)
+                .animation(reduceMotion ? nil : .linear(duration: 1), value: restSecondsRemaining)
 
             VStack(spacing: DS.Spacing.xxs) {
                 Text(restTimeString)
-                    .font(.system(size: 48, weight: .bold, design: .rounded))
+                    .accessibilityIdentifier("workout-session-rest-countdown")
+                    .font(.system(size: inputFontSize, weight: .bold, design: .rounded))
                     .monospacedDigit()
                     .contentTransition(.numericText())
             }
         }
-        .frame(width: 180, height: 180)
+        .frame(width: min(timerDiameter, 320), height: min(timerDiameter, 320))
     }
 
     private var restProgress: Double {
@@ -729,25 +861,33 @@ struct WorkoutSessionView: View {
     }
 
     private var restControls: some View {
-        HStack(spacing: DS.Spacing.md) {
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(spacing: DS.Spacing.md))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.md))
+        return layout {
             Button {
                 let maxRestSeconds = 3600 // 1 hour cap
                 guard restTotalSeconds + 30 <= maxRestSeconds else { return }
-                restSecondsRemaining += 30
-                restTotalSeconds += 30
+                restTimer.addTime(30)
+                if let endDate = restTimer.endDate {
+                    restActivity.update(endDate: endDate, totalDuration: restTotalSeconds)
+                }
             } label: {
                 Text("+30s")
                     .font(.body.weight(.medium))
+                    .fixedSize(horizontal: false, vertical: true)
                     .frame(maxWidth: .infinity, minHeight: 48)
             }
             .buttonStyle(.bordered)
             .tint(.secondary)
+            .accessibilityIdentifier("workout-session-add-rest")
 
             Button {
                 finishRest()
             } label: {
                 Text("Skip")
                     .font(.body.weight(.semibold))
+                    .fixedSize(horizontal: false, vertical: true)
                     .frame(maxWidth: .infinity, minHeight: 48)
             }
             .buttonStyle(.borderedProminent)
@@ -759,6 +899,7 @@ struct WorkoutSessionView: View {
             } label: {
                 Text("End")
                     .font(.body.weight(.medium))
+                    .fixedSize(horizontal: false, vertical: true)
                     .frame(maxWidth: .infinity, minHeight: 48)
             }
             .buttonStyle(.bordered)
@@ -931,31 +1072,22 @@ struct WorkoutSessionView: View {
 
     private func startRest() {
         let seconds = Int(viewModel.resolveRestDuration(forSetAt: currentSetIndex))
-        restTotalSeconds = seconds
-        restSecondsRemaining = seconds
         showRestTimer = true
-        startRestCountdown()
+        restTimer.start(seconds: seconds)
+        startRestActivity()
     }
 
-    private func startRestCountdown() {
-        restTimerTask?.cancel()
-        restTimerTask = Task {
-            while restSecondsRemaining > 0, !Task.isCancelled {
-                do {
-                    try await Task.sleep(for: .seconds(1))
-                } catch { break }
-                guard !Task.isCancelled else { return }
-                restSecondsRemaining -= 1
-            }
-            guard !Task.isCancelled else { return }
-            finishRest()
-        }
+    private func startRestActivity() {
+        guard restTimer.isRunning, let endDate = restTimer.endDate else { return }
+        restActivity.start(sessionStartedAt: viewModel.sessionStartTime, exerciseName: exercise.localizedName, setNumber: currentSetIndex + 1,
+                           endDate: endDate, totalDuration: restTotalSeconds)
     }
 
     private func finishRest() {
+        guard showRestTimer else { return }
         let completedSetIndex = currentSetIndex
-        restTimerTask?.cancel()
-        restTimerTask = nil
+        restTimer.stop()
+        restActivity.end(sessionStartedAt: viewModel.sessionStartTime)
         showRestTimer = false
         restTimerCompleted += 1
 
@@ -1001,11 +1133,23 @@ struct WorkoutSessionView: View {
 
     // MARK: - Save
 
+    private func persistSessionDraft() {
+        // Scene transitions can be delayed or omitted when another display is
+        // active. Save edited inputs too, and retain resumed drafts until commit.
+        guard didPrepareSession, templateInfo == nil, !didCommitWorkout else { return }
+        viewModel.saveDraft(
+            restEndDate: showRestTimer ? restTimer.endDate : nil,
+            restTotalDuration: showRestTimer ? restTotalSeconds : nil,
+            restingSetIndex: showRestTimer ? currentSetIndex : nil
+        )
+    }
+
     private func saveWorkout() {
-        restTimerTask?.cancel()
-        restTimerTask = nil
         isInputFieldFocused = false
         guard let record = viewModel.createValidatedRecord(weightUnit: weightUnit) else { return }
+        didCommitWorkout = true
+        restTimer.stop()
+        restActivity.end(sessionStartedAt: viewModel.sessionStartTime)
 
         // Auto intensity — called BEFORE modelContext.insert so @Query history excludes this record
         let intensityService = WorkoutIntensityService()

@@ -254,6 +254,7 @@ struct DUNEApp: App {
 #if DEBUG
         if Self.shouldResetUITestState {
             TestDataSeeder.resetUserDefaults()
+            WorkoutSessionDraft.clear()
         }
 #endif
 
@@ -327,14 +328,67 @@ struct DUNEApp: App {
     }
 
     var body: some Scene {
-        Self.makeWindowGroup(content: windowContent)
+        Self.makeWindowGroup(content: primarySceneContent)
+            .modelContainer(appRuntime.modelContainer)
+
+        Self.makeInsightsWindowGroup(content: workoutInsightsContent)
             .modelContainer(appRuntime.modelContainer)
     }
 
     // SwiftUI may evaluate its lazy scene builder on AsyncRenderer. Build the
     // content on MainActor, then let the nonisolated builder return that value.
     nonisolated private static func makeWindowGroup<Content: View>(content: Content) -> WindowGroup<Content> {
-        WindowGroup { content }
+        WindowGroup(id: AppWindowRouter.primaryWindowID) { content }
+    }
+
+    nonisolated private static func makeInsightsWindowGroup<Content: View>(content: Content) -> WindowGroup<Content> {
+        WindowGroup("Workout Insights", id: AppWindowRouter.insightsWindowID) { content }
+    }
+
+    @ViewBuilder
+    private var primarySceneContent: some View {
+#if DEBUG
+        if Self.isRunningUITests && ProcessInfo.processInfo.arguments.contains("--ui-legacy-insights-content") {
+            workoutInsightsContent
+        } else {
+            windowContent
+        }
+#else
+        windowContent
+#endif
+    }
+
+    @ViewBuilder
+    private var workoutInsightsContent: some View {
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            // Keep the legacy scene identifier restorable, but recover into the
+            // main UI on phones. The persisted workout draft remains resumable;
+            // unsupported scene activation/destruction cannot strand this scene.
+            windowContent
+                .overlay(alignment: .topLeading) {
+#if DEBUG
+                    if Self.isRunningUITests {
+                        Color.clear.frame(width: 1, height: 1)
+                            .accessibilityElement(children: .ignore)
+                            .accessibilityLabel("Recovered workout window")
+                            .accessibilityIdentifier("legacy-insights-recovered")
+                    }
+#endif
+                }
+        } else {
+            WorkoutInsightsWindowView(
+                isReady: isLaunchExperienceReady && canLoadHealthKitData
+                    && (!Self.shouldSeedMockData || hasSeededMockData)
+            )
+            .environment(\.appTheme, selectedTheme)
+            .tint(selectedTheme.accentColor)
+            .preferredColorScheme(Self.forcedUITestColorScheme)
+            .task {
+#if DEBUG
+                seedMockDataIfNeeded()
+#endif
+            }
+        }
     }
 
     private var windowContent: some View {
@@ -365,8 +419,17 @@ struct DUNEApp: App {
                 }
             }
         }
+        .transaction { transaction in
+#if DEBUG
+            if Self.isRunningUITests && ProcessInfo.processInfo.arguments.contains("--ui-disable-animations") {
+                transaction.animation = nil
+                transaction.disablesAnimations = true
+            }
+#endif
+        }
         .tint(selectedTheme.accentColor)
         .preferredColorScheme(Self.forcedUITestColorScheme)
+        .background { AppWindowSceneReader(kind: .primary) }
         .onChange(of: showConsentSheet) { oldValue, newValue in
             guard oldValue, !newValue else { return }
             Task { await advanceLaunchExperienceFlowIfNeeded() }
@@ -433,18 +496,26 @@ struct DUNEApp: App {
         } else {
             Color.clear
                 .task {
-                    guard !hasSeededMockData else { return }
-                    TestDataSeeder.seed(
-                        into: appRuntime.modelContainer.mainContext,
-                        scenario: Self.uiTestLaunchConfiguration.scenario
-                    )
-                    // Seeding resets preferences; restore the explicit visual-test theme afterwards.
-                    if let forcedTheme = Self.forcedUITestTheme {
-                        selectedTheme = forcedTheme
-                    }
-                    hasSeededMockData = true
+                    seedMockDataIfNeeded()
                 }
         }
+    }
+
+    @MainActor
+    private func seedMockDataIfNeeded() {
+        guard Self.shouldSeedMockData, !hasSeededMockData else { return }
+        // A restored auxiliary scene can appear before the main scene.
+        // Both scenes share this synchronous, once-per-launch fixture gate.
+        TestDataSeeder.seed(
+            into: appRuntime.modelContainer.mainContext,
+            scenario: Self.uiTestLaunchConfiguration.scenario
+        )
+        // Seeding resets preferences; restore the explicit visual-test theme afterwards.
+        if let forcedTheme = Self.forcedUITestTheme {
+            selectedTheme = forcedTheme
+        }
+        hasSeededMockData = true
+        AppLogger.data.info("UI test fixtures ready")
     }
     #else
     // Stub to keep the `else if` branch compiling in Release builds.
@@ -993,6 +1064,53 @@ struct DUNEApp: App {
         guard !Task.isCancelled, isShowingLaunchSplash else { return }
         isShowingLaunchSplash = false
         isResolvingLaunchSplash = false
+    }
+}
+
+private struct WorkoutInsightsWindowView: View {
+    let isReady: Bool
+    @Environment(\.openWindow) private var openWindow
+    @Environment(\.dismissWindow) private var dismissWindow
+    @State private var windowSession: UISceneSession?
+    @State private var windowError: String?
+
+    var body: some View {
+        NavigationStack {
+            Group {
+                if isReady {
+                    WeeklyStatsDetailView()
+                } else {
+                    Text("Finish setup in the main window to view your workout insights.")
+                        .padding()
+                }
+            }
+            .safeAreaInset(edge: .bottom, spacing: 0) {
+                HStack {
+                    Spacer()
+                    Button("Close") {
+                        AppWindowRouter.shared.closeInsights(
+                            windowSession, openWindow: openWindow, dismissWindow: dismissWindow
+                        ) {
+                            windowError = $0
+                        }
+                    }
+                    .accessibilityIdentifier("workout-insights-close")
+                }
+                .padding(DS.Spacing.md)
+                .background(.bar)
+            }
+        }
+        .background {
+            AppWindowSceneReader(kind: .insights) { windowSession = $0 }
+        }
+        .alert("Error", isPresented: Binding(
+            get: { windowError != nil },
+            set: { if !$0 { windowError = nil } }
+        )) {
+            Button("OK", role: .cancel) { windowError = nil }
+        } message: {
+            Text(windowError ?? "")
+        }
     }
 }
 

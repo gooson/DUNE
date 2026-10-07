@@ -6,8 +6,32 @@ struct WeeklyStatsDetailView: View {
     @Query(sort: \ExerciseRecord.date, order: .reverse) private var recentRecords: [ExerciseRecord]
     @State private var viewModel = WeeklyStatsDetailViewModel()
     @Environment(\.horizontalSizeClass) private var sizeClass
+    @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @State private var refreshRevision = 0
 
     private var isRegular: Bool { sizeClass == .regular }
+
+    private struct LoadInput: Equatable {
+        let period: WeeklyStatsDetailViewModel.StatsPeriod
+        let snapshots: [ManualExerciseSnapshot]
+        let revision: Int
+    }
+
+    private var loadInput: LoadInput {
+        LoadInput(period: viewModel.selectedPeriod, snapshots: recentRecords.map { record in
+            ManualExerciseSnapshot(
+                date: record.date,
+                exerciseType: record.exerciseType,
+                categoryRawValue: ActivityCategory.strength.rawValue,
+                equipmentRawValue: record.resolvedEquipmentRaw,
+                duration: record.duration,
+                calories: record.estimatedCalories ?? record.calories ?? 0,
+                totalVolume: record.totalVolume,
+                healthKitWorkoutID: record.healthKitWorkoutID
+            )
+        }, revision: refreshRevision)
+    }
 
     var body: some View {
         ScrollView {
@@ -30,20 +54,20 @@ struct WeeklyStatsDetailView: View {
         .accessibilityIdentifier("activity-weeklystats-detail-screen")
         .background { DetailWaveBackground() }
         .englishNavigationTitle(viewModel.selectedPeriod.rawValue)
-        .task(id: viewModel.selectedPeriod) {
-            let snapshots = recentRecords.map { record in
-                ManualExerciseSnapshot(
-                    date: record.date,
-                    exerciseType: record.exerciseType,
-                    categoryRawValue: ActivityCategory.strength.rawValue,
-                    equipmentRawValue: record.resolvedEquipmentRaw,
-                    duration: record.duration,
-                    calories: record.estimatedCalories ?? record.calories ?? 0,
-                    totalVolume: record.totalVolume,
-                    healthKitWorkoutID: record.healthKitWorkoutID
-                )
-            }
-            await viewModel.loadData(manualSnapshots: snapshots)
+        .task(id: loadInput) {
+            await viewModel.loadData(manualSnapshots: loadInput.snapshots)
+        }
+        .refreshable {
+            await viewModel.loadData(manualSnapshots: loadInput.snapshots)
+        }
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active { refreshRevision += 1 }
+        }
+        .onReceive(NotificationCenter.default.mainThreadPublisher(for: .appHealthDataDidRefresh)) { _ in
+            refreshRevision += 1
+        }
+        .onReceive(NotificationCenter.default.mainThreadPublisher(for: .NSCalendarDayChanged)) { _ in
+            refreshRevision += 1
         }
     }
 
@@ -65,10 +89,10 @@ struct WeeklyStatsDetailView: View {
     private func contentSection(_ comparison: PeriodComparison) -> some View {
         VStack(spacing: DS.Spacing.lg) {
             // Summary stats grid
-        if !viewModel.summaryStats.isEmpty {
-            summaryGrid
-                .accessibilityIdentifier("activity-weeklystats-summary-grid")
-        }
+            if !viewModel.summaryStats.isEmpty {
+                summaryGrid
+                    .accessibilityIdentifier("activity-weeklystats-summary-grid")
+            }
 
             // Daily breakdown chart (Duration / Sessions / Volume)
             DailyVolumeChartView(
@@ -90,10 +114,10 @@ struct WeeklyStatsDetailView: View {
 
     private var summaryGrid: some View {
         LazyVGrid(
-            columns: [
-                GridItem(.flexible(), spacing: DS.Spacing.sm),
-                GridItem(.flexible(), spacing: DS.Spacing.sm)
-            ],
+            columns: Array(
+                repeating: GridItem(.flexible(), spacing: DS.Spacing.sm),
+                count: dynamicTypeSize.isAccessibilitySize ? 1 : 2
+            ),
             spacing: DS.Spacing.sm
         ) {
             ForEach(viewModel.summaryStats) { stat in

@@ -6,6 +6,7 @@ struct CompoundWorkoutView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.appTheme) private var theme
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     @AppStorage(WeightUnit.storageKey) private var weightUnitRaw = WeightUnit.kg.rawValue
     @State private var viewModel: CompoundWorkoutViewModel
@@ -33,29 +34,24 @@ struct CompoundWorkoutView: View {
     }
 
     var body: some View {
-        ZStack(alignment: .bottom) {
-            ScrollView {
-                VStack(alignment: .leading, spacing: DS.Spacing.lg) {
-                    roundIndicator
-                    exerciseTabs
-                    currentExerciseSection
-                    actionButtons
-                    workoutSummary
+        ScrollView {
+            VStack(alignment: .leading, spacing: DS.Spacing.lg) {
+                roundIndicator
+                exerciseTabs
+                currentExerciseSection
+                actionButtons
+                workoutSummary
+                if dynamicTypeSize.isAccessibilitySize {
+                    timerPanels
                 }
-                .padding(.horizontal, DS.Spacing.lg)
-                .padding(.bottom, timerVisible ? 140 : 80)
             }
-
-            // Rest timer overlay
-            if setTimer.isRunning {
-                RestTimerView(timer: setTimer)
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
-            }
-
-            // Transition timer overlay (between exercises)
-            if viewModel.isTransitioning {
-                transitionOverlay
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
+            .padding(.horizontal, DS.Spacing.lg)
+            .padding(.bottom, DS.Spacing.lg)
+        }
+        .scrollDismissesKeyboard(.interactively)
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            if !dynamicTypeSize.isAccessibilitySize {
+                timerPanels
             }
         }
         .accessibilityIdentifier("compound-workout-screen")
@@ -135,8 +131,21 @@ struct CompoundWorkoutView: View {
         }
     }
 
-    private var timerVisible: Bool {
-        setTimer.isRunning || viewModel.isTransitioning
+    // Keep large text panels in the same scrollable region as the inputs.
+    private var timerPanels: some View {
+        VStack(spacing: 0) {
+            // Rest timer overlay
+            if setTimer.isRunning {
+                RestTimerView(timer: setTimer)
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+            }
+
+            // Transition timer overlay (between exercises)
+            if viewModel.isTransitioning {
+                transitionOverlay
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+            }
+        }
     }
 
     // MARK: - Round Indicator
@@ -241,21 +250,23 @@ struct CompoundWorkoutView: View {
 
     private func setListFor(vm: WorkoutSessionViewModel, exercise: ExerciseDefinition) -> some View {
         VStack(spacing: 0) {
-            // Column headers
-            HStack(spacing: DS.Spacing.sm) {
-                Text("SET")
-                    .frame(width: 24)
-                Text("PREV")
-                    .frame(width: 56, alignment: .leading)
-                ExerciseSetColumnHeaders(exercise: exercise, weightUnit: weightUnit)
-                Spacer()
-                Text("")
-                    .frame(width: 28)
+            if !dynamicTypeSize.isAccessibilitySize {
+                // Column headers
+                HStack(spacing: DS.Spacing.sm) {
+                    Text("SET")
+                        .frame(width: 24)
+                    Text("PREV")
+                        .frame(width: 56, alignment: .leading)
+                    ExerciseSetColumnHeaders(exercise: exercise, weightUnit: weightUnit)
+                    Spacer()
+                    Text("")
+                        .frame(width: 28)
+                }
+                .font(.caption2.weight(.bold))
+                .foregroundStyle(DS.Color.textSecondary)
+                .padding(.horizontal, DS.Spacing.sm)
+                .padding(.bottom, DS.Spacing.xs)
             }
-            .font(.caption2.weight(.bold))
-            .foregroundStyle(DS.Color.textSecondary)
-            .padding(.horizontal, DS.Spacing.sm)
-            .padding(.bottom, DS.Spacing.xs)
 
             ForEach(vm.sets.indices, id: \.self) { index in
                 SetRowView(
