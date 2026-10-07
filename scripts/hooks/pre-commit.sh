@@ -76,6 +76,19 @@ if has_staged_match "^todos/.*\\.md$"; then
     fi
 fi
 
+for catalog in Shared/Resources/Localizable.xcstrings DUNEWatch/Resources/Localizable.xcstrings; do
+    if has_staged_match "^${catalog//./\\.}$"; then
+        staged_catalog="$(mktemp)"
+        git show ":$catalog" > "$staged_catalog"
+        if ! swift "$ROOT_DIR/scripts/format-xcstrings.swift" --check "$staged_catalog"; then
+            rm -f "$staged_catalog"
+            echo "Format the staged catalog and add it again: $catalog"
+            exit 1
+        fi
+        rm -f "$staged_catalog"
+    fi
+done
+
 # Run project-specific checks (uncomment as needed)
 # npm test 2>/dev/null || true
 # npm run lint 2>/dev/null || true
