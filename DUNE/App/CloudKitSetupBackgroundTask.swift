@@ -37,9 +37,11 @@ final class CloudKitSetupBackgroundTask {
             guard let event = notification.userInfo?[NSPersistentCloudKitContainer.eventNotificationUserInfoKey]
                     as? NSPersistentCloudKitContainer.Event,
                   event.type == .setup else { return }
+            let identifier = event.identifier
+            let isFinished = event.endDate != nil
 
             MainActor.assumeIsolated {
-                self?.handleSetupEvent(identifier: event.identifier, isFinished: event.endDate != nil)
+                self?.handleSetupEvent(identifier: identifier, isFinished: isFinished)
             }
         }
     }
