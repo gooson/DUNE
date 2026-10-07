@@ -120,6 +120,11 @@ A skill is a set of local instructions to follow that is stored in a `SKILL.md` 
 
 ## Codex Adapter Layer
 
+### String Catalog Format
+
+- `Localizable.xcstrings`에 항목을 생성하거나 수정한 뒤 `swift scripts/format-xcstrings.swift`를 실행합니다. Shared와 Watch 카탈로그를 Xcode의 JSON 직렬화 형식으로 정렬하며 번역 값은 변경하지 않습니다.
+- 변경 전후와 빌드 후에는 `swift scripts/format-xcstrings.swift --check`로 포맷이 유지되는지 확인합니다. 파일 하나만 검사하거나 정리할 때는 명령 끝에 해당 경로를 전달합니다.
+
 - 사용자 요청으로 개선한 Codex `/run` UI 게이트는 `.codex/skill-compat.md`의 **변경 범위 기반 UI 게이트**를 따른다. 이 명시적 예외는 Claude 원본의 S11 및 Phase 2.5 전체 UI 강제 실행보다 우선한다. `.claude/**` 원본은 변경하지 않으며, Claude에서 직접 실행하는 `/run` 정책은 유지된다.
 - 무의미한 재시도·토큰 낭비 방지는 `.codex/skill-compat.md`의 **재시도와 범위 확장 제한**을 따른다. 같은 실패는 원인에 대응한 변화가 확인된 경우에만 최대 1회 재시도한다. 이 제한은 phase/turn 전환 후에도 유지하고, 무관한 UI 실패 수정·전체 재검증으로 작업 범위를 넓히지 않는다.
 
