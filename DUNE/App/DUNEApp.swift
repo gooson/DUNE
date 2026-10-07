@@ -30,6 +30,7 @@ struct DUNEApp: App {
     @State private var appRuntime: AppRuntime
     private let notificationService: any NotificationService
     private let notificationCenterDelegate: AppNotificationCenterDelegate
+    private let cloudKitSetupBackgroundTask: CloudKitSetupBackgroundTask
     private let whatsNewManager = WhatsNewManager.shared
     private let whatsNewStore = WhatsNewStore.shared
     private static let minimumLaunchSplashDuration: Duration = .seconds(1)
@@ -274,6 +275,9 @@ struct DUNEApp: App {
         let notifService = NotificationServiceImpl()
         self.notificationService = notifService
         self.notificationCenterDelegate = AppNotificationCenterDelegate()
+        let cloudKitSetupBackgroundTask = CloudKitSetupBackgroundTask()
+        cloudKitSetupBackgroundTask.startObserving()
+        self.cloudKitSetupBackgroundTask = cloudKitSetupBackgroundTask
         UNUserNotificationCenter.current().delegate = notificationCenterDelegate
         _appRuntime = State(initialValue: Self.makeAppRuntime(notificationService: notifService))
     }
