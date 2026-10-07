@@ -207,6 +207,7 @@ struct MetricDetailView: View {
             }
             .padding(sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.lg)
         }
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier("metric-detail-screen-\(metric.category.rawValue)")
         .background { DetailWaveBackground() }
         .environment(\.waveColor, metric.category.themeColor)

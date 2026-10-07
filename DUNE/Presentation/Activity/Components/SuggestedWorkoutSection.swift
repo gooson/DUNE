@@ -23,6 +23,7 @@ struct SuggestedWorkoutSection: View {
     let onBrowseAll: () -> Void
 
     @Environment(\.appTheme) private var theme
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var showingEquipmentSheet = false
     @State private var searchText = ""
     @State private var cachedFilteredExercises: [ExerciseDefinition] = []
@@ -37,6 +38,12 @@ struct SuggestedWorkoutSection: View {
     ]
 
     private static let searchBorderColor = Color.secondary.opacity(0.15)
+
+    private var recommendationColumns: [GridItem] {
+        dynamicTypeSize.isAccessibilitySize
+            ? [GridItem(.flexible())]
+            : Self.columns
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
@@ -270,7 +277,7 @@ struct SuggestedWorkoutSection: View {
                     }
                 }
 
-                LazyVGrid(columns: Self.columns, spacing: DS.Spacing.sm) {
+                LazyVGrid(columns: recommendationColumns, spacing: DS.Spacing.sm) {
                     ForEach(suggestion.exercises) { exercise in
                         let excluded = isExerciseExcluded(exercise.id)
                         SuggestedExerciseRow(
@@ -359,34 +366,31 @@ struct SuggestedWorkoutSection: View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
             sectionHeader("Suggested Routines")
 
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: DS.Spacing.sm) {
-                    ForEach(templateRecommendations) { recommendation in
-                        Button {
-                            onStartRecommendation(recommendation)
-                        } label: {
-                            recommendationCard(recommendation)
-                        }
-                        .buttonStyle(.plain)
-                        .overlay(alignment: .topTrailing) {
-                            if let onSave = onSaveRecommendationAsTemplate {
-                                Button {
-                                    onSave(recommendation)
-                                } label: {
-                                    Image(systemName: "bookmark")
-                                        .font(.caption)
-                                        .foregroundStyle(DS.Color.activity)
-                                        .padding(DS.Spacing.sm)
-                                }
-                                .buttonStyle(.plain)
-                                .accessibilityLabel("Save as Template")
-                                .accessibilityIdentifier("activity-recommendation-save-template")
-                            }
-                        }
-                        .accessibilityIdentifier("activity-recommended-routine-card")
+            workoutStrip {
+                ForEach(templateRecommendations) { recommendation in
+                    Button {
+                        onStartRecommendation(recommendation)
+                    } label: {
+                        recommendationCard(recommendation)
                     }
+                    .buttonStyle(.plain)
+                    .overlay(alignment: .topTrailing) {
+                        if let onSave = onSaveRecommendationAsTemplate {
+                            Button {
+                                onSave(recommendation)
+                            } label: {
+                                Image(systemName: "bookmark")
+                                    .font(.caption)
+                                    .foregroundStyle(DS.Color.activity)
+                                    .padding(DS.Spacing.sm)
+                            }
+                            .buttonStyle(.plain)
+                            .accessibilityLabel("Save as Template")
+                            .accessibilityIdentifier("activity-recommendation-save-template")
+                        }
+                    }
+                    .accessibilityIdentifier("activity-recommended-routine-card")
                 }
-                .padding(.vertical, 1)
             }
         }
     }
@@ -400,7 +404,7 @@ struct SuggestedWorkoutSection: View {
                     Text(recommendation.title)
                         .font(.subheadline.weight(.semibold))
                         .foregroundStyle(theme.sandColor)
-                        .lineLimit(1)
+                        .lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 1)
                     Spacer(minLength: 0)
                 }
 
@@ -432,7 +436,8 @@ struct SuggestedWorkoutSection: View {
                     .lineLimit(2)
                     .multilineTextAlignment(.leading)
             }
-            .frame(width: 220, alignment: .leading)
+            .frame(width: dynamicTypeSize.isAccessibilitySize ? nil : 220, alignment: .leading)
+            .frame(maxWidth: dynamicTypeSize.isAccessibilitySize ? .infinity : nil, alignment: .leading)
         }
     }
 
@@ -450,7 +455,7 @@ struct SuggestedWorkoutSection: View {
                         Text("AI Workout Builder")
                             .font(.subheadline.weight(.semibold))
                             .foregroundStyle(.primary)
-                            .lineLimit(1)
+                            .lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 1)
 
                         Text("Describe your ideal workout in natural language and get a ready-to-use template instantly.")
                             .font(.caption2)
@@ -474,23 +479,32 @@ struct SuggestedWorkoutSection: View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
             sectionHeader("Templates")
 
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: DS.Spacing.sm) {
-                    ForEach(templates) { template in
-                        Button {
-                            onStartTemplate(template)
-                        } label: {
-                            templateCard(template)
-                        }
-                        .buttonStyle(.plain)
+            workoutStrip {
+                ForEach(templates) { template in
+                    Button {
+                        onStartTemplate(template)
+                    } label: {
+                        templateCard(template)
                     }
+                    .buttonStyle(.plain)
                 }
-                .padding(.vertical, 1)
             }
         }
     }
 
     // MARK: - Shared Components
+
+    @ViewBuilder
+    private func workoutStrip<Content: View>(@ViewBuilder content: () -> Content) -> some View {
+        if dynamicTypeSize.isAccessibilitySize {
+            VStack(alignment: .leading, spacing: DS.Spacing.sm, content: content)
+        } else {
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: DS.Spacing.sm, content: content)
+                    .padding(.vertical, 1)
+            }
+        }
+    }
 
     private func sectionHeader(_ title: LocalizedStringKey) -> some View {
         Text(title)
@@ -507,7 +521,7 @@ struct SuggestedWorkoutSection: View {
                     Text(template.name)
                         .font(.subheadline.weight(.semibold))
                         .foregroundStyle(theme.sandColor)
-                        .lineLimit(1)
+                        .lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 1)
                     Spacer(minLength: 0)
                     Image(systemName: "play.fill")
                         .font(.caption.weight(.bold))
@@ -526,7 +540,8 @@ struct SuggestedWorkoutSection: View {
                         .multilineTextAlignment(.leading)
                 }
             }
-            .frame(width: 220, alignment: .leading)
+            .frame(width: dynamicTypeSize.isAccessibilitySize ? nil : 220, alignment: .leading)
+            .frame(maxWidth: dynamicTypeSize.isAccessibilitySize ? .infinity : nil, alignment: .leading)
         }
     }
 

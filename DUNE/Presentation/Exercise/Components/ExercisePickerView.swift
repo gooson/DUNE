@@ -21,6 +21,7 @@ struct ExercisePickerView: View {
     @Query(sort: \WorkoutTemplate.updatedAt, order: .reverse) private var templates: [WorkoutTemplate]
     @Query(sort: \UserCategory.sortOrder) private var userCategories: [UserCategory]
     @State private var searchText = ""
+    @FocusState private var isQuickSearchFocused: Bool
     @State private var selectedCategory: ExerciseCategory?
     @State private var selectedUserCategoryName: String?
     @State private var selectedMuscle: MuscleGroup?
@@ -361,7 +362,15 @@ struct ExercisePickerView: View {
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled()
                     .submitLabel(.search)
+                    .focused($isQuickSearchFocused)
+                    .onSubmit { isQuickSearchFocused = false }
                     .accessibilityIdentifier("picker-search-field")
+
+                if isQuickSearchFocused {
+                    Button("Done") { isQuickSearchFocused = false }
+                        .buttonStyle(.borderless)
+                        .accessibilityIdentifier("picker-search-done")
+                }
 
                 if !searchText.isEmpty {
                     Button {
@@ -384,11 +393,12 @@ struct ExercisePickerView: View {
         Section {
             ForEach(templates) { template in
                 Button {
-                    dismissPicker {
-                        onStartTemplate(template)
-                    }
+                    // The presenting owner queues the template before dismissing
+                    // its picker, so onDismiss cannot run before the selection.
+                    onStartTemplate(template)
                 } label: {
                     templateRow(template)
+                        .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
                 .accessibilityIdentifier(templateRowIdentifier(template))

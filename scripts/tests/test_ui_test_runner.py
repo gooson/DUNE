@@ -17,6 +17,7 @@ VERIFIER = ROOT / "scripts/lib/verify-ui-test-log.py"
 SMOKE = "DUNEUITests/DashboardSmokeTests"
 EXTRA = "DUNEUITests/TodaySettingsRegressionTests"
 DEFAULT_SKIP = "DUNEUITests/ActivitySmokeTests/testPullToRefreshShowsWaveIndicator"
+DUO_UDID = "5A2A5D3F-3D53-4326-99DE-47823CA256FA"
 
 
 def dry_run(*args: str) -> tuple[subprocess.CompletedProcess[str], list[str]]:
@@ -51,6 +52,29 @@ def fake_lock_verifier(directory: Path) -> Path:
 
 
 class RunnerArgvTests(unittest.TestCase):
+    def test_explicit_simulator_dry_run_uses_exact_id_without_simulator_calls(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            fake_bin = Path(directory)
+            marker = fake_bin / "xcrun-called"
+            fake = fake_bin / "xcrun"
+            fake.write_text(f"#!/bin/sh\ntouch '{marker}'\nexit 1\n")
+            fake.chmod(0o755)
+            result = subprocess.run(["bash", str(RUNNER), "--dry-run", "--simulator-udid", DUO_UDID],
+                                    cwd=ROOT, env={**os.environ, "PATH": str(fake_bin) + os.pathsep + os.environ["PATH"]},
+                                    text=True, capture_output=True)
+            command = next((line.removeprefix("DRY_RUN_COMMAND=")
+                            for line in result.stdout.splitlines() if line.startswith("DRY_RUN_COMMAND=")), "")
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertEqual(values(shlex.split(command), "-destination"), ["id=" + DUO_UDID])
+            self.assertFalse(marker.exists(), "Dry-run must not query, boot, or clone a simulator")
+
+    def test_invalid_explicit_simulator_udid_fails_without_command(self) -> None:
+        for value in ("", "not-a-uuid", DUO_UDID + "-extra"):
+            with self.subTest(value=value):
+                result, command = dry_run("--simulator-udid", value)
+                self.assertEqual(result.returncode, 2)
+                self.assertEqual(command, [])
+
     def test_dry_run_does_not_verify_or_wait_for_simulator_lock(self) -> None:
         result = subprocess.run(["bash", str(RUNNER), "--dry-run"], cwd=ROOT,
                                 env={**os.environ, "DUNE_SIM_TEST_LOCK_FD": "invalid"},
@@ -231,6 +255,75 @@ class LogVerifierTests(unittest.TestCase):
 
 
 class RunnerIntegrationTests(unittest.TestCase):
+    def run_explicit_device_fixture(self, devices: dict, requested: str = DUO_UDID,
+                                    list_failure: bool = False) -> tuple[subprocess.CompletedProcess[str], list[str], list[str]]:
+        with tempfile.TemporaryDirectory() as directory:
+            base = Path(directory)
+            fake_bin = fake_lock_verifier(base)
+            calls = base / "simctl.calls"
+            build_calls = base / "xcodebuild.calls"
+            device_json = base / "devices.json"
+            device_json.write_text(json.dumps({"devices": devices}))
+            xcrun = fake_bin / "xcrun"
+            xcrun.write_text("#!/bin/sh\n"
+                             "echo \"$*\" >> \"$FAKE_SIMCTL_CALLS\"\n"
+                             "if [ \"$1 $2 $3 $4\" = 'simctl list devices available' ]; then\n"
+                             "  if [ \"$FAKE_LIST_FAILURE\" = 1 ]; then exit 1; fi\n"
+                             "  cat \"$FAKE_DEVICES_JSON\"; exit 0\n"
+                             "fi\n"
+                             "if [ \"$1 $2 $3\" = 'simctl list devices' ]; then\n"
+                             "  echo \"$FAKE_REQUESTED_UDID (Booted)\"; exit 0\n"
+                             "fi\n"
+                             "exit 0\n")
+            xcrun.chmod(0o755)
+            xcodebuild = fake_bin / "xcodebuild"
+            xcodebuild.write_text("#!/bin/sh\necho \"$*\" >> \"$FAKE_BUILD_CALLS\"\n"
+                                  "echo \"Test Case '-[DUNEUITests.DashboardSmokeTests testAppLaunchesOnDashboard]' passed\"\n"
+                                  "echo 'Executed 1 test, with 0 failures'\n")
+            xcodebuild.chmod(0o755)
+            log = base / "test.log"
+            env = {**os.environ, "PATH": str(fake_bin) + os.pathsep + os.environ["PATH"],
+                   "DUNE_SIM_TEST_LOCK_FD": "fixture", "FAKE_SIMCTL_CALLS": str(calls),
+                   "FAKE_BUILD_CALLS": str(build_calls), "FAKE_DEVICES_JSON": str(device_json),
+                   "FAKE_REQUESTED_UDID": requested,
+                   "FAKE_LIST_FAILURE": "1" if list_failure else "0"}
+            result = subprocess.run(["bash", str(RUNNER), "--no-regen", "--no-stream-log",
+                                     "--log-file", str(log), "--simulator-udid", requested,
+                                     "--only-testing", "DUNEUITests/DashboardSmokeTests"],
+                                    cwd=ROOT, env=env, text=True, capture_output=True, timeout=20)
+            return result, calls.read_text().splitlines() if calls.exists() else [], \
+                build_calls.read_text().splitlines() if build_calls.exists() else []
+
+    def test_explicit_ios_device_never_clones_or_falls_back(self) -> None:
+        devices = {"com.apple.CoreSimulator.SimRuntime.iOS-27-1":
+                   [{"udid": DUO_UDID, "name": "DUNE Duo Visual Audit", "isAvailable": True}]}
+        result, simctl_calls, build_calls = self.run_explicit_device_fixture(devices)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(len(build_calls), 1)
+        self.assertIn("-destination id=" + DUO_UDID, build_calls[0])
+        self.assertNotIn("clone", " ".join(simctl_calls))
+        self.assertTrue(any(call == "simctl boot " + DUO_UDID for call in simctl_calls))
+
+    def test_missing_unavailable_or_non_ios_device_fails_closed(self) -> None:
+        cases = [
+            {},
+            {"com.apple.CoreSimulator.SimRuntime.iOS-27-1":
+             [{"udid": DUO_UDID, "name": "DUNE Duo Visual Audit", "isAvailable": False}]},
+            {"com.apple.CoreSimulator.SimRuntime.watchOS-27-1":
+             [{"udid": DUO_UDID, "name": "Watch", "isAvailable": True}]},
+        ]
+        for devices in cases:
+            with self.subTest(devices=devices):
+                result, simctl_calls, build_calls = self.run_explicit_device_fixture(devices)
+                self.assertEqual(result.returncode, 2, result.stderr)
+                self.assertIn("unavailable", result.stderr)
+                self.assertEqual(build_calls, [])
+                self.assertEqual(simctl_calls, ["simctl list devices available -j"])
+        result, simctl_calls, build_calls = self.run_explicit_device_fixture({}, list_failure=True)
+        self.assertEqual(result.returncode, 2, result.stderr)
+        self.assertEqual(build_calls, [])
+        self.assertEqual(simctl_calls, ["simctl list devices available -j"])
+
     def test_preflight_failure_invalidates_old_receipt_for_both_runners(self) -> None:
         for runner, target in ((RUNNER, "DUNEUITests"), (WATCH_RUNNER, "DUNEWatchUITests")):
             for arguments in (("--only-testing", target + "/Bad-Selector"),

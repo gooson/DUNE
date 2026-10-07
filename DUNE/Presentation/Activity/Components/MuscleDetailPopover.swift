@@ -11,6 +11,8 @@ struct MuscleDetailPopover: View {
 
     @State private var showingInfoSheet = false
     @State private var topExercises: [ExerciseDefinition] = []
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @ScaledMetric(relativeTo: .title3) private var headerIconSize: CGFloat = 32
 
     var body: some View {
         content
@@ -40,18 +42,22 @@ struct MuscleDetailPopover: View {
     private var inlineBody: some View {
         VStack(alignment: .leading, spacing: isInline ? DS.Spacing.md : DS.Spacing.lg) {
             // Header
-            HStack(spacing: DS.Spacing.sm) {
+            let headerLayout = dynamicTypeSize.isAccessibilitySize
+                ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.sm))
+                : AnyLayout(HStackLayout(spacing: DS.Spacing.sm))
+            headerLayout {
                 Image(systemName: muscle.iconName)
                     .font(.title3)
                     .foregroundStyle(DS.Color.activity)
-                    .frame(width: 32, height: 32)
+                    .frame(width: headerIconSize, height: headerIconSize)
 
                 VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                     Text(muscle.displayName)
                         .font(.headline)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
 
-                Spacer()
+                if !dynamicTypeSize.isAccessibilitySize { Spacer() }
 
                 recoveryBadge
             }
@@ -131,10 +137,8 @@ struct MuscleDetailPopover: View {
     // MARK: - Stats Grid
 
     private func statsGrid(state: MuscleFatigueState) -> some View {
-        let columns = [
-            GridItem(.flexible()),
-            GridItem(.flexible()),
-        ]
+        let columns = Array(repeating: GridItem(.flexible()),
+                            count: dynamicTypeSize.isAccessibilitySize ? 1 : 2)
 
         return LazyVGrid(columns: columns, spacing: DS.Spacing.sm) {
             statItem(
@@ -177,9 +181,11 @@ struct MuscleDetailPopover: View {
                 Text(title)
                     .font(.caption2)
                     .foregroundStyle(DS.Color.textSecondary)
+                    .fixedSize(horizontal: false, vertical: true)
             }
             Text(value)
                 .font(.subheadline.weight(.medium))
+                .fixedSize(horizontal: false, vertical: true)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(DS.Spacing.sm)

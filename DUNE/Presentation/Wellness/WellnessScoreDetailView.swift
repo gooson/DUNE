@@ -132,6 +132,7 @@ struct WellnessScoreDetailView: View {
                         color: DS.Color.hrv,
                         unit: "ms"
                     )
+                    .accessibilityIdentifier("wellness-subscore-hrv")
                     .staggeredAppear(index: 6)
 
                     SubScoreTrendChartView(
@@ -140,6 +141,7 @@ struct WellnessScoreDetailView: View {
                         color: DS.Color.heartRate,
                         unit: "bpm"
                     )
+                    .accessibilityIdentifier("wellness-subscore-rhr")
                     .staggeredAppear(index: 6)
 
                     SubScoreTrendChartView(
@@ -149,6 +151,7 @@ struct WellnessScoreDetailView: View {
                         unit: "hrs",
                         fractionDigits: 1
                     )
+                    .accessibilityIdentifier("wellness-subscore-sleep")
                     .staggeredAppear(index: 6)
                 }
 

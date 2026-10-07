@@ -5,6 +5,9 @@ import SwiftUI
 
 struct PostureCaptureView: View {
     @State private var viewModel = PostureAssessmentViewModel()
+    @State private var isOuterGuidanceAvailable = false
+    @State private var isOuterGuidanceEnabled = false
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
 
@@ -22,7 +25,7 @@ struct PostureCaptureView: View {
                 .accessibilityLabel(Text("Camera preview for posture assessment"))
 
                 phaseOverlay
-                    .animation(DS.Animation.standard, value: viewModel.capturePhase)
+                    .animation(reduceMotion ? nil : DS.Animation.standard, value: viewModel.capturePhase)
             }
             .navigationTitle("Posture Assessment")
             .navigationBarTitleDisplayMode(.inline)
@@ -44,6 +47,35 @@ struct PostureCaptureView: View {
             .sensoryFeedback(.success, trigger: viewModel.hapticSuccessCount)
             .sensoryFeedback(.error, trigger: viewModel.hapticErrorCount)
         }
+        .modifier(DuoCaptureGuidanceModifier(
+            isEnabled: $isOuterGuidanceEnabled,
+            isAvailable: $isOuterGuidanceAvailable,
+            accessory: outerGuidance
+        ))
+    }
+
+    private var outerGuidance: some View {
+        ScrollView {
+            VStack(spacing: DS.Spacing.lg) {
+                Label("Posture Assessment", systemImage: "figure.stand")
+                    .font(.title2.bold())
+                if case .countdown(let count) = viewModel.capturePhase {
+                    Text(count.formatted())
+                        .font(.system(size: 64, weight: .bold, design: .rounded))
+                        .monospacedDigit()
+                } else if case .preparing = viewModel.capturePhase {
+                    guidanceHintText
+                    GuidanceChecklistView(guidanceState: viewModel.guidanceState)
+                } else {
+                    Text("Follow the guidance on the main display.")
+                        .font(.headline)
+                }
+            }
+            .padding(DS.Spacing.lg)
+            .frame(maxWidth: .infinity)
+        }
+        .background(.black)
+        .foregroundStyle(.white)
     }
 
     // MARK: - Camera Controls
@@ -61,6 +93,16 @@ struct PostureCaptureView: View {
                         .foregroundStyle(.white)
                 }
                 .accessibilityLabel(Text("Switch camera"))
+
+                if isOuterGuidanceAvailable {
+                    Button {
+                        isOuterGuidanceEnabled.toggle()
+                    } label: {
+                        Image(systemName: isOuterGuidanceEnabled ? "rectangle.on.rectangle.fill" : "rectangle.on.rectangle")
+                    }
+                    .accessibilityLabel("Guidance on Outer Display")
+                    .accessibilityValue(isOuterGuidanceEnabled ? Text("On") : Text("Off"))
+                }
 
                 // Auto/Manual toggle
                 Button {

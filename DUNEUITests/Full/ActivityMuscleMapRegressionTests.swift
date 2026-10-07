@@ -33,17 +33,12 @@ final class ActivityMuscleMapRegressionTests: ActivityExerciseSeededUITestBaseCa
     }
 
     func testMuscleMapDetailViewNavigatesTo3D() throws {
-        navigateToMuscleMapDetail()
-
-        let detailScreen = app.descendants(matching: .any)[AXID.activityMuscleMapDetailScreen].firstMatch
-        XCTAssertTrue(detailScreen.waitForExistence(timeout: 10))
-
-        tapFrontChestMuscle()
+        navigateTo3DView()
 
         let screen3D = app.descendants(matching: .any)[AXID.activityMuscleMap3DScreen].firstMatch
         XCTAssertTrue(
             screen3D.waitForExistence(timeout: 10),
-            "MuscleMap3DView should appear after tapping a muscle"
+            "MuscleMap3DView should appear through the layout's 3D entry"
         )
     }
 
@@ -117,6 +112,18 @@ final class ActivityMuscleMapRegressionTests: ActivityExerciseSeededUITestBaseCa
             viewer.waitForExistence(timeout: 10),
             "3D viewer (ARView container) should exist"
         )
+        let controls = app.scrollViews["musclemap-3d-controls"].firstMatch
+        if controls.exists {
+            XCTAssertTrue(viewer.frame.intersection(controls.frame).isEmpty,
+                          "Accessibility controls must not cover the 3D viewport")
+        }
+        VisualAudit.capture("3D viewer after explicit navigation")
+        if controls.exists {
+            let mode = app.descendants(matching: .any)[AXID.muscleMap3DModePicker].firstMatch
+            for _ in 0..<4 where !mode.isHittable { controls.swipeUp(velocity: .slow) }
+            XCTAssertTrue(mode.isHittable, "3D mode controls must be reachable at accessibility sizes")
+            VisualAudit.capture("3D accessibility controls after scrolling")
+        }
     }
 
     // MARK: - Helpers
@@ -144,6 +151,15 @@ final class ActivityMuscleMapRegressionTests: ActivityExerciseSeededUITestBaseCa
         tapFrontChestMuscle()
 
         let screen3D = app.descendants(matching: .any)[AXID.activityMuscleMap3DScreen].firstMatch
+        // Regular-width layouts keep muscle selection in the adjacent detail pane.
+        let entryLabels = ["3D Muscle Map", "3D 근육맵", "3Dマッスルマップ"]
+        let open3D = app.buttons.matching(NSPredicate(format: "label IN %@", entryLabels)).firstMatch
+        if !screen3D.exists && open3D.exists {
+            let primaryScroll = app.scrollViews.firstMatch
+            for _ in 0..<4 where !open3D.isHittable { primaryScroll.swipeUp() }
+            XCTAssertTrue(open3D.isHittable, "The explicit 3D entry must be reachable")
+            open3D.auditTap()
+        }
         XCTAssertTrue(screen3D.waitForExistence(timeout: 10), "3D view should appear")
     }
 

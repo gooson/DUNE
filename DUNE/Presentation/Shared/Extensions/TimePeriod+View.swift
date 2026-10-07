@@ -54,7 +54,7 @@ extension TimePeriod {
         case .week:
             endExclusive = calendar.date(byAdding: .day, value: 7, to: scrollDate) ?? scrollDate
         case .month:
-            endExclusive = calendar.date(byAdding: .month, value: 1, to: scrollDate) ?? scrollDate
+            endExclusive = scrollDate.addingTimeInterval(visibleDomainSeconds)
         case .sixMonths:
             endExclusive = calendar.date(byAdding: .month, value: 6, to: scrollDate) ?? scrollDate
         case .year:
@@ -75,6 +75,10 @@ extension TimePeriod {
             formatter.setLocalizedDateFormatFromTemplate("Md")
             return "\(formatter.string(from: scrollDate)) – \(formatter.string(from: displayEnd))"
         case .month:
+            if !calendar.isDate(scrollDate, equalTo: displayEnd, toGranularity: .month) {
+                formatter.setLocalizedDateFormatFromTemplate("yMMMd")
+                return "\(formatter.string(from: scrollDate)) – \(formatter.string(from: displayEnd))"
+            }
             formatter.setLocalizedDateFormatFromTemplate("yMMMM")
             return formatter.string(from: scrollDate)
         case .sixMonths:

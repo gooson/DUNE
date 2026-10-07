@@ -1,0 +1,31 @@
+{
+  "configurations": [
+    {
+      "id": "D1C3DDB3-512B-40BE-9F7B-EDC41559BC90",
+      "name": "Duo Functional Capture",
+      "options": {}
+    }
+  ],
+  "defaultOptions": {
+    "targetForVariableExpansion": {
+      "containerPath": "container:DUNE.xcodeproj",
+      "identifier": "DUNEUITests",
+      "name": "DUNEUITests"
+    },
+    "environmentVariableEntries": [
+      { "key": "DUNE_VISUAL_AUDIT", "value": "1", "enabled": true },
+      { "key": "DUNE_VISUAL_AUDIT_STATIC", "value": "1", "enabled": true }
+    ]
+  },
+  "testTargets": [
+    {
+      "skippedTests": ["HealthKitPermissionUITests"],
+      "target": {
+        "containerPath": "container:DUNE.xcodeproj",
+        "identifier": "DUNEUITests",
+        "name": "DUNEUITests"
+      }
+    }
+  ],
+  "version": 1
+}

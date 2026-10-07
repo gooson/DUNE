@@ -24,25 +24,22 @@ struct CardioSessionView: View {
     }
 
     var body: some View {
-        VStack(spacing: 0) {
-            headerBar
-            Spacer()
-            primaryMetric
-            Spacer()
-            if viewModel.supportsMachineLevel {
-                machineLevelControl
-                Spacer()
+        ScrollView {
+            VStack(spacing: DS.Spacing.xl) {
+                headerBar
+                primaryMetric
+                if viewModel.supportsMachineLevel {
+                    machineLevelControl
+                }
+                if viewModel.showsDistance {
+                    distanceSection
+                }
+                secondaryMetrics
+                controlButtons
             }
-            if viewModel.showsDistance {
-                distanceSection
-                Spacer()
-            }
-            secondaryMetrics
-            Spacer()
-            controlButtons
+            .padding(.horizontal, DS.Spacing.lg)
+            .padding(.bottom, DS.Spacing.lg)
         }
-        .padding(.horizontal, DS.Spacing.lg)
-        .padding(.bottom, DS.Spacing.lg)
         .background { DetailWaveBackground() }
         .englishNavigationTitle(exercise.name)
         .navigationBarTitleDisplayMode(.inline)

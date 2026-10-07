@@ -7,6 +7,10 @@ struct InjuryStatisticsView: View {
     let volumeComparisons: [InjuryVolumeComparison]
 
     @Environment(\.appTheme) private var theme
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @ScaledMetric(relativeTo: .caption) private var axisEdgePadding: CGFloat = 8
+    @ScaledMetric(relativeTo: .caption) private var frequencyRowHeight: CGFloat = 44
+    @ScaledMetric(relativeTo: .caption) private var frequencyAxisHeight: CGFloat = 40
 
     var body: some View {
         ScrollView {
@@ -32,13 +36,19 @@ struct InjuryStatisticsView: View {
 
     // MARK: - Overview
 
+    private var overviewRowLayout: AnyLayout {
+        dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.md))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.md))
+    }
+
     private var overviewSection: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.md) {
             Text("Overview")
                 .font(DS.Typography.sectionTitle)
                 .frame(maxWidth: .infinity, alignment: .leading)
 
-            HStack(spacing: DS.Spacing.md) {
+            overviewRowLayout {
                 StatCard(
                     title: "Total",
                     value: statistics.totalCount.formattedWithSeparator,
@@ -52,7 +62,7 @@ struct InjuryStatisticsView: View {
                 )
             }
 
-            HStack(spacing: DS.Spacing.md) {
+            overviewRowLayout {
                 StatCard(
                     title: "Avg Recovery",
                     value: statistics.averageRecoveryDays.map { "\(Int($0.rounded()).formattedWithSeparator)d" } ?? "—",
@@ -69,6 +79,11 @@ struct InjuryStatisticsView: View {
 
     // MARK: - Frequency
 
+    private var frequencyTickStride: Double {
+        let maximum = statistics.frequencyByBodyPart.map(\.count).max() ?? 1
+        return max(1, ceil(Double(maximum) / 4))
+    }
+
     @ViewBuilder
     private var frequencySection: some View {
         if !statistics.frequencyByBodyPart.isEmpty {
@@ -76,6 +91,15 @@ struct InjuryStatisticsView: View {
                 Text("Frequency by Body Part")
                     .font(DS.Typography.sectionTitle)
                     .frame(maxWidth: .infinity, alignment: .leading)
+
+                VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                    ForEach(statistics.frequencyByBodyPart, id: \.bodyPart) { item in
+                        Text(verbatim: "\(item.bodyPart.displayName): \(item.count.formattedWithSeparator)")
+                            .font(.caption)
+                            .foregroundStyle(DS.Color.textSecondary)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                }
 
                 Chart(statistics.frequencyByBodyPart, id: \.bodyPart) { item in
                     BarMark(
@@ -85,16 +109,19 @@ struct InjuryStatisticsView: View {
                     .foregroundStyle(DS.Color.caution.gradient)
                     .cornerRadius(4)
                 }
+                .chartXScale(
+                    domain: 0...max(1, statistics.frequencyByBodyPart.map(\.count).max() ?? 1),
+                    range: .plotDimension(padding: axisEdgePadding)
+                )
                 .chartXAxis {
-                    AxisMarks(values: .automatic(desiredCount: 4)) { _ in
+                    AxisMarks(values: .stride(by: frequencyTickStride)) { _ in
                         AxisValueLabel()
                             .foregroundStyle(theme.sandColor)
                         AxisGridLine()
                             .foregroundStyle(theme.accentColor.opacity(0.30))
                     }
                 }
-                .frame(height: CGFloat(statistics.frequencyByBodyPart.count) * 36)
-                .clipped()
+                .frame(height: max(120, CGFloat(statistics.frequencyByBodyPart.count) * frequencyRowHeight + frequencyAxisHeight))
                 .padding(DS.Spacing.md)
                 .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
             }
@@ -200,6 +227,8 @@ private struct VolumeBar: View {
     var isNA: Bool = false
 
     @Environment(\.appTheme) private var theme
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @ScaledMetric(relativeTo: .caption) private var axisEdgePadding: CGFloat = 8
 
     var body: some View {
         VStack(spacing: DS.Spacing.xs) {

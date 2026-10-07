@@ -1,5 +1,8 @@
 import Foundation
 import SwiftData
+#if DEBUG
+import UIKit
+#endif
 
 enum UITestSeedScenario: String {
     case empty = "empty"
@@ -226,7 +229,52 @@ enum TestDataSeeder {
         seedInjuryRecords(into: context)
         seedHabitDefinitions(into: context)
         seedNotificationInbox(scenario: scenario)
+        if ProcessInfo.processInfo.arguments.contains("--ui-visual-posture-fixtures") {
+            seedVisualPostureFixtures(into: context)
+        }
         try? context.save()
+    }
+
+    /// Synthetic records for visual inspection only; no camera or health inference.
+    @MainActor
+    private static func seedVisualPostureFixtures(into context: ModelContext) {
+        // A system symbol is deliberately not a real body photo. This fixture
+        // exercises image-present routes, not photographic analysis quality.
+        let placeholder = UIImage(systemName: "figure.stand")?.pngData()
+        let joints = [
+            JointPosition3D(name: "leftShoulder", x: -0.2, y: 0.5, z: 0),
+            JointPosition3D(name: "rightShoulder", x: 0.2, y: 0.48, z: 0),
+            JointPosition3D(name: "leftHip", x: -0.15, y: 0, z: 0),
+            JointPosition3D(name: "rightHip", x: 0.15, y: -0.01, z: 0),
+            JointPosition3D(name: "leftKnee", x: -0.12, y: -0.45, z: 0),
+            JointPosition3D(name: "rightKnee", x: 0.14, y: -0.45, z: 0),
+            JointPosition3D(name: "leftAnkle", x: -0.15, y: -0.85, z: 0),
+            JointPosition3D(name: "rightAnkle", x: 0.15, y: -0.85, z: 0)
+        ]
+        for offset in [14, 1] {
+            let metrics = PostureMetricType.allCases.enumerated().map { index, type in
+                PostureMetricResult(
+                    type: type,
+                    value: Double(index + offset),
+                    unit: .degrees,
+                    status: index.isMultiple(of: 2) ? .caution : .normal,
+                    score: 90 - offset - index,
+                    confidence: 0.9
+                )
+            }
+            context.insert(PostureAssessmentRecord(
+                date: Calendar.current.date(byAdding: .day, value: -offset, to: Date()) ?? Date(),
+                overallScore: metrics.weightedOverallScore(),
+                frontMetrics: metrics.filter { !$0.type.requiresSideView },
+                sideMetrics: metrics.filter { $0.type.requiresSideView },
+                frontJointPositions: joints,
+                frontImageData: placeholder,
+                sideImageData: placeholder,
+                bodyHeight: 175,
+                memo: "Visual audit fixture — synthetic measurements for layout verification. "
+                    + String(repeating: "Long memo wrapping and scrolling. ", count: 8)
+            ))
+        }
     }
 
     @MainActor
@@ -417,7 +465,12 @@ enum TestDataSeeder {
                     setNumber: setNum,
                     weight: Double(60 + index * 20),
                     reps: Swift.max(1, 10 - index),
-                    isCompleted: true
+                    isCompleted: true,
+                    // Opt-in fold evidence must survive XCTest's idle wait
+                    // after a real display transition. Normal fixtures retain
+                    // the app's default rest behavior.
+                    restDuration: ProcessInfo.processInfo.arguments.contains("--ui-fold-audit-long-rest")
+                        && exercise.defID == "barbell-bench-press" ? 600 : nil
                 )
                 set.exerciseRecord = record
                 context.insert(set)
@@ -609,9 +662,27 @@ enum TestDataSeeder {
             )
         }
 
+        // Only the opt-in stress audit adds HRV provenance. The normal seed remains unchanged.
+        let stressAuditContributions: [ScoreContribution] = ProcessInfo.processInfo.arguments
+            .contains("--ui-visual-stress-fixture")
+            ? [.init(factor: .hrv, impact: .neutral, detail: "Synthetic visual audit HRV contribution")]
+            : []
+        let conditionComponentDetail: ConditionScoreDetail? = ProcessInfo.processInfo.arguments
+            .contains("--ui-visual-condition-components-fixture")
+            ? ConditionScoreDetail(
+                todayHRV: 60, baselineHRV: 40, zScore: 2,
+                stdDev: 10, effectiveStdDev: 10, daysInBaseline: 14,
+                todayDate: today, rawScore: 100, todayRHR: 54,
+                baselineRHR: 54, rhrDeltaFromBaseline: 0, rhrBaselineDays: 14
+            )
+            : nil
         let recentScores: [ConditionScore] = (0..<7).compactMap { offset in
             guard let date = calendar.date(byAdding: .day, value: -offset, to: today) else { return nil }
-            return ConditionScore(score: max(55, 84 - offset * 3), date: date)
+            return ConditionScore(
+                score: max(55, 84 - offset * 3),
+                date: date,
+                contributions: stressAuditContributions
+            )
         }
 
         let todaySleepStages = makeSleepStages(
@@ -639,7 +710,8 @@ enum TestDataSeeder {
             yesterdaySleepStages: yesterdaySleepStages,
             latestSleepStages: nil,
             sleepDailyDurations: sleepDailyDurations,
-            conditionScore: ConditionScore(score: 84, date: today),
+            conditionScore: ConditionScore(score: conditionComponentDetail == nil ? 84 : 100,
+                                           date: today, detail: conditionComponentDetail),
             baselineStatus: nil,
             recentConditionScores: recentScores,
             failedSources: [],

@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/ActivityExerciseRegressionTests/testWorkoutInsightsReturnsToInteractiveWorkoutAtMaximumAccessibilityTextSize",
+    "DUNEUITests/ActivityExerciseRegressionTests/testWorkoutDraftAndRestTimerAtMaximumAccessibilityTextSize",
+    "DUNEUITests/WellnessRegressionTests/testBodyHistoryEditAndSaveAtMaximumAccessibilityTextSize"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 3,
+    "passed": 0,
+    "skipped": 0,
+    "failed": 3
+  },
+  "passed_cases": 0,
+  "failures": [
+    "401: /Users/shanks/.codex/worktrees/712d/Health/DUNEUITests/Full/ActivityExerciseRegressionTests.swift:215: error: -[DUNEUITests.ActivityExerciseRegressionTests testWorkoutDraftAndRestTimerAtMaximumAccessibilityTextSize] : XCTAssertTrue failed",
+    "413: Test Case '-[DUNEUITests.ActivityExerciseRegressionTests testWorkoutDraftAndRestTimerAtMaximumAccessibilityTextSize]' failed (79.113 seconds).",
+    "670: /Users/shanks/.codex/worktrees/712d/Health/DUNEUITests/Full/ActivityExerciseRegressionTests.swift:67: error: -[DUNEUITests.ActivityExerciseRegressionTests testWorkoutInsightsReturnsToInteractiveWorkoutAtMaximumAccessibilityTextSize] : XCTAssertEqual failed: (\"XCTWaiterResult(rawValue: 2)\") is not eq…",
+    "682: Test Case '-[DUNEUITests.ActivityExerciseRegressionTests testWorkoutInsightsReturnsToInteractiveWorkoutAtMaximumAccessibilityTextSize]' failed (77.789 seconds).",
+    "683: Test Suite 'ActivityExerciseRegressionTests' failed at 2026-10-05 19:27:20.480.",
+    "806: /Users/shanks/.codex/worktrees/712d/Health/DUNEUITests/Helpers/UITestBaseCase.swift:167: error: -[DUNEUITests.WellnessRegressionTests testBodyHistoryEditAndSaveAtMaximumAccessibilityTextSize] : XCTAssertEqual failed: (\"XCTWaiterResult(rawValue: 2)\") is not equal to (\"XCTWaiterResult(rawValue: 1)\") -…",
+    "818: Test Case '-[DUNEUITests.WellnessRegressionTests testBodyHistoryEditAndSaveAtMaximumAccessibilityTextSize]' failed (16.175 seconds).",
+    "819: Test Suite 'WellnessRegressionTests' failed at 2026-10-05 19:27:36.658.",
+    "821: Test Suite 'DUNEUITests.xctest' failed at 2026-10-05 19:27:36.659.",
+    "823: Test Suite 'Selected tests' failed at 2026-10-05 19:27:36.660.",
+    "843: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log has no positive passed-test count",
+    "UI test log has no identifiable passed UI test cases",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/ActivityExerciseRegressionTests/testWorkoutInsightsReturnsToInteractiveWorkoutAtMaximumAccessibilityTextSize",
+    "DUNEUITests/ActivityExerciseRegressionTests/testWorkoutDraftAndRestTimerAtMaximumAccessibilityTextSize",
+    "DUNEUITests/WellnessRegressionTests/testBodyHistoryEditAndSaveAtMaximumAccessibilityTextSize"
+  ],
+  "log_path": "/private/tmp/duo-unlocked-20261005/background-direct-route-ui.log"
+}

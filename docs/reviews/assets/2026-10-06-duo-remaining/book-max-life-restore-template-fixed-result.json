@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/DuoLifeArchiveRestoreTests/testArchivedHabitRestoresToActiveLifeList",
+    "DUNEUITests/DuoLifeStarterTemplateTests/testEmptyStarterTemplateCreatesHabitAndRendersHabitsSection",
+    "DUNEUITests/LifeRegressionTests/testVisualAuditHabitHeatmap",
+    "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditWorkoutSharePreview"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 4,
+    "passed": 2,
+    "skipped": 0,
+    "failed": 2
+  },
+  "passed_cases": 2,
+  "failures": [
+    "652: /Users/shanks/.codex/worktrees/712d/Health/DUNEUITests/Full/ActivityExerciseRegressionTests.swift:982: error: -[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditWorkoutSharePreview] : XCTAssertTrue failed - Complete Set should remain accessible while entering repetitions",
+    "905: Test Case '-[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditWorkoutSharePreview]' failed (235.426 seconds).",
+    "906: Test Suite 'ActivityExerciseRegressionTests' failed at 2026-10-06 21:44:19.961.",
+    "1397: /Users/shanks/.codex/worktrees/712d/Health/DUNEUITests/Full/DuoRemainingRouteTests.swift:73: error: -[DUNEUITests.DuoLifeArchiveRestoreTests testArchivedHabitRestoresToActiveLifeList] : XCTAssertTrue failed - Archived habits entry should be reachable after archiving",
+    "1413: Test Case '-[DUNEUITests.DuoLifeArchiveRestoreTests testArchivedHabitRestoresToActiveLifeList]' failed (162.552 seconds).",
+    "1414: Test Suite 'DuoLifeArchiveRestoreTests' failed at 2026-10-06 21:47:02.522.",
+    "1987: Test Suite 'DUNEUITests.xctest' failed at 2026-10-06 21:50:07.688.",
+    "1989: Test Suite 'Selected tests' failed at 2026-10-06 21:50:07.691.",
+    "2008: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log reports 2 failures",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/DuoLifeArchiveRestoreTests/testArchivedHabitRestoresToActiveLifeList",
+    "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditWorkoutSharePreview"
+  ],
+  "log_path": "/private/tmp/duo-remaining-20261006/book-max-life-restore-template-fixed-ui.log"
+}

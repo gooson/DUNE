@@ -2,6 +2,7 @@ import SwiftUI
 import SwiftData
 
 struct BodyHistoryDetailView: View {
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Bindable var viewModel: BodyCompositionViewModel
     let onRecordsChanged: @MainActor () -> Void
     @Environment(\.modelContext) private var modelContext
@@ -78,7 +79,9 @@ struct BodyHistoryDetailView: View {
         } message: { record in
             Text("This record from \(record.date.formatted(date: .abbreviated, time: .omitted)) will be permanently deleted from all your devices.")
         }
-        .sheet(isPresented: $isShowingEditSheet) {
+        .sheet(isPresented: $isShowingEditSheet, onDismiss: {
+            viewModel.editingRecord = nil
+        }) {
             if let record = viewModel.editingRecord {
                 BodyCompositionFormSheet(
                     viewModel: viewModel,
@@ -100,7 +103,6 @@ struct BodyHistoryDetailView: View {
                             viewModel.didFinishSaving()
                             await viewModel.loadHealthKitData()
                             isShowingEditSheet = false
-                            viewModel.editingRecord = nil
                             onRecordsChanged()
                             return true
                         } catch {
@@ -114,6 +116,12 @@ struct BodyHistoryDetailView: View {
         }
     }
 
+    private var metricLayout: AnyLayout {
+        dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.xs))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.md))
+    }
+
     private func historyRow(_ item: BodyCompositionListItem, rowIndex: Int) -> some View {
         HStack {
             if item.source == .healthKit {
@@ -124,7 +132,7 @@ struct BodyHistoryDetailView: View {
             VStack(alignment: .leading, spacing: DS.Spacing.xs) {
                 Text(item.date, style: .date)
                     .font(.subheadline)
-                HStack(spacing: DS.Spacing.md) {
+                metricLayout {
                     if let w = item.weight {
                         Text("\(w.formattedWithSeparator(fractionDigits: 1)) kg")
                             .font(.caption)
@@ -155,7 +163,7 @@ struct BodyHistoryDetailView: View {
         .contextMenu {
             if item.source == .manual, let record = findManualRecord(id: item.id) {
                 Button {
-                    viewModel.startEditing(record)
+                    viewModel.startEditing(record, presentsSheet: false)
                     isShowingEditSheet = true
                 } label: {
                     Label("Edit", systemImage: "pencil")

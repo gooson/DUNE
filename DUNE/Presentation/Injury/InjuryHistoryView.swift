@@ -6,6 +6,7 @@ struct InjuryHistoryView: View {
     @Bindable var viewModel: InjuryViewModel
     @Query(sort: \InjuryRecord.startDate, order: .reverse) private var allRecords: [InjuryRecord]
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var recordToDelete: InjuryRecord?
     @State private var cachedActiveRecords: [InjuryRecord] = []
     @State private var cachedEndedRecords: [InjuryRecord] = []
@@ -167,13 +168,20 @@ struct InjuryHistoryView: View {
     }
 
     private func injuryRowContent(_ record: InjuryRecord) -> some View {
-        HStack(spacing: DS.Spacing.md) {
+        let rowLayout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.sm))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.md))
+        let metadataLayout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.xs))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.xs))
+
+        return rowLayout {
             Image(systemName: record.severity.iconName)
                 .foregroundStyle(record.severity.color)
                 .frame(width: 24)
 
             VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-                HStack(spacing: DS.Spacing.xs) {
+                metadataLayout {
                     Text(record.bodyPart.displayName)
                         .font(.subheadline.weight(.medium))
                     if let side = record.bodySide {
@@ -183,12 +191,14 @@ struct InjuryHistoryView: View {
                     }
                 }
 
-                HStack(spacing: DS.Spacing.xs) {
+                metadataLayout {
                     Text(record.severity.displayName)
                         .font(.caption2)
-                        .foregroundStyle(record.severity.color)
-                    Text("·")
-                        .foregroundStyle(.quaternary)
+                        .foregroundStyle(.primary)
+                    if !dynamicTypeSize.isAccessibilitySize {
+                        Text("·")
+                            .foregroundStyle(.quaternary)
+                    }
                     Text(record.durationLabel)
                         .font(.caption)
                         .foregroundStyle(DS.Color.textSecondary)
@@ -199,15 +209,18 @@ struct InjuryHistoryView: View {
                     .foregroundStyle(.tertiary)
             }
 
-            Spacer()
+            if !dynamicTypeSize.isAccessibilitySize {
+                Spacer()
+            }
 
             if record.isActive {
                 Text("Active")
                     .font(.caption2.weight(.medium))
+                    .fixedSize(horizontal: true, vertical: false)
                     .padding(.horizontal, DS.Spacing.sm)
                     .padding(.vertical, DS.Spacing.xxs)
                     .background(record.severity.color.opacity(0.12), in: Capsule())
-                    .foregroundStyle(record.severity.color)
+                    .foregroundStyle(.primary)
             }
         }
     }
@@ -223,6 +236,7 @@ private struct InjuryDetailDestination: Hashable {
 }
 
 private struct InjuryDetailView: View {
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     let record: InjuryRecord?
     @State private var detailViewModel = InjuryViewModel()
     @State private var isShowingEditSheet = false
@@ -296,13 +310,19 @@ private struct InjuryDetailView: View {
     private func summaryCard(_ record: InjuryRecord) -> some View {
         StandardCard {
             VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-                HStack(alignment: .center, spacing: DS.Spacing.sm) {
+                let layout = dynamicTypeSize.isAccessibilitySize
+                    ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.sm))
+                    : AnyLayout(HStackLayout(alignment: .center, spacing: DS.Spacing.sm))
+                layout {
                     Image(systemName: record.severity.iconName)
                         .font(.title3)
                         .foregroundStyle(record.severity.color)
 
                     VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-                        HStack(spacing: DS.Spacing.xs) {
+                        let titleLayout = dynamicTypeSize.isAccessibilitySize
+                            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.xs))
+                            : AnyLayout(HStackLayout(spacing: DS.Spacing.xs))
+                        titleLayout {
                             Text(record.bodyPart.displayName)
                                 .font(.headline)
                             if let side = record.bodySide {
@@ -314,21 +334,22 @@ private struct InjuryDetailView: View {
 
                         Text(record.severity.displayName)
                             .font(.caption)
-                            .foregroundStyle(record.severity.color)
+                            .foregroundStyle(.primary)
 
                         Text(record.severity.severityDescription)
                             .font(.caption2)
                             .foregroundStyle(DS.Color.textSecondary)
                     }
+                    .frame(maxWidth: .infinity, alignment: .leading)
 
-                    Spacer()
+                    if !dynamicTypeSize.isAccessibilitySize { Spacer() }
 
                     Text(record.isActive ? String(localized: "Active") : String(localized: "Recovered"))
                         .font(.caption2.weight(.semibold))
                         .padding(.horizontal, DS.Spacing.sm)
                         .padding(.vertical, DS.Spacing.xxs)
                         .background((record.isActive ? record.severity.color : Color.green).opacity(0.12), in: Capsule())
-                        .foregroundStyle(record.isActive ? record.severity.color : .green)
+                        .foregroundStyle(.primary)
                 }
             }
         }

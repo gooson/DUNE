@@ -5,16 +5,27 @@ struct PostureComparisonView: View {
     let newer: PostureAssessmentRecord
     let viewModel: PostureHistoryViewModel
 
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @ScaledMetric(relativeTo: .title3) private var scoreRingSize: CGFloat = 72
+
     @State private var zoomImage: ZoomableImageItem?
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: DS.Spacing.lg) {
-                scoreComparison
-                imageComparison
-                metricDeltas
+        AdaptivePaneView {
+            ScrollView {
+                VStack(spacing: DS.Spacing.lg) {
+                    scoreComparison
+                    imageComparison
+                }
+                .padding(.horizontal, DS.Spacing.lg)
             }
-            .padding(.horizontal, DS.Spacing.lg)
+            .accessibilityIdentifier("posture-comparison-photos-scroll")
+        } secondary: {
+            ScrollView {
+                metricDeltas
+                    .padding(.horizontal, DS.Spacing.lg)
+            }
+            .accessibilityIdentifier("posture-comparison-metrics-scroll")
         }
         .englishNavigationTitle("Comparison")
         .navigationBarTitleDisplayMode(.inline)
@@ -26,7 +37,10 @@ struct PostureComparisonView: View {
     // MARK: - Score Comparison
 
     private var scoreComparison: some View {
-        HStack(spacing: DS.Spacing.lg) {
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(spacing: DS.Spacing.lg))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.lg))
+        return layout {
             scoreColumn(
                 label: older.date.formatted(.dateTime.month(.abbreviated).day()),
                 score: older.overallScore
@@ -57,7 +71,7 @@ struct PostureComparisonView: View {
             ZStack {
                 Circle()
                     .stroke(.quaternary, lineWidth: 6)
-                    .frame(width: 72, height: 72)
+                    .frame(width: scoreRingSize, height: scoreRingSize)
 
                 Circle()
                     .trim(from: 0, to: min(1, max(0, CGFloat(score) / 100.0)))
@@ -65,7 +79,7 @@ struct PostureComparisonView: View {
                         scoreColor(score),
                         style: StrokeStyle(lineWidth: 6, lineCap: .round)
                     )
-                    .frame(width: 72, height: 72)
+                    .frame(width: scoreRingSize, height: scoreRingSize)
                     .rotationEffect(.degrees(-90))
 
                 Text("\(score)")
@@ -197,7 +211,13 @@ struct PostureComparisonView: View {
     }
 
     private func metricDeltaRow(_ delta: MetricDelta) -> some View {
-        HStack(spacing: DS.Spacing.md) {
+        let rowLayout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.sm))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.md))
+        let valuesLayout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.xs))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.xs))
+        return rowLayout {
             Image(systemName: delta.type.iconName)
                 .font(.subheadline)
                 .foregroundStyle(deltaColor(delta))
@@ -207,7 +227,7 @@ struct PostureComparisonView: View {
                 Text(delta.type.displayName)
                     .font(.subheadline.weight(.medium))
 
-                HStack(spacing: DS.Spacing.xs) {
+                valuesLayout {
                     if let oldVal = delta.oldValue {
                         Text(formattedPostureMetricValue(oldVal, unit: delta.unit))
                             .font(.caption)
@@ -234,7 +254,9 @@ struct PostureComparisonView: View {
                 }
             }
 
-            Spacer()
+            if !dynamicTypeSize.isAccessibilitySize {
+                Spacer()
+            }
 
             if let scoreDelta = delta.scoreDelta {
                 Text(scoreDelta >= 0 ? "+\(scoreDelta)" : "\(scoreDelta)")

@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 143,
+  "requested_selectors": [
+    "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditRestTimerAcrossFoldStates"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 0,
+    "passed": 0,
+    "skipped": 0,
+    "failed": 0
+  },
+  "passed_cases": 0,
+  "failures": [
+    "xcodebuild exited 143",
+    "UI test log has no positive passed-test count",
+    "UI test log has no identifiable passed UI test cases",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditRestTimerAcrossFoldStates"
+  ],
+  "log_path": "/private/tmp/duo-hinge-control-20261006/fold-maxax-countdown-ui.log"
+}

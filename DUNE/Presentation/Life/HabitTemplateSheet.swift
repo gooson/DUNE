@@ -15,12 +15,14 @@ struct HabitTemplateSheet: View {
                 }
                 .padding(DS.Spacing.md)
             }
+            .accessibilityIdentifier("habit-template-list")
             .background { SheetWaveBackground() }
             .englishNavigationTitle("Habit Templates")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") { dismiss() }
+                        .accessibilityIdentifier("habit-template-cancel")
                 }
             }
         }

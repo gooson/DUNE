@@ -38,6 +38,7 @@ struct RestTimerView: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .tint(DS.Color.activity)
+                .accessibilityIdentifier("rest-timer-skip")
             }
         }
         .padding(DS.Spacing.lg)

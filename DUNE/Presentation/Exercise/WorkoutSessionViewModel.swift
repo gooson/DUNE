@@ -2,7 +2,7 @@ import Foundation
 import Observation
 
 /// Editable set data for the workout session UI (not persisted until save)
-struct EditableSet: Identifiable {
+struct EditableSet: Identifiable, Equatable {
     let id = UUID()
     var setNumber: Int
     var weight: String = ""
@@ -70,6 +70,9 @@ struct WorkoutSessionDraft: Codable {
     let memo: String
     let savedAt: Date
     var templateRestDuration: TimeInterval?
+    var restEndDate: Date?
+    var restTotalDuration: Int?
+    var restingSetIndex: Int?
 
     struct DraftSet: Codable {
         let setNumber: Int
@@ -653,7 +656,7 @@ final class WorkoutSessionViewModel {
 
     // MARK: - Draft Persistence
 
-    func saveDraft() {
+    func saveDraft(restEndDate: Date? = nil, restTotalDuration: Int? = nil, restingSetIndex: Int? = nil) {
         let draftSets = sets.map { set in
             WorkoutSessionDraft.DraftSet(
                 setNumber: set.setNumber,
@@ -676,7 +679,10 @@ final class WorkoutSessionViewModel {
             sessionStartTime: sessionStartTime,
             memo: memo,
             savedAt: Date(),
-            templateRestDuration: templateRestDuration
+            templateRestDuration: templateRestDuration,
+            restEndDate: restEndDate,
+            restTotalDuration: restTotalDuration,
+            restingSetIndex: restingSetIndex
         )
         WorkoutSessionDraft.save(draft)
     }

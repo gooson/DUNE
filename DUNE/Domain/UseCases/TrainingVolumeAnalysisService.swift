@@ -272,7 +272,7 @@ private struct TypeAggregate {
 
 /// Lightweight snapshot of an ExerciseRecord for volume analysis.
 /// Avoids SwiftData dependency in Domain layer.
-struct ManualExerciseSnapshot: Sendable {
+struct ManualExerciseSnapshot: Sendable, Equatable {
     let date: Date
     let exerciseType: String
     let categoryRawValue: String

@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/ActivityExerciseRegressionTests/testExerciseHistoryAtMaximumAccessibilityTextSize"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 1,
+    "passed": 0,
+    "skipped": 0,
+    "failed": 1
+  },
+  "passed_cases": 0,
+  "failures": [
+    "353: /Users/shanks/.codex/worktrees/712d/Health/DUNEUITests/Full/ActivityExerciseRegressionTests.swift:322: error: -[DUNEUITests.ActivityExerciseRegressionTests testExerciseHistoryAtMaximumAccessibilityTextSize] : XCTAssertTrue failed - The seeded Bench Press history row must be present after scrolling",
+    "369: Test Case '-[DUNEUITests.ActivityExerciseRegressionTests testExerciseHistoryAtMaximumAccessibilityTextSize]' failed (93.797 seconds).",
+    "370: Test Suite 'ActivityExerciseRegressionTests' failed at 2026-10-06 14:22:54.111.",
+    "372: Test Suite 'DUNEUITests.xctest' failed at 2026-10-06 14:22:54.112.",
+    "374: Test Suite 'Selected tests' failed at 2026-10-06 14:22:54.113.",
+    "392: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log has no positive passed-test count",
+    "UI test log has no identifiable passed UI test cases",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/ActivityExerciseRegressionTests/testExerciseHistoryAtMaximumAccessibilityTextSize"
+  ],
+  "log_path": "/private/tmp/duo-finish-20261006/history-row-correction-ui.log"
+}

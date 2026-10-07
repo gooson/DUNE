@@ -3,6 +3,8 @@ import SwiftUI
 /// Horizontal bar breakdown of exercise types within the selected period.
 struct ExerciseTypeBreakdownView: View {
     let exerciseTypes: [ExerciseTypeVolume]
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @ScaledMetric(relativeTo: .caption) private var iconWidth: CGFloat = 20
 
     private var sortedTypesCache: [ExerciseTypeVolume] {
         exerciseTypes.sorted { $0.durationFraction > $1.durationFraction }
@@ -33,12 +35,21 @@ struct ExerciseTypeBreakdownView: View {
 
     // MARK: - Row
 
+    @ViewBuilder
     private func typeRow(_ type: ExerciseTypeVolume) -> some View {
+        if dynamicTypeSize.isAccessibilitySize {
+            accessibleTypeRow(type)
+        } else {
+            compactTypeRow(type)
+        }
+    }
+
+    private func compactTypeRow(_ type: ExerciseTypeVolume) -> some View {
         HStack(spacing: DS.Spacing.sm) {
             Image(systemName: type.iconName)
                 .font(.caption)
                 .foregroundStyle(type.color)
-                .frame(width: 20, alignment: .center)
+                .frame(width: iconWidth, alignment: .center)
 
             Text(type.displayName)
                 .font(.subheadline)
@@ -76,6 +87,52 @@ struct ExerciseTypeBreakdownView: View {
                 .foregroundStyle(.tertiary)
                 .frame(width: 32, alignment: .trailing)
         }
+    }
+
+    private func accessibleTypeRow(_ type: ExerciseTypeVolume) -> some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+            HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.sm) {
+                Image(systemName: type.iconName)
+                    .font(.caption)
+                    .foregroundStyle(type.color)
+                    .frame(width: iconWidth)
+                    .accessibilityHidden(true)
+                Text(type.displayName)
+                    .font(.subheadline)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            Text(durationLabel(type.totalDuration))
+                .font(.caption)
+                .foregroundStyle(DS.Color.textSecondary)
+            HStack(alignment: .firstTextBaseline) {
+                Text("Sessions")
+                Spacer(minLength: DS.Spacing.sm)
+                Text("\(type.sessionCount)")
+                    .monospacedDigit()
+                    .fixedSize()
+            }
+            .font(.caption)
+            Text(percentLabel(type.durationFraction))
+                .font(.caption2)
+                .monospacedDigit()
+                .foregroundStyle(.secondary)
+                .fixedSize()
+            GeometryReader { geo in
+                Capsule()
+                    .fill(type.color.opacity(0.15))
+                    .overlay(alignment: .leading) {
+                        Capsule()
+                            .fill(type.color)
+                            .frame(width: geo.size.width * CGFloat(type.durationFraction))
+                    }
+            }
+            .frame(height: 6)
+            .clipShape(Capsule())
+            .accessibilityHidden(true)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.vertical, DS.Spacing.sm)
+        .accessibilityElement(children: .combine)
     }
 
     // MARK: - Helpers

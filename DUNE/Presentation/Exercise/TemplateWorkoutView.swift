@@ -8,6 +8,7 @@ struct TemplateWorkoutView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.appTheme) private var theme
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     @AppStorage(WeightUnit.storageKey) private var weightUnitRaw = WeightUnit.kg.rawValue
     @State private var viewModel: TemplateWorkoutViewModel
@@ -38,25 +39,22 @@ struct TemplateWorkoutView: View {
     }
 
     var body: some View {
-        ZStack(alignment: .bottom) {
-            ScrollView {
-                VStack(alignment: .leading, spacing: DS.Spacing.lg) {
-                    exerciseProgressHeader
-                    currentExerciseContent
-                    actionButtons
+        ScrollView {
+            VStack(alignment: .leading, spacing: DS.Spacing.lg) {
+                exerciseProgressHeader
+                currentExerciseContent
+                actionButtons
+                if dynamicTypeSize.isAccessibilitySize {
+                    timerPanels
                 }
-                .padding(.horizontal, DS.Spacing.lg)
-                .padding(.bottom, restTimer.isRunning ? 140 : 80)
             }
-
-            if restTimer.isRunning {
-                RestTimerView(timer: restTimer)
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
-            }
-
-            if showTransition {
-                transitionOverlay
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
+            .padding(.horizontal, DS.Spacing.lg)
+            .padding(.bottom, DS.Spacing.lg)
+        }
+        .scrollDismissesKeyboard(.interactively)
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            if !dynamicTypeSize.isAccessibilitySize {
+                timerPanels
             }
         }
         .background { DetailWaveBackground() }
@@ -146,6 +144,21 @@ struct TemplateWorkoutView: View {
     }
 
     // MARK: - Exercise Progress Header
+
+    // Keep large text panels in the same scrollable region as the inputs.
+    private var timerPanels: some View {
+        VStack(spacing: 0) {
+            if restTimer.isRunning {
+                RestTimerView(timer: restTimer)
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+            }
+
+            if showTransition {
+                transitionOverlay
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+            }
+        }
+    }
 
     private var exerciseProgressHeader: some View {
         VStack(spacing: DS.Spacing.sm) {
@@ -280,21 +293,23 @@ struct TemplateWorkoutView: View {
 
     private func setList(vm: WorkoutSessionViewModel, exercise: ExerciseDefinition) -> some View {
         VStack(spacing: 0) {
-            // Column headers
-            HStack(spacing: DS.Spacing.sm) {
-                Text("SET")
-                    .frame(width: 24)
-                Text("PREV")
-                    .frame(width: 56, alignment: .leading)
-                ExerciseSetColumnHeaders(exercise: exercise, weightUnit: weightUnit)
-                Spacer()
-                Text("")
-                    .frame(width: 28)
+            if !dynamicTypeSize.isAccessibilitySize {
+                // Column headers
+                HStack(spacing: DS.Spacing.sm) {
+                    Text("SET")
+                        .frame(width: 24)
+                    Text("PREV")
+                        .frame(width: 56, alignment: .leading)
+                    ExerciseSetColumnHeaders(exercise: exercise, weightUnit: weightUnit)
+                    Spacer()
+                    Text("")
+                        .frame(width: 28)
+                }
+                .font(.caption2.weight(.bold))
+                .foregroundStyle(DS.Color.textSecondary)
+                .padding(.horizontal, DS.Spacing.sm)
+                .padding(.bottom, DS.Spacing.xs)
             }
-            .font(.caption2.weight(.bold))
-            .foregroundStyle(DS.Color.textSecondary)
-            .padding(.horizontal, DS.Spacing.sm)
-            .padding(.bottom, DS.Spacing.xs)
 
             ForEach(vm.sets.indices, id: \.self) { index in
                 SetRowView(
