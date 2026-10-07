@@ -852,7 +852,7 @@ final class HabitReminderScheduler {
         }
         content.sound = .default
         content.userInfo = NotificationResponsePayload(
-            routeKind: NotificationRoute.notificationHub.destination.rawValue,
+            routeKind: NotificationRoute.lifeChecklist.destination.rawValue,
             insightType: HealthInsight.InsightType.lifeChecklistReminder.rawValue
         ).userInfo
         return content

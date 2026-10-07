@@ -135,7 +135,7 @@ final class NotificationInboxManager: @unchecked Sendable {
                 AppLogger.notification.debug("[InboxManager] Routed via resolvedRoute for itemID=\(itemID)")
                 return
             }
-            if let route = parseRoute(userInfo: userInfo) {
+            if let route = responseRoute(userInfo: userInfo) {
                 AppLogger.notification.debug("[InboxManager] Routing via parseRoute: \(route.destination.rawValue)")
                 emitNavigationRequest(.init(itemID: itemID, route: route))
                 return
@@ -150,7 +150,7 @@ final class NotificationInboxManager: @unchecked Sendable {
            let fallbackBody,
            let insightTypeRaw,
            let insightType = HealthInsight.InsightType(rawValue: insightTypeRaw) {
-            let route = parseRoute(userInfo: userInfo)
+            let route = responseRoute(userInfo: userInfo)
             AppLogger.notification.debug("[InboxManager] Fallback path: creating insight type=\(insightType.rawValue), route=\(route?.destination.rawValue ?? "nil")")
             let insight = HealthInsight(
                 type: insightType,
@@ -168,7 +168,7 @@ final class NotificationInboxManager: @unchecked Sendable {
             return
         }
 
-        guard let route = parseRoute(userInfo: userInfo) else {
+        guard let route = responseRoute(userInfo: userInfo) else {
             AppLogger.notification.warning("[InboxManager] No itemID, no fallback, no route — notification dropped")
             return
         }
@@ -200,6 +200,8 @@ final class NotificationInboxManager: @unchecked Sendable {
         case .sleepDetail:
             userInfo[UserInfoKeys.routeKind] = route.destination.rawValue
         case .postureAssessment:
+            userInfo[UserInfoKeys.routeKind] = route.destination.rawValue
+        case .dailyDigest, .lifeChecklist:
             userInfo[UserInfoKeys.routeKind] = route.destination.rawValue
         }
         return userInfo
@@ -272,14 +274,40 @@ final class NotificationInboxManager: @unchecked Sendable {
             return .sleepDetail
         case .postureAssessment:
             return .postureAssessment
+        case .dailyDigest:
+            return .dailyDigest
+        case .lifeChecklist:
+            return .lifeChecklist
         }
     }
 
+    private func responseRoute(userInfo: [AnyHashable: Any]) -> NotificationRoute? {
+        if let rawType = userInfo[UserInfoKeys.insightType] as? String,
+           let type = HealthInsight.InsightType(rawValue: rawType) {
+            switch type {
+            case .dailyDigest:
+                return .dailyDigest
+            case .lifeChecklistReminder:
+                return .lifeChecklist
+            default:
+                break
+            }
+        }
+        return parseRoute(userInfo: userInfo)
+    }
+
     func resolvedRoute(for item: NotificationInboxItem) -> NotificationRoute? {
+        switch item.insightType {
+        case .dailyDigest:
+            return .dailyDigest
+        case .lifeChecklistReminder:
+            return .lifeChecklist
+        default:
+            break
+        }
         guard let route = item.route else {
             if item.insightType == .workoutPR { return .activityPersonalRecords }
             if item.insightType == .postureReminder { return .postureAssessment }
-            if item.insightType == .dailyDigest { return .notificationHub }
             return nil
         }
 

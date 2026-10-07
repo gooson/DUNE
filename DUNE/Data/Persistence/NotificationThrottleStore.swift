@@ -268,6 +268,10 @@ final class NotificationThrottleStore: @unchecked Sendable {
                 routeKey = "sleepDetail"
             case .postureAssessment:
                 routeKey = "postureAssessment"
+            case .dailyDigest:
+                routeKey = "dailyDigest"
+            case .lifeChecklist:
+                routeKey = "lifeChecklist"
             }
         } else {
             routeKey = "none"

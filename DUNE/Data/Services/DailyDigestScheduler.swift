@@ -15,7 +15,6 @@ final class DailyDigestScheduler {
 
     private let notificationScheduler: BedtimeReminderNotificationScheduling
     private let userDefaults: UserDefaults
-    private let digestUseCase = GenerateDailyDigestUseCase()
 
     init(
         notificationScheduler: BedtimeReminderNotificationScheduling = UserNotificationCenterBedtimeReminderScheduler(),
@@ -46,7 +45,7 @@ final class DailyDigestScheduler {
         content.body = String(localized: "Your daily health summary is ready. Tap to review.")
         content.sound = .default
         content.userInfo = NotificationResponsePayload(
-            routeKind: NotificationRoute.notificationHub.destination.rawValue,
+            routeKind: NotificationRoute.dailyDigest.destination.rawValue,
             insightType: HealthInsight.InsightType.dailyDigest.rawValue
         ).userInfo
 

@@ -33,14 +33,18 @@ final class NotificationRoutingRegressionTests: SeededUITestBaseCase {
         )
     }
 
-    func testDigestAndChecklistRowsOpenMessageDetail() {
+    func testDigestAndChecklistRowsOpenTheirFeatures() {
         openHub()
         tapNotification(title: "Daily Digest Route Fixture")
-        XCTAssertTrue(app.descendants(matching: .any)["notification-message-detail-screen"].firstMatch.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.descendants(matching: .any)["notification-daily-digest-screen"].firstMatch.waitForExistence(timeout: 10))
+        XCTAssertTrue(app.descendants(matching: .any)["dashboard-daily-digest"].firstMatch.waitForExistence(timeout: 15))
+        XCTAssertTrue(app.staticTexts.matching(NSPredicate(format: "label CONTAINS %@", "84")).firstMatch.exists)
 
         app.navigationBars.buttons.element(boundBy: 0).tap()
         tapNotification(title: "Life Checklist Route Fixture")
-        XCTAssertTrue(app.descendants(matching: .any)["notification-message-detail-screen"].firstMatch.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.tabBars.buttons["Life"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.tabBars.buttons["Life"].isSelected)
+        XCTAssertTrue(app.descendants(matching: .any)["life-section-habits"].firstMatch.waitForExistence(timeout: 10))
     }
 
     private func openHub() {
@@ -75,11 +79,10 @@ final class NotificationResponseRoutingUITests: SeededUITestBaseCase {
         ]
     }
 
-    func testNotificationResponseOpensMatchingMessageAndBackReturnsToHub() {
-        let detail = app.descendants(matching: .any)["notification-message-detail-screen"].firstMatch
-        XCTAssertTrue(detail.waitForExistence(timeout: 15), "Notification response should open message detail")
-        XCTAssertTrue(app.staticTexts["Daily Digest Route Fixture"].firstMatch.exists)
-        XCTAssertTrue(app.staticTexts["Review today's summary."].firstMatch.exists)
+    func testNotificationResponseOpensSummaryAndBackReturnsToToday() {
+        let detail = app.descendants(matching: .any)["notification-daily-digest-screen"].firstMatch
+        XCTAssertTrue(detail.waitForExistence(timeout: 15), "Notification response should open today's summary")
+        XCTAssertTrue(app.descendants(matching: .any)["dashboard-daily-digest"].firstMatch.waitForExistence(timeout: 15))
         let todayTab = app.tabBars.buttons["Today"].firstMatch
         if todayTab.exists {
             XCTAssertTrue(todayTab.isSelected, "Notification response should select Today")
@@ -90,12 +93,36 @@ final class NotificationResponseRoutingUITests: SeededUITestBaseCase {
         XCTAssertEqual(XCTWaiter.wait(for: [briefingClosed], timeout: 5), .completed)
 
         let backButton = app.navigationBars.buttons.element(boundBy: 0)
-        XCTAssertTrue(backButton.waitForExistence(timeout: 5), "Message detail should have a back button")
+        XCTAssertTrue(backButton.waitForExistence(timeout: 5), "Summary should have a back button")
         backButton.tap()
 
-        let hub = app.descendants(matching: .any)[AXID.notificationHubScreen].firstMatch
-        XCTAssertTrue(hub.waitForExistence(timeout: 8), "Back should return to the notification hub")
-        XCTAssertTrue(app.staticTexts["Daily Digest Route Fixture"].firstMatch.exists)
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.dashboardToolbarNotifications].firstMatch.waitForExistence(timeout: 8))
+    }
+}
+
+@MainActor
+final class LifeChecklistResponseRoutingUITests: SeededUITestBaseCase {
+    override var uiScenario: LaunchScenario? { .notificationRoutingSeeded }
+
+    override var additionalLaunchArguments: [String] {
+        [
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+            "--ui-open-notification-title", "Life Checklist Route Fixture"
+        ]
+    }
+
+    func testNotificationResponseOpensLifeChecklist() {
+        let lifeTab = app.tabBars.buttons["Life"].firstMatch
+        XCTAssertTrue(lifeTab.waitForExistence(timeout: 15))
+        XCTAssertTrue(lifeTab.isSelected)
+        XCTAssertTrue(app.descendants(matching: .any)["life-section-habits"].firstMatch.waitForExistence(timeout: 10))
+        let firstHabit = app.descendants(matching: .any)[AXID.lifeHabitRow("Morning Stretch")].firstMatch
+        XCTAssertTrue(firstHabit.waitForExistence(timeout: 10))
+        let visibleHabit = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "hittable == true"),
+            object: firstHabit
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [visibleHabit], timeout: 5), .completed)
     }
 }
 

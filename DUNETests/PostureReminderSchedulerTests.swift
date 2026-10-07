@@ -29,7 +29,7 @@ struct PostureReminderSchedulerTests {
 @Suite("DailyDigestScheduler")
 @MainActor
 struct DailyDigestSchedulerTests {
-    @Test("Scheduled daily digest carries an inbox destination")
+    @Test("Scheduled daily digest opens its summary")
     func scheduledPayload() async throws {
         let suiteName = "DailyDigestSchedulerTests.\(UUID().uuidString)"
         let defaults = try #require(UserDefaults(suiteName: suiteName))
@@ -44,7 +44,7 @@ struct DailyDigestSchedulerTests {
 
         let request = try #require(scheduler.requests.first)
         let payload = NotificationResponsePayload(userInfo: request.content.userInfo)
-        #expect(payload.routeKind == NotificationRoute.notificationHub.destination.rawValue)
+        #expect(payload.routeKind == NotificationRoute.dailyDigest.destination.rawValue)
         #expect(payload.insightType == HealthInsight.InsightType.dailyDigest.rawValue)
     }
 }
