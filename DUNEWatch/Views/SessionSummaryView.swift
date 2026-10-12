@@ -67,9 +67,11 @@ struct SessionSummaryView: View {
                         .monospacedDigit()
                         .lineLimit(1)
                         .minimumScaleFactor(0.7)
+                        .accessibilityIdentifier("watch-session-summary-duration-value")
                     Text("Duration")
                         .font(DS.Typography.metricLabel)
                         .foregroundStyle(.secondary)
+                        .accessibilityIdentifier("watch-session-summary-duration-label")
                 }
                 .padding(.vertical, DS.Spacing.xs)
 
@@ -85,8 +87,13 @@ struct SessionSummaryView: View {
                             Button("Retry") { retrySave() }
                                 .buttonStyle(.borderedProminent)
                                 .tint(DS.Color.positive)
-                            Button("Dismiss Without Saving") { workoutManager.reset() }
-                                .buttonStyle(.bordered)
+                            if hasSaved {
+                                Button("Done") { workoutManager.reset() }
+                                    .buttonStyle(.bordered)
+                            } else {
+                                Button("Dismiss Without Saving") { workoutManager.reset() }
+                                    .buttonStyle(.bordered)
+                            }
                         }
                     }
                     .padding(DS.Spacing.md)
