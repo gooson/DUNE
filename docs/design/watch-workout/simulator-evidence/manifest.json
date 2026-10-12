@@ -1,17 +1,50 @@
 [
   {
-    "attachments" : [
+    "attachments": [
       {
-        "configurationName" : "PR Configuration",
-        "deviceId" : "584CD70C-869E-4950-98FA-3CE6EB54A51B",
-        "deviceName" : "iPhone 18 Pro",
-        "exportedFileName" : "50790155-DC21-4B85-9A8B-ADBDCE517DFB.png",
-        "isAssociatedWithFailure" : false,
-        "suggestedHumanReadableName" : "WatchWorkoutFlowSmokeTests-testRestTimerAppearsAfterCompletingFirstSet--strength-rest-timer_0_17F69D37-9E8F-4224-A2C2-F699A04F5B56.png",
-        "timestamp" : 1791761454.651
+        "configurationName": "PR Configuration",
+        "deviceId": "E169394E-40DC-4FCF-B54D-31754C3C47A5",
+        "deviceName": "Apple Watch SE 3 (40mm)",
+        "exportedFileName": "watch-rest-timer-final.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "WatchResponsiveWorkoutLayoutTests-testKoreanXXXLRestTimerKeepsPrimaryActionsReachable--korean-xxxl-rest-actions_0_45EA2A6D-6609-4C03-9CFB-B11228F81156.png",
+        "timestamp": 1791778238.614
       }
     ],
-    "testIdentifier" : "WatchWorkoutFlowSmokeTests/testRestTimerAppearsAfterCompletingFirstSet()",
-    "testIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEWatchUITests/WatchWorkoutFlowSmokeTests/testRestTimerAppearsAfterCompletingFirstSet"
+    "testIdentifier": "WatchResponsiveWorkoutLayoutTests/testKoreanXXXLRestTimerKeepsPrimaryActionsReachable()",
+    "testIdentifierURL": "test://com.apple.xcode/DUNE/DUNEWatchUITests/WatchResponsiveWorkoutLayoutTests/testKoreanXXXLRestTimerKeepsPrimaryActionsReachable",
+    "verifiedWatchSimulator": "Apple Watch SE 3 (40mm)"
+  },
+  {
+    "attachments": [
+      {
+        "configurationName": "PR Configuration",
+        "deviceId": "E169394E-40DC-4FCF-B54D-31754C3C47A5",
+        "deviceName": "Apple Watch SE 3 (40mm)",
+        "exportedFileName": "watch-controls-final.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "WatchResponsiveWorkoutLayoutTests-testKoreanXXXLStrengthControlsKeepPrimaryActionsReachable--korean-xxxl-strength-controls_0_8384450E-42AF-4FD1-9F1D-196B4642AABA.png",
+        "timestamp": 1791777790.605
+      }
+    ],
+    "testIdentifier": "WatchResponsiveWorkoutLayoutTests/testKoreanXXXLStrengthControlsKeepPrimaryActionsReachable()",
+    "testIdentifierURL": "test://com.apple.xcode/DUNE/DUNEWatchUITests/WatchResponsiveWorkoutLayoutTests/testKoreanXXXLStrengthControlsKeepPrimaryActionsReachable",
+    "verifiedWatchSimulator": "Apple Watch SE 3 (40mm)"
+  },
+  {
+    "attachments": [
+      {
+        "configurationName": "PR Configuration",
+        "deviceId": "E169394E-40DC-4FCF-B54D-31754C3C47A5",
+        "deviceName": "Apple Watch SE 3 (40mm)",
+        "exportedFileName": "watch-save-error-final.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "WatchWorkoutFlowSmokeTests-testSummarySaveFailureOffersVisibleRetry--summary-save-error_0_9D884785-A88E-412F-8A7A-16A88DA6D1D2.png",
+        "timestamp": 1791777879.639
+      }
+    ],
+    "testIdentifier": "WatchWorkoutFlowSmokeTests/testSummarySaveFailureOffersVisibleRetry()",
+    "testIdentifierURL": "test://com.apple.xcode/DUNE/DUNEWatchUITests/WatchWorkoutFlowSmokeTests/testSummarySaveFailureOffersVisibleRetry",
+    "verifiedWatchSimulator": "Apple Watch SE 3 (40mm)"
   }
 ]

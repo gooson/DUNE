@@ -37,7 +37,7 @@ related_solutions:
 
 | File | Change | Reason |
 |------|--------|--------|
-| `DUNEWatch/Views/RestTimerView.swift` | 타이머와 RPE를 한 행에, `+30초`/`건너뛰기`를 다음 행에 배치하고 종료를 상단 확인 동작으로 이동 | 남은 시간과 다음 행동을 분명히 표시 |
+| `DUNEWatch/Views/RestTimerView.swift` | 타이머·심박·RPE를 크기 적응형 링에 모으고, `+30초`/`건너뛰기`를 44pt 행동 행에 배치하며 종료를 상단 확인 동작으로 유지 | 남은 시간과 다음 행동을 분명히 표시 |
 | `DUNEWatch/Views/MetricsView.swift` | 중복 진행 표시 제거, 세트 완료 직후 추정 RPE 기록 | 작은 화면 공간 확보 및 조기 종료 데이터 보존 |
 | `DUNEWatch/Views/SessionSummaryView.swift` | 요약 진입 시 저장, 저장 상태 표시, `완료` 하단 고정, 이후 강도 수정 저장 | 저장과 요약 닫기 분리 |
 | `DUNEWatch/Views/WorkoutPreviewView.swift` | `.accessibilityElement(children: .contain)`으로 화면 컨테이너 구성 | 자식 버튼 식별자 보존 |
@@ -77,6 +77,7 @@ related_solutions:
 ## Lessons Learned
 
 - 작은 Watch 화면에서 중복 정보와 가로 조작 세 개는 중요한 타이머를 약하게 만든다.
+- 링 안의 보조 정보는 링의 최소 크기에서 실제 글자 높이까지 확인해야 한다. 작은 링에서는 제안 문구를 줄이고 타이머 글자를 비례 축소한다.
 - 운동 종료 확정, 기록 저장, 요약 닫기는 서로 다른 시점의 사용자 행동이다.
 - 스크린샷에 보이는 컨트롤도 상위 접근성 식별자 때문에 자동화와 VoiceOver에서 구분되지 않을 수 있다.
 - UI 테스트의 스와이프 거리뿐 아니라 속도와 스크롤 스냅도 fixture 탐색 결과를 바꾼다.
