@@ -66,25 +66,31 @@ struct SetInputSheet: View {
     // MARK: - Weight + Reps
 
     private var weightRepsContent: some View {
-        VStack(spacing: actionableSuggestedWeightKg == nil ? DS.Spacing.sm : DS.Spacing.xs) {
-            if inputType == .setsReps { addedWeightToggle }
-            weightSection
-            if let suggestedWeightKg = actionableSuggestedWeightKg {
-                Button {
-                    weight = suggestedWeightKg
-                    onWeightEdited(suggestedWeightKg)
-                } label: {
-                    Text("Use \(suggestedWeightKg, specifier: "%.1f") kg")
-                        .font(.caption.weight(.semibold))
-                        .frame(maxWidth: .infinity, minHeight: 24)
+        adaptiveInputLayout {
+            VStack(spacing: DS.Spacing.sm) {
+                if inputType == .setsReps { addedWeightToggle }
+                weightSection
+                if let suggestedWeightKg = actionableSuggestedWeightKg {
+                    Button {
+                        weight = suggestedWeightKg
+                        onWeightEdited(suggestedWeightKg)
+                    } label: {
+                        Text("Use \(suggestedWeightKg, specifier: "%.1f") kg")
+                            .font(.caption.weight(.semibold))
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.7)
+                            .frame(maxWidth: .infinity, minHeight: 44)
+                            .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+                    .foregroundStyle(DS.Color.caution)
+                    .background(DS.Color.caution.opacity(DS.Opacity.border), in: RoundedRectangle(cornerRadius: DS.Radius.md))
+                    .accessibilityIdentifier("watch-set-input-use-lighter-weight")
+                } else {
+                    Divider()
                 }
-                .buttonStyle(.bordered)
-                .tint(DS.Color.caution)
-                .accessibilityIdentifier("watch-set-input-use-lighter-weight")
-            } else {
-                Divider()
+                repsSection
             }
-            repsSection
         }
         .padding(.horizontal, DS.Spacing.md)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
@@ -119,9 +125,11 @@ struct SetInputSheet: View {
     // MARK: - Reps Only (setsReps / bodyweight)
 
     private var repsOnlyContent: some View {
-        VStack(spacing: DS.Spacing.sm) {
-            if inputType == .setsReps { addedWeightToggle }
-            repsSection
+        adaptiveInputLayout {
+            VStack(spacing: DS.Spacing.lg) {
+                if inputType == .setsReps { addedWeightToggle }
+                repsSection
+            }
         }
         .padding(.horizontal, DS.Spacing.md)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
@@ -183,6 +191,18 @@ struct SetInputSheet: View {
         .onDisappear { isCrownFocused = false }
     }
 
+    /// Touch scrolling is a fallback for large text; the Crown remains bound to the active value.
+    private func adaptiveInputLayout<Content: View>(@ViewBuilder content: () -> Content) -> some View {
+        ViewThatFits(in: .vertical) {
+            content()
+                .fixedSize(horizontal: false, vertical: true)
+            ScrollView {
+                content()
+            }
+            .scrollBounceBehavior(.basedOnSize)
+        }
+    }
+
     // MARK: - Shared Toolbar
 
     @ToolbarContentBuilder
@@ -194,6 +214,7 @@ struct SetInputSheet: View {
                 } label: {
                     Image(systemName: "list.bullet.clipboard")
                 }
+                .accessibilityLabel(Text("Previous Sets"))
                 .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.setInputPreviousSetsButton)
             }
         }
@@ -216,6 +237,8 @@ struct SetInputSheet: View {
                 usesAddedWeight = enabled
             }
         ))
+            .font(DS.Typography.tileSubtitle)
+            .tint(DS.Color.positive)
             .accessibilityIdentifier("watch-set-input-added-weight")
     }
 
@@ -224,13 +247,13 @@ struct SetInputSheet: View {
             weightButton("-2.5", delta: -2.5)
             VStack(spacing: 0) {
                 Text("\(weight, specifier: "%.1f")")
-                    .font(.system(.title3, design: .rounded).monospacedDigit().bold())
+                    .font(DS.Typography.countdownValue)
                     .foregroundStyle(DS.Color.positive)
                     .contentTransition(.numericText())
                     .lineLimit(1)
                     .minimumScaleFactor(0.7)
                 Text("kg")
-                    .font(.caption2)
+                    .font(DS.Typography.metricLabel)
                     .foregroundStyle(.secondary)
             }
             .frame(maxWidth: .infinity)
@@ -249,9 +272,10 @@ struct SetInputSheet: View {
             Text(label)
                 .font(.caption.weight(.medium))
                 .frame(width: 44, height: 44)
+                .contentShape(Rectangle())
         }
-        .buttonStyle(.bordered)
-        .tint(.secondary)
+        .buttonStyle(.plain)
+        .background(.quaternary, in: RoundedRectangle(cornerRadius: DS.Radius.md))
         .accessibilityIdentifier(
             delta < 0
                 ? WatchWorkoutSurfaceAccessibility.setInputWeightDecrementButton
@@ -262,7 +286,7 @@ struct SetInputSheet: View {
     // MARK: - Reps Section
 
     private var repsSection: some View {
-        HStack {
+        HStack(spacing: DS.Spacing.xs) {
             Button {
                 if reps > WatchSetInputPolicy.minimumReps {
                     reps -= 1
@@ -271,25 +295,25 @@ struct SetInputSheet: View {
             } label: {
                 Image(systemName: "minus")
                     .font(.body.weight(.semibold))
-                    .frame(minWidth: 44, minHeight: 44)
+                    .frame(width: 44, height: 44)
+                    .contentShape(Rectangle())
             }
-            .buttonStyle(.bordered)
-            .tint(.secondary)
+            .buttonStyle(.plain)
+            .background(.quaternary, in: RoundedRectangle(cornerRadius: DS.Radius.md))
             .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.setInputRepsDecrementButton)
-
-            Spacer()
 
             VStack(spacing: 0) {
                 Text("\(reps)")
-                    .font(.system(.title2, design: .rounded).monospacedDigit().bold())
+                    .font(DS.Typography.countdownValue)
                     .foregroundStyle(DS.Color.positive)
                     .contentTransition(.numericText())
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.6)
                 Text("reps")
-                    .font(.caption2)
+                    .font(DS.Typography.metricLabel)
                     .foregroundStyle(.secondary)
             }
-
-            Spacer()
+            .frame(maxWidth: .infinity)
 
             Button {
                 if reps < WatchSetInputPolicy.maximumEditableReps {
@@ -299,10 +323,11 @@ struct SetInputSheet: View {
             } label: {
                 Image(systemName: "plus")
                     .font(.body.weight(.semibold))
-                    .frame(minWidth: 44, minHeight: 44)
+                    .frame(width: 44, height: 44)
+                    .contentShape(Rectangle())
             }
-            .buttonStyle(.bordered)
-            .tint(.secondary)
+            .buttonStyle(.plain)
+            .background(.quaternary, in: RoundedRectangle(cornerRadius: DS.Radius.md))
             .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.setInputRepsIncrementButton)
         }
     }
@@ -311,8 +336,13 @@ struct SetInputSheet: View {
 
     private var durationSection: some View {
         VStack(spacing: DS.Spacing.sm) {
+            Image(systemName: "timer")
+                .font(.title3)
+                .foregroundStyle(.secondary)
+                .accessibilityHidden(true)
+
             Text("\(durationMinutes)")
-                .font(.system(.title2, design: .rounded).monospacedDigit().bold())
+                .font(DS.Typography.primaryMetric)
                 .foregroundStyle(DS.Color.positive)
                 .contentTransition(.numericText())
 
@@ -339,9 +369,10 @@ struct SetInputSheet: View {
             Text(label)
                 .font(.caption.weight(.medium))
                 .frame(maxWidth: .infinity, minHeight: 44)
+                .contentShape(Rectangle())
         }
-        .buttonStyle(.bordered)
-        .tint(.secondary)
+        .buttonStyle(.plain)
+        .background(.quaternary, in: RoundedRectangle(cornerRadius: DS.Radius.md))
     }
 
     // MARK: - Previous Sets Detail
@@ -350,36 +381,36 @@ struct SetInputSheet: View {
         List {
             Section {
                 ForEach(previousSets, id: \.setNumber) { set in
-                    HStack(spacing: DS.Spacing.sm) {
-                        Text("Set \(set.setNumber)")
-                            .font(.caption2)
-                            .foregroundStyle(.tertiary)
-                            .frame(width: 36, alignment: .leading)
-
-                        if let d = set.duration, d > 0 {
-                            Text(Duration.seconds(d).formatted(.time(pattern: .minuteSecond)))
-                                .font(.caption2.monospacedDigit())
-                        }
-                        Group {
-                            if let w = set.weight, w > 0 {
-                                Text("\(w, specifier: "%.1f")kg")
-                                    .font(.caption2.monospacedDigit())
-                            }
-
-                            if let r = set.reps, r > 0 {
-                                Text("\u{00d7}\(r)")
-                                    .font(.caption2.monospacedDigit())
+                    VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                        HStack {
+                            Text("Set \(set.setNumber)")
+                                .font(DS.Typography.tileSubtitle)
+                                .foregroundStyle(DS.Color.positive)
+                            Spacer(minLength: DS.Spacing.xs)
+                            if let rpe = set.rpe {
+                                Text("RPE \(RPELevel.format(rpe))")
+                                    .font(DS.Typography.metricLabel)
+                                    .foregroundStyle(.secondary)
                             }
                         }
 
-                        Spacer()
-
-                        if let rpe = set.rpe {
-                            Text("RPE \(rpe, specifier: rpe.truncatingRemainder(dividingBy: 1) == 0 ? "%.0f" : "%.1f")")
-                                .font(.caption2)
-                                .foregroundStyle(DS.Color.textSecondary)
+                        HStack(spacing: DS.Spacing.sm) {
+                            if let duration = set.duration, duration > 0 {
+                                Text(Duration.seconds(duration).formatted(.time(pattern: .minuteSecond)))
+                            }
+                            if let weight = set.weight, weight > 0 {
+                                Text("\(weight, specifier: "%.1f")kg")
+                            }
+                            if let reps = set.reps, reps > 0 {
+                                Text("\u{00d7}\(reps)")
+                            }
                         }
+                        .font(DS.Typography.tileSubtitle.monospacedDigit())
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.7)
                     }
+                    .padding(.vertical, DS.Spacing.xxs)
+                    .accessibilityElement(children: .combine)
                     .accessibilityIdentifier(
                         WatchWorkoutSurfaceAccessibility.setInputPreviousSetRow(set.setNumber)
                     )
