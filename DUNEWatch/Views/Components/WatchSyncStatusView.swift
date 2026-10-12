@@ -6,28 +6,35 @@ struct WatchSyncStatusView: View {
     @Environment(WatchConnectivityManager.self) private var connectivity
 
     var body: some View {
-        HStack(spacing: 4) {
+        HStack(spacing: DS.Spacing.sm) {
             switch connectivity.syncStatus {
             case .syncing:
                 ProgressView()
-                    .frame(width: 12, height: 12)
+                    .frame(width: 16, height: 16)
                 Text("Syncing...")
             case .synced(let date):
                 Image(systemName: "checkmark.circle")
                     .foregroundStyle(DS.Color.positive)
+                    .frame(width: 16)
                 Text(syncTimeLabel(from: date))
             case .failed(let message):
                 Image(systemName: "exclamationmark.triangle")
                     .foregroundStyle(DS.Color.caution)
+                    .frame(width: 16)
                 Text(message)
             case .notConnected:
                 Image(systemName: "iphone.slash")
                     .foregroundStyle(.secondary)
+                    .frame(width: 16)
                 Text("iPhone not connected")
             }
         }
         .font(.caption2)
         .foregroundStyle(.secondary)
+        .lineLimit(2)
+        .frame(maxWidth: .infinity, minHeight: 32, alignment: .leading)
+        .padding(.horizontal, DS.Spacing.sm)
+        .background(.quaternary, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
     }
 
     private func syncTimeLabel(from date: Date) -> String {
