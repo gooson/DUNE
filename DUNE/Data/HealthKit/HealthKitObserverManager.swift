@@ -14,14 +14,15 @@ extension HKHealthStore: HealthKitObserverStoring {}
 
 /// Manages HKObserverQuery registrations and HealthKit background delivery.
 ///
-/// Observes 8 HealthKit data types. On change, requests a coordinated refresh
-/// through `AppRefreshCoordinator` (which handles throttling) and evaluates
-/// new samples for background notification delivery.
+/// Observes 9 HealthKit data types. Most changes request a coordinated refresh
+/// through `AppRefreshCoordinator` and evaluate background notifications.
+/// Heart-rate changes only recheck the pending Apple Watch bedtime reminder.
 @MainActor
 final class HealthKitObserverManager {
     private let store: any HealthKitObserverStoring
     private let coordinator: AppRefreshCoordinating
     private let notificationEvaluator: BackgroundNotificationEvaluator?
+    private let watchReminder: any WatchBedtimeReminderRechecking
 
     /// Registration, retention, and stopping are synchronous on the same actor.
     private var queries: [HKObserverQuery] = []
@@ -32,6 +33,8 @@ final class HealthKitObserverManager {
         (HKQuantityType(.heartRateVariabilitySDNN), .immediate),
         (HKQuantityType(.restingHeartRate), .immediate),
         (HKCategoryType(.sleepAnalysis), .immediate),
+        // Watch heart-rate updates may arrive after a bedtime reminder was scheduled.
+        (HKQuantityType(.heartRate), .immediate),
         // Infrequent body composition measurements should not wait for an hourly batch.
         (HKQuantityType(.bodyMass), .immediate),
         (HKQuantityType(.bodyFatPercentage), .immediate),
@@ -44,11 +47,13 @@ final class HealthKitObserverManager {
     init(
         store: any HealthKitObserverStoring,
         coordinator: AppRefreshCoordinating,
-        notificationEvaluator: BackgroundNotificationEvaluator? = nil
+        notificationEvaluator: BackgroundNotificationEvaluator? = nil,
+        watchReminder: any WatchBedtimeReminderRechecking = AppleWatchBedtimeReminderScheduler.shared
     ) {
         self.store = store
         self.coordinator = coordinator
         self.notificationEvaluator = notificationEvaluator
+        self.watchReminder = watchReminder
     }
 
     /// Registers observer queries for all tracked types and enables background delivery.
@@ -77,39 +82,61 @@ final class HealthKitObserverManager {
     // MARK: - Private
 
     private func registerObserver(for sampleType: HKSampleType) {
-        let typeName = sampleType.identifier
-
-        let query = HKObserverQuery(sampleType: sampleType, predicate: nil) { [coordinator, notificationEvaluator] _, completionHandler, error in
-            if let error {
-                AppLogger.healthKit.error("[ObserverManager] Observer error for \(typeName): \(error.localizedDescription)")
-                completionHandler()
-                return
-            }
-
-            // Correction #92: error identification log
-            AppLogger.healthKit.info("[ObserverManager] Change detected: \(typeName)")
-
-            Self.processUpdate(completion: completionHandler) {
-                async let refreshTask: Void = {
-                    _ = await coordinator.requestRefresh(source: .healthKitObserver)
-                }()
-                async let notifyTask: Void = {
-                    await notificationEvaluator?.evaluateAndNotify(sampleType: sampleType)
-                }()
-                async let bedtimeTask: Void = {
-                    if sampleType.identifier == HKCategoryType(.sleepAnalysis).identifier {
-                        await BedtimeReminderScheduler.shared.refreshSchedule(force: true)
-                        await AppleWatchBedtimeReminderScheduler.shared.refreshSchedule(force: true)
-                    }
-                }()
-                _ = await (refreshTask, notifyTask, bedtimeTask)
-            }
+        let query = HKObserverQuery(sampleType: sampleType, predicate: nil) { [coordinator, notificationEvaluator, watchReminder] _, completionHandler, error in
+            Self.handleObserverUpdate(
+                sampleType: sampleType,
+                error: error,
+                coordinator: coordinator,
+                notificationEvaluator: notificationEvaluator,
+                watchReminder: watchReminder,
+                completion: completionHandler
+            )
         }
 
         queries.append(query)
         store.execute(query)
 
-        AppLogger.healthKit.info("[ObserverManager] Registered observer for \(typeName)")
+        AppLogger.healthKit.info("[ObserverManager] Registered observer for \(sampleType.identifier)")
+    }
+
+    @discardableResult
+    nonisolated static func handleObserverUpdate(
+        sampleType: HKSampleType,
+        error: Error?,
+        coordinator: AppRefreshCoordinating,
+        notificationEvaluator: BackgroundNotificationEvaluator?,
+        watchReminder: any WatchBedtimeReminderRechecking,
+        completion: @escaping () -> Void
+    ) -> Task<Void, Never>? {
+        if let error {
+            AppLogger.healthKit.error("[ObserverManager] Observer error for \(sampleType.identifier): \(error.localizedDescription)")
+            completion()
+            return nil
+        }
+
+        AppLogger.healthKit.info("[ObserverManager] Change detected: \(sampleType.identifier)")
+
+        if sampleType.identifier == HKQuantityType(.heartRate).identifier {
+            return processUpdate(completion: completion) {
+                await watchReminder.cancelPendingReminderIfWatchIsWorn()
+            }
+        }
+
+        return processUpdate(completion: completion) {
+            async let refreshTask: Void = {
+                _ = await coordinator.requestRefresh(source: .healthKitObserver)
+            }()
+            async let notifyTask: Void = {
+                await notificationEvaluator?.evaluateAndNotify(sampleType: sampleType)
+            }()
+            async let bedtimeTask: Void = {
+                if sampleType.identifier == HKCategoryType(.sleepAnalysis).identifier {
+                    await BedtimeReminderScheduler.shared.refreshSchedule(force: true)
+                    await AppleWatchBedtimeReminderScheduler.shared.refreshSchedule(force: true)
+                }
+            }()
+            _ = await (refreshTask, notifyTask, bedtimeTask)
+        }
     }
 
     /// Keep HealthKit's background delivery alive until all asynchronous work finishes.
