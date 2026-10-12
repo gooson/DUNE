@@ -140,78 +140,118 @@ struct MetricsView: View {
 
     private var lastSetRPESheet: some View {
         VStack(spacing: DS.Spacing.sm) {
-            Text("RPE \(RPELevel.format(lastSetRPEInput))")
-                .font(.headline.monospacedDigit())
+            ScrollView {
+                VStack(spacing: DS.Spacing.sm) {
+                    Text("RPE")
+                        .font(DS.Typography.metricLabel)
+                        .foregroundStyle(.secondary)
 
-            HStack(spacing: DS.Spacing.md) {
-                Button {
-                    lastSetRPEInput = max(RPELevel.range.lowerBound, lastSetRPEInput - RPELevel.step)
-                } label: {
-                    Image(systemName: "minus")
-                }
-                .accessibilityIdentifier("watch-last-set-rpe-decrement")
+                    Text(RPELevel.format(lastSetRPEInput))
+                        .font(DS.Typography.primaryMetric)
+                        .foregroundStyle(DS.Color.positive)
+                        .contentTransition(.numericText())
+                        .accessibilityLabel(Text("RPE \(RPELevel.format(lastSetRPEInput))"))
 
-                Button {
-                    lastSetRPEInput = min(RPELevel.range.upperBound, lastSetRPEInput + RPELevel.step)
-                } label: {
-                    Image(systemName: "plus")
+                    HStack(spacing: DS.Spacing.md) {
+                        Button {
+                            lastSetRPEInput = max(RPELevel.range.lowerBound, lastSetRPEInput - RPELevel.step)
+                        } label: {
+                            Image(systemName: "minus")
+                                .frame(maxWidth: .infinity, minHeight: 44)
+                                .contentShape(Rectangle())
+                        }
+                        .background(.quaternary, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+                        .accessibilityIdentifier("watch-last-set-rpe-decrement")
+
+                        Button {
+                            lastSetRPEInput = min(RPELevel.range.upperBound, lastSetRPEInput + RPELevel.step)
+                        } label: {
+                            Image(systemName: "plus")
+                                .frame(maxWidth: .infinity, minHeight: 44)
+                                .contentShape(Rectangle())
+                        }
+                        .background(.quaternary, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+                        .accessibilityIdentifier("watch-last-set-rpe-increment")
+                    }
+                    .buttonStyle(.plain)
                 }
-                .accessibilityIdentifier("watch-last-set-rpe-increment")
             }
-            .buttonStyle(.bordered)
+            .scrollBounceBehavior(.basedOnSize)
 
-            Button("Confirm RPE") {
+            Button {
                 estimatedRPE = lastSetRPEInput
                 workoutManager.recordSetRPE(lastSetRPEInput, source: "user")
                 showLastSetRPEInput = false
+            } label: {
+                Text("Confirm RPE")
+                    .font(.headline)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
+                    .frame(maxWidth: .infinity, minHeight: 44)
+                    .contentShape(Rectangle())
             }
-            .buttonStyle(.borderedProminent)
+            .buttonStyle(.plain)
+            .foregroundStyle(.black)
+            .background(DS.Color.positive, in: RoundedRectangle(cornerRadius: DS.Radius.lg))
             .accessibilityIdentifier("watch-last-set-rpe-confirm")
         }
-        .padding(DS.Spacing.md)
+        .padding(.horizontal, DS.Spacing.md)
         .accessibilityElement(children: .contain)
         .accessibilityIdentifier("watch-last-set-rpe-sheet")
     }
 
     // MARK: - Set Entry (Redesigned)
 
-    /// Plain VStack instead of ScrollView — crown must stay free for TabView paging.
-    /// ScrollView in a non-last vertical page tab cannot receive crown events.
+    /// Keep the normal layout unscrolled so the Crown pages through the workout.
+    /// Oversized accessibility text can use touch scrolling when neither layout fits.
     private var setEntryView: some View {
-        VStack(spacing: DS.Spacing.md) {
-            // Exercise name (large)
-            exerciseHeader
-
-            // Input card — adapts to inputType
-            inputCard
-
-            // Complete Set button (large touch target)
-            completeButton
-
-            // Heart rate (secondary)
-            heartRateDisplay
+        ViewThatFits(in: .vertical) {
+            setEntryContent(compact: false)
+                .fixedSize(horizontal: false, vertical: true)
+            setEntryContent(compact: true)
+                .fixedSize(horizontal: false, vertical: true)
+            ScrollView {
+                setEntryContent(compact: true)
+            }
+            .scrollBounceBehavior(.basedOnSize)
         }
         .padding(.horizontal, DS.Spacing.md)
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionMetricsScreen)
+    }
+
+    private func setEntryContent(compact: Bool) -> some View {
+        VStack(spacing: compact ? DS.Spacing.xs : DS.Spacing.sm) {
+            exerciseHeader(compact: compact)
+            inputCard
+            completeButton
+            heartRateDisplay
+        }
     }
 
     // MARK: - Header
 
-    private var exerciseHeader: some View {
-        VStack(spacing: DS.Spacing.xs) {
+    private func exerciseHeader(compact: Bool) -> some View {
+        HStack(spacing: DS.Spacing.sm) {
             if let entry = workoutManager.currentEntry {
-                Text(entry.exerciseName)
-                    .font(DS.Typography.exerciseName)
-                    .lineLimit(2)
-                    .minimumScaleFactor(0.7)
-                    .multilineTextAlignment(.center)
+                EquipmentIconView(equipment: entry.equipment, size: 28)
+                    .frame(width: 28, height: 28)
+                    .accessibilityHidden(true)
 
-                Text("Set \(workoutManager.currentSetIndex + 1) of \(workoutManager.effectiveTotalSets)")
-                    .font(DS.Typography.tileSubtitle)
-                    .foregroundStyle(.secondary)
+                VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                    Text(entry.exerciseName)
+                        .font(compact ? DS.Typography.tileSubtitle : DS.Typography.exerciseName)
+                        .lineLimit(2)
+                        .minimumScaleFactor(0.7)
 
+                    Text("Set \(workoutManager.currentSetIndex + 1) of \(workoutManager.effectiveTotalSets)")
+                        .font(DS.Typography.metricLabel)
+                        .foregroundStyle(.secondary)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
         }
+        .accessibilityElement(children: .combine)
     }
 
     // MARK: - Input Card (Tap to Edit)
@@ -228,25 +268,31 @@ struct MetricsView: View {
                 case .setsReps:
                     if usesAddedWeight { weightRepsInputCardContent } else { repsOnlyInputCardContent }
                 case .roundsBased:
-                    repsOnlyInputCardContent
-                    durationInputCardContent
+                    HStack(spacing: DS.Spacing.md) {
+                        repsOnlyInputCardContent
+                            .frame(maxWidth: .infinity)
+                        durationInputCardContent
+                            .frame(maxWidth: .infinity)
+                    }
                 case .setsRepsWeight, .durationDistance:
                     weightRepsInputCardContent
                 }
             }
             .foregroundStyle(DS.Color.positive)
             .frame(maxWidth: .infinity)
-            .padding(.vertical, DS.Spacing.md)
+            .padding(.horizontal, DS.Spacing.md)
+            .padding(.vertical, DS.Spacing.sm)
+            .frame(minHeight: 58)
             .background {
                 RoundedRectangle(cornerRadius: DS.Radius.md)
-                    .fill(DS.Color.positive.opacity(DS.Opacity.border))
+                    .fill(DS.Color.positive.opacity(isLuminanceReduced ? DS.Opacity.subtle : DS.Opacity.border))
             }
             .overlay(alignment: .topTrailing) {
                 if !isDuration {
                     Image(systemName: "pencil")
-                        .font(.caption2)
+                        .font(.system(size: 9))
                         .foregroundStyle(.secondary)
-                        .padding(DS.Spacing.sm)
+                        .padding(DS.Spacing.xs)
                 }
             }
         }
@@ -255,46 +301,52 @@ struct MetricsView: View {
     }
 
     private var weightRepsInputCardContent: some View {
-        Group {
-            HStack(spacing: DS.Spacing.xs) {
+        HStack(spacing: DS.Spacing.sm) {
+            VStack(spacing: 0) {
                 Text("\(weight, specifier: "%.1f")")
-                    .font(DS.Typography.metricValue)
+                    .font(DS.Typography.countdownValue)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.6)
                 Text("kg")
-                    .font(DS.Typography.tileSubtitle)
+                    .font(DS.Typography.metricLabel)
                     .foregroundStyle(.secondary)
             }
+            .frame(maxWidth: .infinity)
 
-            HStack(spacing: DS.Spacing.xs) {
-                Text("\u{00d7}")
-                    .font(DS.Typography.tileSubtitle)
-                    .foregroundStyle(.secondary)
-                Text("\(reps)")
-                    .font(DS.Typography.metricValue)
-                Text("reps")
-                    .font(DS.Typography.tileSubtitle)
-                    .foregroundStyle(.secondary)
-            }
+            Text("\u{00d7}")
+                .font(DS.Typography.tileSubtitle)
+                .foregroundStyle(.secondary)
+
+            repsOnlyInputCardContent
+                .frame(maxWidth: .infinity)
         }
     }
 
     private var repsOnlyInputCardContent: some View {
-        HStack(spacing: DS.Spacing.xs) {
+        VStack(spacing: 0) {
             Text("\(reps)")
-                .font(DS.Typography.metricValue)
+                .font(DS.Typography.countdownValue)
+                .lineLimit(1)
+                .minimumScaleFactor(0.6)
             Text("reps")
-                .font(DS.Typography.tileSubtitle)
+                .font(DS.Typography.metricLabel)
                 .foregroundStyle(.secondary)
         }
     }
 
     private var durationInputCardContent: some View {
-        TimelineView(.periodic(from: .now, by: 1)) { context in
+        TimelineView(.periodic(from: .now, by: isLuminanceReduced ? 60 : 1)) { context in
             let elapsed = Int(setTimerStart.map { max(0, workoutManager.activeElapsedTime(at: context.date) - $0) } ?? 0)
-            let mins = elapsed / 60
-            let secs = elapsed % 60
-            Text(String(format: "%d:%02d", mins, secs))
-                .font(.system(.title2, design: .rounded).monospacedDigit().bold())
-                .contentTransition(.numericText())
+            VStack(spacing: 0) {
+                Text(Duration.seconds(elapsed).formatted(.time(pattern: .minuteSecond)))
+                    .font(DS.Typography.countdownValue)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.6)
+                    .contentTransition(.numericText())
+                Text("Duration")
+                    .font(DS.Typography.metricLabel)
+                    .foregroundStyle(.secondary)
+            }
         }
     }
 
@@ -305,14 +357,18 @@ struct MetricsView: View {
             completeSet()
         } label: {
             HStack {
-                Image(systemName: "checkmark.circle.fill")
+                Image(systemName: "checkmark")
                 Text("Complete Set")
                     .font(.headline)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
             }
             .frame(maxWidth: .infinity, minHeight: 44)
+            .contentShape(Rectangle())
         }
-        .buttonStyle(.borderedProminent)
-        .tint(DS.Color.positive)
+        .buttonStyle(.plain)
+        .foregroundStyle(.black)
+        .background(DS.Color.positive, in: RoundedRectangle(cornerRadius: DS.Radius.lg))
         .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionMetricsCompleteSetButton)
     }
 
@@ -341,16 +397,37 @@ struct MetricsView: View {
     // MARK: - Next Exercise Transition
 
     private var nextExerciseTransition: some View {
-        VStack(spacing: DS.Spacing.lg) {
+        ViewThatFits(in: .vertical) {
+            nextExerciseContent
+                .fixedSize(horizontal: false, vertical: true)
+            ScrollView {
+                nextExerciseContent
+            }
+            .scrollBounceBehavior(.basedOnSize)
+        }
+        .padding(.horizontal, DS.Spacing.md)
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionMetricsNextExercise)
+    }
+
+    private var nextExerciseContent: some View {
+        VStack(spacing: DS.Spacing.sm) {
             Text("Next Exercise")
                 .font(DS.Typography.metricLabel)
                 .foregroundStyle(.secondary)
 
             if let next = proposedExerciseName {
-                Text(next)
-                    .font(DS.Typography.exerciseName)
-                    .lineLimit(2)
-                    .multilineTextAlignment(.center)
+                HStack(spacing: DS.Spacing.sm) {
+                    EquipmentIconView(equipment: workoutManager.currentEntry?.equipment, size: 32)
+                        .frame(width: 32, height: 32)
+                        .accessibilityHidden(true)
+
+                    Text(next)
+                        .font(DS.Typography.exerciseName)
+                        .lineLimit(2)
+                        .minimumScaleFactor(0.7)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
             }
 
             Button {
@@ -361,10 +438,13 @@ struct MetricsView: View {
                 WKInterfaceDevice.current().play(.notification)
                 pendingInputSheet = true
             } label: {
-                Text("Start")
-                    .frame(maxWidth: .infinity)
+                Label("Start", systemImage: "play.fill")
+                    .frame(maxWidth: .infinity, minHeight: 44)
+                    .contentShape(Rectangle())
             }
-            .tint(DS.Color.positive)
+            .buttonStyle(.plain)
+            .foregroundStyle(.black)
+            .background(DS.Color.positive, in: RoundedRectangle(cornerRadius: DS.Radius.lg))
 
             Button {
                 let hasNext = workoutManager.skipExercise()
@@ -378,11 +458,12 @@ struct MetricsView: View {
                 }
             } label: {
                 Text("Skip")
-                    .frame(maxWidth: .infinity)
+                    .frame(maxWidth: .infinity, minHeight: 44)
+                    .contentShape(Rectangle())
             }
-            .tint(.gray)
+            .buttonStyle(.plain)
+            .background(.quaternary, in: RoundedRectangle(cornerRadius: DS.Radius.lg))
         }
-        .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionMetricsNextExercise)
     }
 
     /// Name of the exercise currently proposed in the transition overlay.

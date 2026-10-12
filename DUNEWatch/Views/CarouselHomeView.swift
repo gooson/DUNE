@@ -120,6 +120,7 @@ struct CarouselHomeView: View {
                     Image(systemName: "gearshape")
                         .font(.system(size: 17))
                         .foregroundStyle(.secondary)
+                        .frame(minWidth: 44, minHeight: 44)
                 }
                 .buttonStyle(.plain)
             }
@@ -158,22 +159,25 @@ struct CarouselHomeView: View {
     // MARK: - Carousel
 
     private var carousel: some View {
-        ScrollView(.vertical) {
-            VStack(spacing: 0) {
-                ForEach(cards) { card in
-                    cardContent(for: card)
-                        .containerRelativeFrame(.vertical)
-                        .scrollTransition { content, phase in
-                            content
-                                .scaleEffect(phase.isIdentity ? 1.0 : 0.85)
-                                .opacity(phase.isIdentity ? 1.0 : 0.6)
-                        }
+        GeometryReader { geometry in
+            ScrollView(.vertical) {
+                VStack(spacing: 0) {
+                    ForEach(cards) { card in
+                        cardContent(for: card)
+                            // A minimum allows long names and larger text to grow beyond one page.
+                            .frame(minHeight: geometry.size.height)
+                            .scrollTransition { content, phase in
+                                content
+                                    .scaleEffect(phase.isIdentity ? 1.0 : 0.95)
+                                    .opacity(phase.isIdentity ? 1.0 : 0.7)
+                            }
+                    }
                 }
+                .scrollTargetLayout()
             }
-            .scrollTargetLayout()
+            // Align cards while permitting oversized content to remain scrollable.
+            .scrollTargetBehavior(.viewAligned)
         }
-        // .viewAligned snaps to card views; .paging drifts when nav title collapses
-        .scrollTargetBehavior(.viewAligned)
     }
 
     // MARK: - Card Content
@@ -212,54 +216,66 @@ struct CarouselHomeView: View {
     }
 
     private var allExercisesCard: some View {
-        VStack(spacing: DS.Spacing.sm) {
-            Text(String(localized: "Browse").uppercased())
-                .font(DS.Typography.tinyLabel)
+        VStack(alignment: .leading, spacing: DS.Spacing.md) {
+            Text("Browse")
+                .font(DS.Typography.metricLabel)
                 .foregroundStyle(.secondary)
-                .tracking(0.5)
 
-            Spacer()
+            HStack(spacing: DS.Spacing.md) {
+                Image(systemName: "figure.run")
+                    .font(.system(size: 28, weight: .medium))
+                    .foregroundStyle(theme.sandColor)
+                    .frame(width: 40, height: 44)
+                Text("All Exercises")
+                    .font(DS.Typography.exerciseName)
+                    .lineLimit(2)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .padding(DS.Spacing.md)
+            .background(.thinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.lg))
 
-            Image(systemName: "plus.circle.fill")
-                .font(.system(size: 44))
-                .foregroundStyle(DS.Color.positive)
-
-            Text(String(localized: "All Exercises"))
-                .font(.system(.title3, design: .rounded).bold())
-
-            Spacer()
+            Label("Browse All", systemImage: "magnifyingglass")
+                .font(DS.Typography.tileSubtitle)
+                .frame(maxWidth: .infinity, minHeight: 44)
+                .foregroundStyle(theme.accentColor)
+                .background(theme.accentColor.opacity(DS.Opacity.border), in: Capsule())
         }
         .frame(maxWidth: .infinity)
         .padding(.horizontal, DS.Spacing.lg)
+        .accessibilityElement(children: .combine)
     }
 
     // MARK: - Empty State
 
     private var emptyState: some View {
-        VStack(spacing: DS.Spacing.lg) {
-            Image(systemName: "iphone.and.arrow.right.inward")
-                .font(.system(size: 28))
-                .foregroundStyle(.secondary)
-            Text(String(localized: "No Exercises"))
-                .font(DS.Typography.exerciseName)
-            Text(emptyStateDescription)
-                .font(DS.Typography.metricLabel)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
+        ScrollView {
+            VStack(spacing: DS.Spacing.md) {
+                Image(systemName: "iphone.and.arrow.right.inward")
+                    .font(.system(size: 28))
+                    .foregroundStyle(.secondary)
+                Text(String(localized: "No Exercises"))
+                    .font(DS.Typography.exerciseName)
+                Text(emptyStateDescription)
+                    .font(DS.Typography.metricLabel)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
 
-            NavigationLink(value: WatchRoute.quickStartAll) {
-                Label(String(localized: "Browse All"), systemImage: "magnifyingglass")
+                NavigationLink(value: WatchRoute.quickStartAll) {
+                    Label(String(localized: "Browse All"), systemImage: "magnifyingglass")
+                        .frame(maxWidth: .infinity, minHeight: 44)
+                }
+                .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.homeBrowseAllLink)
+                .buttonStyle(.borderedProminent)
+                .tint(theme.accentColor)
+                .padding(.top, DS.Spacing.md)
+
+                WatchSyncStatusView()
+                    .padding(.top, DS.Spacing.xs)
             }
-            .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.homeBrowseAllLink)
-            .buttonStyle(.borderedProminent)
-            .tint(DS.Color.positive)
-            .padding(.top, DS.Spacing.md)
-
-            WatchSyncStatusView()
-                .padding(.top, DS.Spacing.xs)
+            .frame(maxWidth: .infinity)
+            .padding()
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-        .padding()
+        .scrollBounceBehavior(.basedOnSize)
     }
 
     private var emptyStateDescription: String {

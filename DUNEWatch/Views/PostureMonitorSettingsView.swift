@@ -2,6 +2,7 @@ import SwiftUI
 
 /// Watch settings view for posture monitoring configuration.
 struct PostureMonitorSettingsView: View {
+    @Environment(\.appTheme) private var theme
     @State private var postureMonitor = WatchPostureMonitor.shared
 
     @State private var isEnabled = false
@@ -20,6 +21,7 @@ struct PostureMonitorSettingsView: View {
                 Toggle(isOn: $isEnabled) {
                     Label("Posture Monitoring", systemImage: "figure.stand")
                 }
+                .frame(minHeight: 44)
                 .onChange(of: isEnabled) { _, newValue in
                     postureMonitor.setEnabled(newValue)
                 }
@@ -75,6 +77,7 @@ struct PostureMonitorSettingsView: View {
                 }
             }
         }
+        .tint(theme.accentColor)
         .navigationTitle(String(localized: "Posture"))
         .onAppear {
             guard !didLoadInitialValues else { return }
@@ -91,5 +94,6 @@ struct PostureMonitorSettingsView: View {
             Text(value)
                 .foregroundStyle(.secondary)
         }
+        .frame(minHeight: 44)
     }
 }

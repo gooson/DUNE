@@ -15,26 +15,30 @@ struct WatchExerciseReorderView: View {
                             && !workoutManager.completedSetsData[index].isEmpty
                         let isCurrent = index == workoutManager.currentExerciseIndex
 
-                        VStack(spacing: DS.Spacing.xs) {
+                        VStack(spacing: DS.Spacing.sm) {
                             HStack(spacing: DS.Spacing.md) {
+                                EquipmentIconView(equipment: entry.equipment, size: 20)
+                                    .frame(width: 24, height: 24)
+                                    .accessibilityHidden(true)
+
                                 if isCompleted {
                                     Image(systemName: "checkmark.circle.fill")
                                         .foregroundStyle(DS.Color.positive)
-                                        .frame(width: 20)
+                                        .frame(width: 18)
                                 } else if isCurrent {
                                     Image(systemName: "play.circle.fill")
                                         .foregroundStyle(DS.Color.activity)
-                                        .frame(width: 20)
+                                        .frame(width: 18)
                                 } else {
                                     Text("\(index + 1)")
                                         .font(DS.Typography.metricLabel)
                                         .foregroundStyle(.secondary)
-                                        .frame(width: 20)
+                                        .frame(width: 18)
                                 }
 
                                 Text(entry.exerciseName)
-                                    .font(DS.Typography.tileSubtitle)
-                                    .lineLimit(1)
+                                    .font(DS.Typography.tileTitle)
+                                    .lineLimit(2)
                             }
                             .opacity(isCompleted ? 0.5 : 1.0)
 
@@ -45,9 +49,11 @@ struct WatchExerciseReorderView: View {
                                     } label: {
                                         Image(systemName: "arrow.up")
                                             .font(.caption2)
-                                            .frame(maxWidth: .infinity, minHeight: 28)
+                                            .frame(maxWidth: .infinity, minHeight: 44)
                                     }
                                     .buttonStyle(.bordered)
+                                    .accessibilityLabel("Move Up")
+                                    .accessibilityIdentifier("watch-reorder-up-\(index)")
                                     .disabled(!workoutManager.canMoveExercise(at: index, direction: .up))
 
                                     Button {
@@ -55,9 +61,11 @@ struct WatchExerciseReorderView: View {
                                     } label: {
                                         Image(systemName: "arrow.down")
                                             .font(.caption2)
-                                            .frame(maxWidth: .infinity, minHeight: 28)
+                                            .frame(maxWidth: .infinity, minHeight: 44)
                                     }
                                     .buttonStyle(.bordered)
+                                    .accessibilityLabel("Move Down")
+                                    .accessibilityIdentifier("watch-reorder-down-\(index)")
                                     .disabled(!workoutManager.canMoveExercise(at: index, direction: .down))
                                 }
                             }

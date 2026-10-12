@@ -14,6 +14,23 @@ final class WatchResponsiveWorkoutLayoutTests: WatchUITestBaseCase {
         ], screenshot: "stair-climber-preview")
         XCTAssertTrue(elementExists(WatchAXID.workoutPreviewLevelValue, timeout: 2))
         XCTAssertFalse(app.buttons[WatchAXID.workoutPreviewCardioOutdoorButton].exists)
+        assertTouchTargetsAtLeast44([
+            WatchAXID.workoutPreviewLevelDecrease,
+            WatchAXID.workoutPreviewLevelIncrease,
+            WatchAXID.workoutPreviewCardioIndoorButton
+        ])
+
+        let level = app.staticTexts[WatchAXID.workoutPreviewLevelValue].firstMatch
+        let initialLevel = level.label
+        app.buttons[WatchAXID.workoutPreviewLevelIncrease].tap()
+        XCTAssertEqual(
+            XCTWaiter.wait(for: [XCTNSPredicateExpectation(
+                predicate: NSPredicate(format: "label != %@", initialLevel),
+                object: level
+            )], timeout: 5),
+            .completed,
+            "Preview level control should update its visible value"
+        )
     }
 
     func testEllipticalPreviewKeepsStartAndLevelControlsVisible() throws {
@@ -34,12 +51,31 @@ final class WatchResponsiveWorkoutLayoutTests: WatchUITestBaseCase {
             WatchAXID.workoutPreviewCardioOutdoorButton
         ], screenshot: "running-preview")
         XCTAssertFalse(app.buttons[WatchAXID.workoutPreviewLevelIncrease].exists)
+        assertTouchTargetsAtLeast44([
+            WatchAXID.workoutPreviewCardioIndoorButton,
+            WatchAXID.workoutPreviewCardioOutdoorButton
+        ])
+    }
+
+    func testOutdoorStartErrorStillAllowsIndoorRecovery() throws {
+        relaunchApp(withAdditionalArguments: ["--ui-force-cardio-start-error"])
+        openPreview(for: "running")
+        XCTAssertTrue(tapElement(WatchAXID.workoutPreviewCardioOutdoorButton, timeout: 5))
+        XCTAssertTrue(elementExists("watch-workout-preview-start-error", timeout: 5))
+        assertFirstViewportButtons([
+            WatchAXID.workoutPreviewCardioIndoorButton,
+            WatchAXID.workoutPreviewCardioOutdoorButton
+        ], screenshot: "running-start-error")
+        XCTAssertTrue(tapElement(WatchAXID.workoutPreviewCardioIndoorButton, timeout: 5))
+        XCTAssertTrue(elementExists(WatchAXID.sessionPagingRoot, timeout: 10),
+                      "Indoor start should remain available after an outdoor failure")
     }
 
     func testStrengthPreviewKeepsStartVisible() throws {
         openPreview(for: "ui-test-squat")
         XCTAssertTrue(elementExists(WatchAXID.workoutPreviewStrengthList, timeout: 3))
         assertFirstViewportButtons([WatchAXID.workoutPreviewStartButton], screenshot: "strength-preview")
+        assertTouchTargetsAtLeast44([WatchAXID.workoutPreviewStartButton])
     }
 
     func testKoreanXXXLStairClimberKeepsStartVisibleAndLevelReachable() throws {
@@ -78,6 +114,30 @@ final class WatchResponsiveWorkoutLayoutTests: WatchUITestBaseCase {
             WatchAXID.cardioLevelDecrease,
             WatchAXID.cardioLevelIncrease
         ], screenshot: "active-machine-level")
+        assertTouchTargetsAtLeast44([WatchAXID.cardioLevelDecrease, WatchAXID.cardioLevelIncrease])
+    }
+
+    func testKoreanXXXLCardioBottomMetricsRemainReachable() throws {
+        relaunchApp(withAdditionalArguments: [
+            "-AppleLanguages", "(ko)",
+            "-AppleLocale", "ko_KR",
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryXXXL"
+        ])
+        openPreview(for: "running")
+        XCTAssertTrue(tapElement(WatchAXID.workoutPreviewCardioIndoorButton, timeout: 5))
+        XCTAssertTrue(elementExists(WatchAXID.sessionPagingRoot, timeout: 10))
+        XCTAssertTrue(app.staticTexts["달리기"].firstMatch.waitForExistence(timeout: 5),
+                      "The cardio activity title should use the Watch Korean catalog")
+
+        let calories = app.staticTexts["kcal"].firstMatch
+        XCTAssertTrue(calories.waitForExistence(timeout: 5), "The bottom metric row should render")
+        let scrollView = app.scrollViews.firstMatch
+        XCTAssertTrue(scrollView.exists, "Cardio metrics should offer vertical scrolling")
+        for _ in 0..<3 where !calories.isHittable {
+            scrollView.swipeUp()
+        }
+        XCTAssertTrue(calories.isHittable, "Calories should be reachable on a small watch at large text sizes")
+        addScreenshotAttachment(named: defaultArtifactName(suffix: "korean-xxxl-cardio-bottom"))
     }
 
     func testKoreanXXXLRestTimerKeepsPrimaryActionsReachable() throws {
@@ -108,6 +168,32 @@ final class WatchResponsiveWorkoutLayoutTests: WatchUITestBaseCase {
             XCTAssertGreaterThanOrEqual(button.frame.height, 44, "\(identifier) should have a practical touch target")
         }
         addScreenshotAttachment(named: defaultArtifactName(suffix: "korean-xxxl-rest-actions"))
+    }
+
+    func testKoreanXXXLStrengthControlsKeepPrimaryActionsReachable() throws {
+        relaunchApp(withAdditionalArguments: [
+            "--ui-watch-strength-start-controls",
+            "-AppleLanguages", "(ko)",
+            "-AppleLocale", "ko_KR",
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryXXXL"
+        ])
+        startFixtureStrengthWorkout()
+        openControlsPage()
+
+        let actions = [WatchAXID.sessionControlsPauseResumeButton, WatchAXID.sessionControlsEndButton]
+        assertFirstViewportButtons(actions, screenshot: "korean-xxxl-strength-controls")
+        assertTouchTargetsAtLeast44(actions)
+    }
+
+    private func assertTouchTargetsAtLeast44(_ identifiers: [String]) {
+        for identifier in identifiers {
+            let button = app.buttons[identifier].firstMatch
+            XCTAssertTrue(button.waitForExistence(timeout: 5), "Missing \(identifier)")
+            XCTAssertGreaterThanOrEqual(button.frame.width, 44,
+                                        "\(identifier) should have a practical touch target width")
+            XCTAssertGreaterThanOrEqual(button.frame.height, 44,
+                                        "\(identifier) should have a practical touch target height")
+        }
     }
 
     private func openPreview(for exerciseID: String) {

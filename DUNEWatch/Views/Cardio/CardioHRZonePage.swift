@@ -8,28 +8,28 @@ struct CardioHRZonePage: View {
 
     var body: some View {
         TimelineView(.periodic(from: .now, by: isLuminanceReduced ? 10 : 1)) { _ in
-            VStack(spacing: DS.Spacing.md) {
-                Spacer(minLength: 0)
+            ScrollView(.vertical) {
+                VStack(spacing: DS.Spacing.md) {
 
-                // Current HR (large, zone-colored)
-                heartRateDisplay
+                    // Current HR (large, zone-colored)
+                    heartRateDisplay
 
-                // Zone bar
-                HRZoneBar(
-                    currentZone: workoutManager.currentZone,
-                    fraction: workoutManager.hrFraction
-                )
+                    // Zone bar
+                    HRZoneBar(
+                        currentZone: workoutManager.currentZone,
+                        fraction: workoutManager.hrFraction
+                    )
+                    .padding(.horizontal, DS.Spacing.sm)
+
+                    // Zone name
+                    zoneLabel
+
+                    // Avg HR
+                    avgHeartRateRow
+                }
                 .padding(.horizontal, DS.Spacing.sm)
-
-                // Zone name
-                zoneLabel
-
-                Spacer(minLength: 0)
-
-                // Avg HR
-                avgHeartRateRow
             }
-            .padding(.horizontal, DS.Spacing.sm)
+            .scrollBounceBehavior(.basedOnSize)
         }
     }
 
@@ -48,11 +48,14 @@ struct CardioHRZonePage: View {
             .font(DS.Typography.primaryMetric)
             .foregroundStyle(zoneColor)
             .contentTransition(.numericText())
+            .lineLimit(1)
+            .minimumScaleFactor(0.7)
 
             Text("bpm")
                 .font(DS.Typography.metricLabel)
                 .foregroundStyle(.secondary)
         }
+        .frame(maxWidth: .infinity)
     }
 
     // MARK: - Zone Label
@@ -96,6 +99,8 @@ struct CardioHRZonePage: View {
             .contentTransition(.numericText())
         }
         .padding(.horizontal, DS.Spacing.xs)
+        .frame(minHeight: 44)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
     }
 
     // MARK: - Helpers

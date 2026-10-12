@@ -10,28 +10,27 @@ struct CardioMainMetricsPage: View {
 
     var body: some View {
         TimelineView(.periodic(from: .now, by: isLuminanceReduced ? 10 : 1)) { context in
-            VStack(spacing: DS.Spacing.sm) {
-                // Activity type header
-                activityHeader
+            ScrollView(.vertical) {
+                VStack(spacing: DS.Spacing.md) {
+                    // Activity type header
+                    activityHeader
 
-                // Elapsed time (large)
-                elapsedTimeDisplay(now: context.date)
+                    // Elapsed time (large)
+                    elapsedTimeDisplay(now: context.date)
 
-                Spacer(minLength: 0)
+                    // Distance + Pace/Speed (medium 2-col)
+                    if workoutManager.supportsMachineLevel {
+                        currentLevelRow
+                    } else if profile.showsDistance {
+                        distanceRow
+                    }
 
-                // Distance + Pace/Speed (medium 2-col)
-                if workoutManager.supportsMachineLevel {
-                    currentLevelRow
-                } else if profile.showsDistance {
-                    distanceRow
+                    // HR + Calories (compact 2-col)
+                    bottomRow
                 }
-
-                Spacer(minLength: 0)
-
-                // HR + Calories (compact 2-col)
-                bottomRow
+                .padding(.horizontal, DS.Spacing.sm)
             }
-            .padding(.horizontal, DS.Spacing.sm)
+            .scrollBounceBehavior(.basedOnSize)
         }
     }
 
@@ -53,7 +52,7 @@ struct CardioMainMetricsPage: View {
                     .font(.caption2)
                     .foregroundStyle(DS.Color.activity)
 
-                Text(type.typeName)
+                Text(LocalizedStringKey(type.typeName))
                     .font(DS.Typography.metricLabel)
                     .foregroundStyle(.secondary)
             }
@@ -76,12 +75,15 @@ struct CardioMainMetricsPage: View {
         .font(DS.Typography.primaryMetric)
         .foregroundStyle(DS.Color.activity)
         .contentTransition(.numericText())
+        .lineLimit(1)
+        .minimumScaleFactor(0.7)
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     // MARK: - Distance Row
 
     private var distanceRow: some View {
-        HStack(spacing: DS.Spacing.md) {
+        HStack(spacing: DS.Spacing.sm) {
             // Distance
             VStack(spacing: DS.Spacing.xxs) {
                 Text(String(format: "%.2f", workoutManager.distanceKm))
@@ -92,7 +94,8 @@ struct CardioMainMetricsPage: View {
                     .font(DS.Typography.metricLabel)
                     .foregroundStyle(.tertiary)
             }
-            .frame(maxWidth: .infinity)
+            .frame(maxWidth: .infinity, minHeight: 52)
+            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
 
             // Pace or Speed
             if profile.showsPace {
@@ -105,7 +108,8 @@ struct CardioMainMetricsPage: View {
                         .font(DS.Typography.metricLabel)
                         .foregroundStyle(.tertiary)
                 }
-                .frame(maxWidth: .infinity)
+                .frame(maxWidth: .infinity, minHeight: 52)
+                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
             } else if profile.showsSpeed {
                 VStack(spacing: DS.Spacing.xxs) {
                     Text(formattedSpeed)
@@ -116,7 +120,8 @@ struct CardioMainMetricsPage: View {
                         .font(DS.Typography.metricLabel)
                         .foregroundStyle(.tertiary)
                 }
-                .frame(maxWidth: .infinity)
+                .frame(maxWidth: .infinity, minHeight: 52)
+                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
             }
         }
     }
@@ -142,10 +147,12 @@ struct CardioMainMetricsPage: View {
                 .font(DS.Typography.metricLabel)
                 .foregroundStyle(.tertiary)
         }
+        .frame(maxWidth: .infinity, minHeight: 52)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
     }
 
     private var bottomRow: some View {
-        HStack(spacing: DS.Spacing.lg) {
+        HStack(spacing: DS.Spacing.sm) {
             // Heart Rate
             WorkoutMetricCard(
                 icon: "heart.fill",
@@ -156,6 +163,8 @@ struct CardioMainMetricsPage: View {
                 color: workoutManager.currentZone?.color ?? theme.metricHeartRate,
                 size: .compact
             )
+            .frame(maxWidth: .infinity, minHeight: 48)
+            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
 
             // Calories
             WorkoutMetricCard(
@@ -167,6 +176,8 @@ struct CardioMainMetricsPage: View {
                 color: DS.Color.caution,
                 size: .compact
             )
+            .frame(maxWidth: .infinity, minHeight: 48)
+            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
         }
     }
 }

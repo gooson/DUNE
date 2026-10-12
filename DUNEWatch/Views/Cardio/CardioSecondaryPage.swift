@@ -20,14 +20,11 @@ struct CardioSecondaryPage: View {
                     Spacer()
                 }
 
-                Spacer(minLength: 0)
-
                 // Profile-specific content
                 profileContent(now: context.date)
-
-                Spacer(minLength: 0)
             }
             .padding(.horizontal, DS.Spacing.sm)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
     }
 
@@ -75,7 +72,7 @@ struct CardioSecondaryPage: View {
                 } label: {
                     Image(systemName: "minus")
                         .font(.title3.weight(.bold))
-                        .frame(maxWidth: .infinity, minHeight: 40)
+                        .frame(maxWidth: .infinity, minHeight: 44)
                 }
                 .buttonStyle(.bordered)
                 .accessibilityIdentifier("watch-cardio-level-decrease")
@@ -98,7 +95,7 @@ struct CardioSecondaryPage: View {
                 } label: {
                     Image(systemName: "plus")
                         .font(.title3.weight(.bold))
-                        .frame(maxWidth: .infinity, minHeight: 40)
+                        .frame(maxWidth: .infinity, minHeight: 44)
                 }
                 .buttonStyle(.borderedProminent)
                 .tint(DS.Color.activity)
