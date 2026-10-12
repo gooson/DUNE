@@ -59,5 +59,7 @@ private final class RecordingReminderNotificationScheduler: BedtimeReminderNotif
         requests.append(request)
     }
 
+    func pendingReminder(identifier: String) async -> UNNotificationRequest? { nil }
+
     func removePendingReminder(identifier: String) { }
 }

@@ -295,7 +295,8 @@ struct BedtimeReminderSchedulerTests {
 @Suite("AppleWatchBedtimeReminderScheduler")
 @MainActor
 struct AppleWatchBedtimeReminderSchedulerTests {
-    private let expectedTitle = String(localized: "Put on your Apple Watch before bed.")
+    private let expectedTitle = String(localized: "Check your Apple Watch before bed.")
+    private let expectedBody = String(localized: "To track sleep, make sure your Apple Watch is on your wrist.")
 
     @Test("Schedules reminder using selected lead time", arguments: BedtimeReminderLeadTime.allCases)
     func schedulesReminderUsingSelectedLeadTime(leadTime: BedtimeReminderLeadTime) async throws {
@@ -327,9 +328,7 @@ struct AppleWatchBedtimeReminderSchedulerTests {
 
         await scheduler.refreshSchedule()
 
-        #expect(notificationScheduler.removedIdentifiers == [
-            "com.raftel.dune.bedtime-watch-reminder"
-        ])
+        #expect(notificationScheduler.removedIdentifiers.isEmpty)
         #expect(notificationScheduler.requests.count == 1)
 
         let request = try #require(notificationScheduler.requests.first)
@@ -346,6 +345,7 @@ struct AppleWatchBedtimeReminderSchedulerTests {
             #expect(triggerDate == expected)
         }
         #expect(request.content.title == expectedTitle)
+        #expect(request.content.body == expectedBody)
         #expect(await watchWearStateService.queryCount() == 0)
     }
 
@@ -532,6 +532,197 @@ struct AppleWatchBedtimeReminderSchedulerTests {
         #expect(await watchWearStateService.queryCount() == 1)
     }
 
+    @Test("A watch heart-rate update cancels a reminder scheduled earlier in the day")
+    func heartRateUpdateCancelsScheduledReminder() async throws {
+        let calendar = Calendar(identifier: .gregorian)
+        var currentDate = try #require(calendar.date(from: DateComponents(year: 2026, month: 3, day: 8, hour: 12)))
+        let userDefaults = try makeUserDefaults(enabled: true)
+        let notificationScheduler = MockBedtimeNotificationScheduler(authorized: true)
+        let watchWearStateService = MockWatchWearStateService(response: true)
+        let identifier = "com.raftel.dune.bedtime-watch-reminder"
+
+        let scheduler = AppleWatchBedtimeReminderScheduler(
+            sleepService: MockSleepService(
+                calendar: calendar,
+                referenceDate: currentDate,
+                stagesByOffset: [
+                    1: [makeSleepStage(dayOffset: 1, hour: 23, minute: 30, calendar: calendar, referenceDate: currentDate)]
+                ]
+            ),
+            watchWearStateService: watchWearStateService,
+            watchAvailabilityProvider: MockWatchAvailabilityProvider(),
+            notificationScheduler: notificationScheduler,
+            userDefaults: userDefaults,
+            calendar: calendar,
+            now: { currentDate }
+        )
+
+        await scheduler.refreshSchedule()
+        #expect(notificationScheduler.pendingRequests[identifier] != nil)
+
+        await scheduler.cancelPendingReminderIfWatchIsWorn()
+        #expect(notificationScheduler.pendingRequests[identifier] != nil)
+        #expect(notificationScheduler.pendingLookups == 0)
+        #expect(await watchWearStateService.queryCount() == 0)
+
+        currentDate = try #require(calendar.date(from: DateComponents(year: 2026, month: 3, day: 8, hour: 22, minute: 10)))
+        await scheduler.cancelPendingReminderIfWatchIsWorn()
+
+        #expect(notificationScheduler.pendingRequests[identifier] == nil)
+        #expect(notificationScheduler.pendingLookups == 1)
+        #expect(await watchWearStateService.queryCount() == 1)
+    }
+
+    @Test("A Watch update during notification registration cancels the newly added reminder")
+    func heartRateUpdateDuringRegistrationCancelsReminder() async throws {
+        let calendar = Calendar(identifier: .gregorian)
+        let currentDate = try #require(calendar.date(from: DateComponents(year: 2026, month: 3, day: 8, hour: 22)))
+        let addGate = NotificationAddGate()
+        let notificationScheduler = MockBedtimeNotificationScheduler(authorized: true)
+        notificationScheduler.addGate = addGate
+        let watchWearStateService = MockWatchWearStateService(response: false)
+        let identifier = "com.raftel.dune.bedtime-watch-reminder"
+
+        let scheduler = AppleWatchBedtimeReminderScheduler(
+            sleepService: MockSleepService(
+                calendar: calendar,
+                referenceDate: currentDate,
+                stagesByOffset: [
+                    1: [makeSleepStage(dayOffset: 1, hour: 23, minute: 30, calendar: calendar, referenceDate: currentDate)]
+                ]
+            ),
+            watchWearStateService: watchWearStateService,
+            watchAvailabilityProvider: MockWatchAvailabilityProvider(),
+            notificationScheduler: notificationScheduler,
+            userDefaults: try makeUserDefaults(enabled: true),
+            calendar: calendar,
+            now: { currentDate }
+        )
+
+        let refresh = Task { await scheduler.refreshSchedule() }
+        await addGate.waitUntilStarted()
+        await watchWearStateService.setResponse(true)
+        let recheck = Task { await scheduler.cancelPendingReminderIfWatchIsWorn() }
+
+        await addGate.release()
+        await refresh.value
+        await recheck.value
+
+        #expect(notificationScheduler.pendingRequests[identifier] == nil)
+        #expect(notificationScheduler.pendingLookups == 1)
+        #expect(await watchWearStateService.queryCount() == 2)
+    }
+
+    @Test("A new Watch sample arriving during a wear query is rechecked")
+    func heartRateUpdateDuringWearQueryIsRechecked() async throws {
+        let calendar = Calendar(identifier: .gregorian)
+        let currentDate = try #require(calendar.date(from: DateComponents(year: 2026, month: 3, day: 8, hour: 22)))
+        let notificationScheduler = MockBedtimeNotificationScheduler(authorized: true)
+        let watchWearStateService = MockWatchWearStateService(response: false)
+        let identifier = "com.raftel.dune.bedtime-watch-reminder"
+
+        let scheduler = AppleWatchBedtimeReminderScheduler(
+            sleepService: MockSleepService(
+                calendar: calendar,
+                referenceDate: currentDate,
+                stagesByOffset: [
+                    1: [makeSleepStage(dayOffset: 1, hour: 23, minute: 30, calendar: calendar, referenceDate: currentDate)]
+                ]
+            ),
+            watchWearStateService: watchWearStateService,
+            watchAvailabilityProvider: MockWatchAvailabilityProvider(),
+            notificationScheduler: notificationScheduler,
+            userDefaults: try makeUserDefaults(enabled: true),
+            calendar: calendar,
+            now: { currentDate }
+        )
+
+        await scheduler.refreshSchedule()
+        #expect(notificationScheduler.pendingRequests[identifier] != nil)
+
+        let queryGate = NotificationAddGate()
+        await watchWearStateService.setQueryGate(queryGate)
+        let firstUpdate = Task { await scheduler.cancelPendingReminderIfWatchIsWorn() }
+        await queryGate.waitUntilStarted()
+        await watchWearStateService.setResponse(true)
+        let secondUpdate = Task { await scheduler.cancelPendingReminderIfWatchIsWorn() }
+        await Task.yield()
+
+        await queryGate.release()
+        await firstUpdate.value
+        await secondUpdate.value
+
+        #expect(notificationScheduler.pendingRequests[identifier] == nil)
+        #expect(await watchWearStateService.queryCount() == 3)
+    }
+
+    @Test("A heart-rate update without Watch data keeps the scheduled reminder")
+    func nonWatchHeartRateKeepsScheduledReminder() async throws {
+        let calendar = Calendar(identifier: .gregorian)
+        var currentDate = try #require(calendar.date(from: DateComponents(year: 2026, month: 3, day: 8, hour: 12)))
+        let notificationScheduler = MockBedtimeNotificationScheduler(authorized: true)
+        let watchWearStateService = MockWatchWearStateService(response: false)
+        let identifier = "com.raftel.dune.bedtime-watch-reminder"
+
+        let scheduler = AppleWatchBedtimeReminderScheduler(
+            sleepService: MockSleepService(
+                calendar: calendar,
+                referenceDate: currentDate,
+                stagesByOffset: [
+                    1: [makeSleepStage(dayOffset: 1, hour: 23, minute: 30, calendar: calendar, referenceDate: currentDate)]
+                ]
+            ),
+            watchWearStateService: watchWearStateService,
+            watchAvailabilityProvider: MockWatchAvailabilityProvider(),
+            notificationScheduler: notificationScheduler,
+            userDefaults: try makeUserDefaults(enabled: true),
+            calendar: calendar,
+            now: { currentDate }
+        )
+
+        await scheduler.refreshSchedule()
+        currentDate = try #require(calendar.date(from: DateComponents(year: 2026, month: 3, day: 8, hour: 22, minute: 10)))
+        await scheduler.cancelPendingReminderIfWatchIsWorn()
+
+        #expect(notificationScheduler.pendingRequests[identifier] != nil)
+        #expect(await watchWearStateService.queryCount() == 1)
+    }
+
+    @Test("Foreground refresh rechecks Watch wear even inside the schedule debounce")
+    func debouncedRefreshCancelsWornWatchReminder() async throws {
+        let calendar = Calendar(identifier: .gregorian)
+        var currentDate = try #require(calendar.date(from: DateComponents(year: 2026, month: 3, day: 8, hour: 22)))
+        let notificationScheduler = MockBedtimeNotificationScheduler(authorized: true)
+        let watchWearStateService = MockWatchWearStateService(response: false)
+        let identifier = "com.raftel.dune.bedtime-watch-reminder"
+
+        let scheduler = AppleWatchBedtimeReminderScheduler(
+            sleepService: MockSleepService(
+                calendar: calendar,
+                referenceDate: currentDate,
+                stagesByOffset: [
+                    1: [makeSleepStage(dayOffset: 1, hour: 23, minute: 30, calendar: calendar, referenceDate: currentDate)]
+                ]
+            ),
+            watchWearStateService: watchWearStateService,
+            watchAvailabilityProvider: MockWatchAvailabilityProvider(),
+            notificationScheduler: notificationScheduler,
+            userDefaults: try makeUserDefaults(enabled: true),
+            calendar: calendar,
+            now: { currentDate }
+        )
+
+        await scheduler.refreshSchedule()
+        #expect(notificationScheduler.pendingRequests[identifier] != nil)
+
+        await watchWearStateService.setResponse(true)
+        currentDate = try #require(calendar.date(from: DateComponents(year: 2026, month: 3, day: 8, hour: 22, minute: 10)))
+        await scheduler.refreshSchedule()
+
+        #expect(notificationScheduler.pendingRequests[identifier] == nil)
+        #expect(notificationScheduler.requests.count == 1)
+    }
+
     @Test("Removes reminder when Apple Watch is unavailable")
     func removesReminderWhenWatchUnavailable() async throws {
         let calendar = Calendar(identifier: .gregorian)
@@ -641,8 +832,9 @@ private struct MockSleepService: SleepQuerying {
 }
 
 private actor MockWatchWearStateService: WatchWearStateQuerying {
-    private let response: Bool
+    private var response: Bool
     private var intervals: [(Date, Date)] = []
+    private var queryGate: NotificationAddGate?
 
     init(response: Bool) {
         self.response = response
@@ -650,11 +842,23 @@ private actor MockWatchWearStateService: WatchWearStateQuerying {
 
     func hasRecentWatchHeartRateSample(startingAt startDate: Date, endingAt endDate: Date) async -> Bool {
         intervals.append((startDate, endDate))
-        return response
+        let result = response
+        let gate = queryGate
+        queryGate = nil
+        await gate?.wait()
+        return result
     }
 
     func queryCount() -> Int {
         intervals.count
+    }
+
+    func setResponse(_ value: Bool) {
+        response = value
+    }
+
+    func setQueryGate(_ gate: NotificationAddGate) {
+        queryGate = gate
     }
 }
 
@@ -666,8 +870,11 @@ private struct MockWatchAvailabilityProvider: BedtimeReminderWatchAvailabilityPr
 @MainActor
 private final class MockBedtimeNotificationScheduler: BedtimeReminderNotificationScheduling {
     var authorized: Bool
+    var addGate: NotificationAddGate?
     private(set) var requests: [UNNotificationRequest] = []
+    private(set) var pendingRequests: [String: UNNotificationRequest] = [:]
     private(set) var removedIdentifiers: [String] = []
+    private(set) var pendingLookups = 0
 
     init(authorized: Bool) {
         self.authorized = authorized
@@ -678,10 +885,41 @@ private final class MockBedtimeNotificationScheduler: BedtimeReminderNotificatio
     }
 
     func add(_ request: UNNotificationRequest) async throws {
+        await addGate?.wait()
         requests.append(request)
+        pendingRequests[request.identifier] = request
+    }
+
+    func pendingReminder(identifier: String) async -> UNNotificationRequest? {
+        pendingLookups += 1
+        return pendingRequests[identifier]
     }
 
     func removePendingReminder(identifier: String) {
         removedIdentifiers.append(identifier)
+        pendingRequests.removeValue(forKey: identifier)
+    }
+}
+
+private actor NotificationAddGate {
+    private var continuation: CheckedContinuation<Void, Never>?
+    private var started: CheckedContinuation<Void, Never>?
+
+    func wait() async {
+        await withCheckedContinuation { continuation in
+            self.continuation = continuation
+            started?.resume()
+            started = nil
+        }
+    }
+
+    func waitUntilStarted() async {
+        if continuation != nil { return }
+        await withCheckedContinuation { started = $0 }
+    }
+
+    func release() {
+        continuation?.resume()
+        continuation = nil
     }
 }

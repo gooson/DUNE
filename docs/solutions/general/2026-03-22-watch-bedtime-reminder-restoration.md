@@ -9,6 +9,8 @@ related_solutions: [docs/solutions/architecture/2026-03-07-bedtime-watch-reminde
 
 # Solution: Apple Watch 취침 리마인더 복원
 
+> 후속 개선: [예약 후 들어오는 Watch 심박으로 취침 알림 취소](2026-10-13-watch-bedtime-reminder-late-heart-rate.md).
+
 ## Problem
 
 평균 취침 시간 기준 bedtime reminder는 한 차례 일반 취침 알림으로 전환되면서,
