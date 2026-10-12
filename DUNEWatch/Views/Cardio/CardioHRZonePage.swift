@@ -9,7 +9,6 @@ struct CardioHRZonePage: View {
     var body: some View {
         TimelineView(.periodic(from: .now, by: isLuminanceReduced ? 10 : 1)) { _ in
             VStack(spacing: DS.Spacing.md) {
-                Spacer(minLength: 0)
 
                 // Current HR (large, zone-colored)
                 heartRateDisplay
@@ -24,12 +23,11 @@ struct CardioHRZonePage: View {
                 // Zone name
                 zoneLabel
 
-                Spacer(minLength: 0)
-
                 // Avg HR
                 avgHeartRateRow
             }
             .padding(.horizontal, DS.Spacing.sm)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
     }
 
@@ -48,11 +46,14 @@ struct CardioHRZonePage: View {
             .font(DS.Typography.primaryMetric)
             .foregroundStyle(zoneColor)
             .contentTransition(.numericText())
+            .lineLimit(1)
+            .minimumScaleFactor(0.7)
 
             Text("bpm")
                 .font(DS.Typography.metricLabel)
                 .foregroundStyle(.secondary)
         }
+        .frame(maxWidth: .infinity)
     }
 
     // MARK: - Zone Label
@@ -96,6 +97,8 @@ struct CardioHRZonePage: View {
             .contentTransition(.numericText())
         }
         .padding(.horizontal, DS.Spacing.xs)
+        .frame(minHeight: 44)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
     }
 
     // MARK: - Helpers

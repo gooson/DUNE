@@ -36,7 +36,7 @@ struct SessionSummaryView: View {
 
     var body: some View {
         ScrollView {
-            VStack(spacing: DS.Spacing.lg) {
+            VStack(alignment: .leading, spacing: DS.Spacing.md) {
                 HStack(spacing: DS.Spacing.sm) {
                     Image(systemName: "checkmark.circle.fill")
                         .font(.title3)
@@ -61,12 +61,41 @@ struct SessionSummaryView: View {
                     .font(.caption2)
                 }
 
-                Divider()
+                VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                    Text(formattedDuration)
+                        .font(DS.Typography.primaryMetric)
+                        .monospacedDigit()
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.7)
+                    Text("Duration")
+                        .font(DS.Typography.metricLabel)
+                        .foregroundStyle(.secondary)
+                }
+                .padding(.vertical, DS.Spacing.xs)
+
+                if let saveError {
+                    VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                        Label("Save Error", systemImage: "exclamationmark.circle.fill")
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(DS.Color.negative)
+                        Text(saveError)
+                            .font(DS.Typography.metricLabel)
+                            .foregroundStyle(.secondary)
+                        HStack(spacing: DS.Spacing.sm) {
+                            Button("Retry") { retrySave() }
+                                .buttonStyle(.borderedProminent)
+                                .tint(DS.Color.positive)
+                            Button("Dismiss Without Saving") { workoutManager.reset() }
+                                .buttonStyle(.bordered)
+                        }
+                    }
+                    .padding(DS.Spacing.md)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(DS.Color.negative.opacity(DS.Opacity.medium), in: RoundedRectangle(cornerRadius: DS.Radius.md))
+                }
 
                 // Stats grid
                 statsGrid
-
-                Divider()
 
                 Button {
                     showEffortInput = true
@@ -77,8 +106,6 @@ struct SessionSummaryView: View {
                 .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionSummaryEffortButton)
 
                 if !workoutManager.isCardioMode {
-                    Divider()
-
                     // Exercise breakdown (strength only)
                     exerciseBreakdown
                 }
@@ -104,21 +131,6 @@ struct SessionSummaryView: View {
         .navigationBarBackButtonHidden()
         .accessibilityElement(children: .contain)
         .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionSummaryScreen)
-        .alert("Save Error", isPresented: .init(
-            get: { saveError != nil },
-            set: { if !$0 { saveError = nil } }
-        )) {
-            Button("Retry") {
-                retrySave()
-            }
-            if hasSaved {
-                Button("Done") { workoutManager.reset() }
-            } else {
-                Button("Dismiss Without Saving") { workoutManager.reset() }
-            }
-        } message: {
-            Text(saveError ?? "")
-        }
         .sheet(isPresented: $showEffortInput) {
             SessionEffortInputSheet(
                 effort: Binding(
@@ -173,8 +185,6 @@ struct SessionSummaryView: View {
             GridItem(.flexible()),
             GridItem(.flexible())
         ], spacing: DS.Spacing.md) {
-            statItem(title: "Duration", value: formattedDuration)
-
             if workoutManager.isCardioMode {
                 if workoutManager.supportsMachineLevel {
                     statItem(title: "Avg Level", value: workoutManager.formattedAverageMachineLevel)
@@ -238,11 +248,15 @@ struct SessionSummaryView: View {
     private func statItem(title: LocalizedStringKey, value: String) -> some View {
         VStack(spacing: DS.Spacing.xxs) {
             Text(value)
-                .font(DS.Typography.tileSubtitle)
+                .font(DS.Typography.secondaryMetric)
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
             Text(title)
-                .font(DS.Typography.tinyLabel)
+                .font(DS.Typography.metricLabel)
                 .foregroundStyle(.secondary)
         }
+        .frame(maxWidth: .infinity, minHeight: 50)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
     }
 
     private var effortSummaryRow: some View {
