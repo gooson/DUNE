@@ -55,6 +55,38 @@ final class WatchWorkoutFlowSmokeTests: WatchUITestBaseCase {
             WatchAXID.sessionControlsEndButton,
             WatchAXID.sessionControlsPauseResumeButton
         ], screenshot: "strength-controls")
+        for identifier in [WatchAXID.sessionControlsEndButton, WatchAXID.sessionControlsPauseResumeButton] {
+            XCTAssertGreaterThanOrEqual(app.buttons[identifier].firstMatch.frame.height, 44,
+                                        "\(identifier) should have a practical touch target")
+        }
+    }
+
+    func testStrengthControlsPauseAndResumeWithoutLeavingWorkout() throws {
+        relaunchApp(withAdditionalArguments: ["--ui-watch-strength-start-controls"])
+        startFixtureStrengthWorkout()
+        openControlsPage()
+
+        let pauseResume = app.buttons[WatchAXID.sessionControlsPauseResumeButton].firstMatch
+        XCTAssertTrue(pauseResume.waitForExistence(timeout: 5))
+        pauseResume.tap()
+        XCTAssertEqual(
+            XCTWaiter.wait(for: [XCTNSPredicateExpectation(
+                predicate: NSPredicate(format: "label IN %@", ["Resume", "재개", "再開"]),
+                object: pauseResume
+            )], timeout: 5),
+            .completed,
+            "Pause should change the control to Resume"
+        )
+        pauseResume.tap()
+        XCTAssertEqual(
+            XCTWaiter.wait(for: [XCTNSPredicateExpectation(
+                predicate: NSPredicate(format: "label IN %@", ["Pause", "일시정지", "一時停止"]),
+                object: pauseResume
+            )], timeout: 5),
+            .completed,
+            "Resume should restore the Pause control"
+        )
+        XCTAssertTrue(elementExists(WatchAXID.sessionControlsScreen, timeout: 5))
     }
 
     func testRestTimerAppearsAfterCompletingFirstSet() throws {
@@ -72,6 +104,10 @@ final class WatchWorkoutFlowSmokeTests: WatchUITestBaseCase {
             WatchAXID.restTimerSkipButton,
             WatchAXID.restTimerEndButton
         ], screenshot: "strength-rest-timer")
+        for identifier in [WatchAXID.restTimerRPERate, "watch-rest-timer-add-time", WatchAXID.restTimerSkipButton] {
+            XCTAssertGreaterThanOrEqual(app.buttons[identifier].firstMatch.frame.height, 44,
+                                        "\(identifier) should have a practical touch target")
+        }
     }
 
     func testRestTimerContinuesAfterCancellingEnd() throws {
@@ -141,6 +177,14 @@ final class WatchWorkoutFlowSmokeTests: WatchUITestBaseCase {
         XCTAssertTrue(elementExists(WatchAXID.sessionSummaryScreen, timeout: 8))
         XCTAssertTrue(elementExists(WatchAXID.sessionSummaryEffortButton, timeout: 5))
         XCTAssertTrue(elementExists(WatchAXID.sessionSummaryDoneButton, timeout: 5))
+        let duration = app.staticTexts["watch-session-summary-duration-value"].firstMatch
+        XCTAssertTrue(duration.waitForExistence(timeout: 5), "Summary should show the duration hero")
+        XCTAssertFalse(duration.label.isEmpty, "Summary duration should have an accessible value")
+        XCTAssertTrue(duration.isHittable, "Summary duration should be visible before scrolling")
+        XCTAssertTrue(elementExists("watch-session-summary-stats", timeout: 5),
+                      "Summary should keep the workout statistics below the duration hero")
+        XCTAssertGreaterThanOrEqual(app.buttons[WatchAXID.sessionSummaryDoneButton].firstMatch.frame.height, 44,
+                                    "Summary Done should have a practical touch target")
         let saveStatus = app.staticTexts[WatchAXID.sessionSummarySaveStatus]
         XCTAssertEqual(
             XCTWaiter.wait(

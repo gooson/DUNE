@@ -111,6 +111,7 @@ struct ControlsView: View {
                 isPrimary: true
             )
         }
+        .accessibilityLabel(workoutManager.isPaused ? Text("Resume") : Text("Pause"))
         .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionControlsPauseResumeButton)
     }
 
@@ -121,6 +122,7 @@ struct ControlsView: View {
             controlLabel("End", systemImage: "xmark", tint: DS.Color.negative,
                          height: height, isPrimary: true)
         }
+        .accessibilityLabel("End")
         .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionControlsEndButton)
     }
 

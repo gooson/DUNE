@@ -14,6 +14,23 @@ final class WatchResponsiveWorkoutLayoutTests: WatchUITestBaseCase {
         ], screenshot: "stair-climber-preview")
         XCTAssertTrue(elementExists(WatchAXID.workoutPreviewLevelValue, timeout: 2))
         XCTAssertFalse(app.buttons[WatchAXID.workoutPreviewCardioOutdoorButton].exists)
+        assertTouchTargetsAtLeast44([
+            WatchAXID.workoutPreviewLevelDecrease,
+            WatchAXID.workoutPreviewLevelIncrease,
+            WatchAXID.workoutPreviewCardioIndoorButton
+        ])
+
+        let level = app.staticTexts[WatchAXID.workoutPreviewLevelValue].firstMatch
+        let initialLevel = level.label
+        app.buttons[WatchAXID.workoutPreviewLevelIncrease].tap()
+        XCTAssertEqual(
+            XCTWaiter.wait(for: [XCTNSPredicateExpectation(
+                predicate: NSPredicate(format: "label != %@", initialLevel),
+                object: level
+            )], timeout: 5),
+            .completed,
+            "Preview level control should update its visible value"
+        )
     }
 
     func testEllipticalPreviewKeepsStartAndLevelControlsVisible() throws {
@@ -34,12 +51,17 @@ final class WatchResponsiveWorkoutLayoutTests: WatchUITestBaseCase {
             WatchAXID.workoutPreviewCardioOutdoorButton
         ], screenshot: "running-preview")
         XCTAssertFalse(app.buttons[WatchAXID.workoutPreviewLevelIncrease].exists)
+        assertTouchTargetsAtLeast44([
+            WatchAXID.workoutPreviewCardioIndoorButton,
+            WatchAXID.workoutPreviewCardioOutdoorButton
+        ])
     }
 
     func testStrengthPreviewKeepsStartVisible() throws {
         openPreview(for: "ui-test-squat")
         XCTAssertTrue(elementExists(WatchAXID.workoutPreviewStrengthList, timeout: 3))
         assertFirstViewportButtons([WatchAXID.workoutPreviewStartButton], screenshot: "strength-preview")
+        assertTouchTargetsAtLeast44([WatchAXID.workoutPreviewStartButton])
     }
 
     func testKoreanXXXLStairClimberKeepsStartVisibleAndLevelReachable() throws {
@@ -78,6 +100,7 @@ final class WatchResponsiveWorkoutLayoutTests: WatchUITestBaseCase {
             WatchAXID.cardioLevelDecrease,
             WatchAXID.cardioLevelIncrease
         ], screenshot: "active-machine-level")
+        assertTouchTargetsAtLeast44([WatchAXID.cardioLevelDecrease, WatchAXID.cardioLevelIncrease])
     }
 
     func testKoreanXXXLRestTimerKeepsPrimaryActionsReachable() throws {
@@ -108,6 +131,32 @@ final class WatchResponsiveWorkoutLayoutTests: WatchUITestBaseCase {
             XCTAssertGreaterThanOrEqual(button.frame.height, 44, "\(identifier) should have a practical touch target")
         }
         addScreenshotAttachment(named: defaultArtifactName(suffix: "korean-xxxl-rest-actions"))
+    }
+
+    func testKoreanXXXLStrengthControlsKeepPrimaryActionsReachable() throws {
+        relaunchApp(withAdditionalArguments: [
+            "--ui-watch-strength-start-controls",
+            "-AppleLanguages", "(ko)",
+            "-AppleLocale", "ko_KR",
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryXXXL"
+        ])
+        startFixtureStrengthWorkout()
+        openControlsPage()
+
+        let actions = [WatchAXID.sessionControlsPauseResumeButton, WatchAXID.sessionControlsEndButton]
+        assertFirstViewportButtons(actions, screenshot: "korean-xxxl-strength-controls")
+        assertTouchTargetsAtLeast44(actions)
+    }
+
+    private func assertTouchTargetsAtLeast44(_ identifiers: [String]) {
+        for identifier in identifiers {
+            let button = app.buttons[identifier].firstMatch
+            XCTAssertTrue(button.waitForExistence(timeout: 5), "Missing \(identifier)")
+            XCTAssertGreaterThanOrEqual(button.frame.width, 44,
+                                        "\(identifier) should have a practical touch target width")
+            XCTAssertGreaterThanOrEqual(button.frame.height, 44,
+                                        "\(identifier) should have a practical touch target height")
+        }
     }
 
     private func openPreview(for exerciseID: String) {
