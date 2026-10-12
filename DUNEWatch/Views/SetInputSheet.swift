@@ -66,30 +66,32 @@ struct SetInputSheet: View {
     // MARK: - Weight + Reps
 
     private var weightRepsContent: some View {
-        adaptiveInputLayout {
-            VStack(spacing: DS.Spacing.sm) {
-                if inputType == .setsReps { addedWeightToggle }
-                weightSection
-                if let suggestedWeightKg = actionableSuggestedWeightKg {
-                    Button {
-                        weight = suggestedWeightKg
-                        onWeightEdited(suggestedWeightKg)
-                    } label: {
-                        Text("Use \(suggestedWeightKg, specifier: "%.1f") kg")
-                            .font(.caption.weight(.semibold))
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.7)
-                            .frame(maxWidth: .infinity, minHeight: 44)
-                            .contentShape(Rectangle())
+        VStack {
+            adaptiveInputLayout {
+                VStack(spacing: DS.Spacing.sm) {
+                    if inputType == .setsReps { addedWeightToggle }
+                    weightSection
+                    if let suggestedWeightKg = actionableSuggestedWeightKg {
+                        Button {
+                            weight = suggestedWeightKg
+                            onWeightEdited(suggestedWeightKg)
+                        } label: {
+                            Text("Use \(suggestedWeightKg, specifier: "%.1f") kg")
+                                .font(.caption.weight(.semibold))
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.7)
+                                .frame(maxWidth: .infinity, minHeight: 44)
+                                .contentShape(Rectangle())
+                        }
+                        .buttonStyle(.plain)
+                        .foregroundStyle(DS.Color.caution)
+                        .background(DS.Color.caution.opacity(DS.Opacity.border), in: RoundedRectangle(cornerRadius: DS.Radius.md))
+                        .accessibilityIdentifier("watch-set-input-use-lighter-weight")
+                    } else {
+                        Divider()
                     }
-                    .buttonStyle(.plain)
-                    .foregroundStyle(DS.Color.caution)
-                    .background(DS.Color.caution.opacity(DS.Opacity.border), in: RoundedRectangle(cornerRadius: DS.Radius.md))
-                    .accessibilityIdentifier("watch-set-input-use-lighter-weight")
-                } else {
-                    Divider()
+                    repsSection
                 }
-                repsSection
             }
         }
         .padding(.horizontal, DS.Spacing.md)
@@ -125,10 +127,12 @@ struct SetInputSheet: View {
     // MARK: - Reps Only (setsReps / bodyweight)
 
     private var repsOnlyContent: some View {
-        adaptiveInputLayout {
-            VStack(spacing: DS.Spacing.lg) {
-                if inputType == .setsReps { addedWeightToggle }
-                repsSection
+        VStack {
+            adaptiveInputLayout {
+                VStack(spacing: DS.Spacing.lg) {
+                    if inputType == .setsReps { addedWeightToggle }
+                    repsSection
+                }
             }
         }
         .padding(.horizontal, DS.Spacing.md)
@@ -167,12 +171,10 @@ struct SetInputSheet: View {
     // MARK: - Duration (durationIntensity / plank, wall sit, etc.)
 
     private var durationContent: some View {
-        ScrollView {
-            VStack(spacing: DS.Spacing.lg) {
-                durationSection
-            }
-            .padding(.horizontal, DS.Spacing.md)
+        VStack(spacing: DS.Spacing.lg) {
+            durationSection
         }
+        .padding(.horizontal, DS.Spacing.md)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .focusable(true)
         .focused($isCrownFocused)

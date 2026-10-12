@@ -43,8 +43,8 @@ struct RestTimerView: View {
     var body: some View {
         GeometryReader { geometry in
             // Reserve a full 44pt action row before sizing the primary countdown.
-            let ringSize = min(156, geometry.size.width - DS.Spacing.xl,
-                               max(118, geometry.size.height - 44 - DS.Spacing.lg))
+            let ringSize = min(144, geometry.size.width - DS.Spacing.xl,
+                               max(104, geometry.size.height - 44 - DS.Spacing.xl - DS.Spacing.md))
             let spacing = DS.Spacing.sm
 
             ViewThatFits(in: .vertical) {
@@ -143,7 +143,6 @@ struct RestTimerView: View {
                 .frame(width: ringSize - DS.Spacing.xl * 2)
             }
             .frame(width: ringSize, height: ringSize)
-            .padding(.top, DS.Spacing.xs)
 
             HStack(spacing: DS.Spacing.sm) {
                 Button {
@@ -210,14 +209,15 @@ struct RestTimerView: View {
         } label: {
             HStack(spacing: DS.Spacing.xxs) {
                 VStack(spacing: 0) {
-                    if let estimatedRPE {
-                        Text("RPE \(RPELevel.format(hasConfirmedRPE ? adjustedRPE : estimatedRPE))")
+                    if hasConfirmedRPE {
+                        Text("RPE \(RPELevel.format(adjustedRPE))")
                             .monospacedDigit()
-                        if !hasConfirmedRPE {
-                            Text("Suggested")
-                                .font(DS.Typography.tinyLabel)
-                                .foregroundStyle(.secondary)
-                        }
+                    } else if let estimatedRPE {
+                        Text("RPE \(RPELevel.format(estimatedRPE))")
+                            .monospacedDigit()
+                        Text("Suggested")
+                            .font(DS.Typography.tinyLabel)
+                            .foregroundStyle(.secondary)
                     } else {
                         Text("Rate RPE")
                     }
@@ -234,7 +234,7 @@ struct RestTimerView: View {
         }
         .buttonStyle(.plain)
         .accessibilityIdentifier(
-            estimatedRPE == nil
+            estimatedRPE == nil && !hasConfirmedRPE
                 ? "watch-rest-timer-rpe-rate"
                 : WatchWorkoutSurfaceAccessibility.restTimerRPEBadge
         )

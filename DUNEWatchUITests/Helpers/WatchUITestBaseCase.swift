@@ -416,7 +416,7 @@ class WatchUITestBaseCase: XCTestCase {
         ensureQuickStartVisible()
     }
 
-    func findQuickStartExercise(identifier: String, maxSwipes: Int = 6) -> XCUIElement? {
+    func findQuickStartExercise(identifier: String, maxSwipes: Int = 12) -> XCUIElement? {
         // watchOS exposes the List as a CollectionView with the screen identifier.
         let scrollContainers = [
             app.tables[WatchAXID.quickStartList].firstMatch,
