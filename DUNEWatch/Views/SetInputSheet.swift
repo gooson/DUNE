@@ -171,8 +171,12 @@ struct SetInputSheet: View {
     // MARK: - Duration (durationIntensity / plank, wall sit, etc.)
 
     private var durationContent: some View {
-        VStack(spacing: DS.Spacing.lg) {
-            durationSection
+        VStack {
+            adaptiveInputLayout {
+                VStack(spacing: DS.Spacing.lg) {
+                    durationSection
+                }
+            }
         }
         .padding(.horizontal, DS.Spacing.md)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)

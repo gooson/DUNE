@@ -44,7 +44,7 @@ struct RestTimerView: View {
         GeometryReader { geometry in
             // Reserve a full 44pt action row before sizing the primary countdown.
             let ringSize = min(144, geometry.size.width - DS.Spacing.xl,
-                               max(104, geometry.size.height - 44 - DS.Spacing.xl - DS.Spacing.md))
+                               max(100, geometry.size.height - 44 - DS.Spacing.xl * 2))
             let spacing = DS.Spacing.sm
 
             ViewThatFits(in: .vertical) {
@@ -132,13 +132,13 @@ struct RestTimerView: View {
 
                 VStack(spacing: 0) {
                     Text(timeString)
-                        .font(DS.Typography.primaryMetric)
+                        .font(.system(size: min(42, ringSize * 0.34), weight: .bold, design: .rounded).monospacedDigit())
                         .lineLimit(1)
                         .minimumScaleFactor(0.7)
                         .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.restTimerCountdown)
 
                     heartRateLabel
-                    rpeButton
+                    rpeButton(compact: ringSize < 124)
                 }
                 .frame(width: ringSize - DS.Spacing.xl * 2)
             }
@@ -202,7 +202,7 @@ struct RestTimerView: View {
             : Text("Not measured"))
     }
 
-    private var rpeButton: some View {
+    private func rpeButton(compact: Bool) -> some View {
         Button {
             adjustedRPE = hasConfirmedRPE ? adjustedRPE : (estimatedRPE ?? 8)
             showRPEInput = true
@@ -215,9 +215,11 @@ struct RestTimerView: View {
                     } else if let estimatedRPE {
                         Text("RPE \(RPELevel.format(estimatedRPE))")
                             .monospacedDigit()
-                        Text("Suggested")
-                            .font(DS.Typography.tinyLabel)
-                            .foregroundStyle(.secondary)
+                        if !compact {
+                            Text("Suggested")
+                                .font(DS.Typography.tinyLabel)
+                                .foregroundStyle(.secondary)
+                        }
                     } else {
                         Text("Rate RPE")
                     }

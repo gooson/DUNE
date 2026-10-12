@@ -57,6 +57,20 @@ final class WatchResponsiveWorkoutLayoutTests: WatchUITestBaseCase {
         ])
     }
 
+    func testOutdoorStartErrorStillAllowsIndoorRecovery() throws {
+        relaunchApp(withAdditionalArguments: ["--ui-force-cardio-start-error"])
+        openPreview(for: "running")
+        XCTAssertTrue(tapElement(WatchAXID.workoutPreviewCardioOutdoorButton, timeout: 5))
+        XCTAssertTrue(elementExists("watch-workout-preview-start-error", timeout: 5))
+        assertFirstViewportButtons([
+            WatchAXID.workoutPreviewCardioIndoorButton,
+            WatchAXID.workoutPreviewCardioOutdoorButton
+        ], screenshot: "running-start-error")
+        XCTAssertTrue(tapElement(WatchAXID.workoutPreviewCardioIndoorButton, timeout: 5))
+        XCTAssertTrue(elementExists(WatchAXID.sessionPagingRoot, timeout: 10),
+                      "Indoor start should remain available after an outdoor failure")
+    }
+
     func testStrengthPreviewKeepsStartVisible() throws {
         openPreview(for: "ui-test-squat")
         XCTAssertTrue(elementExists(WatchAXID.workoutPreviewStrengthList, timeout: 3))
@@ -101,6 +115,29 @@ final class WatchResponsiveWorkoutLayoutTests: WatchUITestBaseCase {
             WatchAXID.cardioLevelIncrease
         ], screenshot: "active-machine-level")
         assertTouchTargetsAtLeast44([WatchAXID.cardioLevelDecrease, WatchAXID.cardioLevelIncrease])
+    }
+
+    func testKoreanXXXLCardioBottomMetricsRemainReachable() throws {
+        relaunchApp(withAdditionalArguments: [
+            "-AppleLanguages", "(ko)",
+            "-AppleLocale", "ko_KR",
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryXXXL"
+        ])
+        openPreview(for: "running")
+        XCTAssertTrue(tapElement(WatchAXID.workoutPreviewCardioIndoorButton, timeout: 5))
+        XCTAssertTrue(elementExists(WatchAXID.sessionPagingRoot, timeout: 10))
+        XCTAssertTrue(app.staticTexts["달리기"].firstMatch.waitForExistence(timeout: 5),
+                      "The cardio activity title should use the Watch Korean catalog")
+
+        let calories = app.staticTexts["kcal"].firstMatch
+        XCTAssertTrue(calories.waitForExistence(timeout: 5), "The bottom metric row should render")
+        let scrollView = app.scrollViews.firstMatch
+        XCTAssertTrue(scrollView.exists, "Cardio metrics should offer vertical scrolling")
+        for _ in 0..<3 where !calories.isHittable {
+            scrollView.swipeUp()
+        }
+        XCTAssertTrue(calories.isHittable, "Calories should be reachable on a small watch at large text sizes")
+        addScreenshotAttachment(named: defaultArtifactName(suffix: "korean-xxxl-cardio-bottom"))
     }
 
     func testKoreanXXXLRestTimerKeepsPrimaryActionsReachable() throws {

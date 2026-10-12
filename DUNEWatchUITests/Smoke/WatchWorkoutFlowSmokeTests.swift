@@ -205,6 +205,31 @@ final class WatchWorkoutFlowSmokeTests: WatchUITestBaseCase {
         XCTAssertTrue(elementExists(WatchAXID.homeRoot, timeout: 10), "Ended workout should not reopen as active")
     }
 
+    func testSummarySaveFailureOffersVisibleRetry() throws {
+        relaunchApp(withAdditionalArguments: ["--ui-force-session-save-error"])
+        completeFixtureStrengthWorkoutToSummary()
+
+        let retry = app.buttons["watch-session-summary-save-retry-button"].firstMatch
+        XCTAssertTrue(retry.waitForExistence(timeout: 8), "A save error should keep Retry visible below summary scrolling")
+        XCTAssertTrue(retry.isHittable, "Retry should be reachable without scrolling")
+        XCTAssertGreaterThanOrEqual(retry.frame.height, 44)
+        addScreenshotAttachment(named: defaultArtifactName(suffix: "summary-save-error"))
+
+        retry.tap()
+        if elementExists(WatchAXID.sessionSummaryEffortSheet, timeout: 5) {
+            XCTAssertTrue(tapElement(WatchAXID.sessionSummaryEffortDoneButton, timeout: 5))
+        }
+        let status = app.staticTexts[WatchAXID.sessionSummarySaveStatus].firstMatch
+        XCTAssertEqual(
+            XCTWaiter.wait(for: [XCTNSPredicateExpectation(
+                predicate: NSPredicate(format: "label IN %@", ["Saved", "저장됨", "保存済み"]),
+                object: status
+            )], timeout: 15),
+            .completed,
+            "Retry should save the workout without leaving the summary"
+        )
+    }
+
     private func restSeconds(from label: String) -> Int? {
         let components = label.split(separator: ":")
         guard components.count == 2,

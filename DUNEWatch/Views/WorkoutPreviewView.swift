@@ -14,6 +14,9 @@ struct WorkoutPreviewView: View {
     @State private var isReordering = false
     @State private var errorMessage: String?
     @State private var lastCardioWasOutdoor = false
+    #if DEBUG
+    @State private var didInjectUITestCardioStartFailure = false
+    #endif
     @State private var selectedLevel: Int = 5
     @FocusState private var levelFocused: Bool
     /// Mutable copy of entries for pre-workout reordering (original template unchanged).
@@ -166,25 +169,16 @@ struct WorkoutPreviewView: View {
         supportsOutdoor: Bool
     ) -> some View {
         VStack(spacing: DS.Spacing.xs) {
-            if errorMessage != nil {
-                Button {
-                    startCardio(
-                        activityType: activityType,
-                        isOutdoor: lastCardioWasOutdoor,
-                        secondaryUnit: cardioUnit
-                    )
-                } label: {
-                    cardioButtonLabel(String(localized: "Retry"), systemImage: "arrow.clockwise")
-                }
-                .buttonStyle(.borderedProminent)
-                .tint(theme.accentColor)
-                .disabled(isStarting)
-                .accessibilityIdentifier("watch-workout-preview-retry")
-            } else if supportsOutdoor {
+            if supportsOutdoor {
                 Button {
                     startCardio(activityType: activityType, isOutdoor: false, secondaryUnit: cardioUnit)
                 } label: {
-                    cardioButtonLabel(String(localized: "Indoor"), systemImage: "building.fill")
+                    cardioButtonLabel(
+                        errorMessage != nil && !lastCardioWasOutdoor
+                            ? String(localized: "Retry") : String(localized: "Indoor"),
+                        systemImage: errorMessage != nil && !lastCardioWasOutdoor
+                            ? "arrow.clockwise" : "building.fill"
+                    )
                 }
                 .buttonStyle(.bordered)
                 .disabled(isStarting)
@@ -193,7 +187,10 @@ struct WorkoutPreviewView: View {
                 Button {
                     startCardio(activityType: activityType, isOutdoor: false, secondaryUnit: cardioUnit)
                 } label: {
-                    cardioButtonLabel(String(localized: "Indoor"), systemImage: "building.fill")
+                    cardioButtonLabel(
+                        errorMessage != nil ? String(localized: "Retry") : String(localized: "Indoor"),
+                        systemImage: errorMessage != nil ? "arrow.clockwise" : "building.fill"
+                    )
                 }
                 .buttonStyle(.borderedProminent)
                 .tint(theme.accentColor)
@@ -201,11 +198,16 @@ struct WorkoutPreviewView: View {
                 .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.workoutPreviewCardioIndoorButton)
             }
 
-            if supportsOutdoor && errorMessage == nil {
+            if supportsOutdoor {
                 Button {
                     startCardio(activityType: activityType, isOutdoor: true, secondaryUnit: cardioUnit)
                 } label: {
-                    Label(String(localized: "Outdoor"), systemImage: "sun.max.fill")
+                    Label(
+                        errorMessage != nil && lastCardioWasOutdoor
+                            ? String(localized: "Retry") : String(localized: "Outdoor"),
+                        systemImage: errorMessage != nil && lastCardioWasOutdoor
+                            ? "arrow.clockwise" : "sun.max.fill"
+                    )
                         .frame(maxWidth: .infinity, minHeight: 44)
                 }
                 .buttonStyle(.borderedProminent)
@@ -238,6 +240,16 @@ struct WorkoutPreviewView: View {
         isStarting = true
         errorMessage = nil
         lastCardioWasOutdoor = isOutdoor
+
+        #if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("--ui-force-cardio-start-error"),
+           !didInjectUITestCardioStartFailure {
+            didInjectUITestCardioStartFailure = true
+            isStarting = false
+            errorMessage = String(localized: "Could not start workout. Please try again.")
+            return
+        }
+        #endif
 
         let level: Int? = secondaryUnit?.supportsMachineLevel == true ? selectedLevel : nil
 

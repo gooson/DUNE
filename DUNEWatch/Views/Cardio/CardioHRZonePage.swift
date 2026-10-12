@@ -8,26 +8,28 @@ struct CardioHRZonePage: View {
 
     var body: some View {
         TimelineView(.periodic(from: .now, by: isLuminanceReduced ? 10 : 1)) { _ in
-            VStack(spacing: DS.Spacing.md) {
+            ScrollView(.vertical) {
+                VStack(spacing: DS.Spacing.md) {
 
-                // Current HR (large, zone-colored)
-                heartRateDisplay
+                    // Current HR (large, zone-colored)
+                    heartRateDisplay
 
-                // Zone bar
-                HRZoneBar(
-                    currentZone: workoutManager.currentZone,
-                    fraction: workoutManager.hrFraction
-                )
+                    // Zone bar
+                    HRZoneBar(
+                        currentZone: workoutManager.currentZone,
+                        fraction: workoutManager.hrFraction
+                    )
+                    .padding(.horizontal, DS.Spacing.sm)
+
+                    // Zone name
+                    zoneLabel
+
+                    // Avg HR
+                    avgHeartRateRow
+                }
                 .padding(.horizontal, DS.Spacing.sm)
-
-                // Zone name
-                zoneLabel
-
-                // Avg HR
-                avgHeartRateRow
             }
-            .padding(.horizontal, DS.Spacing.sm)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .scrollBounceBehavior(.basedOnSize)
         }
     }
 

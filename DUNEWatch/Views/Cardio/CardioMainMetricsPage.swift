@@ -10,25 +10,27 @@ struct CardioMainMetricsPage: View {
 
     var body: some View {
         TimelineView(.periodic(from: .now, by: isLuminanceReduced ? 10 : 1)) { context in
-            VStack(spacing: DS.Spacing.md) {
-                // Activity type header
-                activityHeader
+            ScrollView(.vertical) {
+                VStack(spacing: DS.Spacing.md) {
+                    // Activity type header
+                    activityHeader
 
-                // Elapsed time (large)
-                elapsedTimeDisplay(now: context.date)
+                    // Elapsed time (large)
+                    elapsedTimeDisplay(now: context.date)
 
-                // Distance + Pace/Speed (medium 2-col)
-                if workoutManager.supportsMachineLevel {
-                    currentLevelRow
-                } else if profile.showsDistance {
-                    distanceRow
+                    // Distance + Pace/Speed (medium 2-col)
+                    if workoutManager.supportsMachineLevel {
+                        currentLevelRow
+                    } else if profile.showsDistance {
+                        distanceRow
+                    }
+
+                    // HR + Calories (compact 2-col)
+                    bottomRow
                 }
-
-                // HR + Calories (compact 2-col)
-                bottomRow
+                .padding(.horizontal, DS.Spacing.sm)
             }
-            .padding(.horizontal, DS.Spacing.sm)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .scrollBounceBehavior(.basedOnSize)
         }
     }
 
@@ -50,7 +52,7 @@ struct CardioMainMetricsPage: View {
                     .font(.caption2)
                     .foregroundStyle(DS.Color.activity)
 
-                Text(type.typeName)
+                Text(LocalizedStringKey(type.typeName))
                     .font(DS.Typography.metricLabel)
                     .foregroundStyle(.secondary)
             }

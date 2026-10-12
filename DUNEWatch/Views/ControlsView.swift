@@ -12,21 +12,28 @@ struct ControlsView: View {
 
     var body: some View {
         GeometryReader { geometry in
-            let spacing = DS.Spacing.lg
+            let spacing = geometry.size.height < 180 ? DS.Spacing.sm : DS.Spacing.lg
+            let hasSecondaryActions = showSkip && !workoutManager.isCardioMode
+                && (!workoutManager.isLastExercise || workoutManager.canReorderExercises)
+            let reservedHeight = 24 + spacing * 2 + DS.Spacing.xs
             let primaryHeight = workoutManager.isCardioMode
-                ? max(64, min(96, (geometry.size.height - spacing) / 2))
-                : max(64, min(100, (geometry.size.height - spacing) * 0.58))
-            let secondaryHeight = max(48, min(64, geometry.size.height - primaryHeight - spacing))
+                ? max(44, min(96, (geometry.size.height - spacing - DS.Spacing.xs) / 2))
+                : hasSecondaryActions
+                    ? max(44, min(76, geometry.size.height - reservedHeight - 48))
+                    : max(44, min(64, (geometry.size.height - reservedHeight) / 2))
+            let secondaryHeight: CGFloat = 48
 
             ViewThatFits(in: .vertical) {
-                controlsGrid(spacing: spacing, primaryHeight: primaryHeight, secondaryHeight: secondaryHeight)
+                controlsContent(spacing: spacing, primaryHeight: primaryHeight,
+                                secondaryHeight: secondaryHeight, hasSecondaryActions: hasSecondaryActions)
 
                 ScrollView {
-                    controlsGrid(spacing: spacing, primaryHeight: primaryHeight, secondaryHeight: secondaryHeight)
+                    controlsContent(spacing: spacing, primaryHeight: primaryHeight,
+                                    secondaryHeight: secondaryHeight, hasSecondaryActions: hasSecondaryActions)
                 }
                 .scrollBounceBehavior(.basedOnSize)
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         }
         .sheet(isPresented: $showReorderSheet) {
             WatchExerciseReorderView()
@@ -54,11 +61,46 @@ struct ControlsView: View {
         }
     }
 
-    private func controlsGrid(spacing: CGFloat, primaryHeight: CGFloat, secondaryHeight: CGFloat) -> some View {
+    private func controlsContent(
+        spacing: CGFloat,
+        primaryHeight: CGFloat,
+        secondaryHeight: CGFloat,
+        hasSecondaryActions: Bool
+    ) -> some View {
+        VStack(alignment: .leading, spacing: spacing) {
+            if !workoutManager.isCardioMode {
+                HStack(spacing: DS.Spacing.xs) {
+                    Text("Controls")
+                        .font(.system(size: 16, weight: .semibold))
+                    if hasSecondaryActions,
+                       let snapshot = workoutManager.templateSnapshot,
+                       snapshot.entries.indices.contains(workoutManager.currentExerciseIndex) {
+                        Text(snapshot.entries[workoutManager.currentExerciseIndex].exerciseName)
+                            .font(.system(size: 12))
+                            .foregroundStyle(.secondary)
+                            .lineLimit(1)
+                    }
+                }
+                .frame(minHeight: 24)
+                .padding(.horizontal, DS.Spacing.sm)
+            }
+
+            controlsGrid(spacing: spacing, primaryHeight: primaryHeight,
+                         secondaryHeight: secondaryHeight, hasSecondaryActions: hasSecondaryActions)
+        }
+        .padding(.top, DS.Spacing.xs)
+    }
+
+    private func controlsGrid(
+        spacing: CGFloat,
+        primaryHeight: CGFloat,
+        secondaryHeight: CGFloat,
+        hasSecondaryActions: Bool
+    ) -> some View {
         VStack(spacing: spacing) {
-            if workoutManager.isCardioMode {
-                pauseResumeButton(height: primaryHeight)
-                endButton(height: primaryHeight)
+            if workoutManager.isCardioMode || !hasSecondaryActions {
+                pauseResumeButton(height: primaryHeight, horizontal: !workoutManager.isCardioMode)
+                endButton(height: primaryHeight, horizontal: !workoutManager.isCardioMode)
             } else {
                 HStack(spacing: spacing) {
                     pauseResumeButton(height: primaryHeight)
@@ -66,8 +108,7 @@ struct ControlsView: View {
                 }
             }
 
-            if showSkip, !workoutManager.isCardioMode,
-               !workoutManager.isLastExercise || workoutManager.canReorderExercises {
+            if hasSecondaryActions {
                 HStack(spacing: spacing) {
                     if !workoutManager.isLastExercise {
                         Button {
@@ -95,7 +136,7 @@ struct ControlsView: View {
         .padding(.horizontal, DS.Spacing.xs)
     }
 
-    private func pauseResumeButton(height: CGFloat) -> some View {
+    private func pauseResumeButton(height: CGFloat, horizontal: Bool = false) -> some View {
         Button {
             if workoutManager.isPaused {
                 workoutManager.resume()
@@ -108,19 +149,20 @@ struct ControlsView: View {
                 systemImage: workoutManager.isPaused ? "play.fill" : "pause.fill",
                 tint: DS.Color.caution,
                 height: height,
-                isPrimary: true
+                isPrimary: true,
+                horizontal: horizontal
             )
         }
         .accessibilityLabel(workoutManager.isPaused ? Text("Resume") : Text("Pause"))
         .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionControlsPauseResumeButton)
     }
 
-    private func endButton(height: CGFloat) -> some View {
+    private func endButton(height: CGFloat, horizontal: Bool = false) -> some View {
         Button(role: .destructive) {
             showEndConfirmation = true
         } label: {
             controlLabel("End", systemImage: "xmark", tint: DS.Color.negative,
-                         height: height, isPrimary: true)
+                         height: height, isPrimary: true, horizontal: horizontal)
         }
         .accessibilityLabel("End")
         .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionControlsEndButton)
@@ -131,17 +173,31 @@ struct ControlsView: View {
         systemImage: String,
         tint: Color,
         height: CGFloat,
-        isPrimary: Bool
+        isPrimary: Bool,
+        horizontal: Bool = false
     ) -> some View {
-        VStack(spacing: isPrimary ? DS.Spacing.sm : DS.Spacing.xs) {
-            Image(systemName: systemImage)
-                .font(isPrimary ? .title2.weight(.semibold) : .body.weight(.semibold))
-                .foregroundStyle(tint)
-            Text(title)
-                .font(isPrimary ? .callout.weight(.semibold) : .caption.weight(.semibold))
-                .foregroundStyle(.primary)
-                .multilineTextAlignment(.center)
-                .fixedSize(horizontal: false, vertical: true)
+        Group {
+            if horizontal {
+                HStack(spacing: DS.Spacing.sm) {
+                    Image(systemName: systemImage)
+                        .font(.title3.weight(.semibold))
+                        .foregroundStyle(tint)
+                    Text(title)
+                        .font(.callout.weight(.semibold))
+                        .foregroundStyle(.primary)
+                }
+            } else {
+                VStack(spacing: isPrimary ? DS.Spacing.sm : DS.Spacing.xs) {
+                    Image(systemName: systemImage)
+                        .font(isPrimary ? .title2.weight(.semibold) : .body.weight(.semibold))
+                        .foregroundStyle(tint)
+                    Text(title)
+                        .font(isPrimary ? .callout.weight(.semibold) : .caption.weight(.semibold))
+                        .foregroundStyle(.primary)
+                        .multilineTextAlignment(.center)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
         }
         .padding(.horizontal, DS.Spacing.xs)
         .padding(.vertical, DS.Spacing.sm)

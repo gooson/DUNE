@@ -30,6 +30,10 @@ struct SessionSummaryView: View {
     @State private var showEffortInput = false
     @State private var didPresentEffortInput = false
     @State private var effortInputAutoCloseTask: Task<Void, Never>?
+    @AccessibilityFocusState private var isSaveErrorFocused: Bool
+    #if DEBUG
+    @State private var didInjectUITestSaveFailure = false
+    #endif
 
     /// Auto-dismiss effort input after a short period of inactivity.
     private let effortInputAutoCloseDelay: Duration = .seconds(12)
@@ -83,17 +87,12 @@ struct SessionSummaryView: View {
                         Text(saveError)
                             .font(DS.Typography.metricLabel)
                             .foregroundStyle(.secondary)
-                        HStack(spacing: DS.Spacing.sm) {
-                            Button("Retry") { retrySave() }
-                                .buttonStyle(.borderedProminent)
-                                .tint(DS.Color.positive)
-                            if hasSaved {
-                                Button("Done") { workoutManager.reset() }
-                                    .buttonStyle(.bordered)
-                            } else {
-                                Button("Dismiss Without Saving") { workoutManager.reset() }
-                                    .buttonStyle(.bordered)
-                            }
+                        if hasSaved {
+                            Button("Done") { workoutManager.reset() }
+                                .buttonStyle(.bordered)
+                        } else {
+                            Button("Dismiss Without Saving") { workoutManager.reset() }
+                                .buttonStyle(.bordered)
                         }
                     }
                     .padding(DS.Spacing.md)
@@ -122,16 +121,25 @@ struct SessionSummaryView: View {
         }
         .safeAreaInset(edge: .bottom, spacing: 0) {
             Button {
-                finishSummary()
+                if saveError != nil {
+                    retrySave()
+                } else {
+                    finishSummary()
+                }
             } label: {
-                Text("Done")
+                Text(saveError != nil ? "Retry" : "Done")
                     .font(DS.Typography.tileTitle)
                     .frame(maxWidth: .infinity, minHeight: 44)
             }
             .buttonStyle(.borderedProminent)
-            .tint(DS.Color.positive)
+            .tint(saveError != nil ? DS.Color.negative : DS.Color.positive)
             .disabled(isSaving || workoutManager.isFinalizingWorkout)
-            .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionSummaryDoneButton)
+            .accessibilityFocused($isSaveErrorFocused)
+            .accessibilityIdentifier(
+                saveError != nil
+                    ? "watch-session-summary-save-retry-button"
+                    : WatchWorkoutSurfaceAccessibility.sessionSummaryDoneButton
+            )
             .padding(.horizontal, DS.Spacing.xs)
         }
         .background { WatchWaveBackground(color: DS.Color.positive) }
@@ -155,13 +163,15 @@ struct SessionSummaryView: View {
         }
         .onAppear {
             initializeSuggestedEffortIfNeeded()
-            if !didPresentEffortInput {
-                didPresentEffortInput = true
-                showEffortInput = true
-            }
             if !didStartAutomaticSave {
                 didStartAutomaticSave = true
                 startSaving()
+            }
+        }
+        .onChange(of: hasSaved) { _, saved in
+            if saved, !didPresentEffortInput {
+                didPresentEffortInput = true
+                showEffortInput = true
             }
         }
         .onChange(of: effortSuggestion?.suggestedEffort) { _, _ in
@@ -173,6 +183,16 @@ struct SessionSummaryView: View {
             } else {
                 cancelEffortInputAutoCloseTimer()
                 if persistEffortIfNeeded() { sendCompletionUpdateIfNeeded() }
+                if saveError != nil { isSaveErrorFocused = true }
+            }
+        }
+        .onChange(of: saveError) { _, error in
+            guard error != nil else { return }
+            WKInterfaceDevice.current().play(.failure)
+            if showEffortInput {
+                showEffortInput = false
+            } else {
+                isSaveErrorFocused = true
             }
         }
         .onChange(of: scenePhase) { _, phase in
@@ -430,6 +450,15 @@ struct SessionSummaryView: View {
 
     @MainActor
     private func saveSession(dismissOnSuccess: Bool) async {
+        #if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("--ui-force-session-save-error"),
+           !didInjectUITestSaveFailure {
+            didInjectUITestSaveFailure = true
+            saveError = String(localized: "Failed to save workout data. Please try again.")
+            isSaving = false
+            return
+        }
+        #endif
         // Cardio HKWorkout is finalized by HKLiveWorkoutBuilder before its record is saved.
         if workoutManager.isCardioMode {
             await workoutManager.waitForWorkoutFinalization()
