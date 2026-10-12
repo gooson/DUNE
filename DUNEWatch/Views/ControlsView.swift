@@ -12,13 +12,17 @@ struct ControlsView: View {
 
     var body: some View {
         GeometryReader { geometry in
-            let spacing = min(DS.Spacing.lg, max(DS.Spacing.xs, geometry.size.height * 0.035))
+            let spacing = DS.Spacing.lg
+            let primaryHeight = workoutManager.isCardioMode
+                ? max(64, min(96, (geometry.size.height - spacing) / 2))
+                : max(64, min(100, (geometry.size.height - spacing) * 0.58))
+            let secondaryHeight = max(48, min(64, geometry.size.height - primaryHeight - spacing))
 
             ViewThatFits(in: .vertical) {
-                controlsGrid(spacing: spacing)
+                controlsGrid(spacing: spacing, primaryHeight: primaryHeight, secondaryHeight: secondaryHeight)
 
                 ScrollView {
-                    controlsGrid(spacing: spacing)
+                    controlsGrid(spacing: spacing, primaryHeight: primaryHeight, secondaryHeight: secondaryHeight)
                 }
                 .scrollBounceBehavior(.basedOnSize)
             }
@@ -50,31 +54,16 @@ struct ControlsView: View {
         }
     }
 
-    private func controlsGrid(spacing: CGFloat) -> some View {
+    private func controlsGrid(spacing: CGFloat, primaryHeight: CGFloat, secondaryHeight: CGFloat) -> some View {
         VStack(spacing: spacing) {
-            HStack(spacing: spacing) {
-                Button(role: .destructive) {
-                    showEndConfirmation = true
-                } label: {
-                    controlLabel("End", systemImage: "xmark")
+            if workoutManager.isCardioMode {
+                pauseResumeButton(height: primaryHeight)
+                endButton(height: primaryHeight)
+            } else {
+                HStack(spacing: spacing) {
+                    pauseResumeButton(height: primaryHeight)
+                    endButton(height: primaryHeight)
                 }
-                .tint(DS.Color.negative)
-                .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionControlsEndButton)
-
-                Button {
-                    if workoutManager.isPaused {
-                        workoutManager.resume()
-                    } else {
-                        workoutManager.pause()
-                    }
-                } label: {
-                    controlLabel(
-                        workoutManager.isPaused ? "Resume" : "Pause",
-                        systemImage: workoutManager.isPaused ? "play.fill" : "pause.fill"
-                    )
-                }
-                .tint(DS.Color.caution)
-                .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionControlsPauseResumeButton)
             }
 
             if showSkip, !workoutManager.isCardioMode,
@@ -84,9 +73,9 @@ struct ControlsView: View {
                         Button {
                             workoutManager.skipExercise()
                         } label: {
-                            controlLabel("Skip", systemImage: "forward.fill")
+                            controlLabel("Skip", systemImage: "forward.fill", tint: .secondary,
+                                         height: secondaryHeight, isPrimary: false)
                         }
-                        .tint(.secondary)
                         .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionControlsSkipButton)
                     }
 
@@ -94,25 +83,68 @@ struct ControlsView: View {
                         Button {
                             showReorderSheet = true
                         } label: {
-                            controlLabel("Reorder", systemImage: "arrow.up.arrow.down")
+                            controlLabel("Reorder", systemImage: "arrow.up.arrow.down", tint: .secondary,
+                                         height: secondaryHeight, isPrimary: false)
                         }
-                        .tint(.secondary)
                         .accessibilityIdentifier("watch-session-controls-reorder-button")
                     }
                 }
             }
         }
+        .buttonStyle(.plain)
+        .padding(.horizontal, DS.Spacing.xs)
     }
 
-    private func controlLabel(_ title: LocalizedStringKey, systemImage: String) -> some View {
-        VStack(spacing: DS.Spacing.xxs) {
+    private func pauseResumeButton(height: CGFloat) -> some View {
+        Button {
+            if workoutManager.isPaused {
+                workoutManager.resume()
+            } else {
+                workoutManager.pause()
+            }
+        } label: {
+            controlLabel(
+                workoutManager.isPaused ? "Resume" : "Pause",
+                systemImage: workoutManager.isPaused ? "play.fill" : "pause.fill",
+                tint: DS.Color.caution,
+                height: height,
+                isPrimary: true
+            )
+        }
+        .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionControlsPauseResumeButton)
+    }
+
+    private func endButton(height: CGFloat) -> some View {
+        Button(role: .destructive) {
+            showEndConfirmation = true
+        } label: {
+            controlLabel("End", systemImage: "xmark", tint: DS.Color.negative,
+                         height: height, isPrimary: true)
+        }
+        .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionControlsEndButton)
+    }
+
+    private func controlLabel(
+        _ title: LocalizedStringKey,
+        systemImage: String,
+        tint: Color,
+        height: CGFloat,
+        isPrimary: Bool
+    ) -> some View {
+        VStack(spacing: isPrimary ? DS.Spacing.sm : DS.Spacing.xs) {
             Image(systemName: systemImage)
-                .font(.title3)
+                .font(isPrimary ? .title2.weight(.semibold) : .body.weight(.semibold))
+                .foregroundStyle(tint)
             Text(title)
-                .font(DS.Typography.metricLabel)
+                .font(isPrimary ? .callout.weight(.semibold) : .caption.weight(.semibold))
+                .foregroundStyle(.primary)
                 .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
         }
-        .frame(maxWidth: .infinity, minHeight: 48)
+        .padding(.horizontal, DS.Spacing.xs)
+        .padding(.vertical, DS.Spacing.sm)
+        .frame(maxWidth: .infinity, minHeight: height)
+        .background(tint.opacity(DS.Opacity.overlay), in: RoundedRectangle(cornerRadius: DS.Radius.lg))
+        .contentShape(RoundedRectangle(cornerRadius: DS.Radius.lg))
     }
 }
