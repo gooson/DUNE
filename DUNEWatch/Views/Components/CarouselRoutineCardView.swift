@@ -6,9 +6,6 @@ struct CarouselRoutineCardView: View {
     let name: String
     let entries: [TemplateEntry]
 
-    /// Maximum exercise icons to preview
-    private let maxIconPreview = 4
-
     @Environment(\.appTheme) private var theme
     @Environment(WatchConnectivityManager.self) private var connectivity
 
@@ -21,50 +18,56 @@ struct CarouselRoutineCardView: View {
     }
 
     var body: some View {
-        VStack(spacing: DS.Spacing.sm) {
-            // Section badge
+        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
             Text("ROUTINE")
-                .font(DS.Typography.tinyLabel)
-                .foregroundStyle(theme.accentColor)
-                .tracking(0.5)
-
-            Spacer()
-
-            // Exercise icon strip (centered, larger than list version)
-            exerciseIconStrip
-
-            // Routine name
-            Text(name)
-                .font(.system(.title3, design: .rounded).bold())
-                .lineLimit(1)
-                .minimumScaleFactor(0.7)
-                .multilineTextAlignment(.center)
-
-            // Meta info
-            Text(metaLabel)
                 .font(DS.Typography.metricLabel)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(theme.accentColor)
 
-            Spacer()
-        }
-        .frame(maxWidth: .infinity)
-        .padding(.horizontal, DS.Spacing.lg)
-    }
+            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                HStack(spacing: DS.Spacing.md) {
+                    if let first = entries.first {
+                        WorkoutExerciseIcon(
+                            exerciseID: first.exerciseDefinitionID,
+                            name: first.exerciseName,
+                            inputType: connectivity.exerciseInfo(for: first.exerciseDefinitionID)?.inputType ?? first.inputTypeRaw,
+                            equipment: first.equipment,
+                            size: 32
+                        )
+                        .padding(DS.Spacing.xs)
+                        .background(.quaternary, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
+                    }
+                    Text(name)
+                        .font(DS.Typography.exerciseName)
+                        .lineLimit(2)
+                        .minimumScaleFactor(0.85)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
 
-    // MARK: - Icon Strip
-
-    private var exerciseIconStrip: some View {
-        HStack(spacing: DS.Spacing.md) {
-            ForEach(Array(entries.prefix(maxIconPreview).enumerated()), id: \.element.id) { _, entry in
-                EquipmentIconView(equipment: entry.equipment, size: 32)
-                    .frame(width: 32, height: 32)
-            }
-
-            if entries.count > maxIconPreview {
-                Text("+\(entries.count - maxIconPreview)")
+                Text(metaLabel)
                     .font(DS.Typography.metricLabel)
                     .foregroundStyle(.secondary)
+                    .lineLimit(2)
+
+                if let first = entries.first {
+                    Divider()
+                    Text(first.exerciseName)
+                        .font(DS.Typography.tileSubtitle)
+                        .lineLimit(1)
+                        .foregroundStyle(.secondary)
+                }
             }
+            .padding(DS.Spacing.md)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(.thinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.lg))
+
+            Label("Start", systemImage: "play.fill")
+                .font(DS.Typography.tileSubtitle)
+                .frame(maxWidth: .infinity, minHeight: 44)
+                .foregroundStyle(theme.accentColor)
+                .background(theme.accentColor.opacity(DS.Opacity.border), in: Capsule())
         }
+        .padding(.horizontal, DS.Spacing.lg)
+        .padding(.vertical, DS.Spacing.xs)
+        .accessibilityElement(children: .combine)
     }
 }

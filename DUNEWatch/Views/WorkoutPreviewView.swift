@@ -8,10 +8,12 @@ struct WorkoutPreviewView: View {
     let snapshot: WorkoutSessionTemplate
     @Environment(WorkoutManager.self) private var workoutManager
     @Environment(WatchConnectivityManager.self) private var connectivity
-    @Environment(\.dismiss) private var dismiss
+    @Environment(\.appTheme) private var theme
 
     @State private var isStarting = false
+    @State private var isReordering = false
     @State private var errorMessage: String?
+    @State private var lastCardioWasOutdoor = false
     @State private var selectedLevel: Int = 5
     @FocusState private var levelFocused: Bool
     /// Mutable copy of entries for pre-workout reordering (original template unchanged).
@@ -34,13 +36,20 @@ struct WorkoutPreviewView: View {
         .navigationTitle(snapshot.name)
         .accessibilityElement(children: .contain)
         .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.workoutPreviewScreen)
-        .alert(String(localized: "Error"), isPresented: .init(
-            get: { errorMessage != nil },
-            set: { if !$0 { errorMessage = nil } }
-        )) {
-            Button(String(localized: "OK"), role: .cancel) {}
-        } message: {
-            Text(errorMessage ?? "")
+        .toolbar {
+            if resolvedCardioType == nil && reorderedEntries.count > 1 {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        isReordering.toggle()
+                    } label: {
+                        Image(systemName: isReordering ? "checkmark" : "arrow.up.arrow.down")
+                            .frame(minWidth: 44, minHeight: 44)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel(isReordering ? String(localized: "Done") : String(localized: "Reorder Exercises"))
+                    .accessibilityIdentifier("watch-workout-preview-reorder")
+                }
+            }
         }
     }
 
@@ -88,61 +97,25 @@ struct WorkoutPreviewView: View {
         let cardioUnit = resolvedCardioSecondaryUnit ?? fallbackCardioSecondaryUnit(for: activityType)
         let supportsOutdoor = cardioUnit?.usesDistanceField == true && cardioUnit?.isIndoorOnly != true
 
-        return GeometryReader { geometry in
-            let spacing = min(DS.Spacing.md, max(DS.Spacing.xs, geometry.size.height * 0.025))
-            let iconSize = min(32, max(20, geometry.size.height * 0.14))
+        return VStack(spacing: DS.Spacing.sm) {
+            ScrollView {
+                VStack(spacing: DS.Spacing.md) {
+                    cardioHeader(activityType: activityType, iconSize: 28, spacing: DS.Spacing.md)
 
-            ViewThatFits(in: .vertical) {
-                cardioContent(
-                    activityType: activityType,
-                    cardioUnit: cardioUnit,
-                    supportsOutdoor: supportsOutdoor,
-                    spacing: spacing,
-                    iconSize: iconSize,
-                    scrollHeader: true
-                )
+                    if let errorMessage {
+                        startErrorNotice(errorMessage)
+                            .padding(.horizontal, DS.Spacing.lg)
+                    }
 
-                ScrollView {
-                    cardioContent(
-                        activityType: activityType,
-                        cardioUnit: cardioUnit,
-                        supportsOutdoor: supportsOutdoor,
-                        spacing: spacing,
-                        iconSize: iconSize,
-                        scrollHeader: false
-                    )
+                    if let cardioUnit, cardioUnit.supportsMachineLevel,
+                       let range = cardioUnit.machineLevelRange {
+                        machineLevelPicker(range: range)
+                            .padding(.horizontal, DS.Spacing.lg)
+                    }
                 }
-                .scrollBounceBehavior(.basedOnSize)
+                .padding(.vertical, DS.Spacing.xs)
             }
-        }
-        .accessibilityElement(children: .contain)
-        .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.workoutPreviewCardio)
-    }
-
-    private func cardioContent(
-        activityType: WorkoutActivityType,
-        cardioUnit: CardioSecondaryUnit?,
-        supportsOutdoor: Bool,
-        spacing: CGFloat,
-        iconSize: CGFloat,
-        scrollHeader: Bool
-    ) -> some View {
-        VStack(spacing: spacing) {
-            if scrollHeader {
-                ScrollView {
-                    cardioHeader(activityType: activityType, iconSize: iconSize, spacing: spacing)
-                }
-                .scrollBounceBehavior(.basedOnSize)
-            } else {
-                cardioHeader(activityType: activityType, iconSize: iconSize, spacing: spacing)
-            }
-
-            if let cardioUnit, cardioUnit.supportsMachineLevel,
-               let range = cardioUnit.machineLevelRange {
-                machineLevelPicker(range: range)
-                    .padding(.horizontal, DS.Spacing.lg)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
+            .scrollBounceBehavior(.basedOnSize)
 
             cardioActionButtons(
                 activityType: activityType,
@@ -150,8 +123,11 @@ struct WorkoutPreviewView: View {
                 supportsOutdoor: supportsOutdoor
             )
             .padding(.horizontal, DS.Spacing.lg)
+            .padding(.bottom, DS.Spacing.xs)
             .fixedSize(horizontal: false, vertical: true)
         }
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.workoutPreviewCardio)
     }
 
     private func cardioHeader(
@@ -162,12 +138,23 @@ struct WorkoutPreviewView: View {
         HStack(spacing: spacing) {
             Image(systemName: activityType.iconName)
                 .font(.system(size: iconSize))
-                .foregroundStyle(DS.Color.activity)
+                .foregroundStyle(theme.sandColor)
+                .frame(width: 36, height: 40)
+                .background(.quaternary, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
+                .accessibilityHidden(true)
 
-            Text(LocalizedStringKey(activityType.typeName))
-                .font(DS.Typography.exerciseName)
-                .multilineTextAlignment(.leading)
-                .fixedSize(horizontal: false, vertical: true)
+            VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                Text(LocalizedStringKey(activityType.typeName))
+                    .font(DS.Typography.exerciseName)
+                    .multilineTextAlignment(.leading)
+                    .fixedSize(horizontal: false, vertical: true)
+
+                if errorMessage != nil {
+                    Text(lastCardioWasOutdoor ? String(localized: "Outdoor") : String(localized: "Indoor"))
+                        .font(DS.Typography.metricLabel)
+                        .foregroundStyle(.secondary)
+                }
+            }
         }
         .frame(maxWidth: .infinity)
         .padding(.horizontal, DS.Spacing.lg)
@@ -179,7 +166,21 @@ struct WorkoutPreviewView: View {
         supportsOutdoor: Bool
     ) -> some View {
         VStack(spacing: DS.Spacing.xs) {
-            if supportsOutdoor {
+            if errorMessage != nil {
+                Button {
+                    startCardio(
+                        activityType: activityType,
+                        isOutdoor: lastCardioWasOutdoor,
+                        secondaryUnit: cardioUnit
+                    )
+                } label: {
+                    cardioButtonLabel(String(localized: "Retry"), systemImage: "arrow.clockwise")
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(theme.accentColor)
+                .disabled(isStarting)
+                .accessibilityIdentifier("watch-workout-preview-retry")
+            } else if supportsOutdoor {
                 Button {
                     startCardio(activityType: activityType, isOutdoor: false, secondaryUnit: cardioUnit)
                 } label: {
@@ -195,12 +196,12 @@ struct WorkoutPreviewView: View {
                     cardioButtonLabel(String(localized: "Indoor"), systemImage: "building.fill")
                 }
                 .buttonStyle(.borderedProminent)
-                .tint(DS.Color.activity)
+                .tint(theme.accentColor)
                 .disabled(isStarting)
                 .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.workoutPreviewCardioIndoorButton)
             }
 
-            if supportsOutdoor {
+            if supportsOutdoor && errorMessage == nil {
                 Button {
                     startCardio(activityType: activityType, isOutdoor: true, secondaryUnit: cardioUnit)
                 } label: {
@@ -208,7 +209,7 @@ struct WorkoutPreviewView: View {
                         .frame(maxWidth: .infinity, minHeight: 44)
                 }
                 .buttonStyle(.borderedProminent)
-                .tint(DS.Color.positive)
+                .tint(theme.accentColor)
                 .disabled(isStarting)
                 .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.workoutPreviewCardioOutdoorButton)
             }
@@ -235,6 +236,8 @@ struct WorkoutPreviewView: View {
     ) {
         guard !isStarting else { return }
         isStarting = true
+        errorMessage = nil
+        lastCardioWasOutdoor = isOutdoor
 
         let level: Int? = secondaryUnit?.supportsMachineLevel == true ? selectedLevel : nil
 
@@ -276,45 +279,47 @@ struct WorkoutPreviewView: View {
 
     private func machineLevelPicker(range: ClosedRange<Int>) -> some View {
         HStack(spacing: DS.Spacing.sm) {
-                Button {
-                    if selectedLevel > range.lowerBound {
-                        selectedLevel -= 1
-                    }
-                } label: {
-                    Image(systemName: "minus")
-                        .font(.title3.weight(.bold))
-                        .frame(maxWidth: .infinity, minHeight: 40)
+            Button {
+                if selectedLevel > range.lowerBound {
+                    selectedLevel -= 1
                 }
-                .buttonStyle(.bordered)
-                .disabled(selectedLevel <= range.lowerBound)
-                .accessibilityIdentifier("watch-workout-preview-level-decrease")
+            } label: {
+                Image(systemName: "minus")
+                    .font(.title3.weight(.bold))
+                    .frame(maxWidth: .infinity, minHeight: 44)
+            }
+            .buttonStyle(.bordered)
+            .disabled(selectedLevel <= range.lowerBound)
+            .accessibilityLabel("Decrease Level")
+            .accessibilityIdentifier("watch-workout-preview-level-decrease")
 
-                VStack(spacing: 0) {
-                    Text("Level")
-                        .font(DS.Typography.metricLabel)
-                        .foregroundStyle(.secondary)
+            VStack(spacing: 0) {
+                Text("Level")
+                    .font(DS.Typography.metricLabel)
+                    .foregroundStyle(.secondary)
 
-                    Text("\(selectedLevel)")
-                        .font(DS.Typography.secondaryMetric)
-                        .foregroundStyle(DS.Color.activity)
-                        .contentTransition(.numericText())
-                        .accessibilityIdentifier("watch-workout-preview-level-value")
+                Text("\(selectedLevel)")
+                    .font(DS.Typography.secondaryMetric)
+                    .foregroundStyle(DS.Color.activity)
+                    .contentTransition(.numericText())
+                    .accessibilityIdentifier("watch-workout-preview-level-value")
+            }
+            .frame(minWidth: 36)
+
+            Button {
+                if selectedLevel < range.upperBound {
+                    selectedLevel += 1
                 }
-                .frame(minWidth: 36)
-
-                Button {
-                    if selectedLevel < range.upperBound {
-                        selectedLevel += 1
-                    }
-                } label: {
-                    Image(systemName: "plus")
-                        .font(.title3.weight(.bold))
-                        .frame(maxWidth: .infinity, minHeight: 40)
-                }
-                .buttonStyle(.borderedProminent)
-                .tint(DS.Color.activity)
-                .disabled(selectedLevel >= range.upperBound)
-                .accessibilityIdentifier("watch-workout-preview-level-increase")
+            } label: {
+                Image(systemName: "plus")
+                    .font(.title3.weight(.bold))
+                    .frame(maxWidth: .infinity, minHeight: 44)
+            }
+            .buttonStyle(.borderedProminent)
+            .tint(theme.accentColor)
+            .disabled(selectedLevel >= range.upperBound)
+            .accessibilityLabel("Increase Level")
+            .accessibilityIdentifier("watch-workout-preview-level-increase")
         }
         .focusable(true)
         .focused($levelFocused)
@@ -336,87 +341,103 @@ struct WorkoutPreviewView: View {
 
     private var strengthStartContent: some View {
         VStack(spacing: 0) {
-            List {
-                Section {
-                    ForEach(Array(reorderedEntries.enumerated()), id: \.element.id) { index, entry in
-                        VStack(spacing: DS.Spacing.xs) {
-                            HStack(spacing: DS.Spacing.md) {
-                                Text("\(index + 1)")
-                                    .font(DS.Typography.metricLabel)
-                                    .foregroundStyle(.secondary)
-                                    .frame(width: 16)
-
-                                EquipmentIconView(equipment: entry.equipment, size: 20)
-                                    .frame(width: 20, height: 20)
-
-                                VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-                                    Text(entry.exerciseName)
-                                        .font(DS.Typography.tileSubtitle)
-                                        .lineLimit(1)
-
-                                    let profile = TemplateExerciseProfile(
-                                        inputTypeRaw: resolvedInputType(for: entry),
-                                        cardioSecondaryUnitRaw: resolvedCardioSecondaryUnitRaw(for: entry)
+            ScrollViewReader { proxy in
+                List {
+                    if let errorMessage {
+                        startErrorNotice(errorMessage)
+                            .listRowBackground(Color.clear)
+                            .id("start-error")
+                    }
+                    Section {
+                        ForEach(Array(reorderedEntries.enumerated()), id: \.element.id) { index, entry in
+                            VStack(spacing: DS.Spacing.xs) {
+                                HStack(spacing: DS.Spacing.sm) {
+                                    WorkoutExerciseIcon(
+                                        exerciseID: entry.exerciseDefinitionID,
+                                        name: entry.exerciseName,
+                                        inputType: resolvedInputType(for: entry),
+                                        equipment: entry.equipment,
+                                        size: 24
                                     )
+                                    .padding(DS.Spacing.xs)
+                                    .background(.quaternary, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
 
-                                    HStack(spacing: DS.Spacing.xs) {
-                                        if profile.showsStrengthDefaultsEditor {
-                                            Text("\(entry.defaultSets)\u{00d7}\(entry.defaultReps)")
-                                            if resolvedInputType(for: entry) != ExerciseInputType.roundsBased.rawValue,
-                                               let kg = entry.defaultWeightKg, kg > 0 {
-                                                Text("\u{00b7} \(kg, specifier: "%.1f")kg")
-                                            }
-                                        } else {
-                                            Text(profile.primarySummaryLabel)
-                                            if let secondary = profile.secondarySummaryLabel {
-                                                Text("\u{00b7} \(secondary)")
+                                    VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                                        Text(entry.exerciseName)
+                                            .font(DS.Typography.tileSubtitle.weight(.semibold))
+                                            .lineLimit(2)
+
+                                        let profile = TemplateExerciseProfile(
+                                            inputTypeRaw: resolvedInputType(for: entry),
+                                            cardioSecondaryUnitRaw: resolvedCardioSecondaryUnitRaw(for: entry)
+                                        )
+
+                                        HStack(spacing: DS.Spacing.xs) {
+                                            if profile.showsStrengthDefaultsEditor {
+                                                Text("\(entry.defaultSets)\u{00d7}\(entry.defaultReps)")
+                                                if resolvedInputType(for: entry) != ExerciseInputType.roundsBased.rawValue,
+                                                   let kg = entry.defaultWeightKg, kg > 0 {
+                                                    Text("\u{00b7} \(kg, specifier: "%.1f")kg")
+                                                }
+                                            } else {
+                                                Text(profile.primarySummaryLabel)
+                                                if let secondary = profile.secondarySummaryLabel {
+                                                    Text("\u{00b7} \(secondary)")
+                                                }
                                             }
                                         }
+                                        .font(DS.Typography.metricLabel)
+                                        .foregroundStyle(.secondary)
                                     }
-                                    .font(DS.Typography.metricLabel)
-                                    .foregroundStyle(.secondary)
                                 }
-                            }
 
-                            if reorderedEntries.count > 1 {
-                                HStack(spacing: DS.Spacing.sm) {
-                                    Button {
-                                        guard index > 0 else { return }
-                                        reorderedEntries.swapAt(index, index - 1)
-                                    } label: {
-                                        Image(systemName: "arrow.up")
-                                            .font(.caption2)
-                                            .frame(maxWidth: .infinity, minHeight: 28)
-                                    }
-                                    .buttonStyle(.bordered)
-                                    .disabled(index == 0)
+                                if isReordering && reorderedEntries.count > 1 {
+                                    HStack(spacing: DS.Spacing.sm) {
+                                        Button {
+                                            guard index > 0 else { return }
+                                            reorderedEntries.swapAt(index, index - 1)
+                                        } label: {
+                                            Image(systemName: "arrow.up")
+                                                .font(.caption2)
+                                                .frame(maxWidth: .infinity, minHeight: 44)
+                                        }
+                                        .buttonStyle(.bordered)
+                                        .disabled(index == 0)
+                                        .accessibilityLabel("Move Up")
 
-                                    Button {
-                                        guard index + 1 < reorderedEntries.count else { return }
-                                        reorderedEntries.swapAt(index, index + 1)
-                                    } label: {
-                                        Image(systemName: "arrow.down")
-                                            .font(.caption2)
-                                            .frame(maxWidth: .infinity, minHeight: 28)
+                                        Button {
+                                            guard index + 1 < reorderedEntries.count else { return }
+                                            reorderedEntries.swapAt(index, index + 1)
+                                        } label: {
+                                            Image(systemName: "arrow.down")
+                                                .font(.caption2)
+                                                .frame(maxWidth: .infinity, minHeight: 44)
+                                        }
+                                        .buttonStyle(.bordered)
+                                        .disabled(index == reorderedEntries.count - 1)
+                                        .accessibilityLabel("Move Down")
                                     }
-                                    .buttonStyle(.bordered)
-                                    .disabled(index == reorderedEntries.count - 1)
                                 }
                             }
                         }
-                    }
-                } header: {
-                    Text(
-                        String(
-                            format: String(localized: "%@ exercises"),
-                            locale: Locale.current,
-                            reorderedEntries.count.formattedWithSeparator
+                    } header: {
+                        Text(
+                            String(
+                                format: String(localized: "%@ exercises"),
+                                locale: Locale.current,
+                                reorderedEntries.count.formattedWithSeparator
+                            )
                         )
-                    )
+                    }
+                }
+                .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.workoutPreviewStrengthList)
+                .scrollContentBackground(.hidden)
+                .onChange(of: errorMessage) { _, newValue in
+                    if newValue != nil {
+                        proxy.scrollTo("start-error", anchor: .top)
+                    }
                 }
             }
-            .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.workoutPreviewStrengthList)
-            .scrollContentBackground(.hidden)
 
             Button {
                 startStrengthWorkout()
@@ -427,15 +448,15 @@ struct WorkoutPreviewView: View {
                             .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.workoutPreviewStarting)
                             .tint(.black)
                     } else {
-                        Image(systemName: "play.fill")
+                        Image(systemName: errorMessage == nil ? "play.fill" : "arrow.clockwise")
                     }
-                    Text(String(localized: "Start"))
+                    Text(errorMessage == nil ? String(localized: "Start") : String(localized: "Retry"))
                         .font(.headline)
                 }
                 .frame(maxWidth: .infinity, minHeight: 44)
             }
             .buttonStyle(.borderedProminent)
-            .tint(DS.Color.positive)
+            .tint(theme.accentColor)
             .disabled(isStarting)
             .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.workoutPreviewStartButton)
             .padding(.horizontal, DS.Spacing.lg)
@@ -446,6 +467,7 @@ struct WorkoutPreviewView: View {
     private func startStrengthWorkout() {
         guard !isStarting else { return }
         isStarting = true
+        errorMessage = nil
 
         let reorderedSnapshot = WorkoutSessionTemplate(
             name: snapshot.name,
@@ -467,6 +489,22 @@ struct WorkoutPreviewView: View {
                 WKInterfaceDevice.current().play(.failure)
             }
         }
+    }
+
+    private func startErrorNotice(_ message: String) -> some View {
+        HStack(alignment: .top, spacing: DS.Spacing.sm) {
+            Image(systemName: "exclamationmark.circle.fill")
+                .foregroundStyle(DS.Color.negative)
+                .accessibilityHidden(true)
+            Text(message)
+                .font(DS.Typography.metricLabel)
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .padding(DS.Spacing.md)
+        .background(DS.Color.negative.opacity(DS.Opacity.border), in: RoundedRectangle(cornerRadius: DS.Radius.md))
+        .accessibilityElement(children: .combine)
+        .accessibilityIdentifier("watch-workout-preview-start-error")
     }
 
     private func presentStartError(_ error: Error) {

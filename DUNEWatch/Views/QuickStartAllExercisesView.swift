@@ -31,16 +31,19 @@ struct QuickStartAllExercisesView: View {
     var body: some View {
         Group {
             if connectivity.exerciseLibrary.isEmpty {
-                VStack(spacing: DS.Spacing.lg) {
-                    Image(systemName: "text.magnifyingglass")
-                        .font(.system(size: 26))
-                        .foregroundStyle(.secondary)
-                    Text(String(localized: "No Exercises"))
-                        .font(DS.Typography.exerciseName)
-                    WatchSyncStatusView()
+                ScrollView {
+                    VStack(spacing: DS.Spacing.md) {
+                        Image(systemName: "text.magnifyingglass")
+                            .font(.system(size: 26))
+                            .foregroundStyle(.secondary)
+                        Text(String(localized: "No Exercises"))
+                            .font(DS.Typography.exerciseName)
+                        WatchSyncStatusView()
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding()
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-                .padding()
+                .scrollBounceBehavior(.basedOnSize)
                 .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.quickStartEmpty)
             } else {
                 List {
@@ -57,8 +60,23 @@ struct QuickStartAllExercisesView: View {
                     }
 
                     if isSearching || isFilterActive {
-                        ForEach(cachedFiltered, id: \.id) { exercise in
-                            exerciseRow(exercise)
+                        if cachedFiltered.isEmpty {
+                            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                                Label("No Results", systemImage: "magnifyingglass")
+                                    .font(DS.Typography.tileTitle)
+                                Button("Clear Filters") {
+                                    searchText = ""
+                                    selectedCategory = nil
+                                }
+                                .frame(minHeight: 44)
+                                .buttonStyle(.bordered)
+                                .accessibilityIdentifier("watch-quickstart-clear-filters")
+                            }
+                            .accessibilityIdentifier("watch-quickstart-no-results")
+                        } else {
+                            ForEach(cachedFiltered, id: \.id) { exercise in
+                                exerciseRow(exercise)
+                            }
                         }
                     } else {
                         if !cachedRecent.isEmpty {
