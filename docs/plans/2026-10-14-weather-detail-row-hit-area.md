@@ -1,7 +1,9 @@
 ---
+tags: [weather, today, ui-testing, hit-testing]
+category: plan
 topic: weather-detail-row-hit-area
 date: 2026-10-14
-status: approved
+status: implemented
 confidence: high
 related_solutions:
   - docs/solutions/performance/2026-10-14-today-scroll-top-bounce.md
