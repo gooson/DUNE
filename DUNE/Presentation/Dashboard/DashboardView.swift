@@ -37,11 +37,6 @@ struct DashboardView: View {
         case top
     }
 
-    private let gridColumns: [GridItem] = [
-        GridItem(.flexible(), spacing: DS.Spacing.md),
-        GridItem(.flexible(), spacing: DS.Spacing.md)
-    ]
-
     private let refreshSignal: Int
     private let notificationHubSignal: Int
     private let notificationHubIsActive: Bool
@@ -123,6 +118,7 @@ struct DashboardView: View {
                 .padding(sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.lg)
                 .coordinateSpace(name: TabHeroStartLine.coordinateSpace)
             }
+            .scrollBounceBehavior(.basedOnSize)
             .accessibilityElement(children: .contain)
             .accessibilityIdentifier("dashboard-root-scroll")
             .onChange(of: scrollToTopSignal) { _, _ in
@@ -699,34 +695,53 @@ struct DashboardView: View {
     }
 
     private func cardGrid(cards: [VitalCardData]) -> some View {
-        LazyVGrid(columns: gridColumns, spacing: DS.Spacing.md) {
-            ForEach(Array(cards.enumerated()), id: \.element.id) { index, card in
-                Button {
-                    openMetric(card.metric)
-                } label: {
-                    VitalCard(data: card, animationIndex: index)
-                }
-                .buttonStyle(.plain)
-                .hoverEffect(.highlight)
-                .accessibilityIdentifier(metricCardIdentifier(for: card.metric.category))
-                .contextMenu {
-                    NavigationLink(value: card.metric) {
-                        Label("View Trend", systemImage: "chart.line.uptrend.xyaxis")
+        let rows: [(left: VitalCardData, right: VitalCardData?, index: Int)] =
+            stride(from: 0, to: cards.count, by: 2).map { index in
+                (left: cards[index], right: index + 1 < cards.count ? cards[index + 1] : nil, index: index)
+            }
+
+        return VStack(spacing: DS.Spacing.md) {
+            ForEach(rows, id: \.left.id) { row in
+                HStack(alignment: .top, spacing: DS.Spacing.md) {
+                    metricCard(row.left, index: row.index)
+                    if let right = row.right {
+                        metricCard(right, index: row.index + 1)
+                    } else {
+                        Color.clear
+                            .frame(maxWidth: .infinity)
+                            .accessibilityHidden(true)
                     }
-                    NavigationLink(value: AllDataDestination(category: card.category)) {
-                        Label("Show All Data", systemImage: "list.bullet")
-                    }
                 }
-                .opacity(hasAppeared ? 1 : 0)
-                .offset(y: hasAppeared ? 0 : 8)
-                .animation(
-                    reduceMotion
-                        ? .none
-                        : .easeOut(duration: 0.35).delay(Double(min(index, 5)) * 0.05),
-                    value: hasAppeared
-                )
             }
         }
+    }
+
+    private func metricCard(_ card: VitalCardData, index: Int) -> some View {
+        Button {
+            openMetric(card.metric)
+        } label: {
+            VitalCard(data: card, animationIndex: index)
+        }
+        .buttonStyle(.plain)
+        .frame(maxWidth: .infinity)
+        .hoverEffect(.highlight)
+        .accessibilityIdentifier(metricCardIdentifier(for: card.metric.category))
+        .contextMenu {
+            NavigationLink(value: card.metric) {
+                Label("View Trend", systemImage: "chart.line.uptrend.xyaxis")
+            }
+            NavigationLink(value: AllDataDestination(category: card.category)) {
+                Label("Show All Data", systemImage: "list.bullet")
+            }
+        }
+        .opacity(hasAppeared ? 1 : 0)
+        .offset(y: hasAppeared ? 0 : 8)
+        .animation(
+            reduceMotion
+                ? .none
+                : .easeOut(duration: 0.35).delay(Double(min(index, 5)) * 0.05),
+            value: hasAppeared
+        )
     }
 
     // MARK: - Error States
