@@ -523,6 +523,7 @@ struct DashboardView: View {
             .padding(.horizontal, DS.Spacing.xs)
 
             cardGrid(cards: viewModel.pinnedCards)
+                .accessibilityElement(children: .contain)
                 .accessibilityIdentifier("dashboard-pinned-grid")
         }
     }
@@ -684,6 +685,7 @@ struct DashboardView: View {
         SectionGroup(title: title, icon: icon, iconColor: iconColor) {
             cardGrid(cards: cards)
         }
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier(accessibilityIdentifier)
     }
 
