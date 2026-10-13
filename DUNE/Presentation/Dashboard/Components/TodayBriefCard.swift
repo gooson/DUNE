@@ -76,6 +76,7 @@ struct TodayBriefCard: View {
                         .font(.caption2.weight(.semibold))
                         .foregroundStyle(.tertiary)
                 }
+                .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
             .accessibilityIdentifier("dashboard-weather-card")

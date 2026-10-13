@@ -176,11 +176,6 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         weatherCard.auditTap()
 
         let weatherDetail = app.descendants(matching: .any)[AXID.weatherDetailScreen].firstMatch
-        if VisualAudit.isEnabled && !weatherDetail.waitForExistence(timeout: 2) {
-            // Preserve the failed row-center capture, then test a painted label.
-            let label = weatherCard.staticTexts.firstMatch
-            if label.exists && label.isHittable { label.auditTap() }
-        }
         XCTAssertTrue(weatherDetail.waitForExistence(timeout: 5), "Weather detail should open from weather card")
     }
 
