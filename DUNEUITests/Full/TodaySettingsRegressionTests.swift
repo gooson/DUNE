@@ -173,6 +173,7 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         XCTAssertTrue(weatherCard.waitForExistence(timeout: 10), "Seeded Today state should render weather card")
         XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.dashboardWeatherCard, maxSwipes: 8),
                       "Weather card should be visible before opening its detail")
+        XCTAssertGreaterThanOrEqual(weatherCard.frame.height, 44, "Weather row should have a finger-sized tap target")
         weatherCard.auditTap()
 
         let weatherDetail = app.descendants(matching: .any)[AXID.weatherDetailScreen].firstMatch

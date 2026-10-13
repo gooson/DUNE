@@ -30,7 +30,7 @@ related_brainstorms: []
 
 ## Approach
 
-Weather `Button` 라벨인 `HStack`에 직사각형 `contentShape`를 부여한다. 기존 테스트가 버튼 중심을 탭하도록 두고, visual audit에서만 동작하는 재탭 fallback을 제거해 실패를 숨기지 않게 한다. Apple의 [SwiftUI NavigationStack 문서](https://developer.apple.com/documentation/swiftui/understanding-the-navigation-stack)에 따른 기존 destination 구성은 이번 실패의 원인이 아니므로 유지한다.
+Weather `Button` 라벨인 `HStack`에 44pt 최소 높이와 직사각형 `contentShape`를 부여한다. 기존 테스트가 버튼 중심을 탭하도록 두고, visual audit에서만 동작하는 재탭 fallback을 제거해 실패를 숨기지 않게 한다. 높이는 품질 검토에서 확인한 21pt 터치 대상도 [Apple의 44pt 권장 기준](https://developer.apple.com/design/tips/)에 맞춘다. 기존 destination 구성은 이번 실패의 원인이 아니므로 유지한다.
 
 ### Alternative Approaches Considered
 
@@ -53,13 +53,13 @@ Weather `Button` 라벨인 `HStack`에 직사각형 `contentShape`를 부여한�
 ### Step 1: Weather 행 터치 영역 수정
 
 - **Files**: `TodayBriefCard.swift`
-- **Changes**: Weather `Button` 라벨의 `HStack`에 `.contentShape(Rectangle())` 추가.
+- **Changes**: Weather `Button` 라벨의 `HStack`에 `.frame(minHeight: 44)`와 `.contentShape(Rectangle())` 추가.
 - **Verification**: 원래 실패한 UI 테스트가 상세 화면 식별자를 찾는지 확인.
 
 ### Step 2: 회귀 테스트가 우회 경로를 사용하지 않게 정리
 
 - **Files**: `TodaySettingsRegressionTests.swift`
-- **Changes**: visual audit 모드의 텍스트 재탭 fallback 제거. 기존 AXID·중앙 탭·상세 화면 assertion 유지.
+- **Changes**: visual audit 모드의 텍스트 재탭 fallback 제거. 기존 AXID·중앙 탭·상세 화면 assertion 유지, 44pt 터치 높이 검증.
 - **Verification**: 관련 Today 테스트와 공통 smoke를 실행하고 결과 로그의 실행 건수 확인.
 
 ### Step 3: 빌드·리뷰·해결책 문서화
