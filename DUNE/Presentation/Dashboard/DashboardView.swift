@@ -118,7 +118,6 @@ struct DashboardView: View {
                 .padding(sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.lg)
                 .coordinateSpace(name: TabHeroStartLine.coordinateSpace)
             }
-            .scrollBounceBehavior(.basedOnSize)
             .accessibilityElement(children: .contain)
             .accessibilityIdentifier("dashboard-root-scroll")
             .onChange(of: scrollToTopSignal) { _, _ in
