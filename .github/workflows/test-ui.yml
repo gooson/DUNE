@@ -3,7 +3,7 @@ name: UI Tests
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
-    branches: [main]
+    branches: [main, 'codex/ios27-*']
     paths:
       - 'DUNE/**'
       - 'DUNEWatch/**'

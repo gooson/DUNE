@@ -142,33 +142,17 @@ if exact:
     print(exact)
     sys.exit(0)
 
-same_name_compatible = select([
+same_name = select([
     entry for entry in candidates
-    if entry['name'] == sim_name and entry['version'][0] >= minimum_major
+    if entry['name'] == sim_name
 ])
-if same_name_compatible:
-    print(same_name_compatible)
+if same_name:
+    print(same_name)
     sys.exit(0)
 
-compatible = select([
-    entry for entry in candidates
-    if entry['version'][0] >= minimum_major
-])
-if compatible:
-    print(compatible)
-    sys.exit(0)
-
-same_runtime = select([
-    entry for entry in candidates
-    if runtime_prefix in entry['runtime']
-])
-if same_runtime:
-    print(same_runtime)
-    sys.exit(0)
-
-any_runtime = select(candidates)
-if any_runtime:
-    print(any_runtime)
+fallback = select(candidates)
+if fallback:
+    print(fallback)
     sys.exit(0)
 
 sys.exit(1)
