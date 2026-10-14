@@ -26,6 +26,7 @@ struct CardioSecondaryPage: View {
             .padding(.horizontal, DS.Spacing.sm)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
+        .accessibilityIdentifier("watch-cardio-secondary")
     }
 
     // MARK: - Profile

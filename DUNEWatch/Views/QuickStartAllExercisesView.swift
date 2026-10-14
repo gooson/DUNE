@@ -5,7 +5,8 @@ import SwiftUI
 struct QuickStartAllExercisesView: View {
     @Environment(WatchConnectivityManager.self) private var connectivity
 
-    @State private var searchText = ""
+    @State private var searchText = ProcessInfo.processInfo.arguments.contains("--uitesting-watch")
+        && ProcessInfo.processInfo.arguments.contains("--ui-watch-no-search-results") ? "zzzxq" : ""
     @State private var selectedCategory: WatchExerciseCategory?
     @State private var cachedFiltered: [WatchExerciseInfo] = []
     @State private var cachedRecent: [WatchExerciseInfo] = []
@@ -38,6 +39,7 @@ struct QuickStartAllExercisesView: View {
                             .foregroundStyle(.secondary)
                         Text(String(localized: "No Exercises"))
                             .font(DS.Typography.exerciseName)
+                            .accessibilityIdentifier("watch-quickstart-empty-title")
                         WatchSyncStatusView()
                     }
                     .frame(maxWidth: .infinity)
@@ -64,6 +66,7 @@ struct QuickStartAllExercisesView: View {
                             VStack(alignment: .leading, spacing: DS.Spacing.sm) {
                                 Label("No Results", systemImage: "magnifyingglass")
                                     .font(DS.Typography.tileTitle)
+                                    .accessibilityIdentifier("watch-quickstart-no-results-title")
                                 Button("Clear Filters") {
                                     searchText = ""
                                     selectedCategory = nil

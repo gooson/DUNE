@@ -37,7 +37,16 @@ struct PostureCaptureView: View {
                     cameraControls
                 }
             }
-            .task { viewModel.setupCamera() }
+            .task {
+                if ProcessInfo.processInfo.arguments.contains("--ui-design-map-posture-result"),
+                   let record = try? modelContext.fetch(FetchDescriptor<PostureAssessmentRecord>(
+                       sortBy: [SortDescriptor(\.date, order: .reverse)]
+                   )).first {
+                    viewModel.showVisualResult(from: record)
+                } else {
+                    viewModel.setupCamera()
+                }
+            }
             .task { viewModel.updateDeviceOrientation(UIDevice.current.orientation) }
             .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
                 viewModel.updateDeviceOrientation(UIDevice.current.orientation)

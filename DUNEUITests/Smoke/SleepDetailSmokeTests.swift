@@ -15,7 +15,8 @@ final class SleepDetailSmokeTests: UITestBaseCase {
             "-AppleLanguages",
             "(en)",
             "-AppleLocale",
-            "en_US"
+            "en_US",
+            "--ui-design-map-sleep-insights"
         ]
     }
 
@@ -63,5 +64,31 @@ final class SleepDetailSmokeTests: UITestBaseCase {
             app.scrollToElementIfNeeded(AXID.sleepSectionExternal, maxSwipes: 4),
             "External Factors section should be reachable by scrolling"
         )
+    }
+
+    func testSleepDebtExplanationOpens() throws {
+        try navigateToSleepDetail()
+        XCTAssertTrue(revealSleepInfoButton("sleep-debt-info-button"))
+        app.buttons["sleep-debt-info-button"].firstMatch.auditTap()
+        XCTAssertTrue(app.scrollViews["sleep-debt-info-sheet"].firstMatch.waitForExistence(timeout: 5))
+        VisualAudit.capture("Sleep debt explanation")
+    }
+
+    func testWakeAnalysisExplanationOpens() throws {
+        try navigateToSleepDetail()
+        XCTAssertTrue(revealSleepInfoButton("sleep-waso-info-button"))
+        app.buttons["sleep-waso-info-button"].firstMatch.auditTap()
+        XCTAssertTrue(app.scrollViews["sleep-waso-info-sheet"].firstMatch.waitForExistence(timeout: 5))
+        VisualAudit.capture("WASO explanation")
+    }
+
+    private func revealSleepInfoButton(_ identifier: String) -> Bool {
+        let detailScroll = app.scrollViews[AXID.metricDetailScreen("sleep")].firstMatch
+        guard detailScroll.waitForExistence(timeout: 5) else { return false }
+        let button = app.buttons[identifier].firstMatch
+        for _ in 0..<14 where !button.isHittable {
+            detailScroll.swipeUp(velocity: .slow)
+        }
+        return button.isHittable
     }
 }

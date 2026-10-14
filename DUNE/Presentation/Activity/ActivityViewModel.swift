@@ -393,6 +393,18 @@ final class ActivityViewModel {
     /// Recomputes injury risk assessment from available data.
     /// Active injuries are passed from the View's @Query since the ViewModel doesn't access SwiftData.
     func recomputeInjuryRisk(activeInjuries: [InjuryInfo] = []) {
+        if ProcessInfo.processInfo.arguments.contains("--ui-design-map-activity-routes") {
+            injuryRiskAssessment = InjuryRiskAssessment(
+                score: 42,
+                factors: [
+                    .init(type: .muscleFatigue, contribution: 24,
+                          detail: "Recent strength training load"),
+                    .init(type: .sleepDeficit, contribution: 18,
+                          detail: "Recent sleep duration")
+                ]
+            )
+            return
+        }
         guard !allExerciseSnapshots.isEmpty || !recentWorkouts.isEmpty else {
             injuryRiskAssessment = nil
             return
@@ -452,6 +464,23 @@ final class ActivityViewModel {
             }
         }
         guard !Task.isCancelled, requestID == weeklyReportRequestID else { return }
+
+        if ProcessInfo.processInfo.arguments.contains("--ui-design-map-activity-routes") {
+            weeklyReport = WorkoutReport(
+                period: .weekly,
+                startDate: Calendar.current.date(byAdding: .day, value: -7, to: .now) ?? .now,
+                endDate: .now,
+                stats: .init(totalSessions: 3, totalVolume: 2_400, totalDuration: 5_400,
+                             activeDays: 3, averageIntensity: 0.72, volumeChangePercent: 0.12),
+                muscleBreakdown: [
+                    .init(muscleGroup: .chest, volume: 1_100, sessions: 2),
+                    .init(muscleGroup: .quadriceps, volume: 1_300, sessions: 1)
+                ],
+                highlights: [.init(type: .consistency, description: "Three active days this week")],
+                formattedSummary: "Three sessions across strength training this week."
+            )
+            return
+        }
 
         let allSnapshots = allExerciseSnapshots
         guard !allSnapshots.isEmpty else {

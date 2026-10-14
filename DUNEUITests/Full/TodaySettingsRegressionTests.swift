@@ -171,8 +171,26 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
 
         let weatherCard = app.descendants(matching: .any)[AXID.dashboardWeatherCard].firstMatch
         XCTAssertTrue(weatherCard.waitForExistence(timeout: 10), "Seeded Today state should render weather card")
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.dashboardWeatherCard, maxSwipes: 8),
-                      "Weather card should be visible before opening its detail")
+        let dashboardScroll = app.scrollViews["dashboard-root-scroll"].firstMatch
+        XCTAssertTrue(dashboardScroll.waitForExistence(timeout: 5))
+        func visibleWeatherViewport() -> CGRect {
+            let scrollFrame = dashboardScroll.frame.intersection(app.windows.firstMatch.frame)
+            let top = max(scrollFrame.minY, app.navigationBars.firstMatch.frame.maxY + 8)
+            let bottom = min(scrollFrame.maxY, app.tabBars.firstMatch.frame.minY - 8)
+            return CGRect(x: scrollFrame.minX, y: top, width: scrollFrame.width,
+                          height: max(0, bottom - top))
+        }
+        for _ in 0..<24 {
+            let viewport = visibleWeatherViewport()
+            if weatherCard.exists && weatherCard.isHittable && viewport.contains(weatherCard.frame) { break }
+            if weatherCard.exists && weatherCard.frame.midY < viewport.midY {
+                dashboardScroll.swipeDown(velocity: .slow)
+            } else {
+                dashboardScroll.swipeUp(velocity: .slow)
+            }
+        }
+        XCTAssertTrue(weatherCard.isHittable && visibleWeatherViewport().contains(weatherCard.frame),
+                      "Weather card should be fully below the navigation bar before opening its detail")
         XCTAssertGreaterThanOrEqual(weatherCard.frame.height, 44, "Weather row should have a finger-sized tap target")
         weatherCard.auditTap()
 
@@ -182,14 +200,13 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
 
     func testPinnedMetricsEditorOpensAndDismisses() throws {
         dismissMorningBriefingIfNeeded()
-
-        XCTAssertTrue(
-            app.scrollToHittableElementIfNeeded(AXID.dashboardPinnedEdit, maxSwipes: 8),
-            "Pinned edit button should be reachable"
-        )
-
         let editButton = app.descendants(matching: .any)[AXID.dashboardPinnedEdit].firstMatch
         XCTAssertTrue(editButton.waitForExistence(timeout: 5), "Pinned edit button should exist")
+        let dashboardScroll = app.scrollViews["dashboard-root-scroll"].firstMatch
+        XCTAssertTrue(dashboardScroll.waitForExistence(timeout: 5))
+        for _ in 0..<18 where !editButton.isHittable {
+            dashboardScroll.swipeUp(velocity: .slow)
+        }
         XCTAssertTrue(waitForHittable(editButton, timeout: 5), "Pinned edit button should be tappable")
         editButton.auditTap()
 

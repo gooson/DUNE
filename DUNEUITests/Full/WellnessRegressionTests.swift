@@ -397,6 +397,18 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
         captureScrollContent("Posture detail", count: 5)
     }
 
+    func testWellnessRecentPostureRecordOpensDetail() throws {
+        navigateToWellness()
+        let record = app.buttons.matching(NSPredicate(
+            format: "identifier BEGINSWITH %@", "wellness-posture-record-"
+        )).firstMatch
+        reveal(record)
+        XCTAssertTrue(record.exists && record.isHittable, "Recent posture record should be reachable")
+        record.auditTap()
+        XCTAssertTrue(app.navigationBars["Assessment Detail"].firstMatch.waitForExistence(timeout: 5))
+        VisualAudit.capture("Wellness recent posture record detail")
+    }
+
     func testPostureDetailScoreAcrossFoldStatesAtMaximumTextSize() throws {
         guard ProcessInfo.processInfo.environment["DUNE_VISUAL_AUDIT_FOLD"] == "1" else {
             throw XCTSkip("Opt-in fold and native posture score audit only")
@@ -560,6 +572,18 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
             XCTAssertTrue(close.waitForExistence(timeout: 5))
             close.auditTap()
         }
+    }
+
+    func testVisualAuditPostureResultOnSimulator() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments.append("--ui-design-map-posture-result")
+        launchApp(with: configuration)
+        navigateToWellness()
+        XCTAssertTrue(app.waitAndTapToolbarAction(AXID.wellnessToolbarAdd))
+        XCTAssertTrue(app.waitAndTap("wellness-menu-posture"))
+        XCTAssertTrue(app.descendants(matching: .any)["posture-result-screen"].firstMatch
+            .waitForExistence(timeout: 10), "Seeded posture result should open")
+        VisualAudit.capture("Posture result from visual audit record")
     }
 
     private func openHistory() {

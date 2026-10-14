@@ -78,5 +78,6 @@ struct WatchExerciseReorderView: View {
         }
         .scrollContentBackground(.hidden)
         .background { WatchWaveBackground() }
+        .accessibilityIdentifier("watch-exercise-reorder-screen")
     }
 }

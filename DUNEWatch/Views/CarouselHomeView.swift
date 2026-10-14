@@ -122,6 +122,7 @@ struct CarouselHomeView: View {
                         .foregroundStyle(.secondary)
                         .frame(minWidth: 44, minHeight: 44)
                 }
+                .accessibilityIdentifier("watch-home-posture-settings")
                 .buttonStyle(.plain)
             }
         }
@@ -293,6 +294,11 @@ struct CarouselHomeView: View {
     /// Pre-computes snapshots and daysAgo to avoid UserDefaults reads in body (P1 #2, P2 #5).
     /// @State caching with onChange invalidation (Correction #47, #87).
     private func rebuildCards() {
+        if ProcessInfo.processInfo.arguments.contains("--uitesting-watch")
+            && ProcessInfo.processInfo.arguments.contains("--ui-watch-home-empty") {
+            cards = []
+            return
+        }
         var result: [CarouselCard] = []
         let library = connectivity.exerciseLibrary
 

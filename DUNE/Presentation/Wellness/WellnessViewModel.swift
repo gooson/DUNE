@@ -148,6 +148,20 @@ final class WellnessViewModel {
     /// Recomputes tonight's sleep quality prediction from available data.
     /// Call after loadData completes, or when relevant inputs change.
     func recomputeSleepPrediction(todayWorkoutIntensity: Double = 0) {
+        if ProcessInfo.processInfo.arguments.contains("--ui-design-map-sleep-prediction") {
+            sleepPrediction = SleepQualityPrediction(
+                predictedScore: 78,
+                confidence: .medium,
+                factors: [
+                    .init(type: .recentSleepPattern, impact: .positive,
+                          detail: "Recent sleep has been consistent"),
+                    .init(type: .conditionLevel, impact: .neutral,
+                          detail: "Today's condition is steady")
+                ],
+                tips: ["Keep a regular bedtime tonight"]
+            )
+            return
+        }
         guard !sleepDetailTrend.isEmpty else {
             sleepPrediction = nil
             return

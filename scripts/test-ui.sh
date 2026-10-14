@@ -286,6 +286,11 @@ TEST_CMD=(xcodebuild test -project "$PROJECT_FILE"
 
 TEST_CMD+=(-testPlan "$TEST_PLAN")
 echo "Using test plan: $TEST_PLAN"
+if [[ "$TEST_PLAN" == "DUNEUITests-DesignCapture" ]]; then
+    # Screenshot attachments are the artifact; sysdiagnose after expected route
+    # failures can block xcresult finalization for several minutes.
+    TEST_CMD+=(-collect-test-diagnostics never)
+fi
 
 if [[ "$SMOKE_MODE" -eq 1 ]]; then
     SMOKE_ONLY=(

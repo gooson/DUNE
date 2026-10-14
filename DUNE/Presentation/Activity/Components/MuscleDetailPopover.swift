@@ -52,9 +52,7 @@ struct MuscleDetailPopover: View {
                     .frame(width: headerIconSize, height: headerIconSize)
 
                 VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-                    Text(muscle.displayName)
-                        .font(.headline)
-                        .fixedSize(horizontal: false, vertical: true)
+                    muscleTitle
                 }
 
                 if !dynamicTypeSize.isAccessibilitySize { Spacer() }
@@ -65,24 +63,24 @@ struct MuscleDetailPopover: View {
             // Stats grid
             if let state = fatigueState {
                 statsGrid(state: state)
-
-                if let score = state.compoundScore {
-                    Button {
-                        showingInfoSheet = true
-                    } label: {
-                        HStack(spacing: DS.Spacing.xxs) {
-                            Image(systemName: "info.circle")
-                                .font(.caption)
-                            Text("View Calculation")
-                                .font(.caption)
-                        }
-                        .foregroundStyle(DS.Color.activity)
+            }
+            if let score = fatigueState?.compoundScore {
+                Button {
+                    showingInfoSheet = true
+                } label: {
+                    HStack(spacing: DS.Spacing.xxs) {
+                        Image(systemName: "info.circle")
+                            .font(.caption)
+                        Text("View Calculation")
+                            .font(.caption)
                     }
-                    .sheet(isPresented: $showingInfoSheet) {
-                        FatigueInfoSheet(score: score)
-                    }
+                    .foregroundStyle(DS.Color.activity)
                 }
-            } else if isInline {
+                .accessibilityIdentifier("activity-muscle-detail-calculation")
+                .sheet(isPresented: $showingInfoSheet) {
+                    FatigueInfoSheet(score: score)
+                }
+            } else if isInline && fatigueState == nil {
                 Text("No recent activity for this muscle")
                     .font(.subheadline)
                     .foregroundStyle(DS.Color.textSecondary)
@@ -99,6 +97,18 @@ struct MuscleDetailPopover: View {
                     }
                 }
             }
+        }
+    }
+
+    @ViewBuilder
+    private var muscleTitle: some View {
+        let title = Text(muscle.displayName)
+            .font(.headline)
+            .fixedSize(horizontal: false, vertical: true)
+        if isInline {
+            title
+        } else {
+            title.accessibilityIdentifier("activity-muscle-detail-popover-sheet")
         }
     }
 

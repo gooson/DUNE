@@ -65,6 +65,7 @@ final class WatchSetRPEEntryUITests: WatchUITestBaseCase {
 
         XCTAssertTrue(elementExists(WatchAXID.setInputScreen, timeout: 5))
         XCTAssertTrue(elementExists("watch-set-input-use-lighter-weight", timeout: 5))
+        captureDesignState("S07", visible: "watch-set-input-use-lighter-weight")
         XCTAssertTrue(tapElement("watch-set-input-use-lighter-weight", timeout: 5))
         XCTAssertFalse(elementExists("watch-set-input-use-lighter-weight", timeout: 1))
     }
