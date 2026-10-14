@@ -167,6 +167,8 @@ struct ContentView: View {
     @State private var notificationRouteSignal = 0
     @State private var notificationHubSignal = 0
     @State private var lifeChecklistSignal = 0
+    private let shortcutTemplateID: UUID?
+    private let shortcutTemplateSignal: Int
     #if DEBUG
     @State private var didOpenUITestNotification = false
     #endif
@@ -177,13 +179,17 @@ struct ContentView: View {
         refreshCoordinator: AppRefreshCoordinating? = nil,
         scoreRefreshService: ScoreRefreshService? = nil,
         launchExperienceReady: Bool = true,
-        canLoadHealthKitData: Bool = true
+        canLoadHealthKitData: Bool = true,
+        shortcutTemplateID: UUID? = nil,
+        shortcutTemplateSignal: Int = 0
     ) {
         self.sharedHealthDataService = sharedHealthDataService
         self.refreshCoordinator = refreshCoordinator
         self.scoreRefreshService = scoreRefreshService
         self.launchExperienceReady = launchExperienceReady
         self.canLoadHealthKitData = canLoadHealthKitData
+        self.shortcutTemplateID = shortcutTemplateID
+        self.shortcutTemplateSignal = shortcutTemplateSignal
         _selectedSection = State(initialValue: Self.initialSectionForUITests())
     }
 
@@ -220,7 +226,9 @@ struct ContentView: View {
                         scrollToTopSignal: activityScrollToTopSignal,
                         refreshSignal: refreshSignal,
                         notificationWorkoutID: notificationOpenWorkoutID,
-                        notificationRouteSignal: notificationRouteSignal
+                        notificationRouteSignal: notificationRouteSignal,
+                        shortcutTemplateID: shortcutTemplateID,
+                        shortcutTemplateSignal: shortcutTemplateSignal
                     )
                     .navigationDestination(for: NotificationPresentationDestination.self) { destination in
                         notificationDestinationView(for: destination)
@@ -277,6 +285,10 @@ struct ContentView: View {
         .environment(\.appTheme, selectedTheme)
         .tint(selectedTheme.accentColor)
         .tabViewStyle(.sidebarAdaptable)
+        .task(id: shortcutTemplateSignal) {
+            guard shortcutTemplateSignal > 0, shortcutTemplateID != nil else { return }
+            selectedSection = .train
+        }
         .background { HabitReminderSyncView() }
         // Foreground refresh: scenePhase .background → .active (Correction #16/#60)
         .onChange(of: scenePhase) { oldPhase, newPhase in

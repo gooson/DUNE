@@ -124,6 +124,8 @@ struct ActivityView: View {
     private let scrollToTopSignal: Int
     private let notificationWorkoutID: String?
     private let notificationRouteSignal: Int
+    private let shortcutTemplateID: UUID?
+    private let shortcutTemplateSignal: Int
     private let notificationPersonalRecordsSignal: Int
 
     private enum ScrollAnchor: Hashable {
@@ -162,6 +164,8 @@ struct ActivityView: View {
         refreshSignal: Int = 0,
         notificationWorkoutID: String? = nil,
         notificationRouteSignal: Int = 0,
+        shortcutTemplateID: UUID? = nil,
+        shortcutTemplateSignal: Int = 0,
         notificationPersonalRecordsSignal: Int = 0
     ) {
         _viewModel = State(initialValue: ActivityViewModel(sharedHealthDataService: sharedHealthDataService, scoreRefreshService: scoreRefreshService))
@@ -170,6 +174,8 @@ struct ActivityView: View {
         self.scoreRefreshService = scoreRefreshService
         self.notificationWorkoutID = notificationWorkoutID
         self.notificationRouteSignal = notificationRouteSignal
+        self.shortcutTemplateID = shortcutTemplateID
+        self.shortcutTemplateSignal = shortcutTemplateSignal
         self.notificationPersonalRecordsSignal = notificationPersonalRecordsSignal
     }
 
@@ -454,6 +460,13 @@ struct ActivityView: View {
         }
         .task(id: notificationRouteSignal) {
             await handleExternalNotificationRoute()
+        }
+        .task(id: shortcutTemplateSignal) {
+            guard shortcutTemplateSignal > 0, let shortcutTemplateID else { return }
+            let templates = (try? modelContext.fetch(FetchDescriptor<WorkoutTemplate>())) ?? []
+            guard let template = templates.first(where: { $0.id == shortcutTemplateID }),
+                  !template.exerciseEntries.isEmpty else { return }
+            startFromTemplate(template)
         }
         .task(id: notificationPersonalRecordsSignal) {
             await handleExternalPersonalRecordsRoute()

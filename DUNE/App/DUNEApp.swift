@@ -2,6 +2,7 @@ import SwiftUI
 import SwiftData
 import HealthKit
 import UserNotifications
+import AppIntents
 
 @main
 struct DUNEApp: App {
@@ -28,6 +29,8 @@ struct DUNEApp: App {
     @State private var hasForcedAutomaticWhatsNewPresentation = false
 
     @State private var appRuntime: AppRuntime
+    @State private var shortcutTemplateID: UUID?
+    @State private var shortcutTemplateSignal = 0
     private let notificationService: any NotificationService
     private let notificationCenterDelegate: AppNotificationCenterDelegate
     private let cloudKitSetupBackgroundTask: CloudKitSetupBackgroundTask
@@ -279,7 +282,10 @@ struct DUNEApp: App {
         cloudKitSetupBackgroundTask.startObserving()
         self.cloudKitSetupBackgroundTask = cloudKitSetupBackgroundTask
         UNUserNotificationCenter.current().delegate = notificationCenterDelegate
-        _appRuntime = State(initialValue: Self.makeAppRuntime(notificationService: notifService))
+        let runtime = Self.makeAppRuntime(notificationService: notifService)
+        _appRuntime = State(initialValue: runtime)
+        DUNEAppIntentStore.shared.configure(container: runtime.modelContainer)
+        DUNEAppShortcuts.updateAppShortcutParameters()
     }
 
     private static func deleteStoreFiles(at url: URL) {
@@ -434,6 +440,16 @@ struct DUNEApp: App {
         .tint(selectedTheme.accentColor)
         .preferredColorScheme(Self.forcedUITestColorScheme)
         .background { AppWindowSceneReader(kind: .primary) }
+        .handlesExternalEvents(preferring: ["OpenWorkoutTemplateIntent"], allowing: ["OpenWorkoutTemplateIntent"])
+        .onAppIntentExecution(OpenWorkoutTemplateIntent.self) { intent in
+            do {
+                try DUNEAppIntentStore.shared.validateWorkoutTemplate(id: intent.target.id)
+            } catch {
+                return
+            }
+            shortcutTemplateID = intent.target.id
+            shortcutTemplateSignal += 1
+        }
         .onChange(of: showConsentSheet) { oldValue, newValue in
             guard oldValue, !newValue else { return }
             Task { await advanceLaunchExperienceFlowIfNeeded() }
@@ -466,7 +482,9 @@ struct DUNEApp: App {
             refreshCoordinator: appRuntime.refreshCoordinator,
             scoreRefreshService: appRuntime.scoreRefreshService,
             launchExperienceReady: isLaunchExperienceReady,
-            canLoadHealthKitData: canLoadHealthKitData
+            canLoadHealthKitData: canLoadHealthKitData,
+            shortcutTemplateID: shortcutTemplateID,
+            shortcutTemplateSignal: shortcutTemplateSignal
         )
         .id(appRuntime.revision)
         .sheet(isPresented: $showConsentSheet) {
@@ -565,6 +583,7 @@ struct DUNEApp: App {
             notificationService: notificationService,
             cloudSyncEnabled: nextValue
         )
+        DUNEAppIntentStore.shared.configure(container: appRuntime.modelContainer)
 
         if isLaunchExperienceReady {
             hasStartedRuntimeServices = false
