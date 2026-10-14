@@ -11,6 +11,7 @@ related_solutions:
   - docs/solutions/healthkit/flights-climbed-tracking.md
   - docs/solutions/healthkit/2026-03-05-watch-cardio-step-count-collection.md
   - docs/solutions/general/2026-03-10-watch-stair-climber-mixed-cardio-fallback.md
+  - docs/solutions/general/2026-10-14-watch-stair-handrail-inactivity.md
 ---
 
 # Solution: Watch Machine Cardio Inactivity Signal
@@ -71,6 +72,8 @@ The helper keeps the rule explicit:
 - all cardio: `distance` or `steps`
 - stair cardio: `floorsClimbed`
 - machine cardio: `activeCalories` fallback when `supportsMachineLevel == true`
+
+2026-10-14 업데이트: 손잡이를 잡은 계단 기구 운동에서는 위 지표가 모두 정적일 수 있다. 현재 `CardioInactivityPolicy`는 `stairClimbing`과 `stairStepper`의 일반 정지 알림 및 자동 종료를 실행하지 않는다. 자세한 이유와 회귀 테스트는 관련 해결책 문서를 참조한다.
 
 ## Prevention
 
