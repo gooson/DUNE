@@ -133,7 +133,7 @@ class RunnerArgvTests(unittest.TestCase):
             path = Path(directory) / "UI results" / "test log.txt"
             result, command = dry_run("--log-file", str(path))
             self.assertEqual(result.returncode, 0, result.stderr)
-            self.assertEqual(values(command, "-destination"), ["platform=iOS Simulator,name=iPhone 17,OS=26.2"])
+            self.assertEqual(values(command, "-destination"), ["platform=iOS Simulator,name=iPhone 17,OS=27.0"])
             self.assertFalse(path.parent.exists())
 
     def test_invalid_selector_and_excluded_plan_fail(self) -> None:

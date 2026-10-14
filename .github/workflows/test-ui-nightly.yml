@@ -17,7 +17,7 @@ env:
 
 jobs:
   nightly-ios-unit-tests:
-    runs-on: macos-15
+    runs-on: xcode-27
     timeout-minutes: 45
 
     steps:
@@ -25,7 +25,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Select Xcode
-        run: sudo xcode-select -s /Applications/Xcode_26.2.app/Contents/Developer
+        run: sudo xcode-select -s /Applications/Xcode_27.app/Contents/Developer
 
       - name: Simulator diagnostics
         if: always()
@@ -54,7 +54,7 @@ jobs:
           retention-days: 14
 
   nightly-watch-unit-tests:
-    runs-on: macos-15
+    runs-on: xcode-27
     timeout-minutes: 45
 
     steps:
@@ -62,7 +62,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Select Xcode
-        run: sudo xcode-select -s /Applications/Xcode_26.2.app/Contents/Developer
+        run: sudo xcode-select -s /Applications/Xcode_27.app/Contents/Developer
 
       - name: Simulator diagnostics
         if: always()
@@ -91,7 +91,7 @@ jobs:
           retention-days: 14
 
   nightly-ios-ui-tests:
-    runs-on: macos-15
+    runs-on: xcode-27
     timeout-minutes: 90
 
     steps:
@@ -99,7 +99,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Select Xcode
-        run: sudo xcode-select -s /Applications/Xcode_26.2.app/Contents/Developer
+        run: sudo xcode-select -s /Applications/Xcode_27.app/Contents/Developer
 
       - name: Simulator diagnostics
         if: always()
@@ -128,7 +128,7 @@ jobs:
           retention-days: 14
 
   nightly-watch-ui-tests:
-    runs-on: macos-15
+    runs-on: xcode-27
     timeout-minutes: 90
 
     steps:
@@ -136,7 +136,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Select Xcode
-        run: sudo xcode-select -s /Applications/Xcode_26.2.app/Contents/Developer
+        run: sudo xcode-select -s /Applications/Xcode_27.app/Contents/Developer
 
       - name: Simulator diagnostics
         if: always()

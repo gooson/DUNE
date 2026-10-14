@@ -22,11 +22,11 @@ PROJECT_SPEC="DUNE/project.yml"
 PROJECT_FILE="DUNE/DUNE.xcodeproj"
 IOS_SCHEME="DUNETests"
 IOS_SIM_NAME="${DUNE_SIM_NAME:-iPhone 17}"
-IOS_SIM_OS="${DUNE_SIM_OS:-26.0}"
+IOS_SIM_OS="${DUNE_SIM_OS:-27.0}"
 IOS_DESTINATION="${DAILVE_IOS_DESTINATION:-platform=iOS Simulator,name=${IOS_SIM_NAME},OS=${IOS_SIM_OS}}"
 WATCH_SCHEME="DUNEWatchTests"
 WATCH_SIM_NAME="${DUNE_WATCH_SIM_NAME:-Apple Watch Series 11 (46mm)}"
-WATCH_SIM_OS="${DUNE_WATCH_SIM_OS:-26.2}"
+WATCH_SIM_OS="${DUNE_WATCH_SIM_OS:-27.0}"
 WATCH_DESTINATION="${DAILVE_WATCH_DESTINATION:-platform=watchOS Simulator,name=${WATCH_SIM_NAME},OS=${WATCH_SIM_OS}}"
 DERIVED_DATA_DIR="${DAILVE_UNIT_TEST_DERIVED_DATA_DIR:-.deriveddata/unit-tests}"
 LOG_DIR=".xcodebuild"
@@ -116,6 +116,8 @@ for runtime, devices in data.get('devices', {}).items():
     if not match:
         continue
     version = tuple(int(part or 0) for part in match.groups())
+    if version[0] < minimum_major:
+        continue
     for device in devices:
         if not device.get('isAvailable', True):
             continue
@@ -181,11 +183,11 @@ sys.exit(1)
 }
 
 if [[ "$MODE" != "watch" && -z "${DAILVE_IOS_DESTINATION:-}" ]]; then
-    IOS_DESTINATION="$(resolve_sim_destination "iOS" "iOS-${IOS_SIM_OS//./-}" "$IOS_SIM_NAME" "$IOS_SIM_OS" "26")"
+    IOS_DESTINATION="$(resolve_sim_destination "iOS" "iOS-${IOS_SIM_OS//./-}" "$IOS_SIM_NAME" "$IOS_SIM_OS" "27")"
 fi
 
 if [[ "$MODE" != "ios" && -z "${DAILVE_WATCH_DESTINATION:-}" ]]; then
-    WATCH_DESTINATION="$(resolve_sim_destination "watchOS" "watchOS-${WATCH_SIM_OS//./-}" "$WATCH_SIM_NAME" "$WATCH_SIM_OS" "26")"
+    WATCH_DESTINATION="$(resolve_sim_destination "watchOS" "watchOS-${WATCH_SIM_OS//./-}" "$WATCH_SIM_NAME" "$WATCH_SIM_OS" "27")"
 fi
 
 if [[ "$MODE" != "watch" ]]; then

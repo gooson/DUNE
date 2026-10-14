@@ -74,7 +74,7 @@ SwiftData `ResultsObserver`/`HistoryObserver`, 자세 이미지 AI, Private Clou
 | File | Change Type | Description |
 |---|---|---|
 | `DUNE/project.yml`, `DUNE/DUNE.xcodeproj/project.pbxproj` | 수정 | 27.0 최소 배포 버전 동기화 |
-| `scripts/test-unit.sh`, `scripts/test-ui.sh`, `scripts/test-watch-ui.sh`, `CLAUDE.md` | 수정 | 테스트 런타임 기본값과 프로젝트 목표 설명 동기화 |
+| `scripts/test-unit.sh`, `scripts/test-ui.sh`, `scripts/test-watch-ui.sh`, `scripts/tests/test_ui_test_runner.py`, `.github/workflows/*.yml`, `CLAUDE.md` | 수정 | 테스트 런타임·CI Xcode 이미지와 프로젝트 목표 설명 동기화 |
 | `DUNE/Data/HealthKit/HealthKitManager.swift`, 관련 QueryService·ViewModel·Tests | 수정 | 기간 제한 권한과 부분 데이터 처리 |
 | `DUNE/Domain/UseCases/CalculateConditionScoreUseCase.swift`, 관련 Tests | 조건부 수정 | 고빈도 HRV 영향 검증과 필요한 안정화 |
 | `DUNE/Domain/Models/HeartRateZone.swift`, `DUNE/Data/HealthKit/HeartRateQueryService.swift`, `DUNEWatch/Managers/WorkoutManager.swift`, 관련 View·Tests | 수정 | 개인화 구간 모델과 실시간/사후 표시 |
@@ -88,9 +88,9 @@ SwiftData `ResultsObserver`/`HistoryObserver`, 자세 이미지 AI, Private Clou
 
 ### Step 1: Deployment baseline PR
 
-- **Files**: `DUNE/project.yml`, 생성 프로젝트, `scripts/test-*.sh`, `CLAUDE.md`.
-- **Changes**: 세 플랫폼 및 확장 타깃의 배포 버전을 27.0으로 맞추고, 26.x 시뮬레이터로 되돌아가는 기본값을 제거한다.
-- **Verification**: xcodegen 재생성, build, 프로젝트 build settings의 모든 target 확인, iOS/watchOS 27 시뮬레이터 대상 테스트 명령 확인.
+- **Files**: `DUNE/project.yml`, 생성 프로젝트, `scripts/test-*.sh`, 테스트 실행기 계약, `.github/workflows/*.yml`, `CLAUDE.md`.
+- **Changes**: 세 플랫폼 및 확장 타깃의 배포 버전을 27.0으로 맞추고, 26.x 시뮬레이터로 되돌아가는 기본값을 제거한다. CI를 iOS/watchOS/visionOS 27 SDK가 포함된 Xcode 27 이미지로 옮긴다.
+- **Verification**: xcodegen 재생성, build, 프로젝트 build settings의 모든 target 확인, iOS/watchOS 27 시뮬레이터 대상 테스트 명령과 CI 계약 확인.
 
 ### Step 2: HealthKit limited read authorization PR
 
