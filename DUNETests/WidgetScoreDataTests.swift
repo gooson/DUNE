@@ -88,6 +88,43 @@ struct WidgetScoreDataTests {
         #expect(data.wellnessScore == 90)
     }
 
+    @Test("Configured metric selects its own score, status, and message")
+    func metricSelection() {
+        let data = WidgetScoreData(
+            conditionScore: 82, conditionStatusRaw: "good", conditionMessage: "Condition detail",
+            readinessScore: 45, readinessStatusRaw: "light", readinessMessage: "Readiness detail",
+            wellnessScore: 63, wellnessStatusRaw: "fair", wellnessMessage: "Wellness detail",
+            updatedAt: .now
+        )
+
+        #expect(data.metric(.condition) == WidgetMetricSnapshot(
+            score: 82, statusRaw: "good", message: "Condition detail"
+        ))
+        #expect(data.metric(.readiness) == WidgetMetricSnapshot(
+            score: 45, statusRaw: "light", message: "Readiness detail"
+        ))
+        #expect(data.metric(.wellness) == WidgetMetricSnapshot(
+            score: 63, statusRaw: "fair", message: "Wellness detail"
+        ))
+    }
+
+    @Test("Unavailable configured metric does not borrow another score")
+    func unavailableMetricSelection() {
+        let data = WidgetScoreData(
+            conditionScore: 82, conditionStatusRaw: "good", conditionMessage: "Condition detail",
+            readinessScore: nil, readinessStatusRaw: nil, readinessMessage: nil,
+            wellnessScore: nil, wellnessStatusRaw: nil, wellnessMessage: nil,
+            updatedAt: .now
+        )
+
+        #expect(data.metric(.readiness) == WidgetMetricSnapshot(
+            score: nil, statusRaw: nil, message: nil
+        ))
+        #expect(data.metric(.wellness) == WidgetMetricSnapshot(
+            score: nil, statusRaw: nil, message: nil
+        ))
+    }
+
     @Test("App group ID is correct")
     func appGroupID() {
         #expect(WidgetScoreData.appGroupID == "group.com.raftel.dailve")
