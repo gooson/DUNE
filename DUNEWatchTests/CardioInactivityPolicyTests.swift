@@ -9,6 +9,7 @@ struct CardioInactivityPolicyTests {
         let now = Date()
 
         let result = CardioInactivityPolicy.evaluate(
+            workoutMode: .cardio(activityType: .running, isOutdoor: true),
             inactivityDuration: CardioInactivityPolicy.softNudgeAfter - 1,
             autoEndDeadline: nil,
             now: now
@@ -22,6 +23,7 @@ struct CardioInactivityPolicyTests {
         let now = Date()
 
         let result = CardioInactivityPolicy.evaluate(
+            workoutMode: .cardio(activityType: .running, isOutdoor: true),
             inactivityDuration: CardioInactivityPolicy.softNudgeAfter,
             autoEndDeadline: nil,
             now: now
@@ -35,6 +37,7 @@ struct CardioInactivityPolicyTests {
         let now = Date()
 
         let result = CardioInactivityPolicy.evaluate(
+            workoutMode: .cardio(activityType: .running, isOutdoor: true),
             inactivityDuration: CardioInactivityPolicy.confirmationAfter,
             autoEndDeadline: nil,
             now: now
@@ -56,6 +59,7 @@ struct CardioInactivityPolicyTests {
         let futureDeadline = now.addingTimeInterval(4)
 
         let beforeDeadline = CardioInactivityPolicy.evaluate(
+            workoutMode: .cardio(activityType: .running, isOutdoor: true),
             inactivityDuration: 999,
             autoEndDeadline: futureDeadline,
             now: now
@@ -63,10 +67,39 @@ struct CardioInactivityPolicyTests {
         #expect(beforeDeadline == .confirmation(deadline: futureDeadline))
 
         let afterDeadline = CardioInactivityPolicy.evaluate(
+            workoutMode: .cardio(activityType: .running, isOutdoor: true),
             inactivityDuration: 999,
             autoEndDeadline: futureDeadline,
             now: futureDeadline
         )
         #expect(afterDeadline == .autoEnd)
+    }
+
+    @Test("Stair machine workouts do not prompt or auto-end from missing wrist motion")
+    func stairMachineIgnoresMissingMotion() {
+        let now = Date()
+
+        for activityType in [WorkoutActivityType.stairClimbing, .stairStepper] {
+            let workoutMode = WorkoutMode.cardio(activityType: activityType, isOutdoor: false)
+
+            #expect(CardioInactivityPolicy.evaluate(
+                workoutMode: workoutMode,
+                inactivityDuration: CardioInactivityPolicy.softNudgeAfter,
+                autoEndDeadline: nil,
+                now: now
+            ) == .none)
+            #expect(CardioInactivityPolicy.evaluate(
+                workoutMode: workoutMode,
+                inactivityDuration: CardioInactivityPolicy.confirmationAfter,
+                autoEndDeadline: nil,
+                now: now
+            ) == .none)
+            #expect(CardioInactivityPolicy.evaluate(
+                workoutMode: workoutMode,
+                inactivityDuration: CardioInactivityPolicy.confirmationAfter + 30,
+                autoEndDeadline: now.addingTimeInterval(-1),
+                now: now
+            ) == .none)
+        }
     }
 }
