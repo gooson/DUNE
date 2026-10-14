@@ -17,6 +17,7 @@ PROJECT_FILE="DUNE/DUNE.xcodeproj"
 DESTINATION="${DAILVE_IOS_DESTINATION:-platform=iOS Simulator,name=iPhone 17,OS=27.0}"
 DERIVED_DATA_DIR="${DAILVE_AI_EVALUATION_DERIVED_DATA_DIR:-.deriveddata/ai-evaluations}"
 LOG_FILE="${DAILVE_AI_EVALUATION_LOG_FILE:-.xcodebuild/ai-evaluations.log}"
+RESULT_BUNDLE="$(dirname "$LOG_FILE")/ai-evaluations-$(date +%Y%m%d-%H%M%S)-$$.xcresult"
 REGENERATE=1
 
 while [[ $# -gt 0 ]]; do
@@ -42,6 +43,7 @@ xcodebuild test \
     -scheme DUNETests \
     -destination "$DESTINATION" \
     -derivedDataPath "$DERIVED_DATA_DIR" \
+    -resultBundlePath "$RESULT_BUNDLE" \
     -only-testing:DUNETests/AIFeatureEvaluationTests \
     CODE_SIGNING_ALLOWED=NO \
     CODE_SIGNING_REQUIRED=NO \
@@ -56,4 +58,15 @@ if [[ "$TEST_EXIT" -ne 0 ]]; then
     exit "$TEST_EXIT"
 fi
 
-echo "AI feature evaluation passed. Full log: $LOG_FILE"
+RESULT_JSON="${LOG_FILE}.result.json"
+if ! xcrun xcresulttool get test-results tests --path "$RESULT_BUNDLE" --compact >"$RESULT_JSON"; then
+    echo "AI feature evaluation result could not be inspected. Bundle: $RESULT_BUNDLE" >&2
+    exit 2
+fi
+
+if ! python3 "$ROOT_DIR/scripts/lib/verify-ai-evaluation-result.py" "$RESULT_JSON"; then
+    echo "AI feature evaluation is incomplete. Bundle: $RESULT_BUNDLE" >&2
+    exit 2
+fi
+
+echo "AI live feature evaluation passed. Full log: $LOG_FILE; bundle: $RESULT_BUNDLE"
