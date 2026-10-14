@@ -23,6 +23,13 @@ protocol HeartRateQuerying: Sendable {
     func fetchHeartRateRecovery(forWorkoutID workoutID: String) async throws -> HeartRateRecovery?
 }
 
+protocol WorkoutZoneDistributionQuerying: Sendable {
+    func fetchWorkoutZoneDistribution(
+        forWorkoutID workoutID: String,
+        maxHR: Double
+    ) async throws -> WorkoutZoneDistribution?
+}
+
 extension HeartRateQuerying {
     func fetchHeartRateHistory(
         start: Date,
@@ -33,7 +40,7 @@ extension HeartRateQuerying {
     }
 }
 
-struct HeartRateQueryService: HeartRateQuerying, WatchWearStateQuerying, Sendable {
+struct HeartRateQueryService: HeartRateQuerying, WorkoutZoneDistributionQuerying, WatchWearStateQuerying, Sendable {
     private let manager: HealthKitManager
 
     init(manager: HealthKitManager) {
@@ -273,6 +280,48 @@ struct HeartRateQueryService: HeartRateQuerying, WatchWearStateQuerying, Sendabl
     func fetchHeartRateZones(forWorkoutID workoutID: String, maxHR: Double) async throws -> [HeartRateZone] {
         let samples = try await fetchHeartRateSamples(forWorkoutID: workoutID)
         return HeartRateZoneCalculator.computeZones(samples: samples, maxHR: maxHR)
+    }
+
+    func fetchWorkoutZoneDistribution(
+        forWorkoutID workoutID: String,
+        maxHR: Double
+    ) async throws -> WorkoutZoneDistribution? {
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            guard let samples = mockData.workout(withID: workoutID)?.heartRateSamples,
+                  samples.count >= 2 else { return nil }
+            return Self.estimatedDistribution(samples: samples, maxHR: maxHR)
+        }
+        guard manager.isAvailable, let uuid = UUID(uuidString: workoutID) else { return nil }
+        let descriptor = HKSampleQueryDescriptor(
+            predicates: [.workout(HKQuery.predicateForObject(with: uuid))],
+            sortDescriptors: [SortDescriptor(\.startDate, order: .reverse)],
+            limit: 1
+        )
+        guard let workout = try await manager.execute(descriptor).first else { return nil }
+        if let group = workout.zoneGroup(for: HKQuantityType(.heartRate)) {
+            return WorkoutZoneDistribution(group: group)
+        }
+        // Older workouts have no stored zone configuration. Retain the existing
+        // five-zone estimate for those workouts and label its source accordingly.
+        let samples = try await fetchHeartRateSamples(forWorkoutID: workoutID)
+        guard samples.count >= 2 else { return nil }
+        return Self.estimatedDistribution(samples: samples, maxHR: maxHR)
+    }
+
+    private static func estimatedDistribution(
+        samples: [HeartRateSample],
+        maxHR: Double
+    ) -> WorkoutZoneDistribution {
+        let legacy = HeartRateZoneCalculator.computeZones(samples: samples, maxHR: maxHR)
+        let bins = legacy.map { item in
+            WorkoutZoneDistribution.Bin(
+                index: item.zone.rawValue,
+                minimumBPM: item.zone.hrFractionRange.lowerBound * maxHR,
+                maximumBPM: item.zone.hrFractionRange.upperBound * maxHR,
+                durationSeconds: item.durationSeconds
+            )
+        }
+        return WorkoutZoneDistribution(source: .estimated, bins: bins)
     }
 
     // MARK: - Heart Rate Recovery

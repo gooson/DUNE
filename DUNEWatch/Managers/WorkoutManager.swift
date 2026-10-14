@@ -80,6 +80,18 @@ final class WorkoutManager: NSObject {
     /// Defaults to 190 (HeartRateZoneCalculator.defaultMaxHR) when age is unavailable.
     private(set) var estimatedMaxHR: Double = HeartRateZoneCalculator.defaultMaxHR
 
+    /// HealthKit's live zone group can contain a personalized number of zones.
+    private(set) var liveZoneDistribution: WorkoutZoneDistribution?
+    private(set) var liveZoneIndex: Int?
+
+    var displayedZoneIndex: Int? {
+        guard let liveZoneDistribution else { return currentZone?.rawValue }
+        guard let liveZoneIndex,
+              liveZoneDistribution.zones.contains(where: { $0.index == liveZoneIndex }) else { return nil }
+        return liveZoneIndex
+    }
+    var displayedZoneCount: Int { liveZoneDistribution?.zones.count ?? HeartRateZone.Zone.allCases.count }
+
     /// Current heart rate zone based on live HR and estimated maxHR.
     var currentZone: HeartRateZone.Zone? {
         guard heartRate > 0, estimatedMaxHR > 0 else { return nil }
@@ -417,6 +429,8 @@ final class WorkoutManager: NSObject {
     /// Common HK session setup shared by strength and cardio flows.
     private func startHKSession(config: HKWorkoutConfiguration, templateName: String) async throws {
         self.heartRateSamples = []
+        self.liveZoneDistribution = nil
+        self.liveZoneIndex = nil
         self.steps = 0
         self.isSessionEnded = false
         self.isFinalizingWorkout = false
@@ -509,6 +523,24 @@ final class WorkoutManager: NSObject {
         pausedDuration = 0
         pauseStart = nil
         resetCardioInactivityTracking(clearInteractionTimestamp: true)
+#if DEBUG && targetEnvironment(simulator)
+        if ProcessInfo.processInfo.arguments.contains("--ui-watch-six-zones"),
+           case .cardio = workoutMode {
+            liveZoneDistribution = WorkoutZoneDistribution(
+                source: .system,
+                bins: (1...6).map { index in
+                    .init(
+                        index: index,
+                        minimumBPM: index == 1 ? nil : Double(80 + index * 20),
+                        maximumBPM: index == 6 ? nil : Double(100 + index * 20),
+                        durationSeconds: 30
+                    )
+                }
+            )
+            liveZoneIndex = 3
+            heartRate = 135
+        }
+#endif
         persistRecoveryState()
         WatchConnectivityManager.shared.sendWorkoutStarted(templateName: templateName)
     }
@@ -1265,6 +1297,24 @@ extension WorkoutManager: HKWorkoutSessionDelegate {
 extension WorkoutManager: HKLiveWorkoutBuilderDelegate {
     nonisolated func workoutBuilderDidCollectEvent(_ workoutBuilder: HKLiveWorkoutBuilder) {
         // No custom events
+    }
+
+    nonisolated func workoutBuilder(
+        _ workoutBuilder: HKLiveWorkoutBuilder,
+        didUpdateWorkoutZone update: HKLiveWorkoutZoneUpdate
+    ) {
+        // Extract Sendable values before crossing to MainActor. The update and
+        // builder objects themselves must stay on the delegate callback thread.
+        let callbackBuilderID = ObjectIdentifier(workoutBuilder)
+        let distribution = update.zoneGroup.map(WorkoutZoneDistribution.init(group:))
+        let zoneIndex = update.currentZoneDuration?.zone.index
+        Task { @MainActor in
+            guard !isSessionEnded,
+                  let builder,
+                  ObjectIdentifier(builder) == callbackBuilderID else { return }
+            if let distribution { liveZoneDistribution = distribution }
+            liveZoneIndex = zoneIndex
+        }
     }
 
     nonisolated func workoutBuilder(

@@ -16,8 +16,8 @@ struct CardioHRZonePage: View {
 
                     // Zone bar
                     HRZoneBar(
-                        currentZone: workoutManager.currentZone,
-                        fraction: workoutManager.hrFraction
+                        activeIndex: workoutManager.displayedZoneIndex,
+                        zoneCount: workoutManager.displayedZoneCount
                     )
                     .padding(.horizontal, DS.Spacing.sm)
 
@@ -62,15 +62,19 @@ struct CardioHRZonePage: View {
 
     private var zoneLabel: some View {
         Group {
-            if let zone = workoutManager.currentZone {
+            if let index = workoutManager.displayedZoneIndex {
                 HStack(spacing: DS.Spacing.xs) {
-                    Text("Zone \(zone.rawValue)")
+                    Text("Zone \(index)")
                         .font(DS.Typography.secondaryMetric)
-                        .foregroundStyle(zone.color)
+                        .foregroundStyle(zoneColor)
+                        .accessibilityIdentifier("watch-live-heart-rate-zone-label")
 
-                    Text(zone.displayName)
-                        .font(DS.Typography.metricLabel)
-                        .foregroundStyle(.secondary)
+                    if workoutManager.liveZoneDistribution == nil,
+                       let estimatedZone = workoutManager.currentZone {
+                        Text(estimatedZone.displayName)
+                            .font(DS.Typography.metricLabel)
+                            .foregroundStyle(.secondary)
+                    }
                 }
             } else {
                 Text("--")
@@ -106,6 +110,7 @@ struct CardioHRZonePage: View {
     // MARK: - Helpers
 
     private var zoneColor: Color {
-        workoutManager.currentZone?.color ?? theme.metricHeartRate
+        guard let index = workoutManager.displayedZoneIndex else { return theme.metricHeartRate }
+        return HRZoneBar.color(for: index, count: workoutManager.displayedZoneCount)
     }
 }
