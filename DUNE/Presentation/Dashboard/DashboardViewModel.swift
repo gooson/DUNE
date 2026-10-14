@@ -7,16 +7,18 @@ import OSLog
 final class DashboardViewModel {
     var conditionScore: ConditionScore?
     var baselineStatus: BaselineStatus?
-    private(set) var limitedHRVStartDate: Date?
+    private(set) var limitedConditionHistoryStartDate: Date?
     var hasLimitedConditionHistory: Bool {
-        guard let limitedHRVStartDate else { return false }
+        guard let limitedStart = limitedConditionHistoryStartDate else {
+            return false
+        }
         let today = Calendar.current.startOfDay(for: Date())
         let windowStart = Calendar.current.date(
             byAdding: .day,
             value: -CalculateConditionScoreUseCase.conditionWindowDays,
             to: today
         ) ?? today
-        return limitedHRVStartDate > windowStart
+        return limitedStart > windowStart
     }
     var sortedMetrics: [HealthMetric] = [] {
         didSet { invalidateFilteredMetrics() }
@@ -223,7 +225,7 @@ final class DashboardViewModel {
         if !hasLoadedOnce {
             conditionScore = nil
             baselineStatus = nil
-            limitedHRVStartDate = nil
+            limitedConditionHistoryStartDate = nil
             recentScores = []
             coachingMessage = nil
             focusInsight = nil
@@ -269,11 +271,18 @@ final class DashboardViewModel {
         )
 
         guard isCurrentLoadRequest(requestID) else { return }
-        let limitedStart = canQueryHealthKit
-            ? await historyService.limitedReadStartDate(for: .hrv)
-            : nil
+        let limitedHRVStart: Date?
+        let limitedRHRStart: Date?
+        if canQueryHealthKit {
+            async let hrvStart = historyService.limitedReadStartDate(for: .hrv)
+            async let rhrStart = historyService.limitedReadStartDate(for: .rhr)
+            (limitedHRVStart, limitedRHRStart) = await (hrvStart, rhrStart)
+        } else {
+            limitedHRVStart = nil
+            limitedRHRStart = nil
+        }
         guard isCurrentLoadRequest(requestID) else { return }
-        limitedHRVStartDate = limitedStart
+        limitedConditionHistoryStartDate = [limitedHRVStart, limitedRHRStart].compactMap { $0 }.max()
 
         if hrvResult.failed, sharedSnapshot == nil {
             // Avoid showing stale readiness data after a live HRV refresh fails.

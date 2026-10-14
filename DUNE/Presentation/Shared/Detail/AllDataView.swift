@@ -13,6 +13,18 @@ struct AllDataView: View {
                     .listRowSeparator(.hidden)
             }
 
+            if viewModel.dataPoints.isEmpty && !viewModel.isLoading {
+                EmptyStateView(
+                    icon: category.iconName,
+                    title: "No Data",
+                    message: viewModel.limitedHistoryStartDate != nil
+                        ? "No data in the available range."
+                        : "No data available yet."
+                )
+                .accessibilityIdentifier("all-data-empty-state")
+                .listRowSeparator(.hidden)
+            }
+
             ForEach(viewModel.groupedByDate, id: \.date) { section in
                 Section {
                     ForEach(section.points) { point in
@@ -39,18 +51,6 @@ struct AllDataView: View {
         .environment(\.waveColor, category.themeColor)
         .englishNavigationTitle(category.englishDisplayName)
         .navigationBarTitleDisplayMode(.inline)
-        .overlay {
-            if viewModel.dataPoints.isEmpty && !viewModel.isLoading {
-                EmptyStateView(
-                    icon: category.iconName,
-                    title: "No Data",
-                    message: viewModel.limitedHistoryStartDate != nil
-                        ? "No data in the available range."
-                        : "No data available yet."
-                )
-                .accessibilityIdentifier("all-data-empty-state")
-            }
-        }
         .task {
             viewModel.configure(category: category)
             await viewModel.loadInitialData()

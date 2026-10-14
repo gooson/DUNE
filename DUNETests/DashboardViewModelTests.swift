@@ -24,12 +24,17 @@ private struct MockHRVService: HRVQuerying {
 }
 
 private struct DashboardLimitedHistory: MetricHistoryQuerying {
-    let hrvStart: Date
+    var hrvStart: Date?
+    var rhrStart: Date?
 
     func earliestDate(for category: HealthMetric.Category) async throws -> Date? { nil }
     func latestDate(for category: HealthMetric.Category, before end: Date) async throws -> Date? { nil }
     func limitedReadStartDate(for category: HealthMetric.Category) async -> Date? {
-        category == .hrv ? hrvStart : nil
+        switch category {
+        case .hrv: hrvStart
+        case .rhr: rhrStart
+        default: nil
+        }
     }
 }
 
@@ -396,11 +401,17 @@ struct DashboardViewModelTests {
 
     // MARK: - HRV Fallback
 
-    @Test("A limited HRV read window is identified when it overlaps the condition baseline")
-    func limitedHRVBaseline() async {
-        let start = Calendar.current.date(byAdding: .day, value: -2, to: Date())!
+    @Test("An eight-day HRV read limit remains visible with a ready condition score")
+    func limitedHRVBaselineWithReadyScore() async {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let start = calendar.date(byAdding: .day, value: -8, to: today)!
+        let samples = (0..<8).compactMap { offset -> HRVSample? in
+            guard let date = calendar.date(byAdding: .day, value: -offset, to: today) else { return nil }
+            return HRVSample(value: 45 + Double(offset), date: date)
+        }
         let vm = DashboardViewModel(
-            hrvService: MockHRVService(),
+            hrvService: MockHRVService(samples: samples),
             historyService: DashboardLimitedHistory(hrvStart: start),
             sleepService: MockSleepService(),
             workoutService: MockWorkoutService(),
@@ -411,7 +422,31 @@ struct DashboardViewModelTests {
 
         await vm.loadData()
 
-        #expect(vm.limitedHRVStartDate == start)
+        #expect(vm.limitedConditionHistoryStartDate == start)
+        #expect(vm.conditionScore != nil)
+        #expect(vm.hasLimitedConditionHistory)
+    }
+
+    @Test("A resting-heart-rate-only read limit is visible with an incomplete baseline")
+    func limitedRHRBaselineWithoutScore() async {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let start = calendar.date(byAdding: .day, value: -3, to: today)!
+        let vm = DashboardViewModel(
+            hrvService: MockHRVService(),
+            historyService: DashboardLimitedHistory(rhrStart: start),
+            sleepService: MockSleepService(),
+            workoutService: MockWorkoutService(),
+            stepsService: MockStepsService(),
+            bodyService: MockBodyService(),
+            coachingMessageEnhancer: nil
+        )
+
+        await vm.loadData()
+
+        #expect(vm.limitedConditionHistoryStartDate == start)
+        #expect(vm.conditionScore == nil)
+        #expect(vm.baselineStatus?.isReady == false)
         #expect(vm.hasLimitedConditionHistory)
     }
 

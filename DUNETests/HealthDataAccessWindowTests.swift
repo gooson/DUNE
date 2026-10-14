@@ -33,4 +33,31 @@ struct HealthDataAccessWindowTests {
         #expect(window.pointSampleQueryStart(for: "hrv", intendedStart: start) == boundary)
         #expect(window.pointSampleQueryStart(for: "hrv", intendedStart: later) == later)
     }
+
+    @Test("Any condition boundary change invalidates visible derived history")
+    func changedConditionHistory() {
+        let full = HealthDataAccessWindow()
+        let limited = HealthDataAccessWindow(limitedStartDates: [hrvIdentifier: start])
+        let narrower = HealthDataAccessWindow(limitedStartDates: [hrvIdentifier: boundary])
+        let unrelated = HealthDataAccessWindow(limitedStartDates: ["steps": boundary])
+
+        #expect(limited.changesConditionAccess(comparedTo: full, for: [hrvIdentifier, rhrIdentifier]))
+        #expect(narrower.changesConditionAccess(comparedTo: limited, for: [hrvIdentifier, rhrIdentifier]))
+        #expect(limited.changesConditionAccess(comparedTo: narrower, for: [hrvIdentifier, rhrIdentifier]))
+        #expect(full.changesConditionAccess(comparedTo: limited, for: [hrvIdentifier, rhrIdentifier]))
+        #expect(!unrelated.changesConditionAccess(comparedTo: full, for: [hrvIdentifier, rhrIdentifier]))
+    }
+
+    @Test("A limited boundary survives persistence for cold-launch comparison")
+    func persistedWindow() throws {
+        let saved = HealthDataAccessWindow(limitedStartDates: [hrvIdentifier: start])
+        let restored = try JSONDecoder().decode(
+            HealthDataAccessWindow.self,
+            from: JSONEncoder().encode(saved)
+        )
+        let narrowed = HealthDataAccessWindow(limitedStartDates: [hrvIdentifier: boundary])
+
+        #expect(restored == saved)
+        #expect(narrowed.changesConditionAccess(comparedTo: restored, for: [hrvIdentifier]))
+    }
 }

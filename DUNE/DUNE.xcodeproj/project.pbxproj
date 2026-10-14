@@ -124,6 +124,7 @@
 		15034F715ED3064BF173FACD /* Date+Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71684C2603805EAE1DB7A36C /* Date+Validation.swift */; };
 		151D772733D4C6A02DFD232C /* InjuryFormSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC22C6FC50E542AFB508B23 /* InjuryFormSheet.swift */; };
 		15294CA646187B77490955FD /* VisionExerciseMuscleMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ABEC75F0B36AA697838E3C3 /* VisionExerciseMuscleMapView.swift */; };
+		156730FEB67DC475BB162BBB /* ScoreRefreshServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C23C22D87EF2E86C9356416C /* ScoreRefreshServiceTests.swift */; };
 		157296FC510AAECBB79F2951 /* TemplateNudgeDismissStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F6EEA78E3699BDB4DC7DE6 /* TemplateNudgeDismissStoreTests.swift */; };
 		1574FCAEC67C49A685C2428E /* PostureReminderScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20270C704B62361EF2975D94 /* PostureReminderScheduler.swift */; };
 		15A21B88E037F070D8C9CEEE /* ExerciseDefaultEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7016020C0A1A1D099AE37511 /* ExerciseDefaultEditView.swift */; };
@@ -2132,6 +2133,7 @@
 		C1CBA9AEF881C2FC3630CAE5 /* MuscleRecoveryMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuscleRecoveryMapView.swift; sourceTree = "<group>"; };
 		C1F5B52956D861B647E29CB9 /* VisionMuscleMapExperienceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionMuscleMapExperienceView.swift; sourceTree = "<group>"; };
 		C230316946BDC2620C9D1855 /* UITestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestHelpers.swift; sourceTree = "<group>"; };
+		C23C22D87EF2E86C9356416C /* ScoreRefreshServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreRefreshServiceTests.swift; sourceTree = "<group>"; };
 		C249B098206A2DB018DE6A67 /* PostureCaptureService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostureCaptureService.swift; sourceTree = "<group>"; };
 		C26594D42A6F70141D194137 /* HabitTemplateSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitTemplateSheet.swift; sourceTree = "<group>"; };
 		C28E9F66D4E934E721288198 /* AggregateNocturnalVitalsUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AggregateNocturnalVitalsUseCaseTests.swift; sourceTree = "<group>"; };
@@ -4233,6 +4235,7 @@
 				6A3E792A39A67B889F4C2E5E /* SakuraBranchShapeTests.swift */,
 				8A4CF45416930EB61A3E6EBB /* SakuraPetalShapeTests.swift */,
 				A1812EE11BF0364E6889F6C2 /* ScoreDetailHistoryRegressionTests.swift */,
+				C23C22D87EF2E86C9356416C /* ScoreRefreshServiceTests.swift */,
 				1E351F3EEEA566A369A425F1 /* SharedHealthDataServiceTests.swift */,
 				60A8DC34BCE2A2AB53134075 /* SharedHealthSnapshotTests.swift */,
 				B82D96077AAFB79663E66E76 /* SimulatorAdvancedMockDataTests.swift */,
@@ -5819,6 +5822,7 @@
 				E86D6E7BF82BE2F8227AD198 /* SakuraBranchShapeTests.swift in Sources */,
 				9CB735BAA1C449E59EC823A0 /* SakuraPetalShapeTests.swift in Sources */,
 				BFE4CA8AF1DC6BC91A7EE12A /* ScoreDetailHistoryRegressionTests.swift in Sources */,
+				156730FEB67DC475BB162BBB /* ScoreRefreshServiceTests.swift in Sources */,
 				867E38B3FD10A28FE7C729DC /* SharedHealthDataServiceTests.swift in Sources */,
 				0BA777438C201BAB4475EBA1 /* SharedHealthSnapshotTests.swift in Sources */,
 				FA74478A835B4F6E84FB99E4 /* SimulatorAdvancedMockDataTests.swift in Sources */,

@@ -1,3 +1,4 @@
+import Foundation
 import HealthKit
 import OSLog
 
@@ -9,10 +10,25 @@ protocol HealthKitManaging: Sendable {
 
 actor HealthKitManager: HealthKitManaging {
     static let shared = HealthKitManager()
+    private static let persistedWindowKey = "healthkit.limitedReadAccessWindow.v1"
+    private static let pendingConditionChangeKey = "healthkit.pendingConditionAccessChange.v1"
 
     private let store = HKHealthStore()
     private let logger = AppLogger.healthKit
-    private var accessWindow = HealthDataAccessWindow()
+    private var accessWindow: HealthDataAccessWindow
+    private var hasPendingConditionAccessChange: Bool
+
+    init() {
+        hasPendingConditionAccessChange = UserDefaults.standard.bool(
+            forKey: Self.pendingConditionChangeKey
+        )
+        if let saved = UserDefaults.standard.data(forKey: Self.persistedWindowKey),
+           let window = try? JSONDecoder().decode(HealthDataAccessWindow.self, from: saved) {
+            accessWindow = window
+        } else {
+            accessWindow = HealthDataAccessWindow()
+        }
+    }
 
     private let readTypes: Set<HKSampleType> = [
         HKQuantityType(.heartRateVariabilitySDNN),
@@ -115,7 +131,32 @@ actor HealthKitManager: HealthKitManaging {
             logger.error("HealthKit read window unavailable: \(error.localizedDescription)")
             return false
         }
+        let conditionTypes = [
+            HKQuantityType(.heartRateVariabilitySDNN).identifier,
+            HKQuantityType(.restingHeartRate).identifier
+        ]
+        let conditionChanged = accessWindow.changesConditionAccess(
+            comparedTo: previous, for: conditionTypes
+        )
+        if conditionChanged {
+            hasPendingConditionAccessChange = true
+            UserDefaults.standard.set(true, forKey: Self.pendingConditionChangeKey)
+        }
+        if let saved = try? JSONEncoder().encode(accessWindow) {
+            UserDefaults.standard.set(saved, forKey: Self.persistedWindowKey)
+        }
         return previous != accessWindow
+    }
+
+    /// Authorization can refresh the window before the app's foreground path runs.
+    /// Keep this durable until invalidation succeeds, including across a crash.
+    func conditionAccessChangePending() -> Bool {
+        hasPendingConditionAccessChange
+    }
+
+    func acknowledgeConditionAccessChange() {
+        hasPendingConditionAccessChange = false
+        UserDefaults.standard.set(false, forKey: Self.pendingConditionChangeKey)
     }
 
     func limitedReadStartDate(for type: HKObjectType) -> Date? {
@@ -130,7 +171,7 @@ actor HealthKitManager: HealthKitManaging {
             )
         }
 #endif
-        accessWindow.limitedStartDate(for: type.identifier)
+        return accessWindow.limitedStartDate(for: type.identifier)
     }
 
     func pointSampleQueryStart(for type: HKObjectType, intendedStart: Date) -> Date {
