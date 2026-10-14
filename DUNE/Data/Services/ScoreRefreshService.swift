@@ -146,6 +146,37 @@ final class ScoreRefreshService {
         scheduleSparklineReload()
     }
 
+    /// Invalidate the 24-hour condition history shown in the app after the
+    /// HealthKit read window changes. Older snapshots are not presented.
+    @discardableResult
+    func invalidateRecentConditionHistory() async -> Bool {
+        let cutoff = Date().addingTimeInterval(-Self.rollingWindowSeconds)
+        sparklineReloadTask?.cancel()
+        conditionSparkline = .empty
+        do {
+            let descriptor = FetchDescriptor<HourlyScoreSnapshot>(
+                predicate: #Predicate {
+                    $0.date >= cutoff &&
+                        ($0.conditionScore != nil || $0.hrvValue != nil || $0.rhrValue != nil)
+                }
+            )
+            let snapshots = try context.fetch(descriptor)
+            for snapshot in snapshots {
+                snapshot.conditionScore = nil
+                snapshot.hrvValue = nil
+                snapshot.rhrValue = nil
+            }
+            if !snapshots.isEmpty {
+                try context.save()
+            }
+            await loadTodaySparklines()
+            return true
+        } catch {
+            AppLogger.data.error("[ScoreRefreshService] Failed to invalidate condition history: \(error.localizedDescription)")
+            return false
+        }
+    }
+
     /// Debounced sparkline reload — coalesces multiple rapid recordSnapshot calls
     /// (from Dashboard, Wellness, Activity VMs) into a single fetch.
     private func scheduleSparklineReload() {

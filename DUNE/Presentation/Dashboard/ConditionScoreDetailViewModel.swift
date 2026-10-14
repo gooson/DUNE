@@ -32,8 +32,10 @@ final class ConditionScoreDetailViewModel {
     private(set) var trendLineData: [ChartDataPoint]?
     private(set) var scrollDomain: ClosedRange<Date> = Date.now...Date.now
     private(set) var currentScore: ConditionScore?
+    private(set) var limitedHistoryStartDate: Date?
 
     private let hrvService: HRVQuerying
+    private let historyService: any MetricHistoryQuerying
     private let scoreUseCase = CalculateConditionScoreUseCase()
     private let scoreRefreshService: ScoreRefreshService?
     private let nowProvider: @Sendable () -> Date
@@ -41,11 +43,13 @@ final class ConditionScoreDetailViewModel {
 
     init(
         hrvService: HRVQuerying? = nil,
+        historyService: (any MetricHistoryQuerying)? = nil,
         healthKitManager: HealthKitManager = .shared,
         scoreRefreshService: ScoreRefreshService? = nil,
         nowProvider: @escaping @Sendable () -> Date = Date.init
     ) {
         self.hrvService = hrvService ?? HRVQueryService(manager: healthKitManager)
+        self.historyService = historyService ?? MetricHistoryQueryService(manager: healthKitManager)
         self.scoreRefreshService = scoreRefreshService
         self.nowProvider = nowProvider
         recalculateScrollDomain()
@@ -53,6 +57,7 @@ final class ConditionScoreDetailViewModel {
 
     func configure(score: ConditionScore) {
         self.currentScore = score
+        limitedHistoryStartDate = nil
         resetScrollPosition()
         recalculateScrollDomain()
     }
@@ -71,6 +76,11 @@ final class ConditionScoreDetailViewModel {
                 try await loadScoreData(requestID: requestID)
             }
             guard isCurrentReloadRequest(requestID) else { return }
+            async let hrvLimit = historyService.limitedReadStartDate(for: .hrv)
+            async let rhrLimit = historyService.limitedReadStartDate(for: .rhr)
+            let (hrvStart, rhrStart) = await (hrvLimit, rhrLimit)
+            guard isCurrentReloadRequest(requestID) else { return }
+            limitedHistoryStartDate = [hrvStart, rhrStart].compactMap { $0 }.max()
             buildHighlights()
             recalculateTrendLine()
         } catch {

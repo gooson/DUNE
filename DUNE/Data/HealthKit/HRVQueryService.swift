@@ -38,9 +38,12 @@ struct HRVQueryService: HRVQuerying, Sendable {
             return mockData.hrvSamples(days: days).filter { $0.date >= start && $0.date < end }
         }
         guard manager.isAvailable else { return [] }
-        try await manager.ensureNotDenied(for: HKQuantityType(.heartRateVariabilitySDNN))
+        let type = HKQuantityType(.heartRateVariabilitySDNN)
+        try await manager.ensureNotDenied(for: type)
+        let queryStart = await manager.pointSampleQueryStart(for: type, intendedStart: start)
+        guard queryStart < end else { return [] }
         let predicate = HKQuery.predicateForSamples(
-            withStart: start,
+            withStart: queryStart,
             end: end,
             options: .strictStartDate
         )
@@ -64,15 +67,18 @@ struct HRVQueryService: HRVQuerying, Sendable {
             return mockData.restingHeartRate(for: date)
         }
         guard manager.isAvailable else { return nil }
-        try await manager.ensureNotDenied(for: HKQuantityType(.restingHeartRate))
+        let type = HKQuantityType(.restingHeartRate)
+        try await manager.ensureNotDenied(for: type)
         let calendar = Calendar.current
         let startOfDay = calendar.startOfDay(for: date)
         guard let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay) else {
             return nil
         }
+        let queryStart = await manager.pointSampleQueryStart(for: type, intendedStart: startOfDay)
+        guard queryStart < endOfDay else { return nil }
 
         let predicate = HKQuery.predicateForSamples(
-            withStart: startOfDay,
+            withStart: queryStart,
             end: endOfDay,
             options: .strictStartDate
         )
@@ -96,15 +102,18 @@ struct HRVQueryService: HRVQuerying, Sendable {
             return mockData.latestRestingHeartRate(withinDays: days)
         }
         guard manager.isAvailable else { return nil }
-        try await manager.ensureNotDenied(for: HKQuantityType(.restingHeartRate))
+        let type = HKQuantityType(.restingHeartRate)
+        try await manager.ensureNotDenied(for: type)
         let calendar = Calendar.current
         let endDate = Date()
         guard let startDate = calendar.date(byAdding: .day, value: -days, to: endDate) else {
             return nil
         }
+        let queryStart = await manager.pointSampleQueryStart(for: type, intendedStart: startDate)
+        guard queryStart < endDate else { return nil }
 
         let predicate = HKQuery.predicateForSamples(
-            withStart: startDate,
+            withStart: queryStart,
             end: endDate,
             options: .strictStartDate
         )
@@ -137,9 +146,12 @@ struct HRVQueryService: HRVQuerying, Sendable {
                 .sorted { $0.date < $1.date }
         }
         guard manager.isAvailable else { return [] }
-        try await manager.ensureNotDenied(for: HKQuantityType(.heartRateVariabilitySDNN))
+        let type = HKQuantityType(.heartRateVariabilitySDNN)
+        try await manager.ensureNotDenied(for: type)
+        let queryStart = await manager.pointSampleQueryStart(for: type, intendedStart: start)
+        guard queryStart < end else { return [] }
 
-        let predicate = HKQuery.predicateForSamples(withStart: start, end: end, options: .strictStartDate)
+        let predicate = HKQuery.predicateForSamples(withStart: queryStart, end: end, options: .strictStartDate)
         let descriptor = HKStatisticsCollectionQueryDescriptor(
             predicate: .quantitySample(type: HKQuantityType(.heartRateVariabilitySDNN), predicate: predicate),
             options: .discreteAverage,
@@ -171,9 +183,12 @@ struct HRVQueryService: HRVQuerying, Sendable {
             return mockData.rhrCollection(start: start, end: end)
         }
         guard manager.isAvailable else { return [] }
-        try await manager.ensureNotDenied(for: HKQuantityType(.restingHeartRate))
+        let type = HKQuantityType(.restingHeartRate)
+        try await manager.ensureNotDenied(for: type)
+        let queryStart = await manager.pointSampleQueryStart(for: type, intendedStart: start)
+        guard queryStart < end else { return [] }
 
-        let predicate = HKQuery.predicateForSamples(withStart: start, end: end, options: .strictStartDate)
+        let predicate = HKQuery.predicateForSamples(withStart: queryStart, end: end, options: .strictStartDate)
         let descriptor = HKStatisticsCollectionQueryDescriptor(
             predicate: .quantitySample(type: HKQuantityType(.restingHeartRate), predicate: predicate),
             options: [.discreteMin, .discreteMax, .discreteAverage],

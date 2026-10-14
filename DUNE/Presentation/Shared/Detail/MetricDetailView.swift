@@ -35,6 +35,11 @@ struct MetricDetailView: View {
                 .sensoryFeedback(.selection, trigger: viewModel.selectedPeriod)
                 .staggeredAppear(index: 1)
 
+                if let limitedStart = viewModel.limitedHistoryStartDate,
+                   viewModel.scrollPosition < limitedStart {
+                    LimitedHealthHistoryNotice()
+                }
+
                 // Chart header: visible range + trend toggle
                 chartHeader
                     .staggeredAppear(index: 2)

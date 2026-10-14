@@ -242,6 +242,19 @@ struct AllDataViewModelTests {
         )
     }
 
+    @Test("All-data paging retains the limited read boundary when no samples are visible")
+    func emptyLimitedHistory() async {
+        let boundary = Date().addingTimeInterval(-2 * 86_400)
+        let vm = makeVM(history: HistoryDates(dates: [], limitedStart: boundary))
+        vm.configure(category: .hrv)
+
+        await vm.loadInitialData()
+
+        #expect(vm.dataPoints.isEmpty)
+        #expect(vm.limitedHistoryStartDate == boundary)
+        #expect(!vm.hasMoreData)
+    }
+
     @Test("loadInitialData for HRV loads first page and keeps pagination open")
     func loadInitialHRV() async {
         let hrv = MockAllDataHRVService(hrvSamples: [
@@ -347,7 +360,9 @@ struct AllDataViewModelTests {
 
 struct HistoryDates: MetricHistoryQuerying {
     var dates: [Date]
+    var limitedStart: Date? = nil
     func earliestDate(for category: HealthMetric.Category) async throws -> Date? { dates.min() }
+    func limitedReadStartDate(for category: HealthMetric.Category) async -> Date? { limitedStart }
     func latestDate(for category: HealthMetric.Category, before end: Date) async throws -> Date? {
         dates.filter { $0 < end }.max()
     }

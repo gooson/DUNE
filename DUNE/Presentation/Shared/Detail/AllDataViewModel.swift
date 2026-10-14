@@ -11,6 +11,7 @@ final class AllDataViewModel {
     }
     var isLoading = false
     var hasMoreData = true
+    private(set) var limitedHistoryStartDate: Date?
 
     private(set) var category: HealthMetric.Category = .hrv
 
@@ -57,10 +58,15 @@ final class AllDataViewModel {
 
     func loadInitialData() async {
         resetPageRequests()
+        let requestID = pageRequestID
         pageEnd = Calendar.current.date(byAdding: .day, value: 1, to: Calendar.current.startOfDay(for: Date())) ?? Date()
         dataPoints = []
         hasMoreData = true
         isLoading = false
+        limitedHistoryStartDate = nil
+        let limitedStart = await historyService.limitedReadStartDate(for: category)
+        guard pageRequestID == requestID, !Task.isCancelled else { return }
+        limitedHistoryStartDate = limitedStart
         await loadNextPage()
     }
 

@@ -1,3 +1,4 @@
+import Foundation
 import HealthKit
 import OSLog
 
@@ -9,9 +10,25 @@ protocol HealthKitManaging: Sendable {
 
 actor HealthKitManager: HealthKitManaging {
     static let shared = HealthKitManager()
+    private static let persistedWindowKey = "healthkit.limitedReadAccessWindow.v1"
+    private static let pendingConditionChangeKey = "healthkit.pendingConditionAccessChange.v1"
 
     private let store = HKHealthStore()
     private let logger = AppLogger.healthKit
+    private var accessWindow: HealthDataAccessWindow
+    private var hasPendingConditionAccessChange: Bool
+
+    init() {
+        hasPendingConditionAccessChange = UserDefaults.standard.bool(
+            forKey: Self.pendingConditionChangeKey
+        )
+        if let saved = UserDefaults.standard.data(forKey: Self.persistedWindowKey),
+           let window = try? JSONDecoder().decode(HealthDataAccessWindow.self, from: saved) {
+            accessWindow = window
+        } else {
+            accessWindow = HealthDataAccessWindow()
+        }
+    }
 
     private let readTypes: Set<HKSampleType> = [
         HKQuantityType(.heartRateVariabilitySDNN),
@@ -78,6 +95,7 @@ actor HealthKitManager: HealthKitManaging {
                 toShare: shareTypes,
                 read: readTypes.union([HKObjectType.workoutType()])
             )
+            _ = await refreshLimitedReadAccessWindow()
             logger.info("HealthKit authorization requested successfully")
         } catch {
             logger.error("HealthKit authorization failed: \(error.localizedDescription)")
@@ -87,6 +105,77 @@ actor HealthKitManager: HealthKitManaging {
 
     func authorizationStatus(for type: HKObjectType) -> HKAuthorizationStatus {
         store.authorizationStatus(for: type)
+    }
+
+    /// Recheck after authorization and when the app resumes from Health settings.
+    /// A missing result is ambiguous and never means that read access was granted.
+    @discardableResult
+    func refreshLimitedReadAccessWindow() async -> Bool {
+        let previous = accessWindow
+        guard isAvailable else {
+            accessWindow = HealthDataAccessWindow()
+            return previous != accessWindow
+        }
+        do {
+            let dates = try await store.earliestAuthorizedSampleDate(
+                for: readTypes.union([HKObjectType.workoutType()])
+            )
+            accessWindow = HealthDataAccessWindow(
+                limitedStartDates: Dictionary(
+                    uniqueKeysWithValues: dates.map { ($0.key.identifier, $0.value) }
+                )
+            )
+        } catch {
+            // Preserve a known limited boundary until HealthKit can confirm a
+            // replacement; a temporary error is not evidence of full access.
+            logger.error("HealthKit read window unavailable: \(error.localizedDescription)")
+            return false
+        }
+        let conditionTypes = [
+            HKQuantityType(.heartRateVariabilitySDNN).identifier,
+            HKQuantityType(.restingHeartRate).identifier
+        ]
+        let conditionChanged = accessWindow.changesConditionAccess(
+            comparedTo: previous, for: conditionTypes
+        )
+        if conditionChanged {
+            hasPendingConditionAccessChange = true
+            UserDefaults.standard.set(true, forKey: Self.pendingConditionChangeKey)
+        }
+        if let saved = try? JSONEncoder().encode(accessWindow) {
+            UserDefaults.standard.set(saved, forKey: Self.persistedWindowKey)
+        }
+        return previous != accessWindow
+    }
+
+    /// Authorization can refresh the window before the app's foreground path runs.
+    /// Keep this durable until invalidation succeeds, including across a crash.
+    func conditionAccessChangePending() -> Bool {
+        hasPendingConditionAccessChange
+    }
+
+    func acknowledgeConditionAccessChange() {
+        hasPendingConditionAccessChange = false
+        UserDefaults.standard.set(false, forKey: Self.pendingConditionChangeKey)
+    }
+
+    func limitedReadStartDate(for type: HKObjectType) -> Date? {
+#if DEBUG && targetEnvironment(simulator)
+        let arguments = ProcessInfo.processInfo.arguments
+        if arguments.contains("--uitesting"), arguments.contains("--uitest-limited-health-history") {
+            // Deterministic authorization window for simulator UI coverage.
+            return Calendar.current.date(
+                byAdding: .day,
+                value: -2,
+                to: Calendar.current.startOfDay(for: Date())
+            )
+        }
+#endif
+        return accessWindow.limitedStartDate(for: type.identifier)
+    }
+
+    func pointSampleQueryStart(for type: HKObjectType, intendedStart: Date) -> Date {
+        accessWindow.pointSampleQueryStart(for: type.identifier, intendedStart: intendedStart)
     }
 
     /// No-op for read-only types. HealthKit's `authorizationStatus` only reflects

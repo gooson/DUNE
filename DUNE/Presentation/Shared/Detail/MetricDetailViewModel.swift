@@ -50,6 +50,7 @@ final class MetricDetailViewModel {
     private var hasHistoryYDomain = false
     private(set) var weightYDomain: ClosedRange<Double> = 0...100
     private(set) var earliestHistoryDate: Date?
+    private(set) var limitedHistoryStartDate: Date?
     private var historyBoundsLoaded = false
     private var historyReferenceDate = Date()
     private var loadedHistoryRange: (start: Date, end: Date)?
@@ -122,6 +123,7 @@ final class MetricDetailViewModel {
         requestedHistoryRange = nil
         historyBoundsLoaded = false
         earliestHistoryDate = nil
+        limitedHistoryStartDate = nil
         self.category = category
         self.currentValue = currentValue
         self.hasConfiguredValue = true
@@ -168,6 +170,9 @@ final class MetricDetailViewModel {
             case .breathingDisturbances: try await loadBreathingDisturbancesData(requestID: requestID)
             }
             guard isCurrentReloadRequest(requestID) else { return }
+            let limitedStart = await historyService.limitedReadStartDate(for: category)
+            guard isCurrentReloadRequest(requestID) else { return }
+            limitedHistoryStartDate = limitedStart
             if historyNavigation {
                 summaryStats = currentSummary
                 currentValue = headlineValue

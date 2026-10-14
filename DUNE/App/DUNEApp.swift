@@ -442,6 +442,7 @@ struct DUNEApp: App {
             guard newPhase == .active else { return }
             Task {
                 await refreshAppRuntimeIfNeeded()
+                await refreshLimitedReadAccessIfNeeded()
                 await requestDeferredAuthorizationsIfNeeded()
             }
         }
@@ -761,6 +762,30 @@ struct DUNEApp: App {
     }
 
     @MainActor
+    private func refreshLimitedReadAccessIfNeeded() async {
+        guard hasCompletedHealthKitAuthorizationThisLaunch,
+              !Self.shouldBypassLaunchExperienceForTests else { return }
+        let windowChanged = await HealthKitManager.shared.refreshLimitedReadAccessWindow()
+        let hadPendingConditionChange = await HealthKitManager.shared.conditionAccessChangePending()
+        let conditionChanged = await invalidateConditionHistoryIfNeeded()
+        guard !hadPendingConditionChange || conditionChanged else { return }
+        if windowChanged || conditionChanged {
+            await appRuntime.refreshCoordinator.forceRefresh()
+        }
+    }
+
+    @MainActor
+    private func invalidateConditionHistoryIfNeeded() async -> Bool {
+        guard await HealthKitManager.shared.conditionAccessChangePending() else { return false }
+        // All current condition sparklines read at most the last 24 hours.
+        // Keep archival snapshots unchanged to avoid rewriting CloudKit history.
+        WidgetDataWriter.writeConditionScore(nil)
+        guard await appRuntime.scoreRefreshService.invalidateRecentConditionHistory() else { return false }
+        await HealthKitManager.shared.acknowledgeConditionAccessChange()
+        return true
+    }
+
+    @MainActor
     private func requestDeferredAuthorizationsIfNeeded() async {
         guard isLaunchExperienceReady else { return }
         guard scenePhase == .active else { return }
@@ -781,12 +806,16 @@ struct DUNEApp: App {
             do {
                 try await HealthKitManager.shared.requestAuthorization()
                 hasRequestedHealthKitAuthorization = true
+                let hadPendingConditionChange = await HealthKitManager.shared.conditionAccessChangePending()
+                let clearedConditionHistory = await invalidateConditionHistoryIfNeeded()
                 // A persisted flag can outlive device permissions or the requested type set.
                 // Discard snapshots fetched before this launch's authorization completed.
                 await appRuntime.refreshCoordinator.invalidateCacheOnly()
                 hasCompletedHealthKitAuthorizationThisLaunch = true
                 appRuntime.observerManager?.startObserving()
-                await appRuntime.refreshCoordinator.forceRefresh()
+                if !hadPendingConditionChange || clearedConditionHistory {
+                    await appRuntime.refreshCoordinator.forceRefresh()
+                }
             } catch {
                 AppLogger.healthKit.error("Deferred HealthKit authorization failed: \(error.localizedDescription)")
             }

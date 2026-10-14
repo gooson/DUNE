@@ -154,6 +154,10 @@ private struct ComparisonMetricChart: View {
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 .accessibilityIdentifier("comparison-date-range")
+            if let limitedStart = viewModel.limitedHistoryStartDate,
+               range.lowerBound < limitedStart {
+                LimitedHealthHistoryNotice()
+            }
             if viewModel.isLoading {
                 ProgressView().frame(maxWidth: .infinity, minHeight: 220)
             } else if let message = viewModel.errorMessage {

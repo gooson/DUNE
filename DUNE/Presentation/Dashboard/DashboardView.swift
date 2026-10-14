@@ -272,26 +272,36 @@ struct DashboardView: View {
     private var dashboardUpperContent: some View {
         // Hero
         if let score = viewModel.conditionScore {
-            NavigationLink(value: score) {
-                ConditionHeroView(
-                    score: score,
-                    recentScores: viewModel.recentScores,
-                    weeklyGoalProgress: viewModel.weeklyGoalProgress,
-                    trendBadges: viewModel.heroBaselineDetails,
-                    hourlySparkline: viewModel.conditionSparkline.nonEmptyOrNil,
-                    adaptiveMessage: viewModel.adaptiveHeroMessage
-                )
+            VStack(spacing: DS.Spacing.md) {
+                NavigationLink(value: score) {
+                    ConditionHeroView(
+                        score: score,
+                        recentScores: viewModel.recentScores,
+                        weeklyGoalProgress: viewModel.weeklyGoalProgress,
+                        trendBadges: viewModel.heroBaselineDetails,
+                        hourlySparkline: viewModel.conditionSparkline.nonEmptyOrNil,
+                        adaptiveMessage: viewModel.adaptiveHeroMessage
+                    )
+                }
+                .reportTabHeroFrame()
+                .buttonStyle(.plain)
+                .accessibilityIdentifier("dashboard-hero-condition")
+                if viewModel.hasLimitedConditionHistory {
+                    LimitedHealthHistoryNotice()
+                }
             }
-            .reportTabHeroFrame()
-            .buttonStyle(.plain)
-            .accessibilityIdentifier("dashboard-hero-condition")
             .transition(Self.sectionTransition)
             .staggeredAppear(index: 0)
         } else if let status = viewModel.baselineStatus, !status.isReady {
-            BaselineProgressView(status: status)
-                .reportTabHeroFrame()
-                .transition(Self.sectionTransition)
-                .staggeredAppear(index: 0)
+            VStack(spacing: DS.Spacing.md) {
+                BaselineProgressView(status: status)
+                    .reportTabHeroFrame()
+                if viewModel.hasLimitedConditionHistory {
+                    LimitedHealthHistoryNotice()
+                }
+            }
+            .transition(Self.sectionTransition)
+            .staggeredAppear(index: 0)
         }
 
         // Yesterday Recap (morning only)
