@@ -13,6 +13,7 @@ actor HealthDataQAService: HealthDataQuestionAnswering {
     private let contextBuilder: HealthDataQAContextBuilder
     private let nowProvider: @Sendable () -> Date
     private let availabilityProvider: @Sendable () -> Bool
+    private let localeIdentifierProvider: @Sendable () -> String
     private var session: LanguageModelSession?
 
     init(
@@ -21,7 +22,8 @@ actor HealthDataQAService: HealthDataQuestionAnswering {
         workoutService: any WorkoutQuerying = WorkoutQueryService(manager: .shared),
         hrvService: any HRVQuerying = HRVQueryService(manager: .shared),
         nowProvider: @escaping @Sendable () -> Date = Date.init,
-        availabilityProvider: @escaping @Sendable () -> Bool = HealthDataQAService.defaultAvailabilityProvider
+        availabilityProvider: @escaping @Sendable () -> Bool = HealthDataQAService.defaultAvailabilityProvider,
+        localeIdentifierProvider: @escaping @Sendable () -> String = { Locale.current.identifier }
     ) {
         self.contextBuilder = HealthDataQAContextBuilder(
             sharedHealthDataService: sharedHealthDataService,
@@ -32,6 +34,7 @@ actor HealthDataQAService: HealthDataQuestionAnswering {
         )
         self.availabilityProvider = availabilityProvider
         self.nowProvider = nowProvider
+        self.localeIdentifierProvider = localeIdentifierProvider
     }
 
     func ask(_ question: String) async -> HealthDataQAReply {
@@ -74,7 +77,7 @@ actor HealthDataQAService: HealthDataQuestionAnswering {
     func makeInstructions() async -> String {
         let baselineSummary = await contextBuilder.makeBaselineSummary()
         return """
-        \(Self.localeInstruction())
+        \(Self.localeInstruction(localeIdentifier: localeIdentifierProvider()))
 
         You are DUNE's on-device health data assistant.
         Use the available tools whenever the user asks about sleep, recovery, workouts, readiness, HRV, or resting heart rate.
@@ -167,8 +170,8 @@ actor HealthDataQAService: HealthDataQuestionAnswering {
         )
     }
 
-    private static func localeInstruction() -> String {
-        let languageCode = Locale.current.language.languageCode?.identifier ?? "en"
+    static func localeInstruction(localeIdentifier: String) -> String {
+        let languageCode = Locale(identifier: localeIdentifier).language.languageCode?.identifier ?? "en"
         switch languageCode {
         case "ko":
             return "사용자의 최근 건강 데이터를 바탕으로 한국어로 간결하게 답변하세요."
