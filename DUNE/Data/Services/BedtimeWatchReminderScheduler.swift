@@ -6,6 +6,7 @@ import WatchConnectivity
 protocol BedtimeReminderNotificationScheduling {
     func isAuthorized() async -> Bool
     func add(_ request: UNNotificationRequest) async throws
+    func pendingReminder(identifier: String) async -> UNNotificationRequest?
     func removePendingReminder(identifier: String)
 }
 
@@ -26,6 +27,10 @@ struct UserNotificationCenterBedtimeReminderScheduler: BedtimeReminderNotificati
         try await center.add(request)
     }
 
+    func pendingReminder(identifier: String) async -> UNNotificationRequest? {
+        await center.pendingNotificationRequests().first { $0.identifier == identifier }
+    }
+
     func removePendingReminder(identifier: String) {
         center.removePendingNotificationRequests(withIdentifiers: [identifier])
     }
@@ -34,6 +39,11 @@ struct UserNotificationCenterBedtimeReminderScheduler: BedtimeReminderNotificati
 @MainActor
 protocol BedtimeReminderWatchAvailabilityProviding {
     var isPaired: Bool { get }
+}
+
+@MainActor
+protocol WatchBedtimeReminderRechecking: Sendable {
+    func cancelPendingReminderIfWatchIsWorn() async
 }
 
 @MainActor
@@ -221,12 +231,13 @@ final class BedtimeReminderScheduler {
 
 /// Schedules the Apple Watch bedtime reminder based on the user's recent average bedtime.
 @MainActor
-final class AppleWatchBedtimeReminderScheduler {
+final class AppleWatchBedtimeReminderScheduler: WatchBedtimeReminderRechecking {
     static let shared = AppleWatchBedtimeReminderScheduler()
     static let settingsKey = "isAppleWatchBedtimeReminderEnabled"
 
     private enum Constants {
         static let notificationIdentifier = "com.raftel.dune.bedtime-watch-reminder"
+        static let scheduledTriggerDateKey = "appleWatchBedtimeReminderScheduledTriggerDate"
         static let watchWearLookbackInterval: TimeInterval = 90 * 60
     }
 
@@ -239,6 +250,10 @@ final class AppleWatchBedtimeReminderScheduler {
     private let calendar: Calendar
     private let now: () -> Date
     private var lastRefreshDate: Date?
+    private var pendingOperation: Task<Void, Never>?
+    private var pendingWearCheck: Task<Void, Never>?
+    private var wearCheckRequestedWhileRunning = false
+    private var recoveredMissingTriggerDate = false
 
     init(
         sleepService: SleepQuerying = SleepQueryService(manager: .shared),
@@ -261,27 +276,34 @@ final class AppleWatchBedtimeReminderScheduler {
     }
 
     func refreshSchedule(force: Bool = false) async {
+        await scheduleSerialized { [self] in
+            await performRefreshSchedule(force: force)
+        }.value
+    }
+
+    private func performRefreshSchedule(force: Bool) async {
         let currentDate = now()
         if !force,
            let last = lastRefreshDate,
            currentDate.timeIntervalSince(last) < 30 * 60 {
+            await recheckPendingReminder(at: currentDate)
             return
         }
         lastRefreshDate = currentDate
 
         let isEnabled = userDefaults.object(forKey: Self.settingsKey) as? Bool ?? true
         guard isEnabled else {
-            await removePendingReminder()
+            performRemovePendingReminder()
             return
         }
 
         guard watchAvailabilityProvider.isPaired else {
-            await removePendingReminder()
+            performRemovePendingReminder()
             return
         }
 
         guard await notificationScheduler.isAuthorized() else {
-            await removePendingReminder()
+            performRemovePendingReminder()
             return
         }
 
@@ -295,7 +317,7 @@ final class AppleWatchBedtimeReminderScheduler {
         guard let bedtime = bedtimeCalculator.execute(
             input: .init(sleepStagesByDay: recentStages, calendar: calendar)
         ) else {
-            await removePendingReminder()
+            performRemovePendingReminder()
             return
         }
 
@@ -307,7 +329,7 @@ final class AppleWatchBedtimeReminderScheduler {
             from: currentDate,
             calendar: calendar
         ) else {
-            await removePendingReminder()
+            performRemovePendingReminder()
             return
         }
 
@@ -315,7 +337,7 @@ final class AppleWatchBedtimeReminderScheduler {
             currentDate: currentDate,
             triggerDate: triggerDate
         ) {
-            await removePendingReminder()
+            performRemovePendingReminder()
             AppLogger.notification.info("[AppleWatchBedtimeReminder] Skipped because Apple Watch appears to be worn near bedtime")
             return
         }
@@ -326,8 +348,8 @@ final class AppleWatchBedtimeReminderScheduler {
         )
 
         let content = UNMutableNotificationContent()
-        content.title = String(localized: "Put on your Apple Watch before bed.")
-        content.body = String(localized: "Wear your Apple Watch to bed to track sleep.")
+        content.title = String(localized: "Check your Apple Watch before bed.")
+        content.body = String(localized: "To track sleep, make sure your Apple Watch is on your wrist.")
         content.sound = .default
         content.userInfo = NotificationResponsePayload(
             routeKind: NotificationRoute.sleepDetail.destination.rawValue,
@@ -340,10 +362,10 @@ final class AppleWatchBedtimeReminderScheduler {
             trigger: UNCalendarNotificationTrigger(dateMatching: triggerComponents, repeats: false)
         )
 
-        await removePendingReminder()
-
         do {
             try await notificationScheduler.add(request)
+            userDefaults.set(triggerDate, forKey: Constants.scheduledTriggerDateKey)
+            recoveredMissingTriggerDate = true
             AppLogger.notification.info("[AppleWatchBedtimeReminder] Scheduled for \(triggerDate.formatted(date: .abbreviated, time: .shortened))")
         } catch {
             AppLogger.notification.error("[AppleWatchBedtimeReminder] Failed to schedule reminder: \(error.localizedDescription)")
@@ -351,7 +373,77 @@ final class AppleWatchBedtimeReminderScheduler {
     }
 
     func removePendingReminder() async {
+        await scheduleSerialized { [self] in
+            performRemovePendingReminder()
+        }.value
+    }
+
+    private func performRemovePendingReminder() {
         notificationScheduler.removePendingReminder(identifier: Constants.notificationIdentifier)
+        userDefaults.removeObject(forKey: Constants.scheduledTriggerDateKey)
+        recoveredMissingTriggerDate = true
+    }
+
+    /// Rechecks a previously scheduled reminder when new heart-rate data arrives.
+    func cancelPendingReminderIfWatchIsWorn() async {
+        if let pendingWearCheck {
+            wearCheckRequestedWhileRunning = true
+            await pendingWearCheck.value
+            return
+        }
+
+        let check = scheduleSerialized { [self] in
+            repeat {
+                wearCheckRequestedWhileRunning = false
+                await recheckPendingReminder(at: now())
+            } while wearCheckRequestedWhileRunning
+            pendingWearCheck = nil
+        }
+        pendingWearCheck = check
+        await check.value
+    }
+
+    private func recheckPendingReminder(at currentDate: Date) async {
+        if let cachedTriggerDate = userDefaults.object(forKey: Constants.scheduledTriggerDateKey) as? Date {
+            guard currentDate < cachedTriggerDate else {
+                userDefaults.removeObject(forKey: Constants.scheduledTriggerDateKey)
+                return
+            }
+            guard currentDate >= cachedTriggerDate.addingTimeInterval(-Constants.watchWearLookbackInterval) else {
+                return
+            }
+        } else if recoveredMissingTriggerDate {
+            return
+        }
+
+        recoveredMissingTriggerDate = true
+        guard let request = await notificationScheduler.pendingReminder(identifier: Constants.notificationIdentifier),
+              let trigger = request.trigger as? UNCalendarNotificationTrigger,
+              let triggerDate = calendar.date(from: trigger.dateComponents) else {
+            userDefaults.removeObject(forKey: Constants.scheduledTriggerDateKey)
+            return
+        }
+
+        userDefaults.set(triggerDate, forKey: Constants.scheduledTriggerDateKey)
+        guard await shouldSkipReminderBecauseWatchIsLikelyWorn(
+            currentDate: currentDate,
+            triggerDate: triggerDate
+        ) else { return }
+
+        performRemovePendingReminder()
+        AppLogger.notification.info("[AppleWatchBedtimeReminder] Canceled pending reminder after watch heart-rate update")
+    }
+
+    private func scheduleSerialized(
+        _ operation: @escaping @MainActor () async -> Void
+    ) -> Task<Void, Never> {
+        let previous = pendingOperation
+        let current = Task { @MainActor in
+            await previous?.value
+            await operation()
+        }
+        pendingOperation = current
+        return current
     }
 
     private func configuredLeadTime() -> BedtimeReminderLeadTime {

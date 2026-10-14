@@ -37,11 +37,6 @@ struct DashboardView: View {
         case top
     }
 
-    private let gridColumns: [GridItem] = [
-        GridItem(.flexible(), spacing: DS.Spacing.md),
-        GridItem(.flexible(), spacing: DS.Spacing.md)
-    ]
-
     private let refreshSignal: Int
     private let notificationHubSignal: Int
     private let notificationHubIsActive: Bool
@@ -527,6 +522,7 @@ struct DashboardView: View {
             .padding(.horizontal, DS.Spacing.xs)
 
             cardGrid(cards: viewModel.pinnedCards)
+                .accessibilityElement(children: .contain)
                 .accessibilityIdentifier("dashboard-pinned-grid")
         }
     }
@@ -688,6 +684,7 @@ struct DashboardView: View {
         SectionGroup(title: title, icon: icon, iconColor: iconColor) {
             cardGrid(cards: cards)
         }
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier(accessibilityIdentifier)
     }
 
@@ -699,34 +696,53 @@ struct DashboardView: View {
     }
 
     private func cardGrid(cards: [VitalCardData]) -> some View {
-        LazyVGrid(columns: gridColumns, spacing: DS.Spacing.md) {
-            ForEach(Array(cards.enumerated()), id: \.element.id) { index, card in
-                Button {
-                    openMetric(card.metric)
-                } label: {
-                    VitalCard(data: card, animationIndex: index)
-                }
-                .buttonStyle(.plain)
-                .hoverEffect(.highlight)
-                .accessibilityIdentifier(metricCardIdentifier(for: card.metric.category))
-                .contextMenu {
-                    NavigationLink(value: card.metric) {
-                        Label("View Trend", systemImage: "chart.line.uptrend.xyaxis")
+        let rows: [(left: VitalCardData, right: VitalCardData?, index: Int)] =
+            stride(from: 0, to: cards.count, by: 2).map { index in
+                (left: cards[index], right: index + 1 < cards.count ? cards[index + 1] : nil, index: index)
+            }
+
+        return VStack(spacing: DS.Spacing.md) {
+            ForEach(rows, id: \.left.id) { row in
+                HStack(alignment: .top, spacing: DS.Spacing.md) {
+                    metricCard(row.left, index: row.index)
+                    if let right = row.right {
+                        metricCard(right, index: row.index + 1)
+                    } else {
+                        Color.clear
+                            .frame(maxWidth: .infinity)
+                            .accessibilityHidden(true)
                     }
-                    NavigationLink(value: AllDataDestination(category: card.category)) {
-                        Label("Show All Data", systemImage: "list.bullet")
-                    }
                 }
-                .opacity(hasAppeared ? 1 : 0)
-                .offset(y: hasAppeared ? 0 : 8)
-                .animation(
-                    reduceMotion
-                        ? .none
-                        : .easeOut(duration: 0.35).delay(Double(min(index, 5)) * 0.05),
-                    value: hasAppeared
-                )
             }
         }
+    }
+
+    private func metricCard(_ card: VitalCardData, index: Int) -> some View {
+        Button {
+            openMetric(card.metric)
+        } label: {
+            VitalCard(data: card, animationIndex: index)
+        }
+        .buttonStyle(.plain)
+        .frame(maxWidth: .infinity)
+        .hoverEffect(.highlight)
+        .accessibilityIdentifier(metricCardIdentifier(for: card.metric.category))
+        .contextMenu {
+            NavigationLink(value: card.metric) {
+                Label("View Trend", systemImage: "chart.line.uptrend.xyaxis")
+            }
+            NavigationLink(value: AllDataDestination(category: card.category)) {
+                Label("Show All Data", systemImage: "list.bullet")
+            }
+        }
+        .opacity(hasAppeared ? 1 : 0)
+        .offset(y: hasAppeared ? 0 : 8)
+        .animation(
+            reduceMotion
+                ? .none
+                : .easeOut(duration: 0.35).delay(Double(min(index, 5)) * 0.05),
+            value: hasAppeared
+        )
     }
 
     // MARK: - Error States

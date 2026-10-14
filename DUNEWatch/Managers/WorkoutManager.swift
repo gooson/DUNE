@@ -1171,6 +1171,7 @@ final class WorkoutManager: NSObject {
 
         let referenceDate = max(lastMotionDate ?? now, lastInteractionDate ?? now)
         let evaluation = CardioInactivityPolicy.evaluate(
+            workoutMode: workoutMode,
             inactivityDuration: now.timeIntervalSince(referenceDate),
             autoEndDeadline: autoEndDeadline,
             now: now
@@ -1428,10 +1429,16 @@ enum CardioInactivityPolicy {
     static let countdownDuration: TimeInterval = 10
 
     static func evaluate(
+        workoutMode: WorkoutMode,
         inactivityDuration: TimeInterval,
         autoEndDeadline: Date?,
         now: Date
     ) -> CardioInactivityEvaluation {
+        // Wrist motion and live metrics cannot reliably show whether a stair machine is still running.
+        if case .cardio(let activityType, _) = workoutMode, activityType.isStairBased {
+            return .none
+        }
+
         if let autoEndDeadline {
             return now >= autoEndDeadline
                 ? .autoEnd

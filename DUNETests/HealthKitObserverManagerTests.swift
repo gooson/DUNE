@@ -13,13 +13,13 @@ struct HealthKitObserverManagerTests {
         store.state.withLock { $0.deliverySucceeds = false }
         let manager = HealthKitObserverManager(store: store, coordinator: ObserverRefreshStub())
         manager.startObserving()
-        #expect(store.state.withLock { $0.deliveryAttempts } == 8)
+        #expect(store.state.withLock { $0.deliveryAttempts } == 9)
 
         store.state.withLock { $0.deliverySucceeds = true }
         manager.startObserving()
-        #expect(store.state.withLock { $0.deliveryAttempts } == 16)
-        #expect(store.state.withLock { $0.successfulDeliveries } == 8)
-        #expect(store.state.withLock { $0.executed.count } == 8)
+        #expect(store.state.withLock { $0.deliveryAttempts } == 18)
+        #expect(store.state.withLock { $0.successfulDeliveries } == 9)
+        #expect(store.state.withLock { $0.executed.count } == 9)
         manager.stopObserving()
     }
 
@@ -31,20 +31,20 @@ struct HealthKitObserverManagerTests {
 
         manager.startObserving()
         let initialQueries = store.state.withLock { $0.executed }
-        #expect(initialQueries.count == 8)
+        #expect(initialQueries.count == 9)
         manager.startObserving()
-        #expect(store.state.withLock { $0.executed.count } == 8)
-        #expect(store.state.withLock { $0.frequencies.count } == 8)
+        #expect(store.state.withLock { $0.executed.count } == 9)
+        #expect(store.state.withLock { $0.frequencies.count } == 9)
 
         manager.stopObserving()
         #expect(store.state.withLock { $0.stopped.map(ObjectIdentifier.init) } == initialQueries.map(ObjectIdentifier.init))
         manager.stopObserving()
-        #expect(store.state.withLock { $0.stopped.count } == 8)
+        #expect(store.state.withLock { $0.stopped.count } == 9)
 
         manager.startObserving()
-        #expect(store.state.withLock { $0.executed.count } == 16)
+        #expect(store.state.withLock { $0.executed.count } == 18)
         manager.stopObserving()
-        #expect(store.state.withLock { $0.stopped.count } == 16)
+        #expect(store.state.withLock { $0.stopped.count } == 18)
     }
 
     @Test("Body composition requests immediate delivery while steps and workouts remain hourly")
@@ -57,6 +57,7 @@ struct HealthKitObserverManagerTests {
         for identifier: HKQuantityTypeIdentifier in [.bodyMass, .bodyFatPercentage, .bodyMassIndex] {
             #expect(frequencies[HKQuantityType(identifier).identifier] == .immediate)
         }
+        #expect(frequencies[HKQuantityType(.heartRate).identifier] == .immediate)
         #expect(frequencies[HKQuantityType(.stepCount).identifier] == .hourly)
         #expect(frequencies[HKSampleType.workoutType().identifier] == .hourly)
         manager.stopObserving()
@@ -78,6 +79,45 @@ struct HealthKitObserverManagerTests {
         await gate.release()
         await task.value
         #expect(completions.withLock { $0 } == 1)
+    }
+
+    @Test("Heart-rate update completes after the Watch reminder is rechecked")
+    func heartRateUpdateRechecksWatchReminder() async {
+        let gate = ObserverWorkGate()
+        let watchReminder = await ObserverWatchReminderSpy(gate: gate)
+        let completions = Mutex(0)
+
+        let task = HealthKitObserverManager.handleObserverUpdate(
+            sampleType: HKQuantityType(.heartRate),
+            error: nil,
+            coordinator: ObserverRefreshStub(),
+            notificationEvaluator: nil,
+            watchReminder: watchReminder,
+            completion: { completions.withLock { $0 += 1 } }
+        )
+
+        await gate.waitUntilStarted()
+        #expect(await watchReminder.recheckCount == 1)
+        #expect(completions.withLock { $0 } == 0)
+
+        await gate.release()
+        await task?.value
+        #expect(completions.withLock { $0 } == 1)
+    }
+}
+
+@MainActor
+private final class ObserverWatchReminderSpy: WatchBedtimeReminderRechecking {
+    let gate: ObserverWorkGate
+    private(set) var recheckCount = 0
+
+    init(gate: ObserverWorkGate) {
+        self.gate = gate
+    }
+
+    func cancelPendingReminderIfWatchIsWorn() async {
+        recheckCount += 1
+        await gate.wait()
     }
 }
 

@@ -48,6 +48,63 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         waitForExpectations(timeout: 5)
     }
 
+    func testManualScrollToTopSettlesWithoutMovingConditionHero() throws {
+        dismissMorningBriefingIfNeeded()
+
+        let hero = app.descendants(matching: .any)[AXID.dashboardHeroCondition].firstMatch
+        let scrollView = app.scrollViews["dashboard-root-scroll"].firstMatch
+        XCTAssertTrue(hero.waitForExistence(timeout: 15), "Seeded Today should show the condition hero")
+        XCTAssertTrue(scrollView.waitForExistence(timeout: 8), "Today root scroll view should exist")
+        XCTAssertTrue(waitForHittable(hero, timeout: 5), "The hero should start in the viewport")
+
+        let initialHeroY = hero.frame.minY
+        let positionTolerance: CGFloat = 12
+        let settledAtTop = XCTNSPredicateExpectation(
+            predicate: NSPredicate { _, _ in
+                hero.exists && hero.isHittable && abs(hero.frame.minY - initialHeroY) <= positionTolerance
+            },
+            object: nil
+        )
+
+        for _ in 0..<8 where hero.isHittable {
+            scrollView.swipeUp()
+        }
+        XCTAssertFalse(hero.isHittable, "Scroll far enough to move the hero off-screen")
+
+        // Move the content down in bounded steps. The final step uses only the
+        // remaining distance so this gesture does not cross the refresh threshold.
+        for _ in 0..<12 {
+            let remaining = initialHeroY - hero.frame.minY
+            if hero.isHittable && abs(remaining) <= positionTolerance { break }
+            guard remaining > 0 else { break }
+
+            let distance = min(remaining, min(scrollView.frame.height * 0.35, 180))
+            let start = scrollView.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.35))
+            start.press(forDuration: 0.05, thenDragTo: start.withOffset(CGVector(dx: 0, dy: distance)))
+        }
+        XCTAssertEqual(XCTWaiter.wait(for: [settledAtTop], timeout: 5), .completed,
+                       "Manual scrolling should return the hero to its original top position")
+
+        for _ in 0..<3 {
+            let start = scrollView.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.35))
+            start.press(forDuration: 0.05, thenDragTo: start.withOffset(CGVector(dx: 0, dy: 24)))
+            let stableHero = XCTNSPredicateExpectation(
+                predicate: NSPredicate { _, _ in
+                    hero.exists && hero.isHittable && abs(hero.frame.minY - initialHeroY) <= positionTolerance
+                },
+                object: nil
+            )
+            XCTAssertEqual(XCTWaiter.wait(for: [stableHero], timeout: 5), .completed,
+                           "Repeated short pulls at the top should not shift or lock the hero")
+        }
+
+        hero.auditTap()
+        XCTAssertTrue(
+            app.descendants(matching: .any)[AXID.conditionScoreDetailScreen].firstMatch.waitForExistence(timeout: 5),
+            "The condition hero should remain interactive after repeated top pulls"
+        )
+    }
+
     func testConditionHeroOpensConditionScoreDetail() throws {
         dismissMorningBriefingIfNeeded()
 
@@ -116,14 +173,10 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         XCTAssertTrue(weatherCard.waitForExistence(timeout: 10), "Seeded Today state should render weather card")
         XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.dashboardWeatherCard, maxSwipes: 8),
                       "Weather card should be visible before opening its detail")
+        XCTAssertGreaterThanOrEqual(weatherCard.frame.height, 44, "Weather row should have a finger-sized tap target")
         weatherCard.auditTap()
 
         let weatherDetail = app.descendants(matching: .any)[AXID.weatherDetailScreen].firstMatch
-        if VisualAudit.isEnabled && !weatherDetail.waitForExistence(timeout: 2) {
-            // Preserve the failed row-center capture, then test a painted label.
-            let label = weatherCard.staticTexts.firstMatch
-            if label.exists && label.isHittable { label.auditTap() }
-        }
         XCTAssertTrue(weatherDetail.waitForExistence(timeout: 5), "Weather detail should open from weather card")
     }
 
