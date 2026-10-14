@@ -3,10 +3,10 @@ options:
   bundleIdPrefix: com.raftel
   developmentLanguage: en
   deploymentTarget:
-    iOS: "26.0"
-    watchOS: "26.0"
-    visionOS: "26.0"
-  xcodeVersion: "26.2"
+    iOS: "27.0"
+    watchOS: "27.0"
+    visionOS: "27.0"
+  xcodeVersion: "27.0"
   generateEmptyDirectories: true
   groupSortPosition: top
 
@@ -21,7 +21,7 @@ settings:
     ENABLE_USER_SCRIPT_SANDBOXING: YES
     # English text keys are used directly; generated symbols collide on case and punctuation.
     STRING_CATALOG_GENERATE_SYMBOLS: NO
-    IPHONEOS_DEPLOYMENT_TARGET: "26.0"
+    IPHONEOS_DEPLOYMENT_TARGET: "27.0"
     DEVELOPMENT_TEAM: "4GWU9QB2JZ"
     CODE_SIGN_IDENTITY: "iPhone Developer"
 
@@ -226,7 +226,7 @@ targets:
         INFOPLIST_FILE: ../DUNEWatch/Resources/Info.plist
         INFOPLIST_KEY_CFBundleIconName: AppIcon
         INFOPLIST_KEY_CFBundleDisplayName: DUNE
-        WATCHOS_DEPLOYMENT_TARGET: "26.0"
+        WATCHOS_DEPLOYMENT_TARGET: "27.0"
         SWIFT_VERSION: "6.0"
         SWIFT_STRICT_CONCURRENCY: complete
         DEVELOPMENT_TEAM: "4GWU9QB2JZ"
@@ -281,7 +281,7 @@ targets:
         SWIFT_STRICT_CONCURRENCY: complete
         DEVELOPMENT_TEAM: "4GWU9QB2JZ"
         CODE_SIGN_IDENTITY: "iPhone Developer"
-        IPHONEOS_DEPLOYMENT_TARGET: "26.0"
+        IPHONEOS_DEPLOYMENT_TARGET: "27.0"
     entitlements:
       path: ../DUNEWidget/Resources/DUNEWidget.entitlements
       properties:
@@ -419,7 +419,7 @@ targets:
         INFOPLIST_FILE: ../DUNEVision/Resources/Info.plist
         INFOPLIST_KEY_CFBundleDisplayName: DUNE
         INFOPLIST_KEY_CFBundleIconName: VisionAppIcon
-        XROS_DEPLOYMENT_TARGET: "26.0"
+        XROS_DEPLOYMENT_TARGET: "27.0"
         SWIFT_VERSION: "6.0"
         SWIFT_STRICT_CONCURRENCY: complete
         DEVELOPMENT_TEAM: "4GWU9QB2JZ"
@@ -463,7 +463,7 @@ targets:
         MARKETING_VERSION: *marketingVersion
         GENERATE_INFOPLIST_FILE: true
         INFOPLIST_FILE: ../DUNEVisionWidgets/Resources/Info.plist
-        XROS_DEPLOYMENT_TARGET: "26.0"
+        XROS_DEPLOYMENT_TARGET: "27.0"
         SWIFT_VERSION: "6.0"
         SWIFT_STRICT_CONCURRENCY: complete
         DEVELOPMENT_TEAM: "4GWU9QB2JZ"

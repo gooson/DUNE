@@ -23,7 +23,7 @@ PROJECT_SPEC="DUNE/project.yml"
 PROJECT_FILE="DUNE/DUNE.xcodeproj"
 SCHEME="DUNEWatchUITests"
 WATCH_SIM_NAME="${DUNE_WATCH_SIM_NAME:-Apple Watch Series 10 (46mm)}"
-WATCH_SIM_OS="${DUNE_WATCH_SIM_OS:-26.2}"
+WATCH_SIM_OS="${DUNE_WATCH_SIM_OS:-27.0}"
 DESTINATION="platform=watchOS Simulator,name=${WATCH_SIM_NAME},OS=${WATCH_SIM_OS}"
 DERIVED_DATA_DIR="${DAILVE_WATCH_UI_TEST_DERIVED_DATA_DIR:-.deriveddata/watch-ui-tests}"
 LOG_DIR=".xcodebuild"
@@ -154,6 +154,8 @@ for runtime, devices in data['devices'].items():
     if 'watchOS' not in runtime:
         continue
     os_version = parse_os(runtime)
+    if not os_version or int(os_version.split('.')[0]) < 27:
+        continue
     for device in devices:
         if not device.get('isAvailable', True):
             continue

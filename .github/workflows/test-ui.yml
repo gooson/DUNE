@@ -3,7 +3,7 @@ name: UI Tests
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
-    branches: [main]
+    branches: [main, 'codex/ios27-*']
     paths:
       - 'DUNE/**'
       - 'DUNEWatch/**'
@@ -79,7 +79,7 @@ jobs:
   ios-ui-tests:
     needs: ui-gate-contracts
     if: github.event.pull_request.draft == false && needs.ui-gate-contracts.outputs.ios == 'true'
-    runs-on: macos-15
+    runs-on: xcode-27
     timeout-minutes: 60
 
     steps:
@@ -87,7 +87,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Select Xcode
-        run: sudo xcode-select -s /Applications/Xcode_26.2.app/Contents/Developer
+        run: sudo xcode-select -s /Applications/Xcode_27.app/Contents/Developer
 
       - name: Simulator diagnostics
         if: always()
@@ -118,7 +118,7 @@ jobs:
   watch-ui-tests:
     needs: ui-gate-contracts
     if: github.event.pull_request.draft == false && needs.ui-gate-contracts.outputs.watch == 'true'
-    runs-on: macos-15
+    runs-on: xcode-27
     timeout-minutes: 60
 
     steps:
@@ -126,7 +126,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Select Xcode
-        run: sudo xcode-select -s /Applications/Xcode_26.2.app/Contents/Developer
+        run: sudo xcode-select -s /Applications/Xcode_27.app/Contents/Developer
 
       - name: Simulator diagnostics
         if: always()

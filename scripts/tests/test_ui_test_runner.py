@@ -13,6 +13,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 RUNNER = ROOT / "scripts/test-ui.sh"
 WATCH_RUNNER = ROOT / "scripts/test-watch-ui.sh"
+UNIT_RUNNER = ROOT / "scripts/test-unit.sh"
 VERIFIER = ROOT / "scripts/lib/verify-ui-test-log.py"
 SMOKE = "DUNEUITests/DashboardSmokeTests"
 EXTRA = "DUNEUITests/TodaySettingsRegressionTests"
@@ -133,7 +134,7 @@ class RunnerArgvTests(unittest.TestCase):
             path = Path(directory) / "UI results" / "test log.txt"
             result, command = dry_run("--log-file", str(path))
             self.assertEqual(result.returncode, 0, result.stderr)
-            self.assertEqual(values(command, "-destination"), ["platform=iOS Simulator,name=iPhone 17,OS=26.2"])
+            self.assertEqual(values(command, "-destination"), ["platform=iOS Simulator,name=iPhone 17,OS=27.0"])
             self.assertFalse(path.parent.exists())
 
     def test_invalid_selector_and_excluded_plan_fail(self) -> None:
@@ -405,6 +406,71 @@ class RunnerIntegrationTests(unittest.TestCase):
         self.assertEqual(run.returncode, 65)
         self.assertEqual(receipt["run_exit_status"], 65)
         self.assertEqual(receipt["status"], "failed")
+
+
+class SimulatorVersionFloorTests(unittest.TestCase):
+    """Execute each runner's real selector against mixed and legacy-only runtimes."""
+
+    def select(self, runner: Path, platform: str, include_27: bool) -> str:
+        source = runner.read_text()
+        if runner == UNIT_RUNNER:
+            start = source.index("resolve_sim_destination() {")
+            end = source.index('\nif [[ "$MODE" != "watch"', start)
+            name = "iPhone 17" if platform == "iOS" else "Apple Watch Series 11 (46mm)"
+            shell = source[start:end] + (
+                f'\nresolve_sim_destination "{platform}" "{platform}-27-0" "{name}" "27.0" "27"\n'
+            )
+        else:
+            start = source.index("DEVICE_INFO=$(xcrun simctl list devices available -j")
+            end = source.index("\nRESOLVED_", start)
+            setting = ('SIMULATOR_NAME="iPhone 17"; SIMULATOR_OS="27.0"\n'
+                       if platform == "iOS" else
+                       'WATCH_SIM_NAME="Apple Watch Series 11 (46mm)"; WATCH_SIM_OS="27.0"\n')
+            shell = setting + source[start:end] + '\nprintf "%s" "$DEVICE_INFO"\n'
+
+        legacy_name = "iPhone 17" if platform == "iOS" else "Apple Watch Series 11 (46mm)"
+        modern_name = "iPhone 18 Pro" if platform == "iOS" else "Apple Watch Series 12 (46mm)"
+        legacy_id = "11111111-1111-1111-1111-111111111111"
+        modern_id = "22222222-2222-2222-2222-222222222222"
+        devices = {f"com.apple.CoreSimulator.SimRuntime.{platform}-26-2": [
+            {"name": legacy_name, "udid": legacy_id, "isAvailable": True}
+        ]}
+        if include_27:
+            devices[f"com.apple.CoreSimulator.SimRuntime.{platform}-27-0"] = [
+                {"name": modern_name, "udid": modern_id, "isAvailable": True}
+            ]
+
+        with tempfile.TemporaryDirectory() as directory:
+            base = Path(directory)
+            fixture = base / "devices.json"
+            fixture.write_text(json.dumps({"devices": devices}))
+            xcrun = base / "xcrun"
+            xcrun.write_text('#!/bin/sh\ncat "$FAKE_DEVICES_JSON"\n')
+            xcrun.chmod(0o755)
+            result = subprocess.run(["bash", "-c", shell], cwd=ROOT,
+                                    env={**os.environ, "PATH": str(base) + os.pathsep + os.environ["PATH"],
+                                         "FAKE_DEVICES_JSON": str(fixture)},
+                                    text=True, capture_output=True, timeout=10)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertNotIn(legacy_id, result.stdout)
+            return result.stdout.strip()
+
+    def test_mixed_runtimes_select_27_for_all_runners(self) -> None:
+        for runner, platform in ((UNIT_RUNNER, "iOS"), (UNIT_RUNNER, "watchOS"),
+                                 (RUNNER, "iOS"), (WATCH_RUNNER, "watchOS")):
+            with self.subTest(runner=runner.name, platform=platform):
+                choice = self.select(runner, platform, include_27=True)
+                self.assertIn("22222222-2222-2222-2222-222222222222", choice)
+
+    def test_legacy_only_runtimes_never_select_26(self) -> None:
+        for runner, platform in ((UNIT_RUNNER, "iOS"), (UNIT_RUNNER, "watchOS"),
+                                 (RUNNER, "iOS"), (WATCH_RUNNER, "watchOS")):
+            with self.subTest(runner=runner.name, platform=platform):
+                choice = self.select(runner, platform, include_27=False)
+                if runner == UNIT_RUNNER:
+                    self.assertIn("OS=27.0", choice)
+                else:
+                    self.assertEqual(choice, "")
 
 
 if __name__ == "__main__":

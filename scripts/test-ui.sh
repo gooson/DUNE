@@ -19,7 +19,7 @@ PROJECT_SPEC="DUNE/project.yml"
 PROJECT_FILE="DUNE/DUNE.xcodeproj"
 SCHEME="DUNEUITests"
 SIMULATOR_NAME="${DAILVE_IOS_SIMULATOR:-iPhone 17}"
-SIMULATOR_OS="${DAILVE_IOS_OS:-26.2}"
+SIMULATOR_OS="${DAILVE_IOS_OS:-27.0}"
 DESTINATION="platform=iOS Simulator,name=${SIMULATOR_NAME},OS=${SIMULATOR_OS}"
 SIMULATOR_UDID=""
 SIMULATOR_UDID_REQUESTED=0
@@ -227,6 +227,8 @@ for runtime, devices in data['devices'].items():
     if 'iOS' not in runtime:
         continue
     os_version = parse_os(runtime)
+    if not os_version or int(os_version.split('.')[0]) < 27:
+        continue
     for device in devices:
         if not device.get('isAvailable', True):
             continue
