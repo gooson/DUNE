@@ -7,6 +7,17 @@ import OSLog
 final class DashboardViewModel {
     var conditionScore: ConditionScore?
     var baselineStatus: BaselineStatus?
+    private(set) var limitedHRVStartDate: Date?
+    var hasLimitedConditionHistory: Bool {
+        guard let limitedHRVStartDate else { return false }
+        let today = Calendar.current.startOfDay(for: Date())
+        let windowStart = Calendar.current.date(
+            byAdding: .day,
+            value: -CalculateConditionScoreUseCase.conditionWindowDays,
+            to: today
+        ) ?? today
+        return limitedHRVStartDate > windowStart
+    }
     var sortedMetrics: [HealthMetric] = [] {
         didSet { invalidateFilteredMetrics() }
     }
@@ -121,6 +132,7 @@ final class DashboardViewModel {
 
     private let healthKitManager: HealthKitManager
     private let hrvService: HRVQuerying
+    private let historyService: any MetricHistoryQuerying
     private let sleepService: SleepQuerying
     private let workoutService: WorkoutQuerying
     private let stepsService: StepsQuerying
@@ -148,6 +160,7 @@ final class DashboardViewModel {
     init(
         healthKitManager: HealthKitManager = .shared,
         hrvService: HRVQuerying? = nil,
+        historyService: (any MetricHistoryQuerying)? = nil,
         sleepService: SleepQuerying? = nil,
         workoutService: WorkoutQuerying? = nil,
         stepsService: StepsQuerying? = nil,
@@ -162,6 +175,7 @@ final class DashboardViewModel {
     ) {
         self.healthKitManager = healthKitManager
         self.hrvService = hrvService ?? HRVQueryService(manager: healthKitManager)
+        self.historyService = historyService ?? MetricHistoryQueryService(manager: healthKitManager)
         self.sleepService = sleepService ?? SleepQueryService(manager: healthKitManager)
         self.workoutService = workoutService ?? WorkoutQueryService(manager: healthKitManager)
         self.stepsService = stepsService ?? StepsQueryService(manager: healthKitManager)
@@ -209,6 +223,7 @@ final class DashboardViewModel {
         if !hasLoadedOnce {
             conditionScore = nil
             baselineStatus = nil
+            limitedHRVStartDate = nil
             recentScores = []
             coachingMessage = nil
             focusInsight = nil
@@ -254,6 +269,11 @@ final class DashboardViewModel {
         )
 
         guard isCurrentLoadRequest(requestID) else { return }
+        let limitedStart = canQueryHealthKit
+            ? await historyService.limitedReadStartDate(for: .hrv)
+            : nil
+        guard isCurrentLoadRequest(requestID) else { return }
+        limitedHRVStartDate = limitedStart
 
         if hrvResult.failed, sharedSnapshot == nil {
             // Avoid showing stale readiness data after a live HRV refresh fails.

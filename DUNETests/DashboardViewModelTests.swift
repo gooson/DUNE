@@ -23,6 +23,16 @@ private struct MockHRVService: HRVQuerying {
     func fetchRHRCollection(start: Date, end: Date, interval: DateComponents) async throws -> [(date: Date, min: Double, max: Double, average: Double)] { rhrCollection }
 }
 
+private struct DashboardLimitedHistory: MetricHistoryQuerying {
+    let hrvStart: Date
+
+    func earliestDate(for category: HealthMetric.Category) async throws -> Date? { nil }
+    func latestDate(for category: HealthMetric.Category, before end: Date) async throws -> Date? { nil }
+    func limitedReadStartDate(for category: HealthMetric.Category) async -> Date? {
+        category == .hrv ? hrvStart : nil
+    }
+}
+
 private actor ToggleHRVService: HRVQuerying {
     enum TestError: Error {
         case forcedFailure
@@ -385,6 +395,25 @@ struct DashboardViewModelTests {
     }
 
     // MARK: - HRV Fallback
+
+    @Test("A limited HRV read window is identified when it overlaps the condition baseline")
+    func limitedHRVBaseline() async {
+        let start = Calendar.current.date(byAdding: .day, value: -2, to: Date())!
+        let vm = DashboardViewModel(
+            hrvService: MockHRVService(),
+            historyService: DashboardLimitedHistory(hrvStart: start),
+            sleepService: MockSleepService(),
+            workoutService: MockWorkoutService(),
+            stepsService: MockStepsService(),
+            bodyService: MockBodyService(),
+            coachingMessageEnhancer: nil
+        )
+
+        await vm.loadData()
+
+        #expect(vm.limitedHRVStartDate == start)
+        #expect(vm.hasLimitedConditionHistory)
+    }
 
     @Test("HRV shows latest sample even if not today")
     func hrvFallback() async {

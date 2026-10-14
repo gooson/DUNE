@@ -78,6 +78,21 @@ private actor SequencedConditionHRVService: HRVQuerying {
     }
 }
 
+private struct StubLimitedConditionHistory: MetricHistoryQuerying {
+    let hrvStart: Date?
+    let rhrStart: Date?
+
+    func earliestDate(for category: HealthMetric.Category) async throws -> Date? { nil }
+    func latestDate(for category: HealthMetric.Category, before end: Date) async throws -> Date? { nil }
+    func limitedReadStartDate(for category: HealthMetric.Category) async -> Date? {
+        switch category {
+        case .hrv: hrvStart
+        case .rhr: rhrStart
+        default: nil
+        }
+    }
+}
+
 // MARK: - Tests
 
 @Suite("ConditionScoreDetailViewModel")
@@ -134,6 +149,21 @@ struct ConditionScoreDetailViewModelTests {
     }
 
     // MARK: - Loading
+
+    @Test("Condition history reports the later of HRV and resting-heart-rate access boundaries")
+    func limitedHistoryUsesLaterBoundary() async {
+        let hrvStart = Date().addingTimeInterval(-7 * 86_400)
+        let rhrStart = Date().addingTimeInterval(-2 * 86_400)
+        let vm = ConditionScoreDetailViewModel(
+            hrvService: MockHRVService(),
+            historyService: StubLimitedConditionHistory(hrvStart: hrvStart, rhrStart: rhrStart)
+        )
+        vm.configure(score: ConditionScore(score: 50, date: Date()))
+
+        await vm.loadData()
+
+        #expect(vm.limitedHistoryStartDate == rhrStart)
+    }
 
     @Test("loads chart data from HRV samples for week period")
     func loadsWeekData() async {

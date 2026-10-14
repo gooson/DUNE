@@ -76,6 +76,11 @@ struct ConditionScoreDetailView: View {
                 .sensoryFeedback(.selection, trigger: viewModel.selectedPeriod)
                 .staggeredAppear(index: 3)
 
+                if let limitedStart = viewModel.limitedHistoryStartDate,
+                   viewModel.scrollPosition < limitedStart {
+                    LimitedHealthHistoryNotice()
+                }
+
                 // 4. Chart Header
                 ScoreDetailChartHeader(
                     visibleRangeLabel: viewModel.visibleRangeLabel,

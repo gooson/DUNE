@@ -4,6 +4,11 @@ import HealthKit
 protocol MetricHistoryQuerying: Sendable {
     func earliestDate(for category: HealthMetric.Category) async throws -> Date?
     func latestDate(for category: HealthMetric.Category, before end: Date) async throws -> Date?
+    func limitedReadStartDate(for category: HealthMetric.Category) async -> Date?
+}
+
+extension MetricHistoryQuerying {
+    func limitedReadStartDate(for category: HealthMetric.Category) async -> Date? { nil }
 }
 
 struct MetricHistoryQueryService: MetricHistoryQuerying {
@@ -19,6 +24,20 @@ struct MetricHistoryQueryService: MetricHistoryQuerying {
 
     func latestDate(for category: HealthMetric.Category, before end: Date) async throws -> Date? {
         try await sampleDate(for: category, before: end, ascending: false)
+    }
+
+    func limitedReadStartDate(for category: HealthMetric.Category) async -> Date? {
+        let type: HKObjectType
+        switch category {
+        case .sleep:
+            type = HKCategoryType(.sleepAnalysis)
+        case .exercise:
+            type = HKObjectType.workoutType()
+        default:
+            guard let identifier = Self.quantityIdentifier(for: category) else { return nil }
+            type = HKQuantityType(identifier)
+        }
+        return await manager.limitedReadStartDate(for: type)
     }
 
     private func sampleDate(for category: HealthMetric.Category, before end: Date, ascending: Bool) async throws -> Date? {

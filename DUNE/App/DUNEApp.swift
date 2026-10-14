@@ -442,6 +442,7 @@ struct DUNEApp: App {
             guard newPhase == .active else { return }
             Task {
                 await refreshAppRuntimeIfNeeded()
+                await refreshLimitedReadAccessIfNeeded()
                 await requestDeferredAuthorizationsIfNeeded()
             }
         }
@@ -758,6 +759,16 @@ struct DUNEApp: App {
         }
         scheduleWorkoutTitleBackfill()
         backfillHealthKitWorkoutIDs()
+    }
+
+    @MainActor
+    private func refreshLimitedReadAccessIfNeeded() async {
+        guard hasCompletedHealthKitAuthorizationThisLaunch,
+              !Self.shouldBypassLaunchExperienceForTests else { return }
+        let changed = await HealthKitManager.shared.refreshLimitedReadAccessWindow()
+        if changed {
+            await appRuntime.refreshCoordinator.forceRefresh()
+        }
     }
 
     @MainActor

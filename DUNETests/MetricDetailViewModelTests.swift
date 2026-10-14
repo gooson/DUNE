@@ -191,6 +191,20 @@ struct MetricDetailViewModelTests {
         )
     }
 
+    @Test("Metric history keeps the authorization boundary separate from the first sample")
+    func limitedHistoryBoundary() async {
+        let boundary = Date().addingTimeInterval(-2 * 86_400)
+        let vm = makeVM(history: DetailHistoryDates(oldest: nil, limitedStart: boundary))
+
+        vm.configure(category: .weight, currentValue: 70, lastUpdated: nil)
+        await vm.loadData()
+        #expect(vm.earliestHistoryDate == nil)
+        #expect(vm.limitedHistoryStartDate == boundary)
+
+        vm.configure(category: .steps, currentValue: 0, lastUpdated: nil)
+        #expect(vm.limitedHistoryStartDate == nil)
+    }
+
     @Test("Weight history does not repeatedly shrink and expand the Y axis")
     func historyYAxisRemainsStable() async {
         let today = calendar.startOfDay(for: Date())
@@ -713,7 +727,9 @@ struct MetricDetailViewModelTests {
 
 private struct DetailHistoryDates: MetricHistoryQuerying {
     var oldest: Date? = nil
+    var limitedStart: Date? = nil
     func earliestDate(for category: HealthMetric.Category) async throws -> Date? { oldest }
+    func limitedReadStartDate(for category: HealthMetric.Category) async -> Date? { limitedStart }
     func latestDate(for category: HealthMetric.Category, before end: Date) async throws -> Date? {
         oldest.flatMap { $0 < end ? $0 : nil }
     }

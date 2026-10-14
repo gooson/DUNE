@@ -288,10 +288,15 @@ struct DashboardView: View {
             .transition(Self.sectionTransition)
             .staggeredAppear(index: 0)
         } else if let status = viewModel.baselineStatus, !status.isReady {
-            BaselineProgressView(status: status)
-                .reportTabHeroFrame()
-                .transition(Self.sectionTransition)
-                .staggeredAppear(index: 0)
+            VStack(spacing: DS.Spacing.md) {
+                BaselineProgressView(status: status)
+                    .reportTabHeroFrame()
+                if viewModel.hasLimitedConditionHistory {
+                    LimitedHealthHistoryNotice()
+                }
+            }
+            .transition(Self.sectionTransition)
+            .staggeredAppear(index: 0)
         }
 
         // Yesterday Recap (morning only)

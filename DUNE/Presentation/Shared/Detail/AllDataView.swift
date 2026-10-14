@@ -8,6 +8,11 @@ struct AllDataView: View {
 
     var body: some View {
         List {
+            if viewModel.limitedHistoryStartDate != nil {
+                LimitedHealthHistoryNotice()
+                    .listRowSeparator(.hidden)
+            }
+
             ForEach(viewModel.groupedByDate, id: \.date) { section in
                 Section {
                     ForEach(section.points) { point in
@@ -39,7 +44,9 @@ struct AllDataView: View {
                 EmptyStateView(
                     icon: category.iconName,
                     title: "No Data",
-                    message: "No data available yet."
+                    message: viewModel.limitedHistoryStartDate != nil
+                        ? "No data in the available range."
+                        : "No data available yet."
                 )
                 .accessibilityIdentifier("all-data-empty-state")
             }
