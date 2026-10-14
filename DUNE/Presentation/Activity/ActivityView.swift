@@ -687,7 +687,8 @@ struct ActivityView: View {
                 rewardSummary: viewModel.workoutRewardSummary,
                 rewardHistory: viewModel.workoutRewardHistory,
                 unlockedBadgeKeys: viewModel.unlockedBadgeKeys,
-                preselectedKind: preselectedKind
+                preselectedKind: preselectedKind,
+                recentWorkouts: viewModel.recentWorkouts
             )
         case .consistency:
             ConsistencyDetailView()

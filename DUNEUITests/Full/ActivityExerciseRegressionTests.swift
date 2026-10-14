@@ -967,6 +967,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         let pacePoint = app.descendants(matching: .any)["personal-records-timeline-latest-value"].firstMatch
         XCTAssertTrue(pacePoint.waitForExistence(timeout: 10),
                       "A recent workout pace should appear in the monthly chart")
+        VisualAudit.capture("Personal Records pace history")
     }
 
     func testConsistencyDetailShowsCalendarAndHistorySections() throws {

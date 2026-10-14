@@ -39,6 +39,7 @@ Activity tab PR section and detail view were functional but visually plain:
 - `.interpolationMethod(.catmullRom)` for smooth curves
 - Latest point always annotated with value
 - 10% Y-axis padding for breathing room
+- 최고 페이스 차트는 [운동별 페이스 기록](2026-10-14-personal-record-pace-history-chart.md)을 사용한다. 현재 최고 카드는 전체 기간 PR이며, 차트는 선택 기간의 운동 페이스와 조회되지 않은 저장 PR을 표시한다. 페이스 곡선에는 실제 측정값보다 빠른 중간값을 만들지 않도록 선형 보간을 사용한다.
 
 ### 4. Reward Progress Section
 
