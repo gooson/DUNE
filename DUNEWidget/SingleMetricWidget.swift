@@ -7,8 +7,8 @@ enum WidgetMetricChoice: String, AppEnum {
     case readiness
     case wellness
 
-    static var typeDisplayRepresentation: TypeDisplayRepresentation = "Score"
-    static var caseDisplayRepresentations: [Self: DisplayRepresentation] = [
+    static let typeDisplayRepresentation: TypeDisplayRepresentation = "Score"
+    static let caseDisplayRepresentations: [Self: DisplayRepresentation] = [
         .condition: "Condition",
         .readiness: "Readiness",
         .wellness: "Wellness",
@@ -24,8 +24,8 @@ enum WidgetMetricChoice: String, AppEnum {
 }
 
 struct SingleMetricConfiguration: WidgetConfigurationIntent {
-    static var title: LocalizedStringResource = "DUNE Score"
-    static var description = IntentDescription("Choose the health score to show.")
+    static let title: LocalizedStringResource = "DUNE Score"
+    static let description = IntentDescription("Choose the health score to show.")
 
     @Parameter(title: "Score") var metric: WidgetMetricChoice
 
