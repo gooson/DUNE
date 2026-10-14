@@ -31,7 +31,7 @@ WWDC26에서 확인한 DUNE 적용 후보를 우선순위 순으로 제공한다
 - HealthKit 운동 구간을 운동 후 요약과 Watch 실시간 표시에서 사용한다.
 - 기존 Foundation Models 기능에 실제 출력 품질 평가를 추가한다.
 - 운동 템플릿과 습관의 안전한 동작을 App Intents·단축어로 제공한다.
-- 휴식 타이머 Live Activity의 iOS 27 가로 Dynamic Island와 작은 화면을 지원한다.
+- 휴식 타이머 Live Activity의 iOS 27 가로 Dynamic Island 제한 폭과 Watch Smart Stack의 small activity family를 지원한다.
 - Watch 운동 순서 변경, 위젯 구성, 성능 계측을 각기 독립된 후속 PR로 제공한다.
 
 ### Non-functional
@@ -51,16 +51,32 @@ WWDC26에서 확인한 DUNE 적용 후보를 우선순위 순으로 제공한다
 |---|---|---|---|
 | 01 | 선행 조건 | `codex/ios27-deployment` | iOS/watchOS/visionOS와 테스트 기본 런타임 27.0 |
 | 02 | P0 | `codex/ios27-healthkit-limited-access` | 타입별 읽기 시작일, 추세/기준선의 부분 데이터 표현 |
-| 03 | P1 | `codex/ios27-hrv-density` | 새 Watch 수준 표본 밀도 회귀 테스트와 필요한 점수 안정화 |
+| 03 | P1 | `codex/ios27-hrv-density` | 새 Watch 기기에서 표본 밀도가 달라도 점수가 안정적인지 회귀 검증 |
 | 04 | P1 | `codex/ios27-workout-zones` | HealthKit 개인화 구간, Watch 실시간 구간, 운동 후 분포 |
 | 05 | P1 | `codex/ios27-ai-evaluations` | Q&A·운동 템플릿 생성 평가 세트와 실행 경로 |
 | 06 | P1 | `codex/ios27-app-intents` | 템플릿 열기·습관 기록 단축어와 시스템 경로 테스트 |
-| 07 | P2 | `codex/ios27-rest-live-activity` | 가로 Dynamic Island·작은 화면 휴식 타이머 |
+| 07 | P2 | `codex/ios27-rest-live-activity` | `isDynamicIslandLimitedInWidth` 대응·Watch small activity family 휴식 타이머 |
 | 08 | P2 | `codex/ios27-watch-reorder` | Watch 순서 변경 제스처와 접근성 조작 |
-| 09 | P2 | `codex/ios27-widget-config` | 사용자가 표시 지표를 고르는 위젯 |
+| 09 | P2 | `codex/ios27-widget-config` | iOS 27의 `systemExtraLargePortrait`·동적 스타일 검증과 지표 구성 |
 | 10 | P2 | `codex/ios27-metrickit` | 상태별 성능 계측과 개인 건강값 비포함 보고 |
 
-SwiftData `ResultsObserver`/`HistoryObserver`, 자세 이미지 AI, Private Cloud Compute는 측정된 문제 또는 개인정보·계정 자격 판단이 선행되지 않아 이번 적용 스택에서 제외한다. WWDC26 조사에서 보류 후보로 분류한 항목이다.
+SwiftData `ResultsObserver`/`HistoryObserver`, 자세 이미지 AI, Private Cloud Compute는 측정된 문제 또는 개인정보·계정 자격 판단이 선행되지 않아 이번 적용 스택에서 제외한다. HealthKit의 폐경 상태 기록 API도 실제 제품에 생식 건강 기록 화면이 없어 보류한다. WWDC26 조사에서 확인한 뒤 보류 후보로 분류한 항목이다.
+
+### 조사 근거
+
+| 적용 후보 | Apple 원문 |
+|---|---|
+| iOS·watchOS 27 플랫폼 변경 | [iOS 27 가이드](https://developer.apple.com/wwdc26/guides/ios/), [watchOS 27 가이드](https://developer.apple.com/wwdc26/guides/watchos/) |
+| HealthKit 기간 제한 읽기 권한 | [HealthKit 권한 문서](https://developer.apple.com/documentation/healthkit/authorizing-access-to-health-data), [시작일 API](https://developer.apple.com/documentation/healthkit/hkhealthstore/earliestauthorizedsampledate%28for%3A%29) |
+| 개인화 운동 구간 | [WWDC26 운동 구간 세션](https://developer.apple.com/videos/play/wwdc2026/207/) |
+| Foundation Models 품질 평가 | [WWDC26 Foundation Models](https://developer.apple.com/videos/play/wwdc2026/241/), [평가 세션](https://developer.apple.com/videos/play/wwdc2026/298/) |
+| App Intents 및 단축어 테스트 | [WWDC26 App Intents 테스트](https://developer.apple.com/videos/play/wwdc2026/295/) |
+| Live Activity·SwiftUI 표시 | [WWDC26 Live Activities](https://developer.apple.com/videos/play/wwdc2026/223/), [SwiftUI 세션](https://developer.apple.com/videos/play/wwdc2026/269/) |
+| Watch 재정렬 | [WWDC26 SwiftUI 가이드](https://developer.apple.com/wwdc26/guides/swiftui/), [재정렬 API](https://developer.apple.com/documentation/SwiftUI/Reordering-items-in-lists-stacks-grids-and-custom-layouts) |
+| 세로형 초대형 위젯 | [`systemExtraLargePortrait`](https://developer.apple.com/documentation/WidgetKit/WidgetFamily/systemExtraLargePortrait), [WWDC26 WidgetKit](https://developer.apple.com/videos/play/wwdc2026/277/) |
+| 성능 계측 | [WWDC26 MetricKit 세션](https://developer.apple.com/videos/play/wwdc2026/222/) |
+
+WWDC26 [전체 영상 목록](https://developer.apple.com/videos/wwdc2026/)과 iOS/watchOS 가이드에서 앱의 현재 HealthKit, SwiftUI, WidgetKit, Foundation Models, App Intents, ActivityKit, SwiftData 경로에 연결되는 항목을 대조했다. HRV 표본 밀도는 WWDC26에 새 HealthKit API로 발표된 기능이라고 단정하지 않는다. [Apple Watch 심박수 안내](https://support.apple.com/en-us/120277)의 새 기기 동작에 대응하는 데이터 회귀 검증으로 분류한다. 구성 가능한 위젯 자체는 기존 WidgetKit 기능이고, 27 전용 검토점은 [WidgetKit foundations](https://developer.apple.com/videos/play/wwdc2026/277/)의 `systemExtraLargePortrait` family 및 시스템 스타일 적응이다.
 
 ### Alternative Approaches Considered
 
@@ -126,19 +142,19 @@ SwiftData `ResultsObserver`/`HistoryObserver`, 자세 이미지 AI, Private Clou
 ### Step 7: Rest Live Activity PR
 
 - **Files**: 휴식 타이머 widget view와 tests/captures.
-- **Changes**: 제한 폭에서는 간결한 표시를 사용하고 작은 family 레이아웃을 제공한다.
-- **Verification**: 세로·가로 Dynamic Island, Watch Smart Stack 및 접근성.
+- **Changes**: `isDynamicIslandLimitedInWidth`에서 간결한 compact 표시를 사용하고, `activityFamily == .small`일 때 Watch Smart Stack에 맞는 표시를 제공한다.
+- **Verification**: 세로·가로 Dynamic Island의 제한 폭 분기, Watch small activity family, 접근성.
 
 ### Step 8: Watch reorder PR
 
 - **Files**: Watch 재정렬 view와 workout state, tests/captures.
-- **Changes**: 완료 운동을 고정한 채 Watch 끌기 재정렬을 추가하고 접근성 조작을 유지한다.
+- **Changes**: `reorderable()`과 `reorderContainer(for:move:)`로 완료 운동을 고정한 채 Watch 재정렬을 추가하고 접근성 조작을 유지한다.
 - **Verification**: 제스처·완료 운동 경계·Watch 캡처.
 
 ### Step 9: Configurable widget PR
 
 - **Files**: 위젯 구성과 App Intent, widget tests/captures.
-- **Changes**: 사용자가 Condition/Readiness/Wellness 중 대표 지표를 고른다.
+- **Changes**: 사용자가 Condition/Readiness/Wellness 중 대표 지표를 고르고, iOS 27에서 제공하는 `systemExtraLargePortrait` family의 실제 배치를 확인한다.
 - **Verification**: 기본 설정 마이그레이션, 선택 변경, 잠금 화면 개인정보 노출 점검.
 
 ### Step 10: MetricKit PR
