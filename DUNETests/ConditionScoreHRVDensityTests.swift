@@ -26,26 +26,6 @@ struct ConditionScoreHRVDensityTests {
         ))
     }
 
-    @Test("Exact duplicate sampling density leaves the daily score unchanged")
-    func duplicateDensity() {
-        let values: [Double] = [61, 52, 54, 49, 57, 51, 55]
-        let sparse = values.enumerated().map { day, value in
-            sample(dayOffset: day, hour: 10, value: value)
-        }
-        let dense = values.enumerated().flatMap { day, value in
-            (0..<6).map { minute in
-                sample(dayOffset: day, hour: 10, minute: minute, value: value)
-            }
-        }
-
-        let sparseScore = dailyScore(sparse).score
-        let denseScore = dailyScore(dense).score
-        #expect(sparseScore != nil && denseScore != nil)
-        #expect(sparseScore?.score == denseScore?.score)
-        #expect(abs((sparseScore?.detail?.todayHRV ?? 0) - (denseScore?.detail?.todayHRV ?? 0)) < 0.001)
-        #expect(abs((sparseScore?.detail?.baselineHRV ?? 0) - (denseScore?.detail?.baselineHRV ?? 0)) < 0.001)
-    }
-
     @Test("A more frequent morning source does not drown out the evening signal")
     func mixedCadence() {
         let morning: [Double] = [50, 48, 53, 47, 51, 49, 52]
@@ -92,5 +72,56 @@ struct ConditionScoreHRVDensityTests {
         #expect(abs((sparseScore?.detail?.todayHRV ?? 0) - 55) < 0.001)
         #expect(abs((denseScore?.detail?.todayHRV ?? 0) - 55) < 0.001)
         #expect(sparseScore?.score == denseScore?.score)
+    }
+
+    @Test("Three observed recent hours use equal hourly weight")
+    func intradayRecentHours() {
+        let history = (1...6).map { day in
+            sample(dayOffset: day, hour: 12, value: 50)
+        }
+        let today = [
+            sample(dayOffset: 0, hour: 10, value: 90),
+            sample(dayOffset: 0, hour: 15, value: 40),
+            sample(dayOffset: 0, hour: 16, value: 50),
+            sample(dayOffset: 0, hour: 17, value: 60)
+        ]
+        let denseHour = (1...5).map { minute in
+            sample(dayOffset: 0, hour: 15, minute: minute, value: 40)
+        }
+
+        let sparse = calculator.executeIntraday(input: .init(
+            hrvSamples: history + today,
+            evaluationDate: evaluationDate
+        )).score
+        let dense = calculator.executeIntraday(input: .init(
+            hrvSamples: history + today + denseHour,
+            evaluationDate: evaluationDate
+        )).score
+
+        #expect(sparse != nil && dense != nil)
+        #expect(abs((sparse?.detail?.todayHRV ?? 0) - 50) < 0.001)
+        #expect(abs((dense?.detail?.todayHRV ?? 0) - 50) < 0.001)
+        #expect(sparse?.score == dense?.score)
+    }
+
+    @Test("Two samples in the same hour do not satisfy the intraday fallback")
+    func intradayDuplicateOnlyHour() {
+        let history = (1...6).map { day in
+            sample(dayOffset: day, hour: 12, value: 50)
+        }
+        let oneSample = sample(dayOffset: 0, hour: 12, value: 60)
+        let duplicate = sample(dayOffset: 0, hour: 12, minute: 10, value: 60)
+
+        let single = calculator.executeIntraday(input: .init(
+            hrvSamples: history + [oneSample],
+            evaluationDate: evaluationDate
+        ))
+        let dense = calculator.executeIntraday(input: .init(
+            hrvSamples: history + [oneSample, duplicate],
+            evaluationDate: evaluationDate
+        ))
+
+        #expect(single.score == nil)
+        #expect(dense.score == nil)
     }
 }

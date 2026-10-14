@@ -11,6 +11,7 @@ related_files:
 related_solutions:
   - docs/solutions/general/2026-03-12-condition-score-rhr-baseline-and-chart-scroll.md
   - docs/solutions/architecture/2026-03-13-hourly-score-snapshot-system.md
+  - docs/solutions/general/2026-10-14-condition-score-hrv-density.md
 ---
 
 # Solution: Stabilize Condition Score Intraday Chart
@@ -50,17 +51,22 @@ private func computeIntradayAverage(
     evaluationDate: Date,
     calendar: Calendar
 ) -> Double? {
+    let fullDayHourly = hourlyAverages(from: validSamples, calendar: calendar)
+    guard fullDayHourly.count >= minimumIntradayFallbackHours else { return nil }
+
     let recentWindow = validSamples.filter { $0.date >= recentWindowStart }
-    if recentWindow.count >= minimumIntradayWindowSamples {
-        return average(recentWindow.map(\.value))
+    let recentHourly = hourlyAverages(from: recentWindow, calendar: calendar)
+    if recentHourly.count >= minimumIntradayWindowHours {
+        return average(recentHourly)
     }
 
     let expandedWindow = validSamples.filter { $0.date >= expandedWindowStart }
-    if expandedWindow.count >= minimumIntradayWindowSamples {
-        return average(expandedWindow.map(\.value))
+    let expandedHourly = hourlyAverages(from: expandedWindow, calendar: calendar)
+    if expandedHourly.count >= minimumIntradayWindowHours {
+        return average(expandedHourly)
     }
 
-    return average(validSamples.map(\.value))
+    return average(fullDayHourly)
 }
 ```
 
