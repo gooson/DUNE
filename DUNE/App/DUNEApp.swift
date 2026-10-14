@@ -34,6 +34,7 @@ struct DUNEApp: App {
     private let notificationService: any NotificationService
     private let notificationCenterDelegate: AppNotificationCenterDelegate
     private let cloudKitSetupBackgroundTask: CloudKitSetupBackgroundTask
+    private let workoutGenerationMetricMonitor: WorkoutGenerationMetricMonitor?
     private let whatsNewManager = WhatsNewManager.shared
     private let whatsNewStore = WhatsNewStore.shared
     private static let minimumLaunchSplashDuration: Duration = .seconds(1)
@@ -255,6 +256,7 @@ struct DUNEApp: App {
     }
 
     init() {
+        workoutGenerationMetricMonitor = Self.isRunningXCTest ? nil : WorkoutGenerationMetricMonitor()
 #if DEBUG
         if Self.shouldResetUITestState {
             TestDataSeeder.resetUserDefaults()
