@@ -790,6 +790,27 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         }
     }
 
+    func testPersonalRecordsPaceHistoryShowsWorkoutsInMonth() throws {
+        openActivityDetail(
+            sectionIdentifier: AXID.activitySectionPR,
+            destinationIdentifier: AXID.activityPersonalRecordsDetailScreen,
+            maxSwipes: 24
+        )
+
+        let paceChip = app.buttons["activity-personal-records-kind-fastestPace"].firstMatch
+        XCTAssertTrue(paceChip.waitForExistence(timeout: 10))
+        let chipBar = app.scrollViews["activity-personal-records-chip-bar"].firstMatch
+        XCTAssertTrue(chipBar.waitForExistence(timeout: 5))
+        for _ in 0..<6 where !paceChip.isHittable { chipBar.swipeLeft() }
+        XCTAssertTrue(paceChip.isHittable)
+        paceChip.tap()
+        tapSegment(in: AXID.activityPersonalRecordsPeriodPicker, index: 0, timeout: 10)
+
+        let pacePoint = app.descendants(matching: .any)["personal-records-timeline-latest-value"].firstMatch
+        XCTAssertTrue(pacePoint.waitForExistence(timeout: 10),
+                      "A recent workout pace should appear in the monthly chart")
+    }
+
     func testConsistencyDetailShowsCalendarAndHistorySections() throws {
         openActivityDetail(
             sectionIdentifier: AXID.activitySectionConsistency,

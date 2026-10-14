@@ -9,6 +9,7 @@ struct PersonalRecordsDetailView: View {
     let rewardHistory: [WorkoutRewardEvent]
     var unlockedBadgeKeys: Set<String> = []
     var preselectedKind: ActivityPersonalRecord.Kind?
+    var recentWorkouts: [WorkoutSummary] = []
 
     @State private var viewModel = PersonalRecordsDetailViewModel()
     @State private var shareImage: ShareableImage?
@@ -28,6 +29,11 @@ struct PersonalRecordsDetailView: View {
             hasher.combine(record.id)
             hasher.combine(record.value)
             hasher.combine(record.date.timeIntervalSince1970)
+        }
+        for workout in recentWorkouts {
+            hasher.combine(workout.id)
+            hasher.combine(workout.averagePace)
+            hasher.combine(workout.date.timeIntervalSince1970)
         }
         return hasher.finalize()
     }
@@ -95,6 +101,7 @@ struct PersonalRecordsDetailView: View {
         }
         .task(id: recordsUpdateKey) {
             viewModel.load(records: records)
+            viewModel.addPaceWorkouts(recentWorkouts)
             viewModel.rewardSummary = rewardSummary
             viewModel.rewardHistory = rewardHistory
             viewModel.unlockedBadgeKeys = unlockedBadgeKeys
@@ -102,6 +109,13 @@ struct PersonalRecordsDetailView: View {
             if viewModel.selectedKind == nil {
                 viewModel.selectedKind = preselectedKind ?? viewModel.availableKinds.first
             }
+            if viewModel.resolvedKind == .fastestPace {
+                await viewModel.loadPaceHistoryIfNeeded()
+            }
+        }
+        .task(id: viewModel.resolvedKind) {
+            guard viewModel.resolvedKind == .fastestPace else { return }
+            await viewModel.loadPaceHistoryIfNeeded()
         }
     }
 
@@ -211,15 +225,42 @@ struct PersonalRecordsDetailView: View {
 
     private var timelineChart: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            Text("PR Timeline")
-                .font(.subheadline.weight(.semibold))
-                .foregroundStyle(DS.Color.textSecondary)
+            Group {
+                if viewModel.resolvedKind == .fastestPace {
+                    Text("Pace History")
+                } else {
+                    Text("PR Timeline")
+                }
+            }
+            .font(.subheadline.weight(.semibold))
+            .foregroundStyle(DS.Color.textSecondary)
 
             if viewModel.chartData.isEmpty {
-                Text(String(localized: "No records in this period."))
-                    .font(.caption)
-                    .foregroundStyle(.tertiary)
-                    .frame(maxWidth: .infinity, minHeight: 220)
+                Group {
+                    if viewModel.isLoadingPaceHistory && viewModel.resolvedKind == .fastestPace {
+                        ProgressView()
+                    } else if let error = viewModel.paceHistoryError,
+                              viewModel.resolvedKind == .fastestPace {
+                        Text(error)
+                            .font(.caption)
+                            .foregroundStyle(.tertiary)
+                    } else if viewModel.resolvedKind == .fastestPace {
+                        Group {
+                            if viewModel.selectedPeriod == .year {
+                                Text("No pace recorded in the past year.")
+                            } else {
+                                Text("No pace recorded in this period. Try a longer period.")
+                            }
+                        }
+                        .font(.caption)
+                        .foregroundStyle(.tertiary)
+                    } else {
+                        Text(String(localized: "No records in this period."))
+                            .font(.caption)
+                            .foregroundStyle(.tertiary)
+                    }
+                }
+                .frame(maxWidth: .infinity, minHeight: 220)
             } else {
                 let chartColor = viewModel.resolvedKind?.tintColor ?? DS.Color.activity
 
@@ -236,7 +277,7 @@ struct PersonalRecordsDetailView: View {
                             endPoint: .bottom
                         )
                     )
-                    .interpolationMethod(.catmullRom)
+                    .interpolationMethod(viewModel.resolvedKind == .fastestPace ? .linear : .catmullRom)
 
                     // Smooth curved line
                     LineMark(
@@ -244,7 +285,8 @@ struct PersonalRecordsDetailView: View {
                         y: .value("Value", record.value)
                     )
                     .foregroundStyle(chartColor.opacity(0.7))
-                    .interpolationMethod(.catmullRom)
+                    // A smoothed pace curve can imply a faster value than any workout measured.
+                    .interpolationMethod(viewModel.resolvedKind == .fastestPace ? .linear : .catmullRom)
                     .lineStyle(StrokeStyle(lineWidth: 2.5, lineCap: .round))
 
                     // Data points

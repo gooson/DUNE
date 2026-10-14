@@ -23559,6 +23559,38 @@
         }
       }
     },
+    "No pace recorded in the past year." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "過去1年間にペースの記録はありません。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "지난 1년간 측정된 페이스가 없어요."
+          }
+        }
+      }
+    },
+    "No pace recorded in this period. Try a longer period." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "この期間にペースの記録はありません。期間を長くしてみてください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 기간에 측정된 페이스가 없어요. 기간을 늘려 보세요."
+          }
+        }
+      }
+    },
     "No personal records yet." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -25287,6 +25319,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "과부하"
+          }
+        }
+      }
+    },
+    "Pace History" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ペース履歴"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "페이스 기록"
           }
         }
       }
