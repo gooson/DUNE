@@ -534,6 +534,24 @@ final class MetricDetailViewModel {
         let calendar = Calendar.current
         let today = Date()
 
+        if ProcessInfo.processInfo.arguments.contains("--ui-design-map-sleep-insights") {
+            let fixture = SleepDeficitAnalysis(
+                shortTermAverage: 420,
+                longTermAverage: 450,
+                weeklyDeficit: 180,
+                dailyDeficits: (0..<7).map { day in
+                    .init(date: calendar.date(byAdding: .day, value: -day, to: today) ?? today,
+                          actualMinutes: 420, deficitMinutes: 30)
+                },
+                level: .mild,
+                dataPointCount: 7
+            )
+            deficitAnalysis = fixture
+            debtRecoveryPrediction = debtRecoveryUseCase.execute(deficit: fixture)
+            hasLoadedSleepInsightCards = true
+            return
+        }
+
         async let deficitTask = fetchDeficitAnalysis(today: today, calendar: calendar)
         async let bedtimeTask = fetchAverageBedtime(today: today, calendar: calendar)
 
@@ -542,7 +560,7 @@ final class MetricDetailViewModel {
         guard isCurrentReloadRequest(requestID) else { return }
         deficitAnalysis = deficit
         averageBedtime = bedtime
-        if let deficit {
+        if let deficit = deficitAnalysis {
             debtRecoveryPrediction = debtRecoveryUseCase.execute(deficit: deficit)
         }
         hasLoadedSleepInsightCards = true

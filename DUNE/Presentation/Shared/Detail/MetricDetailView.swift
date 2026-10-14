@@ -102,7 +102,8 @@ struct MetricDetailView: View {
                         title: "Sleep Quality",
                         icon: "bed.double.fill",
                         iconColor: DS.Color.sleep,
-                        subtitle: "Analyzes sleep debt, recovery forecast, and awakening patterns"
+                        subtitle: "Analyzes sleep debt, recovery forecast, and awakening patterns",
+                        sectionIdentifier: "sleep-section-quality"
                     ) {
                         if let deficit = viewModel.deficitAnalysis,
                            deficit.level != .insufficient {
@@ -111,7 +112,6 @@ struct MetricDetailView: View {
                         WakeAnalysisCard(analysis: viewModel.wasoAnalysis)
                         SleepDebtRecoveryCard(prediction: viewModel.debtRecoveryPrediction)
                     }
-                    .accessibilityIdentifier("sleep-section-quality")
                     .staggeredAppear(index: 4)
 
                     // Group 2: Sleep Patterns
@@ -119,7 +119,8 @@ struct MetricDetailView: View {
                         title: "Sleep Patterns",
                         icon: "clock.badge.checkmark",
                         iconColor: DS.Color.sleep,
-                        subtitle: "Tracks bedtime regularity and nap patterns"
+                        subtitle: "Tracks bedtime regularity and nap patterns",
+                        sectionIdentifier: "sleep-section-patterns"
                     ) {
                         if let averageBedtime = viewModel.averageBedtime {
                             AverageBedtimeCard(averageBedtime: averageBedtime)
@@ -127,7 +128,6 @@ struct MetricDetailView: View {
                         SleepRegularityCard(regularity: viewModel.sleepRegularity)
                         NapDetectionCard(analysis: viewModel.napAnalysis)
                     }
-                    .accessibilityIdentifier("sleep-section-patterns")
                     .staggeredAppear(index: 5)
 
                     // Group 3: Nocturnal Health
@@ -135,13 +135,13 @@ struct MetricDetailView: View {
                         title: "Nocturnal Health",
                         icon: "heart.text.clipboard",
                         iconColor: DS.Color.sleep,
-                        subtitle: "Monitors heart rate, breathing, and oxygen levels during sleep"
+                        subtitle: "Monitors heart rate, breathing, and oxygen levels during sleep",
+                        sectionIdentifier: "sleep-section-nocturnal"
                     ) {
                         NocturnalVitalsChartView(snapshot: viewModel.nocturnalVitals)
                         VitalsTimelineCard(analysis: viewModel.vitalsTimeline)
                         BreathingDisturbanceCard(analysis: viewModel.breathingAnalysis)
                     }
-                    .accessibilityIdentifier("sleep-section-nocturnal")
                     .staggeredAppear(index: 6)
 
                     // Group 4: External Factors
@@ -149,12 +149,12 @@ struct MetricDetailView: View {
                         title: "External Factors",
                         icon: "arrow.triangle.branch",
                         iconColor: DS.Color.sleep,
-                        subtitle: "Explores how exercise and environment affect your sleep"
+                        subtitle: "Explores how exercise and environment affect your sleep",
+                        sectionIdentifier: "sleep-section-external"
                     ) {
                         SleepExerciseCorrelationCard(correlation: viewModel.exerciseCorrelation)
                         SleepEnvironmentCard(analysis: viewModel.sleepEnvironment)
                     }
-                    .accessibilityIdentifier("sleep-section-external")
                     .staggeredAppear(index: 7)
                 }
 

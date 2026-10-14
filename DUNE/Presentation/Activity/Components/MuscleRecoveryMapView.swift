@@ -65,6 +65,7 @@ struct MuscleRecoveryMapView: View {
                     .font(.subheadline)
                     .foregroundStyle(DS.Color.textSecondary)
             }
+            .accessibilityIdentifier("activity-muscle-map-algorithm-info")
 
             Spacer()
 
@@ -74,6 +75,7 @@ struct MuscleRecoveryMapView: View {
                 }
             }
             .pickerStyle(.segmented)
+            .accessibilityIdentifier("activity-muscle-map-mode")
             .frame(maxWidth: 160)
         }
         .sheet(isPresented: $showingRecoveryInfoSheet) {

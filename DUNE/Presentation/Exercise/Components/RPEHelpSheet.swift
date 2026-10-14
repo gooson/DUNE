@@ -21,6 +21,7 @@ struct RPEHelpSheet: View {
                 }
                 .padding()
             }
+            .accessibilityIdentifier("rpe-help-sheet")
             .navigationTitle("RPE Guide")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

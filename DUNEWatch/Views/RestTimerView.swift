@@ -42,16 +42,14 @@ struct RestTimerView: View {
 
     var body: some View {
         GeometryReader { geometry in
-            // Reserve a full 44pt action row before sizing the primary countdown.
-            let ringSize = min(144, geometry.size.width - DS.Spacing.xl,
-                               max(100, geometry.size.height - 44 - DS.Spacing.xl * 2))
-            let spacing = DS.Spacing.sm
+            let ringSize = min(136, geometry.size.width - DS.Spacing.xl * 2,
+                               max(96, geometry.size.height - 44 - DS.Spacing.md * 2))
 
             ViewThatFits(in: .vertical) {
-                timerContent(ringSize: ringSize, actionSpacing: spacing)
+                timerContent(ringSize: ringSize)
 
                 ScrollView {
-                    timerContent(ringSize: ringSize, actionSpacing: spacing)
+                    timerContent(ringSize: ringSize)
                         .frame(maxWidth: .infinity)
                 }
                 .scrollBounceBehavior(.basedOnSize)
@@ -94,7 +92,8 @@ struct RestTimerView: View {
             }
         }) {
             rpeOverlay
-                .padding(DS.Spacing.md)
+                .padding(.horizontal, DS.Spacing.md)
+                .padding(.vertical, DS.Spacing.xs)
                 .accessibilityElement(children: .contain)
                 .accessibilityIdentifier("watch-rest-timer-rpe-sheet")
         }
@@ -116,8 +115,8 @@ struct RestTimerView: View {
         }
     }
 
-    private func timerContent(ringSize: CGFloat, actionSpacing: CGFloat) -> some View {
-        VStack(spacing: actionSpacing) {
+    private func timerContent(ringSize: CGFloat) -> some View {
+        VStack(spacing: DS.Spacing.md) {
             ZStack {
                 if !isLuminanceReduced {
                     Circle()
@@ -130,33 +129,34 @@ struct RestTimerView: View {
                         .animation(reduceMotion ? nil : .linear(duration: 1), value: tick)
                 }
 
-                VStack(spacing: 0) {
+                VStack(spacing: DS.Spacing.xs) {
                     Text(timeString)
-                        .font(.system(size: min(42, ringSize * 0.34), weight: .bold, design: .rounded).monospacedDigit())
+                        .font(.system(size: min(36, ringSize * 0.3), weight: .bold, design: .rounded).monospacedDigit())
                         .lineLimit(1)
                         .minimumScaleFactor(0.7)
                         .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.restTimerCountdown)
 
                     heartRateLabel
-                    rpeButton(compact: ringSize < 124)
                 }
                 .frame(width: ringSize - DS.Spacing.xl * 2)
             }
             .frame(width: ringSize, height: ringSize)
 
-            HStack(spacing: DS.Spacing.sm) {
+            HStack(spacing: DS.Spacing.xs) {
                 Button {
                     addTime(30)
                 } label: {
                     Text("+30s")
-                        .font(.caption.weight(.semibold))
-                        .frame(maxWidth: .infinity, minHeight: 44)
+                        .font(.caption2.weight(.semibold))
+                        .frame(minWidth: 46, maxWidth: .infinity, minHeight: 44)
                         .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
-                .background(.quaternary, in: Capsule())
+                .background(.quaternary, in: RoundedRectangle(cornerRadius: DS.Radius.md))
                 .disabled(totalSeconds + 30 > Self.maxDurationSeconds)
                 .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.restTimerAddTimeButton)
+
+                rpeButton
 
                 Button {
                     didFinish = true
@@ -165,15 +165,16 @@ struct RestTimerView: View {
                     onSkip(total)
                 } label: {
                     Text("Skip")
-                        .font(.caption.weight(.semibold))
+                        .font(.caption2.weight(.semibold))
                         .lineLimit(1)
                         .minimumScaleFactor(0.75)
-                        .frame(maxWidth: .infinity, minHeight: 44)
+                        .frame(minWidth: 50, maxWidth: .infinity, minHeight: 44)
                         .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
                 .foregroundStyle(isLuminanceReduced ? Color.primary : Color.black)
-                .background(isLuminanceReduced ? Color.clear : theme.metricActivity, in: Capsule())
+                .background(isLuminanceReduced ? Color.clear : theme.metricActivity,
+                            in: RoundedRectangle(cornerRadius: DS.Radius.md))
                 .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.restTimerSkipButton)
             }
         }
@@ -202,39 +203,39 @@ struct RestTimerView: View {
             : Text("Not measured"))
     }
 
-    private func rpeButton(compact: Bool) -> some View {
+    private var rpeButton: some View {
         Button {
             adjustedRPE = hasConfirmedRPE ? adjustedRPE : (estimatedRPE ?? 8)
             showRPEInput = true
         } label: {
-            HStack(spacing: DS.Spacing.xxs) {
-                VStack(spacing: 0) {
-                    if hasConfirmedRPE {
-                        Text("RPE \(RPELevel.format(adjustedRPE))")
-                            .monospacedDigit()
-                    } else if let estimatedRPE {
-                        Text("RPE \(RPELevel.format(estimatedRPE))")
-                            .monospacedDigit()
-                        if !compact {
-                            Text("Suggested")
-                                .font(DS.Typography.tinyLabel)
-                                .foregroundStyle(.secondary)
-                        }
-                    } else {
-                        Text("Rate RPE")
-                    }
+            VStack(spacing: 0) {
+                if hasConfirmedRPE {
+                    Text("RPE")
+                        .font(DS.Typography.tinyLabel)
+                    Text(RPELevel.format(adjustedRPE))
+                        .monospacedDigit()
+                } else if let estimatedRPE {
+                    Text("Suggested")
+                        .font(.system(size: 8, weight: .medium))
+                        .foregroundStyle(.secondary)
+                    Text(RPELevel.format(estimatedRPE))
+                        .monospacedDigit()
+                } else {
+                    Text("RPE")
+                        .font(DS.Typography.tinyLabel)
+                    Text("Record")
                 }
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 9, weight: .semibold))
             }
             .font(.caption2.weight(.semibold))
-            .foregroundStyle(theme.metricActivity)
+            .foregroundStyle(Color.primary)
             .lineLimit(1)
-            .minimumScaleFactor(0.75)
-            .frame(maxWidth: .infinity, minHeight: 44)
+            .minimumScaleFactor(0.8)
+            .frame(width: 46, height: 44)
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+        .background(.quaternary, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+        .accessibilityLabel(rpeButtonAccessibilityLabel)
         .accessibilityIdentifier(
             estimatedRPE == nil && !hasConfirmedRPE
                 ? "watch-rest-timer-rpe-rate"
@@ -242,35 +243,21 @@ struct RestTimerView: View {
         )
     }
 
-    // MARK: - RPE Overlay
-
-    private var rpeOverlay: some View {
-        ViewThatFits(in: .vertical) {
-            rpeContent
-            ScrollView {
-                rpeContent
-            }
-            .scrollBounceBehavior(.basedOnSize)
+    private var rpeButtonAccessibilityLabel: Text {
+        if hasConfirmedRPE {
+            Text("RPE \(RPELevel.format(adjustedRPE))")
+        } else if let estimatedRPE {
+            Text("RPE \(RPELevel.format(estimatedRPE))")
+        } else {
+            Text("Rate RPE")
         }
     }
 
-    private var rpeContent: some View {
-        VStack(spacing: DS.Spacing.md) {
-            VStack(spacing: DS.Spacing.xxs) {
-                Text("RPE")
-                    .font(DS.Typography.metricLabel)
-                    .foregroundStyle(.secondary)
-                Text(RPELevel.format(adjustedRPE))
-                    .font(DS.Typography.primaryMetric)
-                    .foregroundStyle(rpeColor)
-                    .contentTransition(.numericText())
-                Text(RPELevel(value: adjustedRPE).displayLabel)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-            .accessibilityElement(children: .combine)
+    // MARK: - RPE Overlay
 
-            HStack(spacing: DS.Spacing.lg) {
+    private var rpeOverlay: some View {
+        ScrollView {
+            HStack(spacing: DS.Spacing.xs) {
                 Button {
                     let newValue = adjustedRPE - RPELevel.step
                     if RPELevel.range.contains(newValue) {
@@ -280,11 +267,29 @@ struct RestTimerView: View {
                 } label: {
                     Image(systemName: "minus")
                         .font(.title3.weight(.semibold))
-                        .frame(maxWidth: .infinity, minHeight: 44)
-                        .contentShape(Rectangle())
+                        .frame(width: 44, height: 44)
+                        .contentShape(Circle())
                 }
+                .buttonStyle(.plain)
+                .background(.quaternary, in: Circle())
                 .accessibilityLabel("Decrease RPE")
                 .disabled(adjustedRPE <= RPELevel.range.lowerBound)
+
+                VStack(spacing: DS.Spacing.xxs) {
+                    Text(RPELevel.format(adjustedRPE))
+                        .font(.system(size: 32, weight: .bold, design: .rounded).monospacedDigit())
+                        .foregroundStyle(rpeColor)
+                        .contentTransition(.numericText())
+                    Text(RPELevel(value: adjustedRPE).displayLabel)
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.8)
+                }
+                .frame(maxWidth: .infinity)
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel("RPE")
+                .accessibilityValue(Text(RPELevel.format(adjustedRPE)))
 
                 Button {
                     let newValue = adjustedRPE + RPELevel.step
@@ -295,15 +300,19 @@ struct RestTimerView: View {
                 } label: {
                     Image(systemName: "plus")
                         .font(.title3.weight(.semibold))
-                        .frame(maxWidth: .infinity, minHeight: 44)
-                        .contentShape(Rectangle())
+                        .frame(width: 44, height: 44)
+                        .contentShape(Circle())
                 }
+                .buttonStyle(.plain)
+                .background(.quaternary, in: Circle())
                 .accessibilityLabel("Increase RPE")
                 .disabled(adjustedRPE >= RPELevel.range.upperBound)
             }
-            .buttonStyle(.plain)
-            .background(.quaternary, in: Capsule())
-
+            .frame(maxWidth: .infinity)
+            .padding(.top, DS.Spacing.xs)
+        }
+        .scrollBounceBehavior(.basedOnSize)
+        .safeAreaInset(edge: .bottom, spacing: 0) {
             Button {
                 onRPEAdjusted?(adjustedRPE)
                 hasConfirmedRPE = true
@@ -319,6 +328,7 @@ struct RestTimerView: View {
             .foregroundStyle(.black)
             .background(theme.metricActivity, in: Capsule())
             .accessibilityIdentifier("watch-rest-timer-rpe-confirm")
+            .padding(.top, DS.Spacing.xs)
         }
     }
 

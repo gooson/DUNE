@@ -188,6 +188,13 @@ final class LifeRegressionTests: SeededUITestBaseCase {
         XCTAssertTrue(app.scrollToHittableElementIfNeeded(restoreID, maxSwipes: 8),
                       "Archived habit Restore action must be reachable")
         VisualAudit.capture("Archived habit with reachable Restore")
+        let historyID = "habit-management-history-Morning Stretch"
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(historyID, maxSwipes: 8),
+                      "Archived habit History action must be reachable")
+        app.buttons[historyID].firstMatch.auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)["habit-management-history-screen"].firstMatch
+            .waitForExistence(timeout: 8), "Management history sheet should open")
+        VisualAudit.capture("Archived habit management history")
     }
 
     private func captureLifeAuditScroll(_ route: String) {

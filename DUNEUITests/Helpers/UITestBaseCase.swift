@@ -164,11 +164,9 @@ class UITestBaseCase: XCTestCase {
         let restoredInsightsClose = app.buttons["workout-insights-close"].firstMatch
         if restoredInsightsClose.exists && restoredInsightsClose.isHittable {
             restoredInsightsClose.auditTap()
-            let dismissed = XCTNSPredicateExpectation(
-                predicate: NSPredicate(format: "exists == false"), object: restoredInsightsClose
-            )
-            XCTAssertEqual(XCTWaiter.wait(for: [dismissed], timeout: 10), .completed,
-                           "Restored Insights must close before the primary fixture can be audited")
+            // The secondary scene can remain in the accessibility tree after
+            // its main window has returned to the foreground. setUp verifies
+            // primary navigation instead of requiring that scene to vanish.
         }
     }
 

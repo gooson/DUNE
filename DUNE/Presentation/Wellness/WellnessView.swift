@@ -103,17 +103,19 @@ struct WellnessView: View {
                         }
 
                         // Sleep Prediction
-                        SectionGroup(title: "Tonight's Sleep", icon: "moon.zzz", iconColor: DS.Color.sleep) {
+                        SectionGroup(title: "Tonight's Sleep", icon: "moon.zzz",
+                                     iconColor: DS.Color.sleep,
+                                     sectionIdentifier: "wellness-section-sleep-prediction") {
                             if viewModel.sleepPrediction != nil {
                                 NavigationLink(value: SleepPredictionDestination()) {
                                     SleepPredictionCard(prediction: viewModel.sleepPrediction)
                                 }
                                 .buttonStyle(.plain)
+                                .accessibilityIdentifier("wellness-sleep-prediction-detail-link")
                             } else {
                                 SleepPredictionCard(prediction: nil)
                             }
                         }
-                        .accessibilityIdentifier("wellness-section-sleep-prediction")
                         .staggeredAppear(index: 1)
 
                         // Physical section

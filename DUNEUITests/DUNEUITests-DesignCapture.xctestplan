@@ -1,0 +1,31 @@
+{
+  "configurations": [
+    {
+      "id": "C8997F26-5FA8-49E8-A944-E7D4E1A18201",
+      "name": "Design Capture",
+      "options": {}
+    }
+  ],
+  "defaultOptions": {
+    "targetForVariableExpansion": {
+      "containerPath": "container:DUNE.xcodeproj",
+      "identifier": "DUNEUITests",
+      "name": "DUNEUITests"
+    },
+    "environmentVariableEntries": [
+      { "key": "DUNE_VISUAL_AUDIT", "value": "1", "enabled": true },
+      { "key": "DUNE_VISUAL_AUDIT_STATIC", "value": "1", "enabled": true }
+    ]
+  },
+  "testTargets": [
+    {
+      "skippedTests": ["HealthKitPermissionUITests"],
+      "target": {
+        "containerPath": "container:DUNE.xcodeproj",
+        "identifier": "DUNEUITests",
+        "name": "DUNEUITests"
+      }
+    }
+  ],
+  "version": 1
+}

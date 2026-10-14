@@ -1,0 +1,1064 @@
+{
+  "device": "duo-open",
+  "source_revision": "1f49c921512a8fbf33eb26221c527d03c54b136f",
+  "xcresults": [
+    ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.13_10-50-25-+0900.xcresult"
+  ],
+  "processed_capture_candidates": 146,
+  "captured": {
+    "T03": {
+      "row_id": "T03",
+      "evidence": "title:Today",
+      "test": "NotificationRoutingRegressionTests/testBedtimeReminderPushesFromNotificationHub()",
+      "action": "root after setup -[NotificationRoutingRegressionTests testBedtimeReminderPushesFromNotificationHub]",
+      "timestamp": 1791827338.042,
+      "image": "B84D8926-4937-4FB7-B232-BCCCACD92B84.png",
+      "screen": "screen-1-2006x2852-root after setup -[NotificationRoutingRegressionTests testBedtimeReminderPushesFromNotificationHub]_1_B7C909BF-6DF2-4FB1-9645-E7A4A56FE6ED.png",
+      "file": "T03.png"
+    },
+    "T02": {
+      "row_id": "T02",
+      "evidence": "cloud-sync-consent-view",
+      "test": "CloudSyncConsentRegressionTests/testCloudSyncConsentHookPresentsAndDismissesSheet()",
+      "action": "Cloud sync consent before dismissal",
+      "timestamp": 1791827290.258,
+      "image": "4A25176A-3C8B-42AD-907D-36B503AD0CF7.png",
+      "screen": "screen-1-2006x2852-Cloud sync consent before dismissal_1_411B20CC-9C0E-4261-BF24-AC51C370B3DA.png",
+      "file": "T02.png"
+    },
+    "T11": {
+      "row_id": "T11",
+      "evidence": "notification-hub-screen",
+      "test": "TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState()",
+      "action": "tap dashboard-toolbar-notifications",
+      "timestamp": 1791827662.623,
+      "image": "44EF8DE8-7363-4BF9-A7A1-B3AC2B1D49A9.png",
+      "screen": "screen-1-2006x2852-tap dashboard-toolbar-notifications_1_76C5FDB6-F6B8-45E1-8CC1-4DA3A1D9D49C.png",
+      "file": "T11.png"
+    },
+    "T06": {
+      "row_id": "T06",
+      "evidence": "metric-detail-screen-sleep",
+      "test": "TodaySettingsRegressionTests/testSleepMetricOpensMetricDetailAndAllData()",
+      "action": "tap dashboard-metric-sleep",
+      "timestamp": 1791827921.273,
+      "image": "95D53AD3-F633-4AC8-9533-8C9E12C0A553.png",
+      "screen": "screen-1-2006x2852-tap dashboard-metric-sleep_1_419EF4A5-C1DA-421F-9E48-C38DFD568FCD.png",
+      "file": "T06.png"
+    },
+    "T10": {
+      "row_id": "T10",
+      "evidence": "notification-daily-digest-screen",
+      "test": "NotificationResponseRoutingUITests/testNotificationResponseOpensSummaryAndBackReturnsToToday()",
+      "action": "root after setup -[NotificationResponseRoutingUITests testNotificationResponseOpensSummaryAndBackReturnsToToday]",
+      "timestamp": 1791827321.042,
+      "image": "2C5DF763-3B4D-447F-B6B6-04ED26553558.png",
+      "screen": "screen-1-2006x2852-root after setup -[NotificationResponseRoutingUITests testNotificationResponseOpensSummaryAndBackReturnsToToday]_1_9C4A0EB6-2C5D-4B13-9FB6-379E16AAA6F5.png",
+      "file": "T10.png"
+    },
+    "T15": {
+      "row_id": "T15",
+      "evidence": "notification-sleep-detail-screen",
+      "test": "NotificationRoutingRegressionTests/testBedtimeReminderPushesFromNotificationHub()",
+      "action": "before teardown -[NotificationRoutingRegressionTests testBedtimeReminderPushesFromNotificationHub]",
+      "timestamp": 1791827349.184,
+      "image": "4D60A084-EABE-449F-8D89-2F20134F6CB7.png",
+      "screen": "screen-1-2006x2852-before teardown -[NotificationRoutingRegressionTests testBedtimeReminderPushesFromNotificationHub]_1_D886992E-151F-4187-9189-DED67781FE7D.png",
+      "file": "T15.png"
+    },
+    "L01": {
+      "row_id": "L01",
+      "evidence": "title:Life",
+      "test": "LifeRegressionTests/testVisualAuditHabitManagement()",
+      "action": "root after setup -[LifeRegressionTests testVisualAuditHabitManagement]",
+      "timestamp": 1791831301.259,
+      "image": "CCA67B3D-52FA-4458-A8B2-B21E55314385.png",
+      "screen": "screen-1-2006x2852-root after setup -[LifeRegressionTests testVisualAuditHabitManagement]_1_3B6F8E4A-2CA7-4874-B454-A344CB851B43.png",
+      "file": "L01.png"
+    },
+    "P05": {
+      "row_id": "P05",
+      "evidence": "posture-history-screen",
+      "test": "PostureVisualAuditTests/testPostureComparison()",
+      "action": "tap wellness-link-posturehistory",
+      "timestamp": 1791830020.228,
+      "image": "7B515595-A102-4BE7-9E0F-AFBC73C4065A.png",
+      "screen": "screen-1-2006x2852-tap wellness-link-posturehistory_1_A5DA161E-999F-43F4-ACFF-45206A87BF49.png",
+      "file": "P05.png"
+    },
+    "S06": {
+      "row_id": "S06",
+      "evidence": "test-and-unmapped-title:근육 지도",
+      "test": "SettingsSmokeTests/testWhatsNewMuscleMapDetailExists()",
+      "action": "before teardown -[SettingsSmokeTests testWhatsNewMuscleMapDetailExists]",
+      "timestamp": 1791827448.055,
+      "image": "1C2C69BD-CFBA-40C3-87AC-2E72212399EB.png",
+      "screen": "screen-1-2006x2852-before teardown -[SettingsSmokeTests testWhatsNewMuscleMapDetailExists]_1_EAC70CE1-F513-48AB-A62A-1A26D576C967.png",
+      "file": "S06.png"
+    },
+    "S01": {
+      "row_id": "S01",
+      "evidence": "title:Settings",
+      "test": "SettingsSmokeTests/testWhatsNewMuscleMapDetailExists()",
+      "action": "tap dashboard-toolbar-settings",
+      "timestamp": 1791827412.691,
+      "image": "EAB7BC3D-6E9F-4544-B2FC-FF52B7BDE129.png",
+      "screen": "screen-1-2006x2852-tap dashboard-toolbar-settings_1_1900DDAA-53C6-49AE-9E62-C1D06A6B5171.png",
+      "file": "S01.png"
+    },
+    "T04": {
+      "row_id": "T04",
+      "evidence": "condition-score-detail-screen",
+      "test": "TodaySettingsRegressionTests/testConditionHeroOpensConditionScoreDetail()",
+      "action": "tap dashboard-hero-condition",
+      "timestamp": 1791827617.575,
+      "image": "1FE4FE37-FACA-4F80-9193-2C71B6B0E9C5.png",
+      "screen": "screen-1-2006x2852-tap dashboard-hero-condition_1_F7133FB4-D64B-4110-933B-35932DC0CEA1.png",
+      "file": "T04.png"
+    },
+    "S03": {
+      "row_id": "S03",
+      "evidence": "exercise-default-edit-screen",
+      "test": "TodaySettingsRegressionTests/testExerciseDefaultsListSearchesAndOpensEditRoute()",
+      "action": "tap exercise-defaults-row-barbell-bench-press",
+      "timestamp": 1791827645.754,
+      "image": "DE526809-9141-49B0-ADA0-257D1CADDA83.png",
+      "screen": "screen-1-2006x2852-tap exercise-defaults-row-barbell-bench-press_1_B89E4F2C-BCBF-4992-BEA2-3A96F58E88E6.png",
+      "file": "S03.png"
+    },
+    "S02": {
+      "row_id": "S02",
+      "evidence": "exercise-defaults-screen",
+      "test": "TodaySettingsRegressionTests/testExerciseDefaultsListSearchesAndOpensEditRoute()",
+      "action": "tap settings-row-exercisedefaults",
+      "timestamp": 1791827640.616,
+      "image": "50796F7E-1EC6-41DA-A093-4A6CEB711C1D.png",
+      "screen": "screen-1-2006x2852-tap settings-row-exercisedefaults_1_50551454-F04C-4021-9585-3DDDF5192E77.png",
+      "file": "S02.png"
+    },
+    "S04": {
+      "row_id": "S04",
+      "evidence": "preferred-exercises-screen",
+      "test": "TodaySettingsRegressionTests/testPreferredExercisesSearchShowsToggle()",
+      "action": "tap settings-row-preferredexercises",
+      "timestamp": 1791827738.388,
+      "image": "55E53B4A-CCD3-488F-A341-49AD10ECA201.png",
+      "screen": "screen-1-2006x2852-tap settings-row-preferredexercises_1_BA5EF5FA-44E8-4C3A-9958-1B90009E325E.png",
+      "file": "S04.png"
+    },
+    "T07": {
+      "row_id": "T07",
+      "evidence": "all-data-screen-sleep",
+      "test": "TodaySettingsRegressionTests/testSleepMetricOpensMetricDetailAndAllData()",
+      "action": "tap metric-detail-show-all-data",
+      "timestamp": 1791827936.679,
+      "image": "7339479A-5C4C-473E-A762-D9CA2E0D133F.png",
+      "screen": "screen-1-2006x2852-tap metric-detail-show-all-data_1_F7CCC169-2F84-4C3D-B83C-B9A55C5C86E3.png",
+      "file": "T07.png"
+    },
+    "T09": {
+      "row_id": "T09",
+      "evidence": "dashboard-morning-briefing-screen",
+      "test": "TodaySettingsRegressionTests/testVisualAuditMorningBriefing()",
+      "action": "Today morning briefing initial viewport",
+      "timestamp": 1791828010.369,
+      "image": "552A793C-20B9-435F-BEAB-C7DE60AA1FAA.png",
+      "screen": "screen-1-2006x2852-Today morning briefing initial viewport_1_E5518697-AE1E-4002-B24C-9CB36F15927F.png",
+      "file": "T09.png"
+    },
+    "S05": {
+      "row_id": "S05",
+      "evidence": "whatsnew-screen",
+      "test": "TodaySettingsRegressionTests/testVisualAuditWhatsNew()",
+      "action": "tap dashboard-toolbar-whatsnew",
+      "timestamp": 1791828052.328,
+      "image": "7E9A2750-015A-4A45-A7E9-9CB99E7E74C9.png",
+      "screen": "screen-1-2006x2852-tap dashboard-toolbar-whatsnew_1_3480F819-04E8-42CF-B6F4-8222BF6A38CA.png",
+      "file": "S05.png"
+    },
+    "T08": {
+      "row_id": "T08",
+      "evidence": "weather-detail-screen",
+      "test": "TodaySettingsRegressionTests/testWeatherCardOpensWeatherDetail()",
+      "action": "tap 21°C",
+      "timestamp": 1791828133.219,
+      "image": "AB3DFFC2-A088-4D24-9E21-7CF849930D2E.png",
+      "screen": "screen-1-2006x2852-tap 21°C_1_B999EB24-D1FD-437A-A1D3-66F54AE000E0.png",
+      "file": "T08.png"
+    },
+    "A07": {
+      "row_id": "A07",
+      "evidence": "activity-exercise-type-detail-screen",
+      "test": "ActivityExerciseRegressionTests/testExerciseTypeDetailShowsTrendSurface()",
+      "action": "tap activity-training-volume-row-manual-strength",
+      "timestamp": 1791828328.825,
+      "image": "7A8228C5-415B-4233-9207-83D08BBDA0FA.png",
+      "screen": "screen-1-2006x2852-tap activity-training-volume-row-manual-strength_1_C4675B1F-FECE-47F3-B3B9-568395A56A3B.png",
+      "file": "A07.png"
+    },
+    "A06": {
+      "row_id": "A06",
+      "evidence": "activity-training-volume-detail-screen",
+      "test": "ActivityExerciseRegressionTests/testExerciseTypeDetailShowsTrendSurface()",
+      "action": "tap activity-section-volume",
+      "timestamp": 1791828316.593,
+      "image": "C4B6DD12-D354-4641-8F8A-7D49BF1EC730.png",
+      "screen": "screen-1-2006x2852-tap activity-section-volume_1_DCC31F2A-272E-456A-8A20-FF08346CD5FB.png",
+      "file": "A06.png"
+    },
+    "A01": {
+      "row_id": "A01",
+      "evidence": "title:Activity",
+      "test": "ActivityExerciseRegressionTests/testExerciseTypeDetailShowsTrendSurface()",
+      "action": "root after setup -[ActivityExerciseRegressionTests testExerciseTypeDetailShowsTrendSurface]",
+      "timestamp": 1791828296.442,
+      "image": "EB7752B4-8635-459A-A896-FB0D3B95FE01.png",
+      "screen": "screen-1-2006x2852-root after setup -[ActivityExerciseRegressionTests testExerciseTypeDetailShowsTrendSurface]_1_323D9A25-7E23-483F-B73E-7C9362B852E4.png",
+      "file": "A01.png"
+    },
+    "W05": {
+      "row_id": "W05",
+      "evidence": "exercise-start-screen",
+      "test": "ActivityExerciseRegressionTests/testManualWorkoutSessionSavesAndDismissesCompletionSheet()",
+      "action": "tap exercise-detail-start",
+      "timestamp": 1791828423.962,
+      "image": "DFA0B392-3ED7-4302-AD7B-5FCCFFFC1C2A.png",
+      "screen": "screen-1-2006x2852-tap exercise-detail-start_1_DFAD0E96-FD13-43BE-BFDF-DB32980C1DC6.png",
+      "file": "W05.png"
+    },
+    "W10": {
+      "row_id": "W10",
+      "evidence": "workout-completion-sheet",
+      "test": "ActivityExerciseRegressionTests/testManualWorkoutSessionSavesAndDismissesCompletionSheet()",
+      "action": "tap workout-session-done",
+      "timestamp": 1791828465.496,
+      "image": "F1802730-B0F3-4DE6-86B9-F17767046AD8.png",
+      "screen": "screen-1-2006x2852-tap workout-session-done_1_79B2F7CB-A591-431E-88FB-8B32DDD90767.png",
+      "file": "W10.png"
+    },
+    "W06": {
+      "row_id": "W06",
+      "evidence": "workout-session-screen",
+      "test": "ActivityExerciseRegressionTests/testManualWorkoutSessionSavesAndDismissesCompletionSheet()",
+      "action": "tap exercise-start-button",
+      "timestamp": 1791828428.597,
+      "image": "65DDE5D6-6C3D-494E-85A3-4BC90A12E52E.png",
+      "screen": "screen-1-2006x2852-tap exercise-start-button_1_656E6A62-570B-4610-B5DA-4E2745179C9C.png",
+      "file": "W06.png"
+    },
+    "W03": {
+      "row_id": "W03",
+      "evidence": "exercise-detail-screen",
+      "test": "ActivityExerciseRegressionTests/testManualWorkoutSessionSavesAndDismissesCompletionSheet()",
+      "action": "tap picker-detail-barbell-bench-press",
+      "timestamp": 1791828418.761,
+      "image": "528A3E67-3260-4B0F-97BE-B4E3407314CD.png",
+      "screen": "screen-1-2006x2852-tap picker-detail-barbell-bench-press_1_1FA57518-D4B7-426F-A5DC-DB4A44D4FF66.png",
+      "file": "W03.png"
+    },
+    "W01": {
+      "row_id": "W01",
+      "evidence": "exercise-view-screen",
+      "test": "ActivityExerciseRegressionTests/testManualWorkoutSessionSavesAndDismissesCompletionSheet()",
+      "action": "tap activity-recent-seeall",
+      "timestamp": 1791828379.811,
+      "image": "0237B2D2-FDEA-4125-8153-5F5B87E593E3.png",
+      "screen": "screen-1-2006x2852-tap activity-recent-seeall_1_F1E95BCA-D966-4599-94F0-8AA40D66D3E3.png",
+      "file": "W01.png"
+    },
+    "T14": {
+      "row_id": "T14",
+      "evidence": "notification-target-not-found-screen",
+      "test": "ActivityExerciseRegressionTests/testNotificationMissingWorkoutRouteShowsFallback()",
+      "action": "tap notification-row-workout-ui-test-activity-workout-missing",
+      "timestamp": 1791828509.223,
+      "image": "629AF254-4E40-4351-9B02-48318EE6286F.png",
+      "screen": "screen-1-2006x2852-tap notification-row-workout-ui-test-activity-workout-missing_1_81DED7AF-7782-471E-B2D3-54019168C648.png",
+      "file": "T14.png"
+    },
+    "W33": {
+      "row_id": "W33",
+      "evidence": "healthkit-workout-title-editor-screen",
+      "test": "ActivityExerciseRegressionTests/testNotificationWorkoutRouteOpensHealthKitDetailAndTitleEditor()",
+      "action": "tap healthkit-workout-edit-title",
+      "timestamp": 1791828541.009,
+      "image": "84CD7733-517A-4F96-A722-88F282CB2357.png",
+      "screen": "screen-1-2006x2852-tap healthkit-workout-edit-title_1_6428ED57-E13B-4F74-BC47-DFFAC4A75482.png",
+      "file": "W33.png"
+    },
+    "W28": {
+      "row_id": "W28",
+      "evidence": "healthkit-workout-detail-screen",
+      "test": "ActivityExerciseRegressionTests/testNotificationWorkoutRouteOpensHealthKitDetailAndTitleEditor()",
+      "action": "tap notification-row-workout-ui-test-activity-workout-running",
+      "timestamp": 1791828536.048,
+      "image": "45E67005-B0DC-493E-8F51-F8631DAA93B1.png",
+      "screen": "screen-1-2006x2852-tap notification-row-workout-ui-test-activity-workout-running_1_2675591E-FA98-4917-ACB0-A00B46FC9756.png",
+      "file": "W28.png"
+    },
+    "W02": {
+      "row_id": "W02",
+      "evidence": "picker-root-list",
+      "test": "ActivityExerciseRegressionTests/testQuickStartPickerShowsDetailAndSearchResults()",
+      "action": "tap activity-toolbar-add",
+      "timestamp": 1791828571.268,
+      "image": "43D16CCF-AED0-4BEB-BC3B-39EFAA16DCF3.png",
+      "screen": "screen-1-2006x2852-tap activity-toolbar-add_1_15B93F02-5FE9-4D3E-8274-83BD863E68B9.png",
+      "file": "W02.png"
+    },
+    "W23": {
+      "row_id": "W23",
+      "evidence": "cardio-start-screen",
+      "test": "ActivityExerciseRegressionTests/testRecommendedRoutineCardOpensExerciseStart()",
+      "action": "tap activity-recommended-routine-card",
+      "timestamp": 1791828699.951,
+      "image": "72937C05-A659-4C1F-AF28-0484BF013727.png",
+      "screen": "screen-1-2006x2852-tap activity-recommended-routine-card_1_438A7786-4C02-4EE2-8AAD-BA444AFA15F6.png",
+      "file": "W23.png"
+    },
+    "W22": {
+      "row_id": "W22",
+      "evidence": "template-workout-transition-screen",
+      "test": "ActivityExerciseRegressionTests/testTemplateWorkoutContainerCloseDismissesFullScreenFlow()",
+      "action": "tap workout-template-row-codex-circuit-builder",
+      "timestamp": 1791856334.692,
+      "image": "96071F68-310E-4E8E-A889-545FFAEAA84D.png",
+      "screen": "screen-1-2006x2852-tap workout-template-row-codex-circuit-builder_1_039B95B6-D3C2-4208-B8F9-DD63E6FA76BA.png",
+      "file": "W22.png"
+    },
+    "W12": {
+      "row_id": "W12",
+      "evidence": "workout-template-list-screen",
+      "test": "ActivityExerciseRegressionTests/testTemplateWorkoutContainerCloseDismissesFullScreenFlow()",
+      "action": "tap exercise-toolbar-templates",
+      "timestamp": 1791856329.925,
+      "image": "BA86C044-AAD3-40EE-BB20-6FCED0906F87.png",
+      "screen": "screen-1-2006x2852-tap exercise-toolbar-templates_1_894AEADA-B977-413E-80AC-C155FAD589F2.png",
+      "file": "W12.png"
+    },
+    "W13": {
+      "row_id": "W13",
+      "evidence": "template-form-screen",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditNewExerciseAtDefaultTextSize()",
+      "action": "tap workout-template-list-add",
+      "timestamp": 1791856497.729,
+      "image": "70730915-8207-4125-9DD3-7AD95D2E9696.png",
+      "screen": "screen-1-2006x2852-tap workout-template-list-add_1_E68028E1-F341-482E-8812-5F685783F654.png",
+      "file": "W13.png"
+    },
+    "W04": {
+      "row_id": "W04",
+      "evidence": "create-custom-exercise-screen",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditNewExerciseAtDefaultTextSize()",
+      "action": "tap picker-create-custom-button",
+      "timestamp": 1791856525.726,
+      "image": "2966861B-38C7-4712-A6E7-BB7FD250EBCA.png",
+      "screen": "screen-1-2006x2852-tap picker-create-custom-button_1_3F20EF97-A380-4680-877F-AA5E7A9EC11E.png",
+      "file": "W04.png"
+    },
+    "W29": {
+      "row_id": "W29",
+      "evidence": "user-category-management-screen",
+      "test": "ActivityExerciseRegressionTests/testUserCategoryManagementCreatesCategory()",
+      "action": "tap exercise-toolbar-categories",
+      "timestamp": 1791829008.517,
+      "image": "AF1C43E0-F2B7-47A6-8F13-52801D599E52.png",
+      "screen": "screen-1-2006x2852-tap exercise-toolbar-categories_1_3C923CDD-A2F3-4BC1-92FD-130510CAE5AE.png",
+      "file": "W29.png"
+    },
+    "W30": {
+      "row_id": "W30",
+      "evidence": "user-category-edit-screen",
+      "test": "ActivityExerciseRegressionTests/testUserCategoryManagementCreatesCategory()",
+      "action": "tap user-category-add",
+      "timestamp": 1791829012.553,
+      "image": "5CF70FE4-B11A-4CD4-BBC3-E639448BA570.png",
+      "screen": "screen-1-2006x2852-tap user-category-add_1_DD3B6592-C36F-474D-B3A1-8027881A7479.png",
+      "file": "W30.png"
+    },
+    "W15": {
+      "row_id": "W15",
+      "evidence": "title:주간 운동 계획",
+      "test": "ActivityExerciseRegressionTests/testWeeklyPlanAssignsTemplateToSelectedDay()",
+      "action": "tap workout-weekly-plan-open",
+      "timestamp": 1791829226.569,
+      "image": "2C226448-2EC9-4DB0-880E-672B310DFA45.png",
+      "screen": "screen-1-2006x2852-tap workout-weekly-plan-open_1_C12AD316-3EE2-472D-89CD-62AAB774B472.png",
+      "file": "W15.png"
+    },
+    "W07": {
+      "row_id": "W07",
+      "evidence": "test-and-action:Rest timer after first completed set",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditRestTimerFromQuickStart()",
+      "action": "Rest timer after first completed set",
+      "timestamp": 1791856621.892,
+      "image": "C3BBEBDA-6031-40FB-8B67-119A575F4A31.png",
+      "screen": "screen-1-2006x2852-Rest timer after first completed set_1_EFFB9CD3-A2F3-4402-AFEF-4D41C2D164D5.png",
+      "file": "W07.png"
+    },
+    "A04": {
+      "row_id": "A04",
+      "evidence": "activity-musclemap-3d-screen",
+      "test": "ActivityMuscleMapRegressionTests/testMuscleMap3DViewModePickerSwitches()",
+      "action": "tap 3D 근육맵",
+      "timestamp": 1791829422.172,
+      "image": "C0488D5B-2E7E-4F18-860E-A60DBAC8315C.png",
+      "screen": "screen-1-2006x2852-tap 3D 근육맵_1_FE399343-E3EF-44F9-AB68-6729029BACE4.png",
+      "file": "A04.png"
+    },
+    "L03": {
+      "row_id": "L03",
+      "evidence": "habit-template-list",
+      "test": "DuoLifeStarterTemplateTests/testEmptyStarterTemplateCreatesHabitAndRendersHabitsSection()",
+      "action": "tap life-empty-template",
+      "timestamp": 1791829652.336,
+      "image": "DC844F0F-9288-4133-8F1B-0A3D77B54869.png",
+      "screen": "screen-1-2006x2852-tap life-empty-template_1_CC1A7E6F-900A-4EFD-ABCB-534BE90E4C0B.png",
+      "file": "L03.png"
+    },
+    "L02": {
+      "row_id": "L02",
+      "evidence": "habit-form-name",
+      "test": "LifeRegressionTests/testEditFlowRenamesSeededHabit()",
+      "action": "tap life-habit-action-edit",
+      "timestamp": 1791829705.375,
+      "image": "786227EC-F7F4-45A4-9379-39884D156746.png",
+      "screen": "screen-1-2006x2852-tap life-habit-action-edit_1_54B84C1D-A136-4715-B81C-33247A473385.png",
+      "file": "L02.png"
+    },
+    "L05": {
+      "row_id": "L05",
+      "evidence": "life-habit-history-screen",
+      "test": "LifeRegressionTests/testHabitHistoryShowsSeededEntriesAndDismisses()",
+      "action": "tap life-habit-action-history",
+      "timestamp": 1791829742.299,
+      "image": "2E9AC63B-716B-4F00-807A-8CE4B0AF0ACB.png",
+      "screen": "screen-1-2006x2852-tap life-habit-action-history_1_62E0E43A-9716-49A3-9A91-C2EF231EE5A3.png",
+      "file": "L05.png"
+    },
+    "L07": {
+      "row_id": "L07",
+      "evidence": "test-and-title:Activity Detail",
+      "test": "LifeRegressionTests/testVisualAuditHabitHeatmap()",
+      "action": "tap habit-heatmap",
+      "timestamp": 1791829819.079,
+      "image": "22831837-2AD0-4410-B06F-69D5B466DDFC.png",
+      "screen": "screen-1-2006x2852-tap habit-heatmap_1_BA55F8C9-628B-48C9-B41D-CE0EC279391A.png",
+      "file": "L07.png"
+    },
+    "L04": {
+      "row_id": "L04",
+      "evidence": "habit-management-screen",
+      "test": "LifeRegressionTests/testVisualAuditHabitManagement()",
+      "action": "tap life-section-habits",
+      "timestamp": 1791829871.885,
+      "image": "C338E90E-BFA3-46C5-9EC1-6E7306DF4619.png",
+      "screen": "screen-1-2006x2852-tap life-section-habits_1_BECE7550-A3FF-4218-87C5-6C7FABF7DFE6.png",
+      "file": "L04.png"
+    },
+    "L08": {
+      "row_id": "L08",
+      "evidence": "life-weekly-report-scroll",
+      "test": "LifeRegressionTests/testVisualAuditWeeklyReport()",
+      "action": "tap life-weekly-report-button",
+      "timestamp": 1791829929.415,
+      "image": "E13ACBF4-2C05-44AF-A40C-A5310926717F.png",
+      "screen": "screen-1-2006x2852-tap life-weekly-report-button_1_414C368F-D3E2-4E27-A0E3-0E504912CB8A.png",
+      "file": "L08.png"
+    },
+    "P02": {
+      "row_id": "P02",
+      "evidence": "title:Realtime Analysis",
+      "test": "PostureVisualAuditTests/testCameraAndRealtimeAvailability()",
+      "action": "tap wellness-menu-realtime-posture",
+      "timestamp": 1791829984.443,
+      "image": "F2EFEB8A-0213-47D5-A992-3732520CFAB2.png",
+      "screen": "screen-1-2006x2852-tap wellness-menu-realtime-posture_1_FD1BF570-91C3-40D6-97FE-C460D51277BF.png",
+      "file": "P02.png"
+    },
+    "P03": {
+      "row_id": "P03",
+      "evidence": "title:Exercise Mode",
+      "test": "PostureVisualAuditTests/testCameraAndRealtimeAvailability()",
+      "action": "tap Select Exercise",
+      "timestamp": 1791829989.687,
+      "image": "0E2F3BDA-47ED-4BBF-B77F-F3FD93B24A6C.png",
+      "screen": "screen-1-2006x2852-tap Select Exercise_1_C8DD360F-199B-46DC-8674-F9BCBB45DE4F.png",
+      "file": "P03.png"
+    },
+    "H01": {
+      "row_id": "H01",
+      "evidence": "title:Wellness",
+      "test": "PostureVisualAuditTests/testCameraAndRealtimeAvailability()",
+      "action": "root after setup -[PostureVisualAuditTests testCameraAndRealtimeAvailability]",
+      "timestamp": 1791829965.664,
+      "image": "75D4BEEB-B48F-4342-A4D2-81E976FA2F23.png",
+      "screen": "screen-1-2006x2852-root after setup -[PostureVisualAuditTests testCameraAndRealtimeAvailability]_1_E46ACB7F-1059-4C68-9474-49009A84271D.png",
+      "file": "H01.png"
+    },
+    "P01": {
+      "row_id": "P01",
+      "evidence": "title:Posture Assessment",
+      "test": "PostureVisualAuditTests/testCameraAndRealtimeAvailability()",
+      "action": "tap wellness-menu-posture",
+      "timestamp": 1791829972.54,
+      "image": "7FBA022E-5B5E-48A9-BAC0-EB6EBC496F81.png",
+      "screen": "screen-1-2006x2852-tap wellness-menu-posture_1_14B259CA-98AD-4237-9AEC-0B81DB454692.png",
+      "file": "P01.png"
+    },
+    "P08": {
+      "row_id": "P08",
+      "evidence": "posture-comparison-photos-scroll",
+      "test": "PostureVisualAuditTests/testPostureComparison()",
+      "action": "tap Compare Selected",
+      "timestamp": 1791830041.029,
+      "image": "F7D87E2B-DABE-413A-9747-3C8C6305DAF5.png",
+      "screen": "screen-1-2006x2852-tap Compare Selected_1_2F53A914-BA60-49CE-93D8-EEDD589F3AB7.png",
+      "file": "P08.png"
+    },
+    "P06": {
+      "row_id": "P06",
+      "evidence": "test-and-title:Assessment Detail",
+      "test": "PostureVisualAuditTests/testPostureHistoryAndDetail()",
+      "action": "tap 86, October 12, 2026, 8 metrics, ·, Visual audit fixture — synthetic measurements for layout verification. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. ",
+      "timestamp": 1791830084.983,
+      "image": "564EFB0C-8F87-4872-9C56-68F710168500.png",
+      "screen": "screen-1-2006x2852-tap 86, October 12, 2026, 8 metrics, ·, Visual audit fixture — synthetic measurements for layout verification. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. _1_8B5EF930-7599-4013-8ED0-7607C9327BEE.png",
+      "file": "P06.png"
+    },
+    "P07": {
+      "row_id": "P07",
+      "evidence": "posture-symmetry-screen",
+      "test": "PostureVisualAuditTests/testPostureSymmetry()",
+      "action": "tap posture-symmetry-link",
+      "timestamp": 1791830153.215,
+      "image": "08660CCD-377B-4EE2-8362-3D04838CE91C.png",
+      "screen": "screen-1-2006x2852-tap posture-symmetry-link_1_2120EDA7-48E0-459E-815B-B4B0BF6CAE50.png",
+      "file": "P07.png"
+    },
+    "H06": {
+      "row_id": "H06",
+      "evidence": "body-history-detail-screen",
+      "test": "WellnessRegressionTests/testBodyAddFlowSavesRecord()",
+      "action": "tap wellness-link-bodyhistory",
+      "timestamp": 1791830245.836,
+      "image": "08F97E5A-35B6-41FC-BE52-83F366B09553.png",
+      "screen": "screen-1-2006x2852-tap wellness-link-bodyhistory_1_9A79F7F9-6EBE-48F8-A8F0-655D5B426FF1.png",
+      "file": "H06.png"
+    },
+    "H05": {
+      "row_id": "H05",
+      "evidence": "body-form-screen",
+      "test": "WellnessRegressionTests/testBodyAddFlowSavesRecord()",
+      "action": "tap wellness-menu-body-record",
+      "timestamp": 1791830223.074,
+      "image": "3CBB8EE2-BD64-4CC6-9E0D-282DE4E1D816.png",
+      "screen": "screen-1-2006x2852-tap wellness-menu-body-record_1_F66D93F1-5DD5-487A-A561-9B0196FE655C.png",
+      "file": "H05.png"
+    },
+    "H04": {
+      "row_id": "H04",
+      "evidence": "test-and-action:Metric comparison",
+      "test": "WellnessRegressionTests/testCompareMetricsSharesPeriodAndDismisses()",
+      "action": "tap wellness-compare-metrics",
+      "timestamp": 1791830324.75,
+      "image": "049A51EC-94B7-47C1-B949-E4700754B6DB.png",
+      "screen": "screen-1-2006x2852-tap wellness-compare-metrics_1_8AD43AE6-B5D3-4570-B0AE-2D73608242DB.png",
+      "file": "H04.png"
+    },
+    "H09": {
+      "row_id": "H09",
+      "evidence": "injury-history-screen",
+      "test": "WellnessRegressionTests/testInjuryAddFlowShowsRecoveredFieldsAndCreatesHistoryRow()",
+      "action": "tap wellness-link-injuryhistory",
+      "timestamp": 1791830431.981,
+      "image": "D83FF923-9EF3-4783-BEFF-ACC9A50B8DC6.png",
+      "screen": "screen-1-2006x2852-tap wellness-link-injuryhistory_1_BDBCE3F5-77F1-47C7-8F95-29325AF40339.png",
+      "file": "H09.png"
+    },
+    "H08": {
+      "row_id": "H08",
+      "evidence": "injury-form-screen",
+      "test": "WellnessRegressionTests/testInjuryAddFlowShowsRecoveredFieldsAndCreatesHistoryRow()",
+      "action": "tap wellness-menu-injury",
+      "timestamp": 1791830399.913,
+      "image": "EEFE005D-15AA-420E-B33B-FC76E8E68B4B.png",
+      "screen": "screen-1-2006x2852-tap wellness-menu-injury_1_FC4313BB-BFB7-4FC7-9539-F4656E7723F4.png",
+      "file": "H08.png"
+    },
+    "H10": {
+      "row_id": "H10",
+      "evidence": "injury-detail-screen",
+      "test": "WellnessRegressionTests/testInjuryHistoryRowOpensDetailAndEditForm()",
+      "action": "tap injury-history-row-0",
+      "timestamp": 1791830455.22,
+      "image": "04F1F7D9-6DCA-4E4A-847A-48717F07DA6B.png",
+      "screen": "screen-1-2006x2852-tap injury-history-row-0_1_85467F6C-CEE3-4904-8FF6-EA55E71688F1.png",
+      "file": "H10.png"
+    },
+    "H11": {
+      "row_id": "H11",
+      "evidence": "injury-statistics-screen",
+      "test": "WellnessRegressionTests/testInjuryStatisticsRouteOpensFromHistory()",
+      "action": "tap injury-history-stats",
+      "timestamp": 1791830489.892,
+      "image": "A947E539-2140-4118-8000-20FE3C10CA79.png",
+      "screen": "screen-1-2006x2852-tap injury-history-stats_1_8EDC595B-0819-41EE-BD21-030690022B8D.png",
+      "file": "H11.png"
+    },
+    "H02": {
+      "row_id": "H02",
+      "evidence": "wellness-score-detail-screen",
+      "test": "WellnessRegressionTests/testWellnessRootRendersAndHeroOpensScoreDetail()",
+      "action": "tap wellness-hero-score",
+      "timestamp": 1791830526.127,
+      "image": "42E1B696-A889-4093-AD01-BFB6094F46CB.png",
+      "screen": "screen-1-2006x2852-tap wellness-hero-score_1_6213C346-94C6-4B93-9C6D-E98C25E18192.png",
+      "file": "H02.png"
+    },
+    "T01": {
+      "row_id": "T01",
+      "evidence": "visually verified simctl frame",
+      "test": "simctl io recordVideo",
+      "action": "app launch at 1.6s",
+      "timestamp": 1791830605.0586426,
+      "image": "launch.mov",
+      "screen": "actual simulator launch frame",
+      "file": "T01.png",
+      "video": "launch.mov",
+      "frame_time": "1.6"
+    },
+    "W26": {
+      "row_id": "W26",
+      "evidence": "exercise-history-screen",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditExerciseHistoryFromSelectedWorkout()",
+      "action": "tap exercise-session-view-history",
+      "timestamp": 1791830749.21,
+      "image": "C705F3D0-C64F-4B4C-8664-15EBC8A31B3A.png",
+      "screen": "screen-1-2006x2852-tap exercise-session-view-history_1_C8208E7A-9274-4E50-BAA3-E9611E8C0296.png",
+      "file": "W26.png"
+    },
+    "W27": {
+      "row_id": "W27",
+      "evidence": "exercise-session-detail-scroll",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditExerciseHistoryFromSelectedWorkout()",
+      "action": "tap exercise-row-barbell-bench-press",
+      "timestamp": 1791830742.106,
+      "image": "64DEF677-C477-41CE-BF91-BEB5032D96D6.png",
+      "screen": "screen-1-2006x2852-tap exercise-row-barbell-bench-press_1_1B50C471-D6F6-4DE6-BF3F-1CA8C74F60EA.png",
+      "file": "W27.png"
+    },
+    "A10": {
+      "row_id": "A10",
+      "evidence": "activity-personal-records-detail-screen",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditPersonalRecordShareSheet()",
+      "action": "tap activity-section-pr",
+      "timestamp": 1791830982.122,
+      "image": "912B9A1C-A5B1-4264-B3C8-E140045D10D6.png",
+      "screen": "screen-1-2006x2852-tap activity-section-pr_1_6AD53F67-D206-4668-B87E-4EA8B526D450.png",
+      "file": "A10.png"
+    },
+    "T17": {
+      "row_id": "T17",
+      "evidence": "health-qa-send",
+      "test": "DesignMapAdditionalRoutesTests/testHealthDataQAOpensFromToday()",
+      "action": "tap dashboard-health-qa-card",
+      "timestamp": 1791831191.717,
+      "image": "0AEA106C-FCAA-4EF7-8360-412C03CE8B33.png",
+      "screen": "screen-1-2006x2852-tap dashboard-health-qa-card_1_31BD71AE-C3F3-46B1-8FB2-00A7479AC3D8.png",
+      "file": "T17.png"
+    },
+    "T12": {
+      "row_id": "T12",
+      "evidence": "notification-message-detail-screen",
+      "test": "DesignMapNotificationDetailTests/testNotificationMessageDetail()",
+      "action": "tap Message Route Fixture",
+      "timestamp": 1791831263.741,
+      "image": "125E0D91-2DAE-4675-960C-C66E25A31065.png",
+      "screen": "screen-1-2006x2852-tap Message Route Fixture_1_5831431A-44CA-41AD-B252-2F20F0268944.png",
+      "file": "T12.png"
+    },
+    "L06": {
+      "row_id": "L06",
+      "evidence": "habit-management-history-screen",
+      "test": "LifeRegressionTests/testVisualAuditHabitManagement()",
+      "action": "tap habit-management-history-Morning Stretch",
+      "timestamp": 1791831363.252,
+      "image": "EFFB5C5F-2B4F-4650-8641-7EF96BCBC3CA.png",
+      "screen": "screen-1-2006x2852-tap habit-management-history-Morning Stretch_1_8A5A027F-69E6-443B-80EC-2E2FF33CCC1E.png",
+      "file": "L06.png"
+    },
+    "H07": {
+      "row_id": "H07",
+      "evidence": "test-and-action:Wellness recent posture record",
+      "test": "PostureVisualAuditTests/testWellnessRecentPostureRecordOpensDetail()",
+      "action": "tap wellness-posture-record-BB500F87-BDA0-4492-983C-99EC44F2B98E",
+      "timestamp": 1791831392.886,
+      "image": "192B68DF-AE7E-4C33-BE95-78B05F27704E.png",
+      "screen": "screen-1-2006x2852-tap wellness-posture-record-BB500F87-BDA0-4492-983C-99EC44F2B98E_1_AB141C25-AA32-4962-8AFA-15B708847167.png",
+      "file": "H07.png"
+    },
+    "P04": {
+      "row_id": "P04",
+      "evidence": "posture-result-screen",
+      "test": "PostureVisualAuditTests/testVisualAuditPostureResultOnSimulator()",
+      "action": "tap wellness-menu-posture",
+      "timestamp": 1791831816.297,
+      "image": "284D65D3-6726-4409-A081-BAC0AEABCF34.png",
+      "screen": "screen-1-2006x2852-tap wellness-menu-posture_1_1A578F97-5802-4B09-B3FD-C571CB9DDAEA.png",
+      "file": "P04.png"
+    },
+    "W14": {
+      "row_id": "W14",
+      "evidence": "test-and-action:Template exercise picker",
+      "test": "ActivityExercisePickerRegressionTests/testFullPickerSupportsFilterSelectorsAndSelectionFromTemplateForm()",
+      "action": "Template exercise picker",
+      "timestamp": 1791831918.758,
+      "image": "FD4C1A46-5833-4052-A198-18D270D72615.png",
+      "screen": "screen-1-2006x2852-Template exercise picker_1_CFD250CF-23BD-4F79-90BC-1013BD3C0A43.png",
+      "file": "W14.png"
+    },
+    "A03": {
+      "row_id": "A03",
+      "evidence": "activity-musclemap-detail-screen",
+      "test": "ActivityExerciseRegressionTests/testActivityDetailRoutesOpenExpectedScreens()",
+      "action": "tap activity-musclemap-detail-link",
+      "timestamp": 1791832056.945,
+      "image": "DB839447-CA63-4268-A093-3A978E99D535.png",
+      "screen": "screen-1-2006x2852-tap activity-musclemap-detail-link_1_D141F58B-28AD-435E-8CC7-CE426D5A352C.png",
+      "file": "A03.png"
+    },
+    "A02": {
+      "row_id": "A02",
+      "evidence": "activity-training-readiness-detail-screen",
+      "test": "ActivityExerciseRegressionTests/testActivityDetailRoutesOpenExpectedScreens()",
+      "action": "tap activity-hero-readiness",
+      "timestamp": 1791832038.96,
+      "image": "A85DF2B0-9466-4F49-A449-46F34002005F.png",
+      "screen": "screen-1-2006x2852-tap activity-hero-readiness_1_5B1796FB-6324-4840-AC72-E205BD0BE648.png",
+      "file": "A02.png"
+    },
+    "A12": {
+      "row_id": "A12",
+      "evidence": "activity-exercise-mix-detail-screen",
+      "test": "ActivityExerciseRegressionTests/testActivityExerciseMixRouteOpensExpectedScreen()",
+      "action": "tap activity-section-exercisemix",
+      "timestamp": 1791832090.278,
+      "image": "744C2EDD-64D1-4F73-A9A5-BB0DBBE4C37C.png",
+      "screen": "screen-1-2006x2852-tap activity-section-exercisemix_1_CA4C9B4E-316D-421C-AD71-3AB9CDA62C21.png",
+      "file": "A12.png"
+    },
+    "A11": {
+      "row_id": "A11",
+      "evidence": "activity-consistency-detail-screen",
+      "test": "ActivityExerciseRegressionTests/testActivitySecondaryDetailRoutesOpenExpectedScreens()",
+      "action": "tap activity-section-consistency",
+      "timestamp": 1791832121.397,
+      "image": "0BFE81FC-937A-4D8B-AC53-7D9A242CBAF9.png",
+      "screen": "screen-1-2006x2852-tap activity-section-consistency_1_2004A5CC-2D63-419F-B885-05702BA679E2.png",
+      "file": "A11.png"
+    },
+    "W25": {
+      "row_id": "W25",
+      "evidence": "cardio-session-summary-screen",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditCardioAtDefaultTextSize()",
+      "action": "tap cardio-session-confirm-end",
+      "timestamp": 1791856430.15,
+      "image": "B159476F-D825-4616-B61D-F3EEB9819712.png",
+      "screen": "screen-1-2006x2852-tap cardio-session-confirm-end_1_36546365-B85F-4509-8D10-3D341D1F1D94.png",
+      "file": "W25.png"
+    },
+    "W24": {
+      "row_id": "W24",
+      "evidence": "cardio-session-screen",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditCardioAtDefaultTextSize()",
+      "action": "tap cardio-start-indoor",
+      "timestamp": 1791856414.023,
+      "image": "5FA55D0B-FDB3-4C1A-9771-31879D86A273.png",
+      "screen": "screen-1-2006x2852-tap cardio-start-indoor_1_A242160C-9234-4B02-9BC5-F3F37E454F07.png",
+      "file": "W24.png"
+    },
+    "W21": {
+      "row_id": "W21",
+      "evidence": "compound-workout-screen",
+      "test": "ActivityExerciseRegressionTests/testCompoundWorkoutSetupStartsWorkoutAndFinishesFlow()",
+      "action": "tap compound-workout-setup-start",
+      "timestamp": 1791832409.631,
+      "image": "3059A991-CEDF-4578-B1D9-134B9E776735.png",
+      "screen": "screen-1-2006x2852-tap compound-workout-setup-start_1_CF235EA6-C47A-4B46-8B00-F3806DCBE45D.png",
+      "file": "W21.png"
+    },
+    "W19": {
+      "row_id": "W19",
+      "evidence": "compound-workout-setup-screen",
+      "test": "ActivityExerciseRegressionTests/testCompoundWorkoutSetupStartsWorkoutAndFinishesFlow()",
+      "action": "tap exercise-menu-compound",
+      "timestamp": 1791832341.424,
+      "image": "34BD769E-A2B0-4361-B318-2160FD4A1DCF.png",
+      "screen": "screen-1-2006x2852-tap exercise-menu-compound_1_FD167B99-E1FA-411C-BE90-320610EC4E1B.png",
+      "file": "W19.png"
+    },
+    "W20": {
+      "row_id": "W20",
+      "evidence": "test-and-action:Compound exercise picker",
+      "test": "ActivityExerciseRegressionTests/testCompoundWorkoutSetupStartsWorkoutAndFinishesFlow()",
+      "action": "Compound exercise picker",
+      "timestamp": 1791832351.958,
+      "image": "498690A7-C33F-452F-B02F-99352A74D48A.png",
+      "screen": "screen-1-2006x2852-Compound exercise picker_1_6F970FA8-5977-4419-99FD-323A9FE3B69E.png",
+      "file": "W20.png"
+    },
+    "A18": {
+      "row_id": "A18",
+      "evidence": "activity-consistency-info-sheet",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditConsistencyExplanation()",
+      "action": "tap activity-consistency-info",
+      "timestamp": 1791833000.369,
+      "image": "186AEFAF-D19E-4B19-8052-A59662A7EFEE.png",
+      "screen": "screen-1-2006x2852-tap activity-consistency-info_1_2C6820EA-1614-48C7-97E1-D332F5D42C83.png",
+      "file": "A18.png"
+    },
+    "A19": {
+      "row_id": "A19",
+      "evidence": "activity-exercise-mix-info-sheet",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditExerciseMixExplanation()",
+      "action": "tap activity-exercise-mix-info",
+      "timestamp": 1791833040.49,
+      "image": "7EEF87C3-DAB6-43A4-BF03-3C2DA1B59B4F.png",
+      "screen": "screen-1-2006x2852-tap activity-exercise-mix-info_1_164F5E2C-74AE-4A77-B21D-B5FE111275BB.png",
+      "file": "A19.png"
+    },
+    "A13": {
+      "row_id": "A13",
+      "evidence": "activity-muscle-detail-popover-sheet",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditMuscleDetailPopover()",
+      "action": "tap musclemap-body-front-chest",
+      "timestamp": 1791833060.399,
+      "image": "28676AE5-5646-4D47-8661-6C1DA2FF9D47.png",
+      "screen": "screen-1-2006x2852-tap musclemap-body-front-chest_1_88F2C25D-416B-4934-908E-5A130CA5740E.png",
+      "file": "A13.png"
+    },
+    "A17": {
+      "row_id": "A17",
+      "evidence": "activity-personal-records-info-sheet",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditPersonalRecordsExplanation()",
+      "action": "tap activity-pr-info",
+      "timestamp": 1791833122.143,
+      "image": "60501977-D04E-48B0-A8A1-AD055D78332D.png",
+      "screen": "screen-1-2006x2852-tap activity-pr-info_1_505E2681-BE37-41C8-B7BA-D89E432F1526.png",
+      "file": "A17.png"
+    },
+    "A15": {
+      "row_id": "A15",
+      "evidence": "activity-fatigue-algorithm-sheet",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditRecoveryAlgorithmExplanation()",
+      "action": "tap activity-muscle-map-algorithm-info",
+      "timestamp": 1791833198.683,
+      "image": "11AD4D84-2D55-4B9F-9FE9-3C450FB5C807.png",
+      "screen": "screen-1-2006x2852-tap activity-muscle-map-algorithm-info_1_1941E161-82E8-4200-8DA6-F7F3F22A61D0.png",
+      "file": "A15.png"
+    },
+    "H14": {
+      "row_id": "H14",
+      "evidence": "heart-rate-recovery-info-sheet",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditHeartRateRecoveryExplanation()",
+      "action": "tap heart-rate-recovery-info-button",
+      "timestamp": 1791833708.576,
+      "image": "05AAFF83-F0F4-49D4-9B2C-57CF5A377F13.png",
+      "screen": "screen-1-2006x2852-tap heart-rate-recovery-info-button_1_1E21DBEC-5ACC-43FB-BC6C-1203E1D21FC7.png",
+      "file": "H14.png"
+    },
+    "W16": {
+      "row_id": "W16",
+      "evidence": "test-and-action:Template workout first session",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditTemplateWorkoutFirstSession()",
+      "action": "Template workout first session",
+      "timestamp": 1791833991.472,
+      "image": "DA601AF7-E6C0-4556-BA85-7604D3BB5786.png",
+      "screen": "screen-1-2006x2852-Template workout first session_1_56B5B25D-9E52-48E9-A912-6F28EB5BE11C.png",
+      "file": "W16.png"
+    },
+    "T13": {
+      "row_id": "T13",
+      "evidence": "notification-destination-unavailable-screen",
+      "test": "DesignMapNotificationDetailTests/testNotificationDestinationUnavailable()",
+      "action": "tap Unavailable Route Fixture",
+      "timestamp": 1791834036.226,
+      "image": "84BC332C-41C0-4A4E-B399-D0BC021ED16E.png",
+      "screen": "screen-1-2006x2852-tap Unavailable Route Fixture_1_16DE9C4E-5FA6-4B61-B3D3-D27305E0DC68.png",
+      "file": "T13.png"
+    },
+    "T16": {
+      "row_id": "T16",
+      "evidence": "test-and-action:Personal Records notification push",
+      "test": "DesignMapNotificationDetailTests/testNotificationPersonalRecordsPush()",
+      "action": "Personal Records Route Fixture",
+      "timestamp": 1791834063.292,
+      "image": "34EFF361-A38F-4EC9-99CD-64BCFC85948D.png",
+      "screen": "screen-1-2006x2852-Personal Records Route Fixture_1_B2007374-8CF3-4A6F-924A-0AB9AEEE5A01.png",
+      "file": "T16.png"
+    },
+    "A16": {
+      "row_id": "A16",
+      "evidence": "activity-volume-algorithm-sheet",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditVolumeAlgorithmExplanation()",
+      "action": "tap activity-muscle-map-algorithm-info",
+      "timestamp": 1791834519.423,
+      "image": "686EA885-BC66-42D3-863B-B7F5D38B2D52.png",
+      "screen": "screen-1-2006x2852-tap activity-muscle-map-algorithm-info_1_53232190-345D-4E5F-B239-7448505FEADE.png",
+      "file": "A16.png"
+    },
+    "A09": {
+      "row_id": "A09",
+      "evidence": "activity-weekly-report-detail-screen",
+      "test": "ActivityExerciseRegressionTests/testActivityRiskAndReportRoutesOpen()",
+      "action": "tap activity-weeklyreport-detail-link",
+      "timestamp": 1791834625.768,
+      "image": "F42A3801-5806-4BD9-92C0-2DE9E91A8FAF.png",
+      "screen": "screen-1-2006x2852-tap activity-weeklyreport-detail-link_1_0988CE6B-DD18-462C-8DDB-AFD3EF0BB9FC.png",
+      "file": "A09.png"
+    },
+    "A08": {
+      "row_id": "A08",
+      "evidence": "activity-injury-risk-detail-screen",
+      "test": "ActivityExerciseRegressionTests/testActivityRiskAndReportRoutesOpen()",
+      "action": "tap activity-injuryrisk-detail-link",
+      "timestamp": 1791834606.341,
+      "image": "36874429-510A-4788-AF46-412FB89CD1DC.png",
+      "screen": "screen-1-2006x2852-tap activity-injuryrisk-detail-link_1_D27808B6-EB04-4549-A0A7-C4F695891751.png",
+      "file": "A08.png"
+    },
+    "W31": {
+      "row_id": "W31",
+      "evidence": "workout-session-last-set-sheet",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditLastSetOptions()",
+      "action": "tap workout-session-complete-set",
+      "timestamp": 1791834708.981,
+      "image": "C107E926-6377-42A1-A669-9A2B43F7B8ED.png",
+      "screen": "screen-1-2006x2852-tap workout-session-complete-set_1_0280D0D3-7CE2-4669-9869-328C7CA2BD4C.png",
+      "file": "W31.png"
+    },
+    "W11": {
+      "row_id": "W11",
+      "evidence": "share-image-sheet",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditPersonalRecordShareSheet()",
+      "action": "tap activity-personal-records-share-button",
+      "timestamp": 1791834737.18,
+      "image": "FD5C99D2-1EBF-405F-B22F-FA77D0885746.png",
+      "screen": "screen-1-2006x2852-tap activity-personal-records-share-button_1_F957E8D1-FEBB-471A-827F-192F111BF21B.png",
+      "file": "W11.png"
+    },
+    "A05": {
+      "row_id": "A05",
+      "evidence": "activity-weeklystats-detail-screen",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditWeeklyStatsDetailDirect()",
+      "action": "tap activity-section-weeklystats",
+      "timestamp": 1791834832.967,
+      "image": "50C63F5D-D750-489C-893D-247692409F36.png",
+      "screen": "screen-1-2006x2852-tap activity-section-weeklystats_1_66B4CB28-0C90-4C62-9BE2-9A7F1416B53D.png",
+      "file": "A05.png"
+    },
+    "W32": {
+      "row_id": "W32",
+      "evidence": "test-and-action:Workout Insights presentation",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditWorkoutInsights()",
+      "action": "Workout Insights presentation",
+      "timestamp": 1791834904.713,
+      "image": "C9776F26-B585-4FB5-89E0-CF269F3E4F75.png",
+      "screen": "screen-1-2006x2852-Workout Insights presentation_1_1AD0F7C7-3CCD-4621-8060-37791E07B7C4.png",
+      "file": "W32.png"
+    },
+    "H03": {
+      "row_id": "H03",
+      "evidence": "wellness-sleep-prediction-detail-screen",
+      "test": "DesignMapAdditionalRoutesTests/testSleepPredictionOpensFromWellness()",
+      "action": "tap wellness-sleep-prediction-detail-link",
+      "timestamp": 1791834941.463,
+      "image": "C73D8240-0D29-4C7A-924F-14FD69008456.png",
+      "screen": "screen-1-2006x2852-tap wellness-sleep-prediction-detail-link_1_DA30006E-60AE-4EDA-8A2E-A69214B9D104.png",
+      "file": "H03.png"
+    },
+    "H12": {
+      "row_id": "H12",
+      "evidence": "sleep-debt-info-sheet",
+      "test": "SleepDetailSmokeTests/testSleepDebtExplanationOpens()",
+      "action": "tap sleep-debt-info-button",
+      "timestamp": 1791834981.723,
+      "image": "96A36F94-501F-49C1-AD6B-8A21E6589C93.png",
+      "screen": "screen-1-2006x2852-tap sleep-debt-info-button_1_1E16DC91-7273-4D51-A5CF-D11506B65149.png",
+      "file": "H12.png"
+    },
+    "T18": {
+      "row_id": "T18",
+      "evidence": "pinned-metrics-editor-screen",
+      "test": "TodaySettingsRegressionTests/testPinnedMetricsEditorOpensAndDismisses()",
+      "action": "tap dashboard-pinned-edit",
+      "timestamp": 1791835106.032,
+      "image": "DAD8F2CE-A456-4BB3-B912-6D29A5C2063D.png",
+      "screen": "screen-1-2006x2852-tap dashboard-pinned-edit_1_82D2ACF8-42F9-4691-86C6-05BC0520D6D4.png",
+      "file": "T18.png"
+    },
+    "A14": {
+      "row_id": "A14",
+      "evidence": "activity-fatigue-info-sheet",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditMuscleFatigueExplanation()",
+      "action": "tap activity-muscle-detail-calculation",
+      "timestamp": 1791835301.578,
+      "image": "32061995-624B-46FB-9D63-32C09629DF8B.png",
+      "screen": "screen-1-2006x2852-tap activity-muscle-detail-calculation_1_1D96A048-5F61-4262-AE5D-C3088DE0C82B.png",
+      "file": "A14.png"
+    },
+    "A20": {
+      "row_id": "A20",
+      "evidence": "activity-recommendation-equipment-sheet",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditRecommendationEquipmentInfo()",
+      "action": "tap activity-recommendation-equipment-info",
+      "timestamp": 1791835330.081,
+      "image": "36E5735B-E93A-4070-9E17-42A7ECC84DD2.png",
+      "screen": "screen-1-2006x2852-tap activity-recommendation-equipment-info_1_4AAE9AA0-BB78-46CA-B3A5-FCA9D64AAE89.png",
+      "file": "A20.png"
+    },
+    "W09": {
+      "row_id": "W09",
+      "evidence": "rpe-help-sheet",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditSetRPEAndHelp()",
+      "action": "tap set-rpe-help",
+      "timestamp": 1791835412.777,
+      "image": "3338635A-FA75-4C0B-8407-32A92446A878.png",
+      "screen": "screen-1-2006x2852-tap set-rpe-help_1_AD5BD154-DC96-4498-BFC6-9B54849CD000.png",
+      "file": "W09.png"
+    },
+    "W08": {
+      "row_id": "W08",
+      "evidence": "test-and-action:RPE active picker",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditSetRPEAndHelp()",
+      "action": "RPE active picker",
+      "timestamp": 1791835407.642,
+      "image": "D544A397-17B6-4F3A-9E1E-9B23FE463874.png",
+      "screen": "screen-1-2006x2852-RPE active picker_1_22D56387-9AAE-4C50-A9CE-057068D3EAA2.png",
+      "file": "W08.png"
+    },
+    "H13": {
+      "row_id": "H13",
+      "evidence": "sleep-waso-info-sheet",
+      "test": "SleepDetailSmokeTests/testWakeAnalysisExplanationOpens()",
+      "action": "tap sleep-waso-info-button",
+      "timestamp": 1791835455.204,
+      "image": "E7C61CCE-0C81-4B7D-98DE-4B8CFABC3B0D.png",
+      "screen": "screen-1-2006x2852-tap sleep-waso-info-button_1_7EF1C615-D76F-4E81-9F7B-2D39BA9F3EEF.png",
+      "file": "H13.png"
+    },
+    "T05": {
+      "row_id": "T05",
+      "evidence": "cumulative-stress-detail-screen",
+      "test": "TodaySettingsRegressionTests/testVisualAuditCumulativeStress()",
+      "action": "tap dashboard-stress-score",
+      "timestamp": 1791835479.898,
+      "image": "FE569477-D551-4ED4-8484-3588565F4300.png",
+      "screen": "screen-1-2006x2852-tap dashboard-stress-score_1_F1AEB3CA-CA04-4D4C-A2F7-90BA940DB3C6.png",
+      "file": "T05.png"
+    }
+  },
+  "unmatched": [],
+  "source_worktree_dirty": true
+}

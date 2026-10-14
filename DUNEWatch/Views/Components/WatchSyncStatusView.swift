@@ -22,6 +22,7 @@ struct WatchSyncStatusView: View {
                     .foregroundStyle(DS.Color.caution)
                     .frame(width: 16)
                 Text(message)
+                    .accessibilityIdentifier("watch-sync-failed")
             case .notConnected:
                 Image(systemName: "iphone.slash")
                     .foregroundStyle(.secondary)
