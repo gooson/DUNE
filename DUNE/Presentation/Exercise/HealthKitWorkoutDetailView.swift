@@ -536,6 +536,13 @@ private struct WorkoutZoneDistributionView: View {
                     .accessibilityIdentifier("healthkit-workout-zones-source")
             }
 
+            if distribution.source == .estimated {
+                Text("Estimated using a \(Int(HeartRateZoneCalculator.defaultMaxHR)) bpm maximum heart rate.")
+                    .font(.caption)
+                    .foregroundStyle(DS.Color.textSecondary)
+                    .accessibilityIdentifier("healthkit-workout-zones-estimate-method")
+            }
+
             ForEach(distribution.zones) { zone in
                 zoneRow(zone)
             }

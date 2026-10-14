@@ -41,6 +41,9 @@ final class WorkoutZoneDetailUITests: ActivityExerciseSeededUITestBaseCase {
         let source = app.staticTexts[Fixture.zoneSource].firstMatch
         XCTAssertTrue(source.waitForExistence(timeout: 10), "Zone source should be accessible")
         XCTAssertEqual(source.label, "Estimated zones")
+        let method = app.staticTexts["healthkit-workout-zones-estimate-method"].firstMatch
+        XCTAssertTrue(method.waitForExistence(timeout: 5), "Estimated zones should disclose their maximum heart rate")
+        XCTAssertEqual(method.label, "Estimated using a 190 bpm maximum heart rate.")
 
         for index in 1...3 {
             let zone = app.descendants(matching: .any)["healthkit-workout-zone-\(index)"].firstMatch
