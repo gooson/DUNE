@@ -27,7 +27,11 @@ struct SingleMetricConfiguration: WidgetConfigurationIntent {
     static let title: LocalizedStringResource = "DUNE Score"
     static let description = IntentDescription("Choose the health score to show.")
 
-    @Parameter(title: "Score") var metric: WidgetMetricChoice
+    @Parameter(title: "Score") var metric: WidgetMetricChoice?
+
+    var selectedMetric: WidgetMetricChoice {
+        metric ?? .condition
+    }
 
     init() {
         metric = .condition
@@ -46,11 +50,11 @@ struct SingleMetricProvider: AppIntentTimelineProvider {
     }
 
     func snapshot(for configuration: SingleMetricConfiguration, in context: Context) async -> SingleMetricEntry {
-        entry(for: configuration.metric.surfaceMetric, preview: context.isPreview)
+        entry(for: configuration.selectedMetric.surfaceMetric, preview: context.isPreview)
     }
 
     func timeline(for configuration: SingleMetricConfiguration, in context: Context) async -> Timeline<SingleMetricEntry> {
-        let entry = entry(for: configuration.metric.surfaceMetric, preview: false)
+        let entry = entry(for: configuration.selectedMetric.surfaceMetric, preview: false)
         let nextHour = Calendar.autoupdatingCurrent.nextDate(
             after: entry.date,
             matching: DateComponents(minute: 0),
