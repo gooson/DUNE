@@ -326,7 +326,10 @@ struct CalculateConditionScoreUseCase: ConditionScoreCalculating, Sendable {
 
         return grouped.compactMap { date, samples in
             guard !samples.isEmpty else { return nil }
-            let avg = samples.map(\.value).reduce(0, +) / Double(samples.count)
+            // Newer devices can contribute many more samples within one hour.
+            // Give each observed hour equal weight so sampling cadence alone
+            // cannot shift the day's physiological average.
+            guard let avg = average(hourlyAverages(from: samples, calendar: calendar)) else { return nil }
             return (date: date, value: avg)
         }
         .sorted { $0.date > $1.date }
@@ -352,6 +355,13 @@ struct CalculateConditionScoreUseCase: ConditionScoreCalculating, Sendable {
     private func average(_ values: [Double]) -> Double? {
         guard !values.isEmpty else { return nil }
         return values.reduce(0, +) / Double(values.count)
+    }
+
+    private func hourlyAverages(from samples: [HRVSample], calendar: Calendar) -> [Double] {
+        let grouped = Dictionary(grouping: samples) { sample in
+            calendar.dateInterval(of: .hour, for: sample.date)?.start ?? sample.date
+        }
+        return grouped.values.compactMap { average($0.map(\.value)) }
     }
 
     private func standardDeviation(_ values: [Double]) -> Double {
@@ -386,8 +396,9 @@ struct CalculateConditionScoreUseCase: ConditionScoreCalculating, Sendable {
             calendar.date(byAdding: .hour, value: -intradayWindowHours, to: evaluationDate) ?? dayStart
         )
         let recentWindow = validSamples.filter { $0.date >= recentWindowStart }
-        if recentWindow.count >= minimumIntradayWindowSamples {
-            return average(recentWindow.map(\.value))
+        let recentHourly = hourlyAverages(from: recentWindow, calendar: calendar)
+        if recentHourly.count >= minimumIntradayWindowSamples {
+            return average(recentHourly)
         }
 
         let expandedWindowStart = max(
@@ -395,11 +406,12 @@ struct CalculateConditionScoreUseCase: ConditionScoreCalculating, Sendable {
             calendar.date(byAdding: .hour, value: -expandedIntradayWindowHours, to: evaluationDate) ?? dayStart
         )
         let expandedWindow = validSamples.filter { $0.date >= expandedWindowStart }
-        if expandedWindow.count >= minimumIntradayWindowSamples {
-            return average(expandedWindow.map(\.value))
+        let expandedHourly = hourlyAverages(from: expandedWindow, calendar: calendar)
+        if expandedHourly.count >= minimumIntradayWindowSamples {
+            return average(expandedHourly)
         }
 
-        return average(validSamples.map(\.value))
+        return average(hourlyAverages(from: validSamples, calendar: calendar))
     }
 
     private func validatedRHR(_ value: Double?) -> Double? {
