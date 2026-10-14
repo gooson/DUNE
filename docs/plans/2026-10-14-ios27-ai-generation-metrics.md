@@ -2,14 +2,14 @@
 tags: [ios27, metrickit, statereporting, foundation-models, privacy]
 date: 2026-10-14
 category: plan
-status: approved
+status: implemented
 ---
 
 # PR10: AI 운동 템플릿 생성 성능 계측
 
 ## Context
 
-실기기에서 AI 운동 템플릿 생성의 응답 시간 분포와 CPU/메모리 비용을 파악한다. 기준 커밋은 PR9 `5c41c1e2`다. 설치된 iPhoneOS 27.0 SDK에서 `MetricManager`, `mxSignpost`, `StateReporter` 시그니처를 확인했다.
+실기기에서 AI 운동 템플릿 생성의 응답 시간 분포와 CPU/메모리 비용을 파악한다. 기준 커밋은 PR9의 컴파일 수정까지 포함한 `6827c548`다. 설치된 iPhoneOS 27.0 SDK에서 `MetricManager`, `mxSignpost`, `StateReporter` 시그니처를 확인했다.
 
 ## Approach
 
@@ -25,6 +25,7 @@ status: approved
 | DUNE/Data/Services/AIWorkoutTemplateGenerator.swift | Modify | 두 respond 호출 경계 |
 | DUNE/App/DUNEApp.swift | Modify | 앱 수명 구독, 테스트에서는 구독 제외 |
 | DUNETests/WorkoutGenerationMetricsTests.swift | Add | 성공/오류/취소/겹치는 구간 상태 회복 |
+| DUNE/DUNE.xcodeproj/project.pbxproj | Modify | 새 서비스와 테스트 파일 등록 |
 | docs/solutions/performance/2026-10-14-ai-generation-metrickit.md | Add | SDK 근거, 수집 계약, 검증 한계 |
 
 ## Implementation Steps
@@ -53,3 +54,11 @@ status: approved
 
 - https://developer.apple.com/videos/play/wwdc2026/222/
 - https://developer.apple.com/documentation/metrickit/monitoring-app-performance-with-metrickit
+
+## Execution Result
+
+- Plan / Work / 독립 정적 Review / Resolve / Compound 완료, 로컬 커밋까지 수행.
+- 직접 SDK typecheck: 서비스, 실제 FoundationModels 응답을 감싸는 최소 probe, Swift Testing 테스트 소스 통과.
+- 수정한 Swift 파일 parse 및 `git diff --check` 통과.
+- 독립 검토의 P2(project 등록 누락) 수정. UI·localization 변경 없음.
+- 앱 통합 빌드, 테스트 실행, 실기기 측정은 미수행. Ship 및 runtime 게이트는 부모 작업으로 전달하며 통과로 표시하지 않음.
