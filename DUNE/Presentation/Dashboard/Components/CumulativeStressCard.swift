@@ -13,7 +13,6 @@ struct CumulativeStressCard: View {
                 contributionRows
             }
         }
-        .accessibilityIdentifier("dashboard-stress-score")
     }
 
     // MARK: - Header

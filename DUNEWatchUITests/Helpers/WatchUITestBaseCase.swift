@@ -32,6 +32,8 @@ enum WatchAXID {
     static let workoutPreviewStartLabels = ["Start", "시작", "開始"]
     static let sessionPagingRoot = "watch-session-paging-root"
     static let sessionMetricsScreen = "watch-session-metrics-screen"
+    static let sessionMetricsInputCard = "watch-session-input-card"
+    static let sessionMetricsNextExercise = "watch-session-next-exercise"
     static let sessionMetricsCompleteSetButton = "watch-session-complete-set-button"
     static let sessionMetricsCompleteSetLabels = ["Complete Set", "세트 완료", "セット完了"]
     static let sessionMetricsLastSetFinish = "watch-session-last-set-finish"
@@ -596,6 +598,11 @@ class WatchUITestBaseCase: XCTestCase {
         attachment.name = name
         attachment.lifetime = lifetime
         add(attachment)
+    }
+
+    func captureDesignState(_ code: String, visible identifier: String) {
+        XCTAssertTrue(elementExists(identifier, timeout: 5), "\(code) must be visible before capture")
+        addScreenshotAttachment(named: "watch-design-map-\(code)")
     }
 
     /// Checks the actual accessible button frame before the test performs any scrolling.

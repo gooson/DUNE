@@ -15,6 +15,7 @@ struct SleepDebtInfoSheet: View {
             }
             .padding(DS.Spacing.xl)
         }
+        .accessibilityIdentifier("sleep-debt-info-sheet")
         .presentationDetents([.medium, .large])
         .presentationDragIndicator(.visible)
     }

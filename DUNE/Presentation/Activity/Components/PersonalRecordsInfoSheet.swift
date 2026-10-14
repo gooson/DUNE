@@ -14,6 +14,7 @@ struct PersonalRecordsInfoSheet: View {
             }
             .padding(DS.Spacing.xl)
         }
+        .accessibilityIdentifier("activity-personal-records-info-sheet")
         .presentationDetents([.medium, .large])
         .presentationDragIndicator(.visible)
     }

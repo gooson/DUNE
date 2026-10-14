@@ -21,6 +21,7 @@ struct PostureMonitorSettingsView: View {
                 Toggle(isOn: $isEnabled) {
                     Label("Posture Monitoring", systemImage: "figure.stand")
                 }
+                .accessibilityIdentifier("watch-posture-monitor-toggle")
                 .frame(minHeight: 44)
                 .onChange(of: isEnabled) { _, newValue in
                     postureMonitor.setEnabled(newValue)
@@ -39,6 +40,7 @@ struct PostureMonitorSettingsView: View {
                     } label: {
                         Text("Stretch Reminder")
                     }
+                    .accessibilityIdentifier("watch-posture-reminder-picker")
                     .onChange(of: thresholdMinutes) { _, newValue in
                         postureMonitor.setSedentaryThreshold(minutes: newValue)
                     }
@@ -74,10 +76,12 @@ struct PostureMonitorSettingsView: View {
                     )
                 } header: {
                     Text("Today")
+                        .accessibilityIdentifier("watch-posture-today-header")
                 }
             }
         }
         .tint(theme.accentColor)
+        .accessibilityIdentifier("watch-posture-settings")
         .navigationTitle(String(localized: "Posture"))
         .onAppear {
             guard !didLoadInitialValues else { return }

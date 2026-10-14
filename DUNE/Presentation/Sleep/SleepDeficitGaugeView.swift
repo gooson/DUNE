@@ -36,6 +36,7 @@ struct SleepDeficitGaugeView: View {
                             .foregroundStyle(DS.Color.textSecondary)
                     }
                     .buttonStyle(.plain)
+                    .accessibilityIdentifier("sleep-debt-info-button")
                 }
 
                 ZStack {

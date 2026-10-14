@@ -355,6 +355,9 @@ final class WorkoutSessionViewModel {
                 setType: set.setType
             )
         }
+        if ProcessInfo.processInfo.arguments.contains("--ui-design-map-one-set") {
+            previousSets = Array(previousSets.prefix(1))
+        }
 
         // A restored draft is already the source of truth for every editable field.
         guard !restoredFromDraft else { return }

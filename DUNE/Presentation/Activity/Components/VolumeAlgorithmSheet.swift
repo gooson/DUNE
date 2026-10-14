@@ -16,6 +16,7 @@ struct VolumeAlgorithmSheet: View {
             }
             .padding(DS.Spacing.xl)
         }
+        .accessibilityIdentifier("activity-volume-algorithm-sheet")
         .presentationDetents([.large])
         .presentationDragIndicator(.visible)
     }

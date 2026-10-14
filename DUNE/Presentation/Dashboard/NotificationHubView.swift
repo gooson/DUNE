@@ -389,6 +389,11 @@ struct NotificationHubView: View {
     }
 
     private func handleTap(on item: NotificationInboxItem) {
+        if ProcessInfo.processInfo.arguments.contains("--ui-design-map-notification-details"),
+           item.title == "Unavailable Route Fixture" {
+            destination = .unavailable(itemID: item.id)
+            return
+        }
         let route = inboxManager.resolvedRoute(for: item)?.destination
         if route == .workoutDetail || route == .lifeChecklist {
             if inboxManager.open(itemID: item.id) == nil {
@@ -598,6 +603,7 @@ private struct NotificationDestinationUnavailableView: View {
             }
         )
         .padding(.horizontal, DS.Spacing.lg)
+        .accessibilityIdentifier("notification-destination-unavailable-screen")
         .background { DetailWaveBackground() }
         .overlay(alignment: .bottom) {
             Text("ID: \(itemID)")

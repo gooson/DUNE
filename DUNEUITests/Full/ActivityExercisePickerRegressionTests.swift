@@ -193,10 +193,11 @@ final class ActivityExercisePickerRegressionTests: ActivityExerciseSeededUITestB
 
         let addExerciseButton = app.descendants(matching: .any)[AXID.templateFormAddExercise].firstMatch
         XCTAssertTrue(addExerciseButton.waitForExistence(timeout: 5), "Add Exercise button should exist in template form")
-        addExerciseButton.tap()
+        addExerciseButton.auditTap()
 
         let picker = app.descendants(matching: .any)[AXID.pickerRootList].firstMatch
         XCTAssertTrue(picker.waitForExistence(timeout: 8), "Full picker should appear from template form")
+        VisualAudit.capture("Template exercise picker")
     }
 
     private func dismissSearchKeyboardIfPresent() {

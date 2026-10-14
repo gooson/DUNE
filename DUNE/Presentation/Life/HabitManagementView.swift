@@ -233,6 +233,7 @@ struct HabitManagementView: View {
             }
             .buttonStyle(.plain)
             .accessibilityLabel(String(localized: "History"))
+            .accessibilityIdentifier("habit-management-history-\(habit.name)")
 
             Button {
                 restoreHabit(habit)
