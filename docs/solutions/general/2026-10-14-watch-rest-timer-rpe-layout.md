@@ -59,7 +59,7 @@ related_solutions:
 }
 ```
 
-조정 행은 이 코드의 상위 `ScrollView`에 배치한다. 40mm Watch 시뮬레이터에서 휴식 타이머와 RPE 시트의 첫 화면을 캡처하고 관련 두 UI 테스트 시나리오가 통과하는 것을 확인했다.
+조정 행은 이 코드의 상위 `ScrollView`에 배치한다. 40mm Watch 시뮬레이터에서 [휴식 타이머 S09](../../design/phone-design-map/actual/watch/images/S09.png), [RPE 입력 S10](../../design/phone-design-map/actual/watch/images/S10.png), [확정 후 S16](../../design/phone-design-map/actual/watch/images/S16.png)을 실제 화면으로 캡처했다. 관련 UI 테스트는 첫 화면 버튼과 조작 간격을 검증한다.
 
 ## Prevention
 

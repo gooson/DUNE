@@ -14,6 +14,7 @@ related_solutions:
   - docs/solutions/general/2026-03-02-watchos-button-overflow-fix.md
   - docs/solutions/testing/2026-03-12-watch-ui-smoke-surface-fallback-hardening.md
   - docs/solutions/design/2026-03-15-watch-machine-level-preview-picker.md
+  - docs/solutions/general/2026-10-14-watch-rest-timer-rpe-layout.md
 ---
 
 # Solution: Watch 운동 화면 밀도와 완료 저장 분리
@@ -42,6 +43,8 @@ related_solutions:
 | `DUNEWatch/Views/SessionSummaryView.swift` | 요약 진입 시 저장, 저장 상태 표시, `완료` 하단 고정, 이후 강도 수정 저장 | 저장과 요약 닫기 분리 |
 | `DUNEWatch/Views/WorkoutPreviewView.swift` | `.accessibilityElement(children: .contain)`으로 화면 컨테이너 구성 | 자식 버튼 식별자 보존 |
 | `DUNEWatchUITests/Helpers/WatchUITestBaseCase.swift` | 중첩 컨트롤은 `firstMatch`, 운동 목록은 느린 짧은 드래그와 역방향 탐색 | 실제 watchOS 접근성·스크롤 동작 검증 |
+
+2026-10-14 후속 수정에서 링 안의 RPE를 44pt 조작 행으로 이동하고 RPE 확정 버튼을 시트 하단에 고정했다. 현재 배치는 [Watch 휴식 타이머와 RPE 확정 버튼의 첫 화면 배치](2026-10-14-watch-rest-timer-rpe-layout.md)를 따른다.
 
 ### Key Code
 
