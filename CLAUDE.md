@@ -7,7 +7,7 @@
 
 - **Type**: iOS Health & Fitness App (HRV/RHR 기반 컨디션 분석)
 - **Stack**: Swift 6 / SwiftUI / HealthKit / SwiftData / CloudKit
-- **Target**: iOS 26+
+- **Target**: iOS 27+, watchOS 27+, visionOS 27+
 - **Status**: Active Development (MVP)
 
 ## Core Principles
