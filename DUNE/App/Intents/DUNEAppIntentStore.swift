@@ -26,6 +26,11 @@ final class DUNEAppIntentStore {
     }
 
     private var container: ModelContainer?
+    private let saveContext: @MainActor (ModelContext) throws -> Void
+
+    init(saveContext: @escaping @MainActor (ModelContext) throws -> Void = { try $0.save() }) {
+        self.saveContext = saveContext
+    }
 
     func configure(container: ModelContainer) {
         self.container = container
@@ -62,7 +67,10 @@ final class DUNEAppIntentStore {
     }
 
     func completeHabit(id: UUID, at date: Date = Date()) throws -> CompletionResult {
-        let context = try modelContext()
+        guard let container else { throw DUNEAppIntentError.unavailable }
+        // Keep an unsuccessful intent write out of the app's shared mainContext.
+        let context = ModelContext(container)
+        context.autosaveEnabled = false
         let habits = try context.fetch(FetchDescriptor<HabitDefinition>())
         guard let habit = habits.first(where: { $0.id == id }) else {
             throw DUNEAppIntentError.itemNotFound
@@ -88,7 +96,12 @@ final class DUNEAppIntentStore {
         if habit.logs == nil { habit.logs = [] }
         habit.logs?.append(log)
         context.insert(log)
-        try context.save()
+        do {
+            try saveContext(context)
+        } catch {
+            context.rollback()
+            throw error
+        }
         return .completed
     }
 
