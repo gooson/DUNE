@@ -51,7 +51,21 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
 
     func testVisualAuditWorkoutInsights() throws {
         guard VisualAudit.isEnabled else { throw XCTSkip("Opt-in visual audit only") }
-        try verifyWorkoutInsightsReturnsToWorkout()
+        try verifyWorkoutInsightsReturnsToWorkout(useQuickStart: true)
+    }
+
+    func testVisualAuditWorkoutInsightsSheetFallback() throws {
+        guard VisualAudit.isEnabled else { throw XCTSkip("Opt-in visual audit only") }
+        var configuration = launchConfiguration
+        configuration.additionalArguments.append("--ui-design-map-insights-sheet")
+        launchApp(with: configuration)
+        XCTAssertTrue(app.hasPrimaryNavigation(timeout: 8))
+        openQuickStartPicker()
+        startQuickStartExerciseFromDetail(search: "Bench Press", exerciseID: Fixture.benchPressID)
+        XCTAssertTrue(app.waitAndTapToolbarAction("workout-session-insights"))
+        XCTAssertTrue(app.descendants(matching: .any)["activity-weeklystats-detail-screen"].firstMatch
+            .waitForExistence(timeout: 10), "Workout Insights sheet should open on iPad")
+        VisualAudit.capture("Workout Insights iPad sheet fallback")
     }
 
     func testWorkoutInsightsReturnsToInteractiveWorkoutAtMaximumAccessibilityTextSize() throws {
@@ -650,7 +664,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         tapBackButton()
         ensureActivityRoot()
 
-        XCTAssertTrue(app.scrollToElementIfNeeded(AXID.activitySectionWeeklyStats, maxSwipes: 4))
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.activitySectionWeeklyStats, maxSwipes: 12))
         waitForElement(AXID.activitySectionWeeklyStats, timeout: 5).auditTap()
         XCTAssertTrue(
             app.descendants(matching: .any)[AXID.activityWeeklyStatsDetailScreen].firstMatch.waitForExistence(timeout: 10),
@@ -660,7 +674,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         tapBackButton()
         ensureActivityRoot()
 
-        XCTAssertTrue(app.scrollToElementIfNeeded(AXID.activitySectionVolume, maxSwipes: 8))
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.activitySectionVolume, maxSwipes: 12))
         waitForElement(AXID.activitySectionVolume, timeout: 5).auditTap()
         XCTAssertTrue(
             app.descendants(matching: .any)[AXID.activityTrainingVolumeDetailScreen].firstMatch.waitForExistence(timeout: 10),
@@ -671,8 +685,21 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         XCTAssertTrue(exerciseTypeRow.waitForExistence(timeout: 8), "Seeded manual strength exercise type row should exist")
     }
 
+    func testVisualAuditWeeklyStatsDetailDirect() throws {
+        ensureActivityRoot()
+        let rootScroll = app.scrollViews[AXID.activityRootScroll].firstMatch
+        XCTAssertTrue(rootScroll.waitForExistence(timeout: 8))
+        let weekly = app.buttons[AXID.activitySectionWeeklyStats].firstMatch
+        for _ in 0..<14 where !weekly.isHittable { rootScroll.swipeUp(velocity: .slow) }
+        XCTAssertTrue(weekly.isHittable, "Weekly stats link should be visible")
+        weekly.auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.activityWeeklyStatsDetailScreen].firstMatch
+            .waitForExistence(timeout: 10))
+        VisualAudit.capture("Weekly stats detail")
+    }
+
     func testActivitySecondaryDetailRoutesOpenExpectedScreens() throws {
-        XCTAssertTrue(app.scrollToElementIfNeeded(AXID.activitySectionPR, maxSwipes: 10))
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.activitySectionPR, maxSwipes: 12))
         waitForElement(AXID.activitySectionPR, timeout: 5).auditTap()
         XCTAssertTrue(
             app.descendants(matching: .any)[AXID.activityPersonalRecordsDetailScreen].firstMatch.waitForExistence(timeout: 10),
@@ -682,7 +709,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         tapBackButton()
         ensureActivityRoot()
 
-        XCTAssertTrue(app.scrollToElementIfNeeded(AXID.activitySectionConsistency, maxSwipes: 10))
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.activitySectionConsistency, maxSwipes: 12))
         waitForElement(AXID.activitySectionConsistency, timeout: 5).auditTap()
         XCTAssertTrue(
             app.descendants(matching: .any)[AXID.activityConsistencyDetailScreen].firstMatch.waitForExistence(timeout: 10),
@@ -697,6 +724,137 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             app.descendants(matching: .any)[AXID.activityExerciseMixDetailScreen].firstMatch.waitForExistence(timeout: 10),
             "Exercise Mix detail should open"
         )
+    }
+
+    func testActivityRiskAndReportRoutesOpen() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments.append("--ui-design-map-activity-routes")
+        launchApp(with: configuration)
+        let activityScroll = app.scrollViews[AXID.activityRootScroll].firstMatch
+        let riskLink = app.descendants(matching: .any)["activity-injuryrisk-detail-link"].firstMatch
+        XCTAssertTrue(activityScroll.waitForExistence(timeout: 5))
+        for _ in 0..<24 where !riskLink.isHittable { activityScroll.swipeUp(velocity: .slow) }
+        XCTAssertTrue(riskLink.isHittable)
+        waitForElement("activity-injuryrisk-detail-link", timeout: 5).auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)["activity-injury-risk-detail-screen"].firstMatch
+            .waitForExistence(timeout: 10))
+
+        tapBackButton()
+        ensureActivityRoot()
+
+        let reportLink = app.descendants(matching: .any)["activity-weeklyreport-detail-link"].firstMatch
+        for _ in 0..<24 where !reportLink.isHittable { activityScroll.swipeUp(velocity: .slow) }
+        XCTAssertTrue(reportLink.isHittable)
+        waitForElement("activity-weeklyreport-detail-link", timeout: 5).auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)["activity-weekly-report-detail-screen"].firstMatch
+            .waitForExistence(timeout: 10))
+    }
+
+    func testVisualAuditPersonalRecordsExplanation() throws {
+        openActivityInfo(button: "activity-pr-info", sheet: "activity-personal-records-info-sheet")
+    }
+
+    func testVisualAuditConsistencyExplanation() throws {
+        openActivityInfo(button: "activity-consistency-info", sheet: "activity-consistency-info-sheet")
+    }
+
+    func testVisualAuditExerciseMixExplanation() throws {
+        openActivityInfo(button: "activity-exercise-mix-info", sheet: "activity-exercise-mix-info-sheet")
+    }
+
+    func testVisualAuditRecoveryAlgorithmExplanation() throws {
+        openActivityInfo(button: "activity-muscle-map-algorithm-info", sheet: "activity-fatigue-algorithm-sheet")
+    }
+
+    func testVisualAuditVolumeAlgorithmExplanation() throws {
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("activity-muscle-map-algorithm-info", maxSwipes: 10))
+        let mode = app.segmentedControls["activity-muscle-map-mode"].firstMatch
+        XCTAssertTrue(mode.waitForExistence(timeout: 5))
+        let volume = mode.buttons.element(boundBy: 1)
+        XCTAssertTrue(volume.waitForExistence(timeout: 5))
+        volume.auditTap()
+        let info = app.buttons["activity-muscle-map-algorithm-info"].firstMatch
+        let rootScroll = app.scrollViews[AXID.activityRootScroll].firstMatch
+        for _ in 0..<30 where !info.isHittable { rootScroll.swipeDown(velocity: .slow) }
+        XCTAssertTrue(info.isHittable, "Volume calculation info should be visible")
+        info.auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)["activity-volume-algorithm-sheet"].firstMatch
+            .waitForExistence(timeout: 10))
+        VisualAudit.capture("Volume algorithm explanation")
+    }
+
+    func testVisualAuditMuscleDetailPopover() throws {
+        let muscle = app.buttons["musclemap-body-front-chest"].firstMatch
+        let activityScroll = app.scrollViews[AXID.activityRootScroll].firstMatch
+        XCTAssertTrue(activityScroll.waitForExistence(timeout: 5))
+        for _ in 0..<24 where !muscle.isHittable { activityScroll.swipeUp(velocity: .slow) }
+        XCTAssertTrue(muscle.isHittable)
+        muscle.auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)["activity-muscle-detail-popover-sheet"].firstMatch
+            .waitForExistence(timeout: 10))
+        VisualAudit.capture("Muscle detail popover")
+    }
+
+    func testVisualAuditMuscleFatigueExplanation() throws {
+        let muscle = app.buttons["musclemap-body-front-chest"].firstMatch
+        let activityScroll = app.scrollViews[AXID.activityRootScroll].firstMatch
+        XCTAssertTrue(activityScroll.waitForExistence(timeout: 5))
+        for _ in 0..<24 where !muscle.isHittable { activityScroll.swipeUp(velocity: .slow) }
+        XCTAssertTrue(muscle.isHittable)
+        muscle.auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)["activity-muscle-detail-popover-sheet"].firstMatch
+            .waitForExistence(timeout: 10))
+        let calculation = app.buttons["activity-muscle-detail-calculation"].firstMatch
+        XCTAssertTrue(calculation.waitForExistence(timeout: 8))
+        calculation.auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)["activity-fatigue-info-sheet"].firstMatch
+            .waitForExistence(timeout: 10))
+        VisualAudit.capture("Muscle fatigue explanation")
+    }
+
+    func testVisualAuditRecommendationEquipmentInfo() throws {
+        let target = app.buttons["activity-recommendation-equipment-info"].firstMatch
+        let rootScroll = app.scrollViews[AXID.activityRootScroll].firstMatch
+        XCTAssertTrue(rootScroll.waitForExistence(timeout: 8))
+        for _ in 0..<30 where !target.isHittable { rootScroll.swipeUp(velocity: .slow) }
+        XCTAssertTrue(target.isHittable)
+        target.auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)["activity-recommendation-equipment-sheet"].firstMatch
+            .waitForExistence(timeout: 10))
+        VisualAudit.capture("Recommendation equipment sheet")
+    }
+
+    private func openActivityInfo(button: String, sheet: String) {
+        let target = app.buttons[button].firstMatch
+        let rootScroll = app.scrollViews[AXID.activityRootScroll].firstMatch
+        XCTAssertTrue(rootScroll.waitForExistence(timeout: 8))
+        for _ in 0..<30 where !target.isHittable {
+            rootScroll.swipeUp(velocity: .slow)
+        }
+        XCTAssertTrue(target.isHittable, "\(button) should be reachable")
+        target.auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)[sheet].firstMatch.waitForExistence(timeout: 10),
+                      "\(sheet) should open")
+        VisualAudit.capture(sheet)
+    }
+
+    func testVisualAuditPersonalRecordShareSheet() throws {
+        XCTAssertTrue(app.scrollToElementIfNeeded(AXID.activitySectionPR, maxSwipes: 10))
+        waitForElement(AXID.activitySectionPR, timeout: 5).auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.activityPersonalRecordsDetailScreen].firstMatch
+            .waitForExistence(timeout: 10))
+
+        let shareID = "activity-personal-records-share-button"
+        let share = app.buttons[shareID].firstMatch
+        let detailScroll = app.scrollViews[AXID.activityPersonalRecordsDetailScreen].firstMatch
+        XCTAssertTrue(detailScroll.waitForExistence(timeout: 5))
+        for _ in 0..<8 where !share.isHittable { detailScroll.swipeDown(velocity: .slow) }
+        for _ in 0..<12 where !share.isHittable { detailScroll.swipeUp(velocity: .slow) }
+        XCTAssertTrue(share.isHittable, "Personal record share button should be visible")
+        share.auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)["share-image-sheet"].firstMatch
+            .waitForExistence(timeout: 10))
+        VisualAudit.capture("Personal record image share sheet")
     }
 
     func testExerciseTypeDetailShowsTrendSurface() throws {
@@ -876,6 +1034,21 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         )
     }
 
+    func testVisualAuditExerciseHistoryFromSelectedWorkout() throws {
+        openExerciseViewFromRecentWorkouts()
+        XCTAssertTrue(app.scrollToElementIfNeeded(AXID.exerciseRow(Fixture.benchPressID), maxSwipes: 8))
+        app.descendants(matching: .any)[AXID.exerciseRow(Fixture.benchPressID)].firstMatch.auditTap()
+
+        let historyLink = app.descendants(matching: .any)[AXID.exerciseSessionViewHistory].firstMatch
+        let detailScroll = app.scrollViews["exercise-session-detail-scroll"].firstMatch
+        XCTAssertTrue(detailScroll.waitForExistence(timeout: 5))
+        for _ in 0..<8 where !historyLink.isHittable { detailScroll.swipeUp() }
+        XCTAssertTrue(historyLink.exists && historyLink.isHittable)
+        historyLink.auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.exerciseHistoryScreen].firstMatch
+            .waitForExistence(timeout: 10))
+    }
+
     func testQuickStartPickerShowsDetailAndSearchResults() throws {
         openQuickStartPicker()
 
@@ -981,6 +1154,139 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
 
     func testManualWorkoutSessionSavesAndDismissesCompletionSheet() throws {
         try verifyManualWorkoutCompletion(showsShareSheet: false)
+    }
+
+    func testVisualAuditSetRPEAndHelp() throws {
+        openQuickStartPicker()
+        startQuickStartExerciseFromDetail(search: "Bench Press", exerciseID: Fixture.benchPressID)
+
+        let rpe = app.buttons["set-rpe-activate"].firstMatch
+        let slider = app.sliders["set-rpe-slider"].firstMatch
+        let controls = app.scrollViews["workout-session-controls"].firstMatch
+        XCTAssertTrue(controls.waitForExistence(timeout: 5))
+        for _ in 0..<12 where !rpe.isHittable && !slider.isHittable {
+            controls.swipeUp(velocity: .slow)
+        }
+        if rpe.isHittable { rpe.auditTap() }
+        for _ in 0..<6 where !slider.isHittable {
+            controls.swipeUp(velocity: .slow)
+        }
+        XCTAssertTrue(slider.isHittable, "RPE slider should be visible")
+        VisualAudit.capture("RPE active picker")
+
+        let rpeHelp = app.buttons["set-rpe-help"].firstMatch
+        for _ in 0..<6 where !rpeHelp.isHittable { controls.swipeUp(velocity: .slow) }
+        XCTAssertTrue(rpeHelp.isHittable, "RPE help should be reachable")
+        let help = app.buttons["set-rpe-help"].firstMatch
+        XCTAssertTrue(help.waitForExistence(timeout: 5))
+        help.auditTap()
+        XCTAssertTrue(app.scrollViews["rpe-help-sheet"].firstMatch.waitForExistence(timeout: 5))
+        VisualAudit.capture("RPE help sheet")
+    }
+
+    func testVisualAuditExercisePicker() throws {
+        openQuickStartPicker()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.pickerRootList].firstMatch
+            .waitForExistence(timeout: 8), "Exercise picker should open")
+        VisualAudit.capture("Exercise picker initial viewport")
+    }
+
+    func testVisualAuditTemplateWorkoutFirstSession() throws {
+        openTemplateList()
+        let rowID = AXID.workoutTemplateRow(Fixture.circuitTemplate)
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(rowID, maxSwipes: 12))
+        let row = app.buttons[rowID].firstMatch
+        row.auditTap()
+        let container = app.descendants(matching: .any)[AXID.templateWorkoutContainerScreen].firstMatch
+        if !container.waitForExistence(timeout: 3) {
+            let title = row.staticTexts.firstMatch
+            if title.exists && title.isHittable { title.auditTap() }
+        }
+        XCTAssertTrue(container.waitForExistence(timeout: 8))
+        let start = app.buttons[AXID.templateWorkoutTransitionStart].firstMatch
+        let session = app.descendants(matching: .any)[AXID.workoutSessionScreen].firstMatch
+        XCTAssertTrue(waitForEither(start, session, timeout: 8),
+                      "Template should offer Start or open its first session")
+        if start.exists { start.auditTap() }
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.workoutSessionScreen].firstMatch
+            .waitForExistence(timeout: 10), "Template's first workout should open")
+        VisualAudit.capture("Template workout first session")
+    }
+
+    func testVisualAuditLastSetOptions() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += ["--ui-design-map-one-set", "-AppleLanguages", "(en)",
+                                              "-AppleLocale", "en_US"]
+        launchApp(with: configuration)
+        openQuickStartPicker()
+        startQuickStartExerciseFromDetail(search: "Bench Press", exerciseID: Fixture.benchPressID)
+
+        for control in ["+2.5", "+1"] {
+            XCTAssertTrue(scrollToWorkoutControl(control), "\(control) should be reachable")
+            app.buttons[control].firstMatch.auditTap()
+        }
+        let completeSet = app.buttons[AXID.workoutSessionCompleteSet].firstMatch
+        XCTAssertTrue(completeSet.waitForExistence(timeout: 5))
+        if !completeSet.isHittable {
+            XCTAssertTrue(scrollToWorkoutControl(AXID.workoutSessionCompleteSet))
+        }
+        completeSet.auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)["workout-session-last-set-sheet"].firstMatch
+            .waitForExistence(timeout: 10), "Last-set options should open after the only set")
+        VisualAudit.capture("Last-set options")
+    }
+
+    func testVisualAuditRestTimerFromQuickStart() throws {
+        guard VisualAudit.isEnabled else { throw XCTSkip("Opt-in visual audit only") }
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryL"
+        ]
+        launchApp(with: configuration)
+        openQuickStartPicker()
+        startQuickStartExerciseFromDetail(search: "Bench Press", exerciseID: Fixture.benchPressID)
+        for control in ["+2.5", "+1"] {
+            XCTAssertTrue(scrollToWorkoutControl(control))
+            app.buttons[control].firstMatch.auditTap()
+        }
+        let completeSet = app.buttons[AXID.workoutSessionCompleteSet].firstMatch
+        XCTAssertTrue(completeSet.waitForExistence(timeout: 5))
+        if !completeSet.isHittable {
+            XCTAssertTrue(scrollToWorkoutControl(AXID.workoutSessionCompleteSet))
+        }
+        completeSet.auditTap()
+        XCTAssertTrue(app.buttons["workout-session-add-rest"].firstMatch.waitForExistence(timeout: 10))
+        VisualAudit.capture("Rest timer after first completed set")
+    }
+
+    func testVisualAuditNewExerciseAtDefaultTextSize() throws {
+        guard VisualAudit.isEnabled else { throw XCTSkip("Opt-in visual audit only") }
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryL"
+        ]
+        launchApp(with: configuration)
+        openTemplateList()
+        let addTemplate = app.descendants(matching: .any)[AXID.workoutTemplateListAdd].firstMatch
+        XCTAssertTrue(addTemplate.waitForExistence(timeout: 5))
+        addTemplate.auditTap()
+        let form = app.descendants(matching: .any)[AXID.templateFormScreen].firstMatch
+        XCTAssertTrue(form.waitForExistence(timeout: 8))
+        let addExercise = app.descendants(matching: .any)[AXID.templateFormAddExercise].firstMatch
+        let formScroll = app.collectionViews[AXID.templateFormScreen].firstMatch
+        for _ in 0..<12 where !(addExercise.exists && addExercise.isHittable) {
+            formScroll.swipeUp(velocity: .slow)
+        }
+        XCTAssertTrue(addExercise.exists && addExercise.isHittable)
+        addExercise.auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.pickerRootList].firstMatch.waitForExistence(timeout: 8))
+        let create = app.descendants(matching: .any)[AXID.pickerCreateCustomButton].firstMatch
+        XCTAssertTrue(app.scrollToHittablePickerElementIfNeeded(AXID.pickerCreateCustomButton, maxSwipes: 12))
+        XCTAssertTrue(create.waitForExistence(timeout: 8) && create.isHittable)
+        create.auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.createCustomExerciseScreen].firstMatch
+            .waitForExistence(timeout: 8))
+        VisualAudit.capture("New exercise form at default text size")
     }
 
     func testVisualAuditWorkoutSharePreview() throws {
@@ -1533,6 +1839,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             app.descendants(matching: .any)[AXID.compoundWorkoutScreen].firstMatch.waitForExistence(timeout: 10),
             "Compound workout screen should open"
         )
+        VisualAudit.capture("Compound workout active session")
 
         XCTAssertTrue(
             app.fillTextInput(AXID.setRowField(1, "weight"), with: "60"),
@@ -1575,16 +1882,26 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
     }
 
     func testCardioFlowReachesSummary() throws {
+        try verifyCardioFlowReachesSummary(accessibilityText: true)
+    }
+
+    func testVisualAuditCardioAtDefaultTextSize() throws {
+        guard VisualAudit.isEnabled else { throw XCTSkip("Opt-in visual audit only") }
+        try verifyCardioFlowReachesSummary(accessibilityText: false)
+    }
+
+    private func verifyCardioFlowReachesSummary(accessibilityText: Bool) throws {
         if VisualAudit.isEnabled {
             var configuration = launchConfiguration
             configuration.additionalArguments += [
                 "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
-                "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+                "-UIPreferredContentSizeCategoryName",
+                accessibilityText ? "UICTContentSizeCategoryAccessibilityXXXL" : "UICTContentSizeCategoryL"
             ]
             launchApp(with: configuration)
             XCTAssertTrue(app.hasPrimaryNavigation(timeout: 8))
         }
-        openExerciseSingleExercisePicker()
+        openQuickStartPicker()
         XCTAssertTrue(app.fillTextInput(AXID.pickerSearchField, with: "Running"), "Picker search should accept Running")
         dismissSearchKeyboardIfPresent()
 
@@ -1735,6 +2052,25 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         )
     }
 
+    func testVisualAuditHeartRateRecoveryExplanation() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments.append("--ui-design-map-heart-rate-recovery")
+        launchApp(with: configuration)
+        openNotificationHub()
+        let route = app.buttons[AXID.notificationWorkoutRow(Fixture.notificationWorkoutRouteID)].firstMatch
+        XCTAssertTrue(route.waitForExistence(timeout: 8))
+        route.auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.healthkitWorkoutDetailScreen].firstMatch
+            .waitForExistence(timeout: 10))
+
+        let infoID = "heart-rate-recovery-info-button"
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(infoID, maxSwipes: 10))
+        app.buttons[infoID].firstMatch.auditTap()
+        XCTAssertTrue(app.scrollViews["heart-rate-recovery-info-sheet"].firstMatch
+            .waitForExistence(timeout: 5))
+        VisualAudit.capture("Heart rate recovery explanation")
+    }
+
     func testNotificationMissingWorkoutRouteShowsFallback() throws {
         openNotificationHub()
 
@@ -1817,16 +2153,18 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         let seeAllButton = app.buttons[AXID.activityRecentSeeAll].firstMatch
         let exerciseScreen = app.descendants(matching: .any)[AXID.exerciseViewScreen].firstMatch
         let exerciseToolbarAdd = app.descendants(matching: .any)[AXID.exerciseToolbarAdd].firstMatch
+        let rootScroll = app.scrollViews[AXID.activityRootScroll].firstMatch
+        XCTAssertTrue(rootScroll.waitForExistence(timeout: 5), "Activity root scroll should exist")
         for _ in 0..<2 {
-            XCTAssertTrue(
-                app.scrollToHittableElementIfNeeded(AXID.activityRecentSeeAll, maxSwipes: maxSwipes),
-                "Recent workouts See All should be reachable and tappable"
-            )
+            for _ in 0..<max(24, maxSwipes) where !seeAllButton.isHittable {
+                rootScroll.swipeUp(velocity: .slow)
+            }
+            XCTAssertTrue(seeAllButton.isHittable,
+                          "Recent workouts See All should be reachable and tappable")
             XCTAssertTrue(seeAllButton.waitForExistence(timeout: 5), "Recent workouts See All should exist")
             // A partially visible row can be reported as hittable while its
             // center is under the collapsed navigation bar. Reveal the whole
             // action in the interior of the scroll viewport before tapping.
-            let rootScroll = app.scrollViews[AXID.activityRootScroll].firstMatch
             for _ in 0..<2 {
                 for _ in 0..<8 {
                     let viewport = rootScroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 80)
@@ -2076,6 +2414,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             openCompoundPicker(using: addExercise, in: setupScreen),
             "Add exercise button should be reachable in compound setup"
         )
+        VisualAudit.capture("Compound exercise picker")
 
         let pickerRow = app.descendants(matching: .any)[AXID.pickerExerciseRow(exerciseID)].firstMatch
         XCTAssertTrue(

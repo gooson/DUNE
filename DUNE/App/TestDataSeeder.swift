@@ -34,6 +34,9 @@ enum TestDataSeeder {
     @MainActor
     static func seed(into context: ModelContext, scenario: UITestSeedScenario = .defaultSeeded) {
         resetUserDefaults()
+        if ProcessInfo.processInfo.arguments.contains("--ui-design-map-one-set") {
+            WorkoutSettingsStore.shared.setCount = 1
+        }
         configureSimulatorAdvancedMockData(for: scenario)
 
         switch scenario {
@@ -573,6 +576,31 @@ enum TestDataSeeder {
         ]
 
         if scenario == .notificationRoutingSeeded {
+            if ProcessInfo.processInfo.arguments.contains("--ui-design-map-notification-details") {
+                insights.insert(contentsOf: [
+                    HealthInsight(
+                        type: .stepGoal,
+                        title: "Message Route Fixture",
+                        body: "A notification message that opens its in-app detail.",
+                        severity: .informational,
+                        route: .notificationHub
+                    ),
+                    HealthInsight(
+                        type: .stepGoal,
+                        title: "Unavailable Route Fixture",
+                        body: "A notification whose destination is unavailable.",
+                        severity: .informational,
+                        route: .notificationHub
+                    ),
+                    HealthInsight(
+                        type: .workoutPR,
+                        title: "Personal Records Route Fixture",
+                        body: "Open personal records from the notification inbox.",
+                        severity: .celebration,
+                        route: .activityPersonalRecords
+                    )
+                ], at: 0)
+            }
             insights.insert(contentsOf: [
                 HealthInsight(
                     type: .sleepComplete,

@@ -73,6 +73,7 @@ struct MetricsView: View {
             if !didInitialAppear {
                 didInitialAppear = true
                 showInputSheet = currentInputType != .durationIntensity
+                    || ProcessInfo.processInfo.arguments.contains("--ui-watch-duration-input")
             }
         }
         .onChange(of: pendingInputSheet) { _, shouldShow in

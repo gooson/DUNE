@@ -15,7 +15,11 @@ status: implemented
 | [watch-workout-design.svg](watch-workout-design.svg) | 편집 가능한 벡터 원본 |
 | [build-watch-workout-design.py](build-watch-workout-design.py) | 같은 두 파일을 재생성하는 스크립트 |
 | [simulator-evidence/](simulator-evidence/) | 현재 구현에서 캡처한 화면과 테스트 출처 |
+| [62개 상태별 실제 화면 맵](../phone-design-map/actual/watch/index.html) | 기본 글자 크기 실제 캡처 58개, 미캡처 4개, 기존 검증 캡처 3개 |
+| [collect-actual-captures.py](collect-actual-captures.py) | Watch UI 테스트 결과에서 실제 화면을 추출하고 맵 갱신 |
 | [research-screens/](research-screens/) | 비교에 사용한 공개 제품 화면 자료 |
+
+현재 실제 화면 맵은 58/62개 상태가 채워져 있다. S08 이전 세트는 완료한 세트에서 진입 버튼이 나타나지 않았고, S11 휴식 AOD와 C12 유산소 AOD는 시뮬레이터에서 실제 저휘도 화면을 캡처하지 못했다. S16 심박 미측정 휴식은 화면 수정 후 시뮬레이터 연결 실패로 재캡처하지 못해 이전 이미지를 제거했다. 이 맵의 빈 칸은 디자인 시안으로 대체하지 않는다. 기본 글자 크기의 실제 화면에서 루틴 이름 잘림, 운동 재정렬 조작 가림, 저장 요약의 버튼과 내용 겹침을 확인했다. 각 상태의 캡처 출처와 예외는 [인덱스](../phone-design-map/actual/watch/capture-index.json)에 기록했다.
 
 ## 이후 변경 순서
 

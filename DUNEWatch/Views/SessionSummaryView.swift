@@ -451,6 +451,10 @@ struct SessionSummaryView: View {
     @MainActor
     private func saveSession(dismissOnSuccess: Bool) async {
         #if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("--uitesting-watch"),
+           ProcessInfo.processInfo.arguments.contains("--ui-watch-save-delay") {
+            try? await Task.sleep(nanoseconds: 10_000_000_000)
+        }
         if ProcessInfo.processInfo.arguments.contains("--ui-force-session-save-error"),
            !didInjectUITestSaveFailure {
             didInjectUITestSaveFailure = true

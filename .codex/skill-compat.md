@@ -80,6 +80,14 @@ Claude skill 문서를 그대로 유지하면서 Codex에서 실행 semantics를
 7. 자동 판정 범위를 축소한 경우 근거와 대체 검증을 Proof Ledger에 남긴다. 인프라 변경은 실행기 fixture/구문/parity 검증도 수행한다. 빌드, 리뷰, Compound, Ship의 다른 게이트는 유지한다.
    - 앱 소스·프로젝트·UI test body·seed/helper가 동일한 CLI 선택 변경은 fixture와 dry-run 검증 결과 및 앱 관련 diff 없음으로 증빙한다. 검증 도중 발견한 무관한 기존 UI 실패를 수정하느라 작업 범위를 확장하지 않는다. 중단한 UI 실행은 통과 증거가 아니며 이번 도구 작업의 완료 조건으로 삼지 않는다.
 
+### 실제 화면 디자인맵 동기화
+
+Codex가 iOS·iPadOS·Duo·watchOS의 보이는 화면 배치, 글자, 상태, 내비게이션을 바꾸면 같은 작업에서 `docs/design/phone-design-map/actual/index.html`의 영향받는 화면을 갱신한다. `docs/design/phone-design-map/screen-inventory.md`와 Watch 상태표에서 화면 ID를 찾고, 해당 기기·상태의 UI 테스트를 시뮬레이터에서 실행해 새 PNG를 수집한다. `docs/design/phone-design-map/README.md`의 「화면 수정 시 갱신」 절차를 따른다. 영향 범위만 캡처하며, 전체 맵 재캡처는 사용자가 명시적으로 요청한 경우에만 한다.
+
+- 실제 앱 캡처와 캡처 출처를 갱신하고 갤러리·보드·통합 포털을 재생성한 뒤 화면의 잘림, 겹침, 글자 크기를 확인한다. UI 테스트 통과만으로 디자인맵 갱신을 완료했다고 보고하지 않는다.
+- 화면 영향이 없다고 판단한 변경은 호출부와 근거를 기록한다. 캡처가 막히거나 상태에 진입할 수 없으면 기존 이미지를 새 버전의 증거로 제시하지 않고 영향받는 화면 ID, 미갱신 기기, 원인과 재개 조건을 보고한다.
+- 이 동기화는 위 UI 테스트 범위 게이트에 추가되는 산출물 검증이다. 문서/도구만 수정해 앱 화면이 바뀌지 않은 작업에는 캡처를 요구하지 않는다.
+
 ### /plan
 
 - 계획서는 항상 `docs/plans/YYYY-MM-DD-{topic-slug}.md` 에 실제 생성한다.

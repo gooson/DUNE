@@ -63,7 +63,9 @@ final class HealthKitWorkoutDetailViewModel {
 
             guard !Task.isCancelled else { return }
             heartRateSummary = hr
-            heartRateRecovery = recovery
+            heartRateRecovery = ProcessInfo.processInfo.arguments.contains("--ui-design-map-heart-rate-recovery")
+                ? HeartRateRecovery(peakHR: 171, recoveryHR: 142)
+                : recovery
             effortScore = effort
             workoutStepCount = steps.workout
             dayStepCount = steps.day

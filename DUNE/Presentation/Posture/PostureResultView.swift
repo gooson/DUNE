@@ -27,6 +27,7 @@ struct PostureResultView: View {
             }
             .padding()
         }
+        .accessibilityIdentifier("posture-result-screen")
         .background(Color(.systemGroupedBackground))
         .postureImageZoom($zoomImage)
     }

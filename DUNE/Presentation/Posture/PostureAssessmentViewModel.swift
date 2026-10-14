@@ -113,6 +113,33 @@ final class PostureAssessmentViewModel {
         self.correctiveExerciseUseCase = correctiveExerciseUseCase
     }
 
+    /// Displays the existing visual audit record in the live result view on a camera-free simulator.
+    func showVisualResult(from record: PostureAssessmentRecord) {
+        let frontJoints = record.frontJointPositions
+        let sideJoints = record.sideJointPositions
+        frontAssessment = PostureAssessment(
+            captureType: .front, metrics: record.frontMetrics, jointPositions: frontJoints,
+            bodyHeight: record.bodyHeight, heightEstimation: record.heightEstimation, capturedAt: record.date
+        )
+        sideAssessment = PostureAssessment(
+            captureType: .side, metrics: record.sideMetrics, jointPositions: sideJoints,
+            bodyHeight: record.bodyHeight, heightEstimation: record.heightEstimation, capturedAt: record.date
+        )
+        frontResult = PostureCaptureResult(
+            jointPositions: frontJoints, bodyHeight: record.bodyHeight,
+            heightEstimation: record.heightEstimation, imageData: record.frontImageData,
+            poseSource: .twoDFallback
+        )
+        sideResult = PostureCaptureResult(
+            jointPositions: sideJoints, bodyHeight: record.bodyHeight,
+            heightEstimation: record.heightEstimation, imageData: record.sideImageData,
+            poseSource: .twoDFallback
+        )
+        memo = record.memo
+        refreshCombinedAssessment()
+        capturePhase = .result
+    }
+
     // MARK: - Camera Setup
 
     private var isCameraConfigured = false
