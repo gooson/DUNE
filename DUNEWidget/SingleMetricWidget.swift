@@ -100,17 +100,17 @@ struct SingleMetricWidgetView: View {
         let snapshot = entry.snapshot
         switch kind {
         case .condition:
-            WidgetMetric(kind: kind, title: WidgetMetricText.condition, compactTitle: "C", score: snapshot.score,
+            return WidgetMetric(kind: kind, title: WidgetMetricText.condition, compactTitle: "C", score: snapshot.score,
                          statusLabel: WidgetDS.labelForConditionStatus(snapshot.statusRaw), message: snapshot.message,
                          color: WidgetDS.colorForConditionStatus(snapshot.statusRaw),
                          icon: WidgetDS.iconForConditionStatus(snapshot.statusRaw))
         case .readiness:
-            WidgetMetric(kind: kind, title: WidgetMetricText.readiness, compactTitle: "R", score: snapshot.score,
+            return WidgetMetric(kind: kind, title: WidgetMetricText.readiness, compactTitle: "R", score: snapshot.score,
                          statusLabel: WidgetDS.labelForReadinessStatus(snapshot.statusRaw), message: snapshot.message,
                          color: WidgetDS.colorForReadinessStatus(snapshot.statusRaw),
                          icon: WidgetDS.iconForReadinessStatus(snapshot.statusRaw))
         case .wellness:
-            WidgetMetric(kind: kind, title: WidgetMetricText.wellness, compactTitle: "W", score: snapshot.score,
+            return WidgetMetric(kind: kind, title: WidgetMetricText.wellness, compactTitle: "W", score: snapshot.score,
                          statusLabel: WidgetDS.labelForWellnessStatus(snapshot.statusRaw), message: snapshot.message,
                          color: WidgetDS.colorForWellnessStatus(snapshot.statusRaw),
                          icon: WidgetDS.iconForWellnessStatus(snapshot.statusRaw))
