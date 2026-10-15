@@ -101,6 +101,46 @@ final class NotificationResponseRoutingUITests: SeededUITestBaseCase {
 }
 
 @MainActor
+final class DeferredDigestNotificationRoutingUITests: SeededUITestBaseCase {
+    override var uiScenario: LaunchScenario? { .notificationRoutingSeeded }
+
+    override var additionalLaunchArguments: [String] {
+        [
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+            "--ui-open-notification-title", "Daily Digest Route Fixture",
+            "--ui-defer-daily-digest-healthkit"
+        ]
+    }
+
+    func testSummaryWaitsForHealthKitReadinessWithoutShowingEmptyState() {
+        let detail = app.descendants(matching: .any)["notification-daily-digest-screen"].firstMatch
+        XCTAssertTrue(detail.waitForExistence(timeout: 15))
+
+        let loading = app.descendants(matching: .any)["notification-daily-digest-loading"].firstMatch
+        XCTAssertTrue(loading.waitForExistence(timeout: 5), "Summary should wait while HealthKit access is deferred")
+        XCTAssertFalse(app.staticTexts["No Health Data"].exists, "Pending authorization is not an empty result")
+
+        XCUIDevice.shared.press(.home)
+        let backgrounded = NSPredicate { _, _ in
+            MainActor.assumeIsolated {
+                self.app.state == .runningBackground || self.app.state == .runningBackgroundSuspended
+            }
+        }
+        XCTAssertEqual(
+            XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: backgrounded, object: nil)], timeout: 10),
+            .completed,
+            "Summary app should enter the background before releasing deferred HealthKit access"
+        )
+        app.activate()
+        XCTAssertTrue(app.wait(for: .runningForeground, timeout: 10))
+
+        let digest = app.descendants(matching: .any)["dashboard-daily-digest"].firstMatch
+        XCTAssertTrue(digest.waitForExistence(timeout: 15), "Summary should load when HealthKit becomes ready")
+        XCTAssertFalse(loading.exists)
+    }
+}
+
+@MainActor
 final class LifeChecklistResponseRoutingUITests: SeededUITestBaseCase {
     override var uiScenario: LaunchScenario? { .notificationRoutingSeeded }
 
