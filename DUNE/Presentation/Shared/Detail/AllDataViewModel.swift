@@ -10,7 +10,7 @@ final class AllDataViewModel {
         didSet { invalidateGroupedByDate() }
     }
     var isLoading = false
-    var hasMoreData = true
+    var hasMoreData = false
     private(set) var limitedHistoryStartDate: Date?
 
     private(set) var category: HealthMetric.Category = .hrv
@@ -61,12 +61,15 @@ final class AllDataViewModel {
         let requestID = pageRequestID
         pageEnd = Calendar.current.date(byAdding: .day, value: 1, to: Calendar.current.startOfDay(for: Date())) ?? Date()
         dataPoints = []
-        hasMoreData = true
+        // Keep the pagination row inactive until the authorization boundary is known.
+        // Its .task can otherwise start a page request and invalidate this load.
+        hasMoreData = false
         isLoading = false
         limitedHistoryStartDate = nil
         let limitedStart = await historyService.limitedReadStartDate(for: category)
         guard pageRequestID == requestID, !Task.isCancelled else { return }
         limitedHistoryStartDate = limitedStart
+        hasMoreData = true
         await loadNextPage()
     }
 
@@ -218,9 +221,10 @@ final class AllDataViewModel {
             points = try await breathingDisturbanceService.fetchNightlyDisturbances(start: start, end: end)
                 .map { ChartDataPoint(date: $0.date, value: $0.value) }
         }
+        let earliestVisibleDate = max(start, limitedHistoryStartDate ?? start)
         return await Task.detached(priority: .userInitiated) {
             // Statistics buckets and raw samples follow the same half-open boundary.
-            points.filter { $0.date >= start && $0.date < end }.sorted { $0.date > $1.date }
+            points.filter { $0.date >= earliestVisibleDate && $0.date < end }.sorted { $0.date > $1.date }
         }.value
     }
 }
