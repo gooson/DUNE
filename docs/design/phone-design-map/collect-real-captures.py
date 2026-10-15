@@ -297,6 +297,8 @@ def render_gallery(rows: list[dict], chosen: dict[str, dict], device: str) -> st
                 parts.append(f'<div class="missing">{note}</div>')
             parts.append(f'<div class="meta"><span class="id">{row["id"]}</span><span class="title">{escape(row["title"])}</span>')
             if item:
+                if item.get("current_verification") == "pending":
+                    parts.append(f'<div class="note" style="color:#e8bf94">{escape(item["current_verification_note"])}</div>')
                 parts.append(f'<div class="note">{escape(item["test"])} · {escape(item["action"])}</div>')
                 if item.get("video"):
                     parts.append(f'<div class="note"><a href="{escape(item["video"])}" style="color:#e8bf94">원본 앱 시작 영상</a></div>')
@@ -452,10 +454,14 @@ def render_watch_gallery() -> None:
 
 def render_portal() -> None:
     entries = []
+    pending_notes = set()
     for device, label in DEVICE_LABELS.items():
         folder = HERE / "actual" / device
         index = folder / "capture-index.json"
-        count = len(json.loads(index.read_text())["captured"]) if index.exists() else 0
+        captured = json.loads(index.read_text())["captured"] if index.exists() else {}
+        count = len(captured)
+        pending_notes.update(item["current_verification_note"] for item in captured.values()
+                             if item.get("current_verification") == "pending")
         preview_image = folder / "images" / "T03.png"
         preview = (f'<img src="{device}/images/T03.png" alt="{label} 오늘 화면 실제 캡처">'
                    if preview_image.exists() else '<div class="pending">캡처 대기</div>')
@@ -467,6 +473,7 @@ def render_portal() -> None:
     entries.append(f'<a class="card" href="watch/index.html">'
                    f'<img src="{watch_preview}" alt="Watch 운동 실제 화면 맵 미리보기">'
                    f'<div class="meta"><strong>Apple Watch · 운동</strong><span>{watch_count} / 62 상태 실제 캡처</span></div></a>')
+    pending_html = ''.join(f'<p style="color:#e8bf94">{escape(note)}</p>' for note in sorted(pending_notes))
     html = ('<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
             '<title>DUNE · 전체 디자인맵</title><style>'
             'body{margin:0;background:#101819;color:#f5f2eb;font-family:-apple-system,BlinkMacSystemFont,sans-serif}'
@@ -478,7 +485,7 @@ def render_portal() -> None:
             '.meta span{color:#c9ad8e}</style><main><h1>DUNE · 전체 디자인맵</h1>'
             '<p>iPhone·iPad·Duo의 현재 앱 실제 화면과 Watch 운동 재작업 결과를 한곳에서 확인합니다.</p>'
             '<p><a href="compare.html" style="color:#e8bf94">폰·패드·Duo 같은 화면 비교하기 →</a></p>'
-            '<div class="grid">' + ''.join(entries) + '</div></main></html>')
+            + pending_html + '<div class="grid">' + ''.join(entries) + '</div></main></html>')
     (HERE / "actual" / "index.html").write_text(html)
     render_watch_gallery()
     render_comparison()
@@ -519,6 +526,8 @@ def render_comparison() -> None:
             'const link=document.createElement("a");link.className="photo";link.href=src;const img=document.createElement("img");'
             'img.src=src;img.alt=id+" 실제 화면";link.append(img);slot.append(link);'
             'const proof=document.createElement("div");proof.className="proof";proof.textContent=item.test+" · "+item.action;slot.append(proof);'
+            'if(item.current_verification==="pending"){const note=document.createElement("div");note.className="proof";'
+            'note.style.color="#e8bf94";note.textContent=item.current_verification_note;slot.append(note);}'
             '}else{slot.innerHTML="";const empty=document.createElement("div");empty.className="missing";'
             'empty.textContent=["W17","W18"].includes(id)?"현재 앱 진입 경로 없음":'
             'id==="S07"&&device!=="ipad"?"이 기기에서는 별도 화면 없음":"미캡처";slot.append(empty)}}}'

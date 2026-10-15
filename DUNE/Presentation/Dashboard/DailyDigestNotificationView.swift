@@ -7,26 +7,36 @@ struct DailyDigestNotificationView: View {
     @Environment(\.horizontalSizeClass) private var sizeClass
 
     let canLoadHealthKitData: Bool
+    let hasFailedHealthKitAuthorization: Bool
 
     init(
         sharedHealthDataService: SharedHealthDataService? = nil,
         scoreRefreshService: ScoreRefreshService? = nil,
-        canLoadHealthKitData: Bool = true
+        canLoadHealthKitData: Bool = true,
+        hasFailedHealthKitAuthorization: Bool = false
     ) {
         _viewModel = State(initialValue: DashboardViewModel(
             sharedHealthDataService: sharedHealthDataService,
             scoreRefreshService: scoreRefreshService
         ))
         self.canLoadHealthKitData = canLoadHealthKitData
+        self.hasFailedHealthKitAuthorization = hasFailedHealthKitAuthorization
     }
 
     var body: some View {
         ScrollView {
             Group {
-                if !hasLoaded {
+                if hasFailedHealthKitAuthorization {
+                    EmptyStateView(
+                        icon: "heart.text.clipboard",
+                        title: "Health Data Unavailable",
+                        message: "Close and reopen DUNE to try again."
+                    )
+                } else if !isReadyToLoad || !hasLoaded {
                     ProgressView()
                         .frame(maxWidth: .infinity)
                         .padding(.top, DS.Spacing.xxxl)
+                        .accessibilityIdentifier("notification-daily-digest-loading")
                 } else if let digest = viewModel.dailyDigest,
                           !viewModel.sortedMetrics.isEmpty || viewModel.conditionScore != nil {
                     VStack(spacing: DS.Spacing.md) {
@@ -46,13 +56,19 @@ struct DailyDigestNotificationView: View {
         .accessibilityIdentifier("notification-daily-digest-screen")
         .background { DetailWaveBackground() }
         .englishNavigationTitle("Today's Summary")
-        .task(id: canLoadHealthKitData) {
+        .task(id: isReadyToLoad) {
+            guard isReadyToLoad else { return }
             await viewModel.loadData(
                 canLoadHealthKitData: canLoadHealthKitData,
                 forceDailyDigest: true
             )
+            guard !Task.isCancelled else { return }
             hasLoaded = true
         }
+    }
+
+    private var isReadyToLoad: Bool {
+        canLoadHealthKitData || !HealthKitManager.shared.isAvailable
     }
 
     private func metricsGrid(for metrics: DailyDigest.DigestMetrics) -> some View {

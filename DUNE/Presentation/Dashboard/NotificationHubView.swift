@@ -161,6 +161,7 @@ enum NotificationHubMetricResolver {
 struct NotificationHubView: View {
     let sharedHealthDataService: SharedHealthDataService?
     let canLoadHealthKitData: Bool
+    let hasFailedHealthKitAuthorization: Bool
     let requestedItemID: String?
     let navigationRequestID: Int
 
@@ -177,11 +178,13 @@ struct NotificationHubView: View {
     init(
         sharedHealthDataService: SharedHealthDataService? = nil,
         canLoadHealthKitData: Bool = true,
+        hasFailedHealthKitAuthorization: Bool = false,
         requestedItemID: String? = nil,
         navigationRequestID: Int = 0
     ) {
         self.sharedHealthDataService = sharedHealthDataService
         self.canLoadHealthKitData = canLoadHealthKitData
+        self.hasFailedHealthKitAuthorization = hasFailedHealthKitAuthorization
         self.requestedItemID = requestedItemID
         self.navigationRequestID = navigationRequestID
     }
@@ -260,7 +263,8 @@ struct NotificationHubView: View {
             case .dailyDigest:
                 DailyDigestNotificationView(
                     sharedHealthDataService: sharedHealthDataService,
-                    canLoadHealthKitData: canLoadHealthKitData
+                    canLoadHealthKitData: canLoadHealthKitData,
+                    hasFailedHealthKitAuthorization: hasFailedHealthKitAuthorization
                 )
             case .message(_, let title, let body):
                 NotificationMessageDetailView(title: title, message: body)
