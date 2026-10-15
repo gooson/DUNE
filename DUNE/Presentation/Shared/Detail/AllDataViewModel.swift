@@ -81,13 +81,24 @@ final class AllDataViewModel {
 
         do {
             var end = pageEnd
+            let boundary = earliestVisibleDate
             while isCurrentPageRequest(requestID) {
-                let start = Calendar.current.date(byAdding: .day, value: -pageSize, to: end) ?? end
+                if let boundary, end <= boundary {
+                    hasMoreData = false
+                    return
+                }
+                let requestedStart = Calendar.current.date(byAdding: .day, value: -pageSize, to: end) ?? end
+                let start = max(requestedStart, boundary ?? requestedStart)
                 let points = try await fetchData(start: start, end: end)
                 guard isCurrentPageRequest(requestID) else { return }
                 if !points.isEmpty {
                     dataPoints.append(contentsOf: points)
                     pageEnd = start
+                    if let boundary, pageEnd <= boundary { hasMoreData = false }
+                    return
+                }
+                if let boundary, start <= boundary {
+                    hasMoreData = false
                     return
                 }
                 // An empty month is not the end of history. Jump directly to the
@@ -97,7 +108,12 @@ final class AllDataViewModel {
                     hasMoreData = false
                     return
                 }
+                guard isCurrentPageRequest(requestID) else { return }
                 guard previous < start else { throw HistoryError.invalidCursor }
+                if let limitedHistoryStartDate, previous < limitedHistoryStartDate {
+                    hasMoreData = false
+                    return
+                }
                 let day = Calendar.current.startOfDay(for: previous)
                 end = Calendar.current.date(byAdding: .day, value: 1, to: day) ?? start
                 // Sleep samples can begin the evening before their reporting day.
@@ -221,10 +237,21 @@ final class AllDataViewModel {
             points = try await breathingDisturbanceService.fetchNightlyDisturbances(start: start, end: end)
                 .map { ChartDataPoint(date: $0.date, value: $0.value) }
         }
-        let earliestVisibleDate = max(start, limitedHistoryStartDate ?? start)
+        let earliestVisibleDate = max(start, self.earliestVisibleDate ?? start)
         return await Task.detached(priority: .userInitiated) {
             // Statistics buckets and raw samples follow the same half-open boundary.
             points.filter { $0.date >= earliestVisibleDate && $0.date < end }.sorted { $0.date > $1.date }
         }.value
+    }
+
+    /// Daily statistics are dated at bucket midnight even if authorization begins later that day.
+    private var earliestVisibleDate: Date? {
+        guard let limitedHistoryStartDate else { return nil }
+        switch category {
+        case .rhr, .sleep, .steps:
+            return Calendar.current.startOfDay(for: limitedHistoryStartDate)
+        default:
+            return limitedHistoryStartDate
+        }
     }
 }
