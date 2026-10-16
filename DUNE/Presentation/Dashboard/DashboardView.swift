@@ -138,6 +138,8 @@ struct DashboardView: View {
                     }
                 }
                 .padding(sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.lg)
+                .frame(maxWidth: sizeClass == .regular ? DS.Layout.rootContentMaxWidth : .infinity)
+                .frame(maxWidth: .infinity)
                 .coordinateSpace(name: TabHeroStartLine.coordinateSpace)
             }
             .accessibilityElement(children: .contain)

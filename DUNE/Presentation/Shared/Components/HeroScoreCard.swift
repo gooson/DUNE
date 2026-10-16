@@ -65,22 +65,17 @@ struct HeroScoreCard: View {
     var body: some View {
         HeroCard(tintColor: statusColor) {
             VStack(alignment: .leading, spacing: DS.Spacing.md) {
-            ViewThatFits(in: .horizontal) {
-                if !dynamicTypeSize.isAccessibilitySize {
-                    HStack(spacing: isRegular ? DS.Spacing.xxl : DS.Spacing.xl) {
+            if dynamicTypeSize.isAccessibilitySize {
+                verticalSummary
+            } else {
+                ViewThatFits(in: .horizontal) {
+                    HStack(spacing: isRegular ? DS.Spacing.xxl : DS.Spacing.md) {
                         scoreRing
                         scoreInfo
+                            .frame(width: isRegular ? 260 : 145, alignment: .leading)
                         chevron
                     }
-                }
-
-                VStack(alignment: .leading, spacing: DS.Spacing.lg) {
-                    HStack {
-                        scoreRing
-                        Spacer(minLength: 0)
-                        chevron
-                    }
-                    scoreInfo
+                    verticalSummary
                 }
             }
             if let sparkline = hourlySparkline, sparkline.points.count >= 2 {
@@ -140,6 +135,17 @@ struct HeroScoreCard: View {
             }
         }
         // score changes handled by .task(id: score) above
+    }
+
+    private var verticalSummary: some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.lg) {
+            HStack {
+                scoreRing
+                Spacer(minLength: 0)
+                chevron
+            }
+            scoreInfo
+        }
     }
 
     private var scoreRing: some View {

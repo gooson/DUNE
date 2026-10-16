@@ -1,11 +1,11 @@
 {
   "device": "ipad",
-  "source_revision": "ab567364d38a127d1aafe5aca586020adf222ce9",
+  "source_revision": "40f6e4e4c3d73c6d5f5c09c1260597546321c0ba",
   "source_worktree_dirty": true,
   "xcresults": [
-    "/Users/shanks/.codex/worktrees/92bc/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.17_02-25-45-+0900.xcresult"
+    ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.17_03-46-57-+0900.xcresult"
   ],
-  "processed_capture_candidates": 107,
+  "processed_capture_candidates": 137,
   "captured": {
     "S05": {
       "row_id": "S05",
@@ -1040,29 +1040,19 @@
       "evidence": "title:Today",
       "test": "TodayDesignMapCaptureTests/testTodayRootRenders()",
       "action": "root after setup -[TodayDesignMapCaptureTests testTodayRootRenders]",
-      "timestamp": 1792168171.699,
-      "image": "D78017DA-38DB-4F3B-B0F4-13CE49C367E0.png",
-      "screen": "screen-0-2064x2752-root after setup -[TodayDesignMapCaptureTests testTodayRootRenders]_0_B7ADF21D-8FB4-4FD2-973C-6730C8935D8D.png",
+      "timestamp": 1792176641.678,
+      "image": "35DA7375-7706-4499-9E04-2115F647BFBB.png",
+      "screen": "screen-0-2064x2752-root after setup -[TodayDesignMapCaptureTests testTodayRootRenders]_0_E44209F6-6691-4490-B5FC-E737B468AF8C.png",
       "file": "T03.png"
-    },
-    "L01": {
-      "row_id": "L01",
-      "evidence": "title:Life",
-      "test": "LifeRegressionTests/testVisualAuditHabitManagement()",
-      "action": "root after setup -[LifeRegressionTests testVisualAuditHabitManagement]",
-      "timestamp": 1792168384.651,
-      "image": "49B292FD-C755-47FB-9FFD-3F6ED6CA21A8.png",
-      "screen": "screen-0-2064x2752-root after setup -[LifeRegressionTests testVisualAuditHabitManagement]_0_2EA3FD17-B4D6-432A-A42C-7D292B0C451A.png",
-      "file": "L01.png"
     },
     "A01": {
       "row_id": "A01",
       "evidence": "title:Activity",
       "test": "ActivityExerciseRegressionTests/testExerciseTypeDetailShowsTrendSurface()",
       "action": "root after setup -[ActivityExerciseRegressionTests testExerciseTypeDetailShowsTrendSurface]",
-      "timestamp": 1792170184.729,
-      "image": "9E3C816A-A846-41F5-BFB7-DB07107CF4C4.png",
-      "screen": "screen-0-2064x2752-root after setup -[ActivityExerciseRegressionTests testExerciseTypeDetailShowsTrendSurface]_0_DCDED56E-2081-49DB-A2E5-777F81972BAC.png",
+      "timestamp": 1792176528.715,
+      "image": "1A5C717F-8F63-4F48-B9B3-93DCC9CBE79A.png",
+      "screen": "screen-0-2064x2752-root after setup -[ActivityExerciseRegressionTests testExerciseTypeDetailShowsTrendSurface]_0_F98EADC5-CB36-4C57-99EA-5C852AEFD77D.png",
       "file": "A01.png"
     },
     "H01": {
@@ -1070,10 +1060,20 @@
       "evidence": "title:Wellness",
       "test": "WellnessDesignMapCaptureTests/testWellnessRootRenders()",
       "action": "root after setup -[WellnessDesignMapCaptureTests testWellnessRootRenders]",
-      "timestamp": 1792171609.245,
-      "image": "CDA1A120-5B55-450E-95FA-3C7F1CEDD14C.png",
-      "screen": "screen-0-2064x2752-root after setup -[WellnessDesignMapCaptureTests testWellnessRootRenders]_0_6279F3BE-0E67-4A77-805A-9DFA1DAD62FB.png",
+      "timestamp": 1792176653.826,
+      "image": "50F32FAD-84E1-4B4D-A5C6-7E28BD13FD7C.png",
+      "screen": "screen-0-2064x2752-root after setup -[WellnessDesignMapCaptureTests testWellnessRootRenders]_0_969C84A7-229E-46F5-B891-2C8F7B8BC54D.png",
       "file": "H01.png"
+    },
+    "L01": {
+      "row_id": "L01",
+      "evidence": "title:Life",
+      "test": "LifeRegressionTests/testVisualAuditHabitManagement()",
+      "action": "root after setup -[LifeRegressionTests testVisualAuditHabitManagement]",
+      "timestamp": 1792176572.6,
+      "image": "0A50E757-B645-4C94-A92D-3B856BA9BB1E.png",
+      "screen": "screen-0-2064x2752-root after setup -[LifeRegressionTests testVisualAuditHabitManagement]_0_CD97390E-9938-45A0-94BB-65AB35F853D0.png",
+      "file": "L01.png"
     }
   },
   "unmatched": []
