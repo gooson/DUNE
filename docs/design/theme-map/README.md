@@ -7,7 +7,7 @@ status: in-progress
 
 # DUNE 테마 맵
 
-[테마 맵 열기](index.html) · [실제 화면 디자인맵 열기](../phone-design-map/actual/index.html)
+[테마 맵 열기](index.html) · [UX·비주얼 명세](../2026-10-17-ux-visual-spec.md) · [실제 화면 디자인맵 열기](../phone-design-map/actual/index.html)
 
 2026-10-17까지 논의한 **8개 테마 방향 시안**과 공통 능선 표현 연구안을 저장소에 보존한다. 이 자료는 움직이는 디자인 제안이며 앱의 현재 구현이나 실제 시뮬레이터 캡처가 아니다. 시안의 컨디션 수치와 문구는 예시다.
 
