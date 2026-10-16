@@ -18,6 +18,9 @@ struct HealthKitWorkoutDetailView: View {
                 badgesSection
                 statsGrid
                 heartRateSection
+                if let distribution = viewModel.zoneDistribution, !distribution.zones.isEmpty {
+                    WorkoutZoneDistributionView(distribution: distribution)
+                }
                 weatherSection
             }
             .padding(.horizontal, DS.Spacing.lg)
@@ -43,6 +46,9 @@ struct HealthKitWorkoutDetailView: View {
         .task {
             correctedTitle = WorkoutTypeCorrectionStore.shared.correctedTitle(for: workout.id)
             viewModel.loadDetail(workoutID: workout.id)
+        }
+        .onDisappear {
+            viewModel.cancelLoading()
         }
     }
 
@@ -512,5 +518,124 @@ struct HealthKitWorkoutDetailView: View {
         case 27: "tornado"               // tornado
         default: "cloud.fill"
         }
+    }
+}
+
+private struct WorkoutZoneDistributionView: View {
+    let distribution: WorkoutZoneDistribution
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.md) {
+            HStack(alignment: .firstTextBaseline) {
+                Label("Heart Rate Zones", systemImage: "heart.fill")
+                    .font(.headline)
+                Spacer(minLength: DS.Spacing.sm)
+                Text(sourceLabel)
+                    .font(.caption)
+                    .foregroundStyle(DS.Color.textSecondary)
+                    .accessibilityIdentifier("healthkit-workout-zones-source")
+            }
+
+            if distribution.source == .estimated {
+                Text("Estimated using a \(Int(HeartRateZoneCalculator.defaultMaxHR)) bpm maximum heart rate.")
+                    .font(.caption)
+                    .foregroundStyle(DS.Color.textSecondary)
+                    .accessibilityIdentifier("healthkit-workout-zones-estimate-method")
+            }
+
+            ForEach(distribution.zones) { zone in
+                zoneRow(zone)
+            }
+        }
+        .padding(DS.Spacing.md)
+        .chartSurface(cornerRadius: DS.Radius.md, topBloomHeight: 34)
+        .accessibilityIdentifier("healthkit-workout-zones-section")
+    }
+
+    private func zoneRow(_ zone: WorkoutZoneDistribution.Zone) -> some View {
+        let color = color(for: zone.index)
+        return VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+            HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.sm) {
+                Text("Zone \(zone.index)")
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(color)
+                Spacer(minLength: DS.Spacing.xs)
+                Text(durationText(zone.durationSeconds))
+                    .font(.caption.monospacedDigit())
+                Text(zone.percentage.formatted(.percent.precision(.fractionLength(0))))
+                    .font(.caption.monospacedDigit())
+                    .foregroundStyle(DS.Color.textSecondary)
+                    .frame(minWidth: 36, alignment: .trailing)
+            }
+            Text(bpmRange(for: zone))
+                .font(.caption)
+                .foregroundStyle(DS.Color.textSecondary)
+            ProgressView(value: zone.percentage)
+                .tint(color)
+                .accessibilityHidden(true)
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityIdentifier("healthkit-workout-zone-\(zone.index)")
+    }
+
+    private var sourceLabel: LocalizedStringKey {
+        switch distribution.source {
+        case .system: "System zones"
+        case .user: "Custom zones"
+        case .app: "App zones"
+        case .estimated: "Estimated zones"
+        case .unknown: "Zone source unknown"
+        }
+    }
+
+    private func bpmRange(for zone: WorkoutZoneDistribution.Zone) -> String {
+        let minimum = zone.minimumBPM.flatMap { $0.isFinite && (0..<1000).contains($0) ? Int($0.rounded()) : nil }
+        let maximum = zone.maximumBPM.flatMap { $0.isFinite && (0..<1000).contains($0) ? Int($0.rounded()) : nil }
+        switch (minimum, maximum) {
+        case let (minimum?, maximum?):
+            return String(localized: "\(minimum)–\(maximum) bpm")
+        case let (minimum?, nil):
+            return String(localized: "From \(minimum) bpm")
+        case let (nil, maximum?):
+            return String(localized: "Below \(maximum) bpm")
+        case (nil, nil):
+            return String(localized: "Range unavailable")
+        }
+    }
+
+    private func durationText(_ seconds: TimeInterval) -> String {
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = seconds >= 3600 ? [.hour, .minute, .second] : [.minute, .second]
+        formatter.unitsStyle = .abbreviated
+        formatter.zeroFormattingBehavior = .pad
+        return formatter.string(from: seconds) ?? "—"
+    }
+
+    private func color(for index: Int) -> Color {
+        switch index {
+        case 1: DS.Color.zone1
+        case 2: DS.Color.zone2
+        case 3: DS.Color.zone3
+        case 4: DS.Color.zone4
+        case 5: DS.Color.zone5
+        default: DS.Color.heartRate
+        }
+    }
+}
+
+#Preview("Workout zones") {
+    ScrollView {
+        WorkoutZoneDistributionView(
+            distribution: WorkoutZoneDistribution(
+                source: .user,
+                bins: [
+                    .init(index: 1, minimumBPM: nil, maximumBPM: 120, durationSeconds: 180),
+                    .init(index: 2, minimumBPM: 120, maximumBPM: 145, durationSeconds: 600),
+                    .init(index: 3, minimumBPM: 145, maximumBPM: 165, durationSeconds: 420),
+                    .init(index: 4, minimumBPM: 165, maximumBPM: nil, durationSeconds: 60)
+                ]
+            )
+        )
+        .padding()
     }
 }

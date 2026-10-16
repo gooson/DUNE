@@ -1837,6 +1837,29 @@
         }
       }
     },
+    "%lld–%lld bpm" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld–%lld bpm"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld～%lldbpm"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld–%lldbpm"
+          }
+        }
+      }
+    },
     "%lld/%lld done" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -4416,6 +4439,29 @@
         }
       }
     },
+    "App zones" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App zones"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アプリ設定ゾーン"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "앱 설정 구간"
+          }
+        }
+      }
+    },
     "Appearance" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -6025,6 +6071,29 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "초급"
+          }
+        }
+      }
+    },
+    "Below %lld bpm" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Below %lld bpm"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lldbpm未満"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lldbpm 미만"
           }
         }
       }
@@ -10062,6 +10131,29 @@
         }
       }
     },
+    "Custom zones" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Custom zones"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "カスタムゾーン"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "사용자 설정 구간"
+          }
+        }
+      }
+    },
     "Cycle through 3+ exercises in rounds." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -12256,6 +12348,52 @@
         }
       }
     },
+    "Estimated using a %lld bpm maximum heart rate." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estimated using a %lld bpm maximum heart rate."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最大心拍数を%lld bpmと仮定して推定しています。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최대 심박수를 %lldbpm으로 가정한 추정치입니다."
+          }
+        }
+      }
+    },
+    "Estimated zones" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estimated zones"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "推定ゾーン"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "추정 구간"
+          }
+        }
+      }
+    },
     "Evaluates regularity of your sleep patterns. Irregular sleep timing disrupts circadian rhythm and increases physiological stress." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -14358,6 +14496,29 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "금"
+          }
+        }
+      }
+    },
+    "From %lld bpm" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "From %lld bpm"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lldbpm以上"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lldbpm 이상"
           }
         }
       }
@@ -27205,6 +27366,29 @@
         }
       }
     },
+    "Range unavailable" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Range unavailable"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "範囲データなし"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "범위 정보 없음"
+          }
+        }
+      }
+    },
     "Rate effort for each set with a redesigned slider — Apple Watch estimates RPE automatically from heart rate." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -35219,6 +35403,29 @@
         }
       }
     },
+    "System zones" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "System zones"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "システムゾーン"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "시스템 구간"
+          }
+        }
+      }
+    },
     "Table Tennis" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -42105,6 +42312,52 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "이번 주 현황"
+          }
+        }
+      }
+    },
+    "Zone %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zone %lld"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ゾーン%lld"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld구간"
+          }
+        }
+      }
+    },
+    "Zone source unknown" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zone source unknown"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ゾーンの設定元が不明"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "구간 출처 알 수 없음"
           }
         }
       }

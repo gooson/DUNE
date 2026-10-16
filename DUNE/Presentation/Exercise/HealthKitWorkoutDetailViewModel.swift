@@ -23,6 +23,7 @@ final class HealthKitWorkoutDetailViewModel {
 
     var heartRateSummary: HeartRateSummary?
     var heartRateRecovery: HeartRateRecovery?
+    var zoneDistribution: WorkoutZoneDistribution?
     var effortScore: Double?
     var isLoading = false
     var errorMessage: String?
@@ -32,22 +33,26 @@ final class HealthKitWorkoutDetailViewModel {
     var weekStepCount: Double?
 
     private let heartRateService: HeartRateQueryService
+    private let zoneService: any WorkoutZoneDistributionQuerying
     private let effortService: EffortScoreService
     private let healthKitManager: HealthKitManager
     private var loadTask: Task<Void, Never>?
 
     init(
         heartRateService: HeartRateQueryService = HeartRateQueryService(manager: .shared),
+        zoneService: (any WorkoutZoneDistributionQuerying)? = nil,
         effortService: EffortScoreService = EffortScoreService(manager: .shared),
         healthKitManager: HealthKitManager = .shared
     ) {
         self.heartRateService = heartRateService
+        self.zoneService = zoneService ?? heartRateService
         self.effortService = effortService
         self.healthKitManager = healthKitManager
     }
 
     func loadDetail(workoutID: String) {
         loadTask?.cancel()
+        zoneDistribution = nil
         loadTask = Task {
             isLoading = true
             defer {
@@ -58,19 +63,29 @@ final class HealthKitWorkoutDetailViewModel {
             async let effortResult = safeEffortFetch(workoutID: workoutID)
             async let stepResult = safeStepRangeFetch(workoutID: workoutID)
             async let recoveryResult = safeRecoveryFetch(workoutID: workoutID)
+            async let zoneResult = safeZoneFetch(workoutID: workoutID)
 
-            let (hr, effort, steps, recovery) = await (hrResult, effortResult, stepResult, recoveryResult)
+            let (hr, effort, steps, recovery, zones) = await (
+                hrResult, effortResult, stepResult, recoveryResult, zoneResult
+            )
 
             guard !Task.isCancelled else { return }
             heartRateSummary = hr
             heartRateRecovery = ProcessInfo.processInfo.arguments.contains("--ui-design-map-heart-rate-recovery")
                 ? HeartRateRecovery(peakHR: 171, recoveryHR: 142)
                 : recovery
+            zoneDistribution = zones
             effortScore = effort
             workoutStepCount = steps.workout
             dayStepCount = steps.day
             weekStepCount = steps.week
         }
+    }
+
+    func cancelLoading() {
+        loadTask?.cancel()
+        loadTask = nil
+        isLoading = false
     }
 
     func stepCount(for workout: WorkoutSummary, range: StepRange) -> Double? {
@@ -130,6 +145,17 @@ final class HealthKitWorkoutDetailViewModel {
     private func safeRecoveryFetch(workoutID: String) async -> HeartRateRecovery? {
         do {
             return try await heartRateService.fetchHeartRateRecovery(forWorkoutID: workoutID)
+        } catch {
+            return nil
+        }
+    }
+
+    private func safeZoneFetch(workoutID: String) async -> WorkoutZoneDistribution? {
+        do {
+            return try await zoneService.fetchWorkoutZoneDistribution(
+                forWorkoutID: workoutID,
+                maxHR: HeartRateZoneCalculator.defaultMaxHR
+            )
         } catch {
             return nil
         }

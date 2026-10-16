@@ -161,7 +161,9 @@ struct CardioMainMetricsPage: View {
                     ? "\(Int(workoutManager.heartRate))"
                     : "--",
                 unit: "bpm",
-                color: workoutManager.currentZone?.color ?? theme.metricHeartRate,
+                color: workoutManager.displayedZoneIndex.map {
+                    HRZoneBar.color(for: $0, count: workoutManager.displayedZoneCount)
+                } ?? theme.metricHeartRate,
                 size: .compact
             )
             .frame(maxWidth: .infinity, minHeight: 48)
