@@ -1,11 +1,11 @@
 {
   "device": "regular",
-  "source_revision": "1f49c921512a8fbf33eb26221c527d03c54b136f",
+  "source_revision": "2c43546f213dd2c445ab26f12fa27420eb823ea0",
+  "source_worktree_dirty": true,
   "xcresults": [
-    ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.13_10-11-21-+0900.xcresult",
-    ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.13_10-19-12-+0900.xcresult"
+    "/Users/shanks/.codex/worktrees/51b3/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.16_14-47-28-+0900.xcresult"
   ],
-  "processed_capture_candidates": 113,
+  "processed_capture_candidates": 105,
   "captured": {
     "W13": {
       "row_id": "W13",
@@ -176,16 +176,6 @@
       "image": "F0FBD87F-0146-4DE9-A11B-11290D164EF0.png",
       "screen": "screen-0-1320x2868-before teardown -[NotificationRoutingRegressionTests testBedtimeReminderPushesFromNotificationHub]_0_F9E76A4C-20AF-4E9E-B6E3-EB35A91E5F8B.png",
       "file": "T15.png"
-    },
-    "T03": {
-      "row_id": "T03",
-      "evidence": "dashboard-root-scroll",
-      "test": "NotificationRoutingRegressionTests/testBedtimeReminderPushesFromNotificationHub()",
-      "action": "root after setup -[NotificationRoutingRegressionTests testBedtimeReminderPushesFromNotificationHub]",
-      "timestamp": 1791817153.389,
-      "image": "3EFF68C1-D4DD-4D38-AAA9-925D0B0E331F.png",
-      "screen": "screen-0-1320x2868-root after setup -[NotificationRoutingRegressionTests testBedtimeReminderPushesFromNotificationHub]_0_17871452-3D84-40A2-ABA5-AA6E28FD7BCA.png",
-      "file": "T03.png"
     },
     "L01": {
       "row_id": "L01",
@@ -1064,8 +1054,17 @@
       "file": "T01.png",
       "video": "launch.mov",
       "frame_time": "1.2"
+    },
+    "T03": {
+      "row_id": "T03",
+      "evidence": "title:Today",
+      "test": "NotificationRoutingRegressionTests/testBedtimeReminderPushesFromNotificationHub()",
+      "action": "root after setup -[NotificationRoutingRegressionTests testBedtimeReminderPushesFromNotificationHub]",
+      "timestamp": 1792129663.491,
+      "image": "D2460A01-464D-4462-BD6B-76E48FC5D635.png",
+      "screen": "screen-0-1206x2622-root after setup -[NotificationRoutingRegressionTests testBedtimeReminderPushesFromNotificationHub]_0_1EC1E545-2B06-4CE6-BFDE-B0DF5C89B300.png",
+      "file": "T03.png"
     }
   },
-  "unmatched": [],
-  "source_worktree_dirty": true
+  "unmatched": []
 }

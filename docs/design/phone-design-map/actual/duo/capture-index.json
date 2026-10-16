@@ -1,22 +1,12 @@
 {
   "device": "duo",
-  "source_revision": "1f49c921512a8fbf33eb26221c527d03c54b136f",
+  "source_revision": "2c43546f213dd2c445ab26f12fa27420eb823ea0",
+  "source_worktree_dirty": true,
   "xcresults": [
-    ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.13_10-44-57-+0900.xcresult",
-    ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.13_10-47-05-+0900.xcresult"
+    "/Users/shanks/.codex/worktrees/51b3/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.16_14-53-22-+0900.xcresult"
   ],
-  "processed_capture_candidates": 108,
+  "processed_capture_candidates": 105,
   "captured": {
-    "T03": {
-      "row_id": "T03",
-      "evidence": "title:Today",
-      "test": "NotificationRoutingRegressionTests/testDigestAndChecklistRowsOpenTheirFeatures()",
-      "action": "root after setup -[NotificationRoutingRegressionTests testDigestAndChecklistRowsOpenTheirFeatures]",
-      "timestamp": 1791824283.544,
-      "image": "CCA8861B-EE86-4BC0-8393-426A0726999C.png",
-      "screen": "screen-0-1398x2034-root after setup -[NotificationRoutingRegressionTests testDigestAndChecklistRowsOpenTheirFeatures]_0_623B67EE-8894-4DD2-AB42-1A4E336F63A5.png",
-      "file": "T03.png"
-    },
     "T11": {
       "row_id": "T11",
       "evidence": "notification-hub-screen",
@@ -1060,8 +1050,17 @@
       "image": "D3F1E991-D71A-4192-A5BC-11773AC64B79.png",
       "screen": "screen-0-1398x2034-tap 21°C_0_BDA352B3-7267-4E28-8258-DCED32D3552D.png",
       "file": "T08.png"
+    },
+    "T03": {
+      "row_id": "T03",
+      "evidence": "title:Today",
+      "test": "TodaySettingsRegressionTests/testConditionHeroOpensConditionScoreDetail()",
+      "action": "tap dashboard-morning-briefing-dismiss",
+      "timestamp": 1792130077.862,
+      "image": "288D7601-83B7-4EF6-BB69-F12039A2F760.png",
+      "screen": "screen-0-1398x2034-tap dashboard-morning-briefing-dismiss_0_BAB5A0F6-407B-4B75-AD38-E20528964DA1.png",
+      "file": "T03.png"
     }
   },
-  "unmatched": [],
-  "source_worktree_dirty": true
+  "unmatched": []
 }
