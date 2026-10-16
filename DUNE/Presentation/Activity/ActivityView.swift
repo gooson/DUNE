@@ -341,6 +341,8 @@ struct ActivityView: View {
                     }
                 }
                 .padding()
+                .frame(maxWidth: isRegular ? DS.Layout.rootContentMaxWidth : .infinity)
+                .frame(maxWidth: .infinity)
                 .coordinateSpace(name: TabHeroStartLine.coordinateSpace)
             }
             .accessibilityIdentifier("activity-root-scroll")

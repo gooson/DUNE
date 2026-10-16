@@ -66,6 +66,8 @@ struct LifeView: View {
                     )
                 }
                 .padding(isRegular ? DS.Spacing.xxl : DS.Spacing.lg)
+                .frame(maxWidth: isRegular ? DS.Layout.rootContentMaxWidth : .infinity)
+                .frame(maxWidth: .infinity)
                 .coordinateSpace(name: TabHeroStartLine.coordinateSpace)
             }
             .scrollBounceBehavior(.basedOnSize)

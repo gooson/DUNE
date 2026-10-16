@@ -44,6 +44,23 @@ struct WellnessView: View {
         return (viewModel.physicalCards + viewModel.activeCards).map(\.metric).filter { seen.insert($0.id).inserted }
     }
 
+    private func openBodyRecord() {
+        bodyViewModel.resetForm()
+        bodyViewModel.isShowingAddSheet = true
+    }
+
+    private var bodyRecordButton: some View {
+        Button(action: openBodyRecord) {
+            Label("Body Record", systemImage: "plus.circle.fill")
+                .font(.headline)
+                .frame(maxWidth: .infinity, minHeight: 44)
+        }
+        .buttonStyle(.borderedProminent)
+        .tint(theme.accentColor)
+        .controlSize(.large)
+        .accessibilityIdentifier("wellness-primary-body-record")
+    }
+
     var body: some View {
         ScrollViewReader { proxy in
             ScrollView {
@@ -58,6 +75,7 @@ struct WellnessView: View {
                         viewModel.wellnessScore == nil {
                         ProgressView()
                             .frame(maxWidth: .infinity, minHeight: 200)
+                        bodyRecordButton
                     } else if viewModel.physicalCards.isEmpty &&
                                 viewModel.activeCards.isEmpty &&
                                 viewModel.wellnessScore == nil &&
@@ -66,11 +84,15 @@ struct WellnessView: View {
                             CloudSyncWaitingView {
                                 Task { viewModel.loadData() }
                             }
+                            bodyRecordButton
                         } else {
                             EmptyStateView(
                                 icon: "leaf.fill",
                                 title: "No Wellness Data",
-                                message: "Wear Apple Watch to bed for sleep tracking, or add body composition records to get started."
+                                message: "Wear Apple Watch to bed for sleep tracking, or add body composition records to get started.",
+                                actionTitle: "Body Record",
+                                action: openBodyRecord,
+                                actionIdentifier: "wellness-primary-body-record"
                             )
                         }
                     } else {
@@ -105,6 +127,8 @@ struct WellnessView: View {
                             .reportTabHeroFrame()
                             .staggeredAppear(index: 0)
                         }
+
+                        bodyRecordButton
 
                         // Sleep Prediction
                         SectionGroup(title: "Sleep Prediction", icon: "moon.zzz",
@@ -174,6 +198,8 @@ struct WellnessView: View {
                     }
                 }
                 .padding(isRegular ? DS.Spacing.xxl : DS.Spacing.lg)
+                .frame(maxWidth: isRegular ? DS.Layout.rootContentMaxWidth : .infinity)
+                .frame(maxWidth: .infinity)
                 .coordinateSpace(name: TabHeroStartLine.coordinateSpace)
             }
             .scrollBounceBehavior(.basedOnSize)
@@ -203,8 +229,7 @@ struct WellnessView: View {
             ToolbarItem(placement: .primaryAction) {
                 Menu {
                     Button {
-                        bodyViewModel.resetForm()
-                        bodyViewModel.isShowingAddSheet = true
+                        openBodyRecord()
                     } label: {
                         Label("Body Record", systemImage: "figure.stand")
                     }
