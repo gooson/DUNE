@@ -1,0 +1,256 @@
+<style>
+  #dune-direction {
+    color-scheme: light dark;
+    --dd-bg: light-dark(#fcf7ec, #1c1a19);
+    --dd-surface: light-dark(#fffdfa, #222a27);
+    --dd-soft: light-dark(#f5ead9, #302b28);
+    --dd-ink: light-dark(#252b28, #f4f5ee);
+    --dd-muted: light-dark(#54605b, #b3c0b7);
+    --dd-copper: light-dark(#965938, #e5ad83);
+    --dd-sage: light-dark(#176e68, #76d0ad);
+    --dd-sand: light-dark(#e7bd82, #926b4c);
+    --dd-dune: light-dark(#cb9164, #784f3c);
+    --dd-horizon: light-dark(#71868b, #91a3a2);
+    --dd-line: light-dark(#dedbd2, #405049);
+    --dd-wave: light-dark(#efddc3, #493d33);
+    color: var(--dd-ink);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+    width: 100%;
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 10px 8px 20px;
+    box-sizing: border-box;
+  }
+  #dune-direction * { box-sizing: border-box; }
+  #dune-direction .dd-heading { margin: 0 0 22px; padding-right: 94px; }
+  #dune-direction .dd-eyebrow { color: var(--dd-copper); font-size: 11px; font-weight: 750; letter-spacing: .15em; }
+  #dune-direction h2 { margin: 8px 0 4px; font-size: clamp(26px, 4vw, 38px); line-height: 1.12; letter-spacing: -.035em; }
+  #dune-direction .dd-tagline { margin: 0; color: var(--dd-muted); font-size: 14px; line-height: 1.45; }
+  #dune-direction .dd-stage { display: grid; grid-template-columns: minmax(0, 1.03fr) minmax(0, .97fr); gap: 22px; align-items: stretch; }
+  #dune-direction .dd-phone { background: var(--dd-bg); border: 1px solid var(--dd-line); border-radius: 34px; min-height: 690px; padding: 23px 23px 17px; position: relative; overflow: hidden; box-shadow: 0 22px 45px light-dark(#584a3520, #00000050); }
+  #dune-direction .dd-phone::before { content: ""; position: absolute; inset:0 0 auto; height:215px; background:linear-gradient(180deg, light-dark(#f5dfbd, #44352f), var(--dd-bg)); }
+  #dune-direction .dd-phone .dd-phone-wave { top:0; left:0; height:185px; opacity:.48; }
+  #dune-direction .dd-phone-wave .far { fill:light-dark(#dec6a5, #77645d); }
+  #dune-direction .dd-phone-wave .middle { fill:light-dark(#dfae78, #956d52); }
+  #dune-direction .dd-phone-wave .near { fill:var(--dd-dune); }
+  #dune-direction .dd-phone > *:not(.dd-phone-wave) { position: relative; z-index: 1; }
+  #dune-direction .dd-system { display:flex; justify-content:space-between; align-items:center; font-size:12px; font-weight:700; min-height:26px; }
+  #dune-direction .dd-system .dd-system-right { font-size:10px; letter-spacing:.08em; }
+  #dune-direction .dd-apphead { display:flex; align-items:center; justify-content:space-between; margin:34px 0 25px; }
+  #dune-direction .dd-apphead strong { font-size:31px; letter-spacing:-.045em; line-height:1; }
+  #dune-direction .dd-head-actions { display:flex; gap:8px; color:var(--dd-muted); font-size:15px; }
+  #dune-direction .dd-head-actions span { display:grid; place-items:center; width:31px; height:31px; background:var(--dd-surface); border:1px solid var(--dd-line); border-radius:50%; }
+  #dune-direction .dd-hero { background:light-dark(#352e29, #352e29); color:light-dark(#fff5e8, #fff5e8); border:1px solid light-dark(#745d43, #745d43); border-radius:25px; padding:23px 21px 19px; box-shadow:0 12px 28px light-dark(#745b3229, #00000040); }
+  #dune-direction .dd-wave-art { position:absolute; inset:0; width:100%; height:100%; display:block; pointer-events:none; }
+  #dune-direction .dd-hero-top { display:flex; align-items:center; gap:18px; animation:dd-arrive .65s ease-out both; }
+  #dune-direction .dd-ring { width:132px; height:132px; flex:0 0 132px; display:grid; place-items:center; position:relative; }
+  #dune-direction .dd-ring-svg { display:block; width:100%; height:100%; overflow:visible; }
+  #dune-direction .dd-ring-arc, #dune-direction .dd-ring-halo { stroke-dasharray:364.4; stroke-dashoffset:218.64; transform:rotate(-90deg); transform-origin:70px 70px; }
+  #dune-direction .dd-ring-arc { animation:dd-ring-draw 1.35s cubic-bezier(.2,.7,.2,1) both; }
+  #dune-direction .dd-ring-halo { filter:blur(6px); opacity:.64; animation:dd-ring-glow 3.4s ease-in-out infinite alternate; }
+  #dune-direction .dd-ring-tip { filter:drop-shadow(0 0 5px light-dark(#caffaa, #caffaa)); }
+  #dune-direction .dd-ring-glint { filter:drop-shadow(0 0 5px light-dark(#fff0bc, #fff0bc)); }
+  #dune-direction .dd-ring-inner { position:absolute; inset:22px; border-radius:50%; background:light-dark(#352e29, #352e29); display:flex; flex-direction:column; align-items:center; justify-content:center; }
+  #dune-direction .dd-ring-inner b { font-size:38px; line-height:1; letter-spacing:-.07em; font-variant-numeric:tabular-nums; }
+  #dune-direction .dd-ring-inner small { margin-top:4px; color:light-dark(#c9bba7, #c9bba7); font-size:11px; font-weight:700; letter-spacing:.12em; }
+  #dune-direction .dd-hero-title { min-width:0; }
+  #dune-direction .dd-overline { display:block; color:light-dark(#e7c17e, #e7c17e); font-size:11px; font-weight:750; letter-spacing:.08em; }
+  #dune-direction .dd-hero-title h3 { margin:4px 0 5px; font-size:23px; letter-spacing:-.04em; line-height:1.2; }
+  #dune-direction .dd-hero-title p { margin:0; color:light-dark(#d4c8b8, #d4c8b8); font-size:13px; line-height:1.45; }
+  #dune-direction .dd-hero-spark { margin-top:18px; padding-top:12px; border-top:1px solid light-dark(#695747, #695747); }
+  #dune-direction .dd-hero-spark-head { display:flex; align-items:center; justify-content:space-between; color:light-dark(#eee0ca, #eee0ca); font-size:12px; font-weight:700; }
+  #dune-direction .dd-hero-spark-head span:last-child { color:light-dark(#c3b49e, #c3b49e); font-size:11px; }
+  #dune-direction .dd-hero-spark svg { display:block; width:100%; height:72px; margin-top:4px; }
+  #dune-direction .dd-hero-spark .spark-baseline { stroke:light-dark(#74614f, #74614f); stroke-width:1; }
+  #dune-direction .dd-hero-spark .spark-line { fill:none; stroke:light-dark(#efc66f, #efc66f); stroke-width:3; stroke-linecap:round; stroke-linejoin:round; }
+  #dune-direction .dd-hero-spark .spark-dot { fill:light-dark(#b9e7aa, #b9e7aa); stroke:light-dark(#352e29, #352e29); stroke-width:2; }
+  #dune-direction .dd-hero-spark .spark-label { fill:light-dark(#fff1d7, #fff1d7); font-size:13px; font-weight:700; }
+  #dune-direction .dd-evidence { display:flex; gap:8px; margin:22px 0 14px; flex-wrap:wrap; animation:dd-arrive .65s .16s ease-out both; }
+  #dune-direction .dd-evidence span { background:light-dark(#4a4035, #4a4035); color:light-dark(#f6ede1, #f6ede1); padding:9px 11px; border-radius:12px; font-size:12px; font-weight:600; }
+  #dune-direction .dd-evidence b { color:light-dark(#b5dcaa, #b5dcaa); }
+  #dune-direction .dd-primary { display:block; width:100%; padding:14px 16px; border-radius:13px; background:light-dark(#e2b761, #e2b761); color:light-dark(#2f2820, #2f2820); font-size:14px; line-height:1.2; font-weight:700; text-align:center; animation:dd-arrive .65s .28s ease-out both; }
+  #dune-direction .dd-section-label { display:flex; align-items:center; justify-content:space-between; gap:8px; margin:27px 2px 11px; font-size:14px; font-weight:700; }
+  #dune-direction .dd-section-label em { font-size:12px; font-style:normal; color:var(--dd-copper); font-weight:650; }
+  #dune-direction .dd-trend { height:140px; background:var(--dd-surface); border:1px solid var(--dd-line); border-radius:17px; padding:12px 14px 10px; overflow:hidden; }
+  #dune-direction .dd-trend svg { width:100%; height:100%; display:block; }
+  #dune-direction .dd-trend .plot-line { fill:none; stroke:var(--dd-copper); stroke-width:3.5; stroke-linejoin:round; stroke-linecap:round; }
+  #dune-direction .dd-trend .plot-area { fill:var(--dd-sand); opacity:.23; }
+  #dune-direction .dd-trend .plot-grid { stroke:var(--dd-line); stroke-width:1; }
+  #dune-direction .dd-trend .plot-dot { fill:var(--dd-copper); stroke:var(--dd-surface); stroke-width:2; }
+  #dune-direction .dd-trend text { fill:var(--dd-ink); font-size:14px; font-weight:700; }
+  #dune-direction .dd-trend .plot-axis { fill:var(--dd-muted); font-size:10px; font-weight:600; }
+  #dune-direction .dd-summary { margin-top:12px; color:var(--dd-muted); font-size:12px; line-height:1.45; }
+  #dune-direction .dd-nav { display:flex; justify-content:space-around; align-items:center; gap:2px; margin-top:27px; padding:12px 3px 1px; border-top:1px solid var(--dd-line); color:var(--dd-muted); font-size:11px; font-weight:650; }
+  #dune-direction .dd-nav .active { color:var(--dd-copper); }
+  #dune-direction .dd-right { display:grid; grid-template-rows:repeat(3,minmax(0,1fr)); gap:13px; }
+  #dune-direction .dd-preview { position:relative; display:flex; flex-direction:column; justify-content:space-between; min-height:0; background:var(--dd-bg); border:1px solid var(--dd-line); border-radius:23px; padding:18px 20px; overflow:hidden; }
+  #dune-direction .dd-preview-wave { top:auto; bottom:0; height:74px; opacity:.55; }
+  #dune-direction .dd-preview-wave .far { fill:var(--dd-wave); }
+  #dune-direction .dd-preview-wave .middle { fill:var(--dd-sand); opacity:.38; }
+  #dune-direction .dd-preview-wave .near { fill:var(--dd-dune); opacity:.24; }
+  #dune-direction .dd-preview > *:not(.dd-preview-wave) { position:relative; z-index:1; }
+  #dune-direction .dd-preview-head { display:flex; justify-content:space-between; align-items:center; color:var(--dd-muted); font-size:11px; font-weight:750; letter-spacing:.08em; }
+  #dune-direction .dd-preview-head strong { color:var(--dd-ink); font-size:20px; letter-spacing:-.04em; }
+  #dune-direction .dd-preview-body { display:flex; align-items:center; gap:17px; }
+  #dune-direction .dd-preview-number { font-size:49px; letter-spacing:-.07em; line-height:1; font-weight:700; color:var(--dd-sage); font-variant-numeric:tabular-nums; }
+  #dune-direction .dd-preview-copy { min-width:0; }
+  #dune-direction .dd-preview-copy b { display:block; font-size:16px; line-height:1.2; }
+  #dune-direction .dd-preview-copy span { display:block; color:var(--dd-muted); font-size:12px; line-height:1.4; margin-top:4px; }
+  #dune-direction .dd-preview-foot { display:flex; gap:7px; align-items:center; font-size:12px; color:var(--dd-copper); font-weight:700; }
+  #dune-direction .dd-bars { display:flex; align-items:end; gap:6px; height:60px; width:130px; flex:0 0 130px; }
+  #dune-direction .dd-bars i { width:12px; border-radius:6px 6px 3px 3px; background:var(--dd-sage); opacity:.45; }
+  #dune-direction .dd-bars i:last-child { opacity:1; }
+  #dune-direction .dd-checks { display:grid; gap:7px; flex:1; }
+  #dune-direction .dd-checks span { display:block; background:var(--dd-soft); border-radius:7px; padding:6px 9px; color:var(--dd-ink); font-size:11px; }
+  #dune-direction .dd-checks span.done { color:var(--dd-sage); font-weight:700; }
+  #dune-direction .dd-tokens { display:flex; flex-wrap:wrap; gap:16px; align-items:center; margin-top:23px; padding-top:15px; border-top:1px solid var(--dd-line); }
+  #dune-direction .dd-tokens-title { font-size:11px; letter-spacing:.1em; color:var(--dd-muted); font-weight:750; margin-right:5px; }
+  #dune-direction .dd-token { display:flex; align-items:center; gap:7px; font-size:11px; color:var(--dd-muted); }
+  #dune-direction .dd-swatch { width:17px; height:17px; border-radius:50%; border:1px solid var(--dd-line); }
+  #dune-direction .dd-swatch.sand { background:var(--dd-bg); }
+  #dune-direction .dd-swatch.ink { background:var(--dd-ink); }
+  #dune-direction .dd-swatch.copper { background:var(--dd-copper); }
+  #dune-direction .dd-swatch.sage { background:var(--dd-sage); }
+  #dune-direction .dd-swatch.horizon { background:var(--dd-horizon); }
+  #dune-direction .dd-footnote { margin:12px 0 0; color:var(--dd-muted); font-size:11px; }
+  @keyframes dd-arrive { from { opacity:0; transform:translateY(7px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes dd-ring-draw { from { stroke-dashoffset:364.4; } to { stroke-dashoffset:218.64; } }
+  @keyframes dd-ring-glow { from { opacity:.38; } to { opacity:.9; } }
+  @media (prefers-reduced-motion: reduce) {
+    #dune-direction *, #dune-direction *::before, #dune-direction *::after { animation:none !important; transition:none !important; }
+  }
+  @media (max-width: 680px) {
+    #dune-direction .dd-stage { grid-template-columns:1fr; }
+    #dune-direction .dd-phone { min-height:0; }
+    #dune-direction .dd-right { grid-template-rows:none; }
+    #dune-direction .dd-preview { min-height:145px; }
+  }
+  @media (max-width: 380px) {
+    #dune-direction .dd-phone { padding:18px 15px 14px; }
+    #dune-direction .dd-hero { padding:18px 14px; }
+    #dune-direction .dd-ring { width:108px; height:108px; flex-basis:108px; }
+    #dune-direction .dd-ring-inner { inset:18px; }
+    #dune-direction .dd-ring-inner b { font-size:31px; }
+    #dune-direction .dd-ring-inner small { letter-spacing:.05em; }
+    #dune-direction .dd-hero-title h3 { font-size:20px; }
+    #dune-direction .dd-hero-top { gap:12px; }
+  }
+</style>
+
+<section id="dune-direction" aria-label="DUNE 전체 디자인 방향 개념 시안">
+  <header class="dd-heading">
+    <div class="dd-eyebrow">DUNE · DESIGN DIRECTION</div>
+    <h2>Desert Horizon</h2>
+    <p class="dd-tagline">Today 상단 배경부터 네 화면의 모래 능선이 하나의 리듬으로 흐릅니다</p>
+  </header>
+  <div class="dd-stage">
+    <div class="dd-phone" aria-label="Today 화면 개념 시안">
+      <svg class="dd-wave-art dd-phone-wave" data-dune-wave="today" viewBox="0 0 400 100" preserveAspectRatio="none" role="img" aria-label="Today 상단 배경의 세 겹 모래 능선이 지속적으로 흐름"><path class="far"/><path class="middle"/><path class="near"/></svg>
+      <div class="dd-system"><span>9:41</span><span class="dd-system-right">●●● ▰</span></div>
+      <div class="dd-apphead"><strong>Today</strong><div class="dd-head-actions" aria-hidden="true"><span>◌</span><span>⚙</span></div></div>
+      <div class="dd-hero">
+        <div class="dd-hero-top">
+          <div class="dd-ring" role="img" aria-label="컨디션 40점, 금빛에서 연두빛으로 이어지는 발광 링"><svg class="dd-ring-svg" viewBox="0 0 140 140" aria-hidden="true"><defs><linearGradient id="dd-ring-gradient" x1="25%" y1="0%" x2="80%" y2="100%"><stop offset="0%" stop-color="#927743"/><stop offset="48%" stop-color="#e1b453"/><stop offset="78%" stop-color="#f5d778"/><stop offset="93%" stop-color="#f7eaa3"/><stop offset="100%" stop-color="#98dc95"/></linearGradient></defs><circle cx="70" cy="70" r="58" fill="none" stroke="#6f5a3a" stroke-opacity=".6" stroke-width="12"/><circle class="dd-ring-halo" cx="70" cy="70" r="58" fill="none" stroke="url(#dd-ring-gradient)" stroke-width="13" stroke-linecap="round"/><circle class="dd-ring-arc" cx="70" cy="70" r="58" fill="none" stroke="url(#dd-ring-gradient)" stroke-width="12" stroke-linecap="round"/><circle class="dd-ring-tip" cx="104.1" cy="116.9" r="6" fill="#a4e5a0"/><circle class="dd-ring-glint" cx="70" cy="12" r="5" fill="#fff2c5" opacity="0"/></svg><div class="dd-ring-inner"><b>40</b><small>CONDITION</small></div></div>
+          <div class="dd-hero-title"><span class="dd-overline">오늘의 상태</span><h3>가볍게<br>시작해요</h3><p>무리하지 않는 움직임이 좋아요.</p></div>
+        </div>
+        <div class="dd-hero-spark"><div class="dd-hero-spark-head"><span>오늘의 컨디션 흐름</span><span>24h</span></div><svg viewBox="0 0 300 65" preserveAspectRatio="none" role="img" aria-label="오늘 시간대별 컨디션 그래프, 현재 40점"><line class="spark-baseline" x1="4" y1="53" x2="296" y2="53"/><path class="spark-line" d="M5 37 C22 37 29 32 43 30 S70 34 82 27 S112 18 126 27 S153 34 169 25 S197 35 211 31 S234 42 249 36 S274 42 288 40"/><circle class="spark-dot" cx="288" cy="40" r="5"/><text class="spark-label" x="257" y="31">40</text></svg></div>
+        <div class="dd-evidence"><span>HRV <b>평소 수준</b></span><span>수면 <b>6시간 20분</b></span></div>
+        <div class="dd-primary">가벼운 운동 보기 &nbsp; →</div>
+      </div>
+      <div class="dd-section-label"><span>최근 7일 컨디션</span><em>자세히 보기 →</em></div>
+      <div class="dd-trend"><svg viewBox="0 0 300 105" role="img" aria-label="7일 컨디션 점수는 55, 49, 52, 46, 49, 43, 40점이며 오늘은 40점"><line class="plot-grid" x1="8" y1="85" x2="290" y2="85"/><line class="plot-grid" x1="8" y1="48" x2="290" y2="48"/><path class="plot-area" d="M8 30 C27 34 34 46 52 45 S79 34 96 38 S124 54 140 51 S167 42 184 45 S211 56 228 59 S258 64 276 67 L276 85 L8 85 Z"/><path class="plot-line" d="M8 30 C27 34 34 46 52 45 S79 34 96 38 S124 54 140 51 S167 42 184 45 S211 56 228 59 S258 64 276 67"/><circle class="plot-dot" cx="276" cy="67" r="5"/><text x="251" y="55">40</text><text class="plot-axis" x="8" y="100">7일 전</text><text class="plot-axis" x="268" y="100">오늘</text></svg></div>
+      <div class="dd-summary">최근 일주일의 흐름을 확인하고 오늘의 강도를 정하세요.</div>
+      <div class="dd-nav"><span class="active">Today</span><span>Activity</span><span>Wellness</span><span>Life</span></div>
+    </div>
+    <div class="dd-right" aria-label="다른 탭의 같은 시각 언어">
+      <div class="dd-preview">
+        <svg class="dd-wave-art dd-preview-wave" data-dune-wave="activity" viewBox="0 0 400 100" preserveAspectRatio="none" aria-hidden="true"><path class="far"/><path class="middle"/><path class="near"/></svg>
+        <div class="dd-preview-head"><strong>Activity</strong><span>움직임</span></div>
+        <div class="dd-preview-body"><div class="dd-preview-number">71</div><div class="dd-preview-copy"><b>보통 강도로</b><span>준비도와 회복 지도를 함께 보고 시작</span></div></div>
+        <div class="dd-preview-foot">운동 기록 시작 <span aria-hidden="true">→</span></div>
+      </div>
+      <div class="dd-preview">
+        <svg class="dd-wave-art dd-preview-wave" data-dune-wave="wellness" viewBox="0 0 400 100" preserveAspectRatio="none" aria-hidden="true"><path class="far"/><path class="middle"/><path class="near"/></svg>
+        <div class="dd-preview-head"><strong>Wellness</strong><span>회복</span></div>
+        <div class="dd-preview-body"><div class="dd-bars" role="img" aria-label="수면 추세 예시 막대그래프"><i style="height:32px"></i><i style="height:45px"></i><i style="height:39px"></i><i style="height:52px"></i><i style="height:43px"></i><i style="height:55px"></i><i style="height:49px"></i></div><div class="dd-preview-copy"><b>7시간 10분</b><span>수면의 흐름을 한눈에</span></div></div>
+        <div class="dd-preview-foot">수면 자세히 <span aria-hidden="true">→</span></div>
+      </div>
+      <div class="dd-preview">
+        <svg class="dd-wave-art dd-preview-wave" data-dune-wave="life" viewBox="0 0 400 100" preserveAspectRatio="none" aria-hidden="true"><path class="far"/><path class="middle"/><path class="near"/></svg>
+        <div class="dd-preview-head"><strong>Life</strong><span>습관</span></div>
+        <div class="dd-preview-body"><div class="dd-preview-number">2/3</div><div class="dd-checks"><span class="done">✓ 아침 산책</span><span class="done">✓ 물 마시기</span><span>○ 휴식하기</span></div></div>
+        <div class="dd-preview-foot">오늘의 습관 <span aria-hidden="true">→</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="dd-tokens" aria-label="시각 언어">
+    <span class="dd-tokens-title">VISUAL LANGUAGE</span>
+    <span class="dd-token"><i class="dd-swatch sand"></i>사막 바탕</span>
+    <span class="dd-token"><i class="dd-swatch horizon"></i>먼 지평선</span>
+    <span class="dd-token"><i class="dd-swatch ink"></i>진한 글자</span>
+    <span class="dd-token"><i class="dd-swatch copper"></i>행동 강조</span>
+    <span class="dd-token"><i class="dd-swatch sage"></i>건강 신호</span>
+    <span class="dd-token">비대칭 사구 곡선 · 겹친 능선 · 절제된 모래결</span>
+  </div>
+  <p class="dd-footnote">개념 시안 · 수치는 예시 데이터 · 앱 구현 화면 아님</p>
+</section>
+<script>
+(() => {
+  const root = document.getElementById("dune-direction");
+  if (!root) return;
+
+  const twoPi = Math.PI * 2;
+  const intensity = { today: 1, activity: 1.2, wellness: 0.8, life: 0.6 };
+  const layers = [
+    { name: "far", center: 45, amplitude: 8, frequency: 0.72, seconds: 18, skew: 0.20 },
+    { name: "middle", center: 62, amplitude: 10, frequency: 1.0, seconds: 15, skew: 0.18 },
+    { name: "near", center: 76, amplitude: 13, frequency: 1.35, seconds: 13, skew: 0.14 }
+  ];
+  const screens = Array.from(root.querySelectorAll("svg[data-dune-wave]")).map(svg => ({
+    strength: intensity[svg.dataset.duneWave] || 1,
+    paths: layers.map(layer => svg.querySelector(`path.${layer.name}`))
+  }));
+  const ringGlint = root.querySelector(".dd-ring-glint");
+  const startTime = performance.now();
+
+  function dunePath(layer, strength, seconds) {
+    const phase = twoPi * seconds / layer.seconds;
+    const points = [];
+    for (let x = 0; x <= 400; x += 5) {
+      const angle = twoPi * layer.frequency * x / 400 + phase;
+      const contour = Math.sin(angle) + layer.skew * Math.sin(2 * angle + Math.PI / 6);
+      const y = layer.center + layer.amplitude * strength * contour;
+      points.push(`${x === 0 ? "M" : "L"}${x} ${y.toFixed(2)}`);
+    }
+    return `${points.join(" ")} L400 100 L0 100 Z`;
+  }
+
+  function draw(seconds) {
+    screens.forEach(screen => layers.forEach((layer, index) => {
+      screen.paths[index].setAttribute("d", dunePath(layer, screen.strength, seconds));
+    }));
+    if (ringGlint) {
+      const sweep = Math.max(0, seconds - 1.25);
+      const fraction = (sweep % 5) / 5;
+      const angle = -Math.PI / 2 + twoPi * 0.4 * fraction;
+      ringGlint.setAttribute("cx", (70 + 58 * Math.cos(angle)).toFixed(2));
+      ringGlint.setAttribute("cy", (70 + 58 * Math.sin(angle)).toFixed(2));
+      ringGlint.setAttribute("opacity", seconds < 1.25 ? "0" : (0.88 * Math.sin(Math.PI * fraction)).toFixed(2));
+    }
+  }
+
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  let frameId;
+  function animate(now) {
+    draw((now - startTime) / 1000);
+    frameId = requestAnimationFrame(animate);
+  }
+  function updateMotion() {
+    if (frameId) cancelAnimationFrame(frameId);
+    if (reducedMotion.matches) draw(0);
+    else frameId = requestAnimationFrame(animate);
+  }
+  reducedMotion.addEventListener("change", updateMotion);
+  updateMotion();
+})();
+</script>

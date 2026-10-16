@@ -1,0 +1,322 @@
+<style>
+  #lily-direction {
+    color-scheme: light dark;
+    --dd-bg: light-dark(#f6f1ee, #1d2330);
+    --dd-surface: light-dark(#fffbf7, #2a3140);
+    --dd-soft: light-dark(#eae5e8, #363d4a);
+    --dd-ink: light-dark(#303849, #f3eff0);
+    --dd-muted: light-dark(#69717b, #c7c4cf);
+    --dd-copper: light-dark(#9e6594, #e7aaca);
+    --dd-sage: light-dark(#6b9096, #a9d4c7);
+    --dd-sand: light-dark(#d9e2df, #3d5260);
+    --dd-dune: light-dark(#acc8bb, #4e6670);
+    --dd-horizon: light-dark(#6b7b99, #b5d7d7);
+    --dd-line: light-dark(#d9d6df, #586070);
+    --dd-wave: light-dark(#e9e3e9, #344452);
+    color: var(--dd-ink);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+    width: 100%;
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 10px 8px 20px;
+    box-sizing: border-box;
+  }
+  #lily-direction * { box-sizing: border-box; }
+  #lily-direction .dd-heading { margin: 0 0 22px; padding-right: 94px; }
+  #lily-direction .dd-eyebrow { color: var(--dd-copper); font-size: 11px; font-weight: 750; letter-spacing: .15em; }
+  #lily-direction h2 { margin: 8px 0 4px; font-size: clamp(26px, 4vw, 38px); line-height: 1.12; letter-spacing: -.035em; }
+  #lily-direction .dd-tagline { margin: 0; color: var(--dd-muted); font-size: 14px; line-height: 1.45; }
+  #lily-direction .dd-stage { display: grid; grid-template-columns: minmax(0, 1.03fr) minmax(0, .97fr); gap: 22px; align-items: stretch; }
+  #lily-direction .dd-phone { background: var(--dd-bg); border: 1px solid var(--dd-line); border-radius: 34px; min-height: 690px; padding: 23px 23px 17px; position: relative; overflow: hidden; box-shadow: 0 22px 45px light-dark(#584a3520, #00000050); }
+  #lily-direction .dd-phone::before { content: ""; position: absolute; inset:0 0 auto; height:252px; background:radial-gradient(ellipse at 65% 35%,#8dcac692,transparent 57%),linear-gradient(180deg,#457cab 0%,#6ca9ba 56%,var(--dd-bg) 100%); }
+  #lily-direction .dd-pond { position:absolute; inset:0 0 auto; width:100%; height:230px; z-index:0; display:block; overflow:hidden; pointer-events:none; }
+  #lily-direction .dd-pond .pond-reflections { opacity:.42; animation:dd-pond-drift 26s ease-in-out infinite alternate-reverse; }
+  #lily-direction .dd-pond .pond-dabs { animation:dd-pond-drift 18s ease-in-out infinite alternate; }
+  #lily-direction .dd-pond .pond-lily { --sway:2.5px; animation:dd-pond-sway 12s ease-in-out infinite alternate; }
+  #lily-direction .dd-pond .pond-lily:nth-child(3n + 1) { --sway:4px; animation-duration:15s; animation-direction:alternate-reverse; }
+  #lily-direction .dd-pond .pond-lily:nth-child(3n + 2) { --sway:2px; animation-duration:10s; animation-delay:-3s; }
+  #lily-direction .dd-pond .pond-lily.depth-far { opacity:.54; filter:blur(1.1px); }
+  #lily-direction .dd-pond .pond-lily.depth-mid { opacity:.78; filter:blur(.5px); }
+  #lily-direction .dd-pond .pond-lily.depth-near { opacity:.96; }
+  #lily-direction .dd-pond .pond-glints { animation:dd-pond-shimmer 5s ease-in-out infinite alternate; }
+  #lily-direction .dd-pond .pond-leaf { fill:none; stroke-linecap:round; stroke-linejoin:round; filter:blur(.35px); }
+  #lily-direction .dd-pond .pond-petal { fill:none; stroke-linecap:round; opacity:.9; filter:blur(.35px); }
+  #lily-direction .dd-pond .pond-center { fill:#d6a2d5; opacity:.86; filter:blur(.4px); }
+  #lily-direction .dd-phone > *:not(.dd-pond) { position: relative; z-index: 1; }
+  #lily-direction .dd-system, #lily-direction .dd-apphead { color:#fffaf7; text-shadow:0 1px 6px #29374777; }
+  #lily-direction .dd-system { display:flex; justify-content:space-between; align-items:center; font-size:12px; font-weight:700; min-height:26px; }
+  #lily-direction .dd-system .dd-system-right { font-size:10px; letter-spacing:.08em; }
+  #lily-direction .dd-apphead { display:flex; align-items:center; justify-content:space-between; margin:34px 0 25px; }
+  #lily-direction .dd-apphead strong { font-size:31px; letter-spacing:-.045em; line-height:1; }
+  #lily-direction .dd-head-actions { display:flex; gap:8px; color:var(--dd-muted); font-size:15px; }
+  #lily-direction .dd-head-actions span { display:grid; place-items:center; width:31px; height:31px; background:var(--dd-surface); border:1px solid var(--dd-line); border-radius:50%; }
+  #lily-direction .dd-hero { background:light-dark(#303649, #303649); color:light-dark(#fff6fb, #fff6fb); border:1px solid light-dark(#68768c, #68768c); border-radius:25px; padding:23px 21px 19px; box-shadow:0 12px 28px light-dark(#986c9c33, #00000040); }
+  #lily-direction .dd-hero-top { display:flex; align-items:center; gap:18px; animation:dd-arrive .65s ease-out both; }
+  #lily-direction .dd-ring { width:132px; height:132px; flex:0 0 132px; display:grid; place-items:center; position:relative; }
+  #lily-direction .dd-ring-svg { display:block; width:100%; height:100%; overflow:visible; }
+  #lily-direction .dd-ring-arc, #lily-direction .dd-ring-halo { stroke-dasharray:364.4; stroke-dashoffset:218.64; transform:rotate(-90deg); transform-origin:70px 70px; }
+  #lily-direction .dd-ring-arc { animation:dd-ring-draw 1.35s cubic-bezier(.2,.7,.2,1) both; }
+  #lily-direction .dd-ring-halo { filter:blur(6px); opacity:.64; animation:dd-ring-glow 3.4s ease-in-out infinite alternate; }
+  #lily-direction .dd-ring-tip { filter:drop-shadow(0 0 6px light-dark(#b7e9de, #b7e9de)); }
+  #lily-direction .dd-ring-glint { filter:drop-shadow(0 0 7px light-dark(#fff1f9, #fff1f9)); }
+  #lily-direction .dd-ring-inner { position:absolute; inset:22px; border-radius:50%; background:light-dark(#303649, #303649); display:flex; flex-direction:column; align-items:center; justify-content:center; }
+  #lily-direction .dd-ring-inner b { font-size:38px; line-height:1; letter-spacing:-.07em; font-variant-numeric:tabular-nums; }
+  #lily-direction .dd-ring-inner small { margin-top:4px; color:light-dark(#c7c4cf, #c7c4cf); font-size:11px; font-weight:700; letter-spacing:.12em; }
+  #lily-direction .dd-hero-title { min-width:0; }
+  #lily-direction .dd-overline { display:block; color:light-dark(#f0b5d3, #f0b5d3); font-size:11px; font-weight:750; letter-spacing:.08em; }
+  #lily-direction .dd-hero-title h3 { margin:4px 0 5px; font-size:23px; letter-spacing:-.04em; line-height:1.2; }
+  #lily-direction .dd-hero-title p { margin:0; color:light-dark(#e7d8e9, #e7d8e9); font-size:13px; line-height:1.45; }
+  #lily-direction .dd-hero-spark { margin-top:18px; padding-top:12px; border-top:1px solid light-dark(#5e607b, #5e607b); }
+  #lily-direction .dd-hero-spark-head { display:flex; align-items:center; justify-content:space-between; color:light-dark(#fff5fa, #fff5fa); font-size:12px; font-weight:700; }
+  #lily-direction .dd-hero-spark-head span:last-child { color:light-dark(#d7c9da, #d7c9da); font-size:11px; }
+  #lily-direction .dd-hero-spark svg { display:block; width:100%; height:72px; margin-top:4px; }
+  #lily-direction .dd-hero-spark .spark-baseline { stroke:light-dark(#626983, #626983); stroke-width:1; }
+  #lily-direction .dd-hero-spark .spark-line { fill:none; stroke:light-dark(#efadd2, #efadd2); stroke-width:3; stroke-linecap:round; stroke-linejoin:round; }
+  #lily-direction .dd-hero-spark .spark-dot { fill:light-dark(#f3c5dc, #f3c5dc); stroke:light-dark(#303649, #303649); stroke-width:2; }
+  #lily-direction .dd-hero-spark .spark-label { fill:light-dark(#fff8fc, #fff8fc); font-size:13px; font-weight:700; }
+  #lily-direction .dd-evidence { display:flex; gap:8px; margin:22px 0 14px; flex-wrap:wrap; animation:dd-arrive .65s .16s ease-out both; }
+  #lily-direction .dd-evidence span { background:light-dark(#42465d, #42465d); color:light-dark(#fff6fa, #fff6fa); padding:9px 11px; border-radius:12px; font-size:12px; font-weight:600; }
+  #lily-direction .dd-evidence b { color:light-dark(#f3c5dc, #f3c5dc); }
+  #lily-direction .dd-primary { display:block; width:100%; padding:14px 16px; border-radius:13px; background:light-dark(#e7aaca, #e7aaca); color:light-dark(#303649, #303649); font-size:14px; line-height:1.2; font-weight:700; text-align:center; animation:dd-arrive .65s .28s ease-out both; }
+  #lily-direction .dd-section-label { display:flex; align-items:center; justify-content:space-between; gap:8px; margin:27px 2px 11px; font-size:14px; font-weight:700; }
+  #lily-direction .dd-section-label em { font-size:12px; font-style:normal; color:var(--dd-copper); font-weight:650; }
+  #lily-direction .dd-trend { height:140px; background:var(--dd-surface); border:1px solid var(--dd-line); border-radius:17px; padding:12px 14px 10px; overflow:hidden; }
+  #lily-direction .dd-trend svg { width:100%; height:100%; display:block; }
+  #lily-direction .dd-trend .plot-line { fill:none; stroke:var(--dd-copper); stroke-width:3.5; stroke-linejoin:round; stroke-linecap:round; }
+  #lily-direction .dd-trend .plot-area { fill:var(--dd-sand); opacity:.23; }
+  #lily-direction .dd-trend .plot-grid { stroke:var(--dd-line); stroke-width:1; }
+  #lily-direction .dd-trend .plot-dot { fill:var(--dd-copper); stroke:var(--dd-surface); stroke-width:2; }
+  #lily-direction .dd-trend text { fill:var(--dd-ink); font-size:14px; font-weight:700; }
+  #lily-direction .dd-trend .plot-axis { fill:var(--dd-muted); font-size:10px; font-weight:600; }
+  #lily-direction .dd-summary { margin-top:12px; color:var(--dd-muted); font-size:12px; line-height:1.45; }
+  #lily-direction .dd-nav { display:flex; justify-content:space-around; align-items:center; gap:2px; margin-top:27px; padding:12px 3px 1px; border-top:1px solid var(--dd-line); color:var(--dd-muted); font-size:11px; font-weight:650; }
+  #lily-direction .dd-nav .active { color:var(--dd-copper); }
+  #lily-direction .dd-right { display:grid; grid-template-rows:repeat(3,minmax(0,1fr)); gap:13px; }
+  #lily-direction .dd-preview { position:relative; display:flex; flex-direction:column; justify-content:space-between; min-height:0; background:var(--dd-surface); border:1px solid var(--dd-line); border-radius:23px; padding:18px 20px; overflow:hidden; color:var(--dd-ink); }
+  #lily-direction .dd-preview .dd-pond { inset:0; height:100%; opacity:.65; -webkit-mask-image:linear-gradient(90deg,transparent 15%,#000 80%); mask-image:linear-gradient(90deg,transparent 15%,#000 80%); }
+  #lily-direction .dd-preview > *:not(.dd-pond) { position:relative; z-index:1; }
+  #lily-direction .dd-preview-head { display:flex; justify-content:space-between; align-items:center; color:var(--dd-muted); font-size:11px; font-weight:750; letter-spacing:.08em; }
+  #lily-direction .dd-preview-head strong { color:var(--dd-ink); font-size:20px; letter-spacing:-.04em; }
+  #lily-direction .dd-preview-body { display:flex; align-items:center; gap:17px; }
+  #lily-direction .dd-preview-number { font-size:49px; letter-spacing:-.07em; line-height:1; font-weight:700; color:var(--dd-copper); font-variant-numeric:tabular-nums; }
+  #lily-direction .dd-preview-copy { min-width:0; }
+  #lily-direction .dd-preview-copy b { display:block; font-size:16px; line-height:1.2; }
+  #lily-direction .dd-preview-copy span { display:block; color:var(--dd-muted); font-size:12px; line-height:1.4; margin-top:4px; }
+  #lily-direction .dd-preview-foot { display:flex; gap:7px; align-items:center; font-size:12px; color:var(--dd-copper); font-weight:700; }
+  #lily-direction .dd-bars { display:flex; align-items:end; gap:6px; height:60px; width:130px; flex:0 0 130px; }
+  #lily-direction .dd-bars i { width:12px; border-radius:6px 6px 3px 3px; background:var(--dd-copper); opacity:.45; }
+  #lily-direction .dd-bars i:last-child { opacity:1; }
+  #lily-direction .dd-checks { display:grid; gap:7px; flex:1; }
+  #lily-direction .dd-checks span { display:block; background:var(--dd-soft); border-radius:7px; padding:6px 9px; color:var(--dd-ink); font-size:11px; }
+  #lily-direction .dd-checks span.done { color:var(--dd-copper); font-weight:700; }
+  #lily-direction .dd-tokens { display:flex; flex-wrap:wrap; gap:16px; align-items:center; margin-top:23px; padding-top:15px; border-top:1px solid var(--dd-line); }
+  #lily-direction .dd-tokens-title { font-size:11px; letter-spacing:.1em; color:var(--dd-muted); font-weight:750; margin-right:5px; }
+  #lily-direction .dd-token { display:flex; align-items:center; gap:7px; font-size:11px; color:var(--dd-muted); }
+  #lily-direction .dd-swatch { width:17px; height:17px; border-radius:50%; border:1px solid var(--dd-line); }
+  #lily-direction .dd-swatch.sand { background:var(--dd-bg); }
+  #lily-direction .dd-swatch.ink { background:var(--dd-ink); }
+  #lily-direction .dd-swatch.copper { background:var(--dd-copper); }
+  #lily-direction .dd-swatch.sage { background:var(--dd-sage); }
+  #lily-direction .dd-swatch.horizon { background:var(--dd-horizon); }
+  #lily-direction .dd-footnote { margin:12px 0 0; color:var(--dd-muted); font-size:11px; }
+  @keyframes dd-arrive { from { opacity:0; transform:translateY(7px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes dd-ring-draw { from { stroke-dashoffset:364.4; } to { stroke-dashoffset:218.64; } }
+  @keyframes dd-ring-glow { from { opacity:.38; } to { opacity:.9; } }
+  @keyframes dd-pond-drift { from { transform:translateX(-6px); } to { transform:translateX(7px); } }
+  @keyframes dd-pond-sway { from { transform:translateX(calc(-1 * var(--sway))); } to { transform:translateX(var(--sway)); } }
+  @keyframes dd-pond-shimmer { from { opacity:.35; } to { opacity:.8; } }
+  @media (prefers-reduced-motion: reduce) {
+    #lily-direction *, #lily-direction *::before, #lily-direction *::after { animation:none !important; transition:none !important; }
+  }
+  @media (max-width: 680px) {
+    #lily-direction .dd-stage { grid-template-columns:1fr; }
+    #lily-direction .dd-phone { min-height:0; }
+    #lily-direction .dd-right { grid-template-rows:none; }
+    #lily-direction .dd-preview { min-height:145px; }
+  }
+  @media (max-width: 380px) {
+    #lily-direction .dd-phone { padding:18px 15px 14px; }
+    #lily-direction .dd-hero { padding:18px 14px; }
+    #lily-direction .dd-ring { width:108px; height:108px; flex-basis:108px; }
+    #lily-direction .dd-ring-inner { inset:18px; }
+    #lily-direction .dd-ring-inner b { font-size:31px; }
+    #lily-direction .dd-ring-inner small { letter-spacing:.05em; }
+    #lily-direction .dd-hero-title h3 { font-size:20px; }
+    #lily-direction .dd-hero-top { gap:12px; }
+  }
+</style>
+
+<section id="lily-direction" aria-label="Water Lilies 테마 디자인 방향 개념 시안">
+  <header class="dd-heading">
+    <div class="dd-eyebrow">DUNE · WATER LILIES</div>
+    <h2>Lily Reverie</h2>
+    <p class="dd-tagline">푸른 수면을 가로지르는 수련의 붓결과 보랏빛 꽃점이 함께 흐릅니다</p>
+  </header>
+  <div class="dd-stage">
+    <div class="dd-phone" aria-label="Today 화면 개념 시안">
+      <svg class="dd-pond" data-pond-scene="today" viewBox="0 0 400 220" preserveAspectRatio="none" role="img" aria-label="Today 상단에서 물빛 색점과 수련 잎 군집이 잔물결을 따라 좌우로 천천히 흔들림"><g class="pond-reflections"></g><g class="pond-dabs"></g><g class="pond-glints"></g><g class="pond-lilies"></g></svg>
+      <div class="dd-system"><span>9:41</span><span class="dd-system-right">●●● ▰</span></div>
+      <div class="dd-apphead"><strong>Today</strong><div class="dd-head-actions" aria-hidden="true"><span>◌</span><span>⚙</span></div></div>
+      <div class="dd-hero">
+        <div class="dd-hero-top">
+          <div class="dd-ring" role="img" aria-label="컨디션 40점, 보랏빛에서 연분홍과 물빛 끝점으로 이어지는 발광 링"><svg class="dd-ring-svg" viewBox="0 0 140 140" aria-hidden="true"><defs><linearGradient id="lily-ring-gradient" x1="25%" y1="0%" x2="80%" y2="100%"><stop offset="0%" stop-color="#6e719e"/><stop offset="48%" stop-color="#a280b2"/><stop offset="78%" stop-color="#dda4cb"/><stop offset="93%" stop-color="#f4d1e2"/><stop offset="100%" stop-color="#a7ded3"/></linearGradient></defs><circle cx="70" cy="70" r="58" fill="none" stroke="#696582" stroke-opacity=".7" stroke-width="12"/><circle class="dd-ring-halo" cx="70" cy="70" r="58" fill="none" stroke="url(#lily-ring-gradient)" stroke-width="13" stroke-linecap="round"/><circle class="dd-ring-arc" cx="70" cy="70" r="58" fill="none" stroke="url(#lily-ring-gradient)" stroke-width="12" stroke-linecap="round"/><circle class="dd-ring-tip" cx="104.1" cy="116.9" r="6" fill="#a7ded3"/><circle class="dd-ring-glint" cx="70" cy="12" r="5" fill="#fff8fe" opacity="0"/></svg><div class="dd-ring-inner"><b>40</b><small>CONDITION</small></div></div>
+          <div class="dd-hero-title"><span class="dd-overline">오늘의 상태</span><h3>가볍게<br>시작해요</h3><p>무리하지 않는 움직임이 좋아요.</p></div>
+        </div>
+        <div class="dd-hero-spark"><div class="dd-hero-spark-head"><span>오늘의 컨디션 흐름</span><span>24h</span></div><svg viewBox="0 0 300 65" preserveAspectRatio="none" role="img" aria-label="오늘 시간대별 컨디션 그래프, 현재 40점"><line class="spark-baseline" x1="4" y1="53" x2="296" y2="53"/><path class="spark-line" d="M5 37 C22 37 29 32 43 30 S70 34 82 27 S112 18 126 27 S153 34 169 25 S197 35 211 31 S234 42 249 36 S274 42 288 40"/><circle class="spark-dot" cx="288" cy="40" r="5"/><text class="spark-label" x="257" y="31">40</text></svg></div>
+        <div class="dd-evidence"><span>HRV <b>평소 수준</b></span><span>수면 <b>6시간 20분</b></span></div>
+        <div class="dd-primary">가벼운 운동 보기 &nbsp; →</div>
+      </div>
+      <div class="dd-section-label"><span>최근 7일 컨디션</span><em>자세히 보기 →</em></div>
+      <div class="dd-trend"><svg viewBox="0 0 300 105" role="img" aria-label="7일 컨디션 점수는 55, 49, 52, 46, 49, 43, 40점이며 오늘은 40점"><line class="plot-grid" x1="8" y1="85" x2="290" y2="85"/><line class="plot-grid" x1="8" y1="48" x2="290" y2="48"/><path class="plot-area" d="M8 30 C27 34 34 46 52 45 S79 34 96 38 S124 54 140 51 S167 42 184 45 S211 56 228 59 S258 64 276 67 L276 85 L8 85 Z"/><path class="plot-line" d="M8 30 C27 34 34 46 52 45 S79 34 96 38 S124 54 140 51 S167 42 184 45 S211 56 228 59 S258 64 276 67"/><circle class="plot-dot" cx="276" cy="67" r="5"/><text x="251" y="55">40</text><text class="plot-axis" x="8" y="100">7일 전</text><text class="plot-axis" x="268" y="100">오늘</text></svg></div>
+      <div class="dd-summary">최근 일주일의 흐름을 확인하고 오늘의 강도를 정하세요.</div>
+      <div class="dd-nav"><span class="active">Today</span><span>Activity</span><span>Wellness</span><span>Life</span></div>
+    </div>
+    <div class="dd-right" aria-label="다른 탭의 같은 시각 언어">
+      <div class="dd-preview">
+        <svg class="dd-pond" data-pond-scene="activity" viewBox="0 0 400 180" preserveAspectRatio="none" aria-hidden="true"><g class="pond-reflections"></g><g class="pond-dabs"></g><g class="pond-glints"></g><g class="pond-lilies"></g></svg>
+        <div class="dd-preview-head"><strong>Activity</strong><span>움직임</span></div>
+        <div class="dd-preview-body"><div class="dd-preview-number">71</div><div class="dd-preview-copy"><b>보통 강도로</b><span>준비도와 회복 지도를 함께 보고 시작</span></div></div>
+        <div class="dd-preview-foot">운동 기록 시작 <span aria-hidden="true">→</span></div>
+      </div>
+      <div class="dd-preview">
+        <svg class="dd-pond" data-pond-scene="wellness" viewBox="0 0 400 180" preserveAspectRatio="none" aria-hidden="true"><g class="pond-reflections"></g><g class="pond-dabs"></g><g class="pond-glints"></g><g class="pond-lilies"></g></svg>
+        <div class="dd-preview-head"><strong>Wellness</strong><span>회복</span></div>
+        <div class="dd-preview-body"><div class="dd-bars" role="img" aria-label="수면 추세 예시 막대그래프"><i style="height:32px"></i><i style="height:45px"></i><i style="height:39px"></i><i style="height:52px"></i><i style="height:43px"></i><i style="height:55px"></i><i style="height:49px"></i></div><div class="dd-preview-copy"><b>7시간 10분</b><span>수면의 흐름을 한눈에</span></div></div>
+        <div class="dd-preview-foot">수면 자세히 <span aria-hidden="true">→</span></div>
+      </div>
+      <div class="dd-preview">
+        <svg class="dd-pond" data-pond-scene="life" viewBox="0 0 400 180" preserveAspectRatio="none" aria-hidden="true"><g class="pond-reflections"></g><g class="pond-dabs"></g><g class="pond-glints"></g><g class="pond-lilies"></g></svg>
+        <div class="dd-preview-head"><strong>Life</strong><span>습관</span></div>
+        <div class="dd-preview-body"><div class="dd-preview-number">2/3</div><div class="dd-checks"><span class="done">✓ 아침 산책</span><span class="done">✓ 물 마시기</span><span>○ 휴식하기</span></div></div>
+        <div class="dd-preview-foot">오늘의 습관 <span aria-hidden="true">→</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="dd-tokens" aria-label="시각 언어">
+    <span class="dd-tokens-title">VISUAL LANGUAGE</span>
+    <span class="dd-token"><i class="dd-swatch sand"></i>안개 낀 연못</span>
+    <span class="dd-token"><i class="dd-swatch horizon"></i>짙은 물그림자</span>
+    <span class="dd-token"><i class="dd-swatch ink"></i>진한 글자</span>
+    <span class="dd-token"><i class="dd-swatch copper"></i>행동 강조</span>
+    <span class="dd-token"><i class="dd-swatch sage"></i>건강 신호</span>
+    <span class="dd-token">푸른 수면 · 겹친 초록 붓결 · 작은 보랏빛 꽃점</span>
+  </div>
+  <p class="dd-footnote">개념 시안 · 수치는 예시 데이터 · 앱 구현 화면 아님</p>
+</section>
+<script>
+(() => {
+  const root = document.getElementById("lily-direction");
+  if (!root) return;
+
+  const twoPi = Math.PI * 2;
+  const svgNS = "http://www.w3.org/2000/svg";
+  const marks = ["#bad8d0", "#81b6b1", "#8dc7c8", "#a2c2a0", "#b6c66e", "#7bad75", "#aac5dd", "#c1a6d1", "#d7bee0", "#e1d9ab"];
+  function element(parent, name, attributes) {
+    const node = document.createElementNS(svgNS, name);
+    Object.entries(attributes).forEach(([key, value]) => node.setAttribute(key, String(value)));
+    parent.appendChild(node);
+    return node;
+  }
+  function addLily(group, x, y, size, flower, depth) {
+    const island=element(group,"g",{class:`pond-lily depth-${depth}`});
+    const greens=["#4a987d","#8abf75","#b5c97a","#4a8f89","#cad18e","#6eaa7d","#9ec7aa","#729962"];
+    const tone=(x*7+y*3)%greens.length;
+    for (let stroke=0; stroke<13; stroke+=1) {
+      const band=Math.floor(stroke/2)-3;
+      const jitter=Math.sin(stroke*2.7+x*.11+y*.07);
+      const left=x-size*(.65+.29*Math.abs(Math.sin(stroke*1.9+y*.03)));
+      const right=x+size*(.37+.55*Math.abs(Math.cos(stroke*1.4+x*.04)));
+      const row=y+band*size*.105+jitter*size*.035;
+      const bend=(stroke%3-1)*size*.065;
+      element(island,"path",{class:"pond-leaf",d:`M${left.toFixed(1)} ${row.toFixed(1)} Q${(x+bend).toFixed(1)} ${(row-2.5+jitter).toFixed(1)} ${right.toFixed(1)} ${(row+bend*.35).toFixed(1)}`,stroke:greens[(tone+stroke)%greens.length],"stroke-width":(stroke%4===0 ? 5.4 : stroke%3===0 ? 3.7 : 2.2).toFixed(1),opacity:(.28+(stroke%4)*.1).toFixed(2)});
+    }
+    for (let fleck=0; fleck<9; fleck+=1) {
+      const px=x+Math.sin(fleck*2.32+y)*size*.79;
+      const py=y+Math.cos(fleck*3.17+x)*size*.24;
+      element(island,"path",{class:"pond-leaf",d:`M${px.toFixed(1)} ${py.toFixed(1)} l${(2+(fleck%4)*1.5).toFixed(1)} ${((fleck%3)-1).toFixed(1)}`,stroke:fleck%3===0 ? "#d4d5a4" : fleck%3===1 ? "#407e8b" : "#a8c5a6","stroke-width":(1+(fleck%3)*.6).toFixed(1),opacity:.5});
+    }
+    if (!flower) return;
+    const fx=x+size*.15, fy=y-size*.3;
+    const scale=Math.max(.65,Math.min(1.1,size/25));
+    for (let petal=0; petal<5; petal+=1) {
+      const shift=(petal-2)*2.2*scale;
+      element(island,"path",{class:"pond-petal",d:`M${(fx+shift).toFixed(1)} ${(fy+3*scale).toFixed(1)} Q${(fx+shift+(petal%2 ? 2 : -2)*scale).toFixed(1)} ${(fy-3*scale).toFixed(1)} ${(fx+shift+(petal-2)*.6*scale).toFixed(1)} ${(fy-(7+(petal%2)*2)*scale).toFixed(1)}`,stroke:petal%2 ? "#9d66bc" : "#c47cc5","stroke-width":((3+(petal%3)*.6)*scale).toFixed(1)});
+    }
+    for (let grain=0; grain<3; grain+=1) element(island,"circle",{class:"pond-center",cx:(fx+(grain-1)*2.2*scale).toFixed(1),cy:(fy+1.5*scale).toFixed(1),r:(1.2*scale).toFixed(1)});
+  }
+  root.querySelectorAll("svg[data-pond-scene]").forEach((svg, sceneIndex) => {
+    let seed = 92741 + sceneIndex * 5831;
+    const random = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; };
+    const reflections=svg.querySelector(".pond-reflections");
+    const dabs=svg.querySelector(".pond-dabs");
+    const glints=svg.querySelector(".pond-glints");
+    const lilies=svg.querySelector(".pond-lilies");
+    const isToday=sceneIndex===0;
+    for (let i=0; i<(isToday ? 46 : 22); i+=1) {
+      const x=(isToday ? 48 : 150)+random()*(isToday ? 345 : 260);
+      const y=random()*(isToday ? 170 : 150);
+      const length=12+random()*47;
+      const drift=-3+random()*6;
+      element(reflections,"path",{d:`M${x.toFixed(1)} ${y.toFixed(1)} Q${(x+length*.52).toFixed(1)} ${(y+drift).toFixed(1)} ${(x+length).toFixed(1)} ${(y+drift*.3).toFixed(1)}`,fill:"none",stroke:i%3===0 ? "#387f8e" : i%3===1 ? "#b0c9b6" : "#669db0","stroke-width":(1+random()*2.4).toFixed(1),opacity:(.17+random()*.23).toFixed(2)});
+    }
+    const count=isToday ? 560 : 280;
+    for (let i=0; i<count; i+=1) {
+      const clustered=random()<.48;
+      const clusterX=[126,238,336,392][Math.floor(random()*4)];
+      const clusterY=[48,92,142][Math.floor(random()*3)];
+      const x=clustered ? clusterX+(random()+random()-1)*85 : (isToday ? 48 : 132)+random()*(isToday ? 386 : 295);
+      const y=clustered ? clusterY+(random()+random()-1)*62 : random()*(isToday ? 193 : 174);
+      const dot=random()<.79;
+      const rx=dot ? .7+random()*2.1 : 2.4+random()*5.2;
+      const ry=dot ? rx : .7+random()*1.5;
+      const color=marks[Math.floor(random()*marks.length)];
+      element(dabs,"ellipse",{cx:x.toFixed(1),cy:y.toFixed(1),rx:rx.toFixed(1),ry:ry.toFixed(1),fill:color,opacity:(dot ? .32+random()*.51 : .17+random()*.31).toFixed(2),transform:`rotate(${(-14+random()*28).toFixed(1)} ${x.toFixed(1)} ${y.toFixed(1)})`});
+    }
+    for (let i=0; i<(isToday ? 50 : 24); i+=1) {
+      const x=(isToday ? 75 : 185)+random()*(isToday ? 345 : 235);
+      const y=random()*(isToday ? 175 : 145);
+      element(glints,"circle",{cx:x.toFixed(1),cy:y.toFixed(1),r:(.8+random()*1.8).toFixed(1),fill:i%2 ? "#f6e6e8" : "#e9e5b5",opacity:(.32+random()*.48).toFixed(2)});
+    }
+    const placements=isToday ? [
+      [91,36,23,false,"far"],[124,35,27,false,"far"],[158,43,25,true,"far"],
+      [243,30,21,false,"far"],[271,36,27,false,"far"],[306,41,24,true,"far"],[339,43,20,false,"far"],
+      [73,82,28,false,"mid"],[107,86,30,true,"mid"],[141,91,29,false,"mid"],[178,82,26,false,"mid"],
+      [240,97,29,true,"mid"],[275,94,33,false,"mid"],[311,102,30,false,"mid"],[346,98,27,true,"mid"],
+      [116,143,33,false,"near"],[153,149,34,true,"near"],[192,143,31,false,"near"],
+      [281,151,34,false,"near"],[319,146,36,true,"near"],[361,153,32,false,"near"]
+    ] : [
+      [215,39,25,false,"far"],[246,46,28,true,"far"],[281,43,27,false,"far"],[316,48,25,false,"far"],
+      [238,91,30,false,"mid"],[272,93,32,sceneIndex===2,"mid"],[310,101,34,false,"mid"],
+      [303,137,34,true,"near"],[340,139,32,false,"near"],[374,136,29,true,"near"]
+    ];
+    placements.forEach(([x,y,size,flower,depth]) => addLily(lilies,x,y,size,flower,depth));
+  });
+  const ringGlint = root.querySelector(".dd-ring-glint");
+  const startTime = performance.now();
+
+  function draw(seconds) {
+    if (ringGlint) {
+      const sweep = Math.max(0, seconds - 1.25);
+      const fraction = (sweep % 5) / 5;
+      const angle = -Math.PI / 2 + twoPi * 0.4 * fraction;
+      ringGlint.setAttribute("cx", (70 + 58 * Math.cos(angle)).toFixed(2));
+      ringGlint.setAttribute("cy", (70 + 58 * Math.sin(angle)).toFixed(2));
+      ringGlint.setAttribute("opacity", seconds < 1.25 ? "0" : (0.88 * Math.sin(Math.PI * fraction)).toFixed(2));
+    }
+  }
+
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  let frameId;
+  function animate(now) {
+    draw((now - startTime) / 1000);
+    frameId = requestAnimationFrame(animate);
+  }
+  function updateMotion() {
+    if (frameId) cancelAnimationFrame(frameId);
+    if (reducedMotion.matches) draw(0);
+    else frameId = requestAnimationFrame(animate);
+  }
+  reducedMotion.addEventListener("change", updateMotion);
+  updateMotion();
+})();
+</script>

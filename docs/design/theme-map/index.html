@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DUNE Theme Map</title>
+  <style>
+    :root { color-scheme:dark; font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif; background:#10131a; color:#f4f1ec; }
+    * { box-sizing:border-box; }
+    body { margin:0; min-width:320px; background:radial-gradient(ellipse at 75% -10%,#34516a 0%,transparent 43%),#10131a; }
+    a { color:inherit; }
+    button,select { font:inherit; }
+    button { cursor:pointer; }
+    [hidden] { display:none !important; }
+    .shell { max-width:1600px; margin:auto; padding:32px clamp(16px,3vw,48px) 60px; }
+    .eyebrow { margin:0 0 12px; color:#d8b692; font-size:12px; font-weight:750; letter-spacing:.18em; }
+    .masthead { display:flex; justify-content:space-between; align-items:start; gap:24px; margin-bottom:28px; }
+    h1 { margin:0; font-size:clamp(35px,4.5vw,68px); line-height:1; letter-spacing:-.055em; }
+    .intro { max-width:720px; margin:15px 0 0; color:#c2c9d0; font-size:15px; line-height:1.6; }
+    .head-link { flex:0 0 auto; margin-top:8px; padding:10px 14px; border:1px solid #5e6874; border-radius:999px; text-decoration:none; font-size:12px; font-weight:700; }
+    .head-link:hover,.head-link:focus-visible { border-color:#d8b692; outline:none; }
+    .note { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:0 0 24px; color:#aeb9c2; font-size:12px; }
+    .note strong { color:#e7ceae; }
+    .separator { color:#63707e; }
+    .layout { display:grid; grid-template-columns:minmax(290px,380px) minmax(0,1fr); gap:22px; align-items:start; }
+    .catalog { display:grid; gap:9px; }
+    .catalog-title { display:flex; justify-content:space-between; align-items:baseline; margin:0 0 5px; }
+    .catalog-title h2 { margin:0; font-size:17px; letter-spacing:-.02em; }
+    .catalog-title span { color:#9eabb7; font-size:12px; }
+    .theme-card { display:grid; grid-template-columns:1fr auto; gap:0 8px; padding:0; border:1px solid #313e4c; border-radius:18px; background:#1b222c; overflow:hidden; transition:border-color .18s,background .18s; }
+    .theme-card:has(button[aria-pressed="true"]) { border-color:#d6b488; background:#27313b; }
+    .theme-card:hover { border-color:#7c8d9b; }
+    .theme-choice { width:100%; padding:15px 0 12px 15px; border:0; background:none; color:inherit; text-align:left; }
+    .theme-choice:focus-visible { outline:2px solid #e4c598; outline-offset:-4px; border-radius:14px; }
+    .theme-name { display:block; color:#ddc5a6; font-size:10px; font-weight:800; letter-spacing:.15em; }
+    .theme-title { display:block; margin:4px 0; font-size:17px; font-weight:750; letter-spacing:-.025em; }
+    .theme-motif { display:block; color:#aeb9c2; font-size:12px; line-height:1.4; }
+    .theme-open { align-self:start; padding:13px 14px; color:#b8c8d2; text-decoration:none; font-size:12px; }
+    .theme-open:hover,.theme-open:focus-visible { color:#fff; text-decoration:underline; }
+    .swatches { grid-column:1 / -1; display:flex; height:6px; }
+    .swatches i { flex:1; }
+    .study { margin-top:12px; padding:17px; border:1px solid #374453; border-radius:17px; background:#17202a; }
+    .study small { display:block; color:#d8b692; font-size:10px; font-weight:800; letter-spacing:.12em; }
+    .study a { display:inline-block; margin:7px 0 5px; font-size:16px; font-weight:750; text-decoration:none; }
+    .study a:hover,.study a:focus-visible { text-decoration:underline; }
+    .study p { margin:0; color:#aeb9c2; font-size:12px; line-height:1.45; }
+    .workspace { min-width:0; padding:18px; border:1px solid #35414e; border-radius:22px; background:#19212b; box-shadow:0 24px 70px #0005; }
+    .workspace-head { display:flex; justify-content:space-between; gap:16px; align-items:start; margin-bottom:15px; }
+    .workspace-eyebrow { margin:0 0 4px; color:#d8b692; font-size:10px; font-weight:800; letter-spacing:.16em; }
+    .workspace h2 { margin:0; font-size:clamp(24px,2.5vw,34px); letter-spacing:-.04em; }
+    .workspace-summary { margin:7px 0 0; max-width:700px; color:#bdc7cf; font-size:13px; line-height:1.5; }
+    .workspace-actions { display:flex; flex-wrap:wrap; justify-content:end; gap:8px; }
+    .action { border:1px solid #65717e; border-radius:10px; padding:9px 12px; background:#25313c; color:#fff; text-decoration:none; font-size:12px; font-weight:700; white-space:nowrap; }
+    .action:hover,.action:focus-visible { border-color:#e4c598; outline:none; }
+    .preview-grid { display:grid; grid-template-columns:minmax(0,1fr); gap:12px; }
+    .preview-grid.comparing { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    .preview-panel { min-width:0; overflow:hidden; border:1px solid #485362; border-radius:15px; background:#111820; }
+    .preview-caption { display:flex; align-items:center; justify-content:space-between; gap:8px; padding:8px 12px; border-bottom:1px solid #35414e; color:#d4dde3; font-size:11px; font-weight:750; }
+    .preview-panel iframe { display:block; width:100%; height:min(82vh,930px); min-height:610px; border:0; background:#1d2330; }
+    .compare-controls { display:flex; align-items:center; flex-wrap:wrap; gap:9px; margin:0 0 12px; padding:10px 12px; border:1px solid #465260; border-radius:12px; color:#c8d1d8; font-size:12px; }
+    .compare-controls select { min-width:170px; padding:7px 9px; border:1px solid #65717e; border-radius:7px; background:#263541; color:#fff; }
+    .workspace-foot { margin:13px 2px 0; color:#9daab6; font-size:11px; line-height:1.5; }
+    @media (max-width:1050px) { .layout { grid-template-columns:1fr; } .catalog { grid-template-columns:repeat(2,minmax(0,1fr)); } .catalog-title,.study { grid-column:1 / -1; } }
+    @media (max-width:700px) { .shell { padding-top:22px; } .masthead { display:block; } .head-link { display:inline-block; margin-top:16px; } .catalog { grid-template-columns:1fr; } .workspace { padding:12px; } .workspace-head { display:block; } .workspace-actions { justify-content:start; margin-top:13px; } .preview-grid.comparing { grid-template-columns:1fr; } .preview-panel iframe { height:750px; } }
+    @media (prefers-reduced-motion:reduce) { .theme-card { transition:none; } }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="masthead">
+      <div>
+        <p class="eyebrow">DUNE / DESIGN ARCHIVE</p>
+        <h1>Theme Map</h1>
+        <p class="intro">8개 테마의 현재 방향 시안을 보존한 맵입니다. 테마를 선택해 움직임과 Today 히어로, 그래프, 다른 탭의 표현을 보고 두 시안을 나란히 비교할 수 있습니다.</p>
+      </div>
+      <a class="head-link" href="../phone-design-map/actual/index.html">실제 앱 화면 디자인맵 ↗</a>
+    </header>
+    <p class="note"><strong>방향 시안</strong><span class="separator">·</span> 실제 앱 구현 및 시뮬레이터 캡처와 구분<span class="separator">·</span> 컨디션 수치는 예시<span class="separator">·</span> 마지막 정리 <span id="updated-date">2026-10-17</span></p>
+    <div class="layout">
+      <nav class="catalog" aria-label="테마 목록">
+        <div class="catalog-title"><h2>테마</h2><span id="theme-count">8개</span></div>
+        <div id="theme-list" style="display:contents"><div class="theme-card"><button class="theme-choice" type="button" data-theme="dune" aria-pressed="true"><span class="theme-name">DUNE</span><span class="theme-title">Desert Horizon</span><span class="theme-motif">모래 능선</span></button><a class="theme-open" href="themes/dune-design-direction.html" target="_blank" rel="noopener">열기 ↗</a><div class="swatches" aria-hidden="true"><i style="background:#302b2a"></i><i style="background:#b2854c"></i><i style="background:#e1b453"></i><i style="background:#f5d778"></i></div></div>
+<div class="theme-card"><button class="theme-choice" type="button" data-theme="ocean" aria-pressed="false"><span class="theme-name">OCEAN</span><span class="theme-title">Ocean Current</span><span class="theme-motif">두꺼운 흰 포말과 해류</span></button><a class="theme-open" href="themes/ocean-cool-direction.html" target="_blank" rel="noopener">열기 ↗</a><div class="swatches" aria-hidden="true"><i style="background:#0a2932"></i><i style="background:#205b75"></i><i style="background:#4fc3d5"></i><i style="background:#d7faf6"></i></div></div>
+<div class="theme-card"><button class="theme-choice" type="button" data-theme="forest" aria-pressed="false"><span class="theme-name">FOREST</span><span class="theme-title">Forest Canopy</span><span class="theme-motif">안개와 숲 능선</span></button><a class="theme-open" href="themes/forest-green-direction.html" target="_blank" rel="noopener">열기 ↗</a><div class="swatches" aria-hidden="true"><i style="background:#172f29"></i><i style="background:#4f7f61"></i><i style="background:#a6c58b"></i><i style="background:#e8c86b"></i></div></div>
+<div class="theme-card"><button class="theme-choice" type="button" data-theme="sakura" aria-pressed="false"><span class="theme-name">SAKURA</span><span class="theme-title">Spring Haze</span><span class="theme-motif">벚꽃 군집과 얇은 가지</span></button><a class="theme-open" href="themes/sakura-calm-direction.html" target="_blank" rel="noopener">열기 ↗</a><div class="swatches" aria-hidden="true"><i style="background:#574354"></i><i style="background:#ba8d9a"></i><i style="background:#efc0a7"></i><i style="background:#ffe3d5"></i></div></div>
+<div class="theme-card"><button class="theme-choice" type="button" data-theme="arctic" aria-pressed="false"><span class="theme-name">ARCTIC</span><span class="theme-title">Aurora Drift</span><span class="theme-motif">오로라의 빛 띠</span></button><a class="theme-open" href="themes/arctic-dawn-direction.html" target="_blank" rel="noopener">열기 ↗</a><div class="swatches" aria-hidden="true"><i style="background:#0e1b33"></i><i style="background:#48649b"></i><i style="background:#64afce"></i><i style="background:#a7f4dc"></i></div></div>
+<div class="theme-card"><button class="theme-choice" type="button" data-theme="solar" aria-pressed="false"><span class="theme-name">SOLAR</span><span class="theme-title">Solar Pulse</span><span class="theme-motif">태양 코어와 빛의 궤적</span></button><a class="theme-open" href="themes/solar-pop-direction.html" target="_blank" rel="noopener">열기 ↗</a><div class="swatches" aria-hidden="true"><i style="background:#3d2222"></i><i style="background:#9d4a36"></i><i style="background:#f1ad46"></i><i style="background:#ffe19a"></i></div></div>
+<div class="theme-card"><button class="theme-choice" type="button" data-theme="contour" aria-pressed="false"><span class="theme-name">CONTOUR</span><span class="theme-title">Contour Field</span><span class="theme-motif">석회색 지형과 등고선</span></button><a class="theme-open" href="themes/contour-atlas-direction.html" target="_blank" rel="noopener">열기 ↗</a><div class="swatches" aria-hidden="true"><i style="background:#343a31"></i><i style="background:#657c36"></i><i style="background:#bbcf72"></i><i style="background:#e4efb0"></i></div></div>
+<div class="theme-card"><button class="theme-choice" type="button" data-theme="water-lilies" aria-pressed="false"><span class="theme-name">WATER LILIES</span><span class="theme-title">Lily Reverie</span><span class="theme-motif">푸른 수면과 수련 붓결</span></button><a class="theme-open" href="themes/water-lilies-direction.html" target="_blank" rel="noopener">열기 ↗</a><div class="swatches" aria-hidden="true"><i style="background:#303649"></i><i style="background:#457cab"></i><i style="background:#8abf75"></i><i style="background:#c47cc5"></i></div></div></div>
+        <aside class="study" id="study-link"><small>SHARED STUDY</small><a href="themes/theme-crest-language.html" target="_blank" rel="noopener">공통 능선 언어 ↗</a><p>테마별 상단 능선의 굵기, 발광, 움직임을 비교한 초기 연구안</p></aside>
+      </nav>
+      <section class="workspace" aria-label="선택한 테마 미리보기">
+        <div class="workspace-head">
+          <div><p class="workspace-eyebrow" id="selected-name">DUNE</p><h2 id="selected-title">Desert Horizon</h2><p class="workspace-summary" id="selected-description">모래 능선 · 모든 화면의 능선이 한 리듬으로 지속해서 흐름. 모래빛 상단 배경, 금빛 발광 링, 히어로 그래프</p></div>
+          <div class="workspace-actions"><a class="action" id="source-link" href="themes/dune-design-direction.html" target="_blank" rel="noopener">원본 시안 열기 ↗</a><button class="action" id="compare-toggle" type="button" aria-expanded="false">두 시안 비교</button></div>
+        </div>
+        <div class="compare-controls" id="compare-controls" hidden><label for="compare-select">비교할 테마</label><select id="compare-select"><option value="dune">DUNE · Desert Horizon</option>
+<option value="ocean">OCEAN · Ocean Current</option>
+<option value="forest">FOREST · Forest Canopy</option>
+<option value="sakura">SAKURA · Spring Haze</option>
+<option value="arctic">ARCTIC · Aurora Drift</option>
+<option value="solar">SOLAR · Solar Pulse</option>
+<option value="contour">CONTOUR · Contour Field</option>
+<option value="water-lilies">WATER LILIES · Lily Reverie</option></select><span>두 미리보기가 각각 움직입니다.</span></div>
+        <div class="preview-grid" id="preview-grid">
+          <div class="preview-panel"><div class="preview-caption"><span id="primary-caption">DUNE</span><span>현재 방향</span></div><iframe id="primary-frame" title="선택한 테마 시안" loading="eager" src="themes/dune-design-direction.html"></iframe></div>
+          <div class="preview-panel" id="compare-panel" hidden><div class="preview-caption"><span id="compare-caption"></span><span>비교</span></div><iframe id="compare-frame" title="비교할 테마 시안" loading="lazy"></iframe></div>
+        </div>
+        <p class="workspace-foot">시안 원본은 이 맵과 같은 저장소에 보존됩니다. 운영체제에서 움직임 줄이기를 켜면 각 시안의 지속 애니메이션이 멈춥니다.</p>
+      </section>
+    </div>
+  </main>
+  <script>
+    const manifest = {"updated": "2026-10-17", "themes": [{"id": "dune", "name": "DUNE", "title": "Desert Horizon", "file": "dune-design-direction.html", "motif": "모래 능선", "motion": "모든 화면의 능선이 한 리듬으로 지속해서 흐름", "detail": "모래빛 상단 배경, 금빛 발광 링, 히어로 그래프", "colors": ["#302b2a", "#b2854c", "#e1b453", "#f5d778"]}, {"id": "ocean", "name": "OCEAN", "title": "Ocean Current", "file": "ocean-cool-direction.html", "motif": "두꺼운 흰 포말과 해류", "motion": "깊은 물결과 반대 방향의 흐름이 교차", "detail": "일본 판화의 굵은 선을 연상시키는 포말, 청록 발광 링", "colors": ["#0a2932", "#205b75", "#4fc3d5", "#d7faf6"]}, {"id": "forest", "name": "FOREST", "title": "Forest Canopy", "file": "forest-green-direction.html", "motif": "안개와 숲 능선", "motion": "먼 숲과 가까운 능선이 서로 다른 속도로 이동", "detail": "짙은 녹색 바탕, 금빛 링과 선명한 그래프", "colors": ["#172f29", "#4f7f61", "#a6c58b", "#e8c86b"]}, {"id": "sakura", "name": "SAKURA", "title": "Spring Haze", "file": "sakura-calm-direction.html", "motif": "벚꽃 군집과 얇은 가지", "motion": "봄 안개와 소수의 꽃잎이 느리게 흐름", "detail": "살구와 분홍의 층, 새잎빛 링", "colors": ["#574354", "#ba8d9a", "#efc0a7", "#ffe3d5"]}, {"id": "arctic", "name": "ARCTIC", "title": "Aurora Drift", "file": "arctic-dawn-direction.html", "motif": "오로라의 빛 띠", "motion": "배경은 고요하게 두고 오로라만 천천히 이동", "detail": "빙하빛 청색과 보라·민트 오로라, 얼음빛 링", "colors": ["#0e1b33", "#48649b", "#64afce", "#a7f4dc"]}, {"id": "solar", "name": "SOLAR", "title": "Solar Pulse", "file": "solar-pop-direction.html", "motif": "태양 코어와 빛의 궤적", "motion": "고정된 중심 주위로 빛이 맥동하고 움직임", "detail": "구릿빛과 주황빛, 금빛 발광 링", "colors": ["#3d2222", "#9d4a36", "#f1ad46", "#ffe19a"]}, {"id": "contour", "name": "CONTOUR", "title": "Contour Field", "file": "contour-atlas-direction.html", "motif": "석회색 지형과 등고선", "motion": "굵은 기준선과 등고선이 느리게 호흡", "detail": "올리브·라임 계열 링, 지형도 같은 화면 깊이", "colors": ["#343a31", "#657c36", "#bbcf72", "#e4efb0"]}, {"id": "water-lilies", "name": "WATER LILIES", "title": "Lily Reverie", "file": "water-lilies-direction.html", "motif": "푸른 수면과 수련 붓결", "motion": "초록 붓질 군집과 보랏빛 꽃점이 좌우로 흔들림", "detail": "모네 수련에서 출발한 점묘와 물빛, 보랏빛 발광 링", "colors": ["#303649", "#457cab", "#8abf75", "#c47cc5"]}], "studies": [{"id": "crest-language", "name": "공통 능선 언어", "title": "Theme Crest Language", "file": "theme-crest-language.html", "detail": "테마별 상단 능선의 굵기, 발광, 움직임을 비교한 초기 연구안"}]};
+    const themes = manifest.themes;
+    const select = document.getElementById("compare-select");
+    const source = document.getElementById("source-link");
+    const primaryFrame = document.getElementById("primary-frame");
+    const compareFrame = document.getElementById("compare-frame");
+    const compareToggle = document.getElementById("compare-toggle");
+    const compareControls = document.getElementById("compare-controls");
+    const comparePanel = document.getElementById("compare-panel");
+    const previewGrid = document.getElementById("preview-grid");
+    let current = themes[0];
+
+    document.querySelectorAll(".theme-choice").forEach(button => {
+      button.addEventListener("click", () => showTheme(button.dataset.theme));
+    });
+
+    function showTheme(id) {
+      const theme = themes.find(item => item.id === id);
+      if (!theme) return;
+      current = theme;
+      document.querySelectorAll(".theme-choice").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.theme === id)));
+      document.getElementById("selected-name").textContent = theme.name;
+      document.getElementById("selected-title").textContent = theme.title;
+      document.getElementById("selected-description").textContent = `${theme.motif} · ${theme.motion}. ${theme.detail}`;
+      document.getElementById("primary-caption").textContent = theme.name;
+      source.href = `themes/${theme.file}`;
+      primaryFrame.src = `themes/${theme.file}`;
+      if (select.value === id) {
+        const alternative = themes.find(item => item.id !== id);
+        if (alternative) select.value = alternative.id;
+      }
+      updateCompare();
+      history.replaceState(null, "", `#${id}`);
+    }
+
+    function updateCompare() {
+      if (comparePanel.hidden) return;
+      const theme = themes.find(item => item.id === select.value);
+      if (!theme || theme.id === current.id) return;
+      document.getElementById("compare-caption").textContent = theme.name;
+      compareFrame.src = `themes/${theme.file}`;
+    }
+
+    compareToggle.addEventListener("click", () => {
+      const enabled = comparePanel.hidden;
+      comparePanel.hidden = !enabled;
+      compareControls.hidden = !enabled;
+      previewGrid.classList.toggle("comparing", enabled);
+      compareToggle.setAttribute("aria-expanded", String(enabled));
+      compareToggle.textContent = enabled ? "비교 닫기" : "두 시안 비교";
+      if (enabled) updateCompare(); else compareFrame.removeAttribute("src");
+    });
+    select.addEventListener("change", updateCompare);
+    const initial = decodeURIComponent(location.hash.slice(1));
+    showTheme(themes.some(theme => theme.id === initial) ? initial : themes[0].id);
+  </script>
+</body>
+</html>

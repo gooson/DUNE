@@ -1,0 +1,101 @@
+<div id="theme-crest-language" class="viz-dotted-background">
+  <style>
+    #theme-crest-language { width:100%; display:grid; gap:18px; padding:10px 0 18px; }
+    #theme-crest-language * { box-sizing:border-box; }
+    #theme-crest-language .crest-scene { position:relative; height:154px; overflow:hidden; border-radius:26px; isolation:isolate; }
+    #theme-crest-language .crest-scene svg { display:block; width:100%; height:100%; }
+    #theme-crest-language .crest-name { position:absolute; z-index:2; left:24px; top:18px; color:#fff; font:500 14px/1.2 -apple-system,BlinkMacSystemFont,sans-serif; letter-spacing:.16em; text-shadow:0 1px 8px #0008; }
+    #theme-crest-language .crest-word { position:absolute; z-index:2; left:24px; bottom:18px; color:#fff; font:500 22px/1.15 -apple-system,BlinkMacSystemFont,sans-serif; letter-spacing:-.03em; text-shadow:0 2px 12px #0009; }
+    #theme-crest-language .crest-motion { transform-origin:center; animation:crest-breathe 11s ease-in-out infinite alternate; }
+    #theme-crest-language .crest-motion.reversed { animation-direction:alternate-reverse; animation-duration:14s; }
+    #theme-crest-language .crest-shine { animation:crest-shine 5s ease-in-out infinite alternate; }
+    #theme-crest-language .crest-speck { animation:crest-float 12s ease-in-out infinite alternate; }
+    #theme-crest-language .crest-ocean { background:#061c27; }
+    #theme-crest-language .crest-dune { background:#3a2d26; }
+    #theme-crest-language .crest-forest { background:#102c22; }
+    #theme-crest-language .crest-sakura { background:#382537; }
+    @keyframes crest-breathe { from { transform:translate(-9px,2px) scale(1.025); } to { transform:translate(9px,-3px) scale(1.025); } }
+    @keyframes crest-shine { from { opacity:.42; } to { opacity:.92; } }
+    @keyframes crest-float { from { transform:translate(-7px,9px); opacity:.34; } to { transform:translate(11px,-9px); opacity:.85; } }
+    @media (prefers-reduced-motion:reduce) { #theme-crest-language .crest-motion, #theme-crest-language .crest-shine, #theme-crest-language .crest-speck { animation:none; } }
+    @media (max-width:480px) { #theme-crest-language .crest-scene { height:142px; border-radius:21px; } #theme-crest-language .crest-name,#theme-crest-language .crest-word { left:18px; } }
+  </style>
+
+  <section class="crest-scene crest-ocean" aria-label="Ocean Cool: 푸른 파도 위를 두꺼운 백색 포말이 흐르는 상단 배경">
+    <svg viewBox="0 0 760 154" preserveAspectRatio="xMidYMid slice" role="img" aria-label="굵은 흰색 포말이 파도 봉우리를 따라 움직임">
+      <defs>
+        <linearGradient id="crest-ocean-water" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#2b8190"/><stop offset="1" stop-color="#092e3e"/></linearGradient>
+        <linearGradient id="crest-ocean-foam" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fffdf0"/><stop offset=".5" stop-color="#d8f5f0"/><stop offset="1" stop-color="#72b9c3"/></linearGradient>
+        <filter id="crest-ocean-glow" x="-20%" y="-80%" width="140%" height="260%"><feGaussianBlur stdDeviation="5"/></filter>
+      </defs>
+      <path d="M0 95 C95 87 157 82 253 87 S410 103 520 82 S666 68 760 82" fill="none" stroke="#517b84" stroke-width="3" opacity=".45"/>
+      <g class="crest-motion">
+        <path d="M-35 143 C28 137 70 65 106 69 C147 72 158 130 212 116 C247 107 262 71 294 77 C336 83 334 135 380 139 C440 146 461 53 506 58 C555 64 564 126 606 112 C657 95 670 49 712 56 C746 61 759 87 795 91 L795 180 L-35 180Z" fill="url(#crest-ocean-water)"/>
+        <path d="M-35 143 C28 137 70 65 106 69 C147 72 158 130 212 116 C247 107 262 71 294 77 C336 83 334 135 380 139 C440 146 461 53 506 58 C555 64 564 126 606 112 C657 95 670 49 712 56 C746 61 759 87 795 91" fill="none" stroke="#d7faf6" stroke-width="23" opacity=".42" filter="url(#crest-ocean-glow)"/>
+        <path class="crest-shine" d="M-35 143 C28 137 70 65 106 69 C147 72 158 130 212 116 C247 107 262 71 294 77 C336 83 334 135 380 139 C440 146 461 53 506 58 C555 64 564 126 606 112 C657 95 670 49 712 56 C746 61 759 87 795 91" fill="none" stroke="url(#crest-ocean-foam)" stroke-width="11" stroke-linejoin="round" stroke-linecap="round"/>
+        <path d="M96 77 C115 74 131 97 143 107 M503 66 C530 67 542 99 552 104 M705 62 C724 64 734 77 742 85" fill="none" stroke="#fffdf5" stroke-width="2.2" opacity=".8"/>
+      </g>
+    </svg>
+    <span class="crest-name">OCEAN COOL</span><span class="crest-word">포말의 붓결</span>
+  </section>
+
+  <section class="crest-scene crest-dune" aria-label="DUNE: 모래 언덕 능선의 따뜻한 금빛 반사광이 느리게 흐르는 상단 배경">
+    <svg viewBox="0 0 760 154" preserveAspectRatio="xMidYMid slice" role="img" aria-label="모래 언덕의 빛받는 능선이 은은하게 움직임">
+      <defs>
+        <linearGradient id="crest-dune-sky" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#705143"/><stop offset="1" stop-color="#2f2524"/></linearGradient>
+        <linearGradient id="crest-dune-sand" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#b5885c"/><stop offset="1" stop-color="#5e4033"/></linearGradient>
+        <linearGradient id="crest-dune-edge" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#f6d79b"/><stop offset=".55" stop-color="#fff2cb"/><stop offset="1" stop-color="#c8965a"/></linearGradient>
+        <filter id="crest-dune-glow" x="-20%" y="-100%" width="140%" height="300%"><feGaussianBlur stdDeviation="7"/></filter>
+      </defs>
+      <rect width="760" height="154" fill="url(#crest-dune-sky)"/>
+      <path d="M0 111 Q176 81 310 100 T760 85 L760 154 H0Z" fill="#a77b5a" opacity=".33"/>
+      <g class="crest-motion reversed">
+        <path d="M-40 147 C115 126 176 47 294 56 C415 64 467 127 576 111 C674 95 730 56 802 67 L802 170 H-40Z" fill="url(#crest-dune-sand)"/>
+        <path d="M-40 147 C115 126 176 47 294 56 C415 64 467 127 576 111 C674 95 730 56 802 67" fill="none" stroke="#ffe7ad" stroke-width="22" opacity=".38" filter="url(#crest-dune-glow)"/>
+        <path class="crest-shine" d="M-40 147 C115 126 176 47 294 56 C415 64 467 127 576 111 C674 95 730 56 802 67" fill="none" stroke="url(#crest-dune-edge)" stroke-width="6" stroke-linecap="round"/>
+        <path d="M183 104 C234 86 289 81 347 88 M584 126 C653 113 717 92 770 83" fill="none" stroke="#d6ae7a" stroke-width="1.5" opacity=".52"/>
+      </g>
+      <g class="crest-speck" fill="#fff0c7"><circle cx="414" cy="44" r="1.7"/><circle cx="436" cy="55" r="1"/><circle cx="616" cy="28" r="1.2"/></g>
+    </svg>
+    <span class="crest-name">DUNE</span><span class="crest-word">빛받는 사구의 능선</span>
+  </section>
+
+  <section class="crest-scene crest-forest" aria-label="Forest Green: 숲 능선 사이로 부드러운 옅은 안개와 빛이 흐르는 상단 배경">
+    <svg viewBox="0 0 760 154" preserveAspectRatio="xMidYMid slice" role="img" aria-label="숲의 겹친 능선 위로 안개와 여린 빛이 움직임">
+      <defs>
+        <linearGradient id="crest-forest-sky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#315647"/><stop offset="1" stop-color="#0c2922"/></linearGradient>
+        <linearGradient id="crest-forest-mist" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#f3f4d7" stop-opacity=".85"/><stop offset="1" stop-color="#c7e5d1" stop-opacity=".25"/></linearGradient>
+        <filter id="crest-forest-blur" x="-20%" y="-100%" width="140%" height="300%"><feGaussianBlur stdDeviation="7"/></filter>
+      </defs>
+      <rect width="760" height="154" fill="url(#crest-forest-sky)"/>
+      <path d="M0 111 L53 74 L95 102 L146 55 L207 106 L276 75 L344 112 L403 61 L462 101 L531 50 L585 99 L652 64 L716 104 L760 76 L760 154 H0Z" fill="#4f765b" opacity=".65"/>
+      <g class="crest-motion reversed">
+        <path d="M-30 134 C70 131 92 81 160 87 C223 95 246 127 321 121 C396 115 418 72 493 77 C564 83 576 123 647 114 C709 105 742 82 790 88 L790 170 H-30Z" fill="#173a2b"/>
+        <path d="M-30 134 C70 131 92 81 160 87 C223 95 246 127 321 121 C396 115 418 72 493 77 C564 83 576 123 647 114 C709 105 742 82 790 88" fill="none" stroke="#edf4d9" stroke-width="19" opacity=".37" filter="url(#crest-forest-blur)"/>
+        <path class="crest-shine" d="M-30 134 C70 131 92 81 160 87 C223 95 246 127 321 121 C396 115 418 72 493 77 C564 83 576 123 647 114 C709 105 742 82 790 88" fill="none" stroke="url(#crest-forest-mist)" stroke-width="8" stroke-linecap="round"/>
+        <path d="M75 128 L84 110 L93 128 M272 118 L282 99 L292 119 M566 119 L577 97 L587 116 M696 109 L707 90 L717 106" fill="none" stroke="#91ae8b" stroke-width="3" opacity=".6"/>
+      </g>
+      <g class="crest-speck" fill="#f7efbf"><circle cx="369" cy="48" r="2"/><circle cx="381" cy="57" r="1"/><circle cx="601" cy="36" r="1.5"/></g>
+    </svg>
+    <span class="crest-name">FOREST GREEN</span><span class="crest-word">숲 사이를 지나는 안개</span>
+  </section>
+
+  <section class="crest-scene crest-sakura" aria-label="Sakura Calm: 벚꽃 군집의 밝은 꽃잎 윤곽과 흩날리는 꽃잎이 흐르는 상단 배경">
+    <svg viewBox="0 0 760 154" preserveAspectRatio="xMidYMid slice" role="img" aria-label="벚꽃 능선의 아이보리빛 가장자리와 작은 꽃잎이 부드럽게 움직임">
+      <defs>
+        <linearGradient id="crest-sakura-sky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#8d5878"/><stop offset="1" stop-color="#372536"/></linearGradient>
+        <linearGradient id="crest-sakura-petal" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff2eb"/><stop offset="1" stop-color="#edaecc"/></linearGradient>
+        <filter id="crest-sakura-glow" x="-20%" y="-100%" width="140%" height="300%"><feGaussianBlur stdDeviation="6"/></filter>
+      </defs>
+      <rect width="760" height="154" fill="url(#crest-sakura-sky)"/>
+      <path d="M0 112 Q123 88 226 104 T458 96 T760 107 L760 154 H0Z" fill="#e2a6c2" opacity=".25"/>
+      <g class="crest-motion">
+        <path d="M-30 129 Q23 108 73 116 Q104 85 139 96 Q171 67 210 81 Q257 66 290 104 Q330 108 363 91 Q400 69 437 86 Q463 58 503 75 Q542 59 577 95 Q608 106 639 91 Q677 64 713 85 Q755 78 790 104 L790 170 H-30Z" fill="#ad6f98"/>
+        <path d="M-30 129 Q23 108 73 116 Q104 85 139 96 Q171 67 210 81 Q257 66 290 104 Q330 108 363 91 Q400 69 437 86 Q463 58 503 75 Q542 59 577 95 Q608 106 639 91 Q677 64 713 85 Q755 78 790 104" fill="none" stroke="#fff0e5" stroke-width="19" opacity=".43" filter="url(#crest-sakura-glow)"/>
+        <path class="crest-shine" d="M-30 129 Q23 108 73 116 Q104 85 139 96 Q171 67 210 81 Q257 66 290 104 Q330 108 363 91 Q400 69 437 86 Q463 58 503 75 Q542 59 577 95 Q608 106 639 91 Q677 64 713 85 Q755 78 790 104" fill="none" stroke="url(#crest-sakura-petal)" stroke-width="6" stroke-linecap="round"/>
+      </g>
+      <g class="crest-speck" fill="#ffe1ec" opacity=".8"><ellipse cx="344" cy="47" rx="5" ry="2.5" transform="rotate(-27 344 47)"/><ellipse cx="391" cy="37" rx="4" ry="2" transform="rotate(34 391 37)"/><ellipse cx="612" cy="45" rx="5" ry="2.5" transform="rotate(-12 612 45)"/><ellipse cx="666" cy="34" rx="3.5" ry="2" transform="rotate(28 666 34)"/></g>
+    </svg>
+    <span class="crest-name">SAKURA CALM</span><span class="crest-word">꽃잎이 잇는 곡선</span>
+  </section>
+</div>
