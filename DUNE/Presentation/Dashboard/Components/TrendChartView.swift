@@ -12,7 +12,8 @@ struct TrendChartView: View {
                 x: .value("Date", score.date, unit: .day),
                 y: .value("Score", score.score)
             )
-            .foregroundStyle(theme.sandColor.opacity(0.5))
+            .foregroundStyle(theme.sandColor.opacity(0.9))
+            .lineStyle(StrokeStyle(lineWidth: 2.5, lineCap: .round))
             .interpolationMethod(.catmullRom)
 
             PointMark(

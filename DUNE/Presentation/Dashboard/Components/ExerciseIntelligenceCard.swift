@@ -4,7 +4,6 @@ struct ExerciseIntelligenceCard: View {
     let suggestion: WorkoutSuggestion
     let conditionScore: Int?
     let sleepMinutes: Double?
-    let onStartWorkout: () -> Void
 
     private enum Labels {
         static let readyModerate = String(localized: "ready for moderate+ intensity")
@@ -75,18 +74,6 @@ struct ExerciseIntelligenceCard: View {
                     }
                 }
 
-                // CTA
-                Button(action: onStartWorkout) {
-                    Text("Start this workout")
-                        .font(.subheadline)
-                        .fontWeight(.semibold)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, DS.Spacing.sm)
-                        .background(DS.Color.activity.opacity(0.15), in: RoundedRectangle(cornerRadius: DS.Radius.sm))
-                        .foregroundStyle(DS.Color.activity)
-                }
-                .buttonStyle(.plain)
-                .accessibilityIdentifier("dashboard-intelligence-start")
             }
         }
         .accessibilityIdentifier("dashboard-exercise-intelligence")

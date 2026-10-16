@@ -4,7 +4,6 @@ import Charts
 struct ConditionHeroView: View {
     let score: ConditionScore
     let recentScores: [ConditionScore]
-    var weeklyGoalProgress: (completedDays: Int, goalDays: Int)? = nil
     var trendBadges: [BaselineDetail] = []
     var hourlySparkline: HourlySparklineData?
     var adaptiveMessage: AdaptiveHeroMessage? = nil
@@ -27,8 +26,8 @@ struct ConditionHeroView: View {
         static let ringSizeCompact: CGFloat = 88
         static let ringLineWidthRegular: CGFloat = 14
         static let ringLineWidthCompact: CGFloat = 10
-        static let sparklineHeightRegular: CGFloat = 56
-        static let sparklineHeightCompact: CGFloat = 44
+        static let sparklineHeightRegular: CGFloat = 84
+        static let sparklineHeightCompact: CGFloat = 72
     }
 
     private var ringSize: CGFloat {
@@ -42,24 +41,35 @@ struct ConditionHeroView: View {
 
     var body: some View {
         HeroCard(tintColor: score.status.color) {
-            Group {
-                if dynamicTypeSize.isAccessibilitySize {
-                    VStack(alignment: .leading, spacing: DS.Spacing.lg) {
-                        scoreRing
-                            .frame(maxWidth: .infinity)
-                        scoreDetails
+            VStack(alignment: .leading, spacing: DS.Spacing.md) {
+                Group {
+                    if dynamicTypeSize.isAccessibilitySize {
+                        VStack(alignment: .leading, spacing: DS.Spacing.lg) {
+                            scoreRing.frame(maxWidth: .infinity)
+                            scoreDetails
+                        }
+                    } else {
+                        HStack(spacing: isRegular ? DS.Spacing.xxl : DS.Spacing.xl) {
+                            scoreRing
+                            scoreDetails
+                            Spacer(minLength: 0)
+                        }
                     }
-                } else {
-                    HStack(spacing: isRegular ? DS.Spacing.xxl : DS.Spacing.xl) {
-                        scoreRing
-                        scoreDetails
-                        Spacer(minLength: 0)
+                }
+
+                trendContent
+                    .accessibilityIdentifier("dashboard-hero-trend")
+
+                if !trendBadges.isEmpty {
+                    VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                        ForEach(Array(trendBadges.prefix(2).enumerated()), id: \.offset) { _, detail in
+                            BaselineTrendBadge(detail: detail)
+                        }
                     }
                 }
             }
         }
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel("Condition score \(score.score), \(score.status.label)")
+        .accessibilityElement(children: .contain)
         .sensoryFeedback(.impact(weight: .light), trigger: isAppeared)
         .onAppear {
             guard !isAppeared else { return }
@@ -91,6 +101,7 @@ struct ConditionHeroView: View {
                 lineWidth: ringLineWidth,
                 size: ringSize,
                 useWarmGradient: true,
+                showsTravelingHighlight: true,
                 gradientTipColor: score.status.nextTierColor
             )
 
@@ -103,12 +114,14 @@ struct ConditionHeroView: View {
                     .contentTransition(.numericText())
 
                 Text(Labels.scoreLabel)
-                    .font(.system(size: 9, weight: .semibold, design: .rounded))
+                    .font(.caption2.weight(.semibold))
                     .foregroundStyle(theme.sandColor)
                     .tracking(1)
             }
             .frame(width: ringContentSize, height: ringContentSize)
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Condition score \(score.score), \(score.status.label)")
     }
 
     private var scoreDetails: some View {
@@ -150,54 +163,48 @@ struct ConditionHeroView: View {
                 }
             }
 
-            // Hourly sparkline (today) or 7-day sparkline (fallback)
-            if let sparkline = hourlySparkline, !sparkline.points.isEmpty {
-                HStack(spacing: DS.Spacing.xs) {
-                    HourlySparklineView(data: sparkline, tintColor: score.status.color)
-                        .frame(height: isRegular ? Layout.sparklineHeightRegular : Layout.sparklineHeightCompact)
+        }
+    }
 
-                    Text(sparkline.includesYesterday ? "24h" : "Today")
-                        .font(.caption2)
-                        .foregroundStyle(theme.tertiaryTextStyle)
+    @ViewBuilder
+    private var trendContent: some View {
+        if let sparkline = hourlySparkline, !sparkline.points.isEmpty {
+            VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                HStack {
+                    Text("Condition Trend")
+                        .font(.subheadline.weight(.semibold))
+                    Spacer()
+                    if sparkline.includesYesterday {
+                        Text("24h")
+                    } else {
+                        Text("Today")
+                    }
                 }
-            } else if !recentScores.isEmpty {
-                HStack(spacing: DS.Spacing.xs) {
-                    TrendChartView(scores: recentScores)
-                        .frame(height: isRegular ? Layout.sparklineHeightRegular : Layout.sparklineHeightCompact)
-
+                .foregroundStyle(.primary)
+                HourlySparklineView(
+                    data: sparkline,
+                    tintColor: score.status.color,
+                    height: isRegular ? Layout.sparklineHeightRegular : Layout.sparklineHeightCompact
+                )
+                .accessibilityLabel("Condition Trend")
+            }
+        } else if !recentScores.isEmpty {
+            VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                HStack {
+                    Text("Condition Trend")
+                        .font(.subheadline.weight(.semibold))
+                    Spacer()
                     Text("7d")
-                        .font(.caption2)
-                        .foregroundStyle(theme.tertiaryTextStyle)
                 }
+                .foregroundStyle(.primary)
+                TrendChartView(scores: recentScores)
+                    .frame(height: isRegular ? Layout.sparklineHeightRegular : Layout.sparklineHeightCompact)
+                    .accessibilityLabel("Condition Trend")
             }
-
-            if let weeklyGoalProgress {
-                VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-                    HStack(spacing: DS.Spacing.xs) {
-                        Text("Weekly Goal")
-                            .font(.caption2)
-                            .foregroundStyle(theme.tertiaryTextStyle)
-                        Spacer()
-                        Text("\(weeklyGoalProgress.completedDays)/\(weeklyGoalProgress.goalDays)")
-                            .font(.caption2)
-                            .foregroundStyle(theme.secondaryTextColor)
-                            .monospacedDigit()
-                    }
-                    ProgressView(
-                        value: Double(weeklyGoalProgress.completedDays),
-                        total: Double(max(1, weeklyGoalProgress.goalDays))
-                    )
-                    .tint(DS.Color.activity)
-                }
-            }
-
-            if !trendBadges.isEmpty {
-                VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-                    ForEach(Array(trendBadges.enumerated()), id: \.offset) { _, detail in
-                        BaselineTrendBadge(detail: detail)
-                    }
-                }
-            }
+        } else {
+            Text("Not enough data to show trend.")
+                .font(.subheadline)
+                .foregroundStyle(theme.secondaryTextColor)
         }
     }
 }

@@ -6,16 +6,13 @@ import Charts
 struct HourlySparklineView: View {
     let data: HourlySparklineData
     let tintColor: Color
-
-    private enum Layout {
-        static let height: CGFloat = 32
-    }
+    var height: CGFloat = 32
 
     var body: some View {
         if data.points.isEmpty {
             Rectangle()
                 .fill(.clear)
-                .frame(height: Layout.height)
+                .frame(height: height)
         } else {
             Chart(data.points) { point in
                 LineMark(
@@ -24,6 +21,7 @@ struct HourlySparklineView: View {
                 )
                 .interpolationMethod(.catmullRom)
                 .foregroundStyle(tintColor)
+                .lineStyle(StrokeStyle(lineWidth: 2.5, lineCap: .round))
 
                 AreaMark(
                     x: .value("Hour", point.index),
@@ -36,7 +34,7 @@ struct HourlySparklineView: View {
             .chartYAxis(.hidden)
             .chartXScale(domain: 0...max(data.points.count - 1, 1))
             .chartYScale(domain: computedYDomain)
-            .frame(height: Layout.height)
+            .frame(height: height)
             .clipped()
         }
     }

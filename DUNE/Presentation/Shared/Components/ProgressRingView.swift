@@ -6,12 +6,14 @@ struct ProgressRingView: View {
     var lineWidth: CGFloat = 14
     var size: CGFloat = 160
     var useWarmGradient: Bool = false
+    var showsTravelingHighlight: Bool = false
     /// Arc tip color — the color at the progress endpoint.
     /// When nil, defaults to ringColor. Set to "next tier" color
     /// so the arc visually reaches toward the next level.
     var gradientTipColor: Color? = nil
 
     @State private var animatedProgress: Double = 0
+    @State private var highlightPosition: Double = 0
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.appTheme) private var theme
 
@@ -55,6 +57,18 @@ struct ProgressRingView: View {
                     style: StrokeStyle(lineWidth: lineWidth, lineCap: .round)
                 )
                 .rotationEffect(.degrees(-90))
+
+            if showsTravelingHighlight && !reduceMotion && animatedProgress > 0.05 {
+                Circle()
+                    .trim(from: 0, to: 0.035)
+                    .stroke(
+                        (gradientTipColor ?? ringColor).opacity(0.85),
+                        style: StrokeStyle(lineWidth: lineWidth * 0.55, lineCap: .round)
+                    )
+                    .blur(radius: 2)
+                    .rotationEffect(.degrees(-90 + highlightPosition * arcDegrees))
+                    .accessibilityHidden(true)
+            }
         }
         .frame(width: size, height: size)
         .onAppear {
@@ -65,6 +79,15 @@ struct ProgressRingView: View {
                 withAnimation(DS.Animation.slow) {
                     animatedProgress = progress
                 }
+                startTravelingHighlight()
+            }
+        }
+        .onChange(of: reduceMotion) { _, isReduced in
+            if isReduced {
+                highlightPosition = 0
+                animatedProgress = progress
+            } else {
+                startTravelingHighlight()
             }
         }
         .onChange(of: progress) { _, newValue in
@@ -75,6 +98,14 @@ struct ProgressRingView: View {
                     animatedProgress = newValue
                 }
             }
+        }
+    }
+
+    private func startTravelingHighlight() {
+        guard showsTravelingHighlight else { return }
+        highlightPosition = 0
+        withAnimation(.linear(duration: 5).repeatForever(autoreverses: false)) {
+            highlightPosition = 1
         }
     }
 
