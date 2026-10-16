@@ -159,7 +159,7 @@ struct HeroScoreCard: View {
                     .contentTransition(.numericText())
 
                 Text(scoreLabel)
-                    .font(.system(size: 9, weight: .semibold, design: .rounded))
+                    .font(.caption2.weight(.semibold))
                     .foregroundStyle(theme.sandColor)
                     .tracking(1)
             }

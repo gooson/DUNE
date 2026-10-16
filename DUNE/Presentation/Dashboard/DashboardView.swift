@@ -314,10 +314,22 @@ struct DashboardView: View {
                 .reportTabHeroFrame()
                 .buttonStyle(.plain)
                 .accessibilityIdentifier("dashboard-hero-condition")
-                Button(action: onOpenActivity) {
-                    Label("View Activity", systemImage: "arrow.right")
-                        .font(.subheadline.weight(.semibold))
-                        .frame(maxWidth: .infinity, minHeight: 44)
+                Button {
+                    if score.status == .tired || score.status == .warning {
+                        onOpenWellness()
+                    } else {
+                        onOpenActivity()
+                    }
+                } label: {
+                    Group {
+                        if score.status == .tired || score.status == .warning {
+                            Label("View Wellness", systemImage: "arrow.right")
+                        } else {
+                            Label("View Activity", systemImage: "arrow.right")
+                        }
+                    }
+                    .font(.subheadline.weight(.semibold))
+                    .frame(maxWidth: .infinity, minHeight: 44)
                 }
                 .buttonStyle(.borderedProminent)
                 .buttonBorderShape(.capsule)
