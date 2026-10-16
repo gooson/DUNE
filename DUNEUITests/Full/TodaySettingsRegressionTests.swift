@@ -105,6 +105,52 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         )
     }
 
+    func testRepeatedFullSwipesAtTopSettleConditionHero() throws {
+        dismissMorningBriefingIfNeeded()
+
+        let hero = app.descendants(matching: .any)[AXID.dashboardHeroCondition].firstMatch
+        let scrollView = app.scrollViews["dashboard-root-scroll"].firstMatch
+        XCTAssertTrue(hero.waitForExistence(timeout: 15))
+        XCTAssertTrue(scrollView.waitForExistence(timeout: 8))
+        XCTAssertTrue(waitForHittable(hero, timeout: 5))
+        let initialHeroY = hero.frame.minY
+
+        for _ in 0..<6 where hero.isHittable {
+            scrollView.swipeUp(velocity: .slow)
+        }
+        XCTAssertFalse(hero.isHittable, "The hero should leave the viewport before returning to the top")
+
+        for _ in 0..<12 where !hero.isHittable || hero.frame.minY < initialHeroY - 12 {
+            scrollView.swipeDown(velocity: .slow)
+        }
+
+        for _ in 0..<3 {
+            scrollView.swipeDown(velocity: .slow)
+            let settledHero = XCTNSPredicateExpectation(
+                predicate: NSPredicate { _, _ in
+                    hero.exists && hero.isHittable && abs(hero.frame.minY - initialHeroY) <= 12
+                },
+                object: nil
+            )
+            XCTAssertEqual(XCTWaiter.wait(for: [settledHero], timeout: 5), .completed,
+                           "Repeated full swipes should settle the hero at its original top position")
+        }
+
+        let refreshTrigger = app.buttons[AXID.waveRefreshTestTrigger].firstMatch
+        let refreshIndicator = app.descendants(matching: .any)[AXID.waveRefreshIndicator].firstMatch
+        XCTAssertTrue(refreshTrigger.waitForExistence(timeout: 5))
+        refreshTrigger.tap()
+        XCTAssertTrue(refreshIndicator.waitForExistence(timeout: 5),
+                      "The wave refresh test trigger should remain available at the top")
+        let refreshFinished = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "exists == false"),
+            object: refreshIndicator
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [refreshFinished], timeout: 15), .completed)
+        XCTAssertLessThanOrEqual(abs(hero.frame.minY - initialHeroY), 12,
+                                 "The hero should remain at the top after refresh completes")
+    }
+
     func testConditionHeroOpensConditionScoreDetail() throws {
         dismissMorningBriefingIfNeeded()
 

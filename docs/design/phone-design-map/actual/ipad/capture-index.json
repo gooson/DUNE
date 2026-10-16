@@ -1,10 +1,11 @@
 {
   "device": "ipad",
-  "source_revision": "1f49c921512a8fbf33eb26221c527d03c54b136f",
+  "source_revision": "2c43546f213dd2c445ab26f12fa27420eb823ea0",
+  "source_worktree_dirty": true,
   "xcresults": [
-    ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.13_10-21-22-+0900.xcresult"
+    "/Users/shanks/.codex/worktrees/51b3/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.16_14-51-01-+0900.xcresult"
   ],
-  "processed_capture_candidates": 165,
+  "processed_capture_candidates": 106,
   "captured": {
     "S05": {
       "row_id": "S05",
@@ -25,16 +26,6 @@
       "image": "BF30F37A-21C4-447C-9744-956DBA7A514E.png",
       "screen": "screen-0-2064x2752-before teardown -[NotificationRoutingRegressionTests testBedtimeReminderPushesFromNotificationHub]_0_0D8C412C-0DBA-4332-BBA1-6945067B13D1.png",
       "file": "T15.png"
-    },
-    "T03": {
-      "row_id": "T03",
-      "evidence": "title:Today",
-      "test": "NotificationRoutingRegressionTests/testDigestAndChecklistRowsOpenTheirFeatures()",
-      "action": "root after setup -[NotificationRoutingRegressionTests testDigestAndChecklistRowsOpenTheirFeatures]",
-      "timestamp": 1791820459.894,
-      "image": "64886CBA-F1FE-4879-A918-E812CC66EFB9.png",
-      "screen": "screen-0-2064x2752-root after setup -[NotificationRoutingRegressionTests testDigestAndChecklistRowsOpenTheirFeatures]_0_4C060174-8DD8-4353-9222-884C441C559F.png",
-      "file": "T03.png"
     },
     "T09": {
       "row_id": "T09",
@@ -1073,25 +1064,17 @@
       "file": "T01.png",
       "video": "launch.mov",
       "frame_time": "1.2"
+    },
+    "T03": {
+      "row_id": "T03",
+      "evidence": "title:Today",
+      "test": "TodaySettingsRegressionTests/testRepeatedFullSwipesAtTopSettleConditionHero()",
+      "action": "root after setup -[TodaySettingsRegressionTests testRepeatedFullSwipesAtTopSettleConditionHero]",
+      "timestamp": 1792129901.09,
+      "image": "AA3762B2-01DC-4602-A282-2B20E52C0590.png",
+      "screen": "screen-0-2064x2752-root after setup -[TodaySettingsRegressionTests testRepeatedFullSwipesAtTopSettleConditionHero]_0_B93267F2-4D51-4703-B367-5E0816C0D13A.png",
+      "file": "T03.png"
     }
   },
-  "unmatched": [
-    {
-      "row_id": null,
-      "evidence": "ActivityExerciseRegressionTests-testManualWorkoutSessionSavesAndDismissesCompletionSheet--failure",
-      "test": "ActivityExerciseRegressionTests/testManualWorkoutSessionSavesAndDismissesCompletionSheet()",
-      "action": "ActivityExerciseRegressionTests-testManualWorkoutSessionSavesAndDismissesCompletionSheet--failure",
-      "timestamp": 1791854732.5,
-      "screen": "ActivityExerciseRegressionTests-testManualWorkoutSessionSavesAndDismissesCompletionSheet--failure_0_3C8E2C0F-780C-4E27-8420-F228708B1199.png"
-    },
-    {
-      "row_id": null,
-      "evidence": "ActivityExerciseRegressionTests-testTemplateWorkoutContainerCloseDismissesFullScreenFlow--failure",
-      "test": "ActivityExerciseRegressionTests/testTemplateWorkoutContainerCloseDismissesFullScreenFlow()",
-      "action": "ActivityExerciseRegressionTests-testTemplateWorkoutContainerCloseDismissesFullScreenFlow--failure",
-      "timestamp": 1791854788.411,
-      "screen": "ActivityExerciseRegressionTests-testTemplateWorkoutContainerCloseDismissesFullScreenFlow--failure_0_7FC2256C-D0C0-4082-B4E4-FD3FAF507005.png"
-    }
-  ],
-  "source_worktree_dirty": true
+  "unmatched": []
 }

@@ -120,6 +120,13 @@ struct DashboardView: View {
             }
             .accessibilityElement(children: .contain)
             .accessibilityIdentifier("dashboard-root-scroll")
+            .onScrollPhaseChange { _, newPhase, context in
+                guard newPhase == .idle else { return }
+                // Finish near-top swipes at the expanded navigation title's resting position.
+                let distanceFromTop = context.geometry.contentOffset.y + context.geometry.contentInsets.top
+                guard distanceFromTop > 0, distanceFromTop < 130 else { return }
+                proxy.scrollTo(ScrollAnchor.top, anchor: .top)
+            }
             .onChange(of: scrollToTopSignal) { _, _ in
                 withAnimation(DS.Animation.standard) {
                     proxy.scrollTo(ScrollAnchor.top, anchor: .top)
