@@ -829,6 +829,58 @@ final class WorkoutManager: NSObject {
         persistRecoveryState()
     }
 
+    /// Applies a SwiftUI reorder using entry identities, keeping every index-based companion value attached.
+    func reorderExercises(moving sourceIDs: [UUID], before destinationID: UUID?) {
+        guard var snapshot = templateSnapshot,
+              snapshot.entries.indices.contains(currentExerciseIndex) else { return }
+        let originalEntries = snapshot.entries
+        let originalIDs = originalEntries.map(\.id)
+        let completedIndices = Set(originalEntries.indices.filter {
+            $0 < completedSetsData.count && !completedSetsData[$0].isEmpty
+        })
+        guard let orderedIDs = Self.reorderedExerciseIDs(
+            originalIDs, completedIndices: completedIndices,
+            moving: sourceIDs, before: destinationID
+        ) else { return }
+
+        let oldIndexByID = Dictionary(uniqueKeysWithValues: originalIDs.enumerated().map { ($0.element, $0.offset) })
+        let currentID = originalIDs[currentExerciseIndex]
+        let completed = originalEntries.indices.map { $0 < completedSetsData.count ? completedSetsData[$0] : [] }
+        let extras = extraSetsPerExercise
+        let skipped = skippedExerciseIndices
+        snapshot.entries = orderedIDs.compactMap { id in oldIndexByID[id].map { originalEntries[$0] } }
+        completedSetsData = orderedIDs.compactMap { id in oldIndexByID[id].map { completed[$0] } }
+        extraSetsPerExercise = Dictionary(uniqueKeysWithValues: orderedIDs.enumerated().compactMap { newIndex, id in
+            guard let oldIndex = oldIndexByID[id], let count = extras[oldIndex] else { return nil }
+            return (newIndex, count)
+        })
+        skippedExerciseIndices = Set(orderedIDs.enumerated().compactMap { newIndex, id in
+            guard let oldIndex = oldIndexByID[id], skipped.contains(oldIndex) else { return nil }
+            return newIndex
+        })
+        currentExerciseIndex = orderedIDs.firstIndex(of: currentID) ?? currentExerciseIndex
+        templateSnapshot = snapshot
+        persistRecoveryState()
+    }
+
+    /// Rejects any drag that would move a completed exercise or shift its fixed position.
+    static func reorderedExerciseIDs(
+        _ ids: [UUID], completedIndices: Set<Int>, moving sourceIDs: [UUID], before destinationID: UUID?
+    ) -> [UUID]? {
+        let sourceSet = Set(sourceIDs)
+        guard !sourceSet.isEmpty, sourceSet.count == sourceIDs.count,
+              Set(ids).count == ids.count, sourceSet.isSubset(of: Set(ids)),
+              completedIndices.allSatisfy({ ids.indices.contains($0) && !sourceSet.contains(ids[$0]) }) else { return nil }
+        if let destinationID, (!ids.contains(destinationID) || sourceSet.contains(destinationID)) { return nil }
+
+        let movingIDs = ids.filter { sourceSet.contains($0) }
+        var remaining = ids.filter { !sourceSet.contains($0) }
+        let insertionIndex = destinationID.flatMap { remaining.firstIndex(of: $0) } ?? remaining.endIndex
+        remaining.insert(contentsOf: movingIDs, at: insertionIndex)
+        guard completedIndices.allSatisfy({ remaining[$0] == ids[$0] }), remaining != ids else { return nil }
+        return remaining
+    }
+
     func reset() {
         stopInactivityMonitoring()
         finalizationTimeoutTask?.cancel()
