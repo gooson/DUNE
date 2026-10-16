@@ -16,6 +16,18 @@ struct WidgetSurfaceAccessibilityTests {
         )
     }
 
+    @Test("Single metric widget has a separate identity and includes portrait family")
+    func singleMetricWidgetContract() {
+        #expect(WidgetSurfaceAccessibility.singleMetricWidgetKind == "DUNESingleMetricWidget")
+        #expect(WidgetSurfaceAccessibility.singleMetricWidgetKind != WidgetSurfaceAccessibility.widgetKind)
+        #expect(WidgetSurfaceAccessibility.singleMetricFamilyRoutes == [
+            "systemSmall", "systemMedium", "systemLarge", "systemExtraLargePortrait",
+        ])
+        #expect(WidgetSurfaceMetric.allCases.map(\.rawValue) == [
+            "condition", "readiness", "wellness",
+        ])
+    }
+
     @Test("Family root and lane identifiers stay stable and unique")
     func familyIdentifiers() {
         let rootIDs = WidgetSurfaceFamily.allCases.map(WidgetSurfaceAccessibility.rootID)

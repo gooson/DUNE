@@ -15,7 +15,14 @@ enum WidgetSurfaceFamily: String, CaseIterable {
     }
 }
 
-enum WidgetSurfaceMetric: String, CaseIterable {
+enum WidgetSingleMetricFamily: String, CaseIterable {
+    case small = "systemSmall"
+    case medium = "systemMedium"
+    case large = "systemLarge"
+    case portrait = "systemExtraLargePortrait"
+}
+
+enum WidgetSurfaceMetric: String, CaseIterable, Sendable {
     case condition
     case readiness
     case wellness
@@ -23,6 +30,8 @@ enum WidgetSurfaceMetric: String, CaseIterable {
 
 enum WidgetSurfaceAccessibility {
     static let widgetKind = "WellnessDashboardWidget"
+    static let singleMetricWidgetKind = "DUNESingleMetricWidget"
+    static let singleMetricFamilyRoutes = WidgetSingleMetricFamily.allCases.map(\.rawValue)
 
     static let supportedFamilyRoutes = WidgetSurfaceFamily.allCases.map(\.entryRoute)
 

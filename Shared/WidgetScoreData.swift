@@ -1,5 +1,11 @@
 import Foundation
 
+struct WidgetMetricSnapshot: Equatable, Sendable {
+    let score: Int?
+    let statusRaw: String?
+    let message: String?
+}
+
 /// Data shared between the main app and the widget extension via an App Group file.
 struct WidgetScoreData: Codable, Sendable {
     var conditionScore: Int?
@@ -15,6 +21,17 @@ struct WidgetScoreData: Codable, Sendable {
     var wellnessMessage: String?
 
     var updatedAt: Date
+
+    func metric(_ kind: WidgetSurfaceMetric) -> WidgetMetricSnapshot {
+        switch kind {
+        case .condition:
+            WidgetMetricSnapshot(score: conditionScore, statusRaw: conditionStatusRaw, message: conditionMessage)
+        case .readiness:
+            WidgetMetricSnapshot(score: readinessScore, statusRaw: readinessStatusRaw, message: readinessMessage)
+        case .wellness:
+            WidgetMetricSnapshot(score: wellnessScore, statusRaw: wellnessStatusRaw, message: wellnessMessage)
+        }
+    }
 
     enum CodingKeys: String, CodingKey {
         case conditionScore, conditionStatusRaw, conditionMessage
