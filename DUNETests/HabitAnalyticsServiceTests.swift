@@ -26,6 +26,17 @@ struct HabitAnalyticsServiceTests {
                                  date: start.addingTimeInterval(6 * 86_400),
                                  completionCount: 1)
         ]))
+
+        let oldOnly = counts + [
+            DailyCompletionCount(id: start.addingTimeInterval(6 * 86_400),
+                                 date: start.addingTimeInterval(6 * 86_400),
+                                 completionCount: 1)
+        ] + (7..<90).map { offset in
+            DailyCompletionCount(id: start.addingTimeInterval(Double(offset) * 86_400),
+                                 date: start.addingTimeInterval(Double(offset) * 86_400),
+                                 completionCount: 0)
+        }
+        #expect(!HabitAnalyticsService.hasMeaningfulTrend(oldOnly))
     }
 
     private func makeDate(year: Int = 2026, month: Int = 3, day: Int) -> Date {

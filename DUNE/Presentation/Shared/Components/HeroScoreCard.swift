@@ -97,7 +97,8 @@ struct HeroScoreCard: View {
                         data: sparkline,
                         tintColor: statusColor,
                         height: isRegular ? 84 : 72,
-                        showsReferenceLabels: true
+                        showsReferenceLabels: true,
+                        accessibilityTitle: trendTitle
                     )
                 }
             }

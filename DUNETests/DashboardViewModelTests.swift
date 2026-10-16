@@ -927,7 +927,7 @@ struct DashboardViewModelTests {
 
         await vm.loadData()
 
-        #expect(vm.weeklyGoalProgress.completedDays == 1)
+        #expect(vm.activeDaysThisWeek == 1)
     }
 
     @Test("RHR baseline excludes current comparison day")

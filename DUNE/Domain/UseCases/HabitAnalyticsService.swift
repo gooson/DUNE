@@ -150,7 +150,8 @@ enum HabitAnalyticsService {
     // MARK: - Daily Completion Counts (Heatmap)
 
     static func hasMeaningfulTrend(_ dailyCounts: [DailyCompletionCount]) -> Bool {
-        dailyCounts.lazy.filter { $0.completionCount > 0 }.prefix(7).count == 7
+        // Older completions alone cannot explain the recent weeks shown in Life.
+        dailyCounts.suffix(28).lazy.filter { $0.completionCount > 0 }.prefix(7).count == 7
     }
 
     static func dailyCompletionCounts(

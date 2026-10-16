@@ -8,6 +8,7 @@ struct HourlySparklineView: View {
     let tintColor: Color
     var height: CGFloat = 32
     var showsReferenceLabels = false
+    var accessibilityTitle: LocalizedStringKey = "Score Trend"
 
     var body: some View {
         if data.points.isEmpty {
@@ -65,7 +66,7 @@ struct HourlySparklineView: View {
             }
             }
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel("Score Trend")
+            .accessibilityLabel(accessibilityTitle)
             .accessibilityValue(accessibilitySummary)
         }
     }

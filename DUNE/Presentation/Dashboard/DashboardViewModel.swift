@@ -80,9 +80,6 @@ final class DashboardViewModel {
     private(set) var activeDaysThisWeek = 0
     private(set) var isMirroredReadOnlyMode = false
     private let weeklyGoalDays = 5
-    var weeklyGoalProgress: (completedDays: Int, goalDays: Int) {
-        (completedDays: min(activeDaysThisWeek, weeklyGoalDays), goalDays: weeklyGoalDays)
-    }
     var availablePinnedCategories: [HealthMetric.Category] {
         HealthMetric.Category.allCases.filter { TodayPinnedMetricsStore.allowedCategories.contains($0) }
     }
@@ -1655,7 +1652,6 @@ final class DashboardViewModel {
     // Computed properties reading currentTimeBand from body cause cascade invalidation
     // during NavigationStack transitions (Correction: .environment() @Observable rule).
     private(set) var shouldShowDailyDigest = false
-    private(set) var shouldShowQuickActions = true
     private(set) var shouldShowProgressRings = true
     private(set) var shouldShowTodaysBrief = true
     private(set) var shouldShowExerciseIntelligence = true
@@ -1770,7 +1766,6 @@ final class DashboardViewModel {
 
     private func updateTimeBandVisibility() {
         let band = currentTimeBand
-        shouldShowQuickActions = band != .night
         shouldShowProgressRings = band != .night
         shouldShowTodaysBrief = band == .morning || band == .daytime
         shouldShowExerciseIntelligence = band == .morning || band == .daytime

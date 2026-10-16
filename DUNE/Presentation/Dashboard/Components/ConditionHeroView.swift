@@ -192,10 +192,11 @@ struct ConditionHeroView: View {
                     data: sparkline,
                     tintColor: score.status.color,
                     height: isRegular ? Layout.sparklineHeightRegular : Layout.sparklineHeightCompact,
-                    showsReferenceLabels: true
+                    showsReferenceLabels: true,
+                    accessibilityTitle: "Condition Trend"
                 )
             }
-        } else if !recentScores.isEmpty {
+        } else if recentScores.count >= 2 && recentScores.first?.date != recentScores.last?.date {
             VStack(alignment: .leading, spacing: DS.Spacing.xs) {
                 HStack {
                     Text("Condition Trend")
