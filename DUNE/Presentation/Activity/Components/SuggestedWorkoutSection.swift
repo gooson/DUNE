@@ -240,8 +240,10 @@ struct SuggestedWorkoutSection: View {
                             .font(.caption2)
                             .foregroundStyle(.tertiary)
                     }
+                    .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
+                .accessibilityIdentifier("activity-recommendation-equipment-info")
             }
         }
     }
@@ -645,6 +647,7 @@ private struct RecommendationEquipmentSheet: View {
                     Text("At least one equipment is always kept to avoid an empty recommendation.")
                 }
             }
+            .accessibilityIdentifier("activity-recommendation-equipment-sheet")
             .englishNavigationTitle(title)
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {

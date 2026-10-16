@@ -2,6 +2,38 @@ import Foundation
 import Testing
 @testable import DUNE
 
+private struct PaceHistoryWorkoutService: WorkoutQuerying {
+    let workouts: [WorkoutSummary]
+
+    func fetchWorkouts(days: Int) async throws -> [WorkoutSummary] { workouts }
+    func fetchWorkouts(start: Date, end: Date) async throws -> [WorkoutSummary] { workouts }
+}
+
+private actor PausedPaceHistoryWorkoutService: WorkoutQuerying {
+    private var fetchContinuation: CheckedContinuation<[WorkoutSummary], Never>?
+    private var startedContinuation: CheckedContinuation<Void, Never>?
+
+    func fetchWorkouts(days: Int) async throws -> [WorkoutSummary] { [] }
+
+    func fetchWorkouts(start: Date, end: Date) async throws -> [WorkoutSummary] {
+        await withCheckedContinuation { continuation in
+            fetchContinuation = continuation
+            startedContinuation?.resume()
+            startedContinuation = nil
+        }
+    }
+
+    func waitUntilStarted() async {
+        if fetchContinuation != nil { return }
+        await withCheckedContinuation { startedContinuation = $0 }
+    }
+
+    func finish(with workouts: [WorkoutSummary]) {
+        fetchContinuation?.resume(returning: workouts)
+        fetchContinuation = nil
+    }
+}
+
 @Suite("PersonalRecordsDetailViewModel")
 @MainActor
 struct PersonalRecordsDetailViewModelTests {
@@ -27,6 +59,24 @@ struct PersonalRecordsDetailViewModelTests {
             date: date(daysAgo),
             isRecent: daysAgo <= 7,
             source: .manual
+        )
+    }
+
+    private func makeWorkout(
+        id: String,
+        pace: Double?,
+        daysAgo: Int,
+        activityType: WorkoutActivityType = .running
+    ) -> WorkoutSummary {
+        WorkoutSummary(
+            id: id,
+            type: activityType.rawValue,
+            activityType: activityType,
+            duration: 1_800,
+            calories: 250,
+            distance: 5_000,
+            date: date(daysAgo),
+            averagePace: pace
         )
     }
 
@@ -121,6 +171,97 @@ struct PersonalRecordsDetailViewModelTests {
         ])
         let dates = vm.chartData.map(\.date)
         #expect(dates == dates.sorted())
+    }
+
+    @Test("Pace chart shows workouts in the selected month when the all-time best is older")
+    func paceHistoryWithOldBest() {
+        let vm = PersonalRecordsDetailViewModel()
+        vm.selectedKind = .fastestPace
+        vm.selectedPeriod = .month
+        vm.load(records: [makeRecord(id: "best", kind: .fastestPace, value: 384, daysAgo: 200)])
+        vm.addPaceWorkouts([
+            makeWorkout(id: "newer", pace: 410, daysAgo: 2),
+            makeWorkout(id: "older", pace: 425, daysAgo: 10),
+        ])
+
+        #expect(vm.currentBest?.value == 384)
+        #expect(vm.filteredRecords.isEmpty)
+        #expect(vm.chartData.map(\.value) == [425, 410])
+    }
+
+    @Test("Pace history excludes invalid and unrelated workouts and deduplicates refreshes")
+    func paceHistoryValidation() {
+        let vm = PersonalRecordsDetailViewModel()
+        vm.selectedKind = .fastestPace
+        vm.selectedPeriod = .month
+        vm.load(records: [makeRecord(id: "best", kind: .fastestPace, value: 384, daysAgo: 100)])
+        let valid = makeWorkout(id: "valid", pace: 410, daysAgo: 1)
+        vm.addPaceWorkouts([
+            valid,
+            makeWorkout(id: "zero", pace: 0, daysAgo: 1),
+            makeWorkout(id: "infinite", pace: .infinity, daysAgo: 1),
+            makeWorkout(id: "other", pace: 410, daysAgo: 1, activityType: .traditionalStrengthTraining),
+        ])
+        vm.addPaceWorkouts([valid])
+
+        #expect(vm.chartData.map(\.id) == ["pace-workout-valid"])
+    }
+
+    @Test("Loading a year of workout history populates a past pace point")
+    func loadsPaceHistory() async {
+        let oldWorkout = makeWorkout(id: "past", pace: 420, daysAgo: 100)
+        let vm = PersonalRecordsDetailViewModel(
+            workoutService: PaceHistoryWorkoutService(workouts: [oldWorkout])
+        )
+        vm.selectedKind = .fastestPace
+        vm.selectedPeriod = .year
+        vm.load(records: [makeRecord(id: "best", kind: .fastestPace, value: 384, daysAgo: 200)])
+
+        await vm.loadPaceHistoryIfNeeded()
+
+        #expect(vm.hasLoadedPaceHistory)
+        #expect(vm.chartData.map(\.id) == ["best", "pace-workout-past"])
+    }
+
+    @Test("Replacing the recent workout snapshot removes stale pace points")
+    func paceHistoryReplacesRecentSnapshot() async {
+        let old = makeWorkout(id: "old", pace: 420, daysAgo: 2)
+        let replacement = makeWorkout(id: "replacement", pace: 410, daysAgo: 1)
+        let vm = PersonalRecordsDetailViewModel(
+            workoutService: PaceHistoryWorkoutService(workouts: [old])
+        )
+        vm.selectedKind = .fastestPace
+        vm.selectedPeriod = .month
+        vm.load(records: [makeRecord(id: "best", kind: .fastestPace, value: 384, daysAgo: 100)])
+        vm.addPaceWorkouts([old])
+        await vm.loadPaceHistoryIfNeeded()
+        #expect(vm.chartData.map(\.id) == ["pace-workout-old"])
+
+        vm.addPaceWorkouts([replacement])
+        #expect(!vm.hasLoadedPaceHistory)
+        #expect(vm.chartData.map(\.id) == ["pace-workout-replacement"])
+    }
+
+    @Test("Cancelling a chip selection does not cancel the shared pace fetch")
+    func paceHistorySurvivesSelectionCancellation() async {
+        let workout = makeWorkout(id: "new", pace: 410, daysAgo: 1)
+        let service = PausedPaceHistoryWorkoutService()
+        let vm = PersonalRecordsDetailViewModel(workoutService: service)
+        vm.selectedKind = .fastestPace
+        vm.selectedPeriod = .month
+        vm.load(records: [makeRecord(id: "best", kind: .fastestPace, value: 384, daysAgo: 100)])
+
+        let firstSelection = Task { await vm.loadPaceHistoryIfNeeded() }
+        await service.waitUntilStarted()
+        firstSelection.cancel()
+        let secondSelection = Task { await vm.loadPaceHistoryIfNeeded() }
+        await Task.yield()
+        await service.finish(with: [workout])
+        await firstSelection.value
+        await secondSelection.value
+
+        #expect(vm.hasLoadedPaceHistory)
+        #expect(vm.chartData.map(\.id) == ["pace-workout-new"])
     }
 
     @Test("allTimeRecords ignores period filter")

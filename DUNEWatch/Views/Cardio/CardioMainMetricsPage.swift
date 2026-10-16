@@ -32,6 +32,7 @@ struct CardioMainMetricsPage: View {
             }
             .scrollBounceBehavior(.basedOnSize)
         }
+        .accessibilityIdentifier("watch-cardio-main-metrics")
     }
 
     // MARK: - Profile

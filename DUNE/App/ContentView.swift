@@ -148,6 +148,7 @@ struct ContentView: View {
     private let scoreRefreshService: ScoreRefreshService?
     private let launchExperienceReady: Bool
     private let canLoadHealthKitData: Bool
+    private let hasFailedHealthKitAuthorization: Bool
     @Environment(\.scenePhase) private var scenePhase
     @AppStorage(AppTheme.storageKey) private var selectedTheme: AppTheme = .desertWarm
     @State private var selectedSection: AppSection
@@ -177,13 +178,15 @@ struct ContentView: View {
         refreshCoordinator: AppRefreshCoordinating? = nil,
         scoreRefreshService: ScoreRefreshService? = nil,
         launchExperienceReady: Bool = true,
-        canLoadHealthKitData: Bool = true
+        canLoadHealthKitData: Bool = true,
+        hasFailedHealthKitAuthorization: Bool = false
     ) {
         self.sharedHealthDataService = sharedHealthDataService
         self.refreshCoordinator = refreshCoordinator
         self.scoreRefreshService = scoreRefreshService
         self.launchExperienceReady = launchExperienceReady
         self.canLoadHealthKitData = canLoadHealthKitData
+        self.hasFailedHealthKitAuthorization = hasFailedHealthKitAuthorization
         _selectedSection = State(initialValue: Self.initialSectionForUITests())
     }
 
@@ -404,12 +407,14 @@ struct ContentView: View {
             DailyDigestNotificationView(
                 sharedHealthDataService: sharedHealthDataService,
                 scoreRefreshService: scoreRefreshService,
-                canLoadHealthKitData: canLoadHealthKitData
+                canLoadHealthKitData: canLoadHealthKitData,
+                hasFailedHealthKitAuthorization: hasFailedHealthKitAuthorization
             )
         case .notificationHub(let itemID, let requestID):
             NotificationHubView(
                 sharedHealthDataService: sharedHealthDataService,
                 canLoadHealthKitData: canLoadHealthKitData,
+                hasFailedHealthKitAuthorization: hasFailedHealthKitAuthorization,
                 requestedItemID: itemID,
                 navigationRequestID: requestID
             )

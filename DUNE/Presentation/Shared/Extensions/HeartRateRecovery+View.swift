@@ -32,6 +32,7 @@ struct HeartRateRecoveryRow: View {
                         .foregroundStyle(DS.Color.textSecondary)
                 }
                 .buttonStyle(.plain)
+                .accessibilityIdentifier("heart-rate-recovery-info-button")
 
                 Spacer()
 
@@ -76,6 +77,7 @@ struct HeartRateRecoveryInfoSheet: View {
             }
             .padding(DS.Spacing.xl)
         }
+        .accessibilityIdentifier("heart-rate-recovery-info-sheet")
         .presentationDetents([.medium, .large])
         .presentationDragIndicator(.visible)
     }

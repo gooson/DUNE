@@ -161,6 +161,7 @@ enum NotificationHubMetricResolver {
 struct NotificationHubView: View {
     let sharedHealthDataService: SharedHealthDataService?
     let canLoadHealthKitData: Bool
+    let hasFailedHealthKitAuthorization: Bool
     let requestedItemID: String?
     let navigationRequestID: Int
 
@@ -177,11 +178,13 @@ struct NotificationHubView: View {
     init(
         sharedHealthDataService: SharedHealthDataService? = nil,
         canLoadHealthKitData: Bool = true,
+        hasFailedHealthKitAuthorization: Bool = false,
         requestedItemID: String? = nil,
         navigationRequestID: Int = 0
     ) {
         self.sharedHealthDataService = sharedHealthDataService
         self.canLoadHealthKitData = canLoadHealthKitData
+        self.hasFailedHealthKitAuthorization = hasFailedHealthKitAuthorization
         self.requestedItemID = requestedItemID
         self.navigationRequestID = navigationRequestID
     }
@@ -260,7 +263,8 @@ struct NotificationHubView: View {
             case .dailyDigest:
                 DailyDigestNotificationView(
                     sharedHealthDataService: sharedHealthDataService,
-                    canLoadHealthKitData: canLoadHealthKitData
+                    canLoadHealthKitData: canLoadHealthKitData,
+                    hasFailedHealthKitAuthorization: hasFailedHealthKitAuthorization
                 )
             case .message(_, let title, let body):
                 NotificationMessageDetailView(title: title, message: body)
@@ -389,6 +393,11 @@ struct NotificationHubView: View {
     }
 
     private func handleTap(on item: NotificationInboxItem) {
+        if ProcessInfo.processInfo.arguments.contains("--ui-design-map-notification-details"),
+           item.title == "Unavailable Route Fixture" {
+            destination = .unavailable(itemID: item.id)
+            return
+        }
         let route = inboxManager.resolvedRoute(for: item)?.destination
         if route == .workoutDetail || route == .lifeChecklist {
             if inboxManager.open(itemID: item.id) == nil {
@@ -598,6 +607,7 @@ private struct NotificationDestinationUnavailableView: View {
             }
         )
         .padding(.horizontal, DS.Spacing.lg)
+        .accessibilityIdentifier("notification-destination-unavailable-screen")
         .background { DetailWaveBackground() }
         .overlay(alignment: .bottom) {
             Text("ID: \(itemID)")

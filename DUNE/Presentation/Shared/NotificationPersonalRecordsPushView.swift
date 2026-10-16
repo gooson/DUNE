@@ -19,7 +19,8 @@ struct NotificationPersonalRecordsPushView: View {
                     records: viewModel.personalRecords,
                     notice: viewModel.personalRecordNotice,
                     rewardSummary: viewModel.workoutRewardSummary,
-                    rewardHistory: viewModel.workoutRewardHistory
+                    rewardHistory: viewModel.workoutRewardHistory,
+                    recentWorkouts: viewModel.recentWorkouts
                 )
             }
         }

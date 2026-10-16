@@ -390,6 +390,7 @@ struct DashboardView: View {
                 CumulativeStressCard(stressScore: stressScore)
             }
             .buttonStyle(.plain)
+            .accessibilityIdentifier("dashboard-stress-score")
             .transition(Self.sectionTransition)
             .staggeredAppear(index: 6)
         }

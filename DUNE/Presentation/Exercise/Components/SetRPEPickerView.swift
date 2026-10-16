@@ -71,8 +71,10 @@ struct SetRPEPickerView: View {
                         .foregroundStyle(DS.Color.textTertiary)
                 }
                 .padding(.vertical, DS.Spacing.xs)
+                .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
+            .accessibilityIdentifier("set-rpe-activate")
 
             Button {
                 showHelp = true
@@ -84,6 +86,7 @@ struct SetRPEPickerView: View {
             }
             .buttonStyle(.plain)
             .accessibilityLabel(Text("RPE Help"))
+            .accessibilityIdentifier("set-rpe-help")
         }
     }
 
@@ -107,6 +110,7 @@ struct SetRPEPickerView: View {
             }
             .buttonStyle(.plain)
             .accessibilityLabel(Text("RPE Help"))
+            .accessibilityIdentifier("set-rpe-help")
 
             Button {
                 withAnimation(DS.Animation.snappy) {
@@ -167,6 +171,7 @@ struct SetRPEPickerView: View {
                 .foregroundStyle(DS.Color.textSecondary)
         }
         .tint(currentColor)
+        .accessibilityIdentifier("set-rpe-slider")
         .sensoryFeedback(.selection, trigger: sliderValue)
         .onChange(of: sliderValue) { _, newValue in
             rpe = newValue

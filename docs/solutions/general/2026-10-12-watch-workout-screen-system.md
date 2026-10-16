@@ -13,6 +13,7 @@ related_files:
   - docs/plans/2026-10-12-watch-workout-redesign.md
 related_solutions:
   - docs/solutions/general/2026-10-06-watch-workout-density-and-autosave.md
+  - docs/solutions/general/2026-10-14-watch-rest-timer-rpe-layout.md
 ---
 
 # Solution: Watch 운동 화면의 공통 위계와 작은 화면 대응
@@ -37,7 +38,7 @@ related_solutions:
 
 | File | Change | Reason |
 |---|---|---|
-| `RestTimerView.swift` | 시간·심박·RPE를 링 안에 순서대로 표시하고 작은 링에서는 타이머 글자와 제안 문구를 줄임. `+30초`와 건너뛰기는 44pt 이상 | 남은 시간과 즉시 행동을 함께 읽고 누를 수 있도록 함 |
+| `RestTimerView.swift` | 시간·심박을 크기 적응형 링에 표시하고 RPE·`+30초`·건너뛰기를 44pt 조작 행에 배치 | 링과 문구의 겹침을 막고 즉시 행동을 함께 읽고 누를 수 있도록 함 |
 | `ControlsView.swift` | 근력 조작에 제목·운동명을 표시. 보조 행동이 있으면 두 행, 없으면 주요 버튼을 세로 배치 | 실제 행동 수에 맞춰 빈 공간을 줄임 |
 | `CardioMainMetricsPage.swift`, `CardioHRZonePage.swift` | 세로 스크롤을 허용하고 콘텐츠보다 화면이 클 때 바운스를 억제 | 작은 워치와 큰 글씨에서도 아래 지표에 접근 |
 | `WorkoutPreviewView.swift` | 시작 오류를 화면 안에 표시하면서 실내·실외 선택을 유지 | 실패 후 다른 모드로 회복 가능 |

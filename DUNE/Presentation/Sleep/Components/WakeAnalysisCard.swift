@@ -12,6 +12,7 @@ struct WakeAnalysisCard: View {
                     Label(String(localized: "Wake Analysis"), systemImage: "moon.stars")
                         .font(.callout)
                         .foregroundStyle(DS.Color.textSecondary)
+                        .accessibilityIdentifier("sleep-wake-analysis-card")
                     Button {
                         showingInfoSheet = true
                     } label: {
@@ -20,6 +21,7 @@ struct WakeAnalysisCard: View {
                             .foregroundStyle(DS.Color.textSecondary)
                     }
                     .buttonStyle(.plain)
+                    .accessibilityIdentifier("sleep-waso-info-button")
                     Spacer()
                     if let analysis {
                         Text("\(analysis.score)")
@@ -56,7 +58,6 @@ struct WakeAnalysisCard: View {
                 }
             }
         }
-        .accessibilityIdentifier("sleep-wake-analysis-card")
         .sheet(isPresented: $showingInfoSheet) {
             WASOInfoSheet()
         }

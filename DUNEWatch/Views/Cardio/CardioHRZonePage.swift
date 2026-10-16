@@ -31,6 +31,7 @@ struct CardioHRZonePage: View {
             }
             .scrollBounceBehavior(.basedOnSize)
         }
+        .accessibilityIdentifier("watch-cardio-hr-zone")
     }
 
     // MARK: - Heart Rate Display

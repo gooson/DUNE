@@ -141,6 +141,11 @@ final class WatchConnectivityManager: NSObject {
 
     /// Allows watch UI to trigger exercise-library re-sync explicitly.
     func requestExerciseLibrarySync(force: Bool = false) {
+        if ProcessInfo.processInfo.arguments.contains("--uitesting-watch"),
+           ProcessInfo.processInfo.arguments.contains("--ui-watch-sync-failed") {
+            syncStatus = .failed("Sync failed")
+            return
+        }
         requestExerciseLibrarySyncIfNeeded(force: force)
     }
 
@@ -214,14 +219,49 @@ final class WatchConnectivityManager: NSObject {
                         id: "running", name: "Running", inputType: "durationDistance",
                         defaultSets: 1, defaultReps: nil, defaultWeightKg: nil,
                         isPreferred: true, equipment: "treadmill", cardioSecondaryUnit: "km"
+                    ),
+                    WatchExerciseInfo(
+                        id: "cycling", name: "Cycling", inputType: "durationDistance",
+                        defaultSets: 1, defaultReps: nil, defaultWeightKg: nil,
+                        isPreferred: true, equipment: "stationary-bike", cardioSecondaryUnit: "km"
+                    ),
+                    WatchExerciseInfo(
+                        id: "swimming", name: "Swimming", inputType: "durationDistance",
+                        defaultSets: 1, defaultReps: nil, defaultWeightKg: nil,
+                        equipment: "pool", cardioSecondaryUnit: "meters"
+                    ),
+                    WatchExerciseInfo(
+                        id: "mixedCardio", name: "Mixed Cardio", inputType: "durationDistance",
+                        defaultSets: 1, defaultReps: nil, defaultWeightKg: nil,
+                        equipment: "bodyweight", cardioSecondaryUnit: "none"
+                    ),
+                    WatchExerciseInfo(
+                        id: "circuit", name: "Circuit", inputType: "roundsBased",
+                        defaultSets: 3, defaultReps: 5, defaultWeightKg: nil,
+                        isPreferred: true, equipment: "bodyweight", cardioSecondaryUnit: nil
                     )
                 ])
             }
             setExerciseLibrary(exercises)
+            if arguments.contains("--ui-watch-design-routine") {
+                workoutTemplates = [WatchWorkoutTemplateInfo(
+                    id: UUID(uuidString: "00000000-0000-4000-8000-000000000001")!,
+                    name: "Strength Duo",
+                    entries: [
+                        TemplateEntry(exerciseDefinitionID: "ui-test-squat", exerciseName: "UI Test Squat",
+                                      defaultSets: 3, defaultReps: 8, defaultWeightKg: 40,
+                                      inputTypeRaw: "setsRepsWeight"),
+                        TemplateEntry(exerciseDefinitionID: "crunch", exerciseName: "Crunch",
+                                      defaultSets: 3, defaultReps: 10, inputTypeRaw: "setsReps")
+                    ],
+                    updatedAt: Date()
+                )]
+            }
             activeWorkout = nil
         }
 
-        syncStatus = .synced(Date())
+        syncStatus = arguments.contains("--ui-watch-sync-failed")
+            ? .failed("Sync failed") : .synced(Date())
         return true
     }
 

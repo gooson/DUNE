@@ -8,6 +8,8 @@ struct SectionGroup<Content: View>: View {
     let iconColor: Color
     var subtitle: LocalizedStringKey? = nil
     var infoAction: (() -> Void)? = nil
+    var infoIdentifier: String? = nil
+    var sectionIdentifier: String? = nil
     var fillHeight: Bool = false
     @ViewBuilder let content: () -> Content
 
@@ -166,10 +168,7 @@ struct SectionGroup<Content: View>: View {
                         .font(.subheadline)
                         .foregroundStyle(iconColor)
 
-                    Text(title)
-                        .font(.subheadline)
-                        .fontWeight(.semibold)
-                        .foregroundStyle(DS.Color.textSecondary)
+                    sectionTitle
 
                     if let infoAction {
                         Spacer()
@@ -179,6 +178,7 @@ struct SectionGroup<Content: View>: View {
                                 .font(.subheadline)
                                 .foregroundStyle(DS.Color.textSecondary)
                         }
+                        .accessibilityIdentifier(infoIdentifier ?? "section-info")
                     }
                 }
 
@@ -215,6 +215,19 @@ struct SectionGroup<Content: View>: View {
                             .strokeBorder(sectionBorderGradient, lineWidth: borderWidth)
                     )
             }
+        }
+    }
+
+    @ViewBuilder
+    private var sectionTitle: some View {
+        let label = Text(title)
+            .font(.subheadline)
+            .fontWeight(.semibold)
+            .foregroundStyle(DS.Color.textSecondary)
+        if let sectionIdentifier {
+            label.accessibilityIdentifier(sectionIdentifier)
+        } else {
+            label
         }
     }
 }

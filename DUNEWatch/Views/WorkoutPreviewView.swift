@@ -416,6 +416,7 @@ struct WorkoutPreviewView: View {
                                         .buttonStyle(.bordered)
                                         .disabled(index == 0)
                                         .accessibilityLabel("Move Up")
+                                        .accessibilityIdentifier("watch-workout-preview-move-up-\(index)")
 
                                         Button {
                                             guard index + 1 < reorderedEntries.count else { return }
@@ -428,6 +429,7 @@ struct WorkoutPreviewView: View {
                                         .buttonStyle(.bordered)
                                         .disabled(index == reorderedEntries.count - 1)
                                         .accessibilityLabel("Move Down")
+                                        .accessibilityIdentifier("watch-workout-preview-move-down-\(index)")
                                     }
                                 }
                             }

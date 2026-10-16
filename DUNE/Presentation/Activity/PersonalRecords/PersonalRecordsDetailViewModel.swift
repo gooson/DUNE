@@ -8,6 +8,19 @@ final class PersonalRecordsDetailViewModel {
     var selectedPeriod: TimePeriod = .sixMonths { didSet { invalidateDerived() } }
     var selectedKind: ActivityPersonalRecord.Kind? { didSet { invalidateDerived() } }
 
+    private let workoutService: any WorkoutQuerying
+    private var recentPaceWorkouts: [ActivityPersonalRecord] = []
+    private var fetchedPaceWorkouts: [ActivityPersonalRecord] = []
+    private var paceLoadTask: Task<Void, Never>?
+    private var paceHistoryGeneration = 0
+    private(set) var hasLoadedPaceHistory = false
+    private(set) var isLoadingPaceHistory = false
+    private(set) var paceHistoryError: String?
+
+    init(workoutService: any WorkoutQuerying = WorkoutQueryService(manager: .shared)) {
+        self.workoutService = workoutService
+    }
+
     /// PR periods relevant for this view (day/week excluded — PRs are sparse).
     static let availablePeriods: [TimePeriod] = [.month, .sixMonths, .year]
 
@@ -124,6 +137,75 @@ final class PersonalRecordsDetailViewModel {
         invalidateDerived()
     }
 
+    /// Recent workouts can render immediately while the one-year HealthKit query runs.
+    func addPaceWorkouts(_ workouts: [WorkoutSummary]) {
+        let updated = Self.paceRecords(from: workouts)
+        guard Set(updated) != Set(recentPaceWorkouts) else { return }
+        recentPaceWorkouts = updated
+        fetchedPaceWorkouts = []
+        paceHistoryGeneration += 1
+        paceLoadTask?.cancel()
+        paceLoadTask = nil
+        hasLoadedPaceHistory = false
+        isLoadingPaceHistory = false
+        paceHistoryError = nil
+        invalidateDerived()
+    }
+
+    private static func paceRecords(from workouts: [WorkoutSummary]) -> [ActivityPersonalRecord] {
+        var byID: [String: ActivityPersonalRecord] = [:]
+        for workout in workouts {
+            guard workout.activityType.isDistanceBased,
+                  let pace = workout.averagePace,
+                  pace.isFinite, pace >= 60, pace <= 3600 else { continue }
+            let record = ActivityPersonalRecord(
+                id: "pace-workout-\(workout.id)",
+                kind: .fastestPace,
+                title: workout.activityType.typeName,
+                value: pace,
+                date: workout.date,
+                isRecent: false,
+                source: .healthKit,
+                workoutID: workout.id
+            )
+            byID[record.id] = record
+        }
+        return Array(byID.values)
+    }
+
+    func loadPaceHistoryIfNeeded() async {
+        if let paceLoadTask {
+            await paceLoadTask.value
+            return
+        }
+        guard !hasLoadedPaceHistory else { return }
+        let generation = paceHistoryGeneration
+        let range = TimePeriod.year.dateRange()
+        isLoadingPaceHistory = true
+        paceHistoryError = nil
+        let task = Task { @MainActor [weak self, workoutService] in
+            guard let self else { return }
+            defer {
+                if generation == self.paceHistoryGeneration {
+                    self.isLoadingPaceHistory = false
+                    self.paceLoadTask = nil
+                }
+            }
+            do {
+                let workouts = try await workoutService.fetchWorkouts(start: range.start, end: range.end)
+                guard !Task.isCancelled, generation == self.paceHistoryGeneration else { return }
+                self.fetchedPaceWorkouts = Self.paceRecords(from: workouts)
+                self.hasLoadedPaceHistory = true
+                self.invalidateDerived()
+            } catch {
+                guard !Task.isCancelled, generation == self.paceHistoryGeneration else { return }
+                self.paceHistoryError = String(localized: "Could not load workout data")
+            }
+        }
+        paceLoadTask = task
+        await task.value
+    }
+
     var resolvedKind: ActivityPersonalRecord.Kind? {
         if let selectedKind, availableKinds.contains(selectedKind) {
             return selectedKind
@@ -149,7 +231,25 @@ final class PersonalRecordsDetailViewModel {
             .filter { $0.date >= range.start && $0.date <= range.end }
             .sorted { $0.date > $1.date }
         filteredRecords = periodFiltered
-        chartData = periodFiltered.sorted { $0.date < $1.date }
+        let chartSource: [ActivityPersonalRecord]
+        if kind == .fastestPace && (!recentPaceWorkouts.isEmpty || !fetchedPaceWorkouts.isEmpty) {
+            var workoutsByID: [String: ActivityPersonalRecord] = [:]
+            for workout in fetchedPaceWorkouts + recentPaceWorkouts {
+                workoutsByID[workout.id] = workout
+            }
+            let workouts = Array(workoutsByID.values)
+            let workoutIDs = Set(workouts.compactMap(\.workoutID))
+            let unmatchedRecords = byKind.filter { record in
+                guard let workoutID = record.workoutID else { return true }
+                return !workoutIDs.contains(workoutID)
+            }
+            chartSource = workouts + unmatchedRecords
+        } else {
+            chartSource = byKind
+        }
+        chartData = chartSource
+            .filter { $0.date >= range.start && $0.date <= range.end }
+            .sorted { $0.date < $1.date }
 
         if let kind, kind.isLowerBetter {
             currentBest = byKind.min { $0.value < $1.value }
