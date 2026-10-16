@@ -79,7 +79,7 @@ struct NotificationActivityDestination: Identifiable, Hashable {
 }
 
 /// Activity tab — Hero-first layout.
-/// Layout: Hero → Muscle Map → Weekly Stats → Search+Suggestion+Templates → Volume → Workouts → PRs → Consistency → Frequency.
+/// Layout: Hero → Log Workout → Muscle Map → Weekly Stats → Search+Suggestion+Templates → Volume → Workouts → PRs → Consistency → Frequency.
 struct ActivityView: View {
     private struct ExerciseStartConfiguration: Identifiable {
         let id = UUID()
@@ -203,6 +203,18 @@ struct ActivityView: View {
                         .accessibilityIdentifier("activity-hero-readiness")
                         .buttonStyle(.plain)
                         .staggeredAppear(index: 0)
+
+                        Button {
+                            showingExercisePicker = true
+                        } label: {
+                            Label("Log Workout", systemImage: "plus.circle.fill")
+                                .font(.headline)
+                                .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .tint(DS.Color.activity)
+                        .controlSize(.large)
+                        .accessibilityIdentifier("activity-log-workout-button")
 
                         // ② Recovery Map + Weekly Stats (side-by-side on iPad)
                         if isRegular {
