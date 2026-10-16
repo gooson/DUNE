@@ -13,6 +13,7 @@ struct ExerciseMixInfoSheet: View {
             }
             .padding(DS.Spacing.xl)
         }
+        .accessibilityIdentifier("activity-exercise-mix-info-sheet")
         .presentationDetents([.medium, .large])
         .presentationDragIndicator(.visible)
     }

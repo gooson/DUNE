@@ -14,6 +14,7 @@ struct ConsistencyInfoSheet: View {
             }
             .padding(DS.Spacing.xl)
         }
+        .accessibilityIdentifier("activity-consistency-info-sheet")
         .presentationDetents([.medium, .large])
         .presentationDragIndicator(.visible)
     }

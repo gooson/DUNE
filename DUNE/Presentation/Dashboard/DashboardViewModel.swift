@@ -1665,6 +1665,22 @@ final class DashboardViewModel {
     private let stressUseCase = CalculateCumulativeStressUseCase()
 
     private func buildCumulativeStressScore() {
+        if ProcessInfo.processInfo.arguments.contains("--ui-visual-stress-fixture") {
+            cumulativeStressScore = CumulativeStressScore(
+                score: 42,
+                level: .moderate,
+                contributions: [
+                    .init(factor: .hrvVariability, rawScore: 40, weight: 0.5,
+                          detail: "Recent HRV pattern"),
+                    .init(factor: .sleepConsistency, rawScore: 46, weight: 0.3,
+                          detail: "Recent sleep consistency"),
+                    .init(factor: .activityLoad, rawScore: 38, weight: 0.2,
+                          detail: "Recent training load")
+                ],
+                trend: .stable
+            )
+            return
+        }
         // Use HRV data already fetched for condition score
         guard conditionScore != nil else {
             cumulativeStressScore = nil

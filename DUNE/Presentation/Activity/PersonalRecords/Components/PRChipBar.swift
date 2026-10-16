@@ -54,6 +54,7 @@ struct PRChipBar: View {
         .buttonStyle(.plain)
         .id(kind)
         .accessibilityLabel(kind.displayName)
+        .accessibilityIdentifier("activity-personal-records-kind-\(kind.rawValue)")
         .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 }

@@ -57,25 +57,40 @@ final class LimitedHealthHistoryUITests: SeededUITestBaseCase {
         XCTAssertTrue(app.scrollToElementIfNeeded(AXID.dashboardMetricCard("hrv")))
         let card = app.descendants(matching: .any)[AXID.dashboardMetricCard("hrv")].firstMatch
         XCTAssertTrue(card.waitForExistence(timeout: 5))
-        card.auditTap()
-        XCTAssertTrue(
-            app.descendants(matching: .any)[AXID.metricDetailScreen("hrv")].firstMatch
-                .waitForExistence(timeout: 8)
-        )
+        card.press(forDuration: 1.1)
+        let showAllData = app.buttons["Show All Data"].firstMatch
+        XCTAssertTrue(showAllData.waitForExistence(timeout: 5))
+        showAllData.tap()
 
-        XCTAssertTrue(app.scrollToElementIfNeeded(AXID.metricDetailShowAllData))
-        app.descendants(matching: .any)[AXID.metricDetailShowAllData].firstMatch.auditTap()
-
-        XCTAssertTrue(
-            app.descendants(matching: .any)["all-data-screen-hrv"].firstMatch
-                .waitForExistence(timeout: 8)
-        )
+        let allData = app.descendants(matching: .any)["all-data-screen-hrv"].firstMatch
+        XCTAssertTrue(allData.waitForExistence(timeout: 8))
+        XCTAssertTrue(allData.isHittable, "All Data must be in the foreground, not behind Metric Detail")
         XCTAssertTrue(
             app.descendants(matching: .any)["limited-health-history-notice"].firstMatch
                 .waitForExistence(timeout: 10)
         )
         XCTAssertTrue(app.scrollToHittableElementIfNeeded("limited-health-history-notice"))
         capture("HRV all data with limited HealthKit history")
+    }
+
+    func testMetricComparisonExplainsLimitedHistory() {
+        navigateToWellness()
+        XCTAssertTrue(app.waitAndTapToolbarAction("wellness-compare-metrics"))
+
+        let firstPane = app.descendants(matching: .any)["metric-comparison-first"].firstMatch
+        XCTAssertTrue(firstPane.waitForExistence(timeout: 8))
+        let firstPicker = firstPane.descendants(matching: .any)["metric-comparison-first-picker"].firstMatch
+        XCTAssertTrue(firstPicker.waitForExistence(timeout: 5))
+        firstPicker.auditTap()
+
+        let hrv = app.descendants(matching: .any)["metric-comparison-first-option-hrv"].firstMatch
+        XCTAssertTrue(hrv.waitForExistence(timeout: 5))
+        hrv.auditTap()
+
+        let notice = firstPane.descendants(matching: .any)["limited-health-history-notice"].firstMatch
+        XCTAssertTrue(notice.waitForExistence(timeout: 10))
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("limited-health-history-notice"))
+        capture("Metric comparison with limited HealthKit history")
     }
 
     private func dismissMorningBriefingIfNeeded() {
@@ -99,6 +114,9 @@ final class LimitedHealthHistoryUITests: SeededUITestBaseCase {
     }
 
     private func capture(_ name: String) {
+        // Navigation transitions can outlive XCTest's idle signal and produce
+        // a screenshot of the previous view after the destination is in AX.
+        Thread.sleep(forTimeInterval: 0.8)
         let attachment = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
         attachment.name = name
         attachment.lifetime = .keepAlways

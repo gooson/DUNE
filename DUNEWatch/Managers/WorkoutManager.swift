@@ -1166,6 +1166,23 @@ final class WorkoutManager: NSObject {
             return
         }
 
+        if ProcessInfo.processInfo.arguments.contains("--uitesting-watch") {
+            let arguments = ProcessInfo.processInfo.arguments
+            if arguments.contains("--ui-watch-cardio-soft-nudge") {
+                cardioInactivityPrompt = .softNudge
+                return
+            }
+            if arguments.contains("--ui-watch-cardio-auto-end") {
+                cardioInactivityPrompt = .confirmation
+                cardioAutoEndCountdown = 30
+                return
+            }
+            if arguments.contains("--ui-watch-cardio-stairs-prompt") {
+                cardioInactivityPrompt = .stairMachineExitSuggestion
+                return
+            }
+        }
+
         let previousMetrics = CardioInactivityObservedMetrics(
             distance: lastObservedDistance,
             steps: lastObservedSteps,

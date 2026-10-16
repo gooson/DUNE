@@ -225,17 +225,19 @@ struct ActivityView: View {
                         }
 
                         // ③.5 Injury Risk Assessment
-                        SectionGroup(title: "Injury Risk", icon: "shield.checkered", iconColor: DS.Color.activity) {
+                        SectionGroup(title: "Injury Risk", icon: "shield.checkered",
+                                     iconColor: DS.Color.activity,
+                                     sectionIdentifier: "activity-section-injuryrisk") {
                             if viewModel.injuryRiskAssessment != nil {
                                 NavigationLink(value: ActivityDetailDestination.injuryRisk) {
                                     InjuryRiskCard(assessment: viewModel.injuryRiskAssessment)
                                 }
                                 .buttonStyle(.plain)
+                                .accessibilityIdentifier("activity-injuryrisk-detail-link")
                             } else {
                                 InjuryRiskCard(assessment: nil)
                             }
                         }
-                        .accessibilityIdentifier("activity-section-injuryrisk")
                         .staggeredAppear(index: 4)
 
                         // ④ Suggested Workout (with search + templates)
@@ -247,17 +249,19 @@ struct ActivityView: View {
                             .staggeredAppear(index: 6)
 
                         // ⑥ Weekly Report
-                        SectionGroup(title: "Weekly Report", icon: "doc.text", iconColor: DS.Color.activity) {
+                        SectionGroup(title: "Weekly Report", icon: "doc.text",
+                                     iconColor: DS.Color.activity,
+                                     sectionIdentifier: "activity-section-weeklyreport") {
                             if viewModel.weeklyReport != nil {
                                 NavigationLink(value: ActivityDetailDestination.weeklyReport) {
                                     WorkoutReportCard(report: viewModel.weeklyReport)
                                 }
                                 .buttonStyle(.plain)
+                                .accessibilityIdentifier("activity-weeklyreport-detail-link")
                             } else {
                                 WorkoutReportCard(report: nil)
                             }
                         }
-                        .accessibilityIdentifier("activity-section-weeklyreport")
                         .staggeredAppear(index: 7)
 
                         // ⑧ Recent Workouts
@@ -273,7 +277,8 @@ struct ActivityView: View {
                         // ⑨ Personal Records
                         SectionGroup(title: "Personal Records", icon: "trophy.fill",
                                      iconColor: DS.Color.activity,
-                                     infoAction: { showingPRInfo = true }) {
+                                     infoAction: { showingPRInfo = true },
+                                     infoIdentifier: "activity-pr-info") {
                             NavigationLink(value: ActivityDetailDestination.personalRecords()) {
                                 PersonalRecordsSection(
                                     records: viewModel.personalRecords,
@@ -299,7 +304,8 @@ struct ActivityView: View {
                         // ⑩ Consistency
                         SectionGroup(title: "Consistency", icon: "flame.fill",
                                      iconColor: DS.Color.activity,
-                                     infoAction: { showingConsistencyInfo = true }) {
+                                     infoAction: { showingConsistencyInfo = true },
+                                     infoIdentifier: "activity-consistency-info") {
                             NavigationLink(value: ActivityDetailDestination.consistency) {
                                 ConsistencyCard(streak: viewModel.workoutStreak)
                             }
@@ -311,7 +317,8 @@ struct ActivityView: View {
                         // ⑪ Exercise Mix
                         SectionGroup(title: "Exercise Mix", icon: "chart.bar.xaxis",
                                      iconColor: DS.Color.activity,
-                                     infoAction: { showingExerciseMixInfo = true }) {
+                                     infoAction: { showingExerciseMixInfo = true },
+                                     infoIdentifier: "activity-exercise-mix-info") {
                             NavigationLink(value: ActivityDetailDestination.exerciseMix) {
                                 ExerciseFrequencySection(frequencies: viewModel.exerciseFrequencies)
                             }
@@ -693,7 +700,8 @@ struct ActivityView: View {
                 rewardSummary: viewModel.workoutRewardSummary,
                 rewardHistory: viewModel.workoutRewardHistory,
                 unlockedBadgeKeys: viewModel.unlockedBadgeKeys,
-                preselectedKind: preselectedKind
+                preselectedKind: preselectedKind,
+                recentWorkouts: viewModel.recentWorkouts
             )
         case .consistency:
             ConsistencyDetailView()

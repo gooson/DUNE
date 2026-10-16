@@ -148,6 +148,7 @@ struct ContentView: View {
     private let scoreRefreshService: ScoreRefreshService?
     private let launchExperienceReady: Bool
     private let canLoadHealthKitData: Bool
+    private let hasFailedHealthKitAuthorization: Bool
     @Environment(\.scenePhase) private var scenePhase
     @AppStorage(AppTheme.storageKey) private var selectedTheme: AppTheme = .desertWarm
     @State private var selectedSection: AppSection
@@ -181,7 +182,8 @@ struct ContentView: View {
         launchExperienceReady: Bool = true,
         canLoadHealthKitData: Bool = true,
         shortcutTemplateID: UUID? = nil,
-        shortcutTemplateSignal: Int = 0
+        shortcutTemplateSignal: Int = 0,
+        hasFailedHealthKitAuthorization: Bool = false
     ) {
         self.sharedHealthDataService = sharedHealthDataService
         self.refreshCoordinator = refreshCoordinator
@@ -190,6 +192,7 @@ struct ContentView: View {
         self.canLoadHealthKitData = canLoadHealthKitData
         self.shortcutTemplateID = shortcutTemplateID
         self.shortcutTemplateSignal = shortcutTemplateSignal
+        self.hasFailedHealthKitAuthorization = hasFailedHealthKitAuthorization
         _selectedSection = State(initialValue: Self.initialSectionForUITests())
     }
 
@@ -416,12 +419,14 @@ struct ContentView: View {
             DailyDigestNotificationView(
                 sharedHealthDataService: sharedHealthDataService,
                 scoreRefreshService: scoreRefreshService,
-                canLoadHealthKitData: canLoadHealthKitData
+                canLoadHealthKitData: canLoadHealthKitData,
+                hasFailedHealthKitAuthorization: hasFailedHealthKitAuthorization
             )
         case .notificationHub(let itemID, let requestID):
             NotificationHubView(
                 sharedHealthDataService: sharedHealthDataService,
                 canLoadHealthKitData: canLoadHealthKitData,
+                hasFailedHealthKitAuthorization: hasFailedHealthKitAuthorization,
                 requestedItemID: itemID,
                 navigationRequestID: requestID
             )

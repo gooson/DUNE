@@ -19,6 +19,7 @@ struct FatigueAlgorithmSheet: View {
             }
             .padding(DS.Spacing.xl)
         }
+        .accessibilityIdentifier("activity-fatigue-algorithm-sheet")
         .presentationDetents([.large])
         .presentationDragIndicator(.visible)
     }

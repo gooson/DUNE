@@ -39,6 +39,7 @@ struct ShareImageSheet: View {
                 .padding(.horizontal, DS.Spacing.lg)
                 .padding(.bottom, DS.Spacing.lg)
             }
+            .accessibilityIdentifier("share-image-sheet")
             .englishNavigationTitle("Share Workout")
             .navigationBarTitleDisplayMode(.inline)
             .background { SheetWaveBackground() }

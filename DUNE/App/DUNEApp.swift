@@ -20,6 +20,12 @@ struct DUNEApp: App {
     @State private var isAdvancingLaunchExperience = false
     @State private var hasAttemptedHealthKitAuthorizationThisLaunch = false
     @State private var hasCompletedHealthKitAuthorizationThisLaunch = false
+    @State private var hasFailedHealthKitAuthorizationThisLaunch = false
+#if DEBUG
+    @State private var isUITestAuthorizationDeferred = DUNEApp.isRunningUITests
+        && ProcessInfo.processInfo.arguments.contains("--ui-defer-daily-digest-healthkit")
+    @State private var hasUITestBackgroundedWhileAuthorizationDeferred = false
+#endif
     @State private var hasAttemptedNotificationAuthorizationThisLaunch = false
     @State private var isRequestingDeferredAuthorizations = false
     @State private var hasStartedRuntimeServices = false
@@ -455,6 +461,15 @@ struct DUNEApp: App {
             Task { await advanceLaunchExperienceFlowIfNeeded() }
         }
         .onChange(of: scenePhase) { _, newPhase in
+#if DEBUG
+            if isUITestAuthorizationDeferred {
+                if newPhase == .background {
+                    hasUITestBackgroundedWhileAuthorizationDeferred = true
+                } else if newPhase == .active && hasUITestBackgroundedWhileAuthorizationDeferred {
+                    isUITestAuthorizationDeferred = false
+                }
+            }
+#endif
             guard newPhase == .active else { return }
             Task {
                 await refreshAppRuntimeIfNeeded()
@@ -484,7 +499,8 @@ struct DUNEApp: App {
             launchExperienceReady: isLaunchExperienceReady,
             canLoadHealthKitData: canLoadHealthKitData,
             shortcutTemplateID: shortcutTemplateID,
-            shortcutTemplateSignal: shortcutTemplateSignal
+            shortcutTemplateSignal: shortcutTemplateSignal,
+            hasFailedHealthKitAuthorization: hasFailedHealthKitAuthorizationThisLaunch
         )
         .id(appRuntime.revision)
         .sheet(isPresented: $showConsentSheet) {
@@ -631,7 +647,13 @@ struct DUNEApp: App {
     }
 
     private var canLoadHealthKitData: Bool {
-        Self.shouldBypassLaunchExperienceForTests || hasCompletedHealthKitAuthorizationThisLaunch
+        let authorizationCompleted = Self.shouldBypassLaunchExperienceForTests
+            || hasCompletedHealthKitAuthorizationThisLaunch
+#if DEBUG
+        return authorizationCompleted && !isUITestAuthorizationDeferred
+#else
+        return authorizationCompleted
+#endif
     }
 
     private var nextLaunchExperienceStep: LaunchExperienceStep {
@@ -836,6 +858,7 @@ struct DUNEApp: App {
                     await appRuntime.refreshCoordinator.forceRefresh()
                 }
             } catch {
+                hasFailedHealthKitAuthorizationThisLaunch = true
                 AppLogger.healthKit.error("Deferred HealthKit authorization failed: \(error.localizedDescription)")
             }
         }

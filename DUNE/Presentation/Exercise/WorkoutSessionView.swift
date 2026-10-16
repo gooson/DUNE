@@ -123,7 +123,8 @@ struct WorkoutSessionView: View {
                     // when SwiftUI reports multiple-window support on Duo.
                     // Keep insights in the workout's scene so dismissal can
                     // preserve the active draft and rest timer.
-                    if supportsMultipleWindows && UIDevice.current.userInterfaceIdiom != .phone {
+                    if supportsMultipleWindows && UIDevice.current.userInterfaceIdiom != .phone
+                        && !ProcessInfo.processInfo.arguments.contains("--ui-design-map-insights-sheet") {
                         if !AppWindowRouter.shared.openInsights(from: windowSession, openWindow: openWindow) {
                             showingInsights = true
                         }
