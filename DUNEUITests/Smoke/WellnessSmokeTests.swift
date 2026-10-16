@@ -148,7 +148,7 @@ final class WellnessSmokeTests: UITestBaseCase {
 @MainActor
 final class WellnessSeededSmokeTests: SeededUITestBaseCase {
     override var additionalLaunchArguments: [String] {
-        ["--ui-design-map-sleep-prediction"]
+        ["--ui-design-map-sleep-prediction", "-morningBriefingDisabled", "YES"]
     }
 
     override func setUpWithError() throws {

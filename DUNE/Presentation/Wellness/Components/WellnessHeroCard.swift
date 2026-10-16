@@ -32,7 +32,8 @@ struct WellnessHeroCard: View {
                 showsChevron: true,
                 accessibilityLabel: "Wellness score \(score.score), \(score.status.label)",
                 accessibilityHint: "Tap to see score details",
-                hourlySparkline: hourlySparkline
+                hourlySparkline: hourlySparkline,
+                trendTitle: "Wellness Trend"
             )
         } else {
             emptyCard

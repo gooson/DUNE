@@ -67,6 +67,13 @@ struct ConditionHeroView: View {
                         }
                     }
                 }
+                HStack {
+                    Spacer()
+                    Text("View Details")
+                    Image(systemName: "chevron.right")
+                }
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(theme.sandColor)
             }
         }
         .accessibilityElement(children: .contain)
@@ -184,9 +191,9 @@ struct ConditionHeroView: View {
                 HourlySparklineView(
                     data: sparkline,
                     tintColor: score.status.color,
-                    height: isRegular ? Layout.sparklineHeightRegular : Layout.sparklineHeightCompact
+                    height: isRegular ? Layout.sparklineHeightRegular : Layout.sparklineHeightCompact,
+                    showsReferenceLabels: true
                 )
-                .accessibilityLabel("Condition Trend")
             }
         } else if !recentScores.isEmpty {
             VStack(alignment: .leading, spacing: DS.Spacing.xs) {
@@ -198,8 +205,7 @@ struct ConditionHeroView: View {
                 }
                 .foregroundStyle(.primary)
                 TrendChartView(scores: recentScores)
-                    .frame(height: isRegular ? Layout.sparklineHeightRegular : Layout.sparklineHeightCompact)
-                    .accessibilityLabel("Condition Trend")
+                    .frame(height: isRegular ? 116 : 104)
             }
         } else {
             Text("Not enough data to show trend.")

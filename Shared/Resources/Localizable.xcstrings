@@ -13682,6 +13682,23 @@
         }
       }
     },
+    "Falling" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "下降"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "하락"
+          }
+        }
+      }
+    },
     "Far" : {
       "localizations" : {
         "ja" : {
@@ -14671,6 +14688,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "금"
+          }
+        }
+      }
+    },
+    "From %@ to %@. Minimum %d, maximum %d, current %d." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@から%@まで。最小%d、最大%d、現在%d。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@부터 %@까지. 최저 %d, 최고 %d, 현재 %d."
           }
         }
       }
@@ -27850,12 +27884,12 @@
       }
     },
     "Readiness Trend" : {
-      "extractionState" : "stale",
+      "extractionState" : "manual",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "準備度トレンド"
+            "value" : "準備度の推移"
           }
         },
         "ko" : {
@@ -30115,6 +30149,23 @@
         }
       }
     },
+    "Rising" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "上昇"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "상승"
+          }
+        }
+      }
+    },
     "Risk Factors" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -30911,6 +30962,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "점수 가이드"
+          }
+        }
+      }
+    },
+    "Score Trend" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "スコアの推移"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "점수 추세"
           }
         }
       }
@@ -38144,11 +38212,12 @@
       }
     },
     "Trend" : {
+      "extractionState" : "manual",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "トレンド"
+            "value" : "推移"
           }
         },
         "ko" : {
@@ -40995,6 +41064,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "웰니스"
+          }
+        }
+      }
+    },
+    "Wellness Trend" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ウェルネスの推移"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "웰니스 추세"
           }
         }
       }

@@ -387,7 +387,7 @@ private struct HabitListQueryView: View {
                 } label: {
                     Label("History", systemImage: "square.grid.3x3.fill")
                         .font(.subheadline)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
                 }
                 .buttonStyle(.bordered)
                 .accessibilityIdentifier("habit-heatmap")

@@ -456,19 +456,17 @@ struct DashboardView: View {
 
     @ViewBuilder
     private var dashboardLowerContent: some View {
-        if viewModel.shouldShowQuickActions {
-            QuickActionsRow(
-                onLogWeight: onLogWeight,
-                onOpenSleep: {
-                    if let sleepMetric = viewModel.sortedMetrics.first(where: { $0.category == .sleep }) {
-                        openMetric(sleepMetric)
-                    } else {
-                        onOpenWellness()
-                    }
+        QuickActionsRow(
+            onLogWeight: onLogWeight,
+            onOpenSleep: {
+                if let sleepMetric = viewModel.sortedMetrics.first(where: { $0.category == .sleep }) {
+                    openMetric(sleepMetric)
+                } else {
+                    onOpenWellness()
                 }
-            )
-            .staggeredAppear(index: 9)
-        }
+            }
+        )
+        .staggeredAppear(index: 9)
 
         // Pinned Metrics
         if !viewModel.pinnedCards.isEmpty {

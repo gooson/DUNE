@@ -82,6 +82,7 @@ final class DashboardSmokeTests: UITestBaseCase {
         var configuration = launchConfiguration
         configuration.shouldSeedMockData = true
         configuration.scenario = .defaultSeeded
+        configuration.additionalArguments += ["-morningBriefingDisabled", "YES"]
         launchApp(with: configuration)
         navigateToDashboard()
 
@@ -102,6 +103,7 @@ final class DashboardSmokeTests: UITestBaseCase {
         var configuration = launchConfiguration
         configuration.shouldSeedMockData = true
         configuration.scenario = .defaultSeeded
+        configuration.additionalArguments += ["-morningBriefingDisabled", "YES"]
         launchApp(with: configuration)
         navigateToDashboard()
 

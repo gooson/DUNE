@@ -7,6 +7,7 @@ struct HourlySparklineView: View {
     let data: HourlySparklineData
     let tintColor: Color
     var height: CGFloat = 32
+    var showsReferenceLabels = false
 
     var body: some View {
         if data.points.isEmpty {
@@ -14,7 +15,9 @@ struct HourlySparklineView: View {
                 .fill(.clear)
                 .frame(height: height)
         } else {
-            Chart(data.points) { point in
+            VStack(spacing: 4) {
+            Chart {
+                ForEach(data.points) { point in
                 LineMark(
                     x: .value("Hour", point.index),
                     y: .value("Score", point.score)
@@ -29,6 +32,11 @@ struct HourlySparklineView: View {
                 )
                 .interpolationMethod(.catmullRom)
                 .foregroundStyle(areaGradient)
+                }
+
+                RuleMark(y: .value("Current", data.currentScore))
+                    .foregroundStyle(tintColor.opacity(0.22))
+                    .lineStyle(StrokeStyle(lineWidth: 1, dash: [3, 3]))
             }
             .chartXAxis(.hidden)
             .chartYAxis(.hidden)
@@ -36,7 +44,52 @@ struct HourlySparklineView: View {
             .chartYScale(domain: computedYDomain)
             .frame(height: height)
             .clipped()
+            if showsReferenceLabels {
+                HStack {
+                    Text("Low")
+                    Text("\(minimumScore)")
+                    Spacer()
+                    Text("Current")
+                    Text("\(Int(data.currentScore))")
+                    Spacer()
+                    Text("High")
+                    Text("\(maximumScore)")
+                }
+                HStack {
+                    Text(hourLabel(data.points.first?.hour ?? 0))
+                    Spacer()
+                    Text(hourLabel(data.points.last?.hour ?? 0))
+                }
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            }
+            }
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel("Score Trend")
+            .accessibilityValue(accessibilitySummary)
         }
+    }
+
+    private var minimumScore: Int { Int(data.points.map(\.score).min() ?? 0) }
+    private var maximumScore: Int { Int(data.points.map(\.score).max() ?? 0) }
+    private func hourLabel(_ hour: Int) -> String { String(format: "%02d:00", hour) }
+
+    private var accessibilitySummary: String {
+        let first = data.points.first?.score ?? 0
+        let last = data.points.last?.score ?? 0
+        let direction = last > first + 2 ? String(localized: "Rising")
+            : last < first - 2 ? String(localized: "Falling") : String(localized: "Stable")
+        let format = String(localized: "From %@ to %@. Minimum %d, maximum %d, current %d.")
+        let values = String(
+            format: format,
+            locale: .current,
+            hourLabel(data.points.first?.hour ?? 0),
+            hourLabel(data.points.last?.hour ?? 0),
+            minimumScore,
+            maximumScore,
+            Int(data.currentScore)
+        )
+        return "\(direction). \(values)"
     }
 
     // MARK: - Cached Computations

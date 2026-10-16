@@ -14,7 +14,9 @@ struct ProgressRingView: View {
 
     @State private var animatedProgress: Double = 0
     @State private var highlightPosition: Double = 0
+    @State private var isVisible = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.scenePhase) private var scenePhase
     @Environment(\.appTheme) private var theme
 
     /// Gradient stops — location 0 = arc start, location 1 = arc end.
@@ -58,7 +60,7 @@ struct ProgressRingView: View {
                 )
                 .rotationEffect(.degrees(-90))
 
-            if showsTravelingHighlight && !reduceMotion && animatedProgress > 0.05 {
+            if showsTravelingHighlight && isVisible && scenePhase == .active && !reduceMotion && animatedProgress > 0.05 {
                 Circle()
                     .trim(from: 0, to: 0.035)
                     .stroke(
@@ -72,6 +74,7 @@ struct ProgressRingView: View {
         }
         .frame(width: size, height: size)
         .onAppear {
+            isVisible = true
             animatedProgress = 0
             if reduceMotion {
                 animatedProgress = progress
@@ -80,6 +83,17 @@ struct ProgressRingView: View {
                     animatedProgress = progress
                 }
                 startTravelingHighlight()
+            }
+        }
+        .onDisappear {
+            isVisible = false
+            highlightPosition = 0
+        }
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active && isVisible && !reduceMotion {
+                startTravelingHighlight()
+            } else {
+                highlightPosition = 0
             }
         }
         .onChange(of: reduceMotion) { _, isReduced in
