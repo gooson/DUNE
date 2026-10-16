@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DUNE Theme Map</title>
+  <style>
+    :root { color-scheme:dark; font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif; background:#10131a; color:#f4f1ec; }
+    * { box-sizing:border-box; }
+    body { margin:0; min-width:320px; background:radial-gradient(ellipse at 75% -10%,#34516a 0%,transparent 43%),#10131a; }
+    a { color:inherit; }
+    button,select { font:inherit; }
+    button { cursor:pointer; }
+    [hidden] { display:none !important; }
+    .shell { max-width:1600px; margin:auto; padding:32px clamp(16px,3vw,48px) 60px; }
+    .eyebrow { margin:0 0 12px; color:#d8b692; font-size:12px; font-weight:750; letter-spacing:.18em; }
+    .masthead { display:flex; justify-content:space-between; align-items:start; gap:24px; margin-bottom:28px; }
+    h1 { margin:0; font-size:clamp(35px,4.5vw,68px); line-height:1; letter-spacing:-.055em; }
+    .intro { max-width:720px; margin:15px 0 0; color:#c2c9d0; font-size:15px; line-height:1.6; }
+    .head-link { flex:0 0 auto; margin-top:8px; padding:10px 14px; border:1px solid #5e6874; border-radius:999px; text-decoration:none; font-size:12px; font-weight:700; }
+    .head-link:hover,.head-link:focus-visible { border-color:#d8b692; outline:none; }
+    .note { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:0 0 24px; color:#aeb9c2; font-size:12px; }
+    .note strong { color:#e7ceae; }
+    .separator { color:#63707e; }
+    .layout { display:grid; grid-template-columns:minmax(290px,380px) minmax(0,1fr); gap:22px; align-items:start; }
+    .catalog { display:grid; gap:9px; }
+    .catalog-title { display:flex; justify-content:space-between; align-items:baseline; margin:0 0 5px; }
+    .catalog-title h2 { margin:0; font-size:17px; letter-spacing:-.02em; }
+    .catalog-title span { color:#9eabb7; font-size:12px; }
+    .theme-card { display:grid; grid-template-columns:1fr auto; gap:0 8px; padding:0; border:1px solid #313e4c; border-radius:18px; background:#1b222c; overflow:hidden; transition:border-color .18s,background .18s; }
+    .theme-card:has(button[aria-pressed="true"]) { border-color:#d6b488; background:#27313b; }
+    .theme-card:hover { border-color:#7c8d9b; }
+    .theme-choice { width:100%; padding:15px 0 12px 15px; border:0; background:none; color:inherit; text-align:left; }
+    .theme-choice:focus-visible { outline:2px solid #e4c598; outline-offset:-4px; border-radius:14px; }
+    .theme-name { display:block; color:#ddc5a6; font-size:10px; font-weight:800; letter-spacing:.15em; }
+    .theme-title { display:block; margin:4px 0; font-size:17px; font-weight:750; letter-spacing:-.025em; }
+    .theme-motif { display:block; color:#aeb9c2; font-size:12px; line-height:1.4; }
+    .theme-open { align-self:start; padding:13px 14px; color:#b8c8d2; text-decoration:none; font-size:12px; }
+    .theme-open:hover,.theme-open:focus-visible { color:#fff; text-decoration:underline; }
+    .swatches { grid-column:1 / -1; display:flex; height:6px; }
+    .swatches i { flex:1; }
+    .study { margin-top:12px; padding:17px; border:1px solid #374453; border-radius:17px; background:#17202a; }
+    .study small { display:block; color:#d8b692; font-size:10px; font-weight:800; letter-spacing:.12em; }
+    .study a { display:inline-block; margin:7px 0 5px; font-size:16px; font-weight:750; text-decoration:none; }
+    .study a:hover,.study a:focus-visible { text-decoration:underline; }
+    .study p { margin:0; color:#aeb9c2; font-size:12px; line-height:1.45; }
+    .workspace { min-width:0; padding:18px; border:1px solid #35414e; border-radius:22px; background:#19212b; box-shadow:0 24px 70px #0005; }
+    .workspace-head { display:flex; justify-content:space-between; gap:16px; align-items:start; margin-bottom:15px; }
+    .workspace-eyebrow { margin:0 0 4px; color:#d8b692; font-size:10px; font-weight:800; letter-spacing:.16em; }
+    .workspace h2 { margin:0; font-size:clamp(24px,2.5vw,34px); letter-spacing:-.04em; }
+    .workspace-summary { margin:7px 0 0; max-width:700px; color:#bdc7cf; font-size:13px; line-height:1.5; }
+    .workspace-actions { display:flex; flex-wrap:wrap; justify-content:end; gap:8px; }
+    .action { border:1px solid #65717e; border-radius:10px; padding:9px 12px; background:#25313c; color:#fff; text-decoration:none; font-size:12px; font-weight:700; white-space:nowrap; }
+    .action:hover,.action:focus-visible { border-color:#e4c598; outline:none; }
+    .preview-grid { display:grid; grid-template-columns:minmax(0,1fr); gap:12px; }
+    .preview-grid.comparing { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    .preview-panel { min-width:0; overflow:hidden; border:1px solid #485362; border-radius:15px; background:#111820; }
+    .preview-caption { display:flex; align-items:center; justify-content:space-between; gap:8px; padding:8px 12px; border-bottom:1px solid #35414e; color:#d4dde3; font-size:11px; font-weight:750; }
+    .preview-panel iframe { display:block; width:100%; height:min(82vh,930px); min-height:610px; border:0; background:#1d2330; }
+    .compare-controls { display:flex; align-items:center; flex-wrap:wrap; gap:9px; margin:0 0 12px; padding:10px 12px; border:1px solid #465260; border-radius:12px; color:#c8d1d8; font-size:12px; }
+    .compare-controls select { min-width:170px; padding:7px 9px; border:1px solid #65717e; border-radius:7px; background:#263541; color:#fff; }
+    .workspace-foot { margin:13px 2px 0; color:#9daab6; font-size:11px; line-height:1.5; }
+    @media (max-width:1050px) { .layout { grid-template-columns:1fr; } .catalog { grid-template-columns:repeat(2,minmax(0,1fr)); } .catalog-title,.study { grid-column:1 / -1; } }
+    @media (max-width:700px) { .shell { padding-top:22px; } .masthead { display:block; } .head-link { display:inline-block; margin-top:16px; } .catalog { grid-template-columns:1fr; } .workspace { padding:12px; } .workspace-head { display:block; } .workspace-actions { justify-content:start; margin-top:13px; } .preview-grid.comparing { grid-template-columns:1fr; } .preview-panel iframe { height:750px; } }
+    @media (prefers-reduced-motion:reduce) { .theme-card { transition:none; } }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="masthead">
+      <div>
+        <p class="eyebrow">DUNE / DESIGN ARCHIVE</p>
+        <h1>Theme Map</h1>
+        <p class="intro">8개 테마의 현재 방향 시안을 보존한 맵입니다. 테마를 선택해 움직임과 Today 히어로, 그래프, 다른 탭의 표현을 보고 두 시안을 나란히 비교할 수 있습니다.</p>
+      </div>
+      <a class="head-link" href="../phone-design-map/actual/index.html">실제 앱 화면 디자인맵 ↗</a>
+    </header>
+    <p class="note"><strong>방향 시안</strong><span class="separator">·</span> 실제 앱 구현 및 시뮬레이터 캡처와 구분<span class="separator">·</span> 컨디션 수치는 예시<span class="separator">·</span> 마지막 정리 <span id="updated-date">__UPDATED__</span></p>
+    <div class="layout">
+      <nav class="catalog" aria-label="테마 목록">
+        <div class="catalog-title"><h2>테마</h2><span id="theme-count">__THEME_COUNT__개</span></div>
+        <div id="theme-list" style="display:contents">__THEME_CARDS__</div>
+        <aside class="study" id="study-link"><small>SHARED STUDY</small><a href="themes/__STUDY_FILE__" target="_blank" rel="noopener">__STUDY_NAME__ ↗</a><p>__STUDY_DETAIL__</p></aside>
+      </nav>
+      <section class="workspace" aria-label="선택한 테마 미리보기">
+        <div class="workspace-head">
+          <div><p class="workspace-eyebrow" id="selected-name">__FIRST_NAME__</p><h2 id="selected-title">__FIRST_TITLE__</h2><p class="workspace-summary" id="selected-description">__FIRST_DESCRIPTION__</p></div>
+          <div class="workspace-actions"><a class="action" id="source-link" href="themes/__FIRST_FILE__" target="_blank" rel="noopener">원본 시안 열기 ↗</a><button class="action" id="compare-toggle" type="button" aria-expanded="false">두 시안 비교</button></div>
+        </div>
+        <div class="compare-controls" id="compare-controls" hidden><label for="compare-select">비교할 테마</label><select id="compare-select">__COMPARE_OPTIONS__</select><span>두 미리보기가 각각 움직입니다.</span></div>
+        <div class="preview-grid" id="preview-grid">
+          <div class="preview-panel"><div class="preview-caption"><span id="primary-caption">__FIRST_NAME__</span><span>현재 방향</span></div><iframe id="primary-frame" title="선택한 테마 시안" loading="eager" src="themes/__FIRST_FILE__"></iframe></div>
+          <div class="preview-panel" id="compare-panel" hidden><div class="preview-caption"><span id="compare-caption"></span><span>비교</span></div><iframe id="compare-frame" title="비교할 테마 시안" loading="lazy"></iframe></div>
+        </div>
+        <p class="workspace-foot">시안 원본은 이 맵과 같은 저장소에 보존됩니다. 운영체제에서 움직임 줄이기를 켜면 각 시안의 지속 애니메이션이 멈춥니다.</p>
+      </section>
+    </div>
+  </main>
+  <script>
+    const manifest = __THEME_MANIFEST__;
+    const themes = manifest.themes;
+    const select = document.getElementById("compare-select");
+    const source = document.getElementById("source-link");
+    const primaryFrame = document.getElementById("primary-frame");
+    const compareFrame = document.getElementById("compare-frame");
+    const compareToggle = document.getElementById("compare-toggle");
+    const compareControls = document.getElementById("compare-controls");
+    const comparePanel = document.getElementById("compare-panel");
+    const previewGrid = document.getElementById("preview-grid");
+    let current = themes[0];
+
+    document.querySelectorAll(".theme-choice").forEach(button => {
+      button.addEventListener("click", () => showTheme(button.dataset.theme));
+    });
+
+    function showTheme(id) {
+      const theme = themes.find(item => item.id === id);
+      if (!theme) return;
+      current = theme;
+      document.querySelectorAll(".theme-choice").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.theme === id)));
+      document.getElementById("selected-name").textContent = theme.name;
+      document.getElementById("selected-title").textContent = theme.title;
+      document.getElementById("selected-description").textContent = `${theme.motif} · ${theme.motion}. ${theme.detail}`;
+      document.getElementById("primary-caption").textContent = theme.name;
+      source.href = `themes/${theme.file}`;
+      primaryFrame.src = `themes/${theme.file}`;
+      if (select.value === id) {
+        const alternative = themes.find(item => item.id !== id);
+        if (alternative) select.value = alternative.id;
+      }
+      updateCompare();
+      history.replaceState(null, "", `#${id}`);
+    }
+
+    function updateCompare() {
+      if (comparePanel.hidden) return;
+      const theme = themes.find(item => item.id === select.value);
+      if (!theme || theme.id === current.id) return;
+      document.getElementById("compare-caption").textContent = theme.name;
+      compareFrame.src = `themes/${theme.file}`;
+    }
+
+    compareToggle.addEventListener("click", () => {
+      const enabled = comparePanel.hidden;
+      comparePanel.hidden = !enabled;
+      compareControls.hidden = !enabled;
+      previewGrid.classList.toggle("comparing", enabled);
+      compareToggle.setAttribute("aria-expanded", String(enabled));
+      compareToggle.textContent = enabled ? "비교 닫기" : "두 시안 비교";
+      if (enabled) updateCompare(); else compareFrame.removeAttribute("src");
+    });
+    select.addEventListener("change", updateCompare);
+    const initial = decodeURIComponent(location.hash.slice(1));
+    showTheme(themes.some(theme => theme.id === initial) ? initial : themes[0].id);
+  </script>
+</body>
+</html>
