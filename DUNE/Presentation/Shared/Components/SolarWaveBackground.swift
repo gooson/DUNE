@@ -2,12 +2,7 @@ import SwiftUI
 
 // MARK: - Solar Tab Background
 
-/// Multi-layer solar flare background for tab root screens.
-///
-/// Layers (back to front):
-/// 1. **Ember** — distant warm glow, broad slow waves
-/// 2. **Core** — mid-layer solar core energy
-/// 3. **Glow** — foreground bright highlight flare
+/// A fixed solar core with slowly breathing light trails for tab root screens.
 struct SolarTabWaveBackground: View {
     @Environment(\.wavePreset) private var preset
     @Environment(\.appTheme) private var theme
@@ -36,38 +31,8 @@ struct SolarTabWaveBackground: View {
         let opacityScale = Double(scale) * visibilityBoost
 
         ZStack(alignment: .top) {
-            // Layer 1: Ember — distant warm glow
-            WaveOverlayView(
-                color: theme.solarEmberColor,
-                opacity: 0.12 * opacityScale,
-                amplitude: 0.05 * scale,
-                frequency: 0.7,
-                verticalOffset: 0.35,
-                bottomFade: 0.5
-            )
-            .frame(height: 190)
-
-            // Layer 2: Core — mid-layer solar energy
-            WaveOverlayView(
-                color: theme.solarCoreColor,
-                opacity: 0.16 * opacityScale,
-                amplitude: 0.07 * scale,
-                frequency: 1.6,
-                verticalOffset: 0.48,
-                bottomFade: 0.4
-            )
-            .frame(height: 170)
-
-            // Layer 3: Glow — foreground bright flare
-            WaveOverlayView(
-                color: theme.solarGlowColor,
-                opacity: 0.07 * opacityScale,
-                amplitude: 0.03 * scale,
-                frequency: 2.8,
-                verticalOffset: 0.62,
-                bottomFade: 0.35
-            )
-            .frame(height: 140)
+            SolarCoronaScene(intensity: opacityScale)
+                .frame(height: 230)
 
             // Background gradient
             LinearGradient(
@@ -131,27 +96,8 @@ struct SolarDetailWaveBackground: View {
 
     var body: some View {
         ZStack(alignment: .top) {
-            // Ember glow
-            WaveOverlayView(
-                color: theme.solarEmberColor,
-                opacity: 0.08 * visibilityBoost,
-                amplitude: 0.035,
-                frequency: 0.9,
-                verticalOffset: 0.40,
-                bottomFade: 0.5
-            )
-            .frame(height: 150)
-
-            // Core warmth
-            WaveOverlayView(
-                color: theme.solarCoreColor,
-                opacity: 0.10 * visibilityBoost,
-                amplitude: 0.045,
-                frequency: 1.7,
-                verticalOffset: 0.55,
-                bottomFade: 0.45
-            )
-            .frame(height: 140)
+            SolarCoronaScene(intensity: 0.65 * visibilityBoost)
+                .frame(height: 170)
 
             LinearGradient(
                 colors: [
@@ -179,15 +125,8 @@ struct SolarSheetWaveBackground: View {
 
     var body: some View {
         ZStack(alignment: .top) {
-            WaveOverlayView(
-                color: theme.solarEmberColor,
-                opacity: 0.06 * visibilityBoost,
-                amplitude: 0.025,
-                frequency: 0.8,
-                verticalOffset: 0.45,
-                bottomFade: 0.5
-            )
-            .frame(height: 130)
+            SolarCoronaScene(intensity: 0.45 * visibilityBoost)
+                .frame(height: 140)
 
             LinearGradient(
                 colors: [
@@ -199,6 +138,86 @@ struct SolarSheetWaveBackground: View {
             )
         }
         .ignoresSafeArea()
+    }
+}
+
+// MARK: - Solar Scene
+
+/// The core stays fixed while its surrounding trails breathe by a few points.
+private struct SolarCoronaScene: View {
+    let intensity: Double
+
+    @Environment(\.appTheme) private var theme
+    @Environment(\.waveReducedMotion) private var reduceMotion
+    @Environment(\.scenePhase) private var scenePhase
+
+    var body: some View {
+        GeometryReader { geometry in
+            ZStack {
+                if !reduceMotion && scenePhase == .active {
+                    lightTrails
+                        .phaseAnimator([false, true]) { content, expanded in
+                            content
+                                .scaleEffect(expanded ? 1.05 : 1)
+                                .rotationEffect(.degrees(expanded ? 3 : -3))
+                        } animation: { _ in
+                            .easeInOut(duration: 7)
+                        }
+                } else {
+                    lightTrails
+                }
+
+                // A steady core avoids suggesting that a health value is pulsing.
+                Circle()
+                    .fill(
+                        RadialGradient(
+                            colors: [theme.solarGlowColor, theme.solarCoreColor, theme.solarEmberColor],
+                            center: .topLeading,
+                            startRadius: 0,
+                            endRadius: 60
+                        )
+                    )
+                    .frame(width: 58, height: 58)
+                    .opacity(0.40 * intensity)
+            }
+            .position(x: geometry.size.width * 0.78, y: geometry.size.height * 0.38)
+        }
+        .clipped()
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
+    }
+
+    private var lightTrails: some View {
+        ZStack {
+            Circle()
+                .fill(
+                    RadialGradient(
+                        colors: [theme.solarCoreColor.opacity(0.20 * intensity), .clear],
+                        center: .center,
+                        startRadius: 30,
+                        endRadius: 100
+                    )
+                )
+                .frame(width: 200, height: 200)
+
+            Ellipse()
+                .trim(from: 0.08, to: 0.84)
+                .stroke(
+                    theme.solarGlowColor.opacity(0.34 * intensity),
+                    style: StrokeStyle(lineWidth: 2.5, lineCap: .round)
+                )
+                .frame(width: 170, height: 90)
+                .rotationEffect(.degrees(-24))
+
+            Ellipse()
+                .trim(from: 0.24, to: 0.94)
+                .stroke(
+                    theme.solarCoreColor.opacity(0.22 * intensity),
+                    style: StrokeStyle(lineWidth: 1.5, lineCap: .round)
+                )
+                .frame(width: 220, height: 130)
+                .rotationEffect(.degrees(18))
+        }
     }
 }
 
