@@ -68,13 +68,13 @@ struct OceanTabWaveBackground: View {
                 reverseDirection: true,
                 strokeStyle: WaveStrokeStyle(
                     color: theme.oceanFoamColor,
-                    width: 1.1,
-                    opacity: 0.24 * scale
+                    width: 2.2,
+                    opacity: 0.38 * scale
                 ),
                 foamStyle: WaveFoamStyle(
                     color: theme.oceanFoamColor,
-                    opacity: 0.2 * scale,
-                    depth: 0.024
+                    opacity: 0.32 * scale,
+                    depth: 0.045
                 )
             )
             .frame(height: 200)
@@ -94,13 +94,13 @@ struct OceanTabWaveBackground: View {
                 reverseDirection: false,
                 strokeStyle: WaveStrokeStyle(
                     color: theme.oceanFoamColor,
-                    width: 2.5,
-                    opacity: 0.68 * scale
+                    width: 4.5,
+                    opacity: 0.76 * scale
                 ),
                 foamStyle: WaveFoamStyle(
                     color: theme.oceanFoamColor,
-                    opacity: 0.64 * scale,
-                    depth: 0.08
+                    opacity: 0.72 * scale,
+                    depth: 0.11
                 )
             )
             .frame(height: 200)
@@ -1228,8 +1228,9 @@ struct OceanLegacyArcticTabWaveBackground: View {
                 opacity: 0.20 * scale
             )
 
-            TimelineView(.animation(minimumInterval: 1.0 / 60.0, paused: isPlaybackPaused)) { context in
-                let elapsed = context.date.timeIntervalSinceReferenceDate
+            TimelineView(.animation(minimumInterval: isLowPowerModeEnabled ? 1.0 / 20.0 : profile.edgePhaseStep, paused: isPlaybackPaused)) { context in
+                // Only the aurora moves; the sky remains a stable reading surface.
+                let elapsed = reduceMotion ? 0 : context.date.timeIntervalSinceReferenceDate * 0.5
                 let microElapsed = ArcticPhaseQuantizer.quantizedElapsed(
                     elapsed,
                     step: profile.microPhaseStep
@@ -1240,51 +1241,6 @@ struct OceanLegacyArcticTabWaveBackground: View {
                 )
 
                 ZStack(alignment: .top) {
-                    ArcticRibbonOverlayView(
-                        color: theme.arcticDeepColor,
-                        opacity: 0.14 * scale,
-                        amplitude: 0.035 * scale,
-                        frequency: 0.98,
-                        verticalOffset: 0.40,
-                        bottomFade: 0.42,
-                        ridge: 0.17,
-                        phase: arcticPhase(elapsed: elapsed, duration: 18),
-                        strokeColor: theme.arcticFrostColor,
-                        strokeOpacity: 0.14 * scale,
-                        strokeWidth: 0.9
-                    )
-                    .frame(height: 280)
-
-                    ArcticRibbonOverlayView(
-                        color: theme.arcticAuroraColor,
-                        opacity: 0.22 * scale,
-                        amplitude: 0.072 * scale,
-                        frequency: 1.66,
-                        verticalOffset: 0.50,
-                        bottomFade: 0.34,
-                        ridge: 0.24,
-                        phase: arcticPhase(elapsed: elapsed, duration: 14, reverse: true),
-                        strokeColor: ArcticAuroraPalette.neonMint,
-                        strokeOpacity: 0.26 * scale,
-                        strokeWidth: 1.4
-                    )
-                    .frame(height: 280)
-
-                    ArcticRibbonOverlayView(
-                        color: theme.arcticFrostColor,
-                        opacity: 0.26 * scale,
-                        amplitude: 0.096 * scale,
-                        frequency: 2.24,
-                        verticalOffset: 0.57,
-                        bottomFade: 0.30,
-                        ridge: 0.30,
-                        phase: arcticPhase(elapsed: elapsed, duration: 11),
-                        strokeColor: ArcticAuroraPalette.violet,
-                        strokeOpacity: 0.30 * scale,
-                        strokeWidth: 1.9
-                    )
-                    .frame(height: 280)
-
                     ArcticAuroraCurtainOverlayView(
                         primaryColor: ArcticAuroraPalette.neonMint,
                         secondaryColor: ArcticAuroraPalette.emerald,
@@ -1470,8 +1426,9 @@ struct OceanLegacyArcticDetailWaveBackground: View {
                 opacity: 0.13
             )
 
-            TimelineView(.animation(minimumInterval: 1.0 / 60.0, paused: isPlaybackPaused)) { context in
-                let elapsed = context.date.timeIntervalSinceReferenceDate
+            TimelineView(.animation(minimumInterval: isLowPowerModeEnabled ? 1.0 / 20.0 : profile.edgePhaseStep, paused: isPlaybackPaused)) { context in
+                // Only the aurora moves; the sky remains a stable reading surface.
+                let elapsed = reduceMotion ? 0 : context.date.timeIntervalSinceReferenceDate * 0.5
                 let microElapsed = ArcticPhaseQuantizer.quantizedElapsed(
                     elapsed,
                     step: profile.microPhaseStep
@@ -1482,51 +1439,6 @@ struct OceanLegacyArcticDetailWaveBackground: View {
                 )
 
                 ZStack(alignment: .top) {
-                    ArcticRibbonOverlayView(
-                        color: theme.arcticDeepColor,
-                        opacity: 0.11,
-                        amplitude: 0.025,
-                        frequency: 1.02,
-                        verticalOffset: 0.42,
-                        bottomFade: 0.42,
-                        ridge: 0.15,
-                        phase: arcticPhase(elapsed: elapsed, duration: 16),
-                        strokeColor: theme.arcticFrostColor,
-                        strokeOpacity: 0.10,
-                        strokeWidth: 0.7
-                    )
-                    .frame(height: 200)
-
-                    ArcticRibbonOverlayView(
-                        color: theme.arcticAuroraColor,
-                        opacity: 0.15,
-                        amplitude: 0.048,
-                        frequency: 1.62,
-                        verticalOffset: 0.52,
-                        bottomFade: 0.40,
-                        ridge: 0.21,
-                        phase: arcticPhase(elapsed: elapsed, duration: 13, reverse: true),
-                        strokeColor: ArcticAuroraPalette.neonMint,
-                        strokeOpacity: 0.20,
-                        strokeWidth: 1.1
-                    )
-                    .frame(height: 200)
-
-                    ArcticRibbonOverlayView(
-                        color: theme.arcticFrostColor,
-                        opacity: 0.18,
-                        amplitude: 0.064,
-                        frequency: 2.02,
-                        verticalOffset: 0.56,
-                        bottomFade: 0.36,
-                        ridge: 0.27,
-                        phase: arcticPhase(elapsed: elapsed, duration: 11),
-                        strokeColor: ArcticAuroraPalette.violet,
-                        strokeOpacity: 0.22,
-                        strokeWidth: 1.3
-                    )
-                    .frame(height: 200)
-
                     ArcticAuroraCurtainOverlayView(
                         primaryColor: ArcticAuroraPalette.neonMint,
                         secondaryColor: ArcticAuroraPalette.emerald,
@@ -1692,8 +1604,9 @@ struct OceanLegacyArcticSheetWaveBackground: View {
                 opacity: 0.10
             )
 
-            TimelineView(.animation(minimumInterval: 1.0 / 60.0, paused: isPlaybackPaused)) { context in
-                let elapsed = context.date.timeIntervalSinceReferenceDate
+            TimelineView(.animation(minimumInterval: isLowPowerModeEnabled ? 1.0 / 20.0 : profile.edgePhaseStep, paused: isPlaybackPaused)) { context in
+                // Only the aurora moves; the sky remains a stable reading surface.
+                let elapsed = reduceMotion ? 0 : context.date.timeIntervalSinceReferenceDate * 0.5
                 let microElapsed = ArcticPhaseQuantizer.quantizedElapsed(
                     elapsed,
                     step: profile.microPhaseStep
@@ -1704,36 +1617,6 @@ struct OceanLegacyArcticSheetWaveBackground: View {
                 )
 
                 ZStack(alignment: .top) {
-                    ArcticRibbonOverlayView(
-                        color: theme.arcticAuroraColor,
-                        opacity: 0.12,
-                        amplitude: 0.034,
-                        frequency: 1.54,
-                        verticalOffset: 0.50,
-                        bottomFade: 0.44,
-                        ridge: 0.20,
-                        phase: arcticPhase(elapsed: elapsed, duration: 13, reverse: true),
-                        strokeColor: ArcticAuroraPalette.neonMint,
-                        strokeOpacity: 0.16,
-                        strokeWidth: 0.9
-                    )
-                    .frame(height: 150)
-
-                    ArcticRibbonOverlayView(
-                        color: theme.arcticFrostColor,
-                        opacity: 0.14,
-                        amplitude: 0.05,
-                        frequency: 1.92,
-                        verticalOffset: 0.54,
-                        bottomFade: 0.40,
-                        ridge: 0.24,
-                        phase: arcticPhase(elapsed: elapsed, duration: 11),
-                        strokeColor: ArcticAuroraPalette.violet,
-                        strokeOpacity: 0.18,
-                        strokeWidth: 1.1
-                    )
-                    .frame(height: 150)
-
                     ArcticAuroraCurtainOverlayView(
                         primaryColor: ArcticAuroraPalette.neonMint,
                         secondaryColor: ArcticAuroraPalette.emerald,

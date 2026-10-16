@@ -41,8 +41,12 @@ struct DashboardView: View {
     private let notificationHubSignal: Int
     private let notificationHubIsActive: Bool
     private let onOpenNotifications: () -> Void
+    private let onOpenActivity: () -> Void
+    private let onOpenWellness: () -> Void
+    private let onLogWeight: () -> Void
     private let launchExperienceReady: Bool
     private let canLoadHealthKitData: Bool
+    private let hasFailedHealthKitAuthorization: Bool
     private let sharedHealthDataService: SharedHealthDataService?
     private let scoreRefreshService: ScoreRefreshService?
     @State private var showWhatsNew = false
@@ -64,8 +68,12 @@ struct DashboardView: View {
         notificationHubSignal: Int = 0,
         notificationHubIsActive: Bool = false,
         onOpenNotifications: @escaping () -> Void = {},
+        onOpenActivity: @escaping () -> Void = {},
+        onOpenWellness: @escaping () -> Void = {},
+        onLogWeight: @escaping () -> Void = {},
         launchExperienceReady: Bool = true,
-        canLoadHealthKitData: Bool = true
+        canLoadHealthKitData: Bool = true,
+        hasFailedHealthKitAuthorization: Bool = false
     ) {
         self.sharedHealthDataService = sharedHealthDataService
         self.scoreRefreshService = scoreRefreshService
@@ -78,8 +86,12 @@ struct DashboardView: View {
         self.notificationHubSignal = notificationHubSignal
         self.notificationHubIsActive = notificationHubIsActive
         self.onOpenNotifications = onOpenNotifications
+        self.onOpenActivity = onOpenActivity
+        self.onOpenWellness = onOpenWellness
+        self.onLogWeight = onLogWeight
         self.launchExperienceReady = launchExperienceReady
         self.canLoadHealthKitData = canLoadHealthKitData
+        self.hasFailedHealthKitAuthorization = hasFailedHealthKitAuthorization
     }
 
     var body: some View {
@@ -102,13 +114,23 @@ struct DashboardView: View {
                                 Task { await viewModel.loadData(canLoadHealthKitData: canLoadHealthKitData) }
                             }
                         } else {
-                            EmptyStateView(
-                                icon: "heart.text.clipboard",
-                                title: "No Health Data",
-                                message: "Grant HealthKit access to see your daily metrics.",
-                                actionTitle: "Open Settings",
-                                action: openSettings
-                            )
+                            if hasFailedHealthKitAuthorization {
+                                EmptyStateView(
+                                    icon: "heart.text.clipboard",
+                                    title: "Health Access Needed",
+                                    message: "Allow Health access in Settings to see your daily metrics.",
+                                    actionTitle: "Open Settings",
+                                    action: openSettings
+                                )
+                            } else {
+                                EmptyStateView(
+                                    icon: "heart.text.clipboard",
+                                    title: "No Measurements Yet",
+                                    message: "Your health trends will appear after measurements are available.",
+                                    actionTitle: "View Activity",
+                                    action: onOpenActivity
+                                )
+                            }
                         }
                     } else {
                         dashboardUpperContent
@@ -284,7 +306,6 @@ struct DashboardView: View {
                     ConditionHeroView(
                         score: score,
                         recentScores: viewModel.recentScores,
-                        weeklyGoalProgress: viewModel.weeklyGoalProgress,
                         trendBadges: viewModel.heroBaselineDetails,
                         hourlySparkline: viewModel.conditionSparkline.nonEmptyOrNil,
                         adaptiveMessage: viewModel.adaptiveHeroMessage
@@ -293,6 +314,26 @@ struct DashboardView: View {
                 .reportTabHeroFrame()
                 .buttonStyle(.plain)
                 .accessibilityIdentifier("dashboard-hero-condition")
+                Button {
+                    if score.status == .tired || score.status == .warning {
+                        onOpenWellness()
+                    } else {
+                        onOpenActivity()
+                    }
+                } label: {
+                    Group {
+                        if score.status == .tired || score.status == .warning {
+                            Label("View Wellness", systemImage: "arrow.right")
+                        } else {
+                            Label("View Activity", systemImage: "arrow.right")
+                        }
+                    }
+                    .font(.subheadline.weight(.semibold))
+                    .frame(maxWidth: .infinity, minHeight: 44)
+                }
+                .buttonStyle(.borderedProminent)
+                .buttonBorderShape(.capsule)
+                .accessibilityIdentifier("dashboard-primary-activity")
                 if viewModel.hasLimitedConditionHistory {
                     LimitedHealthHistoryNotice()
                 }
@@ -321,25 +362,6 @@ struct DashboardView: View {
             )
             .transition(Self.sectionTransition)
             .staggeredAppear(index: 1)
-        }
-
-        // Quick Actions Row (hidden at night)
-        if viewModel.shouldShowQuickActions {
-        QuickActionsRow(
-            onLogWeight: {
-                if let weightMetric = viewModel.sortedMetrics.first(where: { $0.category == .weight }) {
-                    openMetric(weightMetric)
-                }
-            },
-            onOpenSleep: {
-                if let sleepMetric = viewModel.sortedMetrics.first(where: { $0.category == .sleep }) {
-                    openMetric(sleepMetric)
-                }
-            },
-            onOpenBriefing: { isShowingBriefing = true },
-            onOpenHealthQA: { isShowingHealthDataQA = true }
-        )
-        .staggeredAppear(index: 2)
         }
 
         // Daily Progress Rings (hidden at night)
@@ -408,8 +430,7 @@ struct DashboardView: View {
             ExerciseIntelligenceCard(
                 suggestion: suggestion,
                 conditionScore: viewModel.conditionScore?.score,
-                sleepMinutes: viewModel.sortedMetrics.first(where: { $0.category == .sleep })?.value,
-                onStartWorkout: {} // Workout start requires tab switch — handled by user
+                sleepMinutes: viewModel.sortedMetrics.first(where: { $0.category == .sleep })?.value
             )
             .transition(Self.sectionTransition)
             .staggeredAppear(index: 6)
@@ -443,15 +464,22 @@ struct DashboardView: View {
                 .staggeredAppear(index: 8)
         }
 
-        // Health Q&A
-        HealthDataQACard(isAvailable: HealthDataQAService.isAvailable) {
-            isShowingHealthDataQA = true
-        }
-        .staggeredAppear(index: 8)
     }
 
     @ViewBuilder
     private var dashboardLowerContent: some View {
+        QuickActionsRow(
+            onLogWeight: onLogWeight,
+            onOpenSleep: {
+                if let sleepMetric = viewModel.sortedMetrics.first(where: { $0.category == .sleep }) {
+                    openMetric(sleepMetric)
+                } else {
+                    onOpenWellness()
+                }
+            }
+        )
+        .staggeredAppear(index: 9)
+
         // Pinned Metrics
         if !viewModel.pinnedCards.isEmpty {
             pinnedSection
@@ -511,6 +539,11 @@ struct DashboardView: View {
             .transition(Self.sectionTransition)
             .staggeredAppear(index: 12)
         }
+
+        HealthDataQACard(isAvailable: HealthDataQAService.isAvailable) {
+            isShowingHealthDataQA = true
+        }
+        .staggeredAppear(index: 13)
     }
 
     // MARK: - Sections

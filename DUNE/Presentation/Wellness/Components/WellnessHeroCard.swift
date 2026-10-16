@@ -9,7 +9,7 @@ struct WellnessHeroCard: View {
 
     private enum Labels {
         static let wellness = "WELLNESS"
-        static let sleep = String(localized: "Sleep")
+        static let sleep = String(localized: "Sleep Score")
         static let condition = String(localized: "Condition")
         static let body = String(localized: "Body")
     }
@@ -32,7 +32,8 @@ struct WellnessHeroCard: View {
                 showsChevron: true,
                 accessibilityLabel: "Wellness score \(score.score), \(score.status.label)",
                 accessibilityHint: "Tap to see score details",
-                hourlySparkline: hourlySparkline
+                hourlySparkline: hourlySparkline,
+                trendTitle: "Wellness Trend"
             )
         } else {
             emptyCard

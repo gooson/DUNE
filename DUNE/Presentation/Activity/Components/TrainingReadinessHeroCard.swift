@@ -31,7 +31,8 @@ struct TrainingReadinessHeroCard: View {
                 showsChevron: false,
                 accessibilityLabel: String(localized: "Training readiness \(readiness.score), \(readiness.status.label)"),
                 accessibilityHint: nil,
-                hourlySparkline: hourlySparkline
+                hourlySparkline: hourlySparkline,
+                trendTitle: "Readiness Trend"
             )
         } else {
             emptyCard

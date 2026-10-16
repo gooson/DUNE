@@ -80,7 +80,7 @@ struct AIFeatureEvaluationTests {
                 GeneratedWorkoutExerciseSlot(exerciseDefinitionID: "push-up", exerciseName: "푸시업", sets: 3, reps: 12),
             ]
         )
-        let metrics = AIFeatureEvaluationScorer.score(template: invalidTemplate, sample: workoutCase, catalog: catalog)
+        let metrics = AIFeatureEvaluationScorer.score(template: invalidTemplate, sample: workoutCase, catalog: catalog.allExercises())
         #expect(metrics.catalogIDsAreValid == false)
         #expect(metrics.exerciseNamesMatchCatalog == false)
         #expect(metrics.slotsAreUnique == true)

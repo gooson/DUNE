@@ -8,11 +8,13 @@ struct WellnessView: View {
     @State private var isShowingPostureCapture = false
     @State private var isShowingComparison = false
     @State private var isShowingRealtimePosture = false
+    @State private var lastHandledWeightEntrySignal = 0
     @Environment(\.modelContext) private var modelContext
     @Environment(\.appTheme) private var theme
     @Environment(\.horizontalSizeClass) private var sizeClass
 
     private let scrollToTopSignal: Int
+    private let openWeightEntrySignal: Int
 
     private enum ScrollAnchor: Hashable {
         case top
@@ -27,11 +29,13 @@ struct WellnessView: View {
         sharedHealthDataService: SharedHealthDataService? = nil,
         scoreRefreshService: ScoreRefreshService? = nil,
         scrollToTopSignal: Int = 0,
-        refreshSignal: Int = 0
+        refreshSignal: Int = 0,
+        openWeightEntrySignal: Int = 0
     ) {
         _viewModel = State(initialValue: WellnessViewModel(sharedHealthDataService: sharedHealthDataService, scoreRefreshService: scoreRefreshService))
         self.scrollToTopSignal = scrollToTopSignal
         self.refreshSignal = refreshSignal
+        self.openWeightEntrySignal = openWeightEntrySignal
         self.scoreRefreshService = scoreRefreshService
     }
 
@@ -103,12 +107,12 @@ struct WellnessView: View {
                         }
 
                         // Sleep Prediction
-                        SectionGroup(title: "Tonight's Sleep", icon: "moon.zzz",
+                        SectionGroup(title: "Sleep Prediction", icon: "moon.zzz",
                                      iconColor: DS.Color.sleep,
                                      sectionIdentifier: "wellness-section-sleep-prediction") {
-                            if viewModel.sleepPrediction != nil {
+                            if let prediction = viewModel.sleepPrediction {
                                 NavigationLink(value: SleepPredictionDestination()) {
-                                    SleepPredictionCard(prediction: viewModel.sleepPrediction)
+                                    predictionSummary(prediction)
                                 }
                                 .buttonStyle(.plain)
                                 .accessibilityIdentifier("wellness-sleep-prediction-detail-link")
@@ -375,10 +379,52 @@ struct WellnessView: View {
         .task(id: refreshSignal) {
             viewModel.loadData()
         }
+        .onAppear {
+            openWeightEntryIfNeeded(openWeightEntrySignal)
+        }
+        .onChange(of: openWeightEntrySignal) { _, signal in
+            openWeightEntryIfNeeded(signal)
+        }
         .englishNavigationTitle("Wellness")
     }
 
     // MARK: - Helpers
+
+    private func openWeightEntryIfNeeded(_ signal: Int) {
+        guard signal > lastHandledWeightEntrySignal else { return }
+        lastHandledWeightEntrySignal = signal
+        bodyViewModel.resetForm()
+        bodyViewModel.isShowingAddSheet = true
+    }
+
+    private func predictionSummary(_ prediction: SleepQualityPrediction) -> some View {
+        StandardCard {
+            HStack(spacing: DS.Spacing.md) {
+                Image(systemName: "moon.zzz")
+                    .font(.title3)
+                    .foregroundStyle(DS.Color.sleep)
+                    .accessibilityHidden(true)
+
+                VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                    Text("Tonight's Sleep")
+                        .font(.subheadline.weight(.semibold))
+                    Text(prediction.outlook.displayName)
+                        .font(.subheadline)
+                    Text(prediction.confidence.displayName)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+
+                Spacer(minLength: DS.Spacing.xs)
+
+                Text("\(prediction.predictedScore)")
+                    .font(DS.Typography.cardScore)
+                    .monospacedDigit()
+                    .foregroundStyle(theme.heroTextGradient)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+    }
 
     private func partialFailureBanner(_ message: String) -> some View {
         InlineCard {

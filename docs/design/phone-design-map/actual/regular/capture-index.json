@@ -1,11 +1,11 @@
 {
   "device": "regular",
-  "source_revision": "2c43546f213dd2c445ab26f12fa27420eb823ea0",
+  "source_revision": "ab567364d38a127d1aafe5aca586020adf222ce9",
   "source_worktree_dirty": true,
   "xcresults": [
-    "/Users/shanks/.codex/worktrees/51b3/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.16_14-47-28-+0900.xcresult"
+    "/Users/shanks/.codex/worktrees/92bc/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.17_02-24-04-+0900.xcresult"
   ],
-  "processed_capture_candidates": 105,
+  "processed_capture_candidates": 106,
   "captured": {
     "W13": {
       "row_id": "W13",
@@ -16,16 +16,6 @@
       "image": "731212C8-7C10-48F7-93F2-C7D2B9744E04.png",
       "screen": "screen-0-1320x2868-tap template-form-name_0_BC73D4AE-FE23-4616-90F6-012C6D72736E.png",
       "file": "W13.png"
-    },
-    "A01": {
-      "row_id": "A01",
-      "evidence": "activity-hero-readiness",
-      "test": "ActivityExercisePickerRegressionTests/testQuickStartPickerCanRevealAllExercisesAndOpenDetail()",
-      "action": "root after setup -[ActivityExercisePickerRegressionTests testQuickStartPickerCanRevealAllExercisesAndOpenDetail]",
-      "timestamp": 1791816265.148,
-      "image": "CE80B326-BB3C-4D69-BEC3-880CBC0BE214.png",
-      "screen": "screen-0-1320x2868-root after setup -[ActivityExercisePickerRegressionTests testQuickStartPickerCanRevealAllExercisesAndOpenDetail]_0_91CCC257-FB8E-4A20-86B4-E4470D686338.png",
-      "file": "A01.png"
     },
     "W05": {
       "row_id": "W05",
@@ -176,16 +166,6 @@
       "image": "F0FBD87F-0146-4DE9-A11B-11290D164EF0.png",
       "screen": "screen-0-1320x2868-before teardown -[NotificationRoutingRegressionTests testBedtimeReminderPushesFromNotificationHub]_0_F9E76A4C-20AF-4E9E-B6E3-EB35A91E5F8B.png",
       "file": "T15.png"
-    },
-    "L01": {
-      "row_id": "L01",
-      "evidence": "title:Life",
-      "test": "LifeRegressionTests/testVisualAuditHabitManagement()",
-      "action": "root after setup -[LifeRegressionTests testVisualAuditHabitManagement]",
-      "timestamp": 1791836198.48,
-      "image": "94EE0C5A-F32B-4DBE-BD98-9F1354BD705F.png",
-      "screen": "screen-0-1320x2868-root after setup -[LifeRegressionTests testVisualAuditHabitManagement]_0_7CC4F92A-A039-4D2E-A54A-3FC902CD833B.png",
-      "file": "L01.png"
     },
     "S03": {
       "row_id": "S03",
@@ -446,16 +426,6 @@
       "image": "6A050775-A564-44A9-BC88-2D89C53C2EC4.png",
       "screen": "screen-0-1320x2868-tap wellness-link-bodyhistory_0_55D60633-EB4C-4068-A55C-E638F3FA4B57.png",
       "file": "H06.png"
-    },
-    "H01": {
-      "row_id": "H01",
-      "evidence": "title:Wellness",
-      "test": "WellnessRegressionTests/testBodyAddFlowSavesRecord()",
-      "action": "root after setup -[WellnessRegressionTests testBodyAddFlowSavesRecord]",
-      "timestamp": 1791819512.442,
-      "image": "6C591421-9D2B-46B7-8121-2EF437A110CE.png",
-      "screen": "screen-0-1320x2868-root after setup -[WellnessRegressionTests testBodyAddFlowSavesRecord]_0_923F06EE-3509-49AB-A62A-94E770639941.png",
-      "file": "H01.png"
     },
     "H05": {
       "row_id": "H05",
@@ -1055,15 +1025,45 @@
       "video": "launch.mov",
       "frame_time": "1.2"
     },
+    "L01": {
+      "row_id": "L01",
+      "evidence": "title:Life",
+      "test": "LifeRegressionTests/testVisualAuditHabitManagement()",
+      "action": "root after setup -[LifeRegressionTests testVisualAuditHabitManagement]",
+      "timestamp": 1792168029.54,
+      "image": "E7558516-E67E-41C9-ADC1-ABC02B9A2C6C.png",
+      "screen": "screen-0-1206x2622-root after setup -[LifeRegressionTests testVisualAuditHabitManagement]_0_65B7BB1F-8506-4396-85A1-2E63D377F55D.png",
+      "file": "L01.png"
+    },
     "T03": {
       "row_id": "T03",
       "evidence": "title:Today",
-      "test": "NotificationRoutingRegressionTests/testBedtimeReminderPushesFromNotificationHub()",
-      "action": "root after setup -[NotificationRoutingRegressionTests testBedtimeReminderPushesFromNotificationHub]",
-      "timestamp": 1792129663.491,
-      "image": "D2460A01-464D-4462-BD6B-76E48FC5D635.png",
-      "screen": "screen-0-1206x2622-root after setup -[NotificationRoutingRegressionTests testBedtimeReminderPushesFromNotificationHub]_0_1EC1E545-2B06-4CE6-BFDE-B0DF5C89B300.png",
+      "test": "TodayDesignMapCaptureTests/testTodayRootRenders()",
+      "action": "root after setup -[TodayDesignMapCaptureTests testTodayRootRenders]",
+      "timestamp": 1792169849.248,
+      "image": "7E8B4ABD-974A-4F73-9BA4-7C2BD1315C1C.png",
+      "screen": "screen-0-1206x2622-root after setup -[TodayDesignMapCaptureTests testTodayRootRenders]_0_1E7FF8D8-17CC-465E-B201-1DC97A91D732.png",
       "file": "T03.png"
+    },
+    "A01": {
+      "row_id": "A01",
+      "evidence": "title:Activity",
+      "test": "ActivityExercisePickerRegressionTests/testQuickStartPickerCanRevealAllExercisesAndOpenDetail()",
+      "action": "root after setup -[ActivityExercisePickerRegressionTests testQuickStartPickerCanRevealAllExercisesAndOpenDetail]",
+      "timestamp": 1792170051.24,
+      "image": "2A556221-FD15-4300-8B96-EEBB9A96E41A.png",
+      "screen": "screen-0-1206x2622-root after setup -[ActivityExercisePickerRegressionTests testQuickStartPickerCanRevealAllExercisesAndOpenDetail]_0_B602611E-3706-4795-87FF-D40C60F36472.png",
+      "file": "A01.png"
+    },
+    "H01": {
+      "row_id": "H01",
+      "evidence": "title:Wellness",
+      "test": "WellnessDesignMapCaptureTests/testWellnessRootRenders()",
+      "action": "root after setup -[WellnessDesignMapCaptureTests testWellnessRootRenders]",
+      "timestamp": 1792171508.039,
+      "image": "63E44519-91EB-4EF1-8697-CF8E034D6C23.png",
+      "screen": "screen-0-1206x2622-root after setup -[WellnessDesignMapCaptureTests testWellnessRootRenders]_0_4344A1D8-5C31-4802-B7DA-541B58CFAD71.png",
+      "file": "H01.png"
     }
   },
   "unmatched": []

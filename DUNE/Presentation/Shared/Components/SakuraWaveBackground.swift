@@ -424,12 +424,14 @@ struct SakuraTabWaveBackground: View {
             SakuraPetalDriftView(
                 intensity: Double(scale),
                 darkModeBoost: colorScheme == .dark ? 1.12 : 1.0,
-                petalCount: preset == .life ? 22 : 34,
-                speed: 12,
+                petalCount: preset == .life ? 5 : 8,
+                speed: 24,
                 petalColor: theme.sakuraPetalColor,
                 topBias: 0.84,
                 fallRange: 0.68
             )
+            .frame(height: 240)
+            .clipped()
 
             SakuraFramingBranches(
                 theme: theme,
@@ -573,12 +575,14 @@ struct SakuraDetailWaveBackground: View {
             SakuraPetalDriftView(
                 intensity: 0.75,
                 darkModeBoost: colorScheme == .dark ? 1.12 : 1.0,
-                petalCount: 22,
-                speed: 13.5,
+                petalCount: 5,
+                speed: 28,
                 petalColor: theme.sakuraPetalColor,
                 topBias: 0.78,
                 fallRange: 0.72
             )
+            .frame(height: 190)
+            .clipped()
 
             LinearGradient(
                 colors: [
@@ -654,12 +658,14 @@ struct SakuraSheetWaveBackground: View {
             SakuraPetalDriftView(
                 intensity: 0.48,
                 darkModeBoost: colorScheme == .dark ? 1.08 : 1.0,
-                petalCount: 14,
-                speed: 15.5,
+                petalCount: 3,
+                speed: 30,
                 petalColor: theme.sakuraPetalColor,
                 topBias: 0.74,
                 fallRange: 0.64
             )
+            .frame(height: 160)
+            .clipped()
 
             LinearGradient(
                 colors: [

@@ -143,3 +143,30 @@ final class WellnessSmokeTests: UITestBaseCase {
         return addMenuByIdentifier
     }
 }
+
+/// Seeded route coverage for the compact Wellness layout.
+@MainActor
+final class WellnessSeededSmokeTests: SeededUITestBaseCase {
+    override var additionalLaunchArguments: [String] {
+        ["--ui-design-map-sleep-prediction", "-morningBriefingDisabled", "YES"]
+    }
+
+    override func setUpWithError() throws {
+        try super.setUpWithError()
+        navigateToWellness()
+    }
+
+    func testSleepPredictionSummaryOpensDetail() throws {
+        let sectionID = "wellness-section-sleep-prediction"
+        XCTAssertTrue(app.scrollToElementIfNeeded(sectionID, maxSwipes: 10), "Sleep Prediction section should be reachable")
+
+        let detailLink = app.buttons["wellness-sleep-prediction-detail-link"].firstMatch
+        XCTAssertTrue(detailLink.waitForExistence(timeout: 5), "Sleep Prediction summary should be a detail link")
+        detailLink.tap()
+
+        XCTAssertTrue(
+            app.descendants(matching: .any)["wellness-sleep-prediction-detail-screen"].firstMatch.waitForExistence(timeout: 8),
+            "Sleep Prediction should open its detail screen"
+        )
+    }
+}

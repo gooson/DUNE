@@ -198,10 +198,16 @@ struct DesertTabWaveBackground: View {
         let scale = intensityScale
 
         ZStack(alignment: .top) {
+            LinearGradient(
+                colors: desertGradientColors,
+                startPoint: .top,
+                endPoint: DS.Gradient.tabBackgroundEnd
+            )
+
             // Layer 1: Far — broad, smooth horizon dunes
             DesertDuneOverlayView(
                 color: resolvedColor,
-                opacity: 0.085 * scale,
+                opacity: 0.12 * scale,
                 amplitude: 0.05 * scale,
                 frequency: 0.72,
                 verticalOffset: 0.37,
@@ -210,15 +216,15 @@ struct DesertTabWaveBackground: View {
                 skewOffset: .pi / 6,
                 driftDuration: 18,
                 crestColor: theme.sandColor,
-                crestOpacity: 0.12 * Double(scale),
-                crestWidth: 0.9
+                crestOpacity: 0.22 * Double(scale),
+                crestWidth: 1.2
             )
             .frame(height: 200)
 
             // Layer 2: Near — smooth foreground dune slope
             DesertDuneOverlayView(
                 color: resolvedColor,
-                opacity: 0.15 * scale,
+                opacity: 0.18 * scale,
                 amplitude: 0.082 * scale,
                 frequency: 1.35,
                 verticalOffset: 0.57,
@@ -230,17 +236,10 @@ struct DesertTabWaveBackground: View {
                 driftDuration: 13,
                 showShimmer: true,
                 crestColor: theme.sandColor,
-                crestOpacity: 0.20 * Double(scale),
-                crestWidth: 1.35
+                crestOpacity: 0.30 * Double(scale),
+                crestWidth: 1.7
             )
             .frame(height: 200)
-
-            // Background gradient
-            LinearGradient(
-                colors: desertGradientColors,
-                startPoint: .top,
-                endPoint: DS.Gradient.tabBackgroundEnd
-            )
         }
         .ignoresSafeArea()
         .animation(DS.Animation.atmosphereTransition, value: atmosphere)
@@ -270,6 +269,12 @@ struct DesertDetailWaveBackground: View {
         let gradientTop = color.opacity(DS.Opacity.light)
 
         ZStack(alignment: .top) {
+            LinearGradient(
+                colors: [gradientTop, .clear],
+                startPoint: .top,
+                endPoint: DS.Gradient.tabBackgroundEnd
+            )
+
             DesertDuneOverlayView(
                 color: color,
                 opacity: 0.09,
@@ -280,16 +285,10 @@ struct DesertDetailWaveBackground: View {
                 skewness: 0.18,
                 driftDuration: 16,
                 crestColor: theme.sandColor,
-                crestOpacity: 0.16,
-                crestWidth: 1.0
+                crestOpacity: 0.22,
+                crestWidth: 1.2
             )
             .frame(height: 150)
-
-            LinearGradient(
-                colors: [gradientTop, .clear],
-                startPoint: .top,
-                endPoint: DS.Gradient.tabBackgroundEnd
-            )
         }
         .ignoresSafeArea()
     }
@@ -306,6 +305,12 @@ struct DesertSheetWaveBackground: View {
         let gradientTop = color.opacity(DS.Opacity.light)
 
         ZStack(alignment: .top) {
+            LinearGradient(
+                colors: [gradientTop, .clear],
+                startPoint: .top,
+                endPoint: DS.Gradient.sheetBackgroundEnd
+            )
+
             DesertDuneOverlayView(
                 color: color,
                 opacity: 0.065,
@@ -320,12 +325,6 @@ struct DesertSheetWaveBackground: View {
                 crestWidth: 0.9
             )
             .frame(height: 120)
-
-            LinearGradient(
-                colors: [gradientTop, .clear],
-                startPoint: .top,
-                endPoint: DS.Gradient.sheetBackgroundEnd
-            )
         }
         .ignoresSafeArea()
     }

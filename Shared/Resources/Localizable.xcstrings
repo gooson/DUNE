@@ -2850,6 +2850,23 @@
         }
       }
     },
+    "24h" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "24時間"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "24시간"
+          }
+        }
+      }
+    },
     "30 Days" : {
       "localizations" : {
         "ja" : {
@@ -4206,6 +4223,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "세션 간 충분한 휴식을 취하세요"
+          }
+        }
+      }
+    },
+    "Allow Health access in Settings to see your daily metrics." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "設定でヘルスケアへのアクセスを許可すると、毎日の指標を確認できます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "설정에서 건강 데이터 접근을 허용하면 일일 지표를 볼 수 있어요."
           }
         }
       }
@@ -9273,6 +9307,23 @@
         }
       }
     },
+    "Condition Trend" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "コンディションの推移"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "컨디션 추세"
+          }
+        }
+      }
+    },
     "Condition-driven surroundings and recovery tone." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -13631,6 +13682,23 @@
         }
       }
     },
+    "Falling" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "下降"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "하락"
+          }
+        }
+      }
+    },
     "Far" : {
       "localizations" : {
         "ja" : {
@@ -14620,6 +14688,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "금"
+          }
+        }
+      }
+    },
+    "From %@ to %@. Minimum %d, maximum %d, current %d." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@から%@まで。最小%d、最大%d、現在%d。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@부터 %@까지. 최저 %d, 최고 %d, 현재 %d."
           }
         }
       }
@@ -16370,6 +16455,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "건강"
+          }
+        }
+      }
+    },
+    "Health Access Needed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ヘルスケアへのアクセスが必要です"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "건강 데이터 접근 권한 필요"
           }
         }
       }
@@ -23962,6 +24064,23 @@
         }
       }
     },
+    "No Measurements Yet" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "測定記録はまだありません"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "아직 측정 기록이 없어요"
+          }
+        }
+      }
+    },
     "No memo" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -27765,12 +27884,12 @@
       }
     },
     "Readiness Trend" : {
-      "extractionState" : "stale",
+      "extractionState" : "manual",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "準備度トレンド"
+            "value" : "準備度の推移"
           }
         },
         "ko" : {
@@ -30030,6 +30149,23 @@
         }
       }
     },
+    "Rising" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "上昇"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "상승"
+          }
+        }
+      }
+    },
     "Risk Factors" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -30826,6 +30962,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "점수 가이드"
+          }
+        }
+      }
+    },
+    "Score Trend" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "スコアの推移"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "점수 추세"
           }
         }
       }
@@ -38059,11 +38212,12 @@
       }
     },
     "Trend" : {
+      "extractionState" : "manual",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "トレンド"
+            "value" : "推移"
           }
         },
         "ko" : {
@@ -39166,6 +39320,23 @@
         }
       }
     },
+    "View Activity" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アクティビティを見る"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "활동 보기"
+          }
+        }
+      }
+    },
     "View All" : {
       "localizations" : {
         "ja" : {
@@ -39301,6 +39472,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "주간 리포트 보기"
+          }
+        }
+      }
+    },
+    "View Wellness" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ウェルネスを見る"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "웰니스 보기"
           }
         }
       }
@@ -40897,6 +41085,23 @@
         }
       }
     },
+    "Wellness Trend" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ウェルネスの推移"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "웰니스 추세"
+          }
+        }
+      }
+    },
     "What is Cumulative Stress?" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -42480,6 +42685,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "습관은 iPhone에서 추적됩니다. iPhone에서 DUNE을 열어 습관을 확인하고 관리하세요."
+          }
+        }
+      }
+    },
+    "Your health trends will appear after measurements are available." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "測定記録が集まると、健康状態の推移がここに表示されます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "측정 기록이 쌓이면 건강 추세가 여기에 표시돼요."
           }
         }
       }

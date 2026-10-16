@@ -11,6 +11,7 @@ enum ContourPalette {
 /// Cached unit-space geometry keeps trigonometry out of Shape.path(in:).
 struct ContourLines: Shape {
     var simplified = false
+    var indexLinesOnly = false
 
     private static let rings: [[CGPoint]] = (0..<14).map { ring in
         let radius = 0.12 + Double(ring) * 0.045
@@ -29,6 +30,7 @@ struct ContourLines: Shape {
         let scale = min(rect.width, rect.height * 1.8)
         for (index, ring) in Self.rings.enumerated() {
             if simplified && !index.isMultiple(of: 2) { continue }
+            if indexLinesOnly && !index.isMultiple(of: 4) { continue }
             let points = ring.map {
                 CGPoint(x: rect.minX + rect.width * 0.94 + $0.x * scale,
                         y: rect.minY + rect.height * 0.12 + $0.y * scale)
@@ -104,6 +106,11 @@ struct ContourBackground: View {
         ZStack {
             ContourLines(simplified: style == .watch)
                 .stroke(ContourPalette.ink.opacity(style.lineOpacity), lineWidth: 0.7)
+
+            if style != .watch {
+                ContourLines(indexLinesOnly: true)
+                    .stroke(ContourPalette.ink.opacity(style.lineOpacity * 1.35), lineWidth: 1.6)
+            }
 
             if style == .tab {
                 if !reduceMotion && scenePhase == .active {

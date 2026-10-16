@@ -168,6 +168,7 @@ struct ContentView: View {
     @State private var notificationRouteSignal = 0
     @State private var notificationHubSignal = 0
     @State private var lifeChecklistSignal = 0
+    @State private var weightEntrySignal = 0
     private let shortcutTemplateID: UUID?
     private let shortcutTemplateSignal: Int
     #if DEBUG
@@ -208,8 +209,22 @@ struct ContentView: View {
                         notificationHubSignal: notificationHubSignal,
                         notificationHubIsActive: notificationHubSignal > 0 && !todayNavPath.isEmpty,
                         onOpenNotifications: openNotificationHubManually,
+                        onOpenActivity: {
+                            trainNavPath = NavigationPath()
+                            selectedSection = .train
+                        },
+                        onOpenWellness: {
+                            wellnessNavPath = NavigationPath()
+                            selectedSection = .wellness
+                        },
+                        onLogWeight: {
+                            wellnessNavPath = NavigationPath()
+                            weightEntrySignal += 1
+                            selectedSection = .wellness
+                        },
                         launchExperienceReady: launchExperienceReady,
-                        canLoadHealthKitData: canLoadHealthKitData
+                        canLoadHealthKitData: canLoadHealthKitData,
+                        hasFailedHealthKitAuthorization: hasFailedHealthKitAuthorization
                     )
                     .navigationDestination(for: NotificationPresentationDestination.self) { destination in
                         notificationDestinationView(for: destination)
@@ -249,7 +264,8 @@ struct ContentView: View {
                         sharedHealthDataService: sharedHealthDataService,
                         scoreRefreshService: scoreRefreshService,
                         scrollToTopSignal: wellnessScrollToTopSignal,
-                        refreshSignal: refreshSignal
+                        refreshSignal: refreshSignal,
+                        openWeightEntrySignal: weightEntrySignal
                     )
                     .navigationDestination(for: NotificationPresentationDestination.self) { destination in
                         notificationDestinationView(for: destination)

@@ -28,6 +28,7 @@ struct HeroScoreCard: View {
     let accessibilityLabel: String
     let accessibilityHint: String?
     var hourlySparkline: HourlySparklineData?
+    var trendTitle: LocalizedStringKey = "Trend"
 
     @State private var animatedScore: Int = 0
     @State private var isAppeared = false
@@ -63,6 +64,7 @@ struct HeroScoreCard: View {
 
     var body: some View {
         HeroCard(tintColor: statusColor) {
+            VStack(alignment: .leading, spacing: DS.Spacing.md) {
             ViewThatFits(in: .horizontal) {
                 if !dynamicTypeSize.isAccessibilitySize {
                     HStack(spacing: isRegular ? DS.Spacing.xxl : DS.Spacing.xl) {
@@ -81,10 +83,42 @@ struct HeroScoreCard: View {
                     scoreInfo
                 }
             }
+            if let sparkline = hourlySparkline, sparkline.points.count >= 2 {
+                VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                    HStack {
+                        Text(trendTitle)
+                            .font(.subheadline.weight(.semibold))
+                        Spacer()
+                        Text(sparkline.includesYesterday ? "24h" : "Today")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    HourlySparklineView(
+                        data: sparkline,
+                        tintColor: statusColor,
+                        height: isRegular ? 84 : 72,
+                        showsReferenceLabels: true,
+                        accessibilityTitle: trendTitle
+                    )
+                }
+            } else {
+                VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                    Text(trendTitle)
+                        .font(.subheadline.weight(.semibold))
+                    Text("Not enough data to show trend.")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                        .frame(maxWidth: .infinity, minHeight: isRegular ? 84 : 72, alignment: .center)
+                }
+            }
+            ViewThatFits(in: .horizontal) {
+                HStack(spacing: DS.Spacing.md) { subScoreItems }
+                    .fixedSize(horizontal: true, vertical: false)
+                VStack(alignment: .leading, spacing: DS.Spacing.sm) { subScoreItems }
+            }
+            }
         }
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel(accessibilityLabel)
-        .accessibilityHint(accessibilityHint ?? "")
+        .accessibilityElement(children: .contain)
         .sensoryFeedback(.impact(weight: .light), trigger: isAppeared)
         .task(id: score) {
             let isFirst = !isAppeared
@@ -135,9 +169,11 @@ struct HeroScoreCard: View {
                     .contentTransition(.numericText())
 
                 Text(scoreLabel)
-                    .font(.system(size: 9, weight: .semibold, design: .rounded))
+                    .font(.caption2.weight(.semibold))
                     .foregroundStyle(theme.sandColor)
                     .tracking(1)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
             }
             .frame(width: ringContentSize, height: ringContentSize)
         }
@@ -179,29 +215,10 @@ struct HeroScoreCard: View {
                 }
             }
 
-            // Hourly sparkline when available
-            if let sparkline = hourlySparkline, !sparkline.points.isEmpty {
-                HStack(spacing: DS.Spacing.xs) {
-                    HourlySparklineView(data: sparkline, tintColor: statusColor)
-                        .frame(height: isRegular ? 48 : 36)
-
-                    Text(sparkline.includesYesterday ? "24h" : "Today")
-                        .font(.caption2)
-                        .foregroundStyle(.tertiary)
-                }
-            }
-
-            ViewThatFits(in: .horizontal) {
-                HStack(spacing: DS.Spacing.md) {
-                    subScoreItems
-                }
-                .fixedSize(horizontal: true, vertical: false)
-
-                VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-                    subScoreItems
-                }
-            }
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(accessibilityLabel)
+        .accessibilityHint(accessibilityHint ?? "")
     }
 
     @ViewBuilder

@@ -3,8 +3,6 @@ import SwiftUI
 struct QuickActionsRow: View {
     let onLogWeight: () -> Void
     let onOpenSleep: () -> Void
-    let onOpenBriefing: () -> Void
-    let onOpenHealthQA: () -> Void
 
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
@@ -25,21 +23,6 @@ struct QuickActionsRow: View {
                     action: onOpenSleep
                 )
 
-                quickActionButton(
-                    icon: "sun.horizon.fill",
-                    label: String(localized: "Briefing"),
-                    color: DS.Color.warmGlow,
-                    identifier: "dashboard-quick-action-briefing",
-                    action: onOpenBriefing
-                )
-
-                quickActionButton(
-                    icon: "bubble.left.and.text.bubble.right.fill",
-                    label: String(localized: "Ask AI"),
-                    color: DS.Color.hrv,
-                    identifier: "dashboard-quick-action-qa",
-                    action: onOpenHealthQA
-                )
             }
             .padding(.horizontal, DS.Spacing.xs)
         }
