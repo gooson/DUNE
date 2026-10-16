@@ -64,6 +64,62 @@ private actor SequencedAllDataHRVService: HRVQuerying {
     }
 }
 
+private actor SuspendedLimitedHistoryDates: MetricHistoryQuerying {
+    let limitedStart: Date
+    private var lookupStarted = false
+    private var startedContinuation: CheckedContinuation<Void, Never>?
+    private var releaseContinuation: CheckedContinuation<Void, Never>?
+
+    init(limitedStart: Date) {
+        self.limitedStart = limitedStart
+    }
+
+    func earliestDate(for category: HealthMetric.Category) async throws -> Date? { nil }
+    func latestDate(for category: HealthMetric.Category, before end: Date) async throws -> Date? { nil }
+
+    func limitedReadStartDate(for category: HealthMetric.Category) async -> Date? {
+        lookupStarted = true
+        startedContinuation?.resume()
+        startedContinuation = nil
+        await withCheckedContinuation { continuation in
+            releaseContinuation = continuation
+        }
+        return limitedStart
+    }
+
+    func waitUntilLookupStarts() async {
+        if lookupStarted { return }
+        await withCheckedContinuation { continuation in
+            startedContinuation = continuation
+        }
+    }
+
+    func resumeLookup() {
+        releaseContinuation?.resume()
+        releaseContinuation = nil
+    }
+}
+
+private actor CountingHistoryDates: MetricHistoryQuerying {
+    let dates: [Date]
+    let limitedStart: Date
+    private var latestDateCalls = 0
+
+    init(dates: [Date], limitedStart: Date) {
+        self.dates = dates
+        self.limitedStart = limitedStart
+    }
+
+    func earliestDate(for category: HealthMetric.Category) async throws -> Date? { dates.min() }
+    func limitedReadStartDate(for category: HealthMetric.Category) async -> Date? { limitedStart }
+    func latestDate(for category: HealthMetric.Category, before end: Date) async throws -> Date? {
+        latestDateCalls += 1
+        return dates.filter { $0 < end }.max()
+    }
+
+    func latestDateCallCount() -> Int { latestDateCalls }
+}
+
 struct MockAllDataSleepService: SleepQuerying {
     var stagesByDay: [Date: [SleepStage]] = [:]
 
@@ -253,6 +309,64 @@ struct AllDataViewModelTests {
         #expect(vm.dataPoints.isEmpty)
         #expect(vm.limitedHistoryStartDate == boundary)
         #expect(!vm.hasMoreData)
+    }
+
+    @Test("Initial pagination waits for the limited read boundary and excludes earlier samples")
+    func initialPaginationWaitsForLimitedHistory() async {
+        let boundary = day(2)
+        let history = SuspendedLimitedHistoryDates(limitedStart: boundary)
+        let vm = AllDataViewModel(
+            hrvService: MockAllDataHRVService(hrvSamples: [
+                HRVSample(value: 42, date: day(1)),
+                HRVSample(value: 50, date: day(4)),
+            ]),
+            historyService: history
+        )
+        vm.configure(category: .hrv)
+
+        let initialLoad = Task { await vm.loadInitialData() }
+        await history.waitUntilLookupStarts()
+        await vm.loadNextPage()
+        #expect(vm.dataPoints.isEmpty)
+
+        await history.resumeLookup()
+        await initialLoad.value
+
+        #expect(vm.limitedHistoryStartDate == boundary)
+        #expect(vm.dataPoints.map(\.value) == [42])
+    }
+
+    @Test("A midday read boundary preserves that day's RHR aggregate")
+    func middayBoundaryPreservesRHRBucket() async {
+        let dayStart = day(1)
+        let boundary = dayStart.addingTimeInterval(12 * 3600)
+        let vm = AllDataViewModel(
+            hrvService: MockAllDataHRVService(rhrByDay: [dayStart: 62]),
+            historyService: HistoryDates(dates: [], limitedStart: boundary)
+        )
+        vm.configure(category: .rhr)
+
+        await vm.loadInitialData()
+
+        #expect(vm.limitedHistoryStartDate == boundary)
+        #expect(vm.dataPoints.map(\.value) == [62])
+        #expect(!vm.hasMoreData)
+    }
+
+    @Test("Limited history stops paging before searching older samples")
+    func limitedHistoryStopsPagingAtBoundary() async {
+        let history = CountingHistoryDates(dates: [day(45), day(90)], limitedStart: day(2))
+        let vm = AllDataViewModel(
+            hrvService: MockAllDataHRVService(hrvSamples: [HRVSample(value: 50, date: day(45))]),
+            historyService: history
+        )
+        vm.configure(category: .hrv)
+
+        await vm.loadInitialData()
+
+        #expect(vm.dataPoints.isEmpty)
+        #expect(!vm.hasMoreData)
+        #expect(await history.latestDateCallCount() == 0)
     }
 
     @Test("loadInitialData for HRV loads first page and keeps pagination open")

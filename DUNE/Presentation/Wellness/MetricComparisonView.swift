@@ -101,10 +101,13 @@ struct MetricComparisonView: View {
         VStack(alignment: .leading, spacing: DS.Spacing.md) {
                 Picker(title, selection: selection) {
                     ForEach(metrics) { metric in
-                        Text(metric.name).tag(metric.id)
+                        Text(metric.name)
+                            .tag(metric.id)
+                            .accessibilityIdentifier("\(identifier)-option-\(metric.category.rawValue)")
                     }
                 }
                 .pickerStyle(.menu)
+                .accessibilityIdentifier("\(identifier)-picker")
                 if let metric = metrics.first(where: { $0.id == selection.wrappedValue }) {
                     ComparisonMetricChart(metric: metric, period: period, referenceDate: referenceDate)
                         .id(metric.id)

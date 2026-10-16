@@ -162,7 +162,13 @@ actor HealthKitManager: HealthKitManaging {
     func limitedReadStartDate(for type: HKObjectType) -> Date? {
 #if DEBUG && targetEnvironment(simulator)
         let arguments = ProcessInfo.processInfo.arguments
-        if arguments.contains("--uitesting"), arguments.contains("--uitest-limited-health-history") {
+        let limitedMetricTypes = [
+            HKQuantityType(.heartRateVariabilitySDNN).identifier,
+            HKQuantityType(.restingHeartRate).identifier
+        ]
+        if arguments.contains("--uitesting"),
+           arguments.contains("--uitest-limited-health-history"),
+           limitedMetricTypes.contains(type.identifier) {
             // Deterministic authorization window for simulator UI coverage.
             return Calendar.current.date(
                 byAdding: .day,
