@@ -170,6 +170,28 @@ final class LifeSeededSmokeTests: SeededUITestBaseCase {
         XCTAssertFalse(app.buttons["life-empty-template"].exists, "Seeded habits should not show the empty template entry")
     }
 
+    func testSparseTrendKeepsHabitListAndHistoryAccessible() throws {
+        XCTAssertTrue(
+            app.scrollToElementIfNeeded(AXID.lifeSectionHabits, maxSwipes: 8),
+            "Habit list should remain reachable when trend data is sparse"
+        )
+        XCTAssertTrue(elementExists(AXID.lifeSectionHabits, timeout: 5), "Habits section should remain available")
+
+        let historyButtonID = "habit-heatmap"
+        XCTAssertTrue(
+            app.scrollToElementIfNeeded(historyButtonID, maxSwipes: 10),
+            "Sparse trend state should provide a reachable History action"
+        )
+        let historyButton = app.buttons[historyButtonID].firstMatch
+        XCTAssertTrue(historyButton.waitForExistence(timeout: 5), "History action should exist with sparse trend data")
+        historyButton.tap()
+
+        XCTAssertTrue(
+            app.navigationBars["Activity Detail"].waitForExistence(timeout: 8),
+            "History should open the activity detail route"
+        )
+    }
+
     func testHabitActionsMenuOpensEditSheet() throws {
         XCTAssertTrue(
             app.openLifeHabitActions(named: "Morning Stretch", maxSwipes: 8),

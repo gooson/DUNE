@@ -78,6 +78,45 @@ final class DashboardSmokeTests: UITestBaseCase {
         XCTAssertTrue(settingsButton.waitForExistence(timeout: 5), "Notification settings button should exist in notification hub summary")
     }
 
+    func testConditionTrendAndPrimaryActivityRoute() throws {
+        var configuration = launchConfiguration
+        configuration.shouldSeedMockData = true
+        configuration.scenario = .defaultSeeded
+        launchApp(with: configuration)
+        navigateToDashboard()
+
+        XCTAssertTrue(
+            app.descendants(matching: .any)["dashboard-hero-trend"].firstMatch.waitForExistence(timeout: 10),
+            "Today condition trend should have a stable accessibility identifier"
+        )
+
+        let activityButton = app.buttons["dashboard-primary-activity"].firstMatch
+        XCTAssertTrue(activityButton.waitForExistence(timeout: 5), "View Activity action should be available on Today")
+        activityButton.tap()
+
+        XCTAssertTrue(app.navigationBars["Activity"].waitForExistence(timeout: 8), "View Activity should select the Activity tab")
+        XCTAssertTrue(elementExists(AXID.activityHeroReadiness, timeout: 8), "Activity destination should render")
+    }
+
+    func testTodayLogWeightOpensWellnessBodyForm() throws {
+        var configuration = launchConfiguration
+        configuration.shouldSeedMockData = true
+        configuration.scenario = .defaultSeeded
+        launchApp(with: configuration)
+        navigateToDashboard()
+
+        let logWeight = app.buttons["dashboard-quick-action-weight"].firstMatch
+        XCTAssertTrue(app.scrollToElementIfNeeded("dashboard-quick-actions", maxSwipes: 12), "Today quick actions should be reachable")
+        XCTAssertTrue(logWeight.waitForExistence(timeout: 5), "Log Weight quick action should appear")
+        logWeight.tap()
+
+        XCTAssertTrue(app.navigationBars["Wellness"].waitForExistence(timeout: 8), "Log Weight should open Wellness")
+        XCTAssertTrue(
+            app.descendants(matching: .any)[AXID.bodyFormScreen].firstMatch.waitForExistence(timeout: 8),
+            "Log Weight should present the body measurement form"
+        )
+    }
+
     // MARK: - Tab Navigation Round-Trip
 
     func testTabNavigationRoundTrip() throws {
