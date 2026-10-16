@@ -355,7 +355,7 @@ private struct HabitListQueryView: View {
 
     // A week of actual completed days gives the trend a readable sample.
     private var hasMeaningfulTrend: Bool {
-        heatmapData.lazy.filter { $0.completionCount > 0 }.prefix(7).count == 7
+        HabitAnalyticsService.hasMeaningfulTrend(heatmapData)
     }
 
     private var analyticsSection: some View {

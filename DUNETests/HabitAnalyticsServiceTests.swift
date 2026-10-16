@@ -6,6 +6,28 @@ import Foundation
 struct HabitAnalyticsServiceTests {
     private let calendar = Calendar.current
 
+    @Test("Habit trend waits for seven days with actual completions")
+    func meaningfulTrendThreshold() {
+        let start = Date(timeIntervalSince1970: 0)
+        let counts = (0..<6).map { offset in
+            DailyCompletionCount(id: start.addingTimeInterval(Double(offset) * 86_400),
+                                 date: start.addingTimeInterval(Double(offset) * 86_400),
+                                 completionCount: 1)
+        }
+        #expect(!HabitAnalyticsService.hasMeaningfulTrend([]))
+        #expect(!HabitAnalyticsService.hasMeaningfulTrend(counts))
+        #expect(!HabitAnalyticsService.hasMeaningfulTrend(counts + [
+            DailyCompletionCount(id: start.addingTimeInterval(6 * 86_400),
+                                 date: start.addingTimeInterval(6 * 86_400),
+                                 completionCount: 0)
+        ]))
+        #expect(HabitAnalyticsService.hasMeaningfulTrend(counts + [
+            DailyCompletionCount(id: start.addingTimeInterval(6 * 86_400),
+                                 date: start.addingTimeInterval(6 * 86_400),
+                                 completionCount: 1)
+        ]))
+    }
+
     private func makeDate(year: Int = 2026, month: Int = 3, day: Int) -> Date {
         calendar.date(from: DateComponents(year: year, month: month, day: day))!
     }

@@ -149,6 +149,10 @@ enum HabitAnalyticsService {
 
     // MARK: - Daily Completion Counts (Heatmap)
 
+    static func hasMeaningfulTrend(_ dailyCounts: [DailyCompletionCount]) -> Bool {
+        dailyCounts.lazy.filter { $0.completionCount > 0 }.prefix(7).count == 7
+    }
+
     static func dailyCompletionCounts(
         logs: [HabitLogSnapshot],
         habits: [HabitSnapshot],
