@@ -54,15 +54,15 @@ struct AIWorkoutTemplateGenerator: NaturalLanguageWorkoutGenerating, Sendable {
                 tools: [tool],
                 instructions: buildInstructions(localeIdentifier: request.localeIdentifier)
             )
-            let response = try await session.respond(
-                to: buildPrompt(
-                    prompt: trimmedPrompt,
-                    recentRecords: request.recentRecords,
-                    library: library,
-                    promptIntent: promptIntent
-                ),
-                generating: AIWorkoutTemplate.self
+            let prompt = buildPrompt(
+                prompt: trimmedPrompt,
+                recentRecords: request.recentRecords,
+                library: library,
+                promptIntent: promptIntent
             )
+            let response = try await WorkoutGenerationMetrics.shared.measure {
+                try await session.respond(to: prompt, generating: AIWorkoutTemplate.self)
+            }
             let generated = response.content
             AppLogger.exercise.debug(
                 "AI workout template raw output promptHash=\(trimmedPrompt, privacy: .private(mask: .hash)) name=\(generated.name, privacy: .private) estimated=\(generated.estimatedMinutes, privacy: .public) slotCount=\(generated.exercises.count, privacy: .public) slots=\(debugSlotSummary(generated.exercises), privacy: .private)"
@@ -101,15 +101,15 @@ struct AIWorkoutTemplateGenerator: NaturalLanguageWorkoutGenerating, Sendable {
                     tools: [retryTool],
                     instructions: buildInstructions(localeIdentifier: request.localeIdentifier)
                 )
-                let retryResponse = try await retrySession.respond(
-                    to: buildPrompt(
-                        prompt: trimmedPrompt,
-                        recentRecords: request.recentRecords,
-                        library: library,
-                        promptIntent: promptIntent
-                    ),
-                    generating: AIWorkoutTemplate.self
+                let retryPrompt = buildPrompt(
+                    prompt: trimmedPrompt,
+                    recentRecords: request.recentRecords,
+                    library: library,
+                    promptIntent: promptIntent
                 )
+                let retryResponse = try await WorkoutGenerationMetrics.shared.measure {
+                    try await retrySession.respond(to: retryPrompt, generating: AIWorkoutTemplate.self)
+                }
                 let retryGenerated = retryResponse.content
                 return try resolveGeneratedTemplate(retryGenerated, library: library)
             } catch {
