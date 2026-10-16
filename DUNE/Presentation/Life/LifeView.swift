@@ -248,12 +248,6 @@ private struct HabitListQueryView: View {
                 .accessibilityIdentifier("life-hero-progress")
                 .staggeredAppear(index: 0)
 
-            // Analytics section (chart + heatmap)
-            if !habits.isEmpty {
-                analyticsSection
-                    .staggeredAppear(index: 1)
-            }
-
             if habits.isEmpty {
                 ArchivedHabitCountView()
                 autoAchievementsSection()
@@ -265,6 +259,9 @@ private struct HabitListQueryView: View {
                     habitsSection()
                     autoAchievementsSection(useTwoColumnCards: false)
                 }
+
+                analyticsSection
+                    .staggeredAppear(index: 2)
             }
         }
         .onGeometryChange(for: CGFloat.self) { geometry in
@@ -356,15 +353,44 @@ private struct HabitListQueryView: View {
 
     // MARK: - Analytics Section
 
+    // A week of actual completed days gives the trend a readable sample.
+    private var hasMeaningfulTrend: Bool {
+        heatmapData.lazy.filter { $0.completionCount > 0 }.prefix(7).count == 7
+    }
+
     private var analyticsSection: some View {
         VStack(spacing: DS.Spacing.md) {
-            HabitCompletionChartView(
-                weeklyRates: weeklyRates,
-                monthlyRates: monthlyRates
-            )
+            if hasMeaningfulTrend {
+                HabitCompletionChartView(
+                    weeklyRates: weeklyRates,
+                    monthlyRates: monthlyRates
+                )
 
-            HabitHeatmapView(data: heatmapData) {
-                showingHeatmapDetail = true
+                HabitHeatmapView(data: heatmapData) {
+                    showingHeatmapDetail = true
+                }
+            } else {
+                InlineCard {
+                    HStack(spacing: DS.Spacing.sm) {
+                        Image(systemName: "chart.bar.xaxis")
+                            .foregroundStyle(DS.Color.tabLife)
+                            .accessibilityHidden(true)
+                        Text("Not enough data to show trend.")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                        Spacer(minLength: 0)
+                    }
+                }
+
+                Button {
+                    showingHeatmapDetail = true
+                } label: {
+                    Label("History", systemImage: "square.grid.3x3.fill")
+                        .font(.subheadline)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .buttonStyle(.bordered)
+                .accessibilityIdentifier("habit-heatmap")
             }
 
             if weeklyReport != nil {
