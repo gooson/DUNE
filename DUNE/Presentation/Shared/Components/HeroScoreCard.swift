@@ -83,7 +83,7 @@ struct HeroScoreCard: View {
                     scoreInfo
                 }
             }
-            if let sparkline = hourlySparkline, !sparkline.points.isEmpty {
+            if let sparkline = hourlySparkline, sparkline.points.count >= 2 {
                 VStack(alignment: .leading, spacing: DS.Spacing.xs) {
                     HStack {
                         Text(trendTitle)
@@ -100,6 +100,15 @@ struct HeroScoreCard: View {
                         showsReferenceLabels: true,
                         accessibilityTitle: trendTitle
                     )
+                }
+            } else {
+                VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                    Text(trendTitle)
+                        .font(.subheadline.weight(.semibold))
+                    Text("Not enough data to show trend.")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                        .frame(maxWidth: .infinity, minHeight: isRegular ? 84 : 72, alignment: .center)
                 }
             }
             ViewThatFits(in: .horizontal) {
@@ -163,6 +172,8 @@ struct HeroScoreCard: View {
                     .font(.caption2.weight(.semibold))
                     .foregroundStyle(theme.sandColor)
                     .tracking(1)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
             }
             .frame(width: ringContentSize, height: ringContentSize)
         }

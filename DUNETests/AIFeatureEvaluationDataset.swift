@@ -1,4 +1,5 @@
 import Foundation
+@testable import DUNE
 
 enum AIEvaluationLocale: String, CaseIterable, Hashable, Sendable {
     case korean = "ko-KR"

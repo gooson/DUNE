@@ -121,9 +121,11 @@ struct ConditionHeroView: View {
                     .contentTransition(.numericText())
 
                 Text(Labels.scoreLabel)
-                    .font(.caption2.weight(.semibold))
+                    .font(.system(size: 9, weight: .semibold))
                     .foregroundStyle(theme.sandColor)
-                    .tracking(1)
+                    .tracking(0.5)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
             }
             .frame(width: ringContentSize, height: ringContentSize)
         }
@@ -175,7 +177,7 @@ struct ConditionHeroView: View {
 
     @ViewBuilder
     private var trendContent: some View {
-        if let sparkline = hourlySparkline, !sparkline.points.isEmpty {
+        if let sparkline = hourlySparkline, sparkline.points.count >= 2 {
             VStack(alignment: .leading, spacing: DS.Spacing.xs) {
                 HStack {
                     Text("Condition Trend")

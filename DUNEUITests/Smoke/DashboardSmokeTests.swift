@@ -131,3 +131,35 @@ final class DashboardSmokeTests: UITestBaseCase {
         }
     }
 }
+
+@MainActor
+final class TodayDesignMapCaptureTests: UITestBaseCase {
+    override var shouldSeedMockData: Bool { true }
+    override var additionalLaunchArguments: [String] {
+        ["-morningBriefingDisabled", "YES", "-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
+    }
+
+    func testTodayRootRenders() {
+        XCTAssertTrue(app.descendants(matching: .any)["dashboard-hero-condition"].firstMatch.waitForExistence(timeout: 15))
+    }
+}
+
+@MainActor
+final class LifeDesignMapCaptureTests: UITestBaseCase {
+    override var shouldSeedMockData: Bool { true }
+    override var initialTabSelectionArgument: String? { "life" }
+
+    func testLifeRootRenders() {
+        XCTAssertTrue(app.descendants(matching: .any)["life-hero-progress"].firstMatch.waitForExistence(timeout: 15))
+    }
+}
+
+@MainActor
+final class WellnessDesignMapCaptureTests: UITestBaseCase {
+    override var shouldSeedMockData: Bool { true }
+    override var initialTabSelectionArgument: String? { "wellness" }
+
+    func testWellnessRootRenders() {
+        XCTAssertTrue(app.descendants(matching: .any)["wellness-hero-score"].firstMatch.waitForExistence(timeout: 15))
+    }
+}
