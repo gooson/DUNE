@@ -6,6 +6,7 @@ struct EmptyStateView: View {
     let message: LocalizedStringKey
     var actionTitle: LocalizedStringKey?
     var action: (() -> Void)?
+    var actionIdentifier: String?
 
     @Environment(\.appTheme) private var theme
 
@@ -33,6 +34,7 @@ struct EmptyStateView: View {
                 .buttonStyle(.borderedProminent)
                 .tint(theme.accentColor)
                 .controlSize(.regular)
+                .accessibilityIdentifier(actionIdentifier ?? "empty-state-action")
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

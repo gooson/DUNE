@@ -48,6 +48,13 @@ final class WellnessSmokeTests: UITestBaseCase {
         XCTAssertTrue(fatField.exists, "Body fat field should exist")
     }
 
+    func testPrimaryBodyRecordOpensForm() throws {
+        let action = app.buttons[AXID.wellnessPrimaryBodyRecord].firstMatch
+        XCTAssertTrue(action.waitForExistence(timeout: 5), "Primary body record action should be visible")
+        action.tap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.bodyFormSave].firstMatch.waitForExistence(timeout: 5))
+    }
+
     func testBodyFormCancelDismisses() throws {
         let addMenu = wellnessAddMenu()
         XCTAssertTrue(addMenu.waitForExistence(timeout: 5), "Add menu should exist")
@@ -154,6 +161,13 @@ final class WellnessSeededSmokeTests: SeededUITestBaseCase {
     override func setUpWithError() throws {
         try super.setUpWithError()
         navigateToWellness()
+    }
+
+    func testSeededPrimaryBodyRecordOpensForm() throws {
+        let action = app.buttons[AXID.wellnessPrimaryBodyRecord].firstMatch
+        XCTAssertTrue(action.waitForExistence(timeout: 5), "Primary body record action should follow the hero")
+        action.tap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.bodyFormSave].firstMatch.waitForExistence(timeout: 5))
     }
 
     func testSleepPredictionSummaryOpensDetail() throws {

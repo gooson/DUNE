@@ -1,9 +1,9 @@
 {
   "device": "duo-open",
-  "source_revision": "40f6e4e4c3d73c6d5f5c09c1260597546321c0ba",
+  "source_revision": "d1dfa3f4dd27500b43a91f40fb3bbc7bb2718dfe",
   "source_worktree_dirty": true,
   "xcresults": [
-    "/Users/shanks/.codex/worktrees/10df/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.17_05-05-55-+0900.xcresult"
+    ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.18_23-59-46-+0900.xcresult"
   ],
   "processed_capture_candidates": 106,
   "captured": {
@@ -1021,24 +1021,14 @@
       "screen": "screen-1-2006x2852-tap dashboard-stress-score_1_F1AEB3CA-CA04-4D4C-A2F7-90BA940DB3C6.png",
       "file": "T05.png"
     },
-    "L01": {
-      "row_id": "L01",
-      "evidence": "title:Life",
-      "test": "LifeDesignMapCaptureTests/testLifeRootRenders()",
-      "action": "root after setup -[LifeDesignMapCaptureTests testLifeRootRenders]",
-      "timestamp": 1792169738.74,
-      "image": "DA19E23B-4F8A-4A34-ABE6-15D39B099240.png",
-      "screen": "screen-1-2006x2852-root after setup -[LifeDesignMapCaptureTests testLifeRootRenders]_1_D1B8725F-9A08-4228-B7EC-1CA638BD1C4A.png",
-      "file": "L01.png"
-    },
     "A01": {
       "row_id": "A01",
       "evidence": "title:Activity",
       "test": "ActivityExerciseRegressionTests/testExerciseTypeDetailShowsTrendSurface()",
       "action": "root after setup -[ActivityExerciseRegressionTests testExerciseTypeDetailShowsTrendSurface]",
-      "timestamp": 1792170298.675,
-      "image": "FC1CDDA1-8D25-4A2C-A0E8-5B28184C1E2A.png",
-      "screen": "screen-1-2006x2852-root after setup -[ActivityExerciseRegressionTests testExerciseTypeDetailShowsTrendSurface]_1_9CEFFC4B-0C22-41E7-A246-4C76BF40AECE.png",
+      "timestamp": 1792177989.067,
+      "image": "24946869-D896-4371-99F0-DC652F487884.png",
+      "screen": "screen-1-2006x2852-root after setup -[ActivityExerciseRegressionTests testExerciseTypeDetailShowsTrendSurface]_1_0275191A-1E60-439E-9711-432235B0E6B0.png",
       "file": "A01.png"
     },
     "H01": {
@@ -1046,19 +1036,29 @@
       "evidence": "title:Wellness",
       "test": "WellnessDesignMapCaptureTests/testWellnessRootRenders()",
       "action": "root after setup -[WellnessDesignMapCaptureTests testWellnessRootRenders]",
-      "timestamp": 1792171802.633,
-      "image": "58584A51-3C42-454B-8CBD-2D1606C5ED65.png",
-      "screen": "screen-1-2006x2852-root after setup -[WellnessDesignMapCaptureTests testWellnessRootRenders]_1_D74DD334-0944-4671-9467-AA68B0A09015.png",
+      "timestamp": 1792178084.627,
+      "image": "71A62D5C-A613-49EC-895B-BFEF839479A1.png",
+      "screen": "screen-1-2006x2852-root after setup -[WellnessDesignMapCaptureTests testWellnessRootRenders]_1_6B49366B-7747-43BF-B925-621DE5E4DE44.png",
       "file": "H01.png"
+    },
+    "L01": {
+      "row_id": "L01",
+      "evidence": "title:Life",
+      "test": "LifeDesignMapCaptureTests/testLifeRootRenders()",
+      "action": "root after setup -[LifeDesignMapCaptureTests testLifeRootRenders]",
+      "timestamp": 1792178050.371,
+      "image": "1BEB4121-6E96-4423-9D59-D1489AB0C304.png",
+      "screen": "screen-1-2006x2852-root after setup -[LifeDesignMapCaptureTests testLifeRootRenders]_1_680CFE7C-264E-4EE5-B6BB-49FD3D33596C.png",
+      "file": "L01.png"
     },
     "T03": {
       "row_id": "T03",
       "evidence": "title:Today",
       "test": "TodayDesignMapCaptureTests/testTodayRootRenders()",
-      "action": "root after setup -[TodayDesignMapCaptureTests testTodayRootRenders]",
-      "timestamp": 1792181455.183,
-      "image": "568C8033-5145-4594-AB1A-F931114509D5.png",
-      "screen": "screen-1-2006x2852-root after setup -[TodayDesignMapCaptureTests testTodayRootRenders]_1_6F6151E7-8FC8-4D50-B3E1-CFDACF8CE943.png",
+      "action": "before teardown -[TodayDesignMapCaptureTests testTodayRootRenders]",
+      "timestamp": 1792335633.475,
+      "image": "6AF8A9E1-C762-433F-B192-DB00ABE0AC3B.png",
+      "screen": "screen-1-2006x2852-before teardown -[TodayDesignMapCaptureTests testTodayRootRenders]_1_35C01575-D02F-4FFE-950D-E4D6FDF0C99F.png",
       "file": "T03.png"
     }
   },

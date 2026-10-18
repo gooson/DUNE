@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DUNE · 4탭 레이아웃 맵</title>
+  <style>
+    :root { color-scheme: light; font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", sans-serif; background: #eee9e2; color: #262622; }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    header { padding: 28px max(22px, calc((100vw - 1200px)/2)); background: #faf8f3; border-bottom: 1px solid #dbd3c7; }
+    h1 { margin: 0 0 8px; font-size: clamp(26px, 4vw, 40px); letter-spacing: -.04em; }
+    p { line-height: 1.55; }
+    header p { max-width: 780px; margin: 0 0 18px; color: #55534e; }
+    a { color: #79532f; }
+    .links { display: flex; flex-wrap: wrap; gap: 12px 20px; font-size: 14px; }
+    .toolbar { position: sticky; top: 0; z-index: 5; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; padding: 12px max(22px, calc((100vw - 1200px)/2)); background: #faf8f3ee; backdrop-filter: blur(16px); border-bottom: 1px solid #dbd3c7; }
+    .toolbar strong { margin-right: 8px; }
+    button { cursor: pointer; font: inherit; }
+    .toolbar button { border: 1px solid #b9ad9f; background: #fff; padding: 8px 12px; border-radius: 999px; }
+    .toolbar button[aria-pressed="true"] { background: #463a30; color: white; border-color: #463a30; }
+    main { max-width: 1240px; margin: auto; padding: 26px 20px 60px; }
+    .legend { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 28px; }
+    .legend article { background: #fffaf4; padding: 14px 16px; border-radius: 14px; border: 1px solid #ddd2c5; font-size: 14px; line-height: 1.5; }
+    .legend b { display: block; margin-bottom: 4px; }
+    .tab-map { margin: 0 0 32px; padding: 22px; border-radius: 24px; background: #fffaf5; border: 1px solid #d9cec0; }
+    .tab-map h2 { margin: 0 0 4px; font-size: 24px; }
+    .tab-map > p { margin: 0 0 16px; color: #625e57; font-size: 14px; }
+    .preview { width: min(100%, var(--preview-width, 390px)); container-type: inline-size; margin: auto; border: 1px solid #cfc5b8; border-radius: 28px; overflow: hidden; box-shadow: 0 20px 44px #463a3020; background: #fbf7f1; }
+    .scene { min-height: 132px; padding: 22px 20px 14px; display: flex; align-items: flex-end; background: radial-gradient(ellipse at 70% 75%, #f3e4d6 0, transparent 45%), linear-gradient(175deg, #f8f4f0 55%, #ecd8c7 56%, #faf6f1 85%); }
+    .scene h3 { font-size: 29px; margin: 0; letter-spacing: -.04em; }
+    .content { display: grid; gap: 12px; padding: 16px; }
+    .hero { background: linear-gradient(135deg, #f7f0e8, #eaf1ed); border: 1px solid #ddc8b4; border-radius: 22px; padding: 18px; display: grid; gap: 12px; }
+    .summary { display: grid; grid-template-columns: 100px minmax(0, 1fr); gap: 12px; align-items: center; }
+    .ring { width: 100px; height: 100px; border: 10px solid #a9bdab; border-right-color: #dce3db; border-radius: 50%; display: grid; place-content: center; text-align: center; font-weight: 700; font-size: 18px; }
+    .ring small { font-size: 9px; letter-spacing: .05em; }
+    .summary-text { min-width: 0; }
+    .summary-text b { display: block; font-size: 17px; }
+    .summary-text p { margin: 5px 0 0; font-size: 13px; color: #504d47; }
+    .trend { min-width: 0; border-top: 1px solid #cec6bc; padding-top: 10px; }
+    .trend-title { display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; }
+    .trend svg { display: block; width: 100%; height: 72px; margin-top: 4px; }
+    .axis { display: flex; justify-content: space-between; font-size: 11px; color: #66645e; }
+    .evidence { display: flex; flex-wrap: wrap; gap: 6px; }
+    .evidence span { background: #ffffffbd; border-radius: 8px; padding: 5px 8px; font-size: 11px; }
+    .detail { justify-self: end; color: #785334; font-size: 12px; font-weight: 700; }
+    .cta { min-height: 48px; display: grid; place-content: center; border-radius: 999px; color: #fff; background: #9b6c4a; font-weight: 700; text-align: center; padding: 12px; }
+    .secondary { background: #f4eee7; border-radius: 16px; padding: 15px; }
+    .secondary b { display: block; font-size: 14px; margin-bottom: 5px; }
+    .secondary p { margin: 0; font-size: 12px; color: #514d48; }
+    .habit { display: flex; align-items: center; justify-content: space-between; gap: 12px; background: #fff; padding: 12px; border-radius: 12px; font-size: 13px; }
+    .habit em { font-style: normal; color: #7d5d39; white-space: nowrap; }
+    .note { margin: 14px 0 0; color: #57534d; font-size: 13px; }
+    .phone { --preview-width: 402px; }
+    .fold { --preview-width: 466px; }
+    .tablet { --preview-width: 1032px; }
+    .open { --preview-width: 669px; }
+    @container (min-width: 650px) {
+      .content { max-width: 760px; margin: auto; padding: 24px; }
+      .summary { grid-template-columns: 128px minmax(0, 1fr); }
+      .ring { width: 128px; height: 128px; }
+    }
+    .large-text .summary { grid-template-columns: 1fr; }
+    .large-text .ring { margin-bottom: 4px; }
+    .large-text .summary-text b { font-size: 21px; }
+    .large-text .summary-text p, .large-text .secondary p { font-size: 17px; }
+    .large-text .content { max-width: 760px; }
+    .life .hero { background: linear-gradient(135deg, #faf0e3, #f5ede4); }
+    .life .ring { border-color: #d6af71; border-right-color: #eee3d1; }
+    .activity .cta { background: #6c9469; }
+    .wellness .scene { background: linear-gradient(175deg, #f7faf8 55%, #d7eae6 56%, #f9fbf9 90%); }
+    .life .scene { background: linear-gradient(175deg, #fdf9f2 55%, #f1e3d1 56%, #fdf9f3 90%); }
+    footer { text-align: center; color: #676159; padding: 30px; font-size: 13px; }
+  </style>
+</head>
+<body class="phone">
+  <header>
+    <h1>DUNE · 4탭 레이아웃 맵</h1>
+    <p>화면의 정보 순서와 반응형 배치를 고정하는 구현 기준. 기기 폭은 이번 캡처 기기의 논리 폭이며, 아래 선과 값은 배치 설명용으로 실제 건강 데이터나 앱 캡처가 아니다.</p>
+    <nav class="links" aria-label="관련 맵">
+      <a href="README.md">화면별 맵 목록·유지 방법</a>
+      <a href="../theme-map/index.html">7개 구현 테마·장면 기준</a>
+      <a href="../phone-design-map/actual/index.html">실제 앱 화면 캡처</a>
+      <a href="../../plans/2026-10-17-ux-visual-rollout.md">상세 구현 계획</a>
+      <a href="../2026-10-17-ux-visual-spec.md">출시 UX 명세</a>
+    </nav>
+  </header>
+  <div class="toolbar" role="group" aria-label="화면 조건">
+    <strong>배치 보기</strong>
+    <button data-mode="phone" aria-pressed="true">iPhone · 402pt</button>
+    <button data-mode="fold" aria-pressed="false">Duo 접힘 · 466pt</button>
+    <button data-mode="open" aria-pressed="false">Duo 펼침 · 669pt</button>
+    <button data-mode="tablet" aria-pressed="false">iPad · 1032pt</button>
+    <button id="large-text" aria-pressed="false">큰 글씨</button>
+  </div>
+  <main>
+    <div class="legend">
+      <article><b>① 상태</b>점수·상태 이름·짧은 이유를 함께 표시한다. 색만으로 의미를 전하지 않는다.</article>
+      <article><b>② 변화</b>실제 표본과 기간·축을 보여 준다. 데이터가 부족하면 설명으로 바꾼다.</article>
+      <article><b>③ 행동</b>히어로 밖의 CTA 한 개가 실제 목적지나 기록 화면으로 열린다.</article>
+      <article><b>④ 테마</b>배경 장면은 테마 맵을 따른다. 링은 상태, 선은 데이터, 능선은 장식이다.</article>
+    </div>
+    <section class="tab-map today" id="today" aria-labelledby="today-title">
+      <h2 id="today-title">T03 · Today</h2><p>오늘 어떻게 움직일까? · 상태 → 추세 → 근거 → Activity/Wellness → 현재 시간대 요약</p>
+      <div class="preview"><div class="scene"><h3>Today</h3></div><div class="content">
+        <div class="hero"><div class="summary"><div class="ring">상태<br><small>CONDITION</small></div><div class="summary-text"><b>현재 컨디션</b><p>몸의 상태를 설명하는 짧은 문장</p></div></div><div class="trend"><div class="trend-title"><span>컨디션 변화</span><span>Today / 24h / 7d</span></div><svg viewBox="0 0 300 72" role="img" aria-label="실제 값이 있을 때만 그리는 추세 자리"><path d="M0 54H300M0 32H300" stroke="#c6bdb2" stroke-dasharray="3 5"/><path d="M0 53 L60 47 L120 44 L180 34 L240 29 L300 20" fill="none" stroke="#856b55" stroke-width="3"/></svg><div class="axis"><span>시작·낮음</span><span>현재·높음</span></div></div><div class="evidence"><span>HRV · 기준선 대비</span><span>RHR · 기준선 대비</span></div><span class="detail">상세 보기 ›</span></div>
+        <div class="cta">상태에 맞는 탭 보기</div><div class="secondary"><b>현재 시간대 요약 1개</b><p>Briefing·Digest·Insight 중 관련성이 높은 블록. 나머지는 아래 섹션으로.</p></div>
+      </div></div><p class="note">점수 없음: 권한·기록 없음·기준선 수집을 구분하고 그래프를 만들지 않는다.</p>
+    </section>
+    <section class="tab-map activity" id="activity" aria-labelledby="activity-title">
+      <h2 id="activity-title">A01 · Activity</h2><p>오늘 운동해도 될까? · 준비도 → 추세/근거 → 운동 기록 → 근육 회복 → 최근 운동</p>
+      <div class="preview"><div class="scene"><h3>Activity</h3></div><div class="content">
+        <div class="hero"><div class="summary"><div class="ring">준비도<br><small>READINESS</small></div><div class="summary-text"><b>운동 가능 상태</b><p>HRV·수면·회복에 근거한 짧은 문장</p></div></div><div class="trend"><div class="trend-title"><span>준비도 추세</span><span>Today / 24h</span></div><svg viewBox="0 0 300 72" role="img" aria-label="실제 값이 있을 때만 그리는 추세 자리"><path d="M0 54H300M0 32H300" stroke="#c6bdb2" stroke-dasharray="3 5"/><path d="M0 48 L60 42 L120 40 L180 37 L240 34 L300 29" fill="none" stroke="#648968" stroke-width="3"/></svg><div class="axis"><span>이전</span><span>현재</span></div></div><div class="evidence"><span>HRV</span><span>수면</span><span>회복</span></div><span class="detail">준비도 상세 ›</span></div>
+        <div class="cta">운동 기록</div><div class="secondary"><b>근육 회복 지도</b><p>운동 행동 뒤에 놓는다. 주간 통계·최근 운동은 이어지는 아래 섹션.</p></div>
+      </div></div><p class="note">준비도 없음: 점수 대신 수집 조건을 알리고 운동 기록은 계속 사용할 수 있다.</p>
+    </section>
+    <section class="tab-map wellness" id="wellness" aria-labelledby="wellness-title">
+      <h2 id="wellness-title">H01 · Wellness</h2><p>몸과 수면은 어떻게 변하나? · 현재 상태 → 추세 → 신체 기록 → 미래 수면 예측 → 중요한 지표</p>
+      <div class="preview"><div class="scene"><h3>Wellness</h3></div><div class="content">
+        <div class="hero"><div class="summary"><div class="ring">상태<br><small>WELLNESS</small></div><div class="summary-text"><b>현재 웰니스</b><p>현재 점수에 대한 짧은 설명</p></div></div><div class="trend"><div class="trend-title"><span>웰니스 추세</span><span>Today / 24h</span></div><svg viewBox="0 0 300 72" role="img" aria-label="실제 값이 있을 때만 그리는 추세 자리"><path d="M0 54H300M0 32H300" stroke="#c6bdb2" stroke-dasharray="3 5"/><path d="M0 48 L60 43 L120 45 L180 33 L240 30 L300 25" fill="none" stroke="#568b84" stroke-width="3"/></svg><div class="axis"><span>이전</span><span>현재</span></div></div><div class="evidence"><span>수면</span><span>컨디션</span></div><span class="detail">점수 상세 ›</span></div>
+        <div class="cta">신체 기록 열기</div><div class="secondary"><b>오늘 밤 수면 예측</b><p>미래 추정값과 신뢰도를 현재 점수와 분리한다. 관련 지표는 아래로.</p></div>
+      </div></div><p class="note">로딩·클라우드 동기화 대기·기록 없음: 점수·그래프를 꾸미지 않고 신체 기록 행동은 계속 제공한다.</p>
+    </section>
+    <section class="tab-map life" id="life" aria-labelledby="life-title">
+      <h2 id="life-title">L01 · Life</h2><p>오늘의 습관에서 무엇이 남았나? · 완료 수 → 다음 항목 → 자동 기록 → 표본 충분할 때만 추세</p>
+      <div class="preview"><div class="scene"><h3>Life · + 새 습관</h3></div><div class="content">
+        <div class="hero"><div class="summary"><div class="ring">1 / 3<br><small>오늘 완료</small></div><div class="summary-text"><b>오늘의 습관</b><p>완료한 수와 다음에 할 항목을 함께 읽는다.</p></div></div><div class="evidence"><span>완료 1개</span><span>남은 항목 2개</span></div></div>
+        <div class="secondary"><b>다음 완료 가능한 항목</b><div class="habit"><span>읽기</span><em>진행 기록 ›</em></div><div class="habit"><span>물 마시기</span><em>완료 +</em></div><p style="margin-top:8px">오늘의 기록 행동은 각 항목 안에 있다. 추세는 실제 기록이 충분할 때만 이 아래에 표시한다.</p></div>
+      </div></div><p class="note">습관 없음: 시작 행동을 먼저 표시한다. 완료율은 숫자·텍스트·표식을 함께 쓴다.</p>
+    </section>
+  </main>
+  <footer>레이아웃 시안 · 실제 앱 캡처는 위 링크의 actual 디자인맵에서 확인</footer>
+  <script>
+    const modes = ["phone", "fold", "open", "tablet"];
+    document.querySelectorAll("[data-mode]").forEach(button => button.addEventListener("click", () => {
+      document.body.classList.remove(...modes);
+      document.body.classList.add(button.dataset.mode);
+      document.querySelectorAll("[data-mode]").forEach(item => item.setAttribute("aria-pressed", String(item === button)));
+    }));
+    document.getElementById("large-text").addEventListener("click", event => {
+      const enabled = document.body.classList.toggle("large-text");
+      event.currentTarget.setAttribute("aria-pressed", String(enabled));
+    });
+  </script>
+</body>
+</html>

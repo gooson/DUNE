@@ -37,6 +37,7 @@ Today는 `.waveRefreshable`을 `ScrollViewReader` 바깥에 적용하고, `.onSc
 - 상단 자동 정렬을 완전히 없앤 실험에서는 실제 당김 테스트가 통과했지만 기존 반복 전체 스와이프 테스트가 실패했다. 따라서 자동 정렬을 관성 종료로 제한했다.
 - 최종 코드에서 실제 당김과 반복 전체 스와이프 UI 테스트가 같은 Pro Max 시뮬레이터에서 2/2 통과했다 (`.xcodebuild/today-scroll-phase-gated.log`). 이후 안정성 assertion을 바꾼 실제 당김 테스트도 다시 통과했다 (`.xcodebuild/today-scroll-final-validation.log`). 시뮬레이터를 재시작한 뒤 수동 상단 복귀와 반복 전체 스와이프 테스트가 2/2 통과했다 (`.xcodebuild/today-scroll-after-sim-reset.log`). 탭 재선택 테스트는 앞선 자동 정렬 제거 실험에서 통과했고, 해당 동작의 코드는 최종 변경에서 유지됐다.
 - 최종 4개 묶음 실행은 시뮬레이터의 화면 요소 조회가 멈춰 두 테스트가 시간 제한으로 종료됐다. 앱 동작 assertion 실패는 아니었고, 시뮬레이터 재시작 후 해당 두 테스트를 재실행해 통과를 확인했다.
+- 최신 main의 Today 레이아웃 변경과 병합한 뒤 Pro Max 시뮬레이터에서 실제 당김·반복 전체 스와이프가 다시 2/2 통과했다 (`.xcodebuild/today-scroll-merged-main-after-reset.log`). 첫 실행은 테스트 케이스 시작 전에 CoreSimulator 러너가 멈췄고, 해당 시뮬레이터를 재시작한 후 재검증했다.
 - iOS 앱 빌드가 통과했다 (`.xcodebuild/today-native-build.log`).
 
 ## Prevention

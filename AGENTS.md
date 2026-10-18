@@ -180,6 +180,8 @@ Codex는 아래 allow list를 Claude와 동일 기준으로 취급합니다(단,
 
 ## Actual Design Map Sync
 
+- 모든 디자인 작업은 변경 전 해당 화면의 레이아웃 맵과 [테마 맵](docs/design/theme-map/index.html)에서 배치·표현 기준을 먼저 확인하거나 갱신합니다. 4탭 루트는 [4탭 레이아웃 맵](docs/design/layout-map/index.html)을 사용하고, 그 밖의 새 화면·레이아웃은 별도 맵을 `docs/design/layout-map/`에 만들고 인덱스에서 연결한 뒤 구현합니다. 코드·실제 캡처가 맵과 다르면 같은 작업에서 차이를 해소합니다. 시안과 실제 캡처는 구분합니다. 세 맵의 역할과 순서는 [레이아웃 맵 유지 방법](docs/design/layout-map/README.md)을 따릅니다.
+
 - 앱의 화면 배치·문구·상태·내비게이션을 수정하면 같은 작업에서 [통합 실제 화면 디자인맵](docs/design/phone-design-map/actual/index.html)의 해당 화면을 다시 캡처하고 갱신합니다. 일반 iPhone, iPad, Duo 접힘·펼침, Watch 중 영향받는 기기만 실행하되, 영향을 받는 상태와 기기를 명시적으로 확인합니다.
 - 기존 PNG를 새 화면의 증거로 재사용하지 않습니다. 캡처할 수 없으면 갱신되지 않은 화면 ID와 이유를 결과에 명시하고 완료된 캡처로 표시하지 않습니다. 실행 절차는 [디자인맵 유지 방법](docs/design/phone-design-map/README.md)의 「화면 수정 시 갱신」을 따릅니다.
 - Codex의 UI 검증 범위 판정과 디자인맵 갱신 의무는 별개입니다. 세부 게이트는 `.codex/skill-compat.md`를 따릅니다. `.claude/**` 원본은 변경하지 않습니다.

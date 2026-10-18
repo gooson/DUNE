@@ -9,6 +9,8 @@ status: in-progress
 
 [폰·패드·Duo·Watch 통합 디자인맵 열기](actual/index.html)
 
+[4탭 레이아웃 기준맵](../layout-map/index.html)은 화면 정보 순서와 반응형 배치의 시안이다. 이 문서의 PNG는 실제 앱 캡처다.
+
 [폰·패드·Duo의 같은 화면 비교](actual/compare.html)
 
 [테마 방향 시안 8개와 공통 시각 언어 맵](../theme-map/index.html)은 별도로 보존한다. 테마 맵은 구현된 앱 화면의 캡처가 아니다.
@@ -25,7 +27,9 @@ status: in-progress
 
 2026-10-15 T10 일간 요약의 권한 준비 중 상태를 수정한 뒤 일반 iPhone과 iPad의 T10을 다시 캡처했다. Duo 접힘·펼침의 T10 이미지는 이전 구현의 캡처이며 이번 변경의 확인 증거가 아니다. 기존 Duo의 `devicectl` 화면 조회가 응답하지 않았고 새 임시 Duo도 부팅을 완료하지 못해 두 자세의 갱신은 보류했다. 시뮬레이터 서비스가 정상화되면 두 자세의 실제 표시를 다시 확인하고 T10을 갱신한다.
 
-2026-10-17 UX·디자인 개편 후 Today(T03), Activity(A01), Wellness(H01), Life(L01)를 일반 iPhone, iPad, Duo 접힘·펼침에서 다시 캡처했다. Duo는 활성 LCD/LCD-1과 내부 화면 native PNG를 확인한 뒤 자세별로 수집했다. 각 화면의 새 출처와 캡처 시각은 기기별 `capture-index.json`에 기록했다. 이전에 미검증이던 Duo 펼침 T03도 이번 캡처로 갱신했다.
+2026-10-17 4탭 레이아웃 개편 후 영향받은 12개 화면을 다시 캡처했다: 일반 iPhone A01·H01, iPad T03·A01·H01·L01, Duo 접힘 A01·H01, Duo 펼침 T03·A01·H01·L01. 각 화면의 새 출처와 캡처 시각은 기기별 `capture-index.json`에 기록했다. Duo는 활성 LCD/LCD-1과 내부 화면 native PNG를 확인한 뒤 자세별로 수집했다. 이전에 미검증이던 Duo 펼침 T03도 이번 캡처로 갱신했다.
+
+2026-10-19 Today 스크롤 수정과 최신 레이아웃 병합 후 T03을 일반 iPhone, iPad, Duo 접힘·펼침에서 다시 수집했다. 앞의 세 캡처 테스트는 통과했다. Duo 펼침 테스트는 Today 화면을 실제로 첨부했지만, 새 측면 내비게이션을 기존 접근성 검사에서 찾지 못해 실패했다. 펼침 T03에는 이 실패 실행의 `before teardown` 원본 PNG를 사용했고 화면 내용과 활성 LCD-1을 직접 확인했다. 이 PNG는 캡처 테스트 통과의 증거로 취급하지 않는다.
 
 T01 앱 시작은 `simctl io recordVideo`의 실제 앱 시작 프레임과 원본 영상으로 기록했다. 나머지 갤러리 화면 이미지는 XCTest의 `XCUIScreen.screenshot()` 결과다. 각 카드에서 원본 PNG를 열 수 있다. `boards/`의 7개 PNG는 같은 실제 이미지의 축소 모음이다. 앱 상태와 데이터는 테스트 시나리오의 mock fixture를 사용한다. 일부 테스트는 영어 언어를 지정한다. 원래 최대 접근성 글자 크기 테스트에서 선택됐던 23개 이미지는 기본 글자 크기의 실제 캡처로 교체했고, 현재 인덱스에는 강제 최대 접근성 크기 테스트 출처가 없다. 각 카드 아래에 테스트와 캡처 동작을 기록했다. 인덱스의 `source_revision`은 캡처 시점의 기준 커밋이며, `source_worktree_dirty: true`는 미커밋 앱·테스트 변경을 포함해 빌드했음을 뜻한다.
 

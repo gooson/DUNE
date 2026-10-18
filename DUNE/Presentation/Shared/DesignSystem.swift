@@ -151,6 +151,13 @@ enum DS {
         static let xxxl: CGFloat = 32
     }
 
+    // MARK: - Layout
+
+    enum Layout {
+        /// Shared reading column for the four root tabs on regular-width screens.
+        static let rootContentMaxWidth: CGFloat = 760
+    }
+
     // MARK: - Corner Radius
 
     enum Radius {
