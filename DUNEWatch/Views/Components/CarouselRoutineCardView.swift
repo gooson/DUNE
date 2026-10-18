@@ -5,6 +5,7 @@ import SwiftUI
 struct CarouselRoutineCardView: View {
     let name: String
     let entries: [TemplateEntry]
+    let showsStartButton: Bool
 
     @Environment(\.appTheme) private var theme
     @Environment(WatchConnectivityManager.self) private var connectivity
@@ -65,6 +66,9 @@ struct CarouselRoutineCardView: View {
                 .frame(maxWidth: .infinity, minHeight: 44)
                 .foregroundStyle(theme.accentColor)
                 .background(theme.accentColor.opacity(DS.Opacity.border), in: Capsule())
+                .opacity(showsStartButton ? 1 : 0)
+                .accessibilityHidden(!showsStartButton)
+                .animation(.easeOut(duration: 0.2), value: showsStartButton)
         }
         .padding(.horizontal, DS.Spacing.lg)
         .padding(.vertical, DS.Spacing.xs)

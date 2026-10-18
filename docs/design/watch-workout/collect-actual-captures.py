@@ -37,11 +37,11 @@ def collect(result_paths: list[Path]) -> None:
             time.sleep(1)
             summary_output = subprocess.run(summary_command, check=True, capture_output=True, text=True).stdout
         summary = json.loads(summary_output)
-        watch_devices = [item["device"].get("modelName", "Apple Watch")
+        watch_devices = [(item["device"].get("deviceName")
+                          or item["device"].get("modelName", "Apple Watch")).split("-wt-", 1)[0]
                          for item in summary.get("devicesAndConfigurations", [])
                          if item.get("device", {}).get("platform") == "watchOS Simulator"]
-        device_name = "Apple Watch SE 3 (40mm)" if watch_devices[:1] == ["Apple Watch SE 3"] else (
-            watch_devices[0] if watch_devices else "Apple Watch simulator")
+        device_name = watch_devices[0] if watch_devices else "Apple Watch simulator"
         with tempfile.TemporaryDirectory(prefix="dune-watch-captures-") as temporary:
             export = Path(temporary)
             subprocess.run(
