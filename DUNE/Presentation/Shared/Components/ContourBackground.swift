@@ -30,7 +30,8 @@ struct ContourLines: Shape {
         let scale = min(rect.width, rect.height * 1.8)
         for (index, ring) in Self.rings.enumerated() {
             if simplified && !index.isMultiple(of: 2) { continue }
-            if indexLinesOnly && !index.isMultiple(of: 4) { continue }
+            // The two reference contours follow the direction artwork's map hierarchy.
+            if indexLinesOnly && index != 5 && index != 9 { continue }
             let points = ring.map {
                 CGPoint(x: rect.minX + rect.width * 0.94 + $0.x * scale,
                         y: rect.minY + rect.height * 0.12 + $0.y * scale)
@@ -105,11 +106,11 @@ struct ContourBackground: View {
     private var contourField: some View {
         ZStack {
             ContourLines(simplified: style == .watch)
-                .stroke(ContourPalette.ink.opacity(style.lineOpacity), lineWidth: 0.7)
+                .stroke(ContourPalette.ink.opacity(style.lineOpacity), lineWidth: 0.8)
 
             if style != .watch {
                 ContourLines(indexLinesOnly: true)
-                    .stroke(ContourPalette.ink.opacity(style.lineOpacity * 1.35), lineWidth: 1.6)
+                    .stroke(ContourPalette.accent.opacity(style.lineOpacity * 3), lineWidth: 2.4)
             }
 
             if style == .tab {
@@ -131,7 +132,7 @@ struct ContourBackground: View {
 
     private var secondaryContours: some View {
         ContourLines(simplified: true)
-            .stroke(ContourPalette.ink.opacity(0.08), lineWidth: 0.7)
+            .stroke(ContourPalette.ink.opacity(0.06), lineWidth: 0.7)
             .rotationEffect(.degrees(180))
     }
 }
