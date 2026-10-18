@@ -1,11 +1,11 @@
 {
   "device": "regular",
-  "source_revision": "40f6e4e4c3d73c6d5f5c09c1260597546321c0ba",
+  "source_revision": "648abafb88d813825b0189833a9317389d314fef",
   "source_worktree_dirty": true,
   "xcresults": [
-    ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.17_03-43-42-+0900.xcresult"
+    ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.17_04-45-57-+0900.xcresult"
   ],
-  "processed_capture_candidates": 110,
+  "processed_capture_candidates": 113,
   "captured": {
     "W13": {
       "row_id": "W13",
@@ -1040,19 +1040,19 @@
       "evidence": "title:Today",
       "test": "TodayDesignMapCaptureTests/testTodayRootRenders()",
       "action": "root after setup -[TodayDesignMapCaptureTests testTodayRootRenders]",
-      "timestamp": 1792169849.248,
-      "image": "7E8B4ABD-974A-4F73-9BA4-7C2BD1315C1C.png",
-      "screen": "screen-0-1206x2622-root after setup -[TodayDesignMapCaptureTests testTodayRootRenders]_0_1E7FF8D8-17CC-465E-B201-1DC97A91D732.png",
+      "timestamp": 1792180087.773,
+      "image": "A1E1C997-A8F9-453E-864B-82251280358E.png",
+      "screen": "screen-0-1206x2622-root after setup -[TodayDesignMapCaptureTests testTodayRootRenders]_0_32625008-88CC-46A6-9798-19A9EEF2ECD4.png",
       "file": "T03.png"
     },
     "A01": {
       "row_id": "A01",
       "evidence": "title:Activity",
-      "test": "ActivityExercisePickerRegressionTests/testQuickStartPickerCanRevealAllExercisesAndOpenDetail()",
-      "action": "root after setup -[ActivityExercisePickerRegressionTests testQuickStartPickerCanRevealAllExercisesAndOpenDetail]",
-      "timestamp": 1792176242.88,
-      "image": "BBD88487-C0D1-425E-A9DC-0CAB7BF1D3B7.png",
-      "screen": "screen-0-1206x2622-root after setup -[ActivityExercisePickerRegressionTests testQuickStartPickerCanRevealAllExercisesAndOpenDetail]_0_1D82B274-67EB-4D53-8C91-E6B0C6AF5BE4.png",
+      "test": "ActivityExerciseRegressionTests/testExerciseTypeDetailShowsTrendSurface()",
+      "action": "root after setup -[ActivityExerciseRegressionTests testExerciseTypeDetailShowsTrendSurface]",
+      "timestamp": 1792179996.456,
+      "image": "409F5464-01BC-4C60-9933-E9AAD20C56E0.png",
+      "screen": "screen-0-1206x2622-root after setup -[ActivityExerciseRegressionTests testExerciseTypeDetailShowsTrendSurface]_0_A581056C-8529-46A7-89B6-5C7BCDF8D227.png",
       "file": "A01.png"
     },
     "H01": {
@@ -1060,9 +1060,9 @@
       "evidence": "title:Wellness",
       "test": "WellnessDesignMapCaptureTests/testWellnessRootRenders()",
       "action": "root after setup -[WellnessDesignMapCaptureTests testWellnessRootRenders]",
-      "timestamp": 1792176296.528,
-      "image": "50AB8413-25F1-4912-A532-D151FECAFC9F.png",
-      "screen": "screen-0-1206x2622-root after setup -[WellnessDesignMapCaptureTests testWellnessRootRenders]_0_0CC974C3-7E44-4B9B-9D93-CA39A15907AA.png",
+      "timestamp": 1792180099.513,
+      "image": "FEE9C86A-2974-417F-9918-5CCD5427A1C7.png",
+      "screen": "screen-0-1206x2622-root after setup -[WellnessDesignMapCaptureTests testWellnessRootRenders]_0_D60B689A-C392-42CF-9021-5A708FCA6133.png",
       "file": "H01.png"
     }
   },

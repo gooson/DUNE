@@ -73,7 +73,7 @@ struct ConditionHeroView: View {
                     Image(systemName: "chevron.right")
                 }
                 .font(.subheadline.weight(.semibold))
-                .foregroundStyle(theme.sandColor)
+                .foregroundStyle(Color.primary.opacity(0.82))
             }
         }
         .accessibilityElement(children: .contain)
@@ -122,7 +122,7 @@ struct ConditionHeroView: View {
 
                 Text(Labels.scoreLabel)
                     .font(.system(size: 9, weight: .semibold))
-                    .foregroundStyle(theme.sandColor)
+                    .foregroundStyle(Color.primary.opacity(0.76))
                     .tracking(0.5)
                     .lineLimit(1)
                     .minimumScaleFactor(0.7)
@@ -155,12 +155,12 @@ struct ConditionHeroView: View {
 
                     Text(adaptive.message)
                         .font(.subheadline)
-                        .foregroundStyle(theme.secondaryTextColor)
+                        .foregroundStyle(Color.primary.opacity(0.78))
                         .fixedSize(horizontal: false, vertical: true)
                 } else {
                     Text(score.narrativeMessage)
                         .font(.subheadline)
-                        .foregroundStyle(theme.secondaryTextColor)
+                        .foregroundStyle(Color.primary.opacity(0.78))
                         .fixedSize(horizontal: false, vertical: true)
                 }
 
@@ -213,7 +213,7 @@ struct ConditionHeroView: View {
         } else {
             Text("Not enough data to show trend.")
                 .font(.subheadline)
-                .foregroundStyle(theme.secondaryTextColor)
+                .foregroundStyle(Color.primary.opacity(0.78))
         }
     }
 }

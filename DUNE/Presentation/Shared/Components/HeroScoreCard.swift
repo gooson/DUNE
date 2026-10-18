@@ -102,7 +102,7 @@ struct HeroScoreCard: View {
                         .font(.subheadline.weight(.semibold))
                     Text("Not enough data to show trend.")
                         .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.primary.opacity(0.72))
                         .frame(maxWidth: .infinity, minHeight: isRegular ? 84 : 72, alignment: .center)
                 }
             }
@@ -155,7 +155,8 @@ struct HeroScoreCard: View {
                 ringColor: statusColor,
                 lineWidth: ringLineWidth,
                 size: ringSize,
-                useWarmGradient: true
+                useWarmGradient: true,
+                showsTravelingHighlight: true
             )
             .shadow(
                 color: statusColor.opacity(showGlow ? 0.5 : 0),
@@ -176,7 +177,7 @@ struct HeroScoreCard: View {
 
                 Text(scoreLabel)
                     .font(.caption2.weight(.semibold))
-                    .foregroundStyle(theme.sandColor)
+                    .foregroundStyle(Color.primary.opacity(0.76))
                     .tracking(1)
                     .lineLimit(1)
                     .minimumScaleFactor(0.7)
@@ -210,7 +211,7 @@ struct HeroScoreCard: View {
             HStack(spacing: DS.Spacing.xs) {
                 Text(guideMessage)
                     .font(.subheadline)
-                    .foregroundStyle(DS.Color.textSecondary)
+                    .foregroundStyle(Color.primary.opacity(0.78))
                     .fixedSize(horizontal: false, vertical: true)
 
                 if let sparkline = hourlySparkline, sparkline.deltaDirection != .stable {
@@ -232,7 +233,7 @@ struct HeroScoreCard: View {
         if showsChevron {
             Image(systemName: "chevron.right")
                 .font(.caption)
-                .foregroundStyle(.quaternary)
+                .foregroundStyle(Color.primary.opacity(0.76))
         }
     }
 
@@ -247,7 +248,7 @@ struct HeroScoreCard: View {
         VStack(alignment: .leading, spacing: 2) {
             Text(item.label)
                 .font(.caption2)
-                .foregroundStyle(theme.sandColor)
+                .foregroundStyle(Color.primary.opacity(0.76))
 
             HStack(spacing: DS.Spacing.xs) {
                 GeometryReader { geo in
@@ -266,7 +267,7 @@ struct HeroScoreCard: View {
                 Text(item.value.map { "\($0)" } ?? "--")
                     .font(.caption)
                     .fontWeight(.medium)
-                    .foregroundStyle(item.value != nil ? AnyShapeStyle(theme.sandColor) : AnyShapeStyle(.quaternary))
+                    .foregroundStyle(Color.primary.opacity(item.value != nil ? 0.82 : 0.55))
                     .monospacedDigit()
                     .fixedSize(horizontal: true, vertical: false)
             }

@@ -4,8 +4,6 @@ import Charts
 struct TrendChartView: View {
     let scores: [ConditionScore]
 
-    @Environment(\.appTheme) private var theme
-
     var body: some View {
         VStack(spacing: 4) {
         Chart {
@@ -14,7 +12,7 @@ struct TrendChartView: View {
                 x: .value("Date", score.date, unit: .day),
                 y: .value("Score", score.score)
             )
-            .foregroundStyle(theme.sandColor.opacity(0.9))
+            .foregroundStyle(Color.primary.opacity(0.82))
             .lineStyle(StrokeStyle(lineWidth: 2.5, lineCap: .round))
             .interpolationMethod(.catmullRom)
 
@@ -27,7 +25,7 @@ struct TrendChartView: View {
             }
 
             RuleMark(y: .value("Current", scores.first?.score ?? 0))
-                .foregroundStyle(theme.sandColor.opacity(0.2))
+                .foregroundStyle(Color.primary.opacity(0.26))
                 .lineStyle(StrokeStyle(lineWidth: 1, dash: [3, 3]))
         }
         .chartYScale(domain: 0...100)
@@ -44,14 +42,14 @@ struct TrendChartView: View {
             Text("\(scores.map(\.score).max() ?? 0)")
         }
         .font(.caption)
-        .foregroundStyle(.secondary)
+        .foregroundStyle(Color.primary.opacity(0.72))
         HStack {
             Text(scores.last?.date.formatted(.dateTime.month(.abbreviated).day()) ?? "")
             Spacer()
             Text(scores.first?.date.formatted(.dateTime.month(.abbreviated).day()) ?? "")
         }
         .font(.caption)
-        .foregroundStyle(.secondary)
+        .foregroundStyle(Color.primary.opacity(0.72))
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("Condition Trend")
