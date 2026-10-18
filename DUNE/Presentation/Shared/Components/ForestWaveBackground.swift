@@ -197,10 +197,10 @@ struct ForestTabWaveBackground: View {
             // Layer 1: Far — distant misty treeline (smallest trees, lightest)
             ForestWaveOverlayView(
                 color: theme.forestMistColor,
-                opacity: 0.09 * opacityScale,
-                amplitude: 0.25 * scale,
+                opacity: 0.23 * opacityScale,
+                amplitude: 0.11 * scale,
                 frequency: 0.9,
-                verticalOffset: 0.58,
+                verticalOffset: 0.40,
                 bottomFade: 0.5,
                 treeDensity: 0.45,
                 driftDuration: 35,
@@ -208,33 +208,50 @@ struct ForestTabWaveBackground: View {
                 crestOpacity: 0.10 * opacityScale,
                 crestWidth: 1
             )
-            .frame(height: 150)
+            .frame(height: 190)
+
+            // A pale break keeps the distant canopy visible above the middle ridge at rest.
+            LinearGradient(
+                colors: [.clear, theme.forestMistColor.opacity(0.13 * opacityScale), .clear],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .frame(height: 38)
+            .offset(y: 65)
 
             // Layer 2: Mid — middle-distance forest (medium trees)
             ForestWaveOverlayView(
                 color: theme.forestMidColor,
-                opacity: 0.25 * opacityScale,
-                amplitude: 0.35 * scale,
+                opacity: 0.38 * opacityScale,
+                amplitude: 0.10 * scale,
                 frequency: 1.65,
-                verticalOffset: 0.92,
+                verticalOffset: 0.64,
                 bottomFade: 0.4,
-                treeDensity: 3.2,
+                treeDensity: 1.4,
                 driftDuration: 27,
                 crestColor: theme.forestMistColor,
                 crestOpacity: 0.12 * opacityScale,
                 crestWidth: 1
             )
-            .frame(height: 170)
+            .frame(height: 190)
+
+            LinearGradient(
+                colors: [.clear, theme.forestMistColor.opacity(0.11 * opacityScale), .clear],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .frame(height: 35)
+            .offset(y: 108)
 
             // Layer 3: Near — foreground forest with tall conifers (darkest)
             ForestWaveOverlayView(
                 color: theme.forestDeepColor,
-                opacity: 0.75 * opacityScale,
-                amplitude: 0.2 * scale,
+                opacity: 0.57 * opacityScale,
+                amplitude: 0.09 * scale,
                 frequency: 2.7,
-                verticalOffset: 0.8,
+                verticalOffset: 0.87,
                 bottomFade: 0.4,
-                treeDensity: 1,
+                treeDensity: 1.3,
                 driftDuration: 20,
                 showGrain: true,
                 grainOpacity: colorScheme == .dark ? 0.014 : 0.03,
@@ -242,7 +259,7 @@ struct ForestTabWaveBackground: View {
                 crestOpacity: 0.55 * opacityScale,
                 crestWidth: 1
             )
-            .frame(height: 180)
+            .frame(height: 190)
 
             // Bokashi gradient overlay
             LinearGradient(
