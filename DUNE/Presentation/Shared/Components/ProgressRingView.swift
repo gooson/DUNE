@@ -64,10 +64,10 @@ struct ProgressRingView: View {
                 Circle()
                     .trim(from: 0, to: 0.035)
                     .stroke(
-                        (gradientTipColor ?? ringColor).opacity(0.85),
-                        style: StrokeStyle(lineWidth: lineWidth * 0.55, lineCap: .round)
+                        Color.white.opacity(0.95),
+                        style: StrokeStyle(lineWidth: lineWidth * 0.42, lineCap: .round)
                     )
-                    .blur(radius: 2)
+                    .shadow(color: theme.accentColor.opacity(0.85), radius: 4)
                     .rotationEffect(.degrees(-90 + highlightPosition * arcDegrees))
                     .accessibilityHidden(true)
             }
