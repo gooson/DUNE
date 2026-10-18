@@ -1,11 +1,11 @@
 {
   "device": "duo-open",
-  "source_revision": "d1dfa3f4dd27500b43a91f40fb3bbc7bb2718dfe",
+  "source_revision": "648abafb88d813825b0189833a9317389d314fef",
   "source_worktree_dirty": true,
   "xcresults": [
-    ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.18_23-59-46-+0900.xcresult"
+    ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.17_05-11-33-+0900.xcresult"
   ],
-  "processed_capture_candidates": 106,
+  "processed_capture_candidates": 114,
   "captured": {
     "T02": {
       "row_id": "T02",
@@ -1021,14 +1021,24 @@
       "screen": "screen-1-2006x2852-tap dashboard-stress-score_1_F1AEB3CA-CA04-4D4C-A2F7-90BA940DB3C6.png",
       "file": "T05.png"
     },
+    "T03": {
+      "row_id": "T03",
+      "evidence": "title:Today",
+      "test": "TodayDesignMapCaptureTests/testTodayRootRenders()",
+      "action": "root after setup -[TodayDesignMapCaptureTests testTodayRootRenders]",
+      "timestamp": 1792181659.458,
+      "image": "F4398AB7-F955-4F8A-9CF0-F726103F9838.png",
+      "screen": "screen-1-2006x2852-root after setup -[TodayDesignMapCaptureTests testTodayRootRenders]_1_31EF61A2-9BC0-48AE-80E5-9D578579A5E2.png",
+      "file": "T03.png"
+    },
     "A01": {
       "row_id": "A01",
       "evidence": "title:Activity",
       "test": "ActivityExerciseRegressionTests/testExerciseTypeDetailShowsTrendSurface()",
       "action": "root after setup -[ActivityExerciseRegressionTests testExerciseTypeDetailShowsTrendSurface]",
-      "timestamp": 1792177989.067,
-      "image": "24946869-D896-4371-99F0-DC652F487884.png",
-      "screen": "screen-1-2006x2852-root after setup -[ActivityExerciseRegressionTests testExerciseTypeDetailShowsTrendSurface]_1_0275191A-1E60-439E-9711-432235B0E6B0.png",
+      "timestamp": 1792181558.395,
+      "image": "DF0B8BE9-8A08-4EE1-9AB0-3E19D807965D.png",
+      "screen": "screen-1-2006x2852-root after setup -[ActivityExerciseRegressionTests testExerciseTypeDetailShowsTrendSurface]_1_62275AEF-11CD-4256-826C-9540666715BF.png",
       "file": "A01.png"
     },
     "H01": {
@@ -1036,9 +1046,9 @@
       "evidence": "title:Wellness",
       "test": "WellnessDesignMapCaptureTests/testWellnessRootRenders()",
       "action": "root after setup -[WellnessDesignMapCaptureTests testWellnessRootRenders]",
-      "timestamp": 1792178084.627,
-      "image": "71A62D5C-A613-49EC-895B-BFEF839479A1.png",
-      "screen": "screen-1-2006x2852-root after setup -[WellnessDesignMapCaptureTests testWellnessRootRenders]_1_6B49366B-7747-43BF-B925-621DE5E4DE44.png",
+      "timestamp": 1792181684.147,
+      "image": "67D7B68F-CBB2-4AD5-9322-0BCE8F547131.png",
+      "screen": "screen-1-2006x2852-root after setup -[WellnessDesignMapCaptureTests testWellnessRootRenders]_1_0655AA2F-F749-4AB0-9A52-532A22A27AF4.png",
       "file": "H01.png"
     },
     "L01": {
@@ -1050,16 +1060,6 @@
       "image": "1BEB4121-6E96-4423-9D59-D1489AB0C304.png",
       "screen": "screen-1-2006x2852-root after setup -[LifeDesignMapCaptureTests testLifeRootRenders]_1_680CFE7C-264E-4EE5-B6BB-49FD3D33596C.png",
       "file": "L01.png"
-    },
-    "T03": {
-      "row_id": "T03",
-      "evidence": "title:Today",
-      "test": "TodayDesignMapCaptureTests/testTodayRootRenders()",
-      "action": "before teardown -[TodayDesignMapCaptureTests testTodayRootRenders]",
-      "timestamp": 1792335633.475,
-      "image": "6AF8A9E1-C762-433F-B192-DB00ABE0AC3B.png",
-      "screen": "screen-1-2006x2852-before teardown -[TodayDesignMapCaptureTests testTodayRootRenders]_1_35C01575-D02F-4FFE-950D-E4D6FDF0C99F.png",
-      "file": "T03.png"
     }
   },
   "unmatched": []
