@@ -42,10 +42,10 @@ related_solutions: []
 
 ### Verification
 
-- Watch 빌드와 최종 `build-for-testing` 통과. `LazyVStack` 변경 전 seeded Watch UI 테스트 `testStartPromptReturnsAfterCarouselScroll` 1건 통과.
-- `LazyVStack` 변경 후 같은 UI 테스트 재실행은 CoreSimulatorService 연결 실패로 테스트가 0건 실행됐다. 최신 코드의 스크롤 정렬 동작은 다시 확인해야 한다.
+- Watch 빌드와 최종 `build-for-testing` 통과. `LazyVStack` 변경 후 seeded Watch UI 테스트 `testStartPromptReturnsAfterCarouselScroll` 1건 통과.
+- CoreSimulatorService 연결 실패로 0건 실행됐던 시도는 시뮬레이터 접근 권한을 조정해 다시 실행한 뒤 통과했다.
 - 실패 시 녹화에서 이동 중 시작 표시가 숨는 프레임을 확인했고, 통과한 테스트에서 정지 후 표시와 운동 미리보기 이동을 확인했다.
-- 실제 화면맵 H01·H02·H03을 44mm Watch 시뮬레이터 화면으로 갱신했다. 캡처 전용 테스트는 H03 카드 위치 판정에서 실패했으므로 각 이미지의 출처와 실패 경위를 `capture-index.json`에 남겼다.
+- 캡처 전용 `testCaptureHomeCardsDesignMap()`도 통과했고, 실제 화면맵 H01·H02·H03을 최신 44mm Watch 시뮬레이터 화면으로 갱신했다. 캡처 인덱스의 기기 표기를 `deviceName`에 맞춰 바로잡았다.
 
 ## Prevention
 
@@ -53,7 +53,7 @@ related_solutions: []
 
 - [ ] Watch 스크롤 UI 테스트는 `isHittable`과 함께 카드 중심이 화면 안에 있는지 확인한다.
 - [ ] 스크롤 중 요소를 숨길 때 카드 높이가 변하지 않는지 확인한다.
-- [ ] 실패한 테스트의 화면을 디자인맵에 사용할 때는 실제 PNG를 보고 실패 경위를 출처에 기록한다.
+- [ ] 캡처 인덱스의 기기명이 실제 시뮬레이터 이름과 일치하는지 확인한다.
 
 ### Rule Addition
 
