@@ -31,13 +31,20 @@ struct OceanTabWaveBackground: View {
         let scale = intensityScale
 
         ZStack(alignment: .top) {
+            // Keep the wash behind the currents so the still frame retains depth.
+            LinearGradient(
+                colors: oceanGradientColors,
+                startPoint: .top,
+                endPoint: DS.Gradient.tabBackgroundEnd
+            )
+
             // Layer 1: Deep (back)
             OceanWaveOverlayView(
                 color: theme.oceanDeepColor,
-                opacity: 0.07 * scale,
-                amplitude: 0.026 * scale,
+                opacity: 0.15 * scale,
+                amplitude: 0.035 * scale,
                 frequency: 1.05,
-                verticalOffset: 0.4,
+                verticalOffset: 0.34,
                 bottomFade: 0.5,
                 steepness: 0.12,
                 crestHeight: 0.18 * scale,
@@ -55,10 +62,10 @@ struct OceanTabWaveBackground: View {
             // Layer 2: Mid (reverse for cross-current)
             OceanWaveOverlayView(
                 color: theme.oceanMidColor,
-                opacity: 0.11 * scale,
-                amplitude: 0.05 * scale,
+                opacity: 0.22 * scale,
+                amplitude: 0.065 * scale,
                 frequency: 1.65,
-                verticalOffset: 0.5,
+                verticalOffset: 0.47,
                 bottomFade: 0.4,
                 steepness: 0.24,
                 harmonicOffset: .pi / 3,
@@ -68,13 +75,13 @@ struct OceanTabWaveBackground: View {
                 reverseDirection: true,
                 strokeStyle: WaveStrokeStyle(
                     color: theme.oceanFoamColor,
-                    width: 2.2,
-                    opacity: 0.38 * scale
+                    width: 2.6,
+                    opacity: 0.44 * scale
                 ),
                 foamStyle: WaveFoamStyle(
                     color: theme.oceanFoamColor,
-                    opacity: 0.32 * scale,
-                    depth: 0.045
+                    opacity: 0.44 * scale,
+                    depth: 0.07
                 )
             )
             .frame(height: 200)
@@ -82,10 +89,10 @@ struct OceanTabWaveBackground: View {
             // Layer 3: Surface (front, most visible)
             OceanWaveOverlayView(
                 color: theme.oceanSurfaceColor,
-                opacity: 0.28 * scale,
+                opacity: 0.32 * scale,
                 amplitude: 0.13 * scale,
                 frequency: 2.35,
-                verticalOffset: 0.56,
+                verticalOffset: 0.60,
                 bottomFade: 0.4,
                 steepness: 0.54,
                 crestHeight: 0.5 * scale,
@@ -94,23 +101,16 @@ struct OceanTabWaveBackground: View {
                 reverseDirection: false,
                 strokeStyle: WaveStrokeStyle(
                     color: theme.oceanFoamColor,
-                    width: 4.5,
-                    opacity: 0.76 * scale
+                    width: 5.5,
+                    opacity: 0.88 * scale
                 ),
                 foamStyle: WaveFoamStyle(
                     color: theme.oceanFoamColor,
-                    opacity: 0.72 * scale,
-                    depth: 0.11
+                    opacity: 0.82 * scale,
+                    depth: 0.15
                 )
             )
             .frame(height: 200)
-
-            // Background gradient
-            LinearGradient(
-                colors: oceanGradientColors,
-                startPoint: .top,
-                endPoint: DS.Gradient.tabBackgroundEnd
-            )
         }
         .ignoresSafeArea()
         .animation(DS.Animation.atmosphereTransition, value: atmosphere)

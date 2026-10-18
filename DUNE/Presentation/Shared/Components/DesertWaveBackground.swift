@@ -167,7 +167,8 @@ private struct HeatShimmerView: View {
 ///
 /// Layers (back to front):
 /// 1. **Far** — slow, large dunes (distant horizon)
-/// 2. **Near** — faster, smaller dunes with sand ripple (foreground)
+/// 2. **Mid** — warm, distinct ridge between horizon and foreground
+/// 3. **Near** — faster, smaller dunes with sand ripple (foreground)
 ///
 /// Includes heat shimmer texture overlay on near layer.
 struct DesertTabWaveBackground: View {
@@ -206,28 +207,45 @@ struct DesertTabWaveBackground: View {
 
             // Layer 1: Far — broad, smooth horizon dunes
             DesertDuneOverlayView(
-                color: resolvedColor,
-                opacity: 0.12 * scale,
-                amplitude: 0.05 * scale,
+                color: theme.sandColor,
+                opacity: 0.20 * scale,
+                amplitude: 0.06 * scale,
                 frequency: 0.72,
-                verticalOffset: 0.37,
+                verticalOffset: 0.34,
                 bottomFade: 0.5,
                 skewness: 0.2,
                 skewOffset: .pi / 6,
                 driftDuration: 18,
                 crestColor: theme.sandColor,
-                crestOpacity: 0.22 * Double(scale),
+                crestOpacity: 0.34 * Double(scale),
                 crestWidth: 1.2
             )
             .frame(height: 200)
 
-            // Layer 2: Near — smooth foreground dune slope
+            // Layer 2: Mid — a separate sunlit ridge visible in the still scene.
             DesertDuneOverlayView(
                 color: resolvedColor,
-                opacity: 0.18 * scale,
+                opacity: 0.22 * scale,
+                amplitude: 0.065 * scale,
+                frequency: 1.05,
+                verticalOffset: 0.48,
+                bottomFade: 0.45,
+                skewness: 0.18,
+                skewOffset: .pi / 3,
+                driftDuration: 16,
+                crestColor: theme.sandColor,
+                crestOpacity: 0.40 * Double(scale),
+                crestWidth: 1.5
+            )
+            .frame(height: 200)
+
+            // Layer 3: Near — smooth foreground dune slope.
+            DesertDuneOverlayView(
+                color: resolvedColor,
+                opacity: 0.27 * scale,
                 amplitude: 0.082 * scale,
                 frequency: 1.35,
-                verticalOffset: 0.57,
+                verticalOffset: 0.62,
                 bottomFade: 0.4,
                 skewness: 0.14,
                 skewOffset: .pi / 4,
@@ -236,8 +254,8 @@ struct DesertTabWaveBackground: View {
                 driftDuration: 13,
                 showShimmer: true,
                 crestColor: theme.sandColor,
-                crestOpacity: 0.30 * Double(scale),
-                crestWidth: 1.7
+                crestOpacity: 0.52 * Double(scale),
+                crestWidth: 2.0
             )
             .frame(height: 200)
         }
