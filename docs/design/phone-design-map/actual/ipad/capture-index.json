@@ -1,9 +1,9 @@
 {
   "device": "ipad",
-  "source_revision": "ab567364d38a127d1aafe5aca586020adf222ce9",
+  "source_revision": "40f6e4e4c3d73c6d5f5c09c1260597546321c0ba",
   "source_worktree_dirty": true,
   "xcresults": [
-    "/Users/shanks/.codex/worktrees/92bc/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.17_02-25-45-+0900.xcresult"
+    "/Users/shanks/.codex/worktrees/10df/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.17_04-53-39-+0900.xcresult"
   ],
   "processed_capture_candidates": 107,
   "captured": {
@@ -1035,16 +1035,6 @@
       "video": "launch.mov",
       "frame_time": "1.2"
     },
-    "T03": {
-      "row_id": "T03",
-      "evidence": "title:Today",
-      "test": "TodayDesignMapCaptureTests/testTodayRootRenders()",
-      "action": "root after setup -[TodayDesignMapCaptureTests testTodayRootRenders]",
-      "timestamp": 1792168171.699,
-      "image": "D78017DA-38DB-4F3B-B0F4-13CE49C367E0.png",
-      "screen": "screen-0-2064x2752-root after setup -[TodayDesignMapCaptureTests testTodayRootRenders]_0_B7ADF21D-8FB4-4FD2-973C-6730C8935D8D.png",
-      "file": "T03.png"
-    },
     "L01": {
       "row_id": "L01",
       "evidence": "title:Life",
@@ -1074,6 +1064,16 @@
       "image": "CDA1A120-5B55-450E-95FA-3C7F1CEDD14C.png",
       "screen": "screen-0-2064x2752-root after setup -[WellnessDesignMapCaptureTests testWellnessRootRenders]_0_6279F3BE-0E67-4A77-805A-9DFA1DAD62FB.png",
       "file": "H01.png"
+    },
+    "T03": {
+      "row_id": "T03",
+      "evidence": "title:Today",
+      "test": "TodayDesignMapCaptureTests/testTodayRootRenders()",
+      "action": "root after setup -[TodayDesignMapCaptureTests testTodayRootRenders]",
+      "timestamp": 1792180471.77,
+      "image": "6B73E8B4-658D-4128-AE6C-6FCC3DF84050.png",
+      "screen": "screen-0-2064x2752-root after setup -[TodayDesignMapCaptureTests testTodayRootRenders]_0_B137891C-2E1F-4E2D-B4FB-4BDC7CB57066.png",
+      "file": "T03.png"
     }
   },
   "unmatched": []

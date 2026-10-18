@@ -151,6 +151,37 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
                                  "The hero should remain at the top after refresh completes")
     }
 
+    func testNativePullToRefreshKeepsTodayScrollable() throws {
+        dismissMorningBriefingIfNeeded()
+
+        let hero = app.descendants(matching: .any)[AXID.dashboardHeroCondition].firstMatch
+        let scrollView = app.scrollViews["dashboard-root-scroll"].firstMatch
+        XCTAssertTrue(hero.waitForExistence(timeout: 15))
+        XCTAssertTrue(scrollView.waitForExistence(timeout: 8))
+        XCTAssertTrue(waitForHittable(hero, timeout: 5))
+        let initialHeroY = hero.frame.minY
+
+        let start = scrollView.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.35))
+        let end = scrollView.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.8))
+        start.press(forDuration: 0.15, thenDragTo: end, withVelocity: .slow, thenHoldForDuration: 0.5)
+
+        XCTAssertLessThanOrEqual(abs(hero.frame.minY - initialHeroY), 12,
+                                 "Today should settle at its original top after a native downward pull")
+        let heroDriftsFromTop = XCTNSPredicateExpectation(
+            predicate: NSPredicate { _, _ in
+                hero.exists && abs(hero.frame.minY - initialHeroY) > 12
+            },
+            object: nil
+        )
+        heroDriftsFromTop.isInverted = true
+        XCTAssertEqual(XCTWaiter.wait(for: [heroDriftsFromTop], timeout: 2), .completed,
+                       "Today should remain settled after the pull finishes")
+
+        scrollView.swipeUp(velocity: .slow)
+        XCTAssertLessThan(hero.frame.minY, initialHeroY - 20,
+                          "Today should respond to the next upward scroll after refresh")
+    }
+
     func testConditionHeroOpensConditionScoreDetail() throws {
         dismissMorningBriefingIfNeeded()
 

@@ -1,9 +1,9 @@
 {
   "device": "duo-open",
-  "source_revision": "ab567364d38a127d1aafe5aca586020adf222ce9",
+  "source_revision": "40f6e4e4c3d73c6d5f5c09c1260597546321c0ba",
   "source_worktree_dirty": true,
   "xcresults": [
-    ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.17_02-29-40-+0900.xcresult"
+    "/Users/shanks/.codex/worktrees/10df/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.17_05-05-55-+0900.xcresult"
   ],
   "processed_capture_candidates": 106,
   "captured": {
@@ -1021,16 +1021,6 @@
       "screen": "screen-1-2006x2852-tap dashboard-stress-score_1_F1AEB3CA-CA04-4D4C-A2F7-90BA940DB3C6.png",
       "file": "T05.png"
     },
-    "T03": {
-      "row_id": "T03",
-      "evidence": "title:Today",
-      "test": "TodayDesignMapCaptureTests/testTodayRootRenders()",
-      "action": "root after setup -[TodayDesignMapCaptureTests testTodayRootRenders]",
-      "timestamp": 1792169462.685,
-      "image": "2CFDCB10-1CB3-4C47-B85A-14F479A6575D.png",
-      "screen": "screen-1-2006x2852-root after setup -[TodayDesignMapCaptureTests testTodayRootRenders]_1_5A09D522-976C-48A1-9D3A-A85EB9958FB3.png",
-      "file": "T03.png"
-    },
     "L01": {
       "row_id": "L01",
       "evidence": "title:Life",
@@ -1060,6 +1050,16 @@
       "image": "58584A51-3C42-454B-8CBD-2D1606C5ED65.png",
       "screen": "screen-1-2006x2852-root after setup -[WellnessDesignMapCaptureTests testWellnessRootRenders]_1_D74DD334-0944-4671-9467-AA68B0A09015.png",
       "file": "H01.png"
+    },
+    "T03": {
+      "row_id": "T03",
+      "evidence": "title:Today",
+      "test": "TodayDesignMapCaptureTests/testTodayRootRenders()",
+      "action": "root after setup -[TodayDesignMapCaptureTests testTodayRootRenders]",
+      "timestamp": 1792181455.183,
+      "image": "568C8033-5145-4594-AB1A-F931114509D5.png",
+      "screen": "screen-1-2006x2852-root after setup -[TodayDesignMapCaptureTests testTodayRootRenders]_1_6F6151E7-8FC8-4D50-B3E1-CFDACF8CE943.png",
+      "file": "T03.png"
     }
   },
   "unmatched": []

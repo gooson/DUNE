@@ -1,9 +1,9 @@
 {
   "device": "duo",
-  "source_revision": "ab567364d38a127d1aafe5aca586020adf222ce9",
+  "source_revision": "40f6e4e4c3d73c6d5f5c09c1260597546321c0ba",
   "source_worktree_dirty": true,
   "xcresults": [
-    "/Users/shanks/.codex/worktrees/92bc/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.17_02-27-19-+0900.xcresult"
+    "/Users/shanks/.codex/worktrees/10df/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.17_05-16-39-+0900.xcresult"
   ],
   "processed_capture_candidates": 106,
   "captured": {
@@ -1021,16 +1021,6 @@
       "screen": "screen-0-1398x2034-tap 21°C_0_BDA352B3-7267-4E28-8258-DCED32D3552D.png",
       "file": "T08.png"
     },
-    "T03": {
-      "row_id": "T03",
-      "evidence": "title:Today",
-      "test": "TodayDesignMapCaptureTests/testTodayRootRenders()",
-      "action": "root after setup -[TodayDesignMapCaptureTests testTodayRootRenders]",
-      "timestamp": 1792168597.72,
-      "image": "8C319891-EA0E-4778-AC1A-96C8B76D0A8E.png",
-      "screen": "screen-0-1398x2034-root after setup -[TodayDesignMapCaptureTests testTodayRootRenders]_0_A014E44C-C6CF-4C0D-A36B-55A2A6AAA61B.png",
-      "file": "T03.png"
-    },
     "L01": {
       "row_id": "L01",
       "evidence": "title:Life",
@@ -1060,6 +1050,16 @@
       "image": "8ADA94A9-E4B8-499D-AC5A-0C28A185BAAF.png",
       "screen": "screen-0-1398x2034-root after setup -[WellnessDesignMapCaptureTests testWellnessRootRenders]_0_D692B25B-217D-4B2C-9DAC-CDB9BE4CA5CC.png",
       "file": "H01.png"
+    },
+    "T03": {
+      "row_id": "T03",
+      "evidence": "title:Today",
+      "test": "TodayDesignMapCaptureTests/testTodayRootRenders()",
+      "action": "root after setup -[TodayDesignMapCaptureTests testTodayRootRenders]",
+      "timestamp": 1792181875.453,
+      "image": "56526E20-8480-44A4-A882-237D78FE99B3.png",
+      "screen": "screen-0-1398x2034-root after setup -[TodayDesignMapCaptureTests testTodayRootRenders]_0_55444F25-4727-4166-A010-F8A7904CADE5.png",
+      "file": "T03.png"
     }
   },
   "unmatched": []
