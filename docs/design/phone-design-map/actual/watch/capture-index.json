@@ -193,23 +193,26 @@
     "H01": {
       "file": "H01.png",
       "test": "WatchWorkoutFlowSmokeTests/testCaptureHomeCardsDesignMap()",
-      "device": "Apple Watch SE 3 (40mm)",
-      "timestamp": 1791863614.53,
-      "resultBundle": "watch-capture-homecards-20261013.xcresult"
+      "device": "Apple Watch SE 3 (44mm)",
+      "timestamp": 1792335702.592,
+      "resultBundle": "H01-a7017dcd09.xcresult",
+      "provenance": "캡처 후 H03 카드 위치 검증에서 테스트 실패. 이 화면의 PNG는 별도로 확인함."
     },
     "H02": {
       "file": "H02.png",
-      "test": "simctl launch · --ui-scenario default-seeded",
-      "device": "Apple Watch SE 3 (40mm)",
-      "timestamp": 1791860401.159726,
-      "resultBundle": "simctl io screenshot"
+      "test": "WatchWorkoutFlowSmokeTests/testCaptureHomeCardsDesignMap()",
+      "device": "Apple Watch SE 3 (44mm)",
+      "timestamp": 1792335708.356,
+      "resultBundle": "H01-a7017dcd09.xcresult",
+      "provenance": "캡처 후 H03 카드 위치 검증에서 테스트 실패. 이 화면의 PNG는 별도로 확인함."
     },
     "H03": {
       "file": "H03.png",
-      "test": "WatchWorkoutFlowSmokeTests/testCaptureHomeCardsDesignMap()",
-      "device": "Apple Watch SE 3 (40mm)",
-      "timestamp": 1791863620.108,
-      "resultBundle": "watch-capture-homecards-20261013.xcresult"
+      "test": "WatchHomeSmokeTests/testStartPromptReturnsAfterCarouselScroll()",
+      "device": "Apple Watch SE 3 (44mm)",
+      "timestamp": 1792334609.516,
+      "resultBundle": "Test-DUNEWatchUITests-2026.10.18_23-43-04-+0900.xcresult",
+      "provenance": "화면 밖 카드 탭으로 실패한 UI 테스트의 첨부 화면. 보이는 선호 운동 카드와 시작 표시를 확인했고, 수정된 스크롤 UI 테스트는 이후 통과함."
     },
     "H04": {
       "file": "H04.png",

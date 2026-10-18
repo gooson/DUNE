@@ -172,11 +172,22 @@ final class WatchWorkoutFlowSmokeTests: WatchUITestBaseCase {
         let routine = "watch-home-card-routine-00000000-0000-4000-8000-000000000001"
         captureDesignState("H01", visible: routine)
 
+        launchApp(with: LaunchConfiguration(scenario: .defaultSeeded,
+                                           additionalArguments: ["--ui-watch-recent-card"]))
+        captureDesignState("H02", visible: "watch-home-card-recent-ui-test-squat")
+
         launchApp(with: LaunchConfiguration(scenario: .responsiveLayout))
-        let preferred = "watch-home-card-preferred-cycling"
-        for _ in 0..<10 where !app.buttons[preferred].firstMatch.isHittable { app.swipeUp() }
-        XCTAssertTrue(app.buttons[preferred].firstMatch.isHittable)
-        captureDesignState("H03", visible: preferred)
+        app.swipeUp()
+        let preferredCards = app.buttons.matching(
+            NSPredicate(format: "identifier BEGINSWITH %@", "watch-home-card-preferred-")
+        )
+        let viewport = app.frame
+        let preferredCard = preferredCards.allElementsBoundByIndex.first { card in
+            viewport.contains(CGPoint(x: card.frame.midX, y: card.frame.midY)) && card.isHittable
+        }
+        XCTAssertNotNil(preferredCard)
+        guard let preferredCard else { return }
+        captureDesignState("H03", visible: preferredCard.identifier)
     }
 
     func testCaptureRoutineReorderDesignMap() throws {

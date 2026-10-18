@@ -386,7 +386,7 @@ def render_watch_gallery() -> None:
                 }
                 if code in issues:
                     proof += f'<small class="issue">확인된 문제: {escape(issues[code])}</small>'
-                if code == "C08" and item.get("provenance"):
+                if item.get("provenance"):
                     proof += f'<small>{escape(item["provenance"])}</small>'
             else:
                 visual = '<div class="missing">미캡처</div>'

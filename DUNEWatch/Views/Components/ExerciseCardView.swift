@@ -7,14 +7,16 @@ struct ExerciseCardView: View {
     let sectionLabel: String
     let sectionColor: Color
     let daysAgo: String?
+    let showsStartButton: Bool
 
     private let subtitle: String
 
-    init(exercise: WatchExerciseInfo, sectionLabel: String, sectionColor: Color, daysAgo: String?) {
+    init(exercise: WatchExerciseInfo, sectionLabel: String, sectionColor: Color, daysAgo: String?, showsStartButton: Bool = true) {
         self.exercise = exercise
         self.sectionLabel = sectionLabel
         self.sectionColor = sectionColor
         self.daysAgo = daysAgo
+        self.showsStartButton = showsStartButton
         self.subtitle = exerciseSubtitle(for: exercise)
     }
 
@@ -65,6 +67,9 @@ struct ExerciseCardView: View {
                 .frame(maxWidth: .infinity, minHeight: 44)
                 .foregroundStyle(theme.accentColor)
                 .background(theme.accentColor.opacity(DS.Opacity.border), in: Capsule())
+                .opacity(showsStartButton ? 1 : 0)
+                .accessibilityHidden(!showsStartButton)
+                .animation(.easeOut(duration: 0.2), value: showsStartButton)
         }
         .padding(.horizontal, DS.Spacing.lg)
         .padding(.vertical, DS.Spacing.xs)

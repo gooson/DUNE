@@ -179,6 +179,7 @@ final class WatchConnectivityManager: NSObject {
                     defaultSets: 3,
                     defaultReps: 8,
                     defaultWeightKg: 40,
+                    lastUsedAt: arguments.contains("--ui-watch-recent-card") ? Date() : nil,
                     equipment: "barbell",
                     cardioSecondaryUnit: nil
                 ),

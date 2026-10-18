@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DUNE · Watch 홈 스크롤 레이아웃 맵</title>
+  <style>
+    :root { font-family: -apple-system, BlinkMacSystemFont, sans-serif; color: #f8f5ef; background: #151819; }
+    body { max-width: 760px; margin: auto; padding: 24px; }
+    a { color: #deb391; }
+    p, li { line-height: 1.5; color: #c9d0cc; }
+    .states { display: flex; flex-wrap: wrap; gap: 24px; }
+    figure { margin: 0; }
+    .watch { width: 184px; height: 224px; border: 5px solid #444b4b; border-radius: 43px; background: #080b0b; padding: 15px; box-sizing: border-box; }
+    .section { color: #dbac85; font-size: 12px; margin: 4px 0 12px; }
+    .card { border-radius: 16px; background: #232b2b; padding: 13px 11px; min-height: 82px; }
+    .card strong { display: block; font-size: 17px; }
+    .card small { display: block; margin-top: 10px; color: #b7c2bd; }
+    .action { margin-top: 10px; border-radius: 30px; background: #3b3028; color: #e8b793; text-align: center; height: 36px; line-height: 36px; font-size: 14px; }
+    .moving .action { opacity: 0; }
+    figcaption { max-width: 194px; padding-top: 9px; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <a href="index.html">← 레이아웃 맵</a>
+  <h1>Watch 홈 · 운동 카드 스크롤</h1>
+  <p>H01 루틴 · H02 최근 · H03 선호/인기 카드의 동작 기준 시안. 실제 앱 캡처는 <a href="../phone-design-map/actual/watch/index.html">Watch 실제 화면 맵</a>에서 확인한다.</p>
+  <div class="states">
+    <figure><div class="watch"><div class="section">RECENT</div><div class="card"><strong>스쿼트</strong><small>근력 · 3세트</small></div><div class="action">▶ 시작</div></div><figcaption>정지 · 시작 표시</figcaption></figure>
+    <figure><div class="watch moving"><div class="section">RECENT</div><div class="card"><strong>스쿼트</strong><small>근력 · 3세트</small></div><div class="action">▶ 시작</div></div><figcaption>스크롤 중 · 시작 숨김</figcaption></figure>
+    <figure><div class="watch"><div class="section">PREFERRED</div><div class="card"><strong>사이클링</strong><small>유산소</small></div><div class="action">▶ 시작</div></div><figcaption>다음 카드 정지 · 시작 복귀</figcaption></figure>
+  </div>
+  <ul>
+    <li>정보 순서: 구분 → 운동/루틴 이름과 세부 정보 → 시작 행동.</li>
+    <li>스크롤 추적·감속·프로그램 이동 중에는 시작 표시만 투명하게 한다. 공간은 유지해 카드 높이와 스크롤 위치를 고정한다.</li>
+    <li>멈춘 뒤 시작 표시가 다시 나타난다. 카드 선택은 기존 운동 미리보기로 이동한다.</li>
+    <li>H04 전체 운동 탐색, H05 빈 상태는 기존 행동을 유지한다. 큰 글씨에서도 이름과 세부 정보가 시작 공간을 침범하지 않도록 스크롤 높이를 허용한다.</li>
+  </ul>
+</body>
+</html>
