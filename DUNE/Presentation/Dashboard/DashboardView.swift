@@ -144,9 +144,14 @@ struct DashboardView: View {
             }
             .accessibilityElement(children: .contain)
             .accessibilityIdentifier("dashboard-root-scroll")
-            .onScrollPhaseChange { _, newPhase, context in
-                guard newPhase == .idle else { return }
-                // Finish near-top swipes at the expanded navigation title's resting position.
+            .waveRefreshable {
+                guard launchExperienceReady else { return }
+                await loadDashboard()
+            }
+            .onScrollPhaseChange { oldPhase, newPhase, context in
+                // Only finish inertial swipes. Pull-to-refresh releases and its inset
+                // restoration must keep the system scroll view in control.
+                guard oldPhase == .decelerating, newPhase == .idle else { return }
                 let distanceFromTop = context.geometry.contentOffset.y + context.geometry.contentInsets.top
                 guard distanceFromTop > 0, distanceFromTop < 130 else { return }
                 proxy.scrollTo(ScrollAnchor.top, anchor: .top)
@@ -176,10 +181,6 @@ struct DashboardView: View {
         }
         .navigationDestination(item: $weatherDetailNavigation) { snapshot in
             WeatherDetailView(snapshot: snapshot)
-        }
-        .waveRefreshable {
-            guard launchExperienceReady else { return }
-            await loadDashboard()
         }
         .task(id: dashboardLoadTrigger) {
             guard launchExperienceReady else { return }

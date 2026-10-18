@@ -101,6 +101,7 @@ status: approved
 - **`/run`에서 `/ship` 호출 전 Pre-Ship 게이트 강제** (#196)
 - **`/ship` 전 기존 review finding을 final diff 기준으로 재분류**: 수정 후에도 예전 리뷰 코멘트를 그대로 carry 하면 stale finding이 ship 이후 혼란을 만들 수 있으므로, ship 전에 각 finding을 `Open`/`Resolved`/`Stale after fix`로 다시 정리하고 미해결 P1/P2가 남아 있으면 중단한다 (#227)
 - **scrollable chart gesture 수정은 full lifecycle regression을 고정**: quick drag scroll, long-press selection, long-press 중 visible range 고정, vertical parent scroll, release 후 scroll resume, scroll-after-selection overlay cleanup + no snap-back을 seeded/mock UI test 또는 동등한 수동 재현 절차로 남긴다 (#229)
+- **Today 최상단 스크롤 수정은 실제 당김과 관성 복귀를 함께 검증**: 첫 카드의 최종 위치나 테스트 전용 새로고침 버튼만으로 통과시키지 않는다. 실제 ScrollView를 당긴 뒤 제목·카드 위치가 유지되고 다음 스와이프가 반응하는지, 반복 관성 스와이프는 맨 위로 복귀하는지를 시뮬레이터에서 각각 확인한다.
 - **solution 문서는 final implementation과 같은 턴에 동기화**: interaction contract를 바꾸고도 docs/solutions가 이전 시도(`chartXSelection`, `SpatialTapGesture`, 임시 fallback)를 설명한 채 남아 있으면 stale review를 유발하므로, 구현이 바뀐 턴에 관련 solution 문서도 같이 수정한다 (#230)
 - **`.claude/settings.local.json`은 기본적으로 `{}` 유지** (#203)
 - **`/run` 최종 출력 계약은 상태 기반으로 작성** (#204)

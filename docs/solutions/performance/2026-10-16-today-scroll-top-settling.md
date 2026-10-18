@@ -4,10 +4,12 @@ category: performance
 date: 2026-10-16
 severity: important
 related_files: [DUNE/Presentation/Dashboard/DashboardView.swift, DUNEUITests/Full/TodaySettingsRegressionTests.swift]
-related_solutions: [docs/solutions/performance/2026-10-14-today-scroll-top-bounce.md]
+related_solutions: [docs/solutions/performance/2026-10-14-today-scroll-top-bounce.md, docs/solutions/performance/2026-10-17-today-native-pull-scroll-lock.md]
 ---
 
 # Solution: Today 상단에서 반복 스와이프 후 제목과 카드가 덜컹거리는 문제
+
+> 2026-10-17 후속: 아래의 모든 idle 단계 정렬은 실제 상단 당김 뒤 카드가 제목 아래에 고정되는 회귀를 만들었다. 현재 구현은 관성 스와이프가 끝날 때만 정렬한다. [후속 해결 기록](2026-10-17-today-native-pull-scroll-lock.md)을 참조한다.
 
 ## Problem
 
