@@ -180,6 +180,25 @@ private enum GlassCardGradients {
         startPoint: .leading,
         endPoint: .trailing
     )
+    // Water Lilies
+    private static let lilyAccent = Color("LilyAccent")
+    private static let lilyDusk = Color("LilyDusk")
+    private static let lilySand = Color("LilySand")
+    private static let lilyHeroBorder = LinearGradient(
+        colors: [lilyAccent.opacity(0.58), lilySand.opacity(0.18)],
+        startPoint: .topLeading,
+        endPoint: .bottomTrailing
+    )
+    private static let lilyDarkBorder = LinearGradient(
+        colors: [lilyAccent.opacity(0.38), lilyDusk.opacity(0.20)],
+        startPoint: .topLeading,
+        endPoint: .bottomTrailing
+    )
+    private static let lilyBottomSeparator = LinearGradient(
+        colors: [.clear, lilyAccent.opacity(0.22), .clear],
+        startPoint: .leading,
+        endPoint: .trailing
+    )
     static let clearBorder = LinearGradient(
         colors: [Color.clear, Color.clear],
         startPoint: .topLeading,
@@ -195,6 +214,7 @@ private enum GlassCardGradients {
         case .arcticDawn:  arcticHeroBorder
         case .solarPop:    solarHeroBorder
         case .contourAtlas: clearBorder
+        case .waterLilies: lilyHeroBorder
         }
     }
     static func darkBorder(for theme: AppTheme) -> LinearGradient {
@@ -206,6 +226,7 @@ private enum GlassCardGradients {
         case .arcticDawn:  arcticDarkBorder
         case .solarPop:    solarDarkBorder
         case .contourAtlas: clearBorder
+        case .waterLilies: lilyDarkBorder
         }
     }
     static func bottomSeparator(for theme: AppTheme) -> LinearGradient {
@@ -217,6 +238,7 @@ private enum GlassCardGradients {
         case .arcticDawn:  arcticBottomSeparator
         case .solarPop:    solarBottomSeparator
         case .contourAtlas: clearBorder
+        case .waterLilies: lilyBottomSeparator
         }
     }
 
@@ -256,13 +278,44 @@ private enum GlassCardGradients {
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
-        case .desertWarm, .oceanCool, .forestGreen, .contourAtlas:
+        case .waterLilies:
+            LinearGradient(
+                colors: [
+                    lilyDusk.opacity(colorScheme == .dark ? 0.30 : 0.25),
+                    lilyAccent.opacity(colorScheme == .dark ? 0.22 : 0.18),
+                    lilySand.opacity(colorScheme == .dark ? 0.12 : 0.10),
+                    .clear
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        case .desertWarm, .oceanCool, .forestGreen:
+            LinearGradient(
+                colors: [
+                    theme.accentColor.opacity(colorScheme == .dark ? 0.22 : 0.26),
+                    theme.duskColor.opacity(colorScheme == .dark ? 0.14 : 0.12),
+                    .clear
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        case .contourAtlas:
             clearBorder
         }
     }
 
     static func standardSurface(for theme: AppTheme, colorScheme: ColorScheme) -> LinearGradient {
         switch theme {
+        case .waterLilies:
+            LinearGradient(
+                colors: [
+                    lilySand.opacity(colorScheme == .dark ? 0.16 : 0.14),
+                    lilyAccent.opacity(colorScheme == .dark ? 0.10 : 0.08),
+                    .clear
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
         case .sakuraCalm:
             LinearGradient(
                 colors: [
@@ -297,13 +350,29 @@ private enum GlassCardGradients {
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
-        case .desertWarm, .oceanCool, .forestGreen, .contourAtlas:
+        case .desertWarm, .oceanCool, .forestGreen:
+            LinearGradient(
+                colors: [
+                    theme.accentColor.opacity(colorScheme == .dark ? 0.10 : 0.11),
+                    theme.duskColor.opacity(colorScheme == .dark ? 0.06 : 0.05),
+                    .clear
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        case .contourAtlas:
             clearBorder
         }
     }
 
     static func inlineSurface(for theme: AppTheme, colorScheme: ColorScheme) -> LinearGradient {
         switch theme {
+        case .waterLilies:
+            LinearGradient(
+                colors: [lilySand.opacity(colorScheme == .dark ? 0.11 : 0.10), .clear],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
         case .sakuraCalm:
             LinearGradient(
                 colors: [
@@ -344,6 +413,16 @@ private enum GlassCardGradients {
 
     static func topBloom(for theme: AppTheme, colorScheme: ColorScheme) -> LinearGradient {
         switch theme {
+        case .waterLilies:
+            LinearGradient(
+                colors: [
+                    lilyAccent.opacity(colorScheme == .dark ? 0.14 : 0.12),
+                    lilySand.opacity(colorScheme == .dark ? 0.08 : 0.07),
+                    .clear
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
         case .sakuraCalm:
             LinearGradient(
                 colors: [
@@ -381,6 +460,16 @@ private enum GlassCardGradients {
 
     static func cardBorder(for theme: AppTheme, colorScheme: ColorScheme) -> LinearGradient {
         switch theme {
+        case .waterLilies:
+            LinearGradient(
+                colors: [
+                    lilyAccent.opacity(colorScheme == .dark ? 0.34 : 0.28),
+                    lilySand.opacity(colorScheme == .dark ? 0.24 : 0.20),
+                    lilyDusk.opacity(colorScheme == .dark ? 0.14 : 0.10)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
         case .sakuraCalm:
             LinearGradient(
                 colors: [

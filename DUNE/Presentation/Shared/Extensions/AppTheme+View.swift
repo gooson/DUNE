@@ -20,6 +20,8 @@ extension AppTheme {
             "Solar"
         case .contourAtlas:
             "Contour"
+        case .waterLilies:
+            "Lily"
         }
     }
 
@@ -269,7 +271,7 @@ extension AppTheme {
     /// Whether this theme uses a glass-style card border with custom surface gradients.
     var usesGlassBorder: Bool {
         switch self {
-        case .sakuraCalm, .arcticDawn, .solarPop: true
+        case .sakuraCalm, .arcticDawn, .solarPop, .waterLilies: true
         case .desertWarm, .oceanCool, .forestGreen, .contourAtlas: false
         }
     }
@@ -306,6 +308,7 @@ extension AppTheme {
         case .arcticDawn:  String(localized: "Arctic Dawn")
         case .solarPop:    String(localized: "Solar Pop")
         case .contourAtlas: String(localized: "Contour Atlas")
+        case .waterLilies: String(localized: "Water Lilies")
         }
     }
 }

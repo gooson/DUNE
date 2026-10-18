@@ -106,6 +106,8 @@ struct WatchWaveBackground: View {
     var body: some View {
         if theme == .contourAtlas {
             ContourBackground(style: .watch)
+        } else if theme == .waterLilies {
+            WatchWaterLiliesBackground()
         } else {
             legacyBackground
         }

@@ -184,6 +184,7 @@ struct TabWaveBackground: View {
             case .arcticDawn:  OceanLegacyArcticTabWaveBackground()
             case .solarPop:    SolarTabWaveBackground()
             case .contourAtlas: ContourBackground(style: .tab)
+            case .waterLilies: WaterLiliesTabWaveBackground()
             }
         }
         .id(theme)
@@ -207,6 +208,7 @@ struct DetailWaveBackground: View {
             case .arcticDawn:  OceanLegacyArcticDetailWaveBackground()
             case .solarPop:    SolarDetailWaveBackground()
             case .contourAtlas: ContourBackground(style: .detail)
+            case .waterLilies: WaterLiliesDetailWaveBackground()
             }
         }
         .id(theme)
@@ -255,6 +257,7 @@ struct SheetWaveBackground: View {
             case .arcticDawn:  OceanLegacyArcticSheetWaveBackground()
             case .solarPop:    SolarSheetWaveBackground()
             case .contourAtlas: ContourBackground(style: .sheet)
+            case .waterLilies: WaterLiliesSheetWaveBackground()
             }
         }
         .id(theme)
