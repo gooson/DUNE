@@ -20,9 +20,7 @@ struct WellnessHeroCard: View {
 
     var body: some View {
         if let score {
-            if theme == .desertWarm,
-               sleepMetric != nil,
-               sleepTrend.contains(where: { $0.minutes > 0 }) {
+            if theme == .desertWarm {
                 desertSleepSummary(score: score)
             } else {
                 standardHero(score: score)
@@ -68,19 +66,35 @@ struct WellnessHeroCard: View {
                     }
 
                     HStack(alignment: .center, spacing: 18) {
-                        HStack(alignment: .bottom, spacing: 5) {
-                            ForEach(Array(sleepTrend.suffix(7).enumerated()), id: \.offset) { index, sample in
-                                RoundedRectangle(cornerRadius: 5)
-                                    .fill(Color(red: 0.350, green: 0.690, blue: 0.588).opacity(index == sleepTrend.suffix(7).count - 1 ? 1 : 0.55))
-                                    .frame(width: 12, height: max(9, min(60, CGFloat(sample.minutes / 600) * 60)))
+                        Group {
+                            if sleepTrend.contains(where: { $0.minutes > 0 }) {
+                                HStack(alignment: .bottom, spacing: 5) {
+                                    ForEach(Array(sleepTrend.suffix(7).enumerated()), id: \.offset) { index, sample in
+                                        if sample.minutes > 0 {
+                                            RoundedRectangle(cornerRadius: 5)
+                                                .fill(Color(red: 0.350, green: 0.690, blue: 0.588).opacity(index == sleepTrend.suffix(7).count - 1 ? 1 : 0.55))
+                                                .frame(width: 12, height: max(9, min(60, CGFloat(sample.minutes / 600) * 60)))
+                                        } else {
+                                            Color.clear.frame(width: 12, height: 0)
+                                        }
+                                    }
+                                }
+                                .accessibilityLabel("Sleep")
+                            } else {
+                                Text("Need More Data")
+                                    .font(.caption.weight(.medium))
+                                    .foregroundStyle(.secondary)
+                                    .accessibilityIdentifier("wellness-sleep-empty-state")
                             }
                         }
-                        .frame(height: 62, alignment: .bottom)
-                        .accessibilityLabel("Sleep")
+                        .frame(minWidth: 88, minHeight: 62, alignment: .bottomLeading)
 
                         VStack(alignment: .leading, spacing: 5) {
-                            if let minutes = sleepTrend.last(where: { $0.minutes > 0 })?.minutes {
+                            if let minutes = sleepTrend.last?.minutes, minutes > 0 {
                                 Text("\(Int(minutes) / 60)h \(Int(minutes) % 60)min")
+                                    .font(.headline.weight(.semibold))
+                            } else {
+                                Text("Need More Data")
                                     .font(.headline.weight(.semibold))
                             }
                             Text(score.narrativeMessage)
@@ -108,6 +122,19 @@ struct WellnessHeroCard: View {
                 }
                 .buttonStyle(.plain)
                 .accessibilityIdentifier("wellness-sleep-detail-link")
+            } else {
+                NavigationLink(value: WellnessScoreDestination()) {
+                    HStack(spacing: 6) {
+                        Text("View Details")
+                        Image(systemName: "arrow.right")
+                    }
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(colorScheme == .dark
+                        ? Color(red: 0.898, green: 0.678, blue: 0.514)
+                        : Color(red: 0.588, green: 0.349, blue: 0.220))
+                }
+                .buttonStyle(.plain)
+                .accessibilityIdentifier("wellness-score-detail-link")
             }
         }
         .padding(20)

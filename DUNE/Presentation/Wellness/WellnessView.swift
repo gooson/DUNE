@@ -109,9 +109,7 @@ struct WellnessView: View {
 
                         // Hero Card
                         if viewModel.wellnessScore != nil,
-                           theme == .desertWarm,
-                           let sleepMetric,
-                           viewModel.sleepDetailTrend.contains(where: { $0.minutes > 0 }) {
+                           theme == .desertWarm {
                             WellnessHeroCard(
                                 score: viewModel.wellnessScore,
                                 sleepScore: viewModel.sleepScore,

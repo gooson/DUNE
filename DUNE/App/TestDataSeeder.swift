@@ -676,7 +676,7 @@ enum TestDataSeeder {
             return (date: date, min: average - 1, max: average + 1, average: average)
         }
 
-        let sleepDailyDurations: [SharedHealthSnapshot.SleepDailyDuration] = (0..<14).compactMap { offset in
+        let sleepDailyDurations: [SharedHealthSnapshot.SleepDailyDuration] = ProcessInfo.processInfo.arguments.contains("--ui-test-no-sleep-trend") ? [] : (0..<14).compactMap { offset in
             guard let date = calendar.date(byAdding: .day, value: -offset, to: today) else { return nil }
             return SharedHealthSnapshot.SleepDailyDuration(
                 date: date,

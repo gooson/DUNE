@@ -441,7 +441,7 @@ enum SimulatorAdvancedMockDataProvider {
             return (date: date, min: average - 2, max: average + 3, average: average)
         }
 
-        let sleepDailyDurations: [SharedHealthSnapshot.SleepDailyDuration] = (0..<30).compactMap { offset in
+        let sleepDailyDurations: [SharedHealthSnapshot.SleepDailyDuration] = ProcessInfo.processInfo.arguments.contains("--ui-test-no-sleep-trend") ? [] : (0..<30).compactMap { offset in
             guard let date = calendar.date(byAdding: .day, value: -offset, to: today) else { return nil }
             let deep = max(74, 104 - Double(offset % 6) * 4)
             let rem = max(86, 112 - Double(offset % 5) * 3)
