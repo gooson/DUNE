@@ -10,6 +10,7 @@ struct WellnessHeroCard: View {
     var sleepMetric: HealthMetric?
     @Environment(\.appTheme) private var theme
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
         if let score {
@@ -31,6 +32,25 @@ struct WellnessHeroCard: View {
                         Text("Sleep")
                             .font(.caption.weight(.semibold))
                             .foregroundStyle(theme.directionPreviewTextColor.opacity(0.74))
+                    }
+
+                    if dynamicTypeSize.isAccessibilitySize {
+                        VStack(alignment: .leading, spacing: 12) {
+                            wellnessRing(score)
+                            wellnessCopy(score)
+                        }
+                    } else {
+                        ViewThatFits(in: .horizontal) {
+                            HStack(alignment: .center, spacing: 18) {
+                                wellnessRing(score)
+                                wellnessCopy(score)
+                                    .frame(minWidth: 145, alignment: .leading)
+                            }
+                            VStack(alignment: .leading, spacing: 10) {
+                                wellnessRing(score)
+                                wellnessCopy(score)
+                            }
+                        }
                     }
 
                     HStack(alignment: .center, spacing: 18) {
@@ -69,10 +89,9 @@ struct WellnessHeroCard: View {
                                     .font(.headline.weight(.semibold))
                                     .foregroundStyle(theme.directionPreviewTextColor)
                             }
-                            Text(score.narrativeMessage)
+                            Text("Sleep")
                                 .font(.subheadline)
                                 .foregroundStyle(theme.directionPreviewTextColor.opacity(0.74))
-                                .fixedSize(horizontal: false, vertical: true)
                         }
                     }
                 }
@@ -136,6 +155,34 @@ struct WellnessHeroCard: View {
                                 : Color(red: 0.871, green: 0.859, blue: 0.824))
                             : theme.accentColor.opacity(0.25), lineWidth: 1)
                 }
+        }
+    }
+
+    private func wellnessRing(_ score: WellnessScore) -> some View {
+        TabHeroScoreRing(
+            progress: Double(score.score) / 100,
+            value: score.score.formatted(),
+            caption: "WELLNESS",
+            ringColor: theme == .desertWarm ? Color(red: 0.886, green: 0.718, blue: 0.380) : theme.accentColor,
+            highlightColor: theme == .desertWarm ? Color(red: 0.969, green: 0.843, blue: 0.471) : theme.duskColor,
+            tipColor: score.status.color,
+            trackColor: theme == .desertWarm ? Color(red: 0.435, green: 0.353, blue: 0.227) : theme.accentColor,
+            textColor: theme.directionPreviewTextColor,
+            secondaryTextColor: theme.directionPreviewTextColor.opacity(0.74),
+            accessibilityLabel: "Wellness score \(score.score), \(score.status.label)",
+            accessibilityIdentifier: "wellness-hero-ring"
+        )
+    }
+
+    private func wellnessCopy(_ score: WellnessScore) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text(score.status.label)
+                .font(.headline.weight(.semibold))
+                .foregroundStyle(theme.directionPreviewTextColor)
+            Text(score.narrativeMessage)
+                .font(.subheadline)
+                .foregroundStyle(theme.directionPreviewTextColor.opacity(0.74))
+                .fixedSize(horizontal: false, vertical: true)
         }
     }
 

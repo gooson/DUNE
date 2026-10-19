@@ -235,6 +235,8 @@ struct TabHeroScoreRing: View {
                 Text(value)
                     .font(.system(size: 36, weight: .bold, design: .rounded))
                     .monospacedDigit()
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.6)
                     .contentTransition(.numericText())
                 Text(caption)
                     .font(.system(size: 10, weight: .bold))

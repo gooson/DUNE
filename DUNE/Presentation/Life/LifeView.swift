@@ -989,14 +989,22 @@ private struct HabitListQueryView: View {
                         : theme.directionPreviewTextColor.opacity(0.74))
             }
 
-            ViewThatFits(in: .horizontal) {
-                HStack(alignment: .center, spacing: 17) {
-                    desertHabitCount
+            if dynamicTypeSize.isAccessibilitySize {
+                VStack(alignment: .leading, spacing: 12) {
+                    lifeProgressRing
                     desertHabitList
                 }
-                VStack(alignment: .leading, spacing: 12) {
-                    desertHabitCount
-                    desertHabitList
+            } else {
+                ViewThatFits(in: .horizontal) {
+                    HStack(alignment: .center, spacing: 17) {
+                        lifeProgressRing
+                        desertHabitList
+                            .frame(minWidth: 140, alignment: .leading)
+                    }
+                    VStack(alignment: .leading, spacing: 12) {
+                        lifeProgressRing
+                        desertHabitList
+                    }
                 }
             }
 
@@ -1042,19 +1050,22 @@ private struct HabitListQueryView: View {
         }
     }
 
-    private var desertHabitCount: some View {
-        HStack(alignment: .firstTextBaseline, spacing: 2) {
-            Text(viewModel.completedCount.formatted())
-                .foregroundStyle(theme == .desertWarm
-                    ? (colorScheme == .dark ? Color(red: 0.478, green: 0.816, blue: 0.678) : Color(red: 0.090, green: 0.431, blue: 0.408))
-                    : theme.accentColor)
-            Text("/\(viewModel.totalActiveCount)")
-                .foregroundStyle(theme == .desertWarm
-                    ? (colorScheme == .dark ? Color(red: 0.702, green: 0.753, blue: 0.718) : Color(red: 0.337, green: 0.376, blue: 0.357))
-                    : theme.directionPreviewTextColor.opacity(0.74))
-        }
-        .font(.system(size: 43, weight: .bold, design: .rounded))
-        .monospacedDigit()
+    private var lifeProgressRing: some View {
+        TabHeroScoreRing(
+            progress: viewModel.totalActiveCount > 0
+                ? Double(viewModel.completedCount) / Double(viewModel.totalActiveCount)
+                : 0,
+            value: "\(viewModel.completedCount)/\(viewModel.totalActiveCount)",
+            caption: "Today",
+            ringColor: theme == .desertWarm ? Color(red: 0.886, green: 0.718, blue: 0.380) : theme.accentColor,
+            highlightColor: theme == .desertWarm ? Color(red: 0.969, green: 0.843, blue: 0.471) : theme.duskColor,
+            tipColor: theme.accentColor,
+            trackColor: theme == .desertWarm ? Color(red: 0.435, green: 0.353, blue: 0.227) : theme.accentColor,
+            textColor: theme.directionPreviewTextColor,
+            secondaryTextColor: theme.directionPreviewTextColor.opacity(0.74),
+            accessibilityLabel: "Life progress \(viewModel.completedCount) of \(viewModel.totalActiveCount)",
+            accessibilityIdentifier: "life-hero-ring"
+        )
     }
 
     private var desertHabitList: some View {
