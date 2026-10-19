@@ -40,16 +40,10 @@ struct WellnessHeroCard: View {
                             wellnessCopy(score)
                         }
                     } else {
-                        ViewThatFits(in: .horizontal) {
-                            HStack(alignment: .center, spacing: 18) {
-                                wellnessRing(score)
-                                wellnessCopy(score)
-                                    .frame(minWidth: 145, alignment: .leading)
-                            }
-                            VStack(alignment: .leading, spacing: 10) {
-                                wellnessRing(score)
-                                wellnessCopy(score)
-                            }
+                        HStack(alignment: .center, spacing: 18) {
+                            wellnessRing(score)
+                            wellnessCopy(score)
+                                .frame(maxWidth: .infinity, alignment: .leading)
                         }
                     }
 

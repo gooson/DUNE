@@ -521,16 +521,10 @@ struct ActivityView: View {
                                 themeReadinessCopy(readiness)
                             }
                         } else {
-                            ViewThatFits(in: .horizontal) {
-                                HStack(alignment: .center, spacing: 18) {
-                                    themeReadinessRing(readiness)
-                                    themeReadinessCopy(readiness)
-                                        .frame(minWidth: 145, alignment: .leading)
-                                }
-                                VStack(alignment: .leading, spacing: 10) {
-                                    themeReadinessRing(readiness)
-                                    themeReadinessCopy(readiness)
-                                }
+                            HStack(alignment: .center, spacing: 18) {
+                                themeReadinessRing(readiness)
+                                themeReadinessCopy(readiness)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
                             }
                         }
                     } else {
