@@ -41,7 +41,7 @@ status: complete
 ## 구현과 검증 연결
 
 - 장면: `TabWaveBackground`의 7개 기존 분기와 각 테마 배경 컴포넌트.
-- 상태 링: `ProgressRingView`를 사용하는 Today·Activity·Wellness 히어로. Life 진행 링은 완료율 표현을 유지한다.
+- 상태 링: 4탭 히어로가 `TabHeroScoreRing`의 Today 기준 지름·획·숫자 계층을 공유한다. Life는 같은 링에 오늘 완료한 습관 수/대상 수를 표시한다.
 - 비교: 테마별 밝음·어두움, `Reduce Motion`, 작은 iPhone과 iPad·Duo의 상단 가독성을 확인한다. 변경된 앱 화면은 [실제 화면 디자인맵](../phone-design-map/actual/index.html)에 새 캡처와 출처를 기록한다.
 
 ## 적용 확인
