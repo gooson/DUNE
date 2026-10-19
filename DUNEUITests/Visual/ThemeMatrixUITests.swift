@@ -34,6 +34,31 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
         }
     }
 
+    func testDesertFourTabHeroesAtMaximumAccessibilityTextSize() {
+        app.terminate()
+        app.launchArguments = launchConfiguration.launchArguments + [
+            "--ui-test-theme", "desertWarm",
+            "--ui-test-style", "dark",
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL",
+            "-morningBriefingDisabled", "YES"
+        ]
+        app.launch()
+
+        let roots: [(tab: String, navigate: () -> Void, ring: String)] = [
+            ("Today", navigateToDashboard, "dashboard-hero-ring"),
+            ("Activity", navigateToActivity, "activity-hero-ring"),
+            ("Wellness", navigateToWellness, "wellness-hero-ring"),
+            ("Life", navigateToLife, "life-hero-ring")
+        ]
+
+        for root in roots {
+            root.navigate()
+            let ring = app.descendants(matching: .any)[root.ring].firstMatch
+            XCTAssertTrue(ring.waitForExistence(timeout: 10), "\(root.tab) ring should remain visible at the largest text size")
+            addScreenshotAttachment(named: "Desert Accessibility XXXL \(root.tab)")
+        }
+    }
+
     func testOceanCoolMatrix() {
         captureTheme("oceanCool", named: "Ocean")
     }

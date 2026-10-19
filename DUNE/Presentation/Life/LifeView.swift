@@ -1077,8 +1077,10 @@ private struct HabitListQueryView: View {
                             ? (theme == .desertWarm ? Color(red: 0.090, green: 0.431, blue: 0.408) : theme.accentColor)
                             : theme.secondaryTextColor)
                     Text(habit.name)
-                        .lineLimit(1)
+                        .lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 1)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
+                .frame(maxWidth: dynamicTypeSize.isAccessibilitySize ? .infinity : nil, alignment: .leading)
                 .font(.caption.weight(habit.isCompleted ? .semibold : .regular))
                 .foregroundStyle(theme == .desertWarm ? (colorScheme == .dark ? Color.white : Color.primary) : theme.directionPreviewTextColor)
                 .padding(.horizontal, 8)

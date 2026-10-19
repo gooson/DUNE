@@ -35,6 +35,8 @@ status: in-progress
 
 4탭 히어로의 링을 Today와 같은 크기·획·그라디언트로 맞춘 뒤 [DESERT HORIZON iPhone·iPad 실제 캡처 16장](review/four-tab-hero-rings-2026-10-19/README.md)과 [WATER LILIES iPhone 실제 캡처 8장](review/water-lilies-hero-rings-2026-10-19/README.md)을 별도로 보존했다. Activity는 준비도, Wellness는 웰니스 점수, Life는 완료 습관 수를 표시한다. 이 작업은 첫 카드의 배치와 링 복구에 한정되며, 아래 레이아웃 차이와 나머지 테마 검증은 계속 남아 있다.
 
+[DESERT HORIZON iPhone 최대 접근성 글씨 4탭 실제 캡처](review/four-tab-hero-rings-accessibility-2026-10-19/README.md)에서 링과 설명의 세로 배치를 확인하고, Life 첫 습관 이름이 한 줄 생략되던 문제를 두 줄 표시로 고쳤다. 이 증거는 어두운 모드 iPhone에 한정한다.
+
 | 화면 | DESERT HORIZON 시안의 첫 화면 배치 | 현재 남은 레이아웃 차이 |
 |---|---|---|
 | T03 Today | 짧은 상단 제목 → 하나의 어두운 카드 안에 점수·설명·24시간 흐름·근거·행동 → 별도 7일 추세 카드 | 카드의 순서와 묶음을 새로 촬영했다. 시간별 표본이 없는 빈 슬롯과 7일 그래프의 색·표면이 시안과 다르다. |
