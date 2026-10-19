@@ -13,6 +13,8 @@ related_solutions:
 
 # Solution: 천국의 계단 운동 이탈 시 워치 종료 제안
 
+> 2026-10-19: 이 기능은 실운동 중 오탐으로 종료 확인창을 띄워 제거했다. 현재 구현과 검증 근거는 [계단 운동 알림 제거](2026-10-19-watch-stair-workout-continuity.md)를 참조한다. 아래 내용은 당시 설계의 기록이다.
+
 ## Problem
 
 천국의 계단 운동 중 기기에서 내려와 평지를 걸으면 `steps`와 `activeCalories`가 계속 증가한다. 기존 `CardioInactivityActivitySignal`은 두 값의 증가를 운동 지속으로 간주하므로 정체 감지 알림이 나오지 않는다.

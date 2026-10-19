@@ -66,10 +66,10 @@
     },
     "C10": {
       "file": "C10.png",
-      "test": "WatchWorkoutFlowSmokeTests/testCaptureStairExitDesignMap()",
-      "device": "Apple Watch SE 3 (40mm)",
-      "timestamp": 1791865624.393,
-      "resultBundle": "watch-capture-c10-20261013.xcresult"
+      "test": "WatchWorkoutFlowSmokeTests/testStairWorkoutContinuesWithoutPromptDesignMap()",
+      "device": "Apple Watch SE 3 (44mm)",
+      "timestamp": 1792373406.211,
+      "resultBundle": "stair-watch-emptyhome.xcresult"
     },
     "C11": {
       "file": "C11.png",
@@ -193,23 +193,23 @@
     "H01": {
       "file": "H01.png",
       "test": "WatchWorkoutFlowSmokeTests/testCaptureHomeCardsDesignMap()",
-      "device": "Apple Watch SE 3 (40mm)",
-      "timestamp": 1791863614.53,
-      "resultBundle": "watch-capture-homecards-20261013.xcresult"
+      "device": "Apple Watch SE 3 (44mm)",
+      "timestamp": 1792338121.968,
+      "resultBundle": "H01-d9bba6e26b.xcresult"
     },
     "H02": {
       "file": "H02.png",
-      "test": "simctl launch · --ui-scenario default-seeded",
-      "device": "Apple Watch SE 3 (40mm)",
-      "timestamp": 1791860401.159726,
-      "resultBundle": "simctl io screenshot"
+      "test": "WatchWorkoutFlowSmokeTests/testCaptureHomeCardsDesignMap()",
+      "device": "Apple Watch SE 3 (44mm)",
+      "timestamp": 1792338127.87,
+      "resultBundle": "H01-d9bba6e26b.xcresult"
     },
     "H03": {
       "file": "H03.png",
       "test": "WatchWorkoutFlowSmokeTests/testCaptureHomeCardsDesignMap()",
-      "device": "Apple Watch SE 3 (40mm)",
-      "timestamp": 1791863620.108,
-      "resultBundle": "watch-capture-homecards-20261013.xcresult"
+      "device": "Apple Watch SE 3 (44mm)",
+      "timestamp": 1792338137.103,
+      "resultBundle": "H01-d9bba6e26b.xcresult"
     },
     "H04": {
       "file": "H04.png",

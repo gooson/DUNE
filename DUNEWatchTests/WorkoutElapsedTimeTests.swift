@@ -36,6 +36,24 @@ struct WorkoutElapsedTimeTests {
         #expect(elapsed == 300)
     }
 
+    @Test("Elapsed time keeps advancing while an alert is shown without a user pause")
+    func elapsedAdvancesDuringAlert() {
+        let start = Date(timeIntervalSince1970: 1_000)
+        let alertShown = start.addingTimeInterval(120)
+        let alertDismissed = alertShown.addingTimeInterval(45)
+
+        let before = WorkoutElapsedTime.activeElapsedTime(
+            startDate: start, pausedDuration: 0, pauseStart: nil,
+            isPaused: false, now: alertShown
+        )
+        let after = WorkoutElapsedTime.activeElapsedTime(
+            startDate: start, pausedDuration: 0, pauseStart: nil,
+            isPaused: false, now: alertDismissed
+        )
+
+        #expect(after - before == 45)
+    }
+
     @Test("Elapsed time excludes accumulated and ongoing pause durations")
     func elapsedExcludesPauseDurations() {
         let now = Date()

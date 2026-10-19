@@ -84,6 +84,7 @@ struct CarouselHomeView: View {
     @Environment(\.appTheme) private var theme
 
     @State private var cards: [CarouselCard] = []
+    @State private var isCarouselScrolling = false
     /// Content-aware invalidation key (Correction #87).
     @State private var templateContentKey: Int = 0
     private var exerciseLibrarySnapshot: [String] {
@@ -162,7 +163,7 @@ struct CarouselHomeView: View {
     private var carousel: some View {
         GeometryReader { geometry in
             ScrollView(.vertical) {
-                VStack(spacing: 0) {
+                LazyVStack(spacing: 0) {
                     ForEach(cards) { card in
                         cardContent(for: card)
                             // A minimum allows long names and larger text to grow beyond one page.
@@ -178,6 +179,9 @@ struct CarouselHomeView: View {
             }
             // Align cards while permitting oversized content to remain scrollable.
             .scrollTargetBehavior(.viewAligned)
+            .onScrollPhaseChange { _, newPhase in
+                isCarouselScrolling = newPhase.isScrolling
+            }
         }
     }
 
@@ -192,7 +196,8 @@ struct CarouselHomeView: View {
                     exercise: exercise,
                     sectionLabel: card.section.label,
                     sectionColor: card.section.color(for: theme),
-                    daysAgo: daysAgo
+                    daysAgo: daysAgo,
+                    showsStartButton: !isCarouselScrolling
                 )
             }
             .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.homeCard(card.id))
@@ -202,7 +207,11 @@ struct CarouselHomeView: View {
             NavigationLink(value: WatchRoute.workoutPreview(
                 WorkoutSessionTemplate(name: name, entries: entries)
             )) {
-                CarouselRoutineCardView(name: name, entries: entries)
+                CarouselRoutineCardView(
+                    name: name,
+                    entries: entries,
+                    showsStartButton: !isCarouselScrolling
+                )
             }
             .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.homeCard(card.id))
             .buttonStyle(.plain)
