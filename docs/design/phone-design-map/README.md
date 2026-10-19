@@ -43,6 +43,8 @@ Watch의 [62개 상태별 맵](actual/watch/index.html)에는 기본 글자 크�
 
 ## 화면 수정 시 갱신
 
+2026-10-19 T03·A01·H01·L01 히어로 링 통일 후 iPhone 18 Pro Max와 iPad Pro 13-inch (M5)의 밝음·어두움 실제 화면 16장을 [새 캡처와 출처](../full-redesign-map/review/four-tab-hero-rings-2026-10-19/README.md)에 보존했다. 같은 날 [WATER LILIES iPhone 8장](../full-redesign-map/review/water-lilies-hero-rings-2026-10-19/README.md)도 촬영했다. 기존 `actual/regular`은 다른 iPhone UDID로 만든 인덱스라 덮어쓰지 않았다. 현재 포털은 이 새 캡처로 연결하며, 기존 기기의 4개 화면은 갱신 완료로 계산하지 않는다.
+
 2026-10-19 DESERT HORIZON의 T03·A01·H01·L01은 iPhone 18 Pro Max 시뮬레이터에서 밝음·어두움 실제 화면 8장을 [중간 리뷰](../full-redesign-map/review/desert-horizon-layout-2026-10-19/README.md)로 새로 촬영했다. 일반 iPhone `actual/regular` 인덱스는 현재 사용할 수 없는 다른 iPhone UDID를 기준으로 하므로 이 4개 ID를 갱신 완료로 표시하지 않는다. 동일 기기의 새 인덱스와 다른 영향 기기 확인이 끝나면 통합 실제 화면맵에 반영한다.
 
 화면 배치, 글자, 상태, 내비게이션이 바뀌는 작업에서는 같은 작업 안에서 영향받는 화면 ID와 기기를 확인하고 **실제 앱 화면을 다시 캡처**한다. 폰 ID는 [화면 인벤토리](screen-inventory.md), Watch ID는 [Watch 상태표](../../plans/2026-10-12-watch-workout-redesign.md)에서 찾는다. 새 화면이나 분기는 상태표와 캡처 테스트를 먼저 추가한다. 수정된 화면이 어느 기기에 나타나는지 확인한 뒤 해당 기기만 갱신한다.

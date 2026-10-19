@@ -485,6 +485,7 @@ def render_portal() -> None:
             '.meta span{color:#c9ad8e}</style><main><h1>DUNE · 전체 디자인맵</h1>'
             '<p>iPhone·iPad·Duo의 현재 앱 실제 화면과 Watch 운동 재작업 결과를 한곳에서 확인합니다.</p>'
             '<p><a href="compare.html" style="color:#e8bf94">폰·패드·Duo 같은 화면 비교하기 →</a></p>'
+            '<p><a href="../../full-redesign-map/review/four-tab-hero-rings-2026-10-19/index.html" style="color:#e8bf94">4탭 히어로 링 최신 iPhone 실제 캡처와 출처 →</a></p>'
             + pending_html + '<div class="grid">' + ''.join(entries) + '</div></main></html>')
     (HERE / "actual" / "index.html").write_text(html)
     render_watch_gallery()
