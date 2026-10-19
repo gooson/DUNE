@@ -62,6 +62,11 @@ struct LifeView: View {
                         viewModel: viewModel,
                         refreshSignal: refreshSignal + localRefreshSignal,
                         onOpenTemplates: { isShowingTemplateSheet = true },
+                        onOpenChecklist: {
+                            withAnimation(DS.Animation.standard) {
+                                proxy.scrollTo(LifeScrollAnchor.checklist, anchor: .top)
+                            }
+                        },
                         historySelection: $historySelection
                     )
                 }
@@ -205,6 +210,7 @@ private struct HabitListQueryView: View {
     @Bindable var viewModel: LifeViewModel
     let refreshSignal: Int
     let onOpenTemplates: () -> Void
+    let onOpenChecklist: () -> Void
 
     @Environment(\.modelContext) private var modelContext
     @Environment(\.appTheme) private var theme
@@ -968,7 +974,7 @@ private struct HabitListQueryView: View {
                 standardHeroSection
             }
         }
-        .accessibilityElement(children: .combine)
+        .accessibilityElement(children: theme == .desertWarm ? .contain : .combine)
         .accessibilityLabel(Text("Life progress \(viewModel.completedCount) of \(viewModel.totalActiveCount)"))
         .sensoryFeedback(.impact(weight: .light), trigger: heroAppeared)
         .onAppear {
@@ -1000,10 +1006,15 @@ private struct HabitListQueryView: View {
                 }
             }
 
-            HStack(spacing: 6) {
-                Text("Today's Habits")
-                Image(systemName: "arrow.right")
+            Button(action: onOpenChecklist) {
+                HStack(spacing: 6) {
+                    Text("Today's Habits")
+                    Image(systemName: "arrow.right")
+                }
+                .frame(minHeight: 44, alignment: .leading)
             }
+            .buttonStyle(.plain)
+            .accessibilityIdentifier("life-hero-checklist-button")
             .font(.subheadline.weight(.semibold))
             .foregroundStyle(colorScheme == .dark
                 ? Color(red: 0.898, green: 0.678, blue: 0.514)
