@@ -200,6 +200,56 @@ struct ProgressRingView: View {
     }
 }
 
+/// The 4-tab hero ring keeps the same geometry and numeric hierarchy as Today.
+struct TabHeroScoreRing: View {
+    let progress: Double
+    let value: String
+    let caption: LocalizedStringKey
+    let ringColor: Color
+    let highlightColor: Color
+    let tipColor: Color
+    let trackColor: Color
+    let textColor: Color
+    let secondaryTextColor: Color
+    let accessibilityLabel: LocalizedStringKey
+    let accessibilityIdentifier: String
+
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    var body: some View {
+        ZStack {
+            Circle()
+                .stroke(trackColor.opacity(0.3), lineWidth: 11)
+            Circle()
+                .trim(from: 0, to: min(1, max(0, progress)))
+                .stroke(
+                    AngularGradient(
+                        colors: [ringColor.opacity(0.55), ringColor, highlightColor, tipColor],
+                        center: .center
+                    ),
+                    style: StrokeStyle(lineWidth: 11, lineCap: .round)
+                )
+                .rotationEffect(.degrees(-90))
+                .shadow(color: highlightColor.opacity(reduceMotion ? 0 : 0.4), radius: 5)
+            VStack(spacing: 2) {
+                Text(value)
+                    .font(.system(size: 36, weight: .bold, design: .rounded))
+                    .monospacedDigit()
+                    .contentTransition(.numericText())
+                Text(caption)
+                    .font(.system(size: 10, weight: .bold))
+                    .tracking(1)
+                    .foregroundStyle(secondaryTextColor)
+            }
+            .foregroundStyle(textColor)
+        }
+        .frame(width: 124, height: 124)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text(accessibilityLabel))
+        .accessibilityIdentifier(accessibilityIdentifier)
+    }
+}
+
 // MARK: - All-Levels Preview
 
 #Preview("Ring Gradient — All Levels") {

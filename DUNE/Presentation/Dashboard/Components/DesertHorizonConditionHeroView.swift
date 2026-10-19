@@ -10,7 +10,6 @@ struct DesertHorizonConditionHeroView: View {
     let onPrimaryAction: () -> Void
 
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.appTheme) private var theme
     @Environment(\.colorScheme) private var colorScheme
 
@@ -122,31 +121,19 @@ struct DesertHorizonConditionHeroView: View {
     }
 
     private var ring: some View {
-        ZStack {
-            Circle()
-                .stroke((isDesert ? Color(red: 0.435, green: 0.353, blue: 0.227) : gold).opacity(0.3), lineWidth: 11)
-            Circle()
-                .trim(from: 0, to: CGFloat(score.score) / 100)
-                .stroke(
-                    AngularGradient(colors: [gold.opacity(0.55), gold, paleGold, theme.scoreGood], center: .center),
-                    style: StrokeStyle(lineWidth: 11, lineCap: .round)
-                )
-                .rotationEffect(.degrees(-90))
-                .shadow(color: paleGold.opacity(reduceMotion ? 0 : 0.4), radius: 5)
-            VStack(spacing: 2) {
-                Text(score.score.formatted())
-                    .font(.system(size: 36, weight: .bold, design: .rounded))
-                    .contentTransition(.numericText())
-                Text("CONDITION")
-                    .font(.system(size: 10, weight: .bold))
-                    .tracking(1)
-                    .foregroundStyle(muted)
-            }
-            .foregroundStyle(ink)
-        }
-        .frame(width: 124, height: 124)
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Condition score \(score.score), \(score.status.label)")
+        TabHeroScoreRing(
+            progress: Double(score.score) / 100,
+            value: score.score.formatted(),
+            caption: "CONDITION",
+            ringColor: gold,
+            highlightColor: paleGold,
+            tipColor: theme.scoreGood,
+            trackColor: isDesert ? Color(red: 0.435, green: 0.353, blue: 0.227) : gold,
+            textColor: ink,
+            secondaryTextColor: muted,
+            accessibilityLabel: "Condition score \(score.score), \(score.status.label)",
+            accessibilityIdentifier: "dashboard-hero-ring"
+        )
     }
 
     private var statusText: some View {
