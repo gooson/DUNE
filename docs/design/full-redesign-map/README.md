@@ -41,6 +41,8 @@ status: in-progress
 
 나머지 7개 테마의 [iPad 밝음·어두움 4탭 실제 캡처 56장](review/seven-theme-ipad-hero-rings-2026-10-19/README.md)도 새로 촬영했다. 7개 UI 테스트가 모두 통과했고, 대표 화면에서 링 옆 정보 순서와 잘림을 대조했다. iPad 8개 테마의 최신 링 화면을 확보했지만 Duo·접근성·시각 디테일 전체 게이트를 완료한 것으로 계산하지 않는다.
 
+레이아웃 확인 후 [SAKURA·CONTOUR·WATER LILIES의 어두운 Today 카드 대비](review/hero-dark-surface-contrast-2026-10-19/README.md)를 조정하고, 밝은 모드 iPhone·iPad의 T03 실제 화면 6장을 새로 보존했다. 링 크기·정보 순서는 유지했다. 세 테마의 iPhone 4탭 테스트가 통과했으며, iPad는 새 빌드를 직접 실행해 촬영했다.
+
 | 화면 | DESERT HORIZON 시안의 첫 화면 배치 | 현재 남은 레이아웃 차이 |
 |---|---|---|
 | T03 Today | 짧은 상단 제목 → 하나의 어두운 카드 안에 점수·설명·24시간 흐름·근거·행동 → 별도 7일 추세 카드 | 카드의 순서와 묶음을 새로 촬영했다. 시간별 표본이 없는 빈 슬롯과 7일 그래프의 색·표면이 시안과 다르다. |
