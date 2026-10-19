@@ -126,7 +126,6 @@ final class WorkoutManager: NSObject {
     private var lastObservedFloorsClimbed: Double = 0
     private var lastObservedActiveCalories: Double = 0
     private var autoEndDeadline: Date?
-    private var stairMachineExitDetector = StairMachineExitDetector()
 
     /// Average heart rate across the entire session.
     var averageHeartRate: Double {
@@ -616,9 +615,6 @@ final class WorkoutManager: NSObject {
 
     /// User explicitly keeps cardio workout running from inactivity recommendation.
     func keepCardioWorkoutRunning() {
-        if cardioInactivityPrompt == .stairMachineExitSuggestion {
-            stairMachineExitDetector.dismissSuggestion()
-        }
         lastInteractionDate = Date()
         clearInactivityPrompt()
     }
@@ -1165,6 +1161,14 @@ final class WorkoutManager: NSObject {
 
         resetCardioInactivityTracking(clearInteractionTimestamp: true)
 
+#if DEBUG && targetEnvironment(simulator)
+        if ProcessInfo.processInfo.arguments.contains("--ui-watch-stair-exit-regression"),
+           case .cardio(let activityType, _) = workoutMode,
+           activityType.isStairBased {
+            simulateFormerStairExitTimeline()
+        }
+#endif
+
         inactivityMonitorTask = Task { @MainActor [weak self] in
             while let self, !Task.isCancelled {
                 self.evaluateCardioInactivity(at: Date())
@@ -1172,6 +1176,23 @@ final class WorkoutManager: NSObject {
             }
         }
     }
+
+#if DEBUG && targetEnvironment(simulator)
+    private func simulateFormerStairExitTimeline() {
+        let start = Date().addingTimeInterval(-120)
+        startDate = start
+        for (seconds, sampledDistance, sampledSteps) in [
+            (90.0, 0.0, 120.0),
+            (100.0, 7.0, 125.0),
+            (119.0, 29.0, 141.0),
+            (120.0, 32.0, 142.0)
+        ] {
+            distance = sampledDistance
+            steps = sampledSteps
+            evaluateCardioInactivity(at: start.addingTimeInterval(seconds))
+        }
+    }
+#endif
 
     private func stopInactivityMonitoring() {
         inactivityMonitorTask?.cancel()
@@ -1181,7 +1202,6 @@ final class WorkoutManager: NSObject {
 
     private func resetCardioInactivityTracking(clearInteractionTimestamp: Bool) {
         lastMotionDate = Date()
-        stairMachineExitDetector = StairMachineExitDetector()
         if clearInteractionTimestamp {
             lastInteractionDate = Date()
         }
@@ -1229,10 +1249,6 @@ final class WorkoutManager: NSObject {
                 cardioAutoEndCountdown = 30
                 return
             }
-            if arguments.contains("--ui-watch-cardio-stairs-prompt") {
-                cardioInactivityPrompt = .stairMachineExitSuggestion
-                return
-            }
         }
 
         let previousMetrics = CardioInactivityObservedMetrics(
@@ -1242,21 +1258,6 @@ final class WorkoutManager: NSObject {
             activeCalories: lastObservedActiveCalories
         )
         let currentMetrics = currentObservedCardioMetrics()
-
-        if cardioInactivityPrompt == .stairMachineExitSuggestion { return }
-        if case .cardio(let activityType, _) = workoutMode,
-           activityType.isStairBased,
-           let startDate,
-           stairMachineExitDetector.observe(
-               at: now,
-               elapsed: now.timeIntervalSince(startDate),
-               distance: currentMetrics.distance,
-               steps: currentMetrics.steps
-           ) {
-            clearInactivityPrompt()
-            cardioInactivityPrompt = .stairMachineExitSuggestion
-            return
-        }
 
         if CardioInactivityActivitySignal.hasProgress(
             workoutMode: workoutMode,
@@ -1487,59 +1488,6 @@ extension WorkoutManager: HKLiveWorkoutBuilderDelegate {
 enum CardioInactivityPrompt: Equatable {
     case softNudge
     case confirmation
-    case stairMachineExitSuggestion
-}
-
-final class StairMachineExitDetector {
-    private static let machineObservationDuration: TimeInterval = 90
-    private static let walkingObservationDuration: TimeInterval = 20
-    private static let minimumWalkingDistance = 30.0
-    private static let maximumMachineDistance = 5.0
-
-    private var sawStationaryMachine = false
-    private var isDisqualified = false
-    private var walkingStartDate: Date?
-    private var walkingStartSteps: Double = 0
-    private var suggestionDismissed = false
-
-    func observe(at now: Date, elapsed: TimeInterval, distance: Double, steps: Double) -> Bool {
-        guard !isDisqualified, !suggestionDismissed,
-              elapsed.isFinite, elapsed >= 0,
-              distance.isFinite, distance >= 0,
-              steps.isFinite, steps >= 0 else { return false }
-
-        if !sawStationaryMachine {
-            if distance > Self.maximumMachineDistance {
-                isDisqualified = true
-                return false
-            }
-            guard elapsed >= Self.machineObservationDuration else { return false }
-            sawStationaryMachine = true
-        }
-
-        guard distance > Self.maximumMachineDistance else { return false }
-        if walkingStartDate == nil {
-            walkingStartDate = now
-            walkingStartSteps = steps
-            return false
-        }
-
-        guard let walkingStartDate,
-              distance >= Self.minimumWalkingDistance else { return false }
-
-        let walkingDuration = now.timeIntervalSince(walkingStartDate)
-        let hasStepEvidence = walkingDuration >= Self.walkingObservationDuration
-            && steps - walkingStartSteps >= 15
-        let hasDistanceOnlyEvidence = walkingDuration >= 40 && distance >= 60
-        guard hasStepEvidence || hasDistanceOnlyEvidence else { return false }
-
-        suggestionDismissed = true
-        return true
-    }
-
-    func dismissSuggestion() {
-        suggestionDismissed = true
-    }
 }
 
 enum CardioInactivityPolicy {

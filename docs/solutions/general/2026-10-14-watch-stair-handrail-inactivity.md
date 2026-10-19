@@ -26,7 +26,7 @@ related_solutions:
 
 ## Solution
 
-계단 기구 활동 유형인 `stairClimbing`과 `stairStepper`는 손목·HealthKit 지표가 정적인 경우에도 일반 정지 알림과 자동 종료를 실행하지 않는다. 기구에서 내려와 걷는 전환을 거리로 감지하는 `StairMachineExitDetector`는 기존 순서대로 계속 실행하고, 사용자에게 종료 여부를 묻는다.
+계단 기구 활동 유형인 `stairClimbing`과 `stairStepper`는 손목·HealthKit 지표가 정적인 경우에도 일반 정지 알림과 자동 종료를 실행하지 않는다. 당시에는 기구 이탈 추정 알림이 별도로 남아 있었으나, 2026-10-19에 실운동 중 오탐이 확인되어 제거했다. 현재 동작은 [계단 운동 알림 제거](2026-10-19-watch-stair-workout-continuity.md)를 참조한다.
 
 ### Changes Made
 
