@@ -7,6 +7,7 @@ struct MuscleMap3DView: View {
     let highlightedMuscle: MuscleGroup?
 
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.appTheme) private var theme
     @Environment(\.dismiss) private var dismiss
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var mode: MuscleMap3DMode = .recovery
@@ -194,6 +195,12 @@ struct MuscleMap3DView: View {
         .padding(.horizontal, DS.Spacing.lg)
         .padding(.vertical, DS.Spacing.md)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.lg))
+        .background(theme.accentColor.opacity(0.12), in: RoundedRectangle(cornerRadius: DS.Radius.lg))
+        .overlay {
+            RoundedRectangle(cornerRadius: DS.Radius.lg)
+                .strokeBorder(theme.accentColor.opacity(0.25), lineWidth: 0.5)
+                .allowsHitTesting(false)
+        }
     }
 
     private var compactModePicker: some View {

@@ -201,6 +201,7 @@ struct CardioSessionSummaryView: View {
         }
         .buttonStyle(.borderedProminent)
         .tint(hasSaved ? DS.Color.positive : DS.Color.activity)
+        .foregroundStyle(DS.Color.onBrightAction)
         .disabled(isSaving || hasSaved)
         .accessibilityIdentifier("cardio-session-summary-save")
     }

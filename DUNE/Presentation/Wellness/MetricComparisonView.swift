@@ -33,7 +33,7 @@ struct MetricComparisonView: View {
 
                 Text("Same dates; separate scales. Trends do not establish cause.")
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
 
                 let layout = availableWidth >= 760 && !dynamicTypeSize.isAccessibilitySize
                     ? AnyLayout(HStackLayout(alignment: .top, spacing: DS.Spacing.md))
@@ -45,6 +45,7 @@ struct MetricComparisonView: View {
                 }
                 .padding(DS.Spacing.md)
             }
+            .background { SheetWaveBackground().opacity(0.42) }
             .onGeometryChange(for: CGFloat.self) { $0.size.width } action: { availableWidth = $0 }
             .navigationTitle(dynamicTypeSize.isAccessibilitySize ? "" : String(localized: "Compare Metrics"))
             .toolbar {
@@ -78,7 +79,7 @@ struct MetricComparisonView: View {
                         .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
-                    .foregroundStyle(period == option ? .primary : .secondary)
+                    .foregroundStyle(period == option ? Color.primary : DS.Color.textSecondary)
                     .accessibilityAddTraits(period == option ? .isSelected : [])
                     .accessibilityIdentifier("metric-comparison-period-\(option.rawValue)")
                 }
@@ -155,7 +156,7 @@ private struct ComparisonMetricChart: View {
             Text(metric.name).font(.headline)
             Text(range.lowerBound.formatted(date: .abbreviated, time: .omitted) + " – " + range.upperBound.formatted(date: .abbreviated, time: .omitted))
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
                 .accessibilityIdentifier("comparison-date-range")
             if let limitedStart = viewModel.limitedHistoryStartDate,
                range.lowerBound < limitedStart {
@@ -164,7 +165,7 @@ private struct ComparisonMetricChart: View {
             if viewModel.isLoading {
                 ProgressView().frame(maxWidth: .infinity, minHeight: 220)
             } else if let message = viewModel.errorMessage {
-                Text(message).foregroundStyle(.secondary)
+                Text(message).foregroundStyle(DS.Color.textSecondary)
                 Button("Retry") { Task { await viewModel.loadData() } }
             } else {
                 let points = viewModel.chartData.filter {
@@ -173,6 +174,10 @@ private struct ComparisonMetricChart: View {
                 if points.isEmpty {
                     ContentUnavailableView("No Data", systemImage: "chart.xyaxis.line")
                 } else {
+                    Text(chartUnit)
+                        .font(.caption)
+                        .foregroundStyle(DS.Color.textSecondary)
+                        .frame(maxWidth: .infinity, alignment: .trailing)
                     Chart(points) { point in
                         if metric.category == .sleep {
                             BarMark(x: .value("Date", point.date), y: .value(chartUnit, point.value))
@@ -194,8 +199,10 @@ private struct ComparisonMetricChart: View {
                                 AxisTick()
                                 if dynamicTypeSize.isAccessibilitySize {
                                     AxisValueLabel(format: .dateTime.month(.defaultDigits).day())
+                                        .foregroundStyle(DS.Color.textSecondary)
                                 } else {
                                     AxisValueLabel(format: .dateTime.month(.abbreviated).day())
+                                        .foregroundStyle(DS.Color.textSecondary)
                                 }
                             }
                         } else {
@@ -203,6 +210,7 @@ private struct ComparisonMetricChart: View {
                                 AxisGridLine()
                                 AxisTick()
                                 AxisValueLabel()
+                                    .foregroundStyle(DS.Color.textSecondary)
                             }
                         }
                     }
@@ -211,9 +219,9 @@ private struct ComparisonMetricChart: View {
                             AxisGridLine()
                             AxisTick()
                             AxisValueLabel()
+                                .foregroundStyle(DS.Color.textSecondary)
                         }
                     }
-                    .chartYAxisLabel(chartUnit)
                     .frame(height: max(220, chartHeight))
                     .accessibilityLabel(Text(metric.name))
                 }

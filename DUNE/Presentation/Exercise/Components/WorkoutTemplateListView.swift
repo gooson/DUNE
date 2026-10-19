@@ -94,6 +94,7 @@ struct WorkoutTemplateListView: View {
                 Label("Create Template", systemImage: "plus.circle.fill")
             }
             .buttonStyle(.borderedProminent)
+            .foregroundStyle(DS.Color.onActivity)
             .tint(DS.Color.activity)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

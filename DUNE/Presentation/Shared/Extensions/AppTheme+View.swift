@@ -51,6 +51,15 @@ extension AppTheme {
         themedColor(defaultAsset: "AccentColor", variantSuffix: "Accent")
     }
 
+    /// Foreground for a prominent button filled with this theme's accent.
+    /// Contour and Lily use dark accents in light appearance; every dark accent is light.
+    func prominentButtonForegroundColor(for colorScheme: ColorScheme) -> Color {
+        if colorScheme == .light && (self == .contourAtlas || self == .waterLilies) {
+            return .white
+        }
+        return Color(red: 0.07, green: 0.08, blue: 0.09)
+    }
+
     /// Bronze/copper for hero text gradient start.
     var bronzeColor: Color {
         themedColor(defaultAsset: "DesertBronze", variantSuffix: "Bronze")

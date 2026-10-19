@@ -1,0 +1,875 @@
+{
+  "schema_version": 1,
+  "device": {
+    "kind": "regular",
+    "platform": "iOS Simulator",
+    "model_name": "iPhone 18 Pro",
+    "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+  },
+  "captures": {
+    "arctic/light/detail": {
+      "theme": "arctic",
+      "appearance": "light",
+      "surface": "detail",
+      "file": "arctic/light/detail.png",
+      "attachment_name": "Arctic Light Detail_0_3B75460A-1BF2-4BF4-A705-0F7C908D3E3A.png",
+      "test_identifier": "ThemeFlowMatrixUITests/testArcticDawnFlows()",
+      "timestamp": 1792372200.835,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_10-08-58-+0900.xcresult",
+      "device": {
+        "kind": "regular",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 18 Pro",
+        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "arctic/light/sheet": {
+      "theme": "arctic",
+      "appearance": "light",
+      "surface": "sheet",
+      "file": "arctic/light/sheet.png",
+      "attachment_name": "Arctic Light Sheet_0_037F13F5-790B-4671-A397-2F73ADDE06FE.png",
+      "test_identifier": "ThemeComparisonSheetUITests/testEightThemesLightAndDark()",
+      "timestamp": 1792373635.308,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_10-31-02-+0900.xcresult",
+      "device": {
+        "kind": "regular",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 18 Pro",
+        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "arctic/light/workout": {
+      "theme": "arctic",
+      "appearance": "light",
+      "surface": "workout",
+      "file": "arctic/light/workout.png",
+      "attachment_name": "Arctic Light Workout_0_606D0845-F89A-4E32-ACD9-67096F979868.png",
+      "test_identifier": "ThemeFlowMatrixUITests/testArcticDawnFlows()",
+      "timestamp": 1792372228.174,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_10-08-58-+0900.xcresult",
+      "device": {
+        "kind": "regular",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 18 Pro",
+        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "arctic/dark/detail": {
+      "theme": "arctic",
+      "appearance": "dark",
+      "surface": "detail",
+      "file": "arctic/dark/detail.png",
+      "attachment_name": "Arctic Dark Detail_0_B91ED564-2FEA-4E3A-A3A1-EB743BA17AB6.png",
+      "test_identifier": "ThemeFlowMatrixUITests/testArcticDawnFlows()",
+      "timestamp": 1792372242.477,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_10-08-58-+0900.xcresult",
+      "device": {
+        "kind": "regular",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 18 Pro",
+        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "arctic/dark/sheet": {
+      "theme": "arctic",
+      "appearance": "dark",
+      "surface": "sheet",
+      "file": "arctic/dark/sheet.png",
+      "attachment_name": "Arctic Dark Sheet_0_485D329F-2D0F-4BF3-955B-88516A91AFDC.png",
+      "test_identifier": "ThemeComparisonSheetUITests/testEightThemesLightAndDark()",
+      "timestamp": 1792373651.364,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_10-31-02-+0900.xcresult",
+      "device": {
+        "kind": "regular",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 18 Pro",
+        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "arctic/dark/workout": {
+      "theme": "arctic",
+      "appearance": "dark",
+      "surface": "workout",
+      "file": "arctic/dark/workout.png",
+      "attachment_name": "Arctic Dark Workout_0_954D24E5-0394-4ABA-B2A7-35E6B7C2636A.png",
+      "test_identifier": "ThemeFlowMatrixUITests/testArcticDawnFlows()",
+      "timestamp": 1792372271.555,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_10-08-58-+0900.xcresult",
+      "device": {
+        "kind": "regular",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 18 Pro",
+        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "contour/light/detail": {
+      "theme": "contour",
+      "appearance": "light",
+      "surface": "detail",
+      "file": "contour/light/detail.png",
+      "attachment_name": "Contour Light Detail_0_D15D2F8E-00FC-4DA4-9E00-C933ADBD5006.png",
+      "test_identifier": "ThemeFlowMatrixUITests/testContourAtlasFlows()",
+      "timestamp": 1792372290.996,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_10-08-58-+0900.xcresult",
+      "device": {
+        "kind": "regular",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 18 Pro",
+        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "contour/light/sheet": {
+      "theme": "contour",
+      "appearance": "light",
+      "surface": "sheet",
+      "file": "contour/light/sheet.png",
+      "attachment_name": "Contour Light Sheet_0_45ADA220-E1A1-4D70-9878-F8E3DFF42750.png",
+      "test_identifier": "ThemeComparisonSheetUITests/testEightThemesLightAndDark()",
+      "timestamp": 1792373688.733,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_10-31-02-+0900.xcresult",
+      "device": {
+        "kind": "regular",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 18 Pro",
+        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "contour/light/workout": {
+      "theme": "contour",
+      "appearance": "light",
+      "surface": "workout",
+      "file": "contour/light/workout.png",
+      "attachment_name": "Contour Light Workout_0_BA5B1F67-37A2-4DC8-8C4C-F752E241A24E.png",
+      "test_identifier": "ThemeFlowMatrixUITests/testContourAtlasFlows()",
+      "timestamp": 1792372315.224,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_10-08-58-+0900.xcresult",
+      "device": {
+        "kind": "regular",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 18 Pro",
+        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "contour/dark/detail": {
+      "theme": "contour",
+      "appearance": "dark",
+      "surface": "detail",
+      "file": "contour/dark/detail.png",
+      "attachment_name": "Contour Dark Detail_0_D7051814-E92C-4714-8BD5-3153E6358625.png",
+      "test_identifier": "ThemeFlowMatrixUITests/testContourAtlasFlows()",
+      "timestamp": 1792372329.896,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_10-08-58-+0900.xcresult",
+      "device": {
+        "kind": "regular",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 18 Pro",
+        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "contour/dark/sheet": {
+      "theme": "contour",
+      "appearance": "dark",
+      "surface": "sheet",
+      "file": "contour/dark/sheet.png",
+      "attachment_name": "Contour Dark Sheet_0_AAD6B4AB-50E8-4A73-A80D-E2A2FECCE4F0.png",
+      "test_identifier": "ThemeComparisonSheetUITests/testEightThemesLightAndDark()",
+      "timestamp": 1792373702.398,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_10-31-02-+0900.xcresult",
+      "device": {
+        "kind": "regular",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 18 Pro",
+        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "contour/dark/workout": {
+      "theme": "contour",
+      "appearance": "dark",
+      "surface": "workout",
+      "file": "contour/dark/workout.png",
+      "attachment_name": "Contour Dark Workout_0_6DD9F6E8-FAB9-4355-BEAE-3846BD5BEDA2.png",
+      "test_identifier": "ThemeFlowMatrixUITests/testContourAtlasFlows()",
+      "timestamp": 1792372357.877,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_10-08-58-+0900.xcresult",
+      "device": {
+        "kind": "regular",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 18 Pro",
+        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "dune/light/detail": {
+      "theme": "dune",
+      "appearance": "light",
+      "surface": "detail",
+      "file": "dune/light/detail.png",
+      "attachment_name": "Desert Light Detail_0_90F0014B-3067-4990-8068-DFE2DD497859.png",
+      "test_identifier": "ThemeFlowMatrixUITests/testDesertWarmFlows()",
+      "timestamp": 1792372377.777,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_10-08-58-+0900.xcresult",
+      "device": {
+        "kind": "regular",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 18 Pro",
+        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "dune/light/sheet": {
+      "theme": "dune",
+      "appearance": "light",
+      "surface": "sheet",
+      "file": "dune/light/sheet.png",
+      "attachment_name": "Desert Light Sheet_0_723BB379-DAEF-4477-996D-BA2285E92672.png",
+      "test_identifier": "ThemeComparisonSheetUITests/testEightThemesLightAndDark()",
+      "timestamp": 1792373521.453,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_10-31-02-+0900.xcresult",
+      "device": {
+        "kind": "regular",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 18 Pro",
+        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "dune/light/workout": {
+      "theme": "dune",
+      "appearance": "light",
+      "surface": "workout",
+      "file": "dune/light/workout.png",
+      "attachment_name": "Desert Light Workout_0_E77CBEE6-D71B-44E4-AF6E-714F739E8428.png",
+      "test_identifier": "ThemeFlowMatrixUITests/testDesertWarmFlows()",
+      "timestamp": 1792372404.335,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_10-08-58-+0900.xcresult",
+      "device": {
+        "kind": "regular",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 18 Pro",
+        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "dune/dark/detail": {
+      "theme": "dune",
+      "appearance": "dark",
+      "surface": "detail",
+      "file": "dune/dark/detail.png",
+      "attachment_name": "Desert Dark Detail_0_2A0CBEA4-BF02-4A67-9305-26456541B363.png",
+      "test_identifier": "ThemeFlowMatrixUITests/testDesertWarmFlows()",
+      "timestamp": 1792372415.271,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_10-08-58-+0900.xcresult",
+      "device": {
+        "kind": "regular",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 18 Pro",
+        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "dune/dark/sheet": {
+      "theme": "dune",
+      "appearance": "dark",
+      "surface": "sheet",
+      "file": "dune/dark/sheet.png",
+      "attachment_name": "Desert Dark Sheet_0_D4281328-5690-48A7-B8D1-950EB9F44004.png",
+      "test_identifier": "ThemeComparisonSheetUITests/testEightThemesLightAndDark()",
+      "timestamp": 1792373537.205,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_10-31-02-+0900.xcresult",
+      "device": {
+        "kind": "regular",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 18 Pro",
+        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "dune/dark/workout": {
+      "theme": "dune",
+      "appearance": "dark",
+      "surface": "workout",
+      "file": "dune/dark/workout.png",
+      "attachment_name": "Desert Dark Workout_0_20178FB9-410C-4667-A2B5-7E7BB6F43EDD.png",
+      "test_identifier": "ThemeFlowMatrixUITests/testDesertWarmFlows()",
+      "timestamp": 1792372440.35,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_10-08-58-+0900.xcresult",
+      "device": {
+        "kind": "regular",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 18 Pro",
+        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "forest/light/detail": {
+      "theme": "forest",
+      "appearance": "light",
+      "surface": "detail",
+      "file": "forest/light/detail.png",
+      "attachment_name": "Forest Light Detail_0_CA8C29E2-4FAB-40FA-B03C-B1830E0E9BBD.png",
+      "test_identifier": "ThemeFlowMatrixUITests/testForestGreenFlows()",
+      "timestamp": 1792372492.061,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_10-08-58-+0900.xcresult",
+      "device": {
+        "kind": "regular",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 18 Pro",
+        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "forest/light/sheet": {
+      "theme": "forest",
+      "appearance": "light",
+      "surface": "sheet",
+      "file": "forest/light/sheet.png",
+      "attachment_name": "Forest Light Sheet_0_E6CF684A-7031-407F-A20E-8AF3A1343A3E.png",
+      "test_identifier": "ThemeComparisonSheetUITests/testEightThemesLightAndDark()",
+      "timestamp": 1792373579.409,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_10-31-02-+0900.xcresult",
+      "device": {
+        "kind": "regular",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 18 Pro",
+        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "forest/light/workout": {
+      "theme": "forest",
+      "appearance": "light",
+      "surface": "workout",
+      "file": "forest/light/workout.png",
+      "attachment_name": "Forest Light Workout_0_E12195B6-D43F-48E1-88FB-D54BFF0E2E1E.png",
+      "test_identifier": "ThemeFlowMatrixUITests/testForestGreenFlows()",
+      "timestamp": 1792372544.093,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_10-08-58-+0900.xcresult",
+      "device": {
+        "kind": "regular",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 18 Pro",
+        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "forest/dark/detail": {
+      "theme": "forest",
+      "appearance": "dark",
+      "surface": "detail",
+      "file": "forest/dark/detail.png",
+      "attachment_name": "Forest Dark Detail_0_9DCFDB32-7549-4DE6-B441-23A20BFD9801.png",
+      "test_identifier": "ThemeFlowMatrixUITests/testForestGreenFlows()",
+      "timestamp": 1792372565.634,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_10-08-58-+0900.xcresult",
+      "device": {
+        "kind": "regular",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 18 Pro",
+        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "forest/dark/sheet": {
+      "theme": "forest",
+      "appearance": "dark",
+      "surface": "sheet",
+      "file": "forest/dark/sheet.png",
+      "attachment_name": "Forest Dark Sheet_0_51CEAF74-D313-4DC0-AFE5-6F698A31454C.png",
+      "test_identifier": "ThemeComparisonSheetUITests/testEightThemesLightAndDark()",
+      "timestamp": 1792373595.632,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_10-31-02-+0900.xcresult",
+      "device": {
+        "kind": "regular",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 18 Pro",
+        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "forest/dark/workout": {
+      "theme": "forest",
+      "appearance": "dark",
+      "surface": "workout",
+      "file": "forest/dark/workout.png",
+      "attachment_name": "Forest Dark Workout_0_C5B05185-FA2E-4C7F-BAA0-6F2ACFD6FAD2.png",
+      "test_identifier": "ThemeFlowMatrixUITests/testForestGreenFlows()",
+      "timestamp": 1792372594.616,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_10-08-58-+0900.xcresult",
+      "device": {
+        "kind": "regular",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 18 Pro",
+        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "ocean/light/detail": {
+      "theme": "ocean",
+      "appearance": "light",
+      "surface": "detail",
+      "file": "ocean/light/detail.png",
+      "attachment_name": "Ocean Light Detail_0_48064FE5-25A8-4AB5-AD9A-E7CD2CDABD91.png",
+      "test_identifier": "ThemeFlowMatrixUITests/testOceanCoolFlows()",
+      "timestamp": 1792372620.253,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_10-08-58-+0900.xcresult",
+      "device": {
+        "kind": "regular",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 18 Pro",
+        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "ocean/light/sheet": {
+      "theme": "ocean",
+      "appearance": "light",
+      "surface": "sheet",
+      "file": "ocean/light/sheet.png",
+      "attachment_name": "Ocean Light Sheet_0_7CB3A6D0-42F8-40FF-AE72-FB57BBB39C30.png",
+      "test_identifier": "ThemeComparisonSheetUITests/testEightThemesLightAndDark()",
+      "timestamp": 1792373552.119,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_10-31-02-+0900.xcresult",
+      "device": {
+        "kind": "regular",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 18 Pro",
+        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "ocean/light/workout": {
+      "theme": "ocean",
+      "appearance": "light",
+      "surface": "workout",
+      "file": "ocean/light/workout.png",
+      "attachment_name": "Ocean Light Workout_0_BD6082DA-9051-4881-9C63-6E601DC167EF.png",
+      "test_identifier": "ThemeFlowMatrixUITests/testOceanCoolFlows()",
+      "timestamp": 1792372655.877,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_10-08-58-+0900.xcresult",
+      "device": {
+        "kind": "regular",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 18 Pro",
+        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "ocean/dark/detail": {
+      "theme": "ocean",
+      "appearance": "dark",
+      "surface": "detail",
+      "file": "ocean/dark/detail.png",
+      "attachment_name": "Ocean Dark Detail_0_C19FBECF-176F-43D8-AA56-77490BC0673E.png",
+      "test_identifier": "ThemeFlowMatrixUITests/testOceanCoolFlows()",
+      "timestamp": 1792372669.211,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_10-08-58-+0900.xcresult",
+      "device": {
+        "kind": "regular",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 18 Pro",
+        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "ocean/dark/sheet": {
+      "theme": "ocean",
+      "appearance": "dark",
+      "surface": "sheet",
+      "file": "ocean/dark/sheet.png",
+      "attachment_name": "Ocean Dark Sheet_0_010B7064-4731-408C-BBAB-8AB48088C40B.png",
+      "test_identifier": "ThemeComparisonSheetUITests/testEightThemesLightAndDark()",
+      "timestamp": 1792373566.343,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_10-31-02-+0900.xcresult",
+      "device": {
+        "kind": "regular",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 18 Pro",
+        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "ocean/dark/workout": {
+      "theme": "ocean",
+      "appearance": "dark",
+      "surface": "workout",
+      "file": "ocean/dark/workout.png",
+      "attachment_name": "Ocean Dark Workout_0_6D0A4834-7079-4BAD-A05C-6ADDD1C94D60.png",
+      "test_identifier": "ThemeFlowMatrixUITests/testOceanCoolFlows()",
+      "timestamp": 1792372703.775,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_10-08-58-+0900.xcresult",
+      "device": {
+        "kind": "regular",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 18 Pro",
+        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "sakura/light/detail": {
+      "theme": "sakura",
+      "appearance": "light",
+      "surface": "detail",
+      "file": "sakura/light/detail.png",
+      "attachment_name": "Sakura Light Detail_0_F2CED432-16BB-4515-9D74-250A2927846A.png",
+      "test_identifier": "ThemeFlowMatrixUITests/testSakuraCalmFlows()",
+      "timestamp": 1792372725.458,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_10-08-58-+0900.xcresult",
+      "device": {
+        "kind": "regular",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 18 Pro",
+        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "sakura/light/sheet": {
+      "theme": "sakura",
+      "appearance": "light",
+      "surface": "sheet",
+      "file": "sakura/light/sheet.png",
+      "attachment_name": "Sakura Light Sheet_0_82144F46-3946-4165-8258-B2745C7E0445.png",
+      "test_identifier": "ThemeComparisonSheetUITests/testEightThemesLightAndDark()",
+      "timestamp": 1792373608.557,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_10-31-02-+0900.xcresult",
+      "device": {
+        "kind": "regular",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 18 Pro",
+        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "sakura/light/workout": {
+      "theme": "sakura",
+      "appearance": "light",
+      "surface": "workout",
+      "file": "sakura/light/workout.png",
+      "attachment_name": "Sakura Light Workout_0_D711827C-4FB7-48B5-B3D4-70817C481922.png",
+      "test_identifier": "ThemeFlowMatrixUITests/testSakuraCalmFlows()",
+      "timestamp": 1792372756.871,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_10-08-58-+0900.xcresult",
+      "device": {
+        "kind": "regular",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 18 Pro",
+        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "sakura/dark/detail": {
+      "theme": "sakura",
+      "appearance": "dark",
+      "surface": "detail",
+      "file": "sakura/dark/detail.png",
+      "attachment_name": "Sakura Dark Detail_0_888CFD75-DD86-4B8C-99A6-E7F3C21E6E04.png",
+      "test_identifier": "ThemeFlowMatrixUITests/testSakuraCalmFlows()",
+      "timestamp": 1792372769.464,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_10-08-58-+0900.xcresult",
+      "device": {
+        "kind": "regular",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 18 Pro",
+        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "sakura/dark/sheet": {
+      "theme": "sakura",
+      "appearance": "dark",
+      "surface": "sheet",
+      "file": "sakura/dark/sheet.png",
+      "attachment_name": "Sakura Dark Sheet_0_6C0887A7-DAC4-4D3B-846C-D5E5A6588B6F.png",
+      "test_identifier": "ThemeComparisonSheetUITests/testEightThemesLightAndDark()",
+      "timestamp": 1792373621.253,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_10-31-02-+0900.xcresult",
+      "device": {
+        "kind": "regular",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 18 Pro",
+        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "sakura/dark/workout": {
+      "theme": "sakura",
+      "appearance": "dark",
+      "surface": "workout",
+      "file": "sakura/dark/workout.png",
+      "attachment_name": "Sakura Dark Workout_0_63999509-2CC5-4D7C-81AC-93EA6F17DA20.png",
+      "test_identifier": "ThemeFlowMatrixUITests/testSakuraCalmFlows()",
+      "timestamp": 1792372798.102,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_10-08-58-+0900.xcresult",
+      "device": {
+        "kind": "regular",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 18 Pro",
+        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "solar/light/detail": {
+      "theme": "solar",
+      "appearance": "light",
+      "surface": "detail",
+      "file": "solar/light/detail.png",
+      "attachment_name": "Solar Light Detail_0_377C4EBE-8051-4B46-870E-7E397B393147.png",
+      "test_identifier": "ThemeFlowMatrixUITests/testSolarPopFlows()",
+      "timestamp": 1792372824.709,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_10-08-58-+0900.xcresult",
+      "device": {
+        "kind": "regular",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 18 Pro",
+        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "solar/light/sheet": {
+      "theme": "solar",
+      "appearance": "light",
+      "surface": "sheet",
+      "file": "solar/light/sheet.png",
+      "attachment_name": "Solar Light Sheet_0_517FD1FA-D5C0-4FA5-92FA-E98E485B3064.png",
+      "test_identifier": "ThemeComparisonSheetUITests/testEightThemesLightAndDark()",
+      "timestamp": 1792373663.454,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_10-31-02-+0900.xcresult",
+      "device": {
+        "kind": "regular",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 18 Pro",
+        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "solar/light/workout": {
+      "theme": "solar",
+      "appearance": "light",
+      "surface": "workout",
+      "file": "solar/light/workout.png",
+      "attachment_name": "Solar Light Workout_0_171B23AF-864C-4AD2-95DC-17F4BBA67411.png",
+      "test_identifier": "ThemeFlowMatrixUITests/testSolarPopFlows()",
+      "timestamp": 1792372856.595,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_10-08-58-+0900.xcresult",
+      "device": {
+        "kind": "regular",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 18 Pro",
+        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "solar/dark/detail": {
+      "theme": "solar",
+      "appearance": "dark",
+      "surface": "detail",
+      "file": "solar/dark/detail.png",
+      "attachment_name": "Solar Dark Detail_0_F1153F8B-714E-4FA4-93B5-BAE4B7875ADE.png",
+      "test_identifier": "ThemeFlowMatrixUITests/testSolarPopFlows()",
+      "timestamp": 1792372868.245,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_10-08-58-+0900.xcresult",
+      "device": {
+        "kind": "regular",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 18 Pro",
+        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "solar/dark/sheet": {
+      "theme": "solar",
+      "appearance": "dark",
+      "surface": "sheet",
+      "file": "solar/dark/sheet.png",
+      "attachment_name": "Solar Dark Sheet_0_5A6ABA8C-64E3-4F85-8D5A-3A555EB0D453.png",
+      "test_identifier": "ThemeComparisonSheetUITests/testEightThemesLightAndDark()",
+      "timestamp": 1792373675.572,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_10-31-02-+0900.xcresult",
+      "device": {
+        "kind": "regular",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 18 Pro",
+        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "solar/dark/workout": {
+      "theme": "solar",
+      "appearance": "dark",
+      "surface": "workout",
+      "file": "solar/dark/workout.png",
+      "attachment_name": "Solar Dark Workout_0_E432F0A6-B9F0-4B17-B52E-CD2179FB2E64.png",
+      "test_identifier": "ThemeFlowMatrixUITests/testSolarPopFlows()",
+      "timestamp": 1792372895.715,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_10-08-58-+0900.xcresult",
+      "device": {
+        "kind": "regular",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 18 Pro",
+        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "water-lilies/light/detail": {
+      "theme": "water-lilies",
+      "appearance": "light",
+      "surface": "detail",
+      "file": "water-lilies/light/detail.png",
+      "attachment_name": "Water Lilies Light Detail_0_9FE6645E-F0E6-40A1-AA69-9F5FA374DA88.png",
+      "test_identifier": "ThemeFlowMatrixUITests/testWaterLiliesFlows()",
+      "timestamp": 1792372917.988,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_10-08-58-+0900.xcresult",
+      "device": {
+        "kind": "regular",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 18 Pro",
+        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "water-lilies/light/sheet": {
+      "theme": "water-lilies",
+      "appearance": "light",
+      "surface": "sheet",
+      "file": "water-lilies/light/sheet.png",
+      "attachment_name": "Water Lilies Light Sheet_0_66D27781-FD1C-4320-A22D-F7345DFE6BCC.png",
+      "test_identifier": "ThemeComparisonSheetUITests/testEightThemesLightAndDark()",
+      "timestamp": 1792373716.79,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_10-31-02-+0900.xcresult",
+      "device": {
+        "kind": "regular",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 18 Pro",
+        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "water-lilies/light/workout": {
+      "theme": "water-lilies",
+      "appearance": "light",
+      "surface": "workout",
+      "file": "water-lilies/light/workout.png",
+      "attachment_name": "Water Lilies Light Workout_0_6FEEA04F-57A1-4F87-9ECF-3EB22FBDC577.png",
+      "test_identifier": "ThemeFlowMatrixUITests/testWaterLiliesFlows()",
+      "timestamp": 1792372950.268,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_10-08-58-+0900.xcresult",
+      "device": {
+        "kind": "regular",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 18 Pro",
+        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "water-lilies/dark/detail": {
+      "theme": "water-lilies",
+      "appearance": "dark",
+      "surface": "detail",
+      "file": "water-lilies/dark/detail.png",
+      "attachment_name": "Water Lilies Dark Detail_0_8B31339F-E367-42AE-A208-60188163B810.png",
+      "test_identifier": "ThemeFlowMatrixUITests/testWaterLiliesFlows()",
+      "timestamp": 1792372961.126,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_10-08-58-+0900.xcresult",
+      "device": {
+        "kind": "regular",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 18 Pro",
+        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "water-lilies/dark/sheet": {
+      "theme": "water-lilies",
+      "appearance": "dark",
+      "surface": "sheet",
+      "file": "water-lilies/dark/sheet.png",
+      "attachment_name": "Water Lilies Dark Sheet_0_19E7AC71-BC1F-430D-9875-B06D16D15CC7.png",
+      "test_identifier": "ThemeComparisonSheetUITests/testEightThemesLightAndDark()",
+      "timestamp": 1792373729.757,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_10-31-02-+0900.xcresult",
+      "device": {
+        "kind": "regular",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 18 Pro",
+        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "water-lilies/dark/workout": {
+      "theme": "water-lilies",
+      "appearance": "dark",
+      "surface": "workout",
+      "file": "water-lilies/dark/workout.png",
+      "attachment_name": "Water Lilies Dark Workout_0_45A8CC8E-EC9C-466A-A81A-36E271CB044E.png",
+      "test_identifier": "ThemeFlowMatrixUITests/testWaterLiliesFlows()",
+      "timestamp": 1792372990.417,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_10-08-58-+0900.xcresult",
+      "device": {
+        "kind": "regular",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 18 Pro",
+        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    }
+  }
+}

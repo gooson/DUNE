@@ -892,6 +892,7 @@ struct WorkoutSessionView: View {
                     .frame(maxWidth: .infinity, minHeight: 48)
             }
             .buttonStyle(.borderedProminent)
+            .foregroundStyle(DS.Color.onActivity)
             .tint(DS.Color.activity)
             .accessibilityIdentifier("workout-session-skip-rest")
 
@@ -927,6 +928,7 @@ struct WorkoutSessionView: View {
                     .padding(.vertical, DS.Spacing.lg)
                 }
                 .buttonStyle(.borderedProminent)
+                .foregroundStyle(DS.Color.onActivity)
                 .tint(DS.Color.activity)
                 .accessibilityIdentifier("workout-session-complete-set")
                 .padding(.horizontal, DS.Spacing.lg)
@@ -1016,6 +1018,7 @@ struct WorkoutSessionView: View {
                         .frame(maxWidth: .infinity, minHeight: 44)
                     }
                     .buttonStyle(.borderedProminent)
+                    .foregroundStyle(DS.Color.onActivity)
                     .tint(DS.Color.activity)
                     .accessibilityIdentifier("workout-session-finish")
                 } else {
@@ -1030,6 +1033,7 @@ struct WorkoutSessionView: View {
                     }
                     .buttonStyle(.borderedProminent)
                     .tint(DS.Color.negative)
+                    .foregroundStyle(DS.Color.onBrightAction)
                     .accessibilityIdentifier("workout-session-finish")
                 }
             }

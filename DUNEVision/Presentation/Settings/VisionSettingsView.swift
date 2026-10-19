@@ -6,6 +6,7 @@ struct VisionSettingsView: View {
     private static let windowPlacementSmokeStepDelayNanos: UInt64 = 350_000_000
 
     @AppStorage(SimulatorAdvancedMockDataModeStore.storageKey) private var isSimulatorMockEnabled = false
+    @AppStorage(AppTheme.storageKey) private var selectedTheme: AppTheme = .desertWarm
 
     private let modelContainer: ModelContainer
     private let smokeConfiguration: VisionWindowPlacementSmokeConfiguration
@@ -25,6 +26,14 @@ struct VisionSettingsView: View {
 
     var body: some View {
         Form {
+            Section("Themes") {
+                Picker("Appearance", selection: $selectedTheme) {
+                    ForEach(AppTheme.allCases, id: \.self) { theme in
+                        Text(VisionThemePalette.displayName(for: theme)).tag(theme)
+                    }
+                }
+                .accessibilityIdentifier("vision-settings-theme-picker")
+            }
             if SimulatorAdvancedMockDataModeStore.isSimulatorAvailable {
                 simulatorMockDataSection
             }
@@ -49,7 +58,7 @@ struct VisionSettingsView: View {
                 Text("Status")
                 Spacer()
                 Text(isSimulatorMockEnabled ? "Enabled" : "Disabled")
-                    .foregroundStyle(isSimulatorMockEnabled ? Color.accentColor : .secondary)
+                    .foregroundStyle(isSimulatorMockEnabled ? VisionThemePalette.accentColor(for: selectedTheme) : .secondary)
             }
 
             Button {

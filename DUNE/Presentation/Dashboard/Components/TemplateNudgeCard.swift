@@ -56,6 +56,7 @@ struct TemplateNudgeCard: View {
                         .font(.caption.weight(.semibold))
                 }
                 .buttonStyle(.borderedProminent)
+                .foregroundStyle(DS.Color.onActivity)
                 .controlSize(.small)
                 .tint(DS.Color.activity)
             }

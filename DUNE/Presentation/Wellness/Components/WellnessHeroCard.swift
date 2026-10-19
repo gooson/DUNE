@@ -6,6 +6,10 @@ struct WellnessHeroCard: View {
     let conditionScore: Int?
     let bodyScore: Int?
     var hourlySparkline: HourlySparklineData?
+    var sleepTrend: [SleepDailySample] = []
+    var sleepMetric: HealthMetric?
+    @Environment(\.appTheme) private var theme
+    @Environment(\.colorScheme) private var colorScheme
 
     private enum Labels {
         static let wellness = "WELLNESS"
@@ -16,7 +20,20 @@ struct WellnessHeroCard: View {
 
     var body: some View {
         if let score {
-            HeroScoreCard(
+            if theme == .desertWarm,
+               sleepMetric != nil,
+               sleepTrend.contains(where: { $0.minutes > 0 }) {
+                desertSleepSummary(score: score)
+            } else {
+                standardHero(score: score)
+            }
+        } else {
+            emptyCard
+        }
+    }
+
+    private func standardHero(score: WellnessScore) -> some View {
+        HeroScoreCard(
                 score: score.score,
                 scoreLabel: Labels.wellness,
                 statusLabel: score.status.label,
@@ -35,8 +52,81 @@ struct WellnessHeroCard: View {
                 hourlySparkline: hourlySparkline,
                 trendTitle: "Wellness Trend"
             )
-        } else {
-            emptyCard
+    }
+
+    private func desertSleepSummary(score: WellnessScore) -> some View {
+        VStack(alignment: .leading, spacing: 16) {
+            NavigationLink(value: WellnessScoreDestination()) {
+                VStack(alignment: .leading, spacing: 16) {
+                    HStack {
+                        Text("Wellness")
+                            .font(.title3.weight(.bold))
+                        Spacer()
+                        Text("Sleep")
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(.secondary)
+                    }
+
+                    HStack(alignment: .center, spacing: 18) {
+                        HStack(alignment: .bottom, spacing: 5) {
+                            ForEach(Array(sleepTrend.suffix(7).enumerated()), id: \.offset) { index, sample in
+                                RoundedRectangle(cornerRadius: 5)
+                                    .fill(Color(red: 0.350, green: 0.690, blue: 0.588).opacity(index == sleepTrend.suffix(7).count - 1 ? 1 : 0.55))
+                                    .frame(width: 12, height: max(9, min(60, CGFloat(sample.minutes / 600) * 60)))
+                            }
+                        }
+                        .frame(height: 62, alignment: .bottom)
+                        .accessibilityLabel("Sleep")
+
+                        VStack(alignment: .leading, spacing: 5) {
+                            if let minutes = sleepTrend.last(where: { $0.minutes > 0 })?.minutes {
+                                Text("\(Int(minutes) / 60)h \(Int(minutes) % 60)min")
+                                    .font(.headline.weight(.semibold))
+                            }
+                            Text(score.narrativeMessage)
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+                    }
+                }
+            }
+            .buttonStyle(.plain)
+            .accessibilityIdentifier("wellness-hero-score")
+            .accessibilityLabel("Wellness score \(score.score), \(score.status.label)")
+
+            if let sleepMetric {
+                NavigationLink(value: sleepMetric) {
+                    HStack(spacing: 6) {
+                        Text("Sleep Details")
+                        Image(systemName: "arrow.right")
+                    }
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(colorScheme == .dark
+                        ? Color(red: 0.898, green: 0.678, blue: 0.514)
+                        : Color(red: 0.588, green: 0.349, blue: 0.220))
+                }
+                .buttonStyle(.plain)
+                .accessibilityIdentifier("wellness-sleep-detail-link")
+            }
+        }
+        .padding(20)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background {
+            RoundedRectangle(cornerRadius: 23)
+                .fill(colorScheme == .dark ? Color(red: 0.110, green: 0.120, blue: 0.125) : Color(red: 0.988, green: 0.969, blue: 0.937))
+                .overlay(alignment: .bottom) {
+                    DesertPreviewWave()
+                        .frame(height: 74)
+                        .clipped()
+                }
+                .clipShape(RoundedRectangle(cornerRadius: 23))
+                .overlay {
+                    RoundedRectangle(cornerRadius: 23)
+                        .strokeBorder(colorScheme == .dark
+                            ? Color(red: 0.251, green: 0.314, blue: 0.286)
+                            : Color(red: 0.871, green: 0.859, blue: 0.824), lineWidth: 1)
+                }
         }
     }
 

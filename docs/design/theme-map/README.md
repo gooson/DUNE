@@ -7,11 +7,13 @@ status: in-progress
 
 # DUNE 테마 맵
 
-[테마 맵 열기](index.html) · [7개 테마 앱 적용 맵](app-contract.md) · [UX·비주얼 명세](../2026-10-17-ux-visual-spec.md) · [실제 화면 디자인맵 열기](../phone-design-map/actual/index.html)
+[테마 맵 열기](index.html) · [8개 테마 전체 구현 맵](../full-redesign-map/index.html) · [7개 테마 앱 적용 맵](app-contract.md) · [UX·비주얼 명세](../2026-10-17-ux-visual-spec.md) · [실제 화면 디자인맵 열기](../phone-design-map/actual/index.html)
 
 [4탭 레이아웃 기준맵](../layout-map/index.html)은 배치와 정보 순서의 별도 기준이다. 이 테마 맵은 색·장면·링·움직임을 정의한다.
 
 2026-10-17까지 논의한 **8개 테마 방향 시안**과 공통 능선 표현 연구안을 저장소에 보존한다. 이 자료는 움직이는 디자인 제안이며 앱의 현재 구현이나 실제 시뮬레이터 캡처가 아니다. 시안의 컨디션 수치와 문구는 예시다.
+
+2026-10-19 [전체 디자인 개편 맵](../full-redesign-map/index.html)은 이 8개 시안을 앱의 4탭과 전체 화면군에 구현하기 위한 새 목표다. 기존 `app-contract.md`는 7개 구현 테마의 당시 적용 기록이며, WATER LILIES는 새 맵에서 구현 대상으로 확장했다. 시안 자체가 구현 완료를 뜻하지 않는다.
 
 | 테마 | 시안 | 핵심 표현 |
 |---|---|---|

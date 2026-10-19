@@ -2,6 +2,8 @@ import SwiftData
 import SwiftUI
 
 struct WeeklyWorkoutPlanView: View {
+    @Environment(\.appTheme) private var theme
+    @Environment(\.colorScheme) private var colorScheme
     @Query(sort: \WorkoutTemplate.name) private var templates: [WorkoutTemplate]
     @AppStorage("workout.weeklyPlan.v1") private var planData = Data()
     @State private var selectedDate = Date()
@@ -63,6 +65,7 @@ struct WeeklyWorkoutPlanView: View {
                         if let template = templates.first(where: { $0.id == id }) {
                             Button { onStartTemplate(template) } label: {
                                 Label(template.name, systemImage: "play.fill")
+                                    .foregroundStyle(theme.prominentButtonForegroundColor(for: colorScheme))
                             }
                             .buttonStyle(.borderedProminent)
                             .accessibilityIdentifier("weekly-plan-selected-template")
@@ -95,6 +98,7 @@ struct WeeklyWorkoutPlanView: View {
             .accessibilityElement(children: .contain)
             .accessibilityIdentifier("weekly-plan-template-list")
         }
+        .background { DetailWaveBackground().opacity(0.65) }
         .navigationTitle("Weekly Workout Plan")
         .navigationBarTitleDisplayMode(.inline)
         .accessibilityElement(children: .contain)

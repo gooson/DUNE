@@ -37,6 +37,7 @@ struct RestTimerView: View {
                         .font(.caption.weight(.medium))
                 }
                 .buttonStyle(.borderedProminent)
+                .foregroundStyle(DS.Color.onActivity)
                 .tint(DS.Color.activity)
                 .accessibilityIdentifier("rest-timer-skip")
             }

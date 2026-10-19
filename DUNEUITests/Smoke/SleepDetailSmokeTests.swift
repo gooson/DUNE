@@ -25,7 +25,7 @@ final class SleepDetailSmokeTests: UITestBaseCase {
         navigateToDashboard()
 
         let cardID = AXID.dashboardMetricCard("sleep")
-        guard app.scrollToElementIfNeeded(cardID, maxSwipes: 6) else {
+        guard app.scrollToHittableElementIfNeeded(cardID, maxSwipes: 6) else {
             throw XCTSkip("Sleep metric card not found on Dashboard — may need HealthKit data")
         }
 

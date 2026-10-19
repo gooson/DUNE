@@ -142,7 +142,7 @@ struct SessionSummaryView: View {
             )
             .padding(.horizontal, DS.Spacing.xs)
         }
-        .background { WatchWaveBackground(color: DS.Color.positive) }
+        .background { WatchWaveBackground() }
         .navigationBarBackButtonHidden()
         .accessibilityElement(children: .contain)
         .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionSummaryScreen)

@@ -117,7 +117,7 @@ struct ConditionHeroView: View {
                     .font(DS.Typography.cardScore)
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)
-                    .foregroundStyle(theme.detailScoreGradient)
+                    .foregroundStyle(.primary)
                     .contentTransition(.numericText())
 
                 Text(Labels.scoreLabel)

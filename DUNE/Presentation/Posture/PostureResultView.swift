@@ -7,6 +7,8 @@ struct PostureResultView: View {
     let dismiss: DismissAction
     @Environment(\.modelContext) private var modelContext
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.appTheme) private var theme
+    @Environment(\.colorScheme) private var colorScheme
 
     @State private var animatedScore: Double = 0
     @State private var zoomImage: ZoomableImageItem?
@@ -294,6 +296,7 @@ struct PostureResultView: View {
                     viewModel.proceedToSideCapture()
                 } label: {
                     Label(String(localized: "Capture Side View"), systemImage: "camera.fill")
+                        .foregroundStyle(theme.prominentButtonForegroundColor(for: colorScheme))
                         .frame(maxWidth: .infinity)
                 }
                 .buttonStyle(.borderedProminent)
@@ -304,6 +307,7 @@ struct PostureResultView: View {
                 saveAssessment()
             } label: {
                 Label(String(localized: "Save Assessment"), systemImage: "square.and.arrow.down")
+                    .foregroundStyle(theme.prominentButtonForegroundColor(for: colorScheme))
                     .frame(maxWidth: .infinity)
             }
             .buttonStyle(.borderedProminent)

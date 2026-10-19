@@ -173,6 +173,8 @@ struct NotificationHubView: View {
     @State private var handledNavigationRequestID: Int?
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.appTheme) private var theme
+    @Environment(\.colorScheme) private var colorScheme
     private let inboxManager = NotificationInboxManager.shared
 
     init(
@@ -321,8 +323,11 @@ struct NotificationHubView: View {
                     }
 
                     HStack(spacing: DS.Spacing.sm) {
-                        Button("Read All") {
+                        Button {
                             inboxManager.markAllRead()
+                        } label: {
+                            Text("Read All")
+                                .foregroundStyle(theme.prominentButtonForegroundColor(for: colorScheme))
                         }
                         .buttonStyle(.borderedProminent)
                         .disabled(unreadCount == 0)

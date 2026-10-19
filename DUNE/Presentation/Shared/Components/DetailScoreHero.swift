@@ -37,7 +37,7 @@ struct DetailScoreHero: View {
                 VStack(spacing: 2) {
                     Text("\(score)")
                         .font(DS.Typography.heroScore)
-                        .foregroundStyle(theme.detailScoreGradient)
+                        .foregroundStyle(.primary)
                         .contentTransition(.numericText())
 
                     Text(scoreLabel)

@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DUNE · 전체 디자인 개편 맵</title>
+  <style>
+    :root { color-scheme:dark; font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif; color:#f5f1eb; background:#10151b; --scene:#302b2a; --middle:#b2854c; --accent:#e1b453; --light:#f5d778; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; min-width:320px; background:radial-gradient(circle at 84% -8%,#36505a70,transparent 38%),#10151b; }
+    button,input,select { font:inherit; }
+    button { cursor:pointer; }
+    a { color:#f3ca8e; }
+    :focus-visible { outline:2px solid #f6d19a; outline-offset:3px; }
+    .wrap { max-width:1540px; margin:auto; padding:0 clamp(18px,3vw,48px); }
+    .masthead { position:relative; overflow:hidden; border-bottom:1px solid #34414e; background:linear-gradient(118deg,#202b35 5%,var(--scene) 68%,#111820); }
+    .masthead::after { content:""; position:absolute; width:62vw; height:62vw; max-width:850px; max-height:850px; right:-7%; top:-74%; border-radius:50%; background:radial-gradient(circle,var(--middle) 0,transparent 65%); opacity:.22; pointer-events:none; }
+    .masthead .wrap { position:relative; z-index:1; padding-top:45px; padding-bottom:38px; }
+    .eyebrow { margin:0 0 12px; color:#f4c996; font-size:11px; font-weight:800; letter-spacing:.2em; text-transform:uppercase; }
+    h1 { max-width:970px; margin:0; font-size:clamp(36px,5.3vw,78px); line-height:1.03; letter-spacing:-.06em; }
+    .lead { max-width:840px; margin:18px 0 23px; color:#e3e3e1; font-size:clamp(15px,1.4vw,19px); line-height:1.65; }
+    .status-line { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:26px; }
+    .status-line span { padding:8px 11px; border:1px solid #72818d; border-radius:999px; background:#10182088; font-size:12px; }
+    .status-line strong { color:#f4cf9c; }
+    .nav-links { display:flex; flex-wrap:wrap; gap:9px; }
+    .nav-links a { padding:9px 12px; border:1px solid #72818d; border-radius:9px; color:#f3f0eb; font-size:12px; font-weight:700; text-decoration:none; }
+    .nav-links a:hover { background:#ffffff17; }
+    main.wrap { padding-top:32px; padding-bottom:72px; }
+    section { margin:0 0 48px; scroll-margin-top:20px; }
+    .section-head { display:flex; justify-content:space-between; align-items:end; flex-wrap:wrap; gap:12px; margin-bottom:17px; }
+    .section-head h2 { margin:0; font-size:clamp(25px,2.7vw,37px); letter-spacing:-.045em; }
+    .section-head p { max-width:700px; margin:0; color:#b6c1ca; font-size:13px; line-height:1.5; }
+    .theme-list { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:9px; margin-bottom:16px; }
+    .theme-choice { min-width:0; padding:14px 14px 10px; border:1px solid #465563; border-radius:14px; background:#1a2530; color:#eee; text-align:left; transition:border-color .18s,transform .18s; }
+    .theme-choice:hover { border-color:#8b9ba6; transform:translateY(-2px); }
+    .theme-choice[aria-pressed="true"] { border-color:#f2c988; box-shadow:0 0 0 1px #f2c98855 inset; background:#26323a; }
+    .theme-id { display:block; font-size:14px; font-weight:800; letter-spacing:.04em; }
+    .theme-subtitle { display:block; min-height:17px; margin-top:3px; color:#b7c1c9; font-size:11px; }
+    .swatches { display:flex; overflow:hidden; height:5px; margin-top:12px; border-radius:99px; }
+    .swatches i { flex:1; }
+    .theme-detail { display:grid; grid-template-columns:minmax(300px,1.05fr) minmax(350px,1fr); gap:14px; }
+    .source-panel,.contract-panel { min-width:0; overflow:hidden; border:1px solid #465463; border-radius:19px; background:#1b252f; }
+    .panel-bar { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; min-height:50px; padding:11px 15px; border-bottom:1px solid #3a4855; font-size:12px; }
+    .panel-bar strong { letter-spacing:.07em; }
+    .panel-bar a { font-weight:700; }
+    iframe { display:block; width:100%; height:min(78vh,850px); min-height:590px; border:0; background:#222; }
+    .contract-body { padding:20px; }
+    .contract-head { display:flex; justify-content:space-between; gap:10px; align-items:start; }
+    .contract-head h3 { margin:0 0 3px; font-size:28px; letter-spacing:-.045em; }
+    .contract-head small { color:#b8c4cd; }
+    .badge { flex:0 0 auto; border:1px solid #8d765a; border-radius:99px; padding:7px 9px; color:#f7d4a6; font-size:11px; font-weight:800; }
+    .contract-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:20px; }
+    .contract-grid article { padding:14px; border:1px solid #3f4e5a; border-radius:13px; background:#24313a; }
+    .contract-grid b,.gap-box b,.file-box b { display:block; margin-bottom:7px; color:#f5c88c; font-size:11px; letter-spacing:.1em; }
+    .contract-grid p,.gap-box p,.file-box p { margin:0; color:#e1e7ea; font-size:13px; line-height:1.55; }
+    .gap-box,.file-box { margin-top:10px; padding:14px; border-radius:13px; background:#101920; }
+    .gap-box { border-left:3px solid var(--accent); }
+    .file-box { border-left:3px solid #82a2b5; }
+    .tab-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; }
+    .tab-card { min-width:0; padding:19px; border:1px solid #394956; border-radius:17px; background:#1c2731; }
+    .tab-card-head { display:flex; align-items:baseline; gap:8px; }
+    .tab-card-head span { color:#eebf87; font-size:12px; font-weight:800; }
+    .tab-card h3 { margin:0; font-size:23px; letter-spacing:-.035em; }
+    .tab-question { margin:13px 0; font-size:14px; font-weight:750; }
+    .flow { min-height:95px; padding:12px; border:1px solid #52606c; border-radius:10px; color:#f5e1c5; font-size:13px; line-height:1.55; }
+    dl { display:grid; grid-template-columns:67px 1fr; gap:9px 7px; margin:15px 0; font-size:12px; line-height:1.45; }
+    dt { color:#aabac5; } dd { margin:0; } .tab-card a { font-size:12px; }
+    .family-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; }
+    .family-grid article { padding:16px; border:1px solid #374754; border-radius:13px; background:#1b2530; }
+    .family-grid b { color:#f1c98f; font-size:13px; }
+    .family-grid p { margin:8px 0 0; color:#c9d2d9; font-size:12px; line-height:1.55; }
+    .matrix-wrap,.inventory-wrap { overflow:auto; border:1px solid #3c4b58; border-radius:15px; background:#1b2530; }
+    table { width:100%; border-collapse:collapse; text-align:left; }
+    th,td { padding:13px; border-bottom:1px solid #364450; font-size:12px; vertical-align:top; }
+    th { color:#f1c88e; background:#26333e; }
+    tbody tr:last-child td,tbody tr:last-child th { border-bottom:0; }
+    tbody tr:hover { background:#ffffff08; }
+    .matrix th:first-child { min-width:145px; }
+    .matrix th small { display:block; margin-top:4px; color:#abc0c9; font-weight:500; }
+    .matrix td { min-width:175px; }
+    .matrix td a { color:#d7e4e9; text-decoration:none; }
+    .matrix td a:hover { text-decoration:underline; }
+    .matrix td b { color:#f1c88e; }
+    .matrix td small { display:block; margin-top:8px; color:#aab9c3; line-height:1.4; }
+    .capture-links { display:grid; gap:5px; margin-top:6px; }
+    .capture-pending { color:#abb9c2; }
+    .evidence-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; }
+    .evidence-grid[hidden] { display:none; }
+    .evidence-grid figure { min-width:0; margin:0; padding:8px; border:1px solid #455360; border-radius:13px; background:#1b2730; }
+    .evidence-grid img,.capture-placeholder { display:block; width:100%; height:250px; object-fit:contain; border-radius:8px; background:#101820; }
+    .capture-placeholder { display:grid; place-items:center; color:#aab9c3; font-size:12px; }
+    .evidence-grid figcaption { padding:9px 4px 2px; font-size:12px; color:#e1e7ea; }
+    .coverage-controls { display:flex; flex-wrap:wrap; gap:9px; margin:15px 0; }
+    .coverage-controls input,.coverage-controls select { padding:10px 12px; border:1px solid #5b6a75; border-radius:9px; background:#202e38; color:#fff; }
+    .coverage-controls input { width:min(100%,360px); }
+    .inventory { min-width:1040px; }
+    .inventory td:nth-child(5) { min-width:245px; }
+    .inventory td:nth-child(6) { max-width:330px; overflow-wrap:anywhere; }
+    .inventory td:nth-child(7) { min-width:155px; }
+    .inventory .capture-links a { color:#d7e4e9; text-decoration:none; }
+    .inventory .capture-links a:hover { text-decoration:underline; }
+    .inventory code { color:#c5d6dd; font-size:11px; }
+    .device-secondary { display:block; margin-top:5px; color:#aab9c3; font-size:11px; line-height:1.5; }
+    .deferred { color:#e7bf7c; }
+    .flow-steps { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; list-style:none; margin:0; padding:0; }
+    .flow-steps li { padding:17px; border:1px solid #455360; border-radius:14px; background:#1b2730; }
+    .flow-steps span { display:block; margin-bottom:8px; color:#f5c88d; font-size:12px; font-weight:850; letter-spacing:.1em; }
+    .flow-steps b { display:block; margin-bottom:7px; font-size:17px; }
+    .flow-steps p { margin:0; color:#c9d3d9; font-size:12px; line-height:1.6; }
+    .gate { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+    .gate article { border:1px solid #455360; border-radius:14px; padding:16px; background:#1b2730; }
+    .gate h3 { margin:0 0 7px; font-size:16px; }
+    .gate p { margin:0; color:#c9d3d9; font-size:12px; line-height:1.6; }
+    footer { border-top:1px solid #34414e; padding:23px 0 34px; color:#aab8c2; font-size:12px; }
+    @media (max-width:1100px) { .theme-detail { grid-template-columns:1fr; } .tab-grid,.evidence-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .family-grid,.flow-steps { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+    @media (max-width:660px) { .theme-list { grid-template-columns:repeat(2,minmax(0,1fr)); } .contract-grid,.tab-grid,.family-grid,.flow-steps,.gate { grid-template-columns:1fr; } .flow { min-height:0; } iframe { min-height:570px; height:72vh; } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .theme-choice { transition:none; } }
+  </style>
+</head>
+<body>
+  <header class="masthead"><div class="wrap">
+    <p class="eyebrow">DUNE / IMPLEMENTATION BLUEPRINT / __DATE__</p>
+    <h1>전체 디자인 개편 맵</h1>
+    <p class="lead">8개 방향 시안을 앱에 구현하기 위한 맵입니다. DESERT HORIZON의 4탭 레이아웃을 시안과 먼저 대조하고, 그 다음 시각 디테일과 나머지 테마를 진행합니다. 기존 캡처 수는 시안 일치나 구현 완료를 뜻하지 않습니다.</p>
+    <div class="status-line"><span><strong>8</strong> 테마 · WATER LILIES 포함</span><span><strong>4</strong> 루트 탭 · 32개 조합</span><span><strong>__REACHABLE_COUNT__</strong> 실제 진입 화면 · 전체 인벤토리 __SCREEN_COUNT__개</span><span>Watch 운동 상태 62개 연계 · 테마 실제 __WATCH_COUNT__/24</span><span>상세·시트·운동 실제 __FLOW_COUNT__/48</span><span>실제 루트 캡처 · __CAPTURE_COUNTS__</span></div>
+    <nav class="nav-links" aria-label="관련 자료"><a href="../theme-map/index.html">원본 테마맵 ↗</a><a href="../layout-map/index.html">4탭 레이아웃 기준 ↗</a><a href="review/desert-horizon-layout-2026-10-19/README.md">DESERT HORIZON 4탭 중간 대조 ↗</a><a href="../phone-design-map/actual/index.html">기존 실제 캡처 ↗</a><a href="README.md">맵 사용법·완료 기준 ↗</a></nav>
+  </div></header>
+  <main class="wrap">
+    <section id="themes"><div class="section-head"><h2>01 · 테마별 구현 계약</h2><p>테마를 선택하면 원본 방향 시안과 해당 앱 구현 기준을 함께 봅니다. 시안의 점수와 건강 문구는 예시입니다.</p></div>
+      <div class="theme-list" role="group" aria-label="테마 선택">__THEME_BUTTONS__</div>
+      <div class="theme-detail">
+        <div class="source-panel"><div class="panel-bar"><strong>방향 시안 · 실제 앱 화면 아님</strong><a id="source-link" href="../theme-map/themes/dune-design-direction.html" target="_blank" rel="noopener">원본 열기 ↗</a></div><iframe id="source-frame" title="선택한 테마의 보존된 시안" loading="eager" src="../theme-map/themes/dune-design-direction.html"></iframe></div>
+        <div class="contract-panel"><div class="panel-bar"><strong>앱에 반영할 계약</strong><span id="theme-case">desertWarm</span></div><div class="contract-body">
+          <div class="contract-head"><div><h3 id="theme-title">DUNE · Desert Horizon</h3><small id="theme-motif">모래 능선</small></div><span class="badge" id="theme-status">기존 테마 재설계</span></div>
+          <div class="contract-grid"><article><b>01 / 상단 장면</b><p id="theme-scene">__FIRST_SCENE__</p></article><article><b>02 / 카드 표면</b><p id="theme-surface">__FIRST_SURFACE__</p></article><article><b>03 / 상태 링</b><p id="theme-ring">__FIRST_RING__</p></article><article><b>04 / 실데이터 그래프</b><p id="theme-graph">__FIRST_GRAPH__</p></article><article><b>05 / 지속 움직임</b><p id="theme-motion">__FIRST_MOTION__</p></article><article><b>06 / 합격 화면</b><p id="theme-check">__FIRST_CHECK__</p></article></div>
+          <div class="gap-box"><b>현재 구현과의 차이</b><p id="theme-gap">__FIRST_GAP__</p></div><div class="file-box"><b>주요 구현 지점</b><p id="theme-code">__FIRST_CODE__</p></div>
+        </div></div>
+      </div>
+    </section>
+    <section id="tabs"><div class="section-head"><h2>02 · 4탭 × 8테마</h2><p>화면의 정보 순서와 행동 목적지는 모든 테마에서 같습니다. 장면의 강도는 Today → Activity → Wellness → Life 순으로 낮춥니다.</p></div><div class="tab-grid">__TAB_CARDS__</div></section>
+    <section id="matrix"><div class="section-head"><h2>03 · 구현·캡처 매트릭스</h2><p>32칸 모두 목표 조합입니다. 링크가 있는 경우에만 해당 기기의 실제 앱 캡처가 보존되었습니다. 캡처는 시각 검토 자료이며 그 자체로 완료 판정은 아닙니다.</p></div><div class="matrix-wrap"><table class="matrix"><thead><tr><th>테마</th><th>Today</th><th>Activity</th><th>Wellness</th><th>Life</th></tr></thead><tbody>__MATRIX_ROWS__</tbody></table></div></section>
+    <section id="evidence"><div class="section-head"><h2>실제 앱 화면 대조</h2><p>위에서 선택한 테마의 iPhone 밝음·어두움 4탭을 나란히 봅니다. 미캡처 칸은 이미지 대신 대기로 표시합니다. 시안과 캡처는 출처가 다릅니다.</p></div>__EVIDENCE_SECTIONS__</section>
+    <section id="flow-evidence"><div class="section-head"><h2>상세·시트·운동 화면 대조</h2><p>선택한 테마의 iPhone 상태 상세, 지표 비교 시트, 운동 선택 화면을 밝음·어두움으로 확인합니다.</p></div>__FLOW_EVIDENCE_SECTIONS__</section>
+    <section id="watch-evidence"><div class="section-head"><h2>Watch 테마 실제 화면</h2><p>선택한 테마의 홈·전체 운동 목록·운동 중 화면입니다. 이 24장은 62개 운동 상태 검증과 별도 근거입니다.</p></div>__WATCH_EVIDENCE_SECTIONS__</section>
+    <section id="screens"><div class="section-head"><h2>04 · 전체 화면군 적용 범위</h2><p>아래 규칙을 7개 화면군의 상세·시트·운동 흐름에 상속하고 화면별로 확인합니다. 실제 화면 열의 ‘이번 개편 촬영’은 2026-10-19 이후 촬영 시각만 뜻하며, 빌드·동작·접근성 완료 판정은 아닙니다. ‘기존 캡처’는 이번 개편의 증거로 세지 않습니다.</p></div><div class="family-grid">__FAMILY_CARDS__</div>
+      <div class="coverage-controls"><label for="screen-search">화면 검색</label><input id="screen-search" type="search" placeholder="ID, 화면명, 코드 경로"><label for="family-filter">화면군</label><select id="family-filter"><option value="">전체</option><option value="T">T · 시작·오늘</option><option value="A">A · 활동</option><option value="W">W · 운동</option><option value="H">H · 웰니스</option><option value="P">P · 자세</option><option value="L">L · 라이프</option><option value="S">S · 설정</option></select><span id="visible-count" aria-live="polite"></span></div>
+      <div class="inventory-wrap"><table class="inventory"><thead><tr><th>ID</th><th>화면</th><th>방식</th><th>테마 적용 패턴</th><th>기기별 현재 배치</th><th>현재 코드</th><th>실제 화면 출처</th><th>범위</th></tr></thead><tbody id="screen-rows">__SCREEN_ROWS__</tbody></table></div>
+    </section>
+    <section id="sequence"><div class="section-head"><h2>05 · 구현 순서</h2><p>앞 단계의 공통 계약을 확인한 뒤 다음 화면군으로 확장합니다. 각 단계에서 시안·코드·실제 캡처를 함께 대조합니다.</p></div><ol class="flow-steps">
+      <li><span>GATE 0</span><b>기준 캡처 고정</b><p>각 테마의 현재 T03/A01/H01/L01과 대표 상세·시트를 밝음·어두움으로 남긴다. 기존 DUNE 캡처를 다른 테마의 증거로 재사용하지 않는다.</p></li>
+      <li><span>GATE 1</span><b>공통 토큰·장면</b><p>AppTheme, 테마별 색상 asset, Tab/Detail/Sheet 배경, HeroCard, 상태 링, 데이터 그래프의 역할을 정한다. 기존 기록과 선택값을 보존한다.</p></li>
+      <li><span>GATE 2</span><b>기존 7테마 루트</b><p>테마마다 T03→A01→H01→L01의 시안 모티프와 강도를 적용한다. 첫 화면에서 테마가 정지 이미지로도 식별돼야 한다.</p></li>
+      <li><span>GATE 3</span><b>WATER LILIES 추가</b><p>새 AppTheme 케이스, 색상·모티프, 설정 선택, 저장값 복원, 4탭·상세·시트·Watch/Vision 토큰을 추가한다. 기존 7개 케이스의 저장 호환성을 확인한다.</p></li>
+      <li><span>GATE 4</span><b>전체 화면군 전개</b><p>106개 진입 가능한 폰 화면을 화면군 규칙으로 대조한다. Watch 62개 운동 상태와 Widget/Vision의 테마 참조는 별도 플랫폼 계약으로 확인한다.</p></li>
+      <li><span>GATE 5</span><b>실제 화면 검증</b><p>영향받는 iPhone·iPad·Duo 양 자세, Watch를 새 빌드로 캡처한다. 밝음·어두움, 큰 글씨, Reduce Motion, 무데이터 상태와 실제 행동을 확인한다.</p></li>
+    </ol></section>
+    <section id="quality"><div class="section-head"><h2>06 · 완료 판정</h2><p>색상과 움직임만 닮았다고 끝내지 않습니다. 시안의 장면을 실제 앱의 읽기·행동·데이터와 함께 확인합니다.</p></div><div class="gate">
+      <article><h3>시각 충실도</h3><p>각 테마의 고유 모티프가 정지 T03에서도 구분되고 네 탭에서 같은 시각 언어가 이어진다. 카드 표면·링 광택·그래프는 역할이 분리된다. 원본 HTML과 새 앱 PNG를 나란히 대조한다.</p></article>
+      <article><h3>데이터와 행동</h3><p>링은 상태, 그래프는 실제 변화, 배경은 장식이다. 권한·기록 없음·기준선 수집·동기화·오류를 구분한다. CTA 문구와 목적지가 맞고 기존 운동·습관 기록 경로가 작동한다.</p></article>
+      <article><h3>기기와 접근성</h3><p>iPhone, iPad, Duo 접힘·펼침에서 정보가 잘리거나 접힘 경계에 놓이지 않는다. 큰 글씨·VoiceOver·Increase Contrast·Reduce Motion에서 같은 의미와 조작을 유지한다.</p></article>
+      <article><h3>증거와 동기화</h3><p>테마맵 보존본·manifest·README와 이 맵을 동기화한다. 변경 화면의 새 actual PNG, 출처, 캡처 시각을 기록한다. 미캡처 화면은 완료로 표시하지 않는다.</p></article>
+    </div></section>
+  </main>
+  <footer><div class="wrap">전체 디자인 개편을 위한 구현 기준 시안 · 현재 앱 구현 및 실제 캡처와 구분 · 원본 테마맵과 화면 인벤토리에서 생성</div></footer>
+  <script>
+    const themes = __THEMES_JSON__;
+    const buttons = [...document.querySelectorAll('.theme-choice')];
+    function selectTheme(id) {
+      const theme = themes.find(item => item.id === id);
+      if (!theme) return;
+      buttons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.theme === id)));
+      const [scene,middle,accent,light] = theme.colors;
+      document.documentElement.style.setProperty('--scene', scene);
+      document.documentElement.style.setProperty('--middle', middle);
+      document.documentElement.style.setProperty('--accent', accent);
+      document.documentElement.style.setProperty('--light', light);
+      document.getElementById('theme-title').textContent = `${theme.name} · ${theme.title}`;
+      document.getElementById('theme-motif').textContent = theme.motif;
+      document.getElementById('theme-case').textContent = theme.app_case;
+      document.getElementById('theme-status').textContent = id === 'water-lilies' ? '신규 앱 테마' : '기존 테마 재설계';
+      for (const field of ['scene','surface','ring','graph','motion','gap','code','check']) {
+        document.getElementById(`theme-${field}`).textContent = theme[field];
+      }
+      const url = `../theme-map/themes/${theme.file}`;
+      document.getElementById('source-link').href = url;
+      document.getElementById('source-frame').src = url;
+      document.querySelectorAll('[data-evidence-theme]').forEach(section => { section.hidden = section.dataset.evidenceTheme !== id; });
+      document.querySelectorAll('[data-watch-theme]').forEach(section => { section.hidden = section.dataset.watchTheme !== id; });
+      document.querySelectorAll('[data-flow-theme]').forEach(section => { section.hidden = section.dataset.flowTheme !== id; });
+      history.replaceState(null, '', `#${id}`);
+    }
+    buttons.forEach(button => button.addEventListener('click', () => selectTheme(button.dataset.theme)));
+    const initial = decodeURIComponent(location.hash.slice(1));
+    selectTheme(themes.some(theme => theme.id === initial) ? initial : themes[0].id);
+    const search = document.getElementById('screen-search');
+    const family = document.getElementById('family-filter');
+    const rows = [...document.querySelectorAll('#screen-rows tr')];
+    function filterScreens() {
+      const query = search.value.trim().toLocaleLowerCase();
+      let count = 0;
+      for (const row of rows) {
+        row.hidden = (family.value && row.dataset.family !== family.value) || (query && !row.dataset.search.includes(query));
+        if (!row.hidden) count += 1;
+      }
+      document.getElementById('visible-count').textContent = `${count} / ${rows.length}개 화면`;
+    }
+    search.addEventListener('input', filterScreens);
+    family.addEventListener('change', filterScreens);
+    filterScreens();
+  </script>
+</body>
+</html>

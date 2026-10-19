@@ -21,6 +21,7 @@ struct RPEHelpSheet: View {
                 }
                 .padding()
             }
+            .background { SheetWaveBackground().opacity(0.55) }
             .accessibilityIdentifier("rpe-help-sheet")
             .navigationTitle("RPE Guide")
             .navigationBarTitleDisplayMode(.inline)

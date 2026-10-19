@@ -15,7 +15,6 @@ struct ExercisePickerView: View {
     let onStartTemplate: ((WorkoutTemplate) -> Void)?
     let onSelect: (ExerciseDefinition) -> Void
 
-    @Environment(\.appTheme) private var theme
     @Environment(\.dismiss) private var dismiss
     @Query(sort: \CustomExercise.createdAt, order: .reverse) private var customExercises: [CustomExercise]
     @Query(sort: \WorkoutTemplate.updatedAt, order: .reverse) private var templates: [WorkoutTemplate]
@@ -358,7 +357,11 @@ struct ExercisePickerView: View {
                 Image(systemName: "magnifyingglass")
                     .foregroundStyle(DS.Color.textSecondary)
 
-                TextField("Search exercises", text: $searchText)
+                TextField(
+                    "Search exercises",
+                    text: $searchText,
+                    prompt: Text("Search exercises").foregroundColor(Color.primary.opacity(0.72))
+                )
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled()
                     .submitLabel(.search)
@@ -496,7 +499,7 @@ struct ExercisePickerView: View {
                     .foregroundStyle(DS.Color.activity)
                 Text(template.name)
                     .font(.headline)
-                    .foregroundStyle(theme.sandColor)
+                    .foregroundStyle(.primary)
                 Spacer()
                 Image(systemName: "play.circle.fill")
                     .font(.title3)
@@ -513,7 +516,7 @@ struct ExercisePickerView: View {
                         .foregroundStyle(.tertiary)
                     Text(template.exerciseEntries.map(\.exerciseName).prefix(3).joined(separator: ", "))
                         .font(.caption)
-                        .foregroundStyle(.tertiary)
+                        .foregroundStyle(Color.primary.opacity(0.72))
                         .lineLimit(1)
                 }
             }
@@ -568,7 +571,7 @@ struct ExercisePickerView: View {
             HStack(spacing: DS.Spacing.xs) {
                 Text(exercise.localizedName)
                     .font(.body)
-                    .foregroundStyle(theme.sandColor)
+                    .foregroundStyle(.primary)
                 if exercise.id.hasPrefix("custom-") {
                     Text("Custom")
                         .font(.system(size: 9, weight: .medium))
@@ -581,12 +584,12 @@ struct ExercisePickerView: View {
             if exercise.localizedName != exercise.name {
                 Text(exercise.name)
                     .font(.caption)
-                    .foregroundStyle(.tertiary)
+                    .foregroundStyle(Color.primary.opacity(0.72))
             }
             HStack(spacing: DS.Spacing.xs) {
                 Text(exercise.primaryMuscles.map(\.displayName).joined(separator: ", "))
                     .font(.caption)
-                    .foregroundStyle(DS.Color.textSecondary)
+                    .foregroundStyle(Color.primary.opacity(0.72))
                 Text("\u{00B7}")
                     .foregroundStyle(.tertiary)
                 Label {
@@ -595,7 +598,7 @@ struct ExercisePickerView: View {
                     exercise.equipment.svgIcon(size: 12)
                 }
                 .font(.caption)
-                .foregroundStyle(.tertiary)
+                .foregroundStyle(Color.primary.opacity(0.72))
             }
         }
     }
@@ -642,7 +645,7 @@ struct ExercisePickerView: View {
                     in: Capsule()
                 )
                 .foregroundStyle(
-                    isSelected ? .white : theme.sandColor
+                    isSelected ? DS.Color.onBrightAction : .primary
                 )
         }
         .buttonStyle(.plain)
@@ -676,7 +679,7 @@ struct ExercisePickerView: View {
                 in: Capsule()
             )
             .foregroundStyle(
-                isSelected ? .white : theme.sandColor
+                isSelected ? .white : .primary
             )
         }
         .buttonStyle(.plain)
@@ -700,7 +703,7 @@ struct ExercisePickerView: View {
                     in: Capsule()
                 )
                 .foregroundStyle(
-                    selectedMuscle == muscle ? .white : theme.sandColor
+                    selectedMuscle == muscle ? DS.Color.onBrightAction : .primary
                 )
         }
         .buttonStyle(.plain)
@@ -727,7 +730,7 @@ struct ExercisePickerView: View {
                 in: Capsule()
             )
             .foregroundStyle(
-                selectedEquipment == equipment ? .white : theme.sandColor
+                selectedEquipment == equipment ? DS.Color.onBrightAction : .primary
             )
         }
         .buttonStyle(.plain)

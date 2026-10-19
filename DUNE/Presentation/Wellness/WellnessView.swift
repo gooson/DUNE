@@ -11,6 +11,7 @@ struct WellnessView: View {
     @State private var lastHandledWeightEntrySignal = 0
     @Environment(\.modelContext) private var modelContext
     @Environment(\.appTheme) private var theme
+    @Environment(\.colorScheme) private var colorScheme
     @Environment(\.horizontalSizeClass) private var sizeClass
 
     private let scrollToTopSignal: Int
@@ -44,6 +45,10 @@ struct WellnessView: View {
         return (viewModel.physicalCards + viewModel.activeCards).map(\.metric).filter { seen.insert($0.id).inserted }
     }
 
+    private var sleepMetric: HealthMetric? {
+        comparisonMetrics.first { $0.category == .sleep }
+    }
+
     private func openBodyRecord() {
         bodyViewModel.resetForm()
         bodyViewModel.isShowingAddSheet = true
@@ -52,6 +57,7 @@ struct WellnessView: View {
     private var bodyRecordButton: some View {
         Button(action: openBodyRecord) {
             Label("Body Record", systemImage: "plus.circle.fill")
+                .foregroundStyle(theme.prominentButtonForegroundColor(for: colorScheme))
                 .font(.headline)
                 .frame(maxWidth: .infinity, minHeight: 44)
         }
@@ -102,14 +108,30 @@ struct WellnessView: View {
                         }
 
                         // Hero Card
-                        if viewModel.wellnessScore != nil {
+                        if viewModel.wellnessScore != nil,
+                           theme == .desertWarm,
+                           let sleepMetric,
+                           viewModel.sleepDetailTrend.contains(where: { $0.minutes > 0 }) {
+                            WellnessHeroCard(
+                                score: viewModel.wellnessScore,
+                                sleepScore: viewModel.sleepScore,
+                                conditionScore: viewModel.conditionScore,
+                                bodyScore: viewModel.bodyScore,
+                                hourlySparkline: viewModel.wellnessSparkline.nonEmptyOrNil,
+                                sleepTrend: viewModel.sleepDetailTrend,
+                                sleepMetric: sleepMetric
+                            )
+                            .reportTabHeroFrame()
+                            .staggeredAppear(index: 0)
+                        } else if viewModel.wellnessScore != nil {
                             NavigationLink(value: WellnessScoreDestination()) {
                                 WellnessHeroCard(
                                     score: viewModel.wellnessScore,
                                     sleepScore: viewModel.sleepScore,
                                     conditionScore: viewModel.conditionScore,
                                     bodyScore: viewModel.bodyScore,
-                                    hourlySparkline: viewModel.wellnessSparkline.nonEmptyOrNil
+                                    hourlySparkline: viewModel.wellnessSparkline.nonEmptyOrNil,
+                                    sleepTrend: viewModel.sleepDetailTrend
                                 )
                             }
                             .reportTabHeroFrame()
@@ -122,7 +144,8 @@ struct WellnessView: View {
                                 sleepScore: viewModel.sleepScore,
                                 conditionScore: viewModel.conditionScore,
                                 bodyScore: viewModel.bodyScore,
-                                hourlySparkline: viewModel.wellnessSparkline.nonEmptyOrNil
+                                hourlySparkline: viewModel.wellnessSparkline.nonEmptyOrNil,
+                                sleepTrend: viewModel.sleepDetailTrend
                             )
                             .reportTabHeroFrame()
                             .staggeredAppear(index: 0)

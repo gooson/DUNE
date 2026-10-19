@@ -74,6 +74,10 @@ private struct WaterLiliesScene: View {
 
     var body: some View {
         ZStack(alignment: .top) {
+            // Fill the background's proposed size so the short pond scene is
+            // anchored to the top, like the other theme backgrounds.
+            Color.clear
+
             LinearGradient(
                 colors: [
                     WaterLiliesPalette.waterDeep.opacity(colorScheme == .dark ? 0.36 : 0.27),

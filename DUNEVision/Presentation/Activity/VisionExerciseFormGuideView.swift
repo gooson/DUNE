@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct VisionExerciseFormGuideView: View {
+    @AppStorage(AppTheme.storageKey) private var selectedTheme: AppTheme = .desertWarm
     @State private var viewModel: VisionExerciseFormGuideViewModel
 
     init(viewModel: VisionExerciseFormGuideViewModel = VisionExerciseFormGuideViewModel()) {
@@ -121,7 +122,7 @@ struct VisionExerciseFormGuideView: View {
 
                 Image(systemName: guide.exercise.equipment.iconName)
                     .font(.title3)
-                    .foregroundStyle(isSelected ? Color.accentColor : Color.secondary)
+                    .foregroundStyle(isSelected ? VisionThemePalette.accentColor(for: selectedTheme) : Color.secondary)
             }
 
             HStack(spacing: 10) {

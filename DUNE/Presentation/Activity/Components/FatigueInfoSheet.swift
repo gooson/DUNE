@@ -19,6 +19,7 @@ struct FatigueInfoSheet: View {
             }
             .padding(DS.Spacing.xl)
         }
+        .background { SheetWaveBackground().opacity(0.55) }
         .accessibilityIdentifier("activity-fatigue-info-sheet")
         .presentationDetents([.large])
         .presentationDragIndicator(.visible)

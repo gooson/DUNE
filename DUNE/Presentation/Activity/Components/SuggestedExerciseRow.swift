@@ -53,6 +53,7 @@ struct SuggestedExerciseRow: View {
                 HStack(spacing: DS.Spacing.xs) {
                     Button("Start", action: onStart)
                         .buttonStyle(.borderedProminent)
+                        .foregroundStyle(DS.Color.onActivity)
                         .tint(DS.Color.activity)
                         .font(.caption.weight(.semibold))
                         .controlSize(.small)

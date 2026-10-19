@@ -6,6 +6,8 @@ import SwiftUI
 struct RealtimePostureView: View {
     @State private var viewModel = RealtimePostureViewModel()
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.appTheme) private var theme
+    @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
         NavigationStack {
@@ -145,6 +147,7 @@ struct RealtimePostureView: View {
                 viewModel.start()
             }
             .buttonStyle(.borderedProminent)
+            .foregroundStyle(theme.prominentButtonForegroundColor(for: colorScheme))
         }
         .foregroundStyle(.white)
         .padding(DS.Spacing.xl)

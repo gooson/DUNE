@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct VisionDashboardWindowScene: View {
+    @AppStorage(AppTheme.storageKey) private var selectedTheme: AppTheme = .desertWarm
     let kind: VisionDashboardWindowKind
     @State private var viewModel: VisionDashboardWorkspaceViewModel
 
@@ -393,9 +394,9 @@ struct VisionDashboardWindowScene: View {
         ZStack {
             LinearGradient(
                 colors: [
-                    Color.accentColor.opacity(0.12),
+                    VisionThemePalette.accentColor(for: selectedTheme).opacity(0.12),
                     Color.clear,
-                    Color.accentColor.opacity(0.04)
+                    VisionThemePalette.accentColor(for: selectedTheme).opacity(0.04)
                 ],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing

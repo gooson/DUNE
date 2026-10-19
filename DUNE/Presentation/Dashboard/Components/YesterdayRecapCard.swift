@@ -15,12 +15,12 @@ struct YesterdayRecapCard: View {
                     HStack(spacing: DS.Spacing.xs) {
                         Image(systemName: "clock.arrow.circlepath")
                             .font(.caption)
-                            .foregroundStyle(theme.tertiaryTextStyle)
+                            .foregroundStyle(theme.secondaryTextColor)
 
                         Text("Yesterday")
                             .font(.caption)
                             .fontWeight(.semibold)
-                            .foregroundStyle(theme.tertiaryTextStyle)
+                            .foregroundStyle(theme.secondaryTextColor)
                     }
 
                     HStack(spacing: DS.Spacing.md) {

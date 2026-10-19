@@ -18,6 +18,8 @@ enum DS {
         static let heartRate = SwiftUI.Color("MetricHeartRate")
         static let sleep     = SwiftUI.Color("MetricSleep")
         static let activity  = SwiftUI.Color("MetricActivity")
+        /// Readable label on the light activity fill in both appearances.
+        static let onActivity = SwiftUI.Color(red: 0.07, green: 0.08, blue: 0.09)
         static let steps     = SwiftUI.Color("MetricSteps")
         static let body      = SwiftUI.Color("MetricBody")
         static let posture   = SwiftUI.Color("MetricPosture")
@@ -35,6 +37,8 @@ enum DS {
         static let positive = SwiftUI.Color("Positive")
         static let negative = SwiftUI.Color("Negative")
         static let caution  = SwiftUI.Color("Caution")
+        /// Readable label on the bright semantic fills used by prominent actions.
+        static let onBrightAction = onActivity
 
         // Text
         static let textSecondary = SwiftUI.Color("TextSecondary")

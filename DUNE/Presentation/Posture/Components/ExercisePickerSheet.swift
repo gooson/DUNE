@@ -38,6 +38,8 @@ struct ExercisePickerSheet: View {
                     }
                 }
             }
+            .scrollContentBackground(.hidden)
+            .background { SheetWaveBackground().opacity(0.45) }
             .navigationTitle("Exercise Mode")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

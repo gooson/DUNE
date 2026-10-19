@@ -173,8 +173,7 @@ private struct HeatShimmerView: View {
 /// Includes heat shimmer texture overlay on near layer.
 struct DesertTabWaveBackground: View {
     @Environment(\.wavePreset) private var preset
-    @Environment(\.waveColor) private var color
-    @Environment(\.appTheme) private var theme
+    @Environment(\.colorScheme) private var colorScheme
     @Environment(\.weatherAtmosphere) private var atmosphere
 
     private var isWeatherActive: Bool {
@@ -191,73 +190,70 @@ struct DesertTabWaveBackground: View {
         }
     }
 
-    private var resolvedColor: Color {
-        isWeatherActive ? atmosphere.waveColor : color
+    private var isDark: Bool { colorScheme == .dark }
+    private var baseColor: Color {
+        isDark ? Color(red: 0.110, green: 0.102, blue: 0.098)
+            : Color(red: 0.988, green: 0.969, blue: 0.925)
     }
 
     var body: some View {
         let scale = intensityScale
 
         ZStack(alignment: .top) {
+            baseColor
+
             LinearGradient(
                 colors: desertGradientColors,
                 startPoint: .top,
-                endPoint: DS.Gradient.tabBackgroundEnd
+                endPoint: .bottom
             )
+            .frame(height: 215)
 
-            // Layer 1: Far — broad, smooth horizon dunes
+            // Match the source SVG's 100-unit dune profile: far 45±8,
+            // middle 62±10, near 76±13. The fills have no glowing crest.
             DesertDuneOverlayView(
-                color: theme.sandColor,
-                opacity: 0.20 * scale,
-                amplitude: 0.06 * scale,
+                color: isDark ? Color(red: 0.467, green: 0.392, blue: 0.365)
+                    : Color(red: 0.871, green: 0.776, blue: 0.647),
+                opacity: 0.48 * scale,
+                amplitude: 0.08 * scale,
                 frequency: 0.72,
-                verticalOffset: 0.34,
-                bottomFade: 0.5,
+                verticalOffset: 0.45,
+                bottomFade: 0,
                 skewness: 0.2,
                 skewOffset: .pi / 6,
-                driftDuration: 18,
-                crestColor: theme.sandColor,
-                crestOpacity: 0.34 * Double(scale),
-                crestWidth: 1.2
+                driftDuration: 18
             )
-            .frame(height: 200)
+            .frame(height: 185)
 
-            // Layer 2: Mid — a separate sunlit ridge visible in the still scene.
             DesertDuneOverlayView(
-                color: resolvedColor,
-                opacity: 0.22 * scale,
-                amplitude: 0.065 * scale,
-                frequency: 1.05,
-                verticalOffset: 0.48,
-                bottomFade: 0.45,
-                skewness: 0.18,
-                skewOffset: .pi / 3,
-                driftDuration: 16,
-                crestColor: theme.sandColor,
-                crestOpacity: 0.40 * Double(scale),
-                crestWidth: 1.5
-            )
-            .frame(height: 200)
-
-            // Layer 3: Near — smooth foreground dune slope.
-            DesertDuneOverlayView(
-                color: resolvedColor,
-                opacity: 0.27 * scale,
-                amplitude: 0.082 * scale,
-                frequency: 1.35,
+                color: isWeatherActive ? atmosphere.waveColor : (isDark
+                    ? Color(red: 0.584, green: 0.427, blue: 0.322)
+                    : Color(red: 0.875, green: 0.682, blue: 0.471)),
+                opacity: 0.48 * scale,
+                amplitude: 0.10 * scale,
+                frequency: 1.0,
                 verticalOffset: 0.62,
-                bottomFade: 0.4,
-                skewness: 0.14,
-                skewOffset: .pi / 4,
-                ripple: 0,
-                rippleFrequency: 5.2,
-                driftDuration: 13,
-                showShimmer: true,
-                crestColor: theme.sandColor,
-                crestOpacity: 0.52 * Double(scale),
-                crestWidth: 2.0
+                bottomFade: 0,
+                skewness: 0.18,
+                skewOffset: .pi / 6,
+                driftDuration: 15
             )
-            .frame(height: 200)
+            .frame(height: 185)
+
+            DesertDuneOverlayView(
+                color: isWeatherActive ? atmosphere.waveColor : (isDark
+                    ? Color(red: 0.471, green: 0.310, blue: 0.235)
+                    : Color(red: 0.796, green: 0.569, blue: 0.392)),
+                opacity: 0.48 * scale,
+                amplitude: 0.13 * scale,
+                frequency: 1.35,
+                verticalOffset: 0.76,
+                bottomFade: 0,
+                skewness: 0.14,
+                skewOffset: .pi / 6,
+                driftDuration: 13
+            )
+            .frame(height: 185)
         }
         .ignoresSafeArea()
         .animation(DS.Animation.atmosphereTransition, value: atmosphere)
@@ -268,10 +264,57 @@ struct DesertTabWaveBackground: View {
             return atmosphere.gradientColors
         }
         return [
-            color.opacity(DS.Opacity.medium),
-            DS.Color.warmGlow.opacity(DS.Opacity.subtle),
-            .clear
+            isDark ? Color(red: 0.267, green: 0.208, blue: 0.184)
+                : Color(red: 0.961, green: 0.875, blue: 0.741),
+            baseColor
         ]
+    }
+}
+
+/// Three low dune layers at the foot of Desert Horizon's compact tab cards.
+/// Uses the same geometry and opacity order as the source preview artwork.
+struct DesertPreviewWave: View {
+    @Environment(\.colorScheme) private var colorScheme
+
+    private var isDark: Bool { colorScheme == .dark }
+
+    var body: some View {
+        ZStack {
+            DesertDuneOverlayView(
+                color: isDark ? Color(red: 0.286, green: 0.239, blue: 0.200)
+                    : Color(red: 0.937, green: 0.867, blue: 0.765),
+                opacity: 0.55,
+                amplitude: 0.08,
+                frequency: 0.72,
+                verticalOffset: 0.45,
+                bottomFade: 0,
+                skewness: 0.20,
+                driftDuration: 18
+            )
+            DesertDuneOverlayView(
+                color: isDark ? Color(red: 0.573, green: 0.420, blue: 0.298)
+                    : Color(red: 0.906, green: 0.741, blue: 0.510),
+                opacity: 0.55 * 0.38,
+                amplitude: 0.10,
+                frequency: 1.0,
+                verticalOffset: 0.62,
+                bottomFade: 0,
+                skewness: 0.18,
+                driftDuration: 15
+            )
+            DesertDuneOverlayView(
+                color: isDark ? Color(red: 0.471, green: 0.310, blue: 0.235)
+                    : Color(red: 0.796, green: 0.569, blue: 0.392),
+                opacity: 0.55 * 0.24,
+                amplitude: 0.13,
+                frequency: 1.35,
+                verticalOffset: 0.76,
+                bottomFade: 0,
+                skewness: 0.14,
+                driftDuration: 13
+            )
+        }
+        .allowsHitTesting(false)
     }
 }
 
