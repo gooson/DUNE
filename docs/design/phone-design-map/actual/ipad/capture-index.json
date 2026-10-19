@@ -1,9 +1,12 @@
 {
   "device": "ipad",
-  "source_revision": "648abafb88d813825b0189833a9317389d314fef",
+  "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
   "source_worktree_dirty": true,
   "xcresults": [
-    ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.17_04-51-09-+0900.xcresult"
+    ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.17_04-51-09-+0900.xcresult",
+    "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_08-35-52-+0900.xcresult",
+    "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_08-59-44-+0900.xcresult",
+    "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_09-57-20-+0900.xcresult"
   ],
   "processed_capture_candidates": 114,
   "captured": {
@@ -1037,42 +1040,42 @@
     },
     "T03": {
       "row_id": "T03",
-      "evidence": "title:Today",
-      "test": "TodayDesignMapCaptureTests/testTodayRootRenders()",
-      "action": "root after setup -[TodayDesignMapCaptureTests testTodayRootRenders]",
-      "timestamp": 1792180387.711,
-      "image": "645B6650-E637-4EFF-8D99-1630A6FBD0CB.png",
-      "screen": "screen-0-2064x2752-root after setup -[TodayDesignMapCaptureTests testTodayRootRenders]_0_BD90A2C4-5518-4A87-BA12-F43F813BFC7A.png",
+      "evidence": "DUNE light theme root",
+      "test": "ThemeMatrixUITests/testDesertWarmMatrix()",
+      "action": "Desert Light Today_0_769E6414-4F7B-4B77-8AA4-A8E26363BC25.png",
+      "timestamp": 1792371633.508,
+      "image": "Desert Light Today_0_769E6414-4F7B-4B77-8AA4-A8E26363BC25.png",
+      "screen": "Desert Light Today_0_769E6414-4F7B-4B77-8AA4-A8E26363BC25.png",
       "file": "T03.png"
     },
     "A01": {
       "row_id": "A01",
-      "evidence": "title:Activity",
-      "test": "ActivityExerciseRegressionTests/testExerciseTypeDetailShowsTrendSurface()",
-      "action": "root after setup -[ActivityExerciseRegressionTests testExerciseTypeDetailShowsTrendSurface]",
-      "timestamp": 1792180338.127,
-      "image": "CD080DBB-B786-4422-B72E-33B014ADA57A.png",
-      "screen": "screen-0-2064x2752-root after setup -[ActivityExerciseRegressionTests testExerciseTypeDetailShowsTrendSurface]_0_32FBF69F-A14B-4408-A0D3-C604290E22C0.png",
+      "evidence": "DUNE light theme root",
+      "test": "ThemeMatrixUITests/testDesertWarmMatrix()",
+      "action": "Desert Light Activity_0_EC7A260D-2E0B-4DB6-B285-96FB9910E66A.png",
+      "timestamp": 1792371641.201,
+      "image": "Desert Light Activity_0_EC7A260D-2E0B-4DB6-B285-96FB9910E66A.png",
+      "screen": "Desert Light Activity_0_EC7A260D-2E0B-4DB6-B285-96FB9910E66A.png",
       "file": "A01.png"
     },
     "H01": {
       "row_id": "H01",
-      "evidence": "title:Wellness",
-      "test": "WellnessDesignMapCaptureTests/testWellnessRootRenders()",
-      "action": "root after setup -[WellnessDesignMapCaptureTests testWellnessRootRenders]",
-      "timestamp": 1792180399.927,
-      "image": "B2CD35EE-3AA9-4A72-91F0-BACA00BCE13D.png",
-      "screen": "screen-0-2064x2752-root after setup -[WellnessDesignMapCaptureTests testWellnessRootRenders]_0_6C820BD4-95E1-4EB6-A0A1-B56B4C801108.png",
+      "evidence": "DUNE light theme root",
+      "test": "ThemeMatrixUITests/testDesertWarmMatrix()",
+      "action": "Desert Light Wellness_0_96B3E86C-7FB9-4069-A156-DCAD53BBBB56.png",
+      "timestamp": 1792371647.938,
+      "image": "Desert Light Wellness_0_96B3E86C-7FB9-4069-A156-DCAD53BBBB56.png",
+      "screen": "Desert Light Wellness_0_96B3E86C-7FB9-4069-A156-DCAD53BBBB56.png",
       "file": "H01.png"
     },
     "L01": {
       "row_id": "L01",
-      "evidence": "title:Life",
-      "test": "LifeRegressionTests/testVisualAuditHabitManagement()",
-      "action": "root after setup -[LifeRegressionTests testVisualAuditHabitManagement]",
-      "timestamp": 1792176572.6,
-      "image": "0A50E757-B645-4C94-A92D-3B856BA9BB1E.png",
-      "screen": "screen-0-2064x2752-root after setup -[LifeRegressionTests testVisualAuditHabitManagement]_0_CD97390E-9938-45A0-94BB-65AB35F853D0.png",
+      "evidence": "DUNE light theme root",
+      "test": "ThemeMatrixUITests/testDesertWarmMatrix()",
+      "action": "Desert Light Life_0_EC2B8C2D-028D-4F81-BFC2-4CD93EDCBA55.png",
+      "timestamp": 1792371654.132,
+      "image": "Desert Light Life_0_EC2B8C2D-028D-4F81-BFC2-4CD93EDCBA55.png",
+      "screen": "Desert Light Life_0_EC2B8C2D-028D-4F81-BFC2-4CD93EDCBA55.png",
       "file": "L01.png"
     }
   },

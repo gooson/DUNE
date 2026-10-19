@@ -161,17 +161,18 @@ private struct SakuraPetalDriftView: View {
     private var petals: [PetalSpec] {
         let normalizedTopBias = min(max(topBias, 0), 1)
         let normalizedFallRange = min(max(fallRange, 0.35), 1.25)
-        let yStart = (-0.18 * normalizedTopBias) - 0.08
-        let ySpan = 0.56 - 0.34 * normalizedTopBias
+        let yStart = 0.07 + 0.06 * (1 - normalizedTopBias)
+        let ySpan = 0.12
 
         return (0..<petalCount).map { idx in
             let seed = Double(idx * 139 + 17)
-            let x = 0.05 + 0.9 * abs(sin(seed * 0.171))
+            // Keep the few moving petals in the outer margin, away from copy and controls.
+            let x = idx.isMultiple(of: 2) ? 0.025 : 0.975
             let y = yStart + ySpan * abs(sin(seed * 0.137 + 0.7))
             let size = 5.0 + 8.0 * abs(sin(seed * 0.293))
-            let sway = 6.0 + 14.0 * abs(sin(seed * 0.227 + 1.2))
+            let sway = 2.0 + 2.0 * abs(sin(seed * 0.227 + 1.2))
             let start = 2 * Double.pi * abs(sin(seed * 0.043))
-            let fallDepth = (0.55 + 0.45 * abs(sin(seed * 0.119 + 0.4))) * normalizedFallRange
+            let fallDepth = (0.28 + 0.12 * abs(sin(seed * 0.119 + 0.4))) * normalizedFallRange
             let fallRate = 0.65 + 0.9 * abs(sin(seed * 0.083 + 1.0))
             let spin = 18.0 + 42.0 * abs(sin(seed * 0.057))
             return PetalSpec(
@@ -264,6 +265,60 @@ private struct SakuraPetalGlyph: Shape {
     }
 }
 
+/// Fixed blossoms make the theme identifiable before any petal animation begins.
+private struct SakuraBlossomClustersShape: Shape {
+    private static let flowers: [(CGFloat, CGFloat, CGFloat)] = [
+        (0.075, 0.22, 1.0), (0.14, 0.37, 0.78), (0.19, 0.54, 0.64),
+        (0.92, 0.18, 1.05), (0.84, 0.34, 0.82), (0.77, 0.49, 0.68)
+    ]
+
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        for (x, y, scale) in Self.flowers {
+            let center = CGPoint(x: rect.width * x, y: rect.height * y)
+            let radius = min(rect.width * 0.016, 6) * scale
+            for petal in 0..<5 {
+                let angle = CGFloat(petal) * (2 * .pi / 5)
+                let origin = CGPoint(
+                    x: center.x + cos(angle) * radius * 0.95,
+                    y: center.y + sin(angle) * radius * 0.95
+                )
+                path.addEllipse(in: CGRect(
+                    x: origin.x - radius * 0.68,
+                    y: origin.y - radius * 0.68,
+                    width: radius * 1.36,
+                    height: radius * 1.36
+                ))
+            }
+        }
+        return path
+    }
+}
+
+/// Sparse corner branches frame the scene without running through the center copy.
+private struct SakuraCornerBranchesShape: Shape {
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        path.move(to: CGPoint(x: 0, y: rect.height * 0.06))
+        path.addCurve(
+            to: CGPoint(x: rect.width * 0.20, y: rect.height * 0.58),
+            control1: CGPoint(x: rect.width * 0.13, y: rect.height * 0.10),
+            control2: CGPoint(x: rect.width * 0.12, y: rect.height * 0.46)
+        )
+        path.move(to: CGPoint(x: rect.width, y: rect.height * 0.02))
+        path.addCurve(
+            to: CGPoint(x: rect.width * 0.76, y: rect.height * 0.54),
+            control1: CGPoint(x: rect.width * 0.84, y: rect.height * 0.12),
+            control2: CGPoint(x: rect.width * 0.87, y: rect.height * 0.40)
+        )
+        path.move(to: CGPoint(x: rect.width * 0.10, y: rect.height * 0.27))
+        path.addLine(to: CGPoint(x: rect.width * 0.17, y: rect.height * 0.22))
+        path.move(to: CGPoint(x: rect.width * 0.88, y: rect.height * 0.30))
+        path.addLine(to: CGPoint(x: rect.width * 0.81, y: rect.height * 0.23))
+        return path
+    }
+}
+
 private struct SakuraFramingBranches: View {
     let theme: AppTheme
     let scale: CGFloat
@@ -272,41 +327,16 @@ private struct SakuraFramingBranches: View {
 
     var body: some View {
         ZStack {
-            SakuraBranchShape(
-                amplitude: 0.17 * scale,
-                frequency: 1.36,
-                phase: CGFloat.pi * 0.11,
-                verticalOffset: 0.31,
-                twigDensity: 0.92,
-                pattern: .flowering
-            )
-            .stroke(
-                theme.sakuraPetalColor.opacity(0.36 * opacityScale),
-                style: StrokeStyle(lineWidth: 1.8, lineCap: .round, lineJoin: .round)
-            )
-            .frame(height: 230)
-            .rotationEffect(.degrees(-24))
-            .offset(x: -126, y: -36)
-            .blur(radius: colorScheme == .dark ? 0.1 : 0.28)
+            SakuraCornerBranchesShape()
+                .stroke(
+                    theme.sakuraLeafColor.opacity((colorScheme == .dark ? 0.48 : 0.54) * opacityScale),
+                    style: StrokeStyle(lineWidth: 1.35, lineCap: .round, lineJoin: .round)
+                )
 
-            SakuraBranchShape(
-                amplitude: 0.16 * scale,
-                frequency: 1.29,
-                phase: CGFloat.pi * 0.53,
-                verticalOffset: 0.29,
-                twigDensity: 0.84,
-                pattern: .flowering
-            )
-            .stroke(
-                theme.sakuraPetalColor.opacity(0.32 * opacityScale),
-                style: StrokeStyle(lineWidth: 1.55, lineCap: .round, lineJoin: .round)
-            )
-            .frame(height: 220)
-            .scaleEffect(x: -1, y: 1)
-            .rotationEffect(.degrees(23))
-            .offset(x: 128, y: -28)
-            .blur(radius: colorScheme == .dark ? 0.1 : 0.24)
+            SakuraBlossomClustersShape()
+                .fill(theme.sakuraPetalColor.opacity((colorScheme == .dark ? 0.72 : 0.78) * opacityScale))
         }
+        .frame(height: 170 * scale)
         .allowsHitTesting(false)
     }
 }
@@ -424,21 +454,14 @@ struct SakuraTabWaveBackground: View {
             SakuraPetalDriftView(
                 intensity: Double(scale),
                 darkModeBoost: colorScheme == .dark ? 1.12 : 1.0,
-                petalCount: preset == .life ? 5 : 8,
+                petalCount: preset == .life ? 2 : 4,
                 speed: 24,
                 petalColor: theme.sakuraPetalColor,
                 topBias: 0.84,
                 fallRange: 0.68
             )
-            .frame(height: 240)
+            .frame(height: 170)
             .clipped()
-
-            SakuraFramingBranches(
-                theme: theme,
-                scale: scale,
-                opacityScale: opacityScale,
-                colorScheme: colorScheme
-            )
 
             LinearGradient(
                 colors: sakuraGradientColors,
@@ -468,6 +491,13 @@ struct SakuraTabWaveBackground: View {
                     endPoint: .bottom
                 )
             }
+
+            SakuraFramingBranches(
+                theme: theme,
+                scale: scale,
+                opacityScale: opacityScale,
+                colorScheme: colorScheme
+            )
         }
         .ignoresSafeArea()
         .animation(DS.Animation.atmosphereTransition, value: atmosphere)
@@ -575,7 +605,7 @@ struct SakuraDetailWaveBackground: View {
             SakuraPetalDriftView(
                 intensity: 0.75,
                 darkModeBoost: colorScheme == .dark ? 1.12 : 1.0,
-                petalCount: 5,
+                petalCount: 3,
                 speed: 28,
                 petalColor: theme.sakuraPetalColor,
                 topBias: 0.78,
@@ -592,6 +622,13 @@ struct SakuraDetailWaveBackground: View {
                 ],
                 startPoint: .top,
                 endPoint: DS.Gradient.tabBackgroundEnd
+            )
+
+            SakuraFramingBranches(
+                theme: theme,
+                scale: 0.72,
+                opacityScale: 0.55 * visibilityBoost,
+                colorScheme: colorScheme
             )
         }
         .ignoresSafeArea()
@@ -658,7 +695,7 @@ struct SakuraSheetWaveBackground: View {
             SakuraPetalDriftView(
                 intensity: 0.48,
                 darkModeBoost: colorScheme == .dark ? 1.08 : 1.0,
-                petalCount: 3,
+                petalCount: 2,
                 speed: 30,
                 petalColor: theme.sakuraPetalColor,
                 topBias: 0.74,
@@ -675,6 +712,13 @@ struct SakuraSheetWaveBackground: View {
                 ],
                 startPoint: .top,
                 endPoint: DS.Gradient.sheetBackgroundEnd
+            )
+
+            SakuraFramingBranches(
+                theme: theme,
+                scale: 0.60,
+                opacityScale: 0.38 * visibilityBoost,
+                colorScheme: colorScheme
             )
         }
         .ignoresSafeArea()

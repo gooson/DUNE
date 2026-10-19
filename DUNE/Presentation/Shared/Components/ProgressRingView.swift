@@ -138,6 +138,7 @@ struct ProgressRingView: View {
         static let arcticAccent06 = Color("ArcticAccent").opacity(0.6)
         // Solar Pop
         static let solarAccent06 = Color("SolarAccent").opacity(0.6)
+        static let lilyGlint = Color("LilyAccent").opacity(0.64)
 
         static func accentGradientStops(base: Color, tipColor: Color, theme: AppTheme) -> [Gradient.Stop] {
             switch theme {
@@ -185,6 +186,13 @@ struct ProgressRingView: View {
                 return [
                     .init(color: solarAccent06, location: 0),
                     .init(color: base, location: 0.82),
+                    .init(color: tipColor, location: 1)
+                ]
+            case .waterLilies:
+                return [
+                    .init(color: base.opacity(0.75), location: 0),
+                    .init(color: base, location: 0.86),
+                    .init(color: lilyGlint, location: 0.93),
                     .init(color: tipColor, location: 1)
                 ]
             }

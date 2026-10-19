@@ -2,6 +2,23 @@ import SwiftUI
 
 /// Widget-specific Design System subset. Uses shared Colors.xcassets.
 enum WidgetDS {
+    /// The main app mirrors its theme into the shared App Group for widget rendering.
+    static var themeAccent: SwiftUI.Color {
+        let rawValue = WidgetScoreData.sharedDefaults()?.string(forKey: "com.raftel.dailve.app_theme")
+        let assetName: String
+        switch rawValue {
+        case "oceanCool": assetName = "OceanAccent"
+        case "forestGreen": assetName = "ForestAccent"
+        case "sakuraCalm": assetName = "SakuraAccent"
+        case "arcticDawn", "articDawn", "artic": assetName = "ArcticAccent"
+        case "solarPop": assetName = "SolarAccent"
+        case "contourAtlas": assetName = "ContourAccent"
+        case "waterLilies": assetName = "LilyAccent"
+        default: assetName = "AccentColor"
+        }
+        return SwiftUI.Color(assetName)
+    }
+
     enum Color {
         static let scoreExcellent = SwiftUI.Color("ScoreExcellent")
         static let scoreGood      = SwiftUI.Color("ScoreGood")
@@ -11,9 +28,9 @@ enum WidgetDS {
         static let textSecondary  = SwiftUI.Color("TextSecondary")
         static let textTertiary   = SwiftUI.Color("TextTertiary")
         static let cardBackground = SwiftUI.Color("CardBackground")
-        static let ringTrack      = SwiftUI.Color.white.opacity(0.10)
+        static var ringTrack: SwiftUI.Color { WidgetDS.themeAccent.opacity(0.12) }
         static let cardStroke     = SwiftUI.Color.white.opacity(0.08)
-        static let placeholderFill = SwiftUI.Color.white.opacity(0.04)
+        static var placeholderFill: SwiftUI.Color { WidgetDS.themeAccent.opacity(0.06) }
     }
 
     enum Layout {

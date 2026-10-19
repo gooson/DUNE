@@ -14,6 +14,7 @@ struct TemplateFormView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @Environment(\.appTheme) private var theme
+    @Environment(\.colorScheme) private var colorScheme
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     let mode: TemplateFormMode
@@ -185,6 +186,7 @@ struct TemplateFormView: View {
                         .symbolRenderingMode(.monochrome)
                     Text("Generate Template")
                 }
+                .foregroundStyle(theme.prominentButtonForegroundColor(for: colorScheme))
                 .font(.subheadline.weight(.semibold))
             }
             .disabled(!canGenerateTemplate)

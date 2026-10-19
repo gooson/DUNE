@@ -14,6 +14,7 @@ struct AppThemeTests {
         #expect(AppTheme.arcticDawn.rawValue == "arcticDawn")
         #expect(AppTheme.solarPop.rawValue == "solarPop")
         #expect(AppTheme.contourAtlas.rawValue == "contourAtlas")
+        #expect(AppTheme.waterLilies.rawValue == "waterLilies")
     }
 
     @Test("Codable round-trip preserves identity")
@@ -27,7 +28,7 @@ struct AppThemeTests {
 
     @Test("CaseIterable includes all themes")
     func allCases() {
-        #expect(AppTheme.allCases.count == 7)
+        #expect(AppTheme.allCases.count == 8)
         #expect(AppTheme.allCases.contains(.desertWarm))
         #expect(AppTheme.allCases.contains(.oceanCool))
         #expect(AppTheme.allCases.contains(.forestGreen))
@@ -35,6 +36,7 @@ struct AppThemeTests {
         #expect(AppTheme.allCases.contains(.arcticDawn))
         #expect(AppTheme.allCases.contains(.solarPop))
         #expect(AppTheme.allCases.contains(.contourAtlas))
+        #expect(AppTheme.allCases.contains(.waterLilies))
     }
 
     @Test("Init from unknown rawValue returns nil")
@@ -60,11 +62,12 @@ struct AppThemeTests {
         #expect(AppTheme.arcticDawn.assetPrefix == "Arctic")
         #expect(AppTheme.solarPop.assetPrefix == "Solar")
         #expect(AppTheme.contourAtlas.assetPrefix == "Contour")
+        #expect(AppTheme.waterLilies.assetPrefix == "Lily")
     }
 
     @Test("usesGlassBorder returns true for glass-border themes")
     func glassBorderThemes() {
-        let glassThemes: [AppTheme] = [.sakuraCalm, .arcticDawn, .solarPop]
+        let glassThemes: [AppTheme] = [.sakuraCalm, .arcticDawn, .solarPop, .waterLilies]
         let plainThemes: [AppTheme] = [.desertWarm, .oceanCool, .forestGreen, .contourAtlas]
 
         for theme in glassThemes {
@@ -79,6 +82,28 @@ struct AppThemeTests {
     func contourPersistence() {
         #expect(AppTheme.resolvedTheme(fromPersistedRawValue: " contourAtlas ") == .contourAtlas)
         #expect(AppTheme.normalizedRawValue(fromPersistedRawValue: "contourAtlas") == "contourAtlas")
+    }
+
+    @Test("Water Lilies selection survives persisted-value normalization")
+    func waterLiliesPersistence() {
+        #expect(AppTheme.resolvedTheme(fromPersistedRawValue: " waterLilies ") == .waterLilies)
+        #expect(AppTheme.normalizedRawValue(fromPersistedRawValue: "waterLilies") == "waterLilies")
+    }
+
+    @Test("Water Lilies resolves required themed assets")
+    @MainActor
+    func waterLiliesAssets() throws {
+        let suffixes = [
+            "Accent", "Bronze", "Dusk", "Sand", "CardBackground",
+            "TabTrain", "TabWellness", "TabLife",
+            "ScoreExcellent", "ScoreGood", "ScoreFair", "ScoreTired", "ScoreWarning",
+            "MetricHRV", "MetricRHR", "MetricHeartRate", "MetricSleep", "MetricActivity", "MetricSteps", "MetricBody",
+            "WeatherRain", "WeatherSnow", "WeatherCloudy", "WeatherNight"
+        ]
+        for suffix in suffixes {
+            let name = AppTheme.waterLilies.themedAssetName(defaultAsset: "unused", variantSuffix: suffix)
+            #expect(UIColor(named: name) != nil, "Missing asset: \(name)")
+        }
     }
 
     @Test("Contour resolves every required color asset in both appearances")

@@ -481,6 +481,7 @@ struct ExerciseView: View {
                 }
                 .font(.caption.weight(.semibold))
                 .buttonStyle(.borderedProminent)
+                .foregroundStyle(DS.Color.onActivity)
                 .tint(DS.Color.activity)
                 .accessibilityIdentifier("exercise-resume-draft")
 

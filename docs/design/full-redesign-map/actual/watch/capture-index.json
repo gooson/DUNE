@@ -1,0 +1,419 @@
+{
+  "schema_version": 1,
+  "device": {
+    "kind": "watch",
+    "platform": "watchOS Simulator",
+    "model_name": "Apple Watch",
+    "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
+  },
+  "captures": {
+    "arctic/home": {
+      "theme": "arctic",
+      "scene": "home",
+      "file": "arctic/home.png",
+      "attachment_name": "Arctic Watch Home_0_1FCF5BC0-E0C3-4E60-B498-A5D97DC89202.png",
+      "test_identifier": "WatchThemeMatrixUITests/testArcticHomeAndExerciseList()",
+      "timestamp": 1792376250.477,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.10.19_11-17-04-+0900.xcresult",
+      "device": {
+        "kind": "watch",
+        "platform": "watchOS Simulator",
+        "model_name": "Apple Watch",
+        "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "arctic/all-exercises": {
+      "theme": "arctic",
+      "scene": "all-exercises",
+      "file": "arctic/all-exercises.png",
+      "attachment_name": "Arctic Watch All Exercises_0_5D8CBE15-4B5D-4ADE-A2B3-CBBEBA4F1954.png",
+      "test_identifier": "WatchThemeMatrixUITests/testArcticHomeAndExerciseList()",
+      "timestamp": 1792376266.523,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.10.19_11-17-04-+0900.xcresult",
+      "device": {
+        "kind": "watch",
+        "platform": "watchOS Simulator",
+        "model_name": "Apple Watch",
+        "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "arctic/workout": {
+      "theme": "arctic",
+      "scene": "workout",
+      "file": "arctic/workout.png",
+      "attachment_name": "Arctic Watch Workout_0_99D27980-2ACF-43CE-9CE1-EABA41BD8C0C.png",
+      "test_identifier": "WatchThemeMatrixUITests/testArcticWorkoutTheme()",
+      "timestamp": 1792376302.557,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.10.19_11-17-04-+0900.xcresult",
+      "device": {
+        "kind": "watch",
+        "platform": "watchOS Simulator",
+        "model_name": "Apple Watch",
+        "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "contour/home": {
+      "theme": "contour",
+      "scene": "home",
+      "file": "contour/home.png",
+      "attachment_name": "Contour Watch Home_0_D3E9B3D6-6A28-4282-BBB4-AD3573146705.png",
+      "test_identifier": "WatchThemeMatrixUITests/testContourHomeAndExerciseList()",
+      "timestamp": 1792376315.436,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.10.19_11-17-04-+0900.xcresult",
+      "device": {
+        "kind": "watch",
+        "platform": "watchOS Simulator",
+        "model_name": "Apple Watch",
+        "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "contour/all-exercises": {
+      "theme": "contour",
+      "scene": "all-exercises",
+      "file": "contour/all-exercises.png",
+      "attachment_name": "Contour Watch All Exercises_0_D57B9311-6D1B-49D4-9356-74AED83846F1.png",
+      "test_identifier": "WatchThemeMatrixUITests/testContourHomeAndExerciseList()",
+      "timestamp": 1792376331.499,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.10.19_11-17-04-+0900.xcresult",
+      "device": {
+        "kind": "watch",
+        "platform": "watchOS Simulator",
+        "model_name": "Apple Watch",
+        "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "contour/workout": {
+      "theme": "contour",
+      "scene": "workout",
+      "file": "contour/workout.png",
+      "attachment_name": "Contour Watch Workout_0_0307AA91-6F2B-4998-A9C2-0BE0B3DA52E7.png",
+      "test_identifier": "WatchThemeMatrixUITests/testContourWorkoutTheme()",
+      "timestamp": 1792376369.414,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.10.19_11-17-04-+0900.xcresult",
+      "device": {
+        "kind": "watch",
+        "platform": "watchOS Simulator",
+        "model_name": "Apple Watch",
+        "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "dune/home": {
+      "theme": "dune",
+      "scene": "home",
+      "file": "dune/home.png",
+      "attachment_name": "Desert Watch Home_0_ED647CBD-ACF4-440D-AA50-1B0BD6DEC28E.png",
+      "test_identifier": "WatchThemeMatrixUITests/testDesertHomeAndExerciseList()",
+      "timestamp": 1792376382.731,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.10.19_11-17-04-+0900.xcresult",
+      "device": {
+        "kind": "watch",
+        "platform": "watchOS Simulator",
+        "model_name": "Apple Watch",
+        "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "dune/all-exercises": {
+      "theme": "dune",
+      "scene": "all-exercises",
+      "file": "dune/all-exercises.png",
+      "attachment_name": "Desert Watch All Exercises_0_EA8F8E62-8505-4C16-88A4-3A33028437D6.png",
+      "test_identifier": "WatchThemeMatrixUITests/testDesertHomeAndExerciseList()",
+      "timestamp": 1792376399.202,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.10.19_11-17-04-+0900.xcresult",
+      "device": {
+        "kind": "watch",
+        "platform": "watchOS Simulator",
+        "model_name": "Apple Watch",
+        "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "dune/workout": {
+      "theme": "dune",
+      "scene": "workout",
+      "file": "dune/workout.png",
+      "attachment_name": "Desert Watch Workout_0_A99208F0-74F7-4C6C-B59C-77D54EC4A81E.png",
+      "test_identifier": "WatchThemeMatrixUITests/testDesertWorkoutTheme()",
+      "timestamp": 1792376438.782,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.10.19_11-17-04-+0900.xcresult",
+      "device": {
+        "kind": "watch",
+        "platform": "watchOS Simulator",
+        "model_name": "Apple Watch",
+        "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "forest/home": {
+      "theme": "forest",
+      "scene": "home",
+      "file": "forest/home.png",
+      "attachment_name": "Forest Watch Home_0_42257024-654F-4C21-915A-4713ED7FF5F6.png",
+      "test_identifier": "WatchThemeMatrixUITests/testForestHomeAndExerciseList()",
+      "timestamp": 1792376451.524,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.10.19_11-17-04-+0900.xcresult",
+      "device": {
+        "kind": "watch",
+        "platform": "watchOS Simulator",
+        "model_name": "Apple Watch",
+        "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "forest/all-exercises": {
+      "theme": "forest",
+      "scene": "all-exercises",
+      "file": "forest/all-exercises.png",
+      "attachment_name": "Forest Watch All Exercises_0_62CD62C1-3115-45E4-9DE6-E5A3E827E23D.png",
+      "test_identifier": "WatchThemeMatrixUITests/testForestHomeAndExerciseList()",
+      "timestamp": 1792376467.802,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.10.19_11-17-04-+0900.xcresult",
+      "device": {
+        "kind": "watch",
+        "platform": "watchOS Simulator",
+        "model_name": "Apple Watch",
+        "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "forest/workout": {
+      "theme": "forest",
+      "scene": "workout",
+      "file": "forest/workout.png",
+      "attachment_name": "Forest Watch Workout_0_1D483593-9F64-4943-BEF3-57A3744E8B29.png",
+      "test_identifier": "WatchThemeMatrixUITests/testForestWorkoutTheme()",
+      "timestamp": 1792376503.614,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.10.19_11-17-04-+0900.xcresult",
+      "device": {
+        "kind": "watch",
+        "platform": "watchOS Simulator",
+        "model_name": "Apple Watch",
+        "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "ocean/home": {
+      "theme": "ocean",
+      "scene": "home",
+      "file": "ocean/home.png",
+      "attachment_name": "Ocean Watch Home_0_661DC0DB-09A2-4152-A814-2F15F50A1BE2.png",
+      "test_identifier": "WatchThemeMatrixUITests/testOceanHomeAndExerciseList()",
+      "timestamp": 1792376516.528,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.10.19_11-17-04-+0900.xcresult",
+      "device": {
+        "kind": "watch",
+        "platform": "watchOS Simulator",
+        "model_name": "Apple Watch",
+        "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "ocean/all-exercises": {
+      "theme": "ocean",
+      "scene": "all-exercises",
+      "file": "ocean/all-exercises.png",
+      "attachment_name": "Ocean Watch All Exercises_0_1C1921E0-02F5-4229-98EB-A93949AAB6F6.png",
+      "test_identifier": "WatchThemeMatrixUITests/testOceanHomeAndExerciseList()",
+      "timestamp": 1792376532.705,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.10.19_11-17-04-+0900.xcresult",
+      "device": {
+        "kind": "watch",
+        "platform": "watchOS Simulator",
+        "model_name": "Apple Watch",
+        "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "ocean/workout": {
+      "theme": "ocean",
+      "scene": "workout",
+      "file": "ocean/workout.png",
+      "attachment_name": "Ocean Watch Workout_0_E07E9A26-782E-43E6-8D96-00EF3F60C9A1.png",
+      "test_identifier": "WatchThemeMatrixUITests/testOceanWorkoutTheme()",
+      "timestamp": 1792376569.414,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.10.19_11-17-04-+0900.xcresult",
+      "device": {
+        "kind": "watch",
+        "platform": "watchOS Simulator",
+        "model_name": "Apple Watch",
+        "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "sakura/home": {
+      "theme": "sakura",
+      "scene": "home",
+      "file": "sakura/home.png",
+      "attachment_name": "Sakura Watch Home_0_DC6E326B-5303-4DC2-A2BC-5F3A3AD25D90.png",
+      "test_identifier": "WatchThemeMatrixUITests/testSakuraHomeAndExerciseList()",
+      "timestamp": 1792376582.846,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.10.19_11-17-04-+0900.xcresult",
+      "device": {
+        "kind": "watch",
+        "platform": "watchOS Simulator",
+        "model_name": "Apple Watch",
+        "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "sakura/all-exercises": {
+      "theme": "sakura",
+      "scene": "all-exercises",
+      "file": "sakura/all-exercises.png",
+      "attachment_name": "Sakura Watch All Exercises_0_C10CE104-2AFD-4E62-A46D-0148A1CA3DD5.png",
+      "test_identifier": "WatchThemeMatrixUITests/testSakuraHomeAndExerciseList()",
+      "timestamp": 1792376599.74,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.10.19_11-17-04-+0900.xcresult",
+      "device": {
+        "kind": "watch",
+        "platform": "watchOS Simulator",
+        "model_name": "Apple Watch",
+        "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "sakura/workout": {
+      "theme": "sakura",
+      "scene": "workout",
+      "file": "sakura/workout.png",
+      "attachment_name": "Sakura Watch Workout_0_AC032548-59E4-4103-9D45-C983B14813FA.png",
+      "test_identifier": "WatchThemeMatrixUITests/testSakuraWorkoutTheme()",
+      "timestamp": 1792376636.763,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.10.19_11-17-04-+0900.xcresult",
+      "device": {
+        "kind": "watch",
+        "platform": "watchOS Simulator",
+        "model_name": "Apple Watch",
+        "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "solar/home": {
+      "theme": "solar",
+      "scene": "home",
+      "file": "solar/home.png",
+      "attachment_name": "Solar Watch Home_0_23CD8FAE-5AD6-42C0-93DD-A2541895D060.png",
+      "test_identifier": "WatchThemeMatrixUITests/testSolarHomeAndExerciseList()",
+      "timestamp": 1792376651.331,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.10.19_11-17-04-+0900.xcresult",
+      "device": {
+        "kind": "watch",
+        "platform": "watchOS Simulator",
+        "model_name": "Apple Watch",
+        "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "solar/all-exercises": {
+      "theme": "solar",
+      "scene": "all-exercises",
+      "file": "solar/all-exercises.png",
+      "attachment_name": "Solar Watch All Exercises_0_5759A505-0371-46BF-A28B-BBD8AC35AF52.png",
+      "test_identifier": "WatchThemeMatrixUITests/testSolarHomeAndExerciseList()",
+      "timestamp": 1792376667.13,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.10.19_11-17-04-+0900.xcresult",
+      "device": {
+        "kind": "watch",
+        "platform": "watchOS Simulator",
+        "model_name": "Apple Watch",
+        "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "solar/workout": {
+      "theme": "solar",
+      "scene": "workout",
+      "file": "solar/workout.png",
+      "attachment_name": "Solar Watch Workout_0_0401E17E-5EF6-4E69-8460-1099E7141768.png",
+      "test_identifier": "WatchThemeMatrixUITests/testSolarWorkoutTheme()",
+      "timestamp": 1792376704.409,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.10.19_11-17-04-+0900.xcresult",
+      "device": {
+        "kind": "watch",
+        "platform": "watchOS Simulator",
+        "model_name": "Apple Watch",
+        "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "water-lilies/home": {
+      "theme": "water-lilies",
+      "scene": "home",
+      "file": "water-lilies/home.png",
+      "attachment_name": "Water Lilies Watch Home_0_07FF4852-3A57-4B97-B98C-C0B6B2230B53.png",
+      "test_identifier": "WatchThemeMatrixUITests/testWaterLiliesHomeAndExerciseList()",
+      "timestamp": 1792376718.246,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.10.19_11-17-04-+0900.xcresult",
+      "device": {
+        "kind": "watch",
+        "platform": "watchOS Simulator",
+        "model_name": "Apple Watch",
+        "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "water-lilies/all-exercises": {
+      "theme": "water-lilies",
+      "scene": "all-exercises",
+      "file": "water-lilies/all-exercises.png",
+      "attachment_name": "Water Lilies Watch All Exercises_0_F8C6492E-0F86-4ABB-BBBF-605B9DFF8773.png",
+      "test_identifier": "WatchThemeMatrixUITests/testWaterLiliesHomeAndExerciseList()",
+      "timestamp": 1792376733.992,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.10.19_11-17-04-+0900.xcresult",
+      "device": {
+        "kind": "watch",
+        "platform": "watchOS Simulator",
+        "model_name": "Apple Watch",
+        "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    },
+    "water-lilies/workout": {
+      "theme": "water-lilies",
+      "scene": "workout",
+      "file": "water-lilies/workout.png",
+      "attachment_name": "Water Lilies Watch Workout_0_577AEA9F-789F-47AC-8360-FB7B337B08D1.png",
+      "test_identifier": "WatchThemeMatrixUITests/testWaterLiliesWorkoutTheme()",
+      "timestamp": 1792376770.7,
+      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.10.19_11-17-04-+0900.xcresult",
+      "device": {
+        "kind": "watch",
+        "platform": "watchOS Simulator",
+        "model_name": "Apple Watch",
+        "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
+      },
+      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+      "source_worktree_dirty": true
+    }
+  }
+}

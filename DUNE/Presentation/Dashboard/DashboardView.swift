@@ -26,6 +26,7 @@ struct DashboardView: View {
         }()
     ) private var exerciseRecords: [ExerciseRecord]
     @Environment(\.horizontalSizeClass) private var sizeClass
+    @Environment(\.appTheme) private var theme
     @Environment(\.openURL) private var openURL
     private let library: ExerciseLibraryQuerying = ExerciseLibraryService.shared
     private let inboxManager = NotificationInboxManager.shared
@@ -305,38 +306,19 @@ struct DashboardView: View {
         // Hero
         if let score = viewModel.conditionScore {
             VStack(spacing: DS.Spacing.md) {
-                NavigationLink(value: score) {
-                    ConditionHeroView(
-                        score: score,
-                        recentScores: viewModel.recentScores,
-                        trendBadges: viewModel.heroBaselineDetails,
-                        hourlySparkline: viewModel.conditionSparkline.nonEmptyOrNil,
-                        adaptiveMessage: viewModel.adaptiveHeroMessage
-                    )
-                }
-                .reportTabHeroFrame()
-                .buttonStyle(.plain)
-                .accessibilityIdentifier("dashboard-hero-condition")
-                Button {
+                DesertHorizonConditionHeroView(
+                    score: score,
+                    trendBadges: viewModel.heroBaselineDetails,
+                    hourlySparkline: viewModel.conditionSparkline.nonEmptyOrNil,
+                    adaptiveMessage: viewModel.adaptiveHeroMessage
+                ) {
                     if score.status == .tired || score.status == .warning {
                         onOpenWellness()
                     } else {
                         onOpenActivity()
                     }
-                } label: {
-                    Group {
-                        if score.status == .tired || score.status == .warning {
-                            Label("View Wellness", systemImage: "arrow.right")
-                        } else {
-                            Label("View Activity", systemImage: "arrow.right")
-                        }
-                    }
-                    .font(.subheadline.weight(.semibold))
-                    .frame(maxWidth: .infinity, minHeight: 44)
                 }
-                .buttonStyle(.borderedProminent)
-                .buttonBorderShape(.capsule)
-                .accessibilityIdentifier("dashboard-primary-activity")
+                .reportTabHeroFrame()
                 if viewModel.hasLimitedConditionHistory {
                     LimitedHealthHistoryNotice()
                 }
@@ -353,6 +335,39 @@ struct DashboardView: View {
             }
             .transition(Self.sectionTransition)
             .staggeredAppear(index: 0)
+        }
+
+        // The direction previews place the weekly trend after the primary hero.
+        // Keep it tied to real scores only.
+        if let score = viewModel.conditionScore,
+           viewModel.recentScores.count >= 2 {
+            NavigationLink(value: score) {
+                VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                    HStack {
+                        Text("Condition Trend")
+                            .font(.headline)
+                        Spacer()
+                        Text("View Details")
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(theme.accentColor)
+                        Image(systemName: "arrow.right")
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(theme.accentColor)
+                    }
+                    TrendChartView(
+                        scores: viewModel.recentScores,
+                        lineColor: theme == .desertWarm
+                            ? Color(red: 0.898, green: 0.678, blue: 0.514)
+                            : theme.accentColor
+                    )
+                        .frame(height: 126)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(DS.Spacing.lg)
+                .background(theme.cardBackground, in: RoundedRectangle(cornerRadius: 17))
+            }
+            .buttonStyle(.plain)
+            .accessibilityIdentifier("dashboard-weekly-condition-trend")
         }
 
         // Yesterday Recap (morning only)

@@ -5,6 +5,8 @@ struct BodyCompositionFormSheet: View {
     let isEdit: Bool
     let onSave: @MainActor () async -> Bool
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.appTheme) private var theme
+    @Environment(\.colorScheme) private var colorScheme
     @State private var saveCount = 0
     @FocusState private var focusedField: InputField?
 
@@ -91,13 +93,16 @@ struct BodyCompositionFormSheet: View {
                     Button("Cancel") { dismiss() }
                         .accessibilityIdentifier("body-form-cancel")
                     Spacer()
-                    Button("Save") {
+                    Button {
                         focusedField = nil
                         Task {
                             if await onSave() {
                                 saveCount += 1
                             }
                         }
+                    } label: {
+                        Text("Save")
+                            .foregroundStyle(theme.prominentButtonForegroundColor(for: colorScheme))
                     }
                     .buttonStyle(.borderedProminent)
                     .disabled(viewModel.isSaving || (viewModel.newWeight.isEmpty && viewModel.newBodyFat.isEmpty && viewModel.newMuscleMass.isEmpty))

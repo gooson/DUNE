@@ -251,6 +251,7 @@ struct CardioSessionView: View {
                 .frame(width: 52, height: 52)
         }
         .buttonStyle(.borderedProminent)
+        .foregroundStyle(DS.Color.onActivity)
         .tint(DS.Color.activity)
     }
 
@@ -329,6 +330,7 @@ struct CardioSessionView: View {
             }
             .buttonStyle(.borderedProminent)
             .tint(DS.Color.caution)
+            .foregroundStyle(DS.Color.onBrightAction)
             .disabled(viewModel.state == .idle || viewModel.state == .finished)
 
             // End
@@ -344,6 +346,7 @@ struct CardioSessionView: View {
             }
             .buttonStyle(.borderedProminent)
             .tint(DS.Color.negative)
+            .foregroundStyle(DS.Color.onBrightAction)
             .disabled(viewModel.state == .idle || viewModel.state == .finished)
             .accessibilityIdentifier("cardio-session-end")
         }

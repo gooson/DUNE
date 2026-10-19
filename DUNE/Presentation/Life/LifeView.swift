@@ -62,6 +62,11 @@ struct LifeView: View {
                         viewModel: viewModel,
                         refreshSignal: refreshSignal + localRefreshSignal,
                         onOpenTemplates: { isShowingTemplateSheet = true },
+                        onOpenChecklist: {
+                            withAnimation(DS.Animation.standard) {
+                                proxy.scrollTo(LifeScrollAnchor.checklist, anchor: .top)
+                            }
+                        },
                         historySelection: $historySelection
                     )
                 }
@@ -171,9 +176,9 @@ struct LifeView: View {
             }
         }
         .englishNavigationTitle("Life")
-        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarTitleDisplayMode(theme == .desertWarm ? .large : .inline)
         .toolbarBackground(.regularMaterial, for: .navigationBar)
-        .toolbarBackground(.visible, for: .navigationBar)
+        .toolbarBackground(theme == .desertWarm ? .hidden : .visible, for: .navigationBar)
     }
 }
 
@@ -205,13 +210,13 @@ private struct HabitListQueryView: View {
     @Bindable var viewModel: LifeViewModel
     let refreshSignal: Int
     let onOpenTemplates: () -> Void
+    let onOpenChecklist: () -> Void
 
     @Environment(\.modelContext) private var modelContext
     @Environment(\.appTheme) private var theme
     @Environment(\.horizontalSizeClass) private var sizeClass
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-    @ScaledMetric(relativeTo: .caption) private var compactCompletionRingSize: CGFloat = 64
-    @ScaledMetric(relativeTo: .caption) private var regularCompletionRingSize: CGFloat = 80
+    @Environment(\.colorScheme) private var colorScheme
 
     // Correction #68: O(1) lookup instead of O(N) per row
     @State private var habitsByID: [UUID: HabitDefinition] = [:]
@@ -943,9 +948,12 @@ private struct HabitListQueryView: View {
 
     @ViewBuilder
     private var starterActions: some View {
-        Button("Add Habit") {
+        Button {
             viewModel.resetForm()
             viewModel.isShowingAddSheet = true
+        } label: {
+            Text("Add Habit")
+                .foregroundStyle(theme.prominentButtonForegroundColor(for: colorScheme))
         }
         .buttonStyle(.borderedProminent)
         .tint(theme.accentColor)
@@ -957,46 +965,8 @@ private struct HabitListQueryView: View {
     }
 
     private var heroSection: some View {
-        HeroCard(tintColor: DS.Color.tabLife) {
-            let layout = dynamicTypeSize.isAccessibilitySize
-                ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.md))
-                : AnyLayout(HStackLayout(spacing: isRegular ? DS.Spacing.xxl : DS.Spacing.xl))
-            layout {
-                completionRing
-
-                VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-                    HStack(spacing: DS.Spacing.xs) {
-                        Text("Today's Habits")
-                            .font(isRegular ? .title3 : .headline)
-                            .fontWeight(.semibold)
-
-                        Image(systemName: completionStatusIcon)
-                            .font(.subheadline)
-                            .foregroundStyle(completionStatusColor)
-                    }
-
-                    Text(viewModel.heroNarrative)
-                        .font(.subheadline)
-                        .foregroundStyle(DS.Color.textSecondary)
-                        .fixedSize(horizontal: false, vertical: true)
-
-                    HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xs) {
-                        Text("\(viewModel.completedCount)")
-                            .font(DS.Typography.cardScore)
-                            .foregroundStyle(theme.heroTextGradient)
-                            .contentTransition(.numericText())
-                        Text("/ \(viewModel.totalActiveCount)")
-                            .font(.title3)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-
-                if !dynamicTypeSize.isAccessibilitySize {
-                    Spacer(minLength: 0)
-                }
-            }
-        }
-        .accessibilityElement(children: .combine)
+        themeHeroSection
+        .accessibilityElement(children: .contain)
         .accessibilityLabel(Text("Life progress \(viewModel.completedCount) of \(viewModel.totalActiveCount)"))
         .sensoryFeedback(.impact(weight: .light), trigger: heroAppeared)
         .onAppear {
@@ -1005,39 +975,107 @@ private struct HabitListQueryView: View {
         }
     }
 
-    private var completionStatusIcon: String {
-        let total = viewModel.totalActiveCount
-        if total == 0 { return "circle.dashed" }
-        if viewModel.completedCount >= total { return "checkmark.circle.fill" }
-        if viewModel.completedCount > 0 { return "circle.lefthalf.filled" }
-        return "circle"
+    private var themeHeroSection: some View {
+        VStack(alignment: .leading, spacing: 15) {
+            HStack {
+                Text("Life")
+                    .font(.title3.weight(.bold))
+                    .foregroundStyle(theme == .desertWarm ? (colorScheme == .dark ? Color.white : Color.primary) : theme.directionPreviewTextColor)
+                Spacer()
+                Text("Today's Habits")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(theme == .desertWarm
+                        ? (colorScheme == .dark ? Color(red: 0.702, green: 0.753, blue: 0.718) : Color(red: 0.337, green: 0.376, blue: 0.357))
+                        : theme.directionPreviewTextColor.opacity(0.74))
+            }
+
+            ViewThatFits(in: .horizontal) {
+                HStack(alignment: .center, spacing: 17) {
+                    desertHabitCount
+                    desertHabitList
+                }
+                VStack(alignment: .leading, spacing: 12) {
+                    desertHabitCount
+                    desertHabitList
+                }
+            }
+
+            Button(action: onOpenChecklist) {
+                HStack(spacing: 6) {
+                    Text("Today's Habits")
+                    Image(systemName: "arrow.right")
+                }
+                .frame(minHeight: 44, alignment: .leading)
+            }
+            .buttonStyle(.plain)
+            .accessibilityIdentifier("life-hero-checklist-button")
+            .font(.subheadline.weight(.semibold))
+            .foregroundStyle(theme == .desertWarm
+                ? (colorScheme == .dark
+                    ? Color(red: 0.898, green: 0.678, blue: 0.514)
+                    : Color(red: 0.588, green: 0.349, blue: 0.220))
+                : theme.directionPreviewActionColor(for: colorScheme))
+        }
+        .padding(20)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background {
+            RoundedRectangle(cornerRadius: 23)
+                .fill(theme == .desertWarm
+                    ? LinearGradient(colors: [colorScheme == .dark ? Color(red: 0.110, green: 0.120, blue: 0.125) : Color(red: 0.988, green: 0.969, blue: 0.937)], startPoint: .top, endPoint: .bottom)
+                    : theme.directionPreviewBackground)
+                .overlay(alignment: .bottom) {
+                    if theme == .desertWarm {
+                        DesertPreviewWave()
+                            .frame(height: 74)
+                            .clipped()
+                    }
+                }
+                .clipShape(RoundedRectangle(cornerRadius: 23))
+                .overlay {
+                    RoundedRectangle(cornerRadius: 23)
+                        .strokeBorder(theme == .desertWarm
+                            ? (colorScheme == .dark
+                                ? Color(red: 0.251, green: 0.314, blue: 0.286)
+                                : Color(red: 0.871, green: 0.859, blue: 0.824))
+                            : theme.accentColor.opacity(0.25), lineWidth: 1)
+                }
+        }
     }
 
-    private var completionStatusColor: Color {
-        let total = viewModel.totalActiveCount
-        if total == 0 { return .secondary }
-        if viewModel.completedCount >= total { return DS.Color.positive }
-        if viewModel.completedCount > 0 { return DS.Color.tabLife }
-        return .secondary
+    private var desertHabitCount: some View {
+        HStack(alignment: .firstTextBaseline, spacing: 2) {
+            Text(viewModel.completedCount.formatted())
+                .foregroundStyle(theme == .desertWarm
+                    ? (colorScheme == .dark ? Color(red: 0.478, green: 0.816, blue: 0.678) : Color(red: 0.090, green: 0.431, blue: 0.408))
+                    : theme.accentColor)
+            Text("/\(viewModel.totalActiveCount)")
+                .foregroundStyle(theme == .desertWarm
+                    ? (colorScheme == .dark ? Color(red: 0.702, green: 0.753, blue: 0.718) : Color(red: 0.337, green: 0.376, blue: 0.357))
+                    : theme.directionPreviewTextColor.opacity(0.74))
+        }
+        .font(.system(size: 43, weight: .bold, design: .rounded))
+        .monospacedDigit()
     }
 
-    private var completionRing: some View {
-        let total = Swift.max(viewModel.totalActiveCount, 1)
-        let progress = Double(viewModel.completedCount) / Double(total)
-        return ProgressRingView(
-            progress: progress,
-            ringColor: DS.Color.tabLife,
-            lineWidth: isRegular ? 10 : 8,
-            size: isRegular ? regularCompletionRingSize : compactCompletionRingSize
-        )
-        .overlay {
-            Text("\(Int(progress * 100))%")
-                .font(.caption)
-                .fontWeight(.semibold)
-                .monospacedDigit()
-                .fixedSize()
-                .foregroundStyle(theme.sandColor)
-                .contentTransition(.numericText())
+    private var desertHabitList: some View {
+        VStack(alignment: .leading, spacing: 5) {
+            ForEach(viewModel.habitProgresses.prefix(3), id: \.id) { habit in
+                HStack(spacing: 5) {
+                    Image(systemName: habit.isCompleted ? "checkmark" : "circle")
+                        .foregroundStyle(habit.isCompleted
+                            ? (theme == .desertWarm ? Color(red: 0.090, green: 0.431, blue: 0.408) : theme.accentColor)
+                            : theme.secondaryTextColor)
+                    Text(habit.name)
+                        .lineLimit(1)
+                }
+                .font(.caption.weight(habit.isCompleted ? .semibold : .regular))
+                .foregroundStyle(theme == .desertWarm ? (colorScheme == .dark ? Color.white : Color.primary) : theme.directionPreviewTextColor)
+                .padding(.horizontal, 8)
+                .padding(.vertical, 6)
+                .background(theme == .desertWarm
+                    ? (colorScheme == .dark ? Color(red: 0.188, green: 0.196, blue: 0.190) : Color(red: 0.961, green: 0.918, blue: 0.851))
+                    : theme.accentColor.opacity(0.12), in: RoundedRectangle(cornerRadius: 7))
+            }
         }
     }
 

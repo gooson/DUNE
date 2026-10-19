@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct VisionExerciseMuscleMapView: View {
+    @AppStorage(AppTheme.storageKey) private var selectedTheme: AppTheme = .desertWarm
     let primaryMuscles: [MuscleGroup]
     let secondaryMuscles: [MuscleGroup]
 
@@ -15,7 +16,7 @@ struct VisionExerciseMuscleMapView: View {
             }
 
             HStack(spacing: 16) {
-                legendItem(title: "Primary", color: Color.accentColor.opacity(0.72))
+                legendItem(title: "Primary", color: VisionThemePalette.accentColor(for: selectedTheme).opacity(0.72))
                 legendItem(title: "Secondary", color: Color.cyan.opacity(0.38))
             }
         }
@@ -76,7 +77,7 @@ struct VisionExerciseMuscleMapView: View {
 
     private func fillColor(for muscle: MuscleGroup) -> Color {
         if primarySet.contains(muscle) {
-            return Color.accentColor.opacity(0.72)
+            return VisionThemePalette.accentColor(for: selectedTheme).opacity(0.72)
         }
         if secondarySet.contains(muscle) {
             return Color.cyan.opacity(0.38)
@@ -86,7 +87,7 @@ struct VisionExerciseMuscleMapView: View {
 
     private func strokeColor(for muscle: MuscleGroup) -> Color {
         if primarySet.contains(muscle) {
-            return Color.accentColor.opacity(0.46)
+            return VisionThemePalette.accentColor(for: selectedTheme).opacity(0.46)
         }
         if secondarySet.contains(muscle) {
             return Color.cyan.opacity(0.24)

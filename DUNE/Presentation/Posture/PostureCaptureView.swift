@@ -10,6 +10,8 @@ struct PostureCaptureView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.appTheme) private var theme
+    @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
         NavigationStack {
@@ -264,6 +266,7 @@ struct PostureCaptureView: View {
                         .font(.caption2.weight(.semibold))
                 }
                 .buttonStyle(.borderedProminent)
+                .foregroundStyle(theme.prominentButtonForegroundColor(for: colorScheme))
                 .tint(.white.opacity(0.2))
                 .accessibilityIdentifier("posture-diagnostics-preset")
 

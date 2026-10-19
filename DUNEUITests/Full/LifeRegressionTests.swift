@@ -17,6 +17,29 @@ final class LifeRegressionTests: SeededUITestBaseCase {
         try super.setUpWithError()
     }
 
+    func testDesertHeroChecklistButtonScrollsToHabits() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += ["--ui-test-theme", "desertWarm"]
+        launchApp(with: configuration)
+        ensureLifeRoot()
+
+        let checklistButton = app.buttons["life-hero-checklist-button"].firstMatch
+        XCTAssertTrue(checklistButton.waitForExistence(timeout: 8), "Desert hero checklist CTA should be a button")
+        XCTAssertTrue(checklistButton.isHittable, "Checklist CTA should be tappable in the hero")
+
+        let habitsSection = app.descendants(matching: .any)[AXID.lifeSectionHabits].firstMatch
+        XCTAssertTrue(habitsSection.waitForExistence(timeout: 5), "Habits section should exist below the hero")
+        let initialY = habitsSection.frame.minY
+        checklistButton.tap()
+
+        let reachedHabits = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
+            habitsSection.exists && habitsSection.isHittable
+                && habitsSection.frame.minY < initialY - 20
+        }, object: nil)
+        XCTAssertEqual(XCTWaiter.wait(for: [reachedHabits], timeout: 5), .completed,
+                       "Checklist CTA should scroll the Habits section into view")
+    }
+
     func testLifeRootRendersAndAddFlowCreatesNewHabit() throws {
         ensureLifeRoot()
         XCTAssertTrue(waitForElement(AXID.lifeHeroProgress, timeout: 15).exists, "Life hero should exist in seeded state")

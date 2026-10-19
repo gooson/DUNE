@@ -6,6 +6,7 @@ import WidgetKit
 /// All callers are @MainActor, so read-modify-write is serialized.
 @MainActor
 enum WidgetDataWriter {
+    static let themeDefaultsKey = "com.raftel.dailve.app_theme"
     // Debounce reloadAllTimelines to coalesce rapid writes from multiple VMs.
     private static var reloadWorkItem: DispatchWorkItem?
 
@@ -27,6 +28,13 @@ enum WidgetDataWriter {
         let item = DispatchWorkItem { WidgetCenter.shared.reloadAllTimelines() }
         reloadWorkItem = item
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: item)
+    }
+
+    static func writeTheme(_ theme: AppTheme) {
+        guard let defaults = WidgetScoreData.sharedDefaults() else { return }
+        guard defaults.string(forKey: themeDefaultsKey) != theme.rawValue else { return }
+        defaults.set(theme.rawValue, forKey: themeDefaultsKey)
+        scheduleReload()
     }
 
     private static func update(_ mutation: (inout WidgetScoreData) -> Void) {

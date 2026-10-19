@@ -10,12 +10,12 @@ struct WidgetPlaceholderView: View {
             Text("DUNE")
                 .font(.caption2)
                 .fontWeight(.semibold)
-                .foregroundStyle(WidgetDS.Color.textSecondary)
+                .foregroundStyle(WidgetDS.themeAccent)
                 .accessibilityIdentifier(WidgetSurfaceAccessibility.placeholderBrandID(for: family))
 
             Image(systemName: "heart.text.clipboard")
                 .font(iconFont)
-                .foregroundStyle(WidgetDS.Color.textTertiary)
+                .foregroundStyle(WidgetDS.themeAccent.opacity(0.72))
                 .accessibilityIdentifier(WidgetSurfaceAccessibility.placeholderIconID(for: family))
 
             Text(message)

@@ -34,6 +34,7 @@ struct MuscleDetailPopover: View {
         } else {
             inlineBody
                 .padding(DS.Spacing.xl)
+                .background { SheetWaveBackground().opacity(0.55) }
                 .presentationDetents([.medium])
                 .presentationDragIndicator(.visible)
         }

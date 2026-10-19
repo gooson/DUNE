@@ -20,6 +20,7 @@ struct ExerciseDetailSheet: View {
                 .padding(.horizontal, DS.Spacing.lg)
                 .padding(.bottom, DS.Spacing.xl)
             }
+            .background { SheetWaveBackground().opacity(0.65) }
             .accessibilityIdentifier("exercise-detail-screen")
             .englishNavigationTitle(exercise.name)
             .navigationBarTitleDisplayMode(.inline)

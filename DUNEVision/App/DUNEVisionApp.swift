@@ -207,7 +207,7 @@ struct DUNEVisionApp: App {
                 refreshCoordinator: refreshCoordinator,
                 workoutService: workoutService
             )
-            .tint(.accentColor)
+            .tint(VisionThemePalette.accentColor(for: selectedTheme))
             .modelContainer(historyModelContainer)
         }
 
@@ -217,7 +217,7 @@ struct DUNEVisionApp: App {
                 sharedHealthDataService: sharedHealthDataService,
                 workoutService: workoutService
             )
-            .tint(.accentColor)
+            .tint(VisionThemePalette.accentColor(for: selectedTheme))
         }
         .defaultSize(width: 760, height: 560)
         .defaultWindowPlacement { _, context in
@@ -230,7 +230,7 @@ struct DUNEVisionApp: App {
                 sharedHealthDataService: sharedHealthDataService,
                 workoutService: workoutService
             )
-            .tint(.accentColor)
+            .tint(VisionThemePalette.accentColor(for: selectedTheme))
         }
         .defaultSize(width: 860, height: 620)
         .defaultWindowPlacement { _, context in
@@ -243,7 +243,7 @@ struct DUNEVisionApp: App {
                 sharedHealthDataService: sharedHealthDataService,
                 workoutService: workoutService
             )
-            .tint(.accentColor)
+            .tint(VisionThemePalette.accentColor(for: selectedTheme))
         }
         .defaultSize(width: 760, height: 560)
         .defaultWindowPlacement { _, context in
@@ -256,7 +256,7 @@ struct DUNEVisionApp: App {
                 sharedHealthDataService: sharedHealthDataService,
                 workoutService: workoutService
             )
-            .tint(.accentColor)
+            .tint(VisionThemePalette.accentColor(for: selectedTheme))
         }
         .defaultSize(width: 760, height: 560)
         .defaultWindowPlacement { _, context in
@@ -267,7 +267,7 @@ struct DUNEVisionApp: App {
             NavigationStack {
                 VisionSettingsView(modelContainer: modelContainer)
             }
-            .tint(.accentColor)
+            .tint(VisionThemePalette.accentColor(for: selectedTheme))
         }
         .defaultSize(width: 520, height: 620)
         .defaultWindowPlacement { _, context in
@@ -277,7 +277,7 @@ struct DUNEVisionApp: App {
         // 3D Charts window — opened via openWindow(id:)
         WindowGroup(id: "chart3d") {
             Chart3DContainerView(sharedHealthDataService: sharedHealthDataService, workoutService: workoutService)
-                .tint(.accentColor)
+                .tint(VisionThemePalette.accentColor(for: selectedTheme))
         }
         .defaultSize(width: 800, height: 600, depth: 400)
         .defaultWindowPlacement { _, context in
@@ -286,14 +286,14 @@ struct DUNEVisionApp: App {
 
         WindowGroup(id: "spatial-volume") {
             VisionVolumetricExperienceView(sharedHealthDataService: sharedHealthDataService)
-                .tint(.accentColor)
+                .tint(VisionThemePalette.accentColor(for: selectedTheme))
         }
         .windowStyle(.volumetric)
         .defaultSize(width: 1.4, height: 0.95, depth: 0.85, in: .meters)
 
         ImmersiveSpace(id: "immersive-recovery") {
             VisionImmersiveExperienceView(sharedHealthDataService: sharedHealthDataService)
-                .tint(.accentColor)
+                .tint(VisionThemePalette.accentColor(for: selectedTheme))
         }
         .immersionStyle(selection: $immersionStyle, in: .mixed, .progressive, .full)
     }

@@ -451,6 +451,7 @@ struct TemplateWorkoutView: View {
                         .frame(maxWidth: .infinity, minHeight: 44)
                 }
                 .buttonStyle(.borderedProminent)
+                .foregroundStyle(DS.Color.onActivity)
                 .tint(DS.Color.activity)
 
                 Button {

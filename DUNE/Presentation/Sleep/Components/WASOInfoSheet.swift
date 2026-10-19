@@ -15,6 +15,7 @@ struct WASOInfoSheet: View {
             }
             .padding(DS.Spacing.xl)
         }
+        .background { SheetWaveBackground().opacity(0.55) }
         .accessibilityIdentifier("sleep-waso-info-sheet")
         .presentationDetents([.medium, .large])
         .presentationDragIndicator(.visible)

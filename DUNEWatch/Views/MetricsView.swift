@@ -288,6 +288,10 @@ struct MetricsView: View {
                 RoundedRectangle(cornerRadius: DS.Radius.md)
                     .fill(DS.Color.positive.opacity(isLuminanceReduced ? DS.Opacity.subtle : DS.Opacity.border))
             }
+            .overlay {
+                RoundedRectangle(cornerRadius: DS.Radius.md)
+                    .strokeBorder(theme.accentColor.opacity(isLuminanceReduced ? 0.35 : 0.75), lineWidth: 1.5)
+            }
             .overlay(alignment: .topTrailing) {
                 if !isDuration {
                     Image(systemName: "pencil")

@@ -16,6 +16,7 @@ struct VolumeAlgorithmSheet: View {
             }
             .padding(DS.Spacing.xl)
         }
+        .background { SheetWaveBackground().opacity(0.55) }
         .accessibilityIdentifier("activity-volume-algorithm-sheet")
         .presentationDetents([.large])
         .presentationDragIndicator(.visible)

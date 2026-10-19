@@ -31,10 +31,6 @@ struct SolarTabWaveBackground: View {
         let opacityScale = Double(scale) * visibilityBoost
 
         ZStack(alignment: .top) {
-            SolarCoronaScene(intensity: opacityScale)
-                .frame(height: 230)
-
-            // Background gradient
             LinearGradient(
                 colors: solarGradientColors,
                 startPoint: .top,
@@ -52,6 +48,9 @@ struct SolarTabWaveBackground: View {
                     endPoint: DS.Gradient.tabBackgroundEnd
                 )
             }
+
+            SolarCoronaScene(intensity: opacityScale)
+                .frame(height: 230)
         }
         .ignoresSafeArea()
         .animation(DS.Animation.atmosphereTransition, value: atmosphere)
@@ -96,9 +95,6 @@ struct SolarDetailWaveBackground: View {
 
     var body: some View {
         ZStack(alignment: .top) {
-            SolarCoronaScene(intensity: 0.65 * visibilityBoost)
-                .frame(height: 170)
-
             LinearGradient(
                 colors: [
                     (colorScheme == .dark ? theme.solarCoreColor : theme.solarEmberColor).opacity(DS.Opacity.light),
@@ -107,6 +103,9 @@ struct SolarDetailWaveBackground: View {
                 startPoint: .top,
                 endPoint: DS.Gradient.tabBackgroundEnd
             )
+
+            SolarCoronaScene(intensity: 0.65 * visibilityBoost)
+                .frame(height: 170)
         }
         .ignoresSafeArea()
     }
@@ -125,9 +124,6 @@ struct SolarSheetWaveBackground: View {
 
     var body: some View {
         ZStack(alignment: .top) {
-            SolarCoronaScene(intensity: 0.45 * visibilityBoost)
-                .frame(height: 140)
-
             LinearGradient(
                 colors: [
                     .clear,
@@ -136,6 +132,9 @@ struct SolarSheetWaveBackground: View {
                 startPoint: .top,
                 endPoint: DS.Gradient.sheetBackgroundEnd
             )
+
+            SolarCoronaScene(intensity: 0.45 * visibilityBoost)
+                .frame(height: 140)
         }
         .ignoresSafeArea()
     }
@@ -174,11 +173,17 @@ private struct SolarCoronaScene: View {
                             colors: [theme.solarGlowColor, theme.solarCoreColor, theme.solarEmberColor],
                             center: .topLeading,
                             startRadius: 0,
-                            endRadius: 60
+                            endRadius: 58
                         )
                     )
-                    .frame(width: 58, height: 58)
-                    .opacity(0.40 * intensity)
+                    .frame(width: 56, height: 56)
+                    .opacity(0.82 * intensity)
+                    .overlay(alignment: .topLeading) {
+                        Circle()
+                            .fill(theme.solarGlowColor.opacity(0.38 * intensity))
+                            .frame(width: 15, height: 15)
+                            .offset(x: 12, y: 11)
+                    }
             }
             .position(x: geometry.size.width * 0.78, y: geometry.size.height * 0.38)
         }
@@ -192,13 +197,29 @@ private struct SolarCoronaScene: View {
             Circle()
                 .fill(
                     RadialGradient(
-                        colors: [theme.solarCoreColor.opacity(0.20 * intensity), .clear],
+                        colors: [
+                            theme.solarCoreColor.opacity(0.26 * intensity),
+                            theme.solarEmberColor.opacity(0.12 * intensity),
+                            .clear
+                        ],
                         center: .center,
-                        startRadius: 30,
-                        endRadius: 100
+                        startRadius: 33,
+                        endRadius: 105
                     )
                 )
-                .frame(width: 200, height: 200)
+                .frame(width: 210, height: 210)
+
+            Circle()
+                .stroke(theme.solarGlowColor.opacity(0.38 * intensity), lineWidth: 1.5)
+                .frame(width: 90, height: 90)
+
+            ForEach(0..<12, id: \.self) { ray in
+                Capsule()
+                    .fill(theme.solarGlowColor.opacity(0.32 * intensity))
+                    .frame(width: 2, height: 12)
+                    .offset(y: -58)
+                    .rotationEffect(.degrees(Double(ray) * 30))
+            }
 
             Ellipse()
                 .trim(from: 0.08, to: 0.84)

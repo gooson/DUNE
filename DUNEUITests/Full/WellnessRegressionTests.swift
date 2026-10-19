@@ -18,6 +18,30 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
         navigateToWellness()
     }
 
+    func testDesertHeroKeepsSleepEmptyStateAndScoreNavigation() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "--ui-test-theme", "desertWarm",
+            "--ui-test-no-sleep-trend"
+        ]
+        launchApp(with: configuration)
+        navigateToWellness()
+
+        let hero = app.descendants(matching: .any)[AXID.wellnessHeroScore].firstMatch
+        let sleepEmptyState = app.descendants(matching: .any)["wellness-sleep-empty-state"].firstMatch
+        XCTAssertTrue(hero.waitForExistence(timeout: 15), "Desert Wellness hero should retain the seeded score")
+        XCTAssertTrue(sleepEmptyState.waitForExistence(timeout: 10),
+                      "Missing sleep trend should show an honest empty state inside the hero")
+        XCTAssertTrue(sleepEmptyState.isHittable, "Sleep empty state should be visible in the hero")
+        XCTAssertTrue(hero.frame.minY < sleepEmptyState.frame.minY,
+                      "Sleep empty state should remain below the hero score in the Desert layout")
+
+        hero.tap()
+        let detail = app.descendants(matching: .any)[AXID.wellnessScoreDetailScreen].firstMatch
+        XCTAssertTrue(detail.waitForExistence(timeout: 10),
+                      "Wellness score detail should remain reachable without a sleep trend")
+    }
+
     func testCompareMetricsSharesPeriodAndDismisses() throws {
         XCTAssertTrue(app.waitAndTapToolbarAction("wellness-compare-metrics"),
                       "Wellness should expose metric comparison directly or in toolbar overflow\n\(app.debugDescription)")

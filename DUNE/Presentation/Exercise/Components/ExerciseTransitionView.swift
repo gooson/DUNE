@@ -66,6 +66,7 @@ struct ExerciseTransitionView: View {
                 .frame(maxWidth: .infinity, minHeight: 50)
             }
             .buttonStyle(.borderedProminent)
+            .foregroundStyle(DS.Color.onActivity)
             .tint(DS.Color.activity)
             .accessibilityIdentifier("template-workout-transition-start")
             .padding(.horizontal, DS.Spacing.lg)

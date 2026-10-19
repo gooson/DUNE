@@ -447,6 +447,11 @@ struct DUNEApp: App {
         }
         .tint(selectedTheme.accentColor)
         .preferredColorScheme(Self.forcedUITestColorScheme)
+        .onAppear { WidgetDataWriter.writeTheme(selectedTheme) }
+        .onChange(of: selectedTheme) { _, theme in
+            WidgetDataWriter.writeTheme(theme)
+            WatchSessionManager.shared.syncWorkoutSettingsToWatch()
+        }
         .background { AppWindowSceneReader(kind: .primary) }
         .handlesExternalEvents(preferring: ["OpenWorkoutTemplateIntent"], allowing: ["OpenWorkoutTemplateIntent"])
         .onAppIntentExecution(OpenWorkoutTemplateIntent.self) { intent in

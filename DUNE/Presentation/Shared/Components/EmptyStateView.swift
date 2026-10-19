@@ -9,6 +9,7 @@ struct EmptyStateView: View {
     var actionIdentifier: String?
 
     @Environment(\.appTheme) private var theme
+    @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
         VStack(spacing: DS.Spacing.lg) {
@@ -30,6 +31,7 @@ struct EmptyStateView: View {
                 Button(action: action) {
                     Text(actionTitle)
                         .font(.subheadline.weight(.medium))
+                        .foregroundStyle(theme.prominentButtonForegroundColor(for: colorScheme))
                 }
                 .buttonStyle(.borderedProminent)
                 .tint(theme.accentColor)

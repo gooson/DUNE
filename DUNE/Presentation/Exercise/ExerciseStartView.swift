@@ -173,6 +173,7 @@ struct ExerciseStartView: View {
                 .frame(maxWidth: .infinity, minHeight: 50)
             }
             .buttonStyle(.borderedProminent)
+            .foregroundStyle(DS.Color.onActivity)
             .tint(DS.Color.activity)
             .accessibilityIdentifier("exercise-start-button")
             .padding(.horizontal, DS.Spacing.lg)

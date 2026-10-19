@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct CloudSyncConsentView: View {
+    @Environment(\.appTheme) private var theme
+    @Environment(\.colorScheme) private var colorScheme
     @AppStorage("hasShownCloudSyncConsent") private var hasShownConsent = false
     @AppStorage(CloudSyncPreferenceStore.storageKey) private var isCloudSyncEnabled = false
     @Binding var isPresented: Bool
@@ -52,6 +54,7 @@ struct CloudSyncConsentView: View {
                 } label: {
                     Text("Enable iCloud Sync")
                         .font(.headline)
+                        .foregroundStyle(theme.prominentButtonForegroundColor(for: colorScheme))
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 14)
                 }

@@ -14,6 +14,7 @@ struct PersonalRecordsInfoSheet: View {
             }
             .padding(DS.Spacing.xl)
         }
+        .background { SheetWaveBackground().opacity(0.55) }
         .accessibilityIdentifier("activity-personal-records-info-sheet")
         .presentationDetents([.medium, .large])
         .presentationDragIndicator(.visible)

@@ -24,12 +24,23 @@ struct SectionGroup<Content: View>: View {
         case .sakuraCalm: 0.95
         case .arcticDawn: 0.85
         case .solarPop:   0.9
+        case .waterLilies: 0.9
         case .desertWarm, .oceanCool, .forestGreen, .contourAtlas: 0.6
         }
     }
 
     private var sectionSurfaceGradient: LinearGradient {
         switch theme {
+        case .waterLilies:
+            LinearGradient(
+                colors: [
+                    Color("LilySand").opacity(colorScheme == .dark ? 0.16 : 0.14),
+                    Color("LilyAccent").opacity(colorScheme == .dark ? 0.10 : 0.08),
+                    .clear
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
         case .sakuraCalm:
             LinearGradient(
                 colors: [
@@ -71,6 +82,12 @@ struct SectionGroup<Content: View>: View {
 
     private var sectionTopBloom: LinearGradient {
         switch theme {
+        case .waterLilies:
+            LinearGradient(
+                colors: [Color("LilyAccent").opacity(colorScheme == .dark ? 0.14 : 0.10), .clear],
+                startPoint: .top,
+                endPoint: .bottom
+            )
         case .sakuraCalm:
             LinearGradient(
                 colors: [
@@ -112,6 +129,15 @@ struct SectionGroup<Content: View>: View {
 
     private var sectionBorderGradient: LinearGradient {
         switch theme {
+        case .waterLilies:
+            LinearGradient(
+                colors: [
+                    Color("LilyAccent").opacity(colorScheme == .dark ? 0.30 : 0.24),
+                    Color("LilySand").opacity(colorScheme == .dark ? 0.18 : 0.14)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
         case .sakuraCalm:
             LinearGradient(
                 colors: [
