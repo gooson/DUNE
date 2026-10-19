@@ -14,6 +14,26 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
         XCTAssertTrue(sleepQuality.waitForExistence(timeout: 10), "Sleep action should open sleep metric details")
     }
 
+    func testDesertWellnessRingLayout() {
+        for style in ["Light", "Dark"] {
+            app.terminate()
+            app.launchArguments = launchConfiguration.launchArguments + [
+                "--ui-test-theme", "desertWarm",
+                "--ui-test-style", style.lowercased(),
+                "-morningBriefingDisabled", "YES"
+            ]
+            app.launch()
+            navigateToWellness()
+
+            let hero = app.descendants(matching: .any)["wellness-hero-score"].firstMatch
+            let narrative = app.descendants(matching: .any)["wellness-hero-narrative"].firstMatch
+            XCTAssertTrue(hero.waitForExistence(timeout: 10))
+            XCTAssertTrue(narrative.waitForExistence(timeout: 10))
+            XCTAssertLessThanOrEqual(narrative.frame.maxX, hero.frame.maxX + 1)
+            addScreenshotAttachment(named: "Desert \(style) Wellness Ring Layout")
+        }
+    }
+
     func testOceanCoolMatrix() {
         captureTheme("oceanCool", named: "Ocean")
     }
@@ -57,18 +77,22 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
     private func captureRoots(for combination: String) {
         navigateToDashboard()
         captureRoot(AXID.dashboardHeroCondition, tab: "Today", combination: combination)
+        assertRing("dashboard-hero-ring", combination: combination)
         assertAction("dashboard-primary-activity", combination: combination)
 
         navigateToActivity()
         captureRoot(AXID.activityHeroReadiness, tab: "Activity", combination: combination)
+        assertRing("activity-hero-ring", combination: combination)
         assertAction("activity-log-workout-button", combination: combination)
 
         navigateToWellness()
         captureRoot(AXID.wellnessHeroScore, tab: "Wellness", combination: combination)
+        assertRing("wellness-hero-ring", combination: combination)
         assertAction("wellness-sleep-detail-link", combination: combination)
 
         navigateToLife()
         captureRoot(AXID.lifeHeroProgress, tab: "Life", combination: combination)
+        assertRing("life-hero-ring", combination: combination)
         assertAction("life-hero-checklist-button", combination: combination)
     }
 
@@ -81,5 +105,10 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
     private func assertAction(_ identifier: String, combination: String) {
         let action = app.descendants(matching: .any)[identifier].firstMatch
         XCTAssertTrue(action.waitForExistence(timeout: 10), "\(combination): \(identifier) should load")
+    }
+
+    private func assertRing(_ identifier: String, combination: String) {
+        let ring = app.descendants(matching: .any)[identifier].firstMatch
+        XCTAssertTrue(ring.waitForExistence(timeout: 10), "\(combination): \(identifier) should show the tab score ring")
     }
 }

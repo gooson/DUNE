@@ -47,6 +47,12 @@ struct WellnessHeroCard: View {
                         }
                     }
 
+                    Text(score.narrativeMessage)
+                        .font(.subheadline)
+                        .foregroundStyle(theme.directionPreviewTextColor.opacity(0.74))
+                        .fixedSize(horizontal: false, vertical: true)
+                        .accessibilityIdentifier("wellness-hero-narrative")
+
                     HStack(alignment: .center, spacing: 18) {
                         Group {
                             if sleepTrend.contains(where: { $0.minutes > 0 }) {
@@ -169,15 +175,9 @@ struct WellnessHeroCard: View {
     }
 
     private func wellnessCopy(_ score: WellnessScore) -> some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text(score.status.label)
-                .font(.headline.weight(.semibold))
-                .foregroundStyle(theme.directionPreviewTextColor)
-            Text(score.narrativeMessage)
-                .font(.subheadline)
-                .foregroundStyle(theme.directionPreviewTextColor.opacity(0.74))
-                .fixedSize(horizontal: false, vertical: true)
-        }
+        Text(score.status.label)
+            .font(.headline.weight(.semibold))
+            .foregroundStyle(theme.directionPreviewTextColor)
     }
 
     // MARK: - Empty State
