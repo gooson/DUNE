@@ -75,6 +75,44 @@ struct CardioInactivityPolicyTests {
         #expect(afterDeadline == .autoEnd)
     }
 
+    @Test("Stair workout stays active through the former exit suggestion window")
+    func stairWorkoutContinuesThroughWalkingLikeMetrics() {
+        let start = Date(timeIntervalSince1970: 1_000)
+        let mode = WorkoutMode.cardio(activityType: .stairClimbing, isOutdoor: false)
+        let samples: [(seconds: TimeInterval, distance: Double, steps: Double)] = [
+            (90, 0, 120), (100, 7, 125), (119, 29, 141), (120, 32, 142)
+        ]
+
+        var previous = CardioInactivityObservedMetrics(
+            distance: 0, steps: 0, floorsClimbed: 0, activeCalories: 0
+        )
+        for sample in samples {
+            let current = CardioInactivityObservedMetrics(
+                distance: sample.distance, steps: sample.steps,
+                floorsClimbed: 0, activeCalories: 0
+            )
+            #expect(CardioInactivityActivitySignal.hasProgress(
+                workoutMode: mode, supportsMachineLevel: true,
+                previous: previous, current: current
+            ))
+            previous = current
+            let now = start.addingTimeInterval(sample.seconds)
+            let result = CardioInactivityPolicy.evaluate(
+                workoutMode: mode,
+                inactivityDuration: sample.seconds,
+                autoEndDeadline: nil,
+                now: now
+            )
+            let elapsed = WorkoutElapsedTime.activeElapsedTime(
+                startDate: start, pausedDuration: 0, pauseStart: nil,
+                isPaused: false, now: now
+            )
+
+            #expect(result == .none)
+            #expect(elapsed == sample.seconds)
+        }
+    }
+
     @Test("Stair machine workouts do not prompt or auto-end from missing wrist motion")
     func stairMachineIgnoresMissingMotion() {
         let now = Date()

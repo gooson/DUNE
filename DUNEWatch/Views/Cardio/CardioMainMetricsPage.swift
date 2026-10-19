@@ -79,6 +79,7 @@ struct CardioMainMetricsPage: View {
         .lineLimit(1)
         .minimumScaleFactor(0.7)
         .frame(maxWidth: .infinity, alignment: .leading)
+        .accessibilityIdentifier("watch-cardio-elapsed-time")
     }
 
     // MARK: - Distance Row

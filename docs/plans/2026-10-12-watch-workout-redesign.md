@@ -139,7 +139,7 @@ related_solutions:
 | C07 | 일반 상세 | `CardioSecondaryPage` |
 | C08 | 움직임 없음 | `SessionPagingView` |
 | C09 | 자동 종료 예고 | `SessionPagingView` |
-| C10 | 계단 운동 확인 | `SessionPagingView` |
+| C10 | 계단 운동 진행 중 (종료 추정 알림 없음) | `CardioMainMetricsPage` |
 | C11 | 기계 운동 상세 | `CardioSecondaryPage` |
 | C12 | 유산소 AOD | `CardioSecondaryPage` |
 | F01 | 근력 요약 | `SessionSummaryView` |

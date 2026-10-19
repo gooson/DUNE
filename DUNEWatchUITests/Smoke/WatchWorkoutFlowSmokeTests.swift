@@ -128,8 +128,59 @@ final class WatchWorkoutFlowSmokeTests: WatchUITestBaseCase {
         captureCardioPrompt(exerciseID: "running", argument: "--ui-watch-cardio-auto-end", code: "C09")
     }
 
-    func testCaptureStairExitDesignMap() throws {
-        captureCardioPrompt(exerciseID: "stair-climber", argument: "--ui-watch-cardio-stairs-prompt", code: "C10")
+    func testStairWorkoutContinuesWithoutPromptDesignMap() throws {
+        launchApp(with: LaunchConfiguration(
+            scenario: .responsiveLayout,
+            additionalArguments: ["--ui-watch-home-empty", "--ui-watch-stair-exit-regression"]
+        ))
+        openAllExercises()
+        guard let exercise = findQuickStartExercise(identifier: "watch-quickstart-exercise-stair-climber") else {
+            XCTFail("Stair climber fixture must be reachable")
+            return
+        }
+        exercise.tap()
+        XCTAssertTrue(tapElement(WatchAXID.workoutPreviewCardioIndoorButton))
+
+        let elapsed = app.staticTexts["watch-cardio-elapsed-time"].firstMatch
+        XCTAssertTrue(elapsed.waitForExistence(timeout: 10))
+        let initialTime = elapsed.label
+        let initialComponents = initialTime.split(separator: ":").compactMap { Int($0) }
+        XCTAssertEqual(initialComponents.count, 2)
+        XCTAssertGreaterThanOrEqual(initialComponents[0] * 60 + initialComponents[1], 120)
+        let advanced = expectation(for: NSPredicate(format: "label != %@", initialTime), evaluatedWith: elapsed)
+        wait(for: [advanced], timeout: 5)
+        XCTAssertFalse(app.staticTexts["계단 운동을 마칠까요?"].firstMatch.exists)
+        addScreenshotAttachment(named: "watch-design-map-C10")
+    }
+
+    func testCardioAlertDoesNotPauseElapsedTime() throws {
+        launchApp(with: LaunchConfiguration(
+            scenario: .responsiveLayout,
+            additionalArguments: ["--ui-watch-home-empty", "--ui-watch-cardio-soft-nudge"]
+        ))
+        openAllExercises()
+        guard let exercise = findQuickStartExercise(identifier: "watch-quickstart-exercise-running") else {
+            XCTFail("Running fixture must be reachable")
+            return
+        }
+        exercise.tap()
+        XCTAssertTrue(tapElement(WatchAXID.workoutPreviewCardioIndoorButton))
+
+        let alertTitle = app.staticTexts["움직임이 감지되지 않음"].firstMatch
+        XCTAssertTrue(alertTitle.waitForExistence(timeout: 10))
+        let shownAt = Date()
+        let timePassed = XCTNSPredicateExpectation(
+            predicate: NSPredicate { _, _ in Date().timeIntervalSince(shownAt) >= 3 },
+            object: nil
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [timePassed], timeout: 5), .completed)
+
+        XCTAssertTrue(tapElement("계속 운동"))
+        let elapsed = app.staticTexts["watch-cardio-elapsed-time"].firstMatch
+        XCTAssertTrue(elapsed.waitForExistence(timeout: 5))
+        let components = elapsed.label.split(separator: ":").compactMap { Int($0) }
+        XCTAssertEqual(components.count, 2)
+        XCTAssertGreaterThanOrEqual(components[0] * 60 + components[1], 3)
     }
 
     private func captureCardioPrompt(exerciseID: String, argument: String, code: String) {
@@ -145,7 +196,7 @@ final class WatchWorkoutFlowSmokeTests: WatchUITestBaseCase {
         switch code {
         case "C08": expectedTitle = "움직임이 감지되지 않음"
         case "C09": expectedTitle = "운동을 곧 종료할까요?"
-        default: expectedTitle = "계단 운동을 마칠까요?"
+        default: XCTFail("Unsupported cardio prompt state: \(code)"); return
         }
         XCTAssertTrue(app.staticTexts[expectedTitle].firstMatch.waitForExistence(timeout: 10))
         addScreenshotAttachment(named: "watch-design-map-\(code)")
