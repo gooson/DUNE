@@ -108,8 +108,7 @@ struct WellnessView: View {
                         }
 
                         // Hero Card
-                        if viewModel.wellnessScore != nil,
-                           theme == .desertWarm {
+                        if viewModel.wellnessScore != nil {
                             WellnessHeroCard(
                                 score: viewModel.wellnessScore,
                                 sleepScore: viewModel.sleepScore,
@@ -120,21 +119,6 @@ struct WellnessView: View {
                                 sleepMetric: sleepMetric
                             )
                             .reportTabHeroFrame()
-                            .staggeredAppear(index: 0)
-                        } else if viewModel.wellnessScore != nil {
-                            NavigationLink(value: WellnessScoreDestination()) {
-                                WellnessHeroCard(
-                                    score: viewModel.wellnessScore,
-                                    sleepScore: viewModel.sleepScore,
-                                    conditionScore: viewModel.conditionScore,
-                                    bodyScore: viewModel.bodyScore,
-                                    hourlySparkline: viewModel.wellnessSparkline.nonEmptyOrNil,
-                                    sleepTrend: viewModel.sleepDetailTrend
-                                )
-                            }
-                            .reportTabHeroFrame()
-                            .buttonStyle(.plain)
-                            .accessibilityIdentifier("wellness-hero-score")
                             .staggeredAppear(index: 0)
                         } else {
                             WellnessHeroCard(

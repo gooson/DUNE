@@ -193,23 +193,7 @@ struct ActivityView: View {
                         ProgressView()
                             .frame(maxWidth: .infinity, minHeight: 200)
                     } else {
-                        if theme == .desertWarm {
-                            desertReadinessPreview
-                        } else {
-                            readinessHeroLink
-                            Button {
-                                showingExercisePicker = true
-                            } label: {
-                                Label("Log Workout", systemImage: "plus.circle.fill")
-                                    .font(.headline)
-                                    .frame(maxWidth: .infinity)
-                            }
-                            .buttonStyle(.borderedProminent)
-                            .foregroundStyle(DS.Color.onActivity)
-                            .tint(DS.Color.activity)
-                            .controlSize(.large)
-                            .accessibilityIdentifier("activity-log-workout-button")
-                        }
+                        themeReadinessPreview
 
                         // ② Recovery Map + Weekly Stats (side-by-side on iPad)
                         if isRegular {
@@ -513,50 +497,37 @@ struct ActivityView: View {
         .englishNavigationTitle("Activity")
     }
 
-    private var readinessHeroLink: some View {
-        NavigationLink(value: ActivityDetailDestination.trainingReadiness) {
-            TrainingReadinessHeroCard(
-                readiness: viewModel.trainingReadiness,
-                isCalibrating: viewModel.trainingReadiness?.isCalibrating ?? true,
-                hourlySparkline: viewModel.readinessSparkline.nonEmptyOrNil
-            )
-        }
-        .reportTabHeroFrame()
-        .accessibilityIdentifier("activity-hero-readiness")
-        .buttonStyle(.plain)
-        .staggeredAppear(index: 0)
-    }
-
-    private var desertReadinessPreview: some View {
+    private var themeReadinessPreview: some View {
         VStack(alignment: .leading, spacing: 18) {
             NavigationLink(value: ActivityDetailDestination.trainingReadiness) {
                 VStack(alignment: .leading, spacing: 18) {
                     HStack {
                         Text("Activity")
                             .font(.title3.weight(.bold))
+                            .foregroundStyle(theme.directionPreviewTextColor)
                         Spacer()
                         if viewModel.trainingReadiness?.isCalibrating == true {
                             Text("Calibrating")
                                 .font(.caption.weight(.semibold))
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(theme.directionPreviewTextColor.opacity(0.74))
                         }
                     }
 
                     if let readiness = viewModel.trainingReadiness {
                         ViewThatFits(in: .horizontal) {
                             HStack(alignment: .center, spacing: 18) {
-                                desertReadinessScore(readiness)
-                                desertReadinessCopy(readiness)
+                                themeReadinessScore(readiness)
+                                themeReadinessCopy(readiness)
                             }
                             VStack(alignment: .leading, spacing: 10) {
-                                desertReadinessScore(readiness)
-                                desertReadinessCopy(readiness)
+                                themeReadinessScore(readiness)
+                                themeReadinessCopy(readiness)
                             }
                         }
                     } else {
                         Text("Need More Data")
                             .font(.headline)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(theme.directionPreviewTextColor.opacity(0.74))
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -574,9 +545,12 @@ struct ActivityView: View {
                     Spacer()
                 }
                 .font(.subheadline.weight(.semibold))
-                .foregroundStyle(colorScheme == .dark
-                    ? Color(red: 0.898, green: 0.678, blue: 0.514)
-                    : Color(red: 0.588, green: 0.349, blue: 0.220))
+                .frame(minHeight: 44, alignment: .leading)
+                .foregroundStyle(theme == .desertWarm
+                    ? (colorScheme == .dark
+                        ? Color(red: 0.898, green: 0.678, blue: 0.514)
+                        : Color(red: 0.588, green: 0.349, blue: 0.220))
+                    : theme.directionPreviewActionColor(for: colorScheme))
                 .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
@@ -585,40 +559,49 @@ struct ActivityView: View {
         .padding(20)
         .background {
             RoundedRectangle(cornerRadius: 23)
-                .fill(colorScheme == .dark ? Color(red: 0.110, green: 0.120, blue: 0.125) : Color(red: 0.988, green: 0.969, blue: 0.937))
+                .fill(theme == .desertWarm
+                    ? LinearGradient(colors: [colorScheme == .dark ? Color(red: 0.110, green: 0.120, blue: 0.125) : Color(red: 0.988, green: 0.969, blue: 0.937)], startPoint: .top, endPoint: .bottom)
+                    : theme.directionPreviewBackground)
                 .overlay(alignment: .bottom) {
-                    DesertPreviewWave()
-                        .frame(height: 74)
-                        .clipped()
+                    if theme == .desertWarm {
+                        DesertPreviewWave()
+                            .frame(height: 74)
+                            .clipped()
+                    }
                 }
                 .clipShape(RoundedRectangle(cornerRadius: 23))
                 .overlay {
                     RoundedRectangle(cornerRadius: 23)
-                        .strokeBorder(colorScheme == .dark
-                            ? Color(red: 0.251, green: 0.314, blue: 0.286)
-                            : Color(red: 0.871, green: 0.859, blue: 0.824), lineWidth: 1)
+                        .strokeBorder(theme == .desertWarm
+                            ? (colorScheme == .dark
+                                ? Color(red: 0.251, green: 0.314, blue: 0.286)
+                                : Color(red: 0.871, green: 0.859, blue: 0.824))
+                            : theme.accentColor.opacity(0.25), lineWidth: 1)
                 }
         }
         .reportTabHeroFrame()
         .staggeredAppear(index: 0)
     }
 
-    private func desertReadinessScore(_ readiness: TrainingReadiness) -> some View {
+    private func themeReadinessScore(_ readiness: TrainingReadiness) -> some View {
         Text(readiness.score.formatted())
             .font(.system(size: 49, weight: .bold, design: .rounded))
             .monospacedDigit()
-            .foregroundStyle(colorScheme == .dark
-                ? Color(red: 0.463, green: 0.816, blue: 0.678)
-                : Color(red: 0.090, green: 0.431, blue: 0.408))
+            .foregroundStyle(theme == .desertWarm
+                ? (colorScheme == .dark
+                    ? Color(red: 0.463, green: 0.816, blue: 0.678)
+                    : Color(red: 0.090, green: 0.431, blue: 0.408))
+                : theme.accentColor)
     }
 
-    private func desertReadinessCopy(_ readiness: TrainingReadiness) -> some View {
+    private func themeReadinessCopy(_ readiness: TrainingReadiness) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(readiness.status.label)
                 .font(.headline.weight(.semibold))
+                .foregroundStyle(theme.directionPreviewTextColor)
             Text(readiness.narrativeMessage)
                 .font(.subheadline)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(theme.directionPreviewTextColor.opacity(0.74))
                 .fixedSize(horizontal: false, vertical: true)
         }
     }

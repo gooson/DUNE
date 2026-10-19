@@ -3,6 +3,7 @@ import Charts
 
 struct TrendChartView: View {
     let scores: [ConditionScore]
+    var lineColor: Color = .primary.opacity(0.82)
 
     var body: some View {
         VStack(spacing: 4) {
@@ -12,7 +13,7 @@ struct TrendChartView: View {
                 x: .value("Date", score.date, unit: .day),
                 y: .value("Score", score.score)
             )
-            .foregroundStyle(Color.primary.opacity(0.82))
+            .foregroundStyle(lineColor)
             .lineStyle(StrokeStyle(lineWidth: 2.5, lineCap: .round))
             .interpolationMethod(.catmullRom)
 

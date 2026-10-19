@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// The Today composition from the Desert Horizon direction: one dark surface
+/// The shared Today composition from the eight theme directions: one surface
 /// contains the score, its trend, the supporting signals, and the next action.
 struct DesertHorizonConditionHeroView: View {
     let score: ConditionScore
@@ -11,11 +11,50 @@ struct DesertHorizonConditionHeroView: View {
 
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.appTheme) private var theme
+    @Environment(\.colorScheme) private var colorScheme
 
-    private let surface = Color(red: 0.208, green: 0.180, blue: 0.161)
-    private let gold = Color(red: 0.886, green: 0.718, blue: 0.380)
-    private let paleGold = Color(red: 0.969, green: 0.843, blue: 0.471)
-    private let muted = Color(red: 0.831, green: 0.784, blue: 0.722)
+    private var isDesert: Bool { theme == .desertWarm }
+    /// Every direction preview uses an opaque dark Today hero in both appearances.
+    private var surface: Color {
+        switch theme {
+        case .desertWarm: Color(red: 0.208, green: 0.180, blue: 0.161)
+        case .oceanCool: Color(red: 0.063, green: 0.165, blue: 0.231)
+        case .forestGreen: Color(red: 0.114, green: 0.208, blue: 0.153)
+        case .sakuraCalm: Color(red: 0.282, green: 0.176, blue: 0.243)
+        case .arcticDawn: Color(red: 0.082, green: 0.161, blue: 0.263)
+        case .solarPop: Color(red: 0.243, green: 0.157, blue: 0.153)
+        case .contourAtlas: Color(red: 0.157, green: 0.188, blue: 0.161)
+        case .waterLilies: Color(red: 0.188, green: 0.212, blue: 0.286)
+        }
+    }
+    private var border: Color {
+        switch theme {
+        case .desertWarm: Color(red: 0.455, green: 0.365, blue: 0.263)
+        case .oceanCool: Color(red: 0.227, green: 0.400, blue: 0.478)
+        case .forestGreen: Color(red: 0.298, green: 0.416, blue: 0.298)
+        case .sakuraCalm: Color(red: 0.588, green: 0.420, blue: 0.510)
+        case .arcticDawn: Color(red: 0.318, green: 0.439, blue: 0.557)
+        case .solarPop: Color(red: 0.596, green: 0.376, blue: 0.282)
+        case .contourAtlas: Color(red: 0.380, green: 0.455, blue: 0.318)
+        case .waterLilies: Color(red: 0.408, green: 0.463, blue: 0.549)
+        }
+    }
+    private var gold: Color { isDesert ? Color(red: 0.886, green: 0.718, blue: 0.380) : theme.accentColor }
+    private var paleGold: Color { isDesert ? Color(red: 0.969, green: 0.843, blue: 0.471) : theme.duskColor }
+    private var muted: Color { isDesert ? Color(red: 0.831, green: 0.784, blue: 0.722) : ink.opacity(0.76) }
+    private var ink: Color {
+        switch theme {
+        case .desertWarm: Color(red: 1, green: 0.961, blue: 0.910)
+        case .oceanCool: Color(red: 0.941, green: 0.984, blue: 1)
+        case .forestGreen: Color(red: 0.969, green: 0.965, blue: 0.910)
+        case .sakuraCalm: Color(red: 1, green: 0.969, blue: 0.980)
+        case .arcticDawn: Color(red: 0.969, green: 0.988, blue: 1)
+        case .solarPop: Color(red: 1, green: 0.973, blue: 0.929)
+        case .contourAtlas: Color(red: 0.953, green: 0.973, blue: 0.914)
+        case .waterLilies: Color(red: 1, green: 0.965, blue: 0.984)
+        }
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -23,7 +62,7 @@ struct DesertHorizonConditionHeroView: View {
                 VStack(alignment: .leading, spacing: 18) {
                     header
                     Rectangle()
-                        .fill(Color(red: 0.412, green: 0.341, blue: 0.278))
+                        .fill(isDesert ? Color(red: 0.412, green: 0.341, blue: 0.278) : gold.opacity(0.25))
                         .frame(height: 1)
                     trend
                     evidence
@@ -45,7 +84,7 @@ struct DesertHorizonConditionHeroView: View {
                     Spacer()
                 }
                 .font(.subheadline.weight(.bold))
-                .foregroundStyle(surface)
+                .foregroundStyle(isDesert ? surface : theme.prominentButtonForegroundColor(for: colorScheme))
                 .frame(minHeight: 48)
                 .background(gold, in: RoundedRectangle(cornerRadius: 13))
             }
@@ -59,7 +98,7 @@ struct DesertHorizonConditionHeroView: View {
                 .fill(surface)
                 .overlay {
                     RoundedRectangle(cornerRadius: 25)
-                        .strokeBorder(Color(red: 0.455, green: 0.365, blue: 0.263), lineWidth: 1)
+                        .strokeBorder(border, lineWidth: 1)
                 }
                 .shadow(color: Color(red: 0.455, green: 0.357, blue: 0.196).opacity(0.16), radius: 16, y: 9)
         }
@@ -85,11 +124,11 @@ struct DesertHorizonConditionHeroView: View {
     private var ring: some View {
         ZStack {
             Circle()
-                .stroke(Color(red: 0.435, green: 0.353, blue: 0.227).opacity(0.7), lineWidth: 11)
+                .stroke((isDesert ? Color(red: 0.435, green: 0.353, blue: 0.227) : gold).opacity(0.3), lineWidth: 11)
             Circle()
                 .trim(from: 0, to: CGFloat(score.score) / 100)
                 .stroke(
-                    AngularGradient(colors: [Color(red: 0.573, green: 0.467, blue: 0.263), gold, paleGold, Color(red: 0.596, green: 0.863, blue: 0.584)], center: .center),
+                    AngularGradient(colors: [gold.opacity(0.55), gold, paleGold, theme.scoreGood], center: .center),
                     style: StrokeStyle(lineWidth: 11, lineCap: .round)
                 )
                 .rotationEffect(.degrees(-90))
@@ -103,7 +142,7 @@ struct DesertHorizonConditionHeroView: View {
                     .tracking(1)
                     .foregroundStyle(muted)
             }
-            .foregroundStyle(Color(red: 1, green: 0.961, blue: 0.910))
+            .foregroundStyle(ink)
         }
         .frame(width: 124, height: 124)
         .accessibilityElement(children: .ignore)
@@ -117,7 +156,7 @@ struct DesertHorizonConditionHeroView: View {
                 .foregroundStyle(gold)
             Text(score.status.guideMessage)
                 .font(.title3.weight(.bold))
-                .foregroundStyle(Color(red: 1, green: 0.961, blue: 0.910))
+                .foregroundStyle(ink)
                 .fixedSize(horizontal: false, vertical: true)
             Text(adaptiveMessage?.message ?? score.narrativeMessage)
                 .font(.subheadline)
@@ -136,7 +175,7 @@ struct DesertHorizonConditionHeroView: View {
                     .font(.caption)
                     .foregroundStyle(muted)
             }
-            .foregroundStyle(Color(red: 0.933, green: 0.878, blue: 0.792))
+            .foregroundStyle(ink)
 
             if let hourlySparkline, hourlySparkline.points.count >= 2 {
                 HourlySparklineView(data: hourlySparkline, tintColor: paleGold, height: 72)
@@ -144,7 +183,8 @@ struct DesertHorizonConditionHeroView: View {
                 Text("Not enough data to show trend.")
                     .font(.subheadline)
                     .foregroundStyle(muted)
-                    .frame(maxWidth: .infinity, minHeight: 72, alignment: .center)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.vertical, 8)
             }
         }
     }
@@ -154,14 +194,14 @@ struct DesertHorizonConditionHeroView: View {
             ForEach(Array(trendBadges.prefix(2).enumerated()), id: \.offset) { _, detail in
                 HStack(spacing: 4) {
                     Text(detail.label)
-                        .foregroundStyle(Color(red: 0.965, green: 0.929, blue: 0.882))
+                        .foregroundStyle(ink)
                     Text(detail.value.formattedWithSeparator(fractionDigits: detail.fractionDigits))
-                        .foregroundStyle(Color(red: 0.710, green: 0.863, blue: 0.667))
+                        .foregroundStyle(theme.scoreGood)
                 }
                 .font(.caption2.weight(.semibold))
                 .padding(.horizontal, 10)
                 .padding(.vertical, 9)
-                .background(Color(red: 0.290, green: 0.251, blue: 0.208), in: RoundedRectangle(cornerRadius: 12))
+                .background(isDesert ? Color(red: 0.290, green: 0.251, blue: 0.208) : gold.opacity(0.12), in: RoundedRectangle(cornerRadius: 12))
             }
             Spacer(minLength: 0)
         }

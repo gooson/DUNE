@@ -53,18 +53,22 @@ final class WaterLiliesThemeTests: SeededUITestBaseCase {
     private func assertAndCaptureTabRoots(style: String) {
         navigateToDashboard()
         XCTAssertTrue(waitForElement(AXID.dashboardHeroCondition, timeout: 10).exists)
+        XCTAssertTrue(waitForElement("dashboard-primary-activity", timeout: 10).exists)
         addScreenshotAttachment(named: "Water Lilies Today \(style)")
 
         navigateToActivity()
         XCTAssertTrue(waitForElement(AXID.activityHeroReadiness, timeout: 10).exists)
+        XCTAssertTrue(waitForElement("activity-log-workout-button", timeout: 10).exists)
         addScreenshotAttachment(named: "Water Lilies Activity \(style)")
 
         navigateToWellness()
         XCTAssertTrue(waitForElement(AXID.wellnessHeroScore, timeout: 10).exists)
+        XCTAssertTrue(waitForElement("wellness-sleep-detail-link", timeout: 10).exists)
         addScreenshotAttachment(named: "Water Lilies Wellness \(style)")
 
         navigateToLife()
         XCTAssertTrue(waitForElement(AXID.lifeHeroProgress, timeout: 10).exists)
+        XCTAssertTrue(waitForElement("life-hero-checklist-button", timeout: 10).exists)
         addScreenshotAttachment(named: "Water Lilies Life \(style)")
 
         navigateToDashboard()

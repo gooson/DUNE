@@ -11,58 +11,26 @@ struct WellnessHeroCard: View {
     @Environment(\.appTheme) private var theme
     @Environment(\.colorScheme) private var colorScheme
 
-    private enum Labels {
-        static let wellness = "WELLNESS"
-        static let sleep = String(localized: "Sleep Score")
-        static let condition = String(localized: "Condition")
-        static let body = String(localized: "Body")
-    }
-
     var body: some View {
         if let score {
-            if theme == .desertWarm {
-                desertSleepSummary(score: score)
-            } else {
-                standardHero(score: score)
-            }
+            themeSleepSummary(score: score)
         } else {
             emptyCard
         }
     }
 
-    private func standardHero(score: WellnessScore) -> some View {
-        HeroScoreCard(
-                score: score.score,
-                scoreLabel: Labels.wellness,
-                statusLabel: score.status.label,
-                statusIcon: score.status.iconName,
-                statusColor: score.status.color,
-                guideMessage: score.narrativeMessage,
-                subScores: [
-                    .init(label: Labels.sleep, value: sleepScore, color: DS.Color.sleep),
-                    .init(label: Labels.condition, value: conditionScore, color: DS.Color.hrv),
-                    .init(label: Labels.body, value: bodyScore, color: DS.Color.body)
-                ],
-                badgeText: nil,
-                showsChevron: true,
-                accessibilityLabel: "Wellness score \(score.score), \(score.status.label)",
-                accessibilityHint: "Tap to see score details",
-                hourlySparkline: hourlySparkline,
-                trendTitle: "Wellness Trend"
-            )
-    }
-
-    private func desertSleepSummary(score: WellnessScore) -> some View {
+    private func themeSleepSummary(score: WellnessScore) -> some View {
         VStack(alignment: .leading, spacing: 16) {
             NavigationLink(value: WellnessScoreDestination()) {
                 VStack(alignment: .leading, spacing: 16) {
                     HStack {
                         Text("Wellness")
                             .font(.title3.weight(.bold))
+                            .foregroundStyle(theme.directionPreviewTextColor)
                         Spacer()
                         Text("Sleep")
                             .font(.caption.weight(.semibold))
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(theme.directionPreviewTextColor.opacity(0.74))
                     }
 
                     HStack(alignment: .center, spacing: 18) {
@@ -72,7 +40,9 @@ struct WellnessHeroCard: View {
                                     ForEach(Array(sleepTrend.suffix(7).enumerated()), id: \.offset) { index, sample in
                                         if sample.minutes > 0 {
                                             RoundedRectangle(cornerRadius: 5)
-                                                .fill(Color(red: 0.350, green: 0.690, blue: 0.588).opacity(index == sleepTrend.suffix(7).count - 1 ? 1 : 0.55))
+                                                .fill((theme == .desertWarm
+                                                    ? Color(red: 0.350, green: 0.690, blue: 0.588)
+                                                    : theme.metricSleep).opacity(index == sleepTrend.suffix(7).count - 1 ? 1 : 0.55))
                                                 .frame(width: 12, height: max(9, min(60, CGFloat(sample.minutes / 600) * 60)))
                                         } else {
                                             Color.clear.frame(width: 12, height: 0)
@@ -83,7 +53,7 @@ struct WellnessHeroCard: View {
                             } else {
                                 Text("Need More Data")
                                     .font(.caption.weight(.medium))
-                                    .foregroundStyle(.secondary)
+                                    .foregroundStyle(theme.directionPreviewTextColor.opacity(0.74))
                                     .accessibilityIdentifier("wellness-sleep-empty-state")
                             }
                         }
@@ -93,13 +63,15 @@ struct WellnessHeroCard: View {
                             if let minutes = sleepTrend.last?.minutes, minutes > 0 {
                                 Text("\(Int(minutes) / 60)h \(Int(minutes) % 60)min")
                                     .font(.headline.weight(.semibold))
+                                    .foregroundStyle(theme.directionPreviewTextColor)
                             } else {
                                 Text("Need More Data")
                                     .font(.headline.weight(.semibold))
+                                    .foregroundStyle(theme.directionPreviewTextColor)
                             }
                             Text(score.narrativeMessage)
                                 .font(.subheadline)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(theme.directionPreviewTextColor.opacity(0.74))
                                 .fixedSize(horizontal: false, vertical: true)
                         }
                     }
@@ -116,9 +88,11 @@ struct WellnessHeroCard: View {
                         Image(systemName: "arrow.right")
                     }
                     .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(colorScheme == .dark
-                        ? Color(red: 0.898, green: 0.678, blue: 0.514)
-                        : Color(red: 0.588, green: 0.349, blue: 0.220))
+                    .foregroundStyle(theme == .desertWarm
+                        ? (colorScheme == .dark
+                            ? Color(red: 0.898, green: 0.678, blue: 0.514)
+                            : Color(red: 0.588, green: 0.349, blue: 0.220))
+                        : theme.directionPreviewActionColor(for: colorScheme))
                 }
                 .buttonStyle(.plain)
                 .accessibilityIdentifier("wellness-sleep-detail-link")
@@ -129,9 +103,11 @@ struct WellnessHeroCard: View {
                         Image(systemName: "arrow.right")
                     }
                     .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(colorScheme == .dark
-                        ? Color(red: 0.898, green: 0.678, blue: 0.514)
-                        : Color(red: 0.588, green: 0.349, blue: 0.220))
+                    .foregroundStyle(theme == .desertWarm
+                        ? (colorScheme == .dark
+                            ? Color(red: 0.898, green: 0.678, blue: 0.514)
+                            : Color(red: 0.588, green: 0.349, blue: 0.220))
+                        : theme.directionPreviewActionColor(for: colorScheme))
                 }
                 .buttonStyle(.plain)
                 .accessibilityIdentifier("wellness-score-detail-link")
@@ -141,18 +117,24 @@ struct WellnessHeroCard: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .background {
             RoundedRectangle(cornerRadius: 23)
-                .fill(colorScheme == .dark ? Color(red: 0.110, green: 0.120, blue: 0.125) : Color(red: 0.988, green: 0.969, blue: 0.937))
+                .fill(theme == .desertWarm
+                    ? LinearGradient(colors: [colorScheme == .dark ? Color(red: 0.110, green: 0.120, blue: 0.125) : Color(red: 0.988, green: 0.969, blue: 0.937)], startPoint: .top, endPoint: .bottom)
+                    : theme.directionPreviewBackground)
                 .overlay(alignment: .bottom) {
-                    DesertPreviewWave()
-                        .frame(height: 74)
-                        .clipped()
+                    if theme == .desertWarm {
+                        DesertPreviewWave()
+                            .frame(height: 74)
+                            .clipped()
+                    }
                 }
                 .clipShape(RoundedRectangle(cornerRadius: 23))
                 .overlay {
                     RoundedRectangle(cornerRadius: 23)
-                        .strokeBorder(colorScheme == .dark
-                            ? Color(red: 0.251, green: 0.314, blue: 0.286)
-                            : Color(red: 0.871, green: 0.859, blue: 0.824), lineWidth: 1)
+                        .strokeBorder(theme == .desertWarm
+                            ? (colorScheme == .dark
+                                ? Color(red: 0.251, green: 0.314, blue: 0.286)
+                                : Color(red: 0.871, green: 0.859, blue: 0.824))
+                            : theme.accentColor.opacity(0.25), lineWidth: 1)
                 }
         }
     }

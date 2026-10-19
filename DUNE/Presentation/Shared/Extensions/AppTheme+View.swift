@@ -292,6 +292,40 @@ extension AppTheme {
     var cardBackground: Color {
         themedColor(defaultAsset: "CardBackground", variantSuffix: "CardBackground")
     }
+
+    /// Arctic and Solar directions use dark compact previews in both appearances.
+    var directionPreviewBackground: LinearGradient {
+        let colors: [Color]
+        switch self {
+        case .arcticDawn:
+            colors = [Color(red: 0.125, green: 0.243, blue: 0.365), Color(red: 0.078, green: 0.165, blue: 0.282)]
+        case .solarPop:
+            colors = [Color(red: 0.439, green: 0.251, blue: 0.196), Color(red: 0.275, green: 0.173, blue: 0.165)]
+        default:
+            colors = [cardBackground, cardBackground]
+        }
+        return LinearGradient(colors: colors, startPoint: .topLeading, endPoint: .bottomTrailing)
+    }
+
+    var directionPreviewTextColor: Color {
+        self == .arcticDawn || self == .solarPop ? .white : .primary
+    }
+
+    /// Compact preview actions stay readable on the direction's actual card surface.
+    func directionPreviewActionColor(for colorScheme: ColorScheme) -> Color {
+        switch self {
+        case .oceanCool where colorScheme == .light:
+            Color(red: 0.090, green: 0.435, blue: 0.514)
+        case .forestGreen where colorScheme == .light:
+            Color(red: 0.541, green: 0.392, blue: 0.114)
+        case .sakuraCalm where colorScheme == .light:
+            Color(red: 0.678, green: 0.243, blue: 0.404)
+        case .solarPop:
+            Color(red: 1, green: 0.722, blue: 0.478)
+        default:
+            accentColor
+        }
+    }
 }
 
 // MARK: - Display Name

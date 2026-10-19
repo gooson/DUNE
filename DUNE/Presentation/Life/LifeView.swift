@@ -217,8 +217,6 @@ private struct HabitListQueryView: View {
     @Environment(\.horizontalSizeClass) private var sizeClass
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.colorScheme) private var colorScheme
-    @ScaledMetric(relativeTo: .caption) private var compactCompletionRingSize: CGFloat = 64
-    @ScaledMetric(relativeTo: .caption) private var regularCompletionRingSize: CGFloat = 80
 
     // Correction #68: O(1) lookup instead of O(N) per row
     @State private var habitsByID: [UUID: HabitDefinition] = [:]
@@ -967,14 +965,8 @@ private struct HabitListQueryView: View {
     }
 
     private var heroSection: some View {
-        Group {
-            if theme == .desertWarm {
-                desertHorizonHeroSection
-            } else {
-                standardHeroSection
-            }
-        }
-        .accessibilityElement(children: theme == .desertWarm ? .contain : .combine)
+        themeHeroSection
+        .accessibilityElement(children: .contain)
         .accessibilityLabel(Text("Life progress \(viewModel.completedCount) of \(viewModel.totalActiveCount)"))
         .sensoryFeedback(.impact(weight: .light), trigger: heroAppeared)
         .onAppear {
@@ -983,16 +975,18 @@ private struct HabitListQueryView: View {
         }
     }
 
-    private var desertHorizonHeroSection: some View {
+    private var themeHeroSection: some View {
         VStack(alignment: .leading, spacing: 15) {
             HStack {
                 Text("Life")
                     .font(.title3.weight(.bold))
-                    .foregroundStyle(colorScheme == .dark ? Color.white : Color.primary)
+                    .foregroundStyle(theme == .desertWarm ? (colorScheme == .dark ? Color.white : Color.primary) : theme.directionPreviewTextColor)
                 Spacer()
                 Text("Today's Habits")
                     .font(.caption.weight(.semibold))
-                    .foregroundStyle(colorScheme == .dark ? Color(red: 0.702, green: 0.753, blue: 0.718) : Color(red: 0.337, green: 0.376, blue: 0.357))
+                    .foregroundStyle(theme == .desertWarm
+                        ? (colorScheme == .dark ? Color(red: 0.702, green: 0.753, blue: 0.718) : Color(red: 0.337, green: 0.376, blue: 0.357))
+                        : theme.directionPreviewTextColor.opacity(0.74))
             }
 
             ViewThatFits(in: .horizontal) {
@@ -1016,26 +1010,34 @@ private struct HabitListQueryView: View {
             .buttonStyle(.plain)
             .accessibilityIdentifier("life-hero-checklist-button")
             .font(.subheadline.weight(.semibold))
-            .foregroundStyle(colorScheme == .dark
-                ? Color(red: 0.898, green: 0.678, blue: 0.514)
-                : Color(red: 0.588, green: 0.349, blue: 0.220))
+            .foregroundStyle(theme == .desertWarm
+                ? (colorScheme == .dark
+                    ? Color(red: 0.898, green: 0.678, blue: 0.514)
+                    : Color(red: 0.588, green: 0.349, blue: 0.220))
+                : theme.directionPreviewActionColor(for: colorScheme))
         }
         .padding(20)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background {
             RoundedRectangle(cornerRadius: 23)
-                .fill(colorScheme == .dark ? Color(red: 0.110, green: 0.120, blue: 0.125) : Color(red: 0.988, green: 0.969, blue: 0.937))
+                .fill(theme == .desertWarm
+                    ? LinearGradient(colors: [colorScheme == .dark ? Color(red: 0.110, green: 0.120, blue: 0.125) : Color(red: 0.988, green: 0.969, blue: 0.937)], startPoint: .top, endPoint: .bottom)
+                    : theme.directionPreviewBackground)
                 .overlay(alignment: .bottom) {
-                    DesertPreviewWave()
-                    .frame(height: 74)
-                    .clipped()
+                    if theme == .desertWarm {
+                        DesertPreviewWave()
+                            .frame(height: 74)
+                            .clipped()
+                    }
                 }
                 .clipShape(RoundedRectangle(cornerRadius: 23))
                 .overlay {
                     RoundedRectangle(cornerRadius: 23)
-                        .strokeBorder(colorScheme == .dark
-                            ? Color(red: 0.251, green: 0.314, blue: 0.286)
-                            : Color(red: 0.871, green: 0.859, blue: 0.824), lineWidth: 1)
+                        .strokeBorder(theme == .desertWarm
+                            ? (colorScheme == .dark
+                                ? Color(red: 0.251, green: 0.314, blue: 0.286)
+                                : Color(red: 0.871, green: 0.859, blue: 0.824))
+                            : theme.accentColor.opacity(0.25), lineWidth: 1)
                 }
         }
     }
@@ -1043,9 +1045,13 @@ private struct HabitListQueryView: View {
     private var desertHabitCount: some View {
         HStack(alignment: .firstTextBaseline, spacing: 2) {
             Text(viewModel.completedCount.formatted())
-                .foregroundStyle(colorScheme == .dark ? Color(red: 0.478, green: 0.816, blue: 0.678) : Color(red: 0.090, green: 0.431, blue: 0.408))
+                .foregroundStyle(theme == .desertWarm
+                    ? (colorScheme == .dark ? Color(red: 0.478, green: 0.816, blue: 0.678) : Color(red: 0.090, green: 0.431, blue: 0.408))
+                    : theme.accentColor)
             Text("/\(viewModel.totalActiveCount)")
-                .foregroundStyle(colorScheme == .dark ? Color(red: 0.702, green: 0.753, blue: 0.718) : Color(red: 0.337, green: 0.376, blue: 0.357))
+                .foregroundStyle(theme == .desertWarm
+                    ? (colorScheme == .dark ? Color(red: 0.702, green: 0.753, blue: 0.718) : Color(red: 0.337, green: 0.376, blue: 0.357))
+                    : theme.directionPreviewTextColor.opacity(0.74))
         }
         .font(.system(size: 43, weight: .bold, design: .rounded))
         .monospacedDigit()
@@ -1057,95 +1063,19 @@ private struct HabitListQueryView: View {
                 HStack(spacing: 5) {
                     Image(systemName: habit.isCompleted ? "checkmark" : "circle")
                         .foregroundStyle(habit.isCompleted
-                            ? Color(red: 0.090, green: 0.431, blue: 0.408)
-                            : Color(red: 0.337, green: 0.376, blue: 0.357))
+                            ? (theme == .desertWarm ? Color(red: 0.090, green: 0.431, blue: 0.408) : theme.accentColor)
+                            : theme.secondaryTextColor)
                     Text(habit.name)
                         .lineLimit(1)
                 }
                 .font(.caption.weight(habit.isCompleted ? .semibold : .regular))
-                .foregroundStyle(colorScheme == .dark ? Color.white : Color.primary)
+                .foregroundStyle(theme == .desertWarm ? (colorScheme == .dark ? Color.white : Color.primary) : theme.directionPreviewTextColor)
                 .padding(.horizontal, 8)
                 .padding(.vertical, 6)
-                .background(colorScheme == .dark ? Color(red: 0.188, green: 0.196, blue: 0.190) : Color(red: 0.961, green: 0.918, blue: 0.851), in: RoundedRectangle(cornerRadius: 7))
+                .background(theme == .desertWarm
+                    ? (colorScheme == .dark ? Color(red: 0.188, green: 0.196, blue: 0.190) : Color(red: 0.961, green: 0.918, blue: 0.851))
+                    : theme.accentColor.opacity(0.12), in: RoundedRectangle(cornerRadius: 7))
             }
-        }
-    }
-
-    private var standardHeroSection: some View {
-        HeroCard(tintColor: DS.Color.tabLife) {
-            let layout = dynamicTypeSize.isAccessibilitySize
-                ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.md))
-                : AnyLayout(HStackLayout(spacing: isRegular ? DS.Spacing.xxl : DS.Spacing.xl))
-            layout {
-                completionRing
-
-                VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-                    HStack(spacing: DS.Spacing.xs) {
-                        Text("Today's Habits")
-                            .font(isRegular ? .title3 : .headline)
-                            .fontWeight(.semibold)
-
-                        Image(systemName: completionStatusIcon)
-                            .font(.subheadline)
-                            .foregroundStyle(completionStatusColor)
-                    }
-
-                    Text(viewModel.heroNarrative)
-                        .font(.subheadline)
-                        .foregroundStyle(DS.Color.textSecondary)
-                        .fixedSize(horizontal: false, vertical: true)
-
-                    HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xs) {
-                        Text("\(viewModel.completedCount)")
-                            .font(DS.Typography.cardScore)
-                            .foregroundStyle(.primary)
-                            .contentTransition(.numericText())
-                        Text("/ \(viewModel.totalActiveCount)")
-                            .font(.title3)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-
-                if !dynamicTypeSize.isAccessibilitySize {
-                    Spacer(minLength: 0)
-                }
-            }
-        }
-    }
-
-    private var completionStatusIcon: String {
-        let total = viewModel.totalActiveCount
-        if total == 0 { return "circle.dashed" }
-        if viewModel.completedCount >= total { return "checkmark.circle.fill" }
-        if viewModel.completedCount > 0 { return "circle.lefthalf.filled" }
-        return "circle"
-    }
-
-    private var completionStatusColor: Color {
-        let total = viewModel.totalActiveCount
-        if total == 0 { return .secondary }
-        if viewModel.completedCount >= total { return DS.Color.positive }
-        if viewModel.completedCount > 0 { return DS.Color.tabLife }
-        return .secondary
-    }
-
-    private var completionRing: some View {
-        let total = Swift.max(viewModel.totalActiveCount, 1)
-        let progress = Double(viewModel.completedCount) / Double(total)
-        return ProgressRingView(
-            progress: progress,
-            ringColor: DS.Color.tabLife,
-            lineWidth: isRegular ? 10 : 8,
-            size: isRegular ? regularCompletionRingSize : compactCompletionRingSize
-        )
-        .overlay {
-            Text("\(Int(progress * 100))%")
-                .font(.caption)
-                .fontWeight(.semibold)
-                .monospacedDigit()
-                .fixedSize()
-                .foregroundStyle(theme.sandColor)
-                .contentTransition(.numericText())
         }
     }
 

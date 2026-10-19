@@ -57,20 +57,29 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
     private func captureRoots(for combination: String) {
         navigateToDashboard()
         captureRoot(AXID.dashboardHeroCondition, tab: "Today", combination: combination)
+        assertAction("dashboard-primary-activity", combination: combination)
 
         navigateToActivity()
         captureRoot(AXID.activityHeroReadiness, tab: "Activity", combination: combination)
+        assertAction("activity-log-workout-button", combination: combination)
 
         navigateToWellness()
         captureRoot(AXID.wellnessHeroScore, tab: "Wellness", combination: combination)
+        assertAction("wellness-sleep-detail-link", combination: combination)
 
         navigateToLife()
         captureRoot(AXID.lifeHeroProgress, tab: "Life", combination: combination)
+        assertAction("life-hero-checklist-button", combination: combination)
     }
 
     private func captureRoot(_ identifier: String, tab: String, combination: String) {
         let root = app.descendants(matching: .any)[identifier].firstMatch
         XCTAssertTrue(root.waitForExistence(timeout: 10), "\(combination) \(tab): \(identifier) should load")
         addScreenshotAttachment(named: "\(combination) \(tab)")
+    }
+
+    private func assertAction(_ identifier: String, combination: String) {
+        let action = app.descendants(matching: .any)[identifier].firstMatch
+        XCTAssertTrue(action.waitForExistence(timeout: 10), "\(combination): \(identifier) should load")
     }
 }
