@@ -29,7 +29,7 @@ status: in-progress
 
 | 맵 | 기준 | 확인 방법 |
 |---|---|---|
-| [테마 맵](../theme-map/index.html) | 7개 구현 테마의 색·장면·링·움직임 | 테마 시안·manifest·README 동기화 |
+| [테마 맵](../theme-map/index.html) | 8개 구현 테마의 색·장면·링·움직임 | 테마 시안·manifest·README 동기화 |
 | [레이아웃 맵](index.html) | 4탭 정보 순서, 히어로, 행동, 반응형 배치 | 계획서와 코드·실제 화면 대조 |
 | [실제 화면 디자인맵](../phone-design-map/actual/index.html) | 현재 빌드의 시뮬레이터 화면 | 새 PNG·캡처 출처·육안 확인 |
 

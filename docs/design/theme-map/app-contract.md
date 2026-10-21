@@ -24,6 +24,8 @@ status: complete
 
 히어로의 점수 단위, 상태 설명, 기준 대비 수치, 상세 행동과 7일 추세선에는 테마 장식용 연색을 쓰지 않는다. 밝은 카드에서는 짙은 중성 텍스트·데이터 선, 어두운 카드에서는 밝은 중성 텍스트·데이터 선을 사용한다. 테마 고유색은 카드 표면·링 광택·작은 아이콘에 남긴다. 특히 SAKURA의 분홍 표면과 CONTOUR의 불투명 표면에서 숫자·추세선·행동 문구를 실제 화면으로 확인한다.
 
+Today의 첫 카드는 밝은 모드에서도 어두운 표면을 유지한다. SAKURA·CONTOUR·WATER LILIES의 이 카드에는 밝은 모드의 짙은 강조색 대신 카드용 밝은 링·상태 제목·추세선을 사용하고, 바깥 밝은 화면의 버튼 강조색은 유지한다. [수정 후 iPhone·iPad 실제 화면](../full-redesign-map/review/hero-dark-surface-contrast-2026-10-19/README.md)에서 확인한다.
+
 앱의 `*Sand` 색상 asset은 점수 단위·차트 눈금·보조 설명에도 쓰이는 글자색이다. 밝은 화면의 연한 시안색을 그대로 옮기지 않고 짙은 계열로 조정해 보통 글자 대비 4.5:1 이상을 목표로 한다. 어두운 화면과 Watch에서는 밝은 계열을 쓴다. 원본 시안의 꽃·포말·능선 색은 별도 장면 색으로 보존한다.
 
 ## 테마별 표현 계약
@@ -41,7 +43,7 @@ status: complete
 ## 구현과 검증 연결
 
 - 장면: `TabWaveBackground`의 7개 기존 분기와 각 테마 배경 컴포넌트.
-- 상태 링: `ProgressRingView`를 사용하는 Today·Activity·Wellness 히어로. Life 진행 링은 완료율 표현을 유지한다.
+- 상태 링: 4탭 히어로가 `TabHeroScoreRing`의 Today 기준 지름·획·숫자 계층을 공유한다. Life는 같은 링에 오늘 완료한 습관 수/대상 수를 표시한다.
 - 비교: 테마별 밝음·어두움, `Reduce Motion`, 작은 iPhone과 iPad·Duo의 상단 가독성을 확인한다. 변경된 앱 화면은 [실제 화면 디자인맵](../phone-design-map/actual/index.html)에 새 캡처와 출처를 기록한다.
 
 ## 적용 확인
