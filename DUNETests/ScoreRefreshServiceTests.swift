@@ -10,7 +10,11 @@ struct ScoreRefreshServiceTests {
     func invalidateConditionHistory() async throws {
         let container = try ModelContainer(
             for: HourlyScoreSnapshot.self,
-            configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+            configurations: ModelConfiguration(
+                "ScoreRefreshServiceTests-\(UUID().uuidString)",
+                isStoredInMemoryOnly: true,
+                cloudKitDatabase: .none
+            )
         )
         let context = ModelContext(container)
         let now = Date()

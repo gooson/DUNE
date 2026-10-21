@@ -43,6 +43,8 @@ Watch의 [63개 상태별 맵](actual/watch/index.html)에는 기본 글자 크�
 
 2026-10-21 유산소 심박 존을 수정하고 거리 1km 통과 알림 C13을 추가했다. C03은 작업트리 전용 Watch 시뮬레이터에서 첫 HealthKit 존이 `존 1`로 표시되는 통과한 UI 테스트의 실제 화면으로 갱신했다. C13은 초기화한 동일 전용 Watch에서 실행한 최신 빌드의 XCTest 화면 녹화 16초 프레임을 실제 PNG로 등록했다. 배너는 화면에 보였지만 접근성 식별자 조회는 실패했으며, 테스트 실패와 캡처 출처를 인덱스에 기록했다.
 
+2026-10-22 컨디션 일간 이력과 히어로 점수 정렬 수정 후, 이 작업의 전용 시뮬레이터에서 일반 iPhone·iPad의 T04와 Duo 접힘의 A01·H01·L01·T04를 새로 캡처했다. 해당 테스트는 각각 1개·1개·4개 통과했다. Duo 접힘 T03은 기존 캡처 테스트의 시작 탭 누락으로 실패했고, 후속 실행은 Xcode가 모든 시뮬레이터 목적지를 인식하지 못해 시작되지 않았다. 사용자 지시로 추가 캡처 검증을 중단하고 이 한계를 기록한다. Duo 접힘 T03과 Duo 펼침 T04는 최신 변경의 캡처로 갱신하지 못했으며, 기존 이미지를 이번 변경의 완료 증거로 사용하지 않는다. `xcodebuild -showdestinations -project DUNE/DUNE.xcodeproj -scheme DUNEUITests`에 전용 Duo가 다시 나타나면 두 화면만 재검증한다.
+
 ## 화면 수정 시 갱신
 
 2026-10-19 T03·A01·H01·L01 히어로 링 통일 후 iPhone 18 Pro Max와 iPad Pro 13-inch (M5)의 밝음·어두움 실제 화면 16장을 [새 캡처와 출처](../full-redesign-map/review/four-tab-hero-rings-2026-10-19/README.md)에 보존했다. 같은 날 [WATER LILIES iPhone 8장](../full-redesign-map/review/water-lilies-hero-rings-2026-10-19/README.md)도 촬영했다. 기존 `actual/regular`은 다른 iPhone UDID로 만든 인덱스라 덮어쓰지 않았다. 현재 포털은 이 새 캡처로 연결하며, 기존 기기의 4개 화면은 갱신 완료로 계산하지 않는다.
