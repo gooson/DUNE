@@ -57,6 +57,8 @@ DESERT HORIZON을 제외한 7개 테마의 최신 iPad 밝음·어두움 4탭 �
 
 밝은 모드에서도 어두운 Today 카드를 쓰는 SAKURA·CONTOUR·WATER LILIES의 링·상태 제목·근거 수치 대비를 수정한 뒤 [iPhone·iPad의 T03 실제 화면 6장과 출처](../full-redesign-map/review/hero-dark-surface-contrast-2026-10-19/README.md)를 새로 보존했다. 이전 테마 갤러리의 해당 T03은 수정 전 기준 화면이며 이번 대비 수정의 완료 증거로 사용하지 않는다.
 
+2026-10-22 전용 Duo에서 DESERT HORIZON의 T03·A01·H01·L01을 접힘 세로와 펼침 가로로 다시 확인했다. [밝음·어두움 실제 화면 16장과 테스트 출처](../full-redesign-map/review/duo-four-tab-hero-rings-2026-10-22/README.md)를 보존하고, 기기별 `actual/duo`·`actual/duo-open`의 해당 4개 ID와 보드를 밝은 모드 새 캡처로 갱신했다. 외부 LCD·내부 LCD-1의 활성 상태와 실제 PNG를 대조했으며 탭별 직접 진입 테스트 2건이 통과했다. 펼침 가로의 증거를 펼침 세로·탭 레일 전환·다른 테마·접근성 크기의 통과로 사용하지 않는다.
+
 2026-10-19 DESERT HORIZON의 T03·A01·H01·L01은 iPhone 18 Pro Max 시뮬레이터에서 밝음·어두움 실제 화면 8장을 [중간 리뷰](../full-redesign-map/review/desert-horizon-layout-2026-10-19/README.md)로 새로 촬영했다. 일반 iPhone `actual/regular` 인덱스는 현재 사용할 수 없는 다른 iPhone UDID를 기준으로 하므로 이 4개 ID를 갱신 완료로 표시하지 않는다. 동일 기기의 새 인덱스와 다른 영향 기기 확인이 끝나면 통합 실제 화면맵에 반영한다.
 
 화면 배치, 글자, 상태, 내비게이션이 바뀌는 작업에서는 같은 작업 안에서 영향받는 화면 ID와 기기를 확인하고 **실제 앱 화면을 다시 캡처**한다. 폰 ID는 [화면 인벤토리](screen-inventory.md), Watch ID는 [Watch 상태표](../../plans/2026-10-12-watch-workout-redesign.md)에서 찾는다. 새 화면이나 분기는 상태표와 캡처 테스트를 먼저 추가한다. 수정된 화면이 어느 기기에 나타나는지 확인한 뒤 해당 기기만 갱신한다.
