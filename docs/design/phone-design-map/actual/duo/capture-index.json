@@ -1,11 +1,11 @@
 {
   "device": "duo",
-  "source_revision": "648abafb88d813825b0189833a9317389d314fef",
+  "source_revision": "1e159fb4bfb0ea8a52849b2254ed58204427293e",
   "source_worktree_dirty": true,
   "xcresults": [
-    ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.17_04-57-52-+0900.xcresult"
+    ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.22_00-54-15-+0900.xcresult"
   ],
-  "processed_capture_candidates": 114,
+  "processed_capture_candidates": 120,
   "captured": {
     "T11": {
       "row_id": "T11",
@@ -52,11 +52,11 @@
     "T09": {
       "row_id": "T09",
       "evidence": "dashboard-morning-briefing-screen",
-      "test": "NotificationRoutingRegressionTests/testBedtimeReminderPushesFromNotificationHub()",
+      "test": "TodaySettingsRegressionTests/testConditionHeroOpensConditionScoreDetail()",
       "action": "tap tab-today",
-      "timestamp": 1791824259.565,
-      "image": "EF2884A8-39A7-4EA1-A487-5B5B32E35205.png",
-      "screen": "screen-0-1398x2034-tap tab-today_0_75E25ADE-7CCD-4295-A9E6-551641424321.png",
+      "timestamp": 1792598906.433,
+      "image": "8A86ED68-328E-45BC-BB84-9659C81A5DCA.png",
+      "screen": "screen-0-1398x2034-tap tab-today_0_F0C3B17A-C03D-4370-B05E-464DA4418467.png",
       "file": "T09.png"
     },
     "P05": {
@@ -153,10 +153,10 @@
       "row_id": "A07",
       "evidence": "activity-exercise-type-detail-screen",
       "test": "ActivityExerciseRegressionTests/testExerciseTypeDetailShowsTrendSurface()",
-      "action": "tap activity-training-volume-row-manual-strength",
-      "timestamp": 1791825264.321,
-      "image": "4EAC10C9-D539-49B9-9CB6-CEDC47512BD7.png",
-      "screen": "screen-0-1398x2034-tap activity-training-volume-row-manual-strength_0_A7C570C4-03AC-4185-9061-614930ECF6E3.png",
+      "action": "tap 1개월",
+      "timestamp": 1792598621.527,
+      "image": "E056C80A-E50E-47A6-BA58-F7071C4C1012.png",
+      "screen": "screen-0-1398x2034-tap 1개월_0_3CA09BAE-8738-482D-8428-46CB05988A6A.png",
       "file": "A07.png"
     },
     "A06": {
@@ -164,9 +164,9 @@
       "evidence": "activity-training-volume-detail-screen",
       "test": "ActivityExerciseRegressionTests/testExerciseTypeDetailShowsTrendSurface()",
       "action": "tap activity-section-volume",
-      "timestamp": 1791825252.19,
-      "image": "30E258DD-6014-4978-B063-07CB4431D62D.png",
-      "screen": "screen-0-1398x2034-tap activity-section-volume_0_314AFC42-A724-4072-A0F9-FB1E86BD41D4.png",
+      "timestamp": 1792598535.77,
+      "image": "C1C41B5E-4386-41FC-A9E8-ED25C086E115.png",
+      "screen": "screen-0-1398x2034-tap activity-section-volume_0_CCBB9F93-5A76-4753-9B86-B67079E796E5.png",
       "file": "A06.png"
     },
     "W05": {
@@ -689,16 +689,6 @@
       "screen": "screen-0-1398x2034-tap habit-management-history-Morning Stretch_0_6BAC62AA-4E39-4F60-AC5D-F239606756F1.png",
       "file": "L06.png"
     },
-    "T04": {
-      "row_id": "T04",
-      "evidence": "condition-score-detail-screen",
-      "test": "TodaySettingsRegressionTests/testConditionHeroOpensConditionScoreDetail()",
-      "action": "tap dashboard-hero-condition",
-      "timestamp": 1791840324.062,
-      "image": "227F92D7-246A-4753-99E0-1885078C8F25.png",
-      "screen": "screen-0-1398x2034-tap dashboard-hero-condition_0_9B1C97C2-6678-44AA-BA2D-3596178B716B.png",
-      "file": "T04.png"
-    },
     "T18": {
       "row_id": "T18",
       "evidence": "pinned-metrics-editor-screen",
@@ -1036,9 +1026,9 @@
       "evidence": "title:Life",
       "test": "LifeDesignMapCaptureTests/testLifeRootRenders()",
       "action": "root after setup -[LifeDesignMapCaptureTests testLifeRootRenders]",
-      "timestamp": 1792169275.918,
-      "image": "F9D5B91E-0114-4377-B212-32B7855A7CDA.png",
-      "screen": "screen-0-1398x2034-root after setup -[LifeDesignMapCaptureTests testLifeRootRenders]_0_6E8EED9B-1AA0-423B-B9AE-08A20F8B6EEF.png",
+      "timestamp": 1792598652.186,
+      "image": "B3A99CF5-53AE-44FF-8AC1-5FAF1E520EEA.png",
+      "screen": "screen-0-1398x2034-root after setup -[LifeDesignMapCaptureTests testLifeRootRenders]_0_587510A5-54B4-40E2-8FD2-A86A7C837164.png",
       "file": "L01.png"
     },
     "A01": {
@@ -1046,9 +1036,9 @@
       "evidence": "title:Activity",
       "test": "ActivityExerciseRegressionTests/testExerciseTypeDetailShowsTrendSurface()",
       "action": "root after setup -[ActivityExerciseRegressionTests testExerciseTypeDetailShowsTrendSurface]",
-      "timestamp": 1792180962.372,
-      "image": "EA0F3D8A-EE4B-4101-838A-C04420E1D7A8.png",
-      "screen": "screen-0-1398x2034-root after setup -[ActivityExerciseRegressionTests testExerciseTypeDetailShowsTrendSurface]_0_B0961676-D137-46A0-AD88-FD8E3511B182.png",
+      "timestamp": 1792598486.42,
+      "image": "9A583290-E4C8-4412-AE36-3F3E2DABB362.png",
+      "screen": "screen-0-1398x2034-root after setup -[ActivityExerciseRegressionTests testExerciseTypeDetailShowsTrendSurface]_0_75A280F4-AB60-4DB2-B196-E6986EFB8708.png",
       "file": "A01.png"
     },
     "H01": {
@@ -1056,10 +1046,20 @@
       "evidence": "title:Wellness",
       "test": "WellnessDesignMapCaptureTests/testWellnessRootRenders()",
       "action": "root after setup -[WellnessDesignMapCaptureTests testWellnessRootRenders]",
-      "timestamp": 1792181142.545,
-      "image": "317CED43-0474-40D4-B66B-B3194263DB88.png",
-      "screen": "screen-0-1398x2034-root after setup -[WellnessDesignMapCaptureTests testWellnessRootRenders]_0_6801FFEC-7F0F-4D20-B022-E6CF52715CD5.png",
+      "timestamp": 1792599038.386,
+      "image": "6A15A4BC-9123-4031-AE75-7383419A582B.png",
+      "screen": "screen-0-1398x2034-root after setup -[WellnessDesignMapCaptureTests testWellnessRootRenders]_0_DC390216-015F-4822-BAE8-2E92F502243B.png",
       "file": "H01.png"
+    },
+    "T04": {
+      "row_id": "T04",
+      "evidence": "condition-score-detail-screen",
+      "test": "TodaySettingsRegressionTests/testConditionHeroOpensConditionScoreDetail()",
+      "action": "tap dashboard-hero-condition",
+      "timestamp": 1792598993.357,
+      "image": "F026C7CA-3866-4DB1-A01B-222C3DF3E65A.png",
+      "screen": "screen-0-1398x2034-tap dashboard-hero-condition_0_0A20B840-04A2-4044-B375-DF78D62F84D4.png",
+      "file": "T04.png"
     }
   },
   "unmatched": []

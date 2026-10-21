@@ -41,6 +41,8 @@ Watch의 [62개 상태별 맵](actual/watch/index.html)에는 기본 글자 크�
 
 미캡처 상태는 S08 이전 세트, S11 휴식 AOD, C12 유산소 AOD다. S08은 완료한 세트 뒤 버튼이 표시되지 않았고 재현 테스트가 응답 없이 멈춰 원인을 분리해야 한다. AOD 2개는 시뮬레이터 화면 전원 전환으로 실제 저휘도 프레임을 얻지 못했다. S16은 이후 실제 화면을 재캡처해 등록했다. 화면 이미지를 다른 상태나 시안으로 대체하지 않았다. C10은 계단 종료 추정 알림을 제거하고 120초 이후에도 타이머가 증가하는 실제 Watch 화면을 새로 캡처했다. C08은 알림이 실제로 보이는 실패 첨부 화면을 확인해 등록했다. watchOS 접근성 계층이 그 화면을 `alert`로 분류하지 않아 테스트의 요소 판정만 실패했으며, 이 경위를 인덱스에 기록했다.
 
+2026-10-22 컨디션 일간 이력과 히어로 점수 정렬 수정 후, 이 작업의 전용 시뮬레이터에서 일반 iPhone·iPad의 T04와 Duo 접힘의 A01·H01·L01·T04를 새로 캡처했다. 해당 테스트는 각각 1개·1개·4개 통과했다. Duo 접힘 T03은 기존 캡처 테스트의 시작 탭 누락으로 실패했고, 후속 실행은 Xcode가 모든 시뮬레이터 목적지를 인식하지 못해 시작되지 않았다. 사용자 지시로 추가 캡처 검증을 중단하고 이 한계를 기록한다. Duo 접힘 T03과 Duo 펼침 T04는 최신 변경의 캡처로 갱신하지 못했으며, 기존 이미지를 이번 변경의 완료 증거로 사용하지 않는다. `xcodebuild -showdestinations -project DUNE/DUNE.xcodeproj -scheme DUNEUITests`에 전용 Duo가 다시 나타나면 두 화면만 재검증한다.
+
 ## 화면 수정 시 갱신
 
 2026-10-19 T03·A01·H01·L01 히어로 링 통일 후 iPhone 18 Pro Max와 iPad Pro 13-inch (M5)의 밝음·어두움 실제 화면 16장을 [새 캡처와 출처](../full-redesign-map/review/four-tab-hero-rings-2026-10-19/README.md)에 보존했다. 같은 날 [WATER LILIES iPhone 8장](../full-redesign-map/review/water-lilies-hero-rings-2026-10-19/README.md)도 촬영했다. 기존 `actual/regular`은 다른 iPhone UDID로 만든 인덱스라 덮어쓰지 않았다. 현재 포털은 이 새 캡처로 연결하며, 기존 기기의 4개 화면은 갱신 완료로 계산하지 않는다.
