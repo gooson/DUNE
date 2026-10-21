@@ -395,6 +395,8 @@ def render_watch_gallery() -> None:
                     "S11": "휴식 AOD: 시뮬레이터 저휘도 화면 캡처 불가",
                     "S16": "휴식 UI 수정 후 재캡처 중 시뮬레이터 연결 실패",
                     "C12": "유산소 AOD: 시뮬레이터 저휘도 화면 캡처 불가",
+                    "C03": "심박 존 변경 후 Watch 시뮬레이터 부팅 실패로 재캡처하지 못함",
+                    "C13": "1km 통과 알림 추가 후 Watch 시뮬레이터 부팅 실패로 캡처하지 못함",
                 }
                 proof = f'<small>{escape(missing_reasons.get(code, "실제 화면 이미지 없음"))}</small>'
             cards_for_group.append(f'<article class="state">{visual}<div class="caption"><strong>{code} {escape(title)}</strong>{proof}</div></article>')
@@ -470,9 +472,14 @@ def render_portal() -> None:
     watch_index = HERE / "actual" / "watch" / "capture-index.json"
     watch_count = len(json.loads(watch_index.read_text()).get("captured", {})) if watch_index.exists() else 0
     watch_preview = "watch/images/S01.png" if (HERE / "actual" / "watch" / "images" / "S01.png").exists() else "../../watch-workout/watch-workout-design.png"
+    watch_state_count = len(re.findall(
+        r"^\| ([HDGPXSCF]\d\d) \|",
+        (REPO / "docs/plans/2026-10-12-watch-workout-redesign.md").read_text(),
+        re.MULTILINE,
+    ))
     entries.append(f'<a class="card" href="watch/index.html">'
                    f'<img src="{watch_preview}" alt="Watch 운동 실제 화면 맵 미리보기">'
-                   f'<div class="meta"><strong>Apple Watch · 운동</strong><span>{watch_count} / 62 상태 실제 캡처</span></div></a>')
+                   f'<div class="meta"><strong>Apple Watch · 운동</strong><span>{watch_count} / {watch_state_count} 상태 실제 캡처</span></div></a>')
     pending_html = ''.join(f'<p style="color:#e8bf94">{escape(note)}</p>' for note in sorted(pending_notes))
     html = ('<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
             '<title>DUNE · 전체 디자인맵</title><style>'

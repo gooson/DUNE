@@ -21,6 +21,7 @@ status: in-progress
 |---|---|
 | Today T03·Activity A01·Wellness H01·Life L01 | [4탭 레이아웃 맵](index.html) |
 | Watch H01·H02·H03 홈 카드 | [Watch 홈 스크롤 맵](watch-home-scroll.html) |
+| Watch C01·C03·C04 유산소 세션 | [Watch 유산소 세션 맵](watch-cardio-session.html) |
 
 새 화면 맵에는 화면 ID, 대상 기기·상태, 정보 순서, 행동 경로, 빈 상태와 접근성 전환을 명시한다.
 

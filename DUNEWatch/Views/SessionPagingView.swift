@@ -24,32 +24,55 @@ struct SessionPagingView: View {
 
 private struct CardioSessionPagingView: View {
     @Environment(WorkoutManager.self) private var workoutManager
-    @Environment(\.isLuminanceReduced) private var isLuminanceReduced
 
     @State private var selectedTab: CardioTab = .mainMetrics
+    @State private var announcedKilometer: Int?
+    @State private var milestoneDismissTask: Task<Void, Never>?
 
     var body: some View {
-        TabView(selection: $selectedTab) {
-            ControlsView(showSkip: false)
-                .tag(CardioTab.controls)
+        ZStack(alignment: .bottom) {
+            TabView(selection: $selectedTab) {
+                ControlsView(showSkip: false)
+                    .tag(CardioTab.controls)
 
-            CardioMainMetricsPage()
-                .tag(CardioTab.mainMetrics)
+                CardioMainMetricsPage()
+                    .tag(CardioTab.mainMetrics)
 
-            CardioHRZonePage()
-                .tag(CardioTab.hrZone)
+                CardioHRZonePage(milestoneKilometer: announcedKilometer)
+                    .tag(CardioTab.hrZone)
 
-            CardioSecondaryPage()
-                .tag(CardioTab.secondary)
+                CardioSecondaryPage()
+                    .tag(CardioTab.secondary)
 
-            NowPlayingView()
-                .tag(CardioTab.nowPlaying)
-        }
-        .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionPagingCardio)
-        .onChange(of: isLuminanceReduced) { _, reduced in
-            if reduced {
-                selectedTab = .mainMetrics
+                NowPlayingView()
+                    .tag(CardioTab.nowPlaying)
             }
+            .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionPagingCardio)
+
+            if selectedTab != .hrZone, let announcedKilometer {
+                CardioDistanceMilestoneBanner(kilometer: announcedKilometer)
+                    .padding(.bottom, DS.Spacing.sm)
+            }
+        }
+        .onChange(of: selectedTab) { _, tab in
+#if DEBUG && targetEnvironment(simulator)
+            if tab == .hrZone {
+                workoutManager.simulateKilometerMilestoneIfRequested()
+            }
+#endif
+        }
+        .onChange(of: workoutManager.latestDistanceMilestone) { _, kilometer in
+            milestoneDismissTask?.cancel()
+            announcedKilometer = kilometer
+            guard kilometer != nil else { return }
+            milestoneDismissTask = Task { @MainActor in
+                try? await Task.sleep(for: .seconds(6))
+                guard !Task.isCancelled else { return }
+                announcedKilometer = nil
+            }
+        }
+        .onDisappear {
+            milestoneDismissTask?.cancel()
         }
         .onChange(of: workoutManager.cardioInactivityPrompt) { oldValue, newValue in
             guard oldValue != newValue else { return }
@@ -136,6 +159,26 @@ private struct CardioSessionPagingView: View {
         case hrZone
         case secondary
         case nowPlaying
+    }
+}
+
+struct CardioDistanceMilestoneBanner: View {
+    let kilometer: Int
+
+    var body: some View {
+        HStack(spacing: DS.Spacing.xs) {
+            Image(systemName: "figure.run")
+            Text(kilometer, format: .number)
+                .fontWeight(.bold)
+            Text("km")
+            Text("reached")
+                .accessibilityIdentifier("watch-cardio-distance-milestone")
+        }
+        .font(DS.Typography.metricLabel)
+        .padding(.horizontal, DS.Spacing.md)
+        .padding(.vertical, DS.Spacing.sm)
+        .background(.regularMaterial, in: Capsule())
+        .allowsHitTesting(false)
     }
 }
 
