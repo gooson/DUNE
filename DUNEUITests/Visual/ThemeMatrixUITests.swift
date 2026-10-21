@@ -23,6 +23,7 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
         ]
 
         for style in ["Light", "Dark"] {
+            var todayRingSize: CGSize?
             for root in roots {
                 var configuration = launchConfiguration
                 configuration.initialTabSelectionArgument = root.argument
@@ -41,8 +42,14 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
                 assertAction(root.action, combination: combination)
 
                 let ring = app.descendants(matching: .any)[root.ring].firstMatch
-                XCTAssertEqual(ring.frame.width, 124, accuracy: 1, "\(combination): ring should use Today geometry")
-                XCTAssertEqual(ring.frame.height, 124, accuracy: 1, "\(combination): ring should remain circular")
+                if root.argument == "today" {
+                    todayRingSize = ring.frame.size
+                }
+                // AX includes the stroke outside the 124pt layout circle.
+                XCTAssertEqual(ring.frame.width, todayRingSize?.width ?? 0, accuracy: 1,
+                               "\(combination): ring should use Today geometry")
+                XCTAssertEqual(ring.frame.height, ring.frame.width, accuracy: 1,
+                               "\(combination): ring should remain circular")
                 XCTAssertTrue(app.windows.firstMatch.frame.contains(ring.frame), "\(combination): whole ring should fit on screen")
                 XCTAssertTrue(app.descendants(matching: .any)[root.action].firstMatch.isHittable,
                               "\(combination): hero action should be reachable")
