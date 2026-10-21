@@ -992,18 +992,18 @@ private struct HabitListQueryView: View {
             if dynamicTypeSize.isAccessibilitySize {
                 VStack(alignment: .leading, spacing: 12) {
                     lifeProgressRing
-                    desertHabitList
+                    lifeProgressNarrative
                 }
             } else {
                 ViewThatFits(in: .horizontal) {
                     HStack(alignment: .center, spacing: 17) {
                         lifeProgressRing
-                        desertHabitList
+                        lifeProgressNarrative
                             .frame(minWidth: 140, alignment: .leading)
                     }
                     VStack(alignment: .leading, spacing: 12) {
                         lifeProgressRing
-                        desertHabitList
+                        lifeProgressNarrative
                     }
                 }
             }
@@ -1063,28 +1063,13 @@ private struct HabitListQueryView: View {
         )
     }
 
-    private var desertHabitList: some View {
-        VStack(alignment: .leading, spacing: 5) {
-            ForEach(viewModel.habitProgresses.prefix(3), id: \.id) { habit in
-                HStack(spacing: 5) {
-                    Image(systemName: habit.isCompleted ? "checkmark" : "circle")
-                        .foregroundStyle(habit.isCompleted
-                            ? (theme == .desertWarm ? Color(red: 0.090, green: 0.431, blue: 0.408) : theme.accentColor)
-                            : theme.secondaryTextColor)
-                    Text(habit.name)
-                        .lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 1)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-                .frame(maxWidth: dynamicTypeSize.isAccessibilitySize ? .infinity : nil, alignment: .leading)
-                .font(.caption.weight(habit.isCompleted ? .semibold : .regular))
-                .foregroundStyle(theme == .desertWarm ? (colorScheme == .dark ? Color.white : Color.primary) : theme.directionPreviewTextColor)
-                .padding(.horizontal, 8)
-                .padding(.vertical, 6)
-                .background(theme == .desertWarm
-                    ? (colorScheme == .dark ? Color(red: 0.188, green: 0.196, blue: 0.190) : Color(red: 0.961, green: 0.918, blue: 0.851))
-                    : theme.accentColor.opacity(0.12), in: RoundedRectangle(cornerRadius: 7))
-            }
-        }
+    private var lifeProgressNarrative: some View {
+        Text(viewModel.heroNarrative)
+            .font(.headline)
+            .foregroundStyle(theme.directionPreviewTextColor)
+            .fixedSize(horizontal: false, vertical: true)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .accessibilityIdentifier("life-hero-narrative")
     }
 
     private func timeOfDayHeader(_ timeOfDay: HabitTimeOfDay, count: Int) -> some View {
