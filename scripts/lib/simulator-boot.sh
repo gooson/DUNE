@@ -6,10 +6,10 @@
 _dump_simulator_diagnostics() {
     echo "── Simulator Diagnostics ──"
     echo "Available runtimes:"
-    xcrun simctl list runtimes 2>&1 || true
+    python3 "$ROOT_DIR/scripts/lib/command-deadline.py" --seconds 30 -- xcrun simctl list runtimes 2>&1 || true
     echo ""
     echo "Device state for target UDID ($1):"
-    xcrun simctl list devices 2>&1 | grep -A2 "$1" | head -10 || true
+    python3 "$ROOT_DIR/scripts/lib/command-deadline.py" --seconds 30 -- xcrun simctl list devices 2>&1 | grep -A2 "$1" | head -10 || true
     echo "── End Diagnostics ──"
 }
 
@@ -17,6 +17,13 @@ _dump_simulator_diagnostics() {
 # Uses stepped backoff: 2s → 4s → 6s → ... → 10s (capped).
 # Returns 0 on success, 1 on timeout.
 _try_boot() {
+    # One monotonic deadline includes bootstatus, fallback queries and sleeps.
+    ROOT_DIR="$ROOT_DIR" python3 "$ROOT_DIR/scripts/lib/command-deadline.py" \
+        --seconds "$3" -- bash -c 'source "$1"; _try_boot_cycle "$2" "$3" "$4"' \
+        boot-cycle "$ROOT_DIR/scripts/lib/simulator-boot.sh" "$1" "$2" "$3"
+}
+
+_try_boot_cycle() {
     local udid="$1"
     local label="$2"
     local timeout="$3"
@@ -24,7 +31,7 @@ _try_boot() {
     local interval=2
 
     local boot_err
-    boot_err=$(xcrun simctl boot "$udid" 2>&1) || true
+    boot_err=$(python3 "$ROOT_DIR/scripts/lib/command-deadline.py" --seconds 30 -- xcrun simctl boot "$udid" 2>&1) || true
     if [[ -n "$boot_err" ]]; then
         # "Unable to boot device in current state: Booted" is fine
         if echo "$boot_err" | grep -q "Booted"; then
@@ -36,7 +43,7 @@ _try_boot() {
 
     # Poll with bootstatus first (faster, blocks until ready), fall back to list devices.
     # bootstatus exits 0 when booted; we give it most of the remaining timeout.
-    if xcrun simctl bootstatus "$udid" -b 2>/dev/null; then
+    if python3 "$ROOT_DIR/scripts/lib/command-deadline.py" --seconds "$timeout" -- xcrun simctl bootstatus "$udid" -b 2>/dev/null; then
         echo "${label} simulator booted (bootstatus confirmed)."
         return 0
     fi
@@ -44,7 +51,7 @@ _try_boot() {
     # Fallback: poll simctl list devices. Use generous 30s sub-timeout because
     # the CoreSimulator daemon can be slow to respond while booting.
     while [[ "$elapsed" -lt "$timeout" ]]; do
-        if timeout 30 xcrun simctl list devices 2>/dev/null | grep -F "$udid" | grep -q "Booted"; then
+        if python3 "$ROOT_DIR/scripts/lib/command-deadline.py" --seconds 30 -- xcrun simctl list devices 2>/dev/null | grep -F "$udid" | grep -q "Booted"; then
             echo "${label} simulator booted (${elapsed}s)."
             return 0
         fi
@@ -72,7 +79,7 @@ wait_for_simulator_boot() {
     local attempt=0
 
     # Validate env var inputs
-    if ! [[ "$timeout" =~ ^[0-9]+$ ]]; then
+    if ! [[ "$timeout" =~ ^[0-9]+$ ]] || [[ "$timeout" -eq 0 ]]; then
         echo "ERROR: SIMULATOR_BOOT_TIMEOUT must be a positive integer (got: '$timeout')."
         exit 1
     fi
@@ -84,7 +91,7 @@ wait_for_simulator_boot() {
     echo "Waiting for ${label} simulator [$udid] to boot (timeout=${timeout}s, retries=${max_retries})..."
 
     # Pre-flight: verify the device exists (anchored grep)
-    if ! xcrun simctl list devices 2>/dev/null | grep -qF "$udid"; then
+    if ! python3 "$ROOT_DIR/scripts/lib/command-deadline.py" --seconds 30 -- xcrun simctl list devices 2>/dev/null | grep -qF "$udid"; then
         echo "ERROR: Simulator UDID [$udid] not found in device list."
         _dump_simulator_diagnostics "$udid"
         exit 1
@@ -93,7 +100,7 @@ wait_for_simulator_boot() {
     while [[ "$attempt" -le "$max_retries" ]]; do
         if [[ "$attempt" -gt 0 ]]; then
             echo "Retry $attempt/$max_retries: shutting down and rebooting ${label} simulator..."
-            xcrun simctl shutdown "$udid" 2>/dev/null || true
+            python3 "$ROOT_DIR/scripts/lib/command-deadline.py" --seconds 30 -- xcrun simctl shutdown "$udid" 2>/dev/null || true
             sleep 3
         fi
 

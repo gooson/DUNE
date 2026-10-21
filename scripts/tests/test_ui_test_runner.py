@@ -1,6 +1,7 @@
 """Contract tests for the iOS UI runner's argv and execution evidence."""
 
 import shlex
+import hashlib
 import json
 import os
 import subprocess
@@ -47,6 +48,12 @@ def fake_lock_verifier(directory: Path) -> Path:
     python = fake_bin / "python3"
     python.write_text("#!/bin/sh\ncase \"$1:$3\" in "
                       "*/simulator-test-lock.py:--verify) exit 0 ;; esac\n"
+                      'case "$1:$2" in\n'
+                      '*/worktree-simulator-registry.py:is-orphan) exit 1 ;;\n'
+                      '*/worktree-simulator-registry.py:cleanup-name) '
+                      'printf "reset\\n" >> "$FAKE_ACTIONS"; touch "$FAKE_RESET_DONE"; exit 0 ;;\n'
+                      '*/worktree-simulator-registry.py:is-recorded|'
+                      '*/worktree-simulator-registry.py:record) exit 0 ;;\nesac\n'
                       f'exec "{sys.executable}" "$@"\n')
     python.chmod(0o755)
     return fake_bin
@@ -360,13 +367,36 @@ class RunnerIntegrationTests(unittest.TestCase):
             fake_bin = fake_lock_verifier(base)
             fixture = base / "fixture.log"
             fixture.write_text(log_text)
-            (fake_bin / "xcrun").write_text("#!/bin/sh\necho '{\"devices\":{}}'\n")
+            actions = base / "simulator-actions"
+            reset_done = base / "reset-done"
+            if runner == WATCH_RUNNER:
+                source_id = "11111111-2222-3333-4444-555555555555"
+                clone_id = "AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE"
+                name = "Apple Watch Fixture"
+                suffix = f"-wt-{ROOT.name}-{ROOT.parent.name}-{hashlib.sha256(str(ROOT).encode()).hexdigest()[:12]}"
+                devices = {"devices": {"com.apple.CoreSimulator.SimRuntime.watchOS-27-0": [
+                    {"udid": source_id, "name": name, "state": "Shutdown", "isAvailable": True},
+                    {"udid": clone_id, "name": name + suffix, "state": "Booted", "isAvailable": True},
+                ]}}
+                (base / "before.json").write_text(json.dumps(devices))
+                devices["devices"]["com.apple.CoreSimulator.SimRuntime.watchOS-27-0"][1]["name"] = "Fixture Clone"
+                (base / "after.json").write_text(json.dumps(devices))
+                (fake_bin / "xcrun").write_text(
+                    '#!/bin/sh\ncase "$2" in\n'
+                    'list) if [ -e "$FAKE_RESET_DONE" ]; then cat "$FAKE_AFTER"; '
+                    'else cat "$FAKE_BEFORE"; fi ;;\n'
+                    f'clone) printf "clone\\n" >> "$FAKE_ACTIONS"; echo {clone_id} ;;\n'
+                    '*) exit 0 ;;\nesac\n')
+            else:
+                (fake_bin / "xcrun").write_text("#!/bin/sh\necho '{\"devices\":{}}'\n")
             (fake_bin / "xcodebuild").write_text("#!/bin/sh\ncat \"$FAKE_TEST_LOG\"\nexit \"$FAKE_TEST_EXIT\"\n")
             for fake in fake_bin.iterdir():
                 fake.chmod(0o755)
             log = base / "output with spaces.log"
             env = {**os.environ, "PATH": str(fake_bin) + os.pathsep + os.environ["PATH"],
                    "FAKE_TEST_LOG": str(fixture), "FAKE_TEST_EXIT": str(exit_code),
+                   "FAKE_ACTIONS": str(actions), "FAKE_RESET_DONE": str(reset_done),
+                   "FAKE_BEFORE": str(base / "before.json"), "FAKE_AFTER": str(base / "after.json"),
                    "DUNE_SIM_TEST_LOCK_FD": "fixture"}
             args = ["bash", str(runner), "--no-regen", "--no-stream-log", "--log-file", str(log)]
             if selector:
@@ -376,7 +406,28 @@ class RunnerIntegrationTests(unittest.TestCase):
                                  cwd=ROOT, env=env, text=True, capture_output=True, timeout=30)
             receipt = json.loads(Path(str(log) + ".result.json").read_text())
             self.assertEqual(receipt["target"], target)
+            if runner == WATCH_RUNNER:
+                self.assertEqual(actions.read_text().splitlines(), ["reset", "clone"], run.stderr)
             return run, receipt
+
+    def test_watch_query_error_stops_before_xcodebuild(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            base = Path(directory)
+            fake_bin = fake_lock_verifier(base)
+            marker = base / "xcodebuild-called"
+            (fake_bin / "xcrun").write_text("#!/bin/sh\nexit 1\n")
+            (fake_bin / "xcodebuild").write_text('#!/bin/sh\ntouch "$FAKE_BUILD_MARKER"\n')
+            for fake in fake_bin.iterdir():
+                fake.chmod(0o755)
+            run = subprocess.run(
+                ["bash", str(WATCH_RUNNER), "--no-regen", "--smoke", "--log-file", str(base / "watch.log")],
+                cwd=ROOT, env={**os.environ, "PATH": str(fake_bin) + os.pathsep + os.environ["PATH"],
+                               "DUNE_SIM_TEST_LOCK_FD": "fixture", "FAKE_BUILD_MARKER": str(marker)},
+                text=True, capture_output=True, timeout=15,
+            )
+            self.assertEqual(run.returncode, 2, run.stderr)
+            self.assertFalse(marker.exists())
+            self.assertIn("Could not query", run.stderr)
 
     def test_ios_runner_writes_passed_receipt(self) -> None:
         selector = "DUNEUITests/DashboardSmokeTests/testAppLaunchesOnDashboard"
@@ -421,12 +472,13 @@ class SimulatorVersionFloorTests(unittest.TestCase):
                 f'\nresolve_sim_destination "{platform}" "{platform}-27-0" "{name}" "27.0" "27"\n'
             )
         else:
-            start = source.index("DEVICE_INFO=$(xcrun simctl list devices available -j")
+            start = source.index("DEVICE_INFO=$(_simctl_bounded 30 list devices available -j")
             end = source.index("\nRESOLVED_", start)
             setting = ('SIMULATOR_NAME="iPhone 17"; SIMULATOR_OS="27.0"\n'
                        if platform == "iOS" else
                        'WATCH_SIM_NAME="Apple Watch Series 11 (46mm)"; WATCH_SIM_OS="27.0"\n')
-            shell = setting + source[start:end] + '\nprintf "%s" "$DEVICE_INFO"\n'
+            shell = ('_simctl_bounded() { shift; xcrun simctl "$@"; }\n'
+                     + setting + source[start:end] + '\nprintf "%s" "$DEVICE_INFO"\n')
 
         legacy_name = "iPhone 17" if platform == "iOS" else "Apple Watch Series 11 (46mm)"
         modern_name = "iPhone 18 Pro" if platform == "iOS" else "Apple Watch Series 12 (46mm)"

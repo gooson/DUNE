@@ -76,6 +76,25 @@ class SimulatorTestLockTests(unittest.TestCase):
         self.assertEqual(result.returncode, 23)
         self.assertEqual(json.loads(result.stdout), arguments)
 
+    def test_bounded_wait_fails_while_another_worktree_owns_lock(self) -> None:
+        started = self.base / "bounded-first-started"
+        release = self.base / "bounded-first-release"
+        hold = ("import pathlib,sys,time\n"
+                "pathlib.Path(sys.argv[1]).touch()\n"
+                "while not pathlib.Path(sys.argv[2]).exists(): time.sleep(.02)\n")
+        first = subprocess.Popen(self.command(self.repo, hold, str(started), str(release)),
+                                 stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        self.addCleanup(lambda: first.kill() if first.poll() is None else None)
+        wait_for(started)
+        result = subprocess.run(self.command(self.sibling, "print('should-not-run')"),
+                                env={**os.environ, "DUNE_SIM_TEST_LOCK_WAIT_SECONDS": "0.2"},
+                                capture_output=True, text=True, timeout=5)
+        self.assertEqual(result.returncode, 2)
+        self.assertIn("lock remained busy", result.stderr)
+        self.assertNotIn("should-not-run", result.stdout)
+        release.touch()
+        self.assertEqual(first.wait(timeout=5), 0)
+
     def test_inherited_descriptor_survives_shell_reentry(self) -> None:
         script = self.base / "runner.sh"
         started = self.base / "shell-child-started"

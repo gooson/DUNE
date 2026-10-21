@@ -9,6 +9,7 @@
 
 - 명령 실행/대기는 셸 도구에 맡긴다. 실행만을 위한 모델이나 별도 agent를 생성하지 않는다.
 - 표준 실행기: `scripts/test-unit.sh`, `scripts/test-ui.sh`, `scripts/test-watch-ui.sh`. 기본 파일 로그와 요약을 사용하고, 로그 전체를 `cat`하지 않는다. CI streaming 기본 동작은 유지한다.
+- UI runner의 전체 deadline에는 잠금·부팅·빌드·테스트·결과 정리가 포함되고 로그 무갱신 15분에도 종료된다. 같은 테스트를 raw `xcodebuild`, wrapper, 다른 로그 이름으로 중복 실행하지 않는다. `DUNE_UI_TEST_WALL_TIMEOUT`/`DUNE_UI_TEST_IDLE_TIMEOUT` 조정은 실행 전 예상 검증 범위와 근거가 있을 때만 한다.
 - 정상 결과는 종료 상태·로그 경로·보고된 테스트 수만 확인한다. 실패 시 제한된 오류 요약 → 해당 로그 구간 → 관련 소스 순서로 읽는다. 요약에서 수를 알 수 없으면 unknown이며 0건 성공으로 간주하지 않는다.
 - iOS/watch UI 실행은 `<log>.result.json`에 target, 실제 종료 코드, executed/passed/skipped/failed 수, 누락 selector, 실패 요약을 기록한다. 최초 오류와 최근의 서로 다른 오류를 제한된 길이로 보존한다. JSON의 `status`와 실행기 종료 상태를 함께 확인한다. unknown/0건/식별 가능한 passed case 없음/필수 selector 누락은 실패다. 이 결과는 명시한 선택 범위의 실행 증거이며 full 커버리지·시각적 레이아웃 인증은 아니다.
 - 개발 중 `test-ui.sh --only-testing <target/class/method>` 또는 `--smoke`로 빠르게 확인할 수 있다. 둘을 함께 주면 명시적 선택과 smoke의 합집합을 실행한다. `/run`의 최종 범위는 `.codex/skill-compat.md`의 변경 범위 기반 UI 게이트를 적용하고, 그 외는 source skill이 요구하는 범위를 유지한다. full 판정을 smoke/targeted로 대신하지 않는다. 단위 테스트의 `--ios-only`/`--watch-only`는 실제 변경 범위와 최종 요구조건에 맞게 사용한다.

@@ -99,6 +99,22 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+if [[ "$DRY_RUN" -eq 0 && -z "${DUNE_UI_WATCHDOG_ACTIVE:-}" ]]; then
+    # Include simulator lock, boot, test execution, and xcresult finalization.
+    # Focused runs have a short ceiling; explicit full runs can take longer.
+    WALL_TIMEOUT="${DUNE_UI_TEST_WALL_TIMEOUT:-}"
+    if [[ -z "$WALL_TIMEOUT" ]]; then
+        if [[ "$SMOKE_MODE" -eq 1 || "${#ONLY_TESTING[@]}" -gt 0 ]]; then
+            WALL_TIMEOUT=1800
+        else
+            WALL_TIMEOUT=10800
+        fi
+    fi
+    exec python3 "$ROOT_DIR/scripts/lib/command-deadline.py" \
+        --seconds "$WALL_TIMEOUT" --idle-seconds "${DUNE_UI_TEST_IDLE_TIMEOUT:-900}" \
+        --activity-file "$LOG_FILE" -- "$ROOT_DIR/scripts/test-ui.sh" ${ORIGINAL_ARGS[@]+"${ORIGINAL_ARGS[@]}"}
+fi
+
 if [[ "$SIMULATOR_UDID_REQUESTED" -eq 1 ]]; then
     if [[ ! "$SIMULATOR_UDID" =~ ^[[:xdigit:]]{8}-[[:xdigit:]]{4}-[[:xdigit:]]{4}-[[:xdigit:]]{4}-[[:xdigit:]]{12}$ ]]; then
         echo "Invalid simulator UDID: $SIMULATOR_UDID" >&2
@@ -178,7 +194,7 @@ fi
 
 if [[ "$DRY_RUN" -eq 0 && -n "$SIMULATOR_UDID" ]]; then
     # An explicit device request is strict: never choose another device or clone it.
-    if ! xcrun simctl list devices available -j | python3 -c '
+    if ! _simctl_bounded 30 list devices available -j | python3 -c '
 import json, sys
 requested = sys.argv[1].lower()
 try:
@@ -208,10 +224,10 @@ if [[ "$DRY_RUN" -eq 0 ]]; then
 if [[ -n "$SIMULATOR_UDID" ]]; then
     echo "Ensuring requested iOS simulator '$SIMULATOR_UDID' is booted..."
     wait_for_simulator_boot "$SIMULATOR_UDID" "iOS"
-    xcrun simctl terminate "$SIMULATOR_UDID" "$BUNDLE_ID" >/dev/null 2>&1 || true
+    _simctl_bounded 30 terminate "$SIMULATOR_UDID" "$BUNDLE_ID" >/dev/null 2>&1 || true
 else
 echo "Ensuring simulator '$SIMULATOR_NAME' is booted..."
-DEVICE_INFO=$(xcrun simctl list devices available -j \
+DEVICE_INFO=$(_simctl_bounded 30 list devices available -j \
     | python3 -c "
 import json, re, sys
 requested_name = '${SIMULATOR_NAME}'
@@ -265,7 +281,7 @@ if [[ -n "$DEVICE_INFO" ]]; then
     DEVICE_UDID=$(ensure_worktree_simulator "$DEVICE_UDID" "$RESOLVED_SIMULATOR_NAME")
     DESTINATION="id=${DEVICE_UDID}"
     wait_for_simulator_boot "$DEVICE_UDID" "iOS"
-    xcrun simctl terminate "$DEVICE_UDID" "$BUNDLE_ID" >/dev/null 2>&1 || true
+    _simctl_bounded 30 terminate "$DEVICE_UDID" "$BUNDLE_ID" >/dev/null 2>&1 || true
 else
     echo "Warning: Could not find simulator '$SIMULATOR_NAME' (OS $SIMULATOR_OS). xcodebuild will attempt to boot one."
 fi
