@@ -134,6 +134,7 @@ Codex가 iOS·iPadOS·Duo·watchOS의 보이는 화면 배치, 글자, 상태, �
 - `agent: ui-test-expert`는 agent-map의 실제 모델 배정을 사용한다. 테스트 실행 자체에는 agent가 필요 없다.
 - Unit/UI/watch 테스트는 기존 `scripts/test-unit.sh`, `scripts/test-ui.sh`, `scripts/test-watch-ui.sh`를 표준 경로로 사용한다. 기본 파일 로그/요약을 유지하고 필요한 때만 streaming한다.
 - **UI 실행 점유 제한**: Codex 로컬 UI 테스트는 raw `xcodebuild test` 대신 표준 UI 실행기를 사용한다. 실행기에는 시뮬레이터 잠금 대기 60초, 로그 무갱신 15분, 전체 실행 deadline이 있다. focused/smoke 기본 30분, full 기본 3시간이며 정당한 장시간 검증은 `DUNE_UI_TEST_WALL_TIMEOUT`과 `DUNE_UI_TEST_IDLE_TIMEOUT`으로 실행 전에 명시한다. deadline 124, 잠금 대기 실패, 테스트 결과 정체는 실패 증거다. 별도 PID를 임의 종료하거나 같은 명령을 이름만 바꿔 재시도하지 않는다.
+- **전용 시뮬레이터 사용**: 사용자가 특정 기기를 직접 지정한 경우 외에는 현재 worktree 소유로 등록된 clone을 단독 사용한다. iPhone·iPad·Duo·Watch의 UI 테스트, 앱 설치·초기화, 수동 캡처, 자세·회전 전환에 모두 적용한다. 명시적 UDID를 넘기기 전에도 `.codex-checks/worktree-simulators.json`의 worktree·UDID·이름과 실제 기기를 대조한다. `booted` 선택이나 공용 원본·다른 worktree 기기로의 fallback은 사용하지 않는다. 전용 기기 조회·생성·소유권 확인이 실패하면 해당 실행을 중단하고 원인과 재개 조건을 기록한다. 전용 기기도 저장소 잠금과 실행 deadline을 유지한다.
 - UI 명령 시작 전 변경 범위와 정확한 selector/기기/plan을 정한다. 일반 기능 수정은 영향받는 단일 기기와 테스트부터 실행하고, 추가 기기·full·전체 디자인맵은 실제 영향 또는 명시적 사용자 요청이 있을 때만 연다. 한 저장소에서 한 번에 한 UI runner만 진행하고 테스트 완료 전에 새 runner를 만들지 않는다.
 - iPhone 검증 후 watchOS 검증으로 넘어갈 때 iPhone runner 종료와 결과 receipt를 먼저 확인한다. watch runner는 잠금을 얻은 뒤 이 worktree가 소유한 동일 이름의 Watch clone을 삭제 확인하고 새로 생성한다. 삭제·소유권 확인에 실패하면 Watch 검증을 시작하지 않는다. 공용 원본·다른 worktree 기기는 삭제하지 않는다.
 - 실행기 계약 테스트도 같은 호스트에서는 순차 실행한다. 동시 fixture·시뮬레이터 조회가 대기 시간을 늘린 경우 실행을 중지하고 소유 자식이 정리됐는지 확인한 뒤 해당 실패만 다시 진단한다. 프로세스 수를 줄이기 위한 진단 중에 새 백그라운드 runner를 시작하지 않는다.
