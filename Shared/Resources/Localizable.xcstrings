@@ -128,6 +128,9 @@
         }
       }
     },
+    "/%@" : {
+
+    },
     "/hr avg" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1072,6 +1075,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@시간"
+          }
+        }
+      }
+    },
+    "%@h %@min" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@h %2$@min"
           }
         }
       }
@@ -9074,7 +9087,6 @@
       }
     },
     "CONDITION" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -20796,7 +20808,6 @@
       }
     },
     "Log Workout" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -27827,7 +27838,6 @@
       }
     },
     "Read All" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
