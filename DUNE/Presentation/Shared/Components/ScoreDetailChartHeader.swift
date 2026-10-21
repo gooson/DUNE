@@ -13,6 +13,7 @@ struct ScoreDetailChartHeader: View {
                 .font(.subheadline)
                 .fontWeight(.medium)
                 .foregroundStyle(DS.Color.textSecondary)
+                .accessibilityIdentifier("score-detail-chart-visible-range")
                 .contentTransition(.numericText())
                 .animation(DS.Animation.snappy, value: visibleRangeLabel)
 

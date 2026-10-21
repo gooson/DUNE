@@ -4,6 +4,9 @@ import Testing
 
 @Suite("HourlySparklineData Tests")
 struct HourlySparklineDataTests {
+    private func point(index: Int, hour: Int, score: Double) -> HourlySparklineData.HourlyPoint {
+        .init(index: index, date: Date(timeIntervalSince1970: Double(index * 3600)), hour: hour, score: score)
+    }
 
     // MARK: - DeltaDirection
 
@@ -11,8 +14,8 @@ struct HourlySparklineDataTests {
     func deltaDirectionUp() {
         let data = HourlySparklineData(
             points: [
-                .init(index: 0, hour: 8, score: 50),
-                .init(index: 1, hour: 9, score: 55)
+                point(index: 0, hour: 8, score: 50),
+                point(index: 1, hour: 9, score: 55)
             ],
             currentScore: 55,
             previousScore: 50,
@@ -26,8 +29,8 @@ struct HourlySparklineDataTests {
     func deltaDirectionDown() {
         let data = HourlySparklineData(
             points: [
-                .init(index: 0, hour: 8, score: 60),
-                .init(index: 1, hour: 9, score: 52)
+                point(index: 0, hour: 8, score: 60),
+                point(index: 1, hour: 9, score: 52)
             ],
             currentScore: 52,
             previousScore: 60,
@@ -41,8 +44,8 @@ struct HourlySparklineDataTests {
     func deltaDirectionStable() {
         let data = HourlySparklineData(
             points: [
-                .init(index: 0, hour: 8, score: 50),
-                .init(index: 1, hour: 9, score: 51)
+                point(index: 0, hour: 8, score: 50),
+                point(index: 1, hour: 9, score: 51)
             ],
             currentScore: 51,
             previousScore: 50,
@@ -55,7 +58,7 @@ struct HourlySparklineDataTests {
     @Test("Delta is 0 when no previous score")
     func deltaZeroWhenNoPrevious() {
         let data = HourlySparklineData(
-            points: [.init(index: 0, hour: 9, score: 65)],
+            points: [point(index: 0, hour: 9, score: 65)],
             currentScore: 65,
             previousScore: nil,
             includesYesterday: false
@@ -79,10 +82,10 @@ struct HourlySparklineDataTests {
     func includesYesterdayFlag() {
         let data = HourlySparklineData(
             points: [
-                .init(index: 0, hour: 22, score: 60),
-                .init(index: 1, hour: 23, score: 58),
-                .init(index: 2, hour: 0, score: 55),
-                .init(index: 3, hour: 1, score: 57)
+                point(index: 0, hour: 22, score: 60),
+                point(index: 1, hour: 23, score: 58),
+                point(index: 2, hour: 0, score: 55),
+                point(index: 3, hour: 1, score: 57)
             ],
             currentScore: 57,
             previousScore: 55,
@@ -98,8 +101,8 @@ struct HourlySparklineDataTests {
 
     @Test("HourlyPoint uses index as Identifiable id")
     func hourlyPointIdentity() {
-        let p1 = HourlySparklineData.HourlyPoint(index: 0, hour: 23, score: 50)
-        let p2 = HourlySparklineData.HourlyPoint(index: 1, hour: 0, score: 55)
+        let p1 = point(index: 0, hour: 23, score: 50)
+        let p2 = point(index: 1, hour: 0, score: 55)
         #expect(p1.id == 0)
         #expect(p2.id == 1)
         #expect(p1.id != p2.id)
@@ -115,7 +118,7 @@ struct HourlySparklineDataTests {
     @Test("nonEmptyOrNil returns self for non-empty")
     func nonEmptyOrNilNonEmpty() {
         let data = HourlySparklineData(
-            points: [.init(index: 0, hour: 9, score: 65)],
+            points: [point(index: 0, hour: 9, score: 65)],
             currentScore: 65,
             previousScore: nil,
             includesYesterday: false

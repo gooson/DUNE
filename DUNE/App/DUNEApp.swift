@@ -825,10 +825,10 @@ struct DUNEApp: App {
     @MainActor
     private func invalidateConditionHistoryIfNeeded() async -> Bool {
         guard await HealthKitManager.shared.conditionAccessChangePending() else { return false }
-        // All current condition sparklines read at most the last 24 hours.
-        // Keep archival snapshots unchanged to avoid rewriting CloudKit history.
+        // The day detail chart reads the seven-day scroll buffer; older
+        // archival snapshots remain outside the invalidation window.
         WidgetDataWriter.writeConditionScore(nil)
-        guard await appRuntime.scoreRefreshService.invalidateRecentConditionHistory() else { return false }
+        guard await appRuntime.scoreRefreshService.invalidateVisibleConditionHistory() else { return false }
         await HealthKitManager.shared.acknowledgeConditionAccessChange()
         return true
     }

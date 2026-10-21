@@ -591,12 +591,7 @@ struct ActivityView: View {
             progress: Double(readiness.score) / 100,
             value: readiness.score.formatted(),
             caption: "READINESS",
-            ringColor: theme == .desertWarm ? Color(red: 0.886, green: 0.718, blue: 0.380) : theme.accentColor,
-            highlightColor: theme == .desertWarm ? Color(red: 0.969, green: 0.843, blue: 0.471) : theme.duskColor,
             tipColor: readiness.status.color,
-            trackColor: theme == .desertWarm ? Color(red: 0.435, green: 0.353, blue: 0.227) : theme.accentColor,
-            textColor: theme.directionPreviewTextColor,
-            secondaryTextColor: theme.directionPreviewTextColor.opacity(0.74),
             accessibilityLabel: "Training readiness \(readiness.score), \(readiness.status.label)",
             accessibilityIdentifier: "activity-hero-ring"
         )

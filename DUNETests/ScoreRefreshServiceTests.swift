@@ -34,30 +34,36 @@ struct ScoreRefreshServiceTests {
             conditionScore: 68,
             hrvValue: 48
         )
+        let archival = HourlyScoreSnapshot(
+            date: Calendar.current.date(byAdding: .day, value: -10, to: now)!,
+            conditionScore: 64,
+            hrvValue: 47
+        )
         context.insert(older)
         context.insert(recent)
         context.insert(historical)
+        context.insert(archival)
         try context.save()
 
         let service = ScoreRefreshService(modelContainer: container)
         await service.loadTodaySparklines()
         #expect(!service.conditionSparkline.points.isEmpty)
 
-        #expect(await service.invalidateRecentConditionHistory())
-        let cutoff = Date().addingTimeInterval(-ScoreRefreshService.rollingWindowSeconds)
+        #expect(await service.invalidateVisibleConditionHistory())
+        let cutoff = TimePeriod.day.dateRange(offset: -TimePeriod.day.scrollBufferPeriods).start
 
         let afterRecent = try ModelContext(container).fetch(FetchDescriptor<HourlyScoreSnapshot>())
         #expect(afterRecent.filter { $0.date >= cutoff }.allSatisfy {
             $0.conditionScore == nil && $0.hrvValue == nil && $0.rhrValue == nil
         })
-        #expect(afterRecent.first { $0.date < cutoff }?.conditionScore == 68)
+        #expect(afterRecent.first { $0.date < cutoff }?.conditionScore == 64)
 
         let persisted = try ModelContext(container).fetch(FetchDescriptor<HourlyScoreSnapshot>())
-        #expect(persisted.count == 3)
+        #expect(persisted.count == 4)
         #expect(persisted.filter { $0.date >= cutoff }.allSatisfy {
             $0.conditionScore == nil && $0.hrvValue == nil && $0.rhrValue == nil
         })
-        #expect(persisted.first { $0.date < cutoff }?.conditionScore == 68)
+        #expect(persisted.first { $0.date < cutoff }?.conditionScore == 64)
         let retained = try #require(persisted.first { $0.wellnessScore == 80 })
         #expect(retained.readinessScore == 69)
         #expect(retained.sleepScore == 82)

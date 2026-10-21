@@ -113,6 +113,10 @@ struct ConditionScoreDetailView: View {
                                     value: viewModel.visibleRangeLabel
                                 )
                             }
+                            .chartSelectionUITestProbe(
+                                "visible-points:\(viewModel.visibleChartPointCount)",
+                                identifier: "condition-history-probe"
+                            )
                         }
                     }
                     .id(viewModel.selectedPeriod)
