@@ -498,6 +498,7 @@ def render_portal() -> None:
             '<p><a href="../../full-redesign-map/review/seven-theme-ipad-hero-rings-2026-10-19/index.html" style="color:#e8bf94">나머지 7개 테마 4탭 최신 iPad 실제 캡처 →</a></p>'
             '<p><a href="../../full-redesign-map/review/hero-dark-surface-contrast-2026-10-19/index.html" style="color:#e8bf94">SAKURA·CONTOUR·WATER LILIES Today 카드 대비 수정 후 실제 캡처 →</a></p>'
             '<p><a href="../../full-redesign-map/review/duo-four-tab-hero-rings-2026-10-22/index.html" style="color:#e8bf94">전용 Duo 접힘·펼침 4탭 링 최신 실제 화면 16장 →</a></p>'
+            '<p><a href="../../full-redesign-map/review/life-hero-narrative-2026-10-22/index.html" style="color:#e8bf94">Life 히어로 정보 중복 해소 후 5개 기기 조건·큰 글씨 실제 화면 15장 →</a></p>'
             + pending_html + '<div class="grid">' + ''.join(entries) + '</div></main></html>')
     (HERE / "actual" / "index.html").write_text(html)
     render_watch_gallery()

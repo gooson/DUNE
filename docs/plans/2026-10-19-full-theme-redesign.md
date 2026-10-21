@@ -88,7 +88,7 @@ related_brainstorms: []
 
 - **Files**: `LifeView.swift`, Life UI 테스트, 4탭 레이아웃 맵과 영향받은 실제 화면맵.
 - **Changes**: 링 옆의 습관 이름 3개를 기존 `LifeViewModel.heroNarrative` 진행 설명으로 바꾼다. 링·체크리스트 행동·아래 습관 목록은 유지한다. 새 문자열이나 데이터 로직은 추가하지 않는다.
-- **Verification**: Life 단일 배치 테스트로 밝음·어두움·최대 접근성 글씨를 확인한다. 공유 레이아웃의 영향 기기인 iPhone·iPad·Duo 접힘·펼침에서 L01만 새로 촬영한다. 앞서 검증한 다른 3탭을 재실행하지 않는다.
+- **Verification**: Life 단일 배치 테스트로 밝음·어두움·최대 접근성 글씨를 확인한다. 공유 레이아웃의 영향 기기인 iPhone 402pt·440pt, iPad, Duo 접힘·펼침에서 L01만 새로 촬영한다. 앞서 검증한 다른 3탭을 재실행하지 않는다. 최종 집중 검사 5건 통과·실제 화면 15장을 보존했다.
 
 ## Edge Cases
 

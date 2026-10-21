@@ -11,6 +11,8 @@ status: reviewed
 
 현재 worktree가 생성·등록한 전용 `iPhone Duo-wt-Health-c658-3d55863c6a19`에서 DESERT HORIZON의 T03 Today, A01 Activity, H01 Wellness, L01 Life를 확인했다. 접힘 세로의 활성 외부 LCD와 펼침 가로의 활성 내부 LCD-1을 공식 기기 조회로 대조했다. 원본 PNG를 보존하며 시안 이미지를 사용하지 않았다.
 
+이후 Life 히어로의 습관 이름을 진행 설명으로 바꿨다. 이 갤러리의 L01은 해당 변경 전 배치이며 [최신 Life 실제 화면](../life-hero-narrative-2026-10-22/README.md)을 현재 배치의 증거로 사용한다.
+
 ## 검사와 결과
 
 - `ThemeMatrixUITests.testDesertHeroRingsByInitialTab`을 자세별로 실행했다. 두 실행 모두 정상 종료했으며 합계 2건 통과·실패 0건·건너뜀 0건이다.

@@ -1,6 +1,6 @@
 {
   "device": "duo",
-  "source_revision": "b243b27f5fa44db587494f3382a1c4b8484fb641",
+  "source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
   "source_worktree_dirty": true,
   "xcresults": [
     ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.22_00-54-15-+0900.xcresult"
@@ -1043,31 +1043,32 @@
     "L01": {
       "file": "L01.png",
       "screen_id": "L01",
-      "tab": "Life",
-      "appearance": "light",
+      "device": "Duo 접힘 세로",
+      "device_id": "AB14C82A-C28A-4F9F-96A4-87CA8044518B",
+      "state": "light",
       "theme": "desertWarm",
-      "posture": "closed",
-      "orientation": "portrait",
-      "display": "LCD",
       "native_size": [
         1398,
         2034
       ],
-      "device_id": "AB14C82A-C28A-4F9F-96A4-87CA8044518B",
-      "test": "ThemeMatrixUITests/testDesertHeroRingsByInitialTab()",
-      "source_revision": "b243b27f5fa44db587494f3382a1c4b8484fb641",
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
       "source_worktree_dirty": true,
-      "timestamp": 1792601836.4774826,
-      "capture_method": "host VisualAudit checkpoint; simctl explicit display",
-      "checkpoint": 5,
-      "source_file": ".xcodebuild/hero-rings-duo-closed-20261022/005-1398x2034.png",
-      "layout_assertions": "Today ring frame parity; circular bounds; viewport containment; reachable action; Wellness narrative width",
+      "life_view_sha256": "8281d19a6d115b015c021c326111e96694e0ba170df1c1b6a5f93bc040460d2e",
+      "timestamp": 1792602768.499017,
+      "test": "LifeSeededSmokeTests/testHeroNarrativeLayout()",
+      "checkpoint": 2,
+      "capture_method": "host viewport hold; simctl explicit display",
+      "source_file": ".xcodebuild/life-narrative-duo-closed-fixed-20261022/002-1398x2034.png",
       "row_id": "L01",
-      "evidence": "identifier:Life hero; layout assertions",
-      "action": "hero ring Desert Light Life (closed)",
-      "image": "005-1398x2034.png",
-      "screen": "005-1398x2034.png",
-      "evidence_gallery": "../../../full-redesign-map/review/duo-four-tab-hero-rings-2026-10-22/closed/L01-light.png"
+      "image": "002-1398x2034.png",
+      "screen": "002-1398x2034.png",
+      "action": "Life hero narrative Light (duo-closed)",
+      "evidence": "identifier:life-hero-narrative; frame and action assertions",
+      "evidence_gallery": "../../../full-redesign-map/review/life-hero-narrative-2026-10-22/duo-closed/L01-light.png"
     },
     "A01": {
       "file": "A01.png",
