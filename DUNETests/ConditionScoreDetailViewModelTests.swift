@@ -176,6 +176,7 @@ struct ConditionScoreDetailViewModelTests {
         await vm.loadData()
 
         #expect(!vm.chartData.isEmpty)
+        #expect(vm.chartData.last?.value == 65)
         #expect(vm.isLoading == false)
         #expect(vm.errorMessage == nil)
     }
@@ -418,6 +419,75 @@ struct ConditionScoreDetailViewModelTests {
         if let stats = vm.summaryStats {
             #expect(stats.average > 0)
         }
+    }
+
+    @Test("Day chart loads scores beyond the previous 48 hours")
+    func dayHistoryIncludesScrollableDates() async {
+        let fixedNow = calendar.date(bySettingHour: 13, minute: 0, second: 0, of: Date()) ?? Date()
+        let samples = (-21...0).flatMap { dayOffset -> [HRVSample] in
+            (9...11).compactMap { hour in
+                guard let day = calendar.date(byAdding: .day, value: dayOffset, to: fixedNow),
+                      let date = calendar.date(bySettingHour: hour, minute: 0, second: 0, of: day) else {
+                    return nil
+                }
+                return HRVSample(value: 42 + Double(dayOffset + 21) * 0.3, date: date)
+            }
+        }
+        let vm = ConditionScoreDetailViewModel(
+            hrvService: MockHRVService(samples: samples),
+            historyService: StubLimitedConditionHistory(hrvStart: nil, rhrStart: nil),
+            nowProvider: { fixedNow }
+        )
+        vm.configure(score: ConditionScore(score: 50, date: fixedNow))
+        vm.selectedPeriod = .day
+        try? await Task.sleep(for: .milliseconds(50))
+        if vm.chartData.isEmpty { await vm.loadData() }
+
+        let threeDaysAgo = calendar.date(byAdding: .day, value: -3, to: fixedNow)!
+        #expect(vm.chartData.contains { calendar.isDate($0.date, inSameDayAs: threeDaysAgo) },
+                "Loaded dates: \(vm.chartData.map(\.date))")
+        #expect(vm.chartData.last?.value == 50)
+    }
+
+    @Test("Single HRV readings still produce previous-day chart points")
+    func dayHistoryFallsBackToDailyScore() async {
+        let fixedNow = calendar.date(bySettingHour: 13, minute: 0, second: 0, of: Date()) ?? Date()
+        let samples = (-21...0).compactMap { dayOffset -> HRVSample? in
+            guard let day = calendar.date(byAdding: .day, value: dayOffset, to: fixedNow),
+                  let date = calendar.date(bySettingHour: 9, minute: 0, second: 0, of: day) else {
+                return nil
+            }
+            return HRVSample(value: 40 + Double(dayOffset + 21), date: date)
+        }
+        let vm = ConditionScoreDetailViewModel(
+            hrvService: MockHRVService(samples: samples),
+            historyService: StubLimitedConditionHistory(hrvStart: nil, rhrStart: nil),
+            nowProvider: { fixedNow }
+        )
+        vm.configure(score: ConditionScore(score: 50, date: fixedNow))
+        vm.selectedPeriod = .day
+        try? await Task.sleep(for: .milliseconds(50))
+        if vm.chartData.isEmpty { await vm.loadData() }
+
+        let threeDaysAgo = calendar.date(byAdding: .day, value: -3, to: fixedNow)!
+        #expect(vm.chartData.contains { calendar.isDate($0.date, inSameDayAs: threeDaysAgo) },
+                "Loaded dates: \(vm.chartData.map(\.date))")
+    }
+
+    @Test("Recorded hourly scores and current hero score override recalculated values")
+    func recordedScoresMatchHero() {
+        let now = calendar.date(bySettingHour: 13, minute: 0, second: 0, of: Date()) ?? Date()
+        let prior = calendar.date(byAdding: .hour, value: -1, to: now)!
+        let points = ConditionScoreDetailViewModel.mergedHourlyPoints(
+            calculated: [ChartDataPoint(date: prior, value: 70), ChartDataPoint(date: now, value: 72)],
+            snapshots: [(date: prior, score: 56), (date: now, score: 52)],
+            currentScore: ConditionScore(score: 50, date: now),
+            now: now,
+            calendar: calendar
+        )
+
+        #expect(points.map(\.value) == [56, 50])
+        #expect(points.map(\.date) == [prior, now])
     }
 
     @Test("latest load wins when an older request finishes later")

@@ -8,6 +8,7 @@ struct HourlySparklineView: View {
     let tintColor: Color
     var height: CGFloat = 32
     var showsReferenceLabels = false
+    var usesTimelineAxis = false
     var accessibilityTitle: LocalizedStringKey = "Score Trend"
 
     var body: some View {
@@ -20,7 +21,7 @@ struct HourlySparklineView: View {
             Chart {
                 ForEach(data.points) { point in
                 LineMark(
-                    x: .value("Hour", point.index),
+                    x: .value("Hour", xValue(for: point)),
                     y: .value("Score", point.score)
                 )
                 .interpolationMethod(.catmullRom)
@@ -28,7 +29,7 @@ struct HourlySparklineView: View {
                 .lineStyle(StrokeStyle(lineWidth: 2.5, lineCap: .round))
 
                 AreaMark(
-                    x: .value("Hour", point.index),
+                    x: .value("Hour", xValue(for: point)),
                     y: .value("Score", point.score)
                 )
                 .interpolationMethod(.catmullRom)
@@ -41,7 +42,7 @@ struct HourlySparklineView: View {
             }
             .chartXAxis(.hidden)
             .chartYAxis(.hidden)
-            .chartXScale(domain: 0...max(data.points.count - 1, 1))
+            .chartXScale(domain: xDomain)
             .chartYScale(domain: computedYDomain)
             .frame(height: height)
             .clipped()
@@ -74,6 +75,16 @@ struct HourlySparklineView: View {
     private var minimumScore: Int { Int(data.points.map(\.score).min() ?? 0) }
     private var maximumScore: Int { Int(data.points.map(\.score).max() ?? 0) }
     private func hourLabel(_ hour: Int) -> String { String(format: "%02d:00", hour) }
+
+    private func xValue(for point: HourlySparklineData.HourlyPoint) -> Double {
+        usesTimelineAxis ? point.date.timeIntervalSince1970 : Double(point.index)
+    }
+
+    private var xDomain: ClosedRange<Double> {
+        guard usesTimelineAxis else { return 0...Double(max(data.points.count - 1, 1)) }
+        let end = data.points.last?.date.timeIntervalSince1970 ?? Date.now.timeIntervalSince1970
+        return (end - TimePeriod.day.visibleDomainSeconds)...end
+    }
 
     private var accessibilitySummary: String {
         let first = data.points.first?.score ?? 0

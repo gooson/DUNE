@@ -395,6 +395,8 @@ def render_watch_gallery() -> None:
                     "S11": "휴식 AOD: 시뮬레이터 저휘도 화면 캡처 불가",
                     "S16": "휴식 UI 수정 후 재캡처 중 시뮬레이터 연결 실패",
                     "C12": "유산소 AOD: 시뮬레이터 저휘도 화면 캡처 불가",
+                    "C03": "심박 존 변경 후 Watch 시뮬레이터 부팅 실패로 재캡처하지 못함",
+                    "C13": "1km 통과 알림 추가 후 Watch 시뮬레이터 부팅 실패로 캡처하지 못함",
                 }
                 proof = f'<small>{escape(missing_reasons.get(code, "실제 화면 이미지 없음"))}</small>'
             cards_for_group.append(f'<article class="state">{visual}<div class="caption"><strong>{code} {escape(title)}</strong>{proof}</div></article>')
@@ -470,9 +472,14 @@ def render_portal() -> None:
     watch_index = HERE / "actual" / "watch" / "capture-index.json"
     watch_count = len(json.loads(watch_index.read_text()).get("captured", {})) if watch_index.exists() else 0
     watch_preview = "watch/images/S01.png" if (HERE / "actual" / "watch" / "images" / "S01.png").exists() else "../../watch-workout/watch-workout-design.png"
+    watch_state_count = len(re.findall(
+        r"^\| ([HDGPXSCF]\d\d) \|",
+        (REPO / "docs/plans/2026-10-12-watch-workout-redesign.md").read_text(),
+        re.MULTILINE,
+    ))
     entries.append(f'<a class="card" href="watch/index.html">'
                    f'<img src="{watch_preview}" alt="Watch 운동 실제 화면 맵 미리보기">'
-                   f'<div class="meta"><strong>Apple Watch · 운동</strong><span>{watch_count} / 62 상태 실제 캡처</span></div></a>')
+                   f'<div class="meta"><strong>Apple Watch · 운동</strong><span>{watch_count} / {watch_state_count} 상태 실제 캡처</span></div></a>')
     pending_html = ''.join(f'<p style="color:#e8bf94">{escape(note)}</p>' for note in sorted(pending_notes))
     html = ('<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
             '<title>DUNE · 전체 디자인맵</title><style>'
@@ -485,6 +492,11 @@ def render_portal() -> None:
             '.meta span{color:#c9ad8e}</style><main><h1>DUNE · 전체 디자인맵</h1>'
             '<p>iPhone·iPad·Duo의 현재 앱 실제 화면과 Watch 운동 재작업 결과를 한곳에서 확인합니다.</p>'
             '<p><a href="compare.html" style="color:#e8bf94">폰·패드·Duo 같은 화면 비교하기 →</a></p>'
+            '<p><a href="../../full-redesign-map/review/four-tab-hero-rings-2026-10-19/index.html" style="color:#e8bf94">4탭 히어로 링 최신 iPhone 실제 캡처와 출처 →</a></p>'
+            '<p><a href="../../full-redesign-map/review/four-tab-hero-rings-accessibility-2026-10-19/index.html" style="color:#e8bf94">4탭 최대 접근성 글씨 실제 캡처와 출처 →</a></p>'
+            '<p><a href="../../full-redesign-map/review/six-theme-hero-rings-2026-10-19/index.html" style="color:#e8bf94">나머지 6개 테마 4탭 최신 iPhone 실제 캡처 →</a></p>'
+            '<p><a href="../../full-redesign-map/review/seven-theme-ipad-hero-rings-2026-10-19/index.html" style="color:#e8bf94">나머지 7개 테마 4탭 최신 iPad 실제 캡처 →</a></p>'
+            '<p><a href="../../full-redesign-map/review/hero-dark-surface-contrast-2026-10-19/index.html" style="color:#e8bf94">SAKURA·CONTOUR·WATER LILIES Today 카드 대비 수정 후 실제 캡처 →</a></p>'
             + pending_html + '<div class="grid">' + ''.join(entries) + '</div></main></html>')
     (HERE / "actual" / "index.html").write_text(html)
     render_watch_gallery()

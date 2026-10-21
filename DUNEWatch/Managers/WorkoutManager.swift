@@ -2,6 +2,7 @@ import Foundation
 import HealthKit
 import Observation
 import OSLog
+import WatchKit
 
 /// Manages HKWorkoutSession + HKLiveWorkoutBuilder for Watch workout tracking.
 /// Provides real-time heart rate, calorie, and session state.
@@ -69,6 +70,8 @@ final class WorkoutManager: NSObject {
 
     /// Total distance in meters (cardio mode only).
     private(set) var distance: Double = 0
+    private var lastAnnouncedKilometer = 0
+    private(set) var latestDistanceMilestone: Int?
 
     /// Total steps in current session.
     private(set) var steps: Double = 0
@@ -86,9 +89,7 @@ final class WorkoutManager: NSObject {
 
     var displayedZoneIndex: Int? {
         guard let liveZoneDistribution else { return currentZone?.rawValue }
-        guard let liveZoneIndex,
-              liveZoneDistribution.zones.contains(where: { $0.index == liveZoneIndex }) else { return nil }
-        return liveZoneIndex
+        return WatchZoneDisplay.number(for: liveZoneIndex, in: liveZoneDistribution)
     }
     var displayedZoneCount: Int { liveZoneDistribution?.zones.count ?? HeartRateZone.Zone.allCases.count }
 
@@ -353,6 +354,8 @@ final class WorkoutManager: NSObject {
         self.workoutMode = .cardio(activityType: activityType, isOutdoor: isOutdoor)
         self.cardioSecondaryUnit = secondaryUnit
         self.distance = 0
+        self.lastAnnouncedKilometer = 0
+        self.latestDistanceMilestone = nil
         self.steps = 0
         self.currentPace = 0
         self.floorsClimbed = 0
@@ -409,6 +412,8 @@ final class WorkoutManager: NSObject {
         self.completedSetsData = Array(repeating: [], count: snapshot.entries.count)
         self.extraSetsPerExercise = [:]
         self.distance = 0
+        self.lastAnnouncedKilometer = 0
+        self.latestDistanceMilestone = nil
         self.steps = 0
         self.currentPace = 0
         self.currentMachineLevel = nil
@@ -527,17 +532,21 @@ final class WorkoutManager: NSObject {
            case .cardio = workoutMode {
             liveZoneDistribution = WorkoutZoneDistribution(
                 source: .system,
-                bins: (1...6).map { index in
+                bins: (0..<6).map { index in
                     .init(
                         index: index,
-                        minimumBPM: index == 1 ? nil : Double(80 + index * 20),
-                        maximumBPM: index == 6 ? nil : Double(100 + index * 20),
+                        minimumBPM: index == 0 ? nil : Double(100 + index * 20),
+                        maximumBPM: index == 5 ? nil : Double(120 + index * 20),
                         durationSeconds: 30
                     )
                 }
             )
-            liveZoneIndex = 3
+            liveZoneIndex = ProcessInfo.processInfo.arguments.contains("--ui-watch-first-zone") ? 0 : 2
             heartRate = 135
+        }
+        if ProcessInfo.processInfo.arguments.contains("--ui-watch-kilometer-milestone"),
+           case .cardio = workoutMode {
+            distance = 990
         }
 #endif
         persistRecoveryState()
@@ -894,6 +903,8 @@ final class WorkoutManager: NSObject {
         heartRate = 0
         activeCalories = 0
         distance = 0
+        lastAnnouncedKilometer = 0
+        latestDistanceMilestone = nil
         steps = 0
         currentPace = 0
         estimatedMaxHR = HeartRateZoneCalculator.defaultMaxHR
@@ -948,6 +959,7 @@ final class WorkoutManager: NSObject {
             // Restore distance from builder statistics if cardio session
             if isCardioMode {
                 restoreDistanceFromBuilder(recoveredBuilder)
+                lastAnnouncedKilometer = Int(distance / 1000)
             }
 
             // If strength mode but template couldn't be restored, mark as recovered session
@@ -1453,8 +1465,7 @@ extension WorkoutManager: HKLiveWorkoutBuilderDelegate {
                 activeCalories = kcal
             }
             if let meters = distanceValue {
-                distance = meters
-                updatePace()
+                updateDistance(meters)
             }
             if let floors = floorsValue {
                 floorsClimbed = floors
@@ -1466,6 +1477,35 @@ extension WorkoutManager: HKLiveWorkoutBuilderDelegate {
             evaluateCardioInactivity(at: Date())
         }
     }
+
+    private func updateDistance(_ meters: Double) {
+        guard meters.isFinite, (0..<500_000).contains(meters) else { return }
+        distance = meters
+        updatePace()
+        guard !isSessionEnded,
+              case .cardio(let activityType, _) = workoutMode,
+              activityType.isDistanceBased else { return }
+        if isPaused {
+            lastAnnouncedKilometer = max(lastAnnouncedKilometer, Int(meters / 1000))
+            return
+        }
+        guard
+              let milestone = CardioDistanceMilestone.reached(
+                distanceMeters: meters,
+                after: lastAnnouncedKilometer
+              ) else { return }
+        lastAnnouncedKilometer = milestone
+        latestDistanceMilestone = milestone
+        WKInterfaceDevice.current().play(.notification)
+    }
+
+#if DEBUG && targetEnvironment(simulator)
+    func simulateKilometerMilestoneIfRequested() {
+        guard ProcessInfo.processInfo.arguments.contains("--ui-watch-kilometer-milestone"),
+              isCardioMode, distance < 1_000 else { return }
+        updateDistance(1_010)
+    }
+#endif
 
     /// Recalculates current pace (sec/km) from total distance and active elapsed time.
     @MainActor
@@ -1560,6 +1600,23 @@ enum CardioInactivityActivitySignal {
         }
 
         return false
+    }
+}
+
+enum CardioDistanceMilestone {
+    static func reached(distanceMeters: Double, after lastAnnouncedKilometer: Int) -> Int? {
+        guard distanceMeters.isFinite, (0..<500_000).contains(distanceMeters),
+              lastAnnouncedKilometer >= 0 else { return nil }
+        let kilometer = Int(distanceMeters / 1000)
+        return kilometer > lastAnnouncedKilometer ? kilometer : nil
+    }
+}
+
+enum WatchZoneDisplay {
+    static func number(for rawIndex: Int?, in distribution: WorkoutZoneDistribution) -> Int? {
+        guard let rawIndex,
+              let position = distribution.zones.firstIndex(where: { $0.index == rawIndex }) else { return nil }
+        return position + 1
     }
 }
 

@@ -76,4 +76,18 @@ struct WatchHRZoneTests {
     func allCasesCount() {
         #expect(HeartRateZone.Zone.allCases.count == 5)
     }
+
+    @Test("HealthKit zero-based zone indices use one-based Watch labels")
+    func healthKitDisplayNumber() {
+        let distribution = WorkoutZoneDistribution(
+            source: .system,
+            bins: (0..<6).map { .init(index: $0, minimumBPM: nil, maximumBPM: nil, durationSeconds: 0) }
+        )
+
+        #expect(WatchZoneDisplay.number(for: 0, in: distribution) == 1)
+        #expect(WatchZoneDisplay.number(for: 2, in: distribution) == 3)
+        #expect(WatchZoneDisplay.number(for: 5, in: distribution) == 6)
+        #expect(WatchZoneDisplay.number(for: nil, in: distribution) == nil)
+        #expect(WatchZoneDisplay.number(for: 6, in: distribution) == nil)
+    }
 }

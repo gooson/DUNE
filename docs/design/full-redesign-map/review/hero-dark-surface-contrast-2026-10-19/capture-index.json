@@ -1,0 +1,95 @@
+{
+  "source_revision": "807232f1",
+  "captures": {
+    "ipad/contour/T03": {
+      "file": "ipad/contour/T03.png",
+      "capture_method": "simctl io screenshot (LCD screenID 1)",
+      "timestamp": 1792388958.3701184,
+      "launch_arguments": [
+        "--uitesting",
+        "--ui-reset",
+        "--seed-mock",
+        "--ui-scenario",
+        "default-seeded",
+        "--ui-test-theme",
+        "contourAtlas",
+        "--ui-test-style",
+        "light",
+        "-morningBriefingDisabled",
+        "YES"
+      ],
+      "device": "iPad Pro 13-inch (M5)",
+      "device_id": "EE45BC41-3EC5-45DD-9585-9A84FDEDFCB3"
+    },
+    "ipad/sakura/T03": {
+      "file": "ipad/sakura/T03.png",
+      "capture_method": "simctl io screenshot (LCD screenID 1)",
+      "timestamp": 1792388937.8419223,
+      "launch_arguments": [
+        "--uitesting",
+        "--ui-reset",
+        "--seed-mock",
+        "--ui-scenario",
+        "default-seeded",
+        "--ui-test-theme",
+        "sakuraCalm",
+        "--ui-test-style",
+        "light",
+        "-morningBriefingDisabled",
+        "YES"
+      ],
+      "device": "iPad Pro 13-inch (M5)",
+      "device_id": "EE45BC41-3EC5-45DD-9585-9A84FDEDFCB3"
+    },
+    "ipad/water-lilies/T03": {
+      "file": "ipad/water-lilies/T03.png",
+      "capture_method": "simctl io screenshot (LCD screenID 1)",
+      "timestamp": 1792388967.829308,
+      "launch_arguments": [
+        "--uitesting",
+        "--ui-reset",
+        "--seed-mock",
+        "--ui-scenario",
+        "default-seeded",
+        "--ui-test-theme",
+        "waterLilies",
+        "--ui-test-style",
+        "light",
+        "-morningBriefingDisabled",
+        "YES"
+      ],
+      "device": "iPad Pro 13-inch (M5)",
+      "device_id": "EE45BC41-3EC5-45DD-9585-9A84FDEDFCB3"
+    },
+    "iphone/contour/T03": {
+      "file": "iphone/contour/T03.png",
+      "capture_method": "XCTest attachment",
+      "attachment": "Contour Light Today_0_EA79D011-0111-47C2-B094-3C9B1D652316.png",
+      "timestamp": 1792388492.457,
+      "result_bundle": "dune-hero-contrast-iphone-fixed-20261019.xcresult",
+      "device": "iPhone 18 Pro Max",
+      "device_id": "8D97EA93-CBF5-4D7C-9CFF-435EF2F85AB4",
+      "test": "ThemeMatrixUITests/testContourAtlasMatrix()"
+    },
+    "iphone/sakura/T03": {
+      "file": "iphone/sakura/T03.png",
+      "capture_method": "XCTest attachment",
+      "attachment": "Sakura Light Today_0_19ABD38E-4B27-4932-940A-BDCF28069AAB.png",
+      "timestamp": 1792388709.828,
+      "result_bundle": "dune-hero-contrast-sakura-iphone-20261019.xcresult",
+      "device": "iPhone 18 Pro Max",
+      "device_id": "8D97EA93-CBF5-4D7C-9CFF-435EF2F85AB4",
+      "test": "ThemeMatrixUITests/testSakuraCalmMatrix()"
+    },
+    "iphone/water-lilies/T03": {
+      "file": "iphone/water-lilies/T03.png",
+      "capture_method": "XCTest attachment",
+      "attachment": "Water Lilies Today Light_0_DB9275A3-614E-4CEF-B907-7E49413F48B6.png",
+      "timestamp": 1792388794.987,
+      "result_bundle": "dune-hero-contrast-lily-iphone-20261019.xcresult",
+      "device": "iPhone 18 Pro Max",
+      "device_id": "8D97EA93-CBF5-4D7C-9CFF-435EF2F85AB4",
+      "test": "WaterLiliesThemeTests/testFourTabRootsInLightAndDark()"
+    }
+  }
+}

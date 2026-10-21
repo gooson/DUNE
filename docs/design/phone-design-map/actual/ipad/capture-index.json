@@ -1,14 +1,11 @@
 {
   "device": "ipad",
-  "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
+  "source_revision": "338517370178d0bc580d412d006cdc92c6bab7bb",
   "source_worktree_dirty": true,
   "xcresults": [
-    ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.17_04-51-09-+0900.xcresult",
-    "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_08-35-52-+0900.xcresult",
-    "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_08-59-44-+0900.xcresult",
-    "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_09-57-20-+0900.xcresult"
+    "/Users/shanks/.codex/worktrees/c658/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_14-45-09-+0900.xcresult"
   ],
-  "processed_capture_candidates": 114,
+  "processed_capture_candidates": 122,
   "captured": {
     "S05": {
       "row_id": "S05",
@@ -740,16 +737,6 @@
       "screen": "screen-0-2064x2752-before teardown -[SettingsSmokeTests testWhatsNewMuscleMapDetailExists]_0_C42964DD-0BFA-49BB-BFF5-8FBD712C0DF7.png",
       "file": "S06.png"
     },
-    "T04": {
-      "row_id": "T04",
-      "evidence": "condition-score-detail-screen",
-      "test": "TodaySettingsRegressionTests/testConditionHeroOpensConditionScoreDetail()",
-      "action": "tap dashboard-hero-condition",
-      "timestamp": 1791838407.46,
-      "image": "F16671A9-80DF-46EE-A66A-901E8D569ED2.png",
-      "screen": "screen-0-2064x2752-tap dashboard-hero-condition_0_95895688-3688-41FE-91D7-35464588F9FC.png",
-      "file": "T04.png"
-    },
     "A18": {
       "row_id": "A18",
       "evidence": "activity-consistency-info-sheet",
@@ -1040,44 +1027,119 @@
     },
     "T03": {
       "row_id": "T03",
-      "evidence": "DUNE light theme root",
+      "evidence": "title:Today",
       "test": "ThemeMatrixUITests/testDesertWarmMatrix()",
-      "action": "Desert Light Today_0_769E6414-4F7B-4B77-8AA4-A8E26363BC25.png",
-      "timestamp": 1792371633.508,
-      "image": "Desert Light Today_0_769E6414-4F7B-4B77-8AA4-A8E26363BC25.png",
-      "screen": "Desert Light Today_0_769E6414-4F7B-4B77-8AA4-A8E26363BC25.png",
+      "action": "root after setup -[ThemeMatrixUITests testDesertWarmMatrix]",
+      "timestamp": 1792388751.826,
+      "image": "1B39BE4A-482D-47F0-A7ED-7C2BAD331413.png",
+      "screen": "screen-0-2064x2752-root after setup -[ThemeMatrixUITests testDesertWarmMatrix]_0_A5C1BCFA-7620-44BB-A83A-A3C8C3E25F62.png",
       "file": "T03.png"
-    },
-    "A01": {
-      "row_id": "A01",
-      "evidence": "DUNE light theme root",
-      "test": "ThemeMatrixUITests/testDesertWarmMatrix()",
-      "action": "Desert Light Activity_0_EC7A260D-2E0B-4DB6-B285-96FB9910E66A.png",
-      "timestamp": 1792371641.201,
-      "image": "Desert Light Activity_0_EC7A260D-2E0B-4DB6-B285-96FB9910E66A.png",
-      "screen": "Desert Light Activity_0_EC7A260D-2E0B-4DB6-B285-96FB9910E66A.png",
-      "file": "A01.png"
     },
     "H01": {
       "row_id": "H01",
-      "evidence": "DUNE light theme root",
+      "evidence": "title:Wellness",
       "test": "ThemeMatrixUITests/testDesertWarmMatrix()",
-      "action": "Desert Light Wellness_0_96B3E86C-7FB9-4069-A156-DCAD53BBBB56.png",
-      "timestamp": 1792371647.938,
-      "image": "Desert Light Wellness_0_96B3E86C-7FB9-4069-A156-DCAD53BBBB56.png",
-      "screen": "Desert Light Wellness_0_96B3E86C-7FB9-4069-A156-DCAD53BBBB56.png",
+      "action": "tap tab-wellness",
+      "timestamp": 1792388844.413,
+      "image": "8A91E180-B177-491D-886C-69D5C2AA8D84.png",
+      "screen": "screen-0-2064x2752-tap tab-wellness_0_6AE17FCC-E70E-47F3-9503-0030AB3B70FB.png",
       "file": "H01.png"
     },
     "L01": {
       "row_id": "L01",
-      "evidence": "DUNE light theme root",
+      "evidence": "title:Life",
       "test": "ThemeMatrixUITests/testDesertWarmMatrix()",
-      "action": "Desert Light Life_0_EC2B8C2D-028D-4F81-BFC2-4CD93EDCBA55.png",
-      "timestamp": 1792371654.132,
-      "image": "Desert Light Life_0_EC2B8C2D-028D-4F81-BFC2-4CD93EDCBA55.png",
-      "screen": "Desert Light Life_0_EC2B8C2D-028D-4F81-BFC2-4CD93EDCBA55.png",
+      "action": "tap tab-life",
+      "timestamp": 1792388834.643,
+      "image": "A2D9B2F1-F20B-4832-A781-F9FF691FBC36.png",
+      "screen": "screen-0-2064x2752-tap tab-life_0_FF10DDC1-AB23-4AA1-9BA1-147A3F139EBD.png",
       "file": "L01.png"
+    },
+    "T04": {
+      "row_id": "T04",
+      "evidence": "condition-score-detail-screen",
+      "test": "TodaySettingsRegressionTests/testConditionHeroOpensConditionScoreDetail()",
+      "action": "tap dashboard-hero-condition",
+      "timestamp": 1792388532.351,
+      "image": "AD72D47B-19C1-4B9A-BA0F-F53F1F281B74.png",
+      "screen": "screen-0-2064x2752-tap dashboard-hero-condition_0_D50FEEBA-E8AD-4E29-BE55-788FE077778D.png",
+      "file": "T04.png"
+    },
+    "A01": {
+      "row_id": "A01",
+      "evidence": "title:Activity",
+      "test": "ThemeMatrixUITests/testDesertWarmMatrix()",
+      "action": "tap tab-activity",
+      "timestamp": 1792388814.243,
+      "image": "C614AB3E-3F14-482D-8F73-E46EBFCAECFF.png",
+      "screen": "screen-0-2064x2752-tap tab-activity_0_79CB46C2-7F6A-4F02-88E2-FEFA55728CEE.png",
+      "file": "A01.png"
     }
   },
-  "unmatched": []
+  "unmatched": [
+    {
+      "row_id": null,
+      "evidence": "Desert Dark Life",
+      "test": "ThemeMatrixUITests/testDesertWarmMatrix()",
+      "action": "Desert Dark Life",
+      "timestamp": 1792388836.04,
+      "screen": "Desert Dark Life_0_203E5247-2495-4A4E-A3F0-DF0DC459282B.png"
+    },
+    {
+      "row_id": null,
+      "evidence": "Desert Dark Wellness",
+      "test": "ThemeMatrixUITests/testDesertWarmMatrix()",
+      "action": "Desert Dark Wellness",
+      "timestamp": 1792388826.245,
+      "screen": "Desert Dark Wellness_0_78926CD6-7EDE-48CE-BFB2-1D8CB3D29AC1.png"
+    },
+    {
+      "row_id": null,
+      "evidence": "Desert Dark Activity",
+      "test": "ThemeMatrixUITests/testDesertWarmMatrix()",
+      "action": "Desert Dark Activity",
+      "timestamp": 1792388815.725,
+      "screen": "Desert Dark Activity_0_5EFBB5B7-E350-4AD5-8927-39F4B771CFB3.png"
+    },
+    {
+      "row_id": null,
+      "evidence": "Desert Dark Today",
+      "test": "ThemeMatrixUITests/testDesertWarmMatrix()",
+      "action": "Desert Dark Today",
+      "timestamp": 1792388804.63,
+      "screen": "Desert Dark Today_0_8CD16F8E-1ACD-46B7-B322-728E72F5C7DC.png"
+    },
+    {
+      "row_id": null,
+      "evidence": "Desert Light Life",
+      "test": "ThemeMatrixUITests/testDesertWarmMatrix()",
+      "action": "Desert Light Life",
+      "timestamp": 1792388792.868,
+      "screen": "Desert Light Life_0_E42B4CC1-4246-4CCB-9BAD-4AA2B99830FC.png"
+    },
+    {
+      "row_id": null,
+      "evidence": "Desert Light Wellness",
+      "test": "ThemeMatrixUITests/testDesertWarmMatrix()",
+      "action": "Desert Light Wellness",
+      "timestamp": 1792388782.913,
+      "screen": "Desert Light Wellness_0_C05D8D26-ED60-491C-B188-014030AEDF88.png"
+    },
+    {
+      "row_id": null,
+      "evidence": "Desert Light Activity",
+      "test": "ThemeMatrixUITests/testDesertWarmMatrix()",
+      "action": "Desert Light Activity",
+      "timestamp": 1792388772.562,
+      "screen": "Desert Light Activity_0_788F3DAC-A5FA-4D6B-B187-053BE56AF1DD.png"
+    },
+    {
+      "row_id": null,
+      "evidence": "Desert Light Today",
+      "test": "ThemeMatrixUITests/testDesertWarmMatrix()",
+      "action": "Desert Light Today",
+      "timestamp": 1792388760.986,
+      "screen": "Desert Light Today_0_CCE69163-B44F-479C-8E22-095C58E844A4.png"
+    }
+  ]
 }

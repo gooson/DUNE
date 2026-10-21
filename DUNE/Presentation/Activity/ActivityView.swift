@@ -121,6 +121,7 @@ struct ActivityView: View {
     @Environment(\.horizontalSizeClass) private var sizeClass
     @Environment(\.appTheme) private var theme
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var cachedInjuryConflicts: [InjuryConflict] = []
     private let conflictUseCase = CheckInjuryConflictUseCase()
     private let scrollToTopSignal: Int
@@ -514,14 +515,16 @@ struct ActivityView: View {
                     }
 
                     if let readiness = viewModel.trainingReadiness {
-                        ViewThatFits(in: .horizontal) {
-                            HStack(alignment: .center, spacing: 18) {
-                                themeReadinessScore(readiness)
+                        if dynamicTypeSize.isAccessibilitySize {
+                            VStack(alignment: .leading, spacing: 12) {
+                                themeReadinessRing(readiness)
                                 themeReadinessCopy(readiness)
                             }
-                            VStack(alignment: .leading, spacing: 10) {
-                                themeReadinessScore(readiness)
+                        } else {
+                            HStack(alignment: .center, spacing: 18) {
+                                themeReadinessRing(readiness)
                                 themeReadinessCopy(readiness)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
                             }
                         }
                     } else {
@@ -583,15 +586,15 @@ struct ActivityView: View {
         .staggeredAppear(index: 0)
     }
 
-    private func themeReadinessScore(_ readiness: TrainingReadiness) -> some View {
-        Text(readiness.score.formatted())
-            .font(.system(size: 49, weight: .bold, design: .rounded))
-            .monospacedDigit()
-            .foregroundStyle(theme == .desertWarm
-                ? (colorScheme == .dark
-                    ? Color(red: 0.463, green: 0.816, blue: 0.678)
-                    : Color(red: 0.090, green: 0.431, blue: 0.408))
-                : theme.accentColor)
+    private func themeReadinessRing(_ readiness: TrainingReadiness) -> some View {
+        TabHeroScoreRing(
+            progress: Double(readiness.score) / 100,
+            value: readiness.score.formatted(),
+            caption: "READINESS",
+            tipColor: readiness.status.color,
+            accessibilityLabel: "Training readiness \(readiness.score), \(readiness.status.label)",
+            accessibilityIdentifier: "activity-hero-ring"
+        )
     }
 
     private func themeReadinessCopy(_ readiness: TrainingReadiness) -> some View {

@@ -10,7 +10,6 @@ struct DesertHorizonConditionHeroView: View {
     let onPrimaryAction: () -> Void
 
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.appTheme) private var theme
     @Environment(\.colorScheme) private var colorScheme
 
@@ -42,6 +41,32 @@ struct DesertHorizonConditionHeroView: View {
     }
     private var gold: Color { isDesert ? Color(red: 0.886, green: 0.718, blue: 0.380) : theme.accentColor }
     private var paleGold: Color { isDesert ? Color(red: 0.969, green: 0.843, blue: 0.471) : theme.duskColor }
+    /// The card stays dark in light appearance, while these three themes use
+    /// dark accents on the surrounding light canvas.
+    private var heroAccent: Color {
+        guard colorScheme == .light else { return gold }
+        return switch theme {
+        case .sakuraCalm: Color(red: 0.992, green: 0.545, blue: 0.735)
+        case .contourAtlas: Color(red: 0.808, green: 0.910, blue: 0.514)
+        case .waterLilies: Color(red: 0.906, green: 0.667, blue: 0.792)
+        default: gold
+        }
+    }
+    private var heroHighlight: Color {
+        if colorScheme == .light && (theme == .sakuraCalm || theme == .contourAtlas || theme == .waterLilies) {
+            return ink
+        }
+        return paleGold
+    }
+    private var heroPositive: Color {
+        if colorScheme == .light && theme == .contourAtlas {
+            return Color(red: 0.741, green: 0.835, blue: 0.525)
+        }
+        if colorScheme == .light && theme == .waterLilies {
+            return Color(red: 0.502, green: 0.722, blue: 0.478)
+        }
+        return theme.scoreGood
+    }
     private var muted: Color { isDesert ? Color(red: 0.831, green: 0.784, blue: 0.722) : ink.opacity(0.76) }
     private var ink: Color {
         switch theme {
@@ -122,38 +147,26 @@ struct DesertHorizonConditionHeroView: View {
     }
 
     private var ring: some View {
-        ZStack {
-            Circle()
-                .stroke((isDesert ? Color(red: 0.435, green: 0.353, blue: 0.227) : gold).opacity(0.3), lineWidth: 11)
-            Circle()
-                .trim(from: 0, to: CGFloat(score.score) / 100)
-                .stroke(
-                    AngularGradient(colors: [gold.opacity(0.55), gold, paleGold, theme.scoreGood], center: .center),
-                    style: StrokeStyle(lineWidth: 11, lineCap: .round)
-                )
-                .rotationEffect(.degrees(-90))
-                .shadow(color: paleGold.opacity(reduceMotion ? 0 : 0.4), radius: 5)
-            VStack(spacing: 2) {
-                Text(score.score.formatted())
-                    .font(.system(size: 36, weight: .bold, design: .rounded))
-                    .contentTransition(.numericText())
-                Text("CONDITION")
-                    .font(.system(size: 10, weight: .bold))
-                    .tracking(1)
-                    .foregroundStyle(muted)
-            }
-            .foregroundStyle(ink)
-        }
-        .frame(width: 124, height: 124)
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Condition score \(score.score), \(score.status.label)")
+        TabHeroScoreRing(
+            progress: Double(score.score) / 100,
+            value: score.score.formatted(),
+            caption: "CONDITION",
+            ringColor: heroAccent,
+            highlightColor: heroHighlight,
+            tipColor: heroPositive,
+            trackColor: isDesert ? Color(red: 0.435, green: 0.353, blue: 0.227) : heroAccent,
+            textColor: ink,
+            secondaryTextColor: muted,
+            accessibilityLabel: "Condition score \(score.score), \(score.status.label)",
+            accessibilityIdentifier: "dashboard-hero-ring"
+        )
     }
 
     private var statusText: some View {
         VStack(alignment: .leading, spacing: 6) {
             Text("Condition")
                 .font(.caption.weight(.bold))
-                .foregroundStyle(gold)
+                .foregroundStyle(heroAccent)
             Text(score.status.guideMessage)
                 .font(.title3.weight(.bold))
                 .foregroundStyle(ink)
@@ -178,7 +191,7 @@ struct DesertHorizonConditionHeroView: View {
             .foregroundStyle(ink)
 
             if let hourlySparkline, hourlySparkline.points.count >= 2 {
-                HourlySparklineView(data: hourlySparkline, tintColor: paleGold, height: 72)
+                HourlySparklineView(data: hourlySparkline, tintColor: heroHighlight, height: 72, usesTimelineAxis: true)
             } else {
                 Text("Not enough data to show trend.")
                     .font(.subheadline)
@@ -196,7 +209,7 @@ struct DesertHorizonConditionHeroView: View {
                     Text(detail.label)
                         .foregroundStyle(ink)
                     Text(detail.value.formattedWithSeparator(fractionDigits: detail.fractionDigits))
-                        .foregroundStyle(theme.scoreGood)
+                        .foregroundStyle(heroPositive)
                 }
                 .font(.caption2.weight(.semibold))
                 .padding(.horizontal, 10)

@@ -23,7 +23,7 @@ struct WorkoutManagerReorderTests {
 
         #expect(manager.templateSnapshot?.entries.map(\.id) == [entries[0].id, entries[3].id, entries[1].id, entries[2].id])
         #expect(manager.completedSetsData[0].count == 1)
-        #expect(manager.completedSetsData.dropFirst().allSatisfy(\.isEmpty))
+        #expect(manager.completedSetsData.dropFirst().allSatisfy { $0.isEmpty })
         #expect(manager.extraSetsPerExercise == [2: 1])
         #expect(manager.skippedExerciseIndices == [2])
         #expect(manager.currentEntry?.id == entries[2].id)

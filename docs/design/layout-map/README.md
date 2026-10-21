@@ -13,12 +13,15 @@ status: in-progress
 
 미리보기 폭은 이번 실제 캡처 기기의 논리 폭(iPhone 402pt, Duo 외부 466pt, Duo 내부 669pt, iPad 1032pt)이다. 캡처 기기가 바뀌면 표시 폭과 배치 전환을 다시 대조한다.
 
+4탭 첫 카드의 링은 Today의 124pt 크기·호·중앙 수치·상태 문구를 공통 기준으로 한다. Activity는 실제 준비도 점수, Wellness는 실제 웰니스 점수, Life는 오늘 완료 수/대상 수를 표시한다. 수치가 없으면 빈 상태를 사용하며 임의 점수나 완료율을 만들지 않는다. 접근성 글씨 크기에서는 링과 설명을 세로로 배치한다.
+
 ## 화면별 맵 목록
 
 | 범위 | 맵 |
 |---|---|
 | Today T03·Activity A01·Wellness H01·Life L01 | [4탭 레이아웃 맵](index.html) |
 | Watch H01·H02·H03 홈 카드 | [Watch 홈 스크롤 맵](watch-home-scroll.html) |
+| Watch C01·C03·C04 유산소 세션 | [Watch 유산소 세션 맵](watch-cardio-session.html) |
 
 새 화면 맵에는 화면 ID, 대상 기기·상태, 정보 순서, 행동 경로, 빈 상태와 접근성 전환을 명시한다.
 
@@ -26,7 +29,7 @@ status: in-progress
 
 | 맵 | 기준 | 확인 방법 |
 |---|---|---|
-| [테마 맵](../theme-map/index.html) | 7개 구현 테마의 색·장면·링·움직임 | 테마 시안·manifest·README 동기화 |
+| [테마 맵](../theme-map/index.html) | 8개 구현 테마의 색·장면·링·움직임 | 테마 시안·manifest·README 동기화 |
 | [레이아웃 맵](index.html) | 4탭 정보 순서, 히어로, 행동, 반응형 배치 | 계획서와 코드·실제 화면 대조 |
 | [실제 화면 디자인맵](../phone-design-map/actual/index.html) | 현재 빌드의 시뮬레이터 화면 | 새 PNG·캡처 출처·육안 확인 |
 

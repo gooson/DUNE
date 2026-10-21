@@ -9,7 +9,8 @@ struct HourlySparklineData: Sendable, Equatable {
     let includesYesterday: Bool
 
     struct HourlyPoint: Sendable, Equatable, Identifiable {
-        let index: Int   // Sequential position for chart x-axis (0-based)
+        let index: Int   // Stable identity in the ordered snapshot series
+        let date: Date
         let hour: Int    // Clock hour (0-23)
         let score: Double
         var id: Int { index }

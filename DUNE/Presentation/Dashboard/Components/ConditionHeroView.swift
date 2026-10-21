@@ -195,6 +195,7 @@ struct ConditionHeroView: View {
                     tintColor: score.status.color,
                     height: isRegular ? Layout.sparklineHeightRegular : Layout.sparklineHeightCompact,
                     showsReferenceLabels: true,
+                    usesTimelineAxis: true,
                     accessibilityTitle: "Condition Trend"
                 )
             }
