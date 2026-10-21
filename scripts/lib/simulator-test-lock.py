@@ -3,14 +3,17 @@
 
 import fcntl
 import hashlib
+import math
 import os
 from pathlib import Path
 import stat
 import subprocess
 import sys
+import time
 
 
 LOCK_FD_ENV = "DUNE_SIM_TEST_LOCK_FD"
+WAIT_SECONDS_ENV = "DUNE_SIM_TEST_LOCK_WAIT_SECONDS"
 
 
 def lock_path(root: Path) -> Path:
@@ -62,8 +65,26 @@ def main() -> None:
     finally:
         os.close(original_fd)
     check_lock_file(fd, path)
-    print("Waiting for repository simulator test lock...", file=sys.stderr, flush=True)
-    fcntl.flock(fd, fcntl.LOCK_EX)
+    wait_seconds = os.environ.get(WAIT_SECONDS_ENV)
+    if wait_seconds is None:
+        print("Waiting for repository simulator test lock...", file=sys.stderr, flush=True)
+        fcntl.flock(fd, fcntl.LOCK_EX)
+    else:
+        try:
+            wait_duration = float(wait_seconds)
+        except ValueError as error:
+            raise ValueError(f"{WAIT_SECONDS_ENV} must be a non-negative number") from error
+        if not math.isfinite(wait_duration) or wait_duration < 0:
+            raise ValueError(f"{WAIT_SECONDS_ENV} must be a non-negative number")
+        deadline = time.monotonic() + wait_duration
+        while True:
+            try:
+                fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                break
+            except BlockingIOError:
+                if time.monotonic() >= deadline:
+                    raise TimeoutError(f"repository simulator test lock remained busy for {wait_seconds}s")
+                time.sleep(min(0.2, max(0, deadline - time.monotonic())))
     os.set_inheritable(fd, True)
     os.environ[LOCK_FD_ENV] = str(fd)
     os.execvp(sys.argv[3], sys.argv[3:])
@@ -72,6 +93,6 @@ def main() -> None:
 if __name__ == "__main__":
     try:
         main()
-    except (OSError, ValueError, subprocess.CalledProcessError) as error:
+    except (OSError, ValueError, TimeoutError, subprocess.CalledProcessError) as error:
         print(f"Simulator test lock: {error}", file=sys.stderr)
         sys.exit(2)

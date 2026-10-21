@@ -17,6 +17,7 @@ from unittest import mock
 
 SCRIPT = pathlib.Path(__file__).resolve().parents[1] / "lib/simulator-worktree.sh"
 REGISTRY_SCRIPT = pathlib.Path(__file__).resolve().parents[1] / "lib/worktree-simulator-registry.py"
+DEADLINE_SCRIPT = pathlib.Path(__file__).resolve().parents[1] / "lib/command-deadline.py"
 spec = importlib.util.spec_from_file_location("worktree_simulator_registry", REGISTRY_SCRIPT)
 registry = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(registry)
@@ -38,6 +39,7 @@ class SimulatorWorktreeTests(unittest.TestCase):
             helper = path / "scripts/lib/worktree-simulator-registry.py"
             helper.parent.mkdir(parents=True)
             shutil.copy2(REGISTRY_SCRIPT, helper)
+            shutil.copy2(DEADLINE_SCRIPT, helper.with_name("command-deadline.py"))
 
     def git(self, cwd, *args):
         return subprocess.run(["git", *args], cwd=cwd, check=True, capture_output=True)
@@ -89,6 +91,35 @@ class SimulatorWorktreeTests(unittest.TestCase):
                 self.assertEqual(result.stdout, "")
                 self.assertIn("Cannot compute worktree identity", result.stderr)
 
+    def test_clone_and_reset_stop_when_simulator_lookup_fails(self):
+        source = "11111111-2222-3333-4444-555555555555"
+        for command in (
+            f"ensure_worktree_simulator {source} 'Apple Watch Test'",
+            "reset_worktree_simulator 'Apple Watch Test'",
+        ):
+            with self.subTest(command=command):
+                result = self.shell(self.worktrees[0], '''
+                _find_simulator_by_name() { return 2; }
+                _simctl_bounded() { echo 'unexpected simctl call' >&2; return 1; }
+                ''' + command, check=False)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertEqual(result.stdout, "")
+                self.assertIn("Could not query simulator", result.stderr)
+                self.assertNotIn("unexpected simctl call", result.stderr)
+
+    def test_name_lookup_distinguishes_no_match_from_failed_query(self):
+        root = self.worktrees[0]
+        no_match = self.shell(root, '''
+        _simctl_bounded() { printf '{"devices":{"mock":[]}}\\n'; }
+        _find_simulator_by_name 'Apple Watch Test'
+        ''')
+        self.assertEqual(no_match.stdout, "")
+        failed = self.shell(root, '''
+        _simctl_bounded() { printf '{"devices":{"mock":[]}}\\n'; return 124; }
+        _find_simulator_by_name 'Apple Watch Test'
+        ''', check=False)
+        self.assertNotEqual(failed.returncode, 0)
+
     def test_registry_deletes_only_recorded_matching_device(self):
         root = self.worktrees[0]
         udid = "AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE"
@@ -99,22 +130,47 @@ class SimulatorWorktreeTests(unittest.TestCase):
             other: {"udid": other, "name": "iPhone Default", "state": "Booted"},
         }
 
-        def simctl(command, **_kwargs):
-            action, target = command[2:4]
+        def simctl(action, target, **_kwargs):
             if action == "shutdown":
                 state[target]["state"] = "Shutdown"
             elif action == "delete":
                 state.pop(target)
-            return subprocess.CompletedProcess(command, 0)
+            return subprocess.CompletedProcess([action, target], 0)
 
         with mock.patch.object(registry, "devices", side_effect=lambda: state.copy()), \
-                mock.patch.object(registry.subprocess, "run", side_effect=simctl) as run:
+                mock.patch.object(registry, "run_simctl", side_effect=simctl) as run:
             registry.record(root, udid, name, set())
             self.assertEqual(registry.cleanup(root), 0)
         self.assertEqual(registry.read_registry(root), [])
         self.assertIn(other, state)
-        self.assertEqual([call.args[0][2] for call in run.call_args_list],
+        self.assertEqual([call.args[0] for call in run.call_args_list],
                          ["shutdown", "delete"])
+
+    def test_named_cleanup_resets_only_owned_watch_clone(self):
+        root = self.worktrees[0]
+        watch_id = "AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE"
+        phone_id = "11111111-2222-3333-4444-555555555555"
+        suffix = registry.worktree_suffix(root)
+        watch_name = "Apple Watch Test" + suffix
+        phone_name = "iPhone Test" + suffix
+        state = {
+            watch_id: {"udid": watch_id, "name": watch_name, "state": "Shutdown"},
+            phone_id: {"udid": phone_id, "name": phone_name, "state": "Shutdown"},
+        }
+
+        def simctl(action, target, **_kwargs):
+            self.assertEqual(action, "delete")
+            state.pop(target)
+            return subprocess.CompletedProcess([action, target], 0)
+
+        with mock.patch.object(registry, "devices", side_effect=lambda: state.copy()), \
+                mock.patch.object(registry, "run_simctl", side_effect=simctl):
+            registry.record(root, watch_id, watch_name, set())
+            registry.record(root, phone_id, phone_name, set())
+            self.assertEqual(registry.cleanup(root, watch_name), 0)
+        self.assertNotIn(watch_id, state)
+        self.assertIn(phone_id, state)
+        self.assertEqual([item["udid"] for item in registry.read_registry(root)], [phone_id])
 
     def test_registry_preserves_name_mismatch(self):
         root = self.worktrees[0]
@@ -125,7 +181,7 @@ class SimulatorWorktreeTests(unittest.TestCase):
             registry.record(root, udid, name, set())
         with mock.patch.object(registry, "devices", return_value={
                 udid: {"udid": udid, "name": "Reassigned", "state": "Shutdown"}}), \
-                mock.patch.object(registry.subprocess, "run") as run:
+                mock.patch.object(registry, "run_simctl") as run:
             self.assertEqual(registry.cleanup(root), 1)
         run.assert_not_called()
         self.assertEqual(len(registry.read_registry(root)), 1)
@@ -140,7 +196,7 @@ class SimulatorWorktreeTests(unittest.TestCase):
         registry.write_registry(root, [
             {"udid": udid, "name": name, "worktree": str(root.resolve())}])
         with mock.patch.object(registry, "devices", return_value=current), \
-                mock.patch.object(registry.subprocess, "run") as run:
+                mock.patch.object(registry, "run_simctl") as run:
             self.assertEqual(registry.cleanup(root), 1)
         run.assert_not_called()
         self.assertEqual(len(registry.read_registry(root)), 1)
@@ -185,6 +241,44 @@ path.write_text(json.dumps(state))
         remaining = json.loads(state_path.read_text())
         self.assertEqual(set(remaining), {source_udid})
 
+    def test_failed_clone_records_partial_device_and_never_uses_shared_source(self):
+        root = self.worktrees[0]
+        bin_dir = self.root / "partial-bin"
+        bin_dir.mkdir()
+        xcrun = bin_dir / "xcrun"
+        xcrun.write_text('''#!/usr/bin/env python3
+import json, os, pathlib, sys
+path = pathlib.Path(os.environ["MOCK_SIMULATORS"])
+state = json.loads(path.read_text())
+args = sys.argv[2:]
+if args[:2] == ["list", "devices"]:
+    print(json.dumps({"devices": {"mock": list(state.values())}}))
+elif args[0] == "clone":
+    udid = "AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE"
+    state[udid] = {"udid": udid, "name": args[2], "state": "Shutdown"}
+    path.write_text(json.dumps(state))
+    sys.exit(124)
+elif args[0] == "shutdown" and args[1] in state:
+    state[args[1]]["state"] = "Shutdown"
+path.write_text(json.dumps(state))
+''')
+        xcrun.chmod(0o755)
+        source = "11111111-2222-3333-4444-555555555555"
+        created = "AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE"
+        state_path = self.root / "partial-devices.json"
+        state_path.write_text(json.dumps({source: {
+            "udid": source, "name": "iPhone Source", "state": "Shutdown"}}))
+        env = os.environ.copy()
+        env["PATH"] = str(bin_dir) + os.pathsep + env["PATH"]
+        env["MOCK_SIMULATORS"] = str(state_path)
+        result = self.shell(root, f"ensure_worktree_simulator {source} 'iPhone Test'",
+                            check=False, env=env)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertEqual(result.stdout, "")
+        self.assertIn("Recorded partial clone", result.stderr)
+        self.assertEqual([item["udid"] for item in registry.read_registry(root)], [created])
+        self.assertEqual(set(json.loads(state_path.read_text())), {source, created})
+
     def test_cleanup_keeps_failed_record_and_continues_to_next_device(self):
         root = self.worktrees[0]
         first = "AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE"
@@ -198,15 +292,14 @@ path.write_text(json.dumps(state))
             registry.record(root, first, state[first]["name"], set())
             registry.record(root, second, state[second]["name"], set())
 
-        def simctl(command, **_kwargs):
-            udid = command[3]
+        def simctl(action, udid, **_kwargs):
             if udid == first:
-                raise subprocess.CalledProcessError(1, command)
+                raise subprocess.CalledProcessError(1, [action, udid])
             state.pop(udid)
-            return subprocess.CompletedProcess(command, 0)
+            return subprocess.CompletedProcess([action, udid], 0)
 
         with mock.patch.object(registry, "devices", side_effect=lambda: state.copy()), \
-                mock.patch.object(registry.subprocess, "run", side_effect=simctl):
+                mock.patch.object(registry, "run_simctl", side_effect=simctl):
             self.assertEqual(registry.cleanup(root), 1)
         self.assertEqual([item["udid"] for item in registry.read_registry(root)], [first])
         self.assertEqual(set(state), {first})
@@ -256,7 +349,7 @@ path.write_text(json.dumps(state))
         with mock.patch.object(registry, "devices", return_value=current):
             registry.record(root, udid, name, set())
         with mock.patch.object(registry, "devices", return_value=current), \
-                mock.patch.object(registry.subprocess, "run", return_value=subprocess.CompletedProcess([], 0)):
+                mock.patch.object(registry, "run_simctl", return_value=subprocess.CompletedProcess([], 0)):
             self.assertEqual(registry.cleanup(root), 1)
         self.assertEqual(len(registry.read_registry(root)), 1)
 
@@ -283,6 +376,10 @@ path.write_text(json.dumps(state))
                 clone) echo {created} ;;
                 delete) return 1 ;;
             esac
+        }}
+        _simctl_bounded() {{
+            shift
+            xcrun simctl "$@"
         }}
         python3() {{
             if [[ "$1" == */worktree-simulator-registry.py &&

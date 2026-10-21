@@ -8,6 +8,28 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT_DIR"
+if [[ -z "${DUNE_UI_WATCHDOG_ACTIVE:-}" ]]; then
+    WALL_TIMEOUT="${DUNE_UI_TEST_WALL_TIMEOUT:-}"
+    WATCH_ACTIVITY_FILE=".xcodebuild/watch-ui-test.log"
+    WATCH_ARGS=("$@")
+    for ((arg_index=0; arg_index<${#WATCH_ARGS[@]}; arg_index++)); do
+        if [[ "${WATCH_ARGS[arg_index]}" == "--log-file" && $((arg_index + 1)) -lt ${#WATCH_ARGS[@]} ]]; then
+            WATCH_ACTIVITY_FILE="${WATCH_ARGS[arg_index + 1]}"
+        fi
+    done
+    if [[ -z "$WALL_TIMEOUT" ]]; then
+        WALL_TIMEOUT=10800
+        for arg in "$@"; do
+            if [[ "$arg" == "--smoke" || "$arg" == "--only-testing" ]]; then
+                WALL_TIMEOUT=1800
+                break
+            fi
+        done
+    fi
+    exec python3 "$ROOT_DIR/scripts/lib/command-deadline.py" \
+        --seconds "$WALL_TIMEOUT" --idle-seconds "${DUNE_UI_TEST_IDLE_TIMEOUT:-900}" \
+        --activity-file "$WATCH_ACTIVITY_FILE" -- "$ROOT_DIR/scripts/test-watch-ui.sh" "$@"
+fi
 if [[ -n "${DUNE_SIM_TEST_LOCK_FD:-}" ]]; then
     python3 "$ROOT_DIR/scripts/lib/simulator-test-lock.py" "$ROOT_DIR" --verify
 else
@@ -138,7 +160,7 @@ mkdir -p "$LOG_DIR" "$DERIVED_DATA_DIR"
 regen_project
 
 echo "Ensuring watch simulator '$WATCH_SIM_NAME' is booted..."
-DEVICE_INFO=$(xcrun simctl list devices available -j \
+DEVICE_INFO=$(_simctl_bounded 30 list devices available -j \
     | python3 -c "
 import json, re, sys
 requested_name = '${WATCH_SIM_NAME}'
@@ -181,19 +203,24 @@ for candidate in candidates:
 if candidates:
     emit(candidates[0])
 
-sys.exit(1)
-" 2>/dev/null) || true
+sys.exit(0)
+" 2>/dev/null) || {
+    echo "Error: Could not query available Watch simulators; test execution stopped." >&2
+    exit 2
+}
 
 RESOLVED_WATCH_SIM_NAME="$WATCH_SIM_NAME"
 RESOLVED_WATCH_SIM_OS="$WATCH_SIM_OS"
 
 if [[ -n "$DEVICE_INFO" ]]; then
     IFS=$'\t' read -r DEVICE_UDID RESOLVED_WATCH_SIM_NAME RESOLVED_WATCH_SIM_OS <<< "$DEVICE_INFO"
+    reset_worktree_simulator "$RESOLVED_WATCH_SIM_NAME"
     DEVICE_UDID=$(ensure_worktree_simulator "$DEVICE_UDID" "$RESOLVED_WATCH_SIM_NAME")
     DESTINATION="id=${DEVICE_UDID}"
     wait_for_simulator_boot "$DEVICE_UDID" "watchOS"
 else
-    echo "Warning: Could not find watch simulator '$WATCH_SIM_NAME' (OS $WATCH_SIM_OS). xcodebuild will attempt to boot one."
+    echo "Error: No eligible Watch simulator '$WATCH_SIM_NAME' (OS $WATCH_SIM_OS); test execution stopped." >&2
+    exit 2
 fi
 
 echo "Running watch UI tests with scheme '$SCHEME' for destination '$DESTINATION'..."

@@ -15,6 +15,7 @@ import time
 
 
 UDID = re.compile(r"^[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}$")
+DEADLINE = Path(__file__).with_name("command-deadline.py")
 
 
 def registry_path(root: Path) -> Path:
@@ -115,9 +116,14 @@ def write_registry(root: Path, records: list[dict[str, str]]) -> None:
             temporary.unlink(missing_ok=True)
 
 
+def run_simctl(*args: str, capture_output: bool = False) -> subprocess.CompletedProcess:
+    return subprocess.run([sys.executable, str(DEADLINE), "--seconds", "30", "--",
+                           "xcrun", "simctl", *args], check=True,
+                          capture_output=capture_output, text=capture_output)
+
+
 def devices() -> dict[str, dict]:
-    result = subprocess.run(["xcrun", "simctl", "list", "devices", "-j"],
-                            check=True, capture_output=True, text=True)
+    result = run_simctl("list", "devices", "-j", capture_output=True)
     data = json.loads(result.stdout)
     return {device["udid"]: device
             for runtime in data["devices"].values() for device in runtime}
@@ -160,13 +166,45 @@ def rollback_safe(root: Path, udid: str, name: str, preexisting: set[str]) -> bo
     return devices().get(udid, {}).get("name") == name
 
 
-def cleanup(root: Path) -> int:
+def reconcile_clone(root: Path, name: str, preexisting: set[str]) -> int:
+    """Account for a clone that may have been created before simctl failed."""
     root = root.resolve()
+    if not name.endswith(worktree_suffix(root)):
+        raise ValueError("clone name does not belong to this worktree")
+    snapshot = devices()
+    candidates = [udid for udid, device in snapshot.items()
+                  if device.get("name") == name and UDID.fullmatch(udid)
+                  and udid.upper() not in {old.upper() for old in preexisting}]
+    if not candidates:
+        print(f"No new simulator named {name} was found after clone failure.", file=sys.stderr)
+        return 0
+    if len(candidates) != 1:
+        for udid in candidates:
+            mark_orphan(root, udid, name)
+        print(f"Multiple new simulators named {name}; manual cleanup required.", file=sys.stderr)
+        return 1
+    udid = candidates[0]
+    try:
+        record(root, udid, name, preexisting)
+        print(f"Recorded partial clone after failure: {name} [{udid}]", file=sys.stderr)
+        return 0
+    except (OSError, ValueError, subprocess.CalledProcessError, KeyError,
+            json.JSONDecodeError) as error:
+        mark_orphan(root, udid, name)
+        print(f"Marked partial clone for manual cleanup: {name} [{udid}]: {error}",
+              file=sys.stderr)
+        return 1
+
+
+def cleanup(root: Path, target_name: str | None = None) -> int:
+    root = root.resolve()
+    if target_name is not None and not target_name.endswith(worktree_suffix(root)):
+        raise ValueError("target simulator name does not belong to this worktree")
     with registry_lock(root):
-        return _cleanup(root)
+        return _cleanup(root, target_name)
 
 
-def _cleanup(root: Path) -> int:
+def _cleanup(root: Path, target_name: str | None = None) -> int:
     records = read_registry(root)
     orphans = orphan_files(root)
     if not records and not orphans:
@@ -174,6 +212,7 @@ def _cleanup(root: Path) -> int:
         return 0
 
     remaining = []
+    selected_remaining = 0
     deleted = 0
     snapshot = devices()
     unresolved_orphans = 0
@@ -182,6 +221,8 @@ def _cleanup(root: Path) -> int:
             item = json.loads(path.read_text())
             udid = item.get("udid", "")
             name = item.get("name", "")
+            if target_name is not None and name != target_name:
+                continue
             if (item.get("worktree") != str(root) or not isinstance(udid, str)
                     or not isinstance(name, str) or not UDID.fullmatch(udid)
                     or not name.endswith(worktree_suffix(root))):
@@ -199,12 +240,16 @@ def _cleanup(root: Path) -> int:
     for item in records:
         udid = item.get("udid", "")
         name = item.get("name", "")
+        if target_name is not None and name != target_name:
+            remaining.append(item)
+            continue
         if (item.get("worktree") != str(root) or item.get("preclone_verified") is not True
                 or not isinstance(udid, str)
                 or not isinstance(name, str) or not UDID.fullmatch(udid)
                 or not name.endswith(worktree_suffix(root))):
             print(f"Preserved unverified simulator record: {name} [{udid}]", file=sys.stderr)
             remaining.append(item)
+            selected_remaining += 1
             continue
         try:
             current = snapshot.get(udid)
@@ -214,38 +259,40 @@ def _cleanup(root: Path) -> int:
             if current.get("name") != name:
                 print(f"Preserved name mismatch: {name} [{udid}]", file=sys.stderr)
                 remaining.append(item)
+                selected_remaining += 1
                 continue
             if current.get("state") != "Shutdown":
-                subprocess.run(["xcrun", "simctl", "shutdown", udid], check=True)
+                run_simctl("shutdown", udid)
                 for _ in range(10):
                     if devices().get(udid, {}).get("state") == "Shutdown":
                         break
                     time.sleep(1)
                 else:
                     raise RuntimeError("shutdown was not confirmed")
-            subprocess.run(["xcrun", "simctl", "delete", udid], check=True)
+            run_simctl("delete", udid)
             if udid in devices():
                 raise RuntimeError("simulator still exists after delete")
             snapshot.pop(udid, None)
             print(f"Deleted: {name} [{udid}]")
             deleted += 1
-        except (OSError, subprocess.CalledProcessError, ValueError, KeyError,
+        except (OSError, subprocess.CalledProcessError, subprocess.TimeoutExpired, ValueError, KeyError,
                 json.JSONDecodeError, RuntimeError) as error:
             print(f"Preserved after cleanup failure: {name} [{udid}]: {error}",
                   file=sys.stderr)
             remaining.append(item)
+            selected_remaining += 1
 
     write_registry(root, remaining)
     print(f"Deleted {deleted} worktree simulator(s); {len(remaining)} recorded and "
           f"{unresolved_orphans} untracked remain.")
-    return 1 if remaining or unresolved_orphans else 0
+    return 1 if selected_remaining or unresolved_orphans else 0
 
 
 def main() -> int:
-    operations = {"record", "cleanup", "absent", "rollback-safe", "mark-orphan",
+    operations = {"record", "reconcile-clone", "cleanup", "cleanup-name", "absent", "rollback-safe", "mark-orphan",
                   "is-orphan", "is-recorded"}
     if len(sys.argv) < 3 or sys.argv[1] not in operations:
-        print("Usage: worktree-simulator-registry.py record ROOT UDID NAME BASELINE_JSON | cleanup ROOT | absent ROOT UDID | rollback-safe ROOT UDID NAME BASELINE_JSON | mark-orphan ROOT UDID NAME | is-orphan ROOT UDID | is-recorded ROOT UDID NAME",
+        print("Usage: worktree-simulator-registry.py record ROOT UDID NAME BASELINE_JSON | reconcile-clone ROOT NAME BASELINE_JSON | cleanup ROOT | cleanup-name ROOT NAME | absent ROOT UDID | rollback-safe ROOT UDID NAME BASELINE_JSON | mark-orphan ROOT UDID NAME | is-orphan ROOT UDID | is-recorded ROOT UDID NAME",
               file=sys.stderr)
         return 2
     operation = sys.argv[1]
@@ -257,8 +304,15 @@ def main() -> int:
                            for device in runtime}
             record(root, sys.argv[3], sys.argv[4], preexisting)
             return 0
+        if operation == "reconcile-clone" and len(sys.argv) == 5:
+            baseline = json.loads(Path(sys.argv[4]).read_text())
+            preexisting = {device["udid"] for runtime in baseline["devices"].values()
+                           for device in runtime}
+            return reconcile_clone(root, sys.argv[3], preexisting)
         if operation == "cleanup" and len(sys.argv) == 3:
             return cleanup(root)
+        if operation == "cleanup-name" and len(sys.argv) == 4:
+            return cleanup(root, sys.argv[3])
         if operation == "absent" and len(sys.argv) == 4 and UDID.fullmatch(sys.argv[3]):
             return 0 if sys.argv[3] not in devices() else 1
         if operation == "rollback-safe" and len(sys.argv) == 6:
@@ -274,7 +328,7 @@ def main() -> int:
         if operation == "is-recorded" and len(sys.argv) == 5:
             return 0 if is_recorded(root, sys.argv[3], sys.argv[4]) else 1
         raise ValueError("invalid arguments")
-    except (OSError, subprocess.CalledProcessError, ValueError, KeyError,
+    except (OSError, subprocess.CalledProcessError, subprocess.TimeoutExpired, ValueError, KeyError,
             json.JSONDecodeError) as error:
         print(f"Simulator registry error: {error}", file=sys.stderr)
         return 1
