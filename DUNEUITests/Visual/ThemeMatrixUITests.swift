@@ -14,6 +14,51 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
         XCTAssertTrue(sleepQuality.waitForExistence(timeout: 10), "Sleep action should open sleep metric details")
     }
 
+    func testDesertHeroRingsByInitialTab() {
+        let roots: [(tab: String, argument: String, hero: String, ring: String, action: String)] = [
+            ("Today", "today", AXID.dashboardHeroCondition, "dashboard-hero-ring", "dashboard-primary-activity"),
+            ("Activity", "train", AXID.activityHeroReadiness, "activity-hero-ring", "activity-log-workout-button"),
+            ("Wellness", "wellness", AXID.wellnessHeroScore, "wellness-hero-ring", "wellness-sleep-detail-link"),
+            ("Life", "life", AXID.lifeHeroProgress, "life-hero-ring", "life-hero-checklist-button")
+        ]
+
+        for style in ["Light", "Dark"] {
+            for root in roots {
+                var configuration = launchConfiguration
+                configuration.initialTabSelectionArgument = root.argument
+                configuration.additionalArguments += [
+                    "--ui-test-theme", "desertWarm",
+                    "--ui-test-style", style.lowercased(),
+                    "-morningBriefingDisabled", "YES"
+                ]
+                launchApp(with: configuration)
+
+                let combination = "Desert \(style) \(root.tab)"
+                XCTAssertTrue(app.hasPrimaryNavigation(timeout: 15), "\(combination): seeded root should load")
+                let hero = app.descendants(matching: .any)[root.hero].firstMatch
+                XCTAssertTrue(hero.waitForExistence(timeout: 10), "\(combination): hero should load")
+                assertRing(root.ring, combination: combination)
+                assertAction(root.action, combination: combination)
+
+                let ring = app.descendants(matching: .any)[root.ring].firstMatch
+                XCTAssertEqual(ring.frame.width, 124, accuracy: 1, "\(combination): ring should use Today geometry")
+                XCTAssertEqual(ring.frame.height, 124, accuracy: 1, "\(combination): ring should remain circular")
+                XCTAssertTrue(app.windows.firstMatch.frame.contains(ring.frame), "\(combination): whole ring should fit on screen")
+                XCTAssertTrue(app.descendants(matching: .any)[root.action].firstMatch.isHittable,
+                              "\(combination): hero action should be reachable")
+                if root.argument == "wellness" {
+                    let narrative = app.descendants(matching: .any)["wellness-hero-narrative"].firstMatch
+                    XCTAssertTrue(narrative.waitForExistence(timeout: 10))
+                    XCTAssertLessThanOrEqual(narrative.frame.maxX, hero.frame.maxX + 1)
+                }
+                VisualAudit.capture("hero ring \(combination)")
+                if !VisualAudit.isEnabled {
+                    addScreenshotAttachment(named: combination)
+                }
+            }
+        }
+    }
+
     func testDesertWellnessRingLayout() {
         for style in ["Light", "Dark"] {
             app.terminate()

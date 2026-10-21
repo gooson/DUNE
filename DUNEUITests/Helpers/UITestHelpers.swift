@@ -659,10 +659,10 @@ extension XCUIApplication {
             }
 
             // Duo's vertical system tabs may not expose a TabBar or the tab IDs.
-            // Accept an explicitly requested destination only when both its
-            // main content and toolbar action have actually rendered.
+            // Accept the default Today destination or an explicitly requested
+            // destination only after its content and toolbar have rendered.
             switch initialTab {
-            case "today":
+            case nil, "today":
                 return self.descendants(matching: .any)[AXID.dashboardHeroCondition].firstMatch.exists
                     && self.buttons[AXID.dashboardToolbarSettings].firstMatch.exists
             case "life":
