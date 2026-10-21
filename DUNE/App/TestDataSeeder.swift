@@ -665,9 +665,14 @@ enum TestDataSeeder {
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: fetchedAt)
 
-        let hrvSamples: [HRVSample] = (0..<14).compactMap { offset in
-            guard let date = calendar.date(byAdding: .day, value: -offset, to: today) else { return nil }
-            return HRVSample(value: 66 - Double(offset), date: date)
+        let hourlyConditionHistory = ProcessInfo.processInfo.arguments.contains("--ui-test-condition-hourly-history")
+        let hrvSamples: [HRVSample] = (0..<(hourlyConditionHistory ? 22 : 14)).flatMap { offset -> [HRVSample] in
+            guard let day = calendar.date(byAdding: .day, value: -offset, to: today) else { return [] }
+            let hours = hourlyConditionHistory ? [7, 8, 9, 10] : [0]
+            return hours.compactMap { hour in
+                guard let date = calendar.date(byAdding: .hour, value: hour, to: day) else { return nil }
+                return HRVSample(value: 66 - Double(offset) + Double(hour) * 0.1, date: date)
+            }
         }
 
         let rhrCollection: [(date: Date, min: Double, max: Double, average: Double)] = (0..<14).compactMap { offset in

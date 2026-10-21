@@ -1057,12 +1057,7 @@ private struct HabitListQueryView: View {
                 : 0,
             value: "\(viewModel.completedCount)/\(viewModel.totalActiveCount)",
             caption: "Today",
-            ringColor: theme == .desertWarm ? Color(red: 0.886, green: 0.718, blue: 0.380) : theme.accentColor,
-            highlightColor: theme == .desertWarm ? Color(red: 0.969, green: 0.843, blue: 0.471) : theme.duskColor,
             tipColor: theme.accentColor,
-            trackColor: theme == .desertWarm ? Color(red: 0.435, green: 0.353, blue: 0.227) : theme.accentColor,
-            textColor: theme.directionPreviewTextColor,
-            secondaryTextColor: theme.directionPreviewTextColor.opacity(0.74),
             accessibilityLabel: "Life progress \(viewModel.completedCount) of \(viewModel.totalActiveCount)",
             accessibilityIdentifier: "life-hero-ring"
         )

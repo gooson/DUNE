@@ -205,32 +205,45 @@ struct TabHeroScoreRing: View {
     let progress: Double
     let value: String
     let caption: LocalizedStringKey
-    let ringColor: Color
-    let highlightColor: Color
+    var ringColor: Color? = nil
+    var highlightColor: Color? = nil
     let tipColor: Color
-    let trackColor: Color
-    let textColor: Color
-    let secondaryTextColor: Color
+    var trackColor: Color? = nil
+    var textColor: Color? = nil
+    var secondaryTextColor: Color? = nil
     let accessibilityLabel: LocalizedStringKey
     let accessibilityIdentifier: String
 
+    @Environment(\.appTheme) private var theme
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    private var resolvedRingColor: Color {
+        ringColor ?? (theme == .desertWarm ? Color(red: 0.886, green: 0.718, blue: 0.380) : theme.accentColor)
+    }
+
+    private var resolvedHighlightColor: Color {
+        highlightColor ?? (theme == .desertWarm ? Color(red: 0.969, green: 0.843, blue: 0.471) : theme.duskColor)
+    }
+
+    private var resolvedTrackColor: Color {
+        trackColor ?? (theme == .desertWarm ? Color(red: 0.435, green: 0.353, blue: 0.227) : theme.accentColor)
+    }
 
     var body: some View {
         ZStack {
             Circle()
-                .stroke(trackColor.opacity(0.3), lineWidth: 11)
+                .stroke(resolvedTrackColor.opacity(0.3), lineWidth: 11)
             Circle()
                 .trim(from: 0, to: min(1, max(0, progress)))
                 .stroke(
                     AngularGradient(
-                        colors: [ringColor.opacity(0.55), ringColor, highlightColor, tipColor],
+                        colors: [resolvedRingColor.opacity(0.55), resolvedRingColor, resolvedHighlightColor, tipColor],
                         center: .center
                     ),
                     style: StrokeStyle(lineWidth: 11, lineCap: .round)
                 )
                 .rotationEffect(.degrees(-90))
-                .shadow(color: highlightColor.opacity(reduceMotion ? 0 : 0.4), radius: 5)
+                .shadow(color: resolvedHighlightColor.opacity(reduceMotion ? 0 : 0.4), radius: 5)
             VStack(spacing: 2) {
                 Text(value)
                     .font(.system(size: 36, weight: .bold, design: .rounded))
@@ -241,9 +254,9 @@ struct TabHeroScoreRing: View {
                 Text(caption)
                     .font(.system(size: 10, weight: .bold))
                     .tracking(1)
-                    .foregroundStyle(secondaryTextColor)
+                    .foregroundStyle(secondaryTextColor ?? theme.directionPreviewTextColor.opacity(0.74))
             }
-            .foregroundStyle(textColor)
+            .foregroundStyle(textColor ?? theme.directionPreviewTextColor)
         }
         .frame(width: 124, height: 124)
         .accessibilityElement(children: .ignore)

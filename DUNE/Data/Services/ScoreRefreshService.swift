@@ -146,11 +146,11 @@ final class ScoreRefreshService {
         scheduleSparklineReload()
     }
 
-    /// Invalidate the 24-hour condition history shown in the app after the
-    /// HealthKit read window changes. Older snapshots are not presented.
+    /// Invalidate all condition history visible in the day detail chart after
+    /// the HealthKit read window changes. Older archival snapshots stay intact.
     @discardableResult
-    func invalidateRecentConditionHistory() async -> Bool {
-        let cutoff = Date().addingTimeInterval(-Self.rollingWindowSeconds)
+    func invalidateVisibleConditionHistory() async -> Bool {
+        let cutoff = TimePeriod.day.dateRange(offset: -TimePeriod.day.scrollBufferPeriods).start
         sparklineReloadTask?.cancel()
         conditionSparkline = .empty
         do {
@@ -240,6 +240,22 @@ final class ScoreRefreshService {
         return (try? context.fetch(rollingDescriptor(from: startDate, fetchLimit: fetchLimit))) ?? []
     }
 
+    /// Return recorded condition values for the detail chart's scrollable history.
+    func fetchConditionSnapshots(from start: Date, to end: Date) async -> [(date: Date, score: Double)] {
+        let descriptor = FetchDescriptor<HourlyScoreSnapshot>(
+            predicate: #Predicate { $0.date >= start && $0.date <= end && $0.conditionScore != nil },
+            sortBy: [SortDescriptor(\.date)]
+        )
+        do {
+            return try context.fetch(descriptor).compactMap { snapshot in
+                snapshot.conditionScore.map { (date: snapshot.date, score: $0) }
+            }
+        } catch {
+            AppLogger.data.error("[ScoreRefreshService] Failed to fetch condition history: \(error.localizedDescription)")
+            return []
+        }
+    }
+
     /// Fetch snapshots that have a non-nil stressScore within the given date range.
     /// Used by CumulativeStressDetailViewModel for chart data.
     func fetchStressSnapshots(from start: Date, to end: Date) async -> [HourlyScoreSnapshot] {
@@ -272,13 +288,13 @@ final class ScoreRefreshService {
         includesYesterday: Bool
     ) -> HourlySparklineData {
         let calendar = Calendar.current
-        let raw: [(hour: Int, score: Double)] = snapshots.compactMap { snap in
+        let raw: [(date: Date, hour: Int, score: Double)] = snapshots.compactMap { snap in
             guard let score = snap[keyPath: keyPath] else { return nil }
             let hour = calendar.component(.hour, from: snap.date)
-            return (hour: hour, score: score)
+            return (date: snap.date, hour: hour, score: score)
         }
         let indexed: [HourlySparklineData.HourlyPoint] = raw.enumerated().map { idx, pair in
-            HourlySparklineData.HourlyPoint(index: idx, hour: pair.hour, score: pair.score)
+            HourlySparklineData.HourlyPoint(index: idx, date: pair.date, hour: pair.hour, score: pair.score)
         }
 
         guard let last = indexed.last else { return .empty }

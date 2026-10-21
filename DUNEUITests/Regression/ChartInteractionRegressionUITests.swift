@@ -13,6 +13,39 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
         assertScoreTrendFollowsHistoryScroll()
     }
 
+    func testConditionDayChartRetainsPointsWhenScrollingToPreviousDays() throws {
+        app.terminate()
+        app.launchArguments.append("--ui-test-condition-hourly-history")
+        app.launch()
+        navigateToDashboard()
+        dismissMorningBriefingIfNeeded()
+        waitForElement(AXID.dashboardHeroCondition, timeout: 15).tap()
+
+        let periods = app.segmentedControls.firstMatch
+        XCTAssertTrue(periods.waitForExistence(timeout: 10))
+        periods.buttons.element(boundBy: 0).tap()
+
+        let chart = waitForElement(AXID.detailChartSurface, timeout: 15)
+        XCTAssertTrue(app.scrollToElementIfNeeded(AXID.detailChartSurface, maxSwipes: 5))
+        let visibleRange = waitForElement("score-detail-chart-visible-range", timeout: 15)
+        let initialRange = visibleRange.label
+        let historyProbe = app.otherElements.matching(
+            NSPredicate(format: "label BEGINSWITH %@", "visible-points:")
+        ).firstMatch
+        XCTAssertTrue(historyProbe.waitForExistence(timeout: 10))
+
+        for _ in 0..<2 {
+            let start = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.15, dy: 0.55))
+            let end = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.85, dy: 0.55))
+            start.press(forDuration: 0.05, thenDragTo: end)
+        }
+
+        XCTAssertNotEqual(visibleRange.label, initialRange)
+        let visiblePointCount = Int(historyProbe.label.split(separator: ":").last ?? "") ?? 0
+        XCTAssertGreaterThan(visiblePointCount, 0, "Previous-day chart window should retain plotted scores")
+        VisualAudit.capture("Condition day chart after previous-day scroll")
+    }
+
     func testWellnessTrendFollowsHistoryScroll() throws {
         launchLongMetricHistory()
         navigateToWellness()

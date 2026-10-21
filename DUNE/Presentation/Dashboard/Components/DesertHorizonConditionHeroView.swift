@@ -165,7 +165,7 @@ struct DesertHorizonConditionHeroView: View {
             .foregroundStyle(ink)
 
             if let hourlySparkline, hourlySparkline.points.count >= 2 {
-                HourlySparklineView(data: hourlySparkline, tintColor: paleGold, height: 72)
+                HourlySparklineView(data: hourlySparkline, tintColor: paleGold, height: 72, usesTimelineAxis: true)
             } else {
                 Text("Not enough data to show trend.")
                     .font(.subheadline)

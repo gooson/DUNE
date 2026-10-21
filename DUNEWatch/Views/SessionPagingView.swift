@@ -24,9 +24,10 @@ struct SessionPagingView: View {
 
 private struct CardioSessionPagingView: View {
     @Environment(WorkoutManager.self) private var workoutManager
-    @Environment(\.isLuminanceReduced) private var isLuminanceReduced
 
     @State private var selectedTab: CardioTab = .mainMetrics
+    @State private var announcedKilometer: Int?
+    @State private var milestoneDismissTask: Task<Void, Never>?
 
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -46,10 +47,36 @@ private struct CardioSessionPagingView: View {
                 .tag(CardioTab.nowPlaying)
         }
         .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionPagingCardio)
-        .onChange(of: isLuminanceReduced) { _, reduced in
-            if reduced {
-                selectedTab = .mainMetrics
+        .overlay(alignment: .bottom) {
+            if let announcedKilometer {
+                HStack(spacing: DS.Spacing.xs) {
+                    Image(systemName: "figure.run")
+                    Text("\(announcedKilometer) km")
+                        .fontWeight(.bold)
+                    Text("reached")
+                }
+                .font(DS.Typography.metricLabel)
+                .padding(.horizontal, DS.Spacing.md)
+                .padding(.vertical, DS.Spacing.sm)
+                .background(.regularMaterial, in: Capsule())
+                .allowsHitTesting(false)
+                .accessibilityElement(children: .combine)
+                .accessibilityIdentifier("watch-cardio-distance-milestone")
+                .padding(.bottom, DS.Spacing.sm)
             }
+        }
+        .onChange(of: workoutManager.latestDistanceMilestone) { _, kilometer in
+            milestoneDismissTask?.cancel()
+            announcedKilometer = kilometer
+            guard kilometer != nil else { return }
+            milestoneDismissTask = Task { @MainActor in
+                try? await Task.sleep(for: .seconds(4))
+                guard !Task.isCancelled else { return }
+                announcedKilometer = nil
+            }
+        }
+        .onDisappear {
+            milestoneDismissTask?.cancel()
         }
         .onChange(of: workoutManager.cardioInactivityPrompt) { oldValue, newValue in
             guard oldValue != newValue else { return }
