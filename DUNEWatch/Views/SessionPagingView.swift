@@ -30,47 +30,43 @@ private struct CardioSessionPagingView: View {
     @State private var milestoneDismissTask: Task<Void, Never>?
 
     var body: some View {
-        TabView(selection: $selectedTab) {
-            ControlsView(showSkip: false)
-                .tag(CardioTab.controls)
+        ZStack(alignment: .bottom) {
+            TabView(selection: $selectedTab) {
+                ControlsView(showSkip: false)
+                    .tag(CardioTab.controls)
 
-            CardioMainMetricsPage()
-                .tag(CardioTab.mainMetrics)
+                CardioMainMetricsPage()
+                    .tag(CardioTab.mainMetrics)
 
-            CardioHRZonePage()
-                .tag(CardioTab.hrZone)
+                CardioHRZonePage(milestoneKilometer: announcedKilometer)
+                    .tag(CardioTab.hrZone)
 
-            CardioSecondaryPage()
-                .tag(CardioTab.secondary)
+                CardioSecondaryPage()
+                    .tag(CardioTab.secondary)
 
-            NowPlayingView()
-                .tag(CardioTab.nowPlaying)
-        }
-        .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionPagingCardio)
-        .overlay(alignment: .bottom) {
-            if let announcedKilometer {
-                HStack(spacing: DS.Spacing.xs) {
-                    Image(systemName: "figure.run")
-                    Text("\(announcedKilometer) km")
-                        .fontWeight(.bold)
-                    Text("reached")
-                }
-                .font(DS.Typography.metricLabel)
-                .padding(.horizontal, DS.Spacing.md)
-                .padding(.vertical, DS.Spacing.sm)
-                .background(.regularMaterial, in: Capsule())
-                .allowsHitTesting(false)
-                .accessibilityElement(children: .combine)
-                .accessibilityIdentifier("watch-cardio-distance-milestone")
-                .padding(.bottom, DS.Spacing.sm)
+                NowPlayingView()
+                    .tag(CardioTab.nowPlaying)
             }
+            .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionPagingCardio)
+
+            if selectedTab != .hrZone, let announcedKilometer {
+                CardioDistanceMilestoneBanner(kilometer: announcedKilometer)
+                    .padding(.bottom, DS.Spacing.sm)
+            }
+        }
+        .onChange(of: selectedTab) { _, tab in
+#if DEBUG && targetEnvironment(simulator)
+            if tab == .hrZone {
+                workoutManager.simulateKilometerMilestoneIfRequested()
+            }
+#endif
         }
         .onChange(of: workoutManager.latestDistanceMilestone) { _, kilometer in
             milestoneDismissTask?.cancel()
             announcedKilometer = kilometer
             guard kilometer != nil else { return }
             milestoneDismissTask = Task { @MainActor in
-                try? await Task.sleep(for: .seconds(4))
+                try? await Task.sleep(for: .seconds(6))
                 guard !Task.isCancelled else { return }
                 announcedKilometer = nil
             }
@@ -163,6 +159,26 @@ private struct CardioSessionPagingView: View {
         case hrZone
         case secondary
         case nowPlaying
+    }
+}
+
+struct CardioDistanceMilestoneBanner: View {
+    let kilometer: Int
+
+    var body: some View {
+        HStack(spacing: DS.Spacing.xs) {
+            Image(systemName: "figure.run")
+            Text(kilometer, format: .number)
+                .fontWeight(.bold)
+            Text("km")
+            Text("reached")
+                .accessibilityIdentifier("watch-cardio-distance-milestone")
+        }
+        .font(DS.Typography.metricLabel)
+        .padding(.horizontal, DS.Spacing.md)
+        .padding(.vertical, DS.Spacing.sm)
+        .background(.regularMaterial, in: Capsule())
+        .allowsHitTesting(false)
     }
 }
 

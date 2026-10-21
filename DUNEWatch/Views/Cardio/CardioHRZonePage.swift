@@ -2,6 +2,7 @@ import SwiftUI
 
 /// Page 2: Heart rate zone display — current HR, zone bar, zone name, avg HR.
 struct CardioHRZonePage: View {
+    let milestoneKilometer: Int?
     @Environment(WorkoutManager.self) private var workoutManager
     @Environment(\.isLuminanceReduced) private var isLuminanceReduced
     @Environment(\.appTheme) private var theme
@@ -23,6 +24,11 @@ struct CardioHRZonePage: View {
 
                     // Zone name
                     zoneLabel
+
+                    if let milestoneKilometer {
+                        CardioDistanceMilestoneBanner(kilometer: milestoneKilometer)
+                            .frame(maxWidth: .infinity)
+                    }
 
                     // Avg HR
                     avgHeartRateRow

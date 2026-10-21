@@ -89,9 +89,7 @@ final class WorkoutManager: NSObject {
 
     var displayedZoneIndex: Int? {
         guard let liveZoneDistribution else { return currentZone?.rawValue }
-        guard let liveZoneIndex,
-              let position = liveZoneDistribution.zones.firstIndex(where: { $0.index == liveZoneIndex }) else { return nil }
-        return position + 1
+        return WatchZoneDisplay.number(for: liveZoneIndex, in: liveZoneDistribution)
     }
     var displayedZoneCount: Int { liveZoneDistribution?.zones.count ?? HeartRateZone.Zone.allCases.count }
 
@@ -543,8 +541,12 @@ final class WorkoutManager: NSObject {
                     )
                 }
             )
-            liveZoneIndex = 2
+            liveZoneIndex = ProcessInfo.processInfo.arguments.contains("--ui-watch-first-zone") ? 0 : 2
             heartRate = 135
+        }
+        if ProcessInfo.processInfo.arguments.contains("--ui-watch-kilometer-milestone"),
+           case .cardio = workoutMode {
+            distance = 990
         }
 #endif
         persistRecoveryState()
@@ -1477,6 +1479,7 @@ extension WorkoutManager: HKLiveWorkoutBuilderDelegate {
     }
 
     private func updateDistance(_ meters: Double) {
+        guard meters.isFinite, (0..<500_000).contains(meters) else { return }
         distance = meters
         updatePace()
         guard !isSessionEnded,
@@ -1495,6 +1498,14 @@ extension WorkoutManager: HKLiveWorkoutBuilderDelegate {
         latestDistanceMilestone = milestone
         WKInterfaceDevice.current().play(.notification)
     }
+
+#if DEBUG && targetEnvironment(simulator)
+    func simulateKilometerMilestoneIfRequested() {
+        guard ProcessInfo.processInfo.arguments.contains("--ui-watch-kilometer-milestone"),
+              isCardioMode, distance < 1_000 else { return }
+        updateDistance(1_010)
+    }
+#endif
 
     /// Recalculates current pace (sec/km) from total distance and active elapsed time.
     @MainActor
@@ -1598,6 +1609,14 @@ enum CardioDistanceMilestone {
               lastAnnouncedKilometer >= 0 else { return nil }
         let kilometer = Int(distanceMeters / 1000)
         return kilometer > lastAnnouncedKilometer ? kilometer : nil
+    }
+}
+
+enum WatchZoneDisplay {
+    static func number(for rawIndex: Int?, in distribution: WorkoutZoneDistribution) -> Int? {
+        guard let rawIndex,
+              let position = distribution.zones.firstIndex(where: { $0.index == rawIndex }) else { return nil }
+        return position + 1
     }
 }
 

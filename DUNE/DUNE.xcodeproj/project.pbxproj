@@ -506,6 +506,7 @@
 		5FD3C4286ACA5689A719BCCD /* HealthSnapshotMirrorStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167588A31B2DC65E3D67F142 /* HealthSnapshotMirrorStore.swift */; };
 		6054A365801EEA6936A65E1B /* CardioMetricProfileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF86FA59A82FDCE82264ACC2 /* CardioMetricProfileTests.swift */; };
 		606EB0868CEA3D68A05B29D7 /* ExerciseFrequency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 945E60E17D909A3827EEC089 /* ExerciseFrequency.swift */; };
+		60857F7B28229ABF21D76B1C /* CardioDistanceMilestoneTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B3FC7FB9877D7036787575 /* CardioDistanceMilestoneTests.swift */; };
 		60924D312DE03F687ECB6671 /* InjuryCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3BAED903A0287F329DDF85 /* InjuryCardView.swift */; };
 		60FB2F7161933DAFC4249890 /* ConditionCalculationCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F880FF56CE58665042C654 /* ConditionCalculationCard.swift */; };
 		6153FADA2F731E5AC98894B1 /* WorkoutWriteServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C688184FF129715CA4D45323 /* WorkoutWriteServiceTests.swift */; };
@@ -2180,6 +2181,7 @@
 		C09EBE30760F9BE1C13DD97B /* ActiveRecoverySuggestion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveRecoverySuggestion.swift; sourceTree = "<group>"; };
 		C12CEA73F1F7A6714E601D85 /* DUNEVision.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = DUNEVision.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C184F605ACB696D94E6470D7 /* VisionWindowPlacementPlannerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionWindowPlacementPlannerTests.swift; sourceTree = "<group>"; };
+		C1B3FC7FB9877D7036787575 /* CardioDistanceMilestoneTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardioDistanceMilestoneTests.swift; sourceTree = "<group>"; };
 		C1CBA9AEF881C2FC3630CAE5 /* MuscleRecoveryMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuscleRecoveryMapView.swift; sourceTree = "<group>"; };
 		C1F5B52956D861B647E29CB9 /* VisionMuscleMapExperienceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionMuscleMapExperienceView.swift; sourceTree = "<group>"; };
 		C230316946BDC2620C9D1855 /* UITestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestHelpers.swift; sourceTree = "<group>"; };
@@ -2565,6 +2567,7 @@
 		0C894EB8F6C393EF09F3BE80 /* DUNEWatchTests */ = {
 			isa = PBXGroup;
 			children = (
+				C1B3FC7FB9877D7036787575 /* CardioDistanceMilestoneTests.swift */,
 				039001E3DAE5F0A6DC801031 /* CardioInactivityPolicyTests.swift */,
 				43A159CA85F0D06CDBBD837E /* CardioInactivitySignalTests.swift */,
 				CF86FA59A82FDCE82264ACC2 /* CardioMetricProfileTests.swift */,
@@ -5757,6 +5760,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				60857F7B28229ABF21D76B1C /* CardioDistanceMilestoneTests.swift in Sources */,
 				C0E54E55B751DC573C8E06BC /* CardioInactivityPolicyTests.swift in Sources */,
 				95A32E19E9C88588C7759F23 /* CardioInactivitySignalTests.swift in Sources */,
 				6054A365801EEA6936A65E1B /* CardioMetricProfileTests.swift in Sources */,

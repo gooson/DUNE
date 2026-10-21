@@ -23,7 +23,7 @@ status: in-progress
 | iPad | [캡처 맵](actual/ipad/index.html) | [화면별 캡처 출처](actual/ipad/capture-index.json) |
 | iPhone Duo · 접힘 | [외부 화면 캡처 맵](actual/duo/index.html) | [화면별 캡처 출처](actual/duo/capture-index.json) |
 | iPhone Duo · 펼침 | [내부 화면 캡처 맵](actual/duo-open/index.html) | [화면별 캡처 출처](actual/duo-open/capture-index.json) |
-| Apple Watch · 운동 | [62개 상태별 실제 화면 맵](actual/watch/index.html) | [신규 캡처 출처](actual/watch/capture-index.json) · [기존 검증 출처](../watch-workout/simulator-evidence/manifest.json) |
+| Apple Watch · 운동 | [63개 상태별 실제 화면 맵](actual/watch/index.html) | [신규 캡처 출처](actual/watch/capture-index.json) · [기존 검증 출처](../watch-workout/simulator-evidence/manifest.json) |
 
 2026-10-15 T10 일간 요약의 권한 준비 중 상태를 수정한 뒤 일반 iPhone과 iPad의 T10을 다시 캡처했다. Duo 접힘·펼침의 T10 이미지는 이전 구현의 캡처이며 이번 변경의 확인 증거가 아니다. 기존 Duo의 `devicectl` 화면 조회가 응답하지 않았고 새 임시 Duo도 부팅을 완료하지 못해 두 자세의 갱신은 보류했다. 시뮬레이터 서비스가 정상화되면 두 자세의 실제 표시를 다시 확인하고 T10을 갱신한다.
 
@@ -31,15 +31,17 @@ status: in-progress
 
 2026-10-17 테마 적용 계약에 따라 히어로 링 광택과 보조 문구·추세선 대비를 조정한 뒤 일반 iPhone, iPad, Duo 접힘, Duo 펼침의 T03·A01·H01을 각각 새로 캡처했다(총 12장). 네 기기 형태에서 해당 UI 테스트 3개씩 통과했고, Duo는 외부 LCD와 내부 LCD-1 활성 상태 및 캡처 크기를 대조했다. 각 `capture-index.json`의 `source_revision`은 캡처 당시의 기준 커밋이며 `source_worktree_dirty: true`는 이번 앱 변경을 빌드한 작업 트리 상태를 나타낸다. 이 실제 화면맵의 12장은 기본 DUNE 테마이며, 나머지 테마의 방향 기준은 [7개 테마 앱 적용 맵](../theme-map/app-contract.md)에 기록한다.
 
-T01 앱 시작은 `simctl io recordVideo`의 실제 앱 시작 프레임과 원본 영상으로 기록했다. 나머지 갤러리 화면 이미지는 XCTest의 `XCUIScreen.screenshot()` 결과다. 각 카드에서 원본 PNG를 열 수 있다. `boards/`의 7개 PNG는 같은 실제 이미지의 축소 모음이다. 앱 상태와 데이터는 테스트 시나리오의 mock fixture를 사용한다. 일부 테스트는 영어 언어를 지정한다. 원래 최대 접근성 글자 크기 테스트에서 선택됐던 23개 이미지는 기본 글자 크기의 실제 캡처로 교체했고, 현재 인덱스에는 강제 최대 접근성 크기 테스트 출처가 없다. 각 카드 아래에 테스트와 캡처 동작을 기록했다. 인덱스의 `source_revision`은 캡처 시점의 기준 커밋이며, `source_worktree_dirty: true`는 미커밋 앱·테스트 변경을 포함해 빌드했음을 뜻한다.
+T01 앱 시작은 `simctl io recordVideo`의 실제 앱 시작 프레임과 원본 영상으로 기록했다. 나머지 갤러리 화면 이미지는 XCTest의 `XCUIScreen.screenshot()` 결과이며, Watch C13만 최신 빌드의 XCTest 실제 화면 녹화에서 추출한 프레임이다. 각 카드에서 원본 PNG를 열 수 있다. `boards/`의 7개 PNG는 같은 실제 이미지의 축소 모음이다. 앱 상태와 데이터는 테스트 시나리오의 mock fixture를 사용한다. 일부 테스트는 영어 언어를 지정한다. 원래 최대 접근성 글자 크기 테스트에서 선택됐던 23개 이미지는 기본 글자 크기의 실제 캡처로 교체했고, 현재 인덱스에는 강제 최대 접근성 크기 테스트 출처가 없다. 각 카드 아래에 테스트와 캡처 동작을 기록했다. 인덱스의 `source_revision`은 캡처 시점의 기준 커밋이며, `source_worktree_dirty: true`는 미커밋 앱·테스트 변경을 포함해 빌드했음을 뜻한다.
 
 Duo는 전용 시뮬레이터에서 접힌 상태의 외부 LCD(1398×2034)와 펼친 상태의 내부 LCD-1(2007×2853)을 `devicectl device info displays`의 활성 표시 및 native PNG로 확인했다. 펼친 화면의 원본 PNG에는 회전 메타데이터가 있어 보드 축소본에만 EXIF 방향을 적용했다. 원본 PNG는 그대로 보관한다.
 
-Watch의 [62개 상태별 맵](actual/watch/index.html)에는 기본 글자 크기의 실제 앱 캡처 **59개 상태**와 미캡처 3개 상태를 표시한다. 대부분은 Apple Watch SE 3 (40mm)에서 캡처했고, H01·H02·H03 홈 카드는 Apple Watch SE 3 (44mm)에서 2026-10-19에 갱신했다. 기존 접근성 XXXL 검증 캡처 3장은 별도 구역에 보존했다. 12개 대표 상태의 디자인 보드도 실제 앱 캡처와 구분했다. H01 루틴 이름 잘림, P02 조작 가림, F02·F05·F06·F07의 하단 지표 및 오류 내용 가림을 실제 화면에서 확인했다. [Watch 상태표와 구현 계획](../../plans/2026-10-12-watch-workout-redesign.md)은 별도로 유지한다. 새 디자인 작업은 현재 화면의 캡처 현황을 확인한 뒤 시작한다.
+Watch의 [63개 상태별 맵](actual/watch/index.html)에는 기본 글자 크기의 실제 앱 캡처 **60개 상태**와 미캡처 3개 상태를 표시한다. 대부분은 Apple Watch SE 3 (40mm)에서 캡처했고, H01·H02·H03 홈 카드는 Apple Watch SE 3 (44mm)에서 2026-10-19에 갱신했다. 기존 접근성 XXXL 검증 캡처 3장은 별도 구역에 보존했다. 12개 대표 상태의 디자인 보드도 실제 앱 캡처와 구분했다. H01 루틴 이름 잘림, P02 조작 가림, F02·F05·F06·F07의 하단 지표 및 오류 내용 가림을 실제 화면에서 확인했다. [Watch 상태표와 구현 계획](../../plans/2026-10-12-watch-workout-redesign.md)은 별도로 유지한다. 새 디자인 작업은 현재 화면의 캡처 현황을 확인한 뒤 시작한다.
 
 2026-10-19 Watch 홈 H01·H02·H03은 44mm 시뮬레이터의 `testCaptureHomeCardsDesignMap()` 통과 결과에서 다시 캡처했다. 별도의 스크롤 복귀·미리보기 이동 UI 테스트도 최신 코드에서 통과했다. 각 이미지의 기기와 결과 번들은 `capture-index.json`에 기록했다.
 
 미캡처 상태는 S08 이전 세트, S11 휴식 AOD, C12 유산소 AOD다. S08은 완료한 세트 뒤 버튼이 표시되지 않았고 재현 테스트가 응답 없이 멈춰 원인을 분리해야 한다. AOD 2개는 시뮬레이터 화면 전원 전환으로 실제 저휘도 프레임을 얻지 못했다. S16은 이후 실제 화면을 재캡처해 등록했다. 화면 이미지를 다른 상태나 시안으로 대체하지 않았다. C10은 계단 종료 추정 알림을 제거하고 120초 이후에도 타이머가 증가하는 실제 Watch 화면을 새로 캡처했다. C08은 알림이 실제로 보이는 실패 첨부 화면을 확인해 등록했다. watchOS 접근성 계층이 그 화면을 `alert`로 분류하지 않아 테스트의 요소 판정만 실패했으며, 이 경위를 인덱스에 기록했다.
+
+2026-10-21 유산소 심박 존을 수정하고 거리 1km 통과 알림 C13을 추가했다. C03은 작업트리 전용 Watch 시뮬레이터에서 첫 HealthKit 존이 `존 1`로 표시되는 통과한 UI 테스트의 실제 화면으로 갱신했다. C13은 초기화한 동일 전용 Watch에서 실행한 최신 빌드의 XCTest 화면 녹화 16초 프레임을 실제 PNG로 등록했다. 배너는 화면에 보였지만 접근성 식별자 조회는 실패했으며, 테스트 실패와 캡처 출처를 인덱스에 기록했다.
 
 ## 화면 수정 시 갱신
 

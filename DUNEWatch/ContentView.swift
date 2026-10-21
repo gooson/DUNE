@@ -93,6 +93,13 @@ struct ContentView: View {
         }
         .task {
             await workoutManager.recoverSession()
+#if DEBUG && targetEnvironment(simulator)
+            if ProcessInfo.processInfo.arguments.contains("--ui-watch-direct-running"),
+               !workoutManager.isActive {
+                // The simulator fixture surfaces startup failure as a missing session in UI tests.
+                try? await workoutManager.startCardioSession(activityType: .running, isOutdoor: false)
+            }
+#endif
         }
     }
 }

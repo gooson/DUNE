@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DUNE · Watch 유산소 세션 레이아웃 맵</title>
+  <style>
+    :root { font-family: -apple-system, BlinkMacSystemFont, sans-serif; color: #f8f5ef; background: #151819; }
+    body { max-width: 760px; margin: auto; padding: 24px; }
+    a { color: #deb391; }
+    p, li { line-height: 1.5; color: #c9d0cc; }
+    .states { display: flex; flex-wrap: wrap; gap: 24px; }
+    figure { margin: 0; }
+    .watch { width: 184px; height: 224px; border: 5px solid #444b4b; border-radius: 43px; background: #080b0b; padding: 15px; box-sizing: border-box; position: relative; }
+    .time { text-align: right; font-size: 14px; }
+    .heart { text-align: center; color: #85afc3; margin-top: 20px; font-size: 44px; font-weight: 750; }
+    .unit, .zone { text-align: center; color: #a6afb3; }
+    .bars { display: flex; gap: 3px; margin: 12px 0; }
+    .bars span { flex: 1; height: 5px; border-radius: 4px; background: #5a5145; }
+    .bars span:first-child { background: #85afc3; }
+    .bars .active { background: #d99a6a; height: 7px; }
+    .banner { position: absolute; left: 14px; right: 14px; bottom: 14px; border-radius: 13px; background: #283535; padding: 10px; text-align: center; color: #f8f5ef; }
+    figcaption { max-width: 194px; padding-top: 9px; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <a href="index.html">← 레이아웃 맵</a>
+  <h1>Watch 유산소 세션 · 심박 존과 거리 통과</h1>
+  <p>C01 메인 · C03 존 · C04 상세 화면의 상호작용 기준 시안. 색과 수치는 설명용이며 실제 캡처는 <a href="../phone-design-map/actual/watch/index.html">Watch 실제 화면 맵</a>에서 확인한다.</p>
+  <div class="states">
+    <figure><div class="watch"><div class="time">09:05</div><div class="heart">128</div><div class="unit">bpm</div><div class="bars"><span class="active"></span><span></span><span></span><span></span><span></span></div><div class="zone">존 1</div></div><figcaption>C03 · 첫 HealthKit 존은 1로 표시</figcaption></figure>
+    <figure><div class="watch"><div class="time">09:05</div><div class="heart">142</div><div class="unit">bpm</div><div class="bars"><span></span><span></span><span class="active"></span><span></span><span></span></div><div class="zone">존 3</div><div class="banner">1 km 통과</div></div><figcaption>C03 · 거리 경계 통과 시 잠깐 표시</figcaption></figure>
+  </div>
+  <ul>
+    <li>가로 스와이프로 선택한 유산소 페이지를 유지한다. 손목을 내렸다 다시 들어 올려도 C03을 C01로 되돌리지 않는다.</li>
+    <li>HealthKit 존 번호 0부터 시작하는 내부 인덱스를 화면 순서 1부터 표시한다. 설정된 존 개수와 막대 강조 위치를 일치시킨다.</li>
+    <li>거리를 표시하는 유산소 운동에서 1km 경계마다 진동 한 번과 임시 배너를 제공한다. 운동 재개와 센서 값 흔들림으로 같은 경계를 반복 알리지 않는다.</li>
+    <li>심박이 없거나 존이 활성화되지 않으면 기존 빈 상태를 유지한다. 큰 글씨에서는 본문 세로 스크롤을 허용하고 임시 배너는 주요 조작을 막지 않는다.</li>
+  </ul>
+</body>
+</html>

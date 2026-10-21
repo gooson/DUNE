@@ -70,7 +70,12 @@ def collect(result_paths: list[Path]) -> None:
     index_path.write_text(json.dumps({"captured": dict(sorted(captured.items()))}, ensure_ascii=False, indent=2) + "\n")
     renderer = runpy.run_path(str(HERE.parent / "phone-design-map" / "collect-real-captures.py"))
     renderer["render_portal"]()
-    print(f"Watch actual capture: {len(captured)} / 62 states")
+    state_rows = re.findall(
+        r"^\| ([HDGPXSCF]\d\d) \|",
+        (HERE.parent.parent / "plans" / "2026-10-12-watch-workout-redesign.md").read_text(),
+        re.MULTILINE,
+    )
+    print(f"Watch actual capture: {len(captured)} / {len(state_rows)} states")
 
 
 if __name__ == "__main__":

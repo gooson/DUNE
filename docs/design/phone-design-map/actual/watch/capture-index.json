@@ -16,10 +16,11 @@
     },
     "C03": {
       "file": "C03.png",
-      "test": "WatchWorkoutFlowSmokeTests/testCaptureRunningDesignMap()",
+      "test": "WatchLiveHeartRateZonesUITests/testFirstHealthKitZoneDisplaysAsZoneOne()",
       "device": "Apple Watch SE 3 (40mm)",
-      "timestamp": 1791862147.449,
-      "resultBundle": "watch-capture-cardio-fixed-20261013.xcresult"
+      "timestamp": 1792543288.3543775,
+      "resultBundle": "watch-cardio-ui-capture.log",
+      "provenance": "XCUIScreen PNG saved by passing Watch UI test; Xcode result bundle finalization stalled"
     },
     "C04": {
       "file": "C04.png",
@@ -77,6 +78,15 @@
       "device": "Apple Watch SE 3 (40mm)",
       "timestamp": 1791862107.247,
       "resultBundle": "watch-capture-cardio-fixed-20261013.xcresult"
+    },
+    "C13": {
+      "file": "C13.png",
+      "test": "WatchLiveHeartRateZonesUITests/testKilometerMilestoneAppearsOnCurrentPage()",
+      "device": "DUNE-c658-watch-cardio (Apple Watch SE 3, 40mm)",
+      "timestamp": 1792598538.5804899,
+      "resultBundle": "watch-cardio-ui-km-erased.xcresult",
+      "provenance": "Actual frame at 16s from XCTest screen recording of current build; visual milestone shown; test failed accessibility identifier lookup",
+      "videoOffsetSeconds": 16
     },
     "D01": {
       "file": "D01.png",
