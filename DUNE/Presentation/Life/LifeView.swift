@@ -995,16 +995,9 @@ private struct HabitListQueryView: View {
                     lifeProgressNarrative
                 }
             } else {
-                ViewThatFits(in: .horizontal) {
-                    HStack(alignment: .center, spacing: 17) {
-                        lifeProgressRing
-                        lifeProgressNarrative
-                            .frame(minWidth: 140, alignment: .leading)
-                    }
-                    VStack(alignment: .leading, spacing: 12) {
-                        lifeProgressRing
-                        lifeProgressNarrative
-                    }
+                HStack(alignment: .center, spacing: 17) {
+                    lifeProgressRing
+                    lifeProgressNarrative
                 }
             }
 
