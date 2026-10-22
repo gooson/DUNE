@@ -133,8 +133,6 @@ struct WellnessView: View {
                             .staggeredAppear(index: 0)
                         }
 
-                        bodyRecordButton
-
                         // Sleep Prediction
                         SectionGroup(title: "Sleep Prediction", icon: "moon.zzz",
                                      iconColor: DS.Color.sleep,
@@ -150,6 +148,8 @@ struct WellnessView: View {
                             }
                         }
                         .staggeredAppear(index: 1)
+
+                        bodyRecordButton
 
                         // Physical section
                         if !viewModel.physicalCards.isEmpty {

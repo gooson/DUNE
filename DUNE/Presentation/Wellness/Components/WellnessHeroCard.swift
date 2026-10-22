@@ -12,6 +12,37 @@ struct WellnessHeroCard: View {
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
+    private var recentSleepSamples: [SleepDailySample] {
+        Array(sleepTrend.suffix(7))
+    }
+
+    private var validSleepSamples: [SleepDailySample] {
+        recentSleepSamples.filter { $0.minutes > 0 }
+    }
+
+    private var latestSleepSample: SleepDailySample? {
+        validSleepSamples.last
+    }
+
+    private var averageSleepMinutes: Int? {
+        guard validSleepSamples.count >= 2 else { return nil }
+        return Int((validSleepSamples.map(\.minutes).reduce(0, +) / Double(validSleepSamples.count)).rounded())
+    }
+
+    private func sleepDuration(_ minutes: Int) -> String {
+        "\(minutes / 60)h \(minutes % 60)min"
+    }
+
+    private var sleepAccessibilitySummary: String {
+        guard let latestSleepSample else { return String(localized: "No recent sleep records") }
+        let latest = sleepDuration(Int(latestSleepSample.minutes))
+        let date = latestSleepSample.date.formatted(.dateTime.month(.abbreviated).day())
+        guard let averageSleepMinutes else {
+            return "\(String(localized: "Latest Sleep")) \(date), \(latest)"
+        }
+        return "\(String(localized: "Latest Sleep")) \(date), \(latest). 7d avg \(sleepDuration(averageSleepMinutes))"
+    }
+
     var body: some View {
         if let score {
             themeSleepSummary(score: score)
@@ -55,14 +86,14 @@ struct WellnessHeroCard: View {
 
                     HStack(alignment: .center, spacing: 18) {
                         Group {
-                            if sleepTrend.contains(where: { $0.minutes > 0 }) {
+                            if !validSleepSamples.isEmpty {
                                 HStack(alignment: .bottom, spacing: 5) {
-                                    ForEach(Array(sleepTrend.suffix(7).enumerated()), id: \.offset) { index, sample in
+                                    ForEach(Array(recentSleepSamples.enumerated()), id: \.offset) { _, sample in
                                         if sample.minutes > 0 {
                                             RoundedRectangle(cornerRadius: 5)
                                                 .fill((theme == .desertWarm
                                                     ? Color(red: 0.350, green: 0.690, blue: 0.588)
-                                                    : theme.metricSleep).opacity(index == sleepTrend.suffix(7).count - 1 ? 1 : 0.55))
+                                                    : theme.metricSleep).opacity(sample.date == latestSleepSample?.date ? 1 : 0.55))
                                                 .frame(width: 12, height: max(9, min(60, CGFloat(sample.minutes / 600) * 60)))
                                         } else {
                                             Color.clear.frame(width: 12, height: 0)
@@ -80,18 +111,28 @@ struct WellnessHeroCard: View {
                         .frame(minWidth: 88, minHeight: 62, alignment: .bottomLeading)
 
                         VStack(alignment: .leading, spacing: 5) {
-                            if let minutes = sleepTrend.last?.minutes, minutes > 0 {
-                                Text("\(Int(minutes) / 60)h \(Int(minutes) % 60)min")
+                            if let latestSleepSample {
+                                Text(sleepDuration(Int(latestSleepSample.minutes)))
                                     .font(.headline.weight(.semibold))
                                     .foregroundStyle(theme.directionPreviewTextColor)
+                                    .accessibilityIdentifier("wellness-sleep-latest")
+                                Text(latestSleepSample.date.formatted(.dateTime.month(.abbreviated).day()))
+                                    .font(.caption)
+                                    .foregroundStyle(theme.directionPreviewTextColor.opacity(0.74))
                             } else {
                                 Text("Need More Data")
                                     .font(.headline.weight(.semibold))
                                     .foregroundStyle(theme.directionPreviewTextColor)
                             }
-                            Text("Sleep")
+                            Text("Latest Sleep")
                                 .font(.subheadline)
                                 .foregroundStyle(theme.directionPreviewTextColor.opacity(0.74))
+                            if let averageSleepMinutes {
+                                Text("7d avg · \(sleepDuration(averageSleepMinutes))")
+                                    .font(.caption.weight(.semibold))
+                                    .foregroundStyle(theme.directionPreviewTextColor.opacity(0.74))
+                                    .accessibilityIdentifier("wellness-sleep-average")
+                            }
                         }
                     }
                 }
@@ -99,6 +140,7 @@ struct WellnessHeroCard: View {
             .buttonStyle(.plain)
             .accessibilityIdentifier("wellness-hero-score")
             .accessibilityLabel("Wellness score \(score.score), \(score.status.label)")
+            .accessibilityValue(sleepAccessibilitySummary)
 
             if let sleepMetric {
                 NavigationLink(value: sleepMetric) {
