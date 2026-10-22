@@ -16,7 +16,7 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
 
     func testDesertHeroRingsByInitialTab() {
         let roots: [(tab: String, argument: String, hero: String, ring: String, action: String)] = [
-            ("Today", "today", AXID.dashboardHeroCondition, "dashboard-hero-ring", "dashboard-primary-activity"),
+            ("Today", "today", AXID.dashboardHeroCondition, "dashboard-hero-ring", AXID.dashboardHeroCondition),
             ("Activity", "train", AXID.activityHeroReadiness, "activity-hero-ring", "activity-log-workout-button"),
             ("Wellness", "wellness", AXID.wellnessHeroScore, "wellness-hero-ring", "wellness-sleep-detail-link"),
             ("Life", "life", AXID.lifeHeroProgress, "life-hero-ring", "life-hero-checklist-button")
@@ -40,6 +40,10 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
                 XCTAssertTrue(hero.waitForExistence(timeout: 10), "\(combination): hero should load")
                 assertRing(root.ring, combination: combination)
                 assertAction(root.action, combination: combination)
+                if root.argument == "today" {
+                    XCTAssertFalse(app.buttons["dashboard-primary-activity"].exists,
+                                   "\(combination): Today hero should have no cross-tab action")
+                }
 
                 let ring = app.descendants(matching: .any)[root.ring].firstMatch
                 if root.argument == "today" {
@@ -155,7 +159,9 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
         navigateToDashboard()
         captureRoot(AXID.dashboardHeroCondition, tab: "Today", combination: combination)
         assertRing("dashboard-hero-ring", combination: combination)
-        assertAction("dashboard-primary-activity", combination: combination)
+        assertAction(AXID.dashboardHeroCondition, combination: combination)
+        XCTAssertFalse(app.buttons["dashboard-primary-activity"].exists,
+                       "\(combination): Today hero should have no cross-tab action")
 
         navigateToActivity()
         captureRoot(AXID.activityHeroReadiness, tab: "Activity", combination: combination)

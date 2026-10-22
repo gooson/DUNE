@@ -78,7 +78,7 @@ final class DashboardSmokeTests: UITestBaseCase {
         XCTAssertTrue(settingsButton.waitForExistence(timeout: 5), "Notification settings button should exist in notification hub summary")
     }
 
-    func testConditionTrendAndPrimaryActivityRoute() throws {
+    func testConditionTrendAndHeroDetailRoute() throws {
         var configuration = launchConfiguration
         configuration.shouldSeedMockData = true
         configuration.scenario = .defaultSeeded
@@ -91,12 +91,14 @@ final class DashboardSmokeTests: UITestBaseCase {
             "Today condition trend should have a stable accessibility identifier"
         )
 
-        let activityButton = app.buttons["dashboard-primary-activity"].firstMatch
-        XCTAssertTrue(activityButton.waitForExistence(timeout: 5), "View Activity action should be available on Today")
-        activityButton.tap()
+        let hero = app.buttons[AXID.dashboardHeroCondition].firstMatch
+        XCTAssertTrue(hero.waitForExistence(timeout: 5), "Today hero should be one accessible detail link")
+        XCTAssertFalse(app.buttons["dashboard-primary-activity"].exists,
+                       "Today hero should not contain a cross-tab Activity action")
+        hero.tap()
 
-        XCTAssertTrue(app.navigationBars["Activity"].waitForExistence(timeout: 8), "View Activity should select the Activity tab")
-        XCTAssertTrue(elementExists(AXID.activityHeroReadiness, timeout: 8), "Activity destination should render")
+        XCTAssertTrue(elementExists(AXID.conditionScoreDetailScreen, timeout: 8),
+                      "Today hero should open condition score detail")
     }
 
     func testTodayLogWeightOpensWellnessBodyForm() throws {
