@@ -17,12 +17,12 @@ The Wellness hero currently puts both the score and sleep summary inside one sco
 
 - Score title, ring, and narrative open the Wellness score detail.
 - Sleep title, chart, and duration/average open the sleep metric detail when a sleep metric exists.
-- No nested links or competing gestures. Keep a visible sleep detail affordance and the score fallback when sleep data is unavailable.
+- No nested links or competing gestures. Keep distinct visible score and sleep detail affordances when the sleep metric exists; keep score detail visible when it does not.
 - Preserve compact, regular-width, and accessibility text layouts and useful VoiceOver labels.
 
 ## Approach
 
-Use two sibling `NavigationLink`s inside the existing card: one for score content and one for sleep content. Keep the footer as a visible link to the same sleep destination. When the sleep metric is absent, render the sleep content as static information and retain the score detail footer.
+Use two sibling `NavigationLink`s inside the existing card: one for score content and one for sleep content. Place a distinct visible detail arrow inside each link so each destination has one semantic action. On iPad, align both arrows at the bottom of their respective columns. When the sleep metric is absent, render the sleep content as static information while retaining the score detail arrow.
 
 ### Alternative Approaches Considered
 
@@ -39,6 +39,8 @@ Use two sibling `NavigationLink`s inside the existing card: one for score conten
 | `DUNE/Presentation/Wellness/Components/WellnessHeroCard.swift` | Split score and sleep links; independent accessibility |
 | `DUNEUITests/Smoke/WellnessSmokeTests.swift` | Seeded route tests and summary accessibility assertion |
 | `DUNEUITests/Visual/ThemeMatrixUITests.swift` | Adjust link-bound layout assertions |
+| `DUNEUITests/Visual/WaterLiliesThemeTests.swift` | Follow the sleep link's new identifier |
+| `Shared/Resources/Localizable.xcstrings` | Localize the explicit Wellness detail action |
 | `docs/design/phone-design-map/actual/` | Refresh affected actual screen capture per repository rule |
 
 ## Implementation Steps
@@ -51,7 +53,7 @@ Use two sibling `NavigationLink`s inside the existing card: one for score conten
 
 | Case | Handling |
 |---|---|
-| Sleep metric missing | Sleep section remains readable, not tappable; score footer stays available |
+| Sleep metric missing | Sleep section remains readable, not tappable; score action stays available |
 | Sleep trend has zero or one valid sample | Existing latest/average display rules remain unchanged |
 | Accessibility text on iPad | Stacked layout keeps both links separately reachable |
 
@@ -68,3 +70,4 @@ Use two sibling `NavigationLink`s inside the existing card: one for score conten
 | SwiftUI merges link accessibility children | Medium | Route or AX test failure | Assign separate link identifiers and assert both destinations |
 | Compact section spacing grows | Medium | Hero pushes first fold content | Inspect simulator capture and adjust spacing |
 | iPad frame assertions assume one encompassing link | High | Existing UI test failure | Update assertions to each semantic section |
+| iPad detail arrows read as a shared footer when vertically offset | Medium | Ambiguous destination ownership | Align column CTA rows and inspect actual H01 capture |

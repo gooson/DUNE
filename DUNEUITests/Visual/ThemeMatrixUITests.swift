@@ -7,7 +7,7 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
         captureTheme("desertWarm", named: "Desert")
 
         navigateToWellness()
-        let sleepDetail = app.descendants(matching: .any)["wellness-sleep-detail-link"].firstMatch
+        let sleepDetail = app.buttons["wellness-hero-sleep"].firstMatch
         XCTAssertTrue(sleepDetail.waitForExistence(timeout: 10), "Desert sleep detail action should load")
         sleepDetail.tap()
         let sleepQuality = app.descendants(matching: .any)["sleep-section-quality"].firstMatch
@@ -18,7 +18,7 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
         let roots: [(tab: String, argument: String, hero: String, ring: String, action: String)] = [
             ("Today", "today", AXID.dashboardHeroCondition, "dashboard-hero-ring", AXID.dashboardHeroCondition),
             ("Activity", "train", AXID.activityHeroReadiness, "activity-hero-ring", "activity-log-workout-button"),
-            ("Wellness", "wellness", AXID.wellnessHeroScore, "wellness-hero-ring", "wellness-sleep-detail-link"),
+            ("Wellness", "wellness", AXID.wellnessHeroScore, "wellness-hero-ring", "wellness-hero-sleep"),
             ("Life", "life", AXID.lifeHeroProgress, "life-hero-ring", "life-hero-checklist-button")
         ]
 
@@ -218,7 +218,7 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
         navigateToWellness()
         captureRoot(AXID.wellnessHeroScore, tab: "Wellness", combination: combination)
         assertRing("wellness-hero-ring", combination: combination)
-        assertAction("wellness-sleep-detail-link", combination: combination)
+        assertAction("wellness-hero-sleep", combination: combination)
 
         navigateToLife()
         captureRoot(AXID.lifeHeroProgress, tab: "Life", combination: combination)

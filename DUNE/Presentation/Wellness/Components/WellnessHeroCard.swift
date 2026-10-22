@@ -13,6 +13,10 @@ struct WellnessHeroCard: View {
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
+    private var usesSideBySideLayout: Bool {
+        horizontalSizeClass == .regular && !dynamicTypeSize.isAccessibilitySize
+    }
+
     private var recentSleepSamples: [SleepDailySample] {
         Array(sleepTrend.suffix(7))
     }
@@ -35,7 +39,9 @@ struct WellnessHeroCard: View {
     }
 
     private var sleepAccessibilitySummary: String {
-        guard let latestSleepSample else { return String(localized: "Need More Data") }
+        guard let latestSleepSample else {
+            return "\(String(localized: "Sleep")), \(String(localized: "Need More Data"))"
+        }
         let latest = sleepDuration(Int(latestSleepSample.minutes))
         let date = latestSleepSample.date.formatted(.dateTime.month(.abbreviated).day())
         guard let averageSleepMinutes else {
@@ -54,7 +60,7 @@ struct WellnessHeroCard: View {
 
     private func themeSleepSummary(score: WellnessScore) -> some View {
         VStack(alignment: .leading, spacing: 16) {
-            if horizontalSizeClass == .regular && !dynamicTypeSize.isAccessibilitySize {
+            if usesSideBySideLayout {
                 HStack(alignment: .top, spacing: 24) {
                     wellnessScoreLink(score)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -64,38 +70,6 @@ struct WellnessHeroCard: View {
             } else {
                 wellnessScoreLink(score)
                 sleepSection
-            }
-
-            if let sleepMetric {
-                NavigationLink(value: sleepMetric) {
-                    HStack(spacing: 6) {
-                        Text("Sleep Details")
-                        Image(systemName: "arrow.right")
-                    }
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(theme == .desertWarm
-                        ? (colorScheme == .dark
-                            ? Color(red: 0.898, green: 0.678, blue: 0.514)
-                            : Color(red: 0.588, green: 0.349, blue: 0.220))
-                        : theme.directionPreviewActionColor(for: colorScheme))
-                }
-                .buttonStyle(.plain)
-                .accessibilityIdentifier("wellness-sleep-detail-link")
-            } else {
-                NavigationLink(value: WellnessScoreDestination()) {
-                    HStack(spacing: 6) {
-                        Text("View Details")
-                        Image(systemName: "arrow.right")
-                    }
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(theme == .desertWarm
-                        ? (colorScheme == .dark
-                            ? Color(red: 0.898, green: 0.678, blue: 0.514)
-                            : Color(red: 0.588, green: 0.349, blue: 0.220))
-                        : theme.directionPreviewActionColor(for: colorScheme))
-                }
-                .buttonStyle(.plain)
-                .accessibilityIdentifier("wellness-score-detail-link")
             }
         }
         .padding(20)
@@ -132,8 +106,12 @@ struct WellnessHeroCard: View {
                     .foregroundStyle(theme.directionPreviewTextColor)
                 wellnessStatus(score)
                 wellnessNarrative(score)
+                if usesSideBySideLayout {
+                    Spacer(minLength: 0)
+                }
+                detailAction("Wellness Details")
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
+            .frame(maxWidth: .infinity, maxHeight: usesSideBySideLayout ? .infinity : nil, alignment: .topLeading)
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
@@ -162,8 +140,27 @@ struct WellnessHeroCard: View {
                 .font(.caption.weight(.semibold))
                 .foregroundStyle(theme.directionPreviewTextColor.opacity(0.74))
             sleepSummary
+            if sleepMetric != nil {
+                if usesSideBySideLayout {
+                    Spacer(minLength: 0)
+                }
+                detailAction("Sleep Details")
+            }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(maxWidth: .infinity, maxHeight: usesSideBySideLayout ? .infinity : nil, alignment: .topLeading)
+    }
+
+    private func detailAction(_ title: LocalizedStringKey) -> some View {
+        HStack(spacing: 6) {
+            Text(title)
+            Image(systemName: "arrow.right")
+        }
+        .font(.subheadline.weight(.semibold))
+        .foregroundStyle(theme == .desertWarm
+            ? (colorScheme == .dark
+                ? Color(red: 0.898, green: 0.678, blue: 0.514)
+                : Color(red: 0.588, green: 0.349, blue: 0.220))
+            : theme.directionPreviewActionColor(for: colorScheme))
     }
 
     @ViewBuilder
