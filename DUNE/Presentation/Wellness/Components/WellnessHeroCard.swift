@@ -31,7 +31,7 @@ struct WellnessHeroCard: View {
     }
 
     private func sleepDuration(_ minutes: Int) -> String {
-        "\(minutes / 60)h \(minutes % 60)min"
+        String(localized: "\(minutes / 60)h \(minutes % 60)min")
     }
 
     private var sleepAccessibilitySummary: String {

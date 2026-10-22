@@ -199,7 +199,7 @@ struct DesertHorizonConditionHeroView: View {
         }
     }
 
-    private var trendPeriod: String {
+    private var trendPeriod: LocalizedStringKey {
         if let hourlySparkline, hourlySparkline.points.count >= 2 {
             return hourlySparkline.includesYesterday ? "24h" : "Today"
         }
