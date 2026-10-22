@@ -54,40 +54,17 @@ struct WellnessHeroCard: View {
 
     private func themeSleepSummary(score: WellnessScore) -> some View {
         VStack(alignment: .leading, spacing: 16) {
-            NavigationLink(value: WellnessScoreDestination()) {
-                VStack(alignment: .leading, spacing: 16) {
-                    HStack {
-                        Text("Wellness")
-                            .font(.title3.weight(.bold))
-                            .foregroundStyle(theme.directionPreviewTextColor)
-                        Spacer()
-                        Text("Sleep")
-                            .font(.caption.weight(.semibold))
-                            .foregroundStyle(theme.directionPreviewTextColor.opacity(0.74))
-                    }
-
-                    if horizontalSizeClass == .regular && !dynamicTypeSize.isAccessibilitySize {
-                        HStack(alignment: .center, spacing: 24) {
-                            VStack(alignment: .leading, spacing: 16) {
-                                wellnessStatus(score)
-                                wellnessNarrative(score)
-                            }
-                            .frame(maxWidth: .infinity, alignment: .leading)
-
-                            sleepSummary
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                        }
-                    } else {
-                        wellnessStatus(score)
-                        wellnessNarrative(score)
-                        sleepSummary
-                    }
+            if horizontalSizeClass == .regular && !dynamicTypeSize.isAccessibilitySize {
+                HStack(alignment: .top, spacing: 24) {
+                    wellnessScoreLink(score)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    sleepSection
+                        .frame(maxWidth: .infinity, alignment: .leading)
                 }
+            } else {
+                wellnessScoreLink(score)
+                sleepSection
             }
-            .buttonStyle(.plain)
-            .accessibilityIdentifier("wellness-hero-score")
-            .accessibilityLabel("Wellness score \(score.score), \(score.status.label)")
-            .accessibilityValue(sleepAccessibilitySummary)
 
             if let sleepMetric {
                 NavigationLink(value: sleepMetric) {
@@ -145,6 +122,48 @@ struct WellnessHeroCard: View {
                             : theme.accentColor.opacity(0.25), lineWidth: 1)
                 }
         }
+    }
+
+    private func wellnessScoreLink(_ score: WellnessScore) -> some View {
+        NavigationLink(value: WellnessScoreDestination()) {
+            VStack(alignment: .leading, spacing: 16) {
+                Text("Wellness")
+                    .font(.title3.weight(.bold))
+                    .foregroundStyle(theme.directionPreviewTextColor)
+                wellnessStatus(score)
+                wellnessNarrative(score)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityIdentifier("wellness-hero-score")
+        .accessibilityLabel("Wellness score \(score.score), \(score.status.label)")
+    }
+
+    @ViewBuilder
+    private var sleepSection: some View {
+        if let sleepMetric {
+            NavigationLink(value: sleepMetric) {
+                sleepSectionContent
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .accessibilityIdentifier("wellness-hero-sleep")
+            .accessibilityLabel(sleepAccessibilitySummary)
+        } else {
+            sleepSectionContent
+        }
+    }
+
+    private var sleepSectionContent: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text("Sleep")
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(theme.directionPreviewTextColor.opacity(0.74))
+            sleepSummary
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     @ViewBuilder
