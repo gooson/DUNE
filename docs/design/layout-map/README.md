@@ -19,6 +19,8 @@ Life의 링 옆에는 현재 진행 상태를 설명하는 문장을 둔다. 히
 
 이 Life 배치는 [2026-10-22 실제 화면 15장](../full-redesign-map/review/life-hero-narrative-2026-10-22/README.md)에서 전용 iPhone 402pt·440pt, iPad, Duo 접힘·펼침의 밝음·어두움·최대 글씨로 확인했다. 맵의 Today 카드 안 행동, Activity 요약·운동 기록, Wellness 수면 막대·상세도 현재 개편의 정보 배치와 맞췄다.
 
+나머지 7개 테마의 Life 기본 글씨도 [전용 iPhone 밝음·어두움 실제 화면 14장](../full-redesign-map/review/life-seven-themes-2026-10-22/README.md)에서 링 옆 설명과 체크리스트 행동을 대조했다. 해당 테마의 다른 기기·접근성 상태를 통과한 것으로 확대하지 않는다.
+
 2026-10-22 전용 Duo 접힘 세로·펼침 가로에서 [4탭 밝음·어두움 실제 배치](../full-redesign-map/review/duo-four-tab-hero-rings-2026-10-22/README.md)를 확인했다. 접근성 프레임은 124pt 원 바깥의 11pt 획도 포함하므로, 테스트는 Today의 실제 링 프레임과 다른 세 탭을 비교한다. 위 미리보기의 Duo 펼침 669pt는 세로 폭 기준이며 이번 펼침 가로 캡처와 방향이 다르다.
 
 ## 화면별 맵 목록

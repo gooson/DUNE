@@ -44,6 +44,7 @@ Today 링이 화면 내부의 전용 View여서 다른 탭에서 같은 지름·
 - 해당 PNG와 테스트 결과 출처는 `docs/design/full-redesign-map/review/`의 두 히어로 링 폴더에 있다.
 - 2026-10-22 전용 Duo 접힘 세로·펼침 가로에서도 밝음·어두움 4탭 검사 2건이 정상 통과했다. [새 실제 화면 16장과 출처](../../design/full-redesign-map/review/duo-four-tab-hero-rings-2026-10-22/README.md)를 보존하고 실제 디자인맵의 해당 8개 화면을 갱신했다. 탭 레일 전환·펼침 세로·최대 글씨는 이 검사의 범위가 아니다.
 - 이어 Life의 중복 습관 이름을 기존 진행 설명으로 바꿨다. [iPhone 2종·iPad·Duo 2자세의 기본·최대 글씨 실제 화면 15장](../../design/full-redesign-map/review/life-hero-narrative-2026-10-22/README.md)과 집중 검사 5건이 통과했다. 앞선 캡처의 Life는 변경 전 기준이다.
+- 나머지 7테마의 [iPhone 밝음·어두움 Life 실제 화면 14장](../../design/full-redesign-map/review/life-seven-themes-2026-10-22/README.md)도 새로 촬영하고 단일 selector 1건 통과를 확인했다. 전체 개편 맵의 iPhone 8테마 L01과 DESERT HORIZON의 iPad·Duo 두 자세 L01에 각 캡처의 원래 출처를 반영했다.
 
 ## Prevention
 
@@ -53,6 +54,7 @@ Today 링이 화면 내부의 전용 View여서 다른 탭에서 같은 지름·
 - 긴 현지화 문구는 링 옆 고정 폭을 가정하지 말고 카드 전체 폭에서 줄바꿈할 수 있게 배치한다.
 - 문장을 한 줄로 펼쳤을 때의 폭이 레이아웃 선택 기준이 되면 `ViewThatFits`가 의도하지 않은 세로 배치를 선택할 수 있다. 일반 글씨의 링·설명은 주어진 폭 안에서 줄바꿈하고 접근성 크기에서 명시적으로 세로 배치한다.
 - 같은 기기 모델의 전용 clone으로 실제 맵을 갱신할 때도 새 UDID·원본 PNG·테스트 출처를 화면별로 기록한다. 다른 폭·폼팩터는 별도 증거로 보존하며 이전 기기의 증거인 것처럼 표시하지 않는다.
+- 기본 실제 화면맵과 테마별 전체 개편 맵은 별도 이미지 인덱스를 사용한다. 같은 화면을 수정했을 때 두 맵에서 이전 화면이 최신으로 남지 않는지 확인하고, 이미 유효한 같은 소스의 캡처는 원래 시각과 테스트 출처를 유지해 연결한다.
 
 ## Lessons Learned
 

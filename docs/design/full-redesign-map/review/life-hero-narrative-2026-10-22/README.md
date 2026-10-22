@@ -34,4 +34,4 @@ L01의 Today 기준 완료 링을 유지하고, 링 옆의 습관 이름 3개를
 
 ## 적용 범위와 남은 확인
 
-DESERT HORIZON의 L01 배치 증거다. 다른 7개 테마는 같은 구조를 상속하지만 새 문장의 테마별 실제 대비는 이번 테스트의 통과 범위가 아니다. 다른 탭·탭 레일 전환·펼침 세로·고대비·VoiceOver 전체 흐름도 포함하지 않는다. 출처의 `source_worktree_dirty`는 캡처 당시 `ViewThatFits` 제거가 미커밋 상태였음을 뜻하며 앱 소스 hash를 함께 보존했다.
+DESERT HORIZON의 L01 배치 증거다. 다른 7개 테마의 기본 글씨는 [후속 iPhone 실제 화면 14장](../life-seven-themes-2026-10-22/README.md)에서 별도로 확인했다. 다른 탭·탭 레일 전환·펼침 세로·고대비·VoiceOver 전체 흐름은 포함하지 않는다. 출처의 `source_worktree_dirty`는 캡처 당시 `ViewThatFits` 제거가 미커밋 상태였음을 뜻하며 앱 소스 hash를 함께 보존했다.

@@ -8,22 +8,44 @@
   },
   "captures": {
     "arctic/dark/L01": {
-      "theme": "arctic",
-      "appearance": "dark",
-      "screen_id": "L01",
       "file": "arctic/dark/L01.png",
-      "attachment_name": "Arctic Dark Life_0_88CC4C47-050C-4C91-B62B-11F6BA4A4867.png",
-      "test_identifier": "ThemeMatrixUITests/testArcticDawnMatrix()",
-      "timestamp": 1792370970.205,
-      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_09-48-04-+0900.xcresult",
+      "screen_id": "L01",
+      "theme": "arctic",
+      "theme_id": "arctic",
+      "state": "dark",
       "device": {
         "kind": "regular",
         "platform": "iOS Simulator",
         "model_name": "iPhone 18 Pro",
-        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+        "identifier": "F7F01710-33E6-4F20-961C-A9B8C1FECF43"
       },
-      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
-      "source_worktree_dirty": true
+      "device_id": "F7F01710-33E6-4F20-961C-A9B8C1FECF43",
+      "native_size": [
+        1206,
+        2622
+      ],
+      "window_size_pt": [
+        402,
+        874
+      ],
+      "source_revision": "ec67bacec03674dac71d13e3b9245d708b2d10ab",
+      "source_worktree_dirty": true,
+      "source_sha256": {
+        "DUNE/Presentation/Life/LifeView.swift": "8281d19a6d115b015c021c326111e96694e0ba170df1c1b6a5f93bc040460d2e",
+        "DUNE/Presentation/Shared/Extensions/AppTheme+View.swift": "380a9058446cfc7ec1b21abb1899c9cf011a37c56bd95e681bcbce92ad0a432b",
+        "DUNE/Presentation/Shared/Components/ProgressRingView.swift": "090f314d8b7bfd62f43a93f8df526162f897a22bcc63c9b44ed5db4593cd7487",
+        "DUNEUITests/Smoke/LifeSmokeTests.swift": "e6a6862fb4f98a2f2e68dc040c367dd8198d8d11bb82795ba47435ed3b3ed6b4"
+      },
+      "timestamp": 1792629769.1674204,
+      "test": "LifeSeededSmokeTests/testHeroNarrativeRemainingThemes()",
+      "checkpoint": 9,
+      "capture_method": "host viewport hold; simctl explicit display",
+      "source_file": ".xcodebuild/life-seven-themes-20261022/009-1206x2622.png",
+      "appearance": "dark",
+      "attachment_name": "009-1206x2622.png",
+      "test_identifier": "LifeSeededSmokeTests/testHeroNarrativeRemainingThemes()",
+      "evidence_gallery": "../../review/life-seven-themes-2026-10-22/arctic/L01-dark.png",
+      "validation_receipt": "../../review/life-seven-themes-2026-10-22/test-results.json"
     },
     "arctic/dark/H01": {
       "theme": "arctic",
@@ -80,22 +102,44 @@
       "source_worktree_dirty": true
     },
     "arctic/light/L01": {
-      "theme": "arctic",
-      "appearance": "light",
-      "screen_id": "L01",
       "file": "arctic/light/L01.png",
-      "attachment_name": "Arctic Light Life_0_D656474B-52A2-4586-BB65-B5B5A65D0787.png",
-      "test_identifier": "ThemeMatrixUITests/testArcticDawnMatrix()",
-      "timestamp": 1792370946.316,
-      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_09-48-04-+0900.xcresult",
+      "screen_id": "L01",
+      "theme": "arctic",
+      "theme_id": "arctic",
+      "state": "light",
       "device": {
         "kind": "regular",
         "platform": "iOS Simulator",
         "model_name": "iPhone 18 Pro",
-        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+        "identifier": "F7F01710-33E6-4F20-961C-A9B8C1FECF43"
       },
-      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
-      "source_worktree_dirty": true
+      "device_id": "F7F01710-33E6-4F20-961C-A9B8C1FECF43",
+      "native_size": [
+        1206,
+        2622
+      ],
+      "window_size_pt": [
+        402,
+        874
+      ],
+      "source_revision": "ec67bacec03674dac71d13e3b9245d708b2d10ab",
+      "source_worktree_dirty": true,
+      "source_sha256": {
+        "DUNE/Presentation/Life/LifeView.swift": "8281d19a6d115b015c021c326111e96694e0ba170df1c1b6a5f93bc040460d2e",
+        "DUNE/Presentation/Shared/Extensions/AppTheme+View.swift": "380a9058446cfc7ec1b21abb1899c9cf011a37c56bd95e681bcbce92ad0a432b",
+        "DUNE/Presentation/Shared/Components/ProgressRingView.swift": "090f314d8b7bfd62f43a93f8df526162f897a22bcc63c9b44ed5db4593cd7487",
+        "DUNEUITests/Smoke/LifeSmokeTests.swift": "e6a6862fb4f98a2f2e68dc040c367dd8198d8d11bb82795ba47435ed3b3ed6b4"
+      },
+      "timestamp": 1792629757.2183077,
+      "test": "LifeSeededSmokeTests/testHeroNarrativeRemainingThemes()",
+      "checkpoint": 8,
+      "capture_method": "host viewport hold; simctl explicit display",
+      "source_file": ".xcodebuild/life-seven-themes-20261022/008-1206x2622.png",
+      "appearance": "light",
+      "attachment_name": "008-1206x2622.png",
+      "test_identifier": "LifeSeededSmokeTests/testHeroNarrativeRemainingThemes()",
+      "evidence_gallery": "../../review/life-seven-themes-2026-10-22/arctic/L01-light.png",
+      "validation_receipt": "../../review/life-seven-themes-2026-10-22/test-results.json"
     },
     "arctic/light/H01": {
       "theme": "arctic",
@@ -152,22 +196,44 @@
       "source_worktree_dirty": true
     },
     "contour/dark/L01": {
-      "theme": "contour",
-      "appearance": "dark",
-      "screen_id": "L01",
       "file": "contour/dark/L01.png",
-      "attachment_name": "Contour Dark Life_0_EEB6C9D0-F3C4-45CF-B104-167EEF063179.png",
-      "test_identifier": "ThemeMatrixUITests/testContourAtlasMatrix()",
-      "timestamp": 1792371021.239,
-      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_09-48-04-+0900.xcresult",
+      "screen_id": "L01",
+      "theme": "contour",
+      "theme_id": "contour",
+      "state": "dark",
       "device": {
         "kind": "regular",
         "platform": "iOS Simulator",
         "model_name": "iPhone 18 Pro",
-        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+        "identifier": "F7F01710-33E6-4F20-961C-A9B8C1FECF43"
       },
-      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
-      "source_worktree_dirty": true
+      "device_id": "F7F01710-33E6-4F20-961C-A9B8C1FECF43",
+      "native_size": [
+        1206,
+        2622
+      ],
+      "window_size_pt": [
+        402,
+        874
+      ],
+      "source_revision": "ec67bacec03674dac71d13e3b9245d708b2d10ab",
+      "source_worktree_dirty": true,
+      "source_sha256": {
+        "DUNE/Presentation/Life/LifeView.swift": "8281d19a6d115b015c021c326111e96694e0ba170df1c1b6a5f93bc040460d2e",
+        "DUNE/Presentation/Shared/Extensions/AppTheme+View.swift": "380a9058446cfc7ec1b21abb1899c9cf011a37c56bd95e681bcbce92ad0a432b",
+        "DUNE/Presentation/Shared/Components/ProgressRingView.swift": "090f314d8b7bfd62f43a93f8df526162f897a22bcc63c9b44ed5db4593cd7487",
+        "DUNEUITests/Smoke/LifeSmokeTests.swift": "e6a6862fb4f98a2f2e68dc040c367dd8198d8d11bb82795ba47435ed3b3ed6b4"
+      },
+      "timestamp": 1792629816.28712,
+      "test": "LifeSeededSmokeTests/testHeroNarrativeRemainingThemes()",
+      "checkpoint": 13,
+      "capture_method": "host viewport hold; simctl explicit display",
+      "source_file": ".xcodebuild/life-seven-themes-20261022/013-1206x2622.png",
+      "appearance": "dark",
+      "attachment_name": "013-1206x2622.png",
+      "test_identifier": "LifeSeededSmokeTests/testHeroNarrativeRemainingThemes()",
+      "evidence_gallery": "../../review/life-seven-themes-2026-10-22/contour/L01-dark.png",
+      "validation_receipt": "../../review/life-seven-themes-2026-10-22/test-results.json"
     },
     "contour/dark/H01": {
       "theme": "contour",
@@ -224,22 +290,44 @@
       "source_worktree_dirty": true
     },
     "contour/light/L01": {
-      "theme": "contour",
-      "appearance": "light",
-      "screen_id": "L01",
       "file": "contour/light/L01.png",
-      "attachment_name": "Contour Light Life_0_62D6E0FA-D89F-4285-BE25-B9612734120E.png",
-      "test_identifier": "ThemeMatrixUITests/testContourAtlasMatrix()",
-      "timestamp": 1792370998.244,
-      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_09-48-04-+0900.xcresult",
+      "screen_id": "L01",
+      "theme": "contour",
+      "theme_id": "contour",
+      "state": "light",
       "device": {
         "kind": "regular",
         "platform": "iOS Simulator",
         "model_name": "iPhone 18 Pro",
-        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+        "identifier": "F7F01710-33E6-4F20-961C-A9B8C1FECF43"
       },
-      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
-      "source_worktree_dirty": true
+      "device_id": "F7F01710-33E6-4F20-961C-A9B8C1FECF43",
+      "native_size": [
+        1206,
+        2622
+      ],
+      "window_size_pt": [
+        402,
+        874
+      ],
+      "source_revision": "ec67bacec03674dac71d13e3b9245d708b2d10ab",
+      "source_worktree_dirty": true,
+      "source_sha256": {
+        "DUNE/Presentation/Life/LifeView.swift": "8281d19a6d115b015c021c326111e96694e0ba170df1c1b6a5f93bc040460d2e",
+        "DUNE/Presentation/Shared/Extensions/AppTheme+View.swift": "380a9058446cfc7ec1b21abb1899c9cf011a37c56bd95e681bcbce92ad0a432b",
+        "DUNE/Presentation/Shared/Components/ProgressRingView.swift": "090f314d8b7bfd62f43a93f8df526162f897a22bcc63c9b44ed5db4593cd7487",
+        "DUNEUITests/Smoke/LifeSmokeTests.swift": "e6a6862fb4f98a2f2e68dc040c367dd8198d8d11bb82795ba47435ed3b3ed6b4"
+      },
+      "timestamp": 1792629805.3501859,
+      "test": "LifeSeededSmokeTests/testHeroNarrativeRemainingThemes()",
+      "checkpoint": 12,
+      "capture_method": "host viewport hold; simctl explicit display",
+      "source_file": ".xcodebuild/life-seven-themes-20261022/012-1206x2622.png",
+      "appearance": "light",
+      "attachment_name": "012-1206x2622.png",
+      "test_identifier": "LifeSeededSmokeTests/testHeroNarrativeRemainingThemes()",
+      "evidence_gallery": "../../review/life-seven-themes-2026-10-22/contour/L01-light.png",
+      "validation_receipt": "../../review/life-seven-themes-2026-10-22/test-results.json"
     },
     "contour/light/H01": {
       "theme": "contour",
@@ -296,22 +384,38 @@
       "source_worktree_dirty": true
     },
     "dune/dark/L01": {
-      "theme": "dune",
-      "appearance": "dark",
-      "screen_id": "L01",
       "file": "dune/dark/L01.png",
-      "attachment_name": "Desert Dark Life_0_68561C94-05A0-469A-AC13-7E00D5C739DB.png",
-      "test_identifier": "ThemeMatrixUITests/testDesertWarmMatrix()",
-      "timestamp": 1792371073.083,
-      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_09-48-04-+0900.xcresult",
+      "screen_id": "L01",
       "device": {
         "kind": "regular",
         "platform": "iOS Simulator",
         "model_name": "iPhone 18 Pro",
-        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+        "identifier": "F7F01710-33E6-4F20-961C-A9B8C1FECF43"
       },
-      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
-      "source_worktree_dirty": true
+      "device_id": "F7F01710-33E6-4F20-961C-A9B8C1FECF43",
+      "state": "dark",
+      "theme": "dune",
+      "native_size": [
+        1206,
+        2622
+      ],
+      "window_size_pt": [
+        402.0,
+        874.0
+      ],
+      "source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "source_worktree_dirty": true,
+      "life_view_sha256": "8281d19a6d115b015c021c326111e96694e0ba170df1c1b6a5f93bc040460d2e",
+      "timestamp": 1792603485.1439838,
+      "test": "LifeSeededSmokeTests/testHeroNarrativeLayout()",
+      "checkpoint": 3,
+      "capture_method": "host viewport hold; simctl explicit display",
+      "source_file": ".xcodebuild/life-narrative-small-phone-20261022/003-1206x2622.png",
+      "appearance": "dark",
+      "attachment_name": "003-1206x2622.png",
+      "test_identifier": "LifeSeededSmokeTests/testHeroNarrativeLayout()",
+      "evidence_gallery": "../../review/life-hero-narrative-2026-10-22/small-phone/L01-dark.png",
+      "validation_receipt": "../../review/life-hero-narrative-2026-10-22/test-results.json"
     },
     "dune/dark/H01": {
       "theme": "dune",
@@ -368,22 +472,38 @@
       "source_worktree_dirty": true
     },
     "dune/light/L01": {
-      "theme": "dune",
-      "appearance": "light",
-      "screen_id": "L01",
       "file": "dune/light/L01.png",
-      "attachment_name": "Desert Light Life_0_4FFC3A08-7B71-48EC-9366-C4FF9E60B42C.png",
-      "test_identifier": "ThemeMatrixUITests/testDesertWarmMatrix()",
-      "timestamp": 1792371051.635,
-      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_09-48-04-+0900.xcresult",
+      "screen_id": "L01",
       "device": {
         "kind": "regular",
         "platform": "iOS Simulator",
         "model_name": "iPhone 18 Pro",
-        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+        "identifier": "F7F01710-33E6-4F20-961C-A9B8C1FECF43"
       },
-      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
-      "source_worktree_dirty": true
+      "device_id": "F7F01710-33E6-4F20-961C-A9B8C1FECF43",
+      "state": "light",
+      "theme": "dune",
+      "native_size": [
+        1206,
+        2622
+      ],
+      "window_size_pt": [
+        402.0,
+        874.0
+      ],
+      "source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "source_worktree_dirty": true,
+      "life_view_sha256": "8281d19a6d115b015c021c326111e96694e0ba170df1c1b6a5f93bc040460d2e",
+      "timestamp": 1792603473.448192,
+      "test": "LifeSeededSmokeTests/testHeroNarrativeLayout()",
+      "checkpoint": 2,
+      "capture_method": "host viewport hold; simctl explicit display",
+      "source_file": ".xcodebuild/life-narrative-small-phone-20261022/002-1206x2622.png",
+      "appearance": "light",
+      "attachment_name": "002-1206x2622.png",
+      "test_identifier": "LifeSeededSmokeTests/testHeroNarrativeLayout()",
+      "evidence_gallery": "../../review/life-hero-narrative-2026-10-22/small-phone/L01-light.png",
+      "validation_receipt": "../../review/life-hero-narrative-2026-10-22/test-results.json"
     },
     "dune/light/H01": {
       "theme": "dune",
@@ -440,22 +560,44 @@
       "source_worktree_dirty": true
     },
     "forest/dark/L01": {
-      "theme": "forest",
-      "appearance": "dark",
-      "screen_id": "L01",
       "file": "forest/dark/L01.png",
-      "attachment_name": "Forest Dark Life_0_44607B28-B7F0-4EB4-8BE3-19B39A3DE60B.png",
-      "test_identifier": "ThemeMatrixUITests/testForestGreenMatrix()",
-      "timestamp": 1792371125.922,
-      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_09-48-04-+0900.xcresult",
+      "screen_id": "L01",
+      "theme": "forest",
+      "theme_id": "forest",
+      "state": "dark",
       "device": {
         "kind": "regular",
         "platform": "iOS Simulator",
         "model_name": "iPhone 18 Pro",
-        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+        "identifier": "F7F01710-33E6-4F20-961C-A9B8C1FECF43"
       },
-      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
-      "source_worktree_dirty": true
+      "device_id": "F7F01710-33E6-4F20-961C-A9B8C1FECF43",
+      "native_size": [
+        1206,
+        2622
+      ],
+      "window_size_pt": [
+        402,
+        874
+      ],
+      "source_revision": "ec67bacec03674dac71d13e3b9245d708b2d10ab",
+      "source_worktree_dirty": true,
+      "source_sha256": {
+        "DUNE/Presentation/Life/LifeView.swift": "8281d19a6d115b015c021c326111e96694e0ba170df1c1b6a5f93bc040460d2e",
+        "DUNE/Presentation/Shared/Extensions/AppTheme+View.swift": "380a9058446cfc7ec1b21abb1899c9cf011a37c56bd95e681bcbce92ad0a432b",
+        "DUNE/Presentation/Shared/Components/ProgressRingView.swift": "090f314d8b7bfd62f43a93f8df526162f897a22bcc63c9b44ed5db4593cd7487",
+        "DUNEUITests/Smoke/LifeSmokeTests.swift": "e6a6862fb4f98a2f2e68dc040c367dd8198d8d11bb82795ba47435ed3b3ed6b4"
+      },
+      "timestamp": 1792629722.3480673,
+      "test": "LifeSeededSmokeTests/testHeroNarrativeRemainingThemes()",
+      "checkpoint": 5,
+      "capture_method": "host viewport hold; simctl explicit display",
+      "source_file": ".xcodebuild/life-seven-themes-20261022/005-1206x2622.png",
+      "appearance": "dark",
+      "attachment_name": "005-1206x2622.png",
+      "test_identifier": "LifeSeededSmokeTests/testHeroNarrativeRemainingThemes()",
+      "evidence_gallery": "../../review/life-seven-themes-2026-10-22/forest/L01-dark.png",
+      "validation_receipt": "../../review/life-seven-themes-2026-10-22/test-results.json"
     },
     "forest/dark/H01": {
       "theme": "forest",
@@ -512,22 +654,44 @@
       "source_worktree_dirty": true
     },
     "forest/light/L01": {
-      "theme": "forest",
-      "appearance": "light",
-      "screen_id": "L01",
       "file": "forest/light/L01.png",
-      "attachment_name": "Forest Light Life_0_2C77CA9C-C717-46B0-BEC5-D2C359146AD5.png",
-      "test_identifier": "ThemeMatrixUITests/testForestGreenMatrix()",
-      "timestamp": 1792371103.025,
-      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_09-48-04-+0900.xcresult",
+      "screen_id": "L01",
+      "theme": "forest",
+      "theme_id": "forest",
+      "state": "light",
       "device": {
         "kind": "regular",
         "platform": "iOS Simulator",
         "model_name": "iPhone 18 Pro",
-        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+        "identifier": "F7F01710-33E6-4F20-961C-A9B8C1FECF43"
       },
-      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
-      "source_worktree_dirty": true
+      "device_id": "F7F01710-33E6-4F20-961C-A9B8C1FECF43",
+      "native_size": [
+        1206,
+        2622
+      ],
+      "window_size_pt": [
+        402,
+        874
+      ],
+      "source_revision": "ec67bacec03674dac71d13e3b9245d708b2d10ab",
+      "source_worktree_dirty": true,
+      "source_sha256": {
+        "DUNE/Presentation/Life/LifeView.swift": "8281d19a6d115b015c021c326111e96694e0ba170df1c1b6a5f93bc040460d2e",
+        "DUNE/Presentation/Shared/Extensions/AppTheme+View.swift": "380a9058446cfc7ec1b21abb1899c9cf011a37c56bd95e681bcbce92ad0a432b",
+        "DUNE/Presentation/Shared/Components/ProgressRingView.swift": "090f314d8b7bfd62f43a93f8df526162f897a22bcc63c9b44ed5db4593cd7487",
+        "DUNEUITests/Smoke/LifeSmokeTests.swift": "e6a6862fb4f98a2f2e68dc040c367dd8198d8d11bb82795ba47435ed3b3ed6b4"
+      },
+      "timestamp": 1792629711.1368248,
+      "test": "LifeSeededSmokeTests/testHeroNarrativeRemainingThemes()",
+      "checkpoint": 4,
+      "capture_method": "host viewport hold; simctl explicit display",
+      "source_file": ".xcodebuild/life-seven-themes-20261022/004-1206x2622.png",
+      "appearance": "light",
+      "attachment_name": "004-1206x2622.png",
+      "test_identifier": "LifeSeededSmokeTests/testHeroNarrativeRemainingThemes()",
+      "evidence_gallery": "../../review/life-seven-themes-2026-10-22/forest/L01-light.png",
+      "validation_receipt": "../../review/life-seven-themes-2026-10-22/test-results.json"
     },
     "forest/light/H01": {
       "theme": "forest",
@@ -584,22 +748,44 @@
       "source_worktree_dirty": true
     },
     "ocean/dark/L01": {
-      "theme": "ocean",
-      "appearance": "dark",
-      "screen_id": "L01",
       "file": "ocean/dark/L01.png",
-      "attachment_name": "Ocean Dark Life_0_8F7F824A-14C3-4288-9CF4-FDF439F18D8F.png",
-      "test_identifier": "ThemeMatrixUITests/testOceanCoolMatrix()",
-      "timestamp": 1792371176.88,
-      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_09-48-04-+0900.xcresult",
+      "screen_id": "L01",
+      "theme": "ocean",
+      "theme_id": "ocean",
+      "state": "dark",
       "device": {
         "kind": "regular",
         "platform": "iOS Simulator",
         "model_name": "iPhone 18 Pro",
-        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+        "identifier": "F7F01710-33E6-4F20-961C-A9B8C1FECF43"
       },
-      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
-      "source_worktree_dirty": true
+      "device_id": "F7F01710-33E6-4F20-961C-A9B8C1FECF43",
+      "native_size": [
+        1206,
+        2622
+      ],
+      "window_size_pt": [
+        402,
+        874
+      ],
+      "source_revision": "ec67bacec03674dac71d13e3b9245d708b2d10ab",
+      "source_worktree_dirty": true,
+      "source_sha256": {
+        "DUNE/Presentation/Life/LifeView.swift": "8281d19a6d115b015c021c326111e96694e0ba170df1c1b6a5f93bc040460d2e",
+        "DUNE/Presentation/Shared/Extensions/AppTheme+View.swift": "380a9058446cfc7ec1b21abb1899c9cf011a37c56bd95e681bcbce92ad0a432b",
+        "DUNE/Presentation/Shared/Components/ProgressRingView.swift": "090f314d8b7bfd62f43a93f8df526162f897a22bcc63c9b44ed5db4593cd7487",
+        "DUNEUITests/Smoke/LifeSmokeTests.swift": "e6a6862fb4f98a2f2e68dc040c367dd8198d8d11bb82795ba47435ed3b3ed6b4"
+      },
+      "timestamp": 1792629699.9197624,
+      "test": "LifeSeededSmokeTests/testHeroNarrativeRemainingThemes()",
+      "checkpoint": 3,
+      "capture_method": "host viewport hold; simctl explicit display",
+      "source_file": ".xcodebuild/life-seven-themes-20261022/003-1206x2622.png",
+      "appearance": "dark",
+      "attachment_name": "003-1206x2622.png",
+      "test_identifier": "LifeSeededSmokeTests/testHeroNarrativeRemainingThemes()",
+      "evidence_gallery": "../../review/life-seven-themes-2026-10-22/ocean/L01-dark.png",
+      "validation_receipt": "../../review/life-seven-themes-2026-10-22/test-results.json"
     },
     "ocean/dark/H01": {
       "theme": "ocean",
@@ -656,22 +842,44 @@
       "source_worktree_dirty": true
     },
     "ocean/light/L01": {
-      "theme": "ocean",
-      "appearance": "light",
-      "screen_id": "L01",
       "file": "ocean/light/L01.png",
-      "attachment_name": "Ocean Light Life_0_BD2E9646-CDC1-4067-A625-E3ACB5218D81.png",
-      "test_identifier": "ThemeMatrixUITests/testOceanCoolMatrix()",
-      "timestamp": 1792371155.547,
-      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_09-48-04-+0900.xcresult",
+      "screen_id": "L01",
+      "theme": "ocean",
+      "theme_id": "ocean",
+      "state": "light",
       "device": {
         "kind": "regular",
         "platform": "iOS Simulator",
         "model_name": "iPhone 18 Pro",
-        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+        "identifier": "F7F01710-33E6-4F20-961C-A9B8C1FECF43"
       },
-      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
-      "source_worktree_dirty": true
+      "device_id": "F7F01710-33E6-4F20-961C-A9B8C1FECF43",
+      "native_size": [
+        1206,
+        2622
+      ],
+      "window_size_pt": [
+        402,
+        874
+      ],
+      "source_revision": "ec67bacec03674dac71d13e3b9245d708b2d10ab",
+      "source_worktree_dirty": true,
+      "source_sha256": {
+        "DUNE/Presentation/Life/LifeView.swift": "8281d19a6d115b015c021c326111e96694e0ba170df1c1b6a5f93bc040460d2e",
+        "DUNE/Presentation/Shared/Extensions/AppTheme+View.swift": "380a9058446cfc7ec1b21abb1899c9cf011a37c56bd95e681bcbce92ad0a432b",
+        "DUNE/Presentation/Shared/Components/ProgressRingView.swift": "090f314d8b7bfd62f43a93f8df526162f897a22bcc63c9b44ed5db4593cd7487",
+        "DUNEUITests/Smoke/LifeSmokeTests.swift": "e6a6862fb4f98a2f2e68dc040c367dd8198d8d11bb82795ba47435ed3b3ed6b4"
+      },
+      "timestamp": 1792629688.5461576,
+      "test": "LifeSeededSmokeTests/testHeroNarrativeRemainingThemes()",
+      "checkpoint": 2,
+      "capture_method": "host viewport hold; simctl explicit display",
+      "source_file": ".xcodebuild/life-seven-themes-20261022/002-1206x2622.png",
+      "appearance": "light",
+      "attachment_name": "002-1206x2622.png",
+      "test_identifier": "LifeSeededSmokeTests/testHeroNarrativeRemainingThemes()",
+      "evidence_gallery": "../../review/life-seven-themes-2026-10-22/ocean/L01-light.png",
+      "validation_receipt": "../../review/life-seven-themes-2026-10-22/test-results.json"
     },
     "ocean/light/H01": {
       "theme": "ocean",
@@ -728,22 +936,44 @@
       "source_worktree_dirty": true
     },
     "sakura/dark/L01": {
-      "theme": "sakura",
-      "appearance": "dark",
-      "screen_id": "L01",
       "file": "sakura/dark/L01.png",
-      "attachment_name": "Sakura Dark Life_0_41C953CE-EED4-4F74-AD2C-7A9161006BEF.png",
-      "test_identifier": "ThemeMatrixUITests/testSakuraCalmMatrix()",
-      "timestamp": 1792371228.247,
-      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_09-48-04-+0900.xcresult",
+      "screen_id": "L01",
+      "theme": "sakura",
+      "theme_id": "sakura",
+      "state": "dark",
       "device": {
         "kind": "regular",
         "platform": "iOS Simulator",
         "model_name": "iPhone 18 Pro",
-        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+        "identifier": "F7F01710-33E6-4F20-961C-A9B8C1FECF43"
       },
-      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
-      "source_worktree_dirty": true
+      "device_id": "F7F01710-33E6-4F20-961C-A9B8C1FECF43",
+      "native_size": [
+        1206,
+        2622
+      ],
+      "window_size_pt": [
+        402,
+        874
+      ],
+      "source_revision": "ec67bacec03674dac71d13e3b9245d708b2d10ab",
+      "source_worktree_dirty": true,
+      "source_sha256": {
+        "DUNE/Presentation/Life/LifeView.swift": "8281d19a6d115b015c021c326111e96694e0ba170df1c1b6a5f93bc040460d2e",
+        "DUNE/Presentation/Shared/Extensions/AppTheme+View.swift": "380a9058446cfc7ec1b21abb1899c9cf011a37c56bd95e681bcbce92ad0a432b",
+        "DUNE/Presentation/Shared/Components/ProgressRingView.swift": "090f314d8b7bfd62f43a93f8df526162f897a22bcc63c9b44ed5db4593cd7487",
+        "DUNEUITests/Smoke/LifeSmokeTests.swift": "e6a6862fb4f98a2f2e68dc040c367dd8198d8d11bb82795ba47435ed3b3ed6b4"
+      },
+      "timestamp": 1792629744.5510037,
+      "test": "LifeSeededSmokeTests/testHeroNarrativeRemainingThemes()",
+      "checkpoint": 7,
+      "capture_method": "host viewport hold; simctl explicit display",
+      "source_file": ".xcodebuild/life-seven-themes-20261022/007-1206x2622.png",
+      "appearance": "dark",
+      "attachment_name": "007-1206x2622.png",
+      "test_identifier": "LifeSeededSmokeTests/testHeroNarrativeRemainingThemes()",
+      "evidence_gallery": "../../review/life-seven-themes-2026-10-22/sakura/L01-dark.png",
+      "validation_receipt": "../../review/life-seven-themes-2026-10-22/test-results.json"
     },
     "sakura/dark/H01": {
       "theme": "sakura",
@@ -800,22 +1030,44 @@
       "source_worktree_dirty": true
     },
     "sakura/light/L01": {
-      "theme": "sakura",
-      "appearance": "light",
-      "screen_id": "L01",
       "file": "sakura/light/L01.png",
-      "attachment_name": "Sakura Light Life_0_B2DF1EDA-9709-4A9B-8DC4-5B78D0CE0B1D.png",
-      "test_identifier": "ThemeMatrixUITests/testSakuraCalmMatrix()",
-      "timestamp": 1792371206.671,
-      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_09-48-04-+0900.xcresult",
+      "screen_id": "L01",
+      "theme": "sakura",
+      "theme_id": "sakura",
+      "state": "light",
       "device": {
         "kind": "regular",
         "platform": "iOS Simulator",
         "model_name": "iPhone 18 Pro",
-        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+        "identifier": "F7F01710-33E6-4F20-961C-A9B8C1FECF43"
       },
-      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
-      "source_worktree_dirty": true
+      "device_id": "F7F01710-33E6-4F20-961C-A9B8C1FECF43",
+      "native_size": [
+        1206,
+        2622
+      ],
+      "window_size_pt": [
+        402,
+        874
+      ],
+      "source_revision": "ec67bacec03674dac71d13e3b9245d708b2d10ab",
+      "source_worktree_dirty": true,
+      "source_sha256": {
+        "DUNE/Presentation/Life/LifeView.swift": "8281d19a6d115b015c021c326111e96694e0ba170df1c1b6a5f93bc040460d2e",
+        "DUNE/Presentation/Shared/Extensions/AppTheme+View.swift": "380a9058446cfc7ec1b21abb1899c9cf011a37c56bd95e681bcbce92ad0a432b",
+        "DUNE/Presentation/Shared/Components/ProgressRingView.swift": "090f314d8b7bfd62f43a93f8df526162f897a22bcc63c9b44ed5db4593cd7487",
+        "DUNEUITests/Smoke/LifeSmokeTests.swift": "e6a6862fb4f98a2f2e68dc040c367dd8198d8d11bb82795ba47435ed3b3ed6b4"
+      },
+      "timestamp": 1792629733.4358494,
+      "test": "LifeSeededSmokeTests/testHeroNarrativeRemainingThemes()",
+      "checkpoint": 6,
+      "capture_method": "host viewport hold; simctl explicit display",
+      "source_file": ".xcodebuild/life-seven-themes-20261022/006-1206x2622.png",
+      "appearance": "light",
+      "attachment_name": "006-1206x2622.png",
+      "test_identifier": "LifeSeededSmokeTests/testHeroNarrativeRemainingThemes()",
+      "evidence_gallery": "../../review/life-seven-themes-2026-10-22/sakura/L01-light.png",
+      "validation_receipt": "../../review/life-seven-themes-2026-10-22/test-results.json"
     },
     "sakura/light/H01": {
       "theme": "sakura",
@@ -872,22 +1124,44 @@
       "source_worktree_dirty": true
     },
     "solar/dark/L01": {
-      "theme": "solar",
-      "appearance": "dark",
-      "screen_id": "L01",
       "file": "solar/dark/L01.png",
-      "attachment_name": "Solar Dark Life_0_8A2F1EB6-3D08-49A2-B6C5-18E011928206.png",
-      "test_identifier": "ThemeMatrixUITests/testSolarPopMatrix()",
-      "timestamp": 1792371282.394,
-      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_09-48-04-+0900.xcresult",
+      "screen_id": "L01",
+      "theme": "solar",
+      "theme_id": "solar",
+      "state": "dark",
       "device": {
         "kind": "regular",
         "platform": "iOS Simulator",
         "model_name": "iPhone 18 Pro",
-        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+        "identifier": "F7F01710-33E6-4F20-961C-A9B8C1FECF43"
       },
-      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
-      "source_worktree_dirty": true
+      "device_id": "F7F01710-33E6-4F20-961C-A9B8C1FECF43",
+      "native_size": [
+        1206,
+        2622
+      ],
+      "window_size_pt": [
+        402,
+        874
+      ],
+      "source_revision": "ec67bacec03674dac71d13e3b9245d708b2d10ab",
+      "source_worktree_dirty": true,
+      "source_sha256": {
+        "DUNE/Presentation/Life/LifeView.swift": "8281d19a6d115b015c021c326111e96694e0ba170df1c1b6a5f93bc040460d2e",
+        "DUNE/Presentation/Shared/Extensions/AppTheme+View.swift": "380a9058446cfc7ec1b21abb1899c9cf011a37c56bd95e681bcbce92ad0a432b",
+        "DUNE/Presentation/Shared/Components/ProgressRingView.swift": "090f314d8b7bfd62f43a93f8df526162f897a22bcc63c9b44ed5db4593cd7487",
+        "DUNEUITests/Smoke/LifeSmokeTests.swift": "e6a6862fb4f98a2f2e68dc040c367dd8198d8d11bb82795ba47435ed3b3ed6b4"
+      },
+      "timestamp": 1792629794.5929005,
+      "test": "LifeSeededSmokeTests/testHeroNarrativeRemainingThemes()",
+      "checkpoint": 11,
+      "capture_method": "host viewport hold; simctl explicit display",
+      "source_file": ".xcodebuild/life-seven-themes-20261022/011-1206x2622.png",
+      "appearance": "dark",
+      "attachment_name": "011-1206x2622.png",
+      "test_identifier": "LifeSeededSmokeTests/testHeroNarrativeRemainingThemes()",
+      "evidence_gallery": "../../review/life-seven-themes-2026-10-22/solar/L01-dark.png",
+      "validation_receipt": "../../review/life-seven-themes-2026-10-22/test-results.json"
     },
     "solar/dark/H01": {
       "theme": "solar",
@@ -944,22 +1218,44 @@
       "source_worktree_dirty": true
     },
     "solar/light/L01": {
-      "theme": "solar",
-      "appearance": "light",
-      "screen_id": "L01",
       "file": "solar/light/L01.png",
-      "attachment_name": "Solar Light Life_0_4D653F27-9789-4331-9990-E40A93AA087B.png",
-      "test_identifier": "ThemeMatrixUITests/testSolarPopMatrix()",
-      "timestamp": 1792371260.283,
-      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_09-48-04-+0900.xcresult",
+      "screen_id": "L01",
+      "theme": "solar",
+      "theme_id": "solar",
+      "state": "light",
       "device": {
         "kind": "regular",
         "platform": "iOS Simulator",
         "model_name": "iPhone 18 Pro",
-        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+        "identifier": "F7F01710-33E6-4F20-961C-A9B8C1FECF43"
       },
-      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
-      "source_worktree_dirty": true
+      "device_id": "F7F01710-33E6-4F20-961C-A9B8C1FECF43",
+      "native_size": [
+        1206,
+        2622
+      ],
+      "window_size_pt": [
+        402,
+        874
+      ],
+      "source_revision": "ec67bacec03674dac71d13e3b9245d708b2d10ab",
+      "source_worktree_dirty": true,
+      "source_sha256": {
+        "DUNE/Presentation/Life/LifeView.swift": "8281d19a6d115b015c021c326111e96694e0ba170df1c1b6a5f93bc040460d2e",
+        "DUNE/Presentation/Shared/Extensions/AppTheme+View.swift": "380a9058446cfc7ec1b21abb1899c9cf011a37c56bd95e681bcbce92ad0a432b",
+        "DUNE/Presentation/Shared/Components/ProgressRingView.swift": "090f314d8b7bfd62f43a93f8df526162f897a22bcc63c9b44ed5db4593cd7487",
+        "DUNEUITests/Smoke/LifeSmokeTests.swift": "e6a6862fb4f98a2f2e68dc040c367dd8198d8d11bb82795ba47435ed3b3ed6b4"
+      },
+      "timestamp": 1792629783.4365394,
+      "test": "LifeSeededSmokeTests/testHeroNarrativeRemainingThemes()",
+      "checkpoint": 10,
+      "capture_method": "host viewport hold; simctl explicit display",
+      "source_file": ".xcodebuild/life-seven-themes-20261022/010-1206x2622.png",
+      "appearance": "light",
+      "attachment_name": "010-1206x2622.png",
+      "test_identifier": "LifeSeededSmokeTests/testHeroNarrativeRemainingThemes()",
+      "evidence_gallery": "../../review/life-seven-themes-2026-10-22/solar/L01-light.png",
+      "validation_receipt": "../../review/life-seven-themes-2026-10-22/test-results.json"
     },
     "solar/light/H01": {
       "theme": "solar",
@@ -1016,22 +1312,44 @@
       "source_worktree_dirty": true
     },
     "water-lilies/dark/L01": {
-      "theme": "water-lilies",
-      "appearance": "dark",
-      "screen_id": "L01",
       "file": "water-lilies/dark/L01.png",
-      "attachment_name": "Water Lilies Life Dark_0_387C7862-81C8-449B-80EC-1FA917E5ACFC.png",
-      "test_identifier": "WaterLiliesThemeTests/testFourTabRootsInLightAndDark()",
-      "timestamp": 1792371354.733,
-      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_09-48-04-+0900.xcresult",
+      "screen_id": "L01",
+      "theme": "water-lilies",
+      "theme_id": "water-lilies",
+      "state": "dark",
       "device": {
         "kind": "regular",
         "platform": "iOS Simulator",
         "model_name": "iPhone 18 Pro",
-        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+        "identifier": "F7F01710-33E6-4F20-961C-A9B8C1FECF43"
       },
-      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
-      "source_worktree_dirty": true
+      "device_id": "F7F01710-33E6-4F20-961C-A9B8C1FECF43",
+      "native_size": [
+        1206,
+        2622
+      ],
+      "window_size_pt": [
+        402,
+        874
+      ],
+      "source_revision": "ec67bacec03674dac71d13e3b9245d708b2d10ab",
+      "source_worktree_dirty": true,
+      "source_sha256": {
+        "DUNE/Presentation/Life/LifeView.swift": "8281d19a6d115b015c021c326111e96694e0ba170df1c1b6a5f93bc040460d2e",
+        "DUNE/Presentation/Shared/Extensions/AppTheme+View.swift": "380a9058446cfc7ec1b21abb1899c9cf011a37c56bd95e681bcbce92ad0a432b",
+        "DUNE/Presentation/Shared/Components/ProgressRingView.swift": "090f314d8b7bfd62f43a93f8df526162f897a22bcc63c9b44ed5db4593cd7487",
+        "DUNEUITests/Smoke/LifeSmokeTests.swift": "e6a6862fb4f98a2f2e68dc040c367dd8198d8d11bb82795ba47435ed3b3ed6b4"
+      },
+      "timestamp": 1792629838.622368,
+      "test": "LifeSeededSmokeTests/testHeroNarrativeRemainingThemes()",
+      "checkpoint": 15,
+      "capture_method": "host viewport hold; simctl explicit display",
+      "source_file": ".xcodebuild/life-seven-themes-20261022/015-1206x2622.png",
+      "appearance": "dark",
+      "attachment_name": "015-1206x2622.png",
+      "test_identifier": "LifeSeededSmokeTests/testHeroNarrativeRemainingThemes()",
+      "evidence_gallery": "../../review/life-seven-themes-2026-10-22/water-lilies/L01-dark.png",
+      "validation_receipt": "../../review/life-seven-themes-2026-10-22/test-results.json"
     },
     "water-lilies/dark/H01": {
       "theme": "water-lilies",
@@ -1088,22 +1406,44 @@
       "source_worktree_dirty": true
     },
     "water-lilies/light/L01": {
-      "theme": "water-lilies",
-      "appearance": "light",
-      "screen_id": "L01",
       "file": "water-lilies/light/L01.png",
-      "attachment_name": "Water Lilies Life Light_0_87A7627E-876C-481A-80B8-247DDD7F0865.png",
-      "test_identifier": "WaterLiliesThemeTests/testFourTabRootsInLightAndDark()",
-      "timestamp": 1792371304.865,
-      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_09-48-04-+0900.xcresult",
+      "screen_id": "L01",
+      "theme": "water-lilies",
+      "theme_id": "water-lilies",
+      "state": "light",
       "device": {
         "kind": "regular",
         "platform": "iOS Simulator",
         "model_name": "iPhone 18 Pro",
-        "identifier": "5A2ED6B5-BE39-40A1-AE42-9A065D6B53BA"
+        "identifier": "F7F01710-33E6-4F20-961C-A9B8C1FECF43"
       },
-      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
-      "source_worktree_dirty": true
+      "device_id": "F7F01710-33E6-4F20-961C-A9B8C1FECF43",
+      "native_size": [
+        1206,
+        2622
+      ],
+      "window_size_pt": [
+        402,
+        874
+      ],
+      "source_revision": "ec67bacec03674dac71d13e3b9245d708b2d10ab",
+      "source_worktree_dirty": true,
+      "source_sha256": {
+        "DUNE/Presentation/Life/LifeView.swift": "8281d19a6d115b015c021c326111e96694e0ba170df1c1b6a5f93bc040460d2e",
+        "DUNE/Presentation/Shared/Extensions/AppTheme+View.swift": "380a9058446cfc7ec1b21abb1899c9cf011a37c56bd95e681bcbce92ad0a432b",
+        "DUNE/Presentation/Shared/Components/ProgressRingView.swift": "090f314d8b7bfd62f43a93f8df526162f897a22bcc63c9b44ed5db4593cd7487",
+        "DUNEUITests/Smoke/LifeSmokeTests.swift": "e6a6862fb4f98a2f2e68dc040c367dd8198d8d11bb82795ba47435ed3b3ed6b4"
+      },
+      "timestamp": 1792629827.643424,
+      "test": "LifeSeededSmokeTests/testHeroNarrativeRemainingThemes()",
+      "checkpoint": 14,
+      "capture_method": "host viewport hold; simctl explicit display",
+      "source_file": ".xcodebuild/life-seven-themes-20261022/014-1206x2622.png",
+      "appearance": "light",
+      "attachment_name": "014-1206x2622.png",
+      "test_identifier": "LifeSeededSmokeTests/testHeroNarrativeRemainingThemes()",
+      "evidence_gallery": "../../review/life-seven-themes-2026-10-22/water-lilies/L01-light.png",
+      "validation_receipt": "../../review/life-seven-themes-2026-10-22/test-results.json"
     },
     "water-lilies/light/H01": {
       "theme": "water-lilies",
