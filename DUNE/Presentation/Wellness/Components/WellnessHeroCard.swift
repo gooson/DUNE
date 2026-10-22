@@ -171,60 +171,72 @@ struct WellnessHeroCard: View {
             .accessibilityIdentifier("wellness-hero-narrative")
     }
 
+    @ViewBuilder
     private var sleepSummary: some View {
-        HStack(alignment: .center, spacing: 18) {
-            Group {
-                if !validSleepSamples.isEmpty {
-                    HStack(alignment: .bottom, spacing: 5) {
-                        ForEach(Array(recentSleepSamples.enumerated()), id: \.offset) { _, sample in
-                            if sample.minutes > 0 {
-                                RoundedRectangle(cornerRadius: 5)
-                                    .fill((theme == .desertWarm
-                                        ? Color(red: 0.350, green: 0.690, blue: 0.588)
-                                        : theme.metricSleep).opacity(sample.date == latestSleepSample?.date ? 1 : 0.55))
-                                    .frame(width: 12, height: max(9, min(60, CGFloat(sample.minutes / 600) * 60)))
-                            } else {
-                                Color.clear.frame(width: 12, height: 0)
-                            }
+        if dynamicTypeSize.isAccessibilitySize {
+            VStack(alignment: .leading, spacing: 12) {
+                sleepBars
+                sleepCopy
+            }
+        } else {
+            HStack(alignment: .center, spacing: 18) {
+                sleepBars
+                sleepCopy
+            }
+        }
+    }
+
+    private var sleepBars: some View {
+        Group {
+            if !validSleepSamples.isEmpty {
+                HStack(alignment: .bottom, spacing: 5) {
+                    ForEach(Array(recentSleepSamples.enumerated()), id: \.offset) { _, sample in
+                        if sample.minutes > 0 {
+                            RoundedRectangle(cornerRadius: 5)
+                                .fill((theme == .desertWarm
+                                    ? Color(red: 0.350, green: 0.690, blue: 0.588)
+                                    : theme.metricSleep).opacity(sample.date == latestSleepSample?.date ? 1 : 0.55))
+                                .frame(width: 12, height: max(9, min(60, CGFloat(sample.minutes / 600) * 60)))
+                        } else {
+                            Color.clear.frame(width: 12, height: 0)
                         }
                     }
-                    .accessibilityLabel("Sleep")
-                } else {
-                    Text("Need More Data")
-                        .font(.caption.weight(.medium))
-                        .foregroundStyle(theme.directionPreviewTextColor.opacity(0.74))
-                        .accessibilityIdentifier("wellness-sleep-empty-state")
                 }
-            }
-            .frame(minWidth: 88, minHeight: 62, alignment: .bottomLeading)
-
-            VStack(alignment: .leading, spacing: 5) {
-                if let latestSleepSample {
-                    Text(sleepDuration(Int(latestSleepSample.minutes)))
-                        .font(.headline.weight(.semibold))
-                        .foregroundStyle(theme.directionPreviewTextColor)
-                        .accessibilityIdentifier("wellness-sleep-latest")
-                    Text(latestSleepSample.date.formatted(.dateTime.month(.abbreviated).day()))
-                        .font(.caption)
-                        .foregroundStyle(theme.directionPreviewTextColor.opacity(0.74))
-                } else {
-                    Text("Need More Data")
-                        .font(.headline.weight(.semibold))
-                        .foregroundStyle(theme.directionPreviewTextColor)
-                }
-                Text("Sleep")
-                    .font(.subheadline)
+                .accessibilityLabel("Sleep")
+            } else {
+                Text("Need More Data")
+                    .font(.caption.weight(.medium))
                     .foregroundStyle(theme.directionPreviewTextColor.opacity(0.74))
-                if let averageSleepMinutes {
-                    HStack(spacing: 4) {
-                        Text("7d")
-                        Text("Average")
-                        Text("· \(sleepDuration(averageSleepMinutes))")
-                    }
+                    .accessibilityIdentifier("wellness-sleep-empty-state")
+            }
+        }
+        .frame(minWidth: 88, minHeight: 62, alignment: .bottomLeading)
+    }
+
+    private var sleepCopy: some View {
+        VStack(alignment: .leading, spacing: 5) {
+            if let latestSleepSample {
+                Text(sleepDuration(Int(latestSleepSample.minutes)))
+                    .font(.headline.weight(.semibold))
+                    .foregroundStyle(theme.directionPreviewTextColor)
+                    .accessibilityIdentifier("wellness-sleep-latest")
+                Text(latestSleepSample.date.formatted(.dateTime.month(.abbreviated).day()))
+                    .font(.caption)
+                    .foregroundStyle(theme.directionPreviewTextColor.opacity(0.74))
+            } else {
+                Text("Need More Data")
+                    .font(.headline.weight(.semibold))
+                    .foregroundStyle(theme.directionPreviewTextColor)
+            }
+            Text("Sleep")
+                .font(.subheadline)
+                .foregroundStyle(theme.directionPreviewTextColor.opacity(0.74))
+            if let averageSleepMinutes {
+                Text("7d Average · \(sleepDuration(averageSleepMinutes))")
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(theme.directionPreviewTextColor.opacity(0.74))
+                    .fixedSize(horizontal: false, vertical: true)
                     .accessibilityIdentifier("wellness-sleep-average")
-                }
             }
         }
     }

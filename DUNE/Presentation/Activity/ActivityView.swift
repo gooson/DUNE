@@ -193,7 +193,7 @@ struct ActivityView: View {
                     if viewModel.isLoading && viewModel.weeklyExerciseMinutes.isEmpty {
                         // Keep the first screen and workout entry available while health data loads.
                         themeReadinessPreview
-                        suggestedWorkoutSection()
+                        suggestedWorkoutSection(useHistory: false)
                         ProgressView()
                             .frame(maxWidth: .infinity, minHeight: 100)
                     } else {
@@ -544,6 +544,7 @@ struct ActivityView: View {
             }
             .accessibilityIdentifier("activity-hero-readiness")
             .buttonStyle(.plain)
+            .disabled(viewModel.trainingReadiness == nil)
 
             Button {
                 showingExercisePicker = true
@@ -748,15 +749,15 @@ struct ActivityView: View {
         }
     }
 
-    private func suggestedWorkoutSection(fillHeight: Bool = false) -> some View {
+    private func suggestedWorkoutSection(fillHeight: Bool = false, useHistory: Bool = true) -> some View {
         SectionGroup(title: "Suggested Workout", icon: "sparkles", iconColor: DS.Color.activity, fillHeight: fillHeight) {
             SuggestedWorkoutSection(
                 suggestion: viewModel.workoutSuggestion,
                 recommendationContext: viewModel.recommendationContext,
                 availableEquipment: viewModel.recommendationAvailableEquipment,
                 library: library,
-                recentExerciseIDs: recentExerciseIDs,
-                popularExerciseIDs: popularExerciseIDs,
+                recentExerciseIDs: useHistory ? recentExerciseIDs : [],
+                popularExerciseIDs: useHistory ? popularExerciseIDs : [],
                 onStartExercise: { exercise in
                     exerciseStartConfiguration = ExerciseStartConfiguration(exercise: exercise)
                 },

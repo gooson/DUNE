@@ -55,6 +55,7 @@ struct TrendChartView: View {
         .foregroundStyle(labelColor)
         }
         .accessibilityElement(children: .ignore)
+        .accessibilityIdentifier("dashboard-weekly-condition-chart")
         .accessibilityLabel("Condition Trend")
         .accessibilityValue(accessibilitySummary)
     }

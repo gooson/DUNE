@@ -685,7 +685,8 @@ enum TestDataSeeder {
             guard let date = calendar.date(byAdding: .day, value: -offset, to: today) else { return nil }
             return SharedHealthSnapshot.SleepDailyDuration(
                 date: date,
-                totalMinutes: 430 - Double(offset * 5),
+                totalMinutes: offset == 0 && ProcessInfo.processInfo.arguments.contains("--ui-test-zero-latest-sleep")
+                    ? 0 : 430 - Double(offset * 5),
                 stageBreakdown: [
                     .deep: 92 - Double(min(offset, 4) * 3),
                     .rem: 108 - Double(min(offset, 4) * 2),

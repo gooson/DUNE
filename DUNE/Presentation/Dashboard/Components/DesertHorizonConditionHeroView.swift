@@ -183,7 +183,7 @@ struct DesertHorizonConditionHeroView: View {
                 HourlySparklineView(data: hourlySparkline, tintColor: heroHighlight, height: 72, usesTimelineAxis: true)
             } else if hasWeeklyTrend {
                 TrendChartView(
-                    scores: recentScores,
+                    scores: weeklyTrendScores,
                     lineColor: heroHighlight,
                     labelColor: muted,
                     referenceColor: muted.opacity(0.55)
@@ -208,6 +208,12 @@ struct DesertHorizonConditionHeroView: View {
 
     private var hasWeeklyTrend: Bool {
         recentScores.count >= 2 && recentScores.first?.date != recentScores.last?.date
+    }
+
+    private var weeklyTrendScores: [ConditionScore] {
+        let calendar = Calendar.current
+        let history = recentScores.filter { !calendar.isDate($0.date, inSameDayAs: score.date) }
+        return Array(([score] + history).prefix(7))
     }
 
     private var evidence: some View {
