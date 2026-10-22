@@ -68,7 +68,7 @@ final class WaterLiliesThemeTests: SeededUITestBaseCase {
         navigateToWellness()
         XCTAssertTrue(waitForElement(AXID.wellnessHeroScore, timeout: 10).exists)
         XCTAssertTrue(waitForElement("wellness-hero-ring", timeout: 10).exists)
-        XCTAssertTrue(waitForElement("wellness-sleep-detail-link", timeout: 10).exists)
+        XCTAssertTrue(waitForElement("wellness-hero-sleep", timeout: 10).exists)
         addScreenshotAttachment(named: "Water Lilies Wellness \(style)")
 
         navigateToLife()

@@ -4,9 +4,11 @@
   "source_worktree_dirty": true,
   "xcresults": [
     "/Users/shanks/.codex/worktrees/condition-review-ship/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.21_09-40-32-+0900.xcresult",
-    "/Users/shanks/.codex/worktrees/condition-review-ship/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.22_00-46-16-+0900.xcresult"
+    "/Users/shanks/.codex/worktrees/condition-review-ship/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.22_00-46-16-+0900.xcresult",
+    "/Users/shanks/Documents/Codex/2026-10-22/new-chat/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.22_18-42-30-+0900.xcresult",
+    "/Users/shanks/Documents/Codex/2026-10-22/new-chat/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.22_21-54-56-+0900.xcresult"
   ],
-  "processed_capture_candidates": 109,
+  "processed_capture_candidates": 111,
   "captured": {
     "W13": {
       "row_id": "W13",
@@ -890,11 +892,14 @@
       "row_id": "H01",
       "evidence": "title:Wellness",
       "test": "ThemeMatrixUITests/testDesertWarmMatrix()",
-      "action": "tap Wellness",
-      "timestamp": 1792388680.659,
-      "image": "F2608634-F15A-4253-85DF-F2AB40BED09D.png",
-      "screen": "screen-0-1320x2868-tap Wellness_0_A21BF4C6-9E7D-47F0-8C1B-528271959E2E.png",
-      "file": "H01.png"
+      "action": "tap tab-wellness",
+      "timestamp": 1792673801.217,
+      "image": "B77D1023-D98E-4060-BE4A-4D1FD681C61D.png",
+      "screen": "screen-0-1320x2868-tap tab-wellness_0_F561FFFE-6B38-428A-BC10-3129498B8ED0.png",
+      "file": "H01.png",
+      "source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "source_worktree_dirty": true,
+      "device_id": "5D857DC7-33D6-444B-8373-77C71C7040D3"
     },
     "W02": {
       "row_id": "W02",
