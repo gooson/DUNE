@@ -191,8 +191,11 @@ struct ActivityView: View {
 
                 VStack(spacing: DS.Spacing.lg) {
                     if viewModel.isLoading && viewModel.weeklyExerciseMinutes.isEmpty {
+                        // Keep the first screen and workout entry available while health data loads.
+                        themeReadinessPreview
+                        suggestedWorkoutSection()
                         ProgressView()
-                            .frame(maxWidth: .infinity, minHeight: 200)
+                            .frame(maxWidth: .infinity, minHeight: 100)
                     } else {
                         themeReadinessPreview
 
@@ -527,6 +530,9 @@ struct ActivityView: View {
                                     .frame(maxWidth: .infinity, alignment: .leading)
                             }
                         }
+                    } else if viewModel.isLoading {
+                        ProgressView()
+                            .accessibilityLabel("Loading")
                     } else {
                         Text("Need More Data")
                             .font(.headline)

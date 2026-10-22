@@ -22,6 +22,7 @@ related_brainstorms: [docs/brainstorms/2026-03-14-hero-card-detail-unification.m
 - 신체 기록은 Wellness의 수면 예측 다음에 놓아 현재 상태, 예측, 직접 기록의 정보 순서를 만든다. 데이터가 없는 상태에서도 직접 기록 경로는 유지한다.
 - 기존 A01·L01·W06·T04·H02·S01에서 이미 구현한 흐름은 회귀 검증하고, 증거 없는 장식 변경은 하지 않는다.
 - 8개 테마에 동일한 정보 구조를 적용하며 Dynamic Type, iPhone·iPad·Duo에서 내용이 잘리지 않는다.
+- 첫 화면의 건강 데이터 조회가 길어져도 Activity의 준비도 카드와 운동 시작 경로를 사용할 수 있다. iPad Wellness의 넓은 카드에서는 점수와 수면 기록을 두 열로 읽는다.
 
 ## Approach
 
@@ -32,6 +33,7 @@ T03 레이아웃 맵과 UX 명세의 행동 계약을 먼저 고친다. Today �
 | 범위 | 파일 |
 |---|---|
 | Today | `DUNE/Presentation/Dashboard/Components/DesertHorizonConditionHeroView.swift`, `DashboardView.swift` |
+| Activity 로딩 | `DUNE/Presentation/Activity/ActivityView.swift` |
 | Wellness | `DUNE/Presentation/Wellness/Components/WellnessHeroCard.swift`, `WellnessView.swift` |
 | UI 검증 | `DUNEUITests/Smoke/DashboardSmokeTests.swift`, `DUNEUITests/Visual/ThemeMatrixUITests.swift`, `WaterLiliesThemeTests.swift`, 관련 Wellness 테스트 |
 | 설계·증거 | `docs/design/layout-map/`, `docs/design/2026-10-17-ux-visual-spec.md`, `docs/design/full-redesign-map/`, `docs/design/phone-design-map/actual/` |
@@ -42,6 +44,8 @@ T03 레이아웃 맵과 UX 명세의 행동 계약을 먼저 고친다. Today �
 2. **T03 구현:** `DesertHorizonConditionHeroView.swift`와 `DashboardView.swift`에서 탭 전환 버튼을 제거한다. 상세 링크의 시각적·접근성 목적지를 드러내고, 시간별→7일→수집 상태 순서로 실제 데이터만 표시한다. 기존 별도 주간 카드의 중복은 판단하여 정리한다.
 3. **H01 구현:** `WellnessHeroCard.swift`에서 지난밤과 유효 표본의 평균을 구분한다. `WellnessView.swift`의 신체 기록 행동을 예측 뒤로 이동한다. 빈 상태 경로는 유지한다.
 4. **검증:** 현재 동선을 전제로 한 UI 테스트를 상세 push와 탭 바 경로로 바꾸고 수면 요약의 데이터 상태를 확인한다. iOS 빌드, 영향 UI 테스트, 실제 T03/H01 캡처와 육안 대조를 실시한다. A01/L01 및 대표 상세·운동·설정은 기존 구현과 시안을 대조해 이번 변경이 없는 이유를 결과에 남긴다.
+   - 공통 smoke에서 Activity의 긴 조회가 첫 화면을 로딩 표시만으로 대체하는 문제를 확인하면 카드와 운동 검색을 조회 중에도 노출하고 A01을 다시 캡처한다.
+   - iPad H01 캡처에서 넓은 카드의 빈 절반이 확인되면 점수·설명과 수면 기록을 두 열로 나누고 재캡처한다.
 5. **리뷰·출하:** `/run`의 리뷰, 품질, 해결책 기록, PR/merge 게이트를 따른다. 실제 캡처하지 못한 기기·상태는 완료로 표시하지 않는다.
 
 ## Verification
