@@ -78,11 +78,15 @@ final class DashboardSmokeTests: UITestBaseCase {
         XCTAssertTrue(settingsButton.waitForExistence(timeout: 5), "Notification settings button should exist in notification hub summary")
     }
 
-    func testConditionTrendAndPrimaryActivityRoute() throws {
+    func testConditionTrendAndHeroDetailRoute() throws {
         var configuration = launchConfiguration
         configuration.shouldSeedMockData = true
         configuration.scenario = .defaultSeeded
-        configuration.additionalArguments += ["-morningBriefingDisabled", "YES"]
+        configuration.additionalArguments += [
+            "--ui-visual-condition-components-fixture",
+            "-morningBriefingDisabled", "YES",
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US"
+        ]
         launchApp(with: configuration)
         navigateToDashboard()
 
@@ -90,13 +94,20 @@ final class DashboardSmokeTests: UITestBaseCase {
             app.descendants(matching: .any)["dashboard-hero-trend"].firstMatch.waitForExistence(timeout: 10),
             "Today condition trend should have a stable accessibility identifier"
         )
+        let weeklyChart = app.descendants(matching: .any)["dashboard-weekly-condition-chart"].firstMatch
+        XCTAssertTrue(weeklyChart.waitForExistence(timeout: 5), "Daily history should render the seven-day fallback chart")
+        XCTAssertTrue(app.staticTexts["7d"].firstMatch.exists, "Fallback trend should show the seven-day period")
+        XCTAssertTrue((weeklyChart.value as? String ?? "").contains("Minimum 66, maximum 100, current 100."),
+                      "The chart should use the displayed score of 100, not the stale history score of 84")
 
-        let activityButton = app.buttons["dashboard-primary-activity"].firstMatch
-        XCTAssertTrue(activityButton.waitForExistence(timeout: 5), "View Activity action should be available on Today")
-        activityButton.tap()
+        let hero = app.buttons[AXID.dashboardHeroCondition].firstMatch
+        XCTAssertTrue(hero.waitForExistence(timeout: 5), "Today hero should be one accessible detail link")
+        XCTAssertFalse(app.buttons["dashboard-primary-activity"].exists,
+                       "Today hero should not contain a cross-tab Activity action")
+        hero.tap()
 
-        XCTAssertTrue(app.navigationBars["Activity"].waitForExistence(timeout: 8), "View Activity should select the Activity tab")
-        XCTAssertTrue(elementExists(AXID.activityHeroReadiness, timeout: 8), "Activity destination should render")
+        XCTAssertTrue(elementExists(AXID.conditionScoreDetailScreen, timeout: 8),
+                      "Today hero should open condition score detail")
     }
 
     func testTodayLogWeightOpensWellnessBodyForm() throws {

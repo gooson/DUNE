@@ -155,7 +155,10 @@ final class WellnessSmokeTests: UITestBaseCase {
 @MainActor
 final class WellnessSeededSmokeTests: SeededUITestBaseCase {
     override var additionalLaunchArguments: [String] {
-        ["--ui-design-map-sleep-prediction", "-morningBriefingDisabled", "YES"]
+        [
+            "--ui-design-map-sleep-prediction", "-morningBriefingDisabled", "YES",
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US"
+        ]
     }
 
     override func setUpWithError() throws {
@@ -164,10 +167,39 @@ final class WellnessSeededSmokeTests: SeededUITestBaseCase {
     }
 
     func testSeededPrimaryBodyRecordOpensForm() throws {
+        let prediction = app.buttons["wellness-sleep-prediction-detail-link"].firstMatch
+        XCTAssertTrue(prediction.waitForExistence(timeout: 8), "Sleep Prediction should appear in seeded Wellness")
         let action = app.buttons[AXID.wellnessPrimaryBodyRecord].firstMatch
-        XCTAssertTrue(action.waitForExistence(timeout: 5), "Primary body record action should follow the hero")
+        XCTAssertTrue(action.waitForExistence(timeout: 5), "Primary body record action should follow Sleep Prediction")
+        XCTAssertGreaterThanOrEqual(action.frame.minY, prediction.frame.maxY,
+                                    "Body Record should follow Sleep Prediction in reading order")
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.wellnessPrimaryBodyRecord, maxSwipes: 8),
+                      "Body Record should remain reachable below Sleep Prediction")
         action.tap()
         XCTAssertTrue(app.descendants(matching: .any)[AXID.bodyFormSave].firstMatch.waitForExistence(timeout: 5))
+    }
+
+    func testSeededSleepSummarySeparatesLatestFromSevenDayAverage() throws {
+        let hero = app.buttons[AXID.wellnessHeroScore].firstMatch
+        XCTAssertTrue(hero.waitForExistence(timeout: 10), "Wellness summary should be accessible")
+        let summary = hero.value as? String ?? ""
+        XCTAssertTrue(summary.hasPrefix("Sleep "), "Summary should identify the latest dated sleep duration")
+        XCTAssertTrue(summary.contains(", 7h 54min. 7d Average 7h 26min"),
+                      "Latest 474-minute sleep and the seven-day 446-minute average should be distinct: \(summary)")
+        addScreenshotAttachment(named: "Wellness latest sleep and seven-day average")
+    }
+
+    func testSeededSleepSummarySkipsTrailingZeroSample() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments.append("--ui-test-zero-latest-sleep")
+        launchApp(with: configuration)
+        navigateToWellness()
+
+        let hero = app.buttons[AXID.wellnessHeroScore].firstMatch
+        XCTAssertTrue(hero.waitForExistence(timeout: 10), "Wellness summary should be accessible")
+        let summary = hero.value as? String ?? ""
+        XCTAssertTrue(summary.contains(", 7h 42min. 7d Average 7h 21min"),
+                      "A zero-minute latest day should use yesterday's 462 minutes and the six valid-day average of 441 minutes: \(summary)")
     }
 
     func testSleepPredictionSummaryOpensDetail() throws {

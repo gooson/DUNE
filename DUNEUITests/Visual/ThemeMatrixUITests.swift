@@ -16,7 +16,7 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
 
     func testDesertHeroRingsByInitialTab() {
         let roots: [(tab: String, argument: String, hero: String, ring: String, action: String)] = [
-            ("Today", "today", AXID.dashboardHeroCondition, "dashboard-hero-ring", "dashboard-primary-activity"),
+            ("Today", "today", AXID.dashboardHeroCondition, "dashboard-hero-ring", AXID.dashboardHeroCondition),
             ("Activity", "train", AXID.activityHeroReadiness, "activity-hero-ring", "activity-log-workout-button"),
             ("Wellness", "wellness", AXID.wellnessHeroScore, "wellness-hero-ring", "wellness-sleep-detail-link"),
             ("Life", "life", AXID.lifeHeroProgress, "life-hero-ring", "life-hero-checklist-button")
@@ -40,6 +40,10 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
                 XCTAssertTrue(hero.waitForExistence(timeout: 10), "\(combination): hero should load")
                 assertRing(root.ring, combination: combination)
                 assertAction(root.action, combination: combination)
+                if root.argument == "today" {
+                    XCTAssertFalse(app.buttons["dashboard-primary-activity"].exists,
+                                   "\(combination): Today hero should have no cross-tab action")
+                }
 
                 let ring = app.descendants(matching: .any)[root.ring].firstMatch
                 if root.argument == "today" {
@@ -83,6 +87,49 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
             XCTAssertTrue(narrative.waitForExistence(timeout: 10))
             XCTAssertLessThanOrEqual(narrative.frame.maxX, hero.frame.maxX + 1)
             addScreenshotAttachment(named: "Desert \(style) Wellness Ring Layout")
+        }
+    }
+
+    func testIPadWellnessSleepSummaryFitsAtDefaultAndAccessibilityTextSizes() throws {
+        guard app.isIPadLayout else { throw XCTSkip("Regular-width Wellness layout requires iPad") }
+
+        for category in [nil, "UICTContentSizeCategoryAccessibilityXXXL"] {
+            var configuration = launchConfiguration
+            configuration.additionalArguments += [
+                "--ui-test-theme", "desertWarm",
+                "-morningBriefingDisabled", "YES"
+            ]
+            if let category {
+                configuration.additionalArguments += ["-UIPreferredContentSizeCategoryName", category]
+            }
+            launchApp(with: configuration)
+            navigateToWellness()
+
+            let hero = app.buttons[AXID.wellnessHeroScore].firstMatch
+            let narrative = app.descendants(matching: .any)["wellness-hero-narrative"].firstMatch
+            let latest = app.descendants(matching: .any)["wellness-sleep-latest"].firstMatch
+            let average = app.descendants(matching: .any)["wellness-sleep-average"].firstMatch
+            let state = category == nil ? "Default" : "Accessibility XXXL"
+
+            XCTAssertTrue(hero.waitForExistence(timeout: 10), "\(state): Wellness hero should load")
+            XCTAssertTrue(narrative.waitForExistence(timeout: 5), "\(state): narrative should load")
+            XCTAssertTrue(latest.waitForExistence(timeout: 5), "\(state): latest sleep should load")
+            XCTAssertTrue(average.waitForExistence(timeout: 5), "\(state): sleep average should load")
+
+            let bounds = hero.frame.insetBy(dx: -1, dy: -1)
+            for item in [narrative, latest, average] {
+                XCTAssertTrue(bounds.contains(item.frame), "\(state): \(item.identifier) should fit inside the hero")
+            }
+            XCTAssertGreaterThanOrEqual(average.frame.minY, latest.frame.maxY - 1,
+                                        "\(state): average should follow the latest sleep duration")
+            if category == nil {
+                XCTAssertGreaterThanOrEqual(latest.frame.minX, narrative.frame.maxX - 1,
+                                            "Regular-width layout should place sleep beside the narrative")
+            } else {
+                XCTAssertGreaterThanOrEqual(latest.frame.minY, narrative.frame.maxY - 1,
+                                            "Accessibility text should stack sleep below the narrative")
+            }
+            addScreenshotAttachment(named: "iPad Wellness sleep summary \(state)")
         }
     }
 
@@ -155,7 +202,9 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
         navigateToDashboard()
         captureRoot(AXID.dashboardHeroCondition, tab: "Today", combination: combination)
         assertRing("dashboard-hero-ring", combination: combination)
-        assertAction("dashboard-primary-activity", combination: combination)
+        assertAction(AXID.dashboardHeroCondition, combination: combination)
+        XCTAssertFalse(app.buttons["dashboard-primary-activity"].exists,
+                       "\(combination): Today hero should have no cross-tab action")
 
         navigateToActivity()
         captureRoot(AXID.activityHeroReadiness, tab: "Activity", combination: combination)

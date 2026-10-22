@@ -54,7 +54,9 @@ final class WaterLiliesThemeTests: SeededUITestBaseCase {
         navigateToDashboard()
         XCTAssertTrue(waitForElement(AXID.dashboardHeroCondition, timeout: 10).exists)
         XCTAssertTrue(waitForElement("dashboard-hero-ring", timeout: 10).exists)
-        XCTAssertTrue(waitForElement("dashboard-primary-activity", timeout: 10).exists)
+        XCTAssertTrue(app.buttons[AXID.dashboardHeroCondition].firstMatch.exists)
+        XCTAssertFalse(app.buttons["dashboard-primary-activity"].exists,
+                       "Today hero should not expose a cross-tab Activity action")
         addScreenshotAttachment(named: "Water Lilies Today \(style)")
 
         navigateToActivity()

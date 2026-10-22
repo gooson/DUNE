@@ -4,6 +4,8 @@ import Charts
 struct TrendChartView: View {
     let scores: [ConditionScore]
     var lineColor: Color = .primary.opacity(0.82)
+    var labelColor: Color = .primary.opacity(0.72)
+    var referenceColor: Color = .primary.opacity(0.26)
 
     var body: some View {
         VStack(spacing: 4) {
@@ -26,7 +28,7 @@ struct TrendChartView: View {
             }
 
             RuleMark(y: .value("Current", scores.first?.score ?? 0))
-                .foregroundStyle(Color.primary.opacity(0.26))
+                .foregroundStyle(referenceColor)
                 .lineStyle(StrokeStyle(lineWidth: 1, dash: [3, 3]))
         }
         .chartYScale(domain: 0...100)
@@ -43,16 +45,17 @@ struct TrendChartView: View {
             Text("\(scores.map(\.score).max() ?? 0)")
         }
         .font(.caption)
-        .foregroundStyle(Color.primary.opacity(0.72))
+        .foregroundStyle(labelColor)
         HStack {
             Text(scores.last?.date.formatted(.dateTime.month(.abbreviated).day()) ?? "")
             Spacer()
             Text(scores.first?.date.formatted(.dateTime.month(.abbreviated).day()) ?? "")
         }
         .font(.caption)
-        .foregroundStyle(Color.primary.opacity(0.72))
+        .foregroundStyle(labelColor)
         }
         .accessibilityElement(children: .ignore)
+        .accessibilityIdentifier("dashboard-weekly-condition-chart")
         .accessibilityLabel("Condition Trend")
         .accessibilityValue(accessibilitySummary)
     }

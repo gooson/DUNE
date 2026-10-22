@@ -191,8 +191,11 @@ struct ActivityView: View {
 
                 VStack(spacing: DS.Spacing.lg) {
                     if viewModel.isLoading && viewModel.weeklyExerciseMinutes.isEmpty {
+                        // Keep the first screen and workout entry available while health data loads.
+                        themeReadinessPreview
+                        suggestedWorkoutSection(useHistory: false)
                         ProgressView()
-                            .frame(maxWidth: .infinity, minHeight: 200)
+                            .frame(maxWidth: .infinity, minHeight: 100)
                     } else {
                         themeReadinessPreview
 
@@ -527,6 +530,9 @@ struct ActivityView: View {
                                     .frame(maxWidth: .infinity, alignment: .leading)
                             }
                         }
+                    } else if viewModel.isLoading {
+                        ProgressView()
+                            .accessibilityLabel("Loading")
                     } else {
                         Text("Need More Data")
                             .font(.headline)
@@ -538,6 +544,7 @@ struct ActivityView: View {
             }
             .accessibilityIdentifier("activity-hero-readiness")
             .buttonStyle(.plain)
+            .disabled(viewModel.trainingReadiness == nil)
 
             Button {
                 showingExercisePicker = true
@@ -742,15 +749,15 @@ struct ActivityView: View {
         }
     }
 
-    private func suggestedWorkoutSection(fillHeight: Bool = false) -> some View {
+    private func suggestedWorkoutSection(fillHeight: Bool = false, useHistory: Bool = true) -> some View {
         SectionGroup(title: "Suggested Workout", icon: "sparkles", iconColor: DS.Color.activity, fillHeight: fillHeight) {
             SuggestedWorkoutSection(
                 suggestion: viewModel.workoutSuggestion,
                 recommendationContext: viewModel.recommendationContext,
                 availableEquipment: viewModel.recommendationAvailableEquipment,
                 library: library,
-                recentExerciseIDs: recentExerciseIDs,
-                popularExerciseIDs: popularExerciseIDs,
+                recentExerciseIDs: useHistory ? recentExerciseIDs : [],
+                popularExerciseIDs: useHistory ? popularExerciseIDs : [],
                 onStartExercise: { exercise in
                     exerciseStartConfiguration = ExerciseStartConfiguration(exercise: exercise)
                 },

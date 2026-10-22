@@ -1,13 +1,13 @@
 import SwiftUI
 
 /// The shared Today composition from the eight theme directions: one surface
-/// contains the score, its trend, the supporting signals, and the next action.
+/// contains the score, its trend, the supporting signals, and a single detail destination.
 struct DesertHorizonConditionHeroView: View {
     let score: ConditionScore
     let trendBadges: [BaselineDetail]
     let hourlySparkline: HourlySparklineData?
+    let recentScores: [ConditionScore]
     let adaptiveMessage: AdaptiveHeroMessage?
-    let onPrimaryAction: () -> Void
 
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.appTheme) private var theme
@@ -82,42 +82,30 @@ struct DesertHorizonConditionHeroView: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            NavigationLink(value: score) {
-                VStack(alignment: .leading, spacing: 18) {
-                    header
-                    Rectangle()
-                        .fill(isDesert ? Color(red: 0.412, green: 0.341, blue: 0.278) : gold.opacity(0.25))
-                        .frame(height: 1)
-                    trend
-                    evidence
-                }
-                .contentShape(Rectangle())
-            }
-            .buttonStyle(.plain)
-            .accessibilityIdentifier("dashboard-hero-condition")
-
-            Button(action: onPrimaryAction) {
-                HStack {
+        NavigationLink(value: score) {
+            VStack(alignment: .leading, spacing: 18) {
+                header
+                Rectangle()
+                    .fill(isDesert ? Color(red: 0.412, green: 0.341, blue: 0.278) : gold.opacity(0.25))
+                    .frame(height: 1)
+                trend
+                evidence
+                HStack(spacing: 6) {
                     Spacer()
-                    if score.status == .tired || score.status == .warning {
-                        Text("View Wellness")
-                    } else {
-                        Text("View Activity")
-                    }
-                    Image(systemName: "arrow.right")
-                    Spacer()
+                    Text("View Details")
+                    Image(systemName: "chevron.right")
+                        .accessibilityHidden(true)
                 }
-                .font(.subheadline.weight(.bold))
-                .foregroundStyle(isDesert ? surface : theme.prominentButtonForegroundColor(for: colorScheme))
-                .frame(minHeight: 48)
-                .background(gold, in: RoundedRectangle(cornerRadius: 13))
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(heroAccent)
+                .frame(minHeight: 44)
             }
-            .buttonStyle(.plain)
-            .accessibilityIdentifier("dashboard-primary-activity")
-            .padding(.top, 16)
+            .contentShape(Rectangle())
+            .padding(21)
         }
-        .padding(21)
+        .buttonStyle(.plain)
+        .accessibilityIdentifier("dashboard-hero-condition")
+        .accessibilityHint("View Details")
         .background {
             RoundedRectangle(cornerRadius: 25)
                 .fill(surface)
@@ -183,8 +171,9 @@ struct DesertHorizonConditionHeroView: View {
             HStack {
                 Text("Condition Trend")
                     .font(.subheadline.weight(.semibold))
+                    .accessibilityIdentifier("dashboard-hero-trend")
                 Spacer()
-                Text("24h")
+                Text(trendPeriod)
                     .font(.caption)
                     .foregroundStyle(muted)
             }
@@ -192,6 +181,14 @@ struct DesertHorizonConditionHeroView: View {
 
             if let hourlySparkline, hourlySparkline.points.count >= 2 {
                 HourlySparklineView(data: hourlySparkline, tintColor: heroHighlight, height: 72, usesTimelineAxis: true)
+            } else if hasWeeklyTrend {
+                TrendChartView(
+                    scores: weeklyTrendScores,
+                    lineColor: heroHighlight,
+                    labelColor: muted,
+                    referenceColor: muted.opacity(0.55)
+                )
+                    .frame(height: 126)
             } else {
                 Text("Not enough data to show trend.")
                     .font(.subheadline)
@@ -200,6 +197,23 @@ struct DesertHorizonConditionHeroView: View {
                     .padding(.vertical, 8)
             }
         }
+    }
+
+    private var trendPeriod: LocalizedStringKey {
+        if let hourlySparkline, hourlySparkline.points.count >= 2 {
+            return hourlySparkline.includesYesterday ? "24h" : "Today"
+        }
+        return hasWeeklyTrend ? "7d" : ""
+    }
+
+    private var hasWeeklyTrend: Bool {
+        recentScores.count >= 2 && recentScores.first?.date != recentScores.last?.date
+    }
+
+    private var weeklyTrendScores: [ConditionScore] {
+        let calendar = Calendar.current
+        let history = recentScores.filter { !calendar.isDate($0.date, inSameDayAs: score.date) }
+        return Array(([score] + history).prefix(7))
     }
 
     private var evidence: some View {
