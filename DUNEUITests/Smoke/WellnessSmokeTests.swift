@@ -180,9 +180,9 @@ final class WellnessSeededSmokeTests: SeededUITestBaseCase {
     }
 
     func testSeededSleepSummarySeparatesLatestFromSevenDayAverage() throws {
-        let hero = app.buttons[AXID.wellnessHeroScore].firstMatch
-        XCTAssertTrue(hero.waitForExistence(timeout: 10), "Wellness summary should be accessible")
-        let summary = hero.value as? String ?? ""
+        let sleepLink = app.buttons["wellness-hero-sleep"].firstMatch
+        XCTAssertTrue(sleepLink.waitForExistence(timeout: 10), "Sleep summary should be accessible")
+        let summary = sleepLink.label
         XCTAssertTrue(summary.hasPrefix("Sleep "), "Summary should identify the latest dated sleep duration")
         XCTAssertTrue(summary.contains(", 7h 54min. 7d Average 7h 26min"),
                       "Latest 474-minute sleep and the seven-day 446-minute average should be distinct: \(summary)")
@@ -195,11 +195,35 @@ final class WellnessSeededSmokeTests: SeededUITestBaseCase {
         launchApp(with: configuration)
         navigateToWellness()
 
-        let hero = app.buttons[AXID.wellnessHeroScore].firstMatch
-        XCTAssertTrue(hero.waitForExistence(timeout: 10), "Wellness summary should be accessible")
-        let summary = hero.value as? String ?? ""
+        let sleepLink = app.buttons["wellness-hero-sleep"].firstMatch
+        XCTAssertTrue(sleepLink.waitForExistence(timeout: 10), "Sleep summary should be accessible")
+        let summary = sleepLink.label
         XCTAssertTrue(summary.contains(", 7h 42min. 7d Average 7h 21min"),
                       "A zero-minute latest day should use yesterday's 462 minutes and the six valid-day average of 441 minutes: \(summary)")
+    }
+
+    func testSeededWellnessHeroScoreOpensScoreDetail() throws {
+        let scoreLink = app.buttons[AXID.wellnessHeroScore].firstMatch
+        let sleepLink = app.buttons["wellness-hero-sleep"].firstMatch
+        XCTAssertTrue(scoreLink.waitForExistence(timeout: 10), "Wellness score link should load")
+        XCTAssertTrue(sleepLink.waitForExistence(timeout: 5), "Sleep link should load independently")
+
+        scoreLink.tap()
+
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.wellnessScoreDetailScreen].firstMatch.waitForExistence(timeout: 8),
+                      "Wellness score should open score details")
+    }
+
+    func testSeededWellnessHeroSleepOpensSleepMetricDetail() throws {
+        let scoreLink = app.buttons[AXID.wellnessHeroScore].firstMatch
+        let sleepLink = app.buttons["wellness-hero-sleep"].firstMatch
+        XCTAssertTrue(scoreLink.waitForExistence(timeout: 10), "Wellness score link should load")
+        XCTAssertTrue(sleepLink.waitForExistence(timeout: 5), "Sleep link should load independently")
+
+        sleepLink.tap()
+
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.metricDetailScreen("sleep")].firstMatch.waitForExistence(timeout: 8),
+                      "Sleep summary should open sleep metric details")
     }
 
     func testSleepPredictionSummaryOpensDetail() throws {

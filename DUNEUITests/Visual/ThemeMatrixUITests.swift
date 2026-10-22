@@ -105,20 +105,24 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
             launchApp(with: configuration)
             navigateToWellness()
 
-            let hero = app.buttons[AXID.wellnessHeroScore].firstMatch
+            let scoreLink = app.buttons[AXID.wellnessHeroScore].firstMatch
+            let sleepLink = app.buttons["wellness-hero-sleep"].firstMatch
             let narrative = app.descendants(matching: .any)["wellness-hero-narrative"].firstMatch
             let latest = app.descendants(matching: .any)["wellness-sleep-latest"].firstMatch
             let average = app.descendants(matching: .any)["wellness-sleep-average"].firstMatch
             let state = category == nil ? "Default" : "Accessibility XXXL"
 
-            XCTAssertTrue(hero.waitForExistence(timeout: 10), "\(state): Wellness hero should load")
+            XCTAssertTrue(scoreLink.waitForExistence(timeout: 10), "\(state): Wellness score link should load")
+            XCTAssertTrue(sleepLink.waitForExistence(timeout: 5), "\(state): sleep link should load")
             XCTAssertTrue(narrative.waitForExistence(timeout: 5), "\(state): narrative should load")
             XCTAssertTrue(latest.waitForExistence(timeout: 5), "\(state): latest sleep should load")
             XCTAssertTrue(average.waitForExistence(timeout: 5), "\(state): sleep average should load")
 
-            let bounds = hero.frame.insetBy(dx: -1, dy: -1)
-            for item in [narrative, latest, average] {
-                XCTAssertTrue(bounds.contains(item.frame), "\(state): \(item.identifier) should fit inside the hero")
+            let scoreBounds = scoreLink.frame.insetBy(dx: -1, dy: -1)
+            let sleepBounds = sleepLink.frame.insetBy(dx: -1, dy: -1)
+            XCTAssertTrue(scoreBounds.contains(narrative.frame), "\(state): narrative should fit inside the score link")
+            for item in [latest, average] {
+                XCTAssertTrue(sleepBounds.contains(item.frame), "\(state): \(item.identifier) should fit inside the sleep link")
             }
             XCTAssertGreaterThanOrEqual(average.frame.minY, latest.frame.maxY - 1,
                                         "\(state): average should follow the latest sleep duration")
