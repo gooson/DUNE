@@ -1,0 +1,13 @@
+{
+  "initial_closed_run": "failed: ViewThatFits chose vertical placement for default text; SDK cleanup exceeded 60s",
+  "fix": "HStack for default text; VStack for accessibility text",
+  "closed_retry": "passed once after layout fix",
+  "final_runs": [
+    "small-phone",
+    "phone",
+    "ipad",
+    "duo-closed",
+    "duo-open"
+  ],
+  "excluded": "The earlier open run before the HStack correction is not final evidence"
+}

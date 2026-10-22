@@ -1,7 +1,7 @@
 {
   "device": "ipad",
-  "source_revision": "1e159fb4bfb0ea8a52849b2254ed58204427293e",
-  "source_worktree_dirty": false,
+  "source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+  "source_worktree_dirty": true,
   "xcresults": [
     "/Users/shanks/.codex/worktrees/c658/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_14-45-09-+0900.xcresult",
     "/Users/shanks/.codex/worktrees/condition-review-ship/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.22_00-49-51-+0900.xcresult"
@@ -1047,14 +1047,34 @@
       "file": "H01.png"
     },
     "L01": {
+      "file": "L01.png",
+      "screen_id": "L01",
+      "device": "iPad Pro 13-inch (M5)",
+      "device_id": "BB16A300-D17D-4C60-9BBD-9AD518CF1C5C",
+      "state": "light",
+      "theme": "desertWarm",
+      "native_size": [
+        2064,
+        2752
+      ],
+      "window_size_pt": [
+        1032.0,
+        1376.0
+      ],
+      "source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "source_worktree_dirty": true,
+      "life_view_sha256": "8281d19a6d115b015c021c326111e96694e0ba170df1c1b6a5f93bc040460d2e",
+      "timestamp": 1792603118.7237885,
+      "test": "LifeSeededSmokeTests/testHeroNarrativeLayout()",
+      "checkpoint": 2,
+      "capture_method": "host viewport hold; simctl explicit display",
+      "source_file": ".xcodebuild/life-narrative-ipad-20261022/002-2064x2752.png",
       "row_id": "L01",
-      "evidence": "title:Life",
-      "test": "ThemeMatrixUITests/testDesertWarmMatrix()",
-      "action": "tap tab-life",
-      "timestamp": 1792388834.643,
-      "image": "A2D9B2F1-F20B-4832-A781-F9FF691FBC36.png",
-      "screen": "screen-0-2064x2752-tap tab-life_0_FF10DDC1-AB23-4AA1-9BA1-147A3F139EBD.png",
-      "file": "L01.png"
+      "image": "002-2064x2752.png",
+      "screen": "002-2064x2752.png",
+      "action": "Life hero narrative Light (ipad)",
+      "evidence": "identifier:life-hero-narrative; frame and action assertions",
+      "evidence_gallery": "../../../full-redesign-map/review/life-hero-narrative-2026-10-22/ipad/L01-light.png"
     },
     "A01": {
       "row_id": "A01",

@@ -19,6 +19,7 @@ A skill is a set of local instructions to follow that is stored in a `SKILL.md` 
 - agent-architecture: 에이전트 시스템 아키텍처 패턴. 에이전트 설계/프롬프트/컨텍스트 관리 시 사용. (file: /Users/shanks/work/Health/.claude/skills/agent-architecture/SKILL.md)
 - brainstorm: 아이디어나 요구사항이 모호할 때 구조화된 질문으로 명확화. (file: /Users/shanks/work/Health/.claude/skills/brainstorm/SKILL.md)
 - changelog: 최근 변경사항 기반 릴리스 노트 생성. (file: /Users/shanks/work/Health/.claude/skills/changelog/SKILL.md)
+- cleanup: 머지 완료된 워크트리와 로컬 브랜치 일괄 정리. (file: /Users/shanks/work/Health/.claude/skills/cleanup/SKILL.md)
 - code-style: 코드 스타일/컨벤션 참조. (file: /Users/shanks/work/Health/.claude/skills/code-style/SKILL.md)
 - compound: 해결된 문제를 docs/solutions 에 문서화. (file: /Users/shanks/work/Health/.claude/skills/compound/SKILL.md)
 - copy-voice: 문서/UI 문구 톤앤매너 가이드. (file: /Users/shanks/work/Health/.claude/skills/copy-voice/SKILL.md)
@@ -88,20 +89,29 @@ A skill is a set of local instructions to follow that is stored in a `SKILL.md` 
 
 ### Mandatory rules
 
+- /Users/shanks/work/Health/.claude/rules/asset-catalog.md
+- /Users/shanks/work/Health/.claude/rules/build-pipeline.md
 - /Users/shanks/work/Health/.claude/rules/compound-workflow.md
+- /Users/shanks/work/Health/.claude/rules/design-system-rules.md
 - /Users/shanks/work/Health/.claude/rules/documentation-standards.md
 - /Users/shanks/work/Health/.claude/rules/healthkit-patterns.md
 - /Users/shanks/work/Health/.claude/rules/input-validation.md
 - /Users/shanks/work/Health/.claude/rules/localization.md
+- /Users/shanks/work/Health/.claude/rules/mcp-utilization.md
+- /Users/shanks/work/Health/.claude/rules/navigation-ownership.md
+- /Users/shanks/work/Health/.claude/rules/performance-patterns.md
+- /Users/shanks/work/Health/.claude/rules/resource-management.md
 - /Users/shanks/work/Health/.claude/rules/swift-layer-boundaries.md
 - /Users/shanks/work/Health/.claude/rules/swiftdata-cloudkit.md
+- /Users/shanks/work/Health/.claude/rules/swiftui-patterns.md
 - /Users/shanks/work/Health/.claude/rules/testing-required.md
 - /Users/shanks/work/Health/.claude/rules/todo-conventions.md
 - /Users/shanks/work/Health/.claude/rules/watch-navigation.md
+- /Users/shanks/work/Health/.claude/rules/watch-ios-parity.md
 
 ## Trigger Rules (Parity)
 
-- 사용자 입력에 `/brainstorm`, `/plan`, `/work`, `/review`, `/triage`, `/compound`, `/ship`, `/run`, `/debug`, `/onboard`, `/retrospective`, `/changelog` 가 포함되면 동일 이름 skill을 우선 적용합니다.
+- 사용자 입력에 `/brainstorm`, `/plan`, `/work`, `/review`, `/triage`, `/compound`, `/ship`, `/run`, `/debug`, `/onboard`, `/retrospective`, `/changelog`, `/cleanup` 가 포함되면 동일 이름 skill을 우선 적용합니다.
 - 사용자가 특정 agent 이름(예: `reviewer-security`, `swift-ui-expert`)을 직접 언급하면 해당 `.claude/agents/{name}.md`를 우선 적용합니다.
 - "리뷰해줘/품질 검토/출시 전 점검" 요청은 `review` + `app-quality-gate` 조합을 기본으로 사용합니다.
 - UI 변경 작업은 `ui-testing`과 `swift-ui-expert`를 자동 후보로 평가합니다.
@@ -128,6 +138,7 @@ A skill is a set of local instructions to follow that is stored in a `SKILL.md` 
 - 사용자 요청으로 개선한 Codex `/run` UI 게이트는 `.codex/skill-compat.md`의 **변경 범위 기반 UI 게이트**를 따른다. 이 명시적 예외는 Claude 원본의 S11 및 Phase 2.5 전체 UI 강제 실행보다 우선한다. `.claude/**` 원본은 변경하지 않으며, Claude에서 직접 실행하는 `/run` 정책은 유지된다.
 - 무의미한 재시도·토큰 낭비 방지는 `.codex/skill-compat.md`의 **재시도와 범위 확장 제한**을 따른다. 같은 실패는 원인에 대응한 변화가 확인된 경우에만 최대 1회 재시도한다. 이 제한은 phase/turn 전환 후에도 유지하고, 무관한 UI 실패 수정·전체 재검증으로 작업 범위를 넓히지 않는다.
 - Codex의 UI 테스트는 `.codex/skill-compat.md`의 **UI 실행 점유 제한**을 따른다. 표준 실행기와 소유 프로세스 deadline을 사용하고, 한 번에 한 시뮬레이터 실행만 유지한다. 진행 중인 실행을 다시 시작하거나 결과 정리를 무기한 기다리지 않는다.
+- 시뮬레이터는 `.codex/skill-compat.md`의 **전용 시뮬레이터 사용**을 따른다. 현재 worktree 소유로 등록된 기기를 단독 사용하며, 테스트·수동 캡처·Duo 자세 전환에도 같은 소유권 기준을 적용한다.
 
 - `.claude/**` 는 **수정하지 않는 source of truth** 입니다. Codex 전용 번역/보강은 `.codex/**` 와 `AGENTS.md` 에만 기록합니다.
 - Codex 실행 adapter 문서는 다음 3개를 기준으로 유지합니다.

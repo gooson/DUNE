@@ -1,0 +1,11 @@
+{
+  "initial_run": {
+    "result": "failed",
+    "cause": "AX visual frame was 135pt because the 11pt stroke extends beyond the 124pt layout circle",
+    "cleanup": "SDK result cleanup exceeded 60s; not a pass"
+  },
+  "correction": "Compare all tab ring frames against the Today frame, including the stroke",
+  "closed_retry": "1 passed, normal runner exit",
+  "open_run": "1 passed, normal runner exit",
+  "scope": "4 tabs × 2 appearances × 2 display states; direct initial tab only"
+}

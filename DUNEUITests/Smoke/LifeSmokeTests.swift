@@ -170,6 +170,66 @@ final class LifeSeededSmokeTests: SeededUITestBaseCase {
         XCTAssertFalse(app.buttons["life-empty-template"].exists, "Seeded habits should not show the empty template entry")
     }
 
+    func testHeroNarrativeLayout() throws {
+        let states: [(name: String, style: String, category: String?)] = [
+            ("Light", "light", nil),
+            ("Dark", "dark", nil),
+            ("Accessibility XXXL", "dark", "UICTContentSizeCategoryAccessibilityXXXL")
+        ]
+        for state in states {
+            verifyHeroNarrativeLayout(theme: "desertWarm", style: state.style,
+                                      category: state.category, name: state.name)
+        }
+    }
+
+    func testHeroNarrativeRemainingThemes() throws {
+        let themes = [
+            "oceanCool", "forestGreen", "sakuraCalm", "arcticDawn",
+            "solarPop", "contourAtlas", "waterLilies"
+        ]
+        for theme in themes {
+            for style in ["light", "dark"] {
+                verifyHeroNarrativeLayout(theme: theme, style: style, name: "\(theme) \(style)")
+            }
+        }
+    }
+
+    private func verifyHeroNarrativeLayout(theme: String, style: String,
+                                           category: String? = nil, name: String) {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "--ui-test-theme", theme, "--ui-test-style", style,
+            "-morningBriefingDisabled", "YES"
+        ]
+        if let category {
+            configuration.additionalArguments += ["-UIPreferredContentSizeCategoryName", category]
+        }
+        launchApp(with: configuration)
+        XCTAssertTrue(app.hasPrimaryNavigation(timeout: 15))
+
+        let hero = app.descendants(matching: .any)[AXID.lifeHeroProgress].firstMatch
+        let ring = app.descendants(matching: .any)["life-hero-ring"].firstMatch
+        let narrative = app.descendants(matching: .any)["life-hero-narrative"].firstMatch
+        let action = app.buttons["life-hero-checklist-button"].firstMatch
+        XCTAssertTrue(narrative.waitForExistence(timeout: 10))
+        XCTAssertFalse(narrative.label.isEmpty, "\(name): progress should have a text explanation")
+        XCTAssertTrue(hero.frame.contains(narrative.frame), "\(name): narrative should fit inside the hero")
+        XCTAssertTrue(app.windows.firstMatch.frame.contains(ring.frame), "\(name): ring should fit on screen")
+        XCTAssertTrue(action.isHittable, "\(name): checklist action should remain reachable")
+        XCTAssertFalse(hero.staticTexts["Morning Stretch"].exists, "Habit names belong in the execution list below the hero")
+        if category != nil {
+            XCTAssertGreaterThanOrEqual(narrative.frame.minY, ring.frame.maxY,
+                                        "Large text should place the explanation below the ring")
+        } else {
+            XCTAssertGreaterThanOrEqual(narrative.frame.minX, ring.frame.maxX,
+                                        "Default text should place the explanation beside the ring")
+        }
+        VisualAudit.capture("Life hero narrative \(name)")
+        if !VisualAudit.isEnabled {
+            addScreenshotAttachment(named: "Life hero narrative \(name)")
+        }
+    }
+
     func testSparseTrendKeepsHabitListAndHistoryAccessible() throws {
         XCTAssertTrue(
             app.scrollToElementIfNeeded(AXID.lifeSectionHabits, maxSwipes: 8),

@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "device": {
+    "kind": "duo",
+    "platform": "iOS Simulator",
+    "model_name": "iPhone Duo",
+    "identifier": "AB14C82A-C28A-4F9F-96A4-87CA8044518B"
+  },
+  "captures": {
+    "dune/light/L01": {
+      "file": "dune/light/L01.png",
+      "screen_id": "L01",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "AB14C82A-C28A-4F9F-96A4-87CA8044518B"
+      },
+      "device_id": "AB14C82A-C28A-4F9F-96A4-87CA8044518B",
+      "state": "light",
+      "theme": "dune",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "source_worktree_dirty": true,
+      "life_view_sha256": "8281d19a6d115b015c021c326111e96694e0ba170df1c1b6a5f93bc040460d2e",
+      "timestamp": 1792602768.499017,
+      "test": "LifeSeededSmokeTests/testHeroNarrativeLayout()",
+      "checkpoint": 2,
+      "capture_method": "host viewport hold; simctl explicit display",
+      "source_file": ".xcodebuild/life-narrative-duo-closed-fixed-20261022/002-1398x2034.png",
+      "appearance": "light",
+      "attachment_name": "002-1398x2034.png",
+      "test_identifier": "LifeSeededSmokeTests/testHeroNarrativeLayout()",
+      "evidence_gallery": "../../review/life-hero-narrative-2026-10-22/duo-closed/L01-light.png",
+      "validation_receipt": "../../review/life-hero-narrative-2026-10-22/test-results.json"
+    },
+    "dune/dark/L01": {
+      "file": "dune/dark/L01.png",
+      "screen_id": "L01",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "AB14C82A-C28A-4F9F-96A4-87CA8044518B"
+      },
+      "device_id": "AB14C82A-C28A-4F9F-96A4-87CA8044518B",
+      "state": "dark",
+      "theme": "dune",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "source_worktree_dirty": true,
+      "life_view_sha256": "8281d19a6d115b015c021c326111e96694e0ba170df1c1b6a5f93bc040460d2e",
+      "timestamp": 1792602784.8323793,
+      "test": "LifeSeededSmokeTests/testHeroNarrativeLayout()",
+      "checkpoint": 3,
+      "capture_method": "host viewport hold; simctl explicit display",
+      "source_file": ".xcodebuild/life-narrative-duo-closed-fixed-20261022/003-1398x2034.png",
+      "appearance": "dark",
+      "attachment_name": "003-1398x2034.png",
+      "test_identifier": "LifeSeededSmokeTests/testHeroNarrativeLayout()",
+      "evidence_gallery": "../../review/life-hero-narrative-2026-10-22/duo-closed/L01-dark.png",
+      "validation_receipt": "../../review/life-hero-narrative-2026-10-22/test-results.json"
+    }
+  }
+}

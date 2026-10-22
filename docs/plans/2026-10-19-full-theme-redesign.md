@@ -78,6 +78,18 @@ related_brainstorms: []
 - **Changes**: 새 빌드의 실제 캡처만 등록하고 미캡처 상태를 분리한다.
 - **Verification**: 맵 생성 `--check`, 이미지·출처·기기·접근성 확인, 빌드 및 영향 범위 테스트.
 
+### 2026-10-22 재개 단위: Duo 4탭 링 배치
+
+- **Files**: `DUNEUITests/Visual/ThemeMatrixUITests.swift`, `DUNEUITests/Helpers/UITestHelpers.swift`, 영향받은 실제 디자인맵과 개편 맵.
+- **Changes**: 기본 Today 시작 상태를 내비게이션 판정에 포함하고, 탭별 직접 진입으로 124pt 링·전체 frame·행동 도달성·Wellness 설명 폭을 검사한다. 현재 worktree 소유 Duo만 사용한다.
+- **Verification**: `testDesertHeroRingsByInitialTab` 하나를 자세별로 실행한다. `DUNEUITests-DuoAudit`과 기존 host 캡처 도구로 활성 디스플레이 PNG를 보존하고 픽셀·배치를 검토한다. 탭 레일 전환·다른 테마·최대 글씨는 이 단위의 통과 범위에 포함하지 않는다. 각 실행은 표준 실행기의 30분 deadline·잠금 대기 60초 제한을 적용한다.
+
+### 2026-10-22 후속 단위: Life 히어로 정보 중복 해소
+
+- **Files**: `LifeView.swift`, Life UI 테스트, 4탭 레이아웃 맵과 영향받은 실제 화면맵.
+- **Changes**: 링 옆의 습관 이름 3개를 기존 `LifeViewModel.heroNarrative` 진행 설명으로 바꾼다. 링·체크리스트 행동·아래 습관 목록은 유지한다. 새 문자열이나 데이터 로직은 추가하지 않는다.
+- **Verification**: Life 단일 배치 테스트로 밝음·어두움·최대 접근성 글씨를 확인한다. 공유 레이아웃의 영향 기기인 iPhone 402pt·440pt, iPad, Duo 접힘·펼침에서 L01만 새로 촬영한다. 앞서 검증한 다른 3탭을 재실행하지 않는다. 최종 집중 검사 5건 통과·실제 화면 15장을 보존했다.
+
 ## Edge Cases
 
 | Case | Handling |
