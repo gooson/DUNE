@@ -99,14 +99,14 @@
     <div class="legend">
       <article><b>① 상태</b>점수·상태 이름·짧은 이유를 함께 표시한다. 색만으로 의미를 전하지 않는다.</article>
       <article><b>② 변화</b>실제 표본과 기간·축을 보여 준다. 데이터가 부족하면 설명으로 바꾼다.</article>
-      <article><b>③ 행동</b>상태에 연결된 주요 행동은 히어로 안에 둔다. Wellness의 신체 기록처럼 별도 목적의 기록 행동은 카드 다음에 둔다.</article>
+      <article><b>③ 행동</b>Today 히어로는 컨디션 상세로 이어지는 하나의 링크다. Activity의 운동 기록은 같은 탭의 별도 행동으로 둔다.</article>
       <article><b>④ 공통 히어로</b>네 탭 모두 Today와 같은 124pt 링을 요약 왼쪽에 둔다. Today·Activity·Wellness는 실제 점수, Life는 오늘 완료 수/대상 수를 표시한다. 큰 글씨에서는 링 위·설명 아래로 쌓는다.</article>
     </div>
     <section class="tab-map today" id="today" aria-labelledby="today-title">
-      <h2 id="today-title">T03 · Today</h2><p>오늘 어떻게 움직일까? · 상태 → 추세 → 근거 → Activity/Wellness → 현재 시간대 요약</p>
+      <h2 id="today-title">T03 · Today</h2><p>지금 컨디션은 어떤가? · 상태 → 실제 추세 → 근거 → 컨디션 상세 → 현재 시간대 요약</p>
       <div class="preview"><div class="scene"><h3>Today</h3></div><div class="content">
-        <div class="hero"><div class="summary"><div class="ring">상태<br><small>CONDITION</small></div><div class="summary-text"><b>현재 컨디션</b><p>몸의 상태를 설명하는 짧은 문장</p></div></div><div class="trend"><div class="trend-title"><span>컨디션 변화</span><span>24시간</span></div><svg viewBox="0 0 300 72" role="img" aria-label="실제 시간별 값이 있을 때만 그리는 추세 자리"><path d="M0 54H300M0 32H300" stroke="#c6bdb2" stroke-dasharray="3 5"/><path d="M0 53 L60 47 L120 44 L180 34 L240 29 L300 20" fill="none" stroke="#856b55" stroke-width="3"/></svg><div class="axis"><span>이전</span><span>현재</span></div></div><div class="evidence"><span>HRV · 기준선 대비</span><span>RHR · 기준선 대비</span></div><div class="cta">활동 보기 →</div></div>
-        <div class="secondary"><b>별도 7일 컨디션 추세</b><p>시간별 표본이 부족한 상태와 구분해 실제 일별 기록을 표시한다.</p></div><div class="secondary"><b>현재 시간대 요약</b><p>Briefing·Digest·Insight 등 관련 요약은 추세 다음에 이어진다.</p></div>
+        <div class="hero"><div class="summary"><div class="ring">상태<br><small>CONDITION</small></div><div class="summary-text"><b>현재 컨디션</b><p>몸의 상태를 설명하는 짧은 문장</p></div></div><div class="trend"><div class="trend-title"><span>컨디션 변화</span><span>24시간</span></div><svg viewBox="0 0 300 72" role="img" aria-label="실제 시간별 값이 있을 때만 그리는 추세 자리"><path d="M0 54H300M0 32H300" stroke="#c6bdb2" stroke-dasharray="3 5"/><path d="M0 53 L60 47 L120 44 L180 34 L240 29 L300 20" fill="none" stroke="#856b55" stroke-width="3"/></svg><div class="axis"><span>이전</span><span>현재</span></div></div><div class="evidence"><span>HRV · 기준선 대비</span><span>RHR · 기준선 대비</span></div><span class="detail">컨디션 상세 ›</span></div>
+        <div class="secondary"><b>추세 데이터 상태</b><p>24시간 표본이 부족하면 히어로 안에 실제 7일 추세를 표시한다. 일별 표본도 부족하면 수집 상태를 짧게 설명한다.</p></div><div class="secondary"><b>현재 시간대 요약</b><p>Briefing·Digest·Insight 등 관련 요약은 추세 다음에 이어진다.</p></div>
       </div></div><p class="note">점수 없음: 권한·기록 없음·기준선 수집을 구분하고 그래프를 만들지 않는다.</p>
     </section>
     <section class="tab-map activity" id="activity" aria-labelledby="activity-title">
@@ -119,8 +119,8 @@
     <section class="tab-map wellness" id="wellness" aria-labelledby="wellness-title">
       <h2 id="wellness-title">H01 · Wellness</h2><p>몸과 수면은 어떻게 변하나? · 현재 상태 → 추세 → 신체 기록 → 미래 수면 예측 → 중요한 지표</p>
       <div class="preview"><div class="scene"><h3>Wellness</h3></div><div class="content">
-        <div class="hero"><div class="trend-title"><span>웰니스</span><span>수면</span></div><div class="summary"><div class="ring">상태<br><small>WELLNESS</small></div><div class="summary-text"><b>현재 웰니스 상태</b></div></div><p class="note">긴 점수 설명은 링 다음 행에서 카드 전체 폭으로 읽는다.</p><div class="trend"><div class="trend-title"><span>최근 7일 수면</span><span>실제 수면 시간</span></div><svg viewBox="0 0 300 72" role="img" aria-label="실제 수면 기록이 있는 날만 표시하는 막대 자리"><g fill="#568b84"><rect x="8" y="20" width="24" height="48" rx="5"/><rect x="50" y="26" width="24" height="42" rx="5"/><rect x="92" y="18" width="24" height="50" rx="5"/><rect x="134" y="24" width="24" height="44" rx="5"/><rect x="176" y="16" width="24" height="52" rx="5"/><rect x="218" y="22" width="24" height="46" rx="5"/><rect x="260" y="12" width="24" height="56" rx="5"/></g></svg></div><span class="detail">수면 상세 →</span></div>
-        <div class="cta">신체 기록 열기</div><div class="secondary"><b>오늘 밤 수면 예측</b><p>미래 추정값과 신뢰도를 현재 점수와 분리한다. 관련 지표는 아래로.</p></div>
+        <div class="hero"><div class="trend-title"><span>웰니스</span><span>수면</span></div><div class="summary"><div class="ring">상태<br><small>WELLNESS</small></div><div class="summary-text"><b>현재 웰니스 상태</b></div></div><p class="note">긴 점수 설명은 링 다음 행에서 카드 전체 폭으로 읽는다.</p><div class="trend"><div class="trend-title"><span>최근 7일 수면</span><span>실제 수면 시간</span></div><svg viewBox="0 0 300 72" role="img" aria-label="실제 수면 기록이 있는 날만 표시하는 막대 자리"><g fill="#568b84"><rect x="8" y="20" width="24" height="48" rx="5"/><rect x="50" y="26" width="24" height="42" rx="5"/><rect x="92" y="18" width="24" height="50" rx="5"/><rect x="134" y="24" width="24" height="44" rx="5"/><rect x="176" y="16" width="24" height="52" rx="5"/><rect x="218" y="22" width="24" height="46" rx="5"/><rect x="260" y="12" width="24" height="56" rx="5"/></g></svg></div><span class="detail">수면 상세 →</span><p class="note">지난밤 수면과 유효한 7일 평균을 구분한다.</p></div>
+        <div class="secondary"><b>오늘 밤 수면 예측</b><p>미래 추정값과 신뢰도를 현재 점수와 분리한다. 관련 지표는 아래로.</p></div><div class="cta">신체 기록 열기</div>
       </div></div><p class="note">로딩·클라우드 동기화 대기·기록 없음: 점수·그래프를 꾸미지 않고 신체 기록 행동은 계속 제공한다.</p>
     </section>
     <section class="tab-map life" id="life" aria-labelledby="life-title">
