@@ -11,6 +11,8 @@ status: in-progress
 
 [2026-10-22 T03·A01·H01 첫 화면 UX 개편 실제 캡처](../full-redesign-map/review/first-fold-ux-2026-10-22/index.html)는 iPhone·iPad의 밝음·어두움 화면 12장이다. 히어로의 탭 전환 버튼 제거, Activity 로딩 진입, 최근 수면 요약·iPad 두 열 배치를 반영한 결과이며 출처·검증 범위는 [캡처 설명](../full-redesign-map/review/first-fold-ux-2026-10-22/README.md)에 기록했다.
 
+2026-10-22 Wellness 히어로의 점수와 수면 영역을 각각 해당 상세 링크로 분리한 뒤, 전용 iPhone 18 Pro Max와 iPad Pro 13-inch (M5)에서 H01을 다시 캡처했다. [iPhone H01](actual/regular/images/H01.png)과 [iPad H01](actual/ipad/images/H01.png)의 수면 제목·막대·기간은 점수 내용과 독립된 영역에 있으며, 캡처 테스트 `ThemeMatrixUITests/testDesertWarmMatrix()`가 두 기기에서 각각 1건 통과했다. 두 H01의 개별 출처는 각 `capture-index.json`의 `captured.H01`에 기록했다.
+
 [4탭 레이아웃 기준맵](../layout-map/index.html)은 화면 정보 순서와 반응형 배치의 시안이다. 이 문서의 PNG는 실제 앱 캡처다.
 
 [폰·패드·Duo의 같은 화면 비교](actual/compare.html)
