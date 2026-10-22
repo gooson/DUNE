@@ -34,13 +34,13 @@ struct WellnessHeroCard: View {
     }
 
     private var sleepAccessibilitySummary: String {
-        guard let latestSleepSample else { return String(localized: "No recent sleep records") }
+        guard let latestSleepSample else { return String(localized: "Need More Data") }
         let latest = sleepDuration(Int(latestSleepSample.minutes))
         let date = latestSleepSample.date.formatted(.dateTime.month(.abbreviated).day())
         guard let averageSleepMinutes else {
-            return "\(String(localized: "Latest Sleep")) \(date), \(latest)"
+            return "\(String(localized: "Sleep")) \(date), \(latest)"
         }
-        return "\(String(localized: "Latest Sleep")) \(date), \(latest). 7d avg \(sleepDuration(averageSleepMinutes))"
+        return "\(String(localized: "Sleep")) \(date), \(latest). \(String(localized: "7d")) \(String(localized: "Average")) \(sleepDuration(averageSleepMinutes))"
     }
 
     var body: some View {
@@ -124,11 +124,15 @@ struct WellnessHeroCard: View {
                                     .font(.headline.weight(.semibold))
                                     .foregroundStyle(theme.directionPreviewTextColor)
                             }
-                            Text("Latest Sleep")
+                            Text("Sleep")
                                 .font(.subheadline)
                                 .foregroundStyle(theme.directionPreviewTextColor.opacity(0.74))
                             if let averageSleepMinutes {
-                                Text("7d avg · \(sleepDuration(averageSleepMinutes))")
+                                HStack(spacing: 4) {
+                                    Text("7d")
+                                    Text("Average")
+                                    Text("· \(sleepDuration(averageSleepMinutes))")
+                                }
                                     .font(.caption.weight(.semibold))
                                     .foregroundStyle(theme.directionPreviewTextColor.opacity(0.74))
                                     .accessibilityIdentifier("wellness-sleep-average")

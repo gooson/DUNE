@@ -183,8 +183,8 @@ final class WellnessSeededSmokeTests: SeededUITestBaseCase {
         let hero = app.buttons[AXID.wellnessHeroScore].firstMatch
         XCTAssertTrue(hero.waitForExistence(timeout: 10), "Wellness summary should be accessible")
         let summary = hero.value as? String ?? ""
-        XCTAssertTrue(summary.hasPrefix("Latest Sleep "), "Summary should identify the latest valid sleep duration")
-        XCTAssertTrue(summary.contains(". 7d avg "), "Summary should identify the separate seven-day average")
+        XCTAssertTrue(summary.hasPrefix("Sleep "), "Summary should identify the latest dated sleep duration")
+        XCTAssertTrue(summary.contains(". 7d Average "), "Summary should identify the separate seven-day average")
         addScreenshotAttachment(named: "Wellness latest sleep and seven-day average")
     }
 
