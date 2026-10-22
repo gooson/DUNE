@@ -449,7 +449,8 @@ enum SimulatorAdvancedMockDataProvider {
             let awake = 14 + Double(offset % 4) * 2
             return SharedHealthSnapshot.SleepDailyDuration(
                 date: date,
-                totalMinutes: deep + rem + core,
+                totalMinutes: offset == 0 && ProcessInfo.processInfo.arguments.contains("--ui-test-zero-latest-sleep")
+                    ? 0 : deep + rem + core,
                 stageBreakdown: [
                     .deep: deep,
                     .rem: rem,

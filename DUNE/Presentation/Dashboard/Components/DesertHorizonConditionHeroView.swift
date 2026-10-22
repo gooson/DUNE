@@ -89,7 +89,6 @@ struct DesertHorizonConditionHeroView: View {
                     .fill(isDesert ? Color(red: 0.412, green: 0.341, blue: 0.278) : gold.opacity(0.25))
                     .frame(height: 1)
                 trend
-                    .accessibilityIdentifier("dashboard-hero-trend")
                 evidence
                 HStack(spacing: 6) {
                     Spacer()
@@ -172,6 +171,7 @@ struct DesertHorizonConditionHeroView: View {
             HStack {
                 Text("Condition Trend")
                     .font(.subheadline.weight(.semibold))
+                    .accessibilityIdentifier("dashboard-hero-trend")
                 Spacer()
                 Text(trendPeriod)
                     .font(.caption)

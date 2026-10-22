@@ -184,8 +184,8 @@ final class WellnessSeededSmokeTests: SeededUITestBaseCase {
         XCTAssertTrue(hero.waitForExistence(timeout: 10), "Wellness summary should be accessible")
         let summary = hero.value as? String ?? ""
         XCTAssertTrue(summary.hasPrefix("Sleep "), "Summary should identify the latest dated sleep duration")
-        XCTAssertTrue(summary.contains(", 7h 10min. 7d Average 6h 55min"),
-                      "Latest 430-minute sleep and the seven-day 415-minute average should be distinct")
+        XCTAssertTrue(summary.contains(", 7h 54min. 7d Average 7h 26min"),
+                      "Latest 474-minute sleep and the seven-day 446-minute average should be distinct: \(summary)")
         addScreenshotAttachment(named: "Wellness latest sleep and seven-day average")
     }
 
@@ -198,8 +198,8 @@ final class WellnessSeededSmokeTests: SeededUITestBaseCase {
         let hero = app.buttons[AXID.wellnessHeroScore].firstMatch
         XCTAssertTrue(hero.waitForExistence(timeout: 10), "Wellness summary should be accessible")
         let summary = hero.value as? String ?? ""
-        XCTAssertTrue(summary.contains(", 7h 5min. 7d Average 6h 53min"),
-                      "A zero-minute latest day should use yesterday's 425 minutes and the six valid-day average of 413 minutes")
+        XCTAssertTrue(summary.contains(", 7h 42min. 7d Average 7h 21min"),
+                      "A zero-minute latest day should use yesterday's 462 minutes and the six valid-day average of 441 minutes: \(summary)")
     }
 
     func testSleepPredictionSummaryOpensDetail() throws {
