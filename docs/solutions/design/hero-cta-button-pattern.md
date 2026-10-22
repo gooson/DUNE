@@ -51,8 +51,10 @@ VStack(spacing: DS.Spacing.sm) {
 
 - Hero 카드에 interactive 요소를 추가할 때는 항상 NavigationLink 외부 배치 검토
 - `HeroCard` 컴포넌트 자체에 `onAction` closure를 추가하지 않음 (소비자 View에서 구조적 분리)
+- 별도 CTA가 카드의 정보와 다른 루트 탭으로 보내는 경우에는 먼저 목적지 자체를 재검토한다. Today 컨디션 히어로는 카드 전체를 컨디션 상세로 통일하고 다른 탭 이동을 탭 바에 맡겼다. 이 문서의 분리 패턴은 카드 상세와 구별되는 실제 행동이 필요한 경우에 적용한다.
 
 ## Related
 
 - Life Hero 업그레이드: `StandardCard` → `HeroCard` + narrative message
 - `ProgressRingView` 재사용으로 일관된 링 UI 유지
+- [첫 화면 히어로의 목적지와 데이터 의미 맞추기](../general/2026-10-22-contextual-first-fold-hero.md)

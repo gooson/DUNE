@@ -1,9 +1,9 @@
 ---
 topic: first-fold-ux-redesign
 date: 2026-10-22
-status: in-progress
+status: implemented
 confidence: high
-related_solutions: [docs/solutions/design/hero-cta-button-pattern.md]
+related_solutions: [docs/solutions/design/hero-cta-button-pattern.md, docs/solutions/general/2026-10-22-contextual-first-fold-hero.md]
 related_brainstorms: [docs/brainstorms/2026-03-14-hero-card-detail-unification.md]
 ---
 
