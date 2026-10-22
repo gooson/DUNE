@@ -9,6 +9,8 @@ status: in-progress
 
 [폰·패드·Duo·Watch 통합 디자인맵 열기](actual/index.html)
 
+[2026-10-22 T03·A01·H01 첫 화면 UX 개편 실제 캡처](../full-redesign-map/review/first-fold-ux-2026-10-22/index.html)는 iPhone·iPad의 밝음·어두움 화면 12장이다. 히어로의 탭 전환 버튼 제거, Activity 로딩 진입, 최근 수면 요약·iPad 두 열 배치를 반영한 결과이며 출처·검증 범위는 [캡처 설명](../full-redesign-map/review/first-fold-ux-2026-10-22/README.md)에 기록했다.
+
 [4탭 레이아웃 기준맵](../layout-map/index.html)은 화면 정보 순서와 반응형 배치의 시안이다. 이 문서의 PNG는 실제 앱 캡처다.
 
 [폰·패드·Duo의 같은 화면 비교](actual/compare.html)
