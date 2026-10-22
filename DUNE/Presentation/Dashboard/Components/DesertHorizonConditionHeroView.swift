@@ -93,7 +93,7 @@ struct DesertHorizonConditionHeroView: View {
                 evidence
                 HStack(spacing: 6) {
                     Spacer()
-                    Text("Condition Details")
+                    Text("View Details")
                     Image(systemName: "chevron.right")
                         .accessibilityHidden(true)
                 }
@@ -106,7 +106,7 @@ struct DesertHorizonConditionHeroView: View {
         }
         .buttonStyle(.plain)
         .accessibilityIdentifier("dashboard-hero-condition")
-        .accessibilityHint("Opens condition details")
+        .accessibilityHint("View Details")
         .background {
             RoundedRectangle(cornerRadius: 25)
                 .fill(surface)
@@ -182,7 +182,12 @@ struct DesertHorizonConditionHeroView: View {
             if let hourlySparkline, hourlySparkline.points.count >= 2 {
                 HourlySparklineView(data: hourlySparkline, tintColor: heroHighlight, height: 72, usesTimelineAxis: true)
             } else if hasWeeklyTrend {
-                TrendChartView(scores: recentScores, lineColor: heroHighlight)
+                TrendChartView(
+                    scores: recentScores,
+                    lineColor: heroHighlight,
+                    labelColor: muted,
+                    referenceColor: muted.opacity(0.55)
+                )
                     .frame(height: 126)
             } else {
                 Text("Not enough data to show trend.")
