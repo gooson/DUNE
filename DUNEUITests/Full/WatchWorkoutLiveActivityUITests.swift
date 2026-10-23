@@ -166,7 +166,7 @@ final class SystemWidgetDesignTests: UITestBaseCase {
         let sizes = ["small": ["Small", "작게", "小"],
                      "medium": ["Medium", "중간", "中"],
                      "large": ["Large", "크게", "大"]]
-        func widget(_ family: String, onHome: Bool = false) -> XCUIElement? {
+        func widget(_ family: String) -> XCUIElement? {
             let title = NSPredicate(format: "label CONTAINS %@ OR label CONTAINS %@ OR label CONTAINS %@",
                                     titles[0], titles[1], titles[2])
             let values = sizes[family] ?? []
@@ -175,16 +175,9 @@ final class SystemWidgetDesignTests: UITestBaseCase {
             let query = springboard.descendants(matching: .any)
                 .matching(NSCompoundPredicate(andPredicateWithSubpredicates: [title, size])).firstMatch
             if query.exists && query.isHittable { return query }
-            if onHome {
-                let home = springboard.descendants(matching: .any).matching(title).firstMatch
-                if home.exists && home.isHittable && home.frame.width > 140 && home.frame.height > 140 {
-                    return home
-                }
-            }
             return nil
         }
-        // Gallery snapshots use the provider's standard placeholder. The Home
-        // installation uses the production timeline written by the seeded app.
+        // Gallery snapshots render the production provider's standard placeholder.
         for family in ["small", "medium", "large"] {
             for _ in 0..<3 where widget(family) == nil { swipeGallery("left") }
             let root = try XCTUnwrap(widget(family), "The native \(family) widget host should be visible")
