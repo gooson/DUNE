@@ -718,23 +718,27 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
     }
 
     func testActivityExerciseMixRouteOpensExpectedScreen() throws {
-        XCTAssertTrue(app.scrollToElementIfNeeded(AXID.activitySectionExerciseMix, maxSwipes: 10))
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.activitySectionExerciseMix, maxSwipes: 10))
         waitForElement(AXID.activitySectionExerciseMix, timeout: 5).auditTap()
         XCTAssertTrue(
             app.descendants(matching: .any)[AXID.activityExerciseMixDetailScreen].firstMatch.waitForExistence(timeout: 10),
             "Exercise Mix detail should open"
         )
-        for identifier in [
-            "activity-exercise-mix-composition",
-            "activity-exercise-mix-weekly-chart",
-            "activity-exercise-mix-muscle-shares",
-            "activity-exercise-mix-cardio-types"
-        ] {
-            XCTAssertTrue(app.scrollToElementIfNeeded(identifier, maxSwipes: 10),
-                          "Exercise Mix section \(identifier) should be reachable")
-            XCTAssertTrue(app.descendants(matching: .any)[identifier].firstMatch.exists)
-        }
-        addScreenshotAttachment(named: "Activity Exercise Mix detail")
+        let composition = app.descendants(matching: .any)["activity-exercise-mix-composition"].firstMatch
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("activity-exercise-mix-composition", maxSwipes: 10))
+        XCTAssertTrue(composition.isHittable)
+        addScreenshotAttachment(named: "Activity Exercise Mix composition")
+
+        let weeklyChart = app.descendants(matching: .any)["activity-exercise-mix-weekly-chart"].firstMatch
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("activity-exercise-mix-weekly-chart", maxSwipes: 10))
+        XCTAssertTrue(weeklyChart.isHittable)
+        addScreenshotAttachment(named: "Activity Exercise Mix weekly chart")
+
+        let muscleShares = app.descendants(matching: .any)["activity-exercise-mix-muscle-shares"].firstMatch
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("activity-exercise-mix-muscle-shares", maxSwipes: 10))
+        XCTAssertTrue(muscleShares.isHittable)
+        XCTAssertTrue(app.descendants(matching: .any)["activity-exercise-mix-cardio-types"].firstMatch.exists)
+        addScreenshotAttachment(named: "Activity Exercise Mix muscle shares")
     }
 
     func testActivityRiskAndReportRoutesOpen() throws {

@@ -55,7 +55,10 @@ final class DashboardSmokeTests: UITestBaseCase {
 
         let filter = app.segmentedControls[AXID.notificationsFilter].firstMatch
         XCTAssertTrue(filter.waitForExistence(timeout: 5), "Notification filters should appear")
-        filter.buttons["News"].tap()
+        // Picker order is All, Health, News across localizations.
+        let news = filter.buttons.element(boundBy: 2)
+        XCTAssertTrue(news.waitForExistence(timeout: 5))
+        news.tap()
 
         let release = app.buttons[AXID.notificationsNewsRelease].firstMatch
         XCTAssertTrue(release.waitForExistence(timeout: 5), "The current release should appear in News")
@@ -95,6 +98,37 @@ final class DashboardSmokeTests: UITestBaseCase {
 
         let settingsButton = app.descendants(matching: .any)[AXID.notificationsOpenSettingsButton].firstMatch
         XCTAssertTrue(settingsButton.waitForExistence(timeout: 5), "Notification settings button should exist in notification hub summary")
+    }
+
+    func testNotificationHubSummaryAtMaximumAccessibilitySize() throws {
+        var configuration = launchConfiguration
+        configuration.shouldSeedMockData = true
+        configuration.scenario = .defaultSeeded
+        configuration.additionalArguments += [
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ]
+        launchApp(with: configuration)
+        navigateToDashboard()
+        XCTAssertTrue(app.waitAndTap(AXID.dashboardToolbarNotifications))
+
+        let settings = app.buttons[AXID.notificationsOpenSettingsButton].firstMatch
+        let readAll = app.buttons[AXID.notificationsReadAllButton].firstMatch
+        let filter = app.segmentedControls[AXID.notificationsFilter].firstMatch
+        let window = app.windows.firstMatch.frame
+        for identifier in [AXID.notificationsOpenSettingsButton, AXID.notificationsReadAllButton, AXID.notificationsFilter] {
+            XCTAssertTrue(app.scrollToHittableElementIfNeeded(identifier, maxSwipes: 8),
+                          "\(identifier) should be reachable at maximum accessibility size")
+            let element = app.descendants(matching: .any)[identifier].firstMatch
+            XCTAssertTrue(window.contains(element.frame), "\(identifier) should fit inside the viewport")
+        }
+        XCTAssertTrue(settings.exists && readAll.exists && filter.exists)
+        XCTAssertFalse(settings.frame.intersects(readAll.frame), "Settings and Read All must not overlap")
+        addScreenshotAttachment(named: "Notifications summary and filters maximum accessibility")
+
+        let news = filter.buttons.element(boundBy: 2)
+        XCTAssertTrue(news.waitForExistence(timeout: 5), "News is the third filter segment")
+        news.tap()
+        XCTAssertTrue(app.buttons[AXID.notificationsNewsRelease].firstMatch.waitForExistence(timeout: 5))
     }
 
     func testConditionTrendAndHeroDetailRoute() throws {
@@ -174,10 +208,10 @@ final class TodayDesignMapCaptureTests: UITestBaseCase {
     }
 
     func testRecoverySleepUsesSeededHistory() {
-        XCTAssertTrue(app.scrollToElementIfNeeded("dashboard-recovery-sleep-chart", maxSwipes: 12),
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("dashboard-recovery-sleep-chart", maxSwipes: 12),
                       "Seven-day sleep bars should be reachable with seeded daily sleep history")
         let chart = app.descendants(matching: .any)["dashboard-recovery-sleep-chart"].firstMatch
-        XCTAssertTrue(chart.waitForExistence(timeout: 5))
+        XCTAssertTrue(chart.isHittable)
         XCTAssertTrue(app.descendants(matching: .any)["dashboard-recovery-sleep-card"].firstMatch.exists,
                       "The history chart should remain inside Recovery & Sleep")
         addScreenshotAttachment(named: "Today Recovery Sleep seven day chart")

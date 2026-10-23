@@ -34,6 +34,7 @@ struct WeeklyHabitSummaryCard: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
         }
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier("life-weekly-report-summary")
     }
 

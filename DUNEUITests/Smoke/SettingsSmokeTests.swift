@@ -248,7 +248,10 @@ final class SettingsSmokeTests: UITestBaseCase {
         XCTAssertTrue(hub.waitForExistence(timeout: 5), "Settings should open the notification hub")
         let filter = app.segmentedControls[AXID.notificationsFilter].firstMatch
         XCTAssertTrue(filter.waitForExistence(timeout: 5))
-        XCTAssertTrue(filter.buttons["News"].isSelected, "Settings should enter with the News filter selected")
+        // Picker order is All, Health, News across localizations.
+        let news = filter.buttons.element(boundBy: 2)
+        XCTAssertTrue(news.waitForExistence(timeout: 5))
+        XCTAssertTrue(news.isSelected, "Settings should enter with the News filter selected")
 
         let release = app.buttons[AXID.notificationsNewsRelease].firstMatch
         XCTAssertTrue(release.waitForExistence(timeout: 5), "Current release should be available")

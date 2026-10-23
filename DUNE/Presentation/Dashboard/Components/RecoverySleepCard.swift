@@ -20,6 +20,7 @@ struct RecoverySleepCard: View {
                     detailLink
                 }
             }
+            .accessibilityElement(children: .contain)
             .accessibilityIdentifier("dashboard-recovery-sleep-card")
         }
     }

@@ -8,7 +8,10 @@ final class LaunchExperienceSmokeTests: UITestBaseCase {
         XCTAssertTrue(app.waitAndTap(AXID.dashboardToolbarNotifications), "Open notifications from Today")
         let filter = app.segmentedControls[AXID.notificationsFilter].firstMatch
         XCTAssertTrue(filter.waitForExistence(timeout: 5))
-        filter.buttons["News"].tap()
+        // Picker order is All, Health, News across localizations.
+        let news = filter.buttons.element(boundBy: 2)
+        XCTAssertTrue(news.waitForExistence(timeout: 5))
+        news.tap()
         let release = app.buttons[AXID.notificationsNewsRelease].firstMatch
         XCTAssertTrue(release.waitForExistence(timeout: 5), "Release should appear in News")
         release.tap()
