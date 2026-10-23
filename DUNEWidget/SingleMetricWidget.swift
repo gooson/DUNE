@@ -134,7 +134,7 @@ struct SingleMetricWidgetView: View {
                 compactContent
             }
         }
-        .containerBackground(.fill.tertiary, for: .widget)
+        .duneWidgetSurface()
         .accessibilityIdentifier("widget-single-\(entry.kind.rawValue)-root")
     }
 
@@ -234,7 +234,7 @@ private struct SingleMetricRingView: View {
     var body: some View {
         ZStack {
             Circle()
-                .stroke(.primary.opacity(0.12), style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
+                .stroke(WidgetDS.Color.ringTrack, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
             Circle()
                 .trim(from: 0, to: metric.progress)
                 .stroke(metric.tintColor, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))

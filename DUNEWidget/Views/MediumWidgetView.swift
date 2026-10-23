@@ -10,11 +10,11 @@ struct MediumWidgetView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             .padding(WidgetDS.Layout.edgePadding)
-            .containerBackground(.fill.tertiary, for: .widget)
+            .duneWidgetSurface()
             .accessibilityIdentifier(WidgetSurfaceAccessibility.rootID(for: .medium))
         } else {
             placeholderView
-                .containerBackground(.fill.tertiary, for: .widget)
+                .duneWidgetSurface()
                 .accessibilityIdentifier(WidgetSurfaceAccessibility.rootID(for: .medium))
         }
     }
@@ -32,6 +32,7 @@ struct MediumWidgetView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .accessibilityIdentifier(WidgetSurfaceAccessibility.scoredLaneID(for: .medium))
+            .privacySensitive()
         }
     }
 }

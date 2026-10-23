@@ -138,7 +138,7 @@ struct WidgetCompactMetricView: View {
                 .font(.system(size: 11, weight: .semibold, design: .rounded))
                 .foregroundStyle(WidgetDS.Color.textSecondary)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .frame(maxWidth: .infinity, alignment: .top)
         .accessibilityIdentifier(WidgetSurfaceAccessibility.metricID(metric.kind, family: family))
     }
 }
@@ -187,7 +187,8 @@ struct WidgetMetricTileView: View {
 
     private var tileBackground: some View {
         RoundedRectangle(cornerRadius: WidgetDS.Layout.rowCornerRadius, style: .continuous)
-            .fill(metric.hasScore ? metric.tintColor.opacity(0.10) : WidgetDS.Color.placeholderFill)
+            .fill(WidgetDS.isDesertWarm ? WidgetDS.Color.warmTile :
+                    (metric.hasScore ? metric.tintColor.opacity(0.10) : WidgetDS.Color.placeholderFill))
             .overlay {
                 RoundedRectangle(cornerRadius: WidgetDS.Layout.rowCornerRadius, style: .continuous)
                     .stroke(metric.hasScore ? metric.tintColor.opacity(0.18) : WidgetDS.Color.cardStroke, lineWidth: 1)
@@ -234,19 +235,20 @@ struct WidgetMetricRowView: View {
                 Text(metric.detailText)
                     .font(.caption2)
                     .foregroundStyle(WidgetDS.Color.textTertiary)
-                    .lineLimit(1)
+                    .lineLimit(2)
             }
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 10)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+        .frame(maxWidth: .infinity, alignment: .leading)
         .background(backgroundShape)
         .accessibilityIdentifier(WidgetSurfaceAccessibility.metricID(metric.kind, family: family))
     }
 
     private var backgroundShape: some View {
         RoundedRectangle(cornerRadius: WidgetDS.Layout.rowCornerRadius, style: .continuous)
-            .fill(metric.hasScore ? metric.tintColor.opacity(0.10) : WidgetDS.Color.placeholderFill)
+            .fill(WidgetDS.isDesertWarm ? WidgetDS.Color.warmTile :
+                    (metric.hasScore ? metric.tintColor.opacity(0.10) : WidgetDS.Color.placeholderFill))
             .overlay {
                 RoundedRectangle(cornerRadius: WidgetDS.Layout.rowCornerRadius, style: .continuous)
                     .stroke(metric.hasScore ? metric.tintColor.opacity(0.18) : WidgetDS.Color.cardStroke, lineWidth: 1)

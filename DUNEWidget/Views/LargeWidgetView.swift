@@ -8,16 +8,16 @@ struct LargeWidgetView: View {
         if entry.hasAnyScore {
             VStack(alignment: .leading, spacing: WidgetDS.Layout.rowSpacing) {
                 metricRows
-
+                Spacer(minLength: 0)
                 footerRow
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             .padding(WidgetDS.Layout.edgePadding)
-            .containerBackground(.fill.tertiary, for: .widget)
+            .duneWidgetSurface()
             .accessibilityIdentifier(WidgetSurfaceAccessibility.rootID(for: .large))
         } else {
             placeholderView
-                .containerBackground(.fill.tertiary, for: .widget)
+                .duneWidgetSurface()
                 .accessibilityIdentifier(WidgetSurfaceAccessibility.rootID(for: .large))
         }
     }
@@ -62,23 +62,17 @@ struct LargeWidgetView: View {
         .lineLimit(1)
         .minimumScaleFactor(0.8)
         .accessibilityIdentifier(WidgetSurfaceAccessibility.footerID(for: .large))
+        .privacySensitive()
     }
 
     private var metricRows: some View {
-        GeometryReader { proxy in
-            let metricCount = max(entry.metrics.count, 1)
-            let totalSpacing = WidgetDS.Layout.rowSpacing * CGFloat(metricCount - 1)
-            let rowHeight = max(0, (proxy.size.height - totalSpacing) / CGFloat(metricCount))
-
-            VStack(spacing: WidgetDS.Layout.rowSpacing) {
-                ForEach(entry.metrics) { metric in
-                    WidgetMetricRowView(metric: metric, family: .large)
-                        .frame(height: rowHeight)
-                }
+        VStack(spacing: WidgetDS.Layout.rowSpacing) {
+            ForEach(entry.metrics) { metric in
+                WidgetMetricRowView(metric: metric, family: .large)
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-            .accessibilityIdentifier(WidgetSurfaceAccessibility.scoredLaneID(for: .large))
         }
+        .accessibilityIdentifier(WidgetSurfaceAccessibility.scoredLaneID(for: .large))
+        .privacySensitive()
     }
 
     private var placeholderView: some View {

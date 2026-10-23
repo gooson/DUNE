@@ -53,3 +53,19 @@ private extension WidgetSurfaceFamily {
         }
     }
 }
+
+#Preview("Today · Small", as: .systemSmall) {
+    WellnessDashboardWidget()
+} timeline: {
+    WellnessDashboardEntry.placeholder
+    WellnessDashboardEntry.partialPreview
+    WellnessDashboardEntry.emptyPreview
+}
+
+#Preview("Today · Large", as: .systemLarge) {
+    WellnessDashboardWidget()
+} timeline: {
+    WellnessDashboardEntry.placeholder
+    WellnessDashboardEntry.partialPreview
+    WellnessDashboardEntry.emptyPreview
+}
