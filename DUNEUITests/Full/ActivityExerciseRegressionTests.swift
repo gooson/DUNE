@@ -1274,6 +1274,77 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         VisualAudit.capture("Rest timer after first completed set")
     }
 
+    func testRestLiveActivityAppearsInNotificationCenterAfterFirstSet() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "--ui-fold-audit-long-rest",
+            "--ui-test-theme", "desertWarm",
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US"
+        ]
+        launchApp(with: configuration)
+        openQuickStartPicker()
+        startQuickStartExerciseFromDetail(search: "Bench Press", exerciseID: Fixture.benchPressID)
+        for control in ["+2.5", "+1"] {
+            XCTAssertTrue(scrollToWorkoutControl(control), "\(control) should be reachable")
+            app.buttons[control].firstMatch.auditTap()
+        }
+        let completeSet = app.buttons[AXID.workoutSessionCompleteSet].firstMatch
+        XCTAssertTrue(scrollToWorkoutControl(AXID.workoutSessionCompleteSet))
+        completeSet.auditTap()
+        XCTAssertTrue(app.buttons["workout-session-add-rest"].firstMatch.waitForExistence(timeout: 8),
+                      "Completing the first set should start a real rest interval")
+
+        XCUIDevice.shared.press(.home)
+        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        let top = springboard.coordinate(withNormalizedOffset: CGVector(dx: 0.08, dy: 0.01))
+        let bottom = springboard.coordinate(withNormalizedOffset: CGVector(dx: 0.08, dy: 0.72))
+        top.press(forDuration: 0.05, thenDragTo: bottom)
+
+        // A first Live Activity may require system permission; the extension uses
+        // SpringBoard's language rather than the app launch locale.
+        let allow = springboard.buttons.matching(
+            NSPredicate(format: "label IN %@", ["Allow", "허용", "許可"])
+        ).firstMatch
+        if allow.waitForExistence(timeout: 2) { allow.tap() }
+
+        let title = springboard.staticTexts.matching(
+            NSPredicate(format: "label CONTAINS %@", "Bench Press")
+        ).firstMatch
+        XCTAssertTrue(title.waitForExistence(timeout: 12), "The real Bench Press rest activity should appear")
+        let activity = springboard.otherElements.containing(.staticText, identifier: "Bench Press")
+            .allElementsBoundByIndex
+            .filter { $0.frame.width > 250 && $0.frame.height > 70 && $0.frame.height < 220 }
+            .min { $0.frame.width * $0.frame.height < $1.frame.width * $1.frame.height }
+        let container = try XCTUnwrap(activity, "SpringBoard should expose the rest activity container")
+        let hierarchy = container.debugDescription
+        let screenshot = XCTAttachment(screenshot: container.screenshot())
+        screenshot.name = "Rest Live Activity notification center"
+        screenshot.lifetime = .keepAlways
+        add(screenshot)
+        let hierarchyAttachment = XCTAttachment(string: hierarchy)
+        hierarchyAttachment.name = "Rest Live Activity system hierarchy"
+        hierarchyAttachment.lifetime = .keepAlways
+        add(hierarchyAttachment)
+
+        XCTAssertTrue(hierarchy.contains("Bench Press"))
+        XCTAssertTrue(["Rest Timer", "휴식 타이머", "休憩タイマー"].contains(where: hierarchy.contains),
+                      "The real activity should identify the rest timer")
+        XCTAssertTrue(["Set 1", "세트 1", "セット 1"].contains(where: hierarchy.contains),
+                      "The real activity should show the completed set")
+
+        let countdown = container.staticTexts.matching(
+            NSPredicate(format: "label MATCHES %@", ".*[0-9]+:[0-9]{2}.*")
+        ).firstMatch
+        XCTAssertTrue(countdown.waitForExistence(timeout: 3), "The real countdown should be visible")
+        let initialCountdown = countdown.label
+        let changed = XCTNSPredicateExpectation(
+            predicate: NSPredicate { _, _ in countdown.exists && countdown.label != initialCountdown },
+            object: nil
+        )
+        let didUpdateAccessibilityLabel = XCTWaiter.wait(for: [changed], timeout: 3) == .completed
+        print("Rest Live Activity countdown AX label updated within three seconds: \(didUpdateAccessibilityLabel)")
+    }
+
     func testVisualAuditNewExerciseAtDefaultTextSize() throws {
         guard VisualAudit.isEnabled else { throw XCTSkip("Opt-in visual audit only") }
         var configuration = launchConfiguration

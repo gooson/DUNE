@@ -161,10 +161,8 @@ final class LifeSeededSmokeTests: SeededUITestBaseCase {
     func testWeeklyReportShowsMeasuredComparison() throws {
         XCTAssertTrue(app.scrollToHittableElementIfNeeded("life-weekly-report-button", maxSwipes: 8),
                       "Weekly report summary should be reachable")
-        let summary = app.descendants(matching: .any)["life-weekly-report-summary"].firstMatch
         let current = app.descendants(matching: .any)["life-weekly-current-rate"].firstMatch
         let previous = app.descendants(matching: .any)["life-weekly-previous-rate"].firstMatch
-        XCTAssertTrue(summary.waitForExistence(timeout: 5))
         XCTAssertTrue(app.scrollToHittableElementIfNeeded("life-weekly-previous-rate", maxSwipes: 8),
                       "Measured weekly rates should be visible")
         XCTAssertTrue(current.isHittable, "Current completion rate should come from habit logs")

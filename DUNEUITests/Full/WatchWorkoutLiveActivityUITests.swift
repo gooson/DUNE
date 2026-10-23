@@ -20,6 +20,7 @@ final class WatchWorkoutLiveActivityUITests: UITestBaseCase {
         var configuration = launchConfiguration
         configuration.additionalArguments += [
             "--ui-watch-live-activity", phase,
+            "--ui-test-theme", "desertWarm",
             "-AppleLanguages", "(en)", "-AppleLocale", "en_US"
         ]
         launchApp(with: configuration)
