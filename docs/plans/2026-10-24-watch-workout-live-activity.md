@@ -1,7 +1,7 @@
 ---
 topic: Watch workout Live Activity
 date: 2026-10-24
-status: approved
+status: implemented
 confidence: high
 related_solutions:
   - architecture/2026-09-20-iphone-duo-adaptive-experience.md
@@ -43,7 +43,9 @@ Watch `HKWorkoutSession.startMirroringToCompanionDevice()`와 iPhone의 앱 초�
 |------|------|
 | Shared/WatchWorkoutSnapshot.swift | 검증 가능한 공통 snapshot 계약 |
 | Shared/WatchWorkoutAttributes.swift | 별도 ActivityKit attributes |
+| DUNE/Domain/Models/WorkoutMirrorRetryPolicy.swift | 장애별 단일 재시도·재연결 정책 |
 | DUNEWatch/Managers/WorkoutManager.swift | 미러링과 snapshot 송신·복구·정리 |
+| DUNEWatch/WatchConnectivityManager.swift | 실제 reachability 복구 이벤트 연결 |
 | DUNE/Presentation/Exercise/WatchWorkoutMirrorManager.swift | 조기 handler 등록, 수신·상태 lifecycle |
 | DUNE/Presentation/Exercise/WatchWorkoutActivity.swift | 직렬 ActivityKit 시작·갱신·종료 |
 | DUNE/App/DUNEApp.swift | 앱 초기화 시 handler 설치 |
