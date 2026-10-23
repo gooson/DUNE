@@ -83,7 +83,7 @@ final class SystemWidgetDesignTests: UITestBaseCase {
             "-AppleLanguages", "(en)", "-AppleLocale", "en_US"
         ]
         launchApp(with: configuration)
-    
+
         // Let each production view model write its real seeded score to the App Group.
         for (tab, ringID) in [
             ("Today", "dashboard-hero-ring"),
@@ -94,10 +94,10 @@ final class SystemWidgetDesignTests: UITestBaseCase {
             XCTAssertTrue(app.descendants(matching: .any)[ringID].firstMatch.waitForExistence(timeout: 12),
                           "\(tab) should calculate its score before opening WidgetKit")
         }
-    
+
         navigateToDashboard()
         addScreenshotAttachment(named: "Desert Today after latest integration")
-    
+
         XCUIDevice.shared.press(.home)
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
         func attachHierarchy(_ stage: String) {
@@ -118,7 +118,7 @@ final class SystemWidgetDesignTests: UITestBaseCase {
             let end = springboard.coordinate(withNormalizedOffset: CGVector(dx: endX, dy: 0.48))
             start.press(forDuration: 0.05, thenDragTo: end)
         }
-    
+
         let icon = springboard.descendants(matching: .icon)
             .matching(NSPredicate(format: "label == %@", "DUNE")).firstMatch
         for _ in 0..<4 where !icon.isHittable { springboard.swipeLeft() }
@@ -138,7 +138,7 @@ final class SystemWidgetDesignTests: UITestBaseCase {
             return
         }
         addWidget.tap()
-    
+
         // Search only the system gallery. DUNE Today is the StaticConfiguration
         // display name; DUNE is the app/category name. Do not select the separate
         // configurable Single Metric widget.
@@ -147,20 +147,20 @@ final class SystemWidgetDesignTests: UITestBaseCase {
         if let category = springboard.cells.matching(NSPredicate(format: "label == %@", "DUNE"))
             .allElementsBoundByIndex.first(where: { $0.isHittable }) ?? visible(["DUNE"]) {
             category.tap()
-        } else if let today = visible(["DUNE Today"]) {
+        } else if let today = visible(["DUNE Today", "오늘의 DUNE", "今日のDUNE"]) {
             today.tap()
         } else {
             attachHierarchy("widget-gallery-search")
             XCTFail("DUNE widget gallery entry unavailable")
             return
         }
-        guard visible(["DUNE Today"]) != nil ||
+        guard visible(["DUNE Today", "오늘의 DUNE", "今日のDUNE"]) != nil ||
               springboard.descendants(matching: .any)["widget-small-root"].firstMatch.exists else {
             attachHierarchy("dune-gallery")
             XCTFail("DUNE Today gallery not identifiable; inspect system hierarchy")
             return
         }
-    
+
         // Gallery uses the provider's standard placeholder, not user score data.
         // Home installation below uses the real production timeline.
         // WidgetKit may expose extension AX IDs in the gallery. Capture only a
@@ -179,7 +179,7 @@ final class SystemWidgetDesignTests: UITestBaseCase {
             add(shot)
             attachHierarchy("gallery-\(family)")
         }
-    
+
         // Return to Small and install one actual Home widget if the host permits it.
         let small = springboard.descendants(matching: .any)["widget-small-root"].firstMatch
         for _ in 0..<3 where !small.isHittable { swipeGallery("right") }

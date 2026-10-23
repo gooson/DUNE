@@ -71,7 +71,7 @@ private struct WorkoutRestActivityContent: View {
                 .lineLimit(1)
                 .privacySensitive()
             HStack(alignment: .lastTextBaseline) {
-                Text("Set \(context.attributes.setNumber)")
+                Text("Set \(context.attributes.setNumber.formatted())")
                     .font(.caption)
                 Spacer()
                 restCountdown(context.state)
@@ -87,7 +87,7 @@ private struct WorkoutRestActivityContent: View {
                 .font(.headline)
                 .lineLimit(1)
                 .privacySensitive()
-            Text("Set \(context.attributes.setNumber)")
+            Text("Set \(context.attributes.setNumber.formatted())")
                 .font(.caption)
             HStack(spacing: 4) {
                 Image(systemName: "timer")

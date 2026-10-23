@@ -1311,10 +1311,10 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         if allow.waitForExistence(timeout: 2) { allow.tap() }
 
         let title = springboard.staticTexts.matching(
-            NSPredicate(format: "label CONTAINS %@", "Bench Press")
+            NSPredicate(format: "label IN %@", ["바벨 벤치프레스", "Barbell Bench Press"])
         ).firstMatch
         XCTAssertTrue(title.waitForExistence(timeout: 12), "The real Bench Press rest activity should appear")
-        let activity = springboard.otherElements.containing(.staticText, identifier: "Bench Press")
+        let activity = springboard.otherElements.containing(.staticText, identifier: title.label)
             .allElementsBoundByIndex
             .filter { $0.frame.width > 250 && $0.frame.height > 70 && $0.frame.height < 220 }
             .min { $0.frame.width * $0.frame.height < $1.frame.width * $1.frame.height }
@@ -1329,19 +1329,19 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         hierarchyAttachment.lifetime = .keepAlways
         add(hierarchyAttachment)
 
-        XCTAssertTrue(hierarchy.contains("Bench Press"))
+        XCTAssertTrue(hierarchy.contains(title.label))
         XCTAssertTrue(["Rest Timer", "휴식 타이머", "休憩タイマー"].contains(where: hierarchy.contains),
                       "The real activity should identify the rest timer")
         XCTAssertTrue(["Set 1", "세트 1", "セット 1"].contains(where: hierarchy.contains),
                       "The real activity should show the completed set")
 
         let countdown = container.staticTexts.matching(
-            NSPredicate(format: "label MATCHES %@", ".*[0-9]+:[0-9]{2}.*")
+            NSPredicate(format: "label MATCHES %@ OR value MATCHES %@", ".*[0-9]+:[0-9]{2}.*", ".*[0-9]+:[0-9]{2}.*")
         ).firstMatch
         XCTAssertTrue(countdown.waitForExistence(timeout: 3), "The real countdown should be visible")
-        let initialCountdown = countdown.label
+        let initialCountdown = countdown.label + String(describing: countdown.value)
         let changed = XCTNSPredicateExpectation(
-            predicate: NSPredicate { _, _ in countdown.exists && countdown.label != initialCountdown },
+            predicate: NSPredicate { _, _ in countdown.exists && countdown.label + String(describing: countdown.value) != initialCountdown },
             object: nil
         )
         let didUpdateAccessibilityLabel = XCTWaiter.wait(for: [changed], timeout: 3) == .completed
