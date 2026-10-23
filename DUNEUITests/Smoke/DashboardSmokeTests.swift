@@ -93,7 +93,9 @@ final class DashboardSmokeTests: UITestBaseCase {
         let moreOptions = app.buttons[AXID.notificationsMoreOptionsButton].firstMatch
         XCTAssertTrue(moreOptions.waitForExistence(timeout: 5), "More Options should exist in the notification hub")
         moreOptions.tap()
-        XCTAssertTrue(app.buttons[AXID.notificationsDeleteAllButton].waitForExistence(timeout: 5),
+        XCTAssertTrue(app.buttons.matching(NSPredicate(format: "identifier == %@ OR label IN %@",
+                                                      AXID.notificationsDeleteAllButton, ["Delete All", "전체 삭제", "すべて削除"]))
+            .firstMatch.waitForExistence(timeout: 5),
                       "Delete All should appear in More Options")
 
         let settingsButton = app.descendants(matching: .any)[AXID.notificationsOpenSettingsButton].firstMatch
