@@ -408,6 +408,7 @@ struct NotificationHubView: View {
                 showDeleteAllConfirmation = true
             }
             .disabled(items.isEmpty)
+            .accessibilityIdentifier("notifications-delete-all-button")
         } label: {
             Image(systemName: "ellipsis")
                 .frame(minWidth: 44, minHeight: 44)

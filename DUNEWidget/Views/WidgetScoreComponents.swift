@@ -220,7 +220,7 @@ struct WidgetMetricRowView: View {
                     if metric.hasScore {
                         HStack(spacing: 3) {
                             Image(systemName: metric.icon)
-                        .foregroundStyle(metric.tintColor)
+                                .foregroundStyle(metric.tintColor)
                                 .font(.system(size: 10, weight: .semibold))
                             Text(metric.statusLabel)
                                 .lineLimit(1)

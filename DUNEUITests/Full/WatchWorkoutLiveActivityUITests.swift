@@ -168,16 +168,21 @@ final class SystemWidgetDesignTests: UITestBaseCase {
                      "medium": ["Medium", "중간", "中"],
                      "large": ["Large", "크게", "大"]]
         func widget(_ family: String, onHome: Bool = false) -> XCUIElement? {
-            springboard.descendants(matching: .any)
-                .matching(NSPredicate(format: "label CONTAINS %@", "DUNE"))
-                .allElementsBoundByIndex.first { element in
-                    let frame = element.frame
-                    guard frame.width > 140, frame.height > 140,
-                          titles.contains(where: element.label.contains), element.isHittable else { return false }
-                    let value = (element.value as? String) ?? ""
-                    return (sizes[family] ?? []).contains(where: value.contains)
-                        || (onHome && abs(frame.width - frame.height) < 5)
+            let title = NSPredicate(format: "label CONTAINS %@ OR label CONTAINS %@ OR label CONTAINS %@",
+                                    titles[0], titles[1], titles[2])
+            let values = sizes[family] ?? []
+            let size = NSPredicate(format: "value CONTAINS[c] %@ OR value CONTAINS[c] %@ OR value CONTAINS[c] %@",
+                                   values[0], values[1], values[2])
+            let query = springboard.descendants(matching: .any)
+                .matching(NSCompoundPredicate(andPredicateWithSubpredicates: [title, size])).firstMatch
+            if query.exists && query.isHittable { return query }
+            if onHome {
+                let home = springboard.descendants(matching: .any).matching(title).firstMatch
+                if home.exists && home.isHittable && home.frame.width > 140 && home.frame.height > 140 {
+                    return home
                 }
+            }
+            return nil
         }
         // Gallery snapshots use the provider's standard placeholder. The Home
         // installation uses the production timeline written by the seeded app.

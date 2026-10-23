@@ -61,7 +61,6 @@ struct LifeView: View {
                     HabitListQueryView(
                         viewModel: viewModel,
                         refreshSignal: refreshSignal + localRefreshSignal,
-                        onOpenTemplates: { isShowingTemplateSheet = true },
                         onOpenChecklist: {
                             withAnimation(DS.Animation.standard) {
                                 proxy.scrollTo(LifeScrollAnchor.checklist, anchor: .top)
@@ -210,7 +209,6 @@ private struct HabitListQueryView: View {
 
     @Bindable var viewModel: LifeViewModel
     let refreshSignal: Int
-    let onOpenTemplates: () -> Void
     let onOpenChecklist: () -> Void
 
     @Environment(\.modelContext) private var modelContext

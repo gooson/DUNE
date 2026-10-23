@@ -79,7 +79,7 @@ struct NotificationActivityDestination: Identifiable, Hashable {
 }
 
 /// Activity tab — Hero-first layout.
-/// Layout: Hero → Log Workout → Muscle Map → Weekly Stats → Search+Suggestion+Templates → Volume → Workouts → PRs → Consistency → Frequency.
+/// Layout: Hero → Muscle Map → Weekly Stats → Search+Suggestion+Templates → Volume → Workouts → PRs → Consistency → Frequency.
 struct ActivityView: View {
     private struct ExerciseStartConfiguration: Identifiable {
         let id = UUID()

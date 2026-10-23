@@ -93,7 +93,7 @@ final class DashboardSmokeTests: UITestBaseCase {
         let moreOptions = app.buttons[AXID.notificationsMoreOptionsButton].firstMatch
         XCTAssertTrue(moreOptions.waitForExistence(timeout: 5), "More Options should exist in the notification hub")
         moreOptions.tap()
-        XCTAssertTrue(app.buttons["Delete All"].waitForExistence(timeout: 5),
+        XCTAssertTrue(app.buttons[AXID.notificationsDeleteAllButton].waitForExistence(timeout: 5),
                       "Delete All should appear in More Options")
 
         let settingsButton = app.descendants(matching: .any)[AXID.notificationsOpenSettingsButton].firstMatch
@@ -268,6 +268,9 @@ final class TodayDesignMapCaptureTests: UITestBaseCase {
                       "Seven-day sleep bars should be reachable with seeded daily sleep history")
         let chart = app.descendants(matching: .any)["dashboard-recovery-sleep-chart"].firstMatch
         XCTAssertTrue(chart.isHittable)
+        let readableViewport = app.windows.firstMatch.frame.insetBy(dx: 0, dy: 140)
+        for _ in 0..<4 where !readableViewport.contains(chart.frame) { app.swipeUp() }
+        XCTAssertTrue(readableViewport.contains(chart.frame), "The full chart should be above the tab bar")
         XCTAssertTrue(app.descendants(matching: .any)["dashboard-recovery-sleep-card"].firstMatch.exists,
                       "The history chart should remain inside Recovery & Sleep")
         addScreenshotAttachment(named: "Today Recovery Sleep seven day chart")
