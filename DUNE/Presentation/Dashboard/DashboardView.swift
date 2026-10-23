@@ -262,8 +262,7 @@ struct DashboardView: View {
         }
         .englishNavigationTitle("Today")
         .toolbar {
-            notificationsToolbarItem
-            settingsToolbarItem
+            dashboardToolbarItem
         }
         .navigationDestination(isPresented: $showSettings) {
             SettingsView(
@@ -626,31 +625,28 @@ struct DashboardView: View {
     }
 
     @ToolbarContentBuilder
-    private var notificationsToolbarItem: some ToolbarContent {
+    private var dashboardToolbarItem: some ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {
-            Button {
-                onOpenNotifications()
-            } label: {
-                notificationBellIcon
-            }
-            .accessibilityLabel("Notifications")
-            .accessibilityValue(combinedUnreadCount > 0
-                ? Text("\(combinedUnreadCount) unread notifications")
-                : Text("Inbox is all caught up"))
-            .accessibilityIdentifier("dashboard-toolbar-notifications")
-        }
-    }
+            HStack(spacing: 12) {
+                Button {
+                    onOpenNotifications()
+                } label: {
+                    notificationBellIcon
+                }
+                .accessibilityLabel("Notifications")
+                .accessibilityValue(combinedUnreadCount > 0
+                    ? Text("\(combinedUnreadCount) unread notifications")
+                    : Text("Inbox is all caught up"))
+                .accessibilityIdentifier("dashboard-toolbar-notifications")
 
-    @ToolbarContentBuilder
-    private var settingsToolbarItem: some ToolbarContent {
-        ToolbarItem(placement: .topBarTrailing) {
-            Button {
-                showSettings = true
-            } label: {
-                Image(systemName: "gearshape")
+                Button {
+                    showSettings = true
+                } label: {
+                    Image(systemName: "gearshape")
+                }
+                .accessibilityLabel("Settings")
+                .accessibilityIdentifier("dashboard-toolbar-settings")
             }
-            .accessibilityLabel("Settings")
-            .accessibilityIdentifier("dashboard-toolbar-settings")
         }
     }
 
