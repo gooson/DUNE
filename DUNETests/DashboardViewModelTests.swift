@@ -399,6 +399,155 @@ struct DashboardViewModelTests {
         #expect(vm.shouldShowDailyDigest)
     }
 
+    // MARK: - Skeleton State
+
+    private func makeSkeletonViewModel(
+        sharedHealthDataService: SharedHealthDataService? = nil
+    ) -> DashboardViewModel {
+        DashboardViewModel(
+            hrvService: MockHRVService(),
+            sleepService: MockSleepService(),
+            workoutService: MockWorkoutService(),
+            stepsService: MockStepsService(),
+            bodyService: MockBodyService(),
+            sharedHealthDataService: sharedHealthDataService,
+            weatherProvider: MockWeatherProvider(),
+            coachingMessageEnhancer: nil
+        )
+    }
+
+    @Test("First empty dashboard load shows skeleton only until its response completes")
+    func skeletonDuringFirstEmptyLoad() async {
+        let sharedService = SuspendingDashboardSharedHealthDataService(snapshot: makeEmptySharedSnapshot())
+        let vm = makeSkeletonViewModel(sharedHealthDataService: sharedService)
+
+        #expect(vm.shouldShowSkeleton(canLoadHealthKitData: true, hasFailedHealthKitAuthorization: false))
+
+        let loadTask = Task { await vm.loadData() }
+        await sharedService.waitUntilFetchStarts()
+
+        #expect(vm.isLoading)
+        #expect(vm.sortedMetrics.isEmpty)
+        #expect(vm.shouldShowSkeleton(canLoadHealthKitData: true, hasFailedHealthKitAuthorization: false))
+
+        await sharedService.resumeFetch()
+        _ = await loadTask.result
+
+        #expect(vm.isLoading == false)
+        #expect(vm.sortedMetrics.isEmpty)
+        #expect(vm.shouldShowSkeleton(canLoadHealthKitData: true, hasFailedHealthKitAuthorization: false) == false)
+    }
+
+    @Test("First populated dashboard load shows skeleton until metrics are applied")
+    func skeletonDuringFirstPopulatedLoad() async {
+        let sharedService = SuspendingDashboardSharedHealthDataService(
+            snapshot: makeDashboardSharedSnapshot(hrvValue: 54)
+        )
+        let vm = makeSkeletonViewModel(sharedHealthDataService: sharedService)
+
+        let loadTask = Task { await vm.loadData() }
+        await sharedService.waitUntilFetchStarts()
+
+        #expect(vm.isLoading)
+        #expect(vm.shouldShowSkeleton(canLoadHealthKitData: true, hasFailedHealthKitAuthorization: false))
+
+        await sharedService.resumeFetch()
+        _ = await loadTask.result
+
+        #expect(vm.sortedMetrics.contains { $0.category == .hrv })
+        #expect(vm.shouldShowSkeleton(canLoadHealthKitData: true, hasFailedHealthKitAuthorization: false) == false)
+    }
+
+    @Test(
+        "Pending HealthKit authorization keeps skeleton after a deferred load, unless authorization fails",
+        .enabled(if: HealthKitManager.shared.isAvailable)
+    )
+    func skeletonWhileAuthorizationPending() async {
+        let vm = makeSkeletonViewModel()
+
+        await vm.loadData(canLoadHealthKitData: false)
+
+        #expect(vm.isLoading == false)
+        #expect(vm.sortedMetrics.isEmpty)
+        #expect(vm.isMirroredReadOnlyMode == false)
+        #expect(vm.shouldShowSkeleton(canLoadHealthKitData: false, hasFailedHealthKitAuthorization: false))
+        #expect(vm.shouldShowSkeleton(canLoadHealthKitData: true, hasFailedHealthKitAuthorization: false))
+        #expect(vm.shouldShowSkeleton(canLoadHealthKitData: false, hasFailedHealthKitAuthorization: true) == false)
+    }
+
+    @Test("Cancelled first load remains uncompleted after its response returns")
+    func cancelledFirstLoadKeepsSkeleton() async {
+        let sharedService = SuspendingDashboardSharedHealthDataService(
+            snapshot: makeDashboardSharedSnapshot(hrvValue: 54)
+        )
+        let vm = makeSkeletonViewModel(sharedHealthDataService: sharedService)
+
+        let loadTask = Task { await vm.loadData() }
+        await sharedService.waitUntilFetchStarts()
+
+        loadTask.cancel()
+        await sharedService.resumeFetch()
+        _ = await loadTask.result
+
+        #expect(vm.isLoading == false)
+        #expect(vm.sortedMetrics.isEmpty)
+        #expect(vm.shouldShowSkeleton(canLoadHealthKitData: true, hasFailedHealthKitAuthorization: false))
+    }
+
+    @Test("An obsolete first response cannot end the first-load skeleton")
+    func skeletonUntilCurrentLoadCompletes() async {
+        let sharedService = SequencedDashboardSharedHealthDataService(
+            snapshots: [makeDashboardSharedSnapshot(hrvValue: 22), makeEmptySharedSnapshot()]
+        )
+        let vm = makeSkeletonViewModel(sharedHealthDataService: sharedService)
+
+        let firstLoad = Task { await vm.loadData() }
+        await sharedService.waitUntilFetchStarts(call: 0)
+        let currentLoad = Task { await vm.loadData() }
+        await sharedService.waitUntilFetchStarts(call: 1)
+
+        firstLoad.cancel()
+        await sharedService.resumeFetch(call: 0)
+        _ = await firstLoad.result
+
+        #expect(vm.isLoading)
+        #expect(vm.sortedMetrics.isEmpty)
+        #expect(vm.shouldShowSkeleton(canLoadHealthKitData: true, hasFailedHealthKitAuthorization: false))
+
+        await sharedService.resumeFetch(call: 1)
+        _ = await currentLoad.result
+
+        #expect(vm.isLoading == false)
+        #expect(vm.sortedMetrics.isEmpty)
+        #expect(vm.shouldShowSkeleton(canLoadHealthKitData: true, hasFailedHealthKitAuthorization: false) == false)
+    }
+
+    @Test("Refresh retains existing metrics without returning to skeleton")
+    func refreshRetainsMetricsWithoutSkeleton() async {
+        let sharedService = SequencedDashboardSharedHealthDataService(
+            snapshots: [makeDashboardSharedSnapshot(hrvValue: 54), makeEmptySharedSnapshot()]
+        )
+        let vm = makeSkeletonViewModel(sharedHealthDataService: sharedService)
+
+        let firstLoad = Task { await vm.loadData() }
+        await sharedService.waitUntilFetchStarts(call: 0)
+        await sharedService.resumeFetch(call: 0)
+        _ = await firstLoad.result
+
+        let loadedMetricCount = vm.sortedMetrics.count
+        #expect(loadedMetricCount > 0)
+
+        let refresh = Task { await vm.loadData() }
+        await sharedService.waitUntilFetchStarts(call: 1)
+
+        #expect(vm.isLoading)
+        #expect(vm.sortedMetrics.count == loadedMetricCount)
+        #expect(vm.shouldShowSkeleton(canLoadHealthKitData: true, hasFailedHealthKitAuthorization: false) == false)
+
+        await sharedService.resumeFetch(call: 1)
+        _ = await refresh.result
+    }
+
     // MARK: - HRV Fallback
 
     @Test("An eight-day HRV read limit remains visible with a ready condition score")

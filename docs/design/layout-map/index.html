@@ -105,6 +105,7 @@
     </div>
     <section class="tab-map today" id="today" aria-labelledby="today-title">
       <h2 id="today-title">T03 · Today</h2><p>지금 컨디션은 어떤가? · 상태 → 실제 추세 → 근거 → 컨디션 상세 → 현재 시간대 요약</p>
+      <p class="note">시작 상태: 건강 접근 준비와 첫 조회가 완료될 때까지 기존 대시보드 스켈레톤을 유지한다. 조회 성공 후 측정값이 없을 때만 빈 상태를 표시하고, 실패는 오류·권한 안내로 구분한다. 기존 측정값이 있는 새로고침에서는 콘텐츠를 유지한다. iPhone·iPad·Duo 접힘·펼침에 공통 적용한다.</p>
       <div class="preview"><div class="scene"><h3>Today</h3></div><div class="content">
         <div class="hero"><div class="summary"><div class="ring">상태<br><small>CONDITION</small></div><div class="summary-text"><b>현재 컨디션</b><p>몸의 상태를 설명하는 짧은 문장</p></div></div><div class="trend"><div class="trend-title"><span>컨디션 변화</span><span>24시간</span></div><svg viewBox="0 0 300 72" role="img" aria-label="실제 시간별 값이 있을 때만 그리는 추세 자리"><path d="M0 54H300M0 32H300" stroke="#c6bdb2" stroke-dasharray="3 5"/><path d="M0 53 L60 47 L120 44 L180 34 L240 29 L300 20" fill="none" stroke="#856b55" stroke-width="3"/></svg><div class="axis"><span>이전</span><span>현재</span></div></div><div class="evidence"><span>HRV · 기준선 대비</span><span>RHR · 기준선 대비</span></div><span class="detail">컨디션 상세 ›</span></div>
         <div class="secondary"><b>추세 데이터 상태</b><p>24시간 표본이 부족하면 히어로 안에 실제 7일 추세를 표시한다. 일별 표본도 부족하면 수집 상태를 짧게 설명한다.</p></div><div class="secondary"><b>현재 시간대 요약</b><p>Briefing·Digest·Insight 등 관련 요약은 추세 다음에 이어진다.</p></div>

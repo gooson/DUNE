@@ -28,5 +28,7 @@ struct DashboardSkeletonView: View {
             }
         }
         .redacted(reason: .placeholder)
+        .accessibilityElement(children: .ignore)
+        .accessibilityIdentifier("dashboard-loading-skeleton")
     }
 }
