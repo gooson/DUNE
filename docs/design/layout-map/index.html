@@ -54,7 +54,8 @@
     .phone { --preview-width: 402px; }
     .fold { --preview-width: 466px; }
     .tablet { --preview-width: 1032px; }
-    .open { --preview-width: 669px; }
+    .open { --preview-width: 951px; }
+    .open .preview { aspect-ratio: 951 / 669; overflow-y: auto; }
     @container (min-width: 650px) {
       .content { max-width: 760px; margin: auto; padding: 24px; }
       .summary { grid-template-columns: 124px minmax(0, 1fr); }
@@ -78,6 +79,11 @@
     <p>화면의 정보 순서와 반응형 배치를 고정하는 구현 기준. 기기 폭은 이번 캡처 기기의 논리 폭이며, 아래 선과 값은 배치 설명용으로 실제 건강 데이터나 앱 캡처가 아니다.</p>
     <nav class="links" aria-label="관련 맵">
       <a href="README.md">화면별 맵 목록·유지 방법</a>
+      <a href="../theme-map/themes/dune-final-four-tab.html">DESERT HORIZON 4탭 상세 시안</a>
+      <a href="notification-inbox-proposal.md">Today 알림함·새로운 소식 배치</a>
+      <a href="exercise-mix-detail-proposal.md">Activity 운동 구성 상세 배치</a>
+      <a href="record-entry-navigation.md">기록 진입 상단 내비게이션 배치</a>
+      <a href="widget-live-activity-proposal.md">위젯·휴식 라이브 액티비티 배치</a>
       <a href="watch-home-scroll.html">Watch 홈 스크롤 기준</a>
       <a href="watch-cardio-session.html">Watch 유산소 세션 기준</a>
       <a href="../theme-map/index.html">8개 테마·장면 기준</a>
@@ -91,7 +97,7 @@
     <strong>배치 보기</strong>
     <button data-mode="phone" aria-pressed="true">iPhone · 402pt</button>
     <button data-mode="fold" aria-pressed="false">Duo 접힘 · 466pt</button>
-    <button data-mode="open" aria-pressed="false">Duo 펼침 · 669pt</button>
+    <button data-mode="open" aria-pressed="false">Duo 펼침 · 가로 951×669pt</button>
     <button data-mode="tablet" aria-pressed="false">iPad · 1032pt</button>
     <button id="large-text" aria-pressed="false">큰 글씨</button>
   </div>
@@ -101,6 +107,7 @@
       <article><b>② 변화</b>실제 표본과 기간·축을 보여 준다. 데이터가 부족하면 설명으로 바꾼다.</article>
       <article><b>③ 행동</b>Today 히어로는 컨디션 상세로 이어지는 하나의 링크다. Activity의 운동 기록은 같은 탭의 별도 행동으로 둔다.</article>
       <article><b>④ 공통 히어로</b>네 탭 모두 Today와 같은 124pt 링을 요약 왼쪽에 둔다. Today·Activity·Wellness는 실제 점수, Life는 오늘 완료 수/대상 수를 표시한다. 큰 글씨에서는 링 위·설명 아래로 쌓는다.</article>
+      <article><b>⑤ 탭 아이콘</b>Today는 심장·기록지, Activity는 불꽃, Wellness는 잎, Life는 체크리스트다. 접힘·iPhone·iPad는 하단, Duo 펼침 가로는 우측 탭 레일에 둔다.</article>
     </div>
     <section class="tab-map today" id="today" aria-labelledby="today-title">
       <h2 id="today-title">T03 · Today</h2><p>지금 컨디션은 어떤가? · 상태 → 실제 추세 → 근거 → 컨디션 상세 → 현재 시간대 요약</p>
@@ -113,7 +120,9 @@
       <h2 id="activity-title">A01 · Activity</h2><p>오늘 운동해도 될까? · 준비도·설명·운동 기록 → 근육 회복 → 주간 통계·최근 운동</p>
       <div class="preview"><div class="scene"><h3>Activity</h3></div><div class="content">
         <div class="hero"><div class="trend-title"><span>활동</span></div><div class="summary"><div class="ring">준비도<br><small>READINESS</small></div><div class="summary-text"><b>운동 가능 상태</b><p>HRV·수면·회복에 근거한 짧은 문장</p></div></div><span class="detail">운동 기록 →</span></div>
-        <div class="secondary"><b>근육 회복 지도</b><p>운동 행동 뒤에 놓는다. 주간 통계·최근 운동은 이어지는 아래 섹션.</p></div>
+        <div class="secondary"><b>근육 지도와 이번 주 통계</b><p>운동 행동 뒤에 앞·뒤 전신 그림, 회복/볼륨 선택과 모드별 범례를 둔다. 이어서 볼륨·칼로리·운동 시간·활동일 4개 통계 카드를 2×2로 놓는다. 추천 운동은 검색·환경과 장비·부위별 운동·루틴·템플릿·AI 운동 만들기 순서로 잇는다.</p></div>
+        <div class="secondary"><b>주간 보고서</b><p>운동 횟수·활동일·볼륨·기간 대비 변화 뒤에 주요 근육군, 요약 문장, 하이라이트를 놓는다. 기록이 없으면 안내 카드로 바꾼다.</p></div>
+        <div class="secondary"><b>개인 기록</b><p>근력·유산소 최고 기록을 날짜순 최대 8개까지 2열 카드로 배치한다. 레벨·배지·포인트, 종류·값·날짜·출처와 가능한 경우 작은 추세를 함께 표시한다.</p></div>
       </div></div><p class="note">준비도 없음: 점수 대신 수집 조건을 알리고 운동 기록은 계속 사용할 수 있다.</p>
     </section>
     <section class="tab-map wellness" id="wellness" aria-labelledby="wellness-title">
