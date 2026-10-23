@@ -159,6 +159,10 @@ enum NotificationHubMetricResolver {
 
 /// Latest-first notification inbox accessed from the Today tab toolbar.
 struct NotificationHubView: View {
+    enum Filter: Hashable {
+        case all, health, news
+    }
+
     let sharedHealthDataService: SharedHealthDataService?
     let canLoadHealthKitData: Bool
     let hasFailedHealthKitAuthorization: Bool
@@ -167,6 +171,8 @@ struct NotificationHubView: View {
 
     @State private var items: [NotificationInboxItem] = []
     @State private var unreadCount = 0
+    @State private var release: WhatsNewInboxRelease?
+    @State private var filter: Filter
     @State private var destination: HubDestination?
     @State private var showDeleteAllConfirmation = false
     @State private var animatedIDs: Set<String> = []
@@ -176,19 +182,22 @@ struct NotificationHubView: View {
     @Environment(\.appTheme) private var theme
     @Environment(\.colorScheme) private var colorScheme
     private let inboxManager = NotificationInboxManager.shared
+    private let whatsNewStore = WhatsNewStore.shared
 
     init(
         sharedHealthDataService: SharedHealthDataService? = nil,
         canLoadHealthKitData: Bool = true,
         hasFailedHealthKitAuthorization: Bool = false,
         requestedItemID: String? = nil,
-        navigationRequestID: Int = 0
+        navigationRequestID: Int = 0,
+        initialFilter: Filter = .all
     ) {
         self.sharedHealthDataService = sharedHealthDataService
         self.canLoadHealthKitData = canLoadHealthKitData
         self.hasFailedHealthKitAuthorization = hasFailedHealthKitAuthorization
         self.requestedItemID = requestedItemID
         self.navigationRequestID = navigationRequestID
+        _filter = State(initialValue: initialFilter)
     }
 
     private enum HubDestination: Hashable, Identifiable {
@@ -200,6 +209,7 @@ struct NotificationHubView: View {
         case postureAssessment(itemID: String)
         case dailyDigest(itemID: String)
         case message(itemID: String, title: String, body: String)
+        case whatsNew(version: String)
 
         var id: String {
             switch self {
@@ -220,6 +230,8 @@ struct NotificationHubView: View {
                 return "daily-digest-\(itemID)"
             case .message(let itemID, _, _):
                 return "message-\(itemID)"
+            case .whatsNew(let version):
+                return "whats-new-\(version)"
             }
         }
     }
@@ -227,11 +239,13 @@ struct NotificationHubView: View {
     var body: some View {
         List {
             summarySection
+            filterSection
 
-            if items.isEmpty {
+            if visibleHealthItems.isEmpty && !showsRelease {
                 emptySection
             } else {
-                inboxSection
+                if showsRelease { releaseSection }
+                if !visibleHealthItems.isEmpty { inboxSection }
             }
         }
         .accessibilityIdentifier("notification-hub-screen")
@@ -240,6 +254,7 @@ struct NotificationHubView: View {
         .background { TabWaveBackground() }
         .navigationBarTitleDisplayMode(.inline)
         .englishNavigationTitle("Notifications")
+        .toolbar(.visible, for: .tabBar)
         .confirmationDialog("Delete all notifications?", isPresented: $showDeleteAllConfirmation, titleVisibility: .visible) {
             Button("Delete All", role: .destructive) {
                 inboxManager.deleteAll()
@@ -253,7 +268,11 @@ struct NotificationHubView: View {
             case .metric(let metric, _):
                 MetricDetailView(metric: metric)
             case .settings:
-                SettingsView()
+                SettingsView(
+                    sharedHealthDataService: sharedHealthDataService,
+                    canLoadHealthKitData: canLoadHealthKitData,
+                    hasFailedHealthKitAuthorization: hasFailedHealthKitAuthorization
+                )
             case .unavailable(let itemID):
                 NotificationDestinationUnavailableView(itemID: itemID)
             case .personalRecords:
@@ -270,6 +289,11 @@ struct NotificationHubView: View {
                 )
             case .message(_, let title, let body):
                 NotificationMessageDetailView(title: title, message: body)
+            case .whatsNew(let version):
+                WhatsNewView(
+                    releases: WhatsNewManager.shared.orderedReleases(preferredVersion: version),
+                    mode: .manual
+                )
             }
         }
         .task {
@@ -288,6 +312,21 @@ struct NotificationHubView: View {
         .onReceive(NotificationCenter.default.mainThreadPublisher(for: NotificationInboxManager.inboxDidChangeNotification)) { _ in
             reload()
         }
+        .onReceive(NotificationCenter.default.mainThreadPublisher(for: WhatsNewStore.didChangeNotification)) { _ in
+            reload()
+        }
+    }
+
+    private var combinedUnreadCount: Int {
+        unreadCount + (release?.isUnread == true ? 1 : 0)
+    }
+
+    private var visibleHealthItems: [NotificationInboxItem] {
+        filter == .news ? [] : items
+    }
+
+    private var showsRelease: Bool {
+        filter != .health && release != nil
     }
 
     private var summarySection: some View {
@@ -295,12 +334,12 @@ struct NotificationHubView: View {
             StandardCard {
                 VStack(alignment: .leading, spacing: DS.Spacing.md) {
                     HStack(spacing: DS.Spacing.sm) {
-                        Image(systemName: unreadCount > 0 ? "bell.badge.fill" : "bell")
+                        Image(systemName: combinedUnreadCount > 0 ? "bell.badge.fill" : "bell")
                             .font(.headline)
                             .foregroundStyle(.tint)
 
-                        if unreadCount > 0 {
-                            Text("\(unreadCount) unread notifications")
+                        if combinedUnreadCount > 0 {
+                            Text("\(combinedUnreadCount) unread notifications")
                                 .font(.subheadline.weight(.semibold))
                         } else {
                             Text("Inbox is all caught up")
@@ -325,20 +364,26 @@ struct NotificationHubView: View {
                     HStack(spacing: DS.Spacing.sm) {
                         Button {
                             inboxManager.markAllRead()
+                            if let release { whatsNewStore.markOpened(build: release.build) }
                         } label: {
                             Text("Read All")
                                 .foregroundStyle(theme.prominentButtonForegroundColor(for: colorScheme))
                         }
                         .buttonStyle(.borderedProminent)
-                        .disabled(unreadCount == 0)
+                        .disabled(combinedUnreadCount == 0)
                         .accessibilityIdentifier("notifications-read-all-button")
 
-                        Button("Delete All", role: .destructive) {
-                            showDeleteAllConfirmation = true
+                        Menu {
+                            Button("Delete All", role: .destructive) {
+                                showDeleteAllConfirmation = true
+                            }
+                            .disabled(items.isEmpty)
+                        } label: {
+                            Image(systemName: "ellipsis")
+                                .frame(minWidth: 44, minHeight: 44)
                         }
-                        .buttonStyle(.bordered)
-                        .disabled(items.isEmpty)
-                        .accessibilityIdentifier("notifications-delete-all-button")
+                        .accessibilityLabel("More Options")
+                        .accessibilityIdentifier("notifications-more-options-button")
                     }
                 }
             }
@@ -348,14 +393,69 @@ struct NotificationHubView: View {
         }
     }
 
+    private var filterSection: some View {
+        Section {
+            Picker("Notifications Filter", selection: $filter) {
+                Text("All").tag(Filter.all)
+                Text("Health").tag(Filter.health)
+                Text("News").tag(Filter.news)
+            }
+            .pickerStyle(.segmented)
+            .accessibilityIdentifier("notifications-filter")
+            .listRowSeparator(.hidden)
+            .listRowBackground(Color.clear)
+        }
+    }
+
+    private var releaseSection: some View {
+        Section {
+            if let release {
+                Button {
+                    whatsNewStore.markOpened(build: release.build)
+                    destination = .whatsNew(version: release.release.version)
+                } label: {
+                    InlineCard {
+                        HStack(alignment: .top, spacing: DS.Spacing.md) {
+                            Image(systemName: "sparkles")
+                                .foregroundStyle(.tint)
+                                .frame(width: 30, height: 30)
+                            VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                                HStack {
+                                    Text("What's New")
+                                        .font(.subheadline.weight(.semibold))
+                                    if release.isUnread {
+                                        Circle().fill(Color.accentColor).frame(width: 7, height: 7)
+                                    }
+                                    Spacer()
+                                    Text(verbatim: release.release.version)
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
+                                Text(release.release.intro)
+                                    .font(.footnote)
+                                    .foregroundStyle(.secondary)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                Label("Open Release", systemImage: "arrow.up.right")
+                                    .font(.caption2)
+                                    .foregroundStyle(.tertiary)
+                            }
+                        }
+                    }
+                }
+                .buttonStyle(.plain)
+                .accessibilityIdentifier("notifications-news-release")
+                .listRowSeparator(.hidden)
+                .listRowBackground(Color.clear)
+            }
+        }
+    }
+
     private var emptySection: some View {
         Section {
             EmptyStateView(
                 icon: "bell.slash",
-                title: "No Notifications",
-                message: "Notifications will appear here when they arrive.",
-                actionTitle: "Open Settings",
-                action: { destination = .settings }
+                title: emptyTitle,
+                message: emptyMessage
             )
             .accessibilityIdentifier("notifications-empty-state")
             .listRowSeparator(.hidden)
@@ -364,9 +464,25 @@ struct NotificationHubView: View {
         }
     }
 
+    private var emptyTitle: LocalizedStringKey {
+        switch filter {
+        case .all: "No News Yet"
+        case .health: "No Notifications"
+        case .news: "No App Updates"
+        }
+    }
+
+    private var emptyMessage: LocalizedStringKey {
+        switch filter {
+        case .all: "Updates and notifications will appear here when they arrive."
+        case .health: "Notifications will appear here when they arrive."
+        case .news: "App updates will appear here when available."
+        }
+    }
+
     private var inboxSection: some View {
         Section {
-            ForEach(Array(items.enumerated()), id: \.element.id) { index, item in
+            ForEach(Array(visibleHealthItems.enumerated()), id: \.element.id) { index, item in
                 Button {
                     handleTap(on: item)
                 } label: {
@@ -395,6 +511,7 @@ struct NotificationHubView: View {
     private func reload() {
         items = inboxManager.items()
         unreadCount = inboxManager.unreadCount()
+        release = WhatsNewInboxRelease.current()
     }
 
     private func handleTap(on item: NotificationInboxItem) {
