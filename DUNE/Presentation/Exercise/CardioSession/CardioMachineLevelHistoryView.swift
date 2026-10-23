@@ -7,17 +7,18 @@ struct CardioMachineLevelHistoryView: View {
 
     var body: some View {
         if !changes.isEmpty {
-            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+            LazyVStack(alignment: .leading, spacing: DS.Spacing.sm) {
                 Label("Level History", systemImage: "chart.xyaxis.line")
                     .font(.headline)
 
                 ForEach(changes.indices, id: \.self) { index in
                     let change = changes[index]
+                    let elapsed = change.formattedElapsed
                     let rowLayout = dynamicTypeSize.isAccessibilitySize
                         ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.xs))
                         : AnyLayout(HStackLayout(spacing: DS.Spacing.sm))
                     rowLayout {
-                        Text(change.formattedElapsed)
+                        Text(elapsed)
                             .monospacedDigit()
                             .foregroundStyle(DS.Color.textSecondary)
                         if !dynamicTypeSize.isAccessibilitySize {
@@ -32,7 +33,7 @@ struct CardioMachineLevelHistoryView: View {
                     .padding(.vertical, DS.Spacing.xs)
                     .accessibilityElement(children: .combine)
                     .accessibilityLabel(
-                        Text("Elapsed Time") + Text(verbatim: ": \(change.formattedElapsed), ")
+                        Text("Elapsed Time") + Text(verbatim: ": \(elapsed), ")
                         + Text("Level") + Text(verbatim: " \(change.level)")
                     )
                     .accessibilityIdentifier("cardio-level-history-row-\(index)")

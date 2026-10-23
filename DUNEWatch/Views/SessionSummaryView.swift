@@ -105,16 +105,17 @@ struct SessionSummaryView: View {
                 statsGrid
 
                 if workoutManager.isCardioMode, !workoutManager.machineLevelChanges.isEmpty {
-                    VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                    LazyVStack(alignment: .leading, spacing: DS.Spacing.xs) {
                         Text("Level History")
                             .font(DS.Typography.tileTitle)
                         ForEach(workoutManager.machineLevelChanges.indices, id: \.self) { index in
                             let change = workoutManager.machineLevelChanges[index]
+                            let elapsed = change.formattedElapsed
                             let rowLayout = dynamicTypeSize.isAccessibilitySize
                                 ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.xs))
                                 : AnyLayout(HStackLayout(spacing: DS.Spacing.xs))
                             rowLayout {
-                                Text(change.formattedElapsed)
+                                Text(elapsed)
                                     .monospacedDigit()
                                     .foregroundStyle(.secondary)
                                 if !dynamicTypeSize.isAccessibilitySize {
@@ -127,7 +128,7 @@ struct SessionSummaryView: View {
                             .font(DS.Typography.metricLabel)
                             .accessibilityElement(children: .combine)
                             .accessibilityLabel(
-                                Text("Elapsed Time") + Text(verbatim: ": \(change.formattedElapsed), ")
+                                Text("Elapsed Time") + Text(verbatim: ": \(elapsed), ")
                                 + Text("Level") + Text(verbatim: " \(change.level)")
                             )
                             .accessibilityIdentifier("watch-level-history-row-\(index)")

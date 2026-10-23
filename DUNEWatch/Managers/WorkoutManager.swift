@@ -381,6 +381,7 @@ final class WorkoutManager: NSObject {
 
         do {
             try await startHKSession(config: config, templateName: activityType.typeName)
+            clearMachineLevelRecoveryHistory()
             if let initialLevel {
                 setMachineLevel(initialLevel)
             }
@@ -566,6 +567,7 @@ final class WorkoutManager: NSObject {
         captureMachineLevelSegment(until: now)
         if let change = CardioMachineLevelChange(elapsedSeconds: activeElapsedTime(at: now), level: normalized) {
             machineLevelChanges.append(change)
+            appendMachineLevelRecoveryHistory(change)
         }
         currentMachineLevel = normalized
         maxMachineLevel = max(maxMachineLevel ?? normalized, normalized)
@@ -1033,7 +1035,9 @@ final class WorkoutManager: NSObject {
             currentMachineLevel: currentMachineLevel,
             averageMachineLevel: averageMachineLevel,
             maxMachineLevel: maxMachineLevel,
-            machineLevelChanges: machineLevelChanges,
+            // History is append-only on disk so the state snapshot stays small.
+            machineLevelChanges: nil,
+            machineLevelEventCount: machineLevelChanges.count,
             pausedDuration: pausedDuration,
             pauseStart: pauseStart,
             machineLevelWeightedSeconds: machineLevelWeightedSeconds,
@@ -1077,7 +1081,13 @@ final class WorkoutManager: NSObject {
         currentMachineLevel = state.currentMachineLevel
         averageMachineLevel = state.averageMachineLevel
         maxMachineLevel = state.maxMachineLevel
-        machineLevelChanges = state.machineLevelChanges ?? []
+        let diskChanges = loadMachineLevelRecoveryHistory(for: state.startDate)
+        machineLevelChanges = diskChanges ?? state.machineLevelChanges ?? []
+        if let diskChanges,
+           diskChanges.count > (state.machineLevelEventCount ?? 0),
+           let latestLevel = diskChanges.last?.level {
+            currentMachineLevel = latestLevel
+        }
         pausedDuration = state.pausedDuration ?? 0
         pauseStart = state.pauseStart
         isPaused = pauseStart != nil
@@ -1089,6 +1099,60 @@ final class WorkoutManager: NSObject {
 
     private func clearRecoveryState() {
         UserDefaults.standard.removeObject(forKey: Self.recoveryKey)
+        clearMachineLevelRecoveryHistory()
+    }
+
+    static var recoveryHistoryURL: URL {
+        URL.applicationSupportDirectory.appending(path: "machine-level-recovery.jsonl")
+    }
+
+    private func appendMachineLevelRecoveryHistory(_ change: CardioMachineLevelChange) {
+        guard let startDate else { return }
+        do {
+            let url = Self.recoveryHistoryURL
+            try FileManager.default.createDirectory(
+                at: url.deletingLastPathComponent(), withIntermediateDirectories: true
+            )
+            var line = try JSONEncoder().encode(MachineLevelRecoveryEntry(startDate: startDate, change: change))
+            line.append(0x0A)
+            if FileManager.default.fileExists(atPath: url.path) {
+                let handle = try FileHandle(forUpdating: url)
+                defer { try? handle.close() }
+                let end = try handle.seekToEnd()
+                if end > 0 {
+                    try handle.seek(toOffset: end - 1)
+                    if try handle.read(upToCount: 1) != Data([0x0A]) {
+                        let existing = try Data(contentsOf: url)
+                        let completeLength = existing.lastIndex(of: 0x0A).map { $0 + 1 } ?? 0
+                        try handle.truncate(atOffset: UInt64(completeLength))
+                    }
+                }
+                _ = try handle.seekToEnd()
+                try handle.write(contentsOf: line)
+            } else {
+                try line.write(to: url, options: .atomic)
+            }
+        } catch {
+            Self.logger.error("Could not persist machine level change: \(error.localizedDescription, privacy: .public)")
+        }
+    }
+
+    private func loadMachineLevelRecoveryHistory(for startDate: Date?) -> [CardioMachineLevelChange]? {
+        guard let startDate,
+              let data = try? Data(contentsOf: Self.recoveryHistoryURL) else { return nil }
+        let decoder = JSONDecoder()
+        let changes: [CardioMachineLevelChange] = data.split(separator: 0x0A).compactMap { line in
+            guard let entry = try? decoder.decode(MachineLevelRecoveryEntry.self, from: Data(line)),
+                  entry.startDate == startDate else { return nil }
+            return CardioMachineLevelChange(
+                elapsedSeconds: entry.change.elapsedSeconds, level: entry.change.level
+            )
+        }
+        return changes.isEmpty ? nil : changes
+    }
+
+    private func clearMachineLevelRecoveryHistory() {
+        try? FileManager.default.removeItem(at: Self.recoveryHistoryURL)
     }
 
     private override init() {
@@ -1722,11 +1786,17 @@ private struct WorkoutRecoveryState: Codable {
     let averageMachineLevel: Double?
     let maxMachineLevel: Int?
     let machineLevelChanges: [CardioMachineLevelChange]?
+    let machineLevelEventCount: Int?
     let pausedDuration: TimeInterval?
     let pauseStart: Date?
     let machineLevelWeightedSeconds: TimeInterval
     let machineLevelWeightedSum: Double
     let lastMachineLevelSampleDate: Date?
+}
+
+private struct MachineLevelRecoveryEntry: Codable {
+    let startDate: Date
+    let change: CardioMachineLevelChange
 }
 
 enum WorkoutStartupError: LocalizedError {

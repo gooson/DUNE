@@ -27,7 +27,7 @@ iPhone `CardioSessionViewModel`과 Watch `WorkoutManager`는 레벨별 경과 �
 
 `CardioMachineLevelChange`에 일시정지를 제외한 운동 경과 초와 새 레벨을 기록한다. 같은 레벨 입력은 이벤트로 추가하지 않는다. iPhone·Watch 모두 변경 시 이벤트를 추가하고, Watch는 복구 상태에도 목록을 저장한다.
 
-Watch 복구 상태에는 누적 일시정지 시간과 현재 일시정지 시작 시각도 함께 저장한다. 복구된 HealthKit 세션 상태와 맞춘 뒤 다음 변경 이벤트의 활성 경과 시간을 계산한다. 목록 행은 경과 시간과 레벨을 함께 읽도록 접근성 레이블을 제공하고, 큰 글씨에서는 세로로 배치한다.
+Watch 복구 상태에는 누적 일시정지 시간과 현재 일시정지 시작 시각도 함께 저장한다. 레벨 이벤트는 별도 JSON Lines 파일에 한 줄씩 추가해 64KB 복구 스냅샷 제한과 반복적인 전체 목록 인코딩을 피한다. 복구된 HealthKit 세션 상태와 맞춘 뒤 다음 변경 이벤트의 활성 경과 시간을 계산한다. 목록 행은 경과 시간과 레벨을 함께 읽도록 접근성 레이블을 제공하고, 큰 글씨에서는 세로로 배치한다.
 
 `ExerciseRecord`에는 optional JSON `Data`로 목록을 보관한다. 기존 V18 `ExerciseRecord`와 `WorkoutSet` 모양을 고정한 뒤 V19 스키마의 optional 필드로 이전한다. 새 기록은 완료 요약과 iPhone 운동 기록 상세에서 시간순으로 표시한다. 기존 기록에는 목록이 없으므로 변화 섹션을 숨긴다.
 
