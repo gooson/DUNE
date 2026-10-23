@@ -9,7 +9,7 @@ status: in-progress
 
 [4탭 레이아웃 맵](index.html)은 Today(T03), Activity(A01), Wellness(H01), Life(L01)의 정보 순서와 화면 폭·큰 글씨 전환을 시각적으로 정한 **구현 기준 시안**이다. 값과 그래프는 설명용이며 실제 건강 기록이나 앱 캡처가 아니다. 상세·설정·Watch 등 4탭 밖의 화면을 설계할 때는 이 디렉터리에 화면별 맵을 별도로 만들고 아래 목록 및 `index.html`에서 연결한다.
 
-[DESERT HORIZON 4탭 전체 배치 시안](../theme-map/themes/dune-final-four-tab.html)은 2026-10-22 첫 화면 UX와 Wellness 상세 목적지 분리 이후의 첫 카드부터 마지막 섹션까지 카드 구성·문구·행동을 제안한다. 밝음·어두움과 기기 폭·큰 글씨·기록 없음 전환을 제공한다. [판정 기준과 현재 앱 차이](desert-horizon-final.md)를 함께 보며, 시안을 실제 캡처나 구현 완료로 계산하지 않는다.
+[DESERT HORIZON 4탭 전체 배치 시안](../theme-map/themes/dune-final-four-tab.html)은 2026-10-22 첫 화면 UX와 Wellness 상세 목적지 분리 이후의 첫 카드부터 마지막 섹션까지 카드 구성·문구·행동을 제안한다. 밝음·어두움과 기기 폭·큰 글씨·기록 없음 전환을 제공한다. 알림함 통합, 상단 기록 진입, 운동 구성, 테마 표면은 현재 코드에 반영했으며 [구현 기준과 남은 검증](desert-horizon-final.md)에 상태를 기록한다. 시안과 2026-10-22 캡처는 이번 구현의 실제 캡처나 런타임 합격 증거가 아니다.
 
 [8개 테마 전체 디자인 개편 맵](../full-redesign-map/index.html)은 이 4탭 레이아웃을 모든 테마와 화면군에 적용하는 목표·구현 순서다. WATER LILIES의 신규 테마화도 그 맵에서 추적한다.
 

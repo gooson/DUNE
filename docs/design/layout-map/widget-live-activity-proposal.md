@@ -2,14 +2,14 @@
 tags: [design, layout, widget, live-activity, ios, watchos]
 date: 2026-10-24
 category: plan
-status: proposed
+status: implemented-pending-validation
 ---
 
 # DESERT HORIZON 위젯·휴식 라이브 액티비티 배치
 
 [크기·상태별 추가 시안](../theme-map/themes/dune-widget-live-activity.html) · [4탭 시안](../theme-map/themes/dune-final-four-tab.html) · [실제 화면맵](../phone-design-map/actual/index.html)
 
-이 문서는 `DUNEWidget/`와 `Shared/`의 현재 구현을 기준으로 한 **목표 배치**다. HTML은 코드에 있는 콘텐츠를 재구성한 디자인 시안이며 실제 위젯·라이브 액티비티 캡처가 아니다. 현재 휴식 라이브 액티비티의 캡처는 [증거 목록](../live-activity-captures/README.md)에 아직 대기 중으로 표시된다.
+이 문서는 `DUNEWidget/`와 `Shared/`에 반영한 **정보·표면 배치 계약**이다. HTML은 코드에 있는 콘텐츠를 재구성한 디자인 시안이며 실제 위젯·라이브 액티비티 캡처가 아니다. WidgetKit 크기별 화면과 휴식 라이브 액티비티의 시스템 호스트 캡처는 [증거 목록](../live-activity-captures/README.md)을 포함해 아직 대기 중이다.
 
 ## 화면 ID와 정보 순서
 
@@ -29,7 +29,7 @@ status: proposed
 
 - 값이 없는 점수는 `--`와 DUNE 열기 안내를 사용한다. 세 점수가 모두 없으면 현재 구현의 브랜드·심장 기록지·안내를 크기에 맞게 보여 준다. 일부 값만 없으면 다른 점수는 남긴다.
 - 세 점수의 의미색은 현재 `WidgetDS`의 상태색을 따른다. 테마 호박색은 배경의 옅은 빛과 링 바탕에만 사용해 건강 상태의 의미를 덮지 않는다.
-- 잠금 화면의 운동명은 주변 사람에게 보일 수 있다. 개인정보에 민감한 이름을 쓰는 경우 현재 구현의 노출 정책을 확인하고, 향후 구현에서 이름 숨기기 설정을 검토한다. 시안에는 현재 속성인 운동명·세트 번호·남은 시간만 둔다.
+- 잠금 화면의 운동명은 주변 사람에게 보일 수 있다. 현재 잠금 화면·Dynamic Island·Watch small의 운동명에는 `privacySensitive()`를 적용했다. 실제 시스템 잠금 상태와 개인정보 표시 방식은 호스트 캡처에서 확인한다. 시안에는 현재 속성인 운동명·세트 번호·남은 시간만 둔다.
 - 휴식 카운트다운은 종료 시간이 갱신되면 새 종료 시간을 표시한다. 시안의 01:30과 00:08은 정지된 상태 예시다. 완료 후 화면을 임의로 유지하지 않는다.
 - 홈 화면 위젯 표면은 시스템 컨테이너를 기준으로 한다. Live Activity의 compact·minimal·expanded는 시스템 검은 표면을 그대로 사용한다. DUNE의 색은 정보 계층을 보조하는 정도로 적용한다.
 - WG01 Small의 세 링·지표 이름은 카드 위쪽, 가장 낮은 점수 요약·갱신 시각은 카드 아래쪽에 배치한다. 하단 행은 카드 내용 높이를 기준으로 흐르며 링 위에 겹치거나 절대 위치에 매달리지 않는다. 다른 위젯 크기도 제목·링·설명·하단 정보가 각각의 영역 안에서 줄바꿈되도록 둔다.
@@ -39,10 +39,10 @@ status: proposed
 ## 현재 구현 대조에서 확인한 일
 
 1. `WorkoutRestLiveActivity.swift`의 다섯 프레젠테이션에는 타이머·운동명·세트 번호만 있다. 운동 일시정지·건너뛰기 버튼은 현재 제공되지 않는다.
-2. 라이브 액티비티는 잠금 화면 표면을 검정 80%로 지정하며 테마색을 사용하지 않는다. Dynamic Island도 현재 흰 기호·텍스트다. 제안 시안은 잠금 화면에 따뜻한 어두운 색을, 시간과 타이머 기호에 절제된 호박색을 배치한다.
-3. `WidgetDS`는 앱에서 선택한 테마의 액센트를 읽지만, 점수 본문은 상태색과 시스템 위젯 표면을 중심으로 그린다. 새 시안은 상태색을 보존하고 배경·테두리의 온도만 DESERT HORIZON과 맞춘다.
+2. 구현 전 잠금 화면은 검정 80% 표면, Dynamic Island는 흰 기호·텍스트였다. 현재 DESERT HORIZON은 밝음·어두움에 대응하는 `WidgetWarmSurface`와 `WidgetWarmAccent`를 사용한다. 잠금 화면 시스템 행동은 표면과 대비되는 `DesertHorizonInk`를 사용하고, Dynamic Island의 시스템 검은 표면은 유지한다. 다른 테마의 잠금 화면은 기존 검정 표면을 유지한다.
+3. `WidgetDS`는 앱에서 선택한 테마의 액센트를 읽고, 점수 자체의 의미색은 유지한다. DESERT HORIZON 위젯은 따뜻한 컨테이너·타일·테두리를 적용했다. `WellnessDashboardEntry`의 전체·일부·전체 누락 `#Preview`는 개발용 상태 fixture이며 시스템 호스트 캡처 증거가 아니다.
 4. `SmallWidgetView`의 가장 낮은 점수 요약과 `LargeWidgetView`의 갱신 시각, `SingleMetricWidget`의 네 크기 및 전체 누락 상태를 각각 포함한다.
-5. 실제 캡처가 없어 새 시안을 구현 완료·접근성 통과로 표시하지 않는다. 다음 실제 검증에는 잠금 화면, iPhone 세로·가로 Dynamic Island, Watch Smart Stack, 위젯별 크기·밝음·어두움·누락 상태가 필요하다.
+5. 코드 반영은 완료했으나 실제 캡처·접근성 합격은 아직 기록하지 않는다. 다음 실제 검증에는 잠금 화면, iPhone 세로·가로 Dynamic Island, Watch Smart Stack, 위젯별 크기·밝음·어두움·누락 상태가 필요하다. 시스템 호스트에 진입하지 못한 상태는 미캡처로 남긴다.
 
 ## Apple 디자인 원칙 검토
 

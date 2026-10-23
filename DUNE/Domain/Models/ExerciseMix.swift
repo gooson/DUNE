@@ -56,6 +56,7 @@ struct ExerciseMixSummary: Sendable {
     let unattributedSets: Int
     let cardioTypes: [CardioType]
     let frequencies: [ExerciseFrequency]
+    var isHealthKitSourceUnavailable = false
     var total: Int { strength + cardio + other }
 
     static func empty(asOf date: Date = .now, calendar: Calendar = .current) -> Self {

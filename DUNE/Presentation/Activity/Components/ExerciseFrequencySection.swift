@@ -13,6 +13,7 @@ struct ExerciseFrequencySection: View {
         } else {
             StandardCard {
                 VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                    if summary.isHealthKitSourceUnavailable { partialDataNotice }
                     Text("Last 4 weeks")
                         .font(.caption)
                         .foregroundStyle(DS.Color.textSecondary)
@@ -135,6 +136,7 @@ struct ExerciseFrequencySection: View {
     private var emptyState: some View {
         StandardCard {
             VStack(spacing: DS.Spacing.sm) {
+                if summary.isHealthKitSourceUnavailable { partialDataNotice }
                 Image(systemName: "chart.bar")
                     .font(.title3)
                     .foregroundStyle(.quaternary)
@@ -146,6 +148,13 @@ struct ExerciseFrequencySection: View {
             .frame(maxWidth: .infinity)
             .padding(.vertical, DS.Spacing.md)
         }
+    }
+
+    private var partialDataNotice: some View {
+        Label("Some workout data could not be loaded.", systemImage: "exclamationmark.triangle")
+            .font(.caption)
+            .foregroundStyle(DS.Color.textSecondary)
+            .fixedSize(horizontal: false, vertical: true)
     }
 
     private func localizedExerciseName(_ name: String) -> String {

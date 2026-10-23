@@ -24,6 +24,14 @@ struct ExerciseMixDetailView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: DS.Spacing.lg) {
+                if summary.isHealthKitSourceUnavailable {
+                    StandardCard {
+                        Label("Some workout data could not be loaded.", systemImage: "exclamationmark.triangle")
+                            .font(.caption)
+                            .foregroundStyle(DS.Color.textSecondary)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                }
                 if viewModel.isLoading {
                     ProgressView()
                         .frame(maxWidth: .infinity, minHeight: 200)
