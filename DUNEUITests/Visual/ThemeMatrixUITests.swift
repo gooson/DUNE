@@ -87,6 +87,7 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
                 if abs(max(initialBounds.width, initialBounds.height) - 951) < 2 {
                     // A fresh app launch can restore portrait. Let the host set
                     // physical orientation, then require the actual inner viewport.
+                    XCUIDevice.shared.orientation = .landscapeLeft
                     VisualAudit.capture("ORIENT:landscapeLeft Today navigation layout")
                     let landscape = XCTNSPredicateExpectation(
                         predicate: NSPredicate { _, _ in
