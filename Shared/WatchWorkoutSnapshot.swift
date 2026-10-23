@@ -1,6 +1,6 @@
 import Foundation
 
-/// Small, versioned payload used only by the mirrored workout and its Live Activity.
+/// Small payload used only by the mirrored workout and its Live Activity.
 struct WatchWorkoutSnapshot: Codable, Hashable, Sendable {
     enum Phase: String, Codable, Sendable {
         case running, paused, ended
