@@ -15,6 +15,7 @@ struct CardioSessionRecord: Sendable {
     let floorsAscended: Double?
     let cardioMachineLevelAverage: Double?
     let cardioMachineLevelMax: Int?
+    let cardioMachineLevelChanges: [CardioMachineLevelChange]
     let estimatedCalories: Double
     let metValue: Double
     let autoIntensityRaw: Double?
@@ -54,6 +55,7 @@ final class CardioSessionViewModel {
     private(set) var currentMachineLevel: Int?
     private(set) var averageMachineLevel: Double?
     private(set) var maxMachineLevel: Int?
+    private(set) var machineLevelChanges: [CardioMachineLevelChange] = []
     private(set) var currentPaceSecondsPerKm: Double = 0
     private(set) var averagePaceSecondsPerKm: Double = 0
     private(set) var estimatedCalories: Double = 0
@@ -278,9 +280,16 @@ final class CardioSessionViewModel {
     }
 
     func setMachineLevel(_ level: Int) {
-        guard supportsMachineLevel, let normalized = cardioUnit.normalizedMachineLevel(level) else { return }
+        guard (state == .running || state == .paused),
+              supportsMachineLevel,
+              let normalized = cardioUnit.normalizedMachineLevel(level),
+              normalized != currentMachineLevel else { return }
         let now = Date()
         captureMachineLevelSegment(until: now)
+        let activeSeconds = pausedAccumulated + (lastResumeDate.map { now.timeIntervalSince($0) } ?? 0)
+        if let change = CardioMachineLevelChange(elapsedSeconds: max(0, activeSeconds), level: normalized) {
+            machineLevelChanges.append(change)
+        }
         currentMachineLevel = normalized
         maxMachineLevel = max(maxMachineLevel ?? normalized, normalized)
         updateCalories(at: now)
@@ -442,6 +451,7 @@ final class CardioSessionViewModel {
         currentMachineLevel = nil
         averageMachineLevel = nil
         maxMachineLevel = nil
+        machineLevelChanges = []
         currentPaceSecondsPerKm = 0
         averagePaceSecondsPerKm = 0
         estimatedCalories = 0
@@ -550,6 +560,7 @@ final class CardioSessionViewModel {
             floorsAscended: safeFloors,
             cardioMachineLevelAverage: safeAverageMachineLevel,
             cardioMachineLevelMax: safeMaxMachineLevel,
+            cardioMachineLevelChanges: machineLevelChanges,
             estimatedCalories: estimatedCalories,
             metValue: supportsMachineLevel
                 ? exercise.metValue * cardioUnit.metMultiplier(forMachineLevel: referenceMachineLevel)

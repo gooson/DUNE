@@ -1,5 +1,27 @@
 import Foundation
 
+/// A machine level selected at an active elapsed time in a cardio session.
+struct CardioMachineLevelChange: Codable, Sendable, Equatable {
+    let elapsedSeconds: TimeInterval
+    let level: Int
+
+    init?(elapsedSeconds: TimeInterval, level: Int) {
+        guard elapsedSeconds.isFinite, (0...604_800).contains(elapsedSeconds), (1...20).contains(level) else { return nil }
+        self.elapsedSeconds = elapsedSeconds
+        self.level = level
+    }
+
+    var formattedElapsed: String {
+        let total = Int(elapsedSeconds)
+        let hours = total / 3600
+        let minutes = (total % 3600) / 60
+        let seconds = total % 60
+        return hours > 0
+            ? String(format: "%d:%02d:%02d", hours, minutes, seconds)
+            : String(format: "%d:%02d", minutes, seconds)
+    }
+}
+
 /// Secondary unit for cardio exercises (durationDistance input type).
 /// Determines how the non-duration field is displayed and stored.
 enum CardioSecondaryUnit: String, Codable, Sendable, CaseIterable {

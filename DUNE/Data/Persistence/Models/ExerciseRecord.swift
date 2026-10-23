@@ -22,6 +22,8 @@ final class ExerciseRecord {
     var cardioMachineLevelAverage: Double?
     /// Max machine level reached during non-distance machine cardio sessions.
     var cardioMachineLevelMax: Int?
+    /// JSON-encoded active-time machine level changes, including the initial level.
+    var cardioMachineLevelChangesData: Data?
     var memo: String = ""
     var isFromHealthKit: Bool = false
     var healthKitWorkoutID: String?
@@ -60,6 +62,7 @@ final class ExerciseRecord {
         floorsAscended: Double? = nil,
         cardioMachineLevelAverage: Double? = nil,
         cardioMachineLevelMax: Int? = nil,
+        cardioMachineLevelChanges: [CardioMachineLevelChange] = [],
         memo: String = "",
         isFromHealthKit: Bool = false,
         healthKitWorkoutID: String? = nil,
@@ -88,6 +91,8 @@ final class ExerciseRecord {
         self.floorsAscended = floorsAscended
         self.cardioMachineLevelAverage = cardioMachineLevelAverage
         self.cardioMachineLevelMax = cardioMachineLevelMax.flatMap { (1...99).contains($0) ? $0 : nil }
+        self.cardioMachineLevelChangesData = cardioMachineLevelChanges.isEmpty
+            ? nil : try? JSONEncoder().encode(cardioMachineLevelChanges)
         self.memo = memo
         self.isFromHealthKit = isFromHealthKit
         self.healthKitWorkoutID = healthKitWorkoutID
@@ -106,6 +111,14 @@ final class ExerciseRecord {
     }
 
     // MARK: - Computed Accessors
+
+    var cardioMachineLevelChanges: [CardioMachineLevelChange] {
+        guard let cardioMachineLevelChangesData,
+              let changes = try? JSONDecoder().decode([CardioMachineLevelChange].self, from: cardioMachineLevelChangesData) else {
+            return []
+        }
+        return changes.filter { (0...604_800).contains($0.elapsedSeconds) && (1...20).contains($0.level) }
+    }
 
     var primaryMuscles: [MuscleGroup] {
         primaryMusclesRaw.compactMap { MuscleGroup(rawValue: $0) }

@@ -113,6 +113,7 @@ final class WorkoutManager: NSObject {
     private(set) var averageMachineLevel: Double?
     /// Highest machine level reached during the session.
     private(set) var maxMachineLevel: Int?
+    private(set) var machineLevelChanges: [CardioMachineLevelChange] = []
 
     /// Running samples for average HR calculation.
     private var heartRateSamples: [Double] = []
@@ -350,6 +351,7 @@ final class WorkoutManager: NSObject {
         let previousSetIndex = currentSetIndex
         let previousCompletedSets = completedSetsData
         let previousExtraSets = extraSetsPerExercise
+        let previousMachineLevelChanges = machineLevelChanges
 
         self.workoutMode = .cardio(activityType: activityType, isOutdoor: isOutdoor)
         self.cardioSecondaryUnit = secondaryUnit
@@ -362,6 +364,7 @@ final class WorkoutManager: NSObject {
         self.currentMachineLevel = nil
         self.averageMachineLevel = nil
         self.maxMachineLevel = nil
+        self.machineLevelChanges = []
         self.machineLevelWeightedSeconds = 0
         self.machineLevelWeightedSum = 0
         self.lastMachineLevelSampleDate = nil
@@ -394,6 +397,7 @@ final class WorkoutManager: NSObject {
             currentSetIndex = previousSetIndex
             completedSetsData = previousCompletedSets
             extraSetsPerExercise = previousExtraSets
+            machineLevelChanges = previousMachineLevelChanges
             throw error
         }
     }
@@ -419,6 +423,7 @@ final class WorkoutManager: NSObject {
         self.currentMachineLevel = nil
         self.averageMachineLevel = nil
         self.maxMachineLevel = nil
+        self.machineLevelChanges = []
         self.machineLevelWeightedSeconds = 0
         self.machineLevelWeightedSum = 0
         self.lastMachineLevelSampleDate = nil
@@ -554,10 +559,14 @@ final class WorkoutManager: NSObject {
     }
 
     func setMachineLevel(_ level: Int) {
-        guard let cardioSecondaryUnit,
-              let normalized = cardioSecondaryUnit.normalizedMachineLevel(level) else { return }
+        guard isActive, let cardioSecondaryUnit,
+              let normalized = cardioSecondaryUnit.normalizedMachineLevel(level),
+              normalized != currentMachineLevel else { return }
         let now = Date()
         captureMachineLevelSegment(until: now)
+        if let change = CardioMachineLevelChange(elapsedSeconds: activeElapsedTime(at: now), level: normalized) {
+            machineLevelChanges.append(change)
+        }
         currentMachineLevel = normalized
         maxMachineLevel = max(maxMachineLevel ?? normalized, normalized)
         persistRecoveryState()
@@ -912,6 +921,7 @@ final class WorkoutManager: NSObject {
         currentMachineLevel = nil
         averageMachineLevel = nil
         maxMachineLevel = nil
+        machineLevelChanges = []
         machineLevelWeightedSeconds = 0
         machineLevelWeightedSum = 0
         lastMachineLevelSampleDate = nil
@@ -954,7 +964,7 @@ final class WorkoutManager: NSObject {
             recoveredBuilder.delegate = self
 
             // Restore template/exercise state from persisted data (C4)
-            restoreRecoveryState()
+            restoreRecoveredSessionState(recovered.state, at: Date())
 
             // Restore distance from builder statistics if cardio session
             if isCardioMode {
@@ -1023,6 +1033,9 @@ final class WorkoutManager: NSObject {
             currentMachineLevel: currentMachineLevel,
             averageMachineLevel: averageMachineLevel,
             maxMachineLevel: maxMachineLevel,
+            machineLevelChanges: machineLevelChanges,
+            pausedDuration: pausedDuration,
+            pauseStart: pauseStart,
             machineLevelWeightedSeconds: machineLevelWeightedSeconds,
             machineLevelWeightedSum: machineLevelWeightedSum,
             lastMachineLevelSampleDate: lastMachineLevelSampleDate
@@ -1030,6 +1043,21 @@ final class WorkoutManager: NSObject {
         guard let data = try? JSONEncoder().encode(state),
               data.count < 64_000 else { return }
         UserDefaults.standard.set(data, forKey: Self.recoveryKey)
+    }
+
+    func restoreRecoveredSessionState(_ recoveredState: HKWorkoutSessionState, at now: Date) {
+        restoreRecoveryState()
+        switch recoveredState {
+        case .paused:
+            // Older snapshots did not store pause accounting. Start tracking at recovery.
+            if pauseStart == nil { beginPause(at: now) }
+            isPaused = true
+        case .running:
+            if pauseStart != nil { endPause(at: now) }
+            isPaused = false
+        default:
+            break
+        }
     }
 
     private func restoreRecoveryState() {
@@ -1049,6 +1077,10 @@ final class WorkoutManager: NSObject {
         currentMachineLevel = state.currentMachineLevel
         averageMachineLevel = state.averageMachineLevel
         maxMachineLevel = state.maxMachineLevel
+        machineLevelChanges = state.machineLevelChanges ?? []
+        pausedDuration = state.pausedDuration ?? 0
+        pauseStart = state.pauseStart
+        isPaused = pauseStart != nil
         machineLevelWeightedSeconds = state.machineLevelWeightedSeconds
         machineLevelWeightedSum = state.machineLevelWeightedSum
         lastMachineLevelSampleDate = state.lastMachineLevelSampleDate
@@ -1132,6 +1164,7 @@ final class WorkoutManager: NSObject {
         pauseStart = date
         isPaused = true
         clearInactivityPrompt()
+        persistRecoveryState()
     }
 
     private func endPause(at date: Date) {
@@ -1147,6 +1180,7 @@ final class WorkoutManager: NSObject {
         }
         isPaused = false
         lastInteractionDate = date
+        persistRecoveryState()
     }
 
     private func captureMachineLevelSegment(until date: Date) {
@@ -1687,6 +1721,9 @@ private struct WorkoutRecoveryState: Codable {
     let currentMachineLevel: Int?
     let averageMachineLevel: Double?
     let maxMachineLevel: Int?
+    let machineLevelChanges: [CardioMachineLevelChange]?
+    let pausedDuration: TimeInterval?
+    let pauseStart: Date?
     let machineLevelWeightedSeconds: TimeInterval
     let machineLevelWeightedSum: Double
     let lastMachineLevelSampleDate: Date?

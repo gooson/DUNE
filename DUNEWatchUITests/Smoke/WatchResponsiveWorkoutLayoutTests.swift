@@ -110,6 +110,17 @@ final class WatchResponsiveWorkoutLayoutTests: WatchUITestBaseCase {
         // Cardio opens on Main Metrics; the secondary page is two left swipes away.
         for _ in 0..<2 { app.swipeLeft() }
         XCTAssertTrue(elementExists(WatchAXID.cardioLevelValue, timeout: 5), "Machine level page should open")
+        let level = app.staticTexts[WatchAXID.cardioLevelValue].firstMatch
+        let initialLevel = level.label
+        app.buttons[WatchAXID.cardioLevelIncrease].tap()
+        XCTAssertEqual(
+            XCTWaiter.wait(for: [XCTNSPredicateExpectation(
+                predicate: NSPredicate(format: "label != %@", initialLevel),
+                object: level
+            )], timeout: 5),
+            .completed,
+            "Active machine level should change during the workout"
+        )
         assertFirstViewportButtons([
             WatchAXID.cardioLevelDecrease,
             WatchAXID.cardioLevelIncrease

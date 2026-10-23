@@ -19,6 +19,7 @@ struct CardioSessionSummaryView: View {
             VStack(spacing: DS.Spacing.xl) {
                 completionHeader
                 metricsGrid
+                CardioMachineLevelHistoryView(changes: viewModel.machineLevelChanges)
             }
             .padding(DS.Spacing.lg)
         }
@@ -227,6 +228,7 @@ struct CardioSessionSummaryView: View {
             floorsAscended: data.floorsAscended,
             cardioMachineLevelAverage: data.cardioMachineLevelAverage,
             cardioMachineLevelMax: data.cardioMachineLevelMax,
+            cardioMachineLevelChanges: data.cardioMachineLevelChanges,
             exerciseDefinitionID: data.exerciseID,
             primaryMuscles: exercise.primaryMuscles,
             secondaryMuscles: exercise.secondaryMuscles,
