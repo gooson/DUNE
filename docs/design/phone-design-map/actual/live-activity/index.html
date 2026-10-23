@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DUNE · WLA01 실제 화면 맵</title>
+  <style>
+    :root { font-family: -apple-system, BlinkMacSystemFont, sans-serif; color: #f5f2eb; background: #101819; }
+    body { max-width: 1000px; margin: auto; padding: 24px; }
+    a { color: #e8bf94; }
+    p, li { color: #bac8c4; line-height: 1.55; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+    figure { margin: 0; border: 1px solid #405153; border-radius: 16px; overflow: hidden; background: #1b292b; }
+    .pending { min-height: 260px; display: grid; place-items: center; color: #c9ad8e; background: #0b1112; }
+    figcaption { padding: 12px; } img { display: block; width: 100%; height: auto; }
+  </style>
+</head>
+<body>
+  <p><a href="../index.html">← 전체 실제 화면 맵</a></p>
+  <h1>WLA01 · Watch 운동 Live Activity</h1>
+  <p>iOS 시스템 표면의 실제 화면 캡처 자리입니다. iPhone 알림 센터의 진행·일시 정지 두 상태를 새 구현에서 캡처했습니다. 시드 데이터로 실행한 실제 시스템 요소 캡처이며, 나머지 다섯 상태는 캡처 대기입니다.</p>
+  <p><a href="README.md">캡처 출처와 검증 범위</a> · <a href="capture-index.json">상태별 기록</a> · <a href="../../../layout-map/watch-workout-live-activity.md">레이아웃 기준 시안</a></p>
+  <div class="grid">
+    <figure><a href="images/iphone_notification_running.png"><img src="images/iphone_notification_running.png" alt="iPhone 알림 센터 · 운동 진행 · DEBUG 시드 시스템 요소 원본"></a><figcaption>iPhone 알림 센터 · 운동 진행 · 시드 / iOS 27.0</figcaption></figure>
+    <figure><a href="images/iphone_notification_paused.png"><img src="images/iphone_notification_paused.png" alt="iPhone 알림 센터 · 일시 정지 · DEBUG 시드 시스템 요소 원본"></a><figcaption>iPhone 알림 센터 · 일시 정지 · 시드 / iOS 27.0</figcaption></figure>
+    <figure><div class="pending">실제 캡처 대기</div><figcaption>iPhone 알림 센터 · 연결 대기</figcaption></figure>
+    <figure><div class="pending">실제 캡처 대기</div><figcaption>iPhone Dynamic Island compact · 운동 진행</figcaption></figure>
+    <figure><div class="pending">실제 캡처 대기</div><figcaption>iPhone Dynamic Island compact · 일시 정지 아이콘</figcaption></figure>
+    <figure><div class="pending">실제 캡처 대기</div><figcaption>iPhone Dynamic Island expanded · 운동 진행</figcaption></figure>
+    <figure><div class="pending">실제 캡처 대기</div><figcaption>iPhone Dynamic Island expanded · 일시 정지</figcaption></figure>
+  </div>
+  <p>iPad, Duo 접힘·펼침, Watch small family도 미캡처입니다. DEBUG 시드의 SpringBoard 알림 센터 화면과 실제 잠긴 iPhone·Watch 쌍 기기 검증은 서로 다른 출처로 기록합니다.</p>
+</body>
+</html>

@@ -262,6 +262,9 @@ struct DUNEApp: App {
     }
 
     init() {
+        if !Self.isRunningXCTest {
+            WatchWorkoutMirrorManager.shared.startObserving()
+        }
         workoutGenerationMetricMonitor = Self.isRunningXCTest ? nil : WorkoutGenerationMetricMonitor()
 #if DEBUG
         if Self.shouldResetUITestState {
@@ -448,6 +451,9 @@ struct DUNEApp: App {
         .tint(selectedTheme.accentColor)
         .preferredColorScheme(Self.forcedUITestColorScheme)
         .onAppear { WidgetDataWriter.writeTheme(selectedTheme) }
+#if DEBUG
+        .task { await WatchWorkoutActivityPreview.startIfRequested() }
+#endif
         .onChange(of: selectedTheme) { _, theme in
             WidgetDataWriter.writeTheme(theme)
             WatchSessionManager.shared.syncWorkoutSettingsToWatch()

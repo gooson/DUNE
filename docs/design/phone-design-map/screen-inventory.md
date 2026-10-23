@@ -151,3 +151,11 @@ SwiftUI View와 인라인 프레젠테이션 **108개**를 화면 단위로 대�
 | S05 | 새 소식 | 오늘·설정·앱 시작 | push/sheet | 상세 push 또는 시트 | 상세 push 또는 시트 | push 또는 시트 · 상태 유지 | `DUNE/Presentation/WhatsNew/WhatsNewView.swift:8` |
 | S06 | 새 기능 상세 | 새 소식 | push | 상세 push · 한 열 | 상세 콘텐츠 | 선택·스크롤 유지 | `DUNE/Presentation/WhatsNew/WhatsNewView.swift:151` |
 | S07 | 운동 분석 별도 창 | iPad 운동 중 | window | 운동 분석 시트로 대체 | 별도 읽기 전용 창 | 운동 분석 시트로 대체 | `DUNE/App/DUNEApp.swift:1074` |
+
+## 앱 밖의 시스템 표면
+
+이 표면은 위 108개 앱 화면 수에 포함하지 않는다. 캡처 출처도 앱 내부 화면과 별도로 관리한다.
+
+| ID | 표면 | 진입 | 상태 | 실제 화면 맵 |
+|---|---|---|---|---|
+| WLA01 | Watch 운동 Live Activity | Watch 운동 미러링 → ActivityKit | iPhone 알림 센터 진행·일시 정지·연결 대기, Dynamic Island compact·expanded 진행·일시 정지 | [WLA01 실제 화면](actual/live-activity/index.html) |

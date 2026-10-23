@@ -38,6 +38,7 @@ struct DUNEWidgetBundle: WidgetBundle {
         WellnessDashboardWidget()
         SingleMetricWidget()
         WorkoutRestLiveActivity()
+        WatchWorkoutLiveActivity()
     }
 }
 

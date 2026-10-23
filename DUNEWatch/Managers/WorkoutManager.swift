@@ -27,6 +27,15 @@ final class WorkoutManager: NSObject {
     private(set) var session: HKWorkoutSession?
     private(set) var builder: HKLiveWorkoutBuilder?
     private(set) var isSimulatedSessionActive = false
+    private var mirrorStartTask: Task<Void, Never>?
+    private var mirrorIntervalTask: Task<Void, Never>?
+    private var mirrorSendTask: Task<Void, Never>?
+    private var mirrorRetryTask: Task<Void, Never>?
+    private var mirroredSession: HKWorkoutSession?
+    private var pendingMirrorSnapshot: WatchWorkoutSnapshot?
+    private var mirrorGeneration = UUID()
+    private var mirrorRetryPolicy = WorkoutMirrorRetryPolicy()
+    private var mirrorWorkoutName = String(localized: "Workout")
 
     var isActive: Bool { (session != nil || isSimulatedSessionActive) && !isSessionEnded }
     private(set) var isPaused = false
@@ -438,6 +447,8 @@ final class WorkoutManager: NSObject {
 
     /// Common HK session setup shared by strength and cardio flows.
     private func startHKSession(config: HKWorkoutConfiguration, templateName: String) async throws {
+        stopMirrorTransport()
+        mirrorWorkoutName = templateName
         self.heartRateSamples = []
         self.liveZoneDistribution = nil
         self.liveZoneIndex = nil
@@ -501,6 +512,7 @@ final class WorkoutManager: NSObject {
             // Notify iPhone via WatchConnectivity
             WatchConnectivityManager.shared.sendWorkoutStarted(templateName: templateName)
             startInactivityMonitoringIfNeeded()
+            startMirrorTransport(for: newSession)
         } catch {
             Self.logger.error("Failed to start HK session: \(String(describing: error), privacy: .public)")
             newSession.end()
@@ -583,6 +595,7 @@ final class WorkoutManager: NSObject {
     func pause() {
         if let session {
             beginPause(at: Date())
+            enqueueMirrorSnapshot()
             session.pause()
             return
         }
@@ -594,6 +607,7 @@ final class WorkoutManager: NSObject {
     func resume() {
         if let session {
             endPause(at: Date())
+            enqueueMirrorSnapshot()
             session.resume()
             return
         }
@@ -624,12 +638,16 @@ final class WorkoutManager: NSObject {
         // Transition UI immediately even when simulator callbacks are delayed.
         isSessionEnded = true
         isFinalizingWorkout = session != nil
+        enqueueMirrorSnapshot()
+        mirrorIntervalTask?.cancel()
+        mirrorIntervalTask = nil
         notifyWorkoutEndedIfNeeded()
 
         if isFinalizingWorkout {
             startFinalizationTimeoutWatchdog()
         }
         session?.end()
+        stopMirrorTransport()
         stopInactivityMonitoring()
     }
 
@@ -726,6 +744,7 @@ final class WorkoutManager: NSObject {
             currentExerciseIndex += 1
             currentSetIndex = 0
         }
+        enqueueMirrorSnapshot()
     }
 
     /// Skip the current exercise and advance to the next non-skipped pending exercise.
@@ -738,6 +757,7 @@ final class WorkoutManager: NSObject {
         if let nextIdx = nextPendingExerciseIndex(after: currentExerciseIndex) {
             currentExerciseIndex = nextIdx
             currentSetIndex = 0
+            enqueueMirrorSnapshot()
             return true
         }
         return false
@@ -898,6 +918,7 @@ final class WorkoutManager: NSObject {
     }
 
     func reset() {
+        stopMirrorTransport()
         stopInactivityMonitoring()
         finalizationTimeoutTask?.cancel()
         finalizationTimeoutTask = nil
@@ -977,6 +998,25 @@ final class WorkoutManager: NSObject {
             // If strength mode but template couldn't be restored, mark as recovered session
             if !isCardioMode, templateSnapshot == nil {
                 isRecoveredSession = true
+            }
+            if case .cardio(let activityType, _) = workoutMode {
+                mirrorWorkoutName = activityType.typeName
+            } else {
+                mirrorWorkoutName = templateSnapshot?.name ?? String(localized: "Workout")
+            }
+            isSessionEnded = recovered.state == .ended
+            isPaused = recovered.state == .paused
+            startDate = startDate ?? recovered.startDate ?? recoveredBuilder.startDate
+            if let startDate {
+                let now = Date()
+                let elapsed = recoveredBuilder.elapsedTime(at: now)
+                if elapsed.isFinite, elapsed >= 0 {
+                    pausedDuration = max(0, now.timeIntervalSince(startDate) - elapsed)
+                    pauseStart = isPaused ? now : nil
+                }
+            }
+            if !isSessionEnded {
+                startMirrorTransport(for: recovered)
             }
         } catch {
             // No active session to recover
@@ -1153,6 +1193,136 @@ final class WorkoutManager: NSObject {
 
     private func clearMachineLevelRecoveryHistory() {
         try? FileManager.default.removeItem(at: Self.recoveryHistoryURL)
+    }
+
+    // MARK: - Workout Mirroring
+
+    private func startMirrorTransport(for workoutSession: HKWorkoutSession, isRetry: Bool = false) {
+        stopMirrorTransport(resetRetryPolicy: !isRetry)
+        let generation = mirrorGeneration
+        mirrorStartTask = Task { @MainActor [weak self] in
+            do {
+                try await workoutSession.startMirroringToCompanionDevice()
+                guard let self,
+                      self.mirrorGeneration == generation,
+                      self.session === workoutSession,
+                      !self.isSessionEnded else { return }
+                self.mirrorStartTask = nil
+                self.mirroredSession = workoutSession
+                self.enqueueMirrorSnapshot()
+                self.mirrorIntervalTask = Task { @MainActor [weak self] in
+                    while !Task.isCancelled {
+                        do {
+                            try await Task.sleep(for: .seconds(5))
+                        } catch {
+                            return
+                        }
+                        guard let self,
+                              self.mirrorGeneration == generation,
+                              self.session === workoutSession,
+                              !self.isSessionEnded else { return }
+                        self.enqueueMirrorSnapshot()
+                    }
+                }
+            } catch {
+                guard let self, self.mirrorGeneration == generation else { return }
+                self.mirrorStartTask = nil
+                Self.logger.error("Workout mirroring failed: \(String(describing: error), privacy: .private)")
+                self.handleMirrorFailure(for: workoutSession)
+            }
+        }
+    }
+
+    private func stopMirrorTransport(resetRetryPolicy: Bool = true) {
+        mirrorGeneration = UUID()
+        mirrorStartTask?.cancel()
+        mirrorStartTask = nil
+        mirrorIntervalTask?.cancel()
+        mirrorIntervalTask = nil
+        mirrorSendTask?.cancel()
+        mirrorSendTask = nil
+        mirrorRetryTask?.cancel()
+        mirrorRetryTask = nil
+        mirroredSession = nil
+        pendingMirrorSnapshot = nil
+        if resetRetryPolicy {
+            mirrorRetryPolicy.reset()
+        }
+    }
+
+    private func handleMirrorFailure(for workoutSession: HKWorkoutSession) {
+        guard session === workoutSession, !isSessionEnded else { return }
+        // A send failure and disconnect callback can describe the same outage.
+        guard !mirrorRetryPolicy.isRetryScheduled else { return }
+        let shouldRetry = mirrorRetryPolicy.recordFailure()
+        stopMirrorTransport(resetRetryPolicy: false)
+        if shouldRetry {
+            scheduleMirrorRetry(for: workoutSession)
+        }
+    }
+
+    private func scheduleMirrorRetry(for workoutSession: HKWorkoutSession) {
+        guard mirrorRetryTask == nil else { return }
+        let generation = mirrorGeneration
+        mirrorRetryTask = Task { @MainActor [weak self] in
+            do {
+                try await Task.sleep(for: .seconds(5))
+            } catch {
+                return
+            }
+            guard let self,
+                  self.mirrorGeneration == generation,
+                  self.session === workoutSession,
+                  !self.isSessionEnded else { return }
+            self.mirrorRetryTask = nil
+            guard self.mirrorRetryPolicy.beginRetry() else { return }
+            self.startMirrorTransport(for: workoutSession, isRetry: true)
+        }
+    }
+
+    func phoneDidReconnect() {
+        guard let workoutSession = session,
+              !isSessionEnded,
+              mirrorRetryPolicy.recordReconnect() else { return }
+        scheduleMirrorRetry(for: workoutSession)
+    }
+
+    private func enqueueMirrorSnapshot() {
+        guard let mirroredSession, let startDate else { return }
+        let now = Date()
+        let snapshot = WatchWorkoutSnapshot(
+            startedAt: startDate,
+            updatedAt: now,
+            exerciseName: currentEntry?.exerciseName ?? mirrorWorkoutName,
+            elapsedSeconds: activeElapsedTime(at: now),
+            phase: isSessionEnded ? .ended : (isPaused ? .paused : .running),
+            heartRate: (20...250).contains(heartRate) ? heartRate : nil,
+            activeCalories: activeCalories,
+            distanceMeters: isCardioMode ? distance : 0
+        )
+        guard snapshot.isValid else { return }
+        pendingMirrorSnapshot = snapshot
+        guard mirrorSendTask == nil else { return }
+        let generation = mirrorGeneration
+        mirrorSendTask = Task { @MainActor [weak self] in
+            guard let self else { return }
+            while let snapshot = self.pendingMirrorSnapshot {
+                self.pendingMirrorSnapshot = nil
+                do {
+                    let data = try JSONEncoder().encode(snapshot)
+                    try await mirroredSession.sendToRemoteWorkoutSession(data: data)
+                } catch {
+                    guard self.mirrorGeneration == generation else { return }
+                    Self.logger.error("Workout mirror send failed: \(String(describing: error), privacy: .private)")
+                    self.handleMirrorFailure(for: mirroredSession)
+                    return
+                }
+                guard self.mirrorGeneration == generation,
+                      self.session === mirroredSession else { return }
+                self.mirrorRetryPolicy.recordSuccess()
+            }
+            self.mirrorSendTask = nil
+        }
     }
 
     private override init() {
@@ -1420,12 +1590,16 @@ extension WorkoutManager: HKWorkoutSessionDelegate {
             switch toState {
             case .running:
                 endPause(at: date)
+                enqueueMirrorSnapshot()
             case .paused:
                 beginPause(at: date)
+                enqueueMirrorSnapshot()
             case .ended:
                 if completedDuration == nil { completedDuration = activeElapsedTime(at: date) }
                 endPause(at: date)
                 isSessionEnded = true
+                enqueueMirrorSnapshot()
+                stopMirrorTransport()
                 isFinalizingWorkout = true
                 notifyWorkoutEndedIfNeeded()
                 startFinalizationTimeoutWatchdog()
@@ -1468,6 +1642,22 @@ extension WorkoutManager: HKWorkoutSessionDelegate {
             finalizationTimeoutTask?.cancel()
             finalizationTimeoutTask = nil
             isFinalizingWorkout = false
+            stopMirrorTransport()
+        }
+    }
+
+    nonisolated func workoutSession(
+        _ workoutSession: HKWorkoutSession,
+        didDisconnectFromRemoteDeviceWithError error: Error?
+    ) {
+        Task { @MainActor in
+            guard let currentSession = session,
+                  workoutSession === currentSession,
+                  mirroredSession === workoutSession else { return }
+            if let error {
+                Self.logger.error("Workout mirror disconnected: \(String(describing: error), privacy: .private)")
+            }
+            handleMirrorFailure(for: workoutSession)
         }
     }
 }
@@ -1501,6 +1691,7 @@ extension WorkoutManager: HKLiveWorkoutBuilderDelegate {
         _ workoutBuilder: HKLiveWorkoutBuilder,
         didCollectDataOf collectedTypes: Set<HKSampleType>
     ) {
+        let callbackBuilderID = ObjectIdentifier(workoutBuilder)
         // Extract primitive values on the delegate callback thread (before actor hop)
         // to avoid cross-actor access of non-Sendable HKLiveWorkoutBuilder.
         var heartRateValue: Double?
@@ -1555,6 +1746,9 @@ extension WorkoutManager: HKLiveWorkoutBuilderDelegate {
 
         // Dispatch only primitive values to MainActor
         Task { @MainActor in
+            guard !isSessionEnded,
+                  let builder,
+                  ObjectIdentifier(builder) == callbackBuilderID else { return }
             if let bpm = heartRateValue {
                 heartRate = bpm
                 heartRateSamples.append(bpm)
