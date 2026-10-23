@@ -31,8 +31,8 @@ struct WatchWorkoutLiveActivity: Widget {
                     }
                 }
             } compactLeading: {
-                Image(systemName: "figure.run")
-                    .accessibilityLabel("Workout")
+                Image(systemName: context.state.phase == .paused ? "pause.fill" : "figure.run")
+                    .accessibilityLabel(context.state.phase == .paused ? Text("Paused") : Text("Workout"))
             } compactTrailing: {
                 if context.isStale {
                     Image(systemName: "wifi.slash")
@@ -45,8 +45,9 @@ struct WatchWorkoutLiveActivity: Widget {
                         .frame(maxWidth: 60)
                 }
             } minimal: {
-                Image(systemName: "figure.run")
-                    .accessibilityLabel("Workout")
+                Image(systemName: context.isStale ? "wifi.slash" : (context.state.phase == .paused ? "pause.fill" : "figure.run"))
+                    .accessibilityLabel(context.isStale ? Text("Waiting for Watch")
+                                        : (context.state.phase == .paused ? Text("Paused") : Text("Workout")))
             }
         }
         .supplementalActivityFamilies([.small])

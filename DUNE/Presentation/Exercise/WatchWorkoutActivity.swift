@@ -26,24 +26,29 @@ final class WatchWorkoutActivity {
     private var activityID: String?
     private var activityMirrorID: UUID?
     private var attemptedMirrorID: UUID?
+    private var acceptsInitialStartCorrection = false
 
     init(driver: any WatchWorkoutActivityDriving = SystemWatchWorkoutActivityDriver()) {
         self.driver = driver
     }
 
-    func start(mirrorID: UUID, snapshot: WatchWorkoutSnapshot, requestedID: String? = nil, didRequest: Bool = false) {
+    func start(mirrorID: UUID, snapshot: WatchWorkoutSnapshot, requestedID: String? = nil,
+               didRequest: Bool = false, allowsStartCorrection: Bool = false) {
         guard snapshot.isValid, snapshot.phase != .ended else { return }
         self.mirrorID = mirrorID
         self.snapshot = snapshot
+        acceptsInitialStartCorrection = allowsStartCorrection
         enqueue(Update(mirrorID: mirrorID, snapshot: snapshot, requestedID: requestedID, didRequest: didRequest))
     }
 
-    func receive(_ incoming: WatchWorkoutSnapshot, mirrorID: UUID) {
+    func receive(_ incoming: WatchWorkoutSnapshot, mirrorID: UUID, authoritative: Bool = false) {
         guard self.mirrorID == mirrorID,
               let current = snapshot, current.phase != .ended,
               incoming.isValid,
-              abs(incoming.startedAt.timeIntervalSince(current.startedAt)) < 2,
+              (abs(incoming.startedAt.timeIntervalSince(current.startedAt)) < 2
+                || (acceptsInitialStartCorrection && authoritative)),
               incoming.updatedAt >= current.updatedAt else { return }
+        if authoritative { acceptsInitialStartCorrection = false }
         snapshot = incoming
         enqueue(Update(mirrorID: mirrorID, snapshot: incoming))
     }

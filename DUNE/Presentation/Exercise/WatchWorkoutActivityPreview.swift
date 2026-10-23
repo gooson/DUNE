@@ -1,5 +1,6 @@
 #if DEBUG
 import ActivityKit
+import OSLog
 import UIKit
 
 /// Starts a real system Live Activity for a dedicated UI test launch.
@@ -42,11 +43,15 @@ enum WatchWorkoutActivityPreview {
         guard snapshot.isValid else { return }
 
         let staleDate = phase == .stale ? now.addingTimeInterval(3) : now.addingTimeInterval(300)
-        _ = try? Activity.request(
-            attributes: WatchWorkoutAttributes(mirrorID: UUID()),
-            content: ActivityContent(state: snapshot, staleDate: staleDate),
-            pushType: nil
-        )
+        do {
+            _ = try Activity.request(
+                attributes: WatchWorkoutAttributes(mirrorID: UUID()),
+                content: ActivityContent(state: snapshot, staleDate: staleDate),
+                pushType: nil
+            )
+        } catch {
+            AppLogger.ui.error("Unable to seed Watch workout activity: \(error.localizedDescription, privacy: .private)")
+        }
     }
 
     private enum PreviewPhase: String {

@@ -32,17 +32,23 @@ final class WatchWorkoutMirrorManager: NSObject {
                 AppLogger.ui.error("Unable to start mirrored workout activity: \(error.localizedDescription, privacy: .private)")
             }
             let activityID = requestedID
-            Task { @MainActor in self?.attach(session, mirrorID: id, initial: initial, activityID: activityID) }
+            let allowsStartCorrection = session.startDate == nil
+            Task { @MainActor in
+                self?.attach(session, mirrorID: id, initial: initial, activityID: activityID,
+                             allowsStartCorrection: allowsStartCorrection)
+            }
         }
     }
 
-    private func attach(_ incoming: HKWorkoutSession, mirrorID id: UUID, initial: WatchWorkoutSnapshot, activityID: String?) {
+    private func attach(_ incoming: HKWorkoutSession, mirrorID id: UUID, initial: WatchWorkoutSnapshot,
+                        activityID: String?, allowsStartCorrection: Bool) {
         if let mirrorID { activity.finish(mirrorID: mirrorID) }
         session?.delegate = nil
         session = incoming
         incoming.delegate = self
         mirrorID = id
-        activity.start(mirrorID: id, snapshot: initial, requestedID: activityID, didRequest: true)
+        activity.start(mirrorID: id, snapshot: initial, requestedID: activityID, didRequest: true,
+                       allowsStartCorrection: allowsStartCorrection)
         if incoming.state == .ended || incoming.state == .stopped { finish(incoming, at: Date()) }
     }
 
@@ -98,7 +104,7 @@ extension WatchWorkoutMirrorManager: HKWorkoutSessionDelegate {
             for packet in data where packet.count <= 4_096 {
                 do {
                     let snapshot = try JSONDecoder().decode(WatchWorkoutSnapshot.self, from: packet)
-                    activity.receive(snapshot, mirrorID: mirrorID)
+                    activity.receive(snapshot, mirrorID: mirrorID, authoritative: true)
                 } catch {
                     AppLogger.ui.error("Invalid Watch workout snapshot: \(error.localizedDescription, privacy: .private)")
                 }

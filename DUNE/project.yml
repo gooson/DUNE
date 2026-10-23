@@ -201,6 +201,7 @@ targets:
       - path: Domain/Models/WorkoutMode.swift
       - path: Domain/Models/AppTheme.swift
       - path: Domain/Models/WatchConnectivityModels.swift
+      - path: Domain/Models/WorkoutMirrorRetryPolicy.swift
       - path: ../Shared/WatchWorkoutSnapshot.swift
         group: Shared
       - path: Domain/Models/HealthMetric.swift

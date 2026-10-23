@@ -108,6 +108,18 @@ struct WatchWorkoutActivityTests {
         #expect(driver.events == ["start", "end:activity-1"])
     }
 
+    @Test("A provisional start date is corrected exactly once by the Watch payload")
+    func correctsProvisionalStart() async {
+        let driver = MockWatchWorkoutActivityDriver()
+        let activity = WatchWorkoutActivity(driver: driver)
+        activity.start(mirrorID: mirrorID, snapshot: snapshot(), allowsStartCorrection: true)
+        let actual = snapshot(updatedAtOffset: 20, startedAtOffset: -60, elapsedSeconds: 80)
+        activity.receive(actual, mirrorID: mirrorID, authoritative: true)
+        activity.receive(snapshot(updatedAtOffset: 30, startedAtOffset: -120), mirrorID: mirrorID, authoritative: true)
+        await activity.waitForPendingUpdates()
+        #expect(activity.snapshot == actual)
+    }
+
     @Test("Replaces an activity when a different mirrored session starts")
     func closesReplacedSessionActivity() async {
         let driver = MockWatchWorkoutActivityDriver()

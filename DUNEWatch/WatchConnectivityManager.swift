@@ -94,6 +94,15 @@ final class WatchConnectivityManager: NSObject {
     var isReachable: Bool {
         WCSession.isSupported() ? WCSession.default.isReachable : false
     }
+    private var lastReachability = false
+
+    private func observeReachability(_ reachable: Bool) {
+        let becameReachable = !lastReachability && reachable
+        lastReachability = reachable
+        if becameReachable {
+            WorkoutManager.shared.phoneDidReconnect()
+        }
+    }
 
     /// Active workout state received from iPhone
     private(set) var activeWorkout: WatchWorkoutState?
@@ -424,6 +433,7 @@ extension WatchConnectivityManager: WCSessionDelegate {
         }
         if activationState == .activated {
             Task { @MainActor in
+                lastReachability = session.isReachable
                 syncStatus = .syncing
                 loadCachedContext()
                 if exerciseLibrary.isEmpty {
@@ -438,10 +448,12 @@ extension WatchConnectivityManager: WCSessionDelegate {
 
     nonisolated func sessionReachabilityDidChange(_ session: WCSession) {
         Task { @MainActor in
+            let reachable = session.isReachable
+            observeReachability(reachable)
             let needsLibrary = exerciseLibrary.isEmpty
             let needsTemplates = workoutTemplates.isEmpty
             guard needsLibrary || needsTemplates else { return }
-            if session.isReachable {
+            if reachable {
                 if needsLibrary {
                     syncStatus = .syncing
                     requestExerciseLibrarySyncIfNeeded(force: false)

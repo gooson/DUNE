@@ -30,9 +30,11 @@ final class WorkoutManager: NSObject {
     private var mirrorStartTask: Task<Void, Never>?
     private var mirrorIntervalTask: Task<Void, Never>?
     private var mirrorSendTask: Task<Void, Never>?
+    private var mirrorRetryTask: Task<Void, Never>?
     private var mirroredSession: HKWorkoutSession?
     private var pendingMirrorSnapshot: WatchWorkoutSnapshot?
     private var mirrorGeneration = UUID()
+    private var mirrorRetryPolicy = WorkoutMirrorRetryPolicy()
     private var mirrorWorkoutName = String(localized: "Workout")
 
     var isActive: Bool { (session != nil || isSimulatedSessionActive) && !isSessionEnded }
@@ -634,6 +636,7 @@ final class WorkoutManager: NSObject {
             startFinalizationTimeoutWatchdog()
         }
         session?.end()
+        stopMirrorTransport()
         stopInactivityMonitoring()
     }
 
@@ -1098,8 +1101,8 @@ final class WorkoutManager: NSObject {
 
     // MARK: - Workout Mirroring
 
-    private func startMirrorTransport(for workoutSession: HKWorkoutSession) {
-        stopMirrorTransport()
+    private func startMirrorTransport(for workoutSession: HKWorkoutSession, isRetry: Bool = false) {
+        stopMirrorTransport(resetRetryPolicy: !isRetry)
         let generation = mirrorGeneration
         mirrorStartTask = Task { @MainActor [weak self] in
             do {
@@ -1108,6 +1111,7 @@ final class WorkoutManager: NSObject {
                       self.mirrorGeneration == generation,
                       self.session === workoutSession,
                       !self.isSessionEnded else { return }
+                self.mirrorStartTask = nil
                 self.mirroredSession = workoutSession
                 self.enqueueMirrorSnapshot()
                 self.mirrorIntervalTask = Task { @MainActor [weak self] in
@@ -1126,13 +1130,14 @@ final class WorkoutManager: NSObject {
                 }
             } catch {
                 guard let self, self.mirrorGeneration == generation else { return }
+                self.mirrorStartTask = nil
                 Self.logger.error("Workout mirroring failed: \(String(describing: error), privacy: .private)")
-                self.stopMirrorTransport()
+                self.handleMirrorFailure(for: workoutSession)
             }
         }
     }
 
-    private func stopMirrorTransport() {
+    private func stopMirrorTransport(resetRetryPolicy: Bool = true) {
         mirrorGeneration = UUID()
         mirrorStartTask?.cancel()
         mirrorStartTask = nil
@@ -1140,8 +1145,50 @@ final class WorkoutManager: NSObject {
         mirrorIntervalTask = nil
         mirrorSendTask?.cancel()
         mirrorSendTask = nil
+        mirrorRetryTask?.cancel()
+        mirrorRetryTask = nil
         mirroredSession = nil
         pendingMirrorSnapshot = nil
+        if resetRetryPolicy {
+            mirrorRetryPolicy.reset()
+        }
+    }
+
+    private func handleMirrorFailure(for workoutSession: HKWorkoutSession) {
+        guard session === workoutSession, !isSessionEnded else { return }
+        // A send failure and disconnect callback can describe the same outage.
+        guard !mirrorRetryPolicy.isRetryScheduled else { return }
+        let shouldRetry = mirrorRetryPolicy.recordFailure()
+        stopMirrorTransport(resetRetryPolicy: false)
+        if shouldRetry {
+            scheduleMirrorRetry(for: workoutSession)
+        }
+    }
+
+    private func scheduleMirrorRetry(for workoutSession: HKWorkoutSession) {
+        guard mirrorRetryTask == nil else { return }
+        let generation = mirrorGeneration
+        mirrorRetryTask = Task { @MainActor [weak self] in
+            do {
+                try await Task.sleep(for: .seconds(5))
+            } catch {
+                return
+            }
+            guard let self,
+                  self.mirrorGeneration == generation,
+                  self.session === workoutSession,
+                  !self.isSessionEnded else { return }
+            self.mirrorRetryTask = nil
+            guard self.mirrorRetryPolicy.beginRetry() else { return }
+            self.startMirrorTransport(for: workoutSession, isRetry: true)
+        }
+    }
+
+    func phoneDidReconnect() {
+        guard let workoutSession = session,
+              !isSessionEnded,
+              mirrorRetryPolicy.recordReconnect() else { return }
+        scheduleMirrorRetry(for: workoutSession)
     }
 
     private func enqueueMirrorSnapshot() {
@@ -1171,11 +1218,12 @@ final class WorkoutManager: NSObject {
                 } catch {
                     guard self.mirrorGeneration == generation else { return }
                     Self.logger.error("Workout mirror send failed: \(String(describing: error), privacy: .private)")
-                    self.stopMirrorTransport()
+                    self.handleMirrorFailure(for: mirroredSession)
                     return
                 }
                 guard self.mirrorGeneration == generation,
                       self.session === mirroredSession else { return }
+                self.mirrorRetryPolicy.recordSuccess()
             }
             self.mirrorSendTask = nil
         }
@@ -1505,11 +1553,13 @@ extension WorkoutManager: HKWorkoutSessionDelegate {
         didDisconnectFromRemoteDeviceWithError error: Error?
     ) {
         Task { @MainActor in
-            guard let currentSession = session, workoutSession === currentSession else { return }
-            stopMirrorTransport()
+            guard let currentSession = session,
+                  workoutSession === currentSession,
+                  mirroredSession === workoutSession else { return }
             if let error {
                 Self.logger.error("Workout mirror disconnected: \(String(describing: error), privacy: .private)")
             }
+            handleMirrorFailure(for: workoutSession)
         }
     }
 }

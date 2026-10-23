@@ -69,7 +69,7 @@ Watch `HKWorkoutSession.startMirroringToCompanionDevice()`와 iPhone의 앱 초�
 | 정지·재개 | 활성 누적 시간과 상태 timestamp로 표시 |
 | 종료·새 세션·지연된 callback | 세션 identity와 직렬 ActivityKit 작업으로 이전 callback 배제 |
 | Watch 복구 | 복구된 세션에 mirroring과 송신 재설정 |
-| 기기 단절·프로세스 종료 | delegate 정리 및 staleDate로 오래된 숫자 표시 방지 |
+| 기기 단절·프로세스 종료 | delegate 정리 및 staleDate로 오래된 숫자 표시 방지. 장애당 5초 후 1회 재시도하고 이후에는 실제 연결 복구 이벤트에서만 재개 |
 | 시뮬레이터 HealthKit 제한 | seed 경로로 시스템 표면을 검증하고 실제 쌍 기기 검증은 별도 명시 |
 
 ## Testing Strategy
