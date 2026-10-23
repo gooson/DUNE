@@ -191,83 +191,80 @@ struct DesertTabWaveBackground: View {
     }
 
     private var isDark: Bool { colorScheme == .dark }
-    private var baseColor: Color {
-        isDark ? Color(red: 0.110, green: 0.102, blue: 0.098)
-            : Color(red: 0.988, green: 0.969, blue: 0.925)
-    }
-
     var body: some View {
         let scale = intensityScale
+        // Preserve the 185pt crest geometry while extending the fills into the page.
+        let profileScale: CGFloat = 185 / 420
 
         ZStack(alignment: .top) {
-            baseColor
+            DesertPalette.surface
+            backgroundGradient
 
-            LinearGradient(
-                colors: desertGradientColors,
-                startPoint: .top,
-                endPoint: .bottom
-            )
-            .frame(height: 215)
-
-            // Match the source SVG's 100-unit dune profile: far 45±8,
-            // middle 62±10, near 76±13. The fills have no glowing crest.
-            DesertDuneOverlayView(
-                color: isDark ? Color(red: 0.467, green: 0.392, blue: 0.365)
-                    : Color(red: 0.871, green: 0.776, blue: 0.647),
-                opacity: 0.48 * scale,
-                amplitude: 0.08 * scale,
-                frequency: 0.72,
-                verticalOffset: 0.45,
-                bottomFade: 0,
-                skewness: 0.2,
-                skewOffset: .pi / 6,
-                driftDuration: 18
-            )
-            .frame(height: 185)
-
-            DesertDuneOverlayView(
-                color: isWeatherActive ? atmosphere.waveColor : (isDark
-                    ? Color(red: 0.584, green: 0.427, blue: 0.322)
-                    : Color(red: 0.875, green: 0.682, blue: 0.471)),
-                opacity: 0.48 * scale,
-                amplitude: 0.10 * scale,
-                frequency: 1.0,
-                verticalOffset: 0.62,
-                bottomFade: 0,
-                skewness: 0.18,
-                skewOffset: .pi / 6,
-                driftDuration: 15
-            )
-            .frame(height: 185)
-
-            DesertDuneOverlayView(
-                color: isWeatherActive ? atmosphere.waveColor : (isDark
-                    ? Color(red: 0.471, green: 0.310, blue: 0.235)
-                    : Color(red: 0.796, green: 0.569, blue: 0.392)),
-                opacity: 0.48 * scale,
-                amplitude: 0.13 * scale,
-                frequency: 1.35,
-                verticalOffset: 0.76,
-                bottomFade: 0,
-                skewness: 0.14,
-                skewOffset: .pi / 6,
-                driftDuration: 13
-            )
-            .frame(height: 185)
+            ZStack {
+                DesertDuneOverlayView(
+                    color: DesertPalette.duneFar,
+                    opacity: (isDark ? 0.54 : 0.42) * scale,
+                    amplitude: 0.08 * scale * profileScale,
+                    frequency: 0.72,
+                    verticalOffset: 0.45 * profileScale,
+                    bottomFade: 0,
+                    skewness: 0.20,
+                    driftDuration: 18
+                )
+                DesertDuneOverlayView(
+                    color: isWeatherActive ? atmosphere.waveColor : DesertPalette.duneMid,
+                    opacity: (isDark ? 0.54 : 0.42) * scale,
+                    amplitude: 0.10 * scale * profileScale,
+                    frequency: 1.0,
+                    verticalOffset: 0.62 * profileScale,
+                    bottomFade: 0,
+                    skewness: 0.18,
+                    driftDuration: 15
+                )
+                DesertDuneOverlayView(
+                    color: isWeatherActive ? atmosphere.waveColor : DesertPalette.duneNear,
+                    opacity: (isDark ? 0.38 : 0.32) * scale,
+                    amplitude: 0.13 * scale * profileScale,
+                    frequency: 1.35,
+                    verticalOffset: 0.76 * profileScale,
+                    bottomFade: 0,
+                    skewness: 0.14,
+                    driftDuration: 13
+                )
+            }
+            .frame(height: 420)
+            .mask {
+                LinearGradient(
+                    stops: [
+                        .init(color: .white, location: 0),
+                        .init(color: .white, location: 0.23),
+                        .init(color: .clear, location: 1)
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+            }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .ignoresSafeArea()
         .animation(DS.Animation.atmosphereTransition, value: atmosphere)
     }
 
-    private var desertGradientColors: [Color] {
+    private var backgroundGradient: LinearGradient {
         if isWeatherActive {
-            return atmosphere.gradientColors
+            LinearGradient(colors: atmosphere.gradientColors, startPoint: .top, endPoint: .bottom)
+        } else {
+            LinearGradient(
+                stops: [
+                    .init(color: DesertPalette.horizonTop, location: 0),
+                    .init(color: DesertPalette.horizonMiddle, location: 0.20),
+                    .init(color: DesertPalette.horizonTop, location: 0.44),
+                    .init(color: DesertPalette.surface, location: 1)
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
         }
-        return [
-            isDark ? Color(red: 0.267, green: 0.208, blue: 0.184)
-                : Color(red: 0.961, green: 0.875, blue: 0.741),
-            baseColor
-        ]
     }
 }
 

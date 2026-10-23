@@ -523,7 +523,9 @@ struct HeroCard<Content: View>: View {
             .frame(maxWidth: .infinity)
             .padding(cardPadding)
             .background {
-                if theme == .contourAtlas {
+                if theme == .desertWarm {
+                    DesertCardSurface(cornerRadius: cornerRadius)
+                } else if theme == .contourAtlas {
                     ContourCardSurface(cornerRadius: cornerRadius, emphasized: true)
                 } else {
                     RoundedRectangle(cornerRadius: cornerRadius)
@@ -582,7 +584,9 @@ struct StandardCard<Content: View>: View {
         content()
             .padding(resolvedPadding)
             .background {
-                if theme == .contourAtlas {
+                if theme == .desertWarm {
+                    DesertCardSurface(cornerRadius: cornerRadius, isSupporting: true)
+                } else if theme == .contourAtlas {
                     ContourCardSurface(cornerRadius: cornerRadius, emphasized: false)
                 } else {
                     RoundedRectangle(cornerRadius: cornerRadius)
@@ -635,7 +639,9 @@ struct InlineCard<Content: View>: View {
         content()
             .padding(cardPadding)
             .background {
-                if theme == .contourAtlas {
+                if theme == .desertWarm {
+                    DesertCardSurface(cornerRadius: cornerRadius)
+                } else if theme == .contourAtlas {
                     ContourCardSurface(cornerRadius: cornerRadius, emphasized: false)
                 } else {
                     RoundedRectangle(cornerRadius: cornerRadius)

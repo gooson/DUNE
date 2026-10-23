@@ -39,8 +39,8 @@ struct HeroScoreCard: View {
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
-    private var desertInk: Color { colorScheme == .dark ? Color(red: 0.957, green: 0.961, blue: 0.933) : Color(red: 0.145, green: 0.169, blue: 0.157) }
-    private var desertMuted: Color { colorScheme == .dark ? Color(red: 0.702, green: 0.753, blue: 0.718) : Color(red: 0.337, green: 0.376, blue: 0.357) }
+    private var desertInk: Color { DesertPalette.ink }
+    private var desertMuted: Color { DesertPalette.muted }
 
     private var isRegular: Bool { sizeClass == .regular }
 
@@ -140,22 +140,7 @@ struct HeroScoreCard: View {
         }
         .padding(20)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background {
-            RoundedRectangle(cornerRadius: 23)
-                .fill(colorScheme == .dark ? Color(red: 0.110, green: 0.120, blue: 0.125) : Color(red: 0.988, green: 0.969, blue: 0.937))
-                .overlay(alignment: .bottom) {
-                    DesertPreviewWave()
-                    .frame(height: 74)
-                    .clipped()
-                }
-                .clipShape(RoundedRectangle(cornerRadius: 23))
-                .overlay {
-                    RoundedRectangle(cornerRadius: 23)
-                        .strokeBorder(colorScheme == .dark
-                            ? Color(red: 0.251, green: 0.314, blue: 0.286)
-                            : Color(red: 0.871, green: 0.859, blue: 0.824), lineWidth: 1)
-                }
-        }
+        .background { DesertCardSurface(cornerRadius: DS.Radius.xxl) }
         .accessibilityLabel(accessibilityLabel)
         .accessibilityHint(accessibilityHint ?? "")
     }

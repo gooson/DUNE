@@ -222,7 +222,9 @@ struct SectionGroup<Content: View>: View {
         .padding(outerPadding)
         .frame(maxHeight: fillHeight ? .infinity : nil, alignment: .top)
         .background {
-            if theme == .contourAtlas {
+            if theme == .desertWarm {
+                DesertCardSurface(cornerRadius: cornerRadius, isSupporting: true)
+            } else if theme == .contourAtlas {
                 ContourCardSurface(cornerRadius: cornerRadius)
             } else {
                 RoundedRectangle(cornerRadius: cornerRadius)
