@@ -270,9 +270,33 @@ final class TodayDesignMapCaptureTests: UITestBaseCase {
                       "Seven-day sleep bars should be reachable with seeded daily sleep history")
         let chart = app.descendants(matching: .any)["dashboard-recovery-sleep-chart"].firstMatch
         XCTAssertTrue(chart.isHittable)
-        let readableViewport = app.windows.firstMatch.frame.insetBy(dx: 0, dy: 140)
-        for _ in 0..<4 where !readableViewport.contains(chart.frame) { app.swipeUp() }
-        XCTAssertTrue(readableViewport.contains(chart.frame), "The full chart should be above the tab bar")
+        let scroll = app.scrollViews["dashboard-root-scroll"].firstMatch
+        XCTAssertTrue(scroll.waitForExistence(timeout: 5))
+        let window = app.windows.firstMatch.frame
+        let tabBar = app.tabBars.firstMatch
+        let navigationBar = app.navigationBars.firstMatch
+        func visibleViewport() -> CGRect {
+            let top = max(scroll.frame.minY, window.minY,
+                          navigationBar.exists ? navigationBar.frame.maxY : window.minY) + 4
+            let bottom = min(scroll.frame.maxY, window.maxY,
+                             tabBar.exists ? tabBar.frame.minY : window.maxY) - 4
+            return CGRect(x: max(scroll.frame.minX, window.minX), y: top,
+                          width: min(scroll.frame.maxX, window.maxX) - max(scroll.frame.minX, window.minX),
+                          height: max(0, bottom - top))
+        }
+        for _ in 0..<2 where !visibleViewport().contains(chart.frame) {
+            let viewport = visibleViewport()
+            let movement = chart.frame.maxY > viewport.maxY
+                ? chart.frame.maxY - viewport.maxY + 4
+                : chart.frame.minY - viewport.minY - 4
+            let distance = min(abs(movement), scroll.frame.height * 0.35)
+            let start = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.55))
+            start.press(forDuration: 0.05, thenDragTo: start.withOffset(
+                CGVector(dx: 0, dy: movement > 0 ? -distance : distance)
+            ))
+        }
+        XCTAssertTrue(visibleViewport().contains(chart.frame),
+                      "The full chart should fit between the navigation bar and tab bar")
         XCTAssertTrue(app.descendants(matching: .any)["dashboard-recovery-sleep-card"].firstMatch.exists,
                       "The history chart should remain inside Recovery & Sleep")
         addScreenshotAttachment(named: "Today Recovery Sleep seven day chart")

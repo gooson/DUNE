@@ -70,6 +70,31 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
         }
     }
 
+    func testDesertTodayToolbarFitsAtBothAppearances() {
+        for style in ["Light", "Dark"] {
+            var configuration = launchConfiguration
+            configuration.initialTabSelectionArgument = "today"
+            configuration.additionalArguments += [
+                "--ui-test-theme", "desertWarm",
+                "--ui-test-style", style.lowercased(),
+                "-morningBriefingDisabled", "YES"
+            ]
+            launchApp(with: configuration)
+
+            let window = app.windows.firstMatch.frame
+            for identifier in [AXID.dashboardToolbarNotifications, AXID.dashboardToolbarSettings] {
+                let action = app.buttons[identifier].firstMatch
+                XCTAssertTrue(action.waitForExistence(timeout: 10), "Desert \(style): \(identifier) should appear")
+                XCTAssertGreaterThanOrEqual(action.frame.width, 44, "Desert \(style): \(identifier) needs a 44pt target")
+                XCTAssertGreaterThanOrEqual(action.frame.height, 44, "Desert \(style): \(identifier) needs a 44pt target")
+                XCTAssertTrue(window.contains(action.frame), "Desert \(style): \(identifier) should fit the window")
+                XCTAssertLessThan(action.frame.maxY, 150, "Desert \(style): \(identifier) should stay in the top toolbar")
+            }
+            VisualAudit.capture("Today toolbar Desert \(style)")
+            if !VisualAudit.isEnabled { addScreenshotAttachment(named: "Today toolbar Desert \(style)") }
+        }
+    }
+
     func testDesertWellnessRingLayout() {
         for style in ["Light", "Dark"] {
             app.terminate()

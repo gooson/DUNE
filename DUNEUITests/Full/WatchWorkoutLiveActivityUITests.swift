@@ -74,16 +74,15 @@ final class WatchWorkoutLiveActivityUITests: UITestBaseCase {
 
 @MainActor
 final class SystemWidgetDesignTests: UITestBaseCase {
-    func testSystemDUNETodayWidgetFamilies() throws {
-        var configuration = launchConfiguration
-        configuration.shouldSeedMockData = true
-        configuration.scenario = .defaultSeeded
-        configuration.additionalArguments += [
+    override var shouldSeedMockData: Bool { true }
+    override var additionalLaunchArguments: [String] {
+        [
             "--ui-test-theme", "desertWarm", "--ui-test-style", "light",
             "-AppleLanguages", "(en)", "-AppleLocale", "en_US"
         ]
-        launchApp(with: configuration)
+    }
 
+    func testSystemDUNETodayWidgetFamilies() throws {
         // Let each production view model write its real seeded score to the App Group.
         for (tab, ringID) in [
             ("Today", "dashboard-hero-ring"),
