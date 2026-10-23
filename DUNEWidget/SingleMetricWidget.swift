@@ -205,7 +205,7 @@ struct SingleMetricWidgetView: View {
             Text(metric.secondaryText)
         }
         .font(.caption.weight(.semibold))
-        .foregroundStyle(metric.tintColor)
+        .foregroundStyle(metric.textColor)
         .lineLimit(1)
         .minimumScaleFactor(0.75)
         .privacySensitive()
@@ -241,7 +241,7 @@ private struct SingleMetricRingView: View {
                 .rotationEffect(.degrees(-90))
             Text(metric.scoreText)
                 .font(.system(size: size * 0.31, weight: .bold, design: .rounded))
-                .foregroundStyle(metric.hasScore ? metric.tintColor : .primary)
+                .foregroundStyle(metric.hasScore ? metric.textColor : .primary)
                 .monospacedDigit()
                 .minimumScaleFactor(0.7)
         }

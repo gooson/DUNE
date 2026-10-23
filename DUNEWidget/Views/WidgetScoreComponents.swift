@@ -23,6 +23,11 @@ struct WidgetMetric: Identifiable {
         hasScore ? color : WidgetDS.Color.textTertiary
     }
 
+    /// Keep text readable while the ring and icon retain the status color.
+    var textColor: Color {
+        WidgetDS.isDesertWarm ? .primary : tintColor
+    }
+
     var secondaryText: String {
         hasScore ? statusLabel : WidgetMetricText.openDune
     }
@@ -116,7 +121,7 @@ struct WidgetRingView: View {
 
             Text(metric.scoreText)
                 .font(.system(size: size * 0.31, weight: .bold, design: .rounded))
-                .foregroundStyle(metric.tintColor)
+                .foregroundStyle(metric.textColor)
                 .monospacedDigit()
                 .minimumScaleFactor(0.7)
         }
@@ -162,17 +167,18 @@ struct WidgetMetricTileView: View {
             if metric.hasScore {
                 HStack(spacing: 3) {
                     Image(systemName: metric.icon)
+                        .foregroundStyle(metric.tintColor)
                         .font(.system(size: 10, weight: .semibold))
                     Text(metric.statusLabel)
                         .lineLimit(1)
                 }
                 .font(.system(size: 11, weight: .semibold, design: .rounded))
-                .foregroundStyle(metric.tintColor)
+                .foregroundStyle(metric.textColor)
                 .minimumScaleFactor(0.75)
             } else {
                 Text(metric.secondaryText)
                     .font(.system(size: 11, weight: .semibold, design: .rounded))
-                    .foregroundStyle(metric.tintColor)
+                    .foregroundStyle(metric.textColor)
                     .lineLimit(1)
                     .minimumScaleFactor(0.75)
             }
@@ -214,18 +220,19 @@ struct WidgetMetricRowView: View {
                     if metric.hasScore {
                         HStack(spacing: 3) {
                             Image(systemName: metric.icon)
+                        .foregroundStyle(metric.tintColor)
                                 .font(.system(size: 10, weight: .semibold))
                             Text(metric.statusLabel)
                                 .lineLimit(1)
                         }
                         .font(.caption)
                         .fontWeight(.semibold)
-                        .foregroundStyle(metric.tintColor)
+                        .foregroundStyle(metric.textColor)
                     } else {
                         Text(metric.secondaryText)
                             .font(.caption)
                             .fontWeight(.semibold)
-                            .foregroundStyle(metric.tintColor)
+                            .foregroundStyle(metric.textColor)
                             .lineLimit(1)
                     }
 

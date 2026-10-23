@@ -179,6 +179,7 @@ struct NotificationHubView: View {
     @State private var handledNavigationRequestID: Int?
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.appTheme) private var theme
     @Environment(\.colorScheme) private var colorScheme
     private let inboxManager = NotificationInboxManager.shared
@@ -251,6 +252,8 @@ struct NotificationHubView: View {
         .accessibilityIdentifier("notification-hub-screen")
         .listStyle(.plain)
         .scrollContentBackground(.hidden)
+        .frame(maxWidth: 720)
+        .frame(maxWidth: .infinity)
         .background { TabWaveBackground() }
         .navigationBarTitleDisplayMode(.inline)
         .englishNavigationTitle("Notifications")
@@ -333,57 +336,21 @@ struct NotificationHubView: View {
         Section {
             StandardCard {
                 VStack(alignment: .leading, spacing: DS.Spacing.md) {
-                    HStack(spacing: DS.Spacing.sm) {
-                        Image(systemName: combinedUnreadCount > 0 ? "bell.badge.fill" : "bell")
-                            .font(.headline)
-                            .foregroundStyle(.tint)
-
-                        if combinedUnreadCount > 0 {
-                            Text("\(combinedUnreadCount) unread notifications")
-                                .font(.subheadline.weight(.semibold))
-                        } else {
-                            Text("Inbox is all caught up")
-                                .font(.subheadline.weight(.semibold))
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.85)
-                                .layoutPriority(1)
+                    if dynamicTypeSize.isAccessibilitySize {
+                        unreadSummary
+                        settingsButton
+                        readAllButton
+                        moreOptionsMenu
+                    } else {
+                        HStack(spacing: DS.Spacing.sm) {
+                            unreadSummary
+                            Spacer(minLength: DS.Spacing.sm)
+                            settingsButton
                         }
-
-                        Spacer()
-
-                        Button {
-                            destination = .settings
-                        } label: {
-                            Image(systemName: "gearshape")
+                        HStack(spacing: DS.Spacing.sm) {
+                            readAllButton
+                            moreOptionsMenu
                         }
-                        .buttonStyle(.plain)
-                        .accessibilityLabel("Notification Settings")
-                        .accessibilityIdentifier("notifications-open-settings-button")
-                    }
-
-                    HStack(spacing: DS.Spacing.sm) {
-                        Button {
-                            inboxManager.markAllRead()
-                            if let release { whatsNewStore.markOpened(build: release.build) }
-                        } label: {
-                            Text("Read All")
-                                .foregroundStyle(theme.prominentButtonForegroundColor(for: colorScheme))
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .disabled(combinedUnreadCount == 0)
-                        .accessibilityIdentifier("notifications-read-all-button")
-
-                        Menu {
-                            Button("Delete All", role: .destructive) {
-                                showDeleteAllConfirmation = true
-                            }
-                            .disabled(items.isEmpty)
-                        } label: {
-                            Image(systemName: "ellipsis")
-                                .frame(minWidth: 44, minHeight: 44)
-                        }
-                        .accessibilityLabel("More Options")
-                        .accessibilityIdentifier("notifications-more-options-button")
                     }
                 }
             }
@@ -391,6 +358,62 @@ struct NotificationHubView: View {
             .listRowBackground(Color.clear)
             .listRowInsets(EdgeInsets(top: DS.Spacing.sm, leading: DS.Spacing.lg, bottom: DS.Spacing.sm, trailing: DS.Spacing.lg))
         }
+    }
+
+    private var unreadSummary: some View {
+        HStack(alignment: .top, spacing: DS.Spacing.sm) {
+            Image(systemName: combinedUnreadCount > 0 ? "bell.badge.fill" : "bell")
+                .font(.headline)
+                .foregroundStyle(.tint)
+            Group {
+                if combinedUnreadCount > 0 {
+                    Text("\(combinedUnreadCount) unread notifications")
+                } else {
+                    Text("Inbox is all caught up")
+                }
+            }
+            .font(.subheadline.weight(.semibold))
+            .fixedSize(horizontal: false, vertical: true)
+        }
+    }
+
+    private var settingsButton: some View {
+        Button {
+            destination = .settings
+        } label: {
+            Image(systemName: "gearshape")
+                .frame(minWidth: 44, minHeight: 44)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("Notification Settings")
+        .accessibilityIdentifier("notifications-open-settings-button")
+    }
+
+    private var readAllButton: some View {
+        Button {
+            inboxManager.markAllRead()
+            if let release { whatsNewStore.markOpened(build: release.build) }
+        } label: {
+            Text("Read All")
+                .foregroundStyle(theme.prominentButtonForegroundColor(for: colorScheme))
+        }
+        .buttonStyle(.borderedProminent)
+        .disabled(combinedUnreadCount == 0)
+        .accessibilityIdentifier("notifications-read-all-button")
+    }
+
+    private var moreOptionsMenu: some View {
+        Menu {
+            Button("Delete All", role: .destructive) {
+                showDeleteAllConfirmation = true
+            }
+            .disabled(items.isEmpty)
+        } label: {
+            Image(systemName: "ellipsis")
+                .frame(minWidth: 44, minHeight: 44)
+        }
+        .accessibilityLabel("More Options")
+        .accessibilityIdentifier("notifications-more-options-button")
     }
 
     private var filterSection: some View {
@@ -443,6 +466,7 @@ struct NotificationHubView: View {
                     }
                 }
                 .buttonStyle(.plain)
+                .accessibilityValue(release.isUnread ? Text("Unread") : Text("Read"))
                 .accessibilityIdentifier("notifications-news-release")
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color.clear)
@@ -466,7 +490,7 @@ struct NotificationHubView: View {
 
     private var emptyTitle: LocalizedStringKey {
         switch filter {
-        case .all: "No News Yet"
+        case .all: "No Notifications"
         case .health: "No Notifications"
         case .news: "No App Updates"
         }

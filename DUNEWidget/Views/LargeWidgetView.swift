@@ -28,14 +28,14 @@ struct LargeWidgetView: View {
                 HStack(spacing: 6) {
                     Image(systemName: lowestMetric.icon)
                         .font(.caption2)
-                        .foregroundStyle(lowestMetric.tintColor)
+                        .foregroundStyle(lowestMetric.textColor)
 
                     Text(lowestMetric.title)
                         .fontWeight(.medium)
 
                     Text(lowestMetric.statusLabel)
                         .fontWeight(.semibold)
-                        .foregroundStyle(lowestMetric.tintColor)
+                        .foregroundStyle(lowestMetric.textColor)
                 }
                 .accessibilityIdentifier(WidgetSurfaceAccessibility.summaryID(for: .large))
             } else {

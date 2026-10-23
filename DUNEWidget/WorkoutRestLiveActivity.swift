@@ -7,7 +7,7 @@ struct WorkoutRestLiveActivity: Widget {
         ActivityConfiguration(for: WorkoutRestAttributes.self) { context in
             WorkoutRestActivityContent(context: context)
                 .activityBackgroundTint(WidgetDS.isDesertWarm ? WidgetDS.Color.warmSurface : .black.opacity(0.8))
-                .activitySystemActionForegroundColor(.white)
+                .activitySystemActionForegroundColor(WidgetDS.isDesertWarm ? WidgetDS.Color.warmInk : .white)
         } dynamicIsland: { context in
             DynamicIsland {
                 DynamicIslandExpandedRegion(.leading) {
@@ -65,7 +65,7 @@ private struct WorkoutRestActivityContent: View {
         VStack(alignment: .leading, spacing: 8) {
             Label("Rest Timer", systemImage: "timer")
                 .font(.caption.weight(.bold))
-                .foregroundStyle(WidgetDS.isDesertWarm ? WidgetDS.themeAccent : .white)
+                .foregroundStyle(WidgetDS.isDesertWarm ? WidgetDS.Color.warmAccent : .white)
             Text(context.attributes.exerciseName)
                 .font(.subheadline.weight(.semibold))
                 .lineLimit(1)
@@ -76,7 +76,7 @@ private struct WorkoutRestActivityContent: View {
                 Spacer()
                 restCountdown(context.state)
                     .font(.system(.title, design: .rounded, weight: .bold))
-                    .foregroundStyle(WidgetDS.isDesertWarm ? WidgetDS.themeAccent : .white)
+                    .foregroundStyle(WidgetDS.isDesertWarm ? WidgetDS.Color.warmAccent : .white)
             }
         }
     }
@@ -92,10 +92,10 @@ private struct WorkoutRestActivityContent: View {
             HStack(spacing: 4) {
                 Image(systemName: "timer")
                     .accessibilityLabel("Rest Timer")
-                    .foregroundStyle(WidgetDS.isDesertWarm ? WidgetDS.themeAccent : .white)
+                    .foregroundStyle(WidgetDS.isDesertWarm ? WidgetDS.Color.warmAccent : .white)
                 restCountdown(context.state)
                     .font(.title3.weight(.bold))
-                    .foregroundStyle(WidgetDS.isDesertWarm ? WidgetDS.themeAccent : .white)
+                    .foregroundStyle(WidgetDS.isDesertWarm ? WidgetDS.Color.warmAccent : .white)
             }
             .lineLimit(1)
             .minimumScaleFactor(0.8)

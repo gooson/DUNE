@@ -36,6 +36,8 @@ enum WidgetDS {
         static let warmSurface = SwiftUI.Color("WidgetWarmSurface")
         static let warmTile = SwiftUI.Color("WidgetWarmTile")
         static let warmStroke = SwiftUI.Color("WidgetWarmStroke")
+        static let warmAccent = SwiftUI.Color("WidgetWarmAccent")
+        static let warmInk = SwiftUI.Color("DesertHorizonInk")
         static var ringTrack: SwiftUI.Color { WidgetDS.themeAccent.opacity(0.12) }
         static var cardStroke: SwiftUI.Color {
             WidgetDS.isDesertWarm ? warmStroke : SwiftUI.Color.white.opacity(0.08)

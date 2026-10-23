@@ -600,7 +600,7 @@ struct DashboardView: View {
                     .padding(.horizontal, 5)
                     .padding(.vertical, 2)
                     .background(Color.red, in: Capsule())
-                    .accessibilityLabel("\(combinedUnreadCount.formatted()) unread notifications")
+                    .accessibilityHidden(true)
             }
         }
         .frame(width: 44, height: 44)
@@ -629,6 +629,9 @@ struct DashboardView: View {
                 notificationBellIcon
             }
             .accessibilityLabel("Notifications")
+            .accessibilityValue(combinedUnreadCount > 0
+                ? Text("\(combinedUnreadCount) unread notifications")
+                : Text("Inbox is all caught up"))
             .accessibilityIdentifier("dashboard-toolbar-notifications")
         }
     }

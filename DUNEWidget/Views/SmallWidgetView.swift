@@ -29,7 +29,7 @@ struct SmallWidgetView: View {
                             Text(lowestMetric.statusLabel)
                                 .fontWeight(.semibold)
                         }
-                        .foregroundStyle(lowestMetric.tintColor)
+                        .foregroundStyle(lowestMetric.textColor)
                         .accessibilityIdentifier(WidgetSurfaceAccessibility.summaryID(for: .small))
                     } else {
                         Text(WidgetMetricText.openDune)

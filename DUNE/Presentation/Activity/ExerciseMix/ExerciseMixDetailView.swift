@@ -7,6 +7,8 @@ struct ExerciseMixDetailView: View {
     @State private var viewModel = ExerciseMixDetailViewModel()
 
     @Environment(\.appTheme) private var theme
+    @Environment(\.horizontalSizeClass) private var sizeClass
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var selectedAngle: Double?
     @State private var selectedExercise: String?
 
@@ -28,15 +30,32 @@ struct ExerciseMixDetailView: View {
                 } else if viewModel.exerciseFrequencies.isEmpty {
                     emptyState
                 } else {
-                    compositionCard
-                    weeklyCard
-                    muscleCard
-                    cardioCard
+                    if sizeClass == .regular && !dynamicTypeSize.isAccessibilitySize {
+                        HStack(alignment: .top, spacing: DS.Spacing.md) {
+                            VStack(spacing: DS.Spacing.md) {
+                                compositionCard
+                                weeklyCard
+                            }
+                            .frame(maxWidth: .infinity, alignment: .top)
+                            VStack(spacing: DS.Spacing.md) {
+                                muscleCard
+                                cardioCard
+                            }
+                            .frame(maxWidth: .infinity, alignment: .top)
+                        }
+                    } else {
+                        compositionCard
+                        weeklyCard
+                        muscleCard
+                        cardioCard
+                    }
                     donutChart
                     fullFrequencyList
                 }
             }
             .padding()
+            .frame(maxWidth: 780)
+            .frame(maxWidth: .infinity)
         }
         .accessibilityIdentifier("activity-exercise-mix-detail-screen")
         .background { DetailWaveBackground() }
@@ -51,9 +70,7 @@ struct ExerciseMixDetailView: View {
             VStack(alignment: .leading, spacing: DS.Spacing.md) {
                 Text("Last 4 weeks")
                     .font(.headline)
-                (Text(summary.start, format: .dateTime.month(.abbreviated).day())
-                 + Text(" – ")
-                 + Text(summary.end, format: .dateTime.month(.abbreviated).day()))
+                Text("\(summary.start, format: .dateTime.month(.abbreviated).day()) – \(summary.end, format: .dateTime.month(.abbreviated).day())")
                     .font(.caption)
                     .foregroundStyle(DS.Color.textSecondary)
                 VStack(alignment: .leading, spacing: DS.Spacing.xxs) {

@@ -3,6 +3,7 @@ import SwiftUI
 /// Displays workout type distribution as horizontal bars.
 struct ExerciseFrequencySection: View {
     let summary: ExerciseMixSummary
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     private var frequencies: [ExerciseFrequency] { summary.frequencies }
 
@@ -29,25 +30,10 @@ struct ExerciseFrequencySection: View {
                     .background(DS.Color.activity.opacity(0.12), in: Capsule())
                     .clipShape(Capsule())
                     .accessibilityHidden(true)
-                    HStack {
-                        Text("Strength")
-                        Spacer()
-                        Text("\(summary.strength.formattedWithSeparator) / \(summary.total.formattedWithSeparator)")
-                    }
-                    .font(.caption.weight(.medium))
-                    HStack {
-                        Text("Cardio")
-                        Spacer()
-                        Text("\(summary.cardio.formattedWithSeparator) / \(summary.total.formattedWithSeparator)")
-                    }
-                    .font(.caption.weight(.medium))
+                    ratioRow("Strength", count: summary.strength)
+                    ratioRow("Cardio", count: summary.cardio)
                     if summary.other > 0 {
-                        HStack {
-                            Text("Other")
-                            Spacer()
-                            Text("\(summary.other.formattedWithSeparator) / \(summary.total.formattedWithSeparator)")
-                        }
-                        .font(.caption.weight(.medium))
+                        ratioRow("Other", count: summary.other)
                     }
                     if !summary.muscles.isEmpty {
                         Divider()
@@ -55,12 +41,7 @@ struct ExerciseFrequencySection: View {
                             .font(.caption2)
                             .foregroundStyle(DS.Color.textSecondary)
                         ForEach(summary.muscles.prefix(3)) { share in
-                            HStack {
-                                Text(share.muscle.displayName)
-                                Spacer()
-                                Text(share.fraction, format: .percent.precision(.fractionLength(0)))
-                            }
-                            .font(.caption)
+                            muscleRow(share)
                         }
                     }
                     Divider()
@@ -78,6 +59,46 @@ struct ExerciseFrequencySection: View {
                 }
             }
         }
+    }
+
+    private func ratioRow(_ title: LocalizedStringKey, count: Int) -> some View {
+        let value = "\(count.formattedWithSeparator) / \(summary.total.formattedWithSeparator)"
+        return ViewThatFits(in: .horizontal) {
+            if !dynamicTypeSize.isAccessibilitySize {
+                HStack {
+                    Text(title)
+                    Spacer(minLength: DS.Spacing.xs)
+                    Text(value).monospacedDigit()
+                }
+            }
+            VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                Text(title)
+                Text(value)
+                    .foregroundStyle(DS.Color.textSecondary)
+                    .monospacedDigit()
+            }
+        }
+        .font(.caption.weight(.medium))
+    }
+
+    private func muscleRow(_ share: ExerciseMixSummary.MuscleShare) -> some View {
+        ViewThatFits(in: .horizontal) {
+            if !dynamicTypeSize.isAccessibilitySize {
+                HStack {
+                    Text(share.muscle.displayName)
+                    Spacer(minLength: DS.Spacing.xs)
+                    Text(share.fraction, format: .percent.precision(.fractionLength(0)))
+                        .monospacedDigit()
+                }
+            }
+            VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                Text(share.muscle.displayName)
+                Text(share.fraction, format: .percent.precision(.fractionLength(0)))
+                    .foregroundStyle(DS.Color.textSecondary)
+                    .monospacedDigit()
+            }
+        }
+        .font(.caption)
     }
 
     private func frequencyRow(_ freq: ExerciseFrequency) -> some View {
