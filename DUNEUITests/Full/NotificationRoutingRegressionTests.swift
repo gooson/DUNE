@@ -49,8 +49,10 @@ final class NotificationRoutingRegressionTests: SeededUITestBaseCase {
 
     func testReadAllKeepsNewsAvailableAndClearsCombinedBadge() {
         navigateToDashboard()
-        XCTAssertTrue(app.descendants(matching: .any)[AXID.dashboardNotificationsUnreadBadge].firstMatch
-            .waitForExistence(timeout: 5), "Today bell should show the seeded combined unread badge")
+        let bell = app.buttons[AXID.dashboardToolbarNotifications].firstMatch
+        XCTAssertTrue(bell.waitForExistence(timeout: 5))
+        XCTAssertTrue((bell.value as? String)?.contains("unread notifications") == true,
+                      "Today bell should announce the seeded combined unread count")
         openHub()
         let filter = app.segmentedControls[AXID.notificationsFilter].firstMatch
         XCTAssertTrue(filter.waitForExistence(timeout: 5))
@@ -70,8 +72,8 @@ final class NotificationRoutingRegressionTests: SeededUITestBaseCase {
         let back = app.navigationBars.buttons.element(boundBy: 0)
         XCTAssertTrue(back.waitForExistence(timeout: 5))
         back.tap()
-        XCTAssertFalse(app.descendants(matching: .any)[AXID.dashboardNotificationsUnreadBadge].firstMatch.exists,
-                       "Today bell badge should clear after Read All")
+        XCTAssertEqual(bell.value as? String, "Inbox is all caught up",
+                       "Today bell should announce the cleared combined inbox after Read All")
     }
 
     private func openHub() {
