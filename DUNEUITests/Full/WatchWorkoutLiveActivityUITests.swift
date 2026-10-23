@@ -108,8 +108,8 @@ final class SystemWidgetDesignTests: UITestBaseCase {
         }
         func visible(_ labels: [String]) -> XCUIElement? {
             let predicate = NSPredicate(format: "label IN %@", labels + labels.map { " " + $0 })
-            return springboard.descendants(matching: .any).matching(predicate)
-                .allElementsBoundByIndex.first(where: { $0.isHittable })
+            let element = springboard.descendants(matching: .any).matching(predicate).firstMatch
+            return element.exists && element.isHittable ? element : nil
         }
         func swipeGallery(_ direction: String) {
             let startX: CGFloat = direction == "left" ? 0.82 : 0.18
@@ -144,8 +144,8 @@ final class SystemWidgetDesignTests: UITestBaseCase {
         // configurable Single Metric widget.
         let search = springboard.searchFields.firstMatch
         if search.waitForExistence(timeout: 3) && search.isHittable { search.tap(); search.typeText("DUNE") }
-        if let category = springboard.cells.matching(NSPredicate(format: "label == %@", "DUNE"))
-            .allElementsBoundByIndex.first(where: { $0.isHittable }) ?? visible(["DUNE"]) {
+        let category = springboard.cells.matching(NSPredicate(format: "label == %@", "DUNE")).firstMatch
+        if category.exists && category.isHittable {
             category.tap()
         } else if let today = visible(["DUNE Today", "오늘의 DUNE", "今日のDUNE"]) {
             today.tap()
@@ -206,6 +206,14 @@ final class SystemWidgetDesignTests: UITestBaseCase {
         let addControl = try XCTUnwrap(visible(["Add Widget", "위젯 추가", "ウィジェットを追加"]))
         addControl.tap()
         if let done = visible(["Done", "완료", "完了"]) { done.tap() }
+        let galleryAdd = springboard.buttons.matching(NSPredicate(
+            format: "label IN %@", ["Add Widget", "위젯 추가", " 위젯 추가", "ウィジェットを追加"]
+        )).firstMatch
+        let galleryClosed = XCTNSPredicateExpectation(
+            predicate: NSPredicate { _, _ in !galleryAdd.exists || !galleryAdd.isHittable }, object: nil
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [galleryClosed], timeout: 5), .completed,
+                       "The gallery must close before recording a Home timeline capture")
         let home = try XCTUnwrap(widget("small", onHome: true), "A real Small widget should be installed on Home")
         let homeShot = XCTAttachment(screenshot: home.screenshot())
         homeShot.name = "DUNE Today system widget small Home"
