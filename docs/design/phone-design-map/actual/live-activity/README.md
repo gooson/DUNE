@@ -15,3 +15,7 @@ DEBUG 시드로 만든 `WatchWorkoutLiveActivityUITests` 화면은 **실제 Spri
 캡처를 추가할 때는 `images/`에 해당 상태의 원본 PNG를 보존하고 `capture-index.json`의 해당 상태만 `captured`로 바꾼다. 테스트 이름, 결과 번들, 기기·OS, 캡처 시각, `seeded_springboard` 또는 `paired_device` 출처를 함께 기록한다. PNG를 눈으로 확인해 운동명·시간·수치·잘림을 점검한 뒤 [갤러리](index.html)를 갱신한다. XCTest 첨부 이름은 `WLA01-running-notification-center`와 `WLA01-paused-notification-center`다. `xcrun xcresulttool export attachments --path <결과.xcresult> --output-path <임시 디렉터리>`로 원본을 추출할 수 있다.
 
 iPad, Duo 접힘·펼침, Watch small family도 이 작업에서 캡처하지 않았다. 이 기기와 표면의 결과는 iPhone 시드 캡처로 대체하지 않는다.
+
+## 2026-10-24 DESERT HORIZON 갱신
+
+9e3788a4의 따뜻한 표면·액센트·민감 정보 표시 적용 후, 전용 iPhone 18 Pro에서 진행·일시 정지 알림 센터 시스템 요소를 새로 촬영했다. 두 메서드는 각각 통과했다(같은 번들의 Rest 검사 1건은 별도 실패). 시스템 어두운 모드 캡처이며 밝은 모드·실제 잠금 상태·쌍 기기·Island·small family의 증거가 아니다. 개별 기기·시각·테스트는 capture-index.json을 따른다.

@@ -58,3 +58,7 @@ status: implemented-pending-validation
 | 즐거움 | 적합 | 호박색과 부드러운 표면은 운동·건강 정보를 가리지 않는다. |
 
 [Apple Live Activities](https://developer.apple.com/design/human-interface-guidelines/live-activities)와 [Apple Widgets](https://developer.apple.com/design/human-interface-guidelines/widgets)의 짧고 한눈에 읽히는 정보, 시스템 위치별 적응, 적절한 여백, 민감 정보 노출 기준을 적용한다.
+
+## 최신 Watch 운동 Live Activity
+
+main의 WLA01 통합 후 [Watch 운동 계약](watch-workout-live-activity.md)에도 같은 표면·대비 기준을 반영했다. 운동명·심박·칼로리·거리는 privacySensitive로 표시하며 진행·일시 정지·stale·경과 시간과 미러링 동작은 기존 코드를 보존한다. 새 시스템 캡처의 출처·미검증 상태는 [실제 WLA01 맵](../phone-design-map/actual/live-activity/index.html)에서 구분한다.

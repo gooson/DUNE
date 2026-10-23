@@ -10,6 +10,18 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 SCREENS = {"T03": "Today", "A01": "Activity", "H01": "Wellness", "L01": "Life"}
 DEVICES = {"regular": "iPhone", "ipad": "iPad", "duo": "Duo 접힘", "duo-open": "Duo 펼침"}
+DETAIL_TITLES = {
+    "T03-recovery": "Today · Recovery Sleep",
+    "L01-weekly": "Life · 주간 보고서 비교",
+    "H01-accessibility": "iPad · 최대 글씨 수면",
+    "H01-default": "iPad · 기본 수면 요약",
+    "T11-news": "알림 · News",
+    "T11-release-detail": "알림 · Release detail",
+    "T11-accessibility": "알림 · 최대 접근성 글씨",
+    "A12-composition": "Activity · 운동 구성",
+    "A12-weekly": "Activity · 주간 추이",
+    "A12-muscles": "Activity · 근육 분포",
+}
 
 
 def existing_file(relative: str) -> str | None:
@@ -17,6 +29,49 @@ def existing_file(relative: str) -> str | None:
     if path.is_relative_to(HERE) and path.is_file():
         return path.relative_to(HERE).as_posix()
     return None
+
+
+def supplementary_captures() -> dict[str, list[dict]]:
+    """Include only indexed PNGs whose files are actually present."""
+    result: dict[str, list[dict]] = {"details": [], "system": []}
+    for category in result:
+        folders = [HERE / device / "details" for device in DEVICES] if category == "details" else [HERE / "system"]
+        for folder in folders:
+            index_path = folder / "capture-index.json"
+            if not index_path.is_file():
+                continue
+            index = json.loads(index_path.read_text(encoding="utf-8"))
+            entries = index.get("captures", index) if isinstance(index, dict) else index
+            if isinstance(entries, dict):
+                entries = entries.items()
+            elif isinstance(entries, list):
+                entries = ((str(number), item) for number, item in enumerate(entries))
+            else:
+                continue
+            for key, item in entries:
+                if not isinstance(item, dict) or not isinstance(item.get("file"), str):
+                    continue
+                # Existing indexes use paths relative to the device directory
+                # (details/...) or the gallery root (system/...). Accept a
+                # filename relative to the index directory as well.
+                parent = folder.parent if category == "details" else HERE
+                candidates = [parent / item["file"], folder / item["file"]]
+                relative = next((found for candidate in candidates if candidate.is_relative_to(HERE)
+                                 if (found := existing_file(candidate.relative_to(HERE).as_posix()))), None)
+                if not relative:
+                    continue
+                device = item.get("device") if isinstance(item.get("device"), dict) else {}
+                result[category].append({
+                    "title": item.get("title") or DETAIL_TITLES.get(key) or key.replace("-", " · "),
+                    "file": relative,
+                    "source": item.get("source_revision", "기록 없음"),
+                    "test": item.get("test_identifier") or item.get("test", "기록 없음"),
+                    "device": item.get("deviceName") or device.get("model_name", "기록 없음"),
+                    "udid": item.get("deviceId") or device.get("identifier", "기록 없음"),
+                    "note": item.get("note", ""),
+                    "result_bundle": item.get("result_bundle", ""),
+                })
+    return result
 
 
 def capture_data() -> dict:
@@ -74,7 +129,8 @@ def capture_data() -> dict:
                     "test": item.get("test", "기록 없음"),
                     "device": item.get("device", "이전 iPhone 기준 화면"),
                 }
-    return {"actual": actual, "before": before, "devices": DEVICES, "screens": SCREENS}
+    return {"actual": actual, "before": before, "devices": DEVICES, "screens": SCREENS,
+            "supplementary": supplementary_captures()}
 
 
 PAGE = r'''<!doctype html>
@@ -111,6 +167,15 @@ PAGE = r'''<!doctype html>
     .meta { padding: 14px 16px; font-size: .82rem; color: #c6d0cb; overflow-wrap: anywhere; }
     .prototype { margin-top: 28px; padding: 20px; border: 1px solid #6d5b4c; border-radius: 16px; background: #29251f; }
     .prototype p { margin-bottom: 0; }
+    .supplementary { margin-top: 34px; }
+    .supplementary h2 { font-size: 1.35rem; }
+    .capture-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 16px; }
+    .capture-card { min-width: 0; border: 1px solid #405153; border-radius: 14px; overflow: hidden; background: #1b292b; }
+    .capture-card h3 { margin: 0; padding: 14px 14px 2px; font-size: 1rem; }
+    .capture-card .image-wrap { min-height: 180px; }
+    .capture-card img { width: 100%; max-height: 320px; object-fit: contain; }
+    .capture-card .meta { padding: 10px 14px 14px; line-height: 1.45; }
+    .capture-card .meta span { display: block; }
     @media (max-width: 720px) { .comparison { grid-template-columns: 1fr; } .image-wrap img { max-height: 65vh; } }
   </style>
 </head>
@@ -118,7 +183,7 @@ PAGE = r'''<!doctype html>
   <div class="eyebrow">DUNE · 2026-10-24 review</div>
   <h1>DESERT HORIZON 실제 화면 비교</h1>
   <p>4탭의 이전 기준 화면과 현재 앱 캡처를 나란히 봅니다. 큰 글씨 화면도 선택할 수 있습니다.</p>
-  <p class="notice">오른쪽 이미지는 각 캡처 인덱스에 기록된 실제 앱 화면입니다. iPhone의 밝음·어두움 8장과 최대 접근성 글씨 4장은 소스 <code>3d9ba7e7</code>의 개별 ThemeMatrix 테스트에서 수집했습니다. 첫 묶음 전체에는 다른 UI 테스트 실패 5건이 있어 최종 검증은 진행 중입니다. 왼쪽의 이전 화면은 밝은 모드 기준이며 기기와 시점이 다를 수 있습니다.</p>
+  <p class="notice">현재 구현은 실제 앱·시스템 호스트 PNG이며 출처는 각 인덱스에 기록합니다. iPhone·iPad·Duo 접힘 Today 상단은 최신 밝음·어두움 검사를 통과했습니다. <strong>Duo 펼침 Today는 표시 회전 검증이 막혀 최종 캡처가 없습니다.</strong> 이전에 가림이 있던 이미지는 현재 화면으로 표시하지 않습니다. 전체 회귀는 미실행이며 왼쪽 이전 화면은 기기·시점이 다를 수 있는 밝은 기준입니다.</p>
   <p><a href="README.md">캡처 출처와 갱신 방법</a> · <a href="../../../phone-design-map/actual/index.html">통합 실제 화면맵</a></p>
   <div class="controls">
     <div class="control"><strong>화면</strong><div class="segments" id="screens" aria-label="4탭 화면 선택"></div></div>
@@ -129,6 +194,8 @@ PAGE = r'''<!doctype html>
     <section class="panel"><div class="panel-head"><h2>이전 기준 · 실제 앱 화면</h2><p id="before-note"></p></div><div class="image-wrap" id="before-image"></div><div class="meta" id="before-meta"></div></section>
     <section class="panel"><div class="panel-head"><h2>현재 구현 · 실제 앱 화면</h2><p id="actual-note"></p></div><div class="image-wrap" id="actual-image"></div><div class="meta" id="actual-meta"></div></section>
   </div>
+  <section class="supplementary" id="detail-section" hidden><h2>추가 화면 · 실제 앱 캡처</h2><p>개별 화면 테스트에서 수집한 PNG입니다. 각 카드의 소스, 테스트, 실행 메모를 확인하세요. 전체 UI 묶음 통과를 뜻하지 않습니다.</p><div class="capture-grid" id="detail-grid"></div></section>
+  <section class="supplementary" id="system-section" hidden><h2>시스템 화면 · 실제 캡처</h2><p>시스템 호스트에서 수집하고 인덱스와 원본 PNG가 모두 확인된 캡처만 표시합니다.</p><div class="capture-grid" id="system-grid"></div></section>
   <aside class="prototype"><h2>방향 시안 · 실제 앱 화면 아님</h2><a href="../../../theme-map/themes/dune-final-four-tab.html">DESERT HORIZON 4탭 시안 열기 ↗</a><p>시안의 수치와 그래프는 예시입니다. 위 비교 이미지의 출처나 검증 결과로 사용하지 않습니다.</p></aside>
 </main>
 <script>
@@ -141,6 +208,24 @@ function showImage(target, entry, alt) {
   const link = document.createElement("a"); link.href = entry.file; link.title = "원본 PNG 열기";
   const img = document.createElement("img"); img.src = entry.file; img.alt = alt; img.loading = "lazy";
   link.append(img); target.append(link);
+}
+function renderSupplementary(kind, sectionId, gridId) {
+  const entries = DATA.supplementary[kind];
+  if (!entries.length) return;
+  document.getElementById(sectionId).hidden = false;
+  const grid = document.getElementById(gridId);
+  for (const entry of entries) {
+    const card = document.createElement("article"); card.className = "capture-card";
+    const heading = document.createElement("h3"); heading.textContent = entry.title; card.append(heading);
+    const wrap = document.createElement("div"); wrap.className = "image-wrap";
+    showImage(wrap, entry, `${entry.title} 실제 ${kind === "system" ? "시스템" : "앱"} 캡처`); card.append(wrap);
+    const meta = document.createElement("div"); meta.className = "meta";
+    for (const line of [`실제 캡처 · ${entry.device}`, `테스트: ${entry.test}`, `소스: ${entry.source}`, `기기 ID: ${entry.udid}`, entry.result_bundle && `결과 번들: ${entry.result_bundle}`, entry.note]) {
+      if (!line) continue;
+      const span = document.createElement("span"); span.textContent = line; meta.append(span);
+    }
+    card.append(meta); grid.append(card);
+  }
 }
 function render() {
   const before = DATA.before[selected.screen];
@@ -169,6 +254,8 @@ for (const [device, name] of Object.entries(DATA.devices)) {
 }
 document.getElementById("device").addEventListener("change", event => { selected.device = event.target.value; render(); });
 render();
+renderSupplementary("details", "detail-section", "detail-grid");
+renderSupplementary("system", "system-section", "system-grid");
 </script></body></html>
 '''
 

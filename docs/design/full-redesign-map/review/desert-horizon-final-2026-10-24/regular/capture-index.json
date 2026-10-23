@@ -66,18 +66,18 @@
       "appearance": "dark",
       "screen_id": "T03",
       "file": "dune/dark/T03.png",
-      "attachment_name": "Desert Dark Today_0_CFDEB1E7-B05C-4AD3-9FB6-218CBCBDD900.png",
-      "test_identifier": "ThemeMatrixUITests/testDesertHeroRingsByInitialTab()",
-      "timestamp": 1792782577.295,
-      "result_bundle": "/Users/shanks/.codex/worktrees/desert-horizon-final-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.24_04-02-34-+0900.xcresult",
+      "test_identifier": "ThemeMatrixUITests/testDesertTodayToolbarFitsAtBothAppearances()",
+      "timestamp": 1792789131.043,
+      "result_bundle": "Test-DUNEUITests-2026.10.24_05-58-13-+0900.xcresult",
       "device": {
-        "kind": "regular",
-        "platform": "iOS Simulator",
-        "model_name": "iPhone 18 Pro",
-        "identifier": "4990D55E-752C-4E35-8FB4-953F995AB2C2"
+        "identifier": "4990D55E-752C-4E35-8FB4-953F995AB2C2",
+        "model_name": "iPhone 18 Pro-wt-Health-desert-horizon-final-validation-f5271f075392",
+        "kind": "regular"
       },
-      "source_revision": "3d9ba7e7",
-      "source_worktree_dirty": false
+      "source_revision": "9a9dcf1c06cb789d95d16a7d57807c8b3c072d6c",
+      "source_worktree_dirty": true,
+      "dirty_scope": "documentation/capture metadata only; application source c239a50d and selector9a9dcf1c committed",
+      "note": "Final Today compact toolbar bounds and two appearances passed; later changes are documentation only."
     },
     "dune/light/L01": {
       "theme": "dune",
@@ -138,18 +138,18 @@
       "appearance": "light",
       "screen_id": "T03",
       "file": "dune/light/T03.png",
-      "attachment_name": "Desert Light Today_0_6BE840DB-65CA-4A5D-AFA4-EE3FA3958F52.png",
-      "test_identifier": "ThemeMatrixUITests/testDesertHeroRingsByInitialTab()",
-      "timestamp": 1792782527.336,
-      "result_bundle": "/Users/shanks/.codex/worktrees/desert-horizon-final-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.24_04-02-34-+0900.xcresult",
+      "test_identifier": "ThemeMatrixUITests/testDesertTodayToolbarFitsAtBothAppearances()",
+      "timestamp": 1792789120.835,
+      "result_bundle": "Test-DUNEUITests-2026.10.24_05-58-13-+0900.xcresult",
       "device": {
-        "kind": "regular",
-        "platform": "iOS Simulator",
-        "model_name": "iPhone 18 Pro",
-        "identifier": "4990D55E-752C-4E35-8FB4-953F995AB2C2"
+        "identifier": "4990D55E-752C-4E35-8FB4-953F995AB2C2",
+        "model_name": "iPhone 18 Pro-wt-Health-desert-horizon-final-validation-f5271f075392",
+        "kind": "regular"
       },
-      "source_revision": "3d9ba7e7",
-      "source_worktree_dirty": false
+      "source_revision": "9a9dcf1c06cb789d95d16a7d57807c8b3c072d6c",
+      "source_worktree_dirty": true,
+      "dirty_scope": "documentation/capture metadata only; application source c239a50d and selector9a9dcf1c committed",
+      "note": "Final Today compact toolbar bounds and two appearances passed; later changes are documentation only."
     }
   }
 }

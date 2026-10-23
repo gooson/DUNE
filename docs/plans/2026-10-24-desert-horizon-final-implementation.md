@@ -1,7 +1,7 @@
 ---
 topic: desert-horizon-final-implementation
 date: 2026-10-24
-status: approved
+status: blocked-ui-validation
 confidence: high
 related_solutions:
   - docs/solutions/general/2026-10-19-four-tab-hero-ring-parity.md
@@ -89,6 +89,6 @@ related_solutions:
 - 초기 상태: detached HEAD `06380d95`, 기존 디자인 문서/HTML 변경은 본 대화의 승인 시안으로서 이번 작업에 포함한다. 그 밖의 선행 변경은 자동 포함하지 않는다.
 - 구현 브랜치: `codex/desert-horizon-final-implementation`; 검증·Ship 브랜치: `codex/desert-horizon-final-ship`. 원래 작업 트리에 다른 작업의 변경이 시작되어 `53fd5c2d`에서 독립 관리 워크트리를 만들었다. 다른 작업의 파일은 포함하거나 되돌리지 않는다.
 - Plan 조사: docs/solutions, docs/brainstorms, todos, 실제 View/Widget 소스 및 기존 Apple Live Activities/Widgets 공식 문서를 대조했다. 초기 UI plan은 `.codex-checks`에 최종 plan과 함께 보존한다.
-- Phase: Init·Plan·Work 완료. UI Test 진행 중; Review·Quality·Resolve·Compound·Pre-Ship·Ship 대기.
+- Phase: Init·Plan·Work 완료. 최종 제품 빌드(c239a50d)·단위 테스트58개 통과. UI Test는 Duo 펼침 Today의 표시 회전/실제 가로 viewport 조건 실패로 차단됐다. Mac 잠금 해제 후 Device Hub 확인이 재개 조건이며 Review 이후 단계·PR·머지는 미실행이다.
 - 통합 iOS/Widget 빌드 성공(`c4d07845` 앱 소스), 영향 단위 테스트 7개 suite 58/58 통과. 첫 iPhone targeted UI는 15개 중 10개 통과·5개 실패: 한국어 새 소식 필터 선택과 자식 접근성 식별자 덮어쓰기가 원인이었다. `1c4cdd88`에서 수정 후 실패 5개·관련 보강 2개만 재검증한다.
 - 4탭 밝음·어두움 및 최대 접근성 크기 실제 캡처는 개별 통과한 ThemeMatrix 메서드에서 얻었다. 결과 번들 전체가 통과했다는 증거로 사용하지 않는다. 출처는 새 캡처 갤러리에 개별 기록한다.
