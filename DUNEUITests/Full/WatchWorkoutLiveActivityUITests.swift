@@ -71,3 +71,134 @@ final class WatchWorkoutLiveActivityUITests: UITestBaseCase {
         add(hierarchyAttachment)
     }
 }
+
+@MainActor
+final class SystemWidgetDesignTests: UITestBaseCase {
+    func testSystemDUNETodayWidgetFamilies() throws {
+        var configuration = launchConfiguration
+        configuration.shouldSeedMockData = true
+        configuration.scenario = .defaultSeeded
+        configuration.additionalArguments += [
+            "--ui-test-theme", "desertWarm", "--ui-test-style", "light",
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US"
+        ]
+        launchApp(with: configuration)
+    
+        // Let each production view model write its real seeded score to the App Group.
+        for (tab, ringID) in [
+            ("Today", "dashboard-hero-ring"),
+            ("Activity", "activity-hero-ring"),
+            ("Wellness", "wellness-hero-ring")
+        ] {
+            app.navigateToTab(tab)
+            XCTAssertTrue(app.descendants(matching: .any)[ringID].firstMatch.waitForExistence(timeout: 12),
+                          "\(tab) should calculate its score before opening WidgetKit")
+        }
+    
+        navigateToDashboard()
+        addScreenshotAttachment(named: "Desert Today after latest integration")
+    
+        XCUIDevice.shared.press(.home)
+        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        func attachHierarchy(_ stage: String) {
+            let attachment = XCTAttachment(string: springboard.debugDescription)
+            attachment.name = "DUNE widget system hierarchy - \(stage)"
+            attachment.lifetime = .keepAlways
+            add(attachment)
+        }
+        func visible(_ labels: [String]) -> XCUIElement? {
+            let predicate = NSPredicate(format: "label IN %@", labels)
+            return springboard.descendants(matching: .any).matching(predicate)
+                .allElementsBoundByIndex.first(where: { $0.isHittable })
+        }
+        func swipeGallery(_ direction: String) {
+            let startX: CGFloat = direction == "left" ? 0.82 : 0.18
+            let endX: CGFloat = direction == "left" ? 0.18 : 0.82
+            let start = springboard.coordinate(withNormalizedOffset: CGVector(dx: startX, dy: 0.48))
+            let end = springboard.coordinate(withNormalizedOffset: CGVector(dx: endX, dy: 0.48))
+            start.press(forDuration: 0.05, thenDragTo: end)
+        }
+    
+        let icon = springboard.descendants(matching: .icon)
+            .matching(NSPredicate(format: "label == %@", "DUNE")).firstMatch
+        for _ in 0..<4 where !icon.isHittable { springboard.swipeLeft() }
+        guard icon.isHittable else { attachHierarchy("home-icon"); XCTFail("DUNE Home icon not reachable"); return }
+        icon.press(forDuration: 1.2)
+        guard let editHome = visible(["Edit Home Screen", "홈 화면 편집", "ホーム画面を編集"]) else {
+            attachHierarchy("icon-context-menu")
+            XCTFail("Edit Home Screen action unavailable")
+            return
+        }
+        editHome.tap()
+        if visible(["Add Widget", "Add Widgets", "위젯 추가", "ウィジェットを追加"]) == nil,
+           let edit = visible(["Edit", "편집", "編集"]) { edit.tap() }
+        guard let addWidget = visible(["Add Widget", "Add Widgets", "위젯 추가", "ウィジェットを追加"]) else {
+            attachHierarchy("home-edit-mode")
+            XCTFail("Add Widget control unavailable")
+            return
+        }
+        addWidget.tap()
+    
+        // Search only the system gallery. DUNE Today is the StaticConfiguration
+        // display name; DUNE is the app/category name. Do not select the separate
+        // configurable Single Metric widget.
+        let search = springboard.searchFields.firstMatch
+        if search.waitForExistence(timeout: 3) && search.isHittable { search.tap(); search.typeText("DUNE") }
+        if let category = springboard.cells.matching(NSPredicate(format: "label == %@", "DUNE"))
+            .allElementsBoundByIndex.first(where: { $0.isHittable }) ?? visible(["DUNE"]) {
+            category.tap()
+        } else if let today = visible(["DUNE Today"]) {
+            today.tap()
+        } else {
+            attachHierarchy("widget-gallery-search")
+            XCTFail("DUNE widget gallery entry unavailable")
+            return
+        }
+        guard visible(["DUNE Today"]) != nil ||
+              springboard.descendants(matching: .any)["widget-small-root"].firstMatch.exists else {
+            attachHierarchy("dune-gallery")
+            XCTFail("DUNE Today gallery not identifiable; inspect system hierarchy")
+            return
+        }
+    
+        // Gallery uses the provider's standard placeholder, not user score data.
+        // Home installation below uses the real production timeline.
+        // WidgetKit may expose extension AX IDs in the gallery. Capture only a
+        // visible family root, never a fabricated in-app preview or whole screen.
+        for (family, direction) in [("small", "right"), ("medium", "left"), ("large", "left")] {
+            let root = springboard.descendants(matching: .any)["widget-\(family)-root"].firstMatch
+            for _ in 0..<3 where !root.isHittable { swipeGallery(direction) }
+            guard root.isHittable else {
+                attachHierarchy("gallery-\(family)-missing")
+                XCTFail("WidgetKit \(family) preview root is not AX observable")
+                return
+            }
+            let shot = XCTAttachment(screenshot: root.screenshot())
+            shot.name = "DUNE Today system widget \(family) gallery"
+            shot.lifetime = .keepAlways
+            add(shot)
+            attachHierarchy("gallery-\(family)")
+        }
+    
+        // Return to Small and install one actual Home widget if the host permits it.
+        let small = springboard.descendants(matching: .any)["widget-small-root"].firstMatch
+        for _ in 0..<3 where !small.isHittable { swipeGallery("right") }
+        guard small.isHittable else { attachHierarchy("return-to-small"); XCTFail("Small preview unavailable"); return }
+        guard let addControl = visible(["Add Widget", "위젯 추가", "ウィジェットを追加"]) else {
+            attachHierarchy("gallery-add-widget")
+            XCTFail("System Add Widget action unavailable")
+            return
+        }
+        addControl.tap()
+        guard small.waitForExistence(timeout: 8) && small.isHittable else {
+            attachHierarchy("home-widget-missing")
+            XCTFail("Installed Small DUNE Today widget is not AX observable on Home")
+            return
+        }
+        let homeShot = XCTAttachment(screenshot: small.screenshot())
+        homeShot.name = "DUNE Today system widget small Home"
+        homeShot.lifetime = .keepAlways
+        add(homeShot)
+        attachHierarchy("home-widget-small")
+    }
+}

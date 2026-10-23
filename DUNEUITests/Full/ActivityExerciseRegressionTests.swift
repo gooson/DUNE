@@ -1289,7 +1289,10 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             app.buttons[control].firstMatch.auditTap()
         }
         let completeSet = app.buttons[AXID.workoutSessionCompleteSet].firstMatch
-        XCTAssertTrue(scrollToWorkoutControl(AXID.workoutSessionCompleteSet))
+        XCTAssertTrue(completeSet.waitForExistence(timeout: 5))
+        if !completeSet.isHittable {
+            XCTAssertTrue(scrollToWorkoutControl(AXID.workoutSessionCompleteSet))
+        }
         completeSet.auditTap()
         XCTAssertTrue(app.buttons["workout-session-add-rest"].firstMatch.waitForExistence(timeout: 8),
                       "Completing the first set should start a real rest interval")
