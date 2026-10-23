@@ -5,6 +5,17 @@ import Testing
 @Suite("CardioSecondaryUnit")
 struct CardioSecondaryUnitTests {
 
+    @Test("Machine level changes validate bounds and format active time")
+    func machineLevelChangeValidation() {
+        #expect(CardioMachineLevelChange(elapsedSeconds: -1, level: 5) == nil)
+        #expect(CardioMachineLevelChange(elapsedSeconds: .nan, level: 5) == nil)
+        #expect(CardioMachineLevelChange(elapsedSeconds: .greatestFiniteMagnitude, level: 5) == nil)
+        #expect(CardioMachineLevelChange(elapsedSeconds: 0, level: 0) == nil)
+        #expect(CardioMachineLevelChange(elapsedSeconds: 0, level: 21) == nil)
+        #expect(CardioMachineLevelChange(elapsedSeconds: 75, level: 5)?.formattedElapsed == "1:15")
+        #expect(CardioMachineLevelChange(elapsedSeconds: 3675, level: 20)?.formattedElapsed == "1:01:15")
+    }
+
     // MARK: - toKm conversion
 
     @Test("km unit returns value as-is")

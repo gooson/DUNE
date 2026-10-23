@@ -225,12 +225,14 @@ struct CardioSessionView: View {
                 machineLevelButton(systemImage: "minus") {
                     viewModel.adjustMachineLevel(by: -1)
                 }
+                .accessibilityIdentifier("cardio-level-decrease")
 
                 VStack(spacing: DS.Spacing.xxs) {
                     Text(viewModel.formattedCurrentMachineLevel)
                         .font(.system(size: 38, weight: .bold, design: .rounded).monospacedDigit())
                         .foregroundStyle(DS.Color.activity)
                         .contentTransition(.numericText())
+                        .accessibilityIdentifier("cardio-level-value")
                     Text("Current")
                         .font(.caption)
                         .foregroundStyle(DS.Color.textSecondary)
@@ -240,6 +242,7 @@ struct CardioSessionView: View {
                 machineLevelButton(systemImage: "plus") {
                     viewModel.adjustMachineLevel(by: 1)
                 }
+                .accessibilityIdentifier("cardio-level-increase")
             }
         }
     }

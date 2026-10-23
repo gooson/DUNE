@@ -33,6 +33,7 @@ struct ExerciseSessionDetailView: View {
             VStack(alignment: .leading, spacing: DS.Spacing.lg) {
                 sessionHeader
                 cardioMetricsSection
+                CardioMachineLevelHistoryView(changes: record.cardioMachineLevelChanges)
                 healthKitBadge
                 setsList
                 heartRateSection

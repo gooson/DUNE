@@ -1885,6 +1885,33 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         try verifyCardioFlowReachesSummary(accessibilityText: true)
     }
 
+    func testStairClimberLevelChangesAppearInSummary() throws {
+        openQuickStartPicker()
+        XCTAssertTrue(app.fillTextInput(AXID.pickerSearchField, with: "천국의 계단"))
+        dismissSearchKeyboardIfPresent()
+
+        let detailID = AXID.pickerExerciseDetailButton("stair-climber")
+        XCTAssertTrue(app.scrollToHittablePickerElementIfNeeded(detailID, maxSwipes: 8))
+        app.descendants(matching: .any)[detailID].firstMatch.auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.exerciseDetailScreen].firstMatch.waitForExistence(timeout: 8))
+        app.descendants(matching: .any)[AXID.exerciseDetailStart].firstMatch.auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.cardioStartScreen].firstMatch.waitForExistence(timeout: 8))
+        app.buttons[AXID.cardioStartIndoor].firstMatch.auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.cardioSessionScreen].firstMatch.waitForExistence(timeout: 10))
+
+        let increase = app.buttons["cardio-level-increase"].firstMatch
+        XCTAssertTrue(increase.waitForExistence(timeout: 5))
+        increase.auditTap()
+        increase.auditTap()
+        XCTAssertEqual(app.staticTexts["cardio-level-value"].firstMatch.label, "3")
+
+        app.buttons[AXID.cardioSessionEnd].firstMatch.auditTap()
+        app.buttons[AXID.cardioSessionConfirmEnd].firstMatch.auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.cardioSessionSummaryScreen].firstMatch.waitForExistence(timeout: 10))
+        XCTAssertTrue(app.descendants(matching: .any)["cardio-level-history-row-0"].firstMatch.exists)
+        XCTAssertTrue(app.descendants(matching: .any)["cardio-level-history-row-1"].firstMatch.exists)
+    }
+
     func testVisualAuditCardioAtDefaultTextSize() throws {
         guard VisualAudit.isEnabled else { throw XCTSkip("Opt-in visual audit only") }
         try verifyCardioFlowReachesSummary(accessibilityText: false)
