@@ -1346,6 +1346,10 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         )
         let didUpdateAccessibilityLabel = XCTWaiter.wait(for: [changed], timeout: 3) == .completed
         print("Rest Live Activity countdown AX label updated within three seconds: \(didUpdateAccessibilityLabel)")
+        app.activate()
+        let skipRest = app.buttons["workout-session-skip-rest"].firstMatch
+        if skipRest.waitForExistence(timeout: 5) && skipRest.isHittable { skipRest.tap() }
+
     }
 
     func testVisualAuditNewExerciseAtDefaultTextSize() throws {

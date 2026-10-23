@@ -107,7 +107,7 @@ final class SystemWidgetDesignTests: UITestBaseCase {
             add(attachment)
         }
         func visible(_ labels: [String]) -> XCUIElement? {
-            let predicate = NSPredicate(format: "label IN %@", labels)
+            let predicate = NSPredicate(format: "label IN %@", labels + labels.map { " " + $0 })
             return springboard.descendants(matching: .any).matching(predicate)
                 .allElementsBoundByIndex.first(where: { $0.isHittable })
         }
@@ -161,18 +161,34 @@ final class SystemWidgetDesignTests: UITestBaseCase {
             return
         }
 
-        // Gallery uses the provider's standard placeholder, not user score data.
-        // Home installation below uses the real production timeline.
-        // WidgetKit may expose extension AX IDs in the gallery. Capture only a
-        // visible family root, never a fabricated in-app preview or whole screen.
-        for (family, direction) in [("small", "right"), ("medium", "left"), ("large", "left")] {
-            let root = springboard.descendants(matching: .any)["widget-\(family)-root"].firstMatch
-            for _ in 0..<3 where !root.isHittable { swipeGallery(direction) }
-            guard root.isHittable else {
-                attachHierarchy("gallery-\(family)-missing")
-                XCTFail("WidgetKit \(family) preview root is not AX observable")
-                return
-            }
+        // SpringBoard exposes the real widget as a native host button. WidgetKit
+        // does not expose the extension's internal IDs in this OS gallery.
+        let titles = ["DUNE Today", "오늘의 DUNE", "今日のDUNE"]
+        let sizes = ["small": ["Small", "작게", "小"],
+                     "medium": ["Medium", "중간", "中"],
+                     "large": ["Large", "크게", "大"]]
+        func widget(_ family: String, onHome: Bool = false) -> XCUIElement? {
+            springboard.descendants(matching: .any)
+                .matching(NSPredicate(format: "label CONTAINS %@", "DUNE"))
+                .allElementsBoundByIndex.first { element in
+                    let frame = element.frame
+                    guard frame.width > 140, frame.height > 140,
+                          titles.contains(where: element.label.contains), element.isHittable else { return false }
+                    let value = (element.value as? String) ?? ""
+                    return (sizes[family] ?? []).contains(where: value.contains)
+                        || (onHome && abs(frame.width - frame.height) < 5)
+                }
+        }
+        // Gallery snapshots use the provider's standard placeholder. The Home
+        // installation uses the production timeline written by the seeded app.
+        for family in ["small", "medium", "large"] {
+            for _ in 0..<3 where widget(family) == nil { swipeGallery("left") }
+            let root = try XCTUnwrap(widget(family), "The native \(family) widget host should be visible")
+            XCTAssertTrue(springboard.windows.firstMatch.frame.contains(root.frame),
+                          "The entire \(family) widget must fit in the gallery viewport")
+            if family == "small" { XCTAssertEqual(root.frame.width, root.frame.height, accuracy: 5) }
+            if family == "medium" { XCTAssertGreaterThan(root.frame.width, root.frame.height * 1.5) }
+            if family == "large" { XCTAssertGreaterThan(root.frame.height, 250) }
             let shot = XCTAttachment(screenshot: root.screenshot())
             shot.name = "DUNE Today system widget \(family) gallery"
             shot.lifetime = .keepAlways
@@ -180,22 +196,13 @@ final class SystemWidgetDesignTests: UITestBaseCase {
             attachHierarchy("gallery-\(family)")
         }
 
-        // Return to Small and install one actual Home widget if the host permits it.
-        let small = springboard.descendants(matching: .any)["widget-small-root"].firstMatch
-        for _ in 0..<3 where !small.isHittable { swipeGallery("right") }
-        guard small.isHittable else { attachHierarchy("return-to-small"); XCTFail("Small preview unavailable"); return }
-        guard let addControl = visible(["Add Widget", "위젯 추가", "ウィジェットを追加"]) else {
-            attachHierarchy("gallery-add-widget")
-            XCTFail("System Add Widget action unavailable")
-            return
-        }
+        for _ in 0..<3 where widget("small") == nil { swipeGallery("right") }
+        XCTAssertNotNil(widget("small"), "Small should be selected before installing")
+        let addControl = try XCTUnwrap(visible(["Add Widget", "위젯 추가", "ウィジェットを追加"]))
         addControl.tap()
-        guard small.waitForExistence(timeout: 8) && small.isHittable else {
-            attachHierarchy("home-widget-missing")
-            XCTFail("Installed Small DUNE Today widget is not AX observable on Home")
-            return
-        }
-        let homeShot = XCTAttachment(screenshot: small.screenshot())
+        if let done = visible(["Done", "완료", "完了"]) { done.tap() }
+        let home = try XCTUnwrap(widget("small", onHome: true), "A real Small widget should be installed on Home")
+        let homeShot = XCTAttachment(screenshot: home.screenshot())
         homeShot.name = "DUNE Today system widget small Home"
         homeShot.lifetime = .keepAlways
         add(homeShot)
