@@ -1,4 +1,5 @@
 import SwiftUI
+import Charts
 
 /// Consolidated recovery & sleep card combining sleep deficit gauge with sleep-related insights.
 /// Replaces the separate SleepDeficitBadgeView and sleep-category InsightCards.
@@ -14,6 +15,7 @@ struct RecoverySleepCard: View {
                 VStack(alignment: .leading, spacing: DS.Spacing.sm) {
                     header
                     deficitRow
+                    sleepHistory
                     insightRows
                     detailLink
                 }
@@ -84,6 +86,46 @@ struct RecoverySleepCard: View {
     }
 
     // MARK: - Sleep Insights
+
+    @ViewBuilder
+    private var sleepHistory: some View {
+        if let deficit = sleepDeficit, hasValidDeficit {
+            let samples = Array(deficit.dailyDeficits
+                .filter { $0.actualMinutes.isFinite && $0.actualMinutes > 0 }
+                .sorted { $0.date < $1.date }
+                .suffix(7))
+            if samples.count >= 2 {
+                VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                    HStack {
+                        Text("Sleep")
+                        Spacer()
+                        Text("7d")
+                    }
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                    Chart(samples, id: \.date) { sample in
+                        BarMark(
+                            x: .value("Date", sample.date, unit: .day),
+                            y: .value("Hours", sample.actualMinutes / 60)
+                        )
+                        .foregroundStyle(DS.Color.sleep)
+                        .cornerRadius(3)
+                    }
+                    .chartXAxis {
+                        AxisMarks(values: .stride(by: .day)) { _ in
+                            AxisValueLabel(format: .dateTime.weekday(.narrow))
+                        }
+                    }
+                    .chartYAxis {
+                        AxisMarks(position: .leading, values: .automatic(desiredCount: 3))
+                    }
+                    .frame(height: 80)
+                    .clipped()
+                    .accessibilityIdentifier("dashboard-recovery-sleep-chart")
+                }
+            }
+        }
+    }
 
     @ViewBuilder
     private var insightRows: some View {

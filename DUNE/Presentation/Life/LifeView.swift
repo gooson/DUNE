@@ -114,6 +114,7 @@ struct LifeView: View {
                     } label: {
                         Label("From Template", systemImage: "doc.on.doc")
                     }
+                    .accessibilityIdentifier("life-toolbar-template")
                 } label: {
                     Image(systemName: "plus")
                 }
@@ -400,29 +401,11 @@ private struct HabitListQueryView: View {
                 .accessibilityIdentifier("habit-heatmap")
             }
 
-            if weeklyReport != nil {
+            if let report = weeklyReport {
                 Button {
                     showingReport = true
                 } label: {
-                    let layout = dynamicTypeSize.isAccessibilitySize
-                        ? AnyLayout(VStackLayout(spacing: DS.Spacing.xs))
-                        : AnyLayout(HStackLayout(spacing: DS.Spacing.xs))
-                    layout {
-                        Image(systemName: "doc.text.magnifyingglass")
-                            .accessibilityHidden(true)
-                        Text("View Weekly Report")
-                            .lineLimit(nil)
-                            .fixedSize(horizontal: false, vertical: true)
-                            .multilineTextAlignment(.center)
-                    }
-                    .font(.subheadline.bold())
-                    .foregroundStyle(DS.Color.tabLife)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, DS.Spacing.sm)
-                    .background {
-                        RoundedRectangle(cornerRadius: DS.Radius.sm)
-                            .fill(.ultraThinMaterial)
-                    }
+                    WeeklyHabitSummaryCard(report: report)
                 }
                 .buttonStyle(.plain)
                 .accessibilityIdentifier("life-weekly-report-button")
@@ -534,12 +517,7 @@ private struct HabitListQueryView: View {
                     EmptyStateView(
                         icon: "checklist",
                         title: "No Habits Yet",
-                        message: "Add your first habit to start tracking your daily routine.",
-                        actionTitle: "Add Habit",
-                        action: {
-                            viewModel.resetForm()
-                            viewModel.isShowingAddSheet = true
-                        }
+                        message: "Add your first habit to start tracking your daily routine."
                     )
                 } else {
                     // Category filter chips
@@ -937,32 +915,11 @@ private struct HabitListQueryView: View {
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
-                ViewThatFits(in: .horizontal) {
-                    HStack(spacing: DS.Spacing.md) { starterActions }
-                    VStack(alignment: .leading, spacing: DS.Spacing.sm) { starterActions }
-                }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
 
-    @ViewBuilder
-    private var starterActions: some View {
-        Button {
-            viewModel.resetForm()
-            viewModel.isShowingAddSheet = true
-        } label: {
-            Text("Add Habit")
-                .foregroundStyle(theme.prominentButtonForegroundColor(for: colorScheme))
-        }
-        .buttonStyle(.borderedProminent)
-        .tint(theme.accentColor)
-        .accessibilityIdentifier("life-empty-add")
-
-        Button("From Template", action: onOpenTemplates)
-            .buttonStyle(.bordered)
-            .accessibilityIdentifier("life-empty-template")
-    }
 
     private var heroSection: some View {
         themeHeroSection
@@ -980,12 +937,12 @@ private struct HabitListQueryView: View {
             HStack {
                 Text("Life")
                     .font(.title3.weight(.bold))
-                    .foregroundStyle(theme == .desertWarm ? (colorScheme == .dark ? Color.white : Color.primary) : theme.directionPreviewTextColor)
+                    .foregroundStyle(theme == .desertWarm ? DesertPalette.ink : theme.directionPreviewTextColor)
                 Spacer()
                 Text("Today's Habits")
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(theme == .desertWarm
-                        ? (colorScheme == .dark ? Color(red: 0.702, green: 0.753, blue: 0.718) : Color(red: 0.337, green: 0.376, blue: 0.357))
+                        ? DesertPalette.muted
                         : theme.directionPreviewTextColor.opacity(0.74))
             }
 
@@ -1020,26 +977,16 @@ private struct HabitListQueryView: View {
         .padding(20)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background {
-            RoundedRectangle(cornerRadius: 23)
-                .fill(theme == .desertWarm
-                    ? LinearGradient(colors: [colorScheme == .dark ? Color(red: 0.110, green: 0.120, blue: 0.125) : Color(red: 0.988, green: 0.969, blue: 0.937)], startPoint: .top, endPoint: .bottom)
-                    : theme.directionPreviewBackground)
-                .overlay(alignment: .bottom) {
-                    if theme == .desertWarm {
-                        DesertPreviewWave()
-                            .frame(height: 74)
-                            .clipped()
+            if theme == .desertWarm {
+                DesertCardSurface(cornerRadius: DS.Radius.xxl)
+            } else {
+                RoundedRectangle(cornerRadius: 23)
+                    .fill(theme.directionPreviewBackground)
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 23)
+                            .strokeBorder(theme.accentColor.opacity(0.25), lineWidth: 1)
                     }
-                }
-                .clipShape(RoundedRectangle(cornerRadius: 23))
-                .overlay {
-                    RoundedRectangle(cornerRadius: 23)
-                        .strokeBorder(theme == .desertWarm
-                            ? (colorScheme == .dark
-                                ? Color(red: 0.251, green: 0.314, blue: 0.286)
-                                : Color(red: 0.871, green: 0.859, blue: 0.824))
-                            : theme.accentColor.opacity(0.25), lineWidth: 1)
-                }
+            }
         }
     }
 
@@ -1059,7 +1006,7 @@ private struct HabitListQueryView: View {
     private var lifeProgressNarrative: some View {
         Text(viewModel.heroNarrative)
             .font(.headline)
-            .foregroundStyle(theme.directionPreviewTextColor)
+            .foregroundStyle(theme == .desertWarm ? DesertPalette.ink : theme.directionPreviewTextColor)
             .fixedSize(horizontal: false, vertical: true)
             .frame(maxWidth: .infinity, alignment: .leading)
             .accessibilityIdentifier("life-hero-narrative")

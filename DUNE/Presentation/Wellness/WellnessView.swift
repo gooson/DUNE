@@ -54,18 +54,6 @@ struct WellnessView: View {
         bodyViewModel.isShowingAddSheet = true
     }
 
-    private var bodyRecordButton: some View {
-        Button(action: openBodyRecord) {
-            Label("Body Record", systemImage: "plus.circle.fill")
-                .foregroundStyle(theme.prominentButtonForegroundColor(for: colorScheme))
-                .font(.headline)
-                .frame(maxWidth: .infinity, minHeight: 44)
-        }
-        .buttonStyle(.borderedProminent)
-        .tint(theme.accentColor)
-        .controlSize(.large)
-        .accessibilityIdentifier("wellness-primary-body-record")
-    }
 
     var body: some View {
         ScrollViewReader { proxy in
@@ -81,7 +69,6 @@ struct WellnessView: View {
                         viewModel.wellnessScore == nil {
                         ProgressView()
                             .frame(maxWidth: .infinity, minHeight: 200)
-                        bodyRecordButton
                     } else if viewModel.physicalCards.isEmpty &&
                                 viewModel.activeCards.isEmpty &&
                                 viewModel.wellnessScore == nil &&
@@ -90,15 +77,11 @@ struct WellnessView: View {
                             CloudSyncWaitingView {
                                 Task { viewModel.loadData() }
                             }
-                            bodyRecordButton
-                        } else {
+                            } else {
                             EmptyStateView(
                                 icon: "leaf.fill",
                                 title: "No Wellness Data",
-                                message: "Wear Apple Watch to bed for sleep tracking, or add body composition records to get started.",
-                                actionTitle: "Body Record",
-                                action: openBodyRecord,
-                                actionIdentifier: "wellness-primary-body-record"
+                                message: "Wear Apple Watch to bed for sleep tracking, or add body composition records to get started."
                             )
                         }
                     } else {
@@ -149,7 +132,6 @@ struct WellnessView: View {
                         }
                         .staggeredAppear(index: 1)
 
-                        bodyRecordButton
 
                         // Physical section
                         if !viewModel.physicalCards.isEmpty {
