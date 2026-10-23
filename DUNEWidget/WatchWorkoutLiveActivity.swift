@@ -71,6 +71,7 @@ private struct WatchWorkoutActivityContent: View {
                 if activityFamily != .small && !isStale {
                     WorkoutElapsedTime(state: state)
                         .font(.headline)
+                        .multilineTextAlignment(.trailing)
                 }
             }
 

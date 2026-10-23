@@ -447,8 +447,8 @@ extension WatchConnectivityManager: WCSessionDelegate {
     }
 
     nonisolated func sessionReachabilityDidChange(_ session: WCSession) {
+        let reachable = session.isReachable
         Task { @MainActor in
-            let reachable = session.isReachable
             observeReachability(reachable)
             let needsLibrary = exerciseLibrary.isEmpty
             let needsTemplates = workoutTemplates.isEmpty

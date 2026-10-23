@@ -19,7 +19,8 @@ final class WatchWorkoutMirrorManager: NSObject {
             guard session.state != .ended, session.state != .stopped else { return }
             let id = UUID()
             let now = Date()
-            let start = session.startDate ?? now
+            let reportedStart = session.startDate
+            let start = reportedStart ?? now
             let initial = WatchWorkoutSnapshot(
                 startedAt: start, updatedAt: now, exerciseName: String(localized: "Workout"),
                 elapsedSeconds: 0, phase: session.state == .paused ? .paused : .running,
@@ -32,7 +33,7 @@ final class WatchWorkoutMirrorManager: NSObject {
                 AppLogger.ui.error("Unable to start mirrored workout activity: \(error.localizedDescription, privacy: .private)")
             }
             let activityID = requestedID
-            let allowsStartCorrection = session.startDate == nil
+            let allowsStartCorrection = reportedStart == nil
             Task { @MainActor in
                 self?.attach(session, mirrorID: id, initial: initial, activityID: activityID,
                              allowsStartCorrection: allowsStartCorrection)
