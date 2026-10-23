@@ -724,6 +724,17 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             app.descendants(matching: .any)[AXID.activityExerciseMixDetailScreen].firstMatch.waitForExistence(timeout: 10),
             "Exercise Mix detail should open"
         )
+        for identifier in [
+            "activity-exercise-mix-composition",
+            "activity-exercise-mix-weekly-chart",
+            "activity-exercise-mix-muscle-shares",
+            "activity-exercise-mix-cardio-types"
+        ] {
+            XCTAssertTrue(app.scrollToElementIfNeeded(identifier, maxSwipes: 10),
+                          "Exercise Mix section \(identifier) should be reachable")
+            XCTAssertTrue(app.descendants(matching: .any)[identifier].firstMatch.exists)
+        }
+        addScreenshotAttachment(named: "Activity Exercise Mix detail")
     }
 
     func testActivityRiskAndReportRoutesOpen() throws {

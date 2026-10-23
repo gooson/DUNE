@@ -17,7 +17,7 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
     func testDesertHeroRingsByInitialTab() {
         let roots: [(tab: String, argument: String, hero: String, ring: String, action: String)] = [
             ("Today", "today", AXID.dashboardHeroCondition, "dashboard-hero-ring", AXID.dashboardHeroCondition),
-            ("Activity", "train", AXID.activityHeroReadiness, "activity-hero-ring", "activity-log-workout-button"),
+            ("Activity", "train", AXID.activityHeroReadiness, "activity-hero-ring", AXID.activityToolbarAdd),
             ("Wellness", "wellness", AXID.wellnessHeroScore, "wellness-hero-ring", "wellness-hero-sleep"),
             ("Life", "life", AXID.lifeHeroProgress, "life-hero-ring", "life-hero-checklist-button")
         ]
@@ -158,6 +158,8 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
             root.navigate()
             let ring = app.descendants(matching: .any)[root.ring].firstMatch
             XCTAssertTrue(ring.waitForExistence(timeout: 10), "\(root.tab) ring should remain visible at the largest text size")
+            XCTAssertTrue(app.windows.firstMatch.frame.contains(ring.frame),
+                          "\(root.tab) ring should fit the window at the largest text size")
             addScreenshotAttachment(named: "Desert Accessibility XXXL \(root.tab)")
         }
     }
@@ -213,7 +215,7 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
         navigateToActivity()
         captureRoot(AXID.activityHeroReadiness, tab: "Activity", combination: combination)
         assertRing("activity-hero-ring", combination: combination)
-        assertAction("activity-log-workout-button", combination: combination)
+        assertAction(AXID.activityToolbarAdd, combination: combination)
 
         navigateToWellness()
         captureRoot(AXID.wellnessHeroScore, tab: "Wellness", combination: combination)

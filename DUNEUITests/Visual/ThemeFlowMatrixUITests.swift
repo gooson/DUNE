@@ -32,7 +32,7 @@ final class ThemeFlowMatrixUITests: SeededUITestBaseCase {
 
             launchTheme(rawValue, style: style)
             navigateToActivity()
-            XCTAssertTrue(app.waitAndTap("activity-log-workout-button"), "\(combination): log workout action")
+            XCTAssertTrue(app.waitAndTap(AXID.activityToolbarAdd), "\(combination): toolbar add action")
             XCTAssertTrue(app.descendants(matching: .any)["picker-root-list"].firstMatch.waitForExistence(timeout: 10))
             addScreenshotAttachment(named: "\(combination) Workout")
         }

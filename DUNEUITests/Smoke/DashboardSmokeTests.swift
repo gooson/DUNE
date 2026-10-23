@@ -49,10 +49,22 @@ final class DashboardSmokeTests: UITestBaseCase {
 
     func testNavigateToWhatsNew() throws {
         navigateToDashboard()
-        XCTAssertTrue(app.waitAndTap(AXID.dashboardToolbarWhatsNew), "What's New toolbar button should exist on Today")
+        XCTAssertFalse(app.buttons["dashboard-toolbar-whatsnew"].exists,
+                       "Today should use the notification hub for release news")
+        XCTAssertTrue(app.waitAndTap(AXID.dashboardToolbarNotifications), "Notification hub should open from Today")
+
+        let filter = app.segmentedControls[AXID.notificationsFilter].firstMatch
+        XCTAssertTrue(filter.waitForExistence(timeout: 5), "Notification filters should appear")
+        filter.buttons["News"].tap()
+
+        let release = app.buttons[AXID.notificationsNewsRelease].firstMatch
+        XCTAssertTrue(release.waitForExistence(timeout: 5), "The current release should appear in News")
+        addScreenshotAttachment(named: "Notifications News release")
+        release.tap()
 
         let screen = app.descendants(matching: .any)[AXID.whatsNewScreen].firstMatch
-        XCTAssertTrue(screen.waitForExistence(timeout: 5), "What's New screen should open from the Today toolbar")
+        XCTAssertTrue(screen.waitForExistence(timeout: 5), "Release detail should open from the News filter")
+        addScreenshotAttachment(named: "Notifications release detail")
     }
 
     func testNavigateToSettings() throws {
@@ -62,6 +74,10 @@ final class DashboardSmokeTests: UITestBaseCase {
     }
 
     func testNavigateToNotificationHub() throws {
+        var configuration = launchConfiguration
+        configuration.shouldSeedMockData = true
+        configuration.scenario = .defaultSeeded
+        launchApp(with: configuration)
         navigateToDashboard()
         XCTAssertTrue(app.waitAndTap(AXID.dashboardToolbarNotifications), "Notifications toolbar button should exist")
 
@@ -71,8 +87,11 @@ final class DashboardSmokeTests: UITestBaseCase {
         let readAllButton = app.descendants(matching: .any)[AXID.notificationsReadAllButton].firstMatch
         XCTAssertTrue(readAllButton.waitForExistence(timeout: 5), "Read All button should exist in notification hub")
 
-        let deleteAllButton = app.descendants(matching: .any)[AXID.notificationsDeleteAllButton].firstMatch
-        XCTAssertTrue(deleteAllButton.waitForExistence(timeout: 5), "Delete All button should exist in notification hub")
+        let moreOptions = app.buttons[AXID.notificationsMoreOptionsButton].firstMatch
+        XCTAssertTrue(moreOptions.waitForExistence(timeout: 5), "More Options should exist in the notification hub")
+        moreOptions.tap()
+        XCTAssertTrue(app.buttons["Delete All"].waitForExistence(timeout: 5),
+                      "Delete All should appear in More Options")
 
         let settingsButton = app.descendants(matching: .any)[AXID.notificationsOpenSettingsButton].firstMatch
         XCTAssertTrue(settingsButton.waitForExistence(timeout: 5), "Notification settings button should exist in notification hub summary")
@@ -152,6 +171,16 @@ final class TodayDesignMapCaptureTests: UITestBaseCase {
 
     func testTodayRootRenders() {
         XCTAssertTrue(app.descendants(matching: .any)["dashboard-hero-condition"].firstMatch.waitForExistence(timeout: 15))
+    }
+
+    func testRecoverySleepUsesSeededHistory() {
+        XCTAssertTrue(app.scrollToElementIfNeeded("dashboard-recovery-sleep-chart", maxSwipes: 12),
+                      "Seven-day sleep bars should be reachable with seeded daily sleep history")
+        let chart = app.descendants(matching: .any)["dashboard-recovery-sleep-chart"].firstMatch
+        XCTAssertTrue(chart.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.descendants(matching: .any)["dashboard-recovery-sleep-card"].firstMatch.exists,
+                      "The history chart should remain inside Recovery & Sleep")
+        addScreenshotAttachment(named: "Today Recovery Sleep seven day chart")
     }
 }
 

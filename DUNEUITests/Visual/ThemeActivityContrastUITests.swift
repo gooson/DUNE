@@ -24,9 +24,9 @@ final class ThemeActivityContrastUITests: SeededUITestBaseCase {
                 ]
                 app.launch()
                 navigateToActivity()
-                let button = app.buttons["activity-log-workout-button"].firstMatch
-                XCTAssertTrue(button.waitForExistence(timeout: 10), "\(theme.name) \(style): log action")
-                XCTAssertTrue(button.isHittable, "\(theme.name) \(style): log action visible")
+                let button = app.buttons[AXID.activityToolbarAdd].firstMatch
+                XCTAssertTrue(button.waitForExistence(timeout: 10), "\(theme.name) \(style): toolbar add")
+                XCTAssertTrue(button.isHittable, "\(theme.name) \(style): toolbar add visible")
                 addScreenshotAttachment(named: "\(theme.name) \(style) Activity")
             }
         }

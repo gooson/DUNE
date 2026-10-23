@@ -62,7 +62,7 @@ final class WaterLiliesThemeTests: SeededUITestBaseCase {
         navigateToActivity()
         XCTAssertTrue(waitForElement(AXID.activityHeroReadiness, timeout: 10).exists)
         XCTAssertTrue(waitForElement("activity-hero-ring", timeout: 10).exists)
-        XCTAssertTrue(waitForElement("activity-log-workout-button", timeout: 10).exists)
+        XCTAssertTrue(waitForElement(AXID.activityToolbarAdd, timeout: 10).exists)
         addScreenshotAttachment(named: "Water Lilies Activity \(style)")
 
         navigateToWellness()

@@ -131,13 +131,16 @@ enum AXID {
     // MARK: - Dashboard Tab (active: hero, settings, pinned-edit)
     static let dashboardHeroCondition = "dashboard-hero-condition"
     static let dashboardToolbarNotifications = "dashboard-toolbar-notifications"
-    static let dashboardToolbarWhatsNew = "dashboard-toolbar-whatsnew"
+    static let dashboardNotificationsUnreadBadge = "dashboard-notifications-unread-badge"
     static let dashboardToolbarSettings = "dashboard-toolbar-settings"
     static let dashboardMorningBriefingScreen = "dashboard-morning-briefing-screen"
     static let dashboardMorningBriefingDismiss = "dashboard-morning-briefing-dismiss"
     static let dashboardPinnedEdit = "dashboard-pinned-edit"
     static let notificationsReadAllButton = "notifications-read-all-button"
     static let notificationsDeleteAllButton = "notifications-delete-all-button"
+    static let notificationsMoreOptionsButton = "notifications-more-options-button"
+    static let notificationsFilter = "notifications-filter"
+    static let notificationsNewsRelease = "notifications-news-release"
     static let notificationsOpenSettingsButton = "notifications-open-settings-button"
     static let dashboardPinnedGrid = "dashboard-pinned-grid"
     static let dashboardWeatherCard = "dashboard-weather-card"
@@ -209,7 +212,6 @@ enum AXID {
     // MARK: - Wellness Tab (active: hero, toolbar-add, add-menu items)
     static let wellnessHeroScore = "wellness-hero-score"
     static let wellnessToolbarAdd = "wellness-toolbar-add"
-    static let wellnessPrimaryBodyRecord = "wellness-primary-body-record"
     static let wellnessCardHRV = "wellness-card-hrv"
     static let wellnessCardWeight = "wellness-card-weight"
     static let wellnessMenuBodyRecord = "wellness-menu-body-record"
@@ -234,6 +236,7 @@ enum AXID {
     static let lifeHeroProgress = "life-hero-progress"
     static let lifeToolbarAdd = "life-toolbar-add"
     static let lifeToolbarNewHabit = "life-toolbar-new-habit"
+    static let lifeToolbarTemplate = "life-toolbar-template"
     static let lifeSectionHabits = "life-section-habits"
     static let lifeHabitToggle = "life-habit-toggle"
     static func lifeHabitRow(_ habitName: String) -> String { "life-habit-row-\(habitName)" }

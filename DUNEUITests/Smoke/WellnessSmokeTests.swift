@@ -48,10 +48,13 @@ final class WellnessSmokeTests: UITestBaseCase {
         XCTAssertTrue(fatField.exists, "Body fat field should exist")
     }
 
-    func testPrimaryBodyRecordOpensForm() throws {
-        let action = app.buttons[AXID.wellnessPrimaryBodyRecord].firstMatch
-        XCTAssertTrue(action.waitForExistence(timeout: 5), "Primary body record action should be visible")
-        action.tap()
+    func testToolbarBodyRecordReplacesPrimaryBodyAction() throws {
+        XCTAssertFalse(app.buttons["wellness-primary-body-record"].exists,
+                       "Wellness body should not duplicate the toolbar record action")
+        let addMenu = wellnessAddMenu()
+        XCTAssertTrue(addMenu.waitForExistence(timeout: 5))
+        addMenu.tap()
+        XCTAssertTrue(app.waitAndTap(AXID.wellnessMenuBodyRecord), "Body Record should remain in toolbar menu")
         XCTAssertTrue(app.descendants(matching: .any)[AXID.bodyFormSave].firstMatch.waitForExistence(timeout: 5))
     }
 
@@ -166,16 +169,15 @@ final class WellnessSeededSmokeTests: SeededUITestBaseCase {
         navigateToWellness()
     }
 
-    func testSeededPrimaryBodyRecordOpensForm() throws {
+    func testSeededToolbarBodyRecordOpensForm() throws {
         let prediction = app.buttons["wellness-sleep-prediction-detail-link"].firstMatch
         XCTAssertTrue(prediction.waitForExistence(timeout: 8), "Sleep Prediction should appear in seeded Wellness")
-        let action = app.buttons[AXID.wellnessPrimaryBodyRecord].firstMatch
-        XCTAssertTrue(action.waitForExistence(timeout: 5), "Primary body record action should follow Sleep Prediction")
-        XCTAssertGreaterThanOrEqual(action.frame.minY, prediction.frame.maxY,
-                                    "Body Record should follow Sleep Prediction in reading order")
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.wellnessPrimaryBodyRecord, maxSwipes: 8),
-                      "Body Record should remain reachable below Sleep Prediction")
-        action.tap()
+        XCTAssertFalse(app.buttons["wellness-primary-body-record"].exists,
+                       "Seeded Wellness should not show a duplicate body record action")
+        let add = app.buttons[AXID.wellnessToolbarAdd].firstMatch
+        XCTAssertTrue(add.waitForExistence(timeout: 5), "Toolbar add should remain available")
+        add.tap()
+        XCTAssertTrue(app.waitAndTap(AXID.wellnessMenuBodyRecord), "Toolbar Body Record should open the form")
         XCTAssertTrue(app.descendants(matching: .any)[AXID.bodyFormSave].firstMatch.waitForExistence(timeout: 5))
     }
 

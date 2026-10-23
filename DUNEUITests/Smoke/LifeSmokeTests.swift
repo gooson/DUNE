@@ -38,33 +38,20 @@ final class LifeSmokeTests: UITestBaseCase {
                        "This launch must explicitly request the largest accessibility text category")
         XCTAssertTrue(app.hasPrimaryNavigation(timeout: 8), "Life should load at maximum accessibility text size")
 
-        XCTAssertTrue(
-            app.scrollToHittableElementIfNeeded("life-empty-template", maxSwipes: 5),
-            "Template entry should remain reachable at maximum accessibility text size\n\(app.debugDescription)"
-        )
-        XCTAssertTrue(
-            app.scrollToHittableElementIfNeeded("life-empty-add", maxSwipes: 5, direction: .down),
-            "Add Habit should remain reachable at maximum accessibility text size\n\(app.debugDescription)"
-        )
-        app.buttons["life-empty-add"].firstMatch.tap()
+        XCTAssertTrue(app.openLifeNewHabitForm(),
+                      "Toolbar New Habit should remain reachable at maximum accessibility text size")
         XCTAssertTrue(app.textFields[AXID.habitFormName].firstMatch.waitForExistence(timeout: 5),
                       "The starter should open the habit form at maximum accessibility text size")
         XCTAssertTrue(app.dismissModalIfPresent(cancelIdentifiers: [AXID.habitFormCancel]),
                       "Cancel should dismiss the form without creating a habit")
 
-        XCTAssertTrue(
-            app.scrollToHittableElementIfNeeded("life-empty-add", maxSwipes: 5, direction: .down),
-            "Cancel should preserve the actionable empty starter"
-        )
-        XCTAssertTrue(
-            app.scrollToHittableElementIfNeeded("life-empty-template", maxSwipes: 5),
-            "The empty starter should retain its template action after cancellation"
-        )
+        XCTAssertTrue(app.buttons[AXID.lifeToolbarAdd].waitForExistence(timeout: 5),
+                      "Cancel should preserve the toolbar add action")
     }
 
     func testEmptyStarterAddCancelPreservesEmptyState() throws {
         XCTAssertTrue(elementExists(AXID.lifeHeroProgress, timeout: 8), "Empty starter should appear")
-        XCTAssertTrue(app.waitAndTap("life-empty-add"), "Empty starter should offer Add Habit\n\(app.debugDescription)")
+        XCTAssertTrue(app.openLifeNewHabitForm(), "Toolbar should offer New Habit")
 
         let nameField = app.textFields[AXID.habitFormName].firstMatch
         XCTAssertTrue(nameField.waitForExistence(timeout: 3), "Add Habit should open the habit form")
@@ -73,14 +60,15 @@ final class LifeSmokeTests: UITestBaseCase {
             "Cancel should dismiss the habit form without creating a habit"
         )
 
-        let addButton = app.buttons["life-empty-add"].firstMatch
-        XCTAssertTrue(addButton.waitForExistence(timeout: 3), "Cancel should preserve the empty starter")
-        XCTAssertTrue(addButton.isHittable, "Empty starter should remain actionable after cancel")
-        XCTAssertTrue(app.buttons["life-empty-template"].exists, "Template entry should remain available")
+        let addButton = app.buttons[AXID.lifeToolbarAdd].firstMatch
+        XCTAssertTrue(addButton.waitForExistence(timeout: 3), "Cancel should preserve toolbar add")
+        XCTAssertTrue(addButton.isHittable, "Toolbar add should remain actionable after cancel")
+        XCTAssertFalse(app.buttons["life-empty-add"].exists, "Empty state should avoid a duplicate add action")
     }
 
     func testEmptyStarterOpensTemplates() throws {
-        XCTAssertTrue(app.waitAndTap("life-empty-template"), "Empty starter should offer From Template\n\(app.debugDescription)")
+        XCTAssertTrue(app.waitAndTap(AXID.lifeToolbarAdd), "Toolbar add menu should open")
+        XCTAssertTrue(app.waitAndTap(AXID.lifeToolbarTemplate), "Toolbar should offer From Template")
         XCTAssertTrue(elementExists("habit-template-list", timeout: 3), "Template picker should appear")
         XCTAssertTrue(
             app.dismissModalIfPresent(cancelIdentifiers: ["habit-template-cancel"]),
@@ -88,10 +76,10 @@ final class LifeSmokeTests: UITestBaseCase {
         )
 
         XCTAssertTrue(
-            app.buttons["life-empty-template"].waitForExistence(timeout: 3),
-            "Cancel should return to the empty starter"
+            app.buttons[AXID.lifeToolbarAdd].waitForExistence(timeout: 3),
+            "Cancel should return to the Life toolbar"
         )
-        XCTAssertTrue(app.buttons["life-empty-add"].isHittable, "Add Habit should remain actionable")
+        XCTAssertTrue(app.buttons[AXID.lifeToolbarAdd].isHittable, "Add Habit should remain actionable")
     }
 
     func testHabitFormOpens() throws {
@@ -168,6 +156,20 @@ final class LifeSeededSmokeTests: SeededUITestBaseCase {
         )
         XCTAssertFalse(app.buttons["life-empty-add"].exists, "Seeded habits should not show the empty starter")
         XCTAssertFalse(app.buttons["life-empty-template"].exists, "Seeded habits should not show the empty template entry")
+    }
+
+    func testWeeklyReportShowsMeasuredComparison() throws {
+        XCTAssertTrue(app.scrollToElementIfNeeded("life-weekly-report-summary", maxSwipes: 8),
+                      "Weekly report summary should be reachable")
+        let summary = app.descendants(matching: .any)["life-weekly-report-summary"].firstMatch
+        let current = app.descendants(matching: .any)["life-weekly-current-rate"].firstMatch
+        let previous = app.descendants(matching: .any)["life-weekly-previous-rate"].firstMatch
+        XCTAssertTrue(summary.waitForExistence(timeout: 5))
+        XCTAssertTrue(current.waitForExistence(timeout: 5), "Current completion rate should come from habit logs")
+        XCTAssertTrue(previous.waitForExistence(timeout: 5), "Previous completion rate should come from habit logs")
+        XCTAssertTrue(app.buttons["life-weekly-report-button"].firstMatch.exists,
+                      "The existing weekly report detail route should remain available")
+        addScreenshotAttachment(named: "Life weekly report summary")
     }
 
     func testHeroNarrativeLayout() throws {
