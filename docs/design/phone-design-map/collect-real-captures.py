@@ -480,6 +480,15 @@ def render_portal() -> None:
     entries.append(f'<a class="card" href="watch/index.html">'
                    f'<img src="{watch_preview}" alt="Watch 운동 실제 화면 맵 미리보기">'
                    f'<div class="meta"><strong>Apple Watch · 운동</strong><span>{watch_count} / {watch_state_count} 상태 실제 캡처</span></div></a>')
+    live_index = HERE / "actual" / "live-activity" / "capture-index.json"
+    live_data = json.loads(live_index.read_text()) if live_index.exists() else {"captured": {}, "states": {}}
+    live_count = len(live_data["captured"])
+    live_total = len(live_data["states"])
+    live_preview_path = HERE / "actual" / "live-activity" / "images" / "iphone_notification_running.png"
+    live_preview = ('<img src="live-activity/images/iphone_notification_running.png" alt="WLA01 운동 진행 실제 캡처">'
+                    if live_preview_path.exists() else '<div class="pending">캡처 대기</div>')
+    entries.append(f'<a class="card" href="live-activity/index.html">{live_preview}<div class="meta">'
+                   f'<strong>WLA01 · Watch 운동 Live Activity</strong><span>{live_count} / {live_total} 상태 실제 캡처</span></div></a>')
     pending_html = ''.join(f'<p style="color:#e8bf94">{escape(note)}</p>' for note in sorted(pending_notes))
     html = ('<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
             '<title>DUNE · 전체 디자인맵</title><style>'

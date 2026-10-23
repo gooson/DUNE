@@ -5,6 +5,7 @@ import WatchKit
 /// Post-workout summary showing total time, volume, sets, and HR.
 struct SessionSummaryView: View {
     @Environment(WorkoutManager.self) private var workoutManager
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.modelContext) private var modelContext
     @Environment(\.scenePhase) private var scenePhase
     @Query private var exerciseRecords: [ExerciseRecord]
@@ -102,6 +103,39 @@ struct SessionSummaryView: View {
 
                 // Stats grid
                 statsGrid
+
+                if workoutManager.isCardioMode, !workoutManager.machineLevelChanges.isEmpty {
+                    LazyVStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                        Text("Level History")
+                            .font(DS.Typography.tileTitle)
+                        ForEach(workoutManager.machineLevelChanges.indices, id: \.self) { index in
+                            let change = workoutManager.machineLevelChanges[index]
+                            let elapsed = change.formattedElapsed
+                            let rowLayout = dynamicTypeSize.isAccessibilitySize
+                                ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.xs))
+                                : AnyLayout(HStackLayout(spacing: DS.Spacing.xs))
+                            rowLayout {
+                                Text(elapsed)
+                                    .monospacedDigit()
+                                    .foregroundStyle(.secondary)
+                                if !dynamicTypeSize.isAccessibilitySize {
+                                    Spacer(minLength: DS.Spacing.xs)
+                                }
+                                Text("Level")
+                                Text(change.level.formatted())
+                                    .fontWeight(.semibold)
+                            }
+                            .font(DS.Typography.metricLabel)
+                            .accessibilityElement(children: .combine)
+                            .accessibilityLabel(
+                                Text("Elapsed Time") + Text(verbatim: ": \(elapsed), ")
+                                + Text("Level") + Text(verbatim: " \(change.level)")
+                            )
+                            .accessibilityIdentifier("watch-level-history-row-\(index)")
+                        }
+                    }
+                    .accessibilityIdentifier("watch-level-history")
+                }
 
                 Button {
                     showEffortInput = true
@@ -723,6 +757,7 @@ struct SessionSummaryView: View {
             floorsAscended: floors > 0 ? floors : nil,
             cardioMachineLevelAverage: workoutManager.averageMachineLevel,
             cardioMachineLevelMax: workoutManager.maxMachineLevel,
+            cardioMachineLevelChanges: workoutManager.machineLevelChanges,
             isFromHealthKit: true,
             healthKitWorkoutID: healthKitWorkoutID,
             exerciseDefinitionID: exerciseDefinitionID,

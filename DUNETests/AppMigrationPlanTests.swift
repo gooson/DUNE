@@ -130,6 +130,41 @@ struct AppSchemaTests {
         #expect(fetched.first?.weight == 70)
     }
 
+    @Test("V18 cardio record migrates and level changes survive reopen")
+    func v18CardioLevelHistoryMigrates() throws {
+        let storeURL = makeTemporaryStoreURL()
+        defer { removeStoreFiles(at: storeURL) }
+        let oldSchema = Schema(AppSchemaV18.models)
+
+        do {
+            let configuration = ModelConfiguration(schema: oldSchema, url: storeURL, cloudKitDatabase: .none)
+            let container = try ModelContainer(for: oldSchema, configurations: configuration)
+            let context = ModelContext(container)
+            context.insert(AppSchemaV18.ExerciseRecord(
+                exerciseType: "stair-climber", duration: 600,
+                cardioMachineLevelAverage: 6, cardioMachineLevelMax: 8
+            ))
+            try context.save()
+        }
+
+        let configuration = ModelConfiguration(schema: AppSchema.currentSchema, url: storeURL, cloudKitDatabase: .none)
+        let container = try ModelContainer(for: AppSchema.currentSchema, configurations: configuration)
+        let context = ModelContext(container)
+        let record = try #require(context.fetch(FetchDescriptor<ExerciseRecord>()).first)
+        #expect(record.cardioMachineLevelAverage == 6)
+        #expect(record.cardioMachineLevelChanges.isEmpty)
+        let changes = [
+            try #require(CardioMachineLevelChange(elapsedSeconds: 0, level: 5)),
+            try #require(CardioMachineLevelChange(elapsedSeconds: 240, level: 8))
+        ]
+        record.cardioMachineLevelChangesData = try JSONEncoder().encode(changes)
+        try context.save()
+
+        let reopened = try ModelContainer(for: AppSchema.currentSchema, configurations: configuration)
+        let saved = try #require(ModelContext(reopened).fetch(FetchDescriptor<ExerciseRecord>()).first)
+        #expect(saved.cardioMachineLevelChanges == changes)
+    }
+
     private func makeTemporaryStoreURL() -> URL {
         FileManager.default.temporaryDirectory
             .appendingPathComponent(UUID().uuidString)

@@ -123,6 +123,10 @@ targets:
         group: Shared/Resources
       - path: ../Shared/WorkoutRestAttributes.swift
         group: Shared
+      - path: ../Shared/WatchWorkoutAttributes.swift
+        group: Shared
+      - path: ../Shared/WatchWorkoutSnapshot.swift
+        group: Shared
       # Shared Widget Data
       - path: ../Shared/WidgetScoreData.swift
         group: Shared
@@ -197,6 +201,9 @@ targets:
       - path: Domain/Models/WorkoutMode.swift
       - path: Domain/Models/AppTheme.swift
       - path: Domain/Models/WatchConnectivityModels.swift
+      - path: Domain/Models/WorkoutMirrorRetryPolicy.swift
+      - path: ../Shared/WatchWorkoutSnapshot.swift
+        group: Shared
       - path: Domain/Models/HealthMetric.swift
       - path: Domain/Models/HeartRateZone.swift
       - path: Domain/Models/WorkoutZoneDistribution.swift
@@ -262,6 +269,10 @@ targets:
       - path: ../Shared/Resources/Colors.xcassets
         group: Shared/Resources
       - path: ../Shared/WorkoutRestAttributes.swift
+        group: Shared
+      - path: ../Shared/WatchWorkoutAttributes.swift
+        group: Shared
+      - path: ../Shared/WatchWorkoutSnapshot.swift
         group: Shared
       # Shared Widget Data
       - path: ../Shared/WidgetScoreData.swift

@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DUNE · 머신 유산소 레벨 기록 맵</title>
+  <style>
+    :root { font-family: -apple-system, BlinkMacSystemFont, sans-serif; color: #f8f5ef; background: #151819; }
+    body { max-width: 700px; margin: auto; padding: 24px; }
+    a { color: #deb391; }
+    p, li { line-height: 1.5; color: #c9d0cc; }
+    .card { border-radius: 16px; background: #283535; padding: 16px; margin: 12px 0; }
+    .row { display: flex; justify-content: space-between; padding: 9px 0; border-top: 1px solid #ffffff24; }
+    .row:first-of-type { border-top: 0; }
+    .time { color: #a6afb3; font-variant-numeric: tabular-nums; }
+  </style>
+</head>
+<body>
+  <a href="index.html">← 레이아웃 맵</a>
+  <h1>머신 유산소 레벨 기록</h1>
+  <p>W25 완료 요약·W27 저장 기록 상세·Watch F07 계단 운동 완료 요약의 정보 순서 기준 시안이다. 실제 앱 캡처는 <a href="../phone-design-map/actual/index.html">실제 화면 맵</a>에서 확인한다.</p>
+  <div class="card">
+    <strong>레벨 변화</strong>
+    <div class="row"><span class="time">0:00</span><span>레벨 5</span></div>
+    <div class="row"><span class="time">4:30</span><span>레벨 7</span></div>
+    <div class="row"><span class="time">9:15</span><span>레벨 6</span></div>
+  </div>
+  <ul>
+    <li>평균·최대 레벨 다음에 변화 기록을 시간순으로 표시한다. 시간은 일시정지를 뺀 운동 경과 시간이다.</li>
+    <li>레벨을 입력하지 않은 운동과 기존 기록에는 변화 목록을 표시하지 않는다.</li>
+    <li>iPhone·iPad·Duo에서는 요약과 기록 상세의 스크롤 영역 안에 둔다. Watch에서는 완료 요약의 통계 아래에 둔다.</li>
+    <li>큰 글씨에서도 한 행의 시간과 레벨을 읽을 수 있게 세로 스크롤을 유지한다.</li>
+  </ul>
+</body>
+</html>

@@ -99,7 +99,10 @@ struct DashboardView: View {
                 VStack(spacing: sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.xl) {
                     if !launchExperienceReady {
                         DashboardSkeletonView()
-                    } else if viewModel.isLoading && !hasAppeared {
+                    } else if viewModel.shouldShowSkeleton(
+                        canLoadHealthKitData: canLoadHealthKitData,
+                        hasFailedHealthKitAuthorization: hasFailedHealthKitAuthorization
+                    ) {
                         DashboardSkeletonView()
                     } else if viewModel.sortedMetrics.isEmpty && !viewModel.isLoading {
                         if viewModel.errorMessage != nil {
@@ -125,6 +128,8 @@ struct DashboardView: View {
                                     actionTitle: "View Activity",
                                     action: onOpenActivity
                                 )
+                                .accessibilityElement(children: .contain)
+                                .accessibilityIdentifier("dashboard-empty-state")
                             }
                         }
                     } else {

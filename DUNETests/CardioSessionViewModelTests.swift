@@ -446,6 +446,7 @@ struct CardioSessionViewModelTests {
 
         vm.start()
         vm.setMachineLevel(5)
+        vm.setMachineLevel(5)
         try? await Task.sleep(for: .milliseconds(1200))
         vm.setMachineLevel(10)
         try? await Task.sleep(for: .milliseconds(1200))
@@ -457,9 +458,30 @@ struct CardioSessionViewModelTests {
         #expect((record?.cardioMachineLevelAverage ?? 0) > 5)
         #expect((record?.cardioMachineLevelAverage ?? 0) < 10.5)
         #expect(record?.cardioMachineLevelMax == 10)
+        #expect(record?.cardioMachineLevelChanges.map(\.level) == [5, 10])
+        #expect((record?.cardioMachineLevelChanges.last?.elapsedSeconds ?? 0) >= 1)
+        #expect(record?.cardioMachineLevelChanges.last?.elapsedSeconds == vm.machineLevelChanges.last?.elapsedSeconds)
         #expect((record?.autoIntensityRaw ?? 0) > 0)
         #expect((record?.metValue ?? 0) > 8.0)
         #expect((calorieService.lastMetValue ?? 0) > 8.0)
+    }
+
+    @Test("Level changes during pause use active elapsed time")
+    func machineLevelChangesExcludePause() async {
+        let vm = makeVM(
+            id: "stair-climber", name: "Stair Climber", isOutdoor: false,
+            activityType: .stairClimbing, cardioSecondaryUnit: .floors
+        )
+        vm.start()
+        vm.setMachineLevel(5)
+        vm.pause()
+        vm.setMachineLevel(7)
+        let pausedTime = vm.machineLevelChanges.last?.elapsedSeconds
+        try? await Task.sleep(for: .milliseconds(100))
+        vm.setMachineLevel(8)
+        #expect(vm.machineLevelChanges.last?.elapsedSeconds == pausedTime)
+        vm.resume()
+        await vm.end()
     }
 
     // MARK: - Cardio Fitness (VO2 Max)
