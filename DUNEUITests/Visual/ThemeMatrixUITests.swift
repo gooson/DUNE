@@ -82,14 +82,30 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
             launchApp(with: configuration)
 
             let window = app.windows.firstMatch.frame
-            for identifier in [AXID.dashboardToolbarNotifications, AXID.dashboardToolbarSettings] {
-                let action = app.buttons[identifier].firstMatch
-                XCTAssertTrue(action.waitForExistence(timeout: 10), "Desert \(style): \(identifier) should appear")
-                XCTAssertGreaterThanOrEqual(action.frame.width, 44, "Desert \(style): \(identifier) needs a 44pt target")
-                XCTAssertGreaterThanOrEqual(action.frame.height, 44, "Desert \(style): \(identifier) needs a 44pt target")
-                XCTAssertTrue(window.contains(action.frame), "Desert \(style): \(identifier) should fit the window")
-                XCTAssertLessThan(action.frame.maxY, 150, "Desert \(style): \(identifier) should stay in the top toolbar")
+            let bell = app.buttons[AXID.dashboardToolbarNotifications].firstMatch
+            let settings = app.buttons[AXID.dashboardToolbarSettings].firstMatch
+            let isDuoViewport = abs(window.width - 466) < 1 || abs(window.width - 951) < 1
+            for action in [bell, settings] {
+                XCTAssertTrue(action.waitForExistence(timeout: 10), "Desert \(style): \(action.identifier) should appear")
+                if isDuoViewport {
+                    // The native Duo rail gives its 36pt AX child a 48pt host target.
+                    XCTAssertGreaterThanOrEqual(action.frame.height, 36,
+                                                "Desert \(style): native rail action should retain its host target")
+                } else {
+                    XCTAssertGreaterThanOrEqual(action.frame.width, 44,
+                                                "Desert \(style): \(action.identifier) needs a 44pt target")
+                    XCTAssertGreaterThanOrEqual(action.frame.height, 44,
+                                                "Desert \(style): \(action.identifier) needs a 44pt target")
+                }
+                XCTAssertTrue(window.contains(action.frame), "Desert \(style): \(action.identifier) should fit the window")
             }
+            let group = bell.frame.union(settings.frame)
+            XCTAssertLessThan(abs(bell.frame.midY - settings.frame.midY), 2,
+                              "Desert \(style): bell and settings should share a toolbar row")
+            XCTAssertLessThanOrEqual(group.height, 64, "Desert \(style): toolbar actions must not span a tall glass area")
+            XCTAssertLessThanOrEqual(group.width, 160, "Desert \(style): toolbar actions should form a compact group")
+            XCTAssertLessThan(group.maxY, window.minY + window.height * 0.4,
+                              "Desert \(style): toolbar group should remain in the upper portion of the viewport")
             VisualAudit.capture("Today toolbar Desert \(style)")
             if !VisualAudit.isEnabled { addScreenshotAttachment(named: "Today toolbar Desert \(style)") }
         }
