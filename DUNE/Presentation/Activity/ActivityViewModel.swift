@@ -40,6 +40,7 @@ final class ActivityViewModel {
     var unlockedBadgeKeys: Set<String> = []
     var workoutStreak: WorkoutStreak?
     var exerciseFrequencies: [ExerciseFrequency] = []
+    var exerciseMix = ExerciseMixSummary.empty()
     var weeklyStats: [ActivityStat] = []
     var templateRecommendations: [WorkoutTemplateRecommendation] = []
     var injuryRiskAssessment: InjuryRiskAssessment?
@@ -115,6 +116,7 @@ final class ActivityViewModel {
     /// Cached manual records for manual-cardio fallback PR calculations.
     private var manualRecordsCache: [ExerciseRecord] = []
     private var healthKitOnlySnapshots: [ExerciseRecordSnapshot] = []
+    private var exerciseMixWorkouts: [WorkoutSummary] = []
     private var weeklyReportRequestID = 0
     @ObservationIgnored
     private var localizedExerciseNameLookup: [String: String] = [:]
@@ -537,18 +539,53 @@ final class ActivityViewModel {
         }
         workoutStreak = WorkoutStreakService.calculate(from: streakEntries + hkStreakEntries)
 
-        // Exercise Frequency
-        let freqEntries = exerciseRecordSnapshots.compactMap { snapshot -> ExerciseFrequencyService.WorkoutEntry? in
-            guard let name = snapshot.exerciseName, !name.isEmpty else { return nil }
-            return ExerciseFrequencyService.WorkoutEntry(
-                exerciseName: localizedExerciseName(name),
-                date: snapshot.date
-            )
-        }
-        exerciseFrequencies = ExerciseFrequencyService.analyze(from: freqEntries)
+        rebuildExerciseMix()
 
         // Weekly Stats
         rebuildWeeklyStats()
+    }
+
+    private func rebuildExerciseMix() {
+        let manualEntries = manualRecordsCache.map { record -> ExerciseMixEntry in
+            let definition = record.exerciseDefinitionID.flatMap { library.exercise(byID: $0) }
+            let activity = WorkoutActivityType.infer(from: record.exerciseType)
+            let kind: ExerciseMixKind
+            switch definition?.category {
+            case .strength, .bodyweight: kind = .strength
+            case .cardio, .hiit: kind = .cardio
+            case .flexibility: kind = .other
+            case nil:
+                kind = activity?.category == .strength ? .strength
+                    : (activity?.category == .cardio || activity?.isDistanceBased == true) ? .cardio : .other
+            }
+            let duration = resolveManualDurationSeconds(for: record).map { $0 / 60 }
+            let distance = resolveManualDistanceMeters(for: record).map { $0 / 1000 }
+            return ExerciseMixEntry(
+                id: "manual-\(record.id)", linkedWorkoutID: record.healthKitWorkoutID,
+                isHealthKit: false, date: record.date,
+                name: definition?.localizedName ?? localizedExerciseName(record.exerciseType),
+                kind: kind,
+                primaryMuscles: record.primaryMuscles.isEmpty ? (definition?.primaryMuscles ?? []) : record.primaryMuscles,
+                completedSets: record.completedSets.count,
+                durationMinutes: duration, distanceKm: distance,
+                dedupName: record.exerciseType
+            )
+        }
+        let healthEntries = exerciseMixWorkouts.map { workout -> ExerciseMixEntry in
+            let kind: ExerciseMixKind = workout.activityType.category == .strength ? .strength
+                : (workout.activityType.category == .cardio || workout.activityType.isDistanceBased) ? .cardio : .other
+            return ExerciseMixEntry(
+                id: workout.id, linkedWorkoutID: workout.isFromThisApp ? workout.id : nil,
+                isHealthKit: true, date: workout.date,
+                name: localizedExerciseName(workout.type), kind: kind,
+                primaryMuscles: [], completedSets: 0,
+                durationMinutes: workout.duration > 0 && workout.duration.isFinite ? workout.duration / 60 : nil,
+                distanceKm: workout.distance.flatMap { $0 > 0 && $0.isFinite ? $0 / 1000 : nil },
+                dedupName: workout.type
+            )
+        }
+        exerciseMix = ExerciseMixService.analyze(manualEntries + healthEntries)
+        exerciseFrequencies = exerciseMix.frequencies
     }
 
     /// Computes strength/manual+HealthKit merged personal records and notice text.
@@ -724,14 +761,15 @@ final class ActivityViewModel {
         async let exerciseTask = safeExerciseFetch(canQueryHealthKit: healthKitAvailable)
         async let stepsTask = safeStepsFetch(canQueryHealthKit: healthKitAvailable)
         async let workoutsTask = safeWorkoutsFetch(canQueryHealthKit: healthKitAvailable)
+        async let mixWorkoutsTask = safeExerciseMixWorkoutsFetch(canQueryHealthKit: healthKitAvailable)
         let sharedSnapshot = await sharedSnapshotTask
         async let trainingLoadTask = safeTrainingLoadFetch(snapshot: sharedSnapshot, canQueryHealthKit: healthKitAvailable)
         async let sleepTask = safeSleepFetch(snapshot: sharedSnapshot, canQueryHealthKit: healthKitAvailable)
         async let readinessTask = safeReadinessFetch(snapshot: sharedSnapshot, canQueryHealthKit: healthKitAvailable)
         async let sleepDailyTask = safeSleepDailyFetch(snapshot: sharedSnapshot, canQueryHealthKit: healthKitAvailable)
 
-        let (exerciseResult, stepsResult, workoutsResult, loadResult, sleepResult, readinessResult, sleepDailyResult) = await (
-            exerciseTask, stepsTask, workoutsTask, trainingLoadTask, sleepTask, readinessTask, sleepDailyTask
+        let (exerciseResult, stepsResult, workoutsResult, mixWorkoutsResult, loadResult, sleepResult, readinessResult, sleepDailyResult) = await (
+            exerciseTask, stepsTask, workoutsTask, mixWorkoutsTask, trainingLoadTask, sleepTask, readinessTask, sleepDailyTask
         )
 
         guard isCurrentLoadRequest(requestID) else { return }
@@ -741,6 +779,7 @@ final class ActivityViewModel {
         weeklySteps = stepsResult.weeklyData
         todaySteps = stepsResult.todayMetric
         recentWorkouts = workoutsResult
+        exerciseMixWorkouts = mixWorkoutsResult
         #if DEBUG
         let scenario = UITestSeedScenario.current()
         let mockedRecommendations = TestDataSeeder.mockTemplateRecommendations(
@@ -1137,6 +1176,18 @@ final class ActivityViewModel {
             return try await workoutService.fetchWorkouts(days: 7)
         } catch {
             AppLogger.ui.error("Activity workouts fetch failed: \(error.localizedDescription)")
+            return []
+        }
+    }
+
+    private func safeExerciseMixWorkoutsFetch(canQueryHealthKit: Bool) async -> [WorkoutSummary] {
+        guard canQueryHealthKit else { return [] }
+        let today = Calendar.current.startOfDay(for: Date())
+        guard let start = Calendar.current.date(byAdding: .day, value: -27, to: today) else { return [] }
+        do {
+            return try await workoutService.fetchWorkouts(start: start, end: Date())
+        } catch {
+            AppLogger.ui.error("Exercise mix workout fetch failed: \(error.localizedDescription)")
             return []
         }
     }

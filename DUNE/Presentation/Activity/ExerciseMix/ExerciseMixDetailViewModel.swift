@@ -34,6 +34,12 @@ final class ExerciseMixDetailViewModel {
         isLoading = false
     }
 
+    func load(summary: ExerciseMixSummary) {
+        exerciseFrequencies = summary.frequencies
+        frequencyByName = Dictionary(uniqueKeysWithValues: summary.frequencies.map { ($0.exerciseName, $0) })
+        isLoading = false
+    }
+
     private func resolveDisplayName(record: ExerciseRecord, definition: ExerciseDefinition?) -> String {
         if let localizedName = definition?.localizedName, !localizedName.isEmpty {
             return localizedName

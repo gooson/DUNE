@@ -193,7 +193,6 @@ struct ActivityView: View {
                     if viewModel.isLoading && viewModel.weeklyExerciseMinutes.isEmpty {
                         // Keep the first screen and workout entry available while health data loads.
                         themeReadinessPreview
-                        suggestedWorkoutSection(useHistory: false)
                         ProgressView()
                             .frame(maxWidth: .infinity, minHeight: 100)
                     } else {
@@ -315,7 +314,7 @@ struct ActivityView: View {
                                      infoAction: { showingExerciseMixInfo = true },
                                      infoIdentifier: "activity-exercise-mix-info") {
                             NavigationLink(value: ActivityDetailDestination.exerciseMix) {
-                                ExerciseFrequencySection(frequencies: viewModel.exerciseFrequencies)
+                                ExerciseFrequencySection(summary: viewModel.exerciseMix)
                             }
                             .buttonStyle(.plain)
                             .accessibilityIdentifier("activity-section-exercisemix")
@@ -546,48 +545,19 @@ struct ActivityView: View {
             .buttonStyle(.plain)
             .disabled(viewModel.trainingReadiness == nil)
 
-            Button {
-                showingExercisePicker = true
-            } label: {
-                HStack(spacing: 6) {
-                    Text("Log Workout")
-                    Image(systemName: "arrow.right")
-                    Spacer()
-                }
-                .font(.subheadline.weight(.semibold))
-                .frame(minHeight: 44, alignment: .leading)
-                .foregroundStyle(theme == .desertWarm
-                    ? (colorScheme == .dark
-                        ? Color(red: 0.898, green: 0.678, blue: 0.514)
-                        : Color(red: 0.588, green: 0.349, blue: 0.220))
-                    : theme.directionPreviewActionColor(for: colorScheme))
-                .contentShape(Rectangle())
-            }
-            .buttonStyle(.plain)
-            .accessibilityIdentifier("activity-log-workout-button")
         }
         .padding(20)
         .background {
-            RoundedRectangle(cornerRadius: 23)
-                .fill(theme == .desertWarm
-                    ? LinearGradient(colors: [colorScheme == .dark ? Color(red: 0.110, green: 0.120, blue: 0.125) : Color(red: 0.988, green: 0.969, blue: 0.937)], startPoint: .top, endPoint: .bottom)
-                    : theme.directionPreviewBackground)
-                .overlay(alignment: .bottom) {
-                    if theme == .desertWarm {
-                        DesertPreviewWave()
-                            .frame(height: 74)
-                            .clipped()
+            if theme == .desertWarm {
+                DesertCardSurface(cornerRadius: 23)
+            } else {
+                RoundedRectangle(cornerRadius: 23)
+                    .fill(theme.directionPreviewBackground)
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 23)
+                            .strokeBorder(theme.accentColor.opacity(0.25), lineWidth: 1)
                     }
-                }
-                .clipShape(RoundedRectangle(cornerRadius: 23))
-                .overlay {
-                    RoundedRectangle(cornerRadius: 23)
-                        .strokeBorder(theme == .desertWarm
-                            ? (colorScheme == .dark
-                                ? Color(red: 0.251, green: 0.314, blue: 0.286)
-                                : Color(red: 0.871, green: 0.859, blue: 0.824))
-                            : theme.accentColor.opacity(0.25), lineWidth: 1)
-                }
+            }
         }
         .reportTabHeroFrame()
         .staggeredAppear(index: 0)
@@ -818,7 +788,7 @@ struct ActivityView: View {
         case .consistency:
             ConsistencyDetailView()
         case .exerciseMix:
-            ExerciseMixDetailView()
+            ExerciseMixDetailView(summary: viewModel.exerciseMix)
         case .trainingReadiness:
             TrainingReadinessDetailView(
                 readiness: viewModel.trainingReadiness,
