@@ -48,7 +48,7 @@ struct ExerciseMixServiceTests {
     @Test("Linked and orphan app workouts deduplicate while third-party cardio remains")
     func mergedSources() {
         let result = ExerciseMixService.analyze([
-            entry("manual-1", linked: "hk-1", sets: 2),
+            entry("manual-1", sets: 2, linked: "hk-1"),
             entry("manual-2", name: "Squat", sets: 2),
             entry("hk-1", linked: "hk-1", healthKit: true),
             entry("hk-2", name: "Squat", linked: "hk-2", healthKit: true),
