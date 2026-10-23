@@ -643,6 +643,8 @@ struct DashboardView: View {
                     showSettings = true
                 } label: {
                     Image(systemName: "gearshape")
+                        .frame(width: 44, height: 44)
+                        .contentShape(Rectangle())
                 }
                 .accessibilityLabel("Settings")
                 .accessibilityIdentifier("dashboard-toolbar-settings")
