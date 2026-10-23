@@ -144,6 +144,62 @@ final class DashboardSmokeTests: UITestBaseCase {
 }
 
 @MainActor
+final class DashboardLoadingTests: UITestBaseCase {
+    override var additionalLaunchArguments: [String] {
+        ["--ui-defer-daily-digest-healthkit", "-morningBriefingDisabled", "YES",
+         "-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
+    }
+
+    func testSkeletonUntilFirstQueryCompletes() {
+        assertLoadingSkeleton()
+        addScreenshotAttachment(named: "Today T03 loading skeleton")
+
+        resumeAuthorization()
+
+        let skeleton = app.otherElements["dashboard-loading-skeleton"].firstMatch
+        let finished = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "exists == false"),
+            object: skeleton
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [finished], timeout: 15), .completed)
+        // Existing HealthKit measurements survive an app reset. The unit tests
+        // cover deterministic empty responses; this test checks the launch lifecycle.
+        if app.otherElements["dashboard-empty-state"].firstMatch.exists {
+            XCTAssertTrue(app.staticTexts["No Measurements Yet"].firstMatch.exists)
+        }
+        addScreenshotAttachment(named: "Today T03 completed first query")
+    }
+
+    func testSkeletonTransitionsToMeasurements() {
+        var configuration = launchConfiguration
+        configuration.shouldSeedMockData = true
+        configuration.scenario = .defaultSeeded
+        launchApp(with: configuration)
+        assertLoadingSkeleton()
+        addScreenshotAttachment(named: "Today T03 loading before measurements")
+
+        resumeAuthorization()
+
+        XCTAssertTrue(app.descendants(matching: .any)["dashboard-hero-condition"].firstMatch.waitForExistence(timeout: 15))
+        XCTAssertFalse(app.otherElements["dashboard-loading-skeleton"].firstMatch.exists)
+        XCTAssertFalse(app.staticTexts["No Measurements Yet"].firstMatch.exists)
+        addScreenshotAttachment(named: "Today T03 loaded measurements")
+    }
+
+    private func assertLoadingSkeleton() {
+        XCTAssertTrue(app.otherElements["dashboard-loading-skeleton"].firstMatch.waitForExistence(timeout: 10))
+        XCTAssertFalse(app.staticTexts["No Measurements Yet"].firstMatch.exists)
+    }
+
+    private func resumeAuthorization() {
+        XCUIDevice.shared.press(.home)
+        XCTAssertTrue(app.wait(for: .runningBackground, timeout: 5))
+        app.activate()
+        XCTAssertTrue(app.wait(for: .runningForeground, timeout: 5))
+    }
+}
+
+@MainActor
 final class TodayDesignMapCaptureTests: UITestBaseCase {
     override var shouldSeedMockData: Bool { true }
     override var additionalLaunchArguments: [String] {

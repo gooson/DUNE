@@ -190,6 +190,17 @@ final class DashboardViewModel {
         self.pinnedCategories = pinnedMetricsStore.load()
     }
 
+    func shouldShowSkeleton(
+        canLoadHealthKitData: Bool,
+        hasFailedHealthKitAuthorization: Bool
+    ) -> Bool {
+        guard hasLoadedOnce || hasFailedHealthKitAuthorization else { return true }
+        let isAwaitingAuthorization = !canLoadHealthKitData
+            && !hasFailedHealthKitAuthorization
+            && !isMirroredReadOnlyMode
+        return isAwaitingAuthorization || (isLoading && sortedMetrics.isEmpty)
+    }
+
     func setPinnedCategories(_ categories: [HealthMetric.Category]) {
         pinnedMetricsStore.save(categories)
         pinnedCategories = pinnedMetricsStore.load()
@@ -334,7 +345,11 @@ final class DashboardViewModel {
         buildYesterdayRecap()
         buildCumulativeStressScore()
         buildDailyDigest(force: forceDailyDigest)
-        hasLoadedOnce = true
+        // A deferred authorization pass has not queried health data yet.
+        // Keep the first-load skeleton until the authorized request completes.
+        if canQueryHealthKit || isMirroredReadOnlyMode {
+            hasLoadedOnce = true
+        }
         lastUpdated = Date()
         WidgetDataWriter.writeConditionScore(conditionScore)
 
