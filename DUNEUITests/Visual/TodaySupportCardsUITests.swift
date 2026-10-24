@@ -228,9 +228,9 @@ final class TodaySupportCardsUITests: SeededUITestBaseCase {
         let navigationBar = app.navigationBars.firstMatch
         let tabBar = app.tabBars.firstMatch
         let top = max(scroll.frame.minY, window.minY,
-                      navigationBar.exists ? navigationBar.frame.maxY : window.minY) + 4
+                      navigationBar.exists ? navigationBar.frame.maxY : window.minY)
         let bottom = min(scroll.frame.maxY, window.maxY,
-                         tabBar.exists ? tabBar.frame.minY : window.maxY) - 4
+                         tabBar.exists ? tabBar.frame.minY : window.maxY)
         let left = max(scroll.frame.minX, window.minX)
         let right = min(scroll.frame.maxX, window.maxX)
         return CGRect(x: left, y: top, width: max(0, right - left), height: max(0, bottom - top))
