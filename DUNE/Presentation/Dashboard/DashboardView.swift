@@ -148,14 +148,6 @@ struct DashboardView: View {
                 guard launchExperienceReady else { return }
                 await loadDashboard()
             }
-            .onScrollPhaseChange { oldPhase, newPhase, context in
-                // Only finish inertial swipes. Pull-to-refresh releases and its inset
-                // restoration must keep the system scroll view in control.
-                guard oldPhase == .decelerating, newPhase == .idle else { return }
-                let distanceFromTop = context.geometry.contentOffset.y + context.geometry.contentInsets.top
-                guard distanceFromTop > 0, distanceFromTop < 130 else { return }
-                proxy.scrollTo(ScrollAnchor.top, anchor: .top)
-            }
             .onChange(of: scrollToTopSignal) { _, _ in
                 withAnimation(DS.Animation.standard) {
                     proxy.scrollTo(ScrollAnchor.top, anchor: .top)
