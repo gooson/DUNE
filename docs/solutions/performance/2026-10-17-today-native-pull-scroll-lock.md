@@ -9,6 +9,8 @@ related_solutions: [docs/solutions/performance/2026-10-16-today-scroll-top-settl
 
 # Solution: Today 최상단 당김 뒤 카드가 제목 아래에 고정되는 문제
 
+> 2026-10-24 재검증: idle 자동 정렬은 실제53pt 점프를 만들었고, native refresh caller도91ms 만에 취소되는 별도 결함이 확인됐다. 이 문서의 당시 성공 결과를 현재 해결 보증으로 사용하지 않는다. [확인된 원인과 남은 복귀 실패](2026-10-24-today-scroll-root-cause.md)에 중간 실패 및 미검증 범위를 기록했다.
+
 ## Problem
 
 ### Symptoms

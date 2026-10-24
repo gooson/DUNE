@@ -6,7 +6,8 @@
     "/Users/shanks/.codex/worktrees/condition-review-ship/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.21_09-40-32-+0900.xcresult",
     "/Users/shanks/.codex/worktrees/condition-review-ship/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.22_00-46-16-+0900.xcresult",
     "/Users/shanks/Documents/Codex/2026-10-22/new-chat/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.22_18-42-30-+0900.xcresult",
-    "/Users/shanks/Documents/Codex/2026-10-22/new-chat/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.22_21-54-56-+0900.xcresult"
+    "/Users/shanks/Documents/Codex/2026-10-22/new-chat/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.22_21-54-56-+0900.xcresult",
+    "/Users/shanks/.codex/worktrees/36ee/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.24_17-54-52-+0900.xcresult"
   ],
   "processed_capture_candidates": 111,
   "captured": {
@@ -1062,18 +1063,21 @@
       "row_id": "T03",
       "file": "T03.png",
       "evidence": "actual Desert Horizon seeded root",
-      "test": "ThemeMatrixUITests/testDesertTodayToolbarFitsAtBothAppearances()",
-      "action": "Direct initial-tab launch, Desert light root",
-      "timestamp": 1792789120.835,
-      "image": "",
-      "source_revision": "9a9dcf1c06cb789d95d16a7d57807c8b3c072d6c",
-      "source_worktree_dirty": true,
+      "test": "TodaySettingsRegressionTests/testNativeRefreshReleaseWithoutHoldKeepsTodayScrollable()",
+      "action": "native refresh completed without hold",
+      "timestamp": 1792832250.45,
+      "image": "F8B30640-074D-4D74-A0DB-2CFD96033931.png",
+      "source_revision": "c3500bcb",
+      "source_worktree_dirty": false,
       "device_id": "4990D55E-752C-4E35-8FB4-953F995AB2C2",
       "device_name": "iPhone 18 Pro-wt-Health-desert-horizon-final-validation-f5271f075392",
       "gallery": "../../../full-redesign-map/review/desert-horizon-final-2026-10-24/index.html",
-      "xcresult": "Test-DUNEUITests-2026.10.24_05-58-13-+0900.xcresult",
+      "xcresult": "/Users/shanks/.codex/worktrees/36ee/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.24_17-54-52-+0900.xcresult",
       "current_verification": "pending",
-      "current_verification_note": "새 DESERT HORIZON 측정값 표시 상태는 이 캡처로 확인했다. 시작 스켈레톤·빈 상태는 별도 변경(#834)의 미갱신 상태이며 이 PNG로 완료 처리하지 않는다."
+      "current_verification_note": "2026-10-24 스크롤 조사 c3500bcb: native refresh 해제 후 새 실제 화면으로 갱신했다. 해당 경로는 통과했지만 targeted UI8 중 수동·반복 상단 복귀2건은 실패했다. 스크롤 수정 완료 증거가 아니다. 초기 로딩·빈 상태 검증도 별도 미완료다.",
+      "screen": "Today native refresh completed without hold",
+      "simulator_udid": "0376F2EC-BF2B-4CEE-966B-3388E7AACF4B",
+      "verification_scope": "Seeded English Today; native refresh release completion and subsequent scroll passed. Overall targeted UI8:6passed2failed; deep/manual top return unresolved."
     },
     "A01": {
       "row_id": "A01",

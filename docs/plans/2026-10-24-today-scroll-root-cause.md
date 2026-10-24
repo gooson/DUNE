@@ -1,8 +1,8 @@
 ---
 topic: today-scroll-root-cause
 date: 2026-10-24
-status: approved
-confidence: medium
+status: in-progress
+confidence: high for confirmed defects; unresolved for full top return
 related_solutions:
   - docs/solutions/performance/2026-10-16-today-scroll-top-settling.md
   - docs/solutions/performance/2026-10-17-today-native-pull-scroll-lock.md
@@ -37,6 +37,8 @@ related_brainstorms: []
 | 파일 | 변경 |
 |---|---|
 | `DUNE/Presentation/Dashboard/DashboardView.swift` | 자연 스크롤에 개입하는 보정 제거, 필요한 host/anchor 교정 |
+| `DUNE/Presentation/Shared/Components/WaveRefreshTaskCoordinator.swift`, `WaveRefreshIndicator.swift` | native caller와 화면 소유 refresh 취소 분리 |
+| `DUNETests/WaveRefreshTaskCoordinatorTests.swift` | 취소·중복 실행4개 계약 검증 |
 | `DUNEUITests/Full/TodaySettingsRegressionTests.swift` | 부분 스크롤·빠른 복귀·refresh lifecycle 회귀 |
 | `docs/design/layout-map/README.md` | T03 스크롤 계약 |
 | `docs/design/phone-design-map/README.md`, `actual/**` | 영향 T03의 새 실제 캡처와 출처, 미검증 기기 명시 |
@@ -70,11 +72,15 @@ related_brainstorms: []
 |---|---|---|
 | 0 Initialization | completed | 시작 worktree clean, detached HEAD에서 `codex/today-scroll-root-cause` 생성; 최초 test 변경은 이번 debug 작업 산출물 |
 | 1 Plan | completed | 이 계획서와 관련 solution·공식 API·코드 조사 |
-| 2 Work | in_progress | 수정 전 부분 스크롤 테스트 실행 중 |
-| 2.5 UI | pending | 최종 코드 검증 대기 |
-| 3 Review | pending | 최종 diff 대기 |
-| 3.5 Quality | pending | 최종 diff 대기 |
+| 2 Work | in_progress | c3500bcb 구현·빌드·unit4 통과. 깊은 상단 복귀 결함 잔존 |
+| 2.5 UI | failed | c3500bcb targeted iPhone8=6pass2fail; iPad/Duo 미실행. 동일 경로 재시도 중단 |
+| 3 Review | pending | UI 게이트 실패로 진입 보류 |
+| 3.5 Quality | pending | Work의 SwiftUI·Apple UX·app 품질·UI 테스트 검토 완료; 최종 실행 한계 미해결 |
 | 4 Resolve | pending | 리뷰 대기 |
-| 5 Compound | pending | 검증 결과 대기 |
+| 5 Compound | pending | 조사 기록은 생성했으나 해결 완료 게이트 미충족 |
 | 5.5 Pre-Ship | pending | 게이트 대기 |
 | 6 Ship | pending | 게이트 대기 |
+
+## 추가 원인 격리 대기
+
+강제 idle 보정과 refresh caller 취소는 trace로 확인했다. Reader/zero anchor 제거는 단독 실험에서 full-swipe1회 통과했지만 최종8건에서 다시2건 실패하여 확정 해결로 보지 않는다. 화면 밖AX조회를 교정하고 느린 held pan을 사용해도 수동 복귀 실패는 남았다. 같은 실행 경로는 adapter 재시도 제한에 따라 중단했다. 사용자에게 이번 작업의 추가 원인 격리 예외를 질문했으며, 응답 전에는 추가 실행하지 않는다. 후보는 static NavigationStack/ScrollView에서 wave modifier 유무 비교와 native title mode/offset/inset 동시 측정이다.

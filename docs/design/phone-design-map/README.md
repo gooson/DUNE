@@ -51,6 +51,8 @@ Watch의 [63개 상태별 맵](actual/watch/index.html)에는 기본 글자 크�
 
 ## 화면 수정 시 갱신
 
+2026-10-24 스크롤 조사(c3500bcb)에서는 전용 iPhone의 native 새로고침 해제 후 T03을 새 실제 화면으로 갱신했다. native held/no-hold·부분 왕복 등의 경로는 통과했지만 최종 targeted UI8 중 수동·반복 상단 복귀2건이 실패하여 스크롤 수정 완료로 표시하지 않는다. iPad·Duo 접힘·펼침은 이 선행 게이트 실패로 새 검증과 캡처를 시작하지 못했다. 네 형태의 `captured.T03.current_verification`에 이 제한을 표시했고 기존 다른 기기 PNG를 새 수정 증거로 사용하지 않는다. [확인된 결함과 남은 원인 격리](../../solutions/performance/2026-10-24-today-scroll-root-cause.md)에 재개 조건을 기록했다.
+
 2026-10-24 T03 시작 로딩을 수정했다. 첫 조회 시작 전과 HealthKit 권한 준비 중에는 스켈레톤을 유지하고, 실제 조회 완료 후 기록이 없을 때만 빈 상태로 전환한다. 영향 기기는 iPhone·iPad·Duo 접힘·펼침이며 Watch는 제외한다. 기존 워크트리의 소유권 등록 오류는 분리한 `main` 기반 워크트리에서 잠금 FD 전달 환경을 바로잡아 해결했지만, 다른 워크트리의 UI 검증이 저장소 잠금을 보유하여 관련 테스트는 60초 대기 후 시작하지 못했다. 네 기기의 T03 초기 스켈레톤·조회 완료 빈 상태·측정값 표시 상태는 새 캡처 미완료이며 기존 이미지는 이 변경의 증거가 아니다. [구현과 검증 제한](../../solutions/general/2026-10-24-dashboard-initial-loading-state.md)에 재개 조건을 기록했다.
 
 2026-10-19 T03·A01·H01·L01 히어로 링 통일 후 iPhone 18 Pro Max와 iPad Pro 13-inch (M5)의 밝음·어두움 실제 화면 16장을 [새 캡처와 출처](../full-redesign-map/review/four-tab-hero-rings-2026-10-19/README.md)에 보존했다. 같은 날 [WATER LILIES iPhone 8장](../full-redesign-map/review/water-lilies-hero-rings-2026-10-19/README.md)도 촬영했다. 기존 `actual/regular`은 다른 iPhone UDID로 만든 인덱스라 덮어쓰지 않았다. 현재 포털은 이 새 캡처로 연결하며, 기존 기기의 4개 화면은 갱신 완료로 계산하지 않는다.
