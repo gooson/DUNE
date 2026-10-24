@@ -55,6 +55,7 @@ final class DashboardViewModel {
     var pinnedCategories: [HealthMetric.Category]
     var baselineDeltasByMetricID: [String: MetricBaselineDelta] = [:]
     private(set) var sleepDeficitAnalysis: SleepDeficitAnalysis?
+    private(set) var latestSleepStages: [SleepStage] = []
     private var hasLoadedOnce = false
 
     /// Assembled briefing data for the morning briefing sheet.
@@ -886,9 +887,11 @@ final class DashboardViewModel {
             sleepDate = latest.date
             isHistorical = true
         } else {
+            latestSleepStages = []
             return nil
         }
 
+        latestSleepStages = stages
         let output = sleepScoreUseCase.execute(input: .init(stages: stages))
         let yesterdayOutput = sleepScoreUseCase.execute(input: .init(stages: yesterdayStages))
 
@@ -936,8 +939,12 @@ final class DashboardViewModel {
 
     private func fetchSleepData(from snapshot: SharedHealthSnapshot) -> HealthMetric? {
         let calendar = Calendar.current
-        guard let sleepInput = snapshot.sleepScoreInput else { return nil }
+        guard let sleepInput = snapshot.sleepScoreInput else {
+            latestSleepStages = []
+            return nil
+        }
 
+        latestSleepStages = sleepInput.stages
         let output = sleepScoreUseCase.execute(input: .init(stages: sleepInput.stages))
         let yesterdayOutput = sleepScoreUseCase.execute(input: .init(stages: snapshot.yesterdaySleepStages))
 

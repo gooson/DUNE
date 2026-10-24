@@ -1714,6 +1714,29 @@
         }
       }
     },
+    "%lld percent" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld percent"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lldパーセント"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld퍼센트"
+          }
+        }
+      }
+    },
     "%lld posture warnings detected" : {
       "localizations" : {
         "ja" : {
@@ -10368,6 +10391,29 @@
         }
       }
     },
+    "Current conditions" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Current conditions"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "現在の天気"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "현재 날씨"
+          }
+        }
+      }
+    },
     "Current debt: %lldh %lldm" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -11382,6 +11428,29 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "닫기"
+          }
+        }
+      }
+    },
+    "Dismiss sleep insight" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dismiss sleep insight"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "睡眠インサイトを閉じる"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "수면 인사이트 닫기"
           }
         }
       }
@@ -15579,6 +15648,52 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "목표"
+          }
+        }
+      }
+    },
+    "Goal 8 hours" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Goal 8 hours"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "目標 8時間"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "목표 8시간"
+          }
+        }
+      }
+    },
+    "Goal 10,000" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Goal 10,000"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "目標 10,000歩"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "목표 10,000걸음"
           }
         }
       }
@@ -19890,6 +20005,29 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "어젯밤 수면: %1$lld시간 %2$lld분."
+          }
+        }
+      }
+    },
+    "Last Sleep" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last Sleep"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "前回の睡眠"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "지난 수면"
           }
         }
       }
@@ -33777,6 +33915,29 @@
         }
       }
     },
+    "Sleep History" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sleep History"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "睡眠履歴"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "수면 기록"
+          }
+        }
+      }
+    },
     "Sleep Journey" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -35785,6 +35946,29 @@
         }
       }
     },
+    "Steps and last sleep" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Steps and last sleep"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "歩数と前回の睡眠"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "걸음과 지난 수면"
+          }
+        }
+      }
+    },
     "Stop Listening" : {
       "localizations" : {
         "ja" : {
@@ -37777,6 +37961,29 @@
         }
       }
     },
+    "Today's Brief" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Today's Brief"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今日のブリーフィング"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "오늘의 브리핑"
+          }
+        }
+      }
+    },
     "Today's condition score was %lld (%@%lld from yesterday)." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -37807,6 +38014,52 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "오늘 컨디션 점수는 %lld점이었습니다."
+          }
+        }
+      }
+    },
+    "Today's Goals" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Today's Goals"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今日の目標"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "오늘 목표"
+          }
+        }
+      }
+    },
+    "Today's habits" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Today's habits"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今日の習慣"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "오늘의 습관"
           }
         }
       }
@@ -37866,6 +38119,29 @@
         }
       }
     },
+    "Today's Progress" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Today's Progress"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今日の進捗"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "오늘의 진행"
+          }
+        }
+      }
+    },
     "Today's Recommendation" : {
       "localizations" : {
         "ja" : {
@@ -37911,6 +38187,29 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "오늘의 추천 운동"
+          }
+        }
+      }
+    },
+    "Today's Suggestion" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Today's Suggestion"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今日の提案"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "오늘의 제안"
           }
         }
       }
@@ -40069,6 +40368,29 @@
         }
       }
     },
+    "View Briefing" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "View Briefing"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ブリーフィングを見る"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "브리핑 보기"
+          }
+        }
+      }
+    },
     "View Calculation" : {
       "localizations" : {
         "ja" : {
@@ -41165,6 +41487,29 @@
         }
       }
     },
+    "Weather and Activity" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weather and Activity"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "天気と活動"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "날씨와 활동"
+          }
+        }
+      }
+    },
     "Weather Data" : {
       "localizations" : {
         "ja" : {
@@ -41244,6 +41589,29 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "날씨 가이드"
+          }
+        }
+      }
+    },
+    "Weather unavailable" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weather unavailable"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "天気情報を利用できません"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "날씨 정보를 사용할 수 없어요"
           }
         }
       }
@@ -41448,6 +41816,29 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "주간 리포트"
+          }
+        }
+      }
+    },
+    "Weekly Sleep Deficit" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weekly Sleep Deficit"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今週の睡眠不足"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이번 주 수면 부족"
           }
         }
       }

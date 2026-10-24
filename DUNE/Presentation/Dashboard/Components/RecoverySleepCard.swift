@@ -7,13 +7,23 @@ struct RecoverySleepCard: View {
     let sleepDeficit: SleepDeficitAnalysis?
     let sleepInsights: [InsightCardData]
     let sleepMetric: HealthMetric?
+    var sleepStages: [SleepStage] = []
     let onDismissInsight: (String) -> Void
+
+    @ScaledMetric(relativeTo: .caption) private var historyHeight: CGFloat = 112
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
+    private var validStages: [SleepStage] {
+        sleepStages.filter { $0.endDate > $0.startDate && $0.duration.isFinite && $0.duration > 0 }
+            .sorted { $0.startDate < $1.startDate } // oldest-first
+    }
 
     var body: some View {
         if shouldShow {
-            InlineCard {
-                VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+            DashboardSupportCard {
+                VStack(alignment: .leading, spacing: DS.Spacing.lg) {
                     header
+                    lastSleep
                     deficitRow
                     sleepHistory
                     insightRows
@@ -26,7 +36,7 @@ struct RecoverySleepCard: View {
     }
 
     private var shouldShow: Bool {
-        hasValidDeficit || !sleepInsights.isEmpty
+        sleepMetric != nil || !validStages.isEmpty || hasValidDeficit || !sleepInsights.isEmpty
     }
 
     private var hasValidDeficit: Bool {
@@ -39,13 +49,67 @@ struct RecoverySleepCard: View {
     private var header: some View {
         HStack(spacing: DS.Spacing.xs) {
             Image(systemName: "bed.double.fill")
-                .font(.caption2)
+                .font(.title3)
                 .foregroundStyle(DS.Color.body)
+                .frame(width: 38, height: 38)
+                .background(DS.Color.sleep.opacity(0.15), in: RoundedRectangle(cornerRadius: 12))
 
             Text("Recovery & Sleep")
-                .font(.caption)
-                .fontWeight(.medium)
-                .foregroundStyle(DS.Color.textSecondary)
+                .font(.headline)
+        }
+    }
+
+    @ViewBuilder
+    private var lastSleep: some View {
+        if let metric = sleepMetric {
+            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                if dynamicTypeSize.isAccessibilitySize {
+                    VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                        Text("Last Sleep").foregroundStyle(.secondary)
+                        Text(metric.value.hoursMinutesFormatted).font(.title3.bold()).monospacedDigit()
+                    }
+                } else {
+                    HStack {
+                        Text("Last Sleep").foregroundStyle(.secondary)
+                        Spacer()
+                        Text(metric.value.hoursMinutesFormatted).font(.title3.bold()).monospacedDigit()
+                    }
+                }
+                Text(metric.date, format: .dateTime.month(.abbreviated).day())
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+
+                if let first = validStages.first, let end = validStages.map(\.endDate).max() {
+                    Chart(Array(validStages.enumerated()), id: \.offset) { _, stage in
+                        BarMark(
+                            xStart: .value("Start", stage.startDate),
+                            xEnd: .value("End", stage.endDate),
+                            y: .value("Stage", "sleep")
+                        )
+                        .foregroundStyle(stage.stage.color)
+                    }
+                    .chartXAxis(.hidden)
+                    .chartYAxis(.hidden)
+                    .chartXScale(domain: first.startDate...end)
+                    .frame(height: 30)
+                    .clipped()
+                    .accessibilityLabel("Sleep stages timeline, \(validStages.count) stages")
+
+                    HStack {
+                        Label {
+                            Text(first.startDate, format: .dateTime.hour().minute())
+                        } icon: { Image(systemName: "moon.fill") }
+                        Spacer()
+                        Label {
+                            Text(end, format: .dateTime.hour().minute())
+                        } icon: { Image(systemName: "sunrise.fill") }
+                    }
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                }
+            }
+            .accessibilityElement(children: .contain)
+            .accessibilityIdentifier("dashboard-recovery-last-sleep")
         }
     }
 
@@ -68,6 +132,9 @@ struct RecoverySleepCard: View {
                 .frame(width: 32, height: 32)
 
                 VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                    Text("Weekly Sleep Deficit")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                     HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xs) {
                         Text(deficit.formattedWeeklyDeficit)
                             .font(.subheadline.bold().monospacedDigit())
@@ -94,16 +161,21 @@ struct RecoverySleepCard: View {
             let samples = Array(deficit.dailyDeficits
                 .filter { $0.actualMinutes.isFinite && $0.actualMinutes > 0 }
                 .sorted { $0.date < $1.date }
-                .suffix(7))
-            if samples.count >= 2 {
+                    .suffix(7))
+            if samples.count >= 2, let first = samples.first, let last = samples.last {
+                let upperBound = max(4, ceil((samples.map { $0.actualMinutes / 60 }.max() ?? 0) / 2) * 2 + 2)
                 VStack(alignment: .leading, spacing: DS.Spacing.xs) {
-                    HStack {
-                        Text("Sleep")
-                        Spacer()
-                        Text("7d")
+                    Text("Sleep History")
+                        .font(.caption.weight(.semibold))
+                    HStack(spacing: DS.Spacing.xxs) {
+                        Text(first.date, format: .dateTime.month(.abbreviated).day())
+                        Text("–")
+                        Text(last.date, format: .dateTime.month(.abbreviated).day())
                     }
                     .font(.caption2)
                     .foregroundStyle(.secondary)
+                    .accessibilityElement(children: .combine)
+                    .accessibilityIdentifier("dashboard-recovery-sleep-period")
                     Chart(samples, id: \.date) { sample in
                         BarMark(
                             x: .value("Date", sample.date, unit: .day),
@@ -112,6 +184,7 @@ struct RecoverySleepCard: View {
                         .foregroundStyle(DS.Color.sleep)
                         .cornerRadius(3)
                     }
+                    .chartYScale(domain: 0...upperBound, range: .plotDimension(padding: 8))
                     .chartXAxis {
                         AxisMarks(values: .stride(by: .day)) { _ in
                             AxisValueLabel(format: .dateTime.weekday(.narrow))
@@ -120,7 +193,8 @@ struct RecoverySleepCard: View {
                     .chartYAxis {
                         AxisMarks(position: .leading, values: .automatic(desiredCount: 3))
                     }
-                    .frame(height: 80)
+                    .frame(height: historyHeight)
+                    .padding(.top, DS.Spacing.xs)
                     .clipped()
                     .accessibilityIdentifier("dashboard-recovery-sleep-chart")
                 }
@@ -146,7 +220,7 @@ struct RecoverySleepCard: View {
                         Text(card.message)
                             .font(.caption)
                             .foregroundStyle(DS.Color.textSecondary)
-                            .lineLimit(3)
+                            .fixedSize(horizontal: false, vertical: true)
 
                         Spacer(minLength: 0)
 
@@ -156,9 +230,10 @@ struct RecoverySleepCard: View {
                             Image(systemName: "xmark")
                                 .font(.caption2.weight(.medium))
                                 .foregroundStyle(.tertiary)
-                                .frame(width: 20, height: 20)
+                                .frame(width: 44, height: 44)
                         }
                         .buttonStyle(.plain)
+                        .accessibilityLabel("Dismiss sleep insight")
                     }
                 }
             }
@@ -174,15 +249,16 @@ struct RecoverySleepCard: View {
 
             NavigationLink(value: metric) {
                 HStack {
-                    Spacer()
                     Text("Sleep Details")
-                        .font(.caption.weight(.medium))
+                        .font(.subheadline.weight(.semibold))
                         .foregroundStyle(.tint)
+                    Spacer()
                     Image(systemName: "chevron.right")
                         .font(.caption2.weight(.semibold))
                         .foregroundStyle(.tint)
-                    Spacer()
                 }
+                .frame(minHeight: 44)
+                .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
         }

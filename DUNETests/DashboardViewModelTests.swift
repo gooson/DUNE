@@ -765,6 +765,8 @@ struct DashboardViewModelTests {
         #expect(vm.sortedMetrics.contains { $0.category == .hrv })
         #expect(vm.sortedMetrics.contains { $0.category == .sleep })
         #expect(vm.errorMessage == nil)
+        #expect(vm.latestSleepStages.count == sleepStages.count)
+        #expect(vm.latestSleepStages.first?.startDate == sleepDate)
     }
 
     @Test("Shared snapshot source failure shows partial error when category card cannot be built")
@@ -972,6 +974,7 @@ struct DashboardViewModelTests {
         await vm.loadData()
 
         #expect(vm.pinnedMetrics.map(\.category) == [.steps, .exercise, .hrv])
+        #expect(vm.latestSleepStages.first?.startDate == today)
         #expect(vm.conditionCards.contains(where: { $0.category == .hrv }) == false)
     }
 
