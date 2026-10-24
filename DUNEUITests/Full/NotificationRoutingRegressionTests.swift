@@ -47,6 +47,35 @@ final class NotificationRoutingRegressionTests: SeededUITestBaseCase {
         XCTAssertTrue(app.descendants(matching: .any)["life-section-habits"].firstMatch.waitForExistence(timeout: 10))
     }
 
+    func testReadAllKeepsNewsAvailableAndClearsCombinedBadge() {
+        navigateToDashboard()
+        let bell = app.buttons[AXID.dashboardToolbarNotifications].firstMatch
+        XCTAssertTrue(bell.waitForExistence(timeout: 5))
+        XCTAssertTrue((bell.value as? String)?.contains("unread notifications") == true,
+                      "Today bell should announce the seeded combined unread count")
+        openHub()
+        let filter = app.segmentedControls[AXID.notificationsFilter].firstMatch
+        XCTAssertTrue(filter.waitForExistence(timeout: 5))
+        filter.buttons["News"].tap()
+        XCTAssertTrue(app.buttons[AXID.notificationsNewsRelease].firstMatch.waitForExistence(timeout: 5),
+                      "News filter should retain the current release")
+
+        let readAll = app.buttons[AXID.notificationsReadAllButton].firstMatch
+        XCTAssertTrue(readAll.waitForExistence(timeout: 5) && readAll.isEnabled,
+                      "Seeded health items and release should make Read All available")
+        readAll.tap()
+        XCTAssertTrue(app.staticTexts["Inbox is all caught up"].firstMatch.waitForExistence(timeout: 5),
+                      "Read All should clear the combined unread count")
+        XCTAssertFalse(readAll.isEnabled, "Read All should disable after both stores are marked read")
+        XCTAssertTrue(app.buttons[AXID.notificationsNewsRelease].firstMatch.exists,
+                      "Marking the release read should not remove its detail route")
+        let back = app.navigationBars.buttons.element(boundBy: 0)
+        XCTAssertTrue(back.waitForExistence(timeout: 5))
+        back.tap()
+        XCTAssertEqual(bell.value as? String, "Inbox is all caught up",
+                       "Today bell should announce the cleared combined inbox after Read All")
+    }
+
     private func openHub() {
         navigateToDashboard()
         let briefing = app.descendants(matching: .any)[AXID.dashboardMorningBriefingScreen].firstMatch

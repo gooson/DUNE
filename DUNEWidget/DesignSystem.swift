@@ -2,6 +2,11 @@ import SwiftUI
 
 /// Widget-specific Design System subset. Uses shared Colors.xcassets.
 enum WidgetDS {
+    static var isDesertWarm: Bool {
+        let theme = WidgetScoreData.sharedDefaults()?.string(forKey: "com.raftel.dailve.app_theme")
+        return theme == nil || theme == "desertWarm"
+    }
+
     /// The main app mirrors its theme into the shared App Group for widget rendering.
     static var themeAccent: SwiftUI.Color {
         let rawValue = WidgetScoreData.sharedDefaults()?.string(forKey: "com.raftel.dailve.app_theme")
@@ -28,8 +33,15 @@ enum WidgetDS {
         static let textSecondary  = SwiftUI.Color("TextSecondary")
         static let textTertiary   = SwiftUI.Color("TextTertiary")
         static let cardBackground = SwiftUI.Color("CardBackground")
+        static let warmSurface = SwiftUI.Color("WidgetWarmSurface")
+        static let warmTile = SwiftUI.Color("WidgetWarmTile")
+        static let warmStroke = SwiftUI.Color("WidgetWarmStroke")
+        static let warmAccent = SwiftUI.Color("WidgetWarmAccent")
+        static let warmInk = SwiftUI.Color("DesertHorizonInk")
         static var ringTrack: SwiftUI.Color { WidgetDS.themeAccent.opacity(0.12) }
-        static let cardStroke     = SwiftUI.Color.white.opacity(0.08)
+        static var cardStroke: SwiftUI.Color {
+            WidgetDS.isDesertWarm ? warmStroke : SwiftUI.Color.white.opacity(0.08)
+        }
         static var placeholderFill: SwiftUI.Color { WidgetDS.themeAccent.opacity(0.06) }
     }
 
@@ -128,5 +140,23 @@ enum WidgetDS {
             color.opacity(0.92),
             color
         ]
+    }
+}
+
+private struct WidgetSurfaceModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        if WidgetDS.isDesertWarm {
+            content.containerBackground(for: .widget) {
+                WidgetDS.Color.warmSurface
+            }
+        } else {
+            content.containerBackground(.fill.tertiary, for: .widget)
+        }
+    }
+}
+
+extension View {
+    func duneWidgetSurface() -> some View {
+        modifier(WidgetSurfaceModifier())
     }
 }

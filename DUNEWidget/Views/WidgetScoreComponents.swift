@@ -23,6 +23,11 @@ struct WidgetMetric: Identifiable {
         hasScore ? color : WidgetDS.Color.textTertiary
     }
 
+    /// Keep text readable while the ring and icon retain the status color.
+    var textColor: Color {
+        WidgetDS.isDesertWarm ? .primary : tintColor
+    }
+
     var secondaryText: String {
         hasScore ? statusLabel : WidgetMetricText.openDune
     }
@@ -116,7 +121,7 @@ struct WidgetRingView: View {
 
             Text(metric.scoreText)
                 .font(.system(size: size * 0.31, weight: .bold, design: .rounded))
-                .foregroundStyle(metric.tintColor)
+                .foregroundStyle(metric.textColor)
                 .monospacedDigit()
                 .minimumScaleFactor(0.7)
         }
@@ -138,7 +143,7 @@ struct WidgetCompactMetricView: View {
                 .font(.system(size: 11, weight: .semibold, design: .rounded))
                 .foregroundStyle(WidgetDS.Color.textSecondary)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .frame(maxWidth: .infinity, alignment: .top)
         .accessibilityIdentifier(WidgetSurfaceAccessibility.metricID(metric.kind, family: family))
     }
 }
@@ -162,17 +167,18 @@ struct WidgetMetricTileView: View {
             if metric.hasScore {
                 HStack(spacing: 3) {
                     Image(systemName: metric.icon)
+                        .foregroundStyle(metric.tintColor)
                         .font(.system(size: 10, weight: .semibold))
                     Text(metric.statusLabel)
                         .lineLimit(1)
                 }
                 .font(.system(size: 11, weight: .semibold, design: .rounded))
-                .foregroundStyle(metric.tintColor)
+                .foregroundStyle(metric.textColor)
                 .minimumScaleFactor(0.75)
             } else {
                 Text(metric.secondaryText)
                     .font(.system(size: 11, weight: .semibold, design: .rounded))
-                    .foregroundStyle(metric.tintColor)
+                    .foregroundStyle(metric.textColor)
                     .lineLimit(1)
                     .minimumScaleFactor(0.75)
             }
@@ -187,7 +193,8 @@ struct WidgetMetricTileView: View {
 
     private var tileBackground: some View {
         RoundedRectangle(cornerRadius: WidgetDS.Layout.rowCornerRadius, style: .continuous)
-            .fill(metric.hasScore ? metric.tintColor.opacity(0.10) : WidgetDS.Color.placeholderFill)
+            .fill(WidgetDS.isDesertWarm ? WidgetDS.Color.warmTile :
+                    (metric.hasScore ? metric.tintColor.opacity(0.10) : WidgetDS.Color.placeholderFill))
             .overlay {
                 RoundedRectangle(cornerRadius: WidgetDS.Layout.rowCornerRadius, style: .continuous)
                     .stroke(metric.hasScore ? metric.tintColor.opacity(0.18) : WidgetDS.Color.cardStroke, lineWidth: 1)
@@ -213,18 +220,19 @@ struct WidgetMetricRowView: View {
                     if metric.hasScore {
                         HStack(spacing: 3) {
                             Image(systemName: metric.icon)
+                                .foregroundStyle(metric.tintColor)
                                 .font(.system(size: 10, weight: .semibold))
                             Text(metric.statusLabel)
                                 .lineLimit(1)
                         }
                         .font(.caption)
                         .fontWeight(.semibold)
-                        .foregroundStyle(metric.tintColor)
+                        .foregroundStyle(metric.textColor)
                     } else {
                         Text(metric.secondaryText)
                             .font(.caption)
                             .fontWeight(.semibold)
-                            .foregroundStyle(metric.tintColor)
+                            .foregroundStyle(metric.textColor)
                             .lineLimit(1)
                     }
 
@@ -234,19 +242,20 @@ struct WidgetMetricRowView: View {
                 Text(metric.detailText)
                     .font(.caption2)
                     .foregroundStyle(WidgetDS.Color.textTertiary)
-                    .lineLimit(1)
+                    .lineLimit(2)
             }
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 10)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+        .frame(maxWidth: .infinity, alignment: .leading)
         .background(backgroundShape)
         .accessibilityIdentifier(WidgetSurfaceAccessibility.metricID(metric.kind, family: family))
     }
 
     private var backgroundShape: some View {
         RoundedRectangle(cornerRadius: WidgetDS.Layout.rowCornerRadius, style: .continuous)
-            .fill(metric.hasScore ? metric.tintColor.opacity(0.10) : WidgetDS.Color.placeholderFill)
+            .fill(WidgetDS.isDesertWarm ? WidgetDS.Color.warmTile :
+                    (metric.hasScore ? metric.tintColor.opacity(0.10) : WidgetDS.Color.placeholderFill))
             .overlay {
                 RoundedRectangle(cornerRadius: WidgetDS.Layout.rowCornerRadius, style: .continuous)
                     .stroke(metric.hasScore ? metric.tintColor.opacity(0.18) : WidgetDS.Color.cardStroke, lineWidth: 1)

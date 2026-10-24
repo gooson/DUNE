@@ -9,9 +9,11 @@ status: in-progress
 
 [4탭 레이아웃 맵](index.html)은 Today(T03), Activity(A01), Wellness(H01), Life(L01)의 정보 순서와 화면 폭·큰 글씨 전환을 시각적으로 정한 **구현 기준 시안**이다. 값과 그래프는 설명용이며 실제 건강 기록이나 앱 캡처가 아니다. 상세·설정·Watch 등 4탭 밖의 화면을 설계할 때는 이 디렉터리에 화면별 맵을 별도로 만들고 아래 목록 및 `index.html`에서 연결한다.
 
+[DESERT HORIZON 4탭 전체 배치 시안](../theme-map/themes/dune-final-four-tab.html)은 2026-10-22 첫 화면 UX와 Wellness 상세 목적지 분리 이후의 첫 카드부터 마지막 섹션까지 카드 구성·문구·행동을 제안한다. 밝음·어두움과 기기 폭·큰 글씨·기록 없음 전환을 제공한다. 알림함 통합, 상단 기록 진입, 운동 구성, 테마 표면은 현재 코드에 반영했으며 [구현 기준과 남은 검증](desert-horizon-final.md)에 상태를 기록한다. 시안과 2026-10-22 캡처는 이번 구현의 실제 캡처나 런타임 합격 증거가 아니다.
+
 [8개 테마 전체 디자인 개편 맵](../full-redesign-map/index.html)은 이 4탭 레이아웃을 모든 테마와 화면군에 적용하는 목표·구현 순서다. WATER LILIES의 신규 테마화도 그 맵에서 추적한다.
 
-미리보기 폭은 이번 실제 캡처 기기의 논리 폭(iPhone 402pt, Duo 외부 466pt, Duo 내부 669pt, iPad 1032pt)이다. 캡처 기기가 바뀌면 표시 폭과 배치 전환을 다시 대조한다.
+미리보기 폭은 이번 실제 캡처 기기의 논리 폭(iPhone 402pt, Duo 외부 세로 466pt, Duo 내부 펼침 가로 951×669pt, iPad 1032pt)이다. 캡처 기기가 바뀌면 표시 폭과 배치 전환을 다시 대조한다.
 
 4탭 첫 카드의 링은 Today의 124pt 크기·호·중앙 수치·상태 문구를 공통 기준으로 한다. Activity는 실제 준비도 점수, Wellness는 실제 웰니스 점수, Life는 오늘 완료 수/대상 수를 표시한다. 수치가 없으면 빈 상태를 사용하며 임의 점수나 완료율을 만들지 않는다. 접근성 글씨 크기에서는 링과 설명을 세로로 배치한다.
 
@@ -21,13 +23,18 @@ Life의 링 옆에는 현재 진행 상태를 설명하는 문장을 둔다. 히
 
 나머지 7개 테마의 Life 기본 글씨도 [전용 iPhone 밝음·어두움 실제 화면 14장](../full-redesign-map/review/life-seven-themes-2026-10-22/README.md)에서 링 옆 설명과 체크리스트 행동을 대조했다. 해당 테마의 다른 기기·접근성 상태를 통과한 것으로 확대하지 않는다.
 
-2026-10-22 전용 Duo 접힘 세로·펼침 가로에서 [4탭 밝음·어두움 실제 배치](../full-redesign-map/review/duo-four-tab-hero-rings-2026-10-22/README.md)를 확인했다. 접근성 프레임은 124pt 원 바깥의 11pt 획도 포함하므로, 테스트는 Today의 실제 링 프레임과 다른 세 탭을 비교한다. 위 미리보기의 Duo 펼침 669pt는 세로 폭 기준이며 이번 펼침 가로 캡처와 방향이 다르다.
+2026-10-22 전용 Duo 접힘 세로·펼침 가로에서 [4탭 밝음·어두움 실제 배치](../full-redesign-map/review/duo-four-tab-hero-rings-2026-10-22/README.md)를 확인했다. 접근성 프레임은 124pt 원 바깥의 11pt 획도 포함하므로, 테스트는 Today의 실제 링 프레임과 다른 세 탭을 비교한다. Duo 펼침 미리보기는 해당 가로 캡처와 같은 951×669pt 비율이다.
 
 ## 화면별 맵 목록
 
 | 범위 | 맵 |
 |---|---|
 | Today T03·Activity A01·Wellness H01·Life L01 | [4탭 레이아웃 맵](index.html) |
+| DESERT HORIZON 4탭 상세 배치 | [밝음·어두움 시안](../theme-map/themes/dune-final-four-tab.html) · [상세 계약](desert-horizon-final.md) |
+| Today 알림함·새로운 소식 | [알림함 배치·상태·목적지](notification-inbox-proposal.md) · [시안의 종 아이콘](../theme-map/themes/dune-final-four-tab.html) |
+| Activity 운동 구성 상세 | [근력·유산소와 부위별 구성 배치](exercise-mix-detail-proposal.md) · [4탭 시안](../theme-map/themes/dune-final-four-tab.html) |
+| Activity·Wellness·Life 기록 진입 | [상단 추가 버튼·메뉴 배치](record-entry-navigation.md) · [4탭 시안](../theme-map/themes/dune-final-four-tab.html) |
+| iOS 위젯·휴식 라이브 액티비티 | [크기·상태별 배치 기준](widget-live-activity-proposal.md) · [DESERT HORIZON 추가 시안](../theme-map/themes/dune-widget-live-activity.html) |
 | Watch H01·H02·H03 홈 카드 | [Watch 홈 스크롤 맵](watch-home-scroll.html) |
 | Watch C01·C03·C04 유산소 세션 | [Watch 유산소 세션 맵](watch-cardio-session.html) |
 | WLA01 Watch 운동 Live Activity | [Watch 운동 Live Activity 맵](watch-workout-live-activity.md) |

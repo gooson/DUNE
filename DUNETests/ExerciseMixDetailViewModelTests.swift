@@ -72,4 +72,25 @@ struct ExerciseMixDetailViewModelTests {
         #expect(vm.exerciseFrequencies.first?.exerciseName == "Custom Move")
         #expect(vm.frequencyByName["Custom Move"] != nil)
     }
+
+    @Test("Detail uses the exact merged summary frequencies")
+    func mergedSummaryParity() {
+        let vm = ExerciseMixDetailViewModel(library: MockExerciseLibrary())
+        let summary = ExerciseMixService.analyze([
+            .init(id: "manual", linkedWorkoutID: "hk", isHealthKit: false,
+                  date: makeDate(0), name: "Bench Press", kind: .strength,
+                  primaryMuscles: [.chest], completedSets: 3,
+                  durationMinutes: nil, distanceKm: nil),
+            .init(id: "hk", linkedWorkoutID: "hk", isHealthKit: true,
+                  date: makeDate(0), name: "Bench Press", kind: .strength,
+                  primaryMuscles: [], completedSets: 0,
+                  durationMinutes: nil, distanceKm: nil)
+        ], asOf: Date())
+
+        vm.load(summary: summary)
+
+        #expect(summary.total == 1)
+        #expect(vm.exerciseFrequencies == summary.frequencies)
+        #expect(vm.frequencyByName["Bench Press"]?.count == 1)
+    }
 }

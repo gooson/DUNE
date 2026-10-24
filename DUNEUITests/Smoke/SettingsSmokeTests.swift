@@ -133,25 +133,16 @@ final class SettingsSmokeTests: UITestBaseCase {
     }
 
     func testNavigateToWhatsNew() throws {
-        _ = app.scrollToElementIfNeeded(AXID.settingsRowWhatsNew)
-
-        let link = app.descendants(matching: .any)[AXID.settingsRowWhatsNew].firstMatch
-        XCTAssertTrue(link.waitForExistence(timeout: 5), "What's New link should exist")
-        link.tap()
-
-        let screen = app.descendants(matching: .any)[AXID.whatsNewScreen].firstMatch
-        XCTAssertTrue(screen.waitForExistence(timeout: 5), "What's New screen should open")
+        openReleaseFromSettings()
+        let back = app.navigationBars.buttons.element(boundBy: 0)
+        XCTAssertTrue(back.waitForExistence(timeout: 5), "Manual release detail should have a back button")
+        back.tap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.notificationHubScreen].firstMatch.waitForExistence(timeout: 5),
+                      "Back should return to the News filter in Notifications")
     }
 
     func testWhatsNewNotificationsDetailShowsArtwork() throws {
-        _ = app.scrollToElementIfNeeded(AXID.settingsRowWhatsNew)
-
-        let link = app.descendants(matching: .any)[AXID.settingsRowWhatsNew].firstMatch
-        XCTAssertTrue(link.waitForExistence(timeout: 5), "What's New link should exist")
-        link.tap()
-
-        let screen = app.descendants(matching: .any)[AXID.whatsNewScreen].firstMatch
-        XCTAssertTrue(screen.waitForExistence(timeout: 5), "What's New screen should open")
+        openReleaseFromSettings()
 
         _ = app.scrollToElementIfNeeded(AXID.whatsNewRow("notifications"))
         let notificationsRow = app.descendants(matching: .any)[AXID.whatsNewRow("notifications")].firstMatch
@@ -175,14 +166,7 @@ final class SettingsSmokeTests: UITestBaseCase {
     }
 
     func testWhatsNewSleepDebtDetailExists() throws {
-        _ = app.scrollToElementIfNeeded(AXID.settingsRowWhatsNew)
-
-        let link = app.descendants(matching: .any)[AXID.settingsRowWhatsNew].firstMatch
-        XCTAssertTrue(link.waitForExistence(timeout: 5), "What's New link should exist")
-        link.tap()
-
-        let screen = app.descendants(matching: .any)[AXID.whatsNewScreen].firstMatch
-        XCTAssertTrue(screen.waitForExistence(timeout: 5), "What's New screen should open")
+        openReleaseFromSettings()
 
         _ = app.scrollToElementIfNeeded(AXID.whatsNewRow("sleepDebt"))
         let sleepDebtRow = app.descendants(matching: .any)[AXID.whatsNewRow("sleepDebt")].firstMatch
@@ -206,14 +190,7 @@ final class SettingsSmokeTests: UITestBaseCase {
     }
 
     func testWhatsNewWidgetDetailExists() throws {
-        _ = app.scrollToElementIfNeeded(AXID.settingsRowWhatsNew)
-
-        let link = app.descendants(matching: .any)[AXID.settingsRowWhatsNew].firstMatch
-        XCTAssertTrue(link.waitForExistence(timeout: 5), "What's New link should exist")
-        link.tap()
-
-        let screen = app.descendants(matching: .any)[AXID.whatsNewScreen].firstMatch
-        XCTAssertTrue(screen.waitForExistence(timeout: 5), "What's New screen should open")
+        openReleaseFromSettings()
 
         _ = app.scrollToElementIfNeeded(AXID.whatsNewRow("widgets"))
         let widgetsRow = app.descendants(matching: .any)[AXID.whatsNewRow("widgets")].firstMatch
@@ -237,14 +214,7 @@ final class SettingsSmokeTests: UITestBaseCase {
     }
 
     func testWhatsNewMuscleMapDetailExists() throws {
-        _ = app.scrollToElementIfNeeded(AXID.settingsRowWhatsNew)
-
-        let link = app.descendants(matching: .any)[AXID.settingsRowWhatsNew].firstMatch
-        XCTAssertTrue(link.waitForExistence(timeout: 5), "What's New link should exist")
-        link.tap()
-
-        let screen = app.descendants(matching: .any)[AXID.whatsNewScreen].firstMatch
-        XCTAssertTrue(screen.waitForExistence(timeout: 5), "What's New screen should open")
+        openReleaseFromSettings()
 
         _ = app.scrollToElementIfNeeded(AXID.whatsNewRow("muscleMap"))
         let muscleMapRow = app.descendants(matching: .any)[AXID.whatsNewRow("muscleMap")].firstMatch
@@ -265,5 +235,28 @@ final class SettingsSmokeTests: UITestBaseCase {
             artwork.waitForExistence(timeout: 5),
             "Muscle Map detail should show hero artwork"
         )
+    }
+
+    private func openReleaseFromSettings() {
+        XCTAssertTrue(app.scrollToElementIfNeeded(AXID.settingsRowWhatsNew),
+                      "What's New entry should remain reachable in Settings")
+        let link = app.descendants(matching: .any)[AXID.settingsRowWhatsNew].firstMatch
+        XCTAssertTrue(link.waitForExistence(timeout: 5))
+        link.tap()
+
+        let hub = app.descendants(matching: .any)[AXID.notificationHubScreen].firstMatch
+        XCTAssertTrue(hub.waitForExistence(timeout: 5), "Settings should open the notification hub")
+        let filter = app.segmentedControls[AXID.notificationsFilter].firstMatch
+        XCTAssertTrue(filter.waitForExistence(timeout: 5))
+        // Picker order is All, Health, News across localizations.
+        let news = filter.buttons.element(boundBy: 2)
+        XCTAssertTrue(news.waitForExistence(timeout: 5))
+        XCTAssertTrue(news.isSelected, "Settings should enter with the News filter selected")
+
+        let release = app.buttons[AXID.notificationsNewsRelease].firstMatch
+        XCTAssertTrue(release.waitForExistence(timeout: 5), "Current release should be available")
+        release.tap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.whatsNewScreen].firstMatch.waitForExistence(timeout: 5),
+                      "Manual release detail should open from News")
     }
 }

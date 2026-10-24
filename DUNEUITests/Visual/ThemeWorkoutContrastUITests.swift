@@ -24,7 +24,7 @@ final class ThemeWorkoutContrastUITests: SeededUITestBaseCase {
                 ]
                 app.launch()
                 navigateToActivity()
-                XCTAssertTrue(app.waitAndTap("activity-log-workout-button"), "\(theme.name) \(style): log workout")
+                XCTAssertTrue(app.waitAndTap(AXID.activityToolbarAdd), "\(theme.name) \(style): add workout")
                 XCTAssertTrue(app.descendants(matching: .any)["picker-root-list"].firstMatch.waitForExistence(timeout: 10))
                 let exercise = app.descendants(matching: .any)
                     .matching(NSPredicate(format: "identifier BEGINSWITH %@", "picker-row-"))

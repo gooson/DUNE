@@ -106,6 +106,7 @@ private actor SuspendingActivitySharedHealthDataService: SharedHealthDataService
 
 private actor StartupTrackingWorkoutService: WorkoutQuerying {
     private(set) var fetchCallCount = 0
+    private(set) var windowFetchCount = 0
 
     func fetchWorkouts(days: Int) async throws -> [WorkoutSummary] {
         fetchCallCount += 1
@@ -114,6 +115,7 @@ private actor StartupTrackingWorkoutService: WorkoutQuerying {
 
     func fetchWorkouts(start: Date, end: Date) async throws -> [WorkoutSummary] {
         fetchCallCount += 1
+        windowFetchCount += 1
         return []
     }
 }
@@ -404,6 +406,46 @@ struct ActivityViewModelTests {
 
         await sharedService.resumeFetch()
         await loadTask.value
+        if !vm.isMirroredReadOnlyMode {
+            #expect(await workoutService.windowFetchCount == 2) // 7-day exercise + shared 28-day mix/load
+        }
+    }
+
+    @Test("Unknown custom exercise with completed primary-muscle sets remains strength")
+    func customStrengthWithoutDefinition() {
+        let vm = makeViewModel(personalRecordStore: makeIsolatedPRStore())
+        let record = ExerciseRecord(
+            date: Date(), exerciseType: "Custom Pull A", duration: 600,
+            primaryMuscles: [.back]
+        )
+        let set = WorkoutSet(setNumber: 1, reps: 8, isCompleted: true)
+        set.exerciseRecord = record
+        record.sets = [set]
+
+        vm.updateSuggestion(records: [record])
+
+        #expect(vm.exerciseMix.strength == 1)
+        #expect(vm.exerciseMix.other == 0)
+        #expect(vm.exerciseMix.muscles.first?.muscle == .back)
+        #expect(vm.exerciseMix.muscles.first?.sets == 1)
+    }
+
+    @Test("Recognized cardio is not reclassified by saved set muscles")
+    func cardioClassificationWins() {
+        let vm = makeViewModel(personalRecordStore: makeIsolatedPRStore())
+        let record = ExerciseRecord(
+            date: Date(), exerciseType: "Running", duration: 1_800,
+            primaryMuscles: [.quadriceps]
+        )
+        let set = WorkoutSet(setNumber: 1, duration: 1_800, isCompleted: true)
+        set.exerciseRecord = record
+        record.sets = [set]
+
+        vm.updateSuggestion(records: [record])
+
+        #expect(vm.exerciseMix.cardio == 1)
+        #expect(vm.exerciseMix.strength == 0)
+        #expect(vm.exerciseMix.muscles.isEmpty)
     }
 
     @Test("newer activity refresh ignores an older delayed workout response")
@@ -505,6 +547,7 @@ struct ActivityViewModelTests {
         // Exercise falls back to empty
         #expect(vm.weeklyExerciseMinutes.isEmpty)
         #expect(vm.recentWorkouts.isEmpty)
+        #expect(vm.exerciseMix.isHealthKitSourceUnavailable == !vm.isMirroredReadOnlyMode)
         #expect(vm.isLoading == false)
     }
 

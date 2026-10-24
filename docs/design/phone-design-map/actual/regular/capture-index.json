@@ -72,13 +72,18 @@
     },
     "A12": {
       "row_id": "A12",
-      "evidence": "activity-exercise-mix-detail-screen",
+      "file": "A12.png",
+      "evidence": "actual app section",
       "test": "ActivityExerciseRegressionTests/testActivityExerciseMixRouteOpensExpectedScreen()",
-      "action": "before teardown -[ActivityExerciseRegressionTests testActivityExerciseMixRouteOpensExpectedScreen]",
-      "timestamp": 1791816441.003,
-      "image": "40151E41-78FB-46C7-8C1A-408F94C4C7E2.png",
-      "screen": "screen-0-1320x2868-before teardown -[ActivityExerciseRegressionTests testActivityExerciseMixRouteOpensExpectedScreen]_0_8D72AAD3-EA8A-4760-8F19-057813DEA39C.png",
-      "file": "A12.png"
+      "action": "A12-composition",
+      "timestamp": 1792783785.319,
+      "image": "5729391B-963B-4B26-9CA8-B9347989C664.png",
+      "source_revision": "1c4cdd88",
+      "source_worktree_dirty": false,
+      "device_id": "4990D55E-752C-4E35-8FB4-953F995AB2C2",
+      "device_name": "iPhone 18 Pro-wt-Health-desert-horizon-final-validation-f5271f075392",
+      "xcresult": "Test-DUNEUITests-2026.10.24_04-28-35-+0900.xcresult",
+      "gallery": "../../../full-redesign-map/review/desert-horizon-final-2026-10-24/index.html"
     },
     "A11": {
       "row_id": "A11",
@@ -192,13 +197,18 @@
     },
     "T11": {
       "row_id": "T11",
-      "evidence": "notification-hub-screen",
-      "test": "TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState()",
-      "action": "tap dashboard-toolbar-notifications",
-      "timestamp": 1791817496.342,
-      "image": "45D2BC6E-695E-4AFC-B987-8514882B2544.png",
-      "screen": "screen-0-1320x2868-tap dashboard-toolbar-notifications_0_370E52B8-4CB1-4D73-9987-25AB676C63E9.png",
-      "file": "T11.png"
+      "file": "T11.png",
+      "evidence": "actual app section",
+      "test": "DashboardSmokeTests/testNavigateToWhatsNew()",
+      "action": "T11-news",
+      "timestamp": 1792783809.952,
+      "image": "6926F12A-2995-4798-8F0F-2FCF1DF0C37C.png",
+      "source_revision": "1c4cdd88",
+      "source_worktree_dirty": false,
+      "device_id": "4990D55E-752C-4E35-8FB4-953F995AB2C2",
+      "device_name": "iPhone 18 Pro-wt-Health-desert-horizon-final-validation-f5271f075392",
+      "xcresult": "Test-DUNEUITests-2026.10.24_04-28-35-+0900.xcresult",
+      "gallery": "../../../full-redesign-map/review/desert-horizon-final-2026-10-24/index.html"
     },
     "T18": {
       "row_id": "T18",
@@ -859,47 +869,34 @@
       "frame_time": "1.2"
     },
     "L01": {
-      "file": "L01.png",
-      "screen_id": "L01",
-      "device": "iPhone 18 Pro Max · 440pt",
-      "device_id": "CBA79707-511C-4E88-A9A0-B26ACF6B5026",
-      "state": "light",
-      "theme": "desertWarm",
-      "native_size": [
-        1320,
-        2868
-      ],
-      "window_size_pt": [
-        440.0,
-        956.0
-      ],
-      "source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
-      "source_worktree_dirty": true,
-      "life_view_sha256": "8281d19a6d115b015c021c326111e96694e0ba170df1c1b6a5f93bc040460d2e",
-      "timestamp": 1792602963.385492,
-      "test": "LifeSeededSmokeTests/testHeroNarrativeLayout()",
-      "checkpoint": 2,
-      "capture_method": "host viewport hold; simctl explicit display",
-      "source_file": ".xcodebuild/life-narrative-phone-20261022/002-1320x2868.png",
       "row_id": "L01",
-      "image": "002-1320x2868.png",
-      "screen": "002-1320x2868.png",
-      "action": "Life hero narrative Light (phone)",
-      "evidence": "identifier:life-hero-narrative; frame and action assertions",
-      "evidence_gallery": "../../../full-redesign-map/review/life-hero-narrative-2026-10-22/phone/L01-light.png"
+      "file": "L01.png",
+      "evidence": "actual Desert Horizon seeded root",
+      "test": "ThemeMatrixUITests/testDesertHeroRingsByInitialTab()",
+      "action": "Direct initial-tab launch, Desert light root",
+      "timestamp": 1792782564.52,
+      "image": "",
+      "source_revision": "3d9ba7e7",
+      "source_worktree_dirty": false,
+      "device_id": "4990D55E-752C-4E35-8FB4-953F995AB2C2",
+      "device_name": "iPhone 18 Pro",
+      "gallery": "../../../full-redesign-map/review/desert-horizon-final-2026-10-24/index.html",
+      "xcresult": "/Users/shanks/.codex/worktrees/desert-horizon-final-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.24_04-02-34-+0900.xcresult"
     },
     "H01": {
       "row_id": "H01",
-      "evidence": "title:Wellness",
-      "test": "ThemeMatrixUITests/testDesertWarmMatrix()",
-      "action": "tap tab-wellness",
-      "timestamp": 1792673801.217,
-      "image": "B77D1023-D98E-4060-BE4A-4D1FD681C61D.png",
-      "screen": "screen-0-1320x2868-tap tab-wellness_0_F561FFFE-6B38-428A-BC10-3129498B8ED0.png",
       "file": "H01.png",
-      "source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
-      "source_worktree_dirty": true,
-      "device_id": "5D857DC7-33D6-444B-8373-77C71C7040D3"
+      "evidence": "actual Desert Horizon seeded root",
+      "test": "ThemeMatrixUITests/testDesertHeroRingsByInitialTab()",
+      "action": "Direct initial-tab launch, Desert light root",
+      "timestamp": 1792782552.704,
+      "image": "",
+      "source_revision": "3d9ba7e7",
+      "source_worktree_dirty": false,
+      "device_id": "4990D55E-752C-4E35-8FB4-953F995AB2C2",
+      "device_name": "iPhone 18 Pro",
+      "gallery": "../../../full-redesign-map/review/desert-horizon-final-2026-10-24/index.html",
+      "xcresult": "/Users/shanks/.codex/worktrees/desert-horizon-final-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.24_04-02-34-+0900.xcresult"
     },
     "W02": {
       "row_id": "W02",
@@ -1063,23 +1060,35 @@
     },
     "T03": {
       "row_id": "T03",
-      "evidence": "title:Today",
-      "test": "ThemeMatrixUITests/testDesertWarmMatrix()",
-      "action": "root after setup -[ThemeMatrixUITests testDesertWarmMatrix]",
-      "timestamp": 1792388605.463,
-      "image": "861F56B2-C40E-4E8A-A46A-DD923EFE065A.png",
-      "screen": "screen-0-1320x2868-root after setup -[ThemeMatrixUITests testDesertWarmMatrix]_0_C4CA95F6-FD57-4DCB-AE7B-C91993C3D000.png",
-      "file": "T03.png"
+      "file": "T03.png",
+      "evidence": "actual Desert Horizon seeded root",
+      "test": "ThemeMatrixUITests/testDesertTodayToolbarFitsAtBothAppearances()",
+      "action": "Direct initial-tab launch, Desert light root",
+      "timestamp": 1792789120.835,
+      "image": "",
+      "source_revision": "9a9dcf1c06cb789d95d16a7d57807c8b3c072d6c",
+      "source_worktree_dirty": true,
+      "device_id": "4990D55E-752C-4E35-8FB4-953F995AB2C2",
+      "device_name": "iPhone 18 Pro-wt-Health-desert-horizon-final-validation-f5271f075392",
+      "gallery": "../../../full-redesign-map/review/desert-horizon-final-2026-10-24/index.html",
+      "xcresult": "Test-DUNEUITests-2026.10.24_05-58-13-+0900.xcresult",
+      "current_verification": "pending",
+      "current_verification_note": "새 DESERT HORIZON 측정값 표시 상태는 이 캡처로 확인했다. 시작 스켈레톤·빈 상태는 별도 변경(#834)의 미갱신 상태이며 이 PNG로 완료 처리하지 않는다."
     },
     "A01": {
       "row_id": "A01",
-      "evidence": "title:Activity",
-      "test": "ThemeMatrixUITests/testDesertWarmMatrix()",
-      "action": "tap Activity",
-      "timestamp": 1792388657.489,
-      "image": "CD114367-5F05-448C-96F1-7965A26BAA6D.png",
-      "screen": "screen-0-1320x2868-tap Activity_0_7C81AF1E-ECD6-4047-83EF-BABB4F7F4831.png",
-      "file": "A01.png"
+      "file": "A01.png",
+      "evidence": "actual Desert Horizon seeded root",
+      "test": "ThemeMatrixUITests/testDesertHeroRingsByInitialTab()",
+      "action": "Direct initial-tab launch, Desert light root",
+      "timestamp": 1792782539.697,
+      "image": "",
+      "source_revision": "3d9ba7e7",
+      "source_worktree_dirty": false,
+      "device_id": "4990D55E-752C-4E35-8FB4-953F995AB2C2",
+      "device_name": "iPhone 18 Pro",
+      "gallery": "../../../full-redesign-map/review/desert-horizon-final-2026-10-24/index.html",
+      "xcresult": "/Users/shanks/.codex/worktrees/desert-horizon-final-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.24_04-02-34-+0900.xcresult"
     },
     "T04": {
       "row_id": "T04",
@@ -1092,5 +1101,6 @@
       "file": "T04.png"
     }
   },
-  "unmatched": []
+  "unmatched": [],
+  "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다."
 }

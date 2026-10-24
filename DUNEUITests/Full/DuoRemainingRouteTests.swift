@@ -238,10 +238,14 @@ final class DuoLifeStarterTemplateTests: UITestBaseCase {
     }
 
     func testEmptyStarterTemplateCreatesHabitAndRendersHabitsSection() throws {
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded("life-empty-template", maxSwipes: 8),
-                      "The empty starter template entry should be reachable")
-        VisualAudit.capture("Life empty starter before template")
-        app.buttons["life-empty-template"].firstMatch.auditTap()
+        let add = app.buttons[AXID.lifeToolbarAdd].firstMatch
+        XCTAssertTrue(add.waitForExistence(timeout: 8) && add.isHittable,
+                      "Life toolbar add should remain reachable at maximum text size")
+        VisualAudit.capture("Life toolbar before template")
+        add.auditTap()
+        let template = app.buttons[AXID.lifeToolbarTemplate].firstMatch
+        XCTAssertTrue(template.waitForExistence(timeout: 5), "Toolbar should offer the template route")
+        template.auditTap()
 
         let templateList = app.scrollViews["habit-template-list"].firstMatch
         XCTAssertTrue(templateList.waitForExistence(timeout: 8), "Habit template picker should open")

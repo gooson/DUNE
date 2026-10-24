@@ -312,17 +312,23 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         expectation(for: readAllDisabled, evaluatedWith: readAllButton)
         waitForExpectations(timeout: 5)
 
+        let moreOptions = app.buttons[AXID.notificationsMoreOptionsButton].firstMatch
+        XCTAssertTrue(moreOptions.waitForExistence(timeout: 5), "More Options should contain Delete All")
+        moreOptions.auditTap()
         let deleteAllButton = app.buttons["Delete All"].firstMatch
         XCTAssertTrue(deleteAllButton.waitForExistence(timeout: 5), "Delete All button should exist")
         XCTAssertTrue(deleteAllButton.isEnabled, "Delete All should stay enabled while seeded items remain")
-        deleteAllButton.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).auditTap()
+        deleteAllButton.auditTap()
 
         let confirmDelete = app.sheets.buttons["Delete All"].firstMatch
         XCTAssertTrue(confirmDelete.waitForExistence(timeout: 5), "Delete confirmation should appear")
         confirmDelete.auditTap()
 
+        let filter = app.segmentedControls[AXID.notificationsFilter].firstMatch
+        XCTAssertTrue(filter.waitForExistence(timeout: 5))
+        filter.buttons["Health"].tap()
         let emptyState = app.descendants(matching: .any)[AXID.notificationsEmptyState].firstMatch
-        XCTAssertTrue(emptyState.waitForExistence(timeout: 5), "Notification hub should show empty state after deleting all items")
+        XCTAssertTrue(emptyState.waitForExistence(timeout: 5), "Health filter should be empty after deleting all health items")
     }
 
     func testSettingsShowsPhaseTwoRows() throws {
@@ -487,8 +493,12 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
     func testVisualAuditWhatsNew() throws {
         guard VisualAudit.isEnabled else { throw XCTSkip("Opt-in visual audit only") }
         dismissMorningBriefingIfNeeded()
-        XCTAssertTrue(app.waitAndTapToolbarAction(AXID.dashboardToolbarWhatsNew),
-                      "UNVERIFIED: What's New entry unavailable")
+        XCTAssertTrue(app.waitAndTapToolbarAction(AXID.dashboardToolbarNotifications),
+                      "UNVERIFIED: Notification hub entry unavailable")
+        let filter = app.segmentedControls[AXID.notificationsFilter].firstMatch
+        XCTAssertTrue(filter.waitForExistence(timeout: 5))
+        filter.buttons["News"].tap()
+        XCTAssertTrue(app.waitAndTap(AXID.notificationsNewsRelease), "UNVERIFIED: current release unavailable")
         XCTAssertTrue(app.descendants(matching: .any)[AXID.whatsNewScreen].firstMatch.waitForExistence(timeout: 5),
                       "What's New should open")
         captureTodayAuditScroll("Today What's New")
@@ -655,8 +665,11 @@ final class TodaySettingsEmptyStateRegressionTests: UITestBaseCase {
         XCTAssertTrue(notificationsButton.waitForExistence(timeout: 5), "Notifications toolbar button should exist")
         notificationsButton.auditTap()
 
+        let filter = app.segmentedControls[AXID.notificationsFilter].firstMatch
+        XCTAssertTrue(filter.waitForExistence(timeout: 5))
+        filter.buttons["Health"].tap()
         let emptyState = app.descendants(matching: .any)[AXID.notificationsEmptyState].firstMatch
-        XCTAssertTrue(emptyState.waitForExistence(timeout: 5), "Notification hub should show empty state without seeded notifications")
+        XCTAssertTrue(emptyState.waitForExistence(timeout: 5), "Health filter should show empty state without seeded notifications")
     }
 }
 

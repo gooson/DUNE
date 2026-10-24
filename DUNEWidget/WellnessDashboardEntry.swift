@@ -44,4 +44,20 @@ struct WellnessDashboardEntry: TimelineEntry {
         wellnessMessage: "Good condition. Normal training is fine.",
         scoreUpdatedAt: .now
     )
+
+    static let partialPreview = WellnessDashboardEntry(
+        date: .now,
+        conditionScore: 78, conditionStatusRaw: "good", conditionMessage: nil,
+        readinessScore: 72, readinessStatusRaw: "moderate", readinessMessage: nil,
+        wellnessScore: nil, wellnessStatusRaw: nil, wellnessMessage: nil,
+        scoreUpdatedAt: .now
+    )
+
+    static let emptyPreview = WellnessDashboardEntry(
+        date: .now,
+        conditionScore: nil, conditionStatusRaw: nil, conditionMessage: nil,
+        readinessScore: nil, readinessStatusRaw: nil, readinessMessage: nil,
+        wellnessScore: nil, wellnessStatusRaw: nil, wellnessMessage: nil,
+        scoreUpdatedAt: nil
+    )
 }

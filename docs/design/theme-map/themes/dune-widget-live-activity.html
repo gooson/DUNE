@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DESERT HORIZON · 라이브 액티비티와 위젯 시안</title>
+<style>
+  * { box-sizing: border-box; }
+  body { --ink:#f7efe5; --muted:#c9b8a6; --panel:#25211e; --widget:#292622; --tile:#37312b; --border:#695444; --ring-track:#655344; --warm:#e0b575; margin:0; background:#141210; color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif; }
+  body.light { --ink:#30271f; --muted:#6e6257; --panel:#f7efe4; --widget:#faf6ee; --tile:#f0e7da; --border:#d8c6b3; --ring-track:#dfd0be; --warm:#9d6540; background:#e9e1d7; }
+  button { font:inherit; cursor:pointer; }
+  .page { max-width:1210px; margin:auto; padding:32px 20px 70px; }
+  .eyebrow { color:var(--warm); font-size:12px; font-weight:800; letter-spacing:.12em; }
+  h1 { margin:8px 0; font-size:clamp(28px,4vw,42px); letter-spacing:-.05em; }
+  .intro { max-width:850px; margin:0; color:var(--muted); font-size:14px; line-height:1.6; }
+  a { color:var(--warm); }
+  .links { display:flex; flex-wrap:wrap; gap:12px 20px; margin:15px 0 22px; font-size:13px; }
+  .controls { display:flex; flex-wrap:wrap; align-items:center; gap:8px 20px; margin-bottom:28px; }
+  .control-group { display:flex; flex-wrap:wrap; gap:5px; align-items:center; }
+  .control-group strong { margin-right:3px; color:var(--muted); font-size:12px; }
+  .control-group button { min-height:38px; padding:7px 12px; border:1px solid var(--border); border-radius:10px; background:var(--panel); color:var(--ink); font-size:12px; }
+  .control-group button[aria-pressed="true"] { background:var(--warm); border-color:var(--warm); color:#201914; font-weight:800; }
+  .section-head { margin:33px 0 16px; }
+  .section-head h2 { margin:0 0 5px; font-size:24px; letter-spacing:-.04em; }
+  .section-head p { margin:0; color:var(--muted); font-size:13px; line-height:1.5; }
+  .gallery { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; }
+  .preview-card { min-width:0; padding:16px; border:1px solid var(--border); border-radius:20px; background:var(--panel); }
+  .preview-card h3 { margin:0 0 5px; font-size:15px; }
+  .preview-card > p { margin:0 0 15px; color:var(--muted); font-size:11px; line-height:1.45; }
+  .preview-card.wide { grid-column:span 2; }
+  .lock-frame { min-height:306px; padding:15px 18px 22px; border:7px solid #090909; border-radius:37px; background:linear-gradient(180deg,#46382f 0%,#684936 38%,#241d1b 100%); color:#fff8ee; display:flex; flex-direction:column; }
+  .lock-status { display:flex; justify-content:space-between; font-size:11px; font-weight:700; }
+  .lock-clock { margin:44px 0 auto; text-align:center; font-size:58px; font-weight:200; line-height:1; letter-spacing:-.06em; }
+  .lock-clock small { display:block; margin-top:7px; font-size:11px; font-weight:600; letter-spacing:0; }
+  .lock-activity { padding:13px 15px; border:1px solid #d9aa7466; border-radius:20px; background:linear-gradient(120deg,#41332c,#252321); box-shadow:0 8px 26px #0005; }
+  .lock-activity .activity-title { display:flex; align-items:center; gap:6px; color:#e5b97b; font-size:11px; font-weight:800; }
+  .lock-activity .exercise { display:block; margin:6px 0 12px; font-size:14px; font-weight:650; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .lock-activity .activity-bottom { display:flex; align-items:end; justify-content:space-between; gap:10px; }
+  .lock-activity .set { color:#d2bdab; font-size:12px; }
+  .lock-activity .countdown { color:#f1c78d; font-size:27px; font-weight:800; font-variant-numeric:tabular-nums; line-height:1; }
+  .light .lock-frame { background:linear-gradient(180deg,#ddc4ab 0%,#bc8e6e 42%,#60463b 100%); }
+  .light .lock-activity { background:linear-gradient(120deg,#f8eee1,#e9d8c5); color:#30271f; box-shadow:0 9px 27px #3b251a30; }
+  .light .lock-activity .activity-title,.light .lock-activity .countdown { color:#8e5b36; }
+  .light .lock-activity .set { color:#6e6257; }
+  .island-grid { display:grid; gap:16px; align-content:start; }
+  .island-row { display:flex; flex-wrap:wrap; align-items:center; gap:12px; }
+  .island-caption { min-width:78px; color:var(--muted); font-size:11px; }
+  .island { background:#050505; color:#f4c48a; box-shadow:0 4px 20px #0005; }
+  .island.compact { width:224px; min-height:46px; display:flex; align-items:center; justify-content:space-between; gap:10px; padding:0 15px; border-radius:25px; }
+  .island.compact .countdown { font-size:15px; font-weight:800; font-variant-numeric:tabular-nums; }
+  .island.minimal { width:50px; height:50px; display:grid; place-items:center; border-radius:50%; font-size:20px; }
+  .island.expanded { width:min(100%,345px); min-height:112px; padding:18px 21px; border-radius:27px; }
+  .island.expanded .first-line { display:flex; align-items:start; justify-content:space-between; gap:14px; }
+  .island.expanded .first-line span { font-size:12px; font-weight:700; }
+  .island.expanded .first-line strong { font-size:27px; font-variant-numeric:tabular-nums; line-height:1; }
+  .island.expanded .exercise { display:block; margin-top:19px; color:#fff7ee; font-size:13px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
+  .watch-shell { width:178px; height:206px; margin:auto; padding:13px; border:7px solid #080808; border-radius:37px; background:#151411; color:#f9f0e8; box-shadow:0 0 0 9px #3d3b39; }
+  .watch-time { color:#aaa59f; font-size:11px; text-align:right; }
+  .watch-exercise { display:block; max-width:100%; margin:22px 0 6px; font-size:16px; font-weight:700; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .watch-set { color:#bdb5aa; font-size:11px; }
+  .watch-countdown { display:flex; align-items:center; gap:7px; margin-top:22px; color:#e8ba7d; font-size:25px; font-weight:800; font-variant-numeric:tabular-nums; }
+  .widget-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); align-items:start; gap:16px; }
+  .widget-frame { min-width:0; padding:15px; border:1px solid var(--border); border-radius:20px; background:var(--panel); }
+  .widget-frame h3 { margin:0 0 4px; font-size:15px; }
+  .widget-frame > p { margin:0 0 14px; color:var(--muted); font-size:11px; line-height:1.45; }
+  .widget-surface { position:relative; margin:auto; overflow:hidden; border:1px solid var(--border); border-radius:26px; background:linear-gradient(160deg,var(--tile) -40%,var(--widget) 50%); color:var(--ink); box-shadow:0 14px 25px #0002; }
+  .widget-surface::after { position:absolute; content:""; inset:0; pointer-events:none; background:linear-gradient(180deg,#d19b6520,transparent 50%); }
+  .widget-surface.small { width:180px; height:180px; padding:14px; }
+  .widget-surface.medium { width:min(100%,370px); height:180px; padding:13px; }
+  .widget-surface.large { width:min(100%,370px); height:360px; padding:14px; }
+  .widget-surface.portrait { width:min(100%,280px); height:395px; padding:19px; }
+  .widget-surface > * { position:relative; z-index:1; }
+  .widget-surface.dashboard .scored-content { height:100%; min-height:0; }
+  .widget-title { display:block; font-size:12px; font-weight:800; }
+  .widget-title.compact { font-size:11px; }
+  .score-ring { --ring-color:#93bf9f; --ring-fill:270deg; flex:none; width:var(--size,56px); height:var(--size,56px); padding:var(--ring-width,6px); border-radius:50%; background:conic-gradient(var(--ring-color) 0 var(--ring-fill),var(--ring-track) var(--ring-fill) 360deg); }
+  .score-ring > span { display:grid; place-items:center; width:100%; height:100%; border-radius:50%; background:var(--widget); color:var(--ring-color); font-size:var(--score-size,16px); font-weight:800; font-variant-numeric:tabular-nums; }
+  .widget-compact-scores { display:flex; justify-content:space-between; gap:5px; }
+  .widget-surface.small.dashboard .scored-content { display:flex; flex-direction:column; justify-content:space-between; gap:12px; }
+  .compact-score { display:grid; justify-items:center; gap:5px; min-width:0; color:var(--muted); font-size:11px; font-weight:700; }
+  .widget-small-footer { display:flex; align-items:center; justify-content:space-between; gap:6px; min-width:0; font-size:10px; }
+  .widget-small-footer span:first-child { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:var(--score-good,#93bf9f); }
+  .widget-small-footer span:last-child { color:var(--muted); flex:none; }
+  .widget-tiles { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:6px; height:100%; }
+  .widget-tile { display:flex; flex-direction:column; align-items:center; gap:7px; min-width:0; padding:9px 3px; border:1px solid var(--border); border-radius:17px; background:#bd96651b; }
+  .widget-tile .widget-title { max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:var(--muted); }
+  .widget-tile .score-ring { margin:auto 0; }
+  .widget-tile .status { max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:10px; font-weight:700; }
+  .widget-rows { display:grid; grid-template-rows:repeat(3,minmax(0,1fr)); gap:6px; height:calc(100% - 23px); }
+  .widget-row { display:flex; align-items:center; gap:11px; min-width:0; padding:9px 11px; border:1px solid var(--border); border-radius:16px; background:#bd96651b; }
+  .widget-row-copy { min-width:0; }
+  .widget-row-head { display:flex; align-items:center; gap:6px; flex-wrap:wrap; font-size:12px; }
+  .widget-row-head b { color:var(--muted); }
+  .widget-row-head span { font-weight:700; }
+  .widget-row-copy small { display:block; margin-top:4px; color:var(--muted); font-size:10px; line-height:1.3; }
+  .widget-large-footer { display:flex; align-items:center; justify-content:space-between; gap:8px; height:23px; color:var(--muted); font-size:10px; }
+  .single-small { display:flex; flex-direction:column; height:100%; }
+  .single-small .score-ring { margin:auto 0; }
+  .single-status { display:block; color:#93bf9f; font-size:11px; font-weight:700; line-height:1.25; }
+  .single-medium { display:flex; align-items:center; gap:17px; height:100%; }
+  .single-medium > div:last-child { display:flex; flex-direction:column; gap:7px; min-width:0; }
+  .single-detail { margin:0; color:var(--muted); font-size:11px; line-height:1.35; }
+  .single-footer { color:var(--muted); font-size:10px; }
+  .single-portrait { display:flex; flex-direction:column; align-items:flex-start; height:100%; gap:14px; }
+  .single-portrait .score-ring { margin:auto; }
+  .single-portrait .single-status { font-size:17px; }
+  .widget-placeholder { display:none; height:100%; flex-direction:column; align-items:center; justify-content:center; gap:10px; text-align:center; }
+  .widget-placeholder b { color:var(--warm); font-size:11px; letter-spacing:.05em; }
+  .widget-placeholder i { color:var(--warm); font-size:29px; font-style:normal; }
+  .widget-placeholder span { color:var(--muted); font-size:12px; }
+  body[data-record="empty"] .dashboard .scored-content { display:none; }
+  body[data-record="empty"] .dashboard .widget-placeholder { display:flex; }
+  .audit { margin-top:24px; padding:16px 18px; border:1px solid var(--border); border-radius:18px; background:var(--panel); }
+  .audit h3 { margin:0 0 10px; font-size:15px; }
+  .audit ul { margin:0; padding-left:19px; color:var(--muted); font-size:12px; line-height:1.7; }
+  @media(max-width:620px) { .page { padding:24px 12px 60px; } .preview-card.wide { grid-column:auto; } .lock-frame { max-width:370px; margin:auto; } }
+</style>
+</head>
+<body data-record="sample">
+<main class="page">
+  <div class="eyebrow">DUNE / DESERT HORIZON / 보조 화면 시안</div>
+  <h1>라이브 액티비티와 위젯</h1>
+  <p class="intro">현재 <code>DUNEWidget</code>에 있는 휴식 타이머와 점수 위젯의 정보 구조를 바탕으로 한 추가 디자인입니다. 아래 이미지는 HTML 제안 시안이며 실제 iOS·watchOS 캡처가 아닙니다. 수치와 시간은 배치 확인용 예시입니다.</p>
+  <nav class="links" aria-label="관련 시안"><a href="dune-final-four-tab.html">← 4탭 전체 시안</a><a href="../../layout-map/widget-live-activity-proposal.md">배치·상태 기준</a><a href="../index.html">테마 맵</a></nav>
+  <div class="controls">
+    <div class="control-group" aria-label="모드"><strong>모드</strong><button type="button" data-mode="dark" aria-pressed="true">어두움</button><button type="button" data-mode="light" aria-pressed="false">밝음</button></div>
+    <div class="control-group" aria-label="휴식 시간"><strong>휴식</strong><button type="button" data-rest="90" aria-pressed="true">01:30</button><button type="button" data-rest="8" aria-pressed="false">00:08</button></div>
+    <div class="control-group" aria-label="점수 상태"><strong>점수</strong><button type="button" data-record-choice="sample" aria-pressed="true">예시 기록</button><button type="button" data-record-choice="partial" aria-pressed="false">일부 누락</button><button type="button" data-record-choice="empty" aria-pressed="false">기록 없음</button></div>
+    <div class="control-group" aria-label="단일 점수 선택"><strong>단일 점수</strong><button type="button" data-metric-choice="condition" aria-pressed="true">컨디션</button><button type="button" data-metric-choice="readiness" aria-pressed="false">준비도</button><button type="button" data-metric-choice="wellness" aria-pressed="false">웰니스</button></div>
+  </div>
+
+  <div class="section-head"><h2>휴식 타이머 Live Activity</h2><p>잠금 화면 · Dynamic Island compact/minimal/expanded · Watch Smart Stack small. 현재 코드의 운동명·세트 번호·남은 시간만 사용합니다.</p></div>
+  <div class="gallery">
+    <section class="preview-card"><h3>iPhone 잠금 화면</h3><p>남은 시간은 가장 크게, 운동명과 세트는 보조 정보로 둡니다.</p><div class="lock-frame"><div class="lock-status"><span>9:41</span><span>●●● ▰</span></div><div class="lock-clock">9:41<small>10월 24일 토요일</small></div><div class="lock-activity"><span class="activity-title">◷ &nbsp;휴식 타이머</span><strong class="exercise">벤치프레스</strong><div class="activity-bottom"><span class="set">2세트 후 휴식</span><strong class="countdown" data-rest-text>01:30</strong></div></div></div></section>
+    <section class="preview-card"><h3>Dynamic Island</h3><p>시스템 검은 표면에서 핵심만 보이게 합니다.</p><div class="island-grid"><div class="island-row"><span class="island-caption">compact</span><div class="island compact"><span aria-label="타이머">◷</span><strong class="countdown" data-rest-text>01:30</strong></div></div><div class="island-row"><span class="island-caption">minimal</span><div class="island minimal" aria-label="휴식 타이머">◷</div></div><div class="island-row"><span class="island-caption">expanded</span><div class="island expanded"><div class="first-line"><span>◷ &nbsp;휴식 타이머</span><strong data-rest-text>01:30</strong></div><span class="exercise">벤치프레스</span></div></div></div></section>
+    <section class="preview-card"><h3>Watch Smart Stack small</h3><p>운동명 → 세트 번호 → 남은 시간 순서입니다.</p><div class="watch-shell"><div class="watch-time">9:41</div><strong class="watch-exercise">벤치프레스</strong><span class="watch-set">2세트</span><div class="watch-countdown"><span aria-hidden="true">◷</span><strong data-rest-text>01:30</strong></div></div></section>
+  </div>
+
+  <div class="section-head"><h2>DUNE Today 위젯</h2><p>세 지표의 점수와 의미색을 유지합니다. 값이 없는 지표는 --로, 세 점수가 모두 없으면 현재 위젯의 시작 안내로 전환합니다.</p></div>
+  <div class="widget-grid">
+    <section class="widget-frame"><h3>Small · 세 점수</h3><p>세 링과 가장 낮은 점수의 상태, 갱신 시각</p><div class="widget-surface small dashboard"><div class="scored-content"><div class="widget-compact-scores"><div class="compact-score"><div class="score-ring" style="--size:38px;--ring-width:5px;--score-size:11px" data-score-kind="condition"><span data-score>78</span></div><span>C</span></div><div class="compact-score"><div class="score-ring" style="--size:38px;--ring-width:5px;--score-size:11px" data-score-kind="readiness"><span data-score>72</span></div><span>R</span></div><div class="compact-score"><div class="score-ring" style="--size:38px;--ring-width:5px;--score-size:11px" data-score-kind="wellness"><span data-score>65</span></div><span>W</span></div></div><div class="widget-small-footer"><span id="small-lowest">웰니스 · 양호</span><span>09:41</span></div></div><div class="widget-placeholder"><b>DUNE</b><i aria-hidden="true">♡▤</i><span>DUNE 열기</span></div></div></section>
+    <section class="widget-frame"><h3>Medium · 세 타일</h3><p>지표 이름·링·상태를 같은 너비로 배치</p><div class="widget-surface medium dashboard"><div class="scored-content widget-tiles"><div class="widget-tile"><span class="widget-title compact">컨디션</span><div class="score-ring" data-score-kind="condition"><span data-score>78</span></div><span class="status" data-status-kind="condition">양호</span></div><div class="widget-tile"><span class="widget-title compact">준비도</span><div class="score-ring" data-score-kind="readiness"><span data-score>72</span></div><span class="status" data-status-kind="readiness">보통</span></div><div class="widget-tile"><span class="widget-title compact">웰니스</span><div class="score-ring" data-score-kind="wellness"><span data-score>65</span></div><span class="status" data-status-kind="wellness">양호</span></div></div><div class="widget-placeholder"><b>DUNE</b><i aria-hidden="true">♡▤</i><span>DUNE 열기</span></div></div></section>
+    <section class="widget-frame"><h3>Large · 세 행</h3><p>짧은 설명과 가장 낮은 점수 요약까지 표시</p><div class="widget-surface large dashboard"><div class="scored-content" style="height:100%"><div class="widget-rows"><div class="widget-row"><div class="score-ring" style="--size:38px;--ring-width:5px;--score-size:11px" data-score-kind="condition"><span data-score>78</span></div><div class="widget-row-copy"><div class="widget-row-head"><b>컨디션</b><span data-status-kind="condition">양호</span></div><small data-detail-kind="condition">HRV 흐름이 안정적이에요</small></div></div><div class="widget-row"><div class="score-ring" style="--size:38px;--ring-width:5px;--score-size:11px" data-score-kind="readiness"><span data-score>72</span></div><div class="widget-row-copy"><div class="widget-row-head"><b>준비도</b><span data-status-kind="readiness">보통</span></div><small data-detail-kind="readiness">오늘 운동 강도를 조절해 보세요</small></div></div><div class="widget-row"><div class="score-ring" style="--size:38px;--ring-width:5px;--score-size:11px" data-score-kind="wellness"><span data-score>65</span></div><div class="widget-row-copy"><div class="widget-row-head"><b>웰니스</b><span data-status-kind="wellness">양호</span></div><small data-detail-kind="wellness">최근 수면과 활동을 반영했어요</small></div></div></div><div class="widget-large-footer"><span id="large-lowest">웰니스 · 양호</span><span>09:41 갱신</span></div></div><div class="widget-placeholder"><b>DUNE</b><i aria-hidden="true">♡▤</i><span>DUNE 열기</span></div></div></section>
+  </div>
+
+  <div class="section-head"><h2>DUNE Score 단일 점수 위젯</h2><p>상단의 컨디션·준비도·웰니스 선택은 현재 위젯 설정 항목을 재현합니다. Medium부터 설명을, 세로 크기에는 중앙의 큰 링을 둡니다.</p></div>
+  <div class="widget-grid">
+    <section class="widget-frame"><h3>Small</h3><p>제목·점수·상태</p><div class="widget-surface small"><div class="single-small"><b class="widget-title" data-single-title>컨디션</b><div class="score-ring" style="--size:60px;--ring-width:6px;--score-size:20px" data-single-ring><span data-score>78</span></div><span class="single-status" data-single-status>양호</span></div></div></section>
+    <section class="widget-frame"><h3>Medium</h3><p>큰 링 옆에 상태와 짧은 설명</p><div class="widget-surface medium"><div class="single-medium"><div class="score-ring" style="--size:94px;--ring-width:9px;--score-size:29px" data-single-ring><span data-score>78</span></div><div><b class="widget-title" data-single-title>컨디션</b><span class="single-status" data-single-status>양호</span><p class="single-detail" data-single-detail>HRV 흐름이 안정적이에요</p><span class="single-footer">오늘</span></div></div></div></section>
+    <section class="widget-frame"><h3>Large</h3><p>한 점수의 상태와 설명에 집중</p><div class="widget-surface large"><div class="single-portrait"><b class="widget-title" data-single-title>컨디션</b><div class="score-ring" style="--size:150px;--ring-width:12px;--score-size:46px" data-single-ring><span data-score>78</span></div><span class="single-status" data-single-status>양호</span><p class="single-detail" data-single-detail>HRV 흐름이 안정적이에요</p><span class="single-footer">오늘</span></div></div></section>
+    <section class="widget-frame"><h3>세로 크기</h3><p>지원되는 기기에서 중앙 링과 하단 상태</p><div class="widget-surface portrait"><div class="single-portrait"><b class="widget-title" data-single-title>컨디션</b><div class="score-ring" style="--size:168px;--ring-width:13px;--score-size:52px" data-single-ring><span data-score>78</span></div><span class="single-status" data-single-status>양호</span><p class="single-detail" data-single-detail>HRV 흐름이 안정적이에요</p><span class="single-footer">오늘</span></div></div></section>
+  </div>
+  <aside class="audit"><h3>현재 구현과 연결되는 점</h3><ul><li>라이브 액티비티에는 타이머 조작 버튼이 없습니다. 시안에도 추가하지 않았습니다.</li><li>위젯의 실제 정보는 점수와 상태, 일부 크기의 설명·갱신 시각입니다. 의미색은 테마색으로 바꾸지 않았습니다.</li><li>잠금 화면의 운동명은 주변에 보일 수 있습니다. 실제 개인정보 노출 정책과 밝음·어두움 대비는 기기 캡처로 확인해야 합니다.</li></ul></aside>
+</main>
+<script>
+  const samples = {
+    condition: { title:'컨디션', score:78, status:'양호', color:'#9dc59b', detail:'HRV 흐름이 안정적이에요' },
+    readiness: { title:'준비도', score:72, status:'보통', color:'#a5c79f', detail:'오늘 운동 강도를 조절해 보세요' },
+    wellness: { title:'웰니스', score:65, status:'양호', color:'#a7bf9e', detail:'최근 수면과 활동을 반영했어요' }
+  };
+  let record = 'sample';
+  let chosen = 'condition';
+  function setPressed(selector, selected) {
+    document.querySelectorAll(selector).forEach(button => button.setAttribute('aria-pressed', String(button.dataset.mode === selected || button.dataset.rest === selected || button.dataset.recordChoice === selected || button.dataset.metricChoice === selected)));
+  }
+  function activeData(kind) { return record === 'empty' || (record === 'partial' && kind === 'wellness') ? null : samples[kind]; }
+  function paint() {
+    document.body.dataset.record = record;
+    document.querySelectorAll('[data-score-kind]').forEach(ring => {
+      const data = activeData(ring.dataset.scoreKind);
+      ring.style.setProperty('--ring-fill', `${(data?.score ?? 0) * 3.6}deg`);
+      ring.style.setProperty('--ring-color', data?.color ?? '#9a938b');
+      ring.querySelector('[data-score]').textContent = data?.score ?? '--';
+      ring.setAttribute('aria-label', `${samples[ring.dataset.scoreKind].title} ${data?.score ?? '기록 없음'}`);
+    });
+    document.querySelectorAll('[data-status-kind]').forEach(label => { label.textContent = activeData(label.dataset.statusKind)?.status ?? 'DUNE 열기'; });
+    document.querySelectorAll('[data-detail-kind]').forEach(label => { label.textContent = activeData(label.dataset.detailKind)?.detail ?? 'DUNE 열기'; });
+    const lowest = Object.keys(samples).map(activeData).filter(Boolean).sort((a,b) => a.score - b.score)[0];
+    document.getElementById('small-lowest').textContent = lowest ? `${lowest.title} · ${lowest.status}` : 'DUNE 열기';
+    document.getElementById('large-lowest').textContent = lowest ? `${lowest.title} · ${lowest.status}` : 'DUNE 열기';
+    const selected = activeData(chosen);
+    document.querySelectorAll('[data-single-title]').forEach(item => item.textContent = samples[chosen].title);
+    document.querySelectorAll('[data-single-ring]').forEach(ring => {
+      ring.style.setProperty('--ring-fill', `${(selected?.score ?? 0) * 3.6}deg`);
+      ring.style.setProperty('--ring-color', selected?.color ?? '#9a938b');
+      ring.querySelector('[data-score]').textContent = selected?.score ?? '--';
+      ring.setAttribute('aria-label', `${samples[chosen].title} ${selected?.score ?? '기록 없음'}`);
+    });
+    document.querySelectorAll('[data-single-status]').forEach(item => item.textContent = selected?.status ?? 'DUNE 열기');
+    document.querySelectorAll('[data-single-detail]').forEach(item => item.textContent = selected?.detail ?? '아직 기록이 없습니다');
+  }
+  document.querySelectorAll('[data-mode]').forEach(button => button.addEventListener('click', () => {
+    document.body.classList.toggle('light', button.dataset.mode === 'light');
+    setPressed('[data-mode]', button.dataset.mode);
+  }));
+  document.querySelectorAll('[data-rest]').forEach(button => button.addEventListener('click', () => {
+    const value = button.dataset.rest === '8' ? '00:08' : '01:30';
+    document.querySelectorAll('[data-rest-text]').forEach(item => item.textContent = value);
+    setPressed('[data-rest]', button.dataset.rest);
+  }));
+  document.querySelectorAll('[data-record-choice]').forEach(button => button.addEventListener('click', () => {
+    record = button.dataset.recordChoice;
+    setPressed('[data-record-choice]', record);
+    paint();
+  }));
+  document.querySelectorAll('[data-metric-choice]').forEach(button => button.addEventListener('click', () => {
+    chosen = button.dataset.metricChoice;
+    setPressed('[data-metric-choice]', chosen);
+    paint();
+  }));
+  paint();
+</script>
+</body>
+</html>

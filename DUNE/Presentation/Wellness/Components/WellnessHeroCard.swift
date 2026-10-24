@@ -75,26 +75,16 @@ struct WellnessHeroCard: View {
         .padding(20)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background {
-            RoundedRectangle(cornerRadius: 23)
-                .fill(theme == .desertWarm
-                    ? LinearGradient(colors: [colorScheme == .dark ? Color(red: 0.110, green: 0.120, blue: 0.125) : Color(red: 0.988, green: 0.969, blue: 0.937)], startPoint: .top, endPoint: .bottom)
-                    : theme.directionPreviewBackground)
-                .overlay(alignment: .bottom) {
-                    if theme == .desertWarm {
-                        DesertPreviewWave()
-                            .frame(height: 74)
-                            .clipped()
+            if theme == .desertWarm {
+                DesertCardSurface(cornerRadius: DS.Radius.xxl)
+            } else {
+                RoundedRectangle(cornerRadius: 23)
+                    .fill(theme.directionPreviewBackground)
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 23)
+                            .strokeBorder(theme.accentColor.opacity(0.25), lineWidth: 1)
                     }
-                }
-                .clipShape(RoundedRectangle(cornerRadius: 23))
-                .overlay {
-                    RoundedRectangle(cornerRadius: 23)
-                        .strokeBorder(theme == .desertWarm
-                            ? (colorScheme == .dark
-                                ? Color(red: 0.251, green: 0.314, blue: 0.286)
-                                : Color(red: 0.871, green: 0.859, blue: 0.824))
-                            : theme.accentColor.opacity(0.25), lineWidth: 1)
-                }
+            }
         }
     }
 
@@ -103,7 +93,7 @@ struct WellnessHeroCard: View {
             VStack(alignment: .leading, spacing: 16) {
                 Text("Wellness")
                     .font(.title3.weight(.bold))
-                    .foregroundStyle(theme.directionPreviewTextColor)
+                    .foregroundStyle(theme == .desertWarm ? DesertPalette.ink : theme.directionPreviewTextColor)
                 wellnessStatus(score)
                 wellnessNarrative(score)
                 if usesSideBySideLayout {
@@ -138,7 +128,7 @@ struct WellnessHeroCard: View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Sleep")
                 .font(.caption.weight(.semibold))
-                .foregroundStyle(theme.directionPreviewTextColor.opacity(0.74))
+                .foregroundStyle(theme == .desertWarm ? DesertPalette.muted : theme.directionPreviewTextColor.opacity(0.74))
             sleepSummary
             if sleepMetric != nil {
                 if usesSideBySideLayout {
@@ -182,7 +172,7 @@ struct WellnessHeroCard: View {
     private func wellnessNarrative(_ score: WellnessScore) -> some View {
         Text(score.narrativeMessage)
             .font(.subheadline)
-            .foregroundStyle(theme.directionPreviewTextColor.opacity(0.74))
+            .foregroundStyle(theme == .desertWarm ? DesertPalette.muted : theme.directionPreviewTextColor.opacity(0.74))
             .fixedSize(horizontal: false, vertical: true)
             .accessibilityIdentifier("wellness-hero-narrative")
     }
@@ -222,7 +212,7 @@ struct WellnessHeroCard: View {
             } else {
                 Text("Need More Data")
                     .font(.caption.weight(.medium))
-                    .foregroundStyle(theme.directionPreviewTextColor.opacity(0.74))
+                    .foregroundStyle(theme == .desertWarm ? DesertPalette.muted : theme.directionPreviewTextColor.opacity(0.74))
                     .accessibilityIdentifier("wellness-sleep-empty-state")
             }
         }
@@ -234,23 +224,23 @@ struct WellnessHeroCard: View {
             if let latestSleepSample {
                 Text(sleepDuration(Int(latestSleepSample.minutes)))
                     .font(.headline.weight(.semibold))
-                    .foregroundStyle(theme.directionPreviewTextColor)
+                    .foregroundStyle(theme == .desertWarm ? DesertPalette.ink : theme.directionPreviewTextColor)
                     .accessibilityIdentifier("wellness-sleep-latest")
                 Text(latestSleepSample.date.formatted(.dateTime.month(.abbreviated).day()))
                     .font(.caption)
-                    .foregroundStyle(theme.directionPreviewTextColor.opacity(0.74))
+                    .foregroundStyle(theme == .desertWarm ? DesertPalette.muted : theme.directionPreviewTextColor.opacity(0.74))
             } else {
                 Text("Need More Data")
                     .font(.headline.weight(.semibold))
-                    .foregroundStyle(theme.directionPreviewTextColor)
+                    .foregroundStyle(theme == .desertWarm ? DesertPalette.ink : theme.directionPreviewTextColor)
             }
             Text("Sleep")
                 .font(.subheadline)
-                .foregroundStyle(theme.directionPreviewTextColor.opacity(0.74))
+                .foregroundStyle(theme == .desertWarm ? DesertPalette.muted : theme.directionPreviewTextColor.opacity(0.74))
             if let averageSleepMinutes {
                 Text("7d Average · \(sleepDuration(averageSleepMinutes))")
                     .font(.caption.weight(.semibold))
-                    .foregroundStyle(theme.directionPreviewTextColor.opacity(0.74))
+                    .foregroundStyle(theme == .desertWarm ? DesertPalette.muted : theme.directionPreviewTextColor.opacity(0.74))
                     .fixedSize(horizontal: false, vertical: true)
                     .accessibilityIdentifier("wellness-sleep-average")
             }
@@ -271,7 +261,7 @@ struct WellnessHeroCard: View {
     private func wellnessCopy(_ score: WellnessScore) -> some View {
         Text(score.status.label)
             .font(.headline.weight(.semibold))
-            .foregroundStyle(theme.directionPreviewTextColor)
+            .foregroundStyle(theme == .desertWarm ? DesertPalette.ink : theme.directionPreviewTextColor)
     }
 
     // MARK: - Empty State

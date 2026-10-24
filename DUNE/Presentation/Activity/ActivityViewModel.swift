@@ -40,6 +40,7 @@ final class ActivityViewModel {
     var unlockedBadgeKeys: Set<String> = []
     var workoutStreak: WorkoutStreak?
     var exerciseFrequencies: [ExerciseFrequency] = []
+    var exerciseMix = ExerciseMixSummary.empty()
     var weeklyStats: [ActivityStat] = []
     var templateRecommendations: [WorkoutTemplateRecommendation] = []
     var injuryRiskAssessment: InjuryRiskAssessment?
@@ -115,6 +116,8 @@ final class ActivityViewModel {
     /// Cached manual records for manual-cardio fallback PR calculations.
     private var manualRecordsCache: [ExerciseRecord] = []
     private var healthKitOnlySnapshots: [ExerciseRecordSnapshot] = []
+    private var exerciseMixWorkouts: [WorkoutSummary] = []
+    private var exerciseMixSourceDidFail = false
     private var weeklyReportRequestID = 0
     @ObservationIgnored
     private var localizedExerciseNameLookup: [String: String] = [:]
@@ -272,9 +275,9 @@ final class ActivityViewModel {
         let completedSets = record.completedSets
         let totalWeight = completedSets.trainingVolume()
         let totalReps = Swift.min(completedSets.compactMap(\.reps).reduce(0, +), 10_000)
-        let durationSec = resolveManualDurationSeconds(for: record)
+        let durationSec = resolveManualDurationSeconds(for: record, completedSets: completedSets)
         let durationMin = durationSec.flatMap { $0 > 0 ? Swift.min($0 / 60.0, 480) : nil }
-        let distKm = resolveManualDistanceMeters(for: record).flatMap { $0 > 0 ? Swift.min($0 / 1000.0, 500) : nil }
+        let distKm = resolveManualDistanceMeters(for: record, completedSets: completedSets).flatMap { $0 > 0 ? Swift.min($0 / 1000.0, 500) : nil }
 
         return ExerciseRecordSnapshot(
             date: record.date,
@@ -537,18 +540,68 @@ final class ActivityViewModel {
         }
         workoutStreak = WorkoutStreakService.calculate(from: streakEntries + hkStreakEntries)
 
-        // Exercise Frequency
-        let freqEntries = exerciseRecordSnapshots.compactMap { snapshot -> ExerciseFrequencyService.WorkoutEntry? in
-            guard let name = snapshot.exerciseName, !name.isEmpty else { return nil }
-            return ExerciseFrequencyService.WorkoutEntry(
-                exerciseName: localizedExerciseName(name),
-                date: snapshot.date
-            )
-        }
-        exerciseFrequencies = ExerciseFrequencyService.analyze(from: freqEntries)
+        rebuildExerciseMix()
 
         // Weekly Stats
         rebuildWeeklyStats()
+    }
+
+    private func rebuildExerciseMix() {
+        let now = Date()
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: now)
+        let start = calendar.date(byAdding: .day, value: -27, to: today) ?? today
+        let manualEntries = manualRecordsCache
+            .filter { start <= $0.date && $0.date <= now }
+            .map { record -> ExerciseMixEntry in
+            let definition = record.exerciseDefinitionID.flatMap { library.exercise(byID: $0) }
+            let activity = WorkoutActivityType.infer(from: record.exerciseType)
+            let completedSets = record.completedSets
+            let kind: ExerciseMixKind
+            switch definition?.category {
+            case .strength, .bodyweight: kind = .strength
+            case .cardio, .hiit: kind = .cardio
+            case .flexibility: kind = .other
+            case nil:
+                if activity?.category == .cardio || activity?.isDistanceBased == true {
+                    kind = .cardio
+                } else if activity?.category == .strength
+                            || (!completedSets.isEmpty && !record.primaryMuscles.isEmpty) {
+                    kind = .strength
+                } else {
+                    kind = .other
+                }
+            }
+            let duration = resolveManualDurationSeconds(for: record, completedSets: completedSets).map { $0 / 60 }
+            let distance = resolveManualDistanceMeters(for: record, completedSets: completedSets).map { $0 / 1000 }
+            return ExerciseMixEntry(
+                id: "manual-\(record.id)", linkedWorkoutID: record.healthKitWorkoutID,
+                isHealthKit: false, date: record.date,
+                name: definition?.localizedName ?? localizedExerciseName(record.exerciseType),
+                kind: kind,
+                primaryMuscles: record.primaryMuscles.isEmpty ? (definition?.primaryMuscles ?? []) : record.primaryMuscles,
+                completedSets: completedSets.count,
+                durationMinutes: duration, distanceKm: distance,
+                dedupName: record.exerciseType
+            )
+        }
+        let healthEntries = exerciseMixWorkouts.map { workout -> ExerciseMixEntry in
+            let kind: ExerciseMixKind = workout.activityType.category == .strength ? .strength
+                : (workout.activityType.category == .cardio || workout.activityType.isDistanceBased) ? .cardio : .other
+            return ExerciseMixEntry(
+                id: workout.id, linkedWorkoutID: workout.isFromThisApp ? workout.id : nil,
+                isHealthKit: true, date: workout.date,
+                name: localizedExerciseName(workout.type), kind: kind,
+                primaryMuscles: [], completedSets: 0,
+                durationMinutes: workout.duration > 0 && workout.duration.isFinite ? workout.duration / 60 : nil,
+                distanceKm: workout.distance.flatMap { $0 > 0 && $0.isFinite ? $0 / 1000 : nil },
+                dedupName: workout.type
+            )
+        }
+        var summary = ExerciseMixService.analyze(manualEntries + healthEntries, asOf: now, calendar: calendar)
+        summary.isHealthKitSourceUnavailable = exerciseMixSourceDidFail
+        exerciseMix = summary
+        exerciseFrequencies = exerciseMix.frequencies
     }
 
     /// Computes strength/manual+HealthKit merged personal records and notice text.
@@ -724,11 +777,18 @@ final class ActivityViewModel {
         async let exerciseTask = safeExerciseFetch(canQueryHealthKit: healthKitAvailable)
         async let stepsTask = safeStepsFetch(canQueryHealthKit: healthKitAvailable)
         async let workoutsTask = safeWorkoutsFetch(canQueryHealthKit: healthKitAvailable)
+        async let mixWorkoutsTask = safeExerciseMixWorkoutsFetch(canQueryHealthKit: healthKitAvailable)
         let sharedSnapshot = await sharedSnapshotTask
-        async let trainingLoadTask = safeTrainingLoadFetch(snapshot: sharedSnapshot, canQueryHealthKit: healthKitAvailable)
         async let sleepTask = safeSleepFetch(snapshot: sharedSnapshot, canQueryHealthKit: healthKitAvailable)
         async let readinessTask = safeReadinessFetch(snapshot: sharedSnapshot, canQueryHealthKit: healthKitAvailable)
         async let sleepDailyTask = safeSleepDailyFetch(snapshot: sharedSnapshot, canQueryHealthKit: healthKitAvailable)
+        let mixWorkoutsResult = await mixWorkoutsTask
+        async let trainingLoadTask = safeTrainingLoadFetch(
+            snapshot: sharedSnapshot,
+            workouts: mixWorkoutsResult.workouts,
+            workoutFetchFailed: mixWorkoutsResult.didFail,
+            canQueryHealthKit: healthKitAvailable
+        )
 
         let (exerciseResult, stepsResult, workoutsResult, loadResult, sleepResult, readinessResult, sleepDailyResult) = await (
             exerciseTask, stepsTask, workoutsTask, trainingLoadTask, sleepTask, readinessTask, sleepDailyTask
@@ -741,6 +801,8 @@ final class ActivityViewModel {
         weeklySteps = stepsResult.weeklyData
         todaySteps = stepsResult.todayMetric
         recentWorkouts = workoutsResult
+        exerciseMixWorkouts = mixWorkoutsResult.workouts
+        exerciseMixSourceDidFail = mixWorkoutsResult.didFail
         #if DEBUG
         let scenario = UITestSeedScenario.current()
         let mockedRecommendations = TestDataSeeder.mockTemplateRecommendations(
@@ -982,18 +1044,24 @@ final class ActivityViewModel {
             .lowercased()
     }
 
-    private func resolveManualDurationSeconds(for record: ExerciseRecord) -> TimeInterval? {
+    private func resolveManualDurationSeconds(
+        for record: ExerciseRecord,
+        completedSets: [WorkoutSet]? = nil
+    ) -> TimeInterval? {
         if record.duration > 0, record.duration.isFinite, record.duration < 86_400 {
             return record.duration
         }
-        let setDuration = record.completedSets.compactMap(\.duration).reduce(0, +)
+        let setDuration = (completedSets ?? record.completedSets).compactMap(\.duration).reduce(0, +)
         guard setDuration > 0, setDuration.isFinite, setDuration < 86_400 else { return nil }
         return setDuration
     }
 
     /// Manual set distances are entered in km. Record distance may be legacy data.
-    private func resolveManualDistanceMeters(for record: ExerciseRecord) -> Double? {
-        let setDistanceKm = record.completedSets.compactMap(\.distance).reduce(0, +)
+    private func resolveManualDistanceMeters(
+        for record: ExerciseRecord,
+        completedSets: [WorkoutSet]? = nil
+    ) -> Double? {
+        let setDistanceKm = (completedSets ?? record.completedSets).compactMap(\.distance).reduce(0, +)
         if setDistanceKm > 0, setDistanceKm.isFinite {
             let meters = setDistanceKm * 1000.0
             if meters > 0, meters < 500_000 { return meters }
@@ -1141,21 +1209,37 @@ final class ActivityViewModel {
         }
     }
 
+    private struct ExerciseMixWorkoutResult: Sendable {
+        let workouts: [WorkoutSummary]
+        let didFail: Bool
+    }
+
+    private func safeExerciseMixWorkoutsFetch(canQueryHealthKit: Bool) async -> ExerciseMixWorkoutResult {
+        guard canQueryHealthKit else { return .init(workouts: [], didFail: false) }
+        let today = Calendar.current.startOfDay(for: Date())
+        guard let start = Calendar.current.date(byAdding: .day, value: -27, to: today) else {
+            return .init(workouts: [], didFail: true)
+        }
+        do {
+            return .init(workouts: try await workoutService.fetchWorkouts(start: start, end: Date()), didFail: false)
+        } catch {
+            AppLogger.ui.error("Exercise mix workout fetch failed: \(error.localizedDescription)")
+            return .init(workouts: [], didFail: true)
+        }
+    }
+
     // MARK: - Training Load (28-day)
 
     private func safeTrainingLoadFetch(
         snapshot: SharedHealthSnapshot?,
+        workouts: [WorkoutSummary],
+        workoutFetchFailed: Bool,
         canQueryHealthKit: Bool
     ) async -> [TrainingLoadDataPoint] {
-        guard canQueryHealthKit else { return [] }
+        guard canQueryHealthKit, !workoutFetchFailed else { return [] }
         do {
             let calendar = Calendar.current
             let today = calendar.startOfDay(for: Date())
-            guard let start = calendar.date(byAdding: .day, value: -27, to: today) else {
-                return []
-            }
-
-            let workouts = try await workoutService.fetchWorkouts(start: start, end: Date())
             let restingHR: Double?
             if let snapshot {
                 if let effectiveRHR = snapshot.effectiveRHR?.value {

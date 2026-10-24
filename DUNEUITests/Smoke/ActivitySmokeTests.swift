@@ -89,15 +89,14 @@ final class ActivitySmokeTests: UITestBaseCase {
         XCTAssertTrue(addButton.waitForExistence(timeout: 3), "Picker should dismiss back to Activity screen")
     }
 
-    func testLogWorkoutButtonOpensExercisePicker() throws {
-        let logWorkoutButton = app.buttons["activity-log-workout-button"].firstMatch
-        XCTAssertTrue(app.scrollToElementIfNeeded("activity-log-workout-button", maxSwipes: 8), "Log Workout action should be reachable")
-        XCTAssertTrue(logWorkoutButton.waitForExistence(timeout: 5), "Log Workout button should appear")
-        logWorkoutButton.tap()
+    func testToolbarAddOpensExercisePickerWithoutDuplicateHeroAction() throws {
+        XCTAssertFalse(app.buttons["activity-log-workout-button"].exists,
+                       "Readiness hero should not duplicate the toolbar add action")
+        XCTAssertTrue(app.waitAndTap(AXID.activityToolbarAdd), "Toolbar add should be reachable")
 
         XCTAssertTrue(
             app.descendants(matching: .any)[AXID.pickerRootList].firstMatch.waitForExistence(timeout: 5),
-            "Log Workout should open the exercise picker"
+            "Toolbar add should open the exercise picker"
         )
     }
 

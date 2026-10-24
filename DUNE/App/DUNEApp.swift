@@ -647,16 +647,8 @@ struct DUNEApp: App {
     }
 
     private var shouldPresentAutomaticWhatsNew: Bool {
-        guard !Self.shouldBypassLaunchExperienceForTests else { return false }
-
-        let version = whatsNewManager.currentAppVersion()
-        let build = whatsNewManager.currentBuildNumber()
-        guard !build.isEmpty,
-              whatsNewManager.currentRelease(for: version) != nil else {
-            return false
-        }
-
-        return whatsNewStore.shouldShowBadge(build: build)
+        // Release news is discoverable in the inbox; the legacy sheet remains for explicit UI fixtures.
+        false
     }
 
     private var canLoadHealthKitData: Bool {

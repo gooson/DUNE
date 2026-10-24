@@ -1,0 +1,1240 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DESERT HORIZON · 4탭 기존 대비 시안</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", sans-serif; background: #141210; color: #f7f0e6; }
+  button { font: inherit; cursor: pointer; }
+  .page { max-width: 1180px; margin: auto; padding: 30px 20px 64px; }
+  .page.landscape-preview { max-width: 1320px; }
+  .eyebrow { color: #e8bd82; font-size: 12px; font-weight: 700; letter-spacing: .13em; }
+  h1 { margin: 8px 0 6px; font-size: clamp(27px, 4vw, 40px); letter-spacing: -.04em; }
+  .intro { margin: 0 0 22px; color: #c9bcb0; font-size: 14px; line-height: 1.5; }
+  .companion-link { display: inline-flex; align-items: center; min-height: 42px; margin: -7px 0 20px; padding: 8px 14px; border: 1px solid #ad8965; border-radius: 12px; background: #6d4d373d; color: #f0c58c; font-size: 13px; font-weight: 700; text-decoration: none; }
+  .companion-link:hover, .companion-link:focus-visible { background: #a8744c55; }
+  .controls { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; margin-bottom: 20px; }
+  .tabs, .modes { display: flex; flex-wrap: wrap; gap: 7px; }
+  .view-controls { display: flex; flex-wrap: wrap; gap: 8px; margin: -8px 0 20px; }
+  .view-controls fieldset { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; margin: 0; padding: 6px 8px; border: 1px solid #56483d; border-radius: 13px; }
+  .view-controls fieldset[hidden] { display: none; }
+  .view-controls legend { padding: 0 4px; color: #c9bcb0; font-size: 11px; }
+  .view-controls button { min-height: 34px; border: 0; border-radius: 8px; padding: 5px 9px; background: #302923; color: #e7dbce; font-size: 12px; }
+  .view-controls button[aria-pressed="true"] { background: #e8bd82; color: #241c17; font-weight: 700; }
+  .controls button { min-height: 40px; border: 1px solid #806c5b; border-radius: 999px; padding: 8px 15px; color: #e7dbce; background: #302923; }
+  .tabs button { display: inline-flex; align-items: center; gap: 7px; }
+  .tabs .tab-icon { width: 17px; height: 17px; }
+  .controls button[aria-pressed="true"] { background: #e8bd82; color: #241c17; border-color: #e8bd82; font-weight: 700; }
+  .tab-icon { display: block; width: 22px; height: 22px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .tab-icon.leaf { fill: currentColor; stroke: none; }
+  .stage { display: grid; grid-template-columns: minmax(0, 292px) minmax(0, 402px) minmax(0, 1fr); gap: 20px; align-items: start; }
+  .stage.wide { grid-template-columns: minmax(0, 292px) minmax(0, 1fr); }
+  .stage.wide .notes { grid-column: 1 / -1; width: 100%; padding-top: 0; }
+  .actual-card { position: sticky; top: 12px; min-width: 0; padding: 12px; border: 1px solid #756051; border-radius: 20px; background: #241f1b; }
+  .compare-label { display: block; margin-bottom: 9px; color: #e8bd82; font-size: 12px; font-weight: 700; letter-spacing: .04em; }
+  .actual-card img { display: block; width: 100%; height: auto; max-height: 680px; object-fit: contain; border: 1px solid #4d4037; border-radius: 10px; background: #151412; }
+  .actual-card p { margin: 10px 0 7px; color: #d1c2b3; font-size: 11px; line-height: 1.45; }
+  .actual-card a { color: #e8bd82; font-size: 12px; font-weight: 700; }
+  .target-wrap { width: 100%; min-width: 0; }
+  .stage.wide .target-wrap { display: grid; justify-items: center; }
+  .page.landscape-preview .target-wrap { display: block; overflow-x: auto; }
+  .target-label { color: #e8bd82; font-size: 12px; font-weight: 700; margin: 0 0 7px 3px; }
+  .phone { --page-bg:#181716; --page-gradient:linear-gradient(180deg,#3b302b 0,#614b3e 160px,#3d3029 340px,#25211d 610px,transparent 1050px),linear-gradient(180deg,#201c19 0%,#181716 50%,#141312 100%); --page-ink:#fff7ee; --page-muted:#cabfb4; --card:#222321; --card-border:#43504a; --support:#302d2a; --accent:#dfa777; --ring-track:#534434; position: relative; color: var(--page-ink); background: var(--page-gradient); width: 100%; max-width: 402px; height: 860px; border: 8px solid #080808; border-radius: 50px; overflow: hidden; box-shadow: 0 22px 60px #0008; }
+  .phone.duo-closed { max-width: 466px; }
+  .phone.duo-open { min-width: 760px; max-width: 951px; height: auto; aspect-ratio: 951 / 669; margin-inline: auto; border-radius: 36px; }
+  .phone.ipad { max-width: 1032px; height: 820px; border-radius: 31px; }
+  .phone.light { --page-bg:#fbf7ef; --page-gradient:linear-gradient(180deg,#ead9c0 0,#d4ae8d 185px,#e9d5bb 390px,#f6eee2 670px,transparent 1050px),linear-gradient(180deg,#f1e4d2 0%,#fbf7ef 55%,#f9f4eb 100%); --page-ink:#292720; --page-muted:#615a52; --card:#fffdfa; --card-border:#d9cfc2; --support:#f0e8db; --accent:#865337; --ring-track:#d7c8b4; }
+  .phone .top { position: relative; height: 183px; overflow: visible; background: transparent; color: #fff8ef; }
+  .phone.light .top { color: #2d251f; }
+  .dunes { position: absolute; inset: 0 0 auto; width: 100%; height: 420px; overflow: visible; -webkit-mask-image: linear-gradient(to bottom,#000 0%,#000 23%,transparent 100%); mask-image: linear-gradient(to bottom,#000 0%,#000 23%,transparent 100%); pointer-events: none; }
+  .ridge.far { fill: #6b5a51; opacity: .54; }
+  .ridge.mid { fill: #8b624b; opacity: .54; }
+  .ridge.near { fill: #76503e; opacity: .38; }
+  .phone.light .ridge.far { fill: #cfb49a; }
+  .phone.light .ridge.mid { fill: #d9a878; }
+  .phone.light .ridge.near { fill: #b88060; }
+  .phone.light .ridge.far { opacity: .42; }
+  .phone.light .ridge.mid { opacity: .42; }
+  .phone.light .ridge.near { opacity: .32; }
+  .status, .app-head { position: relative; z-index: 1; display: flex; align-items: center; justify-content: space-between; padding: 0 25px; }
+  .status { height: 48px; font-size: 13px; font-weight: 700; }
+  .status span:last-child { letter-spacing: 3px; }
+  .app-head { margin-top: 53px; }
+  .app-head h2 { margin: 0; flex: 1; min-width: 0; font-size: 34px; line-height: 1; letter-spacing: -.05em; }
+  .header-actions { display: flex; align-items: center; gap: 6px; }
+  #today-actions { display: flex; align-items: center; gap: 6px; }
+  #today-actions[hidden], #other-action[hidden] { display: none; }
+  .tool-button { position: relative; display: grid; flex: none; place-items: center; width: 44px; height: 44px; padding: 0; border: 1px solid #ffffff55; border-radius: 15px; background: #ffffff29; color: inherit; }
+  .tool-button:hover, .tool-button:focus-visible { background: #ffffff45; }
+  .tool-button svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+  .tool-badge { position: absolute; top: -5px; right: -5px; min-width: 17px; height: 17px; display: grid; place-items: center; padding: 0 4px; border-radius: 999px; background: #d66f69; color: #fff; font-size: 10px; font-weight: 800; }
+  .tool-badge[hidden] { display: none; }
+  .screen { display: none; height: calc(100% - 183px); overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: #b38f6b66 transparent; padding: 16px 16px 100px; }
+  .screen.active { display: block; }
+  .phone.ipad .screen > *, .phone.ipad .empty-screen > * { max-width: 780px; margin-left: auto; margin-right: auto; }
+  .phone.duo-open .top { height: 142px; }
+  .phone.duo-open .app-head { margin-top: 22px; }
+  .phone.duo-open .screen, .phone.duo-open .empty-screen { height: calc(100% - 142px); padding: 12px 92px 96px 30px; }
+  .phone.duo-open .screen > *, .phone.duo-open .empty-screen > * { max-width: 780px; margin-left: auto; margin-right: auto; }
+  .hero { border: 1px solid var(--card-border); border-radius: 25px; padding: 19px; background: var(--card); }
+  .hero.today { color: #fff5e8; background: #352e29; border-color: #765b43; }
+  .hero-kicker { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; color: var(--page-ink); font-size: 15px; font-weight: 700; }
+  .hero.today .hero-kicker { color: #f9e7cf; }
+  .hero-kicker small { font-size: 11px; font-weight: 500; opacity: .72; }
+  .hero-row { display: flex; align-items: center; gap: 19px; }
+  .ring { --angle: 280deg; flex: 0 0 124px; width: 124px; height: 124px; border-radius: 50%; background: conic-gradient(from 0deg, #e2b453, #f4d678 48%, #b2d59a var(--angle), var(--ring-track) var(--angle)); padding: 11px; box-shadow: 0 0 18px #d5a64a28; }
+  .ring-inner { width: 100%; height: 100%; border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; background: var(--card); }
+  .today .ring-inner { background: #352e29; }
+  .ring strong { font-size: 39px; line-height: 1; letter-spacing: -.06em; font-variant-numeric: tabular-nums; }
+  .ring small { margin-top: 5px; color: var(--page-muted); font-size: 11px; }
+  .today .ring small { color: #dacbbc; }
+  .hero-copy { min-width: 0; }
+  .hero-copy .label { color: #e9bc72; font-size: 12px; font-weight: 700; }
+  .hero:not(.today) .hero-copy .label { color: var(--accent); }
+  .hero-copy h3 { margin: 4px 0 5px; font-size: 20px; line-height: 1.22; letter-spacing: -.035em; }
+  .hero-copy p { margin: 0; color: var(--page-muted); font-size: 13px; line-height: 1.4; }
+  .today .hero-copy p { color: #dbcebf; }
+  .divider { height: 1px; margin: 18px 0 15px; background: #92765b70; }
+  .chart-title, .chart-foot { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+  .chart-title { font-size: 13px; font-weight: 700; }
+  .chart-title span:last-child, .chart-foot { font-size: 11px; color: #d0c1ae; }
+  .chart { width: 100%; height: 104px; margin-top: 6px; display: block; }
+  .chart .axis { stroke: #907965; stroke-width: 1; }
+  .chart .line { fill: none; stroke: #f3cd72; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+  .chart .dot { fill: #b7dd9b; }
+  .chart-foot { margin-top: -2px; }
+  .evidence { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 15px; }
+  .evidence span { border-radius: 9px; padding: 8px 10px; background: #4b4036; color: #f7ebdc; font-size: 11px; }
+  .detail-link { display: flex; justify-content: space-between; align-items: center; min-height: 46px; margin-top: 12px; color: var(--accent); font-size: 14px; font-weight: 700; }
+  .today .detail-link { color: #f0c06d; border-top: 1px solid #836b55; margin-top: 16px; padding-top: 8px; }
+  .action { display: block; width: 100%; min-height: 48px; margin-top: 16px; border: 0; border-radius: 13px; background: #dbad7f; color: #281d18; font-size: 15px; font-weight: 700; text-align: center; padding: 13px; }
+  .phone.light .action { background: #a26743; color: #fff8f0; }
+  .section-title { margin: 24px 2px 11px; font-size: 16px; letter-spacing: -.02em; }
+  .section-title small { color: var(--page-muted); font-size: 11px; font-weight: 500; margin-left: 5px; }
+  .support { background: var(--support); border: 1px solid var(--card-border); border-radius: 18px; padding: 17px; }
+  .support p { color: var(--page-muted); font-size: 13px; line-height: 1.45; margin: 6px 0 0; }
+  .support strong { font-size: 15px; }
+  .micro { color: var(--page-muted); font-size: 11px; margin: 11px 2px 0; }
+  .muscle-map { min-width: 0; }
+  .muscle-map .visual-head { margin-bottom: 13px; }
+  .muscle-map-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+  .muscle-map-summary { color: var(--page-muted); font-size: 12px; line-height: 1.35; }
+  .muscle-mode { display: inline-flex; padding: 3px; border: 1px solid var(--card-border); border-radius: 10px; background: var(--support); }
+  .muscle-mode button { min-height: 34px; min-width: 54px; padding: 5px 9px; border: 0; border-radius: 7px; background: transparent; color: var(--page-muted); font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; }
+  .muscle-mode button[aria-pressed="true"] { background: #718a70; color: #fff; }
+  .muscle-figures { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; max-width: 310px; margin: 17px auto 8px; }
+  .muscle-figure { margin: 0; text-align: center; }
+  .muscle-figure svg { display: block; width: 100%; height: 216px; overflow: visible; }
+  .muscle-figure figcaption { margin-top: 3px; color: var(--page-muted); font-size: 11px; }
+  .muscle-outline { fill: none; stroke: var(--page-muted); stroke-opacity: .55; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  .muscle-shape { fill: #91af86; stroke: #cad6ac; stroke-opacity: .8; stroke-width: 1; transition: fill .25s ease, stroke .25s ease; }
+  .muscle-map[data-muscle-mode="volume"] .muscle-shape { fill: #94765b; stroke: #c6a07a; }
+  .muscle-map[data-muscle-mode="volume"] .muscle-shape[data-volume="light"] { fill: #94775d; }
+  .muscle-map[data-muscle-mode="volume"] .muscle-shape[data-volume="moderate"] { fill: #ba8d5d; }
+  .muscle-map[data-muscle-mode="volume"] .muscle-shape[data-volume="high"] { fill: #d89b56; }
+  .muscle-map[data-muscle-mode="volume"] .muscle-shape[data-volume="very-high"] { fill: #efae63; }
+  .muscle-legend { margin-top: 15px; }
+  .muscle-legend[hidden] { display: none; }
+  .muscle-gradient { height: 8px; border-radius: 99px; background: linear-gradient(90deg,#8aaa82 0%,#b6b875 25%,#caa463 48%,#bb7957 72%,#984b43 100%); }
+  .muscle-volume-steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px; }
+  .muscle-volume-steps i { height: 8px; background: #68605a; border-radius: 2px; }
+  .muscle-volume-steps i:nth-child(2) { background: #94775d; }
+  .muscle-volume-steps i:nth-child(3) { background: #ba8d5d; }
+  .muscle-volume-steps i:nth-child(4) { background: #d89b56; }
+  .muscle-volume-steps i:nth-child(5) { background: #efae63; }
+  .muscle-legend-labels { display: flex; justify-content: space-between; gap: 6px; margin-top: 6px; color: var(--page-muted); font-size: 11px; }
+  .muscle-legend-labels.volume-labels span { flex: 1; text-align: center; white-space: nowrap; font-size: 10px; }
+  .muscle-legend-note { margin-top: 9px !important; font-size: 11px !important; }
+  .phone.large-text .muscle-map-toolbar { align-items: flex-start; }
+  .phone.large-text .muscle-legend-labels { font-size: 14px; }
+  .weekly-summary { min-width: 0; }
+  .weekly-summary .visual-head { margin-bottom: 14px; }
+  .weekly-stat-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+  .weekly-stat { min-width: 0; padding: 12px; border: 1px solid var(--card-border); border-radius: 13px; background: var(--card); }
+  .weekly-stat-title { display: flex; align-items: center; gap: 6px; color: var(--page-muted); font-size: 11px; font-weight: 700; }
+  .weekly-stat-icon { display: grid; place-items: center; width: 23px; height: 23px; border-radius: 7px; background: #81a88824; font-size: 13px; }
+  .weekly-stat-icon.warm { background: #d6aa6e2b; }
+  .weekly-stat-value { display: flex; align-items: baseline; gap: 4px; flex-wrap: wrap; margin-top: 9px; font-variant-numeric: tabular-nums; }
+  .weekly-stat-value strong { font-size: 22px; line-height: 1; letter-spacing: -.035em; }
+  .weekly-stat-value span { color: var(--page-muted); font-size: 11px; }
+  .weekly-stat-change { display: block; margin-top: 6px; color: #9bcb99; font-size: 10px; font-weight: 700; }
+  .phone.light .weekly-stat-change { color: #446f49; }
+  .weekly-context { margin-top: 11px !important; font-size: 11px !important; }
+  .phone.large-text .weekly-stat-grid { grid-template-columns: 1fr; }
+  .phone.large-text .weekly-stat-title, .phone.large-text .weekly-stat-value span, .phone.large-text .weekly-stat-change { font-size: 14px; }
+  .suggested-stack { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; min-width: 0; }
+  .suggested-default, .suggested-settings, .suggested-group, .suggested-entry { min-width: 0; max-width: 100%; }
+  .suggested-search { display: flex; align-items: center; gap: 9px; min-height: 48px; padding: 0 14px; border: 1px solid var(--card-border); border-radius: 14px; background: var(--card); color: var(--page-muted); }
+  .suggested-search input { width: 100%; min-width: 0; border: 0; outline: 0; background: transparent; color: var(--page-ink); font: inherit; font-size: 14px; }
+  .suggested-search input::placeholder { color: var(--page-muted); opacity: 1; }
+  .suggested-settings, .suggested-group, .suggested-entry { padding: 14px; border: 1px solid var(--card-border); border-radius: 15px; background: var(--support); }
+  .suggested-context { display: grid; grid-template-columns: repeat(2, 1fr); gap: 3px; padding: 3px; border: 1px solid var(--card-border); border-radius: 10px; background: var(--card); }
+  .suggested-context button { min-height: 34px; border: 0; border-radius: 7px; background: transparent; color: var(--page-muted); font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; }
+  .suggested-context button[aria-pressed="true"] { background: #718a70; color: #fff; }
+  .suggested-equipment { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; margin-top: 12px; padding: 0; border: 0; background: transparent; color: var(--page-ink); font: inherit; font-size: 12px; font-weight: 700; text-align: left; cursor: pointer; }
+  .suggested-equipment span:last-child { color: var(--page-muted); font-weight: 500; }
+  .suggested-equipment-panel { display: grid; gap: 8px; margin-top: 13px; padding-top: 12px; border-top: 1px solid var(--card-border); color: var(--page-muted); font-size: 12px; }
+  .suggested-equipment-panel label { display: flex; gap: 8px; align-items: center; }
+  .suggested-equipment-panel input { accent-color: #718a70; }
+  .suggested-group-title { margin: 0 0 10px; color: var(--page-muted); font-size: 12px; font-weight: 700; }
+  .suggested-group > p { color: var(--page-muted); font-size: 12px; line-height: 1.45; }
+  .suggested-group > p + .suggested-strip { margin-top: 10px; }
+  .suggested-focus { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 11px; }
+  .suggested-focus span { padding: 5px 9px; border-radius: 99px; background: #80a98629; color: var(--page-ink); font-size: 11px; }
+  .suggested-exercises { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; min-width: 0; }
+  .suggested-exercise { min-width: 0; padding: 12px; border: 1px solid var(--card-border); border-radius: 12px; background: var(--card); }
+  .suggested-exercise-head { display: flex; justify-content: space-between; align-items: baseline; gap: 5px; }
+  .suggested-exercise-head strong { min-width: 0; overflow-wrap: anywhere; font-size: 13px; line-height: 1.3; }
+  .suggested-exercise-head span { flex: 0 0 auto; color: var(--page-muted); font-size: 10px; }
+  .suggested-exercise p { margin: 6px 0 0; color: var(--page-muted); font-size: 11px; line-height: 1.35; }
+  .suggested-actions { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 12px; }
+  .suggested-actions button { min-height: 30px; padding: 5px 8px; border: 1px solid var(--card-border); border-radius: 8px; background: var(--support); color: var(--page-ink); font: inherit; font-size: 10px; font-weight: 700; cursor: pointer; }
+  .suggested-actions .suggested-start { border-color: transparent; background: #8dad88; color: #162219; }
+  .suggested-not-interested { display: block; margin: 9px 0 0 auto; padding: 0; border: 0; background: transparent; color: var(--page-muted); font: inherit; font-size: 10px; cursor: pointer; }
+  .suggested-alternatives { margin-top: 9px; padding: 9px; border-radius: 9px; background: #7ca48219; color: var(--page-muted); font-size: 11px; line-height: 1.5; }
+  .suggested-default[hidden], .suggested-search-results[hidden], .suggested-equipment-panel[hidden], .suggested-alternatives[hidden], [data-suggestion-state][hidden], .suggested-search-item[hidden], .suggested-search-empty[hidden] { display: none; }
+  .suggested-strip { display: flex; gap: 9px; min-width: 0; max-width: 100%; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 4px; }
+  .suggested-strip-card { flex: 0 0 min(210px, 100%); min-height: 88px; padding: 11px; border: 1px solid var(--card-border); border-radius: 11px; background: var(--card); scroll-snap-align: start; }
+  .suggested-strip-card strong { display: block; font-size: 13px; }
+  .suggested-strip-card p { margin: 6px 0 0; color: var(--page-muted); font-size: 11px; line-height: 1.35; }
+  .suggested-strip-card .suggested-card-action { display: block; margin-top: 9px; color: var(--accent); font-size: 11px; font-weight: 700; }
+  .suggested-entry { display: flex; align-items: center; gap: 11px; }
+  .suggested-entry .icon-badge { flex-basis: 36px; width: 36px; height: 36px; }
+  .suggested-entry strong { display: block; font-size: 13px; }
+  .suggested-entry p { margin: 3px 0 0; color: var(--page-muted); font-size: 11px; line-height: 1.4; }
+  .suggested-entry > span:last-child { margin-left: auto; color: var(--accent); }
+  .suggested-search-item { padding: 10px 0; border-top: 1px solid var(--card-border); }
+  .suggested-search-item strong { display: block; font-size: 13px; }
+  .suggested-search-item span { display: block; margin-top: 3px; color: var(--page-muted); font-size: 11px; }
+  .phone.large-text .suggested-exercises { grid-template-columns: 1fr; }
+  .phone.large-text .suggested-exercise-head strong, .phone.large-text .suggested-entry strong { font-size: 16px; }
+  .phone.large-text .suggested-exercise p, .phone.large-text .suggested-entry p { font-size: 14px; }
+  .phone.large-text .suggested-actions button, .phone.large-text .suggested-not-interested { min-height: 44px; font-size: 14px; }
+  .phone.large-text .suggested-strip { display: grid; overflow-x: visible; }
+  .phone.large-text .suggested-strip-card { min-height: 0; }
+  .report-card { min-width: 0; }
+  .report-period { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 15px; padding-bottom: 10px; border-bottom: 1px solid var(--card-border); color: var(--page-muted); font-size: 12px; }
+  .report-period strong { color: var(--page-ink); font-size: 13px; }
+  .report-stats { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 3px; margin: 12px 0 15px; }
+  .report-stat { min-width: 0; text-align: center; }
+  .report-stat + .report-stat { border-left: 1px solid var(--card-border); }
+  .report-stat strong { display: block; font-size: 16px; line-height: 1.2; font-variant-numeric: tabular-nums; }
+  .report-stat strong.positive { color: #9bcb99; }
+  .phone.light .report-stat strong.positive { color: #446f49; }
+  .report-stat span { display: block; margin-top: 4px; color: var(--page-muted); font-size: 10px; line-height: 1.25; }
+  .report-muscles { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; margin: 0 0 12px; }
+  .report-muscles > span:first-child { color: var(--page-muted); font-size: 11px; margin-right: 3px; }
+  .report-muscles .muscle-chip { padding: 4px 7px; border-radius: 99px; background: #87ad8727; color: var(--page-ink); font-size: 10px; }
+  .report-summary { margin: 0 !important; padding: 12px; border-radius: 11px; background: var(--card); color: var(--page-ink) !important; font-size: 12px !important; line-height: 1.5 !important; }
+  .report-highlights { display: grid; gap: 7px; margin-top: 13px; }
+  .report-highlights > span:first-child { color: var(--page-muted); font-size: 11px; font-weight: 700; }
+  .report-highlight { display: flex; align-items: flex-start; gap: 7px; color: var(--page-muted); font-size: 12px; line-height: 1.35; }
+  .report-highlight i { width: 17px; flex: 0 0 17px; color: var(--accent); font-style: normal; text-align: center; }
+  .report-card .section-link { margin-top: 12px; border-top: 1px solid var(--card-border); }
+  .phone.large-text .report-stats { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px 0; }
+  .phone.large-text .report-stat:nth-child(3) { border-left: 0; }
+  .phone.large-text .report-stat strong { font-size: 20px; }
+  .phone.large-text .report-stat span, .phone.large-text .report-summary, .phone.large-text .report-highlight { font-size: 15px !important; }
+  .pr-overview { min-width: 0; }
+  .pr-overview .visual-head { margin-bottom: 13px; }
+  .pr-rewards { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; margin-bottom: 11px; color: var(--page-muted); font-size: 11px; }
+  .pr-level { padding: 5px 9px; border-radius: 99px; background: #b5905d; color: #241c17; font-size: 11px; font-weight: 800; }
+  .pr-rewards span:last-child { margin-left: auto; }
+  .pr-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; }
+  .pr-card { display: flex; flex-direction: column; min-width: 0; min-height: 126px; padding: 11px; border: 1px solid var(--card-border); border-left: 3px solid var(--pr-color,#cba365); border-radius: 12px; background: var(--card); }
+  .pr-card[hidden], .pr-notice[hidden] { display: none; }
+  .pr-card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 3px; }
+  .pr-kind { display: block; min-width: 0; color: var(--page-muted); font-size: 10px; font-weight: 700; line-height: 1.3; }
+  .pr-kind i { margin-right: 4px; font-style: normal; }
+  .pr-spark { flex: 0 0 46px; width: 46px; height: 23px; fill: none; stroke: var(--pr-color,#cba365); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .pr-name { display: block; margin-top: 4px; color: var(--page-ink); font-size: 12px; font-weight: 700; line-height: 1.25; }
+  .pr-value { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px; margin-top: 8px; font-variant-numeric: tabular-nums; }
+  .pr-value strong { font-size: 22px; line-height: 1; letter-spacing: -.03em; }
+  .pr-value small { color: var(--page-muted); font-size: 11px; }
+  .pr-new { padding: 2px 4px; border-radius: 5px; background: #8da886; color: #19231b; font-size: 9px; font-weight: 800; }
+  .pr-card-foot { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 3px; margin-top: auto; padding-top: 11px; color: var(--page-muted); font-size: 10px; }
+  .pr-notice { margin: 10px 0 0 !important; padding: 10px; border: 1px solid var(--card-border); border-radius: 10px; color: var(--page-muted); font-size: 11px !important; }
+  .pr-overview .section-link { border-top: 1px solid var(--card-border); margin-top: 13px; }
+  .phone.large-text .pr-grid { grid-template-columns: 1fr; }
+  .phone.large-text .pr-card { min-height: 142px; }
+  .phone.large-text .pr-kind, .phone.large-text .pr-card-foot { font-size: 13px; }
+  .phone.large-text .pr-name { font-size: 16px; }
+  .phone.large-text .pr-value strong { font-size: 26px; }
+  .sleep-section { border-top: 1px solid var(--card-border); margin-top: 17px; padding-top: 15px; }
+  .sleep-bars { display: flex; align-items: end; gap: 6px; height: 64px; margin: 12px 0 8px; }
+  .sleep-bars i { flex: 1; border-radius: 6px 6px 3px 3px; background: #5d9d8b; }
+  .sleep-bars i:last-child { background: #9bd2ae; }
+  .sleep-meta { display: flex; justify-content: space-between; align-items: baseline; font-size: 12px; color: var(--page-muted); }
+  .sleep-meta b { color: var(--page-ink); font-size: 19px; }
+  .sleep-detail { color: var(--accent); font-weight: 700; margin-top: 11px; font-size: 14px; }
+  .wellness-hero-trend { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--card-border); }
+  .wellness-hero-trend .chart-title { color: var(--page-ink); }
+  .wellness-hero-trend .chart-title span:last-child { color: var(--page-muted); }
+  .wellness-hero-trend svg { display: block; width: 100%; height: 54px; margin-top: 5px; }
+  .wellness-hero-trend .trend-line { fill: none; stroke: #dcb66f; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+  .wellness-hero-trend .trend-area { fill: #dcb66f22; }
+  .wellness-hero-trend .trend-grid { stroke: var(--card-border); stroke-width: 1; }
+  .wellness-hero-trend .trend-point { fill: #eac78a; }
+  .phone.light .wellness-hero-trend .trend-line { stroke: #936037; }
+  .phone.light .wellness-hero-trend .trend-point { fill: #936037; }
+  .wellness-metric-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; }
+  .wellness-metric-card { min-width: 0; padding: 13px; border: 1px solid var(--card-border); border-radius: 16px; background: var(--support); }
+  .wellness-metric-card[hidden] { display: none; }
+  .wellness-metric-head { display: flex; align-items: center; gap: 5px; min-width: 0; }
+  .wellness-metric-head .metric-icon { font-size: 14px; }
+  .wellness-metric-head strong { min-width: 0; flex: 1; font-size: 11px; line-height: 1.25; }
+  .wellness-metric-head small { color: var(--page-muted); font-size: 9px; white-space: nowrap; }
+  .wellness-metric-value { display: flex; align-items: baseline; gap: 4px; margin: 10px 0 5px; font-variant-numeric: tabular-nums; }
+  .wellness-metric-value strong { font-size: 22px; line-height: 1; letter-spacing: -.035em; }
+  .wellness-metric-value small { color: var(--page-muted); font-size: 10px; }
+  .wellness-metric-spark { display: block; width: 100%; height: 42px; overflow: visible; }
+  .wellness-metric-spark .metric-grid { stroke: var(--card-border); stroke-width: 1; }
+  .wellness-metric-spark .metric-area { fill: var(--metric-fill, #dcb66f24); }
+  .wellness-metric-spark .metric-line { fill: none; stroke: var(--metric-color, #dcb66f); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+  .wellness-metric-spark .metric-point { fill: var(--metric-color, #dcb66f); stroke: var(--support); stroke-width: 1.5; }
+  .phone.light .wellness-metric-spark { filter: brightness(.68) saturate(1.15); }
+  .wellness-metric-foot { display: flex; justify-content: space-between; gap: 4px; margin-top: 4px; color: var(--page-muted); font-size: 9px; }
+  .wellness-metric-empty { display: grid; align-items: center; height: 42px; color: var(--page-muted); font-size: 10px; }
+  .wellness-metric-empty::before { content: ''; display: block; border-top: 1px dashed var(--card-border); }
+  .metric-bars { display: flex; align-items: end; gap: 5px; height: 42px; padding: 2px 0; border-bottom: 1px solid var(--card-border); }
+  .metric-bars i { flex: 1; min-width: 0; height: var(--bar-height); border-radius: 4px 4px 1px 1px; background: var(--metric-color,#8ab399); opacity: .72; }
+  .metric-bars i:last-child { opacity: 1; }
+  .period-compare { display: grid; gap: 8px; margin: 13px 0 12px; padding: 12px; border: 1px solid var(--card-border); border-radius: 12px; background: var(--card); }
+  .period-compare > strong { font-size: 11px; }
+  .period-compare-row { display: grid; grid-template-columns: 52px minmax(0,1fr) auto; align-items: center; gap: 7px; color: var(--page-muted); font-size: 10px; }
+  .period-compare-row b { color: var(--page-ink); font-size: 10px; font-variant-numeric: tabular-nums; }
+  .period-compare-track { height: 9px; overflow: hidden; border-radius: 99px; background: var(--ring-track); }
+  .period-compare-track i { display: block; height: 100%; width: var(--fill); border-radius: inherit; background: #9bb89f; }
+  .period-compare-row.current .period-compare-track i { background: #dbb375; }
+  .week-dots { display: grid; grid-template-columns: repeat(7,minmax(0,1fr)); gap: 4px; margin: 12px 0 5px; }
+  .week-dots span { display: grid; gap: 4px; text-align: center; color: var(--page-muted); font-size: 9px; }
+  .week-dots i { display: grid; place-items: center; height: 25px; border-radius: 7px; border: 1px solid var(--card-border); background: var(--card); color: var(--page-muted); font-style: normal; }
+  .week-dots .done i { background: #9dbfa449; color: var(--page-ink); border-color: #9dbfa488; }
+  .phone.large-text .period-compare-row, .phone.large-text .week-dots span { font-size: 13px; }
+  .phone.large-text .wellness-metric-grid { grid-template-columns: 1fr; }
+  .phone.large-text .wellness-metric-head strong { font-size: 16px; }
+  .phone.large-text .wellness-metric-head small, .phone.large-text .wellness-metric-foot, .phone.large-text .wellness-metric-empty { font-size: 13px; }
+  .prediction { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+  .prediction b { font-size: 22px; }
+  .prediction span { color: var(--page-muted); font-size: 12px; }
+  .habit { display: flex; justify-content: space-between; align-items: center; gap: 10px; min-height: 56px; border-top: 1px solid var(--card-border); font-size: 14px; }
+  .habit:first-of-type { margin-top: 10px; }
+  .habit span:last-child { color: var(--accent); font-size: 12px; white-space: nowrap; }
+  .pair { display: grid; gap: 14px; }
+  .phone.ipad .pair, .phone.duo-open .pair { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .phone.ipad .wellness-columns, .phone.duo-open .wellness-columns { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; }
+  .phone.ipad .wellness-columns .sleep-section, .phone.duo-open .wellness-columns .sleep-section { border-top: 0; border-left: 1px solid var(--card-border); margin: 0; padding: 0 0 0 19px; }
+  .phone.ipad .wellness-columns .hero-row, .phone.duo-open .wellness-columns .hero-row { align-items: flex-start; }
+  .phone.large-text .hero-row { flex-direction: column; align-items: flex-start; }
+  .phone.large-text .pair, .phone.large-text .wellness-columns { display: grid; grid-template-columns: 1fr; }
+  .phone.large-text .wellness-columns .sleep-section { border-left: 0; border-top: 1px solid var(--card-border); margin-top: 17px; padding: 15px 0 0; }
+  .phone.large-text .hero-copy h3 { font-size: 23px; }
+  .phone.large-text .hero-copy p, .phone.large-text .support p, .phone.large-text .rowline, .phone.large-text .habit { font-size: 16px; }
+  .phone.large-text .hero, .phone.large-text .support { padding: 21px; }
+  .rowline { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid var(--card-border); font-size: 13px; }
+  .rowline:first-child { border-top: 0; padding-top: 0; }
+  .rowline:last-child { padding-bottom: 0; }
+  .rowline b { font-size: 14px; font-variant-numeric: tabular-nums; text-align: right; }
+  .rowline em { color: var(--accent); font-style: normal; font-weight: 700; text-align: right; }
+  .subtle { color: var(--page-muted); }
+  .section-link { color: var(--accent); font-weight: 700; font-size: 13px; padding-top: 13px; }
+  .tag { display: inline-block; border-radius: 7px; background: #9d744633; color: var(--accent); font-size: 11px; padding: 3px 7px; margin-left: 4px; }
+  .phone.light .tag { background: #97644422; }
+  .inner-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; margin-top: 12px; }
+  .inner-tile { border: 1px solid var(--card-border); border-radius: 12px; padding: 11px; min-width: 0; }
+  .inner-tile span { display: block; color: var(--page-muted); font-size: 11px; }
+  .inner-tile strong { display: block; margin-top: 5px; font-size: 18px; font-variant-numeric: tabular-nums; }
+  .inner-tile small { color: var(--page-muted); font-size: 11px; }
+  .detail-row { display: flex; align-items: center; gap: 10px; min-width: 0; padding: 11px 0; border-top: 1px solid var(--card-border); }
+  .detail-row:first-of-type { border-top: 0; }
+  .detail-row .row-copy { min-width: 0; flex: 1; }
+  .detail-row .row-copy strong { display: block; font-size: 13px; }
+  .detail-row .row-copy small { display: block; margin-top: 3px; color: var(--page-muted); font-size: 11px; line-height: 1.35; }
+  .detail-row .row-value { flex: 0 0 auto; color: var(--page-ink); font-size: 12px; font-weight: 700; text-align: right; }
+  .detail-row .row-value small { display: block; color: var(--page-muted); font-size: 10px; font-weight: 500; }
+  .note-chip { display: inline-flex; align-items: center; gap: 4px; border-radius: 99px; padding: 4px 8px; background: #a8ba9929; color: var(--page-ink); font-size: 10px; font-weight: 700; }
+  .detail-metrics { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 7px; margin-top: 12px; }
+  .detail-metrics > div { min-width: 0; padding: 9px; border: 1px solid var(--card-border); border-radius: 10px; background: var(--card); }
+  .detail-metrics span { display: block; color: var(--page-muted); font-size: 10px; }
+  .detail-metrics strong { display: block; margin-top: 4px; font-size: 14px; font-variant-numeric: tabular-nums; }
+  .habit-card { padding: 11px; border: 1px solid var(--card-border); border-radius: 12px; background: var(--card); }
+  .habit-card + .habit-card { margin-top: 8px; }
+  .habit-card .detail-row { padding: 0; border: 0; }
+  .habit-card .progress-track { margin-top: 11px; }
+  .habit-card .habit-foot { display: flex; align-items: center; justify-content: space-between; gap: 7px; margin-top: 7px; color: var(--page-muted); font-size: 11px; }
+  .habit-card .habit-foot b { color: var(--accent); }
+  .filter-pills { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 12px; }
+  .filter-pills span { border: 1px solid var(--card-border); border-radius: 99px; padding: 5px 9px; color: var(--page-muted); font-size: 11px; }
+  .filter-pills .selected { background: #9fae8d40; color: var(--page-ink); font-weight: 700; }
+  .phone.large-text .detail-row .row-copy strong, .phone.large-text .detail-metrics strong { font-size: 16px; }
+  .phone.large-text .detail-row .row-copy small, .phone.large-text .detail-row .row-value, .phone.large-text .habit-card .habit-foot { font-size: 14px; }
+  .progress-track { height: 7px; margin: 8px 0 3px; border-radius: 9px; background: var(--ring-track); overflow: hidden; }
+  .progress-track i { display: block; height: 100%; border-radius: inherit; background: #d6aa6e; }
+  .mini-chart { display: flex; align-items: end; gap: 6px; height: 45px; margin: 12px 0 5px; }
+  .mini-chart i { flex: 1; border-radius: 4px 4px 1px 1px; background: #ad845f; }
+  .mini-chart i:last-child { background: #e7bf7c; }
+  .visual-head { display: flex; align-items: center; gap: 10px; min-width: 0; }
+  .visual-head .head-copy { min-width: 0; flex: 1; }
+  .visual-head .head-copy strong { display: block; }
+  .visual-head .head-copy small { display: block; margin-top: 2px; color: var(--page-muted); font-size: 11px; }
+  .icon-badge { display: inline-grid; flex: 0 0 38px; width: 38px; height: 38px; place-items: center; border-radius: 12px; background: #c9926530; font-size: 20px; line-height: 1; }
+  .icon-badge.green { background: #72b59b2b; }
+  .icon-badge.blue { background: #7898c833; }
+  .icon-badge.gold { background: #dbb36b33; }
+  .icon-badge.rose { background: #cc846e33; }
+  .visual-split { display: flex; align-items: center; gap: 13px; margin-top: 13px; }
+  .visual-split > :last-child { min-width: 0; flex: 1; overflow-wrap: anywhere; }
+  .visual-split + .progress-track { margin-top: 15px; }
+  .mini-ring { --ring-fill: 245deg; --ring-color: #d7b772; flex: 0 0 64px; width: 64px; height: 64px; border-radius: 50%; padding: 6px; background: conic-gradient(var(--ring-color) 0 var(--ring-fill),var(--ring-track) var(--ring-fill) 360deg); }
+  .mini-ring > span { display: grid; place-items: center; width: 100%; height: 100%; border-radius: 50%; background: var(--support); color: var(--page-ink); font-size: 18px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .mini-ring.small { flex-basis: 48px; width: 48px; height: 48px; padding: 5px; }
+  .mini-ring.small > span { font-size: 12px; }
+  .pace-card { min-width: 0; }
+  .pace-card .pace-summary { display: grid; grid-template-columns: 72px minmax(0, 1fr); align-items: center; column-gap: 18px; margin-top: 18px; }
+  .pace-card .pace-summary > :last-child { min-width: 0; overflow-wrap: anywhere; }
+  .pace-card .pace-summary .mini-ring { width: 72px; height: 72px; padding: 7px; }
+  .pace-card .pace-summary .mini-ring > span { font-size: 16px; letter-spacing: -.04em; white-space: nowrap; }
+  .pace-card > .progress-track { margin: 20px 0 9px; }
+  .pace-card > .chart-labels { margin-bottom: 15px; }
+  .phone.large-text .pace-card .pace-summary { grid-template-columns: 1fr; row-gap: 14px; justify-items: start; }
+  .forecast { display: flex; align-items: center; gap: 13px; margin-top: 14px; padding: 12px; border-radius: 13px; background: #c3906330; }
+  .forecast .sky { font-size: 35px; line-height: 1; }
+  .forecast strong { display: block; font-size: 23px; font-variant-numeric: tabular-nums; }
+  .forecast small { display: block; color: var(--page-muted); font-size: 11px; margin-top: 3px; }
+  .spark { display: block; width: 100%; height: 62px; margin: 10px 0 3px; overflow: visible; }
+  .spark .grid { stroke: var(--card-border); stroke-width: 1; }
+  .spark .area { fill: #bfa36a2b; }
+  .spark .trend { fill: none; stroke: #ddba76; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+  .spark .point { fill: #d8c58b; stroke: var(--support); stroke-width: 2; }
+  .phone.light .spark .trend { stroke: #966544; }
+  .phone.light .spark .point { fill: #966544; }
+  .chart-labels { display: flex; justify-content: space-between; gap: 8px; color: var(--page-muted); font-size: 10px; }
+  .sleep-stage { display: flex; gap: 3px; height: 13px; margin: 14px 0 6px; overflow: hidden; border-radius: 7px; }
+  .sleep-stage i { height: 100%; background: #667fa2; }
+  .sleep-stage i:nth-child(2), .sleep-stage i:nth-child(4) { background: #87b6a5; }
+  .sleep-stage i:nth-child(3) { background: #b8a178; }
+  .metric-visual { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 11px 0; border-top: 1px solid var(--card-border); }
+  .metric-visual:first-of-type { border-top: 0; }
+  .metric-visual .value { margin-left: auto; text-align: right; font-size: 14px; font-weight: 700; white-space: nowrap; }
+  .metric-visual .trend-mark { color: #9cc5a2; font-size: 12px; }
+  .mix-bar { display: flex; height: 18px; overflow: hidden; border-radius: 999px; margin: 14px 0 8px; background: var(--ring-track); }
+  .mix-bar .strength { width: 60%; background: #d7a96b; }
+  .mix-bar .cardio { width: 40%; background: #82b6a2; }
+  .mix-legend { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 5px 12px; font-size: 12px; font-weight: 700; }
+  .mix-legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .mix-legend i, .mix-row-label i { display: inline-block; width: 9px; height: 9px; flex: none; border-radius: 50%; background: var(--mix-color, #d7a96b); }
+  .mix-preview { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--card-border); }
+  .mix-preview-title { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 10px; margin-bottom: 8px; font-size: 12px; font-weight: 700; }
+  .mix-preview-title small { color: var(--page-muted); font-weight: 500; }
+  .mix-preview-row, .mix-detail-row { display: grid; grid-template-columns: minmax(55px, 75px) minmax(0, 1fr) auto; align-items: center; gap: 9px; margin-top: 8px; font-size: 11px; }
+  .mix-preview-row b, .mix-detail-row b { font-variant-numeric: tabular-nums; text-align: right; }
+  .mix-track { height: 7px; overflow: hidden; border-radius: 999px; background: var(--ring-track); }
+  .mix-track i { display: block; height: 100%; border-radius: inherit; background: var(--mix-color, #d7a96b); }
+  .mix-open { display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 44px; margin-top: 10px; padding: 7px 0 0; border: 0; background: transparent; color: var(--accent); font-size: 13px; font-weight: 700; text-align: left; }
+  .mix-card { margin-bottom: 12px; padding: 17px; border: 1px solid var(--card-border); border-radius: 18px; background: var(--card); }
+  .mix-detail-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  .mix-detail-grid .mix-card { min-width: 0; margin-bottom: 0; }
+  .phone.ipad .mix-detail-grid, .phone.duo-open .mix-detail-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .phone.large-text .mix-detail-grid { grid-template-columns: 1fr; }
+  .mix-card h3 { margin: 0 0 4px; font-size: 17px; }
+  .mix-card p { margin: 4px 0 0; color: var(--page-muted); font-size: 11px; line-height: 1.45; }
+  .mix-card .mix-bar { height: 24px; }
+  .mix-total { display: flex; align-items: baseline; gap: 7px; margin: 12px 0; }
+  .mix-total strong { font-size: 30px; font-variant-numeric: tabular-nums; }
+  .mix-total span { font-size: 13px; color: var(--page-muted); }
+  .mix-week-chart { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; align-items: end; margin: 15px 0 6px; }
+  .mix-week { display: grid; justify-items: center; gap: 5px; min-width: 0; color: var(--page-muted); font-size: 11px; }
+  .mix-week b { color: var(--page-ink); font-size: 12px; }
+  .mix-week-stack { display: flex; flex-direction: column; justify-content: flex-end; width: min(100%, 46px); height: 76px; overflow: hidden; border-radius: 6px 6px 2px 2px; background: var(--ring-track); }
+  .mix-week-strength { background: #d7a96b; }
+  .mix-week-cardio { background: #82b6a2; }
+  .mix-detail-row { grid-template-columns: minmax(65px, 100px) minmax(0, 1fr) auto; font-size: 12px; padding: 4px 0; }
+  .mix-row-label { display: inline-flex; align-items: center; gap: 6px; min-width: 0; }
+  .mix-detail-row .mix-track { height: 9px; }
+  .mix-section-note { padding-top: 9px; border-top: 1px solid var(--card-border); }
+  .phone.large-text .mix-preview-row, .phone.large-text .mix-detail-row { grid-template-columns: 1fr auto; gap: 5px; font-size: 15px; }
+  .phone.large-text .mix-preview-row .mix-track, .phone.large-text .mix-detail-row .mix-track { grid-column: 1 / -1; grid-row: 2; }
+  .phone.large-text .mix-card p, .phone.large-text .mix-legend { font-size: 15px; }
+  .visual-bars { display: flex; align-items: end; gap: 5px; height: 64px; margin: 14px 0 5px; }
+  .visual-bars i { flex: 1; border-radius: 5px 5px 2px 2px; background: #8ab399; min-width: 0; }
+  .visual-bars i:last-child { background: #e4b878; }
+  .action-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .action-pills span { display: inline-flex; align-items: center; gap: 6px; min-height: 36px; border: 1px solid var(--card-border); border-radius: 999px; padding: 6px 11px; color: var(--page-ink); font-size: 12px; font-weight: 700; }
+  .habit-icon { display: inline-grid; flex: 0 0 30px; width: 30px; height: 30px; place-items: center; border-radius: 9px; background: #a67e5f40; font-size: 16px; }
+  .habit .habit-name { display: inline-flex; align-items: center; gap: 8px; }
+  .heatmap { display: grid; grid-template-columns: repeat(7,1fr); gap: 5px; margin-top: 12px; }
+  .heatmap i { aspect-ratio: 1; border-radius: 5px; background: var(--ring-track); }
+  .heatmap i[data-level="1"] { background: #817967; }
+  .heatmap i[data-level="2"] { background: #b58d65; }
+  .heatmap i[data-level="3"] { background: #8fae8f; }
+  .phone.light .heatmap i[data-level="1"] { background: #c8b8a2; }
+  .phone.light .heatmap i[data-level="2"] { background: #b98157; }
+  .phone.light .heatmap i[data-level="3"] { background: #668f70; }
+  .heatmap-legend { display: flex; align-items: center; justify-content: flex-end; gap: 5px; margin-top: 8px; color: var(--page-muted); font-size: 10px; }
+  .heatmap-legend i { width: 11px; height: 11px; border-radius: 3px; background: var(--ring-track); }
+  .heatmap-legend i[data-level="1"] { background: #817967; }
+  .heatmap-legend i[data-level="2"] { background: #b58d65; }
+  .heatmap-legend i[data-level="3"] { background: #8fae8f; }
+  .phone.large-text .forecast, .phone.large-text .visual-split { align-items: flex-start; }
+  .empty-screen { display: none; height: calc(100% - 183px); overflow-y: auto; overscroll-behavior: contain; padding: 25px 16px 100px; }
+  .empty-screen.active { display: block; }
+  .empty-screen .support { margin-bottom: 13px; }
+  .empty-screen h3 { margin: 0 0 9px; font-size: 20px; }
+  .empty-screen .action { margin-top: 14px; }
+  .partial-banner { display: none; margin-bottom: 12px; padding: 13px 15px; border: 1px solid #b89a6f; border-radius: 13px; background: #6e523a88; color: var(--page-ink); font-size: 12px; line-height: 1.4; }
+  .partial-banner.active { display: block; }
+  .screen-note { padding: 11px 13px; border: 1px dashed var(--card-border); border-radius: 12px; color: var(--page-muted); font-size: 12px; line-height: 1.4; }
+  .phone.light .hero.today { color: #fff5e8; }
+  .phone.light .hero.today .hero-copy p { color: #e1d1bd; }
+  .phone.large-text .inner-grid { grid-template-columns: 1fr; }
+  .phone.large-text .rowline { align-items: flex-start; flex-direction: column; gap: 3px; }
+  .phone.large-text .rowline b, .phone.large-text .rowline em { text-align: left; }
+  .conditional[hidden], .screen[hidden], .empty-screen[hidden] { display: none !important; }
+  .nav { position: absolute; bottom: 12px; left: 16px; right: 16px; z-index: 18; display: flex; justify-content: space-around; gap: 2px; padding: 8px 4px 7px; border: 1px solid #e8d6be35; border-radius: 24px; background: #514740f0; color: #fff8ee; box-shadow: 0 8px 24px #0005; }
+  .nav > span { display: flex; flex: 1; min-width: 0; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 10px; line-height: 1.15; }
+  .nav .nav-text { display: block; }
+  .nav .current { color: #ffcb99; font-weight: 700; }
+  .phone.duo-open .nav { top: 50%; right: 13px; bottom: auto; left: auto; width: 62px; transform: translateY(-50%); flex-direction: column; align-items: center; gap: 5px; padding: 9px 5px; border-radius: 28px; }
+  .phone.duo-open .nav > span { display: grid; flex: none; place-items: center; width: 48px; height: 48px; border-radius: 50%; }
+  .phone.duo-open .nav .current { background: #211a18; }
+  .phone.duo-open .nav .nav-icon { width: 24px; height: 24px; }
+  .phone.duo-open .nav .nav-text { display: none; }
+  .detail-screen { position: absolute; inset: 0; z-index: 12; display: none; flex-direction: column; background: var(--page-gradient); color: var(--page-ink); }
+  .detail-screen.active { display: flex; }
+  .detail-status { height: 48px; flex: none; display: flex; align-items: center; justify-content: space-between; padding: 0 25px; font-size: 13px; font-weight: 700; }
+  .detail-header { display: flex; align-items: center; gap: 8px; min-height: 58px; padding: 4px 16px 8px; }
+  .detail-header h2 { flex: 1; margin: 0; font-size: 25px; letter-spacing: -.04em; }
+  .detail-header .tool-button { width: 44px; height: 44px; border-color: var(--card-border); background: var(--support); }
+  .detail-header .back-button { font-size: 31px; line-height: 1; }
+  .detail-body { flex: 1; min-height: 0; overflow-y: auto; padding: 10px 16px 110px; scrollbar-width: thin; }
+  .detail-body > * { max-width: 780px; margin-left: auto; margin-right: auto; }
+  .detail-body h3 { margin: 20px 2px 10px; font-size: 15px; }
+  .detail-body .mix-card h3 { margin: 0 0 4px; font-size: 17px; }
+  .inbox-summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px; border: 1px solid var(--card-border); border-radius: 20px; background: var(--card); }
+  .inbox-summary strong { display: block; font-size: 17px; }
+  .inbox-summary p { margin: 5px 0 0; color: var(--page-muted); font-size: 11px; }
+  .inbox-summary button { flex: none; min-height: 44px; border: 1px solid var(--card-border); border-radius: 11px; padding: 8px 10px; background: var(--support); color: var(--page-ink); font-size: 11px; font-weight: 700; }
+  .inbox-summary button:disabled { opacity: .45; cursor: default; }
+  .inbox-filters { display: flex; gap: 6px; margin-top: 14px; }
+  .inbox-filters button { min-height: 44px; border: 1px solid var(--card-border); border-radius: 999px; padding: 7px 12px; background: var(--support); color: var(--page-muted); font-size: 12px; }
+  .inbox-filters button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #211b18; font-weight: 700; }
+  .inbox-section[hidden] { display: none; }
+  .notification-item { display: flex; align-items: flex-start; gap: 11px; width: 100%; margin-bottom: 9px; padding: 14px; border: 1px solid var(--card-border); border-radius: 17px; background: var(--card); color: var(--page-ink); text-align: left; }
+  button.notification-item { cursor: pointer; font: inherit; }
+  .notification-item[data-unread="true"] { border-color: #ad825d; }
+  .notification-item .icon-badge { flex-basis: 36px; width: 36px; height: 36px; font-size: 18px; }
+  .notification-copy { flex: 1; min-width: 0; }
+  .notification-meta { display: flex; align-items: center; gap: 6px; color: var(--page-muted); font-size: 10px; }
+  .notification-meta .when { margin-left: auto; }
+  .unread-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+  .notification-item[data-unread="false"] .unread-dot { display: none; }
+  .notification-copy strong { display: block; margin: 5px 0 3px; font-size: 14px; line-height: 1.35; }
+  .notification-copy p { margin: 0; color: var(--page-muted); font-size: 12px; line-height: 1.4; }
+  .notification-destination { display: block; margin-top: 8px; color: var(--accent); font-size: 11px; font-weight: 700; }
+  .detail-note { color: var(--page-muted); font-size: 11px; line-height: 1.5; }
+  .settings-list { padding: 0 15px; border: 1px solid var(--card-border); border-radius: 17px; background: var(--card); }
+  .settings-list .rowline { min-height: 52px; align-items: center; }
+  .entry-option { display: flex; align-items: center; gap: 11px; width: 100%; min-height: 58px; margin-bottom: 9px; padding: 11px 13px; border: 1px solid var(--card-border); border-radius: 14px; background: var(--card); color: var(--page-ink); text-align: left; }
+  .entry-option .entry-copy { min-width: 0; flex: 1; }
+  .entry-option strong { display: block; font-size: 14px; }
+  .entry-option small { display: block; margin-top: 3px; color: var(--page-muted); font-size: 11px; line-height: 1.35; }
+  .entry-option .entry-chevron { color: var(--accent); font-size: 18px; }
+  .entry-option[hidden] { display: none; }
+  .entry-search { width: 100%; min-height: 44px; margin-bottom: 12px; padding: 10px 13px; border: 1px solid var(--card-border); border-radius: 12px; background: var(--support); color: var(--page-ink); font: inherit; }
+  .entry-preview { padding: 16px; border: 1px solid var(--card-border); border-radius: 17px; background: var(--card); }
+  .entry-preview p { color: var(--page-muted); font-size: 13px; line-height: 1.45; }
+  .entry-form[hidden] { display: none; }
+  .entry-form { margin-top: 12px; }
+  .entry-form-card { padding: 15px; border: 1px solid var(--card-border); border-radius: 16px; background: var(--support); }
+  .entry-form-card + .entry-form-card { margin-top: 10px; }
+  .entry-form-card > strong { display: block; margin-bottom: 12px; font-size: 14px; }
+  .entry-field-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 9px; }
+  .entry-field { display: grid; gap: 5px; min-width: 0; color: var(--page-muted); font-size: 11px; }
+  .entry-field input, .entry-field select { width: 100%; min-height: 42px; padding: 8px 10px; border: 1px solid var(--card-border); border-radius: 10px; background: var(--card); color: var(--page-ink); font: inherit; font-size: 14px; }
+  .entry-field + .entry-field { margin-top: 9px; }
+  .entry-field-grid .entry-field + .entry-field { margin-top: 0; }
+  .entry-primary { display: block; width: 100%; min-height: 46px; margin-top: 13px; border: 0; border-radius: 11px; background: #c79e70; color: #201914; font: inherit; font-size: 14px; font-weight: 800; }
+  .entry-secondary { width: 100%; min-height: 40px; margin-top: 10px; border: 1px solid var(--card-border); border-radius: 10px; background: var(--card); color: var(--page-ink); font: inherit; font-size: 12px; }
+  .record-set { display: grid; grid-template-columns: 34px 1fr 1fr 45px; gap: 7px; align-items: center; padding: 10px 0; border-top: 1px solid var(--card-border); font-size: 12px; }
+  .record-set b { color: var(--page-muted); font-size: 11px; }
+  .record-set span { padding: 7px; border: 1px solid var(--card-border); border-radius: 8px; background: var(--card); text-align: center; }
+  .camera-preview { display: grid; place-items: center; height: 220px; border: 1px solid var(--card-border); border-radius: 16px; background: radial-gradient(circle at 50% 42%, #8fa58d55, transparent 60%),var(--card); }
+  .camera-preview span { font-size: 84px; opacity: .75; }
+  .camera-preview small { color: var(--page-muted); font-size: 11px; }
+  .phone.large-text .entry-field-grid { grid-template-columns: 1fr; }
+  .phone.large-text .entry-field-grid .entry-field + .entry-field { margin-top: 9px; }
+  .phone.large-text .entry-option strong { font-size: 17px; }
+  .phone.large-text .entry-option small { font-size: 15px; }
+  .news-feature { margin-bottom: 10px; padding: 16px; border: 1px solid var(--card-border); border-radius: 17px; background: var(--card); }
+  .news-feature strong { font-size: 15px; }
+  .news-feature p { margin: 6px 0 0; color: var(--page-muted); font-size: 12px; line-height: 1.45; }
+  .phone.duo-open .detail-screen { right: 76px; }
+  .phone.duo-open .detail-body { padding-right: 30px; padding-left: 30px; }
+  .phone.large-text .inbox-summary { flex-direction: column; align-items: stretch; }
+  .phone.large-text .inbox-filters { flex-wrap: wrap; }
+  .phone.large-text .notification-copy strong, .phone.large-text .news-feature strong { font-size: 17px; }
+  .phone.large-text .notification-copy p, .phone.large-text .news-feature p { font-size: 15px; }
+  .phone.large-text .detail-body h3 { font-size: 18px; }
+  .notes { padding-top: 18px; }
+  .notes h2 { margin: 0 0 11px; font-size: 21px; }
+  .notes p { color: #d1c2b3; font-size: 14px; line-height: 1.55; }
+  .notes ul { padding-left: 20px; line-height: 1.7; color: #e9dccd; font-size: 14px; }
+  .notes li { margin-bottom: 7px; }
+  .note-id { color: #e8bd82; font-weight: 700; }
+  .compare-list { display: grid; gap: 9px; }
+  .compare-row { border: 1px solid #5c4d42; border-radius: 13px; padding: 11px; background: #29231f; }
+  .compare-row-head { display: flex; align-items: center; justify-content: space-between; gap: 7px; margin-bottom: 7px; }
+  .compare-row-head strong { font-size: 13px; }
+  .compare-kind { border: 1px solid #bd966f; border-radius: 999px; padding: 3px 7px; color: #e8bd82; font-size: 10px; white-space: nowrap; }
+  .compare-row p { margin: 4px 0; color: #d1c2b3; font-size: 11px; line-height: 1.45; }
+  .compare-row p b { color: #f4e7d6; }
+  .compare-note { margin-top: 12px; padding-top: 10px; border-top: 1px solid #5b4b3f; font-size: 11px !important; }
+  .sample { margin-top: 24px; border-top: 1px solid #5b4b3f; padding-top: 12px; color: #b7a99c; font-size: 12px; }
+  @media (max-width: 1050px) { .stage { grid-template-columns: minmax(0, 292px) minmax(0, 1fr); } .stage .notes { grid-column: 1 / -1; padding-top: 0; } }
+  @media (max-width: 760px) { .stage, .stage.wide { grid-template-columns: 1fr; justify-items: center; gap: 12px; } .actual-card { position: static; width: min(100%, 402px); } .actual-card img { max-height: 340px; } .notes, .stage.wide .notes { grid-column: auto; max-width: 430px; } }
+  @media (max-width: 390px) { .page { padding-left: 8px; padding-right: 8px; } .phone { border-width: 5px; border-radius: 37px; } .hero-row { gap: 10px; } .ring { flex-basis: 108px; width: 108px; height: 108px; } .hero-copy h3 { font-size: 18px; } }
+</style>
+</head>
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" aria-hidden="true" style="position:absolute;overflow:hidden">
+  <symbol id="tab-today-icon" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="18" rx="2.5"/><path d="M9 4.2V2.8h6v1.4M7.5 16.8h8.8M7.5 19h6.4"/><path d="M12 14.2 8.8 11.1a2 2 0 0 1 2.9-2.7l.3.3.3-.3a2 2 0 0 1 2.9 2.7Z"/></symbol>
+  <symbol id="tab-activity-icon" viewBox="0 0 24 24"><path d="M12 22c-4.3 0-7.5-3.1-7.5-7.2 0-2.6 1.3-4.8 3.3-6.8.1 2.2 1 3.3 1.7 3.7C10.3 8.5 13.7 6.5 13.2 2c4.4 3.3 6.3 7.5 6.3 12.8 0 4.1-3.2 7.2-7.5 7.2Z"/><path d="M12 22c-2.2 0-3.6-1.6-3.6-3.6 0-1.9 1.3-3.4 3.2-5 .1 1.5.7 2.1 1.4 2.5.6-1.1 1.1-2.2 1.1-3.3 2.1 1.7 3.5 3.8 3.5 5.8 0 2-1.4 3.6-3.6 3.6Z"/></symbol>
+  <symbol id="tab-wellness-icon" viewBox="0 0 24 24"><path d="M21 3C11 3 5 7 5 15c0 3.3 2.2 5.5 5.3 5.5C18 20.5 21 12.1 21 3Z"/><path d="M4 22c2.5-5.3 6.8-9 13.5-12.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="tab-life-icon" viewBox="0 0 24 24"><path d="m3 6 1.7 1.7L7.5 4.5M10 6h11M3 13l1.7 1.7 2.8-3.2M10 13h11M3 20l1.7 1.7 2.8-3.2M10 20h11"/></symbol>
+  <symbol id="bell-icon" viewBox="0 0 24 24"><path d="M18.5 8.8a6.5 6.5 0 0 0-13 0c0 7-2.2 7.4-2.2 8.7h17.4c0-1.3-2.2-1.7-2.2-8.7ZM9.4 20a2.7 2.7 0 0 0 5.2 0"/></symbol>
+  <symbol id="gear-icon" viewBox="0 0 24 24"><path d="m9.7 2.5.4 2.1a7.8 7.8 0 0 1 3.8 0l.4-2.1 2.4 1-.9 2a8 8 0 0 1 2.7 2.7l2-.9 1 2.4-2.1.4a7.8 7.8 0 0 1 0 3.8l2.1.4-1 2.4-2-.9a8 8 0 0 1-2.7 2.7l.9 2-2.4 1-.4-2.1a7.8 7.8 0 0 1-3.8 0l-.4 2.1-2.4-1 .9-2a8 8 0 0 1-2.7-2.7l-2 .9-1-2.4 2.1-.4a7.8 7.8 0 0 1 0-3.8l-2.1-.4 1-2.4 2 .9A8 8 0 0 1 8.6 5.5l-.9-2Z"/><circle cx="12" cy="12" r="3.2"/></symbol>
+  <symbol id="plus-icon" viewBox="0 0 24 24"><path d="M12 4v16M4 12h16"/></symbol>
+</svg>
+<main class="page">
+  <div class="eyebrow">DUNE / DESERT HORIZON / 2026-10-24</div>
+  <h1>4탭 전체 배치 · 기존 대비</h1>
+  <p class="intro">왼쪽은 저장된 앱 실제 캡처, 가운데는 제안 시안, 오른쪽은 탭별 변경점입니다. Today 상단의 종은 알림함을, Activity·Wellness·Life 상단의 더하기는 기록 추가 경로를 엽니다. 기기 화면 안을 스크롤해 마지막 섹션까지 확인합니다. 시안의 수치와 그래프는 예시입니다.</p>
+  <a class="companion-link" href="dune-widget-live-activity.html">추가 시안 · 라이브 액티비티와 위젯 보기 ↗</a>
+  <div class="controls">
+    <div class="tabs" aria-label="화면 선택">
+      <button type="button" data-tab="today" aria-pressed="true"><svg class="tab-icon" aria-hidden="true"><use href="#tab-today-icon"/></svg>Today</button>
+      <button type="button" data-tab="activity" aria-pressed="false"><svg class="tab-icon" aria-hidden="true"><use href="#tab-activity-icon"/></svg>Activity</button>
+      <button type="button" data-tab="wellness" aria-pressed="false"><svg class="tab-icon leaf" aria-hidden="true"><use href="#tab-wellness-icon"/></svg>Wellness</button>
+      <button type="button" data-tab="life" aria-pressed="false"><svg class="tab-icon" aria-hidden="true"><use href="#tab-life-icon"/></svg>Life</button>
+    </div>
+    <div class="modes" aria-label="표시 모드">
+      <button type="button" data-mode="dark" aria-pressed="true">어두움</button>
+      <button type="button" data-mode="light" aria-pressed="false">밝음</button>
+    </div>
+  </div>
+  <div class="view-controls" aria-label="시안 상태 선택">
+    <fieldset><legend>기기·방향</legend><button type="button" data-device="iphone" aria-pressed="true">iPhone</button><button type="button" data-device="duo-closed" aria-pressed="false">Duo 접힘 · 세로</button><button type="button" data-device="duo-open" aria-pressed="false">Duo 펼침 · 가로</button><button type="button" data-device="ipad" aria-pressed="false">iPad</button></fieldset>
+    <fieldset><legend>글씨</legend><button type="button" data-type="normal" aria-pressed="true">기본</button><button type="button" data-type="large" aria-pressed="false">큰 글씨</button></fieldset>
+    <fieldset><legend>기록</legend><button type="button" data-record="sample" aria-pressed="true">예시 기록</button><button type="button" data-record="partial" aria-pressed="false">일부 누락</button><button type="button" data-record="empty" aria-pressed="false">기록 없음</button></fieldset>
+    <fieldset id="recommendation-preview-controls" hidden><legend>Activity 추천 상태</legend><button type="button" data-suggestion-preview="workout" aria-pressed="true">운동 추천</button><button type="button" data-suggestion-preview="rest" aria-pressed="false">회복일</button><button type="button" data-suggestion-preview="none" aria-pressed="false">추천 없음</button></fieldset>
+    <fieldset><legend>Today 시간</legend><button type="button" data-time="morning" aria-pressed="false">아침</button><button type="button" data-time="day" aria-pressed="true">낮</button><button type="button" data-time="evening" aria-pressed="false">저녁</button></fieldset>
+  </div>
+  <div class="stage">
+    <aside class="actual-card" aria-label="기존 앱 실제 캡처"><span class="compare-label">기존 앱 · 실제 캡처</span><img id="actual-image" src="../../full-redesign-map/review/first-fold-ux-2026-10-22/iphone/T03-dark.png" alt="2026년 10월 22일 DESERT HORIZON Today 실제 앱 iPhone 어두운 화면"><p id="actual-meta">2026-10-22 · iPhone 18 Pro 402pt · 어두움 · 첫 화면 캡처</p><a id="actual-source" href="../../full-redesign-map/review/first-fold-ux-2026-10-22/iphone/T03-dark.png" target="_blank" rel="noopener">원본 PNG 열기 ↗</a></aside>
+    <div class="target-wrap"><div class="target-label" id="target-label">변경 제안 · 전체 스크롤 시안</div>
+    <div class="phone dark" id="phone">
+      <div class="top"><svg class="dunes" viewBox="0 0 400 220" preserveAspectRatio="none" aria-hidden="true"><path class="ridge far"/><path class="ridge mid"/><path class="ridge near"/></svg><div class="status" aria-hidden="true"><span>9:41</span><span>●●● ▰</span></div><div class="app-head"><h2 id="app-title">Today</h2><div class="header-actions"><div id="today-actions"><button class="tool-button" type="button" data-open-detail="notifications" aria-label="알림 열기"><svg aria-hidden="true"><use href="#bell-icon"/></svg><span class="tool-badge" id="header-unread-count">3</span></button><button class="tool-button" type="button" data-open-detail="settings" aria-label="설정 열기"><svg aria-hidden="true"><use href="#gear-icon"/></svg></button></div><button class="tool-button" id="other-action" type="button" data-open-detail="exercise-picker" aria-label="운동 추가" title="운동 추가" hidden><svg aria-hidden="true"><use href="#plus-icon"/></svg></button></div></div></div>
+      <section class="screen active" data-screen="today" aria-label="Today T03 시안">
+        <div class="hero today">
+          <div class="hero-row"><div class="ring"><div class="ring-inner"><strong>84</strong><small>컨디션</small></div></div><div class="hero-copy"><span class="label">지금의 상태</span><h3>평소보다 높은<br>컨디션</h3><p>최근 기록에서 회복 흐름이 이어지고 있어요.</p></div></div>
+          <div class="divider"></div><div class="chart-title"><span>컨디션 추세</span><span>최근 7일 · 점수</span></div>
+          <svg class="chart" viewBox="0 0 320 104" role="img" aria-label="예시 7일 컨디션 점수가 66점에서 84점으로 상승"><line class="axis" x1="4" y1="76" x2="315" y2="76"/><line class="axis" x1="4" y1="35" x2="315" y2="35"/><polyline class="line" points="8,69 58,65 108,59 158,54 208,47 258,42 310,35"/><circle class="dot" cx="310" cy="35" r="5"/></svg>
+          <div class="chart-foot"><span>7일 전 66</span><span>현재 84</span></div><div class="evidence"><span>HRV · 14일 평균보다 +7 ms</span><span>안정 심박 · -4 bpm</span></div><div class="detail-link"><span>컨디션 상세</span><span>›</span></div>
+        </div>
+        <div data-time-panel="morning" hidden><h3 class="section-title">어제의 기록</h3><div class="support"><div class="visual-head"><span class="icon-badge blue" aria-hidden="true">↶</span><div class="head-copy"><strong>어제 요약</strong><small>10월 23일 기록</small></div></div><div class="inner-grid"><div class="inner-tile"><span>🏋️ 운동</span><strong>전신 근력</strong><small>48분 · 5개 운동</small></div><div class="inner-tile"><span>🌙 수면</span><strong>7시간 54분</strong><small>최근 수면</small></div></div><div class="metric-visual"><span>컨디션 변화</span><span class="trend-mark">어제 76 → 오늘 84 · +8</span></div><div class="section-link">어제 자세히 보기 ›</div></div></div>
+        <div data-time-panel="morning day">
+          <h3 class="section-title">오늘의 진행</h3><div class="support"><div class="visual-head"><span class="icon-badge green" aria-hidden="true">🏃</span><div class="head-copy"><strong>오늘 목표</strong><small>걸음과 지난 수면</small></div></div><div class="inner-grid"><div class="inner-tile"><div class="visual-split"><div class="mini-ring small" style="--ring-fill:238deg;--ring-color:#8fc39f" role="img" aria-label="걸음 목표 8,000걸음 중 5,280걸음, 66%"><span>👟</span></div><div><span>걸음</span><strong>5,280</strong><small>목표 8,000</small></div></div><div class="progress-track"><i style="width:66%;background:#8fc39f"></i></div></div><div class="inner-tile"><div class="visual-split"><div class="mini-ring small" style="--ring-fill:356deg;--ring-color:#9ebbd2" role="img" aria-label="수면 목표 8시간 중 7시간 54분, 99%"><span>🌙</span></div><div><span>수면</span><strong>7시간 54분</strong><small>목표 8시간</small></div></div><div class="progress-track"><i style="width:99%;background:#9ebbd2"></i></div></div></div></div>
+          <h3 class="section-title">오늘의 브리핑</h3><div class="support"><div class="visual-head"><span class="icon-badge gold" aria-hidden="true">🌤️</span><div class="head-copy"><strong>날씨와 활동</strong><small>서울 · 오늘 09:41</small></div></div><div class="forecast"><span class="sky" aria-hidden="true">☀️</span><div><strong>21°C</strong><small>맑음 · 미세먼지 좋음 · 걷기 좋음</small></div></div><div class="metric-visual"><span>💡 오늘의 제안</span><span class="value">가벼운 야외 활동</span></div><p>컨디션 84점이에요. 낮에는 산책을 하고 운동 강도는 몸 상태에 맞춰 정해 보세요.</p><div class="section-link">날씨와 브리핑 보기 ›</div></div>
+        </div>
+        <h3 class="section-title">회복과 수면</h3><div class="support"><div class="visual-head"><span class="icon-badge blue" aria-hidden="true">🌙</span><div class="head-copy"><strong>지난 수면</strong><small>10월 23일 23:18–10월 24일 07:12</small></div><b>7시간 54분</b></div><div class="sleep-stage" role="img" aria-label="예시 지난 수면 7시간 54분의 단계 타임라인"><i style="width:22%"></i><i style="width:18%"></i><i style="width:12%"></i><i style="width:26%"></i><i style="width:22%"></i></div><div class="chart-labels"><span>23:18 잠듦</span><span>07:12 기상</span></div><div class="metric-visual"><span>이번 주 수면 부족</span><span class="value">1시간 12분</span></div><div class="metric-visual"><span>회복 흐름</span><span class="trend-mark">↗ 평소보다 높음</span></div><div class="section-link">수면 상세 ›</div></div>
+        <h3 class="section-title">스트레스</h3><div class="support"><div class="visual-head"><span class="icon-badge rose" aria-hidden="true">📈</span><div class="head-copy"><strong>누적 스트레스</strong><small>최근 30일 기록</small></div></div><div class="visual-split"><div class="mini-ring" style="--ring-fill:122deg;--ring-color:#cd9b75" role="img" aria-label="누적 스트레스 점수 34"><span>34</span></div><div><strong>최근 흐름 안정</strong><p>최근 30일 기록에서 큰 변화가 없어요.</p></div></div><svg class="spark" viewBox="0 0 300 62" role="img" aria-label="예시 30일 스트레스 점수 흐름"><line class="grid" x1="0" y1="49" x2="300" y2="49"/><path class="area" d="M2 37 C30 39 45 24 70 31 S112 42 140 35 S188 26 217 29 S264 28 298 24 L298 58 L2 58 Z"/><path class="trend" d="M2 37 C30 39 45 24 70 31 S112 42 140 35 S188 26 217 29 S264 28 298 24"/><circle class="point" cx="298" cy="24" r="4"/></svg><div class="chart-labels"><span>30일 전</span><span>현재 34</span></div></div>
+        <div data-time-panel="morning day"><h3 class="section-title">운동 제안</h3><div class="support"><div class="visual-head"><span class="icon-badge green" aria-hidden="true">💪</span><div class="head-copy"><strong>가슴 · 등 · 하체</strong><small>오늘의 추천 부위</small></div></div><p>최근 운동량과 회복 상태를 살펴 가벼운 전신 운동으로 구성했어요.</p><div class="action-pills"><span>❤️ 컨디션 84 · 보통 이상 강도</span><span>🌙 수면 7시간 54분</span></div><div class="section-link">Activity에서 추천 운동 보기 ›</div></div></div>
+        <h3 class="section-title">스마트 인사이트</h3><div class="support"><div class="visual-head"><span class="icon-badge gold" aria-hidden="true">💡</span><div class="head-copy"><strong>안정 심박의 변화</strong><small>최근 14일 기록 기준</small></div></div><div class="visual-split"><div class="mini-ring small" style="--ring-fill:270deg;--ring-color:#9dc6a3" role="img" aria-label="14일 평균보다 4 bpm 낮음"><span>↘</span></div><div><strong>평균보다 -4 bpm</strong><p>최근 측정의 변화를 함께 확인해요.</p></div></div><svg class="spark" viewBox="0 0 300 62" role="img" aria-label="예시 최근 14일 안정 심박이 62 bpm에서 58 bpm으로 변화"><line class="grid" x1="0" y1="49" x2="300" y2="49"/><path class="area" d="M3 15 L51 19 L100 17 L149 27 L198 25 L248 34 L297 39 L297 58 L3 58 Z"/><polyline class="trend" points="3,15 51,19 100,17 149,27 198,25 248,34 297,39"/><circle class="point" cx="297" cy="39" r="4"/></svg><div class="chart-labels"><span>14일 전 · 62 bpm</span><span>최근 · 58 bpm</span></div><div class="section-link">인사이트 모두 보기 ›</div></div>
+        <div data-time-panel="evening" hidden><h3 class="section-title">하루 마무리</h3><div class="support"><div class="visual-head"><span class="icon-badge gold" aria-hidden="true">🌆</span><div class="head-copy"><strong>오늘의 요약</strong><small>10월 24일 · 저녁</small></div></div><p>오늘은 8,420걸음을 걷고 32분 운동했어요. 걸음 목표를 채웠고, 수면 기록도 안정적이에요.</p><div class="inner-grid"><div class="inner-tile"><span>👟 걸음</span><strong>8,420</strong><small>목표 8,000 · 달성</small><div class="progress-track"><i style="width:100%;background:#8fc39f"></i></div></div><div class="inner-tile"><span>🏃 운동</span><strong>32분</strong><small>오늘 기록</small><div class="progress-track"><i style="width:80%;background:#d9b36f"></i></div></div></div><div class="section-link">오늘 기록 보기 ›</div></div></div>
+        <h3 class="section-title">빠른 기록</h3><div class="action-pills"><span>⚖️ 체중 기록 ＋</span><span>🛏️ 수면 기록 ＋</span></div>
+        <h3 class="section-title">고정 지표</h3><div class="support"><div class="visual-head"><span class="icon-badge gold" aria-hidden="true">📌</span><div class="head-copy"><strong>내가 고정한 지표</strong><small>자주 보는 기록</small></div><span class="subtle">편집 ›</span></div><div class="inner-grid"><div class="inner-tile"><span>💓 심박수</span><strong>72 bpm</strong><small>오늘 09:36</small><div class="progress-track"><i style="width:60%;background:#d19a84"></i></div></div><div class="inner-tile"><span>👟 걸음</span><strong>5,280</strong><small>목표 8,000</small><div class="progress-track"><i style="width:66%;background:#90bfa1"></i></div></div></div></div>
+        <p class="micro">마지막 업데이트 · 오늘 09:41</p><div class="partial-banner" data-partial-for="today">체중 기록을 불러올 수 없어 해당 지표를 숨겼습니다. 다른 기록은 유지합니다.</div>
+        <h3 class="section-title">컨디션 지표</h3><div class="wellness-metric-grid">
+          <div class="wellness-metric-card" style="--metric-color:#d19a84;--metric-fill:#d19a8429"><div class="wellness-metric-head"><span class="metric-icon" aria-hidden="true">❤️</span><strong>HRV</strong><small>오늘</small></div><div class="wellness-metric-value"><strong>52</strong><small>ms</small></div><svg class="wellness-metric-spark" viewBox="0 0 150 42" role="img" aria-label="예시 최근 7일 HRV가 44 ms에서 52 ms로 변화"><line class="metric-grid" x1="2" y1="36" x2="148" y2="36"/><path class="metric-area" d="M3 32 L27 29 L51 33 L75 21 L99 23 L123 14 L147 9 L147 39 L3 39 Z"/><polyline class="metric-line" points="3,32 27,29 51,33 75,21 99,23 123,14 147,9"/><circle class="metric-point" cx="147" cy="9" r="3"/></svg><div class="wellness-metric-foot"><span>7일 전 · 44</span><span>최근 · 52 ›</span></div></div>
+          <div class="wellness-metric-card" style="--metric-color:#c98c78;--metric-fill:#c98c7829"><div class="wellness-metric-head"><span class="metric-icon" aria-hidden="true">🫀</span><strong>안정 심박</strong><small>오늘</small></div><div class="wellness-metric-value"><strong>58</strong><small>bpm</small></div><svg class="wellness-metric-spark" viewBox="0 0 150 42" role="img" aria-label="예시 최근 7일 안정 심박이 62 bpm에서 58 bpm으로 변화"><line class="metric-grid" x1="2" y1="36" x2="148" y2="36"/><path class="metric-area" d="M3 10 L27 13 L51 19 L75 16 L99 27 L123 25 L147 32 L147 39 L3 39 Z"/><polyline class="metric-line" points="3,10 27,13 51,19 75,16 99,27 123,25 147,32"/><circle class="metric-point" cx="147" cy="32" r="3"/></svg><div class="wellness-metric-foot"><span>7일 전 · 62</span><span>최근 · 58 ›</span></div></div>
+        </div>
+        <h3 class="section-title">활동 지표</h3><div class="wellness-metric-grid">
+          <div class="wellness-metric-card" style="--metric-color:#90bfa1"><div class="wellness-metric-head"><span class="metric-icon" aria-hidden="true">👟</span><strong>걸음</strong><small>오늘</small></div><div class="wellness-metric-value"><strong>5,280</strong><small>걸음</small></div><div class="metric-bars" role="img" aria-label="예시 최근 7일 일별 걸음 수, 오늘 5,280걸음"><i style="--bar-height:59%"></i><i style="--bar-height:76%"></i><i style="--bar-height:68%"></i><i style="--bar-height:92%"></i><i style="--bar-height:74%"></i><i style="--bar-height:83%"></i><i style="--bar-height:53%"></i></div><div class="wellness-metric-foot"><span>최근 7일 · 일별</span><span>오늘 5,280 ›</span></div></div>
+          <div class="wellness-metric-card" style="--metric-color:#d5ac73"><div class="wellness-metric-head"><span class="metric-icon" aria-hidden="true">🏃</span><strong>운동 시간</strong><small>오늘</small></div><div class="wellness-metric-value"><strong>18</strong><small>분</small></div><div class="metric-bars" role="img" aria-label="예시 최근 7일 일별 운동 시간, 오늘 18분"><i style="--bar-height:35%"></i><i style="--bar-height:74%"></i><i style="--bar-height:9%"></i><i style="--bar-height:86%"></i><i style="--bar-height:53%"></i><i style="--bar-height:68%"></i><i style="--bar-height:39%"></i></div><div class="wellness-metric-foot"><span>최근 7일 · 일별</span><span>오늘 18분 ›</span></div></div>
+        </div>
+        <h3 class="section-title">신체 지표</h3><div class="wellness-metric-grid">
+          <div class="wellness-metric-card" data-today-optional="weight" style="--metric-color:#d6b476;--metric-fill:#d6b47629"><div class="wellness-metric-head"><span class="metric-icon" aria-hidden="true">⚖️</span><strong>체중</strong><small>10/22</small></div><div class="wellness-metric-value"><strong>68.4</strong><small>kg</small></div><svg class="wellness-metric-spark" viewBox="0 0 150 42" role="img" aria-label="예시 최근 14일 체중이 68.9 kg에서 68.4 kg으로 변화"><line class="metric-grid" x1="2" y1="36" x2="148" y2="36"/><path class="metric-area" d="M3 11 L27 14 L51 13 L75 22 L99 25 L123 28 L147 31 L147 39 L3 39 Z"/><polyline class="metric-line" points="3,11 27,14 51,13 75,22 99,25 123,28 147,31"/><circle class="metric-point" cx="147" cy="31" r="3"/></svg><div class="wellness-metric-foot"><span>14일 전 · 68.9</span><span>최근 · 68.4 ›</span></div></div>
+          <div class="wellness-metric-card" style="--metric-color:#9ebbd2"><div class="wellness-metric-head"><span class="metric-icon" aria-hidden="true">🌙</span><strong>수면</strong><small>지난밤</small></div><div class="wellness-metric-value"><strong>7시간 54분</strong></div><div class="metric-bars" role="img" aria-label="예시 최근 7일 일별 수면 시간, 지난밤 7시간 54분"><i style="--bar-height:68%"></i><i style="--bar-height:83%"></i><i style="--bar-height:72%"></i><i style="--bar-height:92%"></i><i style="--bar-height:79%"></i><i style="--bar-height:70%"></i><i style="--bar-height:88%"></i></div><div class="wellness-metric-foot"><span>최근 7일 · 일별</span><span>지난밤 7시간 54분 ›</span></div></div>
+          <div class="wellness-metric-card" style="--metric-color:#a4b69a"><div class="wellness-metric-head"><span class="metric-icon" aria-hidden="true">📏</span><strong>BMI</strong><small>10/22</small></div><div class="wellness-metric-value"><strong>22.1</strong></div><div class="wellness-metric-empty">추세 표본 없음</div><div class="wellness-metric-foot"><span>최근 측정값</span><span>상세 보기 ›</span></div></div>
+        </div>
+        <h3 class="section-title">건강 Q&amp;A</h3><div class="support"><div class="visual-head"><span class="icon-badge blue" aria-hidden="true">💬</span><div class="head-copy"><strong>내 건강 기록에 질문하기</strong><small>수면 · 회복 · 최근 운동</small></div><span aria-hidden="true">⌄</span></div><div class="action-pills"><span>지난주보다 수면이 어땠어?</span><span>최근 운동량을 알려줘</span></div><div class="section-link">건강 Q&amp;A 열기 ›</div></div>
+      </section>
+      <section class="empty-screen" data-empty="today" aria-label="Today 기록 없음 시안"><div class="hero"><div class="visual-head"><span class="icon-badge blue" aria-hidden="true">♡</span><div class="head-copy"><strong>컨디션을 준비하고 있어요</strong><small>건강 기록을 연결해 주세요</small></div></div><p class="subtle">수면·심박·활동 기록이 모이면 오늘의 컨디션과 변화가 이곳에 표시됩니다.</p><div class="detail-link"><span>Apple Health 연결 확인</span><span>›</span></div></div><h3 class="section-title">데이터 상태</h3><div class="support"><div class="detail-row"><span class="icon-badge blue" aria-hidden="true">🌙</span><span class="row-copy"><strong>수면</strong><small>최근 수면 기록 없음</small></span><span class="row-value">연결 확인 ›</span></div><div class="detail-row"><span class="icon-badge rose" aria-hidden="true">❤️</span><span class="row-copy"><strong>심박·HRV</strong><small>측정 권한 또는 기록 확인</small></span><span class="row-value">확인 ›</span></div><div class="detail-row"><span class="icon-badge green" aria-hidden="true">👟</span><span class="row-copy"><strong>활동</strong><small>걸음·운동 기록 없음</small></span><span class="row-value">확인 ›</span></div></div><h3 class="section-title">바로 기록하기</h3><div class="action-pills"><span>⚖️ 체중 기록</span><span>🌙 수면 기록</span></div></section>
+      <section class="screen" data-screen="activity" aria-label="Activity A01 시안">
+        <div class="hero"><div class="hero-kicker"><span>오늘의 운동 준비도</span><small>최근 기록 기준</small></div><div class="hero-row"><div class="ring" style="--angle:255deg"><div class="ring-inner"><strong>71</strong><small>준비도</small></div></div><div class="hero-copy"><span class="label">보통</span><h3>일반 훈련 가능</h3><p>회복 상태를 살피며 강도를 정해 보세요.</p></div></div></div>
+        <h3 class="section-title">회복과 이번 주</h3><div class="pair">
+          <div class="support muscle-map" data-muscle-mode="recovery">
+            <div class="visual-head"><span class="icon-badge green" aria-hidden="true">💪</span><div class="head-copy"><strong>근육 지도</strong><small>앞·뒤 근육군</small></div></div>
+            <div class="muscle-map-toolbar"><span class="muscle-map-summary" id="muscle-map-summary">13개 근육군 준비 완료</span><div class="muscle-mode" role="group" aria-label="근육 지도 표시 기준"><button type="button" data-muscle-mode-button="recovery" aria-pressed="true">회복</button><button type="button" data-muscle-mode-button="volume" aria-pressed="false">볼륨</button></div></div>
+            <div class="muscle-figures" role="img" aria-label="회복 모드 예시: 앞면과 뒷면의 13개 근육군 모두 준비 완료" id="muscle-map-description">
+              <figure class="muscle-figure"><svg viewBox="0 0 120 220" aria-hidden="true" focusable="false"><circle class="muscle-outline" cx="60" cy="16" r="10"/><path class="muscle-outline" d="M51 25 L48 33 30 38 22 50 14 85 20 88 31 57 34 85 40 111 44 126 39 173 42 207 51 207 57 165 60 137 63 165 69 207 78 207 81 173 76 126 80 111 86 85 89 57 100 88 106 85 98 50 90 38 72 33 69 25"/>
+                <path class="muscle-shape" data-volume="high" d="M48 36 Q37 38 34 46 L39 57 54 55 58 43Z"/><path class="muscle-shape" data-volume="high" d="M72 36 Q83 38 86 46 L81 57 66 55 62 43Z"/>
+                <path class="muscle-shape" data-volume="moderate" d="M32 45 Q25 49 25 59 L18 80 22 82 36 57Z"/><path class="muscle-shape" data-volume="moderate" d="M88 45 Q95 49 95 59 L102 80 98 82 84 57Z"/>
+                <path class="muscle-shape" data-volume="very-high" d="M40 58 L58 56 58 72 Q49 77 41 70Z"/><path class="muscle-shape" data-volume="very-high" d="M80 58 L62 56 62 72 Q71 77 79 70Z"/>
+                <path class="muscle-shape" data-volume="light" d="M42 74 Q50 79 58 74 L58 100 46 102Z"/><path class="muscle-shape" data-volume="light" d="M78 74 Q70 79 62 74 L62 100 74 102Z"/>
+                <path class="muscle-shape" data-volume="moderate" d="M45 113 L57 113 58 137 52 162 45 162 42 134Z"/><path class="muscle-shape" data-volume="moderate" d="M75 113 L63 113 62 137 68 162 75 162 78 134Z"/>
+                <path class="muscle-shape" data-volume="light" d="M44 168 L52 168 49 200 44 202 42 186Z"/><path class="muscle-shape" data-volume="light" d="M76 168 L68 168 71 200 76 202 78 186Z"/>
+              </svg><figcaption>앞면</figcaption></figure>
+              <figure class="muscle-figure"><svg viewBox="0 0 120 220" aria-hidden="true" focusable="false"><circle class="muscle-outline" cx="60" cy="16" r="10"/><path class="muscle-outline" d="M51 25 L48 33 30 38 22 50 14 85 20 88 31 57 34 85 40 111 44 126 39 173 42 207 51 207 57 165 60 137 63 165 69 207 78 207 81 173 76 126 80 111 86 85 89 57 100 88 106 85 98 50 90 38 72 33 69 25"/>
+                <path class="muscle-shape" data-volume="high" d="M49 34 Q60 38 71 34 L68 52 60 59 52 52Z"/><path class="muscle-shape" data-volume="moderate" d="M42 38 L50 37 56 56 40 64 34 50Z"/><path class="muscle-shape" data-volume="moderate" d="M78 38 L70 37 64 56 80 64 86 50Z"/>
+                <path class="muscle-shape" data-volume="moderate" d="M32 46 L37 57 24 82 19 80 23 55Z"/><path class="muscle-shape" data-volume="moderate" d="M88 46 L83 57 96 82 101 80 97 55Z"/>
+                <path class="muscle-shape" data-volume="very-high" d="M43 62 L57 57 58 100 46 103 40 81Z"/><path class="muscle-shape" data-volume="very-high" d="M77 62 L63 57 62 100 74 103 80 81Z"/>
+                <path class="muscle-shape" data-volume="light" d="M45 106 L58 105 57 126 45 125Z"/><path class="muscle-shape" data-volume="light" d="M75 106 L62 105 63 126 75 125Z"/>
+                <path class="muscle-shape" data-volume="high" d="M44 128 L58 129 56 144 43 144Z"/><path class="muscle-shape" data-volume="high" d="M76 128 L62 129 64 144 77 144Z"/>
+                <path class="muscle-shape" data-volume="moderate" d="M43 147 L55 148 52 167 44 167Z"/><path class="muscle-shape" data-volume="moderate" d="M77 147 L65 148 68 167 76 167Z"/>
+                <path class="muscle-shape" data-volume="light" d="M44 171 L51 171 49 201 44 202 42 188Z"/><path class="muscle-shape" data-volume="light" d="M76 171 L69 171 71 201 76 202 78 188Z"/>
+              </svg><figcaption>뒷면</figcaption></figure>
+            </div>
+            <div class="muscle-legend" data-muscle-legend="recovery"><div class="muscle-gradient" aria-hidden="true"></div><div class="muscle-legend-labels"><span>회복됨</span><span>피로</span></div><p class="muscle-legend-note">왼쪽에서 오른쪽으로 피로도가 높아집니다.</p></div>
+            <div class="muscle-legend" data-muscle-legend="volume" hidden><div class="muscle-volume-steps" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div><div class="muscle-legend-labels volume-labels"><span>0세트</span><span>1–5</span><span>6–10</span><span>11–15</span><span>16+</span></div><p class="muscle-legend-note">이번 주 근육군별 운동 세트 수입니다.</p></div>
+            <div class="section-link">근육 지도 보기 ›</div>
+          </div>
+          <div class="support weekly-summary">
+            <div class="visual-head"><span class="icon-badge green" aria-hidden="true">📊</span><div class="head-copy"><strong>이번 주 운동</strong><small>최근 7일 · 운동 기록 기준</small></div></div>
+            <div class="weekly-stat-grid">
+              <div class="weekly-stat"><div class="weekly-stat-title"><span class="weekly-stat-icon warm" aria-hidden="true">⚖️</span><span>훈련 볼륨</span></div><div class="weekly-stat-value"><strong>4,820</strong><span>kg</span></div><span class="weekly-stat-change">↗ +12% · 이전 7일 대비</span></div>
+              <div class="weekly-stat"><div class="weekly-stat-title"><span class="weekly-stat-icon warm" aria-hidden="true">🔥</span><span>소모 칼로리</span></div><div class="weekly-stat-value"><strong>680</strong><span>kcal</span></div></div>
+              <div class="weekly-stat"><div class="weekly-stat-title"><span class="weekly-stat-icon" aria-hidden="true">⏱️</span><span>운동 시간</span></div><div class="weekly-stat-value"><strong>142</strong><span>분</span></div><span class="weekly-stat-change">↗ +8% · 이전 7일 대비</span></div>
+              <div class="weekly-stat"><div class="weekly-stat-title"><span class="weekly-stat-icon" aria-hidden="true">📅</span><span>활동일</span></div><div class="weekly-stat-value"><strong>3</strong><span>일</span></div></div>
+            </div>
+            <div class="chart-labels"><span>일별 운동 시간 · 최근 7일</span><span>합계 142분</span></div><div class="visual-bars" role="img" aria-label="예시 최근 7일 운동 시간: 0, 45, 0, 50, 0, 47, 0분. 운동한 날 3일, 합계 142분"><i style="height:0"></i><i style="height:90%"></i><i style="height:0"></i><i style="height:100%"></i><i style="height:0"></i><i style="height:94%"></i><i style="height:0"></i></div><div class="chart-labels"><span>7일 전</span><span>오늘</span></div>
+            <p class="weekly-context">볼륨은 근력 기록, 칼로리는 건강 운동 기록을 기준으로 계산합니다.</p>
+            <div class="section-link">주간 통계 보기 ›</div>
+          </div>
+        </div>
+        <h3 class="section-title">부상 주의</h3><div class="support"><div class="visual-head"><span class="icon-badge rose" aria-hidden="true">🩹</span><div class="head-copy"><strong>오른쪽 어깨</strong><small>10월 21일 기록 · 회복 중</small></div><span class="note-chip">운동 전 확인</span></div><p>어깨 운동과 겹치는 벤치프레스·숄더프레스는 통증 상태를 확인해 주세요.</p><div class="section-link">부상 기록 보기 ›</div></div>
+        <h3 class="section-title">부상 위험</h3><div class="support"><div class="visual-head"><span class="icon-badge green" aria-hidden="true">🛡️</span><div class="head-copy"><strong>최근 훈련 부담</strong><small>최근 7일 운동·회복 기록</small></div></div><div class="visual-split"><div class="mini-ring" style="--ring-fill:108deg;--ring-color:#a5c7a2" role="img" aria-label="예시 부상 위험 점수 30"><span>30</span></div><div><strong>보통</strong><p>몸 상태를 살피며 운동하세요.</p></div></div><div class="detail-row"><span class="icon-badge rose" aria-hidden="true">💪</span><span class="row-copy"><strong>어깨 피로</strong><small>최근 어깨 사용량 증가</small></span></div><div class="detail-row"><span class="icon-badge blue" aria-hidden="true">🌙</span><span class="row-copy"><strong>수면 부족 1시간 12분</strong><small>이번 주 누적</small></span></div><div class="section-link">위험 요인 자세히 보기 ›</div></div>
+        <h3 class="section-title">추천 운동</h3>
+        <div class="suggested-stack">
+          <label class="suggested-search"><span aria-hidden="true">⌕</span><input id="suggested-search-input" type="search" placeholder="운동 검색" aria-label="운동 검색"></label>
+          <div class="suggested-search-results suggested-group" id="suggested-search-results" hidden>
+            <div class="suggested-group-title">전체 운동 · 검색 결과</div>
+            <div class="suggested-search-item" data-search-name="스쿼트 squat"><strong>스쿼트</strong><span>대퇴사두근 · 바벨 · 운동 시작 ›</span></div>
+            <div class="suggested-search-item" data-search-name="벤치프레스 bench press"><strong>벤치프레스</strong><span>가슴 · 바벨 · 운동 시작 ›</span></div>
+            <div class="suggested-search-item" data-search-name="덤벨 로우 dumbbell row"><strong>덤벨 로우</strong><span>등 · 덤벨 · 운동 시작 ›</span></div>
+            <p class="suggested-search-empty" id="suggested-search-empty" hidden>일치하는 운동이 없습니다.</p>
+          </div>
+          <div class="suggested-default" id="suggested-default">
+            <div class="suggested-stack">
+              <div class="suggested-settings">
+                <div class="suggested-context" role="group" aria-label="운동 환경"><button type="button" data-workout-context="gym" aria-pressed="true">헬스장</button><button type="button" data-workout-context="home" aria-pressed="false">집</button></div>
+                <button class="suggested-equipment" id="suggested-equipment-toggle" type="button" aria-expanded="false" aria-controls="suggested-equipment-panel"><span>🏋️ 장비 설정</span><span id="suggested-equipment-count">3개 선택 ›</span></button>
+                <div class="suggested-equipment-panel" id="suggested-equipment-panel" hidden><label><input type="checkbox" checked> 덤벨</label><label><input type="checkbox" checked> 바벨</label><label><input type="checkbox" checked> 맨몸</label><span>선택한 장비로 할 수 있는 운동을 추천합니다.</span></div>
+              </div>
+              <div class="suggested-group" data-suggestion-state="workout" data-suggestion-context="gym">
+                <div class="suggested-group-title">오늘의 부위별 운동 · 회복 상태와 운동량 기준</div>
+                <div class="suggested-focus"><span>가슴</span><span>등</span><span>하체</span></div>
+                <div class="suggested-exercises">
+                  <div class="suggested-exercise"><div class="suggested-exercise-head"><strong>벤치프레스</strong><span>3세트 ›</span></div><p>가슴 회복 상태에 맞는 기본 운동</p><div class="suggested-actions"><button class="suggested-start" type="button">시작</button><button type="button" data-alternatives-toggle="bench" aria-expanded="false">대체 운동</button></div><button class="suggested-not-interested" type="button" aria-pressed="false">관심 없음</button><div class="suggested-alternatives" data-alternatives="bench" hidden>대체 운동 · 덤벨 벤치프레스 ›<br>푸시업 ›</div></div>
+                  <div class="suggested-exercise"><div class="suggested-exercise-head"><strong>시티드 로우</strong><span>3세트 ›</span></div><p>등에 필요한 자극을 더해요</p><div class="suggested-actions"><button class="suggested-start" type="button">시작</button><button type="button" data-alternatives-toggle="row" aria-expanded="false">대체 운동</button></div><button class="suggested-not-interested" type="button" aria-pressed="false">관심 없음</button><div class="suggested-alternatives" data-alternatives="row" hidden>대체 운동 · 덤벨 로우 ›<br>밴드 로우 ›</div></div>
+                  <div class="suggested-exercise"><div class="suggested-exercise-head"><strong>스쿼트</strong><span>3세트 ›</span></div><p>하체의 이번 주 볼륨을 채워요</p><div class="suggested-actions"><button class="suggested-start" type="button">시작</button><button type="button" data-alternatives-toggle="squat" aria-expanded="false">대체 운동</button></div><button class="suggested-not-interested" type="button" aria-pressed="false">관심 없음</button><div class="suggested-alternatives" data-alternatives="squat" hidden>대체 운동 · 고블릿 스쿼트 ›<br>런지 ›</div></div>
+                  <div class="suggested-exercise"><div class="suggested-exercise-head"><strong>루마니안 데드리프트</strong><span>3세트 ›</span></div><p>후면 사슬을 함께 사용해요</p><div class="suggested-actions"><button class="suggested-start" type="button">시작</button><button type="button" data-alternatives-toggle="deadlift" aria-expanded="false">대체 운동</button></div><button class="suggested-not-interested" type="button" aria-pressed="false">관심 없음</button><div class="suggested-alternatives" data-alternatives="deadlift" hidden>대체 운동 · 힙 브리지 ›<br>케틀벨 데드리프트 ›</div></div>
+                </div>
+              </div>
+              <div class="suggested-group" data-suggestion-state="workout" data-suggestion-context="home" hidden>
+                <div class="suggested-group-title">집에서 할 수 있는 운동 · 사용 가능한 장비 기준</div>
+                <div class="suggested-focus"><span>가슴</span><span>등</span><span>하체</span></div>
+                <div class="suggested-exercises">
+                  <div class="suggested-exercise"><div class="suggested-exercise-head"><strong>푸시업</strong><span>3세트 ›</span></div><p>가슴을 쓰는 맨몸 운동</p><div class="suggested-actions"><button class="suggested-start" type="button">시작</button></div><button class="suggested-not-interested" type="button" aria-pressed="false">관심 없음</button></div>
+                  <div class="suggested-exercise"><div class="suggested-exercise-head"><strong>덤벨 로우</strong><span>3세트 ›</span></div><p>집에서 등 운동을 이어가요</p><div class="suggested-actions"><button class="suggested-start" type="button">시작</button></div><button class="suggested-not-interested" type="button" aria-pressed="false">관심 없음</button></div>
+                  <div class="suggested-exercise"><div class="suggested-exercise-head"><strong>고블릿 스쿼트</strong><span>3세트 ›</span></div><p>하체 볼륨을 채워요</p><div class="suggested-actions"><button class="suggested-start" type="button">시작</button></div><button class="suggested-not-interested" type="button" aria-pressed="false">관심 없음</button></div>
+                  <div class="suggested-exercise"><div class="suggested-exercise-head"><strong>힙 브리지</strong><span>3세트 ›</span></div><p>둔근을 가볍게 사용해요</p><div class="suggested-actions"><button class="suggested-start" type="button">시작</button></div><button class="suggested-not-interested" type="button" aria-pressed="false">관심 없음</button></div>
+                </div>
+              </div>
+              <div class="suggested-group" data-suggestion-state="rest" hidden><div class="suggested-group-title">🛏️ 회복일</div><p>최근 훈련 부위의 피로도가 높아 오늘은 가벼운 활동이 적합합니다.</p><p class="micro">다음 준비 부위 · 어깨, 약 18시간 뒤</p><div class="suggested-strip"><div class="suggested-strip-card"><strong>🚶 가볍게 걷기</strong><p>20–30분</p></div><div class="suggested-strip-card"><strong>🧘 스트레칭</strong><p>10분</p></div><div class="suggested-strip-card"><strong>🌿 요가 흐름</strong><p>15분</p></div></div></div>
+              <div class="suggested-group" data-suggestion-state="none" hidden><div class="suggested-group-title">추천할 운동이 없습니다</div><p>장비 설정을 바꾸거나 관심 없음으로 제외한 운동을 다시 포함해 보세요.</p></div>
+              <div class="suggested-group"><div class="suggested-group-title">추천 루틴</div><div class="suggested-strip"><div class="suggested-strip-card"><strong>✨ 상체 + 걷기</strong><p>↻ 3회 · 약 30분<br>근력 → 걷기</p><span class="suggested-card-action">시작 · 템플릿 저장 ♧</span></div><div class="suggested-strip-card"><strong>✨ 전신 순환</strong><p>↻ 4회 · 약 35분<br>근력 → 유산소</p><span class="suggested-card-action">시작 · 템플릿 저장 ♧</span></div></div></div>
+              <div class="suggested-group"><div class="suggested-group-title">내 템플릿</div><div class="suggested-strip"><div class="suggested-strip-card"><strong>📋 전신 A</strong><p>운동 5개<br>스쿼트, 벤치프레스 외</p><span class="suggested-card-action">템플릿으로 시작 ▶</span></div><div class="suggested-strip-card"><strong>📋 짧은 아침 운동</strong><p>운동 3개<br>푸시업, 런지 외</p><span class="suggested-card-action">템플릿으로 시작 ▶</span></div></div></div>
+              <div class="suggested-entry"><span class="icon-badge gold" aria-hidden="true">✨</span><div><strong>AI 운동 만들기</strong><p>원하는 운동을 설명하면 바로 쓸 수 있는 템플릿을 만듭니다.</p></div><span aria-hidden="true">›</span></div>
+              <div class="section-link">전체 운동 보기 ›</div>
+            </div>
+          </div>
+        </div>
+        <h3 class="section-title">훈련량</h3><div class="support"><div class="visual-head"><span class="icon-badge green" aria-hidden="true">📊</span><div class="head-copy"><strong>최근 7일 볼륨</strong><small>총 4,820 kg</small></div></div><div class="visual-bars" role="img" aria-label="예시 최근 7일 훈련 볼륨 막대"><i style="height:50%"></i><i style="height:78%"></i><i style="height:30%"></i><i style="height:90%"></i><i style="height:62%"></i><i style="height:42%"></i><i style="height:74%"></i></div><div class="chart-labels"><span>7일 전</span><span>오늘</span></div></div>
+        <h3 class="section-title">주간 보고서</h3>
+        <div class="support report-card">
+          <div class="visual-head"><span class="icon-badge gold" aria-hidden="true">📋</span><div class="head-copy"><strong>운동 리포트</strong><small>최근 운동 기록을 모아 본 요약</small></div></div>
+          <div class="report-period"><strong>이번 주</strong><span>최근 7일 기록 · 상세 ›</span></div>
+          <div class="report-stats" aria-label="운동 3회, 활동 3일, 볼륨 4,820킬로그램, 이전 기간 대비 볼륨 12퍼센트 증가">
+            <div class="report-stat"><strong>3회</strong><span>운동</span></div>
+            <div class="report-stat"><strong>3일</strong><span>활동일</span></div>
+            <div class="report-stat"><strong>4.8k</strong><span>볼륨 · kg</span></div>
+            <div class="report-stat"><strong class="positive">+12%</strong><span>이전 기간 대비</span></div>
+          </div>
+          <div class="period-compare" role="img" aria-label="예시 지난 7일 훈련 볼륨 4,304 kg, 이번 7일 4,820 kg, 약 12퍼센트 증가"><strong>훈련 볼륨 비교 · 각 7일</strong><div class="period-compare-row"><span>지난 기간</span><span class="period-compare-track"><i style="--fill:89%"></i></span><b>4,304 kg</b></div><div class="period-compare-row current"><span>이번 기간</span><span class="period-compare-track"><i style="--fill:100%"></i></span><b>4,820 kg</b></div></div>
+          <div class="report-muscles"><span>주요 근육군</span><span class="muscle-chip">● 가슴</span><span class="muscle-chip">● 등</span><span class="muscle-chip">● 대퇴사두근</span></div>
+          <p class="report-summary">이번 주 3일 동안 근력과 유산소 운동을 기록했어요. 가슴·등·하체를 중심으로 훈련했고, 근력 볼륨은 이전 기간보다 12% 늘었습니다.</p>
+          <div class="report-highlights"><span>이번 주 하이라이트</span><div class="report-highlight"><i aria-hidden="true">🔥</i><span>이번 주 3일 운동을 이어 갔어요</span></div><div class="report-highlight"><i aria-hidden="true">↗</i><span>훈련 볼륨이 이전 기간보다 12% 늘었어요</span></div></div>
+          <div class="section-link">보고서 자세히 보기 ›</div>
+        </div>
+        <h3 class="section-title">최근 운동</h3><div class="support"><div class="detail-row"><span class="icon-badge green" aria-hidden="true">🏋️</span><span class="row-copy"><strong>전신 근력</strong><small>10월 22일 · 스쿼트 외 4개 · 직접 기록</small></span><span class="row-value">48분<small>1,720 kg ›</small></span></div><div class="detail-row"><span class="icon-badge green" aria-hidden="true">🚶</span><span class="row-copy"><strong>걷기</strong><small>10월 20일 · Apple Health</small></span><span class="row-value">35분<small>2.8 km ›</small></span></div><div class="detail-row"><span class="icon-badge green" aria-hidden="true">🏃</span><span class="row-copy"><strong>달리기</strong><small>10월 18일 · Apple Health</small></span><span class="row-value">42분<small>6.1 km ›</small></span></div><div class="section-link">전체 운동 기록 보기 ›</div></div>
+        <h3 class="section-title">개인 기록</h3>
+        <div class="support pr-overview">
+          <div class="visual-head"><span class="icon-badge gold" aria-hidden="true">🏆</span><div class="head-copy"><strong>내 최고 기록</strong><small id="pr-record-count">근력·유산소 · 최근 기록 8개</small></div></div>
+          <div class="pr-rewards"><span class="pr-level">★ Lv 3</span><span>🏅 배지 4개</span><span>280 pts</span></div>
+          <div class="pr-grid">
+            <div class="pr-card" style="--pr-color:#d4ad67"><div class="pr-card-head"><span class="pr-kind"><i aria-hidden="true">🏋️</i>최고 중량</span><svg class="pr-spark" viewBox="0 0 46 23" aria-hidden="true"><path d="M1 19 L10 17 L18 18 L27 12 L36 10 L45 4"/></svg></div><span class="pr-name">스쿼트</span><div class="pr-value"><strong>80</strong><small>kg</small><span class="pr-new">NEW</span></div><div class="pr-card-foot"><span>10월 22일</span><span>✎ 직접 기록</span></div></div>
+            <div class="pr-card" style="--pr-color:#d3a069"><div class="pr-card-head"><span class="pr-kind"><i aria-hidden="true">🏋️</i>최고 중량</span><svg class="pr-spark" viewBox="0 0 46 23" aria-hidden="true"><path d="M1 19 L10 17 L18 18 L27 12 L36 10 L45 4"/></svg></div><span class="pr-name">벤치프레스</span><div class="pr-value"><strong>62.5</strong><small>kg</small></div><div class="pr-card-foot"><span>10월 21일</span><span>✎ 직접 기록</span></div></div>
+            <div class="pr-card" style="--pr-color:#cfb26d"><div class="pr-card-head"><span class="pr-kind"><i aria-hidden="true">🏆</i>추정 1RM</span></div><span class="pr-name">데드리프트</span><div class="pr-value"><strong>112</strong><small>kg</small><span class="pr-new">NEW</span></div><div class="pr-card-foot"><span>10월 20일</span><span>✎ 직접 기록</span></div></div>
+            <div class="pr-card" style="--pr-color:#d19767"><div class="pr-card-head"><span class="pr-kind"><i aria-hidden="true">⚖️</i>반복 최고 · 5RM</span></div><span class="pr-name">스쿼트</span><div class="pr-value"><strong>72.5</strong><small>kg</small></div><div class="pr-card-foot"><span>10월 19일</span><span>✎ 직접 기록</span></div></div>
+            <div class="pr-card" style="--pr-color:#a998c8"><div class="pr-card-head"><span class="pr-kind"><i aria-hidden="true">📊</i>한 세션 볼륨</span></div><span class="pr-name">레그프레스</span><div class="pr-value"><strong>1,480</strong><small>kg</small></div><div class="pr-card-foot"><span>10월 18일</span><span>✎ 직접 기록</span></div></div>
+            <div class="pr-card" data-pr-source="healthkit" style="--pr-color:#86b9a3"><div class="pr-card-head"><span class="pr-kind"><i aria-hidden="true">🏃</i>최고 페이스</span></div><span class="pr-name">달리기</span><div class="pr-value"><strong>5'20"</strong><small>/km</small></div><div class="pr-card-foot"><span>10월 17일</span><span> Apple Health</span></div></div>
+            <div class="pr-card" data-pr-source="healthkit" style="--pr-color:#79ae9e"><div class="pr-card-head"><span class="pr-kind"><i aria-hidden="true">📍</i>최장 거리</span></div><span class="pr-name">달리기</span><div class="pr-value"><strong>8.20</strong><small>km</small></div><div class="pr-card-foot"><span>10월 16일</span><span> Apple Health</span></div></div>
+            <div class="pr-card" data-pr-source="healthkit" style="--pr-color:#cd9671"><div class="pr-card-head"><span class="pr-kind"><i aria-hidden="true">🔥</i>최다 칼로리</span></div><span class="pr-name">사이클링</span><div class="pr-value"><strong>410</strong><small>kcal</small></div><div class="pr-card-foot"><span>10월 15일</span><span> Apple Health</span></div></div>
+          </div>
+          <p class="pr-notice" id="pr-cardio-notice" hidden>Apple Health의 운동 기록을 연결하면 유산소 개인 기록도 볼 수 있습니다.</p>
+          <div class="section-link">전체 기록 · 종류별 추세 보기 ›</div>
+        </div>
+        <h3 class="section-title">달성 기록</h3><div class="support"><div class="visual-head"><span class="icon-badge gold" aria-hidden="true">🏅</span><div class="head-copy"><strong>이번 달 성취</strong><small>2026년 10월</small></div></div><div class="detail-row"><span class="icon-badge gold" aria-hidden="true">🔥</span><span class="row-copy"><strong>4주 연속 목표 달성</strong><small>10월 22일 · 주간 운동 목표</small></span><span class="row-value">+40 pts</span></div><div class="detail-row"><span class="icon-badge gold" aria-hidden="true">💪</span><span class="row-copy"><strong>근력 운동 10회</strong><small>10월 19일 · 운동 이정표</small></span><span class="row-value">+25 pts</span></div><div class="section-link">달성 기록 모두 보기 ›</div></div>
+        <h3 class="section-title">운동 페이스</h3><div class="support pace-card"><div class="visual-head"><span class="icon-badge gold" aria-hidden="true">🔥</span><div class="head-copy"><strong>연속 운동과 월간 목표</strong><small>10월 1일–31일</small></div></div><div class="visual-split pace-summary"><div class="mini-ring" style="--ring-fill:225deg;--ring-color:#ddad70" role="img" aria-label="이번 달 운동 목표 16회 중 10회"><span>10/16</span></div><div><strong>현재 4일 연속 운동</strong><p>최고 8일 연속 · 이번 달 10회</p></div></div><div class="progress-track"><i style="width:62.5%"></i></div><div class="chart-labels"><span>월간 목표 16회</span><span>6회 남음</span></div><div class="week-dots" role="img" aria-label="예시 최근 7일 중 4일 연속 운동 완료"><span><i>·</i>일</span><span><i>·</i>월</span><span class="done"><i>✓</i>화</span><span class="done"><i>✓</i>수</span><span class="done"><i>✓</i>목</span><span class="done"><i>✓</i>금</span><span><i>·</i>토</span></div><div class="section-link">운동 페이스 자세히 보기 ›</div></div>
+        <h3 class="section-title">운동 구성</h3>
+        <div class="support">
+          <div class="visual-head"><span class="icon-badge green" aria-hidden="true">⚖️</span><div class="head-copy"><strong>근력과 유산소</strong><small>최근 4주 · 운동 기록 10건</small></div></div>
+          <div class="mix-bar" role="img" aria-label="예시 최근 4주 운동 기록 10건 중 근력 6건 60%, 유산소 4건 40%"><i class="strength"></i><i class="cardio"></i></div>
+          <div class="mix-legend"><span><i style="--mix-color:#d7a96b" aria-hidden="true"></i>근력 6건 · 60%</span><span><i style="--mix-color:#82b6a2" aria-hidden="true"></i>유산소 4건 · 40%</span></div>
+          <div class="mix-preview"><div class="mix-preview-title"><span>근력 주요 부위</span><small>완료 세트 환산 기준</small></div>
+            <div class="mix-preview-row"><span>하체</span><div class="mix-track"><i style="width:30%;--mix-color:#dbab70"></i></div><b>30%</b></div>
+            <div class="mix-preview-row"><span>가슴</span><div class="mix-track"><i style="width:23%;--mix-color:#c99072"></i></div><b>23%</b></div>
+            <div class="mix-preview-row"><span>등</span><div class="mix-track"><i style="width:20%;--mix-color:#8db9a1"></i></div><b>20%</b></div>
+          </div>
+          <button class="mix-open" type="button" data-open-detail="exercise-mix" aria-label="운동 구성 상세 보기"><span>부위·운동 종류 자세히 보기</span><span aria-hidden="true">›</span></button>
+        </div>
+      </section>
+      <section class="empty-screen" data-empty="activity" aria-label="Activity 기록 없음 시안"><div class="hero"><div class="visual-head"><span class="icon-badge green" aria-hidden="true">🏃</span><div class="head-copy"><strong>첫 운동을 기록해 보세요</strong><small>준비도 · 근육 회복 · 주간 통계</small></div></div><p class="subtle">운동 기록이 쌓이면 준비도와 부위별 회복을 볼 수 있어요. 상단 ＋에서 운동을 시작할 수 있습니다.</p></div><h3 class="section-title">운동 찾기</h3><div class="support"><label class="suggested-search"><span aria-hidden="true">⌕</span><input type="search" placeholder="운동 검색" aria-label="운동 검색 미리보기"></label><div class="action-pills"><span>🏋️ 근력 운동</span><span>🏃 유산소</span><span>📋 내 템플릿</span></div></div><h3 class="section-title">주간 보고서</h3><div class="support"><div class="visual-head"><span class="icon-badge gold" aria-hidden="true">📋</span><div class="head-copy"><strong>아직 보고서가 없습니다</strong><small>이번 주 완료한 운동 0회</small></div></div><p>운동을 기록하면 운동 횟수·활동일·훈련량을 모아 볼 수 있어요.</p></div><h3 class="section-title">개인 기록</h3><div class="support"><div class="visual-head"><span class="icon-badge gold" aria-hidden="true">🏆</span><div class="head-copy"><strong>첫 최고 기록을 기다리고 있어요</strong><small>근력·유산소 기록 0개</small></div></div><p>세트 중량이나 달리기 기록을 남기면 종류별 최고값이 여기에 모입니다.</p></div></section>
+      <section class="screen" data-screen="wellness" aria-label="Wellness H01 시안">
+        <div class="partial-banner" data-partial-for="wellness">일부 신체 지표를 불러올 수 없습니다. Apple Health 연결을 확인해 주세요.</div>
+        <div class="hero"><div class="hero-kicker"><span>웰니스</span><small>현재 상태</small></div><div class="wellness-columns"><div><div class="hero-row"><div class="ring" style="--angle:310deg"><div class="ring-inner"><strong>87</strong><small>웰니스</small></div></div><div class="hero-copy"><span class="label">평소보다 높음</span><h3>몸의 회복 흐름</h3><p>수면 기록을 함께 살펴보세요.</p></div></div><div class="wellness-hero-trend"><div class="chart-title"><span>웰니스 점수</span><span>최근 7일 · 점수</span></div><svg viewBox="0 0 280 54" role="img" aria-label="예시 최근 7일 웰니스 점수 72점에서 87점으로 변화"><line class="trend-grid" x1="3" y1="43" x2="277" y2="43"/><path class="trend-area" d="M5 37 L49 32 L94 35 L139 25 L184 28 L229 16 L274 10 L274 44 L5 44 Z"/><polyline class="trend-line" points="5,37 49,32 94,35 139,25 184,28 229,16 274,10"/><circle class="trend-point" cx="274" cy="10" r="4"/></svg><div class="chart-labels"><span>7일 전 · 72</span><span>현재 · 87</span></div></div><div class="detail-link"><span>웰니스 상세</span><span>›</span></div></div><div class="sleep-section"><div class="chart-title"><span>최근 7일 수면</span><span>실제 기록</span></div><div class="sleep-bars" role="img" aria-label="예시 최근 7일 수면 시간 막대"><i style="height:62%"></i><i style="height:74%"></i><i style="height:68%"></i><i style="height:78%"></i><i style="height:70%"></i><i style="height:83%"></i><i style="height:88%"></i></div><div class="chart-labels"><span>7일 전</span><span>10월 22일</span></div><div class="sleep-meta"><span>10월 22일 최근 기록</span><b>7시간 54분</b></div><div class="micro">유효한 7일 평균 · 7시간 26분</div><div class="sleep-detail">수면 상세 ›</div></div></div></div>
+        <h3 class="section-title">오늘 밤 수면 예측</h3><div class="support"><div class="visual-head"><span class="icon-badge blue" aria-hidden="true">🌙</span><div class="head-copy"><strong>오늘 밤 수면</strong><small>10월 24일 밤 · 예측 신뢰도 보통</small></div></div><div class="visual-split"><div class="mini-ring" style="--ring-fill:259deg;--ring-color:#8eabd0" role="img" aria-label="오늘 밤 예측 점수 72"><span>72</span></div><div><strong>무난한 수면 예상</strong><p>예측 점수 72점 · 최근 수면과 오늘 활동을 반영했어요.</p></div></div><div class="detail-metrics"><div><span>최근 수면</span><strong>7시간 54분</strong></div><div><span>활동량</span><strong>5,280걸음</strong></div><div><span>컨디션</span><strong>84점</strong></div></div><div class="section-link">예측 근거 보기 ›</div></div>
+        <h3 class="section-title">신체 지표</h3>
+        <div class="wellness-metric-grid">
+          <div class="wellness-metric-card" style="--metric-color:#d6b476;--metric-fill:#d6b47629"><div class="wellness-metric-head"><span class="metric-icon" aria-hidden="true">⚖️</span><strong>체중</strong><small>10/22 측정</small></div><div class="wellness-metric-value"><strong>68.4</strong><small>kg</small></div><svg class="wellness-metric-spark" viewBox="0 0 150 42" role="img" aria-label="예시 최근 14일 체중 68.9 kg에서 68.4 kg으로 변화"><line class="metric-grid" x1="2" y1="36" x2="148" y2="36"/><path class="metric-area" d="M3 11 L27 14 L51 13 L75 22 L99 25 L123 28 L147 31 L147 39 L3 39 Z"/><polyline class="metric-line" points="3,11 27,14 51,13 75,22 99,25 123,28 147,31"/><circle class="metric-point" cx="147" cy="31" r="3"/></svg><div class="wellness-metric-foot"><span>14일 전 · 68.9</span><span>최근 · 68.4</span></div></div>
+          <div class="wellness-metric-card" data-wellness-optional="body-fat" style="--metric-color:#c69d75;--metric-fill:#c69d7529"><div class="wellness-metric-head"><span class="metric-icon" aria-hidden="true">📊</span><strong>체지방률</strong><small>10/22 측정</small></div><div class="wellness-metric-value"><strong>24.1</strong><small>%</small></div><svg class="wellness-metric-spark" viewBox="0 0 150 42" role="img" aria-label="예시 최근 30일 체지방률 24.8%에서 24.1%로 변화"><line class="metric-grid" x1="2" y1="36" x2="148" y2="36"/><path class="metric-area" d="M3 9 L27 14 L51 12 L75 20 L99 22 L123 28 L147 30 L147 39 L3 39 Z"/><polyline class="metric-line" points="3,9 27,14 51,12 75,20 99,22 123,28 147,30"/><circle class="metric-point" cx="147" cy="30" r="3"/></svg><div class="wellness-metric-foot"><span>30일 전 · 24.8</span><span>최근 · 24.1</span></div></div>
+          <div class="wellness-metric-card" style="--metric-color:#a4b69a"><div class="wellness-metric-head"><span class="metric-icon" aria-hidden="true">📏</span><strong>BMI</strong><small>10/22 측정</small></div><div class="wellness-metric-value"><strong>22.1</strong></div><div class="wellness-metric-empty">추세 표본 없음</div><div class="wellness-metric-foot"><span>최근 측정값</span><span>상세 보기 ›</span></div></div>
+        </div>
+        <p class="pr-notice" id="wellness-partial-notice" hidden>체지방률 기록을 불러올 수 없어 해당 그래프를 숨겼습니다. 다른 측정값은 유지합니다.</p>
+        <h3 class="section-title">활성 지표</h3>
+        <div class="wellness-metric-grid">
+          <div class="wellness-metric-card" style="--metric-color:#d19a84;--metric-fill:#d19a8429"><div class="wellness-metric-head"><span class="metric-icon" aria-hidden="true">❤️</span><strong>HRV</strong><small>오늘 측정</small></div><div class="wellness-metric-value"><strong>52</strong><small>ms</small></div><svg class="wellness-metric-spark" viewBox="0 0 150 42" role="img" aria-label="예시 최근 7일 HRV 44 ms에서 52 ms로 변화"><line class="metric-grid" x1="2" y1="36" x2="148" y2="36"/><path class="metric-area" d="M3 32 L27 29 L51 33 L75 21 L99 23 L123 14 L147 9 L147 39 L3 39 Z"/><polyline class="metric-line" points="3,32 27,29 51,33 75,21 99,23 123,14 147,9"/><circle class="metric-point" cx="147" cy="9" r="3"/></svg><div class="wellness-metric-foot"><span>7일 전 · 44</span><span>최근 · 52</span></div></div>
+          <div class="wellness-metric-card" style="--metric-color:#c98c78;--metric-fill:#c98c7829"><div class="wellness-metric-head"><span class="metric-icon" aria-hidden="true">🫀</span><strong>안정 심박</strong><small>오늘 측정</small></div><div class="wellness-metric-value"><strong>58</strong><small>bpm</small></div><svg class="wellness-metric-spark" viewBox="0 0 150 42" role="img" aria-label="예시 최근 7일 안정 심박 62 bpm에서 58 bpm으로 변화"><line class="metric-grid" x1="2" y1="36" x2="148" y2="36"/><path class="metric-area" d="M3 10 L27 13 L51 19 L75 16 L99 27 L123 25 L147 32 L147 39 L3 39 Z"/><polyline class="metric-line" points="3,10 27,13 51,19 75,16 99,27 123,25 147,32"/><circle class="metric-point" cx="147" cy="32" r="3"/></svg><div class="wellness-metric-foot"><span>7일 전 · 62</span><span>최근 · 58</span></div></div>
+          <div class="wellness-metric-card" style="--metric-color:#9ebbd2;--metric-fill:#9ebbd229"><div class="wellness-metric-head"><span class="metric-icon" aria-hidden="true">💓</span><strong>심박수</strong><small>오늘 측정</small></div><div class="wellness-metric-value"><strong>72</strong><small>bpm</small></div><svg class="wellness-metric-spark" viewBox="0 0 150 42" role="img" aria-label="예시 최근 7일 심박수 70 bpm에서 72 bpm으로 변화"><line class="metric-grid" x1="2" y1="36" x2="148" y2="36"/><path class="metric-area" d="M3 24 L27 14 L51 30 L75 19 L99 23 L123 12 L147 20 L147 39 L3 39 Z"/><polyline class="metric-line" points="3,24 27,14 51,30 75,19 99,23 123,12 147,20"/><circle class="metric-point" cx="147" cy="20" r="3"/></svg><div class="wellness-metric-foot"><span>7일 전 · 70</span><span>최근 · 72</span></div></div>
+          <div class="wellness-metric-card" style="--metric-color:#85b9b4;--metric-fill:#85b9b429"><div class="wellness-metric-head"><span class="metric-icon" aria-hidden="true">🫁</span><strong>호흡수</strong><small>오늘 측정</small></div><div class="wellness-metric-value"><strong>15</strong><small>회/분</small></div><svg class="wellness-metric-spark" viewBox="0 0 150 42" role="img" aria-label="예시 최근 7일 호흡수 16회/분에서 15회/분으로 변화"><line class="metric-grid" x1="2" y1="36" x2="148" y2="36"/><path class="metric-area" d="M3 12 L27 19 L51 16 L75 24 L99 18 L123 26 L147 23 L147 39 L3 39 Z"/><polyline class="metric-line" points="3,12 27,19 51,16 75,24 99,18 123,26 147,23"/><circle class="metric-point" cx="147" cy="23" r="3"/></svg><div class="wellness-metric-foot"><span>7일 전 · 16</span><span>최근 · 15</span></div></div>
+        </div>
+        <h3 class="section-title">자세 요약</h3><div class="support"><div class="visual-head"><span class="icon-badge blue" aria-hidden="true">⌚</span><div class="head-copy"><strong>Watch 자세 측정</strong><small>오늘 · 마지막 동기화 09:36</small></div></div><div class="detail-metrics"><div><span>🪑 앉은 시간</span><strong>2시간 18분</strong></div><div><span>🚶 걷기</span><strong>42분</strong></div><div><span>🔔 스트레칭 알림</span><strong>2회</strong></div></div><div class="metric-visual"><span>보행 균형</span><span class="value">79점</span></div><div class="section-link">Watch 자세 기록 ›</div></div>
+        <h3 class="section-title">자세 평가</h3><div class="support"><div class="visual-head"><span class="icon-badge green" aria-hidden="true">🧍</span><div class="head-copy"><strong>자세 평가</strong><small>최근 평가 3건</small></div><span class="subtle">전체 ›</span></div><div class="action-pills"><span>📷 자세 촬영</span><span>🚶 실시간 분석</span></div><div class="detail-row"><div class="mini-ring small" style="--ring-fill:284deg;--ring-color:#8fc39f" role="img" aria-label="10월 22일 자세 평가 79점"><span>79</span></div><span class="row-copy"><strong>10월 22일</strong><small>정면 · 6개 지표 측정</small></span><span class="row-value">›</span></div><div class="detail-row"><div class="mini-ring small" style="--ring-fill:259deg;--ring-color:#d6b476" role="img" aria-label="10월 15일 자세 평가 72점"><span>72</span></div><span class="row-copy"><strong>10월 15일</strong><small>정면 · 6개 지표 측정</small></span><span class="row-value">›</span></div></div>
+        <h3 class="section-title">몸 상태 안내</h3><div class="support"><div class="visual-head"><span class="icon-badge rose" aria-hidden="true">🩹</span><div class="head-copy"><strong>활성 부상 1건</strong><small>최근 기록 · 10월 21일</small></div><span class="subtle">전체 ›</span></div><div class="detail-row"><span class="icon-badge rose" aria-hidden="true">💪</span><span class="row-copy"><strong>오른쪽 어깨</strong><small>운동 중 불편함 · 회복 중</small></span><span class="row-value">수정 ›</span></div><p>어깨 사용 운동 전 통증을 확인해 주세요.</p></div>
+        <h3 class="section-title">신체 기록 내역</h3><div class="support"><div class="visual-head"><span class="icon-badge gold" aria-hidden="true">⚖️</span><div class="head-copy"><strong>체중 변화</strong><small>최근 30일 · 기록 7건</small></div></div><svg class="spark" viewBox="0 0 300 62" role="img" aria-label="예시 최근 30일 체중 기록 7건, 69.1 kg에서 68.4 kg으로 변화"><line class="grid" x1="0" y1="49" x2="300" y2="49"/><path class="area" d="M3 13 C45 20 67 17 100 26 S150 30 190 31 S245 37 297 40 L297 58 L3 58 Z"/><path class="trend" d="M3 13 C45 20 67 17 100 26 S150 30 190 31 S245 37 297 40"/><circle class="point" cx="297" cy="40" r="4"/></svg><div class="chart-labels"><span>9월 24일 · 69.1 kg</span><span>10월 22일 · 68.4 kg</span></div><div class="section-link">기록 모두 보기 ›</div></div>
+      </section>
+      <section class="empty-screen" data-empty="wellness" aria-label="Wellness 기록 없음 시안"><div class="hero"><div class="visual-head"><span class="icon-badge blue" aria-hidden="true">🌿</span><div class="head-copy"><strong>웰니스 기록을 기다리고 있어요</strong><small>최근 측정이 없습니다</small></div></div><p class="subtle">수면과 심박 기록이 모이면 웰니스 점수와 최근 흐름을 볼 수 있습니다.</p></div><h3 class="section-title">기록 상태</h3><div class="support"><div class="detail-row"><span class="icon-badge blue" aria-hidden="true">🌙</span><span class="row-copy"><strong>수면</strong><small>최근 7일 기록 없음</small></span><span class="row-value">연결 확인 ›</span></div><div class="detail-row"><span class="icon-badge gold" aria-hidden="true">⚖️</span><span class="row-copy"><strong>신체 기록</strong><small>체중·체지방률 기록 없음</small></span><span class="row-value">상단 ＋</span></div><div class="detail-row"><span class="icon-badge blue" aria-hidden="true">⌚</span><span class="row-copy"><strong>Watch 자세</strong><small>연결된 측정 없음</small></span><span class="row-value">상태 보기 ›</span></div></div></section>
+      <section class="screen" data-screen="life" aria-label="Life L01 시안">
+        <div class="hero"><div class="hero-kicker"><span>오늘의 습관</span><small>계속 이어가기</small></div><div class="hero-row"><div class="ring" style="--angle:120deg"><div class="ring-inner"><strong>1/3</strong><small>오늘 완료</small></div></div><div class="hero-copy"><span class="label">진행 중</span><h3>3개 중 1개 완료</h3><p>남은 습관은 아래 목록에서 기록할 수 있어요.</p></div></div><div class="detail-link"><span>오늘의 습관</span><span>›</span></div></div>
+        <div class="pair"><div><h3 class="section-title">내 습관</h3><div class="support"><div class="filter-pills" aria-label="습관 분류"><span class="selected">전체</span><span>건강</span><span>학습</span></div><div class="micro">아침 · 1개</div><div class="habit-card"><div class="detail-row"><span class="habit-icon" aria-hidden="true">🧘</span><span class="row-copy"><strong>아침 스트레칭</strong><small>매일 · 5일 연속</small></span><span class="row-value">✓ 완료</span></div><div class="habit-foot"><span>오늘 08:10 기록</span><b>내역 ›</b></div></div><div class="micro">낮 · 1개</div><div class="habit-card"><div class="detail-row"><span class="habit-icon" aria-hidden="true">📚</span><span class="row-copy"><strong>독서</strong><small>매일 · 시간 기록</small></span><span class="row-value">18/30분</span></div><div class="progress-track"><i style="width:60%"></i></div><div class="habit-foot"><span>12분 남음</span><b>시간 입력 ›</b></div></div><div class="micro">저녁 · 1개</div><div class="habit-card"><div class="detail-row"><span class="habit-icon" aria-hidden="true">💧</span><span class="row-copy"><strong>물 마시기</strong><small>매일 · 횟수 기록</small></span><span class="row-value">4/8잔</span></div><div class="progress-track"><i style="width:50%;background:#9ebbd2"></i></div><div class="habit-foot"><span>오늘 4잔 기록</span><b>− &nbsp; ＋</b></div></div><div class="section-link">보관한 습관 2개 ›</div></div></div><div><h3 class="section-title">이번 주 운동 성취</h3><div class="support"><div class="visual-head"><span class="icon-badge green" aria-hidden="true">🏃</span><div class="head-copy"><strong>자동 운동 목표</strong><small>Apple Health · 월–일</small></div><span class="note-chip">2/9 달성</span></div><div class="detail-row"><div class="mini-ring small" style="--ring-fill:216deg;--ring-color:#d5ad71" role="img" aria-label="이번 주 운동 5일 목표 중 3일"><span>3/5</span></div><span class="row-copy"><strong>운동 루틴</strong><small>5일 목표 · 최고 연속 4주</small></span></div><div class="week-dots" role="img" aria-label="예시 이번 주 월요일, 수요일, 금요일에 운동 완료"><span class="done"><i>✓</i>월</span><span><i>·</i>화</span><span class="done"><i>✓</i>수</span><span><i>·</i>목</span><span class="done"><i>✓</i>금</span><span><i>·</i>토</span><span><i>·</i>일</span></div><div class="detail-row"><span class="icon-badge green" aria-hidden="true">💪</span><span class="row-copy"><strong>근력 부위</strong><small>근력 3/3회 · 가슴 3/3회 · 등 2/3회</small></span><span class="row-value">2개 달성</span></div><div class="progress-track"><i style="width:67%;background:#8db9a1"></i></div><div class="detail-row"><span class="icon-badge green" aria-hidden="true">🏃</span><span class="row-copy"><strong>달리기 거리</strong><small>주간 목표 15 km</small></span><span class="row-value">8.2 km</span></div><div class="progress-track"><i style="width:55%;background:#d5ad71"></i></div><div class="section-link">운동 목표 자세히 보기 ›</div></div></div></div>
+        <h3 class="section-title">완료 추세</h3><div class="support"><div class="visual-head"><span class="icon-badge gold" aria-hidden="true">📊</span><div class="head-copy"><strong>습관 완료율</strong><small>이번 주 16/21개 · 76%</small></div></div><div class="filter-pills"><span class="selected">주간</span><span>월간</span></div><div class="visual-bars" role="img" aria-label="예시 최근 7일 일별 습관 완료 개수: 2, 3, 2, 3, 2, 3, 1개. 총 16개"><i style="height:67%"></i><i style="height:100%"></i><i style="height:67%"></i><i style="height:100%"></i><i style="height:67%"></i><i style="height:100%"></i><i style="height:33%"></i></div><div class="chart-labels"><span>일 · 2/3</span><span>월 · 3/3</span><span>화 · 2/3</span><span>수 · 3/3</span><span>목 · 2/3</span><span>금 · 3/3</span><span>토 · 1/3</span></div></div>
+        <h3 class="section-title">활동 달력</h3><div class="support"><div class="visual-head"><span class="icon-badge green" aria-hidden="true">🗓️</span><div class="head-copy"><strong>습관 완료 달력</strong><small>최근 4주 · 전체 90일 보기</small></div></div><div class="chart-labels"><span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div><div class="heatmap" role="img" aria-label="예시 최근 4주 일별 습관 완료 수를 0개부터 3개까지 색으로 표시"><i data-level="2"></i><i data-level="3"></i><i data-level="1"></i><i data-level="2"></i><i data-level="3"></i><i data-level="1"></i><i></i><i data-level="2"></i><i data-level="1"></i><i data-level="3"></i><i data-level="3"></i><i data-level="2"></i><i></i><i data-level="1"></i><i data-level="1"></i><i data-level="2"></i><i data-level="3"></i><i data-level="2"></i><i data-level="3"></i><i data-level="2"></i><i data-level="1"></i><i data-level="2"></i><i data-level="3"></i><i data-level="2"></i><i data-level="3"></i><i data-level="2"></i><i data-level="3"></i><i data-level="1"></i></div><div class="heatmap-legend"><span>완료 0</span><i></i><i data-level="1"></i><i data-level="2"></i><i data-level="3"></i><span>3개</span></div><div class="section-link">90일 전체 기록 ›</div></div>
+        <h3 class="section-title">주간 보고서</h3><div class="support"><div class="visual-head"><span class="icon-badge gold" aria-hidden="true">📋</span><div class="head-copy"><strong>최근 7일 습관</strong><small>10월 18일–24일</small></div></div><div class="inner-grid"><div class="inner-tile"><span>최근 7일 완료</span><strong>16/21개</strong><small>완료율 76%</small></div><div class="inner-tile"><span>이전 7일 완료</span><strong>14/21개</strong><small>완료율 67%</small></div></div><div class="period-compare" role="img" aria-label="예시 이전 7일 습관 완료 14개, 최근 7일 16개"><strong>최근·이전 7일 비교</strong><div class="period-compare-row"><span>이전 7일</span><span class="period-compare-track"><i style="--fill:67%"></i></span><b>14개</b></div><div class="period-compare-row current"><span>최근 7일</span><span class="period-compare-track"><i style="--fill:76%"></i></span><b>16개</b></div></div><div class="detail-row"><span class="icon-badge gold" aria-hidden="true">⭐</span><span class="row-copy"><strong>가장 잘 이어간 습관</strong><small>아침 스트레칭 · 7/7일</small></span></div><div class="detail-row"><span class="icon-badge green" aria-hidden="true">↗</span><span class="row-copy"><strong>더 이어갈 습관</strong><small>독서 · 4/7일</small></span></div><div class="section-link">보고서 자세히 보기 ›</div></div>
+      </section>
+      <section class="empty-screen" data-empty="life" aria-label="Life 습관 없음 시안"><div class="hero"><div class="visual-head"><span class="icon-badge gold" aria-hidden="true">✓</span><div class="head-copy"><strong>첫 습관을 만들어 보세요</strong><small>오늘 등록된 습관 0개</small></div></div><p class="subtle">상단 ＋에서 직접 만들거나 준비된 템플릿을 선택할 수 있어요.</p></div><h3 class="section-title">보관한 습관</h3><div class="support"><div class="detail-row"><span class="habit-icon" aria-hidden="true">🧘</span><span class="row-copy"><strong>저녁 스트레칭</strong><small>보관함 · 다시 시작 가능</small></span><span class="row-value">복원 ›</span></div><div class="detail-row"><span class="habit-icon" aria-hidden="true">📚</span><span class="row-copy"><strong>주말 독서</strong><small>보관함 · 다시 시작 가능</small></span><span class="row-value">복원 ›</span></div></div><h3 class="section-title">자동 운동 성취</h3><div class="support"><div class="visual-head"><span class="icon-badge green" aria-hidden="true">🏃</span><div class="head-copy"><strong>이번 주 운동</strong><small>Apple Health · 월–일</small></div></div><div class="detail-row"><span class="row-copy"><strong>운동 3일</strong><small>월·수·금 · 습관과 별도로 집계</small></span><span class="row-value">3/5일</span></div><div class="progress-track"><i style="width:60%;background:#8db9a1"></i></div><div class="section-link">운동 성취 보기 ›</div></div></section>
+      <section class="detail-screen" data-detail="exercise-picker" aria-label="운동 추가 진입 시안" aria-hidden="true"><div class="detail-status" aria-hidden="true"><span>9:41</span><span>●●● ▰</span></div><div class="detail-header"><button class="tool-button back-button" type="button" data-detail-back aria-label="Activity로 돌아가기">‹</button><h2>운동 찾기</h2></div><div class="detail-body"><input class="entry-search" id="exercise-picker-search" type="search" placeholder="운동 검색" aria-label="운동 검색"><h3>최근 운동</h3><button class="entry-option exercise-picker-item" type="button" data-exercise-name="스쿼트" data-open-detail="entry-destination" data-destination-title="스쿼트" data-destination-description="운동 시작 화면에서 세트·무게·반복을 기록합니다."><span class="icon-badge gold" aria-hidden="true">🏋️</span><span class="entry-copy"><strong>스쿼트</strong><small>하체 · 최근 기록 있음</small></span><span class="entry-chevron" aria-hidden="true">›</span></button><button class="entry-option exercise-picker-item" type="button" data-exercise-name="벤치프레스" data-open-detail="entry-destination" data-destination-title="벤치프레스" data-destination-description="운동 시작 화면에서 세트·무게·반복을 기록합니다."><span class="icon-badge gold" aria-hidden="true">🏋️</span><span class="entry-copy"><strong>벤치프레스</strong><small>가슴 · 최근 기록 있음</small></span><span class="entry-chevron" aria-hidden="true">›</span></button><button class="entry-option exercise-picker-item" type="button" data-exercise-name="달리기" data-open-detail="entry-destination" data-destination-title="달리기" data-destination-description="유산소 운동 시작 화면에서 시간과 거리를 기록합니다."><span class="icon-badge green" aria-hidden="true">🏃</span><span class="entry-copy"><strong>달리기</strong><small>유산소 · 최근 기록 있음</small></span><span class="entry-chevron" aria-hidden="true">›</span></button><p class="detail-note" id="exercise-picker-empty" hidden>일치하는 운동이 없습니다. 다른 이름으로 검색해 보세요.</p></div></section>
+      <section class="detail-screen" data-detail="wellness-add" aria-label="웰니스 기록 추가 메뉴 시안" aria-hidden="true"><div class="detail-status" aria-hidden="true"><span>9:41</span><span>●●● ▰</span></div><div class="detail-header"><button class="tool-button back-button" type="button" data-detail-back aria-label="Wellness로 돌아가기">‹</button><h2>기록 추가</h2></div><div class="detail-body"><h3>웰니스 기록</h3><button class="entry-option" type="button" data-open-detail="entry-destination" data-destination-title="신체 기록" data-destination-description="체중·체지방률 등 신체 지표를 입력하는 화면으로 이어집니다."><span class="icon-badge gold" aria-hidden="true">⚖️</span><span class="entry-copy"><strong>신체 기록</strong><small>체중·체지방률 등 기록</small></span><span class="entry-chevron" aria-hidden="true">›</span></button><button class="entry-option" type="button" data-open-detail="entry-destination" data-destination-title="부상 기록" data-destination-description="부위와 상태를 입력하는 부상 기록 화면으로 이어집니다."><span class="icon-badge rose" aria-hidden="true">🩹</span><span class="entry-copy"><strong>부상 기록</strong><small>부위·발생 시점·상태</small></span><span class="entry-chevron" aria-hidden="true">›</span></button><button class="entry-option" type="button" data-open-detail="entry-destination" data-destination-title="자세 평가" data-destination-description="카메라를 이용한 자세 평가 화면으로 이어집니다."><span class="icon-badge blue" aria-hidden="true">🧍</span><span class="entry-copy"><strong>자세 평가</strong><small>촬영 후 자세 확인</small></span><span class="entry-chevron" aria-hidden="true">›</span></button><button class="entry-option" type="button" data-open-detail="entry-destination" data-destination-title="실시간 자세 분석" data-destination-description="운동 중 자세를 살펴보는 화면으로 이어집니다."><span class="icon-badge green" aria-hidden="true">📷</span><span class="entry-copy"><strong>실시간 자세 분석</strong><small>운동 중 자세 확인</small></span><span class="entry-chevron" aria-hidden="true">›</span></button></div></section>
+      <section class="detail-screen" data-detail="life-add" aria-label="습관 추가 메뉴 시안" aria-hidden="true"><div class="detail-status" aria-hidden="true"><span>9:41</span><span>●●● ▰</span></div><div class="detail-header"><button class="tool-button back-button" type="button" data-detail-back aria-label="Life로 돌아가기">‹</button><h2>습관 추가</h2></div><div class="detail-body"><h3>새 습관 만들기</h3><button class="entry-option" type="button" data-open-detail="entry-destination" data-destination-title="새 습관" data-destination-description="습관 이름·분류·반복 일정·알림을 정하는 화면으로 이어집니다."><span class="icon-badge green" aria-hidden="true">＋</span><span class="entry-copy"><strong>직접 만들기</strong><small>이름과 반복 일정 정하기</small></span><span class="entry-chevron" aria-hidden="true">›</span></button><button class="entry-option" type="button" data-open-detail="entry-destination" data-destination-title="습관 템플릿" data-destination-description="미리 준비된 습관을 선택하고 일정을 조정하는 화면으로 이어집니다."><span class="icon-badge blue" aria-hidden="true">📋</span><span class="entry-copy"><strong>템플릿에서 만들기</strong><small>준비된 습관 선택하기</small></span><span class="entry-chevron" aria-hidden="true">›</span></button></div></section>
+      <section class="detail-screen" data-detail="entry-destination" aria-label="기록 입력 화면 시안" aria-hidden="true">
+        <div class="detail-status" aria-hidden="true"><span>9:41</span><span>●●● ▰</span></div><div class="detail-header"><button class="tool-button back-button" type="button" data-detail-back aria-label="이전 화면으로 돌아가기">‹</button><h2 id="entry-destination-title">기록 입력</h2></div>
+        <div class="detail-body"><div class="entry-preview"><strong id="entry-destination-heading">기록 입력</strong><p id="entry-destination-description">오늘의 기록을 입력하세요.</p></div>
+          <div class="entry-form" data-entry-form="strength" hidden><div class="entry-form-card"><strong>오늘의 세트</strong><div class="record-set"><b>세트</b><b>무게</b><b>반복</b><b>완료</b></div><div class="record-set"><b>1</b><span>40 kg</span><span>10회</span><span>○</span></div><div class="record-set"><b>2</b><span>45 kg</span><span>8회</span><span>○</span></div><div class="record-set"><b>3</b><span>45 kg</span><span>8회</span><span>○</span></div><button class="entry-secondary" type="button">＋ 세트 추가</button></div><div class="entry-form-card"><div class="detail-row"><span class="row-copy"><strong>운동 시간</strong><small>세트를 시작하면 측정합니다</small></span><span class="row-value">00:00</span></div></div><button class="entry-primary" type="button">운동 시작</button></div>
+          <div class="entry-form" data-entry-form="cardio" hidden><div class="entry-form-card"><strong>달리기 기록</strong><div class="entry-field-grid"><label class="entry-field">거리<input value="0.0 km" readonly></label><label class="entry-field">운동 시간<input value="00:00" readonly></label></div><div class="detail-row"><span class="row-copy"><strong>평균 페이스</strong><small>기록을 시작하면 계산합니다</small></span><span class="row-value">--:-- /km</span></div></div><button class="entry-primary" type="button">달리기 시작</button></div>
+          <div class="entry-form" data-entry-form="body" hidden><div class="entry-form-card"><strong>신체 측정</strong><label class="entry-field">측정일<input value="2026. 10. 24." readonly></label><div class="entry-field-grid"><label class="entry-field">체중<input value="68.4 kg" readonly></label><label class="entry-field">체지방률<input value="24.1 %" readonly></label></div><div class="detail-row"><span class="row-copy"><strong>이전 기록</strong><small>10월 22일 · 68.4 kg</small></span><span class="row-value">내역 ›</span></div></div><button class="entry-primary" type="button">신체 기록 저장</button></div>
+          <div class="entry-form" data-entry-form="injury" hidden><div class="entry-form-card"><strong>부상 정보</strong><div class="entry-field-grid"><label class="entry-field">부위<input value="오른쪽 어깨" readonly></label><label class="entry-field">시작일<input value="10월 24일" readonly></label></div><div class="filter-pills" style="margin-top:12px"><span>가벼움</span><span class="selected">보통</span><span>심함</span></div><label class="entry-field">상태<input value="운동할 때 불편함" readonly></label></div><button class="entry-primary" type="button">부상 기록 저장</button></div>
+          <div class="entry-form" data-entry-form="posture" hidden><div class="camera-preview"><span aria-hidden="true">🧍</span><small>정면이 프레임 안에 들어오도록 서 주세요</small></div><div class="entry-form-card" style="margin-top:10px"><strong>촬영 전 확인</strong><div class="detail-row"><span class="row-copy"><strong>정면 촬영</strong><small>어깨·골반·무릎 정렬을 측정합니다</small></span><span class="row-value">준비됨</span></div></div><button class="entry-primary" type="button">자세 촬영 시작</button></div>
+          <div class="entry-form" data-entry-form="realtime" hidden><div class="camera-preview"><span aria-hidden="true">🚶</span><small>움직임이 보이도록 전신을 비춰 주세요</small></div><div class="entry-form-card" style="margin-top:10px"><strong>실시간 자세 분석</strong><div class="detail-metrics"><div><span>어깨 정렬</span><strong>대기</strong></div><div><span>골반 균형</span><strong>대기</strong></div><div><span>움직임</span><strong>대기</strong></div></div></div><button class="entry-primary" type="button">분석 시작</button></div>
+          <div class="entry-form" data-entry-form="habit" hidden><div class="entry-form-card"><strong>새 습관</strong><label class="entry-field">습관 이름<input value="아침 스트레칭" readonly></label><div class="entry-field-grid"><label class="entry-field">분류<input value="건강" readonly></label><label class="entry-field">기록 방식<input value="완료 체크" readonly></label></div><div class="filter-pills" style="margin-top:12px"><span class="selected">월</span><span class="selected">화</span><span class="selected">수</span><span class="selected">목</span><span class="selected">금</span><span>토</span><span>일</span></div><div class="detail-row"><span class="row-copy"><strong>알림</strong><small>오전 8:00</small></span><span class="row-value">켬</span></div></div><button class="entry-primary" type="button">습관 만들기</button></div>
+          <div class="entry-form" data-entry-form="template" hidden><div class="entry-option"><span class="habit-icon" aria-hidden="true">🧘</span><span class="entry-copy"><strong>아침 스트레칭</strong><small>매일 · 완료 체크 · 오전 8시</small></span><span class="entry-chevron">＋</span></div><div class="entry-option"><span class="habit-icon" aria-hidden="true">💧</span><span class="entry-copy"><strong>물 마시기</strong><small>매일 · 8잔 목표</small></span><span class="entry-chevron">＋</span></div><div class="entry-option"><span class="habit-icon" aria-hidden="true">🚶</span><span class="entry-copy"><strong>걷기</strong><small>주 5일 · 30분 목표</small></span><span class="entry-chevron">＋</span></div></div>
+        </div>
+      </section>
+      <section class="detail-screen" data-detail="exercise-mix" aria-label="운동 구성 상세 시안" aria-hidden="true">
+        <div class="detail-status" aria-hidden="true"><span>9:41</span><span>●●● ▰</span></div>
+        <div class="detail-header"><button class="tool-button back-button" type="button" data-detail-back aria-label="Activity로 돌아가기">‹</button><h2>운동 구성</h2></div>
+        <div class="detail-body">
+          <div class="mix-card"><span class="compare-label">최근 4주 · 9월 27일–10월 24일</span><div class="mix-total"><strong>10</strong><span>운동 기록</span></div><p>기록 건수 기준으로 근력과 유산소를 비교합니다.</p><div class="mix-bar" role="img" aria-label="예시 근력 6건 60%, 유산소 4건 40%"><i class="strength"></i><i class="cardio"></i></div><div class="mix-legend"><span><i style="--mix-color:#d7a96b" aria-hidden="true"></i>근력 6건 · 60%</span><span><i style="--mix-color:#82b6a2" aria-hidden="true"></i>유산소 4건 · 40%</span></div></div>
+          <div class="mix-detail-grid">
+          <div class="mix-card"><h3>주별 구성</h3><p>같은 4주 기간의 운동 기록 건수입니다.</p><div class="mix-week-chart" role="img" aria-label="예시 1주부터 4주까지 근력 1, 2, 1, 2건과 유산소 각 1건"><div class="mix-week"><b>2건</b><div class="mix-week-stack"><i class="mix-week-strength" style="height:33%"></i><i class="mix-week-cardio" style="height:33%"></i></div><span>1주</span></div><div class="mix-week"><b>3건</b><div class="mix-week-stack"><i class="mix-week-strength" style="height:67%"></i><i class="mix-week-cardio" style="height:33%"></i></div><span>2주</span></div><div class="mix-week"><b>2건</b><div class="mix-week-stack"><i class="mix-week-strength" style="height:33%"></i><i class="mix-week-cardio" style="height:33%"></i></div><span>3주</span></div><div class="mix-week"><b>3건</b><div class="mix-week-stack"><i class="mix-week-strength" style="height:67%"></i><i class="mix-week-cardio" style="height:33%"></i></div><span>4주</span></div></div><div class="mix-legend"><span><i style="--mix-color:#d7a96b" aria-hidden="true"></i>근력</span><span><i style="--mix-color:#82b6a2" aria-hidden="true"></i>유산소</span></div></div>
+          <div class="mix-card"><h3>근력 · 부위별 비율</h3><p>최근 4주 완료 세트 30개를 근육군별로 나눴어요.</p>
+            <div class="mix-detail-row"><span class="mix-row-label"><i style="--mix-color:#dbab70" aria-hidden="true"></i>하체</span><div class="mix-track"><i style="width:30%;--mix-color:#dbab70"></i></div><b>9세트 · 30%</b></div>
+            <div class="mix-detail-row"><span class="mix-row-label"><i style="--mix-color:#c99072" aria-hidden="true"></i>가슴</span><div class="mix-track"><i style="width:23%;--mix-color:#c99072"></i></div><b>7세트 · 23%</b></div>
+            <div class="mix-detail-row"><span class="mix-row-label"><i style="--mix-color:#8db9a1" aria-hidden="true"></i>등</span><div class="mix-track"><i style="width:20%;--mix-color:#8db9a1"></i></div><b>6세트 · 20%</b></div>
+            <div class="mix-detail-row"><span class="mix-row-label"><i style="--mix-color:#b6a4c8" aria-hidden="true"></i>어깨</span><div class="mix-track"><i style="width:17%;--mix-color:#b6a4c8"></i></div><b>5세트 · 17%</b></div>
+            <div class="mix-detail-row"><span class="mix-row-label"><i style="--mix-color:#88aaa9" aria-hidden="true"></i>코어</span><div class="mix-track"><i style="width:10%;--mix-color:#88aaa9"></i></div><b>3세트 · 10%</b></div>
+            <p class="mix-section-note">주요 부위가 여러 개인 운동은 완료 세트를 해당 부위에 균등 배분합니다. 보조 부위는 이 비율에 포함하지 않습니다.</p>
+          </div>
+          <div class="mix-card"><h3>유산소 · 종류별 기록</h3><p>유산소 운동 기록 4건 기준입니다.</p><div class="mix-detail-row"><span>달리기</span><div class="mix-track"><i style="width:50%;--mix-color:#82b6a2"></i></div><b>2건 · 50%</b></div><div class="mix-detail-row"><span>사이클</span><div class="mix-track"><i style="width:25%;--mix-color:#82b6a2"></i></div><b>1건 · 25%</b></div><div class="mix-detail-row"><span>걷기</span><div class="mix-track"><i style="width:25%;--mix-color:#82b6a2"></i></div><b>1건 · 25%</b></div><p class="mix-section-note">달리기 8.2 km · 45분 / 사이클 32분 / 걷기 2.8 km · 35분</p></div>
+          <div class="mix-card"><h3>운동별 수행</h3><p>운동 기록 10건 기준 · 수행 횟수 순</p><div class="mix-detail-row"><span>벤치프레스</span><div class="mix-track"><i style="width:30%"></i></div><b>3건 · 30%</b></div><div class="mix-detail-row"><span>스쿼트</span><div class="mix-track"><i style="width:20%"></i></div><b>2건 · 20%</b></div><div class="mix-detail-row"><span>달리기</span><div class="mix-track"><i style="width:20%;--mix-color:#82b6a2"></i></div><b>2건 · 20%</b></div><div class="mix-detail-row"><span>로우</span><div class="mix-track"><i style="width:10%"></i></div><b>1건 · 10%</b></div><div class="mix-detail-row"><span>사이클</span><div class="mix-track"><i style="width:10%;--mix-color:#82b6a2"></i></div><b>1건 · 10%</b></div><div class="mix-detail-row"><span>걷기</span><div class="mix-track"><i style="width:10%;--mix-color:#82b6a2"></i></div><b>1건 · 10%</b></div></div>
+          </div>
+          
+        </div>
+      </section>
+      <section class="detail-screen" data-detail="notifications" aria-label="알림 개편 시안" aria-hidden="true">
+        <div class="detail-status" aria-hidden="true"><span>9:41</span><span>●●● ▰</span></div>
+        <div class="detail-header"><button class="tool-button back-button" type="button" data-detail-back aria-label="Today로 돌아가기">‹</button><h2>알림</h2><button class="tool-button" type="button" data-open-detail="settings" aria-label="알림 설정 열기"><svg aria-hidden="true"><use href="#gear-icon"/></svg></button></div>
+        <div class="detail-body">
+          <div class="inbox-summary"><div><strong id="inbox-unread-summary">읽지 않은 소식 3건</strong><p>건강 기록과 앱 소식을 함께 확인합니다.</p></div><button type="button" id="mark-all-read">모두 읽음</button></div>
+          <div class="inbox-filters" role="group" aria-label="알림 종류"><button type="button" data-notification-filter="all" aria-pressed="true">전체</button><button type="button" data-notification-filter="health" aria-pressed="false">건강 알림</button><button type="button" data-notification-filter="news" aria-pressed="false">새로운 소식</button></div>
+          <section class="inbox-section" data-notification-section="news"><h3>새로운 소식</h3><button class="notification-item" type="button" data-unread="true" data-notification-group="news" data-open-detail="news"><span class="icon-badge gold" aria-hidden="true">✦</span><span class="notification-copy"><span class="notification-meta"><span>앱 업데이트 · 버전 0.8.0</span><i class="unread-dot" aria-hidden="true"></i><span class="when">최신</span></span><strong>건강 기록을 더 자세히 살펴보세요</strong><p>이전 기록 탐색, 차트, 스트레스 상세와 화면 이동이 개선됐어요.</p><span class="notification-destination">새로운 소식 보기 ›</span></span></button></section>
+          <section class="inbox-section" data-notification-section="health"><h3>건강 알림</h3><article class="notification-item" data-unread="true" data-notification-group="health"><span class="icon-badge blue" aria-hidden="true">🌙</span><div class="notification-copy"><span class="notification-meta"><span>수면</span><i class="unread-dot" aria-hidden="true"></i><span class="when">오늘</span></span><strong>지난 수면 기록을 확인하세요</strong><p>최근 수면의 시간과 흐름을 볼 수 있습니다.</p><span class="notification-destination">수면 상세 ›</span></div></article><article class="notification-item" data-unread="true" data-notification-group="health"><span class="icon-badge green" aria-hidden="true">🏃</span><div class="notification-copy"><span class="notification-meta"><span>활동</span><i class="unread-dot" aria-hidden="true"></i><span class="when">어제</span></span><strong>이번 주 운동 기록</strong><p>완료한 운동과 회복 흐름을 확인하세요.</p><span class="notification-destination">운동 기록 ›</span></div></article></section>
+          
+        </div>
+      </section>
+      <section class="detail-screen" data-detail="news" aria-label="새로운 소식 상세 시안" aria-hidden="true"><div class="detail-status" aria-hidden="true"><span>9:41</span><span>●●● ▰</span></div><div class="detail-header"><button class="tool-button back-button" type="button" data-detail-back aria-label="알림으로 돌아가기">‹</button><h2>새로운 소식</h2></div><div class="detail-body"><div class="news-feature"><span class="compare-label">앱 업데이트 · 버전 0.8.0</span><strong>건강 기록을 더 자세히</strong><p>이전 기록을 살펴보고, 차트와 스트레스 상세로 변화를 확인할 수 있어요.</p></div><h3>버전 0.8.0에서 달라진 점</h3><div class="news-feature"><strong>📱 iOS 27 지원</strong><p>익숙한 사용 흐름을 유지하면서 최신 iOS에 맞게 다듬었습니다.</p></div><div class="news-feature"><strong>🕘 건강 지표의 이전 기록</strong><p>기록 사이에 긴 공백이 있어도 과거 측정값을 살펴볼 수 있습니다.</p></div><div class="news-feature"><strong>📈 더 안정적인 기록 그래프</strong><p>지난 날짜를 넘겨 볼 때 데이터를 먼저 불러오고 체중 그래프의 눈금을 안정적으로 유지합니다.</p></div><div class="news-feature"><strong>〰️ 누적 스트레스 상세</strong><p>누적 스트레스 점수에서 전용 상세 화면과 이전 흐름을 볼 수 있습니다.</p></div><div class="news-feature"><strong>› 섹션 이동</strong><p>Today·Activity·Wellness·Life의 섹션 제목에서 상세 화면을 더 쉽게 찾을 수 있습니다.</p></div></div></section>
+      <section class="detail-screen" data-detail="settings" aria-label="설정 화면 시안" aria-hidden="true"><div class="detail-status" aria-hidden="true"><span>9:41</span><span>●●● ▰</span></div><div class="detail-header"><button class="tool-button back-button" type="button" data-detail-back aria-label="이전 화면으로 돌아가기">‹</button><h2>설정</h2></div><div class="detail-body"><h3>운동 기본값</h3><div class="settings-list"><div class="rowline"><span>⏱️ 세트 사이 휴식</span><b>90초 ›</b></div><div class="rowline"><span>☷ 기본 세트 수</span><b>3세트 ›</b></div><div class="rowline"><span>🧍 기준 체중</span><b>68.4 kg ›</b></div></div><h3>운동별 설정</h3><div class="settings-list"><div class="rowline"><span>🏋️ 운동별 기본값</span><b>›</b></div><div class="rowline"><span>⭐ 선호 운동</span><b>›</b></div></div><h3>알림</h3><div class="settings-list"><div class="rowline"><span>❤️ 건강 알림</span><b>켬 ›</b></div><div class="rowline"><span>🏆 운동 개인 기록</span><b>켬 ›</b></div><div class="rowline"><span>🌙 취침 알림</span><b>켬 ›</b></div><div class="rowline"><span>🧍 자세 알림</span><b>끔 ›</b></div><div class="rowline"><span>🌆 하루 요약</span><b>켬 ›</b></div></div><h3>브리핑과 화면</h3><div class="settings-list"><div class="rowline"><span>🌤️ 아침 브리핑</span><b>켬</b></div><div class="rowline"><span>🎨 테마</span><b>DESERT HORIZON ›</b></div></div><h3>데이터와 개인정보</h3><div class="settings-list"><div class="rowline"><span>☁️ iCloud 동기화</span><b>켬</b></div><div class="rowline"><span>🔄 지금 동기화</span><b>›</b></div><div class="rowline"><span>❤️ Apple Health 권한</span><b>›</b></div><div class="rowline"><span>📍 위치 접근</span><b>허용 ›</b></div></div><h3>앱 정보</h3><div class="settings-list"><div class="rowline"><span>버전</span><b>0.8.0</b></div><div class="rowline"><span>빌드</span><b>1024</b></div></div></div></section>
+      <div class="nav" aria-hidden="true"><span class="current" data-nav="today"><svg class="tab-icon nav-icon"><use href="#tab-today-icon"/></svg><span class="nav-text">Today</span></span><span data-nav="activity"><svg class="tab-icon nav-icon"><use href="#tab-activity-icon"/></svg><span class="nav-text">Activity</span></span><span data-nav="wellness"><svg class="tab-icon nav-icon leaf"><use href="#tab-wellness-icon"/></svg><span class="nav-text">Wellness</span></span><span data-nav="life"><svg class="tab-icon nav-icon"><use href="#tab-life-icon"/></svg><span class="nav-text">Life</span></span></div>
+    </div>
+    </div>
+    <aside class="notes" aria-live="polite"><h2 id="note-title">T03 · Today 변경점</h2><p id="note-summary">현재 앱과 제안 시안의 차이를 카드 단위로 봅니다.</p><div class="compare-list" id="compare-list"></div><p class="compare-note" id="comparison-scope">왼쪽 PNG는 iPhone 첫 화면의 실제 캡처입니다. 기기·글씨·기록 상태 조작은 가운데 시안에만 적용됩니다. 아래 스크롤 섹션의 비교는 현재 앱 코드의 정보 순서도 함께 기준으로 합니다.</p><div class="sample">시안의 수치·그래프는 예시 · 앱 구현 및 일치 판정 전</div></aside>
+  </div>
+</main>
+<script>
+  const comparison = {
+    today: {
+      id: 'T03', title: 'Today', summary: '컨디션 첫 카드는 유지하고 상단 행동과 알림의 정보 구조를 정리합니다. 시안의 종 아이콘을 눌러 알림안을 볼 수 있습니다.',
+      captures: {
+        dark: { src: '../../full-redesign-map/review/first-fold-ux-2026-10-22/iphone/T03-dark.png', meta: '2026-10-22 · iPhone 18 Pro 402pt · 어두움 · 첫 화면' },
+        light: { src: '../../full-redesign-map/review/first-fold-ux-2026-10-22/iphone/T03-light.png', meta: '2026-10-22 · iPhone 18 Pro 402pt · 밝음 · 첫 화면' }
+      },
+      rows: [
+        { area: '상단 알림·설정', kind: '시안 변경', before: '알림, 새로운 소식, 설정이 각각 상단 도구로 있습니다.', after: '알림과 설정을 44pt 터치 영역으로 두고 새로운 소식의 독립 아이콘을 없앱니다.' },
+        { area: '알림 안의 새로운 소식', kind: '시안 변경', before: '새로운 소식은 별도 상단 진입과 설정의 정보 목록에서 엽니다. 알림은 건강 소식 중심입니다.', after: '알림 안에서 건강 알림과 새로운 소식을 나눠 보고, 새 버전 항목에서 기존 상세 화면으로 이어집니다.' },
+        { area: '컨디션 첫 카드', kind: '유지', before: '84점 링, 실제 7일 추세, HRV·RHR 근거, 상세 진입이 이미 있습니다.', after: '같은 정보 순서를 유지하고 차트 기간·현재점을 명확히 둡니다.' },
+        { area: '상단 사구와 배경', kind: '시안 변경', before: '세 겹 사구가 첫 카드 위쪽에서 끝나고 본문은 어두운 단색으로 이어집니다.', after: '원래 비대칭 곡선은 유지하고 채움과 그라데이션을 화면 전체로 서서히 잇습니다.' },
+        { area: '시간대별 카드', kind: '시안 변경', before: '어제 요약, 걸음·수면 진행, 날씨와 코칭, 회복·스트레스, 저녁 요약이 시간과 데이터에 따라 나타납니다.', after: '어제 운동·수면·점수 변화, 걸음·수면 목표, 서울 날씨와 코칭, 수면 부족과 저녁 요약을 실제 카드 형태로 채웁니다.' },
+        { area: '인사이트·아래 지표', kind: '시안 변경', before: '스마트 인사이트, 고정 지표, 컨디션·활동·신체 지표와 건강 Q&A가 이어집니다.', after: '기간별 작은 그래프와 실제 고정 지표 두 개, 건강 Q&A 질문 예시를 배치합니다. BMI는 표본 부족 자리로 두고 일부 누락 시 해당 지표를 숨깁니다.' }
+      ]
+    },
+    activity: {
+      id: 'A01', title: 'Activity', summary: '준비도와 운동 기록은 유지하고 회복·훈련 분석의 묶음을 명확히 합니다.',
+      captures: {
+        dark: { src: '../../full-redesign-map/review/first-fold-ux-2026-10-22/iphone/A01-dark.png', meta: '2026-10-22 · iPhone 18 Pro 402pt · 어두움 · 첫 화면' },
+        light: { src: '../../full-redesign-map/review/first-fold-ux-2026-10-22/iphone/A01-light.png', meta: '2026-10-22 · iPhone 18 Pro 402pt · 밝음 · 첫 화면' }
+      },
+      rows: [
+        { area: '준비도와 운동 진입', kind: '시안 변경', before: '실제 앱은 준비도 카드의 운동 기록 버튼과 상단 더하기가 모두 운동 선택 화면으로 이어집니다.', after: '준비도 카드의 버튼을 빼고 상단 더하기에서 운동을 찾거나 기록합니다. 로딩·기록 없음에도 같은 위치를 유지합니다.' },
+        { area: '근육 회복 지도', kind: '유지', before: '실제 앱에는 앞·뒤 근육 지도, 회복/볼륨 전환, 지도 아래 회복됨→피로 또는 주간 세트 수 범례가 있습니다.', after: '앞·뒤 전신 지도를 크게 두고 회복/볼륨 선택에 따라 근육 색·요약·지도 아래 범례가 함께 바뀝니다.' },
+        { area: '이번 주 운동', kind: '시안 변경', before: '실제 앱은 훈련 볼륨·칼로리·운동 시간·활동일 4개 통계 카드와 제공되는 이전 기간 대비 변화값을 보여 줍니다.', after: '네 지표를 2×2 카드로 유지하고 단위·변화값·기록 출처를 표시합니다. 아래에는 7일 운동 시간 막대로 3개 활동일의 간격을 보여 줍니다.' },
+        { area: '부상 위험', kind: '시안 변경', before: '주간 통계 뒤에 부상 관련 안내와 위험 정보가 이어집니다.', after: '오른쪽 어깨 부상 기록과 위험 30점, 어깨 피로·수면 부족 요인을 별도 카드에서 읽습니다.' },
+        { area: '추천 운동', kind: '유지', before: '실제 앱은 검색 → 헬스장/집·장비 → 부위별 운동 카드(이유·세트·시작·대체·관심 없음) → 추천 루틴 → 내 템플릿 → AI 운동 만들기 → 전체 운동 순서입니다.', after: '이 순서와 각 행동을 독립된 영역으로 복원했습니다. 검색·운동 카드가 화면 폭에 맞고 루틴·템플릿 목록만 내부에서 가로로 스크롤됩니다.' },
+        { area: '주간 보고서', kind: '시안 변경', before: '실제 카드는 이번 주 운동 횟수·활동일·볼륨·지난 기간 대비 변화, 상위 근육군, 요약 문장, 최대 2개 하이라이트를 담습니다.', after: '정보를 유지하고 지난 7일과 이번 7일의 볼륨 비교 막대를 더합니다. 이전 기간 기록이 없으면 비교값과 막대를 표시하지 않습니다.' },
+        { area: '개인 기록', kind: '유지', before: '실제 앱은 근력·유산소 최고 기록을 날짜순 최대 8개까지 2열로 보여 주고, 레벨·배지·포인트와 조건부 추세·NEW·기록 출처를 표시합니다.', after: '한 줄 스쿼트 요약을 8개 예시 카드로 바꿨습니다. 종류·운동명·값·단위·날짜·출처와 레벨 요약을 각 위치에 두고, 두 값 이상인 종류에만 작은 추세를 표시합니다.' },
+        { area: '최근 운동·달성·페이스', kind: '시안 변경', before: '최근 운동, 달성 기록, 연속 운동·월간 목표가 이어집니다.', after: '운동별 날짜·출처·시간·거리, 달성 일자·포인트, 현재·최고 연속 일수와 7일 운동 표식을 표시합니다.' },
+        { area: '운동 구성', kind: '상세 확장', before: '실제 앱 요약은 운동별 수행 횟수 상위 6개를 막대로, 상세는 운동별 빈도 도넛과 전체 목록을 보여 줍니다.', after: '최근 4주 근력/유산소 기록 비율과 주요 근력 부위를 요약에 두고, 상세에서 주별 구성·부위별 완료 세트 환산 비율·유산소 종류·운동별 횟수를 각각의 분모와 함께 보여 줍니다.' }
+      ]
+    },
+    wellness: {
+      id: 'H01', title: 'Wellness', summary: '현재 점수와 수면의 분리된 목적지를 유지하고 예측·지표를 구별합니다.',
+      captures: {
+        dark: { src: '../../phone-design-map/actual/regular/images/H01.png', meta: '2026-10-22 · iPhone 18 Pro Max 440pt · 어두움 · 점수·수면 링크 분리 후' },
+        light: { src: '../../full-redesign-map/review/first-fold-ux-2026-10-22/iphone/H01-light.png', meta: '2026-10-22 · iPhone 18 Pro 402pt · 밝음 · 링크 분리 전 첫 화면' }
+      },
+      rows: [
+        { area: '웰니스·수면 링크', kind: '시안 변경', before: '실제 앱은 점수 상세와 수면 상세를 분리하고, 점수 추세는 상세에서 보여 줍니다.', after: '두 목적지를 유지하면서 첫 카드에도 기간이 있는 7일 점수 흐름을 작게 배치합니다.' },
+        { area: '최근 실제 수면', kind: '유지', before: '7일 막대, 최근 날짜·시간, 유효한 평균을 표시합니다.', after: '같은 측정 의미와 날짜·평균을 유지하고 점수 영역과 시각적으로 분리합니다.' },
+        { area: '상단 기록 추가', kind: '시안 변경', before: '실제 앱에는 상단 추가 메뉴와 본문의 신체 기록 버튼이 함께 있습니다.', after: '본문 버튼을 빼고 상단 더하기에서 신체·부상·자세 기록 메뉴를 엽니다. 기록 없음 상태에서도 같은 위치를 사용합니다.' },
+        { area: '오늘 밤 예측', kind: '표현 정리', before: '실제 기록 아래 수면 예측 점수가 이어집니다.', after: '예측 링과 신뢰도를 묶고 미래 추정임을 분명히 표시합니다.' },
+        { area: '신체·활성 지표 그래프', kind: '복원', before: '실제 앱의 2열 지표 카드는 기록이 2개 이상이면 각각 작은 추세를, 부족하면 점선 자리를 보여 줍니다.', after: '체중·체지방률과 HRV·안정 심박·심박수·호흡수의 기간별 그래프를 2열 카드로 복원하고, BMI는 표본 부족 상태를 둡니다.' },
+        { area: '자세·부상·기록 내역', kind: '시안 변경', before: 'Watch 앉은 시간·걷기·알림, 자세 촬영·실시간 분석과 최근 점수, 활성 부상, 신체 기록 내역이 이어집니다.', after: 'Watch 실제 지표 세 개, 평가 점수 두 건과 촬영 행동, 오른쪽 어깨 기록, 체중 30일 추세를 각각 보이는 카드로 배치합니다.' }
+      ]
+    },
+    life: {
+      id: 'L01', title: 'Life', summary: '완료 링과 진행 설명은 유지하고 습관 목록·운동 성취·추세를 다시 배치합니다.',
+      captures: {
+        dark: { src: '../../full-redesign-map/review/life-hero-narrative-2026-10-22/small-phone/L01-dark.png', meta: '2026-10-22 · iPhone 18 Pro 402pt · 어두움 · 진행 설명 반영 후' },
+        light: { src: '../../full-redesign-map/review/life-hero-narrative-2026-10-22/small-phone/L01-light.png', meta: '2026-10-22 · iPhone 18 Pro 402pt · 밝음 · 진행 설명 반영 후' }
+      },
+      rows: [
+        { area: '상단 습관 추가', kind: '표현 정리', before: '실제 앱 상단 더하기 메뉴에서 새 습관과 템플릿을 선택할 수 있습니다.', after: '시안에도 같은 상단 더하기를 놓고 습관 없음 카드와 목록의 중복 추가 행동을 덜어 냅니다.' },
+        { area: '오늘의 완료 링', kind: '이미 반영', before: '1/3 링 옆에 진행 설명이 있고 개별 습관은 아래에 있습니다.', after: '이 구조를 유지하고 히어로에서 습관 이름을 반복하지 않습니다.' },
+        { area: '내 습관 목록', kind: '시안 변경', before: '분류 칩과 체크·시간·횟수 방식의 개별 카드가 이어집니다.', after: '아침·낮·저녁 카드에 완료 시각, 시간 진행 막대와 입력, 횟수 조절을 각각 보여 줍니다.' },
+        { area: '이번 주 운동 성취', kind: '시안 변경', before: '습관 목록 뒤에 루틴·근력 부위·달리기 자동 운동 목표가 이어집니다.', after: '월–일 루틴 표식과 근력·달리기 목표값·진행 막대를 묶어 실제 달성 현황을 보여 줍니다.' },
+        { area: '완료 추세와 달력', kind: '시안 변경', before: '기록이 충분할 때 완료 그래프와 히트맵을 표시합니다.', after: '일별 완료 수 16/21개에 맞는 7일 막대와 4주 달력의 날짜·색 범례를 표시합니다.' },
+        { area: '주간 보고서 비교', kind: '시안 변경', before: '최근 7일과 이전 7일의 완료 수를 비교합니다.', after: '완료율 76%·67%와 비교 막대, 가장 잘 이어간 습관과 더 이어갈 습관을 함께 표시합니다.' }
+      ]
+    }
+  };
+  const phone = document.getElementById('phone');
+  // Keep the asymmetric dune profiles from the preserved direction study.
+  const duneLayers = [
+    { name: 'far', center: 45, amplitude: 8, frequency: .72, seconds: 18, skew: .20 },
+    { name: 'mid', center: 62, amplitude: 10, frequency: 1, seconds: 15, skew: .18 },
+    { name: 'near', center: 76, amplitude: 13, frequency: 1.35, seconds: 13, skew: .14 }
+  ];
+  const dunePaths = duneLayers.map(layer => document.querySelector(`.dunes .${layer.name}`));
+  function dunePath(layer, seconds) {
+    const phase = Math.PI * 2 * seconds / layer.seconds;
+    const points = [];
+    for (let x = 0; x <= 400; x += 5) {
+      const angle = Math.PI * 2 * layer.frequency * x / 400 + phase;
+      const contour = Math.sin(angle) + layer.skew * Math.sin(2 * angle + Math.PI / 6);
+      const y = layer.center + layer.amplitude * contour;
+      points.push(`${x === 0 ? 'M' : 'L'}${x} ${y.toFixed(2)}`);
+    }
+    return `${points.join(' ')} L400 220 L0 220 Z`;
+  }
+  function drawDunes(seconds) {
+    duneLayers.forEach((layer, index) => dunePaths[index].setAttribute('d', dunePath(layer, seconds)));
+  }
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let duneFrame;
+  function updateDuneMotion() {
+    if (duneFrame) cancelAnimationFrame(duneFrame);
+    drawDunes(0);
+    if (reduceMotion.matches) return;
+    const start = performance.now();
+    function animate(now) {
+      drawDunes((now - start) / 1000);
+      duneFrame = requestAnimationFrame(animate);
+    }
+    duneFrame = requestAnimationFrame(animate);
+  }
+  reduceMotion.addEventListener('change', updateDuneMotion);
+  updateDuneMotion();
+  let activeTab = 'today';
+  let recordState = 'sample';
+  function renderComparison() {
+    const item = comparison[activeTab];
+    const mode = phone.classList.contains('light') ? 'light' : 'dark';
+    const isDuoLandscape = phone.classList.contains('duo-open');
+    const capture = isDuoLandscape ? {
+      src: `../../full-redesign-map/review/${activeTab === 'life' ? 'life-hero-narrative-2026-10-22/duo-open' : 'duo-four-tab-hero-rings-2026-10-22/open'}/${item.id}-${mode}.png`,
+      meta: `2026-10-22 · Duo 펼침 951×669pt · 가로 · ${mode === 'dark' ? '어두움' : '밝음'} · ${activeTab === 'life' ? '진행 설명 반영 후' : '첫 화면'}`
+    } : item.captures[mode];
+    const image = document.getElementById('actual-image');
+    image.src = capture.src;
+    image.alt = `${capture.meta} · ${item.title} 실제 앱 캡처`;
+    document.getElementById('actual-meta').textContent = capture.meta;
+    document.getElementById('actual-source').href = capture.src;
+    document.getElementById('target-label').textContent = isDuoLandscape ? '변경 제안 · Duo 펼침 가로 951×669pt · 전체 스크롤 시안' : '변경 제안 · 전체 스크롤 시안';
+    document.getElementById('comparison-scope').textContent = isDuoLandscape
+      ? '왼쪽 PNG는 Duo 펼침 가로 첫 화면의 실제 캡처입니다. 글씨·기록 상태 조작은 가운데 시안에만 적용됩니다. 아래 스크롤 섹션의 비교는 현재 앱 코드의 정보 순서도 함께 기준으로 합니다.'
+      : '왼쪽 PNG는 iPhone 첫 화면의 실제 캡처입니다. 기기·글씨·기록 상태 조작은 가운데 시안에만 적용됩니다. 아래 스크롤 섹션의 비교는 현재 앱 코드의 정보 순서도 함께 기준으로 합니다.';
+    document.getElementById('note-title').textContent = `${item.id} · ${item.title} 변경점`;
+    document.getElementById('note-summary').textContent = item.summary;
+    const rows = item.rows.map(change => {
+      const article = document.createElement('article');
+      article.className = 'compare-row';
+      const head = document.createElement('div');
+      head.className = 'compare-row-head';
+      const name = document.createElement('strong');
+      name.textContent = change.area;
+      const kind = document.createElement('span');
+      kind.className = 'compare-kind';
+      kind.textContent = change.kind;
+      head.append(name, kind);
+      const before = document.createElement('p');
+      const beforeLabel = document.createElement('b');
+      beforeLabel.textContent = '기존 · ';
+      before.append(beforeLabel, document.createTextNode(change.before));
+      const after = document.createElement('p');
+      const afterLabel = document.createElement('b');
+      afterLabel.textContent = '시안 · ';
+      after.append(afterLabel, document.createTextNode(change.after));
+      article.append(head, before, after);
+      return article;
+    });
+    document.getElementById('compare-list').replaceChildren(...rows);
+  }
+  function updateScreen() {
+    document.querySelectorAll('[data-screen]').forEach(item => item.classList.toggle('active', recordState !== 'empty' && item.dataset.screen === activeTab));
+    document.querySelectorAll('[data-empty]').forEach(item => item.classList.toggle('active', recordState === 'empty' && item.dataset.empty === activeTab));
+    document.querySelectorAll('[data-partial-for]').forEach(item => item.classList.toggle('active', recordState === 'partial' && item.dataset.partialFor === activeTab));
+    document.querySelectorAll('[data-pr-source="healthkit"]').forEach(item => { item.hidden = recordState === 'partial'; });
+    document.getElementById('pr-cardio-notice').hidden = recordState !== 'partial';
+    document.getElementById('pr-record-count').textContent = recordState === 'partial' ? '근력 기록 · 5개' : '근력·유산소 · 최근 기록 8개';
+    document.querySelectorAll('[data-today-optional], [data-wellness-optional]').forEach(item => { item.hidden = recordState === 'partial'; });
+    document.getElementById('wellness-partial-notice').hidden = recordState !== 'partial';
+    document.getElementById('recommendation-preview-controls').hidden = activeTab !== 'activity';
+  }
+  const detailHistory = [];
+  let activeDetail = null;
+  const addDestinations = {
+    activity: { detail: 'exercise-picker', label: '운동 추가' },
+    wellness: { detail: 'wellness-add', label: '기록 추가' },
+    life: { detail: 'life-add', label: '습관 추가' }
+  };
+  const entryKinds = { '스쿼트': 'strength', '벤치프레스': 'strength', '달리기': 'cardio', '신체 기록': 'body', '부상 기록': 'injury', '자세 평가': 'posture', '실시간 자세 분석': 'realtime', '새 습관': 'habit', '습관 템플릿': 'template' };
+  const entrySubtitles = { strength: '바벨 · 세트와 반복을 기록하세요', cardio: '거리와 시간을 함께 확인하세요', body: '오늘 측정한 값을 입력하세요', injury: '부위와 상태를 기록하세요', posture: '카메라로 전신 정렬을 평가합니다', realtime: '움직이는 동안 자세를 확인합니다', habit: '이름·기록 방식·반복 일정을 정하세요', template: '준비된 습관을 골라 시작하세요' };
+  function updateHeaderAction() {
+    document.getElementById('today-actions').hidden = activeTab !== 'today';
+    const button = document.getElementById('other-action');
+    button.hidden = activeTab === 'today';
+    if (addDestinations[activeTab]) {
+      button.dataset.openDetail = addDestinations[activeTab].detail;
+      button.setAttribute('aria-label', addDestinations[activeTab].label);
+      button.title = addDestinations[activeTab].label;
+    }
+  }
+  function showDetail(name) {
+    activeDetail = name;
+    document.querySelectorAll('.detail-screen').forEach(item => {
+      const isActive = item.dataset.detail === name;
+      item.classList.toggle('active', isActive);
+      item.setAttribute('aria-hidden', String(!isActive));
+    });
+  }
+  function updateUnreadCount() {
+    const count = document.querySelectorAll('.notification-item[data-unread="true"]').length;
+    const badge = document.getElementById('header-unread-count');
+    badge.hidden = count === 0;
+    badge.textContent = String(count);
+    document.querySelector('[data-open-detail="notifications"]').setAttribute('aria-label', count > 0 ? `알림 열기, 읽지 않은 소식 ${count}건` : '알림 열기');
+    document.getElementById('inbox-unread-summary').textContent = count > 0 ? `읽지 않은 소식 ${count}건` : '새 소식을 모두 확인했어요';
+    document.getElementById('mark-all-read').disabled = count === 0;
+  }
+  document.querySelectorAll('[data-open-detail]').forEach(button => button.addEventListener('click', () => {
+    if (activeDetail) detailHistory.push(activeDetail);
+    if (button.dataset.openDetail === 'entry-destination') {
+      const kind = entryKinds[button.dataset.destinationTitle] || 'strength';
+      document.getElementById('entry-destination-title').textContent = button.dataset.destinationTitle;
+      document.getElementById('entry-destination-heading').textContent = button.dataset.destinationTitle;
+      document.getElementById('entry-destination-description').textContent = entrySubtitles[kind];
+      document.querySelectorAll('[data-entry-form]').forEach(item => { item.hidden = item.dataset.entryForm !== kind; });
+    }
+    if (button.dataset.openDetail === 'news') {
+      document.querySelector('.notification-item[data-notification-group="news"]').dataset.unread = 'false';
+      updateUnreadCount();
+    }
+    showDetail(button.dataset.openDetail);
+  }));
+  document.querySelectorAll('[data-detail-back]').forEach(button => button.addEventListener('click', () => {
+    showDetail(detailHistory.pop() || null);
+  }));
+  document.getElementById('exercise-picker-search').addEventListener('input', event => {
+    const query = event.target.value.trim().toLocaleLowerCase();
+    let visible = 0;
+    document.querySelectorAll('.exercise-picker-item').forEach(item => {
+      item.hidden = !item.dataset.exerciseName.toLocaleLowerCase().includes(query);
+      if (!item.hidden) visible += 1;
+    });
+    document.getElementById('exercise-picker-empty').hidden = visible > 0;
+  });
+  document.getElementById('mark-all-read').addEventListener('click', () => {
+    document.querySelectorAll('.notification-item').forEach(item => { item.dataset.unread = 'false'; });
+    updateUnreadCount();
+  });
+  document.querySelectorAll('[data-notification-filter]').forEach(button => button.addEventListener('click', () => {
+    const filter = button.dataset.notificationFilter;
+    document.querySelectorAll('[data-notification-filter]').forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+    document.querySelectorAll('[data-notification-section]').forEach(item => { item.hidden = filter !== 'all' && item.dataset.notificationSection !== filter; });
+  }));
+  updateUnreadCount();
+  document.querySelectorAll('[data-muscle-mode-button]').forEach(button => button.addEventListener('click', () => {
+    const mode = button.dataset.muscleModeButton;
+    document.querySelector('.muscle-map').dataset.muscleMode = mode;
+    document.querySelectorAll('[data-muscle-mode-button]').forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+    document.querySelectorAll('[data-muscle-legend]').forEach(item => { item.hidden = item.dataset.muscleLegend !== mode; });
+    document.getElementById('muscle-map-summary').textContent = mode === 'recovery' ? '13개 근육군 준비 완료' : '이번 주 근육군별 운동량';
+    document.getElementById('muscle-map-description').setAttribute('aria-label', mode === 'recovery'
+      ? '회복 모드 예시: 앞면과 뒷면의 13개 근육군 모두 준비 완료'
+      : '볼륨 모드 예시: 앞면과 뒷면의 근육군을 이번 주 세트 수에 따라 표시');
+  }));
+  const suggestedSearch = document.getElementById('suggested-search-input');
+  suggestedSearch.addEventListener('input', () => {
+    const query = suggestedSearch.value.trim().toLocaleLowerCase();
+    document.getElementById('suggested-default').hidden = query.length > 0;
+    document.getElementById('suggested-search-results').hidden = query.length === 0;
+    let visible = 0;
+    document.querySelectorAll('.suggested-search-item').forEach(item => {
+      item.hidden = !item.dataset.searchName.toLocaleLowerCase().includes(query);
+      if (!item.hidden) visible += 1;
+    });
+    document.getElementById('suggested-search-empty').hidden = visible > 0;
+  });
+  let workoutContext = 'gym';
+  let suggestionPreview = 'workout';
+  function updateSuggestionPreview() {
+    document.querySelectorAll('[data-suggestion-state]').forEach(item => {
+      item.hidden = item.dataset.suggestionState !== suggestionPreview
+        || (suggestionPreview === 'workout' && item.dataset.suggestionContext !== workoutContext);
+    });
+  }
+  document.querySelectorAll('[data-workout-context]').forEach(button => button.addEventListener('click', () => {
+    workoutContext = button.dataset.workoutContext;
+    document.querySelectorAll('[data-workout-context]').forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+    updateSuggestionPreview();
+  }));
+  document.querySelectorAll('[data-suggestion-preview]').forEach(button => button.addEventListener('click', () => {
+    suggestionPreview = button.dataset.suggestionPreview;
+    document.querySelectorAll('[data-suggestion-preview]').forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+    updateSuggestionPreview();
+  }));
+  document.getElementById('suggested-equipment-toggle').addEventListener('click', event => {
+    const button = event.currentTarget;
+    const panel = document.getElementById('suggested-equipment-panel');
+    panel.hidden = !panel.hidden;
+    button.setAttribute('aria-expanded', String(!panel.hidden));
+  });
+  document.querySelectorAll('#suggested-equipment-panel input').forEach(input => input.addEventListener('change', () => {
+    const checked = document.querySelectorAll('#suggested-equipment-panel input:checked');
+    if (checked.length === 0) input.checked = true;
+    document.getElementById('suggested-equipment-count').textContent = `${document.querySelectorAll('#suggested-equipment-panel input:checked').length}개 선택 ›`;
+  }));
+  document.querySelectorAll('[data-alternatives-toggle]').forEach(button => button.addEventListener('click', () => {
+    const panel = document.querySelector(`[data-alternatives="${button.dataset.alternativesToggle}"]`);
+    panel.hidden = !panel.hidden;
+    button.setAttribute('aria-expanded', String(!panel.hidden));
+    button.textContent = panel.hidden ? '대체 운동' : '접기';
+  }));
+  document.querySelectorAll('.suggested-not-interested').forEach(button => button.addEventListener('click', () => {
+    const excluded = button.getAttribute('aria-pressed') !== 'true';
+    button.setAttribute('aria-pressed', String(excluded));
+    button.textContent = excluded ? '관심 없음 되돌리기' : '관심 없음';
+  }));
+  document.querySelectorAll('[data-tab]').forEach(button => button.addEventListener('click', () => {
+    const tab = button.dataset.tab;
+    activeTab = tab;
+    detailHistory.length = 0;
+    showDetail(null);
+    document.querySelectorAll('[data-tab]').forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+    updateScreen();
+    document.querySelectorAll('[data-nav]').forEach(item => item.classList.toggle('current', item.dataset.nav === tab));
+    document.getElementById('app-title').textContent = button.textContent;
+    updateHeaderAction();
+    renderComparison();
+  }));
+  document.querySelectorAll('[data-mode]').forEach(button => button.addEventListener('click', () => {
+    document.querySelectorAll('[data-mode]').forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+    phone.classList.toggle('light', button.dataset.mode === 'light');
+    phone.classList.toggle('dark', button.dataset.mode === 'dark');
+    renderComparison();
+  }));
+  document.querySelectorAll('[data-device]').forEach(button => button.addEventListener('click', () => {
+    document.querySelectorAll('[data-device]').forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+    phone.classList.remove('ipad', 'duo-open', 'duo-closed');
+    document.querySelector('.stage').classList.toggle('wide', button.dataset.device !== 'iphone');
+    document.querySelector('.page').classList.toggle('landscape-preview', button.dataset.device === 'duo-open');
+    if (button.dataset.device !== 'iphone') phone.classList.add(button.dataset.device);
+    renderComparison();
+  }));
+  document.querySelectorAll('[data-type]').forEach(button => button.addEventListener('click', () => {
+    document.querySelectorAll('[data-type]').forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+    phone.classList.toggle('large-text', button.dataset.type === 'large');
+  }));
+  document.querySelectorAll('[data-record]').forEach(button => button.addEventListener('click', () => {
+    document.querySelectorAll('[data-record]').forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+    recordState = button.dataset.record;
+    updateScreen();
+  }));
+  document.querySelectorAll('[data-time]').forEach(button => button.addEventListener('click', () => {
+    document.querySelectorAll('[data-time]').forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+    document.querySelectorAll('[data-time-panel]').forEach(item => { item.hidden = !item.dataset.timePanel.split(' ').includes(button.dataset.time); });
+  }));
+  renderComparison();
+</script>
+</body>
+</html>

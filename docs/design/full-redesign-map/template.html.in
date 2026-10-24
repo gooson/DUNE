@@ -124,13 +124,13 @@
     <h1>전체 디자인 개편 맵</h1>
     <p class="lead">8개 방향 시안을 앱에 구현하기 위한 맵입니다. DESERT HORIZON의 4탭 레이아웃을 시안과 먼저 대조하고, 그 다음 시각 디테일과 나머지 테마를 진행합니다. 기존 캡처 수는 시안 일치나 구현 완료를 뜻하지 않습니다.</p>
     <div class="status-line"><span><strong>8</strong> 테마 · WATER LILIES 포함</span><span><strong>4</strong> 루트 탭 · 32개 조합</span><span><strong>__REACHABLE_COUNT__</strong> 실제 진입 화면 · 전체 인벤토리 __SCREEN_COUNT__개</span><span>Watch 운동 상태 62개 연계 · 테마 실제 __WATCH_COUNT__/24</span><span>상세·시트·운동 실제 __FLOW_COUNT__/48</span><span>실제 루트 캡처 · __CAPTURE_COUNTS__</span></div>
-    <nav class="nav-links" aria-label="관련 자료"><a href="../theme-map/index.html">원본 테마맵 ↗</a><a href="../layout-map/index.html">4탭 레이아웃 기준 ↗</a><a href="review/desert-horizon-layout-2026-10-19/README.md">DESERT HORIZON 4탭 중간 대조 ↗</a><a href="../phone-design-map/actual/index.html">기존 실제 캡처 ↗</a><a href="README.md">맵 사용법·완료 기준 ↗</a></nav>
+    <nav class="nav-links" aria-label="관련 자료"><a href="../theme-map/index.html">원본 테마맵 ↗</a><a href="../layout-map/index.html">4탭 레이아웃 기준 ↗</a><a href="../theme-map/themes/dune-final-four-tab.html">DESERT HORIZON 상세 시안 ↗</a><a href="review/desert-horizon-layout-2026-10-19/README.md">4탭 중간 대조 ↗</a><a href="../phone-design-map/actual/index.html">기존 실제 캡처 ↗</a><a href="README.md">맵 사용법·완료 기준 ↗</a></nav>
   </div></header>
   <main class="wrap">
     <section id="themes"><div class="section-head"><h2>01 · 테마별 구현 계약</h2><p>테마를 선택하면 원본 방향 시안과 해당 앱 구현 기준을 함께 봅니다. 시안의 점수와 건강 문구는 예시입니다.</p></div>
       <div class="theme-list" role="group" aria-label="테마 선택">__THEME_BUTTONS__</div>
       <div class="theme-detail">
-        <div class="source-panel"><div class="panel-bar"><strong>방향 시안 · 실제 앱 화면 아님</strong><a id="source-link" href="../theme-map/themes/dune-design-direction.html" target="_blank" rel="noopener">원본 열기 ↗</a></div><iframe id="source-frame" title="선택한 테마의 보존된 시안" loading="eager" src="../theme-map/themes/dune-design-direction.html"></iframe></div>
+        <div class="source-panel"><div class="panel-bar"><strong>방향 시안 · 실제 앱 화면 아님</strong><a id="source-link" href="../theme-map/themes/dune-final-four-tab.html" target="_blank" rel="noopener">원본 열기 ↗</a></div><iframe id="source-frame" title="선택한 테마의 보존된 시안" loading="eager" src="../theme-map/themes/dune-final-four-tab.html"></iframe></div>
         <div class="contract-panel"><div class="panel-bar"><strong>앱에 반영할 계약</strong><span id="theme-case">desertWarm</span></div><div class="contract-body">
           <div class="contract-head"><div><h3 id="theme-title">DUNE · Desert Horizon</h3><small id="theme-motif">모래 능선</small></div><span class="badge" id="theme-status">기존 테마 재설계</span></div>
           <div class="contract-grid"><article><b>01 / 상단 장면</b><p id="theme-scene">__FIRST_SCENE__</p></article><article><b>02 / 카드 표면</b><p id="theme-surface">__FIRST_SURFACE__</p></article><article><b>03 / 상태 링</b><p id="theme-ring">__FIRST_RING__</p></article><article><b>04 / 실데이터 그래프</b><p id="theme-graph">__FIRST_GRAPH__</p></article><article><b>05 / 지속 움직임</b><p id="theme-motion">__FIRST_MOTION__</p></article><article><b>06 / 합격 화면</b><p id="theme-check">__FIRST_CHECK__</p></article></div>

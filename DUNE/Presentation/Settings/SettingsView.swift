@@ -3,6 +3,20 @@ import SwiftData
 import CoreLocation
 
 struct SettingsView: View {
+    let sharedHealthDataService: SharedHealthDataService?
+    let canLoadHealthKitData: Bool
+    let hasFailedHealthKitAuthorization: Bool
+
+    init(
+        sharedHealthDataService: SharedHealthDataService? = nil,
+        canLoadHealthKitData: Bool = true,
+        hasFailedHealthKitAuthorization: Bool = false
+    ) {
+        self.sharedHealthDataService = sharedHealthDataService
+        self.canLoadHealthKitData = canLoadHealthKitData
+        self.hasFailedHealthKitAuthorization = hasFailedHealthKitAuthorization
+    }
+
     @AppStorage(CloudSyncPreferenceStore.storageKey) private var isCloudSyncEnabled = false
     @AppStorage(SimulatorAdvancedMockDataModeStore.storageKey) private var isSimulatorMockEnabled = false
     @Environment(\.modelContext) private var modelContext
@@ -20,8 +34,6 @@ struct SettingsView: View {
     @State private var lastCloudSyncDate: Date?
 
     private let store = WorkoutSettingsStore.shared
-    private let whatsNewStore = WhatsNewStore.shared
-    private let whatsNewManager = WhatsNewManager.shared
 
     var body: some View {
         GeometryReader { geometry in
@@ -319,17 +331,16 @@ struct SettingsView: View {
 
     private var aboutSection: some View {
         Section("About") {
-            if !whatsNewReleases.isEmpty {
-                NavigationLink {
-                    WhatsNewView(
-                        releases: whatsNewReleases,
-                        mode: .manual,
-                        onPresented: markWhatsNewOpened
-                    )
-                } label: {
-                    Label("What's New", systemImage: "sparkles")
-                        .accessibilityIdentifier("settings-row-whatsnew")
-                }
+            NavigationLink {
+                NotificationHubView(
+                    sharedHealthDataService: sharedHealthDataService,
+                    canLoadHealthKitData: canLoadHealthKitData,
+                    hasFailedHealthKitAuthorization: hasFailedHealthKitAuthorization,
+                    initialFilter: .news
+                )
+            } label: {
+                Label("What's New", systemImage: "bell")
+                    .accessibilityIdentifier("settings-row-whatsnew")
             }
 
             HStack {
@@ -366,16 +377,6 @@ struct SettingsView: View {
 
     private var buildNumber: String {
         Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "—"
-    }
-
-    private var whatsNewReleases: [WhatsNewReleaseData] {
-        whatsNewManager.orderedReleases(preferredVersion: appVersion)
-    }
-
-    private func markWhatsNewOpened() {
-        let build = whatsNewManager.currentBuildNumber()
-        guard !build.isEmpty else { return }
-        whatsNewStore.markOpened(build: build)
     }
 
     private func seedAdvancedMockData() {

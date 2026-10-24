@@ -11,10 +11,7 @@ struct DashboardView: View {
     @State private var isShowingBriefing = false
     @AppStorage("morningBriefingDisabled") private var isBriefingDisabled = false
     @State private var unreadNotificationCount = 0
-    @State private var showWhatsNewBadge = false
-    @State private var cachedWhatsNewReleases: [WhatsNewReleaseData] = []
-    @State private var cachedCurrentRelease: WhatsNewReleaseData?
-    @State private var cachedBuildNumber: String = ""
+    @State private var hasUnreadRelease = false
     @Query(sort: \WorkoutTemplate.updatedAt, order: .reverse) private var templates: [WorkoutTemplate]
     @Query(
         {
@@ -30,8 +27,6 @@ struct DashboardView: View {
     @Environment(\.openURL) private var openURL
     private let library: ExerciseLibraryQuerying = ExerciseLibraryService.shared
     private let inboxManager = NotificationInboxManager.shared
-    private let whatsNewStore = WhatsNewStore.shared
-    private let whatsNewManager = WhatsNewManager.shared
     private let scrollToTopSignal: Int
 
     private enum ScrollAnchor: Hashable {
@@ -50,7 +45,6 @@ struct DashboardView: View {
     private let hasFailedHealthKitAuthorization: Bool
     private let sharedHealthDataService: SharedHealthDataService?
     private let scoreRefreshService: ScoreRefreshService?
-    @State private var showWhatsNew = false
     @State private var showSettings = false
     @State private var cachedWeatherAtmosphere: WeatherAtmosphere = .default
     // Coaching properties are mutated asynchronously by enhanceCoachingTask.
@@ -193,15 +187,15 @@ struct DashboardView: View {
             await loadDashboard()
         }
         .task {
-            loadWhatsNewCache()
             reloadUnreadCount()
-            reloadWhatsNewBadge()
         }
         .onAppear {
             reloadUnreadCount()
-            reloadWhatsNewBadge()
         }
         .onReceive(NotificationCenter.default.mainThreadPublisher(for: NotificationInboxManager.inboxDidChangeNotification)) { _ in
+            reloadUnreadCount()
+        }
+        .onReceive(NotificationCenter.default.mainThreadPublisher(for: WhatsNewStore.didChangeNotification)) { _ in
             reloadUnreadCount()
         }
         .sheet(isPresented: $isShowingPinnedEditor) {
@@ -268,19 +262,14 @@ struct DashboardView: View {
         }
         .englishNavigationTitle("Today")
         .toolbar {
-            notificationsToolbarItem
-            whatsNewToolbarItem
-            settingsToolbarItem
-        }
-        .navigationDestination(isPresented: $showWhatsNew) {
-            WhatsNewView(
-                releases: cachedWhatsNewReleases,
-                mode: .manual,
-                onPresented: markWhatsNewOpened
-            )
+            dashboardToolbarItem
         }
         .navigationDestination(isPresented: $showSettings) {
-            SettingsView()
+            SettingsView(
+                sharedHealthDataService: sharedHealthDataService,
+                canLoadHealthKitData: canLoadHealthKitData,
+                hasFailedHealthKitAuthorization: hasFailedHealthKitAuthorization
+            )
         }
         .onChange(of: viewModel.briefingData != nil) { _, hasData in
             if hasData,
@@ -591,7 +580,6 @@ struct DashboardView: View {
             }
         }
         reloadUnreadCount()
-        reloadWhatsNewBadge()
 
         // Template nudge (non-blocking, after main data loaded)
         let snapshots = templates.map {
@@ -608,14 +596,15 @@ struct DashboardView: View {
                 .frame(width: 22, height: 22)
                 .padding([.top, .trailing], 4)
 
-            if unreadNotificationCount > 0 {
+            if combinedUnreadCount > 0 {
                 Text(unreadBadgeLabel)
+                    .accessibilityIdentifier("dashboard-notifications-unread-badge")
                     .font(.system(size: 9, weight: .bold))
                     .foregroundStyle(.white)
                     .padding(.horizontal, 5)
                     .padding(.vertical, 2)
                     .background(Color.red, in: Capsule())
-                    .accessibilityLabel("\(unreadNotificationCount.formatted()) unread notifications")
+                    .accessibilityHidden(true)
             }
         }
         .frame(width: 44, height: 44)
@@ -623,91 +612,44 @@ struct DashboardView: View {
     }
 
     private var unreadBadgeLabel: String {
-        unreadNotificationCount > 99 ? "99+" : unreadNotificationCount.formatted()
+        combinedUnreadCount > 99 ? "99+" : combinedUnreadCount.formatted()
+    }
+
+    private var combinedUnreadCount: Int {
+        unreadNotificationCount + (hasUnreadRelease ? 1 : 0)
     }
 
     private func reloadUnreadCount() {
         unreadNotificationCount = inboxManager.unreadCount()
-    }
-
-    private func loadWhatsNewCache() {
-        let version = whatsNewManager.currentAppVersion()
-        cachedWhatsNewReleases = whatsNewManager.orderedReleases(preferredVersion: version)
-        cachedCurrentRelease = version.isEmpty ? nil : whatsNewManager.currentRelease(for: version)
-        cachedBuildNumber = whatsNewManager.currentBuildNumber()
+        hasUnreadRelease = WhatsNewInboxRelease.current()?.isUnread ?? false
     }
 
     @ToolbarContentBuilder
-    private var notificationsToolbarItem: some ToolbarContent {
+    private var dashboardToolbarItem: some ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {
-            Button {
-                onOpenNotifications()
-            } label: {
-                notificationBellIcon
-            }
-            .accessibilityLabel("Notifications")
-            .accessibilityIdentifier("dashboard-toolbar-notifications")
-        }
-    }
-
-    @ToolbarContentBuilder
-    private var whatsNewToolbarItem: some ToolbarContent {
-        if !cachedWhatsNewReleases.isEmpty {
-            ToolbarItem(placement: .topBarTrailing) {
+            HStack(spacing: 12) {
                 Button {
-                    showWhatsNew = true
+                    onOpenNotifications()
                 } label: {
-                    whatsNewToolbarIcon
+                    notificationBellIcon
                 }
-                .accessibilityLabel("What's New")
-                .accessibilityIdentifier("dashboard-toolbar-whatsnew")
-            }
-        }
-    }
+                .accessibilityLabel("Notifications")
+                .accessibilityValue(combinedUnreadCount > 0
+                    ? Text("\(combinedUnreadCount) unread notifications")
+                    : Text("Inbox is all caught up"))
+                .accessibilityIdentifier("dashboard-toolbar-notifications")
 
-    @ToolbarContentBuilder
-    private var settingsToolbarItem: some ToolbarContent {
-        ToolbarItem(placement: .topBarTrailing) {
-            Button {
-                showSettings = true
-            } label: {
-                Image(systemName: "gearshape")
-            }
-            .accessibilityLabel("Settings")
-            .accessibilityIdentifier("dashboard-toolbar-settings")
-        }
-    }
-
-    private var whatsNewToolbarIcon: some View {
-        Image(systemName: "sparkles")
-            .frame(width: 22, height: 22)
-            .overlay(alignment: .topTrailing) {
-                if showWhatsNewBadge {
-                    Circle()
-                        .fill(DS.Color.activity)
-                        .frame(width: 9, height: 9)
-                        .overlay {
-                            Circle()
-                                .stroke(Color(uiColor: .systemBackground), lineWidth: 1.5)
-                        }
-                        .offset(x: 4, y: -1)
+                Button {
+                    showSettings = true
+                } label: {
+                    Image(systemName: "gearshape")
+                        .frame(width: 44, height: 44)
+                        .contentShape(Rectangle())
                 }
+                .accessibilityLabel("Settings")
+                .accessibilityIdentifier("dashboard-toolbar-settings")
             }
-    }
-
-    private func reloadWhatsNewBadge() {
-        guard cachedCurrentRelease != nil else {
-            showWhatsNewBadge = false
-            return
         }
-
-        showWhatsNewBadge = whatsNewStore.shouldShowBadge(build: cachedBuildNumber)
-    }
-
-    private func markWhatsNewOpened() {
-        guard !cachedBuildNumber.isEmpty else { return }
-        whatsNewStore.markOpened(build: cachedBuildNumber)
-        showWhatsNewBadge = false
     }
 
     private func cardSection(

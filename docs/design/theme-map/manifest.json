@@ -1,16 +1,27 @@
 {
-  "updated": "2026-10-17",
+  "updated": "2026-10-24",
   "app_contract": "app-contract.md",
   "themes": [
     {
       "id": "dune",
       "name": "DUNE",
       "title": "Desert Horizon",
-      "file": "dune-design-direction.html",
+      "file": "dune-final-four-tab.html",
       "motif": "모래 능선",
-      "motion": "모든 화면의 능선이 한 리듬으로 지속해서 흐름",
-      "detail": "모래빛 상단 배경, 금빛 발광 링, 히어로 그래프",
-      "colors": ["#302b2a", "#b2854c", "#e1b453", "#f5d778"]
+      "motion": "먼·중간 능선이 다른 속도로 낮은 진폭으로 흐르고 Reduce Motion에서는 정지",
+      "detail": "4탭 전체 스크롤 카드·기록 없음·추가 메뉴 목적지별 입력 화면, 탭 바 아이콘, Today 알림·설정과 새 소식 통합·어제 요약·진행·날씨·고정 지표·건강 Q&A·하단 추세 그래프, Activity 앞·뒤 근육 지도·이번 주 통계·상세 추천 운동·부상 요인·최근 운동·주간 보고서 비교·근력/유산소 개인 기록·달성 이력·운동 페이스 링 간격·운동 구성 상세, Wellness 점수·수면 그래프·신체·활성 지표별 추세·Watch 자세·평가·활성 부상, Life 종류별 습관 입력·자동 운동 목표·완료 달력·주간 보고서, Duo 펼침 가로 951×669pt, 원본 사구 곡선과 화면 전체 그라데이션, 기존 실제 화면 대비 비교, 별도 연결된 휴식 라이브 액티비티·점수 위젯 시안과 Small 카드 하단 요약 간격",
+      "colors": [
+        "#302b2a",
+        "#b2854c",
+        "#e1b453",
+        "#f5d778"
+      ],
+      "implementation": {
+        "layout": "../layout-map/desert-horizon-final.md",
+        "actual_captures": "../full-redesign-map/review/desert-horizon-final-2026-10-24/index.html",
+        "verification": "../../reviews/2026-10-24-desert-horizon-final.md",
+        "status": "implemented-with-user-deferred-duo-validation"
+      }
     },
     {
       "id": "ocean",
@@ -20,7 +31,12 @@
       "motif": "두꺼운 흰 포말과 해류",
       "motion": "깊은 물결과 반대 방향의 흐름이 교차",
       "detail": "일본 판화의 굵은 선을 연상시키는 포말, 청록 발광 링",
-      "colors": ["#0a2932", "#205b75", "#4fc3d5", "#d7faf6"]
+      "colors": [
+        "#0a2932",
+        "#205b75",
+        "#4fc3d5",
+        "#d7faf6"
+      ]
     },
     {
       "id": "forest",
@@ -30,7 +46,12 @@
       "motif": "안개와 숲 능선",
       "motion": "먼 숲과 가까운 능선이 서로 다른 속도로 이동",
       "detail": "짙은 녹색 바탕, 금빛 링과 선명한 그래프",
-      "colors": ["#172f29", "#4f7f61", "#a6c58b", "#e8c86b"]
+      "colors": [
+        "#172f29",
+        "#4f7f61",
+        "#a6c58b",
+        "#e8c86b"
+      ]
     },
     {
       "id": "sakura",
@@ -40,7 +61,12 @@
       "motif": "벚꽃 군집과 얇은 가지",
       "motion": "봄 안개와 소수의 꽃잎이 느리게 흐름",
       "detail": "살구와 분홍의 층, 새잎빛 링",
-      "colors": ["#574354", "#ba8d9a", "#efc0a7", "#ffe3d5"]
+      "colors": [
+        "#574354",
+        "#ba8d9a",
+        "#efc0a7",
+        "#ffe3d5"
+      ]
     },
     {
       "id": "arctic",
@@ -50,7 +76,12 @@
       "motif": "오로라의 빛 띠",
       "motion": "배경은 고요하게 두고 오로라만 천천히 이동",
       "detail": "빙하빛 청색과 보라·민트 오로라, 얼음빛 링",
-      "colors": ["#0e1b33", "#48649b", "#64afce", "#a7f4dc"]
+      "colors": [
+        "#0e1b33",
+        "#48649b",
+        "#64afce",
+        "#a7f4dc"
+      ]
     },
     {
       "id": "solar",
@@ -60,7 +91,12 @@
       "motif": "태양 코어와 빛의 궤적",
       "motion": "고정된 중심 주위로 빛이 맥동하고 움직임",
       "detail": "구릿빛과 주황빛, 금빛 발광 링",
-      "colors": ["#3d2222", "#9d4a36", "#f1ad46", "#ffe19a"]
+      "colors": [
+        "#3d2222",
+        "#9d4a36",
+        "#f1ad46",
+        "#ffe19a"
+      ]
     },
     {
       "id": "contour",
@@ -70,7 +106,12 @@
       "motif": "석회색 지형과 등고선",
       "motion": "굵은 기준선과 등고선이 느리게 호흡",
       "detail": "올리브·라임 계열 링, 지형도 같은 화면 깊이",
-      "colors": ["#343a31", "#657c36", "#bbcf72", "#e4efb0"]
+      "colors": [
+        "#343a31",
+        "#657c36",
+        "#bbcf72",
+        "#e4efb0"
+      ]
     },
     {
       "id": "water-lilies",
@@ -80,7 +121,12 @@
       "motif": "푸른 수면과 수련 붓결",
       "motion": "초록 붓질 군집과 보랏빛 꽃점이 좌우로 흔들림",
       "detail": "모네 수련에서 출발한 점묘와 물빛, 보랏빛 발광 링",
-      "colors": ["#303649", "#457cab", "#8abf75", "#c47cc5"]
+      "colors": [
+        "#303649",
+        "#457cab",
+        "#8abf75",
+        "#c47cc5"
+      ]
     }
   ],
   "studies": [

@@ -6,26 +6,30 @@
     "iphone_notification_paused": {
       "path": "images/iphone_notification_paused.png",
       "test": "WatchWorkoutLiveActivityUITests/testPausedNotificationCenterPresentation()",
-      "xcresult": "/Users/shanks/.codex/worktrees/267d/Health/.deriveddata/watch-live-tests/Logs/Test/Test-DUNEUITests-2026.10.24_03-55-06-+0900.xcresult",
-      "device": "iPhone 18 Pro-wt-Health-267d-8092a72acabf",
+      "xcresult": "Test-DUNEUITests-2026.10.24_04-36-32-+0900.xcresult",
+      "device": "iPhone 18 Pro-wt-Health-desert-horizon-final-validation-f5271f075392",
+      "device_id": "4990D55E-752C-4E35-8FB4-953F995AB2C2",
       "runtime": "iOS 27.0",
-      "timestamp": "2026-10-24T03:56:18.435000+09:00",
-      "provenance": "seeded_springboard_element",
-      "source_revision": "ee57958959eb0602aa4f601799595ed359276f80",
+      "timestamp": 1792784362.541,
+      "source_revision": "9e3788a4",
       "source_worktree_dirty": false,
-      "note": "통과한 UI 테스트에서 DUNE Live Activity 요소만 원본 캡처. Watch 연결 없이 DEBUG 시드. 실제 잠금 상태 검증 아님."
+      "appearance": "dark",
+      "provenance": "seeded_springboard_element",
+      "note": "Actual ActivityKit in SpringBoard Notification Center, DEBUG Watch snapshot fixture; no paired Watch/locked-screen proof. Individual method passed; full bundle3passed/1failed."
     },
     "iphone_notification_running": {
       "path": "images/iphone_notification_running.png",
       "test": "WatchWorkoutLiveActivityUITests/testRunningNotificationCenterPresentation()",
-      "xcresult": "/Users/shanks/.codex/worktrees/267d/Health/.deriveddata/watch-live-tests/Logs/Test/Test-DUNEUITests-2026.10.24_03-55-06-+0900.xcresult",
-      "device": "iPhone 18 Pro-wt-Health-267d-8092a72acabf",
+      "xcresult": "Test-DUNEUITests-2026.10.24_04-36-32-+0900.xcresult",
+      "device": "iPhone 18 Pro-wt-Health-desert-horizon-final-validation-f5271f075392",
+      "device_id": "4990D55E-752C-4E35-8FB4-953F995AB2C2",
       "runtime": "iOS 27.0",
-      "timestamp": "2026-10-24T03:56:46.338000+09:00",
-      "provenance": "seeded_springboard_element",
-      "source_revision": "ee57958959eb0602aa4f601799595ed359276f80",
+      "timestamp": 1792784388.041,
+      "source_revision": "9e3788a4",
       "source_worktree_dirty": false,
-      "note": "통과한 UI 테스트에서 DUNE Live Activity 요소만 원본 캡처. Watch 연결 없이 DEBUG 시드. 실제 잠금 상태 검증 아님."
+      "appearance": "dark",
+      "provenance": "seeded_springboard_element",
+      "note": "Actual ActivityKit in SpringBoard Notification Center, DEBUG Watch snapshot fixture; no paired Watch/locked-screen proof. Individual method passed; full bundle3passed/1failed."
     }
   },
   "states": {

@@ -1,0 +1,298 @@
+{
+  "device": {
+    "kind": "duo",
+    "model_name": "iPhone Duo",
+    "identifier": "C3E6C1CD-A4C2-419D-87F7-8B9557F0ADF8",
+    "platform": "iOS Simulator"
+  },
+  "captures": {
+    "dune/light/T03": {
+      "theme": "dune",
+      "appearance": "light",
+      "screen_id": "T03",
+      "file": "dune/light/T03.png",
+      "test_identifier": "ThemeMatrixUITests/testDesertTodayToolbarFitsAtBothAppearances()",
+      "timestamp": 1792789306.507419,
+      "result_bundle": "/Users/shanks/.codex/worktrees/desert-horizon-final-validation/Health/.codex-checks/duo-today-closed/runner-result.json",
+      "device": {
+        "identifier": "C3E6C1CD-A4C2-419D-87F7-8B9557F0ADF8",
+        "model_name": "iPhone Duo",
+        "kind": "duo"
+      },
+      "source_revision": "9a9dcf1c06cb789d95d16a7d57807c8b3c072d6c",
+      "source_worktree_dirty": true,
+      "dirty_scope": "documentation/capture metadata only; application source c239a50d and selector9a9dcf1c committed",
+      "capture_kind": "native explicit active display",
+      "native_dimensions": [
+        1398,
+        2034
+      ],
+      "verified_ax_viewport": [
+        466,
+        678
+      ],
+      "posture": {
+        "verified_effective_display": "LCD",
+        "verified_orientation": "portrait",
+        "actual_angle": null,
+        "angle_readback_unavailable_reason": "Xcode27.1 devicectl device motion subcommand is unavailable; effective display/AX/nativePNG verify layout, not exact angle."
+      },
+      "note": "Final compact toolbar light/dark bounds and actual active-display native PNG; exact hinge angle unavailable."
+    },
+    "dune/light/A01": {
+      "theme": "dune",
+      "appearance": "light",
+      "screen_id": "A01",
+      "file": "dune/light/A01.png",
+      "test_identifier": "ThemeMatrixUITests/testDesertHeroRingsByInitialTab()",
+      "timestamp": 1792786900.618712,
+      "result_bundle": ".codex-checks/duo-closed/runner-result.json",
+      "device": {
+        "kind": "duo",
+        "model_name": "iPhone Duo",
+        "identifier": "C3E6C1CD-A4C2-419D-87F7-8B9557F0ADF8",
+        "platform": "iOS Simulator"
+      },
+      "source_revision": "611134fd",
+      "source_worktree_dirty": true,
+      "capture_kind": "native simctl explicit built-in display",
+      "native_dimensions": [
+        1398,
+        2034
+      ],
+      "oriented_dimensions": [
+        1398,
+        2034
+      ],
+      "verified_ax_viewport": [
+        466,
+        678
+      ],
+      "posture": {
+        "verified_effective_display": "LCD",
+        "verified_orientation": "portrait",
+        "actual_angle": null,
+        "angle_readback_unavailable_reason": "Xcode27.1 devicectl device motion subcommand is unavailable; effective display/AX/nativePNG verify layout, not exact angle."
+      },
+      "note": "Application/root-test source unchanged after611134fd; later commits adjust only the separate system-widget test. Exact hinge angle readback unavailable; active display, physical orientation, AX viewport and native PNG are verified."
+    },
+    "dune/light/H01": {
+      "theme": "dune",
+      "appearance": "light",
+      "screen_id": "H01",
+      "file": "dune/light/H01.png",
+      "test_identifier": "ThemeMatrixUITests/testDesertHeroRingsByInitialTab()",
+      "timestamp": 1792786916.391888,
+      "result_bundle": ".codex-checks/duo-closed/runner-result.json",
+      "device": {
+        "kind": "duo",
+        "model_name": "iPhone Duo",
+        "identifier": "C3E6C1CD-A4C2-419D-87F7-8B9557F0ADF8",
+        "platform": "iOS Simulator"
+      },
+      "source_revision": "611134fd",
+      "source_worktree_dirty": true,
+      "capture_kind": "native simctl explicit built-in display",
+      "native_dimensions": [
+        1398,
+        2034
+      ],
+      "oriented_dimensions": [
+        1398,
+        2034
+      ],
+      "verified_ax_viewport": [
+        466,
+        678
+      ],
+      "posture": {
+        "verified_effective_display": "LCD",
+        "verified_orientation": "portrait",
+        "actual_angle": null,
+        "angle_readback_unavailable_reason": "Xcode27.1 devicectl device motion subcommand is unavailable; effective display/AX/nativePNG verify layout, not exact angle."
+      },
+      "note": "Application/root-test source unchanged after611134fd; later commits adjust only the separate system-widget test. Exact hinge angle readback unavailable; active display, physical orientation, AX viewport and native PNG are verified."
+    },
+    "dune/light/L01": {
+      "theme": "dune",
+      "appearance": "light",
+      "screen_id": "L01",
+      "file": "dune/light/L01.png",
+      "test_identifier": "ThemeMatrixUITests/testDesertHeroRingsByInitialTab()",
+      "timestamp": 1792786931.407932,
+      "result_bundle": ".codex-checks/duo-closed/runner-result.json",
+      "device": {
+        "kind": "duo",
+        "model_name": "iPhone Duo",
+        "identifier": "C3E6C1CD-A4C2-419D-87F7-8B9557F0ADF8",
+        "platform": "iOS Simulator"
+      },
+      "source_revision": "611134fd",
+      "source_worktree_dirty": true,
+      "capture_kind": "native simctl explicit built-in display",
+      "native_dimensions": [
+        1398,
+        2034
+      ],
+      "oriented_dimensions": [
+        1398,
+        2034
+      ],
+      "verified_ax_viewport": [
+        466,
+        678
+      ],
+      "posture": {
+        "verified_effective_display": "LCD",
+        "verified_orientation": "portrait",
+        "actual_angle": null,
+        "angle_readback_unavailable_reason": "Xcode27.1 devicectl device motion subcommand is unavailable; effective display/AX/nativePNG verify layout, not exact angle."
+      },
+      "note": "Application/root-test source unchanged after611134fd; later commits adjust only the separate system-widget test. Exact hinge angle readback unavailable; active display, physical orientation, AX viewport and native PNG are verified."
+    },
+    "dune/dark/T03": {
+      "theme": "dune",
+      "appearance": "dark",
+      "screen_id": "T03",
+      "file": "dune/dark/T03.png",
+      "test_identifier": "ThemeMatrixUITests/testDesertTodayToolbarFitsAtBothAppearances()",
+      "timestamp": 1792789318.8820486,
+      "result_bundle": "/Users/shanks/.codex/worktrees/desert-horizon-final-validation/Health/.codex-checks/duo-today-closed/runner-result.json",
+      "device": {
+        "identifier": "C3E6C1CD-A4C2-419D-87F7-8B9557F0ADF8",
+        "model_name": "iPhone Duo",
+        "kind": "duo"
+      },
+      "source_revision": "9a9dcf1c06cb789d95d16a7d57807c8b3c072d6c",
+      "source_worktree_dirty": true,
+      "dirty_scope": "documentation/capture metadata only; application source c239a50d and selector9a9dcf1c committed",
+      "capture_kind": "native explicit active display",
+      "native_dimensions": [
+        1398,
+        2034
+      ],
+      "verified_ax_viewport": [
+        466,
+        678
+      ],
+      "posture": {
+        "verified_effective_display": "LCD",
+        "verified_orientation": "portrait",
+        "actual_angle": null,
+        "angle_readback_unavailable_reason": "Xcode27.1 devicectl device motion subcommand is unavailable; effective display/AX/nativePNG verify layout, not exact angle."
+      },
+      "note": "Final compact toolbar light/dark bounds and actual active-display native PNG; exact hinge angle unavailable."
+    },
+    "dune/dark/A01": {
+      "theme": "dune",
+      "appearance": "dark",
+      "screen_id": "A01",
+      "file": "dune/dark/A01.png",
+      "test_identifier": "ThemeMatrixUITests/testDesertHeroRingsByInitialTab()",
+      "timestamp": 1792786962.5013,
+      "result_bundle": ".codex-checks/duo-closed/runner-result.json",
+      "device": {
+        "kind": "duo",
+        "model_name": "iPhone Duo",
+        "identifier": "C3E6C1CD-A4C2-419D-87F7-8B9557F0ADF8",
+        "platform": "iOS Simulator"
+      },
+      "source_revision": "611134fd",
+      "source_worktree_dirty": true,
+      "capture_kind": "native simctl explicit built-in display",
+      "native_dimensions": [
+        1398,
+        2034
+      ],
+      "oriented_dimensions": [
+        1398,
+        2034
+      ],
+      "verified_ax_viewport": [
+        466,
+        678
+      ],
+      "posture": {
+        "verified_effective_display": "LCD",
+        "verified_orientation": "portrait",
+        "actual_angle": null,
+        "angle_readback_unavailable_reason": "Xcode27.1 devicectl device motion subcommand is unavailable; effective display/AX/nativePNG verify layout, not exact angle."
+      },
+      "note": "Application/root-test source unchanged after611134fd; later commits adjust only the separate system-widget test. Exact hinge angle readback unavailable; active display, physical orientation, AX viewport and native PNG are verified."
+    },
+    "dune/dark/H01": {
+      "theme": "dune",
+      "appearance": "dark",
+      "screen_id": "H01",
+      "file": "dune/dark/H01.png",
+      "test_identifier": "ThemeMatrixUITests/testDesertHeroRingsByInitialTab()",
+      "timestamp": 1792786978.1869183,
+      "result_bundle": ".codex-checks/duo-closed/runner-result.json",
+      "device": {
+        "kind": "duo",
+        "model_name": "iPhone Duo",
+        "identifier": "C3E6C1CD-A4C2-419D-87F7-8B9557F0ADF8",
+        "platform": "iOS Simulator"
+      },
+      "source_revision": "611134fd",
+      "source_worktree_dirty": true,
+      "capture_kind": "native simctl explicit built-in display",
+      "native_dimensions": [
+        1398,
+        2034
+      ],
+      "oriented_dimensions": [
+        1398,
+        2034
+      ],
+      "verified_ax_viewport": [
+        466,
+        678
+      ],
+      "posture": {
+        "verified_effective_display": "LCD",
+        "verified_orientation": "portrait",
+        "actual_angle": null,
+        "angle_readback_unavailable_reason": "Xcode27.1 devicectl device motion subcommand is unavailable; effective display/AX/nativePNG verify layout, not exact angle."
+      },
+      "note": "Application/root-test source unchanged after611134fd; later commits adjust only the separate system-widget test. Exact hinge angle readback unavailable; active display, physical orientation, AX viewport and native PNG are verified."
+    },
+    "dune/dark/L01": {
+      "theme": "dune",
+      "appearance": "dark",
+      "screen_id": "L01",
+      "file": "dune/dark/L01.png",
+      "test_identifier": "ThemeMatrixUITests/testDesertHeroRingsByInitialTab()",
+      "timestamp": 1792786993.1685073,
+      "result_bundle": ".codex-checks/duo-closed/runner-result.json",
+      "device": {
+        "kind": "duo",
+        "model_name": "iPhone Duo",
+        "identifier": "C3E6C1CD-A4C2-419D-87F7-8B9557F0ADF8",
+        "platform": "iOS Simulator"
+      },
+      "source_revision": "611134fd",
+      "source_worktree_dirty": true,
+      "capture_kind": "native simctl explicit built-in display",
+      "native_dimensions": [
+        1398,
+        2034
+      ],
+      "oriented_dimensions": [
+        1398,
+        2034
+      ],
+      "verified_ax_viewport": [
+        466,
+        678
+      ],
+      "posture": {
+        "verified_effective_display": "LCD",
+        "verified_orientation": "portrait",
+        "actual_angle": null,
+        "angle_readback_unavailable_reason": "Xcode27.1 devicectl device motion subcommand is unavailable; effective display/AX/nativePNG verify layout, not exact angle."
+      },
+      "note": "Application/root-test source unchanged after611134fd; later commits adjust only the separate system-widget test. Exact hinge angle readback unavailable; active display, physical orientation, AX viewport and native PNG are verified."
+    }
+  }
+}

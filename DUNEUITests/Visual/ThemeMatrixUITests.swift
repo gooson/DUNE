@@ -17,7 +17,7 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
     func testDesertHeroRingsByInitialTab() {
         let roots: [(tab: String, argument: String, hero: String, ring: String, action: String)] = [
             ("Today", "today", AXID.dashboardHeroCondition, "dashboard-hero-ring", AXID.dashboardHeroCondition),
-            ("Activity", "train", AXID.activityHeroReadiness, "activity-hero-ring", "activity-log-workout-button"),
+            ("Activity", "train", AXID.activityHeroReadiness, "activity-hero-ring", AXID.activityToolbarAdd),
             ("Wellness", "wellness", AXID.wellnessHeroScore, "wellness-hero-ring", "wellness-hero-sleep"),
             ("Life", "life", AXID.lifeHeroProgress, "life-hero-ring", "life-hero-checklist-button")
         ]
@@ -67,6 +67,59 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
                     addScreenshotAttachment(named: combination)
                 }
             }
+        }
+    }
+
+    func testDesertTodayToolbarFitsAtBothAppearances() {
+        for style in ["Light", "Dark"] {
+            var configuration = launchConfiguration
+            configuration.initialTabSelectionArgument = "today"
+            configuration.additionalArguments += [
+                "--ui-test-theme", "desertWarm",
+                "--ui-test-style", style.lowercased(),
+                "-morningBriefingDisabled", "YES"
+            ]
+            launchApp(with: configuration)
+
+            if VisualAudit.isEnabled,
+               ProcessInfo.processInfo.environment["DUNE_VISUAL_AUDIT_FOLD"] == "1" {
+                let initialBounds = app.windows.firstMatch.frame
+                if abs(max(initialBounds.width, initialBounds.height) - 951) < 2 {
+                    // A fresh app launch can restore portrait. Let the host set
+                    // physical orientation, then require the actual inner viewport.
+                    XCUIDevice.shared.orientation = .landscapeLeft
+                    VisualAudit.capture("ORIENT:landscapeLeft Today navigation layout")
+                    let landscape = XCTNSPredicateExpectation(
+                        predicate: NSPredicate { _, _ in
+                            let bounds = self.app.windows.firstMatch.frame
+                            return bounds.width > bounds.height
+                        }, object: nil
+                    )
+                    XCTAssertEqual(XCTWaiter.wait(for: [landscape], timeout: 5), .completed,
+                                   "Expanded Duo must render its actual landscape viewport")
+                }
+            }
+            let window = app.windows.firstMatch.frame
+            let bell = app.buttons[AXID.dashboardToolbarNotifications].firstMatch
+            let settings = app.buttons[AXID.dashboardToolbarSettings].firstMatch
+            for action in [bell, settings] {
+                XCTAssertTrue(action.waitForExistence(timeout: 10), "Desert \(style): \(action.identifier) should appear")
+                // Native toolbar hosts normalize their AX label child to 36pt,
+                // including iPhone. The SwiftUI labels retain explicit 44pt targets.
+                XCTAssertGreaterThanOrEqual(action.frame.height, 36,
+                                            "Desert \(style): native toolbar label should remain intact")
+                XCTAssertTrue(action.isHittable, "Desert \(style): toolbar action should be reachable")
+                XCTAssertTrue(window.contains(action.frame), "Desert \(style): \(action.identifier) should fit the window")
+            }
+            let group = bell.frame.union(settings.frame)
+            XCTAssertLessThan(abs(bell.frame.midY - settings.frame.midY), 2,
+                              "Desert \(style): bell and settings should share a toolbar row")
+            XCTAssertLessThanOrEqual(group.height, 64, "Desert \(style): toolbar actions must not span a tall glass area")
+            XCTAssertLessThanOrEqual(group.width, 160, "Desert \(style): toolbar actions should form a compact group")
+            XCTAssertLessThan(group.maxY, window.minY + window.height * 0.4,
+                              "Desert \(style): toolbar group should remain in the upper portion of the viewport")
+            VisualAudit.capture("Today toolbar Desert \(style)")
+            if !VisualAudit.isEnabled { addScreenshotAttachment(named: "Today toolbar Desert \(style)") }
         }
     }
 
@@ -158,6 +211,8 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
             root.navigate()
             let ring = app.descendants(matching: .any)[root.ring].firstMatch
             XCTAssertTrue(ring.waitForExistence(timeout: 10), "\(root.tab) ring should remain visible at the largest text size")
+            XCTAssertTrue(app.windows.firstMatch.frame.contains(ring.frame),
+                          "\(root.tab) ring should fit the window at the largest text size")
             addScreenshotAttachment(named: "Desert Accessibility XXXL \(root.tab)")
         }
     }
@@ -213,7 +268,7 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
         navigateToActivity()
         captureRoot(AXID.activityHeroReadiness, tab: "Activity", combination: combination)
         assertRing("activity-hero-ring", combination: combination)
-        assertAction("activity-log-workout-button", combination: combination)
+        assertAction(AXID.activityToolbarAdd, combination: combination)
 
         navigateToWellness()
         captureRoot(AXID.wellnessHeroScore, tab: "Wellness", combination: combination)

@@ -11,7 +11,8 @@ struct SmallWidgetView: View {
                         WidgetCompactMetricView(metric: metric, family: .small)
                     }
                 }
-                .frame(maxWidth: .infinity)
+                .frame(maxWidth: .infinity, alignment: .top)
+                .privacySensitive()
                 .accessibilityIdentifier(WidgetSurfaceAccessibility.scoredLaneID(for: .small))
 
                 Spacer(minLength: 0)
@@ -28,7 +29,7 @@ struct SmallWidgetView: View {
                             Text(lowestMetric.statusLabel)
                                 .fontWeight(.semibold)
                         }
-                        .foregroundStyle(lowestMetric.tintColor)
+                        .foregroundStyle(lowestMetric.textColor)
                         .accessibilityIdentifier(WidgetSurfaceAccessibility.summaryID(for: .small))
                     } else {
                         Text(WidgetMetricText.openDune)
@@ -53,14 +54,15 @@ struct SmallWidgetView: View {
                 .lineLimit(1)
                 .minimumScaleFactor(0.8)
                 .accessibilityIdentifier(WidgetSurfaceAccessibility.footerID(for: .small))
+                .privacySensitive()
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             .padding(WidgetDS.Layout.edgePadding)
-            .containerBackground(.fill.tertiary, for: .widget)
+            .duneWidgetSurface()
             .accessibilityIdentifier(WidgetSurfaceAccessibility.rootID(for: .small))
         } else {
             placeholderView
-                .containerBackground(.fill.tertiary, for: .widget)
+                .duneWidgetSurface()
                 .accessibilityIdentifier(WidgetSurfaceAccessibility.rootID(for: .small))
         }
     }
