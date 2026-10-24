@@ -101,10 +101,9 @@ final class TodaySupportCardsUITests: SeededUITestBaseCase {
             addScreenshotAttachment(named: "Today Support \(style) Progress")
 
             let brief = element("dashboard-today-brief-card")
-            if brief.exists {
-                XCTAssertTrue(brief.frame.width > 0, "\(style): Today's Brief should have a visible frame")
-                assertSameHorizontalEdges(brief, progress, context: "\(style) Today's Brief")
-            }
+            XCTAssertTrue(brief.waitForExistence(timeout: 10), "\(style): seeded daytime brief should load")
+            XCTAssertTrue(brief.frame.width > 0, "\(style): Today's Brief should have a visible frame")
+            assertSameHorizontalEdges(brief, progress, context: "\(style) Today's Brief")
 
             let recovery = element("dashboard-recovery-sleep-card")
             let chart = element("dashboard-recovery-sleep-chart")
@@ -159,9 +158,8 @@ final class TodaySupportCardsUITests: SeededUITestBaseCase {
         XCTAssertTrue(chart.waitForExistence(timeout: 5))
 
         assertSameHorizontalEdges(recovery, progress, context: "Landscape Recovery & Sleep")
-        if brief.exists {
-            assertSameHorizontalEdges(brief, progress, context: "Landscape Today's Brief")
-        }
+        XCTAssertTrue(brief.waitForExistence(timeout: 10), "Seeded daytime brief should load")
+        assertSameHorizontalEdges(brief, progress, context: "Landscape Today's Brief")
         for child in [lastSleep, period, chart] {
             assertWithin(child, parent: recovery, context: "Landscape \(child.identifier)")
         }
