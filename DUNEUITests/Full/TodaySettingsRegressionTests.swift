@@ -193,6 +193,7 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         XCTAssertTrue(scrollView.waitForExistence(timeout: 8))
         XCTAssertTrue(waitForHittable(hero, timeout: 5))
         let initialHeroY = hero.frame.minY
+        addScreenshotAttachment(named: "Today partial scroll initial")
 
         // Short partial drags must preserve their position. The separate full
         // swipe regression covers deceleration back toward the top.
@@ -217,6 +218,7 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         jumpsBackToTop.isInverted = true
         XCTAssertEqual(XCTWaiter.wait(for: [jumpsBackToTop], timeout: 2), .completed,
                        "The scroll position must stay where the gesture left it")
+        addScreenshotAttachment(named: "Today partial upward settled")
 
         let returnStart = scrollView.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.7))
         returnStart.press(
@@ -227,6 +229,16 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         )
         XCTAssertLessThan(hero.frame.minY, initialHeroY - 12,
                           "A partial return toward the top must also preserve its stopping position")
+        let returnJumpsBackToTop = XCTNSPredicateExpectation(
+            predicate: NSPredicate { _, _ in
+                hero.exists && hero.frame.minY >= initialHeroY - 12
+            },
+            object: nil
+        )
+        returnJumpsBackToTop.isInverted = true
+        XCTAssertEqual(XCTWaiter.wait(for: [returnJumpsBackToTop], timeout: 2), .completed,
+                       "A partial return must not snap back to the original top position")
+        addScreenshotAttachment(named: "Today partial return settled")
     }
 
     func testNativeRefreshReleaseWithoutHoldKeepsTodayScrollable() throws {
@@ -250,8 +262,8 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
             thenHoldForDuration: 0
         )
         // XCTest can wait for animations until the transient indicator is gone.
-        // Observe successful completion, which an immediately cancelled refresh
-        // cannot report, instead of mistaking a missed spinner for no refresh.
+        // Observe uncancelled refresh-work completion, which an immediately
+        // cancelled refresh cannot report. The counter does not assert data success.
         let refreshFinished = XCTNSPredicateExpectation(
             predicate: NSPredicate { _, _ in
                 (Int(refreshTrigger.value as? String ?? "") ?? initialRefreshCount) > initialRefreshCount
