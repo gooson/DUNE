@@ -87,7 +87,7 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 
 ## 수집과 대조
 
-2026-10-24 Today 보조 카드의 시안 적용 후 [새 iPhone 실제 화면 6장](../full-redesign-map/review/today-support-cards-2026-10-24/index.html)을 추가했다. 진행·브리핑·회복/수면의 밝음·어두움과 최대 글씨의 진행 영역이다. 기존 기기별 T03 인덱스를 다른 기기의 PNG로 덮어쓰지 않고 통합 포털에서 출처가 있는 별도 갤러리로 연결했다. iPad·Duo의 이번 변경은 새 캡처 미완료로 유지한다.
+2026-10-24 Today 보조 카드의 시안 적용 후 [새 iPhone 실제 화면 5장](../full-redesign-map/review/today-support-cards-2026-10-24/index.html)을 추가했다. 진행·브리핑·회복/수면의 밝음·어두움과 최대 글씨의 진행 영역이다. 기존 기기별 T03 인덱스를 다른 기기의 PNG로 덮어쓰지 않고 통합 포털에서 출처가 있는 별도 갤러리로 연결했다. iPad·Duo의 이번 변경은 새 캡처 미완료로 유지한다.
 
 1. `python3 docs/design/phone-design-map/build-phone-design-maps.py`로 SwiftUI 화면 타입과 프레젠테이션 대상을 대조하고 인벤토리를 갱신한다. 이 스크립트는 더 이상 도식 화면을 생성하지 않는다.
 2. `DUNEUITests-DesignCapture.xctestplan`의 `DUNE_VISUAL_AUDIT`로 실제 화면 PNG와 접근성 계층을 XCTest 결과에 첨부한다. 기기는 명시적 UDID로 분리한다.
@@ -96,3 +96,5 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 5. Watch는 `python3 docs/design/watch-workout/collect-actual-captures.py <watch-xcresult>`로 이름이 붙은 UI 테스트 첨부 화면을 추출하고 상태별 갤러리를 갱신한다.
 
 캡처 출처 테스트의 후속 조작이 실패한 경우에도 화면별 실제 PNG와 접근성 계층이 생성됐는지 확인한 뒤 해당 화면만 채웠다. `capture-index.json`에는 선택된 화면마다 테스트 이름과 캡처 동작을 기록했다.
+
+2026-10-24 `/run`의 후속 실행은 iOS 빌드와 수면 관련 단위4건이 통과했으나, 공통 스모크32건 중3건이 실패했다. Today 재검증도 회복 카드의 임의4pt 검사 여유 때문에1건 실패했다. 실제 화면 안의 카드가 실패 처리된 검사 코드는330dd2eb에서 수정했으며 추가 실행 승인 전에는 T03 최종 검증 완료로 표시하지 않는다. 새 실제 PNG5장은 검증 과정의 촬영본이고, iPad·Duo는 여전히 미갱신이다.

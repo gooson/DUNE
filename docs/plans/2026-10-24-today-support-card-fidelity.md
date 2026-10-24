@@ -2,7 +2,7 @@
 tags: [design, dashboard, spacing, sleep]
 date: 2026-10-24
 category: plan
-status: implemented-pending-device-validation
+status: implemented-validation-blocked
 ---
 
 # Today 보조 카드 시안 적용
@@ -67,3 +67,12 @@ status: implemented-pending-device-validation
 ### 출시
 
 현재 diff의 5관점 리뷰와 SwiftUI·Apple UX·UI 테스트 판단을 모아 P1/P2를 해결한다. 최종 소스 기준 해결책 문서를 작성하고 clean 상태·원격 권한·기존 PR을 확인한 뒤 PR 생성·머지·전용 시뮬레이터와 브랜치 정리를 수행한다.
+
+## /run 현재 결과 (2026-10-24)
+
+- Work: 제품 UI·지표/단계 동시 반영, 단계 범례/시간 단위, 필수 브리핑 존재 검사 구현과 커밋 완료. 최신 iOS 빌드56cab7da 성공.
+- 단위: 정확한 Swift Testing 식별자4개 실행4/통과4(2c1380d4).
+- UI: 공통+Today32개 실행29개 통과3개 실패. 알림2건은 기준과 동일한 자동 브리핑 시트가 앞에 있어 탭하지 못했으며 기준 소스 비교는 공용 잠금으로 미실행. 회복 카드 스크롤1건은 재검증 후 실제 탭바 경계와 일치한 카드가 검사 도구의 임의4pt 여유에 걸린 것으로 확인했다.
+- 330dd2eb: 실제 뷰포트 경계로 검사 코드를 수정·구문 확인·커밋했다. 자동 재시도 한도 이후의 추가 실행 승인을 요청했으며, 응답 전 해당 검사를 다시 실행하지 않는다.
+- 새 실제 iPhone PNG5장과 출처를 보존했다. iPad·Duo 접힘·펼침의 새 캡처는 미실행이다.
+- 5관점 소스 검토와 SwiftUI·Apple UX·UI 범위·앱 품질 검토 결과를 준비했다. 새 코드의 열린 P1/P2/P3는0/0/0이나 필수 UI 게이트는 미완료다. Phase3 이후의 완료나 PR 머지로 표시하지 않는다.
