@@ -35,3 +35,35 @@ status: implemented-pending-device-validation
 ## 결과
 
 제품 소스 `29e54f9a`, iPhone UI 테스트 2건 통과와 실제 PNG 6장을 [검증 기록](../design/full-redesign-map/review/today-support-cards-2026-10-24/README.md)에 보존했다. iPad·Duo와 추가 단위 검사는 공통 시뮬레이터 잠금 해제 후 재개할 대상으로 남긴다. 전체 기기 품질 게이트 통과나 배포 완료로 표시하지 않는다.
+
+## /run 검증·출시 계획
+
+2026-10-24 사용자가 `/run`을 요청했다. 현재 브랜치의 Today 보조 카드 변경을 대상으로 Plan→Work→UI→Review→Quality→Resolve→Compound→Pre-Ship→Ship를 수행한다. 기존 계획을 보강하며 다른 세 탭의 이전 시안 차이를 새 기능으로 확장하지 않는다.
+
+### 조사와 기존 패턴
+
+- 진행·브리핑·회복 카드의 실제 호출부는 DashboardView다. `latestSleepStages` 추가 프로퍼티는 Dashboard에서만 소비한다. 기존 수면 부족 계산·저장 구조는 변경하지 않는다.
+- `2026-03-29-observation-tracking-feedback-loop.md`의 weather/coaching `@State` 캐시 경계를 유지한다.
+- 기존 차트 축 잘림 해결책과 SwiftUI 차트의 clipping 규칙을 대조한다. 축 숫자의 공간을 확보하면서 `.clipped()`를 유지한다.
+- 관련 brainstorm과 완료 TODO를 검색했다. 이번 브랜치에 해당하는 열린 TODO 파일은 없다.
+- 새 SDK API 도입은 없다. 저장소의 `.plotDimension(padding:)` 사용례와 Apple 디자인 로컬 layout reference를 대조한다.
+
+### 테스트 전략
+
+1. `scripts/build-ios.sh`로 새 파일이 등록된 현재 프로젝트의 iOS 빌드를 확인한다.
+2. 미실행된 DashboardViewModel 수면 연결 테스트 두 개를 전용 iPhone에서 제한 실행한다. 기존 단위 실행기가 selector를 지원하지 않으므로 저장소 잠금·deadline·동일 xcodebuild 설정을 적용한 제한 호출을 사용한다. 전체 단위 테스트로 확장하지 않는다.
+3. UI 계획기를 실행하고 실제 소비자를 대조해 Today 지원 카드 테스트와 Dashboard smoke를 선택한다. 이전 UI 2건은 소스·환경 증거가 충분한 경우만 재사용하며, 새로 필요한 selector를 실행한다. iPad와 Duo의 영향 T03 캡처는 공통 잠금과 전용 기기 소유권이 확보된 후 진행한다.
+4. iPhone의 기존 기본·최대 글씨 실제 PNG는 새 이미지로 위장하지 않는다. 소스가 바뀌면 영향을 받는 상태를 새로 촬영하고 출처를 갱신한다.
+5. 앱 외형을 바꾸지 않는 문서·출시 변경은 앱 전체 UI를 다시 실행할 근거로 사용하지 않는다.
+
+### 위험·엣지 케이스
+
+- 겹치는 수면 구간은 가장 늦은 종료 시각을 사용한다. 누락·빈 자료·비유한 값에서는 임의 단계나 시간을 만들지 않는다.
+- 큰 글씨에서 진행 타일은 세로로 배치하고 코칭·경고 문장은 잘리지 않아야 한다.
+- 무효화된 권한·부분 실패 후 이전 수면 단계가 남는지 리뷰한다.
+- 시간제한·잠금 실패는 환경 실패로 기록하고 원인 변화가 확인될 때만 1회 재시도한다. 실행 중 커밋 훅의 로그 정리를 피하고 검증 로그는 `.codex-checks/`에 보존한다.
+- iPad·Duo 미검증은 iPhone 통과로 대신하지 않는다. 최신 소스에 필요한 게이트를 통과하지 못하면 PR 머지를 완료로 표시하지 않는다.
+
+### 출시
+
+현재 diff의 5관점 리뷰와 SwiftUI·Apple UX·UI 테스트 판단을 모아 P1/P2를 해결한다. 최종 소스 기준 해결책 문서를 작성하고 clean 상태·원격 권한·기존 PR을 확인한 뒤 PR 생성·머지·전용 시뮬레이터와 브랜치 정리를 수행한다.
