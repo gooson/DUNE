@@ -2,7 +2,7 @@
 tags: [design, dashboard, spacing, sleep]
 date: 2026-10-24
 category: plan
-status: in-progress
+status: implemented-pending-device-validation
 ---
 
 # Today 보조 카드 시안 적용
@@ -31,3 +31,7 @@ status: in-progress
 ## 완료 기준
 
 새 캡처에서 균등 목표 타일·카드 좌우 정렬·축 잘림을 확인한다. 기기·테스트·revision을 보존한다. 기존 시안을 기준으로 앱을 수정한다.
+
+## 결과
+
+제품 소스 `29e54f9a`, iPhone UI 테스트 2건 통과와 실제 PNG 6장을 [검증 기록](../design/full-redesign-map/review/today-support-cards-2026-10-24/README.md)에 보존했다. iPad·Duo와 추가 단위 검사는 공통 시뮬레이터 잠금 해제 후 재개할 대상으로 남긴다. 전체 기기 품질 게이트 통과나 배포 완료로 표시하지 않는다.

@@ -87,6 +87,8 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 
 ## 수집과 대조
 
+2026-10-24 Today 보조 카드의 시안 적용 후 [새 iPhone 실제 화면 6장](../full-redesign-map/review/today-support-cards-2026-10-24/index.html)을 추가했다. 진행·브리핑·회복/수면의 밝음·어두움과 최대 글씨의 진행 영역이다. 기존 기기별 T03 인덱스를 다른 기기의 PNG로 덮어쓰지 않고 통합 포털에서 출처가 있는 별도 갤러리로 연결했다. iPad·Duo의 이번 변경은 새 캡처 미완료로 유지한다.
+
 1. `python3 docs/design/phone-design-map/build-phone-design-maps.py`로 SwiftUI 화면 타입과 프레젠테이션 대상을 대조하고 인벤토리를 갱신한다. 이 스크립트는 더 이상 도식 화면을 생성하지 않는다.
 2. `DUNEUITests-DesignCapture.xctestplan`의 `DUNE_VISUAL_AUDIT`로 실제 화면 PNG와 접근성 계층을 XCTest 결과에 첨부한다. 기기는 명시적 UDID로 분리한다.
 3. `bash docs/design/phone-design-map/run-capture-group.sh regular today <UDID>`처럼 화면 경로 묶음을 실행한다. 묶음은 `today`, `activity`, `activity-extra`, `activity-info`, `wellness-life`, `additional`, `recovery`다.
