@@ -87,6 +87,9 @@ struct RecoverySleepCard: View {
                             y: .value("Stage", "sleep")
                         )
                         .foregroundStyle(stage.stage.color)
+                        .accessibilityLabel(Text(stage.stage.label))
+                        .accessibilityValue(Text(verbatim: stage.startDate.formatted(date: .omitted, time: .shortened)
+                            + " – " + stage.endDate.formatted(date: .omitted, time: .shortened)))
                     }
                     .chartXAxis(.hidden)
                     .chartYAxis(.hidden)
@@ -94,6 +97,20 @@ struct RecoverySleepCard: View {
                     .frame(height: 30)
                     .clipped()
                     .accessibilityLabel("Sleep stages timeline, \(validStages.count) stages")
+
+                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 110), alignment: .leading)], alignment: .leading) {
+                        ForEach([SleepStage.Stage.deep, .core, .rem, .awake, .unspecified]
+                            .filter { stage in validStages.contains { $0.stage == stage } }, id: \.self) { stage in
+                            HStack(spacing: DS.Spacing.xxs) {
+                                Circle().fill(stage.color).frame(width: 6, height: 6)
+                                    .accessibilityHidden(true)
+                                Text(stage.label)
+                                    .fixedSize(horizontal: false, vertical: true)
+                            }
+                            .font(.caption2)
+                        }
+                    }
+                    .accessibilityIdentifier("dashboard-recovery-stage-legend")
 
                     HStack {
                         Label {
@@ -165,8 +182,14 @@ struct RecoverySleepCard: View {
             if samples.count >= 2, let first = samples.first, let last = samples.last {
                 let upperBound = max(4, ceil((samples.map { $0.actualMinutes / 60 }.max() ?? 0) / 2) * 2 + 2)
                 VStack(alignment: .leading, spacing: DS.Spacing.xs) {
-                    Text("Sleep History")
-                        .font(.caption.weight(.semibold))
+                    HStack {
+                        Text("Sleep History")
+                            .font(.caption.weight(.semibold))
+                        Spacer()
+                        Text("Hours")
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                    }
                     HStack(spacing: DS.Spacing.xxs) {
                         Text(first.date, format: .dateTime.month(.abbreviated).day())
                         Text("–")

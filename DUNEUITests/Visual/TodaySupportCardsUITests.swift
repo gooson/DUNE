@@ -110,13 +110,15 @@ final class TodaySupportCardsUITests: SeededUITestBaseCase {
             let chart = element("dashboard-recovery-sleep-chart")
             let lastSleep = element("dashboard-recovery-last-sleep")
             let period = element("dashboard-recovery-sleep-period")
+            let legend = element("dashboard-recovery-stage-legend")
             XCTAssertTrue(recovery.waitForExistence(timeout: 10), "\(style): Recovery & Sleep should load")
             XCTAssertTrue(chart.waitForExistence(timeout: 5), "\(style): seeded seven-day chart should load")
             XCTAssertTrue(lastSleep.waitForExistence(timeout: 5), "\(style): last sleep should load")
             XCTAssertTrue(period.waitForExistence(timeout: 5), "\(style): sleep period should load")
+            XCTAssertTrue(legend.waitForExistence(timeout: 5), "\(style): sleep stages must have readable labels")
             XCTAssertTrue(scrollFullyIntoViewport(recovery, in: scroll), "\(style): Recovery & Sleep should fit in the viewport")
             assertSameHorizontalEdges(recovery, progress, context: "\(style) Recovery & Sleep")
-            for child in [chart, lastSleep, period] {
+            for child in [chart, lastSleep, period, legend] {
                 assertWithin(child, parent: recovery, context: "\(style) \(child.identifier)")
             }
             XCTAssertGreaterThan(lastSleep.frame.height, 0, "\(style): last sleep must not be clipped")
