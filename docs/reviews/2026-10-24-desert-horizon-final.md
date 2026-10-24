@@ -1,14 +1,14 @@
 ---
 tags: [swiftui, desert-horizon, design, widgets, live-activity, verification]
 date: 2026-10-24
-status: blocked-ui-validation
+status: reviewed-with-validation-exception
 ---
 
 # DESERT HORIZON 실제 구현 검증
 
 ## 현재 상태
 
-제품 소스 구현은 완료했으며 최종 앱·Widget·Watch 통합 빌드와 영향 단위 테스트58개가 통과했다. **Duo 펼침 Today의 가로 화면 검증이 막혀 `/run` UI 게이트는 실패 상태이며 PR·머지를 진행하지 않았다.** 현재 Mac 잠금 때문에 Device Hub의 실제 표시 회전을 확인할 수 없다. 잠금 해제 후 표시 컨트롤러·물리 방향·실제951×669 viewport를 먼저 맞추고 해당 selector만 확인해야 한다.
+제품 소스 구현과 최종 앱·Widget·Watch 통합 빌드, 영향 단위 테스트58개가 완료됐다. **사용자가 2026-10-24 “일단 넘어가”로 Duo 펼침 Today 검증 보류와 후속 진행을 지시했다.** 해당 실행은 실제 가로 viewport 조건에 실패했으며 통과로 바꾸지 않는다. 나머지 대상 검증과 최종 소스 검토를 근거로 PR·머지를 진행한다. 이후 Duo 검증은 Mac 잠금 해제 후 표시 컨트롤러·물리 방향·실제951×669 viewport를 먼저 맞춰 해당 selector만 확인한다.
 
 ## 변경 내용
 
@@ -60,13 +60,13 @@ DUNE 색·카드 표현은 Desert 테마에 한정한다. 알림 통합과 기�
 | 0 Init | completed | 관리 작업 트리·codex 분기 격리, 원본 작업 보존 |
 | 1 Plan | completed | 실제 계획서·레이아웃/데이터/목적지 계약 |
 | 2 Work | completed | 구현 커밋·통합 빌드·58개 단위 테스트 |
-| 2.5 UI Test | failed | Duo 펼침 Today의 실제 가로 viewport 조건 실패, Mac 잠금으로 GUI 확인 차단 |
-| 3 Review | skipped | UI 게이트 실패. 사전 5관점 소스 검토·최종 source reviewer 증거는 보존 |
-| 3.5 Quality | skipped | 정식 게이트 미진입. SwiftUI·Apple UX·UI test·app-quality 사전 검토/수정은 보존 |
-| 4 Resolve | skipped | UI 게이트 해결 후 현재 diff 기준으로 진행 |
-| 5 Compound | skipped | UI 게이트 실패. 해결된 항목의 초안만 보존 |
-| 5.5 Pre-Ship | skipped | UI 게이트 실패. 구현과 현재 기록은 원격 분기에 보존 |
-| 6 Ship | skipped | UI 게이트 실패로 PR·머지 미실행 |
+| 2.5 UI Test | skipped (일부) | 나머지 대상 통과. Duo 펼침 Today의 실패는 보존하고 사용자 명시 지시로 이 검증을 보류 |
+| 3 Review | completed | 5관점 소스 검토와 현재 delta 대조, 열린 소스 P1/P2/P3=0 |
+| 3.5 Quality | completed | SwiftUI·Apple UX 검토 재사용, 최종 app-quality/PR reviewer가 현재 소스·runtime 증거 대조. 사용자 예외 조건부 통과 |
+| 4 Resolve | completed | 앞선 소스 문제 수정 확인. 추가 수정 없음. Duo runtime 위험은 사용자 지시로 미검증 상태 유지 |
+| 5 Compound | completed | docs/solutions/general/2026-10-24-desert-horizon-production-design.md |
+| 5.5 Pre-Ship | pending | 문서·맵 검사 후 clean 상태와 원격·인증 확인 |
+| 6 Ship | pending | 최종 검토 P1/P2/P3=0, 사용자 예외와 미검증 범위를 PR에 명시 |
 
 
 ### 최신 main 통합
@@ -119,7 +119,7 @@ Duo Today의 초기 상단 회귀는 접힘에서는 정상 통과했다. 펼침
 
 ## 사전 검토와 범위
 
-- Security·Performance·Architecture·Data Integrity·Simplicity의 준비 소스 검토에는 열린 P1/P2/P3가 없다. 2,000줄 초과 diff는 폴더별 직접 검토했고, 기존 전문가 검토 후 수정분을 최종 source reviewer가 대조했다. 정식 Phase3 통과를 뜻하지 않는다. Agent-Native는 .claude/.codex 지침 변경이 없어 제외했다.
+- Security·Performance·Architecture·Data Integrity·Simplicity의 준비 소스 검토에는 열린 P1/P2/P3가 없다. 2,000줄 초과 diff는 폴더별 직접 검토했고, 기존 전문가 검토 후 수정분을 최종 source reviewer가 대조했다. 현재 제품 소스가 c239a50d 이후 동일함을 확인해 Phase3에서 재사용했다. Agent-Native는 .claude/.codex 지침 변경이 없어 제외했다.
 - SwiftUI·Apple UX·UI test expert·app-quality·PR reviewer의 소스/레이아웃 검토와 수정 증거는 보존했다. 대량 데이터 optimizer는 28일 범위/공유 query로 제한돼 별도 실행하지 않았다. Duo 표시 방향은 추가 Astra 진단에서도 물리 방향과 compositor의 불일치가 확인됐고 세부 원인은 미확정이다.
 - 새 문자열25개는 en/ko/ja가 모두 있고 catalog format check가 통과했다. 보조 글자/card 대비는 밝음6.69:1·어두움8.74:1, Widget accent/surface는 밝음5.26:1·어두움9.52:1이다.
 - 변경 Unit 파일: ActivityViewModelTests, ExerciseMixServiceTests, ExerciseMixDetailViewModelTests, WhatsNewStoreTests. 실행은 기존 Widget·Dune 관련 suite를 포함한7suite/58개다.
@@ -138,3 +138,13 @@ Duo Today의 초기 상단 회귀는 접힘에서는 정상 통과했다. 펼침
 | 내부 변경 | 28일 query를 training load와 공유하고 source failure를 표시한다. 기존 저장 스키마·실제 운동 데이터를 바꾸지 않는다 |
 
 사전 조건은 건강 데이터 권한/기록 또는 명시된 seeded fixture이며, 실제 Watch 연동 확인에는 페어링된 Watch가 필요하다. Duo 펼침 Today는 Mac 잠금 해제와 Device Hub 표시 회전 확인 뒤 검증한다.
+
+## 사용자 검증 예외와 최종 판정
+
+사용자의 “일단 넘어가” 지시는 Duo 펼침 Today의 남은 runtime 검증만 보류하는 예외다. 실패 로그·portrait viewport·최종 T03 캡처 없음은 유지한다. 앱의 가로 지원을 제거하거나 테스트를 skip으로 수정하지 않았다. 처음 발견된 toolbar glass 문제는 한 trailing HStack/44pt label로 수정했고 접힘·iPhone·iPad는 확인했지만 펼침에서 최종 배치를 확인한 것은 아니다.
+
+최종 reviewer는 d8607253 / origin/main7e6b0594를 기준으로 제품 소스가 c239a50d 이후 같음을 확인했다. 열린 제품 소스 P1=0/P2=0/P3=0이며, 이전 findings는 현 소스에서 해결됨을 대조했다. 결론은 사용자 예외 조건부 PASS WITH NOTES다. ThemeMatrix 후속 변경은 native AX child와 실제 hit target을 구분하며, 펼침 시 실제 width>height 조건을 유지한다.
+
+CLAUDE.md/.claude 규칙은 변경하지 않았다. 기존 교정사항·디자인맵 출처 규칙으로 예방하며 새 전역 규칙은 승격하지 않는다. 작업 대상 활성 TODO가 없으므로 기존 전역 디자인 TODO를 임의로 done 처리하지 않는다.
+
+위젯 갤러리의 3family 검사는 desert-final-focused-phone.log의 개별 메서드(44.096초) 통과이며, 함께 실행한 번들은 별도 Today toolbar assertion 실패로 전체 통과가 아니었다. 이후 Today 검사만 원인 수정 후 phone/iPad/접힘에서 통과했다. Home host lookup 실패 번들을 위젯 갤러리 전체 성공 증거로 사용하지 않는다.

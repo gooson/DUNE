@@ -64,4 +64,4 @@ Small 위젯의 세 점수 링과 하단 상태·시각은 카드 전체 높이�
 
 ### 실제 구현 검증 상태 (2026-10-24)
 
-앱·Widget·Live Activity 소스 구현과 통합 빌드, 영향 단위 테스트58개는 완료했다. iPhone·iPad·Duo 접힘의 대표 UI와 WidgetKit3family 및 Rest/Watch Notification Center를 확인했다. Duo 펼침 Today의 최신 상단은 표시 컨트롤러가 세로로 남아 검증 대기이며, Mac 잠금 해제 후 Device Hub 확인이 필요하다. 최종 전체 검증·PR·머지는 완료되지 않았다. [검증 기록](../../reviews/2026-10-24-desert-horizon-final.md)을 기준으로 한다.
+앱·Widget·Live Activity 소스 구현과 통합 빌드, 영향 단위 테스트58개는 완료했다. iPhone·iPad·Duo 접힘의 대표 UI와 WidgetKit3family 및 Rest/Watch Notification Center를 확인했다. Duo 펼침 Today의 최신 상단은 표시 컨트롤러가 세로로 남아 검증 대기이며, Mac 잠금 해제 후 Device Hub 확인이 필요하다. 사용자는 2026-10-24 “일단 넘어가”로 해당 Duo 검증 보류 후 진행을 지시했다. 펼침 Today는 계속 미검증이며, 나머지 검토·PR·머지는 이 예외를 명시해 진행한다. [검증 기록](../../reviews/2026-10-24-desert-horizon-final.md)을 기준으로 한다.

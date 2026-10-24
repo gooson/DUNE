@@ -2,7 +2,7 @@
 tags: [design, desert-horizon, actual-capture, comparison]
 date: 2026-10-24
 category: design
-status: in-progress
+status: implemented-with-validation-exception
 ---
 
 # DESERT HORIZON 최종 구현 화면 비교
@@ -19,7 +19,7 @@ status: in-progress
 
 ## 남은 검증
 
-Duo 펼침 Today(T03)의 최종 상단 배치는 미검증이다. 물리 방향 landscapeLeft와 달리 simulator 표시 컨트롤러가 rot0, AX669×951, native2007×2853로 남았다. 기존 가림 PNG를 현재 구현으로 재사용하지 않는다. 현재 Mac 잠금 때문에 Device Hub UI를 확인할 수 없어 잠금 해제 후 표시 회전과 실제 가로 viewport를 먼저 확인해야 한다. 이 UI 게이트를 통과하기 전에는 PR·머지를 진행하지 않는다.
+Duo 펼침 Today(T03)의 최종 상단 배치는 미검증이다. 물리 방향 landscapeLeft와 달리 simulator 표시 컨트롤러가 rot0, AX669×951, native2007×2853로 남았다. 기존 가림 PNG를 현재 구현으로 재사용하지 않는다. 현재 Mac 잠금 때문에 Device Hub UI를 확인할 수 없어 잠금 해제 후 표시 회전과 실제 가로 viewport를 먼저 확인해야 한다. 2026-10-24 사용자의 “일단 넘어가” 지시로 이 검증을 보류하고 후속 리뷰·PR·머지를 진행한다. 해당 가로 화면을 통과·완료로 표시하지 않는다.
 
 ## 갱신
 
