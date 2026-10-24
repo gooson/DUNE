@@ -29,9 +29,7 @@ struct DashboardView: View {
     private let inboxManager = NotificationInboxManager.shared
     private let scrollToTopSignal: Int
 
-    private enum ScrollAnchor: Hashable {
-        case top
-    }
+    @State private var scrollPosition = ScrollPosition()
 
     private let refreshSignal: Int
     private let notificationHubSignal: Int
@@ -90,68 +88,64 @@ struct DashboardView: View {
     }
 
     var body: some View {
-        ScrollViewReader { proxy in
-            ScrollView {
-                Color.clear
-                    .frame(width: 0, height: 0)
-                    .id(ScrollAnchor.top)
-
-                VStack(spacing: sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.xl) {
-                    if !launchExperienceReady {
-                        DashboardSkeletonView()
-                    } else if viewModel.shouldShowSkeleton(
-                        canLoadHealthKitData: canLoadHealthKitData,
-                        hasFailedHealthKitAuthorization: hasFailedHealthKitAuthorization
-                    ) {
-                        DashboardSkeletonView()
-                    } else if viewModel.sortedMetrics.isEmpty && !viewModel.isLoading {
-                        if viewModel.errorMessage != nil {
-                            errorSection
-                        } else if viewModel.isMirroredReadOnlyMode {
-                            CloudSyncWaitingView {
-                                Task { await viewModel.loadData(canLoadHealthKitData: canLoadHealthKitData) }
-                            }
-                        } else {
-                            if hasFailedHealthKitAuthorization {
-                                EmptyStateView(
-                                    icon: "heart.text.clipboard",
-                                    title: "Health Access Needed",
-                                    message: "Allow Health access in Settings to see your daily metrics.",
-                                    actionTitle: "Open Settings",
-                                    action: openSettings
-                                )
-                            } else {
-                                EmptyStateView(
-                                    icon: "heart.text.clipboard",
-                                    title: "No Measurements Yet",
-                                    message: "Your health trends will appear after measurements are available.",
-                                    actionTitle: "View Activity",
-                                    action: onOpenActivity
-                                )
-                                .accessibilityElement(children: .contain)
-                                .accessibilityIdentifier("dashboard-empty-state")
-                            }
+        ScrollView {
+            VStack(spacing: sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.xl) {
+                if !launchExperienceReady {
+                    DashboardSkeletonView()
+                } else if viewModel.shouldShowSkeleton(
+                    canLoadHealthKitData: canLoadHealthKitData,
+                    hasFailedHealthKitAuthorization: hasFailedHealthKitAuthorization
+                ) {
+                    DashboardSkeletonView()
+                } else if viewModel.sortedMetrics.isEmpty && !viewModel.isLoading {
+                    if viewModel.errorMessage != nil {
+                        errorSection
+                    } else if viewModel.isMirroredReadOnlyMode {
+                        CloudSyncWaitingView {
+                            Task { await viewModel.loadData(canLoadHealthKitData: canLoadHealthKitData) }
                         }
                     } else {
-                        dashboardUpperContent
-                        dashboardLowerContent
+                        if hasFailedHealthKitAuthorization {
+                            EmptyStateView(
+                                icon: "heart.text.clipboard",
+                                title: "Health Access Needed",
+                                message: "Allow Health access in Settings to see your daily metrics.",
+                                actionTitle: "Open Settings",
+                                action: openSettings
+                            )
+                        } else {
+                            EmptyStateView(
+                                icon: "heart.text.clipboard",
+                                title: "No Measurements Yet",
+                                message: "Your health trends will appear after measurements are available.",
+                                actionTitle: "View Activity",
+                                action: onOpenActivity
+                            )
+                            .accessibilityElement(children: .contain)
+                            .accessibilityIdentifier("dashboard-empty-state")
+                        }
                     }
+                } else {
+                    dashboardUpperContent
+                    dashboardLowerContent
                 }
-                .padding(sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.lg)
-                .frame(maxWidth: sizeClass == .regular ? DS.Layout.rootContentMaxWidth : .infinity)
-                .frame(maxWidth: .infinity)
-                .coordinateSpace(name: TabHeroStartLine.coordinateSpace)
             }
-            .accessibilityElement(children: .contain)
-            .accessibilityIdentifier("dashboard-root-scroll")
-            .waveRefreshable {
-                guard launchExperienceReady else { return }
-                await loadDashboard()
-            }
-            .onChange(of: scrollToTopSignal) { _, _ in
-                withAnimation(DS.Animation.standard) {
-                    proxy.scrollTo(ScrollAnchor.top, anchor: .top)
-                }
+            .padding(.top, DS.Spacing.sm)
+            .padding(sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.lg)
+            .frame(maxWidth: sizeClass == .regular ? DS.Layout.rootContentMaxWidth : .infinity)
+            .frame(maxWidth: .infinity)
+            .coordinateSpace(name: TabHeroStartLine.coordinateSpace)
+        }
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("dashboard-root-scroll")
+        .scrollPosition($scrollPosition)
+        .waveRefreshable {
+            guard launchExperienceReady else { return }
+            await loadDashboard()
+        }
+        .onChange(of: scrollToTopSignal) { _, _ in
+            withAnimation(DS.Animation.standard) {
+                scrollPosition.scrollTo(edge: .top)
             }
         }
         .environment(\.weatherAtmosphere, cachedWeatherAtmosphere)
