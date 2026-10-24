@@ -125,6 +125,56 @@ final class TodaySupportCardsUITests: SeededUITestBaseCase {
         }
     }
 
+    /// The expanded Duo viewport is wide but too short to show the whole recovery card at once.
+    func testDesertTodaySupportCardsInShortLandscapeViewport() {
+        var configuration = launchConfiguration
+        configuration.initialTabSelectionArgument = "today"
+        configuration.additionalArguments += [
+            "--ui-test-theme", "desertWarm",
+            "--ui-test-style", "dark",
+            "--ui-dashboard-hour", "12",
+            "-morningBriefingDisabled", "YES"
+        ]
+        launchApp(with: configuration)
+        XCTAssertTrue(app.hasPrimaryNavigation(timeout: 15), "Landscape Today navigation should load")
+
+        let window = app.windows.firstMatch.frame
+        XCTAssertGreaterThan(window.width, window.height,
+                             "This selector requires an expanded landscape viewport")
+        let scroll = app.scrollViews["dashboard-root-scroll"].firstMatch
+        XCTAssertTrue(scroll.waitForExistence(timeout: 10))
+
+        let progress = element("dashboard-daily-progress")
+        let brief = element("dashboard-today-brief-card")
+        let recovery = element("dashboard-recovery-sleep-card")
+        let lastSleep = element("dashboard-recovery-last-sleep")
+        let period = element("dashboard-recovery-sleep-period")
+        let chart = element("dashboard-recovery-sleep-chart")
+        XCTAssertTrue(progress.waitForExistence(timeout: 10))
+        XCTAssertTrue(recovery.waitForExistence(timeout: 10))
+        XCTAssertTrue(lastSleep.waitForExistence(timeout: 5))
+        XCTAssertTrue(period.waitForExistence(timeout: 5))
+        XCTAssertTrue(chart.waitForExistence(timeout: 5))
+
+        assertSameHorizontalEdges(recovery, progress, context: "Landscape Recovery & Sleep")
+        if brief.exists {
+            assertSameHorizontalEdges(brief, progress, context: "Landscape Today's Brief")
+        }
+        for child in [lastSleep, period, chart] {
+            assertWithin(child, parent: recovery, context: "Landscape \(child.identifier)")
+        }
+
+        XCTAssertTrue(scrollTopIntoViewport(recovery, in: scroll),
+                      "Landscape Recovery & Sleep header should be visible")
+        XCTAssertTrue(visibleViewport(for: scroll).contains(lastSleep.frame),
+                      "Landscape last sleep should fit with the card header")
+        addScreenshotAttachment(named: "Today Support Landscape Recovery Header")
+
+        XCTAssertTrue(scrollPairFullyIntoViewport(period, chart, in: scroll),
+                      "Landscape sleep period and seven-day chart should fit together")
+        addScreenshotAttachment(named: "Today Support Landscape Recovery Chart")
+    }
+
     private func element(_ identifier: String) -> XCUIElement {
         app.descendants(matching: .any)[identifier].firstMatch
     }
@@ -159,6 +209,46 @@ final class TodaySupportCardsUITests: SeededUITestBaseCase {
             ))
         }
         return visibleViewport(for: scroll).contains(target.frame)
+    }
+
+    private func scrollTopIntoViewport(_ target: XCUIElement, in scroll: XCUIElement) -> Bool {
+        guard app.scrollToHittableElementIfNeeded(target.identifier, maxSwipes: 12) else { return false }
+        for _ in 0..<8 {
+            let viewport = visibleViewport(for: scroll)
+            let top = target.frame.minY
+            if top >= viewport.minY && top + 42 <= viewport.maxY { return true }
+            let movement = top + 42 > viewport.maxY
+                ? top + 42 - viewport.maxY + 6
+                : top - viewport.minY - 6
+            let distance = min(abs(movement), scroll.frame.height * 0.3)
+            let start = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+            start.press(forDuration: 0.05, thenDragTo: start.withOffset(
+                CGVector(dx: 0, dy: movement > 0 ? -distance : distance)
+            ))
+        }
+        let viewport = visibleViewport(for: scroll)
+        return target.frame.minY >= viewport.minY && target.frame.minY + 42 <= viewport.maxY
+    }
+
+    private func scrollPairFullyIntoViewport(
+        _ first: XCUIElement, _ second: XCUIElement, in scroll: XCUIElement
+    ) -> Bool {
+        guard app.scrollToHittableElementIfNeeded(second.identifier, maxSwipes: 12) else { return false }
+        for _ in 0..<8 {
+            let viewport = visibleViewport(for: scroll)
+            let content = first.frame.union(second.frame)
+            if viewport.contains(content) { return true }
+            guard content.height <= viewport.height else { return false }
+            let movement = content.maxY > viewport.maxY
+                ? content.maxY - viewport.maxY + 6
+                : content.minY - viewport.minY - 6
+            let distance = min(abs(movement), scroll.frame.height * 0.3)
+            let start = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+            start.press(forDuration: 0.05, thenDragTo: start.withOffset(
+                CGVector(dx: 0, dy: movement > 0 ? -distance : distance)
+            ))
+        }
+        return visibleViewport(for: scroll).contains(first.frame.union(second.frame))
     }
 
     private func assertWithin(_ child: XCUIElement, parent: XCUIElement, context: String) {

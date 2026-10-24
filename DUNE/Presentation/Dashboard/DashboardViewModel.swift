@@ -58,6 +58,12 @@ final class DashboardViewModel {
     private(set) var latestSleepStages: [SleepStage] = []
     private var hasLoadedOnce = false
 
+    private struct SleepFetchResult: Sendable {
+        let metric: HealthMetric?
+        let stages: [SleepStage]
+        let failed: Bool
+    }
+
     /// Assembled briefing data for the morning briefing sheet.
     private(set) var briefingData: MorningBriefingData?
 
@@ -335,6 +341,7 @@ final class DashboardViewModel {
             AppLogger.ui.info("Optimistic retention: keeping \(self.sortedMetrics.count) existing metrics (reload returned empty)")
         } else {
             sortedMetrics = allMetrics.sorted { $0.changeSignificance > $1.changeSignificance }
+            latestSleepStages = sleepResult.metric == nil ? [] : sleepResult.stages
         }
         buildCoachingInsights()
         syncWeatherCardInsight()
@@ -461,21 +468,24 @@ final class DashboardViewModel {
     private func safeSleepFetch(
         snapshot: SharedHealthSnapshot?,
         canQueryHealthKit: Bool
-    ) async -> (metric: HealthMetric?, failed: Bool) {
+    ) async -> SleepFetchResult {
         if let snapshot {
             let sleepRelatedSources: Set<SharedHealthSnapshot.Source> = [
                 .todaySleepStages, .yesterdaySleepStages, .latestSleepStages, .sleepDailyDurations
             ]
-            let metric = fetchSleepData(from: snapshot)
-            let failed = metric == nil && !snapshot.failedSources.isDisjoint(with: sleepRelatedSources)
-            return (metric, failed)
+            let result = fetchSleepData(from: snapshot)
+            return SleepFetchResult(
+                metric: result.metric,
+                stages: result.stages,
+                failed: result.metric == nil && !snapshot.failedSources.isDisjoint(with: sleepRelatedSources)
+            )
         }
-        guard canQueryHealthKit else { return (nil, false) }
+        guard canQueryHealthKit else { return SleepFetchResult(metric: nil, stages: [], failed: false) }
 
-        do { return (try await fetchSleepData(), false) }
+        do { return try await fetchSleepData() }
         catch {
             AppLogger.ui.error("Sleep fetch failed: \(error.localizedDescription)")
-            return (nil, true)
+            return SleepFetchResult(metric: nil, stages: [], failed: true)
         }
     }
 
@@ -864,7 +874,7 @@ final class DashboardViewModel {
     private let sleepScoreUseCase = CalculateSleepScoreUseCase()
     private let sleepDeficitUseCase = CalculateSleepDeficitUseCase()
 
-    private func fetchSleepData() async throws -> HealthMetric? {
+    private func fetchSleepData() async throws -> SleepFetchResult {
         let calendar = Calendar.current
         let today = Date()
         let yesterday = calendar.date(byAdding: .day, value: -1, to: today) ?? today
@@ -887,11 +897,9 @@ final class DashboardViewModel {
             sleepDate = latest.date
             isHistorical = true
         } else {
-            latestSleepStages = []
-            return nil
+            return SleepFetchResult(metric: nil, stages: [], failed: false)
         }
 
-        latestSleepStages = stages
         let output = sleepScoreUseCase.execute(input: .init(stages: stages))
         let yesterdayOutput = sleepScoreUseCase.execute(input: .init(stages: yesterdayStages))
 
@@ -925,7 +933,7 @@ final class DashboardViewModel {
             longTermDurations: dailySleep.map(CalculateSleepDeficitUseCase.Input.DayDuration.init(from:))
         ))
 
-        return HealthMetric(
+        let metric = HealthMetric(
             id: "sleep",
             name: String(localized: "Sleep"),
             value: output.totalMinutes,
@@ -935,16 +943,15 @@ final class DashboardViewModel {
             category: .sleep,
             isHistorical: isHistorical
         )
+        return SleepFetchResult(metric: metric, stages: stages, failed: false)
     }
 
-    private func fetchSleepData(from snapshot: SharedHealthSnapshot) -> HealthMetric? {
+    private func fetchSleepData(from snapshot: SharedHealthSnapshot) -> SleepFetchResult {
         let calendar = Calendar.current
         guard let sleepInput = snapshot.sleepScoreInput else {
-            latestSleepStages = []
-            return nil
+            return SleepFetchResult(metric: nil, stages: [], failed: false)
         }
 
-        latestSleepStages = sleepInput.stages
         let output = sleepScoreUseCase.execute(input: .init(stages: sleepInput.stages))
         let yesterdayOutput = sleepScoreUseCase.execute(input: .init(stages: snapshot.yesterdaySleepStages))
 
@@ -973,7 +980,7 @@ final class DashboardViewModel {
             longTermDurations: snapshot.sleepDailyDurations.map { .init(date: $0.date, totalMinutes: $0.totalMinutes) }
         ))
 
-        return HealthMetric(
+        let metric = HealthMetric(
             id: "sleep",
             name: String(localized: "Sleep"),
             value: output.totalMinutes,
@@ -983,6 +990,7 @@ final class DashboardViewModel {
             category: .sleep,
             isHistorical: sleepInput.isHistorical
         )
+        return SleepFetchResult(metric: metric, stages: sleepInput.stages, failed: false)
     }
 
     private func fetchExerciseData() async throws -> [HealthMetric] {

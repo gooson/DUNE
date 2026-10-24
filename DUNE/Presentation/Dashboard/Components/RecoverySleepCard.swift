@@ -36,7 +36,7 @@ struct RecoverySleepCard: View {
     }
 
     private var shouldShow: Bool {
-        sleepMetric != nil || !validStages.isEmpty || hasValidDeficit || !sleepInsights.isEmpty
+        sleepMetric != nil || hasValidDeficit || !sleepInsights.isEmpty
     }
 
     private var hasValidDeficit: Bool {
