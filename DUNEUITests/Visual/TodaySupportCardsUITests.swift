@@ -246,7 +246,9 @@ final class TodaySupportCardsUITests: SeededUITestBaseCase {
             let movement = frame.maxY > viewport.maxY
                 ? frame.maxY - viewport.maxY + 6
                 : frame.minY - viewport.minY - 6
-            let distance = min(abs(movement), scroll.frame.height * 0.3)
+            // A 10pt correction left the frame unchanged in the captured run.
+            // Keep small corrections large enough to produce a pan.
+            let distance = min(max(abs(movement), 24), scroll.frame.height * 0.3)
             let start = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
             start.press(forDuration: 0.05, thenDragTo: start.withOffset(
                 CGVector(dx: 0, dy: movement > 0 ? -distance : distance)
@@ -264,7 +266,7 @@ final class TodaySupportCardsUITests: SeededUITestBaseCase {
             let movement = top + 42 > viewport.maxY
                 ? top + 42 - viewport.maxY + 6
                 : top - viewport.minY - 6
-            let distance = min(abs(movement), scroll.frame.height * 0.3)
+            let distance = min(max(abs(movement), 24), scroll.frame.height * 0.3)
             let start = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
             start.press(forDuration: 0.05, thenDragTo: start.withOffset(
                 CGVector(dx: 0, dy: movement > 0 ? -distance : distance)
@@ -286,7 +288,7 @@ final class TodaySupportCardsUITests: SeededUITestBaseCase {
             let movement = content.maxY > viewport.maxY
                 ? content.maxY - viewport.maxY + 6
                 : content.minY - viewport.minY - 6
-            let distance = min(abs(movement), scroll.frame.height * 0.3)
+            let distance = min(max(abs(movement), 24), scroll.frame.height * 0.3)
             let start = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
             start.press(forDuration: 0.05, thenDragTo: start.withOffset(
                 CGVector(dx: 0, dy: movement > 0 ? -distance : distance)
