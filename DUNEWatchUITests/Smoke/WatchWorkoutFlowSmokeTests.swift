@@ -304,12 +304,14 @@ final class WatchWorkoutFlowSmokeTests: WatchUITestBaseCase {
         running.tap()
         captureDesignState("P03", visible: WatchAXID.workoutPreviewCardioIndoorButton)
         XCTAssertTrue(tapElement(WatchAXID.workoutPreviewCardioIndoorButton))
+        XCTAssertTrue(elementExists("watch-running-distance-metrics", timeout: 10))
+        app.swipeLeft()
         captureDesignState("C01", visible: "watch-cardio-main-metrics")
         app.swipeLeft()
         captureDesignState("C03", visible: "watch-cardio-hr-zone")
         app.swipeLeft()
         captureDesignState("C04", visible: "watch-cardio-secondary")
-        for _ in 0..<3 { app.swipeRight() }
+        for _ in 0..<4 { app.swipeRight() }
         captureDesignState("X03", visible: WatchAXID.sessionControlsScreen)
         XCTAssertTrue(tapElement(WatchAXID.sessionControlsEndButton))
         let endConfirm = app.buttons.matching(NSPredicate(format: "label IN %@", ["End Workout", "운동 종료", "ワークアウトを終了"])).firstMatch
@@ -320,6 +322,242 @@ final class WatchWorkoutFlowSmokeTests: WatchUITestBaseCase {
             XCTAssertTrue(tapElement(WatchAXID.sessionSummaryEffortDoneButton))
         }
         captureDesignState("F02", visible: WatchAXID.sessionSummaryScreen)
+    }
+
+    func testRunningDistanceMetricsAndPausedDesignMap() throws {
+        startFixtureRunningDistanceWorkout()
+
+        let distance = app.staticTexts["watch-running-distance-value"].firstMatch
+        XCTAssertTrue(distance.waitForExistence(timeout: 5))
+        let initialDistance = accessibleMetricText(distance)
+        XCTAssertTrue(initialDistance.replacingOccurrences(of: ",", with: ".").contains("3.24"),
+                      "Seeded running distance should be shown in km")
+        for identifier in [
+            "watch-running-elapsed-value",
+            "watch-running-average-pace-value",
+            "watch-running-heart-rate-value"
+        ] {
+            let metric = app.staticTexts[identifier].firstMatch
+            XCTAssertTrue(metric.waitForExistence(timeout: 5), "Missing running metric: \(identifier)")
+            let metricText = accessibleMetricText(metric)
+            XCTAssertFalse(metricText.isEmpty, "Running metric should have an accessible value: \(identifier)")
+            XCTAssertFalse(metricText.contains("--"), "Seeded running metric should have a measurement: \(identifier)")
+        }
+        XCTAssertTrue(accessibleMetricText(app.staticTexts["watch-running-heart-rate-value"].firstMatch).contains("148"))
+        captureDesignState("C14", visible: "watch-running-distance-metrics")
+
+        app.swipeLeft()
+        XCTAssertTrue(elementExists("watch-cardio-main-metrics", timeout: 5), "Time-first metrics must remain reachable")
+        app.swipeRight()
+        XCTAssertTrue(elementExists("watch-running-distance-metrics", timeout: 5))
+        app.swipeRight()
+        XCTAssertTrue(elementExists(WatchAXID.sessionControlsScreen, timeout: 5), "Controls should be one right swipe away")
+
+        let pauseResume = app.buttons[WatchAXID.sessionControlsPauseResumeButton].firstMatch
+        XCTAssertTrue(pauseResume.waitForExistence(timeout: 5))
+        pauseResume.tap()
+        XCTAssertEqual(
+            XCTWaiter.wait(for: [XCTNSPredicateExpectation(
+                predicate: NSPredicate(format: "label IN %@", ["Resume", "재개", "再開"]),
+                object: pauseResume
+            )], timeout: 5),
+            .completed
+        )
+        app.swipeLeft()
+        captureDesignState("C15", visible: "watch-running-paused-indicator")
+        XCTAssertTrue(elementExists("watch-running-distance-metrics", timeout: 5))
+        XCTAssertEqual(accessibleMetricText(app.staticTexts["watch-running-distance-value"].firstMatch), initialDistance)
+
+        app.swipeRight()
+        XCTAssertTrue(tapElement(WatchAXID.sessionControlsPauseResumeButton))
+        app.swipeLeft()
+        XCTAssertTrue(elementExists("watch-running-distance-metrics", timeout: 5))
+        XCTAssertFalse(elementExists("watch-running-paused-indicator", timeout: 1))
+    }
+
+    func testRunningVoiceFeedbackTogglePersistsAcrossNavigationAndRelaunch() throws {
+        startFixtureRunningDistanceWorkout()
+        app.swipeRight()
+
+        let voiceToggle = app.switches["watch-running-voice-feedback-toggle"].firstMatch
+        XCTAssertTrue(voiceToggle.waitForExistence(timeout: 5))
+        if !voiceToggle.isHittable {
+            app.swipeUp()
+        }
+        XCTAssertTrue(voiceToggle.isHittable, "Voice Feedback control should be visible on the small Watch")
+        captureDesignState("C16", visible: "watch-running-voice-feedback-toggle")
+        guard let initialValue = voiceToggle.value as? String else {
+            XCTFail("Voice Feedback switch should expose a state")
+            return
+        }
+        voiceToggle.tap()
+        XCTAssertEqual(
+            XCTWaiter.wait(for: [XCTNSPredicateExpectation(
+                predicate: NSPredicate(format: "value != %@", initialValue),
+                object: voiceToggle
+            )], timeout: 5),
+            .completed,
+            "Voice Feedback should change state when tapped"
+        )
+        guard let changedValue = voiceToggle.value as? String else {
+            XCTFail("Changed Voice Feedback switch should expose a state")
+            return
+        }
+
+        app.swipeLeft()
+        XCTAssertTrue(elementExists("watch-running-distance-metrics", timeout: 5))
+        app.swipeRight()
+        XCTAssertEqual(voiceToggle.value as? String, changedValue)
+
+        launchApp(with: LaunchConfiguration(resetState: false, scenario: .responsiveLayout))
+        if elementExists(WatchAXID.homeRoot, timeout: 3) {
+            startRunningWorkoutFromHome()
+        }
+        if elementExists("watch-running-distance-metrics", timeout: 3) {
+            app.swipeRight()
+        }
+        let restoredToggle = app.switches["watch-running-voice-feedback-toggle"].firstMatch
+        XCTAssertTrue(restoredToggle.waitForExistence(timeout: 5))
+        XCTAssertEqual(restoredToggle.value as? String, changedValue,
+                       "Voice Feedback preference should survive app relaunch")
+    }
+
+    func testRunningFeedbackSettingsPersistAcrossSheetAndRelaunch() throws {
+        startFixtureRunningDistanceWorkout()
+        app.swipeRight()
+        openRunningFeedbackSettings()
+        captureDesignState("C17", visible: "watch-running-feedback-settings")
+
+        let distancePicker = app.descendants(matching: .any)["watch-running-feedback-distance"].firstMatch
+        XCTAssertTrue(distancePicker.waitForExistence(timeout: 5))
+        let initialDistance = accessibleMetricText(distancePicker)
+        let chosenDistance = initialDistance.contains("2 km") ? "500 m" : "2 km"
+        selectRunningFeedbackOption(chosenDistance, in: "watch-running-feedback-distance")
+        XCTAssertTrue(accessibleMetricText(distancePicker).contains(chosenDistance))
+
+        let volume = app.sliders["watch-running-feedback-volume"].firstMatch
+        scrollToRunningFeedbackControl(volume)
+        XCTAssertTrue(volume.isHittable, "Volume must be adjustable on the small Watch")
+        let initialVolume = volume.value as? String
+        volume.adjust(toNormalizedSliderPosition: initialVolume?.contains("35") == true ? 0.7 : 0.35)
+        guard let chosenVolume = volume.value as? String else {
+            XCTFail("Feedback volume should expose its percentage")
+            return
+        }
+        XCTAssertNotEqual(chosenVolume, initialVolume, "Volume adjustment should change the displayed level")
+
+        let paceAlerts = app.switches["watch-running-pace-alerts-toggle"].firstMatch
+        scrollToRunningFeedbackControl(paceAlerts)
+        XCTAssertTrue(paceAlerts.isHittable)
+        if !elementExists("watch-running-target-pace", timeout: 1) {
+            paceAlerts.tap()
+        }
+        let target = app.descendants(matching: .any)["watch-running-target-pace"].firstMatch
+        scrollToRunningFeedbackControl(target)
+        XCTAssertTrue(target.waitForExistence(timeout: 5), "Target pace should appear when alerts are enabled")
+        let targetPace = runningTargetPaceText(target)
+        XCTAssertTrue(targetPace.contains(":"), "Target pace should expose a minutes:seconds value")
+        captureDesignState("C18", visible: "watch-running-target-pace")
+
+        let tolerancePicker = app.descendants(matching: .any)["watch-running-pace-tolerance"].firstMatch
+        scrollToRunningFeedbackControl(tolerancePicker)
+        XCTAssertTrue(tolerancePicker.isHittable)
+        let initialTolerance = accessibleMetricText(tolerancePicker)
+        let chosenTolerance = initialTolerance.contains("30 s") ? "60 s" : "30 s"
+        selectRunningFeedbackOption(chosenTolerance, in: "watch-running-pace-tolerance")
+        XCTAssertTrue(accessibleMetricText(tolerancePicker).contains(chosenTolerance))
+
+        XCTAssertTrue(tapElement("watch-running-feedback-settings-done"))
+        openRunningFeedbackSettings()
+        assertRunningFeedbackSettings(distance: chosenDistance, volume: chosenVolume,
+                                      targetPace: targetPace, tolerance: chosenTolerance)
+        XCTAssertTrue(tapElement("watch-running-feedback-settings-done"))
+
+        launchApp(with: LaunchConfiguration(resetState: false, scenario: .responsiveLayout))
+        if elementExists(WatchAXID.homeRoot, timeout: 3) {
+            startRunningWorkoutFromHome()
+        }
+        if elementExists("watch-running-distance-metrics", timeout: 3) {
+            app.swipeRight()
+        }
+        openRunningFeedbackSettings()
+        assertRunningFeedbackSettings(distance: chosenDistance, volume: chosenVolume,
+                                      targetPace: targetPace, tolerance: chosenTolerance)
+    }
+
+    private func openRunningFeedbackSettings() {
+        let settingsButton = app.buttons["watch-running-feedback-settings-button"].firstMatch
+        if !settingsButton.isHittable {
+            app.swipeUp()
+        }
+        XCTAssertTrue(settingsButton.waitForExistence(timeout: 5))
+        XCTAssertTrue(settingsButton.isHittable)
+        settingsButton.tap()
+        XCTAssertTrue(elementExists("watch-running-feedback-settings", timeout: 5))
+    }
+
+    private func scrollToRunningFeedbackControl(_ element: XCUIElement) {
+        for _ in 0..<4 where !element.isHittable {
+            app.swipeUp()
+        }
+    }
+
+    private func selectRunningFeedbackOption(_ option: String, in identifier: String) {
+        let picker = app.descendants(matching: .any)[identifier].firstMatch
+        scrollToRunningFeedbackControl(picker)
+        XCTAssertTrue(picker.isHittable, "Picker \(identifier) should be reachable")
+        picker.tap()
+        let choice = app.buttons[option].firstMatch.waitForExistence(timeout: 3)
+            ? app.buttons[option].firstMatch
+            : app.staticTexts[option].firstMatch
+        XCTAssertTrue(choice.waitForExistence(timeout: 5), "Missing picker choice: \(option)")
+        choice.tap()
+    }
+
+    private func assertRunningFeedbackSettings(distance: String, volume: String,
+                                               targetPace: String, tolerance: String) {
+        let distancePicker = app.descendants(matching: .any)["watch-running-feedback-distance"].firstMatch
+        XCTAssertTrue(distancePicker.waitForExistence(timeout: 5))
+        XCTAssertTrue(accessibleMetricText(distancePicker).contains(distance))
+        let volumeSlider = app.sliders["watch-running-feedback-volume"].firstMatch
+        XCTAssertTrue(volumeSlider.waitForExistence(timeout: 5))
+        XCTAssertEqual(volumeSlider.value as? String, volume)
+        let target = app.descendants(matching: .any)["watch-running-target-pace"].firstMatch
+        XCTAssertTrue(target.waitForExistence(timeout: 5), "Pace alerts should remain enabled")
+        XCTAssertEqual(runningTargetPaceText(target), targetPace)
+        let tolerancePicker = app.descendants(matching: .any)["watch-running-pace-tolerance"].firstMatch
+        XCTAssertTrue(tolerancePicker.waitForExistence(timeout: 5))
+        XCTAssertTrue(accessibleMetricText(tolerancePicker).contains(tolerance))
+    }
+
+    private func runningTargetPaceText(_ target: XCUIElement) -> String {
+        let spoken = accessibleMetricText(target)
+        if spoken.contains(":") { return spoken }
+        let pace = target.staticTexts.matching(NSPredicate(format: "label CONTAINS %@", ":")).firstMatch
+        return pace.exists ? pace.label : spoken
+    }
+
+    private func startFixtureRunningDistanceWorkout() {
+        launchApp(with: LaunchConfiguration(
+            scenario: .responsiveLayout,
+            additionalArguments: ["--ui-watch-running-distance"]
+        ))
+        startRunningWorkoutFromHome()
+    }
+
+    private func accessibleMetricText(_ element: XCUIElement) -> String {
+        element.value as? String ?? element.label
+    }
+
+    private func startRunningWorkoutFromHome() {
+        openAllExercises()
+        guard let running = findQuickStartExercise(identifier: "watch-quickstart-exercise-running") else {
+            XCTFail("Fixture running must be reachable")
+            return
+        }
+        running.tap()
+        XCTAssertTrue(tapElement(WatchAXID.workoutPreviewCardioIndoorButton))
+        XCTAssertTrue(elementExists("watch-running-distance-metrics", timeout: 10))
     }
 
     func testCaptureMachineDesignMap() throws {

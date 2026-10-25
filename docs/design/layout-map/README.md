@@ -37,6 +37,7 @@ Life의 링 옆에는 현재 진행 상태를 설명하는 문장을 둔다. 히
 | iOS 위젯·휴식 라이브 액티비티 | [크기·상태별 배치 기준](widget-live-activity-proposal.md) · [DESERT HORIZON 추가 시안](../theme-map/themes/dune-widget-live-activity.html) |
 | Watch H01·H02·H03 홈 카드 | [Watch 홈 스크롤 맵](watch-home-scroll.html) |
 | Watch C01·C03·C04 유산소 세션 | [Watch 유산소 세션 맵](watch-cardio-session.html) |
+| Watch C14·C15 러닝 거리 우선·C16 음성 제어·C17/C18 안내 설정 | [러닝 거리·음성 기준](watch-running-feedback.md) |
 | WLA01 Watch 운동 Live Activity | [Watch 운동 Live Activity 맵](watch-workout-live-activity.md) |
 | W25·W27·Watch F07 머신 유산소 레벨 변화 | [머신 유산소 레벨 기록 맵](cardio-level-history.html) |
 
