@@ -50,6 +50,21 @@ final class TodayReadingUITests: SeededUITestBaseCase {
     }
 
     private func reveal(_ identifier: String, maxSwipes: Int = 16) {
+        if identifier == Fixture.stressContributions {
+            // The VStack identifier propagates to the decorative trend image.
+            // Readable evidence must target text, with small reversible scrolls.
+            let text = app.staticTexts[identifier].firstMatch
+            let scroll = app.scrollViews["dashboard-root-scroll"].firstMatch
+            for _ in 0..<maxSwipes {
+                if text.exists && text.isHittable { return }
+                let isAbove = text.exists && text.frame.maxY < app.windows.firstMatch.frame.midY
+                let start = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: isAbove ? 0.35 : 0.65))
+                let end = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: isAbove ? 0.65 : 0.35))
+                start.press(forDuration: 0.05, thenDragTo: end)
+            }
+            XCTFail("Readable stress evidence should be visible at this device width")
+            return
+        }
         XCTAssertTrue(
             app.scrollToHittableElementIfNeeded(identifier, maxSwipes: maxSwipes),
             "\(identifier) should be reachable at this text size and device width"
