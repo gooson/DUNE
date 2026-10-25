@@ -83,20 +83,7 @@ struct DesertHorizonConditionHeroView: View {
     var body: some View {
         NavigationLink(value: score) {
             VStack(alignment: .leading, spacing: 12) {
-                HStack(alignment: .firstTextBaseline, spacing: 8) {
-                    Text("CONDITION")
-                        .font(.caption.weight(.bold))
-                        .tracking(1)
-                        .foregroundStyle(heroAccent)
-                    Spacer(minLength: 8)
-                    Text("View Details")
-                        .font(.caption.weight(.semibold))
-                        .foregroundStyle(heroAccent)
-                    Image(systemName: "chevron.right")
-                        .font(.caption.weight(.semibold))
-                        .foregroundStyle(heroAccent)
-                        .accessibilityHidden(true)
-                }
+                titleRow
                 header
                 trend
                 if !trendBadges.isEmpty {
@@ -120,6 +107,42 @@ struct DesertHorizonConditionHeroView: View {
                         .strokeBorder(border, lineWidth: 1)
                 }
                 .shadow(color: Color(red: 0.455, green: 0.357, blue: 0.196).opacity(0.16), radius: 16, y: 9)
+        }
+    }
+
+    @ViewBuilder
+    private var titleRow: some View {
+        if dynamicTypeSize.isAccessibilitySize {
+            VStack(alignment: .leading, spacing: 6) {
+                Text("CONDITION")
+                    .font(.caption.weight(.bold))
+                    .tracking(1)
+                    .foregroundStyle(heroAccent)
+                    .fixedSize(horizontal: false, vertical: true)
+                HStack(alignment: .firstTextBaseline, spacing: 8) {
+                    Text("View Details")
+                        .font(.caption.weight(.semibold))
+                    Image(systemName: "chevron.right")
+                        .font(.caption.weight(.semibold))
+                        .accessibilityHidden(true)
+                }
+                .foregroundStyle(heroAccent)
+            }
+        } else {
+            HStack(alignment: .firstTextBaseline, spacing: 8) {
+                Text("CONDITION")
+                    .font(.caption.weight(.bold))
+                    .tracking(1)
+                    .foregroundStyle(heroAccent)
+                Spacer(minLength: 8)
+                Text("View Details")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(heroAccent)
+                Image(systemName: "chevron.right")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(heroAccent)
+                    .accessibilityHidden(true)
+            }
         }
     }
 
