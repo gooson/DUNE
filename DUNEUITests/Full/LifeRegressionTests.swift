@@ -99,6 +99,21 @@ final class LifeRegressionTests: SeededUITestBaseCase {
             ("life-habit-group-upcoming", "L01 Upcoming habits")
         ] {
             XCTAssertTrue(app.scrollToHittableElementIfNeeded(groupID, maxSwipes: 10), "\(name) should be reachable")
+            if groupID == "life-habit-group-upcoming" {
+                // A hittable group can still extend below an iPad's viewport.
+                // Capture the complete pending schedule and its explanatory copy.
+                let group = app.descendants(matching: .any)[groupID].firstMatch
+                let scroll = app.scrollViews.firstMatch
+                let viewport = scroll.frame.intersection(app.windows.firstMatch.frame)
+                for _ in 0..<6 where !viewport.contains(group.frame) {
+                    if group.frame.maxY > viewport.maxY {
+                        scroll.swipeUp(velocity: .slow)
+                    } else {
+                        scroll.swipeDown(velocity: .slow)
+                    }
+                }
+                XCTAssertTrue(viewport.contains(group.frame), "Upcoming schedule copy should fit completely in the capture viewport")
+            }
             attachLifeScreenshot(name)
         }
     }
