@@ -1,0 +1,127 @@
+<div id="dune-hero-study">
+  <div class="viz-carousel viz-dotted-background" aria-label="Activity·Life 히어로 개선 시안" data-previous-label="이전 시안" data-next-label="다음 시안">
+    <section data-variant="흐름과 근거" aria-label="흐름과 근거 시안"><div class="dh-stage" data-design="rich"></div></section>
+    <section data-variant="핵심 요약" aria-label="핵심 요약 시안" hidden><div class="dh-stage" data-design="compact"></div></section>
+  </div>
+</div>
+<style>
+#dune-hero-study{font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif}
+#dune-hero-study *{box-sizing:border-box}
+#dune-hero-study .dh-stage{padding:24px 10px 32px;min-height:1140px}
+#dune-hero-study .dh-product{color-scheme:dark;--dh-ink:#f8f2e9;--dh-muted:#c7bbb0;--dh-surface:#242421;--dh-inset:#302e29;--dh-line:#52483e;--dh-gold:#f2ce70;--dh-action:#e5ad83;--dh-green:#99bc98;--dh-sleep:#b9acd3;--dh-track:#443e2d;--dh-bg:#3d332c;--dh-crest:#88654e;--dh-halo:#8c683c33;color:var(--dh-ink);background:var(--dh-bg);border-radius:28px;width:100%;max-width:402px;margin:auto;padding:26px 16px 28px;overflow-wrap:anywhere;isolation:isolate;position:relative}
+#dune-hero-study .dh-product::before{content:"";position:absolute;inset:0 0 auto;height:260px;border-radius:28px 28px 0 0;background:radial-gradient(ellipse at 90% 0,var(--dh-crest),transparent 75%),linear-gradient(170deg,var(--dh-crest),transparent);opacity:.65;z-index:-1;pointer-events:none}
+#dune-hero-study .dh-product[data-appearance="light"]{color-scheme:light;--dh-ink:#342d25;--dh-muted:#736355;--dh-surface:#fcf8f0;--dh-inset:#f1e8da;--dh-line:#dacebc;--dh-gold:#a77922;--dh-action:#8c5232;--dh-green:#52734c;--dh-sleep:#7b6599;--dh-track:#e5dac4;--dh-bg:#e8d7c2;--dh-crest:#c89c76;--dh-halo:#e8c68033}
+#dune-hero-study .dh-preview-label{margin:0 0 18px;color:var(--dh-muted);font-size:11px;letter-spacing:.1em;text-align:center}
+#dune-hero-study .dh-tab-title{font-size:32px;letter-spacing:-.04em;font-weight:700;margin:0 4px 21px}
+#dune-hero-study .dh-tab-title.dh-life-title{margin-top:36px}
+#dune-hero-study .dh-hero{background:radial-gradient(ellipse at 0 0,var(--dh-halo),transparent 65%),var(--dh-surface);border:1px solid var(--dh-line);border-radius:24px;padding:20px}
+#dune-hero-study .dh-kicker{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px;font-size:13px;font-weight:600}
+#dune-hero-study .dh-kicker small{color:var(--dh-muted);font-size:11px;font-weight:400;text-align:right}
+#dune-hero-study .dh-main{display:grid;grid-template-columns:124px minmax(0,1fr);align-items:center;gap:20px}
+#dune-hero-study .dh-ring{width:124px;height:124px;position:relative;flex:none}
+#dune-hero-study .dh-ring svg{width:100%;height:100%;overflow:visible;transform:rotate(-90deg)}
+#dune-hero-study .dh-ring circle{fill:none;stroke-width:10}
+#dune-hero-study .dh-ring-track{stroke:var(--dh-track)}
+#dune-hero-study .dh-ring-fill{stroke:var(--dh-gold);stroke-linecap:round;filter:drop-shadow(0 0 5px var(--dh-halo))}
+#dune-hero-study .dh-ring-text{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}
+#dune-hero-study .dh-ring-text strong{font-size:39px;letter-spacing:-.055em;font-weight:700;line-height:1.1}
+#dune-hero-study .dh-ring-text span{font-size:12px;color:var(--dh-muted)}
+#dune-hero-study .dh-status{color:var(--dh-gold);font-size:12px;font-weight:600;display:block;margin-bottom:8px}
+#dune-hero-study .dh-copy h3{font-size:21px;letter-spacing:-.045em;line-height:1.32;margin:0 0 8px;font-weight:650}
+#dune-hero-study .dh-copy p{color:var(--dh-muted);font-size:13px;line-height:1.55;margin:0}
+#dune-hero-study .dh-evidence{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;border-top:1px solid var(--dh-line);margin-top:24px;padding-top:19px}
+#dune-hero-study .dh-factor-label{font-size:12px;color:var(--dh-muted);display:block;margin-bottom:6px}
+#dune-hero-study .dh-factor-value{font-size:20px;font-weight:650;font-variant-numeric:tabular-nums}
+#dune-hero-study .dh-factor-value small{font-size:11px;font-weight:400;color:var(--dh-muted);margin-left:4px}
+#dune-hero-study .dh-meter{height:4px;background:var(--dh-inset);margin-top:10px;border-radius:4px;overflow:hidden}
+#dune-hero-study .dh-meter i{display:block;height:100%;background:var(--dh-gold);border-radius:4px}
+#dune-hero-study .dh-factor:nth-child(2) .dh-meter i{background:var(--dh-sleep)}
+#dune-hero-study .dh-factor:nth-child(3) .dh-meter i{background:var(--dh-green)}
+#dune-hero-study .dh-trend{border-top:1px solid var(--dh-line);margin-top:22px;padding-top:18px}
+#dune-hero-study .dh-trend-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:12px;margin-bottom:15px}
+#dune-hero-study .dh-trend-head span{color:var(--dh-muted);font-size:11px}
+#dune-hero-study .dh-bars{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px}
+#dune-hero-study .dh-column{display:flex;flex-direction:column;align-items:center;gap:7px;min-width:0}
+#dune-hero-study .dh-bar-well{height:48px;width:100%;display:flex;align-items:flex-end;justify-content:center;border-bottom:1px solid var(--dh-line)}
+#dune-hero-study .dh-bar-well i{display:block;width:15px;max-width:100%;height:var(--dh-height);background:var(--dh-gold);opacity:.47;border-radius:4px 4px 0 0}
+#dune-hero-study .dh-column:last-child .dh-bar-well i{opacity:1}
+#dune-hero-study .dh-column b{font-size:11px;font-weight:500;font-variant-numeric:tabular-nums}
+#dune-hero-study .dh-column small{font-size:11px;color:var(--dh-muted)}
+#dune-hero-study .dh-column:last-child small{color:var(--dh-action)}
+#dune-hero-study .dh-life .dh-bar-well i{background:var(--dh-green)}
+#dune-hero-study .dh-life .dh-column:last-child .dh-bar-well i{background:var(--dh-gold)}
+#dune-hero-study .dh-summary{display:flex;gap:20px;align-items:baseline;border-top:1px solid var(--dh-line);padding-top:18px;margin-top:24px;font-size:12px;color:var(--dh-muted)}
+#dune-hero-study .dh-summary b{color:var(--dh-ink);font-size:24px;font-weight:650;margin-right:5px}
+#dune-hero-study .dh-summary .dh-remaining{margin-left:auto;color:var(--dh-gold)}
+#dune-hero-study .dh-checkpoints{display:flex;gap:7px;margin:24px 0 12px}
+#dune-hero-study .dh-checkpoints span{height:6px;flex:1;background:var(--dh-track);border-radius:4px}
+#dune-hero-study .dh-checkpoints span.dh-done{background:var(--dh-gold)}
+#dune-hero-study .dh-compact-note{font-size:12px;color:var(--dh-muted);margin:0}
+#dune-hero-study .dh-action{width:100%;min-height:48px;margin-top:20px;padding:15px 0 0;display:flex;align-items:center;justify-content:space-between;gap:16px;background:none;color:var(--dh-action);border:0;border-top:1px solid var(--dh-line);font:600 13px -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif;text-align:left}
+#dune-hero-study .dh-action[disabled]{color:var(--dh-muted)}
+#dune-hero-study .dh-detail{margin:14px 0 0;color:var(--dh-muted);font-size:13px;line-height:1.6}
+#dune-hero-study .dh-checklist{padding-left:20px;margin:10px 0 0}
+#dune-hero-study .dh-checklist li{padding:5px 0}
+#dune-hero-study .dh-large .dh-main{grid-template-columns:1fr;gap:20px}
+#dune-hero-study .dh-large .dh-copy h3{font-size:29px}
+#dune-hero-study .dh-large .dh-copy p,#dune-hero-study .dh-large .dh-action{font-size:19px}
+#dune-hero-study .dh-large .dh-evidence{grid-template-columns:1fr}
+#dune-hero-study .dh-large .dh-factor{display:grid;grid-template-columns:1fr 1fr;align-items:baseline}
+#dune-hero-study .dh-large .dh-factor .dh-meter{grid-column:1/-1}
+#dune-hero-study .dh-large .dh-factor-label,#dune-hero-study .dh-large .dh-kicker{font-size:17px}
+#dune-hero-study .dh-large .dh-summary{flex-wrap:wrap;gap:12px}
+@media(max-width:370px){#dune-hero-study .dh-stage{padding:18px 0 30px}#dune-hero-study .dh-product{padding:22px 12px}#dune-hero-study .dh-hero{padding:18px 15px}#dune-hero-study .dh-main{gap:13px}#dune-hero-study .dh-copy h3{font-size:18px}#dune-hero-study .dh-copy p{font-size:12px}#dune-hero-study .dh-kicker{gap:8px}#dune-hero-study .dh-bars{gap:6px}#dune-hero-study .dh-large .dh-main{grid-template-columns:1fr}}
+</style>
+<script>
+(() => {
+  const root = document.getElementById('dune-hero-study');
+  const defaults = { appearance:'dark', large:false, data:'complete' };
+  const saved = globalThis.openai?.widgetState?.privateContent;
+  const state = Object.assign({}, defaults, saved && typeof saved === 'object' ? saved : {});
+  const stages = Array.from(root.querySelectorAll('.dh-stage'));
+  const readiness = [72,75,69,81,77,70,67];
+  const completion = [4,5,3,6,5,4,4];
+  const dates = ['19','20','21','22','23','24','25'];
+  function ring(value, caption, progress) {
+    return `<div class="dh-ring" role="img" aria-label="${caption} ${value}"><svg viewBox="0 0 124 124" aria-hidden="true"><circle class="dh-ring-track" cx="62" cy="62" r="56"/><circle class="dh-ring-fill" cx="62" cy="62" r="56" pathLength="100" stroke-dasharray="${progress} 100"/></svg><div class="dh-ring-text"><strong>${value}</strong><span>${caption}</span></div></div>`;
+  }
+  function bars(kind) {
+    const values = kind === 'activity' ? readiness : completion;
+    const label = kind === 'activity' ? '준비도 · 100점 기준' : '습관 · 완료/대상';
+    return `<div class="dh-trend"><div class="dh-trend-head"><b>${label}</b><span>10.19–10.25</span></div><div class="dh-bars" role="img" aria-label="예시 최근 7일 ${label}: ${values.map((v,i)=>`${dates[i]}일 ${state.data==='partial' && i===2?'기록 없음':v+(kind==='life'?'/6':'점')}`).join(', ')}">${values.map((v,i)=>{ const missing=state.data==='partial' && i===2; return `<div class="dh-column"><b>${missing?'—':v+(kind==='life'?'/6':'')}</b><div class="dh-bar-well"><i style="--dh-height:${missing?0:v/(kind==='life'?6:100)*100}%"></i></div><small>${i===6?'오늘':dates[i]+'일'}</small></div>`; }).join('')}</div></div>`;
+  }
+  function factors() {
+    return `<div class="dh-evidence" aria-label="준비도 구성 점수, 각 100점 기준">${[['HRV',48],['수면',82],['회복',72]].map(([label,value],i)=>{ const missing=state.data==='partial' && i===1; return `<div class="dh-factor"><span class="dh-factor-label">${label}</span><span class="dh-factor-value">${missing?'--':value}<small>/100</small></span><div class="dh-meter"><i style="width:${missing?0:value}%"></i></div></div>`; }).join('')}</div>`;
+  }
+  function activity(rich,empty) {
+    return `<article class="dh-hero dh-activity" aria-label="Activity 준비도 개선안"><div class="dh-kicker"><span>오늘의 운동 준비도</span><small>최근 기록 기준</small></div><div class="dh-main">${ring(empty?'--':'67','준비도',empty?0:67)}<div class="dh-copy"><span class="dh-status">${empty?'기록 대기':'보통'}</span><h3>${empty?'준비도를 기다리고 있어요':'일반 훈련 가능'}</h3><p>${empty?'심박·수면·운동 기록이 모이면 준비도를 볼 수 있어요.':'HRV가 평소보다 낮아요.<br>몸의 반응을 살펴보세요.'}</p></div></div>${empty?'':factors()+(rich?bars('activity'):'')}<button type="button" class="dh-action cursor-interaction" data-action="readiness" aria-expanded="false" ${empty?'disabled':''}><span>준비도 자세히 보기</span><span aria-hidden="true">↗</span></button><div class="dh-detail" data-detail="readiness" hidden>예시 구성 점수는 HRV 48, 수면 ${state.data==='partial'?'기록 없음':'82'}, 회복 72입니다. 실제 앱에서는 준비도 상세 화면으로 연결합니다.</div></article>`;
+  }
+  function life(rich,empty) {
+    return `<article class="dh-hero dh-life" aria-label="Life 습관 개선안"><div class="dh-kicker"><span>오늘의 습관</span><small>10월 25일</small></div><div class="dh-main">${ring(empty?'--':'4/6','오늘',empty?0:100*4/6)}<div class="dh-copy"><span class="dh-status">${empty?'첫 습관':'하루의 리듬'}</span><h3>${empty?'나만의 습관을 시작해 보세요':'오늘의 습관,<br>두 개 남았어요'}</h3><p>${empty?'상단 더하기에서<br>습관을 추가할 수 있어요.':'6개 중 4개를 마쳤어요.<br>남은 습관을 확인해 보세요.'}</p></div></div>${empty?'':rich?`<div class="dh-summary"><span><b>4</b>완료</span><span><b>6</b>오늘 대상</span><span class="dh-remaining">2개 남음</span></div>${bars('life')}`:`<div class="dh-checkpoints" role="img" aria-label="6개 습관 중 4개 완료">${[1,2,3,4,5,6].map(v=>`<span class="${v<=4?'dh-done':''}"></span>`).join('')}</div><p class="dh-compact-note">4개 완료 · 2개 남음</p>`}${empty?'':`<button type="button" class="dh-action cursor-interaction" data-action="checklist" aria-expanded="false"><span>오늘의 습관 확인</span><span aria-hidden="true">→</span></button><div class="dh-detail" data-detail="checklist" hidden><b>남은 습관 · 예시</b><ul class="dh-checklist"><li>독서 · 20분</li><li>스트레칭 · 10분</li></ul></div>`}</article>`;
+  }
+  function render() {
+    stages.forEach(stage=>{
+      const rich=stage.dataset.design==='rich', empty=state.data==='empty';
+      stage.innerHTML=`<div class="dh-product ${state.large?'dh-large':''}" data-appearance="${state.appearance}" aria-label="${rich?'흐름과 근거':'핵심 요약'} 미리보기"><p class="dh-preview-label">DUNE · 디자인 시안 · 수치는 예시</p><h2 class="dh-tab-title">Activity</h2>${activity(rich,empty)}<h2 class="dh-tab-title dh-life-title">Life</h2>${life(rich,empty)}</div>`;
+    });
+  }
+  root.addEventListener('click',event=>{
+    const button=event.target.closest('[data-action]');
+    if(!button || button.disabled)return;
+    const article=button.closest('article');
+    const detail=article.querySelector('[data-detail="'+button.dataset.action+'"]');
+    detail.hidden=!detail.hidden;
+    button.setAttribute('aria-expanded',String(!detail.hidden));
+  });
+  render();
+  function change(){render();globalThis.openai?.setWidgetState?.({privateContent:{...state},modelContent:{appearance:state.appearance,largeText:state.large,data:state.data}})?.catch(()=>{});}
+  if(globalThis.Tweak){
+    const tweak=new Tweak({container:root,onChange:change});
+    tweak.addSelect(state,'appearance',{label:'밝음·어두움',options:[{label:'어두움',value:'dark'},{label:'밝음',value:'light'}]});
+    tweak.addToggle(state,'large',{label:'큰 글씨'});
+    tweak.addSelect(state,'data',{label:'기록 상태',options:[{label:'기록 있음',value:'complete'},{label:'일부 누락',value:'partial'},{label:'기록 없음',value:'empty'}]});
+  }
+  globalThis.addEventListener('openai:set_globals',event=>{const restored=event.detail?.globals?.widgetState?.privateContent;if(restored && typeof restored==='object'){Object.assign(state,defaults,restored);render();}});
+  root.addEventListener('dune-preview-setting',event=>{Object.assign(state,event.detail);render();});
+})();
+</script>
