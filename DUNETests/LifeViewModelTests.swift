@@ -519,6 +519,134 @@ struct LifeViewModelTests {
 
     // MARK: - heroNarrative
 
+    @Test("Progress groups partition manual habits by today's schedule")
+    func schedulePartitions() {
+        let vm = LifeViewModel()
+        let calendar = Calendar.current
+        let referenceDate = calendar.startOfDay(for: Date(timeIntervalSince1970: 1_704_844_800))
+
+        func interval(_ name: String, createdDaysAgo: Int) -> HabitDefinition {
+            let habit = HabitDefinition(
+                name: name, iconCategory: .chores, habitType: .check,
+                goalValue: 1, goalUnit: nil, frequency: .interval(days: 7)
+            )
+            let createdAt = calendar.date(byAdding: .day, value: -createdDaysAgo, to: referenceDate)!
+            habit.createdAt = createdAt
+            habit.recurringStartConfiguredAt = createdAt
+            return habit
+        }
+
+        let daily = HabitDefinition(name: "Daily", iconCategory: .health, habitType: .check,
+                                    goalValue: 1, goalUnit: nil, frequency: .daily)
+        let due = interval("Due", createdDaysAgo: 7)
+        let overdue = interval("Overdue", createdDaysAgo: 8)
+        let upcoming = interval("Upcoming", createdDaysAgo: 2)
+        let futureStart = calendar.date(byAdding: .day, value: 5, to: referenceDate)!
+        let scheduled = HabitDefinition(
+            name: "Scheduled", iconCategory: .chores, habitType: .check,
+            goalValue: 1, goalUnit: nil, frequency: .interval(days: 7),
+            recurringStartPoint: .customDate, recurringCustomStartDate: futureStart,
+            recurringStartConfiguredAt: referenceDate
+        )
+        let firstCompletion = HabitDefinition(
+            name: "First completion", iconCategory: .chores, habitType: .check,
+            goalValue: 1, goalUnit: nil, frequency: .interval(days: 7),
+            recurringStartPoint: .firstCompletion
+        )
+        let weeklySeven = HabitDefinition(name: "Weekly seven", iconCategory: .study,
+                                          habitType: .check, goalValue: 1, goalUnit: nil,
+                                          frequency: .weekly(targetDays: 7))
+        let weeklyTwo = HabitDefinition(name: "Weekly two", iconCategory: .study,
+                                        habitType: .check, goalValue: 1, goalUnit: nil,
+                                        frequency: .weekly(targetDays: 2))
+        weeklySeven.logs = (0..<7).map { offset in
+            let date = calendar.date(byAdding: .day, value: -offset, to: referenceDate)!
+            let log = HabitLog(date: date, value: 1)
+            log.habitDefinition = weeklySeven
+            return log
+        }
+        let autoLinked = HabitDefinition(name: "Auto", iconCategory: .fitness,
+                                         habitType: .check, goalValue: 1, goalUnit: nil,
+                                         frequency: .daily, isAutoLinked: true,
+                                         autoLinkSource: "exercise")
+        let archived = HabitDefinition(name: "Archived", iconCategory: .health,
+                                       habitType: .check, goalValue: 1, goalUnit: nil,
+                                       frequency: .daily)
+        archived.isArchived = true
+
+        vm.calculateProgresses(
+            habits: [daily, due, overdue, upcoming, scheduled, firstCompletion,
+                     weeklySeven, weeklyTwo, autoLinked, archived],
+            todayExerciseExists: true,
+            referenceDate: referenceDate
+        )
+
+        #expect(Set(vm.todayHabitProgresses.map(\.name)) == ["Daily", "Due", "Overdue"])
+        #expect(Set(vm.weeklyHabitProgresses.map(\.name)) == ["Weekly seven", "Weekly two"])
+        #expect(Set(vm.upcomingHabitProgresses.map(\.name)) ==
+                ["Upcoming", "Scheduled", "First completion"])
+        #expect(vm.totalActiveCount == 3)
+        #expect(vm.completedCount == 0)
+        #expect(vm.autoLinkedProgresses.map(\.name) == ["Auto"])
+        #expect(vm.habitProgresses.count == 9)
+    }
+
+    @Test("Early interval completion stays in Today only on its completion day")
+    func earlyIntervalCompletionMovesToUpcomingNextDay() {
+        let vm = LifeViewModel()
+        let calendar = Calendar.current
+        let referenceDate = calendar.startOfDay(for: Date(timeIntervalSince1970: 1_704_844_800))
+        let createdAt = calendar.date(byAdding: .day, value: -2, to: referenceDate)!
+        let followingDay = calendar.date(byAdding: .day, value: 1, to: referenceDate)!
+        let habit = HabitDefinition(name: "Filter", iconCategory: .chores,
+                                    habitType: .check, goalValue: 1, goalUnit: nil,
+                                    frequency: .interval(days: 7))
+        habit.createdAt = createdAt
+        habit.recurringStartConfiguredAt = createdAt
+
+        vm.calculateProgresses(habits: [habit], todayExerciseExists: false,
+                               referenceDate: referenceDate)
+        #expect(vm.todayHabitProgresses.isEmpty)
+        #expect(vm.upcomingHabitProgresses.map(\.name) == ["Filter"])
+
+        let completion = HabitLog(date: referenceDate, value: 1)
+        completion.habitDefinition = habit
+        habit.logs = [completion]
+        vm.calculateProgresses(habits: [habit], todayExerciseExists: false,
+                               referenceDate: referenceDate)
+        #expect(vm.todayHabitProgresses.first?.isCompleted == true)
+        #expect(vm.todayHabitProgresses.first?.canCompleteCycle == false)
+        #expect(vm.completedCount == 1)
+        #expect(vm.totalActiveCount == 1)
+
+        vm.calculateProgresses(habits: [habit], todayExerciseExists: false,
+                               referenceDate: followingDay)
+        #expect(vm.todayHabitProgresses.isEmpty)
+        #expect(vm.upcomingHabitProgresses.first?.isCompleted == false)
+        #expect(vm.upcomingHabitProgresses.first?.canCompleteCycle == true)
+        #expect(vm.completedCount == 0)
+        #expect(vm.totalActiveCount == 0)
+    }
+
+    @Test("Hero distinguishes no manual habits from no habits due today")
+    func heroNarrativeNoHabitsDue() {
+        let vm = LifeViewModel()
+        let referenceDate = Calendar.current.startOfDay(for: Date(timeIntervalSince1970: 1_704_844_800))
+        let weekly = HabitDefinition(name: "Weekly", iconCategory: .study,
+                                     habitType: .check, goalValue: 1, goalUnit: nil,
+                                     frequency: .weekly(targetDays: 7))
+
+        vm.calculateProgresses(habits: [], todayExerciseExists: false,
+                               referenceDate: referenceDate)
+        let addHabitNarrative = vm.heroNarrative
+        vm.calculateProgresses(habits: [weekly], todayExerciseExists: false,
+                               referenceDate: referenceDate)
+
+        #expect(vm.totalActiveCount == 0)
+        #expect(vm.heroNarrative == String(localized: "No habits due today"))
+        #expect(vm.heroNarrative != addHabitNarrative)
+    }
+
     @Test("heroNarrative shows waiting message when none completed")
     func heroNarrativeNoneCompleted() {
         let vm = LifeViewModel()

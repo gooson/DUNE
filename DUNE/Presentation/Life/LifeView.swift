@@ -538,14 +538,13 @@ private struct HabitListQueryView: View {
 
     // MARK: - Filtered & Grouped Progresses
 
-    private var filteredProgresses: [HabitProgress] {
-        let base = viewModel.habitProgresses.filter { !$0.isAutoLinked }
-        guard let filter = selectedCategoryFilter else { return base }
-        return base.filter { $0.iconCategory == filter }
+    private func filteredProgresses(_ progresses: [HabitProgress]) -> [HabitProgress] {
+        guard let filter = selectedCategoryFilter else { return progresses }
+        return progresses.filter { $0.iconCategory == filter }
     }
 
     private var groupedProgresses: [(timeOfDay: HabitTimeOfDay, items: [HabitProgress])] {
-        let grouped = Dictionary(grouping: filteredProgresses, by: \.timeOfDay)
+        let grouped = Dictionary(grouping: filteredProgresses(viewModel.todayHabitProgresses), by: \.timeOfDay)
         return HabitTimeOfDay.allCases
             .compactMap { timeOfDay in
                 guard let items = grouped[timeOfDay], !items.isEmpty else { return nil }
@@ -575,23 +574,42 @@ private struct HabitListQueryView: View {
                         categoryFilterSection
                     }
 
-                    // Time-of-day grouped habits
-                    ForEach(groupedProgresses, id: \.timeOfDay) { group in
-                        if groupedProgresses.count > 1 || group.timeOfDay != .anytime {
-                            timeOfDayHeader(group.timeOfDay, count: group.items.count)
+                    VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                        habitGroupHeader("Today's Habits", count: filteredProgresses(viewModel.todayHabitProgresses).count)
+                        if viewModel.todayHabitProgresses.isEmpty && selectedCategoryFilter == nil {
+                            Text("No habits due today")
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                                .fixedSize(horizontal: false, vertical: true)
                         }
-
-                        ForEach(group.items) { progress in
-                            HabitRowView(
-                                progress: progress,
-                                onToggle: { toggleCheck(habitId: progress.id) },
-                                onUpdateValue: { value in updateValue(habitId: progress.id, value: value) },
-                                trailingAccessory: AnyView(habitActionsButton(for: progress))
-                            )
-                            .contextMenu {
-                                habitActionItems(for: progress, deferred: true)
+                        ForEach(groupedProgresses, id: \.timeOfDay) { group in
+                            if groupedProgresses.count > 1 || group.timeOfDay != .anytime {
+                                timeOfDayHeader(group.timeOfDay, count: group.items.count)
                             }
+                            habitRows(group.items)
                         }
+                    }
+                    .accessibilityElement(children: .contain)
+                    .accessibilityIdentifier("life-habit-group-today")
+
+                    let weekly = filteredProgresses(viewModel.weeklyHabitProgresses)
+                    if !weekly.isEmpty {
+                        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                            habitGroupHeader("Weekly Habits", count: weekly.count)
+                            habitRows(weekly)
+                        }
+                        .accessibilityElement(children: .contain)
+                        .accessibilityIdentifier("life-habit-group-weekly")
+                    }
+
+                    let upcoming = filteredProgresses(viewModel.upcomingHabitProgresses)
+                    if !upcoming.isEmpty {
+                        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                            habitGroupHeader("Upcoming Habits", count: upcoming.count)
+                            habitRows(upcoming)
+                        }
+                        .accessibilityElement(children: .contain)
+                        .accessibilityIdentifier("life-habit-group-upcoming")
                     }
                 }
 
@@ -614,6 +632,34 @@ private struct HabitListQueryView: View {
             }
             Button("Cancel", role: .cancel) {
                 actionSelection = nil
+            }
+        }
+    }
+
+    private func habitGroupHeader(_ title: LocalizedStringKey, count: Int) -> some View {
+        HStack(alignment: .firstTextBaseline) {
+            Text(title)
+                .font(.subheadline.weight(.semibold))
+                .fixedSize(horizontal: false, vertical: true)
+                .accessibilityAddTraits(.isHeader)
+            Spacer()
+            Text(count.formattedWithSeparator)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+        .padding(.top, DS.Spacing.xs)
+    }
+
+    private func habitRows(_ progresses: [HabitProgress]) -> some View {
+        ForEach(progresses) { progress in
+            HabitRowView(
+                progress: progress,
+                onToggle: { toggleCheck(habitId: progress.id) },
+                onUpdateValue: { value in updateValue(habitId: progress.id, value: value) },
+                trailingAccessory: AnyView(habitActionsButton(for: progress))
+            )
+            .contextMenu {
+                habitActionItems(for: progress, deferred: true)
             }
         }
     }
