@@ -569,8 +569,8 @@ private struct HabitListQueryView: View {
             title: "My Habits",
             icon: "checklist",
             iconColor: DS.Color.tabLife,
-            fillHeight: fillHeight,
-            sectionIdentifier: "life-section-habits"
+            sectionIdentifier: "life-section-habits",
+            fillHeight: fillHeight
         ) {
             VStack(spacing: DS.Spacing.sm) {
                 if habits.isEmpty {
