@@ -110,6 +110,15 @@ final class TodayCompactUITests: SeededUITestBaseCase {
         XCTAssertTrue(hero.frame.contains(score.frame), "External score must stay within the detail link")
         addScreenshotAttachment(named: "Today Compact 100 accessibility score")
 
+        let chart = element("dashboard-weekly-condition-chart")
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("dashboard-weekly-condition-chart", maxSwipes: 8),
+                      "Large-text trend and its legend should be reachable")
+        XCTAssertTrue(chart.waitForExistence(timeout: 5))
+        XCTAssertTrue((chart.value as? String ?? "").contains("current 100."),
+                      "Large-text trend must keep the displayed current score")
+        addScreenshotAttachment(named: "Today Compact 100 accessibility trend")
+
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("dashboard-hero-score", maxSwipes: 8, direction: .down))
         hero.tap()
         XCTAssertTrue(element("condition-score-detail-screen").waitForExistence(timeout: 8))
     }
@@ -150,11 +159,13 @@ final class TodayCompactUITests: SeededUITestBaseCase {
         for card in [first, second, last] {
             XCTAssertTrue(card.waitForExistence(timeout: 5), "The pinned metric should remain reachable")
         }
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("dashboard-metric-sleep", maxSwipes: 8),
+                      "The final pinned metric should be visible before measuring its row")
+        addScreenshotAttachment(named: "Today Compact odd pinned metrics")
         XCTAssertGreaterThanOrEqual(last.frame.minY, min(first.frame.maxY, second.frame.maxY) - 2)
         XCTAssertEqual(last.frame.minX, grid.frame.minX, accuracy: 2)
         XCTAssertEqual(last.frame.maxX, grid.frame.maxX, accuracy: 2,
                        "The last odd metric must use the whole row without a reserved half cell")
-        addScreenshotAttachment(named: "Today Compact odd pinned metrics")
     }
 
     func testPinnedMetricsUseOneColumnAtStandardXXXLTextSize() {
@@ -171,11 +182,13 @@ final class TodayCompactUITests: SeededUITestBaseCase {
         XCTAssertTrue(grid.waitForExistence(timeout: 10))
         XCTAssertTrue(first.waitForExistence(timeout: 5))
         XCTAssertTrue(second.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("dashboard-metric-rhr", maxSwipes: 8),
+                      "The second pinned card should be visible before comparing columns")
+        addScreenshotAttachment(named: "Today Compact pinned metrics standard XXXL")
         XCTAssertGreaterThanOrEqual(second.frame.minY, first.frame.maxY - 2,
                                     "Standard XXXL should stack pinned metrics in one column")
         XCTAssertEqual(first.frame.minX, second.frame.minX, accuracy: 2)
         XCTAssertEqual(first.frame.maxX, second.frame.maxX, accuracy: 2)
-        addScreenshotAttachment(named: "Today Compact pinned metrics standard XXXL")
     }
 
     func testCompactWorkoutRowPreservesDateValueAndDetailRoute() {
@@ -239,12 +252,14 @@ final class TodayCompactUITests: SeededUITestBaseCase {
         XCTAssertTrue(second.waitForExistence(timeout: 5))
         XCTAssertFalse(third.exists, "Only the two most recent exercise types should appear initially")
         XCTAssertTrue(app.scrollToHittableElementIfNeeded("dashboard-workout-more", maxSwipes: 20))
-        XCTAssertTrue(disclosure.label.contains("More"))
+        XCTAssertTrue(disclosure.label.localizedCaseInsensitiveContains("Show more exercises"))
+        XCTAssertEqual(disclosure.value as? String, "Collapsed")
         disclosure.tap()
 
         XCTAssertTrue(third.waitForExistence(timeout: 5), "More should reveal the older exercise type")
         XCTAssertTrue(app.scrollToHittableElementIfNeeded("dashboard-workout-more", maxSwipes: 6))
-        XCTAssertTrue(disclosure.label.contains("Less"))
+        XCTAssertTrue(disclosure.label.localizedCaseInsensitiveContains("Show fewer exercises"))
+        XCTAssertEqual(disclosure.value as? String, "Expanded")
         addScreenshotAttachment(named: "Today Compact expanded workout types")
         disclosure.tap()
         XCTAssertFalse(third.exists, "Less should collapse the older exercise type")

@@ -195,9 +195,9 @@ struct DesertHorizonConditionHeroView: View {
                     scores: weeklyTrendScores,
                     lineColor: heroHighlight,
                     labelColor: muted,
-                    referenceColor: muted.opacity(0.55)
+                    referenceColor: muted.opacity(0.55),
+                    compact: true
                 )
-                    .frame(height: 94)
             } else {
                 Text("Not enough data to show trend.")
                     .font(.subheadline)

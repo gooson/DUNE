@@ -9,34 +9,37 @@ struct TodayMetricCard: View {
 
     var body: some View {
         StandardCard(padding: 14) {
-            if isWorkout {
-                ViewThatFits(in: .horizontal) {
-                    HStack(alignment: .center, spacing: 10) {
-                        titleAndDate
-                        Spacer(minLength: 8)
-                        metricValue
+            Group {
+                if isWorkout {
+                    ViewThatFits(in: .horizontal) {
+                        HStack(alignment: .center, spacing: 10) {
+                            titleAndDate
+                            Spacer(minLength: 8)
+                            metricValue
+                        }
+                        VStack(alignment: .leading, spacing: 6) {
+                            titleAndDate
+                            metricValue
+                        }
                     }
+                } else {
                     VStack(alignment: .leading, spacing: 6) {
                         titleAndDate
                         metricValue
-                    }
-                }
-            } else {
-                VStack(alignment: .leading, spacing: 6) {
-                    titleAndDate
-                    metricValue
-                    if let detail = data.baselineDetail {
-                        BaselineTrendBadge(detail: detail, inversePolarity: data.inversePolarity)
-                    } else if let change = data.change {
-                        changeLabel(change)
-                    }
-                    if data.sparklineData.count >= 2 {
-                        MiniSparklineView(dataPoints: data.sparklineData, color: data.category.themeColor)
-                            .frame(height: 24)
-                            .accessibilityHidden(true)
+                        if let detail = data.baselineDetail {
+                            BaselineTrendBadge(detail: detail, inversePolarity: data.inversePolarity)
+                        } else if let change = data.change {
+                            changeLabel(change)
+                        }
+                        if data.sparklineData.count >= 2 {
+                            MiniSparklineView(dataPoints: data.sparklineData, color: data.category.themeColor)
+                                .frame(height: 24)
+                                .accessibilityHidden(true)
+                        }
                     }
                 }
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .opacity(data.isStale ? 0.85 : 1)
@@ -58,6 +61,7 @@ struct TodayMetricCard: View {
                 .accessibilityIdentifier("dashboard-workout-date-\(data.id)")
                 .font(.caption2)
                 .foregroundStyle(DS.Color.textSecondary)
+                .accessibilityLabel(Text(data.lastUpdated, format: .dateTime.year().month(.abbreviated).day().hour().minute()))
         }
     }
 

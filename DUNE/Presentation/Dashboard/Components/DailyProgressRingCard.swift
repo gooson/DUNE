@@ -47,9 +47,13 @@ struct DailyProgressRingCard: View {
                 if dynamicTypeSize >= .xxLarge || habitProgress != nil {
                     VStack(spacing: 12) { progressTiles }
                 } else {
-                    HStack(alignment: .top, spacing: 12) { progressTiles }
+                    ViewThatFits(in: .horizontal) {
+                        HStack(alignment: .top, spacing: 12) { progressTiles }
+                        VStack(spacing: 12) { progressTiles }
+                    }
                 }
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
         .accessibilityElement(children: .contain)
         .accessibilityIdentifier("dashboard-daily-progress")
@@ -125,7 +129,7 @@ struct DailyProgressRingCard: View {
                 .accessibilityHidden(true)
             }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(minWidth: 150, maxWidth: .infinity, alignment: .leading)
         .accessibilityElement(children: .contain)
         .accessibilityValue(
             available

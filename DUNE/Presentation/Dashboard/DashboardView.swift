@@ -671,6 +671,7 @@ struct DashboardView: View {
                         }
                     }
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
             if !workouts.isEmpty {
                 Text("Exercise by Type")
@@ -700,6 +701,7 @@ struct DashboardView: View {
                 .accessibilityValue(showsAllWorkoutTypes ? Text("Expanded") : Text("Collapsed"))
             }
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private func metricCard(_ card: VitalCardData, index: Int, isWorkout: Bool = false) -> some View {
