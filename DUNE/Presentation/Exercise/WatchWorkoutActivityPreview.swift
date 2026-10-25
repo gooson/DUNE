@@ -30,10 +30,17 @@ enum WatchWorkoutActivityPreview {
         guard ActivityAuthorizationInfo().areActivitiesEnabled else { return }
 
         let now = Date()
+        let exerciseName: String
+        if let nameIndex = arguments.firstIndex(of: "--ui-watch-live-activity-name"),
+           arguments.indices.contains(nameIndex + 1) {
+            exerciseName = arguments[nameIndex + 1]
+        } else {
+            exerciseName = "Outdoor Run"
+        }
         let snapshot = WatchWorkoutSnapshot(
             startedAt: now.addingTimeInterval(-73),
             updatedAt: now,
-            exerciseName: "Outdoor Run",
+            exerciseName: exerciseName,
             elapsedSeconds: 73,
             phase: phase == .paused ? .paused : .running,
             heartRate: 142,
@@ -42,7 +49,8 @@ enum WatchWorkoutActivityPreview {
         )
         guard snapshot.isValid else { return }
 
-        let staleDate = phase == .stale ? now.addingTimeInterval(3) : now.addingTimeInterval(300)
+        // Seed already-outdated content instead of relying on a scheduled system refresh.
+        let staleDate = phase == .stale ? now.addingTimeInterval(-60) : now.addingTimeInterval(300)
         do {
             _ = try Activity.request(
                 attributes: WatchWorkoutAttributes(mirrorID: UUID()),

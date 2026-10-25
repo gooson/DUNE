@@ -30,7 +30,24 @@ struct WatchWorkoutSnapshot: Codable, Hashable, Sendable {
     /// A running system timer advances without a per-second transport update.
     var timerStartDate: Date { updatedAt.addingTimeInterval(-elapsedSeconds) }
 
+    func isSameWorkout(as other: Self) -> Bool {
+        startedAt == other.startedAt
+    }
+
     func elapsed(at date: Date) -> TimeInterval {
         elapsedSeconds + (phase == .running ? max(0, date.timeIntervalSince(updatedAt)) : 0)
+    }
+}
+
+/// Keeps delayed WatchConnectivity lifecycle messages from replacing newer state.
+struct WatchWorkoutLifecycleOrdering {
+    private(set) var latestUpdate: Date?
+
+    mutating func accept(_ updatedAt: Date?) -> Bool {
+        guard let updatedAt else { return latestUpdate == nil }
+        guard updatedAt.timeIntervalSince1970.isFinite,
+              latestUpdate.map({ updatedAt >= $0 }) ?? true else { return false }
+        latestUpdate = updatedAt
+        return true
     }
 }

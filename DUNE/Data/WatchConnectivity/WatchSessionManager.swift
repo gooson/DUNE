@@ -29,6 +29,10 @@ final class WatchSessionManager: NSObject {
     /// Callback for when Watch sends a completed workout
     var onWorkoutReceived: ((WatchWorkoutUpdate) -> Void)?
 
+    /// Terminal state is independent of HealthKit mirroring and record synchronization.
+    var onWorkoutEnded: ((WatchWorkoutSnapshot) -> Void)?
+    private var workoutLifecycleOrdering = WatchWorkoutLifecycleOrdering()
+
     /// Serializes delegate message handling — cancel-before-spawn
     private var messageHandlerTask: Task<Void, Never>?
     /// Last template snapshot pushed to Watch (used to respond to pull-requests).
@@ -468,7 +472,11 @@ extension WatchSessionManager: WCSessionDelegate {
 
 extension WatchSessionManager {
     private func handleDecodedContext(_ context: ParsedWatchIncomingContext) {
+        if let snapshot = context.watchWorkoutEndedSnapshot {
+            onWorkoutEnded?(snapshot)
+        }
         if let isActive = context.watchWorkoutActive {
+            guard workoutLifecycleOrdering.accept(context.watchWorkoutUpdatedAt) else { return }
             isWatchWorkoutActive = isActive
             if isActive {
                 activeWatchWorkoutTemplateName = context.watchWorkoutTemplateName
@@ -484,6 +492,7 @@ extension WatchSessionManager {
     }
 
     private func handleDecodedMessage(_ message: ParsedWatchIncomingMessage) {
+        handleDecodedContext(message.workoutContext)
         if message.requestExerciseLibrarySync {
             syncExerciseLibraryToWatch()
         }
@@ -559,6 +568,7 @@ extension WatchSessionManager {
 }
 
 struct ParsedWatchIncomingMessage: Sendable {
+    let workoutContext: ParsedWatchIncomingContext
     let workoutCompleteData: Data?
     let setCompletedData: Data?
     let postureSummaryData: Data?
@@ -567,6 +577,7 @@ struct ParsedWatchIncomingMessage: Sendable {
     let requestWorkoutTemplateSync: Bool
 
     init(from message: [String: Any]) {
+        workoutContext = ParsedWatchIncomingContext(from: message)
         workoutCompleteData = message["workoutComplete"] as? Data
         setCompletedData = message["setCompleted"] as? Data
         postureSummaryData = message["postureSummary"] as? Data
@@ -579,10 +590,27 @@ struct ParsedWatchIncomingMessage: Sendable {
 struct ParsedWatchIncomingContext: Sendable {
     let watchWorkoutActive: Bool?
     let watchWorkoutTemplateName: String?
+    let watchWorkoutEndedSnapshot: WatchWorkoutSnapshot?
+    let watchWorkoutUpdatedAt: Date?
 
     init(from context: [String: Any]) {
         watchWorkoutActive = context["watchWorkoutActive"] as? Bool
         watchWorkoutTemplateName = context["watchWorkoutTemplateName"] as? String
+        if let timestamp = context["watchWorkoutUpdatedAt"] as? Double,
+           timestamp.isFinite, timestamp > 0 {
+            watchWorkoutUpdatedAt = Date(timeIntervalSince1970: timestamp)
+        } else {
+            watchWorkoutUpdatedAt = nil
+        }
+        // Invalid or oversized lifecycle data must never dismiss an unrelated activity.
+        if watchWorkoutActive == false,
+           let data = context["watchWorkoutEndedSnapshot"] as? Data, data.count <= 4_096,
+           let snapshot = try? JSONDecoder().decode(WatchWorkoutSnapshot.self, from: data),
+           snapshot.isValid, snapshot.phase == .ended {
+            watchWorkoutEndedSnapshot = snapshot
+        } else {
+            watchWorkoutEndedSnapshot = nil
+        }
     }
 }
 
