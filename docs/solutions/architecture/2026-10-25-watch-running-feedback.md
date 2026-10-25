@@ -3,7 +3,7 @@ tags: [watchos, running, voice-feedback, avspeechsynthesizer, distance, accessib
 category: architecture
 date: 2026-10-25
 severity: important
-status: implemented-ui-validation-pending
+status: resolved
 related_files:
   - DUNEWatch/Managers/RunningVoiceFeedback.swift
   - DUNEWatch/Managers/WorkoutManager.swift
@@ -36,7 +36,7 @@ related_solutions:
 | WorkoutManager.swift | 기존 운동 상태와 km 경계에서 이벤트 전달 | View 생명주기와 발화 분리 |
 | ControlsView.swift | 러닝 전용 음성 토글과 설정 유지 | 사용자가 운동 중 즉시 제어 |
 | Watch Info.plist | Audio background mode | 활성 HKWorkoutSession의 백그라운드 안내 |
-| Watch xcstrings | en/ko/ja 신규 키 23개 | 앱 언어와 발화 언어 일치 |
+| Watch xcstrings | en/ko/ja 신규 키 24개 | 앱 언어와 발화 언어 일치 |
 
 ### 구간·목표 페이스 후속 확장
 
@@ -62,10 +62,11 @@ related_solutions:
 - 실제 생산 소스와 기존 테스트를 symlink로 연결한 호스트 Swift package에서 최종 3개 suite·24개 테스트가 통과했다(`.codex-checks/running-review-ship/logs/unit.log`). 초기 영어 숫자 그룹 구분 기대값 실패는 실제 고정 en locale 결과에 맞춰 수정하고 해당 suite를 재검증했다.
 - 이 증거는 구간·목표 계산, 정규화·저장, 음성 대기열과 주입한 mock speaker의 볼륨 전달에 적용된다. Watch 오디오 어댑터, 이어폰 경로·실제 음량의 실행 증거로 확대하지 않는다.
 - 리뷰에서 무음 해제 후 목표 경고가 계속 비활성인 P2를 수정했다. 들을 수 있는 상태로 돌아오면 페이스 준비 상태만 재설정하고 진행 구간은 유지한다. 음성 토글·볼륨 해제 두 경우의 회귀 테스트가 통과했다. 미사용 kilometer 이벤트·번역 키와 폐기된 API도 정리했다. 남은 P1/P2는 없다.
-- Watch 신규 키 23개의 en/ko/ja, 카탈로그 포맷과 diff 공백 검사를 확인했다.
-- 표준 Watch UI 실행기는 관련 4개 selector를 선택했지만 저장소 시뮬레이터 잠금을 60초 내 확보하지 못해 exit 2로 종료했다. 테스트는 0개 실행됐고, 이후 비차단 잠금 확인도 busy였다. C14 거리·C15 정지·C16 제어·C17 설정·C18 목표의 새 실제 PNG는 없다.
-- 이전 구현 단계에서 simulator metadata 자식에 닫힌 상위 FD 환경값이 전달되는 문제도 확인했다. 실행기 소스는 변경하지 않았고, 상위 잠금을 유지하면서 해당 metadata 자식에만 환경값을 제거하는 로컬 wrapper를 준비했다. 새 작업트리는 소유 기기를 아직 만들지 않았다.
-- 필수 UI·실제 캡처가 미완료이므로 review-ship은 PR 생성·push·머지 전에 중단했다. 정확한 selector·로그·재개 조건은 [리뷰 보고서](../../reviews/2026-10-25-watch-running-feedback-review-ship.md)에 기록했다. 실제 발음·이어폰 출력·음악 복원은 실기기에서 별도 확인한다.
+- Watch 신규 키 24개의 en/ko/ja, 카탈로그 포맷과 diff 공백 검사를 확인했다.
+- 최종 Watch UI는 서로 다른 4건이 통과했다. 거리 화면의 심박 줄을 개선한 뒤 영향받는 1건을 추가 재검증했고 통과했다. C14–C18의 새 실제 PNG·출처를 등록해 직접 확인했다. 캡처는 전용 40mm, en_US, 기본 글씨이며 다른 Watch 크기·최대 글씨를 완료로 확대하지 않는다.
+- 설정 시트의 고정 제목·완료 행이 화면을 압박해 native title/confirmation toolbar로 교체했다. 짧은 3언어 제목, 한 줄 목표값, 별도 접근성 값을 사용한다. 홈·Form의 lazy 접근성 요소는 실제 스크롤로 찾고 값 갱신을 기다린다. 자세한 [리뷰·실행 복구 기록](../../reviews/2026-10-25-watch-running-feedback-review-ship.md)과 영구 검증 receipt를 보존했다.
+- 저장소 잠금은 실제 획득 후 재개했고, 닫힌 FD를 받은 registry metadata 자식에만 환경 보정을 적용했다. SDK의 정체한 verbose sysdiagnose 수집 경로는 공식 `-collect-test-diagnostics never` 옵션으로 제외해 정상 xcresult 생성을 확인했다. 저장소 실행기는 변경하지 않았다.
+- SDK의 메인 스레드 동기 오디오 활성화 권고는 perf-001 후속으로 기록했다. 실제 발음·이어폰 출력·음악 복원은 실기기에서 별도 확인한다.
 
 ## Prevention
 

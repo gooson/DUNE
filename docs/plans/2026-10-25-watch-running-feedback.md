@@ -94,6 +94,6 @@ RunningVoiceFeedback가 TTS와 잠깐의 오디오 세션을 관리하고 Workou
 
 ## Confidence Assessment
 
-후속 확장과 리뷰 수정까지 구현했고, 최종 앱 빌드·정적 검토와 실제 소스에 연결한 호스트 단위 테스트 24개를 확인했다. 원래 작업트리의 Today·Live Activity·테마 변경은 보존하고 최신 main 기준 `codex/watch-running-feedback` 브랜치로 러닝 범위만 분리했다. Watch UI 4건은 저장소 시뮬레이터 잠금 대기에서 시작하지 못했다. C14·C15·C16·C17·C18 실제 캡처는 미완료이며 UI 품질 검증을 통과한 것으로 표시하지 않는다. [리뷰 결과와 재개 조건](../reviews/2026-10-25-watch-running-feedback-review-ship.md)을 따른다.
+후속 확장과 리뷰 수정까지 구현했고 최종 앱 빌드, 호스트 단위 24건, 서로 다른 Watch UI 4건을 확인했다. 40mm 거리 화면의 심박 줄 개선은 영향 1건을 추가 재검증했다. C14–C18 새 캡처를 실제 화면맵에 등록했다. 원래 Today·Live Activity·테마 변경은 보존하고 최신 main 기준의 별도 브랜치로 분리했다. [최종 리뷰와 제한](../reviews/2026-10-25-watch-running-feedback-review-ship.md)을 따른다.
 
 기존 1km 경계·활성 시간·페이지 구조를 재사용하므로 높음. 실기기 오디오 출력은 시뮬레이터 테스트와 구분한다.

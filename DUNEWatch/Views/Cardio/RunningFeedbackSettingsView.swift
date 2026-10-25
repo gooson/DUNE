@@ -6,80 +6,74 @@ struct RunningFeedbackSettingsView: View {
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
-        VStack(spacing: DS.Spacing.xs) {
-            HStack {
-                Text("Feedback Settings")
-                    .font(DS.Typography.sectionTitle)
-                    .lineLimit(2)
+        Form {
+            Toggle("Voice Feedback", isOn: Binding(
+                get: { workoutManager.isRunningVoiceFeedbackEnabled },
+                set: { workoutManager.setRunningVoiceFeedbackEnabled($0) }
+            ))
+            .accessibilityIdentifier("watch-running-feedback-enabled-toggle")
 
-                Spacer(minLength: DS.Spacing.xs)
-
-                Button("Done") { dismiss() }
-                    .font(DS.Typography.metricLabel)
-                    .frame(minHeight: 44)
-                    .accessibilityIdentifier("watch-running-feedback-settings-done")
+            Picker("Feedback Distance", selection: settingsBinding(\.distanceIntervalMeters)) {
+                Text("500 m").tag(500.0)
+                Text("1 km").tag(1_000.0)
+                Text("2 km").tag(2_000.0)
             }
-            .padding(.horizontal, DS.Spacing.sm)
+            .accessibilityIdentifier("watch-running-feedback-distance")
 
-            Form {
-                Toggle("Voice Feedback", isOn: Binding(
-                    get: { workoutManager.isRunningVoiceFeedbackEnabled },
-                    set: { workoutManager.setRunningVoiceFeedbackEnabled($0) }
-                ))
-                .accessibilityIdentifier("watch-running-feedback-enabled-toggle")
-
-                Picker("Feedback Distance", selection: settingsBinding(\.distanceIntervalMeters)) {
-                    Text("500 m").tag(500.0)
-                    Text("1 km").tag(1_000.0)
-                    Text("2 km").tag(2_000.0)
+            VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                HStack {
+                    Text("Feedback Volume")
+                    Spacer(minLength: DS.Spacing.xs)
+                    Text(workoutManager.runningFeedbackSettings.volume,
+                         format: .percent.precision(.fractionLength(0)))
+                        .foregroundStyle(.secondary)
                 }
-                .accessibilityIdentifier("watch-running-feedback-distance")
+                .font(DS.Typography.metricLabel)
 
-                VStack(alignment: .leading, spacing: DS.Spacing.xs) {
-                    HStack {
-                        Text("Feedback Volume")
-                        Spacer(minLength: DS.Spacing.xs)
-                        Text(workoutManager.runningFeedbackSettings.volume,
-                             format: .percent.precision(.fractionLength(0)))
-                            .foregroundStyle(.secondary)
+                Slider(value: settingsBinding(\.volume), in: 0...1)
+                    .tint(DS.Color.activity)
+                    .accessibilityLabel("Feedback Volume")
+                    .accessibilityValue(Text(workoutManager.runningFeedbackSettings.volume,
+                                             format: .percent.precision(.fractionLength(0))))
+                    .accessibilityIdentifier("watch-running-feedback-volume")
+            }
+
+            Toggle("Target Pace Alerts", isOn: settingsBinding(\.paceAlertsEnabled))
+                .accessibilityIdentifier("watch-running-pace-alerts-toggle")
+
+            if workoutManager.runningFeedbackSettings.paceAlertsEnabled {
+                Stepper(value: settingsBinding(\.targetPaceSecondsPerKm), in: 120...1_200, step: 5) {
+                    VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                        Text("Target Pace")
+                            .font(DS.Typography.metricLabel)
+                        Text(formattedPace(workoutManager.runningFeedbackSettings.targetPaceSecondsPerKm))
+                            .font(DS.Typography.secondaryMetric)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.65)
+                            .accessibilityIdentifier("watch-running-target-pace-value")
                     }
-                    .font(DS.Typography.metricLabel)
-
-                    Slider(value: settingsBinding(\.volume), in: 0...1)
-                        .tint(DS.Color.activity)
-                        .accessibilityLabel("Feedback Volume")
-                        .accessibilityValue(Text(workoutManager.runningFeedbackSettings.volume,
-                                                 format: .percent.precision(.fractionLength(0))))
-                        .accessibilityIdentifier("watch-running-feedback-volume")
                 }
+                .accessibilityIdentifier("watch-running-target-pace")
 
-                Toggle("Target Pace Alerts", isOn: settingsBinding(\.paceAlertsEnabled))
-                    .accessibilityIdentifier("watch-running-pace-alerts-toggle")
-
-                if workoutManager.runningFeedbackSettings.paceAlertsEnabled {
-                    Stepper(value: settingsBinding(\.targetPaceSecondsPerKm), in: 120...1_200, step: 5) {
-                        VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-                            Text("Target Pace")
-                                .font(DS.Typography.metricLabel)
-                            Text(formattedPace(workoutManager.runningFeedbackSettings.targetPaceSecondsPerKm))
-                                .font(DS.Typography.secondaryMetric)
-                        }
+                Picker("Pace Tolerance", selection: settingsBinding(\.paceToleranceSecondsPerKm)) {
+                    Text("10 s").tag(10.0)
+                    Text("15 s").tag(15.0)
+                    Text("30 s").tag(30.0)
+                    Text("60 s").tag(60.0)
+                    if !Self.standardTolerances.contains(workoutManager.runningFeedbackSettings.paceToleranceSecondsPerKm) {
+                        let tolerance = workoutManager.runningFeedbackSettings.paceToleranceSecondsPerKm
+                        Text(verbatim: "\(tolerance.formatted()) s")
+                            .tag(tolerance)
                     }
-                    .accessibilityIdentifier("watch-running-target-pace")
-
-                    Picker("Pace Tolerance", selection: settingsBinding(\.paceToleranceSecondsPerKm)) {
-                        Text("10 s").tag(10.0)
-                        Text("15 s").tag(15.0)
-                        Text("30 s").tag(30.0)
-                        Text("60 s").tag(60.0)
-                        if !Self.standardTolerances.contains(workoutManager.runningFeedbackSettings.paceToleranceSecondsPerKm) {
-                            let tolerance = workoutManager.runningFeedbackSettings.paceToleranceSecondsPerKm
-                            Text(verbatim: "\(tolerance.formatted()) s")
-                                .tag(tolerance)
-                        }
-                    }
-                    .accessibilityIdentifier("watch-running-pace-tolerance")
                 }
+                .accessibilityIdentifier("watch-running-pace-tolerance")
+            }
+        }
+        .navigationTitle("Voice")
+        .toolbar {
+            ToolbarItem(placement: .confirmationAction) {
+                Button("Done") { dismiss() }
+                    .accessibilityIdentifier("watch-running-feedback-settings-done")
             }
         }
         .accessibilityIdentifier("watch-running-feedback-settings")

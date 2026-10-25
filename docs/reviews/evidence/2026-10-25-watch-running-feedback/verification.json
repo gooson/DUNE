@@ -1,0 +1,52 @@
+{
+  "base": "ee38ebe0154af1baee68fe7b865f1f7c7345d3d8",
+  "scope": "Watch running only; 4 distinct focused UI tests, not full platform regression",
+  "unit": {
+    "suites": 3,
+    "tests": 24,
+    "failed": 0,
+    "reuse": "Exact core and test source hashes unchanged"
+  },
+  "ui": {
+    "distinct_tests": 4,
+    "failed": 0,
+    "final_distance_recheck": 1,
+    "receipts": [
+      "ui-settings-final.result.json",
+      "ui-running-final.result.json",
+      "ui-distance-fit.result.json"
+    ]
+  },
+  "captures": [
+    "C14",
+    "C15",
+    "C16",
+    "C17",
+    "C18"
+  ],
+  "device": "worktree-owned Apple Watch SE 3 (40mm), watchOS 27.0",
+  "locale": "en_US",
+  "text_size": "system default",
+  "source_hashes": {
+    "DUNE/DUNE.xcodeproj/project.pbxproj": "4c36ac8c2ea71ec9a87226e9f033bdb8fc5e09c016e1dc38a40f9ba165d0fd40",
+    "DUNEWatch/Managers/AVRunningVoiceSpeaker.swift": "ee6f039459b0506096503ea8d5a53aeca69f7cfc55383cf1a2646e4ac7a53adc",
+    "DUNEWatch/Managers/RunningFeedbackSettings.swift": "ee6388349b434e3b5be1d608fcbc04b5b8d0238de27628177987aa31d9efc185",
+    "DUNEWatch/Managers/RunningFeedbackTracker.swift": "47bf4fbb370d837951f78039736ab0f2ef5ffe97e8e722027e76bf384394884c",
+    "DUNEWatch/Managers/RunningVoiceFeedback.swift": "cefe03d45f9fac2acfe84eaddffa59c5f046b72d9e2ef4c539e80615aeaa1884",
+    "DUNEWatch/Managers/WorkoutManager.swift": "470a2ecc994aba0e16624a1a6c31b6bcda704a996a8d0b20c4e9a5916bb1a841",
+    "DUNEWatch/Resources/Info.plist": "92c93421a4ce037f00b88f36a546553c7c5f95373f4092c2a509fd102cebcedb",
+    "DUNEWatch/Resources/Localizable.xcstrings": "97c0bf39cff6273720bf7e41cdf572968691dadf3da7f319480d04698689df94",
+    "DUNEWatch/Views/Cardio/CardioDistanceMetricsPage.swift": "5e21054ce3e0b0f7e1c9cddbe3da7904fd278b4c31cb2bc546bbe41eb6f6c1a0",
+    "DUNEWatch/Views/Cardio/RunningFeedbackSettingsView.swift": "ef1249bcf3b5f81a6ebab41820df092c8da218612da7195e9b110f9b26b6a53b",
+    "DUNEWatch/Views/ControlsView.swift": "0424121ad3ae93c144e7e095000e52bb16a772d414b368b3721a8ddf81bec2b8",
+    "DUNEWatch/Views/SessionPagingView.swift": "9f523eddb006900f07abe60e90ba81089ee944c230faec863bfea329b8f42660",
+    "DUNEWatchTests/RunningFeedbackTrackerTests.swift": "7b4cf1a13af4fe61e615a58be6c51a0b6d592f1b98d65bbb24563ed3ee022fd5",
+    "DUNEWatchTests/RunningVoiceFeedbackTests.swift": "f6fe99a183a84f68dc31536ca60e391324abe966fbb634709f1dc662bea9c1ec",
+    "DUNEWatchUITests/Smoke/WatchWorkoutFlowSmokeTests.swift": "3e0e001f85d5f8d6fa6485c4e210c50dfa88d687419e20b4303696652386b12f"
+  },
+  "limitations": [
+    "Other Watch sizes and maximum Dynamic Type not executed",
+    "Real audio route, pronunciation and music restoration need physical Watch verification",
+    "SDK recommends async audio activation; tracked nonblocking perf-001"
+  ]
+}

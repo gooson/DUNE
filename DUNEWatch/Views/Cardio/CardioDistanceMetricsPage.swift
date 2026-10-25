@@ -8,7 +8,7 @@ struct CardioDistanceMetricsPage: View {
     var body: some View {
         TimelineView(.periodic(from: .now, by: isLuminanceReduced ? 10 : 1)) { context in
             ScrollView(.vertical) {
-                VStack(alignment: .leading, spacing: DS.Spacing.md) {
+                VStack(alignment: .leading, spacing: DS.Spacing.xs) {
                     HStack(alignment: .firstTextBaseline) {
                         Text("Distance")
                             .font(DS.Typography.metricLabel)
@@ -49,10 +49,11 @@ struct CardioDistanceMetricsPage: View {
                         )
 
                         metric(
-                            label: "Average Pace",
+                            label: "Avg Pace",
                             value: formattedAveragePace(at: context.date),
                             unit: "/km",
-                            identifier: "watch-running-average-pace-value"
+                            identifier: "watch-running-average-pace-value",
+                            accessibilityLabel: "Average Pace"
                         )
                     }
 
@@ -78,6 +79,7 @@ struct CardioDistanceMetricsPage: View {
                     }
                 }
                 .padding(.horizontal, DS.Spacing.sm)
+                .padding(.bottom, DS.Spacing.md)
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
             .scrollBounceBehavior(.basedOnSize)
@@ -89,7 +91,8 @@ struct CardioDistanceMetricsPage: View {
         label: LocalizedStringKey,
         value: String,
         unit: LocalizedStringKey? = nil,
-        identifier: String
+        identifier: String,
+        accessibilityLabel: LocalizedStringKey? = nil
     ) -> some View {
         VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
             Text(label)
@@ -105,7 +108,7 @@ struct CardioDistanceMetricsPage: View {
                     .lineLimit(1)
                     .minimumScaleFactor(0.7)
                     .accessibilityIdentifier(identifier)
-                    .accessibilityLabel(label)
+                    .accessibilityLabel(accessibilityLabel ?? label)
                     .accessibilityValue(Text(value))
 
                 if let unit {

@@ -295,8 +295,8 @@ final class WatchWorkoutFlowSmokeTests: WatchUITestBaseCase {
     }
 
     func testCaptureRunningDesignMap() throws {
-        launchApp(with: LaunchConfiguration(scenario: .responsiveLayout))
-        openAllExercises()
+        launchApp(with: runningLaunchConfiguration())
+        openRunningExerciseList()
         guard let running = findQuickStartExercise(identifier: "watch-quickstart-exercise-running") else {
             XCTFail("Fixture running must be reachable")
             return
@@ -344,6 +344,11 @@ final class WatchWorkoutFlowSmokeTests: WatchUITestBaseCase {
             XCTAssertFalse(metricText.contains("--"), "Seeded running metric should have a measurement: \(identifier)")
         }
         XCTAssertTrue(accessibleMetricText(app.staticTexts["watch-running-heart-rate-value"].firstMatch).contains("148"))
+        XCTAssertLessThanOrEqual(
+            app.staticTexts["watch-running-heart-rate-value"].firstMatch.frame.maxY,
+            app.frame.maxY,
+            "Heart rate must fit in the default small-Watch viewport"
+        )
         captureDesignState("C14", visible: "watch-running-distance-metrics")
 
         app.swipeLeft()
@@ -409,7 +414,7 @@ final class WatchWorkoutFlowSmokeTests: WatchUITestBaseCase {
         app.swipeRight()
         XCTAssertEqual(voiceToggle.value as? String, changedValue)
 
-        launchApp(with: LaunchConfiguration(resetState: false, scenario: .responsiveLayout))
+        launchApp(with: runningLaunchConfiguration(resetState: false))
         if elementExists(WatchAXID.homeRoot, timeout: 3) {
             startRunningWorkoutFromHome()
         }
@@ -430,10 +435,10 @@ final class WatchWorkoutFlowSmokeTests: WatchUITestBaseCase {
 
         let distancePicker = app.descendants(matching: .any)["watch-running-feedback-distance"].firstMatch
         XCTAssertTrue(distancePicker.waitForExistence(timeout: 5))
-        let initialDistance = accessibleMetricText(distancePicker)
+        let initialDistance = runningFeedbackPickerText(distancePicker)
         let chosenDistance = initialDistance.contains("2 km") ? "500 m" : "2 km"
         selectRunningFeedbackOption(chosenDistance, in: "watch-running-feedback-distance")
-        XCTAssertTrue(accessibleMetricText(distancePicker).contains(chosenDistance))
+        assertRunningFeedbackPicker(distancePicker, contains: chosenDistance)
 
         let volume = app.sliders["watch-running-feedback-volume"].firstMatch
         scrollToRunningFeedbackControl(volume)
@@ -449,23 +454,30 @@ final class WatchWorkoutFlowSmokeTests: WatchUITestBaseCase {
         let paceAlerts = app.switches["watch-running-pace-alerts-toggle"].firstMatch
         scrollToRunningFeedbackControl(paceAlerts)
         XCTAssertTrue(paceAlerts.isHittable)
-        if !elementExists("watch-running-target-pace", timeout: 1) {
-            paceAlerts.tap()
+        if paceAlerts.value as? String != "1" {
+            // watchOS exposes the full row as a switch; tap its trailing thumb.
+            paceAlerts.coordinate(withNormalizedOffset: CGVector(dx: 0.85, dy: 0.5)).tap()
         }
-        let target = app.descendants(matching: .any)["watch-running-target-pace"].firstMatch
+        XCTAssertEqual(
+            XCTWaiter.wait(for: [XCTNSPredicateExpectation(
+                predicate: NSPredicate(format: "value == %@", "1"), object: paceAlerts
+            )], timeout: 5), .completed,
+            "Target pace alerts must be on before checking their settings"
+        )
+        let target = app.descendants(matching: .any)["watch-running-target-pace-value"].firstMatch
         scrollToRunningFeedbackControl(target)
         XCTAssertTrue(target.waitForExistence(timeout: 5), "Target pace should appear when alerts are enabled")
         let targetPace = runningTargetPaceText(target)
         XCTAssertTrue(targetPace.contains(":"), "Target pace should expose a minutes:seconds value")
-        captureDesignState("C18", visible: "watch-running-target-pace")
+        captureDesignState("C18", visible: "watch-running-target-pace-value")
 
         let tolerancePicker = app.descendants(matching: .any)["watch-running-pace-tolerance"].firstMatch
         scrollToRunningFeedbackControl(tolerancePicker)
         XCTAssertTrue(tolerancePicker.isHittable)
-        let initialTolerance = accessibleMetricText(tolerancePicker)
+        let initialTolerance = runningFeedbackPickerText(tolerancePicker)
         let chosenTolerance = initialTolerance.contains("30 s") ? "60 s" : "30 s"
         selectRunningFeedbackOption(chosenTolerance, in: "watch-running-pace-tolerance")
-        XCTAssertTrue(accessibleMetricText(tolerancePicker).contains(chosenTolerance))
+        assertRunningFeedbackPicker(tolerancePicker, contains: chosenTolerance)
 
         XCTAssertTrue(tapElement("watch-running-feedback-settings-done"))
         openRunningFeedbackSettings()
@@ -473,7 +485,7 @@ final class WatchWorkoutFlowSmokeTests: WatchUITestBaseCase {
                                       targetPace: targetPace, tolerance: chosenTolerance)
         XCTAssertTrue(tapElement("watch-running-feedback-settings-done"))
 
-        launchApp(with: LaunchConfiguration(resetState: false, scenario: .responsiveLayout))
+        launchApp(with: runningLaunchConfiguration(resetState: false))
         if elementExists(WatchAXID.homeRoot, timeout: 3) {
             startRunningWorkoutFromHome()
         }
@@ -518,16 +530,32 @@ final class WatchWorkoutFlowSmokeTests: WatchUITestBaseCase {
                                                targetPace: String, tolerance: String) {
         let distancePicker = app.descendants(matching: .any)["watch-running-feedback-distance"].firstMatch
         XCTAssertTrue(distancePicker.waitForExistence(timeout: 5))
-        XCTAssertTrue(accessibleMetricText(distancePicker).contains(distance))
+        assertRunningFeedbackPicker(distancePicker, contains: distance)
         let volumeSlider = app.sliders["watch-running-feedback-volume"].firstMatch
+        scrollToRunningFeedbackControl(volumeSlider)
         XCTAssertTrue(volumeSlider.waitForExistence(timeout: 5))
         XCTAssertEqual(volumeSlider.value as? String, volume)
-        let target = app.descendants(matching: .any)["watch-running-target-pace"].firstMatch
+        let target = app.descendants(matching: .any)["watch-running-target-pace-value"].firstMatch
+        scrollToRunningFeedbackControl(target)
         XCTAssertTrue(target.waitForExistence(timeout: 5), "Pace alerts should remain enabled")
         XCTAssertEqual(runningTargetPaceText(target), targetPace)
         let tolerancePicker = app.descendants(matching: .any)["watch-running-pace-tolerance"].firstMatch
+        scrollToRunningFeedbackControl(tolerancePicker)
         XCTAssertTrue(tolerancePicker.waitForExistence(timeout: 5))
-        XCTAssertTrue(accessibleMetricText(tolerancePicker).contains(tolerance))
+        assertRunningFeedbackPicker(tolerancePicker, contains: tolerance)
+    }
+
+    private func runningFeedbackPickerText(_ picker: XCUIElement) -> String {
+        ([picker.label, picker.value as? String ?? ""]
+            + picker.staticTexts.allElementsBoundByIndex.map(\.label)).joined(separator: " ")
+    }
+
+    private func assertRunningFeedbackPicker(_ picker: XCUIElement, contains value: String) {
+        let updated = XCTNSPredicateExpectation(predicate: NSPredicate { [self] _, _ in
+            runningFeedbackPickerText(picker).contains(value)
+        }, object: nil)
+        XCTAssertEqual(XCTWaiter.wait(for: [updated], timeout: 5), .completed,
+                       "Expected \(value); picker exposes \(runningFeedbackPickerText(picker))")
     }
 
     private func runningTargetPaceText(_ target: XCUIElement) -> String {
@@ -538,19 +566,46 @@ final class WatchWorkoutFlowSmokeTests: WatchUITestBaseCase {
     }
 
     private func startFixtureRunningDistanceWorkout() {
-        launchApp(with: LaunchConfiguration(
-            scenario: .responsiveLayout,
-            additionalArguments: ["--ui-watch-running-distance"]
-        ))
+        launchApp(with: runningLaunchConfiguration(seededDistance: true))
         startRunningWorkoutFromHome()
     }
 
+    private func runningLaunchConfiguration(
+        resetState: Bool = true,
+        seededDistance: Bool = false
+    ) -> LaunchConfiguration {
+        var arguments = ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
+        if seededDistance { arguments.append("--ui-watch-running-distance") }
+        return LaunchConfiguration(resetState: resetState, scenario: .responsiveLayout,
+                                   additionalArguments: arguments)
+    }
+
+    private func openRunningExerciseList() {
+        // Home's outer identifier replaces the carousel identifier in watchOS AX.
+        // Lazy cards, including All Exercises, become available after scrolling.
+        let home = app.scrollViews[WatchAXID.homeRoot].firstMatch
+        XCTAssertTrue(home.waitForExistence(timeout: 8))
+        let allExercises = app.buttons[WatchAXID.homeAllExercisesCard].firstMatch
+        for _ in 0..<16 {
+            if allExercises.exists && allExercises.isHittable {
+                allExercises.tap()
+                // The following exercise lookup validates the real list content.
+                // Avoid waiting for unrelated, lazily rendered fixture sections.
+                XCTAssertTrue(elementExists(WatchAXID.quickStartScreen, timeout: 8))
+                return
+            }
+            home.swipeUp()
+        }
+        XCTFail("All Exercises must be reachable from the running fixture home")
+    }
+
     private func accessibleMetricText(_ element: XCUIElement) -> String {
-        element.value as? String ?? element.label
+        if let value = element.value as? String, !value.isEmpty { return value }
+        return element.label
     }
 
     private func startRunningWorkoutFromHome() {
-        openAllExercises()
+        openRunningExerciseList()
         guard let running = findQuickStartExercise(identifier: "watch-quickstart-exercise-running") else {
             XCTFail("Fixture running must be reachable")
             return
