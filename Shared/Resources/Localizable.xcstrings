@@ -9149,8 +9149,14 @@
       }
     },
     "Completed" : {
-      "extractionState" : "stale",
+      "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Completed"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9217,6 +9223,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "달성률"
+          }
+        }
+      }
+    },
+    "Component scores · out of 100" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Component scores · out of 100"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "構成スコア · 100点満点"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "구성 점수 · 100점 기준"
           }
         }
       }
@@ -10424,6 +10452,28 @@
         }
       }
     },
+    "Current progress" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Current progress"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "現在の進捗"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "현재 진행"
+          }
+        }
+      }
+    },
     "Current stage focus: %@" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -10627,6 +10677,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "일별 상세"
+          }
+        }
+      }
+    },
+    "Daily completions" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daily completions"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "日別の完了記録"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "일별 완료 기록"
           }
         }
       }
@@ -24913,6 +24985,28 @@
         }
       }
     },
+    "No record" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No record"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "記録なし"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기록 없음"
+          }
+        }
+      }
+    },
     "No Records" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -29096,6 +29190,28 @@
         }
       }
     },
+    "Recorded Readiness" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recorded Readiness"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "記録された準備度"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기록된 준비도"
+          }
+        }
+      }
+    },
     "Recorded today" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -29709,6 +29825,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "렘 수면"
+          }
+        }
+      }
+    },
+    "Remaining" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remaining"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "残り"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "남음"
           }
         }
       }
@@ -40327,6 +40465,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "상세 보기"
+          }
+        }
+      }
+    },
+    "View Readiness Details" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "View Readiness Details"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "準備度の詳細を見る"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "준비도 자세히 보기"
           }
         }
       }

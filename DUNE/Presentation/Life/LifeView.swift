@@ -24,6 +24,55 @@ enum LifeHabitLogSync {
     }
 }
 
+/// The hero records completed days for currently active manual habits. A past
+/// target count is unavailable, so its trend deliberately has no denominator.
+struct LifeHeroHabitSnapshot {
+    let analyticsHabit: HabitSnapshot
+    let createdAt: Date
+    let isAutoLinked: Bool
+}
+
+struct LifeHeroLogSnapshot {
+    let analyticsLog: HabitLogSnapshot
+    let isAutoCompleted: Bool
+}
+
+enum LifeHeroTrend {
+    static func points(
+        habits: [LifeHeroHabitSnapshot],
+        logs: [LifeHeroLogSnapshot],
+        referenceDate: Date = Date()
+    ) -> [WeeklyHeroTrendPoint] {
+        let calendar = Calendar.current
+        let manualHabits = habits.filter { !$0.isAutoLinked }
+        let earliestCreation = manualHabits.map { calendar.startOfDay(for: $0.createdAt) }.min()
+        let habitsByID = Dictionary(manualHabits.map { ($0.analyticsHabit.id, $0) }, uniquingKeysWith: { _, last in last })
+        let eligibleLogs = logs.compactMap { log -> HabitLogSnapshot? in
+            guard !log.isAutoCompleted,
+                  let habit = habitsByID[log.analyticsLog.habitID],
+                  calendar.startOfDay(for: log.analyticsLog.date) >= calendar.startOfDay(for: habit.createdAt),
+                  log.analyticsLog.date <= referenceDate
+            else { return nil }
+            return log.analyticsLog
+        }
+
+        let counts = HabitAnalyticsService.dailyCompletionCounts(
+            logs: eligibleLogs,
+            habits: manualHabits.map(\.analyticsHabit),
+            dayCount: 7,
+            referenceDate: referenceDate
+        )
+        return counts.map { day in
+            let value: Int? = if let earliestCreation, day.date >= earliestCreation {
+                day.completionCount
+            } else {
+                nil
+            }
+            return WeeklyHeroTrendPoint(date: day.date, value: value)
+        }
+    }
+}
+
 struct LifeView: View {
     @State private var viewModel = LifeViewModel()
     @State private var localRefreshSignal = 0
@@ -230,6 +279,7 @@ private struct HabitListQueryView: View {
     @State private var heatmapData: [DailyCompletionCount] = []
     @State private var availableContentWidth: CGFloat = 0
     @State private var weeklyReport: WeeklyHabitReport?
+    @State private var heroTrendPoints: [WeeklyHeroTrendPoint] = []
     @State private var showingReport = false
     @State private var showingHeatmapDetail = false
 
@@ -243,7 +293,7 @@ private struct HabitListQueryView: View {
         VStack(alignment: .leading, spacing: DS.Spacing.lg) {
             // Hero: completion rate
             Group {
-                if habits.isEmpty {
+                if habits.allSatisfy(\.isAutoLinked) {
                     starterSection
                 } else {
                     heroSection
@@ -323,6 +373,7 @@ private struct HabitListQueryView: View {
         hasher.combine(habits.count)
         for habit in habits {
             hasher.combine(habit.id)
+            hasher.combine(habit.createdAt)
             hasher.combine(habit.name)
             hasher.combine(habit.iconCategoryRaw)
             hasher.combine(habit.habitTypeRaw)
@@ -352,6 +403,7 @@ private struct HabitListQueryView: View {
             hasher.combine(log.habitDefinition?.id)
             hasher.combine(log.date)
             hasher.combine(log.value)
+            hasher.combine(log.isAutoCompleted)
             hasher.combine(log.memo ?? "")
         }
         return hasher.finalize()
@@ -956,6 +1008,19 @@ private struct HabitListQueryView: View {
                 }
             }
 
+            lifeProgressSummary
+
+            Divider()
+                .overlay(lifeHeroMuted.opacity(0.25))
+
+            WeeklyHeroTrendView(
+                points: heroTrendPoints,
+                title: "Daily completions",
+                upperBound: max(1, heroTrendPoints.compactMap(\.value).max() ?? 0),
+                tint: theme.accentColor,
+                accessibilityIdentifier: "life-hero-trend"
+            )
+
             Button(action: onOpenChecklist) {
                 HStack(spacing: 6) {
                     Text("Today's Habits")
@@ -1008,6 +1073,43 @@ private struct HabitListQueryView: View {
             .fixedSize(horizontal: false, vertical: true)
             .frame(maxWidth: .infinity, alignment: .leading)
             .accessibilityIdentifier("life-hero-narrative")
+    }
+
+    private var lifeProgressSummary: some View {
+        let remaining = max(0, viewModel.totalActiveCount - viewModel.completedCount)
+        return VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+            Text("Current progress")
+                .font(.caption)
+                .foregroundStyle(lifeHeroMuted)
+
+            let layout = dynamicTypeSize.isAccessibilitySize
+                ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.sm))
+                : AnyLayout(HStackLayout(alignment: .top, spacing: DS.Spacing.sm))
+            layout {
+                lifeSummaryMetric(viewModel.completedCount, title: "Completed")
+                lifeSummaryMetric(viewModel.totalActiveCount, title: "Today's Habits")
+                lifeSummaryMetric(remaining, title: "Remaining")
+            }
+        }
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("life-hero-summary")
+    }
+
+    private var lifeHeroMuted: Color {
+        theme == .desertWarm ? DesertPalette.muted : theme.directionPreviewTextColor.opacity(0.74)
+    }
+
+    private func lifeSummaryMetric(_ value: Int, title: LocalizedStringKey) -> some View {
+        HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xs) {
+            Text(value.formattedWithSeparator)
+                .font(.subheadline.weight(.bold))
+                .foregroundStyle(theme == .desertWarm ? DesertPalette.ink : theme.directionPreviewTextColor)
+            Text(title)
+                .font(.caption)
+                .foregroundStyle(lifeHeroMuted)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private func timeOfDayHeader(_ timeOfDay: HabitTimeOfDay, count: Int) -> some View {
@@ -1186,6 +1288,27 @@ private struct HabitListQueryView: View {
                 weeklyTargetDays: habit.weeklyTargetDays
             )
         }
+
+        heroTrendPoints = LifeHeroTrend.points(
+            habits: zip(habits, habitSnapshots).map { habit, snapshot in
+                LifeHeroHabitSnapshot(
+                    analyticsHabit: snapshot,
+                    createdAt: habit.createdAt,
+                    isAutoLinked: habit.isAutoLinked
+                )
+            },
+            logs: habitLogs.map { log in
+                LifeHeroLogSnapshot(
+                    analyticsLog: HabitLogSnapshot(
+                        habitID: log.habitDefinition?.id ?? UUID(),
+                        date: log.date,
+                        value: log.value,
+                        memo: log.memo
+                    ),
+                    isAutoCompleted: log.isAutoCompleted
+                )
+            }
+        )
 
         weeklyRates = HabitAnalyticsService.weeklyCompletionRates(
             logs: logSnapshots, habits: habitSnapshots
