@@ -1,0 +1,29 @@
+{
+  "info" : {
+    "arguments" : [
+      "devicectl",
+      "device",
+      "orientation",
+      "get",
+      "--device",
+      "E8101AC4-F155-4D0E-A707-75D4396EBBC2",
+      "--timeout",
+      "10",
+      "--json-output",
+      ".codex-checks/duo-0-state/orientation.json"
+    ],
+    "commandType" : "devicectl.device.orientation.get",
+    "environment" : {
+      "TERM" : "dumb"
+    },
+    "jsonVersion" : 5,
+    "outcome" : "success",
+    "version" : "651.13.5"
+  },
+  "result" : {
+    "deviceIdentifier" : "E8101AC4-F155-4D0E-A707-75D4396EBBC2",
+    "deviceIsOrientationLocked" : false,
+    "deviceOrientation" : "portrait",
+    "deviceOrientationNonFlat" : "portrait"
+  }
+}

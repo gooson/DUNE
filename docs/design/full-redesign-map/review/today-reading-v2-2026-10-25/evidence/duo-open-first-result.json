@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/TodayReadingUITests/testCurrentDeviceReadingCards",
+    "DUNEUITests/TodayReadingUITests/testNotificationDigestUsesSameExpandableCard"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 2,
+    "passed": 1,
+    "skipped": 0,
+    "failed": 1
+  },
+  "passed_cases": 1,
+  "failures": [
+    "484: /Users/shanks/.codex/worktrees/today-reading-v2/Health/DUNEUITests/Visual/TodayReadingUITests.swift:53: error: -[DUNEUITests.TodayReadingUITests testCurrentDeviceReadingCards] : XCTAssertTrue failed - dashboard-stress-contributions should be reachable at this text size and device width",
+    "500: Test Case '-[DUNEUITests.TodayReadingUITests testCurrentDeviceReadingCards]' failed (89.543 seconds).",
+    "591: Test Suite 'TodayReadingUITests' failed at 2026-10-25 18:09:23.776.",
+    "593: Test Suite 'DUNEUITests.xctest' failed at 2026-10-25 18:09:23.779.",
+    "595: Test Suite 'Selected tests' failed at 2026-10-25 18:09:23.781.",
+    "613: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log reports 1 failures",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/TodayReadingUITests/testCurrentDeviceReadingCards"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/today-reading-v2/Health/.codex-checks/today-reading-duo-open.log"
+}
