@@ -302,8 +302,8 @@ final class WatchConnectivityManager: NSObject {
     }
 
     /// Notify iPhone that a workout has ended on Watch.
-    func sendWorkoutEnded() {
-        updatePhoneWorkoutLifecycleContext(isActive: false, templateName: nil)
+    func sendWorkoutEnded(snapshot: WatchWorkoutSnapshot? = nil) {
+        updatePhoneWorkoutLifecycleContext(isActive: false, templateName: nil, endedSnapshot: snapshot)
     }
 
     /// Send completed set data back to iPhone.
@@ -394,13 +394,18 @@ final class WatchConnectivityManager: NSObject {
         }
     }
 
-    private func updatePhoneWorkoutLifecycleContext(isActive: Bool, templateName: String?) {
+    private func updatePhoneWorkoutLifecycleContext(
+        isActive: Bool,
+        templateName: String?,
+        endedSnapshot: WatchWorkoutSnapshot? = nil
+    ) {
         guard WCSession.isSupported() else { return }
         let session = WCSession.default
         guard session.activationState == .activated else { return }
 
         var context = session.applicationContext
         context["watchWorkoutActive"] = isActive
+        context["watchWorkoutUpdatedAt"] = Date().timeIntervalSince1970
 
         if let templateName, !templateName.isEmpty {
             context["watchWorkoutTemplateName"] = templateName
@@ -408,10 +413,40 @@ final class WatchConnectivityManager: NSObject {
             context.removeValue(forKey: "watchWorkoutTemplateName")
         }
 
+        context.removeValue(forKey: "watchWorkoutEndedSnapshot")
+        if !isActive, let endedSnapshot, endedSnapshot.phase == .ended, endedSnapshot.isValid {
+            do {
+                let data = try JSONEncoder().encode(endedSnapshot)
+                if data.count <= 4_096 {
+                    context["watchWorkoutEndedSnapshot"] = data
+                } else {
+                    Self.logger.error("Watch workout ended snapshot exceeds WC size limit")
+                }
+            } catch {
+                Self.logger.error("Failed to encode watch workout ended snapshot: \(error.localizedDescription, privacy: .public)")
+            }
+        }
+
         do {
             try session.updateApplicationContext(context)
         } catch {
             Self.logger.error("Failed to update watch workout lifecycle context: \(error.localizedDescription, privacy: .public)")
+        }
+
+        if session.isReachable {
+            var message: [String: Any] = ["watchWorkoutActive": isActive]
+            message["watchWorkoutUpdatedAt"] = context["watchWorkoutUpdatedAt"]
+            if let templateName = context["watchWorkoutTemplateName"] {
+                message["watchWorkoutTemplateName"] = templateName
+            }
+            if let endedSnapshot = context["watchWorkoutEndedSnapshot"] {
+                message["watchWorkoutEndedSnapshot"] = endedSnapshot
+            }
+            session.sendMessage(
+                message,
+                replyHandler: nil,
+                errorHandler: Self.makeWCErrorHandler("Failed to send watch workout lifecycle")
+            )
         }
     }
 }

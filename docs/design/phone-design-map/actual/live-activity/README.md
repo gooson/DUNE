@@ -1,12 +1,12 @@
 ---
 tags: [design, live-activity, actual-capture]
-date: 2026-10-24
+date: 2026-10-25
 status: partial
 ---
 
 # WLA01 · Watch 운동 Live Activity 실제 화면
 
-WLA01은 앱 안의 화면이 아닌 iOS 시스템 표면이다. [레이아웃 기준 시안](../../../layout-map/watch-workout-live-activity.md)과 실제 캡처는 구분한다. iPhone 18 Pro / iOS 27.0에서 통과한 진행·일시 정지 테스트의 실제 DUNE Live Activity 요소 PNG 두 장을 보존했다. 이름·시간·심박·칼로리·거리의 잘림이나 겹침이 없는지 확인했다. 다른 앱 알림을 포함하지 않도록 XCTest 요소 스크린샷을 사용했으며 이미지 후처리는 하지 않았다.
+WLA01은 앱 안의 화면이 아닌 iOS 시스템 표면이다. [레이아웃 기준 시안](../../../layout-map/watch-workout-live-activity.md)과 실제 캡처는 구분한다. 2026-10-25의 배치를 전용 iPhone 18 Pro / iOS 27.0에서 다시 캡처했다. 진행·일시 정지·긴 한국어 근력 운동명 세 장의 원본 XCTest 요소 PNG에서 이름·시간·심박·칼로리·거리의 잘림이나 겹침이 없음을 확인했다. 다른 앱 알림이 포함되지 않으며 이미지 후처리는 하지 않았다.
 
 대상 iPhone 상태는 알림 센터의 진행·일시 정지·연결 대기, Dynamic Island compact와 expanded의 진행·일시 정지다. 일시 정지 시 compact/minimal 아이콘은 일시 정지 기호이고 시간은 고정된다. 연결 대기 상태에서는 오래된 시간·심박·칼로리·거리를 숨긴다.
 
@@ -16,6 +16,24 @@ DEBUG 시드로 만든 `WatchWorkoutLiveActivityUITests` 화면은 **실제 Spri
 
 iPad, Duo 접힘·펼침, Watch small family도 이 작업에서 캡처하지 않았다. 이 기기와 표면의 결과는 iPhone 시드 캡처로 대체하지 않는다.
 
+## 2026-10-25 정보 위계와 검증 제한
+
+운동명·상태를 작은 헤더로 묶고 경과 시간을 크게 강조했다. 심박·칼로리·거리는 의미별 색상 아이콘과 숫자·단위를 구분한다. 이번 이미지 세 장은 어두운 표면이며 밝은 모드·최대 글씨·small·Island를 확인한 결과는 아니다.
+
+`scripts/build-ios.sh --no-regen --log-file .xcodebuild/live-activity-build-final.log`는 통과했다. 관련 시스템 테스트 4건의 로그는 3건 통과·연결 대기 1건 실패를 기록했다. 그 뒤 Xcode가 `IDESchemeActionSDKRecord invalidDigitCount(94232)`를 출력하고 결과 정리를 완료하지 못해 표준 실행기가 로그 무활동 180초 후 종료했다(exit 124). 완료된 테스트 번들·성공한 UI 게이트로 보고하지 않는다.
+
+중단된 `Test-DUNEUITests-2026.10.25_16-16-50-+0900.xcresult`에는 `Info.plist`가 없어 `xcresulttool export attachments`가 실패했다. 대신 `Data/data.0~…`에 남은 세 원본 PNG를 수정 없이 복사하고 화면 내용을 직접 확인했다. 각 원본 payload 이름과 SHA-256, 해당 통과 메서드, 기기·출처는 `capture-index.json`에 보존한다. 캡처 시각은 PNG payload 파일의 수정 시각이므로 별도로 표시했다. 메서드 통과와 실행기 실패를 구분한다.
+
+연결 대기 fixture는 시스템의 3초 후 stale 전환 예약에 의존하지 않게 이미 지난 `staleDate`를 사용하도록 수정했다. SDK 결과 정리 문제가 해소되지 않아 재실행하지 않았다. Xcode가 같은 전용 iPhone에서 결과 번들을 정상적으로 마무리할 수 있게 되면 `WatchWorkoutLiveActivityUITests/testStaleNotificationCenterHidesOutdatedMetrics`만 우선 재검증한다. 그 전에는 연결 대기 캡처를 완료로 표시하지 않는다.
+
 ## 2026-10-24 DESERT HORIZON 갱신
 
 9e3788a4의 따뜻한 표면·액센트·민감 정보 표시 적용 후, 전용 iPhone 18 Pro에서 진행·일시 정지 알림 센터 시스템 요소를 새로 촬영했다. 두 메서드는 각각 통과했다(같은 번들의 Rest 검사 1건은 별도 실패). 시스템 어두운 모드 캡처이며 밝은 모드·실제 잠금 상태·쌍 기기·Island·small family의 증거가 아니다. 개별 기기·시각·테스트는 capture-index.json을 따른다.
+
+## DUNE 워드마크 추가 후 캡처 대기
+
+사용자 피드백에 따라 공통 헤더의 기존 상태 행을 `DUNE · 운동` 형태로 바꿨다. DUNE는 작은 bold rounded 워드마크와 자간·기존 테마 액센트로 표시하며 별도 행을 늘리지 않는다. 잠금 화면·small·Island 펼침에 적용된다. UI 테스트에 워드마크 식별자·정확한 이름·컨테이너 내 프레임 검사를 추가했다. 위 세 PNG는 이 변경 전 캡처이며 `capture-index.json`에서 outdated로 표시했다. 현재 WLA01의 진행·일시 정지·긴 운동명·연결 대기, small·Island 펼침의 새 캡처는 미완료다. 이전 SDK 결과 정리 장애가 해소되지 않아 같은 UI 실행 경로를 반복하지 않았으며, 결과 번들 정상 종료가 가능해지면 전용 iPhone의 긴 운동명 테스트부터 재검증한다.
+
+## Watch 종료 후 제거 경로 수정
+
+Watch의 종료 데이터를 미러와 독립적인 WC lifecycle로 전달하고 iPhone의 ActivityKit 정리에 연결했다. 실제 Watch 종료 후 iPhone 카드 제거는 새 검증 상태로 추가했으며 미캡처다. 기존 SpringBoard 시드 PNG는 Watch의 실제 종료 경로를 검증하지 않는다. SDK UI 결과 정리 장애가 정상화된 뒤 실제 쌍 기기의 종료·끊김·재연결을 확인해야 한다. 구현·코어 검증 범위는 [종료 정리 해결 문서](../../../../solutions/general/2026-10-25-watch-workout-ended-live-activity-cleanup.md)에 기록했다.

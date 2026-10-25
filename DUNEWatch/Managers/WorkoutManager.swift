@@ -638,16 +638,12 @@ final class WorkoutManager: NSObject {
         // Transition UI immediately even when simulator callbacks are delayed.
         isSessionEnded = true
         isFinalizingWorkout = session != nil
-        enqueueMirrorSnapshot()
-        mirrorIntervalTask?.cancel()
-        mirrorIntervalTask = nil
+        session?.end()
         notifyWorkoutEndedIfNeeded()
 
         if isFinalizingWorkout {
             startFinalizationTimeoutWatchdog()
         }
-        session?.end()
-        stopMirrorTransport()
         stopInactivityMonitoring()
     }
 
@@ -1015,7 +1011,9 @@ final class WorkoutManager: NSObject {
                     pauseStart = isPaused ? now : nil
                 }
             }
-            if !isSessionEnded {
+            if isSessionEnded {
+                notifyWorkoutEndedIfNeeded()
+            } else {
                 startMirrorTransport(for: recovered)
             }
         } catch {
@@ -1287,9 +1285,8 @@ final class WorkoutManager: NSObject {
         scheduleMirrorRetry(for: workoutSession)
     }
 
-    private func enqueueMirrorSnapshot() {
-        guard let mirroredSession, let startDate else { return }
-        let now = Date()
+    private func workoutSnapshot(at now: Date = Date()) -> WatchWorkoutSnapshot? {
+        guard let startDate else { return nil }
         let snapshot = WatchWorkoutSnapshot(
             startedAt: startDate,
             updatedAt: now,
@@ -1300,7 +1297,11 @@ final class WorkoutManager: NSObject {
             activeCalories: activeCalories,
             distanceMeters: isCardioMode ? distance : 0
         )
-        guard snapshot.isValid else { return }
+        return snapshot.isValid ? snapshot : nil
+    }
+
+    private func enqueueMirrorSnapshot() {
+        guard let mirroredSession, let snapshot = workoutSnapshot() else { return }
         pendingMirrorSnapshot = snapshot
         guard mirrorSendTask == nil else { return }
         let generation = mirrorGeneration
@@ -1374,15 +1375,18 @@ final class WorkoutManager: NSObject {
     private func notifyWorkoutEndedIfNeeded() {
         guard !didNotifyWorkoutEnded else { return }
         didNotifyWorkoutEnded = true
-        WatchConnectivityManager.shared.sendWorkoutEnded()
+        WatchConnectivityManager.shared.sendWorkoutEnded(snapshot: workoutSnapshot())
+        // HealthKit stops mirroring when the session ends; WC carries the durable terminal state.
+        stopMirrorTransport()
     }
 
     private func startFinalizationTimeoutWatchdog(timeout seconds: TimeInterval = 6) {
         finalizationTimeoutTask?.cancel()
+        let finalizingSession = session
         finalizationTimeoutTask = Task { @MainActor [weak self] in
             try? await Task.sleep(for: .seconds(seconds))
             guard let self, !Task.isCancelled else { return }
-            guard self.isFinalizingWorkout else { return }
+            guard self.session === finalizingSession, self.isFinalizingWorkout else { return }
             Self.logger.error("Workout finalization timed out; allowing summary completion")
             self.isFinalizingWorkout = false
         }
@@ -1598,28 +1602,31 @@ extension WorkoutManager: HKWorkoutSessionDelegate {
                 if completedDuration == nil { completedDuration = activeElapsedTime(at: date) }
                 endPause(at: date)
                 isSessionEnded = true
-                enqueueMirrorSnapshot()
-                stopMirrorTransport()
                 isFinalizingWorkout = true
                 notifyWorkoutEndedIfNeeded()
                 startFinalizationTimeoutWatchdog()
+                let endedBuilder = builder
+                let endedWorkoutMode = workoutMode
                 defer {
-                    finalizationTimeoutTask?.cancel()
-                    finalizationTimeoutTask = nil
-                    isFinalizingWorkout = false
+                    if session === workoutSession {
+                        finalizationTimeoutTask?.cancel()
+                        finalizationTimeoutTask = nil
+                        isFinalizingWorkout = false
+                    }
                 }
                 do {
-                    try await builder?.endCollection(at: date)
-                    if workoutMode == .strength {
+                    try await endedBuilder?.endCollection(at: date)
+                    if endedWorkoutMode == .strength {
                         // Strength template: discard the merged workout so individual
                         // per-exercise HKWorkouts can be created in SessionSummaryView.
-                        builder?.discardWorkout()
+                        endedBuilder?.discardWorkout()
                         // Log after discard completes to confirm success.
                         Self.logger.info("Discarded merged builder workout for strength session")
                     } else {
                         // Cardio: keep the single live-builder workout as-is.
-                        let workout = try await builder?.finishWorkout()
-                        if let workoutID = workout?.uuid.uuidString, !workoutID.isEmpty {
+                        let workout = try await endedBuilder?.finishWorkout()
+                        if session === workoutSession,
+                           let workoutID = workout?.uuid.uuidString, !workoutID.isEmpty {
                             healthKitWorkoutUUID = workoutID
                         }
                     }
