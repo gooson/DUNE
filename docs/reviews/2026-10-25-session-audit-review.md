@@ -72,4 +72,6 @@ The 18 copied task files initially matched the tested original worktree byte for
 
 All findings have been rechecked against the current diff; none remain open. Final PR/quality review and remote merge are recorded by the ship workflow.
 
-Resolve verification: audit synthetic suite **14/14 passed**. An actual-window rescan preserved token totals, all provider/model/project/role groups, event counts, tool counts and output proxy totals. Output mode is 0600. Extra files discovered after the original audit contain no events in the fixed window.
+Resolve verification: audit synthetic suite **15/15 passed**. An actual-window rescan preserved token totals, all provider/model/project/role groups, event counts, tool counts and output proxy totals. Output mode is 0600. Extra files discovered after the original audit contain no events in the fixed window.
+
+Final PR/quality review: PASS. A proposed window-boundary P2 was withdrawn as a false positive after checking the documented per-turn authority contract. Modern response usage takes precedence even when its timestamp is outside the window; a same-turn legacy counter must not reintroduce that usage. Pre-start and post-end regressions now enforce this rule. Partially missing modern records cannot reliably be recovered from legacy counters; the limitation is explicit in the token-efficiency guide. Production parser behavior did not change in this final clarification.

@@ -12,6 +12,7 @@ python3 scripts/audit-agent-sessions.py --start 2026-10-04T08:55:00+00:00 --end 
 
 - 범위는 로컬 Codex 활성/보관/압축 rollout과 Claude projects다. 이벤트 시각으로 필터링하고 파일 읽기 실패·usage 누락을 보고한다. 원격 미동기화 세션이나 계정 전체 과금 기록까지 포함했다고 주장하지 않는다.
 - Codex는 response별 usage를 우선하고 해당 turn의 누적 `token_count`를 다시 더하지 않는다. Claude는 message ID별 반복 block usage를 한 번만 반영한다. 입력 안의 cached read/cache write, 출력 안의 reasoning을 중복 합산하지 않는다.
+- 이 우선순위는 집계 기간 경계에도 적용한다. 같은 turn의 response가 기간 밖에 있으면 기간 안의 누적 카운터로 대체하지 않는다. response 기록이 일부만 남은 turn의 누락분은 누적 카운터로 신뢰성 있게 복원할 수 없으므로 보충하지 않는다.
 - `total`은 반복 입력을 포함한 관측 토큰이며 비용·유효 작업량·계정 한도가 아니다. `uncached`는 cache read/write를 모두 제외한 입력이다. 캐시 쓰기를 포함한 새 입력은 `input - cached`로 따로 확인한다.
 - tool output bytes는 이미지 등 직렬화된 기록을 포함하는 proxy다. 토큰으로 환산하지 않는다. 키워드 출현과 compaction도 실패 횟수가 아니다. 명시적 interruption과 assistant의 환경 미완료 보고를 별도 검토한다.
 - 요청/도구 본문·인증 정보는 보고서에 복사하지 않는다. 상세 세션 ID/로컬 경로는 ignored JSON에 보존하고, 공유 문서는 필요한 집계와 최소 근거만 남긴다. 감사 자체의 실행 구간은 비교 기간에서 제외한다.

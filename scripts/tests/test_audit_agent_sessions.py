@@ -59,6 +59,24 @@ class AuditAgentSessionsTests(unittest.TestCase):
                                             "output": 20, "reasoning": 5, "total": 120, "uncached": 60})
         self.assertEqual(result["groups"]["project"]["Health"]["total"], 120)
 
+    def test_modern_turn_precedence_crosses_window_boundaries(self):
+        for modern_time in ("2026-09-30T23:59:59Z", "2026-10-22T00:00:00Z"):
+            with self.subTest(modern_time=modern_time):
+                usage = {"input_tokens": 10, "total_tokens": 10}
+                rows = [
+                    codex_event("2026-09-30T00:00:00Z", "session_meta", {"id": "boundary"}),
+                    codex_event("2026-09-30T00:00:00Z", "turn_context", {"turn_id": "same-turn"}),
+                    codex_event(modern_time, "token_usage_record", {
+                        "response_id": "boundary-response", "turn_id": "same-turn", "usage": usage}),
+                    codex_event("2026-10-02T00:00:00Z", "event_msg", {
+                        "type": "token_count", "info": {"total_token_usage": usage}}),
+                ]
+                write_lines(self.codex / "sessions" / "boundary.jsonl",
+                            sorted(rows, key=lambda row: row["timestamp"]))
+                result = self.audit()
+                self.assertEqual(result["tokens"]["total"], 0)
+                self.assertEqual(result["coverage"]["legacy_usage_records"], 0)
+
     def test_legacy_deltas_use_prewindow_baseline_and_ignore_repeats(self):
         def counter(time, value):
             return codex_event(time, "event_msg", {"type": "token_count", "info": {
