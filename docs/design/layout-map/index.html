@@ -32,6 +32,12 @@
     .content { display: grid; gap: 12px; padding: 16px; }
     .hero { background: linear-gradient(135deg, #f7f0e8, #eaf1ed); border: 1px solid #ddc8b4; border-radius: 22px; padding: 18px; display: grid; gap: 12px; }
     .summary { display: grid; grid-template-columns: 124px minmax(0, 1fr); gap: 12px; align-items: center; }
+    .today .summary { grid-template-columns: 104px minmax(0, 1fr); gap: 12px; }
+    .today .ring { width: 104px; height: 104px; border: 7px solid #a9bdab; border-right-color: #dce3db; font-size: 36px; }
+    .today .score-large { display: none; }
+    .large-text .today .summary { grid-template-columns: 1fr; }
+    .large-text .today .ring { display: none; }
+    .large-text .today .score-large { display: block; font-size: 40px; }
     .ring { width: 124px; height: 124px; border: 11px solid #a9bdab; border-right-color: #dce3db; border-radius: 50%; display: grid; place-content: center; text-align: center; font-weight: 700; font-size: 30px; }
     .ring small { font-size: 9px; letter-spacing: .05em; }
     .summary-text { min-width: 0; }
@@ -115,17 +121,17 @@
       <article><b>① 상태</b>점수·상태 이름·짧은 이유를 함께 표시한다. 색만으로 의미를 전하지 않는다.</article>
       <article><b>② 변화</b>실제 표본과 기간·축을 보여 준다. 데이터가 부족하면 설명으로 바꾼다.</article>
       <article><b>③ 행동</b>Today 히어로는 컨디션 상세로 이어지는 하나의 링크다. Activity의 운동 기록은 같은 탭의 별도 행동으로 둔다.</article>
-      <article><b>④ 공통 히어로</b>네 탭 모두 Today와 같은 124pt 링을 요약 왼쪽에 둔다. Today·Activity·Wellness는 실제 점수, Life는 오늘 완료 수/대상 수를 표시한다. 큰 글씨에서는 링 위·설명 아래로 쌓는다.</article>
-      <article><b>⑤ 탭 아이콘</b>Today는 심장·기록지, Activity는 불꽃, Wellness는 잎, Life는 체크리스트다. 접힘·iPhone·iPad는 하단, Duo 펼침 가로는 우측 탭 레일에 둔다.</article>
+      <article><b>④ 공통 히어로</b>Today는 Compact 전용 104pt 링과 원 밖 CONDITION을 사용한다. 다른 세 탭은 기존 124pt 공유 링을 유지한다. Today의 접근성 글씨에서는 링 대신 외부 점수를 표시하며 그래픽·간격은 글씨 배율과 분리한다.</article>
+      <article><b>⑤ 탭 아이콘</b>Today는 심장·기록지, Activity는 불꽃, Wellness는 잎, Life는 체크리스트다. 탭 위치는 각 플랫폼의 native 적응을 따른다. iPhone 하단, iPad 상단 등 실제 캡처와 대조하며 Duo 내부 가로의 우측 레일은 이번 네이티브 검증 범위에 포함하지 않는다.</article>
     </div>
     <section class="tab-map today" id="today" aria-labelledby="today-title">
-      <h2 id="today-title">T03 · Today</h2><p>지금 컨디션은 어떤가? · 상태 → 실제 추세 → 근거 → 컨디션 상세 → 현재 시간대 요약</p>
+      <h2 id="today-title">T03 · Today</h2><p>지금 컨디션은 어떤가? · Compact · 점수·설명 → 실제 추세 → 근거 → 현재 시간대 요약</p>
       <p class="note">시작 상태: 건강 접근 준비와 첫 조회가 완료될 때까지 기존 대시보드 스켈레톤을 유지한다. 조회 성공 후 측정값이 없을 때만 빈 상태를 표시하고, 실패는 오류·권한 안내로 구분한다. 기존 측정값이 있는 새로고침에서는 콘텐츠를 유지한다. iPhone·iPad·Duo 접힘·펼침에 공통 적용한다.</p>
       <div class="preview"><div class="scene"><h3>Today</h3></div><div class="content">
-        <div class="hero"><div class="summary"><div class="ring">상태<br><small>CONDITION</small></div><div class="summary-text"><b>현재 컨디션</b><p>몸의 상태를 설명하는 짧은 문장</p></div></div><div class="trend"><div class="trend-title"><span>컨디션 변화</span><span>24시간</span></div><svg viewBox="0 0 300 72" role="img" aria-label="실제 시간별 값이 있을 때만 그리는 추세 자리"><path d="M0 54H300M0 32H300" stroke="#c6bdb2" stroke-dasharray="3 5"/><path d="M0 53 L60 47 L120 44 L180 34 L240 29 L300 20" fill="none" stroke="#856b55" stroke-width="3"/></svg><div class="axis"><span>이전</span><span>현재</span></div></div><div class="evidence"><span>HRV · 기준선 대비</span><span>RHR · 기준선 대비</span></div><span class="detail">컨디션 상세 ›</span></div>
+        <div class="hero"><div class="trend-title"><span>CONDITION</span><span>컨디션 상세 ›</span></div><div class="summary"><div class="ring">52</div><div class="summary-text"><strong class="score-large">52</strong><b>현재 컨디션</b><p>몸의 상태를 설명하는 짧은 문장</p></div></div><div class="trend"><div class="trend-title"><span>컨디션 변화</span><span>24시간</span></div><svg viewBox="0 0 300 72" role="img" aria-label="실제 시간별 값이 있을 때만 그리는 추세 자리"><path d="M0 54H300M0 32H300" stroke="#c6bdb2" stroke-dasharray="3 5"/><path d="M0 53 L60 47 L120 44 L180 34 L240 29 L300 20" fill="none" stroke="#856b55" stroke-width="3"/></svg><div class="axis"><span>이전</span><span>현재</span></div></div><div class="evidence"><span>HRV · 기준선 대비</span><span>RHR · 기준선 대비</span></div></div>
         <div class="secondary"><b>추세 데이터 상태</b><p>24시간 표본이 부족하면 히어로 안에 실제 7일 추세를 표시한다. 일별 표본도 부족하면 수집 상태를 짧게 설명한다.</p></div><div class="secondary"><b>현재 시간대 요약</b><p>Briefing·Digest·Insight 등 관련 요약은 추세 다음에 이어진다.</p></div>
       </div></div><p class="note">점수 없음: 권한·기록 없음·기준선 수집을 구분하고 그래프를 만들지 않는다.</p>
-    </section>
+    <p class="note">Today Compact: 아이콘·값 4–6pt, 링·설명 12pt. 주간 추세는 실제 최근 7일만 표시한다. 지표의 빈 그래프 자리를 없애고 홀수 마지막 항목과 큰 글씨는 전체 폭을 사용한다. 종목별 운동은 최신 두 항목과 나머지 펼침으로 유지한다. <a href="today-case-matrix.md">전체 상태 계약</a> · <a href="../../plans/2026-10-26-today-compact-layout-and-ring.md">구현·검증 계획</a></p></section>
     <section class="tab-map activity" id="activity" aria-labelledby="activity-title">
       <h2 id="activity-title">A01 · Activity</h2><p>오늘 운동해도 될까? · 준비도·설명·운동 기록 → 근육 회복 → 주간 통계·최근 운동</p>
       <div class="preview"><div class="scene"><h3>Activity</h3></div><div class="content">

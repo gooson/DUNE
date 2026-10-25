@@ -691,13 +691,28 @@
     },
     "T18": {
       "row_id": "T18",
-      "evidence": "pinned-metrics-editor-screen",
+      "evidence": "actual Today Compact native seeded screen",
       "test": "TodaySettingsRegressionTests/testPinnedMetricsEditorOpensAndDismisses()",
-      "action": "tap dashboard-pinned-edit",
-      "timestamp": 1791840351.068,
-      "image": "3353D137-2319-4B67-B5DD-5A39BAE222EC.png",
-      "screen": "screen-0-1398x2034-tap dashboard-pinned-edit_0_A12850B7-6F6D-4738-AA3A-2809F819BA72.png",
-      "file": "T18.png"
+      "action": "Open pinned metric editor",
+      "timestamp": 1792955838.486,
+      "image": "images/duo-pins.png",
+      "screen": "screen-0-1398x2034-tap dashboard-pinned-edit_0_56F016F2-7084-4BF1-B9F4-18D8DF4C342B.png",
+      "file": "T18.png",
+      "source_revision": "56f62feceb8e9ec5724a44f4e1881ff19ff75fc8",
+      "source_worktree_dirty": false,
+      "device_id": "89F5C0E5-8637-41BA-B804-D6CEB6CF0B85",
+      "device_name": "iPhone Duo-wt-Health-today-redesign-793fd9c5e781",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "orientation": "portrait",
+      "appearance": "system",
+      "theme": "desertWarm",
+      "gallery": "../../../full-redesign-map/review/today-compact-2026-10-26/index.html",
+      "verification_scope": "T03 measured seeded root / T18 editor only; standard text. No full-state or landscape certification.",
+      "posture": "closed",
+      "display": "LCD"
     },
     "W04": {
       "row_id": "W04",
@@ -1013,20 +1028,31 @@
     },
     "T03": {
       "row_id": "T03",
-      "file": "T03.png",
-      "evidence": "actual Desert Horizon seeded root",
+      "evidence": "actual Today Compact native seeded screen",
       "test": "ThemeMatrixUITests/testDesertTodayToolbarFitsAtBothAppearances()",
-      "action": "Direct initial-tab launch, Desert light root",
-      "timestamp": 1792789306.507419,
-      "image": "",
-      "source_revision": "9a9dcf1c06cb789d95d16a7d57807c8b3c072d6c",
-      "source_worktree_dirty": true,
-      "device_id": "C3E6C1CD-A4C2-419D-87F7-8B9557F0ADF8",
-      "device_name": "iPhone Duo",
-      "gallery": "../../../full-redesign-map/review/desert-horizon-final-2026-10-24/index.html",
-      "xcresult": "/Users/shanks/.codex/worktrees/desert-horizon-final-validation/Health/.codex-checks/duo-today-closed/runner-result.json",
-      "current_verification": "pending",
-      "current_verification_note": "새 DESERT HORIZON 측정값 표시 상태는 이 캡처로 확인했다. 시작 스켈레톤·빈 상태는 별도 변경(#834)의 미갱신 상태이며 이 PNG로 완료 처리하지 않는다."
+      "action": "Desert dark root",
+      "timestamp": 1792956697.133,
+      "image": "images/duo-dark.png",
+      "screen": "screen-0-1398x2034-root after setup -[ThemeMatrixUITests testDesertTodayToolbarFitsAtBothAppearances]_0_555C09F9-6EE8-47CD-BAC0-23B30A096523.png",
+      "file": "T03.png",
+      "source_revision": "56f62feceb8e9ec5724a44f4e1881ff19ff75fc8",
+      "source_worktree_dirty": false,
+      "device_id": "89F5C0E5-8637-41BA-B804-D6CEB6CF0B85",
+      "device_name": "iPhone Duo-wt-Health-today-redesign-793fd9c5e781",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "orientation": "portrait",
+      "appearance": "dark",
+      "theme": "desertWarm",
+      "gallery": "../../../full-redesign-map/review/today-compact-2026-10-26/index.html",
+      "verification_scope": "T03 measured seeded root / T18 editor only; standard text. No full-state or landscape certification.",
+      "xcresult": "Test-DUNEUITests-2026.10.26_04-30-28-+0900.xcresult",
+      "posture": "closed",
+      "display": "LCD",
+      "current_verification": "partial",
+      "current_verification_note": "Today Compact 측정값 표시 상태를 새로 캡처했다. 시작 스켈레톤·빈 상태는 기존 별도 변경의 미갱신 상태이며 이 PNG로 완료 처리하지 않는다."
     },
     "L01": {
       "row_id": "L01",
@@ -1092,5 +1118,11 @@
     }
   },
   "unmatched": [],
-  "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다."
+  "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
+  "last_refresh_revision": "56f62feceb8e9ec5724a44f4e1881ff19ff75fc8",
+  "last_refresh_screens": [
+    "T03",
+    "T18"
+  ],
+  "last_refresh_note": "Only per-screen entries T03/T18 were refreshed; top-level source_revision and other entries retain prior provenance."
 }

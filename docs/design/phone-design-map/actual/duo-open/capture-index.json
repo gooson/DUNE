@@ -944,13 +944,28 @@
     },
     "T18": {
       "row_id": "T18",
-      "evidence": "pinned-metrics-editor-screen",
+      "evidence": "actual Today Compact native seeded screen",
       "test": "TodaySettingsRegressionTests/testPinnedMetricsEditorOpensAndDismisses()",
-      "action": "tap dashboard-pinned-edit",
-      "timestamp": 1791835106.032,
-      "image": "DAD8F2CE-A456-4BB3-B912-6D29A5C2063D.png",
-      "screen": "screen-1-2006x2852-tap dashboard-pinned-edit_1_82D2ACF8-42F9-4691-86C6-05BC0520D6D4.png",
-      "file": "T18.png"
+      "action": "Open pinned metric editor",
+      "timestamp": 1792955102.911,
+      "image": "images/duo-open-pins.png",
+      "screen": "screen-1-2006x2852-tap dashboard-pinned-edit_1_C42CAFA5-E86B-4B29-973B-F1BD5290AFEC.png",
+      "file": "T18.png",
+      "source_revision": "56f62feceb8e9ec5724a44f4e1881ff19ff75fc8",
+      "source_worktree_dirty": false,
+      "device_id": "89F5C0E5-8637-41BA-B804-D6CEB6CF0B85",
+      "device_name": "iPhone Duo-wt-Health-today-redesign-793fd9c5e781",
+      "native_size": [
+        2006,
+        2852
+      ],
+      "orientation": "portrait",
+      "appearance": "system",
+      "theme": "desertWarm",
+      "gallery": "../../../full-redesign-map/review/today-compact-2026-10-26/index.html",
+      "verification_scope": "T03 measured seeded root / T18 editor only; standard text. No full-state or landscape certification.",
+      "posture": "open",
+      "display": "LCD-1"
     },
     "A14": {
       "row_id": "A14",
@@ -1013,35 +1028,32 @@
       "file": "T05.png"
     },
     "T03": {
-      "file": "T03.png",
-      "screen_id": "T03",
-      "tab": "Today",
-      "appearance": "light",
-      "theme": "desertWarm",
-      "posture": "open",
-      "orientation": "landscapeRight",
-      "display": "LCD-1",
-      "native_size": [
-        2853,
-        2007
-      ],
-      "device_id": "AB14C82A-C28A-4F9F-96A4-87CA8044518B",
-      "test": "ThemeMatrixUITests/testDesertHeroRingsByInitialTab()",
-      "source_revision": "b243b27f5fa44db587494f3382a1c4b8484fb641",
-      "source_worktree_dirty": true,
-      "timestamp": 1792602000.2493434,
-      "capture_method": "host VisualAudit checkpoint; simctl explicit display",
-      "checkpoint": 2,
-      "source_file": ".xcodebuild/hero-rings-duo-open-20261022/002-2007x2853.png",
-      "layout_assertions": "Today ring frame parity; circular bounds; viewport containment; reachable action; Wellness narrative width",
       "row_id": "T03",
-      "evidence": "identifier:Today hero; layout assertions",
-      "action": "hero ring Desert Light Today (open)",
-      "image": "002-2007x2853.png",
-      "screen": "002-2007x2853.png",
-      "evidence_gallery": "../../../full-redesign-map/review/duo-four-tab-hero-rings-2026-10-22/open/T03-light.png",
-      "current_verification": "pending",
-      "current_verification_note": "이번 Today toolbar 구현의 펼침 가로 캡처는 미검증이다. 물리 landscapeLeft와 compositor rot0/AX669×951이 불일치하며 Mac이 잠겨 Device Hub 확인이 필요하다. 이 기존 PNG는 새 구현의 완료 증거가 아니다."
+      "evidence": "actual Today Compact native seeded screen",
+      "test": "ThemeMatrixUITests/testDesertTodayToolbarFitsAtBothAppearances()",
+      "action": "Desert dark root",
+      "timestamp": 1792956775.702,
+      "image": "images/duo-open-dark.png",
+      "screen": "screen-1-2006x2852-root after setup -[ThemeMatrixUITests testDesertTodayToolbarFitsAtBothAppearances]_1_05B4477C-B31F-4B29-99AE-BCF75308A6FD.png",
+      "file": "T03.png",
+      "source_revision": "56f62feceb8e9ec5724a44f4e1881ff19ff75fc8",
+      "source_worktree_dirty": false,
+      "device_id": "89F5C0E5-8637-41BA-B804-D6CEB6CF0B85",
+      "device_name": "iPhone Duo-wt-Health-today-redesign-793fd9c5e781",
+      "native_size": [
+        2006,
+        2852
+      ],
+      "orientation": "portrait",
+      "appearance": "dark",
+      "theme": "desertWarm",
+      "gallery": "../../../full-redesign-map/review/today-compact-2026-10-26/index.html",
+      "verification_scope": "T03 measured seeded root / T18 editor only; standard text. No full-state or landscape certification.",
+      "xcresult": "Test-DUNEUITests-2026.10.26_04-32-19-+0900.xcresult",
+      "posture": "open",
+      "display": "LCD-1",
+      "current_verification": "partial",
+      "current_verification_note": "Today Compact 측정값 표시 상태를 새로 캡처했다. 시작 스켈레톤·빈 상태는 기존 별도 변경의 미갱신 상태이며 이 PNG로 완료 처리하지 않는다. Duo 내부 가로는 orientation readback이 세로를 유지해 미검증이며 이 이미지는 내부 세로다."
     },
     "A01": {
       "row_id": "A01",
@@ -1107,5 +1119,11 @@
     }
   },
   "unmatched": [],
-  "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다."
+  "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
+  "last_refresh_revision": "56f62feceb8e9ec5724a44f4e1881ff19ff75fc8",
+  "last_refresh_screens": [
+    "T03",
+    "T18"
+  ],
+  "last_refresh_note": "Only per-screen entries T03/T18 were refreshed; top-level source_revision and other entries retain prior provenance."
 }

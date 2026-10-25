@@ -3,7 +3,7 @@ topic: today-compact-layout-and-ring
 date: 2026-10-26
 category: plan
 tags: [today, compact, ring, dynamic-type, design]
-status: approved
+status: implemented-with-coverage-limits
 direction: Compact selected by user
 confidence: high
 related_solutions:
@@ -23,7 +23,7 @@ related_brainstorms:
 
 비교 화면에서 Compact 링이 깨졌다. 브라우저 실제 측정상 328px 열에서 링이 86px로 축소됐지만 숫자와 CONDITION 라벨은 같은 방식으로 배치되지 않았다. 숫자 52의 중심은 원보다 약 9.6px 왼쪽이었다. 글씨 125%의 100은 약 82.7px 폭으로, 당시 링 안쪽 지름 약 66.5px를 넘었다. 이는 시안 자체의 배치 오류이며 실제 SwiftUI 앱에서 같은 원인이 발생했다고 단정하지 않는다.
 
-이번 작업에서는 시안의 링을 바로잡고 선택·구현 기준을 확정한다. 아래 SwiftUI 변경은 **계획**이며 아직 실행하지 않는다.
+초기 계획은 시안의 링을 바로잡고 선택·구현 기준을 확정하는 것이었다. 이후 사용자가 `/run`을 요청해 아래 SwiftUI 구현을 실행했다. 실제 결과는 [네이티브 갤러리](../design/full-redesign-map/review/today-compact-2026-10-26/index.html)와 [검토 기록](../reviews/2026-10-26-today-compact.md)에 구분해 남긴다.
 
 ## Requirements
 

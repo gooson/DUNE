@@ -2,10 +2,12 @@
 tags: [today, redesign, density, dynamic-type, prototype]
 date: 2026-10-26
 category: plan
-status: draft
+status: implemented-compact
 ---
 
 # Today 재설계 방향 시안
+
+> 이 문서의 초기 비교·검증 설명은 브라우저 시안 단계의 기록이다. 이후 Compact를 선택해 Today SwiftUI에 적용했다. 최신 네이티브 범위는 [상태 계약](today-case-matrix.md), [실제 화면](../full-redesign-map/review/today-compact-2026-10-26/index.html), [실행 기록](../../reviews/2026-10-26-today-compact.md)을 따른다.
 
 T03의 배치를 처음부터 재검토하는 제안이다. [세 방향 시안](../theme-map/themes/dune-today-restart.html)은 예시 데이터로 만든 브라우저 프로토타입이며, 현재 앱 구현·실제 캡처·최종 승인안이 아니다. 기존 DUNE(Desert Warm) 테마의 색·모래 능선·밝음/어두움 표현은 유지한다. 세 시안은 테마가 아닌 배치 대안이다. 기존 4탭 배치 계약을 대체하는 시점은 방향 승인 후 정한다. 다른 탭의 개편은 이번 범위 밖이다. Today 안의 전체 섹션과 상태는 [전체 상태·배치 계약](today-case-matrix.md)에 확장했다.
 
@@ -78,4 +80,4 @@ V1은 기존 흐름을 보존하는 작은 링 구성, V2는 숫자·계기판 �
 
 사용자는 Today에 Compact를 선택했다. Metrics·Editorial은 비교 자료이며 세 안의 하단 구성은 공통이다. Activity·Wellness·Life는 아직 개편하지 않았다. [구현 계획](../../plans/2026-10-26-today-compact-layout-and-ring.md)에 순서와 검증 기준을 확정했다.
 
-시안 링은 외경104pt·획7pt·내부지름90pt로 고정하고 점수를 정중앙에 둔다. CONDITION은 같은 카드 상단에 유지한다. 86pt 축소를 제거하며 큰 글씨는 외부 점수로 전환한다. 0점에서는 진행 호를 숨긴다. 아이콘–숫자4–6pt, 링–설명12pt, 카드 패딩14–16pt를 기준으로 여백을 불필요하게 늘리지 않는다. 이 수정은 브라우저 시안에 반영했고 SwiftUI 적용은 아직 계획 단계다.
+시안 링은 외경104pt·획7pt·내부지름90pt로 고정하고 점수를 정중앙에 둔다. CONDITION은 같은 카드 상단에 유지한다. 86pt 축소를 제거하며 큰 글씨는 외부 점수로 전환한다. 0점에서는 진행 호를 숨긴다. 아이콘–숫자4–6pt, 링–설명12pt, 카드 패딩14–16pt를 기준으로 여백을 불필요하게 늘리지 않는다. 이 기준은 SwiftUI에도 반영했으며 실제 화면과 검증 범위는 위 네이티브 기록으로 분리한다.

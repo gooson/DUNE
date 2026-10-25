@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "target": "DUNEUITests",
+  "run_exit_status": 0,
+  "requested_selectors": [
+    "DUNEUITests/TodayCompactUITests",
+    "DUNEUITests/TodayReadingUITests",
+    "DUNEUITests/TodaySupportCardsUITests/testDesertTodaySupportCardsAtBothAppearances",
+    "DUNEUITests/TodaySupportCardsUITests/testDesertTodayProgressAtMaximumAccessibilityTextSize"
+  ],
+  "skipped_selectors": [
+    "DUNEUITests/TodayCompactUITests/testOddPinnedMetricOccupiesFullFinalRow"
+  ],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 20,
+    "passed": 20,
+    "skipped": 0,
+    "failed": 0
+  },
+  "passed_cases": 20,
+  "failures": [],
+  "required_selectors_missing": [],
+  "log_path": "/private/tmp/today-compact-final-related.log"
+}

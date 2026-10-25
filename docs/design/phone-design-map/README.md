@@ -116,3 +116,7 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 ## 2026-10-26 T03 진행·브리핑 최종 Ship 캡처
 
 [새 실제 iPhone PNG 6장](../full-redesign-map/review/today-progress-brief-2026-10-26/index.html)을 통합 포털에 연결했다. 낮12시·한국어·밝음/어두움의 두 카드와 최대 글씨 진행 타일을 전용 iPhone에서 검사해 2/2 통과했다. 회복·수면은 최신 main 구현을 채택했고 2026-10-24 갤러리는 과거 자료로 분리했다. iPad·Duo의 T03·다른 테마·브리핑 최대 글씨는 이번 Ship 범위 밖의 미갱신 상태다. 기존 이미지를 새 증거로 사용하지 않으며 해당 기기의 관련 selector 실행 후 갱신한다.
+
+## 2026-10-26 Today Compact
+
+[실제 화면 비교·출처](../full-redesign-map/review/today-compact-2026-10-26/index.html)에 기존 DUNE 테마를 유지한 T03 밝음·어두움과 T18 편집을 보존했다. 일반 iPhone·iPad·Duo 외부/내부의 변경 화면만 갱신했으며 각 항목에 소스56f62fec·전용 기기·크기·표시 설정을 기록했다. 다른 화면의 출처는 유지한다. Duo 내부는 새 세로 캡처이며 내부 가로와 수치 힌지 각도는 미검증이다. T03 측정값 캡처가 시작 스켈레톤·빈 기록 상태의 기존 미갱신 항목까지 완료했다는 의미는 아니다. 고정 편집의 행 중앙 터치·선택·저장·홀수 마지막 행 전체 폭 검사는1/1 통과했다. 세부 UI 실행과 기존 알림 검사 실패는 [검토 기록](../../reviews/2026-10-26-today-compact.md)에 구분한다.

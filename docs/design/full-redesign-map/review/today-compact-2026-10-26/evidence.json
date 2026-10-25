@@ -1,0 +1,403 @@
+{
+  "status": "targeted-verified-with-coverage-limits",
+  "captures": [
+    {
+      "device": "regular",
+      "label": "iPhone 18 Pro Max",
+      "state": "T03",
+      "appearance": "light",
+      "file": "images/regular-light.png",
+      "native_size": [
+        1320,
+        2868
+      ],
+      "source_revision": "56f62feceb8e9ec5724a44f4e1881ff19ff75fc8",
+      "test": "ThemeMatrixUITests/testDesertTodayToolbarFitsAtBothAppearances()",
+      "timestamp": 1792956182.921,
+      "xcresult": "Test-DUNEUITests-2026.10.26_04-22-38-+0900.xcresult",
+      "sha256": "0a52a5b7729b46487a8ea45d988195b9a6e9c6721603ce5e2288a98fd332709f",
+      "orientation": "portrait"
+    },
+    {
+      "device": "regular",
+      "label": "iPhone 18 Pro Max",
+      "state": "T03",
+      "appearance": "dark",
+      "file": "images/regular-dark.png",
+      "native_size": [
+        1320,
+        2868
+      ],
+      "source_revision": "56f62feceb8e9ec5724a44f4e1881ff19ff75fc8",
+      "test": "ThemeMatrixUITests/testDesertTodayToolbarFitsAtBothAppearances()",
+      "timestamp": 1792956193.041,
+      "xcresult": "Test-DUNEUITests-2026.10.26_04-22-38-+0900.xcresult",
+      "sha256": "a54191dd7293587924b95c5cac770bb6a4c15333942527ec571d25d849acabb8",
+      "orientation": "portrait"
+    },
+    {
+      "device": "regular",
+      "label": "iPhone 18 Pro Max",
+      "state": "T18",
+      "appearance": "system",
+      "file": "images/regular-pins.png",
+      "native_size": [
+        1320,
+        2868
+      ],
+      "source_revision": "56f62feceb8e9ec5724a44f4e1881ff19ff75fc8",
+      "test": "TodaySettingsRegressionTests/testPinnedMetricsEditorOpensAndDismisses()",
+      "timestamp": 1792956111.462,
+      "sha256": "52af33cb255f36c2ce069a9ecfcdd542edbdfea29fd98ed1d0a1e657df7b714c",
+      "orientation": "portrait"
+    },
+    {
+      "device": "ipad",
+      "label": "iPad Pro 13-inch (M5)",
+      "state": "T03",
+      "appearance": "light",
+      "file": "images/ipad-light.png",
+      "native_size": [
+        2064,
+        2752
+      ],
+      "source_revision": "56f62feceb8e9ec5724a44f4e1881ff19ff75fc8",
+      "test": "ThemeMatrixUITests/testDesertTodayToolbarFitsAtBothAppearances()",
+      "timestamp": 1792956355.644,
+      "xcresult": "Test-DUNEUITests-2026.10.26_04-25-06-+0900.xcresult",
+      "sha256": "eb8c37d816ed7426f924d1ae8840793546071f37c880edfd6097535379ccbace",
+      "orientation": "portrait"
+    },
+    {
+      "device": "ipad",
+      "label": "iPad Pro 13-inch (M5)",
+      "state": "T03",
+      "appearance": "dark",
+      "file": "images/ipad-dark.png",
+      "native_size": [
+        2064,
+        2752
+      ],
+      "source_revision": "56f62feceb8e9ec5724a44f4e1881ff19ff75fc8",
+      "test": "ThemeMatrixUITests/testDesertTodayToolbarFitsAtBothAppearances()",
+      "timestamp": 1792956365.834,
+      "xcresult": "Test-DUNEUITests-2026.10.26_04-25-06-+0900.xcresult",
+      "sha256": "b99528c7d1c9d71336b22e577a033a52a927ed2a3f08bacc39698cc014c12e6c",
+      "orientation": "portrait"
+    },
+    {
+      "device": "ipad",
+      "label": "iPad Pro 13-inch (M5)",
+      "state": "T18",
+      "appearance": "system",
+      "file": "images/ipad-pins.png",
+      "native_size": [
+        2064,
+        2752
+      ],
+      "source_revision": "56f62feceb8e9ec5724a44f4e1881ff19ff75fc8",
+      "test": "TodaySettingsRegressionTests/testPinnedMetricsEditorOpensAndDismisses()",
+      "timestamp": 1792954829.824,
+      "sha256": "4c06d3af82714a99cfa4edd67de954a7b661eaad6461bac42468a7ff7bf397f0",
+      "orientation": "portrait"
+    },
+    {
+      "device": "duo",
+      "label": "Duo 외부 · 세로",
+      "state": "T03",
+      "appearance": "light",
+      "file": "images/duo-light.png",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "source_revision": "56f62feceb8e9ec5724a44f4e1881ff19ff75fc8",
+      "test": "ThemeMatrixUITests/testDesertTodayToolbarFitsAtBothAppearances()",
+      "timestamp": 1792956686.774,
+      "xcresult": "Test-DUNEUITests-2026.10.26_04-30-28-+0900.xcresult",
+      "sha256": "8cc55607e744d78bda384cf18fbcdfc6dc275a4953400a74f19160aea3f2fc85",
+      "orientation": "portrait"
+    },
+    {
+      "device": "duo",
+      "label": "Duo 외부 · 세로",
+      "state": "T03",
+      "appearance": "dark",
+      "file": "images/duo-dark.png",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "source_revision": "56f62feceb8e9ec5724a44f4e1881ff19ff75fc8",
+      "test": "ThemeMatrixUITests/testDesertTodayToolbarFitsAtBothAppearances()",
+      "timestamp": 1792956697.133,
+      "xcresult": "Test-DUNEUITests-2026.10.26_04-30-28-+0900.xcresult",
+      "sha256": "042db5b0970a20c09f025cc9d647a4d46823fdce6aa95d89288745e5e6299bdc",
+      "orientation": "portrait"
+    },
+    {
+      "device": "duo",
+      "label": "Duo 외부 · 세로",
+      "state": "T18",
+      "appearance": "system",
+      "file": "images/duo-pins.png",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "source_revision": "56f62feceb8e9ec5724a44f4e1881ff19ff75fc8",
+      "test": "TodaySettingsRegressionTests/testPinnedMetricsEditorOpensAndDismisses()",
+      "timestamp": 1792955838.486,
+      "sha256": "8fece350cfc588d460317081e87e1c5009842f02d124f90e0757bd7a6ec46c90",
+      "orientation": "portrait"
+    },
+    {
+      "device": "duo-open",
+      "label": "Duo 내부 · 세로",
+      "state": "T03",
+      "appearance": "light",
+      "file": "images/duo-open-light.png",
+      "native_size": [
+        2006,
+        2852
+      ],
+      "source_revision": "56f62feceb8e9ec5724a44f4e1881ff19ff75fc8",
+      "test": "ThemeMatrixUITests/testDesertTodayToolbarFitsAtBothAppearances()",
+      "timestamp": 1792956765.234,
+      "xcresult": "Test-DUNEUITests-2026.10.26_04-32-19-+0900.xcresult",
+      "sha256": "bbff795959f64781fe9f2247fd842167aafceeeca2f1d020b9ff4b2afc9dce3f",
+      "orientation": "portrait"
+    },
+    {
+      "device": "duo-open",
+      "label": "Duo 내부 · 세로",
+      "state": "T03",
+      "appearance": "dark",
+      "file": "images/duo-open-dark.png",
+      "native_size": [
+        2006,
+        2852
+      ],
+      "source_revision": "56f62feceb8e9ec5724a44f4e1881ff19ff75fc8",
+      "test": "ThemeMatrixUITests/testDesertTodayToolbarFitsAtBothAppearances()",
+      "timestamp": 1792956775.702,
+      "xcresult": "Test-DUNEUITests-2026.10.26_04-32-19-+0900.xcresult",
+      "sha256": "db4f605b802d161af0b5102d8d91e01dd889831b48773786e8776844683ebe31",
+      "orientation": "portrait"
+    },
+    {
+      "device": "duo-open",
+      "label": "Duo 내부 · 세로",
+      "state": "T18",
+      "appearance": "system",
+      "file": "images/duo-open-pins.png",
+      "native_size": [
+        2006,
+        2852
+      ],
+      "source_revision": "56f62feceb8e9ec5724a44f4e1881ff19ff75fc8",
+      "test": "TodaySettingsRegressionTests/testPinnedMetricsEditorOpensAndDismisses()",
+      "timestamp": 1792955102.911,
+      "sha256": "3c24bba58e53b454a065e345fba778d0cd2468247837ed844ad02a72243aea6f",
+      "orientation": "portrait"
+    }
+  ],
+  "scope": "21 unique Today related cases passed56f62fec, plus caption-only maxAX delta19cf57c9 passed1/1 (22 successful case executions). Fresh seeded T03 light/dark and T18 editor on four owned configurations. No full iOS/watch pass implied. Duo internal portrait verified; landscape and numeric hinge angle unverified.",
+  "pin_interaction": {
+    "source_revision": "56f62feceb8e9ec5724a44f4e1881ff19ff75fc8",
+    "test": "TodayCompactUITests/testOddPinnedMetricOccupiesFullFinalRow()",
+    "result": "passed1/1",
+    "file": "images/regular-odd-pins.png",
+    "sha256": "b81f951fafa8bf637f590e0a8b1cffddec21ee715d054c29498fc7406700a28c"
+  },
+  "cases": [
+    {
+      "name": "Today Compact workout max text ja_0_F91E9C3E-FE5C-44EE-AB84-0870FC2BF5FF.png",
+      "file": "images/case-01.png",
+      "test": "TodayCompactUITests/testCompactWorkoutRowContainsTextAtMaximumAccessibilitySize()",
+      "native_size": [
+        1320,
+        2868
+      ],
+      "timestamp": 1792956957.27,
+      "sha256": "0d8530e64b30f0cba247bd6dc20986e0f2747ca9cae8f7b7b3a6001d00b73f27",
+      "source_revision": "56f62feceb8e9ec5724a44f4e1881ff19ff75fc8",
+      "device": "regular",
+      "title": "Today Compact workout max text ja"
+    },
+    {
+      "name": "Today Compact workout max text ko_0_F554FEC4-8D23-4B96-819F-274E5E486AD8.png",
+      "file": "images/case-02.png",
+      "test": "TodayCompactUITests/testCompactWorkoutRowContainsTextAtMaximumAccessibilitySize()",
+      "native_size": [
+        1320,
+        2868
+      ],
+      "timestamp": 1792956923.256,
+      "sha256": "3257f2d16284910d249eaa48f77f64705c03376df95b837874ec58639d8f62c4",
+      "source_revision": "56f62feceb8e9ec5724a44f4e1881ff19ff75fc8",
+      "device": "regular",
+      "title": "Today Compact workout max text ko"
+    },
+    {
+      "name": "Today Compact workout max text en_0_28E745B1-B8D8-4D47-A50B-033AC4CC36E2.png",
+      "file": "images/case-03.png",
+      "test": "TodayCompactUITests/testCompactWorkoutRowContainsTextAtMaximumAccessibilitySize()",
+      "native_size": [
+        1320,
+        2868
+      ],
+      "timestamp": 1792956889.459,
+      "sha256": "c8175c8c4b4b70eff304c8a758b3f07f6ff0b451695c41b4b1deb9fe1d72e12c",
+      "source_revision": "56f62feceb8e9ec5724a44f4e1881ff19ff75fc8",
+      "device": "regular",
+      "title": "Today Compact workout max text en"
+    },
+    {
+      "name": "Today Compact 100 accessibility trend_0_D52A981E-ABA0-4C17-A25D-66D77ABC77E9.png",
+      "file": "images/case-04.png",
+      "test": "TodayCompactUITests/testMaximumAccessibilityScoreMovesOutsideRingAndKeepsDetailRoute()",
+      "native_size": [
+        1320,
+        2868
+      ],
+      "timestamp": 1792957941.346,
+      "sha256": "8488f28148e1c01149a97331060ef1a7b2782672843b5569efdc78faa2cad7fa",
+      "source_revision": "19cf57c9bcc91141921e43cadd4facff64f46bd2",
+      "device": "regular",
+      "title": "Today Compact 100 accessibility trend"
+    },
+    {
+      "name": "Today Compact 100 accessibility score_0_4BB8A81D-7447-4903-B064-2C2D3D075922.png",
+      "file": "images/case-05.png",
+      "test": "TodayCompactUITests/testMaximumAccessibilityScoreMovesOutsideRingAndKeepsDetailRoute()",
+      "native_size": [
+        1320,
+        2868
+      ],
+      "timestamp": 1792957938.379,
+      "sha256": "34cb33c82ceeb16e0e2b2364d81ff4ee349e4c379ebe144671b7155804e295f4",
+      "source_revision": "19cf57c9bcc91141921e43cadd4facff64f46bd2",
+      "device": "regular",
+      "title": "Today Compact 100 accessibility score"
+    },
+    {
+      "name": "Today Compact score 52_0_2D2C956A-0720-425E-9F05-156B43DB8D6E.png",
+      "file": "images/case-06.png",
+      "test": "TodayCompactUITests/testMiddleScoreRingKeepsFixedGeometry()",
+      "native_size": [
+        1320,
+        2868
+      ],
+      "timestamp": 1792957047.964,
+      "sha256": "0b746b64b8cc8e9466b176bd28d6180503c723efdddabfa3e168e9dbae970c32",
+      "source_revision": "56f62feceb8e9ec5724a44f4e1881ff19ff75fc8",
+      "device": "regular",
+      "title": "Today Compact score 52"
+    },
+    {
+      "name": "Today Compact score 99_0_3CCCCFF4-2783-4A94-BA67-2445922FC9EA.png",
+      "file": "images/case-07.png",
+      "test": "TodayCompactUITests/testNinetyNinePointRingKeepsFixedGeometry()",
+      "native_size": [
+        1320,
+        2868
+      ],
+      "timestamp": 1792957068.514,
+      "sha256": "01e47c3ab0152bb256ea2b6db53d81d22236b1b70612b2d389f1ca6d149b0711",
+      "source_revision": "56f62feceb8e9ec5724a44f4e1881ff19ff75fc8",
+      "device": "regular",
+      "title": "Today Compact score 99"
+    },
+    {
+      "name": "Today Compact score 1_0_5D7CC0AE-825E-4B29-84AA-2498519AC6C7.png",
+      "file": "images/case-08.png",
+      "test": "TodayCompactUITests/testOnePointRingKeepsFixedGeometry()",
+      "native_size": [
+        1320,
+        2868
+      ],
+      "timestamp": 1792957088.826,
+      "sha256": "ff88c3ba569bed58af16404df782c7c9c195b9cabc598ce751b1a69155251922",
+      "source_revision": "56f62feceb8e9ec5724a44f4e1881ff19ff75fc8",
+      "device": "regular",
+      "title": "Today Compact score 1"
+    },
+    {
+      "name": "Today Compact pinned metrics standard XXXL_0_AA974609-E8BD-4E40-92AA-78822D19C8E2.png",
+      "file": "images/case-09.png",
+      "test": "TodayCompactUITests/testPinnedMetricsUseOneColumnAtStandardXXXLTextSize()",
+      "native_size": [
+        1320,
+        2868
+      ],
+      "timestamp": 1792957114.338,
+      "sha256": "7c9f2e952234d85ab9e32624b7a7ab4fa52c3751451e68864527c855a213441d",
+      "source_revision": "56f62feceb8e9ec5724a44f4e1881ff19ff75fc8",
+      "device": "regular",
+      "title": "Today Compact pinned metrics standard XXXL"
+    },
+    {
+      "name": "Today Compact 100 ring_0_EBB60CCE-2E43-4CBD-8DA0-9CF54C9188E0.png",
+      "file": "images/case-10.png",
+      "test": "TodayCompactUITests/testSeededHundredPointRingHasFixedCircularFrame()",
+      "native_size": [
+        1320,
+        2868
+      ],
+      "timestamp": 1792957128.963,
+      "sha256": "ad1199b9322360e7604cab11e54fa36c028c858ea96b370221d8f2f3c8b2092d",
+      "source_revision": "56f62feceb8e9ec5724a44f4e1881ff19ff75fc8",
+      "device": "regular",
+      "title": "Today Compact 100 ring"
+    },
+    {
+      "name": "Today Compact expanded workout types_0_60EAAC1D-B6AF-4262-A4E5-522138468F2D.png",
+      "file": "images/case-11.png",
+      "test": "TodayCompactUITests/testWorkoutTypeMoreAndLessPreserveHiddenRows()",
+      "native_size": [
+        1320,
+        2868
+      ],
+      "timestamp": 1792957159.683,
+      "sha256": "a58ada6fcbd2edc73246f12cea7023622605fe05cc41f59bae35ffa89fde0d7d",
+      "source_revision": "56f62feceb8e9ec5724a44f4e1881ff19ff75fc8",
+      "device": "regular",
+      "title": "Today Compact expanded workout types"
+    },
+    {
+      "name": "Today Compact score 0_0_A39E4F18-30D7-43A6-AE3E-58E216FABB6B.png",
+      "file": "images/case-12.png",
+      "test": "TodayCompactUITests/testZeroScoreKeepsCircularTrackAndReadableZero()",
+      "native_size": [
+        1320,
+        2868
+      ],
+      "timestamp": 1792957181.146,
+      "sha256": "102382bb394b5a51db90810d441d2d0fbfcb989b9be52cac4cef68eb5c472090",
+      "source_revision": "56f62feceb8e9ec5724a44f4e1881ff19ff75fc8",
+      "device": "regular",
+      "title": "Today Compact score 0"
+    },
+    {
+      "name": "Today Support Accessibility Progress_0_2A1BF236-A35F-40E3-8D02-2661134A8E74.png",
+      "file": "images/case-13.png",
+      "test": "TodaySupportCardsUITests/testDesertTodayProgressAtMaximumAccessibilityTextSize()",
+      "native_size": [
+        1320,
+        2868
+      ],
+      "timestamp": 1792957557.036,
+      "sha256": "ed22c23a539fbd6510e2f68fc524b930e81b00686e6e76b3a7c6e889cf7c8303",
+      "source_revision": "56f62feceb8e9ec5724a44f4e1881ff19ff75fc8",
+      "device": "regular",
+      "title": "Today Support Accessibility Progress"
+    }
+  ],
+  "caption_delta": {
+    "source_revision": "19cf57c9bcc91141921e43cadd4facff64f46bd2",
+    "result": "passed1/1 normal exit0",
+    "scope": "Accessibility title/detail stacked; standard HStack preserved verbatim. Other source unchanged.",
+    "receipt": "max-caption-ui-result.json"
+  }
+}

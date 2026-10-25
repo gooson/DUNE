@@ -212,13 +212,26 @@
     },
     "T18": {
       "row_id": "T18",
-      "evidence": "pinned-metrics-editor-screen",
+      "evidence": "actual Today Compact native seeded screen",
       "test": "TodaySettingsRegressionTests/testPinnedMetricsEditorOpensAndDismisses()",
-      "action": "tap dashboard-pinned-edit",
-      "timestamp": 1791817529.319,
-      "image": "461D80CD-C86E-481C-A7EE-4AEF93275864.png",
-      "screen": "screen-0-1320x2868-tap dashboard-pinned-edit_0_33FF4BEF-BDD4-4FDC-8969-4827EF76823A.png",
-      "file": "T18.png"
+      "action": "Open pinned metric editor",
+      "timestamp": 1792956111.462,
+      "image": "images/regular-pins.png",
+      "screen": "screen-0-1320x2868-tap dashboard-pinned-edit_0_90F9E070-D18B-44AB-8E50-129525179DCE.png",
+      "file": "T18.png",
+      "source_revision": "56f62feceb8e9ec5724a44f4e1881ff19ff75fc8",
+      "source_worktree_dirty": false,
+      "device_id": "9DF82ECF-D93E-4A35-9825-B8165E703B8A",
+      "device_name": "iPhone 18 Pro Max-wt-Health-today-redesign-793fd9c5e781",
+      "native_size": [
+        1320,
+        2868
+      ],
+      "orientation": "portrait",
+      "appearance": "system",
+      "theme": "desertWarm",
+      "gallery": "../../../full-redesign-map/review/today-compact-2026-10-26/index.html",
+      "verification_scope": "T03 measured seeded root / T18 editor only; standard text. No full-state or landscape certification."
     },
     "S04": {
       "row_id": "S04",
@@ -1067,20 +1080,29 @@
     },
     "T03": {
       "row_id": "T03",
-      "file": "T03.png",
-      "evidence": "actual Desert Horizon seeded root",
+      "evidence": "actual Today Compact native seeded screen",
       "test": "ThemeMatrixUITests/testDesertTodayToolbarFitsAtBothAppearances()",
-      "action": "Direct initial-tab launch, Desert light root",
-      "timestamp": 1792789120.835,
-      "image": "",
-      "source_revision": "9a9dcf1c06cb789d95d16a7d57807c8b3c072d6c",
-      "source_worktree_dirty": true,
-      "device_id": "4990D55E-752C-4E35-8FB4-953F995AB2C2",
-      "device_name": "iPhone 18 Pro-wt-Health-desert-horizon-final-validation-f5271f075392",
-      "gallery": "../../../full-redesign-map/review/desert-horizon-final-2026-10-24/index.html",
-      "xcresult": "Test-DUNEUITests-2026.10.24_05-58-13-+0900.xcresult",
-      "current_verification": "pending",
-      "current_verification_note": "새 DESERT HORIZON 측정값 표시 상태는 이 캡처로 확인했다. 시작 스켈레톤·빈 상태는 별도 변경(#834)의 미갱신 상태이며 이 PNG로 완료 처리하지 않는다."
+      "action": "Desert dark root",
+      "timestamp": 1792956193.041,
+      "image": "images/regular-dark.png",
+      "screen": "screen-0-1320x2868-root after setup -[ThemeMatrixUITests testDesertTodayToolbarFitsAtBothAppearances]_0_4B60BB91-C489-4B14-BA90-38113613E13E.png",
+      "file": "T03.png",
+      "source_revision": "56f62feceb8e9ec5724a44f4e1881ff19ff75fc8",
+      "source_worktree_dirty": false,
+      "device_id": "9DF82ECF-D93E-4A35-9825-B8165E703B8A",
+      "device_name": "iPhone 18 Pro Max-wt-Health-today-redesign-793fd9c5e781",
+      "native_size": [
+        1320,
+        2868
+      ],
+      "orientation": "portrait",
+      "appearance": "dark",
+      "theme": "desertWarm",
+      "gallery": "../../../full-redesign-map/review/today-compact-2026-10-26/index.html",
+      "verification_scope": "T03 measured seeded root / T18 editor only; standard text. No full-state or landscape certification.",
+      "xcresult": "Test-DUNEUITests-2026.10.26_04-22-38-+0900.xcresult",
+      "current_verification": "partial",
+      "current_verification_note": "Today Compact 측정값 표시 상태를 새로 캡처했다. 시작 스켈레톤·빈 상태는 기존 별도 변경의 미갱신 상태이며 이 PNG로 완료 처리하지 않는다."
     },
     "A01": {
       "row_id": "A01",
@@ -1109,5 +1131,11 @@
     }
   },
   "unmatched": [],
-  "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다."
+  "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
+  "last_refresh_revision": "56f62feceb8e9ec5724a44f4e1881ff19ff75fc8",
+  "last_refresh_screens": [
+    "T03",
+    "T18"
+  ],
+  "last_refresh_note": "Only per-screen entries T03/T18 were refreshed; top-level source_revision and other entries retain prior provenance."
 }

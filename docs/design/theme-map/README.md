@@ -82,4 +82,4 @@ Small 위젯의 세 점수 링과 하단 상태·시각은 카드 전체 높이�
 
 ## Today Compact 선택·링·간격 확정 (2026-10-26)
 
-사용자는 Today에 Compact를 선택했다. [구현 계획](../../plans/2026-10-26-today-compact-layout-and-ring.md)을 추가했고 시안 링의 원형/중심/0·100점과 큰 글씨 전환을 바로잡았다. CONDITION은 같은 카드 상단에 유지한다. 아이콘–수치4–6pt, 링–설명12pt를 기준으로 불필요한 공간을 줄였다. [수정 캡처](themes/assets/today-compact-ring-fixed.png)와 [전후 측정·한정 검증](themes/assets/today-compact-ring-qa.json)을 보존한다. 현재 변경은 시안과 계획이며 실제 앱 구현·캡처가 아니다.
+사용자는 Today에 Compact를 선택했다. [구현 계획](../../plans/2026-10-26-today-compact-layout-and-ring.md)을 추가했고 시안 링의 원형/중심/0·100점과 큰 글씨 전환을 바로잡았다. CONDITION은 같은 카드 상단에 유지한다. 아이콘–수치4–6pt, 링–설명12pt를 기준으로 불필요한 공간을 줄였다. [수정 캡처](themes/assets/today-compact-ring-fixed.png)와 [전후 측정·한정 검증](themes/assets/today-compact-ring-qa.json)을 보존한다. 브라우저 파일은 시안 보존본이다. SwiftUI에는 Today 전용 104pt 링·조밀한 지표·수면·스트레스·목표 카드를 구현했으며, 네이티브 빌드와 기기별 실제 화면 검증을 진행하고 있다. 고정 편집 중앙 터치·선택·저장·홀수 전체 폭 검사는1/1 통과했다. [새 네이티브 화면](../full-redesign-map/review/today-compact-2026-10-26/index.html)을 보존했으며 최종 Today 관련21개가 통과했으며 전체 상태 검증과는 구분한다.
