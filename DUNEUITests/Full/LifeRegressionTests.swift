@@ -297,7 +297,16 @@ final class LifeRegressionTests: SeededUITestBaseCase {
                           "Recurring habit should wait for its first completion")
         }
 
-        XCTAssertTrue(app.waitAndTap(AXID.habitFormSave, timeout: 5), "\(name) should save")
+        // The sheet's navigation buttons leave the AX tree while its Form is scrolled.
+        // Restore the form's top before looking for Save.
+        let saveButton = app.buttons[AXID.habitFormSave].firstMatch
+        let form = app.collectionViews.firstMatch
+        XCTAssertTrue(form.exists, "\(name) form should expose its scroll container")
+        for _ in 0..<6 where !saveButton.exists {
+            form.swipeDown()
+        }
+        XCTAssertTrue(saveButton.waitForExistence(timeout: 5), "\(name) Save action should return at the top of the form")
+        saveButton.auditTap()
         expectation(for: NSPredicate(format: "exists == false"), evaluatedWith: nameField)
         waitForExpectations(timeout: 5)
         XCTAssertTrue(app.descendants(matching: .any)[AXID.lifeHabitRow(name)].firstMatch.waitForExistence(timeout: 8),
