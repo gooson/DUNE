@@ -6,39 +6,83 @@
     "iphone_notification_paused": {
       "path": "images/iphone_notification_paused.png",
       "test": "WatchWorkoutLiveActivityUITests/testPausedNotificationCenterPresentation()",
-      "xcresult": "Test-DUNEUITests-2026.10.24_04-36-32-+0900.xcresult",
-      "device": "iPhone 18 Pro-wt-Health-desert-horizon-final-validation-f5271f075392",
-      "device_id": "4990D55E-752C-4E35-8FB4-953F995AB2C2",
+      "xcresult": "Test-DUNEUITests-2026.10.25_16-16-50-+0900.xcresult",
+      "device": "iPhone 18 Pro-wt-Health-4592-aaa7381c832d",
+      "device_id": "B52BB289-B70B-46C6-9E57-C6C0D5D11D60",
       "runtime": "iOS 27.0",
-      "timestamp": 1792784362.541,
-      "source_revision": "9e3788a4",
-      "source_worktree_dirty": false,
+      "timestamp": 1792912694.443413,
+      "timestamp_source": "xcresult PNG payload modification time",
+      "source_revision": "015c3672",
+      "source_worktree_dirty": true,
       "appearance": "dark",
-      "provenance": "seeded_springboard_element",
-      "note": "Actual ActivityKit in SpringBoard Notification Center, DEBUG Watch snapshot fixture; no paired Watch/locked-screen proof. Individual method passed; full bundle3passed/1failed."
+      "provenance": "seeded_springboard_element_raw_png",
+      "raw_payload": "data.0~ML-KQEmvCfwt0G9i9rlbE7ahzp3_QxYmlZuhNYvHQsxFV3NhKqYzI-hSbbUP7zm-ScjdP7AtIknZs4_eKX0tew==",
+      "sha256": "9f090b237339e48b0232b6a5d5cb2a4eeaea1533b2f2e119d254f99d1df8c2fe",
+      "validation": {
+        "method": "passed in XCTest log",
+        "bundle": "interrupted during SDK result finalization",
+        "runner_exit": 124
+      },
+      "note": "Actual ActivityKit element screenshot. Copied unchanged from PNG payload in interrupted xcresult (missing Info.plist); 3 methods passed, stale failed, SDK finalization timed out. Not a successful suite/result bundle or paired-Watch proof.",
+      "layout_revision": "2026-10-25-before-dune-wordmark",
+      "current_layout": false
     },
     "iphone_notification_running": {
       "path": "images/iphone_notification_running.png",
       "test": "WatchWorkoutLiveActivityUITests/testRunningNotificationCenterPresentation()",
-      "xcresult": "Test-DUNEUITests-2026.10.24_04-36-32-+0900.xcresult",
-      "device": "iPhone 18 Pro-wt-Health-desert-horizon-final-validation-f5271f075392",
-      "device_id": "4990D55E-752C-4E35-8FB4-953F995AB2C2",
+      "xcresult": "Test-DUNEUITests-2026.10.25_16-16-50-+0900.xcresult",
+      "device": "iPhone 18 Pro-wt-Health-4592-aaa7381c832d",
+      "device_id": "B52BB289-B70B-46C6-9E57-C6C0D5D11D60",
       "runtime": "iOS 27.0",
-      "timestamp": 1792784388.041,
-      "source_revision": "9e3788a4",
-      "source_worktree_dirty": false,
+      "timestamp": 1792912717.7350855,
+      "timestamp_source": "xcresult PNG payload modification time",
+      "source_revision": "015c3672",
+      "source_worktree_dirty": true,
       "appearance": "dark",
-      "provenance": "seeded_springboard_element",
-      "note": "Actual ActivityKit in SpringBoard Notification Center, DEBUG Watch snapshot fixture; no paired Watch/locked-screen proof. Individual method passed; full bundle3passed/1failed."
+      "provenance": "seeded_springboard_element_raw_png",
+      "raw_payload": "data.0~kXcm3uo55s3KCWQYQeWSjCOURQmskLWxmJYneDvJUPVi0D6wXSeXvWWxVDEbVN2igjQHBzvSDkLBGgxA-8e2vg==",
+      "sha256": "c1de5468a218ab404a5f78b89c086c5001c197abf210b76d90111f0b3ad862f8",
+      "validation": {
+        "method": "passed in XCTest log",
+        "bundle": "interrupted during SDK result finalization",
+        "runner_exit": 124
+      },
+      "note": "Actual ActivityKit element screenshot. Copied unchanged from PNG payload in interrupted xcresult (missing Info.plist); 3 methods passed, stale failed, SDK finalization timed out. Not a successful suite/result bundle or paired-Watch proof.",
+      "layout_revision": "2026-10-25-before-dune-wordmark",
+      "current_layout": false
+    },
+    "iphone_notification_strength_long_name": {
+      "path": "images/iphone_notification_strength_long_name.png",
+      "test": "WatchWorkoutLiveActivityUITests/testLongStrengthNameNotificationCenterPresentation()",
+      "xcresult": "Test-DUNEUITests-2026.10.25_16-16-50-+0900.xcresult",
+      "device": "iPhone 18 Pro-wt-Health-4592-aaa7381c832d",
+      "device_id": "B52BB289-B70B-46C6-9E57-C6C0D5D11D60",
+      "runtime": "iOS 27.0",
+      "timestamp": 1792912671.3702562,
+      "timestamp_source": "xcresult PNG payload modification time",
+      "source_revision": "015c3672",
+      "source_worktree_dirty": true,
+      "appearance": "dark",
+      "provenance": "seeded_springboard_element_raw_png",
+      "raw_payload": "data.0~OpCcPXyw0o7urmzqP5OamDD7hnhjWdv9sFWDwRNP2CVbMJuyt-4XfHhrWQOsUj1gfCmkpfEwB0halAck1zptgQ==",
+      "sha256": "e29e7300f40e40fe5056b017296992976cf07f384490fb724fe98a6a521d510e",
+      "validation": {
+        "method": "passed in XCTest log",
+        "bundle": "interrupted during SDK result finalization",
+        "runner_exit": 124
+      },
+      "note": "Actual ActivityKit element screenshot. Copied unchanged from PNG payload in interrupted xcresult (missing Info.plist); 3 methods passed, stale failed, SDK finalization timed out. Not a successful suite/result bundle or paired-Watch proof.",
+      "layout_revision": "2026-10-25-before-dune-wordmark",
+      "current_layout": false
     }
   },
   "states": {
     "iphone_notification_running": {
-      "status": "captured",
+      "status": "outdated",
       "caption": "iPhone 알림 센터 · 운동 진행"
     },
     "iphone_notification_paused": {
-      "status": "captured",
+      "status": "outdated",
       "caption": "iPhone 알림 센터 · 일시 정지"
     },
     "iphone_notification_stale": {
@@ -60,6 +104,14 @@
     "iphone_island_expanded_paused": {
       "status": "pending",
       "caption": "iPhone Dynamic Island expanded · 일시 정지"
+    },
+    "iphone_notification_strength_long_name": {
+      "status": "outdated",
+      "caption": "iPhone 알림 센터 · 긴 한국어 근력 운동명"
+    },
+    "iphone_watch_ended_dismissal": {
+      "status": "pending",
+      "caption": "실제 Watch 종료 후 iPhone 카드 제거"
     }
   },
   "other_surfaces": {
@@ -67,5 +119,48 @@
     "duo_folded": "미캡처",
     "duo_unfolded": "미캡처",
     "watch_small": "미캡처"
+  },
+  "validation_2026_10_25": {
+    "log": ".xcodebuild/live-activity-ui.log",
+    "runner_exit": 124,
+    "testcase_counts": {
+      "executed": 4,
+      "passed": 3,
+      "failed": 1,
+      "skipped": 0
+    },
+    "failure": "Stale status did not appear before timeout. DEBUG fixture changed to an already-past staleDate; not rerun because SDK finalization remained unresolved.",
+    "sdk_failure": "IDESchemeActionSDKRecord invalidDigitCount(94232); no log activity for 180s; interrupted xcresult lacks Info.plist.",
+    "build_log": ".xcodebuild/live-activity-build-final.log",
+    "build_status": "passed on final app/widget source",
+    "unverified": [
+      "stale fixture correction",
+      "light appearance",
+      "large Dynamic Type",
+      "iPad",
+      "Duo folded/unfolded",
+      "Watch small",
+      "Dynamic Island compact/expanded",
+      "paired Watch/iPhone"
+    ]
+  },
+  "brand_update_2026_10_25": {
+    "change": "DUNE wordmark in the existing shared status row; no extra card row",
+    "capture_status": "pending",
+    "affected_surfaces": [
+      "iPhone lock/Notification Center running, paused, stale, long name",
+      "Watch small",
+      "Dynamic Island expanded"
+    ],
+    "reason": "Previous XCTest run stalled in SDK result finalization and the 180s watchdog interrupted its result bundle. That dependency is not recovered; no repeat UI runner was started for this small follow-up.",
+    "resume": "Once Xcode can finalize simulator test results, run WatchWorkoutLiveActivityUITests/testLongStrengthNameNotificationCenterPresentation on owned iPhone B52BB289-B70B-46C6-9E57-C6C0D5D11D60 first.",
+    "build_log": ".xcodebuild/live-activity-brand-build.log"
+  },
+  "workout_end_cleanup_2026_10_25": {
+    "status": "implementation_and_core_verified_paired_device_pending",
+    "core_test_count": 35,
+    "core_log": ".xcodebuild/watch-end-core-tests-final.log",
+    "build_log": ".xcodebuild/watch-end-cleanup-verified-build.log",
+    "reason": "Prior SDK simulator result-finalization failure remains unresolved. Actual Watch/locked iPhone terminal delivery cannot be demonstrated by seeded SpringBoard snapshots."
   }
 }
