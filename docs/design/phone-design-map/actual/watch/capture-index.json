@@ -4,8 +4,12 @@
       "file": "C01.png",
       "test": "WatchWorkoutFlowSmokeTests/testCaptureRunningDesignMap()",
       "device": "Apple Watch SE 3 (40mm)",
-      "timestamp": 1791862145.873,
-      "resultBundle": "watch-capture-cardio-fixed-20261013.xcresult"
+      "timestamp": 1792922533.398,
+      "resultBundle": "Test-DUNEWatchUITests-2026.10.25_19-01-38-+0900.xcresult",
+      "source_revision": "40be85ade3c9670767cf8c71fe77db8e099bad6c",
+      "source_worktree_dirty": true,
+      "locale": "en_US",
+      "text_size": "system default"
     },
     "C02": {
       "file": "C02.png",
@@ -16,18 +20,25 @@
     },
     "C03": {
       "file": "C03.png",
-      "test": "WatchLiveHeartRateZonesUITests/testFirstHealthKitZoneDisplaysAsZoneOne()",
+      "test": "WatchWorkoutFlowSmokeTests/testCaptureRunningDesignMap()",
       "device": "Apple Watch SE 3 (40mm)",
-      "timestamp": 1792543288.3543775,
-      "resultBundle": "watch-cardio-ui-capture.log",
-      "provenance": "XCUIScreen PNG saved by passing Watch UI test; Xcode result bundle finalization stalled"
+      "timestamp": 1792922535.014,
+      "resultBundle": "Test-DUNEWatchUITests-2026.10.25_19-01-38-+0900.xcresult",
+      "source_revision": "40be85ade3c9670767cf8c71fe77db8e099bad6c",
+      "source_worktree_dirty": true,
+      "locale": "en_US",
+      "text_size": "system default"
     },
     "C04": {
       "file": "C04.png",
       "test": "WatchWorkoutFlowSmokeTests/testCaptureRunningDesignMap()",
       "device": "Apple Watch SE 3 (40mm)",
-      "timestamp": 1791862149.087,
-      "resultBundle": "watch-capture-cardio-fixed-20261013.xcresult"
+      "timestamp": 1792922536.606,
+      "resultBundle": "Test-DUNEWatchUITests-2026.10.25_19-01-38-+0900.xcresult",
+      "source_revision": "40be85ade3c9670767cf8c71fe77db8e099bad6c",
+      "source_worktree_dirty": true,
+      "locale": "en_US",
+      "text_size": "system default"
     },
     "C05": {
       "file": "C05.png",
@@ -88,6 +99,71 @@
       "provenance": "Actual frame at 16s from XCTest screen recording of current build; visual milestone shown; test failed accessibility identifier lookup",
       "videoOffsetSeconds": 16
     },
+    "C14": {
+      "file": "C14.png",
+      "test": "WatchWorkoutFlowSmokeTests/testRunningDistanceMetricsAndPausedDesignMap()",
+      "device": "Apple Watch SE 3 (40mm)",
+      "timestamp": 1792922905.417,
+      "resultBundle": "Test-DUNEWatchUITests-2026.10.25_19-07-40-+0900.xcresult",
+      "source_revision": "40be85ade3c9670767cf8c71fe77db8e099bad6c",
+      "source_worktree_dirty": true,
+      "locale": "en_US",
+      "text_size": "system default"
+    },
+    "C15": {
+      "file": "C15.png",
+      "test": "WatchWorkoutFlowSmokeTests/testRunningDistanceMetricsAndPausedDesignMap()",
+      "device": "Apple Watch SE 3 (40mm)",
+      "timestamp": 1792922914.254,
+      "resultBundle": "Test-DUNEWatchUITests-2026.10.25_19-07-40-+0900.xcresult",
+      "source_revision": "40be85ade3c9670767cf8c71fe77db8e099bad6c",
+      "source_worktree_dirty": true,
+      "locale": "en_US",
+      "text_size": "system default"
+    },
+    "C16": {
+      "file": "C16.png",
+      "test": "WatchWorkoutFlowSmokeTests/testRunningVoiceFeedbackTogglePersistsAcrossNavigationAndRelaunch()",
+      "device": "Apple Watch SE 3 (40mm)",
+      "timestamp": 1792922621.081,
+      "resultBundle": "Test-DUNEWatchUITests-2026.10.25_19-01-38-+0900.xcresult",
+      "source_revision": "40be85ade3c9670767cf8c71fe77db8e099bad6c",
+      "source_worktree_dirty": true,
+      "locale": "en_US",
+      "text_size": "system default"
+    },
+    "C17": {
+      "file": "C17.png",
+      "test": "WatchWorkoutFlowSmokeTests/testRunningFeedbackSettingsPersistAcrossSheetAndRelaunch()",
+      "device": "Apple Watch SE 3 (40mm)",
+      "timestamp": 1792922305.404,
+      "resultBundle": "Test-DUNEWatchUITests-2026.10.25_18-57-45-+0900.xcresult",
+      "source_revision": "9e63c2c9ff0ddfcd64f3ae02686d77f8a66a2972",
+      "source_worktree_dirty": true,
+      "source_files_sha256": {
+        "DUNEWatch/Views/Cardio/RunningFeedbackSettingsView.swift": "ef1249bcf3b5f81a6ebab41820df092c8da218612da7195e9b110f9b26b6a53b",
+        "DUNEWatch/Resources/Localizable.xcstrings": "3353ec992a0cb96d1c9afd1624471696925698aa241a1eb7f75903d36ffbfecf",
+        "DUNEWatchUITests/Smoke/WatchWorkoutFlowSmokeTests.swift": "e43df94634cd3a4c5e2714c130e7fe514b9907e5ddbe8fdf5a1ef151931658f1"
+      },
+      "locale": "en_US",
+      "text_size": "system default"
+    },
+    "C18": {
+      "file": "C18.png",
+      "test": "WatchWorkoutFlowSmokeTests/testRunningFeedbackSettingsPersistAcrossSheetAndRelaunch()",
+      "device": "Apple Watch SE 3 (40mm)",
+      "timestamp": 1792922322.895,
+      "resultBundle": "Test-DUNEWatchUITests-2026.10.25_18-57-45-+0900.xcresult",
+      "source_revision": "9e63c2c9ff0ddfcd64f3ae02686d77f8a66a2972",
+      "source_worktree_dirty": true,
+      "source_files_sha256": {
+        "DUNEWatch/Views/Cardio/RunningFeedbackSettingsView.swift": "ef1249bcf3b5f81a6ebab41820df092c8da218612da7195e9b110f9b26b6a53b",
+        "DUNEWatch/Resources/Localizable.xcstrings": "3353ec992a0cb96d1c9afd1624471696925698aa241a1eb7f75903d36ffbfecf",
+        "DUNEWatchUITests/Smoke/WatchWorkoutFlowSmokeTests.swift": "e43df94634cd3a4c5e2714c130e7fe514b9907e5ddbe8fdf5a1ef151931658f1"
+      },
+      "locale": "en_US",
+      "text_size": "system default"
+    },
     "D01": {
       "file": "D01.png",
       "test": "WatchWorkoutFlowSmokeTests/testCaptureStrengthDesignMap()",
@@ -141,8 +217,12 @@
       "file": "F02.png",
       "test": "WatchWorkoutFlowSmokeTests/testCaptureRunningDesignMap()",
       "device": "Apple Watch SE 3 (40mm)",
-      "timestamp": 1791862159.797,
-      "resultBundle": "watch-capture-cardio-fixed-20261013.xcresult"
+      "timestamp": 1792922547.723,
+      "resultBundle": "Test-DUNEWatchUITests-2026.10.25_19-01-38-+0900.xcresult",
+      "source_revision": "40be85ade3c9670767cf8c71fe77db8e099bad6c",
+      "source_worktree_dirty": true,
+      "locale": "en_US",
+      "text_size": "system default"
     },
     "F03": {
       "file": "F03.png",
@@ -253,8 +333,12 @@
       "file": "P03.png",
       "test": "WatchWorkoutFlowSmokeTests/testCaptureRunningDesignMap()",
       "device": "Apple Watch SE 3 (40mm)",
-      "timestamp": 1791862142.94,
-      "resultBundle": "watch-capture-cardio-fixed-20261013.xcresult"
+      "timestamp": 1792922529.197,
+      "resultBundle": "Test-DUNEWatchUITests-2026.10.25_19-01-38-+0900.xcresult",
+      "source_revision": "40be85ade3c9670767cf8c71fe77db8e099bad6c",
+      "source_worktree_dirty": true,
+      "locale": "en_US",
+      "text_size": "system default"
     },
     "P04": {
       "file": "P04.png",
@@ -396,8 +480,12 @@
       "file": "X03.png",
       "test": "WatchWorkoutFlowSmokeTests/testCaptureRunningDesignMap()",
       "device": "Apple Watch SE 3 (40mm)",
-      "timestamp": 1791862151.744,
-      "resultBundle": "watch-capture-cardio-fixed-20261013.xcresult"
+      "timestamp": 1792922539.811,
+      "resultBundle": "Test-DUNEWatchUITests-2026.10.25_19-01-38-+0900.xcresult",
+      "source_revision": "40be85ade3c9670767cf8c71fe77db8e099bad6c",
+      "source_worktree_dirty": true,
+      "locale": "en_US",
+      "text_size": "system default"
     },
     "X04": {
       "file": "X04.png",
@@ -410,8 +498,12 @@
       "file": "X05.png",
       "test": "WatchWorkoutFlowSmokeTests/testCaptureRunningDesignMap()",
       "device": "Apple Watch SE 3 (40mm)",
-      "timestamp": 1791862154.918,
-      "resultBundle": "watch-capture-cardio-fixed-20261013.xcresult"
+      "timestamp": 1792922542.968,
+      "resultBundle": "Test-DUNEWatchUITests-2026.10.25_19-01-38-+0900.xcresult",
+      "source_revision": "40be85ade3c9670767cf8c71fe77db8e099bad6c",
+      "source_worktree_dirty": true,
+      "locale": "en_US",
+      "text_size": "system default"
     },
     "X06": {
       "file": "X06.png",

@@ -21,6 +21,24 @@ final class WorkoutManager: NSObject {
     }
 
     let healthStore = HKHealthStore()
+    private let runningVoiceFeedback = RunningVoiceFeedback(speaker: AVRunningVoiceSpeaker())
+
+    var isRunningVoiceFeedbackEnabled: Bool { runningVoiceFeedback.isEnabled }
+
+    func setRunningVoiceFeedbackEnabled(_ enabled: Bool) {
+        runningVoiceFeedback.isEnabled = enabled
+    }
+
+    var runningFeedbackSettings: RunningFeedbackSettings { runningVoiceFeedback.settings }
+
+    func updateRunningFeedbackSettings(_ settings: RunningFeedbackSettings) {
+        runningVoiceFeedback.settings = settings
+    }
+
+    private func announceRunning(_ event: RunningVoiceFeedback.Event) {
+        guard case .cardio(.running, _) = workoutMode else { return }
+        runningVoiceFeedback.announce(event: event)
+    }
 
     // MARK: - Session State
 
@@ -447,6 +465,8 @@ final class WorkoutManager: NSObject {
 
     /// Common HK session setup shared by strength and cardio flows.
     private func startHKSession(config: HKWorkoutConfiguration, templateName: String) async throws {
+        runningVoiceFeedback.stop()
+        runningVoiceFeedback.resetProgress()
         stopMirrorTransport()
         mirrorWorkoutName = templateName
         self.heartRateSamples = []
@@ -469,6 +489,11 @@ final class WorkoutManager: NSObject {
         if Self.isSimulatorRuntime {
             startSimulatedSession(templateName: templateName)
             startInactivityMonitoringIfNeeded()
+            runningVoiceFeedback.resetProgress(
+                distanceMeters: distance,
+                activeElapsed: activeElapsedTime(at: Date())
+            )
+            announceRunning(.started)
             return
         }
 
@@ -513,6 +538,7 @@ final class WorkoutManager: NSObject {
             WatchConnectivityManager.shared.sendWorkoutStarted(templateName: templateName)
             startInactivityMonitoringIfNeeded()
             startMirrorTransport(for: newSession)
+            announceRunning(.started)
         } catch {
             Self.logger.error("Failed to start HK session: \(String(describing: error), privacy: .public)")
             newSession.end()
@@ -566,6 +592,14 @@ final class WorkoutManager: NSObject {
            case .cardio = workoutMode {
             distance = 990
         }
+        if ProcessInfo.processInfo.arguments.contains("--ui-watch-running-distance"),
+           case .cardio(.running, _) = workoutMode {
+            startDate = Date().addingTimeInterval(-1_170)
+            distance = 3_240
+            lastAnnouncedKilometer = 3
+            currentPace = 1_170 / 3.24
+            heartRate = 148
+        }
 #endif
         persistRecoveryState()
         WatchConnectivityManager.shared.sendWorkoutStarted(templateName: templateName)
@@ -618,10 +652,17 @@ final class WorkoutManager: NSObject {
 
     func end() {
         guard !isSessionEnded, session != nil || isSimulatedSessionActive else { return }
+        // Ending the HK session removes background workout audio runtime.
+        // Manual foreground completion can finish its cue on the summary screen.
+        if WKApplication.shared().applicationState == .active {
+            announceRunning(.ended)
+        } else {
+            runningVoiceFeedback.stop()
+        }
         let endDate = Date()
         completedDuration = activeElapsedTime(at: endDate)
         captureMachineLevelSegment(until: endDate)
-        endPause(at: endDate)
+        endPause(at: endDate, announcesResume: false)
 
         if isSimulatedSessionActive {
             isPaused = false
@@ -914,6 +955,8 @@ final class WorkoutManager: NSObject {
     }
 
     func reset() {
+        runningVoiceFeedback.stop()
+        runningVoiceFeedback.resetProgress()
         stopMirrorTransport()
         stopInactivityMonitoring()
         finalizationTimeoutTask?.cancel()
@@ -1011,6 +1054,11 @@ final class WorkoutManager: NSObject {
                     pauseStart = isPaused ? now : nil
                 }
             }
+            runningVoiceFeedback.resetProgress(
+                distanceMeters: distance,
+                activeElapsed: activeElapsedTime(at: Date())
+            )
+            if isPaused { runningVoiceFeedback.suspendProgress() }
             if isSessionEnded {
                 notifyWorkoutEndedIfNeeded()
             } else {
@@ -1401,11 +1449,14 @@ final class WorkoutManager: NSObject {
         lastMachineLevelSampleDate = nil
         pauseStart = date
         isPaused = true
+        runningVoiceFeedback.suspendProgress()
+        announceRunning(.paused)
         clearInactivityPrompt()
         persistRecoveryState()
     }
 
-    private func endPause(at date: Date) {
+    private func endPause(at date: Date, announcesResume: Bool = true) {
+        let wasPaused = pauseStart != nil
         if let pauseStart {
             let delta = date.timeIntervalSince(pauseStart)
             if delta > 0 {
@@ -1417,6 +1468,13 @@ final class WorkoutManager: NSObject {
             lastMachineLevelSampleDate = date
         }
         isPaused = false
+        if wasPaused, announcesResume, !isSessionEnded {
+            runningVoiceFeedback.resumeProgress(
+                distanceMeters: distance,
+                activeElapsed: activeElapsedTime(at: date)
+            )
+            announceRunning(.resumed)
+        }
         lastInteractionDate = date
         persistRecoveryState()
     }
@@ -1600,7 +1658,7 @@ extension WorkoutManager: HKWorkoutSessionDelegate {
                 enqueueMirrorSnapshot()
             case .ended:
                 if completedDuration == nil { completedDuration = activeElapsedTime(at: date) }
-                endPause(at: date)
+                endPause(at: date, announcesResume: false)
                 isSessionEnded = true
                 isFinalizingWorkout = true
                 notifyWorkoutEndedIfNeeded()
@@ -1646,6 +1704,7 @@ extension WorkoutManager: HKWorkoutSessionDelegate {
         Task { @MainActor in
             guard let currentSession = session, workoutSession === currentSession else { return }
             Self.logger.error("Workout session failed: \(error.localizedDescription, privacy: .public)")
+            runningVoiceFeedback.stop()
             finalizationTimeoutTask?.cancel()
             finalizationTimeoutTask = nil
             isFinalizingWorkout = false
@@ -1787,6 +1846,12 @@ extension WorkoutManager: HKLiveWorkoutBuilderDelegate {
         if isPaused {
             lastAnnouncedKilometer = max(lastAnnouncedKilometer, Int(meters / 1000))
             return
+        }
+        if activityType == .running {
+            runningVoiceFeedback.processProgress(
+                distanceMeters: meters,
+                activeElapsed: activeElapsedTime(at: Date())
+            )
         }
         guard
               let milestone = CardioDistanceMilestone.reached(
