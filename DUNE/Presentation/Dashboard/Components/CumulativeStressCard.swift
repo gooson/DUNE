@@ -5,13 +5,11 @@ struct CumulativeStressCard: View {
     let stressScore: CumulativeStressScore
 
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-    @ScaledMetric(relativeTo: .title) private var gaugeSize: CGFloat = 82
-    @ScaledMetric(relativeTo: .title) private var gaugeStrokeWidth: CGFloat = 6
     @State private var showsAnalysis = false
 
     var body: some View {
-        StandardCard(padding: DS.Spacing.xxl) {
-            VStack(alignment: .leading, spacing: DS.Spacing.xl) {
+        StandardCard(padding: 16) {
+            VStack(alignment: .leading, spacing: 10) {
                 header
                 scoreRow
                 analysis
@@ -55,13 +53,13 @@ struct CumulativeStressCard: View {
     private var scoreRow: some View {
         Group {
             if dynamicTypeSize.isAccessibilitySize {
-                VStack(alignment: .leading, spacing: DS.Spacing.lg) {
-                    gauge
+                VStack(alignment: .leading, spacing: 4) {
+                    scoreValue
                     levelLabel
                 }
             } else {
-                HStack(alignment: .center, spacing: DS.Spacing.xl) {
-                    gauge
+                HStack(alignment: .firstTextBaseline, spacing: 8) {
+                    scoreValue
                     levelLabel
                     Spacer(minLength: 0)
                 }
@@ -69,28 +67,17 @@ struct CumulativeStressCard: View {
         }
     }
 
-    private var gauge: some View {
-        ZStack {
-            Circle()
-                .stroke(DS.Color.cardBackground, lineWidth: gaugeStrokeWidth)
-
-            Circle()
-                .trim(from: 0, to: CGFloat(stressScore.score) / 100)
-                .stroke(levelColor, style: StrokeStyle(lineWidth: gaugeStrokeWidth, lineCap: .round))
-                .rotationEffect(.degrees(-90))
-
-            Text(stressScore.score.formattedWithSeparator)
-                .font(.system(.title, design: .rounded, weight: .bold))
-                .monospacedDigit()
-                .foregroundStyle(.primary)
-                .accessibilityIdentifier("dashboard-stress-score-value")
-        }
-        .frame(width: gaugeSize, height: gaugeSize)
+    private var scoreValue: some View {
+        Text(stressScore.score.formattedWithSeparator)
+            .font(.system(.title, design: .rounded, weight: .bold))
+            .monospacedDigit()
+            .foregroundStyle(.primary)
+            .accessibilityIdentifier("dashboard-stress-score-value")
     }
 
     private var levelLabel: some View {
         Text(stressScore.level.displayName)
-            .font(.title2.weight(.semibold))
+            .font(.headline.weight(.semibold))
             .foregroundStyle(levelColor)
             .fixedSize(horizontal: false, vertical: true)
     }
@@ -124,6 +111,7 @@ struct CumulativeStressCard: View {
                 .accessibilityIdentifier("dashboard-stress-analysis-toggle")
         }
         .tint(levelColor)
+        .frame(minHeight: 44)
     }
 
     @ViewBuilder

@@ -13,20 +13,15 @@ struct TodayBriefCard: View {
     let onRequestLocationPermission: () -> Void
 
     @Environment(\.appTheme) private var theme
-    @Environment(\.horizontalSizeClass) private var sizeClass
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-
-    private var isRegular: Bool { sizeClass == .regular }
 
     var body: some View {
         DashboardSupportCard {
-            VStack(alignment: .leading, spacing: 12) {
-                HStack(spacing: 10) {
+            VStack(alignment: .leading, spacing: 8) {
+                HStack(spacing: 6) {
                     Image(systemName: "cloud.sun.fill")
-                        .font(.system(size: 18, weight: .semibold))
+                        .font(.subheadline.weight(.semibold))
                         .foregroundStyle(theme.accentColor)
-                        .frame(width: 38, height: 38)
-                        .background(theme.accentColor.opacity(0.17), in: RoundedRectangle(cornerRadius: 12))
                         .accessibilityHidden(true)
 
                     VStack(alignment: .leading, spacing: 2) {
@@ -59,23 +54,24 @@ struct TodayBriefCard: View {
     private var weatherRow: some View {
         if let snapshot = weatherSnapshot {
             Button(action: onOpenWeatherDetail) {
-                VStack(alignment: .leading, spacing: 8) {
-                    HStack(spacing: 12) {
+                VStack(alignment: .leading, spacing: 6) {
+                    HStack(spacing: 6) {
                         Image(systemName: snapshot.condition.sfSymbol)
-                            .font(isRegular ? .largeTitle : .title)
+                            .font(.title3)
                             .foregroundStyle(snapshot.condition.iconColor(for: theme))
                             .symbolRenderingMode(.multicolor)
-                            .frame(width: 48, height: 48)
+                            .frame(width: 26)
                             .accessibilityHidden(true)
 
                         VStack(alignment: .leading, spacing: 2) {
-                            Text(temperatureText(snapshot))
-                                .font(.system(.title2, design: .rounded, weight: .bold))
-                                .monospacedDigit()
-
-                            Text(snapshot.condition.label)
-                                .font(.subheadline)
-                                .foregroundStyle(theme.secondaryTextColor)
+                            ViewThatFits(in: .horizontal) {
+                                HStack(alignment: .firstTextBaseline, spacing: 6) {
+                                    temperatureAndCondition(snapshot)
+                                }
+                                VStack(alignment: .leading, spacing: 2) {
+                                    temperatureAndCondition(snapshot)
+                                }
+                            }
 
                             if abs(snapshot.temperature - snapshot.feelsLike) >= 3 {
                                 Text("Feels \(Int(snapshot.feelsLike))°")
@@ -92,14 +88,20 @@ struct TodayBriefCard: View {
                     }
 
                     if dynamicTypeSize.isAccessibilitySize {
-                        VStack(alignment: .leading, spacing: 6) {
+                        VStack(alignment: .leading, spacing: 4) {
                             if let aq = snapshot.airQuality { airQualityBadge(aq) }
                             fitnessBadge(for: snapshot)
                         }
                     } else {
-                        HStack(spacing: 6) {
-                            if let aq = snapshot.airQuality { airQualityBadge(aq) }
-                            fitnessBadge(for: snapshot)
+                        ViewThatFits(in: .horizontal) {
+                            HStack(spacing: 6) {
+                                if let aq = snapshot.airQuality { airQualityBadge(aq) }
+                                fitnessBadge(for: snapshot)
+                            }
+                            VStack(alignment: .leading, spacing: 4) {
+                                if let aq = snapshot.airQuality { airQualityBadge(aq) }
+                                fitnessBadge(for: snapshot)
+                            }
                         }
                     }
                 }
@@ -110,11 +112,11 @@ struct TodayBriefCard: View {
             .accessibilityIdentifier("dashboard-weather-card")
         } else {
             Button(action: onRequestLocationPermission) {
-                HStack(spacing: 12) {
+                HStack(spacing: 6) {
                     Image(systemName: "cloud.fill")
                         .font(.title3)
                         .foregroundStyle(theme.secondaryTextColor)
-                        .frame(width: 48)
+                        .frame(width: 26)
 
                     VStack(alignment: .leading, spacing: 2) {
                         Text("Weather unavailable")
@@ -157,19 +159,19 @@ struct TodayBriefCard: View {
     }
 
     private func suggestionRow(icon: String, title: String?, message: String, color: Color) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 5) {
             Label("Today's Suggestion", systemImage: "lightbulb.fill")
                 .font(.caption.weight(.semibold))
                 .foregroundStyle(theme.secondaryTextColor)
 
-            HStack(alignment: .top, spacing: 10) {
+            HStack(alignment: .top, spacing: 6) {
                 Image(systemName: icon)
                     .font(.title3)
                     .foregroundStyle(color)
-                    .frame(width: 28)
+                    .frame(width: 20)
                     .accessibilityHidden(true)
 
-                VStack(alignment: .leading, spacing: 4) {
+                VStack(alignment: .leading, spacing: 2) {
                     if let title {
                         Text(title)
                             .font(.subheadline.weight(.semibold))
@@ -249,6 +251,16 @@ struct TodayBriefCard: View {
 
     private func temperatureText(_ snapshot: WeatherSnapshot) -> String {
         "\(Int(snapshot.temperature))°C"
+    }
+
+    @ViewBuilder
+    private func temperatureAndCondition(_ snapshot: WeatherSnapshot) -> some View {
+        Text(temperatureText(snapshot))
+            .font(.system(.title3, design: .rounded, weight: .bold))
+            .monospacedDigit()
+        Text(snapshot.condition.label)
+            .font(.subheadline)
+            .foregroundStyle(theme.secondaryTextColor)
     }
 
     private func fitnessBadge(for snapshot: WeatherSnapshot) -> some View {

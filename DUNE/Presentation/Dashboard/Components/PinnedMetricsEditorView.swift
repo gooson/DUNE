@@ -33,6 +33,7 @@ struct PinnedMetricsEditorView: View {
                             }
                         }
                         .buttonStyle(.plain)
+                        .accessibilityIdentifier("pinned-metrics-editor-row-\(category.rawValue)")
                         .disabled(!selectedSet.contains(category) && workingSelection.count >= TodayPinnedMetricsStore.maxPinnedCount)
                     }
                 } header: {

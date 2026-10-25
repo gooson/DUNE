@@ -1,7 +1,6 @@
 import SwiftUI
 
-/// The shared Today composition from the eight theme directions: one surface
-/// contains the score, its trend, the supporting signals, and a single detail destination.
+/// Today Compact keeps the score, trend, and baseline evidence in one detail destination.
 struct DesertHorizonConditionHeroView: View {
     let score: ConditionScore
     let trendBadges: [BaselineDetail]
@@ -83,25 +82,32 @@ struct DesertHorizonConditionHeroView: View {
 
     var body: some View {
         NavigationLink(value: score) {
-            VStack(alignment: .leading, spacing: 18) {
-                header
-                Rectangle()
-                    .fill(isDesert ? Color(red: 0.412, green: 0.341, blue: 0.278) : gold.opacity(0.25))
-                    .frame(height: 1)
-                trend
-                evidence
-                HStack(spacing: 6) {
-                    Spacer()
+            VStack(alignment: .leading, spacing: 12) {
+                HStack(alignment: .firstTextBaseline, spacing: 8) {
+                    Text("CONDITION")
+                        .font(.caption.weight(.bold))
+                        .tracking(1)
+                        .foregroundStyle(heroAccent)
+                    Spacer(minLength: 8)
                     Text("View Details")
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(heroAccent)
                     Image(systemName: "chevron.right")
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(heroAccent)
                         .accessibilityHidden(true)
                 }
-                .font(.subheadline.weight(.semibold))
-                .foregroundStyle(heroAccent)
-                .frame(minHeight: 44)
+                header
+                trend
+                if !trendBadges.isEmpty {
+                    Rectangle()
+                        .fill(isDesert ? Color(red: 0.412, green: 0.341, blue: 0.278) : gold.opacity(0.25))
+                        .frame(height: 1)
+                    evidence
+                }
             }
             .contentShape(Rectangle())
-            .padding(21)
+            .padding(16)
         }
         .buttonStyle(.plain)
         .accessibilityIdentifier("dashboard-hero-condition")
@@ -120,12 +126,18 @@ struct DesertHorizonConditionHeroView: View {
     private var header: some View {
         Group {
             if dynamicTypeSize.isAccessibilitySize {
-                VStack(alignment: .leading, spacing: 18) {
-                    ring
+                VStack(alignment: .leading, spacing: 6) {
+                    Text(score.score.formatted())
+                        .font(.largeTitle.weight(.semibold))
+                        .monospacedDigit()
+                        .foregroundStyle(ink)
+                        .accessibilityElement(children: .ignore)
+                        .accessibilityLabel(Text(scoreAccessibilityLabel))
+                        .accessibilityIdentifier("dashboard-hero-score")
                     statusText
                 }
             } else {
-                HStack(alignment: .center, spacing: 18) {
+                HStack(alignment: .center, spacing: 12) {
                     ring
                     statusText
                     Spacer(minLength: 0)
@@ -135,28 +147,25 @@ struct DesertHorizonConditionHeroView: View {
     }
 
     private var ring: some View {
-        TabHeroScoreRing(
-            progress: Double(score.score) / 100,
-            value: score.score.formatted(),
-            caption: "CONDITION",
+        CompactConditionRing(
+            score: score.score,
             ringColor: heroAccent,
             highlightColor: heroHighlight,
             tipColor: heroPositive,
             trackColor: isDesert ? Color(red: 0.435, green: 0.353, blue: 0.227) : heroAccent,
             textColor: ink,
-            secondaryTextColor: muted,
-            accessibilityLabel: "Condition score \(score.score), \(score.status.label)",
-            accessibilityIdentifier: "dashboard-hero-ring"
+            accessibilityLabel: scoreAccessibilityLabel
         )
+    }
+
+    private var scoreAccessibilityLabel: LocalizedStringKey {
+        "Condition score \(score.score), \(score.status.label)"
     }
 
     private var statusText: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text("Condition")
-                .font(.caption.weight(.bold))
-                .foregroundStyle(heroAccent)
             Text(score.status.guideMessage)
-                .font(.title3.weight(.bold))
+                .font(.headline.weight(.semibold))
                 .foregroundStyle(ink)
                 .fixedSize(horizontal: false, vertical: true)
             Text(adaptiveMessage?.message ?? score.narrativeMessage)
@@ -179,8 +188,8 @@ struct DesertHorizonConditionHeroView: View {
             }
             .foregroundStyle(ink)
 
-            if let hourlySparkline, hourlySparkline.points.count >= 2 {
-                HourlySparklineView(data: hourlySparkline, tintColor: heroHighlight, height: 72, usesTimelineAxis: true)
+            if let validHourlySparkline {
+                HourlySparklineView(data: validHourlySparkline, tintColor: heroHighlight, height: 48, usesTimelineAxis: true)
             } else if hasWeeklyTrend {
                 TrendChartView(
                     scores: weeklyTrendScores,
@@ -188,7 +197,7 @@ struct DesertHorizonConditionHeroView: View {
                     labelColor: muted,
                     referenceColor: muted.opacity(0.55)
                 )
-                    .frame(height: 126)
+                    .frame(height: 94)
             } else {
                 Text("Not enough data to show trend.")
                     .font(.subheadline)
@@ -200,26 +209,37 @@ struct DesertHorizonConditionHeroView: View {
     }
 
     private var trendPeriod: LocalizedStringKey {
-        if let hourlySparkline, hourlySparkline.points.count >= 2 {
-            return hourlySparkline.includesYesterday ? "24h" : "Today"
+        if let validHourlySparkline {
+            return validHourlySparkline.includesYesterday ? "24h" : "Today"
         }
         return hasWeeklyTrend ? "7d" : ""
     }
 
+    private var validHourlySparkline: HourlySparklineData? {
+        guard let hourlySparkline, hourlySparkline.points.count >= 2,
+              hourlySparkline.currentScore.isFinite,
+              hourlySparkline.points.last?.score.isFinite == true,
+              Int(hourlySparkline.currentScore.rounded()) == score.score,
+              Int((hourlySparkline.points.last?.score ?? -1).rounded()) == score.score else { return nil }
+        return hourlySparkline
+    }
+
     private var hasWeeklyTrend: Bool {
-        recentScores.count >= 2 && recentScores.first?.date != recentScores.last?.date
+        weeklyTrendScores.count >= 2
     }
 
     private var weeklyTrendScores: [ConditionScore] {
         let calendar = Calendar.current
-        let history = recentScores.filter { !calendar.isDate($0.date, inSameDayAs: score.date) }
+        let history = recentScores
+            .filter { !calendar.isDate($0.date, inSameDayAs: score.date) }
+            .sorted { $0.date > $1.date }
         return Array(([score] + history).prefix(7))
     }
 
     private var evidence: some View {
-        HStack(spacing: 8) {
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: 136), spacing: 8)], alignment: .leading, spacing: 8) {
             ForEach(Array(trendBadges.prefix(2).enumerated()), id: \.offset) { _, detail in
-                HStack(spacing: 4) {
+                VStack(alignment: .leading, spacing: 4) {
                     Text(detail.label)
                         .foregroundStyle(ink)
                     Text(detail.value.formattedWithSeparator(fractionDigits: detail.fractionDigits))
@@ -230,7 +250,6 @@ struct DesertHorizonConditionHeroView: View {
                 .padding(.vertical, 9)
                 .background(isDesert ? Color(red: 0.290, green: 0.251, blue: 0.208) : gold.opacity(0.12), in: RoundedRectangle(cornerRadius: 12))
             }
-            Spacer(minLength: 0)
         }
     }
 }

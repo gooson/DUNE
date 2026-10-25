@@ -493,6 +493,12 @@ final class DashboardViewModel {
         snapshot: SharedHealthSnapshot?,
         canQueryHealthKit: Bool
     ) async -> (metrics: [HealthMetric], failed: Bool) {
+#if DEBUG
+        if Self.shouldUseSeededUITestFixtures,
+           ProcessInfo.processInfo.arguments.contains("--ui-today-workout-row-fixture") {
+            return (TestDataSeeder.todayWorkoutRowFixture(), false)
+        }
+#endif
         // HealthKit first — provides rich per-type cards
         if canQueryHealthKit {
             do { return (try await fetchExerciseData(), false) }
