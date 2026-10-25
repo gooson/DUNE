@@ -47,7 +47,7 @@ Changed files (최대 10개):
 - `DUNE/Presentation/Shared/Models/WeeklyHeroTrendPoint.swift`
 - `DUNETests/LifeHeroTrendTests.swift`
 - `DUNETests/WeeklyHeroTrendPointTests.swift`
-- +72 more (native PNG, evidence, maps and tests)
+- +74 more (native PNG, evidence, maps and tests)
 
 ## 검증 범위와 실패 처리
 
