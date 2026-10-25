@@ -1,8 +1,8 @@
 ---
 topic: today-scroll-root-cause
 date: 2026-10-24
-status: in-progress
-confidence: high for confirmed defects; unresolved for full top return
+status: completed
+confidence: high — isolated inspector host and verified original failing gestures
 related_solutions:
   - docs/solutions/performance/2026-10-16-today-scroll-top-settling.md
   - docs/solutions/performance/2026-10-17-today-native-pull-scroll-lock.md
@@ -36,6 +36,7 @@ related_brainstorms: []
 
 | 파일 | 변경 |
 |---|---|
+| `DUNE/App/ContentView.swift` | Today NavigationStack 외부에 inspector와 배타적 metric/QA 상태 소유 |
 | `DUNE/Presentation/Dashboard/DashboardView.swift` | 자연 스크롤에 개입하는 보정 제거, 필요한 host/anchor 교정 |
 | `DUNE/Presentation/Shared/Components/WaveRefreshTaskCoordinator.swift`, `WaveRefreshIndicator.swift` | native caller와 화면 소유 refresh 취소 분리 |
 | `DUNETests/WaveRefreshTaskCoordinatorTests.swift` | 취소·중복 실행4개 계약 검증 |
@@ -48,7 +49,7 @@ related_brainstorms: []
 
 1. 수정 전 새 부분 스크롤 테스트와 영상/trace를 수집한다. 앱 source는 빌드 중 동결한다.
 2. phase 기반 자동 이동을 제거하고 재현 테스트 및 기존 상단 복귀 테스트로 차이를 확인한다.
-3. native 복귀 결함이 남으면 host/edge 구조만 원인별 실험한다. 같은 실패는 원인에 대응한 변화 후 최대 1회 재시도한다.
+3. native 복귀 결함이 남으면 host/edge 구조만 원인별 실험한다. 반복 실패 뒤 사용자에게 받은 추가 원인 격리 승인을 적용한다. inspector·toolbar·refresh·배경·콘텐츠를 독립 비교한다.
 4. 최종 소스의 targeted Today UI와 공통 smoke, iOS 빌드를 실행하고 T03 새 PNG를 확인한다.
 5. 5관점 리뷰, SwiftUI·Apple UX 품질 검토, 해결책 기록 후 PR 생성·머지한다.
 
@@ -70,17 +71,21 @@ related_brainstorms: []
 
 | Phase | 상태 | 증거 |
 |---|---|---|
-| 0 Initialization | completed | 시작 worktree clean, detached HEAD에서 `codex/today-scroll-root-cause` 생성; 최초 test 변경은 이번 debug 작업 산출물 |
-| 1 Plan | completed | 이 계획서와 관련 solution·공식 API·코드 조사 |
-| 2 Work | in_progress | c3500bcb 구현·빌드·unit4 통과. 깊은 상단 복귀 결함 잔존 |
-| 2.5 UI | failed | c3500bcb targeted iPhone8=6pass2fail; iPad/Duo 미실행. 동일 경로 재시도 중단 |
-| 3 Review | pending | UI 게이트 실패로 진입 보류 |
-| 3.5 Quality | pending | Work의 SwiftUI·Apple UX·app 품질·UI 테스트 검토 완료; 최종 실행 한계 미해결 |
-| 4 Resolve | pending | 리뷰 대기 |
-| 5 Compound | pending | 조사 기록은 생성했으나 해결 완료 게이트 미충족 |
-| 5.5 Pre-Ship | pending | 게이트 대기 |
-| 6 Ship | pending | 게이트 대기 |
+| 0 Initialization | completed | 작업 브랜치 `codex/today-scroll-root-cause`; 삭제된 checkout은 저장된 브랜치에서 동일 경로로 복구 |
+| 1 Plan | completed | 관련 solution·공식 API·코드·사용자 영상 분석과 이 계획서 |
+| 2 Work | completed | inspector 소유자 이동 f356c479, main 통합 ef42c58e; 양쪽 정상 pre-commit iOS build 성공 |
+| 2.5 UI | completed | main 통합 후 iPhone10·iPad4·Duo접힘2·펼침2 통과, 내부 디스플레이 native 캡처용 추가1건 통과 |
+| 3 Review | completed | Security·Performance·Architecture·Data Integrity·Simplicity 각각 P1/P2/P3=0, Localization0; agent 파일 변경 없어 Agent-Native 제외 |
+| 3.5 Quality | completed | SwiftUI·Apple UX·app-quality 각각 도입 결함0; 성능 대량 데이터 처리 변경 없어 perf-optimizer 제외 |
+| 4 Resolve | completed | Review findings P1=0/P2=0/P3=0으로 추가 소스 수정 없음. main 통합 빌드 통과 |
+| 5 Compound | completed | solution과 실제 캡처7장, 원본 영수증·소스 해시·리뷰 기록 저장 |
+| 5.5 Pre-Ship | pending | 최종 실행 영수증과 문서 커밋 후 진행 |
+| 6 Ship | pending | PR 생성·원격 merge는 검증 게이트 이후 수행, 결과는 실행 보고서에 기록 |
 
-## 추가 원인 격리 대기
+## 원인 격리 결과
 
-강제 idle 보정과 refresh caller 취소는 trace로 확인했다. Reader/zero anchor 제거는 단독 실험에서 full-swipe1회 통과했지만 최종8건에서 다시2건 실패하여 확정 해결로 보지 않는다. 화면 밖AX조회를 교정하고 느린 held pan을 사용해도 수동 복귀 실패는 남았다. 같은 실행 경로는 adapter 재시도 제한에 따라 중단했다. 사용자에게 이번 작업의 추가 원인 격리 예외를 질문했으며, 응답 전에는 추가 실행하지 않는다. 후보는 static NavigationStack/ScrollView에서 wave modifier 유무 비교와 native title mode/offset/inset 동시 측정이다.
+사용자가 재시도 제한을 풀고 추가 격리를 승인했다. 기본 ScrollView에 refresh 없음·native·wave는 정상 복귀했고, 실제 Today에서 refresh·ScrollPosition·배경·toolbar를 각각 제외해도 실패가 남았다. 본문을 고정 Text로 바꾸고 inspector를 유지해도 실패했다. inspector만 제거한 실제 Today는 반복 복귀와 held pull 모두 초기 위치와 일치했다.
+
+따라서 inspector를 기능에서 없애지 않고 Today NavigationStack 바깥으로 옮겼다. metric/QA 선택을 ContentView에 올리고 Dashboard의 callback으로 연다. 기존 실패했던 수동/전체 스크롤 검사는 제스처나 ±12pt 허용 범위를 완화하지 않고 통과했다. 경고 메시지의 발신자는 QuartzCore이며 경고 전체 제거를 성공 조건으로 삼지 않는다. 자세한 native trace·대조군과 적용 소스는 [해결책](../solutions/performance/2026-10-24-today-scroll-root-cause.md)에 있다.
+
+TodoWrite 도구가 없는 런타임에서는 `.codex-checks/scroll-proof/pipeline.json`으로 Phase 상태와 증거를 유지한다. 리뷰 역할의 지정 모델이 런타임에 없어 현재 주 에이전트 모델을 상속했고, 5관점 및 전문 에이전트는 실제로 각각 실행했다.

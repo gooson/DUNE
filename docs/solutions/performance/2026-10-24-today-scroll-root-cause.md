@@ -4,7 +4,7 @@ category: performance
 date: 2026-10-24
 updated: 2026-10-25
 severity: important
-status: verifying
+status: resolved
 related_files:
   - DUNE/App/ContentView.swift
   - DUNE/Presentation/Dashboard/DashboardView.swift
@@ -19,7 +19,7 @@ related_solutions:
 
 # Today 스크롤 점프: 닫힌 inspector의 큰 제목·safe area 피드백
 
-> 2026-10-25: 마지막 원인을 inspector host로 격리했다. inspector를 Today NavigationStack 밖으로 옮긴 최종 iPhone targeted UI 10건이 모두 통과했다. 이전 실패의 원래 위치 ±12pt 검사와 제스처는 변경하지 않았다. iPad 검증·최종 리뷰는 진행 중이다.
+> 2026-10-25: 마지막 원인을 inspector host로 격리했다. inspector를 Today NavigationStack 밖으로 옮긴 최종 iPhone targeted UI 10건이 모두 통과했다. 이전 실패의 원래 위치 ±12pt 검사와 제스처는 변경하지 않았다. 최신 main 통합 후에도 iPhone10·iPad4가 통과했으며, 5관점·SwiftUI·Apple UX·app 품질 리뷰에서 도입된 결함은 없었다. Duo 접힘2·펼침2도 통과했다.
 
 ## Problem
 
@@ -77,9 +77,13 @@ Native refresh는 화면 소유 MainActor coordinator의 task로 실행한다. t
 - coordinator source/test는 변경되지 않았으며 exact-byte 임시 macOS SwiftPackage의 Swift Testing4/4 성공을 재사용한다. iOS simulator unit 성공으로 표현하지 않는다.
 - 부분 드래그는 interacting→idle 경로다. 제거된 decelerating callback은 별도의 native trace와 full swipe로 확인했다.
 - 테스트 전용 counter는 refresh wrapper 완료이며 실제 HealthKit 데이터 조회 성공을 뜻하지 않는다.
-- iPad 검증과 최종 리뷰는 진행 중이다. full iOS/Watch suite 성공을 주장하지 않는다.
+- main 통합 `ef42c58e`에서 iPhone10/10·iPad4/4를 다시 확인했다. iPad는 manual/full 복귀와 metric 열기·닫기·재열기·All Data, QA 열기를 검증했다. Duo 외부·내부 화면에서 manual 복귀와 metric 경로가 각각2/2 통과했다. 내부 화면의 검은 XCTest 첨부를 보완하려고 manual 캡처1건을 추가 실행해 통과했다. full iOS/Watch suite 성공을 주장하지 않는다.
+- 정상 pre-commit 훅의 `scripts/build-ios.sh --no-regen`은 inspector 수정 및 main 통합에서 모두 성공했다.
+- Security·Performance·Architecture·Data Integrity·Simplicity 및 SwiftUI·Apple UX·app-quality 리뷰 모두 도입된 P1/P2/P3 결함0. QA 닫기·새로고침 중 화면 이탈·VoiceOver의 실제 UI 실행은 이번 선택 테스트 범위가 아니다.
 
 ### Evidence
+
+- [버전 관리된 원본 갤러리·실행 영수증·소스 해시·리뷰 기록](../../design/full-redesign-map/review/today-scroll-root-cause-2026-10-25/README.md). Duo 내부는 활성 display3의 native 캡처이며 힌지 각도 readback 제한을 별도로 기록했다.
 
 - `/tmp/scroll-debug/isolation-ui.log`, `isolation2-ui.log`, `isolation3-ui.log`: 구성별 AX 위치
 - `/tmp/scroll-debug/isolation3-native.log`: 동일 window 좌표의 inspector 격리
