@@ -64,8 +64,37 @@ final class TodayReadingUITests: SeededUITestBaseCase {
         ] {
             launchReading(style: style, largeText: largeText)
             inspect()
-            addScreenshotAttachment(named: "TodayReading-\(section)-\(suffix)")
+            captureReading("TodayReading-\(section)-\(suffix)")
         }
+    }
+
+    private func captureReading(_ name: String) {
+        if ProcessInfo.processInfo.environment["DUNE_VISUAL_AUDIT_HOST_ONLY"] == "1" {
+            VisualAudit.capture(name)
+        } else {
+            addScreenshotAttachment(named: name)
+        }
+    }
+
+    func testCurrentDeviceReadingCards() {
+        navigateToDashboard()
+        reveal(Fixture.sleepValue)
+        captureReading("TodayReading-sleep-current")
+        reveal(Fixture.sleepChart)
+        captureReading("TodayReading-sleep-chart-current")
+        reveal(Fixture.stressValue)
+        captureReading("TodayReading-stress-current")
+        reveal(Fixture.stressToggle)
+        app.buttons[Fixture.stressToggle].firstMatch.tap()
+        reveal(Fixture.stressContributions)
+        captureReading("TodayReading-stress-analysis-current")
+        reveal(Fixture.digestCondition)
+        reveal(Fixture.digestSteps)
+        captureReading("TodayReading-digest-current")
+        reveal(Fixture.digestToggle)
+        app.buttons[Fixture.digestToggle].firstMatch.tap()
+        reveal(Fixture.digestSummary)
+        captureReading("TodayReading-digest-summary-current")
     }
 
     func testRecoverySleepRendersAndCapturesVariants() {
@@ -80,7 +109,7 @@ final class TodayReadingUITests: SeededUITestBaseCase {
         navigateToDashboard()
         reveal(Fixture.sleepChart)
         XCTAssertTrue(waitForReadingElement(Fixture.sleepChart), "Seeded sleep history should render")
-        addScreenshotAttachment(named: "TodayReading-sleep-chart-light")
+        captureReading("TodayReading-sleep-chart-light")
         reveal(Fixture.sleepDetails)
         app.buttons[Fixture.sleepDetails].firstMatch.tap()
         XCTAssertTrue(waitForReadingElement("metric-detail-screen-sleep"), "Sleep Details should open the metric detail")
@@ -142,5 +171,6 @@ final class TodayReadingUITests: SeededUITestBaseCase {
         reveal(Fixture.digestSummary)
         XCTAssertTrue(waitForReadingElement(Fixture.digestSummary),
                       "Notification summary should preserve the original text")
+        captureReading("TodayReading-notification-digest")
     }
 }
