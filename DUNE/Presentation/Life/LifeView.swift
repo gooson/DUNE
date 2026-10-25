@@ -257,6 +257,7 @@ private struct HabitListQueryView: View {
     @Query(sort: \ExerciseRecord.date, order: .reverse) private var exerciseRecords: [ExerciseRecord]
 
     @Bindable var viewModel: LifeViewModel
+    @Environment(\.scenePhase) private var scenePhase
     let refreshSignal: Int
     let onOpenChecklist: () -> Void
 
@@ -339,6 +340,15 @@ private struct HabitListQueryView: View {
             recalculate()
         }
         .onChange(of: refreshSignal) { _, _ in
+            recalculate()
+        }
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active { recalculate() }
+        }
+        .onReceive(NotificationCenter.default.mainThreadPublisher(for: .NSCalendarDayChanged)) { _ in
+            recalculate()
+        }
+        .onReceive(NotificationCenter.default.mainThreadPublisher(for: .NSSystemTimeZoneDidChange)) { _ in
             recalculate()
         }
         .onChange(of: viewModel.isShowingEditSheet) { old, new in
@@ -496,7 +506,7 @@ private struct HabitListQueryView: View {
     }
 
     private var activeCategories: [HabitIconCategory] {
-        let used = Set(viewModel.habitProgresses.map(\.iconCategory))
+        let used = Set(viewModel.habitProgresses.filter { !$0.isAutoLinked }.map(\.iconCategory))
         return HabitIconCategory.allCases.filter { used.contains($0) }
     }
 
@@ -543,8 +553,8 @@ private struct HabitListQueryView: View {
         return progresses.filter { $0.iconCategory == filter }
     }
 
-    private var groupedProgresses: [(timeOfDay: HabitTimeOfDay, items: [HabitProgress])] {
-        let grouped = Dictionary(grouping: filteredProgresses(viewModel.todayHabitProgresses), by: \.timeOfDay)
+    private func groupedProgresses(_ progresses: [HabitProgress]) -> [(timeOfDay: HabitTimeOfDay, items: [HabitProgress])] {
+        let grouped = Dictionary(grouping: progresses, by: \.timeOfDay)
         return HabitTimeOfDay.allCases
             .compactMap { timeOfDay in
                 guard let items = grouped[timeOfDay], !items.isEmpty else { return nil }
@@ -574,29 +584,27 @@ private struct HabitListQueryView: View {
                         categoryFilterSection
                     }
 
-                    VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-                        habitGroupHeader("Today's Habits", count: filteredProgresses(viewModel.todayHabitProgresses).count)
-                        if viewModel.todayHabitProgresses.isEmpty && selectedCategoryFilter == nil {
-                            Text("No habits due today")
-                                .font(.subheadline)
-                                .foregroundStyle(.secondary)
-                                .fixedSize(horizontal: false, vertical: true)
-                        }
-                        ForEach(groupedProgresses, id: \.timeOfDay) { group in
-                            if groupedProgresses.count > 1 || group.timeOfDay != .anytime {
-                                timeOfDayHeader(group.timeOfDay, count: group.items.count)
+                    let today = filteredProgresses(viewModel.todayHabitProgresses)
+                    if !today.isEmpty || selectedCategoryFilter == nil {
+                        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                            habitGroupHeader("Today's Habits", count: today.count)
+                            if today.isEmpty {
+                                Text("No habits due today")
+                                    .font(.subheadline)
+                                    .foregroundStyle(.secondary)
+                                    .fixedSize(horizontal: false, vertical: true)
                             }
-                            habitRows(group.items)
+                            timeOfDayRows(today)
                         }
+                        .accessibilityElement(children: .contain)
+                        .accessibilityIdentifier("life-habit-group-today")
                     }
-                    .accessibilityElement(children: .contain)
-                    .accessibilityIdentifier("life-habit-group-today")
 
                     let weekly = filteredProgresses(viewModel.weeklyHabitProgresses)
                     if !weekly.isEmpty {
                         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
                             habitGroupHeader("Weekly Habits", count: weekly.count)
-                            habitRows(weekly)
+                            timeOfDayRows(weekly)
                         }
                         .accessibilityElement(children: .contain)
                         .accessibilityIdentifier("life-habit-group-weekly")
@@ -606,10 +614,16 @@ private struct HabitListQueryView: View {
                     if !upcoming.isEmpty {
                         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
                             habitGroupHeader("Upcoming Habits", count: upcoming.count)
-                            habitRows(upcoming)
+                            timeOfDayRows(upcoming)
                         }
                         .accessibilityElement(children: .contain)
                         .accessibilityIdentifier("life-habit-group-upcoming")
+                    }
+                    if selectedCategoryFilter != nil && today.isEmpty && weekly.isEmpty && upcoming.isEmpty {
+                        Text("No habits match this filter")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                            .fixedSize(horizontal: false, vertical: true)
                     }
                 }
 
@@ -648,6 +662,16 @@ private struct HabitListQueryView: View {
                 .foregroundStyle(.secondary)
         }
         .padding(.top, DS.Spacing.xs)
+    }
+
+    private func timeOfDayRows(_ progresses: [HabitProgress]) -> some View {
+        let groups = groupedProgresses(progresses)
+        return ForEach(groups, id: \.timeOfDay) { group in
+            if groups.count > 1 || group.timeOfDay != .anytime {
+                timeOfDayHeader(group.timeOfDay, count: group.items.count)
+            }
+            habitRows(group.items)
+        }
     }
 
     private func habitRows(_ progresses: [HabitProgress]) -> some View {
