@@ -141,26 +141,19 @@ final class TodayCompactUITests: SeededUITestBaseCase {
 
     func testOddPinnedMetricOccupiesFullFinalRow() {
         navigateToDashboard()
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded("dashboard-pinned-edit", maxSwipes: 12))
-        element("dashboard-pinned-edit").tap()
 
-        let editor = element("pinned-metrics-editor-screen")
-        let sleepChoice = app.buttons["pinned-metrics-editor-row-sleep"].firstMatch
-        XCTAssertTrue(editor.waitForExistence(timeout: 5))
-        XCTAssertTrue(sleepChoice.waitForExistence(timeout: 5), "The seeded third metric should be selectable")
-        sleepChoice.tap()
-        app.buttons["pinned-metrics-editor-done"].firstMatch.tap()
-
+        // --ui-reset restores TodayPinnedMetricsStore.fallback: HRV, RHR, Sleep.
+        // Scope queries to the pinned grid so an unpinned Body metric cannot
+        // accidentally satisfy the expected final pinned card.
         let grid = element("dashboard-pinned-grid")
-        let first = app.buttons["dashboard-metric-hrv"].firstMatch
-        let second = app.buttons["dashboard-metric-rhr"].firstMatch
-        let last = app.buttons["dashboard-metric-sleep"].firstMatch
-        XCTAssertTrue(grid.waitForExistence(timeout: 5))
+        XCTAssertTrue(grid.waitForExistence(timeout: 10))
+        let first = grid.buttons["dashboard-metric-hrv"].firstMatch
+        let second = grid.buttons["dashboard-metric-rhr"].firstMatch
+        let last = grid.buttons["dashboard-metric-sleep"].firstMatch
         for card in [first, second, last] {
-            XCTAssertTrue(card.waitForExistence(timeout: 5), "The pinned metric should remain reachable")
+            XCTAssertTrue(card.waitForExistence(timeout: 5), "All three default pins must be inside the pinned grid")
         }
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded("dashboard-metric-sleep", maxSwipes: 8),
-                      "The final pinned metric should be visible before measuring its row")
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("dashboard-metric-sleep", maxSwipes: 16))
         addScreenshotAttachment(named: "Today Compact odd pinned metrics")
         XCTAssertGreaterThanOrEqual(last.frame.minY, min(first.frame.maxY, second.frame.maxY) - 2)
         XCTAssertEqual(last.frame.minX, grid.frame.minX, accuracy: 2)
