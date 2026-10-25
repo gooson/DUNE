@@ -10,6 +10,7 @@ struct RecoverySleepCard: View {
     let onDismissInsight: (String) -> Void
 
     @ScaledMetric(relativeTo: .caption) private var historyHeight: CGFloat = 112
+    @ScaledMetric(relativeTo: .caption) private var axisEdgePadding: CGFloat = DS.Spacing.sm
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
@@ -131,7 +132,7 @@ struct RecoverySleepCard: View {
                         .foregroundStyle(DS.Color.sleep)
                         .cornerRadius(3)
                     }
-                    .chartYScale(range: .plotDimension(padding: DS.Spacing.sm))
+                    .chartYScale(range: .plotDimension(padding: axisEdgePadding))
                     .chartXAxis {
                         AxisMarks(values: .stride(by: .day)) { _ in
                             AxisValueLabel(format: .dateTime.weekday(.narrow))
