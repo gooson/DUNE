@@ -235,6 +235,13 @@ enum TestDataSeeder {
         if ProcessInfo.processInfo.arguments.contains("--ui-hero-rhythm-fixtures") {
             seedHeroRhythmHistory(into: context)
         }
+        if ProcessInfo.processInfo.arguments.contains("--ui-hero-rhythm-auto-only") {
+            let habits = (try? context.fetch(FetchDescriptor<HabitDefinition>())) ?? []
+            for habit in habits {
+                habit.isAutoLinked = true
+                habit.autoLinkSourceRaw = "exercise"
+            }
+        }
         if ProcessInfo.processInfo.arguments.contains("--ui-visual-posture-fixtures") {
             seedVisualPostureFixtures(into: context)
         }

@@ -49,8 +49,7 @@ struct LifeHeroTrendTests {
                 log(id: manualID, day: 26, value: 2),
                 log(id: manualID, day: 27, value: 2) // Future record.
             ],
-            referenceDate: date(25),
-            calendar: calendar
+            referenceDate: date(25)
         )
 
         #expect(points.map(\.date) == (19...25).map { date($0) })
@@ -64,8 +63,7 @@ struct LifeHeroTrendTests {
         let points = LifeHeroTrend.points(
             habits: [habit(id: manualID, created: 24), habit(id: autoID, created: 20, auto: true)],
             logs: [log(id: autoID, day: 24), log(id: manualID, day: 25, auto: true)],
-            referenceDate: date(25),
-            calendar: calendar
+            referenceDate: date(25)
         )
 
         #expect(points.count == 7)
@@ -78,8 +76,7 @@ struct LifeHeroTrendTests {
         let points = LifeHeroTrend.points(
             habits: [habit(id: id, created: 20, auto: true)],
             logs: [log(id: id, day: 24)],
-            referenceDate: date(25),
-            calendar: calendar
+            referenceDate: date(25)
         )
         #expect(points.count == 7)
         #expect(points.allSatisfy { $0.value == nil })

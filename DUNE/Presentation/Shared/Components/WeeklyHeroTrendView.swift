@@ -110,7 +110,7 @@ struct WeeklyHeroTrendView: View {
     }
 }
 
-#Preview("Recorded values and a missing day") {
+#Preview("No recorded history") {
     WeeklyHeroTrendView(
         points: WeeklyHeroTrendPoint.readinessHistory(samples: [], current: nil),
         title: "Recorded Readiness",

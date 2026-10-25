@@ -41,9 +41,9 @@ enum LifeHeroTrend {
     static func points(
         habits: [LifeHeroHabitSnapshot],
         logs: [LifeHeroLogSnapshot],
-        referenceDate: Date = Date(),
-        calendar: Calendar = .current
+        referenceDate: Date = Date()
     ) -> [WeeklyHeroTrendPoint] {
+        let calendar = Calendar.current
         let manualHabits = habits.filter { !$0.isAutoLinked }
         let earliestCreation = manualHabits.map { calendar.startOfDay(for: $0.createdAt) }.min()
         let habitsByID = Dictionary(manualHabits.map { ($0.analyticsHabit.id, $0) }, uniquingKeysWith: { _, last in last })
@@ -293,7 +293,7 @@ private struct HabitListQueryView: View {
         VStack(alignment: .leading, spacing: DS.Spacing.lg) {
             // Hero: completion rate
             Group {
-                if habits.isEmpty {
+                if habits.allSatisfy(\.isAutoLinked) {
                     starterSection
                 } else {
                     heroSection
@@ -1100,8 +1100,8 @@ private struct HabitListQueryView: View {
     }
 
     private func lifeSummaryMetric(_ value: Int, title: LocalizedStringKey) -> some View {
-        HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xxs) {
-            Text(value.formatted())
+        HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xs) {
+            Text(value.formattedWithSeparator)
                 .font(.subheadline.weight(.bold))
                 .foregroundStyle(theme == .desertWarm ? DesertPalette.ink : theme.directionPreviewTextColor)
             Text(title)

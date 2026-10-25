@@ -68,10 +68,37 @@ final class HeroRhythmUITests: SeededUITestBaseCase {
         navigateToActivity()
         let activityTrend = waitForElement("activity-hero-trend", timeout: 15)
         assertSparseExplanation(activityTrend, title: "Activity")
+        capture("A01-sparse-recorded-history")
 
         navigateToLife()
         let lifeTrend = waitForElement("life-hero-trend", timeout: 15)
         assertSparseExplanation(lifeTrend, title: "Life")
+        capture("L01-sparse-recorded-history")
+    }
+
+    func testAutoOnlyHabitsShowStarterInsteadOfZeroProgress() {
+        var configuration = launchConfiguration
+        configuration.initialTabSelectionArgument = "life"
+        configuration.additionalArguments += ["--ui-hero-rhythm-auto-only"]
+        launchApp(with: configuration)
+        XCTAssertTrue(app.hasPrimaryNavigation(timeout: 15))
+        navigateToLife()
+
+        XCTAssertTrue(waitForElement(AXID.lifeHeroProgress, timeout: 15).exists)
+        XCTAssertFalse(app.descendants(matching: .any)["life-hero-ring"].firstMatch.exists,
+                       "Auto-linked habits must not produce a manual 0/0 ring")
+        XCTAssertFalse(app.descendants(matching: .any)["life-hero-trend"].firstMatch.exists,
+                       "Auto-linked habits must not produce a manual completion trend")
+        capture("L01-auto-only-starter")
+        let add = app.buttons["life-toolbar-add"].firstMatch
+        XCTAssertTrue(add.isHittable, "The add menu should remain reachable from the starter state")
+        add.tap()
+        let template = app.buttons["life-toolbar-template"].firstMatch
+        XCTAssertTrue(template.waitForExistence(timeout: 5),
+                      "Habit templates should remain available after opening the add menu")
+        template.tap()
+        XCTAssertTrue(waitForElement("habit-template-list", timeout: 5).exists,
+                      "Habit templates should open from the starter state")
     }
 
     func testCaptureA01KoreanHero() {
@@ -156,8 +183,9 @@ final class HeroRhythmUITests: SeededUITestBaseCase {
         let name = "\(mapID)-\(style)-ko-\(size)"
         XCTAssertTrue(waitForElement(root, timeout: 15).exists)
         capture(name + "-overview")
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded(trend, maxSwipes: 4),
-                      "\(name): recorded trend should remain visible after scrolling")
+        let lastDay = "\(trend)-day-6"
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(lastDay, maxSwipes: 10),
+                      "\(name): the last recorded day should remain reachable after scrolling")
         XCTAssertTrue(waitForElement(trend, timeout: 5).exists)
         capture(name + "-history")
     }
