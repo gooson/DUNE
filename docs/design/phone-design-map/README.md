@@ -111,3 +111,8 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 ## 2026-10-25 L01 습관 일정 분리 · 캡처 대기
 
 오늘/주간/다가오는 습관을 분리하고 오늘 집계를 실제 당일 대상으로 제한했다. [새 L01 캡처 25장과 출처](actual/life-schedule-2026-10-25/index.html)를 일반 iPhone·iPad·Duo 외부/내부에서 수집해 L01 이미지·기기 갤러리·Life 보드·비교·통합 포털을 갱신했다. 관련 Life UI는 반복을 포함해 22개 통과했다. iPad의 Upcoming은 전체 그룹이 viewport 안에 들어오도록 촬영 위치를 보정한 후 해당 selector만 재검증했다. 일반 iPhone 공통 smoke의 별도 알림 검사 2개 실패는 [검증 기록](../../reviews/2026-10-25-today-habit-schedule.md)에 남겼다. 새 일정 fixture의 기본 4개 viewport와 iPhone/iPad/Duo 내부의 히어로 밝음·어두움·최대 글씨만 확인했으며 모든 그룹·테마·글씨 조합을 완료로 표시하지 않는다. Duo는 활성 LCD/LCD-1, 새 AX/window와 native PNG를 확인했지만 현재 Xcode CLI에 각도 조회가 없어 수치 힌지 각도는 미검증이다. Watch는 Life 화면을 공유하지 않아 영향이 없다.
+
+
+## 2026-10-26 T03 진행·브리핑 최종 Ship 캡처
+
+[새 실제 iPhone PNG 6장](../full-redesign-map/review/today-progress-brief-2026-10-26/index.html)을 통합 포털에 연결했다. 낮12시·한국어·밝음/어두움의 두 카드와 최대 글씨 진행 타일을 전용 iPhone에서 검사해 2/2 통과했다. 회복·수면은 최신 main 구현을 채택했고 2026-10-24 갤러리는 과거 자료로 분리했다. iPad·Duo의 T03·다른 테마·브리핑 최대 글씨는 이번 Ship 범위 밖의 미갱신 상태다. 기존 이미지를 새 증거로 사용하지 않으며 해당 기기의 관련 selector 실행 후 갱신한다.

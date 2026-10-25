@@ -135,7 +135,7 @@ struct DailyProgressRingCard: View {
                 .strokeBorder(theme == .desertWarm ? DesertPalette.border : theme.secondaryTextColor.opacity(0.2), lineWidth: 1)
         }
         .accessibilityElement(children: .contain)
-        .accessibilityValue(Text("\(Int(clampedProgress * 100)) percent"))
+        .accessibilityValue(Text(clampedProgress, format: .percent.precision(.fractionLength(0))))
         .accessibilityIdentifier(identifier)
     }
 }

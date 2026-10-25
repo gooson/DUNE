@@ -1,6 +1,6 @@
 import XCTest
 
-/// Captures and checks the three support cards below the Today hero.
+/// Captures the progress and briefing cards; sleep recovery is covered by TodayReadingUITests.
 @MainActor
 final class TodaySupportCardsUITests: SeededUITestBaseCase {
     func testDesertTodayProgressAtMaximumAccessibilityTextSize() throws {
@@ -105,33 +105,20 @@ final class TodaySupportCardsUITests: SeededUITestBaseCase {
             XCTAssertTrue(brief.frame.width > 0, "\(style): Today's Brief should have a visible frame")
             assertSameHorizontalEdges(brief, progress, context: "\(style) Today's Brief")
 
-            let recovery = element("dashboard-recovery-sleep-card")
-            let chart = element("dashboard-recovery-sleep-chart")
-            let lastSleep = element("dashboard-recovery-last-sleep")
-            let period = element("dashboard-recovery-sleep-period")
-            let legend = element("dashboard-recovery-stage-legend")
-            XCTAssertTrue(recovery.waitForExistence(timeout: 10), "\(style): Recovery & Sleep should load")
-            XCTAssertTrue(chart.waitForExistence(timeout: 5), "\(style): seeded seven-day chart should load")
-            XCTAssertTrue(lastSleep.waitForExistence(timeout: 5), "\(style): last sleep should load")
-            XCTAssertTrue(period.waitForExistence(timeout: 5), "\(style): sleep period should load")
-            XCTAssertTrue(legend.waitForExistence(timeout: 5), "\(style): sleep stages must have readable labels")
-            XCTAssertTrue(scrollFullyIntoViewport(recovery, in: scroll), "\(style): Recovery & Sleep should fit in the viewport: card=\(recovery.frame), viewport=\(visibleViewport(for: scroll))")
-            assertSameHorizontalEdges(recovery, progress, context: "\(style) Recovery & Sleep")
-            for child in [chart, lastSleep, period, legend] {
-                assertWithin(child, parent: recovery, context: "\(style) \(child.identifier)")
-            }
-            XCTAssertGreaterThan(lastSleep.frame.height, 0, "\(style): last sleep must not be clipped")
-            XCTAssertGreaterThan(period.frame.height, 0, "\(style): period label must not be clipped")
-            addScreenshotAttachment(named: "Today Support \(style) Recovery")
+            XCTAssertTrue(scrollFullyIntoViewport(brief, in: scroll), "\(style): Today's Brief should fit in the viewport")
+            let suggestion = element("dashboard-today-suggestion")
+            XCTAssertTrue(suggestion.waitForExistence(timeout: 5), "\(style): seeded suggestion should load")
+            assertWithin(suggestion, parent: brief, context: "\(style) suggestion")
+            addScreenshotAttachment(named: "Today Support \(style) Brief")
         }
     }
 
-    /// The expanded Duo viewport is wide but too short to show the whole recovery card at once.
+    /// Checks the retained cards in the expanded Duo viewport.
     func testDesertTodaySupportCardsInShortLandscapeViewport() {
         assertShortViewportSupportCards(landscape: true, label: "Landscape")
     }
 
-    /// The folded Duo viewport can also be too short to show the whole recovery card at once.
+    /// Checks the retained cards in the folded Duo viewport.
     func testDesertTodaySupportCardsInShortPortraitViewport() {
         assertShortViewportSupportCards(landscape: false, label: "Portrait")
     }
@@ -169,24 +156,13 @@ final class TodaySupportCardsUITests: SeededUITestBaseCase {
         let sleepName = element("dashboard-progress-sleep-name")
         let sleepGoal = element("dashboard-progress-sleep-goal")
         let brief = element("dashboard-today-brief-card")
-        let recovery = element("dashboard-recovery-sleep-card")
-        let lastSleep = element("dashboard-recovery-last-sleep")
-        let period = element("dashboard-recovery-sleep-period")
-        let chart = element("dashboard-recovery-sleep-chart")
-        let legend = element("dashboard-recovery-stage-legend")
         XCTAssertTrue(progress.waitForExistence(timeout: 10))
         for item in [steps, sleep, stepsName, stepsGoal, sleepName, sleepGoal] {
             XCTAssertTrue(item.waitForExistence(timeout: 5), "\(label): \(item.identifier) should load")
         }
         XCTAssertTrue(brief.waitForExistence(timeout: 10), "\(label): seeded daytime brief should load")
-        XCTAssertTrue(recovery.waitForExistence(timeout: 10))
-        XCTAssertTrue(lastSleep.waitForExistence(timeout: 5))
-        XCTAssertTrue(period.waitForExistence(timeout: 5))
-        XCTAssertTrue(chart.waitForExistence(timeout: 5))
-        XCTAssertTrue(legend.waitForExistence(timeout: 5), "\(label): sleep stages should have readable labels")
 
         assertSameHorizontalEdges(brief, progress, context: "\(label) Today's Brief")
-        assertSameHorizontalEdges(recovery, progress, context: "\(label) Recovery & Sleep")
         for (child, parent) in [
             (steps, progress), (sleep, progress),
             (stepsName, steps), (stepsGoal, steps),
@@ -194,9 +170,7 @@ final class TodaySupportCardsUITests: SeededUITestBaseCase {
         ] {
             assertWithin(child, parent: parent, context: "\(label) \(child.identifier)")
         }
-        for child in [lastSleep, period, chart, legend] {
-            assertWithin(child, parent: recovery, context: "\(label) \(child.identifier)")
-        }
+
 
         XCTAssertTrue(scrollFullyIntoViewport(progress, in: scroll),
                       "\(label): daily progress should fit in the viewport")
@@ -206,17 +180,7 @@ final class TodaySupportCardsUITests: SeededUITestBaseCase {
                       "\(label): Today's Brief should fit in the viewport")
         addScreenshotAttachment(named: "Today Support \(label) Brief")
 
-        XCTAssertTrue(scrollTopIntoViewport(recovery, in: scroll),
-                      "\(label): Recovery & Sleep header should be visible")
-        XCTAssertTrue(visibleViewport(for: scroll).contains(lastSleep.frame),
-                      "\(label): last sleep should fit with the card header")
-        XCTAssertTrue(visibleViewport(for: scroll).contains(legend.frame),
-                      "\(label): sleep stages legend should fit with the card header")
-        addScreenshotAttachment(named: "Today Support \(label) Recovery Header")
 
-        XCTAssertTrue(scrollPairFullyIntoViewport(period, chart, in: scroll),
-                      "\(label): sleep period and seven-day chart should fit together")
-        addScreenshotAttachment(named: "Today Support \(label) Recovery Chart")
     }
 
     private func element(_ identifier: String) -> XCUIElement {
@@ -255,46 +219,6 @@ final class TodaySupportCardsUITests: SeededUITestBaseCase {
             ), withVelocity: .slow, thenHoldForDuration: 0.2)
         }
         return visibleViewport(for: scroll).contains(target.frame)
-    }
-
-    private func scrollTopIntoViewport(_ target: XCUIElement, in scroll: XCUIElement) -> Bool {
-        guard app.scrollToHittableElementIfNeeded(target.identifier, maxSwipes: 12) else { return false }
-        for _ in 0..<8 {
-            let viewport = visibleViewport(for: scroll)
-            let top = target.frame.minY
-            if top >= viewport.minY && top + 42 <= viewport.maxY { return true }
-            let movement = top + 42 > viewport.maxY
-                ? top + 42 - viewport.maxY + 6
-                : top - viewport.minY - 6
-            let distance = min(max(abs(movement), 24), scroll.frame.height * 0.3)
-            let start = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
-            start.press(forDuration: 0.05, thenDragTo: start.withOffset(
-                CGVector(dx: 0, dy: movement > 0 ? -distance : distance)
-            ), withVelocity: .slow, thenHoldForDuration: 0.2)
-        }
-        let viewport = visibleViewport(for: scroll)
-        return target.frame.minY >= viewport.minY && target.frame.minY + 42 <= viewport.maxY
-    }
-
-    private func scrollPairFullyIntoViewport(
-        _ first: XCUIElement, _ second: XCUIElement, in scroll: XCUIElement
-    ) -> Bool {
-        guard app.scrollToHittableElementIfNeeded(second.identifier, maxSwipes: 12) else { return false }
-        for _ in 0..<8 {
-            let viewport = visibleViewport(for: scroll)
-            let content = first.frame.union(second.frame)
-            if viewport.contains(content) { return true }
-            guard content.height <= viewport.height else { return false }
-            let movement = content.maxY > viewport.maxY
-                ? content.maxY - viewport.maxY + 6
-                : content.minY - viewport.minY - 6
-            let distance = min(max(abs(movement), 24), scroll.frame.height * 0.3)
-            let start = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
-            start.press(forDuration: 0.05, thenDragTo: start.withOffset(
-                CGVector(dx: 0, dy: movement > 0 ? -distance : distance)
-            ), withVelocity: .slow, thenHoldForDuration: 0.2)
-        }
-        return visibleViewport(for: scroll).contains(first.frame.union(second.frame))
     }
 
     private func assertWithin(_ child: XCUIElement, parent: XCUIElement, context: String) {
