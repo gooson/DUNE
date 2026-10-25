@@ -2,7 +2,7 @@
 tags: [review, activitykit, watchconnectivity, release-gate]
 date: 2026-10-25
 category: review
-status: blocked
+status: reviewed
 ---
 
 # Code Review Report
@@ -17,7 +17,7 @@ status: blocked
 | Priority | Count | Status |
 |---|---|---|
 | P1 - Critical | 0 | 없음 |
-| P2 - Important | 2 | 1건 Resolved · 1건 Open (ship 차단) |
+| P2 - Important | 2 | 1건 Resolved · 1건 Open (사용자 승인으로 ship 예외) |
 | P3 - Minor | 0 | 없음 |
 
 ## P1 Findings (Must Fix)
@@ -67,7 +67,7 @@ status: blocked
 ## Next Steps
 
 - data-001 Resolve 및 해당 회귀 검증.
-- verify-001이 Open인 동안 PR 생성·머지·원격 브랜치 삭제·로컬 정리를 진행하지 않는다.
+- verify-001은 Open으로 유지한다. 아래 사용자 승인에 따라 이번 ship만 예외로 진행하며 검증 통과로 표시하지 않는다.
 
 ## Resolve와 검증 결과
 
@@ -79,7 +79,7 @@ status: blocked
 - xcstrings 포맷 및 `git diff --check`: 통과.
 - Agent-Native·번역 delta: 관련 변경 없음. 이름·단위 면제와 기존 ko/ja 상태 레이블을 확인했다.
 
-## Ship 상태
+## 최초 Ship 보류
 
 `review-ship`의 “Stop before shipping if a P1/P2 finding remains open or required verification is failing or unavailable.” 규칙에 따라 **PR 생성·push·merge를 실행하지 않았다**. 최종 원격 PR 리뷰·GitHub checks·원격 merge 확인과 merge 후 로컬/시뮬레이터 정리도 실행하지 않았다. 관련 코드와 리뷰는 `codex/watch-live-activity`에 보존한다. 원래 `codex/today-design-fidelity` 브랜치의 커밋·외부 테마 작업을 포함하거나 정리하지 않았다.
 
@@ -92,3 +92,9 @@ DAILVE_IOS_SIMULATOR='iPhone 18 Pro' DUNE_UI_TEST_WALL_TIMEOUT=600 DUNE_UI_TEST_
 이 명령은 정상화 확인 전에는 다시 실행하지 않는다. runner가 선택한 이 작업 트리 전용 clone의 소유권과 결과 receipt를 확인하고, 영향받는 상태의 최신 캡처를 갱신한다. UI·실제 쌍 기기 미확인 범위를 정상 테스트로 바꾸지 않는다. 검증 통과 후 최종 PR review 및 사용자 요청의 Ship를 이어간다.
 
 로컬 커밋의 표준 pre-commit 훅이 `.xcodebuild`를 삭제하고 동일 앱 소스의 통합 빌드를 다시 확인해 통과했다. 그 원본 로그를 `.codex-checks/evidence/precommit-ios-build.log`에 보존했다. 삭제된 코어 로그도 같은 입력 해시의 36개 테스트를 실행해 `.codex-checks/evidence/watch-end-core-tests.log`에 다시 보존했다. 문서의 증거 경로만 정정하는 amend에서는 이미 통과한 동일 소스 빌드를 반복하지 않게 훅의 명시된 `DAILVE_SKIP_PRECOMMIT_BUILD=1` 옵션을 사용한다. UI gate나 원격 검증을 우회한 것은 아니다.
+
+## 사용자 승인 후 Ship 재개
+
+사용자가 미완료 UI 검증과 그로 인한 ship 보류를 확인한 뒤 **“그냥 진행해”**라고 명시적으로 지시했다. 사용자 지시를 우선해 이 알려진 로컬 검증 공백을 허용하고 PR 생성·GitHub merge·정리를 진행한다. verify-001은 **Open / user-accepted ship exception**이며, 실제 UI나 paired-device 검증이 완료되었다는 뜻이 아니다. 서버 CI 실패나 새로운 코드 차단 이슈를 승인받은 것으로 확대하지 않는다.
+
+최종 PR reviewer는 `origin/main f4d56f63...1ff76d94` 전체 24개 파일과 기존 finding·수정 결과를 읽기 전용으로 재검토했다. 새 P1/P2 코드·통합·크래시 차단 요소 없음, data-001 Resolved를 확인했다. 이후 변경은 이 승인 기록뿐이다. 앱 소스는 `.codex-checks/watch-end-core-tests/source-manifest.json`의 검증 입력과 동일하다. 빌드·코어 테스트36건·문자열 포맷의 기존 성공은 유지하며 UI 재실행·전체 테스트로 범위를 확대하지 않았다.
