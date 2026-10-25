@@ -150,6 +150,34 @@ enum TestDataSeeder {
         )
     }
 
+    /// Opt-in dense Today row fixture. Its title matches a real exercise definition.
+    static func todayWorkoutRowFixture() -> [HealthMetric] {
+        [HealthMetric(
+            id: "exercise-compact-row",
+            name: String(localized: "Seated Cable Row"),
+            value: 34,
+            unit: "min",
+            change: nil,
+            date: Calendar.current.date(byAdding: .day, value: -3, to: Date()) ?? Date(),
+            category: .exercise,
+            isHistorical: true,
+            iconOverride: "dumbbell.fill",
+            workoutTypeKey: "Seated Cable Row"
+        ), HealthMetric(
+            id: "exercise-compact-run", name: String(localized: "Running"),
+            value: 10, unit: "km", change: nil,
+            date: Calendar.current.date(byAdding: .day, value: -4, to: Date()) ?? Date(),
+            category: .exercise, isHistorical: true,
+            iconOverride: "figure.run", workoutTypeKey: "Running"
+        ), HealthMetric(
+            id: "exercise-compact-cycle", name: String(localized: "Cycling"),
+            value: 20, unit: "km", change: nil,
+            date: Calendar.current.date(byAdding: .day, value: -5, to: Date()) ?? Date(),
+            category: .exercise, isHistorical: true,
+            iconOverride: "bicycle", workoutTypeKey: "Cycling"
+        )]
+    }
+
     static func mockRecentWorkouts(
         for scenario: UITestSeedScenario,
         referenceDate: Date
@@ -745,6 +773,13 @@ enum TestDataSeeder {
                 baselineRHR: 54, rhrDeltaFromBaseline: 0, rhrBaselineDays: 14
             )
             : nil
+        // Opt-in visual boundary fixture; never changes the standard seeded snapshot.
+        let arguments = ProcessInfo.processInfo.arguments
+        let boundaryScore: Int? = arguments.firstIndex(of: "--ui-condition-score-fixture").flatMap { index in
+            guard arguments.indices.contains(index + 1),
+                  let score = Int(arguments[index + 1]), (0...100).contains(score) else { return nil }
+            return score
+        }
         let recentScores: [ConditionScore] = (0..<7).compactMap { offset in
             guard let date = calendar.date(byAdding: .day, value: -offset, to: today) else { return nil }
             return ConditionScore(
@@ -779,8 +814,8 @@ enum TestDataSeeder {
             yesterdaySleepStages: yesterdaySleepStages,
             latestSleepStages: nil,
             sleepDailyDurations: sleepDailyDurations,
-            conditionScore: ConditionScore(score: conditionComponentDetail == nil ? 84 : 100,
-                                           date: today, detail: conditionComponentDetail),
+            conditionScore: ConditionScore(score: boundaryScore ?? (conditionComponentDetail == nil ? 84 : 100),
+                                           date: today, detail: boundaryScore == nil ? conditionComponentDetail : nil),
             baselineStatus: nil,
             recentConditionScores: recentScores,
             failedSources: [],

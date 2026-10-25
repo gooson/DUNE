@@ -6,6 +6,7 @@
 final class TodayReadingUITests: SeededUITestBaseCase {
     private enum Fixture {
         static let sleepValue = "dashboard-recovery-last-sleep-value"
+        static let sleepDate = "dashboard-recovery-last-sleep-date"
         static let sleepChart = "dashboard-recovery-sleep-chart"
         static let sleepDetails = "dashboard-recovery-sleep-details"
         static let stressValue = "dashboard-stress-score-value"
@@ -47,6 +48,12 @@ final class TodayReadingUITests: SeededUITestBaseCase {
 
     private func waitForReadingElement(_ identifier: String, timeout: TimeInterval = 10) -> Bool {
         app.descendants(matching: .any)[identifier].firstMatch.waitForExistence(timeout: timeout)
+    }
+
+    /// A container or decorative shape can inherit the identifier from SwiftUI.
+    /// Read the actual text node when asserting content.
+    private func readableText(_ identifier: String) -> XCUIElement {
+        app.staticTexts[identifier].firstMatch
     }
 
     private func reveal(_ identifier: String, maxSwipes: Int = 16) {
@@ -115,8 +122,14 @@ final class TodayReadingUITests: SeededUITestBaseCase {
     func testRecoverySleepRendersAndCapturesVariants() {
         captureVariants(section: "sleep") {
             reveal(Fixture.sleepValue)
-            XCTAssertTrue(waitForReadingElement(Fixture.sleepValue), "Last sleep must have a visible value")
-            XCTAssertFalse(app.descendants(matching: .any)[Fixture.sleepValue].firstMatch.label.isEmpty)
+            let value = readableText(Fixture.sleepValue)
+            let date = readableText(Fixture.sleepDate)
+            XCTAssertTrue(value.waitForExistence(timeout: 5), "Last sleep must have readable text")
+            XCTAssertTrue(date.waitForExistence(timeout: 5), "Last sleep must retain its recorded date")
+            XCTAssertFalse(value.label.isEmpty)
+            XCTAssertFalse(date.label.isEmpty)
+            XCTAssertGreaterThanOrEqual(date.frame.minY, value.frame.maxY - 2,
+                                        "The sleep date should follow its value")
         }
     }
 
@@ -133,8 +146,9 @@ final class TodayReadingUITests: SeededUITestBaseCase {
     func testStressAnalysisRendersAndCapturesVariants() {
         captureVariants(section: "stress") {
             reveal(Fixture.stressValue)
-            XCTAssertTrue(waitForReadingElement(Fixture.stressValue), "The seeded stress score should render")
-            XCTAssertTrue(app.descendants(matching: .any)[Fixture.stressValue].firstMatch.label.contains("42"),
+            let value = readableText(Fixture.stressValue)
+            XCTAssertTrue(value.waitForExistence(timeout: 5), "The seeded stress score should render")
+            XCTAssertTrue(value.label.contains("42"),
                           "The opt-in stress fixture should show score 42")
             reveal(Fixture.stressToggle)
             app.buttons[Fixture.stressToggle].firstMatch.tap()
@@ -165,8 +179,9 @@ final class TodayReadingUITests: SeededUITestBaseCase {
             reveal(Fixture.digestToggle)
             app.buttons[Fixture.digestToggle].firstMatch.tap()
             reveal(Fixture.digestSummary)
-            XCTAssertTrue(waitForReadingElement(Fixture.digestSummary), "Disclosure should retain the original summary")
-            XCTAssertFalse(app.descendants(matching: .any)[Fixture.digestSummary].firstMatch.label.isEmpty)
+            let summary = readableText(Fixture.digestSummary)
+            XCTAssertTrue(summary.waitForExistence(timeout: 5), "Disclosure should retain the original summary")
+            XCTAssertFalse(summary.label.isEmpty)
         }
     }
 

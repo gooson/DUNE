@@ -94,6 +94,9 @@ status: approved
 
 ### 프로세스
 
+- **UI seed와 운영 fallback을 분리해 확인**: 저장 항목 수·기본 선택을 검증할 때 test base가 호출하는 실제 seed 저장값을 먼저 읽는다. tap 뒤에는 selected/expanded 같은 실제 상태를 확인한 다음 저장·후속 배치를 검사한다. [Today 사례](solutions/general/2026-10-26-today-compact-density-and-pin-hit-area.md)
+- **같은 UI 실패는 관찰 후 재시도**: 기대값을 추정으로 바꾸기 전에 AX·실제 PNG·실패 전후 영상으로 상태가 바뀌지 않은 단계를 격리한다. plain Button label의 Spacer도 전체 hit area에 포함되는지 확인하고 재시도 한도를 phase/turn 전환으로 초기화하지 않는다.
+
 - **workflow paths에 `scripts/**` 대신 개별 스크립트 경로 지정** (#186)
 - **새 UI 테스트 파일은 `BaseUITestCase` 상속** (#187)
 - **locale/raw normalization 테스트는 영문 literal/legacy alias 기대 금지**: watch/helper/unit tests는 `String(localized:)` 결과 또는 canonical enum `rawValue`를 기준으로 검증 (#207)

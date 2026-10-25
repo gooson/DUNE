@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-25",
+  "updated": "2026-10-26",
   "app_contract": "app-contract.md",
   "themes": [
     {
@@ -143,6 +143,20 @@
       "title": "Summary and Rhythm",
       "file": "dune-activity-life-heroes.html",
       "detail": "124pt 공통 링과 구성 점수·7일 기록의 흐름과 근거 승인안. 실제 캡처가 아닌 예시 시안."
+    },
+    {
+      "id": "today-restart",
+      "name": "Today 재설계 · 밀도와 글씨 크기",
+      "title": "DUNE · Compact / Metrics / Editorial",
+      "file": "dune-today-restart.html",
+      "detail": "2026-10-26 제안. 기존 DUNE 브라운·골드·모래 능선을 유지하는 Compact / Metrics / Editorial. Today 전체 섹션, 12개 기록 상태, 24시간 경계, 큰 글씨·3개 언어·6개 폭, 펼침·고정 편집·기록 진입을 비교. 실제 앱 캡처가 아님. 2026-10-26 사용자 선택: Compact. 링 중심·104pt 외경·외부 CONDITION·0점 호 처리와 아이콘/수치 간격을 보완한 시안. SwiftUI Compact 구현·빌드 완료, 관련 UI21개 통과·영향 화면 새 캡처, 전체 상태 검증과 구분. 기존 테마와 다른 탭의 공유 링은 유지."
+    },
+    {
+      "id": "today-comparison",
+      "name": "Today 세 시안 나란히 비교",
+      "title": "Compact / Metrics / Editorial · Side by Side",
+      "file": "dune-today-comparison.html",
+      "detail": "기존 DUNE 테마의 세 전체 Today 시안을 한 줄에서 비교. 같은 글씨·기록 상태·시간대를 공통 적용하며 좁은 화면은 가로 이동. 브라우저 시안이며 실제 앱 캡처가 아님. 2026-10-26 사용자 선택: Compact. 링 중심·104pt 외경·외부 CONDITION·0점 호 처리와 아이콘/수치 간격을 보완한 시안. SwiftUI Compact 구현·빌드 완료, 관련 UI21개 통과·영향 화면 새 캡처, 전체 상태 검증과 구분. 기존 테마와 다른 탭의 공유 링은 유지."
     }
   ]
 }

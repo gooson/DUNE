@@ -11,17 +11,15 @@ struct SmartInsightsSection: View {
 
     var body: some View {
         if !insightCards.isEmpty || templateNudge != nil {
-            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+            VStack(alignment: .leading, spacing: 6) {
                 header
 
-                // Insight cards (max 3)
                 ForEach(insightCards.prefix(3)) { card in
                     InsightCardView(data: card) {
                         onDismissInsight(card.id)
                     }
                 }
 
-                // Template nudge
                 if let nudge = templateNudge {
                     TemplateNudgeCard(
                         recommendation: nudge,
@@ -35,7 +33,7 @@ struct SmartInsightsSection: View {
     }
 
     private var header: some View {
-        HStack(spacing: DS.Spacing.xs) {
+        HStack(spacing: 5) {
             Image(systemName: "lightbulb.fill")
                 .font(.subheadline)
                 .foregroundStyle(DS.Color.caution)
@@ -45,6 +43,5 @@ struct SmartInsightsSection: View {
                 .fontWeight(.semibold)
                 .foregroundStyle(DS.Color.textSecondary)
         }
-        .padding(.horizontal, DS.Spacing.xs)
     }
 }

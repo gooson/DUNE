@@ -31,8 +31,12 @@ struct PinnedMetricsEditorView: View {
                                         .foregroundStyle(DS.Color.positive)
                                 }
                             }
+                            .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+                            .contentShape(Rectangle())
                         }
                         .buttonStyle(.plain)
+                        .accessibilityAddTraits(selectedSet.contains(category) ? .isSelected : [])
+                        .accessibilityIdentifier("pinned-metrics-editor-row-\(category.rawValue)")
                         .disabled(!selectedSet.contains(category) && workingSelection.count >= TodayPinnedMetricsStore.maxPinnedCount)
                     }
                 } header: {
