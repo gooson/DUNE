@@ -52,7 +52,7 @@
 - data-001: 음성 토글/볼륨 무음 해제 시 페이스 준비 상태만 초기화하고 진행 구간을 유지한다. 두 인자의 실제 서비스 회귀를 확인했다.
 - simp-001: 이전 kilometer 이벤트·번역 키를 제거하고 기존 대기열·잘못된 값 테스트를 실제 split 이벤트로 전환했다. 참조 검색에서 잔여 코드가 없다.
 - 초기 호스트 실행에서 영어 숫자 그룹 구분 기대값 3개가 실패했다. 고정 en locale의 실제 결과(1,000/2,000/3,000)를 반영해 해당 서비스 suite11개를 재검증했고 모두 통과했다. 정책·설정13개는 첫 실행에서 통과했으며 이후 해당 코드/테스트는 변하지 않았다.
-- WKApplication 교체 후 새 작업트리의 최종 앱 빌드가 통과했다(`.xcodebuild/watch-running-ship-final-build.log`, exit 0). 추가 API의 폐기 경고가 사라졌고 AppIntents 메타데이터 생략 안내만 남았다.
+- WKApplication 교체 후 새 작업트리의 최종 앱 빌드가 통과했다(`.codex-checks/running-review-ship/logs/final-build.log`, exit 0). 추가 API의 폐기 경고가 사라졌고 AppIntents 메타데이터 생략 안내만 남았다.
 
 ## Localization Verification
 
@@ -66,10 +66,11 @@ SwiftUI 문구는 LocalizedStringKey, 프로그램 음성 문구는 String(local
 
 ## Checks and Ship Gate
 
-- 단위: 실제 소스와 테스트를 연결한 호스트 package에서 정책·설정 13건이 통과했다. 영어 숫자 기대값 수정 후 영향받은 음성 서비스 suite 11건을 재실행해 모두 통과했다. 합계 24개 테스트이며 Watch 오디오 어댑터 실행 증거는 아니다.
+- 단위: 실제 소스와 테스트를 연결한 호스트 package에서 최종 3개 suite·24개 테스트가 모두 통과했다(`.codex-checks/running-review-ship/logs/unit.log`, exit 0). Watch 오디오 어댑터 실행 증거는 아니다.
 - 빌드: 표준 `scripts/build-ios.sh`가 최종 소스에서 통과했다. 카탈로그 포맷, 신규 키 23개의 en/ko/ja, `git diff --check`도 확인했다.
 - Watch UI: 표준 실행기에서 아래 4개 selector를 선택했으나 저장소 잠금을 60초 내 확보하지 못해 exit 2로 종료했다(`.xcodebuild/watch-running-ship-ui.log`). 실행된 테스트는 0개다. 최종 빌드 이후 비차단 잠금 확인도 busy였으므로 추가 실행하지 않았다.
 - 범위: Watch 화면·설정·실제 캡처에 직접 영향을 받는 4건만 선택했다. 프로젝트 파일은 새 Watch 소스 참조 추가뿐이며 iOS 동작은 바뀌지 않았다. 자동 판정기의 full은 실행하지 않았고 targeted 결과를 full 통과로 표시하지 않는다.
+- 증거 보존: 첫 커밋의 저장소 pre-commit 훅이 `.xcodebuild`를 자동 정리했다. 훅이 다시 수행해 통과한 앱 빌드 로그를 `.codex-checks`에 보존했고, 삭제된 단위 로그를 보완하려고 동일 최종 소스의 24건만 한 번 재실행해 위 로그를 남겼다. UI 실패는 실행 당시 exit 2와 출력으로 기록하며 원래 UI 로그는 훅에서 정리됐다.
 - Ship: 필수 UI와 C14–C18 새 캡처를 확인할 수 없어 PR 생성·push·머지·작업트리 정리를 보류했다. 원래 작업트리의 변경은 보존한다.
 
 ### 재개 절차

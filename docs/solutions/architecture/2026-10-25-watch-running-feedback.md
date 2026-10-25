@@ -58,8 +58,8 @@ related_solutions:
 
 ## Verification
 
-- 최종 표준 앱 빌드가 통과했다: `.xcodebuild/watch-running-ship-final-build.log`, exit 0, `BUILD SUCCEEDED`. Watch의 전경 상태 조회는 현재 `WKApplication` API를 사용한다.
-- 실제 생산 소스와 기존 테스트를 symlink로 연결한 호스트 Swift package에서 정책·설정 13개와 음성 서비스 11개, 합계 24개 테스트를 확인했다. 초기 영어 숫자 그룹 구분 기대값 실패는 실제 고정 en locale 결과에 맞춰 수정하고 해당 suite를 재검증했다.
+- 최종 표준 앱 빌드가 통과했다: `.codex-checks/running-review-ship/logs/final-build.log`, exit 0, `BUILD SUCCEEDED`. Watch의 전경 상태 조회는 현재 `WKApplication` API를 사용한다.
+- 실제 생산 소스와 기존 테스트를 symlink로 연결한 호스트 Swift package에서 최종 3개 suite·24개 테스트가 통과했다(`.codex-checks/running-review-ship/logs/unit.log`). 초기 영어 숫자 그룹 구분 기대값 실패는 실제 고정 en locale 결과에 맞춰 수정하고 해당 suite를 재검증했다.
 - 이 증거는 구간·목표 계산, 정규화·저장, 음성 대기열과 주입한 mock speaker의 볼륨 전달에 적용된다. Watch 오디오 어댑터, 이어폰 경로·실제 음량의 실행 증거로 확대하지 않는다.
 - 리뷰에서 무음 해제 후 목표 경고가 계속 비활성인 P2를 수정했다. 들을 수 있는 상태로 돌아오면 페이스 준비 상태만 재설정하고 진행 구간은 유지한다. 음성 토글·볼륨 해제 두 경우의 회귀 테스트가 통과했다. 미사용 kilometer 이벤트·번역 키와 폐기된 API도 정리했다. 남은 P1/P2는 없다.
 - Watch 신규 키 23개의 en/ko/ja, 카탈로그 포맷과 diff 공백 검사를 확인했다.
