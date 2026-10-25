@@ -8,6 +8,7 @@
 	<string>DUNE uses motion data to monitor your daily posture and walking patterns.</string>
 	<key>UIBackgroundModes</key>
 	<array>
+		<string>audio</string>
 		<string>remote-notification</string>
 	</array>
 	<key>WKBackgroundModes</key>

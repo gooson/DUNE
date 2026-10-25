@@ -77,4 +77,38 @@ struct ParsedWatchIncomingMessageTests {
         #expect(parsed.watchWorkoutActive == false)
         #expect(parsed.watchWorkoutTemplateName == nil)
     }
+
+    @Test("Parses the same validated terminal snapshot from background and immediate delivery")
+    func terminalSnapshotDelivery() throws {
+        let snapshot = terminalSnapshot()
+        let data = try JSONEncoder().encode(snapshot)
+        let context: [String: Any] = ["watchWorkoutActive": false, "watchWorkoutEndedSnapshot": data,
+                                     "watchWorkoutUpdatedAt": snapshot.updatedAt.timeIntervalSince1970]
+        #expect(ParsedWatchIncomingContext(from: context).watchWorkoutEndedSnapshot == snapshot)
+        #expect(ParsedWatchIncomingMessage(from: context).workoutContext.watchWorkoutEndedSnapshot == snapshot)
+        #expect(ParsedWatchIncomingContext(from: context).watchWorkoutUpdatedAt == snapshot.updatedAt)
+    }
+
+    @Test("Malformed, oversized, invalid, or nonterminal snapshots cannot dismiss an activity")
+    func rejectsUnsafeTerminalSnapshot() throws {
+        var invalid = terminalSnapshot()
+        invalid.elapsedSeconds = -1
+        var running = terminalSnapshot()
+        running.phase = .running
+        for data in [Data([0xFF]), Data(repeating: 0, count: 4_097),
+                     try JSONEncoder().encode(invalid), try JSONEncoder().encode(running)] {
+            let parsed = ParsedWatchIncomingContext(from: ["watchWorkoutActive": false, "watchWorkoutEndedSnapshot": data])
+            #expect(parsed.watchWorkoutEndedSnapshot == nil)
+        }
+        let data = try JSONEncoder().encode(terminalSnapshot())
+        #expect(ParsedWatchIncomingContext(from: ["watchWorkoutActive": true, "watchWorkoutEndedSnapshot": data]).watchWorkoutEndedSnapshot == nil)
+        #expect(ParsedWatchIncomingContext(from: ["watchWorkoutEndedSnapshot": data]).watchWorkoutEndedSnapshot == nil)
+    }
+
+    private func terminalSnapshot() -> WatchWorkoutSnapshot {
+        let start = Date(timeIntervalSince1970: 1_800_000_000)
+        return WatchWorkoutSnapshot(startedAt: start, updatedAt: start.addingTimeInterval(60),
+                                    exerciseName: "Chest Press", elapsedSeconds: 60, phase: .ended,
+                                    heartRate: 102, activeCalories: 3, distanceMeters: 0)
+    }
 }

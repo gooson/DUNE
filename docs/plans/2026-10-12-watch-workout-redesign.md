@@ -143,6 +143,11 @@ related_solutions:
 | C11 | 기계 운동 상세 | `CardioSecondaryPage` |
 | C12 | 유산소 AOD | `CardioSecondaryPage` |
 | C13 | 거리 1km 통과 알림 | `SessionPagingView` |
+| C14 | 러닝 거리 우선 기본 화면 | `CardioDistanceMetricsPage` |
+| C15 | 러닝 거리 우선 일시정지 | `CardioDistanceMetricsPage` |
+| C16 | 러닝 음성 안내 제어 | `ControlsView` |
+| C17 | 러닝 안내 거리·볼륨 설정 | `RunningFeedbackSettingsView` |
+| C18 | 러닝 목표 페이스·허용 범위 설정 | `RunningFeedbackSettingsView` |
 | F01 | 근력 요약 | `SessionSummaryView` |
 | F02 | 유산소 요약 | `SessionSummaryView` |
 | F03 | 운동별 세트 내역 | `SessionSummaryView` |

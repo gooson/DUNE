@@ -27,6 +27,8 @@ final class WatchWorkoutActivity {
     private var activityMirrorID: UUID?
     private var attemptedMirrorID: UUID?
     private var acceptsInitialStartCorrection = false
+    private static let maximumEndedSnapshots = 32
+    private var endedSnapshotsByStart: [Date: WatchWorkoutSnapshot] = [:]
 
     init(driver: any WatchWorkoutActivityDriving = SystemWatchWorkoutActivityDriver()) {
         self.driver = driver
@@ -38,7 +40,13 @@ final class WatchWorkoutActivity {
         self.mirrorID = mirrorID
         self.snapshot = snapshot
         acceptsInitialStartCorrection = allowsStartCorrection
-        enqueue(Update(mirrorID: mirrorID, snapshot: snapshot, requestedID: requestedID, didRequest: didRequest))
+        // An unidentified placeholder must not become a stranded system activity.
+        if !allowsStartCorrection {
+            enqueue(Update(mirrorID: mirrorID, snapshot: snapshot, requestedID: requestedID, didRequest: didRequest))
+        }
+        if let final = endedSnapshotsByStart[snapshot.startedAt] {
+            finish(matching: final)
+        }
     }
 
     func receive(_ incoming: WatchWorkoutSnapshot, mirrorID: UUID, authoritative: Bool = false) {
@@ -47,10 +55,15 @@ final class WatchWorkoutActivity {
               incoming.isValid,
               (abs(incoming.startedAt.timeIntervalSince(current.startedAt)) < 2
                 || (acceptsInitialStartCorrection && authoritative)),
-              incoming.updatedAt >= current.updatedAt else { return }
+              (incoming.updatedAt >= current.updatedAt
+                || (acceptsInitialStartCorrection && authoritative)) else { return }
+        if acceptsInitialStartCorrection && !authoritative { return }
         if authoritative { acceptsInitialStartCorrection = false }
         snapshot = incoming
         enqueue(Update(mirrorID: mirrorID, snapshot: incoming))
+        if let final = endedSnapshotsByStart[incoming.startedAt] {
+            finish(matching: final)
+        }
     }
 
     func finish(mirrorID: UUID, at date: Date = Date()) {
@@ -60,6 +73,25 @@ final class WatchWorkoutActivity {
         final.phase = .ended
         snapshot = final
         enqueue(Update(mirrorID: mirrorID, snapshot: final))
+    }
+
+    /// A terminal Watch payload remains authoritative even if its mirror disconnected.
+    @discardableResult
+    func finish(matching final: WatchWorkoutSnapshot) -> Bool {
+        guard final.isValid, final.phase == .ended else { return false }
+        if endedSnapshotsByStart[final.startedAt].map({ final.updatedAt >= $0.updatedAt }) ?? true {
+            endedSnapshotsByStart[final.startedAt] = final
+        }
+        if endedSnapshotsByStart.count > Self.maximumEndedSnapshots,
+           let oldestStart = endedSnapshotsByStart.keys.min() {
+            endedSnapshotsByStart.removeValue(forKey: oldestStart)
+        }
+        guard let mirrorID, let current = snapshot, current.isSameWorkout(as: final) else { return false }
+        guard current.phase != .ended else { return true }
+        snapshot = final
+        acceptsInitialStartCorrection = false
+        enqueue(Update(mirrorID: mirrorID, snapshot: final))
+        return true
     }
 
     func waitForPendingUpdates() async { await updateTask?.value }
@@ -136,6 +168,15 @@ private struct SystemWatchWorkoutActivityDriver: WatchWorkoutActivityDriving {
 
 /// Called directly on HealthKit's callback queue, before a cold launch can block MainActor.
 enum WatchWorkoutActivityRequest {
+    /// Also removes orphaned activities after the iPhone process was relaunched.
+    nonisolated static func finish(matching final: WatchWorkoutSnapshot) async {
+        guard final.isValid, final.phase == .ended else { return }
+        for activity in Activity<WatchWorkoutAttributes>.activities
+        where activity.content.state.isSameWorkout(as: final) {
+            await activity.end(nil, dismissalPolicy: .immediate)
+        }
+    }
+
     nonisolated static func start(mirrorID: UUID, snapshot: WatchWorkoutSnapshot) throws -> String? {
         guard ActivityAuthorizationInfo().areActivitiesEnabled else { return nil }
         let abandonedIDs = Activity<WatchWorkoutAttributes>.activities.map(\.id)

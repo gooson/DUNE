@@ -1,0 +1,103 @@
+{
+  "branch": "codex/watch-running-feedback",
+  "base": "ee38ebe0154af1baee68fe7b865f1f7c7345d3d8",
+  "timestamp": "2026-10-25T09:01:52.089277+00:00",
+  "diff_lines": 2759,
+  "review_mode": "inline five perspectives because complete diff exceeds2000 lines per review skill",
+  "reviewers_run": [
+    "security",
+    "performance",
+    "architecture",
+    "data-integrity",
+    "simplicity",
+    "app-quality-gate"
+  ],
+  "reviewers_skipped": [
+    {
+      "name": "agent-native",
+      "reason": "No .claude/.codex/prompt changes in scoped feature"
+    }
+  ],
+  "findings": [
+    {
+      "id": "data-001",
+      "reviewer": "Data Integrity Guardian",
+      "priority": "P2",
+      "status": "Resolved",
+      "title": "Re-enabling voice can leave target pace alerts disarmed",
+      "file": "DUNEWatch/Managers/RunningVoiceFeedback.swift",
+      "line": 44,
+      "issue": "processProgress continues consuming tracker alerts while isEnabled=false or volume=0; enabling voice does not reset alert readiness, so the same excursion may never be spoken.",
+      "suggestion": "Restart only pace readiness when voice becomes audible; retain split progress and cover toggle/volume re-enable regressions.",
+      "resolution": "Pace-only readiness restart on toggle/unmute; existing split retained; both regression arguments passed in service suite."
+    },
+    {
+      "id": "simp-001",
+      "reviewer": "Code Simplicity Reviewer",
+      "priority": "P3",
+      "status": "Resolved",
+      "title": "Legacy kilometer event exists only for tests",
+      "file": "DUNEWatch/Managers/RunningVoiceFeedback.swift",
+      "line": 19,
+      "issue": "Production now exclusively emits actual split cues; legacy average-pace kilometer event and catalog entry are retained only by tests.",
+      "suggestion": "Remove the unused event/catalog string and migrate queue/validation tests to real split cues.",
+      "resolution": "Removed unused event and catalog string; queue/validation tests now exercise actual split events; reference search clean."
+    },
+    {
+      "id": "simp-002",
+      "reviewer": "Code Simplicity Reviewer",
+      "priority": "P3",
+      "status": "Resolved",
+      "title": "Use current WKApplication instead of deprecated WKExtension",
+      "file": "DUNEWatch/Managers/WorkoutManager.swift",
+      "line": 657,
+      "issue": "New foreground completion branch referenced an API deprecated since watchOS9.2.",
+      "suggestion": "Use WKApplication.shared().applicationState.",
+      "resolution": "Changed to WKApplication and verified by final standard build (exit 0)."
+    },
+    {
+      "id": "ui-001",
+      "reviewer": "App Quality Gate",
+      "priority": "P2",
+      "status": "Resolved",
+      "title": "Custom settings header truncates title and consumes list viewport on 40mm Watch",
+      "file": "DUNEWatch/Views/Cardio/RunningFeedbackSettingsView.swift",
+      "issue": "Fresh XCTest failure PNG shows wrapped/truncated Feedback Settings and oversized custom Done row occupying much of sheet viewport.",
+      "suggestion": "Use native title/confirmation toolbar without nested NavigationStack; expose target value separately.",
+      "resolution": "Native title/confirmation toolbar, short localized Voice title and single-line target value. Settings UI test passed and fresh C17/C18 PNGs visually checked on owned 40mm Watch."
+    },
+    {
+      "id": "perf-001",
+      "reviewer": "Performance Oracle",
+      "priority": "P3",
+      "status": "Open",
+      "title": "SDK recommends asynchronous audio session activation",
+      "file": "DUNEWatch/Managers/AVRunningVoiceSpeaker.swift",
+      "line": 27,
+      "issue": "Watch simulator xcresult reports AVAudioSession synchronous activation can affect UI responsiveness when called on main thread. No UI test hang was attributed to audio activation.",
+      "suggestion": "Profile on real Watch and move activation/deactivation to serialized asynchronous lifecycle with cancellation guards.",
+      "resolution": "Deferred: not a mechanical change; async activation requires explicit stop/new-cue race coverage and real audio route validation. Does not block P1/P2 gate."
+    },
+    {
+      "id": "ui-002",
+      "reviewer": "App Quality Gate",
+      "priority": "P3",
+      "status": "Resolved",
+      "title": "Secondary heart-rate row clipped in default 40mm distance capture",
+      "file": "DUNEWatch/Views/Cardio/CardioDistanceMetricsPage.swift",
+      "issue": "Fresh C14/C15 capture shows bottom heart-rate row partly below viewport.",
+      "suggestion": "Keep primary km size; compact gaps and average-pace label; verify actual heart-rate frame and recapture.",
+      "resolution": "Kept 42pt primary km, compacted spacing and Avg Pace label with full accessible name. Default 40mm HR frame assertion passed; fresh C14/C15 visually verified."
+    }
+  ],
+  "summary": {
+    "p1": 0,
+    "p2": 2,
+    "p3": 4,
+    "open_p1": 0,
+    "open_p2": 0,
+    "open_p3": 1
+  },
+  "verification_blockers": [],
+  "resolution_timestamp": "2026-10-25T09:09:11.517060+00:00"
+}

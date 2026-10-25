@@ -4,8 +4,6 @@ import SwiftData
 struct DashboardView: View {
     @State private var viewModel: DashboardViewModel
     @State private var isShowingPinnedEditor = false
-    @State private var isShowingHealthDataQA = false
-    @State private var inspectedMetric: HealthMetric?
     @State private var templateNudgeToSave: WorkoutTemplateRecommendation?
     @State private var hasAppeared = false
     @State private var isShowingBriefing = false
@@ -29,9 +27,7 @@ struct DashboardView: View {
     private let inboxManager = NotificationInboxManager.shared
     private let scrollToTopSignal: Int
 
-    private enum ScrollAnchor: Hashable {
-        case top
-    }
+    @State private var scrollPosition = ScrollPosition()
 
     private let refreshSignal: Int
     private let notificationHubSignal: Int
@@ -40,6 +36,8 @@ struct DashboardView: View {
     private let onOpenActivity: () -> Void
     private let onOpenWellness: () -> Void
     private let onLogWeight: () -> Void
+    private let onInspectMetric: (HealthMetric) -> Void
+    private let onOpenHealthDataQA: () -> Void
     private let launchExperienceReady: Bool
     private let canLoadHealthKitData: Bool
     private let hasFailedHealthKitAuthorization: Bool
@@ -66,6 +64,8 @@ struct DashboardView: View {
         onOpenActivity: @escaping () -> Void = {},
         onOpenWellness: @escaping () -> Void = {},
         onLogWeight: @escaping () -> Void = {},
+        onInspectMetric: @escaping (HealthMetric) -> Void = { _ in },
+        onOpenHealthDataQA: @escaping () -> Void = {},
         launchExperienceReady: Bool = true,
         canLoadHealthKitData: Bool = true,
         hasFailedHealthKitAuthorization: Bool = false
@@ -84,82 +84,72 @@ struct DashboardView: View {
         self.onOpenActivity = onOpenActivity
         self.onOpenWellness = onOpenWellness
         self.onLogWeight = onLogWeight
+        self.onInspectMetric = onInspectMetric
+        self.onOpenHealthDataQA = onOpenHealthDataQA
         self.launchExperienceReady = launchExperienceReady
         self.canLoadHealthKitData = canLoadHealthKitData
         self.hasFailedHealthKitAuthorization = hasFailedHealthKitAuthorization
     }
 
     var body: some View {
-        ScrollViewReader { proxy in
-            ScrollView {
-                Color.clear
-                    .frame(width: 0, height: 0)
-                    .id(ScrollAnchor.top)
-
-                VStack(spacing: sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.xl) {
-                    if !launchExperienceReady {
-                        DashboardSkeletonView()
-                    } else if viewModel.shouldShowSkeleton(
-                        canLoadHealthKitData: canLoadHealthKitData,
-                        hasFailedHealthKitAuthorization: hasFailedHealthKitAuthorization
-                    ) {
-                        DashboardSkeletonView()
-                    } else if viewModel.sortedMetrics.isEmpty && !viewModel.isLoading {
-                        if viewModel.errorMessage != nil {
-                            errorSection
-                        } else if viewModel.isMirroredReadOnlyMode {
-                            CloudSyncWaitingView {
-                                Task { await viewModel.loadData(canLoadHealthKitData: canLoadHealthKitData) }
-                            }
-                        } else {
-                            if hasFailedHealthKitAuthorization {
-                                EmptyStateView(
-                                    icon: "heart.text.clipboard",
-                                    title: "Health Access Needed",
-                                    message: "Allow Health access in Settings to see your daily metrics.",
-                                    actionTitle: "Open Settings",
-                                    action: openSettings
-                                )
-                            } else {
-                                EmptyStateView(
-                                    icon: "heart.text.clipboard",
-                                    title: "No Measurements Yet",
-                                    message: "Your health trends will appear after measurements are available.",
-                                    actionTitle: "View Activity",
-                                    action: onOpenActivity
-                                )
-                                .accessibilityElement(children: .contain)
-                                .accessibilityIdentifier("dashboard-empty-state")
-                            }
+        ScrollView {
+            VStack(spacing: sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.xl) {
+                if !launchExperienceReady {
+                    DashboardSkeletonView()
+                } else if viewModel.shouldShowSkeleton(
+                    canLoadHealthKitData: canLoadHealthKitData,
+                    hasFailedHealthKitAuthorization: hasFailedHealthKitAuthorization
+                ) {
+                    DashboardSkeletonView()
+                } else if viewModel.sortedMetrics.isEmpty && !viewModel.isLoading {
+                    if viewModel.errorMessage != nil {
+                        errorSection
+                    } else if viewModel.isMirroredReadOnlyMode {
+                        CloudSyncWaitingView {
+                            Task { await viewModel.loadData(canLoadHealthKitData: canLoadHealthKitData) }
                         }
                     } else {
-                        dashboardUpperContent
-                        dashboardLowerContent
+                        if hasFailedHealthKitAuthorization {
+                            EmptyStateView(
+                                icon: "heart.text.clipboard",
+                                title: "Health Access Needed",
+                                message: "Allow Health access in Settings to see your daily metrics.",
+                                actionTitle: "Open Settings",
+                                action: openSettings
+                            )
+                        } else {
+                            EmptyStateView(
+                                icon: "heart.text.clipboard",
+                                title: "No Measurements Yet",
+                                message: "Your health trends will appear after measurements are available.",
+                                actionTitle: "View Activity",
+                                action: onOpenActivity
+                            )
+                            .accessibilityElement(children: .contain)
+                            .accessibilityIdentifier("dashboard-empty-state")
+                        }
                     }
+                } else {
+                    dashboardUpperContent
+                    dashboardLowerContent
                 }
-                .padding(sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.lg)
-                .frame(maxWidth: sizeClass == .regular ? DS.Layout.rootContentMaxWidth : .infinity)
-                .frame(maxWidth: .infinity)
-                .coordinateSpace(name: TabHeroStartLine.coordinateSpace)
             }
-            .accessibilityElement(children: .contain)
-            .accessibilityIdentifier("dashboard-root-scroll")
-            .waveRefreshable {
-                guard launchExperienceReady else { return }
-                await loadDashboard()
-            }
-            .onScrollPhaseChange { oldPhase, newPhase, context in
-                // Only finish inertial swipes. Pull-to-refresh releases and its inset
-                // restoration must keep the system scroll view in control.
-                guard oldPhase == .decelerating, newPhase == .idle else { return }
-                let distanceFromTop = context.geometry.contentOffset.y + context.geometry.contentInsets.top
-                guard distanceFromTop > 0, distanceFromTop < 130 else { return }
-                proxy.scrollTo(ScrollAnchor.top, anchor: .top)
-            }
-            .onChange(of: scrollToTopSignal) { _, _ in
-                withAnimation(DS.Animation.standard) {
-                    proxy.scrollTo(ScrollAnchor.top, anchor: .top)
-                }
+            .padding(.top, DS.Spacing.sm)
+            .padding(sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.lg)
+            .frame(maxWidth: sizeClass == .regular ? DS.Layout.rootContentMaxWidth : .infinity)
+            .frame(maxWidth: .infinity)
+            .coordinateSpace(name: TabHeroStartLine.coordinateSpace)
+        }
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("dashboard-root-scroll")
+        .scrollPosition($scrollPosition)
+        .waveRefreshable {
+            guard launchExperienceReady else { return }
+            await loadDashboard()
+        }
+        .onChange(of: scrollToTopSignal) { _, _ in
+            withAnimation(DS.Animation.standard) {
+                scrollPosition.scrollTo(edge: .top)
             }
         }
         .environment(\.weatherAtmosphere, cachedWeatherAtmosphere)
@@ -222,42 +212,6 @@ struct DashboardView: View {
                         library: library
                     )?.map { TemplateExerciseResolver.defaultEntry(for: $0) } ?? []
                 )
-            }
-        }
-        .inspector(isPresented: Binding(
-            get: { inspectedMetric != nil || isShowingHealthDataQA },
-            set: { isPresented in
-                if !isPresented {
-                    inspectedMetric = nil
-                    isShowingHealthDataQA = false
-                }
-            }
-        )) {
-            if isShowingHealthDataQA {
-                HealthDataQASheet(
-                    viewModel: HealthDataQAViewModel(
-                        service: HealthDataQAService(sharedHealthDataService: sharedHealthDataService),
-                        isAvailable: HealthDataQAService.isAvailable
-                    )
-                )
-                .inspectorColumnWidth(min: 320, ideal: 420, max: 540)
-            } else if let metric = inspectedMetric {
-                NavigationStack {
-                    VStack(spacing: 0) {
-                        HStack {
-                            Spacer()
-                            Button("Done") { inspectedMetric = nil }
-                                .accessibilityIdentifier("dashboard-metric-inspector-close")
-                        }
-                        .padding(DS.Spacing.md)
-                        MetricDetailView(metric: metric)
-                            .id(metric.id)
-                            .navigationDestination(for: AllDataDestination.self) { destination in
-                                AllDataView(category: destination.category)
-                            }
-                    }
-                }
-                .inspectorColumnWidth(min: 320, ideal: 420, max: 540)
             }
         }
         .englishNavigationTitle("Today")
@@ -386,7 +340,6 @@ struct DashboardView: View {
             sleepDeficit: viewModel.sleepDeficitAnalysis,
             sleepInsights: viewModel.sleepInsightCards,
             sleepMetric: viewModel.sortedMetrics.first(where: { $0.category == .sleep }),
-            sleepStages: viewModel.latestSleepStages,
             onDismissInsight: { id in
                 withAnimation(DS.Animation.standard) {
                     viewModel.dismissInsightCard(id: id)
@@ -398,11 +351,7 @@ struct DashboardView: View {
 
         // Cumulative Stress Score (Phase 3)
         if let stressScore = viewModel.cumulativeStressScore {
-            NavigationLink(value: stressScore) {
-                CumulativeStressCard(stressScore: stressScore)
-            }
-            .buttonStyle(.plain)
-            .accessibilityIdentifier("dashboard-stress-score")
+            CumulativeStressCard(stressScore: stressScore)
             .transition(Self.sectionTransition)
             .staggeredAppear(index: 6)
         }
@@ -524,7 +473,7 @@ struct DashboardView: View {
         }
 
         HealthDataQACard(isAvailable: HealthDataQAService.isAvailable) {
-            isShowingHealthDataQA = true
+            onOpenHealthDataQA()
         }
         .staggeredAppear(index: 13)
     }
@@ -678,8 +627,7 @@ struct DashboardView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private func openMetric(_ metric: HealthMetric) {
-        isShowingHealthDataQA = false
-        inspectedMetric = metric
+        onInspectMetric(metric)
     }
 
     private func cardGrid(cards: [VitalCardData]) -> some View {

@@ -190,6 +190,147 @@ struct WatchWorkoutActivityTests {
             "end:activity-1"
         ])
     }
+
+    @Test("A WatchConnectivity terminal snapshot closes the matching activity")
+    func terminalContextClosesMatchingWorkout() async {
+        let driver = MockWatchWorkoutActivityDriver()
+        let activity = WatchWorkoutActivity(driver: driver)
+        activity.start(mirrorID: mirrorID, snapshot: snapshot())
+        await activity.waitForPendingUpdates()
+
+        let final = snapshot(phase: .ended, updatedAtOffset: 30, elapsedSeconds: 25)
+        #expect(activity.finish(matching: final))
+        await activity.waitForPendingUpdates()
+        activity.receive(snapshot(updatedAtOffset: 40), mirrorID: mirrorID)
+        await activity.waitForPendingUpdates()
+
+        #expect(activity.snapshot == final)
+        #expect(driver.events == ["start", "end:activity-1"])
+    }
+
+    @Test("A delayed end from an older workout cannot dismiss a newer workout")
+    func terminalContextCannotEndReplacement() async {
+        let driver = MockWatchWorkoutActivityDriver()
+        let activity = WatchWorkoutActivity(driver: driver)
+        let current = snapshot(updatedAtOffset: 310, startedAtOffset: 300)
+        activity.start(mirrorID: UUID(), snapshot: current)
+        await activity.waitForPendingUpdates()
+
+        #expect(!activity.finish(matching: snapshot(phase: .ended, updatedAtOffset: 30)))
+        await activity.waitForPendingUpdates()
+
+        #expect(activity.snapshot == current)
+        #expect(driver.events == ["start"])
+    }
+
+    @Test("An end received before the mirror attaches also closes a pre-requested activity")
+    func terminalContextBeforeAttachment() async {
+        let driver = MockWatchWorkoutActivityDriver()
+        let activity = WatchWorkoutActivity(driver: driver)
+        let final = snapshot(phase: .ended, updatedAtOffset: 30)
+        #expect(!activity.finish(matching: final))
+
+        activity.start(mirrorID: mirrorID, snapshot: snapshot(), requestedID: "background", didRequest: true)
+        await activity.waitForPendingUpdates()
+
+        #expect(activity.snapshot == final)
+        #expect(driver.starts.isEmpty)
+        #expect(driver.events == ["end:background"])
+    }
+
+    @Test("Invalid terminal data does not close or mark a workout as ended")
+    func rejectsInvalidTerminalContext() async {
+        let driver = MockWatchWorkoutActivityDriver()
+        let activity = WatchWorkoutActivity(driver: driver)
+        let current = snapshot()
+        activity.start(mirrorID: mirrorID, snapshot: current)
+        await activity.waitForPendingUpdates()
+        var invalid = snapshot(phase: .ended)
+        invalid.activeCalories = .nan
+
+        #expect(!activity.finish(matching: invalid))
+        #expect(!activity.finish(matching: current))
+        await activity.waitForPendingUpdates()
+        #expect(activity.snapshot == current)
+        #expect(driver.events == ["start"])
+    }
+
+    @Test("Terminal context is serialized after an in-flight activity update")
+    func terminalContextDuringUpdate() async {
+        let driver = MockWatchWorkoutActivityDriver(blockUpdates: true)
+        let activity = WatchWorkoutActivity(driver: driver)
+        activity.start(mirrorID: mirrorID, snapshot: snapshot())
+        await activity.waitForPendingUpdates()
+        activity.receive(snapshot(updatedAtOffset: 20), mirrorID: mirrorID)
+        await driver.waitForBlockedUpdate()
+
+        #expect(activity.finish(matching: snapshot(phase: .ended, updatedAtOffset: 30)))
+        driver.releaseBlockedUpdate()
+        await activity.waitForPendingUpdates()
+
+        #expect(driver.events == ["start", "update-start:activity-1", "update-end:activity-1", "end:activity-1"])
+    }
+
+    @Test("An end cannot close another workout started less than two seconds later")
+    func closelySpacedWorkoutsHaveDistinctEnds() async {
+        let driver = MockWatchWorkoutActivityDriver()
+        let activity = WatchWorkoutActivity(driver: driver)
+        let current = snapshot(updatedAtOffset: 5, startedAtOffset: 1)
+        activity.start(mirrorID: mirrorID, snapshot: current)
+        await activity.waitForPendingUpdates()
+        #expect(!activity.finish(matching: snapshot(phase: .ended, updatedAtOffset: 2)))
+        await activity.waitForPendingUpdates()
+        #expect(activity.snapshot == current)
+        #expect(driver.events == ["start"])
+    }
+
+    @Test("An unidentified mirror never creates a stranded placeholder activity")
+    func defersUnidentifiedStart() async {
+        let driver = MockWatchWorkoutActivityDriver()
+        let activity = WatchWorkoutActivity(driver: driver)
+        activity.start(mirrorID: mirrorID, snapshot: snapshot(), allowsStartCorrection: true)
+        await activity.waitForPendingUpdates()
+        #expect(driver.starts.isEmpty)
+
+        let identified = snapshot(updatedAtOffset: 20, startedAtOffset: -60, elapsedSeconds: 80)
+        activity.receive(identified, mirrorID: mirrorID, authoritative: true)
+        await activity.waitForPendingUpdates()
+        #expect(driver.starts.map(\.snapshot) == [identified])
+    }
+
+    @Test("An end arriving before an unidentified mirror cannot leave a late activity")
+    func terminalBeforeUnidentifiedMirror() async {
+        let driver = MockWatchWorkoutActivityDriver()
+        let activity = WatchWorkoutActivity(driver: driver)
+        let final = snapshot(phase: .ended, updatedAtOffset: 30, startedAtOffset: -60)
+        #expect(!activity.finish(matching: final))
+        activity.start(mirrorID: mirrorID, snapshot: snapshot(updatedAtOffset: 40, startedAtOffset: 40),
+                       allowsStartCorrection: true)
+        await activity.waitForPendingUpdates()
+        #expect(driver.starts.isEmpty)
+
+        activity.receive(snapshot(updatedAtOffset: 20, startedAtOffset: -60), mirrorID: mirrorID, authoritative: true)
+        await activity.waitForPendingUpdates()
+        #expect(activity.snapshot == final)
+        #expect(driver.starts.isEmpty)
+    }
+
+    @Test("Multiple terminal events remain available for delayed session attachments")
+    func retainsEarlierTerminalIdentity() async {
+        let driver = MockWatchWorkoutActivityDriver()
+        let activity = WatchWorkoutActivity(driver: driver)
+        let firstEnd = snapshot(phase: .ended, updatedAtOffset: 30)
+        let secondEnd = snapshot(phase: .ended, updatedAtOffset: 330, startedAtOffset: 300)
+        #expect(!activity.finish(matching: firstEnd))
+        #expect(!activity.finish(matching: secondEnd))
+
+        activity.start(mirrorID: mirrorID, snapshot: snapshot(), requestedID: "late-first", didRequest: true)
+        await activity.waitForPendingUpdates()
+
+        #expect(activity.snapshot == firstEnd)
+        #expect(driver.starts.isEmpty)
+        #expect(driver.events == ["end:late-first"])
+    }
 }
 
 @MainActor

@@ -66,6 +66,58 @@ final class LifeRegressionTests: SeededUITestBaseCase {
         )
     }
 
+    func testWeeklyAndFutureRecurringHabitsStayOutsideTodayProgress() throws {
+        ensureLifeRoot()
+        let hero = app.descendants(matching: .any)[AXID.lifeHeroProgress].firstMatch
+        XCTAssertTrue(hero.waitForExistence(timeout: 10), "Seeded Life hero should render")
+        let baselineProgress = hero.label
+        XCTAssertEqual(baselineProgress, "Life progress 1 of 3", "The seed should start with one of three daily habits completed")
+
+        createScheduledHabit(named: "Weekly Swim", frequencyID: AXID.habitFormFrequencyWeekly)
+        XCTAssertEqual(hero.label, baselineProgress, "A weekly goal must not increase today's denominator")
+
+        createScheduledHabit(named: "Seven Day Reset", frequencyID: "habit-form-frequency-interval", startsOnFirstCompletion: true)
+        XCTAssertEqual(hero.label, baselineProgress, "A future recurring habit must not increase today's denominator")
+
+        let today = app.descendants(matching: .any)["life-habit-group-today"].firstMatch
+        let weekly = app.descendants(matching: .any)["life-habit-group-weekly"].firstMatch
+        let upcoming = app.descendants(matching: .any)["life-habit-group-upcoming"].firstMatch
+        XCTAssertTrue(today.waitForExistence(timeout: 5), "Seeded daily habits should remain in Today")
+        XCTAssertTrue(weekly.waitForExistence(timeout: 5), "Weekly group should appear after adding a weekly habit")
+        XCTAssertTrue(upcoming.waitForExistence(timeout: 5), "Upcoming group should appear for a recurring habit awaiting its first completion")
+        XCTAssertTrue(today.descendants(matching: .any)[AXID.lifeHabitRow("Morning Stretch")].firstMatch.exists)
+        XCTAssertTrue(weekly.descendants(matching: .any)[AXID.lifeHabitRow("Weekly Swim")].firstMatch.exists)
+        XCTAssertTrue(upcoming.descendants(matching: .any)[AXID.lifeHabitRow("Seven Day Reset")].firstMatch.exists)
+        XCTAssertFalse(today.descendants(matching: .any)[AXID.lifeHabitRow("Weekly Swim")].firstMatch.exists)
+        XCTAssertFalse(today.descendants(matching: .any)[AXID.lifeHabitRow("Seven Day Reset")].firstMatch.exists)
+
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.lifeHeroProgress, maxSwipes: 8, direction: .down))
+        attachLifeScreenshot("L01 Today hero with scheduled habits")
+        for (groupID, name) in [
+            ("life-habit-group-today", "L01 Today checklist"),
+            ("life-habit-group-weekly", "L01 Weekly habits"),
+            ("life-habit-group-upcoming", "L01 Upcoming habits")
+        ] {
+            XCTAssertTrue(app.scrollToHittableElementIfNeeded(groupID, maxSwipes: 10), "\(name) should be reachable")
+            if groupID == "life-habit-group-upcoming" {
+                // A hittable group can still extend below an iPad's viewport.
+                // Capture the complete pending schedule and its explanatory copy.
+                let group = app.descendants(matching: .any)[groupID].firstMatch
+                let scroll = app.scrollViews.firstMatch
+                let viewport = scroll.frame.intersection(app.windows.firstMatch.frame)
+                for _ in 0..<6 where !viewport.contains(group.frame) {
+                    if group.frame.maxY > viewport.maxY {
+                        scroll.swipeUp(velocity: .slow)
+                    } else {
+                        scroll.swipeDown(velocity: .slow)
+                    }
+                }
+                XCTAssertTrue(viewport.contains(group.frame), "Upcoming schedule copy should fit completely in the capture viewport")
+            }
+            attachLifeScreenshot(name)
+        }
+    }
+
     func testEditFlowRenamesSeededHabit() throws {
         openActionsMenu(for: "Morning Stretch")
 
@@ -232,6 +284,56 @@ final class LifeRegressionTests: SeededUITestBaseCase {
         }
         for _ in 0..<5 { scroll.swipeDown() }
         VisualAudit.capture("\(route) returned upper viewport")
+    }
+
+    private func createScheduledHabit(
+        named name: String,
+        frequencyID: String,
+        startsOnFirstCompletion: Bool = false
+    ) {
+        XCTAssertTrue(app.openLifeNewHabitForm(), "New Habit form should open for \(name)")
+        let nameField = app.textFields[AXID.habitFormName].firstMatch
+        XCTAssertTrue(app.fillTextInput(AXID.habitFormName, with: name))
+        _ = app.dismissKeyboardIfPresent()
+        XCTAssertTrue(app.scrollToElementInPrimaryFormIfNeeded(frequencyID, maxSwipes: 6), "Frequency option should be reachable")
+        app.descendants(matching: .any)[frequencyID].firstMatch.auditTap()
+
+        if startsOnFirstCompletion {
+            XCTAssertTrue(app.scrollToElementInPrimaryFormIfNeeded("habit-interval-stepper", maxSwipes: 6))
+            let intervalStepper = app.descendants(matching: .any)["habit-interval-stepper"].firstMatch
+            XCTAssertTrue(intervalStepper.waitForExistence(timeout: 5), "Recurring form should expose its day interval")
+            XCTAssertTrue(intervalStepper.label.contains("7"), "Recurring habit should use the default seven-day interval")
+            XCTAssertTrue(app.scrollToElementInPrimaryFormIfNeeded("habit-interval-start-point", maxSwipes: 6))
+            app.descendants(matching: .any)["habit-interval-start-point"].firstMatch.auditTap()
+            let firstCompletion = app.buttons["First Completion"].firstMatch
+            XCTAssertTrue(firstCompletion.waitForExistence(timeout: 5), "First Completion should be available as a start point")
+            firstCompletion.auditTap()
+            XCTAssertTrue(app.staticTexts["Schedule starts after the first completion"].firstMatch.waitForExistence(timeout: 5),
+                          "Recurring habit should wait for its first completion")
+        }
+
+        // The sheet's navigation buttons leave the AX tree while its Form is scrolled.
+        // Restore the form's top before looking for Save.
+        let saveButton = app.buttons[AXID.habitFormSave].firstMatch
+        let form = app.collectionViews.firstMatch
+        XCTAssertTrue(form.exists, "\(name) form should expose its scroll container")
+        for _ in 0..<6 where !saveButton.exists {
+            form.swipeDown()
+        }
+        XCTAssertTrue(saveButton.waitForExistence(timeout: 5), "\(name) Save action should return at the top of the form")
+        saveButton.auditTap()
+        expectation(for: NSPredicate(format: "exists == false"), evaluatedWith: nameField)
+        waitForExpectations(timeout: 5)
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.lifeHabitRow(name)].firstMatch.waitForExistence(timeout: 8),
+                      "\(name) should appear on the Life list")
+    }
+
+    private func attachLifeScreenshot(_ name: String) {
+        VisualAudit.capture(name)
+        let attachment = XCTAttachment(screenshot: app.screenshot())
+        attachment.name = name
+        attachment.lifetime = .keepAlways
+        add(attachment)
     }
 
     private func ensureLifeRoot() {

@@ -1,0 +1,188 @@
+{
+  "source": {
+    "revision": "ef42c58ef8d5ae03eb43c45e5266a8c65c487dd6",
+    "sha256": {
+      "DUNE/App/ContentView.swift": "4e1ca5fc2e775c9f69e4399ca22cf6c041746362f6c16c63ce34552c1795833c",
+      "DUNE/Presentation/Dashboard/DashboardView.swift": "126008d3e168f5171e78a24ee140f8381d4b8fde804599b38512639b288da3ce",
+      "DUNE/Presentation/Shared/Components/WaveRefreshIndicator.swift": "7f2dc7a8190124878e8d0a7351d19a943fe29a7d77c0491d1c91a641f5dabf01",
+      "DUNE/Presentation/Shared/Components/WaveRefreshTaskCoordinator.swift": "4703bc3269d2678c6097aa1e3e27d7cf4b2a201374ec7faeb1f8e0c384be3014",
+      "DUNETests/WaveRefreshTaskCoordinatorTests.swift": "7a00ae4ddc19d428dbaf8a842494c7a6b1d6b9a85a300db64f5993acba8bdab6",
+      "DUNEUITests/Full/TodaySettingsRegressionTests.swift": "b5c21340a4e6044c416d0a46c64f89c1b6e18961e99bd078f96f080a182c0f0d"
+    }
+  },
+  "scope": "Seeded Today, default text/light appearance. Selected scroll/inspector regressions only; not complete suite, all themes, accessibility, or physical-device validation.",
+  "captures": [
+    {
+      "device": "iphone",
+      "file": "images/iphone-manual-initial.png",
+      "label": "Today manual return initial",
+      "test": "TodaySettingsRegressionTests/testManualScrollToTopSettlesWithoutMovingConditionHero()",
+      "device_id": "0376F2EC-BF2B-4CEE-966B-3388E7AACF4B",
+      "device_name": "iPhone 18 Pro Max-wt-Health-36ee-a2e623510feb",
+      "timestamp": 1792933318.555,
+      "original_attachment": "69065466-6423-46C9-B1F5-BC1BC5EAB3A1.png",
+      "pixels": [
+        1320,
+        2868
+      ],
+      "sha256": "ff5a3ac5930d8d5f7dbcb93213f664f063014d1ae1d9338d12ebf3daef101137",
+      "xcresult": "Test-DUNEUITests-2026.10.25_22-00-10-+0900.xcresult"
+    },
+    {
+      "device": "iphone",
+      "file": "images/iphone-manual-settled.png",
+      "label": "Today manual return settled",
+      "test": "TodaySettingsRegressionTests/testManualScrollToTopSettlesWithoutMovingConditionHero()",
+      "device_id": "0376F2EC-BF2B-4CEE-966B-3388E7AACF4B",
+      "device_name": "iPhone 18 Pro Max-wt-Health-36ee-a2e623510feb",
+      "timestamp": 1792933337.245,
+      "original_attachment": "C614C757-A777-4807-84B8-5DB97C64B5B4.png",
+      "pixels": [
+        1320,
+        2868
+      ],
+      "sha256": "81b2c1b178879957aaa09b7b69782cd1c628b86ef8f6b4b1175f205d77b93350",
+      "xcresult": "Test-DUNEUITests-2026.10.25_22-00-10-+0900.xcresult"
+    },
+    {
+      "device": "iphone",
+      "file": "images/iphone-full-settled.png",
+      "label": "Today repeated full swipes settled",
+      "test": "TodaySettingsRegressionTests/testRepeatedFullSwipesAtTopSettleConditionHero()",
+      "device_id": "0376F2EC-BF2B-4CEE-966B-3388E7AACF4B",
+      "device_name": "iPhone 18 Pro Max-wt-Health-36ee-a2e623510feb",
+      "timestamp": 1792933434.496,
+      "original_attachment": "DE71DE32-F1BC-4058-8714-B1F7797CACFE.png",
+      "pixels": [
+        1320,
+        2868
+      ],
+      "sha256": "f300488d065646ad7ecb5bb7ddd7053e24affcb62d718c319613253353b7e234",
+      "xcresult": "Test-DUNEUITests-2026.10.25_22-00-10-+0900.xcresult"
+    },
+    {
+      "device": "iphone",
+      "file": "images/iphone-native-release.png",
+      "label": "Today native refresh completed without hold",
+      "test": "TodaySettingsRegressionTests/testNativeRefreshReleaseWithoutHoldKeepsTodayScrollable()",
+      "device_id": "0376F2EC-BF2B-4CEE-966B-3388E7AACF4B",
+      "device_name": "iPhone 18 Pro Max-wt-Health-36ee-a2e623510feb",
+      "timestamp": 1792933393.913,
+      "original_attachment": "19223677-7460-4312-9F9D-327F8E29FFB4.png",
+      "pixels": [
+        1320,
+        2868
+      ],
+      "sha256": "0372162fc72486583317cd7940aec6f94532cd6e2635cbcb17f83ed70a77db85",
+      "xcresult": "Test-DUNEUITests-2026.10.25_22-00-10-+0900.xcresult"
+    },
+    {
+      "device": "ipad",
+      "file": "images/ipad-manual-settled.png",
+      "label": "Today manual return settled",
+      "test": "TodaySettingsRegressionTests/testManualScrollToTopSettlesWithoutMovingConditionHero()",
+      "device_id": "5FC18C30-0E1B-46E9-87DD-5C8807A7E01E",
+      "device_name": "iPad Pro 13-inch (M5)-wt-Health-36ee-a2e623510feb",
+      "timestamp": 1792933586.875,
+      "original_attachment": "4BF1A76B-1F18-41E4-83FD-0F7FDB2D1CA6.png",
+      "pixels": [
+        2064,
+        2752
+      ],
+      "sha256": "0f57e70ce02307da4382e06f6d701e7b1b45bff263d9302c16c4cc29ea443da3",
+      "xcresult": "Test-DUNEUITests-2026.10.25_22-05-03-+0900.xcresult"
+    },
+    {
+      "device": "duo-close",
+      "file": "images/duo-close-manual-settled.png",
+      "label": "Today manual return settled",
+      "test": "TodaySettingsRegressionTests/testManualScrollToTopSettlesWithoutMovingConditionHero()",
+      "device_id": "1209198E-455F-45F1-B226-C8DD0BA0A4BE",
+      "device_name": "iPhone Duo-wt-Health-36ee-a2e623510feb",
+      "timestamp": 1792933954.591,
+      "original_attachment": "DD9BC106-D722-407B-9313-61BFAF2B5A2C.png",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "7aea8f62dc93f02e48c7ddb6717c213e17fa84bd1cb4bcc6bf650abdd3ae2913",
+      "xcresult": "Test-DUNEUITests-2026.10.25_22-11-07-+0900.xcresult"
+    },
+    {
+      "device": "duo-open",
+      "file": "images/duo-open-manual-settled.png",
+      "label": "Today manual return settled",
+      "test": "TodaySettingsRegressionTests/testManualScrollToTopSettlesWithoutMovingConditionHero()",
+      "device_id": "1209198E-455F-45F1-B226-C8DD0BA0A4BE",
+      "device_name": "iPhone Duo-wt-Health-36ee-a2e623510feb",
+      "timestamp": 1792934312.6458712,
+      "original_attachment": "duo-open-native-settled.png",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "f6cd70ccf0926ec60599e6ffb9c7eb52978cd817138fc1af054c562ae6fbd42a",
+      "xcresult": "Test-DUNEUITests-2026.10.25_22-17-47-+0900.xcresult",
+      "capture_method": "simctl screenshot --display=3; after XCTest manual return settled attachment checkpoint"
+    }
+  ],
+  "runs": [
+    {
+      "device": "iphone",
+      "xcresult": "Test-DUNEUITests-2026.10.25_22-00-10-+0900.xcresult",
+      "counts": {
+        "executed": 10,
+        "passed": 10,
+        "skipped": 0,
+        "failed": 0
+      },
+      "receipt": "evidence/iphone-ui.result.json"
+    },
+    {
+      "device": "ipad",
+      "xcresult": "Test-DUNEUITests-2026.10.25_22-05-03-+0900.xcresult",
+      "counts": {
+        "executed": 4,
+        "passed": 4,
+        "skipped": 0,
+        "failed": 0
+      },
+      "receipt": "evidence/ipad-ui.result.json"
+    },
+    {
+      "device": "duo-close",
+      "xcresult": "Test-DUNEUITests-2026.10.25_22-11-07-+0900.xcresult",
+      "counts": {
+        "executed": 2,
+        "passed": 2,
+        "skipped": 0,
+        "failed": 0
+      },
+      "receipt": "evidence/duo-close-ui.result.json"
+    },
+    {
+      "device": "duo-open",
+      "xcresult": "Test-DUNEUITests-2026.10.25_22-13-21-+0900.xcresult",
+      "counts": {
+        "executed": 2,
+        "passed": 2,
+        "skipped": 0,
+        "failed": 0
+      },
+      "receipt": "evidence/duo-open-ui.result.json"
+    },
+    {
+      "device": "duo-open-capture",
+      "xcresult": "Test-DUNEUITests-2026.10.25_22-17-47-+0900.xcresult",
+      "counts": {
+        "executed": 1,
+        "passed": 1,
+        "skipped": 0,
+        "failed": 0
+      },
+      "receipt": "evidence/duo-open-capture-ui.result.json",
+      "purpose": "One repeated manual test to capture active display; separate from18 regression executions."
+    }
+  ],
+  "capture_limit": "Duo open XCTest PNG was all black. It is retained as rejected evidence; gallery uses simctl active display3 captured after the corresponding checkpoint in a passing repeat. Hinge angle readback unavailable in devicectl651.13.5; posture confirmed by active display identity and native pixels, not measured angle."
+}
