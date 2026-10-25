@@ -305,6 +305,7 @@ final class LifeRegressionTests: SeededUITestBaseCase {
     }
 
     private func attachLifeScreenshot(_ name: String) {
+        VisualAudit.capture(name)
         let attachment = XCTAttachment(screenshot: app.screenshot())
         attachment.name = name
         attachment.lifetime = .keepAlways
