@@ -1,7 +1,7 @@
 ---
 topic: today-reading-v2
 date: 2026-10-25
-status: implemented-validation-partial
+status: implemented-validated
 confidence: high
 related_solutions:
   - ../solutions/architecture/2026-04-05-cumulative-stress-detail-view.md
@@ -90,4 +90,4 @@ High: 데이터 모델·계산을 재사용하는 국소 표시 변경이다. �
 
 ## Execution status
 
-구현과 P2수정을14d37e32에 반영했다. iPhone7/7 통과는44018fcc 기준이며 후속 delta 검사와 T10새 캡처가 남았다. iPad는 잠금 대기에서2회 시작 전 종료됐고 Duo두 자세는 미실행이다. 이전 캡처를 새 구현의 완료 증거로 쓰지 않는다. 상세 결과·재개 조건은 [실행 기록](../reviews/2026-10-25-today-reading-v2-run.md)에 보존한다.
+구현과 P2수정을14d37e32에 반영했다. 명시적 허용 뒤 iPhone2/2·iPad2/2·Duo접힘2/2 및 Duo펼침의 통과 T10+수정 후 카드1/1을 확인했다. 이전 iPhone7/7의 variant 증거는44018fcc로 유지한다. 실제 화면38장과 각도0°/180°·활성 화면·창 크기를 기록했다. 펼침 테스트의 장식 Image선택 오류는 테스트만 수정했고 재시도 내역을 보존한다. 상세 결과는 [실행 기록](../reviews/2026-10-25-today-reading-v2-run.md)에 보존한다.

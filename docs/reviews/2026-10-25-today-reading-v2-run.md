@@ -1,7 +1,7 @@
 ---
 tags: [today, ui, review, run, validation]
 date: 2026-10-25
-status: validation-blocked
+status: verified-feature-scope
 ---
 
 # Today 읽기 위계 V2 실행 기록
@@ -19,7 +19,7 @@ status: validation-blocked
 | 이미 검증한 부채의 max clamp(P3) |제거 |
 | date-range helper의 first/last 방어적 optional 검사(P3) |안전한 helper 계약을 보존하는 tradeoff로 수용. 차단 사항 없음 |
 
-미해결 P1/P2=0이다. SwiftUI·Apple UX 전문 검토를 Work에서 수행하고 후속 변경의 관련 관점만 재검토했다. 대량 데이터 처리가 없어 perf-optimizer는 제외했다. 종합 app-quality는 iPhone 증거를 확인했지만 기기별 캡처 게이트는 열어 뒀다.
+미해결 P1/P2=0이다. SwiftUI·Apple UX 전문 검토를 Work에서 수행하고 후속 변경의 관련 관점만 재검토했다. 대량 데이터 처리가 없어 perf-optimizer는 제외했다. 기존 종합 app-quality의 기기별 캡처 보류 사항은 아래 재개 검증으로 해소하고 최종 증거 재검토에서 PASS WITH NOTES, 미해결P1/P2/P3=0을 받았다.
 
 새 문자열10개는 en/ko/ja 모두 확인했다. Text/Label은 LocalizedStringKey, 시간·수치는 기존 formatter를 사용한다. `swift scripts/format-xcstrings.swift --check`를 실행했다.
 
@@ -40,11 +40,26 @@ status: validation-blocked
 
 로컬 로그와 결과 JSON은 `.codex-checks/today-reading-final-iphone.log{,.result.json}`, `.codex-checks/today-reading-ipad.log`, `.codex-checks/pipeline/`에 보존한다. 캡처 출처·크기·SHA256은 갤러리 인덱스에 커밋한다. 문서 추가로 전체 fingerprint receipt가 stale이 돼도 이전 자동 테스트를 새 성공으로 갱신하지 않는다. 변경 소스별 리비전과 실제 실행 범위를 위 표로 유지한다.
 
-## Remaining gates
+## Explicitly authorized resumption
 
-1.14d37e32에서 `TodayReadingUITests/testCurrentDeviceReadingCards`와 `testNotificationDigestUsesSameExpandableCard`의 최종 delta 검증 및 T10 새 PNG가 필요하다.
-2. iPad·Duo 접힘·펼침의 T03/T10 새 캡처와 육안 확인이 필요하다. 첫 iPad 시도와 재시도 모두 같은 잠금 원인으로 실패하여 해당 자동 실행 경로를 중단했다. 저장소 점유가 해제되고 사용자가 재개를 지시한 뒤, 등록된 소유 기기와 상태를 확인해 재개한다.
-3. 기기별 디자인맵 품질 게이트가 열린 상태에서는 merge 완료로 표시하지 않는다. 원본 워크트리와 전용 기기는 유지한다.
+사용자의 “허용” 후 저장소 잠금이 풀린 것을 실제 획득으로 확인하고3개 소유 기기를 대조했다. 기존 iPad2회 실패 이력은 보존했다. CLI의 고정 retry한도를 수정하지 않고 명시적 재개 실행을 별도 ID로 기록해 이전 이력과 연결했다.
+
+| 최종 관련 실행 | 결과 |
+|---|---|
+| iPhone 최종 delta |2실행/2통과, T10지표 중복 방지·수면 한국어 시간 확인 |
+| iPad 재개 |2실행/2통과 |
+| Duo 접힘 |2실행/2통과, nativecheckpoint11/11정상 |
+| Duo 펼침 첫 실행 |2실행/1통과/1실패. T10통과, 카드 검사의 장식 Image선택·지나침 문제 |
+| Duo 펼침 실패건 수정 후 |실패한 카드1실행/1통과, nativecheckpoint8/8정상. 제품 코드는 그대로, test local helper만a8fa79b8에서 수정 |
+| 병합 후 표준 build |origin/main a5e9052c를fc05f89c에 병합 후 통과. 충돌은 실제맵 링크만 양쪽 보존. Today제품·문구에는14d37e32이후 diff없음 |
+
+최종 관련8개 method/device조건은 각각 성공 증거가 있다. 최초 펼침 실패를 포함하면9실행/8통과/1실패 후 해당 실패 해결이며, 동일 실행8/8로 바꿔 보고하지 않는다. 실제 PNG38장을 [갤러리](../design/full-redesign-map/review/today-reading-v2-2026-10-25/index.html)에 등록했다. source_commit과 app_source_commit, case와 bundle상태를 분리했다. 원본 결과 JSON과 읽기값도evidence/에 보존한다.
+
+Duo의 이전 devicectl motion조회는 현 도구에 없어 public UIKit.UIHingeInteraction을 붙인 보조 앱으로 실제0°/닫힘과180°/완전펼침을 읽었다. 검토한 pinned HID setter만 자세 설정에 사용했다. 외부LCD 및 내부LCD-1 활성 상태와 native·AX를 대조했다. 실제 창은 접힘466×678pt, 펼침951×669pt다. 직후 방향 요청값과 앱 재활성 뒤 방향값이 달라 펼침은 실제 가로창으로 기록한다. 펼침 세로·회전 전환의 합격으로 확대하지 않는다.
+
+최종검증 로그는 `.codex-checks/today-reading-resolve-iphone.log`, `today-reading-ipad-resume.log`, `today-reading-duo-closed.log`, `today-reading-duo-open.log`, `today-reading-duo-open-retry.log`와 각result.json이다. 세 카드의 밝음/어두움/최대글씨는 앞선 iPhone증거, 다른 기기들은 기본 밝음만 확인했다. 실제 기록 없음 native상태·실기기권한·다른테마·전체회귀는 미검증이다.
+
+공유 catalog가 수정 중인 원본 main워크트리는 그대로 보존한다. 원격 머지 후 전용 체크아웃을 병합된 main내용에 맞춰 동기화·재생성하고, 원본의 미커밋 파일을 덮어쓰거나 stash하지 않는다. PR은 [#837](https://github.com/gooson/DUNE/pull/837)을 사용한다.
 
 ## Change Verification Guide
 
