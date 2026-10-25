@@ -4,8 +4,6 @@ import SwiftData
 struct DashboardView: View {
     @State private var viewModel: DashboardViewModel
     @State private var isShowingPinnedEditor = false
-    @State private var isShowingHealthDataQA = false
-    @State private var inspectedMetric: HealthMetric?
     @State private var templateNudgeToSave: WorkoutTemplateRecommendation?
     @State private var hasAppeared = false
     @State private var isShowingBriefing = false
@@ -38,6 +36,8 @@ struct DashboardView: View {
     private let onOpenActivity: () -> Void
     private let onOpenWellness: () -> Void
     private let onLogWeight: () -> Void
+    private let onInspectMetric: (HealthMetric) -> Void
+    private let onOpenHealthDataQA: () -> Void
     private let launchExperienceReady: Bool
     private let canLoadHealthKitData: Bool
     private let hasFailedHealthKitAuthorization: Bool
@@ -64,6 +64,8 @@ struct DashboardView: View {
         onOpenActivity: @escaping () -> Void = {},
         onOpenWellness: @escaping () -> Void = {},
         onLogWeight: @escaping () -> Void = {},
+        onInspectMetric: @escaping (HealthMetric) -> Void = { _ in },
+        onOpenHealthDataQA: @escaping () -> Void = {},
         launchExperienceReady: Bool = true,
         canLoadHealthKitData: Bool = true,
         hasFailedHealthKitAuthorization: Bool = false
@@ -82,6 +84,8 @@ struct DashboardView: View {
         self.onOpenActivity = onOpenActivity
         self.onOpenWellness = onOpenWellness
         self.onLogWeight = onLogWeight
+        self.onInspectMetric = onInspectMetric
+        self.onOpenHealthDataQA = onOpenHealthDataQA
         self.launchExperienceReady = launchExperienceReady
         self.canLoadHealthKitData = canLoadHealthKitData
         self.hasFailedHealthKitAuthorization = hasFailedHealthKitAuthorization
@@ -208,42 +212,6 @@ struct DashboardView: View {
                         library: library
                     )?.map { TemplateExerciseResolver.defaultEntry(for: $0) } ?? []
                 )
-            }
-        }
-        .inspector(isPresented: Binding(
-            get: { inspectedMetric != nil || isShowingHealthDataQA },
-            set: { isPresented in
-                if !isPresented {
-                    inspectedMetric = nil
-                    isShowingHealthDataQA = false
-                }
-            }
-        )) {
-            if isShowingHealthDataQA {
-                HealthDataQASheet(
-                    viewModel: HealthDataQAViewModel(
-                        service: HealthDataQAService(sharedHealthDataService: sharedHealthDataService),
-                        isAvailable: HealthDataQAService.isAvailable
-                    )
-                )
-                .inspectorColumnWidth(min: 320, ideal: 420, max: 540)
-            } else if let metric = inspectedMetric {
-                NavigationStack {
-                    VStack(spacing: 0) {
-                        HStack {
-                            Spacer()
-                            Button("Done") { inspectedMetric = nil }
-                                .accessibilityIdentifier("dashboard-metric-inspector-close")
-                        }
-                        .padding(DS.Spacing.md)
-                        MetricDetailView(metric: metric)
-                            .id(metric.id)
-                            .navigationDestination(for: AllDataDestination.self) { destination in
-                                AllDataView(category: destination.category)
-                            }
-                    }
-                }
-                .inspectorColumnWidth(min: 320, ideal: 420, max: 540)
             }
         }
         .englishNavigationTitle("Today")
@@ -501,7 +469,7 @@ struct DashboardView: View {
         }
 
         HealthDataQACard(isAvailable: HealthDataQAService.isAvailable) {
-            isShowingHealthDataQA = true
+            onOpenHealthDataQA()
         }
         .staggeredAppear(index: 13)
     }
@@ -655,8 +623,7 @@ struct DashboardView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private func openMetric(_ metric: HealthMetric) {
-        isShowingHealthDataQA = false
-        inspectedMetric = metric
+        onInspectMetric(metric)
     }
 
     private func cardGrid(cards: [VitalCardData]) -> some View {

@@ -1,10 +1,12 @@
 ---
-tags: [swiftui, scrollview, refreshable, cancellation, navigation-title, today, regression-test]
+tags: [swiftui, inspector, scrollview, refreshable, cancellation, navigation-title, today, regression-test]
 category: performance
 date: 2026-10-24
+updated: 2026-10-25
 severity: important
-status: in-progress
+status: verifying
 related_files:
+  - DUNE/App/ContentView.swift
   - DUNE/Presentation/Dashboard/DashboardView.swift
   - DUNE/Presentation/Shared/Components/WaveRefreshIndicator.swift
   - DUNE/Presentation/Shared/Components/WaveRefreshTaskCoordinator.swift
@@ -15,88 +17,84 @@ related_solutions:
   - docs/solutions/performance/2026-10-17-today-native-pull-scroll-lock.md
 ---
 
-# Investigation: Today 스크롤 강제 보정과 native refresh 조기 취소 분리
+# Today 스크롤 점프: 닫힌 inspector의 큰 제목·safe area 피드백
 
-> **미해결 조사 기록**: c3500bcb 최종 targeted UI8은6통과2실패다. 아래 두 결함은 native trace로 확인하고 교정했지만, 깊은 수동·반복 상단 복귀가 남아 전체 해결로 인증하지 않았다. PR 생성·머지는 보류하며 추가 동일 경로 검증은 재시도 제한 예외 승인 대기다.
+> 2026-10-25: 마지막 원인을 inspector host로 격리했다. inspector를 Today NavigationStack 밖으로 옮긴 최종 iPhone targeted UI 10건이 모두 통과했다. 이전 실패의 원래 위치 ±12pt 검사와 제스처는 변경하지 않았다. iPad 검증·최종 리뷰는 진행 중이다.
 
 ## Problem
 
-세 차례 수정 뒤에도 Today 상단으로 돌아올 때 카드가 갑자기 이동했다. 사용자 영상에서는 4.667→4.700초 한 프레임 사이 카드 높이는 같고 위치만 약 53.3pt 바뀌었다. 기존 테스트의 최종 hero 좌표나 `isHittable` 성공만으로는 이동 중 불연속과 큰 제목 아래 겹침을 검출하지 못했다.
+세 차례 수정 뒤에도 Today 상단으로 돌아올 때 카드가 갑자기 이동했다. 사용자 영상에서는 4.667→4.700초 한 프레임 사이 카드 높이는 같고 위치만 약 53.3pt 바뀌었다. 기존 endpoint assertion만으로는 이동 중 불연속과 큰 제목 아래 겹침을 검출하지 못했다.
 
 ### Root Cause
 
-서로 다른 두 경로를 native geometry와 cancellation trace로 분리했다.
+세 경로를 실제 geometry·작업 수명·구조 대조군으로 분리했다.
 
-1. `decelerating → idle`에서 `offset.y + contentInsets.top`이 0~130이면 `scrollTo(top)`을 즉시 호출했다. 17:10:08.016의 y=-115.333/inset=118(거리 2.667)이 이 분기를 통과했다. 2ms 뒤 y=-118, 5ms 뒤 y=-168/inset=168로 이동했다. 시스템 큰 제목 inset이 정착 중인데 앱이 임시 inset으로 강제 정렬한 것이다. 콘텐츠 높이 2973.667pt는 변하지 않았다.
-2. native `.refreshable` 작업이 상태 갱신 중 약 91ms 만에 취소됐다(17:23:10.963 시작→11.054 종료, `Task.isCancelled=true`). 테스트 최소 표시 시간 4초도 취소됐다. refresh 종료 후 scroll safe area가 168→108pt가 됐지만 UINavigationBar frame은 `(0,62,440,106)`, scroll frame은 `(0,0,440,956)`, 기본 contentInset은 0으로 유지됐다. 실제 카드가 60pt 올라갔는데 접근성 hero Y는 이전 값이어서 endpoint assertion이 통과했다.
+1. **닫힌 inspector host와 내비게이션 큰 제목의 상단 여백 피드백.** Dashboard의 ScrollView에 `.inspector`를 붙였을 때, 패널이 닫혀 있어도 깊은 스크롤에서 복귀하며 nav bar 높이와 scroll safe area가 반복해서 커졌다 작아졌다. 손을 뗀 뒤 y≈-103~-115, inset≈114~122, 제목 높이≈54~57pt에 남았다. 정상 시작은 y=-168/inset168/nav bar 높이106pt다. 실제 카드가 52~67.7pt 위에 남거나 복귀 순간 튀었다. inspector만 제거하면 같은 실제 콘텐츠·toolbar·refresh·ScrollPosition·배경에서 두 번 위로 스크롤한 뒤 두 번째 하강부터 8번째 하강과 100pt held pull까지 모두 원래 AX Y213pt로 돌아왔다. native scroll window frame(0,0,440,956), y=-168/inset168/nav bar window bottom168도 일치했다. UIKit 내부 구현의 어느 수식이 틀렸는지는 추정하지 않는다. 앱에서 피드백을 만드는 배치와 제거·이동 효과를 확인한 것이다.
+2. **자동 idle 보정이 순간적인 inset을 고정.** `decelerating → idle`에서 `offset.y + contentInsets.top`이 0~130이면 `scrollTo(top)`을 호출했다. 17:10:08.016의 y=-115.333/inset118(거리2.667)이 이 분기를 통과했다. 2ms 뒤 y=-118, 5ms 뒤 y=-168/inset168로 이동했다. 콘텐츠 높이2973.667pt는 같았다. 임계값을 조절하는 보정은 inspector 원인을 제거하지 못했다.
+3. **native refresh caller의 조기 취소.** `.refreshable` 작업이 상태 갱신 중 약91ms 만에 취소됐다(17:23:10.963→11.054, cancelled=true). 테스트 최소 표시4초도 취소되어 native refresh가 조기 종료됐다. scroll safe area168→108인데 nav bar frame(0,62,440,106), scroll frame(0,0,440,956), 기본 contentInset0은 같았다. 실제 카드가60pt 올라간 반면 접근성 좌표는 이전 값이어서 endpoint 검사가 통과한 경우도 있었다.
 
-`cannot add handler to 0 from 0 - dropping` 1644건의 발신 이미지는 QuartzCore, subsystem은 `com.apple.coreanimation`, category는 `API`였다. 이 경고의 반복 횟수만으로 두 스크롤 경로와 인과관계를 주장하지 않는다. 경고 전체 제거를 수정 결과로 보고하지 않는다.
+`cannot add handler to 0 from 0 - dropping` 1644건의 발신 이미지는 QuartzCore, subsystem은 `com.apple.coreanimation`, category는 `API`였다. 경고 빈도 자체를 원인 증거로 사용하지 않았으며, 경고 전체 제거를 수정 결과로 주장하지 않는다.
+
+### Controlled Isolation
+
+전용 iPhone 18 Pro Max/iOS27.0에서 고정 데이터와 같은 pan 입력으로 비교했다. 진단용 테스트는 결과를 기록하는 도구여서 XCTest의 `passed`가 복귀 성공을 뜻하지 않는다. 아래 판정은 기록된 각 위치와 native trace를 기준으로 한다.
+
+| 구성 | 결과 |
+|---|---|
+| 고정 콘텐츠: refresh 없음 / 기본 refresh / wave refresh | 모두 원래 Y192pt로 복귀 |
+| 고정 wave 화면, 실제 Today와 같은 두 번 upward swipe | 두 번째 down에서는 -52pt였으나 세 번째부터 원래 위치로 정상 복귀 |
+| 실제 Today에서 refresh만 제거 | 반복 down 뒤 -52pt, held100 뒤 -55.3pt: 원인 유지 |
+| 실제 Today에서 ScrollPosition만 제거 | down1~5는 -52~-63pt, down6에서만 복귀: 단독 해결 아님 |
+| 실제 Today에서 장식 배경만 제거 | 반복 down 뒤 -53.7pt: 원인 유지 |
+| 실제 Today에서 toolbar만 제거 | down1~4는 -53.7~-63pt: 원인 유지 |
+| 실제 Today의 본문만 고정 Text 블록으로 교체, inspector 유지 | 반복 down 뒤 -63pt, held100 뒤 -55pt: 원인 유지 |
+| 실제 Today에서 inspector만 제거 | down1~7 및 held100 모두 Y213pt, native y=-168/inset168: 정상 |
+
+모든 구성의 UIKit largeTitleDisplayMode는1(always)이므로 자동 제목 모드 차이는 기각했다. AX hero213pt와 native 카드 배경192pt 차이는 label 안쪽21pt 여백이며, 모든 AX 차이를 stale frame으로 간주하지 않는다. 첫 진단의 Timer는 tracking 중 샘플을 놓쳤으므로 두 번째부터 RunLoop.common으로 측정했다. 세 번째 진단부터 scroll/bar를 같은 window 좌표로 변환해 비교했다. 진단용 fixture·timer·환경 분기는 최종 앱에 남기지 않았다.
 
 ## Solution
 
-자동 idle 보정을 제거한다. ScrollViewReader와 높이0 앵커 대신 ScrollView에 하나의 내용 VStack을 두고 ScrollPosition을 연결한다. 기존 앵커와 내용 사이의 암묵적8pt는 명시적 DS.Spacing.sm top padding으로 보존한다. 명시적으로 Today 탭을 재선택할 때만 scrollTo(edge: .top)를 호출한다. native refresh는 `@State`의 화면 소유 coordinator가 MainActor 비구조 Task로 실행하고 caller가 그 완료를 기다린다. SwiftUI가 일시적으로 refresh caller를 취소해도 작업은 유지된다. 실제 화면 이탈은 `.onDisappear`에서 명시적으로 취소한다. 중복 요청은 같은 task를 기다리며 취소된 task도 종료할 때까지 추적해 이전 cleanup과 새 실행의 경합을 막는다.
+**inspector의 소유자를 Today NavigationStack 밖으로 옮긴다.** ContentView가 선택한 metric/QA 상태와 inspector를 소유하고, DashboardView는 `onInspectMetric`과 `onOpenHealthDataQA`로 사용자 의도를 전달한다. 패널 닫기는 두 상태를 비우고, metric/QA 진입은 서로 배타적으로 전환한다. Metric → All Data용 독립 NavigationStack, Done 버튼, QA 서비스, inspectorColumnWidth는 유지한다. Apple도 inspector를 navigation 구조 안/밖에 배치할 수 있으며 배치에 따라 column과 toolbar 영역이 달라짐을 설명한다: [WWDC23 Inspectors in SwiftUI](https://developer.apple.com/videos/play/wwdc2023/10161/).
 
-| File | Change | Reason |
-|---|---|---|
-| DashboardView.swift | 자동 phase 이동 제거, 단일 내용 root, 명시적 ScrollPosition edge 이동 | 사용자 정지 위치와 native 제목·inset 정착을 보존 |
-| WaveRefreshTaskCoordinator.swift | 화면 소유 단일 task, 중복 병합, 명시 취소 | transient refresh caller cancellation 분리 |
-| WaveRefreshIndicator.swift | coordinator로 실행, 화면 이탈 취소 | spinner와 native refresh의 실제 작업 수명 유지 |
-| WaveRefreshTaskCoordinatorTests.swift | caller 취소·명시 취소·중복·취소 drain 4건 | 동시성 계약 검증 |
-| TodaySettingsRegressionTests.swift | 짧은 왕복 드래그·손 떼는 native refresh, 기존 회귀 보강 | 지나가는 spinner 관찰 누락과 offscreen activation point 오류 방지 |
+자동 idle 보정은 제거하고 Today 탭 재선택 때만 `ScrollPosition.scrollTo(edge: .top)`을 호출한다. ScrollViewReader/높이0 anchor를 없앤 단일 콘텐츠 구조는 유지하되 이것만으로 원인을 해결했다고 주장하지 않는다. 기존 anchor의 암묵적8pt 간격은 명시적 top padding으로 보존했다.
 
-### Key Code
+Native refresh는 화면 소유 MainActor coordinator의 task로 실행한다. transient caller 취소가 작업을 끊지 않으며 `.onDisappear`에서 명시적으로 취소한다. 중복 요청은 같은 task를 기다리고 취소된 task도 종료할 때까지 추적해 이전 cleanup과 새 실행이 겹치지 않게 한다. 기존 최소 표시1.8초(테스트4초)와 finishing0.1초는 유지했다.
 
-```swift
-let task = Task { @MainActor in await operation() }
-self.task = task
-await task.value
-self.task = nil
-```
-
-실제 구현에는 coalescing과 `cancel()`이 함께 있다. `cancel()`에서 즉시 task를 nil로 만들지 않는다. 취소를 무시하고 drain 중인 이전 작업과 새 refresh가 겹칠 수 있다.
-
-### Rejected Experiments
-
-- 초기 Reader/zero-anchor 제거 실험은 native pull 한 경로만 검사했고 조기 취소가 남았다. 이후 coordinator 수정 뒤 plain ScrollView/ScrollPosition 구조에서 반복 full-swipe가 한 번 통과했지만, 기존8pt 간격을 명시적으로 보존한 최종 실행에서는 다시 실패했다. Reader/anchor 제거를 확정 원인 해결로 판단하지 않는다. 따라서 초기 pull 실험으로 깊은 복귀의 컨테이너 영향을 기각하지 않았다.
-- refreshable modifier를 바깥으로 옮겨도 91ms caller 취소가 재현됐다. 위치 변경은 남기지 않았다.
-- 새 threshold, hardcoded inset, 추가 delay, 제목 inline 전환은 넣지 않았다. 기존 표시 시간 1.8초(테스트 4초)와 finishing 0.1초를 유지했다.
+| 파일 | 변경 |
+|---|---|
+| ContentView.swift | Today NavigationStack 바깥에 inspector와 패널 상태 소유 |
+| DashboardView.swift | inspector 제거·의도 callback 전달, 자동 phase 이동 제거, 명시적 top 이동 |
+| WaveRefreshTaskCoordinator.swift / WaveRefreshIndicator.swift | 화면 소유 refresh 수명, 중복 병합과 명시 취소 |
+| WaveRefreshTaskCoordinatorTests.swift | caller 취소·명시 취소·중복·취소 drain 4건 |
+| TodaySettingsRegressionTests.swift | 부분 왕복·native hold/release·깊은 복귀·원래 위치·refresh 카운터 검증 |
 
 ## Verification
 
-- 수정 후 native 진단: 17:26:29.942 시작→34.239 종료, cancelled=false. 4.3초 동안 refresh가 유지됐고 safe area 228→168pt, offset -168로 정착했다. 전후 실제 PNG의 카드 상단은 모두 192pt였다.
-- 짧은 partial drag 테스트는 interacting→idle 경로다. 제거한 decelerating 분기의 직접 재현 증거로 사용하지 않는다. 그 분기는 별도 native trace 및 full swipe로 확인했다.
-- 테스트 전용 완료 카운터는 취소되지 않은 refresh wrapper 완료를 뜻한다. HealthKit 데이터 조회 성공을 뜻하지 않는다. XCTest가 animation idle을 기다리는 동안 transient spinner를 놓치는 문제를 피하기 위한 지속 관측값이다.
-- 중간1503d12c UI8:6통과2실패. 남은 manual/deep full-swipe 복귀에서 실제 제목·카드가54–65pt 위에 남는다. native pull 취소 수정만으로 전체 문제 해결이라고 판단할 수 없다. Reader/anchor 격리 후 반복 full-swipe는1회 통과했지만 최종 묶음에서 다시 실패했다. manual 테스트는 화면 밖 isHittable 조회로 XCTest activation-point error도 발생했다. predicate를 실제 복귀 뒤 만들고 frame 검사를 먼저 하며, 느린 held pan을 써 수동 경로와 관성 경로를 분리했다. 원래Y±12pt·hittable·상세 진입은 유지하고 refresh 카운터 불변 검사로 native refresh를 대신 검증하지 않게 했다. c3500bcb 최종8건도6통과2실패이므로 XCTest 오류 수정만으로 상단 복귀가 해결되지는 않았다.
+- 초기 c3500bcb의 targeted UI8은6통과2실패였다. Reader 제거·느린 held pan·AX 오류 교정만으로 해결되지 않았다. 같은 경로를 중단한 뒤 사용자 승인으로 원인 격리를 재개했다.
+- inspector 이동 후 iPhone targeted **10/10 통과**: manual return, repeated full swipes, partial return, native held/no-hold refresh, tab reselect, metric open/close/reopen/All Data, QA open, tab round-trip, Activity refresh.
+- manual/full의 원래 Y±12pt, hittability, 상세 진입, manual refresh counter 불변 검사를 유지했다. 제스처 길이·임계값을 완화하지 않았다.
+- manual settled 및 repeated full settled의 새 native PNG에서 큰 Today 제목, 카드 배경 상단192pt와 정상 간격을 직접 확인했다.
+- coordinator source/test는 변경되지 않았으며 exact-byte 임시 macOS SwiftPackage의 Swift Testing4/4 성공을 재사용한다. iOS simulator unit 성공으로 표현하지 않는다.
+- 부분 드래그는 interacting→idle 경로다. 제거된 decelerating callback은 별도의 native trace와 full swipe로 확인했다.
+- 테스트 전용 counter는 refresh wrapper 완료이며 실제 HealthKit 데이터 조회 성공을 뜻하지 않는다.
+- iPad 검증과 최종 리뷰는 진행 중이다. full iOS/Watch suite 성공을 주장하지 않는다.
 
-### 현재 검증 상태
+### Evidence
 
-| 검증 | 결과 |
-|---|---|
-| `scripts/build-ios.sh --no-regen`, c3500bcb | BUILD SUCCEEDED |
-| coordinator Swift Testing4건 | exact-byte app/test source의 macOS 임시 패키지에서4/4 통과; iOS UI 증거와 구분 |
-| 최종 iPhone targeted UI8건 |6통과2실패; 부분 왕복·native held/no-hold refresh·탭 재선택·공통 탭 왕복·Activity refresh 통과 |
-| 수동 상단 복귀 | 실패; 원래Y±12pt 검사 유지, 화면 밖AX조회 교정 후에도 상단에 도달하지 못함 |
-| 반복 full-swipe 상단 복귀 | 실패; 단일 실험 성공을 최종 통과로 승격하지 않음 |
-| iPhone 실제 T03 | native no-hold refresh 이후 실제 PNG와 출처 갱신; 전체 스크롤 상태는 pending |
-| iPad·Duo 접힘/펼침 T03 | 선행 iPhone 게이트 실패로 새 실행·캡처 미완료; 기존PNG는 수정 증거가 아님 |
-| full iOS/Watch suite | 사용자가 전체 실행을 요청하지 않아 실행하지 않음; Watch에 변경 컴포넌트 소비자 없음 |
-| Review/Resolve/Ship | UI 게이트 실패로 진입하지 않음 |
-
-추적된 manual 정지점은 y=-115.333/inset118, 실제 남은 거리2.667pt인데 화면상의 hero 차이는 약53pt다. 화면 좌표 차이를 pan 잔여 거리로 사용하는 테스트 계산은 제목 높이 변화를 포함한다. 최소80pt의 bounded manual pan이 테스트 입력 교정 후보이나 **실행·통과하지 않았으며**, 반복full 경로의 실패를 설명하거나 대체하지 않는다. 원래위치·탭 가능·상세진입·native refresh 카운터 불변 검사도 유지해야 한다.
-
-다음 격리 후보는 같은 NavigationStack/ScrollView fixture에서 공통 wave refresh modifier 유무를 비교하고, native offset/adjusted inset/nav bar frame과 UIKit topItem title mode를 함께 기록하는 것이다. `ScrollContentOffsetAdjustmentBehavior`는 Apple 문서상 콘텐츠 크기 등 context에 따른 자동 offset 보존을 제어한다. 제목 inset에 적용되어 이 문제를 고친다는 근거는 아직 없으므로 앱에 추가하지 않았다.
+- `/tmp/scroll-debug/isolation-ui.log`, `isolation2-ui.log`, `isolation3-ui.log`: 구성별 AX 위치
+- `/tmp/scroll-debug/isolation3-native.log`: 동일 window 좌표의 inspector 격리
+- `/tmp/scroll-debug/owner-fix-iphone-ui.log.result.json`: 정확한10건 실행·통과
+- `/tmp/scroll-debug/owner-fix-iphone-attachments/`: manual/full/refresh의 실제 PNG
 
 ## Prevention
 
-- [ ] 시스템 큰 제목의 변화 중 offset과 inset 합으로 사용자 위치를 자동 보정하지 않는다.
-- [ ] native 당김의 hold/release 경로와 다음 스크롤을 검증한다.
-- [ ] refresh 작업의 caller cancellation과 화면 소유 cancellation을 따로 테스트한다.
-- [ ] 최종 접근성 좌표뿐 아니라 실제 PNG와 native safe area/title frame을 대조한다.
-- [ ] 실제 pull 경로를 test-trigger 버튼 탭으로 대체하지 않는다.
-- [ ] 기존 성공 문서는 당시의 검증 범위로만 해석하고 반증된 보정법은 후속 기록으로 연결한다.
-
-새 `.claude/rules` 변경은 제안만 하며 source of truth를 수정하지 않는다. 일반 프로젝트 핸드북 변경은 필요 없다. 이 사례의 재현 수치와 취소 소유권 계약을 해결 문서와 테스트에 남긴다.
+- 큰 제목이 변하는 동안 임시 offset+inset으로 사용자 위치를 자동 보정하지 않는다.
+- 닫힌 presentation modifier도 scroll/nav host 구조에 영향을 줄 수 있으므로 데이터·배경·toolbar·presentation을 개별 격리한다.
+- native 당김의 hold/release와 다음 스크롤을 검증한다. test-trigger 버튼만으로 대체하지 않는다.
+- caller cancellation과 화면 소유 cancellation을 따로 테스트한다.
+- AX element의 frame과 실제 카드 배경의 padding 차이를 구분하고, native geometry는 동일 좌표계에서 비교한다.
+- 기존 성공 문서는 당시의 검증 범위로 해석하고 반증된 보정법은 후속 기록으로 연결한다.
 
 ## Lessons Learned
 
-최종 상단 복귀 assertion은 부드러운 이동을 증명하지 않는다. 큰 제목과 refresh inset이 함께 변하는 화면에서는 앱이 보정을 추가할수록 순간적인 시스템 geometry를 기준점으로 고정할 수 있다. 시스템 로그의 빈도 대신 실제 scroll command, task cancellation, native frame의 시간 순서를 확인해야 한다.
+최종 위치가 한 번 맞았다는 사실만으로 반복 스크롤이 안정적이라고 판단할 수 없다. 이번에는 큰 제목·상단 여백의 피드백을 임계값으로 덮던 접근을 중단하고, 실제 화면에서 inspector만 제외하는 대조군을 통해 원인을 좁혔다. 패널의 소유 위치를 변경한 뒤 기존에 실패하던 두 검사가 제스처 변경 없이 통과했다.
