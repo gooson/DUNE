@@ -28,6 +28,9 @@ final class ActivityViewModel {
 
     // New data for redesigned Activity tab
     var trainingReadiness: TrainingReadiness?
+    private(set) var readinessHistory: [WeeklyHeroTrendPoint] = []
+    private(set) var readinessSleepAvailable = false
+    private(set) var readinessRecoveryAvailable = false
 
     // 14-day raw data for Training Readiness detail view
     var hrvDailyAverages: [DailySample] = []
@@ -874,6 +877,10 @@ final class ActivityViewModel {
             fatigueStates: fatigueStates
         )
         trainingReadiness = readinessUseCase.execute(input: readinessInput)
+        readinessSleepAvailable = sleepResult.map {
+            $0.totalSleepMinutes.isFinite && (0...1440).contains($0.totalSleepMinutes)
+        } ?? false
+        readinessRecoveryAvailable = fatigueStates.contains { $0.lastTrainedDate != nil }
         WidgetDataWriter.writeReadinessScore(trainingReadiness)
 
         // Persist hourly score snapshot for sparkline tracking
@@ -886,7 +893,16 @@ final class ActivityViewModel {
             await service.loadTodaySparklines()
         }
         readinessSparkline = scoreRefreshService?.readinessSparkline ?? .empty
+        // Fetch recorded scores, rather than reconstructing an approximate past readiness.
+        // Eight rolling days cover the full seven calendar days across DST boundaries.
+        let snapshots = await scoreRefreshService?.fetchRollingSnapshots(hoursBack: 8 * 24) ?? []
         guard isCurrentLoadRequest(requestID) else { return }
+        readinessHistory = WeeklyHeroTrendPoint.readinessHistory(
+            samples: snapshots.sorted { $0.createdAt < $1.createdAt }.compactMap { snapshot in
+                snapshot.readinessScore.map { DailySample(date: snapshot.date, value: $0) }
+            },
+            current: trainingReadiness
+        )
 
         // Compute derived stats (PRs, streak, frequency, weekly stats)
         recomputeDerivedStats()

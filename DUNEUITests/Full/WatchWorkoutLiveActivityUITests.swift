@@ -16,11 +16,31 @@ final class WatchWorkoutLiveActivityUITests: UITestBaseCase {
         captureNotificationCenter(phase: "paused", expectedStatuses: ["Paused", "일시 정지", "一時停止"])
     }
 
-    private func captureNotificationCenter(phase: String, expectedStatuses: [String]) {
+    func testStaleNotificationCenterHidesOutdatedMetrics() {
+        captureNotificationCenter(phase: "stale", expectedStatuses: ["Waiting for Watch", "Watch 연결 대기", "Watchとの接続待ち"])
+    }
+
+    func testLongStrengthNameNotificationCenterPresentation() {
+        captureNotificationCenter(
+            phase: "running",
+            expectedStatuses: ["Workout", "운동", "ワークアウト"],
+            exerciseName: "체스트 프레스 머신 · 플레이트 로드",
+            evidenceName: "strength-long-name"
+        )
+    }
+
+    private func captureNotificationCenter(
+        phase: String,
+        expectedStatuses: [String],
+        exerciseName: String = "Outdoor Run",
+        evidenceName: String? = nil
+    ) {
         var configuration = launchConfiguration
         configuration.additionalArguments += [
             "--ui-watch-live-activity", phase,
+            "--ui-watch-live-activity-name", exerciseName,
             "--ui-test-theme", "desertWarm",
+            "--ui-test-style", "dark",
             "-AppleLanguages", "(en)", "-AppleLocale", "en_US"
         ]
         launchApp(with: configuration)
@@ -34,25 +54,55 @@ final class WatchWorkoutLiveActivityUITests: UITestBaseCase {
         top.press(forDuration: 0.05, thenDragTo: bottom)
 
         let title = springboard.descendants(matching: .any)
-            .matching(NSPredicate(format: "label CONTAINS %@", "Outdoor Run"))
+            .matching(NSPredicate(format: "label CONTAINS %@", exerciseName))
             .firstMatch
         let didFindTitle = title.waitForExistence(timeout: 15)
         // Extensions use SpringBoard's language, independent of the app launch locale.
         let allow = springboard.buttons.matching(NSPredicate(format: "label IN %@", ["Allow", "허용", "許可"])).firstMatch
         if allow.waitForExistence(timeout: 2) { allow.tap() }
 
-        let activity = springboard.otherElements.containing(.staticText, identifier: "Outdoor Run")
+        let activity = springboard.otherElements.containing(.staticText, identifier: exerciseName)
             .allElementsBoundByIndex
-            .filter { $0.frame.width > 250 && $0.frame.height > 70 && $0.frame.height < 220 }
+            .filter { $0.frame.width > 250 && $0.frame.height > 48 && $0.frame.height < 220 }
             .min { $0.frame.width * $0.frame.height < $1.frame.width * $1.frame.height }
+        if phase == "stale", let activity {
+            let waiting = activity.descendants(matching: .any)
+                .matching(NSPredicate(format: "label IN %@", expectedStatuses)).firstMatch
+            XCTAssertTrue(waiting.waitForExistence(timeout: 12), "The system should transition to its stale presentation")
+        }
         let hierarchy = springboard.debugDescription
-        attachEvidence(phase: phase, hierarchy: hierarchy, activity: activity)
+        attachEvidence(phase: evidenceName ?? phase, hierarchy: hierarchy, activity: activity)
 
         XCTAssertTrue(didFindTitle, "SpringBoard should display the seeded workout")
-        XCTAssertTrue(hierarchy.contains("Outdoor Run"), "Workout title should appear in system UI")
+        XCTAssertTrue(hierarchy.contains(exerciseName), "Workout title should appear in system UI")
         XCTAssertTrue(expectedStatuses.contains(where: hierarchy.contains), "Localized workout status should appear in system UI")
-        XCTAssertTrue(hierarchy.contains("142"), "Heart rate should appear in system UI")
-        XCTAssertTrue(hierarchy.contains("86"), "Active calories should appear in system UI")
+        if let activity {
+            XCTAssertTrue(springboard.windows.firstMatch.frame.contains(activity.frame),
+                          "The complete Live Activity must fit in the system viewport")
+            let brand = activity.staticTexts["watch-workout-brand"].firstMatch
+            XCTAssertTrue(brand.exists, "The Live Activity should identify DUNE")
+            if brand.exists {
+                XCTAssertEqual(brand.label, "DUNE")
+                XCTAssertTrue(activity.frame.contains(brand.frame), "The DUNE wordmark must fit inside the activity")
+            }
+            let activityHierarchy = activity.debugDescription
+            if phase == "stale" {
+                for identifier in ["watch-workout-elapsed", "watch-workout-heart-rate", "watch-workout-calories", "watch-workout-distance"] {
+                    XCTAssertFalse(activity.descendants(matching: .any)[identifier].firstMatch.exists,
+                                   "Outdated \(identifier) must be hidden")
+                }
+            } else {
+                XCTAssertTrue(activityHierarchy.contains("142"), "Heart rate should appear in system UI")
+                XCTAssertTrue(activityHierarchy.contains("86"), "Active calories should appear in system UI")
+                for identifier in ["watch-workout-elapsed", "watch-workout-heart-rate", "watch-workout-calories"] {
+                    let element = activity.descendants(matching: .any)[identifier].firstMatch
+                    XCTAssertTrue(element.exists, "The system should expose \(identifier)")
+                    if element.exists {
+                        XCTAssertTrue(activity.frame.contains(element.frame), "\(identifier) must fit inside the activity")
+                    }
+                }
+            }
+        }
     }
 
     private func attachEvidence(phase: String, hierarchy: String, activity: XCUIElement?) {

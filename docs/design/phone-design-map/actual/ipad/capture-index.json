@@ -1043,7 +1043,7 @@
       "gallery": "../../../full-redesign-map/review/desert-horizon-final-2026-10-24/index.html",
       "xcresult": "Test-DUNEUITests-2026.10.24_05-58-58-+0900.xcresult",
       "current_verification": "pending",
-      "current_verification_note": "2026-10-24 스크롤 조사: 영향 화면 T03. 선행 iPhone targeted UI에서 상단 복귀2건이 실패하여 추가 기기 실행 전 게이트가 중단됐다. 이 기기의 기존 PNG는 이번 스크롤 수정 증거가 아니다. iPhone 회귀 해결 뒤 전용 기기에서 native refresh·부분/상단 복귀를 재검증하고 새 캡처한다. 초기 로딩·빈 상태 검증도 별도 미완료다."
+      "current_verification_note": "새 DESERT HORIZON 측정값 표시 상태는 이 캡처로 확인했다. 시작 스켈레톤·빈 상태는 별도 변경(#834)의 미갱신 상태이며 이 PNG로 완료 처리하지 않는다."
     },
     "H01": {
       "row_id": "H01",
@@ -1062,18 +1062,25 @@
     },
     "L01": {
       "row_id": "L01",
+      "evidence": "title:Life",
+      "test": "LifeRegressionTests/testWeeklyAndFutureRecurringHabitsStayOutsideTodayProgress()",
+      "action": "L01 Today hero with scheduled habits",
+      "timestamp": 1792928860.966,
+      "image": "5DB1471E-025E-4A22-AFD3-B7CC2E0D518A.png",
+      "screen": "screen-0-2064x2752-L01 Today hero with scheduled habits_0_A30B107A-6E9C-4580-AB81-EAF1C606CB87.png",
       "file": "L01.png",
-      "evidence": "actual Desert Horizon seeded root",
-      "test": "ThemeMatrixUITests/testDesertHeroRingsByInitialTab()",
-      "action": "Direct initial-tab launch, Desert light root",
-      "timestamp": 1792786654.155,
-      "image": "",
-      "source_revision": "611134fd",
-      "source_worktree_dirty": true,
-      "device_id": "81514217-64DF-4EF2-B1F9-E15A5CB97628",
-      "device_name": "iPad Pro 13-inch (M5)",
-      "gallery": "../../../full-redesign-map/review/desert-horizon-final-2026-10-24/index.html",
-      "xcresult": "/Users/shanks/.codex/worktrees/desert-horizon-final-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.24_05-14-16-+0900.xcresult"
+      "device_id": "EE6D3D3B-C724-4B91-B609-D82ADAD28FDD",
+      "xcresult": ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.25_20-45-18-+0900.xcresult",
+      "source_revision": "ac785e81bc1ccd227c3a632616a1cfc9d677da26",
+      "source_worktree_dirty": false,
+      "sha256": "96ee276d0b42584f1444fa69f32c0d889626cdb2d1f3c137192e29dfd063b7be",
+      "locale": "en_US",
+      "hierarchy_sha256": "536df10b380ebd76cf740ee8d6fd1dc4823e3da05f71278adb2cbea44af91413",
+      "hierarchy_source": "01.txt (paired hierarchy in source xcresult)",
+      "path": "ipad/01.png",
+      "gallery": "../life-schedule-2026-10-25/index.html",
+      "current_verification": "verified",
+      "current_verification_note": "2026-10-25 일정 분리 후 기본 화면. 다른 화면·표시 설정을 일괄 검증한 증거가 아닙니다."
     },
     "A01": {
       "row_id": "A01",

@@ -1,0 +1,29 @@
+{
+  "info" : {
+    "arguments" : [
+      "devicectl",
+      "device",
+      "orientation",
+      "get",
+      "--device",
+      "D472D221-3BB2-44F0-A2B7-8EF63A9EEE5D",
+      "--timeout",
+      "15",
+      "--json-output",
+      ".codex-checks/hero-duo-openFlat/official-readback.json"
+    ],
+    "commandType" : "devicectl.device.orientation.get",
+    "environment" : {
+      "TERM" : "dumb"
+    },
+    "jsonVersion" : 5,
+    "outcome" : "success",
+    "version" : "651.13.5"
+  },
+  "result" : {
+    "deviceIdentifier" : "D472D221-3BB2-44F0-A2B7-8EF63A9EEE5D",
+    "deviceIsOrientationLocked" : false,
+    "deviceOrientation" : "portrait",
+    "deviceOrientationNonFlat" : "portrait"
+  }
+}

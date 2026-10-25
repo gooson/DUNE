@@ -232,10 +232,46 @@ enum TestDataSeeder {
         seedInjuryRecords(into: context)
         seedHabitDefinitions(into: context)
         seedNotificationInbox(scenario: scenario)
+        if ProcessInfo.processInfo.arguments.contains("--ui-hero-rhythm-fixtures") {
+            seedHeroRhythmHistory(into: context)
+        }
+        if ProcessInfo.processInfo.arguments.contains("--ui-hero-rhythm-auto-only") {
+            let habits = (try? context.fetch(FetchDescriptor<HabitDefinition>())) ?? []
+            for habit in habits {
+                habit.isAutoLinked = true
+                habit.autoLinkSourceRaw = "exercise"
+            }
+        }
         if ProcessInfo.processInfo.arguments.contains("--ui-visual-posture-fixtures") {
             seedVisualPostureFixtures(into: context)
         }
         try? context.save()
+    }
+
+    /// Opt-in recorded history for Activity/Life hero UI checks. Normal seeded
+    /// launches keep their existing sparse-history semantics.
+    @MainActor
+    private static func seedHeroRhythmHistory(into context: ModelContext) {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        for (daysAgo, score) in [(2, 68.0), (5, 82.0)] {
+            guard let day = calendar.date(byAdding: .day, value: -daysAgo, to: today),
+                  let midday = calendar.date(byAdding: .hour, value: 12, to: day) else { continue }
+            context.insert(HourlyScoreSnapshot(date: midday, readinessScore: score))
+        }
+
+        let descriptor = FetchDescriptor<HabitDefinition>()
+        guard let habits = try? context.fetch(descriptor) else { return }
+        let start = calendar.date(byAdding: .day, value: -6, to: today) ?? today
+        for habit in habits { habit.createdAt = start }
+        for (daysAgo, names) in [(1, ["Morning Stretch", "Read"]), (3, ["Morning Stretch"])] {
+            guard let day = calendar.date(byAdding: .day, value: -daysAgo, to: today) else { continue }
+            for habit in habits where names.contains(habit.name) {
+                let log = HabitLog(date: day, value: habit.goalValue, completedAt: day)
+                context.insert(log)
+                log.habitDefinition = habit
+            }
+        }
     }
 
     /// Synthetic records for visual inspection only; no camera or health inference.

@@ -27,18 +27,22 @@ Life의 링 옆에는 현재 진행 상태를 설명하는 문장을 둔다. 히
 
 2026-10-22 전용 Duo 접힘 세로·펼침 가로에서 [4탭 밝음·어두움 실제 배치](../full-redesign-map/review/duo-four-tab-hero-rings-2026-10-22/README.md)를 확인했다. 접근성 프레임은 124pt 원 바깥의 11pt 획도 포함하므로, 테스트는 Today의 실제 링 프레임과 다른 세 탭을 비교한다. Duo 펼침 미리보기는 해당 가로 캡처와 같은 951×669pt 비율이다.
 
+[Activity·Life 히어로 흐름과 근거 승인안](activity-life-hero-proposal.md)은 공통 링에 구성 점수·저장된 준비도·습관 완료 기록을 더하는 2026-10-25 구현 대상이다. 과거 습관 분모는 복원하지 않는다.
+
 ## 화면별 맵 목록
 
 | 범위 | 맵 |
 |---|---|
 | Today T03·Activity A01·Wellness H01·Life L01 | [4탭 레이아웃 맵](index.html) |
 | DESERT HORIZON 4탭 상세 배치 | [밝음·어두움 시안](../theme-map/themes/dune-final-four-tab.html) · [상세 계약](desert-horizon-final.md) |
+| Today 하단 읽기 위계 | [회복·스트레스·요약 V2](today-reading-proposal.md) · [원본 대비 시안](../theme-map/themes/dune-today-reading.html) |
 | Today 알림함·새로운 소식 | [알림함 배치·상태·목적지](notification-inbox-proposal.md) · [시안의 종 아이콘](../theme-map/themes/dune-final-four-tab.html) |
 | Activity 운동 구성 상세 | [근력·유산소와 부위별 구성 배치](exercise-mix-detail-proposal.md) · [4탭 시안](../theme-map/themes/dune-final-four-tab.html) |
 | Activity·Wellness·Life 기록 진입 | [상단 추가 버튼·메뉴 배치](record-entry-navigation.md) · [4탭 시안](../theme-map/themes/dune-final-four-tab.html) |
 | iOS 위젯·휴식 라이브 액티비티 | [크기·상태별 배치 기준](widget-live-activity-proposal.md) · [DESERT HORIZON 추가 시안](../theme-map/themes/dune-widget-live-activity.html) |
 | Watch H01·H02·H03 홈 카드 | [Watch 홈 스크롤 맵](watch-home-scroll.html) |
 | Watch C01·C03·C04 유산소 세션 | [Watch 유산소 세션 맵](watch-cardio-session.html) |
+| Watch C14·C15 러닝 거리 우선·C16 음성 제어·C17/C18 안내 설정 | [러닝 거리·음성 기준](watch-running-feedback.md) |
 | WLA01 Watch 운동 Live Activity | [Watch 운동 Live Activity 맵](watch-workout-live-activity.md) |
 | W25·W27·Watch F07 머신 유산소 레벨 변화 | [머신 유산소 레벨 기록 맵](cardio-level-history.html) |
 

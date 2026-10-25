@@ -3,8 +3,7 @@ import WatchKit
 
 /// Active workout session paging.
 /// Strength: Vertical pages — Controls | MetricsView | NowPlaying (3 pages, Digital Crown)
-/// Cardio:   Horizontal pages — Controls | MainMetrics | HRZone | Secondary | NowPlaying (5 pages, swipe)
-///           Controls accessible via single right swipe from default MainMetrics page.
+/// Cardio:   Flat horizontal pages; running starts on distance with controls one right swipe away.
 struct SessionPagingView: View {
     let isCardioMode: Bool
 
@@ -25,15 +24,20 @@ struct SessionPagingView: View {
 private struct CardioSessionPagingView: View {
     @Environment(WorkoutManager.self) private var workoutManager
 
-    @State private var selectedTab: CardioTab = .mainMetrics
+    @State private var selectedTab: CardioTab?
     @State private var announcedKilometer: Int?
     @State private var milestoneDismissTask: Task<Void, Never>?
 
     var body: some View {
         ZStack(alignment: .bottom) {
-            TabView(selection: $selectedTab) {
+            TabView(selection: effectiveSelection) {
                 ControlsView(showSkip: false)
                     .tag(CardioTab.controls)
+
+                if isRunning {
+                    CardioDistanceMetricsPage()
+                        .tag(CardioTab.distanceMetrics)
+                }
 
                 CardioMainMetricsPage()
                     .tag(CardioTab.mainMetrics)
@@ -53,6 +57,9 @@ private struct CardioSessionPagingView: View {
                 CardioDistanceMilestoneBanner(kilometer: announcedKilometer)
                     .padding(.bottom, DS.Spacing.sm)
             }
+        }
+        .onChange(of: workoutManager.workoutMode) { _, _ in
+            selectedTab = nil
         }
         .onChange(of: selectedTab) { _, tab in
 #if DEBUG && targetEnvironment(simulator)
@@ -119,6 +126,18 @@ private struct CardioSessionPagingView: View {
         )
     }
 
+    private var isRunning: Bool {
+        guard case .cardio(let activityType, _) = workoutManager.workoutMode else { return false }
+        return activityType == .running
+    }
+
+    private var effectiveSelection: Binding<CardioTab> {
+        Binding(
+            get: { selectedTab ?? (isRunning ? .distanceMetrics : .mainMetrics) },
+            set: { selectedTab = $0 }
+        )
+    }
+
     private var cardioInactivityAlertBinding: Binding<Bool> {
         Binding(
             get: { workoutManager.cardioInactivityPrompt != nil },
@@ -155,6 +174,7 @@ private struct CardioSessionPagingView: View {
 
     private enum CardioTab {
         case controls
+        case distanceMetrics
         case mainMetrics
         case hrZone
         case secondary

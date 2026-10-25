@@ -48,6 +48,10 @@ Small 위젯의 세 점수 링과 하단 상태·시각은 카드 전체 높이�
 
 [공통 능선 표현 연구안](themes/theme-crest-language.html)은 초기 시각 언어 탐색으로 별도 보존한다. 수련 시안은 현재 방향으로 두고 세부 표현은 추후 개선하기로 했다.
 
+## Today 하단 읽기 위계 (2026-10-25)
+
+[원본 대비 V1·V2 시안](themes/dune-today-reading.html)을 보존했다. V2의 큰 수면 시간·분리된 수면 부족·접히는 스트레스 근거·지표형 요약을 실제 앱에 적용했으며 [실제 화면 갤러리](../full-redesign-map/review/today-reading-v2-2026-10-25/index.html)와 [구현 계획](../../plans/2026-10-25-today-reading-v2.md)에서 검증 범위를 추적한다. 이 HTML과 시안 PNG는 실제 앱 캡처가 아니다.
+
 ## 갱신 방법
 
 테마의 색, 능선·배경, 링, 그래프, 움직임, 화면별 표현을 바꿀 때 **같은 작업에서** 아래를 갱신한다.
@@ -65,3 +69,7 @@ Small 위젯의 세 점수 링과 하단 상태·시각은 카드 전체 높이�
 ### 실제 구현 검증 상태 (2026-10-24)
 
 앱·Widget·Live Activity 소스 구현과 통합 빌드, 영향 단위 테스트58개는 완료했다. iPhone·iPad·Duo 접힘의 대표 UI와 WidgetKit3family 및 Rest/Watch Notification Center를 확인했다. Duo 펼침 Today의 최신 상단은 표시 컨트롤러가 세로로 남아 검증 대기이며, Mac 잠금 해제 후 Device Hub 확인이 필요하다. 사용자는 2026-10-24 “일단 넘어가”로 해당 Duo 검증 보류 후 진행을 지시했다. 펼침 Today는 계속 미검증이며, 나머지 검토·PR·머지는 이 예외를 명시해 진행한다. [검증 기록](../../reviews/2026-10-24-desert-horizon-final.md)을 기준으로 한다.
+
+## Activity·Life 히어로 승인안 (2026-10-25)
+
+[흐름과 근거·핵심 요약 시안](themes/dune-activity-life-heroes.html)의 흐름과 근거를 사용자가 승인했다. [구현 계획](../../plans/2026-10-25-activity-life-hero-rhythm.md)에 따라 저장된 준비도와 수동 습관 완료 기록을 사용한다. 과거 습관 대상 수는 복원하지 않는다. 방향 시안은 예시이며 실제 캡처와 구분한다. [편집 원본](themes/assets/activity-life-hero-fragment.html)을 보존한다.

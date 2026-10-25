@@ -68,8 +68,11 @@ def main() -> int:
     env = os.environ.copy()
     env["DUNE_UI_WATCHDOG_ACTIVE"] = "1"
     env.setdefault("DUNE_SIM_TEST_LOCK_WAIT_SECONDS", "60")
-    lock_fd = env.get("DUNE_SIM_TEST_LOCK_FD")
-    pass_fds = (int(lock_fd),) if lock_fd and lock_fd.isdecimal() else ()
+    lock_fds = (env.get("DUNE_SIM_TEST_LOCK_FD"),
+                env.get("DUNE_SIM_TEST_WORKTREE_LOCK_FD"))
+    pass_fds = tuple(dict.fromkeys(
+        int(fd) for fd in lock_fds if fd and fd.isdecimal()
+    ))
     owns_group = not bool(os.environ.get("DUNE_UI_WATCHDOG_ACTIVE"))
     process = subprocess.Popen(command, env=env, pass_fds=pass_fds,
                                start_new_session=owns_group)

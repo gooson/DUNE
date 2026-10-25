@@ -505,9 +505,9 @@ struct ActivityView: View {
             NavigationLink(value: ActivityDetailDestination.trainingReadiness) {
                 VStack(alignment: .leading, spacing: 18) {
                     HStack {
-                        Text("Activity")
-                            .font(.title3.weight(.bold))
-                            .foregroundStyle(theme.directionPreviewTextColor)
+                        Text("Training Readiness")
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(readinessInk)
                         Spacer()
                         if viewModel.trainingReadiness?.isCalibrating == true {
                             Text("Calibrating")
@@ -529,6 +529,7 @@ struct ActivityView: View {
                                     .frame(maxWidth: .infinity, alignment: .leading)
                             }
                         }
+
                     } else if viewModel.isLoading {
                         ProgressView()
                             .accessibilityLabel("Loading")
@@ -545,6 +546,36 @@ struct ActivityView: View {
             .buttonStyle(.plain)
             .disabled(viewModel.trainingReadiness == nil)
 
+            if let readiness = viewModel.trainingReadiness {
+                ReadinessHeroEvidenceView(
+                    hrv: readiness.isCalibrating ? nil : readiness.components.hrvScore,
+                    sleep: viewModel.readinessSleepAvailable ? readiness.components.sleepScore : nil,
+                    recovery: viewModel.readinessRecoveryAvailable ? readiness.components.fatigueScore : nil
+                )
+
+                WeeklyHeroTrendView(
+                    points: viewModel.readinessHistory,
+                    title: "Recorded Readiness",
+                    upperBound: 100,
+                    tint: theme.accentColor,
+                    accessibilityIdentifier: "activity-hero-trend"
+                )
+
+                NavigationLink(value: ActivityDetailDestination.trainingReadiness) {
+                    HStack {
+                        Text("View Readiness Details")
+                        Spacer(minLength: DS.Spacing.sm)
+                        Image(systemName: "arrow.right")
+                            .accessibilityHidden(true)
+                    }
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(theme.directionPreviewActionColor(for: colorScheme))
+                    .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .accessibilityIdentifier("activity-hero-details")
+            }
         }
         .padding(20)
         .background {
@@ -574,14 +605,18 @@ struct ActivityView: View {
         )
     }
 
+    private var readinessInk: Color {
+        theme == .desertWarm ? DesertPalette.ink : theme.directionPreviewTextColor
+    }
+
     private func themeReadinessCopy(_ readiness: TrainingReadiness) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(readiness.status.label)
-                .font(.headline.weight(.semibold))
-                .foregroundStyle(theme.directionPreviewTextColor)
+                .font(.title3.weight(.semibold))
+                .foregroundStyle(readinessInk)
             Text(readiness.narrativeMessage)
                 .font(.subheadline)
-                .foregroundStyle(theme.directionPreviewTextColor.opacity(0.74))
+                .foregroundStyle(theme == .desertWarm ? DesertPalette.muted : readinessInk.opacity(0.74))
                 .fixedSize(horizontal: false, vertical: true)
         }
     }

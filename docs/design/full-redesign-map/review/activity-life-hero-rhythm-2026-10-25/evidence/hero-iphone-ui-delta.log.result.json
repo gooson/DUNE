@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/HeroRhythmUITests/testAutoOnlyHabitsShowStarterInsteadOfZeroProgress",
+    "DUNEUITests/HeroRhythmUITests/testLifeSummaryRecordedCompletionsAndChecklist",
+    "DUNEUITests/HeroRhythmUITests/testCaptureA01KoreanHero",
+    "DUNEUITests/HeroRhythmUITests/testCaptureL01KoreanHero",
+    "DUNEUITests/HeroRhythmUITests/testCaptureA01KoreanDarkHero",
+    "DUNEUITests/HeroRhythmUITests/testCaptureL01KoreanDarkHero",
+    "DUNEUITests/HeroRhythmUITests/testCaptureA01KoreanDarkMaximumAXHero",
+    "DUNEUITests/HeroRhythmUITests/testCaptureL01KoreanDarkMaximumAXHero"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 8,
+    "passed": 7,
+    "skipped": 0,
+    "failed": 1
+  },
+  "passed_cases": 7,
+  "failures": [
+    "501: /Users/shanks/.codex/worktrees/activity-life-heroes/Health/DUNEUITests/Visual/HeroRhythmUITests.swift:90: error: -[DUNEUITests.HeroRhythmUITests testAutoOnlyHabitsShowStarterInsteadOfZeroProgress] : XCTAssertTrue failed - Habit templates should remain reachable from the starter state",
+    "515: Test Case '-[DUNEUITests.HeroRhythmUITests testAutoOnlyHabitsShowStarterInsteadOfZeroProgress]' failed (24.388 seconds).",
+    "1090: Test Suite 'HeroRhythmUITests' failed at 2026-10-25 17:40:58.984.",
+    "1092: Test Suite 'DUNEUITests.xctest' failed at 2026-10-25 17:40:58.989.",
+    "1094: Test Suite 'Selected tests' failed at 2026-10-25 17:40:58.989.",
+    "1109: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log reports 1 failures",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/HeroRhythmUITests/testAutoOnlyHabitsShowStarterInsteadOfZeroProgress"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/activity-life-heroes/Health/.codex-checks/hero-iphone-ui-delta.log"
+}

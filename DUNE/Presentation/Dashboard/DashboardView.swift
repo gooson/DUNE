@@ -343,11 +343,7 @@ struct DashboardView: View {
 
         // Cumulative Stress Score (Phase 3)
         if let stressScore = viewModel.cumulativeStressScore {
-            NavigationLink(value: stressScore) {
-                CumulativeStressCard(stressScore: stressScore)
-            }
-            .buttonStyle(.plain)
-            .accessibilityIdentifier("dashboard-stress-score")
+            CumulativeStressCard(stressScore: stressScore)
             .transition(Self.sectionTransition)
             .staggeredAppear(index: 6)
         }

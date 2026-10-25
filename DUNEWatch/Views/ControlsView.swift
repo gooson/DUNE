@@ -9,6 +9,7 @@ struct ControlsView: View {
 
     @State private var showEndConfirmation = false
     @State private var showReorderSheet = false
+    @State private var showRunningFeedbackSettings = false
 
     var body: some View {
         GeometryReader { geometry in
@@ -17,7 +18,9 @@ struct ControlsView: View {
                 && (!workoutManager.isLastExercise || workoutManager.canReorderExercises)
             let reservedHeight = 24 + spacing * 2 + DS.Spacing.xs
             let primaryHeight = workoutManager.isCardioMode
-                ? max(44, min(96, (geometry.size.height - spacing - DS.Spacing.xs) / 2))
+                ? isRunning
+                    ? max(44, min(72, (geometry.size.height - spacing * 3 - 88 - DS.Spacing.xs) / 2))
+                    : max(44, min(96, (geometry.size.height - spacing - DS.Spacing.xs) / 2))
                 : hasSecondaryActions
                     ? max(44, min(76, geometry.size.height - reservedHeight - 48))
                     : max(44, min(64, (geometry.size.height - reservedHeight) / 2))
@@ -37,6 +40,9 @@ struct ControlsView: View {
         }
         .sheet(isPresented: $showReorderSheet) {
             WatchExerciseReorderView()
+        }
+        .sheet(isPresented: $showRunningFeedbackSettings) {
+            RunningFeedbackSettingsView()
         }
         .accessibilityElement(children: .contain)
         .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionControlsScreen)
@@ -59,6 +65,11 @@ struct ControlsView: View {
                 Text("Save and finish this workout?")
             }
         }
+    }
+
+    private var isRunning: Bool {
+        guard case .cardio(let activityType, _) = workoutManager.workoutMode else { return false }
+        return activityType == .running
     }
 
     private func controlsContent(
@@ -106,6 +117,38 @@ struct ControlsView: View {
                     pauseResumeButton(height: primaryHeight)
                     endButton(height: primaryHeight)
                 }
+            }
+
+            if isRunning {
+                Toggle("Voice Feedback", isOn: Binding(
+                    get: { workoutManager.isRunningVoiceFeedbackEnabled },
+                    set: { workoutManager.setRunningVoiceFeedbackEnabled($0) }
+                ))
+                .font(.caption.weight(.semibold))
+                .tint(DS.Color.positive)
+                .padding(.horizontal, DS.Spacing.sm)
+                .frame(minHeight: 44)
+                .accessibilityIdentifier("watch-running-voice-feedback-toggle")
+
+                Button {
+                    showRunningFeedbackSettings = true
+                } label: {
+                    HStack(spacing: DS.Spacing.sm) {
+                        Image(systemName: "speaker.wave.2.fill")
+                            .foregroundStyle(DS.Color.activity)
+                        Text("Feedback Settings")
+                            .font(.caption.weight(.semibold))
+                        Spacer(minLength: 0)
+                        Image(systemName: "chevron.right")
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                    }
+                    .padding(.horizontal, DS.Spacing.sm)
+                    .frame(minHeight: 44)
+                    .background(DS.Color.activity.opacity(DS.Opacity.light),
+                                in: RoundedRectangle(cornerRadius: DS.Radius.md))
+                }
+                .accessibilityIdentifier("watch-running-feedback-settings-button")
             }
 
             if hasSecondaryActions {

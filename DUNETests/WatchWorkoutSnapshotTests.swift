@@ -99,4 +99,36 @@ struct WatchWorkoutSnapshotTests {
 
         #expect(value.timerStartDate == updatedAt.addingTimeInterval(-125))
     }
+
+    @Test("Workout identity uses the exact Watch start, including closely spaced workouts")
+    func workoutIdentity() {
+        let current = snapshot()
+        var other = current
+        #expect(current.isSameWorkout(as: other))
+        other.startedAt = current.startedAt.addingTimeInterval(0.001)
+        #expect(!current.isSameWorkout(as: other))
+        other.startedAt = current.startedAt.addingTimeInterval(1.999)
+        #expect(!current.isSameWorkout(as: other))
+        other.startedAt = current.startedAt.addingTimeInterval(2)
+        #expect(!current.isSameWorkout(as: other))
+        other.startedAt = current.startedAt.addingTimeInterval(-2)
+        #expect(!current.isSameWorkout(as: other))
+    }
+
+    @Test("Older lifecycle messages cannot replace a newer Watch session state")
+    func ordersWorkoutLifecycle() {
+        var ordering = WatchWorkoutLifecycleOrdering()
+        let first = startedAt
+        let newer = startedAt.addingTimeInterval(1)
+        let legacy = ordering.accept(nil)
+        let initial = ordering.accept(first)
+        let replacement = ordering.accept(newer)
+        let delayedEnd = ordering.accept(first)
+        let delayedLegacy = ordering.accept(nil)
+        let duplicate = ordering.accept(newer)
+        let invalid = ordering.accept(Date(timeIntervalSince1970: .infinity))
+        #expect(legacy && initial && replacement && duplicate)
+        #expect(!delayedEnd && !delayedLegacy && !invalid)
+        #expect(ordering.latestUpdate == newer)
+    }
 }

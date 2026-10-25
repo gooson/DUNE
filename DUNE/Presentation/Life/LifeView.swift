@@ -24,6 +24,55 @@ enum LifeHabitLogSync {
     }
 }
 
+/// The hero records completed days for currently active manual habits. A past
+/// target count is unavailable, so its trend deliberately has no denominator.
+struct LifeHeroHabitSnapshot {
+    let analyticsHabit: HabitSnapshot
+    let createdAt: Date
+    let isAutoLinked: Bool
+}
+
+struct LifeHeroLogSnapshot {
+    let analyticsLog: HabitLogSnapshot
+    let isAutoCompleted: Bool
+}
+
+enum LifeHeroTrend {
+    static func points(
+        habits: [LifeHeroHabitSnapshot],
+        logs: [LifeHeroLogSnapshot],
+        referenceDate: Date = Date()
+    ) -> [WeeklyHeroTrendPoint] {
+        let calendar = Calendar.current
+        let manualHabits = habits.filter { !$0.isAutoLinked }
+        let earliestCreation = manualHabits.map { calendar.startOfDay(for: $0.createdAt) }.min()
+        let habitsByID = Dictionary(manualHabits.map { ($0.analyticsHabit.id, $0) }, uniquingKeysWith: { _, last in last })
+        let eligibleLogs = logs.compactMap { log -> HabitLogSnapshot? in
+            guard !log.isAutoCompleted,
+                  let habit = habitsByID[log.analyticsLog.habitID],
+                  calendar.startOfDay(for: log.analyticsLog.date) >= calendar.startOfDay(for: habit.createdAt),
+                  log.analyticsLog.date <= referenceDate
+            else { return nil }
+            return log.analyticsLog
+        }
+
+        let counts = HabitAnalyticsService.dailyCompletionCounts(
+            logs: eligibleLogs,
+            habits: manualHabits.map(\.analyticsHabit),
+            dayCount: 7,
+            referenceDate: referenceDate
+        )
+        return counts.map { day in
+            let value: Int? = if let earliestCreation, day.date >= earliestCreation {
+                day.completionCount
+            } else {
+                nil
+            }
+            return WeeklyHeroTrendPoint(date: day.date, value: value)
+        }
+    }
+}
+
 struct LifeView: View {
     @State private var viewModel = LifeViewModel()
     @State private var localRefreshSignal = 0
@@ -208,6 +257,7 @@ private struct HabitListQueryView: View {
     @Query(sort: \ExerciseRecord.date, order: .reverse) private var exerciseRecords: [ExerciseRecord]
 
     @Bindable var viewModel: LifeViewModel
+    @Environment(\.scenePhase) private var scenePhase
     let refreshSignal: Int
     let onOpenChecklist: () -> Void
 
@@ -230,6 +280,7 @@ private struct HabitListQueryView: View {
     @State private var heatmapData: [DailyCompletionCount] = []
     @State private var availableContentWidth: CGFloat = 0
     @State private var weeklyReport: WeeklyHabitReport?
+    @State private var heroTrendPoints: [WeeklyHeroTrendPoint] = []
     @State private var showingReport = false
     @State private var showingHeatmapDetail = false
 
@@ -243,7 +294,7 @@ private struct HabitListQueryView: View {
         VStack(alignment: .leading, spacing: DS.Spacing.lg) {
             // Hero: completion rate
             Group {
-                if habits.isEmpty {
+                if habits.allSatisfy(\.isAutoLinked) {
                     starterSection
                 } else {
                     heroSection
@@ -291,6 +342,15 @@ private struct HabitListQueryView: View {
         .onChange(of: refreshSignal) { _, _ in
             recalculate()
         }
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active { recalculate() }
+        }
+        .onReceive(NotificationCenter.default.mainThreadPublisher(for: .NSCalendarDayChanged)) { _ in
+            recalculate()
+        }
+        .onReceive(NotificationCenter.default.mainThreadPublisher(for: .NSSystemTimeZoneDidChange)) { _ in
+            recalculate()
+        }
         .onChange(of: viewModel.isShowingEditSheet) { old, new in
             // Recalculate when edit sheet dismisses (habit properties may have changed)
             if old, !new { recalculate() }
@@ -323,6 +383,7 @@ private struct HabitListQueryView: View {
         hasher.combine(habits.count)
         for habit in habits {
             hasher.combine(habit.id)
+            hasher.combine(habit.createdAt)
             hasher.combine(habit.name)
             hasher.combine(habit.iconCategoryRaw)
             hasher.combine(habit.habitTypeRaw)
@@ -352,6 +413,7 @@ private struct HabitListQueryView: View {
             hasher.combine(log.habitDefinition?.id)
             hasher.combine(log.date)
             hasher.combine(log.value)
+            hasher.combine(log.isAutoCompleted)
             hasher.combine(log.memo ?? "")
         }
         return hasher.finalize()
@@ -444,7 +506,7 @@ private struct HabitListQueryView: View {
     }
 
     private var activeCategories: [HabitIconCategory] {
-        let used = Set(viewModel.habitProgresses.map(\.iconCategory))
+        let used = Set(viewModel.habitProgresses.filter { !$0.isAutoLinked }.map(\.iconCategory))
         return HabitIconCategory.allCases.filter { used.contains($0) }
     }
 
@@ -486,14 +548,13 @@ private struct HabitListQueryView: View {
 
     // MARK: - Filtered & Grouped Progresses
 
-    private var filteredProgresses: [HabitProgress] {
-        let base = viewModel.habitProgresses.filter { !$0.isAutoLinked }
-        guard let filter = selectedCategoryFilter else { return base }
-        return base.filter { $0.iconCategory == filter }
+    private func filteredProgresses(_ progresses: [HabitProgress]) -> [HabitProgress] {
+        guard let filter = selectedCategoryFilter else { return progresses }
+        return progresses.filter { $0.iconCategory == filter }
     }
 
-    private var groupedProgresses: [(timeOfDay: HabitTimeOfDay, items: [HabitProgress])] {
-        let grouped = Dictionary(grouping: filteredProgresses, by: \.timeOfDay)
+    private func groupedProgresses(_ progresses: [HabitProgress]) -> [(timeOfDay: HabitTimeOfDay, items: [HabitProgress])] {
+        let grouped = Dictionary(grouping: progresses, by: \.timeOfDay)
         return HabitTimeOfDay.allCases
             .compactMap { timeOfDay in
                 guard let items = grouped[timeOfDay], !items.isEmpty else { return nil }
@@ -508,6 +569,7 @@ private struct HabitListQueryView: View {
             title: "My Habits",
             icon: "checklist",
             iconColor: DS.Color.tabLife,
+            sectionIdentifier: "life-section-habits",
             fillHeight: fillHeight
         ) {
             VStack(spacing: DS.Spacing.sm) {
@@ -519,27 +581,50 @@ private struct HabitListQueryView: View {
                     )
                 } else {
                     // Category filter chips
-                    if activeCategories.count > 1 {
+                    if activeCategories.count > 1 || selectedCategoryFilter != nil {
                         categoryFilterSection
                     }
 
-                    // Time-of-day grouped habits
-                    ForEach(groupedProgresses, id: \.timeOfDay) { group in
-                        if groupedProgresses.count > 1 || group.timeOfDay != .anytime {
-                            timeOfDayHeader(group.timeOfDay, count: group.items.count)
-                        }
-
-                        ForEach(group.items) { progress in
-                            HabitRowView(
-                                progress: progress,
-                                onToggle: { toggleCheck(habitId: progress.id) },
-                                onUpdateValue: { value in updateValue(habitId: progress.id, value: value) },
-                                trailingAccessory: AnyView(habitActionsButton(for: progress))
-                            )
-                            .contextMenu {
-                                habitActionItems(for: progress, deferred: true)
+                    let today = filteredProgresses(viewModel.todayHabitProgresses)
+                    if !today.isEmpty || selectedCategoryFilter == nil {
+                        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                            habitGroupHeader("Today's Habits", count: today.count)
+                            if today.isEmpty {
+                                Text("No habits due today")
+                                    .font(.subheadline)
+                                    .foregroundStyle(.secondary)
+                                    .fixedSize(horizontal: false, vertical: true)
                             }
+                            timeOfDayRows(today)
                         }
+                        .accessibilityElement(children: .contain)
+                        .accessibilityIdentifier("life-habit-group-today")
+                    }
+
+                    let weekly = filteredProgresses(viewModel.weeklyHabitProgresses)
+                    if !weekly.isEmpty {
+                        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                            habitGroupHeader("Weekly Habits", count: weekly.count)
+                            timeOfDayRows(weekly)
+                        }
+                        .accessibilityElement(children: .contain)
+                        .accessibilityIdentifier("life-habit-group-weekly")
+                    }
+
+                    let upcoming = filteredProgresses(viewModel.upcomingHabitProgresses)
+                    if !upcoming.isEmpty {
+                        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                            habitGroupHeader("Upcoming Habits", count: upcoming.count)
+                            timeOfDayRows(upcoming)
+                        }
+                        .accessibilityElement(children: .contain)
+                        .accessibilityIdentifier("life-habit-group-upcoming")
+                    }
+                    if selectedCategoryFilter != nil && today.isEmpty && weekly.isEmpty && upcoming.isEmpty {
+                        Text("No habits match this filter")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                            .fixedSize(horizontal: false, vertical: true)
                     }
                 }
 
@@ -547,7 +632,6 @@ private struct HabitListQueryView: View {
                 ArchivedHabitCountView()
             }
         }
-        .accessibilityIdentifier("life-section-habits")
         .id(LifeScrollAnchor.checklist)
         .confirmationDialog(
             "More actions",
@@ -562,6 +646,44 @@ private struct HabitListQueryView: View {
             }
             Button("Cancel", role: .cancel) {
                 actionSelection = nil
+            }
+        }
+    }
+
+    private func habitGroupHeader(_ title: LocalizedStringKey, count: Int) -> some View {
+        HStack(alignment: .firstTextBaseline) {
+            Text(title)
+                .font(.subheadline.weight(.semibold))
+                .fixedSize(horizontal: false, vertical: true)
+                .accessibilityAddTraits(.isHeader)
+            Spacer()
+            Text(count.formattedWithSeparator)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+        .padding(.top, DS.Spacing.xs)
+    }
+
+    private func timeOfDayRows(_ progresses: [HabitProgress]) -> some View {
+        let groups = groupedProgresses(progresses)
+        return ForEach(groups, id: \.timeOfDay) { group in
+            if groups.count > 1 || group.timeOfDay != .anytime {
+                timeOfDayHeader(group.timeOfDay, count: group.items.count)
+            }
+            habitRows(group.items)
+        }
+    }
+
+    private func habitRows(_ progresses: [HabitProgress]) -> some View {
+        ForEach(progresses) { progress in
+            HabitRowView(
+                progress: progress,
+                onToggle: { toggleCheck(habitId: progress.id) },
+                onUpdateValue: { value in updateValue(habitId: progress.id, value: value) },
+                trailingAccessory: AnyView(habitActionsButton(for: progress))
+            )
+            .contextMenu {
+                habitActionItems(for: progress, deferred: true)
             }
         }
     }
@@ -956,6 +1078,19 @@ private struct HabitListQueryView: View {
                 }
             }
 
+            lifeProgressSummary
+
+            Divider()
+                .overlay(lifeHeroMuted.opacity(0.25))
+
+            WeeklyHeroTrendView(
+                points: heroTrendPoints,
+                title: "Daily completions",
+                upperBound: max(1, heroTrendPoints.compactMap(\.value).max() ?? 0),
+                tint: theme.accentColor,
+                accessibilityIdentifier: "life-hero-trend"
+            )
+
             Button(action: onOpenChecklist) {
                 HStack(spacing: 6) {
                     Text("Today's Habits")
@@ -1008,6 +1143,43 @@ private struct HabitListQueryView: View {
             .fixedSize(horizontal: false, vertical: true)
             .frame(maxWidth: .infinity, alignment: .leading)
             .accessibilityIdentifier("life-hero-narrative")
+    }
+
+    private var lifeProgressSummary: some View {
+        let remaining = max(0, viewModel.totalActiveCount - viewModel.completedCount)
+        return VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+            Text("Current progress")
+                .font(.caption)
+                .foregroundStyle(lifeHeroMuted)
+
+            let layout = dynamicTypeSize.isAccessibilitySize
+                ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.sm))
+                : AnyLayout(HStackLayout(alignment: .top, spacing: DS.Spacing.sm))
+            layout {
+                lifeSummaryMetric(viewModel.completedCount, title: "Completed")
+                lifeSummaryMetric(viewModel.totalActiveCount, title: "Today's Habits")
+                lifeSummaryMetric(remaining, title: "Remaining")
+            }
+        }
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("life-hero-summary")
+    }
+
+    private var lifeHeroMuted: Color {
+        theme == .desertWarm ? DesertPalette.muted : theme.directionPreviewTextColor.opacity(0.74)
+    }
+
+    private func lifeSummaryMetric(_ value: Int, title: LocalizedStringKey) -> some View {
+        HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xs) {
+            Text(value.formattedWithSeparator)
+                .font(.subheadline.weight(.bold))
+                .foregroundStyle(theme == .desertWarm ? DesertPalette.ink : theme.directionPreviewTextColor)
+            Text(title)
+                .font(.caption)
+                .foregroundStyle(lifeHeroMuted)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private func timeOfDayHeader(_ timeOfDay: HabitTimeOfDay, count: Int) -> some View {
@@ -1186,6 +1358,27 @@ private struct HabitListQueryView: View {
                 weeklyTargetDays: habit.weeklyTargetDays
             )
         }
+
+        heroTrendPoints = LifeHeroTrend.points(
+            habits: zip(habits, habitSnapshots).map { habit, snapshot in
+                LifeHeroHabitSnapshot(
+                    analyticsHabit: snapshot,
+                    createdAt: habit.createdAt,
+                    isAutoLinked: habit.isAutoLinked
+                )
+            },
+            logs: habitLogs.map { log in
+                LifeHeroLogSnapshot(
+                    analyticsLog: HabitLogSnapshot(
+                        habitID: log.habitDefinition?.id ?? UUID(),
+                        date: log.date,
+                        value: log.value,
+                        memo: log.memo
+                    ),
+                    isAutoCompleted: log.isAutoCompleted
+                )
+            }
+        )
 
         weeklyRates = HabitAnalyticsService.weeklyCompletionRates(
             logs: logSnapshots, habits: habitSnapshots

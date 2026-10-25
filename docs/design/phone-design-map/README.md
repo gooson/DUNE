@@ -9,6 +9,8 @@ status: in-progress
 
 [폰·패드·Duo·Watch 통합 디자인맵 열기](actual/index.html)
 
+[2026-10-25 Activity·Life 히어로 실제 화면 23장](../full-redesign-map/review/activity-life-hero-rhythm-2026-10-25/index.html)은 새 구성 지표와 기록 흐름을 반영한다. iPhone·iPad·Duo 외부 화면을 갱신했으며, Duo 내부 가로 A01·L01은 회전 readback과 저장소 잠금 문제로 미검증이다. 이전 내부 이미지를 이번 변경의 증거로 사용하지 않는다. 공통 Today 알림함 검사 2건의 실패와 재개 조건은 [검증 설명](../full-redesign-map/review/activity-life-hero-rhythm-2026-10-25/README.md)에 기록했다.
+
 [2026-10-22 T03·A01·H01 첫 화면 UX 개편 실제 캡처](../full-redesign-map/review/first-fold-ux-2026-10-22/index.html)는 iPhone·iPad의 밝음·어두움 화면 12장이다. 히어로의 탭 전환 버튼 제거, Activity 로딩 진입, 최근 수면 요약·iPad 두 열 배치를 반영한 결과이며 출처·검증 범위는 [캡처 설명](../full-redesign-map/review/first-fold-ux-2026-10-22/README.md)에 기록했다.
 
 2026-10-22 Wellness 히어로의 점수와 수면 영역을 각각 해당 상세 링크로 분리한 뒤, 전용 iPhone 18 Pro Max와 iPad Pro 13-inch (M5)에서 H01을 다시 캡처했다. [iPhone H01](actual/regular/images/H01.png)과 [iPad H01](actual/ipad/images/H01.png)의 수면 제목·막대·기간은 점수 내용과 독립된 영역에 있으며, 캡처 테스트 `ThemeMatrixUITests/testDesertWarmMatrix()`가 두 기기에서 각각 1건 통과했다. 두 H01의 개별 출처는 각 `capture-index.json`의 `captured.H01`에 기록했다.
@@ -27,7 +29,7 @@ status: in-progress
 | iPad | [캡처 맵](actual/ipad/index.html) | [화면별 캡처 출처](actual/ipad/capture-index.json) |
 | iPhone Duo · 접힘 | [외부 화면 캡처 맵](actual/duo/index.html) | [화면별 캡처 출처](actual/duo/capture-index.json) |
 | iPhone Duo · 펼침 | [내부 화면 캡처 맵](actual/duo-open/index.html) | [화면별 캡처 출처](actual/duo-open/capture-index.json) |
-| Apple Watch · 운동 | [63개 상태별 실제 화면 맵](actual/watch/index.html) | [신규 캡처 출처](actual/watch/capture-index.json) · [기존 검증 출처](../watch-workout/simulator-evidence/manifest.json) |
+| Apple Watch · 운동 | [68개 상태별 실제 화면 맵](actual/watch/index.html) | [신규 캡처 출처](actual/watch/capture-index.json) · [기존 검증 출처](../watch-workout/simulator-evidence/manifest.json) |
 
 2026-10-15 T10 일간 요약의 권한 준비 중 상태를 수정한 뒤 일반 iPhone과 iPad의 T10을 다시 캡처했다. Duo 접힘·펼침의 T10 이미지는 이전 구현의 캡처이며 이번 변경의 확인 증거가 아니다. 기존 Duo의 `devicectl` 화면 조회가 응답하지 않았고 새 임시 Duo도 부팅을 완료하지 못해 두 자세의 갱신은 보류했다. 시뮬레이터 서비스가 정상화되면 두 자세의 실제 표시를 다시 확인하고 T10을 갱신한다.
 
@@ -39,7 +41,7 @@ T01 앱 시작은 `simctl io recordVideo`의 실제 앱 시작 프레임과 원�
 
 Duo는 전용 시뮬레이터에서 접힌 상태의 외부 LCD(1398×2034)와 펼친 상태의 내부 LCD-1(2007×2853)을 `devicectl device info displays`의 활성 표시 및 native PNG로 확인했다. 펼친 화면의 원본 PNG에는 회전 메타데이터가 있어 보드 축소본에만 EXIF 방향을 적용했다. 원본 PNG는 그대로 보관한다.
 
-Watch의 [63개 상태별 맵](actual/watch/index.html)에는 기본 글자 크기의 실제 앱 캡처 **60개 상태**와 미캡처 3개 상태를 표시한다. 대부분은 Apple Watch SE 3 (40mm)에서 캡처했고, H01·H02·H03 홈 카드는 Apple Watch SE 3 (44mm)에서 2026-10-19에 갱신했다. 기존 접근성 XXXL 검증 캡처 3장은 별도 구역에 보존했다. 12개 대표 상태의 디자인 보드도 실제 앱 캡처와 구분했다. H01 루틴 이름 잘림, P02 조작 가림, F02·F05·F06·F07의 하단 지표 및 오류 내용 가림을 실제 화면에서 확인했다. [Watch 상태표와 구현 계획](../../plans/2026-10-12-watch-workout-redesign.md)은 별도로 유지한다. 새 디자인 작업은 현재 화면의 캡처 현황을 확인한 뒤 시작한다.
+Watch의 [68개 상태별 맵](actual/watch/index.html)에는 기본 글자 크기의 실제 앱 캡처 **65개 상태**와 미캡처 3개 상태를 표시한다. 대부분은 Apple Watch SE 3 (40mm)에서 캡처했고, H01·H02·H03 홈 카드는 Apple Watch SE 3 (44mm)에서 2026-10-19에 갱신했다. 기존 접근성 XXXL 검증 캡처 3장은 별도 구역에 보존했다. 12개 대표 상태의 디자인 보드도 실제 앱 캡처와 구분했다. H01 루틴 이름 잘림, P02 조작 가림, F02·F05·F06·F07의 하단 지표 및 오류 내용 가림을 실제 화면에서 확인했다. [Watch 상태표와 구현 계획](../../plans/2026-10-12-watch-workout-redesign.md)은 별도로 유지한다. 새 디자인 작업은 현재 화면의 캡처 현황을 확인한 뒤 시작한다.
 
 2026-10-19 Watch 홈 H01·H02·H03은 44mm 시뮬레이터의 `testCaptureHomeCardsDesignMap()` 통과 결과에서 다시 캡처했다. 별도의 스크롤 복귀·미리보기 이동 UI 테스트도 최신 코드에서 통과했다. 각 이미지의 기기와 결과 번들은 `capture-index.json`에 기록했다.
 
@@ -51,7 +53,11 @@ Watch의 [63개 상태별 맵](actual/watch/index.html)에는 기본 글자 크�
 
 ## 화면 수정 시 갱신
 
-2026-10-24 스크롤 조사(c3500bcb)에서는 전용 iPhone의 native 새로고침 해제 후 T03을 새 실제 화면으로 갱신했다. native held/no-hold·부분 왕복 등의 경로는 통과했지만 최종 targeted UI8 중 수동·반복 상단 복귀2건이 실패하여 스크롤 수정 완료로 표시하지 않는다. iPad·Duo 접힘·펼침은 이 선행 게이트 실패로 새 검증과 캡처를 시작하지 못했다. 네 형태의 `captured.T03.current_verification`에 이 제한을 표시했고 기존 다른 기기 PNG를 새 수정 증거로 사용하지 않는다. [확인된 결함과 남은 원인 격리](../../solutions/performance/2026-10-24-today-scroll-root-cause.md)에 재개 조건을 기록했다.
+2026-10-25 Today 스크롤 조사에서는 닫힌 inspector의 내비게이션 내부 배치가 큰 제목·상단 여백 피드백을 만드는 것을 원인 격리로 확인했다. inspector를 Today NavigationStack 밖으로 옮긴 소스에서 iPhone UI10건과 iPad UI4건이 통과했다. 최신 main 통합 후 검증과 원본 캡처 출처는 [해결책 기록](../../solutions/performance/2026-10-24-today-scroll-root-cause.md)에서 추적한다. 기존 통합 인덱스의 다른 UDID 캡처를 이번 수정의 완료 증거로 덮어쓰지 않는다.
+
+2026-10-25 러닝 거리 우선 C14·일시 정지 C15·음성 제어 C16·거리/볼륨 C17·목표 페이스 C18의 새 실제 캡처를 등록했다. 전용 40mm Watch, en_US, 기본 글씨에서 서로 다른 UI 4건이 통과했고 거리 화면의 심박 frame을 추가 1건으로 재검증했다. C16은 음성 설정에 접근하기 위해 스크롤한 상태다. 전체 68개 중 65개를 캡처했으며 기존 S08·S11·C12는 이번 범위 밖의 미완료 상태다. [최종 리뷰와 검증 receipt](../../reviews/2026-10-25-watch-running-feedback-review-ship.md)에 출처·범위·실기기 오디오 제한을 기록했다.
+
+2026-10-25 Today 하단 카드의 T03과 공유 일간 요약 카드의 T10은 [V2 실제 화면 갤러리](../full-redesign-map/review/today-reading-v2-2026-10-25/index.html)에서 추적한다. 다른 UDID의 기존 통합 인덱스는 덮어쓰지 않았다. iPad는 이전 잠금 실패2회를 보존하고 명시적 재개 허용 뒤2/2통과했다. 전용 iPhone·iPad·Duo접힘·펼침의 T03/T10 원본38장을 새 갤러리에 등록했다. Duo펼침의 첫 카드 검사 실패는 테스트 대상 선택을 수정해 해당1건 재검증을 통과했고, 이미 통과한 T10결과를 유지한다. 실제 각도0°/180°와 활성 디스플레이를 확인했으며 펼침은951×669pt 가로창이다. 다른 글씨·테마·방향과 기존 인덱스를 일괄 완료로 표시하지 않는다.
 
 2026-10-24 T03 시작 로딩을 수정했다. 첫 조회 시작 전과 HealthKit 권한 준비 중에는 스켈레톤을 유지하고, 실제 조회 완료 후 기록이 없을 때만 빈 상태로 전환한다. 영향 기기는 iPhone·iPad·Duo 접힘·펼침이며 Watch는 제외한다. 기존 워크트리의 소유권 등록 오류는 분리한 `main` 기반 워크트리에서 잠금 FD 전달 환경을 바로잡아 해결했지만, 다른 워크트리의 UI 검증이 저장소 잠금을 보유하여 관련 테스트는 60초 대기 후 시작하지 못했다. 네 기기의 T03 초기 스켈레톤·조회 완료 빈 상태·측정값 표시 상태는 새 캡처 미완료이며 기존 이미지는 이 변경의 증거가 아니다. [구현과 검증 제한](../../solutions/general/2026-10-24-dashboard-initial-loading-state.md)에 재개 조건을 기록했다.
 
@@ -96,3 +102,12 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 5. Watch는 `python3 docs/design/watch-workout/collect-actual-captures.py <watch-xcresult>`로 이름이 붙은 UI 테스트 첨부 화면을 추출하고 상태별 갤러리를 갱신한다.
 
 캡처 출처 테스트의 후속 조작이 실패한 경우에도 화면별 실제 PNG와 접근성 계층이 생성됐는지 확인한 뒤 해당 화면만 채웠다. `capture-index.json`에는 선택된 화면마다 테스트 이름과 캡처 동작을 기록했다.
+
+2026-10-25 WLA01 Watch 운동 Live Activity의 정보 위계를 개선한 뒤 [전용 iPhone 실제 시스템 요소 PNG 세 장](actual/live-activity/index.html)을 갱신했다. 진행·일시 정지·긴 한국어 근력 운동명에서 제목·시간·지표를 직접 확인했다. 관련 테스트 로그는 3건 통과·연결 대기 1건 실패이며 Xcode 결과 정리가 멈춰 실행기는 124로 종료됐다. 원본 PNG는 중단된 번들의 payload에서 수정 없이 복구했고 출처·해시를 기록했다. 연결 대기 fixture 수정·밝은 모드·큰 글씨·Island·Watch small·iPad·Duo는 미검증이며 기존 이미지로 대체하지 않는다.
+
+이어 WLA01의 공통 헤더 상태 행에 `DUNE` 워드마크를 추가했다. 위 세 PNG는 브랜드 추가 전 캡처로 구분했고, 최신 구현의 진행·일시 정지·긴 운동명·연결 대기 및 small·Island 펼침은 새 캡처 대기다. 이전 Xcode 결과 정리 장애가 해결되지 않아 같은 UI 실행을 반복하지 않았다.
+
+
+## 2026-10-25 L01 습관 일정 분리 · 캡처 대기
+
+오늘/주간/다가오는 습관을 분리하고 오늘 집계를 실제 당일 대상으로 제한했다. [새 L01 캡처 25장과 출처](actual/life-schedule-2026-10-25/index.html)를 일반 iPhone·iPad·Duo 외부/내부에서 수집해 L01 이미지·기기 갤러리·Life 보드·비교·통합 포털을 갱신했다. 관련 Life UI는 반복을 포함해 22개 통과했다. iPad의 Upcoming은 전체 그룹이 viewport 안에 들어오도록 촬영 위치를 보정한 후 해당 selector만 재검증했다. 일반 iPhone 공통 smoke의 별도 알림 검사 2개 실패는 [검증 기록](../../reviews/2026-10-25-today-habit-schedule.md)에 남겼다. 새 일정 fixture의 기본 4개 viewport와 iPhone/iPad/Duo 내부의 히어로 밝음·어두움·최대 글씨만 확인했으며 모든 그룹·테마·글씨 조합을 완료로 표시하지 않는다. Duo는 활성 LCD/LCD-1, 새 AX/window와 native PNG를 확인했지만 현재 Xcode CLI에 각도 조회가 없어 수치 힌지 각도는 미검증이다. Watch는 Life 화면을 공유하지 않아 영향이 없다.

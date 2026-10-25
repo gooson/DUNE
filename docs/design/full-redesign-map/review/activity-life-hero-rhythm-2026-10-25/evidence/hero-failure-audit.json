@@ -1,0 +1,44 @@
+{
+  "common_smoke": {
+    "result": "failed",
+    "executed": 39,
+    "passed": 37,
+    "failed": 2,
+    "unresolved": [
+      "DashboardSmokeTests/testNavigateToNotificationHub",
+      "DashboardSmokeTests/testNotificationHubSummaryAtMaximumAccessibilitySize"
+    ],
+    "source_relation": "No direct source path found; unchanged Dashboard/navigation helpers and opt-in fixture false in those tests. Baseline failure not established.",
+    "retry_count": 0,
+    "next_action": "Await user scope choice; preserve failure, no unrelated fixes or retry."
+  },
+  "auto_only_delta": {
+    "first_result": "failed",
+    "cause": "Test queried life-toolbar-template without opening parent Menu",
+    "remediation": "Tap life-toolbar-add then template; assert habit-template-list",
+    "retry_count": 1,
+    "retry_result": "passed 2/2 including sparse-history captures",
+    "retained_passing_first_attempt": "7/7 other selected cases, including all six native capture cases"
+  },
+  "latest_app_revision": "471a82f0",
+  "unrelated_common_smoke_not_waived": true,
+  "duo_preparation": {
+    "first_result": "failed before UI tests",
+    "cause": "Current CoreDevice651.13.5 CLI has no device motion hinge-angle command",
+    "retry_count": 1,
+    "remediation": "Layout-only capture confirms official active LCD and physical orientation plus fresh native viewport. Numerical hinge angle remains unverified.",
+    "retry_result": "external capture 4/4 passed; numerical angle unverified",
+    "boot_note": "bootstatus printed Data Migration Failed yet device is confirmed booted/connected by simctl and devicectl; four actual app UI cases subsequently passed"
+  },
+  "duo_internal": {
+    "result": "preflight failed; 0 UI tests executed",
+    "cause": "Reviewed orientation HID helper dispatched successfully but official physical orientation readback stayed portrait, while LCD-1 became active",
+    "retry_count": 0,
+    "official_alternative": "After a nonblocking check confirmed the repository lock was available, official orientation set returned landscapeLeft but orientation get still returned portrait. Assertion failed; no UI capture was started.",
+    "resume_condition": "A corrected or externally restored rotation path must produce official landscapeLeft readback and active LCD-1 on the exact owned UDID before the single conditional UI retry. Do not repeat either unchanged setter.",
+    "unrefreshed_screen_ids": [
+      "Duo internal landscape A01",
+      "Duo internal landscape L01"
+    ]
+  }
+}
