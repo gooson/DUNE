@@ -112,12 +112,12 @@ struct RecoverySleepCard: View {
                 VStack(alignment: .leading, spacing: DS.Spacing.xs) {
                     ViewThatFits(in: .horizontal) {
                         HStack {
-                            Text("Sleep History")
+                            Text("Sleep History (hours)")
                             Spacer()
                             historyRange(samples)
                         }
                         VStack(alignment: .leading, spacing: DS.Spacing.xs) {
-                            Text("Sleep History")
+                            Text("Sleep History (hours)")
                             historyRange(samples)
                         }
                     }
@@ -131,6 +131,7 @@ struct RecoverySleepCard: View {
                         .foregroundStyle(DS.Color.sleep)
                         .cornerRadius(3)
                     }
+                    .chartYScale(range: .plotDimension(padding: DS.Spacing.sm))
                     .chartXAxis {
                         AxisMarks(values: .stride(by: .day)) { _ in
                             AxisValueLabel(format: .dateTime.weekday(.narrow))
@@ -139,8 +140,8 @@ struct RecoverySleepCard: View {
                     .chartYAxis {
                         AxisMarks(position: .leading, values: .automatic(desiredCount: 3))
                     }
-                    .chartYAxisLabel("Hours", position: .leading)
                     .frame(height: historyHeight)
+                    .padding(.top, DS.Spacing.xs)
                     .clipped()
                     .accessibilityIdentifier("dashboard-recovery-sleep-chart")
                     if deficit.dailyDeficits.contains(where: { !$0.actualMinutes.isFinite || $0.actualMinutes <= 0 }) {
