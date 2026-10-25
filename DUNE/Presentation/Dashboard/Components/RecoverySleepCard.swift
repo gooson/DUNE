@@ -141,6 +141,7 @@ struct RecoverySleepCard: View {
                     }
                     .chartYAxisLabel("Hours", position: .leading)
                     .frame(height: historyHeight)
+                    .clipped()
                     .accessibilityIdentifier("dashboard-recovery-sleep-chart")
                 }
             }

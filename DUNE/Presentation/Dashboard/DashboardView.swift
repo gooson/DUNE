@@ -390,7 +390,6 @@ struct DashboardView: View {
         // Cumulative Stress Score (Phase 3)
         if let stressScore = viewModel.cumulativeStressScore {
             CumulativeStressCard(stressScore: stressScore)
-            .accessibilityIdentifier("dashboard-stress-score")
             .transition(Self.sectionTransition)
             .staggeredAppear(index: 6)
         }

@@ -19,7 +19,7 @@ final class DuoScoreComponentLayoutTests: SeededUITestBaseCase {
         }
         executionTimeAllowance = 600
         launchSeededTab("today", extraArguments: ["--ui-visual-stress-fixture"])
-        openDetail(from: "dashboard-stress-score", screen: "cumulative-stress-detail-screen")
+        openDetail(from: "dashboard-stress-details", screen: "cumulative-stress-detail-screen")
 
         let scroll = app.scrollViews["cumulative-stress-detail-screen"].firstMatch
         let expected: [(factor: String, score: String, weight: String)] = [

@@ -29,7 +29,7 @@ final class TodayReadingUITests: SeededUITestBaseCase {
             "--ui-visual-stress-fixture", "--ui-dashboard-hour", "21",
             "--ui-test-style", style,
             "-morningBriefingDisabled", "YES",
-            "-AppleLanguages", "(en)", "-AppleLocale", "en_US"
+            "-AppleLanguages", "(ko)", "-AppleLocale", "ko_KR"
         ]
         if largeText {
             arguments += ["-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"]

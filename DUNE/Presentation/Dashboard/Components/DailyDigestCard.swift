@@ -27,21 +27,10 @@ struct DailyDigestCard: View {
             .foregroundStyle(.primary)
     }
 
-    @ViewBuilder
     private var headline: some View {
-        if let workout = digest.metrics.workoutSummary {
-            Text(String(localized: "You completed \(workout)."))
-                .font(.title3.weight(.semibold))
-                .fixedSize(horizontal: false, vertical: true)
-        } else if let score = digest.metrics.conditionScore {
-            Text("Today's condition score was \(score).")
-                .font(.title3.weight(.semibold))
-                .fixedSize(horizontal: false, vertical: true)
-        } else if let steps = digest.metrics.stepsCount {
-            Text("\(steps.formattedWithSeparator) steps today.")
-                .font(.title3.weight(.semibold))
-                .fixedSize(horizontal: false, vertical: true)
-        }
+        Text(digest.date, format: .dateTime.month(.abbreviated).day())
+            .font(.subheadline)
+            .foregroundStyle(DS.Color.textSecondary)
     }
 
     @ViewBuilder
