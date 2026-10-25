@@ -52,3 +52,23 @@ related_solutions: [2026-04-05-habit-early-completion-fix]
 ## Testing Strategy / Risks
 
 날짜를 고정한 VM 테스트와 폼 생성 UI 테스트로 집계와 표시를 검증한다. 위험은 기존 통계와 당일 집계의 혼동이며 historical trend는 실제 기록 수라는 기존 라벨을 유지한다. 시뮬레이터·잠금 차단 시 동일 원인 무변화 재시도 없이 증거를 남긴다.
+
+
+## /run 재개 범위 (2026-10-25)
+
+최초 응답에서는 조사만 수행하고 습관 수정을 하지 않았다. 또한 다른 변경이 있는 4592 worktree를 바로 분리하지 않았다. 이후 origin/main 기준 전용 worktree에서 구현했으며 기존 Today/Watch 변경은 포함하지 않았다. 사용자의 이번 /run 요청은 이 경위와 아래 미완료 작업까지 포함한다.
+
+| 이전 상태 | 이번 실행 |
+|---|---|
+| 일정 분리·당일 완료 집계 구현, 리뷰 P2 3/P3 1 수정 | 현재 diff와 기존 findings/수정 이후 delta를 재확인 |
+| 관련 unit 3 suites / 45 통과, 최종 UI source 이전 generic build | 현재 소스 빌드를 receipt로 확인; unit 증거는 파일·환경·증거 유효성 검사 후 재사용하거나 필요한 경우만 갱신 |
+| UI testcase 2 pass / 새 회귀 1 fail | primary-form helper로 고친 fixture 1회 재검증; 같은 원인 재시도 이력 유지 |
+| Xcode 결과 정리 중단, simctl diagnose 잔류 | 종료/환경 정상화 근거를 확인하고 이전 runner와 중복 실행하지 않음 |
+| L01 실제 맵 미갱신 | 일반 iPhone·iPad·Duo 접힘/펼침의 영향 상태를 새 PNG로 확인; capture 출처와 맵 갱신 |
+| 문서 draft·PR/merge 미실행 | 검증 결과에 맞춰 solution/review를 최종 동기화하고 pre-ship→PR→GitHub merge→소유 리소스 정리 |
+
+### 검증 비용과 종료 조건
+
+전체 suite를 새로 돌리지 않는다. 실패 관련 단일 UI 회귀 selector부터 검증하고, 성공 후 관련 Life suite·공통 smoke 및 영향받는 L01 캡처를 실행한다. 최초 fixture 실패의 자동 재시도는 0/1로 남아 있으며 이번 turn을 이유로 초기화하지 않는다. UI 결과 정리는 wall 420초/idle 90초 범위에서 시도한다. 정상 종료·정확한 selector 수·실제 PNG 확인 전에는 게이트를 완료하지 않는다. 같은 원인이 재현되면 그 실행 경로를 중단하고 독립 리뷰·문서화 결과와 정확한 재개 조건을 남긴다.
+
+저장 스키마·새 API는 도입하지 않는다. Foundation의 기존 날짜 비교와 기존 UI 폼 스크롤 helper를 재사용하므로 외부 API 추가 조사는 필요하지 않다. 기존 solution/brainstorm과 소비자 검색으로 설계를 확인한다.
