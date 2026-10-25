@@ -153,7 +153,13 @@ final class TodayCompactUITests: SeededUITestBaseCase {
         app.buttons["dashboard-pinned-edit"].firstMatch.tap()
         let sleepChoice = app.buttons["pinned-metrics-editor-row-sleep"].firstMatch
         XCTAssertTrue(sleepChoice.waitForExistence(timeout: 5))
+        XCTAssertFalse(sleepChoice.isSelected, "The fixture must begin with Sleep unpinned")
         sleepChoice.tap()
+        let selected = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "selected == true"), object: sleepChoice
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [selected], timeout: 5), .completed,
+                       "Tapping the row center must select Sleep before saving")
         app.buttons["pinned-metrics-editor-done"].firstMatch.tap()
 
         let first = grid.buttons["dashboard-metric-hrv"].firstMatch
