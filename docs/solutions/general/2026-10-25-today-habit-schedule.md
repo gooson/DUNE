@@ -1,8 +1,9 @@
 ---
 tags: [life, habits, recurring, weekly, schedule, day-boundary]
 date: 2026-10-25
-category: solution
-status: draft
+category: general
+severity: important
+status: approved
 related_files:
   - DUNE/Presentation/Life/LifeViewModel.swift
   - DUNE/Presentation/Life/LifeView.swift
@@ -34,7 +35,15 @@ Life 히어로는 모든 수동 활성 습관을 오늘의 분모로 세었다. 
 
 ## Verification
 
-관련 단위 테스트는 3 suites / 45개 통과했다. UI 최초 실행은 2개 통과 / 새 fixture 1개 실패였고, fixture는 기존 폼 전용 스크롤 헬퍼로 수정했다. Xcode 결과 정리 정체로 exit 130 종료되어 수정 fixture와 실제 L01 캡처는 미검증이다. 이 문서는 구현 초안이며 merged 결과가 아니다. 상세 근거와 재개 조건은 `docs/reviews/2026-10-25-today-habit-schedule.md`에 기록한다. 테스트 미실행·환경 실패를 통과로 간주하지 않는다.
+고정 날짜 unit 3 suites / 45개가 통과했다. 이후 VM과 해당 suite의 hash가 동일함을 확인해 증거를 재사용했다. 관련 Life UI는 일반 iPhone·iPad·Duo 외부/내부에서 반복을 포함해 22개 통과했다. 일반 iPhone의 전체 선택 묶음은 38개 중 36개 통과·알림 화면 2개 실패이며, 변경되지 않은 알림 경로의 별도 실패로 보존했다. 전체 묶음을 통과로 보고하지 않는다.
+
+L01의 새 실제 PNG 25장, 원본 출처·hash와 갤러리를 저장하고 네 기기 맵·보드·통합 포털을 갱신했다. iPad의 Upcoming 아래쪽이 첫 캡처에서 화면 밖에 남아, 그룹 전체가 실제 scroll viewport 안에 들어오는지 확인한 뒤 해당 회귀 한 건만 다시 실행해 통과했다. [검증 기록](../../reviews/2026-10-25-today-habit-schedule.md)에 정확한 scope·로그·미검증 조합을 적었다. generic iOS 최종 빌드 로그는 `/tmp/habit-run-final-build.log`에서 확인한다.
+
+## Execution Corrections
+
+처음에는 조사만 수행했고 다른 작업이 있는 worktree를 바로 분리하지 않았다. 이후 전용 브랜치·worktree에서 구현했으며 기존 작업을 옮기거나 함께 커밋하지 않았다. 이번 /run에서 미완료 UI·실제 캡처·리뷰·문서·Ship 절차를 이어 수행한다.
+
+바깥 SwiftUI container에 AX ID를 붙이면 자식 ID를 덮어쓸 수 있다. 이미 있던 `SectionGroup.sectionIdentifier`로 제목에만 ID를 주어 해결했다. `isHittable`은 전체 행이 화면 안에 있다는 뜻이 아니므로 캡처할 긴 그룹은 실제 scroll/window 교집합에 전체 frame이 들어오는지도 검사한다. 이 교정은 기존 active correction의 안정된 AX anchor 규칙을 적용한 것이며 `.claude/**` 원본은 수정하지 않는다.
 
 ## Lessons Learned
 

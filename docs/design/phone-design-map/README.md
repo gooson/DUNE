@@ -108,4 +108,4 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 
 ## 2026-10-25 L01 습관 일정 분리 · 캡처 대기
 
-오늘/주간/다가오는 습관을 분리하고 오늘 집계를 실제 당일 대상으로 제한한 구현은 전용 `habit-today-schedule` worktree에 보존했다. [검증 기록](../../reviews/2026-10-25-today-habit-schedule.md)에 따라 단위 테스트 45개는 통과했지만 Duo 외부 화면의 새 회귀 테스트가 폼 탐색 fixture에서 실패했고 Xcode 결과 정리가 정체됐다. fixture 수정 후 재실행과 새 L01 캡처는 미완료다. iPhone·iPad·Duo 접힘/펼침의 기본·큰 글씨, 밝음·어두움을 새 버전으로 갱신하지 못했으며 기존 이미지로 완료 처리하지 않는다. Watch에는 이번 Life 화면 변경 영향이 없다. 정상 UI 실행과 새 PNG 확보 뒤 해당 L01만 갱신한다.
+오늘/주간/다가오는 습관을 분리하고 오늘 집계를 실제 당일 대상으로 제한했다. [새 L01 캡처 25장과 출처](actual/life-schedule-2026-10-25/index.html)를 일반 iPhone·iPad·Duo 외부/내부에서 수집해 L01 이미지·기기 갤러리·Life 보드·비교·통합 포털을 갱신했다. 관련 Life UI는 반복을 포함해 22개 통과했다. iPad의 Upcoming은 전체 그룹이 viewport 안에 들어오도록 촬영 위치를 보정한 후 해당 selector만 재검증했다. 일반 iPhone 공통 smoke의 별도 알림 검사 2개 실패는 [검증 기록](../../reviews/2026-10-25-today-habit-schedule.md)에 남겼다. 새 일정 fixture의 기본 4개 viewport와 iPhone/iPad/Duo 내부의 히어로 밝음·어두움·최대 글씨만 확인했으며 모든 그룹·테마·글씨 조합을 완료로 표시하지 않는다. Duo는 활성 LCD/LCD-1, 새 AX/window와 native PNG를 확인했지만 현재 Xcode CLI에 각도 조회가 없어 수치 힌지 각도는 미검증이다. Watch는 Life 화면을 공유하지 않아 영향이 없다.

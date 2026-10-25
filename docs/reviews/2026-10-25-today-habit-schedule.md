@@ -1,21 +1,23 @@
 ---
-tags: [review, life, habits, schedule]
+tags: [review, life, habits, schedule, accessibility]
 date: 2026-10-25
 category: solution
-status: draft
+status: approved
 ---
 
 # 오늘의 습관 일정 분리 리뷰
 
-> Base: origin/main (94c29d36). Branch: codex/fix-today-habit-schedule. 기존 4592 worktree의 Today/Watch/실행기 변경은 포함하지 않는다.
+> Base: origin/main dc262ef3. Branch: codex/fix-today-habit-schedule. 앱 소스는 048477a9, 마지막 캡처 테스트 보정은 ac785e81이다. 기존 4592 worktree의 Today/Watch/실행기 변경은 포함하지 않는다.
 
 ## Summary
 
 | Priority | Count | Status |
 |---|---|---|
 | P1 | 0 | — |
-| P2 | 3 | Resolved (코드 재확인, UI gate 미완료) |
+| P2 | 4 | 모두 Resolved |
 | P3 | 1 | Resolved |
+
+현재 코드의 Open P1/P2/P3는 0건이다. 아래 공통 smoke 실패는 코드 리뷰의 해결된 지적과 구분한다.
 
 ## P1 Findings
 
@@ -23,39 +25,58 @@ status: draft
 
 ## P2 Findings
 
-1. Architecture / Data Integrity: 열린 Life가 자정을 넘으면 Today/Upcoming과 당일 완료가 낡은 상태로 남음. **Resolved**: calendar day/timezone 알림과 active scene 진입에 재계산을 연결했다.
-2. Apple UX: Weekly/Upcoming에서 기존 시간대 표시가 빠짐. **Resolved**: 세 그룹이 공통 timeOfDayRows를 사용한다.
-3. SwiftUI: 선택한 카테고리의 마지막 수동 습관을 자동 연동으로 편집하면 카테고리가 사라져 필터를 해제할 수 없음. **Resolved**: 선택 필터가 있는 동안 필터 strip과 All을 유지한다.
+1. **Architecture / Data Integrity — 날짜 경계 갱신: Resolved.** 열린 Life가 자정을 넘거나 시간대가 바뀌면 분류가 낡을 수 있었다. calendar day/timezone 알림과 active scene 진입에서 동일 재계산 경로를 호출한다. 고정 날짜 테스트가 다음 날 이동을 검증한다.
+2. **Apple UX — 시간대 표시 보존: Resolved.** Today/Weekly/Upcoming 모두 기존 `timeOfDayRows`와 행 액션을 재사용한다.
+3. **SwiftUI — 선택 카테고리 소멸 후 필터 해제: Resolved.** 마지막 수동 습관을 자동 연동으로 바꿔도 선택 필터가 있는 동안 strip과 All을 유지한다.
+4. **SwiftUI 접근성 — 그룹 식별자 덮어쓰기: Resolved.** 바깥 `SectionGroup.accessibilityIdentifier`가 자식 그룹 식별자를 덮어썼다. 기존 제목 전용 `sectionIdentifier` API로 옮겼다. 실제 UI에서 세 그룹 식별자·소속·오늘 1/3 유지가 통과했다.
 
 ## P3 Findings
 
-SwiftUI / Apple UX: 카테고리 필터에서 빈 Today 0 그룹이 남음. **Resolved**: 빈 filtered Today는 숨기고 전체 필터 결과가 없으면 번역된 안내를 표시한다.
+**빈 filtered Today: Resolved.** 선택 카테고리에 오늘 항목이 없으면 빈 그룹을 숨기고, 모든 그룹에 결과가 없으면 번역된 안내를 표시한다.
 
-## Positive Observations
+## Review / Quality Evidence
 
-- Security/Performance/Simplicity: 신규 문제 없음. 저장 스키마·기록 CRUD·알림 정책은 변경하지 않는다.
-- Agent-Native는 지침 변경이 없어 제외했다.
-- Localization: 네 새 key에 en/ko/ja가 있고 helper는 LocalizedStringKey, VM은 String(localized:)를 사용한다. xcstrings format check 통과.
-- 단위 테스트는 today/weekly/upcoming 분류와 조기 완료 다음날 이동을 고정 날짜로 검증한다.
+- Security, Performance, Architecture, Data Integrity, Simplicity의 실제 agent 결과를 보존했다. 마지막 생산 코드 변경은 제목 전용 AX anchor이며 저장·보안·성능 경로가 바뀌지 않았다. 이전 결과와 변경분, 모든 P2를 현재 코드에서 재확인했다.
+- SwiftUI, Apple UX, UI Test 관점은 별도로 판단했다. 최종 PR reviewer / app-quality-gate는 전체 기능 리뷰와 이후 변경분을 재검토한다. 대량 데이터 처리가 없어 perf-optimizer는 제외했다. Agent-Native는 지침 변경이 없어 제외했다.
+- Localization: 기존 key 수정 없이 Life 전용 key 4개만 추가했으며 en/ko/ja가 모두 있다. View/helper는 LocalizedStringKey, VM은 String(localized:)다. `swift scripts/format-xcstrings.swift --check` 통과.
+- 실제 review 결과: `/tmp/habit-review-{security,performance,data,architecture,simplicity}.txt`, `/tmp/habit-final-pr-review-current.txt`, `/tmp/habit-run-apple-ux-current.txt`. finding lifecycle은 `/tmp/review-findings-codex-fix-today-habit-schedule.json`에 기록했다. 이 로컬 증거는 저장소 밖 자료이며 이 문서가 공유 요약이다.
 
 ## Validation Scope
 
-자동 UI 판정은 공유 catalog·UI test body·HTML 때문에 iOS/watch full을 제안했다. 실제 변경 symbol 소비자는 Life뿐이며 catalog에는 Life 전용 새 key만 추가했다. Watch/Widget/visionOS 소스와 기존 문자열은 그대로다. 사용자 요청 없는 전체 테스트로 확대하지 않고 관련 3개 unit suite와 LifeRegressionTests 및 Life smoke를 선택한다. targeted 성공을 full 성공으로 보고하지 않는다.
+자동 판정은 공유 catalog·UI test body·HTML 때문에 iOS/watch full을 제안했다. 소비자 검색에서 새 분류·집계·문구의 사용자는 Life뿐이었다. Watch는 별도 catalog를 사용하며 기존 shared 문자열·App/Domain/Data/seed/helper는 바뀌지 않았다. 사용자 요청 없는 full로 확대하지 않고 관련 Life와 공통 smoke를 실행했다. full iOS/watch, 모든 테마·방향·새 그룹의 모든 큰 글씨 조합은 미검증이다.
 
-## Execution Evidence / Next Steps
+| 실행 | 실제 결과 | 증거 |
+|---|---|---|
+| 관련 unit 3 suites | 45 passed | `/tmp/habit-today-unit.log`; VM/3개 suite 파일 hash 일치 확인 후 재사용 |
+| Duo 외부 일정 회귀 | 1/1 passed, exit 0 | `/tmp/habit-run-ui-groups-fixed.log.result.json` |
+| 일반 iPhone + 공통 smoke | 38 수행 / 36 passed / 2 failed, exit 65 | `/tmp/habit-run-ui-iphone.log.result.json` |
+| 위 실행의 Life 범위 | 16/16 passed | LifeRegression 6, LifeSeededSmoke 2, LifeSmoke 8 |
+| iPad 일정·히어로 배치 | 2/2 passed, exit 0 | `/tmp/habit-run-ui-ipad.log.result.json` |
+| Duo 내부 일정·히어로 배치 | 2/2 passed, exit 0 | `/tmp/habit-run-ui-duo-open.log.result.json` |
+| iPad Upcoming 캡처 보정 | 1/1 passed, exit 0 | `/tmp/habit-run-ui-ipad-capture.log.result.json` |
+| generic iOS 최종 빌드 | `scripts/build-ios.sh --no-regen` | `/tmp/habit-run-final-build.log`; 최종 /run 증빙과 PR에 결과 기록 |
 
-- generic iOS 빌드: 24bcfbdc 커밋 전 pre-commit scripts/build-ios.sh --no-regen 통과. 이후 최종 UI 수정은 단위/UI test build에서 확인할 대상이다.
-- unit 최초 시도: 테스트 0개. clone 소유권 등록의 Bad file descriptor 환경 실패. 등록 프로세스에서 닫힌 lock FD가 전달된 것이 원인이었다. 저장소 파일 수정 없이 부모 lock 유지 + 자식 stale FD 제거로 별도 전용 기기를 등록했다.
-- unit 재시도 1/1: 전용 Duo clone C9AF35FA-EC0F-421E-9D3B-23B15B77A655, /tmp/habit-today-unit.log, 3 suites / Swift Testing 45개 통과. 실행기 요약의 XCTest 0개와 별개로 로그의 `Test run with 45 tests in 3 suites passed` 및 `TEST SUCCEEDED`를 직접 확인했다.
-- 최초 clone 2ABB7180-5817-4F39-B5FA-A95463D3F9C5에는 orphan marker가 있다. 자동 삭제하지 않으며 worktree를 보존한다.
-- UI 최초 실행: 위 전용 Duo 외부 화면에서 3개 selector의 testcase 실행이 끝났다. 기본 Life 2개 통과 / 새 회귀 1개 실패. 새 테스트가 폼 대신 앱 CollectionView를 스크롤한 fixture 오류이며 기존 primary-form helper 사용으로 수정했다. 테스트 종료 후 Xcode 결과 writer가 멈춰 Info.plist 없는 xcresult만 남았다. 검증된 이번 작업 watchdog PID 95834에 SIGTERM을 보내 종료했고 실행 exit는 130이다. 종료 때 EPERM 경고가 있어 PID 95834/95850/95938이 사라졌음을 확인했다. 별도 session의 simctl diagnose PID 98500은 남았으므로 강제 종료하지 않고 UI 재시도를 보류했다. 수정한 fixture는 미실행이다. 공식 devicectl readback에서 활성 LCD, portrait를 확인했다. 정상 종료·정확한 selector 수·새 PNG 확인 전에는 통과로 간주하지 않는다.
+Life 관련 실행은 합계 22 passed이며 기기 간 반복 실행을 포함한다. 정상 종료한 결과 번들에서 25개 새 PNG를 원본 그대로 수집했다. iPad는 부분적으로만 보이던 Upcoming 전체를 viewport 안으로 이동한 후 필요한 selector 한 건만 재검증했다. 이전에 통과한 기능·표시 설정을 다시 돌리지 않았다.
 
+### 공통 smoke의 별도 실패와 범위 재확정
 
-## Final Status / Recovery
+- `DashboardSmokeTests/testNavigateToNotificationHub`: Notifications navigation title 조회 실패.
+- `DashboardSmokeTests/testNotificationHubSummaryAtMaximumAccessibilitySize`: 알림 설정 버튼 도달성 실패.
 
-- 코드 리뷰: 미해결 P1/P2 없음. 최종 통합 검토 `/tmp/habit-final-pr-review.txt`와 finding JSON에 근거가 있다. 마지막 64a86a0d는 기존 primary-form 스크롤 헬퍼로 fixture를 고친 변경이다.
-- UI 실행의 testcase 결과: 3개 수행, 기본 Life 2개 통과 / 새 분류 회귀 1개 실패. 정상 종료·완성된 xcresult가 없어 UI gate는 실패/미완료다. 실패 테스트의 fixture 수정 후 재시도는 아직 0/1이다.
-- 남은 SDK 진단 프로세스가 종료되고 UI 실행 환경에서 정상 xcresult writer가 확인되면, 단일 regression selector부터 수정한 fixture를 1회 검증한다. `DUNE_UI_TEST_WALL_TIMEOUT=420 DUNE_UI_TEST_IDLE_TIMEOUT=90`을 명시해 결과 정리 대기를 제한한다. 이어 관련 Life suite/공통 smoke를 확인한다. 관련 범위를 넘어 전체 테스트로 확대하지 않는다.
-- L01의 iPhone·iPad·Duo 외부/내부, 밝음/어두움/큰 글씨 캡처는 이번 버전으로 갱신하지 못했다. 기존 PNG는 변경 전 기록이며 완료 증거가 아니다. Watch는 Life 화면을 공유하지 않아 이번 변경 영향이 없다.
-- PR 생성·원격 머지·브랜치/워크트리/시뮬레이터 정리를 실행하지 않았다. 원격의 작업 브랜치와 현재 worktree를 보존한다. orphan marker 기기는 자동 삭제하지 않는다.
-- 사용자 원요청은 습관 조사였으나 기존 Today feature 브랜치에서 진행한 것은 작업 격리 실수였다. 코드 수정 전 origin/main 기준 전용 worktree와 `codex/fix-today-habit-schedule` 브랜치를 만들었으며 기존 4592 변경을 이동·커밋·stash하지 않았다.
+Dashboard/NotificationHub, App/Domain/Data, 공유 UI helper/seed, 두 테스트는 base 대비 변경이 없다. shared catalog도 기존 항목을 전혀 바꾸지 않았다. 새 key·집계의 소비자는 Life만이므로 두 실패를 이 작업의 원인으로 판단하지 않았다. adapter의 무관한 실패 처리 규칙에 따라 별도 실패로 보존하고 Life 영향 범위를 재확정했다. 알림 소스 수정·같은 검사 재시도·실패한 전체 묶음의 통과 처리는 하지 않았다. 완성된 xcresult에는 두 실패와 통과한 Life case가 모두 남아 있다.
+
+## Actual Design Map
+
+[새 L01 실제 캡처 25장](../design/phone-design-map/actual/life-schedule-2026-10-25/index.html)과 manifest에 기기·출처 테스트·시각·코드 revision·원본 PNG/AX hash를 보존했다. 일반 iPhone, iPad, Duo 외부·내부의 L01 이미지·기기 갤러리·Life 보드·비교·통합 포털을 갱신했다. 다른 화면은 기존 출처를 유지한다.
+
+새 일정 4개 viewport는 기기마다 영어다. 히어로 밝음·어두움·최대 글씨의 추가 검사는 일반 iPhone/iPad/Duo 내부의 기기 locale로 실행했다. 모든 그룹의 모든 표시 설정을 확인했다는 뜻은 아니다. Morning/Evening 헤더는 코드로 보존을 확인했지만 새 PNG fixture는 Anytime만 포함한다.
+
+Duo는 외부 LCD와 내부 LCD-1 활성 readback, 새 AX/window와 각 화면의 native PNG를 대조했다. 내부는 landscapeRight다. 현재 Xcode 27.1 build27A9275에는 기존 `device motion` 명령이 없어 수치 각도는 미검증이다. 검토한 고정 source의 180° 요청 후 지연 readback에서 LCD-1이 활성화됐으며 setter 성공이나 PNG 크기만으로 전환을 판정하지 않았다.
+
+## Execution History / Remaining Cleanup
+
+최초에는 조사만 했고 습관 수정을 수행하지 않았다. 또한 다른 변경이 있는 4592 worktree를 즉시 분리하지 않았다. 이후 origin/main 기준 전용 worktree를 만들고 구현·검증을 진행했으며 기존 Today/Watch 변경을 이동·커밋·stash하지 않았다. 이번 /run은 당시 미완료였던 UI·실제 캡처·문서화·Ship까지 포함한다.
+
+초기 clone 등록의 닫힌 lock FD, 폼 주기 선택/Save 탐색, SDK 결과 정리 정체, 그룹 AX 덮어쓰기와 인자 순서 컴파일 오류는 원인별 증거와 수정·재시도 이력을 보존했다. 현재 focused UI는 정상 결과를 만들었다. 이력은 `.codex-checks/habit-run/`에 있으며 미실행/0개/중단을 통과로 바꾸지 않았다.
+
+등록 실패 당시 생긴 orphan simulator `2ABB7180-5817-4F39-B5FA-A95463D3F9C5`의 복구 표식은 남아 있다. Ship adapter는 이 기기를 자동 삭제하지 않고, 복구 표식이 남으면 worktree/브랜치 후처리를 멈추도록 한다. 원격 머지 결과와 실제 정리 결과는 최종 Ship 보고에서 구분한다.
