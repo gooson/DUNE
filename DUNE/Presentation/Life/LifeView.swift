@@ -569,7 +569,8 @@ private struct HabitListQueryView: View {
             title: "My Habits",
             icon: "checklist",
             iconColor: DS.Color.tabLife,
-            fillHeight: fillHeight
+            fillHeight: fillHeight,
+            sectionIdentifier: "life-section-habits"
         ) {
             VStack(spacing: DS.Spacing.sm) {
                 if habits.isEmpty {
@@ -631,7 +632,6 @@ private struct HabitListQueryView: View {
                 ArchivedHabitCountView()
             }
         }
-        .accessibilityIdentifier("life-section-habits")
         .id(LifeScrollAnchor.checklist)
         .confirmationDialog(
             "More actions",
