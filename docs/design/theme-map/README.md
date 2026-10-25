@@ -50,7 +50,7 @@ Small 위젯의 세 점수 링과 하단 상태·시각은 카드 전체 높이�
 
 ## Today 하단 읽기 위계 (2026-10-25)
 
-[원본 대비 V1·V2 시안](themes/dune-today-reading.html)을 보존했다. V2의 큰 수면 시간·분리된 수면 부족·접히는 스트레스 근거·지표형 요약을 실제 앱에 적용하는 중이며 [구현 계획](../../plans/2026-10-25-today-reading-v2.md)에서 검증 범위를 추적한다. 이 HTML과 시안 PNG는 실제 앱 캡처가 아니다.
+[원본 대비 V1·V2 시안](themes/dune-today-reading.html)을 보존했다. V2의 큰 수면 시간·분리된 수면 부족·접히는 스트레스 근거·지표형 요약을 실제 앱에 적용했으며 [실제 화면 갤러리](../full-redesign-map/review/today-reading-v2-2026-10-25/index.html)와 [구현 계획](../../plans/2026-10-25-today-reading-v2.md)에서 검증 범위를 추적한다. 이 HTML과 시안 PNG는 실제 앱 캡처가 아니다.
 
 ## 갱신 방법
 

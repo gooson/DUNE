@@ -1,7 +1,7 @@
 ---
 topic: today-reading-v2
 date: 2026-10-25
-status: approved
+status: implemented-validation-partial
 confidence: high
 related_solutions:
   - ../solutions/architecture/2026-04-05-cumulative-stress-detail-view.md
@@ -41,6 +41,7 @@ related_brainstorms:
 | `DUNE/Presentation/Dashboard/Components/CumulativeStressCard.swift` | modify | 큰 점수·상태·분석 근거·상세 링크 |
 | `DUNE/Presentation/Dashboard/Components/DailyDigestCard.swift` | modify | 지표형 요약·원문 펼침; T10 소비자 포함 |
 | `DUNE/Presentation/Dashboard/DashboardView.swift` | modify | 스트레스 링크 중첩 제거 |
+| `DUNE/Presentation/Dashboard/DailyDigestNotificationView.swift` | modify | 공유 카드의 컨디션·걸음 중복 제거, 수면 보충 |
 | `Shared/Resources/Localizable.xcstrings` | modify | 새 문구 3개 언어 |
 | `DUNEUITests/Visual/TodayReadingUITests.swift` | add | seeded 렌더링·토글·상세·큰 글씨·캡처 |
 | `docs/design/{layout-map,theme-map,phone-design-map}/` | modify | 시안 보존·계약·실제 캡처와 출처 |
@@ -86,3 +87,7 @@ related_brainstorms:
 ## Confidence Assessment
 
 High: 데이터 모델·계산을 재사용하는 국소 표시 변경이다. 네 기기 캡처와 UI 검증은 실행 결과로만 판정한다.
+
+## Execution status
+
+구현과 P2수정을14d37e32에 반영했다. iPhone7/7 통과는44018fcc 기준이며 후속 delta 검사와 T10새 캡처가 남았다. iPad는 잠금 대기에서2회 시작 전 종료됐고 Duo두 자세는 미실행이다. 이전 캡처를 새 구현의 완료 증거로 쓰지 않는다. 상세 결과·재개 조건은 [실행 기록](../reviews/2026-10-25-today-reading-v2-run.md)에 보존한다.
