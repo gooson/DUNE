@@ -30,6 +30,7 @@ Claude skill 문서를 그대로 유지하면서 Codex에서 실행 semantics를
 - 해당 phase의 skill은 처음 진입할 때 한 번 읽고, 내용이 바뀌었거나 컨텍스트에서 사라졌을 때만 다시 읽는다. source의 필수 절차는 유지하되 동일 절차를 parent/child가 반복 서술하지 않는다.
 - 필수 프로젝트 문서/규칙은 유지한다. 선택적 reference, memory, 과거 solution은 검색으로 관련 부분만 읽으며 모든 skill/agent 문서를 일괄 로드하지 않는다.
 - 테스트 실행, 결과 재사용, 비용 측정이 필요할 때만 `.codex/token-efficiency.md`를 읽는다.
+- 세션 비용 감사는 원문을 모델에 일괄 로드하지 않고 `scripts/audit-agent-sessions.py`로 기간별 usage를 집계한 뒤 상위 세션의 필요한 구간만 확인한다. 캐시·reasoning·중복 기록 해석은 `.codex/token-efficiency.md`를 따른다.
 - 여러 reviewer/phase가 변경 정보를 공유할 때 `python3 scripts/codex-context.py snapshot --base <실제-base>`로 한 번 저장하고 반환된 디렉터리를 전달한다. `manifest.json`과 담당 patch 구간만 읽는다. 재사용 전 `python3 scripts/codex-context.py check <디렉터리>`로 최신성을 확인한다. untracked/binary 본문과 관련 호출부는 별도로 확인하며, snapshot은 리뷰·테스트 통과 증거가 아니다. 이 수집 작업 자체에는 agent를 생성하지 않는다.
 
 ### 재시도와 범위 확장 제한
@@ -42,6 +43,7 @@ Claude skill 문서를 그대로 유지하면서 Codex에서 실행 semantics를
 - 같은 원인에 대한 자동 재시도는 **최대 1회**다. 원인에 대응한 코드 수정 또는 실패한 의존성의 정상 동작 확인이 먼저 있어야 한다. 시간 경과, 일시적인 부하 하락, 단순 목록 조회 성공, 막연한 기대만으로 재실행하지 않는다. 새 실패 원인으로 횟수를 초기화하려면 기존 원인이 해소됐다는 증거가 있어야 한다.
 - 재시도에서도 같은 원인이 남으면 해당 실행 경로를 중단하고 원인·미검증 범위·정확한 재개 조건을 기록한다. 독립적으로 가능한 작업은 계속한다. 환경 실패를 코드 실패/테스트 통과로 보고하지 않으며, 필요한 검증이 막힌 상태로 게이트를 통과시키지 않는다.
 - 진행 중인 실행은 복제 실행하지 않는다. 해당 도구의 대기 기능을 사용하고 새 출력이 없으면 반복 로그 읽기·프로세스 조회를 하지 않는다. 상태 조회가 필요할 때는 30~60초 간격으로 하며, 같은 상태가 2회 이어지면 정한 timeout/완료 이벤트를 기다린다. 사용자에게 필요한 진행 안내는 별도로 유지한다.
+- 긴 실행에서 `clock → sleep → tail/ps → write_stdin`을 별도 모델 호출로 반복하지 않는다. 기존 실행 session의 대기 기능을 사용하고 짧은 yield 뒤 무출력 재호출을 쌓지 않는다. 사용자 진행 안내는 60초 이내로 유지하되, 안내를 위해 새 진단 명령을 만들지는 않는다.
 - 사용자에게 실행 비용과 종료 조건을 먼저 알린다. 단순 기능 수정에서 테스트·캡처·리뷰를 완료 조건 없이 계속 추가하지 않는다. 검증에 실패하면 실패 지점과 남은 범위를 기록하고, 동일 원인에서 새 수정 없이 재실행하지 않는다.
 - 무관한 기존 실패는 이번 작업의 diff에 원인이 있는지 먼저 확인한다. 관계가 없으면 별도 이슈로 기록하고 현재 작업의 검증 범위를 다시 확정한다. 완료 조건을 맞추려고 관계없는 앱/테스트를 수정하거나 검증 중 실행기 파일을 수정하지 않는다.
 - 이미 유효한 검증/리뷰가 있으면 같은 내용을 다시 실행하지 않는다. 수정 후 재리뷰는 바뀐 부분과 영향을 받는 관점만 수행하고 기존 결과의 유효 범위를 함께 기록한다. 실행만을 위한 agent 생성, 변화 없는 agent 재호출, 해결 근거 없는 모델 상향을 하지 않는다.
@@ -55,6 +57,7 @@ Claude skill 문서를 그대로 유지하면서 Codex에서 실행 semantics를
 - Work의 테스트와 Quality 결과를 뒤 phase에서 다시 사용할 때는 `.codex/token-efficiency.md`의 증거 일치 조건을 확인한다. 유효한 동일 검증은 재실행 대신 evidence 경로를 기록한다. 이는 phase 생략이 아니며, 변경/누락된 검증은 실행한다.
 - `/run` 안의 `/work`는 구현/QC까지만 담당하고 Compound/Ship는 parent가 한 번 수행한다. UI 최종 범위는 아래 변경 범위 기반 UI 게이트로 결정한다. full로 판정된 검증은 smoke로 대체하지 않는다.
 - `/run` parent가 검증/리뷰 관점별 실행 담당을 한 번 배정한다. Work에서 완료한 전문 검토는 Phase 3.5에서 증거·대상·환경의 유효성을 확인해 재사용하고, 이후 변경으로 영향을 받는 관점만 다시 수행한다. Phase 3.5의 적용 여부 판단과 결과 보고는 유지하며, standalone `/work`의 검증 의무는 바꾸지 않는다.
+- UI 실행권·환경이 막혀도 독립적인 read-only 코드 검토, 로그 분석, 문서 준비까지 전부 중단하지 않는다. UI 게이트는 미완료로 유지하고 선행 검토의 대상 diff·결과를 보존한다. 실행 환경이 복구되면 미검증 selector와 이후 변경분만 이어서 확인하며, 선행 검토를 UI 통과나 Ship 허가로 해석하지 않는다.
 - phase 상태·증거·문서 확인 이력은 `scripts/codex-pipeline.py`로 기록/검사한다(사용법은 `.codex/token-efficiency.md`). 기록의 존재만으로 완료를 선언하지 않는다. 원문과 adapter를 이번 실행에 적용한 판단은 parent가 유지하며, 문서 hash 확인은 원문 읽기/이해의 대체가 아니다. tool의 compact report를 바탕으로 필수 시작/완료 안내와 최종 증빙을 집계하고 같은 로그/절차를 반복 서술하지 않는다.
 - Ship 단계는 auth/network/remote 조건이 충족될 때만 실제 `gh` 작업을 수행한다. 막히면 manual recovery를 출력한다.
 
@@ -131,11 +134,13 @@ Codex가 iOS·iPadOS·Duo·watchOS의 보이는 화면 배치, 글자, 상태, �
 
 ### /ui-testing
 
+- 환경 실패·화면 잠금·실행권 대기가 발생하면 `.codex/ui-execution.md`를 읽고 단계를 분류한다. 저장소 simulator 실행 잠금과 Mac 화면 잠금은 다르다. 실행기 `<log>.host.json`은 진단 자료이며 UI 통과 증거가 아니다.
 - `agent: ui-test-expert`는 agent-map의 실제 모델 배정을 사용한다. 테스트 실행 자체에는 agent가 필요 없다.
 - Unit/UI/watch 테스트는 기존 `scripts/test-unit.sh`, `scripts/test-ui.sh`, `scripts/test-watch-ui.sh`를 표준 경로로 사용한다. 기본 파일 로그/요약을 유지하고 필요한 때만 streaming한다.
 - **UI 실행 점유 제한**: Codex 로컬 UI 테스트는 raw `xcodebuild test` 대신 표준 UI 실행기를 사용한다. 실행기에는 시뮬레이터 잠금 대기 60초, 로그 무갱신 15분, 전체 실행 deadline이 있다. focused/smoke 기본 30분, full 기본 3시간이며 정당한 장시간 검증은 `DUNE_UI_TEST_WALL_TIMEOUT`과 `DUNE_UI_TEST_IDLE_TIMEOUT`으로 실행 전에 명시한다. deadline 124, 잠금 대기 실패, 테스트 결과 정체는 실패 증거다. 별도 PID를 임의 종료하거나 같은 명령을 이름만 바꿔 재시도하지 않는다.
 - **전용 시뮬레이터 사용**: 사용자가 특정 기기를 직접 지정한 경우 외에는 현재 worktree 소유로 등록된 clone을 단독 사용한다. iPhone·iPad·Duo·Watch의 UI 테스트, 앱 설치·초기화, 수동 캡처, 자세·회전 전환에 모두 적용한다. 명시적 UDID를 넘기기 전에도 `.codex-checks/worktree-simulators.json`의 worktree·UDID·이름과 실제 기기를 대조한다. `booted` 선택이나 공용 원본·다른 worktree 기기로의 fallback은 사용하지 않는다. 전용 기기 조회·생성·소유권 확인이 실패하면 해당 실행을 중단하고 원인과 재개 조건을 기록한다. 전용 기기도 저장소 잠금과 실행 deadline을 유지한다.
 - UI 명령 시작 전 변경 범위와 정확한 selector/기기/plan을 정한다. 일반 기능 수정은 영향받는 단일 기기와 테스트부터 실행하고, 추가 기기·full·전체 디자인맵은 실제 영향 또는 명시적 사용자 요청이 있을 때만 연다. 한 저장소에서 한 번에 한 UI runner만 진행하고 테스트 완료 전에 새 runner를 만들지 않는다.
+- **사용자가 별도 기기로 병행 검증을 요청한 경우**: 연결된 다른 worktree의 전용 기기·DerivedData·로그가 모두 격리됐고 현재 worktree에 기존 실행이 없음을 확인한 뒤 `DUNE_SIM_TEST_LOCK_SCOPE=worktree`를 명시할 수 있다. 이 경우에만 저장소 단위 직렬화의 예외이며, 현재 worktree 잠금과 실행 deadline은 유지한다. 업데이트 전 runner는 worktree 잠금을 갖고 있지 않으므로 프로세스의 작업 경로·대상 UDID도 확인한다. 공용 기기 fallback, 다른 worktree 기기 조작, 공유 build/result 경로, 전역 Simulator/GUI 조작에는 이 예외를 적용하지 않는다. 환경 변수는 해당 명령에만 전달하고 기본값으로 저장하지 않는다.
 - iPhone 검증 후 watchOS 검증으로 넘어갈 때 iPhone runner 종료와 결과 receipt를 먼저 확인한다. watch runner는 잠금을 얻은 뒤 이 worktree가 소유한 동일 이름의 Watch clone을 삭제 확인하고 새로 생성한다. 삭제·소유권 확인에 실패하면 Watch 검증을 시작하지 않는다. 공용 원본·다른 worktree 기기는 삭제하지 않는다.
 - 실행기 계약 테스트도 같은 호스트에서는 순차 실행한다. 동시 fixture·시뮬레이터 조회가 대기 시간을 늘린 경우 실행을 중지하고 소유 자식이 정리됐는지 확인한 뒤 해당 실패만 다시 진단한다. 프로세스 수를 줄이기 위한 진단 중에 새 백그라운드 runner를 시작하지 않는다.
 - `xcodebuild`의 개별 testcase allowance는 빌드, CoreSimulator 부팅, 테스트 발견, `.xcresult` 정리 시간을 제한하지 않는다. 실행기가 timeout이면 마지막 testcase·로그 상태를 분류하고, 앱 실패와 SDK/host 정체를 구분한다. 정상 종료와 정확한 selector 결과 receipt가 확인되기 전에는 통과로 보고하지 않는다.

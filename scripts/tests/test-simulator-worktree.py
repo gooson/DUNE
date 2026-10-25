@@ -50,6 +50,39 @@ class SimulatorWorktreeTests(unittest.TestCase):
             cwd=cwd, check=check, capture_output=True, text=True, env=env,
         )
 
+    def test_registry_simctl_deadline_inherits_both_valid_lock_descriptors(self):
+        fake_bin = self.root / "fake-bin"
+        fake_bin.mkdir()
+        fake_xcrun = fake_bin / "xcrun"
+        fake_xcrun.write_text(
+            "#!/usr/bin/env python3\n"
+            "import os\n"
+            "for name in ('DUNE_SIM_TEST_LOCK_FD', 'DUNE_SIM_TEST_WORKTREE_LOCK_FD'):\n"
+            "    os.fstat(int(os.environ[name]))\n"
+            "print('descriptors-open')\n"
+        )
+        fake_xcrun.chmod(0o755)
+        with tempfile.TemporaryFile() as repository_lock, tempfile.TemporaryFile() as worktree_lock:
+            environment = {
+                "DUNE_SIM_TEST_LOCK_FD": str(repository_lock.fileno()),
+                "DUNE_SIM_TEST_WORKTREE_LOCK_FD": str(worktree_lock.fileno()),
+                "PATH": f"{fake_bin}:{os.environ['PATH']}",
+            }
+            with mock.patch.dict(os.environ, environment):
+                result = registry.run_simctl("list", "devices", capture_output=True)
+        self.assertEqual(result.stdout.strip(), "descriptors-open")
+
+    def test_registry_simctl_rejects_stale_lock_descriptor(self):
+        stale = tempfile.TemporaryFile()
+        stale_fd = stale.fileno()
+        stale.close()
+        with mock.patch.dict(os.environ, {
+            "DUNE_SIM_TEST_LOCK_FD": str(stale_fd),
+            "DUNE_SIM_TEST_WORKTREE_LOCK_FD": "invalid",
+        }):
+            with self.assertRaises(OSError):
+                registry.run_simctl("list", "devices", capture_output=True)
+
     def test_same_basename_has_distinct_stable_device_names(self):
         command = '''
         _find_simulator_by_name() { printf '%s\\n' "$1"; }

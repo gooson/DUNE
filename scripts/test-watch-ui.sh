@@ -111,6 +111,12 @@ done
 # can fail and leave a stale successful result for this log path.
 RESULT_FILE="${LOG_FILE}.result.json"
 rm -f "$RESULT_FILE"
+HOST_STATE_FILE="${LOG_FILE}.host.json"
+rm -f "$HOST_STATE_FILE"
+python3 "$ROOT_DIR/scripts/lib/command-deadline.py" --seconds 5 -- \
+    python3 "$ROOT_DIR/scripts/lib/ui-host-state.py" \
+    --runner watch --output "$HOST_STATE_FILE" || \
+    echo "Host state context unavailable; continuing watch UI test preflight." >&2
 
 resolve_test_plan() {
     local requested_plan="$1"
