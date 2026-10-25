@@ -142,16 +142,25 @@ final class TodayCompactUITests: SeededUITestBaseCase {
     func testOddPinnedMetricOccupiesFullFinalRow() {
         navigateToDashboard()
 
-        // --ui-reset restores TodayPinnedMetricsStore.fallback: HRV, RHR, Sleep.
-        // Scope queries to the pinned grid so an unpinned Body metric cannot
-        // accidentally satisfy the expected final pinned card.
+        // seedDefaultRecords explicitly saves HRV + RHR, independent of the
+        // production store's three-category fallback. Add Sleep through the UI.
         let grid = element("dashboard-pinned-grid")
         XCTAssertTrue(grid.waitForExistence(timeout: 10))
+        XCTAssertTrue(grid.buttons["dashboard-metric-hrv"].firstMatch.exists)
+        XCTAssertTrue(grid.buttons["dashboard-metric-rhr"].firstMatch.exists)
+        XCTAssertFalse(grid.buttons["dashboard-metric-sleep"].firstMatch.exists)
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("dashboard-pinned-edit", maxSwipes: 16))
+        app.buttons["dashboard-pinned-edit"].firstMatch.tap()
+        let sleepChoice = app.buttons["pinned-metrics-editor-row-sleep"].firstMatch
+        XCTAssertTrue(sleepChoice.waitForExistence(timeout: 5))
+        sleepChoice.tap()
+        app.buttons["pinned-metrics-editor-done"].firstMatch.tap()
+
         let first = grid.buttons["dashboard-metric-hrv"].firstMatch
         let second = grid.buttons["dashboard-metric-rhr"].firstMatch
         let last = grid.buttons["dashboard-metric-sleep"].firstMatch
         for card in [first, second, last] {
-            XCTAssertTrue(card.waitForExistence(timeout: 5), "All three default pins must be inside the pinned grid")
+            XCTAssertTrue(card.waitForExistence(timeout: 5), "All three selected pins must be inside the pinned grid")
         }
         XCTAssertTrue(app.scrollToHittableElementIfNeeded("dashboard-metric-sleep", maxSwipes: 16))
         addScreenshotAttachment(named: "Today Compact odd pinned metrics")

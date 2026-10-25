@@ -658,20 +658,26 @@ struct DashboardView: View {
         return VStack(spacing: 10) {
             ForEach(rows.indices, id: \.self) { rowIndex in
                 let row = rows[rowIndex]
-                ViewThatFits(in: .horizontal) {
-                    HStack(alignment: .top, spacing: 10) {
-                        ForEach(row) { card in
-                            metricCard(card, index: metrics.firstIndex(where: { $0.id == card.id }) ?? 0)
-                                .frame(minWidth: 150)
+                if row.count == 1 {
+                    ForEach(row) { card in
+                        metricCard(card, index: metrics.firstIndex(where: { $0.id == card.id }) ?? 0)
+                    }
+                } else {
+                    ViewThatFits(in: .horizontal) {
+                        HStack(alignment: .top, spacing: 10) {
+                            ForEach(row) { card in
+                                metricCard(card, index: metrics.firstIndex(where: { $0.id == card.id }) ?? 0)
+                                    .frame(minWidth: 150)
+                            }
+                        }
+                        VStack(spacing: 10) {
+                            ForEach(row) { card in
+                                metricCard(card, index: metrics.firstIndex(where: { $0.id == card.id }) ?? 0)
+                            }
                         }
                     }
-                    VStack(spacing: 10) {
-                        ForEach(row) { card in
-                            metricCard(card, index: metrics.firstIndex(where: { $0.id == card.id }) ?? 0)
-                        }
-                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
             }
             if !workouts.isEmpty {
                 Text("Exercise by Type")
