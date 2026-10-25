@@ -38,9 +38,9 @@ A01에 HRV·수면·회복의 구성 점수와 저장된 준비도 이력을 추
 
 후속 iPhone delta 실행은 8개 중 7개 통과했고, 자동 연동 빈 상태 테스트가 닫힌 Menu의 항목을 바로 조회하여 실패했다. 테스트를 실제 메뉴 순서로 고친 뒤 실패한 검사와 기록 부족 검사를 2/2 통과했다. 이전 7개 통과 증거를 보존하며, 새 실행 2개를 8개 전체 재실행으로 계산하지 않는다. 기존 Life 설명 배치 검사도 1/1 통과했고 밝음·어두움·최대 AX의 3상태를 검사했다. iPad와 Duo 외부 캡처는 각각 4/4 통과했다. 전체 회귀·Watch 검증은 수행하지 않았다.
 
-Duo 최초 준비는 현재 CoreDevice 651.13.5에 없는 `device motion hinge-angle` 조회 때문에 UI 검사 전에 실패했다. 현재는 공식 활성 화면·물리 방향 readback과 fresh native viewport로 **배치만** 검증한다. 숫자 힌지 각도는 미검증이다. 외부 화면은 LCD·portrait를 실행 전후 확인했다. 내부는 LCD-1이 활성화됐지만 검토한 HID 회전 도구의 성공 응답 뒤에도 공식 readback이 portrait여서 가로 캡처를 시작하지 않았다. 공식 `orientation set/get` 대안 확인은 다른 worktree의 UI 실행이 저장소 잠금을 보유하여 60초 후 시작하지 못했다.
+Duo 최초 준비는 현재 CoreDevice 651.13.5에 없는 `device motion hinge-angle` 조회 때문에 UI 검사 전에 실패했다. 현재는 공식 활성 화면·물리 방향 readback과 fresh native viewport로 **배치만** 검증한다. 숫자 힌지 각도는 미검증이다. 외부 화면은 LCD·portrait를 실행 전후 확인했다. 내부는 LCD-1이 활성화됐지만 검토한 HID 회전 도구의 성공 응답 뒤에도 공식 readback이 portrait여서 가로 캡처를 시작하지 않았다. 공식 `orientation set/get` 대안 확인은 처음에는 다른 worktree의 UI 실행이 저장소 잠금을 보유하여 60초 후 시작하지 못했다. 이후 잠금 해제를 비차단 조회로 확인하고 한 번 실행했지만, setter는 landscapeLeft 성공을 반환하고 실제 getter는 portrait에 남아 assertion이 실패했다. 두 설정 경로 모두 같은 조건으로 다시 실행하지 않았다.
 
-재개 조건: 저장소 시뮬레이터 잠금이 해제된 뒤 이 worktree 소유 Duo `D472D221-3BB2-44F0-A2B7-8EF63A9EEE5D`에서 공식 회전 set/get을 확인한다. `landscapeLeft`·활성 LCD-1이 실제 조회로 확인되면 내부 A01·L01 캡처만 한 번 재시도한다. 실패한 회전 경로를 같은 조건으로 반복하지 않는다. Today 알림함 두 실패의 처리 범위는 사용자 선택을 기다리고 있으며, `/run` Phase 2.5 게이트를 아직 통과하지 않았다. 정식 Review·Compound·Ship은 미실행이다.
+재개 조건: 수정된 회전 도구 또는 외부에서 복원한 시뮬레이터 상태가 이 worktree 소유 Duo `D472D221-3BB2-44F0-A2B7-8EF63A9EEE5D`에서 공식 `landscapeLeft` readback·활성 LCD-1을 보여야 한다. 그때 내부 A01·L01 캡처만 한 번 재시도한다. 실패한 회전 경로를 같은 조건으로 반복하지 않는다. Today 알림함 두 실패의 처리 범위는 사용자 선택을 기다리고 있으며, `/run` Phase 2.5 게이트를 아직 통과하지 않았다. 정식 Review·Compound·Ship은 미실행이다.
 
 ## 출처
 

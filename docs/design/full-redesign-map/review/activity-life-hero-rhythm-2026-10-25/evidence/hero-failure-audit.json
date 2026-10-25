@@ -34,8 +34,8 @@
     "result": "preflight failed; 0 UI tests executed",
     "cause": "Reviewed orientation HID helper dispatched successfully but official physical orientation readback stayed portrait, while LCD-1 became active",
     "retry_count": 0,
-    "official_alternative": "not executed: repository simulator test lock busy for 60 seconds",
-    "resume_condition": "Repository simulator lock available; test official orientation set/get with exact owned UDID and require landscapeLeft readback plus active LCD-1 before one conditional retry",
+    "official_alternative": "After a nonblocking check confirmed the repository lock was available, official orientation set returned landscapeLeft but orientation get still returned portrait. Assertion failed; no UI capture was started.",
+    "resume_condition": "A corrected or externally restored rotation path must produce official landscapeLeft readback and active LCD-1 on the exact owned UDID before the single conditional UI retry. Do not repeat either unchanged setter.",
     "unrefreshed_screen_ids": [
       "Duo internal landscape A01",
       "Duo internal landscape L01"
