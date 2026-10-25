@@ -48,5 +48,12 @@
     "Other Watch sizes and maximum Dynamic Type not executed",
     "Real audio route, pronunciation and music restoration need physical Watch verification",
     "SDK recommends async audio activation; tracked nonblocking perf-001"
-  ]
+  ],
+  "build": {
+    "status": "passed",
+    "exit_code": 0,
+    "command": "standard pre-commit scripts/build-ios.sh --no-regen",
+    "log_sha256": "47871dd6150691c7337fa348bef9dff47848c7eb4b96b211ede849e9570070d0",
+    "source_commit": "8bf0ac85608b1a5e192f2428ad05e81ad18aad97"
+  }
 }
