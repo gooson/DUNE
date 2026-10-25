@@ -22,3 +22,7 @@ The parent verified all eight app/resource hashes against the built/tested sourc
 ## Accepted verification limits
 
 Build and targeted unit41/41; ten unique new phone hero scenarios; existing Life layout1/1 covering three sizes; iPad4/4; Duo external4/4 are actual successful executions. Two unchanged Dashboard notification smoke failures and Duo internal landscape/numerical angle remain recorded under explicit `통과 하고 계속` user authorization. Full regression, Watch, measured contrast and full VoiceOver traversal are not proven. No failed/0-case execution is converted into a passing test.
+
+## Latest-main integration delta
+
+Merged origin/main967021f9 at985da481. Conflict resolution preserved both sets of localized keys and map links; theme index regenerated. All hero source and its calculation/service/seed dependencies, plus the eight changed localization entries, are identical to483af226. Xcode regeneration produced no additional diff and the integrated unsigned iOS build passed. Unrelated Today/Watch changes already on main are not re-reviewed as this PR output. No new P1/P2 introduced by this delta.

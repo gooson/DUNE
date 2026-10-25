@@ -53,3 +53,7 @@ Resolve L10N-001, reuse unchanged successful source verification with the metada
 ## Resolve verification
 
 The only post-review product delta is Completed extraction metadata. The parent rechecked all P1/P2 concerns (none) and both P3 items against the current content: L10N-001 resolved, UX-001 intentionally retained. All translation values are identical. The post-fix unsigned iOS build passed, and view/model/test source is unchanged; no duplicate unit/UI run or pixel recapture was added for metadata. User-approved UI limitations remain.
+
+## Latest-main integration delta
+
+Merged origin/main967021f9 at985da481. Conflict resolution preserved both sets of localized keys and map links; theme index regenerated. All hero source and its calculation/service/seed dependencies, plus the eight changed localization entries, are identical to483af226. Xcode regeneration produced no additional diff and the integrated unsigned iOS build passed. Unrelated Today/Watch changes already on main are not re-reviewed as this PR output. No new P1/P2 introduced by this delta.
