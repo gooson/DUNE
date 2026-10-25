@@ -72,6 +72,8 @@ struct WaveRefreshModifier: ViewModifier {
     }
 
     @State private var showIndicator = false
+    @State private var refreshTaskCoordinator = WaveRefreshTaskCoordinator()
+    @State private var completedRefreshCount = 0
 
     private var resolvedColor: Color { colorOverride ?? waveColor }
     private var isUITesting: Bool {
@@ -116,12 +118,21 @@ struct WaveRefreshModifier: ViewModifier {
                     .padding(.top, 116)
                     .accessibilityLabel("Trigger Refresh")
                     .accessibilityIdentifier("wave-refresh-test-trigger")
+                    .accessibilityValue(String(completedRefreshCount))
                 }
             }
+            .onDisappear { refreshTaskCoordinator.cancel() }
     }
 
     @MainActor
     private func performRefresh() async {
+        await refreshTaskCoordinator.run {
+            await runRefresh()
+        }
+    }
+
+    @MainActor
+    private func runRefresh() async {
         showIndicator = true
         // Always reset indicator on ALL exit paths — including Task cancellation.
         // Without defer, cancellation during settle delay leaves showIndicator stuck true.
@@ -137,9 +148,12 @@ struct WaveRefreshModifier: ViewModifier {
             group.addTask { await action() }
             await group.waitForAll()
         }
-        // Brief settle delay so UIRefreshControl finishes scroll restoration
-        // before we remove our overlay. Skipped on cancellation (defer still resets).
+        // Give the branded indicator a short finishing interval before the native
+        // refresh ends. Cancellation still resets it through defer.
         try? await Task.sleep(nanoseconds: 100_000_000) // 0.1s
+        if isUITesting, !Task.isCancelled {
+            completedRefreshCount += 1
+        }
     }
 }
 

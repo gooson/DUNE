@@ -1,0 +1,20 @@
+[
+  {
+    "stage": "initial",
+    "file": "/tmp/scroll-debug/duo-open-native-initial.png",
+    "display_id": 3,
+    "trigger": "Today manual return initial",
+    "started_unix": 1792934292.7964659,
+    "finished_unix": 1792934293.737175,
+    "command": "xcrun simctl io 1209198E-455F-45F1-B226-C8DD0BA0A4BE screenshot --display=3 /tmp/scroll-debug/duo-open-native-initial.png"
+  },
+  {
+    "stage": "settled",
+    "file": "/tmp/scroll-debug/duo-open-native-settled.png",
+    "display_id": 3,
+    "trigger": "Today manual return settled",
+    "started_unix": 1792934311.649698,
+    "finished_unix": 1792934312.6458712,
+    "command": "xcrun simctl io 1209198E-455F-45F1-B226-C8DD0BA0A4BE screenshot --display=3 /tmp/scroll-debug/duo-open-native-settled.png"
+  }
+]

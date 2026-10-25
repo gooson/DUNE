@@ -161,6 +161,8 @@ struct ContentView: View {
     @State private var notificationOpenWorkoutID: String?
     @State private var isShowingLaunchPostureCapture = PostureCaptureService.shouldAutoOpenCaptureOnLaunch
     @State private var todayNavPath = NavigationPath()
+    @State private var inspectedDashboardMetric: HealthMetric?
+    @State private var isShowingDashboardHealthDataQA = false
     @State private var trainNavPath = NavigationPath()
     @State private var wellnessNavPath = NavigationPath()
     @State private var lifeNavPath = NavigationPath()
@@ -197,6 +199,36 @@ struct ContentView: View {
         _selectedSection = State(initialValue: Self.initialSectionForUITests())
     }
 
+    @ViewBuilder
+    private var dashboardInspector: some View {
+        if isShowingDashboardHealthDataQA {
+            HealthDataQASheet(
+                viewModel: HealthDataQAViewModel(
+                    service: HealthDataQAService(sharedHealthDataService: sharedHealthDataService),
+                    isAvailable: HealthDataQAService.isAvailable
+                )
+            )
+            .inspectorColumnWidth(min: 320, ideal: 420, max: 540)
+        } else if let metric = inspectedDashboardMetric {
+            NavigationStack {
+                VStack(spacing: 0) {
+                    HStack {
+                        Spacer()
+                        Button("Done") { inspectedDashboardMetric = nil }
+                            .accessibilityIdentifier("dashboard-metric-inspector-close")
+                    }
+                    .padding(DS.Spacing.md)
+                    MetricDetailView(metric: metric)
+                        .id(metric.id)
+                        .navigationDestination(for: AllDataDestination.self) { destination in
+                            AllDataView(category: destination.category)
+                        }
+                }
+            }
+            .inspectorColumnWidth(min: 320, ideal: 420, max: 540)
+        }
+    }
+
     var body: some View {
         TabView(selection: tabSelection) {
             Tab(value: AppSection.today) {
@@ -222,6 +254,14 @@ struct ContentView: View {
                             weightEntrySignal += 1
                             selectedSection = .wellness
                         },
+                        onInspectMetric: { metric in
+                            isShowingDashboardHealthDataQA = false
+                            inspectedDashboardMetric = metric
+                        },
+                        onOpenHealthDataQA: {
+                            inspectedDashboardMetric = nil
+                            isShowingDashboardHealthDataQA = true
+                        },
                         launchExperienceReady: launchExperienceReady,
                         canLoadHealthKitData: canLoadHealthKitData,
                         hasFailedHealthKitAuthorization: hasFailedHealthKitAuthorization
@@ -229,6 +269,20 @@ struct ContentView: View {
                     .navigationDestination(for: NotificationPresentationDestination.self) { destination in
                         notificationDestinationView(for: destination)
                     }
+                }
+                // Keep the inspector outside the navigation stack. Attaching its
+                // host to the root ScrollView feeds large-title inset changes back
+                // into scrolling, even while the inspector is closed.
+                .inspector(isPresented: Binding(
+                    get: { inspectedDashboardMetric != nil || isShowingDashboardHealthDataQA },
+                    set: { isPresented in
+                        if !isPresented {
+                            inspectedDashboardMetric = nil
+                            isShowingDashboardHealthDataQA = false
+                        }
+                    }
+                )) {
+                    dashboardInspector
                 }
                 .environment(\.wavePreset, .today)
                 .environment(\.waveColor, selectedTheme.tabTodayColor)

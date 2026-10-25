@@ -53,6 +53,8 @@ Watch의 [68개 상태별 맵](actual/watch/index.html)에는 기본 글자 크�
 
 ## 화면 수정 시 갱신
 
+2026-10-25 Today 스크롤 조사에서는 닫힌 inspector의 내비게이션 내부 배치가 큰 제목·상단 여백 피드백을 만드는 것을 원인 격리로 확인했다. inspector를 Today NavigationStack 밖으로 옮긴 소스에서 iPhone UI10건과 iPad UI4건이 통과했다. 최신 main 통합 후 iPhone10·iPad4·Duo접힘2·펼침2와 내부 화면 native 캡처용 추가1건이 통과했다. [새 실제 화면 갤러리와 영수증](../full-redesign-map/review/today-scroll-root-cause-2026-10-25/index.html), [해결책 기록](../../solutions/performance/2026-10-24-today-scroll-root-cause.md)에서 출처와 검증 제한을 추적한다. 기존 통합 인덱스의 다른 UDID 캡처를 이번 수정의 완료 증거로 덮어쓰지 않는다.
+
 2026-10-25 러닝 거리 우선 C14·일시 정지 C15·음성 제어 C16·거리/볼륨 C17·목표 페이스 C18의 새 실제 캡처를 등록했다. 전용 40mm Watch, en_US, 기본 글씨에서 서로 다른 UI 4건이 통과했고 거리 화면의 심박 frame을 추가 1건으로 재검증했다. C16은 음성 설정에 접근하기 위해 스크롤한 상태다. 전체 68개 중 65개를 캡처했으며 기존 S08·S11·C12는 이번 범위 밖의 미완료 상태다. [최종 리뷰와 검증 receipt](../../reviews/2026-10-25-watch-running-feedback-review-ship.md)에 출처·범위·실기기 오디오 제한을 기록했다.
 
 2026-10-25 Today 하단 카드의 T03과 공유 일간 요약 카드의 T10은 [V2 실제 화면 갤러리](../full-redesign-map/review/today-reading-v2-2026-10-25/index.html)에서 추적한다. 다른 UDID의 기존 통합 인덱스는 덮어쓰지 않았다. iPad는 이전 잠금 실패2회를 보존하고 명시적 재개 허용 뒤2/2통과했다. 전용 iPhone·iPad·Duo접힘·펼침의 T03/T10 원본38장을 새 갤러리에 등록했다. Duo펼침의 첫 카드 검사 실패는 테스트 대상 선택을 수정해 해당1건 재검증을 통과했고, 이미 통과한 T10결과를 유지한다. 실제 각도0°/180°와 활성 디스플레이를 확인했으며 펼침은951×669pt 가로창이다. 다른 글씨·테마·방향과 기존 인덱스를 일괄 완료로 표시하지 않는다.

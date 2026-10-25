@@ -59,44 +59,61 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
 
         let initialHeroY = hero.frame.minY
         let positionTolerance: CGFloat = 12
-        let settledAtTop = XCTNSPredicateExpectation(
-            predicate: NSPredicate { _, _ in
-                hero.exists && hero.isHittable && abs(hero.frame.minY - initialHeroY) <= positionTolerance
-            },
-            object: nil
-        )
+        let refreshTrigger = app.buttons[AXID.waveRefreshTestTrigger].firstMatch
+        XCTAssertTrue(refreshTrigger.waitForExistence(timeout: 5))
+        let initialRefreshCount = try XCTUnwrap(Int(refreshTrigger.value as? String ?? ""))
+        addScreenshotAttachment(named: "Today manual return initial")
 
-        for _ in 0..<8 where hero.isHittable {
+        for _ in 0..<8 where hero.frame.intersects(scrollView.frame) {
             scrollView.swipeUp()
         }
-        XCTAssertFalse(hero.isHittable, "Scroll far enough to move the hero off-screen")
+        XCTAssertFalse(hero.frame.intersects(scrollView.frame), "Scroll far enough to move the hero off-screen")
 
         // Move the content down in bounded steps. The final step uses only the
         // remaining distance so this gesture does not cross the refresh threshold.
         for _ in 0..<12 {
             let remaining = initialHeroY - hero.frame.minY
-            if hero.isHittable && abs(remaining) <= positionTolerance { break }
+            if hero.frame.intersects(scrollView.frame) && abs(remaining) <= positionTolerance { break }
             guard remaining > 0 else { break }
 
             let distance = min(remaining, min(scrollView.frame.height * 0.35, 180))
             let start = scrollView.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.35))
-            start.press(forDuration: 0.05, thenDragTo: start.withOffset(CGVector(dx: 0, dy: distance)))
+            start.press(
+                forDuration: 0.05,
+                thenDragTo: start.withOffset(CGVector(dx: 0, dy: distance)),
+                withVelocity: XCUIGestureVelocity(rawValue: 100),
+                thenHoldForDuration: 0.5
+            )
         }
+        let settledAtTop = XCTNSPredicateExpectation(
+            predicate: NSPredicate { _, _ in
+                hero.exists && abs(hero.frame.minY - initialHeroY) <= positionTolerance && hero.isHittable
+            },
+            object: nil
+        )
         XCTAssertEqual(XCTWaiter.wait(for: [settledAtTop], timeout: 5), .completed,
                        "Manual scrolling should return the hero to its original top position")
+        addScreenshotAttachment(named: "Today manual return settled")
 
         for _ in 0..<3 {
             let start = scrollView.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.35))
-            start.press(forDuration: 0.05, thenDragTo: start.withOffset(CGVector(dx: 0, dy: 24)))
+            start.press(
+                forDuration: 0.05,
+                thenDragTo: start.withOffset(CGVector(dx: 0, dy: 24)),
+                withVelocity: XCUIGestureVelocity(rawValue: 100),
+                thenHoldForDuration: 0.5
+            )
             let stableHero = XCTNSPredicateExpectation(
                 predicate: NSPredicate { _, _ in
-                    hero.exists && hero.isHittable && abs(hero.frame.minY - initialHeroY) <= positionTolerance
+                    hero.exists && abs(hero.frame.minY - initialHeroY) <= positionTolerance && hero.isHittable
                 },
                 object: nil
             )
             XCTAssertEqual(XCTWaiter.wait(for: [stableHero], timeout: 5), .completed,
                            "Repeated short pulls at the top should not shift or lock the hero")
         }
+        XCTAssertEqual(try XCTUnwrap(Int(refreshTrigger.value as? String ?? "")), initialRefreshCount,
+                       "Manual top return and short pulls must not trigger native refresh")
 
         hero.auditTap()
         XCTAssertTrue(
@@ -115,12 +132,12 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         XCTAssertTrue(waitForHittable(hero, timeout: 5))
         let initialHeroY = hero.frame.minY
 
-        for _ in 0..<6 where hero.isHittable {
+        for _ in 0..<6 where hero.frame.intersects(scrollView.frame) {
             scrollView.swipeUp(velocity: .slow)
         }
-        XCTAssertFalse(hero.isHittable, "The hero should leave the viewport before returning to the top")
+        XCTAssertFalse(hero.frame.intersects(scrollView.frame), "The hero should leave the viewport before returning to the top")
 
-        for _ in 0..<12 where !hero.isHittable || hero.frame.minY < initialHeroY - 12 {
+        for _ in 0..<12 where hero.frame.minY < initialHeroY - 12 {
             scrollView.swipeDown(velocity: .slow)
         }
 
@@ -128,7 +145,7 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
             scrollView.swipeDown(velocity: .slow)
             let settledHero = XCTNSPredicateExpectation(
                 predicate: NSPredicate { _, _ in
-                    hero.exists && hero.isHittable && abs(hero.frame.minY - initialHeroY) <= 12
+                    hero.exists && abs(hero.frame.minY - initialHeroY) <= 12
                 },
                 object: nil
             )
@@ -149,6 +166,7 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         XCTAssertEqual(XCTWaiter.wait(for: [refreshFinished], timeout: 15), .completed)
         XCTAssertLessThanOrEqual(abs(hero.frame.minY - initialHeroY), 12,
                                  "The hero should remain at the top after refresh completes")
+        addScreenshotAttachment(named: "Today repeated full swipes settled")
     }
 
     func testNativePullToRefreshKeepsTodayScrollable() throws {
@@ -160,10 +178,12 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         XCTAssertTrue(scrollView.waitForExistence(timeout: 8))
         XCTAssertTrue(waitForHittable(hero, timeout: 5))
         let initialHeroY = hero.frame.minY
+        addScreenshotAttachment(named: "Today native pull before")
 
         let start = scrollView.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.35))
         let end = scrollView.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.8))
         start.press(forDuration: 0.15, thenDragTo: end, withVelocity: .slow, thenHoldForDuration: 0.5)
+        addScreenshotAttachment(named: "Today native pull after")
 
         XCTAssertLessThanOrEqual(abs(hero.frame.minY - initialHeroY), 12,
                                  "Today should settle at its original top after a native downward pull")
@@ -180,6 +200,101 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         scrollView.swipeUp(velocity: .slow)
         XCTAssertLessThan(hero.frame.minY, initialHeroY - 20,
                           "Today should respond to the next upward scroll after refresh")
+    }
+
+    func testShortUpwardScrollNearTopDoesNotSnapBack() throws {
+        dismissMorningBriefingIfNeeded()
+
+        let hero = app.descendants(matching: .any)[AXID.dashboardHeroCondition].firstMatch
+        let scrollView = app.scrollViews["dashboard-root-scroll"].firstMatch
+        XCTAssertTrue(hero.waitForExistence(timeout: 15))
+        XCTAssertTrue(scrollView.waitForExistence(timeout: 8))
+        XCTAssertTrue(waitForHittable(hero, timeout: 5))
+        let initialHeroY = hero.frame.minY
+        addScreenshotAttachment(named: "Today partial scroll initial")
+
+        // Short partial drags must preserve their position. The separate full
+        // swipe regression covers deceleration back toward the top.
+        let start = scrollView.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.7))
+        start.press(
+            forDuration: 0.05,
+            thenDragTo: start.withOffset(CGVector(dx: 0, dy: -60)),
+            withVelocity: XCUIGestureVelocity(rawValue: 100),
+            thenHoldForDuration: 0
+        )
+
+        XCTAssertLessThan(hero.frame.minY, initialHeroY - 20,
+                          "A short upward scroll must preserve the user's position instead of jumping back to the top")
+        XCTAssertLessThan(initialHeroY - hero.frame.minY, 130,
+                          "Exercise a small partial scroll rather than a deep swipe")
+        let jumpsBackToTop = XCTNSPredicateExpectation(
+            predicate: NSPredicate { _, _ in
+                hero.exists && hero.frame.minY >= initialHeroY - 12
+            },
+            object: nil
+        )
+        jumpsBackToTop.isInverted = true
+        XCTAssertEqual(XCTWaiter.wait(for: [jumpsBackToTop], timeout: 2), .completed,
+                       "The scroll position must stay where the gesture left it")
+        addScreenshotAttachment(named: "Today partial upward settled")
+
+        let returnStart = scrollView.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.7))
+        returnStart.press(
+            forDuration: 0.05,
+            thenDragTo: returnStart.withOffset(CGVector(dx: 0, dy: 24)),
+            withVelocity: XCUIGestureVelocity(rawValue: 100),
+            thenHoldForDuration: 0
+        )
+        XCTAssertLessThan(hero.frame.minY, initialHeroY - 12,
+                          "A partial return toward the top must also preserve its stopping position")
+        let returnJumpsBackToTop = XCTNSPredicateExpectation(
+            predicate: NSPredicate { _, _ in
+                hero.exists && hero.frame.minY >= initialHeroY - 12
+            },
+            object: nil
+        )
+        returnJumpsBackToTop.isInverted = true
+        XCTAssertEqual(XCTWaiter.wait(for: [returnJumpsBackToTop], timeout: 2), .completed,
+                       "A partial return must not snap back to the original top position")
+        addScreenshotAttachment(named: "Today partial return settled")
+    }
+
+    func testNativeRefreshReleaseWithoutHoldKeepsTodayScrollable() throws {
+        dismissMorningBriefingIfNeeded()
+
+        let hero = app.descendants(matching: .any)[AXID.dashboardHeroCondition].firstMatch
+        let scrollView = app.scrollViews["dashboard-root-scroll"].firstMatch
+        XCTAssertTrue(hero.waitForExistence(timeout: 15))
+        XCTAssertTrue(scrollView.waitForExistence(timeout: 8))
+        XCTAssertTrue(waitForHittable(hero, timeout: 5))
+        let initialHeroY = hero.frame.minY
+        let refreshTrigger = app.buttons[AXID.waveRefreshTestTrigger].firstMatch
+        XCTAssertTrue(refreshTrigger.waitForExistence(timeout: 5))
+        let initialRefreshCount = try XCTUnwrap(Int(refreshTrigger.value as? String ?? ""))
+
+        let start = scrollView.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.35))
+        start.press(
+            forDuration: 0.05,
+            thenDragTo: scrollView.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.8)),
+            withVelocity: .slow,
+            thenHoldForDuration: 0
+        )
+        // XCTest can wait for animations until the transient indicator is gone.
+        // Observe uncancelled refresh-work completion, which an immediately
+        // cancelled refresh cannot report. The counter does not assert data success.
+        let refreshFinished = XCTNSPredicateExpectation(
+            predicate: NSPredicate { _, _ in
+                (Int(refreshTrigger.value as? String ?? "") ?? initialRefreshCount) > initialRefreshCount
+            }, object: nil
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [refreshFinished], timeout: 15), .completed)
+        XCTAssertEqual(hero.frame.minY, initialHeroY, accuracy: 12,
+                       "Native refresh must restore the top inset after release without a hold")
+        addScreenshotAttachment(named: "Today native refresh completed without hold")
+
+        scrollView.swipeUp(velocity: .slow)
+        XCTAssertLessThan(hero.frame.minY, initialHeroY - 20,
+                          "The next upward gesture must work after native refresh")
     }
 
     func testConditionHeroOpensConditionScoreDetail() throws {

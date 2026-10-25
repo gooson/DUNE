@@ -1,0 +1,27 @@
+{
+  "branch": "codex/today-scroll-root-cause",
+  "timestamp": "2026-10-25T22:05:19.554521+09:00",
+  "reviewed_commit": "ef42c58e",
+  "diff_lines": 794,
+  "diff_scope": "six Swift source/test files; documentation reviewed separately by root",
+  "reviewers_run": [
+    "security",
+    "performance",
+    "architecture",
+    "data-integrity",
+    "simplicity"
+  ],
+  "reviewers_skipped": [
+    {
+      "name": "agent-native",
+      "reason": "No agent/prompt/config changes in task diff"
+    }
+  ],
+  "findings": [],
+  "summary": {
+    "p1": 0,
+    "p2": 0,
+    "p3": 0
+  },
+  "localization": "Done moved unchanged, SwiftUI localized literal with existing ko/ja translations; no new user-facing text. Existing test-trigger label and refresh label unchanged."
+}
