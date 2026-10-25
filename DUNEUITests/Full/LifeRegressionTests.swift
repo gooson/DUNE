@@ -279,18 +279,22 @@ final class LifeRegressionTests: SeededUITestBaseCase {
         XCTAssertTrue(app.openLifeNewHabitForm(), "New Habit form should open for \(name)")
         let nameField = app.textFields[AXID.habitFormName].firstMatch
         XCTAssertTrue(app.fillTextInput(AXID.habitFormName, with: name))
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded(frequencyID, maxSwipes: 6), "Frequency option should be reachable")
+        _ = app.dismissKeyboardIfPresent()
+        XCTAssertTrue(app.scrollToElementInPrimaryFormIfNeeded(frequencyID, maxSwipes: 6), "Frequency option should be reachable")
         app.descendants(matching: .any)[frequencyID].firstMatch.auditTap()
 
         if startsOnFirstCompletion {
+            XCTAssertTrue(app.scrollToElementInPrimaryFormIfNeeded("habit-interval-stepper", maxSwipes: 6))
             let intervalStepper = app.descendants(matching: .any)["habit-interval-stepper"].firstMatch
             XCTAssertTrue(intervalStepper.waitForExistence(timeout: 5), "Recurring form should expose its day interval")
             XCTAssertTrue(intervalStepper.label.contains("7"), "Recurring habit should use the default seven-day interval")
-            XCTAssertTrue(app.scrollToHittableElementIfNeeded("habit-interval-start-point", maxSwipes: 6))
+            XCTAssertTrue(app.scrollToElementInPrimaryFormIfNeeded("habit-interval-start-point", maxSwipes: 6))
             app.descendants(matching: .any)["habit-interval-start-point"].firstMatch.auditTap()
             let firstCompletion = app.buttons["First Completion"].firstMatch
             XCTAssertTrue(firstCompletion.waitForExistence(timeout: 5), "First Completion should be available as a start point")
             firstCompletion.auditTap()
+            XCTAssertTrue(app.staticTexts["Schedule starts after the first completion"].firstMatch.waitForExistence(timeout: 5),
+                          "Recurring habit should wait for its first completion")
         }
 
         XCTAssertTrue(app.waitAndTap(AXID.habitFormSave, timeout: 5), "\(name) should save")

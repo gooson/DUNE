@@ -580,7 +580,7 @@ private struct HabitListQueryView: View {
                     )
                 } else {
                     // Category filter chips
-                    if activeCategories.count > 1 {
+                    if activeCategories.count > 1 || selectedCategoryFilter != nil {
                         categoryFilterSection
                     }
 
