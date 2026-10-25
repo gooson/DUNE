@@ -40,7 +40,7 @@ A01에 HRV·수면·회복의 구성 점수와 저장된 준비도 이력을 추
 
 Duo 최초 준비는 현재 CoreDevice 651.13.5에 없는 `device motion hinge-angle` 조회 때문에 UI 검사 전에 실패했다. 현재는 공식 활성 화면·물리 방향 readback과 fresh native viewport로 **배치만** 검증한다. 숫자 힌지 각도는 미검증이다. 외부 화면은 LCD·portrait를 실행 전후 확인했다. 내부는 LCD-1이 활성화됐지만 검토한 HID 회전 도구의 성공 응답 뒤에도 공식 readback이 portrait여서 가로 캡처를 시작하지 않았다. 공식 `orientation set/get` 대안 확인은 처음에는 다른 worktree의 UI 실행이 저장소 잠금을 보유하여 60초 후 시작하지 못했다. 이후 잠금 해제를 비차단 조회로 확인하고 한 번 실행했지만, setter는 landscapeLeft 성공을 반환하고 실제 getter는 portrait에 남아 assertion이 실패했다. 두 설정 경로 모두 같은 조건으로 다시 실행하지 않았다.
 
-재개 조건: 수정된 회전 도구 또는 외부에서 복원한 시뮬레이터 상태가 이 worktree 소유 Duo `D472D221-3BB2-44F0-A2B7-8EF63A9EEE5D`에서 공식 `landscapeLeft` readback·활성 LCD-1을 보여야 한다. 그때 내부 A01·L01 캡처만 한 번 재시도한다. 실패한 회전 경로를 같은 조건으로 반복하지 않는다. Today 알림함 두 실패의 처리 범위는 사용자 선택을 기다리고 있으며, `/run` Phase 2.5 게이트를 아직 통과하지 않았다. 정식 Review·Compound·Ship은 미실행이다.
+재개 조건: 수정된 회전 도구 또는 외부에서 복원한 시뮬레이터 상태가 이 worktree 소유 Duo `D472D221-3BB2-44F0-A2B7-8EF63A9EEE5D`에서 공식 `landscapeLeft` readback·활성 LCD-1을 보여야 한다. 그때 내부 A01·L01 캡처만 한 번 재시도한다. 실패한 회전 경로를 같은 조건으로 반복하지 않는다. 사용자가 `통과 하고 계속`이라고 지시하여 위 실패·미검증을 기록한 상태로 UI 게이트 예외를 승인했다. 실제 테스트 결과는 변경하지 않으며, 정식 Review부터 Ship까지 재개한다. 승인 원문과 범위는 `evidence/user-ui-gate-exception.json`에 보존했다.
 
 ## 출처
 

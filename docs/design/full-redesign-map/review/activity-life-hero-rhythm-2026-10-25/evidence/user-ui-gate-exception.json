@@ -1,0 +1,16 @@
+{
+  "decision": "user_authorized_continue_with_recorded_ui_exceptions",
+  "user_message": "통과 하고 계속",
+  "recorded_at": "2026-10-25T09:27:38.687561+00:00",
+  "retained_failures": [
+    "DashboardSmokeTests/testNavigateToNotificationHub",
+    "DashboardSmokeTests/testNotificationHubSummaryAtMaximumAccessibilitySize"
+  ],
+  "retained_unverified": [
+    "Duo internal landscape A01",
+    "Duo internal landscape L01",
+    "numerical Duo hinge angle"
+  ],
+  "test_results_unchanged": true,
+  "scope": "Continue review and ship of Activity/Life hero changes; do not expand into unrelated notification fixes or repeat unchanged rotation setters."
+}

@@ -1,7 +1,7 @@
 ---
 tags: [activity, life, hero, validation, run]
 date: 2026-10-25
-status: blocked-at-ui-gate
+status: in-progress-after-user-ui-exception
 ---
 
 # Activity·Life 히어로 /run 실행 현황
@@ -79,3 +79,7 @@ Duo 내부는 LCD-1 활성화 뒤에도 회전 readback이 portrait여서 UI 검
 사전 조건: 준비도 이력은 앱이 저장한 서로 다른 날짜의 기록이 필요하며, 새 사용자는 과거 그래프 대신 안내가 정상이다. Life의 현재 주기 진행과 일별 완료 기록은 서로 다른 의미다. 실제 HealthKit 권한·동기화·Watch 전체 회귀는 이 검증에 포함하지 않는다.
 
 시뮬레이터 정리: 원격 머지를 수행하지 않아 삭제 0개. 이 worktree 소유 iPhone·iPad·Duo 3개를 재개용으로 보존한다. 다른 worktree의 기기·프로세스는 정리하지 않았다.
+
+## 사용자 예외 승인 후 재개
+
+사용자가 `통과 하고 계속`이라고 지시하여 2026-10-25 UI 게이트 예외를 승인했다. 알림함 두 실패와 Duo 내부 가로 미검증을 그대로 보존하고, 이번 히어로 변경의 정식 Review부터 Ship까지 재개한다. 위 표는 중단 시점의 기록이며 최종 결과로 갱신할 예정이다. 실제 테스트 결과를 통과로 변경하지 않았다.

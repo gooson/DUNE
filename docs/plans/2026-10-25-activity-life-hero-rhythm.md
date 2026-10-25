@@ -96,3 +96,7 @@ Life는 기존 HabitAnalyticsService.dailyCompletionCounts의 기록 집계를 �
 
 - Overall: high. 기존 링·목적지·기록 저장 경로를 재사용한다.
 - 공식 SwiftUI ViewThatFits/isAccessibilitySize/accessibilityElement 문서를 Context7에서 확인했다. 날짜·집계는 뷰 body 밖에서 계산한다.
+
+## Implementation outcome (2026-10-25)
+
+구현·관련 단위41개·히어로 UI 시나리오·iPhone/iPad/Duo 외부 실제 화면을 완료했다. 정식 리뷰 P1/P2 없음, catalog metadata P3 수정 후 빌드 통과. Today 알림함 두 실패와 Duo 내부 가로 미검증은 사용자 `통과 하고 계속` 승인으로 한계를 보존하고 출시를 진행한다. [해결책](../solutions/architecture/2026-10-25-activity-life-recorded-hero-evidence.md)과 [리뷰](../reviews/2026-10-25-activity-life-hero-review.md)를 참조한다.
