@@ -461,9 +461,9 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         app.launch()
         navigateToDashboard()
         dismissMorningBriefingIfNeeded()
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded("dashboard-stress-score", maxSwipes: 8),
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("dashboard-stress-details", maxSwipes: 8),
                       "UNVERIFIED: seeded cumulative stress entry is unavailable")
-        app.descendants(matching: .any)["dashboard-stress-score"].firstMatch.auditTap()
+        app.descendants(matching: .any)["dashboard-stress-details"].firstMatch.auditTap()
         XCTAssertTrue(app.descendants(matching: .any)["cumulative-stress-detail-screen"].firstMatch.waitForExistence(timeout: 5),
                       "Cumulative stress detail should open")
         captureTodayAuditScroll("Today cumulative stress")
