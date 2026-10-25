@@ -217,7 +217,6 @@ final class LifeSeededSmokeTests: SeededUITestBaseCase {
         XCTAssertFalse(narrative.label.isEmpty, "\(name): progress should have a text explanation")
         XCTAssertTrue(hero.frame.contains(narrative.frame), "\(name): narrative should fit inside the hero")
         XCTAssertTrue(app.windows.firstMatch.frame.contains(ring.frame), "\(name): ring should fit on screen")
-        XCTAssertTrue(action.isHittable, "\(name): checklist action should remain reachable")
         XCTAssertFalse(hero.staticTexts["Morning Stretch"].exists, "Habit names belong in the execution list below the hero")
         if category != nil {
             XCTAssertGreaterThanOrEqual(narrative.frame.minY, ring.frame.maxY,
@@ -230,6 +229,9 @@ final class LifeSeededSmokeTests: SeededUITestBaseCase {
         if !VisualAudit.isEnabled {
             addScreenshotAttachment(named: "Life hero narrative \(name)")
         }
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("life-hero-checklist-button", maxSwipes: 10),
+                      "\(name): checklist action should remain reachable below the expanded hero")
+        XCTAssertTrue(action.isHittable, "\(name): checklist action should remain reachable")
     }
 
     func testSparseTrendKeepsHabitListAndHistoryAccessible() throws {
