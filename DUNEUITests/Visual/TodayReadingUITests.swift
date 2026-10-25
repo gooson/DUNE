@@ -24,7 +24,7 @@ final class TodayReadingUITests: SeededUITestBaseCase {
         readingArguments(style: "light", largeText: false)
     }
 
-    private func readingArguments(style: String, largeText: Bool) -> [String] {
+    nonisolated private func readingArguments(style: String, largeText: Bool) -> [String] {
         var arguments = [
             "--ui-visual-stress-fixture", "--ui-dashboard-hour", "21",
             "--ui-test-style", style,
