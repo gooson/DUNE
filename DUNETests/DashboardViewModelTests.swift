@@ -111,6 +111,36 @@ private struct MockSleepService: SleepQuerying {
     func fetchLastNightSleepSummary(for date: Date) async throws -> SleepSummary? { nil }
 }
 
+private actor ToggleSleepHistoryService: SleepQuerying {
+    enum TestError: Error { case historyUnavailable }
+
+    let stages: [SleepStage]
+    private var historyFails = false
+
+    init(stages: [SleepStage]) {
+        self.stages = stages
+    }
+
+    func setHistoryFails(_ fails: Bool) {
+        historyFails = fails
+    }
+
+    func fetchSleepStages(for date: Date) async throws -> [SleepStage] {
+        Calendar.current.isDateInToday(date) ? stages : []
+    }
+
+    func fetchLatestSleepStages(withinDays days: Int) async throws -> (stages: [SleepStage], date: Date)? {
+        nil
+    }
+
+    func fetchDailySleepDurations(start: Date, end: Date) async throws -> [(date: Date, totalMinutes: Double, stageBreakdown: [SleepStage.Stage: Double])] {
+        if historyFails { throw TestError.historyUnavailable }
+        return []
+    }
+
+    func fetchLastNightSleepSummary(for date: Date) async throws -> SleepSummary? { nil }
+}
+
 private struct MockWorkoutService: WorkoutQuerying {
     var workouts: [WorkoutSummary] = []
     func fetchWorkouts(days: Int) async throws -> [WorkoutSummary] { workouts }
@@ -274,6 +304,21 @@ private actor CountingDashboardSharedHealthDataService: SharedHealthDataService 
     func currentFetchCount() -> Int {
         fetchCount
     }
+}
+
+private actor MutableDashboardSharedHealthDataService: SharedHealthDataService {
+    private var snapshot: SharedHealthSnapshot
+
+    init(snapshot: SharedHealthSnapshot) {
+        self.snapshot = snapshot
+    }
+
+    func setSnapshot(_ snapshot: SharedHealthSnapshot) {
+        self.snapshot = snapshot
+    }
+
+    func fetchSnapshot() async -> SharedHealthSnapshot { snapshot }
+    func invalidateCache() async {}
 }
 
 private actor SequencedDashboardSharedHealthDataService: SharedHealthDataService {
@@ -765,6 +810,8 @@ struct DashboardViewModelTests {
         #expect(vm.sortedMetrics.contains { $0.category == .hrv })
         #expect(vm.sortedMetrics.contains { $0.category == .sleep })
         #expect(vm.errorMessage == nil)
+        #expect(vm.latestSleepStages.count == sleepStages.count)
+        #expect(vm.latestSleepStages.first?.startDate == sleepDate)
     }
 
     @Test("Shared snapshot source failure shows partial error when category card cannot be built")
@@ -805,6 +852,61 @@ struct DashboardViewModelTests {
     }
 
     // MARK: - Sleep Fallback
+
+    @Test("Sleep stages clear when duration history fails on refresh")
+    func sleepStagesClearAfterHistoryFailure() async {
+        let start = Date().addingTimeInterval(-3600)
+        let stages = [SleepStage(stage: .core, duration: 3600, startDate: start, endDate: start.addingTimeInterval(3600))]
+        let sleep = ToggleSleepHistoryService(stages: stages)
+        let vm = DashboardViewModel(
+            hrvService: MockHRVService(),
+            sleepService: sleep,
+            workoutService: MockWorkoutService(),
+            stepsService: MockStepsService(),
+            bodyService: MockBodyService(),
+            coachingMessageEnhancer: nil
+        )
+
+        await vm.loadData()
+        #expect(vm.sortedMetrics.contains { $0.category == .sleep })
+        #expect(vm.latestSleepStages.first?.startDate == start)
+
+        await sleep.setHistoryFails(true)
+        await vm.loadData()
+        #expect(!vm.sortedMetrics.contains { $0.category == .sleep })
+        #expect(vm.latestSleepStages.isEmpty)
+    }
+
+    @Test("Sleep stages clear with the sleep metric when a shared snapshot becomes empty")
+    func sleepStagesClearAfterEmptySnapshot() async {
+        let start = Date().addingTimeInterval(-3600)
+        let stages = [SleepStage(stage: .core, duration: 3600, startDate: start, endDate: start.addingTimeInterval(3600))]
+        let snapshot = SharedHealthSnapshot(
+            hrvSamples: [], todayRHR: nil, yesterdayRHR: nil, latestRHR: nil, rhrCollection: [],
+            todaySleepStages: stages, yesterdaySleepStages: [], latestSleepStages: nil,
+            sleepDailyDurations: [], conditionScore: nil, baselineStatus: nil,
+            recentConditionScores: [], failedSources: [], fetchedAt: Date()
+        )
+        let shared = MutableDashboardSharedHealthDataService(snapshot: snapshot)
+        let vm = DashboardViewModel(
+            hrvService: MockHRVService(),
+            sleepService: MockSleepService(),
+            workoutService: MockWorkoutService(),
+            stepsService: MockStepsService(),
+            bodyService: MockBodyService(),
+            sharedHealthDataService: shared,
+            coachingMessageEnhancer: nil
+        )
+
+        await vm.loadData()
+        #expect(vm.sortedMetrics.contains { $0.category == .sleep })
+        #expect(vm.latestSleepStages.first?.startDate == start)
+
+        await shared.setSnapshot(makeEmptySharedSnapshot())
+        await vm.loadData()
+        #expect(!vm.sortedMetrics.contains { $0.category == .sleep })
+        #expect(vm.latestSleepStages.isEmpty)
+    }
 
     @Test("Sleep falls back to latest when today is empty")
     func sleepFallback() async {
@@ -972,6 +1074,7 @@ struct DashboardViewModelTests {
         await vm.loadData()
 
         #expect(vm.pinnedMetrics.map(\.category) == [.steps, .exercise, .hrv])
+        #expect(vm.latestSleepStages.first?.startDate == today)
         #expect(vm.conditionCards.contains(where: { $0.category == .hrv }) == false)
     }
 

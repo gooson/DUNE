@@ -14,12 +14,35 @@ struct TodayBriefCard: View {
 
     @Environment(\.appTheme) private var theme
     @Environment(\.horizontalSizeClass) private var sizeClass
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     private var isRegular: Bool { sizeClass == .regular }
 
     var body: some View {
-        InlineCard {
-            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+        DashboardSupportCard {
+            VStack(alignment: .leading, spacing: 12) {
+                HStack(spacing: 10) {
+                    Image(systemName: "cloud.sun.fill")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundStyle(theme.accentColor)
+                        .frame(width: 38, height: 38)
+                        .background(theme.accentColor.opacity(0.17), in: RoundedRectangle(cornerRadius: 12))
+                        .accessibilityHidden(true)
+
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Weather and Activity")
+                            .font(.headline)
+                        if let locationName = weatherSnapshot?.locationName {
+                            Text(locationName)
+                                .font(.caption)
+                                .foregroundStyle(theme.secondaryTextColor)
+                        } else {
+                            Text("Current conditions")
+                                .font(.caption)
+                                .foregroundStyle(theme.secondaryTextColor)
+                        }
+                    }
+                }
                 weatherRow
                 coachingRow
                 environmentAlert
@@ -36,70 +59,80 @@ struct TodayBriefCard: View {
     private var weatherRow: some View {
         if let snapshot = weatherSnapshot {
             Button(action: onOpenWeatherDetail) {
-                HStack(spacing: DS.Spacing.sm) {
-                    Image(systemName: snapshot.condition.sfSymbol)
-                        .font(isRegular ? .title2 : .title3)
-                        .foregroundStyle(snapshot.condition.iconColor(for: theme))
-                        .symbolRenderingMode(.multicolor)
-                        .frame(width: isRegular ? 32 : 28)
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack(spacing: 12) {
+                        Image(systemName: snapshot.condition.sfSymbol)
+                            .font(isRegular ? .largeTitle : .title)
+                            .foregroundStyle(snapshot.condition.iconColor(for: theme))
+                            .symbolRenderingMode(.multicolor)
+                            .frame(width: 48, height: 48)
+                            .accessibilityHidden(true)
 
-                    HStack(spacing: DS.Spacing.xs) {
-                        Text(temperatureText(snapshot))
-                            .font(.subheadline.weight(.semibold))
-                            .foregroundStyle(theme.accentColor)
-                            .monospacedDigit()
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(temperatureText(snapshot))
+                                .font(.system(.title2, design: .rounded, weight: .bold))
+                                .monospacedDigit()
 
-                        Text(snapshot.condition.label)
-                            .font(.caption)
-                            .foregroundStyle(theme.sandColor)
+                            Text(snapshot.condition.label)
+                                .font(.subheadline)
+                                .foregroundStyle(theme.secondaryTextColor)
 
-                        if let locationName = snapshot.locationName {
-                            Text("·")
-                                .font(.caption)
-                                .foregroundStyle(.tertiary)
-                            Text(locationName)
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                                .lineLimit(1)
+                            if abs(snapshot.temperature - snapshot.feelsLike) >= 3 {
+                                Text("Feels \(Int(snapshot.feelsLike))°")
+                                    .font(.caption)
+                                    .foregroundStyle(theme.secondaryTextColor)
+                            }
+                        }
+
+                        Spacer(minLength: 0)
+                        Image(systemName: "chevron.right")
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(theme.secondaryTextColor)
+                            .accessibilityHidden(true)
+                    }
+
+                    if dynamicTypeSize.isAccessibilitySize {
+                        VStack(alignment: .leading, spacing: 6) {
+                            if let aq = snapshot.airQuality { airQualityBadge(aq) }
+                            fitnessBadge(for: snapshot)
+                        }
+                    } else {
+                        HStack(spacing: 6) {
+                            if let aq = snapshot.airQuality { airQualityBadge(aq) }
+                            fitnessBadge(for: snapshot)
                         }
                     }
-
-                    Spacer(minLength: 0)
-
-                    if let aq = snapshot.airQuality {
-                        airQualityBadge(aq)
-                    }
-
-                    fitnessBadge(for: snapshot)
-
-                    Image(systemName: "chevron.right")
-                        .font(.caption2.weight(.semibold))
-                        .foregroundStyle(.tertiary)
                 }
-                .frame(minHeight: 44)
+                .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
                 .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
             .accessibilityIdentifier("dashboard-weather-card")
         } else {
             Button(action: onRequestLocationPermission) {
-                HStack(spacing: DS.Spacing.sm) {
+                HStack(spacing: 12) {
                     Image(systemName: "cloud.fill")
                         .font(.title3)
-                        .foregroundStyle(.tertiary)
-                        .frame(width: 28)
+                        .foregroundStyle(theme.secondaryTextColor)
+                        .frame(width: 48)
 
-                    Text("Weather")
-                        .font(.subheadline.weight(.medium))
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Weather unavailable")
+                            .font(.subheadline.weight(.semibold))
+                        Text("Tap to enable location")
+                            .font(.caption)
+                            .foregroundStyle(theme.secondaryTextColor)
+                    }
 
-                    Spacer()
-
-                    Text("Tap to enable location")
-                        .font(.caption)
-                        .foregroundStyle(.tertiary)
+                    Spacer(minLength: 0)
+                    Image(systemName: "chevron.right")
+                        .foregroundStyle(theme.secondaryTextColor)
                 }
+                .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+                .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
+            .accessibilityIdentifier("dashboard-weather-permission")
         }
     }
 
@@ -109,45 +142,48 @@ struct TodayBriefCard: View {
     private var coachingRow: some View {
         if let insight = effectiveInsight {
             Divider().opacity(0.3)
-
-            HStack(alignment: .top, spacing: DS.Spacing.sm) {
-                Image(systemName: insight.iconName)
-                    .font(.title3)
-                    .foregroundStyle(insight.category.iconColor)
-                    .frame(width: 28)
-
-                VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-                    Text(insight.title)
-                        .font(.subheadline.weight(.semibold))
-                        .lineLimit(2)
-
-                    Text(insight.message)
-                        .font(.caption)
-                        .foregroundStyle(DS.Color.textSecondary)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .lineLimit(3)
-                }
-
-                Spacer(minLength: 0)
-            }
+            suggestionRow(icon: insight.iconName, title: insight.title,
+                          message: insight.message, color: insight.category.iconColor)
+        } else if let weatherInsight {
+            Divider().opacity(0.3)
+            suggestionRow(icon: weatherInsight.iconName, title: weatherInsight.title,
+                          message: weatherInsight.message,
+                          color: weatherSnapshot.map { theme.outdoorFitnessColor(for: $0.outdoorFitnessLevel) } ?? theme.accentColor)
         } else if let message = coachingMessage {
             Divider().opacity(0.3)
+            suggestionRow(icon: "figure.run.circle.fill", title: nil,
+                          message: message, color: DS.Color.activity)
+        }
+    }
 
-            HStack(alignment: .top, spacing: DS.Spacing.sm) {
-                Image(systemName: "figure.run.circle.fill")
+    private func suggestionRow(icon: String, title: String?, message: String, color: Color) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Label("Today's Suggestion", systemImage: "lightbulb.fill")
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(theme.secondaryTextColor)
+
+            HStack(alignment: .top, spacing: 10) {
+                Image(systemName: icon)
                     .font(.title3)
-                    .foregroundStyle(DS.Color.activity)
+                    .foregroundStyle(color)
                     .frame(width: 28)
+                    .accessibilityHidden(true)
 
-                Text(message)
-                    .font(.caption)
-                    .foregroundStyle(DS.Color.textSecondary)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .lineLimit(3)
-
-                Spacer(minLength: 0)
+                VStack(alignment: .leading, spacing: 4) {
+                    if let title {
+                        Text(title)
+                            .font(.subheadline.weight(.semibold))
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                    Text(message)
+                        .font(.subheadline)
+                        .foregroundStyle(theme.secondaryTextColor)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
             }
         }
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("dashboard-today-suggestion")
     }
 
     // MARK: - Environment Alert (conditional)
@@ -166,7 +202,7 @@ struct TodayBriefCard: View {
                 Text(alert.message)
                     .font(.caption2)
                     .foregroundStyle(DS.Color.textSecondary)
-                    .lineLimit(2)
+                    .fixedSize(horizontal: false, vertical: true)
             }
         }
     }
@@ -179,44 +215,40 @@ struct TodayBriefCard: View {
             Divider().opacity(0.3)
 
             Button(action: onOpenBriefing) {
-                HStack {
-                    Spacer()
-                    Text("View Details")
-                        .font(.caption.weight(.medium))
+                HStack(spacing: 8) {
+                    Text("View Briefing")
+                        .font(.subheadline.weight(.semibold))
                         .foregroundStyle(.tint)
+                    Spacer(minLength: 0)
                     Image(systemName: "chevron.right")
-                        .font(.caption2.weight(.semibold))
+                        .font(.caption.weight(.semibold))
                         .foregroundStyle(.tint)
-                    Spacer()
                 }
+                .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+                .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
             .accessibilityIdentifier("briefing-entry-card")
-            .accessibilityLabel(Text("Morning Briefing"))
+            .accessibilityLabel(Text("View Briefing"))
             .accessibilityHint(Text("Opens your daily briefing"))
         }
     }
 
     // MARK: - Helpers
 
-    /// The effective coaching insight to display — prioritizes non-weather insights;
-    /// weather-category insights are shown only when no weather snapshot is available
-    /// (otherwise they merge into the weather row via `weatherInsight`).
+    /// Prioritize non-weather coaching. Weather coaching uses the suggestion fallback
+    /// when the weather snapshot is already represented above.
     private var effectiveInsight: CoachingInsight? {
         guard let insight = focusInsight else { return nil }
         if insight.category == .weather, weatherSnapshot != nil {
-            // Weather-category insight merged via weatherInsight in weather row
+            // The weather-specific insight is displayed by coachingRow.
             return nil
         }
         return insight
     }
 
     private func temperatureText(_ snapshot: WeatherSnapshot) -> String {
-        let temp = "\(Int(snapshot.temperature))°C"
-        if abs(snapshot.temperature - snapshot.feelsLike) >= 3 {
-            return "\(temp) (Feels \(Int(snapshot.feelsLike))°)"
-        }
-        return temp
+        "\(Int(snapshot.temperature))°C"
     }
 
     private func fitnessBadge(for snapshot: WeatherSnapshot) -> some View {
@@ -299,4 +331,13 @@ struct TodayBriefCard: View {
 
         return nil
     }
+}
+
+#Preview("No location") {
+    TodayBriefCard(
+        weatherSnapshot: nil, weatherInsight: nil, focusInsight: nil,
+        coachingMessage: nil, conditionStatus: nil,
+        onOpenBriefing: {}, onOpenWeatherDetail: {}, onRequestLocationPermission: {}
+    )
+    .padding()
 }

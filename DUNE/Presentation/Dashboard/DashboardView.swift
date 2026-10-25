@@ -294,16 +294,20 @@ struct DashboardView: View {
 
         // Daily Progress Rings (hidden at night)
         if viewModel.shouldShowProgressRings {
-        DailyProgressRingCard(
-            stepsProgress: stepsProgress,
-            stepsValue: stepsValueText,
-            sleepProgress: sleepProgress,
-            sleepValue: sleepValueText,
-            habitProgress: nil,
-            habitValue: nil
-        )
-        .transition(Self.sectionTransition)
-        .staggeredAppear(index: 3)
+            VStack(alignment: .leading, spacing: 11) {
+                Text("Today's Progress")
+                    .font(.headline)
+                DailyProgressRingCard(
+                    stepsProgress: stepsProgress,
+                    stepsValue: stepsValueText,
+                    sleepProgress: sleepProgress,
+                    sleepValue: sleepValueText,
+                    habitProgress: nil,
+                    habitValue: nil
+                )
+            }
+            .transition(Self.sectionTransition)
+            .staggeredAppear(index: 3)
         }
 
         // Today's Brief (weather + coaching + briefing entry) — morning/daytime only
@@ -311,18 +315,22 @@ struct DashboardView: View {
         // properties (focusInsight, coachingMessage, weatherSnapshot) during layout.
         if viewModel.shouldShowTodaysBrief,
            !isBriefingDisabled || cachedWeatherSnapshot != nil || cachedFocusInsight != nil || cachedCoachingMessage != nil {
-            TodayBriefCard(
-                weatherSnapshot: cachedWeatherSnapshot,
-                weatherInsight: cachedWeatherCardInsight,
-                focusInsight: cachedFocusInsight,
-                coachingMessage: cachedCoachingMessage,
-                conditionStatus: viewModel.briefingData?.conditionStatus,
-                onOpenBriefing: { isShowingBriefing = true },
-                onOpenWeatherDetail: { weatherDetailNavigation = viewModel.weatherSnapshot },
-                onRequestLocationPermission: {
-                    Task { await viewModel.requestLocationPermission() }
-                }
-            )
+            VStack(alignment: .leading, spacing: 11) {
+                Text("Today's Brief")
+                    .font(.headline)
+                TodayBriefCard(
+                    weatherSnapshot: cachedWeatherSnapshot,
+                    weatherInsight: cachedWeatherCardInsight,
+                    focusInsight: cachedFocusInsight,
+                    coachingMessage: cachedCoachingMessage,
+                    conditionStatus: viewModel.briefingData?.conditionStatus,
+                    onOpenBriefing: { isShowingBriefing = true },
+                    onOpenWeatherDetail: { weatherDetailNavigation = viewModel.weatherSnapshot },
+                    onRequestLocationPermission: {
+                        Task { await viewModel.requestLocationPermission() }
+                    }
+                )
+            }
             .transition(Self.sectionTransition)
             .staggeredAppear(index: 4)
         }
