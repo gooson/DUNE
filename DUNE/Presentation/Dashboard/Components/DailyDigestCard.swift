@@ -12,13 +12,28 @@ struct DailyDigestCard: View {
             VStack(alignment: .leading, spacing: DS.Spacing.xl) {
                 header
                 headline
-                metrics
-                fullSummary
+                if hasRecordedMetrics {
+                    metrics
+                    fullSummary
+                } else {
+                    Text("Today's records are still being collected.")
+                        .font(.subheadline)
+                        .foregroundStyle(DS.Color.textSecondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
         }
         .accessibilityElement(children: .contain)
         .accessibilityIdentifier("dashboard-daily-digest")
+    }
+
+    private var hasRecordedMetrics: Bool {
+        let metrics = digest.metrics
+        return metrics.conditionScore != nil || metrics.conditionDelta != nil
+            || metrics.workoutSummary != nil || metrics.sleepMinutes != nil
+            || metrics.sleepDebtMinutes != nil || metrics.stepsCount != nil
+            || metrics.stressLevel != nil
     }
 
     private var header: some View {

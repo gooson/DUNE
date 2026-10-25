@@ -47,7 +47,7 @@ struct CumulativeStressCard: View {
     }
 
     private var periodLabel: some View {
-        Text("Last \(stressScore.windowDays) days")
+        Text("Recent records")
             .font(.caption)
             .foregroundStyle(DS.Color.textSecondary)
     }

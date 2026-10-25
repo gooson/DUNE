@@ -143,6 +143,11 @@ struct RecoverySleepCard: View {
                     .frame(height: historyHeight)
                     .clipped()
                     .accessibilityIdentifier("dashboard-recovery-sleep-chart")
+                    if deficit.dailyDeficits.contains(where: { !$0.actualMinutes.isFinite || $0.actualMinutes <= 0 }) {
+                        Text("Days without records are left blank.")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
                 }
             }
         }
