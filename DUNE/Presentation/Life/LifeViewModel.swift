@@ -46,6 +46,9 @@ final class LifeViewModel {
     // MARK: - Progress State
 
     private(set) var habitProgresses: [HabitProgress] = []
+    private(set) var todayHabitProgresses: [HabitProgress] = []
+    private(set) var weeklyHabitProgresses: [HabitProgress] = []
+    private(set) var upcomingHabitProgresses: [HabitProgress] = []
     private(set) var completedCount: Int = 0
     private(set) var totalActiveCount: Int = 0
     private(set) var autoExerciseProgresses: [LifeAutoAchievementProgress] =
@@ -56,6 +59,9 @@ final class LifeViewModel {
     /// Context-aware narrative for the Life hero card.
     var heroNarrative: String {
         if totalActiveCount == 0 {
+            if !weeklyHabitProgresses.isEmpty || !upcomingHabitProgresses.isEmpty {
+                return String(localized: "No habits due today")
+            }
             return String(localized: "Add habits to start tracking your daily routine")
         }
         if completedCount == 0 {
@@ -295,7 +301,8 @@ final class LifeViewModel {
 
         for habit in habits where !habit.isArchived {
             if let cycleSnapshot = makeCycleSnapshot(for: habit, referenceDate: referenceDate, calendar: calendar) {
-                let isCompleted = cycleSnapshot.lastAction == .complete && !cycleSnapshot.isDue
+                let isCompleted = cycleSnapshot.lastAction == .complete
+                    && cycleSnapshot.lastCompletedAt.map { calendar.isDate($0, inSameDayAs: today) } == true
                 let effectiveValue = isCompleted ? habit.goalValue : 0
 
                 progresses.append(HabitProgress(
@@ -380,8 +387,28 @@ final class LifeViewModel {
         autoLinkedProgresses = progresses.filter(\.isAutoLinked)
 
         let manualProgresses = progresses.filter { !$0.isAutoLinked }
-        completedCount = manualProgresses.filter(\.isCompleted).count
-        totalActiveCount = manualProgresses.count
+        var todayProgresses: [HabitProgress] = []
+        var weeklyProgresses: [HabitProgress] = []
+        var upcomingProgresses: [HabitProgress] = []
+        for progress in manualProgresses {
+            switch progress.frequency {
+            case .daily:
+                todayProgresses.append(progress)
+            case .weekly:
+                weeklyProgresses.append(progress)
+            case .interval:
+                if progress.isDue || progress.isOverdue || progress.isCompleted {
+                    todayProgresses.append(progress)
+                } else {
+                    upcomingProgresses.append(progress)
+                }
+            }
+        }
+        todayHabitProgresses = todayProgresses
+        weeklyHabitProgresses = weeklyProgresses
+        upcomingHabitProgresses = upcomingProgresses
+        completedCount = todayProgresses.filter(\.isCompleted).count
+        totalActiveCount = todayProgresses.count
     }
 
     func calculateAutoExerciseProgresses(

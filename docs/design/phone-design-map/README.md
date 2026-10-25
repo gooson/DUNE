@@ -104,3 +104,8 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 2026-10-25 WLA01 Watch 운동 Live Activity의 정보 위계를 개선한 뒤 [전용 iPhone 실제 시스템 요소 PNG 세 장](actual/live-activity/index.html)을 갱신했다. 진행·일시 정지·긴 한국어 근력 운동명에서 제목·시간·지표를 직접 확인했다. 관련 테스트 로그는 3건 통과·연결 대기 1건 실패이며 Xcode 결과 정리가 멈춰 실행기는 124로 종료됐다. 원본 PNG는 중단된 번들의 payload에서 수정 없이 복구했고 출처·해시를 기록했다. 연결 대기 fixture 수정·밝은 모드·큰 글씨·Island·Watch small·iPad·Duo는 미검증이며 기존 이미지로 대체하지 않는다.
 
 이어 WLA01의 공통 헤더 상태 행에 `DUNE` 워드마크를 추가했다. 위 세 PNG는 브랜드 추가 전 캡처로 구분했고, 최신 구현의 진행·일시 정지·긴 운동명·연결 대기 및 small·Island 펼침은 새 캡처 대기다. 이전 Xcode 결과 정리 장애가 해결되지 않아 같은 UI 실행을 반복하지 않았다.
+
+
+## 2026-10-25 L01 습관 일정 분리 · 캡처 대기
+
+오늘/주간/다가오는 습관을 분리하고 오늘 집계를 실제 당일 대상으로 제한했다. [새 L01 캡처 25장과 출처](actual/life-schedule-2026-10-25/index.html)를 일반 iPhone·iPad·Duo 외부/내부에서 수집해 L01 이미지·기기 갤러리·Life 보드·비교·통합 포털을 갱신했다. 관련 Life UI는 반복을 포함해 22개 통과했다. iPad의 Upcoming은 전체 그룹이 viewport 안에 들어오도록 촬영 위치를 보정한 후 해당 selector만 재검증했다. 일반 iPhone 공통 smoke의 별도 알림 검사 2개 실패는 [검증 기록](../../reviews/2026-10-25-today-habit-schedule.md)에 남겼다. 새 일정 fixture의 기본 4개 viewport와 iPhone/iPad/Duo 내부의 히어로 밝음·어두움·최대 글씨만 확인했으며 모든 그룹·테마·글씨 조합을 완료로 표시하지 않는다. Duo는 활성 LCD/LCD-1, 새 AX/window와 native PNG를 확인했지만 현재 Xcode CLI에 각도 조회가 없어 수치 힌지 각도는 미검증이다. Watch는 Life 화면을 공유하지 않아 영향이 없다.
