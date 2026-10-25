@@ -1,0 +1,1103 @@
+{
+  "date": "2026-10-26",
+  "kind": "browser-prototype-only",
+  "selected_direction": "Compact",
+  "before": [
+    {
+      "score": 0,
+      "text": 100,
+      "ringSize": 86,
+      "numberWidth": 21.828125,
+      "labelWidth": 62.84375,
+      "numberOffsetX": -20.5078125,
+      "numberOffsetY": -7.296875,
+      "labelBottomBeyondInnerCircle": false
+    },
+    {
+      "score": 0,
+      "text": 125,
+      "ringSize": 86,
+      "numberWidth": 27.578125,
+      "labelWidth": 62.84375,
+      "numberOffsetX": -17.6328125,
+      "numberOffsetY": -7.25,
+      "labelBottomBeyondInnerCircle": false
+    },
+    {
+      "score": 52,
+      "text": 100,
+      "ringSize": 86,
+      "numberWidth": 43.640625,
+      "labelWidth": 62.84375,
+      "numberOffsetX": -9.6015625,
+      "numberOffsetY": -7.296875,
+      "labelBottomBeyondInnerCircle": false
+    },
+    {
+      "score": 52,
+      "text": 125,
+      "ringSize": 86,
+      "numberWidth": 55.140625,
+      "labelWidth": 62.84375,
+      "numberOffsetX": -3.8515625,
+      "numberOffsetY": -7.25,
+      "labelBottomBeyondInnerCircle": false
+    },
+    {
+      "score": 100,
+      "text": 100,
+      "ringSize": 86,
+      "numberWidth": 65.453125,
+      "labelWidth": 65.453125,
+      "numberOffsetX": -0.0078125,
+      "numberOffsetY": -7.296875,
+      "labelBottomBeyondInnerCircle": false
+    },
+    {
+      "score": 100,
+      "text": 125,
+      "ringSize": 86,
+      "numberWidth": 82.71875,
+      "labelWidth": 82.71875,
+      "numberOffsetX": 0,
+      "numberOffsetY": -7.25,
+      "labelBottomBeyondInnerCircle": false
+    }
+  ],
+  "geometry_check": {
+    "errors": [],
+    "cases": 58,
+    "failures": [],
+    "rows": [
+      {
+        "mode": "single",
+        "width": 320,
+        "score": 0,
+        "text": 100,
+        "ringWidth": 104,
+        "ringHeight": 104,
+        "centerDX": -0.0078125,
+        "centerDY": 0,
+        "inkMaxRadius": 24.561908588617968,
+        "innerRadius": 45,
+        "svgCenter": [
+          "52",
+          "52"
+        ],
+        "normalizedLength": "100",
+        "dash": "0 100",
+        "arcVisible": false,
+        "innerCaption": 0
+      },
+      {
+        "mode": "single",
+        "width": 320,
+        "score": 0,
+        "text": 125,
+        "ringWidth": 104,
+        "ringHeight": 104,
+        "centerDX": -0.0078125,
+        "centerDY": 0,
+        "inkMaxRadius": 24.561908588617968,
+        "innerRadius": 45,
+        "svgCenter": [
+          "52",
+          "52"
+        ],
+        "normalizedLength": "100",
+        "dash": "0 100",
+        "arcVisible": false,
+        "innerCaption": 0
+      },
+      {
+        "mode": "single",
+        "width": 320,
+        "score": 1,
+        "text": 100,
+        "ringWidth": 104,
+        "ringHeight": 104,
+        "centerDX": -0.0078125,
+        "centerDY": 0,
+        "inkMaxRadius": 24.561908588617968,
+        "innerRadius": 45,
+        "svgCenter": [
+          "52",
+          "52"
+        ],
+        "normalizedLength": "100",
+        "dash": "1 100",
+        "arcVisible": true,
+        "innerCaption": 0
+      },
+      {
+        "mode": "single",
+        "width": 320,
+        "score": 1,
+        "text": 125,
+        "ringWidth": 104,
+        "ringHeight": 104,
+        "centerDX": -0.0078125,
+        "centerDY": 0,
+        "inkMaxRadius": 24.561908588617968,
+        "innerRadius": 45,
+        "svgCenter": [
+          "52",
+          "52"
+        ],
+        "normalizedLength": "100",
+        "dash": "1 100",
+        "arcVisible": true,
+        "innerCaption": 0
+      },
+      {
+        "mode": "single",
+        "width": 320,
+        "score": 52,
+        "text": 100,
+        "ringWidth": 104,
+        "ringHeight": 104,
+        "centerDX": -0.0078125,
+        "centerDY": 0,
+        "inkMaxRadius": 30.99140269519315,
+        "innerRadius": 45,
+        "svgCenter": [
+          "52",
+          "52"
+        ],
+        "normalizedLength": "100",
+        "dash": "52 100",
+        "arcVisible": true,
+        "innerCaption": 0
+      },
+      {
+        "mode": "single",
+        "width": 320,
+        "score": 52,
+        "text": 125,
+        "ringWidth": 104,
+        "ringHeight": 104,
+        "centerDX": -0.0078125,
+        "centerDY": 0,
+        "inkMaxRadius": 30.99140269519315,
+        "innerRadius": 45,
+        "svgCenter": [
+          "52",
+          "52"
+        ],
+        "normalizedLength": "100",
+        "dash": "52 100",
+        "arcVisible": true,
+        "innerCaption": 0
+      },
+      {
+        "mode": "single",
+        "width": 320,
+        "score": 99,
+        "text": 100,
+        "ringWidth": 104,
+        "ringHeight": 104,
+        "centerDX": -0.0078125,
+        "centerDY": 0,
+        "inkMaxRadius": 30.99140269519315,
+        "innerRadius": 45,
+        "svgCenter": [
+          "52",
+          "52"
+        ],
+        "normalizedLength": "100",
+        "dash": "99 100",
+        "arcVisible": true,
+        "innerCaption": 0
+      },
+      {
+        "mode": "single",
+        "width": 320,
+        "score": 99,
+        "text": 125,
+        "ringWidth": 104,
+        "ringHeight": 104,
+        "centerDX": -0.0078125,
+        "centerDY": 0,
+        "inkMaxRadius": 30.99140269519315,
+        "innerRadius": 45,
+        "svgCenter": [
+          "52",
+          "52"
+        ],
+        "normalizedLength": "100",
+        "dash": "99 100",
+        "arcVisible": true,
+        "innerCaption": 0
+      },
+      {
+        "mode": "single",
+        "width": 320,
+        "score": 100,
+        "text": 100,
+        "ringWidth": 104,
+        "ringHeight": 104,
+        "centerDX": -0.0078125,
+        "centerDY": 0,
+        "inkMaxRadius": 39.44032589419901,
+        "innerRadius": 45,
+        "svgCenter": [
+          "52",
+          "52"
+        ],
+        "normalizedLength": "100",
+        "dash": "100 100",
+        "arcVisible": true,
+        "innerCaption": 0
+      },
+      {
+        "mode": "single",
+        "width": 320,
+        "score": 100,
+        "text": 125,
+        "ringWidth": 104,
+        "ringHeight": 104,
+        "centerDX": -0.0078125,
+        "centerDY": 0,
+        "inkMaxRadius": 39.44032589419901,
+        "innerRadius": 45,
+        "svgCenter": [
+          "52",
+          "52"
+        ],
+        "normalizedLength": "100",
+        "dash": "100 100",
+        "arcVisible": true,
+        "innerCaption": 0
+      },
+      {
+        "mode": "single",
+        "width": 440,
+        "score": 0,
+        "text": 100,
+        "ringWidth": 104,
+        "ringHeight": 104,
+        "centerDX": -0.0078125,
+        "centerDY": 0,
+        "inkMaxRadius": 24.561908588617968,
+        "innerRadius": 45,
+        "svgCenter": [
+          "52",
+          "52"
+        ],
+        "normalizedLength": "100",
+        "dash": "0 100",
+        "arcVisible": false,
+        "innerCaption": 0
+      },
+      {
+        "mode": "single",
+        "width": 440,
+        "score": 0,
+        "text": 125,
+        "ringWidth": 104,
+        "ringHeight": 104,
+        "centerDX": -0.0078125,
+        "centerDY": 0,
+        "inkMaxRadius": 24.561908588617968,
+        "innerRadius": 45,
+        "svgCenter": [
+          "52",
+          "52"
+        ],
+        "normalizedLength": "100",
+        "dash": "0 100",
+        "arcVisible": false,
+        "innerCaption": 0
+      },
+      {
+        "mode": "single",
+        "width": 440,
+        "score": 1,
+        "text": 100,
+        "ringWidth": 104,
+        "ringHeight": 104,
+        "centerDX": -0.0078125,
+        "centerDY": 0,
+        "inkMaxRadius": 24.561908588617968,
+        "innerRadius": 45,
+        "svgCenter": [
+          "52",
+          "52"
+        ],
+        "normalizedLength": "100",
+        "dash": "1 100",
+        "arcVisible": true,
+        "innerCaption": 0
+      },
+      {
+        "mode": "single",
+        "width": 440,
+        "score": 1,
+        "text": 125,
+        "ringWidth": 104,
+        "ringHeight": 104,
+        "centerDX": -0.0078125,
+        "centerDY": 0,
+        "inkMaxRadius": 24.561908588617968,
+        "innerRadius": 45,
+        "svgCenter": [
+          "52",
+          "52"
+        ],
+        "normalizedLength": "100",
+        "dash": "1 100",
+        "arcVisible": true,
+        "innerCaption": 0
+      },
+      {
+        "mode": "single",
+        "width": 440,
+        "score": 52,
+        "text": 100,
+        "ringWidth": 104,
+        "ringHeight": 104,
+        "centerDX": -0.0078125,
+        "centerDY": 0,
+        "inkMaxRadius": 30.99140269519315,
+        "innerRadius": 45,
+        "svgCenter": [
+          "52",
+          "52"
+        ],
+        "normalizedLength": "100",
+        "dash": "52 100",
+        "arcVisible": true,
+        "innerCaption": 0
+      },
+      {
+        "mode": "single",
+        "width": 440,
+        "score": 52,
+        "text": 125,
+        "ringWidth": 104,
+        "ringHeight": 104,
+        "centerDX": -0.0078125,
+        "centerDY": 0,
+        "inkMaxRadius": 30.99140269519315,
+        "innerRadius": 45,
+        "svgCenter": [
+          "52",
+          "52"
+        ],
+        "normalizedLength": "100",
+        "dash": "52 100",
+        "arcVisible": true,
+        "innerCaption": 0
+      },
+      {
+        "mode": "single",
+        "width": 440,
+        "score": 99,
+        "text": 100,
+        "ringWidth": 104,
+        "ringHeight": 104,
+        "centerDX": -0.0078125,
+        "centerDY": 0,
+        "inkMaxRadius": 30.99140269519315,
+        "innerRadius": 45,
+        "svgCenter": [
+          "52",
+          "52"
+        ],
+        "normalizedLength": "100",
+        "dash": "99 100",
+        "arcVisible": true,
+        "innerCaption": 0
+      },
+      {
+        "mode": "single",
+        "width": 440,
+        "score": 99,
+        "text": 125,
+        "ringWidth": 104,
+        "ringHeight": 104,
+        "centerDX": -0.0078125,
+        "centerDY": 0,
+        "inkMaxRadius": 30.99140269519315,
+        "innerRadius": 45,
+        "svgCenter": [
+          "52",
+          "52"
+        ],
+        "normalizedLength": "100",
+        "dash": "99 100",
+        "arcVisible": true,
+        "innerCaption": 0
+      },
+      {
+        "mode": "single",
+        "width": 440,
+        "score": 100,
+        "text": 100,
+        "ringWidth": 104,
+        "ringHeight": 104,
+        "centerDX": -0.0078125,
+        "centerDY": 0,
+        "inkMaxRadius": 39.44032589419901,
+        "innerRadius": 45,
+        "svgCenter": [
+          "52",
+          "52"
+        ],
+        "normalizedLength": "100",
+        "dash": "100 100",
+        "arcVisible": true,
+        "innerCaption": 0
+      },
+      {
+        "mode": "single",
+        "width": 440,
+        "score": 100,
+        "text": 125,
+        "ringWidth": 104,
+        "ringHeight": 104,
+        "centerDX": -0.0078125,
+        "centerDY": 0,
+        "inkMaxRadius": 39.44032589419901,
+        "innerRadius": 45,
+        "svgCenter": [
+          "52",
+          "52"
+        ],
+        "normalizedLength": "100",
+        "dash": "100 100",
+        "arcVisible": true,
+        "innerCaption": 0
+      },
+      {
+        "mode": "single",
+        "label": "large",
+        "text": 130,
+        "locale": "ko",
+        "ringVisible": false,
+        "externalVisible": true,
+        "externalValue": "컨디션 100점"
+      },
+      {
+        "mode": "single",
+        "label": "large",
+        "text": 130,
+        "locale": "en",
+        "ringVisible": false,
+        "externalVisible": true,
+        "externalValue": "Condition 100"
+      },
+      {
+        "mode": "single",
+        "label": "large",
+        "text": 130,
+        "locale": "ja",
+        "ringVisible": false,
+        "externalVisible": true,
+        "externalValue": "コンディション100"
+      },
+      {
+        "mode": "single",
+        "label": "large",
+        "text": 160,
+        "locale": "ko",
+        "ringVisible": false,
+        "externalVisible": true,
+        "externalValue": "컨디션 100점"
+      },
+      {
+        "mode": "single",
+        "label": "large",
+        "text": 160,
+        "locale": "en",
+        "ringVisible": false,
+        "externalVisible": true,
+        "externalValue": "Condition 100"
+      },
+      {
+        "mode": "single",
+        "label": "large",
+        "text": 160,
+        "locale": "ja",
+        "ringVisible": false,
+        "externalVisible": true,
+        "externalValue": "コンディション100"
+      },
+      {
+        "mode": "single",
+        "label": "large",
+        "text": 200,
+        "locale": "ko",
+        "ringVisible": false,
+        "externalVisible": true,
+        "externalValue": "컨디션 100점"
+      },
+      {
+        "mode": "single",
+        "label": "large",
+        "text": 200,
+        "locale": "en",
+        "ringVisible": false,
+        "externalVisible": true,
+        "externalValue": "Condition 100"
+      },
+      {
+        "mode": "single",
+        "label": "large",
+        "text": 200,
+        "locale": "ja",
+        "ringVisible": false,
+        "externalVisible": true,
+        "externalValue": "コンディション100"
+      },
+      {
+        "mode": "comparison",
+        "width": 320,
+        "score": 0,
+        "text": 100,
+        "ringWidth": 104,
+        "ringHeight": 104,
+        "centerDX": -0.0078125,
+        "centerDY": 0,
+        "inkMaxRadius": 24.561908588617968,
+        "innerRadius": 45,
+        "svgCenter": [
+          "52",
+          "52"
+        ],
+        "normalizedLength": "100",
+        "dash": "0 100",
+        "arcVisible": false,
+        "innerCaption": 0
+      },
+      {
+        "mode": "comparison",
+        "width": 320,
+        "score": 0,
+        "text": 125,
+        "ringWidth": 104,
+        "ringHeight": 104,
+        "centerDX": -0.0078125,
+        "centerDY": 0,
+        "inkMaxRadius": 24.561908588617968,
+        "innerRadius": 45,
+        "svgCenter": [
+          "52",
+          "52"
+        ],
+        "normalizedLength": "100",
+        "dash": "0 100",
+        "arcVisible": false,
+        "innerCaption": 0
+      },
+      {
+        "mode": "comparison",
+        "width": 320,
+        "score": 1,
+        "text": 100,
+        "ringWidth": 104,
+        "ringHeight": 104,
+        "centerDX": -0.0078125,
+        "centerDY": 0,
+        "inkMaxRadius": 24.561908588617968,
+        "innerRadius": 45,
+        "svgCenter": [
+          "52",
+          "52"
+        ],
+        "normalizedLength": "100",
+        "dash": "1 100",
+        "arcVisible": true,
+        "innerCaption": 0
+      },
+      {
+        "mode": "comparison",
+        "width": 320,
+        "score": 1,
+        "text": 125,
+        "ringWidth": 104,
+        "ringHeight": 104,
+        "centerDX": -0.0078125,
+        "centerDY": 0,
+        "inkMaxRadius": 24.561908588617968,
+        "innerRadius": 45,
+        "svgCenter": [
+          "52",
+          "52"
+        ],
+        "normalizedLength": "100",
+        "dash": "1 100",
+        "arcVisible": true,
+        "innerCaption": 0
+      },
+      {
+        "mode": "comparison",
+        "width": 320,
+        "score": 52,
+        "text": 100,
+        "ringWidth": 104,
+        "ringHeight": 104,
+        "centerDX": -0.0078125,
+        "centerDY": 0,
+        "inkMaxRadius": 30.99140269519315,
+        "innerRadius": 45,
+        "svgCenter": [
+          "52",
+          "52"
+        ],
+        "normalizedLength": "100",
+        "dash": "52 100",
+        "arcVisible": true,
+        "innerCaption": 0
+      },
+      {
+        "mode": "comparison",
+        "width": 320,
+        "score": 52,
+        "text": 125,
+        "ringWidth": 104,
+        "ringHeight": 104,
+        "centerDX": -0.0078125,
+        "centerDY": 0,
+        "inkMaxRadius": 30.99140269519315,
+        "innerRadius": 45,
+        "svgCenter": [
+          "52",
+          "52"
+        ],
+        "normalizedLength": "100",
+        "dash": "52 100",
+        "arcVisible": true,
+        "innerCaption": 0
+      },
+      {
+        "mode": "comparison",
+        "width": 320,
+        "score": 99,
+        "text": 100,
+        "ringWidth": 104,
+        "ringHeight": 104,
+        "centerDX": -0.0078125,
+        "centerDY": 0,
+        "inkMaxRadius": 30.99140269519315,
+        "innerRadius": 45,
+        "svgCenter": [
+          "52",
+          "52"
+        ],
+        "normalizedLength": "100",
+        "dash": "99 100",
+        "arcVisible": true,
+        "innerCaption": 0
+      },
+      {
+        "mode": "comparison",
+        "width": 320,
+        "score": 99,
+        "text": 125,
+        "ringWidth": 104,
+        "ringHeight": 104,
+        "centerDX": -0.0078125,
+        "centerDY": 0,
+        "inkMaxRadius": 30.99140269519315,
+        "innerRadius": 45,
+        "svgCenter": [
+          "52",
+          "52"
+        ],
+        "normalizedLength": "100",
+        "dash": "99 100",
+        "arcVisible": true,
+        "innerCaption": 0
+      },
+      {
+        "mode": "comparison",
+        "width": 320,
+        "score": 100,
+        "text": 100,
+        "ringWidth": 104,
+        "ringHeight": 104,
+        "centerDX": -0.0078125,
+        "centerDY": 0,
+        "inkMaxRadius": 39.44032589419901,
+        "innerRadius": 45,
+        "svgCenter": [
+          "52",
+          "52"
+        ],
+        "normalizedLength": "100",
+        "dash": "100 100",
+        "arcVisible": true,
+        "innerCaption": 0
+      },
+      {
+        "mode": "comparison",
+        "width": 320,
+        "score": 100,
+        "text": 125,
+        "ringWidth": 104,
+        "ringHeight": 104,
+        "centerDX": -0.0078125,
+        "centerDY": 0,
+        "inkMaxRadius": 39.44032589419901,
+        "innerRadius": 45,
+        "svgCenter": [
+          "52",
+          "52"
+        ],
+        "normalizedLength": "100",
+        "dash": "100 100",
+        "arcVisible": true,
+        "innerCaption": 0
+      },
+      {
+        "mode": "comparison",
+        "width": 440,
+        "score": 0,
+        "text": 100,
+        "ringWidth": 104,
+        "ringHeight": 104,
+        "centerDX": -0.0078125,
+        "centerDY": 0,
+        "inkMaxRadius": 24.561908588617968,
+        "innerRadius": 45,
+        "svgCenter": [
+          "52",
+          "52"
+        ],
+        "normalizedLength": "100",
+        "dash": "0 100",
+        "arcVisible": false,
+        "innerCaption": 0
+      },
+      {
+        "mode": "comparison",
+        "width": 440,
+        "score": 0,
+        "text": 125,
+        "ringWidth": 104,
+        "ringHeight": 104,
+        "centerDX": -0.0078125,
+        "centerDY": 0,
+        "inkMaxRadius": 24.561908588617968,
+        "innerRadius": 45,
+        "svgCenter": [
+          "52",
+          "52"
+        ],
+        "normalizedLength": "100",
+        "dash": "0 100",
+        "arcVisible": false,
+        "innerCaption": 0
+      },
+      {
+        "mode": "comparison",
+        "width": 440,
+        "score": 1,
+        "text": 100,
+        "ringWidth": 104,
+        "ringHeight": 104,
+        "centerDX": -0.0078125,
+        "centerDY": 0,
+        "inkMaxRadius": 24.561908588617968,
+        "innerRadius": 45,
+        "svgCenter": [
+          "52",
+          "52"
+        ],
+        "normalizedLength": "100",
+        "dash": "1 100",
+        "arcVisible": true,
+        "innerCaption": 0
+      },
+      {
+        "mode": "comparison",
+        "width": 440,
+        "score": 1,
+        "text": 125,
+        "ringWidth": 104,
+        "ringHeight": 104,
+        "centerDX": -0.0078125,
+        "centerDY": 0,
+        "inkMaxRadius": 24.561908588617968,
+        "innerRadius": 45,
+        "svgCenter": [
+          "52",
+          "52"
+        ],
+        "normalizedLength": "100",
+        "dash": "1 100",
+        "arcVisible": true,
+        "innerCaption": 0
+      },
+      {
+        "mode": "comparison",
+        "width": 440,
+        "score": 52,
+        "text": 100,
+        "ringWidth": 104,
+        "ringHeight": 104,
+        "centerDX": -0.0078125,
+        "centerDY": 0,
+        "inkMaxRadius": 30.99140269519315,
+        "innerRadius": 45,
+        "svgCenter": [
+          "52",
+          "52"
+        ],
+        "normalizedLength": "100",
+        "dash": "52 100",
+        "arcVisible": true,
+        "innerCaption": 0
+      },
+      {
+        "mode": "comparison",
+        "width": 440,
+        "score": 52,
+        "text": 125,
+        "ringWidth": 104,
+        "ringHeight": 104,
+        "centerDX": -0.0078125,
+        "centerDY": 0,
+        "inkMaxRadius": 30.99140269519315,
+        "innerRadius": 45,
+        "svgCenter": [
+          "52",
+          "52"
+        ],
+        "normalizedLength": "100",
+        "dash": "52 100",
+        "arcVisible": true,
+        "innerCaption": 0
+      },
+      {
+        "mode": "comparison",
+        "width": 440,
+        "score": 99,
+        "text": 100,
+        "ringWidth": 104,
+        "ringHeight": 104,
+        "centerDX": -0.0078125,
+        "centerDY": 0,
+        "inkMaxRadius": 30.99140269519315,
+        "innerRadius": 45,
+        "svgCenter": [
+          "52",
+          "52"
+        ],
+        "normalizedLength": "100",
+        "dash": "99 100",
+        "arcVisible": true,
+        "innerCaption": 0
+      },
+      {
+        "mode": "comparison",
+        "width": 440,
+        "score": 99,
+        "text": 125,
+        "ringWidth": 104,
+        "ringHeight": 104,
+        "centerDX": -0.0078125,
+        "centerDY": 0,
+        "inkMaxRadius": 30.99140269519315,
+        "innerRadius": 45,
+        "svgCenter": [
+          "52",
+          "52"
+        ],
+        "normalizedLength": "100",
+        "dash": "99 100",
+        "arcVisible": true,
+        "innerCaption": 0
+      },
+      {
+        "mode": "comparison",
+        "width": 440,
+        "score": 100,
+        "text": 100,
+        "ringWidth": 104,
+        "ringHeight": 104,
+        "centerDX": -0.0078125,
+        "centerDY": 0,
+        "inkMaxRadius": 39.44032589419901,
+        "innerRadius": 45,
+        "svgCenter": [
+          "52",
+          "52"
+        ],
+        "normalizedLength": "100",
+        "dash": "100 100",
+        "arcVisible": true,
+        "innerCaption": 0
+      },
+      {
+        "mode": "comparison",
+        "width": 440,
+        "score": 100,
+        "text": 125,
+        "ringWidth": 104,
+        "ringHeight": 104,
+        "centerDX": -0.0078125,
+        "centerDY": 0,
+        "inkMaxRadius": 39.44032589419901,
+        "innerRadius": 45,
+        "svgCenter": [
+          "52",
+          "52"
+        ],
+        "normalizedLength": "100",
+        "dash": "100 100",
+        "arcVisible": true,
+        "innerCaption": 0
+      },
+      {
+        "mode": "comparison",
+        "label": "large",
+        "text": 130,
+        "locale": "ko",
+        "ringVisible": false,
+        "externalVisible": true,
+        "externalValue": "컨디션 100점"
+      },
+      {
+        "mode": "comparison",
+        "label": "large",
+        "text": 130,
+        "locale": "en",
+        "ringVisible": false,
+        "externalVisible": true,
+        "externalValue": "Condition 100"
+      },
+      {
+        "mode": "comparison",
+        "label": "large",
+        "text": 130,
+        "locale": "ja",
+        "ringVisible": false,
+        "externalVisible": true,
+        "externalValue": "コンディション100"
+      },
+      {
+        "mode": "comparison",
+        "label": "large",
+        "text": 160,
+        "locale": "ko",
+        "ringVisible": false,
+        "externalVisible": true,
+        "externalValue": "컨디션 100점"
+      },
+      {
+        "mode": "comparison",
+        "label": "large",
+        "text": 160,
+        "locale": "en",
+        "ringVisible": false,
+        "externalVisible": true,
+        "externalValue": "Condition 100"
+      },
+      {
+        "mode": "comparison",
+        "label": "large",
+        "text": 160,
+        "locale": "ja",
+        "ringVisible": false,
+        "externalVisible": true,
+        "externalValue": "コンディション100"
+      },
+      {
+        "mode": "comparison",
+        "label": "large",
+        "text": 200,
+        "locale": "ko",
+        "ringVisible": false,
+        "externalVisible": true,
+        "externalValue": "컨디션 100점"
+      },
+      {
+        "mode": "comparison",
+        "label": "large",
+        "text": 200,
+        "locale": "en",
+        "ringVisible": false,
+        "externalVisible": true,
+        "externalValue": "Condition 100"
+      },
+      {
+        "mode": "comparison",
+        "label": "large",
+        "text": 200,
+        "locale": "ja",
+        "ringVisible": false,
+        "externalVisible": true,
+        "externalValue": "コンディション100"
+      }
+    ]
+  },
+  "final_spacing_check": {
+    "errors": [],
+    "rows": [
+      {
+        "width": 1000,
+        "text": 100,
+        "ringWidth": 104,
+        "numberOffsetX": -0.0078125,
+        "heroGap": "12px",
+        "metricGap": "6px",
+        "overflow": false
+      },
+      {
+        "width": 1000,
+        "text": 125,
+        "ringWidth": 104,
+        "numberOffsetX": -0.0078125,
+        "heroGap": "12px",
+        "metricGap": "6px",
+        "overflow": false
+      },
+      {
+        "width": 1000,
+        "text": 160,
+        "ringWidth": 0,
+        "numberOffsetX": 0,
+        "heroGap": "12px",
+        "metricGap": "6px",
+        "overflow": false
+      },
+      {
+        "width": 1440,
+        "text": 100,
+        "ringWidth": 104,
+        "numberOffsetX": -0.0078125,
+        "heroGap": "12px",
+        "metricGap": "6px",
+        "overflow": false
+      },
+      {
+        "width": 1440,
+        "text": 125,
+        "ringWidth": 104,
+        "numberOffsetX": -0.0078125,
+        "heroGap": "12px",
+        "metricGap": "6px",
+        "overflow": false
+      },
+      {
+        "width": 1440,
+        "text": 160,
+        "ringWidth": 0,
+        "numberOffsetX": 0,
+        "heroGap": "12px",
+        "metricGap": "6px",
+        "overflow": false
+      },
+      {
+        "label": "focused-preview",
+        "phones": 1,
+        "visibleLowerCards": 0
+      }
+    ]
+  },
+  "source_sha256": "b6b106bb9d7a05743e539e37f2e6e7c6f3b1662d5f3072eba76456cb62087b66",
+  "native_status": "planned-not-implemented",
+  "scope": "58 ring geometry cases before final spacing adjustments, plus final targeted spacing checks. No claim of full native Dynamic Type validation."
+}

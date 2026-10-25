@@ -1,0 +1,136 @@
+{
+  "errors": [],
+  "rows": [
+    {
+      "width": 1440,
+      "visible": 3,
+      "positions": [
+        {
+          "x": 43,
+          "y": 46,
+          "width": 440
+        },
+        {
+          "x": 500,
+          "y": 46,
+          "width": 440
+        },
+        {
+          "x": 957,
+          "y": 46,
+          "width": 440
+        }
+      ],
+      "documentOverflow": false,
+      "horizontalPan": false,
+      "carouselControls": 0
+    },
+    {
+      "width": 1024,
+      "visible": 3,
+      "positions": [
+        {
+          "x": 8,
+          "y": 46,
+          "width": 328
+        },
+        {
+          "x": 348,
+          "y": 46,
+          "width": 328
+        },
+        {
+          "x": 688,
+          "y": 46,
+          "width": 328
+        }
+      ],
+      "documentOverflow": false,
+      "horizontalPan": false,
+      "carouselControls": 0
+    },
+    {
+      "width": 736,
+      "visible": 3,
+      "positions": [
+        {
+          "x": 8,
+          "y": 46,
+          "width": 320
+        },
+        {
+          "x": 340,
+          "y": 46,
+          "width": 320
+        },
+        {
+          "x": 672,
+          "y": 46,
+          "width": 320
+        }
+      ],
+      "documentOverflow": false,
+      "horizontalPan": true,
+      "carouselControls": 0
+    },
+    {
+      "width": 320,
+      "visible": 3,
+      "positions": [
+        {
+          "x": 8,
+          "y": 46,
+          "width": 320
+        },
+        {
+          "x": 340,
+          "y": 46,
+          "width": 320
+        },
+        {
+          "x": 672,
+          "y": 46,
+          "width": 320
+        }
+      ],
+      "documentOverflow": false,
+      "horizontalPan": true,
+      "carouselControls": 0
+    },
+    {
+      "label": "shared-large-English",
+      "large": 3,
+      "overflows": [
+        {
+          "design": "focus",
+          "overflow": false
+        },
+        {
+          "design": "signal",
+          "overflow": false
+        },
+        {
+          "design": "daylight",
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "label": "night",
+      "progressCards": 0,
+      "digestCards": 3
+    },
+    {
+      "label": "no-records",
+      "stateCards": 3,
+      "metricCards": 0
+    },
+    {
+      "label": "disclosure",
+      "open": true
+    }
+  ],
+  "source_sha256": "a9733b58722c6060ac830982ba42b5ef095d3f31e029d3a56ebc197ff394a061",
+  "scope": "Browser prototype comparison presentation only; shared Today screen content is unchanged.",
+  "compact_ring_update": "See today-compact-ring-qa.json for the Compact fixed geometry / final tight spacing; previous broad checks refer to their earlier prototype versions."
+}

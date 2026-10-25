@@ -31,6 +31,10 @@ Life의 링 옆에는 현재 진행 상태를 설명하는 문장을 둔다. 히
 
 ## 화면별 맵 목록
 
+2026-10-26 [Today 재설계 방향](today-restart-proposal.md)은 여백·글씨 크기 변화 문제를 다시 검토하는 새 제안이다. [Compact·Metrics·Editorial](../theme-map/themes/dune-today-restart.html)를 비교하며 아직 기존 구현 기준을 대체하지 않는다.
+
+[Today 전체 상태·배치 계약](today-case-matrix.md)에 현재 표시 조건, 12개 데이터 상태, 시간대 경계, 오래된 기록, 큰 글씨·언어·기기 폭, 진입과 빈 그래프 처리 기준을 정리했다. 기본 DUNE 테마를 유지하는 전체 스크롤 시안이다.
+
 | 범위 | 맵 |
 |---|---|
 | Today T03·Activity A01·Wellness H01·Life L01 | [4탭 레이아웃 맵](index.html) |
@@ -64,3 +68,7 @@ Life의 링 옆에는 현재 진행 상태를 설명하는 문장을 둔다. 히
 4. 영향받는 화면을 실제 시뮬레이터에서 다시 캡처해 실제 화면 디자인맵을 갱신한다. 캡처할 수 없으면 구 버전 이미지를 새 구현의 증거로 사용하지 않고 화면 ID·기기·이유를 기록한다.
 
 맵의 DUNE 색은 레이아웃 식별용이다. 실제 테마별 팔레트는 테마 맵과 앱의 `AppTheme` 토큰을 따른다.
+
+2026-10-26 [Today 세 시안 나란히 비교](../theme-map/themes/dune-today-comparison.html)를 추가했다. 세 화면을 동일 조건에서 동시에 볼 수 있고 기본 DUNE 테마와 기존 상태 계약은 유지한다.
+
+2026-10-26 Today 방향은 **Compact 선택**으로 기록했다. [링 안정화·전체 적용 계획](../../plans/2026-10-26-today-compact-layout-and-ring.md)을 기준으로 숫자 중심, 고정 기하, 외부 CONDITION 레이블과 조밀한 아이콘/수치 간격을 적용한다. 실제 앱 구현 완료를 뜻하지 않는다.

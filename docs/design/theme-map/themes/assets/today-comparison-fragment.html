@@ -1,0 +1,415 @@
+<style>
+#today-comparison{--type:1;--phone-width:402px;font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo',sans-serif}
+#today-comparison *{box-sizing:border-box}
+#today-comparison .stage{min-height:1160px;padding:16px 8px 32px;display:flex;justify-content:center;align-items:flex-start}
+#today-comparison .phone{color-scheme:light dark;--bg:light-dark(#fbf7ef,#181716);--panel:light-dark(#fffdfa,#222321);--text:light-dark(#292720,#fff7ee);--muted:light-dark(#615a52,#cabfb4);--line:light-dark(#d9cfc2,#43504a);--gold:light-dark(#865337,#dfa777);--page-gradient:linear-gradient(180deg,light-dark(#ead9c0,#3b302b) 0,light-dark(#d4ae8d,#614b3e) 160px,light-dark(#e9d5bb,#3d3029) 340px,light-dark(#f6eee2,#25211d) 610px,transparent 1050px),linear-gradient(180deg,light-dark(#f1e4d2,#201c19),light-dark(#fbf7ef,#181716) 50%,light-dark(#f9f4eb,#141312));--green:light-dark(#3f684c,#b6d6a0);--violet:light-dark(#7660a6,#b7a9eb);width:min(100%,var(--phone-width));min-width:0;border-radius:38px;overflow:hidden;background:var(--page-gradient);color:var(--text);box-shadow:0 22px 65px #0002,0 0 0 1px #8883;position:relative;font-size:calc(15px * var(--type));line-height:1.4;container-type:inline-size}
+#today-comparison .phone[data-mode=dark]{color-scheme:dark}#today-comparison .phone[data-mode=light]{color-scheme:light}
+#today-comparison button{font:inherit;color:inherit;cursor:inherit}
+#today-comparison .chrome{padding:16px 20px 0;position:relative;z-index:1}
+#today-comparison .status{display:flex;justify-content:space-between;align-items:center;height:26px;font-size:13px;font-weight:650;padding:0 5px;position:relative}
+#today-comparison .island{position:absolute;left:50%;transform:translateX(-50%);width:104px;height:27px;border-radius:30px;background:#080a08;top:-3px}
+#today-comparison .signals{display:flex;gap:5px;align-items:center}#today-comparison .signals svg{width:15px;height:15px}
+#today-comparison .titlebar{display:flex;gap:8px;justify-content:space-between;align-items:center;padding:19px 0 14px}
+#today-comparison h1{font-size:calc(30px * var(--type));line-height:1.1;letter-spacing:-1.2px;margin:0;font-weight:730}
+#today-comparison .date{font-size:calc(11px * var(--type));color:var(--muted);margin-top:5px;letter-spacing:.02em}
+#today-comparison .tools{display:flex;gap:4px;flex:none}#today-comparison .tool{display:grid;place-items:center;position:relative;border:1px solid var(--line);background:var(--panel);border-radius:50%;width:44px;height:44px}
+#today-comparison .tool svg{width:19px;height:19px}#today-comparison .badge{position:absolute;top:0;right:0;width:14px;height:14px;background:#c76a4e;border:2px solid var(--bg);border-radius:100%}
+#today-comparison .body{padding:0 16px;display:grid;gap:12px;position:relative;z-index:1}
+#today-comparison .surface{padding:16px;background:var(--panel);border-radius:22px;border:1px solid var(--line);min-width:0}
+#today-comparison .section-top{display:flex;gap:8px;justify-content:space-between;align-items:center;margin-bottom:10px;font-size:calc(12px * var(--type));font-weight:620;flex-wrap:wrap}
+#today-comparison .label-icon{display:flex;gap:5px;align-items:center}#today-comparison .label-icon svg{width:16px;height:16px}
+#today-comparison .muted{color:var(--muted)}#today-comparison .tiny{font-size:calc(11px * var(--type));font-weight:400}
+#today-comparison .chevron{width:15px;height:15px;flex:none}
+#today-comparison .hero{background:radial-gradient(ellipse at 80% 0%,#ce995612,transparent 62%),#352e29;color:#fff5e8;border-color:#765b43;box-shadow:inset 0 1px 0 #fff1,0 8px 26px #0001;position:relative;isolation:isolate}
+#today-comparison .hero .muted{color:#d0c1ae}#today-comparison .eyebrow{font-size:calc(11px * var(--type));letter-spacing:.13em;color:#e7c48e;font-weight:600}
+#today-comparison .hero .empty-note{color:#d0c1ae}#today-comparison .hero{overflow:hidden}
+#today-comparison .dunes{position:absolute;inset:0 0 auto;height:420px;pointer-events:none;mask-image:linear-gradient(to bottom,#000 0%,#000 23%,transparent 100%)}
+#today-comparison .dune-layer{position:absolute;inset:0;background:light-dark(#cfb49a,#6b5a51);opacity:.48}
+#today-comparison .dune-layer.mid{background:light-dark(#d9a878,#8b624b);opacity:.48}
+#today-comparison .dune-layer.near{background:light-dark(#b88060,#76503e);opacity:.35}
+#today-comparison .hero:after{content:'';position:absolute;inset:0;pointer-events:none;z-index:-1;border-radius:inherit;background:linear-gradient(118deg,transparent 10%,#f0dba009 27%,transparent 49%);opacity:var(--ambience,.6);animation:today-light-shift 4s ease-out both}
+#today-comparison .surface{transition:box-shadow .25s ease}#today-comparison .tool{box-shadow:inset 0 1px 0 #fff2;transition:transform .2s ease}#today-comparison .tool:active{transform:scale(.94)}
+#today-comparison .bottomnav{background:linear-gradient(135deg,light-dark(#fffdfa,#554c44ee),light-dark(#f0e8dbee,#302d2af5));box-shadow:0 8px 30px #0001,inset 0 1px 0 #fff4}
+#today-comparison .axis{font-size:calc(11px * var(--type))}#today-comparison .sleep-legend{font-size:calc(11px * var(--type))}
+@keyframes today-light-shift{from{opacity:0;transform:translateY(5px)}to{opacity:var(--ambience,.6);transform:translateY(0)}}
+#today-comparison .hero-summary{display:grid;grid-template-columns:104px minmax(0,1fr);gap:12px;align-items:center;margin:4px 0 12px}
+#today-comparison .ring{width:104px;height:104px;display:grid;place-items:center;position:relative}
+#today-comparison .ring:before{content:'';position:absolute;inset:7px;border-radius:50%;box-shadow:0 0 23px #dfbc7d18,inset 0 0 20px #d9c58a12}
+#today-comparison .ring svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+#today-comparison .ring-number{font-size:36px;font-weight:650;letter-spacing:-1.6px;font-variant-numeric:tabular-nums;position:relative;line-height:1.1}
+#today-comparison .ring-unit{font-size:10px;letter-spacing:.06em;color:#d4cdb7;text-align:center;font-weight:400}
+#today-comparison .guide{font-size:calc(20px * var(--type));font-weight:650;letter-spacing:-.7px;line-height:1.3;margin:5px 0}
+#today-comparison .support{font-size:calc(12px * var(--type));line-height:1.5;margin:5px 0 0;color:#d0c1ae;word-break:keep-all;overflow-wrap:anywhere}
+#today-comparison .trend-head{display:flex;justify-content:space-between;gap:10px;font-size:calc(11px * var(--type));color:#d0c1ae}
+#today-comparison .trend{width:100%;height:47px;display:block;margin-top:5px;overflow:visible}
+#today-comparison .axis{display:flex;justify-content:space-between;font-size:calc(10px * var(--type));color:var(--muted);gap:4px;margin-top:3px}
+#today-comparison .hero .axis{color:#d0c1ae}
+#today-comparison .evidence{margin-top:12px;padding-top:12px;border-top:1px solid #d4cba126;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+#today-comparison .evidence>div{display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap;font-size:calc(11px * var(--type));color:#dedecf}
+#today-comparison .evidence b{font-weight:600;color:#91b779}#today-comparison .evidence small{font-size:inherit;color:#d0c1ae}
+#today-comparison .value{font-size:calc(28px * var(--type));font-weight:650;letter-spacing:-1px;line-height:1.1;font-variant-numeric:tabular-nums}
+#today-comparison .value small{font-size:calc(13px * var(--type));letter-spacing:0;font-weight:450;margin:0 3px}
+#today-comparison .sleep-numbers{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+#today-comparison .debt{text-align:right;font-size:calc(11px * var(--type));color:var(--muted)}#today-comparison .debt b{display:block;font-size:calc(15px * var(--type));color:var(--text);font-weight:600;margin-top:2px}
+#today-comparison .sleep-caption{font-size:calc(11px * var(--type));color:var(--muted);margin-top:7px}
+#today-comparison .timeline{height:19px;display:flex;gap:2px;margin-top:14px;border-radius:5px;overflow:hidden;box-shadow:0 4px 15px #a29bd015}
+#today-comparison .timeline i{flex:var(--seg);background:var(--violet);opacity:var(--o);border-radius:2px}
+#today-comparison .sleep-legend{display:flex;justify-content:space-between;gap:7px;flex-wrap:wrap;font-size:calc(10px * var(--type));margin-top:10px;color:var(--muted)}
+#today-comparison .sleep-legend span{display:flex;gap:5px;align-items:center}#today-comparison .sleep-legend i{display:block;width:5px;height:5px;background:var(--violet);border-radius:50%}
+#today-comparison .stress-layout{display:grid;grid-template-columns:minmax(0,1fr) 113px;align-items:center;gap:12px}
+#today-comparison .stress-number{font-size:calc(25px * var(--type));font-weight:600;letter-spacing:-.7px}#today-comparison .stress-number small{font-size:calc(12px * var(--type));font-weight:400;letter-spacing:0;margin-left:7px;color:var(--muted)}
+#today-comparison .stress-chart{width:100%;height:36px;display:block;color:var(--green)}
+#today-comparison .stress-bottom{display:flex;gap:8px;justify-content:space-between;font-size:calc(11px * var(--type));color:var(--muted);margin-top:9px;flex-wrap:wrap}
+#today-comparison .pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+#today-comparison .pair .surface{padding:14px}#today-comparison .pair .value{font-size:calc(24px * var(--type))}#today-comparison .pair .section-top{margin-bottom:11px}
+#today-comparison .meter{height:4px;background:var(--line);border-radius:4px;margin:12px 0 8px;overflow:hidden}#today-comparison .meter i{display:block;height:100%;width:var(--p);background:var(--green);border-radius:4px}
+#today-comparison .brief{display:grid;grid-template-columns:32px minmax(0,1fr) 16px;gap:10px;align-items:center;padding:14px 2px 6px}
+#today-comparison .brief-icon{display:grid;place-items:center;width:32px;height:32px;color:var(--gold);background:color-mix(in srgb,var(--gold) 13%,transparent);border-radius:11px}
+#today-comparison .brief-icon svg{width:17px;height:17px}#today-comparison .brief strong{font-size:calc(13px * var(--type));font-weight:600;display:block}#today-comparison .brief p{margin:3px 0 0;color:var(--muted);font-size:calc(11px * var(--type))}
+#today-comparison details{border-top:1px solid var(--line);margin-top:4px}#today-comparison summary{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:44px;font-size:calc(12px * var(--type));list-style:none}
+#today-comparison details[open] summary .chevron{transform:rotate(90deg)}#today-comparison details p{font-size:calc(12px * var(--type));color:var(--muted);margin:0 0 12px}
+#today-comparison .bottomnav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;padding:7px;border-radius:28px;background:light-dark(#ffffffed,#353a31ed);border:1px solid light-dark(#fff,#636b5870);box-shadow:0 4px 22px #0001,inset 0 1px 0 #fff2;margin:18px 14px 10px}
+#today-comparison .navitem{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:0;background:transparent;border-radius:22px;min-height:50px;font-size:11px;color:var(--muted);padding:4px}
+#today-comparison .navitem svg{width:21px;height:21px}#today-comparison .navitem.selected{background:light-dark(#eedbc5,#725841);color:light-dark(#865337,#f0c06d);font-weight:600}
+#today-comparison .home{width:110px;height:4px;border-radius:4px;background:var(--text);margin:12px auto 9px;opacity:.65}
+#today-comparison .dense-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+#today-comparison .dense-grid .surface{padding:14px;border-radius:18px}#today-comparison .dense-grid .section-top{margin-bottom:10px}
+#today-comparison .signal .signal-summary{display:flex;justify-content:space-between;align-items:center;gap:14px}
+#today-comparison .signal-score{font-size:calc(70px * var(--type));font-weight:550;line-height:.92;letter-spacing:-4px;color:#fff5e8}
+#today-comparison .signal-score small{font-size:calc(13px * var(--type));letter-spacing:0;color:#d0c1ae;font-weight:400}
+#today-comparison .signal .guide{font-size:calc(18px * var(--type));max-width:11em}
+#today-comparison .gauge{height:7px;background:#ffffff14;border-radius:8px;margin:18px 0 8px;position:relative}
+#today-comparison .gauge i{display:block;width:52%;height:100%;border-radius:8px;background:linear-gradient(90deg,#b2854c,#f4d678);box-shadow:0 0 12px #d9df9b33}
+#today-comparison .signal .eyebrow{color:#e9bc72}#today-comparison .signal .hero .axis{color:#d0c1ae}
+#today-comparison .spark{height:30px;width:100%;display:block;margin-top:12px;color:var(--green)}
+#today-comparison .delta{font-size:calc(11px * var(--type));color:var(--green);margin-top:7px}
+#today-comparison .bars{display:flex;height:49px;gap:7px;align-items:flex-end;margin-top:14px;border-bottom:1px solid var(--line)}
+#today-comparison .bars i{flex:1;height:var(--h);border-radius:4px 4px 0 0;background:var(--violet);opacity:.55}#today-comparison .bars i:last-child{opacity:1;background:linear-gradient(0deg,var(--violet),color-mix(in srgb,var(--violet) 70%,#fff))}
+#today-comparison .signal .sleep{grid-column:1 / -1}
+#today-comparison .editorial-hero{padding:7px 2px 15px;position:relative}
+#today-comparison .editorial-top{display:flex;align-items:center;justify-content:space-between;gap:18px}
+#today-comparison .editorial-number{font-size:calc(88px * var(--type));line-height:1;font-weight:450;letter-spacing:-5px;color:var(--gold)}
+#today-comparison .editorial-hero .guide{font-size:calc(23px * var(--type));font-weight:550}#today-comparison .editorial-hero .support{color:var(--muted)}
+#today-comparison .editorial-hero .eyebrow{color:var(--gold)}
+#today-comparison .horizon{height:35px;margin-top:10px;background:radial-gradient(ellipse at 50% 210%,transparent 47%,color-mix(in srgb,var(--gold) 36%,transparent) 48%,transparent 50%),radial-gradient(ellipse at 55% 190%,transparent 48%,color-mix(in srgb,var(--gold) 16%,transparent) 49%,transparent 51%);position:relative;border-bottom:1px solid var(--line)}
+#today-comparison .horizon i{position:absolute;width:8px;height:8px;left:52%;bottom:-4px;border-radius:50%;background:var(--gold);box-shadow:0 0 15px color-mix(in srgb,var(--gold) 45%,transparent)}
+#today-comparison .editorial-signals{display:flex;justify-content:space-between;gap:10px;margin-top:14px;flex-wrap:wrap;font-size:calc(11px * var(--type));color:var(--muted)}
+#today-comparison .editorial-signals b{font-weight:600;color:var(--text);margin-left:5px}
+#today-comparison .daylight .pair .surface{border:0;border-radius:18px;background:var(--panel);border:1px solid var(--line)}
+#today-comparison .daylight .pair .surface:first-child{background:var(--panel)}
+#today-comparison .daylight .list-row{display:grid;grid-template-columns:30px minmax(0,1fr) auto;gap:10px;align-items:center;padding:15px 1px;border-bottom:1px solid var(--line)}
+#today-comparison .list-row>svg{width:19px;height:19px;color:var(--green)}#today-comparison .list-row strong{display:block;font-size:calc(13px * var(--type));font-weight:550}#today-comparison .list-row span{font-size:calc(11px * var(--type));color:var(--muted)}#today-comparison .list-value{font-size:calc(20px * var(--type));font-weight:550;letter-spacing:-.5px;text-align:right}
+#today-comparison .daylight .sleep-caption{line-height:1.55}
+#today-comparison .empty-note{display:none;padding:16px 0;font-size:calc(14px * var(--type));color:var(--muted)}
+#today-comparison .empty .data-content{display:none}#today-comparison .empty .empty-note{display:block}
+#today-comparison .empty .body > :not(:first-child):not([data-notice]){display:none}
+#today-comparison .large .hero-summary{grid-template-columns:1fr}#today-comparison .large .ring{width:104px;height:104px}#today-comparison .large .ring-number{font-size:36px}
+#today-comparison .large .ring-value-external{display:block}#today-comparison .ring-value-external{display:none;font-weight:600;font-size:calc(18px * var(--type))}
+#today-comparison .large .ring .ring-copy{display:none}#today-comparison .large .ring{display:none}
+#today-comparison .large .pair,#today-comparison .large .dense-grid{grid-template-columns:1fr}#today-comparison .large .stress-layout{grid-template-columns:1fr}#today-comparison .large .signal-summary,#today-comparison .large .editorial-top{flex-wrap:wrap}#today-comparison .large .evidence{grid-template-columns:1fr}
+#today-comparison .large .navitem{font-size:12px}#today-comparison .large .titlebar{align-items:flex-start;flex-wrap:wrap}
+#today-comparison .large .signal-score{font-size:70px}#today-comparison .large .editorial-number{font-size:88px}
+@container (max-width:340px){#today-comparison .hero-summary{grid-template-columns:104px minmax(0,1fr);gap:12px}#today-comparison .ring{width:104px;height:104px}#today-comparison .hero .guide{font-size:calc(18px * var(--type))}#today-comparison .titlebar{padding-top:16px}#today-comparison .tools{gap:2px}}
+@media(prefers-reduced-motion:reduce){#today-comparison *{animation:none!important;transition:none!important}}
+#today-comparison .stage{min-height:var(--stage-height,1160px)}
+#today-comparison .body{gap:14px}
+#today-comparison .text-action{border:0;background:transparent;padding:4px 0;min-height:36px;display:inline-flex;align-items:center;justify-content:space-between;gap:8px;font-size:calc(12px * var(--type));color:var(--gold);text-align:left;max-width:100%}
+#today-comparison .text-action svg{width:14px;height:14px;flex:none}
+#today-comparison .hero-block{position:relative;min-width:0}
+#today-comparison .hero-link{position:absolute;width:44px;height:44px;right:10px;top:6px;border:0;background:transparent;color:transparent;font-size:0;border-radius:12px;z-index:2}
+#today-comparison .hero-link svg{width:16px;height:16px;color:#dfa777}
+#today-comparison .hero .section-top>span:last-child{visibility:hidden}
+#today-comparison .surface h2{font-size:calc(19px * var(--type));line-height:1.35;letter-spacing:-.5px;margin:7px 0 8px}
+#today-comparison .surface p{font-size:calc(12px * var(--type));line-height:1.55;margin:6px 0;overflow-wrap:anywhere}
+#today-comparison .state-card{padding:20px;background:var(--panel)}
+#today-comparison .state-card>p{color:var(--muted);font-size:calc(14px * var(--type))}
+#today-comparison .state-icon{width:42px;height:42px;display:grid;place-items:center;border-radius:14px;background:color-mix(in srgb,var(--gold) 13%,var(--panel));color:var(--gold)}
+#today-comparison .state-icon svg{width:22px;height:22px}
+#today-comparison .freshness-banner,#today-comparison .history-notice{color:var(--muted);font-size:calc(12px * var(--type));line-height:1.5;padding:0 2px 8px}
+#today-comparison .history-notice{padding:0 2px}
+#today-comparison .inline-status{display:flex;align-items:center;gap:8px;background:var(--panel);border-radius:14px;padding:12px;font-size:calc(12px * var(--type));border:1px solid var(--line)}
+#today-comparison .inline-status>svg{width:18px;height:18px;flex:none;color:var(--gold)}
+#today-comparison .inline-status.error{border-color:var(--gold)}
+#today-comparison .progress-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+#today-comparison .progress-label{display:flex;gap:6px;align-items:center;font-size:calc(12px * var(--type));flex-wrap:wrap}
+#today-comparison .progress-label svg{width:14px;height:14px;color:var(--gold)}
+#today-comparison .progress-label b{margin-left:auto;font-size:calc(11px * var(--type));font-weight:500;color:var(--muted)}
+#today-comparison .progress-value{font-size:calc(22px * var(--type));font-weight:600;letter-spacing:-.8px;margin-top:6px;overflow-wrap:anywhere;line-height:1.25}
+#today-comparison .progress-value small{font-size:calc(12px * var(--type));font-weight:400;margin-left:4px}
+#today-comparison .progress-grid .meter{margin:9px 0 6px}#today-comparison .progress-grid>div:last-child .meter i{background:var(--violet)}
+#today-comparison .weather-mini{display:flex;gap:10px;align-items:center;text-align:left;min-width:0;border:0;background:transparent;padding:0;min-height:44px}
+#today-comparison .weather-mini>svg:first-child{width:25px;height:25px;color:var(--gold);flex:none}
+#today-comparison .weather-mini div{flex:1;min-width:0}#today-comparison .weather-mini strong{display:block;font-size:calc(15px * var(--type));font-weight:550}#today-comparison .weather-mini span{display:block;color:var(--muted);font-size:calc(11px * var(--type));margin-top:2px}
+#today-comparison .brief-grid>p{color:var(--muted);margin-top:12px}
+#today-comparison .brief-full>.text-action{width:100%;margin-top:6px;border-top:1px solid var(--line);padding-top:10px}
+#today-comparison .sleep-insight{font-size:calc(12px * var(--type));color:var(--muted);margin-top:10px}
+#today-comparison .sleep>.text-action{width:100%;margin-top:5px}
+#today-comparison .stress-compact{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:14px}
+#today-comparison .stress-score{font-size:calc(36px * var(--type));font-weight:600;line-height:1.1;letter-spacing:-1px;color:var(--text)}
+#today-comparison .stress-score small{font-size:calc(11px * var(--type));font-weight:400;letter-spacing:0;color:var(--muted);margin-left:3px}
+#today-comparison .stress-compact>div>b{font-size:calc(17px * var(--type));font-weight:550;color:var(--green)}
+#today-comparison .stress-compact>div>p{font-size:calc(11px * var(--type));color:var(--muted);line-height:1.45;margin:4px 0 0}
+#today-comparison .evidence-disclosure{margin-top:12px}
+#today-comparison .evidence-disclosure summary{min-height:44px;color:var(--gold);font-size:calc(12px * var(--type))}
+#today-comparison .evidence-lines{display:grid;gap:7px;padding:0 0 10px}
+#today-comparison .evidence-lines p{margin:0;color:var(--muted);font-size:calc(12px * var(--type))}
+#today-comparison .insights>.section-top{padding:0 3px}
+#today-comparison .insight-row{display:flex;gap:10px;padding:14px;background:var(--panel);border:1px solid var(--line);border-radius:16px;margin-top:8px;align-items:flex-start;min-width:0}
+#today-comparison .insight-row>svg{width:20px;height:20px;color:var(--gold);flex:none;margin-top:2px}
+#today-comparison .insight-row>div{flex:1;min-width:0}
+#today-comparison .insight-row b{font-size:calc(13px * var(--type));font-weight:550}
+#today-comparison .insight-row p{font-size:calc(12px * var(--type));color:var(--muted);margin:4px 0 0;line-height:1.5;overflow-wrap:anywhere}
+#today-comparison .dismiss{display:grid;place-items:center;min-width:32px;min-height:32px;border:0;background:transparent;border-radius:10px;color:var(--muted);flex:none;padding:0}
+#today-comparison .dismiss svg{width:15px;height:15px}
+#today-comparison .save-template{display:inline-flex;align-items:center;gap:7px;min-height:40px;padding:8px 13px;border:0;border-radius:12px;background:var(--green);color:light-dark(#fffdfa,#182016);font-size:calc(12px * var(--type));font-weight:550;margin-top:10px;text-align:left;max-width:100%}
+#today-comparison .save-template svg{width:14px;height:14px;flex:none}
+#today-comparison .recap-values{display:flex;gap:10px 18px;flex-wrap:wrap;font-size:calc(12px * var(--type));color:var(--muted)}
+#today-comparison .recap-values b{font-size:calc(16px * var(--type));font-weight:550;color:var(--text)}
+#today-comparison .quick-actions{display:flex;gap:8px;flex-wrap:wrap}
+#today-comparison .quick-actions button{display:flex;align-items:center;gap:7px;background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:9px 14px;min-height:44px;font-size:calc(13px * var(--type));font-weight:500}
+#today-comparison .quick-actions svg{width:17px;height:17px;color:var(--gold)}
+#today-comparison .data-section{min-width:0}#today-comparison .data-section>.section-top{margin:3px 3px 10px}
+#today-comparison .metric-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+#today-comparison .metric-tile{min-width:0;border:1px solid var(--line);border-radius:17px;padding:13px;background:var(--panel)}
+#today-comparison .metric-tile:last-child:nth-child(odd){grid-column:1/-1}
+#today-comparison .metric-open{display:block;border:0;background:transparent;text-align:left;padding:0;width:100%}
+#today-comparison .metric-top{display:flex;justify-content:space-between;align-items:flex-start;gap:7px;flex-wrap:wrap;font-size:calc(12px * var(--type));color:var(--muted)}
+#today-comparison .metric-top .label-icon{align-items:flex-start;gap:5px}
+#today-comparison .metric-top .label-icon>svg{width:14px;height:14px;flex:none;margin-top:2px;color:var(--gold)}
+#today-comparison .age{font-size:calc(11px * var(--type));color:var(--muted)}#today-comparison .age.old{text-decoration:underline;text-decoration-style:dotted;text-underline-offset:3px}
+#today-comparison .metric-number{display:block;font-size:calc(25px * var(--type));font-weight:600;letter-spacing:-.8px;line-height:1.2;margin-top:6px;color:var(--gold);overflow-wrap:anywhere}
+#today-comparison .metric-number small{font-size:calc(12px * var(--type));font-weight:400;margin-left:4px;letter-spacing:0;color:var(--muted)}
+#today-comparison .metric-delta{display:block;font-size:calc(11px * var(--type));color:var(--muted);margin-top:8px;line-height:1.45}
+#today-comparison .metric-delta b{font-weight:550;color:var(--green)}
+#today-comparison .metric-spark{display:block;height:26px;width:100%;color:var(--gold);margin-top:12px}
+#today-comparison .metric-tile .axis{font-size:calc(11px * var(--type));flex-wrap:wrap}
+#today-comparison .sample-note{font-size:calc(11px * var(--type));color:var(--muted);line-height:1.5;margin-top:9px;overflow-wrap:anywhere}
+#today-comparison .updated{font-size:calc(11px * var(--type));color:var(--muted);text-align:right;line-height:1.4}
+#today-comparison .record-list{border:1px solid var(--line);border-radius:18px;background:var(--panel);padding:0 13px}
+#today-comparison .record-row{display:grid;grid-template-columns:18px minmax(0,1fr) auto 14px;gap:9px;align-items:center;width:100%;text-align:left;background:transparent;border:0;border-bottom:1px solid var(--line);padding:12px 0;min-height:63px}
+#today-comparison .record-row>svg{width:17px;height:17px;color:var(--green)}
+#today-comparison .record-label{min-width:0}.record-label b{display:block;font-size:calc(12px * var(--type));font-weight:500;overflow-wrap:anywhere}
+#today-comparison .record-label>span{display:block;color:var(--muted);font-size:calc(11px * var(--type));margin-top:3px}
+#today-comparison .record-row>strong{font-size:calc(19px * var(--type));font-weight:550;color:var(--gold);white-space:nowrap}
+#today-comparison .record-row strong small{font-size:calc(11px * var(--type));font-weight:400;margin-left:4px;color:var(--muted)}
+#today-comparison .record-more{margin:0;border:0}#today-comparison .record-more summary{color:var(--gold)}
+#today-comparison .qa-row{display:flex;align-items:center;gap:11px;text-align:left;width:100%;background:var(--panel);border:1px solid var(--line);border-radius:19px;padding:15px;min-height:64px}
+#today-comparison .qa-row>svg:first-child{width:24px;height:24px;color:var(--green);flex:none}
+#today-comparison .qa-row>span{flex:1;min-width:0}#today-comparison .qa-row b{display:block;font-size:calc(13px * var(--type));font-weight:550}#today-comparison .qa-row small{display:block;font-size:calc(11px * var(--type));color:var(--muted);margin-top:4px}
+#today-comparison .back-action{display:inline-flex;align-items:center;gap:6px;justify-self:start;background:transparent;border:0;padding:0;min-height:44px;color:var(--gold)}
+#today-comparison .back-action svg{width:19px;height:19px}
+#today-comparison .pin-option{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:13px 0;border-bottom:1px solid var(--line);font-size:calc(14px * var(--type))}
+#today-comparison .pin-option input{width:20px;height:20px;accent-color:var(--gold)}
+#today-comparison .weight-field{display:flex;align-items:center;gap:10px;font-size:calc(14px * var(--type));margin:20px 0}
+#today-comparison .weight-field input{width:100%;min-width:0;font:inherit;background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:12px;padding:12px}
+#today-comparison .notification-item{padding:13px 0;border-bottom:1px solid var(--line);font-size:calc(14px * var(--type))}
+#today-comparison .loading-state{display:grid;gap:12px}#today-comparison .skeleton-hero{height:190px;border-radius:22px;background:color-mix(in srgb,var(--panel) 85%,var(--gold))}#today-comparison .skeleton-row{height:90px;border-radius:18px;background:var(--panel)}#today-comparison .loading-state p{font-size:calc(13px * var(--type));color:var(--muted);text-align:center}
+#today-comparison .enhanced-contrast{--muted:light-dark(#494139,#e5d9ca);--line:light-dark(#a79582,#a58d74)}
+#today-comparison .reduced *,#today-comparison .reduced *:before,#today-comparison .reduced *:after{animation:none!important;transition:none!important}
+#today-comparison .large .progress-grid,#today-comparison .large .metric-grid{grid-template-columns:1fr}
+#today-comparison .large .stress-compact{grid-template-columns:auto minmax(0,1fr)}#today-comparison .large .stress-compact>.text-action{grid-column:1/-1;justify-content:flex-end}
+#today-comparison .large .record-row{grid-template-columns:18px minmax(0,1fr) auto}#today-comparison .large .record-row>.chevron{display:none}#today-comparison .large .record-row>strong{grid-column:2/-1;justify-self:start}
+#today-comparison .large .hero-link{position:static;width:100%;height:auto;min-height:44px;font-size:calc(12px * var(--type));color:var(--gold);display:flex;justify-content:space-between;align-items:center;padding:8px 3px 0}
+#today-comparison .large .insight-row{gap:7px}#today-comparison .large .insight-row>svg{display:none}
+@container (min-width:680px){#today-comparison .phone .body:not(.route-body){grid-template-columns:repeat(2,minmax(0,1fr));align-items:start;gap:16px}#today-comparison .hero-block,#today-comparison .data-section,#today-comparison .insights,#today-comparison .quick-actions,#today-comparison .updated,#today-comparison .inline-status,#today-comparison .history-notice,#today-comparison .loading-state,#today-comparison .state-card,#today-comparison .qa-row{grid-column:1/-1}#today-comparison .phone .metric-grid{grid-template-columns:repeat(3,minmax(0,1fr))}#today-comparison .metric-tile:last-child:nth-child(odd){grid-column:auto}#today-comparison .phone .hero-summary{grid-template-columns:104px minmax(0,1fr)}#today-comparison .phone .bottomnav{max-width:440px;margin-inline:auto}#today-comparison .large .metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(pointer:coarse){#today-comparison .dismiss{min-width:44px;min-height:44px}}
+
+#today-comparison .horizon i{left:clamp(4px,var(--score,52%),calc(100% - 4px))}
+#today-comparison .collapsed .titlebar{padding-top:10px;min-height:62px}#today-comparison .collapsed .titlebar>div:first-child{flex:1;text-align:center}#today-comparison .collapsed h1{font-size:calc(17px * var(--type));letter-spacing:-.3px}#today-comparison .collapsed .date{display:none}
+#today-comparison .detail-pairs{display:grid;margin-top:18px}#today-comparison .detail-pairs p{display:flex;justify-content:space-between;align-items:center;gap:10px;border-bottom:1px solid var(--line);padding:12px 0;margin:0;flex-wrap:wrap;font-size:calc(13px * var(--type))}#today-comparison .detail-pairs b{font-weight:550;color:var(--gold)}#today-comparison .detail-pairs span{color:var(--green)}
+#today-comparison .section-top{font-size:calc(14px * var(--type))}
+#today-comparison .surface p{font-size:calc(14px * var(--type))}
+#today-comparison .insight-row b{font-size:calc(14px * var(--type))}
+#today-comparison .insight-row p{font-size:calc(13px * var(--type))}
+#today-comparison .metric-top{font-size:calc(13px * var(--type))}
+#today-comparison .metric-number{font-size:calc(28px * var(--type))}
+#today-comparison .record-label b{font-size:calc(14px * var(--type))}
+#today-comparison .qa-row b{font-size:calc(14px * var(--type))}
+#today-comparison .phone.large .hero-summary{grid-template-columns:1fr}
+#today-comparison .alternative-trend{margin-top:14px;padding-top:10px;border-top:1px solid var(--line)}
+#today-comparison .hero .alternative-trend{border-color:#92765b55}
+#today-comparison .editorial-hero .trend-head,#today-comparison .editorial-hero .axis{color:var(--muted)}
+#today-comparison .editorial-hero .trend path[stroke]{stroke:var(--gold)}
+#today-comparison .editorial-hero .trend circle{fill:var(--gold)}
+#today-comparison .bottomnav{backdrop-filter:blur(18px) saturate(1.15)}
+#today-comparison .ring-copy{position:absolute;inset:0;display:grid;place-items:center;text-align:center;pointer-events:none}
+#today-comparison .ring-number{line-height:1;text-align:center}
+#today-comparison .sleep .section-top,#today-comparison .stress-full .section-top{margin-bottom:6px}
+
+#today-comparison .comparison-scroll{overflow-x:auto;padding:4px 8px 28px;overscroll-behavior-x:contain}
+#today-comparison .comparison-board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;min-width:984px;max-width:1360px;margin:0 auto;align-items:start}
+#today-comparison .comparison-column{min-width:0}
+#today-comparison .comparison-name{margin:0;padding:8px 2px;text-align:center;color:var(--foreground);font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px;line-height:1.4;font-weight:500}
+#today-comparison .stage{min-height:0;padding:6px 0 12px;display:flex;justify-content:center;align-items:flex-start}
+#today-comparison .phone{box-shadow:0 8px 24px #0002,0 0 0 1px #8883}
+</style>
+<div id="today-comparison" aria-label="Today 세 시안 동시 비교">
+  <div class="comparison-scroll viz-dotted-background" aria-label="세 시안 비교 영역">
+    <div class="comparison-board">
+      <section class="comparison-column" aria-label="Compact 시안"><h3 class="comparison-name">Compact</h3><div class="stage"><div class="phone focus" data-design="focus" aria-label="Compact Today"></div></div></section>
+      <section class="comparison-column" aria-label="Metrics 시안"><h3 class="comparison-name">Metrics</h3><div class="stage"><div class="phone signal" data-design="signal" aria-label="Metrics Today"></div></div></section>
+      <section class="comparison-column" aria-label="Editorial 시안"><h3 class="comparison-name">Editorial</h3><div class="stage"><div class="phone daylight" data-design="daylight" aria-label="Editorial Today"></div></div></section>
+    </div>
+  </div>
+</div>
+<script>
+(()=>{
+const root=document.getElementById('today-comparison');
+const icon=(name)=>`<i data-lucide="${name}" aria-hidden="true"></i>`;
+const chevron=`<i class="chevron" data-lucide="chevron-right" aria-hidden="true"></i>`;
+const chrome=`<div class="dunes" aria-hidden="true"><div class="dune-layer far"></div><div class="dune-layer mid"></div><div class="dune-layer near"></div></div><div class="chrome"><div class="status"><span>9:41</span><div class="island" aria-hidden="true"></div><span class="signals">${icon('signal')}${icon('wifi')}${icon('battery-full')}</span></div><header class="titlebar"><div><h1>Today</h1><div class="date">10월 26일 월요일</div></div><div class="tools"><button class="tool cursor-interaction" data-message="새로운 소식 2개" aria-label="알림 2개">${icon('bell')}<span class="badge"></span></button><button class="tool cursor-interaction" data-message="시안 보기 설정은 디자인 조절 메뉴에서 변경할 수 있어요." aria-label="설정">${icon('settings-2')}</button></div></header></div>`;
+const nav=`<nav class="bottomnav" aria-label="탭"><button class="navitem selected cursor-interaction" aria-current="page" data-message="Today 탭을 보고 있어요.">${icon('clipboard-list')}Today</button><button class="navitem cursor-interaction" data-message="Activity는 다음 디자인 단계에서 다뤄요.">${icon('flame')}Activity</button><button class="navitem cursor-interaction" data-message="Wellness는 다음 디자인 단계에서 다뤄요.">${icon('leaf')}Wellness</button><button class="navitem cursor-interaction" data-message="Life는 다음 디자인 단계에서 다뤄요.">${icon('list-checks')}Life</button></nav><div class="home" aria-hidden="true"></div>`;
+const empty=`<div class="empty-note">아직 기록이 없어요.<br>Apple Health와 연결하면 오늘의 흐름을 볼 수 있어요.</div>`;
+const ring=(id)=>`<div class="ring" role="img" aria-label="컨디션 52점, 100점 중 52점"><svg viewBox="0 0 104 104" aria-hidden="true"><defs><linearGradient id="${id}-ring"><stop stop-color="#e2b453"/><stop offset=".55" stop-color="#f4d678"/><stop offset="1" stop-color="#b2d59a"/></linearGradient></defs><circle cx="52" cy="52" r="48.5" fill="none" stroke="#d7c98c" stroke-opacity=".12" stroke-width="7"/><circle cx="52" cy="52" r="48.5" fill="none" stroke="url(#${id}-ring)" stroke-width="7" stroke-linecap="round" class="ring-progress" pathLength="100" stroke-dasharray="52 100" transform="rotate(-90 52 52)"/></svg><div class="ring-copy"><div class="ring-number">52</div></div></div>`;
+const trend=(id)=>`<div class="trend-head"><span>컨디션 추세</span><span>최근 7일 · 점수</span></div><svg class="trend" viewBox="0 0 330 47" preserveAspectRatio="none" role="img" aria-label="최근 7일 컨디션 68, 72, 65, 61, 58, 47, 52점"><defs><linearGradient id="${id}-area" x2="0" y2="1"><stop stop-color="#dfc58b" stop-opacity=".22"/><stop offset="1" stop-color="#dfc58b" stop-opacity="0"/></linearGradient></defs><path d="M2 14 L56 9 L110 18 L164 23 L218 27 L272 41 L328 35 L328 47 L2 47Z" fill="url(#${id}-area)"/><path d="M2 14 L56 9 L110 18 L164 23 L218 27 L272 41 L328 35" fill="none" stroke="#dfc58b" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linejoin="round"/><circle cx="328" cy="35" r="3" fill="#ebdbb6"/></svg><div class="axis"><span>10.20</span><span>오늘 · 52</span></div>`;
+const sleep=(id,weekly=false)=>`<article class="surface sleep"><div class="section-top"><span class="label-icon">${icon('moon')}회복 & 수면</span><span class="muted tiny">10월 25일</span></div><div class="data-content"><div class="sleep-numbers"><div class="value">7<small>시간</small>23<small>분</small></div><div class="debt">수면 부채<b>45분</b></div></div>${weekly?`<div class="bars" role="img" aria-label="최근 7일 수면 6.4, 7.8, 7.1, 6.8, 8.1, 7.9, 7.38시간">${[64,78,71,68,81,79,74].map(h=>`<i style="--h:${h}%"></i>`).join('')}</div><div class="axis"><span>10.19 · 최근 7일</span><span>10.25 · 시간</span></div>`:`<div class="timeline" role="img" aria-label="예시 수면 구간, 23시 42분부터 7시 5분까지">${[8,12,7,15,6,11,4,12,9,8,7,13,8,5].map((s,i)=>`<i style="--seg:${s};--o:${[.5,.75,1,.75][i%4]}"></i>`).join('')}</div><div class="axis"><span>23:42</span><span>수면 구간</span><span>07:05</span></div><div class="sleep-legend"><span><i></i>깊은 수면</span><span><i style="opacity:.75"></i>코어</span><span><i style="opacity:.5"></i>REM</span><span class="muted">수면 상세 ↗</span></div>`}</div>${empty}</article>`;
+const stress=`<article class="surface"><div class="section-top"><span class="label-icon">${icon('activity')}누적 스트레스</span><span class="muted tiny">최근 기록 기준</span></div><div class="data-content"><div class="stress-layout"><div class="stress-number">보통<small>최근 흐름이 안정적이에요</small></div><svg class="stress-chart" viewBox="0 0 113 36" role="img" aria-label="최근 기록에서 완만하게 낮아진 스트레스 추세"><path d="M2 12 L19 16 L36 10 L53 21 L70 18 L87 25 L110 23" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round"/><circle cx="110" cy="23" r="2.5" fill="currentColor"/></svg></div><div class="stress-bottom"><span>HRV · 안정 심박 기반 추정</span><span>상세 ↗</span></div></div>${empty}</article>`;
+const progress=`<div class="pair"><article class="surface"><div class="section-top"><span class="label-icon">${icon('footprints')}걸음</span></div><div class="data-content"><div class="value">6,240<small>보</small></div><div class="meter"><i style="--p:62.4%"></i></div><div class="tiny muted">목표 10,000보 · 62%</div></div>${empty}</article><article class="surface"><div class="section-top"><span class="label-icon">${icon('timer')}운동 시간</span></div><div class="data-content"><div class="value">32<small>분</small></div><div class="meter"><i style="--p:71.1%"></i></div><div class="tiny muted">목표 45분 · 71%</div></div>${empty}</article></div>`;
+const brief=`<div class="brief"><div class="brief-icon">${icon('sparkles')}</div><div><strong>오늘의 브리프</strong><p>컨디션·수면·활동을 한눈에</p></div>${chevron}</div><details class="cursor-interaction"><summary>핵심 지표 더 보기${chevron}</summary><p class="data-content">HRV 38 ms · 안정 심박 54 bpm<br>컨디션은 평소보다 낮고, 수면은 7시간 23분이에요.</p>${empty}</details>`;
+const evidence=`<div class="evidence"><div><span>HRV <small>14일 평균 대비</small></span><b>−5 ms</b></div><div><span>안정 심박 <small>평균 대비</small></span><b>−3 bpm</b></div></div>`;
+const focus=`<article class="surface hero"><div class="section-top"><span class="eyebrow">CONDITION</span><span class="tiny muted">상세 ↗</span></div><div class="data-content"><div class="hero-summary">${ring('focus')}<div><div class="ring-value-external">컨디션 52점</div><div class="guide">회복에 여유를<br>주세요</div><p class="support">HRV가 평소보다 낮아요.<br>오늘은 가벼운 흐름으로.</p></div></div>${trend('focus')}${evidence}</div>${empty}</article>${sleep('focus')}${stress}${progress}${brief}`;
+const signal=`<article class="surface hero"><div class="section-top"><span class="eyebrow">CONDITION</span><span class="tiny muted">상세 ↗</span></div><div class="data-content"><div class="signal-summary"><div class="signal-score">52<small> / 100</small></div><div><div class="guide">회복에<br>여유를 주세요</div><div class="support">평소보다 낮은 컨디션</div></div></div><div class="gauge"><i></i></div><div class="axis"><span>낮음</span><span>컨디션 범위</span><span>높음</span></div></div>${empty}</article><div class="dense-grid">${[['HRV','38','ms','−5 ms','M1 24 L22 18 L43 20 L64 8 L85 15 L106 23 L128 20'],['안정 심박','54','bpm','−3 bpm','M1 7 L22 15 L43 11 L64 18 L85 23 L106 19 L128 25']].map(d=>`<article class="surface"><div class="section-top">${d[0]}<span class="muted tiny">상세 ↗</span></div><div class="data-content"><div class="value">${d[1]}<small>${d[2]}</small></div><svg class="spark" viewBox="0 0 130 30" role="img" aria-label="${d[0]} 최근 7일 예시 추세"><path d="${d[4]}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><div class="delta">${d[3]}<span class="muted"> · 14일 평균 대비</span></div></div>${empty}</article>`).join('')}${sleep('signal',true)}</div>${stress}${progress}${brief}`;
+const daylight=`<article class="editorial-hero"><div class="eyebrow">TODAY'S CONDITION</div><div class="data-content"><div class="editorial-top"><div class="editorial-number">52</div><div><div class="guide">천천히,<br>나의 리듬대로.</div><p class="support">회복에 여유를 주세요.</p></div></div><div class="horizon" role="img" aria-label="컨디션 100점 중 52점"><i></i></div><div class="editorial-signals"><span>HRV<b>38 ms</b></span><span>안정 심박<b>54 bpm</b></span><span>컨디션 상세 ↗</span></div></div>${empty}</article><div class="pair"><article class="surface"><div class="section-top"><span class="label-icon">${icon('moon')}지난 수면</span></div><div class="data-content"><div class="value">7<small>시간</small>23<small>분</small></div><div class="sleep-caption">10월 25일<br>수면 부채 45분</div></div>${empty}</article><article class="surface"><div class="section-top"><span class="label-icon">${icon('activity')}누적 스트레스</span></div><div class="data-content"><div class="value">보통</div><svg class="spark" viewBox="0 0 130 30" role="img" aria-label="최근 기록의 스트레스 예시 추세"><path d="M1 7 L22 15 L43 11 L64 18 L85 23 L106 19 L128 25" fill="none" stroke="currentColor" stroke-width="2"/></svg><div class="tiny muted">최근 기록 기준</div></div>${empty}</article></div><article class="surface"><div class="section-top"><span class="label-icon">${icon('chart-no-axes-combined')}컨디션의 흐름</span><span class="tiny muted">최근 7일</span></div><div class="data-content"><svg class="spark" style="height:48px" viewBox="0 0 330 48" role="img" aria-label="최근 7일 컨디션 68, 72, 65, 61, 58, 47, 52점"><path d="M2 14 L56 9 L110 18 L164 23 L218 27 L272 41 L328 35" stroke="currentColor" stroke-width="2" fill="none"/></svg><div class="axis"><span>10.20</span><span>10.26 · 52점</span></div><div class="sleep-caption">HRV −5 ms · 안정 심박 −3 bpm<br>각 지표의 14일 평균 대비</div></div>${empty}</article><section><div class="section-top" style="margin:5px 0 0">오늘의 움직임<span class="tiny muted">목표 진행</span></div><div class="list-row">${icon('footprints')}<div><strong>걸음</strong><span>10,000보 목표</span></div><div class="list-value data-content">6,240<span> 보</span></div></div><div class="list-row">${icon('timer')}<div><strong>운동 시간</strong><span>45분 목표</span></div><div class="list-value data-content">32<span> 분</span></div></div>${empty}</section>${brief}`;
+const session={pins:['hrv','rhr','sleep'],dismissed:new Set(),route:null,unread:2};
+const defaults={text:100,width:440,appearance:'auto',ambience:60,data:'complete',time:'day',hour:14,locale:'ko',progress:'normal',score:52,stress:20,motion:true,contrast:false,header:'top',restDay:false};
+const saved=window.openai?.widgetState?.modelContent?.todayDesign;
+const state={...defaults,...(saved||{})};
+const tr=(ko,en,ja)=>state.locale==='en'?en:state.locale==='ja'?ja:ko;
+const action=(label,route,extra='')=>`<button type="button" class="text-action cursor-interaction" data-route="${route}" ${extra}>${label}${chevron}</button>`;
+const head=(label,ic,tail='')=>`<div class="section-top"><span class="label-icon">${icon(ic)}${label}</span>${tail}</div>`;
+const timeLabel=(days)=>days===0?tr('오늘','Today','今日'):days===1?tr('어제','Yesterday','昨日'):tr(`${days}일 전`,`${days} days ago`,`${days}日前`);
+const metricDefs=[
+ {id:'hrv',name:['HRV','HRV','HRV'],value:'30',unit:'ms',days:1,ic:'activity',history:[34,31,35,32,33,31,30],delta:'−5 ms'},
+ {id:'rhr',name:['안정 심박','Resting heart rate','安静時心拍数'],value:'63',unit:'bpm',days:1,ic:'heart',history:[67,66,68,64,65,64,63],delta:'−3 bpm'},
+ {id:'sleep',name:['수면','Sleep','睡眠'],value:'7시간 23분',unit:'',days:1,ic:'moon',history:[6.4,7.8,7.1,6.8,8.1,7.9,7.38]},
+ {id:'steps',name:['걸음','Steps','歩数'],value:'13,523',unit:tr('보','steps','歩'),days:1,ic:'footprints',history:[8200,9400,6200,11400,10300,7633,13523]},
+ {id:'exercise',name:['운동 시간','Exercise time','運動時間'],value:'54',unit:tr('분','min','分'),days:1,ic:'timer',history:[20,40,0,54,35,45,54]},
+ {id:'weight',name:['체중','Weight','体重'],value:'73.9',unit:'kg',days:3,ic:'weight',history:[]},
+ {id:'bmi',name:['BMI','BMI','BMI'],value:'25.2',unit:'',days:9,ic:'person-standing',history:[]}
+];
+const exercises=[['달리기','Running','ランニング','10.0','km',1,'footprints'],['체스트 프레스 머신','Chest Press Machine','チェストプレスマシン','20','min',1,'dumbbell'],['Stair Climbing','Stair Climbing','Stair Climbing','34','min',3,'footprints'],['숄더 프레스 머신','Shoulder Press Machine','ショルダープレスマシン','10','min',4,'dumbbell'],['시티드 케이블 로우','Seated Cable Row','シーテッドケーブルロウ','7','min',7,'dumbbell'],['랫 풀다운','Lat Pulldown','ラットプルダウン','11','min',7,'dumbbell'],['플랭크','Plank','プランク','9','min',22,'dumbbell']];
+function miniChart(metric){
+ if(state.data==='no-trend'||state.data==='partial'||!metric.history.length)return `<div class="sample-note">${tr('단일 기록 · 추세는 기록이 쌓이면 표시해요','Single record · trend appears with more data','単一記録 · データが増えると推移を表示')}</div>`;
+ const vals=metric.history,min=Math.min(...vals),max=Math.max(...vals),span=max-min||1;
+ const points=vals.map((v,i)=>`${i*48+2},${27-(v-min)/span*22}`).join(' ');
+ return `<svg class="metric-spark" viewBox="0 0 294 30" preserveAspectRatio="none" role="img" aria-label="${metric.name[state.locale==='en'?1:state.locale==='ja'?2:0]} ${tr('최근 7개 기록의 추세','Trend of last 7 records','直近7件の推移')}"><polyline points="${points}" fill="none" stroke="currentColor" stroke-width="1.8" vector-effect="non-scaling-stroke" stroke-linejoin="round"/></svg><div class="axis"><span>${tr('최근 7개 기록','Last 7 records','直近7件')}</span><span>${metric.id==='exercise'?tr('분','min','分'):metric.id==='steps'?tr('보','steps','歩'):metric.unit||tr('시간','hours','時間')}</span></div>`;
+}
+function metricCard(id){const m=metricDefs.find(x=>x.id===id);if(!m||(state.data==='partial'&&['hrv','weight','bmi'].includes(id)))return '';
+ const age=state.data==='stale'?Math.max(m.days,9):m.days;
+ const value=id==='sleep'?tr('7시간 23분','7h 23m','7時間23分'):m.value;
+ return `<article class="metric-tile" data-metric="${id}"><button class="metric-open cursor-interaction" data-route="metric:${id}" aria-label="${m.name[state.locale==='en'?1:state.locale==='ja'?2:0]} ${tr('상세','details','詳細')}"><span class="metric-top"><span class="label-icon">${icon(m.ic)}${m.name[state.locale==='en'?1:state.locale==='ja'?2:0]}</span><span class="age ${age>7?'old':''}">${timeLabel(age)}</span></span><span class="metric-number">${value}<small>${id==='steps'?tr('보','steps','歩'):id==='exercise'?tr('분','min','分'):m.unit}</small></span>${m.delta?`<span class="metric-delta">${tr('14일 평균 대비','vs 14-day average','14日平均比')} <b>${m.delta}</b></span>`:''}</button>${miniChart(m)}</article>`;
+}
+function group(title,ic,ids){const list=ids.filter(id=>!session.pins.includes(id));const cards=list.map(metricCard).join('');return cards?`<section class="data-section">${head(title,ic)}<div class="metric-grid">${cards}</div></section>`:'';}
+function message(title,body,route,label,ic='heart-handshake'){return `<article class="surface state-card"><span class="state-icon">${icon(ic)}</span><h2>${title}</h2><p>${body}</p>${route?action(label,route):''}</article>`;}
+function localized(html){
+ const pairs=[['평균 대비','vs average','平均比'],['컨디션 상세','Condition details','コンディション詳細'],['10월 17일','Oct 17','10月17日'],['평소 범위의 컨디션','Within your usual range','普段の範囲内'],['최근 컨디션','Latest condition','最近のコンディション'],['평소의 흐름을','Keep your','普段の流れを'],['이어가요','usual rhythm','続けましょう'],['컨디션 흐름을 확인해 보세요.','Review your condition trend.','コンディションの推移を確認しましょう。'],['오늘도 나의 페이스로.','Move at your own pace.','今日も自分のペースで。'],['회복 & 수면','Recovery & sleep','回復と睡眠'],['수면 부채','Sleep debt','睡眠負債'],['깊은 수면','Deep sleep','深い睡眠'],['수면 구간','Sleep stages','睡眠ステージ'],['코어','Core','コア'],['수면 상세','Sleep details','睡眠の詳細'],['10월 25일','Oct 25','10月25日'],['컨디션 추세','Condition trend','コンディション推移'],['최근 7일 · 점수','Last 7 days · score','過去7日 · スコア'],['오늘 · 52','Today · 52','今日 · 52'],['14일 평균 대비','vs 14-day average','14日平均比'],['안정 심박 평균 대비','RHR vs average','安静時心拍数 平均比'],['안정 심박','Resting HR','安静時心拍数'],['회복에 여유를','Give yourself','回復にゆとりを'],['주세요','room to recover','持ちましょう'],['HRV가 평소보다 낮아요.','HRV is below your usual.','HRVが普段より低めです。'],['오늘은 가벼운 흐름으로.','Keep your day gentle.','今日は穏やかなペースで。'],['오늘의 컨디션','Today’s condition','今日のコンディション'],['컨디션 52점','Condition 52','コンディション52'],['평소보다 낮은 컨디션','Below your usual','普段より低め'],['천천히,','Slow down,','ゆっくり、'],['나의 리듬대로.','find your rhythm.','自分のリズムで。'],['회복에 여유를 주세요.','Give yourself room to recover.','回復にゆとりを持ちましょう。'],['상세','Details','詳細'],['최근 7일','Last 7 days','過去7日'],['낮음','Low','低め'],['높음','High','高め'],['컨디션 범위','Condition range','コンディション範囲'],['시간','h','時間'],['분','m','分']];
+ if(state.locale!=='ko')for(const [ko,en,ja]of pairs.sort((a,b)=>b[0].length-a[0].length))html=html.split(ko).join(state.locale==='en'?en:ja);
+ if(state.locale!=='ko')html=html.replace(/컨디션 (\d+)점/g,state.locale==='en'?'Condition $1':'コンディション$1').replace(/오늘 · /g,state.locale==='en'?'Today · ':'今日 · ');return html;
+}
+function hero(design){
+ if(state.data==='calibrating')return message(tr('나의 기준을 만드는 중','Building your baseline','自分の基準を作成中'),tr('3일 기록을 모았어요. 기준선이 준비되면 컨디션을 표시해요.','3 days recorded. Your condition appears when your baseline is ready.','3日分を記録しました。基準が整うとコンディションを表示します。'),'condition',tr('기준선 알아보기','About your baseline','基準について'),'chart-no-axes-combined');
+ if(state.data==='partial')return message(tr('컨디션을 계산할 기록을 기다려요','Waiting for condition data','コンディションのデータを待っています'),tr('HRV 기록을 아직 받지 못했어요. 확인된 수면과 활동은 아래에서 볼 수 있어요.','HRV hasn’t arrived yet. Available sleep and activity remain below.','HRVはまだ届いていません。取得済みの睡眠と活動は下で確認できます。'),'condition',tr('측정 상태 보기','Measurement status','測定状況を見る'));
+ let html=({focus,signal,daylight})[design];html=html.slice(0,html.indexOf('</article>')+10);
+ if(state.data==='no-trend'){const marker='<div class="trend-head">';if(html.includes(marker)){const a=html.indexOf(marker),b=html.indexOf('<div class="evidence">',a);if(b>a)html=html.slice(0,a)+`<p class="sample-note">${tr('첫 점수를 기록했어요. 추세는 두 번째 기록부터 표시해요.','First score recorded. Trends begin with the next record.','最初のスコアです。次の記録から推移を表示します。')}</p>`+html.slice(b);}}
+ if(design!=='focus')html=html.replace('</article>',`<div class="alternative-trend">${state.data==='no-trend'?`<p class="sample-note">${tr('추세는 두 번째 기록부터 표시해요.','Trends appear with the next record.','次の記録から推移を表示します。')}</p>`:trend('alt-'+design)}</div></article>`);
+ html=html.replace(/>52</g,'>'+state.score+'<').replaceAll('컨디션 52점','컨디션 '+state.score+'점').replaceAll('중 52점','중 '+state.score+'점').replaceAll('오늘 · 52','오늘 · '+state.score).replaceAll(', 52점',', '+state.score+'점').replace('stroke-dasharray="52 100"','stroke-dasharray="'+state.score+' 100"').replace('38 ms','30 ms').replace('54 bpm','63 bpm');
+ html=html.replace(/<svg class="trend"[\s\S]*?<\/svg>/g,svg=>{const scores=[68,72,65,61,58,47,state.score],xs=[2,56,110,164,218,272,326],pts=scores.map((v,i)=>`${xs[i]} ${(44-v*.41).toFixed(2)}`),line='M'+pts.join(' L'),area=line+' L326 47 L2 47Z';let i=0;return svg.replace(/<path d="[^"]+"/g,()=>`<path d="${i++===0?area:line}"`).replace('cx="328" cy="35"',`cx="326" cy="${(44-state.score*.41).toFixed(2)}"`);});
+ if(state.score>=70)html=html.replaceAll('회복에 여유를<br>주세요','평소의 흐름을<br>이어가요').replaceAll('HRV가 평소보다 낮아요.','컨디션 흐름을 확인해 보세요.').replaceAll('평소보다 낮은 컨디션','평소 범위의 컨디션').replaceAll('오늘은 가벼운 흐름으로.','오늘도 나의 페이스로.');
+ html=html.replace('<div class="gauge"><i>','<div class="gauge"><i style="width:'+state.score+'%">').replace('<div class="horizon" role="img"','<div class="horizon" style="--score:'+state.score+'%" role="img"');
+ html=html.replace('class="ring-progress"',`class="ring-progress" style="opacity:${state.score===0?0:1}"`).replace('width:52%','width:'+state.score+'%');
+ if(state.data==='stale')html=`<div class="freshness-banner">${tr('9일 전 기록 · 오늘의 컨디션이 아니에요','9-day-old record · not today’s condition','9日前の記録 · 今日の状態ではありません')}</div>`+html;
+ if(state.data==='stale')html=html.replaceAll('오늘의 컨디션','최근 컨디션').replaceAll("TODAY'S CONDITION",'LATEST CONDITION').replaceAll('10.20','10.11').replaceAll('오늘 · '+state.score,'10.17 · '+state.score);
+ if(design==='signal')html=html.replace(/<div class="guide">[\s\S]*?<\/div>/,`<div class="guide">${state.score>=70?tr('평소의 흐름을<br>이어가요','Keep your<br>usual rhythm','普段の流れを<br>続けましょう'):tr('회복에<br>여유를 주세요','Give yourself<br>room to recover','回復に<br>ゆとりを')}</div>`);
+ html=localized(html);
+ return `<div class="hero-block" data-action="condition">${html}<button class="hero-link cursor-interaction" data-route="condition">${tr('컨디션 상세','Condition details','コンディション詳細')}${chevron}</button></div>`;
+}
+function dailyProgress(){if(state.time==='night')return '';
+ const missing=state.progress==='missing'||state.data==='stale',over=state.progress==='over';
+ const values=missing?['—','—']:over?['13,523','9시간 12분']:['6,240','7시간 23분'];
+ const perc=missing?[0,0]:over?[135,115]:[62,92];
+ return `<section class="surface progress-section">${head(tr('오늘의 진행','Today’s progress','今日の進捗'),'circle-gauge')}<div class="progress-grid">${['steps','sleep'].map((id,i)=>`<div><div class="progress-label">${icon(i?'moon':'footprints')}${i?tr('수면','Sleep','睡眠'):tr('걸음','Steps','歩数')}<b>${missing?'—':perc[i]+'%'}</b></div><div class="progress-value">${i?values[i].replace('시간',tr('시간','h','時間')).replace('분',tr('분','m','分')):values[i]}${!i&&!missing?`<small>${tr('보','steps','歩')}</small>`:''}</div><div class="meter"><i style="--p:${Math.min(100,perc[i])}%"></i></div><div class="tiny muted">${missing?tr('오늘 기록을 기다려요','Waiting for today’s data','今日の記録を待っています'):i?tr('8시간 목표','8-hour goal','8時間目標'):tr('10,000보 목표','10,000-step goal','10,000歩目標')}</div></div>`).join('')}</div></section>`;
+}
+function todayBrief(){if(!['morning','day'].includes(state.time))return '';
+ return `<article class="surface brief-full">${head(tr('오늘의 브리프','Today’s brief','今日のブリーフ'),'sparkles')}<div class="brief-grid"><button class="weather-mini cursor-interaction" data-route="weather">${icon(state.data==='partial'?'map-pin-off':'sun')}<div><strong>${state.data==='partial'?tr('위치 연결 필요','Enable location','位置情報を有効に'):tr('서울 18°','Seoul 18°','ソウル18°')}</strong><span>${state.data==='partial'?tr('날씨 없이도 기록을 볼 수 있어요','Your records are still available','天気がなくても記録は見られます'):tr('맑음 · 체감 17°','Clear · feels like 17°','晴れ · 体感17°')}</span></div>${chevron}</button><p>${tr('최근 컨디션과 수면을 함께 살펴보세요.','Review your recent condition alongside sleep.','最近のコンディションと睡眠を一緒に確認しましょう。')}</p></div>${action(tr('브리핑 열기','Open briefing','ブリーフィングを開く'),'briefing')}</article>`;
+}
+function recovery(){let html=sleep('full',true);
+ html=html.replace('<div class="bars"', '<div class="bars"');
+ if(state.data==='no-trend')html=html.replace(/<div class="bars"[\s\S]*?<\/div><div class="axis">[\s\S]*?<\/div>/,`<div class="sample-note">${tr('수면 기록 1개 · 그래프를 표시하지 않아요','One sleep record · no trend yet','睡眠記録1件 · グラフはまだありません')}</div>`);
+ if(state.data==='partial')html=html.replace(/<div class="debt">[\s\S]*?<\/div>/,`<div class="debt">${tr('수면 부채','Sleep debt','睡眠負債')}<b>—</b></div>`);
+ html=html.replace('</article>',`<div class="sleep-insight">${tr('지난 수면은 7시간 23분이에요.','Your last sleep was 7h 23m.','前回の睡眠は7時間23分です。')}</div>${action(tr('수면 상세','Sleep details','睡眠の詳細'),'metric:sleep')}</article>`);
+ if(state.data==='stale')html=html.replaceAll('10월 25일','10월 17일').replaceAll('10.19','10.11').replaceAll('10.25','10.17');return localized(html);
+}
+function stressPanel(){if(state.data==='partial'||state.data==='no-trend')return '';
+ const level=state.stress<30?tr('낮음','Low','低め'):state.stress<65?tr('보통','Moderate','通常'):tr('높음','Elevated','高め');
+ return `<article class="surface stress-full">${head(tr('장기 스트레스','Cumulative stress','長期ストレス'),'chart-no-axes-combined',`<span class="tiny muted">${tr('최근 기록 기준','Recent records','最近の記録に基づく')}</span>`)}<div class="stress-compact"><div class="stress-score">${state.stress}<small>/100</small></div><div><b style="color:${state.stress<30?'var(--green)':state.stress<65?'var(--gold)':'#d66f69'}">${level}</b><p>${tr('HRV·활동·수면 기반 추정','Estimate from HRV, activity and sleep','HRV・活動・睡眠に基づく推定')}</p></div>${action(tr('상세','Details','詳細'),'stress')}</div><details class="evidence-disclosure cursor-interaction"><summary>${tr('분석 근거','Analysis details','分析の根拠')}${chevron}</summary><div class="evidence-lines"><p>${tr('HRV 변동 · 최근 기록에서 관찰된 변화','HRV variability · recent observed changes','HRV変動 · 最近観測された変化')}</p><p>${tr('훈련 부하 · 확보된 활동 기록 기준','Training load · based on available activity','運動負荷 · 取得済みの活動記録に基づく')}</p><p>${tr('분석에 포함되지 않은 항목은 계산에서 제외돼요.','Unavailable factors are excluded from the calculation.','取得できない要因は計算から除外します。')}</p></div></details></article>`;
+}
+function smartContent(){const items=[];
+ if(['morning','day'].includes(state.time)&&!['stale','partial','calibrating'].includes(state.data)&&!state.restDay&&!session.dismissed.has('exercise'))items.push(`<article class="insight-row">${icon('dumbbell')}<div><b>${tr('오늘의 운동 제안','Today’s workout suggestion','今日の運動提案')}</b><p>${tr('최근 수면과 컨디션을 참고한 가벼운 루틴','A light routine based on recent sleep and condition','最近の睡眠と状態を参考にした軽いルーティン')}</p>${action(tr('제안 살펴보기','View suggestion','提案を見る'),'exercise')}</div><button class="dismiss cursor-interaction" data-dismiss="exercise" aria-label="${tr('운동 제안 닫기','Dismiss workout suggestion','運動提案を閉じる')}">${icon('x')}</button></article>`);
+ if(!['partial','calibrating'].includes(state.data)&&!session.dismissed.has('insight'))items.push(`<article class="insight-row">${icon('lightbulb')}<div><b>${tr('최근 회복 흐름','Your recovery trend','最近の回復の流れ')}</b><p>${tr('HRV가 평소보다 낮게 기록됐어요. 수면과 함께 살펴보세요.','HRV was below your usual. Review it alongside sleep.','HRVが普段より低めでした。睡眠と一緒に確認しましょう。')}</p></div><button class="dismiss cursor-interaction" data-dismiss="insight" aria-label="${tr('인사이트 닫기','Dismiss insight','インサイトを閉じる')}">${icon('x')}</button></article>`);
+ if(!session.dismissed.has('routine'))items.push(`<article class="insight-row">${icon('repeat-2')}<div><b>${tr('나의 루틴','Your routine','マイルーティン')}</b><p>Walking · ${tr('3회 반복 · 평균 14분','3 repeats · 14 min average','3回 · 平均14分')}</p><button class="save-template cursor-interaction" data-route="template">${icon('bookmark')}${tr('템플릿으로 저장','Save as template','テンプレートに保存')}</button></div><button class="dismiss cursor-interaction" data-dismiss="routine" aria-label="${tr('루틴 제안 닫기','Dismiss routine','ルーティン提案を閉じる')}">${icon('x')}</button></article>`);
+ return items.length?`<section class="insights">${head(tr('인사이트','Insights','インサイト'),'lightbulb')}${items.join('')}</section>`:'';
+}
+function recap(){if(state.hour<6||state.hour>=12)return '';
+ return `<article class="surface compact-recap">${head(tr('어제 돌아보기','Yesterday’s recap','昨日の振り返り'),'history')}<div class="recap-values"><span><b>13,523</b> ${tr('보','steps','歩')}</span><span><b>54</b> ${tr('분 운동','min exercise','分の運動')}</span><span><b>7h 23m</b> ${tr('수면','sleep','睡眠')}</span></div></article>`;
+}
+function digest(){if(!['evening','night'].includes(state.time))return '';
+ return `<article class="surface digest">${head(tr('오늘의 요약','Today’s digest','今日のまとめ'),'sunset')}<div class="recap-values"><span>${tr('컨디션','Condition','コンディション')} <b>${state.score}</b></span><span>${tr('걸음','Steps','歩数')} <b>6,240</b></span></div><details class="evidence-disclosure cursor-interaction"><summary>${tr('요약 전체 보기','Read full digest','まとめをすべて読む')}${chevron}</summary><p>${tr('오늘 기록된 컨디션과 활동을 정리했어요. 최신 기록 시각을 함께 확인해 주세요.','A summary of recorded condition and activity. Check the latest measurement times.','記録された状態と活動のまとめです。最新の記録時刻も確認してください。')}</p></details></article>`;
+}
+function exerciseRows(){return `<section class="data-section">${head(tr('최근 운동 기록','Recent workouts','最近の運動記録'),'dumbbell',`<span class="tiny muted">${tr('각 기록일 기준','By record date','各記録日を表示')}</span>`)}<div class="record-list">${exercises.slice(0,2).map(exerciseRow).join('')}<details class="record-more cursor-interaction"><summary>${tr('이전 운동 5개 더 보기','Show 5 earlier workouts','以前の運動5件を見る')}${chevron}</summary>${exercises.slice(2).map(exerciseRow).join('')}</details></div></section>`;}
+function exerciseRow(x){const title=x[state.locale==='en'?1:state.locale==='ja'?2:0];return `<button class="record-row cursor-interaction" data-route="workout:${x[1]}">${icon(x[6])}<span class="record-label"><b>${title}</b><span>${timeLabel(x[5])}</span></span><strong>${x[3]}<small>${x[4]==='min'?tr('분','min','分'):x[4]}</small></strong>${chevron}</button>`;}
+function pinSection(){return `<section class="data-section pinned">${head(tr('고정됨','Pinned','ピン留め'),'pin',`<button class="text-action cursor-interaction" data-route="pins">${tr('편집','Edit','編集')}</button>`)}${session.pins.map(metricCard).join('')?`<div class="metric-grid">${session.pins.map(metricCard).join('')}</div>`:`<p class="sample-note">${tr('자주 보는 지표를 고정해 보세요.','Pin the metrics you check most.','よく見る指標をピン留めしましょう。')}</p>`}</section>`;}
+function dashboard(design){
+ const d=state.data;
+ if(['no-records','denied','cloud-wait','error-empty'].includes(d))return message(...({
+  'no-records':[tr('아직 측정 기록이 없어요','No measurements yet','まだ測定記録がありません'),tr('기록이 쌓이면 컨디션과 건강 흐름을 보여 드려요.','Your condition and health trends appear as measurements arrive.','記録が増えるとコンディションと健康の推移が表示されます。'),'activity',tr('활동 살펴보기','View activity','活動を見る')],
+  'denied':[tr('건강 데이터 연결이 필요해요','Health access needed','ヘルスケアへのアクセスが必要です'),tr('설정에서 건강 데이터 접근을 허용하면 기록을 확인할 수 있어요.','Allow health data access in Settings to view your records.','設定でヘルスケアへのアクセスを許可すると記録が表示されます。'),'permissions',tr('설정 열기','Open Settings','設定を開く')],
+  'cloud-wait':[tr('동기화된 기록을 기다려요','Waiting for synced records','同期された記録を待っています'),tr('이 기기는 읽기 전용이에요. iPhone에서 동기화되면 기록이 나타나요.','This device is read-only. Records appear after syncing from iPhone.','このデバイスは読み取り専用です。iPhoneから同期されると表示されます。'),'retry',tr('다시 확인','Check again','再確認')],
+  'error-empty':[tr('기록을 불러올 수 없어요','Couldn’t load your records','記録を読み込めませんでした'),tr('연결 상태를 확인하고 다시 시도해 주세요.','Check your connection and try again.','接続を確認して、もう一度お試しください。'),'retry',tr('다시 시도','Try again','再試行')]
+ })[d]);
+ if(d==='initial-load')return `<div class="loading-state" role="status" aria-label="${tr('건강 기록 불러오는 중','Loading health records','健康記録を読み込み中')}"><div class="skeleton-hero"></div><div class="skeleton-row"></div><div class="skeleton-row"></div><p>${tr('기록을 불러오고 있어요','Loading your records','記録を読み込んでいます')}</p></div>`;
+ const refresh=d==='refreshing'?`<div class="inline-status" role="status">${icon('refresh-cw')}${tr('새 기록 확인 중 · 현재 기록은 유지해요','Updating · keeping existing records visible','更新中 · 既存の記録を表示しています')}</div>`:'';
+ const err=d==='error-cached'?`<div class="inline-status error" role="status">${icon('cloud-off')}<span>${tr('6개 소스 중 2개를 불러오지 못했어요. 기존 기록을 표시해요.','2 of 6 sources unavailable. Showing previous records.','6件中2件を読み込めません。以前の記録を表示しています。')}</span>${action(tr('재시도','Retry','再試行'),'retry')}</div>`:'';
+ const limited=d==='calibrating'||d==='partial'?`<div class="history-notice">${tr('사용 가능한 측정 기록이 제한돼 있어요.','Available measurement history is limited.','利用できる測定履歴が限られています。')}</div>`:'';
+ return `${refresh}${err}${hero(design)}${limited}${recap()}${dailyProgress()}${todayBrief()}${recovery()}${stressPanel()}${smartContent()}${digest()}<div class="quick-actions"><button class="cursor-interaction" data-route="weight">${icon('weight')}${tr('체중 기록','Log weight','体重を記録')}</button><button class="cursor-interaction" data-route="metric:sleep">${icon('moon')}${tr('수면','Sleep','睡眠')}</button></div>${pinSection()}<div class="updated">${tr('업데이트: 방금 · 측정일은 각 지표에 표시','Updated just now · dates shown per metric','たった今更新 · 各指標に測定日を表示')}</div>${group(tr('컨디션 지표','Condition metrics','コンディション指標'),'heart',['hrv','rhr'])}${group(tr('활동 지표','Activity metrics','活動指標'),'footprints',['steps','exercise'])}${exerciseRows()}${group(tr('신체 지표','Body metrics','身体指標'),'weight',['weight','bmi','sleep'])}<button class="qa-row cursor-interaction" data-route="qa">${icon('message-circle')}<span><b>${tr('건강 데이터에 질문하기','Ask about your health data','健康データに質問')}</b><small>${tr('수면·회복·최근 운동을 함께 살펴보세요','Explore sleep, recovery and recent workouts','睡眠・回復・最近の運動を確認')}</small></span>${chevron}</button>`;
+}
+function destination(){const r=session.route;const back=`<button class="back-action cursor-interaction" data-route="back">${icon('arrow-left')}Today</button>`;
+ if(r==='pins')return back+`<section class="surface"><h2>${tr('고정 지표 편집','Edit pinned metrics','ピン留め指標を編集')}</h2><p class="muted">${tr('선택한 지표는 아래 그룹에 중복 표시하지 않아요.','Selected metrics are removed from their groups below.','選択した指標は下のグループに重複表示しません。')}</p>${metricDefs.map(m=>`<label class="pin-option"><span>${m.name[state.locale==='en'?1:state.locale==='ja'?2:0]}</span><input type="checkbox" data-pin="${m.id}" ${session.pins.includes(m.id)?'checked':''}></label>`).join('')}${action(tr('완료','Done','完了'),'back')}</section>`;
+ if(r==='notifications')return back+`<section class="surface"><h2>${tr('알림','Notifications','通知')}</h2><div class="notification-item"><b>${tr('아침 브리핑','Morning briefing','朝のブリーフィング')}</b><p>${tr('오늘의 컨디션과 수면을 확인하세요.','Review today’s condition and sleep.','今日のコンディションと睡眠を確認しましょう。')}</p>${action(tr('브리핑 보기','View briefing','ブリーフィングを見る'),'briefing')}</div><div class="notification-item"><b>${tr('새로운 소식','What’s new','新着情報')}</b><p>DUNE</p></div><button class="save-template cursor-interaction" data-read-all>${tr('모두 읽음','Mark all read','すべて既読にする')}</button></section>`;
+ if(r==='weight')return back+`<section class="surface"><h2>${tr('체중 기록','Log weight','体重を記録')}</h2><form data-weight-form><label class="weight-field">kg<input type="number" min="0.1" max="500" step="0.1" required value="73.9" aria-label="${tr('체중 kg','Weight kg','体重 kg')}"></label><button class="save-template" type="button" data-confirm-weight>${tr('시안에서 기록 확인','Preview entry','入力をプレビュー')}</button><p role="status" data-form-result></p></form></section>`;
+ if(r==='qa')return back+message(tr('건강 데이터에 질문하기','Ask about health data','健康データに質問'),tr('기기 지원·언어 설정에 따라 사용할 수 있어요. 사용할 수 없을 때도 기존 지표 상세를 볼 수 있어요.','Availability depends on device and language. Metric details remain available.','対応デバイスと言語で利用できます。利用できなくても指標の詳細は確認できます。'),null,null,'message-circle');
+ if(r==='stress')return back+`<section class="surface"><h2>${tr('장기 스트레스','Cumulative stress','長期ストレス')}</h2><div class="value">${state.stress}<small>/100</small></div><p>${tr('최근 유효 기록을 바탕으로 한 추정값이에요. 의료 진단을 의미하지 않아요.','An estimate based on recent valid records, not a medical diagnosis.','最近の有効な記録に基づく推定値で、医学的診断ではありません。')}</p><ul><li>HRV</li><li>${tr('활동 부하','Activity load','活動負荷')}</li><li>${tr('수면','Sleep','睡眠')}</li></ul></section>`;
+ if(r?.startsWith('metric:')){const m=metricDefs.find(x=>x.id===r.split(':')[1]);return back+`<section class="surface"><h2>${m.name[state.locale==='en'?1:state.locale==='ja'?2:0]}</h2><div class="value">${m.id==='sleep'?tr('7시간 23분','7h 23m','7時間23分'):m.value}<small>${m.unit}</small></div><p class="muted">${timeLabel(state.data==='stale'?Math.max(m.days,9):m.days)}</p>${miniChart(m)}${action(tr('모든 데이터 보기','Show all data','すべてのデータを見る'),'all:'+m.id)}</section>`;}
+ if(r==='condition')return back+`<section class="surface"><h2>${tr('컨디션 상세','Condition details','コンディション詳細')}</h2>${state.data==='calibrating'?`<div class="value">3<small>${tr('일 기록됨','days recorded','日記録済み')}</small></div><p>${tr('나의 평소 범위를 만드는 중이에요. 필요한 기록이 모이면 점수를 표시해요.','Your usual range is being established. A score appears once enough records arrive.','普段の範囲を作成しています。十分な記録が集まるとスコアを表示します。')}</p>`:`<div class="value">${state.score}<small>/100</small></div><p>${tr('HRV와 안정 심박을 나의 기준선과 비교해요.','HRV and resting heart rate compared with your baseline.','HRVと安静時心拍数を自分の基準と比較します。')}</p>${miniChart(metricDefs[0])}<div class="detail-pairs"><p>HRV <b>30 ms</b><span>−5 ms</span></p><p>${tr('안정 심박','Resting HR','安静時心拍数')} <b>63 bpm</b><span>−3 bpm</span></p></div><p class="muted">${tr('변화량은 각 지표의 14일 평균 대비예요.','Changes are relative to each metric’s 14-day average.','変化量は各指標の14日平均比です。')}</p>`}</section>`;
+ if(r==='weather')return back+`<section class="surface"><h2>${tr('날씨와 활동','Weather and activity','天気と活動')}</h2>${state.data==='partial'?`<p>${tr('날씨를 불러올 수 없어요. 위치 접근을 허용하면 현재 날씨를 확인할 수 있어요.','Weather is unavailable. Allow location access to see current conditions.','天気を取得できません。位置情報を許可すると現在の天気を確認できます。')}</p>${action(tr('위치 접근 설정','Location access','位置情報の設定'),'permissions')}`:`<div class="value">18°<small>${tr('서울 · 맑음','Seoul · Clear','ソウル · 晴れ')}</small></div><div class="detail-pairs"><p>${tr('체감','Feels like','体感')}<b>17°</b></p><p>${tr('최고 / 최저','High / low','最高 / 最低')}<b>21° / 12°</b></p></div><p>${tr('바깥 활동 전 체감 온도와 최신 환경 정보를 함께 확인하세요.','Check feels-like temperature and current conditions before heading out.','屋外活動の前に体感温度と最新の環境情報を確認しましょう。')}</p>`}</section>`;
+ if(r==='briefing')return back+`<section class="surface"><h2>${tr('오늘의 브리핑','Today’s briefing','今日のブリーフィング')}</h2><div class="detail-pairs"><p>${tr('컨디션','Condition','コンディション')}<b>${state.score}</b></p><p>${tr('지난 수면','Last sleep','前回の睡眠')}<b>7h 23m</b></p><p>${tr('어제 걸음','Yesterday’s steps','昨日の歩数')}<b>13,523</b></p></div><p>${tr('최근 기록을 함께 살펴보고 오늘의 페이스를 정해 보세요.','Review your recent records and find your pace for today.','最近の記録を確認して、今日のペースを考えましょう。')}</p></section>`;
+ if(r==='template')return back+`<section class="surface"><h2>${tr('루틴 템플릿','Routine template','ルーティンテンプレート')}</h2><label class="weight-field">${tr('이름','Name','名前')}<input value="Walking" aria-label="${tr('템플릿 이름','Template name','テンプレート名')}"></label><div class="detail-pairs"><p>Walking<b>14 ${tr('분','min','分')}</b></p></div><button class="save-template cursor-interaction" data-save-template>${tr('저장','Save','保存')}</button><p role="status" data-template-result></p></section>`;
+ if(r==='exercise')return back+`<section class="surface"><h2>${tr('오늘의 운동 제안','Today’s workout suggestion','今日の運動提案')}</h2><p>${state.score>=70?tr('컨디션이 평소 범위에 있어요.','Your condition is within your usual range.','コンディションは普段の範囲内です。'):tr('오늘은 가벼운 강도를 참고하세요.','Consider keeping intensity light today.','今日は軽い強度を参考にしてください。')}</p><div class="detail-pairs"><p>${tr('컨디션','Condition','コンディション')}<b>${state.score}</b></p><p>${tr('수면','Sleep','睡眠')}<b>7h 23m</b></p></div><p>${tr('운동 강도와 수면 회복 정보를 함께 보여 드려요.','Intensity and sleep recovery information are shown together.','運動強度と睡眠による回復情報を一緒に表示します。')}</p></section>`;
+ if(r==='settings')return back+`<section class="surface"><h2>${tr('설정','Settings','設定')}</h2><div class="detail-pairs"><p>${tr('현재 테마','Current theme','現在のテーマ')}<b>Desert Warm</b></p><p>${tr('건강 데이터','Health data','ヘルスケア')}<b>${tr('연결됨','Connected','接続済み')}</b></p><p>${tr('알림','Notifications','通知')}<b>${tr('사용','On','オン')}</b></p></div>${action(tr('건강 데이터 접근','Health data access','ヘルスケアへのアクセス'),'permissions')}</section>`;
+ if(r==='permissions')return back+message(tr('건강 데이터와 위치 접근','Health and location access','健康データと位置情報へのアクセス'),tr('기록과 날씨를 표시하는 데 필요한 접근 권한을 설정에서 관리할 수 있어요.','Manage the permissions used to show your health records and local weather in Settings.','記録と天気の表示に必要なアクセス権を設定で管理できます。'),null,null,'shield-check');
+ if(r?.startsWith('all:')){const m=metricDefs.find(x=>x.id===r.split(':')[1]);return back+`<section class="surface"><h2>${m.name[state.locale==='en'?1:state.locale==='ja'?2:0]} · ${tr('모든 데이터','All data','すべてのデータ')}</h2><div class="detail-pairs">${(m.history.length?[...m.history].reverse():[Number(m.value)]).map((v,i)=>`<p>10.${(state.data==='stale'?17:25)-i}<b>${v} ${m.unit}</b></p>`).join('')}</div></section>`;}
+ if(r?.startsWith('workout:')){const x=exercises.find(x=>x[1]===r.slice(8));return back+`<section class="surface"><h2>${x[state.locale==='en'?1:state.locale==='ja'?2:0]}</h2><p class="muted">${timeLabel(x[5])}</p><div class="value">${x[3]}<small>${x[4]==='min'?tr('분','min','分'):x[4]}</small></div></section>`;}
+ return back+message(tr('활동 기록','Activity records','活動記録'),tr('운동의 전체 흐름과 기록은 Activity에서 볼 수 있어요.','View your workout history and progress in Activity.','運動の履歴と進捗はActivityで確認できます。'),null,null,'flame');
+}
+let contentKey='';
+function buildPhones(force=false){const key=JSON.stringify([state.data,state.time,state.hour,state.locale,state.progress,state.score,state.stress,state.restDay,session.route,[...session.dismissed],session.pins,session.unread]);if(!force&&key===contentKey)return;contentKey=key;
+ root.querySelectorAll('.phone').forEach(phone=>{
+ const markup=chrome.replace('9:41',String(state.hour).padStart(2,'0')+':00').replace('10월 26일 월요일',tr('10월 26일 월요일','Monday, October 26','10月26日 月曜日')).replace('data-message="새로운 소식 2개"','data-route="notifications"').replace('data-message="시안 보기 설정은 디자인 조절 메뉴에서 변경할 수 있어요."','data-route="settings"');
+ phone.innerHTML=markup+`<main class="body ${session.route?'route-body':''}">${session.route?destination():dashboard(phone.dataset.design)}</main>`+nav;
+ const badge=phone.querySelector('.badge');if(badge)badge.hidden=session.unread===0;
+ const bell=phone.querySelector('[data-route="notifications"]');if(bell)bell.setAttribute('aria-label',tr(`알림 ${session.unread}개`,`${session.unread} notifications`,`通知${session.unread}件`));
+ });
+ const layers=[{name:'far',center:45,amplitude:8,frequency:.72,skew:.20},{name:'mid',center:62,amplitude:10,frequency:1,skew:.18},{name:'near',center:76,amplitude:13,frequency:1.35,skew:.14}];
+ layers.forEach(layer=>{const points=[];for(let x=0;x<=400;x+=5){const a=Math.PI*2*layer.frequency*x/400,y=layer.center+layer.amplitude*(Math.sin(a)+layer.skew*Math.sin(2*a+Math.PI/6));points.push(`${x/4}% ${y/2.2}%`);}root.querySelectorAll('.dune-layer.'+layer.name).forEach(el=>el.style.clipPath=`polygon(${points.join(',')},100% 100%,0 100%)`);});
+ if(globalThis.lucide)lucide.createIcons();
+}
+function render(save=false){state.hour=Math.min(23,Math.max(0,Number(state.hour)||0));state.time=state.hour>=6&&state.hour<10?'morning':state.hour>=10&&state.hour<17?'day':state.hour>=17&&state.hour<22?'evening':'night';state.text=Math.min(200,Math.max(100,Number(state.text)||100));state.width=Math.min(1032,Math.max(320,Number(state.width)||440));state.score=Math.min(100,Math.max(0,Number(state.score)||0));state.stress=Math.min(100,Math.max(0,Number(state.stress)||0));root.style.setProperty('--ambience',(Number(state.ambience)||0)/100);root.style.setProperty('--type',state.text/100);root.style.setProperty('--phone-width',state.width+'px');buildPhones();root.querySelectorAll('.phone').forEach(p=>{p.dataset.mode=['light','dark'].includes(state.appearance)?state.appearance:'auto';p.classList.toggle('large',state.text>=130);p.classList.toggle('enhanced-contrast',!!state.contrast);p.classList.toggle('reduced',!state.motion);p.classList.toggle('collapsed',state.header==='scrolled');p.classList.remove('empty');p.lang=state.locale;});if(save&&window.openai?.setWidgetState)window.openai.setWidgetState({modelContent:{todayDesign:state}}).catch(()=>{});}
+root.addEventListener('click',e=>{const confirm=e.target.closest('[data-confirm-weight]');if(confirm){const form=confirm.closest('[data-weight-form]'),val=Number(form.querySelector('input').value);form.querySelector('[data-form-result]').textContent=Number.isFinite(val)&&val>0&&val<=500?tr(`${val}kg 입력을 확인했어요. 실제로 저장하지 않아요.`,`${val} kg previewed. Nothing was saved.`,`${val}kgの入力を確認しました。保存されません。`):tr('체중을 확인해 주세요.','Check the weight.','体重を確認してください。');return;}const save=e.target.closest('[data-save-template]');if(save){save.parentElement.querySelector('[data-template-result]').textContent=tr('저장되었습니다.','Saved.','保存されました。');return;}const dismiss=e.target.closest('[data-dismiss]');if(dismiss){session.dismissed.add(dismiss.dataset.dismiss);contentKey='';render();return;}const all=e.target.closest('[data-read-all]');if(all){session.unread=0;contentKey='';render();return;}const btn=e.target.closest('[data-route]');if(btn){if(btn.dataset.route==='retry'){state.data='complete';session.route=null;}else session.route=btn.dataset.route==='back'?null:btn.dataset.route;contentKey='';render();return;}const heroTap=e.target.closest('[data-action]');if(heroTap){session.route='condition';contentKey='';render();return;}const tab=e.target.closest('.navitem');if(tab){session.route=tab.classList.contains('selected')?null:'activity';contentKey='';render();}});
+root.addEventListener('change',e=>{if(e.target.matches('[data-pin]')){const id=e.target.dataset.pin;session.pins=e.target.checked?[...new Set([...session.pins,id])]:session.pins.filter(x=>x!==id);}});
+root.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.matches('[data-weight-form] input')){e.preventDefault();e.target.closest('[data-weight-form]').querySelector('[data-confirm-weight]').click();}});
+root.addEventListener('submit',e=>{if(e.target.matches('[data-weight-form]')){e.preventDefault();const val=Number(e.target.querySelector('input').value);e.target.querySelector('[data-form-result]').textContent=Number.isFinite(val)&&val>0&&val<=500?tr(`${val}kg 입력을 확인했어요. 실제로 저장하지 않아요.`,`${val} kg previewed. Nothing was saved.`,`${val}kgの入力を確認しました。保存されません。`):tr('체중을 확인해 주세요.','Check the weight.','体重を確認してください。');}});
+render();
+window.addEventListener('openai:set_globals',e=>{const next=e.detail?.globals?.widgetState?.modelContent?.todayDesign;if(next){Object.assign(state,next);contentKey='';render();}});
+if(globalThis.Tweak){const tweak=new Tweak({container:root,onChange:()=>render(true)});tweak.addSlider(state,'text',{label:'글자 크기',min:100,max:200,step:5,unit:'%'});tweak.addSelect(state,'appearance',{label:'화면 모드',options:[{label:'시스템',value:'auto'},{label:'밝게',value:'light'},{label:'어둡게',value:'dark'}]});tweak.addSelect(state,'data',{label:'기록 상태',options:[{label:'기록 충분',value:'complete'},{label:'일부 누락',value:'partial'},{label:'기록 없음',value:'no-records'},{label:'건강 접근 필요',value:'denied'},{label:'처음 로딩',value:'initial-load'},{label:'새로고침 중',value:'refreshing'},{label:'전체 조회 오류',value:'error-empty'},{label:'일부 조회 오류',value:'error-cached'},{label:'기준선 형성 중',value:'calibrating'},{label:'클라우드 대기',value:'cloud-wait'},{label:'단일 기록',value:'no-trend'},{label:'오래된 기록',value:'stale'}]});tweak.addSlider(state,'hour',{label:'시간대',min:0,max:23,step:1,unit:'시'});tweak.addSelect(state,'locale',{label:'언어 길이 비교',options:[{label:'한국어',value:'ko'},{label:'English',value:'en'},{label:'日本語',value:'ja'}]});tweak.addSelect(state,'progress',{label:'목표 진행 상태',options:[{label:'진행 중',value:'normal'},{label:'100% 초과',value:'over'},{label:'오늘 기록 없음',value:'missing'}]});tweak.addSlider(state,'score',{label:'컨디션 점수',min:0,max:100,step:1});tweak.addSlider(state,'stress',{label:'스트레스 점수',min:0,max:100,step:1});tweak.addSelect(state,'header',{label:'제목 상태',options:[{label:'상단 펼침',value:'top'},{label:'스크롤 후 접힘',value:'scrolled'}]});tweak.addToggle(state,'restDay',{label:'휴식일 · 운동 제안 숨김'});tweak.addToggle(state,'contrast',{label:'대비 높이기'});}
+})();
+
+</script>

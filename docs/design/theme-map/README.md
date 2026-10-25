@@ -54,6 +54,8 @@ Small 위젯의 세 점수 링과 하단 상태·시각은 카드 전체 높이�
 
 ## 갱신 방법
 
+2026-10-26 [Today 재설계 세 방향 시안](themes/dune-today-restart.html)을 추가했다. 기존 DUNE 테마를 유지하며 Today 전체를 Compact, Metrics, Editorial로 비교하며, 글자 확대가 패딩과 그래프를 함께 확대하지 않도록 설계했다. [배치와 범위](../layout-map/today-restart-proposal.md)에 원인·데이터 계약·남은 범위를 기록한다. 신규 테마 구현이나 실제 앱 캡처가 아니며 방향 승인 전 제안이다. [편집 원본](themes/assets/today-restart-fragment.html)을 보존한다.
+
 테마의 색, 능선·배경, 링, 그래프, 움직임, 화면별 표현을 바꿀 때 **같은 작업에서** 아래를 갱신한다.
 
 1. `themes/`의 해당 HTML을 수정하거나 새 시안을 복사한다. 이 저장소 안의 파일을 보존본으로 취급한다. 대화용 시안 파일을 따로 수정했다면 최신 내용을 다시 복사한다.
@@ -73,3 +75,11 @@ Small 위젯의 세 점수 링과 하단 상태·시각은 카드 전체 높이�
 ## Activity·Life 히어로 승인안 (2026-10-25)
 
 [흐름과 근거·핵심 요약 시안](themes/dune-activity-life-heroes.html)의 흐름과 근거를 사용자가 승인했다. [구현 계획](../../plans/2026-10-25-activity-life-hero-rhythm.md)에 따라 저장된 준비도와 수동 습관 완료 기록을 사용한다. 과거 습관 대상 수는 복원하지 않는다. 방향 시안은 예시이며 실제 캡처와 구분한다. [편집 원본](themes/assets/activity-life-hero-fragment.html)을 보존한다.
+
+## Today 세 시안 동시 비교 (2026-10-26)
+
+[Compact·Metrics·Editorial 나란히 비교](themes/dune-today-comparison.html)를 추가했다. 테마·내용은 기존 제안을 유지하고, 세 전체 화면을 한 줄로 배치한다. 대화에서는 글씨·기록 상태·시간대·언어를 공통으로 변경할 수 있다. 좁은 창은 화면 글씨를 축소하지 않고 비교 영역을 좌우로 이동한다. 세 화면의 세로 스크롤은 한 페이지에서 함께 진행한다. [편집 원본](themes/assets/today-comparison-fragment.html)과 [비교 화면 검사](themes/assets/today-comparison-qa.json)를 보존한다. 실제 앱 화면은 아니다.
+
+## Today Compact 선택·링·간격 확정 (2026-10-26)
+
+사용자는 Today에 Compact를 선택했다. [구현 계획](../../plans/2026-10-26-today-compact-layout-and-ring.md)을 추가했고 시안 링의 원형/중심/0·100점과 큰 글씨 전환을 바로잡았다. CONDITION은 같은 카드 상단에 유지한다. 아이콘–수치4–6pt, 링–설명12pt를 기준으로 불필요한 공간을 줄였다. [수정 캡처](themes/assets/today-compact-ring-fixed.png)와 [전후 측정·한정 검증](themes/assets/today-compact-ring-qa.json)을 보존한다. 현재 변경은 시안과 계획이며 실제 앱 구현·캡처가 아니다.
