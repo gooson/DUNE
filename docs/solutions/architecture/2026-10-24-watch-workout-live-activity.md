@@ -70,3 +70,17 @@ Apple은 [WWDC23 multi-device workout 안내](https://developer.apple.com/videos
 ## Lessons Learned
 
 레이아웃에 Watch 지원이 있어도 Watch 운동이 iPhone 표시를 생성하는 것은 아니다. 시작 경로·백그라운드 권한·갱신 전송을 모두 연결해야 한다. 이번 패턴은 기능 구현에 한정되므로 공통 `.claude` 규칙이나 handbook은 변경하지 않았다. 연계된 기존 TODO는 없어 상태를 이동한 파일도 없다.
+
+## 2026-10-25 표시 개선
+
+운동명과 시간이 같은 크기이고 모든 지표가 같은 색으로 나열되어 읽는 순서가 불분명한 문제를 개선했다. Watch 운동 Live Activity에 작은 운동명·상태 헤더, 큰 rounded 경과 시간, 의미별 색상 아이콘과 구분한 숫자·단위를 배치했다. `ViewThatFits`는 지표 행이 들어가지 않으면 세로로 전환한다. small family는 운동명·시간·핵심 지표만 남기고, Dynamic Island의 제한된 폭에서는 시간 글자를 생략한다. 근력·유산소에 공통인 snapshot에 없는 운동 종류를 이름으로 추측하지 않고 중립적인 사람 기호를 사용한다.
+
+전송·타이머·수치 검증 모델은 변경하지 않았다. stale에서는 시간과 수치를 숨기고 정지·종료에서는 누적 시간을 고정하는 기존 계약을 유지한다. 운동명과 수치의 민감 정보 가림도 유지한다. `WatchWorkoutActivityPreview`의 DEBUG 이름 인자와 시스템 UI 테스트로 긴 한국어 근력 운동명을 검증할 수 있게 했다. 실제 시스템 언어는 앱의 launch locale과 별개이므로 상태 검사는 카탈로그의 en·ko·ja 번역을 사용한다.
+
+표시 기준은 [WLA01 레이아웃 맵](../../design/layout-map/watch-workout-live-activity.md), 최신 실제 캡처·기기·검증 범위는 [WLA01 실제 화면맵](../../design/phone-design-map/actual/live-activity/index.html)에 기록한다. 레이아웃 변화가 테마 색·배경·움직임의 변경으로 확대되지 않게 기존 named color를 사용했다. 시스템 시드 캡처는 실제 Watch↔iPhone 운동 연동의 증거와 구분한다.
+
+최종 검증: `.xcodebuild/live-activity-build-final.log`의 통합 iOS·embedded Watch·Widget 빌드 통과, Swift 구문·xcstrings 포맷·diff 공백 검사 통과. 시스템 UI 로그는 4건 중 3건 통과·연결 대기 1건 실패이며 Xcode 결과 정리가 멈춰 실행기 exit 124다. 메서드 통과만으로 UI 게이트 완료를 선언하지 않는다. 세 원본 시스템 PNG와 SHA-256은 실제 화면맵에 보존했다. 연결 대기 fixture 수정, 큰 글씨·밝은 표면·small·Island·iPad·Duo 및 실제 쌍 기기 연동은 미검증이다.
+
+브랜드 식별 보완: 운동 정보만으로 DUNE임을 알아보기 어렵다는 피드백에 따라 공통 헤더의 상태 행을 `DUNE · 운동` 형태로 바꿨다. 번역하지 않는 작은 bold rounded 워드마크에 자간과 기존 액센트를 적용하며 카드 행·높이를 늘리지 않는다. UI 테스트에 브랜드 이름·식별자·포함 프레임 검사를 추가했다. 이전 실제 PNG는 모두 워드마크 추가 전으로 표시했다. SDK 결과 정리 문제의 정상화가 확인되지 않아 후속 UI 실행과 새 캡처는 보류했으며, 빌드 결과는 `.xcodebuild/live-activity-brand-build.log`에 기록한다.
+
+2026-10-25 Watch 종료 후 `연결 대기`가 남는 경로를 보완했다. 취소되는 최종 미러 패킷에 의존하지 않고 WC terminal snapshot을 ActivityKit end에 연결한다. 정확한 Watch 시작 시각·lifecycle 순서·초기 identity 보류·cold orphan 정리와 검증 한계는 [종료 정리 해결 문서](../general/2026-10-25-watch-workout-ended-live-activity-cleanup.md)를 따른다.

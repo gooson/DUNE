@@ -33,6 +33,7 @@ Life의 링 옆에는 현재 진행 상태를 설명하는 문장을 둔다. 히
 |---|---|
 | Today T03·Activity A01·Wellness H01·Life L01 | [4탭 레이아웃 맵](index.html) |
 | DESERT HORIZON 4탭 상세 배치 | [밝음·어두움 시안](../theme-map/themes/dune-final-four-tab.html) · [상세 계약](desert-horizon-final.md) |
+| Today 하단 읽기 위계 | [회복·스트레스·요약 V2](today-reading-proposal.md) · [원본 대비 시안](../theme-map/themes/dune-today-reading.html) |
 | Today 알림함·새로운 소식 | [알림함 배치·상태·목적지](notification-inbox-proposal.md) · [시안의 종 아이콘](../theme-map/themes/dune-final-four-tab.html) |
 | Activity 운동 구성 상세 | [근력·유산소와 부위별 구성 배치](exercise-mix-detail-proposal.md) · [4탭 시안](../theme-map/themes/dune-final-four-tab.html) |
 | Activity·Wellness·Life 기록 진입 | [상단 추가 버튼·메뉴 배치](record-entry-navigation.md) · [4탭 시안](../theme-map/themes/dune-final-four-tab.html) |

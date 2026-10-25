@@ -15,6 +15,9 @@ final class WatchWorkoutMirrorManager: NSObject {
     func startObserving() {
         guard !isObserving, HKHealthStore.isHealthDataAvailable() else { return }
         isObserving = true
+        WatchSessionManager.shared.onWorkoutEnded = { [weak self] snapshot in
+            self?.receiveWorkoutEnded(snapshot)
+        }
         healthStore.workoutSessionMirroringStartHandler = { [weak self] session in
             guard session.state != .ended, session.state != .stopped else { return }
             let id = UUID()
@@ -27,10 +30,12 @@ final class WatchWorkoutMirrorManager: NSObject {
                 heartRate: nil, activeCalories: 0, distanceMeters: 0
             )
             var requestedID: String?
-            do {
-                requestedID = try WatchWorkoutActivityRequest.start(mirrorID: id, snapshot: initial)
-            } catch {
-                AppLogger.ui.error("Unable to start mirrored workout activity: \(error.localizedDescription, privacy: .private)")
+            if reportedStart != nil {
+                do {
+                    requestedID = try WatchWorkoutActivityRequest.start(mirrorID: id, snapshot: initial)
+                } catch {
+                    AppLogger.ui.error("Unable to start mirrored workout activity: \(error.localizedDescription, privacy: .private)")
+                }
             }
             let activityID = requestedID
             let allowsStartCorrection = reportedStart == nil
@@ -41,6 +46,16 @@ final class WatchWorkoutMirrorManager: NSObject {
         }
     }
 
+    private func receiveWorkoutEnded(_ snapshot: WatchWorkoutSnapshot) {
+        guard snapshot.isValid, snapshot.phase == .ended else { return }
+        if activity.finish(matching: snapshot) {
+            session?.delegate = nil
+            session = nil
+            mirrorID = nil
+        }
+        Task { await WatchWorkoutActivityRequest.finish(matching: snapshot) }
+    }
+
     private func attach(_ incoming: HKWorkoutSession, mirrorID id: UUID, initial: WatchWorkoutSnapshot,
                         activityID: String?, allowsStartCorrection: Bool) {
         if let mirrorID { activity.finish(mirrorID: mirrorID) }
@@ -48,7 +63,7 @@ final class WatchWorkoutMirrorManager: NSObject {
         session = incoming
         incoming.delegate = self
         mirrorID = id
-        activity.start(mirrorID: id, snapshot: initial, requestedID: activityID, didRequest: true,
+        activity.start(mirrorID: id, snapshot: initial, requestedID: activityID, didRequest: !allowsStartCorrection,
                        allowsStartCorrection: allowsStartCorrection)
         if incoming.state == .ended || incoming.state == .stopped { finish(incoming, at: Date()) }
     }

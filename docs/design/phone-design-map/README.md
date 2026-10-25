@@ -53,6 +53,8 @@ Watch의 [63개 상태별 맵](actual/watch/index.html)에는 기본 글자 크�
 
 ## 화면 수정 시 갱신
 
+2026-10-25 Today 하단 카드의 T03과 공유 일간 요약 카드의 T10은 [V2 실제 화면 갤러리](../full-redesign-map/review/today-reading-v2-2026-10-25/index.html)에서 추적한다. 다른 UDID의 기존 통합 인덱스는 덮어쓰지 않았다. iPad는 이전 잠금 실패2회를 보존하고 명시적 재개 허용 뒤2/2통과했다. 전용 iPhone·iPad·Duo접힘·펼침의 T03/T10 원본38장을 새 갤러리에 등록했다. Duo펼침의 첫 카드 검사 실패는 테스트 대상 선택을 수정해 해당1건 재검증을 통과했고, 이미 통과한 T10결과를 유지한다. 실제 각도0°/180°와 활성 디스플레이를 확인했으며 펼침은951×669pt 가로창이다. 다른 글씨·테마·방향과 기존 인덱스를 일괄 완료로 표시하지 않는다.
+
 2026-10-24 T03 시작 로딩을 수정했다. 첫 조회 시작 전과 HealthKit 권한 준비 중에는 스켈레톤을 유지하고, 실제 조회 완료 후 기록이 없을 때만 빈 상태로 전환한다. 영향 기기는 iPhone·iPad·Duo 접힘·펼침이며 Watch는 제외한다. 기존 워크트리의 소유권 등록 오류는 분리한 `main` 기반 워크트리에서 잠금 FD 전달 환경을 바로잡아 해결했지만, 다른 워크트리의 UI 검증이 저장소 잠금을 보유하여 관련 테스트는 60초 대기 후 시작하지 못했다. 네 기기의 T03 초기 스켈레톤·조회 완료 빈 상태·측정값 표시 상태는 새 캡처 미완료이며 기존 이미지는 이 변경의 증거가 아니다. [구현과 검증 제한](../../solutions/general/2026-10-24-dashboard-initial-loading-state.md)에 재개 조건을 기록했다.
 
 2026-10-19 T03·A01·H01·L01 히어로 링 통일 후 iPhone 18 Pro Max와 iPad Pro 13-inch (M5)의 밝음·어두움 실제 화면 16장을 [새 캡처와 출처](../full-redesign-map/review/four-tab-hero-rings-2026-10-19/README.md)에 보존했다. 같은 날 [WATER LILIES iPhone 8장](../full-redesign-map/review/water-lilies-hero-rings-2026-10-19/README.md)도 촬영했다. 기존 `actual/regular`은 다른 iPhone UDID로 만든 인덱스라 덮어쓰지 않았다. 현재 포털은 이 새 캡처로 연결하며, 기존 기기의 4개 화면은 갱신 완료로 계산하지 않는다.
@@ -96,3 +98,7 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 5. Watch는 `python3 docs/design/watch-workout/collect-actual-captures.py <watch-xcresult>`로 이름이 붙은 UI 테스트 첨부 화면을 추출하고 상태별 갤러리를 갱신한다.
 
 캡처 출처 테스트의 후속 조작이 실패한 경우에도 화면별 실제 PNG와 접근성 계층이 생성됐는지 확인한 뒤 해당 화면만 채웠다. `capture-index.json`에는 선택된 화면마다 테스트 이름과 캡처 동작을 기록했다.
+
+2026-10-25 WLA01 Watch 운동 Live Activity의 정보 위계를 개선한 뒤 [전용 iPhone 실제 시스템 요소 PNG 세 장](actual/live-activity/index.html)을 갱신했다. 진행·일시 정지·긴 한국어 근력 운동명에서 제목·시간·지표를 직접 확인했다. 관련 테스트 로그는 3건 통과·연결 대기 1건 실패이며 Xcode 결과 정리가 멈춰 실행기는 124로 종료됐다. 원본 PNG는 중단된 번들의 payload에서 수정 없이 복구했고 출처·해시를 기록했다. 연결 대기 fixture 수정·밝은 모드·큰 글씨·Island·Watch small·iPad·Duo는 미검증이며 기존 이미지로 대체하지 않는다.
+
+이어 WLA01의 공통 헤더 상태 행에 `DUNE` 워드마크를 추가했다. 위 세 PNG는 브랜드 추가 전 캡처로 구분했고, 최신 구현의 진행·일시 정지·긴 운동명·연결 대기 및 small·Island 펼침은 새 캡처 대기다. 이전 Xcode 결과 정리 장애가 해결되지 않아 같은 UI 실행을 반복하지 않았다.
