@@ -30,9 +30,11 @@ struct DailyDigestCard: View {
 
     private var hasRecordedMetrics: Bool {
         let metrics = digest.metrics
-        return metrics.conditionScore != nil || metrics.conditionDelta != nil
-            || metrics.workoutSummary != nil || metrics.sleepMinutes != nil
-            || metrics.sleepDebtMinutes != nil || metrics.stepsCount != nil
+        // Derived debt can be a zero sentinel for insufficient sleep history.
+        // Only observed metrics establish that today's records are available.
+        return metrics.conditionScore != nil || metrics.workoutSummary != nil
+            || (metrics.sleepMinutes.map { $0.isFinite && $0 > 0 } ?? false)
+            || metrics.stepsCount != nil
             || metrics.stressLevel != nil
     }
 

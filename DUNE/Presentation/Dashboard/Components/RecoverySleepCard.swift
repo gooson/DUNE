@@ -89,7 +89,7 @@ struct RecoverySleepCard: View {
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                 if !dynamicTypeSize.isAccessibilitySize { Spacer(minLength: 0) }
-                Text(max(0, deficit.weeklyDeficit).hoursMinutesFormatted)
+                Text(deficit.weeklyDeficit.hoursMinutesFormatted)
                     .font(.headline)
                     .monospacedDigit()
                     .fixedSize(horizontal: false, vertical: true)

@@ -4,7 +4,6 @@ import SwiftUI
 struct DailyDigestNotificationView: View {
     @State private var viewModel: DashboardViewModel
     @State private var hasLoaded = false
-    @Environment(\.horizontalSizeClass) private var sizeClass
 
     let canLoadHealthKitData: Bool
     let hasFailedHealthKitAuthorization: Bool
@@ -41,7 +40,7 @@ struct DailyDigestNotificationView: View {
                           !viewModel.sortedMetrics.isEmpty || viewModel.conditionScore != nil {
                     VStack(spacing: DS.Spacing.md) {
                         DailyDigestCard(digest: digest)
-                        metricsGrid(for: digest.metrics)
+                        sleepMetric(for: digest.metrics)
                     }
                 } else {
                     EmptyStateView(
@@ -71,22 +70,11 @@ struct DailyDigestNotificationView: View {
         canLoadHealthKitData || !HealthKitManager.shared.isAvailable
     }
 
-    private func metricsGrid(for metrics: DailyDigest.DigestMetrics) -> some View {
-        LazyVGrid(
-            columns: [GridItem(.adaptive(minimum: sizeClass == .regular ? 220 : 140), spacing: DS.Spacing.sm)],
-            spacing: DS.Spacing.sm
-        ) {
-            if let score = metrics.conditionScore {
-                metricCard("Condition", value: score.formatted(), symbol: "heart.fill", color: DS.Color.hrv)
-            }
-            if let minutes = metrics.sleepMinutes, minutes.isFinite, minutes > 0 {
-                let hours = Int(minutes) / 60
-                let remainingMinutes = Int(minutes) % 60
-                metricCard("Sleep", value: "\(hours)h \(remainingMinutes)m", symbol: "moon.fill", color: DS.Color.sleep)
-            }
-            if let steps = metrics.stepsCount, steps > 0 {
-                metricCard("Steps", value: steps.formatted(), symbol: "figure.walk", color: DS.Color.steps)
-            }
+    @ViewBuilder
+    private func sleepMetric(for metrics: DailyDigest.DigestMetrics) -> some View {
+        if let minutes = metrics.sleepMinutes, minutes.isFinite, minutes > 0 {
+            metricCard("Sleep", value: minutes.hoursMinutesFormatted, symbol: "moon.fill", color: DS.Color.sleep)
+                .accessibilityIdentifier("notification-daily-digest-sleep")
         }
     }
 

@@ -166,6 +166,11 @@ final class TodayReadingUITests: SeededUITestBaseCase {
         XCTAssertTrue(waitForReadingElement("notification-daily-digest-screen", timeout: 15))
         XCTAssertTrue(waitForReadingElement("dashboard-daily-digest", timeout: 15))
         XCTAssertTrue(waitForReadingElement(Fixture.digestCondition))
+        XCTAssertTrue(waitForReadingElement("notification-daily-digest-sleep"))
+        XCTAssertEqual(app.staticTexts.matching(NSPredicate(format: "label == %@", "컨디션")).count, 1,
+                       "The shared card should own the condition metric without a duplicate grid")
+        XCTAssertEqual(app.staticTexts.matching(NSPredicate(format: "label == %@", "걸음 수")).count, 1,
+                       "The shared card should own the steps metric without a duplicate grid")
         reveal(Fixture.digestToggle)
         app.buttons[Fixture.digestToggle].firstMatch.tap()
         reveal(Fixture.digestSummary)
