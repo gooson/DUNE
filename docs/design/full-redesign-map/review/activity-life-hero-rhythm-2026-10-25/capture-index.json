@@ -1,0 +1,513 @@
+{
+  "kind": "actual-app-captures",
+  "theme": "desertWarm",
+  "locale": "ko_KR except explicit sparse/default fixture states",
+  "app_source": {
+    "app_source_revision": "471a82f0",
+    "current_revision": "88790777acfeb572a569f2b12375c2b594e9ad70",
+    "unchanged_app_source_since": "471a82f0",
+    "sha256": {
+      "DUNE/App/TestDataSeeder.swift": "4bdec61d261e898193e04314938476c53ed8e96f87840ec025bdeac326094972",
+      "DUNE/Presentation/Activity/ActivityView.swift": "06e96baf7ca9f77bde466cd8e5c16ae2c1413ec48e0eeeb3701ebe66eb7cf584",
+      "DUNE/Presentation/Activity/ActivityViewModel.swift": "77b5cbf7952c94182447cddac3c16ef9bc277a67b5c4d32bf03e47edd57189b5",
+      "DUNE/Presentation/Activity/Components/ReadinessHeroEvidenceView.swift": "4862f5dcea082cbb18f3f83c1ba2dd31dbd359bebafe0055c7825480346e50e2",
+      "DUNE/Presentation/Life/LifeView.swift": "26f15f463ee0265394d370db1d274cf271a7a8d501fd3e3cd96289a456d28b12",
+      "DUNE/Presentation/Shared/Components/WeeklyHeroTrendView.swift": "ce24fb868cd49e81b29175b95ffeac3086a1be6d8ecbc08727ff49fe77beeb5d",
+      "DUNE/Presentation/Shared/Models/WeeklyHeroTrendPoint.swift": "6e855828c4e4ebc93593965f9c4dfbccbcdd731f497acc1ffc4a49f4a2d1b539",
+      "Shared/Resources/Localizable.xcstrings": "18202fa36cf86fac27f7ce8cfdc31ea693d76198b067644da3e23c8ed2880d5a"
+    }
+  },
+  "captures": [
+    {
+      "file": "iphone/A01-dark-ko-Default-overview.png",
+      "screen_id": "A01",
+      "device": "iphone",
+      "device_id": "C844F0DB-E028-464D-B273-2E9D175A9564",
+      "device_name": "iPhone 18 Pro Max-wt-Health-activity-life-heroes-36725d12bb49",
+      "native_size": [
+        1320,
+        2868
+      ],
+      "checkpoint": "A01-dark-ko-Default-overview",
+      "timestamp": 1792917481.496,
+      "test": "HeroRhythmUITests/testCaptureA01KoreanDarkHero()",
+      "source_revision": "38ce0d8c",
+      "source_worktree_dirty": true,
+      "capture_method": "XCTest XCUIScreen screenshot PNG; original pixels unchanged",
+      "source_attachment": ".codex-checks/hero-iphone-delta-attachments/31CDC33F-4583-43E1-A75A-883351D18F71.png",
+      "png_sha256": "06dd930aec9f807dd5ebe30edc337e5d56a498b3fdb294c66236962820a1282b"
+    },
+    {
+      "file": "iphone/A01-dark-ko-MaxAX-history.png",
+      "screen_id": "A01",
+      "device": "iphone",
+      "device_id": "C844F0DB-E028-464D-B273-2E9D175A9564",
+      "device_name": "iPhone 18 Pro Max-wt-Health-activity-life-heroes-36725d12bb49",
+      "native_size": [
+        1320,
+        2868
+      ],
+      "checkpoint": "A01-dark-ko-MaxAX-history",
+      "timestamp": 1792917518.348,
+      "test": "HeroRhythmUITests/testCaptureA01KoreanDarkMaximumAXHero()",
+      "source_revision": "38ce0d8c",
+      "source_worktree_dirty": true,
+      "capture_method": "XCTest XCUIScreen screenshot PNG; original pixels unchanged",
+      "source_attachment": ".codex-checks/hero-iphone-delta-attachments/CCE7166D-0176-481F-901D-E95884ACE2FD.png",
+      "png_sha256": "ad163e602a39d02a170eae832d801d08cadb53d7e5ea01f949f8c03b87b6dda9"
+    },
+    {
+      "file": "iphone/A01-dark-ko-MaxAX-overview.png",
+      "screen_id": "A01",
+      "device": "iphone",
+      "device_id": "C844F0DB-E028-464D-B273-2E9D175A9564",
+      "device_name": "iPhone 18 Pro Max-wt-Health-activity-life-heroes-36725d12bb49",
+      "native_size": [
+        1320,
+        2868
+      ],
+      "checkpoint": "A01-dark-ko-MaxAX-overview",
+      "timestamp": 1792917507.151,
+      "test": "HeroRhythmUITests/testCaptureA01KoreanDarkMaximumAXHero()",
+      "source_revision": "38ce0d8c",
+      "source_worktree_dirty": true,
+      "capture_method": "XCTest XCUIScreen screenshot PNG; original pixels unchanged",
+      "source_attachment": ".codex-checks/hero-iphone-delta-attachments/DE7B5531-4B87-46F5-959E-B9606D99F7F8.png",
+      "png_sha256": "1bf65fc743d87b32382f323df58168a0502f29a23b3ad2069cd9c900f25c2aae"
+    },
+    {
+      "file": "iphone/A01-light-ko-Default-overview.png",
+      "screen_id": "A01",
+      "device": "iphone",
+      "device_id": "C844F0DB-E028-464D-B273-2E9D175A9564",
+      "device_name": "iPhone 18 Pro Max-wt-Health-activity-life-heroes-36725d12bb49",
+      "native_size": [
+        1320,
+        2868
+      ],
+      "checkpoint": "A01-light-ko-Default-overview",
+      "timestamp": 1792917539.374,
+      "test": "HeroRhythmUITests/testCaptureA01KoreanHero()",
+      "source_revision": "38ce0d8c",
+      "source_worktree_dirty": true,
+      "capture_method": "XCTest XCUIScreen screenshot PNG; original pixels unchanged",
+      "source_attachment": ".codex-checks/hero-iphone-delta-attachments/ADDCE665-6151-4405-B924-041C7CE656A3.png",
+      "png_sha256": "3a84900d5d782699502b785df2bfab1d82eba23dbebf2f2640330d579dfba4f4"
+    },
+    {
+      "file": "iphone/L01-dark-ko-Default-overview.png",
+      "screen_id": "L01",
+      "device": "iphone",
+      "device_id": "C844F0DB-E028-464D-B273-2E9D175A9564",
+      "device_name": "iPhone 18 Pro Max-wt-Health-activity-life-heroes-36725d12bb49",
+      "native_size": [
+        1320,
+        2868
+      ],
+      "checkpoint": "L01-dark-ko-Default-overview",
+      "timestamp": 1792917565.342,
+      "test": "HeroRhythmUITests/testCaptureL01KoreanDarkHero()",
+      "source_revision": "38ce0d8c",
+      "source_worktree_dirty": true,
+      "capture_method": "XCTest XCUIScreen screenshot PNG; original pixels unchanged",
+      "source_attachment": ".codex-checks/hero-iphone-delta-attachments/DA1CA0A4-CA53-4CE6-B658-E2B835B15340.png",
+      "png_sha256": "d25d7b6f3cb3cdb505f18c3260cf606f1b8b13e669273bc3fb4cf20635c9410e"
+    },
+    {
+      "file": "iphone/L01-dark-ko-MaxAX-history.png",
+      "screen_id": "L01",
+      "device": "iphone",
+      "device_id": "C844F0DB-E028-464D-B273-2E9D175A9564",
+      "device_name": "iPhone 18 Pro Max-wt-Health-activity-life-heroes-36725d12bb49",
+      "native_size": [
+        1320,
+        2868
+      ],
+      "checkpoint": "L01-dark-ko-MaxAX-history",
+      "timestamp": 1792917598.282,
+      "test": "HeroRhythmUITests/testCaptureL01KoreanDarkMaximumAXHero()",
+      "source_revision": "38ce0d8c",
+      "source_worktree_dirty": true,
+      "capture_method": "XCTest XCUIScreen screenshot PNG; original pixels unchanged",
+      "source_attachment": ".codex-checks/hero-iphone-delta-attachments/B7AB86B3-E89D-4F32-8813-77C5E1DD9ED4.png",
+      "png_sha256": "a08097b819d0b84ad78e0d09bc42312ae64317559d47ed07aef1721e901ab32a"
+    },
+    {
+      "file": "iphone/L01-dark-ko-MaxAX-overview.png",
+      "screen_id": "L01",
+      "device": "iphone",
+      "device_id": "C844F0DB-E028-464D-B273-2E9D175A9564",
+      "device_name": "iPhone 18 Pro Max-wt-Health-activity-life-heroes-36725d12bb49",
+      "native_size": [
+        1320,
+        2868
+      ],
+      "checkpoint": "L01-dark-ko-MaxAX-overview",
+      "timestamp": 1792917589.527,
+      "test": "HeroRhythmUITests/testCaptureL01KoreanDarkMaximumAXHero()",
+      "source_revision": "38ce0d8c",
+      "source_worktree_dirty": true,
+      "capture_method": "XCTest XCUIScreen screenshot PNG; original pixels unchanged",
+      "source_attachment": ".codex-checks/hero-iphone-delta-attachments/F80429B3-3B0C-478B-9205-66DCA05BB775.png",
+      "png_sha256": "343ebfb3084adff4ea92f0ef04584a2d6986a3ce7a778b5b1905210b4d86fbf6"
+    },
+    {
+      "file": "iphone/L01-light-ko-Default-overview.png",
+      "screen_id": "L01",
+      "device": "iphone",
+      "device_id": "C844F0DB-E028-464D-B273-2E9D175A9564",
+      "device_name": "iPhone 18 Pro Max-wt-Health-activity-life-heroes-36725d12bb49",
+      "native_size": [
+        1320,
+        2868
+      ],
+      "checkpoint": "L01-light-ko-Default-overview",
+      "timestamp": 1792917618.181,
+      "test": "HeroRhythmUITests/testCaptureL01KoreanHero()",
+      "source_revision": "38ce0d8c",
+      "source_worktree_dirty": true,
+      "capture_method": "XCTest XCUIScreen screenshot PNG; original pixels unchanged",
+      "source_attachment": ".codex-checks/hero-iphone-delta-attachments/D1EC2C89-34F6-4800-BD94-96763F272EDB.png",
+      "png_sha256": "5ba5443c1007a2aafb2fa624d0715cde53e72d8d9a7f603b7e2063fa1c9c850a"
+    },
+    {
+      "file": "iphone/L01-auto-only-starter.png",
+      "screen_id": "L01",
+      "device": "iphone",
+      "device_id": "C844F0DB-E028-464D-B273-2E9D175A9564",
+      "device_name": "iPhone 18 Pro Max-wt-Health-activity-life-heroes-36725d12bb49",
+      "native_size": [
+        1320,
+        2868
+      ],
+      "checkpoint": "L01-auto-only-starter",
+      "timestamp": 1792917723.334,
+      "test": "HeroRhythmUITests/testAutoOnlyHabitsShowStarterInsteadOfZeroProgress()",
+      "source_revision": "38ce0d8c",
+      "source_worktree_dirty": true,
+      "capture_method": "XCTest XCUIScreen screenshot PNG; original pixels unchanged",
+      "source_attachment": ".codex-checks/hero-phone-sparse-attachments/AF96E0F9-A7BB-47F7-B174-47E73B5C34FC.png",
+      "png_sha256": "7211b3f23107fce8f6a84f00e7a5ab121de8ecec8526db61cfad217e0f5f0ce9"
+    },
+    {
+      "file": "iphone/L01-sparse-recorded-history.png",
+      "screen_id": "L01",
+      "device": "iphone",
+      "device_id": "C844F0DB-E028-464D-B273-2E9D175A9564",
+      "device_name": "iPhone 18 Pro Max-wt-Health-activity-life-heroes-36725d12bb49",
+      "native_size": [
+        1320,
+        2868
+      ],
+      "checkpoint": "L01-sparse-recorded-history",
+      "timestamp": 1792917763.165,
+      "test": "HeroRhythmUITests/testSparseHistoryExplainsMissingActivityAndLifeData()",
+      "source_revision": "38ce0d8c",
+      "source_worktree_dirty": true,
+      "capture_method": "XCTest XCUIScreen screenshot PNG; original pixels unchanged",
+      "source_attachment": ".codex-checks/hero-phone-sparse-attachments/22483C27-ADE7-42CE-98A1-A65864124A76.png",
+      "png_sha256": "0a0ef07ab1b26cb845f3dde4957e913f1d5001ba8f4c9af9197d6e8309ed2a3d"
+    },
+    {
+      "file": "iphone/A01-sparse-recorded-history.png",
+      "screen_id": "A01",
+      "device": "iphone",
+      "device_id": "C844F0DB-E028-464D-B273-2E9D175A9564",
+      "device_name": "iPhone 18 Pro Max-wt-Health-activity-life-heroes-36725d12bb49",
+      "native_size": [
+        1320,
+        2868
+      ],
+      "checkpoint": "A01-sparse-recorded-history",
+      "timestamp": 1792917755.267,
+      "test": "HeroRhythmUITests/testSparseHistoryExplainsMissingActivityAndLifeData()",
+      "source_revision": "38ce0d8c",
+      "source_worktree_dirty": true,
+      "capture_method": "XCTest XCUIScreen screenshot PNG; original pixels unchanged",
+      "source_attachment": ".codex-checks/hero-phone-sparse-attachments/C737ED59-555E-4AAB-A855-3BEBBF97A029.png",
+      "png_sha256": "cd0f78e13b80a44b2695346aaaf3fb25c625e5ac186be4fc01e697fd953c7adf"
+    },
+    {
+      "file": "ipad/A01-dark-ko-Default-overview.png",
+      "screen_id": "A01",
+      "device": "ipad",
+      "device_id": "A536A5B3-8E0E-4005-8351-40B4DD401EF0",
+      "device_name": "iPad Pro 13-inch (M5)-wt-Health-activity-life-heroes-36725d12bb49",
+      "native_size": [
+        2064,
+        2752
+      ],
+      "checkpoint": "A01-dark-ko-Default-overview",
+      "timestamp": 1792917938.507,
+      "test": "HeroRhythmUITests/testCaptureA01KoreanDarkHero()",
+      "source_revision": "471a82f0",
+      "source_worktree_dirty": false,
+      "capture_method": "XCTest XCUIScreen screenshot PNG; original pixels unchanged",
+      "source_attachment": ".codex-checks/hero-ipad-attachments/7395C635-73F8-4DCD-8FC2-04B78B5174B5.png",
+      "png_sha256": "e96d904dd71e863cb4e8de62c640e225b8c49283bc13fe8e6f2a7a5b1e1b3814"
+    },
+    {
+      "file": "ipad/A01-light-ko-Default-overview.png",
+      "screen_id": "A01",
+      "device": "ipad",
+      "device_id": "A536A5B3-8E0E-4005-8351-40B4DD401EF0",
+      "device_name": "iPad Pro 13-inch (M5)-wt-Health-activity-life-heroes-36725d12bb49",
+      "native_size": [
+        2064,
+        2752
+      ],
+      "checkpoint": "A01-light-ko-Default-overview",
+      "timestamp": 1792917979.03,
+      "test": "HeroRhythmUITests/testCaptureA01KoreanHero()",
+      "source_revision": "471a82f0",
+      "source_worktree_dirty": false,
+      "capture_method": "XCTest XCUIScreen screenshot PNG; original pixels unchanged",
+      "source_attachment": ".codex-checks/hero-ipad-attachments/74A17D4C-56E9-4E64-8AB3-9A961FDD92F6.png",
+      "png_sha256": "704d557ec89b776e4ac8986e3d3fbe031fe8e32cdf3c30420f5ed938a2a9bbc7"
+    },
+    {
+      "file": "ipad/L01-dark-ko-Default-overview.png",
+      "screen_id": "L01",
+      "device": "ipad",
+      "device_id": "A536A5B3-8E0E-4005-8351-40B4DD401EF0",
+      "device_name": "iPad Pro 13-inch (M5)-wt-Health-activity-life-heroes-36725d12bb49",
+      "native_size": [
+        2064,
+        2752
+      ],
+      "checkpoint": "L01-dark-ko-Default-overview",
+      "timestamp": 1792918008.29,
+      "test": "HeroRhythmUITests/testCaptureL01KoreanDarkHero()",
+      "source_revision": "471a82f0",
+      "source_worktree_dirty": false,
+      "capture_method": "XCTest XCUIScreen screenshot PNG; original pixels unchanged",
+      "source_attachment": ".codex-checks/hero-ipad-attachments/AF362DE2-7286-4869-AA6F-0A825F001A96.png",
+      "png_sha256": "6efc8f70fd9468a25c0b096dc84b9875eeb10a886159fcd37b3f4e2c89d6fd55"
+    },
+    {
+      "file": "ipad/L01-light-ko-Default-overview.png",
+      "screen_id": "L01",
+      "device": "ipad",
+      "device_id": "A536A5B3-8E0E-4005-8351-40B4DD401EF0",
+      "device_name": "iPad Pro 13-inch (M5)-wt-Health-activity-life-heroes-36725d12bb49",
+      "native_size": [
+        2064,
+        2752
+      ],
+      "checkpoint": "L01-light-ko-Default-overview",
+      "timestamp": 1792918033.773,
+      "test": "HeroRhythmUITests/testCaptureL01KoreanHero()",
+      "source_revision": "471a82f0",
+      "source_worktree_dirty": false,
+      "capture_method": "XCTest XCUIScreen screenshot PNG; original pixels unchanged",
+      "source_attachment": ".codex-checks/hero-ipad-attachments/CDFAE3A3-5EAA-4960-A1D3-70BF9FB92775.png",
+      "png_sha256": "b6688b79193be0d1722a9a682c5ad32dcf93e5e8e66da24c87b1bf9d985f76f2"
+    },
+    {
+      "file": "duo-external/A01-dark-ko-Default-overview.png",
+      "screen_id": "A01",
+      "device": "duo-external",
+      "device_id": "D472D221-3BB2-44F0-A2B7-8EF63A9EEE5D",
+      "device_name": "iPhone Duo · LCD",
+      "active_display": "LCD",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "checkpoint": "A01-dark-ko-Default-overview",
+      "sequence": 2,
+      "timestamp": 1792918369.659119,
+      "timestamp_kind": "host native PNG write time",
+      "test": "HeroRhythmUITests/testCaptureA01KoreanDarkHero()",
+      "source_revision": "88790777",
+      "source_worktree_dirty": false,
+      "capture_method": "host viewport hold; simctl explicit display native PNG; original pixels unchanged",
+      "source_attachment": ".codex-checks/hero-duo-closed/002-1398x2034.png",
+      "hierarchy": "duo-external/A01-dark-ko-Default-overview-hierarchy.txt",
+      "window_frame": null,
+      "png_sha256": "9fe0fa7db2e8c599a1d9f254bba3424299555e21412e84d473a9094780a488f1",
+      "numerical_hinge_angle_verified": false
+    },
+    {
+      "file": "duo-external/A01-dark-ko-Default-history.png",
+      "screen_id": "A01",
+      "device": "duo-external",
+      "device_id": "D472D221-3BB2-44F0-A2B7-8EF63A9EEE5D",
+      "device_name": "iPhone Duo · LCD",
+      "active_display": "LCD",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "checkpoint": "A01-dark-ko-Default-history",
+      "sequence": 3,
+      "timestamp": 1792918376.2187066,
+      "timestamp_kind": "host native PNG write time",
+      "test": "HeroRhythmUITests/testCaptureA01KoreanDarkHero()",
+      "source_revision": "88790777",
+      "source_worktree_dirty": false,
+      "capture_method": "host viewport hold; simctl explicit display native PNG; original pixels unchanged",
+      "source_attachment": ".codex-checks/hero-duo-closed/003-1398x2034.png",
+      "hierarchy": "duo-external/A01-dark-ko-Default-history-hierarchy.txt",
+      "window_frame": null,
+      "png_sha256": "9fe0fa7db2e8c599a1d9f254bba3424299555e21412e84d473a9094780a488f1",
+      "numerical_hinge_angle_verified": false
+    },
+    {
+      "file": "duo-external/A01-light-ko-Default-overview.png",
+      "screen_id": "A01",
+      "device": "duo-external",
+      "device_id": "D472D221-3BB2-44F0-A2B7-8EF63A9EEE5D",
+      "device_name": "iPhone Duo · LCD",
+      "active_display": "LCD",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "checkpoint": "A01-light-ko-Default-overview",
+      "sequence": 6,
+      "timestamp": 1792918408.8983946,
+      "timestamp_kind": "host native PNG write time",
+      "test": "HeroRhythmUITests/testCaptureA01KoreanHero()",
+      "source_revision": "88790777",
+      "source_worktree_dirty": false,
+      "capture_method": "host viewport hold; simctl explicit display native PNG; original pixels unchanged",
+      "source_attachment": ".codex-checks/hero-duo-closed/006-1398x2034.png",
+      "hierarchy": "duo-external/A01-light-ko-Default-overview-hierarchy.txt",
+      "window_frame": null,
+      "png_sha256": "da1a1641b24e833434fefbb0e390a5f46f1437776de68ff3aadd35463187fc19",
+      "numerical_hinge_angle_verified": false
+    },
+    {
+      "file": "duo-external/A01-light-ko-Default-history.png",
+      "screen_id": "A01",
+      "device": "duo-external",
+      "device_id": "D472D221-3BB2-44F0-A2B7-8EF63A9EEE5D",
+      "device_name": "iPhone Duo · LCD",
+      "active_display": "LCD",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "checkpoint": "A01-light-ko-Default-history",
+      "sequence": 7,
+      "timestamp": 1792918415.5387657,
+      "timestamp_kind": "host native PNG write time",
+      "test": "HeroRhythmUITests/testCaptureA01KoreanHero()",
+      "source_revision": "88790777",
+      "source_worktree_dirty": false,
+      "capture_method": "host viewport hold; simctl explicit display native PNG; original pixels unchanged",
+      "source_attachment": ".codex-checks/hero-duo-closed/007-1398x2034.png",
+      "hierarchy": "duo-external/A01-light-ko-Default-history-hierarchy.txt",
+      "window_frame": null,
+      "png_sha256": "da1a1641b24e833434fefbb0e390a5f46f1437776de68ff3aadd35463187fc19",
+      "numerical_hinge_angle_verified": false
+    },
+    {
+      "file": "duo-external/L01-dark-ko-Default-overview.png",
+      "screen_id": "L01",
+      "device": "duo-external",
+      "device_id": "D472D221-3BB2-44F0-A2B7-8EF63A9EEE5D",
+      "device_name": "iPhone Duo · LCD",
+      "active_display": "LCD",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "checkpoint": "L01-dark-ko-Default-overview",
+      "sequence": 10,
+      "timestamp": 1792918445.901085,
+      "timestamp_kind": "host native PNG write time",
+      "test": "HeroRhythmUITests/testCaptureL01KoreanDarkHero()",
+      "source_revision": "88790777",
+      "source_worktree_dirty": false,
+      "capture_method": "host viewport hold; simctl explicit display native PNG; original pixels unchanged",
+      "source_attachment": ".codex-checks/hero-duo-closed/010-1398x2034.png",
+      "hierarchy": "duo-external/L01-dark-ko-Default-overview-hierarchy.txt",
+      "window_frame": null,
+      "png_sha256": "16db8edb2885a7efb150d657328d127a271bed79bd784a2cc123cbe6a6376833",
+      "numerical_hinge_angle_verified": false
+    },
+    {
+      "file": "duo-external/L01-dark-ko-Default-history.png",
+      "screen_id": "L01",
+      "device": "duo-external",
+      "device_id": "D472D221-3BB2-44F0-A2B7-8EF63A9EEE5D",
+      "device_name": "iPhone Duo · LCD",
+      "active_display": "LCD",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "checkpoint": "L01-dark-ko-Default-history",
+      "sequence": 11,
+      "timestamp": 1792918453.0676506,
+      "timestamp_kind": "host native PNG write time",
+      "test": "HeroRhythmUITests/testCaptureL01KoreanDarkHero()",
+      "source_revision": "88790777",
+      "source_worktree_dirty": false,
+      "capture_method": "host viewport hold; simctl explicit display native PNG; original pixels unchanged",
+      "source_attachment": ".codex-checks/hero-duo-closed/011-1398x2034.png",
+      "hierarchy": "duo-external/L01-dark-ko-Default-history-hierarchy.txt",
+      "window_frame": null,
+      "png_sha256": "c9a57ffa51ee10115d0b76b67a71fefc2daa899405cdfb7a109687b6a12b2bdb",
+      "numerical_hinge_angle_verified": false
+    },
+    {
+      "file": "duo-external/L01-light-ko-Default-overview.png",
+      "screen_id": "L01",
+      "device": "duo-external",
+      "device_id": "D472D221-3BB2-44F0-A2B7-8EF63A9EEE5D",
+      "device_name": "iPhone Duo · LCD",
+      "active_display": "LCD",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "checkpoint": "L01-light-ko-Default-overview",
+      "sequence": 14,
+      "timestamp": 1792918480.8881068,
+      "timestamp_kind": "host native PNG write time",
+      "test": "HeroRhythmUITests/testCaptureL01KoreanHero()",
+      "source_revision": "88790777",
+      "source_worktree_dirty": false,
+      "capture_method": "host viewport hold; simctl explicit display native PNG; original pixels unchanged",
+      "source_attachment": ".codex-checks/hero-duo-closed/014-1398x2034.png",
+      "hierarchy": "duo-external/L01-light-ko-Default-overview-hierarchy.txt",
+      "window_frame": null,
+      "png_sha256": "5e457b742219b50dd1de985f16e2fde181843722c6f03a2e3b3cdacec6f399cc",
+      "numerical_hinge_angle_verified": false
+    },
+    {
+      "file": "duo-external/L01-light-ko-Default-history.png",
+      "screen_id": "L01",
+      "device": "duo-external",
+      "device_id": "D472D221-3BB2-44F0-A2B7-8EF63A9EEE5D",
+      "device_name": "iPhone Duo · LCD",
+      "active_display": "LCD",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "checkpoint": "L01-light-ko-Default-history",
+      "sequence": 15,
+      "timestamp": 1792918487.6765146,
+      "timestamp_kind": "host native PNG write time",
+      "test": "HeroRhythmUITests/testCaptureL01KoreanHero()",
+      "source_revision": "88790777",
+      "source_worktree_dirty": false,
+      "capture_method": "host viewport hold; simctl explicit display native PNG; original pixels unchanged",
+      "source_attachment": ".codex-checks/hero-duo-closed/015-1398x2034.png",
+      "hierarchy": "duo-external/L01-light-ko-Default-history-hierarchy.txt",
+      "window_frame": null,
+      "png_sha256": "d9c7cd5cbfee6c1524b73c1efa696c8bafd7fbb8ada07a26f55abc58a5b5911c",
+      "numerical_hinge_angle_verified": false
+    }
+  ],
+  "limitations": [
+    "Seeded simulator data, no real HealthKit validation",
+    "Duo numerical hinge angle is not verified on the current CoreDevice CLI; active display and physical orientation are checked separately",
+    "Full VoiceOver navigation and measured WCAG contrast are outside this run",
+    "Common Dashboard notification smoke has two unresolved failures; targeted capture success does not waive that gate"
+  ]
+}

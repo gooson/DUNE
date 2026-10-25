@@ -1,0 +1,289 @@
+{
+  "hero-iphone-ui-delta-retry.log.result.json": {
+    "schema_version": 1,
+    "status": "passed",
+    "target": "DUNEUITests",
+    "run_exit_status": 0,
+    "requested_selectors": [
+      "DUNEUITests/HeroRhythmUITests/testAutoOnlyHabitsShowStarterInsteadOfZeroProgress",
+      "DUNEUITests/HeroRhythmUITests/testSparseHistoryExplainsMissingActivityAndLifeData"
+    ],
+    "skipped_selectors": [],
+    "evidence_scope": {
+      "kind": "selector_execution",
+      "complete_test_inventory": false
+    },
+    "counts": {
+      "executed": 2,
+      "passed": 2,
+      "skipped": 0,
+      "failed": 0
+    },
+    "passed_cases": 2,
+    "failures": [],
+    "required_selectors_missing": [],
+    "log_path": "/Users/shanks/.codex/worktrees/activity-life-heroes/Health/.codex-checks/hero-iphone-ui-delta-retry.log"
+  },
+  "hero-unit-final-summary.json": {
+    "devicesAndConfigurations": [
+      {
+        "device": {
+          "architecture": "arm64",
+          "deviceId": "C844F0DB-E028-464D-B273-2E9D175A9564",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-activity-life-heroes-36725d12bb49",
+          "modelName": "iPhone 18 Pro Max",
+          "osBuildNumber": "24A434",
+          "osVersion": "27.0",
+          "platform": "iOS Simulator"
+        },
+        "expectedFailures": 0,
+        "failedTests": 0,
+        "passedTests": 44,
+        "skippedTests": 0,
+        "testPlanConfiguration": {
+          "configurationId": "1",
+          "configurationName": "Test Scheme Action"
+        }
+      }
+    ],
+    "environmentDescription": "DUNETests · Built with macOS 27.0.1",
+    "expectedFailures": 0,
+    "failedTests": 0,
+    "finishTime": 1792917393.5,
+    "passedTests": 41,
+    "result": "Passed",
+    "runtimeWarnings": [],
+    "skippedTests": 0,
+    "startTime": 1792917335.869,
+    "statistics": [
+      {
+        "subtitle": "4 test runs",
+        "title": "1 test ran with dynamic parameters"
+      }
+    ],
+    "testFailures": [],
+    "title": "Test - DUNETests",
+    "topInsights": [],
+    "totalTestCount": 41
+  },
+  "hero-ipad-captures.log.result.json": {
+    "schema_version": 1,
+    "status": "passed",
+    "target": "DUNEUITests",
+    "run_exit_status": 0,
+    "requested_selectors": [
+      "DUNEUITests/HeroRhythmUITests/testCaptureA01KoreanHero",
+      "DUNEUITests/HeroRhythmUITests/testCaptureL01KoreanHero",
+      "DUNEUITests/HeroRhythmUITests/testCaptureA01KoreanDarkHero",
+      "DUNEUITests/HeroRhythmUITests/testCaptureL01KoreanDarkHero"
+    ],
+    "skipped_selectors": [],
+    "evidence_scope": {
+      "kind": "selector_execution",
+      "complete_test_inventory": false
+    },
+    "counts": {
+      "executed": 4,
+      "passed": 4,
+      "skipped": 0,
+      "failed": 0
+    },
+    "passed_cases": 4,
+    "failures": [],
+    "required_selectors_missing": [],
+    "log_path": "/Users/shanks/.codex/worktrees/activity-life-heroes/Health/.codex-checks/hero-ipad-captures.log"
+  },
+  "hero-duo-closed.log.result.json": {
+    "schema_version": 1,
+    "status": "passed",
+    "target": "DUNEUITests",
+    "run_exit_status": 0,
+    "requested_selectors": [
+      "DUNEUITests/HeroRhythmUITests/testCaptureA01KoreanHero",
+      "DUNEUITests/HeroRhythmUITests/testCaptureL01KoreanHero",
+      "DUNEUITests/HeroRhythmUITests/testCaptureA01KoreanDarkHero",
+      "DUNEUITests/HeroRhythmUITests/testCaptureL01KoreanDarkHero"
+    ],
+    "skipped_selectors": [],
+    "evidence_scope": {
+      "kind": "selector_execution",
+      "complete_test_inventory": false
+    },
+    "counts": {
+      "executed": 4,
+      "passed": 4,
+      "skipped": 0,
+      "failed": 0
+    },
+    "passed_cases": 4,
+    "failures": [],
+    "required_selectors_missing": [],
+    "log_path": "/Users/shanks/.codex/worktrees/activity-life-heroes/Health/.codex-checks/hero-duo-closed.log"
+  },
+  "hero-life-layout-regression.log.result.json": {
+    "schema_version": 1,
+    "status": "passed",
+    "target": "DUNEUITests",
+    "run_exit_status": 0,
+    "requested_selectors": [
+      "DUNEUITests/LifeSeededSmokeTests/testHeroNarrativeLayout"
+    ],
+    "skipped_selectors": [],
+    "evidence_scope": {
+      "kind": "selector_execution",
+      "complete_test_inventory": false
+    },
+    "counts": {
+      "executed": 1,
+      "passed": 1,
+      "skipped": 0,
+      "failed": 0
+    },
+    "passed_cases": 1,
+    "failures": [],
+    "required_selectors_missing": [],
+    "log_path": "/Users/shanks/.codex/worktrees/activity-life-heroes/Health/.codex-checks/hero-life-layout-regression.log"
+  },
+  "hero-failure-audit.json": {
+    "common_smoke": {
+      "result": "failed",
+      "executed": 39,
+      "passed": 37,
+      "failed": 2,
+      "unresolved": [
+        "DashboardSmokeTests/testNavigateToNotificationHub",
+        "DashboardSmokeTests/testNotificationHubSummaryAtMaximumAccessibilitySize"
+      ],
+      "source_relation": "No direct source path found; unchanged Dashboard/navigation helpers and opt-in fixture false in those tests. Baseline failure not established.",
+      "retry_count": 0,
+      "next_action": "Await user scope choice; preserve failure, no unrelated fixes or retry."
+    },
+    "auto_only_delta": {
+      "first_result": "failed",
+      "cause": "Test queried life-toolbar-template without opening parent Menu",
+      "remediation": "Tap life-toolbar-add then template; assert habit-template-list",
+      "retry_count": 1,
+      "retry_result": "passed 2/2 including sparse-history captures",
+      "retained_passing_first_attempt": "7/7 other selected cases, including all six native capture cases"
+    },
+    "latest_app_revision": "471a82f0",
+    "unrelated_common_smoke_not_waived": true,
+    "duo_preparation": {
+      "first_result": "failed before UI tests",
+      "cause": "Current CoreDevice651.13.5 CLI has no device motion hinge-angle command",
+      "retry_count": 1,
+      "remediation": "Layout-only capture confirms official active LCD and physical orientation plus fresh native viewport. Numerical hinge angle remains unverified.",
+      "retry_result": "external capture 4/4 passed; numerical angle unverified",
+      "boot_note": "bootstatus printed Data Migration Failed yet device is confirmed booted/connected by simctl and devicectl; four actual app UI cases subsequently passed"
+    },
+    "duo_internal": {
+      "result": "preflight failed; 0 UI tests executed",
+      "cause": "Reviewed orientation HID helper dispatched successfully but official physical orientation readback stayed portrait, while LCD-1 became active",
+      "retry_count": 0,
+      "official_alternative": "not executed: repository simulator test lock busy for 60 seconds",
+      "resume_condition": "Repository simulator lock available; test official orientation set/get with exact owned UDID and require landscapeLeft readback plus active LCD-1 before one conditional retry",
+      "unrefreshed_screen_ids": [
+        "Duo internal landscape A01",
+        "Duo internal landscape L01"
+      ]
+    }
+  },
+  "hero-iphone-ui-delta.log.result.json": {
+    "schema_version": 1,
+    "status": "failed",
+    "target": "DUNEUITests",
+    "run_exit_status": 65,
+    "requested_selectors": [
+      "DUNEUITests/HeroRhythmUITests/testAutoOnlyHabitsShowStarterInsteadOfZeroProgress",
+      "DUNEUITests/HeroRhythmUITests/testLifeSummaryRecordedCompletionsAndChecklist",
+      "DUNEUITests/HeroRhythmUITests/testCaptureA01KoreanHero",
+      "DUNEUITests/HeroRhythmUITests/testCaptureL01KoreanHero",
+      "DUNEUITests/HeroRhythmUITests/testCaptureA01KoreanDarkHero",
+      "DUNEUITests/HeroRhythmUITests/testCaptureL01KoreanDarkHero",
+      "DUNEUITests/HeroRhythmUITests/testCaptureA01KoreanDarkMaximumAXHero",
+      "DUNEUITests/HeroRhythmUITests/testCaptureL01KoreanDarkMaximumAXHero"
+    ],
+    "skipped_selectors": [],
+    "evidence_scope": {
+      "kind": "selector_execution",
+      "complete_test_inventory": false
+    },
+    "counts": {
+      "executed": 8,
+      "passed": 7,
+      "skipped": 0,
+      "failed": 1
+    },
+    "passed_cases": 7,
+    "failures": [
+      "501: /Users/shanks/.codex/worktrees/activity-life-heroes/Health/DUNEUITests/Visual/HeroRhythmUITests.swift:90: error: -[DUNEUITests.HeroRhythmUITests testAutoOnlyHabitsShowStarterInsteadOfZeroProgress] : XCTAssertTrue failed - Habit templates should remain reachable from the starter state",
+      "515: Test Case '-[DUNEUITests.HeroRhythmUITests testAutoOnlyHabitsShowStarterInsteadOfZeroProgress]' failed (24.388 seconds).",
+      "1090: Test Suite 'HeroRhythmUITests' failed at 2026-10-25 17:40:58.984.",
+      "1092: Test Suite 'DUNEUITests.xctest' failed at 2026-10-25 17:40:58.989.",
+      "1094: Test Suite 'Selected tests' failed at 2026-10-25 17:40:58.989.",
+      "1109: ** TEST FAILED **",
+      "xcodebuild exited 65",
+      "UI test log reports 1 failures",
+      "requested UI test selector has no execution evidence"
+    ],
+    "required_selectors_missing": [
+      "DUNEUITests/HeroRhythmUITests/testAutoOnlyHabitsShowStarterInsteadOfZeroProgress"
+    ],
+    "log_path": "/Users/shanks/.codex/worktrees/activity-life-heroes/Health/.codex-checks/hero-iphone-ui-delta.log"
+  },
+  "hero-iphone-ui.log.result.json": {
+    "schema_version": 1,
+    "status": "failed",
+    "target": "DUNEUITests",
+    "run_exit_status": 65,
+    "requested_selectors": [
+      "DUNEUITests/DashboardSmokeTests",
+      "DUNEUITests/ActivitySmokeTests",
+      "DUNEUITests/WellnessSmokeTests/testWellnessTabLoads",
+      "DUNEUITests/LifeSmokeTests",
+      "DUNEUITests/HeroRhythmUITests"
+    ],
+    "skipped_selectors": [
+      "DUNEUITests/ActivitySmokeTests/testPullToRefreshShowsWaveIndicator",
+      "DUNEUITests/LifeSmokeTests/testWeeklyFrequencyShowsStepper",
+      "DUNEUITests/WellnessSmokeTests/testBodyFormSaveEnablesAfterInput",
+      "DUNEUITests/WellnessSmokeTests/testInjuryRecoveredToggleShowsEndDate",
+      "DUNEUITests/SettingsSmokeTests/testAppearanceSectionExists",
+      "DUNEUITests/SettingsSmokeTests/testDataPrivacySectionExists",
+      "DUNEUITests/SettingsSmokeTests/testAboutSectionExists",
+      "DUNEUITests/SettingsSmokeTests/testPreferredExercisesLinkExists",
+      "DUNEUITests/SettingsSmokeTests/testNavigateToPreferredExercises",
+      "DUNEUITests/SettingsSmokeTests/testWhatsNewLinkExists",
+      "DUNEUITests/SettingsSmokeTests/testNavigateToWhatsNew",
+      "DUNEUITests/SettingsSmokeTests/testWhatsNewNotificationsDetailShowsArtwork",
+      "DUNEUITests/SettingsSmokeTests/testWhatsNewSleepDebtDetailExists",
+      "DUNEUITests/SettingsSmokeTests/testWhatsNewWidgetDetailExists",
+      "DUNEUITests/SettingsSmokeTests/testWhatsNewMuscleMapDetailExists"
+    ],
+    "evidence_scope": {
+      "kind": "selector_execution",
+      "complete_test_inventory": false
+    },
+    "counts": {
+      "executed": 39,
+      "passed": 37,
+      "skipped": 0,
+      "failed": 2
+    },
+    "passed_cases": 37,
+    "failures": [
+      "9170: /Users/shanks/.codex/worktrees/activity-life-heroes/Health/DUNEUITests/Smoke/DashboardSmokeTests.swift:88: error: -[DUNEUITests.DashboardSmokeTests testNavigateToNotificationHub] : XCTAssertTrue failed - Notifications navigation title should appear",
+      "9184: Test Case '-[DUNEUITests.DashboardSmokeTests testNavigateToNotificationHub]' failed (26.581 seconds).",
+      "9748: /Users/shanks/.codex/worktrees/activity-life-heroes/Health/DUNEUITests/Smoke/DashboardSmokeTests.swift:121: error: -[DUNEUITests.DashboardSmokeTests testNotificationHubSummaryAtMaximumAccessibilitySize] : XCTAssertTrue failed - notifications-open-settings-button should be reachable at maximum access…",
+      "9762: Test Case '-[DUNEUITests.DashboardSmokeTests testNotificationHubSummaryAtMaximumAccessibilitySize]' failed (90.012 seconds).",
+      "10007: Test Suite 'DashboardSmokeTests' failed at 2026-10-25 17:25:18.236.",
+      "11459: Test Suite 'DUNEUITests.xctest' failed at 2026-10-25 17:32:31.033.",
+      "11461: Test Suite 'Selected tests' failed at 2026-10-25 17:32:31.036.",
+      "11477: ** TEST FAILED **",
+      "xcodebuild exited 65",
+      "UI test log reports 2 failures"
+    ],
+    "required_selectors_missing": [],
+    "log_path": "/Users/shanks/.codex/worktrees/activity-life-heroes/Health/.codex-checks/hero-iphone-ui.log"
+  }
+}

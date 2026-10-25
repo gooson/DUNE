@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/DashboardSmokeTests",
+    "DUNEUITests/ActivitySmokeTests",
+    "DUNEUITests/WellnessSmokeTests/testWellnessTabLoads",
+    "DUNEUITests/LifeSmokeTests",
+    "DUNEUITests/HeroRhythmUITests"
+  ],
+  "skipped_selectors": [
+    "DUNEUITests/ActivitySmokeTests/testPullToRefreshShowsWaveIndicator",
+    "DUNEUITests/LifeSmokeTests/testWeeklyFrequencyShowsStepper",
+    "DUNEUITests/WellnessSmokeTests/testBodyFormSaveEnablesAfterInput",
+    "DUNEUITests/WellnessSmokeTests/testInjuryRecoveredToggleShowsEndDate",
+    "DUNEUITests/SettingsSmokeTests/testAppearanceSectionExists",
+    "DUNEUITests/SettingsSmokeTests/testDataPrivacySectionExists",
+    "DUNEUITests/SettingsSmokeTests/testAboutSectionExists",
+    "DUNEUITests/SettingsSmokeTests/testPreferredExercisesLinkExists",
+    "DUNEUITests/SettingsSmokeTests/testNavigateToPreferredExercises",
+    "DUNEUITests/SettingsSmokeTests/testWhatsNewLinkExists",
+    "DUNEUITests/SettingsSmokeTests/testNavigateToWhatsNew",
+    "DUNEUITests/SettingsSmokeTests/testWhatsNewNotificationsDetailShowsArtwork",
+    "DUNEUITests/SettingsSmokeTests/testWhatsNewSleepDebtDetailExists",
+    "DUNEUITests/SettingsSmokeTests/testWhatsNewWidgetDetailExists",
+    "DUNEUITests/SettingsSmokeTests/testWhatsNewMuscleMapDetailExists"
+  ],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 39,
+    "passed": 37,
+    "skipped": 0,
+    "failed": 2
+  },
+  "passed_cases": 37,
+  "failures": [
+    "9170: /Users/shanks/.codex/worktrees/activity-life-heroes/Health/DUNEUITests/Smoke/DashboardSmokeTests.swift:88: error: -[DUNEUITests.DashboardSmokeTests testNavigateToNotificationHub] : XCTAssertTrue failed - Notifications navigation title should appear",
+    "9184: Test Case '-[DUNEUITests.DashboardSmokeTests testNavigateToNotificationHub]' failed (26.581 seconds).",
+    "9748: /Users/shanks/.codex/worktrees/activity-life-heroes/Health/DUNEUITests/Smoke/DashboardSmokeTests.swift:121: error: -[DUNEUITests.DashboardSmokeTests testNotificationHubSummaryAtMaximumAccessibilitySize] : XCTAssertTrue failed - notifications-open-settings-button should be reachable at maximum access…",
+    "9762: Test Case '-[DUNEUITests.DashboardSmokeTests testNotificationHubSummaryAtMaximumAccessibilitySize]' failed (90.012 seconds).",
+    "10007: Test Suite 'DashboardSmokeTests' failed at 2026-10-25 17:25:18.236.",
+    "11459: Test Suite 'DUNEUITests.xctest' failed at 2026-10-25 17:32:31.033.",
+    "11461: Test Suite 'Selected tests' failed at 2026-10-25 17:32:31.036.",
+    "11477: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log reports 2 failures"
+  ],
+  "required_selectors_missing": [],
+  "log_path": "/Users/shanks/.codex/worktrees/activity-life-heroes/Health/.codex-checks/hero-iphone-ui.log"
+}
