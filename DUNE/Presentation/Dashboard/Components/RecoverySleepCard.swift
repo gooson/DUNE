@@ -40,7 +40,7 @@ struct RecoverySleepCard: View {
 
     private var hasValidDeficit: Bool {
         guard let deficit = sleepDeficit else { return false }
-        return deficit.level != .insufficient
+        return deficit.level != .insufficient && deficit.weeklyDeficit.isFinite && deficit.weeklyDeficit >= 0
     }
 
     // MARK: - Header
