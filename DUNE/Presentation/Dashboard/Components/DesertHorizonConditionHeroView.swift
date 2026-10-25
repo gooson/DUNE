@@ -230,10 +230,23 @@ struct DesertHorizonConditionHeroView: View {
 
     private var weeklyTrendScores: [ConditionScore] {
         let calendar = Calendar.current
+        let today = calendar.startOfDay(for: .now)
+        guard let firstDay = calendar.date(byAdding: .day, value: -6, to: today),
+              let nextDay = calendar.date(byAdding: .day, value: 1, to: today),
+              score.date >= firstDay, score.date < nextDay else { return [] }
+
+        var scores = [score]
+        var seenDays: Set<Date> = [calendar.startOfDay(for: score.date)]
         let history = recentScores
-            .filter { !calendar.isDate($0.date, inSameDayAs: score.date) }
+            .filter { $0.date >= firstDay && $0.date < nextDay }
             .sorted { $0.date > $1.date }
-        return Array(([score] + history).prefix(7))
+        for historicalScore in history {
+            let day = calendar.startOfDay(for: historicalScore.date)
+            if seenDays.insert(day).inserted {
+                scores.append(historicalScore)
+            }
+        }
+        return scores
     }
 
     private var evidence: some View {

@@ -44,7 +44,7 @@ struct DailyProgressRingCard: View {
                         .foregroundStyle(theme.secondaryTextColor)
                 }
 
-                if dynamicTypeSize.isAccessibilitySize || habitProgress != nil {
+                if dynamicTypeSize >= .xxLarge || habitProgress != nil {
                     VStack(spacing: 12) { progressTiles }
                 } else {
                     HStack(alignment: .top, spacing: 12) { progressTiles }

@@ -157,6 +157,27 @@ final class TodayCompactUITests: SeededUITestBaseCase {
         addScreenshotAttachment(named: "Today Compact odd pinned metrics")
     }
 
+    func testPinnedMetricsUseOneColumnAtStandardXXXLTextSize() {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryXXXL"
+        ]
+        launchApp(with: configuration)
+        navigateToDashboard()
+
+        let grid = element("dashboard-pinned-grid")
+        let first = app.buttons["dashboard-metric-hrv"].firstMatch
+        let second = app.buttons["dashboard-metric-rhr"].firstMatch
+        XCTAssertTrue(grid.waitForExistence(timeout: 10))
+        XCTAssertTrue(first.waitForExistence(timeout: 5))
+        XCTAssertTrue(second.waitForExistence(timeout: 5))
+        XCTAssertGreaterThanOrEqual(second.frame.minY, first.frame.maxY - 2,
+                                    "Standard XXXL should stack pinned metrics in one column")
+        XCTAssertEqual(first.frame.minX, second.frame.minX, accuracy: 2)
+        XCTAssertEqual(first.frame.maxX, second.frame.maxX, accuracy: 2)
+        addScreenshotAttachment(named: "Today Compact pinned metrics standard XXXL")
+    }
+
     func testCompactWorkoutRowPreservesDateValueAndDetailRoute() {
         launchWorkoutRow()
         let rowID = "dashboard-workout-\(workoutID)"
@@ -205,5 +226,28 @@ final class TodayCompactUITests: SeededUITestBaseCase {
             }
             addScreenshotAttachment(named: "Today Compact workout max text \(language)")
         }
+    }
+
+    func testWorkoutTypeMoreAndLessPreserveHiddenRows() {
+        launchWorkoutRow()
+
+        let first = app.buttons["dashboard-workout-exercise-compact-row"].firstMatch
+        let second = app.buttons["dashboard-workout-exercise-compact-run"].firstMatch
+        let third = app.buttons["dashboard-workout-exercise-compact-cycle"].firstMatch
+        let disclosure = app.buttons["dashboard-workout-more"].firstMatch
+        XCTAssertTrue(first.waitForExistence(timeout: 10))
+        XCTAssertTrue(second.waitForExistence(timeout: 5))
+        XCTAssertFalse(third.exists, "Only the two most recent exercise types should appear initially")
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("dashboard-workout-more", maxSwipes: 20))
+        XCTAssertTrue(disclosure.label.contains("More"))
+        disclosure.tap()
+
+        XCTAssertTrue(third.waitForExistence(timeout: 5), "More should reveal the older exercise type")
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("dashboard-workout-more", maxSwipes: 6))
+        XCTAssertTrue(disclosure.label.contains("Less"))
+        addScreenshotAttachment(named: "Today Compact expanded workout types")
+        disclosure.tap()
+        XCTAssertFalse(third.exists, "Less should collapse the older exercise type")
+        XCTAssertTrue(first.exists && second.exists, "The two recent exercise types should remain")
     }
 }

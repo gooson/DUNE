@@ -4,6 +4,7 @@ import SwiftData
 struct DashboardView: View {
     @State private var viewModel: DashboardViewModel
     @State private var isShowingPinnedEditor = false
+    @State private var showsAllWorkoutTypes = false
     @State private var templateNudgeToSave: WorkoutTemplateRecommendation?
     @State private var hasAppeared = false
     @State private var isShowingBriefing = false
@@ -646,8 +647,10 @@ struct DashboardView: View {
 
     private func cardGrid(cards: [VitalCardData]) -> some View {
         let metrics = cards.filter { $0.metric.workoutTypeKey == nil }
-        let workouts = cards.filter { $0.metric.workoutTypeKey != nil }
-        let columns = dynamicTypeSize.isAccessibilitySize ? 1 : 2
+        let workouts = cards.filter { $0.metric.workoutTypeKey != nil }.sorted {
+            $0.lastUpdated == $1.lastUpdated ? $0.id < $1.id : $0.lastUpdated > $1.lastUpdated
+        }
+        let columns = dynamicTypeSize >= .xxLarge ? 1 : 2
         let rows = stride(from: 0, to: metrics.count, by: columns).map { index in
             Array(metrics[index..<min(index + columns, metrics.count)])
         }
@@ -655,14 +658,46 @@ struct DashboardView: View {
         return VStack(spacing: 10) {
             ForEach(rows.indices, id: \.self) { rowIndex in
                 let row = rows[rowIndex]
-                HStack(alignment: .top, spacing: 10) {
-                    ForEach(row) { card in
-                        metricCard(card, index: metrics.firstIndex(where: { $0.id == card.id }) ?? 0)
+                ViewThatFits(in: .horizontal) {
+                    HStack(alignment: .top, spacing: 10) {
+                        ForEach(row) { card in
+                            metricCard(card, index: metrics.firstIndex(where: { $0.id == card.id }) ?? 0)
+                                .frame(minWidth: 150)
+                        }
+                    }
+                    VStack(spacing: 10) {
+                        ForEach(row) { card in
+                            metricCard(card, index: metrics.firstIndex(where: { $0.id == card.id }) ?? 0)
+                        }
                     }
                 }
             }
-            ForEach(Array(workouts.enumerated()), id: \.element.id) { index, card in
+            if !workouts.isEmpty {
+                Text("Exercise by Type")
+                    .font(.caption.weight(.medium))
+                    .foregroundStyle(DS.Color.textSecondary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            ForEach(Array((showsAllWorkoutTypes ? workouts : Array(workouts.prefix(2))).enumerated()), id: \.element.id) { index, card in
                 metricCard(card, index: metrics.count + index, isWorkout: true)
+            }
+            if workouts.count > 2 {
+                Button {
+                    withAnimation(reduceMotion ? nil : DS.Animation.standard) {
+                        showsAllWorkoutTypes.toggle()
+                    }
+                } label: {
+                    HStack(spacing: 5) {
+                        Text(showsAllWorkoutTypes ? LocalizedStringKey("Show fewer exercises") : LocalizedStringKey("Show more exercises"))
+                        Image(systemName: showsAllWorkoutTypes ? "chevron.up" : "chevron.down")
+                    }
+                    .font(.subheadline.weight(.medium))
+                    .frame(maxWidth: .infinity, minHeight: 44)
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .accessibilityIdentifier("dashboard-workout-more")
+                .accessibilityValue(showsAllWorkoutTypes ? Text("Expanded") : Text("Collapsed"))
             }
         }
     }

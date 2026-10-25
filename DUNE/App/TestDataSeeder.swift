@@ -163,6 +163,18 @@ enum TestDataSeeder {
             isHistorical: true,
             iconOverride: "dumbbell.fill",
             workoutTypeKey: "Seated Cable Row"
+        ), HealthMetric(
+            id: "exercise-compact-run", name: String(localized: "Running"),
+            value: 10, unit: "km", change: nil,
+            date: Calendar.current.date(byAdding: .day, value: -4, to: Date()) ?? Date(),
+            category: .exercise, isHistorical: true,
+            iconOverride: "figure.run", workoutTypeKey: "Running"
+        ), HealthMetric(
+            id: "exercise-compact-cycle", name: String(localized: "Cycling"),
+            value: 20, unit: "km", change: nil,
+            date: Calendar.current.date(byAdding: .day, value: -5, to: Date()) ?? Date(),
+            category: .exercise, isHistorical: true,
+            iconOverride: "bicycle", workoutTypeKey: "Cycling"
         )]
     }
 
