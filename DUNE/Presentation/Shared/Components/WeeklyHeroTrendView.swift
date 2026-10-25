@@ -98,9 +98,10 @@ struct WeeklyHeroTrendView: View {
         }
     }
 
-    private func valueText(_ point: WeeklyHeroTrendPoint) -> Text {
+    private func valueText(_ point: WeeklyHeroTrendPoint) -> some View {
         Text(verbatim: point.value.map { $0.formattedWithSeparator } ?? "—")
             .monospacedDigit()
+            .accessibilityLabel(point.value.map { $0.formattedWithSeparator } ?? Labels.noRecord)
     }
 
     private func barHeight(_ value: Int) -> CGFloat {

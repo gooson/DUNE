@@ -44,16 +44,14 @@ enum LifeHeroTrend {
         referenceDate: Date = Date(),
         calendar: Calendar = .current
     ) -> [WeeklyHeroTrendPoint] {
-        let today = calendar.startOfDay(for: referenceDate)
         let manualHabits = habits.filter { !$0.isAutoLinked }
         let earliestCreation = manualHabits.map { calendar.startOfDay(for: $0.createdAt) }.min()
         let habitsByID = Dictionary(manualHabits.map { ($0.analyticsHabit.id, $0) }, uniquingKeysWith: { _, last in last })
-        let tomorrow = calendar.date(byAdding: .day, value: 1, to: today) ?? today
         let eligibleLogs = logs.compactMap { log -> HabitLogSnapshot? in
             guard !log.isAutoCompleted,
                   let habit = habitsByID[log.analyticsLog.habitID],
                   calendar.startOfDay(for: log.analyticsLog.date) >= calendar.startOfDay(for: habit.createdAt),
-                  log.analyticsLog.date < tomorrow
+                  log.analyticsLog.date <= referenceDate
             else { return nil }
             return log.analyticsLog
         }
@@ -64,9 +62,8 @@ enum LifeHeroTrend {
             dayCount: 7,
             referenceDate: referenceDate
         )
-        let hasCompletedRecord = counts.contains { $0.completionCount > 0 }
         return counts.map { day in
-            let value: Int? = if let earliestCreation, day.date >= earliestCreation, hasCompletedRecord {
+            let value: Int? = if let earliestCreation, day.date >= earliestCreation {
                 day.completionCount
             } else {
                 nil

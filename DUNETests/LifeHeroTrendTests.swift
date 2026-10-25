@@ -57,8 +57,8 @@ struct LifeHeroTrendTests {
         #expect(points.map(\.value) == [nil, nil, 1, 0, 0, 0, 0])
     }
 
-    @Test("All dates wait when no current manual completion record exists")
-    func noManualRecords() {
+    @Test("An existing manual habit has known zero completions after creation")
+    func zeroManualCompletions() {
         let manualID = UUID()
         let autoID = UUID()
         let points = LifeHeroTrend.points(
@@ -68,6 +68,19 @@ struct LifeHeroTrendTests {
             calendar: calendar
         )
 
+        #expect(points.count == 7)
+        #expect(points.map(\.value) == [nil, nil, nil, nil, nil, 0, 0])
+    }
+
+    @Test("Auto-linked habits do not create a manual completion history")
+    func noManualHabits() {
+        let id = UUID()
+        let points = LifeHeroTrend.points(
+            habits: [habit(id: id, created: 20, auto: true)],
+            logs: [log(id: id, day: 24)],
+            referenceDate: date(25),
+            calendar: calendar
+        )
         #expect(points.count == 7)
         #expect(points.allSatisfy { $0.value == nil })
     }

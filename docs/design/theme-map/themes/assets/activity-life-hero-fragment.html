@@ -87,8 +87,8 @@
   }
   function bars(kind) {
     const values = kind === 'activity' ? readiness : completion;
-    const label = kind === 'activity' ? '준비도 · 100점 기준' : '습관 · 완료/대상';
-    return `<div class="dh-trend"><div class="dh-trend-head"><b>${label}</b><span>10.19–10.25</span></div><div class="dh-bars" role="img" aria-label="예시 최근 7일 ${label}: ${values.map((v,i)=>`${dates[i]}일 ${state.data==='partial' && i===2?'기록 없음':v+(kind==='life'?'/6':'점')}`).join(', ')}">${values.map((v,i)=>{ const missing=state.data==='partial' && i===2; return `<div class="dh-column"><b>${missing?'—':v+(kind==='life'?'/6':'')}</b><div class="dh-bar-well"><i style="--dh-height:${missing?0:v/(kind==='life'?6:100)*100}%"></i></div><small>${i===6?'오늘':dates[i]+'일'}</small></div>`; }).join('')}</div></div>`;
+    const label = kind === 'activity' ? '준비도 · 100점 기준' : '일별 완료 기록';
+    return `<div class="dh-trend"><div class="dh-trend-head"><b>${label}</b><span>10.19–10.25</span></div><div class="dh-bars" role="img" aria-label="예시 최근 7일 ${label}: ${values.map((v,i)=>`${dates[i]}일 ${state.data==='partial' && i===2?'기록 없음':v+(kind==='life'?'개':'점')}`).join(', ')}">${values.map((v,i)=>{ const missing=state.data==='partial' && i===2; return `<div class="dh-column"><b>${missing?'—':v}</b><div class="dh-bar-well"><i style="--dh-height:${missing?0:v/(kind==='life'?6:100)*100}%"></i></div><small>${i===6?'오늘':dates[i]+'일'}</small></div>`; }).join('')}</div></div>`;
   }
   function factors() {
     return `<div class="dh-evidence" aria-label="준비도 구성 점수, 각 100점 기준">${[['HRV',48],['수면',82],['회복',72]].map(([label,value],i)=>{ const missing=state.data==='partial' && i===1; return `<div class="dh-factor"><span class="dh-factor-label">${label}</span><span class="dh-factor-value">${missing?'--':value}<small>/100</small></span><div class="dh-meter"><i style="width:${missing?0:value}%"></i></div></div>`; }).join('')}</div>`;
