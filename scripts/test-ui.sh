@@ -145,6 +145,12 @@ fi
 RESULT_FILE="${LOG_FILE}.result.json"
 if [[ "$DRY_RUN" -eq 0 ]]; then
     rm -f "$RESULT_FILE"
+    HOST_STATE_FILE="${LOG_FILE}.host.json"
+    rm -f "$HOST_STATE_FILE"
+    python3 "$ROOT_DIR/scripts/lib/command-deadline.py" --seconds 5 -- \
+        python3 "$ROOT_DIR/scripts/lib/ui-host-state.py" \
+        --runner ios --output "$HOST_STATE_FILE" || \
+        echo "Host state context unavailable; continuing UI test preflight." >&2
 fi
 
 resolve_test_plan() {

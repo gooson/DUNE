@@ -1,6 +1,7 @@
 """Contract tests for the owned UI command deadline."""
 
 from pathlib import Path
+import os
 import subprocess
 import sys
 import tempfile
@@ -9,6 +10,7 @@ import unittest
 
 
 SCRIPT = Path(__file__).resolve().parents[1] / "lib" / "command-deadline.py"
+LOCK = SCRIPT.with_name("simulator-test-lock.py")
 
 
 class CommandDeadlineTests(unittest.TestCase):
@@ -25,6 +27,47 @@ class CommandDeadlineTests(unittest.TestCase):
                                  sys.executable, "-c", "import sys; sys.exit(17)"],
                                 capture_output=True, text=True, timeout=5)
         self.assertEqual(result.returncode, 17)
+
+    def test_nested_deadline_preserves_both_repository_lock_descriptors(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            repo = Path(directory) / "repo"
+            repo.mkdir()
+            subprocess.run(["git", "init", "-q", str(repo)], check=True,
+                           capture_output=True)
+            environment = os.environ.copy()
+            environment["DUNE_SIM_TEST_LOCK_SCOPE"] = "repository"
+            environment.pop("DUNE_SIM_TEST_LOCK_FD", None)
+            environment.pop("DUNE_SIM_TEST_WORKTREE_LOCK_FD", None)
+            result = subprocess.run(
+                [sys.executable, str(SCRIPT), "--seconds", "5", "--",
+                 sys.executable, str(LOCK), str(repo), "--",
+                 sys.executable, str(SCRIPT), "--seconds", "3", "--",
+                 sys.executable, str(LOCK), str(repo), "--verify"],
+                env=environment, capture_output=True, text=True, timeout=8,
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_duplicate_and_invalid_inherited_lock_descriptors(self) -> None:
+        with tempfile.TemporaryFile() as file:
+            fd = file.fileno()
+            environment = {**os.environ,
+                           "DUNE_SIM_TEST_LOCK_FD": str(fd),
+                           "DUNE_SIM_TEST_WORKTREE_LOCK_FD": str(fd)}
+            result = subprocess.run(
+                [sys.executable, str(SCRIPT), "--seconds", "2", "--",
+                 sys.executable, "-c", "import os,sys; os.fstat(int(sys.argv[1]))", str(fd)],
+                env=environment, pass_fds=(fd,), capture_output=True, text=True, timeout=5,
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+        invalid = subprocess.run(
+            [sys.executable, str(SCRIPT), "--seconds", "2", "--",
+             sys.executable, "-c", "print('ran')"],
+            env={**os.environ, "DUNE_SIM_TEST_LOCK_FD": "stale",
+                 "DUNE_SIM_TEST_WORKTREE_LOCK_FD": "stale"},
+            capture_output=True, text=True, timeout=5,
+        )
+        self.assertEqual(invalid.returncode, 0, invalid.stderr)
+        self.assertEqual(invalid.stdout.strip(), "ran")
 
     def test_stops_a_stalled_command(self) -> None:
         result = subprocess.run([sys.executable, str(SCRIPT), "--seconds", "1", "--",

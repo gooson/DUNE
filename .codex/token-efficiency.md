@@ -1,6 +1,21 @@
 # 테스트 실행과 검증 재사용
 
-모델 배정은 `agent-map.md`, 공통 위임은 `skill-compat.md`를 따른다. 이 문서는 테스트/검증 단계에서만 읽는다.
+모델 배정은 `agent-map.md`, 공통 위임은 `skill-compat.md`를 따른다. 이 문서는 테스트/검증 또는 사용자가 요청한 비용 감사에서만 읽는다.
+
+## 실제 세션 사용량 감사
+
+사용자가 비용·중단 분석을 요청했을 때만 실행한다. 일상 작업마다 전체 로그를 스캔하지 않는다.
+
+```sh
+python3 scripts/audit-agent-sessions.py --start 2026-10-04T08:55:00+00:00 --end 2026-10-25T08:55:00+00:00 --output .codex-checks/session-audit/usage.json
+```
+
+- 범위는 로컬 Codex 활성/보관/압축 rollout과 Claude projects다. 이벤트 시각으로 필터링하고 파일 읽기 실패·usage 누락을 보고한다. 원격 미동기화 세션이나 계정 전체 과금 기록까지 포함했다고 주장하지 않는다.
+- Codex는 response별 usage를 우선하고 해당 turn의 누적 `token_count`를 다시 더하지 않는다. Claude는 message ID별 반복 block usage를 한 번만 반영한다. 입력 안의 cached read/cache write, 출력 안의 reasoning을 중복 합산하지 않는다.
+- `total`은 반복 입력을 포함한 관측 토큰이며 비용·유효 작업량·계정 한도가 아니다. `uncached`는 cache read/write를 모두 제외한 입력이다. 캐시 쓰기를 포함한 새 입력은 `input - cached`로 따로 확인한다.
+- tool output bytes는 이미지 등 직렬화된 기록을 포함하는 proxy다. 토큰으로 환산하지 않는다. 키워드 출현과 compaction도 실패 횟수가 아니다. 명시적 interruption과 assistant의 환경 미완료 보고를 별도 검토한다.
+- 요청/도구 본문·인증 정보는 보고서에 복사하지 않는다. 상세 세션 ID/로컬 경로는 ignored JSON에 보존하고, 공유 문서는 필요한 집계와 최소 근거만 남긴다. 감사 자체의 실행 구간은 비교 기간에서 제외한다.
+- 개선 전후는 유사한 작업 범위·모델·검증 품질에서 새 입력/출력, 모델 호출 수, 중복 상태 조회, 실패 후 재시도와 미검증 잔여 항목을 비교한다. 캐시율만으로 절감률을 주장하지 않는다.
 
 ## 실행과 출력
 

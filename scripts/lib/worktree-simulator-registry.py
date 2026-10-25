@@ -8,6 +8,7 @@ import json
 import os
 from pathlib import Path
 import re
+import stat
 import subprocess
 import sys
 import tempfile
@@ -117,9 +118,23 @@ def write_registry(root: Path, records: list[dict[str, str]]) -> None:
 
 
 def run_simctl(*args: str, capture_output: bool = False) -> subprocess.CompletedProcess:
+    inherited = []
+    for name in ("DUNE_SIM_TEST_LOCK_FD", "DUNE_SIM_TEST_WORKTREE_LOCK_FD"):
+        value = os.environ.get(name)
+        if value is None:
+            continue
+        if not value.isdecimal():
+            raise ValueError(f"Invalid inherited simulator lock descriptor: {name}")
+        fd = int(value)
+        opened = os.fstat(fd)
+        if not stat.S_ISREG(opened.st_mode) or opened.st_uid != os.getuid():
+            raise ValueError(f"Invalid inherited simulator lock descriptor: {name}")
+        if fd not in inherited:
+            inherited.append(fd)
     return subprocess.run([sys.executable, str(DEADLINE), "--seconds", "30", "--",
                            "xcrun", "simctl", *args], check=True,
-                          capture_output=capture_output, text=capture_output)
+                          capture_output=capture_output, text=capture_output,
+                          pass_fds=tuple(inherited))
 
 
 def devices() -> dict[str, dict]:
