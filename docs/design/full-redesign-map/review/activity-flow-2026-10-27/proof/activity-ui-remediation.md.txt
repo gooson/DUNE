@@ -1,0 +1,13 @@
+# Activity UI conditional retry
+
+Initial run: 43 executed, 38 passed, 5 failed. Raw log: activity-ui-phone.log; result bundle Test-DUNEUITests-2026.10.27_01-23-40-+0900.xcresult.
+
+Related cause (2 HeroRhythm tests): expanded trend renders, confirmed by failure PNG and day child AXIDs. DisclosureGroup container identifier overwrites nested WeeklyHeroTrendView root identifier. Replace container identifier with a dedicated full-width 44pt button and sibling conditional trend. Keep chart root and day identifiers.
+
+Also fix newly added context: no-data muscle states must not imply recovered, positive finite sleep samples determine observed sleep. Accessibility risk score has an unconstrained text alternative.
+
+Capture remediation: initial scroll-to-hittable captures often stop with target header at viewport bottom. Align target near viewport top and capture tall card content separately.
+
+Retry scope: ActivityFlowUITests + both failed HeroRhythm paths + four tab root smoke selectors. First run all 11 Flow tests and Activity/Life/Wellness smoke passed. Three unrelated Dashboard smoke failures (notification hub title, settings button, legacy weekly-condition-chart identifier) are preserved as failures, excluded from conditional retry. DashboardSmokeTests, NotificationHubView, DashboardView, ContentView unchanged versus origin/main; Today hero changes only heading typography/ID. Full regression remains unverified under adapter targeted policy. Final report must not claim full smoke passed.
+
+This is the single automatic retry for the related identifier failure after concrete source remediation.

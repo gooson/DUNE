@@ -1,0 +1,36 @@
+import json,os,subprocess,time,types
+from pathlib import Path
+base=Path('/Users/shanks/.codex/worktrees/80fd/Health/scripts/duo-visual-audit.py')
+source=base.read_text()
+old='    lock_fd = os.environ.get("DUNE_SIM_TEST_LOCK_FD")\n    inherited_fds = (int(lock_fd),) if lock_fd else ()'
+new='    inherited_fds = tuple(dict.fromkeys(int(os.environ[key]) for key in ("DUNE_SIM_TEST_LOCK_FD", "DUNE_SIM_TEST_WORKTREE_LOCK_FD") if os.environ.get(key)))'
+assert source.count(old)==1
+module=types.ModuleType('activity_duo_audit')
+module.__file__=str(base)
+exec(compile(source.replace(old,new),str(base),'exec'),module.__dict__)
+def set_panel(output,sequence,state,device,test_deadline):
+    wanted='LCD' if state=='closed' else 'LCD-1'
+    angle=module.FOLD_ANGLES[state]
+    receipt={'device':device,'requestedState':state,'requestedAngle':angle,
+             'actualAngle':None,'angleVerified':False,'expectedPanel':wanted,
+             'panelVerified':False,'helperSourceCommit':'7acb090dd7d28fb0aea8e1907211ceff15aa450e',
+             'helperSHA256':'f7d6996d6240aaa2f72a0e7fea731b692fe1ac6987491e9c5a597fb890cedcef'}
+    try:
+        subprocess.run(['xcrun','simctl','spawn',device,'/private/tmp/activity-hinge-helper','set',str(angle)],check=True,timeout=15)
+        time.sleep(0.8)
+        panel_path=output/f'{sequence:03}-displays.json'
+        subprocess.run(['xcrun','devicectl','device','info','displays','--device',device,'--timeout','10','--quiet','--json-output',str(panel_path)],check=True,timeout=12)
+        data=json.loads(panel_path.read_text())
+        active=[d for d in data['result']['displays'] if d['active']]
+        assert len(active)==1 and active[0]['name']==wanted,str(active)
+        receipt['activeDisplay']=active[0]
+        receipt['panelVerified']=True
+        print(f'PANEL_VERIFIED {state} {wanted}; angle readback unavailable',flush=True)
+    except Exception as exc:
+        receipt['error']=str(exc)
+        raise
+    finally:
+        (output/f'{sequence:03}-panel-verification.json').write_text(json.dumps(receipt,indent=2)+'\n')
+module.set_fold_with_cli=set_panel
+os.environ['DAILVE_DUO_HINGE_CLI']='/private/tmp/activity-hinge-helper'
+raise SystemExit(module.main())

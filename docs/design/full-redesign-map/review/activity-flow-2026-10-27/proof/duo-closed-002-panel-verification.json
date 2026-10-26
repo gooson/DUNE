@@ -1,0 +1,45 @@
+{
+  "device": "AD51538E-F7C0-40BC-93F1-997750BCDFBE",
+  "requestedState": "closed",
+  "requestedAngle": 0,
+  "actualAngle": null,
+  "angleVerified": false,
+  "expectedPanel": "LCD",
+  "panelVerified": true,
+  "helperSourceCommit": "7acb090dd7d28fb0aea8e1907211ceff15aa450e",
+  "helperSHA256": "f7d6996d6240aaa2f72a0e7fea731b692fe1ac6987491e9c5a597fb890cedcef",
+  "activeDisplay": {
+    "active": true,
+    "backlightState": "activeOn",
+    "bounds": [
+      [
+        0,
+        0
+      ],
+      [
+        1398,
+        2034
+      ]
+    ],
+    "chromeIdentifier": "com.apple.dt.devicekit.chrome.phone15",
+    "currentOrientation": "rot0",
+    "displayId": 1,
+    "framebufferMaskIdentifier": "1C896A2B-F0D7-405C-8D0F-66E4B80AD044",
+    "name": "LCD",
+    "nativeOrientation": "rot0",
+    "nativeSize": [
+      1398,
+      2034
+    ],
+    "physicalSize": [
+      3.039130449295044,
+      4.421739101409912
+    ],
+    "pointScale": 3,
+    "primary": true,
+    "type": {
+      "integrated": {}
+    },
+    "uniqueId": "890AD071-7C1E-4D11-838B-FF06D5FF9D76"
+  }
+}

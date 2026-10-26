@@ -140,3 +140,5 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 [새 실제 iPhone 화면과 출처](../full-redesign-map/review/card-headers-review-ship-2026-10-27/index.html)를 추가했다. 전용 기기 복구 근거 후 관련 UI 6개가 모두 통과하고 정상 종료했다. 네 탭의 초기 viewport·대상 헤더·상세 12장은 새 XCTest 원본이며, 최대 글씨 훈련량과 준비도 목적지도 검사했다. [리뷰·범위·실패 이력의 후속](../../reviews/2026-10-27-card-navigation-review-ship.md)을 따른다. 이전 900초 종료는 과거 실패로 보존하고 이번 결과와 구분한다.
 
 후속 실제 캡처는 iPad 4장, Duo 외부 LCD 4장·내부 LCD-1 4장도 같은 갤러리에 추가했다. 활성 패널 전후 readback과 원본 해상도는 확인했지만 Duo 물리 각도·회전·새 AX는 미검증이다. 모든 하단 카드·모든 테마/글씨 조합은 갱신하지 않았다. 세부 제한은 갤러리 README를 따른다.
+
+2026-10-27 A01을 Flow 순서와 준비도 막대·실제 운동 보상/심박·개인 기록/보고서/부하/구성 강조로 개편하고 T03/H01/L01의 상단 제목을 영어 대문자로 통일했다. [이번 작업의 새 실제 화면과 출처](../full-redesign-map/review/activity-flow-2026-10-27/index.html)를 통합 포털에 연결했다. 다른 UDID의 기존 통합 인덱스는 덮어쓰지 않는다. 통과한 기능 검사와 최대 글씨 전체 수집 시간 초과, Duo 수집 상태는 갤러리 README에서 구분한다.

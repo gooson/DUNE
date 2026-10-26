@@ -1,0 +1,9 @@
+# AX responsiveness recovery
+
+35fd4482 conditional UI retry: first root test exceeded300s allowance. App idle notification absent at89s, AX section queries progressed through122.72s then blocked; failure handling delayed beyond449s. Next dark capture test also blocked at hero AX existence query after111.46s. Cause unknown; not classified as app or SDK defect.
+
+Preserve raw activity-ui-phone-retry.log and pipeline interrupted receipt. Verified owned pipeline controller was interrupted through its signal handler to stop only its recorded child group, after two repeated responsiveness stalls. No successful test result is inferred.
+
+One environmental remediation: shut down and boot registered owned iPhone24C8FE44, install exact already-built binary, direct seeded launch, new PNG plus startup responsiveness. Retry only if this demonstrates changed environment. No source change and no re-run of original broad43 tests. Related identifier cause was fixed but its two selectors were not reached in this interrupted attempt; retain original failures until executed.
+
+Recovery evidence: registered iPhone shut down/booted successfully in11s. Exact installed35fd binary direct seeded launch PID32333 succeeded; native PNG activity-phone-after-reboot.png (2026-10-27 02:22) captured within15s deadline and manually inspected. Environment changed by reboot; prior blocked snapshot source unchanged. One environmental retry now limited to7 affected tests,180s idle and900s wall deadline. First original11Flow successes and relevant smoke remain separately scoped.

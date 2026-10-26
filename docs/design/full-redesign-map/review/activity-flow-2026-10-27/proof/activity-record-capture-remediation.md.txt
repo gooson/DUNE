@@ -1,0 +1,5 @@
+# Capture gesture remediation
+
+First final-PR capture attempt (activity-ui-records-phone.log) used measured56pt drags at default500px/s with no end hold. Native log repeatedly alternates normalizedy0.54/0.65 every~2.8s at PR alignment, demonstrating inertia-driven oscillation. This is a capture-helper defect, not app render failure. Stopped exact verified owned command-deadline watchdog81695 viaSIGTERM; wrapper returned failed, cleanupPermissionError preserved; subsequent ps confirms no own xcodebuild/test-ui process remains. No successful result inferred.
+
+Remediation: reuse existing repository pattern from TodaySettingsRegressionTests: explicit100px/s drag with0.5s end hold. Use measured distance up to200pt and12corrections, not repeated56pt fling. Exclude lower tabbar from usable viewport when it is below screen midpoint (iPad topbar unaffected). Application source unchanged since a0e8cbbc and its passedbuild; only ActivityFlowUITests helper changed. One conditional retry for this capture cause, retain originallog/receipt.

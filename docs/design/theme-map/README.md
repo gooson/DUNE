@@ -117,3 +117,5 @@ Activity 운동 구성은 덤벨·발자국, 큰 68%/32%, 금빛/녹색의 16px 
 최근 운동의 달성 배지는 금속 질감의 리본 메달로, PR은 더 밝은 골드 트로피와 작은 빛 아이콘으로 강조했다. 문구와 실제 달성 의미는 유지하고, 반복되는 반짝임 애니메이션은 사용하지 않는다.
 
 각 탭의 히어로 제목도 [공통 표기 계약](../layout-map/hero-heading-style.md)에 따라 CONDITION·READINESS·WELLNESS·HABITS의 영어 대문자로 통일하는 개편 범위에 포함한다. 현재 Activity 최종 시안의 READINESS가 기준이며 설명은 사용자 언어를 유지한다.
+
+2026-10-27 Activity Flow와 4탭 대문자 제목을 네이티브에 적용했다. [레이아웃 계약](../layout-map/activity-final-proposal.md)과 [새 실제 화면](../full-redesign-map/review/activity-flow-2026-10-27/index.html)에서 현재 앱·검증 제한을 확인한다. 위 시안의 PNG/브라우저 검사와 앱 캡처를 구분하며, 실제 비율은 기록 항목 수 기준이고 원래 DS 범주 색을 따른다.

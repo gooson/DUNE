@@ -170,7 +170,13 @@
       "name": "Activity 최종 통합안",
       "title": "Activity · Final Flow",
       "file": "dune-activity-final.html",
-      "detail": "2026-10-26 요청한 모든 피드백을 Flow 한 화면으로 통합. 상태→운동 선택→기록/성취→누적 분석의 12개 카드. 준비도 막대·근육 범례·부담 근거·리본 메달·골드 PR 배지/작은 Apple 연동 마크/심박·최고 기록·주간 보고서·꾸준함·시간/칼로리·운동 구성 강조. 비교 캐러셀 제거, 이전안 별도 보존. 4탭 히어로 제목의 영어 대문자 통일 포함. 예시 데이터, 앱 미적용."
+      "detail": "2026-10-26 요청한 모든 피드백을 Flow 한 화면으로 통합. 상태→운동 선택→기록/성취→누적 분석의 12개 카드. 준비도 막대·근육 범례·부담 근거·리본 메달·골드 PR 배지/작은 Apple 연동 마크/심박·최고 기록·주간 보고서·꾸준함·시간/칼로리·운동 구성 강조. 비교 캐러셀 제거, 이전안 별도 보존. 4탭 히어로 제목의 영어 대문자 통일 포함. 예시 데이터, 앱 미적용.",
+      "implementation": {
+        "layout": "../layout-map/activity-final-proposal.md",
+        "actual_captures": "../full-redesign-map/review/activity-flow-2026-10-27/index.html",
+        "verification": "../../reviews/2026-10-27-activity-final-flow.md",
+        "status": "implemented-targeted-verification"
+      }
     }
   ]
 }

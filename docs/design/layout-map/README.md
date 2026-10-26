@@ -91,3 +91,7 @@ Activity 후속 시안은 개인 기록에 금빛 메달·최고 값·개선량�
 2026-10-26 [Astra 자문·타 앱 조사·전체 정보구조](activity-information-architecture-study.md)를 추가했다. Activity 비교에 Flow를 추가하고 운동 선택/성취를 분석보다 앞당겼다. 꾸준함·kg 볼륨·부하·부담의 의미와 최근 운동일 합계를 구분하며 현재 집계가 다른 주간 통계/보고서는 보존한다.
 
 2026-10-26 [최종 통합안](activity-final-proposal.md)에서 모든 피드백을 반영한 Flow 한 화면을 제시한다. 이 문서의 비교/조사 기록은 보존하며 최종 전용 시안은 별도 파일에서 연다.
+
+## Activity Flow 네이티브 적용 · 2026-10-27
+
+[A01 현재 배치](index.html#activity)는 상태→선택→기록/성취→분석의12카드다. [실제 화면](../full-redesign-map/review/activity-flow-2026-10-27/index.html)과 [최종 계약](activity-final-proposal.md)을 함께 따른다. 개인 기록의 값과 미니 그래프를 서로 다른 줄로 두어 iPad 반폭에서도 생략을 방지한다. 제목은4탭영어대문자이며 준비도100점막대·실제보상/심박·범례·시간/칼로리·보고서/구성을 적용했다. 전체 회귀와 수집 시간 초과는 실제 화면의 검증 기록에서 구분한다.
