@@ -28,6 +28,7 @@ struct SmartInsightsSection: View {
                     )
                 }
             }
+            .accessibilityElement(children: .contain)
             .accessibilityIdentifier("dashboard-smart-insights-section")
         }
     }

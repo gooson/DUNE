@@ -360,6 +360,30 @@ struct ConditionScoreDetailViewModelTests {
         // Rolling 24h: should include today + yesterday points within window
         #expect(vm.chartData.count >= 4)
         #expect(vm.summaryStats != nil)
+
+        // The Today hero's shared calculation must match the visible detail
+        // window when both use the same measured samples and current score.
+        let windowStart = fixedNow.addingTimeInterval(-ScoreRefreshService.rollingWindowSeconds)
+        let rhrAverages = service.rhrCollection.map {
+            CalculateConditionScoreUseCase.Input.RHRDailyAverage(date: $0.date, value: $0.average)
+        }
+        let calculated = ConditionScoreDetailViewModel.calculatedHourlyPoints(
+            samples: samples,
+            rhrDailyAverages: rhrAverages,
+            displayStart: windowStart,
+            now: fixedNow,
+            recordedHours: [],
+            hasCurrentScore: true,
+            calendar: calendar
+        )
+        let heroPoints = ConditionScoreDetailViewModel.mergedHourlyPoints(
+            calculated: calculated,
+            snapshots: [],
+            currentScore: ConditionScore(score: 65, date: fixedNow),
+            now: fixedNow,
+            calendar: calendar
+        )
+        #expect(heroPoints == vm.chartData.filter { $0.date >= windowStart })
     }
 
     @Test("day period at 3am includes yesterday's hourly data")

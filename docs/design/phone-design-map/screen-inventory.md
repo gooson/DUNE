@@ -18,7 +18,7 @@ SwiftUI View와 인라인 프레젠테이션 **108개**를 화면 단위로 대�
 | T03 | 오늘 | 탭 | root | 하단 탭 · 한 열 | 사이드바 · 넓은 콘텐츠 | 외부 한 열 → 내부 확장 | `DUNE/Presentation/Dashboard/DashboardView.swift:4` |
 | T04 | 컨디션 상세 | 오늘 점수 | push | 상세 push · 한 열 | 상세 콘텐츠 | 선택·스크롤 유지 | `DUNE/Presentation/Dashboard/ConditionScoreDetailView.swift:8` |
 | T05 | 누적 스트레스 | 오늘 카드 | push | 상세 push · 한 열 | 상세 콘텐츠 | 선택·스크롤 유지 | `DUNE/Presentation/Dashboard/CumulativeStressDetailView.swift:7` |
-| T06 | 건강 지표 상세 | 오늘·웰니스 카드 | push/inspector | 상세 push · 선택 상태 | push 또는 선택 상세 inspector | 닫힘 push → 내부 선택 상세 | `DUNE/Presentation/Shared/Detail/MetricDetailView.swift:5` |
+| T06 | 건강 지표 상세 | 오늘·웰니스 카드 | Today push · Wellness 기존 경로 | Today 상세 push · 한 열 | Today 상세 push · Wellness 선택 상세 | Today 두 자세 push | `DUNE/Presentation/Shared/Detail/MetricDetailView.swift:5` |
 | T07 | 전체 데이터 | 지표 상세 | push | 상세 push · 한 열 | 상세 콘텐츠 | 선택·스크롤 유지 | `DUNE/Presentation/Shared/Detail/AllDataView.swift:4` |
 | T08 | 날씨 상세 | 오늘 브리핑 | push | 상세 push · 한 열 | 상세 콘텐츠 | 선택·스크롤 유지 | `DUNE/Presentation/Dashboard/WeatherDetailView.swift:5` |
 | T09 | 아침 브리핑 | 오늘 카드·자동 표시 | sheet | 화면 내 시트 | 시트 · 보조 패널 | 닫힘/내부 시트 | `DUNE/Presentation/Dashboard/MorningBriefingView.swift:4` |

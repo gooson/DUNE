@@ -18,34 +18,44 @@ struct TodayBriefCard: View {
     var body: some View {
         DashboardSupportCard {
             VStack(alignment: .leading, spacing: 8) {
-                HStack(spacing: 6) {
-                    Image(systemName: "cloud.sun.fill")
-                        .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(theme.accentColor)
-                        .accessibilityHidden(true)
-
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("Weather and Activity")
-                            .font(.headline)
-                        if let locationName = weatherSnapshot?.locationName {
-                            Text(locationName)
-                                .font(.caption)
-                                .foregroundStyle(theme.secondaryTextColor)
-                        } else {
-                            Text("Current conditions")
-                                .font(.caption)
-                                .foregroundStyle(theme.secondaryTextColor)
-                        }
-                    }
-                }
+                header
                 weatherRow
                 coachingRow
                 environmentAlert
-                briefingFooter
             }
         }
         .accessibilityElement(children: .contain)
         .accessibilityIdentifier("dashboard-today-brief-card")
+    }
+
+    private var header: some View {
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: 4))
+            : AnyLayout(HStackLayout(alignment: .top, spacing: 8))
+        return layout {
+            HStack(spacing: 6) {
+                Image(systemName: "cloud.sun.fill")
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(theme.accentColor)
+                    .accessibilityHidden(true)
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Weather and Activity")
+                        .font(.headline)
+                    if let locationName = weatherSnapshot?.locationName {
+                        Text(locationName)
+                            .font(.caption)
+                            .foregroundStyle(theme.secondaryTextColor)
+                    } else {
+                        Text("Current conditions")
+                            .font(.caption)
+                            .foregroundStyle(theme.secondaryTextColor)
+                    }
+                }
+            }
+            if !dynamicTypeSize.isAccessibilitySize { Spacer(minLength: 8) }
+            briefingLink
+        }
     }
 
     // MARK: - Weather Row
@@ -209,24 +219,22 @@ struct TodayBriefCard: View {
         }
     }
 
-    // MARK: - Briefing Footer
+    // MARK: - Briefing Entry
 
     @ViewBuilder
-    private var briefingFooter: some View {
+    private var briefingLink: some View {
         if conditionStatus != nil {
-            Divider().opacity(0.3)
-
             Button(action: onOpenBriefing) {
-                HStack(spacing: 8) {
+                HStack(spacing: 4) {
                     Text("View Briefing")
-                        .font(.subheadline.weight(.semibold))
+                        .font(.caption.weight(.semibold))
                         .foregroundStyle(.tint)
-                    Spacer(minLength: 0)
                     Image(systemName: "chevron.right")
                         .font(.caption.weight(.semibold))
                         .foregroundStyle(.tint)
                 }
-                .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(minHeight: 44)
                 .contentShape(Rectangle())
             }
             .buttonStyle(.plain)

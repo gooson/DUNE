@@ -57,6 +57,13 @@ final class DashboardViewModel {
     private(set) var sleepDeficitAnalysis: SleepDeficitAnalysis?
     private(set) var latestSleepStages: [SleepStage] = []
     private var hasLoadedOnce = false
+    private var conditionHourlySamples: [HRVSample] = []
+    private var conditionHourlyRHR: [CalculateConditionScoreUseCase.Input.RHRDailyAverage] = []
+    private var lastHealthDataLoadedAt: Date?
+
+    private var canRetainHealthData: Bool {
+        lastHealthDataLoadedAt.map { Calendar.current.isDate($0, inSameDayAs: nowProvider()) } ?? false
+    }
 
     private struct SleepFetchResult: Sendable {
         let metric: HealthMetric?
@@ -157,6 +164,7 @@ final class DashboardViewModel {
     private let templateRecommendationService: any WorkoutTemplateRecommending
     private let nudgeDismissStore: TemplateNudgeDismissStore
     private var loadRequestID = 0
+    private let nowProvider: () -> Date
 
     /// Hourly sparkline data for the condition hero card.
     /// Stored (not computed read-through to ScoreRefreshService) to avoid cross-observable
@@ -177,7 +185,8 @@ final class DashboardViewModel {
         coachingMessageEnhancer: (any CoachingMessageEnhancing)? = AICoachingMessageService(),
         scoreRefreshService: ScoreRefreshService? = nil,
         templateRecommendationService: (any WorkoutTemplateRecommending)? = nil,
-        nudgeDismissStore: TemplateNudgeDismissStore = .shared
+        nudgeDismissStore: TemplateNudgeDismissStore = .shared,
+        nowProvider: @escaping () -> Date = { Date() }
     ) {
         self.healthKitManager = healthKitManager
         self.hrvService = hrvService ?? HRVQueryService(manager: healthKitManager)
@@ -194,6 +203,7 @@ final class DashboardViewModel {
         self.scoreRefreshService = scoreRefreshService
         self.templateRecommendationService = templateRecommendationService ?? WorkoutTemplateRecommendationService()
         self.nudgeDismissStore = nudgeDismissStore
+        self.nowProvider = nowProvider
         self.pinnedCategories = pinnedMetricsStore.load()
     }
 
@@ -239,6 +249,8 @@ final class DashboardViewModel {
         // On reload, keep existing data visible while fetching new data.
         if !hasLoadedOnce {
             conditionScore = nil
+            conditionHourlySamples = []
+            conditionHourlyRHR = []
             baselineStatus = nil
             limitedConditionHistoryStartDate = nil
             recentScores = []
@@ -271,6 +283,7 @@ final class DashboardViewModel {
 #else
         sharedSnapshot = canUseSharedSnapshot ? await sharedHealthDataService?.fetchSnapshot() : nil
 #endif
+        guard isCurrentLoadRequest(requestID) else { return }
 
         // Each fetch is independent — one failure should not block others.
         // All snapshot-aware fetches launch after snapshot is available.
@@ -299,9 +312,11 @@ final class DashboardViewModel {
         guard isCurrentLoadRequest(requestID) else { return }
         limitedConditionHistoryStartDate = [limitedHRVStart, limitedRHRStart].compactMap { $0 }.max()
 
-        if hrvResult.failed, sharedSnapshot == nil {
-            // Avoid showing stale readiness data after a live HRV refresh fails.
+        if hrvResult.failed, !canRetainHealthData {
+            // A previous day's score must not become today's readiness after a failed refresh.
             conditionScore = nil
+            conditionHourlySamples = []
+            conditionHourlyRHR = []
             baselineStatus = nil
             recentScores = []
             baselineDeltasByMetricID["hrv"] = nil
@@ -315,6 +330,7 @@ final class DashboardViewModel {
         if let stepsMetric = stepsResult.metric { allMetrics.append(stepsMetric) }
         if let weightMetric = weightResult.metric { allMetrics.append(weightMetric) }
         if let bmiMetric = bmiResult.metric { allMetrics.append(bmiMetric) }
+        let hasRefreshedMetrics = !allMetrics.isEmpty
 
         // Track partial failures
         let sourceFailures = [
@@ -323,6 +339,19 @@ final class DashboardViewModel {
         ]
         let failureCount = sourceFailures.filter { $0 }.count
         let totalSources = sourceFailures.count
+
+        // A failed query is not evidence that previously loaded health data disappeared.
+        // Retain only failed categories; successful empty results still remove old metrics.
+        if canRetainHealthData {
+            let failedCategories = Set(zip(
+                [[HealthMetric.Category.hrv, .rhr], [.sleep], [.exercise], [.steps], [.weight], [.bmi]],
+                sourceFailures
+            ).filter { $0.1 }.flatMap { $0.0 })
+            let refreshedIDs = Set(allMetrics.map(\.id))
+            allMetrics.append(contentsOf: sortedMetrics.filter {
+                failedCategories.contains($0.category) && !refreshedIDs.contains($0.id)
+            })
+        }
 
         if failureCount > 0 && !allMetrics.isEmpty {
             errorMessage = String(localized: "Some data could not be loaded (\(failureCount) of \(totalSources) sources)")
@@ -341,7 +370,13 @@ final class DashboardViewModel {
             AppLogger.ui.info("Optimistic retention: keeping \(self.sortedMetrics.count) existing metrics (reload returned empty)")
         } else {
             sortedMetrics = allMetrics.sorted { $0.changeSignificance > $1.changeSignificance }
-            latestSleepStages = sleepResult.metric == nil ? [] : sleepResult.stages
+            if !sleepResult.failed || !canRetainHealthData {
+                latestSleepStages = sleepResult.metric == nil ? [] : sleepResult.stages
+                if sleepResult.metric == nil {
+                    sleepDeficitAnalysis = nil
+                    baselineDeltasByMetricID["sleep"] = nil
+                }
+            }
         }
         buildCoachingInsights()
         syncWeatherCardInsight()
@@ -350,7 +385,11 @@ final class DashboardViewModel {
         heroBaselineDetails = buildHeroBaselineDetails()
         briefingData = buildBriefingData()
         buildAdaptiveHeroMessage()
+        let retainedWorkoutSummary = canRetainHealthData && exerciseResult.failed ? yesterdayWorkoutSummary : nil
         buildYesterdayRecap()
+        if let retainedWorkoutSummary {
+            yesterdayWorkoutSummary = retainedWorkoutSummary
+        }
         buildCumulativeStressScore()
         buildDailyDigest(force: forceDailyDigest)
         // A deferred authorization pass has not queried health data yet.
@@ -358,11 +397,21 @@ final class DashboardViewModel {
         if canQueryHealthKit || isMirroredReadOnlyMode {
             hasLoadedOnce = true
         }
-        lastUpdated = Date()
-        WidgetDataWriter.writeConditionScore(conditionScore)
+        if hasRefreshedMetrics {
+            lastHealthDataLoadedAt = nowProvider()
+        } else if allMetrics.isEmpty {
+            lastHealthDataLoadedAt = nil
+        }
+        if failureCount == 0 || (lastUpdated == nil && !allMetrics.isEmpty) {
+            lastUpdated = nowProvider()
+        }
+        if !hrvResult.failed {
+            WidgetDataWriter.writeConditionScore(conditionScore)
+        }
 
         // Persist hourly score snapshot for sparkline tracking
-        if isCurrentLoadRequest(requestID), let service = scoreRefreshService, conditionScore != nil {
+        if isCurrentLoadRequest(requestID), !hrvResult.failed,
+           let service = scoreRefreshService, conditionScore != nil {
             await service.recordSnapshot(
                 conditionScore: conditionScore?.score,
                 wellnessScore: nil,
@@ -374,14 +423,63 @@ final class DashboardViewModel {
             await service.loadTodaySparklines()
         }
 
-        syncSparklines()
+        await syncSparklines(requestID: requestID)
     }
 
     /// Copy sparkline data from ScoreRefreshService into stored property.
     /// Breaks the cross-observable chain that causes NavigationStack layout feedback loops
     /// when ScoreRefreshService updates during navigation transitions.
-    private func syncSparklines() {
-        conditionSparkline = scoreRefreshService?.conditionSparkline ?? .empty
+    private func syncSparklines(requestID: Int) async {
+        let stored = scoreRefreshService?.conditionSparkline ?? .empty
+        let now = Date()
+        let displayStart = now.addingTimeInterval(-ScoreRefreshService.rollingWindowSeconds)
+        let calendar = Calendar.current
+        let snapshots = stored.points
+            .filter { $0.date >= displayStart && $0.date <= now }
+            .map { (date: $0.date, score: $0.score) }
+        let recordedHours = Set(snapshots.map {
+            calendar.dateInterval(of: .hour, for: $0.date)?.start ?? $0.date
+        })
+        let samples = conditionHourlySamples
+        let rhrDailyAverages = conditionHourlyRHR
+        let currentScore = conditionScore
+        let calculated = await Task.detached(priority: .userInitiated) {
+            ConditionScoreDetailViewModel.calculatedHourlyPoints(
+                samples: samples,
+                rhrDailyAverages: rhrDailyAverages,
+                displayStart: displayStart,
+                now: now,
+                recordedHours: recordedHours,
+                hasCurrentScore: currentScore != nil,
+                calendar: calendar
+            )
+        }.value
+        guard isCurrentLoadRequest(requestID) else { return }
+        let merged = ConditionScoreDetailViewModel.mergedHourlyPoints(
+            calculated: calculated,
+            snapshots: snapshots,
+            currentScore: currentScore,
+            now: now,
+            calendar: calendar
+        )
+        let points = merged.enumerated().map { index, point in
+            HourlySparklineData.HourlyPoint(
+                index: index,
+                date: point.date,
+                hour: calendar.component(.hour, from: point.date),
+                score: point.value
+            )
+        }
+        guard let last = points.last else {
+            conditionSparkline = .empty
+            return
+        }
+        conditionSparkline = HourlySparklineData(
+            points: points,
+            currentScore: last.score,
+            previousScore: points.dropLast().last?.score,
+            includesYesterday: !calendar.isDateInToday(points[0].date)
+        )
     }
 
     /// Copy weather card insight from focusInsight into stored property.
@@ -452,6 +550,12 @@ final class DashboardViewModel {
             let hrvRelatedSources: Set<SharedHealthSnapshot.Source> = [
                 .hrvSamples, .todayRHR, .yesterdayRHR, .latestRHR, .rhrCollection
             ]
+            if canRetainHealthData,
+               !snapshot.failedSources.isDisjoint(with: hrvRelatedSources),
+               sortedMetrics.contains(where: { Self.conditionCategories.contains($0.category) }) {
+                // Check failure metadata before fetchHRVData mutates score and baseline state.
+                return ([], true)
+            }
             let metrics = fetchHRVData(from: snapshot)
             let failed = metrics.isEmpty && !snapshot.failedSources.isDisjoint(with: hrvRelatedSources)
             return (metrics, failed)
@@ -473,6 +577,11 @@ final class DashboardViewModel {
             let sleepRelatedSources: Set<SharedHealthSnapshot.Source> = [
                 .todaySleepStages, .yesterdaySleepStages, .latestSleepStages, .sleepDailyDurations
             ]
+            if canRetainHealthData,
+               !snapshot.failedSources.isDisjoint(with: sleepRelatedSources),
+               sortedMetrics.contains(where: { $0.category == .sleep }) {
+                return SleepFetchResult(metric: nil, stages: [], failed: true)
+            }
             let result = fetchSleepData(from: snapshot)
             return SleepFetchResult(
                 metric: result.metric,
@@ -706,6 +815,8 @@ final class DashboardViewModel {
         let (samples, todayRHR, yesterdayRHR, rhrCollection) = try await (
             samplesTask, todayRHRTask, yesterdayRHRTask, rhrCollectionTask
         )
+        conditionHourlySamples = samples
+        conditionHourlyRHR = makeRHRDailyAverages(from: rhrCollection)
         // Filter to condition window (matches shared snapshot path)
         let startOfToday = calendar.startOfDay(for: today)
         let conditionWindowStart = calendar.date(
@@ -819,6 +930,8 @@ final class DashboardViewModel {
 
         var metrics: [HealthMetric] = []
         let samples = snapshot.hrvSamples
+        conditionHourlySamples = samples
+        conditionHourlyRHR = makeRHRDailyAverages(from: snapshot.rhrCollection)
 
         if let latest = samples.first {
             let isToday = calendar.isDateInToday(latest.date)
@@ -1007,7 +1120,10 @@ final class DashboardViewModel {
         // 30 days for per-type cards (covers less frequent activities like cycling)
         let workouts = try await workoutService.fetchWorkouts(days: 30)
         cachedHealthKitWorkouts = workouts
-        guard !workouts.isEmpty else { return [] }
+        guard !workouts.isEmpty else {
+            activeDaysThisWeek = 0
+            return []
+        }
 
         let minutesByDay = Dictionary(grouping: workouts) {
             calendar.startOfDay(for: $0.date)

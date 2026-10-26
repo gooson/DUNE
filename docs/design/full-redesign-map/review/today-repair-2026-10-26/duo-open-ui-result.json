@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/TodayCompactUITests/testTodayInformationCardsAndHeaderActions"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 1,
+    "passed": 0,
+    "skipped": 0,
+    "failed": 1
+  },
+  "passed_cases": 0,
+  "failures": [
+    "243: /Users/shanks/.codex/worktrees/06a1/Health/DUNEUITests/Helpers/UITestHelpers.swift:797: error: -[DUNEUITests.TodayCompactUITests testTodayInformationCardsAndHeaderActions] : Failed to determine hittability of \"dashboard-stress-details\" Button: Activation point invalid and no suggested hit points bas…",
+    "261: Test Case '-[DUNEUITests.TodayCompactUITests testTodayInformationCardsAndHeaderActions]' failed (58.756 seconds).",
+    "262: Test Suite 'TodayCompactUITests' failed at 2026-10-26 10:42:35.390.",
+    "264: Test Suite 'DUNEUITests.xctest' failed at 2026-10-26 10:42:35.395.",
+    "266: Test Suite 'Selected tests' failed at 2026-10-26 10:42:35.397.",
+    "284: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log has no positive passed-test count",
+    "UI test log has no identifiable passed UI test cases",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/TodayCompactUITests/testTodayInformationCardsAndHeaderActions"
+  ],
+  "log_path": "/private/tmp/today-repair-duo-open.log"
+}

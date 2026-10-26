@@ -20,6 +20,76 @@ final class TodayCompactUITests: SeededUITestBaseCase {
         app.descendants(matching: .any)[identifier].firstMatch
     }
 
+    private var trendChart: XCUIElement {
+        app.descendants(matching: .any).matching(NSPredicate(
+            format: "identifier IN %@",
+            ["dashboard-hourly-condition-chart", "dashboard-weekly-condition-chart"]
+        )).firstMatch
+    }
+
+    func testTodayInformationCardsAndHeaderActions() {
+        var configuration = launchConfiguration
+        configuration.additionalArguments.removeAll { $0 == "--ui-visual-condition-components-fixture" }
+        configuration.additionalArguments += [
+            "--ui-condition-score-fixture", "49",
+            "--ui-visual-stress-fixture", "--ui-dashboard-hour", "8"
+        ]
+        launchApp(with: configuration)
+        navigateToDashboard()
+        XCTAssertTrue(element("dashboard-hero-condition").waitForExistence(timeout: 10))
+        addScreenshotAttachment(named: "Today Repair T03 root and yesterday")
+        for (cardID, actionID, name) in [
+            ("dashboard-today-brief-card", "briefing-entry-card", "brief"),
+            ("dashboard-recovery-sleep-card", "dashboard-recovery-sleep-details", "sleep"),
+            ("dashboard-stress-score", "dashboard-stress-details", "stress")
+        ] {
+            XCTAssertTrue(app.scrollToHittableElementIfNeeded(actionID, maxSwipes: 16))
+            let action = app.buttons[actionID].firstMatch
+            let card = element(cardID)
+            XCTAssertTrue(action.waitForExistence(timeout: 5))
+            XCTAssertTrue(card.exists)
+            XCTAssertLessThan(action.frame.minY - card.frame.minY, 55,
+                              "\(name): details should share the header instead of reserving a footer")
+            addScreenshotAttachment(named: "Today Repair \(name) information")
+        }
+        XCTAssertTrue(element("dashboard-stress-contributions").exists,
+                      "Stress evidence must be present without expanding a disclosure")
+    }
+
+    func testInsightDismissTargetIncludesItsPadding() {
+        var configuration = launchConfiguration
+        configuration.additionalArguments.removeAll { $0 == "--ui-visual-condition-components-fixture" }
+        configuration.additionalArguments += ["--ui-condition-score-fixture", "52"]
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        let dismissalKey = "com.raftel.dailve.insightDismiss.\(dateFormatter.string(from: Date()))"
+        // UserDefaults' argument domain supplies an empty array for this run,
+        // even if a prior run dismissed the same card today.
+        configuration.additionalArguments += ["-\(dismissalKey)", "()"]
+        launchApp(with: configuration)
+        navigateToDashboard()
+
+        // Score 52 produces the fair-condition training insight. The seeded
+        // 430-minute sleep and favorable weather provide a second coaching
+        // insight, so one non-sleep card remains after focus selection.
+        let dismissID = "dashboard-insight-dismiss-training-fair-normal"
+        let dismiss = app.buttons[dismissID].firstMatch
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(dismissID, maxSwipes: 16),
+                      "The seeded insight dismiss action should be reachable on Today")
+        XCTAssertTrue(dismiss.waitForExistence(timeout: 5), "The fair-condition seed must expose an insight dismiss action")
+        XCTAssertGreaterThanOrEqual(dismiss.frame.width, 44)
+        XCTAssertGreaterThanOrEqual(dismiss.frame.height, 44)
+        let identifier = dismiss.identifier
+        // Tap inside the target's clear padding rather than the small X glyph.
+        dismiss.coordinate(withNormalizedOffset: CGVector(dx: 0.15, dy: 0.5)).tap()
+        let dismissed = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "exists == false"), object: app.buttons[identifier]
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [dismissed], timeout: 5), .completed)
+        addScreenshotAttachment(named: "Today Insight dismissed through padded target")
+    }
+
     private func launchWorkoutRow(language: String = "en", locale: String = "en_US", largeText: Bool = false) {
         var configuration = launchConfiguration
         configuration.additionalArguments = [
@@ -47,7 +117,7 @@ final class TodayCompactUITests: SeededUITestBaseCase {
 
         let hero = app.buttons["dashboard-hero-condition"].firstMatch
         let ring = element("dashboard-hero-ring")
-        let chart = element("dashboard-weekly-condition-chart")
+        let chart = trendChart
         XCTAssertTrue(hero.waitForExistence(timeout: 10))
         XCTAssertTrue(ring.waitForExistence(timeout: 5))
         XCTAssertEqual(ring.frame.width, 104, accuracy: 1)
@@ -110,8 +180,9 @@ final class TodayCompactUITests: SeededUITestBaseCase {
         XCTAssertTrue(hero.frame.contains(score.frame), "External score must stay within the detail link")
         addScreenshotAttachment(named: "Today Compact 100 accessibility score")
 
-        let chart = element("dashboard-weekly-condition-chart")
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded("dashboard-weekly-condition-chart", maxSwipes: 8),
+        let chart = trendChart
+        XCTAssertTrue(chart.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(chart.identifier, maxSwipes: 8),
                       "Large-text trend and its legend should be reachable")
         XCTAssertTrue(chart.waitForExistence(timeout: 5))
         XCTAssertTrue((chart.value as? String ?? "").contains("current 100."),
@@ -128,7 +199,7 @@ final class TodayCompactUITests: SeededUITestBaseCase {
 
         let hero = app.buttons["dashboard-hero-condition"].firstMatch
         let ring = element("dashboard-hero-ring")
-        let chart = element("dashboard-weekly-condition-chart")
+        let chart = trendChart
         XCTAssertTrue(hero.waitForExistence(timeout: 10))
         XCTAssertTrue(ring.waitForExistence(timeout: 5))
         XCTAssertTrue(ring.label.contains("100"), "The accessible hero score should reflect the seed")

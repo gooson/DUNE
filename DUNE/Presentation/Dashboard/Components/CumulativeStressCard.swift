@@ -5,7 +5,6 @@ struct CumulativeStressCard: View {
     let stressScore: CumulativeStressScore
 
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-    @State private var showsAnalysis = false
 
     var body: some View {
         StandardCard(padding: 16) {
@@ -13,7 +12,6 @@ struct CumulativeStressCard: View {
                 header
                 scoreRow
                 analysis
-                detailLink
             }
             .frame(maxWidth: .infinity, alignment: .leading)
         }
@@ -26,13 +24,13 @@ struct CumulativeStressCard: View {
             if dynamicTypeSize.isAccessibilitySize {
                 VStack(alignment: .leading, spacing: DS.Spacing.xs) {
                     headerTitle
-                    periodLabel
+                    detailLink
                 }
             } else {
-                HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.sm) {
+                HStack(alignment: .top, spacing: DS.Spacing.sm) {
                     headerTitle
                     Spacer(minLength: 0)
-                    periodLabel
+                    detailLink
                 }
             }
         }
@@ -56,12 +54,14 @@ struct CumulativeStressCard: View {
                 VStack(alignment: .leading, spacing: 4) {
                     scoreValue
                     levelLabel
+                    periodLabel
                 }
             } else {
                 HStack(alignment: .firstTextBaseline, spacing: 8) {
                     scoreValue
                     levelLabel
                     Spacer(minLength: 0)
+                    periodLabel
                 }
             }
         }
@@ -83,35 +83,28 @@ struct CumulativeStressCard: View {
     }
 
     private var analysis: some View {
-        DisclosureGroup(isExpanded: $showsAnalysis) {
-            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-                trendRow
+        VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+            trendRow
 
-                ForEach(stressScore.contributions.sorted {
-                    $0.rawScore * $0.weight > $1.rawScore * $1.weight
-                }) { contribution in
-                    HStack(alignment: .top, spacing: DS.Spacing.sm) {
-                        Circle()
-                            .fill(contribution.factor.color)
-                            .frame(width: 6, height: 6)
-                            .padding(.top, DS.Spacing.xs)
+            ForEach(stressScore.contributions.sorted {
+                $0.rawScore * $0.weight > $1.rawScore * $1.weight
+            }) { contribution in
+                HStack(alignment: .top, spacing: DS.Spacing.sm) {
+                    Circle()
+                        .fill(contribution.factor.color)
+                        .frame(width: 6, height: 6)
+                        .padding(.top, DS.Spacing.xs)
 
-                        Text(contribution.detail)
-                            .font(.subheadline)
-                            .foregroundStyle(DS.Color.textSecondary)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
+                    Text(contribution.detail)
+                        .font(.subheadline)
+                        .foregroundStyle(DS.Color.textSecondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .accessibilityIdentifier("dashboard-stress-contribution-\(contribution.factor.rawValue)")
                 }
             }
-            .padding(.top, DS.Spacing.sm)
-            .accessibilityIdentifier("dashboard-stress-contributions")
-        } label: {
-            Text("Analysis details")
-                .font(.subheadline.weight(.medium))
-                .accessibilityIdentifier("dashboard-stress-analysis-toggle")
         }
-        .tint(levelColor)
-        .frame(minHeight: 44)
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("dashboard-stress-contributions")
     }
 
     @ViewBuilder
@@ -136,13 +129,12 @@ struct CumulativeStressCard: View {
 
     private var detailLink: some View {
         NavigationLink(value: stressScore) {
-            HStack {
+            HStack(spacing: DS.Spacing.xs) {
                 Text("Stress Details")
-                Spacer()
                 Image(systemName: "chevron.right")
+                    .font(.caption.weight(.semibold))
             }
-            .font(.subheadline.weight(.semibold))
-            .padding(.vertical, DS.Spacing.sm)
+            .font(.caption.weight(.semibold))
             .frame(minHeight: 44)
             .contentShape(Rectangle())
         }

@@ -10,8 +10,10 @@ final class TodayReadingUITests: SeededUITestBaseCase {
         static let sleepChart = "dashboard-recovery-sleep-chart"
         static let sleepDetails = "dashboard-recovery-sleep-details"
         static let stressValue = "dashboard-stress-score-value"
-        static let stressToggle = "dashboard-stress-analysis-toggle"
         static let stressContributions = "dashboard-stress-contributions"
+        static let stressHRV = "dashboard-stress-contribution-hrvVariability"
+        static let stressSleep = "dashboard-stress-contribution-sleepConsistency"
+        static let stressActivity = "dashboard-stress-contribution-activityLoad"
         static let stressDetails = "dashboard-stress-details"
         static let digestCondition = "dashboard-digest-condition"
         static let digestSteps = "dashboard-digest-steps"
@@ -57,21 +59,6 @@ final class TodayReadingUITests: SeededUITestBaseCase {
     }
 
     private func reveal(_ identifier: String, maxSwipes: Int = 16) {
-        if identifier == Fixture.stressContributions {
-            // The VStack identifier propagates to the decorative trend image.
-            // Readable evidence must target text, with small reversible scrolls.
-            let text = app.staticTexts[identifier].firstMatch
-            let scroll = app.scrollViews["dashboard-root-scroll"].firstMatch
-            for _ in 0..<maxSwipes {
-                if text.exists && text.isHittable { return }
-                let isAbove = text.exists && text.frame.maxY < app.windows.firstMatch.frame.midY
-                let start = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: isAbove ? 0.35 : 0.65))
-                let end = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: isAbove ? 0.65 : 0.35))
-                start.press(forDuration: 0.05, thenDragTo: end)
-            }
-            XCTFail("Readable stress evidence should be visible at this device width")
-            return
-        }
         XCTAssertTrue(
             app.scrollToHittableElementIfNeeded(identifier, maxSwipes: maxSwipes),
             "\(identifier) should be reachable at this text size and device width"
@@ -106,9 +93,7 @@ final class TodayReadingUITests: SeededUITestBaseCase {
         captureReading("TodayReading-sleep-chart-current")
         reveal(Fixture.stressValue)
         captureReading("TodayReading-stress-current")
-        reveal(Fixture.stressToggle)
-        app.buttons[Fixture.stressToggle].firstMatch.tap()
-        reveal(Fixture.stressContributions)
+        reveal(Fixture.stressHRV)
         captureReading("TodayReading-stress-analysis-current")
         reveal(Fixture.digestCondition)
         reveal(Fixture.digestSteps)
@@ -138,7 +123,8 @@ final class TodayReadingUITests: SeededUITestBaseCase {
         reveal(Fixture.sleepChart)
         XCTAssertTrue(waitForReadingElement(Fixture.sleepChart), "Seeded sleep history should render")
         captureReading("TodayReading-sleep-chart-light")
-        reveal(Fixture.sleepDetails)
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(Fixture.sleepDetails, maxSwipes: 16, direction: .down),
+                      "The sleep detail action should be reachable in the card header")
         app.buttons[Fixture.sleepDetails].firstMatch.tap()
         XCTAssertTrue(waitForReadingElement("metric-detail-screen-sleep"), "Sleep Details should open the metric detail")
     }
@@ -150,20 +136,24 @@ final class TodayReadingUITests: SeededUITestBaseCase {
             XCTAssertTrue(value.waitForExistence(timeout: 5), "The seeded stress score should render")
             XCTAssertTrue(value.label.contains("42"),
                           "The opt-in stress fixture should show score 42")
-            reveal(Fixture.stressToggle)
-            app.buttons[Fixture.stressToggle].firstMatch.tap()
-            reveal(Fixture.stressContributions)
-            XCTAssertTrue(waitForReadingElement(Fixture.stressContributions), "Analysis should expose seeded factors")
+            reveal(Fixture.stressHRV)
+            XCTAssertTrue(waitForReadingElement(Fixture.stressContributions), "Measured evidence should appear without interaction")
+            for (factor, expectedDetail) in [
+                (Fixture.stressHRV, "Recent HRV pattern"),
+                (Fixture.stressSleep, "Recent sleep consistency"),
+                (Fixture.stressActivity, "Recent training load")
+            ] {
+                let evidence = readableText(factor)
+                XCTAssertTrue(evidence.waitForExistence(timeout: 5), "Each seeded factor should be readable on Today")
+                XCTAssertEqual(evidence.label, expectedDetail)
+            }
             XCTAssertFalse(app.descendants(matching: .any)["cumulative-stress-detail-screen"].firstMatch.exists,
-                           "Analysis disclosure should stay on Today")
+                           "Inline evidence should stay on Today")
         }
     }
 
-    func testStressDetailIsSeparateFromAnalysisDisclosure() {
+    func testStressDetailOpensFromHeader() {
         navigateToDashboard()
-        reveal(Fixture.stressToggle)
-        app.buttons[Fixture.stressToggle].firstMatch.tap()
-        XCTAssertTrue(waitForReadingElement(Fixture.stressContributions))
         reveal(Fixture.stressDetails)
         app.buttons[Fixture.stressDetails].firstMatch.tap()
         XCTAssertTrue(waitForReadingElement("cumulative-stress-detail-screen"),

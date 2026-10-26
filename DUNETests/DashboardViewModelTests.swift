@@ -147,6 +147,23 @@ private struct MockWorkoutService: WorkoutQuerying {
     func fetchWorkouts(start: Date, end: Date) async throws -> [WorkoutSummary] { workouts }
 }
 
+private actor ToggleWorkoutService: WorkoutQuerying {
+    enum TestError: Error { case unavailable }
+    private var workouts: [WorkoutSummary]
+    private var fails = false
+
+    init(workouts: [WorkoutSummary]) { self.workouts = workouts }
+    func setFails(_ fails: Bool) { self.fails = fails }
+    func setWorkouts(_ workouts: [WorkoutSummary]) { self.workouts = workouts }
+    func fetchWorkouts(days: Int) async throws -> [WorkoutSummary] {
+        if fails { throw TestError.unavailable }
+        return workouts
+    }
+    func fetchWorkouts(start: Date, end: Date) async throws -> [WorkoutSummary] {
+        try await fetchWorkouts(days: 30)
+    }
+}
+
 private struct MockStepsService: StepsQuerying {
     var todaySteps: Double?
     var yesterdaySteps: Double?
@@ -364,7 +381,10 @@ private actor SequencedDashboardSharedHealthDataService: SharedHealthDataService
     }
 }
 
-private func makeEmptySharedSnapshot(fetchedAt: Date = Date()) -> SharedHealthSnapshot {
+private func makeEmptySharedSnapshot(
+    fetchedAt: Date = Date(),
+    failedSources: Set<SharedHealthSnapshot.Source> = []
+) -> SharedHealthSnapshot {
     SharedHealthSnapshot(
         hrvSamples: [],
         todayRHR: nil,
@@ -378,7 +398,7 @@ private func makeEmptySharedSnapshot(fetchedAt: Date = Date()) -> SharedHealthSn
         conditionScore: nil,
         baselineStatus: nil,
         recentConditionScores: [],
-        failedSources: [],
+        failedSources: failedSources,
         fetchedAt: fetchedAt
     )
 }
@@ -447,7 +467,8 @@ struct DashboardViewModelTests {
     // MARK: - Skeleton State
 
     private func makeSkeletonViewModel(
-        sharedHealthDataService: SharedHealthDataService? = nil
+        sharedHealthDataService: SharedHealthDataService? = nil,
+        nowProvider: @escaping () -> Date = { Date() }
     ) -> DashboardViewModel {
         DashboardViewModel(
             hrvService: MockHRVService(),
@@ -457,7 +478,8 @@ struct DashboardViewModelTests {
             bodyService: MockBodyService(),
             sharedHealthDataService: sharedHealthDataService,
             weatherProvider: MockWeatherProvider(),
-            coachingMessageEnhancer: nil
+            coachingMessageEnhancer: nil,
+            nowProvider: nowProvider
         )
     }
 
@@ -853,8 +875,152 @@ struct DashboardViewModelTests {
 
     // MARK: - Sleep Fallback
 
-    @Test("Sleep stages clear when duration history fails on refresh")
-    func sleepStagesClearAfterHistoryFailure() async {
+    @Test("Failed shared refresh preserves condition, sleep, and yesterday workouts while other sources update")
+    func failedSharedRefreshPreservesLoadedHealthData() async {
+        let now = Date()
+        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: now)!
+        let stages = [SleepStage(stage: .core, duration: 443 * 60, startDate: now.addingTimeInterval(-443 * 60), endDate: now)]
+        let score = ConditionScore(score: 49)
+        let snapshot = SharedHealthSnapshot(
+            hrvSamples: [HRVSample(value: 48, date: now)],
+            todayRHR: 58, yesterdayRHR: 60, latestRHR: nil, rhrCollection: [],
+            todaySleepStages: stages, yesterdaySleepStages: [], latestSleepStages: nil,
+            sleepDailyDurations: (1...3).map { offset in
+                .init(
+                    date: Calendar.current.date(byAdding: .day, value: -offset, to: now)!,
+                    totalMinutes: 420,
+                    stageBreakdown: [.core: 420]
+                )
+            },
+            conditionScore: score, baselineStatus: .init(daysCollected: 7, daysRequired: 7),
+            recentConditionScores: [ConditionScore(score: 55, date: yesterday)],
+            failedSources: [], fetchedAt: now
+        )
+        let shared = MutableDashboardSharedHealthDataService(snapshot: snapshot)
+        let workouts = ToggleWorkoutService(workouts: [
+            WorkoutSummary(id: "yesterday-1", type: "Running", duration: 1800, calories: 200, distance: nil, date: yesterday),
+            WorkoutSummary(id: "yesterday-2", type: "Walking", duration: 1200, calories: 100, distance: nil, date: yesterday)
+        ])
+        let vm = DashboardViewModel(
+            hrvService: MockHRVService(), sleepService: MockSleepService(), workoutService: workouts,
+            stepsService: MockStepsService(todaySteps: 1200), bodyService: MockBodyService(),
+            sharedHealthDataService: shared, weatherProvider: MockWeatherProvider(), coachingMessageEnhancer: nil
+        )
+        await vm.loadData()
+        vm.updateYesterdayWorkoutSummary(from: [])
+        let summary = vm.yesterdayWorkoutSummary
+        let updated = vm.lastUpdated
+        #expect(summary?.contains("2") == true)
+
+        await shared.setSnapshot(makeEmptySharedSnapshot(failedSources: [.hrvSamples, .todayRHR, .todaySleepStages, .sleepDailyDurations]))
+        await workouts.setFails(true)
+        await vm.loadData()
+
+        #expect(vm.conditionScore == score)
+        #expect(vm.baselineStatus?.daysCollected == 7)
+        #expect(vm.todaySleepMinutes == 443)
+        #expect(vm.latestSleepStages.first?.startDate == stages.first?.startDate)
+        #expect(vm.yesterdaySleepMinutes == 420)
+        #expect(vm.yesterdayWorkoutSummary == summary)
+        vm.updateYesterdayWorkoutSummary(from: [])
+        #expect(vm.yesterdayWorkoutSummary == summary)
+        #expect(vm.sortedMetrics.first { $0.category == .steps }?.value == 1200)
+        #expect(vm.lastUpdated == updated)
+        #expect(vm.errorMessage != nil)
+
+        // Successful empty data removes the retained values, including workout caches.
+        await shared.setSnapshot(makeEmptySharedSnapshot())
+        await workouts.setFails(false)
+        await workouts.setWorkouts([])
+        await vm.loadData()
+        vm.updateYesterdayWorkoutSummary(from: [])
+        #expect(vm.conditionScore == nil)
+        #expect(vm.todaySleepMinutes == 0)
+        #expect(vm.latestSleepStages.isEmpty)
+        #expect(vm.yesterdaySleepMinutes == nil)
+        #expect(vm.yesterdayWorkoutSummary == nil)
+        #expect(vm.activeDaysThisWeek == 0)
+        #expect(vm.errorMessage == nil)
+    }
+
+    @Test("Today's partial health success survives a later failure when overall refresh time is yesterday")
+    func partialHealthSuccessRetainedWithStaleOverallRefreshTime() async {
+        let now = Date()
+        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: now)!
+        let stages = [SleepStage(
+            stage: .core, duration: 443 * 60,
+            startDate: now.addingTimeInterval(-443 * 60), endDate: now
+        )]
+        let shared = MutableDashboardSharedHealthDataService(snapshot: makeEmptySharedSnapshot(fetchedAt: yesterday))
+        let workouts = ToggleWorkoutService(workouts: [])
+        let vm = DashboardViewModel(
+            hrvService: MockHRVService(), sleepService: MockSleepService(), workoutService: workouts,
+            stepsService: MockStepsService(), bodyService: MockBodyService(),
+            sharedHealthDataService: shared, weatherProvider: MockWeatherProvider(),
+            coachingMessageEnhancer: nil, nowProvider: { now }
+        )
+        await vm.loadData()
+        vm.lastUpdated = yesterday
+        await workouts.setFails(true)
+
+        await shared.setSnapshot(SharedHealthSnapshot(
+            hrvSamples: [HRVSample(value: 48, date: now)],
+            todayRHR: 58, yesterdayRHR: nil, latestRHR: nil, rhrCollection: [],
+            todaySleepStages: stages, yesterdaySleepStages: [], latestSleepStages: nil,
+            sleepDailyDurations: [], conditionScore: ConditionScore(score: 49),
+            baselineStatus: nil, recentConditionScores: [],
+            failedSources: [], fetchedAt: now
+        ))
+        await vm.loadData()
+        #expect(vm.conditionScore?.score == 49)
+        #expect(vm.todaySleepMinutes == 443)
+        #expect(vm.errorMessage != nil)
+        #expect(vm.lastUpdated == yesterday)
+
+        await shared.setSnapshot(makeEmptySharedSnapshot(
+            fetchedAt: now,
+            failedSources: [.hrvSamples, .todayRHR, .todaySleepStages, .sleepDailyDurations]
+        ))
+        await vm.loadData()
+
+        #expect(vm.conditionScore?.score == 49)
+        #expect(vm.todaySleepMinutes == 443)
+        #expect(vm.latestSleepStages.first?.startDate == stages.first?.startDate)
+        #expect(vm.lastUpdated == yesterday)
+    }
+
+    @Test("Failed refresh does not retain a prior day's condition or sleep as today's data")
+    func failedRefreshDoesNotRetainPreviousDay() async {
+        let today = Date()
+        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: today)!
+        var currentDate = yesterday
+        let shared = MutableDashboardSharedHealthDataService(snapshot: SharedHealthSnapshot(
+            hrvSamples: [HRVSample(value: 48, date: yesterday)],
+            todayRHR: nil, yesterdayRHR: nil, latestRHR: nil, rhrCollection: [],
+            todaySleepStages: [.init(stage: .core, duration: 3600, startDate: yesterday.addingTimeInterval(-3600), endDate: yesterday)],
+            yesterdaySleepStages: [], latestSleepStages: nil, sleepDailyDurations: [],
+            conditionScore: ConditionScore(score: 49), baselineStatus: nil, recentConditionScores: [],
+            failedSources: [], fetchedAt: yesterday
+        ))
+        let vm = makeSkeletonViewModel(sharedHealthDataService: shared, nowProvider: { currentDate })
+        await vm.loadData()
+        #expect(vm.conditionScore?.score == 49)
+        #expect(vm.todaySleepMinutes == 60)
+        currentDate = today
+        await shared.setSnapshot(makeEmptySharedSnapshot(
+            fetchedAt: today, failedSources: [.hrvSamples, .todaySleepStages]
+        ))
+
+        await vm.loadData()
+
+        #expect(vm.conditionScore == nil)
+        #expect(vm.sortedMetrics.isEmpty)
+        #expect(vm.todaySleepMinutes == 0)
+        #expect(vm.yesterdayWorkoutSummary == nil)
+    }
+
+    @Test("Sleep and stages survive a transient duration history failure on refresh")
+    func sleepStagesSurviveHistoryFailure() async {
         let start = Date().addingTimeInterval(-3600)
         let stages = [SleepStage(stage: .core, duration: 3600, startDate: start, endDate: start.addingTimeInterval(3600))]
         let sleep = ToggleSleepHistoryService(stages: stages)
@@ -873,8 +1039,10 @@ struct DashboardViewModelTests {
 
         await sleep.setHistoryFails(true)
         await vm.loadData()
-        #expect(!vm.sortedMetrics.contains { $0.category == .sleep })
-        #expect(vm.latestSleepStages.isEmpty)
+        #expect(vm.sortedMetrics.first { $0.category == .sleep }?.value == 60)
+        #expect(vm.latestSleepStages.first?.startDate == start)
+        #expect(vm.todaySleepMinutes == 60)
+        #expect(vm.errorMessage != nil)
     }
 
     @Test("Sleep stages clear with the sleep metric when a shared snapshot becomes empty")
@@ -1124,8 +1292,8 @@ struct DashboardViewModelTests {
         #expect(delta?.shortTermDelta != nil)
     }
 
-    @Test("Condition score is cleared when HRV fetch fails during refresh without shared snapshot")
-    func conditionScoreIsClearedAfterHRVFailure() async {
+    @Test("Condition score is preserved when HRV refresh fails without shared snapshot")
+    func conditionScoreIsPreservedAfterHRVFailure() async {
         let calendar = Calendar.current
         let samples = (0..<7).compactMap { offset -> HRVSample? in
             guard let date = calendar.date(byAdding: .day, value: -offset, to: Date()) else { return nil }
@@ -1153,8 +1321,10 @@ struct DashboardViewModelTests {
 
         #expect(initialConditionScore != nil)
         #expect(!initialRecentScores.isEmpty)
-        #expect(vm.conditionScore == nil)
-        #expect(vm.recentScores.isEmpty)
+        #expect(vm.conditionScore == initialConditionScore)
+        #expect(vm.recentScores == initialRecentScores)
+        #expect(vm.sortedMetrics.contains { $0.category == .hrv })
+        #expect(vm.errorMessage != nil)
     }
 
     @Test("Weekly goal counts only workouts in current calendar week")

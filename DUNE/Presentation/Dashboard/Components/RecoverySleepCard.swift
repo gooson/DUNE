@@ -19,7 +19,6 @@ struct RecoverySleepCard: View {
                     sleepSummary
                     sleepHistory
                     insightRows
-                    detailLink
                 }
             }
             .accessibilityElement(children: .contain)
@@ -60,13 +59,21 @@ struct RecoverySleepCard: View {
     }
 
     private var header: some View {
-        HStack(spacing: DS.Spacing.sm) {
-            Image(systemName: "bed.double.fill")
-                .font(.headline)
-                .foregroundStyle(DS.Color.sleep)
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: 4))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.sm))
+        return layout {
+            HStack(spacing: DS.Spacing.sm) {
+                Image(systemName: "bed.double.fill")
+                    .font(.headline)
+                    .foregroundStyle(DS.Color.sleep)
 
-            Text("Recovery & Sleep")
-                .font(.headline)
+                Text("Recovery & Sleep")
+                    .font(.headline)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            if !dynamicTypeSize.isAccessibilitySize { Spacer(minLength: 8) }
+            detailLink
         }
     }
 
@@ -213,18 +220,16 @@ struct RecoverySleepCard: View {
     @ViewBuilder
     private var detailLink: some View {
         if let metric = sleepMetric, hasValidSleep {
-            Divider()
-
             NavigationLink(value: metric) {
-                HStack {
+                HStack(spacing: 4) {
                     Text("Sleep Details")
-                        .font(.subheadline.weight(.semibold))
+                        .font(.caption.weight(.semibold))
                         .foregroundStyle(.tint)
-                    Spacer()
                     Image(systemName: "chevron.right")
                         .font(.caption2.weight(.semibold))
                         .foregroundStyle(.tint)
                 }
+                .fixedSize(horizontal: false, vertical: true)
                 .frame(minHeight: 44)
                 .contentShape(Rectangle())
             }

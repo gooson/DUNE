@@ -9,7 +9,7 @@ struct TemplateNudgeCard: View {
     private static let tagBackground = DS.Color.activity.opacity(DS.Opacity.subtle)
 
     var body: some View {
-        InlineCard {
+        DashboardSupportCard {
             VStack(alignment: .leading, spacing: DS.Spacing.sm) {
                 // Header with dismiss
                 HStack {
@@ -26,9 +26,12 @@ struct TemplateNudgeCard: View {
                         Image(systemName: "xmark")
                             .font(.caption2.weight(.medium))
                             .foregroundStyle(.tertiary)
+                            .frame(width: 44, height: 44)
+                            .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
                     .accessibilityLabel(String(localized: "Dismiss"))
+                    .accessibilityIdentifier("dashboard-template-nudge-dismiss")
                 }
 
                 // Exercise list
@@ -61,6 +64,7 @@ struct TemplateNudgeCard: View {
                 .tint(DS.Color.activity)
             }
         }
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier("dashboard-template-nudge-card")
     }
 

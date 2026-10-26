@@ -108,7 +108,7 @@ struct DashboardView: View {
                         errorSection
                     } else if viewModel.isMirroredReadOnlyMode {
                         CloudSyncWaitingView {
-                            Task { await viewModel.loadData(canLoadHealthKitData: canLoadHealthKitData) }
+                            Task { await loadDashboard() }
                         }
                     } else {
                         if hasFailedHealthKitAuthorization {
@@ -751,7 +751,7 @@ struct DashboardView: View {
             title: "Something Went Wrong",
             message: message,
             actionTitle: "Try Again",
-            action: { Task { await viewModel.loadData() } }
+            action: { Task { await loadDashboard() } }
         )
     }
 
@@ -769,7 +769,7 @@ struct DashboardView: View {
                 Spacer()
 
                 Button("Retry") {
-                    Task { await viewModel.loadData() }
+                    Task { await loadDashboard() }
                 }
                 .font(.caption)
                 .fontWeight(.medium)

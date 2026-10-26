@@ -500,6 +500,7 @@ def render_portal() -> None:
             '.pending{display:grid;place-items:center;color:#91a09d}.meta{display:flex;justify-content:space-between;gap:12px;padding:16px}'
             '.meta span{color:#c9ad8e}</style><main><h1>DUNE · 전체 디자인맵</h1>'
             '<p>iPhone·iPad·Duo의 현재 앱 실제 화면과 Watch 운동 재작업 결과를 한곳에서 확인합니다.</p>'
+            '<p><a href="../../full-redesign-map/review/today-repair-2026-10-26/index.html" style="color:#e8bf94">Today 실제 피드백 수정 · 새 캡처·복귀·상세 내비게이션 검증 →</a></p>'
             '<p><a href="../../full-redesign-map/review/today-progress-brief-2026-10-26/index.html" style="color:#e8bf94">Today 진행·브리핑 · main 병합 후 실제 화면 · 2026-10-26 iPhone 밝음·어두움·진행 최대 글씨 →</a></p>'
             '<p><a href="../../full-redesign-map/review/desert-horizon-final-2026-10-24/index.html" style="color:#e8bf94">DESERT HORIZON 2026-10-24 실제 화면 전후 비교 · iPhone 밝음·어두움·큰 글씨 →</a></p>'
             '<p><a href="compare.html" style="color:#e8bf94">폰·패드·Duo 같은 화면 비교하기 →</a></p>'
