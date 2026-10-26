@@ -1,7 +1,7 @@
 ---
 topic: daily-summary-reading
 date: 2026-10-27
-status: approved
+status: implemented
 confidence: high
 related_solutions: [docs/solutions/architecture/2026-10-26-shared-card-navigation-header.md, docs/solutions/general/2026-10-26-today-compact-density-and-pin-hit-area.md]
 related_brainstorms: [docs/brainstorms/2026-10-27-summary-card-disclosure.md]
@@ -73,3 +73,7 @@ DailyDigestCard의 표시만 재배치하고 작은 presentation 문자열 값 �
 ## Confidence Assessment
 
 High. 선택한 시안과 재사용 소비자가 명확하고 데이터 계산을 바꾸지 않는다. UI 환경의 실제 실행·캡처는 결과를 확인한 뒤에만 완료로 처리한다.
+
+## Completion
+
+선택한 핵심 먼저를 구현하고 관련 unit13·기기별 UI11 실행, 표준 빌드와 실제 화면25장 검증을 마쳤다. [리뷰·실패와 복구](../reviews/2026-10-27-daily-summary-reading.md), [해결책](../solutions/general/2026-10-27-daily-summary-reading-and-disclosure.md)을 따른다. 전체 회귀와 갤러리 밖 상태는 완료로 표시하지 않는다. 전용 시뮬레이터3대는 사용 후 삭제했다.

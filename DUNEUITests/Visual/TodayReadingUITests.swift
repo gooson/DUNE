@@ -88,6 +88,41 @@ final class TodayReadingUITests: SeededUITestBaseCase {
         }
     }
 
+    /// Position the digest title just below the measured navigation area before capturing.
+    /// Hittability alone can leave the title above the viewport after scrolling to the toggle.
+    private func alignDigestHeaderForCapture(discover: Bool = true) {
+        // Label passes its identifier to the decorative icon as well as the text;
+        // the icon is not a reliable hittable target at accessibility text sizes.
+        // Discovery is needed only on first arrival. After expansion the metric
+        // is above the viewport, so an upward-only reveal would scroll away.
+        if discover { reveal(Fixture.digestCondition) }
+        let header = readableText(Fixture.digestHeader)
+        XCTAssertTrue(header.waitForExistence(timeout: 5), "Digest title should expose a text anchor")
+        let scroll = app.scrollViews.firstMatch
+        XCTAssertTrue(scroll.exists, "Today should provide a scrollable reading surface")
+        let window = app.windows.firstMatch.frame
+        let navigationBar = app.navigationBars.firstMatch
+        let top = max(scroll.frame.minY, window.minY,
+                      navigationBar.exists ? navigationBar.frame.maxY : window.minY)
+        let bottom = min(scroll.frame.maxY, window.maxY)
+        let targetY = top + 20
+
+        for _ in 0..<10 {
+            let offset = header.frame.minY - targetY
+            if abs(offset) <= 24 { break }
+            let distance = min(max(abs(offset), 28), max(40, (bottom - top) * 0.35))
+            let start = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+            start.press(forDuration: 0.05, thenDragTo: start.withOffset(
+                CGVector(dx: 0, dy: offset > 0 ? -distance : distance)
+            ), withVelocity: .slow, thenHoldForDuration: 0.2)
+        }
+
+        XCTAssertGreaterThanOrEqual(header.frame.minY, top - 4,
+                                    "Digest title must not be hidden behind navigation")
+        XCTAssertLessThanOrEqual(header.frame.minY, targetY + 32,
+                                 "Digest title should anchor the top of the capture")
+    }
+
     func testCurrentDeviceReadingCards() {
         navigateToDashboard()
         reveal(Fixture.sleepValue)
@@ -164,6 +199,36 @@ final class TodayReadingUITests: SeededUITestBaseCase {
     func testDailyDigestAccessibilityText() {
         launchReading(style: "light", largeText: true)
         assertDigestReading(captureSuffix: "ko-axxxl")
+    }
+
+    func testDailyDigestCaptureTopLight() {
+        launchReading(style: "light")
+        captureDigestFraming(suffix: "ko-light")
+    }
+
+    func testDailyDigestCaptureTopAccessibilityText() {
+        launchReading(style: "light", largeText: true)
+        captureDigestFraming(suffix: "ko-axxxl")
+    }
+
+    private func captureDigestFraming(suffix: String) {
+        alignDigestHeaderForCapture()
+        XCTAssertTrue(waitForReadingElement(Fixture.digestDate))
+        XCTAssertTrue(waitForReadingElement(Fixture.digestCondition))
+        XCTAssertTrue(waitForReadingElement(Fixture.digestSteps))
+        XCTAssertTrue(waitForReadingElement(Fixture.digestPreview))
+        captureReading("T03-digest-collapsed-top-\(suffix)")
+
+        reveal(Fixture.digestToggle)
+        let toggle = app.buttons[Fixture.digestToggle].firstMatch
+        XCTAssertTrue(toggle.waitForExistence(timeout: 5))
+        toggle.tap()
+        XCTAssertTrue(waitForReadingElement(Fixture.digestSummary))
+
+        alignDigestHeaderForCapture(discover: false)
+        captureReading("T03-digest-expanded-top-\(suffix)")
+        reveal(Fixture.digestSummary)
+        captureReading("T03-digest-expanded-body-\(suffix)")
     }
 
     private func assertDigestReading(captureSuffix: String) {
