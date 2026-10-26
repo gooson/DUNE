@@ -54,10 +54,6 @@ struct ConsistencyCard: View {
 
                     Spacer(minLength: 0)
 
-                    // Chevron hint
-                    Image(systemName: "chevron.right")
-                        .font(.caption2)
-                        .foregroundStyle(.tertiary)
                 }
 
                 // Monthly progress

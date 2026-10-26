@@ -123,3 +123,8 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 ## 2026-10-26 Today Compact
 
 [실제 화면 비교·출처](../full-redesign-map/review/today-compact-2026-10-26/index.html)에 기존 DUNE 테마를 유지한 T03 밝음·어두움과 T18 편집을 보존했다. 일반 iPhone·iPad·Duo 외부/내부의 변경 화면만 갱신했으며 각 항목에 소스56f62fec·전용 기기·크기·표시 설정을 기록했다. 다른 화면의 출처는 유지한다. Duo 내부는 새 세로 캡처이며 내부 가로와 수치 힌지 각도는 미검증이다. T03 측정값 캡처가 시작 스켈레톤·빈 기록 상태의 기존 미갱신 항목까지 완료했다는 의미는 아니다. 고정 편집의 행 중앙 터치·선택·저장·홀수 마지막 행 전체 폭 검사는1/1 통과했다. 세부 UI 실행과 기존 알림 검사 실패는 [검토 기록](../../reviews/2026-10-26-today-compact.md)에 구분한다.
+
+
+## 2026-10-26 T03 HRV·RHR 근거 구획
+
+히어로의 HRV 값이 RHR 제목에 붙어 보이던 문제를 각 지표별 8pt 여백·8pt 모서리·0.5pt 테두리로 보완했다. 기존 큰 글씨의 한 열 배치는 유지한다. `codex/hrv-rhr-grouping` 전용 워크트리에서 iOS Simulator 빌드가 통과했다. [새 iPhone 기본·최대 글씨 캡처와 출처](../full-redesign-map/review/hrv-rhr-grouping-2026-10-26/index.html)를 보존했고 UI 2/2가 통과했다. 밝음·영어의 측정값 상태만 확인했으며 한국어·어두움은 새 캡처 대기다. iPad·Duo 접힘·펼침의 T03도 새 캡처 대기이며 Watch는 해당 컴포넌트를 사용하지 않는다. 기존 PNG를 수정 후 화면의 증거로 재사용하지 않는다.

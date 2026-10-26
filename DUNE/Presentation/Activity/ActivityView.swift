@@ -94,6 +94,7 @@ struct ActivityView: View {
 
     @State private var viewModel: ActivityViewModel
     @State private var showingExercisePicker = false
+    @State private var showingAllRecentWorkouts = false
     @State private var showingAIWorkoutBuilder = false
     @State private var saveRecommendationAsTemplate: WorkoutTemplateRecommendation?
     @State private var exerciseStartConfiguration: ExerciseStartConfiguration?
@@ -221,13 +222,16 @@ struct ActivityView: View {
                         // ③.5 Injury Risk Assessment
                         SectionGroup(title: "Injury Risk", icon: "shield.checkered",
                                      iconColor: DS.Color.activity,
-                                     sectionIdentifier: "activity-section-injuryrisk") {
+                                     sectionIdentifier: "activity-section-injuryrisk",
+                                     headerLink: viewModel.injuryRiskAssessment == nil ? nil : {
+                                         sectionHeaderLink(ActivityDetailDestination.injuryRisk, identifier: "activity-injuryrisk-detail-link", label: $0)
+                                     }) {
                             if viewModel.injuryRiskAssessment != nil {
                                 NavigationLink(value: ActivityDetailDestination.injuryRisk) {
                                     InjuryRiskCard(assessment: viewModel.injuryRiskAssessment)
                                 }
-                                .buttonStyle(.plain)
-                                .accessibilityIdentifier("activity-injuryrisk-detail-link")
+                                .buttonStyle(CardNavigationButtonStyle())
+                                .accessibilityIdentifier("activity-injuryrisk-detail-content")
                             } else {
                                 InjuryRiskCard(assessment: nil)
                             }
@@ -245,13 +249,16 @@ struct ActivityView: View {
                         // ⑥ Weekly Report
                         SectionGroup(title: "Weekly Report", icon: "doc.text",
                                      iconColor: DS.Color.activity,
-                                     sectionIdentifier: "activity-section-weeklyreport") {
+                                     sectionIdentifier: "activity-section-weeklyreport",
+                                     headerLink: viewModel.weeklyReport == nil ? nil : {
+                                         sectionHeaderLink(ActivityDetailDestination.weeklyReport, identifier: "activity-weeklyreport-detail-link", label: $0)
+                                     }) {
                             if viewModel.weeklyReport != nil {
                                 NavigationLink(value: ActivityDetailDestination.weeklyReport) {
                                     WorkoutReportCard(report: viewModel.weeklyReport)
                                 }
-                                .buttonStyle(.plain)
-                                .accessibilityIdentifier("activity-weeklyreport-detail-link")
+                                .buttonStyle(CardNavigationButtonStyle())
+                                .accessibilityIdentifier("activity-weeklyreport-detail-content")
                             } else {
                                 WorkoutReportCard(report: nil)
                             }
@@ -259,11 +266,19 @@ struct ActivityView: View {
                         .staggeredAppear(index: 7)
 
                         // ⑧ Recent Workouts
-                        SectionGroup(title: "Recent Workouts", icon: "clock.arrow.circlepath", iconColor: DS.Color.activity) {
+                        SectionGroup(title: "Recent Workouts", icon: "clock.arrow.circlepath", iconColor: DS.Color.activity,
+                                     headerLink: { label in
+                            AnyView(Button { showingAllRecentWorkouts = true } label: {
+                                CardNavigationHeader { label }
+                            }
+                            .buttonStyle(CardNavigationButtonStyle())
+                            .accessibilityIdentifier("activity-recent-seeall"))
+                        }) {
                             ExerciseListSection(
                                 workouts: viewModel.recentWorkouts,
                                 exerciseRecords: recentRecords,
-                                tombstonedIDs: DeletedWorkoutTombstoneStore.shared.tombstonedIDs
+                                tombstonedIDs: DeletedWorkoutTombstoneStore.shared.tombstonedIDs,
+                                showsSeeAllButton: false
                             )
                         }
                         .staggeredAppear(index: 8)
@@ -272,7 +287,8 @@ struct ActivityView: View {
                         SectionGroup(title: "Personal Records", icon: "trophy.fill",
                                      iconColor: DS.Color.activity,
                                      infoAction: { showingPRInfo = true },
-                                     infoIdentifier: "activity-pr-info") {
+                                     infoIdentifier: "activity-pr-info",
+                                     headerLink: { sectionHeaderLink(ActivityDetailDestination.personalRecords(), identifier: "activity-section-pr", label: $0) }) {
                             NavigationLink(value: ActivityDetailDestination.personalRecords()) {
                                 PersonalRecordsSection(
                                     records: viewModel.personalRecords,
@@ -280,18 +296,19 @@ struct ActivityView: View {
                                     rewardSummary: viewModel.workoutRewardSummary
                                 )
                             }
-                            .buttonStyle(.plain)
-                            .accessibilityIdentifier("activity-section-pr")
+                            .buttonStyle(CardNavigationButtonStyle())
+                            .accessibilityIdentifier("activity-section-pr-content")
                         }
                         .staggeredAppear(index: 9)
 
-                        SectionGroup(title: "Achievement History", icon: "medal.fill", iconColor: DS.Color.activity) {
+                        SectionGroup(title: "Achievement History", icon: "medal.fill", iconColor: DS.Color.activity,
+                                     headerLink: { sectionHeaderLink(ActivityDetailDestination.personalRecords(), identifier: "activity-section-achievement", label: $0) }) {
                             NavigationLink(value: ActivityDetailDestination.personalRecords()) {
                                 AchievementHistoryPreview(events: viewModel.workoutRewardHistory)
                             }
                             .frame(maxWidth: .infinity, alignment: .leading)
-                            .buttonStyle(.plain)
-                            .accessibilityIdentifier("activity-section-achievement")
+                            .buttonStyle(CardNavigationButtonStyle())
+                            .accessibilityIdentifier("activity-section-achievement-content")
                         }
                         .staggeredAppear(index: 10)
 
@@ -299,12 +316,13 @@ struct ActivityView: View {
                         SectionGroup(title: "Consistency", icon: "flame.fill",
                                      iconColor: DS.Color.activity,
                                      infoAction: { showingConsistencyInfo = true },
-                                     infoIdentifier: "activity-consistency-info") {
+                                     infoIdentifier: "activity-consistency-info",
+                                     headerLink: { sectionHeaderLink(ActivityDetailDestination.consistency, identifier: "activity-section-consistency", label: $0) }) {
                             NavigationLink(value: ActivityDetailDestination.consistency) {
                                 ConsistencyCard(streak: viewModel.workoutStreak)
                             }
-                            .buttonStyle(.plain)
-                            .accessibilityIdentifier("activity-section-consistency")
+                            .buttonStyle(CardNavigationButtonStyle())
+                            .accessibilityIdentifier("activity-section-consistency-content")
                         }
                         .staggeredAppear(index: 11)
 
@@ -312,12 +330,13 @@ struct ActivityView: View {
                         SectionGroup(title: "Exercise Mix", icon: "chart.bar.xaxis",
                                      iconColor: DS.Color.activity,
                                      infoAction: { showingExerciseMixInfo = true },
-                                     infoIdentifier: "activity-exercise-mix-info") {
+                                     infoIdentifier: "activity-exercise-mix-info",
+                                     headerLink: { sectionHeaderLink(ActivityDetailDestination.exerciseMix, identifier: "activity-section-exercisemix", label: $0) }) {
                             NavigationLink(value: ActivityDetailDestination.exerciseMix) {
                                 ExerciseFrequencySection(summary: viewModel.exerciseMix)
                             }
-                            .buttonStyle(.plain)
-                            .accessibilityIdentifier("activity-section-exercisemix")
+                            .buttonStyle(CardNavigationButtonStyle())
+                            .accessibilityIdentifier("activity-section-exercisemix-content")
                         }
                         .staggeredAppear(index: 12)
                     }
@@ -497,7 +516,24 @@ struct ActivityView: View {
             syncToastDismissTask?.cancel()
             syncToastDismissTask = nil
         }
+        .navigationDestination(isPresented: $showingAllRecentWorkouts) {
+            ExerciseView()
+        }
         .englishNavigationTitle("Activity")
+    }
+
+    private func sectionHeaderLink<Destination: Hashable>(
+        _ destination: Destination,
+        identifier: String,
+        label: AnyView
+    ) -> AnyView {
+        AnyView(
+            NavigationLink(value: destination) {
+                CardNavigationHeader { label }
+            }
+            .buttonStyle(CardNavigationButtonStyle())
+            .accessibilityIdentifier(identifier)
+        )
     }
 
     private var themeReadinessPreview: some View {
@@ -505,10 +541,11 @@ struct ActivityView: View {
             NavigationLink(value: ActivityDetailDestination.trainingReadiness) {
                 VStack(alignment: .leading, spacing: 18) {
                     HStack {
-                        Text("Training Readiness")
-                            .font(.subheadline.weight(.semibold))
-                            .foregroundStyle(readinessInk)
-                        Spacer()
+                        CardNavigationHeader(showsChevron: viewModel.trainingReadiness != nil, minimumHeight: 0) {
+                            Text("Training Readiness")
+                                .font(.subheadline.weight(.semibold))
+                                .foregroundStyle(readinessInk)
+                        }
                         if viewModel.trainingReadiness?.isCalibrating == true {
                             Text("Calibrating")
                                 .font(.caption.weight(.semibold))
@@ -543,7 +580,8 @@ struct ActivityView: View {
                 .contentShape(Rectangle())
             }
             .accessibilityIdentifier("activity-hero-readiness")
-            .buttonStyle(.plain)
+            .accessibilityHint("View Readiness Details")
+            .buttonStyle(CardNavigationButtonStyle())
             .disabled(viewModel.trainingReadiness == nil)
 
             if let readiness = viewModel.trainingReadiness {
@@ -561,20 +599,6 @@ struct ActivityView: View {
                     accessibilityIdentifier: "activity-hero-trend"
                 )
 
-                NavigationLink(value: ActivityDetailDestination.trainingReadiness) {
-                    HStack {
-                        Text("View Readiness Details")
-                        Spacer(minLength: DS.Spacing.sm)
-                        Image(systemName: "arrow.right")
-                            .accessibilityHidden(true)
-                    }
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(theme.directionPreviewActionColor(for: colorScheme))
-                    .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
-                    .contentShape(Rectangle())
-                }
-                .buttonStyle(.plain)
-                .accessibilityIdentifier("activity-hero-details")
             }
         }
         .padding(20)
@@ -708,26 +732,15 @@ struct ActivityView: View {
     }
 
     private func recoveryMapSection(fillHeight: Bool = false) -> some View {
-        SectionGroup(title: "Muscle Map", icon: "figure.stand", iconColor: DS.Color.activity, fillHeight: fillHeight) {
+        SectionGroup(title: "Muscle Map", icon: "figure.stand", iconColor: DS.Color.activity,
+                     headerLink: { sectionHeaderLink(ActivityDetailDestination.muscleMap, identifier: "activity-musclemap-detail-link", label: $0) },
+                     fillHeight: fillHeight) {
             MuscleRecoveryMapView(
                 fatigueStates: viewModel.fatigueStates,
                 onMuscleSelected: { muscle in selectedMuscle = muscle }
             )
 
             HStack {
-                NavigationLink(value: ActivityDetailDestination.muscleMap) {
-                    HStack {
-                        Text("View Details")
-                            .font(.subheadline.weight(.medium))
-                            .foregroundStyle(DS.Color.activity)
-                        Image(systemName: "chevron.right")
-                            .font(.caption2.weight(.semibold))
-                            .foregroundStyle(DS.Color.activity)
-                    }
-                }
-                .buttonStyle(.plain)
-                .accessibilityIdentifier("activity-musclemap-detail-link")
-
                 Spacer()
 
                 NavigationLink(value: ActivityDetailDestination.muscleMap3D) {
@@ -745,12 +758,14 @@ struct ActivityView: View {
     }
 
     private func weeklyStatsSection(fillHeight: Bool = false) -> some View {
-        SectionGroup(title: "This Week", icon: "chart.bar.fill", iconColor: DS.Color.activity, fillHeight: fillHeight) {
+        SectionGroup(title: "This Week", icon: "chart.bar.fill", iconColor: DS.Color.activity,
+                     headerLink: { sectionHeaderLink(ActivityDetailDestination.weeklyStats, identifier: "activity-section-weeklystats", label: $0) },
+                     fillHeight: fillHeight) {
             NavigationLink(value: ActivityDetailDestination.weeklyStats) {
                 WeeklyStatsGrid(stats: viewModel.weeklyStats)
             }
-            .buttonStyle(.plain)
-            .accessibilityIdentifier("activity-section-weeklystats")
+            .buttonStyle(CardNavigationButtonStyle())
+            .accessibilityIdentifier("activity-section-weeklystats-content")
         }
     }
 
@@ -794,7 +809,9 @@ struct ActivityView: View {
     }
 
     private func trainingVolumeSection(fillHeight: Bool = false) -> some View {
-        SectionGroup(title: "Training Volume", icon: "chart.line.uptrend.xyaxis", iconColor: DS.Color.activity, fillHeight: fillHeight) {
+        SectionGroup(title: "Training Volume", icon: "chart.line.uptrend.xyaxis", iconColor: DS.Color.activity,
+                     headerLink: { sectionHeaderLink(TrainingVolumeDestination.overview, identifier: "activity-section-volume", label: $0) },
+                     fillHeight: fillHeight) {
             TrainingVolumeSummaryCard(
                 trainingLoadData: viewModel.trainingLoadData,
                 lastWorkoutMinutes: viewModel.lastWorkoutMinutes,

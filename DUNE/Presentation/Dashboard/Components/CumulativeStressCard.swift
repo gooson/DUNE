@@ -20,20 +20,14 @@ struct CumulativeStressCard: View {
     }
 
     private var header: some View {
-        Group {
-            if dynamicTypeSize.isAccessibilitySize {
-                VStack(alignment: .leading, spacing: DS.Spacing.xs) {
-                    headerTitle
-                    detailLink
-                }
-            } else {
-                HStack(alignment: .top, spacing: DS.Spacing.sm) {
-                    headerTitle
-                    Spacer(minLength: 0)
-                    detailLink
-                }
+        NavigationLink(value: stressScore) {
+            CardNavigationHeader {
+                headerTitle
             }
         }
+        .buttonStyle(CardNavigationButtonStyle())
+        .accessibilityHint("Stress Details")
+        .accessibilityIdentifier("dashboard-stress-details")
     }
 
     private var headerTitle: some View {
@@ -125,22 +119,6 @@ struct CumulativeStressCard: View {
         Label(text, systemImage: icon)
             .font(.subheadline)
             .foregroundStyle(color)
-    }
-
-    private var detailLink: some View {
-        NavigationLink(value: stressScore) {
-            HStack(spacing: DS.Spacing.xs) {
-                Text("Stress Details")
-                Image(systemName: "chevron.right")
-                    .font(.caption.weight(.semibold))
-            }
-            .font(.caption.weight(.semibold))
-            .frame(minHeight: 44)
-            .contentShape(Rectangle())
-        }
-        .buttonStyle(.plain)
-        .foregroundStyle(levelColor)
-        .accessibilityIdentifier("dashboard-stress-details")
     }
 
     private var levelColor: Color { stressScore.level.color }

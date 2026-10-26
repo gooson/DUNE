@@ -31,14 +31,6 @@ struct PersonalRecordsSection: View {
                         }
                     }
 
-                    // Chevron hint
-                    HStack {
-                        Spacer()
-                        Image(systemName: "chevron.right")
-                            .font(.caption2)
-                            .foregroundStyle(.tertiary)
-                    }
-
                     if let notice, !notice.isEmpty {
                         Text(notice)
                             .font(.caption2)

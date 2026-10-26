@@ -14,6 +14,7 @@ struct ExerciseListSection: View {
     let exerciseRecords: [ExerciseRecord]
     let limit: Int
     let tombstonedIDs: Set<String>
+    let showsSeeAllButton: Bool
     @State private var isShowingExerciseView = false
 
     private let exerciseLibrary: ExerciseLibraryQuerying
@@ -23,12 +24,14 @@ struct ExerciseListSection: View {
         exerciseRecords: [ExerciseRecord] = [],
         limit: Int = 5,
         tombstonedIDs: Set<String> = [],
+        showsSeeAllButton: Bool = true,
         exerciseLibrary: ExerciseLibraryQuerying = ExerciseLibraryService.shared
     ) {
         self.workouts = workouts
         self.exerciseRecords = exerciseRecords
         self.limit = limit
         self.tombstonedIDs = tombstonedIDs
+        self.showsSeeAllButton = showsSeeAllButton
         self.exerciseLibrary = exerciseLibrary
     }
 
@@ -40,26 +43,28 @@ struct ExerciseListSection: View {
         let content = builtContent
 
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            HStack {
-                Spacer()
+            if showsSeeAllButton {
+                HStack {
+                    Spacer()
 
-                Button {
-                    isShowingExerciseView = true
-                } label: {
-                    HStack(spacing: DS.Spacing.xxs) {
-                        Text("See All")
-                        Image(systemName: "chevron.right")
-                            .font(.caption2.weight(.semibold))
+                    Button {
+                        isShowingExerciseView = true
+                    } label: {
+                        HStack(spacing: DS.Spacing.xxs) {
+                            Text("See All")
+                            Image(systemName: "chevron.right")
+                                .font(.caption2.weight(.semibold))
+                        }
+                        .font(.caption)
+                        .foregroundStyle(DS.Color.activity)
+                        .padding(.vertical, 6)
+                        .padding(.horizontal, 8)
+                        .contentShape(Rectangle())
                     }
-                    .font(.caption)
-                    .foregroundStyle(DS.Color.activity)
-                    .padding(.vertical, 6)
-                    .padding(.horizontal, 8)
-                    .contentShape(Rectangle())
+                    .buttonStyle(.plain)
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+                    .accessibilityIdentifier("activity-recent-seeall")
                 }
-                .buttonStyle(.plain)
-                .frame(maxWidth: .infinity, alignment: .trailing)
-                .accessibilityIdentifier("activity-recent-seeall")
             }
 
             // Unified rows — date-sorted, limited

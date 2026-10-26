@@ -1,0 +1,34 @@
+{
+  "date": "2026-10-26",
+  "base_revision": "34eae9a22882f5e5bf36c8ac60c1d8e75dc822f9",
+  "source_dirty": true,
+  "view_sha256": "f5d9561fad70b433519ae09a2dda84f7e73498ad1bfacc0e8c5b69ff75ff024d",
+  "tests_passed": 2,
+  "scope": "T03 iPhone 18 Pro, Desert Warm, light, English; standard and maximum accessibility text. iPad, Duo, Korean and dark appearance not recaptured.",
+  "captures": [
+    {
+      "configurationName": "Full Configuration",
+      "deviceId": "02CE1F65-F721-44A3-9BBF-523AE138F678",
+      "deviceName": "iPhone 18 Pro-wt-Health-hrv-rhr-grouping-738e8506bdc3",
+      "exportedFileName": "20482BA0-4A19-4137-8033-C668236B19CE.png",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Today Compact 100 accessibility trend_0_65A1AAEA-597D-4D38-B81A-5B4DF495A184.png",
+      "timestamp": 1793020462.021,
+      "test": "TodayCompactUITests/testMaximumAccessibilityScoreMovesOutsideRingAndKeepsDetailRoute()",
+      "file": "maximum-text.png",
+      "sha256": "871618c1250c7be61063a53d23fb80ef0a5db0726ac8c519d7fa964eb89b0dc7"
+    },
+    {
+      "configurationName": "Full Configuration",
+      "deviceId": "02CE1F65-F721-44A3-9BBF-523AE138F678",
+      "deviceName": "iPhone 18 Pro-wt-Health-hrv-rhr-grouping-738e8506bdc3",
+      "exportedFileName": "5A9F9138-9FBA-4413-8F0E-9ED3DC460FB6.png",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Today Compact 100 ring_0_924E2017-854E-4747-9A73-462DC300A40F.png",
+      "timestamp": 1793020482.489,
+      "test": "TodayCompactUITests/testSeededHundredPointRingHasFixedCircularFrame()",
+      "file": "standard-text.png",
+      "sha256": "a41e3c8df718bb0b7ab0f46f102f714288f29992312ce9acebec2683b4e5600c"
+    }
+  ]
+}

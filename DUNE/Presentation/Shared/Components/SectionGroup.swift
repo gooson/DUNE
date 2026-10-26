@@ -10,6 +10,7 @@ struct SectionGroup<Content: View>: View {
     var infoAction: (() -> Void)? = nil
     var infoIdentifier: String? = nil
     var sectionIdentifier: String? = nil
+    var headerLink: ((AnyView) -> AnyView)? = nil
     var fillHeight: Bool = false
     @ViewBuilder let content: () -> Content
 
@@ -185,24 +186,19 @@ struct SectionGroup<Content: View>: View {
             // Section header
             VStack(alignment: .leading, spacing: 2) {
                 HStack(spacing: DS.Spacing.xs) {
-                    // Theme accent bar
-                    RoundedRectangle(cornerRadius: 1)
-                        .fill(theme.sectionAccentGradient)
-                        .frame(width: 2, height: 14)
-
-                    Image(systemName: icon)
-                        .font(.subheadline)
-                        .foregroundStyle(iconColor)
-
-                    sectionTitle
+                    if let headerLink {
+                        headerLink(AnyView(headerLabel))
+                    } else {
+                        headerLabel
+                    }
 
                     if let infoAction {
-                        Spacer()
-
+                        if headerLink == nil { Spacer(minLength: 0) }
                         Button(action: infoAction) {
                             Image(systemName: "info.circle")
                                 .font(.subheadline)
                                 .foregroundStyle(DS.Color.textSecondary)
+                                .frame(minWidth: 44, minHeight: 44)
                         }
                         .accessibilityIdentifier(infoIdentifier ?? "section-info")
                     }
@@ -243,6 +239,20 @@ struct SectionGroup<Content: View>: View {
                             .strokeBorder(sectionBorderGradient, lineWidth: borderWidth)
                     )
             }
+        }
+    }
+
+    private var headerLabel: some View {
+        HStack(spacing: DS.Spacing.xs) {
+            RoundedRectangle(cornerRadius: 1)
+                .fill(theme.sectionAccentGradient)
+                .frame(width: 2, height: 14)
+
+            Image(systemName: icon)
+                .font(.subheadline)
+                .foregroundStyle(iconColor)
+
+            sectionTitle
         }
     }
 
