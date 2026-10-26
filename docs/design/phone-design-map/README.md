@@ -142,3 +142,8 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 후속 실제 캡처는 iPad 4장, Duo 외부 LCD 4장·내부 LCD-1 4장도 같은 갤러리에 추가했다. 활성 패널 전후 readback과 원본 해상도는 확인했지만 Duo 물리 각도·회전·새 AX는 미검증이다. 모든 하단 카드·모든 테마/글씨 조합은 갱신하지 않았다. 세부 제한은 갤러리 README를 따른다.
 
 2026-10-27 A01을 Flow 순서와 준비도 막대·실제 운동 보상/심박·개인 기록/보고서/부하/구성 강조로 개편하고 T03/H01/L01의 상단 제목을 영어 대문자로 통일했다. [이번 작업의 새 실제 화면과 출처](../full-redesign-map/review/activity-flow-2026-10-27/index.html)를 통합 포털에 연결했다. 다른 UDID의 기존 통합 인덱스는 덮어쓰지 않는다. 통과한 기능 검사와 최대 글씨 전체 수집 시간 초과, Duo 수집 상태는 갤러리 README에서 구분한다.
+
+
+## 2026-10-27 오늘의 요약 · 핵심 먼저
+
+[새 실제 화면25장·출처·실패와 복구 이력](../full-redesign-map/review/daily-summary-reading-2026-10-27/index.html)에 T03 Today와 T10 알림 요약의 제목/날짜·두 지표 구분·본문 더 보기를 보존했다. 일반 iPhone 기본/최대 글씨·iPad·Duo 외부/내부의 관련 검사가 통과했다. Duo 내부 첫 실행은 teardown 디스플레이 열거8초 초과로 중단됐고 별도 native 캡처와 simctl list도 응답하지 않았다. 공식 CoreDevice 명령으로 전용 Duo만 재부팅한 뒤 실제 조회와 PNG 생성, 내부 포트 캡처의 정상화를 확인하고 미완료 두 selector를1회 실행해2/2 통과·정상 종료했다. 기존 실패는 보존하며 최종 내부 T03/T10 원본으로 갤러리를 갱신했다. 활성 LCD/LCD-1·새 AX 창·원본 해상도는 기록했지만 수치 힌지 각도·물리 회전 검사는 미완료다. 기존 다른 UDID 인덱스는 유지했다. 어두움·다른 테마·iPad/Duo 최대 글씨·기록 없음은 이번 갤러리 범위 밖이며 Watch는 공유 소비자가 아니다.

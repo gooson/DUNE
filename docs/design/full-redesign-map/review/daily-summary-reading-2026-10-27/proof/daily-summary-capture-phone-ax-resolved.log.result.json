@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/TodayReadingUITests/testDailyDigestCaptureTopAccessibilityText"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 1,
+    "passed": 0,
+    "skipped": 0,
+    "failed": 1
+  },
+  "passed_cases": 0,
+  "failures": [
+    "612: /Users/shanks/.codex/worktrees/035c/Health/DUNEUITests/Visual/TodayReadingUITests.swift:65: error: -[DUNEUITests.TodayReadingUITests testDailyDigestCaptureTopAccessibilityText] : XCTAssertTrue failed - dashboard-digest-condition should be reachable at this text size and device width",
+    "621: Test Case '-[DUNEUITests.TodayReadingUITests testDailyDigestCaptureTopAccessibilityText]' failed (121.285 seconds).",
+    "622: Test Suite 'TodayReadingUITests' failed at 2026-10-27 01:45:47.545.",
+    "624: Test Suite 'DUNEUITests.xctest' failed at 2026-10-27 01:45:47.546.",
+    "626: Test Suite 'Selected tests' failed at 2026-10-27 01:45:47.546.",
+    "641: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log has no positive passed-test count",
+    "UI test log has no identifiable passed UI test cases",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/TodayReadingUITests/testDailyDigestCaptureTopAccessibilityText"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/035c/Health/.xcodebuild/daily-summary-capture-phone-ax-resolved.log"
+}
