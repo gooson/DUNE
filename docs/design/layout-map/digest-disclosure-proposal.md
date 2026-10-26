@@ -7,6 +7,8 @@ status: draft
 
 # 오늘의 요약·펼침형 카드 대안 · 2026-10-27
 
+후속 선택: 사용자는 **본문 더 보기**를 선택했다. 아래 헤더 펼침은 초기 추천 기록이며 현재 발전 방향은 [본문 더 보기 세부안](digest-read-more-refinement.md)을 따른다.
+
 [세 가지 상호작용 시안](digest-disclosure-proposal.html) · [편집 원본](assets/daily-summary-options-fragment.html) · [브레인스토밍](../../brainstorms/2026-10-27-summary-card-disclosure.md)
 
 **검토 중인 제안이며 네이티브 앱 캡처가 아니다.** 실제 앱은 이 작업에서 변경하지 않았다. 첨부 화면의 날짜와 숫자를 예시로 유지했다.

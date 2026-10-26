@@ -1,0 +1,137 @@
+<div id="summary-refinement" aria-label="오늘의 요약 카드 다듬기">
+  <div class="viz-carousel viz-dotted-background" aria-label="본문 더 보기 방향의 요약 카드" data-previous-label="이전" data-next-label="다음">
+    <section data-variant="핵심 먼저 · 추천" aria-label="지표와 짧은 해석을 차례로 읽는 카드">
+      <div class="summary-stage">
+        <article class="summary-card" data-kind="metrics-first" aria-label="핵심 먼저 요약 카드">
+          <header class="summary-heading"><span><i data-lucide="file-text" aria-hidden="true"></i><strong>오늘의 요약</strong></span><time datetime="2026-10-26">10월 26일</time></header>
+          <div class="summary-metrics">
+            <div class="summary-metric"><span class="summary-label">컨디션</span><strong class="summary-number">45</strong><span class="summary-change"><i data-lucide="arrow-up" aria-hidden="true"></i>어제보다 2점</span></div>
+            <div class="summary-metric"><span class="summary-label">걸음 수</span><strong class="summary-number">5,205</strong></div>
+          </div>
+          <div class="summary-reading">
+            <p class="summary-preview" data-preview>컨디션이 어제보다 조금 올랐어요.</p>
+            <div id="summary-metrics-full" class="summary-full" data-full hidden role="region" aria-label="오늘의 전체 요약"><p>컨디션은 45점으로 어제보다 2점 올랐어요. 오늘은 5,205걸음을 기록했어요.</p></div>
+            <button type="button" class="summary-toggle cursor-interaction" aria-expanded="false" aria-controls="summary-metrics-full"><span data-button-text>요약 더 보기</span><i data-lucide="chevron-down" aria-hidden="true"></i></button>
+          </div>
+        </article>
+      </div>
+    </section>
+    <section data-variant="한 문장 먼저" aria-label="요약 문장을 먼저 읽고 수치를 확인하는 카드" hidden>
+      <div class="summary-stage">
+        <article class="summary-card summary-story" data-kind="story-first" aria-label="한 문장 먼저 요약 카드">
+          <header class="summary-heading"><span><i data-lucide="file-text" aria-hidden="true"></i><strong>오늘의 요약</strong></span><time datetime="2026-10-26">10월 26일</time></header>
+          <div class="summary-reading">
+            <p class="summary-preview" data-preview>컨디션이 어제보다<br>조금 올랐어요.</p>
+            <div id="summary-story-full" class="summary-full" data-full hidden role="region" aria-label="오늘의 전체 요약"><p>컨디션은 45점으로 어제보다 2점 올랐어요. 오늘은 5,205걸음을 기록했어요.</p></div>
+            <button type="button" class="summary-toggle cursor-interaction" aria-expanded="false" aria-controls="summary-story-full"><span data-button-text>요약 더 보기</span><i data-lucide="chevron-down" aria-hidden="true"></i></button>
+          </div>
+          <div class="summary-metrics summary-supporting">
+            <div class="summary-metric"><span class="summary-label">컨디션</span><div class="summary-inline-value"><strong class="summary-number">45</strong><span class="summary-change"><i data-lucide="arrow-up" aria-hidden="true"></i>어제보다 2점</span></div></div>
+            <div class="summary-metric"><span class="summary-label">걸음 수</span><strong class="summary-number">5,205</strong></div>
+          </div>
+        </article>
+      </div>
+    </section>
+    <section data-variant="지표를 행으로" aria-label="지표를 한 행씩 구분하고 요약을 펼치는 카드" hidden>
+      <div class="summary-stage">
+        <article class="summary-card summary-rows" data-kind="metric-rows" aria-label="지표 행 요약 카드">
+          <header class="summary-heading"><span><i data-lucide="file-text" aria-hidden="true"></i><strong>오늘의 요약</strong></span><time datetime="2026-10-26">10월 26일</time></header>
+          <dl class="summary-metric-rows">
+            <div><dt><i data-lucide="heart-pulse" aria-hidden="true"></i>컨디션</dt><dd><strong>45</strong><span class="summary-change"><i data-lucide="arrow-up" aria-hidden="true"></i>어제보다 2점</span></dd></div>
+            <div><dt><i data-lucide="footprints" aria-hidden="true"></i>걸음 수</dt><dd><strong>5,205</strong></dd></div>
+          </dl>
+          <div class="summary-reading">
+            <p class="summary-preview" data-preview>컨디션이 어제보다 조금 올랐어요.</p>
+            <div id="summary-rows-full" class="summary-full" data-full hidden role="region" aria-label="오늘의 전체 요약"><p>컨디션은 45점으로 어제보다 2점 올랐어요. 오늘은 5,205걸음을 기록했어요.</p></div>
+            <button type="button" class="summary-toggle cursor-interaction" aria-expanded="false" aria-controls="summary-rows-full"><span data-button-text>요약 더 보기</span><i data-lucide="chevron-down" aria-hidden="true"></i></button>
+          </div>
+        </article>
+      </div>
+    </section>
+  </div>
+</div>
+<style>
+  #summary-refinement{--summary-size:1;--summary-width:430px;--summary-stage-height:370px}
+  #summary-refinement .summary-stage{box-sizing:border-box;min-height:var(--summary-stage-height);padding:16px 12px;display:flex;align-items:flex-start;justify-content:center}
+  #summary-refinement .summary-card{--summary-surface:light-dark(#f5efe5,#37332e);--summary-ink:light-dark(#292a25,#fcf7ef);--summary-secondary:light-dark(#66665e,#c7c1b6);--summary-action:light-dark(#8d542c,#dbac81);--summary-line:light-dark(#d9d0c3,#ffffff19);--summary-edge:light-dark(#d2c7b7,#687163);--summary-positive:light-dark(#4d7049,#acd09e);box-sizing:border-box;width:min(100%,var(--summary-width));padding:16px 16px 8px;border:1px solid var(--summary-edge);border-radius:20px;background:var(--summary-surface);color:var(--summary-ink);font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif;font-size:calc(15px * var(--summary-size));line-height:1.5;container-type:inline-size}
+  #summary-refinement .summary-heading{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px 12px;margin-bottom:20px;min-height:28px}
+  #summary-refinement .summary-heading>span{display:flex;align-items:center;gap:8px;min-width:0}
+  #summary-refinement .summary-heading strong{font-size:calc(17px * var(--summary-size));font-weight:650;line-height:1.4}
+  #summary-refinement .summary-heading svg{width:19px;height:19px;flex-shrink:0;color:var(--summary-secondary)}
+  #summary-refinement time{font-size:calc(12px * var(--summary-size));color:var(--summary-secondary);white-space:nowrap}
+  #summary-refinement .summary-metrics{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;margin-bottom:16px}
+  #summary-refinement .summary-metric{display:flex;flex-direction:column;align-items:flex-start;min-width:0}
+  #summary-refinement .summary-metric+.summary-metric{padding-left:16px;border-left:1px solid var(--summary-line)}
+  #summary-refinement .summary-label{font-size:calc(13px * var(--summary-size));color:var(--summary-secondary);margin-bottom:4px}
+  #summary-refinement .summary-number{font-size:calc(34px * var(--summary-size));font-weight:700;line-height:1.15;letter-spacing:-.035em;font-variant-numeric:tabular-nums}
+  #summary-refinement .summary-change{display:inline-flex;align-items:center;gap:3px;flex-wrap:wrap;color:var(--summary-positive);font-size:calc(12px * var(--summary-size));font-weight:500;line-height:1.5;margin-top:7px}
+  #summary-refinement .summary-change svg{width:12px;height:12px;flex-shrink:0}
+  #summary-refinement .summary-reading{padding-top:14px;border-top:1px solid var(--summary-line)}
+  #summary-refinement .summary-preview,#summary-refinement .summary-full p{margin:0;color:var(--summary-secondary);font-size:calc(15px * var(--summary-size));line-height:1.6;overflow-wrap:anywhere;text-wrap:pretty}
+  #summary-refinement .summary-toggle{display:flex;align-items:center;justify-content:flex-start;gap:4px;width:100%;min-height:44px;margin:2px 0 0;padding:8px 0;border:0;background:none;color:var(--summary-action);font:500 calc(14px * var(--summary-size))/1.5 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif;text-align:left}
+  #summary-refinement .summary-toggle svg{width:14px;height:14px;flex-shrink:0;transition:transform .2s ease}
+  #summary-refinement .is-expanded .summary-toggle svg{transform:rotate(180deg)}
+  #summary-refinement .summary-toggle:active{opacity:.65}
+  #summary-refinement .summary-story .summary-heading{margin-bottom:16px}
+  #summary-refinement .summary-story .summary-reading{border:0;padding:0}
+  #summary-refinement .summary-story .summary-preview{font-size:calc(23px * var(--summary-size));font-weight:600;line-height:1.45;color:var(--summary-ink);letter-spacing:-.025em}
+  #summary-refinement .summary-supporting{border-top:1px solid var(--summary-line);padding-top:14px;margin:2px 0 10px}
+  #summary-refinement .summary-supporting .summary-number{font-size:calc(26px * var(--summary-size))}
+  #summary-refinement .summary-inline-value{display:flex;align-items:baseline;flex-wrap:wrap;gap:8px}
+  #summary-refinement .summary-inline-value .summary-change{margin:0}
+  #summary-refinement .summary-metric-rows{margin:0 0 10px}
+  #summary-refinement .summary-metric-rows>div{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:52px;padding:8px 0}
+  #summary-refinement .summary-metric-rows>div+div{border-top:1px solid var(--summary-line)}
+  #summary-refinement .summary-metric-rows dt{display:flex;align-items:center;gap:8px;color:var(--summary-secondary);font-size:calc(14px * var(--summary-size));min-width:0}
+  #summary-refinement .summary-metric-rows dt svg{width:17px;height:17px;flex-shrink:0}
+  #summary-refinement .summary-metric-rows dd{margin:0;display:flex;flex-direction:column;align-items:flex-end;min-width:0}
+  #summary-refinement .summary-metric-rows strong{font-size:calc(25px * var(--summary-size));font-weight:650;line-height:1.25;font-variant-numeric:tabular-nums;letter-spacing:-.025em}
+  #summary-refinement .summary-metric-rows .summary-change{margin-top:2px}
+  #summary-refinement.is-large{--summary-size:1.35;--summary-stage-height:530px}
+  #summary-refinement.is-narrow{--summary-width:320px}
+  #summary-refinement.is-large .summary-metrics{grid-template-columns:1fr;gap:16px}
+  #summary-refinement.is-large .summary-metric+.summary-metric{padding:0;border:0}
+  #summary-refinement.is-large .summary-heading time{width:100%;padding-left:27px;box-sizing:border-box}
+  #summary-refinement.is-large .summary-metric-rows>div{align-items:flex-start;flex-wrap:wrap}
+  #summary-refinement [hidden]{display:none}
+  @media(max-width:380px){#summary-refinement .summary-stage{padding:12px 8px}#summary-refinement .summary-metrics{gap:12px}#summary-refinement .summary-metric+.summary-metric{padding-left:12px}}
+  @media(prefers-reduced-motion:reduce){#summary-refinement .summary-toggle svg{transition:none}}
+</style>
+<script>
+(()=>{
+  const root=document.getElementById("summary-refinement");
+  const shared={largeText:false,narrowWidth:false};
+  const states=new Map();
+  const stored=window.openai?.widgetState?.privateContent;
+  const renderShared=()=>{root.classList.toggle("is-large",shared.largeText);root.classList.toggle("is-narrow",shared.narrowWidth);};
+  const save=(variant)=>{
+    const expanded=Object.fromEntries([...states].map(([key,value])=>[key,value.expanded]));
+    const request=window.openai?.setWidgetState({modelContent:{direction:"본문 더 보기",variant},privateContent:{expanded}});
+    if(request?.catch)request.catch(()=>{});
+  };
+  root.querySelectorAll(".summary-card").forEach(card=>{
+    const variant=card.dataset.kind;
+    const state={expanded:stored?.expanded?.[variant]===true};states.set(variant,state);
+    const button=card.querySelector(".summary-toggle");
+    const render=()=>{
+      card.classList.toggle("is-expanded",state.expanded);
+      button.setAttribute("aria-expanded",String(state.expanded));
+      button.querySelector("[data-button-text]").textContent=state.expanded?"요약 접기":"요약 더 보기";
+      card.querySelector("[data-preview]").hidden=state.expanded;
+      card.querySelector("[data-full]").hidden=!state.expanded;
+    };
+    button.addEventListener("click",()=>{state.expanded=!state.expanded;render();save(variant);});
+    render();
+  });
+  window.addEventListener("openai:set_globals",event=>{
+    const content=event.detail?.globals?.widgetState?.privateContent;
+    if(!content?.expanded)return;
+    root.querySelectorAll(".summary-card").forEach(card=>{
+      const state=states.get(card.dataset.kind);const next=content.expanded[card.dataset.kind]===true;
+      if(state.expanded!==next){state.expanded=next;card.classList.toggle("is-expanded",next);const button=card.querySelector(".summary-toggle");button.setAttribute("aria-expanded",String(next));button.querySelector("[data-button-text]").textContent=next?"요약 접기":"요약 더 보기";card.querySelector("[data-preview]").hidden=next;card.querySelector("[data-full]").hidden=!next;}
+    });
+  });
+  renderShared();
+  if(globalThis.Tweak){const tweak=new Tweak({container:root,onChange:renderShared});tweak.addToggle(shared,"largeText",{label:"큰 글씨"});tweak.addToggle(shared,"narrowWidth",{label:"좁은 카드 폭"});}
+})();
+</script>

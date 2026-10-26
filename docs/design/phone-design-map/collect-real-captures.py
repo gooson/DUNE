@@ -500,6 +500,7 @@ def render_portal() -> None:
             '.pending{display:grid;place-items:center;color:#91a09d}.meta{display:flex;justify-content:space-between;gap:12px;padding:16px}'
             '.meta span{color:#c9ad8e}</style><main><h1>DUNE · 전체 디자인맵</h1>'
             '<p>iPhone·iPad·Duo의 현재 앱 실제 화면과 Watch 운동 재작업 결과를 한곳에서 확인합니다.</p>'
+            '<p><a href="../../full-redesign-map/review/daily-summary-reading-2026-10-27/index.html" style="color:#e8bf94">오늘의 요약 · 핵심 먼저 · 관련 기기 통과·새 실제 화면25장 →</a></p>'
             '<p><a href="../../full-redesign-map/review/card-headers-review-ship-2026-10-27/index.html" style="color:#e8bf94">카드 상세 헤더 · 관련 UI 6/6 통과 · 새 실제 화면 →</a></p>'
             '<p><a href="../../full-redesign-map/review/card-headers-sleep-debt-2026-10-26/index.html" style="color:#e8bf94">카드 제목 옆 상세 진입·수면 부채 · 새 iPhone 실제 5장 · 자동 UI는 미완료 →</a></p>'
             '<p><a href="../../full-redesign-map/review/hrv-rhr-grouping-2026-10-26/index.html" style="color:#e8bf94">T03 HRV·RHR 구획 · 새 iPhone 기본·최대 글씨 실제 캡처 →</a></p>'
