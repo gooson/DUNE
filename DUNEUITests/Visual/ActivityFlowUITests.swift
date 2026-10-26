@@ -19,7 +19,10 @@ final class ActivityFlowUITests: SeededUITestBaseCase {
 
     func testActivityRootReadinessAndFlowOrder() {
         navigateToActivity()
+        assertActivityRootReadinessAndFlowOrder()
+    }
 
+    private func assertActivityRootReadinessAndFlowOrder() {
         XCTAssertTrue(waitForElement("activity-hero-readiness", timeout: 15).exists)
         XCTAssertTrue(waitForElement("activity-hero-components", timeout: 15).exists,
                       "The readiness evidence bars should be present in the seeded state")
@@ -167,6 +170,27 @@ final class ActivityFlowUITests: SeededUITestBaseCase {
         captureA01Flow(suffix: "-MaxAX")
     }
 
+    func testPersonalRecordValueAtMaximumAccessibilitySize() {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ]
+        launchApp(with: configuration)
+        navigateToActivity()
+        alignActivityCaptureHeader("activity-section-pr")
+        capture("A01-PersonalRecords-MaxAX-header")
+
+        let records = app.buttons["activity-section-pr-content"].firstMatch
+        let numeric = NSPredicate(format: "label MATCHES %@", "^[0-9][0-9.,:'\"msh]*$")
+        let value = records.staticTexts.matching(numeric).firstMatch
+        XCTAssertTrue(value.waitForExistence(timeout: 10), "A seeded personal record should expose its primary value")
+        let viewport = usableActivityViewport()
+        alignActivityPosition(at: viewport.midY - value.frame.height / 2) { value.frame.minY }
+        XCTAssertTrue(usableActivityViewport().insetBy(dx: -1, dy: -1).contains(value.frame),
+                      "The complete record value should fit in the usable viewport")
+        capture("A01-PersonalRecords-MaxAX-value")
+    }
+
     private func captureA01Flow(suffix: String) {
         navigateToActivity()
         XCTAssertTrue(waitForElement("activity-hero-readiness", timeout: 15).exists)
@@ -301,6 +325,53 @@ final class ActivityFlowUITests: SeededUITestBaseCase {
     func testCaptureL01ChangedHero() {
         captureHero(tab: "Life", root: AXID.lifeHeroProgress,
                     heading: "life-hero-heading", title: "HABITS", name: "L01-Life-Habits")
+    }
+
+    func testCaptureDuoClosedFlowAndHeadings() throws {
+        try captureDuoFlowAndHeadings(posture: "closed", suffix: "DuoClosed")
+    }
+
+    func testCaptureDuoOpenFlowAndHeadings() throws {
+        try captureDuoFlowAndHeadings(posture: "openFlat", suffix: "DuoOpen")
+    }
+
+    private func captureDuoFlowAndHeadings(posture: String, suffix: String) throws {
+        guard VisualAudit.isEnabled,
+              ProcessInfo.processInfo.environment["DUNE_VISUAL_AUDIT_HOST_ONLY"] == "1",
+              ProcessInfo.processInfo.environment["DUNE_VISUAL_AUDIT_FOLD"] == "1" else {
+            throw XCTSkip("Opt-in Duo native capture only")
+        }
+        executionTimeAllowance = 600
+
+        navigateToActivity()
+        VisualAudit.capture("FOLD:\(posture) Activity final flow")
+        XCTAssertTrue(app.hasPrimaryNavigation(timeout: 15),
+                      "Activity should remain available after \(posture) transition")
+        assertActivityRootReadinessAndFlowOrder()
+        assertDuoHeroRing("activity-hero-ring", diameter: 104)
+        captureA01Flow(suffix: "-\(suffix)")
+
+        captureHero(tab: "Today", root: AXID.dashboardHeroCondition,
+                    heading: "dashboard-hero-heading", title: "CONDITION",
+                    name: "T03-\(suffix)-Condition")
+        assertDuoHeroRing("dashboard-hero-ring", diameter: 104)
+        captureHero(tab: "Wellness", root: AXID.wellnessHeroScore,
+                    heading: "wellness-hero-heading", title: "WELLNESS",
+                    name: "H01-\(suffix)-Wellness")
+        // The 124pt shared ring's 11pt stroke is included in its AX bounds.
+        assertDuoHeroRing("wellness-hero-ring", diameter: 135)
+        captureHero(tab: "Life", root: AXID.lifeHeroProgress,
+                    heading: "life-hero-heading", title: "HABITS",
+                    name: "L01-\(suffix)-Habits")
+        assertDuoHeroRing("life-hero-ring", diameter: 135)
+    }
+
+    private func assertDuoHeroRing(_ identifier: String, diameter: CGFloat) {
+        let ring = waitForElement(identifier, timeout: 10)
+        XCTAssertEqual(ring.frame.width, diameter, accuracy: 1,
+                       "\(identifier) should keep its tab's ring diameter")
+        XCTAssertEqual(ring.frame.height, ring.frame.width, accuracy: 1,
+                       "\(identifier) should remain circular")
     }
 
     private func captureHero(tab: String, root: String, heading: String, title: String, name: String) {
