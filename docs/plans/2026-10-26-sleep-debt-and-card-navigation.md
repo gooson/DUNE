@@ -2,7 +2,7 @@
 topic: sleep-debt-and-card-navigation
 date: 2026-10-26
 status: implemented
-verification: partial
+verification: targeted-ios-passed
 confidence: high
 related_solutions: [docs/solutions/design/hero-cta-button-pattern.md]
 ---
@@ -69,3 +69,6 @@ Today의 수면 부채는 제목과 시간만 나열되어 최근 수면과 구�
 ## Confidence Assessment
 
 High. 사용자 선택과 기존 목적지가 명확하며 공통 변경을 표현 레이어로 한정할 수 있다.
+
+
+2026-10-27 후속: 관련 iOS UI 6/6 통과·정상 종료. [최종 리뷰와 한정된 확인 범위](../reviews/2026-10-27-card-navigation-review-ship.md)를 따른다. 전체 회귀나 모든 기기/상태 조합의 통과를 뜻하지 않는다.

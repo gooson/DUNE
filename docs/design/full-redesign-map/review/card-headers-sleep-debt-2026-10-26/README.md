@@ -1,3 +1,10 @@
+---
+tags: [card-navigation, design-map]
+date: 2026-10-26
+category: review
+status: reviewed
+---
+
 # 네 탭 헤더·수면 부채 실제 캡처 · 2026-10-26
 
 [갤러리](index.html) · [원본·해시·기기·명령](manual-captures.json) · [실행 기록](../../../../reviews/2026-10-26-card-header-navigation.md)

@@ -72,4 +72,4 @@ NavigationLink(value: existingDestination) {
 
 ## Verification Limits
 
-변경 소스의 Swift 구문 검사와 최종 앱·테스트 타깃의 컴파일/링크는 완료했다. 이전 수면 상세 진입과 Life 헤더 터치는 각각 통과했으나 최종 5개 UI 실행은 테스트 러너 시작 후 결과가 나오지 않아 900초에서 종료됐다. 전체 UI 통과로 처리하지 않는다. [실행 기록](../../reviews/2026-10-26-card-header-navigation.md)에 실패·재시도·새 캡처 상태를 구분한다. `.claude/**` 규칙은 수정하지 않았다.
+변경 소스의 Swift 구문 검사와 최종 앱·테스트 타깃의 컴파일/링크는 완료했다. 2026-10-26의 5개 UI 실행은 결과 없이 900초에서 종료됐으며 실패 이력으로 유지한다. 전용 기기 복구 근거 후 2026-10-27에 관련 6개를 한 번 재개해 6/6 통과·정상 종료했다. [최종 리뷰·확인 범위](../../reviews/2026-10-27-card-navigation-review-ship.md)와 [이전 실행 기록](../../reviews/2026-10-26-card-header-navigation.md)을 구분한다. 전체 UI 통과로 확대하지 않는다. `.claude/**` 규칙은 수정하지 않았다.

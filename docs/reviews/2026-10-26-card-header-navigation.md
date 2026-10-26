@@ -1,4 +1,13 @@
+---
+tags: [card-navigation, design-map]
+date: 2026-10-26
+category: review
+status: reviewed
+---
+
 # 카드 상세 헤더·수면 부채 검증 · 2026-10-26
+
+2026-10-27 후속: 복구 근거를 확인한 뒤 제한적으로 재개한 관련 UI 6개가 모두 통과하고 정상 종료했다. 기존 실패 이력은 아래에 유지하며 [후속 리뷰·검증](2026-10-27-card-navigation-review-ship.md)과 [새 실제 캡처](../design/full-redesign-map/review/card-headers-review-ship-2026-10-27/index.html)를 최신 결과로 사용한다.
 
 ## 범위
 

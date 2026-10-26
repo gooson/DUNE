@@ -1,3 +1,10 @@
+---
+tags: [card-navigation, design-map]
+date: 2026-10-26
+category: review
+status: reviewed
+---
+
 # T03 HRV·RHR 구획 · 2026-10-26
 
 [실제 캡처](index.html) · [출처·해시](evidence.json)

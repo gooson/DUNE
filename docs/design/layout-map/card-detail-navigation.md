@@ -1,3 +1,10 @@
+---
+tags: [card-navigation, design-map]
+date: 2026-10-26
+category: plan
+status: reviewed
+---
+
 # 메인 탭 카드 상세 헤더 · 2026-10-26
 
 사용자가 Today·Activity·Wellness·Life 전체에 승인한 배치다.
