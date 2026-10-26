@@ -3,7 +3,7 @@ topic: activity-final-flow-implementation
 tags: [activity, flow, hero, badges, accessibility]
 date: 2026-10-27
 category: plan
-status: approved
+status: implemented
 confidence: high
 related_solutions: [2026-10-26-shared-card-navigation-header, 2026-10-26-today-compact-density-and-pin-hit-area]
 related_brainstorms: [2026-03-29-pr-visual-enhancement]
@@ -82,3 +82,7 @@ related_brainstorms: [2026-03-29-pr-visual-enhancement]
 ## Confidence Assessment
 
 높음: 시안과 데이터 계약이 이미 조사되어 있고 main의 공통 헤더 구현을 재사용한다. 실제 기기 HealthKit 권한/실시간 동기화와 전체 플랫폼 회귀는 이 작업의 자동 검증 범위가 아니다.
+
+## Completion record
+
+앱 구현·기기별 캡처·전문 리뷰 완료. [현재 리뷰와 검증 제한](../reviews/2026-10-27-activity-final-flow.md), [실제 화면 한판](../design/full-redesign-map/review/activity-flow-2026-10-27/index.html), [해결 문서](../solutions/testing/2026-10-27-activity-flow-accessibility-and-record-layout.md). 최신 main fefd3581을 통합했다. Ship은 별도 frozen 검증 receipt와 PR 결과로 기록한다.
