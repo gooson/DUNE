@@ -1,3 +1,4 @@
+import json
 import os
 from pathlib import Path
 import shutil
@@ -8,6 +9,10 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
 FORMATTER = ROOT / "scripts/format-xcstrings.swift"
+CATALOGS = (
+    ROOT / "Shared/Resources/Localizable.xcstrings",
+    ROOT / "DUNEWatch/Resources/Localizable.xcstrings",
+)
 
 
 class StringCatalogFormattingTests(unittest.TestCase):
@@ -34,6 +39,47 @@ class StringCatalogFormattingTests(unittest.TestCase):
     def test_existing_catalogs_match_xcode_format(self):
         result = self.run_formatter("--check")
         self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_existing_catalog_entries_are_manually_managed(self):
+        # Shared catalogs and dynamic keys cannot rely on one target's extraction.
+        for catalog in CATALOGS:
+            with self.subTest(catalog=catalog.relative_to(ROOT)):
+                strings = json.loads(catalog.read_text(encoding="utf-8"))["strings"]
+                unmanaged = [key for key, entry in strings.items()
+                             if entry.get("extractionState") != "manual"]
+                self.assertEqual(unmanaged, [],
+                                 f"Register catalog entries as manual: {unmanaged[:10]}")
+
+    @unittest.skipUnless(shutil.which("xcrun"), "Xcode tools required")
+    def test_xcode_sync_preserves_catalogs_across_target_extraction(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            directory = Path(temporary_directory)
+            extracted = directory / "Probe.stringsdata"
+            # Same schema emitted by swiftc -emit-localized-strings.
+            for catalog in CATALOGS:
+                copy = directory / "Localizable.xcstrings"
+                original = catalog.read_bytes()
+                copy.write_bytes(original)
+                strings = json.loads(original)["strings"]
+                for keys in ([], list(strings)[:3], list(strings)[-3:]):
+                    with self.subTest(catalog=catalog.relative_to(ROOT), keys=keys):
+                        extracted.write_text(json.dumps({
+                            "source": "Probe.swift",
+                            "tables": {"Localizable": [
+                                {"key": key, "comment": "", "location": {
+                                    "startingColumn": 1, "startingLine": index + 1}}
+                                for index, key in enumerate(keys)
+                            ]},
+                            "version": 1,
+                        }), encoding="utf-8")
+                        result = subprocess.run(
+                            ["xcrun", "xcstringstool", "sync", str(copy),
+                             "--stringsdata", str(extracted)],
+                            capture_output=True, text=True, check=False,
+                        )
+                        self.assertEqual(result.returncode, 0, result.stderr)
+                        self.assertEqual(copy.read_bytes(), original,
+                                         "Xcode sync rewrote the catalog")
 
     def test_formats_and_checks_without_changing_catalog_values(self):
         with tempfile.TemporaryDirectory() as temporary_directory:
