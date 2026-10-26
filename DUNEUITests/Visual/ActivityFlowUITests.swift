@@ -161,6 +161,9 @@ final class ActivityFlowUITests: SeededUITestBaseCase {
     }
 
     func testCaptureA01MaximumAXFlow() {
+        // The opt-in audit preserves nineteen viewports plus their AX trees.
+        // Keep this collection budget separate from the focused product checks.
+        if VisualAudit.isEnabled { executionTimeAllowance = 600 }
         var configuration = launchConfiguration
         configuration.additionalArguments += [
             "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
