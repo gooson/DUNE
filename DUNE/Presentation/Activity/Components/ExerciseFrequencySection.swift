@@ -8,15 +8,27 @@ struct ExerciseFrequencySection: View {
     private var frequencies: [ExerciseFrequency] { summary.frequencies }
 
     var body: some View {
-        if frequencies.isEmpty {
+        if summary.total == 0 && frequencies.isEmpty {
             emptyState
         } else {
             StandardCard {
                 VStack(alignment: .leading, spacing: DS.Spacing.sm) {
                     if summary.isHealthKitSourceUnavailable { partialDataNotice }
-                    Text("Last 4 weeks")
+                    Text("Last 28 days · by recorded exercise entries")
                         .font(.caption)
                         .foregroundStyle(DS.Color.textSecondary)
+                    ViewThatFits(in: .horizontal) {
+                        if !dynamicTypeSize.isAccessibilitySize {
+                            HStack(alignment: .top, spacing: DS.Spacing.md) {
+                                categoryMetric("Strength", icon: "dumbbell.fill", count: summary.strength, color: DS.Color.activityStrength)
+                                categoryMetric("Cardio", icon: "figure.run", count: summary.cardio, color: DS.Color.activityCardio)
+                            }
+                        }
+                        VStack(alignment: .leading, spacing: DS.Spacing.md) {
+                            categoryMetric("Strength", icon: "dumbbell.fill", count: summary.strength, color: DS.Color.activityStrength)
+                            categoryMetric("Cardio", icon: "figure.run", count: summary.cardio, color: DS.Color.activityCardio)
+                        }
+                    }
                     GeometryReader { geometry in
                         HStack(spacing: 0) {
                             DS.Color.activityStrength
@@ -27,27 +39,32 @@ struct ExerciseFrequencySection: View {
                                 .frame(width: geometry.size.width * CGFloat(summary.other) / CGFloat(max(summary.total, 1)))
                         }
                     }
-                    .frame(height: 10)
+                    .frame(height: 16)
                     .background(DS.Color.activity.opacity(0.12), in: Capsule())
                     .clipShape(Capsule())
                     .accessibilityHidden(true)
-                    ratioRow("Strength", count: summary.strength)
-                    ratioRow("Cardio", count: summary.cardio)
                     if summary.other > 0 {
-                        ratioRow("Other", count: summary.other)
+                        categoryMetric("Other", icon: "ellipsis.circle.fill", count: summary.other, color: DS.Color.activityOther)
                     }
                     if !summary.muscles.isEmpty {
                         Divider()
                         Text("Primary muscles · completed sets")
                             .font(.caption2)
                             .foregroundStyle(DS.Color.textSecondary)
-                        ForEach(summary.muscles.prefix(3)) { share in
-                            muscleRow(share)
+                        ViewThatFits(in: .horizontal) {
+                            HStack(spacing: DS.Spacing.xs) {
+                                muscleChips
+                            }
+                            VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                                muscleChips
+                            }
                         }
                     }
-                    Divider()
-                    ForEach(frequencies.prefix(6)) { freq in
-                        frequencyRow(freq)
+                    if !frequencies.isEmpty {
+                        Divider()
+                        ForEach(frequencies.prefix(6)) { freq in
+                            frequencyRow(freq)
+                        }
                     }
 
                 }
@@ -55,44 +72,36 @@ struct ExerciseFrequencySection: View {
         }
     }
 
-    private func ratioRow(_ title: LocalizedStringKey, count: Int) -> some View {
-        let value = "\(count.formattedWithSeparator) / \(summary.total.formattedWithSeparator)"
-        return ViewThatFits(in: .horizontal) {
-            if !dynamicTypeSize.isAccessibilitySize {
-                HStack {
-                    Text(title)
-                    Spacer(minLength: DS.Spacing.xs)
-                    Text(value).monospacedDigit()
-                }
-            }
-            VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-                Text(title)
-                Text(value)
-                    .foregroundStyle(DS.Color.textSecondary)
-                    .monospacedDigit()
-            }
+    private func categoryMetric(_ title: LocalizedStringKey, icon: String, count: Int, color: Color) -> some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+            Label(title, systemImage: icon)
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(color)
+            Text(Double(count) / Double(max(summary.total, 1)), format: .percent.precision(.fractionLength(0)))
+                .font(DS.Typography.cardScore)
+                .foregroundStyle(color)
+                .monospacedDigit()
+            Text("\(count.formattedWithSeparator) / \(summary.total.formattedWithSeparator)")
+                .font(.caption)
+                .foregroundStyle(DS.Color.textSecondary)
+                .monospacedDigit()
         }
-        .font(.caption.weight(.medium))
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
-    private func muscleRow(_ share: ExerciseMixSummary.MuscleShare) -> some View {
-        ViewThatFits(in: .horizontal) {
-            if !dynamicTypeSize.isAccessibilitySize {
-                HStack {
-                    Text(share.muscle.displayName)
-                    Spacer(minLength: DS.Spacing.xs)
-                    Text(share.fraction, format: .percent.precision(.fractionLength(0)))
-                        .monospacedDigit()
-                }
-            }
-            VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+    private var muscleChips: some View {
+        ForEach(summary.muscles.prefix(3)) { share in
+            HStack(spacing: DS.Spacing.xs) {
                 Text(share.muscle.displayName)
                 Text(share.fraction, format: .percent.precision(.fractionLength(0)))
                     .foregroundStyle(DS.Color.textSecondary)
                     .monospacedDigit()
             }
+            .font(.caption.weight(.medium))
+            .padding(.horizontal, DS.Spacing.sm)
+            .padding(.vertical, DS.Spacing.xs)
+            .background(DS.Color.activity.opacity(0.10), in: RoundedRectangle(cornerRadius: DS.Radius.sm))
         }
-        .font(.caption)
     }
 
     private func frequencyRow(_ freq: ExerciseFrequency) -> some View {

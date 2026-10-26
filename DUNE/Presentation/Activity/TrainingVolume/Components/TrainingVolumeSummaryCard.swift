@@ -1,23 +1,47 @@
 import SwiftUI
 import Charts
 
-/// Compact training volume card for the Activity dashboard.
-/// Shows 28-day training load bar chart + last workout metrics.
-/// Tapping navigates to TrainingVolumeDetailView.
+/// Recent workout-day totals and a separate 28-day training-load trend.
 struct TrainingVolumeSummaryCard: View {
     let trainingLoadData: [TrainingLoadDataPoint]
     let lastWorkoutMinutes: Double
     let lastWorkoutCalories: Double
+    let recentWorkoutDate: Date?
 
     @Environment(\.appTheme) private var theme
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-    @ScaledMetric(relativeTo: .caption2) private var chartHeight: CGFloat = 50
+    @ScaledMetric(relativeTo: .caption2) private var chartHeight: CGFloat = 70
+
+    init(
+        trainingLoadData: [TrainingLoadDataPoint],
+        lastWorkoutMinutes: Double,
+        lastWorkoutCalories: Double,
+        recentWorkoutDate: Date? = nil
+    ) {
+        self.trainingLoadData = trainingLoadData
+        self.lastWorkoutMinutes = lastWorkoutMinutes
+        self.lastWorkoutCalories = lastWorkoutCalories
+        self.recentWorkoutDate = recentWorkoutDate
+    }
 
     var body: some View {
         NavigationLink(value: TrainingVolumeDestination.overview) {
             StandardCard {
                 VStack(alignment: .leading, spacing: DS.Spacing.md) {
+                    if let recentWorkoutDate {
+                        Text("Recent workout day · \(recentWorkoutDate.formatted(date: .abbreviated, time: .omitted)) total")
+                            .font(.caption)
+                            .foregroundStyle(DS.Color.textSecondary)
+                    } else {
+                        Text("Recent workout day total")
+                            .font(.caption)
+                            .foregroundStyle(DS.Color.textSecondary)
+                    }
                     metricsRow
+                    Divider()
+                    Text("28-day training load")
+                        .font(.caption.weight(.medium))
+                        .foregroundStyle(DS.Color.textSecondary)
                     miniBarChart
                 }
             }
@@ -27,41 +51,46 @@ struct TrainingVolumeSummaryCard: View {
         .accessibilityIdentifier("activity-section-volume-content")
     }
 
-    // MARK: - Last Workout Metrics
-
     private var metricsRow: some View {
-        HStack(spacing: DS.Spacing.lg) {
-            metricItem(
-                icon: "flame.fill",
-                value: lastWorkoutCalories > 0 ? lastWorkoutCalories.formattedWithSeparator() : "—",
-                unit: String(localized: "kcal")
-            )
-            metricItem(
-                icon: "clock.fill",
-                value: lastWorkoutMinutes > 0 ? lastWorkoutMinutes.formattedWithSeparator() : "—",
-                unit: String(localized: "min")
-            )
-        }
-    }
-
-    private func metricItem(icon: String, value: String, unit: String) -> some View {
-        HStack(spacing: DS.Spacing.xs) {
-            Image(systemName: icon)
-                .font(.caption2)
-                .foregroundStyle(theme.accentColor)
-            VStack(alignment: .leading, spacing: 0) {
-                Text(value)
-                    .font(.subheadline.weight(.semibold))
-                    .monospacedDigit()
-                    .foregroundStyle(theme.heroTextGradient)
-                Text(unit)
-                    .font(.caption2)
-                    .foregroundStyle(DS.Color.textSecondary)
+        ViewThatFits(in: .horizontal) {
+            if !dynamicTypeSize.isAccessibilitySize {
+                HStack(spacing: DS.Spacing.sm) {
+                    metricItem(icon: "timer", title: "Workout Time", value: lastWorkoutMinutes > 0 ? lastWorkoutMinutes.formattedWithSeparator() : "—", unit: "min", tint: DS.Color.activityCardio)
+                    metricItem(icon: "flame.fill", title: "Calories Burned", value: lastWorkoutCalories > 0 ? lastWorkoutCalories.formattedWithSeparator() : "—", unit: "kcal", tint: DS.Color.desertBronze)
+                }
+            }
+            VStack(spacing: DS.Spacing.sm) {
+                metricItem(icon: "timer", title: "Workout Time", value: lastWorkoutMinutes > 0 ? lastWorkoutMinutes.formattedWithSeparator() : "—", unit: "min", tint: DS.Color.activityCardio)
+                metricItem(icon: "flame.fill", title: "Calories Burned", value: lastWorkoutCalories > 0 ? lastWorkoutCalories.formattedWithSeparator() : "—", unit: "kcal", tint: DS.Color.desertBronze)
             }
         }
     }
 
-    // MARK: - Mini Bar Chart (28-day training load)
+    private func metricItem(icon: String, title: LocalizedStringKey, value: String, unit: LocalizedStringKey, tint: Color) -> some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+            Label(title, systemImage: icon)
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(tint)
+            HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xs) {
+                Text(value)
+                    .font(DS.Typography.cardScore)
+                    .monospacedDigit()
+                    .foregroundStyle(theme.heroTextGradient)
+                    .minimumScaleFactor(0.8)
+                    .lineLimit(1)
+                Text(unit)
+                    .font(.caption)
+                    .foregroundStyle(DS.Color.textSecondary)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(DS.Spacing.md)
+        .background(tint.opacity(0.14), in: RoundedRectangle(cornerRadius: DS.Radius.lg))
+        .overlay {
+            RoundedRectangle(cornerRadius: DS.Radius.lg)
+                .strokeBorder(tint.opacity(0.30), lineWidth: 1)
+        }
+    }
 
     private var miniBarChart: some View {
         Chart(trainingLoadData) { point in
@@ -97,7 +126,8 @@ struct TrainingVolumeSummaryCard: View {
                 )
             },
             lastWorkoutMinutes: 45,
-            lastWorkoutCalories: 320
+            lastWorkoutCalories: 320,
+            recentWorkoutDate: .now
         )
         .padding()
     }

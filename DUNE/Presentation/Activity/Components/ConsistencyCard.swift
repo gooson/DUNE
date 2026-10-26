@@ -4,8 +4,8 @@ import SwiftUI
 struct ConsistencyCard: View {
     let streak: WorkoutStreak?
 
-    @Environment(\.horizontalSizeClass) private var sizeClass
     @Environment(\.appTheme) private var theme
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
         if let streak {
@@ -18,54 +18,15 @@ struct ConsistencyCard: View {
     private func filledContent(_ streak: WorkoutStreak) -> some View {
         StandardCard {
             VStack(alignment: .leading, spacing: DS.Spacing.md) {
-                // Streak row
-                HStack(spacing: DS.Spacing.lg) {
-                    // Current streak
-                    VStack(spacing: DS.Spacing.xxs) {
-                        HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xxs) {
-                            Text("\(streak.currentStreak)")
-                                .font(DS.Typography.cardScore)
-                                .foregroundStyle(theme.heroTextGradient)
-                            Text(String(localized: "days"))
-                                .font(.caption)
-                                .foregroundStyle(DS.Color.textSecondary)
-                        }
-                        Text("Current Streak")
-                            .font(.caption2)
-                            .foregroundStyle(.tertiary)
-                    }
-
-                    Divider().frame(height: 36)
-
-                    // Best streak
-                    VStack(spacing: DS.Spacing.xxs) {
-                        HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xxs) {
-                            Text("\(streak.bestStreak)")
-                                .font(.headline)
-                                .foregroundStyle(theme.heroTextGradient)
-                            Text(String(localized: "days"))
-                                .font(.caption)
-                                .foregroundStyle(DS.Color.textSecondary)
-                        }
-                        Text("Best Streak")
-                            .font(.caption2)
-                            .foregroundStyle(.tertiary)
-                    }
-
-                    Spacer(minLength: 0)
-
-                }
-
-                // Monthly progress
+                // The monthly goal leads the card; streaks provide supporting context.
                 VStack(alignment: .leading, spacing: DS.Spacing.xs) {
                     HStack {
-                        Text("This Month")
-                            .font(.caption)
+                        Text("Monthly Workout Goal")
+                            .font(.subheadline.weight(.semibold))
                             .foregroundStyle(DS.Color.textSecondary)
                         Spacer()
                         Text("\(streak.monthlyCount)/\(streak.monthlyGoal)")
-                            .font(.caption)
-                            .fontWeight(.medium)
+                            .font(.headline.weight(.semibold))
                             .monospacedDigit()
                     }
 
@@ -80,11 +41,48 @@ struct ConsistencyCard: View {
                                     .frame(width: geo.size.width * fraction)
                             }
                     }
-                    .frame(height: 6)
+                    .frame(height: 10)
                     .clipShape(Capsule())
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel("Monthly Workout Goal")
+                    .accessibilityValue("\(streak.monthlyCount) of \(streak.monthlyGoal) days")
+                }
+
+                Divider()
+
+                ViewThatFits(in: .horizontal) {
+                    if !dynamicTypeSize.isAccessibilitySize {
+                        HStack(alignment: .top, spacing: DS.Spacing.lg) {
+                            streakMetric(value: streak.currentStreak, title: "Current Streak")
+                            Divider().frame(height: 52)
+                            streakMetric(value: streak.bestStreak, title: "Best Streak")
+                        }
+                    }
+                    VStack(alignment: .leading, spacing: DS.Spacing.md) {
+                        streakMetric(value: streak.currentStreak, title: "Current Streak")
+                        streakMetric(value: streak.bestStreak, title: "Best Streak")
+                    }
                 }
             }
         }
+    }
+
+    private func streakMetric(value: Int, title: LocalizedStringKey) -> some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+            Text(title)
+                .font(.caption)
+                .foregroundStyle(DS.Color.textSecondary)
+            HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xxs) {
+                Text(value.formatted())
+                    .font(DS.Typography.cardScore)
+                    .foregroundStyle(theme.heroTextGradient)
+                    .monospacedDigit()
+                Text("days")
+                    .font(.caption)
+                    .foregroundStyle(DS.Color.textSecondary)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private var emptyState: some View {
