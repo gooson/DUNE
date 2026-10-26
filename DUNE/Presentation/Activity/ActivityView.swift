@@ -541,7 +541,11 @@ struct ActivityView: View {
             NavigationLink(value: ActivityDetailDestination.trainingReadiness) {
                 VStack(alignment: .leading, spacing: 18) {
                     HStack {
-                        CardNavigationHeader(showsChevron: viewModel.trainingReadiness != nil, minimumHeight: 0) {
+                        CardNavigationHeader(
+                            showsChevron: viewModel.trainingReadiness != nil,
+                            minimumHeight: 0,
+                            chevronColor: readinessInk
+                        ) {
                             Text("Training Readiness")
                                 .font(.subheadline.weight(.semibold))
                                 .foregroundStyle(readinessInk)

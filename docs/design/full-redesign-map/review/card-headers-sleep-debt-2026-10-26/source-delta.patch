@@ -1,0 +1,170 @@
+diff --git a/DUNE/DUNE.xcodeproj/project.pbxproj b/DUNE/DUNE.xcodeproj/project.pbxproj
+index bc6b6fcc..c8eef658 100644
+--- a/DUNE/DUNE.xcodeproj/project.pbxproj
++++ b/DUNE/DUNE.xcodeproj/project.pbxproj
+@@ -486,0 +487 @@
++		58162F4026297D7E0F8E6E08 /* CardNavigationHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727D72968926DACCF13CD4D6 /* CardNavigationHeader.swift */; };
+@@ -1012,0 +1014 @@
++		BFC65F54596A18984786E835 /* CardNavigationHeaderUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5EC8F5FD01117F83007BB2B /* CardNavigationHeaderUITests.swift */; };
+@@ -1924,0 +1927 @@
++		727D72968926DACCF13CD4D6 /* CardNavigationHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardNavigationHeader.swift; sourceTree = "<group>"; };
+@@ -2213,0 +2217 @@
++		B5EC8F5FD01117F83007BB2B /* CardNavigationHeaderUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardNavigationHeaderUITests.swift; sourceTree = "<group>"; };
+@@ -2829,0 +2834 @@
++				B5EC8F5FD01117F83007BB2B /* CardNavigationHeaderUITests.swift */,
+@@ -3775,0 +3781 @@
++				727D72968926DACCF13CD4D6 /* CardNavigationHeader.swift */,
+@@ -4977,0 +4984 @@
++				58162F4026297D7E0F8E6E08 /* CardNavigationHeader.swift in Sources */,
+@@ -6223,0 +6231 @@
++				BFC65F54596A18984786E835 /* CardNavigationHeaderUITests.swift in Sources */,
+diff --git a/DUNE/Presentation/Activity/ActivityView.swift b/DUNE/Presentation/Activity/ActivityView.swift
+index 1975dbdf..05def0cb 100644
+--- a/DUNE/Presentation/Activity/ActivityView.swift
++++ b/DUNE/Presentation/Activity/ActivityView.swift
+@@ -544 +544,5 @@ struct ActivityView: View {
+-                        CardNavigationHeader(showsChevron: viewModel.trainingReadiness != nil, minimumHeight: 0) {
++                        CardNavigationHeader(
++                            showsChevron: viewModel.trainingReadiness != nil,
++                            minimumHeight: 0,
++                            chevronColor: readinessInk
++                        ) {
+diff --git a/DUNE/Presentation/Dashboard/Components/DesertHorizonConditionHeroView.swift b/DUNE/Presentation/Dashboard/Components/DesertHorizonConditionHeroView.swift
+index 9a0590e6..84a966ec 100644
+--- a/DUNE/Presentation/Dashboard/Components/DesertHorizonConditionHeroView.swift
++++ b/DUNE/Presentation/Dashboard/Components/DesertHorizonConditionHeroView.swift
+@@ -114 +114 @@ struct DesertHorizonConditionHeroView: View {
+-        CardNavigationHeader(minimumHeight: 0) {
++        CardNavigationHeader(minimumHeight: 0, chevronColor: heroAccent) {
+diff --git a/DUNE/Presentation/Dashboard/Components/TodayBriefCard.swift b/DUNE/Presentation/Dashboard/Components/TodayBriefCard.swift
+index 46575674..c5addff0 100644
+--- a/DUNE/Presentation/Dashboard/Components/TodayBriefCard.swift
++++ b/DUNE/Presentation/Dashboard/Components/TodayBriefCard.swift
+@@ -52,3 +52,8 @@ struct TodayBriefCard: View {
+-                Label("Weather and Activity", systemImage: "cloud.sun.fill")
+-                    .font(.headline)
+-                    .foregroundStyle(.primary)
++                Label {
++                    Text("Weather and Activity")
++                        .foregroundStyle(.primary)
++                } icon: {
++                    Image(systemName: "cloud.sun.fill")
++                        .foregroundStyle(theme.accentColor)
++                }
++                .font(.headline)
+@@ -103,4 +107,0 @@ struct TodayBriefCard: View {
+-                        Image(systemName: "chevron.right")
+-                            .font(.caption.weight(.semibold))
+-                            .foregroundStyle(theme.secondaryTextColor)
+-                            .accessibilityHidden(true)
+diff --git a/DUNE/Presentation/Shared/Components/CardNavigationHeader.swift b/DUNE/Presentation/Shared/Components/CardNavigationHeader.swift
+index e540a1de..0453c454 100644
+--- a/DUNE/Presentation/Shared/Components/CardNavigationHeader.swift
++++ b/DUNE/Presentation/Shared/Components/CardNavigationHeader.swift
+@@ -6,0 +7 @@ struct CardNavigationHeader<Title: View>: View {
++    var chevronColor: Color = .secondary
+@@ -17 +18 @@ struct CardNavigationHeader<Title: View>: View {
+-                    .foregroundStyle(.secondary)
++                    .foregroundStyle(chevronColor)
+diff --git a/DUNE/Presentation/Wellness/Components/WellnessHeroCard.swift b/DUNE/Presentation/Wellness/Components/WellnessHeroCard.swift
+index fe6c0b66..56325229 100644
+--- a/DUNE/Presentation/Wellness/Components/WellnessHeroCard.swift
++++ b/DUNE/Presentation/Wellness/Components/WellnessHeroCard.swift
+@@ -93 +93,4 @@ struct WellnessHeroCard: View {
+-                CardNavigationHeader(minimumHeight: 0) {
++                CardNavigationHeader(
++                    minimumHeight: 0,
++                    chevronColor: theme == .desertWarm ? DesertPalette.ink : theme.directionPreviewTextColor
++                ) {
+@@ -127 +130,7 @@ struct WellnessHeroCard: View {
+-            CardNavigationHeader(showsChevron: sleepMetric != nil, minimumHeight: 0) {
++            CardNavigationHeader(
++                showsChevron: sleepMetric != nil,
++                minimumHeight: 0,
++                chevronColor: theme == .desertWarm
++                    ? DesertPalette.muted
++                    : theme.directionPreviewTextColor.opacity(0.74)
++            ) {
+diff --git a/DUNEUITests/Full/ActivityExerciseRegressionTests.swift b/DUNEUITests/Full/ActivityExerciseRegressionTests.swift
+index 43a77482..856cfee7 100644
+--- a/DUNEUITests/Full/ActivityExerciseRegressionTests.swift
++++ b/DUNEUITests/Full/ActivityExerciseRegressionTests.swift
+@@ -340,2 +340,3 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
+-        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.activitySectionVolume, maxSwipes: 24))
+-        let card = app.buttons[AXID.activitySectionVolume].firstMatch
++        let contentID = "activity-section-volume-content"
++        XCTAssertTrue(app.scrollToHittableElementIfNeeded(contentID, maxSwipes: 24))
++        let card = app.buttons[contentID].firstMatch
+@@ -347 +348,3 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
+-        card.auditTap()
++        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.activitySectionVolume,
++                                                         maxSwipes: 8, direction: .down))
++        app.buttons[AXID.activitySectionVolume].firstMatch.auditTap()
+diff --git a/DUNEUITests/Full/CardNavigationHeaderUITests.swift b/DUNEUITests/Full/CardNavigationHeaderUITests.swift
+index 2adac9d4..3088e7ec 100644
+--- a/DUNEUITests/Full/CardNavigationHeaderUITests.swift
++++ b/DUNEUITests/Full/CardNavigationHeaderUITests.swift
+@@ -8 +8,3 @@ final class CardNavigationHeaderUITests: SeededUITestBaseCase {
+-        ["-morningBriefingDisabled", "YES", "-AppleLanguages", "(ko)", "-AppleLocale", "ko_KR"]
++        ["-morningBriefingDisabled", "YES", "-AppleLanguages", "(ko)", "-AppleLocale", "ko_KR",
++         "--ui-test-theme", "desertWarm", "--ui-test-style", "light",
++         "--ui-design-map-sleep-prediction"]
+@@ -12,0 +15 @@ final class CardNavigationHeaderUITests: SeededUITestBaseCase {
++        captureInitialRoot("Today", hero: AXID.dashboardHeroCondition)
+@@ -16 +19,2 @@ final class CardNavigationHeaderUITests: SeededUITestBaseCase {
+-        tapTrailingHeader(in: "dashboard-recovery-sleep-details", tab: "Today", maxSwipes: 16)
++        tapTrailingHeader(in: "dashboard-recovery-sleep-details", tab: "Today",
++                          maxSwipes: 16, usesLinkAsHeader: true)
+@@ -24,0 +29 @@ final class CardNavigationHeaderUITests: SeededUITestBaseCase {
++        captureInitialRoot("Activity", hero: AXID.activityHeroReadiness)
+@@ -30 +35 @@ final class CardNavigationHeaderUITests: SeededUITestBaseCase {
+-        tapTrailingHeader(in: linkID, tab: "Activity", maxSwipes: 8)
++        tapTrailingHeader(in: linkID, tab: "Activity", maxSwipes: 8, usesLinkAsHeader: true)
+@@ -37 +42 @@ final class CardNavigationHeaderUITests: SeededUITestBaseCase {
+-    func testWellnessScoreHeaderOpensScoreDetail() {
++    func testWellnessSleepPredictionHeaderOpensDetail() {
+@@ -39,6 +44,3 @@ final class CardNavigationHeaderUITests: SeededUITestBaseCase {
+-        let linkID = AXID.wellnessHeroScore
+-        let link = app.buttons[linkID].firstMatch
+-        XCTAssertTrue(link.waitForExistence(timeout: 10))
+-        XCTAssertFalse(app.staticTexts["웰니스 상세"].exists,
+-                       "The old score footer action should not duplicate the header route")
+-        tapTrailingHeader(in: linkID, tab: "Wellness", maxSwipes: 4)
++        captureInitialRoot("Wellness", hero: AXID.wellnessHeroScore)
++        let linkID = "wellness-sleep-prediction-detail-link"
++        tapTrailingHeader(in: linkID, tab: "Wellness", maxSwipes: 8, usesLinkAsHeader: true)
+@@ -46,3 +48,3 @@ final class CardNavigationHeaderUITests: SeededUITestBaseCase {
+-        XCTAssertTrue(app.descendants(matching: .any)[AXID.wellnessScoreDetailScreen].firstMatch
+-            .waitForExistence(timeout: 8), "The score header should keep the wellness score route")
+-        addScreenshotAttachment(named: "Card header Wellness score detail")
++        XCTAssertTrue(app.descendants(matching: .any)["wellness-sleep-prediction-detail-screen"].firstMatch
++            .waitForExistence(timeout: 8), "The prediction header should keep the sleep prediction route")
++        addScreenshotAttachment(named: "Card header Wellness sleep prediction detail")
+@@ -52,0 +55 @@ final class CardNavigationHeaderUITests: SeededUITestBaseCase {
++        captureInitialRoot("Life", hero: AXID.lifeHeroProgress)
+@@ -64 +67,8 @@ final class CardNavigationHeaderUITests: SeededUITestBaseCase {
+-    private func tapTrailingHeader(in linkID: String, tab: String, maxSwipes: Int) {
++    private func captureInitialRoot(_ tab: String, hero identifier: String) {
++        XCTAssertTrue(app.descendants(matching: .any)[identifier].firstMatch.waitForExistence(timeout: 10),
++                      "\(tab) should load before capturing its initial viewport")
++        addScreenshotAttachment(named: "Card header \(tab) initial root")
++    }
++
++    private func tapTrailingHeader(in linkID: String, tab: String, maxSwipes: Int,
++                                   usesLinkAsHeader: Bool = false) {
+@@ -69,2 +79,6 @@ final class CardNavigationHeaderUITests: SeededUITestBaseCase {
+-        let header = link.descendants(matching: .any)["card-navigation-header"].firstMatch
+-        XCTAssertTrue(header.waitForExistence(timeout: 5), "\(tab) link should expose the shared header")
++        let header = usesLinkAsHeader
++            ? link
++            : link.descendants(matching: .any)["card-navigation-header"].firstMatch
++        if !usesLinkAsHeader {
++            XCTAssertTrue(header.waitForExistence(timeout: 5), "\(tab) link should expose the shared header")
++        }
+@@ -81,0 +96,6 @@ final class CardNavigationHeaderUITests: SeededUITestBaseCase {
++        if usesLinkAsHeader {
++            XCTAssertGreaterThanOrEqual(header.frame.height, 44,
++                                        "\(tab) link should expose the complete header hit area")
++            XCTAssertLessThanOrEqual(header.frame.height, 100,
++                                     "\(tab) link should remain a header-sized control")
++        }

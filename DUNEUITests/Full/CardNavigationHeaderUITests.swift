@@ -5,15 +5,19 @@
 @MainActor
 final class CardNavigationHeaderUITests: SeededUITestBaseCase {
     override var additionalLaunchArguments: [String] {
-        ["-morningBriefingDisabled", "YES", "-AppleLanguages", "(ko)", "-AppleLocale", "ko_KR"]
+        ["-morningBriefingDisabled", "YES", "-AppleLanguages", "(ko)", "-AppleLocale", "ko_KR",
+         "--ui-test-theme", "desertWarm", "--ui-test-style", "light",
+         "--ui-design-map-sleep-prediction"]
     }
 
     func testTodaySleepHeaderOpensSleepDetail() {
         navigateToDashboard()
+        captureInitialRoot("Today", hero: AXID.dashboardHeroCondition)
         XCTAssertTrue(app.scrollToHittableElementIfNeeded("dashboard-recovery-sleep-details", maxSwipes: 16))
         XCTAssertFalse(app.staticTexts["수면 상세"].exists,
                        "The old sleep footer action should not duplicate the header route")
-        tapTrailingHeader(in: "dashboard-recovery-sleep-details", tab: "Today", maxSwipes: 16)
+        tapTrailingHeader(in: "dashboard-recovery-sleep-details", tab: "Today",
+                          maxSwipes: 16, usesLinkAsHeader: true)
 
         XCTAssertTrue(app.descendants(matching: .any)[AXID.metricDetailScreen("sleep")].firstMatch
             .waitForExistence(timeout: 8), "The sleep header should keep the sleep metric route")
@@ -22,34 +26,33 @@ final class CardNavigationHeaderUITests: SeededUITestBaseCase {
 
     func testActivityMuscleMapHeaderOpensMuscleMapDetail() {
         navigateToActivity()
+        captureInitialRoot("Activity", hero: AXID.activityHeroReadiness)
         let linkID = AXID.activityMuscleMapDetailLink
         XCTAssertTrue(app.scrollToHittableElementIfNeeded(linkID, maxSwipes: 8))
         let section = app.descendants(matching: .any)[AXID.activitySectionMuscleMap].firstMatch
         XCTAssertFalse(section.staticTexts["상세 보기"].exists,
                        "The old body detail action should not duplicate the header route")
-        tapTrailingHeader(in: linkID, tab: "Activity", maxSwipes: 8)
+        tapTrailingHeader(in: linkID, tab: "Activity", maxSwipes: 8, usesLinkAsHeader: true)
 
         XCTAssertTrue(app.descendants(matching: .any)[AXID.activityMuscleMapDetailScreen].firstMatch
             .waitForExistence(timeout: 8), "The muscle map header should keep the muscle map route")
         addScreenshotAttachment(named: "Card header Activity muscle map detail")
     }
 
-    func testWellnessScoreHeaderOpensScoreDetail() {
+    func testWellnessSleepPredictionHeaderOpensDetail() {
         navigateToWellness()
-        let linkID = AXID.wellnessHeroScore
-        let link = app.buttons[linkID].firstMatch
-        XCTAssertTrue(link.waitForExistence(timeout: 10))
-        XCTAssertFalse(app.staticTexts["웰니스 상세"].exists,
-                       "The old score footer action should not duplicate the header route")
-        tapTrailingHeader(in: linkID, tab: "Wellness", maxSwipes: 4)
+        captureInitialRoot("Wellness", hero: AXID.wellnessHeroScore)
+        let linkID = "wellness-sleep-prediction-detail-link"
+        tapTrailingHeader(in: linkID, tab: "Wellness", maxSwipes: 8, usesLinkAsHeader: true)
 
-        XCTAssertTrue(app.descendants(matching: .any)[AXID.wellnessScoreDetailScreen].firstMatch
-            .waitForExistence(timeout: 8), "The score header should keep the wellness score route")
-        addScreenshotAttachment(named: "Card header Wellness score detail")
+        XCTAssertTrue(app.descendants(matching: .any)["wellness-sleep-prediction-detail-screen"].firstMatch
+            .waitForExistence(timeout: 8), "The prediction header should keep the sleep prediction route")
+        addScreenshotAttachment(named: "Card header Wellness sleep prediction detail")
     }
 
     func testLifeWeeklyReportHeaderOpensReport() {
         navigateToLife()
+        captureInitialRoot("Life", hero: AXID.lifeHeroProgress)
         let linkID = "life-weekly-report-button"
         XCTAssertTrue(app.scrollToHittableElementIfNeeded(linkID, maxSwipes: 10))
         XCTAssertFalse(app.staticTexts["주간 리포트 보기"].exists,
@@ -61,13 +64,24 @@ final class CardNavigationHeaderUITests: SeededUITestBaseCase {
         addScreenshotAttachment(named: "Card header Life weekly report detail")
     }
 
-    private func tapTrailingHeader(in linkID: String, tab: String, maxSwipes: Int) {
+    private func captureInitialRoot(_ tab: String, hero identifier: String) {
+        XCTAssertTrue(app.descendants(matching: .any)[identifier].firstMatch.waitForExistence(timeout: 10),
+                      "\(tab) should load before capturing its initial viewport")
+        addScreenshotAttachment(named: "Card header \(tab) initial root")
+    }
+
+    private func tapTrailingHeader(in linkID: String, tab: String, maxSwipes: Int,
+                                   usesLinkAsHeader: Bool = false) {
         XCTAssertTrue(app.scrollToHittableElementIfNeeded(linkID, maxSwipes: maxSwipes),
                       "\(tab) detail link should be reachable")
         let link = app.buttons[linkID].firstMatch
         XCTAssertTrue(link.waitForExistence(timeout: 5), "\(tab) detail link should keep its identifier")
-        let header = link.descendants(matching: .any)["card-navigation-header"].firstMatch
-        XCTAssertTrue(header.waitForExistence(timeout: 5), "\(tab) link should expose the shared header")
+        let header = usesLinkAsHeader
+            ? link
+            : link.descendants(matching: .any)["card-navigation-header"].firstMatch
+        if !usesLinkAsHeader {
+            XCTAssertTrue(header.waitForExistence(timeout: 5), "\(tab) link should expose the shared header")
+        }
 
         let scroll = app.scrollViews.firstMatch
         for _ in 0..<maxSwipes where !header.isHittable {
@@ -79,6 +93,12 @@ final class CardNavigationHeaderUITests: SeededUITestBaseCase {
             }
         }
         XCTAssertTrue(header.isHittable, "\(tab) header should be visible before tapping")
+        if usesLinkAsHeader {
+            XCTAssertGreaterThanOrEqual(header.frame.height, 44,
+                                        "\(tab) link should expose the complete header hit area")
+            XCTAssertLessThanOrEqual(header.frame.height, 100,
+                                     "\(tab) link should remain a header-sized control")
+        }
         XCTAssertGreaterThan(header.frame.width, 88,
                              "\(tab) header should provide space beyond the title and chevron")
         addScreenshotAttachment(named: "Card header \(tab) root")

@@ -7,3 +7,5 @@ HRV 수치와 RHR 제목의 경계가 모호하던 문제를 각 지표별 얇�
 Desert Warm·밝음·영어의 측정값 상태만 확인했다. iPad·Duo 접힘·펼침 T03, 한국어·어두움은 새 캡처 대기다. Watch는 이 View를 사용하지 않는다. 최대 글씨의 기존 추세 날짜 말줄임은 이번 변경 범위 밖이며 구획 검증과 구분한다. 다른 기기 인덱스와 기존 PNG의 출처는 유지한다.
 
 로그: `.xcodebuild/hrv-rhr-grouping-build.log`, `.xcodebuild/hrv-rhr-grouping-ui.log`. 소스 기준 커밋과 미커밋 View 해시, 촬영 시각·기기·테스트는 evidence.json에 보존했다.
+
+후속 카드 헤더 통일 전 캡처다. 제목 옆 chevron의 최신 기본 iPhone 화면은 [새 갤러리](../card-headers-sleep-debt-2026-10-26/index.html)에서 확인한다.

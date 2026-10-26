@@ -90,7 +90,10 @@ struct WellnessHeroCard: View {
     private func wellnessScoreLink(_ score: WellnessScore) -> some View {
         NavigationLink(value: WellnessScoreDestination()) {
             VStack(alignment: .leading, spacing: 16) {
-                CardNavigationHeader(minimumHeight: 0) {
+                CardNavigationHeader(
+                    minimumHeight: 0,
+                    chevronColor: theme == .desertWarm ? DesertPalette.ink : theme.directionPreviewTextColor
+                ) {
                     Text("Wellness")
                         .font(.title3.weight(.bold))
                         .foregroundStyle(theme == .desertWarm ? DesertPalette.ink : theme.directionPreviewTextColor)
@@ -124,7 +127,13 @@ struct WellnessHeroCard: View {
 
     private var sleepSectionContent: some View {
         VStack(alignment: .leading, spacing: 16) {
-            CardNavigationHeader(showsChevron: sleepMetric != nil, minimumHeight: 0) {
+            CardNavigationHeader(
+                showsChevron: sleepMetric != nil,
+                minimumHeight: 0,
+                chevronColor: theme == .desertWarm
+                    ? DesertPalette.muted
+                    : theme.directionPreviewTextColor.opacity(0.74)
+            ) {
                 Text("Sleep")
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(theme == .desertWarm ? DesertPalette.muted : theme.directionPreviewTextColor.opacity(0.74))

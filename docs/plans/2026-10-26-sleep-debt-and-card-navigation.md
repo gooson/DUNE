@@ -1,7 +1,8 @@
 ---
 topic: sleep-debt-and-card-navigation
 date: 2026-10-26
-status: approved
+status: implemented
+verification: partial
 confidence: high
 related_solutions: [docs/solutions/design/hero-cta-button-pattern.md]
 ---

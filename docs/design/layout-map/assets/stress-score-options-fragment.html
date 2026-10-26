@@ -1,0 +1,114 @@
+<div id="stress-score-options" class="viz-carousel viz-dotted-background" aria-label="장기 스트레스 표시 시안" data-previous-label="이전" data-next-label="다음">
+  <section data-variant="구간 막대 · 추천" aria-label="구간 막대 시안">
+    <div class="stress-stage">
+      <article class="stress-card" data-design="scale" aria-label="구간 막대 카드">
+        <div class="stress-summary">
+          <button type="button" class="stress-heading cursor-interaction" data-open-detail aria-label="장기 스트레스 상세">
+            <i data-lucide="chart-no-axes-combined" aria-hidden="true"></i><span>장기 스트레스</span><i data-lucide="chevron-right" class="stress-chevron" aria-hidden="true"></i>
+          </button>
+          <div class="stress-number-row"><strong data-score>35</strong><span class="stress-denominator">/ 100</span><span class="stress-status" data-status>보통</span></div>
+          <div class="stress-scale" role="meter" aria-label="장기 스트레스 35, 보통" aria-valuemin="0" aria-valuemax="100" aria-valuenow="35">
+            <div class="stress-segments"><span></span><span></span><span></span><span></span></div><span class="stress-position" aria-hidden="true"></span>
+          </div>
+          <div class="stress-scale-labels"><span>낮음</span><span>보통</span><span>다소 높음</span><span>높음</span></div>
+          <div class="stress-evidence"><span>HRV variability CV 0.24</span><span>훈련 부하 균형 잡힘</span><span>규칙적인 수면 패턴</span></div>
+        </div>
+        <div class="stress-detail" hidden><button type="button" class="stress-back cursor-interaction" data-close-detail><i data-lucide="chevron-left" aria-hidden="true"></i>뒤로</button><h3>장기 스트레스</h3><div class="stress-number-row"><strong data-score>35</strong><span class="stress-status" data-status>보통</span></div><div class="stress-evidence"><span>HRV variability CV 0.24</span><span>훈련 부하 균형 잡힘</span><span>규칙적인 수면 패턴</span></div></div>
+      </article>
+    </div>
+  </section>
+  <section data-variant="작은 링" aria-label="작은 링 시안" hidden>
+    <div class="stress-stage">
+      <article class="stress-card" data-design="ring" aria-label="작은 링 카드">
+        <div class="stress-summary">
+          <button type="button" class="stress-heading cursor-interaction" data-open-detail aria-label="장기 스트레스 상세"><i data-lucide="chart-no-axes-combined" aria-hidden="true"></i><span>장기 스트레스</span><i data-lucide="chevron-right" class="stress-chevron" aria-hidden="true"></i></button>
+          <div class="stress-ring-row"><div class="stress-ring" role="img" aria-label="장기 스트레스 35점"><svg viewBox="0 0 112 112" aria-hidden="true"><circle class="stress-track" cx="56" cy="56" r="48"></circle><circle class="stress-arc" cx="56" cy="56" r="48" pathLength="100" stroke-dasharray="35 100"></circle></svg><div><strong data-score>35</strong><small>/ 100</small></div></div><span class="stress-status" data-status>보통</span></div>
+          <div class="stress-evidence"><span>HRV variability CV 0.24</span><span>훈련 부하 균형 잡힘</span><span>규칙적인 수면 패턴</span></div>
+        </div>
+        <div class="stress-detail" hidden><button type="button" class="stress-back cursor-interaction" data-close-detail><i data-lucide="chevron-left" aria-hidden="true"></i>뒤로</button><h3>장기 스트레스</h3><div class="stress-number-row"><strong data-score>35</strong><span class="stress-status" data-status>보통</span></div><div class="stress-evidence"><span>HRV variability CV 0.24</span><span>훈련 부하 균형 잡힘</span><span>규칙적인 수면 패턴</span></div></div>
+      </article>
+    </div>
+  </section>
+  <section data-variant="숫자와 상태 강조" aria-label="숫자와 상태 강조 시안" hidden>
+    <div class="stress-stage">
+      <article class="stress-card" data-design="number" aria-label="숫자와 상태 강조 카드">
+        <div class="stress-summary">
+          <button type="button" class="stress-heading cursor-interaction" data-open-detail aria-label="장기 스트레스 상세"><i data-lucide="chart-no-axes-combined" aria-hidden="true"></i><span>장기 스트레스</span><i data-lucide="chevron-right" class="stress-chevron" aria-hidden="true"></i></button>
+          <div class="stress-emphasis"><div class="stress-number-row"><strong data-score>35</strong><span class="stress-denominator">/ 100</span></div><span class="stress-status" data-status>보통</span></div>
+          <div class="stress-evidence"><span>HRV variability CV 0.24</span><span>훈련 부하 균형 잡힘</span><span>규칙적인 수면 패턴</span></div>
+        </div>
+        <div class="stress-detail" hidden><button type="button" class="stress-back cursor-interaction" data-close-detail><i data-lucide="chevron-left" aria-hidden="true"></i>뒤로</button><h3>장기 스트레스</h3><div class="stress-number-row"><strong data-score>35</strong><span class="stress-status" data-status>보통</span></div><div class="stress-evidence"><span>HRV variability CV 0.24</span><span>훈련 부하 균형 잡힘</span><span>규칙적인 수면 패턴</span></div></div>
+      </article>
+    </div>
+  </section>
+</div>
+<style>
+  #stress-score-options .stress-stage{min-height:410px;padding:20px 12px 30px;display:flex;align-items:flex-start;justify-content:center}
+  #stress-score-options .stress-card{--stress-surface:#37332e;--stress-ink:#fff8ed;--stress-muted:#cbc4b8;--stress-level:#e5b956;--stress-scale:1;box-sizing:border-box;width:100%;max-width:430px;background:var(--stress-surface);color:var(--stress-ink);border:1px solid #627267;border-radius:22px;padding:22px;font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif}
+  #stress-score-options .stress-heading{display:flex;gap:7px;align-items:center;width:100%;min-height:44px;padding:0;border:0;background:none;color:inherit;text-align:left;font:600 calc(18px * var(--stress-scale))/1.3 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif}
+  #stress-score-options .stress-heading>i:first-child,#stress-score-options .stress-heading>svg:first-child{width:22px;height:22px;flex-shrink:0}
+  #stress-score-options .stress-heading .stress-chevron{width:14px;height:14px;color:var(--stress-muted);flex-shrink:0}
+  #stress-score-options .stress-heading:active,#stress-score-options .stress-back:active{opacity:.65}
+  #stress-score-options .stress-number-row{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin:12px 0 18px;font-variant-numeric:tabular-nums}
+  #stress-score-options .stress-number-row strong{font-size:calc(58px * var(--stress-scale));font-weight:700;line-height:1.05;letter-spacing:-2px}
+  #stress-score-options .stress-denominator{font-size:calc(16px * var(--stress-scale));color:var(--stress-muted)}
+  #stress-score-options .stress-status{display:inline-block;padding:5px 10px;border-radius:8px;background:color-mix(in srgb,var(--stress-level) 15%,transparent);color:var(--stress-level);font-size:calc(17px * var(--stress-scale));font-weight:650;white-space:nowrap;line-height:1.3}
+  #stress-score-options .stress-number-row>.stress-status{margin-left:8px}
+  #stress-score-options .stress-scale{position:relative;height:10px;margin-top:8px}
+  #stress-score-options .stress-segments{height:100%;display:grid;grid-template-columns:30fr 25fr 20fr 25fr;gap:4px;border-radius:5px;overflow:hidden}
+  #stress-score-options .stress-segments span:nth-child(1){background:#9fb88e}
+  #stress-score-options .stress-segments span:nth-child(2){background:#e5b956}
+  #stress-score-options .stress-segments span:nth-child(3){background:#d69462}
+  #stress-score-options .stress-segments span:nth-child(4){background:#bc776e}
+  #stress-score-options .stress-segments span{opacity:.38}
+  #stress-score-options .stress-position{position:absolute;left:35%;top:50%;width:14px;height:14px;border:3px solid var(--stress-ink);box-sizing:border-box;background:var(--stress-surface);border-radius:50%;transform:translate(-50%,-50%)}
+  #stress-score-options .stress-scale-labels{display:grid;grid-template-columns:30fr 25fr 20fr 25fr;gap:4px;margin:9px 0 22px;color:var(--stress-muted);font-size:12px}
+  #stress-score-options .stress-scale-labels span{white-space:nowrap}
+  #stress-score-options .stress-scale-labels span:last-child{text-align:right}
+  #stress-score-options .stress-evidence{display:grid;gap:9px;font-size:calc(14px * var(--stress-scale));color:var(--stress-muted);line-height:1.4}
+  #stress-score-options .stress-evidence>span{display:flex;gap:9px;align-items:baseline;overflow-wrap:anywhere}
+  #stress-score-options .stress-evidence>span:before{content:"";width:7px;height:7px;border-radius:50%;flex-shrink:0;background:#d6b476}
+  #stress-score-options .stress-evidence>span:nth-child(2):before{background:#9fb88e}
+  #stress-score-options .stress-evidence>span:nth-child(3):before{background:#9588c1}
+  #stress-score-options .stress-ring-row{display:flex;gap:22px;align-items:center;margin:17px 0 24px}
+  #stress-score-options .stress-ring{position:relative;width:112px;height:112px;flex-shrink:0}
+  #stress-score-options .stress-ring svg{width:112px;height:112px;transform:rotate(-90deg)}
+  #stress-score-options .stress-ring circle{fill:none;stroke-width:7;stroke-linecap:round}
+  #stress-score-options .stress-track{stroke:#8e8162;opacity:.3}
+  #stress-score-options .stress-arc{stroke:var(--stress-level)}
+  #stress-score-options .stress-ring>div{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-variant-numeric:tabular-nums}
+  #stress-score-options .stress-ring strong{font-size:36px;font-weight:700;line-height:1.1}
+  #stress-score-options .stress-ring small{font-size:12px;color:var(--stress-muted)}
+  #stress-score-options .stress-emphasis{border-left:4px solid var(--stress-level);padding:0 0 2px 17px;margin:17px 0 24px}
+  #stress-score-options .stress-emphasis .stress-number-row{margin:0 0 10px}
+  #stress-score-options .stress-back{display:flex;align-items:center;gap:4px;min-height:44px;padding:0;background:none;border:0;color:var(--stress-muted);font:inherit}
+  #stress-score-options .stress-back>svg{width:16px;height:16px}
+  #stress-score-options .stress-detail h3{font-size:20px;font-weight:650;margin:10px 0}
+  #stress-score-options [hidden]{display:none}
+  @media(max-width:360px){#stress-score-options .stress-stage{min-height:430px;padding:14px 6px 25px}#stress-score-options .stress-card{padding:18px}#stress-score-options .stress-scale-labels{font-size:11px}}
+</style>
+<script>
+  (()=>{
+    const root=document.getElementById("stress-score-options");
+    const levels=[{min:0,name:"낮음",color:"#9fb88e"},{min:30,name:"보통",color:"#e5b956"},{min:55,name:"다소 높음",color:"#d69462"},{min:75,name:"높음",color:"#bc776e"}];
+    root.querySelectorAll(".stress-card").forEach(card=>{
+      const state={score:35,largeText:false};
+      const render=()=>{
+        const score=Math.max(0,Math.min(100,Math.round(state.score)));
+        const level=levels.filter(l=>score>=l.min).slice(-1)[0];
+        card.style.setProperty("--stress-level",level.color);
+        card.style.setProperty("--stress-scale",state.largeText?1.15:1);
+        card.querySelectorAll("[data-score]").forEach(el=>el.textContent=score);
+        card.querySelectorAll("[data-status]").forEach(el=>el.textContent=level.name);
+        const meter=card.querySelector(".stress-scale");
+        if(meter){meter.setAttribute("aria-valuenow",score);meter.setAttribute("aria-label",`장기 스트레스 ${score}, ${level.name}`);meter.querySelector(".stress-position").style.left=`${Math.max(2,Math.min(98,score))}%`;meter.querySelectorAll(".stress-segments span").forEach((el,i)=>el.style.opacity=levels[i]===level?1:.38);}
+        const ring=card.querySelector(".stress-ring");
+        if(ring){ring.setAttribute("aria-label",`장기 스트레스 ${score}점, ${level.name}`);ring.querySelector(".stress-arc").setAttribute("stroke-dasharray",`${score} 100`);}
+      };
+      render();
+      card.querySelector("[data-open-detail]").addEventListener("click",()=>{card.querySelector(".stress-summary").hidden=true;card.querySelector(".stress-detail").hidden=false;card.querySelector("[data-close-detail]").focus();});
+      card.querySelector("[data-close-detail]").addEventListener("click",()=>{card.querySelector(".stress-summary").hidden=false;card.querySelector(".stress-detail").hidden=true;card.querySelector("[data-open-detail]").focus();});
+      if(globalThis.Tweak){const tweak=new Tweak({container:card,onChange:render});tweak.addSlider(state,"score",{label:"스트레스 점수",min:0,max:100,step:1});tweak.addToggle(state,"largeText",{label:"큰 글씨"});}
+    });
+  })();
+</script>

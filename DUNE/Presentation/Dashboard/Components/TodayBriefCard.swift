@@ -49,9 +49,14 @@ struct TodayBriefCard: View {
     private var weatherHeader: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
             CardNavigationHeader(showsChevron: weatherSnapshot != nil, minimumHeight: 0) {
-                Label("Weather and Activity", systemImage: "cloud.sun.fill")
-                    .font(.headline)
-                    .foregroundStyle(.primary)
+                Label {
+                    Text("Weather and Activity")
+                        .foregroundStyle(.primary)
+                } icon: {
+                    Image(systemName: "cloud.sun.fill")
+                        .foregroundStyle(theme.accentColor)
+                }
+                .font(.headline)
             }
             if let locationName = weatherSnapshot?.locationName {
                 Text(locationName)
@@ -100,10 +105,6 @@ struct TodayBriefCard: View {
                         }
 
                         Spacer(minLength: 0)
-                        Image(systemName: "chevron.right")
-                            .font(.caption.weight(.semibold))
-                            .foregroundStyle(theme.secondaryTextColor)
-                            .accessibilityHidden(true)
                     }
 
                     if dynamicTypeSize.isAccessibilitySize {

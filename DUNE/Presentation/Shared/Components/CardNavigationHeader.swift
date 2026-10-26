@@ -4,6 +4,7 @@ import SwiftUI
 struct CardNavigationHeader<Title: View>: View {
     var showsChevron = true
     var minimumHeight: CGFloat = 44
+    var chevronColor: Color = .secondary
     @ViewBuilder let title: () -> Title
 
     var body: some View {
@@ -14,7 +15,7 @@ struct CardNavigationHeader<Title: View>: View {
             if showsChevron {
                 Image(systemName: "chevron.right")
                     .font(.caption.weight(.semibold))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(chevronColor)
                     .accessibilityHidden(true)
             }
 

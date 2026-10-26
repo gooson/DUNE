@@ -88,6 +88,7 @@
       <a href="../../plans/2026-10-26-today-compact-layout-and-ring.md">Today Compact 선택 · 링·여백 구현 계획</a>
       <a href="today-restart-proposal.md">Today 재설계 · 밀도와 글씨 크기 시안</a>
       <a href="card-detail-navigation.md">4탭 카드 상세 · 제목 옆 chevron과 헤더 터치</a>
+      <a href="stress-emphasis-proposal.html">장기 스트레스 · 구간 막대·링·숫자 강조 시안</a>
       <a href="today-case-matrix.md">Today 전체 섹션·데이터 상태·시간대 계약</a>
       <a href="activity-life-hero-proposal.md">Activity·Life 히어로 승인안</a>
       <a href="today-reading-proposal.md">Today 하단 읽기 위계 V2</a>
@@ -129,14 +130,14 @@
       <h2 id="today-title">T03 · Today</h2><p>지금 컨디션은 어떤가? · Compact · 점수·설명 → 실제 추세 → 근거 → 현재 시간대 요약</p>
       <p class="note">시작 상태: 건강 접근 준비와 첫 조회가 완료될 때까지 기존 대시보드 스켈레톤을 유지한다. 조회 성공 후 측정값이 없을 때만 빈 상태를 표시하고, 실패는 오류·권한 안내로 구분한다. 기존 측정값이 있는 새로고침에서는 콘텐츠를 유지한다. iPhone·iPad·Duo 접힘·펼침에 공통 적용한다.</p>
       <div class="preview"><div class="scene"><h3>Today</h3></div><div class="content">
-        <div class="hero"><div class="trend-title"><span>CONDITION</span><span>컨디션 상세 ›</span></div><div class="summary"><div class="ring">52</div><div class="summary-text"><strong class="score-large">52</strong><b>현재 컨디션</b><p>몸의 상태를 설명하는 짧은 문장</p></div></div><div class="trend"><div class="trend-title"><span>컨디션 변화</span><span>24시간</span></div><svg viewBox="0 0 300 72" role="img" aria-label="실제 시간별 값이 있을 때만 그리는 추세 자리"><path d="M0 54H300M0 32H300" stroke="#c6bdb2" stroke-dasharray="3 5"/><path d="M0 53 L60 47 L120 44 L180 34 L240 29 L300 20" fill="none" stroke="#856b55" stroke-width="3"/></svg><div class="axis"><span>이전</span><span>현재</span></div></div><div class="evidence"><span>HRV · 기준선 대비</span><span>RHR · 기준선 대비</span></div></div>
+        <div class="hero"><div class="trend-title"><span>CONDITION ›</span></div><div class="summary"><div class="ring">52</div><div class="summary-text"><strong class="score-large">52</strong><b>현재 컨디션</b><p>몸의 상태를 설명하는 짧은 문장</p></div></div><div class="trend"><div class="trend-title"><span>컨디션 변화</span><span>24시간</span></div><svg viewBox="0 0 300 72" role="img" aria-label="실제 시간별 값이 있을 때만 그리는 추세 자리"><path d="M0 54H300M0 32H300" stroke="#c6bdb2" stroke-dasharray="3 5"/><path d="M0 53 L60 47 L120 44 L180 34 L240 29 L300 20" fill="none" stroke="#856b55" stroke-width="3"/></svg><div class="axis"><span>이전</span><span>현재</span></div></div><div class="evidence"><span>HRV · 기준선 대비</span><span>RHR · 기준선 대비</span></div></div>
         <div class="secondary"><b>추세 데이터 상태</b><p>24시간 표본이 부족하면 히어로 안에 실제 7일 추세를 표시한다. 일별 표본도 부족하면 수집 상태를 짧게 설명한다.</p></div><div class="secondary"><b>현재 시간대 요약</b><p>Briefing·Digest·Insight 등 관련 요약은 추세 다음에 이어진다.</p></div>
       </div></div><p class="note">점수 없음: 권한·기록 없음·기준선 수집을 구분하고 그래프를 만들지 않는다.</p>
     <p class="note">Today Compact: 아이콘·값 4–6pt, 링·설명 12pt. 주간 추세는 실제 최근 7일만 표시한다. 지표의 빈 그래프 자리를 없애고 홀수 마지막 항목과 큰 글씨는 전체 폭을 사용한다. 종목별 운동은 최신 두 항목과 나머지 펼침으로 유지한다. <a href="today-case-matrix.md">전체 상태 계약</a> · <a href="../../plans/2026-10-26-today-compact-layout-and-ring.md">구현·검증 계획</a></p></section>
     <section class="tab-map activity" id="activity" aria-labelledby="activity-title">
       <h2 id="activity-title">A01 · Activity</h2><p>오늘 운동해도 될까? · 준비도·설명·운동 기록 → 근육 회복 → 주간 통계·최근 운동</p>
       <div class="preview"><div class="scene"><h3>Activity</h3></div><div class="content">
-        <div class="hero"><div class="trend-title"><span>활동</span></div><div class="summary"><div class="ring">준비도<br><small>READINESS</small></div><div class="summary-text"><b>운동 가능 상태</b><p>HRV·수면·회복에 근거한 짧은 문장</p></div></div><span class="detail">운동 기록 →</span></div>
+        <div class="hero"><div class="trend-title"><span>훈련 준비도 ›</span></div><div class="summary"><div class="ring">준비도<br><small>READINESS</small></div><div class="summary-text"><b>운동 가능 상태</b><p>HRV·수면·회복에 근거한 짧은 문장</p></div></div><span class="detail">운동 기록 →</span></div>
         <div class="secondary"><b>근육 지도와 이번 주 통계</b><p>운동 행동 뒤에 앞·뒤 전신 그림, 회복/볼륨 선택과 모드별 범례를 둔다. 이어서 볼륨·칼로리·운동 시간·활동일 4개 통계 카드를 2×2로 놓는다. 추천 운동은 검색·환경과 장비·부위별 운동·루틴·템플릿·AI 운동 만들기 순서로 잇는다.</p></div>
         <div class="secondary"><b>주간 보고서</b><p>운동 횟수·활동일·볼륨·기간 대비 변화 뒤에 주요 근육군, 요약 문장, 하이라이트를 놓는다. 기록이 없으면 안내 카드로 바꾼다.</p></div>
         <div class="secondary"><b>개인 기록</b><p>근력·유산소 최고 기록을 날짜순 최대 8개까지 2열 카드로 배치한다. 레벨·배지·포인트, 종류·값·날짜·출처와 가능한 경우 작은 추세를 함께 표시한다.</p></div>
@@ -145,14 +146,14 @@
     <section class="tab-map wellness" id="wellness" aria-labelledby="wellness-title">
       <h2 id="wellness-title">H01 · Wellness</h2><p>몸과 수면은 어떻게 변하나? · 현재 상태 → 추세 → 신체 기록 → 미래 수면 예측 → 중요한 지표</p>
       <div class="preview"><div class="scene"><h3>Wellness</h3></div><div class="content">
-        <div class="hero"><div class="trend-title"><span>웰니스</span><span>수면</span></div><div class="summary"><div class="ring">상태<br><small>WELLNESS</small></div><div class="summary-text"><b>현재 웰니스 상태</b></div></div><p class="note">긴 점수 설명은 링 다음 행에서 카드 전체 폭으로 읽는다.</p><div class="trend"><div class="trend-title"><span>최근 7일 수면</span><span>실제 수면 시간</span></div><svg viewBox="0 0 300 72" role="img" aria-label="실제 수면 기록이 있는 날만 표시하는 막대 자리"><g fill="#568b84"><rect x="8" y="20" width="24" height="48" rx="5"/><rect x="50" y="26" width="24" height="42" rx="5"/><rect x="92" y="18" width="24" height="50" rx="5"/><rect x="134" y="24" width="24" height="44" rx="5"/><rect x="176" y="16" width="24" height="52" rx="5"/><rect x="218" y="22" width="24" height="46" rx="5"/><rect x="260" y="12" width="24" height="56" rx="5"/></g></svg></div><span class="detail">수면 상세 →</span><p class="note">날짜가 붙은 최근 수면 기록과 유효한 7일 평균을 구분한다.</p></div>
+        <div class="hero"><div class="trend-title"><span>웰니스 ›</span></div><div class="summary"><div class="ring">상태<br><small>WELLNESS</small></div><div class="summary-text"><b>현재 웰니스 상태</b></div></div><p class="note">긴 점수 설명은 링 다음 행에서 카드 전체 폭으로 읽는다.</p><div class="trend-title"><span>수면 ›</span></div><div class="trend"><div class="trend-title"><span>최근 7일 수면</span><span>실제 수면 시간</span></div><svg viewBox="0 0 300 72" role="img" aria-label="실제 수면 기록이 있는 날만 표시하는 막대 자리"><g fill="#568b84"><rect x="8" y="20" width="24" height="48" rx="5"/><rect x="50" y="26" width="24" height="42" rx="5"/><rect x="92" y="18" width="24" height="50" rx="5"/><rect x="134" y="24" width="24" height="44" rx="5"/><rect x="176" y="16" width="24" height="52" rx="5"/><rect x="218" y="22" width="24" height="46" rx="5"/><rect x="260" y="12" width="24" height="56" rx="5"/></g></svg></div><p class="note">날짜가 붙은 최근 수면 기록과 유효한 7일 평균을 구분한다.</p></div>
         <div class="secondary"><b>오늘 밤 수면 예측</b><p>미래 추정값과 신뢰도를 현재 점수와 분리한다. 관련 지표는 아래로.</p></div><div class="cta">신체 기록 열기</div>
       </div></div><p class="note">로딩·클라우드 동기화 대기·기록 없음: 점수·그래프를 꾸미지 않고 신체 기록 행동은 계속 제공한다.</p>
     </section>
     <section class="tab-map life" id="life" aria-labelledby="life-title">
       <h2 id="life-title">L01 · Life</h2><p>오늘 할 습관에서 무엇이 남았나? · 오늘 완료 수·진행 설명 → 오늘·주간·다가오는 습관 → 자동 기록 → 표본 충분할 때만 추세</p>
       <div class="preview"><div class="scene"><h3>Life · + 새 습관</h3></div><div class="content">
-        <div class="hero"><div class="summary"><div class="ring">1 / 3<br><small>오늘 완료</small></div><div class="summary-text"><b>오늘 진행 상황</b><p>진행 전·일부 완료·전체 완료에 맞는 짧은 설명을 읽는다. 개별 습관 이름은 아래 실행 목록에서 확인한다.</p></div></div><span class="detail">오늘의 습관 ›</span></div>
+        <div class="hero"><div class="summary"><div class="ring">1 / 3<br><small>오늘 완료</small></div><div class="summary-text"><b>오늘 진행 상황</b><p>진행 전·일부 완료·전체 완료에 맞는 짧은 설명을 읽는다. 개별 습관 이름은 아래 실행 목록에서 확인한다.</p></div></div><span class="detail">오늘의 습관 →</span></div>
         <div class="secondary"><b>다음 완료 가능한 항목</b><div class="habit"><span>읽기</span><em>진행 기록 ›</em></div><div class="habit"><span>물 마시기</span><em>완료 +</em></div><p style="margin-top:8px">오늘의 기록 행동은 각 항목 안에 있다. 추세는 실제 기록이 충분할 때만 이 아래에 표시한다.</p></div>
       </div></div><p class="note">습관 없음: 시작 행동을 먼저 표시한다. 오늘 대상은 매일 습관·예정일 도래/기한 초과·오늘 완료한 주기 습관이다. 주 N회 목표는 주간 습관, 미래 일정은 다가오는 습관으로 구분한다. 오늘 대상이 없으면 예정 없음으로 표시한다. 완료율은 숫자·텍스트·표식을 함께 쓴다.</p>
     </section>

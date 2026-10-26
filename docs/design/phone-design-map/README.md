@@ -128,3 +128,8 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 ## 2026-10-26 T03 HRV·RHR 근거 구획
 
 히어로의 HRV 값이 RHR 제목에 붙어 보이던 문제를 각 지표별 8pt 여백·8pt 모서리·0.5pt 테두리로 보완했다. 기존 큰 글씨의 한 열 배치는 유지한다. `codex/hrv-rhr-grouping` 전용 워크트리에서 iOS Simulator 빌드가 통과했다. [새 iPhone 기본·최대 글씨 캡처와 출처](../full-redesign-map/review/hrv-rhr-grouping-2026-10-26/index.html)를 보존했고 UI 2/2가 통과했다. 밝음·영어의 측정값 상태만 확인했으며 한국어·어두움은 새 캡처 대기다. iPad·Duo 접힘·펼침의 T03도 새 캡처 대기이며 Watch는 해당 컴포넌트를 사용하지 않는다. 기존 PNG를 수정 후 화면의 증거로 재사용하지 않는다.
+
+
+## 2026-10-26 카드 상세 헤더·수면 부채
+
+[새 iPhone 원본 5장과 출처](../full-redesign-map/review/card-headers-sleep-debt-2026-10-26/index.html)를 통합 포털에 연결했다. 제목 옆 chevron·헤더 터치와 수면 부채 링을 구현하고 컴파일·링크를 마쳤다. 밝음·한국어·기본 글씨의 T03 낮/밤, A01, H01, L01 첫 viewport만 직접 확인했다. L01 보고서/히트맵과 하단 모든 카드, 부채 0 초과·10시간 초과, 어두움·큰 글씨·다른 테마·iPad·Duo는 새 캡처 미완료다. 최초 H01 흰 시작 프레임은 진단용으로 분리했다. 자동 UI 5개는 러너 시작 후 결과 없이 900초/124 종료됐으며 캡처를 UI 통과로 처리하지 않는다. 전용 기기 재부팅 후 설치·직접 실행은 정상화됐지만 자동 테스트를 추가 반복하지 않았다. [실행·재개 기록](../../reviews/2026-10-26-card-header-navigation.md)을 따른다. 기존 다른 UDID 인덱스와 이전 HRV 갤러리는 과거 출처를 유지한다.

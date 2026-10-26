@@ -111,7 +111,7 @@ struct DesertHorizonConditionHeroView: View {
     }
 
     private var titleRow: some View {
-        CardNavigationHeader(minimumHeight: 0) {
+        CardNavigationHeader(minimumHeight: 0, chevronColor: heroAccent) {
             Text("CONDITION")
                 .font(.caption.weight(.bold))
                 .tracking(1)
