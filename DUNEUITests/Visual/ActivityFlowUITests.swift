@@ -194,6 +194,29 @@ final class ActivityFlowUITests: SeededUITestBaseCase {
         capture("A01-PersonalRecords-MaxAX-value")
     }
 
+    func testActivityMetricValuesAtMaximumAccessibilitySize() {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ]
+        launchApp(with: configuration)
+        navigateToActivity()
+        let groups = [
+            ["activity-report-volume-value"],
+            ["activity-load-timer-value", "activity-load-flame.fill-value"],
+            ["activity-mix-dumbbell.fill-percent", "activity-mix-figure.run-percent"]
+        ]
+        for identifiers in groups {
+            XCTAssertTrue(app.scrollToHittableElementIfNeeded(identifiers[0], maxSwipes: 18),
+                          "The metric group should remain reachable at maximum text size")
+            for identifier in identifiers {
+                let value = waitForElement(identifier, timeout: 10)
+                XCTAssertGreaterThan(value.frame.width, 0, "\(identifier) should render a value")
+                XCTAssertGreaterThan(value.frame.height, 0, "\(identifier) should render a value")
+            }
+        }
+    }
+
     private func captureA01Flow(suffix: String) {
         navigateToActivity()
         XCTAssertTrue(waitForElement("activity-hero-readiness", timeout: 15).exists)
