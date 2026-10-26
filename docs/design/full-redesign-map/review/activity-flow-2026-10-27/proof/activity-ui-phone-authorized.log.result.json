@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "target": "DUNEUITests",
+  "run_exit_status": 0,
+  "requested_selectors": [
+    "DUNEUITests/ActivityFlowUITests/testActivityRootReadinessAndFlowOrder",
+    "DUNEUITests/ActivityFlowUITests/testCaptureA01SeededFlow",
+    "DUNEUITests/ActivityFlowUITests/testCaptureA01DarkFlow",
+    "DUNEUITests/ActivityFlowUITests/testCaptureA01MaximumAXFlow",
+    "DUNEUITests/ActivityFlowUITests/testFourTabHeroHeadingsUseFixedEnglish",
+    "DUNEUITests/HeroRhythmUITests/testActivityComponentsRecordedHistoryAndDetail",
+    "DUNEUITests/HeroRhythmUITests/testSparseHistoryExplainsMissingActivityAndLifeData"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 7,
+    "passed": 7,
+    "skipped": 0,
+    "failed": 0
+  },
+  "passed_cases": 7,
+  "failures": [],
+  "required_selectors_missing": [],
+  "log_path": "/Users/shanks/.codex/worktrees/80fd/Health/.codex-checks/activity-ui-phone-authorized.log"
+}

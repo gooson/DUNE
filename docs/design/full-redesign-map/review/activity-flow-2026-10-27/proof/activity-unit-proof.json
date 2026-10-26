@@ -1,0 +1,12 @@
+{
+  "status": "passed",
+  "executed": 8,
+  "passed": 8,
+  "failed": 0,
+  "suites": 2,
+  "log": ".codex-checks/activity-unit.log",
+  "log_sha256": "30f5bb7e240b0deb54707605fc6f99519c9b7285b0e7226a3e03980290606acf",
+  "result_bundle": ".codex-checks/activity-unit.xcresult",
+  "scope": "ExerciseListItemRewardTests + ExerciseMixServiceTests",
+  "note": "Actual xcodebuild exited0; initial postprocessor was called with missing arguments. Receipt recovery validates original log without rerunning tests."
+}

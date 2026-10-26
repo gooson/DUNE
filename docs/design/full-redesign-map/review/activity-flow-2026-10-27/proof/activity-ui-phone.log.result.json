@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/DashboardSmokeTests",
+    "DUNEUITests/ActivitySmokeTests",
+    "DUNEUITests/WellnessSmokeTests/testWellnessTabLoads",
+    "DUNEUITests/LifeSmokeTests",
+    "DUNEUITests/ActivityFlowUITests",
+    "DUNEUITests/HeroRhythmUITests/testActivityComponentsRecordedHistoryAndDetail",
+    "DUNEUITests/HeroRhythmUITests/testSparseHistoryExplainsMissingActivityAndLifeData"
+  ],
+  "skipped_selectors": [
+    "DUNEUITests/ActivitySmokeTests/testPullToRefreshShowsWaveIndicator",
+    "DUNEUITests/LifeSmokeTests/testWeeklyFrequencyShowsStepper",
+    "DUNEUITests/WellnessSmokeTests/testBodyFormSaveEnablesAfterInput",
+    "DUNEUITests/WellnessSmokeTests/testInjuryRecoveredToggleShowsEndDate",
+    "DUNEUITests/SettingsSmokeTests/testAppearanceSectionExists",
+    "DUNEUITests/SettingsSmokeTests/testDataPrivacySectionExists",
+    "DUNEUITests/SettingsSmokeTests/testAboutSectionExists",
+    "DUNEUITests/SettingsSmokeTests/testPreferredExercisesLinkExists",
+    "DUNEUITests/SettingsSmokeTests/testNavigateToPreferredExercises",
+    "DUNEUITests/SettingsSmokeTests/testWhatsNewLinkExists",
+    "DUNEUITests/SettingsSmokeTests/testNavigateToWhatsNew",
+    "DUNEUITests/SettingsSmokeTests/testWhatsNewNotificationsDetailShowsArtwork",
+    "DUNEUITests/SettingsSmokeTests/testWhatsNewSleepDebtDetailExists",
+    "DUNEUITests/SettingsSmokeTests/testWhatsNewWidgetDetailExists",
+    "DUNEUITests/SettingsSmokeTests/testWhatsNewMuscleMapDetailExists"
+  ],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 43,
+    "passed": 38,
+    "skipped": 0,
+    "failed": 5
+  },
+  "passed_cases": 38,
+  "failures": [
+    "9235: /Users/shanks/.codex/worktrees/80fd/Health/DUNEUITests/Smoke/DashboardSmokeTests.swift:153: error: -[DUNEUITests.DashboardSmokeTests testConditionTrendAndHeroDetailRoute] : XCTAssertTrue failed - Daily history should render the seven-day fallback chart",
+    "9962: /Users/shanks/.codex/worktrees/80fd/Health/DUNEUITests/Smoke/DashboardSmokeTests.swift:121: error: -[DUNEUITests.DashboardSmokeTests testNotificationHubSummaryAtMaximumAccessibilitySize] : XCTAssertTrue failed - notifications-open-settings-button should be reachable at maximum accessibility size",
+    "9976: Test Case '-[DUNEUITests.DashboardSmokeTests testNotificationHubSummaryAtMaximumAccessibilitySize]' failed (96.261 seconds).",
+    "10221: Test Suite 'DashboardSmokeTests' failed at 2026-10-27 01:41:28.623.",
+    "10312: /Users/shanks/.codex/worktrees/80fd/Health/DUNEUITests/Helpers/UITestBaseCase.swift:208: error: -[DUNEUITests.HeroRhythmUITests testActivityComponentsRecordedHistoryAndDetail] : XCTAssertTrue failed - Element 'activity-hero-trend' should exist",
+    "10326: Test Case '-[DUNEUITests.HeroRhythmUITests testActivityComponentsRecordedHistoryAndDetail]' failed (34.146 seconds).",
+    "10424: /Users/shanks/.codex/worktrees/80fd/Health/DUNEUITests/Helpers/UITestBaseCase.swift:208: error: -[DUNEUITests.HeroRhythmUITests testSparseHistoryExplainsMissingActivityAndLifeData] : XCTAssertTrue failed - Element 'activity-hero-trend' should exist",
+    "10438: Test Case '-[DUNEUITests.HeroRhythmUITests testSparseHistoryExplainsMissingActivityAndLifeData]' failed (39.662 seconds).",
+    "10439: Test Suite 'HeroRhythmUITests' failed at 2026-10-27 01:42:42.437.",
+    "11132: Test Suite 'DUNEUITests.xctest' failed at 2026-10-27 01:45:57.441.",
+    "11134: Test Suite 'Selected tests' failed at 2026-10-27 01:45:57.442.",
+    "11153: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log reports 5 failures",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/HeroRhythmUITests/testActivityComponentsRecordedHistoryAndDetail",
+    "DUNEUITests/HeroRhythmUITests/testSparseHistoryExplainsMissingActivityAndLifeData"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/80fd/Health/.codex-checks/activity-ui-phone.log"
+}

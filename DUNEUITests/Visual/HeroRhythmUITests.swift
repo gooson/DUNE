@@ -15,7 +15,7 @@ final class HeroRhythmUITests: SeededUITestBaseCase {
         let headerDetail = app.buttons[AXID.activityHeroReadiness].firstMatch
         let ring = waitForElement("activity-hero-ring", timeout: 15)
         let components = waitForElement("activity-hero-components", timeout: 15)
-        let trend = waitForElement("activity-hero-trend", timeout: 15)
+        let trend = expandActivityHistory()
         XCTAssertTrue(headerDetail.waitForExistence(timeout: 10), "Existing readiness header action remains available")
         XCTAssertFalse(app.buttons["activity-hero-details"].exists,
                        "The old footer must not duplicate the readiness header route")
@@ -67,7 +67,7 @@ final class HeroRhythmUITests: SeededUITestBaseCase {
         XCTAssertTrue(app.hasPrimaryNavigation(timeout: 10))
 
         navigateToActivity()
-        let activityTrend = waitForElement("activity-hero-trend", timeout: 15)
+        let activityTrend = expandActivityHistory()
         assertSparseExplanation(activityTrend, title: "Activity")
         capture("A01-sparse-recorded-history")
 
@@ -184,11 +184,20 @@ final class HeroRhythmUITests: SeededUITestBaseCase {
         let name = "\(mapID)-\(style)-ko-\(size)"
         XCTAssertTrue(waitForElement(root, timeout: 15).exists)
         capture(name + "-overview")
+        if tab == "Activity" { _ = expandActivityHistory() }
         let lastDay = "\(trend)-day-6"
         XCTAssertTrue(app.scrollToHittableElementIfNeeded(lastDay, maxSwipes: 10),
                       "\(name): the last recorded day should remain reachable after scrolling")
         XCTAssertTrue(waitForElement(trend, timeout: 5).exists)
         capture(name + "-history")
+    }
+
+    private func expandActivityHistory() -> XCUIElement {
+        let disclosure = app.buttons["activity-hero-history-disclosure"].firstMatch
+        XCTAssertTrue(disclosure.waitForExistence(timeout: 10))
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("activity-hero-history-disclosure", maxSwipes: 6))
+        disclosure.tap()
+        return waitForElement("activity-hero-trend", timeout: 10)
     }
 
     private func capture(_ name: String) {

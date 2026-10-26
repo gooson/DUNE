@@ -15,6 +15,7 @@ struct ExerciseListItem: Identifiable {
     let completedSets: [WorkoutSet]
     let exerciseDefinitionID: String?
     let isLinkedToHealthKit: Bool
+    let linkedWorkoutID: String?
     let primaryMuscles: [MuscleGroup]
     let equipment: Equipment?
 
@@ -37,6 +38,7 @@ struct ExerciseListItem: Identifiable {
         source: Source, completedSets: [WorkoutSet] = [],
         exerciseDefinitionID: String? = nil,
         isLinkedToHealthKit: Bool = false,
+        linkedWorkoutID: String? = nil,
         primaryMuscles: [MuscleGroup] = [],
         equipment: Equipment? = nil,
         heartRateAvg: Double? = nil,
@@ -59,6 +61,7 @@ struct ExerciseListItem: Identifiable {
         self.completedSets = completedSets
         self.exerciseDefinitionID = exerciseDefinitionID
         self.isLinkedToHealthKit = isLinkedToHealthKit
+        self.linkedWorkoutID = linkedWorkoutID
         self.primaryMuscles = primaryMuscles
         self.equipment = equipment
         self.heartRateAvg = heartRateAvg
@@ -103,6 +106,26 @@ struct ExerciseListItem: Identifiable {
         completedSets.setSummary()
     }
 
+    /// Reward history uses the HealthKit workout ID or a `manual-UUID` fallback.
+    /// Never match by date or activity type: those can belong to another session.
+    func matchingRewardEvents(in events: [WorkoutRewardEvent]) -> [WorkoutRewardEvent] {
+        var workoutIDs: Set<String> = [id]
+        if source == .manual {
+            workoutIDs.insert("manual-\(id)")
+            if let linkedWorkoutID, !linkedWorkoutID.isEmpty {
+                workoutIDs.insert(linkedWorkoutID)
+            }
+        }
+        return events.filter { workoutIDs.contains($0.workoutID) }
+    }
+
+    var validHeartRateAvg: Int? {
+        guard let heartRateAvg, heartRateAvg.isFinite, (20...300).contains(heartRateAvg) else {
+            return nil
+        }
+        return Int(heartRateAvg.rounded())
+    }
+
     // MARK: - Factory Methods
 
     /// Creates an `ExerciseListItem` from a manual `ExerciseRecord`.
@@ -132,6 +155,7 @@ struct ExerciseListItem: Identifiable {
             completedSets: record.completedSets,
             exerciseDefinitionID: record.exerciseDefinitionID,
             isLinkedToHealthKit: hasHKLink,
+            linkedWorkoutID: record.healthKitWorkoutID,
             primaryMuscles: record.primaryMuscles,
             equipment: definition?.equipment
         )

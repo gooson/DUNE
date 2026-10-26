@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Today-only ring with a fixed 104pt outer diameter and a 97pt center path.
+/// Compact root hero ring with a fixed 104pt outer diameter and a 97pt center path.
 struct CompactConditionRing: View {
     let score: Int
     let ringColor: Color
@@ -9,6 +9,7 @@ struct CompactConditionRing: View {
     let trackColor: Color
     let textColor: Color
     let accessibilityLabel: LocalizedStringKey
+    var accessibilityIdentifier: String = "dashboard-hero-ring"
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
@@ -43,7 +44,7 @@ struct CompactConditionRing: View {
         .shadow(color: highlightColor.opacity(reduceMotion ? 0 : 0.25), radius: 4)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text(accessibilityLabel))
-        .accessibilityIdentifier("dashboard-hero-ring")
+        .accessibilityIdentifier(accessibilityIdentifier)
     }
 
     private var ringGradient: AngularGradient {

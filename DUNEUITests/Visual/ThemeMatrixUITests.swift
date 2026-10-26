@@ -23,7 +23,6 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
         ]
 
         for style in ["Light", "Dark"] {
-            var sharedRingSize: CGSize?
             for root in roots {
                 var configuration = launchConfiguration
                 configuration.initialTabSelectionArgument = root.argument
@@ -46,15 +45,11 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
                 }
 
                 let ring = app.descendants(matching: .any)[root.ring].firstMatch
-                if root.argument == "today" {
-                    XCTAssertEqual(ring.frame.width, 104, accuracy: 1,
-                                   "\(combination): Compact Today ring should be 104pt")
-                } else if root.argument == "train" {
-                    sharedRingSize = ring.frame.size
-                } else {
-                    XCTAssertEqual(ring.frame.width, sharedRingSize?.width ?? 0, accuracy: 1,
-                                   "\(combination): non-Today ring should keep the shared geometry")
-                }
+                // Shared 124pt rings include their outer 11pt stroke in AX bounds.
+                let expectedDiameter: CGFloat =
+                    root.argument == "today" || root.argument == "train" ? 104 : 135
+                XCTAssertEqual(ring.frame.width, expectedDiameter, accuracy: 1,
+                               "\(combination): hero ring should use its tab's established diameter")
                 XCTAssertEqual(ring.frame.height, ring.frame.width, accuracy: 1,
                                "\(combination): ring should remain circular")
                 XCTAssertTrue(app.windows.firstMatch.frame.contains(ring.frame), "\(combination): whole ring should fit on screen")

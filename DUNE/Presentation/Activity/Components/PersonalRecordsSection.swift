@@ -7,13 +7,12 @@ struct PersonalRecordsSection: View {
     let rewardSummary: WorkoutRewardSummary?
 
     @Environment(\.appTheme) private var theme
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     private var columns: [GridItem] {
         [GridItem(.flexible(), spacing: DS.Spacing.sm),
          GridItem(.flexible(), spacing: DS.Spacing.sm)]
     }
-
-    private let cardMinHeight: CGFloat = 120
 
     var body: some View {
         if records.isEmpty {
@@ -25,9 +24,17 @@ struct PersonalRecordsSection: View {
                         rewardSummaryRow(rewardSummary)
                     }
 
-                    LazyVGrid(columns: columns, spacing: DS.Spacing.sm) {
-                        ForEach(records.prefix(8)) { record in
-                            prCard(record)
+                    if dynamicTypeSize.isAccessibilitySize {
+                        VStack(spacing: DS.Spacing.sm) {
+                            ForEach(records.prefix(8)) { record in
+                                prCard(record)
+                            }
+                        }
+                    } else {
+                        LazyVGrid(columns: columns, spacing: DS.Spacing.sm) {
+                            ForEach(records.prefix(8)) { record in
+                                prCard(record)
+                            }
                         }
                     }
 
@@ -42,11 +49,17 @@ struct PersonalRecordsSection: View {
     }
 
     private func rewardSummaryRow(_ summary: WorkoutRewardSummary) -> some View {
-        HStack(spacing: DS.Spacing.xs) {
+        ActivityMetricsLayout(horizontalSpacing: DS.Spacing.sm, verticalSpacing: DS.Spacing.xs) {
+            rewardSummaryItems(summary)
+        }
+    }
+
+    @ViewBuilder
+    private func rewardSummaryItems(_ summary: WorkoutRewardSummary) -> some View {
             Label(
                 String.localizedStringWithFormat(
-                    String(localized: "Lv %lld"),
-                    summary.level
+                    String(localized: "Lv %@"),
+                    summary.level.formattedWithSeparator
                 ),
                 systemImage: "star.circle.fill"
             )
@@ -54,126 +67,119 @@ struct PersonalRecordsSection: View {
                 .foregroundStyle(.white)
                 .padding(.horizontal, 8)
                 .padding(.vertical, 4)
-                .background(DS.Color.activity, in: Capsule())
+                .background(DS.Color.desertBronze, in: Capsule())
 
             Label(
                 String.localizedStringWithFormat(
-                    String(localized: "%lld badges"),
-                    summary.badgeCount
+                    String(localized: "%@ badges"),
+                    summary.badgeCount.formattedWithSeparator
                 ),
                 systemImage: "medal.fill"
             )
                 .font(.caption2)
-                .foregroundStyle(DS.Color.textSecondary)
-
-            Spacer(minLength: 0)
+                .foregroundStyle(DS.Color.desertBronze)
 
             Text(
                 String.localizedStringWithFormat(
-                    String(localized: "%lld pts"),
-                    summary.totalPoints
+                    String(localized: "%@ pts"),
+                    summary.totalPoints.formattedWithSeparator
                 )
             )
                 .font(.caption2.weight(.semibold))
-                .foregroundStyle(.tertiary)
-        }
+                .foregroundStyle(DS.Color.desertBronze)
     }
 
     private func prCard(_ record: ActivityPersonalRecord) -> some View {
-        VStack(alignment: .leading, spacing: DS.Spacing.xs) {
-            HStack(spacing: DS.Spacing.xxs) {
-                Image(systemName: record.kind.iconName)
-                    .font(.caption2)
-                    .foregroundStyle(record.kind.tintColor)
-
-                Text(record.localizedTitle)
-                    .font(.caption)
-                    .fontWeight(.medium)
-                    .foregroundStyle(DS.Color.textSecondary)
-                    .lineLimit(1)
-
+        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+            HStack(alignment: .top, spacing: DS.Spacing.sm) {
+                Image(systemName: record.kind.isStrengthKind ? "trophy.fill" : "medal.fill")
+                    .font(.headline)
+                    .foregroundStyle(DS.Color.desertBronze)
+                    .frame(width: 38, height: 38)
+                    .background(DS.Color.activityCardio.opacity(0.22), in: Circle())
+                    .accessibilityHidden(true)
                 Spacer(minLength: 0)
-
-                // Sparkline — own NavigationLink so tap navigates with Kind pre-selected
-                let sparkData = sparklineData(for: record)
-                if sparkData.count >= 2 {
-                    NavigationLink(value: ActivityDetailDestination.personalRecords(preselectedKind: record.kind)) {
-                        MiniSparklineView(dataPoints: sparkData, color: record.kind.tintColor)
-                            .frame(width: 48, height: 24)
-                    }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel(
-                        String.localizedStringWithFormat(
-                            String(localized: "View %@ details"),
-                            record.kind.displayName
-                        )
-                    )
+                if record.isRecent {
+                    Text("NEW BEST")
+                        .font(.caption2.weight(.bold))
+                        .foregroundStyle(DS.Color.desertBronze)
                 }
             }
 
-            HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xxs) {
+            VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                Text(record.localizedTitle)
+                    .font(.subheadline.weight(.semibold))
+                    .fixedSize(horizontal: false, vertical: true)
+                Text(record.kind.displayName)
+                    .font(.caption)
+                    .foregroundStyle(DS.Color.textSecondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
+            VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                 Text(primaryValueText(for: record))
                     .font(DS.Typography.cardScore)
                     .foregroundStyle(theme.heroTextGradient)
-                    .minimumScaleFactor(0.7)
+                    .minimumScaleFactor(0.8)
                     .lineLimit(1)
+                    .frame(maxWidth: .infinity, alignment: .leading)
 
-                if let unit = unitText(for: record) {
-                    Text(unit)
-                        .font(.caption)
-                        .foregroundStyle(DS.Color.textSecondary)
+                HStack(spacing: DS.Spacing.xs) {
+                    if let unit = unitText(for: record) {
+                        Text(unit)
+                            .font(.caption)
+                            .foregroundStyle(DS.Color.textSecondary)
+                    }
+                    Spacer(minLength: 0)
+                    let sparkData = sparklineData(for: record)
+                    if sparkData.count >= 2 {
+                        NavigationLink(value: ActivityDetailDestination.personalRecords(preselectedKind: record.kind)) {
+                            MiniSparklineView(dataPoints: sparkData, color: record.kind.tintColor)
+                                .frame(width: 48, height: 24)
+                                .frame(minHeight: 44)
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel(
+                            String.localizedStringWithFormat(
+                                String(localized: "View %@ details"),
+                                record.kind.displayName
+                            )
+                        )
+                    }
                 }
-
-                Spacer(minLength: 0)
-
                 if let delta = record.formattedDelta {
                     Text(delta)
-                        .font(.system(size: 10, weight: .semibold))
+                        .font(.caption.weight(.semibold))
                         .foregroundStyle((record.deltaValue ?? 0) > 0 ? DS.Color.positive : DS.Color.negative)
-                } else if record.isRecent {
-                    Text("NEW")
-                        .font(.system(size: 9, weight: .bold))
-                        .foregroundStyle(.white)
-                        .padding(.horizontal, 5)
-                        .padding(.vertical, 2)
-                        .background(DS.Color.activity, in: Capsule())
+                        .fixedSize(horizontal: false, vertical: true)
                 }
             }
 
-            Spacer(minLength: 0)
-
-            HStack(spacing: DS.Spacing.xxs) {
+            Divider()
+            HStack(spacing: DS.Spacing.xs) {
                 Text(record.date, style: .date)
                     .font(.caption2)
-                    .foregroundStyle(.tertiary)
+                    .foregroundStyle(DS.Color.textSecondary)
 
                 Spacer(minLength: 0)
 
                 Image(systemName: record.source == .healthKit ? "apple.logo" : "pencil")
-                    .font(.system(size: 8))
-                    .foregroundStyle(.quaternary)
+                    .font(.caption2)
+                    .foregroundStyle(DS.Color.textSecondary)
+                    .accessibilityLabel(record.source == .healthKit ? Text("Apple Health") : Text("Manual entry"))
             }
         }
-        .frame(maxWidth: .infinity, minHeight: cardMinHeight, alignment: .topLeading)
-        .padding(DS.Spacing.sm)
+        .frame(maxWidth: .infinity, alignment: .topLeading)
+        .padding(DS.Spacing.md)
         .background {
-            ZStack(alignment: .leading) {
-                RoundedRectangle(cornerRadius: DS.Radius.sm)
+            RoundedRectangle(cornerRadius: DS.Radius.lg)
                     .fill(.ultraThinMaterial)
-                // Kind-specific accent edge
-                RoundedRectangle(cornerRadius: DS.Radius.sm)
-                    .fill(record.kind.tintColor.opacity(0.05))
-                UnevenRoundedRectangle(
-                    topLeadingRadius: DS.Radius.sm,
-                    bottomLeadingRadius: DS.Radius.sm,
-                    bottomTrailingRadius: 0,
-                    topTrailingRadius: 0
-                )
-                    .fill(record.kind.tintColor.opacity(0.2))
-                    .frame(width: 3)
-            }
+                    .overlay(DS.Color.activityCardio.opacity(0.14), in: RoundedRectangle(cornerRadius: DS.Radius.lg))
         }
-        .clipShape(RoundedRectangle(cornerRadius: DS.Radius.sm))
+        .overlay {
+            RoundedRectangle(cornerRadius: DS.Radius.lg)
+                .strokeBorder(DS.Color.activityCardio.opacity(0.35), lineWidth: 1)
+        }
     }
 
     /// Builds sparkline data from all records matching the same kind.
