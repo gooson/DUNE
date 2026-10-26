@@ -123,3 +123,20 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 ## 2026-10-26 Today Compact
 
 [실제 화면 비교·출처](../full-redesign-map/review/today-compact-2026-10-26/index.html)에 기존 DUNE 테마를 유지한 T03 밝음·어두움과 T18 편집을 보존했다. 일반 iPhone·iPad·Duo 외부/내부의 변경 화면만 갱신했으며 각 항목에 소스56f62fec·전용 기기·크기·표시 설정을 기록했다. 다른 화면의 출처는 유지한다. Duo 내부는 새 세로 캡처이며 내부 가로와 수치 힌지 각도는 미검증이다. T03 측정값 캡처가 시작 스켈레톤·빈 기록 상태의 기존 미갱신 항목까지 완료했다는 의미는 아니다. 고정 편집의 행 중앙 터치·선택·저장·홀수 마지막 행 전체 폭 검사는1/1 통과했다. 세부 UI 실행과 기존 알림 검사 실패는 [검토 기록](../../reviews/2026-10-26-today-compact.md)에 구분한다.
+
+
+## 2026-10-26 T03 HRV·RHR 근거 구획
+
+히어로의 HRV 값이 RHR 제목에 붙어 보이던 문제를 각 지표별 8pt 여백·8pt 모서리·0.5pt 테두리로 보완했다. 기존 큰 글씨의 한 열 배치는 유지한다. `codex/hrv-rhr-grouping` 전용 워크트리에서 iOS Simulator 빌드가 통과했다. [새 iPhone 기본·최대 글씨 캡처와 출처](../full-redesign-map/review/hrv-rhr-grouping-2026-10-26/index.html)를 보존했고 UI 2/2가 통과했다. 밝음·영어의 측정값 상태만 확인했으며 한국어·어두움은 새 캡처 대기다. iPad·Duo 접힘·펼침의 T03도 새 캡처 대기이며 Watch는 해당 컴포넌트를 사용하지 않는다. 기존 PNG를 수정 후 화면의 증거로 재사용하지 않는다.
+
+
+## 2026-10-26 카드 상세 헤더·수면 부채
+
+[새 iPhone 원본 5장과 출처](../full-redesign-map/review/card-headers-sleep-debt-2026-10-26/index.html)를 통합 포털에 연결했다. 제목 옆 chevron·헤더 터치와 수면 부채 링을 구현하고 컴파일·링크를 마쳤다. 밝음·한국어·기본 글씨의 T03 낮/밤, A01, H01, L01 첫 viewport만 직접 확인했다. L01 보고서/히트맵과 하단 모든 카드, 부채 0 초과·10시간 초과, 어두움·큰 글씨·다른 테마·iPad·Duo는 새 캡처 미완료다. 최초 H01 흰 시작 프레임은 진단용으로 분리했다. 자동 UI 5개는 러너 시작 후 결과 없이 900초/124 종료됐으며 캡처를 UI 통과로 처리하지 않는다. 전용 기기 재부팅 후 설치·직접 실행은 정상화됐지만 자동 테스트를 추가 반복하지 않았다. [실행·재개 기록](../../reviews/2026-10-26-card-header-navigation.md)을 따른다. 기존 다른 UDID 인덱스와 이전 HRV 갤러리는 과거 출처를 유지한다.
+
+
+## 2026-10-27 카드 상세 헤더 후속 검증
+
+[새 실제 iPhone 화면과 출처](../full-redesign-map/review/card-headers-review-ship-2026-10-27/index.html)를 추가했다. 전용 기기 복구 근거 후 관련 UI 6개가 모두 통과하고 정상 종료했다. 네 탭의 초기 viewport·대상 헤더·상세 12장은 새 XCTest 원본이며, 최대 글씨 훈련량과 준비도 목적지도 검사했다. [리뷰·범위·실패 이력의 후속](../../reviews/2026-10-27-card-navigation-review-ship.md)을 따른다. 이전 900초 종료는 과거 실패로 보존하고 이번 결과와 구분한다.
+
+후속 실제 캡처는 iPad 4장, Duo 외부 LCD 4장·내부 LCD-1 4장도 같은 갤러리에 추가했다. 활성 패널 전후 readback과 원본 해상도는 확인했지만 Duo 물리 각도·회전·새 AX는 미검증이다. 모든 하단 카드·모든 테마/글씨 조합은 갱신하지 않았다. 세부 제한은 갤러리 README를 따른다.

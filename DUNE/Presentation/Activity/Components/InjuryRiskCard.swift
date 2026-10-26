@@ -51,9 +51,6 @@ struct InjuryRiskCard: View {
 
                     Spacer(minLength: 0)
 
-                    Image(systemName: "chevron.right")
-                        .font(.caption2)
-                        .foregroundStyle(.tertiary)
                 }
 
                 // Top risk factors (max 3, pre-sorted by UseCase)

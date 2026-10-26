@@ -1,0 +1,49 @@
+{
+  "branch": "codex/hrv-rhr-grouping",
+  "timestamp": "2026-10-27T00:12:55.510541+09:00",
+  "base": "origin/main",
+  "base_revision": "2e078ba03898c42f52c9b0eb6737787ac3f386da",
+  "head": "f92af99a2fa23f193243a14bae00e969a5b9c47c",
+  "initial_status": " M docs/design/layout-map/index.html\n?? docs/brainstorms/2026-10-27-summary-card-disclosure.md\n?? docs/design/layout-map/assets/daily-summary-options-fragment.html\n?? docs/design/layout-map/digest-disclosure-proposal.html\n?? docs/design/layout-map/digest-disclosure-proposal.md\n",
+  "diff_lines": 4539,
+  "review_mode": "parent-direct: >=2000 textual diff lines; generated HTML reviewed via source and wrapper",
+  "reviewers_run": [
+    "security",
+    "performance",
+    "architecture",
+    "data-integrity",
+    "simplicity",
+    "localization"
+  ],
+  "reviewers_skipped": [
+    {
+      "name": "agent-native",
+      "reason": "No agent/prompt changes in task diff"
+    }
+  ],
+  "findings": [
+    {
+      "id": "arch-001",
+      "reviewer": "Architecture / test contract",
+      "priority": "P2",
+      "status": "Resolved",
+      "title": "Existing hero regression test still requires removed footer",
+      "file": "DUNEUITests/Visual/HeroRhythmUITests.swift",
+      "line": 16,
+      "issue": "Activity hero footer was intentionally removed, but testActivityComponentsRecordedHistoryAndDetail waits for and taps activity-hero-details; it now fails deterministically.",
+      "suggestion": "Assert the removed footer is absent and verify the existing activityHeroReadiness header opens the original destination.",
+      "resolution": "Legacy footer absence and existing readiness header route asserted; focused regression passed 33.426s."
+    }
+  ],
+  "summary": {
+    "p1": 0,
+    "p2": 1,
+    "p3": 0
+  },
+  "verification": "Final targeted UI run exited 0: 6 executed, 6 passed, 0 failures. Full regression not executed.",
+  "open_summary": {
+    "p1": 0,
+    "p2": 0,
+    "p3": 0
+  }
+}

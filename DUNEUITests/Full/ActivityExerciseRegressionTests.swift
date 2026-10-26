@@ -337,14 +337,17 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
         ])
         launchApp(with: configuration)
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.activitySectionVolume, maxSwipes: 24))
-        let card = app.buttons[AXID.activitySectionVolume].firstMatch
+        let contentID = "activity-section-volume-content"
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(contentID, maxSwipes: 24))
+        let card = app.buttons[contentID].firstMatch
         let viewport = app.scrollViews[AXID.activityRootScroll].firstMatch.frame
             .intersection(app.windows.firstMatch.frame)
         XCTAssertTrue(card.exists && card.isHittable)
         XCTAssertTrue(viewport.contains(CGPoint(x: card.frame.midX, y: card.frame.midY)))
         VisualAudit.capture("Maximum AX training volume summary labels")
-        card.auditTap()
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.activitySectionVolume,
+                                                         maxSwipes: 8, direction: .down))
+        app.buttons[AXID.activitySectionVolume].firstMatch.auditTap()
         XCTAssertTrue(app.descendants(matching: .any)[AXID.activityTrainingVolumeDetailScreen]
             .firstMatch.waitForExistence(timeout: 10))
     }

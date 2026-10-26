@@ -467,8 +467,9 @@ private struct HabitListQueryView: View {
                 } label: {
                     WeeklyHabitSummaryCard(report: report)
                 }
-                .buttonStyle(.plain)
+                .buttonStyle(CardNavigationButtonStyle())
                 .accessibilityIdentifier("life-weekly-report-button")
+                .accessibilityHint("View Weekly Report")
             }
         }
         .navigationDestination(isPresented: $showingReport) {
@@ -1698,20 +1699,16 @@ private struct ArchivedHabitCountView: View {
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
 
-                    Text(String(localized: "\(archivedHabits.count) archived habits"))
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-
-                    Spacer()
-
-                    Image(systemName: "chevron.right")
-                        .font(.caption)
-                        .foregroundStyle(.tertiary)
+                    CardNavigationHeader(minimumHeight: 0) {
+                        Text(String(localized: "\(archivedHabits.count) archived habits"))
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
                 }
                 .padding(DS.Spacing.md)
                 .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.lg))
             }
-            .buttonStyle(.plain)
+            .buttonStyle(CardNavigationButtonStyle())
             .accessibilityIdentifier("life-archived-habits-link")
         }
     }

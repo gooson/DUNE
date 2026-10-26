@@ -17,10 +17,12 @@ struct SuggestedExerciseRow: View {
             Button(action: onShowDetails) {
                 HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.sm) {
                     VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-                        Text(exercise.definition.localizedName)
-                            .font(.subheadline.weight(.semibold))
-                            .foregroundStyle(.primary)
-                            .lineLimit(2)
+                        CardNavigationHeader(minimumHeight: 0) {
+                            Text(exercise.definition.localizedName)
+                                .font(.subheadline.weight(.semibold))
+                                .foregroundStyle(.primary)
+                                .lineLimit(2)
+                        }
 
                         Text(exercise.reason)
                             .font(.caption2)
@@ -40,14 +42,11 @@ struct SuggestedExerciseRow: View {
                         .font(.caption.weight(.semibold))
                         .foregroundStyle(DS.Color.textSecondary)
 
-                        Image(systemName: "chevron.right")
-                            .font(.caption2)
-                            .foregroundStyle(.tertiary)
                     }
                 }
                 .contentShape(Rectangle())
             }
-            .buttonStyle(.plain)
+            .buttonStyle(CardNavigationButtonStyle())
 
             VStack(alignment: .leading, spacing: DS.Spacing.xs) {
                 HStack(spacing: DS.Spacing.xs) {
@@ -107,21 +106,17 @@ struct SuggestedExerciseRow: View {
                                     .font(.caption2)
                                     .foregroundStyle(.tertiary)
 
-                                Text(alt.localizedName)
-                                    .font(.caption)
-                                    .foregroundStyle(DS.Color.textSecondary)
-                                    .lineLimit(1)
-
-                                Spacer()
-
-                                Image(systemName: "chevron.right")
-                                    .font(.caption2)
-                                    .foregroundStyle(.quaternary)
+                                CardNavigationHeader(minimumHeight: 0) {
+                                    Text(alt.localizedName)
+                                        .font(.caption)
+                                        .foregroundStyle(DS.Color.textSecondary)
+                                        .lineLimit(1)
+                                }
                             }
                             .padding(.vertical, DS.Spacing.xxs)
                             .padding(.leading, DS.Spacing.md)
                         }
-                        .buttonStyle(.plain)
+                        .buttonStyle(CardNavigationButtonStyle())
                     }
                 }
                 .padding(DS.Spacing.sm)

@@ -119,13 +119,20 @@ struct WellnessView: View {
                         // Sleep Prediction
                         SectionGroup(title: "Sleep Prediction", icon: "moon.zzz",
                                      iconColor: DS.Color.sleep,
-                                     sectionIdentifier: "wellness-section-sleep-prediction") {
+                                     sectionIdentifier: "wellness-section-sleep-prediction",
+                                     headerLink: viewModel.sleepPrediction == nil ? nil : { label in
+                            AnyView(NavigationLink(value: SleepPredictionDestination()) {
+                                CardNavigationHeader { label }
+                            }
+                            .buttonStyle(CardNavigationButtonStyle())
+                            .accessibilityIdentifier("wellness-sleep-prediction-detail-link"))
+                        }) {
                             if let prediction = viewModel.sleepPrediction {
                                 NavigationLink(value: SleepPredictionDestination()) {
                                     predictionSummary(prediction)
                                 }
-                                .buttonStyle(.plain)
-                                .accessibilityIdentifier("wellness-sleep-prediction-detail-link")
+                                .buttonStyle(CardNavigationButtonStyle())
+                                .accessibilityIdentifier("wellness-sleep-prediction-detail-content")
                             } else {
                                 SleepPredictionCard(prediction: nil)
                             }
@@ -471,12 +478,12 @@ struct WellnessView: View {
                     NavigationLink(value: row.left.metric) {
                         VitalCard(data: row.left)
                     }
-                    .buttonStyle(.plain)
+                    .buttonStyle(CardNavigationButtonStyle())
                     if let right = row.right {
                         NavigationLink(value: right.metric) {
                             VitalCard(data: right)
                         }
-                        .buttonStyle(.plain)
+                        .buttonStyle(CardNavigationButtonStyle())
                     } else {
                         Color.clear
                     }
@@ -514,26 +521,19 @@ private struct WellnessInjuryBannerView: View {
         let activeInjuries = injuryRecords.filter(\.isActive)
         StandardCard {
             VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-                HStack(spacing: DS.Spacing.xs) {
-                    Image(systemName: "bandage.fill")
-                        .font(.subheadline)
-                        .foregroundStyle(DS.Color.caution)
-
-                    Text("Injuries")
-                        .font(.subheadline)
-                        .fontWeight(.semibold)
-
-                    Spacer()
-
-                    if !injuryRecords.isEmpty {
-                        NavigationLink(value: InjuryHistoryDestination()) {
-                            Text("View All")
-                                .font(.caption)
-                                .fontWeight(.medium)
+                if !injuryRecords.isEmpty {
+                    NavigationLink(value: InjuryHistoryDestination()) {
+                        CardNavigationHeader {
+                            Label("Injuries", systemImage: "bandage.fill")
+                                .font(.subheadline.weight(.semibold))
                         }
-                        .accessibilityIdentifier("wellness-link-injuryhistory")
-                        .tint(theme.accentColor)
                     }
+                    .buttonStyle(CardNavigationButtonStyle())
+                    .accessibilityIdentifier("wellness-link-injuryhistory")
+                    .accessibilityHint("View All")
+                } else {
+                    Label("Injuries", systemImage: "bandage.fill")
+                        .font(.subheadline.weight(.semibold))
                 }
 
                 if activeInjuries.isEmpty {
@@ -571,7 +571,6 @@ private struct WellnessInjuryBannerView: View {
 private struct PostureAssessmentLinkView: View {
     @Query(sort: \PostureAssessmentRecord.date, order: .reverse)
     private var records: [PostureAssessmentRecord]
-    @Environment(\.appTheme) private var theme
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @ScaledMetric(relativeTo: .caption2) private var scoreDiameter: CGFloat = 40
 
@@ -582,32 +581,19 @@ private struct PostureAssessmentLinkView: View {
     var body: some View {
         StandardCard {
             VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-                let headerLayout = dynamicTypeSize.isAccessibilitySize
-                    ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.sm))
-                    : AnyLayout(HStackLayout(spacing: DS.Spacing.xs))
-                headerLayout {
-                    HStack(spacing: DS.Spacing.xs) {
-                        Image(systemName: "figure.stand")
-                            .font(.subheadline)
-                            .foregroundStyle(DS.Color.body)
-
-                        Text("Posture Assessment")
-                            .font(.subheadline)
-                            .fontWeight(.semibold)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-
-                    if !dynamicTypeSize.isAccessibilitySize { Spacer() }
-
-                    if !records.isEmpty {
-                        NavigationLink(value: PostureHistoryDestination()) {
-                            Text("View All")
-                                .font(.caption)
-                                .fontWeight(.medium)
+                if !records.isEmpty {
+                    NavigationLink(value: PostureHistoryDestination()) {
+                        CardNavigationHeader {
+                            Label("Posture Assessment", systemImage: "figure.stand")
+                                .font(.subheadline.weight(.semibold))
                         }
-                        .tint(theme.accentColor)
-                        .accessibilityIdentifier("wellness-link-posturehistory")
                     }
+                    .buttonStyle(CardNavigationButtonStyle())
+                    .accessibilityIdentifier("wellness-link-posturehistory")
+                    .accessibilityHint("View All")
+                } else {
+                    Label("Posture Assessment", systemImage: "figure.stand")
+                        .font(.subheadline.weight(.semibold))
                 }
 
                 // Action buttons: Camera Capture + Realtime Analysis
@@ -619,7 +605,7 @@ private struct PostureAssessmentLinkView: View {
                         NavigationLink(value: PostureRecordDestination(id: record.id)) {
                             recordRow(record)
                         }
-                        .buttonStyle(.plain)
+                        .buttonStyle(CardNavigationButtonStyle())
                         .accessibilityIdentifier("wellness-posture-record-\(record.id.uuidString)")
                     }
                 }
@@ -703,10 +689,12 @@ private struct PostureAssessmentLinkView: View {
                 .frame(width: scoreDiameter, height: scoreDiameter)
 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(record.date.formatted(.dateTime.month(.abbreviated).day()))
-                        .font(.caption)
-                        .fontWeight(.medium)
-                        .fixedSize(horizontal: false, vertical: true)
+                    CardNavigationHeader(minimumHeight: 0) {
+                        Text(record.date.formatted(.dateTime.month(.abbreviated).day()))
+                            .font(.caption)
+                            .fontWeight(.medium)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
 
                     Text(String(localized: "\(record.allMetrics.count) metrics measured"))
                         .font(.caption2)
@@ -715,10 +703,6 @@ private struct PostureAssessmentLinkView: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
 
-                Image(systemName: "chevron.right")
-                    .font(.caption2)
-                    .foregroundStyle(.tertiary)
-                    .frame(maxWidth: dynamicTypeSize.isAccessibilitySize ? .infinity : nil, alignment: .trailing)
             }
         }
     }
@@ -739,12 +723,10 @@ private struct BodyHistoryLinkView: View {
                     Image(systemName: "figure.stand")
                         .font(.subheadline)
                         .foregroundStyle(DS.Color.body)
-                    Text("Body Composition History")
-                        .font(.subheadline)
-                    Spacer()
-                    Image(systemName: "chevron.right")
-                        .font(.caption)
-                        .foregroundStyle(.tertiary)
+                    CardNavigationHeader(minimumHeight: 0) {
+                        Text("Body Composition History")
+                            .font(.subheadline)
+                    }
                 }
                 .padding(DS.Spacing.lg)
                 .background {
@@ -752,7 +734,7 @@ private struct BodyHistoryLinkView: View {
                         .fill(.thinMaterial)
                 }
             }
-            .buttonStyle(.plain)
+            .buttonStyle(CardNavigationButtonStyle())
             .accessibilityIdentifier("wellness-link-bodyhistory")
         }
     }

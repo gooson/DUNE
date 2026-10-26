@@ -23,9 +23,6 @@ struct WorkoutReportCard: View {
                         .font(.subheadline.weight(.semibold))
                         .foregroundStyle(.primary)
                     Spacer()
-                    Image(systemName: "chevron.right")
-                        .font(.caption2)
-                        .foregroundStyle(.tertiary)
                 }
 
                 // Key stats row

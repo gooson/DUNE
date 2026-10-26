@@ -16,16 +16,18 @@ struct VitalCard: View {
             VStack(alignment: .leading, spacing: DS.Spacing.sm) {
                 // Header: icon + title
                 HStack(spacing: DS.Spacing.xs) {
-                    Image(systemName: data.metric.resolvedIconName)
-                        .font(.caption)
-                        .foregroundStyle(themeColor)
+                    CardNavigationHeader(minimumHeight: 0) {
+                        HStack(spacing: DS.Spacing.xs) {
+                            Image(systemName: data.metric.resolvedIconName)
+                                .font(.caption)
+                                .foregroundStyle(themeColor)
 
-                    Text(data.title)
-                        .font(.caption)
-                        .fontWeight(.medium)
-                        .foregroundStyle(DS.Color.textSecondary)
-
-                    Spacer(minLength: 0)
+                            Text(data.title)
+                                .font(.caption)
+                                .fontWeight(.medium)
+                                .foregroundStyle(DS.Color.textSecondary)
+                        }
+                    }
 
                     // Freshness label — always visible
                     freshnessLabel

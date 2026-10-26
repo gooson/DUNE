@@ -33,29 +33,43 @@ struct TodayBriefCard: View {
             ? AnyLayout(VStackLayout(alignment: .leading, spacing: 4))
             : AnyLayout(HStackLayout(alignment: .top, spacing: 8))
         return layout {
-            HStack(spacing: 6) {
-                Image(systemName: "cloud.sun.fill")
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(theme.accentColor)
-                    .accessibilityHidden(true)
-
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Weather and Activity")
-                        .font(.headline)
-                    if let locationName = weatherSnapshot?.locationName {
-                        Text(locationName)
-                            .font(.caption)
-                            .foregroundStyle(theme.secondaryTextColor)
-                    } else {
-                        Text("Current conditions")
-                            .font(.caption)
-                            .foregroundStyle(theme.secondaryTextColor)
-                    }
+            if weatherSnapshot != nil {
+                Button(action: onOpenWeatherDetail) {
+                    weatherHeader
                 }
+                .buttonStyle(CardNavigationButtonStyle())
+                .accessibilityIdentifier("dashboard-weather-header")
+            } else {
+                weatherHeader
             }
-            if !dynamicTypeSize.isAccessibilitySize { Spacer(minLength: 8) }
             briefingLink
         }
+    }
+
+    private var weatherHeader: some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+            CardNavigationHeader(showsChevron: weatherSnapshot != nil, minimumHeight: 0) {
+                Label {
+                    Text("Weather and Activity")
+                        .foregroundStyle(.primary)
+                } icon: {
+                    Image(systemName: "cloud.sun.fill")
+                        .foregroundStyle(theme.accentColor)
+                }
+                .font(.headline)
+            }
+            if let locationName = weatherSnapshot?.locationName {
+                Text(locationName)
+                    .font(.caption)
+                    .foregroundStyle(theme.secondaryTextColor)
+            } else {
+                Text("Current conditions")
+                    .font(.caption)
+                    .foregroundStyle(theme.secondaryTextColor)
+            }
+        }
+        .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+        .contentShape(Rectangle())
     }
 
     // MARK: - Weather Row
@@ -91,10 +105,6 @@ struct TodayBriefCard: View {
                         }
 
                         Spacer(minLength: 0)
-                        Image(systemName: "chevron.right")
-                            .font(.caption.weight(.semibold))
-                            .foregroundStyle(theme.secondaryTextColor)
-                            .accessibilityHidden(true)
                     }
 
                     if dynamicTypeSize.isAccessibilitySize {
@@ -225,19 +235,14 @@ struct TodayBriefCard: View {
     private var briefingLink: some View {
         if conditionStatus != nil {
             Button(action: onOpenBriefing) {
-                HStack(spacing: 4) {
+                CardNavigationHeader {
                     Text("View Briefing")
                         .font(.caption.weight(.semibold))
                         .foregroundStyle(.tint)
-                    Image(systemName: "chevron.right")
-                        .font(.caption.weight(.semibold))
-                        .foregroundStyle(.tint)
                 }
-                .fixedSize(horizontal: false, vertical: true)
-                .frame(minHeight: 44)
-                .contentShape(Rectangle())
+                .fixedSize(horizontal: !dynamicTypeSize.isAccessibilitySize, vertical: true)
             }
-            .buttonStyle(.plain)
+            .buttonStyle(CardNavigationButtonStyle())
             .accessibilityIdentifier("briefing-entry-card")
             .accessibilityLabel(Text("View Briefing"))
             .accessibilityHint(Text("Opens your daily briefing"))

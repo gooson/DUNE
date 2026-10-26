@@ -23,7 +23,7 @@ struct HabitHeatmapView: View {
                     .fill(.ultraThinMaterial)
             }
         }
-        .buttonStyle(CardPressButtonStyle())
+        .buttonStyle(CardNavigationButtonStyle())
         .accessibilityIdentifier("habit-heatmap")
         .accessibilityLabel(Text("Activity heatmap"))
         .accessibilityHint(Text("Tap to view detail"))
@@ -32,7 +32,7 @@ struct HabitHeatmapView: View {
     // MARK: - Header
 
     private var header: some View {
-        HStack {
+        CardNavigationHeader(minimumHeight: 0) {
             Label {
                 Text("Activity")
                     .font(.headline)
@@ -40,22 +40,6 @@ struct HabitHeatmapView: View {
                 Image(systemName: "square.grid.3x3.fill")
                     .foregroundStyle(DS.Color.tabLife)
             }
-
-            Spacer()
-
-            Image(systemName: "chevron.right")
-                .font(.caption.weight(.semibold))
-                .foregroundStyle(.tertiary)
         }
-    }
-}
-
-// MARK: - Card Press Button Style
-
-private struct CardPressButtonStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .opacity(configuration.isPressed ? 0.7 : 1.0)
-            .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
     }
 }

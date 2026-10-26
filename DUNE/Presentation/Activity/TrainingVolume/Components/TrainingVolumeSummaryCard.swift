@@ -23,8 +23,8 @@ struct TrainingVolumeSummaryCard: View {
             }
             .contentShape(Rectangle())
         }
-        .buttonStyle(.plain)
-        .accessibilityIdentifier("activity-section-volume")
+        .buttonStyle(CardNavigationButtonStyle())
+        .accessibilityIdentifier("activity-section-volume-content")
     }
 
     // MARK: - Last Workout Metrics

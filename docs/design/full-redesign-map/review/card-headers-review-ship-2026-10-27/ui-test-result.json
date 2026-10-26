@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "target": "DUNEUITests",
+  "run_exit_status": 0,
+  "requested_selectors": [
+    "DUNEUITests/CardNavigationHeaderUITests",
+    "DUNEUITests/ActivityExerciseRegressionTests/testTrainingVolumeSummaryAtMaximumAccessibilityTextSize",
+    "DUNEUITests/HeroRhythmUITests/testActivityComponentsRecordedHistoryAndDetail"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 6,
+    "passed": 6,
+    "skipped": 0,
+    "failed": 0
+  },
+  "passed_cases": 6,
+  "failures": [],
+  "required_selectors_missing": [],
+  "log_path": "/Users/shanks/.codex/worktrees/hrv-rhr-grouping/Health/.xcodebuild/review-ship-card-headers-ui.log"
+}

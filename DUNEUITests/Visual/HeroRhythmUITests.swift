@@ -13,12 +13,12 @@ final class HeroRhythmUITests: SeededUITestBaseCase {
         navigateToActivity()
 
         let headerDetail = app.buttons[AXID.activityHeroReadiness].firstMatch
-        let footerDetail = app.buttons["activity-hero-details"].firstMatch
         let ring = waitForElement("activity-hero-ring", timeout: 15)
         let components = waitForElement("activity-hero-components", timeout: 15)
         let trend = waitForElement("activity-hero-trend", timeout: 15)
         XCTAssertTrue(headerDetail.waitForExistence(timeout: 10), "Existing readiness header action remains available")
-        XCTAssertTrue(footerDetail.waitForExistence(timeout: 10), "Readiness details CTA should be available")
+        XCTAssertFalse(app.buttons["activity-hero-details"].exists,
+                       "The old footer must not duplicate the readiness header route")
         XCTAssertFalse(ring.label.isEmpty, "Readiness ring must speak its current score")
         XCTAssertTrue(components.debugDescription.localizedCaseInsensitiveContains("HRV"),
                       "The component group should expose HRV")
@@ -29,9 +29,10 @@ final class HeroRhythmUITests: SeededUITestBaseCase {
         assertRecordedTrend(trend, identifier: "activity-hero-trend",
                             entries: [(5, "82"), (2, "68")], title: "Activity")
 
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded("activity-hero-details", maxSwipes: 3),
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.activityHeroReadiness,
+                                                         maxSwipes: 3, direction: .down),
                       "Readiness detail action should remain reachable")
-        footerDetail.tap()
+        headerDetail.tap()
         XCTAssertTrue(waitForElement(AXID.activityTrainingReadinessDetailScreen, timeout: 10).exists,
                       "The original readiness destination should open")
     }

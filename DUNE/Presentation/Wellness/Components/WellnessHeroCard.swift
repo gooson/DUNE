@@ -9,7 +9,6 @@ struct WellnessHeroCard: View {
     var sleepTrend: [SleepDailySample] = []
     var sleepMetric: HealthMetric?
     @Environment(\.appTheme) private var theme
-    @Environment(\.colorScheme) private var colorScheme
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
@@ -91,22 +90,24 @@ struct WellnessHeroCard: View {
     private func wellnessScoreLink(_ score: WellnessScore) -> some View {
         NavigationLink(value: WellnessScoreDestination()) {
             VStack(alignment: .leading, spacing: 16) {
-                Text("Wellness")
-                    .font(.title3.weight(.bold))
-                    .foregroundStyle(theme == .desertWarm ? DesertPalette.ink : theme.directionPreviewTextColor)
+                CardNavigationHeader(
+                    minimumHeight: 0,
+                    chevronColor: theme == .desertWarm ? DesertPalette.ink : theme.directionPreviewTextColor
+                ) {
+                    Text("Wellness")
+                        .font(.title3.weight(.bold))
+                        .foregroundStyle(theme == .desertWarm ? DesertPalette.ink : theme.directionPreviewTextColor)
+                }
                 wellnessStatus(score)
                 wellnessNarrative(score)
-                if usesSideBySideLayout {
-                    Spacer(minLength: 0)
-                }
-                detailAction("Wellness Details")
             }
             .frame(maxWidth: .infinity, maxHeight: usesSideBySideLayout ? .infinity : nil, alignment: .topLeading)
             .contentShape(Rectangle())
         }
-        .buttonStyle(.plain)
+        .buttonStyle(CardNavigationButtonStyle())
         .accessibilityIdentifier("wellness-hero-score")
         .accessibilityLabel("Wellness score \(score.score), \(score.status.label)")
+        .accessibilityHint("Wellness Details")
     }
 
     @ViewBuilder
@@ -116,7 +117,7 @@ struct WellnessHeroCard: View {
                 sleepSectionContent
                     .contentShape(Rectangle())
             }
-            .buttonStyle(.plain)
+            .buttonStyle(CardNavigationButtonStyle())
             .accessibilityIdentifier("wellness-hero-sleep")
             .accessibilityLabel(sleepAccessibilitySummary)
         } else {
@@ -126,31 +127,20 @@ struct WellnessHeroCard: View {
 
     private var sleepSectionContent: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Sleep")
-                .font(.caption.weight(.semibold))
-                .foregroundStyle(theme == .desertWarm ? DesertPalette.muted : theme.directionPreviewTextColor.opacity(0.74))
-            sleepSummary
-            if sleepMetric != nil {
-                if usesSideBySideLayout {
-                    Spacer(minLength: 0)
-                }
-                detailAction("Sleep Details")
+            CardNavigationHeader(
+                showsChevron: sleepMetric != nil,
+                minimumHeight: 0,
+                chevronColor: theme == .desertWarm
+                    ? DesertPalette.muted
+                    : theme.directionPreviewTextColor.opacity(0.74)
+            ) {
+                Text("Sleep")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(theme == .desertWarm ? DesertPalette.muted : theme.directionPreviewTextColor.opacity(0.74))
             }
+            sleepSummary
         }
         .frame(maxWidth: .infinity, maxHeight: usesSideBySideLayout ? .infinity : nil, alignment: .topLeading)
-    }
-
-    private func detailAction(_ title: LocalizedStringKey) -> some View {
-        HStack(spacing: 6) {
-            Text(title)
-            Image(systemName: "arrow.right")
-        }
-        .font(.subheadline.weight(.semibold))
-        .foregroundStyle(theme == .desertWarm
-            ? (colorScheme == .dark
-                ? Color(red: 0.898, green: 0.678, blue: 0.514)
-                : Color(red: 0.588, green: 0.349, blue: 0.220))
-            : theme.directionPreviewActionColor(for: colorScheme))
     }
 
     @ViewBuilder

@@ -7,8 +7,10 @@ struct WeeklyHabitSummaryCard: View {
     var body: some View {
         StandardCard {
             VStack(alignment: .leading, spacing: DS.Spacing.lg) {
-                Label("Weekly Report", systemImage: "doc.text.magnifyingglass")
-                    .font(.headline)
+                CardNavigationHeader(minimumHeight: 0) {
+                    Label("Weekly Report", systemImage: "doc.text.magnifyingglass")
+                        .font(.headline)
+                }
 
                 Text(report.weekStart.formatted(.dateTime.month(.abbreviated).day()) + " – "
                      + report.weekEnd.formatted(.dateTime.month(.abbreviated).day()))
@@ -28,9 +30,6 @@ struct WeeklyHabitSummaryCard: View {
                 if let next = report.worstHabits.first {
                     habitRow("Needs Improvement", name: next.name, icon: "arrow.up.right")
                 }
-                Label("View Weekly Report", systemImage: "chevron.right")
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(DS.Color.tabLife)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
         }

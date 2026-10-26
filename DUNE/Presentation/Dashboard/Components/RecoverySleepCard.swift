@@ -58,23 +58,31 @@ struct RecoverySleepCard: View {
         }
     }
 
+    @ViewBuilder
     private var header: some View {
-        let layout = dynamicTypeSize.isAccessibilitySize
-            ? AnyLayout(VStackLayout(alignment: .leading, spacing: 4))
-            : AnyLayout(HStackLayout(spacing: DS.Spacing.sm))
-        return layout {
-            HStack(spacing: DS.Spacing.sm) {
-                Image(systemName: "bed.double.fill")
-                    .font(.headline)
-                    .foregroundStyle(DS.Color.sleep)
-
-                Text("Recovery & Sleep")
-                    .font(.headline)
-                    .fixedSize(horizontal: false, vertical: true)
+        if let metric = sleepMetric, hasValidSleep {
+            NavigationLink(value: metric) {
+                CardNavigationHeader {
+                    headerTitle
+                }
             }
-            if !dynamicTypeSize.isAccessibilitySize { Spacer(minLength: 8) }
-            detailLink
+            .buttonStyle(CardNavigationButtonStyle())
+            .accessibilityHint("Sleep Details")
+            .accessibilityIdentifier("dashboard-recovery-sleep-details")
+        } else {
+            headerTitle
         }
+    }
+
+    private var headerTitle: some View {
+        Label {
+            Text("Recovery & Sleep")
+                .foregroundStyle(.primary)
+        } icon: {
+            Image(systemName: "bed.double.fill")
+                .foregroundStyle(DS.Color.sleep)
+        }
+        .font(.headline)
     }
 
     @ViewBuilder
@@ -102,14 +110,30 @@ struct RecoverySleepCard: View {
     @ViewBuilder
     private var deficitRow: some View {
         if let deficit = sleepDeficit, hasValidDeficit {
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Sleep Debt")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                Text(deficit.weeklyDeficit.hoursMinutesFormatted)
-                    .font(.headline)
-                    .monospacedDigit()
-                    .fixedSize(horizontal: false, vertical: true)
+            HStack(spacing: DS.Spacing.sm) {
+                ProgressRingView(
+                    // Match the 10-hour debt scale in the sleep detail.
+                    progress: min(deficit.weeklyDeficit / 600, 1),
+                    ringColor: deficit.level.color,
+                    lineWidth: 4,
+                    size: 40
+                )
+                .overlay {
+                    Image(systemName: deficit.weeklyDeficit == 0 ? "checkmark" : "moon.zzz.fill")
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(deficit.level.color)
+                }
+                .accessibilityHidden(true)
+
+                VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                    Text("Sleep Debt")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                    Text(deficit.weeklyDeficit.hoursMinutesFormatted)
+                        .font(.headline)
+                        .monospacedDigit()
+                        .fixedSize(horizontal: false, vertical: true)
+                }
             }
             .accessibilityIdentifier("dashboard-recovery-sleep-debt")
         }
@@ -215,28 +239,6 @@ struct RecoverySleepCard: View {
         }
     }
 
-    // MARK: - Detail Link
-
-    @ViewBuilder
-    private var detailLink: some View {
-        if let metric = sleepMetric, hasValidSleep {
-            NavigationLink(value: metric) {
-                HStack(spacing: 4) {
-                    Text("Sleep Details")
-                        .font(.caption.weight(.semibold))
-                        .foregroundStyle(.tint)
-                    Image(systemName: "chevron.right")
-                        .font(.caption2.weight(.semibold))
-                        .foregroundStyle(.tint)
-                }
-                .fixedSize(horizontal: false, vertical: true)
-                .frame(minHeight: 44)
-                .contentShape(Rectangle())
-            }
-            .buttonStyle(.plain)
-            .accessibilityIdentifier("dashboard-recovery-sleep-details")
-        }
-    }
 }
 
 #Preview {

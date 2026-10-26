@@ -96,7 +96,7 @@ struct DesertHorizonConditionHeroView: View {
             .contentShape(Rectangle())
             .padding(16)
         }
-        .buttonStyle(.plain)
+        .buttonStyle(CardNavigationButtonStyle())
         .accessibilityIdentifier("dashboard-hero-condition")
         .accessibilityHint("View Details")
         .background {
@@ -110,39 +110,12 @@ struct DesertHorizonConditionHeroView: View {
         }
     }
 
-    @ViewBuilder
     private var titleRow: some View {
-        if dynamicTypeSize.isAccessibilitySize {
-            VStack(alignment: .leading, spacing: 6) {
-                Text("CONDITION")
-                    .font(.caption.weight(.bold))
-                    .tracking(1)
-                    .foregroundStyle(heroAccent)
-                    .fixedSize(horizontal: false, vertical: true)
-                HStack(alignment: .firstTextBaseline, spacing: 8) {
-                    Text("View Details")
-                        .font(.caption.weight(.semibold))
-                    Image(systemName: "chevron.right")
-                        .font(.caption.weight(.semibold))
-                        .accessibilityHidden(true)
-                }
+        CardNavigationHeader(minimumHeight: 0, chevronColor: heroAccent) {
+            Text("CONDITION")
+                .font(.caption.weight(.bold))
+                .tracking(1)
                 .foregroundStyle(heroAccent)
-            }
-        } else {
-            HStack(alignment: .firstTextBaseline, spacing: 8) {
-                Text("CONDITION")
-                    .font(.caption.weight(.bold))
-                    .tracking(1)
-                    .foregroundStyle(heroAccent)
-                Spacer(minLength: 8)
-                Text("View Details")
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(heroAccent)
-                Image(systemName: "chevron.right")
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(heroAccent)
-                    .accessibilityHidden(true)
-            }
         }
     }
 
@@ -283,7 +256,7 @@ struct DesertHorizonConditionHeroView: View {
 
     private var evidence: some View {
         LazyVGrid(
-            columns: Array(repeating: GridItem(.flexible(), alignment: .leading), count: dynamicTypeSize >= .xxLarge ? 1 : 2),
+            columns: Array(repeating: GridItem(.flexible(), spacing: DS.Spacing.sm, alignment: .leading), count: dynamicTypeSize >= .xxLarge ? 1 : 2),
             alignment: .leading,
             spacing: 8
         ) {
@@ -300,6 +273,11 @@ struct DesertHorizonConditionHeroView: View {
                 }
                 .font(.caption2.weight(.semibold))
                 .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(DS.Spacing.sm)
+                .background {
+                    RoundedRectangle(cornerRadius: DS.Radius.sm)
+                        .strokeBorder(border, lineWidth: 0.5)
+                }
                 .accessibilityElement(children: .combine)
                 .accessibilityIdentifier("dashboard-hero-baseline-\(detail.label)")
             }

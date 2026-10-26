@@ -454,10 +454,12 @@ struct SuggestedWorkoutSection: View {
                         .foregroundStyle(DS.Color.activity)
 
                     VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-                        Text("AI Workout Builder")
-                            .font(.subheadline.weight(.semibold))
-                            .foregroundStyle(.primary)
-                            .lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 1)
+                        CardNavigationHeader(minimumHeight: 0) {
+                            Text("AI Workout Builder")
+                                .font(.subheadline.weight(.semibold))
+                                .foregroundStyle(.primary)
+                                .lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 1)
+                        }
 
                         Text("Describe your ideal workout in natural language and get a ready-to-use template instantly.")
                             .font(.caption2)
@@ -465,15 +467,10 @@ struct SuggestedWorkoutSection: View {
                             .lineLimit(2)
                     }
 
-                    Spacer(minLength: 0)
-
-                    Image(systemName: "chevron.right")
-                        .font(.caption.weight(.semibold))
-                        .foregroundStyle(.tertiary)
                 }
             }
         }
-        .buttonStyle(.plain)
+        .buttonStyle(CardNavigationButtonStyle())
         .accessibilityIdentifier("activity-ai-workout-builder")
     }
 
