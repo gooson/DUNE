@@ -55,6 +55,7 @@ struct DailyDigestCard: View {
                 .font(.headline)
                 .foregroundStyle(.primary)
                 .fixedSize(horizontal: false, vertical: true)
+                .accessibilityIdentifier("dashboard-digest-header")
             if !dynamicTypeSize.isAccessibilitySize { Spacer(minLength: 0) }
             Text(digest.date, format: .dateTime.month(.abbreviated).day())
                 .font(.caption)
@@ -62,7 +63,6 @@ struct DailyDigestCard: View {
                 .fixedSize(horizontal: false, vertical: true)
                 .accessibilityIdentifier("dashboard-digest-date")
         }
-        .accessibilityIdentifier("dashboard-digest-header")
     }
 
     @ViewBuilder
