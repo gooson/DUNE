@@ -259,17 +259,20 @@ final class ActivityFlowUITests: SeededUITestBaseCase {
         let viewport = scroll.frame.intersection(app.windows.firstMatch.frame)
         let navigationBar = app.navigationBars.firstMatch
         let top = max(viewport.minY, navigationBar.exists ? navigationBar.frame.maxY : viewport.minY)
+        let tabBar = app.tabBars.firstMatch
+        let bottom = tabBar.exists && tabBar.frame.minY > viewport.midY
+            ? min(viewport.maxY, tabBar.frame.minY) : viewport.maxY
         return CGRect(x: viewport.minX, y: top,
-                      width: viewport.width, height: max(1, viewport.maxY - top))
+                      width: viewport.width, height: max(1, bottom - top))
     }
 
     private func alignActivityPosition(at targetY: CGFloat, position: () -> CGFloat) {
         let viewport = usableActivityViewport()
-        for _ in 0..<24 {
+        for _ in 0..<12 {
             let before = position()
             let delta = before - targetY
             if abs(delta) <= 10 { return }
-            let distance = min(min(abs(delta) * 0.7, 56), viewport.height * 0.09)
+            let distance = min(min(abs(delta), 200), viewport.height * 0.3)
             dragActivityScroll(by: delta > 0 ? distance : -distance)
             if abs(position() - before) < 2 { return }
         }
@@ -281,7 +284,8 @@ final class ActivityFlowUITests: SeededUITestBaseCase {
         let fraction = distance / max(1, scroll.frame.height)
         let origin = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.6))
         let destination = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.6 - fraction))
-        origin.press(forDuration: 0.18, thenDragTo: destination)
+        origin.press(forDuration: 0.18, thenDragTo: destination,
+                     withVelocity: XCUIGestureVelocity(rawValue: 100), thenHoldForDuration: 0.5)
     }
 
     func testCaptureT03ChangedHero() {
