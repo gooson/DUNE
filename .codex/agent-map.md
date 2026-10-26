@@ -8,9 +8,10 @@
 
 - 일반 구현/새 테스트/리뷰: `gpt-6-sol`, `medium`.
 - 기존 패턴을 따르는 단순 테스트 추가/한정된 파일 조사: `gpt-6-luna`, `medium`.
-- 테스트 실행/결과 집계: 먼저 셸 스크립트. 별도 언어 판단이 필요할 때만 `gpt-6-luna`, `low`.
+- 테스트 실행·대기·정해진 스크린샷 저장: 먼저 셸 스크립트. 여러 화면 진입·상태 확인·캡처 수집·결과 집계에 언어 판단이 필요한 독립 작업만 `gpt-6-luna`, `low` (`ui-test-expert`의 실행 수집 모드).
+- 검증 범위·테스트 설계·캡처의 잘림/겹침 등 시각적 품질 판단: `gpt-6-sol`, `medium`. 수집 성공만으로 품질 게이트를 통과시키지 않는다.
 - 아키텍처 결정, 복잡한 동시성/데이터 정합성, 원인이 불명확한 실패: `gpt-6-astra`, `high`.
-- 아래 agent 배정은 기본값이다. 고위험 조건이면 처음부터 Astra, 같은 실패가 2회 반복되거나 근거가 부족하면 Luna → Sol → Astra로 상향한다. 단순 환경 장애는 모델 변경보다 환경 복구를 우선한다.
+- 아래 agent 배정은 기본값이다. 고위험 조건이면 처음부터 Astra, 수집 범위를 벗어난 판단이나 근거 부족은 Sol, 원인이 불명확한 실패는 Astra에 기존 증거를 전달한다. 모델 상향은 재실행 허가가 아니며 동일 원인 최대 1회 조건부 재시도와 중단 기준은 `skill-compat.md`를 따른다. 단순 환경 장애는 모델 변경보다 환경 복구를 우선한다.
 - 실제 지원 모델/추론 조합은 런타임에서 확인한다. 지정 모델이 없으면 조용히 Astra를 상속하지 말고 사용 가능한 대안과 이유를 기록한다.
 - 앱 전역 모델이나 진행 중인 parent 모델은 이 파일로 바뀌지 않는다. 일반 작업은 사용자가 Sol로 시작할 수 있으며, Astra parent에서는 독립적인 하위 작업을 명시적으로 위임한다.
 
@@ -154,6 +155,8 @@
 - Role: UI test strategy, review, and implementation
 - Preferred execution: 공통 위임 정책 (`.codex/skill-compat.md`)
 - Codex model/reasoning: `gpt-6-sol`, `medium`
+- Execution collection mode: parent가 범위·기기·selector·예상 상태·캡처 목록을 확정한 독립 수집 작업에만 `gpt-6-luna`, `low`를 명시하고 `fork_turns="none"`으로 실행한다. 일반 전략/리뷰/테스트 구현 모드와 구분한다.
 - Edit policy: review-only in Review/Quality, test patching allowed in Work/Resolve
+- Collection edit policy: 앱/테스트/실행기/지침 수정 금지. 지정한 로그·receipt·새 캡처와 캡처 출처만 저장한다. 디자인맵 편집·시각적 승인·실패 수정은 parent 또는 담당 전문가에게 넘긴다.
 - Memory read: `.claude/skills/ui-testing/SKILL.md` + `.codex/agent-memory/ui-test-expert.md`
 - Memory write: `.codex/agent-memory/ui-test-expert.md`

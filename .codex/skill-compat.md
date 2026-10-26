@@ -33,6 +33,14 @@ Claude skill 문서를 그대로 유지하면서 Codex에서 실행 semantics를
 - 세션 비용 감사는 원문을 모델에 일괄 로드하지 않고 `scripts/audit-agent-sessions.py`로 기간별 usage를 집계한 뒤 상위 세션의 필요한 구간만 확인한다. 캐시·reasoning·중복 기록 해석은 `.codex/token-efficiency.md`를 따른다.
 - 여러 reviewer/phase가 변경 정보를 공유할 때 `python3 scripts/codex-context.py snapshot --base <실제-base>`로 한 번 저장하고 반환된 디렉터리를 전달한다. `manifest.json`과 담당 patch 구간만 읽는다. 재사용 전 `python3 scripts/codex-context.py check <디렉터리>`로 최신성을 확인한다. untracked/binary 본문과 관련 호출부는 별도로 확인하며, snapshot은 리뷰·테스트 통과 증거가 아니다. 이 수집 작업 자체에는 agent를 생성하지 않는다.
 
+### 실행 검증 수집 위임
+
+- 단일 명령 실행·대기·정해진 캡처 저장은 셸로 처리한다. 화면 진입·예상 상태 readback·여러 캡처 수집처럼 언어 판단이 필요하고 parent가 독립 작업을 병행할 수 있을 때만 `ui-test-expert` 실행 수집 모드를 사용한다. 모델·추론 배정은 `agent-map.md`를 따른다. 독립 작업이 없으면 inline으로 수행하며 parent 모델이 바뀌었다고 보고하지 않는다.
+- parent는 실행 전에 검증 범위, 정확한 plan/selector, 현재 worktree 전용 기기, locale/seed/앱 상태, 예상 화면 ID와 캡처 목록, 출력 경로, 완료·중단 조건을 확정한다. 대화 전체 대신 이 작업 계약과 역할·관련 규칙 경로만 전달한다. Duo 전환은 지정 memory와 상태 readback·viewport/PNG 증거 규칙도 전달한다.
+- 수집 모드는 source `ui-test-expert`의 테스트 작성·수정 지시보다 좁은 역할이다. 허용된 기기 조작과 증거 저장만 수행하고 테스트 설계, 범위 확대, 코드 수정, 시각적 품질 승인, Ship 판단은 하지 않는다. 이미지/조작 도구나 지정 모델이 지원되지 않으면 대안·이유와 미수행 범위를 기록한다.
+- 위임 후에도 전용 시뮬레이터 소유권, 표준 실행기, 저장소 잠금, deadline, 최대 1회 조건부 재시도를 유지한다. parent와 child가 같은 runner/기기를 동시에 조작하지 않는다. 다른 agent가 앱·테스트·seed·실행 입력을 바꾸면 해당 실행 증거의 유효성을 다시 확인하고 기존 성공을 최종 상태에 재사용하지 않는다.
+- 결과 형식은 `token-efficiency.md`의 수집 결과 계약을 따른다. parent는 receipt·selector·기기·실제 이미지와 출처를 확인해 필요한 게이트를 판단한다. 예상 상태 불일치·불충분한 증거는 기존 자료와 함께 담당 전문가에게 넘긴다. 모델 상향이나 phase 전환으로 재시도 횟수를 초기화하거나 자동 재실행하지 않는다.
+
 ### 재시도와 범위 확장 제한
 
 사용자가 요청한 무의미한 재시도 방지 규칙이다. Claude 원본의 반복 실행 지시보다 이 Codex 실행 한도를 우선한다.
@@ -135,7 +143,7 @@ Codex가 iOS·iPadOS·Duo·watchOS의 보이는 화면 배치, 글자, 상태, �
 ### /ui-testing
 
 - 환경 실패·화면 잠금·실행권 대기가 발생하면 `.codex/ui-execution.md`를 읽고 단계를 분류한다. 저장소 simulator 실행 잠금과 Mac 화면 잠금은 다르다. 실행기 `<log>.host.json`은 진단 자료이며 UI 통과 증거가 아니다.
-- `agent: ui-test-expert`는 agent-map의 실제 모델 배정을 사용한다. 테스트 실행 자체에는 agent가 필요 없다.
+- `agent: ui-test-expert`는 agent-map의 실제 모델 배정을 사용한다. 테스트 실행 자체에는 agent가 필요 없으며, 여러 화면 조작·증거 수집은 위 **실행 검증 수집 위임**의 조건과 역할 제한을 따른다. 테스트 설계·구현과 시각적 품질 판단은 실행 수집 모드로 내리지 않는다.
 - Unit/UI/watch 테스트는 기존 `scripts/test-unit.sh`, `scripts/test-ui.sh`, `scripts/test-watch-ui.sh`를 표준 경로로 사용한다. 기본 파일 로그/요약을 유지하고 필요한 때만 streaming한다.
 - **UI 실행 점유 제한**: Codex 로컬 UI 테스트는 raw `xcodebuild test` 대신 표준 UI 실행기를 사용한다. 실행기에는 시뮬레이터 잠금 대기 60초, 로그 무갱신 15분, 전체 실행 deadline이 있다. focused/smoke 기본 30분, full 기본 3시간이며 정당한 장시간 검증은 `DUNE_UI_TEST_WALL_TIMEOUT`과 `DUNE_UI_TEST_IDLE_TIMEOUT`으로 실행 전에 명시한다. deadline 124, 잠금 대기 실패, 테스트 결과 정체는 실패 증거다. 별도 PID를 임의 종료하거나 같은 명령을 이름만 바꿔 재시도하지 않는다.
 - **전용 시뮬레이터 사용**: 사용자가 특정 기기를 직접 지정한 경우 외에는 현재 worktree 소유로 등록된 clone을 단독 사용한다. iPhone·iPad·Duo·Watch의 UI 테스트, 앱 설치·초기화, 수동 캡처, 자세·회전 전환에 모두 적용한다. 명시적 UDID를 넘기기 전에도 `.codex-checks/worktree-simulators.json`의 worktree·UDID·이름과 실제 기기를 대조한다. `booted` 선택이나 공용 원본·다른 worktree 기기로의 fallback은 사용하지 않는다. 전용 기기 조회·생성·소유권 확인이 실패하면 해당 실행을 중단하고 원인과 재개 조건을 기록한다. 전용 기기도 저장소 잠금과 실행 deadline을 유지한다.

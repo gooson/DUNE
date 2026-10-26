@@ -23,7 +23,7 @@ python3 scripts/audit-agent-sessions.py --start 2026-10-04T08:55:00+00:00 --end 
 - 지침 크기 진단: `python3 scripts/codex-context.py inventory`. 본문 없이 파일 수·총 bytes·상위 10개만 출력한다. 필수 문서를 생략하는 도구가 아니며, bytes를 토큰 절감률로 환산하지 않는다.
 - 리뷰 입력 수집: `python3 scripts/codex-context.py snapshot --base main`. 실제 PR base를 사용한다. 시스템 임시 디렉터리의 manifest와 branch/staged/unstaged patch를 공유하고 본문 전체를 채팅에 재출력하지 않는다. `check <디렉터리>`가 실패하면 기존 snapshot으로 리뷰 완료를 선언하지 않는다. untracked 내용은 manifest의 경로에서 별도로 읽는다. 더 이상 사용하지 않는 snapshot 디렉터리는 작업 종료 시 정리할 수 있다.
 
-- 명령 실행/대기는 셸 도구에 맡긴다. 실행만을 위한 모델이나 별도 agent를 생성하지 않는다.
+- 명령 실행/대기는 셸 도구에 맡긴다. 실행만을 위한 모델이나 별도 agent를 생성하지 않는다. 언어 판단이 필요한 여러 화면 조작·캡처 수집은 `skill-compat.md`의 실행 검증 수집 위임 조건을 따른다.
 - 표준 실행기: `scripts/test-unit.sh`, `scripts/test-ui.sh`, `scripts/test-watch-ui.sh`. 기본 파일 로그와 요약을 사용하고, 로그 전체를 `cat`하지 않는다. CI streaming 기본 동작은 유지한다.
 - UI runner의 전체 deadline에는 잠금·부팅·빌드·테스트·결과 정리가 포함되고 로그 무갱신 15분에도 종료된다. 같은 테스트를 raw `xcodebuild`, wrapper, 다른 로그 이름으로 중복 실행하지 않는다. `DUNE_UI_TEST_WALL_TIMEOUT`/`DUNE_UI_TEST_IDLE_TIMEOUT` 조정은 실행 전 예상 검증 범위와 근거가 있을 때만 한다.
 - 정상 결과는 종료 상태·로그 경로·보고된 테스트 수만 확인한다. 실패 시 제한된 오류 요약 → 해당 로그 구간 → 관련 소스 순서로 읽는다. 요약에서 수를 알 수 없으면 unknown이며 0건 성공으로 간주하지 않는다.
@@ -31,6 +31,13 @@ python3 scripts/audit-agent-sessions.py --start 2026-10-04T08:55:00+00:00 --end 
 - 개발 중 `test-ui.sh --only-testing <target/class/method>` 또는 `--smoke`로 빠르게 확인할 수 있다. 둘을 함께 주면 명시적 선택과 smoke의 합집합을 실행한다. `/run`의 최종 범위는 `.codex/skill-compat.md`의 변경 범위 기반 UI 게이트를 적용하고, 그 외는 source skill이 요구하는 범위를 유지한다. full 판정을 smoke/targeted로 대신하지 않는다. 단위 테스트의 `--ios-only`/`--watch-only`는 실제 변경 범위와 최종 요구조건에 맞게 사용한다.
 - 실패 분류, 최대 1회 조건부 재시도, polling/범위 확장 제한은 `skill-compat.md`의 **재시도와 범위 확장 제한**을 따른다. 실패 로그는 최초 원인과 변경된 부분만 읽고 같은 전체 로그를 다시 로드하지 않는다.
 - 제스처/차트/레이아웃 관련 source 규칙의 seeded/mock 재현 의무는 유지한다. 요소 존재만으로 시각적 레이아웃 전체를 검증했다고 보고하지 않는다.
+
+### 수집 결과 계약
+
+- 수집 담당은 실제 사용 모델/추론과 모드, 명령·plan·selector, 기기 UDID/runtime, locale/seed, 종료 상태, 테스트 수행/통과/실패/skip 수, receipt·로그 경로를 짧게 반환한다. 수집하지 못한 값은 `unknown`으로 두고 실패·미실행·0건·누락 selector를 성공으로 처리하지 않는다.
+- 캡처마다 화면 ID·예상 상태와 실제 readback, 기기·viewport·방향/Duo 자세, 캡처 시각, 새 PNG 절대 경로와 출처를 남긴다. 캡처하지 못한 상태는 이유와 재개 조건을 기록한다. 기존 PNG를 새 실행의 증거로 사용하지 않는다.
+- 정상 로그 전체·대화·이미지 전체를 parent 문맥에 반복 복사하지 않는다. 실패는 제한된 오류 요약과 해당 로그 구간을 전달하고, parent는 영향받는 상태의 실제 PNG를 열어 검토한다. 캡처 수집 완료와 시각적 품질 승인은 구분한다.
+- parent는 증거와 현재 소스·환경·요구 범위를 확인한다. 유효한 동일 실행을 확인용으로 다시 돌리지 않으며, 결과 재사용은 아래 동일 검증 증거 조건을 따른다. 실제 화면 디자인맵 편집·갱신은 별도 담당이 수집 증거로 수행한다.
 
 ## 동일 검증 증거
 
