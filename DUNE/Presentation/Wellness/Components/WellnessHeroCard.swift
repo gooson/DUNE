@@ -94,8 +94,10 @@ struct WellnessHeroCard: View {
                     minimumHeight: 0,
                     chevronColor: theme == .desertWarm ? DesertPalette.ink : theme.directionPreviewTextColor
                 ) {
-                    Text("Wellness")
-                        .font(.title3.weight(.bold))
+                    Text(verbatim: "WELLNESS")
+                        .font(.caption.weight(.semibold))
+                        .tracking(1.5)
+                        .accessibilityIdentifier("wellness-hero-heading")
                         .foregroundStyle(theme == .desertWarm ? DesertPalette.ink : theme.directionPreviewTextColor)
                 }
                 wellnessStatus(score)
@@ -241,7 +243,7 @@ struct WellnessHeroCard: View {
         TabHeroScoreRing(
             progress: Double(score.score) / 100,
             value: score.score.formatted(),
-            caption: "WELLNESS",
+            caption: "",
             tipColor: score.status.color,
             accessibilityLabel: "Wellness score \(score.score), \(score.status.label)",
             accessibilityIdentifier: "wellness-hero-ring"
@@ -258,7 +260,12 @@ struct WellnessHeroCard: View {
 
     private var emptyCard: some View {
         HeroCard(tintColor: DS.Color.fitness.opacity(0.5)) {
-            VStack(spacing: DS.Spacing.md) {
+            VStack(alignment: .leading, spacing: DS.Spacing.md) {
+                Text(verbatim: "WELLNESS")
+                    .font(.caption.weight(.semibold))
+                    .tracking(1.5)
+                    .foregroundStyle(theme == .desertWarm ? DesertPalette.ink : theme.directionPreviewTextColor)
+                    .accessibilityIdentifier("wellness-hero-heading")
                 Image(systemName: "heart.text.clipboard")
                     .font(.system(size: 36))
                     .foregroundStyle(.quaternary)

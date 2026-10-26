@@ -3,8 +3,14 @@ import SwiftUI
 /// Displays injury risk score with level indicator and top risk factors.
 struct InjuryRiskCard: View {
     let assessment: InjuryRiskAssessment?
+    var weeklyStats: [ActivityStat] = []
+    var streak: WorkoutStreak?
+    var fatigueStates: [MuscleFatigueState] = []
+    var sleepAvailable: Bool?
+    var readinessAvailable: Bool?
 
     @Environment(\.appTheme) private var theme
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     private static let gaugeTrackColor = DS.Color.activity.opacity(0.15)
 
@@ -20,7 +26,10 @@ struct InjuryRiskCard: View {
         StandardCard {
             VStack(alignment: .leading, spacing: DS.Spacing.md) {
                 // Score + Level
-                HStack(spacing: DS.Spacing.md) {
+                let layout = dynamicTypeSize.isAccessibilitySize
+                    ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.md))
+                    : AnyLayout(HStackLayout(spacing: DS.Spacing.md))
+                layout {
                     // Circular gauge
                     ZStack {
                         Circle()
@@ -46,11 +55,45 @@ struct InjuryRiskCard: View {
                         Text(assessment.level.guideMessage)
                             .font(.caption)
                             .foregroundStyle(DS.Color.textSecondary)
-                            .lineLimit(2)
+                            .fixedSize(horizontal: false, vertical: true)
                     }
 
                     Spacer(minLength: 0)
 
+                }
+
+                if !weeklyStats.isEmpty || streak != nil || !fatigueStates.isEmpty {
+                    Text("Training records · assessment context")
+                        .font(.caption)
+                        .foregroundStyle(DS.Color.textSecondary)
+                    if let volume = weeklyStats.first(where: { $0.id == "volume" }) {
+                        observation("Strength Volume", icon: "chart.bar.fill",
+                                    value: "\(volume.value) \(volume.unit)", detail: volume.change)
+                    }
+                    if let streak {
+                        observation("Consecutive Training", icon: "calendar",
+                                    value: String(localized: "\(streak.currentStreak) days"))
+                    }
+                    let recovering = fatigueStates.filter { $0.weeklyVolume > 0 && !$0.isRecovered }
+                    if !fatigueStates.isEmpty {
+                        observation("Muscle Recovery", icon: "figure.stand",
+                                    value: recovering.isEmpty ? String(localized: "Recovered") : String(localized: "Recovering"),
+                                    detail: recovering.prefix(2).map { $0.muscle.displayName }.joined(separator: " · "))
+                    }
+                    Text("These records provide context; they are not all risk factors.")
+                        .font(.caption2)
+                        .foregroundStyle(DS.Color.textSecondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                if sleepAvailable == false {
+                    Text("Sleep records are not yet included.")
+                        .font(.caption)
+                        .foregroundStyle(DS.Color.textSecondary)
+                }
+                if readinessAvailable == false {
+                    Text("Readiness data is unavailable.")
+                        .font(.caption)
+                        .foregroundStyle(DS.Color.textSecondary)
                 }
 
                 // Top risk factors (max 3, pre-sorted by UseCase)
@@ -67,7 +110,7 @@ struct InjuryRiskCard: View {
                                 Text(factor.detail)
                                     .font(.caption)
                                     .foregroundStyle(DS.Color.textSecondary)
-                                    .lineLimit(1)
+                                    .fixedSize(horizontal: false, vertical: true)
                                 Spacer(minLength: 0)
                             }
                         }
@@ -94,6 +137,25 @@ struct InjuryRiskCard: View {
     }
 
     // MARK: - Helpers
+
+    private func observation(_ title: LocalizedStringKey, icon: String, value: String, detail: String? = nil) -> some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+            Divider()
+            Label(title, systemImage: icon)
+                .font(.caption)
+                .foregroundStyle(DS.Color.textSecondary)
+            Text(value)
+                .font(.subheadline.weight(.semibold))
+                .monospacedDigit()
+            if let detail, !detail.isEmpty {
+                Text(detail)
+                    .font(.caption)
+                    .foregroundStyle(DS.Color.textSecondary)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .accessibilityElement(children: .combine)
+    }
 
     private func levelColor(_ level: InjuryRiskAssessment.Level) -> Color {
         switch level {

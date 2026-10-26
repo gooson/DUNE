@@ -17,12 +17,13 @@ struct MuscleRecoveryMapView: View {
         var label: String {
             switch self {
             case .recovery: String(localized: "Recovery")
-            case .volume: String(localized: "Volume")
+            case .volume: String(localized: "Sets")
             }
         }
     }
 
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var fatigueByMuscle: [MuscleGroup: MuscleFatigueState] = [:]
     @State private var mode: MapMode = .recovery
     @State private var showingRecoveryInfoSheet = false
@@ -49,7 +50,11 @@ struct MuscleRecoveryMapView: View {
     // MARK: - Header
 
     private var headerSection: some View {
-        HStack {
+        let layout = dynamicTypeSize >= .xxLarge
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.sm))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.sm))
+        return layout {
+            HStack {
             Text(subtitle)
                 .font(.caption)
                 .foregroundStyle(DS.Color.textSecondary)
@@ -64,10 +69,13 @@ struct MuscleRecoveryMapView: View {
                 Image(systemName: "info.circle")
                     .font(.subheadline)
                     .foregroundStyle(DS.Color.textSecondary)
+                    .frame(minWidth: 44, minHeight: 44)
             }
             .accessibilityIdentifier("activity-muscle-map-algorithm-info")
+            .accessibilityLabel("About Muscle Map")
 
             Spacer()
+            }
 
             Picker("Mode", selection: $mode) {
                 ForEach(MapMode.allCases, id: \.rawValue) { m in
@@ -76,7 +84,7 @@ struct MuscleRecoveryMapView: View {
             }
             .pickerStyle(.segmented)
             .accessibilityIdentifier("activity-muscle-map-mode")
-            .frame(maxWidth: 160)
+            .frame(maxWidth: dynamicTypeSize >= .xxLarge ? .infinity : 160)
         }
         .sheet(isPresented: $showingRecoveryInfoSheet) {
             FatigueAlgorithmSheet()
@@ -102,7 +110,7 @@ struct MuscleRecoveryMapView: View {
     // MARK: - Body Diagram
 
     private var bodyDiagramSection: some View {
-        let maxDiagramWidth: CGFloat = isExpanded ? 220 : 170
+        let maxDiagramWidth: CGFloat = isExpanded ? 220 : 120
 
         return VStack(spacing: DS.Spacing.sm) {
             HStack(spacing: DS.Spacing.sm) {
@@ -161,7 +169,7 @@ struct MuscleRecoveryMapView: View {
             .offset(x: centerOffsetX)
         }
         .aspectRatio(aspectRatio, contentMode: .fit)
-        .frame(maxHeight: isExpanded ? 400 : 300)
+        .frame(maxHeight: isExpanded ? 400 : 240)
         .clipped()
     }
 
@@ -172,8 +180,10 @@ struct MuscleRecoveryMapView: View {
         switch mode {
         case .recovery:
             FatigueLegendView(onTap: { showingRecoveryInfoSheet = true })
+                .accessibilityIdentifier("activity-muscle-map-legend-recovery")
         case .volume:
             VolumeLegendView(onTap: { showingVolumeInfoSheet = true })
+                .accessibilityIdentifier("activity-muscle-map-legend-sets")
         }
     }
 

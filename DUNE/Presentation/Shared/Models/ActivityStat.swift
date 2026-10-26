@@ -13,7 +13,7 @@ struct ActivityStat: Identifiable, Sendable {
 
     static func volume(value: String, unit: String = String(localized: "kg"), change: String? = nil, isPositive: Bool? = nil) -> ActivityStat {
         ActivityStat(id: "volume", icon: "scalemass.fill", iconColor: DS.Color.activity,
-                     title: String(localized: "Volume"), value: value, unit: unit,
+                     title: String(localized: "Strength Volume"), value: value, unit: unit,
                      change: change, changeIsPositive: isPositive)
     }
 

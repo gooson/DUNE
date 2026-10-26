@@ -79,7 +79,7 @@ struct NotificationActivityDestination: Identifiable, Hashable {
 }
 
 /// Activity tab — Hero-first layout.
-/// Layout: Hero → Muscle Map → Weekly Stats → Search+Suggestion+Templates → Volume → Workouts → PRs → Consistency → Frequency.
+/// Layout: readiness/recovery → workout choice → recent records/achievements → cumulative analysis.
 struct ActivityView: View {
     private struct ExerciseStartConfiguration: Identifiable {
         let id = UUID()
@@ -199,146 +199,7 @@ struct ActivityView: View {
                     } else {
                         themeReadinessPreview
 
-                        // ② Recovery Map + Weekly Stats (side-by-side on iPad)
-                        if isRegular {
-                            HStack(alignment: .top, spacing: DS.Spacing.md) {
-                                recoveryMapSection(fillHeight: true)
-                                weeklyStatsSection(fillHeight: true)
-                            }
-                            .staggeredAppear(index: 1)
-                        } else {
-                            recoveryMapSection()
-                                .staggeredAppear(index: 1)
-                            weeklyStatsSection()
-                                .staggeredAppear(index: 2)
-                        }
-
-                        // ③ Injury Warning Banner
-                        if !cachedInjuryConflicts.isEmpty {
-                            InjuryWarningBanner(conflicts: cachedInjuryConflicts)
-                                .staggeredAppear(index: 3)
-                        }
-
-                        // ③.5 Injury Risk Assessment
-                        SectionGroup(title: "Injury Risk", icon: "shield.checkered",
-                                     iconColor: DS.Color.activity,
-                                     sectionIdentifier: "activity-section-injuryrisk",
-                                     headerLink: viewModel.injuryRiskAssessment == nil ? nil : {
-                                         sectionHeaderLink(ActivityDetailDestination.injuryRisk, identifier: "activity-injuryrisk-detail-link", label: $0)
-                                     }) {
-                            if viewModel.injuryRiskAssessment != nil {
-                                NavigationLink(value: ActivityDetailDestination.injuryRisk) {
-                                    InjuryRiskCard(assessment: viewModel.injuryRiskAssessment)
-                                }
-                                .buttonStyle(CardNavigationButtonStyle())
-                                .accessibilityIdentifier("activity-injuryrisk-detail-content")
-                            } else {
-                                InjuryRiskCard(assessment: nil)
-                            }
-                        }
-                        .staggeredAppear(index: 4)
-
-                        // ④ Suggested Workout (with search + templates)
-                        suggestedWorkoutSection()
-                            .staggeredAppear(index: 5)
-
-                        // ⑤ Training Volume
-                        trainingVolumeSection()
-                            .staggeredAppear(index: 6)
-
-                        // ⑥ Weekly Report
-                        SectionGroup(title: "Weekly Report", icon: "doc.text",
-                                     iconColor: DS.Color.activity,
-                                     sectionIdentifier: "activity-section-weeklyreport",
-                                     headerLink: viewModel.weeklyReport == nil ? nil : {
-                                         sectionHeaderLink(ActivityDetailDestination.weeklyReport, identifier: "activity-weeklyreport-detail-link", label: $0)
-                                     }) {
-                            if viewModel.weeklyReport != nil {
-                                NavigationLink(value: ActivityDetailDestination.weeklyReport) {
-                                    WorkoutReportCard(report: viewModel.weeklyReport)
-                                }
-                                .buttonStyle(CardNavigationButtonStyle())
-                                .accessibilityIdentifier("activity-weeklyreport-detail-content")
-                            } else {
-                                WorkoutReportCard(report: nil)
-                            }
-                        }
-                        .staggeredAppear(index: 7)
-
-                        // ⑧ Recent Workouts
-                        SectionGroup(title: "Recent Workouts", icon: "clock.arrow.circlepath", iconColor: DS.Color.activity,
-                                     headerLink: { label in
-                            AnyView(Button { showingAllRecentWorkouts = true } label: {
-                                CardNavigationHeader { label }
-                            }
-                            .buttonStyle(CardNavigationButtonStyle())
-                            .accessibilityIdentifier("activity-recent-seeall"))
-                        }) {
-                            ExerciseListSection(
-                                workouts: viewModel.recentWorkouts,
-                                exerciseRecords: recentRecords,
-                                tombstonedIDs: DeletedWorkoutTombstoneStore.shared.tombstonedIDs,
-                                showsSeeAllButton: false
-                            )
-                        }
-                        .staggeredAppear(index: 8)
-
-                        // ⑨ Personal Records
-                        SectionGroup(title: "Personal Records", icon: "trophy.fill",
-                                     iconColor: DS.Color.activity,
-                                     infoAction: { showingPRInfo = true },
-                                     infoIdentifier: "activity-pr-info",
-                                     headerLink: { sectionHeaderLink(ActivityDetailDestination.personalRecords(), identifier: "activity-section-pr", label: $0) }) {
-                            NavigationLink(value: ActivityDetailDestination.personalRecords()) {
-                                PersonalRecordsSection(
-                                    records: viewModel.personalRecords,
-                                    notice: viewModel.personalRecordNotice,
-                                    rewardSummary: viewModel.workoutRewardSummary
-                                )
-                            }
-                            .buttonStyle(CardNavigationButtonStyle())
-                            .accessibilityIdentifier("activity-section-pr-content")
-                        }
-                        .staggeredAppear(index: 9)
-
-                        SectionGroup(title: "Achievement History", icon: "medal.fill", iconColor: DS.Color.activity,
-                                     headerLink: { sectionHeaderLink(ActivityDetailDestination.personalRecords(), identifier: "activity-section-achievement", label: $0) }) {
-                            NavigationLink(value: ActivityDetailDestination.personalRecords()) {
-                                AchievementHistoryPreview(events: viewModel.workoutRewardHistory)
-                            }
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .buttonStyle(CardNavigationButtonStyle())
-                            .accessibilityIdentifier("activity-section-achievement-content")
-                        }
-                        .staggeredAppear(index: 10)
-
-                        // ⑩ Consistency
-                        SectionGroup(title: "Consistency", icon: "flame.fill",
-                                     iconColor: DS.Color.activity,
-                                     infoAction: { showingConsistencyInfo = true },
-                                     infoIdentifier: "activity-consistency-info",
-                                     headerLink: { sectionHeaderLink(ActivityDetailDestination.consistency, identifier: "activity-section-consistency", label: $0) }) {
-                            NavigationLink(value: ActivityDetailDestination.consistency) {
-                                ConsistencyCard(streak: viewModel.workoutStreak)
-                            }
-                            .buttonStyle(CardNavigationButtonStyle())
-                            .accessibilityIdentifier("activity-section-consistency-content")
-                        }
-                        .staggeredAppear(index: 11)
-
-                        // ⑪ Exercise Mix
-                        SectionGroup(title: "Exercise Mix", icon: "chart.bar.xaxis",
-                                     iconColor: DS.Color.activity,
-                                     infoAction: { showingExerciseMixInfo = true },
-                                     infoIdentifier: "activity-exercise-mix-info",
-                                     headerLink: { sectionHeaderLink(ActivityDetailDestination.exerciseMix, identifier: "activity-section-exercisemix", label: $0) }) {
-                            NavigationLink(value: ActivityDetailDestination.exerciseMix) {
-                                ExerciseFrequencySection(summary: viewModel.exerciseMix)
-                            }
-                            .buttonStyle(CardNavigationButtonStyle())
-                            .accessibilityIdentifier("activity-section-exercisemix-content")
-                        }
-                        .staggeredAppear(index: 12)
+                        activityFlowContent
                     }
                 }
                 .padding()
@@ -543,11 +404,13 @@ struct ActivityView: View {
                     HStack {
                         CardNavigationHeader(
                             showsChevron: viewModel.trainingReadiness != nil,
-                            minimumHeight: 0,
+                            minimumHeight: 44,
                             chevronColor: readinessInk
                         ) {
-                            Text("Training Readiness")
-                                .font(.subheadline.weight(.semibold))
+                            Text(verbatim: "READINESS")
+                                .font(.caption.weight(.semibold))
+                                .tracking(1.5)
+                                .accessibilityIdentifier("activity-hero-heading")
                                 .foregroundStyle(readinessInk)
                         }
                         if viewModel.trainingReadiness?.isCalibrating == true {
@@ -560,7 +423,10 @@ struct ActivityView: View {
                     if let readiness = viewModel.trainingReadiness {
                         if dynamicTypeSize.isAccessibilitySize {
                             VStack(alignment: .leading, spacing: 12) {
-                                themeReadinessRing(readiness)
+                                Text(readiness.score.formattedWithSeparator)
+                                    .font(.largeTitle.weight(.semibold))
+                                    .foregroundStyle(readinessInk)
+                                    .accessibilityIdentifier("activity-hero-score-external")
                                 themeReadinessCopy(readiness)
                             }
                         } else {
@@ -595,13 +461,20 @@ struct ActivityView: View {
                     recovery: viewModel.readinessRecoveryAvailable ? readiness.components.fatigueScore : nil
                 )
 
-                WeeklyHeroTrendView(
-                    points: viewModel.readinessHistory,
-                    title: "Recorded Readiness",
-                    upperBound: 100,
-                    tint: theme.accentColor,
-                    accessibilityIdentifier: "activity-hero-trend"
-                )
+                DisclosureGroup {
+                    WeeklyHeroTrendView(
+                        points: viewModel.readinessHistory,
+                        title: "Recorded Readiness",
+                        upperBound: 100,
+                        tint: theme.accentColor,
+                        accessibilityIdentifier: "activity-hero-trend"
+                    )
+                } label: {
+                    Text("Readiness History and Evidence")
+                        .font(.caption.weight(.semibold))
+                }
+                .tint(readinessInk)
+                .accessibilityIdentifier("activity-hero-history-disclosure")
 
             }
         }
@@ -623,11 +496,13 @@ struct ActivityView: View {
     }
 
     private func themeReadinessRing(_ readiness: TrainingReadiness) -> some View {
-        TabHeroScoreRing(
-            progress: Double(readiness.score) / 100,
-            value: readiness.score.formatted(),
-            caption: "READINESS",
+        CompactConditionRing(
+            score: readiness.score,
+            ringColor: theme.accentColor,
+            highlightColor: theme.duskColor,
             tipColor: readiness.status.color,
+            trackColor: readinessInk.opacity(0.6),
+            textColor: readinessInk,
             accessibilityLabel: "Training readiness \(readiness.score), \(readiness.status.label)",
             accessibilityIdentifier: "activity-hero-ring"
         )
@@ -646,6 +521,165 @@ struct ActivityView: View {
                 .font(.subheadline)
                 .foregroundStyle(theme == .desertWarm ? DesertPalette.muted : readinessInk.opacity(0.74))
                 .fixedSize(horizontal: false, vertical: true)
+        }
+    }
+
+    @ViewBuilder
+    private var activityFlowContent: some View {
+        flowPair {
+            VStack(spacing: DS.Spacing.lg) {
+                recoveryMapSection()
+                riskSection
+            }
+        } trailing: {
+            suggestedWorkoutSection()
+        }
+        if !cachedInjuryConflicts.isEmpty {
+            InjuryWarningBanner(conflicts: cachedInjuryConflicts)
+        }
+        recentWorkoutsSection
+        flowPair { personalRecordsSection } trailing: { achievementSection }
+        flowPair { weeklyStatsSection() } trailing: { reportSection }
+        flowPair { consistencySection } trailing: { trainingVolumeSection() }
+        exerciseMixSection
+    }
+
+    @ViewBuilder
+    private func flowPair<Leading: View, Trailing: View>(
+        @ViewBuilder leading: () -> Leading,
+        @ViewBuilder trailing: () -> Trailing
+    ) -> some View {
+        if isRegular && !dynamicTypeSize.isAccessibilitySize {
+            HStack(alignment: .top, spacing: DS.Spacing.md) {
+                leading().frame(maxWidth: .infinity, alignment: .topLeading)
+                trailing().frame(maxWidth: .infinity, alignment: .topLeading)
+            }
+        } else {
+            leading()
+            trailing()
+        }
+    }
+
+    private var riskSection: some View {
+        SectionGroup(title: "Training Burden Check", icon: "shield.checkered",
+                     iconColor: DS.Color.activity,
+                     sectionIdentifier: "activity-section-injuryrisk",
+                     headerLink: viewModel.injuryRiskAssessment == nil ? nil : {
+                         sectionHeaderLink(ActivityDetailDestination.injuryRisk, identifier: "activity-injuryrisk-detail-link", label: $0)
+                     }) {
+            if viewModel.injuryRiskAssessment != nil {
+                NavigationLink(value: ActivityDetailDestination.injuryRisk) {
+                    InjuryRiskCard(
+                        assessment: viewModel.injuryRiskAssessment,
+                        weeklyStats: viewModel.weeklyStats,
+                        streak: viewModel.workoutStreak,
+                        fatigueStates: viewModel.fatigueStates,
+                        sleepAvailable: !viewModel.sleepDailyData.isEmpty,
+                        readinessAvailable: viewModel.trainingReadiness != nil
+                    )
+                }
+                .buttonStyle(CardNavigationButtonStyle())
+                .accessibilityIdentifier("activity-injuryrisk-detail-content")
+            } else {
+                InjuryRiskCard(assessment: nil)
+            }
+        }
+    }
+
+    private var reportSection: some View {
+        SectionGroup(title: "Weekly Report", icon: "doc.text",
+                     iconColor: DS.Color.activity,
+                     sectionIdentifier: "activity-section-weeklyreport",
+                     headerLink: viewModel.weeklyReport == nil ? nil : {
+                         sectionHeaderLink(ActivityDetailDestination.weeklyReport, identifier: "activity-weeklyreport-detail-link", label: $0)
+                     }) {
+            if viewModel.weeklyReport != nil {
+                NavigationLink(value: ActivityDetailDestination.weeklyReport) {
+                    WorkoutReportCard(report: viewModel.weeklyReport)
+                }
+                .buttonStyle(CardNavigationButtonStyle())
+                .accessibilityIdentifier("activity-weeklyreport-detail-content")
+            } else {
+                WorkoutReportCard(report: nil)
+            }
+        }
+    }
+
+    private var recentWorkoutsSection: some View {
+        SectionGroup(title: "Recent Workouts", icon: "clock.arrow.circlepath", iconColor: DS.Color.activity,
+                     sectionIdentifier: "activity-section-recent",
+                     headerLink: { label in
+            AnyView(Button { showingAllRecentWorkouts = true } label: {
+                CardNavigationHeader { label }
+            }
+            .buttonStyle(CardNavigationButtonStyle())
+            .accessibilityIdentifier("activity-recent-seeall"))
+        }) {
+            ExerciseListSection(
+                workouts: viewModel.recentWorkouts,
+                exerciseRecords: recentRecords,
+                tombstonedIDs: DeletedWorkoutTombstoneStore.shared.tombstonedIDs,
+                showsSeeAllButton: false,
+                rewardEvents: viewModel.workoutRewardHistory
+            )
+        }
+    }
+
+    private var personalRecordsSection: some View {
+        SectionGroup(title: "Personal Records", icon: "trophy.fill",
+                     iconColor: DS.Color.activity,
+                     infoAction: { showingPRInfo = true },
+                     infoIdentifier: "activity-pr-info",
+                     headerLink: { sectionHeaderLink(ActivityDetailDestination.personalRecords(), identifier: "activity-section-pr", label: $0) }) {
+            NavigationLink(value: ActivityDetailDestination.personalRecords()) {
+                PersonalRecordsSection(
+                    records: viewModel.personalRecords,
+                    notice: viewModel.personalRecordNotice,
+                    rewardSummary: viewModel.workoutRewardSummary
+                )
+            }
+            .buttonStyle(CardNavigationButtonStyle())
+            .accessibilityIdentifier("activity-section-pr-content")
+        }
+    }
+
+    private var achievementSection: some View {
+        SectionGroup(title: "Achievement History", icon: "medal.fill", iconColor: DS.Color.activity,
+                     headerLink: { sectionHeaderLink(ActivityDetailDestination.personalRecords(), identifier: "activity-section-achievement", label: $0) }) {
+            NavigationLink(value: ActivityDetailDestination.personalRecords()) {
+                AchievementHistoryPreview(events: viewModel.workoutRewardHistory)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .buttonStyle(CardNavigationButtonStyle())
+            .accessibilityIdentifier("activity-section-achievement-content")
+        }
+    }
+
+    private var consistencySection: some View {
+        SectionGroup(title: "Workout Consistency", icon: "flame.fill",
+                     iconColor: DS.Color.activity,
+                     infoAction: { showingConsistencyInfo = true },
+                     infoIdentifier: "activity-consistency-info",
+                     headerLink: { sectionHeaderLink(ActivityDetailDestination.consistency, identifier: "activity-section-consistency", label: $0) }) {
+            NavigationLink(value: ActivityDetailDestination.consistency) {
+                ConsistencyCard(streak: viewModel.workoutStreak)
+            }
+            .buttonStyle(CardNavigationButtonStyle())
+            .accessibilityIdentifier("activity-section-consistency-content")
+        }
+    }
+
+    private var exerciseMixSection: some View {
+        SectionGroup(title: "Exercise Mix", icon: "chart.bar.xaxis",
+                     iconColor: DS.Color.activity,
+                     infoAction: { showingExerciseMixInfo = true },
+                     infoIdentifier: "activity-exercise-mix-info",
+                     headerLink: { sectionHeaderLink(ActivityDetailDestination.exerciseMix, identifier: "activity-section-exercisemix", label: $0) }) {
+            NavigationLink(value: ActivityDetailDestination.exerciseMix) {
+                ExerciseFrequencySection(summary: viewModel.exerciseMix)
+            }
+            .buttonStyle(CardNavigationButtonStyle())
+            .accessibilityIdentifier("activity-section-exercisemix-content")
         }
     }
 
@@ -744,25 +778,14 @@ struct ActivityView: View {
                 onMuscleSelected: { muscle in selectedMuscle = muscle }
             )
 
-            HStack {
-                Spacer()
 
-                NavigationLink(value: ActivityDetailDestination.muscleMap3D) {
-                    Image(systemName: "cube")
-                        .font(.subheadline.weight(.medium))
-                        .foregroundStyle(DS.Color.activity)
-                }
-                .buttonStyle(.plain)
-                .accessibilityIdentifier("activity-musclemap-3d-link")
-            }
-            .padding(.vertical, DS.Spacing.xs)
         }
         .accessibilityElement(children: .contain)
         .accessibilityIdentifier("activity-section-musclemap")
     }
 
     private func weeklyStatsSection(fillHeight: Bool = false) -> some View {
-        SectionGroup(title: "This Week", icon: "chart.bar.fill", iconColor: DS.Color.activity,
+        SectionGroup(title: "Weekly Training", icon: "chart.bar.fill", iconColor: DS.Color.activity,
                      headerLink: { sectionHeaderLink(ActivityDetailDestination.weeklyStats, identifier: "activity-section-weeklystats", label: $0) },
                      fillHeight: fillHeight) {
             NavigationLink(value: ActivityDetailDestination.weeklyStats) {
@@ -774,7 +797,7 @@ struct ActivityView: View {
     }
 
     private func suggestedWorkoutSection(fillHeight: Bool = false, useHistory: Bool = true) -> some View {
-        SectionGroup(title: "Suggested Workout", icon: "sparkles", iconColor: DS.Color.activity, fillHeight: fillHeight) {
+        SectionGroup(title: "Suggested Workout", icon: "sparkles", iconColor: DS.Color.activity, sectionIdentifier: "activity-section-suggested", fillHeight: fillHeight) {
             SuggestedWorkoutSection(
                 suggestion: viewModel.workoutSuggestion,
                 recommendationContext: viewModel.recommendationContext,
@@ -813,13 +836,14 @@ struct ActivityView: View {
     }
 
     private func trainingVolumeSection(fillHeight: Bool = false) -> some View {
-        SectionGroup(title: "Training Volume", icon: "chart.line.uptrend.xyaxis", iconColor: DS.Color.activity,
+        SectionGroup(title: "Training Load", icon: "chart.line.uptrend.xyaxis", iconColor: DS.Color.activity,
                      headerLink: { sectionHeaderLink(TrainingVolumeDestination.overview, identifier: "activity-section-volume", label: $0) },
                      fillHeight: fillHeight) {
             TrainingVolumeSummaryCard(
                 trainingLoadData: viewModel.trainingLoadData,
                 lastWorkoutMinutes: viewModel.lastWorkoutMinutes,
-                lastWorkoutCalories: viewModel.lastWorkoutCalories
+                lastWorkoutCalories: viewModel.lastWorkoutCalories,
+                recentWorkoutDate: viewModel.recentWorkouts.map(\.date).max()
             )
         }
     }
@@ -1025,7 +1049,7 @@ private struct AchievementHistoryPreview: View {
     @Environment(\.horizontalSizeClass) private var sizeClass
 
     private var isRegularLayout: Bool { sizeClass == .regular }
-    private var previewLimit: Int { isRegularLayout ? 4 : 3 }
+    private var previewLimit: Int { 3 }
     private var minimumCardHeight: CGFloat? { isRegularLayout ? 136 : nil }
 
     private var previewEvents: [WorkoutRewardEvent] {
@@ -1081,11 +1105,11 @@ private struct AchievementHistoryPreview: View {
                 Text(event.title)
                     .font(isRegularLayout ? .subheadline.weight(.semibold) : .caption.weight(.semibold))
                     .foregroundStyle(DS.Color.textSecondary)
-                    .lineLimit(isRegularLayout ? 2 : 1)
+                    .fixedSize(horizontal: false, vertical: true)
                 Text(eventDetailText(event))
                     .font(isRegularLayout ? .caption : .caption2)
                     .foregroundStyle(.tertiary)
-                    .lineLimit(isRegularLayout ? 2 : 1)
+                    .fixedSize(horizontal: false, vertical: true)
             }
 
             Spacer(minLength: 0)

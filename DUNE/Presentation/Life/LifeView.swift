@@ -1055,11 +1055,16 @@ private struct HabitListQueryView: View {
 
     private var themeHeroSection: some View {
         VStack(alignment: .leading, spacing: 15) {
-            HStack {
-                Text("Life")
-                    .font(.title3.weight(.bold))
+            let headingLayout = dynamicTypeSize.isAccessibilitySize
+                ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.xs))
+                : AnyLayout(HStackLayout())
+            headingLayout {
+                Text(verbatim: "HABITS")
+                    .font(.caption.weight(.semibold))
+                    .tracking(1.5)
+                    .accessibilityIdentifier("life-hero-heading")
                     .foregroundStyle(theme == .desertWarm ? DesertPalette.ink : theme.directionPreviewTextColor)
-                Spacer()
+                if !dynamicTypeSize.isAccessibilitySize { Spacer() }
                 Text("Today's Habits")
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(theme == .desertWarm
