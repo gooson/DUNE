@@ -39,7 +39,7 @@ Claude skill 문서를 그대로 유지하면서 Codex에서 실행 semantics를
 - parent는 실행 전에 검증 범위, 정확한 plan/selector, 현재 worktree 전용 기기, locale/seed/앱 상태, 예상 화면 ID와 캡처 목록, 출력 경로, 완료·중단 조건을 확정한다. 대화 전체 대신 이 작업 계약과 역할·관련 규칙 경로만 전달한다. Duo 전환은 지정 memory와 상태 readback·viewport/PNG 증거 규칙도 전달한다.
 - 수집 모드는 source `ui-test-expert`의 테스트 작성·수정 지시보다 좁은 역할이다. 허용된 기기 조작과 증거 저장만 수행하고 테스트 설계, 범위 확대, 코드 수정, 시각적 품질 승인, Ship 판단은 하지 않는다. 이미지/조작 도구나 지정 모델이 지원되지 않으면 대안·이유와 미수행 범위를 기록한다.
 - 위임 후에도 전용 시뮬레이터 소유권, 표준 실행기, 저장소 잠금, deadline, 최대 1회 조건부 재시도를 유지한다. parent와 child가 같은 runner/기기를 동시에 조작하지 않는다. 다른 agent가 앱·테스트·seed·실행 입력을 바꾸면 해당 실행 증거의 유효성을 다시 확인하고 기존 성공을 최종 상태에 재사용하지 않는다.
-- 결과 형식은 `token-efficiency.md`의 수집 결과 계약을 따른다. parent는 receipt·selector·기기·실제 이미지와 출처를 확인해 필요한 게이트를 판단한다. 예상 상태 불일치·불충분한 증거는 기존 자료와 함께 담당 전문가에게 넘긴다. 모델 상향이나 phase 전환으로 재시도 횟수를 초기화하거나 자동 재실행하지 않는다.
+- 수집 모드의 결과 형식은 source 역할의 매 응답 리뷰 템플릿(Findings/Missing Test Cases/iPad-Specific Risks/Coverage Rating)을 대신해 `token-efficiency.md`의 수집 결과 계약만 따른다. parent는 기기·실제 이미지와 출처 및 테스트 실행을 맡긴 경우 receipt·selector를 확인해 필요한 게이트를 판단한다. 예상 상태 불일치·불충분한 증거는 기존 자료와 함께 담당 전문가에게 넘긴다. 모델 상향이나 phase 전환으로 재시도 횟수를 초기화하거나 자동 재실행하지 않는다.
 
 ### 재시도와 범위 확장 제한
 
