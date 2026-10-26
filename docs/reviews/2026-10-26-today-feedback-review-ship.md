@@ -2,7 +2,7 @@
 date: 2026-10-26
 category: review
 tags: [today, review-ship, data-retention, verification-gate]
-status: blocked-before-pr
+status: authorized-with-accepted-verification-limits
 ---
 
 # Code Review Report · Today 피드백 수정
@@ -67,3 +67,7 @@ status: blocked-before-pr
 `review-ship` Step4는 미해결 P1/P2 또는 실패/불가한 필수 검증이 있으면 Ship 전에 중단하도록 요구한다. 두 검증 게이트가 Open이므로 PR 생성·push·원격 머지·브랜치/워크트리/시뮬레이터 정리는 수행하지 않았다. 원격 main의 동기화와 GitHub 인증은 확인했다. 로컬 브랜치와 전용 시뮬레이터3개를 보존한다.
 
 [Finding 상태 JSON](2026-10-26-today-feedback-review-ship.json) · [실제 화면·검증 제한](../design/full-redesign-map/review/today-repair-2026-10-26/index.html)
+
+## 사용자 승인에 따른 Ship 재개
+
+위 두 미완료 검증과 중단 사유를 보고한 뒤 사용자가 **“진행해 머지”**라고 명시적으로 지시했다. 이 머지에서는 quality-001·quality-002를 사용자가 수용한 검증 제한으로 기록하고 Ship을 재개한다. finding의 검증 상태는 Open으로 유지하며 Resolved·통과로 바꾸지 않는다. X 재실행 제외 선택도 유지한다. 코드 P1/P2의 미해결 항목은 없다.

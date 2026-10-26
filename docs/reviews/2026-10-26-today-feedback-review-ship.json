@@ -43,7 +43,9 @@
       "file": "DUNEUITests/Visual/TodayCompactUITests.swift",
       "line": 58,
       "issue": "기존 두 실행은 클릭 전에 실패했고 최종 container 수정 뒤 사용자 요청으로 재실행하지 않았다.",
-      "suggestion": "실클릭 검증 또는 사용자의 명시적인 출시 게이트 제외 결정 필요. 추가 X 실행 금지 유지."
+      "suggestion": "실클릭 검증 또는 사용자의 명시적인 출시 게이트 제외 결정 필요. 추가 X 실행 금지 유지.",
+      "release_disposition": "Accepted by user for this merge; verification remains Open",
+      "release_blocking": false
     },
     {
       "id": "quality-002",
@@ -54,7 +56,9 @@
       "file": "docs/design/full-redesign-map/review/today-repair-2026-10-26/duo-open-ui-result.json",
       "line": 1,
       "issue": "Activation point invalid와 검은 캡처. LCD-1 active만으로 표시·터치 성공을 확인할 수 없다.",
-      "suggestion": "좌표/디스플레이 경로 원인 확인 후 유효 PNG와 영향 selector 성공 필요."
+      "suggestion": "좌표/디스플레이 경로 원인 확인 후 유효 PNG와 영향 selector 성공 필요.",
+      "release_disposition": "Accepted by user for this merge; verification remains Open",
+      "release_blocking": false
     }
   ],
   "summary": {
@@ -72,7 +76,7 @@
     "cause": "New regression fixture marked snapshot latestWeight failed while live mock body query succeeded; timestamp assertions therefore failed.",
     "change": "Inject actual ToggleWorkoutService failure and assert partial error; retry only this new test."
   },
-  "ship_status": "blocked-before-pr",
+  "ship_status": "authorized-to-proceed-with-accepted-verification-limits",
   "verification": {
     "dashboard_first_run": {
       "executed": 37,
@@ -102,6 +106,20 @@
     "pr_created": false,
     "merged": false,
     "local_cleanup": "not run; preserve all 3 owned simulators until confirmed remote merge",
-    "code_review": "No open code P1/P2; verification P2 quality-001 and quality-002 remain open"
+    "code_review": "No open code P1/P2; verification P2 quality-001 and quality-002 remain open",
+    "accepted_by_user": [
+      "quality-001",
+      "quality-002"
+    ],
+    "release_blocking": []
+  },
+  "release_authorization": {
+    "user_instruction": "진행해 머지",
+    "context": "두 미완료 검증과 머지 중단 사유를 보고한 뒤 사용자가 진행·머지를 명시적으로 요청함.",
+    "accepted_limitations": [
+      "quality-001",
+      "quality-002"
+    ],
+    "tests_waived_not_passed": true
   }
 }
