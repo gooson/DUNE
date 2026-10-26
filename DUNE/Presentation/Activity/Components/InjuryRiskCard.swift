@@ -31,22 +31,28 @@ struct InjuryRiskCard: View {
                     : AnyLayout(HStackLayout(spacing: DS.Spacing.md))
                 layout {
                     // Circular gauge
-                    ZStack {
-                        Circle()
-                            .stroke(Self.gaugeTrackColor, lineWidth: 6)
-                        Circle()
-                            .trim(from: 0, to: CGFloat(assessment.score) / 100.0)
-                            .stroke(
-                                levelColor(assessment.level),
-                                style: StrokeStyle(lineWidth: 6, lineCap: .round)
-                            )
-                            .rotationEffect(.degrees(-90))
-
+                    if dynamicTypeSize.isAccessibilitySize {
                         Text("\(assessment.score)")
                             .font(DS.Typography.cardScore)
-                            .foregroundStyle(theme.heroTextGradient)
+                            .foregroundStyle(levelColor(assessment.level))
+                    } else {
+                        ZStack {
+                            Circle()
+                                .stroke(Self.gaugeTrackColor, lineWidth: 6)
+                            Circle()
+                                .trim(from: 0, to: CGFloat(assessment.score) / 100.0)
+                                .stroke(
+                                    levelColor(assessment.level),
+                                    style: StrokeStyle(lineWidth: 6, lineCap: .round)
+                                )
+                                .rotationEffect(.degrees(-90))
+
+                            Text("\(assessment.score)")
+                                .font(DS.Typography.cardScore)
+                                .foregroundStyle(theme.heroTextGradient)
+                        }
+                        .frame(width: 56, height: 56)
                     }
-                    .frame(width: 56, height: 56)
 
                     VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                         Text(assessment.level.displayName)
@@ -74,8 +80,9 @@ struct InjuryRiskCard: View {
                         observation("Consecutive Training", icon: "calendar",
                                     value: String(localized: "\(streak.currentStreak) days"))
                     }
-                    let recovering = fatigueStates.filter { $0.weeklyVolume > 0 && !$0.isRecovered }
-                    if !fatigueStates.isEmpty {
+                    let observed = fatigueStates.filter { $0.fatigueLevel != .noData }
+                    let recovering = observed.filter { !$0.isRecovered }
+                    if !observed.isEmpty {
                         observation("Muscle Recovery", icon: "figure.stand",
                                     value: recovering.isEmpty ? String(localized: "Recovered") : String(localized: "Recovering"),
                                     detail: recovering.prefix(2).map { $0.muscle.displayName }.joined(separator: " · "))

@@ -95,6 +95,7 @@ struct ActivityView: View {
     @State private var viewModel: ActivityViewModel
     @State private var showingExercisePicker = false
     @State private var showingAllRecentWorkouts = false
+    @State private var showsReadinessHistory = false
     @State private var showingAIWorkoutBuilder = false
     @State private var saveRecommendationAsTemplate: WorkoutTemplateRecommendation?
     @State private var exerciseStartConfiguration: ExerciseStartConfiguration?
@@ -461,7 +462,26 @@ struct ActivityView: View {
                     recovery: viewModel.readinessRecoveryAvailable ? readiness.components.fatigueScore : nil
                 )
 
-                DisclosureGroup {
+                Button {
+                    showsReadinessHistory.toggle()
+                } label: {
+                    HStack {
+                        Text("Readiness History and Evidence")
+                            .font(.caption.weight(.semibold))
+                            .multilineTextAlignment(.leading)
+                        Spacer(minLength: DS.Spacing.sm)
+                        Image(systemName: showsReadinessHistory ? "chevron.up" : "chevron.down")
+                            .font(.caption.weight(.semibold))
+                    }
+                    .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .foregroundStyle(readinessInk)
+                .accessibilityValue(showsReadinessHistory ? String(localized: "Expanded") : String(localized: "Collapsed"))
+                .accessibilityIdentifier("activity-hero-history-disclosure")
+
+                if showsReadinessHistory {
                     WeeklyHeroTrendView(
                         points: viewModel.readinessHistory,
                         title: "Recorded Readiness",
@@ -469,12 +489,7 @@ struct ActivityView: View {
                         tint: theme.accentColor,
                         accessibilityIdentifier: "activity-hero-trend"
                     )
-                } label: {
-                    Text("Readiness History and Evidence")
-                        .font(.caption.weight(.semibold))
                 }
-                .tint(readinessInk)
-                .accessibilityIdentifier("activity-hero-history-disclosure")
 
             }
         }
@@ -574,7 +589,7 @@ struct ActivityView: View {
                         weeklyStats: viewModel.weeklyStats,
                         streak: viewModel.workoutStreak,
                         fatigueStates: viewModel.fatigueStates,
-                        sleepAvailable: !viewModel.sleepDailyData.isEmpty,
+                        sleepAvailable: viewModel.sleepDailyData.contains { $0.minutes.isFinite && $0.minutes > 0 },
                         readinessAvailable: viewModel.trainingReadiness != nil
                     )
                 }

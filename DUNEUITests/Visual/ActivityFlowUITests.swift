@@ -171,15 +171,16 @@ final class ActivityFlowUITests: SeededUITestBaseCase {
         navigateToActivity()
         XCTAssertTrue(waitForElement("activity-hero-readiness", timeout: 15).exists)
         capture("A01-Activity-Flow-hero\(suffix)")
-        for (identifier, name) in [
-            ("activity-musclemap-detail-link", "A01-Activity-Flow-map"),
-            ("activity-recent-seeall", "A01-Activity-Flow-recent"),
-            ("activity-section-weeklystats", "A01-Activity-Flow-weekly"),
-            ("activity-section-volume", "A01-Activity-Flow-load"),
-            ("activity-section-exercisemix", "A01-Activity-Flow-analysis")
+        for (identifier, nextSection, name) in [
+            ("activity-musclemap-detail-link", "activity-section-injuryrisk", "A01-Activity-Flow-map"),
+            ("activity-recent-seeall", "activity-section-pr", "A01-Activity-Flow-recent"),
+            ("activity-section-pr", "activity-section-achievement", "A01-Activity-Flow-records"),
+            ("activity-section-weeklystats", "activity-section-weeklyreport", "A01-Activity-Flow-weekly"),
+            ("activity-section-weeklyreport", "activity-section-consistency", "A01-Activity-Flow-report"),
+            ("activity-section-volume", "activity-section-exercisemix", "A01-Activity-Flow-load"),
+            ("activity-section-exercisemix", "", "A01-Activity-Flow-analysis")
         ] {
-            XCTAssertTrue(app.scrollToHittableElementIfNeeded(identifier, maxSwipes: 16),
-                          "\(identifier) must be reachable for the native capture")
+            alignActivityCaptureHeader(identifier)
             if suffix == "-MaxAX" {
                 if identifier == "activity-section-weeklystats" {
                     XCTAssertTrue(waitForElement("activity-report-volume-value", timeout: 10).exists)
@@ -194,7 +195,44 @@ final class ActivityFlowUITests: SeededUITestBaseCase {
                 }
             }
             capture(name + suffix)
+            if suffix == "-MaxAX", !nextSection.isEmpty {
+                captureMiddleOfTallCard(start: identifier, next: nextSection, name: name + suffix)
+            }
         }
+    }
+
+    /// `scrollToHittableElementIfNeeded` can stop with a header at the viewport's
+    /// bottom edge. Move it near the usable top before preserving native evidence.
+    private func alignActivityCaptureHeader(_ identifier: String) {
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(identifier, maxSwipes: 16),
+                      "\(identifier) must be reachable for the native capture")
+        let header = element(identifier)
+        let scroll = app.scrollViews[AXID.activityRootScroll].firstMatch
+        let viewport = scroll.frame.intersection(app.windows.firstMatch.frame)
+        let targetTop = viewport.minY + min(70, viewport.height * 0.1)
+        for _ in 0..<12 where header.frame.minY > targetTop + 12 {
+            let oldTop = header.frame.minY
+            dragActivityScroll(from: 0.76, to: 0.57)
+            if abs(header.frame.minY - oldTop) < 2 { break }
+        }
+    }
+
+    private func captureMiddleOfTallCard(start: String, next: String, name: String) {
+        let nextHeader = element(next)
+        guard nextHeader.exists else { return }
+        let scroll = app.scrollViews[AXID.activityRootScroll].firstMatch
+        let viewport = scroll.frame.intersection(app.windows.firstMatch.frame)
+        let cardSpan = nextHeader.frame.minY - element(start).frame.minY
+        guard cardSpan > viewport.height * 0.85 else { return }
+        dragActivityScroll(from: 0.77, to: 0.36)
+        capture(name + "-middle")
+    }
+
+    private func dragActivityScroll(from start: CGFloat, to end: CGFloat) {
+        let scroll = app.scrollViews[AXID.activityRootScroll].firstMatch
+        let origin = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: start))
+        let destination = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: end))
+        origin.press(forDuration: 0.08, thenDragTo: destination)
     }
 
     func testCaptureT03ChangedHero() {
