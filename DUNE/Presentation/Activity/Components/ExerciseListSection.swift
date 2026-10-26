@@ -15,16 +15,19 @@ struct ExerciseListSection: View {
     let limit: Int
     let tombstonedIDs: Set<String>
     let showsSeeAllButton: Bool
+    let rewardEvents: [WorkoutRewardEvent]
     @State private var isShowingExerciseView = false
+    @State private var showsEarlierWorkouts = false
 
     private let exerciseLibrary: ExerciseLibraryQuerying
 
     init(
         workouts: [WorkoutSummary],
         exerciseRecords: [ExerciseRecord] = [],
-        limit: Int = 5,
+        limit: Int = 2,
         tombstonedIDs: Set<String> = [],
         showsSeeAllButton: Bool = true,
+        rewardEvents: [WorkoutRewardEvent] = [],
         exerciseLibrary: ExerciseLibraryQuerying = ExerciseLibraryService.shared
     ) {
         self.workouts = workouts
@@ -32,6 +35,7 @@ struct ExerciseListSection: View {
         self.limit = limit
         self.tombstonedIDs = tombstonedIDs
         self.showsSeeAllButton = showsSeeAllButton
+        self.rewardEvents = rewardEvents
         self.exerciseLibrary = exerciseLibrary
     }
 
@@ -67,14 +71,21 @@ struct ExerciseListSection: View {
                 }
             }
 
-            // Unified rows — date-sorted, limited
-            ForEach(content.items.prefix(limit)) { item in
-                NavigationLink {
-                    destination(for: item, recordsByID: content.recordsByID)
+            ForEach(content.items.prefix(max(limit, 0))) { item in
+                workoutLink(for: item, recordsByID: content.recordsByID)
+            }
+
+            if content.items.count > max(limit, 0) {
+                DisclosureGroup(isExpanded: $showsEarlierWorkouts) {
+                    ForEach(content.items.dropFirst(max(limit, 0))) { item in
+                        workoutLink(for: item, recordsByID: content.recordsByID)
+                    }
                 } label: {
-                    UnifiedWorkoutRow(item: item, style: .compact)
+                    Text("Earlier Workouts")
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(DS.Color.activity)
                 }
-                .buttonStyle(.plain)
+                .accessibilityIdentifier("activity-recent-earlier")
             }
 
             if content.items.isEmpty {
@@ -96,6 +107,22 @@ struct ExerciseListSection: View {
     }
 
     // MARK: - Navigation
+
+    private func workoutLink(
+        for item: ExerciseListItem,
+        recordsByID: [UUID: ExerciseRecord]
+    ) -> some View {
+        NavigationLink {
+            destination(for: item, recordsByID: recordsByID)
+        } label: {
+            UnifiedWorkoutRow(
+                item: item,
+                style: .compact,
+                rewardEvents: item.matchingRewardEvents(in: rewardEvents)
+            )
+        }
+        .buttonStyle(.plain)
+    }
 
     @ViewBuilder
     private func destination(

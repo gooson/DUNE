@@ -5,10 +5,32 @@ import SwiftUI
 struct UnifiedWorkoutRow: View {
     let item: ExerciseListItem
     let style: Style
+    let rewardEvents: [WorkoutRewardEvent]
+
+    init(item: ExerciseListItem, style: Style, rewardEvents: [WorkoutRewardEvent] = []) {
+        self.item = item
+        self.style = style
+        self.rewardEvents = rewardEvents
+    }
 
     @Environment(\.appTheme) private var theme
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @ScaledMetric(relativeTo: .caption2) private var muscleBadgeFontSize: CGFloat = 9
+
+    private var compactRewardBadges: [WorkoutAchievementBadge.Model] {
+        var seenLabels: Set<String> = []
+        var badges = rewardEvents
+            .compactMap(WorkoutAchievementBadge.Model.init(event:))
+            .filter { seenLabels.insert("\($0.isRecord)-\($0.text)").inserted }
+        if let milestone = item.milestoneDistance,
+           !rewardEvents.contains(where: { $0.kind == .milestone && $0.detail == milestone.label }) {
+            badges.append(.init(id: "distance-\(milestone.rawValue)", text: milestone.label, isRecord: false))
+        }
+        if item.isPersonalRecord && !rewardEvents.contains(where: { $0.kind == .personalRecord }) {
+            badges.append(.init(id: "pr-\(item.id)", text: String(localized: "PR"), isRecord: true))
+        }
+        return badges
+    }
 
     private var rowLayout: AnyLayout {
         dynamicTypeSize.isAccessibilitySize
@@ -27,7 +49,7 @@ struct UnifiedWorkoutRow: View {
         switch style {
         case .compact:
             InlineCard { compactContent }
-                .prHighlight(item.isPersonalRecord)
+                .prHighlight(compactRewardBadges.contains { $0.isRecord })
         case .full:
             fullContent
         }
@@ -47,21 +69,30 @@ struct UnifiedWorkoutRow: View {
                         .font(.caption)
                         .foregroundStyle(DS.Color.textSecondary)
 
-                    if let hrAvg = item.heartRateAvg {
+                    if let hrAvg = item.validHeartRateAvg {
                         HStack(spacing: 2) {
                             Image(systemName: "heart.fill")
-                            Text(Int(hrAvg).formattedWithSeparator)
+                            Text(hrAvg.formattedWithSeparator)
                         }
                         .font(.caption.monospacedDigit())
-                        .foregroundStyle(.red.opacity(0.8))
+                        .foregroundStyle(DS.Color.heartRate)
+                        .accessibilityLabel(Text("Average heart rate: \(hrAvg) bpm"))
                     }
                 }
 
-                if item.milestoneDistance != nil || item.isPersonalRecord {
-                    WorkoutBadgeView.inlineBadge(
-                        milestone: item.milestoneDistance,
-                        isPersonalRecord: item.isPersonalRecord
-                    )
+                if !compactRewardBadges.isEmpty {
+                    ViewThatFits(in: .horizontal) {
+                        HStack(spacing: DS.Spacing.xs) {
+                            ForEach(compactRewardBadges) { badge in
+                                WorkoutAchievementBadge(model: badge)
+                            }
+                        }
+                        VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                            ForEach(compactRewardBadges) { badge in
+                                WorkoutAchievementBadge(model: badge)
+                            }
+                        }
+                    }
                 }
 
                 if let summary = item.setSummary {
@@ -153,6 +184,9 @@ struct UnifiedWorkoutRow: View {
             Image(systemName: "apple.logo")
                 .font(.caption2)
                 .foregroundStyle(.pink)
+                .accessibilityLabel(item.source == .healthKit
+                    ? Text("Imported from Apple Health")
+                    : Text("Manual workout linked to Apple Health"))
         }
     }
 
@@ -168,15 +202,16 @@ struct UnifiedWorkoutRow: View {
                 .lineLimit(1)
                 .fixedSize()
 
-            if let hrAvg = item.heartRateAvg {
+            if let hrAvg = item.validHeartRateAvg {
                 HStack(spacing: 2) {
                     Image(systemName: "heart.fill")
-                    Text(Int(hrAvg).formattedWithSeparator)
+                    Text(hrAvg.formattedWithSeparator)
                 }
                 .font(.caption.monospacedDigit())
-                .foregroundStyle(.red.opacity(0.8))
+                .foregroundStyle(DS.Color.heartRate)
                 .lineLimit(1)
                 .fixedSize()
+                .accessibilityLabel(Text("Average heart rate: \(hrAvg) bpm"))
             }
 
             if let pace = item.averagePace {
@@ -255,5 +290,122 @@ struct UnifiedWorkoutRow: View {
         let minutes = totalSeconds / 60
         let seconds = totalSeconds % 60
         return "\(minutes)'\(String(format: "%02d", seconds))\"/km"
+    }
+}
+
+/// An earned reward for the specific workout represented by a compact row.
+private struct WorkoutAchievementBadge: View {
+    struct Model: Identifiable {
+        let id: String
+        let text: String
+        let isRecord: Bool
+
+        init(id: String, text: String, isRecord: Bool) {
+            self.id = id
+            self.text = text
+            self.isRecord = isRecord
+        }
+
+        init?(event: WorkoutRewardEvent) {
+            guard event.kind != .levelUp else { return nil }
+            self.init(
+                id: event.id,
+                text: event.detail.isEmpty ? event.title : event.detail,
+                isRecord: event.kind == .personalRecord
+            )
+        }
+    }
+
+    let model: Model
+
+    private enum Palette {
+        static let gold = DS.Color.activityCardio
+        static let bronze = DS.Color.desertBronze
+        static let sand = DS.Color.sandMuted
+        static let card = DS.Color.cardBackground
+
+        static let medalFace = LinearGradient(
+            colors: [sand, gold, bronze],
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        )
+        static let achievementFill = LinearGradient(
+            colors: [card, gold.opacity(0.20)],
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        )
+        static let recordFill = LinearGradient(
+            colors: [gold.opacity(0.72), sand, gold.opacity(0.55)],
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        )
+    }
+
+    var body: some View {
+        HStack(spacing: DS.Spacing.xs) {
+            emblem
+
+            Text(model.text)
+                .font(.caption2.weight(.semibold))
+                .fixedSize(horizontal: false, vertical: true)
+
+            if model.isRecord {
+                Image(systemName: "sparkle")
+                    .font(.caption2)
+                    .foregroundStyle(Palette.bronze)
+                    .accessibilityHidden(true)
+            }
+        }
+        .foregroundStyle(model.isRecord ? DS.Color.onBrightAction : DS.Color.textSecondary)
+        .padding(.leading, 4)
+        .padding(.trailing, DS.Spacing.sm)
+        .padding(.vertical, 4)
+        .background(
+            model.isRecord ? Palette.recordFill : Palette.achievementFill,
+            in: RoundedRectangle(cornerRadius: DS.Radius.sm)
+        )
+        .overlay {
+            RoundedRectangle(cornerRadius: DS.Radius.sm)
+                .strokeBorder(Palette.gold.opacity(0.65), lineWidth: 1)
+        }
+        .accessibilityLabel(model.isRecord
+            ? Text("Personal record: \(model.text)")
+            : Text("Achievement: \(model.text)"))
+    }
+
+    private var emblem: some View {
+        ZStack {
+            if !model.isRecord {
+                MedalRibbon()
+                    .fill(Palette.bronze.gradient)
+                    .frame(width: 13, height: 13)
+                    .offset(y: 12)
+            }
+            Circle()
+                .fill(Palette.medalFace)
+                .frame(width: 26, height: 26)
+                .overlay {
+                    Circle()
+                        .strokeBorder(Palette.gold.opacity(0.8), lineWidth: 1)
+                }
+            Image(systemName: model.isRecord ? "trophy.fill" : "medal.fill")
+                .font(.caption2.weight(.bold))
+                .foregroundStyle(DS.Color.onBrightAction)
+        }
+        .frame(width: 26, height: 30)
+        .accessibilityHidden(true)
+    }
+}
+
+private struct MedalRibbon: Shape {
+    func path(in rect: CGRect) -> Path {
+        Path { path in
+            path.move(to: CGPoint(x: rect.minX, y: rect.minY))
+            path.addLine(to: CGPoint(x: rect.maxX, y: rect.minY))
+            path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
+            path.addLine(to: CGPoint(x: rect.midX, y: rect.maxY * 0.72))
+            path.addLine(to: CGPoint(x: rect.minX, y: rect.maxY))
+            path.closeSubpath()
+        }
     }
 }
