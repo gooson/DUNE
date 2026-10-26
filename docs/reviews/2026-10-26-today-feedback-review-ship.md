@@ -71,3 +71,5 @@ status: authorized-with-accepted-verification-limits
 ## 사용자 승인에 따른 Ship 재개
 
 위 두 미완료 검증과 중단 사유를 보고한 뒤 사용자가 **“진행해 머지”**라고 명시적으로 지시했다. 이 머지에서는 quality-001·quality-002를 사용자가 수용한 검증 제한으로 기록하고 Ship을 재개한다. finding의 검증 상태는 Open으로 유지하며 Resolved·통과로 바꾸지 않는다. X 재실행 제외 선택도 유지한다. 코드 P1/P2의 미해결 항목은 없다.
+
+최종 PR 검토에서도 새 코드 P1/P2는 없었다. 진행 중 main에 반영된 PR#845(`a20ec544`)를 충돌 없이 통합하고 새4키에 `extractionState=manual`만 추가했다. 번역 값·앱 Swift 코드는 유지했으며 formatter/Xcode 추출 보존 테스트6/6이 통과했다. 이 기록은 PR 생성 전 상태이며 원격 머지 결과는 PR과 작업 최종 보고에서 확인한다.

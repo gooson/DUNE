@@ -76,7 +76,7 @@
     "cause": "New regression fixture marked snapshot latestWeight failed while live mock body query succeeded; timestamp assertions therefore failed.",
     "change": "Inject actual ToggleWorkoutService failure and assert partial error; retry only this new test."
   },
-  "ship_status": "authorized-to-proceed-with-accepted-verification-limits",
+  "ship_status": "ready-for-pr-and-remote-merge",
   "verification": {
     "dashboard_first_run": {
       "executed": 37,
@@ -121,5 +121,20 @@
       "quality-002"
     ],
     "tests_waived_not_passed": true
-  }
+  },
+  "final_pr_base": {
+    "ref": "origin/main",
+    "sha": "a20ec544a3a1e93fc63cb2fc57efbfebbdd1d61b"
+  },
+  "integration_validation": {
+    "upstream": "PR #845 string-catalog-extraction-stability",
+    "change": "추가한 4개 키에 extractionState=manual 추가. 번역 값과 앱 Swift 코드는 변경 없음.",
+    "formatter_tests": {
+      "executed": 6,
+      "passed": 6,
+      "failed": 0
+    },
+    "final_pr_review": "No new code P1/P2; existing two verification limitations explicitly accepted by user."
+  },
+  "record_phase": "final pre-PR verification; remote outcome recorded in PR and chat"
 }
