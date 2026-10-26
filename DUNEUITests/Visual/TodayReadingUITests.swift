@@ -17,6 +17,9 @@ final class TodayReadingUITests: SeededUITestBaseCase {
         static let stressDetails = "dashboard-stress-details"
         static let digestCondition = "dashboard-digest-condition"
         static let digestSteps = "dashboard-digest-steps"
+        static let digestHeader = "dashboard-digest-header"
+        static let digestDate = "dashboard-digest-date"
+        static let digestPreview = "dashboard-digest-preview"
         static let digestToggle = "dashboard-digest-summary-toggle"
         static let digestSummary = "dashboard-digest-full-summary"
     }
@@ -95,13 +98,6 @@ final class TodayReadingUITests: SeededUITestBaseCase {
         captureReading("TodayReading-stress-current")
         reveal(Fixture.stressHRV)
         captureReading("TodayReading-stress-analysis-current")
-        reveal(Fixture.digestCondition)
-        reveal(Fixture.digestSteps)
-        captureReading("TodayReading-digest-current")
-        reveal(Fixture.digestToggle)
-        app.buttons[Fixture.digestToggle].firstMatch.tap()
-        reveal(Fixture.digestSummary)
-        captureReading("TodayReading-digest-summary-current")
     }
 
     func testRecoverySleepRendersAndCapturesVariants() {
@@ -160,19 +156,62 @@ final class TodayReadingUITests: SeededUITestBaseCase {
                       "Explicit stress detail action should navigate")
     }
 
-    func testDailyDigestRendersAndCapturesVariants() {
-        captureVariants(section: "digest") {
-            reveal(Fixture.digestCondition)
-            XCTAssertTrue(waitForReadingElement(Fixture.digestCondition), "Condition should use DigestMetrics")
-            reveal(Fixture.digestSteps)
-            XCTAssertTrue(waitForReadingElement(Fixture.digestSteps), "Seeded step count should remain visible")
-            reveal(Fixture.digestToggle)
-            app.buttons[Fixture.digestToggle].firstMatch.tap()
-            reveal(Fixture.digestSummary)
-            let summary = readableText(Fixture.digestSummary)
-            XCTAssertTrue(summary.waitForExistence(timeout: 5), "Disclosure should retain the original summary")
-            XCTAssertFalse(summary.label.isEmpty)
-        }
+    func testDailyDigestCollapsedExpandedKorean() {
+        launchReading(style: "light")
+        assertDigestReading(captureSuffix: "ko-light")
+    }
+
+    func testDailyDigestAccessibilityText() {
+        launchReading(style: "light", largeText: true)
+        assertDigestReading(captureSuffix: "ko-axxxl")
+    }
+
+    private func assertDigestReading(captureSuffix: String) {
+        reveal(Fixture.digestCondition)
+        XCTAssertTrue(waitForReadingElement(Fixture.digestCondition), "Condition should use DigestMetrics")
+        reveal(Fixture.digestSteps)
+        XCTAssertTrue(waitForReadingElement(Fixture.digestSteps), "Seeded step count should remain visible")
+        XCTAssertTrue(waitForReadingElement(Fixture.digestHeader), "Digest title should be readable")
+        XCTAssertTrue(waitForReadingElement(Fixture.digestDate), "Digest date should be readable")
+
+        reveal(Fixture.digestPreview)
+        let preview = readableText(Fixture.digestPreview)
+        XCTAssertTrue(preview.waitForExistence(timeout: 5), "The first sentence should appear by default")
+        let firstSentence = preview.label
+        XCTAssertFalse(firstSentence.isEmpty)
+        XCTAssertFalse(readableText(Fixture.digestSummary).exists, "The complete summary starts hidden")
+
+        reveal(Fixture.digestToggle)
+        let toggle = app.buttons[Fixture.digestToggle].firstMatch
+        XCTAssertTrue(toggle.waitForExistence(timeout: 5))
+        XCTAssertEqual(toggle.label, "요약 더 보기")
+        let collapsedValue = toggle.value as? String
+        XCTAssertNotNil(collapsedValue, "VoiceOver should announce the collapsed state")
+        XCTAssertFalse(collapsedValue?.isEmpty ?? true)
+        XCTAssertGreaterThanOrEqual(toggle.frame.height, 44, "The entire disclosure row should be tappable")
+        captureReading("T03-digest-collapsed-\(captureSuffix)")
+
+        // Tap near the glyph on the trailing side of the button, still within its hit target.
+        toggle.coordinate(withNormalizedOffset: CGVector(dx: 0.9, dy: 0.5)).tap()
+        reveal(Fixture.digestSummary)
+        let summary = readableText(Fixture.digestSummary)
+        XCTAssertTrue(summary.waitForExistence(timeout: 5), "Expansion should reveal the original summary")
+        let originalSummary = summary.label
+        XCTAssertTrue(originalSummary.hasPrefix(firstSentence), "Preview should preserve the summary's first sentence")
+        XCTAssertGreaterThan(originalSummary.count, firstSentence.count, "Seeded digest should have more than one sentence")
+        XCTAssertFalse(readableText(Fixture.digestPreview).exists, "Expanded text replaces the preview")
+        XCTAssertEqual(toggle.label, "요약 접기")
+        let expandedValue = toggle.value as? String
+        XCTAssertNotNil(expandedValue, "VoiceOver should announce the expanded state")
+        XCTAssertNotEqual(expandedValue, collapsedValue)
+        captureReading("T03-digest-expanded-\(captureSuffix)")
+
+        reveal(Fixture.digestToggle)
+        toggle.tap()
+        reveal(Fixture.digestPreview)
+        XCTAssertEqual(readableText(Fixture.digestPreview).label, firstSentence)
+        XCTAssertFalse(readableText(Fixture.digestSummary).exists)
+        XCTAssertEqual(toggle.value as? String, collapsedValue)
     }
 
     func testNotificationDigestUsesSameExpandableCard() {
@@ -191,11 +230,21 @@ final class TodayReadingUITests: SeededUITestBaseCase {
                        "The shared card should own the condition metric without a duplicate grid")
         XCTAssertEqual(app.staticTexts.matching(NSPredicate(format: "label == %@", "걸음 수")).count, 1,
                        "The shared card should own the steps metric without a duplicate grid")
+        reveal(Fixture.digestPreview)
+        let preview = readableText(Fixture.digestPreview)
+        XCTAssertTrue(preview.waitForExistence(timeout: 5))
+        let firstSentence = preview.label
+        XCTAssertFalse(readableText(Fixture.digestSummary).exists)
+        captureReading("T03-notification-digest-collapsed")
         reveal(Fixture.digestToggle)
         app.buttons[Fixture.digestToggle].firstMatch.tap()
         reveal(Fixture.digestSummary)
-        XCTAssertTrue(waitForReadingElement(Fixture.digestSummary),
+        let summary = readableText(Fixture.digestSummary)
+        XCTAssertTrue(summary.waitForExistence(timeout: 5),
                       "Notification summary should preserve the original text")
-        captureReading("TodayReading-notification-digest")
+        XCTAssertTrue(summary.label.hasPrefix(firstSentence))
+        XCTAssertGreaterThan(summary.label.count, firstSentence.count)
+        XCTAssertFalse(readableText(Fixture.digestPreview).exists)
+        captureReading("T03-notification-digest-expanded")
     }
 }
