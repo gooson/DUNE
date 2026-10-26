@@ -1,0 +1,875 @@
+{
+  "date": "2026-10-26",
+  "kind": "browser-prototype-only",
+  "source_sha256": "ed4377feab2ef773d2c05d0f546a8c89e016d662a4288b49a3ada2b75faed3e4",
+  "scope": "Final single-view integration: 14 layouts (320–1032px, 100–200% browser text, light/dark), 6 record states, 13 detail routes with right-edge header clicks, map/search/rest interactions. Existing comparison tests preserved separately. No native app validation.",
+  "errors": [],
+  "layouts": [
+    {
+      "appearance": "light",
+      "width": 320,
+      "text": 100,
+      "phones": 1,
+      "variants": 0,
+      "order": [
+        "readiness",
+        "muscle",
+        "risk",
+        "suggested",
+        "recent",
+        "records",
+        "achievement",
+        "week",
+        "report",
+        "consistency",
+        "volume",
+        "mix"
+      ],
+      "overflow": []
+    },
+    {
+      "appearance": "light",
+      "width": 320,
+      "text": 125,
+      "phones": 1,
+      "variants": 0,
+      "order": [
+        "readiness",
+        "muscle",
+        "risk",
+        "suggested",
+        "recent",
+        "records",
+        "achievement",
+        "week",
+        "report",
+        "consistency",
+        "volume",
+        "mix"
+      ],
+      "overflow": []
+    },
+    {
+      "appearance": "light",
+      "width": 402,
+      "text": 100,
+      "phones": 1,
+      "variants": 0,
+      "order": [
+        "readiness",
+        "muscle",
+        "risk",
+        "suggested",
+        "recent",
+        "records",
+        "achievement",
+        "week",
+        "report",
+        "consistency",
+        "volume",
+        "mix"
+      ],
+      "overflow": []
+    },
+    {
+      "appearance": "light",
+      "width": 466,
+      "text": 100,
+      "phones": 1,
+      "variants": 0,
+      "order": [
+        "readiness",
+        "muscle",
+        "risk",
+        "suggested",
+        "recent",
+        "records",
+        "achievement",
+        "week",
+        "report",
+        "consistency",
+        "volume",
+        "mix"
+      ],
+      "overflow": []
+    },
+    {
+      "appearance": "light",
+      "width": 951,
+      "text": 100,
+      "phones": 1,
+      "variants": 0,
+      "order": [
+        "readiness",
+        "muscle",
+        "risk",
+        "suggested",
+        "recent",
+        "records",
+        "achievement",
+        "week",
+        "report",
+        "consistency",
+        "volume",
+        "mix"
+      ],
+      "overflow": []
+    },
+    {
+      "appearance": "light",
+      "width": 1032,
+      "text": 100,
+      "phones": 1,
+      "variants": 0,
+      "order": [
+        "readiness",
+        "muscle",
+        "risk",
+        "suggested",
+        "recent",
+        "records",
+        "achievement",
+        "week",
+        "report",
+        "consistency",
+        "volume",
+        "mix"
+      ],
+      "overflow": []
+    },
+    {
+      "appearance": "light",
+      "width": 320,
+      "text": 200,
+      "phones": 1,
+      "variants": 0,
+      "order": [
+        "readiness",
+        "muscle",
+        "risk",
+        "suggested",
+        "recent",
+        "records",
+        "achievement",
+        "week",
+        "report",
+        "consistency",
+        "volume",
+        "mix"
+      ],
+      "overflow": []
+    },
+    {
+      "appearance": "dark",
+      "width": 320,
+      "text": 100,
+      "phones": 1,
+      "variants": 0,
+      "order": [
+        "readiness",
+        "muscle",
+        "risk",
+        "suggested",
+        "recent",
+        "records",
+        "achievement",
+        "week",
+        "report",
+        "consistency",
+        "volume",
+        "mix"
+      ],
+      "overflow": []
+    },
+    {
+      "appearance": "dark",
+      "width": 320,
+      "text": 125,
+      "phones": 1,
+      "variants": 0,
+      "order": [
+        "readiness",
+        "muscle",
+        "risk",
+        "suggested",
+        "recent",
+        "records",
+        "achievement",
+        "week",
+        "report",
+        "consistency",
+        "volume",
+        "mix"
+      ],
+      "overflow": []
+    },
+    {
+      "appearance": "dark",
+      "width": 402,
+      "text": 100,
+      "phones": 1,
+      "variants": 0,
+      "order": [
+        "readiness",
+        "muscle",
+        "risk",
+        "suggested",
+        "recent",
+        "records",
+        "achievement",
+        "week",
+        "report",
+        "consistency",
+        "volume",
+        "mix"
+      ],
+      "overflow": []
+    },
+    {
+      "appearance": "dark",
+      "width": 466,
+      "text": 100,
+      "phones": 1,
+      "variants": 0,
+      "order": [
+        "readiness",
+        "muscle",
+        "risk",
+        "suggested",
+        "recent",
+        "records",
+        "achievement",
+        "week",
+        "report",
+        "consistency",
+        "volume",
+        "mix"
+      ],
+      "overflow": []
+    },
+    {
+      "appearance": "dark",
+      "width": 951,
+      "text": 100,
+      "phones": 1,
+      "variants": 0,
+      "order": [
+        "readiness",
+        "muscle",
+        "risk",
+        "suggested",
+        "recent",
+        "records",
+        "achievement",
+        "week",
+        "report",
+        "consistency",
+        "volume",
+        "mix"
+      ],
+      "overflow": []
+    },
+    {
+      "appearance": "dark",
+      "width": 1032,
+      "text": 100,
+      "phones": 1,
+      "variants": 0,
+      "order": [
+        "readiness",
+        "muscle",
+        "risk",
+        "suggested",
+        "recent",
+        "records",
+        "achievement",
+        "week",
+        "report",
+        "consistency",
+        "volume",
+        "mix"
+      ],
+      "overflow": []
+    },
+    {
+      "appearance": "dark",
+      "width": 320,
+      "text": 200,
+      "phones": 1,
+      "variants": 0,
+      "order": [
+        "readiness",
+        "muscle",
+        "risk",
+        "suggested",
+        "recent",
+        "records",
+        "achievement",
+        "week",
+        "report",
+        "consistency",
+        "volume",
+        "mix"
+      ],
+      "overflow": []
+    }
+  ],
+  "states": [
+    {
+      "data": "empty",
+      "sections": 2,
+      "ring": 0,
+      "sleepFills": 0,
+      "spark": 0
+    },
+    {
+      "data": "denied",
+      "sections": 2,
+      "ring": 0,
+      "sleepFills": 0,
+      "spark": 0
+    },
+    {
+      "data": "loading",
+      "sections": 2,
+      "ring": 0,
+      "sleepFills": 0,
+      "spark": 0
+    },
+    {
+      "data": "partial",
+      "sections": 12,
+      "ring": 1,
+      "sleepFills": 0,
+      "spark": 1
+    },
+    {
+      "data": "calibrating",
+      "sections": 12,
+      "ring": 0,
+      "sleepFills": 0,
+      "spark": 0
+    },
+    {
+      "data": "single",
+      "sections": 12,
+      "ring": 1,
+      "sleepFills": 1,
+      "spark": 0
+    }
+  ],
+  "navigation": [
+    {
+      "route": "readiness",
+      "pass": true
+    },
+    {
+      "route": "muscle",
+      "pass": true
+    },
+    {
+      "route": "stats",
+      "pass": true
+    },
+    {
+      "route": "risk",
+      "pass": true
+    },
+    {
+      "route": "volume",
+      "pass": true
+    },
+    {
+      "route": "report",
+      "pass": true
+    },
+    {
+      "route": "records",
+      "pass": true
+    },
+    {
+      "route": "achievements",
+      "pass": true
+    },
+    {
+      "route": "consistency",
+      "pass": true
+    },
+    {
+      "route": "mix",
+      "pass": true
+    },
+    {
+      "route": "history:strength-1025",
+      "pass": true
+    },
+    {
+      "route": "history:running-1023",
+      "pass": true
+    },
+    {
+      "route": "history:strength-1021",
+      "pass": true
+    }
+  ],
+  "interactions": [
+    {
+      "name": "muscle volume legend",
+      "pass": true
+    },
+    {
+      "name": "muscle recovery legend",
+      "pass": true
+    },
+    {
+      "name": "exercise search",
+      "pass": true
+    },
+    {
+      "name": "rest day recommendation",
+      "pass": true
+    }
+  ],
+  "screenshots": [
+    "activity-final-light-full.png",
+    "activity-final-light.png",
+    "activity-final-records-light.png",
+    "activity-final-volume-light.png",
+    "activity-final-mix-light.png",
+    "activity-final-recent-light.png",
+    "activity-final-report-light.png",
+    "activity-final-dark-full.png",
+    "activity-final-dark.png",
+    "activity-final-records-dark.png",
+    "activity-final-volume-dark.png",
+    "activity-final-mix-dark.png",
+    "activity-final-recent-dark.png",
+    "activity-final-report-dark.png"
+  ],
+  "failures": {
+    "layouts": [],
+    "states": []
+  },
+  "previous_source_sha256": "615415fdc1f9e0d9bd15263ccdbb1eeb2720d83ef57ddeb1ae8fe78318da6a77",
+  "apple_mark_update": {
+    "scope": "Only HealthKit mark styling/content changed; six recent-card browser layouts and workout detail verified. Existing unchanged integration checks retained.",
+    "errors": [],
+    "checks": [
+      {
+        "appearance": "light",
+        "width": 320,
+        "text": 100,
+        "marks": [
+          {
+            "text": "",
+            "label": "직접 기록과 HealthKit이 연결된 기록",
+            "role": "img",
+            "width": 9.609375,
+            "background": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "text": "",
+            "label": "HealthKit에서 불러온 기록",
+            "role": "img",
+            "width": 9.609375,
+            "background": "rgba(0, 0, 0, 0)"
+          }
+        ],
+        "unlinkedMarks": 0,
+        "overflow": 0
+      },
+      {
+        "appearance": "light",
+        "width": 402,
+        "text": 100,
+        "marks": [
+          {
+            "text": "",
+            "label": "직접 기록과 HealthKit이 연결된 기록",
+            "role": "img",
+            "width": 9.609375,
+            "background": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "text": "",
+            "label": "HealthKit에서 불러온 기록",
+            "role": "img",
+            "width": 9.609375,
+            "background": "rgba(0, 0, 0, 0)"
+          }
+        ],
+        "unlinkedMarks": 0,
+        "overflow": 0
+      },
+      {
+        "appearance": "light",
+        "width": 320,
+        "text": 200,
+        "marks": [
+          {
+            "text": "",
+            "label": "직접 기록과 HealthKit이 연결된 기록",
+            "role": "img",
+            "width": 19.890625,
+            "background": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "text": "",
+            "label": "HealthKit에서 불러온 기록",
+            "role": "img",
+            "width": 19.890625,
+            "background": "rgba(0, 0, 0, 0)"
+          }
+        ],
+        "unlinkedMarks": 0,
+        "overflow": 0
+      },
+      {
+        "appearance": "dark",
+        "width": 320,
+        "text": 100,
+        "marks": [
+          {
+            "text": "",
+            "label": "직접 기록과 HealthKit이 연결된 기록",
+            "role": "img",
+            "width": 9.609375,
+            "background": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "text": "",
+            "label": "HealthKit에서 불러온 기록",
+            "role": "img",
+            "width": 9.609375,
+            "background": "rgba(0, 0, 0, 0)"
+          }
+        ],
+        "unlinkedMarks": 0,
+        "overflow": 0
+      },
+      {
+        "appearance": "dark",
+        "width": 402,
+        "text": 100,
+        "marks": [
+          {
+            "text": "",
+            "label": "직접 기록과 HealthKit이 연결된 기록",
+            "role": "img",
+            "width": 9.609375,
+            "background": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "text": "",
+            "label": "HealthKit에서 불러온 기록",
+            "role": "img",
+            "width": 9.609375,
+            "background": "rgba(0, 0, 0, 0)"
+          }
+        ],
+        "unlinkedMarks": 0,
+        "overflow": 0
+      },
+      {
+        "appearance": "dark",
+        "width": 320,
+        "text": 200,
+        "marks": [
+          {
+            "text": "",
+            "label": "직접 기록과 HealthKit이 연결된 기록",
+            "role": "img",
+            "width": 19.890625,
+            "background": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "text": "",
+            "label": "HealthKit에서 불러온 기록",
+            "role": "img",
+            "width": 19.890625,
+            "background": "rgba(0, 0, 0, 0)"
+          }
+        ],
+        "unlinkedMarks": 0,
+        "overflow": 0
+      }
+    ],
+    "detail": {
+      "mark": "",
+      "label": "HealthKit에서 불러온 기록",
+      "heartRate": "평균 148bpm"
+    },
+    "failures": [],
+    "updated_screenshots": [
+      "activity-final-recent-light.png",
+      "activity-final-light-full.png",
+      "activity-final-recent-dark.png",
+      "activity-final-dark-full.png"
+    ]
+  },
+  "before_badge_update_sha256": "d85a543c451e94373b2971fdedc0ddc820d6e90423f11daf6b85d287a53cd4b5",
+  "achievement_badge_update": {
+    "scope": "Achievement badge styling/markup updated: six recent-card layouts and workout detail verified, with Apple marks and HR preserved. Existing unchanged integration checks retained.",
+    "errors": [],
+    "checks": [
+      {
+        "appearance": "light",
+        "width": 320,
+        "text": 100,
+        "marks": [
+          {
+            "text": "",
+            "label": "직접 기록과 HealthKit이 연결된 기록",
+            "role": "img",
+            "width": 9.609375,
+            "background": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "text": "",
+            "label": "HealthKit에서 불러온 기록",
+            "role": "img",
+            "width": 9.609375,
+            "background": "rgba(0, 0, 0, 0)"
+          }
+        ],
+        "badges": [
+          {
+            "label": "운동 20회 달성",
+            "emblem": 1
+          },
+          {
+            "label": "5K 달성",
+            "emblem": 1
+          },
+          {
+            "label": "PR",
+            "emblem": 1
+          },
+          {
+            "label": "근력 10회 배지",
+            "emblem": 1
+          }
+        ],
+        "unlinkedMarks": 0,
+        "overflow": 0
+      },
+      {
+        "appearance": "light",
+        "width": 402,
+        "text": 100,
+        "marks": [
+          {
+            "text": "",
+            "label": "직접 기록과 HealthKit이 연결된 기록",
+            "role": "img",
+            "width": 9.609375,
+            "background": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "text": "",
+            "label": "HealthKit에서 불러온 기록",
+            "role": "img",
+            "width": 9.609375,
+            "background": "rgba(0, 0, 0, 0)"
+          }
+        ],
+        "badges": [
+          {
+            "label": "운동 20회 달성",
+            "emblem": 1
+          },
+          {
+            "label": "5K 달성",
+            "emblem": 1
+          },
+          {
+            "label": "PR",
+            "emblem": 1
+          },
+          {
+            "label": "근력 10회 배지",
+            "emblem": 1
+          }
+        ],
+        "unlinkedMarks": 0,
+        "overflow": 0
+      },
+      {
+        "appearance": "light",
+        "width": 320,
+        "text": 200,
+        "marks": [
+          {
+            "text": "",
+            "label": "직접 기록과 HealthKit이 연결된 기록",
+            "role": "img",
+            "width": 19.890625,
+            "background": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "text": "",
+            "label": "HealthKit에서 불러온 기록",
+            "role": "img",
+            "width": 19.890625,
+            "background": "rgba(0, 0, 0, 0)"
+          }
+        ],
+        "badges": [
+          {
+            "label": "운동 20회 달성",
+            "emblem": 1
+          },
+          {
+            "label": "5K 달성",
+            "emblem": 1
+          },
+          {
+            "label": "PR",
+            "emblem": 1
+          },
+          {
+            "label": "근력 10회 배지",
+            "emblem": 1
+          }
+        ],
+        "unlinkedMarks": 0,
+        "overflow": 0
+      },
+      {
+        "appearance": "dark",
+        "width": 320,
+        "text": 100,
+        "marks": [
+          {
+            "text": "",
+            "label": "직접 기록과 HealthKit이 연결된 기록",
+            "role": "img",
+            "width": 9.609375,
+            "background": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "text": "",
+            "label": "HealthKit에서 불러온 기록",
+            "role": "img",
+            "width": 9.609375,
+            "background": "rgba(0, 0, 0, 0)"
+          }
+        ],
+        "badges": [
+          {
+            "label": "운동 20회 달성",
+            "emblem": 1
+          },
+          {
+            "label": "5K 달성",
+            "emblem": 1
+          },
+          {
+            "label": "PR",
+            "emblem": 1
+          },
+          {
+            "label": "근력 10회 배지",
+            "emblem": 1
+          }
+        ],
+        "unlinkedMarks": 0,
+        "overflow": 0
+      },
+      {
+        "appearance": "dark",
+        "width": 402,
+        "text": 100,
+        "marks": [
+          {
+            "text": "",
+            "label": "직접 기록과 HealthKit이 연결된 기록",
+            "role": "img",
+            "width": 9.609375,
+            "background": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "text": "",
+            "label": "HealthKit에서 불러온 기록",
+            "role": "img",
+            "width": 9.609375,
+            "background": "rgba(0, 0, 0, 0)"
+          }
+        ],
+        "badges": [
+          {
+            "label": "운동 20회 달성",
+            "emblem": 1
+          },
+          {
+            "label": "5K 달성",
+            "emblem": 1
+          },
+          {
+            "label": "PR",
+            "emblem": 1
+          },
+          {
+            "label": "근력 10회 배지",
+            "emblem": 1
+          }
+        ],
+        "unlinkedMarks": 0,
+        "overflow": 0
+      },
+      {
+        "appearance": "dark",
+        "width": 320,
+        "text": 200,
+        "marks": [
+          {
+            "text": "",
+            "label": "직접 기록과 HealthKit이 연결된 기록",
+            "role": "img",
+            "width": 19.890625,
+            "background": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "text": "",
+            "label": "HealthKit에서 불러온 기록",
+            "role": "img",
+            "width": 19.890625,
+            "background": "rgba(0, 0, 0, 0)"
+          }
+        ],
+        "badges": [
+          {
+            "label": "운동 20회 달성",
+            "emblem": 1
+          },
+          {
+            "label": "5K 달성",
+            "emblem": 1
+          },
+          {
+            "label": "PR",
+            "emblem": 1
+          },
+          {
+            "label": "근력 10회 배지",
+            "emblem": 1
+          }
+        ],
+        "unlinkedMarks": 0,
+        "overflow": 0
+      }
+    ],
+    "detail": {
+      "mark": "",
+      "label": "HealthKit에서 불러온 기록",
+      "heartRate": "평균 148bpm"
+    },
+    "failures": [],
+    "updated_screenshots": [
+      "activity-final-recent-light.png",
+      "activity-final-light-full.png",
+      "activity-final-recent-dark.png",
+      "activity-final-dark-full.png"
+    ]
+  }
+}

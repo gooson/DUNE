@@ -31,6 +31,8 @@ Life의 링 옆에는 현재 진행 상태를 설명하는 문장을 둔다. 히
 
 ## 화면별 맵 목록
 
+2026-10-26 [4탭 히어로 제목 표기](hero-heading-style.md)는 첫 카드 상단을 CONDITION·READINESS·WELLNESS·HABITS로 통일하는 공통 개편 기준이다. 영어 대문자 제목과 사용자 언어 설명을 구분하며 네이티브 적용 완료를 의미하지 않는다.
+
 2026-10-26 [Today 재설계 방향](today-restart-proposal.md)은 여백·글씨 크기 변화 문제를 다시 검토하는 새 제안이다. [Compact·Metrics·Editorial](../theme-map/themes/dune-today-restart.html)를 비교한 뒤 Compact를 선택했다. 아래 네이티브 적용 기록과 실제 화면을 현재 기준으로 따른다.
 
 [Today 전체 상태·배치 계약](today-case-matrix.md)에 현재 표시 조건, 12개 데이터 상태, 시간대 경계, 오래된 기록, 큰 글씨·언어·기기 폭, 진입과 빈 그래프 처리 기준을 정리했다. 기본 DUNE 테마를 유지하는 전체 스크롤 시안이다.
@@ -79,3 +81,13 @@ Life의 링 옆에는 현재 진행 상태를 설명하는 문장을 둔다. 히
 Today만 104pt 전용 링과 외부 CONDITION, 고정 그래프 높이·자연 확장 범례, 조밀한 카드·종목별 운동 행으로 옮겼다. 다른 세 탭은 기존 공유 링과 배치를 유지한다. 브라우저 세 시안과 실제 앱 캡처는 계속 구분한다. 네이티브 빌드·번역 형식 검사는 통과했으며, 실제 UI seed와 행 중앙 hit-area 문제를 확인해 수정했다. 선택·저장·홀수 전체 폭 최종 검사는1/1 통과했고 영향 기기별 실제 화면을 새로 보존했다. 나머지 Today 관련20개도 통과했으며 모든 상태 검증 완료를 뜻하지 않는다.
 
 현재 네이티브 근거는 [Today Compact 실제 화면](../full-redesign-map/review/today-compact-2026-10-26/index.html)에 보존한다. 기본 글씨 캡처와 큰 글씨/상태 검사는 별도로 기록하며 Duo 내부 가로의 미검증을 유지한다.
+
+## Activity 개편 시안 (2026-10-26)
+
+[Compact / Training](../theme-map/themes/dune-activity-redesign.html)은 사용자 선택인 Today Compact의 테마·링·간격·큰 글씨 규칙을 Activity에 이어가는 두 방향이다. 현재 순서를 조밀하게 다듬는 Compact와 운동 선택을 앞당기는 Training을 비교하며 [데이터·상태·배치 계약](activity-redesign-proposal.md)에 범위를 기록했다. A01 방향 제안이며 앱 구현·실제 화면 캡처가 아니다. 이전 Activity·Life 히어로 승인안의 구현 상태와 이번 새 제안의 승인 상태를 구분한다.
+
+Activity 후속 시안은 개인 기록에 금빛 메달·최고 값·개선량을 더하고, 준비도 구성은 100점 기준 가로 막대로 비교한다. [현재 계약](activity-redesign-proposal.md)에 제목 헤더·달성 이력과 함께 기록했다.
+
+2026-10-26 [Astra 자문·타 앱 조사·전체 정보구조](activity-information-architecture-study.md)를 추가했다. Activity 비교에 Flow를 추가하고 운동 선택/성취를 분석보다 앞당겼다. 꾸준함·kg 볼륨·부하·부담의 의미와 최근 운동일 합계를 구분하며 현재 집계가 다른 주간 통계/보고서는 보존한다.
+
+2026-10-26 [최종 통합안](activity-final-proposal.md)에서 모든 피드백을 반영한 Flow 한 화면을 제시한다. 이 문서의 비교/조사 기록은 보존하며 최종 전용 시안은 별도 파일에서 연다.

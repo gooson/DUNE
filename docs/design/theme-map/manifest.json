@@ -157,6 +157,20 @@
       "title": "Compact / Metrics / Editorial · Side by Side",
       "file": "dune-today-comparison.html",
       "detail": "기존 DUNE 테마의 세 전체 Today 시안을 한 줄에서 비교. 같은 글씨·기록 상태·시간대를 공통 적용하며 좁은 화면은 가로 이동. 브라우저 시안이며 실제 앱 캡처가 아님. 2026-10-26 사용자 선택: Compact. 링 중심·104pt 외경·외부 CONDITION·0점 호 처리와 아이콘/수치 간격을 보완한 시안. SwiftUI Compact 구현·빌드 완료, 관련 UI21개 통과·영향 화면 새 캡처, 전체 상태 검증과 구분. 기존 테마와 다른 탭의 공유 링은 유지."
+    },
+    {
+      "id": "activity-redesign",
+      "name": "Activity 개편 · Flow / Compact / Training",
+      "title": "Activity · 상태에서 운동과 성취로",
+      "file": "dune-activity-redesign.html",
+      "detail": "2026-10-26 사용자 요청으로 Astra 자문 및 4개 앱 공식 자료를 확인. 상태→운동 선택→기록/성취→분석의 Flow를 추가하고 기존 Compact/Training 보존. 꾸준함·kg 볼륨·28일 부하·부담 점검·세트 수와 최근 운동일 합계를 구분. 근육 범례·개인 기록/달성·시간/칼로리·보고서·HealthKit/심박 표현 유지. 운동 구성은 범주 아이콘·큰 비율·굵은 구성 막대·주요 부위 태그로 강조. 예시 데이터, 앱 미적용."
+    },
+    {
+      "id": "activity-final",
+      "name": "Activity 최종 통합안",
+      "title": "Activity · Final Flow",
+      "file": "dune-activity-final.html",
+      "detail": "2026-10-26 요청한 모든 피드백을 Flow 한 화면으로 통합. 상태→운동 선택→기록/성취→누적 분석의 12개 카드. 준비도 막대·근육 범례·부담 근거·리본 메달·골드 PR 배지/작은 Apple 연동 마크/심박·최고 기록·주간 보고서·꾸준함·시간/칼로리·운동 구성 강조. 비교 캐러셀 제거, 이전안 별도 보존. 4탭 히어로 제목의 영어 대문자 통일 포함. 예시 데이터, 앱 미적용."
     }
   ]
 }

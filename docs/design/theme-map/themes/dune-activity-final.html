@@ -1,0 +1,3019 @@
+<!doctype html>
+<html lang="en" data-visualize-standalone>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<title>Activity Final</title>
+<style>:root{color-scheme:light dark;background:light-dark(rgb(255 255 255), rgb(24 24 24))}html,body{margin:0}body{box-sizing:border-box;padding:1rem;background:inherit}iframe{display:block;width:100%;height:calc(100vh - 2rem);margin:0 auto;border:0}</style>
+
+</head>
+<body>
+<iframe id="codex-visualization" sandbox="allow-scripts" referrerpolicy="no-referrer" title="Activity Final" data-srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot; data-visualize-standalone&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;meta name=&quot;referrer&quot; content=&quot;no-referrer&quot;&gt;
+&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src &#x27;none&#x27;; script-src &#x27;unsafe-inline&#x27; &#x27;unsafe-eval&#x27; &#x27;wasm-unsafe-eval&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src &#x27;unsafe-inline&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src &#x27;none&#x27;; object-src &#x27;none&#x27;; base-uri &#x27;none&#x27;; form-action &#x27;none&#x27;&quot;&gt;
+&lt;title&gt;Activity Final&lt;/title&gt;
+&lt;style&gt;:root {
+  color-scheme: light dark;
+  background-color: var(
+    --background,
+    var(--color-background-primary, light-dark(rgb(255 255 255), rgb(24 24 24)))
+  ) !important;
+
+  /* Agent-facing contract; keep in sync with SKILL.md. */
+  --background: var(
+    --color-background-primary,
+    light-dark(rgb(255 255 255), rgb(24 24 24))
+  );
+  --foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --card: color-mix(in oklab, var(--foreground) 5%, var(--background));
+  --card-foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --popover: var(
+    --color-background-secondary,
+    light-dark(rgb(255 255 255), rgb(45 45 45))
+  );
+  --popover-foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --primary: var(
+    --color-text-info,
+    light-dark(rgb(51 156 255), rgb(131 195 255))
+  );
+  --primary-foreground: var(
+    --color-text-inverse,
+    light-dark(rgb(255 255 255), rgb(13 13 13))
+  );
+  --secondary: var(
+    --color-background-secondary,
+    light-dark(rgb(255 255 255 / 96%), rgb(54 54 54 / 96%))
+  );
+  --secondary-foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --muted: color-mix(in srgb, var(--foreground) 10%, transparent);
+  --muted-foreground: var(
+    --color-text-secondary,
+    light-dark(rgb(26 28 31 / 49.4%), rgb(255 255 255 / 49.8%))
+  );
+  --accent: var(
+    --color-background-info,
+    light-dark(rgb(229 242 255), rgb(13 39 63))
+  );
+  --accent-foreground: var(
+    --color-text-info,
+    light-dark(rgb(51 156 255), rgb(131 195 255))
+  );
+  --destructive: var(
+    --color-text-warning,
+    light-dark(rgb(226 85 7), rgb(255 133 73))
+  );
+  --border: var(
+    --color-border-secondary,
+    light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%))
+  );
+  --input: var(
+    --color-border-primary,
+    light-dark(
+      rgb(26 28 31 / 11.8%),
+      color-mix(in oklab, rgb(0 0 0) 10%, transparent)
+    )
+  );
+  --ring: var(
+    --color-ring-primary,
+    light-dark(rgb(51 156 255), rgb(131 195 255 / 76%))
+  );
+  --font-size-base: var(--font-text-md-size, 16px);
+  --blue: light-dark(rgb(51 156 255), rgb(51 156 255));
+  --orange: light-dark(rgb(226 85 7), rgb(251 106 34));
+  --green: light-dark(rgb(0 162 64), rgb(64 201 119));
+  --red: light-dark(rgb(224 46 42), rgb(255 103 100));
+  --purple: light-dark(rgb(146 79 247), rgb(173 123 249));
+  --yellow: light-dark(rgb(255 195 0), rgb(255 210 64));
+  --viz-series-1: var(--primary);
+  --viz-series-2: light-dark(rgb(243 136 59), rgb(245 154 86));
+  --viz-series-3: light-dark(rgb(93 201 119), rgb(116 213 139));
+  --viz-series-4: light-dark(rgb(235 119 177), rgb(240 143 192));
+  --viz-series-5: light-dark(rgb(155 121 236), rgb(170 145 239));
+  --viz-series-6: light-dark(rgb(58 185 177), rgb(90 203 194));
+
+  /* Internal implementation variables; not part of the agent contract. */
+  --font-sans:
+    -apple-system-body, ui-sans-serif, -apple-system, system-ui, &quot;Segoe UI&quot;,
+    Helvetica, &quot;Apple Color Emoji&quot;, Arial, sans-serif, &quot;Segoe UI Emoji&quot;,
+    &quot;Segoe UI Symbol&quot;;
+  --font-mono:
+    ui-monospace, SFMono-Regular, &quot;SF Mono&quot;, Menlo, Consolas, &quot;Liberation Mono&quot;,
+    monospace;
+  --font-size-normal: max(11px, var(--font-size-base));
+  --font-size-tooltip: calc(var(--font-size-base) - 1px);
+  --font-size-small: max(11px, calc(var(--font-size-base) - 2px));
+  --font-size-h1: calc(var(--font-size-normal) * 1.7142857143);
+  --font-size-h2: calc(var(--font-size-normal) * 1.4285714286);
+  --font-size-h3: calc(var(--font-size-normal) * 1.2857142857);
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --icon-size: 16px;
+  --line-height-normal: calc(var(--font-size-normal) * 1.5);
+  --line-height-tooltip: calc(var(--font-size-tooltip) * 1.4285714286);
+  --line-height-small: calc(var(--font-size-small) + 4px);
+  --corner-shape: round;
+  --radius: var(--border-radius-lg, 8px);
+  --radius-sm: calc(var(--radius) * 0.5);
+  --radius-md: calc(var(--radius) * 0.75);
+  --radius-lg: var(--radius);
+  --radius-2xl: calc(var(--radius) * 2);
+  --radius-full: 9999px;
+  --shadow-sm: 0 1px 2px -1px rgb(0 0 0 / 8%);
+  --checkmark-image: url(&quot;data:image/svg+xml,%3Csvg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; viewBox=&#x27;0 0 17 17&#x27;%3E%3Cpath d=&#x27;M12.8961 3.64101C13.1297 3.41418 13.4984 3.37523 13.7779 3.56581C14.0571 3.75635 14.1554 4.11331 14.0299 4.41347L13.9615 4.53847L7.71151 13.7045C7.59411 13.8767 7.4063 13.9877 7.19881 14.0072C6.99136 14.0267 6.78564 13.9533 6.63826 13.806L2.88826 10.056L2.79842 9.9457C2.6192 9.67407 2.64927 9.30496 2.88826 9.06581C3.12738 8.82669 3.49647 8.79676 3.76815 8.97597L3.8785 9.06581L7.03084 12.2182L12.8053 3.74941L12.8961 3.64101Z&#x27;/%3E%3C/svg%3E&quot;);
+
+  /* Legacy aliases; not part of the current agent contract. */
+  --viz-bg: transparent;
+  --viz-panel: var(--card);
+  --viz-border: var(--border);
+  --viz-text: var(--foreground);
+  --viz-muted: var(--muted-foreground);
+  --viz-accent: var(--primary);
+  --viz-accent-text: var(--primary-foreground);
+  --viz-accent-bg: var(--accent);
+  --viz-font-size: var(--font-size-base);
+  --viz-warning: var(--destructive);
+}
+
+:root[data-theme=&quot;light&quot;] {
+  color-scheme: light;
+}
+
+:root[data-theme=&quot;dark&quot;] {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html &gt; body {
+  /* Preserve MCP aliases for older inline renderers without creating :root cycles. */
+  --color-background-primary: var(
+    --background,
+    light-dark(rgb(255 255 255), rgb(24 24 24))
+  );
+  --color-text-primary: var(
+    --foreground,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --color-border-secondary: var(
+    --border,
+    light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%))
+  );
+
+  margin: 0;
+  padding: var(--visualize-paint-gutter, 0px);
+  color: var(--foreground);
+  background: transparent !important;
+  font-family: var(--font-sans) !important;
+  -webkit-font-smoothing: antialiased;
+  font-size: var(--font-size-base);
+  line-height: calc(var(--font-size-base) * 1.625);
+  font-weight: var(--font-weight-normal);
+}
+
+.cursor-interaction {
+  cursor: var(--cursor-interaction, pointer);
+}
+
+a {
+  color: color-mix(in srgb, var(--viz-accent) 80%, var(--viz-text) 20%);
+  cursor: var(--cursor-interaction, pointer);
+  text-decoration: none;
+  text-underline-offset: 2px;
+  font-weight: inherit;
+}
+
+a:is(:hover, :focus-visible) {
+  text-decoration-line: underline;
+  text-decoration-style: dashed;
+  text-decoration-thickness: 0.5px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin-block: 0;
+}
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+li,
+.table {
+  font-family: var(--font-sans);
+}
+
+h1 {
+  font-size: calc(var(--font-size-base) * 1.5);
+  line-height: 1.3333333333;
+}
+
+h2 {
+  font-size: calc(var(--font-size-base) * 1.25);
+  line-height: 1.4;
+}
+h3 {
+  font-size: calc(var(--font-size-base) * 1.125);
+  line-height: 1.5555555556;
+}
+h4 {
+  font-size: var(--font-size-base);
+  line-height: 1.5;
+}
+h5,
+h6 {
+  font-size: var(--font-size-base);
+  line-height: calc(var(--font-size-base) * 1.625);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+b,
+strong,
+th {
+  font-weight: 600;
+}
+
+code:not(pre code) {
+  display: inline;
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  corner-shape: var(--corner-shape);
+  background: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  overflow-wrap: anywhere;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  word-break: break-word;
+}
+pre,
+pre code {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 20px;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.table {
+  width: 100%;
+  color: var(--foreground);
+  font: inherit;
+  text-align: start;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: calc(var(--font-size-base) * 0.875);
+  line-height: calc(var(--font-size-base) * 1.625);
+  font-family: var(--font-sans);
+}
+
+.table :is(th, td) {
+  padding-block: 10px;
+  padding-inline: 0 24px;
+  overflow-wrap: anywhere;
+  border-bottom: 1px solid var(--border);
+  text-align: start;
+  vertical-align: top;
+  border-bottom-color: color-mix(in srgb, var(--foreground) 5%, transparent);
+}
+.table :is(th, td):not(:last-child) {
+  padding-inline-end: calc(var(--font-size-base) * 1.5);
+}
+
+.table-responsive &gt; .table :is(th, td) {
+  overflow-wrap: break-word;
+}
+
+.table :is(th, td):last-child {
+  padding-inline-end: 0;
+}
+
+.table :is(caption, thead th) {
+  font-weight: 600;
+}
+
+.table thead :is(th, td) {
+  border-bottom-color: var(--border-strong, var(--input));
+  padding-block: calc(var(--font-size-base) / 2);
+  line-height: var(--font-size-base);
+}
+
+.table tbody tr:last-child :is(th, td) {
+  border-bottom: 0;
+}
+.table tbody :is(th, td) {
+  padding-block: calc(var(--font-size-base) * 0.625);
+}
+
+.table.table-sm :is(th, td) {
+  padding-block: 8px;
+}
+
+.table.table-sm :is(th, td):not(:last-child) {
+  padding-inline-end: 16px;
+}
+
+.table :is(.text-end, [align=&quot;right&quot;]) {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+.table :is(.text-center, [align=&quot;center&quot;]) {
+  text-align: center;
+}
+
+.table .text-nowrap {
+  white-space: nowrap;
+}
+
+#widget {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  padding: 0;
+  background: transparent !important;
+}
+
+.card {
+  min-width: 0;
+  padding: 12px;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  border-radius: var(--radius-2xl);
+  corner-shape: var(--corner-shape);
+  color: var(--card-foreground);
+  background: var(--card);
+}
+
+.widget {
+  min-width: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--radius-lg);
+  corner-shape: var(--corner-shape);
+  box-shadow: 0 0 0 0.5px var(--border-strong, var(--border));
+  color: var(--foreground);
+  background: var(--background);
+}
+
+#widget &gt; :not(.card, .widget, .progress) {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.tooltip {
+  position: fixed;
+  z-index: 50;
+  top: 0;
+  left: 0;
+  width: max-content;
+  max-width: min(
+    20rem,
+    var(--tooltip-available-width, calc(100vw - 10px)),
+    calc(100vw - 10px)
+  );
+  max-height: min(
+    var(--tooltip-available-height, calc(100vh - 10px)),
+    calc(100vh - 10px)
+  );
+  border: 1px solid var(--border);
+  corner-shape: var(--corner-shape);
+  overflow-wrap: break-word;
+  white-space: normal;
+  pointer-events: none;
+  user-select: none;
+  font-family: var(--font-sans);
+  padding: 5px 12px;
+  border-color: color-mix(
+    in oklab,
+    light-dark(var(--primary-foreground), var(--foreground)) 5%,
+    transparent
+  );
+  border-radius: var(--radius-2xl);
+  color: light-dark(var(--primary-foreground), var(--foreground));
+  background: light-dark(var(--foreground), var(--popover));
+  box-shadow: 0 8px 18px rgb(15 23 42 / 20%);
+  letter-spacing: -0.15px;
+  font-size: calc(var(--font-size-base) * 14 / 16);
+  font-size: round(nearest, calc(var(--font-size-base) * 14 / 16), 1px);
+  font-weight: 600;
+  line-height: 18px;
+  text-align: center;
+}
+
+.viz-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(max(180px, 24%), 1fr));
+  gap: 10px;
+}
+
+.viz-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.viz-stat-value {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+.viz-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+hr {
+  width: 100%;
+  height: 1px;
+  margin-block: 6px;
+  border: 0;
+  background: var(--border);
+}
+
+.nav {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 4px;
+}
+
+.progress {
+  display: flex;
+  height: 8px;
+  margin-block: calc((var(--line-height-normal, 1.5em) - 8px) / 2);
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--muted);
+}
+
+.progress-bar:only-child {
+  border-radius: var(--radius-full);
+}
+
+.progress-bar {
+  height: 100%;
+  flex-shrink: 0;
+  border: 0;
+  background: var(--viz-series-1);
+}
+
+.viz-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  color: color-mix(in srgb, var(--foreground) 40%, var(--muted-foreground));
+  background: color-mix(in srgb, var(--foreground) 5%, transparent);
+  font-family: var(--font-sans);
+  font-size: calc(var(--font-size-base) * 14 / 16);
+  font-size: round(nearest, calc(var(--font-size-base) * 14 / 16), 1px);
+  font-weight: var(--font-weight-normal);
+  line-height: 1;
+}
+
+small,
+.text-small {
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-small);
+}
+
+.text-muted {
+  color: var(--muted-foreground);
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.viz-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.viz-controls &gt; .form-label {
+  display: grid;
+  min-width: min(100%, 260px);
+  flex: 1 1 280px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 2px 12px;
+  margin-bottom: 0;
+}
+
+.viz-controls &gt; .form-label &gt; :is(.form-control, .form-range, .form-select) {
+  grid-column: 1 / -1;
+}
+
+.btn,
+.nav-link,
+.form-check-input,
+.form-control,
+.form-range,
+.form-select {
+  font: inherit;
+}
+
+/* Match inline alignment without overriding a containing flex or grid layout. */
+.btn,
+.nav-link,
+.form-control,
+.form-select,
+.form-range,
+.form-check {
+  vertical-align: middle;
+}
+
+.btn,
+.nav-link {
+  appearance: button;
+  display: inline-flex;
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin: 0;
+  padding: 0 8px;
+  -webkit-app-region: no-drag;
+  border: 1px solid var(--input);
+  corner-shape: var(--corner-shape);
+  cursor: var(--cursor-interaction, pointer);
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-font-smoothing: inherit;
+  font-family: var(--font-sans);
+  height: fit-content;
+  min-height: calc(12px + 2 * var(--control-spacing, 12px));
+  padding-inline: var(--control-spacing, 12px);
+  border-color: transparent;
+  border-radius: var(--radius-full);
+  color: var(--foreground);
+  background: color-mix(in srgb, var(--foreground) 5%, transparent);
+  font-size: calc(var(--font-size-base) * 14 / 16);
+  font-size: round(nearest, calc(var(--font-size-base) * 14 / 16), 1px);
+  font-weight: var(--font-weight-normal);
+  line-height: 18px;
+}
+
+.btn {
+  border-color: var(--border);
+  color: var(--secondary-foreground);
+  background: var(--secondary);
+}
+
+.btn:is(.btn-block, .viz-tile) {
+  inline-size: 100%;
+}
+
+.btn.viz-tile {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+a.btn {
+  cursor: var(--cursor-interaction, pointer);
+  text-decoration: none;
+}
+
+.btn:not(:disabled):hover {
+  background: light-dark(
+    color-mix(in srgb, var(--foreground) 5.5%, transparent),
+    color-mix(in srgb, var(--foreground) 8%, transparent)
+  );
+}
+
+.nav-link:not(:disabled):not([aria-disabled=&quot;true&quot;]):hover {
+  background: color-mix(in srgb, var(--foreground) 10%, transparent);
+}
+
+.btn-primary {
+  border-color: var(--border);
+  color: var(--primary-foreground);
+  background: var(--foreground);
+  background-clip: border-box;
+}
+
+.btn-primary .text-muted {
+  color: color-mix(in srgb, var(--primary-foreground) 50%, transparent);
+}
+
+.btn-primary:not(:disabled):hover {
+  background: color-mix(in srgb, var(--foreground) 80%, transparent);
+  background-clip: border-box;
+}
+
+.btn-ghost {
+  border-color: transparent;
+  color: var(--muted-foreground);
+  background: transparent;
+}
+
+.btn-ghost:not(:disabled):hover {
+  color: var(--muted-foreground);
+  background: light-dark(
+    color-mix(in srgb, var(--foreground) 5.5%, transparent),
+    color-mix(in srgb, var(--foreground) 8%, transparent)
+  );
+}
+
+.nav-pills .nav-link {
+  min-width: 0;
+  border-color: transparent;
+  color: var(--muted-foreground);
+  background: transparent;
+}
+
+.nav-justified .nav-link {
+  flex: 1 1 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+.nav-pills .nav-link.active {
+  color: var(--foreground);
+  background: var(--muted);
+}
+
+/* Shared preview chrome; product styles stay inside each variant. */
+.viz-dotted-background {
+  background-image: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--foreground) 14%, transparent) 0.8px,
+    transparent 0.8px
+  );
+  background-position: center;
+  background-size: 16px 16px;
+}
+
+.viz-carousel {
+  position: relative;
+  min-width: 0;
+}
+
+.viz-carousel:has(&gt; .viz-carousel-controls) {
+  min-height: calc(60px + var(--viz-carousel-picker-height, 0px));
+  padding-bottom: 60px;
+}
+
+.viz-carousel &gt; [data-variant][hidden] {
+  display: none !important;
+}
+
+.viz-carousel &gt; [data-variant] {
+  isolation: isolate;
+}
+
+.viz-carousel-controls {
+  --viz-carousel-hover: light-dark(
+    color-mix(in srgb, var(--foreground) 5.4%, transparent),
+    color-mix(in srgb, var(--foreground) 7.8%, transparent)
+  );
+  position: absolute;
+  z-index: 2;
+  bottom: 8px;
+  left: 50%;
+  display: flex;
+  width: max-content;
+  /* Leave room for the host&#x27;s design-controls launcher at the trailing edge. */
+  max-width: calc(100% - 96px);
+  align-items: center;
+  gap: 0;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-sans);
+  /* Match the settings dropdown chrome independently of the content font size. */
+  font-size: 13px;
+  font-weight: var(--font-weight-normal);
+  line-height: 18px;
+  transform: translateX(-50%);
+  user-select: none;
+}
+
+/* Keep authored mockup button styles out of the shared carousel chrome. */
+.viz-carousel-controls button,
+.viz-carousel-picker &gt; summary {
+  display: flex !important;
+  height: auto !important;
+  min-height: 30px;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 4px;
+  padding: 0 6px !important;
+  -webkit-app-region: no-drag;
+  border: 0 !important;
+  border-radius: 14px !important;
+  color: inherit !important;
+  background: transparent !important;
+  font: inherit !important;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.viz-carousel-controls &gt; button,
+.viz-carousel-picker &gt; summary {
+  position: relative;
+  isolation: isolate;
+}
+
+.viz-carousel-controls &gt; button {
+  --icon-size: 16px;
+  width: 30px !important;
+  padding: 0 !important;
+}
+
+.viz-carousel-picker &gt; summary {
+  padding-inline: 12px !important;
+}
+
+.viz-carousel-controls .viz-carousel-caret {
+  width: 14px;
+  height: 14px;
+  flex: none;
+  margin: 0;
+  color: inherit;
+  transform: rotate(180deg);
+}
+
+.viz-carousel-controls &gt; button &gt; svg,
+.viz-carousel-controls .viz-carousel-caret,
+.viz-carousel-count {
+  opacity: 0.5;
+}
+
+.viz-carousel-controls &gt; button::before,
+.viz-carousel-picker &gt; summary::before {
+  position: absolute;
+  z-index: -1;
+  inset: 3px;
+  border-radius: 12px;
+  content: &quot;&quot;;
+  pointer-events: none;
+}
+
+.viz-carousel-controls &gt; button:hover::before,
+.viz-carousel-picker &gt; summary:hover::before {
+  background: var(--viz-carousel-hover);
+}
+
+.viz-carousel-controls &gt; button,
+.viz-carousel-controls [data-lucide],
+.viz-carousel-controls .lucide {
+  flex-shrink: 0;
+}
+
+.viz-carousel-picker {
+  min-width: 0;
+}
+
+.viz-carousel-picker &gt; summary {
+  min-width: 0;
+  list-style: none;
+}
+
+.viz-carousel-picker &gt; summary::-webkit-details-marker {
+  display: none;
+}
+
+.viz-carousel-count {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.viz-carousel-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.viz-carousel-options {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 4px);
+  left: 0;
+  display: flex;
+  max-height: 240px;
+  flex-direction: column;
+  gap: 2px;
+  overflow: auto;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--background);
+  box-shadow: 0 4px 12px light-dark(rgb(0 0 0 / 6%), rgb(0 0 0 / 25%));
+}
+
+.viz-carousel-options &gt; button {
+  border-radius: max(0px, calc(var(--radius-lg) - 5px)) !important;
+  width: 100% !important;
+  min-height: 28px;
+  justify-content: flex-start !important;
+  padding: 4px 8px !important;
+  font-size: var(--font-size-small) !important;
+  text-align: start;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.viz-carousel-options &gt; [aria-current=&quot;true&quot;],
+.viz-carousel-options &gt; button:hover {
+  background: var(--viz-carousel-hover) !important;
+}
+
+.btn:disabled,
+.nav-link:disabled,
+.nav-link[aria-disabled=&quot;true&quot;] {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+[data-lucide] {
+  stroke-width: 1.6;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--foreground);
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  padding: 0 8px;
+  outline: none;
+  border: 1px solid var(--input);
+  corner-shape: var(--corner-shape);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  height: calc(12px + 2 * var(--control-spacing, 12px));
+  min-height: calc(12px + 2 * var(--control-spacing, 12px));
+  padding-inline: calc(4px + var(--control-spacing, 12px) / 2);
+  border-color: var(--input);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--popover) 96%, transparent);
+  font-size: calc(var(--font-size-base) * 14 / 16);
+  font-size: round(nearest, calc(var(--font-size-base) * 14 / 16), 1px);
+  font-weight: var(--font-weight-normal);
+  line-height: 1.4285714286;
+}
+.form-control:is(
+  [type=&quot;file&quot;],
+  [type=&quot;date&quot;],
+  [type=&quot;datetime-local&quot;],
+  [type=&quot;month&quot;],
+  [type=&quot;week&quot;],
+  [type=&quot;color&quot;]
+) {
+  height: calc(12px + 2 * var(--control-spacing, 12px));
+  min-height: calc(12px + 2 * var(--control-spacing, 12px));
+  line-height: 18px;
+}
+.form-control:is(
+  [type=&quot;date&quot;],
+  [type=&quot;datetime-local&quot;],
+  [type=&quot;month&quot;],
+  [type=&quot;week&quot;]
+) {
+  padding-inline: var(--control-spacing, 12px);
+}
+
+.form-control::placeholder {
+  color: var(--muted-foreground);
+}
+
+.form-control[type=&quot;file&quot;] {
+  overflow: hidden;
+  cursor: var(--cursor-interaction, pointer);
+  padding: 0;
+}
+
+.form-control[type=&quot;file&quot;]::file-selector-button {
+  padding: 0 8px;
+  border: 0;
+  border-right: 1px solid var(--input);
+  color: var(--secondary-foreground);
+  background: var(--secondary);
+  cursor: inherit;
+  font: inherit;
+  min-height: calc(10px + 2 * var(--control-spacing, 12px));
+  padding-inline: var(--control-spacing, 12px);
+  margin-inline-end: var(--control-spacing, 12px);
+}
+
+.form-control[type=&quot;file&quot;]:not(:disabled):hover::file-selector-button {
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.form-control-color[type=&quot;color&quot;] {
+  width: 40px;
+  height: calc(12px + 2 * var(--control-spacing, 12px));
+  padding: 3px;
+  cursor: var(--cursor-interaction, pointer);
+}
+
+.form-control-color[type=&quot;color&quot;]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.form-control-color[type=&quot;color&quot;]::-webkit-color-swatch {
+  border: 0;
+  border-radius: calc(var(--radius-lg) - 4px);
+  corner-shape: var(--corner-shape);
+}
+
+textarea.form-control {
+  height: auto;
+  resize: vertical;
+  min-height: 96px;
+  padding: 8px 10px;
+}
+
+.form-control:focus-visible {
+  border-color: var(--ring);
+  box-shadow: none;
+}
+.form-control:disabled {
+  color: var(--muted-foreground);
+  background: color-mix(in srgb, var(--foreground) 5%, transparent);
+  opacity: 1;
+}
+.form-control[aria-invalid=&quot;true&quot;] {
+  border-color: var(--red);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--red) 20%, transparent);
+}
+
+.form-control:disabled,
+.form-select:disabled {
+  cursor: not-allowed;
+}
+
+.form-select {
+  appearance: none;
+  display: block;
+  width: 100%;
+  height: fit-content;
+  min-height: calc(12px + 2 * var(--control-spacing, 12px));
+  margin: 0;
+  /* The secondary icon role is 14px at compact density and 16px at web density. */
+  --icon-size: calc(10px + var(--control-spacing, 12px) / 2);
+  /* Settings dropdowns retain a 12px inset and a 4px text-to-chevron gap. */
+  padding: 0 calc(16px + var(--icon-size)) 0 12px;
+  outline: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  corner-shape: var(--corner-shape);
+  color: var(--foreground);
+  background-color: var(--secondary);
+  background-image:
+    linear-gradient(
+      45deg,
+      transparent calc(50% - 0.6px),
+      var(--muted-foreground) calc(50% - 0.6px) calc(50% + 0.6px),
+      transparent calc(50% + 0.6px)
+    ),
+    linear-gradient(
+      135deg,
+      transparent calc(50% - 0.6px),
+      var(--muted-foreground) calc(50% - 0.6px) calc(50% + 0.6px),
+      transparent calc(50% + 0.6px)
+    );
+  background-position:
+    calc(100% - 12px - var(--icon-size) / 2) 50%,
+    calc(100% - 12px - var(--icon-size) * 0.18) 50%;
+  background-repeat: no-repeat;
+  background-size: calc(var(--icon-size) * 0.32) calc(var(--icon-size) * 0.32);
+  cursor: var(--cursor-interaction, default);
+  font-size: calc(var(--font-size-base) * 14 / 16);
+  font-size: round(nearest, calc(var(--font-size-base) * 14 / 16), 1px);
+  font-weight: var(--font-weight-normal);
+  line-height: 18px;
+}
+
+.form-select option {
+  color: var(--popover-foreground);
+  background-color: var(--popover);
+}
+
+.form-select:not(:disabled):hover {
+  background-color: light-dark(
+    color-mix(in srgb, var(--foreground) 5.5%, transparent),
+    color-mix(in srgb, var(--foreground) 8%, transparent)
+  );
+}
+
+.form-select:focus-visible {
+  box-shadow: 0 0 0 2px var(--ring);
+}
+.form-select:disabled {
+  opacity: 0.4;
+}
+
+.form-check {
+  display: flex;
+  min-height: calc(12px + 2 * var(--control-spacing, 12px));
+  align-items: center;
+  gap: 6px;
+}
+
+.form-check-input {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+  margin: 0;
+  border: 1px solid var(--input);
+  color: var(--primary-foreground);
+  background-color: transparent;
+  cursor: var(--cursor-interaction, default);
+  transition:
+    background-color 150ms,
+    border-color 150ms,
+    box-shadow 150ms;
+}
+
+.form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;] {
+  corner-shape: round;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  width: calc(10px + var(--control-spacing, 12px) / 2);
+  height: calc(10px + var(--control-spacing, 12px) / 2);
+  border-color: var(--border-strong, var(--input));
+  border-radius: calc(var(--radius-sm) / 2);
+  background-color: transparent;
+  color: var(--foreground);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input:not(:disabled):not(:checked):hover {
+  background-color: var(--card);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input[type=&quot;checkbox&quot;]:is(:checked, :indeterminate) {
+  border-color: var(--border-strong, var(--input));
+  background-color: color-mix(in srgb, var(--popover) 96%, transparent);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input[type=&quot;checkbox&quot;]:checked::before {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--primary-foreground);
+  content: &quot;&quot;;
+  mask: var(--checkmark-image) center / 12px 12px no-repeat;
+  background-color: var(--foreground);
+}
+.form-check:not(.form-switch)
+  .form-check-input[type=&quot;checkbox&quot;]:indeterminate::before {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 65%;
+  height: 6.65%;
+  margin: auto;
+  border-radius: var(--radius-full);
+  background: var(--foreground);
+  mask: none;
+  content: &quot;&quot;;
+}
+
+.form-check-input[type=&quot;radio&quot;] {
+  border-radius: var(--radius-full);
+  width: 16px;
+  height: 16px;
+  border: 0;
+  box-shadow: inset 0 0 0 1px var(--input);
+}
+
+.form-check-input[type=&quot;radio&quot;]:checked {
+  border: 0;
+  background: radial-gradient(
+    circle,
+    var(--primary-foreground) 0 3px,
+    var(--foreground) 3px
+  );
+  box-shadow: none;
+}
+
+.form-check:not(.form-switch) .form-check-input:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+.form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;]:focus-visible {
+  border-color: var(--ring);
+  outline: none;
+  box-shadow: 0 0 0 2px var(--ring);
+}
+
+.form-check:not(.form-switch) .form-check-input:disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.form-check:not(.form-switch) .form-check-input:disabled + .form-check-label {
+  cursor: not-allowed;
+}
+.form-check:not(.form-switch) .form-check-input[type=&quot;radio&quot;]:disabled,
+.form-check:not(.form-switch)
+  .form-check-input[type=&quot;radio&quot;]:disabled
+  + .form-check-label {
+  opacity: 0.5;
+}
+
+.form-switch .form-check-input:disabled,
+.form-switch .form-check-input:disabled + .form-check-label {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.form-check-label {
+  color: var(--foreground);
+  cursor: var(--cursor-interaction, default);
+}
+
+.form-switch .form-check-input {
+  position: relative;
+  width: 32px;
+  height: 20px;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--muted);
+  box-shadow: none;
+  transition: background-color 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.form-switch .form-check-input::before {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 16px;
+  height: 16px;
+  box-sizing: border-box;
+  border: 1px solid light-dark(var(--primary-foreground), var(--foreground));
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-sm);
+  content: &quot;&quot;;
+  transform: translate(2px, -50%);
+  transition: transform 200ms cubic-bezier(0, 0, 0.2, 1);
+  border-color: #fff;
+  background: #fff;
+}
+
+.form-switch .form-check-input:checked {
+  background: var(--blue);
+}
+
+.form-switch .form-check-input:checked::before {
+  transform: translate(14px, -50%);
+}
+
+.form-switch .form-check-input:focus-visible {
+  box-shadow: 0 0 0 2px var(--ring);
+  outline: none;
+}
+
+.form-range {
+  appearance: none;
+  display: block;
+  width: 100%;
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  accent-color: var(--primary);
+  height: calc(12px + 2 * var(--control-spacing, 12px));
+  min-height: calc(12px + 2 * var(--control-spacing, 12px));
+  outline: none;
+  border-radius: var(--radius-full);
+  color: var(--foreground);
+  background: transparent;
+}
+
+.form-range::-webkit-slider-runnable-track {
+  background: var(--form-range-track, var(--border));
+  height: 2px;
+  border-radius: var(--radius-full);
+}
+
+.form-range::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  margin-top: -9px;
+  border-color: transparent;
+  background: currentColor;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Outline the native track and thumb, preserving the larger input hit area. */
+.form-range:focus-visible::-webkit-slider-runnable-track {
+  outline: 2px auto Highlight;
+  outline-color: -webkit-focus-ring-color;
+}
+
+.form-range::-moz-range-track {
+  background: var(--form-range-track, var(--border));
+  height: 2px;
+  border-radius: var(--radius-full);
+}
+
+.form-range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  border-color: transparent;
+  background: currentColor;
+  box-shadow: var(--shadow-sm);
+}
+
+.form-range:focus-visible::-moz-range-thumb {
+  outline: 2px solid Highlight;
+  outline-offset: 2px;
+}
+
+.form-range:disabled {
+  opacity: 1;
+  cursor: default;
+}
+
+.btn:not(.btn-primary, .viz-tile):is(
+  [aria-pressed=&quot;true&quot;],
+  [aria-selected=&quot;true&quot;],
+  .is-selected
+) {
+  border-color: transparent;
+  color: var(--primary-foreground);
+  background: var(--blue);
+}
+
+.btn.viz-tile:is([aria-pressed=&quot;true&quot;], [aria-selected=&quot;true&quot;], .is-selected) {
+  border-color: var(--primary);
+  box-shadow: inset 0 0 0 1px var(--primary);
+}
+
+.btn:focus-visible,
+.nav-link:focus-visible {
+  outline-offset: 2px;
+  outline: none;
+  box-shadow: 0 0 0 2px var(--ring);
+}
+
+.viz-carousel-controls :is(button, summary):focus-visible {
+  outline: 2px solid var(--ring) !important;
+  outline-offset: 2px !important;
+}
+
+/* Web recipes are the default, including on renderers without inline style queries. */
+@supports (border-radius: if(style(--corner-shape: round): 1px; else: 2px)) {
+  /* Match the host&#x27;s proportional text-sm scale at every text preference. */
+  .tooltip,
+  .viz-badge,
+  .btn,
+  .nav-link,
+  .form-control,
+  .form-select {
+    font-size: if(
+      style(--corner-shape: round): round(
+          nearest,
+          calc(var(--font-size-base) * 14 / 16),
+          1px
+        );
+        else: round(nearest, calc(var(--font-size-base) * 13 / 14), 1px)
+    );
+  }
+
+  .btn,
+  .nav-link,
+  .form-select {
+    border-radius: if(
+      style(--corner-shape: round): var(--radius-full); else: var(--radius-lg)
+    );
+  }
+
+  .form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;] {
+    border-radius: if(
+      style(--corner-shape: round): calc(var(--radius-sm) / 2);
+        else: calc(var(--radius-lg) * 0.4)
+    );
+  }
+
+  .tooltip {
+    font-weight: if(
+      style(--corner-shape: round): 600; else: var(--font-weight-normal)
+    );
+  }
+}
+
+@media (pointer: coarse) {
+  .viz-carousel:has(&gt; .viz-carousel-controls) {
+    min-height: calc(76px + var(--viz-carousel-picker-height, 0px));
+    padding-bottom: 76px;
+  }
+
+  .btn,
+  .nav-link,
+  .viz-carousel-controls button,
+  .viz-carousel-picker &gt; summary,
+  .form-control,
+  .form-select {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  /* Keep small-screen WebKit from zooming when a text field receives focus. */
+  .form-control,
+  .form-select {
+    font-size: max(16px, calc(var(--font-size-base) * 14 / 16));
+    font-size: max(
+      16px,
+      round(nearest, calc(var(--font-size-base) * 14 / 16), 1px)
+    );
+  }
+  .form-control:is(
+    [type=&quot;file&quot;],
+    [type=&quot;date&quot;],
+    [type=&quot;datetime-local&quot;],
+    [type=&quot;month&quot;],
+    [type=&quot;week&quot;],
+    [type=&quot;time&quot;],
+    [type=&quot;color&quot;]
+  ) {
+    height: 44px;
+    min-height: 44px;
+    font-size: max(16px, calc(var(--font-size-base) * 14 / 16));
+    font-size: max(
+      16px,
+      round(nearest, calc(var(--font-size-base) * 14 / 16), 1px)
+    );
+  }
+
+  .form-control[type=&quot;file&quot;]::file-selector-button {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .form-control-color[type=&quot;color&quot;] {
+    width: 44px;
+    height: 44px;
+  }
+
+  .form-control:is(
+    [type=&quot;date&quot;],
+    [type=&quot;datetime-local&quot;],
+    [type=&quot;month&quot;],
+    [type=&quot;time&quot;],
+    [type=&quot;week&quot;]
+  ) {
+    min-width: 0;
+    max-width: 100%;
+    padding-block: 8px;
+  }
+
+  .form-check {
+    min-height: 44px;
+    padding-inline: 15px;
+  }
+
+  .form-check-input {
+    position: relative;
+  }
+
+  .form-check-input::after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 44px;
+    height: 44px;
+    content: &quot;&quot;;
+    transform: translate(-50%, -50%);
+  }
+
+  .form-check-label {
+    display: inline-flex;
+    min-width: 44px;
+    min-height: 44px;
+    align-items: center;
+  }
+
+  .form-range {
+    height: 44px;
+    touch-action: pan-y;
+  }
+}
+
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+#widget &gt; svg {
+  width: 100%;
+}
+
+/* Model-authored chart rules can otherwise stretch icons after these styles load. */
+svg.lucide {
+  display: block;
+  width: var(--icon-size) !important;
+  height: var(--icon-size) !important;
+  flex: none;
+  margin: 0 !important;
+  stroke-width: 1.6;
+}
+
+.text-warning,
+.text-destructive {
+  color: var(--destructive);
+}
+
+html&gt;body{padding:0}&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;script type=&quot;application/json&quot; id=&quot;codex-visualization-widget-state&quot;&gt;__CODEX_VISUALIZATION_WIDGET_STATE__&lt;/script&gt;
+&lt;script&gt;(() =&gt; {
+  const root = document.documentElement;
+  const mediaQuery = globalThis.matchMedia(&quot;(prefers-color-scheme: dark)&quot;);
+  const apply = Reflect.apply;
+  const isArray = Array.isArray;
+  const hasOwn = Object.hasOwn;
+  const parentWindow = globalThis.parent;
+  const stringify = JSON.stringify;
+  const parse = JSON.parse;
+  const encode = TextEncoder.prototype.encode.bind(new TextEncoder());
+  const initialStateElement = document.getElementById(
+    &quot;codex-visualization-widget-state&quot;,
+  );
+  const initialGlobals = parse(initialStateElement?.textContent ?? &quot;{}&quot;);
+  initialStateElement?.remove();
+  /** @type {Record&lt;string, unknown&gt; | null} */
+  let state = initialGlobals.widgetState ?? null;
+  const statePersistence = initialGlobals.statePersistence ?? &quot;none&quot;;
+  let nextStateRequestId = 0;
+  /** @type {Map&lt;number, { resolve: () =&gt; void; reject: (error: Error) =&gt; void; timeout: ReturnType&lt;typeof globalThis.setTimeout&gt;; serializedState: string }&gt;} */
+  const pendingStateWrites = new Map();
+  const persistenceError = () =&gt;
+    Object.assign(
+      new Error(&quot;The host could not persist the widget state update&quot;),
+      {
+        code: -32000,
+        data: { code: &quot;widget_state_persistence_failed&quot;, retryable: false },
+      },
+    );
+  /**
+   * @param {object} prototype
+   * @param {string} property
+   */
+  const getPrototypeGetter = (prototype, property) =&gt; {
+    // oxlint-disable-next-line typescript/unbound-method -- invoked through captured Reflect.apply
+    const getter = Object.getOwnPropertyDescriptor(prototype, property)?.get;
+    if (getter == null) {
+      throw new Error(`Missing ${property} getter`);
+    }
+    return getter;
+  };
+  const getMessageData = getPrototypeGetter(MessageEvent.prototype, &quot;data&quot;);
+  const getMessagePorts = getPrototypeGetter(MessageEvent.prototype, &quot;ports&quot;);
+  const getMessageSource = getPrototypeGetter(MessageEvent.prototype, &quot;source&quot;);
+  // oxlint-disable-next-line typescript/unbound-method -- captured before the untrusted fragment runs
+  const addHostMessageListener = MessagePort.prototype.addEventListener;
+  // oxlint-disable-next-line typescript/unbound-method -- captured before the untrusted fragment runs
+  const postHostMessage = MessagePort.prototype.postMessage;
+  // oxlint-disable-next-line typescript/unbound-method -- captured before the untrusted fragment runs
+  const startHostPort = MessagePort.prototype.start;
+  // oxlint-disable-next-line typescript/unbound-method -- captured before the untrusted fragment runs
+  const stopMessagePropagation = Event.prototype.stopImmediatePropagation;
+  /** @type {MessagePort | null} */
+  let hostPort = null;
+  const postToHost = (type, payload) =&gt; {
+    if (hostPort != null) {
+      apply(postHostMessage, hostPort, [{ type, ...payload }]);
+    }
+  };
+  const openExternal = ({ href }) =&gt; {
+    if (globalThis.navigator.userActivation?.isActive === true) {
+      postToHost(&quot;open-external&quot;, { href });
+    }
+  };
+  const sendFollowUpMessage = ({ context, prompt, title }) =&gt; {
+    if (globalThis.navigator.userActivation?.isActive === true) {
+      postToHost(&quot;follow-up&quot;, { context, prompt, title });
+    }
+    return Promise.resolve();
+  };
+  /**
+   * @param {Record&lt;string, unknown&gt; | ((previous: Record&lt;string, unknown&gt; | null) =&gt; Record&lt;string, unknown&gt;)} next
+   * @returns {Promise&lt;void&gt;}
+   */
+  const setWidgetState = async (next) =&gt; {
+    const nextState = typeof next === &quot;function&quot; ? next(state) : next;
+    if (
+      nextState == null ||
+      typeof nextState !== &quot;object&quot; ||
+      isArray(nextState)
+    ) {
+      throw new TypeError(&quot;Widget state must be a JSON object&quot;);
+    }
+    const inputState = stringify(
+      nextState,
+      (_key, /** @type {unknown} */ value) =&gt; {
+        if (
+          typeof value === &quot;undefined&quot; ||
+          typeof value === &quot;function&quot; ||
+          typeof value === &quot;symbol&quot; ||
+          (typeof value === &quot;number&quot; &amp;&amp; !Number.isFinite(value))
+        ) {
+          throw new TypeError(&quot;Widget state must be a JSON object&quot;);
+        }
+        return value;
+      },
+    );
+    const parsedState = parse(inputState);
+    if (
+      parsedState == null ||
+      typeof parsedState !== &quot;object&quot; ||
+      isArray(parsedState)
+    ) {
+      throw new TypeError(&quot;Widget state must be a JSON object&quot;);
+    }
+    const storedState = {
+      modelContent: null,
+      privateContent: null,
+      ...parsedState,
+    };
+    const serializedState = stringify(storedState);
+    if (encode(serializedState).length &gt; 16 * 1024) {
+      throw new TypeError(
+        &quot;Widget state must be a JSON object of at most 16 KiB&quot;,
+      );
+    }
+    if (
+      hasOwn(storedState, &quot;imageIds&quot;) &amp;&amp;
+      (!isArray(storedState.imageIds) ||
+        storedState.imageIds.some(
+          (/** @type {unknown} */ id) =&gt; typeof id !== &quot;string&quot;,
+        ))
+    ) {
+      throw new TypeError(&quot;Widget state imageIds must be an array of strings&quot;);
+    }
+    if (storedState.imageIds?.length &gt; 0) {
+      throw Object.assign(
+        new TypeError(&quot;Visualization state does not support image attachments&quot;),
+        { code: -32602, data: { code: &quot;images_unsupported&quot; } },
+      );
+    }
+    state = storedState;
+    globalThis.openai.widgetState = state;
+    globalThis.dispatchEvent(
+      new CustomEvent(&quot;openai:set_globals&quot;, {
+        detail: { globals: { widgetState: state } },
+      }),
+    );
+    if (statePersistence === &quot;none&quot;) {
+      throw persistenceError();
+    }
+    const id = ++nextStateRequestId;
+    return new Promise((resolve, reject) =&gt; {
+      const timeout = globalThis.setTimeout(() =&gt; {
+        pendingStateWrites.delete(id);
+        reject(persistenceError());
+      }, 30_000);
+      pendingStateWrites.set(id, { resolve, reject, timeout, serializedState });
+      postToHost(&quot;widget-state-write&quot;, { id, state: serializedState });
+    });
+  };
+  const syncTheme = () =&gt; {
+    const theme = mediaQuery.matches ? &quot;dark&quot; : &quot;light&quot;;
+    root.dataset.theme = theme;
+    globalThis.openai = {
+      ...globalThis.openai,
+      openExternal,
+      sendFollowUpMessage,
+      setWidgetState,
+      theme,
+      visualizationStyleVariables: {},
+      visualizationTheme: theme,
+      widgetState: state,
+      statePersistence,
+      stateModelContext: &quot;none&quot;,
+    };
+    globalThis.dispatchEvent(
+      new CustomEvent(&quot;openai:set_globals&quot;, {
+        detail: { globals: globalThis.openai },
+      }),
+    );
+  };
+  const sendHeight = () =&gt; {
+    postToHost(&quot;height&quot;, {
+      height: Math.ceil(
+        Math.max(
+          document.body.scrollHeight,
+          document.body.getBoundingClientRect().height,
+        ),
+      ),
+    });
+  };
+
+  globalThis.addEventListener(
+    &quot;message&quot;,
+    (event) =&gt; {
+      const data = apply(getMessageData, event, []);
+      const ports = apply(getMessagePorts, event, []);
+      const source = apply(getMessageSource, event, []);
+      if (
+        hostPort != null ||
+        source !== parentWindow ||
+        typeof data !== &quot;object&quot; ||
+        data?.type !== &quot;codex-visualization-initialize&quot; ||
+        !isArray(ports) ||
+        ports.length !== 1
+      ) {
+        return;
+      }
+      apply(stopMessagePropagation, event, []);
+      const nextHostPort = ports[0];
+      try {
+        apply(addHostMessageListener, nextHostPort, [
+          &quot;message&quot;,
+          (event) =&gt; {
+            const data = apply(getMessageData, event, []);
+            if (typeof data === &quot;object&quot; &amp;&amp; data?.type === &quot;measure&quot;) {
+              sendHeight();
+            } else if (
+              typeof data === &quot;object&quot; &amp;&amp;
+              data?.type === &quot;widget-state-result&quot;
+            ) {
+              /** @type {unknown} */
+              const id = data.id;
+              if (typeof id !== &quot;number&quot;) {
+                return;
+              }
+              const pending = pendingStateWrites.get(id);
+              if (pending != null) {
+                pendingStateWrites.delete(id);
+                globalThis.clearTimeout(pending.timeout);
+                if (data.ok === true) {
+                  pending.resolve();
+                } else {
+                  pending.reject(persistenceError());
+                }
+              }
+            }
+          },
+        ]);
+        apply(startHostPort, nextHostPort, []);
+      } catch {
+        return;
+      }
+      hostPort = nextHostPort;
+      for (const [id, { serializedState }] of pendingStateWrites) {
+        postToHost(&quot;widget-state-write&quot;, { id, state: serializedState });
+      }
+      sendHeight();
+    },
+    { capture: true },
+  );
+  document.currentScript?.remove();
+  mediaQuery.addEventListener(&quot;change&quot;, syncTheme);
+  globalThis.addEventListener(&quot;click&quot;, (event) =&gt; {
+    if (event.defaultPrevented) {
+      return;
+    }
+    let element = null;
+    if (event.target instanceof globalThis.Element) {
+      element = event.target;
+    } else if (event.target instanceof globalThis.Node) {
+      element = event.target.parentElement;
+    }
+    const link = element?.closest(&quot;a[href]&quot;);
+    const href = link?.getAttribute(&quot;href&quot;);
+    if (href == null) {
+      return;
+    }
+    if (href.startsWith(&quot;#&quot;)) {
+      let id;
+      try {
+        id = decodeURIComponent(href.slice(1));
+      } catch {
+        return;
+      }
+      const target = id.length === 0 ? root : document.getElementById(id);
+      if (
+        target == null ||
+        globalThis.navigator.userActivation?.isActive !== true
+      ) {
+        return;
+      }
+      event.preventDefault();
+      postToHost(&quot;scroll-to&quot;, {
+        top: target.getBoundingClientRect().top + globalThis.scrollY,
+      });
+      return;
+    }
+    event.preventDefault();
+    openExternal({ href });
+  });
+  new ResizeObserver(sendHeight).observe(document.body);
+  syncTheme();
+})();
+&lt;/script&gt;
+&lt;style&gt;
+#activity-final{--activity-type:1;--activity-width:402px;font-family:-apple-system,BlinkMacSystemFont,&#x27;Apple SD Gothic Neo&#x27;,sans-serif}
+#activity-final *{box-sizing:border-box}
+#activity-final [hidden]{display:none!important}
+#activity-final .stage{display:flex;justify-content:center;align-items:flex-start;padding:16px 4px 28px;min-height:var(--activity-stage,900px)}
+#activity-final .phone{--a-ink:light-dark(#302b26,#fff4e8);--a-muted:light-dark(#695d50,#cdbdad);--a-line:light-dark(#d9caba,#5b4a3d);--a-surface:light-dark(#fffaf2,#2c2722);--a-inset:light-dark(#f3e9dc,#373029);--a-gold:light-dark(#8a5632,#ecc287);--a-green:light-dark(#46674a,#b6d19a);--a-amber:light-dark(#936335,#e5ad6c);--a-faint:light-dark(#e4d6c2,#4f4539);color-scheme:light dark;color:var(--a-ink);width:min(100%,var(--activity-width));min-width:0;border-radius:36px;position:relative;isolation:isolate;overflow:hidden;container-type:inline-size;background:linear-gradient(180deg,light-dark(#ead9c0,#3b302b) 0,light-dark(#d4ae8d,#614b3e) 160px,light-dark(#e9d5bb,#3d3029) 340px,light-dark(#f6eee2,#25211d) 610px,transparent 1050px),linear-gradient(180deg,light-dark(#f1e4d2,#201c19),light-dark(#fbf7ef,#181716) 50%,light-dark(#f9f4eb,#141312));box-shadow:0 18px 60px #0002,0 0 0 1px #8883;font-size:calc(14px * var(--activity-type));line-height:1.45}
+#activity-final .phone[data-mode=light]{color-scheme:light}#activity-final .phone[data-mode=dark]{color-scheme:dark}
+#activity-final .phone button,#activity-final .phone input{font:inherit;color:inherit;cursor:inherit}
+#activity-final .phone button{border:0;background:none;text-align:left}
+#activity-final .phone button:disabled{opacity:.55;cursor:default}
+#activity-final .phone h1,#activity-final .phone h2,#activity-final .phone h3,#activity-final .phone p{margin:0}
+#activity-final .phone h1{font-size:calc(31px * var(--activity-type));line-height:1.12;letter-spacing:-1.2px;font-weight:740}
+#activity-final .phone h2{font-size:calc(15px * var(--activity-type));line-height:1.3;font-weight:650;letter-spacing:-.3px}
+#activity-final .phone h3{font-size:calc(14px * var(--activity-type));line-height:1.4;font-weight:620}
+#activity-final .phone svg[data-lucide]{width:18px;height:18px;flex:none}
+#activity-final .muted{color:var(--a-muted)}#activity-final .small{font-size:calc(11px * var(--activity-type));line-height:1.5}
+#activity-final .dunes{position:absolute;inset:0 0 auto;height:420px;mask-image:linear-gradient(#000 0%,#000 23%,transparent 100%);pointer-events:none;z-index:-1}
+#activity-final .dune-layer{position:absolute;inset:0;background:light-dark(#cfb49a,#6b5a51);opacity:.48}#activity-final .dune-layer.mid{background:light-dark(#d9a878,#8b624b)}#activity-final .dune-layer.near{background:light-dark(#b88060,#76503e);opacity:.35}
+#activity-final .chrome{padding:16px 18px 14px;position:relative}
+#activity-final .status{height:25px;display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:650;padding:0 8px;position:relative}
+#activity-final .island{width:104px;height:27px;border-radius:30px;background:#080808;position:absolute;left:50%;top:-3px;transform:translateX(-50%)}
+#activity-final .signals{display:flex;align-items:center;gap:4px}#activity-final .signals svg[data-lucide]{width:14px;height:14px}
+#activity-final .titlebar{display:flex;justify-content:space-between;align-items:center;gap:10px;padding-top:23px}
+#activity-final .date{margin-top:4px;color:var(--a-muted);font-size:calc(11px * var(--activity-type))}
+#activity-final .phone .round{border:1px solid var(--a-line);background:var(--a-surface);border-radius:50%;width:44px;height:44px;display:grid;place-items:center;flex:none}
+#activity-final main{padding:0 16px;display:grid;gap:12px;position:relative}
+#activity-final .surface{padding:15px;border:1px solid var(--a-line);border-radius:20px;background:var(--a-surface);min-width:0;box-shadow:inset 0 1px 0 light-dark(#fff9,#fff1)}
+#activity-final .section-head{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+#activity-final .section-head .label{display:flex;gap:6px;align-items:center}
+#activity-final .section-head .label&gt;svg{color:var(--a-gold)}
+#activity-final .section-head .section-heading{flex:1;min-width:0;margin:0}
+#activity-final .phone .heading-link{display:flex;align-items:center;gap:6px;width:100%;min-height:44px;padding:0;border-radius:9px;text-align:left;font-weight:650;color:inherit}
+#activity-final .heading-link .heading-title{display:flex;align-items:center;gap:4px;min-width:0;max-width:100%}
+#activity-final .heading-link .heading-text{min-width:0;word-break:keep-all;overflow-wrap:anywhere}
+#activity-final .heading-link svg[data-lucide=chevron-right]{width:13px;height:13px;color:var(--a-gold);flex:none}
+#activity-final .phone .heading-link:active{background:var(--a-inset)}
+#activity-final .hero .heading-link{color:#e7c48e}#activity-final .hero .heading-link:active{background:#4c4034}#activity-final .hero .heading-link svg[data-lucide=chevron-right]{color:inherit}
+#activity-final .hero-top .heading-link{width:auto;flex:1}#activity-final .hero-top .heading-link .heading-title{min-width:0}
+#activity-final .hero-top{margin-bottom:8px}
+#activity-final .evidence-heading{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:calc(11px * var(--activity-type));color:#d0c1ae;margin-bottom:1px}
+#activity-final .evidence-row{display:grid;grid-template-columns:42px minmax(0,1fr) auto;align-items:center;gap:10px;min-width:0;min-height:29px}
+#activity-final .evidence-track{height:7px;background:#baa37829;border-radius:5px;overflow:hidden;min-width:0}
+#activity-final .evidence-track i{display:block;height:100%;background:linear-gradient(90deg,#bd8e4d,#edcb83);border-radius:5px}
+#activity-final .evidence-row.missing .evidence-track{background:transparent}
+#activity-final .achievement-list{display:grid;gap:0}
+#activity-final .achievement-row{display:grid;grid-template-columns:22px minmax(0,1fr) auto;gap:8px;align-items:start;padding:11px 0;border-top:1px solid var(--a-line)}
+#activity-final .achievement-row:first-child{border-top:0;padding-top:0}
+#activity-final .achievement-row&gt;svg[data-lucide]{width:17px;height:17px;color:var(--a-gold);margin-top:2px}
+#activity-final .achievement-name{font-size:calc(13px * var(--activity-type));font-weight:600;word-break:keep-all;overflow-wrap:anywhere}
+#activity-final .achievement-meta{display:flex;flex-wrap:wrap;gap:4px 10px;font-size:calc(11px * var(--activity-type));color:var(--a-muted);margin-top:3px}
+#activity-final .achievement-points{font-size:calc(11px * var(--activity-type));font-weight:550;white-space:nowrap;color:var(--a-muted);padding-top:2px}
+#activity-final .phone.large .achievement-row{grid-template-columns:22px minmax(0,1fr)}#activity-final .phone.large .achievement-points{grid-column:2}
+#activity-final .phone.large .hero-top{flex-direction:column;align-items:flex-start}#activity-final .phone.large .hero-top .heading-link{width:100%}
+#activity-final .phone .text-action{padding:0;min-height:44px;display:flex;align-items:center;justify-content:space-between;gap:8px;color:var(--a-gold);font-size:calc(12px * var(--activity-type));font-weight:600;width:100%}
+#activity-final .phone .small-action{width:auto;min-height:36px;font-size:calc(11px * var(--activity-type));padding:0 2px}
+#activity-final .hero{background:radial-gradient(ellipse at 90% 0%,#ce995616,transparent 62%),#352e29;color:#fff5e8;border-color:#765b43;box-shadow:inset 0 1px 0 #fff1,0 8px 26px #0001}
+#activity-final .hero .muted{color:#d0c1ae}#activity-final .hero .text-action{color:#edbd80}
+#activity-final .eyebrow{font-size:calc(11px * var(--activity-type));letter-spacing:.12em;font-weight:600;color:#e7c48e}
+#activity-final .hero-top{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+#activity-final .hero-row{display:grid;grid-template-columns:104px minmax(0,1fr);align-items:center;gap:12px}
+#activity-final .ring{width:104px;height:104px;display:grid;place-items:center;position:relative}
+#activity-final .ring svg{position:absolute;inset:0;width:104px;height:104px;overflow:visible}#activity-final .ring strong{font-size:36px;font-weight:650;letter-spacing:-1.5px;line-height:1;font-variant-numeric:tabular-nums}
+#activity-final .hero-title{font-size:calc(20px * var(--activity-type));font-weight:650;line-height:1.3;letter-spacing:-.6px;word-break:keep-all;overflow-wrap:anywhere}
+#activity-final .hero-copy{font-size:calc(12px * var(--activity-type));line-height:1.5;margin-top:5px!important;color:#d0c1ae;word-break:keep-all;overflow-wrap:anywhere}
+#activity-final .external-score{display:none;font-size:calc(26px * var(--activity-type));font-weight:650;line-height:1.2;margin-bottom:10px}
+#activity-final .external-score .score-label{font-size:calc(14px * var(--activity-type));font-weight:500;word-break:keep-all}#activity-final .external-score .score-value{white-space:nowrap}#activity-final .external-score small{font-size:calc(13px * var(--activity-type));font-weight:450;margin-left:4px}
+#activity-final .evidence{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;margin:14px 0 0;padding-top:12px;border-top:1px solid #a9937145}
+#activity-final .evidence-label{font-size:calc(12px * var(--activity-type));color:#d0c1ae;display:block}#activity-final .evidence strong{font-size:calc(16px * var(--activity-type));font-weight:600;display:block;line-height:1.4;white-space:nowrap}
+#activity-final .evidence small{font-size:calc(11px * var(--activity-type));font-weight:400;color:#d0c1ae}
+#activity-final .trend-head{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:calc(11px * var(--activity-type));color:#d0c1ae;margin-top:14px}
+#activity-final .spark{height:42px;width:100%;display:block;overflow:visible;margin-top:7px}
+#activity-final .axis{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;color:var(--a-muted);font-size:calc(11px * var(--activity-type));margin-top:4px}
+#activity-final .hero .axis{color:#d0c1ae}
+#activity-final .phone details{min-width:0;border-top:1px solid var(--a-line);margin-top:10px}
+#activity-final .phone summary{display:flex;justify-content:space-between;align-items:center;gap:8px;min-height:44px;list-style:none;font-size:calc(12px * var(--activity-type));font-weight:550;cursor:inherit}
+#activity-final .phone summary::-webkit-details-marker{display:none}#activity-final .phone details[open]&gt;summary svg{transform:rotate(90deg)}
+#activity-final .hero details{border-color:#a9937145}#activity-final .hero details p{font-size:calc(12px * var(--activity-type));color:#d0c1ae;padding-bottom:10px}
+#activity-final .phone .segmented{display:flex;gap:3px;background:var(--a-inset);padding:3px;border-radius:12px;font-size:calc(11px * var(--activity-type));width:max-content;max-width:100%;flex-wrap:wrap}
+#activity-final .phone .segmented button{padding:5px 11px;min-height:36px;min-width:max-content;border-radius:9px;text-align:center;flex:1}
+#activity-final .phone .segmented button[aria-pressed=true]{background:var(--a-surface);color:var(--a-gold);box-shadow:0 1px 5px #0001;font-weight:650}
+#activity-final .map-content{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;align-items:center}
+#activity-final .muscle-figures{display:flex;justify-content:space-evenly;gap:4px;min-width:0}
+#activity-final .muscle-figure{margin:0;min-width:0;width:48%;text-align:center}
+#activity-final .muscle-figure svg{display:block;width:100%;height:174px}
+#activity-final .muscle-figure figcaption{font-size:calc(11px * var(--activity-type));color:var(--a-muted);margin-top:2px}
+#activity-final .muscle-outline{fill:var(--a-inset);stroke:var(--a-line);stroke-width:1.5}
+#activity-final .phone{--fatigue-1:light-dark(#708c62,#98bf86);--fatigue-2:light-dark(#7c9465,#a7c787);--fatigue-3:light-dark(#939e67,#becc85);--fatigue-4:light-dark(#a69c67,#d1c482);--fatigue-5:light-dark(#ad9065,#d1ae79);--fatigue-6:light-dark(#a67a5b,#cc9770);--fatigue-7:light-dark(#996650,#bf7f63);--fatigue-8:light-dark(#8c5346,#b26959);--fatigue-9:light-dark(#80413d,#a65550);--fatigue-10:light-dark(#733434,#944343);--volume-0:light-dark(#e8e0d4,#494036);--volume-1:light-dark(#d9c5a9,#68503b);--volume-2:light-dark(#bea17a,#96704b);--volume-3:light-dark(#a97f4c,#bf945f);--volume-4:light-dark(#8a5632,#e0b87c)}
+#activity-final .muscle-shape{fill:var(--fatigue-2);stroke:var(--a-surface);stroke-width:.7}
+#activity-final .muscle-shape[data-volume=high]{fill:var(--fatigue-6)}
+#activity-final .phone [data-map=volume] .muscle-shape{fill:var(--volume-1)}#activity-final .phone [data-map=volume] .muscle-shape[data-volume=moderate]{fill:var(--volume-2)}#activity-final .phone [data-map=volume] .muscle-shape[data-volume=high]{fill:var(--volume-3)}#activity-final .phone [data-map=volume] .muscle-shape[data-volume=very-high]{fill:var(--volume-4)}
+#activity-final .map-copy .map-value{font-size:calc(25px * var(--activity-type));letter-spacing:-1px;font-weight:620;line-height:1.2;margin-top:12px}
+#activity-final .map-copy p{font-size:calc(12px * var(--activity-type));line-height:1.5;margin-top:5px;color:var(--a-muted)}
+#activity-final .map-legend{padding-top:13px;margin-top:13px;border-top:1px solid var(--a-line);font-size:calc(11px * var(--activity-type));color:var(--a-muted)}
+#activity-final .legend-scale{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:1px}
+#activity-final .legend-scale i{height:6px;display:block;border-radius:2px;background:var(--legend-color)}
+#activity-final .legend-labels{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:7px}
+#activity-final .volume-legend{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;margin-top:7px}
+#activity-final .volume-legend span{min-width:0;display:grid;gap:7px;text-align:center}
+#activity-final .volume-legend i{height:6px;display:block;border-radius:2px;background:var(--legend-color)}
+#activity-final .phone.large .volume-legend{grid-template-columns:minmax(0,1fr);gap:8px}#activity-final .phone.large .volume-legend span{grid-template-columns:40px minmax(0,1fr);align-items:center;gap:10px;text-align:left}
+#activity-final .stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 16px}
+#activity-final .stat{min-width:0}#activity-final .stat .stat-label{font-size:calc(11px * var(--activity-type));color:var(--a-muted);display:flex;gap:5px;align-items:center;flex-wrap:wrap}#activity-final .stat svg[data-lucide]{width:14px;height:14px;color:var(--a-gold)}
+#activity-final .value{font-size:calc(26px * var(--activity-type));line-height:1.2;letter-spacing:-.7px;font-weight:630;font-variant-numeric:tabular-nums;overflow-wrap:anywhere;margin-top:5px}
+#activity-final .value small{font-size:calc(12px * var(--activity-type));font-weight:400;letter-spacing:0;display:inline-block;margin-left:4px}
+#activity-final .delta{font-size:calc(11px * var(--activity-type));color:var(--a-muted);margin-top:4px}
+#activity-final .bars{display:flex;align-items:flex-end;gap:6px;height:46px;margin:12px 0 2px}#activity-final .bars&gt;span{flex:1;height:100%;display:flex;align-items:flex-end;min-width:0}#activity-final .bars i{display:block;width:100%;height:var(--h);background:var(--a-gold);opacity:.7;border-radius:3px 3px 0 0}
+#activity-final .rule{border-top:1px solid var(--a-line);padding-top:10px;margin-top:12px}
+#activity-final .risk .section-head{margin-bottom:6px}
+#activity-final .risk-status{display:inline-flex;align-items:center;gap:5px;padding:5px 9px;border-radius:10px;background:light-dark(#e9eedf,#39422e);color:light-dark(#4b663f,#c6d8ae);font-size:calc(11px * var(--activity-type));font-weight:600;flex:none}
+#activity-final .risk-status svg[data-lucide]{width:13px;height:13px}
+#activity-final .risk-lead{font-size:calc(14px * var(--activity-type));font-weight:550;line-height:1.5;word-break:keep-all;overflow-wrap:anywhere}
+#activity-final .risk-period{font-size:calc(11px * var(--activity-type));color:var(--a-muted);margin-top:5px}
+#activity-final .risk-observations{margin-top:13px;border-top:1px solid var(--a-line)}
+#activity-final .risk-observation{display:grid;grid-template-columns:19px minmax(0,1fr) auto;gap:5px 8px;align-items:start;padding:10px 0;border-bottom:1px solid var(--a-line)}
+#activity-final .risk-observation&gt;svg[data-lucide]{width:16px;height:16px;margin-top:2px;color:var(--a-gold)}
+#activity-final .risk-observation-name{font-size:calc(12px * var(--activity-type));font-weight:550;line-height:1.4;word-break:keep-all}
+#activity-final .risk-observation-detail{font-size:calc(11px * var(--activity-type));line-height:1.5;color:var(--a-muted);margin-top:3px}
+#activity-final .risk-observation-value{font-size:calc(14px * var(--activity-type));font-weight:650;font-variant-numeric:tabular-nums;white-space:nowrap}
+#activity-final .risk-note{font-size:calc(11px * var(--activity-type));line-height:1.5;color:var(--a-muted);margin-top:11px!important;word-break:keep-all;overflow-wrap:anywhere}
+#activity-final .phone.large .risk-observation{grid-template-columns:19px minmax(0,1fr)}#activity-final .phone.large .risk-observation-value{grid-column:2}
+#activity-final .phone .search{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--a-inset);border-radius:12px;min-height:44px;margin-bottom:10px;color:var(--a-muted)}
+#activity-final .phone input[type=search]{background:transparent;border:0;width:100%;min-width:0;outline-offset:3px;font-size:calc(13px * var(--activity-type))}
+#activity-final .context{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+#activity-final .workout-list{margin-top:10px}#activity-final .workout-row{display:flex;align-items:center;gap:10px;width:100%;min-height:64px;padding:10px 0!important;border-top:1px solid var(--a-line)!important}
+#activity-final .workout-row:first-child{border:0!important;padding-top:0!important}#activity-final .workout-row .row-copy{flex:1;min-width:0}#activity-final .row-copy strong{display:block;font-size:calc(13px * var(--activity-type));line-height:1.4;font-weight:600;overflow-wrap:anywhere}#activity-final .row-copy span{display:block;font-size:calc(11px * var(--activity-type));color:var(--a-muted);margin-top:3px}
+#activity-final .tile-icon{width:34px;height:34px;background:var(--a-inset);color:var(--a-gold);border-radius:11px;display:grid;place-items:center;flex:none}
+#activity-final .phone .pill{border:1px solid var(--a-line);border-radius:10px;padding:8px 10px;min-height:44px;font-size:calc(12px * var(--activity-type));width:100%;margin-top:8px;display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--a-inset)}
+#activity-final .phone .primary{background:var(--a-gold);color:light-dark(#fffaf2,#30271f);border-radius:12px;min-height:44px;padding:10px 12px;font-size:calc(13px * var(--activity-type));font-weight:650;width:100%;display:flex;justify-content:space-between;gap:8px;align-items:center;margin-top:10px}
+#activity-final .phone .outline-entry{border-top:1px solid var(--a-line);padding-top:10px;margin-top:10px}
+#activity-final .progress{height:5px;border-radius:4px;background:var(--a-faint);overflow:hidden;margin:10px 0}#activity-final .progress i{display:block;background:var(--a-gold);height:100%;border-radius:4px}
+#activity-final .split{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}#activity-final .split&gt;div{min-width:0}
+#activity-final .volume-metrics{margin-top:10px;gap:10px}
+#activity-final .volume-metric{padding:14px 12px;border-radius:16px;position:relative;isolation:isolate;overflow:hidden;background:radial-gradient(ellipse at 85% 0,light-dark(#e4bd7045,#c99b4f33),transparent 75%),linear-gradient(135deg,light-dark(#fcf3e1,#3d3121),light-dark(#f5ead5,#302820));border:1px solid light-dark(#e3d0ac,#78603c);box-shadow:inset 0 1px 0 light-dark(#fff9,#f5ddab21)}
+#activity-final .volume-metric.calories{background:radial-gradient(ellipse at 85% 0,light-dark(#d9967045,#cf8c5533),transparent 75%),linear-gradient(135deg,light-dark(#fff1e7,#402d24),light-dark(#f6e9de,#312720));border-color:light-dark(#e3c8b6,#7c5840)}
+#activity-final .volume-metric-title{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:calc(11px * var(--activity-type));color:var(--a-muted)}
+#activity-final .volume-metric-icon{width:28px;height:28px;border-radius:10px;display:grid;place-items:center;background:light-dark(#f0d397,#806032);color:light-dark(#87571f,#ffe2a4);box-shadow:inset 0 1px 0 #fff3;flex:none}
+#activity-final .volume-metric.calories .volume-metric-icon{background:light-dark(#f2c4a7,#825236);color:light-dark(#a14f28,#ffd8ba)}
+#activity-final .volume-metric-icon svg[data-lucide]{width:17px;height:17px}
+#activity-final .volume-metric .value{display:flex;align-items:baseline;flex-wrap:wrap;gap:3px 5px;margin-top:13px;line-height:1.05}
+#activity-final .volume-metric .volume-number{font-size:calc(42px * var(--activity-type));font-weight:680;letter-spacing:-1.6px;white-space:nowrap;color:light-dark(#684516,#ffe5ad);font-variant-numeric:tabular-nums;text-shadow:0 2px 16px light-dark(#bc8c3020,#e8b55b1c)}
+#activity-final .volume-metric.calories .volume-number{color:light-dark(#884b2a,#ffd7b2);text-shadow:0 2px 16px light-dark(#bc703020,#e8a05b1c)}
+#activity-final .volume-metric .value small{margin:0;font-size:calc(12px * var(--activity-type));line-height:1.2;color:var(--a-muted);white-space:nowrap}
+#activity-final .volume-chart{margin-top:15px;padding-top:12px;border-top:1px solid var(--a-line)}
+#activity-final .medal{font-size:calc(11px * var(--activity-type));color:var(--a-gold);display:flex;align-items:center;gap:6px;margin-top:8px}
+#activity-final .surface[data-section=records]{background:radial-gradient(ellipse at 90% 0,light-dark(#e8bb6933,#c8903a20),transparent 65%),var(--a-surface);border-color:light-dark(#ceb68e,#8c6a41);box-shadow:inset 0 1px 0 light-dark(#fff,#edd3a824),0 5px 20px #9f6d260a}
+#activity-final .records-summary{display:flex;align-items:center;gap:8px 14px;flex-wrap:wrap;margin-bottom:12px;color:var(--a-gold);font-size:calc(11px * var(--activity-type))}
+#activity-final .records-summary span{display:flex;align-items:center;gap:4px}#activity-final .records-summary svg[data-lucide]{width:14px;height:14px}
+#activity-final .record-item{position:relative;isolation:isolate;min-width:0;padding:14px 12px;background:linear-gradient(145deg,light-dark(#fffaf0,#3a2e21),light-dark(#f7ead3,#30271f));border:1px solid light-dark(#dfc99e,#735a38);border-radius:16px;overflow:hidden;box-shadow:inset 0 1px 0 light-dark(#fff,#e9d1a01a)}
+#activity-final .record-item:before{content:&#x27;&#x27;;position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(115deg,transparent 30%,light-dark(#fff6,#e5bf7320) 50%,transparent 75%)}
+#activity-final .record-top{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:11px}
+#activity-final .record-medallion{width:34px;height:34px;display:grid;place-items:center;background:linear-gradient(145deg,light-dark(#f7dfa4,#a47432),light-dark(#dbb96f,#6f4b24));color:light-dark(#78501e,#ffe6ae);border-radius:50%;box-shadow:inset 0 1px 0 #fff5,0 2px 7px #a8732820;flex:none}
+#activity-final .record-medallion svg[data-lucide]{width:19px;height:19px}
+#activity-final .record-new{font-size:calc(11px * var(--activity-type));font-weight:600;letter-spacing:.05em;color:var(--a-gold)}
+#activity-final .record-title{font-size:calc(14px * var(--activity-type));font-weight:650;line-height:1.35;overflow-wrap:anywhere}
+#activity-final .record-kind{font-size:calc(11px * var(--activity-type));color:var(--a-muted);margin-top:3px}
+#activity-final .record-item .value{font-size:calc(31px * var(--activity-type));letter-spacing:-1px;margin-top:9px;color:var(--a-ink)}
+#activity-final .record-improvement{font-size:calc(11px * var(--activity-type));font-weight:550;color:var(--a-gold);margin-top:6px}
+#activity-final .record-foot{margin-top:12px;padding-top:10px;border-top:1px solid var(--a-line);display:flex;gap:3px;flex-direction:column;font-size:calc(11px * var(--activity-type));color:var(--a-muted)}
+#activity-final .report-copy{font-size:calc(12px * var(--activity-type));line-height:1.6;color:var(--a-muted);margin-top:10px!important}
+#activity-final .report-period{display:flex;justify-content:space-between;gap:6px 12px;flex-wrap:wrap;font-size:calc(11px * var(--activity-type));color:var(--a-muted);margin-bottom:12px}
+#activity-final .report-spotlight{display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding:15px 13px;background:radial-gradient(ellipse at 20% 0,light-dark(#ebc87c55,#d5a75026),transparent 75%),linear-gradient(125deg,light-dark(#fbf0d8,#3c3221),light-dark(#f7eee0,#31291f));border:1px solid light-dark(#ddc69a,#755d37);border-radius:17px;box-shadow:inset 0 1px 0 #fff3}
+#activity-final .report-spotlight&gt;div{flex:1 1 calc(106px * var(--activity-type));min-width:0}
+#activity-final .report-spotlight-label{font-size:calc(11px * var(--activity-type));color:var(--a-muted);display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+#activity-final .report-spotlight-label svg[data-lucide]{width:16px;height:16px;color:var(--a-gold)}
+#activity-final .report-change{font-size:calc(40px * var(--activity-type));font-weight:680;line-height:1.1;letter-spacing:-1.2px;color:light-dark(#805722,#f4d38e);margin-top:7px;white-space:nowrap;font-variant-numeric:tabular-nums}
+#activity-final .report-change small{font-size:calc(18px * var(--activity-type));font-weight:500;letter-spacing:0;margin-left:3px}
+#activity-final .report-volume{display:flex;flex-direction:column;gap:7px;min-width:0;text-align:right}
+#activity-final .report-volume-value{display:flex;gap:3px 5px;flex-wrap:wrap;justify-content:flex-end;align-items:baseline;min-width:0}
+#activity-final .report-volume-value strong{font-size:calc(25px * var(--activity-type));line-height:1.2;letter-spacing:-.7px;font-weight:650;white-space:nowrap;font-variant-numeric:tabular-nums}
+#activity-final .report-volume-value small{font-size:calc(11px * var(--activity-type));color:var(--a-muted)}
+#activity-final .report-volume-label{font-size:calc(11px * var(--activity-type));color:var(--a-muted);word-break:keep-all}
+#activity-final .report-key-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:15px 0 12px;border-bottom:1px solid var(--a-line)}
+#activity-final .report-stat{min-width:0}
+#activity-final .report-stat-value{display:flex;align-items:baseline;gap:3px;flex-wrap:wrap;font-variant-numeric:tabular-nums}
+#activity-final .report-stat-value strong{font-size:calc(25px * var(--activity-type));font-weight:650;letter-spacing:-.6px;line-height:1.2}
+#activity-final .report-stat-value small{font-size:calc(11px * var(--activity-type));color:var(--a-muted)}
+#activity-final .report-stat-label{display:block;margin-top:5px;font-size:calc(11px * var(--activity-type));color:var(--a-muted);word-break:keep-all}
+#activity-final .report-muscles{display:flex;align-items:center;gap:6px 8px;flex-wrap:wrap;font-size:calc(11px * var(--activity-type));color:var(--a-muted);margin-top:12px}
+#activity-final .report-muscle{padding:4px 8px;background:var(--a-inset);border-radius:9px;color:var(--a-ink)}
+#activity-final .report-highlights{display:flex;flex-wrap:wrap;gap:7px 12px;margin-top:12px}
+#activity-final .report-highlight{display:inline-flex;align-items:center;gap:5px;font-size:calc(11px * var(--activity-type));color:var(--a-gold)}
+#activity-final .report-highlight svg[data-lucide]{width:15px;height:15px;flex:none}
+#activity-final .phone.large .report-spotlight,#activity-final .phone.large .report-key-stats{grid-template-columns:minmax(0,1fr)}#activity-final .phone.large .report-volume{text-align:left}#activity-final .phone.large .report-volume-value{justify-content:flex-start}
+#activity-final .phone.large .report-spotlight&gt;div{flex-basis:100%}
+#activity-final .phone.large .report-key-stats{gap:15px}
+#activity-final .recent-workout-row{display:grid!important;grid-template-columns:34px minmax(0,1fr) 15px;align-items:start;gap:10px;width:100%;padding:13px 0!important;border-top:1px solid var(--a-line)!important;min-height:80px}
+#activity-final .recent-workout-row:first-child{border-top:0!important;padding-top:0!important}
+#activity-final .recent-content{display:block;min-width:0}
+#activity-final .recent-top{display:flex;gap:5px 8px;align-items:center;flex-wrap:wrap;min-width:0}
+#activity-final .recent-name{font-size:calc(14px * var(--activity-type));font-weight:620;line-height:1.4;overflow-wrap:anywhere;min-width:0}
+#activity-final .recent-sync{display:inline-flex;align-items:center;flex:none;color:light-dark(#875363,#efbdce);font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:calc(14px * var(--activity-type));line-height:1}
+#activity-final .recent-meta{display:flex;gap:4px 9px;flex-wrap:wrap;align-items:center;color:var(--a-muted);font-size:calc(11px * var(--activity-type));margin-top:5px;line-height:1.5}
+#activity-final .recent-heart{display:inline-flex;align-items:center;gap:4px;color:light-dark(#a04c49,#e5a09a);font-variant-numeric:tabular-nums}
+#activity-final .recent-heart svg[data-lucide]{width:12px;height:12px;fill:currentColor;stroke-width:1.4;flex:none}
+#activity-final .recent-heart small{font-size:inherit}
+#activity-final .recent-badges{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px;padding-bottom:2px}
+#activity-final .recent-achievement{display:inline-flex;align-items:center;gap:7px;max-width:100%;min-height:34px;padding:4px 9px 4px 4px;border:1px solid light-dark(#d8b46d,#8d6938);border-radius:12px;background:linear-gradient(125deg,light-dark(#fff6dc,#574020),light-dark(#eed8a4,#37291b));color:light-dark(#76501e,#f3d49a);box-shadow:inset 0 1px 0 light-dark(#fffdf4,#967245),0 2px 5px light-dark(#9c71251a,#00000026);font-size:calc(11px * var(--activity-type));line-height:1.35;font-weight:650}
+#activity-final .achievement-emblem{position:relative;isolation:isolate;display:inline-flex;align-items:center;justify-content:center;flex:none;width:26px;height:26px;border-radius:50%;background:linear-gradient(145deg,#fff2b8,#c18a37 53%,#edca78);color:#704819;box-shadow:inset 0 0 0 1px #efd18c,inset 0 0 0 3px #a7793340,0 1px 3px #24150d3d}
+#activity-final .achievement-emblem svg[data-lucide]{position:relative;width:15px;height:15px;flex:none;stroke-width:1.8}
+#activity-final .achievement-emblem:before{content:&#x27;&#x27;;position:absolute;z-index:-1;left:6px;right:6px;top:19px;height:10px;background:linear-gradient(90deg,#bd8540,#e9ba66,#9b642b);clip-path:polygon(0 0,100% 0,100% 100%,50% 72%,0 100%)}
+#activity-final .achievement-label{min-width:0;overflow-wrap:anywhere}
+#activity-final .recent-achievement.record{background:linear-gradient(115deg,light-dark(#fff1ba,#f6d99a),light-dark(#e4bd6c,#be8d42));color:#654015;border-color:light-dark(#c39743,#ebc77d);box-shadow:inset 0 1px 0 #fff6d6,0 2px 7px light-dark(#af7e2826,#d6a14826)}
+#activity-final .recent-achievement.record .achievement-emblem{background:linear-gradient(145deg,#fff8d9,#e6b958 52%,#ffedaa);color:#754916}
+#activity-final .recent-achievement.record .achievement-emblem:before{display:none}
+#activity-final .achievement-glint{display:inline-flex;align-items:center;flex:none;color:#93601e}
+#activity-final .achievement-glint svg[data-lucide]{width:10px;height:10px}
+#activity-final .recent-workout-row&gt;svg[data-lucide]{width:14px;height:14px;margin-top:10px}
+#activity-final .phone.large .recent-workout-row{grid-template-columns:34px minmax(0,1fr) 15px}
+#activity-final .weekdays{display:flex;justify-content:space-between;gap:4px;margin-top:12px;flex-wrap:wrap}#activity-final .weekdays span{display:grid;gap:6px;justify-items:center;font-size:calc(11px * var(--activity-type));color:var(--a-muted)}#activity-final .weekdays i{width:9px;height:9px;border-radius:50%;background:var(--a-faint)}#activity-final .weekdays .active i{background:var(--a-gold)}
+#activity-final .mix-period{display:flex;gap:5px 10px;flex-wrap:wrap;font-size:calc(11px * var(--activity-type));color:var(--a-muted);margin-bottom:15px}
+#activity-final .mix-overview{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+#activity-final .mix-category{min-width:0}
+#activity-final .mix-category-title{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:calc(12px * var(--activity-type));font-weight:550}
+#activity-final .mix-icon{width:32px;height:32px;border-radius:11px;display:grid;place-items:center;background:light-dark(#f2dfba,#544126);color:var(--a-gold);box-shadow:inset 0 1px 0 #fff2;flex:none}
+#activity-final .mix-icon svg[data-lucide]{width:19px;height:19px}
+#activity-final .mix-category.cardio .mix-icon{background:light-dark(#e3ead8,#35442e);color:var(--a-green)}
+#activity-final .mix-percent{display:flex;align-items:baseline;gap:4px;margin-top:10px;color:var(--a-gold);font-variant-numeric:tabular-nums}
+#activity-final .mix-category.cardio .mix-percent{color:var(--a-green)}
+#activity-final .mix-percent strong{font-size:calc(42px * var(--activity-type));font-weight:680;letter-spacing:-1.4px;line-height:1.1;white-space:nowrap}
+#activity-final .mix-percent small{font-size:calc(18px * var(--activity-type));font-weight:500;line-height:1.2}
+#activity-final .mix{display:flex;gap:3px;height:16px;border-radius:6px;overflow:hidden;margin-top:16px}#activity-final .mix i:first-child{background:var(--a-gold);flex:68}#activity-final .mix i:last-child{background:var(--a-green);flex:32}
+#activity-final .mix-muscles{display:flex;align-items:center;flex-wrap:wrap;gap:7px 8px;margin-top:16px;padding-top:13px;border-top:1px solid var(--a-line);font-size:calc(11px * var(--activity-type))}
+#activity-final .mix-muscles-label{display:flex;align-items:center;gap:5px;color:var(--a-muted);word-break:keep-all;margin-right:3px}
+#activity-final .mix-muscles-label svg[data-lucide]{width:15px;height:15px;flex:none}
+#activity-final .mix-muscle-tag{padding:5px 9px;border-radius:10px;background:var(--a-inset);color:var(--a-ink);font-weight:500}
+#activity-final .phone.large .mix-overview{grid-template-columns:minmax(0,1fr);gap:17px}
+#activity-final .bottomnav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:3px;margin:20px 14px 10px;padding:6px;border-radius:28px;border:1px solid var(--a-line);background:var(--a-surface);box-shadow:inset 0 1px 0 #fff4,0 8px 28px #0001}
+#activity-final .phone .navitem{padding:5px 2px;min-height:51px;display:flex;flex-direction:column;gap:3px;align-items:center;justify-content:center;font-size:11px;border-radius:24px;color:var(--a-muted)}#activity-final .navitem svg[data-lucide]{width:21px;height:21px}#activity-final .phone .navitem.selected{background:var(--a-inset);color:var(--a-gold);font-weight:650}
+#activity-final .home{width:110px;height:4px;background:var(--a-ink);opacity:.6;border-radius:3px;margin:10px auto}
+#activity-final .wide-pair{display:grid;gap:12px}#activity-final .wide-pair&gt;*{min-width:0}
+#activity-final .phone[data-design=flow] .wide-pair{align-items:start}#activity-final .flow-stack{display:grid;gap:12px;min-width:0}
+#activity-final .phone.large .hero-row{display:block}#activity-final .phone.large .ring{display:none}#activity-final .phone.large .external-score{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline}#activity-final .phone.large .evidence,#activity-final .phone.large .stats,#activity-final .phone.large .split,#activity-final .phone.large .map-content{grid-template-columns:minmax(0,1fr)}
+#activity-final .phone.large .evidence-row{grid-template-columns:minmax(0,1fr) auto;gap:6px 10px}#activity-final .phone.large .evidence-label{grid-column:1;grid-row:1}#activity-final .phone.large .evidence-row strong{grid-column:2;grid-row:1}#activity-final .phone.large .evidence-track{grid-column:1/-1;grid-row:2}
+#activity-final .phone.large .titlebar{align-items:flex-start;flex-wrap:wrap}#activity-final .phone.large .section-head{align-items:flex-start}#activity-final .phone.large .workout-row{align-items:flex-start;flex-wrap:wrap}
+#activity-final .phone.large .map-copy{padding-top:6px}#activity-final .phone.large .muscle-figure svg{height:174px}#activity-final .phone.large .value{overflow-wrap:anywhere}
+#activity-final .placeholder{height:13px;border-radius:5px;background:var(--a-faint);margin:10px 0;opacity:.55;width:75%}#activity-final .placeholder.short{width:45%}
+#activity-final .empty-copy{font-size:calc(13px * var(--activity-type));line-height:1.6;color:var(--a-muted);margin:8px 0!important}
+#activity-final .detail-page{min-height:600px}#activity-final .detail-page h2{font-size:calc(22px * var(--activity-type));margin-bottom:12px}#activity-final .detail-page .surface{margin-top:10px}#activity-final .detail-page p{font-size:calc(13px * var(--activity-type));line-height:1.6}
+#activity-final .phone .back{min-height:44px;color:var(--a-gold);display:flex;align-items:center;gap:5px;padding:0;font-size:calc(13px * var(--activity-type))}
+#activity-final .preview-tag{font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:11px;color:var(--muted-foreground);text-align:center;margin-bottom:5px}
+@container (min-width:700px){#activity-final .phone:not(.large) .wide-pair{grid-template-columns:repeat(2,minmax(0,1fr))}#activity-final .phone:not(.large) .hero-row{grid-template-columns:104px minmax(0,1fr)}#activity-final .phone:not(.large) .stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@container (max-width:340px){#activity-final .map-content{grid-template-columns:minmax(0,1fr)}#activity-final .map-copy .map-value{margin-top:4px}#activity-final .phone .titlebar{gap:8px}#activity-final .phone h1{font-size:calc(28px * var(--activity-type))}}
+@media(prefers-reduced-motion:reduce){#activity-final *{scroll-behavior:auto!important}}
+&lt;/style&gt;
+&lt;div id=&quot;activity-final&quot; aria-label=&quot;Activity 최종안 · 보기 조건&quot;&gt;
+  &lt;div class=&quot;preview-tag&quot;&gt;최종 통합 시안 · 예시 기록 · 앱 미적용&lt;/div&gt;
+  &lt;div class=&quot;viz-dotted-background&quot; aria-label=&quot;Activity 최종 통합 시안&quot;&gt;
+    &lt;section aria-label=&quot;Activity · 상태에서 운동과 성취로&quot;&gt;&lt;div class=&quot;stage&quot;&gt;&lt;div class=&quot;phone&quot; data-design=&quot;flow&quot; aria-label=&quot;Flow Activity&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;
+  &lt;/div&gt;
+  &lt;template id=&quot;activity-anatomy&quot;&gt;&lt;figure class=&quot;muscle-figure&quot;&gt;&lt;svg viewBox=&quot;0 0 120 220&quot; aria-hidden=&quot;true&quot; focusable=&quot;false&quot;&gt;&lt;circle class=&quot;muscle-outline&quot; cx=&quot;60&quot; cy=&quot;16&quot; r=&quot;10&quot;/&gt;&lt;path class=&quot;muscle-outline&quot; d=&quot;M51 25 L48 33 30 38 22 50 14 85 20 88 31 57 34 85 40 111 44 126 39 173 42 207 51 207 57 165 60 137 63 165 69 207 78 207 81 173 76 126 80 111 86 85 89 57 100 88 106 85 98 50 90 38 72 33 69 25&quot;/&gt;
+                &lt;path class=&quot;muscle-shape&quot; data-volume=&quot;high&quot; d=&quot;M48 36 Q37 38 34 46 L39 57 54 55 58 43Z&quot;/&gt;&lt;path class=&quot;muscle-shape&quot; data-volume=&quot;high&quot; d=&quot;M72 36 Q83 38 86 46 L81 57 66 55 62 43Z&quot;/&gt;
+                &lt;path class=&quot;muscle-shape&quot; data-volume=&quot;moderate&quot; d=&quot;M32 45 Q25 49 25 59 L18 80 22 82 36 57Z&quot;/&gt;&lt;path class=&quot;muscle-shape&quot; data-volume=&quot;moderate&quot; d=&quot;M88 45 Q95 49 95 59 L102 80 98 82 84 57Z&quot;/&gt;
+                &lt;path class=&quot;muscle-shape&quot; data-volume=&quot;very-high&quot; d=&quot;M40 58 L58 56 58 72 Q49 77 41 70Z&quot;/&gt;&lt;path class=&quot;muscle-shape&quot; data-volume=&quot;very-high&quot; d=&quot;M80 58 L62 56 62 72 Q71 77 79 70Z&quot;/&gt;
+                &lt;path class=&quot;muscle-shape&quot; data-volume=&quot;light&quot; d=&quot;M42 74 Q50 79 58 74 L58 100 46 102Z&quot;/&gt;&lt;path class=&quot;muscle-shape&quot; data-volume=&quot;light&quot; d=&quot;M78 74 Q70 79 62 74 L62 100 74 102Z&quot;/&gt;
+                &lt;path class=&quot;muscle-shape&quot; data-volume=&quot;moderate&quot; d=&quot;M45 113 L57 113 58 137 52 162 45 162 42 134Z&quot;/&gt;&lt;path class=&quot;muscle-shape&quot; data-volume=&quot;moderate&quot; d=&quot;M75 113 L63 113 62 137 68 162 75 162 78 134Z&quot;/&gt;
+                &lt;path class=&quot;muscle-shape&quot; data-volume=&quot;light&quot; d=&quot;M44 168 L52 168 49 200 44 202 42 186Z&quot;/&gt;&lt;path class=&quot;muscle-shape&quot; data-volume=&quot;light&quot; d=&quot;M76 168 L68 168 71 200 76 202 78 186Z&quot;/&gt;
+              &lt;/svg&gt;&lt;figcaption&gt;앞면&lt;/figcaption&gt;&lt;/figure&gt;
+&lt;figure class=&quot;muscle-figure&quot;&gt;&lt;svg viewBox=&quot;0 0 120 220&quot; aria-hidden=&quot;true&quot; focusable=&quot;false&quot;&gt;&lt;circle class=&quot;muscle-outline&quot; cx=&quot;60&quot; cy=&quot;16&quot; r=&quot;10&quot;/&gt;&lt;path class=&quot;muscle-outline&quot; d=&quot;M51 25 L48 33 30 38 22 50 14 85 20 88 31 57 34 85 40 111 44 126 39 173 42 207 51 207 57 165 60 137 63 165 69 207 78 207 81 173 76 126 80 111 86 85 89 57 100 88 106 85 98 50 90 38 72 33 69 25&quot;/&gt;
+                &lt;path class=&quot;muscle-shape&quot; data-volume=&quot;high&quot; d=&quot;M49 34 Q60 38 71 34 L68 52 60 59 52 52Z&quot;/&gt;&lt;path class=&quot;muscle-shape&quot; data-volume=&quot;moderate&quot; d=&quot;M42 38 L50 37 56 56 40 64 34 50Z&quot;/&gt;&lt;path class=&quot;muscle-shape&quot; data-volume=&quot;moderate&quot; d=&quot;M78 38 L70 37 64 56 80 64 86 50Z&quot;/&gt;
+                &lt;path class=&quot;muscle-shape&quot; data-volume=&quot;moderate&quot; d=&quot;M32 46 L37 57 24 82 19 80 23 55Z&quot;/&gt;&lt;path class=&quot;muscle-shape&quot; data-volume=&quot;moderate&quot; d=&quot;M88 46 L83 57 96 82 101 80 97 55Z&quot;/&gt;
+                &lt;path class=&quot;muscle-shape&quot; data-volume=&quot;very-high&quot; d=&quot;M43 62 L57 57 58 100 46 103 40 81Z&quot;/&gt;&lt;path class=&quot;muscle-shape&quot; data-volume=&quot;very-high&quot; d=&quot;M77 62 L63 57 62 100 74 103 80 81Z&quot;/&gt;
+                &lt;path class=&quot;muscle-shape&quot; data-volume=&quot;light&quot; d=&quot;M45 106 L58 105 57 126 45 125Z&quot;/&gt;&lt;path class=&quot;muscle-shape&quot; data-volume=&quot;light&quot; d=&quot;M75 106 L62 105 63 126 75 125Z&quot;/&gt;
+                &lt;path class=&quot;muscle-shape&quot; data-volume=&quot;high&quot; d=&quot;M44 128 L58 129 56 144 43 144Z&quot;/&gt;&lt;path class=&quot;muscle-shape&quot; data-volume=&quot;high&quot; d=&quot;M76 128 L62 129 64 144 77 144Z&quot;/&gt;
+                &lt;path class=&quot;muscle-shape&quot; data-volume=&quot;moderate&quot; d=&quot;M43 147 L55 148 52 167 44 167Z&quot;/&gt;&lt;path class=&quot;muscle-shape&quot; data-volume=&quot;moderate&quot; d=&quot;M77 147 L65 148 68 167 76 167Z&quot;/&gt;
+                &lt;path class=&quot;muscle-shape&quot; data-volume=&quot;light&quot; d=&quot;M44 171 L51 171 49 201 44 202 42 188Z&quot;/&gt;&lt;path class=&quot;muscle-shape&quot; data-volume=&quot;light&quot; d=&quot;M76 171 L69 171 71 201 76 202 78 188Z&quot;/&gt;
+              &lt;/svg&gt;&lt;figcaption&gt;뒷면&lt;/figcaption&gt;&lt;/figure&gt;&lt;/template&gt;
+&lt;/div&gt;
+&lt;script&gt;
+(()=&gt;{
+const root=document.getElementById(&#x27;activity-final&#x27;);
+const defaults={appearance:&#x27;auto&#x27;,width:402,text:100,data:&#x27;complete&#x27;,score:71,restDay:false};
+const saved=window.openai?.widgetState?.modelContent?.activityFinalDesign;
+const state={...defaults,...(saved&amp;&amp;typeof saved===&#x27;object&#x27;?saved:{})};
+const session={route:null,context:&#x27;gym&#x27;,map:&#x27;recovery&#x27;,query:&#x27;&#x27;,returnFocus:null};
+const icon=name=&gt;`&lt;i data-lucide=&quot;${name}&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;`;
+const esc=x=&gt;String(x).replace(/[&amp;&lt;&gt;&quot;&#x27;]/g,c=&gt;({&#x27;&amp;&#x27;:&#x27;&amp;amp;&#x27;,&#x27;&lt;&#x27;:&#x27;&amp;lt;&#x27;,&#x27;&gt;&#x27;:&#x27;&amp;gt;&#x27;,&#x27;&quot;&#x27;:&#x27;&amp;quot;&#x27;,&quot;&#x27;&quot;:&#x27;&amp;#39;&#x27;}[c]));
+const chevron=()=&gt;icon(&#x27;chevron-right&#x27;);
+const action=(label,route,cls=&#x27;&#x27;)=&gt;`&lt;button type=&quot;button&quot; class=&quot;text-action cursor-interaction ${cls}&quot; data-route=&quot;${route}&quot;&gt;${label}${chevron()}&lt;/button&gt;`;
+const sectionRoutes={muscle:&#x27;muscle&#x27;,week:&#x27;stats&#x27;,volume:&#x27;volume&#x27;,report:&#x27;report&#x27;,records:&#x27;records&#x27;,achievement:&#x27;achievements&#x27;,consistency:&#x27;consistency&#x27;,mix:&#x27;mix&#x27;};
+const headingLink=(title,route,glyph=&#x27;&#x27;,cls=&#x27;&#x27;,label=&#x27;&#x27;)=&gt;`&lt;button type=&quot;button&quot; class=&quot;heading-link cursor-interaction ${cls}&quot; data-route=&quot;${route}&quot; aria-label=&quot;${label||title+&#x27; 상세 보기&#x27;}&quot;&gt;&lt;span class=&quot;heading-title&quot;&gt;${glyph?icon(glyph):&#x27;&#x27;}&lt;span class=&quot;heading-text&quot;&gt;${title}&lt;/span&gt;${chevron()}&lt;/span&gt;&lt;/button&gt;`;
+const section=(id,title,glyph,body,tail=&#x27;&#x27;)=&gt;{const route=!session.route&amp;&amp;sectionRoutes[id];return `&lt;section class=&quot;surface&quot; data-section=&quot;${id}&quot;&gt;&lt;div class=&quot;section-head&quot;&gt;${route?`&lt;h2 class=&quot;section-heading&quot;&gt;${headingLink(title,route,glyph)}&lt;/h2&gt;`:`&lt;div class=&quot;label&quot;&gt;${icon(glyph)}&lt;h2&gt;${title}&lt;/h2&gt;&lt;/div&gt;`}${tail}&lt;/div&gt;${body}&lt;/section&gt;`;};
+const fmt=n=&gt;Number(n).toLocaleString(&#x27;ko-KR&#x27;);
+const hasScore=()=&gt;![&#x27;empty&#x27;,&#x27;denied&#x27;,&#x27;loading&#x27;,&#x27;calibrating&#x27;].includes(state.data);
+const hasRecords=()=&gt;![&#x27;empty&#x27;,&#x27;denied&#x27;,&#x27;loading&#x27;].includes(state.data);
+const chart=(values,color=&#x27;var(--a-gold)&#x27;,label=&#x27;최근 7일 준비도&#x27;)=&gt;{const segs=[];let seg=[];values.forEach((v,i)=&gt;{if(v===null){if(seg.length)segs.push(seg);seg=[];}else seg.push([8+i*44,46-v*.38]);});if(seg.length)segs.push(seg);return `&lt;svg class=&quot;spark&quot; viewBox=&quot;0 0 280 50&quot; preserveAspectRatio=&quot;none&quot; role=&quot;img&quot; aria-label=&quot;${esc(label+&#x27;: &#x27;+values.map(v=&gt;v===null?&#x27;기록 없음&#x27;:v+&#x27;점&#x27;).join(&#x27;, &#x27;))}&quot;&gt;&lt;path d=&quot;M8 45 H272&quot; stroke=&quot;currentColor&quot; opacity=&quot;.15&quot; fill=&quot;none&quot;/&gt;${segs.map(s=&gt;s.length&gt;1?`&lt;polyline points=&quot;${s.map(p=&gt;p.join(&#x27;,&#x27;)).join(&#x27; &#x27;)}&quot; stroke=&quot;${color}&quot; stroke-width=&quot;2&quot; fill=&quot;none&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;/&gt;`:&#x27;&#x27;).join(&#x27;&#x27;)}${values.map((v,i)=&gt;v===null?&#x27;&#x27;:`&lt;circle cx=&quot;${8+i*44}&quot; cy=&quot;${46-v*.38}&quot; r=&quot;${i===6?3:2}&quot; fill=&quot;${color}&quot;/&gt;`).join(&#x27;&#x27;)}&lt;/svg&gt;`};
+function ring(){const s=state.score,arc=s===0?&#x27;&#x27;:`&lt;circle cx=&quot;52&quot; cy=&quot;52&quot; r=&quot;48.5&quot; fill=&quot;none&quot; stroke=&quot;#e4bc6b&quot; stroke-width=&quot;7&quot; stroke-linecap=&quot;${s===100?&#x27;butt&#x27;:&#x27;round&#x27;}&quot; pathLength=&quot;100&quot; stroke-dasharray=&quot;${s} 100&quot; transform=&quot;rotate(-90 52 52)&quot;/&gt;`;return `&lt;div class=&quot;ring&quot; role=&quot;img&quot; aria-label=&quot;운동 준비도 ${s}점&quot;&gt;&lt;svg viewBox=&quot;0 0 104 104&quot; aria-hidden=&quot;true&quot;&gt;&lt;circle cx=&quot;52&quot; cy=&quot;52&quot; r=&quot;48.5&quot; fill=&quot;none&quot; stroke=&quot;#baa378&quot; opacity=&quot;.22&quot; stroke-width=&quot;7&quot;/&gt;${arc}&lt;/svg&gt;&lt;strong aria-hidden=&quot;true&quot;&gt;${s}&lt;/strong&gt;&lt;/div&gt;&lt;div class=&quot;external-score&quot;&gt;&lt;span class=&quot;score-label&quot;&gt;운동 준비도&lt;/span&gt;&lt;span class=&quot;score-value&quot;&gt;${s}&lt;small&gt;점&lt;/small&gt;&lt;/span&gt;&lt;/div&gt;`;}
+function hero(design){
+ if(!hasScore()){
+  const title={empty:&#x27;운동 준비도를 알아가는 중&#x27;,denied:&#x27;건강 기록을 연결해 주세요&#x27;,loading:&#x27;운동 기록을 불러오는 중&#x27;,calibrating:&#x27;나의 기준선을 만드는 중&#x27;}[state.data];
+  const copy={empty:&#x27;수면과 HRV 기록이 쌓이면 준비도와 변화를 함께 볼 수 있어요.&#x27;,denied:&#x27;Apple Health 접근을 허용하면 준비도와 운동 기록을 함께 볼 수 있어요.&#x27;,loading:&#x27;준비도를 확인하고 있어요. 운동은 상단 +에서 선택할 수 있어요.&#x27;,calibrating:&#x27;기록은 모으고 있어요. 기준선이 준비되면 점수를 표시해요.&#x27;}[state.data];
+  return `&lt;section class=&quot;surface hero&quot; data-section=&quot;readiness&quot;&gt;&lt;div class=&quot;hero-top&quot;&gt;&lt;span class=&quot;eyebrow&quot;&gt;READINESS&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;hero-title&quot;&gt;${title}&lt;/div&gt;&lt;p class=&quot;hero-copy&quot;&gt;${copy}&lt;/p&gt;${state.data===&#x27;loading&#x27;?&#x27;&lt;div class=&quot;placeholder&quot;&gt;&lt;/div&gt;&lt;div class=&quot;placeholder short&quot;&gt;&lt;/div&gt;&#x27;:&#x27;&#x27;}${state.data===&#x27;denied&#x27;?action(&#x27;건강 접근 안내&#x27;,&#x27;permissions&#x27;):&#x27;&#x27;}&lt;/section&gt;`;
+ }
+ const status=state.score&gt;=80?&#x27;운동하기 좋은 흐름&#x27;:state.score&gt;=60?&#x27;평소의 운동을 이어가도 좋아요&#x27;:&#x27;회복 흐름을 살펴보세요&#x27;;
+ const message=state.data===&#x27;partial&#x27;?&#x27;HRV는 평소보다 낮아요. 수면 기록은 아직 기다리고 있어요.&#x27;:state.score&gt;=80?&#x27;수면과 HRV가 평소 범위에 있어요.&#x27;:state.score&gt;=60?&#x27;HRV는 평소보다 낮고, 수면은 충분해요.&#x27;:&#x27;준비도가 평소보다 낮아요. 강도와 회복을 함께 살펴보세요.&#x27;;
+ const evidence=`&lt;div class=&quot;evidence&quot; aria-label=&quot;준비도 구성 점수&quot;&gt;&lt;div class=&quot;evidence-heading&quot;&gt;&lt;span&gt;준비도 근거&lt;/span&gt;&lt;span&gt;100점 기준&lt;/span&gt;&lt;/div&gt;${[[&#x27;HRV&#x27;,64],[&#x27;수면&#x27;,state.data===&#x27;partial&#x27;?null:83],[&#x27;회복&#x27;,72]].map(([name,value])=&gt;`&lt;div class=&quot;evidence-row ${value===null?&#x27;missing&#x27;:&#x27;&#x27;}&quot; data-evidence=&quot;${name}&quot; role=&quot;img&quot; aria-label=&quot;${name} 구성 점수 ${value===null?&#x27;기록 없음&#x27;:value+&#x27;점, 100점 기준&#x27;}&quot;&gt;&lt;span class=&quot;evidence-label&quot; aria-hidden=&quot;true&quot;&gt;${name}&lt;/span&gt;&lt;div class=&quot;evidence-track&quot; aria-hidden=&quot;true&quot;&gt;${value===null?&#x27;&#x27;:`&lt;i style=&quot;width:${value}%&quot;&gt;&lt;/i&gt;`}&lt;/div&gt;&lt;strong aria-hidden=&quot;true&quot;&gt;${value===null?&#x27;—&#x27;:value+&#x27;&lt;small&gt; /100&lt;/small&gt;&#x27;}&lt;/strong&gt;&lt;/div&gt;`).join(&#x27;&#x27;)}&lt;/div&gt;`;
+ const trend=state.data===&#x27;single&#x27;?&#x27;&lt;p class=&quot;hero-copy rule&quot;&gt;10.26 첫 기록 · 다음 기록부터 변화를 볼 수 있어요.&lt;/p&gt;&#x27;:`&lt;div class=&quot;trend-head&quot;&gt;&lt;span&gt;저장된 준비도 · 최근 7일&lt;/span&gt;&lt;span&gt;점수 /100&lt;/span&gt;&lt;/div&gt;${chart([62,68,state.data===&#x27;partial&#x27;?null:65,76,73,69,state.score],&#x27;#e4bc6b&#x27;)}&lt;div class=&quot;axis&quot;&gt;&lt;span&gt;10.20&lt;/span&gt;&lt;span&gt;10.26 · ${state.score}점&lt;/span&gt;&lt;/div&gt;`;
+ return `&lt;section class=&quot;surface hero&quot; data-section=&quot;readiness&quot;&gt;&lt;div class=&quot;hero-top&quot;&gt;${!session.route?headingLink(&#x27;READINESS&#x27;,&#x27;readiness&#x27;,&#x27;&#x27;,&#x27;eyebrow&#x27;,&#x27;운동 준비도 상세 보기&#x27;):&#x27;&lt;span class=&quot;eyebrow&quot;&gt;READINESS&lt;/span&gt;&#x27;}&lt;span class=&quot;small muted&quot;&gt;10.26 · 오늘&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;hero-row&quot;&gt;&lt;div&gt;${ring()}&lt;/div&gt;&lt;div&gt;&lt;div class=&quot;hero-title&quot;&gt;${status}&lt;/div&gt;&lt;p class=&quot;hero-copy&quot;&gt;${message}&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;${evidence}${design===&#x27;training&#x27;?`&lt;details&gt;&lt;summary&gt;7일 변화와 근거${chevron()}&lt;/summary&gt;${trend}&lt;p&gt;구성 수치는 각 항목의 100점 기준 점수예요. HRV 실측값이나 수면 시간과 구분해요.&lt;/p&gt;&lt;/details&gt;`:trend}&lt;/section&gt;`;
+}
+function muscleLegend(volume){return volume?`&lt;div class=&quot;map-legend&quot; data-legend=&quot;volume&quot; role=&quot;img&quot; aria-label=&quot;주간 세트 수 범례: 0, 1–5, 6–10, 11–15, 16세트 이상. 지도와 같은 다섯 색상.&quot;&gt;&lt;div&gt;주간 세트 수&lt;/div&gt;&lt;div class=&quot;volume-legend&quot; aria-hidden=&quot;true&quot;&gt;${[&#x27;0&#x27;,&#x27;1–5&#x27;,&#x27;6–10&#x27;,&#x27;11–15&#x27;,&#x27;16+&#x27;].map((label,i)=&gt;`&lt;span&gt;&lt;i style=&quot;--legend-color:var(--volume-${i})&quot;&gt;&lt;/i&gt;${label}&lt;/span&gt;`).join(&#x27;&#x27;)}&lt;/div&gt;&lt;/div&gt;`:`&lt;div class=&quot;map-legend&quot; data-legend=&quot;recovery&quot; role=&quot;img&quot; aria-label=&quot;근육 피로도 10단계 색상 범례: 왼쪽 회복됨에서 오른쪽 피로로 갈수록 피로도가 높아요.&quot;&gt;&lt;div class=&quot;legend-scale&quot; aria-hidden=&quot;true&quot;&gt;${Array.from({length:10},(_,i)=&gt;`&lt;i style=&quot;--legend-color:var(--fatigue-${i+1})&quot;&gt;&lt;/i&gt;`).join(&#x27;&#x27;)}&lt;/div&gt;&lt;div class=&quot;legend-labels&quot; aria-hidden=&quot;true&quot;&gt;&lt;span&gt;회복됨&lt;/span&gt;&lt;span&gt;피로&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;`;}
+function muscle(){const volume=session.map===&#x27;volume&#x27;;return section(&#x27;muscle&#x27;,&#x27;근육 회복&#x27;,&#x27;person-standing&#x27;,`&lt;div class=&quot;map-content&quot; data-map=&quot;${session.map}&quot;&gt;&lt;div class=&quot;muscle-figures&quot; role=&quot;img&quot; aria-label=&quot;${volume?&#x27;앞면과 뒷면 근육군의 주간 운동 세트 수 예시&#x27;:&#x27;앞면과 뒷면 근육군의 회복 상태 예시. 색상은 아래 피로도 범례와 같아요.&#x27;}&quot;&gt;${root.querySelector(&#x27;#activity-anatomy&#x27;).innerHTML}&lt;/div&gt;&lt;div class=&quot;map-copy&quot;&gt;&lt;div class=&quot;segmented&quot; role=&quot;group&quot; aria-label=&quot;근육 지도 기준&quot;&gt;&lt;button type=&quot;button&quot; data-map=&quot;recovery&quot; aria-pressed=&quot;${!volume}&quot; class=&quot;cursor-interaction&quot;&gt;회복&lt;/button&gt;&lt;button type=&quot;button&quot; data-map=&quot;volume&quot; aria-pressed=&quot;${volume}&quot; class=&quot;cursor-interaction&quot;&gt;세트 수&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;map-value&quot;&gt;${volume?&#x27;주간 세트&#x27;:&#x27;회복 상태&#x27;}&lt;/div&gt;&lt;p&gt;${volume?&#x27;주간 근력 기록의 부위별 운동량&#x27;:&#x27;최근 부위별 운동 기록을 기준으로 봐요.&#x27;}&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;${muscleLegend(volume)}`);}
+function stats(){const vals=[[&#x27;dumbbell&#x27;,&#x27;근력 볼륨&#x27;,&#x27;12,480&#x27;,&#x27;kg&#x27;,&#x27;이전 7일 대비 +12%&#x27;],[&#x27;flame&#x27;,&#x27;소모 칼로리&#x27;,&#x27;680&#x27;,&#x27;kcal&#x27;,&#x27;운동 기록 기준&#x27;],[&#x27;clock-3&#x27;,&#x27;운동 시간&#x27;,&#x27;142&#x27;,&#x27;분&#x27;,&#x27;이전 7일 대비 +8%&#x27;],[&#x27;calendar-days&#x27;,&#x27;활동일&#x27;,&#x27;3&#x27;,&#x27;일&#x27;,&#x27;최근 7일 중&#x27;]];return section(&#x27;week&#x27;,&#x27;최근 7일 운동&#x27;,&#x27;chart-no-axes-combined&#x27;,`&lt;div class=&quot;stats&quot;&gt;${vals.map(v=&gt;`&lt;div class=&quot;stat&quot;&gt;&lt;div class=&quot;stat-label&quot;&gt;${icon(v[0])}${v[1]}&lt;/div&gt;&lt;div class=&quot;value&quot;&gt;${v[2]}&lt;small&gt;${v[3]}&lt;/small&gt;&lt;/div&gt;&lt;div class=&quot;delta&quot;&gt;${v[4]}&lt;/div&gt;&lt;/div&gt;`).join(&#x27;&#x27;)}&lt;/div&gt;&lt;div class=&quot;rule&quot;&gt;&lt;div class=&quot;axis&quot;&gt;&lt;span&gt;10.20–10.26 · 일별 운동 시간&lt;/span&gt;&lt;span&gt;합계 142분&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;bars&quot; role=&quot;img&quot; aria-label=&quot;최근 7일 운동 시간 0, 45, 0, 50, 0, 47, 0분&quot;&gt;${[0,45,0,50,0,47,0].map(v=&gt;`&lt;span&gt;&lt;i style=&quot;--h:${v*2}%&quot;&gt;&lt;/i&gt;&lt;/span&gt;`).join(&#x27;&#x27;)}&lt;/div&gt;&lt;div class=&quot;axis&quot;&gt;&lt;span&gt;화&lt;/span&gt;&lt;span&gt;수&lt;/span&gt;&lt;span&gt;목&lt;/span&gt;&lt;span&gt;금&lt;/span&gt;&lt;span&gt;토&lt;/span&gt;&lt;span&gt;일&lt;/span&gt;&lt;span&gt;월&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;`);}
+function riskStatus(){return `&lt;span class=&quot;risk-status&quot;&gt;${icon(&#x27;shield-check&#x27;)}낮음&lt;/span&gt;`;}
+function riskBody(detailed=false){const missingSleep=state.data===&#x27;partial&#x27;,missingReadiness=state.data===&#x27;calibrating&#x27;;return `&lt;p class=&quot;risk-lead&quot;&gt;훈련량과 연속 운동의 부담이 낮은 편이에요.&lt;/p&gt;&lt;div class=&quot;risk-period&quot;&gt;10.20–10.26 · 운동 기록 기준&lt;/div&gt;&lt;div class=&quot;risk-observations&quot; aria-label=&quot;부담을 살펴본 기록&quot;&gt;${[{icon:&#x27;chart-no-axes-combined&#x27;,name:&#x27;근력 볼륨&#x27;,value:&#x27;+12%&#x27;,detail:&#x27;12,480kg · 이전 7일 대비&#x27;},{icon:&#x27;calendar-days&#x27;,name:&#x27;연속 운동&#x27;,value:&#x27;1일&#x27;,detail:&#x27;최근 운동 · 10.25&#x27;},{icon:&#x27;person-standing&#x27;,name:&#x27;근육 회복&#x27;,value:&#x27;회복 중&#x27;,detail:&#x27;어깨·둔근 · 최근 부위별 기록&#x27;}].map(x=&gt;`&lt;div class=&quot;risk-observation&quot;&gt;${icon(x.icon)}&lt;div&gt;&lt;div class=&quot;risk-observation-name&quot;&gt;${x.name}&lt;/div&gt;&lt;div class=&quot;risk-observation-detail&quot;&gt;${x.detail}&lt;/div&gt;&lt;/div&gt;&lt;strong class=&quot;risk-observation-value&quot;&gt;${x.value}&lt;/strong&gt;&lt;/div&gt;`).join(&#x27;&#x27;)}&lt;/div&gt;&lt;p class=&quot;risk-note&quot;&gt;${missingSleep?&#x27;수면 기록은 아직 반영되지 않았어요.&#x27;:missingReadiness?&#x27;준비도는 기준선이 쌓이면 함께 반영돼요.&#x27;:&#x27;회복 중인 부위는 아래 추천 운동과 함께 살펴보세요.&#x27;}&lt;/p&gt;${detailed?&#x27;&lt;div class=&quot;rule&quot;&gt;&lt;h3&gt;부담에 영향을 준 요인&lt;/h3&gt;&lt;p class=&quot;risk-note&quot;&gt;이 예시 기록에서는 훈련량 급증과 긴 연속 운동이 관측되지 않았어요. 위 기록은 평가에 사용한 맥락이며, 세 항목이 모두 부담을 높이는 요인이라는 뜻은 아니에요.&lt;/p&gt;&lt;/div&gt;&#x27;:&#x27;&#x27;}`;}
+function risk(){return `&lt;section class=&quot;surface risk&quot; data-section=&quot;risk&quot;&gt;&lt;div class=&quot;section-head&quot;&gt;&lt;h2 class=&quot;section-heading&quot;&gt;${headingLink(&#x27;훈련 부담 점검&#x27;,&#x27;risk&#x27;,&#x27;shield-check&#x27;)}&lt;/h2&gt;${riskStatus()}&lt;/div&gt;${riskBody()}&lt;/section&gt;`;}
+const exercises=[{name:&#x27;Goblet Squat&#x27;,meta:&#x27;하체 · 덤벨&#x27;,icon:&#x27;dumbbell&#x27;,place:[&#x27;gym&#x27;,&#x27;home&#x27;]},{name:&#x27;Seated Cable Row&#x27;,meta:&#x27;등 · 케이블&#x27;,icon:&#x27;dumbbell&#x27;,place:[&#x27;gym&#x27;]},{name:&#x27;Push-up&#x27;,meta:&#x27;가슴 · 맨몸&#x27;,icon:&#x27;person-standing&#x27;,place:[&#x27;home&#x27;,&#x27;gym&#x27;]},{name:&#x27;Running&#x27;,meta:&#x27;유산소 · 실외&#x27;,icon:&#x27;footprints&#x27;,place:[&#x27;home&#x27;,&#x27;gym&#x27;]}];
+function exerciseRows(list){return list.map(x=&gt;`&lt;button type=&quot;button&quot; class=&quot;workout-row cursor-interaction&quot; data-route=&quot;exercise:${esc(x.name)}&quot;&gt;&lt;span class=&quot;tile-icon&quot;&gt;${icon(x.icon)}&lt;/span&gt;&lt;span class=&quot;row-copy&quot;&gt;&lt;strong&gt;${esc(x.name)}&lt;/strong&gt;&lt;span&gt;${x.meta}&lt;/span&gt;&lt;/span&gt;${chevron()}&lt;/button&gt;`).join(&#x27;&#x27;);}
+function suggested(){return section(&#x27;suggested&#x27;,&#x27;추천 운동&#x27;,&#x27;sparkles&#x27;,`&lt;label class=&quot;search&quot;&gt;${icon(&#x27;search&#x27;)}&lt;input type=&quot;search&quot; data-search placeholder=&quot;운동 검색&quot; aria-label=&quot;운동 검색&quot; value=&quot;${esc(session.query)}&quot;&gt;&lt;/label&gt;&lt;div class=&quot;context&quot;&gt;&lt;div class=&quot;segmented&quot; role=&quot;group&quot; aria-label=&quot;운동 장소&quot;&gt;&lt;button type=&quot;button&quot; data-context=&quot;gym&quot; aria-pressed=&quot;${session.context===&#x27;gym&#x27;}&quot; class=&quot;cursor-interaction&quot;&gt;헬스장&lt;/button&gt;&lt;button type=&quot;button&quot; data-context=&quot;home&quot; aria-pressed=&quot;${session.context===&#x27;home&#x27;}&quot; class=&quot;cursor-interaction&quot;&gt;집&lt;/button&gt;&lt;/div&gt;&lt;button type=&quot;button&quot; class=&quot;text-action small-action cursor-interaction&quot; data-route=&quot;equipment&quot;&gt;${icon(&#x27;sliders-horizontal&#x27;)}장비&lt;/button&gt;&lt;/div&gt;&lt;div data-exercise-results aria-live=&quot;polite&quot;&gt;${suggestionResults()}&lt;/div&gt;&lt;details&gt;&lt;summary&gt;추천 루틴 · 내 템플릿${chevron()}&lt;/summary&gt;&lt;button class=&quot;pill cursor-interaction&quot; type=&quot;button&quot; data-route=&quot;template:추천 전신 루틴&quot;&gt;추천 전신 루틴 · 운동 4개${chevron()}&lt;/button&gt;&lt;button class=&quot;pill cursor-interaction&quot; type=&quot;button&quot; data-route=&quot;template:내 상체 루틴&quot;&gt;내 상체 루틴 · 운동 5개${chevron()}&lt;/button&gt;&lt;/details&gt;&lt;div class=&quot;outline-entry&quot;&gt;${action(&#x27;AI 운동 만들기&#x27;,&#x27;ai&#x27;)}${action(&#x27;전체 운동&#x27;,&#x27;picker&#x27;)}&lt;/div&gt;`);}
+function suggestionResults(){const q=session.query.toLowerCase(),list=exercises.filter(x=&gt;x.place.includes(session.context)&amp;&amp;(!q||x.name.toLowerCase().includes(q)||x.meta.includes(q)));if(state.restDay&amp;&amp;!q)return `&lt;h3&gt;오늘은 회복을 살펴보는 날&lt;/h3&gt;&lt;p class=&quot;empty-copy&quot;&gt;추천 강도보다 몸의 느낌을 먼저 확인해요. 원하면 전체 운동에서 직접 선택할 수 있어요.&lt;/p&gt;`;return `&lt;p class=&quot;small muted&quot;&gt;${q?&#x27;검색 결과&#x27;:&#x27;회복 기록을 바탕으로 고른 운동&#x27;}&lt;/p&gt;&lt;div class=&quot;workout-list&quot;&gt;${list.length?exerciseRows(list.slice(0,q?4:2)):&#x27;&lt;p class=&quot;empty-copy&quot;&gt;일치하는 운동이 없어요.&lt;/p&gt;&#x27;}&lt;/div&gt;`;}
+function volume(){return section(&#x27;volume&#x27;,&#x27;훈련 부하&#x27;,&#x27;chart-column-increasing&#x27;,`&lt;div class=&quot;axis&quot;&gt;&lt;span&gt;최근 운동일 · 10.25 합계&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;split volume-metrics&quot;&gt;&lt;div class=&quot;volume-metric time&quot;&gt;&lt;div class=&quot;volume-metric-title&quot;&gt;&lt;span class=&quot;volume-metric-icon&quot;&gt;${icon(&#x27;timer&#x27;)}&lt;/span&gt;&lt;span&gt;운동 시간&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;value&quot;&gt;&lt;span class=&quot;volume-number&quot;&gt;47&lt;/span&gt;&lt;small&gt;분&lt;/small&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;volume-metric calories&quot;&gt;&lt;div class=&quot;volume-metric-title&quot;&gt;&lt;span class=&quot;volume-metric-icon&quot;&gt;${icon(&#x27;flame&#x27;)}&lt;/span&gt;&lt;span&gt;소모 칼로리&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;value&quot;&gt;&lt;span class=&quot;volume-number&quot;&gt;220&lt;/span&gt;&lt;small&gt;kcal&lt;/small&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;volume-chart&quot;&gt;&lt;div class=&quot;axis&quot;&gt;&lt;span&gt;최근 28일 훈련 부하&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;bars&quot; role=&quot;img&quot; aria-label=&quot;최근 28일 훈련 부하 예시. 쉬는 날과 운동한 날을 구분한 막대&quot;&gt;${[0,15,8,0,19,0,0,14,0,24,0,20,0,0,0,17,0,26,0,21,0,0,23,0,28,0,25,0].map(v=&gt;`&lt;span&gt;&lt;i style=&quot;--h:${v*3}%&quot;&gt;&lt;/i&gt;&lt;/span&gt;`).join(&#x27;&#x27;)}&lt;/div&gt;&lt;div class=&quot;axis&quot;&gt;&lt;span&gt;9.29&lt;/span&gt;&lt;span&gt;10.26&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;`);}
+function report(){return section(&#x27;report&#x27;,&#x27;주간 보고서&#x27;,&#x27;file-chart-column&#x27;,`&lt;div class=&quot;report-period&quot;&gt;&lt;span&gt;10.20–10.26&lt;/span&gt;&lt;span&gt;이전 7일과 비교&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;report-spotlight&quot;&gt;&lt;div&gt;&lt;div class=&quot;report-spotlight-label&quot;&gt;${icon(&#x27;trending-up&#x27;)}근력 볼륨 변화&lt;/div&gt;&lt;div class=&quot;report-change&quot;&gt;+12&lt;small&gt;%&lt;/small&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;report-volume&quot;&gt;&lt;div class=&quot;report-volume-value&quot;&gt;&lt;strong&gt;12,480&lt;/strong&gt;&lt;small&gt;kg&lt;/small&gt;&lt;/div&gt;&lt;span class=&quot;report-volume-label&quot;&gt;기간 근력 볼륨&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;report-key-stats&quot;&gt;${[[&#x27;3&#x27;,&#x27;회&#x27;,&#x27;운동 횟수&#x27;],[&#x27;3&#x27;,&#x27;일&#x27;,&#x27;활동일&#x27;],[&#x27;142&#x27;,&#x27;분&#x27;,&#x27;총 운동 시간&#x27;]].map(x=&gt;`&lt;div class=&quot;report-stat&quot;&gt;&lt;div class=&quot;report-stat-value&quot;&gt;&lt;strong&gt;${x[0]}&lt;/strong&gt;&lt;small&gt;${x[1]}&lt;/small&gt;&lt;/div&gt;&lt;span class=&quot;report-stat-label&quot;&gt;${x[2]}&lt;/span&gt;&lt;/div&gt;`).join(&#x27;&#x27;)}&lt;/div&gt;&lt;p class=&quot;report-copy&quot;&gt;하체와 등을 중심으로 운동한 한 주예요.&lt;/p&gt;&lt;div class=&quot;report-muscles&quot;&gt;&lt;span&gt;주요 부위&lt;/span&gt;&lt;span class=&quot;report-muscle&quot;&gt;하체&lt;/span&gt;&lt;span class=&quot;report-muscle&quot;&gt;등&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;report-highlights&quot;&gt;&lt;span class=&quot;report-highlight&quot;&gt;${icon(&#x27;trophy&#x27;)}개인 기록 2개 갱신&lt;/span&gt;&lt;span class=&quot;report-highlight&quot;&gt;${icon(&#x27;timer&#x27;)}운동 시간 +8%&lt;/span&gt;&lt;/div&gt;`);}
+const recentWorkouts=[{id:&#x27;strength-1025&#x27;,name:&#x27;Strength Training&#x27;,date:&#x27;10.25&#x27;,metric:&#x27;47분&#x27;,source:&#x27;manual&#x27;,linked:true,heartRate:null,icon:&#x27;dumbbell&#x27;,badges:[{kind:&#x27;flag&#x27;,label:&#x27;운동 20회 달성&#x27;}]},{id:&#x27;running-1023&#x27;,name:&#x27;Running&#x27;,date:&#x27;10.23&#x27;,metric:&#x27;5.02km&#x27;,source:&#x27;healthKit&#x27;,linked:true,heartRate:148,icon:&#x27;footprints&#x27;,badges:[{kind:&#x27;medal&#x27;,label:&#x27;5K 달성&#x27;},{kind:&#x27;trophy&#x27;,label:&#x27;PR&#x27;}]},{id:&#x27;strength-1021&#x27;,name:&#x27;Strength Training&#x27;,date:&#x27;10.21&#x27;,metric:&#x27;45분&#x27;,source:&#x27;manual&#x27;,linked:false,heartRate:null,icon:&#x27;dumbbell&#x27;,badges:[{kind:&#x27;medal&#x27;,label:&#x27;근력 10회 배지&#x27;}]}];
+function recentSync(x){return x.linked||x.source===&#x27;healthKit&#x27;?`&lt;span class=&quot;recent-sync&quot; data-sync=&quot;linked&quot; role=&quot;img&quot; aria-label=&quot;${x.source===&#x27;healthKit&#x27;?&#x27;HealthKit에서 불러온 기록&#x27;:&#x27;직접 기록과 HealthKit이 연결된 기록&#x27;}&quot;&gt;&lt;span aria-hidden=&quot;true&quot;&gt;&amp;#xF8FF;&lt;/span&gt;&lt;/span&gt;`:&#x27;&#x27;;}
+function recentBadges(x){return x.badges.length?`&lt;span class=&quot;recent-badges&quot;&gt;${x.badges.map(b=&gt;`&lt;span class=&quot;recent-achievement ${b.kind===&#x27;trophy&#x27;?&#x27;record&#x27;:&#x27;milestone&#x27;}&quot; data-achievement=&quot;${esc(b.label)}&quot;&gt;&lt;span class=&quot;achievement-emblem&quot; aria-hidden=&quot;true&quot;&gt;${icon(b.kind)}&lt;/span&gt;&lt;span class=&quot;achievement-label&quot;&gt;${b.label}&lt;/span&gt;${b.kind===&#x27;trophy&#x27;?`&lt;span class=&quot;achievement-glint&quot; aria-hidden=&quot;true&quot;&gt;${icon(&#x27;sparkles&#x27;)}&lt;/span&gt;`:&#x27;&#x27;}&lt;/span&gt;`).join(&#x27;&#x27;)}&lt;/span&gt;`:&#x27;&#x27;;}
+function recentHeart(x){return x.heartRate!==null?`&lt;span class=&quot;recent-heart&quot; aria-label=&quot;평균 심박수 ${x.heartRate} bpm&quot;&gt;${icon(&#x27;heart&#x27;)}평균 ${x.heartRate}&lt;small&gt;bpm&lt;/small&gt;&lt;/span&gt;`:&#x27;&#x27;;}
+function recentRow(x){return `&lt;button class=&quot;recent-workout-row cursor-interaction&quot; type=&quot;button&quot; data-workout-id=&quot;${x.id}&quot; data-route=&quot;history:${x.id}&quot;&gt;&lt;span class=&quot;tile-icon&quot;&gt;${icon(x.icon)}&lt;/span&gt;&lt;span class=&quot;recent-content&quot;&gt;&lt;span class=&quot;recent-top&quot;&gt;&lt;strong class=&quot;recent-name&quot;&gt;${x.name}&lt;/strong&gt;${recentSync(x)}&lt;/span&gt;&lt;span class=&quot;recent-meta&quot;&gt;&lt;span&gt;${x.date}&lt;/span&gt;&lt;span&gt;${x.metric}&lt;/span&gt;${x.source===&#x27;manual&#x27;?&#x27;&lt;span&gt;직접 기록&lt;/span&gt;&#x27;:&#x27;&#x27;}${recentHeart(x)}&lt;/span&gt;${recentBadges(x)}&lt;/span&gt;${chevron()}&lt;/button&gt;`;}
+function recent(){return section(&#x27;recent&#x27;,&#x27;최근 운동&#x27;,&#x27;history&#x27;,`&lt;div class=&quot;workout-list&quot;&gt;${recentWorkouts.slice(0,2).map(recentRow).join(&#x27;&#x27;)}&lt;/div&gt;&lt;details&gt;&lt;summary&gt;이전 운동 1개${chevron()}&lt;/summary&gt;${recentRow(recentWorkouts[2])}&lt;/details&gt;`);}
+function records(){return section(&#x27;records&#x27;,&#x27;개인 기록&#x27;,&#x27;trophy&#x27;,`&lt;div class=&quot;records-summary&quot;&gt;&lt;span&gt;${icon(&#x27;star&#x27;)}Lv.4&lt;/span&gt;&lt;span&gt;${icon(&#x27;medal&#x27;)}배지 3개&lt;/span&gt;&lt;span&gt;340포인트&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;split&quot;&gt;&lt;article class=&quot;record-item&quot;&gt;&lt;div class=&quot;record-top&quot;&gt;&lt;span class=&quot;record-medallion&quot;&gt;${icon(&#x27;trophy&#x27;)}&lt;/span&gt;&lt;span class=&quot;record-new&quot;&gt;NEW BEST&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;record-title&quot;&gt;Squat&lt;/div&gt;&lt;div class=&quot;record-kind&quot;&gt;최고 중량&lt;/div&gt;&lt;div class=&quot;value&quot;&gt;80&lt;small&gt;kg&lt;/small&gt;&lt;/div&gt;&lt;div class=&quot;record-improvement&quot;&gt;이전 최고보다 +5kg&lt;/div&gt;&lt;div class=&quot;record-foot&quot;&gt;&lt;span&gt;10.21 기록&lt;/span&gt;&lt;span&gt;직접 기록&lt;/span&gt;&lt;/div&gt;&lt;/article&gt;&lt;article class=&quot;record-item&quot;&gt;&lt;div class=&quot;record-top&quot;&gt;&lt;span class=&quot;record-medallion&quot;&gt;${icon(&#x27;medal&#x27;)}&lt;/span&gt;&lt;span class=&quot;record-new&quot;&gt;NEW BEST&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;record-title&quot;&gt;Running&lt;/div&gt;&lt;div class=&quot;record-kind&quot;&gt;최고 페이스&lt;/div&gt;&lt;div class=&quot;value&quot;&gt;5:14&lt;small&gt;/km&lt;/small&gt;&lt;/div&gt;&lt;div class=&quot;record-improvement&quot;&gt;이전 최고보다 14초 단축&lt;/div&gt;&lt;div class=&quot;record-foot&quot;&gt;&lt;span&gt;10.23 기록&lt;/span&gt;&lt;span&gt;Apple Health&lt;/span&gt;&lt;/div&gt;&lt;/article&gt;&lt;/div&gt;`);}
+const achievementEvents=[{kind:&#x27;flag&#x27;,title:&#x27;운동 20회 달성&#x27;,detail:&#x27;누적 운동 20회&#x27;,date:&#x27;10.25&#x27;,points:30},{kind:&#x27;trophy&#x27;,title:&#x27;페이스 개인 기록&#x27;,detail:&#x27;Running · 5:14/km&#x27;,date:&#x27;10.23&#x27;,points:40},{kind:&#x27;medal&#x27;,title:&#x27;꾸준한 시작 배지&#x27;,detail:&#x27;근력 운동 10회&#x27;,date:&#x27;10.21&#x27;,points:20},{kind:&#x27;star&#x27;,title:&#x27;레벨 4 도달&#x27;,detail:&#x27;운동 기록으로 쌓은 포인트&#x27;,date:&#x27;10.18&#x27;,points:0}];
+function achievementRows(all=false){return `&lt;div class=&quot;achievement-list&quot;&gt;${achievementEvents.slice(0,all?4:3).map(x=&gt;`&lt;div class=&quot;achievement-row&quot;&gt;${icon(x.kind)}&lt;div&gt;&lt;div class=&quot;achievement-name&quot;&gt;${x.title}&lt;/div&gt;&lt;div class=&quot;achievement-meta&quot;&gt;&lt;span&gt;${x.date}&lt;/span&gt;&lt;span&gt;${x.detail}&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;${x.points?`&lt;span class=&quot;achievement-points&quot;&gt;+${x.points}포인트&lt;/span&gt;`:&#x27;&#x27;}&lt;/div&gt;`).join(&#x27;&#x27;)}&lt;/div&gt;`;}
+function achievement(all=false){return section(&#x27;achievement&#x27;,&#x27;달성 이력&#x27;,&#x27;medal&#x27;,achievementRows(all));}
+function consistency(monthlyFirst=false){const streak=`&lt;div class=&quot;split&quot;&gt;&lt;div&gt;&lt;div class=&quot;small muted&quot;&gt;현재 연속 운동&lt;/div&gt;&lt;div class=&quot;value&quot;&gt;1&lt;small&gt;일&lt;/small&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div class=&quot;small muted&quot;&gt;최고 연속 운동&lt;/div&gt;&lt;div class=&quot;value&quot;&gt;5&lt;small&gt;일&lt;/small&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;`;const monthly=`&lt;div&gt;&lt;div class=&quot;axis&quot;&gt;&lt;span&gt;10월 운동일 목표&lt;/span&gt;&lt;span&gt;10 / 16일&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;progress&quot; role=&quot;progressbar&quot; aria-label=&quot;10월 운동일 목표&quot; aria-valuemin=&quot;0&quot; aria-valuemax=&quot;16&quot; aria-valuenow=&quot;10&quot;&gt;&lt;i style=&quot;width:62.5%&quot;&gt;&lt;/i&gt;&lt;/div&gt;&lt;div class=&quot;weekdays&quot; aria-label=&quot;최근 7일 중 수·금·일 운동&quot;&gt;${[&#x27;화&#x27;,&#x27;수&#x27;,&#x27;목&#x27;,&#x27;금&#x27;,&#x27;토&#x27;,&#x27;일&#x27;,&#x27;월&#x27;].map((d,i)=&gt;`&lt;span class=&quot;${[1,3,5].includes(i)?&#x27;active&#x27;:&#x27;&#x27;}&quot;&gt;${d}&lt;i&gt;&lt;/i&gt;&lt;/span&gt;`).join(&#x27;&#x27;)}&lt;/div&gt;&lt;/div&gt;`;return section(&#x27;consistency&#x27;,&#x27;운동 꾸준함&#x27;,&#x27;flame&#x27;,monthlyFirst?monthly+`&lt;div class=&quot;rule&quot;&gt;${streak}&lt;/div&gt;`:streak+`&lt;div class=&quot;rule&quot;&gt;${monthly}&lt;/div&gt;`);}
+function mix(){return section(&#x27;mix&#x27;,&#x27;운동 구성&#x27;,&#x27;chart-no-axes-column&#x27;,`&lt;div class=&quot;mix-period&quot;&gt;&lt;span&gt;최근 28일&lt;/span&gt;&lt;span&gt;운동 횟수 기준&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;mix-overview&quot;&gt;${[{kind:&#x27;strength&#x27;,icon:&#x27;dumbbell&#x27;,name:&#x27;근력&#x27;,percent:68},{kind:&#x27;cardio&#x27;,icon:&#x27;footprints&#x27;,name:&#x27;유산소&#x27;,percent:32}].map(x=&gt;`&lt;div class=&quot;mix-category ${x.kind}&quot;&gt;&lt;div class=&quot;mix-category-title&quot;&gt;&lt;span class=&quot;mix-icon&quot;&gt;${icon(x.icon)}&lt;/span&gt;&lt;span&gt;${x.name}&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;mix-percent&quot;&gt;&lt;strong&gt;${x.percent}&lt;/strong&gt;&lt;small&gt;%&lt;/small&gt;&lt;/div&gt;&lt;/div&gt;`).join(&#x27;&#x27;)}&lt;/div&gt;&lt;div class=&quot;mix&quot; role=&quot;img&quot; aria-label=&quot;최근 28일 운동 횟수 구성: 근력 68%, 유산소 32%. 금빛은 근력, 녹색은 유산소.&quot;&gt;&lt;i&gt;&lt;/i&gt;&lt;i&gt;&lt;/i&gt;&lt;/div&gt;&lt;div class=&quot;mix-muscles&quot;&gt;&lt;span class=&quot;mix-muscles-label&quot;&gt;${icon(&#x27;person-standing&#x27;)}주요 근력 부위&lt;/span&gt;&lt;span class=&quot;mix-muscle-tag&quot;&gt;하체&lt;/span&gt;&lt;span class=&quot;mix-muscle-tag&quot;&gt;등&lt;/span&gt;&lt;/div&gt;`);}
+function emptyContent(){if(state.data===&#x27;loading&#x27;)return section(&#x27;loading&#x27;,&#x27;건강 기록 확인 중&#x27;,&#x27;loader&#x27;,`&lt;div class=&quot;placeholder&quot;&gt;&lt;/div&gt;&lt;div class=&quot;placeholder short&quot;&gt;&lt;/div&gt;&lt;p class=&quot;small muted&quot;&gt;운동 선택은 상단 +에서 열 수 있어요.&lt;/p&gt;`);return section(&#x27;start&#x27;,&#x27;운동 기록을 시작해 보세요&#x27;,&#x27;dumbbell&#x27;,`&lt;p class=&quot;empty-copy&quot;&gt;${state.data===&#x27;denied&#x27;?&#x27;건강 접근을 허용하거나 직접 운동을 기록할 수 있어요.&#x27;:&#x27;운동 기록이 쌓이면 주간 통계와 근육 회복을 함께 볼 수 있어요.&#x27;}&lt;/p&gt;${action(&#x27;운동 선택&#x27;,&#x27;picker&#x27;)}${action(&#x27;내 템플릿&#x27;,&#x27;templates&#x27;)}`);}
+function dashboard(){if(!hasRecords())return hero(&#x27;training&#x27;)+emptyContent();return hero(&#x27;training&#x27;)+`&lt;div class=&quot;wide-pair&quot;&gt;&lt;div class=&quot;flow-stack&quot;&gt;${muscle()}${risk()}&lt;/div&gt;${suggested()}&lt;/div&gt;`+recent()+`&lt;div class=&quot;wide-pair&quot;&gt;${records()}${achievement()}&lt;/div&gt;&lt;div class=&quot;wide-pair&quot;&gt;${stats()}${report()}&lt;/div&gt;&lt;div class=&quot;wide-pair&quot;&gt;${consistency(true)}${volume()}&lt;/div&gt;`+mix();}
+function destination(){const route=session.route,back=&#x27;&lt;button type=&quot;button&quot; class=&quot;back cursor-interaction&quot; data-back&gt;&#x27;+icon(&#x27;chevron-left&#x27;)+&#x27;Activity&lt;/button&gt;&#x27;;let body=&#x27;&#x27;;
+ if(route===&#x27;readiness&#x27;)body=section(&#x27;readiness-detail&#x27;,&#x27;운동 준비도&#x27;,&#x27;activity&#x27;,`&lt;div class=&quot;value&quot;&gt;${state.score}&lt;small&gt;/100&lt;/small&gt;&lt;/div&gt;&lt;p class=&quot;report-copy&quot;&gt;HRV·수면·회복을 함께 살펴본 점수예요. 각 구성 점수는 100점 기준이에요.&lt;/p&gt;${hero(&#x27;compact&#x27;)}`);
+ else if(route===&#x27;muscle&#x27;)body=section(&#x27;muscle-detail&#x27;,&#x27;부위별 근육 회복&#x27;,&#x27;person-standing&#x27;,`${muscle()}&lt;p class=&quot;empty-copy&quot;&gt;최근 운동일과 부위별 회복 기록을 함께 확인해요.&lt;/p&gt;${[&#x27;가슴 · 최근 10.25 · 회복 중&#x27;,&#x27;어깨 · 최근 10.25 · 회복 중&#x27;,&#x27;하체 · 최근 10.21 · 회복 완료&#x27;].map(x=&gt;`&lt;div class=&quot;rule&quot;&gt;${x}&lt;/div&gt;`).join(&#x27;&#x27;)}`);
+ else if([&#x27;picker&#x27;,&#x27;templates&#x27;].includes(route))body=section(&#x27;picker&#x27;,&#x27;운동 선택&#x27;,&#x27;dumbbell&#x27;,exerciseRows(exercises)+action(&#x27;내 상체 루틴&#x27;,&#x27;template:내 상체 루틴&#x27;));
+ else if(route.startsWith(&#x27;exercise:&#x27;)||route.startsWith(&#x27;template:&#x27;)){const name=route.split(&#x27;:&#x27;).slice(1).join(&#x27;:&#x27;);body=section(&#x27;exercise-start&#x27;,esc(name),&#x27;dumbbell&#x27;,`&lt;p class=&quot;empty-copy&quot;&gt;운동 구성과 목표를 확인해요.&lt;/p&gt;&lt;div class=&quot;rule&quot;&gt;${route.startsWith(&#x27;template:&#x27;)?&#x27;Squat · Row · Press&#x27;:&#x27;3세트 · 10회&#x27;}&lt;/div&gt;&lt;button type=&quot;button&quot; class=&quot;primary cursor-interaction&quot; data-preview-start&gt;이 구성으로 시작${icon(&#x27;arrow-right&#x27;)}&lt;/button&gt;&lt;p class=&quot;small muted&quot; data-start-result role=&quot;status&quot;&gt;&lt;/p&gt;`);}
+ else if(route===&#x27;equipment&#x27;)body=section(&#x27;equipment&#x27;,&#x27;사용할 장비&#x27;,&#x27;sliders-horizontal&#x27;,`&lt;p class=&quot;empty-copy&quot;&gt;${session.context===&#x27;gym&#x27;?&#x27;헬스장&#x27;:&#x27;집&#x27;}에서 사용할 장비를 선택해요.&lt;/p&gt;${[&#x27;맨몸&#x27;,&#x27;덤벨&#x27;,&#x27;케이블&#x27;].map((x,i)=&gt;`&lt;label class=&quot;workout-row&quot;&gt;&lt;input type=&quot;checkbox&quot; ${i&lt;2?&#x27;checked&#x27;:&#x27;&#x27;}&gt;${x}&lt;/label&gt;`).join(&#x27;&#x27;)}&lt;button type=&quot;button&quot; class=&quot;primary cursor-interaction&quot; data-back&gt;선택 완료${icon(&#x27;check&#x27;)}&lt;/button&gt;`);
+ else if(route===&#x27;permissions&#x27;)body=section(&#x27;permissions&#x27;,&#x27;Apple Health 접근&#x27;,&#x27;heart-pulse&#x27;,&#x27;&lt;p class=&quot;empty-copy&quot;&gt;설정에서 HRV·수면·운동의 읽기 접근을 허용하면 기록을 함께 볼 수 있어요.&lt;/p&gt;&#x27;);
+ else if(route===&#x27;ai&#x27;)body=section(&#x27;builder&#x27;,&#x27;AI 운동 만들기&#x27;,&#x27;sparkles&#x27;,&#x27;&lt;p class=&quot;empty-copy&quot;&gt;운동 목표, 장소와 장비를 바탕으로 루틴을 구성해요.&lt;/p&gt;&lt;label class=&quot;workout-row&quot;&gt;&lt;input type=&quot;radio&quot; name=&quot;goal&quot; checked&gt;전신 근력&lt;/label&gt;&lt;label class=&quot;workout-row&quot;&gt;&lt;input type=&quot;radio&quot; name=&quot;goal&quot;&gt;회복 중심&lt;/label&gt;&lt;button type=&quot;button&quot; class=&quot;primary cursor-interaction&quot; data-preview-start&gt;구성 미리보기&lt;/button&gt;&lt;p class=&quot;small muted&quot; data-start-result role=&quot;status&quot;&gt;&lt;/p&gt;&#x27;);
+ else if(route===&#x27;stats&#x27;)body=stats();else if(route===&#x27;volume&#x27;)body=volume();else if(route===&#x27;report&#x27;)body=report();else if(route===&#x27;records&#x27;)body=records();else if(route===&#x27;achievements&#x27;)body=section(&#x27;achievement-destination&#x27;,&#x27;개인 기록&#x27;,&#x27;trophy&#x27;,`&lt;div class=&quot;medal&quot;&gt;${icon(&#x27;award&#x27;)}레벨 4 · 340포인트&lt;/div&gt;`+`&lt;h3 class=&quot;rule&quot;&gt;달성 이력 · 2026년 10월&lt;/h3&gt;&lt;div class=&quot;rule&quot;&gt;${achievementRows(true)}&lt;/div&gt;`);else if(route===&#x27;consistency&#x27;)body=consistency();else if(route===&#x27;mix&#x27;)body=mix();
+ else if(route===&#x27;risk&#x27;)body=section(&#x27;risk-detail&#x27;,&#x27;훈련 부담&#x27;,&#x27;shield-check&#x27;,riskBody(true),riskStatus());
+ else if(route.startsWith(&#x27;history:&#x27;)){const x=recentWorkouts.find(w=&gt;w.id===route.slice(8));body=x?section(&#x27;history-detail&#x27;,x.name,x.icon,`&lt;div class=&quot;recent-meta&quot;&gt;&lt;span&gt;${x.date}&lt;/span&gt;&lt;span&gt;${x.source===&#x27;manual&#x27;?&#x27;직접 기록&#x27;:&#x27;HealthKit 기록&#x27;}&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;value&quot;&gt;${x.metric}&lt;/div&gt;&lt;div class=&quot;recent-meta&quot;&gt;${recentHeart(x)}${recentSync(x)}&lt;/div&gt;${recentBadges(x)}`):section(&#x27;history-missing&#x27;,&#x27;운동 기록&#x27;,&#x27;history&#x27;,&#x27;&lt;p class=&quot;empty-copy&quot;&gt;이 기록을 찾을 수 없어요.&lt;/p&gt;&#x27;);}
+ else body=section(&#x27;tab-preview&#x27;,route,&#x27;layout-grid&#x27;,&#x27;&lt;p class=&quot;empty-copy&quot;&gt;이번 시안은 Activity 화면의 흐름을 살펴봐요.&lt;/p&gt;&#x27;);
+ return `&lt;div class=&quot;detail-page&quot;&gt;${back}${body}&lt;/div&gt;`;
+}
+function chrome(){return `&lt;div class=&quot;dunes&quot; aria-hidden=&quot;true&quot;&gt;&lt;div class=&quot;dune-layer far&quot;&gt;&lt;/div&gt;&lt;div class=&quot;dune-layer mid&quot;&gt;&lt;/div&gt;&lt;div class=&quot;dune-layer near&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;chrome&quot;&gt;&lt;div class=&quot;status&quot;&gt;&lt;span&gt;9:41&lt;/span&gt;&lt;span class=&quot;island&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;span class=&quot;signals&quot;&gt;${icon(&#x27;signal&#x27;)}${icon(&#x27;wifi&#x27;)}${icon(&#x27;battery-full&#x27;)}&lt;/span&gt;&lt;/div&gt;&lt;header class=&quot;titlebar&quot;&gt;&lt;div&gt;&lt;h1&gt;Activity&lt;/h1&gt;&lt;div class=&quot;date&quot;&gt;10월 26일 월요일&lt;/div&gt;&lt;/div&gt;&lt;button type=&quot;button&quot; class=&quot;round cursor-interaction&quot; data-route=&quot;picker&quot; aria-label=&quot;운동 선택&quot;&gt;${icon(&#x27;plus&#x27;)}&lt;/button&gt;&lt;/header&gt;&lt;/div&gt;`;}
+function nav(){return `&lt;nav class=&quot;bottomnav&quot; aria-label=&quot;주요 탭&quot;&gt;${[[&#x27;clipboard-heart&#x27;,&#x27;Today&#x27;],[&#x27;flame&#x27;,&#x27;Activity&#x27;],[&#x27;leaf&#x27;,&#x27;Wellness&#x27;],[&#x27;list-checks&#x27;,&#x27;Life&#x27;]].map(([i,n])=&gt;`&lt;button type=&quot;button&quot; class=&quot;navitem cursor-interaction ${n===&#x27;Activity&#x27;?&#x27;selected&#x27;:&#x27;&#x27;}&quot; ${n===&#x27;Activity&#x27;?&#x27;aria-current=&quot;page&quot; data-back&#x27;:`data-route=&quot;${n}&quot;`}&gt;${icon(i)}${n}&lt;/button&gt;`).join(&#x27;&#x27;)}&lt;/nav&gt;&lt;div class=&quot;home&quot; aria-hidden=&quot;true&quot;&gt;&lt;/div&gt;`;}
+function sizeStages(){const phone=root.querySelector(&#x27;.phone&#x27;);if(phone)root.style.setProperty(&#x27;--activity-stage&#x27;,phone.getBoundingClientRect().height+44+&#x27;px&#x27;);}
+function render(save=false){state.text=Math.max(100,Math.min(200,Number(state.text)||100));state.width=Math.max(320,Math.min(1032,Number(state.width)||402));state.score=Math.max(0,Math.min(100,Math.round(Number(state.score)||0)));root.style.setProperty(&#x27;--activity-type&#x27;,state.text/100);root.style.setProperty(&#x27;--activity-width&#x27;,state.width+&#x27;px&#x27;);
+ root.querySelectorAll(&#x27;.phone&#x27;).forEach(p=&gt;{p.dataset.mode=[&#x27;light&#x27;,&#x27;dark&#x27;].includes(state.appearance)?state.appearance:&#x27;auto&#x27;;p.classList.toggle(&#x27;large&#x27;,state.text&gt;=130);p.innerHTML=chrome()+`&lt;main&gt;${session.route?destination():dashboard()}&lt;/main&gt;`+nav();});
+ const layers=[{name:&#x27;far&#x27;,center:45,amplitude:8,frequency:.72,skew:.2},{name:&#x27;mid&#x27;,center:62,amplitude:10,frequency:1,skew:.18},{name:&#x27;near&#x27;,center:76,amplitude:13,frequency:1.35,skew:.14}];layers.forEach(l=&gt;{const points=[];for(let x=0;x&lt;=400;x+=5){const a=Math.PI*2*l.frequency*x/400,y=l.center+l.amplitude*(Math.sin(a)+l.skew*Math.sin(2*a+Math.PI/6));points.push(`${x/4}% ${y/2.2}%`);}root.querySelectorAll(&#x27;.dune-layer.&#x27;+l.name).forEach(e=&gt;e.style.clipPath=`polygon(${points.join(&#x27;,&#x27;)},100% 100%,0 100%)`);});
+ if(globalThis.lucide)lucide.createIcons();requestAnimationFrame(sizeStages);if(save&amp;&amp;window.openai?.setWidgetState)window.openai.setWidgetState({modelContent:{activityFinalDesign:state}}).catch(()=&gt;{});
+}
+root.addEventListener(&#x27;click&#x27;,e=&gt;{const b=e.target.closest(&#x27;button&#x27;);if(!b)return;const p=b.closest(&#x27;.phone&#x27;);if(!p)return;
+ if(b.hasAttribute(&#x27;data-route&#x27;)){session.returnFocus=b.dataset.route;session.route=b.dataset.route;render();const next=p.querySelector(&#x27;.back&#x27;);if(next)next.focus({preventScroll:true});p.scrollIntoView({block:&#x27;start&#x27;,behavior:&#x27;instant&#x27;});}
+ else if(b.hasAttribute(&#x27;data-back&#x27;)){session.route=null;render();const focus=[...p.querySelectorAll(&#x27;[data-route]&#x27;)].find(x=&gt;x.dataset.route===session.returnFocus);if(focus)focus.focus({preventScroll:true});}
+ else if(b.hasAttribute(&#x27;data-map&#x27;)){session.map=b.dataset.map;root.querySelectorAll(&#x27;.phone&#x27;).forEach(phone=&gt;{phone.querySelectorAll(&#x27;[data-section=muscle]&#x27;).forEach(s=&gt;{const box=document.createElement(&#x27;div&#x27;);box.innerHTML=muscle();s.replaceWith(box.firstElementChild);});});if(globalThis.lucide)lucide.createIcons();sizeStages();}
+ else if(b.hasAttribute(&#x27;data-context&#x27;)){session.context=b.dataset.context;root.querySelectorAll(&#x27;.phone [data-context]&#x27;).forEach(x=&gt;x.setAttribute(&#x27;aria-pressed&#x27;,String(x.dataset.context===session.context)));updateResults();}
+ else if(b.hasAttribute(&#x27;data-preview-start&#x27;)){const result=b.closest(&#x27;.surface&#x27;).querySelector(&#x27;[data-start-result]&#x27;);if(result)result.textContent=&#x27;시안에서 구성을 확인했어요. 실제 운동은 시작되지 않아요.&#x27;;}
+});
+function updateResults(){root.querySelectorAll(&#x27;[data-exercise-results]&#x27;).forEach(el=&gt;el.innerHTML=suggestionResults());if(globalThis.lucide)lucide.createIcons();requestAnimationFrame(sizeStages);}
+root.addEventListener(&#x27;input&#x27;,e=&gt;{if(e.target.matches(&#x27;[data-search]&#x27;)){session.query=e.target.value;root.querySelectorAll(&#x27;[data-search]&#x27;).forEach(x=&gt;{if(x!==e.target)x.value=session.query;});updateResults();}});
+root.addEventListener(&#x27;toggle&#x27;,()=&gt;requestAnimationFrame(sizeStages),true);
+window.addEventListener(&#x27;openai:set_globals&#x27;,e=&gt;{const s=e.detail?.globals?.widgetState?.modelContent?.activityFinalDesign;if(s){Object.assign(state,s);render();}});
+render();
+if(globalThis.Tweak){const tweak=new Tweak({container:root,onChange:()=&gt;{session.route=null;render(true);}});tweak.addSelect(state,&#x27;appearance&#x27;,{label:&#x27;화면 모드&#x27;,options:[{label:&#x27;시스템&#x27;,value:&#x27;auto&#x27;},{label:&#x27;밝게&#x27;,value:&#x27;light&#x27;},{label:&#x27;어둡게&#x27;,value:&#x27;dark&#x27;}]});tweak.addSlider(state,&#x27;text&#x27;,{label:&#x27;글자 크기&#x27;,min:100,max:200,step:5,unit:&#x27;%&#x27;});tweak.addSlider(state,&#x27;width&#x27;,{label:&#x27;최대 화면 폭&#x27;,min:320,max:1032,step:2,unit:&#x27;pt&#x27;});tweak.addSelect(state,&#x27;data&#x27;,{label:&#x27;기록 상태&#x27;,options:[{label:&#x27;기록 충분&#x27;,value:&#x27;complete&#x27;},{label:&#x27;일부 누락&#x27;,value:&#x27;partial&#x27;},{label:&#x27;첫 준비도 기록&#x27;,value:&#x27;single&#x27;},{label:&#x27;기준선 형성 중&#x27;,value:&#x27;calibrating&#x27;},{label:&#x27;기록 없음&#x27;,value:&#x27;empty&#x27;},{label:&#x27;건강 접근 필요&#x27;,value:&#x27;denied&#x27;},{label:&#x27;처음 불러오는 중&#x27;,value:&#x27;loading&#x27;}]});tweak.addSlider(state,&#x27;score&#x27;,{label:&#x27;준비도 점수&#x27;,min:0,max:100,step:1});tweak.addToggle(state,&#x27;restDay&#x27;,{label:&#x27;휴식일&#x27;});}
+})();
+&lt;/script&gt;
+
+&lt;script src=&quot;https://unpkg.com/@floating-ui/core@1.7.3/dist/floating-ui.core.umd.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;https://unpkg.com/@floating-ui/dom@1.7.4/dist/floating-ui.dom.umd.min.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+(() =&gt; {
+  if (window.FloatingUIDOM == null) {
+    return;
+  }
+  const { autoUpdate, computePosition, flip, offset, shift, size } =
+    window.FloatingUIDOM;
+  const tooltipPlacements = new Set([&quot;top&quot;, &quot;right&quot;, &quot;bottom&quot;, &quot;left&quot;]);
+  const tooltipId = `codex-visualization-tooltip-${
+    window.crypto?.randomUUID?.() ?? Date.now().toString(36)
+  }`;
+  const tooltipGap = 5;
+  const hoverDelay = 700;
+  const skipDelay = 300;
+  let activeTrigger = null;
+  let pendingTrigger = null;
+  let tooltip = null;
+  let openTimeout = null;
+  let autoUpdateCleanup = null;
+  let positionRequest = 0;
+  let skipDelayUntil = 0;
+  let lastPointerWasTouch = false;
+  let pinnedByTouch = false;
+
+  const getTrigger = (event) =&gt; {
+    for (const target of event.composedPath()) {
+      if (target?.nodeType === Node.ELEMENT_NODE) {
+        const trigger = target.closest(&quot;[data-tooltip]&quot;);
+        if (trigger) return trigger;
+      }
+    }
+    return null;
+  };
+  const containsTarget = (trigger, target) =&gt;
+    target?.nodeType != null &amp;&amp; trigger.contains(target);
+  const getContent = (trigger) =&gt;
+    trigger.getAttribute(&quot;data-tooltip&quot;)?.trim() ?? &quot;&quot;;
+  const getPlacement = (trigger) =&gt; {
+    const placement = trigger.getAttribute(&quot;data-tooltip-placement&quot;);
+    return tooltipPlacements.has(placement) ? placement : &quot;top&quot;;
+  };
+  const getTooltip = () =&gt; {
+    if (tooltip == null) {
+      tooltip = document.createElement(&quot;div&quot;);
+      tooltip.id = tooltipId;
+      tooltip.className = &quot;tooltip&quot;;
+      tooltip.setAttribute(&quot;role&quot;, &quot;tooltip&quot;);
+    }
+    return tooltip;
+  };
+  const setDescribedBy = (trigger, described) =&gt; {
+    const ids = new Set(
+      (trigger.getAttribute(&quot;aria-describedby&quot;) ?? &quot;&quot;)
+        .split(/\s+/)
+        .filter(Boolean),
+    );
+    if (described) {
+      ids.add(tooltipId);
+    } else {
+      ids.delete(tooltipId);
+    }
+    if (ids.size === 0) {
+      trigger.removeAttribute(&quot;aria-describedby&quot;);
+    } else {
+      trigger.setAttribute(&quot;aria-describedby&quot;, [...ids].join(&quot; &quot;));
+    }
+  };
+  const clearOpenTimeout = () =&gt; {
+    if (openTimeout != null) {
+      window.clearTimeout(openTimeout);
+      openTimeout = null;
+    }
+    pendingTrigger = null;
+  };
+  const closeTooltip = (activateSkipDelay = true) =&gt; {
+    clearOpenTimeout();
+    pinnedByTouch = false;
+    positionRequest += 1;
+    autoUpdateCleanup?.();
+    autoUpdateCleanup = null;
+    if (activeTrigger == null) {
+      return;
+    }
+    setDescribedBy(activeTrigger, false);
+    activeTrigger = null;
+    tooltip?.remove();
+    if (activateSkipDelay) {
+      skipDelayUntil = Date.now() + skipDelay;
+    }
+  };
+  const updatePosition = (trigger, floating) =&gt; {
+    const request = ++positionRequest;
+    void computePosition(trigger, floating, {
+      middleware: [
+        offset(tooltipGap),
+        flip({ padding: tooltipGap }),
+        shift({ padding: tooltipGap }),
+        size({
+          padding: tooltipGap,
+          apply({ availableHeight, availableWidth, elements }) {
+            elements.floating.style.setProperty(
+              &quot;--tooltip-available-width&quot;,
+              `${Math.max(0, availableWidth)}px`,
+            );
+            elements.floating.style.setProperty(
+              &quot;--tooltip-available-height&quot;,
+              `${Math.max(0, availableHeight)}px`,
+            );
+          },
+        }),
+      ],
+      placement: getPlacement(trigger),
+      strategy: &quot;fixed&quot;,
+    })
+      .then(({ x, y }) =&gt; {
+        if (activeTrigger !== trigger || request !== positionRequest) {
+          return;
+        }
+        const scale = window.devicePixelRatio || 1;
+        floating.style.transform = `translate(${Math.round(x * scale) / scale}px, ${Math.round(y * scale) / scale}px)`;
+        floating.style.visibility = &quot;visible&quot;;
+      })
+      .catch(() =&gt; {
+        if (activeTrigger === trigger &amp;&amp; request === positionRequest) {
+          closeTooltip(false);
+        }
+      });
+  };
+  const openTooltip = (trigger) =&gt; {
+    const content = getContent(trigger);
+    if (!trigger.isConnected || content.length === 0) {
+      return;
+    }
+    clearOpenTimeout();
+    if (activeTrigger === trigger) {
+      return;
+    }
+    closeTooltip();
+    const floating = getTooltip();
+    floating.textContent = content;
+    floating.style.visibility = &quot;hidden&quot;;
+    floating.style.transform = &quot;translate(0, 0)&quot;;
+    document.body.appendChild(floating);
+    activeTrigger = trigger;
+    setDescribedBy(trigger, true);
+    autoUpdateCleanup = autoUpdate(trigger, floating, () =&gt; {
+      updatePosition(trigger, floating);
+    });
+  };
+  const requestOpen = (trigger, immediate = false) =&gt; {
+    if (
+      getContent(trigger).length === 0 ||
+      activeTrigger === trigger ||
+      pendingTrigger === trigger
+    ) {
+      return;
+    }
+    clearOpenTimeout();
+    pendingTrigger = trigger;
+    const delay =
+      immediate || activeTrigger != null || Date.now() &lt; skipDelayUntil
+        ? 0
+        : hoverDelay;
+    if (delay === 0) {
+      openTooltip(trigger);
+      return;
+    }
+    openTimeout = window.setTimeout(() =&gt; {
+      openTimeout = null;
+      pendingTrigger = null;
+      openTooltip(trigger);
+    }, delay);
+  };
+  const handlePointerOpen = (event) =&gt; {
+    if (event.pointerType === &quot;touch&quot;) {
+      return;
+    }
+    const trigger = getTrigger(event);
+    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
+      return;
+    }
+    requestOpen(trigger);
+  };
+  const handlePointer = (event) =&gt; {
+    lastPointerWasTouch =
+      event.type === &quot;pointerdown&quot; &amp;&amp; event.pointerType === &quot;touch&quot;;
+  };
+  const handleTouchClick = (event) =&gt; {
+    const isTouch = event.pointerType === &quot;touch&quot; || lastPointerWasTouch;
+    lastPointerWasTouch = false;
+    if (!isTouch || event.detail === 0) {
+      return;
+    }
+    const trigger = getTrigger(event);
+    if (
+      trigger == null ||
+      !trigger.isConnected ||
+      getContent(trigger).length === 0 ||
+      (pinnedByTouch &amp;&amp; activeTrigger === trigger)
+    ) {
+      if (pinnedByTouch) {
+        closeTooltip();
+      }
+      return;
+    }
+    openTooltip(trigger);
+    pinnedByTouch = activeTrigger === trigger;
+    window.setTimeout(() =&gt; {
+      if (activeTrigger === trigger &amp;&amp; !trigger.isConnected) {
+        closeTooltip(false);
+      }
+    }, 0);
+  };
+  const handleLeave = (event) =&gt; {
+    if (pinnedByTouch) {
+      return;
+    }
+    const trigger = getTrigger(event);
+    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
+      return;
+    }
+    if (activeTrigger === trigger || pendingTrigger === trigger) {
+      closeTooltip();
+    }
+  };
+  const handleFocusIn = (event) =&gt; {
+    const trigger = getTrigger(event);
+    if (trigger?.matches(&quot;:focus-visible&quot;)) {
+      requestOpen(trigger, true);
+    }
+  };
+  const handleKeyDown = (event) =&gt; {
+    if (event.key === &quot;Escape&quot;) {
+      closeTooltip();
+    }
+  };
+  const handleContextMenu = (event) =&gt; {
+    lastPointerWasTouch = false;
+    const trigger = getTrigger(event);
+    if (activeTrigger === trigger || pendingTrigger === trigger) {
+      closeTooltip();
+    }
+  };
+  const handlers = {
+    pointerover: handlePointerOpen,
+    pointerdown: handlePointer,
+    pointercancel: handlePointer,
+    click: handleTouchClick,
+    pointerout: handleLeave,
+    focusin: handleFocusIn,
+    focusout: handleLeave,
+    keydown: handleKeyDown,
+    contextmenu: handleContextMenu,
+  };
+  const roots = new Map();
+  const handledEvents = new WeakSet();
+  const handleEvent = (event) =&gt; {
+    if (handledEvents.has(event)) return;
+    handledEvents.add(event);
+    handlers[event.type](event);
+  };
+  const discoverRoots = (node) =&gt; {
+    if (node.shadowRoot) listen(node.shadowRoot);
+    for (const element of node.querySelectorAll(&quot;*&quot;)) {
+      if (element.shadowRoot) listen(element.shadowRoot);
+    }
+  };
+  const listen = (root) =&gt; {
+    if (roots.has(root)) return;
+    for (const type of Object.keys(handlers)) root.addEventListener(type, handleEvent);
+    const observer = new window.MutationObserver((records) =&gt; {
+      for (const { addedNodes } of records) {
+        for (const node of addedNodes) {
+          if (node.nodeType === Node.ELEMENT_NODE) discoverRoots(node);
+        }
+      }
+      for (const [root, cleanup] of roots) {
+        if (root.host &amp;&amp; !root.host.isConnected) {
+          cleanup();
+          roots.delete(root);
+        }
+      }
+      if (activeTrigger &amp;&amp; !activeTrigger.isConnected) closeTooltip(false);
+    });
+    observer.observe(root, { childList: true, subtree: true });
+    roots.set(root, () =&gt; {
+      observer.disconnect();
+      for (const type of Object.keys(handlers)) root.removeEventListener(type, handleEvent);
+    });
+    discoverRoots(root);
+  };
+  const destroy = () =&gt; {
+    closeTooltip(false);
+    lastPointerWasTouch = false;
+    for (const cleanup of roots.values()) cleanup();
+    roots.clear();
+    tooltip = null;
+  };
+
+  // Events between children of one shadow root never reach the document.
+  listen(document);
+  window.addEventListener(&quot;pagehide&quot;, destroy, { once: true });
+})();
+&lt;/script&gt;
+&lt;script id=&quot;codex-visualization-tabs&quot;&gt;
+(() =&gt; {
+  const selector = &#x27;.nav[role=&quot;tablist&quot;] [role=&quot;tab&quot;]&#x27;;
+  const disabled = &#x27;:disabled,[aria-disabled=&quot;true&quot;]&#x27;;
+  const selectTab = (selected) =&gt; {
+    const panelId = selected.getAttribute(&quot;aria-controls&quot;);
+    for (const tab of selected.closest(&#x27;[role=&quot;tablist&quot;]&#x27;).querySelectorAll(&#x27;[role=&quot;tab&quot;]&#x27;)) {
+      const active = tab === selected;
+      tab.classList.toggle(&quot;active&quot;, active);
+      tab.setAttribute(&quot;aria-selected&quot;, String(active));
+      const id = tab.getAttribute(&quot;aria-controls&quot;);
+      const panel = id &amp;&amp; document.getElementById(id);
+      if (panel != null) {
+        panel.hidden = id !== panelId;
+        if (!panel.hidden &amp;&amp; selected.id) {
+          panel.setAttribute(&quot;aria-labelledby&quot;, selected.id);
+        }
+      }
+    }
+  };
+  const interact = (event) =&gt; {
+    const tab = event.target?.closest?.(selector);
+    if (event.defaultPrevented || tab == null || tab.matches(disabled)) {
+      return;
+    }
+    if (event.type === &quot;click&quot;) {
+      selectTab(tab);
+      return;
+    }
+    const tabs = Array.from(
+      tab.closest(&#x27;[role=&quot;tablist&quot;]&#x27;).querySelectorAll(&#x27;[role=&quot;tab&quot;]&#x27;),
+    ).filter((candidate) =&gt; !candidate.matches(disabled));
+    const current = tabs.indexOf(tab);
+    let next;
+    if (event.key === &quot;ArrowRight&quot; || event.key === &quot;ArrowDown&quot;) {
+      next = (current + 1) % tabs.length;
+    } else if (event.key === &quot;ArrowLeft&quot; || event.key === &quot;ArrowUp&quot;) {
+      next = (current + tabs.length - 1) % tabs.length;
+    } else if (event.key === &quot;Home&quot;) {
+      next = 0;
+    } else if (event.key === &quot;End&quot;) {
+      next = tabs.length - 1;
+    } else {
+      return;
+    }
+    event.preventDefault();
+    tabs[next].focus();
+    selectTab(tabs[next]);
+  };
+
+  for (const list of document.querySelectorAll(&#x27;.nav[role=&quot;tablist&quot;]&#x27;)) {
+    const selected =
+      list.querySelector(&#x27;[role=&quot;tab&quot;][aria-selected=&quot;true&quot;]&#x27;) ??
+      list.querySelector(&#x27;[role=&quot;tab&quot;].active&#x27;) ??
+      list.querySelector(&#x27;[role=&quot;tab&quot;]&#x27;);
+    if (selected != null) {
+      selectTab(selected);
+    }
+  }
+  document.addEventListener(&quot;click&quot;, interact);
+  document.addEventListener(&quot;keydown&quot;, interact);
+  window.addEventListener(&quot;pagehide&quot;, () =&gt; {
+    document.removeEventListener(&quot;click&quot;, interact);
+    document.removeEventListener(&quot;keydown&quot;, interact);
+  }, { once: true });
+})();
+&lt;/script&gt;
+&lt;script id=&quot;codex-visualization-carousel&quot;&gt;
+  (() =&gt; {
+    for (const root of document.querySelectorAll(&quot;.viz-carousel&quot;)) {
+      const panels = Array.from(
+        root.querySelectorAll(&quot;:scope &gt; [data-variant]&quot;),
+      );
+      if (panels.length === 0) {
+        continue;
+      }
+      root.setAttribute(&quot;role&quot;, &quot;group&quot;);
+      panels.forEach((panel, index) =&gt; {
+        panel.hidden = index !== 0;
+        panel.setAttribute(&quot;role&quot;, &quot;group&quot;);
+        if (!panel.hasAttribute(&quot;aria-label&quot;)) {
+          panel.setAttribute(&quot;aria-label&quot;, panel.dataset.variant);
+        }
+      });
+      root.dataset.activeVariant = panels[0].dataset.variant;
+      if (panels.length === 1) {
+        continue;
+      }
+
+      const controls = document.createElement(&quot;div&quot;);
+      controls.className = &quot;viz-carousel-controls&quot;;
+      // Portable copy of the settings dropdown&#x27;s legacy glyph; no 14px icon-package preset matches it.
+      // https://github.com/openai/openai/blob/master/codex/codex-apps/webview/src/icons/chevron.svg
+      controls.innerHTML = `
+      &lt;button type=&quot;button&quot; class=&quot;viz-carousel-previous cursor-interaction&quot;&gt;&lt;i data-lucide=&quot;chevron-left&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/button&gt;
+      &lt;details class=&quot;viz-carousel-picker&quot;&gt;
+        &lt;summary class=&quot;cursor-interaction&quot;&gt;
+          &lt;span class=&quot;viz-carousel-count tabular-nums&quot;&gt;&lt;/span&gt;
+          &lt;span class=&quot;viz-carousel-name&quot;&gt;&lt;/span&gt;
+          &lt;svg class=&quot;viz-carousel-caret&quot; width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 20 21&quot; fill=&quot;none&quot; aria-hidden=&quot;true&quot; focusable=&quot;false&quot;&gt;
+            &lt;path d=&quot;M15.2793 7.71101C15.539 7.45131 15.961 7.45131 16.2207 7.71101C16.4804 7.97071 16.4804 8.39272 16.2207 8.65242L10.4707 14.4024C10.211 14.6621 9.78902 14.6621 9.52932 14.4024L3.77932 8.65242L3.69436 8.54792C3.52385 8.28979 3.55205 7.93828 3.77932 7.71101C4.00659 7.48374 4.3581 7.45554 4.61623 7.62605L4.72073 7.71101L10 12.9903L15.2793 7.71101Z&quot; fill=&quot;currentColor&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;0.6&quot; /&gt;
+          &lt;/svg&gt;
+        &lt;/summary&gt;
+        &lt;div class=&quot;viz-carousel-options&quot;&gt;&lt;/div&gt;
+      &lt;/details&gt;
+      &lt;button type=&quot;button&quot; class=&quot;viz-carousel-next cursor-interaction&quot;&gt;&lt;i data-lucide=&quot;chevron-right&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/button&gt;`;
+      const previous = controls.querySelector(&quot;.viz-carousel-previous&quot;);
+      const next = controls.querySelector(&quot;.viz-carousel-next&quot;);
+      const picker = controls.querySelector(&quot;.viz-carousel-picker&quot;);
+      const summary = picker.querySelector(&quot;summary&quot;);
+      const count = controls.querySelector(&quot;.viz-carousel-count&quot;);
+      const name = controls.querySelector(&quot;.viz-carousel-name&quot;);
+      const options = controls.querySelector(&quot;.viz-carousel-options&quot;);
+      const status = document.createElement(&quot;span&quot;);
+      status.className = &quot;sr-only&quot;;
+      status.setAttribute(&quot;role&quot;, &quot;status&quot;);
+      status.setAttribute(&quot;aria-live&quot;, &quot;polite&quot;);
+      status.setAttribute(&quot;aria-atomic&quot;, &quot;true&quot;);
+      previous.setAttribute(
+        &quot;aria-label&quot;,
+        root.dataset.previousLabel ?? &quot;Previous variant&quot;,
+      );
+      next.setAttribute(&quot;aria-label&quot;, root.dataset.nextLabel ?? &quot;Next variant&quot;);
+
+      let active = 0;
+      let mousePointerId = null;
+      let summaryPointerHandled = false;
+      summary.addEventListener(&quot;pointerdown&quot;, (event) =&gt; {
+        summaryPointerHandled =
+          event.pointerType === &quot;mouse&quot; &amp;&amp; event.button === 0 &amp;&amp; !event.ctrlKey;
+        if (!summaryPointerHandled) {
+          return;
+        }
+        event.preventDefault();
+        summary.focus({ preventScroll: true });
+        picker.open = !picker.open;
+        mousePointerId = picker.open ? event.pointerId : null;
+      });
+      summary.addEventListener(&quot;click&quot;, (event) =&gt; {
+        if (summaryPointerHandled &amp;&amp; event.detail &gt; 0) {
+          event.preventDefault();
+        }
+      });
+      const choices = panels.map((panel, index) =&gt; {
+        const choice = document.createElement(&quot;button&quot;);
+        choice.type = &quot;button&quot;;
+        choice.className = &quot;cursor-interaction&quot;;
+        choice.textContent = panel.dataset.variant;
+        choice.addEventListener(&quot;click&quot;, () =&gt; {
+          select(index);
+          summary.focus();
+        });
+        choice.addEventListener(&quot;pointerup&quot;, (event) =&gt; {
+          if (
+            picker.open &amp;&amp;
+            event.pointerType === &quot;mouse&quot; &amp;&amp;
+            event.button === 0 &amp;&amp;
+            event.pointerId === mousePointerId
+          ) {
+            choice.click();
+          }
+        });
+        options.appendChild(choice);
+        return choice;
+      });
+      const select = (index) =&gt; {
+        const changed = active !== index;
+        active = index;
+        panels.forEach((panel, position) =&gt; {
+          panel.hidden = position !== active;
+          choices[position].setAttribute(
+            &quot;aria-current&quot;,
+            String(position === active),
+          );
+        });
+        root.dataset.activeVariant = panels[active].dataset.variant;
+        count.textContent = `${active + 1} / ${panels.length}`;
+        name.textContent = panels[active].dataset.variant;
+        picker.open = false;
+        mousePointerId = null;
+        if (changed) {
+          status.textContent = `${count.textContent}: ${name.textContent}`;
+        }
+      };
+      previous.addEventListener(&quot;click&quot;, () =&gt;
+        select((active + panels.length - 1) % panels.length),
+      );
+      next.addEventListener(&quot;click&quot;, () =&gt;
+        select((active + 1) % panels.length),
+      );
+      picker.addEventListener(&quot;keydown&quot;, (event) =&gt; {
+        if (event.key === &quot;Escape&quot; &amp;&amp; picker.open) {
+          event.preventDefault();
+          picker.open = false;
+          mousePointerId = null;
+          summary.focus();
+          return;
+        }
+        if (event.altKey || event.ctrlKey || event.metaKey) {
+          return;
+        }
+        const index = choices.indexOf(document.activeElement);
+        let nextIndex;
+        if (event.key === &quot;ArrowDown&quot;) {
+          nextIndex = index &lt; 0 ? active : (index + 1) % choices.length;
+        } else if (event.key === &quot;ArrowUp&quot;) {
+          nextIndex = index &lt; 0 ? active : (index + choices.length - 1) % choices.length;
+        } else if (picker.open &amp;&amp; event.key === &quot;Home&quot;) {
+          nextIndex = 0;
+        } else if (picker.open &amp;&amp; event.key === &quot;End&quot;) {
+          nextIndex = choices.length - 1;
+        } else {
+          return;
+        }
+        event.preventDefault();
+        picker.open = true;
+        choices[nextIndex].focus();
+      });
+      picker.addEventListener(&quot;focusout&quot;, (event) =&gt; {
+        if (!picker.contains(event.relatedTarget)) {
+          picker.open = false;
+          mousePointerId = null;
+        }
+      });
+      const dismiss = (event) =&gt; {
+        if (!summary.contains(event.target)) {
+          mousePointerId = null;
+        }
+        if (!picker.contains(event.target)) {
+          picker.open = false;
+        }
+      };
+      const endPointerSelection = () =&gt; {
+        mousePointerId = null;
+      };
+      const sizePicker = () =&gt; {
+        root.style.setProperty(
+          &quot;--viz-carousel-picker-height&quot;,
+          `${picker.open ? options.offsetHeight : 0}px`,
+        );
+      };
+      picker.addEventListener(&quot;toggle&quot;, sizePicker);
+      window.addEventListener(&quot;resize&quot;, sizePicker);
+      document.addEventListener(&quot;pointerdown&quot;, dismiss);
+      document.addEventListener(&quot;pointerup&quot;, endPointerSelection);
+      document.addEventListener(&quot;pointercancel&quot;, endPointerSelection);
+      window.addEventListener(&quot;blur&quot;, endPointerSelection);
+      window.addEventListener(
+        &quot;pagehide&quot;,
+        () =&gt; {
+          document.removeEventListener(&quot;pointerdown&quot;, dismiss);
+          document.removeEventListener(&quot;pointerup&quot;, endPointerSelection);
+          document.removeEventListener(&quot;pointercancel&quot;, endPointerSelection);
+          window.removeEventListener(&quot;blur&quot;, endPointerSelection);
+          window.removeEventListener(&quot;resize&quot;, sizePicker);
+        },
+        { once: true },
+      );
+      root.append(controls, status);
+      select(0);
+    }
+  })();
+&lt;/script&gt;
+&lt;script id=&quot;codex-visualization-lucide&quot; async src=&quot;https://unpkg.com/lucide@1.17.0/dist/umd/lucide.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+(() =&gt; {
+  const initialize = () =&gt; {
+    globalThis.lucide?.createIcons({ attrs: { width: 16, height: 16 } });
+  };
+  if (globalThis.lucide != null) {
+    initialize();
+    return;
+  }
+  document
+    .getElementById(&quot;codex-visualization-lucide&quot;)
+    ?.addEventListener(&quot;load&quot;, initialize, { once: true });
+})();
+&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+"></iframe>
+
+<script>(() => {
+  const frame = document.getElementById("codex-visualization");
+  if (!(frame instanceof HTMLIFrameElement)) {
+    return;
+  }
+  const isShare = document.documentElement.classList.contains(
+    "visualization-share-root",
+  );
+  let viewportHeight = globalThis.innerHeight;
+  let sizeFingerprint = null;
+  let sizeWriteTimeout;
+  let lastSize = null;
+  let pendingSize = null;
+  const storageKey = `codex:visualization-widget-state-v2:${JSON.stringify([
+    globalThis.location.pathname,
+    globalThis.location.search,
+  ])}`;
+  const sizeStorageKey = `${storageKey}:share-size-v1`;
+  const parseState = (serializedState) => {
+    if (
+      typeof serializedState !== "string" ||
+      new TextEncoder().encode(serializedState).length > 16 * 1024
+    ) {
+      throw new TypeError(
+        "Widget state must be a JSON object of at most 16 KiB",
+      );
+    }
+    /** @type {unknown} */
+    const state = JSON.parse(serializedState);
+    if (
+      state == null ||
+      typeof state !== "object" ||
+      Array.isArray(state) ||
+      ("imageIds" in state &&
+        (!Array.isArray(state.imageIds) || state.imageIds.length > 0))
+    ) {
+      throw new TypeError("Widget state must be a JSON object");
+    }
+    const storedState = { modelContent: null, privateContent: null, ...state };
+    const canonicalState = JSON.stringify(
+      storedState,
+      (_key, /** @type {unknown} */ value) => {
+        if (typeof value === "number" && !Number.isFinite(value)) {
+          throw new TypeError("Widget state must contain finite numbers");
+        }
+        return value;
+      },
+    );
+    if (new TextEncoder().encode(canonicalState).length > 16 * 1024) {
+      throw new TypeError(
+        "Widget state must be a JSON object of at most 16 KiB",
+      );
+    }
+    return storedState;
+  };
+  let storage = null;
+  let state = null;
+  try {
+    const localStorage = globalThis.localStorage;
+    const probeKey = `${storageKey}:probe`;
+    localStorage.setItem(probeKey, "1");
+    localStorage.removeItem(probeKey);
+    storage = localStorage;
+    const savedState = storage.getItem(storageKey);
+    if (savedState != null) {
+      try {
+        state = parseState(savedState);
+      } catch {
+        // Invalid saved state does not disable future writes.
+      }
+    }
+  } catch {
+    storage = null;
+  }
+  const persistSize = () => {
+    globalThis.clearTimeout(sizeWriteTimeout);
+    if (pendingSize == null) {
+      return;
+    }
+    try {
+      storage?.setItem(sizeStorageKey, pendingSize);
+    } catch {
+      // A denied or full cache must not affect the visualization.
+    }
+    pendingSize = null;
+  };
+  if (isShare) {
+    globalThis.addEventListener("pagehide", persistSize);
+  }
+  const initialGlobals = {
+    widgetState: state,
+    statePersistence: storage == null ? "none" : "local",
+  };
+
+  const channel = new MessageChannel();
+  channel.port1.addEventListener("message", (event) => {
+    const data = event.data;
+    if (typeof data !== "object" || data == null) {
+      return;
+    }
+    if (data.type === "widget-state-write") {
+      if (!Number.isSafeInteger(data.id) || data.id <= 0) {
+        return;
+      }
+      let ok = false;
+      try {
+        if (storage != null) {
+          const state = parseState(data.state);
+          storage.setItem(storageKey, JSON.stringify(state));
+          ok = true;
+        }
+      } catch {
+        // Storage denial, quota limits, and invalid state return a failed receipt.
+      }
+      channel.port1.postMessage({
+        type: "widget-state-result",
+        id: data.id,
+        ok,
+      });
+      return;
+    }
+    if (data.type === "height") {
+      const height = data.height;
+      if (
+        typeof height !== "number" ||
+        !Number.isFinite(height) ||
+        height < 0
+      ) {
+        return;
+      }
+      if (height <= 10_000) {
+        const width = isShare && storage != null ? frame.clientWidth : null;
+        frame.style.height = Math.ceil(height) + "px";
+        if (isShare && storage != null) {
+          const size = JSON.stringify({
+            fingerprint: sizeFingerprint,
+            width,
+            viewportHeight: globalThis.innerHeight,
+            dark: globalThis.matchMedia("(prefers-color-scheme: dark)").matches,
+            scale: globalThis.devicePixelRatio,
+            height: Math.ceil(height),
+          });
+          if (size !== lastSize) {
+            lastSize = size;
+            pendingSize = size;
+            globalThis.clearTimeout(sizeWriteTimeout);
+            sizeWriteTimeout = globalThis.setTimeout(persistSize, 100);
+          }
+        }
+      }
+      if (isShare) {
+        // Keep unusually tall content accessible without accepting an unbounded height.
+        if (height > 10_000 && Number.parseFloat(frame.style.height) === 0) {
+          frame.style.removeProperty("height");
+        }
+        frame.scrolling = height > 10_000 ? "auto" : "no";
+        document.documentElement.classList.add("visualization-share-ready");
+      }
+      return;
+    }
+    if (data.type === "scroll-to") {
+      const top = data.top;
+      if (
+        typeof top === "number" &&
+        Number.isFinite(top) &&
+        top >= 0 &&
+        globalThis.navigator.userActivation?.isActive === true
+      ) {
+        globalThis.scrollTo({
+          top: Math.ceil(
+            globalThis.scrollY + frame.getBoundingClientRect().top + top,
+          ),
+        });
+      }
+      return;
+    }
+    if (data.type === "open-external") {
+      const rawHref = data.href;
+      if (typeof rawHref !== "string") {
+        return;
+      }
+      let href;
+      try {
+        const url = new URL(rawHref, document.baseURI);
+        if (url.protocol !== "https:") {
+          return;
+        }
+        href = url.href;
+      } catch {
+        return;
+      }
+      if (globalThis.navigator.userActivation?.isActive === true) {
+        const anchor = document.createElement("a");
+        anchor.href = href;
+        anchor.rel = "noopener noreferrer";
+        anchor.target = "_blank";
+        document.body.appendChild(anchor);
+        anchor.click();
+        anchor.remove();
+      }
+      return;
+    }
+    if (data.type === "follow-up") {
+      const prompt = data.prompt;
+      if (
+        typeof prompt !== "string" ||
+        globalThis.navigator.userActivation?.isActive !== true
+      ) {
+        return;
+      }
+      const title = data.title;
+      globalThis.prompt(typeof title === "string" ? title : prompt, prompt);
+    }
+  });
+  channel.port1.start();
+  const srcdoc = frame.dataset.srcdoc;
+  if (srcdoc == null) {
+    return;
+  }
+  globalThis.addEventListener("resize", () => {
+    const height = Number.parseFloat(frame.style.height);
+    if (!isShare && (!Number.isFinite(height) || height <= viewportHeight)) {
+      frame.style.removeProperty("height");
+    }
+    viewportHeight = globalThis.innerHeight;
+    channel.port1.postMessage({ type: "measure" });
+  });
+  frame.addEventListener(
+    "load",
+    () => {
+      frame.contentWindow?.postMessage(
+        { type: "codex-visualization-initialize" },
+        "*",
+        [channel.port2],
+      );
+    },
+    { once: true },
+  );
+  // Match the trusted bootstrap element, not the same text in an authored title.
+  const frameHtml = srcdoc.replace(
+    '<script type="application/json" id="codex-visualization-widget-state">__CODEX_VISUALIZATION_WIDGET_STATE__<\/script>',
+    () =>
+      '<script type="application/json" id="codex-visualization-widget-state">' +
+      JSON.stringify(initialGlobals).replaceAll("<", "\\u003c") +
+      "<\/script>",
+  );
+  if (isShare && storage != null) {
+    // Fingerprint the rendered document, including restored widget state, without
+    // storing its content. This is a layout cache, not a security identity.
+    let hash = 5381;
+    for (let index = 0; index < frameHtml.length; index += 1) {
+      hash = (hash * 33 + frameHtml.charCodeAt(index)) % 4_294_967_296;
+    }
+    sizeFingerprint = hash.toString(36);
+    try {
+      const size = JSON.parse(storage.getItem(sizeStorageKey) ?? "null");
+      if (
+        size?.fingerprint === sizeFingerprint &&
+        size.width === frame.clientWidth &&
+        size.viewportHeight === globalThis.innerHeight &&
+        size.dark ===
+          globalThis.matchMedia("(prefers-color-scheme: dark)").matches &&
+        size.scale === globalThis.devicePixelRatio &&
+        typeof size.height === "number" &&
+        Number.isFinite(size.height) &&
+        size.height >= 0 &&
+        size.height <= 10_000
+      ) {
+        frame.style.height = size.height + "px";
+      }
+    } catch {
+      // Ignore missing or invalid cache entries and measure the live frame.
+    }
+  }
+  frame.srcdoc = frameHtml;
+  delete frame.dataset.srcdoc;
+})();
+</script>
+</body>
+</html>
