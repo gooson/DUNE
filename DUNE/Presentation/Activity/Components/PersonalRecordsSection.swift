@@ -49,15 +49,8 @@ struct PersonalRecordsSection: View {
     }
 
     private func rewardSummaryRow(_ summary: WorkoutRewardSummary) -> some View {
-        ViewThatFits(in: .horizontal) {
-            if !dynamicTypeSize.isAccessibilitySize {
-                HStack(spacing: DS.Spacing.sm) {
-                    rewardSummaryItems(summary)
-                }
-            }
-            VStack(alignment: .leading, spacing: DS.Spacing.xs) {
-                rewardSummaryItems(summary)
-            }
+        ActivityMetricsLayout(horizontalSpacing: DS.Spacing.sm, verticalSpacing: DS.Spacing.xs) {
+            rewardSummaryItems(summary)
         }
     }
 

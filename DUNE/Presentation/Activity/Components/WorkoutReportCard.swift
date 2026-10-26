@@ -30,15 +30,8 @@ struct WorkoutReportCard: View {
 
                 spotlight(report.stats)
 
-                ViewThatFits(in: .horizontal) {
-                    if !dynamicTypeSize.isAccessibilitySize {
-                        HStack(alignment: .top, spacing: DS.Spacing.sm) {
-                            keyStats(report.stats)
-                        }
-                    }
-                    VStack(alignment: .leading, spacing: DS.Spacing.md) {
-                        keyStats(report.stats)
-                    }
+                ActivityMetricsLayout(horizontalSpacing: DS.Spacing.sm, verticalSpacing: DS.Spacing.md, alignment: .top) {
+                    keyStats(report.stats)
                 }
 
                 if let summary = report.formattedSummary, !summary.isEmpty {
@@ -80,15 +73,8 @@ struct WorkoutReportCard: View {
     }
 
     private func spotlight(_ stats: WorkoutReport.Stats) -> some View {
-        ViewThatFits(in: .horizontal) {
-            if !dynamicTypeSize.isAccessibilitySize {
-                HStack(alignment: .center, spacing: DS.Spacing.lg) {
-                    spotlightContents(stats)
-                }
-            }
-            VStack(alignment: .leading, spacing: DS.Spacing.md) {
-                spotlightContents(stats)
-            }
+        ActivityMetricsLayout(horizontalSpacing: DS.Spacing.lg, verticalSpacing: DS.Spacing.md, alignment: .center) {
+            spotlightContents(stats)
         }
         .padding(DS.Spacing.md)
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -117,7 +103,8 @@ struct WorkoutReportCard: View {
                 .font(.caption)
                 .foregroundStyle(DS.Color.textSecondary)
             HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xs) {
-                Text(stats.totalVolume.formattedWithSeparator())
+                Text(stats.totalVolume >= 0.01 ? stats.totalVolume.formattedWithSeparator() : "—")
+                    .accessibilityIdentifier("activity-report-volume-value")
                     .font(DS.Typography.cardScore)
                     .monospacedDigit()
                 Text("kg")

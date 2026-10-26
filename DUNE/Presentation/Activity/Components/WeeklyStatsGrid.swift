@@ -109,3 +109,23 @@ struct ActivityStatCardView: View {
         .foregroundStyle(isPositive ? DS.Color.positive : DS.Color.negative)
     }
 }
+
+/// Keep accessibility branches outside ViewThatFits so EmptyView cannot win.
+struct ActivityMetricsLayout<Content: View>: View {
+    var horizontalSpacing: CGFloat = DS.Spacing.md
+    var verticalSpacing: CGFloat = DS.Spacing.md
+    var alignment: VerticalAlignment = .top
+    @ViewBuilder let content: () -> Content
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
+    var body: some View {
+        if dynamicTypeSize.isAccessibilitySize {
+            VStack(alignment: .leading, spacing: verticalSpacing) { content() }
+        } else {
+            ViewThatFits(in: .horizontal) {
+                HStack(alignment: alignment, spacing: horizontalSpacing) { content() }
+                VStack(alignment: .leading, spacing: verticalSpacing) { content() }
+            }
+        }
+    }
+}

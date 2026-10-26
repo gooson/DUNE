@@ -175,10 +175,24 @@ final class ActivityFlowUITests: SeededUITestBaseCase {
             ("activity-musclemap-detail-link", "A01-Activity-Flow-map"),
             ("activity-recent-seeall", "A01-Activity-Flow-recent"),
             ("activity-section-weeklystats", "A01-Activity-Flow-weekly"),
+            ("activity-section-volume", "A01-Activity-Flow-load"),
             ("activity-section-exercisemix", "A01-Activity-Flow-analysis")
         ] {
             XCTAssertTrue(app.scrollToHittableElementIfNeeded(identifier, maxSwipes: 16),
                           "\(identifier) must be reachable for the native capture")
+            if suffix == "-MaxAX" {
+                if identifier == "activity-section-weeklystats" {
+                    XCTAssertTrue(waitForElement("activity-report-volume-value", timeout: 10).exists)
+                }
+                if identifier == "activity-section-volume" {
+                    XCTAssertTrue(waitForElement("activity-load-timer-value", timeout: 10).exists)
+                    XCTAssertTrue(waitForElement("activity-load-flame.fill-value", timeout: 10).exists)
+                }
+                if identifier == "activity-section-exercisemix" {
+                    XCTAssertTrue(waitForElement("activity-mix-dumbbell.fill-percent", timeout: 10).exists)
+                    XCTAssertTrue(waitForElement("activity-mix-figure.run-percent", timeout: 10).exists)
+                }
+            }
             capture(name + suffix)
         }
     }

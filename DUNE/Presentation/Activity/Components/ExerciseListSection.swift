@@ -77,7 +77,7 @@ struct ExerciseListSection: View {
 
             if content.items.count > max(limit, 0) {
                 DisclosureGroup(isExpanded: $showsEarlierWorkouts) {
-                    ForEach(content.items.dropFirst(max(limit, 0))) { item in
+                    ForEach(content.items.dropFirst(max(limit, 0)).prefix(3)) { item in
                         workoutLink(for: item, recordsByID: content.recordsByID)
                     }
                 } label: {

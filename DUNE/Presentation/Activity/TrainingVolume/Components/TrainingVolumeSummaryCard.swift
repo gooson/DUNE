@@ -52,17 +52,9 @@ struct TrainingVolumeSummaryCard: View {
     }
 
     private var metricsRow: some View {
-        ViewThatFits(in: .horizontal) {
-            if !dynamicTypeSize.isAccessibilitySize {
-                HStack(spacing: DS.Spacing.sm) {
-                    metricItem(icon: "timer", title: "Workout Time", value: lastWorkoutMinutes > 0 ? lastWorkoutMinutes.formattedWithSeparator() : "—", unit: "min", tint: DS.Color.activityCardio)
-                    metricItem(icon: "flame.fill", title: "Calories Burned", value: lastWorkoutCalories > 0 ? lastWorkoutCalories.formattedWithSeparator() : "—", unit: "kcal", tint: DS.Color.desertBronze)
-                }
-            }
-            VStack(spacing: DS.Spacing.sm) {
-                metricItem(icon: "timer", title: "Workout Time", value: lastWorkoutMinutes > 0 ? lastWorkoutMinutes.formattedWithSeparator() : "—", unit: "min", tint: DS.Color.activityCardio)
-                metricItem(icon: "flame.fill", title: "Calories Burned", value: lastWorkoutCalories > 0 ? lastWorkoutCalories.formattedWithSeparator() : "—", unit: "kcal", tint: DS.Color.desertBronze)
-            }
+        ActivityMetricsLayout(horizontalSpacing: DS.Spacing.sm, verticalSpacing: DS.Spacing.sm) {
+            metricItem(icon: "timer", title: "Workout Time", value: lastWorkoutMinutes > 0 ? lastWorkoutMinutes.formattedWithSeparator() : "—", unit: "min", tint: DS.Color.activityCardio)
+            metricItem(icon: "flame.fill", title: "Calories Burned", value: lastWorkoutCalories > 0 ? lastWorkoutCalories.formattedWithSeparator() : "—", unit: "kcal", tint: DS.Color.desertBronze)
         }
     }
 
@@ -73,6 +65,7 @@ struct TrainingVolumeSummaryCard: View {
                 .foregroundStyle(tint)
             HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xs) {
                 Text(value)
+                    .accessibilityIdentifier("activity-load-\(icon)-value")
                     .font(DS.Typography.cardScore)
                     .monospacedDigit()
                     .foregroundStyle(theme.heroTextGradient)

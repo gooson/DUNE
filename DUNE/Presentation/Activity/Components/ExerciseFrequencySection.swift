@@ -17,17 +17,9 @@ struct ExerciseFrequencySection: View {
                     Text("Last 28 days · by recorded exercise entries")
                         .font(.caption)
                         .foregroundStyle(DS.Color.textSecondary)
-                    ViewThatFits(in: .horizontal) {
-                        if !dynamicTypeSize.isAccessibilitySize {
-                            HStack(alignment: .top, spacing: DS.Spacing.md) {
-                                categoryMetric("Strength", icon: "dumbbell.fill", count: summary.strength, color: DS.Color.activityStrength)
-                                categoryMetric("Cardio", icon: "figure.run", count: summary.cardio, color: DS.Color.activityCardio)
-                            }
-                        }
-                        VStack(alignment: .leading, spacing: DS.Spacing.md) {
-                            categoryMetric("Strength", icon: "dumbbell.fill", count: summary.strength, color: DS.Color.activityStrength)
-                            categoryMetric("Cardio", icon: "figure.run", count: summary.cardio, color: DS.Color.activityCardio)
-                        }
+                    ActivityMetricsLayout(horizontalSpacing: DS.Spacing.md, verticalSpacing: DS.Spacing.md, alignment: .top) {
+                        categoryMetric("Strength", icon: "dumbbell.fill", count: summary.strength, color: DS.Color.activityStrength)
+                        categoryMetric("Cardio", icon: "figure.run", count: summary.cardio, color: DS.Color.activityCardio)
                     }
                     GeometryReader { geometry in
                         HStack(spacing: 0) {
@@ -78,6 +70,7 @@ struct ExerciseFrequencySection: View {
                 .font(.caption.weight(.semibold))
                 .foregroundStyle(color)
             Text(Double(count) / Double(max(summary.total, 1)), format: .percent.precision(.fractionLength(0)))
+                .accessibilityIdentifier("activity-mix-\(icon)-percent")
                 .font(DS.Typography.cardScore)
                 .foregroundStyle(color)
                 .monospacedDigit()

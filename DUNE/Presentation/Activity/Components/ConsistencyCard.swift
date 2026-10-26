@@ -50,18 +50,10 @@ struct ConsistencyCard: View {
 
                 Divider()
 
-                ViewThatFits(in: .horizontal) {
-                    if !dynamicTypeSize.isAccessibilitySize {
-                        HStack(alignment: .top, spacing: DS.Spacing.lg) {
-                            streakMetric(value: streak.currentStreak, title: "Current Streak")
-                            Divider().frame(height: 52)
-                            streakMetric(value: streak.bestStreak, title: "Best Streak")
-                        }
-                    }
-                    VStack(alignment: .leading, spacing: DS.Spacing.md) {
-                        streakMetric(value: streak.currentStreak, title: "Current Streak")
-                        streakMetric(value: streak.bestStreak, title: "Best Streak")
-                    }
+                ActivityMetricsLayout(horizontalSpacing: DS.Spacing.lg, verticalSpacing: DS.Spacing.md, alignment: .top) {
+                    streakMetric(value: streak.currentStreak, title: "Current Streak")
+                    Divider().frame(height: dynamicTypeSize.isAccessibilitySize ? nil : 52)
+                    streakMetric(value: streak.bestStreak, title: "Best Streak")
                 }
             }
         }
