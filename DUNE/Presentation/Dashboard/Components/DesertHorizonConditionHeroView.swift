@@ -113,7 +113,7 @@ struct DesertHorizonConditionHeroView: View {
     private var titleRow: some View {
         CardNavigationHeader(minimumHeight: 0, chevronColor: heroAccent) {
             Text(verbatim: "CONDITION")
-                    .accessibilityIdentifier("dashboard-hero-heading")
+                .accessibilityIdentifier("dashboard-hero-heading")
                 .font(.caption.weight(.semibold))
                 .tracking(1.5)
                 .foregroundStyle(heroAccent)

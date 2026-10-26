@@ -116,40 +116,42 @@ struct PersonalRecordsSection: View {
                     .fixedSize(horizontal: false, vertical: true)
             }
 
-            HStack(alignment: .bottom, spacing: DS.Spacing.xs) {
-                VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-                    HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xxs) {
-                        Text(primaryValueText(for: record))
-                            .font(DS.Typography.cardScore)
-                            .foregroundStyle(theme.heroTextGradient)
-                            .minimumScaleFactor(0.8)
-                            .lineLimit(1)
-                        if let unit = unitText(for: record) {
-                            Text(unit)
-                                .font(.caption)
-                                .foregroundStyle(DS.Color.textSecondary)
-                        }
+            VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                Text(primaryValueText(for: record))
+                    .font(DS.Typography.cardScore)
+                    .foregroundStyle(theme.heroTextGradient)
+                    .minimumScaleFactor(0.8)
+                    .lineLimit(1)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+
+                HStack(spacing: DS.Spacing.xs) {
+                    if let unit = unitText(for: record) {
+                        Text(unit)
+                            .font(.caption)
+                            .foregroundStyle(DS.Color.textSecondary)
                     }
-                    if let delta = record.formattedDelta {
-                        Text(delta)
-                            .font(.caption.weight(.semibold))
-                            .foregroundStyle((record.deltaValue ?? 0) > 0 ? DS.Color.positive : DS.Color.negative)
+                    Spacer(minLength: 0)
+                    let sparkData = sparklineData(for: record)
+                    if sparkData.count >= 2 {
+                        NavigationLink(value: ActivityDetailDestination.personalRecords(preselectedKind: record.kind)) {
+                            MiniSparklineView(dataPoints: sparkData, color: record.kind.tintColor)
+                                .frame(width: 48, height: 24)
+                                .frame(minHeight: 44)
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel(
+                            String.localizedStringWithFormat(
+                                String(localized: "View %@ details"),
+                                record.kind.displayName
+                            )
+                        )
                     }
                 }
-                Spacer(minLength: 0)
-                let sparkData = sparklineData(for: record)
-                if sparkData.count >= 2 {
-                    NavigationLink(value: ActivityDetailDestination.personalRecords(preselectedKind: record.kind)) {
-                        MiniSparklineView(dataPoints: sparkData, color: record.kind.tintColor)
-                            .frame(width: 48, height: 24)
-                    }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel(
-                        String.localizedStringWithFormat(
-                            String(localized: "View %@ details"),
-                            record.kind.displayName
-                        )
-                    )
+                if let delta = record.formattedDelta {
+                    Text(delta)
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle((record.deltaValue ?? 0) > 0 ? DS.Color.positive : DS.Color.negative)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
             }
 

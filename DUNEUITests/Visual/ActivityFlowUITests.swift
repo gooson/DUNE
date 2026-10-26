@@ -174,7 +174,7 @@ final class ActivityFlowUITests: SeededUITestBaseCase {
         for (identifier, nextSection, name) in [
             ("activity-musclemap-detail-link", "activity-section-injuryrisk", "A01-Activity-Flow-map"),
             ("activity-recent-seeall", "activity-section-pr", "A01-Activity-Flow-recent"),
-            ("activity-section-pr", "activity-section-achievement", "A01-Activity-Flow-records"),
+            ("activity-section-pr", "activity-section-weeklystats", "A01-Activity-Flow-records"),
             ("activity-section-weeklystats", "activity-section-weeklyreport", "A01-Activity-Flow-weekly"),
             ("activity-section-weeklyreport", "activity-section-consistency", "A01-Activity-Flow-report"),
             ("activity-section-volume", "activity-section-exercisemix", "A01-Activity-Flow-load"),
@@ -195,44 +195,93 @@ final class ActivityFlowUITests: SeededUITestBaseCase {
                 }
             }
             capture(name + suffix)
-            if suffix == "-MaxAX", !nextSection.isEmpty {
-                captureMiddleOfTallCard(start: identifier, next: nextSection, name: name + suffix)
+            if !nextSection.isEmpty {
+                let boundary = captureBoundary(start: identifier, next: nextSection)
+                captureTallCardSections(start: identifier, next: boundary, name: name + suffix)
             }
         }
     }
 
-    /// `scrollToHittableElementIfNeeded` can stop with a header at the viewport's
-    /// bottom edge. Move it near the usable top before preserving native evidence.
+    /// Align a header with the visible content area, including the navigation bar.
+    /// The short measured drags can correct in either direction if scrolling coasts.
     private func alignActivityCaptureHeader(_ identifier: String) {
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded(identifier, maxSwipes: 16),
-                      "\(identifier) must be reachable for the native capture")
         let header = element(identifier)
+        XCTAssertTrue(header.waitForExistence(timeout: 10),
+                      "\(identifier) must exist for the native capture")
+        let viewport = usableActivityViewport()
+        if !header.isHittable {
+            let direction: ScrollDirection = header.frame.minY < viewport.minY ? .down : .up
+            XCTAssertTrue(app.scrollToHittableElementIfNeeded(identifier, maxSwipes: 16, direction: direction),
+                          "\(identifier) must be reachable for the native capture")
+        }
+        alignActivityPosition(at: viewport.minY + 12) { header.frame.minY }
+    }
+
+    private func captureBoundary(start: String, next: String) -> String {
+        guard start == "activity-section-pr" else { return next }
+        let records = element(start)
+        let achievement = element(next)
+        guard records.exists, achievement.exists,
+              abs(records.frame.minY - achievement.frame.minY) < 40 else { return next }
+        // In two-column layouts the achievement header shares the PR row;
+        // the following weekly row marks the records group's lower edge.
+        return "activity-section-weeklystats"
+    }
+
+    private func captureTallCardSections(start: String, next: String, name: String) {
+        let first = element(start)
+        let following = element(next)
+        guard first.exists, following.exists else { return }
+        let viewport = usableActivityViewport()
+        let span = following.frame.minY - first.frame.minY
+        guard span > viewport.height * 0.9 else { return }
+
+        // Preserve one representative interior view for any card taller than
+        // the usable viewport, regardless of style or text size.
+        let interiorShift = min((span - viewport.height) / 2, viewport.height * 0.45)
+        let interiorTop = first.frame.minY - max(0, interiorShift)
+        alignActivityPosition(at: interiorTop) { first.frame.minY }
+        capture(name + "-middle")
+
+        guard span > viewport.height * 1.35 else { return }
+        // The next heading near the bottom leaves the current card's legend or
+        // final content visible without requiring its full height to fit.
+        let direction: ScrollDirection = following.frame.minY < viewport.minY ? .down : .up
+        _ = app.scrollToHittableElementIfNeeded(next, maxSwipes: 16, direction: direction)
+        alignActivityPosition(at: viewport.maxY - min(72, viewport.height * 0.1)) {
+            following.frame.minY
+        }
+        capture(name + "-end")
+    }
+
+    private func usableActivityViewport() -> CGRect {
         let scroll = app.scrollViews[AXID.activityRootScroll].firstMatch
         let viewport = scroll.frame.intersection(app.windows.firstMatch.frame)
-        let targetTop = viewport.minY + min(70, viewport.height * 0.1)
-        for _ in 0..<12 where header.frame.minY > targetTop + 12 {
-            let oldTop = header.frame.minY
-            dragActivityScroll(from: 0.76, to: 0.57)
-            if abs(header.frame.minY - oldTop) < 2 { break }
+        let navigationBar = app.navigationBars.firstMatch
+        let top = max(viewport.minY, navigationBar.exists ? navigationBar.frame.maxY : viewport.minY)
+        return CGRect(x: viewport.minX, y: top,
+                      width: viewport.width, height: max(1, viewport.maxY - top))
+    }
+
+    private func alignActivityPosition(at targetY: CGFloat, position: () -> CGFloat) {
+        let viewport = usableActivityViewport()
+        for _ in 0..<24 {
+            let before = position()
+            let delta = before - targetY
+            if abs(delta) <= 10 { return }
+            let distance = min(min(abs(delta) * 0.7, 56), viewport.height * 0.09)
+            dragActivityScroll(by: delta > 0 ? distance : -distance)
+            if abs(position() - before) < 2 { return }
         }
     }
 
-    private func captureMiddleOfTallCard(start: String, next: String, name: String) {
-        let nextHeader = element(next)
-        guard nextHeader.exists else { return }
+    /// Positive distance moves content upward; negative distance corrects upward overshoot.
+    private func dragActivityScroll(by distance: CGFloat) {
         let scroll = app.scrollViews[AXID.activityRootScroll].firstMatch
-        let viewport = scroll.frame.intersection(app.windows.firstMatch.frame)
-        let cardSpan = nextHeader.frame.minY - element(start).frame.minY
-        guard cardSpan > viewport.height * 0.85 else { return }
-        dragActivityScroll(from: 0.77, to: 0.36)
-        capture(name + "-middle")
-    }
-
-    private func dragActivityScroll(from start: CGFloat, to end: CGFloat) {
-        let scroll = app.scrollViews[AXID.activityRootScroll].firstMatch
-        let origin = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: start))
-        let destination = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: end))
-        origin.press(forDuration: 0.08, thenDragTo: destination)
+        let fraction = distance / max(1, scroll.frame.height)
+        let origin = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.6))
+        let destination = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.6 - fraction))
+        origin.press(forDuration: 0.18, thenDragTo: destination)
     }
 
     func testCaptureT03ChangedHero() {
