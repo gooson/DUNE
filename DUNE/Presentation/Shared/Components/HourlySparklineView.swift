@@ -8,7 +8,10 @@ struct HourlySparklineView: View {
     let tintColor: Color
     var height: CGFloat = 32
     var showsReferenceLabels = false
+    var showsArea = true
+    var showsTimeRange = false
     var usesTimelineAxis = false
+    var anchorsTimelineToNow = false
     var accessibilityTitle: LocalizedStringKey = "Score Trend"
 
     var body: some View {
@@ -28,12 +31,14 @@ struct HourlySparklineView: View {
                 .foregroundStyle(tintColor)
                 .lineStyle(StrokeStyle(lineWidth: 2.5, lineCap: .round))
 
-                AreaMark(
-                    x: .value("Hour", xValue(for: point)),
-                    y: .value("Score", point.score)
-                )
-                .interpolationMethod(.catmullRom)
-                .foregroundStyle(areaGradient)
+                if showsArea {
+                    AreaMark(
+                        x: .value("Hour", xValue(for: point)),
+                        y: .value("Score", point.score)
+                    )
+                    .interpolationMethod(.catmullRom)
+                    .foregroundStyle(areaGradient)
+                }
                 }
 
                 RuleMark(y: .value("Current", data.currentScore))
@@ -46,6 +51,16 @@ struct HourlySparklineView: View {
             .chartYScale(domain: computedYDomain)
             .frame(height: height)
             .clipped()
+            if showsTimeRange, let first = data.points.first?.date, let last = data.points.last?.date {
+                HStack(spacing: 4) {
+                    Spacer(minLength: 0)
+                    Text(first, format: .dateTime.month(.abbreviated).day().hour().minute())
+                    Text("–")
+                    Text(last, format: .dateTime.month(.abbreviated).day().hour().minute())
+                }
+                .font(.caption2)
+                .foregroundStyle(tintColor.opacity(0.9))
+            }
             if showsReferenceLabels {
                 HStack {
                     Text("Low")
@@ -82,29 +97,37 @@ struct HourlySparklineView: View {
 
     private var xDomain: ClosedRange<Double> {
         guard usesTimelineAxis else { return 0...Double(max(data.points.count - 1, 1)) }
-        let end = data.points.last?.date.timeIntervalSince1970 ?? Date.now.timeIntervalSince1970
-        return (end - TimePeriod.day.visibleDomainSeconds)...end
+        let end = (anchorsTimelineToNow ? Date.now : data.points.last?.date ?? Date.now).timeIntervalSince1970
+        let windowStart = end - TimePeriod.day.visibleDomainSeconds
+        // Today labels the observed range; do not reserve leading space before
+        // its first measurement when fewer than 24 hours are available.
+        let start = anchorsTimelineToNow
+            ? max(windowStart, data.points.first?.date.timeIntervalSince1970 ?? windowStart)
+            : windowStart
+        return min(start, end - 60)...end
     }
 
     private var accessibilitySummary: String {
         let first = data.points.first?.score ?? 0
         let last = data.points.last?.score ?? 0
+        let firstTime = data.points.first?.date.formatted(.dateTime.month(.abbreviated).day().hour().minute())
+            ?? hourLabel(data.points.first?.hour ?? 0)
+        let lastTime = data.points.last?.date.formatted(.dateTime.month(.abbreviated).day().hour().minute())
+            ?? hourLabel(data.points.last?.hour ?? 0)
         let direction = last > first + 2 ? String(localized: "Rising")
             : last < first - 2 ? String(localized: "Falling") : String(localized: "Stable")
         let format = String(localized: "From %@ to %@. Minimum %d, maximum %d, current %d.")
         let values = String(
             format: format,
             locale: .current,
-            hourLabel(data.points.first?.hour ?? 0),
-            hourLabel(data.points.last?.hour ?? 0),
+            showsTimeRange ? firstTime : hourLabel(data.points.first?.hour ?? 0),
+            showsTimeRange ? lastTime : hourLabel(data.points.last?.hour ?? 0),
             minimumScore,
             maximumScore,
             Int(data.currentScore)
         )
         return "\(direction). \(values)"
     }
-
-    // MARK: - Cached Computations
 
     /// Hoisted gradient to avoid allocation inside Chart closure body.
     private var areaGradient: LinearGradient {

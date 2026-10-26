@@ -10,29 +10,23 @@ struct YesterdayRecapCard: View {
     var body: some View {
         let hasContent = workoutSummary != nil || sleepMinutes != nil || scoreDelta != nil
         if hasContent {
-            InlineCard {
+            DashboardSupportCard {
                 VStack(alignment: .leading, spacing: DS.Spacing.sm) {
                     HStack(spacing: DS.Spacing.xs) {
                         Image(systemName: "clock.arrow.circlepath")
-                            .font(.caption)
+                            .font(.subheadline)
                             .foregroundStyle(theme.secondaryTextColor)
 
                         Text("Yesterday")
-                            .font(.caption)
+                            .font(.subheadline)
                             .fontWeight(.semibold)
                             .foregroundStyle(theme.secondaryTextColor)
                     }
 
-                    HStack(spacing: DS.Spacing.md) {
-                        if let summary = workoutSummary {
-                            summaryChip(icon: "figure.run", text: summary)
-                        } else {
-                            summaryChip(icon: "figure.mind.and.body", text: String(localized: "Rest day"))
-                        }
-
-                        if let minutes = sleepMinutes, minutes > 0 {
-                            summaryChip(icon: "bed.double.fill", text: formatSleep(minutes))
-                        }
+                    ViewThatFits(in: .horizontal) {
+                        HStack(spacing: DS.Spacing.md) { summaryItems }
+                            .fixedSize(horizontal: true, vertical: false)
+                        VStack(alignment: .leading, spacing: DS.Spacing.sm) { summaryItems }
                     }
 
                     if let delta = scoreDelta {
@@ -51,6 +45,18 @@ struct YesterdayRecapCard: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
             .accessibilityIdentifier("dashboard-yesterday-recap")
+        }
+    }
+
+    @ViewBuilder
+    private var summaryItems: some View {
+        if let summary = workoutSummary {
+            summaryChip(icon: "figure.run", text: summary)
+        } else {
+            summaryChip(icon: "figure.mind.and.body", text: String(localized: "Rest day"))
+        }
+        if let minutes = sleepMinutes, minutes > 0 {
+            summaryChip(icon: "bed.double.fill", text: formatSleep(minutes))
         }
     }
 
@@ -73,6 +79,7 @@ struct YesterdayRecapCard: View {
             Text(text)
                 .font(.caption)
                 .foregroundStyle(.primary)
+                .fixedSize(horizontal: false, vertical: true)
         }
     }
 
@@ -84,4 +91,9 @@ struct YesterdayRecapCard: View {
         if h > 0 { return String(localized: "\(h)h sleep") }
         return String(localized: "\(m)m sleep")
     }
+}
+
+#Preview {
+    YesterdayRecapCard(workoutSummary: nil, sleepMinutes: 443, yesterdayScore: 53, todayScore: 49)
+        .padding()
 }

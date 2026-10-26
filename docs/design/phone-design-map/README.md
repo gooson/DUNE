@@ -9,6 +9,9 @@ status: in-progress
 
 [폰·패드·Duo·Watch 통합 디자인맵 열기](actual/index.html)
 
+2026-10-26 Today의 실제 피드백 수정은 [새 실제 화면·검증 제한](../full-redesign-map/review/today-repair-2026-10-26/index.html)에서 확인한다. 최종 T03은 폰·iPad·Duo 외부 LCD에서 새로 촬영했으며, 폰 T06은 수면 지표의 push·백그라운드 복귀·뒤로·재진입 표본이다. 기존 다른 UDID의 인덱스 이미지는 덮어쓰지 않았다. Duo 내부는 LCD-1 활성 readback을 확인했으나 히트테스트 실패와 검은 PNG로 미갱신이다. X 추가 실클릭 검사는 사용자 요청으로 실행하지 않았다.
+
+
 [2026-10-25 Activity·Life 히어로 실제 화면 23장](../full-redesign-map/review/activity-life-hero-rhythm-2026-10-25/index.html)은 새 구성 지표와 기록 흐름을 반영한다. iPhone·iPad·Duo 외부 화면을 갱신했으며, Duo 내부 가로 A01·L01은 회전 readback과 저장소 잠금 문제로 미검증이다. 이전 내부 이미지를 이번 변경의 증거로 사용하지 않는다. 공통 Today 알림함 검사 2건의 실패와 재개 조건은 [검증 설명](../full-redesign-map/review/activity-life-hero-rhythm-2026-10-25/README.md)에 기록했다.
 
 [2026-10-22 T03·A01·H01 첫 화면 UX 개편 실제 캡처](../full-redesign-map/review/first-fold-ux-2026-10-22/index.html)는 iPhone·iPad의 밝음·어두움 화면 12장이다. 히어로의 탭 전환 버튼 제거, Activity 로딩 진입, 최근 수면 요약·iPad 두 열 배치를 반영한 결과이며 출처·검증 범위는 [캡처 설명](../full-redesign-map/review/first-fold-ux-2026-10-22/README.md)에 기록했다.

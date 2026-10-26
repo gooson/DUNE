@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/TodayCompactUITests/testInsightDismissTargetIncludesItsPadding",
+    "DUNEUITests/TodayReadingUITests/testRecoverySleepChartAndDetailRoute",
+    "DUNEUITests/TodayReadingUITests/testStressAnalysisRendersAndCapturesVariants",
+    "DUNEUITests/TodayReadingUITests/testStressDetailOpensFromHeader"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 4,
+    "passed": 3,
+    "skipped": 0,
+    "failed": 1
+  },
+  "passed_cases": 3,
+  "failures": [
+    "839: /Users/shanks/.codex/worktrees/06a1/Health/DUNEUITests/Visual/TodayCompactUITests.swift:74: error: -[DUNEUITests.TodayCompactUITests testInsightDismissTargetIncludesItsPadding] : XCTAssertTrue failed - The seeded insight dismiss action should be reachable on Today",
+    "853: Test Case '-[DUNEUITests.TodayCompactUITests testInsightDismissTargetIncludesItsPadding]' failed (146.664 seconds).",
+    "854: Test Suite 'TodayCompactUITests' failed at 2026-10-26 10:23:03.642.",
+    "1294: Test Suite 'DUNEUITests.xctest' failed at 2026-10-26 10:25:22.396.",
+    "1296: Test Suite 'Selected tests' failed at 2026-10-26 10:25:22.396.",
+    "1311: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log reports 1 failures",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/TodayCompactUITests/testInsightDismissTargetIncludesItsPadding"
+  ],
+  "log_path": "/private/tmp/today-repair-ui-retry.log"
+}

@@ -309,7 +309,7 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         XCTAssertTrue(detail.waitForExistence(timeout: 5), "Condition score detail should open from Today hero")
     }
 
-    func testSleepMetricOpensMetricDetailAndAllData() throws {
+    func testSleepMetricPushesDetailBackAndReopensAllData() throws {
         dismissMorningBriefingIfNeeded()
 
         XCTAssertTrue(
@@ -322,29 +322,40 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         sleepCard.auditTap()
 
         let metricDetail = app.descendants(matching: .any)[AXID.metricDetailScreen("sleep")].firstMatch
-        XCTAssertTrue(metricDetail.waitForExistence(timeout: 5), "Metric detail should open from Today metric card")
+        XCTAssertTrue(metricDetail.waitForExistence(timeout: 5), "Metric detail should push from Today metric card")
+        XCTAssertFalse(app.buttons["dashboard-metric-inspector-close"].exists,
+                       "Metric detail should use Today navigation rather than an inspector")
 
-        if app.windows.firstMatch.horizontalSizeClass == .regular {
-            XCTAssertTrue(
-                app.scrollViews["dashboard-root-scroll"].firstMatch.exists,
-                "Today dashboard should remain alongside the inspector\n\(app.debugDescription)"
-            )
+        XCUIDevice.shared.press(.home)
+        XCTAssertTrue(app.wait(for: .runningBackground, timeout: 5))
+        app.activate()
+        XCTAssertTrue(app.wait(for: .runningForeground, timeout: 10),
+                      "Today metric detail should resume in the foreground")
+        XCTAssertTrue(metricDetail.waitForExistence(timeout: 5),
+                      "Pushed metric detail should remain visible after backgrounding")
+        XCTAssertTrue(metricDetail.isHittable, "The resumed detail must be visible, not a covered accessibility node")
+        addScreenshotAttachment(named: "Today metric detail resumed with back navigation")
+
+        let railBack = app.buttons["BackButton"].firstMatch
+        if railBack.exists && railBack.isHittable {
+            railBack.auditTap()
+        } else {
+            let backButton = app.navigationBars.buttons.element(boundBy: 0)
+            XCTAssertTrue(backButton.waitForExistence(timeout: 5),
+                          "Pushed metric detail should have a back button\n\(app.debugDescription)")
+            backButton.auditTap()
         }
-        XCTAssertTrue(
-            app.waitAndTap("dashboard-metric-inspector-close"),
-            "Metric inspector should provide an accessible close action\n\(app.debugDescription)"
-        )
-        let inspectorDismissed = XCTNSPredicateExpectation(
+        let detailPopped = XCTNSPredicateExpectation(
             predicate: NSPredicate(format: "exists == false"),
             object: metricDetail
         )
-        XCTAssertEqual(XCTWaiter.wait(for: [inspectorDismissed], timeout: 5), .completed)
+        XCTAssertEqual(XCTWaiter.wait(for: [detailPopped], timeout: 5), .completed)
         XCTAssertTrue(
             app.scrollToHittableElementIfNeeded(AXID.dashboardMetricCard("sleep"), maxSwipes: 8),
-            "Closing the inspector should leave the selected metric accessible on Today"
+            "Back navigation should leave the selected metric accessible on Today"
         )
         sleepCard.auditTap()
-        XCTAssertTrue(metricDetail.waitForExistence(timeout: 5), "The same metric should reopen after inspector dismissal")
+        XCTAssertTrue(metricDetail.waitForExistence(timeout: 5), "The same metric should reopen after navigating back")
 
         let showAllData = app.descendants(matching: .any)[AXID.metricDetailShowAllData].firstMatch
         XCTAssertTrue(showAllData.waitForExistence(timeout: 5), "Show All Data link should exist in metric detail")

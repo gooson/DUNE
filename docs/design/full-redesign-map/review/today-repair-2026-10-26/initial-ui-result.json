@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/TodayCompactUITests/testTodayInformationCardsAndHeaderActions",
+    "DUNEUITests/TodayCompactUITests/testInsightDismissTargetIncludesItsPadding",
+    "DUNEUITests/TodayCompactUITests/testMaximumAccessibilityScoreMovesOutsideRingAndKeepsDetailRoute",
+    "DUNEUITests/TodayReadingUITests/testRecoverySleepRendersAndCapturesVariants",
+    "DUNEUITests/TodayReadingUITests/testRecoverySleepChartAndDetailRoute",
+    "DUNEUITests/TodayReadingUITests/testStressAnalysisRendersAndCapturesVariants",
+    "DUNEUITests/TodayReadingUITests/testStressDetailOpensFromHeader",
+    "DUNEUITests/TodaySettingsRegressionTests/testSleepMetricPushesDetailBackAndReopensAllData",
+    "DUNEUITests/TodaySupportCardsUITests/testDesertTodaySupportCardsAtBothAppearances"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 9,
+    "passed": 5,
+    "skipped": 0,
+    "failed": 4
+  },
+  "passed_cases": 5,
+  "failures": [
+    "7370: /Users/shanks/.codex/worktrees/06a1/Health/DUNEUITests/Visual/TodayCompactUITests.swift:62: error: -[DUNEUITests.TodayCompactUITests testInsightDismissTargetIncludesItsPadding] : XCTAssertTrue failed - The seeded Today insight must expose a dismiss action",
+    "7584: Test Suite 'TodayCompactUITests' failed at 2026-10-26 10:10:31.277.",
+    "7896: /Users/shanks/.codex/worktrees/06a1/Health/DUNEUITests/Visual/TodayReadingUITests.swift:62: error: -[DUNEUITests.TodayReadingUITests testRecoverySleepChartAndDetailRoute] : XCTAssertTrue failed - dashboard-recovery-sleep-details should be reachable at this text size and device width",
+    "7910: Test Case '-[DUNEUITests.TodayReadingUITests testRecoverySleepChartAndDetailRoute]' failed (67.516 seconds).",
+    "8728: /Users/shanks/.codex/worktrees/06a1/Health/DUNEUITests/Visual/TodayReadingUITests.swift:62: error: -[DUNEUITests.TodayReadingUITests testStressAnalysisRendersAndCapturesVariants] : XCTAssertTrue failed - dashboard-stress-contribution-hrvVariability should be reachable at this text size and device wi…",
+    "8742: Test Case '-[DUNEUITests.TodayReadingUITests testStressAnalysisRendersAndCapturesVariants]' failed (149.913 seconds).",
+    "9348: /Users/shanks/.codex/worktrees/06a1/Health/DUNEUITests/Visual/TodayReadingUITests.swift:62: error: -[DUNEUITests.TodayReadingUITests testStressDetailOpensFromHeader] : XCTAssertTrue failed - dashboard-stress-contribution-hrvVariability should be reachable at this text size and device width",
+    "9362: Test Case '-[DUNEUITests.TodayReadingUITests testStressDetailOpensFromHeader]' failed (136.641 seconds).",
+    "9363: Test Suite 'TodayReadingUITests' failed at 2026-10-26 10:17:22.318.",
+    "9901: Test Suite 'DUNEUITests.xctest' failed at 2026-10-26 10:19:27.759.",
+    "9903: Test Suite 'Selected tests' failed at 2026-10-26 10:19:27.759.",
+    "9921: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log reports 4 failures",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/TodayCompactUITests/testInsightDismissTargetIncludesItsPadding",
+    "DUNEUITests/TodayReadingUITests/testRecoverySleepChartAndDetailRoute",
+    "DUNEUITests/TodayReadingUITests/testStressAnalysisRendersAndCapturesVariants",
+    "DUNEUITests/TodayReadingUITests/testStressDetailOpensFromHeader"
+  ],
+  "log_path": "/private/tmp/today-repair-ui.log"
+}

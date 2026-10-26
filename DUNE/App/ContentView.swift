@@ -161,7 +161,6 @@ struct ContentView: View {
     @State private var notificationOpenWorkoutID: String?
     @State private var isShowingLaunchPostureCapture = PostureCaptureService.shouldAutoOpenCaptureOnLaunch
     @State private var todayNavPath = NavigationPath()
-    @State private var inspectedDashboardMetric: HealthMetric?
     @State private var isShowingDashboardHealthDataQA = false
     @State private var trainNavPath = NavigationPath()
     @State private var wellnessNavPath = NavigationPath()
@@ -209,23 +208,6 @@ struct ContentView: View {
                 )
             )
             .inspectorColumnWidth(min: 320, ideal: 420, max: 540)
-        } else if let metric = inspectedDashboardMetric {
-            NavigationStack {
-                VStack(spacing: 0) {
-                    HStack {
-                        Spacer()
-                        Button("Done") { inspectedDashboardMetric = nil }
-                            .accessibilityIdentifier("dashboard-metric-inspector-close")
-                    }
-                    .padding(DS.Spacing.md)
-                    MetricDetailView(metric: metric)
-                        .id(metric.id)
-                        .navigationDestination(for: AllDataDestination.self) { destination in
-                            AllDataView(category: destination.category)
-                        }
-                }
-            }
-            .inspectorColumnWidth(min: 320, ideal: 420, max: 540)
         }
     }
 
@@ -256,10 +238,9 @@ struct ContentView: View {
                         },
                         onInspectMetric: { metric in
                             isShowingDashboardHealthDataQA = false
-                            inspectedDashboardMetric = metric
+                            todayNavPath.append(metric)
                         },
                         onOpenHealthDataQA: {
-                            inspectedDashboardMetric = nil
                             isShowingDashboardHealthDataQA = true
                         },
                         launchExperienceReady: launchExperienceReady,
@@ -274,10 +255,9 @@ struct ContentView: View {
                 // host to the root ScrollView feeds large-title inset changes back
                 // into scrolling, even while the inspector is closed.
                 .inspector(isPresented: Binding(
-                    get: { inspectedDashboardMetric != nil || isShowingDashboardHealthDataQA },
+                    get: { isShowingDashboardHealthDataQA },
                     set: { isPresented in
                         if !isPresented {
-                            inspectedDashboardMetric = nil
                             isShowingDashboardHealthDataQA = false
                         }
                     }

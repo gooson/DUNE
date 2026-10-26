@@ -12,7 +12,7 @@ struct InsightCardView: View {
     }
 
     var body: some View {
-        InlineCard {
+        DashboardSupportCard {
             HStack(alignment: .top, spacing: DS.Spacing.sm) {
                 Image(systemName: data.iconName)
                     .font(.title3)
@@ -40,9 +40,12 @@ struct InsightCardView: View {
                         Image(systemName: "xmark")
                             .font(.caption2.weight(.medium))
                             .foregroundStyle(.tertiary)
-                            .frame(width: 20, height: 20)
+                            .frame(width: 44, height: 44)
+                            .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
+                    .accessibilityLabel(String(localized: "Dismiss"))
+                    .accessibilityIdentifier("dashboard-insight-dismiss-\(data.id)")
                 }
             }
         }

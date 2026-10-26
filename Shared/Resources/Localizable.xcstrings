@@ -2158,6 +2158,29 @@
         }
       }
     },
+    "%lldh %lldm sleep" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lldh %lldm sleep"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "睡眠 %1$lld時間%2$lld分"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "수면 %1$lld시간 %2$lld분"
+          }
+        }
+      }
+    },
     "%lldh %lldmin" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2171,6 +2194,52 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld시간 %lld분"
+          }
+        }
+      }
+    },
+    "%lldh sleep" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lldh sleep"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "睡眠 %lld時間"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "수면 %lld시간"
+          }
+        }
+      }
+    },
+    "%lldm sleep" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lldm sleep"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "睡眠 %lld分"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "수면 %lld분"
           }
         }
       }
@@ -4636,29 +4705,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "예상치 못한 오류가 발생했어요."
-          }
-        }
-      }
-    },
-    "Analysis details" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Analysis details"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "分析の詳細"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "분석 근거"
           }
         }
       }
@@ -9556,6 +9602,29 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "컨디션"
+          }
+        }
+      }
+    },
+    "Condition %lld → %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Condition %lld → %lld"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "コンディション %1$lld → %2$lld"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "컨디션 %1$lld → %2$lld"
           }
         }
       }

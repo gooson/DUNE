@@ -1,0 +1,140 @@
+{
+  "branch": "codex/today-feedback-repair",
+  "base": "origin/main",
+  "base_revision": "0cb5572126eb3dd96dd5cf8bedc317021cb0d3b2",
+  "initial_head": "0cb5572126eb3dd96dd5cf8bedc317021cb0d3b2",
+  "timestamp": "2026-10-26T11:02:04.613526+09:00",
+  "diff_lines": 2831,
+  "reviewers_run": [
+    "security",
+    "performance",
+    "architecture",
+    "data-integrity",
+    "simplicity",
+    "localization",
+    "app-quality-gate"
+  ],
+  "reviewers_skipped": [
+    {
+      "name": "agent-native",
+      "reason": "No agent/prompt/.claude/.codex changes"
+    }
+  ],
+  "review_mode": "Parent five perspectives inline under >2000-line exception; independent app-quality review",
+  "findings": [
+    {
+      "id": "data-001",
+      "reviewer": "Data Integrity",
+      "priority": "P2",
+      "status": "Resolved",
+      "title": "전체 갱신 시각으로 보존 여부를 판정하면 오늘 부분 성공도 소실될 수 있음",
+      "file": "DUNE/Presentation/Dashboard/DashboardViewModel.swift",
+      "line": 63,
+      "issue": "lastUpdated는 전체 소스 성공 때만 갱신되지만 canRetainHealthData가 그 날짜를 재사용한다. 전날 timestamp 뒤 오늘 부분 성공 후 실패하면 이미 표시한 오늘 정상 값을 제거한다.",
+      "suggestion": "데이터 조회 성공 날짜와 표시용 전체 갱신 시각을 분리하고 자정·부분 성공 회귀 테스트 추가.",
+      "resolution": "lastHealthDataLoadedAt와 시계를 분리했고 날짜 경계 및 부분 성공 뒤 오류 보존 회귀 테스트 확인."
+    },
+    {
+      "id": "quality-001",
+      "reviewer": "App Quality",
+      "priority": "P2",
+      "status": "Open",
+      "title": "X 패딩 클릭 필수 검증 미완료",
+      "file": "DUNEUITests/Visual/TodayCompactUITests.swift",
+      "line": 58,
+      "issue": "기존 두 실행은 클릭 전에 실패했고 최종 container 수정 뒤 사용자 요청으로 재실행하지 않았다.",
+      "suggestion": "실클릭 검증 또는 사용자의 명시적인 출시 게이트 제외 결정 필요. 추가 X 실행 금지 유지.",
+      "release_disposition": "Accepted by user for this merge; verification remains Open",
+      "release_blocking": false
+    },
+    {
+      "id": "quality-002",
+      "reviewer": "App Quality",
+      "priority": "P2",
+      "status": "Open",
+      "title": "Duo 펼침 T03 검증 실패",
+      "file": "docs/design/full-redesign-map/review/today-repair-2026-10-26/duo-open-ui-result.json",
+      "line": 1,
+      "issue": "Activation point invalid와 검은 캡처. LCD-1 active만으로 표시·터치 성공을 확인할 수 없다.",
+      "suggestion": "좌표/디스플레이 경로 원인 확인 후 유효 PNG와 영향 selector 성공 필요.",
+      "release_disposition": "Accepted by user for this merge; verification remains Open",
+      "release_blocking": false
+    }
+  ],
+  "summary": {
+    "p1": 0,
+    "p2": 3,
+    "p3": 0,
+    "resolved_p2": 1,
+    "open_p2": 2
+  },
+  "resolve_validation": {
+    "first_run": "/private/tmp/today-review-ship-unit.xcresult",
+    "count": 37,
+    "passed": 36,
+    "failed": 1,
+    "cause": "New regression fixture marked snapshot latestWeight failed while live mock body query succeeded; timestamp assertions therefore failed.",
+    "change": "Inject actual ToggleWorkoutService failure and assert partial error; retry only this new test."
+  },
+  "ship_status": "ready-for-pr-and-remote-merge",
+  "verification": {
+    "dashboard_first_run": {
+      "executed": 37,
+      "passed": 36,
+      "failed": 1
+    },
+    "corrected_regression_retry": {
+      "executed": 1,
+      "passed": 1,
+      "failed": 0,
+      "summary": "/private/tmp/today-review-ship-unit-selected-summary.json"
+    },
+    "unique_dashboard_cases_verified": 37,
+    "unchanged_condition_detail_cases_reused": 16,
+    "ui_reuse": "Previous successful normal-state captures remain valid only for their layout scope; no X or Duo-open pass claimed.",
+    "invalid_selector_attempt": {
+      "executed": 0,
+      "status": "excluded; Swift Testing identifier required trailing parentheses"
+    }
+  },
+  "final_gate": {
+    "open": [
+      "quality-001",
+      "quality-002"
+    ],
+    "x_rerun": "explicitly declined by user; not executed",
+    "pr_created": false,
+    "merged": false,
+    "local_cleanup": "not run; preserve all 3 owned simulators until confirmed remote merge",
+    "code_review": "No open code P1/P2; verification P2 quality-001 and quality-002 remain open",
+    "accepted_by_user": [
+      "quality-001",
+      "quality-002"
+    ],
+    "release_blocking": []
+  },
+  "release_authorization": {
+    "user_instruction": "진행해 머지",
+    "context": "두 미완료 검증과 머지 중단 사유를 보고한 뒤 사용자가 진행·머지를 명시적으로 요청함.",
+    "accepted_limitations": [
+      "quality-001",
+      "quality-002"
+    ],
+    "tests_waived_not_passed": true
+  },
+  "final_pr_base": {
+    "ref": "origin/main",
+    "sha": "a20ec544a3a1e93fc63cb2fc57efbfebbdd1d61b"
+  },
+  "integration_validation": {
+    "upstream": "PR #845 string-catalog-extraction-stability",
+    "change": "추가한 4개 키에 extractionState=manual 추가. 번역 값과 앱 Swift 코드는 변경 없음.",
+    "formatter_tests": {
+      "executed": 6,
+      "passed": 6,
+      "failed": 0
+    },
+    "final_pr_review": "No new code P1/P2; existing two verification limitations explicitly accepted by user."
+  },
+  "record_phase": "final pre-PR verification; remote outcome recorded in PR and chat"
+}

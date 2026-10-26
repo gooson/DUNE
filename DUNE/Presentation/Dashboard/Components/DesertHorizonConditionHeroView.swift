@@ -212,7 +212,16 @@ struct DesertHorizonConditionHeroView: View {
             .foregroundStyle(ink)
 
             if let validHourlySparkline {
-                HourlySparklineView(data: validHourlySparkline, tintColor: heroHighlight, height: 48, usesTimelineAxis: true)
+                HourlySparklineView(
+                    data: validHourlySparkline,
+                    tintColor: heroHighlight,
+                    height: 48,
+                    showsArea: false,
+                    showsTimeRange: true,
+                    usesTimelineAxis: true,
+                    anchorsTimelineToNow: true
+                )
+                .accessibilityIdentifier("dashboard-hourly-condition-chart")
             } else if hasWeeklyTrend {
                 TrendChartView(
                     scores: weeklyTrendScores,
@@ -273,18 +282,26 @@ struct DesertHorizonConditionHeroView: View {
     }
 
     private var evidence: some View {
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: 136), spacing: 8)], alignment: .leading, spacing: 8) {
+        LazyVGrid(
+            columns: Array(repeating: GridItem(.flexible(), alignment: .leading), count: dynamicTypeSize >= .xxLarge ? 1 : 2),
+            alignment: .leading,
+            spacing: 8
+        ) {
             ForEach(Array(trendBadges.prefix(2).enumerated()), id: \.offset) { _, detail in
-                VStack(alignment: .leading, spacing: 4) {
+                HStack(alignment: .firstTextBaseline, spacing: 8) {
                     Text(detail.label)
-                        .foregroundStyle(ink)
+                        .foregroundStyle(muted)
+                        .fixedSize(horizontal: false, vertical: true)
+                    Spacer(minLength: 0)
                     Text(detail.value.formattedWithSeparator(fractionDigits: detail.fractionDigits))
+                        .monospacedDigit()
                         .foregroundStyle(heroPositive)
+                        .fixedSize()
                 }
                 .font(.caption2.weight(.semibold))
-                .padding(.horizontal, 10)
-                .padding(.vertical, 9)
-                .background(isDesert ? Color(red: 0.290, green: 0.251, blue: 0.208) : gold.opacity(0.12), in: RoundedRectangle(cornerRadius: 12))
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .accessibilityElement(children: .combine)
+                .accessibilityIdentifier("dashboard-hero-baseline-\(detail.label)")
             }
         }
     }

@@ -1,0 +1,61 @@
+{
+  "devicesAndConfigurations" : [
+    {
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "F8DF973B-A068-4A71-B91A-6134E77A7556",
+        "deviceName" : "iPhone 18 Pro Max-wt-Health-06a1-33b814e2e73a",
+        "modelName" : "iPhone 18 Pro Max",
+        "osBuildNumber" : "24A434",
+        "osVersion" : "27.0",
+        "platform" : "iOS Simulator"
+      },
+      "expectedFailures" : 0,
+      "failedTests" : 1,
+      "passedTests" : 36,
+      "skippedTests" : 0,
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription" : "DUNETests · Built with macOS 27.0.1",
+  "expectedFailures" : 0,
+  "failedTests" : 1,
+  "finishTime" : 1792980455.905,
+  "passedTests" : 36,
+  "result" : "Failed",
+  "runtimeWarnings" : [
+
+  ],
+  "skippedTests" : 0,
+  "startTime" : 1792980410.56,
+  "statistics" : [
+
+  ],
+  "testFailures" : [
+    {
+      "failureText" : "Expectation failed: vm.lastUpdated == yesterday\nvm.lastUpdated → 2026-10-26 02:07:12 +0000\nyesterday → 2026-10-25 02:07:12 +0000",
+      "targetName" : "DUNETests",
+      "testIdentifier" : 17,
+      "testIdentifierString" : "DashboardViewModelTests/partialHealthSuccessRetainedWithStaleOverallRefreshTime()",
+      "testIdentifierURL" : "test://com.apple.xcode/DUNE/DUNETests/DashboardViewModelTests/partialHealthSuccessRetainedWithStaleOverallRefreshTime()",
+      "testName" : "Today's partial health success survives a later failure when overall refresh time is yesterday"
+    }
+  ],
+  "title" : "Test - DUNETests",
+  "topInsights" : [
+    {
+      "category" : "Common Failures",
+      "impact" : "100% of failures",
+      "text" : "2 runs of 1 test failed with Expectation failed: vm.lastUpdated == yesterday"
+    },
+    {
+      "category" : "Longest Test Runs",
+      "impact" : "42% of duration",
+      "text" : "1 longest test run with outlier durations exceeding 0.11s (three standard deviations)"
+    }
+  ],
+  "totalTestCount" : 37
+}
