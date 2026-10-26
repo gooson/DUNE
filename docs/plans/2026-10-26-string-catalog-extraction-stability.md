@@ -1,7 +1,7 @@
 ---
 topic: string-catalog-extraction-stability
 date: 2026-10-26
-status: approved
+status: implemented
 confidence: high
 related_solutions:
   - ../solutions/general/xcstrings-extraction-state-warnings.md
