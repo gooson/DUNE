@@ -7,6 +7,8 @@ status: in-progress
 
 # DUNE 전체 디자인맵
 
+2026-10-28 H01 최근 수면의 적은 기록 상태를 [새 실제 화면](../full-redesign-map/review/wellness-sparse-sleep-2026-10-28/index.html)에서 추적한다. 고정7일 위치·16pt 세로 막대를 적용했다. iPhone·iPad의 상태별 출처를 기록하며 Duo 접힘·펼침의 이 수정은 미갱신이다. 이전 Flow66장을 이번 수정의 새 캡처로 계산하지 않는다.
+
 [폰·패드·Duo·Watch 통합 디자인맵 열기](actual/index.html)
 
 2026-10-28 Wellness H01 Flow의 [새 실제 화면과 기기별 출처](../full-redesign-map/review/wellness-flow-2026-10-28/index.html)를 전용 갤러리에 보존한다. 이전 `actual/*/images/H01.png`는 다른 UDID의 캡처이므로 이번 변경의 증거로 덮어쓰지 않았다. 완료한 기기·상태와 남은 범위는 갤러리 README와 이미지별 manifest를 따른다.

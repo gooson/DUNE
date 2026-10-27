@@ -2,7 +2,7 @@
 tags: [wellness, sleep, chart, sparse-data, swiftui]
 date: 2026-10-28
 category: plan
-status: in-progress
+status: implemented
 ---
 
 # Wellness 최근 수면의 적은 기록 배치 수정
@@ -29,3 +29,5 @@ status: in-progress
 5. 새 실제 PNG·출처와 해결책을 보존하고 디자인맵에서 연결한다.
 
 전체 UI 회귀는 요청 범위 밖이며 실행하지 않는다. 점수 계산·저장·HealthKit 실제 쿼리는 변경하지 않는다.
+
+최신 소스 `52988932`에서 iPhone2·iPad1개 device-case가 통과했고, 별도 최초 실행의0개 빈 상태·상세 진입2개는 변경되지 않은 분기/경로의 결과를 재사용했다. iOS 빌드 통과. [새 원본10장과 미검증 범위](../design/full-redesign-map/review/wellness-sparse-sleep-2026-10-28/index.html)를 따른다.
