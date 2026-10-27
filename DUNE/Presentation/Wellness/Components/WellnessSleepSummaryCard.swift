@@ -78,6 +78,7 @@ struct WellnessSleepSummaryCard: View {
                     if let meanMinutes {
                         Text("7-day average · \(duration(meanMinutes))")
                             .font(.caption.weight(.semibold))
+                            .fixedSize(horizontal: false, vertical: true)
                             .foregroundStyle(muted)
                             .accessibilityIdentifier("wellness-sleep-average")
                     }
@@ -96,10 +97,11 @@ struct WellnessSleepSummaryCard: View {
     private func observedBars(latest: SleepDailySample) -> some View {
         let samples = recentSamples
         let scale = barScaleMinutes
-        return HStack(alignment: .bottom, spacing: DS.Spacing.xs) {
-            ForEach(Array(recentDays.enumerated()), id: \.element) { index, day in
-                let sample = samples.last { Calendar.current.isDate($0.date, inSameDayAs: day) }
-                VStack(spacing: DS.Spacing.sm) {
+        let days = recentDays
+        return VStack(spacing: DS.Spacing.sm) {
+            HStack(alignment: .bottom, spacing: DS.Spacing.xs) {
+                ForEach(Array(days.enumerated()), id: \.element) { index, day in
+                    let sample = samples.last { Calendar.current.isDate($0.date, inSameDayAs: day) }
                     ZStack(alignment: .bottom) {
                         Color.clear
                         if let sample {
@@ -112,12 +114,20 @@ struct WellnessSleepSummaryCard: View {
                         }
                     }
                     .frame(height: 64)
-                    Text(!dynamicTypeSize.isAccessibilitySize || index.isMultiple(of: 3)
-                         ? day.formatted(.dateTime.day()) : " ")
-                        .font(.caption2).foregroundStyle(muted)
-                        .accessibilityHidden(true)
+                    .frame(maxWidth: .infinity)
                 }
-                .frame(maxWidth: .infinity)
+            }
+            HStack(spacing: DS.Spacing.xs) {
+                ForEach(Array(days.enumerated()), id: \.element) { index, day in
+                    if !dynamicTypeSize.isAccessibilitySize || index.isMultiple(of: 3) {
+                        if dynamicTypeSize.isAccessibilitySize, index > 0 { Spacer(minLength: 0) }
+                        Text(day.formatted(.dateTime.day()))
+                            .font(.caption2).foregroundStyle(muted)
+                            .fixedSize()
+                            .frame(maxWidth: dynamicTypeSize.isAccessibilitySize ? nil : .infinity)
+                            .accessibilityIdentifier("wellness-sleep-date-\(index)")
+                    }
+                }
             }
         }
     }

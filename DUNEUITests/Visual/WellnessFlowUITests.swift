@@ -108,6 +108,7 @@ final class WellnessFlowUITests: SeededUITestBaseCase {
                 }
             }
             XCTAssertEqual(element("wellness-sleep-average").exists, count >= 2)
+            reveal("wellness-hero-sleep", direction: .down)
             addScreenshotAttachment(named: "H01-sleep-\(count)-records")
         }
     }
@@ -132,6 +133,18 @@ final class WellnessFlowUITests: SeededUITestBaseCase {
                 let bar = waitForElement("wellness-sleep-bar-\(slot)", timeout: 10)
                 XCTAssertEqual(bar.frame.width, 16, accuracy: 0.5)
                 XCTAssertTrue(viewport.contains(bar.frame))
+            }
+            if maximumAX {
+                let labels = [0, 3, 6].map { waitForElement("wellness-sleep-date-\($0)") }
+                for label in labels {
+                    XCTAssertFalse(label.label.contains("…"))
+                    XCTAssertTrue(viewport.contains(label.frame))
+                    XCTAssertTrue(label.isHittable)
+                }
+                XCTAssertLessThan(labels[0].frame.maxX, labels[1].frame.minX)
+                XCTAssertLessThan(labels[1].frame.maxX, labels[2].frame.minX)
+            } else {
+                reveal("wellness-hero-sleep", direction: .down)
             }
             addScreenshotAttachment(named: "H01-sleep-2-records-\(maximumAX ? "MaxAX" : "dark")")
         }
