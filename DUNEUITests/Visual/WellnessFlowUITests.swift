@@ -213,6 +213,29 @@ final class WellnessFlowUITests: SeededUITestBaseCase {
         }
     }
 
+    func testCaptureWideBodyMeasurementFrames() {
+        navigateToWellness()
+        let header = waitForElement("wellness-link-bodyhistory", timeout: 10)
+        let scroll = app.scrollViews.firstMatch
+        let desiredY = app.navigationBars.firstMatch.frame.maxY + 24
+        for _ in 0..<10 {
+            let offset = header.frame.minY - desiredY
+            if abs(offset) < 24 { break }
+            let start = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.6))
+            start.press(forDuration: 0.05, thenDragTo: start.withOffset(CGVector(dx: 0, dy: -max(-240, min(240, offset)))))
+        }
+        let viewport = scroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: -1, dy: -1)
+        for category in ["weight", "bodyFat", "leanBodyMass", "bmi"] {
+            let card = waitForElement("wellness-card-\(category)", timeout: 5)
+            XCTAssertTrue(viewport.contains(card.frame), "Wide layout should show the complete \(category) tile")
+        }
+        if VisualAudit.isEnabled {
+            VisualAudit.capture("H01-Wellness-Flow-body-detail-light")
+        } else {
+            addScreenshotAttachment(named: "H01-Wellness-Flow-body-detail-light")
+        }
+    }
+
     func testCaptureH01DarkFlow() {
         var configuration = launchConfiguration
         if let style = configuration.additionalArguments.firstIndex(of: "--ui-test-style") {
