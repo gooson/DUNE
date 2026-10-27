@@ -126,6 +126,12 @@ struct WellnessView: View {
                                     onAdd: openBodyRecord
                                 )
                             }
+                        } else {
+                            WellnessBodySummaryCard(
+                                cards: [],
+                                comparisons: [:],
+                                onAdd: openBodyRecord
+                            )
                         }
 
                         flowPair {
