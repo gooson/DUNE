@@ -242,10 +242,12 @@ private actor StartupTrackingBodyService: BodyCompositionQuerying {
 
 private actor TodayPreferredBMIBodyService: BodyCompositionQuerying {
     let todayBMI: Double?
+    let todayDate: Date
     let latestBMI: (value: Double, date: Date)?
 
-    init(todayBMI: Double?, latestBMI: (value: Double, date: Date)?) {
+    init(todayBMI: Double?, todayDate: Date, latestBMI: (value: Double, date: Date)?) {
         self.todayBMI = todayBMI
+        self.todayDate = todayDate
         self.latestBMI = latestBMI
     }
 
@@ -256,7 +258,10 @@ private actor TodayPreferredBMIBodyService: BodyCompositionQuerying {
     func fetchLatestWeight(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
     func fetchBMI(for date: Date) async throws -> Double? { todayBMI }
     func fetchLatestBMI(withinDays days: Int) async throws -> (value: Double, date: Date)? { latestBMI }
-    func fetchBMI(start: Date, end: Date) async throws -> [BodyCompositionSample] { [] }
+    func fetchBMI(start: Date, end: Date) async throws -> [BodyCompositionSample] {
+        guard let todayBMI, todayDate >= start, todayDate <= end else { return [] }
+        return [.init(value: todayBMI, date: todayDate)]
+    }
     func fetchBodyFat(start: Date, end: Date) async throws -> [BodyCompositionSample] { [] }
     func fetchLeanBodyMass(start: Date, end: Date) async throws -> [BodyCompositionSample] { [] }
     func fetchLatestBodyFat(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
@@ -301,6 +306,52 @@ private actor TodayPreferredBodyMetricsService: BodyCompositionQuerying {
     func fetchLatestLeanBodyMass(withinDays days: Int) async throws -> (value: Double, date: Date)? { latestLeanBodyMass }
 }
 
+private struct ComparisonBodyService: BodyCompositionQuerying {
+    let weight: [BodyCompositionSample]
+    let bmi: [BodyCompositionSample]
+    let bodyFat: [BodyCompositionSample]
+    let lean: [BodyCompositionSample]
+    var failBodyFatComparison = false
+
+    private func samples(_ values: [BodyCompositionSample], start: Date, end: Date) -> [BodyCompositionSample] {
+        values.filter { $0.date >= start && $0.date <= end }
+    }
+
+    func fetchWeight(days: Int) async throws -> [BodyCompositionSample] { weight }
+    func fetchBodyFat(days: Int) async throws -> [BodyCompositionSample] { bodyFat }
+    func fetchLeanBodyMass(days: Int) async throws -> [BodyCompositionSample] { lean }
+    func fetchWeight(start: Date, end: Date) async throws -> [BodyCompositionSample] {
+        samples(weight, start: start, end: end)
+    }
+    func fetchLatestWeight(withinDays days: Int) async throws -> (value: Double, date: Date)? {
+        weight.max(by: { $0.date < $1.date }).map { ($0.value, $0.date) }
+    }
+    func fetchBMI(for date: Date) async throws -> Double? { nil }
+    func fetchLatestBMI(withinDays days: Int) async throws -> (value: Double, date: Date)? {
+        bmi.max(by: { $0.date < $1.date }).map { ($0.value, $0.date) }
+    }
+    func fetchBMI(start: Date, end: Date) async throws -> [BodyCompositionSample] {
+        samples(bmi, start: start, end: end)
+    }
+    func fetchBodyFat(start: Date, end: Date) async throws -> [BodyCompositionSample] {
+        if failBodyFatComparison, start < Calendar.current.date(byAdding: .day, value: -35, to: Date())! {
+            throw ComparisonError.failed
+        }
+        return samples(bodyFat, start: start, end: end)
+    }
+    func fetchLeanBodyMass(start: Date, end: Date) async throws -> [BodyCompositionSample] {
+        samples(lean, start: start, end: end)
+    }
+    func fetchLatestBodyFat(withinDays days: Int) async throws -> (value: Double, date: Date)? {
+        bodyFat.max(by: { $0.date < $1.date }).map { ($0.value, $0.date) }
+    }
+    func fetchLatestLeanBodyMass(withinDays days: Int) async throws -> (value: Double, date: Date)? {
+        lean.max(by: { $0.date < $1.date }).map { ($0.value, $0.date) }
+    }
+
+    private enum ComparisonError: Error { case failed }
+}
+
 private func makeEmptyWellnessSharedSnapshot(fetchedAt: Date = Date()) -> SharedHealthSnapshot {
     SharedHealthSnapshot(
         hrvSamples: [],
@@ -323,6 +374,63 @@ private func makeEmptyWellnessSharedSnapshot(fetchedAt: Date = Date()) -> Shared
 @Suite("WellnessViewModel")
 @MainActor
 struct WellnessViewModelTests {
+
+    @Test("Four body metrics use measured values and dates seven days before each latest sample")
+    func measuredBodyComparisons() async {
+        let now = Date()
+        let calendar = Calendar.current
+        let latest = calendar.date(byAdding: .day, value: -3, to: now)!
+        let prior = calendar.date(byAdding: .day, value: -7, to: latest)!
+        let service = ComparisonBodyService(
+            weight: [.init(value: 70, date: prior), .init(value: 71, date: latest)],
+            bmi: [.init(value: 23, date: prior), .init(value: 24, date: latest)],
+            bodyFat: [.init(value: 19.5, date: prior), .init(value: 18.5, date: latest)],
+            lean: [.init(value: 30, date: prior), .init(value: 30, date: latest)]
+        )
+        let vm = WellnessViewModel(
+            sleepService: NoopSleepService(), bodyService: service,
+            hrvService: NoopHRVService(), vitalsService: NoopVitalsService(),
+            heartRateService: NoopHeartRateService(),
+            sharedHealthDataService: MockSharedHealthDataService(snapshot: makeEmptyWellnessSharedSnapshot())
+        )
+
+        await vm.performRefresh()
+
+        #expect(vm.bodyComparisons.count == 4)
+        #expect(vm.bodyComparisons[.weight]?.change == 1)
+        #expect(vm.bodyComparisons[.bmi]?.change == 1)
+        #expect(vm.bodyComparisons[.bodyFat]?.change == -1) // Percentage points.
+        #expect(vm.bodyComparisons[.leanBodyMass]?.change == 0)
+        #expect(vm.bodyComparisons[.weight]?.currentDate == latest)
+        #expect(vm.bodyComparisons[.weight]?.previousDate == prior)
+        #expect(vm.physicalCards.first(where: { $0.category == .bmi })?.lastUpdated == latest)
+    }
+
+    @Test("A comparison query error leaves the current body card but omits that comparison")
+    func partialBodyComparisonFailure() async {
+        let now = Date()
+        let prior = Calendar.current.date(byAdding: .day, value: -7, to: now)!
+        let service = ComparisonBodyService(
+            weight: [.init(value: 70, date: prior), .init(value: 71, date: now)],
+            bmi: [],
+            bodyFat: [.init(value: 19, date: prior), .init(value: 18, date: now)],
+            lean: [],
+            failBodyFatComparison: true
+        )
+        let vm = WellnessViewModel(
+            sleepService: NoopSleepService(), bodyService: service,
+            hrvService: NoopHRVService(), vitalsService: NoopVitalsService(),
+            heartRateService: NoopHeartRateService(),
+            sharedHealthDataService: MockSharedHealthDataService(snapshot: makeEmptyWellnessSharedSnapshot())
+        )
+
+        await vm.performRefresh()
+
+        #expect(vm.bodyComparisons[.weight] != nil)
+        #expect(vm.bodyComparisons[.bodyFat] == nil)
+        #expect(vm.physicalCards.contains(where: { $0.category == .bodyFat }))
+        #expect(vm.partialFailureMessage != nil)
+    }
 
     @Test("Shared snapshot keeps sleep sparkline at 7 points with zero-filled gaps")
     func sharedSnapshotSleepSparklineHasSevenPoints() async {
@@ -569,6 +677,7 @@ struct WellnessViewModelTests {
         let weekAgo = Calendar.current.date(byAdding: .day, value: -7, to: now) ?? now
         let bodyService = TodayPreferredBMIBodyService(
             todayBMI: 24.6,
+            todayDate: now,
             latestBMI: (value: 23.9, date: weekAgo)
         )
 
@@ -587,6 +696,7 @@ struct WellnessViewModelTests {
         #expect(bmiCard != nil)
         #expect(bmiCard?.value == "24.6")
         #expect(bmiCard?.lastUpdated.daysAgo == 0)
+        #expect(bmiCard?.lastUpdated == now)
     }
 
     @Test("Body cards prefer today's measurements over older history")

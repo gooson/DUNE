@@ -11,6 +11,7 @@ final class WellnessViewModel {
     var wellnessScore: WellnessScore?
     var physicalCards: [VitalCardData] = []
     var activeCards: [VitalCardData] = []
+    private(set) var bodyComparisons: [HealthMetric.Category: WellnessBodyComparison] = [:]
 
     var isLoading = false
     var partialFailureMessage: String?
@@ -460,6 +461,19 @@ final class WellnessViewModel {
 
         guard isCurrentLoadRequest(requestID) else { return }
 
+        // Keep measured comparison dates in a separate observable value. VitalCardData
+        // deliberately retains its existing change and equality behavior.
+        let comparisonInputs: [(HealthMetric.Category, VitalSample?, [BodyCompositionSample], ClosedRange<Double>)] = [
+            (.weight, results.latestWeight, results.weightComparisonHistory, 0.000001...500),
+            (.bmi, results.latestBMI, results.bmiComparisonHistory, 0.000001...100),
+            (.bodyFat, results.latestBodyFat, results.bodyFatComparisonHistory, 0.000001...100),
+            (.leanBodyMass, results.latestLeanBodyMass, results.leanComparisonHistory, 0.000001...300)
+        ]
+        bodyComparisons = Dictionary(uniqueKeysWithValues: comparisonInputs.compactMap { item in
+            WellnessBodyComparison.select(current: item.1, history: item.2, validRange: item.3)
+                .map { (item.0, $0) }
+        })
+
         // --- Body Trend for Wellness Score ---
         let bodyTrend = buildBodyTrend(results: results)
         let computedBodyDetail = bodyTrend?.detail
@@ -502,6 +516,14 @@ final class WellnessViewModel {
             partialFailureMessage = String(
                 localized: "Some data could not be loaded (\(failedSources.count) of \(primarySources.count) sources)"
             )
+        } else {
+            let comparisonSources: Set<FetchKey> = [.weightComparison, .bmiComparison, .bodyFatComparison, .leanComparison]
+            let failedComparisons = results.errorKeys.intersection(comparisonSources)
+            if !failedComparisons.isEmpty {
+                partialFailureMessage = String(
+                    localized: "Some data could not be loaded (\(failedComparisons.count) of \(comparisonSources.count) sources)"
+                )
+            }
         }
 
         recomputeSleepPrediction()
@@ -554,6 +576,10 @@ final class WellnessViewModel {
         var latestBodyFat: VitalSample?
         var bodyFatHistory: [BodyCompositionSample] = []
         var latestLeanBodyMass: VitalSample?
+        var weightComparisonHistory: [BodyCompositionSample] = []
+        var bmiComparisonHistory: [BodyCompositionSample] = []
+        var bodyFatComparisonHistory: [BodyCompositionSample] = []
+        var leanComparisonHistory: [BodyCompositionSample] = []
         // Vitals
         var latestSpO2: VitalSample?
         var spo2History: [VitalSample] = []
@@ -582,6 +608,10 @@ final class WellnessViewModel {
         case bodyFat
         case bodyFatHistory
         case leanBodyMass
+        case weightComparison
+        case bmiComparison
+        case bodyFatComparison
+        case leanComparison
         case spo2
         case spo2History
         case respRate
@@ -626,25 +656,67 @@ final class WellnessViewModel {
 
         let now = Date()
         let todayStart = Calendar.current.startOfDay(for: now)
+        let comparisonStart = Calendar.current.date(byAdding: .day, value: -40, to: todayStart) ?? todayStart
 
         await withTaskGroup(of: (FetchKey, FetchValue).self) { [
             sleepService, bodyService, hrvService, vitalsService, heartRateService,
-            sleepScoreUseCase, conditionScoreUseCase, todayStart, now
+            sleepScoreUseCase, conditionScoreUseCase, todayStart, comparisonStart, now
         ] group in
             // --- Weight ---
             group.addTask {
                 guard !Task.isCancelled else { return (.weight, .empty) }
                 do {
-                    if let todayWeight = try await bodyService.fetchWeight(start: todayStart, end: now).first {
+                    if let todayWeight = try await bodyService.fetchWeight(start: todayStart, end: now)
+                        .filter({ $0.value.isFinite && $0.value > 0 && $0.value <= 500 && $0.date <= now })
+                        .max(by: { $0.date < $1.date }) {
                         return (.weight, .vitalSample(VitalSample(value: todayWeight.value, date: todayWeight.date)))
                     }
-                    if let w = try await bodyService.fetchLatestWeight(withinDays: 30) {
+                    if let w = try await bodyService.fetchLatestWeight(withinDays: 30),
+                       w.value.isFinite, w.value > 0, w.value <= 500, w.date <= now {
                         return (.weight, .vitalSample(VitalSample(value: w.value, date: w.date)))
                     }
                     return (.weight, .empty)
                 } catch {
                     AppLogger.ui.error("[Wellness] weight fetch failed: \(error.localizedDescription)")
                     return (.weight, .fetchError)
+                }
+            }
+
+            // One bounded range query per metric supplies measured comparison dates.
+            group.addTask {
+                guard !Task.isCancelled else { return (.weightComparison, .empty) }
+                do {
+                    return (.weightComparison, .bodyCompositionHistory(try await bodyService.fetchWeight(start: comparisonStart, end: now)))
+                } catch {
+                    AppLogger.ui.error("[Wellness] weightComparison fetch failed: \(error.localizedDescription)")
+                    return (.weightComparison, .fetchError)
+                }
+            }
+            group.addTask {
+                guard !Task.isCancelled else { return (.bmiComparison, .empty) }
+                do {
+                    return (.bmiComparison, .bodyCompositionHistory(try await bodyService.fetchBMI(start: comparisonStart, end: now)))
+                } catch {
+                    AppLogger.ui.error("[Wellness] bmiComparison fetch failed: \(error.localizedDescription)")
+                    return (.bmiComparison, .fetchError)
+                }
+            }
+            group.addTask {
+                guard !Task.isCancelled else { return (.bodyFatComparison, .empty) }
+                do {
+                    return (.bodyFatComparison, .bodyCompositionHistory(try await bodyService.fetchBodyFat(start: comparisonStart, end: now)))
+                } catch {
+                    AppLogger.ui.error("[Wellness] bodyFatComparison fetch failed: \(error.localizedDescription)")
+                    return (.bodyFatComparison, .fetchError)
+                }
+            }
+            group.addTask {
+                guard !Task.isCancelled else { return (.leanComparison, .empty) }
+                do {
+                    return (.leanComparison, .bodyCompositionHistory(try await bodyService.fetchLeanBodyMass(start: comparisonStart, end: now)))
+                } catch {
+                    AppLogger.ui.error("[Wellness] leanComparison fetch failed: \(error.localizedDescription)")
+                    return (.leanComparison, .fetchError)
                 }
             }
 
@@ -664,13 +736,13 @@ final class WellnessViewModel {
             group.addTask {
                 guard !Task.isCancelled else { return (.bmi, .empty) }
                 do {
-                    let today = Date()
-                    if let todayBMI = try await bodyService.fetchBMI(for: today),
-                       todayBMI > 0, todayBMI < 100 {
-                        return (.bmi, .vitalSample(VitalSample(value: todayBMI, date: today)))
+                    if let todayBMI = try await bodyService.fetchBMI(start: todayStart, end: now)
+                        .filter({ $0.value.isFinite && $0.value > 0 && $0.value <= 100 && $0.date <= now })
+                        .max(by: { $0.date < $1.date }) {
+                        return (.bmi, .vitalSample(VitalSample(value: todayBMI.value, date: todayBMI.date)))
                     }
                     if let b = try await bodyService.fetchLatestBMI(withinDays: 30),
-                       b.value > 0, b.value < 100 {
+                       b.value.isFinite, b.value > 0, b.value <= 100, b.date <= now {
                         return (.bmi, .vitalSample(VitalSample(value: b.value, date: b.date)))
                     }
                     return (.bmi, .empty)
@@ -684,10 +756,13 @@ final class WellnessViewModel {
             group.addTask {
                 guard !Task.isCancelled else { return (.bodyFat, .empty) }
                 do {
-                    if let todayBodyFat = try await bodyService.fetchBodyFat(start: todayStart, end: now).first {
+                    if let todayBodyFat = try await bodyService.fetchBodyFat(start: todayStart, end: now)
+                        .filter({ $0.value.isFinite && $0.value > 0 && $0.value <= 100 && $0.date <= now })
+                        .max(by: { $0.date < $1.date }) {
                         return (.bodyFat, .vitalSample(VitalSample(value: todayBodyFat.value, date: todayBodyFat.date)))
                     }
-                    if let latest = try await bodyService.fetchLatestBodyFat(withinDays: 30) {
+                    if let latest = try await bodyService.fetchLatestBodyFat(withinDays: 30),
+                       latest.value.isFinite, latest.value > 0, latest.value <= 100, latest.date <= now {
                         return (.bodyFat, .vitalSample(VitalSample(value: latest.value, date: latest.date)))
                     }
                     return (.bodyFat, .empty)
@@ -713,10 +788,13 @@ final class WellnessViewModel {
             group.addTask {
                 guard !Task.isCancelled else { return (.leanBodyMass, .empty) }
                 do {
-                    if let todayLeanBodyMass = try await bodyService.fetchLeanBodyMass(start: todayStart, end: now).first {
+                    if let todayLeanBodyMass = try await bodyService.fetchLeanBodyMass(start: todayStart, end: now)
+                        .filter({ $0.value.isFinite && $0.value > 0 && $0.value <= 300 && $0.date <= now })
+                        .max(by: { $0.date < $1.date }) {
                         return (.leanBodyMass, .vitalSample(VitalSample(value: todayLeanBodyMass.value, date: todayLeanBodyMass.date)))
                     }
-                    if let lbm = try await bodyService.fetchLatestLeanBodyMass(withinDays: 30) {
+                    if let lbm = try await bodyService.fetchLatestLeanBodyMass(withinDays: 30),
+                       lbm.value.isFinite, lbm.value > 0, lbm.value <= 300, lbm.date <= now {
                         return (.leanBodyMass, .vitalSample(VitalSample(value: lbm.value, date: lbm.date)))
                     }
                     return (.leanBodyMass, .empty)
@@ -1057,6 +1135,14 @@ final class WellnessViewModel {
                     results.bodyFatHistory = history
                 case let (.leanBodyMass, .vitalSample(sample)):
                     results.latestLeanBodyMass = sample
+                case let (.weightComparison, .bodyCompositionHistory(history)):
+                    results.weightComparisonHistory = history
+                case let (.bmiComparison, .bodyCompositionHistory(history)):
+                    results.bmiComparisonHistory = history
+                case let (.bodyFatComparison, .bodyCompositionHistory(history)):
+                    results.bodyFatComparisonHistory = history
+                case let (.leanComparison, .bodyCompositionHistory(history)):
+                    results.leanComparisonHistory = history
                 case let (.heartRate, .vitalSample(sample)):
                     results.latestHeartRate = sample
                 case let (.heartRateHistory, .vitalHistory(history)):
