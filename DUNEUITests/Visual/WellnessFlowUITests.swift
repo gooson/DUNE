@@ -82,6 +82,72 @@ final class WellnessFlowUITests: SeededUITestBaseCase {
         XCTAssertTrue(waitForElement("wellness-sleep-prediction-detail-screen", timeout: 10).exists)
     }
 
+    func testSparseSleepBarsKeepCalendarPositionsAndWidth() {
+        for (count, slots) in [(1, [6]), (2, [2, 6]), (4, [0, 3, 5, 6]), (7, Array(0..<7))] {
+            var configuration = launchConfiguration
+            configuration.additionalEnvironment["DUNE_UI_SLEEP_SAMPLE_COUNT"] = String(count)
+            launchApp(with: configuration)
+            navigateToWellness()
+            reveal("wellness-sleep-bar-6")
+            let bars = slots.map { waitForElement("wellness-sleep-bar-\($0)", timeout: 10) }
+            for index in 0..<7 {
+                XCTAssertEqual(element("wellness-sleep-bar-\(index)").exists, slots.contains(index),
+                               "Missing dates must remain empty: count=\(count), slot=\(index)")
+            }
+            for bar in bars {
+                XCTAssertEqual(bar.frame.width, 16, accuracy: 0.5)
+                XCTAssertLessThanOrEqual(bar.frame.height, 64.5)
+                XCTAssertTrue(bar.isHittable)
+            }
+            if bars.count > 1 {
+                let slotWidth = (bars.last!.frame.midX - bars.first!.frame.midX) /
+                    CGFloat(slots.last! - slots.first!)
+                for index in 1..<bars.count {
+                    XCTAssertEqual(bars[index].frame.midX - bars[index - 1].frame.midX,
+                                   CGFloat(slots[index] - slots[index - 1]) * slotWidth, accuracy: 1)
+                }
+            }
+            XCTAssertEqual(element("wellness-sleep-average").exists, count >= 2)
+            addScreenshotAttachment(named: "H01-sleep-\(count)-records")
+        }
+    }
+
+    func testSparseSleepDarkAndAccessibility() {
+        for maximumAX in [false, true] {
+            var configuration = launchConfiguration
+            configuration.additionalEnvironment["DUNE_UI_SLEEP_SAMPLE_COUNT"] = "2"
+            if let index = configuration.additionalArguments.firstIndex(of: "--ui-test-style") {
+                configuration.additionalArguments[index + 1] = "dark"
+            }
+            if maximumAX {
+                configuration.additionalArguments += [
+                    "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+                ]
+            }
+            launchApp(with: configuration)
+            navigateToWellness()
+            reveal("wellness-sleep-bar-6")
+            let viewport = app.scrollViews.firstMatch.frame.intersection(app.windows.firstMatch.frame)
+            for slot in [2, 6] {
+                let bar = waitForElement("wellness-sleep-bar-\(slot)", timeout: 10)
+                XCTAssertEqual(bar.frame.width, 16, accuracy: 0.5)
+                XCTAssertTrue(viewport.contains(bar.frame))
+            }
+            addScreenshotAttachment(named: "H01-sleep-2-records-\(maximumAX ? "MaxAX" : "dark")")
+        }
+    }
+
+    func testNoSleepRecordsShowsEmptyState() {
+        var configuration = launchConfiguration
+        configuration.additionalEnvironment["DUNE_UI_SLEEP_SAMPLE_COUNT"] = "0"
+        launchApp(with: configuration)
+        navigateToWellness()
+        XCTAssertTrue(reveal("wellness-sleep-empty-state").isHittable)
+        XCTAssertFalse(element("wellness-sleep-bar-6").exists)
+        XCTAssertFalse(element("wellness-sleep-average").exists)
+        addScreenshotAttachment(named: "H01-sleep-0-records")
+    }
+
     func testBodyMeasurementsAndHeaderEdge() {
         navigateToWellness()
         let body = reveal("wellness-link-bodyhistory")

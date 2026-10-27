@@ -5,6 +5,7 @@ struct WellnessSleepSummaryCard: View {
     let sleepMetric: HealthMetric?
 
     @Environment(\.appTheme) private var theme
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     private var ink: Color { theme == .desertWarm ? DesertPalette.ink : theme.directionPreviewTextColor }
     private var muted: Color { theme == .desertWarm ? DesertPalette.muted : theme.directionPreviewTextColor.opacity(0.74) }
@@ -24,6 +25,12 @@ struct WellnessSleepSummaryCard: View {
     }
 
     private var latest: SleepDailySample? { recentSamples.last }
+
+    private var recentDays: [Date] {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: .now)
+        return (-6...0).compactMap { calendar.date(byAdding: .day, value: $0, to: today) }
+    }
 
     private var barScaleMinutes: Double {
         max(600, recentSamples.map(\.minutes).max() ?? 600)
@@ -75,24 +82,7 @@ struct WellnessSleepSummaryCard: View {
                             .accessibilityIdentifier("wellness-sleep-average")
                     }
                 }
-                if recentSamples.count >= 2 {
-                    HStack(alignment: .bottom, spacing: DS.Spacing.sm) {
-                        ForEach(Array(recentSamples.enumerated()), id: \.offset) { _, sample in
-                            VStack(spacing: DS.Spacing.xs) {
-                                Capsule()
-                                    .fill(DS.Color.sleep.opacity(sample.date == latest.date ? 1 : 0.6))
-                                    .frame(height: max(8, min(54, CGFloat(sample.minutes / barScaleMinutes * 54))))
-                                    .frame(maxHeight: 54, alignment: .bottom)
-                                Text(sample.date.formatted(.dateTime.day()))
-                                    .font(.caption2).foregroundStyle(muted)
-                            }
-                            .frame(maxWidth: .infinity)
-                            .accessibilityLabel("\(sample.date.formatted(.dateTime.month(.abbreviated).day())), \(duration(Int(sample.minutes.rounded())))")
-                        }
-                    }
-                    .frame(height: 70, alignment: .bottom)
-                    .accessibilityIdentifier("wellness-sleep-observed-bars")
-                }
+                observedBars(latest: latest)
             } else {
                 Text("Need More Data")
                     .font(.subheadline).foregroundStyle(muted)
@@ -101,6 +91,35 @@ struct WellnessSleepSummaryCard: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .contentShape(Rectangle())
+    }
+
+    private func observedBars(latest: SleepDailySample) -> some View {
+        let samples = recentSamples
+        let scale = barScaleMinutes
+        return HStack(alignment: .bottom, spacing: DS.Spacing.xs) {
+            ForEach(Array(recentDays.enumerated()), id: \.element) { index, day in
+                let sample = samples.last { Calendar.current.isDate($0.date, inSameDayAs: day) }
+                VStack(spacing: DS.Spacing.sm) {
+                    ZStack(alignment: .bottom) {
+                        Color.clear
+                        if let sample {
+                            RoundedRectangle(cornerRadius: 4)
+                                .fill(DS.Color.sleep.opacity(sample.date == latest.date ? 1 : 0.6))
+                                .frame(width: 16, height: max(4, CGFloat(sample.minutes / scale * 64)))
+                                .accessibilityElement(children: .ignore)
+                                .accessibilityLabel("\(sample.date.formatted(.dateTime.month(.abbreviated).day())), \(duration(Int(sample.minutes.rounded())))")
+                                .accessibilityIdentifier("wellness-sleep-bar-\(index)")
+                        }
+                    }
+                    .frame(height: 64)
+                    Text(!dynamicTypeSize.isAccessibilitySize || index.isMultiple(of: 3)
+                         ? day.formatted(.dateTime.day()) : " ")
+                        .font(.caption2).foregroundStyle(muted)
+                        .accessibilityHidden(true)
+                }
+                .frame(maxWidth: .infinity)
+            }
+        }
     }
 }
 
