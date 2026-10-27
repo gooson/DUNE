@@ -115,10 +115,10 @@ struct WellnessHeroCard: View {
     private func scoreRing(_ score: WellnessScore) -> some View {
         CompactConditionRing(
             score: score.score,
-            ringColor: DS.Color.warmGlow,
-            highlightColor: DS.Color.body,
+            ringColor: theme == .desertWarm ? DS.Color.warmGlow : theme.accentColor,
+            highlightColor: theme == .desertWarm ? DS.Color.body : theme.duskColor,
             tipColor: score.status.color,
-            trackColor: DS.Color.warmGlow,
+            trackColor: theme == .desertWarm ? DS.Color.warmGlow : ink.opacity(0.6),
             textColor: ink,
             accessibilityLabel: "Wellness score \(score.score), \(score.status.label)",
             accessibilityIdentifier: "wellness-hero-ring"

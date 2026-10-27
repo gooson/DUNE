@@ -184,7 +184,9 @@ final class WellnessFlowUITests: SeededUITestBaseCase {
     func testCaptureHealthIndicatorDetails() {
         for style in ["light", "dark"] {
             var configuration = launchConfiguration
-            configuration.additionalArguments += ["--ui-test-style", style]
+            if let index = configuration.additionalArguments.firstIndex(of: "--ui-test-style") {
+                configuration.additionalArguments[index + 1] = style
+            }
             launchApp(with: configuration)
             navigateToWellness()
             let metric = reveal("wellness-card-hrv")
@@ -215,6 +217,21 @@ final class WellnessFlowUITests: SeededUITestBaseCase {
         }
         launchApp(with: configuration)
         captureH01Flow(suffix: "dark")
+    }
+
+    func testCaptureOceanHeroFlow() {
+        var configuration = launchConfiguration
+        if let index = configuration.additionalArguments.firstIndex(of: "--ui-test-theme") {
+            configuration.additionalArguments[index + 1] = "oceanCool"
+        }
+        launchApp(with: configuration)
+        navigateToWellness()
+        XCTAssertTrue(waitForElement("wellness-hero-ring", timeout: 10).exists)
+        if VisualAudit.isEnabled {
+            VisualAudit.capture("H01-Wellness-Flow-hero-Ocean")
+        } else {
+            addScreenshotAttachment(named: "H01-Wellness-Flow-hero-Ocean")
+        }
     }
 
     func testCaptureH01MaximumAXFlow() {

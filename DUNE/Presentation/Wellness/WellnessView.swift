@@ -572,7 +572,7 @@ private struct PostureAssessmentLinkView: View {
                 if !records.isEmpty {
                     NavigationLink(value: PostureHistoryDestination()) {
                         CardNavigationHeader {
-                            Label("Posture Assessment", systemImage: "viewfinder")
+                            assessmentHeading
                                 .font(.subheadline.weight(.semibold))
                         }
                     }
@@ -580,7 +580,7 @@ private struct PostureAssessmentLinkView: View {
                     .accessibilityIdentifier("wellness-link-posturehistory")
                     .accessibilityHint("View All")
                 } else {
-                    Label("Posture Assessment", systemImage: "viewfinder")
+                    assessmentHeading
                         .font(.subheadline.weight(.semibold))
                 }
 
@@ -614,6 +614,15 @@ private struct PostureAssessmentLinkView: View {
         .task(id: latestScoreIdentity) {
             let measured = records.first?.allMetrics.contains { $0.status != .unmeasurable } ?? false
             onScoreUpdate?(measured ? records.first?.overallScore : nil)
+        }
+    }
+
+    @ViewBuilder
+    private var assessmentHeading: some View {
+        if dynamicTypeSize.isAccessibilitySize {
+            Text("Posture Assessment")
+        } else {
+            Label("Posture Assessment", systemImage: "viewfinder")
         }
     }
 
