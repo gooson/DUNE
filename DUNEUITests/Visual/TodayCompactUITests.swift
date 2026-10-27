@@ -27,6 +27,87 @@ final class TodayCompactUITests: SeededUITestBaseCase {
         )).firstMatch
     }
 
+    func testWellnessStylePinnedMetricsHaveEqualRowHeights() {
+        for style in ["dark", "light"] {
+            var configuration = launchConfiguration
+            if let index = configuration.additionalArguments.firstIndex(of: "--ui-test-style") {
+                configuration.additionalArguments[index + 1] = style
+            }
+            launchApp(with: configuration)
+            navigateToDashboard()
+            selectFourPinnedMetrics()
+            let cards = ["hrv", "rhr", "sleep", "weight"].map {
+                app.buttons["dashboard-metric-\($0)"].firstMatch
+            }
+            for card in cards { XCTAssertTrue(card.waitForExistence(timeout: 8)) }
+            for row in [[cards[0], cards[1]], [cards[2], cards[3]]] {
+                XCTAssertEqual(row[0].frame.minY, row[1].frame.minY, accuracy: 1)
+                XCTAssertEqual(row[0].frame.height, row[1].frame.height, accuracy: 1,
+                               "Missing comparison/history must not shorten one card in the row")
+                XCTAssertEqual(row[0].frame.width, row[1].frame.width, accuracy: 1)
+            }
+            XCTAssertTrue(cards[3].staticTexts["No comparison record"].exists)
+            for (index, row) in [(0, cards[0]), (1, cards[2])] {
+                alignPinnedMetricForCapture(row)
+                addScreenshotAttachment(named: "T03-pinned-wellness-row-\(index)-\(style)")
+            }
+            cards[3].tap()
+            XCTAssertTrue(element("metric-detail-screen-weight").waitForExistence(timeout: 8))
+        }
+    }
+
+    func testWellnessStylePinnedMetricsAtMaximumTextSize() {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ]
+        launchApp(with: configuration)
+        navigateToDashboard()
+        selectFourPinnedMetrics()
+        let cards = ["hrv", "rhr", "sleep", "weight"].map {
+            app.buttons["dashboard-metric-\($0)"].firstMatch
+        }
+        for index in 1..<cards.count {
+            XCTAssertGreaterThanOrEqual(cards[index].frame.minY, cards[index - 1].frame.maxY - 1)
+            XCTAssertEqual(cards[index].frame.minX, cards[0].frame.minX, accuracy: 1)
+        }
+        for category in ["hrv", "weight"] {
+            let card = app.buttons["dashboard-metric-\(category)"].firstMatch
+            alignPinnedMetricForCapture(card)
+            let value = app.staticTexts["dashboard-workout-value-\(category)"].firstMatch
+            XCTAssertTrue(value.exists)
+            XCTAssertTrue(card.frame.insetBy(dx: -1, dy: -1).contains(value.frame))
+            addScreenshotAttachment(named: "T03-pinned-wellness-\(category)-MaxAX")
+        }
+    }
+
+    private func selectFourPinnedMetrics() {
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("dashboard-pinned-edit", maxSwipes: 20))
+        app.buttons["dashboard-pinned-edit"].firstMatch.tap()
+        for category in ["sleep", "weight"] {
+            let identifier = "pinned-metrics-editor-row-\(category)"
+            let choice = app.buttons[identifier].firstMatch
+            XCTAssertTrue(app.scrollToHittableElementIfNeeded(identifier, maxSwipes: 10))
+            XCTAssertTrue(choice.waitForExistence(timeout: 5))
+            if !choice.isSelected { choice.tap() }
+            XCTAssertTrue(choice.isSelected)
+        }
+        app.buttons["pinned-metrics-editor-done"].firstMatch.tap()
+    }
+
+    private func alignPinnedMetricForCapture(_ card: XCUIElement) {
+        let scroll = app.scrollViews.firstMatch
+        let desiredY = app.navigationBars.firstMatch.frame.maxY + 20
+        for _ in 0..<12 {
+            let offset = card.frame.minY - desiredY
+            if abs(offset) < 16 { break }
+            let start = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+            start.press(forDuration: 0.1,
+                        thenDragTo: start.withOffset(CGVector(dx: 0, dy: -max(-220, min(220, offset)))),
+                        withVelocity: .slow, thenHoldForDuration: 0.3)
+        }
+    }
+
     func testTodayInformationCardsAndHeaderActions() {
         var configuration = launchConfiguration
         configuration.additionalArguments.removeAll { $0 == "--ui-visual-condition-components-fixture" }

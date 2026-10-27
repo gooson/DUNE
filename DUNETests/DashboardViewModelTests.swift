@@ -1553,6 +1553,41 @@ struct DashboardViewModelTests {
 @MainActor
 struct DashboardViewModelVitalCardTests {
 
+    @Test("Metric trends use existing chronological observations without inventing body history")
+    func metricTrendsUseObservedValues() async {
+        let today = Calendar.current.startOfDay(for: Date())
+        let yesterday = today.addingTimeInterval(-86400)
+        let older = today.addingTimeInterval(-172800)
+        let vm = DashboardViewModel(
+            hrvService: MockHRVService(
+                samples: [.init(value: 48, date: today), .init(value: 55, date: yesterday), .init(value: 40, date: older)],
+                todayRHR: 58, yesterdayRHR: 60,
+                rhrCollection: [(today, 57, 59, 58), (older, 61, 63, 62), (yesterday, 59, 61, 60)]
+            ),
+            sleepService: MockSleepService(), workoutService: MockWorkoutService(),
+            stepsService: MockStepsService(), bodyService: MockBodyService(),
+            pinnedMetricsStore: makePinnedStore([.hrv, .rhr, .weight])
+        )
+        await vm.loadData()
+        #expect(vm.pinnedCards.first { $0.category == .hrv }?.sparklineData == [40, 55, 48])
+        #expect(vm.pinnedCards.first { $0.category == .rhr }?.sparklineData == [62, 60, 58])
+        vm.sortedMetrics.append(HealthMetric(id: "weight", name: "Weight", value: 73.8,
+                                            unit: "kg", change: nil, date: today, category: .weight))
+        #expect(vm.pinnedCards.first { $0.category == .weight }?.sparklineData.isEmpty == true)
+    }
+
+    @Test("A lone observation never becomes a trend")
+    func singleObservationHasNoTrend() async {
+        let vm = DashboardViewModel(
+            hrvService: MockHRVService(samples: [.init(value: 48, date: Date())]),
+            sleepService: MockSleepService(), workoutService: MockWorkoutService(),
+            stepsService: MockStepsService(), bodyService: MockBodyService(),
+            pinnedMetricsStore: makePinnedStore([.hrv])
+        )
+        await vm.loadData()
+        #expect(vm.pinnedCards.first { $0.category == .hrv }?.sparklineData.isEmpty == true)
+    }
+
     @Test("Condition cards contain HRV and RHR")
     func conditionCardsContainHRVAndRHR() async {
         let hrv = MockHRVService(
