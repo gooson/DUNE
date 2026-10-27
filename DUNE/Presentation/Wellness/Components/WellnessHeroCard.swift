@@ -108,6 +108,7 @@ struct WellnessHeroCard: View {
         .buttonStyle(CardNavigationButtonStyle())
         .accessibilityIdentifier("wellness-hero-score")
         .accessibilityLabel("Wellness score \(score.score), \(score.status.label)")
+        .accessibilityValue("\(score.narrativeMessage), \(score.evaluationDate.formatted(.dateTime.month(.abbreviated).day().hour().minute()))")
         .accessibilityHint("Wellness Details")
     }
 

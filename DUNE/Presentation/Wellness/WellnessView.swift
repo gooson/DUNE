@@ -46,6 +46,10 @@ struct WellnessView: View {
         return (viewModel.physicalCards + viewModel.activeCards).map(\.metric).filter { seen.insert($0.id).inserted }
     }
 
+    private var hasSummaryData: Bool {
+        viewModel.wellnessScore != nil || !viewModel.physicalCards.isEmpty || !viewModel.activeCards.isEmpty
+    }
+
     private var sleepMetric: HealthMetric? {
         comparisonMetrics.first { $0.category == .sleep }
     }
@@ -64,66 +68,64 @@ struct WellnessView: View {
                     .id(ScrollAnchor.top)
 
                 VStack(spacing: isRegular ? DS.Spacing.xxl : DS.Spacing.xl) {
-                    if viewModel.isLoading &&
-                        viewModel.physicalCards.isEmpty &&
-                        viewModel.activeCards.isEmpty &&
-                        viewModel.wellnessScore == nil {
+                    if viewModel.isLoading && !hasSummaryData {
                         ProgressView()
                             .frame(maxWidth: .infinity, minHeight: 200)
-                    } else if viewModel.physicalCards.isEmpty &&
-                                viewModel.activeCards.isEmpty &&
-                                viewModel.wellnessScore == nil &&
-                                !viewModel.isLoading {
-                        if viewModel.isMirroredReadOnlyMode {
-                            CloudSyncWaitingView {
-                                Task { viewModel.loadData() }
-                            }
-                            } else {
-                            EmptyStateView(
-                                icon: "leaf.fill",
-                                title: "No Wellness Data",
-                                message: "Wear Apple Watch to bed for sleep tracking, or add body composition records to get started."
-                            )
-                        }
                     } else {
-                        // Partial failure banner
                         if let message = viewModel.partialFailureMessage {
                             partialFailureBanner(message)
                         }
 
-                        WellnessHeroCard(
-                            score: viewModel.wellnessScore,
-                            sleepScore: viewModel.sleepScore,
-                            conditionScore: viewModel.conditionScore,
-                            bodyScore: viewModel.bodyScore,
-                            hourlySparkline: viewModel.wellnessSparkline.nonEmptyOrNil
-                        )
-                        .reportTabHeroFrame()
-                        .staggeredAppear(index: 0)
-
-                        flowPair {
-                            WellnessSleepSummaryCard(
-                                sleepTrend: viewModel.sleepDetailTrend,
-                                sleepMetric: sleepMetric
+                        if !hasSummaryData {
+                            if viewModel.isMirroredReadOnlyMode {
+                                CloudSyncWaitingView {
+                                    Task { viewModel.loadData() }
+                                }
+                            } else {
+                                EmptyStateView(
+                                    icon: "leaf.fill",
+                                    title: "No Wellness Data",
+                                    message: "Wear Apple Watch to bed for sleep tracking, or add body composition records to get started."
+                                )
+                            }
+                        } else {
+                            WellnessHeroCard(
+                                score: viewModel.wellnessScore,
+                                sleepScore: viewModel.sleepScore,
+                                conditionScore: viewModel.conditionScore,
+                                bodyScore: viewModel.bodyScore,
+                                hourlySparkline: viewModel.wellnessSparkline.nonEmptyOrNil
                             )
-                        } trailing: {
-                            WellnessSleepPredictionCard(prediction: viewModel.sleepPrediction)
+                            .reportTabHeroFrame()
+                            .staggeredAppear(index: 0)
+
+                            flowPair {
+                                WellnessSleepSummaryCard(
+                                    sleepTrend: viewModel.sleepDetailTrend,
+                                    sleepMetric: sleepMetric
+                                )
+                            } trailing: {
+                                WellnessSleepPredictionCard(prediction: viewModel.sleepPrediction)
+                            }
                         }
 
+                        // Independent local records remain available without HealthKit metrics.
                         WellnessInjuryBannerView(
                             placement: .active,
                             onEdit: { injuryViewModel.startEditing($0) },
                             onAdd: { startAddingInjury() }
                         )
 
-                        flowPair {
-                            healthIndicatorsSection
-                        } trailing: {
-                            WellnessBodySummaryCard(
-                                cards: viewModel.physicalCards,
-                                comparisons: viewModel.bodyComparisons,
-                                onAdd: openBodyRecord
-                            )
+                        if hasSummaryData {
+                            flowPair {
+                                healthIndicatorsSection
+                            } trailing: {
+                                WellnessBodySummaryCard(
+                                    cards: viewModel.physicalCards,
+                                    comparisons: viewModel.bodyComparisons,
+                                    onAdd: openBodyRecord
+                                )
+                            }
                         }
 
                         flowPair {
@@ -602,10 +604,19 @@ private struct PostureAssessmentLinkView: View {
                 }
             }
         }
-        .task(id: records.first?.allMetrics) {
+        .task(id: latestScoreIdentity) {
             let measured = records.first?.allMetrics.contains { $0.status != .unmeasurable } ?? false
             onScoreUpdate?(measured ? records.first?.overallScore : nil)
         }
+    }
+
+    private var latestScoreIdentity: Int {
+        var hasher = Hasher()
+        hasher.combine(records.first?.id)
+        hasher.combine(records.first?.overallScore)
+        hasher.combine(records.first?.frontMetricsJSON)
+        hasher.combine(records.first?.sideMetricsJSON)
+        return hasher.finalize()
     }
 
     private func assessmentSummary(_ record: PostureAssessmentRecord?) -> some View {
@@ -726,6 +737,7 @@ private struct PostureAssessmentLinkView: View {
                 ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.md))
                 : AnyLayout(HStackLayout(spacing: DS.Spacing.md))
             layout {
+                if record.allMetrics.contains(where: { $0.status != .unmeasurable }) {
                 ZStack {
                     Circle()
                         .stroke(.quaternary, lineWidth: 4)
@@ -745,6 +757,12 @@ private struct PostureAssessmentLinkView: View {
                 }
                 .frame(width: scoreDiameter, height: scoreDiameter)
 
+                } else {
+                    Text("Unable to measure")
+                        .font(.caption)
+                        .foregroundStyle(DS.Color.textSecondary)
+                }
+
                 VStack(alignment: .leading, spacing: 2) {
                     CardNavigationHeader(minimumHeight: 0) {
                         Text(record.date.formatted(.dateTime.month(.abbreviated).day()))
@@ -753,7 +771,7 @@ private struct PostureAssessmentLinkView: View {
                             .fixedSize(horizontal: false, vertical: true)
                     }
 
-                    Text(String(localized: "\(record.allMetrics.count) metrics measured"))
+                    Text(String(localized: "\(record.allMetrics.filter { $0.status != .unmeasurable }.count) metrics measured"))
                         .font(.caption2)
                         .foregroundStyle(DS.Color.textSecondary)
                         .fixedSize(horizontal: false, vertical: true)

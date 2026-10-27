@@ -301,7 +301,7 @@ final class WellnessViewModel {
         // --- Body Composition (Weight) ---
         if let weight = results.latestWeight {
             let change = results.weightWeekAgo.map { weight.value - $0 }
-            let sparkline = results.weightHistory.map(\.value)
+            let sparkline = results.weightHistory.sorted { $0.date < $1.date }.map(\.value)
             cards.append(buildCard(
                 category: .weight,
                 title: String(localized: "Weight"),
@@ -332,7 +332,7 @@ final class WellnessViewModel {
 
         // --- Body Fat ---
         if let bf = results.latestBodyFat {
-            let sparkline = results.bodyFatHistory.map(\.value)
+            let sparkline = results.bodyFatHistory.sorted { $0.date < $1.date }.map(\.value)
             cards.append(buildCard(
                 category: .bodyFat,
                 title: String(localized: "Body Fat"),

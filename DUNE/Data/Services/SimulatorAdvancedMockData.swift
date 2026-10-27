@@ -382,6 +382,26 @@ enum SimulatorAdvancedMockDataProvider {
     }
 
     private static func buildDataSet(referenceDate: Date) -> SimulatorAdvancedMockDataSet {
+        if ProcessInfo.processInfo.arguments.contains("--uitesting") &&
+            ProcessInfo.processInfo.arguments.contains("--ui-test-wellness-records-only") {
+            return SimulatorAdvancedMockDataSet(
+                referenceDate: referenceDate,
+                sharedHealthSnapshot: SharedHealthSnapshot(
+                    hrvSamples: [], todayRHR: nil, yesterdayRHR: nil,
+                    latestRHR: nil, rhrCollection: [],
+                    todaySleepStages: [], yesterdaySleepStages: [],
+                    latestSleepStages: nil, sleepDailyDurations: [],
+                    conditionScore: nil, baselineStatus: nil,
+                    recentConditionScores: [], failedSources: [], fetchedAt: referenceDate
+                ),
+                workouts: [], weightSamples: [], bodyFatSamples: [],
+                leanBodyMassSamples: [], bmiSamples: [], stepsCollection: [],
+                vitals: SimulatorAdvancedMockVitals(
+                    oxygenSaturation: [], respiratoryRate: [], vo2Max: [],
+                    heartRateRecovery: [], wristTemperature: [], generalHeartRate: []
+                )
+            )
+        }
         let snapshot = buildSharedHealthSnapshot(referenceDate: referenceDate)
         let workouts = buildWorkouts(referenceDate: referenceDate)
         // UI-only state: preserve each actual latest sample, but offer no prior

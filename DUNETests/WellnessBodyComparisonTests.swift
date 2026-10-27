@@ -47,8 +47,8 @@ struct WellnessBodyComparisonTests {
         #expect(comparison?.previousDate == target)
     }
 
-    @Test("Missing target day does not substitute a nearby, same-day, or future sample")
-    func missingTargetDay() {
+    @Test("Missing target day uses the latest earlier actual measurement")
+    func missingTargetDayUsesEarlierMeasurement() {
         let now = Date(timeIntervalSince1970: 1_800_000_000)
         let sixDaysAgo = calendar.date(byAdding: .day, value: -6, to: now)!
         let eightDaysAgo = calendar.date(byAdding: .day, value: -8, to: now)!
@@ -60,6 +60,26 @@ struct WellnessBodyComparisonTests {
                 .init(value: 22, date: eightDaysAgo),
                 .init(value: 24, date: now),
                 .init(value: 25, date: tomorrow)
+            ],
+            validRange: 0.000001...100,
+            now: now,
+            calendar: calendar
+        )
+
+        #expect(comparison?.previousDate == eightDaysAgo)
+        #expect(comparison?.previousValue == 22)
+        #expect(comparison?.change == 2)
+    }
+
+    @Test("Six days ago and same-day samples are too recent for comparison")
+    func noSampleAtOrBeforeTargetDay() {
+        let now = Date(timeIntervalSince1970: 1_800_000_000)
+        let sixDaysAgo = calendar.date(byAdding: .day, value: -6, to: now)!
+        let comparison = WellnessBodyComparison.select(
+            current: VitalSample(value: 24, date: now),
+            history: [
+                .init(value: 23, date: sixDaysAgo),
+                .init(value: 24, date: now)
             ],
             validRange: 0.000001...100,
             now: now,

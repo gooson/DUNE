@@ -406,6 +406,44 @@ struct WellnessViewModelTests {
         #expect(vm.physicalCards.first(where: { $0.category == .bmi })?.lastUpdated == latest)
     }
 
+    @Test("Body sparklines run oldest to newest when service history is descending")
+    func bodySparklinesAreChronological() async {
+        let now = Date()
+        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: now)!
+        let twoDaysAgo = Calendar.current.date(byAdding: .day, value: -2, to: now)!
+        let service = ComparisonBodyService(
+            weight: [
+                .init(value: 71, date: now),
+                .init(value: 69, date: yesterday),
+                .init(value: 68, date: twoDaysAgo)
+            ],
+            bmi: [],
+            bodyFat: [
+                .init(value: 18, date: now),
+                .init(value: 19, date: yesterday),
+                .init(value: 20, date: twoDaysAgo)
+            ],
+            lean: []
+        )
+        let vm = WellnessViewModel(
+            sleepService: NoopSleepService(), bodyService: service,
+            hrvService: NoopHRVService(), vitalsService: NoopVitalsService(),
+            heartRateService: NoopHeartRateService(),
+            sharedHealthDataService: MockSharedHealthDataService(snapshot: makeEmptyWellnessSharedSnapshot())
+        )
+
+        await vm.performRefresh()
+
+        let weightCard = vm.physicalCards.first { $0.category == .weight }
+        let bodyFatCard = vm.physicalCards.first { $0.category == .bodyFat }
+        #expect(weightCard?.sparklineData == [68, 69, 71])
+        #expect(weightCard?.sparklineData.last == weightCard?.metric.value)
+        #expect(weightCard?.lastUpdated == now)
+        #expect(bodyFatCard?.sparklineData == [20, 19, 18])
+        #expect(bodyFatCard?.sparklineData.last == bodyFatCard?.metric.value)
+        #expect(bodyFatCard?.lastUpdated == now)
+    }
+
     @Test("A comparison query error leaves the current body card but omits that comparison")
     func partialBodyComparisonFailure() async {
         let now = Date()

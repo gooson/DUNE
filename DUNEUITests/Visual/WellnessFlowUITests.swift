@@ -104,15 +104,41 @@ final class WellnessFlowUITests: SeededUITestBaseCase {
         launchApp(with: configuration)
         navigateToWellness()
 
-        for category in ["weight", "bodyFat", "leanBodyMass", "bmi"] {
-            let card = waitForElement("wellness-card-\(category)", timeout: 10)
-            let currentValue = card.staticTexts.matching(
-                NSPredicate(format: "label MATCHES %@", #"^[0-9][0-9.,]*$"#)
+        let latestValues = [
+            (category: "weight", value: "78.3"),
+            (category: "bodyFat", value: "17.8"),
+            (category: "leanBodyMass", value: "63.1"),
+            (category: "bmi", value: "24.7")
+        ]
+        for item in latestValues {
+            let card = waitForElement("wellness-card-\(item.category)", timeout: 10)
+            let currentValue = card.descendants(matching: .any).matching(
+                NSPredicate(format: "label CONTAINS %@", item.value)
             ).firstMatch
-            XCTAssertTrue(currentValue.exists, "\(category) should retain its measured latest value")
+            XCTAssertTrue(currentValue.exists || card.label.contains(item.value),
+                          "\(item.category) should retain its measured latest value \(item.value)")
             XCTAssertFalse(card.staticTexts["Previous measurement"].exists,
-                           "\(category) should not imply a comparison without a prior observation")
+                           "\(item.category) should not imply a comparison without a prior observation")
         }
+    }
+
+    func testRecordedPostureAndInjuryRemainReachableWithoutHealthData() {
+        var configuration = launchConfiguration
+        configuration.additionalArguments.append("--ui-test-wellness-records-only")
+        launchApp(with: configuration)
+        navigateToWellness()
+
+        XCTAssertTrue(reveal("wellness-link-injuryhistory").isHittable,
+                      "A seeded injury should remain visible when HealthKit is empty")
+        XCTAssertFalse(element("wellness-card-hrv").exists)
+        XCTAssertFalse(element("wellness-card-weight").exists)
+        XCTAssertTrue(reveal("wellness-add-body-record").isHittable,
+                      "The empty body card should still offer manual entry")
+        let score = reveal("wellness-posture-score")
+        XCTAssertTrue(Int(score.label) != nil, "The actual seeded photo assessment score should remain visible")
+        XCTAssertTrue(reveal("wellness-button-posture-capture").isHittable)
+        reveal("wellness-link-posturehistory").tap()
+        XCTAssertTrue(waitForElement("posture-history-screen", timeout: 10).exists)
     }
 
     func testPostureHistoryAndActionsRemainIndependent() {

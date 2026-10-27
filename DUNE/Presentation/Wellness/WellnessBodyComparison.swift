@@ -26,9 +26,11 @@ struct WellnessBodyComparison: Sendable, Equatable {
 
         guard let targetDate = calendar.date(byAdding: .day, value: -7, to: latest.date) else { return nil }
         let targetDay = calendar.startOfDay(for: targetDate)
+        // Use the latest measured sample no later than the target calendar day.
+        // The actual measurement date is retained for the card's comparison label.
         guard let dayEnd = calendar.date(byAdding: .day, value: 1, to: targetDay),
               let previous = validHistory
-                .filter({ $0.date >= targetDay && $0.date < dayEnd && $0.date < latest.date })
+                .filter({ $0.date < dayEnd && $0.date < latest.date })
                 .max(by: { $0.date < $1.date }) else { return nil }
 
         return WellnessBodyComparison(
