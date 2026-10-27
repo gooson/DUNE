@@ -7,6 +7,8 @@ status: in-progress
 
 # DUNE 레이아웃 맵
 
+2026-10-28 H01 오늘 밤 수면은 큰 예측 점수·달 상징·0–100 가로 게이지와 실제3단계 신뢰도 배지·팁 영역을 사용한다. [배치 계약](wellness-redesign-proposal.md)과 [실제 화면](../full-redesign-map/review/wellness-prediction-visual-2026-10-28/index.html)을 함께 따른다. 큰 글씨는 세로 전환한다.
+
 2026-10-28 H01 최근 수면은 적은 기록에서도7일 날짜 위치와16pt 막대 폭을 유지한다. 누락일은 비워 두고 큰 글씨의 날짜 축은 첫날·중간·마지막을 표시한다. [후속 계약](wellness-redesign-proposal.md)과 [새 실제 화면](../full-redesign-map/review/wellness-sparse-sleep-2026-10-28/index.html)을 따른다. 테마 팔레트·카드·탭 순서는 유지한다.
 
 [4탭 레이아웃 맵](index.html)은 Today(T03), Activity(A01), Wellness(H01), Life(L01)의 정보 순서와 화면 폭·큰 글씨 전환을 시각적으로 정한 **구현 기준 시안**이다. 값과 그래프는 설명용이며 실제 건강 기록이나 앱 캡처가 아니다. 상세·설정·Watch 등 4탭 밖의 화면을 설계할 때는 이 디렉터리에 화면별 맵을 별도로 만들고 아래 목록 및 `index.html`에서 연결한다.

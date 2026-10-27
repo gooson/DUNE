@@ -2,7 +2,7 @@
 tags: [wellness, sleep, prediction, visual, accessibility]
 date: 2026-10-28
 category: plan
-status: in-progress
+status: implemented
 ---
 
 # 오늘 밤 수면 카드의 시각적 위계
@@ -24,3 +24,5 @@ status: in-progress
 2. V1 점수/달, V2 게이지·신뢰도·팁 강조를 적용한다.
 3. 기존 전용 iPhone에서 두 신규 검사와 상세 진입을 확인하고 iPad에서 기본 크기의 상태를 확인한다.
 4. 원본 PNG·소스/기기 출처와 미갱신 범위를 기록한다. 전체 회귀는 실행하지 않는다.
+
+실제 상태·캡처·검증 제한과 Astra의 P1/P2 없음 판단은 [새 실제 화면](../design/full-redesign-map/review/wellness-prediction-visual-2026-10-28/index.html)에 보존한다.

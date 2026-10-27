@@ -7,6 +7,8 @@ status: in-progress
 
 # DUNE 전체 디자인맵
 
+2026-10-28 H01 오늘 밤 수면의 점수·달 상징·게이지·신뢰도·팁 영역을 [새 실제 화면](../full-redesign-map/review/wellness-prediction-visual-2026-10-28/index.html)에서 확인한다. 원본별 소스·기기·검증 범위를 기록하며 이전 예측 PNG는 이 개선의 증거로 바꾸지 않는다.
+
 2026-10-28 H01 최근 수면의 적은 기록 상태를 [새 실제 화면](../full-redesign-map/review/wellness-sparse-sleep-2026-10-28/index.html)에서 추적한다. 고정7일 위치·16pt 세로 막대를 적용했다. iPhone·iPad의 상태별 출처를 기록하며 Duo 접힘·펼침의 이 수정은 미갱신이다. 이전 Flow66장을 이번 수정의 새 캡처로 계산하지 않는다.
 
 [폰·패드·Duo·Watch 통합 디자인맵 열기](actual/index.html)

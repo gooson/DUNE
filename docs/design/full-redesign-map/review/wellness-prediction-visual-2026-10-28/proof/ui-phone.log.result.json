@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/WellnessFlowUITests/testPredictionVisualScoreConfidenceAndFactors",
+    "DUNEUITests/WellnessFlowUITests/testPredictionMaximumAXAndEmptyState",
+    "DUNEUITests/WellnessFlowUITests/testSleepAndPredictionOpenIndependentDetails"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 3,
+    "passed": 2,
+    "skipped": 0,
+    "failed": 1
+  },
+  "passed_cases": 2,
+  "failures": [
+    "787: /Users/shanks/.codex/worktrees/80fd/Health/DUNEUITests/Visual/WellnessFlowUITests.swift:142: error: -[DUNEUITests.WellnessFlowUITests testPredictionMaximumAXAndEmptyState] : XCTAssertFalse failed",
+    "801: Test Case '-[DUNEUITests.WellnessFlowUITests testPredictionMaximumAXAndEmptyState]' failed (74.961 seconds).",
+    "1548: Test Suite 'WellnessFlowUITests' failed at 2026-10-28 08:37:27.385.",
+    "1550: Test Suite 'DUNEUITests.xctest' failed at 2026-10-28 08:37:27.390.",
+    "1552: Test Suite 'Selected tests' failed at 2026-10-28 08:37:27.390.",
+    "1567: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log reports 1 failures",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/WellnessFlowUITests/testPredictionMaximumAXAndEmptyState"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/80fd/Health/.codex-checks/wellness-prediction-visual/ui-phone.log"
+}
