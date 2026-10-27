@@ -82,6 +82,82 @@ final class WellnessFlowUITests: SeededUITestBaseCase {
         XCTAssertTrue(waitForElement("wellness-sleep-prediction-detail-screen", timeout: 10).exists)
     }
 
+    func testPredictionVisualScoreConfidenceAndFactors() {
+        for (score, confidence, label, style) in [
+            (37, "low", "Low Confidence", "dark"),
+            (78, "medium", "Medium Confidence", "light"),
+            (0, "low", "Low Confidence", "light"),
+            (100, "high", "High Confidence", "light")
+        ] {
+            var configuration = launchConfiguration
+            configuration.additionalEnvironment["DUNE_UI_SLEEP_PREDICTION_SCORE"] = String(score)
+            configuration.additionalEnvironment["DUNE_UI_SLEEP_PREDICTION_CONFIDENCE"] = confidence
+            if let index = configuration.additionalArguments.firstIndex(of: "--ui-test-style") {
+                configuration.additionalArguments[index + 1] = style
+            }
+            launchApp(with: configuration)
+            navigateToWellness()
+            alignPredictionHeaderForCapture()
+            let value = waitForElement("wellness-prediction-score-value")
+            XCTAssertEqual(value.label, String(score))
+            let meter = waitForElement("wellness-prediction-score-meter")
+            XCTAssertEqual(meter.value as? String, "\(score) / 100")
+            let badge = waitForElement("wellness-prediction-confidence")
+            XCTAssertTrue(badge.label.contains(label))
+            XCTAssertTrue(value.isHittable)
+            XCTAssertTrue(meter.isHittable)
+            XCTAssertTrue(badge.isHittable)
+            addScreenshotAttachment(named: "H01-prediction-\(score)-\(confidence)-\(style)")
+            let factors = reveal("wellness-prediction-factors-disclosure")
+            factors.tap()
+            XCTAssertTrue(app.staticTexts["Recent sleep has been consistent"].waitForExistence(timeout: 5))
+            factors.tap()
+            XCTAssertFalse(app.staticTexts["Recent sleep has been consistent"].exists)
+        }
+    }
+
+    func testPredictionMaximumAXAndEmptyState() {
+        var configuration = launchConfiguration
+        configuration.additionalEnvironment["DUNE_UI_SLEEP_PREDICTION_SCORE"] = "37"
+        configuration.additionalEnvironment["DUNE_UI_SLEEP_PREDICTION_CONFIDENCE"] = "low"
+        configuration.additionalArguments += [
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ]
+        launchApp(with: configuration)
+        navigateToWellness()
+        alignPredictionHeaderForCapture()
+        XCTAssertEqual(waitForElement("wellness-prediction-score-value").label, "37")
+        addScreenshotAttachment(named: "H01-prediction-37-MaxAX-score")
+        let badge = reveal("wellness-prediction-confidence")
+        XCTAssertTrue(badge.label.contains("Low Confidence"))
+        XCTAssertTrue(badge.isHittable)
+        addScreenshotAttachment(named: "H01-prediction-37-MaxAX-confidence")
+
+        configuration = launchConfiguration
+        configuration.additionalEnvironment["DUNE_UI_SLEEP_PREDICTION_SCORE"] = "none"
+        launchApp(with: configuration)
+        navigateToWellness()
+        alignPredictionHeaderForCapture()
+        XCTAssertFalse(element("wellness-prediction-score-meter").exists)
+        XCTAssertFalse(element("wellness-prediction-confidence").exists)
+        XCTAssertTrue(app.staticTexts["Sleep a few nights to see your sleep quality prediction."].exists)
+        addScreenshotAttachment(named: "H01-prediction-empty")
+    }
+
+    private func alignPredictionHeaderForCapture() {
+        let header = waitForElement("wellness-sleep-prediction-card", timeout: 15)
+        let scroll = app.scrollViews.firstMatch
+        let desiredY = max(app.navigationBars.firstMatch.frame.maxY, scroll.frame.minY) + 20
+        for _ in 0..<8 {
+            let offset = header.frame.minY - desiredY
+            if abs(offset) < 16 { break }
+            let start = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.55))
+            start.press(forDuration: 0.05, thenDragTo: start.withOffset(
+                CGVector(dx: 0, dy: -max(-240, min(240, offset)))
+            ))
+        }
+    }
+
     func testSparseSleepBarsKeepCalendarPositionsAndWidth() {
         for (count, slots) in [(1, [6]), (2, [2, 6]), (4, [0, 3, 5, 6]), (7, Array(0..<7))] {
             var configuration = launchConfiguration

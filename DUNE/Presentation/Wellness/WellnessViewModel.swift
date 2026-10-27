@@ -150,9 +150,18 @@ final class WellnessViewModel {
     /// Call after loadData completes, or when relevant inputs change.
     func recomputeSleepPrediction(todayWorkoutIntensity: Double = 0) {
         if ProcessInfo.processInfo.arguments.contains("--ui-design-map-sleep-prediction") {
+            let environment = ProcessInfo.processInfo.environment
+            let isUITesting = ProcessInfo.processInfo.arguments.contains("--uitesting")
+            if isUITesting, environment["DUNE_UI_SLEEP_PREDICTION_SCORE"] == "none" {
+                sleepPrediction = nil
+                return
+            }
+            let fixtureScore = isUITesting ? Int(environment["DUNE_UI_SLEEP_PREDICTION_SCORE"] ?? "") : nil
+            let fixtureConfidence = isUITesting
+                ? SleepQualityPrediction.Confidence(rawValue: environment["DUNE_UI_SLEEP_PREDICTION_CONFIDENCE"] ?? "") : nil
             sleepPrediction = SleepQualityPrediction(
-                predictedScore: 78,
-                confidence: .medium,
+                predictedScore: fixtureScore ?? 78,
+                confidence: fixtureConfidence ?? .medium,
                 factors: [
                     .init(type: .recentSleepPattern, impact: .positive,
                           detail: "Recent sleep has been consistent"),
