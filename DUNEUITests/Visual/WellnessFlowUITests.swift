@@ -16,8 +16,8 @@ final class WellnessFlowUITests: SeededUITestBaseCase {
         app.descendants(matching: .any)[id].firstMatch
     }
 
-    private func reveal(_ id: String) -> XCUIElement {
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded(id, maxSwipes: 16), "\(id) should be reachable")
+    private func reveal(_ id: String, direction: ScrollDirection = .up) -> XCUIElement {
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(id, maxSwipes: 16, direction: direction), "\(id) should be reachable")
         let target = element(id)
         let scroll = app.scrollViews.firstMatch
         for _ in 0..<10 {
@@ -85,7 +85,8 @@ final class WellnessFlowUITests: SeededUITestBaseCase {
     func testBodyMeasurementsAndHeaderEdge() {
         navigateToWellness()
         let body = reveal("wellness-link-bodyhistory")
-        XCTAssertGreaterThanOrEqual(body.frame.height, 44)
+        // Frame coordinates can round a 44pt control down by a fraction of a pixel.
+        XCTAssertGreaterThanOrEqual(body.frame.height, 43.5)
         for category in ["weight", "bodyFat", "leanBodyMass", "bmi"] {
             let card = waitForElement("wellness-card-\(category)", timeout: 10)
             XCTAssertTrue(card.staticTexts["Previous measurement"].exists,
@@ -167,7 +168,7 @@ final class WellnessFlowUITests: SeededUITestBaseCase {
             XCTAssertTrue(viewport.insetBy(dx: -1, dy: -1).contains(value.frame),
                           "\(id) should fit entirely in the scrolling viewport at maximum text size")
         }
-        let weight = reveal("wellness-card-weight")
+        let weight = reveal("wellness-card-weight", direction: .down)
         let number = weight.staticTexts.matching(
             NSPredicate(format: "label MATCHES %@", #"^[0-9][0-9.,]*$"#)
         ).firstMatch

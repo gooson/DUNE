@@ -234,7 +234,7 @@ final class WellnessSeededSmokeTests: SeededUITestBaseCase {
     }
 
     func testSleepPredictionSummaryOpensDetail() throws {
-        let sectionID = "wellness-section-sleep-prediction"
+        let sectionID = "wellness-sleep-prediction-card"
         XCTAssertTrue(app.scrollToElementIfNeeded(sectionID, maxSwipes: 10), "Sleep Prediction section should be reachable")
 
         let detailLink = app.buttons["wellness-sleep-prediction-detail-link"].firstMatch
