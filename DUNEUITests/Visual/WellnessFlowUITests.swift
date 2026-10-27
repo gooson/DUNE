@@ -9,7 +9,7 @@ final class WellnessFlowUITests: SeededUITestBaseCase {
         ["-morningBriefingDisabled", "YES",
          "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
          "--ui-test-theme", "desertWarm", "--ui-test-style", "light",
-         "--ui-design-map-sleep-prediction"]
+         "--ui-design-map-sleep-prediction", "--ui-visual-posture-fixtures"]
     }
 
     private func element(_ id: String) -> XCUIElement {
