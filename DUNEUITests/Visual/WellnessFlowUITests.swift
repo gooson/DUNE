@@ -181,6 +181,33 @@ final class WellnessFlowUITests: SeededUITestBaseCase {
         captureH01Flow(suffix: "light")
     }
 
+    func testCaptureHealthIndicatorDetails() {
+        for style in ["light", "dark"] {
+            var configuration = launchConfiguration
+            configuration.additionalArguments += ["--ui-test-style", style]
+            launchApp(with: configuration)
+            navigateToWellness()
+            let metric = reveal("wellness-card-hrv")
+            let scroll = app.scrollViews.firstMatch
+            // Align the actual metric row below navigation, rather than capturing
+            // a section heading while its chart remains behind the tab bar.
+            let viewport = scroll.frame.intersection(app.windows.firstMatch.frame)
+            let desiredY = max(viewport.minY + 180, app.navigationBars.firstMatch.frame.maxY + 28)
+            let offset = metric.frame.minY - desiredY
+            if abs(offset) > 12 {
+                let start = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+                start.press(forDuration: 0.05, thenDragTo: start.withOffset(CGVector(dx: 0, dy: -max(-240, min(240, offset)))))
+            }
+            XCTAssertTrue(metric.isHittable)
+            let name = "H01-Wellness-Flow-health-detail-\(style)"
+            if VisualAudit.isEnabled {
+                VisualAudit.capture(name)
+            } else {
+                addScreenshotAttachment(named: name)
+            }
+        }
+    }
+
     func testCaptureH01DarkFlow() {
         var configuration = launchConfiguration
         if let style = configuration.additionalArguments.firstIndex(of: "--ui-test-style") {
