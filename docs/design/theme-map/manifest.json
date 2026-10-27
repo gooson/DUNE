@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-26",
+  "updated": "2026-10-27",
   "app_contract": "app-contract.md",
   "themes": [
     {
@@ -164,6 +164,13 @@
       "title": "Activity · 상태에서 운동과 성취로",
       "file": "dune-activity-redesign.html",
       "detail": "2026-10-26 사용자 요청으로 Astra 자문 및 4개 앱 공식 자료를 확인. 상태→운동 선택→기록/성취→분석의 Flow를 추가하고 기존 Compact/Training 보존. 꾸준함·kg 볼륨·28일 부하·부담 점검·세트 수와 최근 운동일 합계를 구분. 근육 범례·개인 기록/달성·시간/칼로리·보고서·HealthKit/심박 표현 유지. 운동 구성은 범주 아이콘·큰 비율·굵은 구성 막대·주요 부위 태그로 강조. 예시 데이터, 앱 미적용."
+    },
+    {
+      "id": "wellness-redesign",
+      "name": "Wellness 개편 · Flow / Compact",
+      "title": "Wellness · 수면에서 몸의 변화로",
+      "file": "dune-wellness-redesign.html",
+      "detail": "2026-10-27 구현 전 제안. Today Compact·Activity Flow의 DUNE 브라운·골드·104px 링·WELLNESS·전체 헤더 상세를 통일. 권장 Flow는 점수→최근 수면→예측→건강 지표→신체→자세/부상, 활성 부상은 예측 다음. Compact는 현행 순서 정돈. 후속 요청의 골드 히어로·건강 지표 면적/큰 숫자·2×2 신체 항목별 비교·촬영 안내/점수 강조를 반영하고 Astra에게 원본·개선본 자문. 비교 날짜·%p·예시/비교없음을 명시하며 체중 외 변화량은 후속 이력 연결 필요. 80개 배치·20개 상태·60개 동작·마지막 아이콘24개 한정 배치 및 최신PNG20장 확인. 초기안 보존, 앱 적용/실제 캡처 아님."
     },
     {
       "id": "activity-final",

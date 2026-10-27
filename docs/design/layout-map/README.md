@@ -40,6 +40,7 @@ Life의 링 옆에는 현재 진행 상태를 설명하는 문장을 둔다. 히
 | 범위 | 맵 |
 |---|---|
 | Today T03·Activity A01·Wellness H01·Life L01 | [4탭 레이아웃 맵](index.html) |
+| Wellness H01 개편 · 구현 전 제안 | [Flow / Compact 전체 시안](../theme-map/themes/dune-wellness-redesign.html) · [순서·데이터·상태 계약](wellness-redesign-proposal.md) |
 | DESERT HORIZON 4탭 상세 배치 | [밝음·어두움 시안](../theme-map/themes/dune-final-four-tab.html) · [상세 계약](desert-horizon-final.md) |
 | Today 하단 읽기 위계 | [회복·스트레스·요약 V2](today-reading-proposal.md) · [원본 대비 시안](../theme-map/themes/dune-today-reading.html) |
 | Today T03 요약 · 본문 더 보기 선택 후 | [세부 배치·펼침 기준](digest-read-more-refinement.md) · [핵심 먼저·한 문장 먼저·지표 행 비교](digest-read-more-refinement.html) |
@@ -96,3 +97,7 @@ Activity 후속 시안은 개인 기록에 금빛 메달·최고 값·개선량�
 ## Activity Flow 네이티브 적용 · 2026-10-27
 
 [A01 현재 배치](index.html#activity)는 상태→선택→기록/성취→분석의12카드다. [실제 화면](../full-redesign-map/review/activity-flow-2026-10-27/index.html)과 [최종 계약](activity-final-proposal.md)을 함께 따른다. 개인 기록의 값과 미니 그래프를 서로 다른 줄로 두어 iPad 반폭에서도 생략을 방지한다. 제목은4탭영어대문자이며 준비도100점막대·실제보상/심박·범례·시간/칼로리·보고서/구성을 적용했다. 전체 회귀와 수집 시간 초과는 실제 화면의 검증 기록에서 구분한다.
+
+## Wellness 개편 시안 · 2026-10-27
+
+[Flow / Compact](../theme-map/themes/dune-wellness-redesign.html)는 Today Compact·Activity Flow의 개편 기록을 이어가는 H01 구현 전 제안이다. 권장 Flow는 점수→최근 수면→오늘 밤 예측→건강 지표→신체→자세/부상 순서이며 활성 부상은 예측 다음에 표시한다. Compact는 기존 점수/수면 묶음과 순서를 정돈한다. WELLNESS·104px 링·네 항목의100점 막대·제목 옆 전체 헤더 상세·큰 글씨 외부 점수를 공유한다. 후속 요청의 골드 히어로·건강 지표 면적/수치·신체 항목별 비교·촬영 안내와 점수 강조를 반영하고 Astra에게 두 차례 자문받았다. [데이터 제약·비교 예시·검증 범위](wellness-redesign-proposal.md), 초기 원본·최신PNG20장·80개 배치/20개 상태/60개 동작과 마지막 아이콘24개 한정 배치 기록을 함께 보존했다. 최종 방향 선택·네이티브 구현·실제 H01 캡처는 아직 수행하지 않았다.

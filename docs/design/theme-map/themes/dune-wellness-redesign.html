@@ -1,0 +1,2942 @@
+<!doctype html>
+<html lang="en" data-visualize-standalone>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<title>Wellness · Flow / Compact</title>
+<style>:root{color-scheme:light dark;background:light-dark(rgb(255 255 255), rgb(24 24 24))}html,body{margin:0}body{box-sizing:border-box;padding:1rem;background:inherit}iframe{display:block;width:100%;height:calc(100vh - 2rem);margin:0 auto;border:0}</style>
+
+</head>
+<body>
+<iframe id="codex-visualization" sandbox="allow-scripts" referrerpolicy="no-referrer" title="Wellness · Flow / Compact" data-srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot; data-visualize-standalone&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;meta name=&quot;referrer&quot; content=&quot;no-referrer&quot;&gt;
+&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src &#x27;none&#x27;; script-src &#x27;unsafe-inline&#x27; &#x27;unsafe-eval&#x27; &#x27;wasm-unsafe-eval&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src &#x27;unsafe-inline&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src &#x27;none&#x27;; object-src &#x27;none&#x27;; base-uri &#x27;none&#x27;; form-action &#x27;none&#x27;&quot;&gt;
+&lt;title&gt;Wellness · Flow / Compact&lt;/title&gt;
+&lt;style&gt;:root {
+  color-scheme: light dark;
+  background-color: var(
+    --background,
+    var(--color-background-primary, light-dark(rgb(255 255 255), rgb(24 24 24)))
+  ) !important;
+
+  /* Agent-facing contract; keep in sync with SKILL.md. */
+  --background: var(
+    --color-background-primary,
+    light-dark(rgb(255 255 255), rgb(24 24 24))
+  );
+  --foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --card: color-mix(in oklab, var(--foreground) 5%, var(--background));
+  --card-foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --popover: var(
+    --color-background-secondary,
+    light-dark(rgb(255 255 255), rgb(45 45 45))
+  );
+  --popover-foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --primary: var(
+    --color-text-info,
+    light-dark(rgb(51 156 255), rgb(131 195 255))
+  );
+  --primary-foreground: var(
+    --color-text-inverse,
+    light-dark(rgb(255 255 255), rgb(13 13 13))
+  );
+  --secondary: var(
+    --color-background-secondary,
+    light-dark(rgb(255 255 255 / 96%), rgb(54 54 54 / 96%))
+  );
+  --secondary-foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --muted: color-mix(in srgb, var(--foreground) 10%, transparent);
+  --muted-foreground: var(
+    --color-text-secondary,
+    light-dark(rgb(26 28 31 / 49.4%), rgb(255 255 255 / 49.8%))
+  );
+  --accent: var(
+    --color-background-info,
+    light-dark(rgb(229 242 255), rgb(13 39 63))
+  );
+  --accent-foreground: var(
+    --color-text-info,
+    light-dark(rgb(51 156 255), rgb(131 195 255))
+  );
+  --destructive: var(
+    --color-text-warning,
+    light-dark(rgb(226 85 7), rgb(255 133 73))
+  );
+  --border: var(
+    --color-border-secondary,
+    light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%))
+  );
+  --input: var(
+    --color-border-primary,
+    light-dark(
+      rgb(26 28 31 / 11.8%),
+      color-mix(in oklab, rgb(0 0 0) 10%, transparent)
+    )
+  );
+  --ring: var(
+    --color-ring-primary,
+    light-dark(rgb(51 156 255), rgb(131 195 255 / 76%))
+  );
+  --font-size-base: var(--font-text-md-size, 16px);
+  --blue: light-dark(rgb(51 156 255), rgb(51 156 255));
+  --orange: light-dark(rgb(226 85 7), rgb(251 106 34));
+  --green: light-dark(rgb(0 162 64), rgb(64 201 119));
+  --red: light-dark(rgb(224 46 42), rgb(255 103 100));
+  --purple: light-dark(rgb(146 79 247), rgb(173 123 249));
+  --yellow: light-dark(rgb(255 195 0), rgb(255 210 64));
+  --viz-series-1: var(--primary);
+  --viz-series-2: light-dark(rgb(243 136 59), rgb(245 154 86));
+  --viz-series-3: light-dark(rgb(93 201 119), rgb(116 213 139));
+  --viz-series-4: light-dark(rgb(235 119 177), rgb(240 143 192));
+  --viz-series-5: light-dark(rgb(155 121 236), rgb(170 145 239));
+  --viz-series-6: light-dark(rgb(58 185 177), rgb(90 203 194));
+
+  /* Internal implementation variables; not part of the agent contract. */
+  --font-sans:
+    -apple-system-body, ui-sans-serif, -apple-system, system-ui, &quot;Segoe UI&quot;,
+    Helvetica, &quot;Apple Color Emoji&quot;, Arial, sans-serif, &quot;Segoe UI Emoji&quot;,
+    &quot;Segoe UI Symbol&quot;;
+  --font-mono:
+    ui-monospace, SFMono-Regular, &quot;SF Mono&quot;, Menlo, Consolas, &quot;Liberation Mono&quot;,
+    monospace;
+  --font-size-normal: max(11px, var(--font-size-base));
+  --font-size-tooltip: calc(var(--font-size-base) - 1px);
+  --font-size-small: max(11px, calc(var(--font-size-base) - 2px));
+  --font-size-h1: calc(var(--font-size-normal) * 1.7142857143);
+  --font-size-h2: calc(var(--font-size-normal) * 1.4285714286);
+  --font-size-h3: calc(var(--font-size-normal) * 1.2857142857);
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --icon-size: 16px;
+  --line-height-normal: calc(var(--font-size-normal) * 1.5);
+  --line-height-tooltip: calc(var(--font-size-tooltip) * 1.4285714286);
+  --line-height-small: calc(var(--font-size-small) + 4px);
+  --corner-shape: round;
+  --radius: var(--border-radius-lg, 8px);
+  --radius-sm: calc(var(--radius) * 0.5);
+  --radius-md: calc(var(--radius) * 0.75);
+  --radius-lg: var(--radius);
+  --radius-2xl: calc(var(--radius) * 2);
+  --radius-full: 9999px;
+  --shadow-sm: 0 1px 2px -1px rgb(0 0 0 / 8%);
+  --checkmark-image: url(&quot;data:image/svg+xml,%3Csvg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; viewBox=&#x27;0 0 17 17&#x27;%3E%3Cpath d=&#x27;M12.8961 3.64101C13.1297 3.41418 13.4984 3.37523 13.7779 3.56581C14.0571 3.75635 14.1554 4.11331 14.0299 4.41347L13.9615 4.53847L7.71151 13.7045C7.59411 13.8767 7.4063 13.9877 7.19881 14.0072C6.99136 14.0267 6.78564 13.9533 6.63826 13.806L2.88826 10.056L2.79842 9.9457C2.6192 9.67407 2.64927 9.30496 2.88826 9.06581C3.12738 8.82669 3.49647 8.79676 3.76815 8.97597L3.8785 9.06581L7.03084 12.2182L12.8053 3.74941L12.8961 3.64101Z&#x27;/%3E%3C/svg%3E&quot;);
+
+  /* Legacy aliases; not part of the current agent contract. */
+  --viz-bg: transparent;
+  --viz-panel: var(--card);
+  --viz-border: var(--border);
+  --viz-text: var(--foreground);
+  --viz-muted: var(--muted-foreground);
+  --viz-accent: var(--primary);
+  --viz-accent-text: var(--primary-foreground);
+  --viz-accent-bg: var(--accent);
+  --viz-font-size: var(--font-size-base);
+  --viz-warning: var(--destructive);
+}
+
+:root[data-theme=&quot;light&quot;] {
+  color-scheme: light;
+}
+
+:root[data-theme=&quot;dark&quot;] {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html &gt; body {
+  /* Preserve MCP aliases for older inline renderers without creating :root cycles. */
+  --color-background-primary: var(
+    --background,
+    light-dark(rgb(255 255 255), rgb(24 24 24))
+  );
+  --color-text-primary: var(
+    --foreground,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --color-border-secondary: var(
+    --border,
+    light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%))
+  );
+
+  margin: 0;
+  padding: var(--visualize-paint-gutter, 0px);
+  color: var(--foreground);
+  background: transparent !important;
+  font-family: var(--font-sans) !important;
+  -webkit-font-smoothing: antialiased;
+  font-size: var(--font-size-base);
+  line-height: calc(var(--font-size-base) * 1.625);
+  font-weight: var(--font-weight-normal);
+}
+
+.cursor-interaction {
+  cursor: var(--cursor-interaction, pointer);
+}
+
+a {
+  color: color-mix(in srgb, var(--viz-accent) 80%, var(--viz-text) 20%);
+  cursor: var(--cursor-interaction, pointer);
+  text-decoration: none;
+  text-underline-offset: 2px;
+  font-weight: inherit;
+}
+
+a:is(:hover, :focus-visible) {
+  text-decoration-line: underline;
+  text-decoration-style: dashed;
+  text-decoration-thickness: 0.5px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin-block: 0;
+}
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+li,
+.table {
+  font-family: var(--font-sans);
+}
+
+h1 {
+  font-size: calc(var(--font-size-base) * 1.5);
+  line-height: 1.3333333333;
+}
+
+h2 {
+  font-size: calc(var(--font-size-base) * 1.25);
+  line-height: 1.4;
+}
+h3 {
+  font-size: calc(var(--font-size-base) * 1.125);
+  line-height: 1.5555555556;
+}
+h4 {
+  font-size: var(--font-size-base);
+  line-height: 1.5;
+}
+h5,
+h6 {
+  font-size: var(--font-size-base);
+  line-height: calc(var(--font-size-base) * 1.625);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+b,
+strong,
+th {
+  font-weight: 600;
+}
+
+code:not(pre code) {
+  display: inline;
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  corner-shape: var(--corner-shape);
+  background: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  overflow-wrap: anywhere;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  word-break: break-word;
+}
+pre,
+pre code {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 20px;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.table {
+  width: 100%;
+  color: var(--foreground);
+  font: inherit;
+  text-align: start;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: calc(var(--font-size-base) * 0.875);
+  line-height: calc(var(--font-size-base) * 1.625);
+  font-family: var(--font-sans);
+}
+
+.table :is(th, td) {
+  padding-block: 10px;
+  padding-inline: 0 24px;
+  overflow-wrap: anywhere;
+  border-bottom: 1px solid var(--border);
+  text-align: start;
+  vertical-align: top;
+  border-bottom-color: color-mix(in srgb, var(--foreground) 5%, transparent);
+}
+.table :is(th, td):not(:last-child) {
+  padding-inline-end: calc(var(--font-size-base) * 1.5);
+}
+
+.table-responsive &gt; .table :is(th, td) {
+  overflow-wrap: break-word;
+}
+
+.table :is(th, td):last-child {
+  padding-inline-end: 0;
+}
+
+.table :is(caption, thead th) {
+  font-weight: 600;
+}
+
+.table thead :is(th, td) {
+  border-bottom-color: var(--border-strong, var(--input));
+  padding-block: calc(var(--font-size-base) / 2);
+  line-height: var(--font-size-base);
+}
+
+.table tbody tr:last-child :is(th, td) {
+  border-bottom: 0;
+}
+.table tbody :is(th, td) {
+  padding-block: calc(var(--font-size-base) * 0.625);
+}
+
+.table.table-sm :is(th, td) {
+  padding-block: 8px;
+}
+
+.table.table-sm :is(th, td):not(:last-child) {
+  padding-inline-end: 16px;
+}
+
+.table :is(.text-end, [align=&quot;right&quot;]) {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+.table :is(.text-center, [align=&quot;center&quot;]) {
+  text-align: center;
+}
+
+.table .text-nowrap {
+  white-space: nowrap;
+}
+
+#widget {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  padding: 0;
+  background: transparent !important;
+}
+
+.card {
+  min-width: 0;
+  padding: 12px;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  border-radius: var(--radius-2xl);
+  corner-shape: var(--corner-shape);
+  color: var(--card-foreground);
+  background: var(--card);
+}
+
+.widget {
+  min-width: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--radius-lg);
+  corner-shape: var(--corner-shape);
+  box-shadow: 0 0 0 0.5px var(--border-strong, var(--border));
+  color: var(--foreground);
+  background: var(--background);
+}
+
+#widget &gt; :not(.card, .widget, .progress) {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.tooltip {
+  position: fixed;
+  z-index: 50;
+  top: 0;
+  left: 0;
+  width: max-content;
+  max-width: min(
+    20rem,
+    var(--tooltip-available-width, calc(100vw - 10px)),
+    calc(100vw - 10px)
+  );
+  max-height: min(
+    var(--tooltip-available-height, calc(100vh - 10px)),
+    calc(100vh - 10px)
+  );
+  border: 1px solid var(--border);
+  corner-shape: var(--corner-shape);
+  overflow-wrap: break-word;
+  white-space: normal;
+  pointer-events: none;
+  user-select: none;
+  font-family: var(--font-sans);
+  padding: 5px 12px;
+  border-color: color-mix(
+    in oklab,
+    light-dark(var(--primary-foreground), var(--foreground)) 5%,
+    transparent
+  );
+  border-radius: var(--radius-2xl);
+  color: light-dark(var(--primary-foreground), var(--foreground));
+  background: light-dark(var(--foreground), var(--popover));
+  box-shadow: 0 8px 18px rgb(15 23 42 / 20%);
+  letter-spacing: -0.15px;
+  font-size: calc(var(--font-size-base) * 14 / 16);
+  font-size: round(nearest, calc(var(--font-size-base) * 14 / 16), 1px);
+  font-weight: 600;
+  line-height: 18px;
+  text-align: center;
+}
+
+.viz-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(max(180px, 24%), 1fr));
+  gap: 10px;
+}
+
+.viz-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.viz-stat-value {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+.viz-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+hr {
+  width: 100%;
+  height: 1px;
+  margin-block: 6px;
+  border: 0;
+  background: var(--border);
+}
+
+.nav {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 4px;
+}
+
+.progress {
+  display: flex;
+  height: 8px;
+  margin-block: calc((var(--line-height-normal, 1.5em) - 8px) / 2);
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--muted);
+}
+
+.progress-bar:only-child {
+  border-radius: var(--radius-full);
+}
+
+.progress-bar {
+  height: 100%;
+  flex-shrink: 0;
+  border: 0;
+  background: var(--viz-series-1);
+}
+
+.viz-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  color: color-mix(in srgb, var(--foreground) 40%, var(--muted-foreground));
+  background: color-mix(in srgb, var(--foreground) 5%, transparent);
+  font-family: var(--font-sans);
+  font-size: calc(var(--font-size-base) * 14 / 16);
+  font-size: round(nearest, calc(var(--font-size-base) * 14 / 16), 1px);
+  font-weight: var(--font-weight-normal);
+  line-height: 1;
+}
+
+small,
+.text-small {
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-small);
+}
+
+.text-muted {
+  color: var(--muted-foreground);
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.viz-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.viz-controls &gt; .form-label {
+  display: grid;
+  min-width: min(100%, 260px);
+  flex: 1 1 280px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 2px 12px;
+  margin-bottom: 0;
+}
+
+.viz-controls &gt; .form-label &gt; :is(.form-control, .form-range, .form-select) {
+  grid-column: 1 / -1;
+}
+
+.btn,
+.nav-link,
+.form-check-input,
+.form-control,
+.form-range,
+.form-select {
+  font: inherit;
+}
+
+/* Match inline alignment without overriding a containing flex or grid layout. */
+.btn,
+.nav-link,
+.form-control,
+.form-select,
+.form-range,
+.form-check {
+  vertical-align: middle;
+}
+
+.btn,
+.nav-link {
+  appearance: button;
+  display: inline-flex;
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin: 0;
+  padding: 0 8px;
+  -webkit-app-region: no-drag;
+  border: 1px solid var(--input);
+  corner-shape: var(--corner-shape);
+  cursor: var(--cursor-interaction, pointer);
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-font-smoothing: inherit;
+  font-family: var(--font-sans);
+  height: fit-content;
+  min-height: calc(12px + 2 * var(--control-spacing, 12px));
+  padding-inline: var(--control-spacing, 12px);
+  border-color: transparent;
+  border-radius: var(--radius-full);
+  color: var(--foreground);
+  background: color-mix(in srgb, var(--foreground) 5%, transparent);
+  font-size: calc(var(--font-size-base) * 14 / 16);
+  font-size: round(nearest, calc(var(--font-size-base) * 14 / 16), 1px);
+  font-weight: var(--font-weight-normal);
+  line-height: 18px;
+}
+
+.btn {
+  border-color: var(--border);
+  color: var(--secondary-foreground);
+  background: var(--secondary);
+}
+
+.btn:is(.btn-block, .viz-tile) {
+  inline-size: 100%;
+}
+
+.btn.viz-tile {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+a.btn {
+  cursor: var(--cursor-interaction, pointer);
+  text-decoration: none;
+}
+
+.btn:not(:disabled):hover {
+  background: light-dark(
+    color-mix(in srgb, var(--foreground) 5.5%, transparent),
+    color-mix(in srgb, var(--foreground) 8%, transparent)
+  );
+}
+
+.nav-link:not(:disabled):not([aria-disabled=&quot;true&quot;]):hover {
+  background: color-mix(in srgb, var(--foreground) 10%, transparent);
+}
+
+.btn-primary {
+  border-color: var(--border);
+  color: var(--primary-foreground);
+  background: var(--foreground);
+  background-clip: border-box;
+}
+
+.btn-primary .text-muted {
+  color: color-mix(in srgb, var(--primary-foreground) 50%, transparent);
+}
+
+.btn-primary:not(:disabled):hover {
+  background: color-mix(in srgb, var(--foreground) 80%, transparent);
+  background-clip: border-box;
+}
+
+.btn-ghost {
+  border-color: transparent;
+  color: var(--muted-foreground);
+  background: transparent;
+}
+
+.btn-ghost:not(:disabled):hover {
+  color: var(--muted-foreground);
+  background: light-dark(
+    color-mix(in srgb, var(--foreground) 5.5%, transparent),
+    color-mix(in srgb, var(--foreground) 8%, transparent)
+  );
+}
+
+.nav-pills .nav-link {
+  min-width: 0;
+  border-color: transparent;
+  color: var(--muted-foreground);
+  background: transparent;
+}
+
+.nav-justified .nav-link {
+  flex: 1 1 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+.nav-pills .nav-link.active {
+  color: var(--foreground);
+  background: var(--muted);
+}
+
+/* Shared preview chrome; product styles stay inside each variant. */
+.viz-dotted-background {
+  background-image: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--foreground) 14%, transparent) 0.8px,
+    transparent 0.8px
+  );
+  background-position: center;
+  background-size: 16px 16px;
+}
+
+.viz-carousel {
+  position: relative;
+  min-width: 0;
+}
+
+.viz-carousel:has(&gt; .viz-carousel-controls) {
+  min-height: calc(60px + var(--viz-carousel-picker-height, 0px));
+  padding-bottom: 60px;
+}
+
+.viz-carousel &gt; [data-variant][hidden] {
+  display: none !important;
+}
+
+.viz-carousel &gt; [data-variant] {
+  isolation: isolate;
+}
+
+.viz-carousel-controls {
+  --viz-carousel-hover: light-dark(
+    color-mix(in srgb, var(--foreground) 5.4%, transparent),
+    color-mix(in srgb, var(--foreground) 7.8%, transparent)
+  );
+  position: absolute;
+  z-index: 2;
+  bottom: 8px;
+  left: 50%;
+  display: flex;
+  width: max-content;
+  /* Leave room for the host&#x27;s design-controls launcher at the trailing edge. */
+  max-width: calc(100% - 96px);
+  align-items: center;
+  gap: 0;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-sans);
+  /* Match the settings dropdown chrome independently of the content font size. */
+  font-size: 13px;
+  font-weight: var(--font-weight-normal);
+  line-height: 18px;
+  transform: translateX(-50%);
+  user-select: none;
+}
+
+/* Keep authored mockup button styles out of the shared carousel chrome. */
+.viz-carousel-controls button,
+.viz-carousel-picker &gt; summary {
+  display: flex !important;
+  height: auto !important;
+  min-height: 30px;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 4px;
+  padding: 0 6px !important;
+  -webkit-app-region: no-drag;
+  border: 0 !important;
+  border-radius: 14px !important;
+  color: inherit !important;
+  background: transparent !important;
+  font: inherit !important;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.viz-carousel-controls &gt; button,
+.viz-carousel-picker &gt; summary {
+  position: relative;
+  isolation: isolate;
+}
+
+.viz-carousel-controls &gt; button {
+  --icon-size: 16px;
+  width: 30px !important;
+  padding: 0 !important;
+}
+
+.viz-carousel-picker &gt; summary {
+  padding-inline: 12px !important;
+}
+
+.viz-carousel-controls .viz-carousel-caret {
+  width: 14px;
+  height: 14px;
+  flex: none;
+  margin: 0;
+  color: inherit;
+  transform: rotate(180deg);
+}
+
+.viz-carousel-controls &gt; button &gt; svg,
+.viz-carousel-controls .viz-carousel-caret,
+.viz-carousel-count {
+  opacity: 0.5;
+}
+
+.viz-carousel-controls &gt; button::before,
+.viz-carousel-picker &gt; summary::before {
+  position: absolute;
+  z-index: -1;
+  inset: 3px;
+  border-radius: 12px;
+  content: &quot;&quot;;
+  pointer-events: none;
+}
+
+.viz-carousel-controls &gt; button:hover::before,
+.viz-carousel-picker &gt; summary:hover::before {
+  background: var(--viz-carousel-hover);
+}
+
+.viz-carousel-controls &gt; button,
+.viz-carousel-controls [data-lucide],
+.viz-carousel-controls .lucide {
+  flex-shrink: 0;
+}
+
+.viz-carousel-picker {
+  min-width: 0;
+}
+
+.viz-carousel-picker &gt; summary {
+  min-width: 0;
+  list-style: none;
+}
+
+.viz-carousel-picker &gt; summary::-webkit-details-marker {
+  display: none;
+}
+
+.viz-carousel-count {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.viz-carousel-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.viz-carousel-options {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 4px);
+  left: 0;
+  display: flex;
+  max-height: 240px;
+  flex-direction: column;
+  gap: 2px;
+  overflow: auto;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--background);
+  box-shadow: 0 4px 12px light-dark(rgb(0 0 0 / 6%), rgb(0 0 0 / 25%));
+}
+
+.viz-carousel-options &gt; button {
+  border-radius: max(0px, calc(var(--radius-lg) - 5px)) !important;
+  width: 100% !important;
+  min-height: 28px;
+  justify-content: flex-start !important;
+  padding: 4px 8px !important;
+  font-size: var(--font-size-small) !important;
+  text-align: start;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.viz-carousel-options &gt; [aria-current=&quot;true&quot;],
+.viz-carousel-options &gt; button:hover {
+  background: var(--viz-carousel-hover) !important;
+}
+
+.btn:disabled,
+.nav-link:disabled,
+.nav-link[aria-disabled=&quot;true&quot;] {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+[data-lucide] {
+  stroke-width: 1.6;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--foreground);
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  padding: 0 8px;
+  outline: none;
+  border: 1px solid var(--input);
+  corner-shape: var(--corner-shape);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  height: calc(12px + 2 * var(--control-spacing, 12px));
+  min-height: calc(12px + 2 * var(--control-spacing, 12px));
+  padding-inline: calc(4px + var(--control-spacing, 12px) / 2);
+  border-color: var(--input);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--popover) 96%, transparent);
+  font-size: calc(var(--font-size-base) * 14 / 16);
+  font-size: round(nearest, calc(var(--font-size-base) * 14 / 16), 1px);
+  font-weight: var(--font-weight-normal);
+  line-height: 1.4285714286;
+}
+.form-control:is(
+  [type=&quot;file&quot;],
+  [type=&quot;date&quot;],
+  [type=&quot;datetime-local&quot;],
+  [type=&quot;month&quot;],
+  [type=&quot;week&quot;],
+  [type=&quot;color&quot;]
+) {
+  height: calc(12px + 2 * var(--control-spacing, 12px));
+  min-height: calc(12px + 2 * var(--control-spacing, 12px));
+  line-height: 18px;
+}
+.form-control:is(
+  [type=&quot;date&quot;],
+  [type=&quot;datetime-local&quot;],
+  [type=&quot;month&quot;],
+  [type=&quot;week&quot;]
+) {
+  padding-inline: var(--control-spacing, 12px);
+}
+
+.form-control::placeholder {
+  color: var(--muted-foreground);
+}
+
+.form-control[type=&quot;file&quot;] {
+  overflow: hidden;
+  cursor: var(--cursor-interaction, pointer);
+  padding: 0;
+}
+
+.form-control[type=&quot;file&quot;]::file-selector-button {
+  padding: 0 8px;
+  border: 0;
+  border-right: 1px solid var(--input);
+  color: var(--secondary-foreground);
+  background: var(--secondary);
+  cursor: inherit;
+  font: inherit;
+  min-height: calc(10px + 2 * var(--control-spacing, 12px));
+  padding-inline: var(--control-spacing, 12px);
+  margin-inline-end: var(--control-spacing, 12px);
+}
+
+.form-control[type=&quot;file&quot;]:not(:disabled):hover::file-selector-button {
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.form-control-color[type=&quot;color&quot;] {
+  width: 40px;
+  height: calc(12px + 2 * var(--control-spacing, 12px));
+  padding: 3px;
+  cursor: var(--cursor-interaction, pointer);
+}
+
+.form-control-color[type=&quot;color&quot;]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.form-control-color[type=&quot;color&quot;]::-webkit-color-swatch {
+  border: 0;
+  border-radius: calc(var(--radius-lg) - 4px);
+  corner-shape: var(--corner-shape);
+}
+
+textarea.form-control {
+  height: auto;
+  resize: vertical;
+  min-height: 96px;
+  padding: 8px 10px;
+}
+
+.form-control:focus-visible {
+  border-color: var(--ring);
+  box-shadow: none;
+}
+.form-control:disabled {
+  color: var(--muted-foreground);
+  background: color-mix(in srgb, var(--foreground) 5%, transparent);
+  opacity: 1;
+}
+.form-control[aria-invalid=&quot;true&quot;] {
+  border-color: var(--red);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--red) 20%, transparent);
+}
+
+.form-control:disabled,
+.form-select:disabled {
+  cursor: not-allowed;
+}
+
+.form-select {
+  appearance: none;
+  display: block;
+  width: 100%;
+  height: fit-content;
+  min-height: calc(12px + 2 * var(--control-spacing, 12px));
+  margin: 0;
+  /* The secondary icon role is 14px at compact density and 16px at web density. */
+  --icon-size: calc(10px + var(--control-spacing, 12px) / 2);
+  /* Settings dropdowns retain a 12px inset and a 4px text-to-chevron gap. */
+  padding: 0 calc(16px + var(--icon-size)) 0 12px;
+  outline: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  corner-shape: var(--corner-shape);
+  color: var(--foreground);
+  background-color: var(--secondary);
+  background-image:
+    linear-gradient(
+      45deg,
+      transparent calc(50% - 0.6px),
+      var(--muted-foreground) calc(50% - 0.6px) calc(50% + 0.6px),
+      transparent calc(50% + 0.6px)
+    ),
+    linear-gradient(
+      135deg,
+      transparent calc(50% - 0.6px),
+      var(--muted-foreground) calc(50% - 0.6px) calc(50% + 0.6px),
+      transparent calc(50% + 0.6px)
+    );
+  background-position:
+    calc(100% - 12px - var(--icon-size) / 2) 50%,
+    calc(100% - 12px - var(--icon-size) * 0.18) 50%;
+  background-repeat: no-repeat;
+  background-size: calc(var(--icon-size) * 0.32) calc(var(--icon-size) * 0.32);
+  cursor: var(--cursor-interaction, default);
+  font-size: calc(var(--font-size-base) * 14 / 16);
+  font-size: round(nearest, calc(var(--font-size-base) * 14 / 16), 1px);
+  font-weight: var(--font-weight-normal);
+  line-height: 18px;
+}
+
+.form-select option {
+  color: var(--popover-foreground);
+  background-color: var(--popover);
+}
+
+.form-select:not(:disabled):hover {
+  background-color: light-dark(
+    color-mix(in srgb, var(--foreground) 5.5%, transparent),
+    color-mix(in srgb, var(--foreground) 8%, transparent)
+  );
+}
+
+.form-select:focus-visible {
+  box-shadow: 0 0 0 2px var(--ring);
+}
+.form-select:disabled {
+  opacity: 0.4;
+}
+
+.form-check {
+  display: flex;
+  min-height: calc(12px + 2 * var(--control-spacing, 12px));
+  align-items: center;
+  gap: 6px;
+}
+
+.form-check-input {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+  margin: 0;
+  border: 1px solid var(--input);
+  color: var(--primary-foreground);
+  background-color: transparent;
+  cursor: var(--cursor-interaction, default);
+  transition:
+    background-color 150ms,
+    border-color 150ms,
+    box-shadow 150ms;
+}
+
+.form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;] {
+  corner-shape: round;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  width: calc(10px + var(--control-spacing, 12px) / 2);
+  height: calc(10px + var(--control-spacing, 12px) / 2);
+  border-color: var(--border-strong, var(--input));
+  border-radius: calc(var(--radius-sm) / 2);
+  background-color: transparent;
+  color: var(--foreground);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input:not(:disabled):not(:checked):hover {
+  background-color: var(--card);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input[type=&quot;checkbox&quot;]:is(:checked, :indeterminate) {
+  border-color: var(--border-strong, var(--input));
+  background-color: color-mix(in srgb, var(--popover) 96%, transparent);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input[type=&quot;checkbox&quot;]:checked::before {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--primary-foreground);
+  content: &quot;&quot;;
+  mask: var(--checkmark-image) center / 12px 12px no-repeat;
+  background-color: var(--foreground);
+}
+.form-check:not(.form-switch)
+  .form-check-input[type=&quot;checkbox&quot;]:indeterminate::before {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 65%;
+  height: 6.65%;
+  margin: auto;
+  border-radius: var(--radius-full);
+  background: var(--foreground);
+  mask: none;
+  content: &quot;&quot;;
+}
+
+.form-check-input[type=&quot;radio&quot;] {
+  border-radius: var(--radius-full);
+  width: 16px;
+  height: 16px;
+  border: 0;
+  box-shadow: inset 0 0 0 1px var(--input);
+}
+
+.form-check-input[type=&quot;radio&quot;]:checked {
+  border: 0;
+  background: radial-gradient(
+    circle,
+    var(--primary-foreground) 0 3px,
+    var(--foreground) 3px
+  );
+  box-shadow: none;
+}
+
+.form-check:not(.form-switch) .form-check-input:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+.form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;]:focus-visible {
+  border-color: var(--ring);
+  outline: none;
+  box-shadow: 0 0 0 2px var(--ring);
+}
+
+.form-check:not(.form-switch) .form-check-input:disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.form-check:not(.form-switch) .form-check-input:disabled + .form-check-label {
+  cursor: not-allowed;
+}
+.form-check:not(.form-switch) .form-check-input[type=&quot;radio&quot;]:disabled,
+.form-check:not(.form-switch)
+  .form-check-input[type=&quot;radio&quot;]:disabled
+  + .form-check-label {
+  opacity: 0.5;
+}
+
+.form-switch .form-check-input:disabled,
+.form-switch .form-check-input:disabled + .form-check-label {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.form-check-label {
+  color: var(--foreground);
+  cursor: var(--cursor-interaction, default);
+}
+
+.form-switch .form-check-input {
+  position: relative;
+  width: 32px;
+  height: 20px;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--muted);
+  box-shadow: none;
+  transition: background-color 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.form-switch .form-check-input::before {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 16px;
+  height: 16px;
+  box-sizing: border-box;
+  border: 1px solid light-dark(var(--primary-foreground), var(--foreground));
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-sm);
+  content: &quot;&quot;;
+  transform: translate(2px, -50%);
+  transition: transform 200ms cubic-bezier(0, 0, 0.2, 1);
+  border-color: #fff;
+  background: #fff;
+}
+
+.form-switch .form-check-input:checked {
+  background: var(--blue);
+}
+
+.form-switch .form-check-input:checked::before {
+  transform: translate(14px, -50%);
+}
+
+.form-switch .form-check-input:focus-visible {
+  box-shadow: 0 0 0 2px var(--ring);
+  outline: none;
+}
+
+.form-range {
+  appearance: none;
+  display: block;
+  width: 100%;
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  accent-color: var(--primary);
+  height: calc(12px + 2 * var(--control-spacing, 12px));
+  min-height: calc(12px + 2 * var(--control-spacing, 12px));
+  outline: none;
+  border-radius: var(--radius-full);
+  color: var(--foreground);
+  background: transparent;
+}
+
+.form-range::-webkit-slider-runnable-track {
+  background: var(--form-range-track, var(--border));
+  height: 2px;
+  border-radius: var(--radius-full);
+}
+
+.form-range::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  margin-top: -9px;
+  border-color: transparent;
+  background: currentColor;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Outline the native track and thumb, preserving the larger input hit area. */
+.form-range:focus-visible::-webkit-slider-runnable-track {
+  outline: 2px auto Highlight;
+  outline-color: -webkit-focus-ring-color;
+}
+
+.form-range::-moz-range-track {
+  background: var(--form-range-track, var(--border));
+  height: 2px;
+  border-radius: var(--radius-full);
+}
+
+.form-range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  border-color: transparent;
+  background: currentColor;
+  box-shadow: var(--shadow-sm);
+}
+
+.form-range:focus-visible::-moz-range-thumb {
+  outline: 2px solid Highlight;
+  outline-offset: 2px;
+}
+
+.form-range:disabled {
+  opacity: 1;
+  cursor: default;
+}
+
+.btn:not(.btn-primary, .viz-tile):is(
+  [aria-pressed=&quot;true&quot;],
+  [aria-selected=&quot;true&quot;],
+  .is-selected
+) {
+  border-color: transparent;
+  color: var(--primary-foreground);
+  background: var(--blue);
+}
+
+.btn.viz-tile:is([aria-pressed=&quot;true&quot;], [aria-selected=&quot;true&quot;], .is-selected) {
+  border-color: var(--primary);
+  box-shadow: inset 0 0 0 1px var(--primary);
+}
+
+.btn:focus-visible,
+.nav-link:focus-visible {
+  outline-offset: 2px;
+  outline: none;
+  box-shadow: 0 0 0 2px var(--ring);
+}
+
+.viz-carousel-controls :is(button, summary):focus-visible {
+  outline: 2px solid var(--ring) !important;
+  outline-offset: 2px !important;
+}
+
+/* Web recipes are the default, including on renderers without inline style queries. */
+@supports (border-radius: if(style(--corner-shape: round): 1px; else: 2px)) {
+  /* Match the host&#x27;s proportional text-sm scale at every text preference. */
+  .tooltip,
+  .viz-badge,
+  .btn,
+  .nav-link,
+  .form-control,
+  .form-select {
+    font-size: if(
+      style(--corner-shape: round): round(
+          nearest,
+          calc(var(--font-size-base) * 14 / 16),
+          1px
+        );
+        else: round(nearest, calc(var(--font-size-base) * 13 / 14), 1px)
+    );
+  }
+
+  .btn,
+  .nav-link,
+  .form-select {
+    border-radius: if(
+      style(--corner-shape: round): var(--radius-full); else: var(--radius-lg)
+    );
+  }
+
+  .form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;] {
+    border-radius: if(
+      style(--corner-shape: round): calc(var(--radius-sm) / 2);
+        else: calc(var(--radius-lg) * 0.4)
+    );
+  }
+
+  .tooltip {
+    font-weight: if(
+      style(--corner-shape: round): 600; else: var(--font-weight-normal)
+    );
+  }
+}
+
+@media (pointer: coarse) {
+  .viz-carousel:has(&gt; .viz-carousel-controls) {
+    min-height: calc(76px + var(--viz-carousel-picker-height, 0px));
+    padding-bottom: 76px;
+  }
+
+  .btn,
+  .nav-link,
+  .viz-carousel-controls button,
+  .viz-carousel-picker &gt; summary,
+  .form-control,
+  .form-select {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  /* Keep small-screen WebKit from zooming when a text field receives focus. */
+  .form-control,
+  .form-select {
+    font-size: max(16px, calc(var(--font-size-base) * 14 / 16));
+    font-size: max(
+      16px,
+      round(nearest, calc(var(--font-size-base) * 14 / 16), 1px)
+    );
+  }
+  .form-control:is(
+    [type=&quot;file&quot;],
+    [type=&quot;date&quot;],
+    [type=&quot;datetime-local&quot;],
+    [type=&quot;month&quot;],
+    [type=&quot;week&quot;],
+    [type=&quot;time&quot;],
+    [type=&quot;color&quot;]
+  ) {
+    height: 44px;
+    min-height: 44px;
+    font-size: max(16px, calc(var(--font-size-base) * 14 / 16));
+    font-size: max(
+      16px,
+      round(nearest, calc(var(--font-size-base) * 14 / 16), 1px)
+    );
+  }
+
+  .form-control[type=&quot;file&quot;]::file-selector-button {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .form-control-color[type=&quot;color&quot;] {
+    width: 44px;
+    height: 44px;
+  }
+
+  .form-control:is(
+    [type=&quot;date&quot;],
+    [type=&quot;datetime-local&quot;],
+    [type=&quot;month&quot;],
+    [type=&quot;time&quot;],
+    [type=&quot;week&quot;]
+  ) {
+    min-width: 0;
+    max-width: 100%;
+    padding-block: 8px;
+  }
+
+  .form-check {
+    min-height: 44px;
+    padding-inline: 15px;
+  }
+
+  .form-check-input {
+    position: relative;
+  }
+
+  .form-check-input::after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 44px;
+    height: 44px;
+    content: &quot;&quot;;
+    transform: translate(-50%, -50%);
+  }
+
+  .form-check-label {
+    display: inline-flex;
+    min-width: 44px;
+    min-height: 44px;
+    align-items: center;
+  }
+
+  .form-range {
+    height: 44px;
+    touch-action: pan-y;
+  }
+}
+
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+#widget &gt; svg {
+  width: 100%;
+}
+
+/* Model-authored chart rules can otherwise stretch icons after these styles load. */
+svg.lucide {
+  display: block;
+  width: var(--icon-size) !important;
+  height: var(--icon-size) !important;
+  flex: none;
+  margin: 0 !important;
+  stroke-width: 1.6;
+}
+
+.text-warning,
+.text-destructive {
+  color: var(--destructive);
+}
+
+html&gt;body{padding:0}&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;script type=&quot;application/json&quot; id=&quot;codex-visualization-widget-state&quot;&gt;__CODEX_VISUALIZATION_WIDGET_STATE__&lt;/script&gt;
+&lt;script&gt;(() =&gt; {
+  const root = document.documentElement;
+  const mediaQuery = globalThis.matchMedia(&quot;(prefers-color-scheme: dark)&quot;);
+  const apply = Reflect.apply;
+  const isArray = Array.isArray;
+  const hasOwn = Object.hasOwn;
+  const parentWindow = globalThis.parent;
+  const stringify = JSON.stringify;
+  const parse = JSON.parse;
+  const encode = TextEncoder.prototype.encode.bind(new TextEncoder());
+  const initialStateElement = document.getElementById(
+    &quot;codex-visualization-widget-state&quot;,
+  );
+  const initialGlobals = parse(initialStateElement?.textContent ?? &quot;{}&quot;);
+  initialStateElement?.remove();
+  /** @type {Record&lt;string, unknown&gt; | null} */
+  let state = initialGlobals.widgetState ?? null;
+  const statePersistence = initialGlobals.statePersistence ?? &quot;none&quot;;
+  let nextStateRequestId = 0;
+  /** @type {Map&lt;number, { resolve: () =&gt; void; reject: (error: Error) =&gt; void; timeout: ReturnType&lt;typeof globalThis.setTimeout&gt;; serializedState: string }&gt;} */
+  const pendingStateWrites = new Map();
+  const persistenceError = () =&gt;
+    Object.assign(
+      new Error(&quot;The host could not persist the widget state update&quot;),
+      {
+        code: -32000,
+        data: { code: &quot;widget_state_persistence_failed&quot;, retryable: false },
+      },
+    );
+  /**
+   * @param {object} prototype
+   * @param {string} property
+   */
+  const getPrototypeGetter = (prototype, property) =&gt; {
+    // oxlint-disable-next-line typescript/unbound-method -- invoked through captured Reflect.apply
+    const getter = Object.getOwnPropertyDescriptor(prototype, property)?.get;
+    if (getter == null) {
+      throw new Error(`Missing ${property} getter`);
+    }
+    return getter;
+  };
+  const getMessageData = getPrototypeGetter(MessageEvent.prototype, &quot;data&quot;);
+  const getMessagePorts = getPrototypeGetter(MessageEvent.prototype, &quot;ports&quot;);
+  const getMessageSource = getPrototypeGetter(MessageEvent.prototype, &quot;source&quot;);
+  // oxlint-disable-next-line typescript/unbound-method -- captured before the untrusted fragment runs
+  const addHostMessageListener = MessagePort.prototype.addEventListener;
+  // oxlint-disable-next-line typescript/unbound-method -- captured before the untrusted fragment runs
+  const postHostMessage = MessagePort.prototype.postMessage;
+  // oxlint-disable-next-line typescript/unbound-method -- captured before the untrusted fragment runs
+  const startHostPort = MessagePort.prototype.start;
+  // oxlint-disable-next-line typescript/unbound-method -- captured before the untrusted fragment runs
+  const stopMessagePropagation = Event.prototype.stopImmediatePropagation;
+  /** @type {MessagePort | null} */
+  let hostPort = null;
+  const postToHost = (type, payload) =&gt; {
+    if (hostPort != null) {
+      apply(postHostMessage, hostPort, [{ type, ...payload }]);
+    }
+  };
+  const openExternal = ({ href }) =&gt; {
+    if (globalThis.navigator.userActivation?.isActive === true) {
+      postToHost(&quot;open-external&quot;, { href });
+    }
+  };
+  const sendFollowUpMessage = ({ context, prompt, title }) =&gt; {
+    if (globalThis.navigator.userActivation?.isActive === true) {
+      postToHost(&quot;follow-up&quot;, { context, prompt, title });
+    }
+    return Promise.resolve();
+  };
+  /**
+   * @param {Record&lt;string, unknown&gt; | ((previous: Record&lt;string, unknown&gt; | null) =&gt; Record&lt;string, unknown&gt;)} next
+   * @returns {Promise&lt;void&gt;}
+   */
+  const setWidgetState = async (next) =&gt; {
+    const nextState = typeof next === &quot;function&quot; ? next(state) : next;
+    if (
+      nextState == null ||
+      typeof nextState !== &quot;object&quot; ||
+      isArray(nextState)
+    ) {
+      throw new TypeError(&quot;Widget state must be a JSON object&quot;);
+    }
+    const inputState = stringify(
+      nextState,
+      (_key, /** @type {unknown} */ value) =&gt; {
+        if (
+          typeof value === &quot;undefined&quot; ||
+          typeof value === &quot;function&quot; ||
+          typeof value === &quot;symbol&quot; ||
+          (typeof value === &quot;number&quot; &amp;&amp; !Number.isFinite(value))
+        ) {
+          throw new TypeError(&quot;Widget state must be a JSON object&quot;);
+        }
+        return value;
+      },
+    );
+    const parsedState = parse(inputState);
+    if (
+      parsedState == null ||
+      typeof parsedState !== &quot;object&quot; ||
+      isArray(parsedState)
+    ) {
+      throw new TypeError(&quot;Widget state must be a JSON object&quot;);
+    }
+    const storedState = {
+      modelContent: null,
+      privateContent: null,
+      ...parsedState,
+    };
+    const serializedState = stringify(storedState);
+    if (encode(serializedState).length &gt; 16 * 1024) {
+      throw new TypeError(
+        &quot;Widget state must be a JSON object of at most 16 KiB&quot;,
+      );
+    }
+    if (
+      hasOwn(storedState, &quot;imageIds&quot;) &amp;&amp;
+      (!isArray(storedState.imageIds) ||
+        storedState.imageIds.some(
+          (/** @type {unknown} */ id) =&gt; typeof id !== &quot;string&quot;,
+        ))
+    ) {
+      throw new TypeError(&quot;Widget state imageIds must be an array of strings&quot;);
+    }
+    if (storedState.imageIds?.length &gt; 0) {
+      throw Object.assign(
+        new TypeError(&quot;Visualization state does not support image attachments&quot;),
+        { code: -32602, data: { code: &quot;images_unsupported&quot; } },
+      );
+    }
+    state = storedState;
+    globalThis.openai.widgetState = state;
+    globalThis.dispatchEvent(
+      new CustomEvent(&quot;openai:set_globals&quot;, {
+        detail: { globals: { widgetState: state } },
+      }),
+    );
+    if (statePersistence === &quot;none&quot;) {
+      throw persistenceError();
+    }
+    const id = ++nextStateRequestId;
+    return new Promise((resolve, reject) =&gt; {
+      const timeout = globalThis.setTimeout(() =&gt; {
+        pendingStateWrites.delete(id);
+        reject(persistenceError());
+      }, 30_000);
+      pendingStateWrites.set(id, { resolve, reject, timeout, serializedState });
+      postToHost(&quot;widget-state-write&quot;, { id, state: serializedState });
+    });
+  };
+  const syncTheme = () =&gt; {
+    const theme = mediaQuery.matches ? &quot;dark&quot; : &quot;light&quot;;
+    root.dataset.theme = theme;
+    globalThis.openai = {
+      ...globalThis.openai,
+      openExternal,
+      sendFollowUpMessage,
+      setWidgetState,
+      theme,
+      visualizationStyleVariables: {},
+      visualizationTheme: theme,
+      widgetState: state,
+      statePersistence,
+      stateModelContext: &quot;none&quot;,
+    };
+    globalThis.dispatchEvent(
+      new CustomEvent(&quot;openai:set_globals&quot;, {
+        detail: { globals: globalThis.openai },
+      }),
+    );
+  };
+  const sendHeight = () =&gt; {
+    postToHost(&quot;height&quot;, {
+      height: Math.ceil(
+        Math.max(
+          document.body.scrollHeight,
+          document.body.getBoundingClientRect().height,
+        ),
+      ),
+    });
+  };
+
+  globalThis.addEventListener(
+    &quot;message&quot;,
+    (event) =&gt; {
+      const data = apply(getMessageData, event, []);
+      const ports = apply(getMessagePorts, event, []);
+      const source = apply(getMessageSource, event, []);
+      if (
+        hostPort != null ||
+        source !== parentWindow ||
+        typeof data !== &quot;object&quot; ||
+        data?.type !== &quot;codex-visualization-initialize&quot; ||
+        !isArray(ports) ||
+        ports.length !== 1
+      ) {
+        return;
+      }
+      apply(stopMessagePropagation, event, []);
+      const nextHostPort = ports[0];
+      try {
+        apply(addHostMessageListener, nextHostPort, [
+          &quot;message&quot;,
+          (event) =&gt; {
+            const data = apply(getMessageData, event, []);
+            if (typeof data === &quot;object&quot; &amp;&amp; data?.type === &quot;measure&quot;) {
+              sendHeight();
+            } else if (
+              typeof data === &quot;object&quot; &amp;&amp;
+              data?.type === &quot;widget-state-result&quot;
+            ) {
+              /** @type {unknown} */
+              const id = data.id;
+              if (typeof id !== &quot;number&quot;) {
+                return;
+              }
+              const pending = pendingStateWrites.get(id);
+              if (pending != null) {
+                pendingStateWrites.delete(id);
+                globalThis.clearTimeout(pending.timeout);
+                if (data.ok === true) {
+                  pending.resolve();
+                } else {
+                  pending.reject(persistenceError());
+                }
+              }
+            }
+          },
+        ]);
+        apply(startHostPort, nextHostPort, []);
+      } catch {
+        return;
+      }
+      hostPort = nextHostPort;
+      for (const [id, { serializedState }] of pendingStateWrites) {
+        postToHost(&quot;widget-state-write&quot;, { id, state: serializedState });
+      }
+      sendHeight();
+    },
+    { capture: true },
+  );
+  document.currentScript?.remove();
+  mediaQuery.addEventListener(&quot;change&quot;, syncTheme);
+  globalThis.addEventListener(&quot;click&quot;, (event) =&gt; {
+    if (event.defaultPrevented) {
+      return;
+    }
+    let element = null;
+    if (event.target instanceof globalThis.Element) {
+      element = event.target;
+    } else if (event.target instanceof globalThis.Node) {
+      element = event.target.parentElement;
+    }
+    const link = element?.closest(&quot;a[href]&quot;);
+    const href = link?.getAttribute(&quot;href&quot;);
+    if (href == null) {
+      return;
+    }
+    if (href.startsWith(&quot;#&quot;)) {
+      let id;
+      try {
+        id = decodeURIComponent(href.slice(1));
+      } catch {
+        return;
+      }
+      const target = id.length === 0 ? root : document.getElementById(id);
+      if (
+        target == null ||
+        globalThis.navigator.userActivation?.isActive !== true
+      ) {
+        return;
+      }
+      event.preventDefault();
+      postToHost(&quot;scroll-to&quot;, {
+        top: target.getBoundingClientRect().top + globalThis.scrollY,
+      });
+      return;
+    }
+    event.preventDefault();
+    openExternal({ href });
+  });
+  new ResizeObserver(sendHeight).observe(document.body);
+  syncTheme();
+})();
+&lt;/script&gt;
+&lt;style&gt;
+#wellness-redesign{--w-type:1;--w-width:402px;font-family:-apple-system,BlinkMacSystemFont,&#x27;Apple SD Gothic Neo&#x27;,sans-serif}
+#wellness-redesign *{box-sizing:border-box}#wellness-redesign [hidden]{display:none!important}
+#wellness-redesign .preview-label{text-align:center;font-size:12px;color:light-dark(#695d50,#cdbdad);margin:8px 0}
+#wellness-redesign .stage{display:flex;justify-content:center;align-items:flex-start;padding:16px 3px 28px}
+#wellness-redesign .phone{--w-ink:light-dark(#302b26,#fff4e8);--w-muted:light-dark(#695d50,#cdbdad);--w-line:light-dark(#d9caba,#5b4a3d);--w-surface:light-dark(#fffaf2,#2c2722);--w-inset:light-dark(#f3e9dc,#373029);--w-gold:light-dark(#8a5632,#ecc287);--w-green:light-dark(#46674a,#b6d19a);--w-sleep:light-dark(#5e6d92,#b6bfe9);--w-teal:light-dark(#3e776e,#9bcbc0);--w-pink:light-dark(#9c5b54,#e8b0a3);--w-faint:light-dark(#e4d6c2,#4f4539);color-scheme:light dark;color:var(--w-ink);width:min(100%,var(--w-width));min-width:0;border-radius:36px;position:relative;isolation:isolate;container-type:inline-size;background:linear-gradient(180deg,light-dark(#ead9c0,#3b302b) 0,light-dark(#d4ae8d,#614b3e) 160px,light-dark(#e9d5bb,#3d3029) 340px,light-dark(#f6eee2,#25211d) 610px,transparent 1050px),linear-gradient(180deg,light-dark(#f1e4d2,#201c19),light-dark(#fbf7ef,#181716) 50%,light-dark(#f9f4eb,#141312));box-shadow:0 18px 60px #0002,0 0 0 1px #8883;font-size:calc(14px * var(--w-type));line-height:1.45;overflow:clip}
+#wellness-redesign .phone[data-mode=light]{color-scheme:light}#wellness-redesign .phone[data-mode=dark]{color-scheme:dark}
+#wellness-redesign .phone button,#wellness-redesign .phone input{font:inherit;color:inherit}#wellness-redesign .phone button{border:0;background:none;text-align:left;cursor:inherit}
+#wellness-redesign .phone button:disabled{opacity:.65;cursor:default}#wellness-redesign .phone button:active{filter:brightness(.9)}
+#wellness-redesign .phone h1,#wellness-redesign .phone h2,#wellness-redesign .phone h3,#wellness-redesign .phone p{margin:0}
+#wellness-redesign .phone h1{font-size:calc(31px * var(--w-type));line-height:1.12;letter-spacing:-1.2px;font-weight:740}
+#wellness-redesign .phone h2{font-size:calc(15px * var(--w-type));line-height:1.35;font-weight:650;letter-spacing:-.3px;min-width:0}
+#wellness-redesign .phone h3{font-size:calc(14px * var(--w-type));font-weight:600}
+#wellness-redesign .phone p,#wellness-redesign .phone span,#wellness-redesign .phone h2,#wellness-redesign .phone h3{word-break:keep-all;overflow-wrap:anywhere}
+#wellness-redesign .phone svg[data-lucide]{width:18px;height:18px;flex:none}
+#wellness-redesign .muted{color:var(--w-muted)}#wellness-redesign .small{font-size:calc(11px * var(--w-type));line-height:1.5}
+#wellness-redesign .dunes{position:absolute;inset:65px 0 auto;height:350px;pointer-events:none;z-index:-1;mask-image:linear-gradient(#000,transparent)}
+#wellness-redesign .dune{position:absolute;inset:0;background:light-dark(#c79b79,#8b624b);opacity:.38;clip-path:ellipse(88% 52% at 22% 70%)}
+#wellness-redesign .dune:last-child{background:light-dark(#a97455,#76503e);clip-path:ellipse(95% 50% at 88% 84%);opacity:.28}
+#wellness-redesign .chrome{padding:16px 18px 14px}#wellness-redesign .status{height:25px;display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:650;padding:0 8px;position:relative}
+#wellness-redesign .island{width:104px;height:27px;border-radius:30px;background:#080808;position:absolute;left:50%;top:-3px;transform:translateX(-50%)}#wellness-redesign .signals{display:flex;gap:4px}#wellness-redesign .signals svg[data-lucide]{width:14px;height:14px}
+#wellness-redesign .titlebar{display:flex;justify-content:space-between;align-items:center;gap:10px;padding-top:23px;flex-wrap:wrap}#wellness-redesign .date{margin-top:4px;color:var(--w-muted);font-size:calc(11px * var(--w-type))}
+#wellness-redesign .tools{display:flex;gap:8px}#wellness-redesign .phone .round{border:1px solid var(--w-line);background:var(--w-surface);border-radius:50%;width:44px;height:44px;display:grid;place-items:center;flex:none}
+#wellness-redesign main{padding:0 16px;display:grid;gap:12px;position:relative}#wellness-redesign .surface{padding:15px;border:1px solid var(--w-line);border-radius:20px;background:var(--w-surface);min-width:0;box-shadow:inset 0 1px 0 light-dark(#fff9,#fff1)}
+#wellness-redesign .head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}#wellness-redesign .head h2{flex:1 0 140px}
+#wellness-redesign .phone .heading{display:flex;align-items:center;gap:6px;width:100%;min-height:44px;padding:0;border-radius:8px;text-align:left;font-weight:650;color:inherit}
+#wellness-redesign .heading .title{display:inline-flex;align-items:center;gap:4px;min-width:0}#wellness-redesign .heading .title&gt;span{min-width:0}
+#wellness-redesign .heading&gt;svg{color:var(--w-gold)}#wellness-redesign .heading svg[data-lucide=chevron-right]{width:13px;height:13px;color:var(--w-gold)}
+#wellness-redesign .pill{display:inline-flex;align-items:center;gap:4px;background:var(--w-inset);color:var(--w-muted);padding:4px 8px;border-radius:9px;font-size:calc(11px * var(--w-type));max-width:100%}
+#wellness-redesign .hero{background:radial-gradient(ellipse at 90% 0%,#ce995616,transparent 62%),#352e29;color:#fff5e8;border-color:#765b43;box-shadow:inset 0 1px 0 #fff1,0 8px 26px #0001}
+#wellness-redesign .hero .muted{color:#d0c1ae}#wellness-redesign .hero .heading,#wellness-redesign .hero .heading svg{color:#e7c48e}#wellness-redesign .eyebrow{font-size:calc(11px * var(--w-type));letter-spacing:.12em;font-weight:600}
+#wellness-redesign .hero-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}#wellness-redesign .hero-top h2{flex:1}#wellness-redesign .hero-row{display:grid;grid-template-columns:104px minmax(0,1fr);align-items:center;gap:12px;margin-top:6px}
+#wellness-redesign .ring{width:104px;height:104px;position:relative;display:grid;place-items:center;flex:none}
+#wellness-redesign .ring svg{position:absolute;inset:0;width:104px;height:104px}#wellness-redesign .ring strong{font-size:36px;font-weight:650;letter-spacing:-1.5px;line-height:1;font-variant-numeric:tabular-nums}
+#wellness-redesign .hero-title{font-size:calc(20px * var(--w-type));font-weight:650;line-height:1.35;letter-spacing:-.6px}
+#wellness-redesign .hero-copy{font-size:calc(12px * var(--w-type));color:#d0c1ae;margin-top:5px!important}
+#wellness-redesign .external-score{display:none;font-size:calc(30px * var(--w-type));font-weight:650;margin:4px 0 10px}#wellness-redesign .external-score small{font-size:calc(14px * var(--w-type));font-weight:400}
+#wellness-redesign .evidence{margin-top:14px;padding-top:12px;border-top:1px solid #a9937145;display:grid;gap:7px}
+#wellness-redesign .caption-row{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap;font-size:calc(11px * var(--w-type));color:var(--w-muted)}#wellness-redesign .hero .caption-row{color:#d0c1ae}
+#wellness-redesign .evidence-row{display:grid;grid-template-columns:57px minmax(0,1fr) auto;gap:10px;align-items:center;min-height:27px;font-size:calc(12px * var(--w-type))}
+#wellness-redesign .evidence-row&gt;span{color:#d0c1ae}#wellness-redesign .evidence-row strong{font-size:calc(16px * var(--w-type));font-weight:600;white-space:nowrap}#wellness-redesign .evidence-row strong small{font-size:calc(11px * var(--w-type));font-weight:400;color:#d0c1ae}
+#wellness-redesign .track{height:7px;background:#baa37829;border-radius:5px;overflow:hidden;min-width:0}#wellness-redesign .track i{display:block;height:100%;background:linear-gradient(90deg,#bd8e4d,#edcb83);border-radius:5px}#wellness-redesign .missing .track{background:transparent}
+#wellness-redesign .phone details{border-top:1px solid var(--w-line);margin-top:12px;min-width:0}#wellness-redesign .hero details{border-color:#a9937145}
+#wellness-redesign .phone summary{min-height:44px;display:flex;justify-content:space-between;align-items:center;gap:8px;list-style:none;font-size:calc(12px * var(--w-type));font-weight:550;cursor:inherit}#wellness-redesign summary::-webkit-details-marker{display:none}#wellness-redesign details[open]&gt;summary svg{transform:rotate(90deg)}
+#wellness-redesign .detail-copy{font-size:calc(12px * var(--w-type));line-height:1.6;margin:8px 0!important;color:var(--w-muted)}#wellness-redesign .hero .detail-copy{color:#d0c1ae}
+#wellness-redesign .sleep-overview{display:flex;justify-content:space-between;gap:14px;align-items:flex-end;flex-wrap:wrap}
+#wellness-redesign .value{font-size:calc(34px * var(--w-type));line-height:1.2;font-weight:650;letter-spacing:-1px;font-variant-numeric:tabular-nums;display:flex;gap:5px;align-items:baseline;flex-wrap:wrap}
+#wellness-redesign .value&gt;span{white-space:nowrap}#wellness-redesign .value small{font-size:calc(14px * var(--w-type));font-weight:450;letter-spacing:0;color:var(--w-muted)}#wellness-redesign .value.secondary{font-size:calc(21px * var(--w-type))}
+#wellness-redesign .sleep-chart{margin-top:18px;position:relative;padding-top:12px}
+#wellness-redesign .plot{height:100px;position:relative;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));align-items:end;gap:10px;border-bottom:1px solid var(--w-line);background:repeating-linear-gradient(to top,transparent 0,transparent 32px,var(--w-line) 33px,transparent 34px)}
+#wellness-redesign .sleep-bar{width:100%;max-width:24px;justify-self:center;border-radius:5px 5px 0 0;background:var(--w-teal);opacity:.48;min-height:1px}#wellness-redesign .sleep-bar.latest{opacity:1}#wellness-redesign .sleep-bar.empty{background:transparent;min-height:0}
+#wellness-redesign .days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;margin-top:6px;font-size:11px;color:var(--w-muted);text-align:center}
+#wellness-redesign .sleep-meta{margin-top:10px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:calc(11px * var(--w-type));color:var(--w-muted)}
+#wellness-redesign .prediction{background:linear-gradient(135deg,light-dark(#edf0f8,#2d2c3b),var(--w-surface) 80%)}#wellness-redesign .prediction .heading&gt;svg{color:var(--w-sleep)}
+#wellness-redesign .prediction-main{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center}#wellness-redesign .prediction-title{font-size:calc(19px * var(--w-type));font-weight:650;line-height:1.4}
+#wellness-redesign .prediction-value{font-size:calc(34px * var(--w-type));font-weight:650;font-variant-numeric:tabular-nums;line-height:1.2}#wellness-redesign .prediction-value small{font-size:calc(12px * var(--w-type));font-weight:400}
+#wellness-redesign .tip{display:flex;gap:8px;align-items:flex-start;border-top:1px solid var(--w-line);padding-top:12px;margin-top:12px;font-size:calc(12px * var(--w-type))}#wellness-redesign .tip&gt;svg{color:var(--w-sleep);margin-top:1px}
+#wellness-redesign .metric-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 16px}
+#wellness-redesign .phone .metric{display:block;width:100%;padding:13px 0;min-width:0;border-bottom:1px solid var(--w-line)}
+#wellness-redesign .metric-title{display:flex;align-items:center;gap:5px;flex-wrap:wrap;font-size:calc(12px * var(--w-type));color:var(--w-muted)}#wellness-redesign .metric-title svg[data-lucide]{width:14px;height:14px;color:var(--w-pink)}
+#wellness-redesign .metric .value{font-size:calc(27px * var(--w-type));margin-top:7px;gap:4px}#wellness-redesign .metric .value small{font-size:calc(11px * var(--w-type))}
+#wellness-redesign .mini-chart{width:100%;height:25px;display:block;margin-top:9px;color:var(--w-gold)}#wellness-redesign .stamp{font-size:calc(11px * var(--w-type));color:var(--w-muted);margin-top:6px}
+#wellness-redesign .group-label{margin-top:6px!important;font-size:calc(11px * var(--w-type));color:var(--w-muted);letter-spacing:.02em}
+#wellness-redesign .body-lead{display:flex;justify-content:space-between;gap:12px;align-items:flex-end;flex-wrap:wrap;padding:0 0 12px;border-bottom:1px solid var(--w-line)}#wellness-redesign .body-change{font-size:calc(12px * var(--w-type));color:var(--w-muted)}
+#wellness-redesign .body-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:2px}#wellness-redesign .body-grid .value{font-size:calc(22px * var(--w-type));gap:3px}
+#wellness-redesign .phone .text-action{min-height:44px;width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;color:var(--w-gold);font-size:calc(12px * var(--w-type));padding:8px 0}
+#wellness-redesign .watch-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}#wellness-redesign .watch-grid .value{font-size:calc(23px * var(--w-type));margin-top:5px}#wellness-redesign .watch-grid .value small{font-size:calc(11px * var(--w-type))}
+#wellness-redesign .management{display:grid;gap:12px}#wellness-redesign .assessment{display:flex;gap:12px;align-items:center;flex-wrap:wrap}#wellness-redesign .assessment strong{font-size:calc(30px * var(--w-type));font-weight:650}#wellness-redesign .assessment .copy{flex:1;min-width:120px}
+#wellness-redesign .assessment-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}#wellness-redesign .phone .primary{background:var(--w-gold);color:var(--w-surface);border-radius:12px;padding:10px 14px;min-height:44px;font-size:calc(12px * var(--w-type));font-weight:600}
+#wellness-redesign .phone .secondary-action{border:1px solid var(--w-line);border-radius:12px;padding:10px 14px;min-height:44px;font-size:calc(12px * var(--w-type))}
+#wellness-redesign .injury-active{border-color:light-dark(#b08a65,#b39473);background:linear-gradient(135deg,var(--w-inset),var(--w-surface))}
+#wellness-redesign .empty-copy{font-size:calc(13px * var(--w-type));line-height:1.65;color:var(--w-muted);margin:8px 0!important}#wellness-redesign .hero .empty-copy{color:#d0c1ae}
+#wellness-redesign .skeleton{height:13px;border-radius:5px;background:var(--w-faint);margin:12px 0;width:78%}#wellness-redesign .skeleton.short{width:45%}
+#wellness-redesign .wide-pair{display:grid;gap:12px;align-items:start}#wellness-redesign .wide-pair&gt;*{min-width:0}
+#wellness-redesign .bottomnav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:3px;margin:20px 14px 10px;padding:6px;border-radius:28px;border:1px solid var(--w-line);background:var(--w-surface)}
+#wellness-redesign .navitem{padding:5px 2px;min-height:51px;display:flex;flex-direction:column;gap:3px;align-items:center;justify-content:center;font-size:11px;border-radius:24px;color:var(--w-muted)}#wellness-redesign .navitem.selected{background:var(--w-inset);color:var(--w-gold);font-weight:650}
+#wellness-redesign .home{width:110px;height:4px;background:var(--w-ink);opacity:.6;border-radius:3px;margin:10px auto}
+#wellness-redesign .detail-page{min-height:650px}#wellness-redesign .detail-page h2{font-size:calc(22px * var(--w-type));margin:10px 0}#wellness-redesign .detail-page .surface{margin-top:12px}#wellness-redesign .phone .back{display:flex;align-items:center;gap:5px;min-height:44px;color:var(--w-gold);padding:0;font-size:calc(13px * var(--w-type))}
+#wellness-redesign .phone .field{display:block;width:100%;background:var(--w-inset);border:1px solid var(--w-line);border-radius:10px;padding:10px;margin:7px 0 14px;font-size:16px;min-height:44px}
+#wellness-redesign .compact-sleep{border-top:1px solid #a9937145;margin-top:12px;padding-top:10px}#wellness-redesign .hero .compact-sleep .value small{color:#d0c1ae}#wellness-redesign .hero .compact-sleep .sleep-bar{background:#9bcbc0}#wellness-redesign .hero .compact-sleep .days,#wellness-redesign .hero .compact-sleep .sleep-meta{color:#d0c1ae}
+#wellness-redesign .phone.large .hero-row{display:block}#wellness-redesign .phone.large .ring{display:none}#wellness-redesign .phone.large .external-score{display:block}
+#wellness-redesign .phone.large .evidence-row{grid-template-columns:minmax(0,1fr) auto;gap:6px 10px}#wellness-redesign .phone.large .evidence-row .track{grid-row:2;grid-column:1/-1}
+#wellness-redesign .phone.large .metric-grid,#wellness-redesign .phone.large .body-grid,#wellness-redesign .phone.large .watch-grid,#wellness-redesign .phone.large .prediction-main{grid-template-columns:minmax(0,1fr)}
+#wellness-redesign .phone.large .sleep-overview{display:grid;gap:14px}#wellness-redesign .phone.large .hero-top{align-items:flex-start}#wellness-redesign .phone.large .hero-top h2{flex-basis:100%}
+#wellness-redesign .phone.large .head{align-items:flex-start}#wellness-redesign .phone.large .head h2{flex-basis:100%}
+#wellness-redesign .hero{position:relative;isolation:isolate;overflow:hidden;background:radial-gradient(ellipse at 6% 5%,#aa80432b,transparent 62%),linear-gradient(135deg,#40352a,#302a26 75%);border-color:#897052}
+#wellness-redesign .hero:before{content:&#x27;&#x27;;position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(170deg,#b1854938,transparent 70%);clip-path:ellipse(85% 50% at 100% 100%)}
+#wellness-redesign .hero:after{content:&#x27;&#x27;;position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(160deg,transparent,#d8ba7a0b);clip-path:ellipse(100% 35% at 20% 110%)}
+#wellness-redesign .ring{filter:drop-shadow(0 3px 12px #edc97720)}#wellness-redesign .ring strong{text-shadow:0 2px 20px #ffdfa015}
+#wellness-redesign .evidence{gap:9px;padding-top:14px}#wellness-redesign .evidence-row{grid-template-columns:83px minmax(0,1fr) auto;min-height:31px}
+#wellness-redesign .evidence-name{display:flex;gap:7px;align-items:center}#wellness-redesign .evidence-name svg[data-lucide]{width:15px;height:15px;color:#d8bb8d}
+#wellness-redesign .hero .track{background:#e4c99a18}#wellness-redesign .hero .track i{background:linear-gradient(90deg,#b89050,#f0d28c)}#wellness-redesign .hero .missing .track{background:transparent}
+#wellness-redesign .phone [data-card=vitals]{background:linear-gradient(150deg,light-dark(#f9f0e7,#302821),var(--w-surface) 60%)}
+#wellness-redesign .phone [data-card=vitals] .metric-grid{gap:10px;margin-top:12px}
+#wellness-redesign .phone .vital-tile{--metric-tone:var(--w-pink);--metric-wash:light-dark(#9c5b5409,#e8b0a309);padding:12px;background:var(--metric-wash);border:0;border-radius:14px;position:relative}
+#wellness-redesign .phone .vital-tile[data-category=hrv],#wellness-redesign .phone .vital-tile[data-category=vo2]{--metric-tone:var(--w-gold);--metric-wash:light-dark(#8a56320a,#ecc2870a)}
+#wellness-redesign .phone .vital-tile[data-category=spo2],#wellness-redesign .phone .vital-tile[data-category=resp]{--metric-tone:var(--w-teal);--metric-wash:light-dark(#3e776e0a,#9bcbc00a)}
+#wellness-redesign .phone .vital-tile[data-category=temp]{--metric-tone:var(--w-sleep);--metric-wash:light-dark(#5e6d920a,#b6bfe90a)}
+#wellness-redesign .vital-tile .metric-title{color:var(--w-ink);gap:5px;min-height:30px;font-weight:550}
+#wellness-redesign .vital-tile .metric-title&gt;svg:first-child{width:21px;height:21px;color:var(--metric-tone)}#wellness-redesign .vital-tile .metric-title&gt;svg:last-child{width:12px;height:12px;color:var(--w-muted);margin-left:auto}
+#wellness-redesign .vital-tile .value{font-size:calc(32px * var(--w-type));margin-top:9px}#wellness-redesign .vital-tile .stamp{display:block}
+#wellness-redesign .vital-tile .mini-chart{height:34px;margin-top:10px}#wellness-redesign .spark-caption{display:block;font-size:calc(11px * var(--w-type));color:var(--w-muted);margin-top:4px}
+#wellness-redesign .phone [data-card=body]{background:linear-gradient(140deg,light-dark(#f5ead9,#352c22),var(--w-surface) 60%)}
+#wellness-redesign .body-comparison-label{display:flex;align-items:center;gap:5px;font-size:calc(11px * var(--w-type));color:var(--w-muted);margin-bottom:13px}
+#wellness-redesign .body-panels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+#wellness-redesign .phone .body-panel{display:flex;flex-direction:column;width:100%;min-width:0;min-height:180px;background:light-dark(#fffaf2b8,#fff1);padding:13px;border:0;border-radius:15px;text-align:left}
+#wellness-redesign .body-panel .metric-title{color:var(--w-ink);font-weight:550}#wellness-redesign .body-panel .metric-title&gt;svg{color:var(--w-gold);width:19px;height:19px}
+#wellness-redesign .body-panel .value{font-size:calc(30px * var(--w-type));margin:12px 0 8px;gap:4px}#wellness-redesign .body-panel .value small{font-size:calc(12px * var(--w-type))}
+#wellness-redesign .delta{font-size:calc(13px * var(--w-type));font-weight:600;display:flex;align-items:center;flex-wrap:wrap;gap:5px;color:var(--w-ink);min-width:0}#wellness-redesign .delta svg[data-lucide]{width:15px;height:15px;color:var(--w-gold)}
+#wellness-redesign .delta small{font-size:calc(11px * var(--w-type));font-weight:400;color:var(--w-muted)}#wellness-redesign .body-panel .stamp{margin-top:auto;padding-top:10px;display:block}
+#wellness-redesign .body-panel .mini-chart{height:26px;margin:10px 0 0}#wellness-redesign .no-comparison{font-size:calc(11px * var(--w-type));font-weight:400;color:var(--w-muted)}
+#wellness-redesign .phone [data-card=posture]{background:linear-gradient(145deg,light-dark(#eef1e7,#2c3027),var(--w-surface) 65%)}
+#wellness-redesign .posture-overview{display:grid;grid-template-columns:104px minmax(0,1fr);gap:16px;align-items:center}
+#wellness-redesign .capture-guide{display:grid;place-items:center;gap:8px;padding:12px 8px;border-radius:17px;background:light-dark(#e2e9d8,#3a4232);color:var(--w-green);text-align:center}
+#wellness-redesign .guide-frame{display:grid;place-items:center;width:72px;height:90px;border:1px solid light-dark(#60704c3b,#b6d19a3b);border-radius:13px;position:relative;background:light-dark(#f3f5ed,#323b2a)}
+#wellness-redesign .guide-frame:before{content:&#x27;&#x27;;position:absolute;inset:10px;border-top:1px dashed light-dark(#60704c4a,#b6d19a4a);border-bottom:1px dashed light-dark(#60704c4a,#b6d19a4a);pointer-events:none}
+#wellness-redesign .phone .guide-frame svg[data-lucide]{width:46px!important;height:64px!important;stroke-width:1.2}#wellness-redesign .capture-guide figcaption{font-size:calc(11px * var(--w-type));line-height:1.4}#wellness-redesign .capture-guide figure{margin:0}
+#wellness-redesign .posture-score{font-size:calc(42px * var(--w-type));font-weight:650;line-height:1.15;letter-spacing:-1.5px;margin:8px 0;display:flex;align-items:baseline;gap:5px;flex-wrap:wrap}#wellness-redesign .posture-score small{font-size:calc(13px * var(--w-type));font-weight:400;letter-spacing:0;color:var(--w-muted)}
+#wellness-redesign .posture-meter{height:7px;background:light-dark(#61714c1a,#b6d19a1a);border-radius:6px;margin-top:11px}#wellness-redesign .posture-meter i{display:block;width:80%;height:100%;border-radius:6px;background:var(--w-green)}
+#wellness-redesign .posture-foot{display:flex;gap:7px;align-items:center;color:var(--w-muted);font-size:calc(11px * var(--w-type));margin-top:14px;padding-top:12px;border-top:1px solid var(--w-line)}#wellness-redesign .posture-foot svg[data-lucide]{width:15px;height:15px}
+#wellness-redesign .assessment-actions&gt;*{flex:1;display:flex;align-items:center;justify-content:center;gap:6px}#wellness-redesign .assessment-actions svg[data-lucide]{width:16px;height:16px}
+#wellness-redesign .phone.large .body-panels,#wellness-redesign .phone.large .posture-overview{grid-template-columns:minmax(0,1fr)}#wellness-redesign .phone.large .body-panel{min-height:0}#wellness-redesign .phone.large .capture-guide{display:none}
+#wellness-redesign .phone.large .assessment-actions{flex-direction:column}#wellness-redesign .phone.large .assessment-actions&gt;*{width:100%}
+@container(min-width:700px){#wellness-redesign .phone:not(.large) .wide-pair{grid-template-columns:repeat(2,minmax(0,1fr))}#wellness-redesign .phone:not(.large) main{padding:0 24px}#wellness-redesign .phone:not(.large) .hero{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 24px}#wellness-redesign .phone:not(.large) .hero-top,#wellness-redesign .phone:not(.large) .hero&gt;details,#wellness-redesign .phone:not(.large) .compact-sleep{grid-column:1/-1}#wellness-redesign .phone:not(.large) .hero-row{grid-template-columns:104px minmax(0,1fr)}#wellness-redesign .phone:not(.large) .hero .evidence{border-top:0;border-left:1px solid #a9937145;margin-top:0;padding:0 0 0 20px}#wellness-redesign .phone:not(.large) .hero-status{align-self:center}}
+@container(max-width:350px){#wellness-redesign .body-grid{grid-template-columns:minmax(0,1fr)}#wellness-redesign .watch-grid{grid-template-columns:minmax(0,1fr)}}
+@media(prefers-reduced-motion:reduce){#wellness-redesign *{scroll-behavior:auto!important}}
+&lt;/style&gt;
+&lt;div id=&quot;wellness-redesign&quot; aria-label=&quot;웰니스 개편 시안&quot;&gt;
+  &lt;div class=&quot;preview-label&quot;&gt;개편 시안 · 예시 기록 · 앱 적용 전&lt;/div&gt;
+  &lt;div class=&quot;viz-carousel viz-dotted-background&quot; aria-label=&quot;웰니스 개편 방향&quot; data-previous-label=&quot;이전 시안&quot; data-next-label=&quot;다음 시안&quot;&gt;
+    &lt;section data-variant=&quot;Flow&quot; aria-label=&quot;Flow · 수면에서 몸의 변화로&quot;&gt;&lt;div class=&quot;stage&quot;&gt;&lt;div class=&quot;phone&quot; data-design=&quot;flow&quot; aria-label=&quot;Flow 웰니스&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;
+    &lt;section data-variant=&quot;Compact&quot; aria-label=&quot;Compact · 기존 순서 정돈&quot; hidden&gt;&lt;div class=&quot;stage&quot;&gt;&lt;div class=&quot;phone&quot; data-design=&quot;compact&quot; aria-label=&quot;Compact 웰니스&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;script&gt;
+(()=&gt;{
+const root=document.getElementById(&#x27;wellness-redesign&#x27;);
+const defaults={appearance:&#x27;auto&#x27;,width:402,text:100,data:&#x27;complete&#x27;,score:79,bodyComparison:true};
+const saved=window.openai?.widgetState?.modelContent?.wellnessDesign;
+const state={...defaults,...(saved&amp;&amp;typeof saved===&#x27;object&#x27;?saved:{})};
+const routes=new Map();
+const icon=name=&gt;`&lt;i data-lucide=&quot;${name}&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;`;
+const escape=s=&gt;String(s).replace(/[&amp;&lt;&gt;&quot;&#x27;]/g,c=&gt;({&#x27;&amp;&#x27;:&#x27;&amp;amp;&#x27;,&#x27;&lt;&#x27;:&#x27;&amp;lt;&#x27;,&#x27;&gt;&#x27;:&#x27;&amp;gt;&#x27;,&#x27;&quot;&#x27;:&#x27;&amp;quot;&#x27;,&quot;&#x27;&quot;:&#x27;&amp;#39;&#x27;}[c]));
+const heading=(title,route,ic,extra=&#x27;&#x27;)=&gt;`&lt;div class=&quot;head&quot;&gt;&lt;h2&gt;${route?`&lt;button class=&quot;heading cursor-interaction&quot; data-route=&quot;${route}&quot;&gt;${ic?icon(ic):&#x27;&#x27;}&lt;span class=&quot;title&quot;&gt;&lt;span&gt;${title}&lt;/span&gt;${icon(&#x27;chevron-right&#x27;)}&lt;/span&gt;&lt;/button&gt;`:`&lt;span class=&quot;heading&quot;&gt;${ic?icon(ic):&#x27;&#x27;}&lt;span&gt;${title}&lt;/span&gt;&lt;/span&gt;`}&lt;/h2&gt;${extra}&lt;/div&gt;`;
+const action=(label,route)=&gt;`&lt;button class=&quot;text-action cursor-interaction&quot; data-route=&quot;${route}&quot;&gt;&lt;span&gt;${label}&lt;/span&gt;${icon(&#x27;chevron-right&#x27;)}&lt;/button&gt;`;
+const summary=(label,content)=&gt;`&lt;details&gt;&lt;summary&gt;${label}${icon(&#x27;chevron-right&#x27;)}&lt;/summary&gt;${content}&lt;/details&gt;`;
+const blank=()=&gt;[&#x27;empty&#x27;,&#x27;access&#x27;,&#x27;sync&#x27;,&#x27;loading&#x27;].includes(state.data);
+const duration=m=&gt;`${Math.floor(m/60)}시간 ${m%60}분`;
+const samples=[398,420,435,405,441,430,432];
+function spark(values,color=&#x27;var(--w-gold)&#x27;){
+ if(values.length&lt;2)return &#x27;&#x27;;
+ const min=Math.min(...values),range=Math.max(...values)-min||1;
+ const pts=values.map((v,i)=&gt;`${2+i/(values.length-1)*296},${23-(v-min)/range*20}`).join(&#x27; &#x27;);
+ const lastY=23-(values[values.length-1]-min)/range*20;
+ return `&lt;svg class=&quot;mini-chart&quot; viewBox=&quot;0 0 300 26&quot; preserveAspectRatio=&quot;none&quot; role=&quot;img&quot; aria-label=&quot;최근 기록 흐름. ${values.join(&#x27;, &#x27;)}&quot;&gt;&lt;polygon points=&quot;2,26 ${pts} 298,26&quot; fill=&quot;${color}&quot; opacity=&quot;.10&quot;/&gt;&lt;polyline points=&quot;${pts}&quot; fill=&quot;none&quot; stroke=&quot;${color}&quot; stroke-width=&quot;2&quot; vector-effect=&quot;non-scaling-stroke&quot;/&gt;&lt;circle cx=&quot;298&quot; cy=&quot;${lastY}&quot; r=&quot;2.6&quot; fill=&quot;${color}&quot;/&gt;&lt;/svg&gt;`;
+}
+function hero(design){
+ if(blank())return `&lt;section class=&quot;surface hero&quot; data-card=&quot;hero&quot;&gt;&lt;div class=&quot;eyebrow&quot;&gt;WELLNESS&lt;/div&gt;&lt;h3 style=&quot;margin-top:14px&quot;&gt;${state.data===&#x27;loading&#x27;?&#x27;기록을 불러오는 중이에요&#x27;:state.data===&#x27;sync&#x27;?&#x27;iPhone의 기록을 기다리고 있어요&#x27;:&#x27;아직 웰니스 점수가 없어요&#x27;}&lt;/h3&gt;${state.data===&#x27;loading&#x27;?&#x27;&lt;div class=&quot;skeleton&quot;&gt;&lt;/div&gt;&lt;div class=&quot;skeleton short&quot;&gt;&lt;/div&gt;&#x27;:`&lt;p class=&quot;empty-copy&quot;&gt;${state.data===&#x27;access&#x27;?&#x27;건강 기록이 보이지 않아요. 건강 앱의 데이터 접근 설정을 확인할 수 있어요.&#x27;:state.data===&#x27;sync&#x27;?&#x27;동기화가 끝나면 이곳에 기록이 표시돼요.&#x27;:&#x27;수면이나 신체 기록이 쌓이면 함께 살펴볼 수 있어요.&#x27;}&lt;/p&gt;`}&lt;/section&gt;`;
+ const bodyOnly=state.data===&#x27;body-only&#x27;,partial=state.data===&#x27;partial&#x27;,single=state.data===&#x27;single&#x27;;
+ const score=bodyOnly?78:partial?78:single?86:Math.max(0,Math.min(100,Number(state.score)||0));
+ const components=bodyOnly?[null,null,75,null]:partial?[83,64,null,80]:single?[83,null,null,null]:[83,64,75,80];
+ const copy=bodyOnly?&#x27;신체 기록부터 모으고 있어요&#x27;:single?&#x27;첫 수면 기록이 도착했어요&#x27;:score&lt;40?&#x27;회복에 여유를 주세요&#x27;:score&lt;60?&#x27;몸의 흐름을 살펴보세요&#x27;:&#x27;회복의 흐름을 이어가요&#x27;;
+ const ring=`&lt;div class=&quot;ring&quot; role=&quot;img&quot; aria-label=&quot;웰니스 ${score}점, 100점 기준&quot;&gt;&lt;svg viewBox=&quot;0 0 104 104&quot; aria-hidden=&quot;true&quot;&gt;&lt;defs&gt;&lt;linearGradient id=&quot;w-ring-${design}&quot; x1=&quot;0&quot; y1=&quot;0&quot; x2=&quot;1&quot; y2=&quot;1&quot;&gt;&lt;stop stop-color=&quot;#b38a4a&quot;/&gt;&lt;stop offset=&quot;.55&quot; stop-color=&quot;#edc66c&quot;/&gt;&lt;stop offset=&quot;1&quot; stop-color=&quot;#f9dfa0&quot;/&gt;&lt;/linearGradient&gt;&lt;/defs&gt;&lt;circle cx=&quot;52&quot; cy=&quot;52&quot; r=&quot;48.5&quot; fill=&quot;none&quot; stroke=&quot;#baa37829&quot; stroke-width=&quot;7&quot;/&gt;&lt;circle cx=&quot;52&quot; cy=&quot;52&quot; r=&quot;48.5&quot; fill=&quot;none&quot; stroke=&quot;url(#w-ring-${design})&quot; stroke-width=&quot;7&quot; stroke-linecap=&quot;round&quot; transform=&quot;rotate(-90 52 52)&quot; stroke-dasharray=&quot;${score/100*304.734} 304.734&quot; ${score===0?&#x27;visibility=&quot;hidden&quot;&#x27;:&#x27;&#x27;}/&gt;&lt;/svg&gt;&lt;strong&gt;${score}&lt;/strong&gt;&lt;/div&gt;`;
+ const evidence=components.map((n,i)=&gt;`&lt;div class=&quot;evidence-row ${n===null?&#x27;missing&#x27;:&#x27;&#x27;}&quot;&gt;&lt;span class=&quot;evidence-name&quot;&gt;${icon([&#x27;moon&#x27;,&#x27;activity&#x27;,&#x27;person-standing&#x27;,&#x27;scan-line&#x27;][i])}&lt;span&gt;${[&#x27;수면&#x27;,&#x27;컨디션&#x27;,&#x27;신체&#x27;,&#x27;자세&#x27;][i]}&lt;/span&gt;&lt;/span&gt;&lt;div class=&quot;track&quot; ${n===null?&#x27;aria-hidden=&quot;true&quot;&#x27;:`role=&quot;meter&quot; aria-label=&quot;${[&#x27;수면&#x27;,&#x27;컨디션&#x27;,&#x27;신체&#x27;,&#x27;자세&#x27;][i]} 점수&quot; aria-valuemin=&quot;0&quot; aria-valuemax=&quot;100&quot; aria-valuenow=&quot;${n}&quot;`}&gt;${n===null?&#x27;&#x27;:`&lt;i style=&quot;width:${n}%&quot;&gt;&lt;/i&gt;`}&lt;/div&gt;&lt;strong&gt;${n===null?&#x27;—&#x27;:`${n}&lt;small&gt;/100&lt;/small&gt;`}&lt;/strong&gt;&lt;/div&gt;`).join(&#x27;&#x27;);
+ return `&lt;section class=&quot;surface hero&quot; data-card=&quot;hero&quot;&gt;&lt;div class=&quot;hero-top&quot;&gt;&lt;h2&gt;&lt;button class=&quot;heading cursor-interaction&quot; data-route=&quot;wellness&quot;&gt;&lt;span class=&quot;title eyebrow&quot;&gt;&lt;span&gt;WELLNESS&lt;/span&gt;${icon(&#x27;chevron-right&#x27;)}&lt;/span&gt;&lt;/button&gt;&lt;/h2&gt;&lt;span class=&quot;small muted&quot;&gt;10.27 · 09:41&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;hero-status&quot;&gt;&lt;div class=&quot;external-score&quot;&gt;${score} &lt;small&gt;웰니스 / 100&lt;/small&gt;&lt;/div&gt;&lt;div class=&quot;hero-row&quot;&gt;${ring}&lt;div&gt;&lt;div class=&quot;hero-title&quot;&gt;${copy}&lt;/div&gt;&lt;p class=&quot;hero-copy&quot;&gt;${bodyOnly?&#x27;수면·컨디션·자세는 기록이 생기면 함께 반영해요.&#x27;:single?&#x27;하루의 기록이에요. 흐름은 며칠 더 모아 볼게요.&#x27;:partial?&#x27;수면·컨디션·자세 기록을 반영했어요. 신체 기록은 아직 없어요.&#x27;:&#x27;수면·컨디션·신체·자세 기록을 함께 반영했어요.&#x27;}&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;evidence&quot;&gt;&lt;div class=&quot;caption-row&quot;&gt;&lt;span&gt;웰니스 근거&lt;/span&gt;&lt;span&gt;각 100점 기준&lt;/span&gt;&lt;/div&gt;${evidence}&lt;/div&gt;${summary(&#x27;점수에 반영한 기록&#x27;,`&lt;p class=&quot;detail-copy&quot;&gt;${components.filter(n=&gt;n!==null).length}개 항목 반영 · 기록이 없는 항목은 점수 계산에서 제외해요. 막대는 각 항목의 점수이며 합산 비율이 아니에요.&lt;/p&gt;&lt;p class=&quot;detail-copy&quot;&gt;09:41 평가 · 시간대 보정 +3점 포함&lt;/p&gt;`)}${design===&#x27;compact&#x27;?`&lt;div class=&quot;compact-sleep&quot;&gt;${sleepContent(true)}&lt;/div&gt;`:&#x27;&#x27;}&lt;/section&gt;`;
+}
+function sleepContent(compact=false){
+ const missing=state.data===&#x27;body-only&#x27;;
+ if(missing)return `&lt;p class=&quot;empty-copy&quot;&gt;아직 수면 기록이 없어요. Apple Watch를 착용하고 자면 수면 흐름을 볼 수 있어요.&lt;/p&gt;`;
+ const single=state.data===&#x27;single&#x27;,stale=state.data===&#x27;stale&#x27;;
+ const vals=single?[0,0,0,0,0,0,432]:samples;
+ const avg=single?null:Math.round(samples.reduce((a,b)=&gt;a+b,0)/samples.length);
+ const end=stale?24:27;
+ return `${compact?heading(&#x27;최근 수면&#x27;,&#x27;sleep&#x27;,&#x27;moon&#x27;):&#x27;&#x27;}&lt;div class=&quot;sleep-overview&quot;&gt;&lt;div&gt;&lt;div class=&quot;small muted&quot;&gt;최근 기록 · 10.${end}&lt;/div&gt;&lt;div class=&quot;value&quot;&gt;&lt;span&gt;7&lt;small&gt;시간&lt;/small&gt;&lt;/span&gt;&lt;span&gt;12&lt;small&gt;분&lt;/small&gt;&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div class=&quot;small muted&quot;&gt;${single?&#x27;기록을 모으는 중&#x27;:&#x27;최근 7일 평균&#x27;}&lt;/div&gt;&lt;div class=&quot;value secondary&quot;&gt;${avg===null?&#x27;—&#x27;:`&lt;span&gt;7&lt;small&gt;시간&lt;/small&gt;&lt;/span&gt;&lt;span&gt;3&lt;small&gt;분&lt;/small&gt;&lt;/span&gt;`}&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;sleep-chart&quot; role=&quot;img&quot; aria-label=&quot;최근 7일 수면. ${vals.map((n,i)=&gt;`10월 ${end-6+i}일 ${n?duration(n):&#x27;기록 없음&#x27;}`).join(&#x27;, &#x27;)}&quot;&gt;&lt;div class=&quot;plot&quot;&gt;${vals.map((n,i)=&gt;`&lt;i class=&quot;sleep-bar ${i===6?&#x27;latest&#x27;:&#x27;&#x27;} ${n?&#x27;&#x27;:&#x27;empty&#x27;}&quot; style=&quot;height:${n/600*100}%&quot;&gt;&lt;/i&gt;`).join(&#x27;&#x27;)}&lt;/div&gt;&lt;div class=&quot;days&quot; aria-hidden=&quot;true&quot;&gt;${vals.map((_,i)=&gt;`&lt;span&gt;${end-6+i}&lt;/span&gt;`).join(&#x27;&#x27;)}&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;sleep-meta&quot;&gt;&lt;span&gt;${single?&#x27;1일 기록 · 평균은 2일 이상부터&#x27;:`10.${end-6}–10.${end} · 유효 기록 7일`}&lt;/span&gt;&lt;span&gt;${stale?&#x27;3일 전 기록 · 오늘 기록 없음&#x27;:&#x27;수면 시간 · 0–10시간&#x27;}&lt;/span&gt;&lt;/div&gt;${stale?&#x27;&lt;p class=&quot;detail-copy&quot;&gt;오늘 수면으로 바꾸어 표시하지 않아요.&lt;/p&gt;&#x27;:&#x27;&#x27;}`;
+}
+const sleepCard=()=&gt;`&lt;section class=&quot;surface&quot; data-card=&quot;sleep&quot;&gt;${heading(&#x27;최근 수면&#x27;,&#x27;sleep&#x27;,&#x27;moon&#x27;)}&lt;div&gt;${sleepContent()}&lt;/div&gt;&lt;/section&gt;`;
+function prediction(){
+ const no=state.data===&#x27;body-only&#x27;,single=state.data===&#x27;single&#x27;;
+ if(no)return `&lt;section class=&quot;surface prediction&quot; data-card=&quot;prediction&quot;&gt;${heading(&#x27;오늘 밤 수면&#x27;,null,&#x27;moon-star&#x27;)}&lt;p class=&quot;empty-copy&quot;&gt;수면 기록이 생기면 오늘 밤의 수면 예측을 볼 수 있어요.&lt;/p&gt;&lt;/section&gt;`;
+ return `&lt;section class=&quot;surface prediction&quot; data-card=&quot;prediction&quot;&gt;${heading(&#x27;오늘 밤 수면&#x27;,&#x27;prediction&#x27;,&#x27;moon-star&#x27;,`&lt;span class=&quot;pill&quot;&gt;예측 · 신뢰도 ${single?&#x27;낮음&#x27;:&#x27;보통&#x27;}&lt;/span&gt;`)}&lt;div class=&quot;prediction-main&quot;&gt;&lt;div&gt;&lt;div class=&quot;prediction-title&quot;&gt;${single?&#x27;기록을 더 모으고 있어요&#x27;:&#x27;편안한 수면이 기대돼요&#x27;}&lt;/div&gt;&lt;p class=&quot;detail-copy&quot;&gt;${single?&#x27;하루의 기록을 바탕으로 한 초기 추정이에요.&#x27;:&#x27;최근 수면 시간과 컨디션을 바탕으로 살펴봤어요.&#x27;}&lt;/p&gt;&lt;/div&gt;&lt;div class=&quot;prediction-value&quot;&gt;${single?&#x27;—&#x27;:&#x27;78&#x27;}&lt;small&gt;${single?&#x27;&#x27;:&#x27; /100&#x27;}&lt;/small&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;tip&quot;&gt;${icon(&#x27;sparkles&#x27;)}&lt;span&gt;${single?&#x27;기록이 적을 때는 예측 수치를 강조하지 않아요.&#x27;:&#x27;오늘 밤도 평소의 수면 리듬을 이어가 보세요.&#x27;}&lt;/span&gt;&lt;/div&gt;${summary(&#x27;예측에 사용한 기록&#x27;,`&lt;p class=&quot;detail-copy&quot;&gt;최근 수면 시간 · HRV 흐름 · 현재 컨디션&lt;/p&gt;&lt;p class=&quot;detail-copy&quot;&gt;관측된 수면 점수와 다른 추정값이에요. 수면 시간의 변동을 실제 취침 시각으로 표시하지 않아요.&lt;/p&gt;`)}&lt;/section&gt;`;
+}
+const metrics=[
+ {id:&#x27;hrv&#x27;,name:&#x27;HRV&#x27;,v:&#x27;48&#x27;,unit:&#x27;ms&#x27;,date:&#x27;오늘 08:12&#x27;,ic:&#x27;activity&#x27;,a:[53,50,49,51,47,46,48]},
+ {id:&#x27;rhr&#x27;,name:&#x27;안정 시 심박&#x27;,v:&#x27;58&#x27;,unit:&#x27;bpm&#x27;,date:&#x27;오늘 07:42&#x27;,ic:&#x27;heart&#x27;,a:[60,58,59,57,58,59,58]},
+ {id:&#x27;heart&#x27;,name:&#x27;심박수&#x27;,v:&#x27;72&#x27;,unit:&#x27;bpm&#x27;,date:&#x27;오늘 09:18&#x27;,ic:&#x27;heart-pulse&#x27;,a:[74,78,69,73,70,71,72]},
+ {id:&#x27;spo2&#x27;,name:&#x27;혈중 산소&#x27;,v:&#x27;98&#x27;,unit:&#x27;%&#x27;,date:&#x27;오늘 06:54&#x27;,ic:&#x27;droplets&#x27;,a:[98,97,98,99,98,98,98]},
+ {id:&#x27;resp&#x27;,name:&#x27;호흡수&#x27;,v:&#x27;15&#x27;,unit:&#x27;회/분&#x27;,date:&#x27;오늘 06:54&#x27;,ic:&#x27;wind&#x27;,a:[16,15,15,14,15,16,15]},
+ {id:&#x27;temp&#x27;,name:&#x27;손목 온도 변화&#x27;,v:&#x27;+0.2&#x27;,unit:&#x27;°C&#x27;,date:&#x27;오늘 06:54 · 개인 기준선 대비&#x27;,ic:&#x27;thermometer&#x27;,a:[.1,0,.2,.1,0,.1,.2]},
+ {id:&#x27;vo2&#x27;,name:&#x27;심폐 체력&#x27;,v:&#x27;44.2&#x27;,unit:&#x27;ml/kg/min&#x27;,date:&#x27;10.25 기록&#x27;,ic:&#x27;footprints&#x27;,a:[43.6,43.8,43.7,44,44.1,44,44.2]},
+ {id:&#x27;recovery&#x27;,name:&#x27;심박 회복&#x27;,v:&#x27;28&#x27;,unit:&#x27;bpm&#x27;,date:&#x27;10.25 기록&#x27;,ic:&#x27;heart-handshake&#x27;,a:[26,25,26,28,27,29,28]}
+];
+function metric(m){
+ const isMissing=state.data===&#x27;partial&#x27;&amp;&amp;[&#x27;spo2&#x27;,&#x27;temp&#x27;].includes(m.id);
+ const single=state.data===&#x27;single&#x27;;
+ return `&lt;button class=&quot;metric vital-tile cursor-interaction&quot; data-category=&quot;${m.id}&quot; data-route=&quot;metric-${m.id}&quot; ${isMissing?&#x27;disabled&#x27;:&#x27;&#x27;}&gt;&lt;span class=&quot;metric-title&quot;&gt;${icon(m.ic)}&lt;span&gt;${m.name}&lt;/span&gt;${isMissing?&#x27;&#x27;:icon(&#x27;chevron-right&#x27;)}&lt;/span&gt;&lt;span class=&quot;value&quot;&gt;&lt;span&gt;${isMissing?&#x27;—&#x27;:m.v}&lt;/span&gt;${isMissing?&#x27;&#x27;:`&lt;small&gt;${m.unit}&lt;/small&gt;`}&lt;/span&gt;${isMissing?&#x27;&#x27;:spark(single?[Number(m.v)]:m.a,&#x27;var(--metric-tone)&#x27;)}&lt;span class=&quot;spark-caption&quot;&gt;${isMissing?&#x27;&#x27;:single?&#x27;&#x27;:&#x27;최근 기록&#x27;}&lt;/span&gt;&lt;span class=&quot;stamp&quot;&gt;${isMissing?&#x27;기록을 불러오지 못했어요&#x27;:single?&#x27;첫 기록 · 추세 대기&#x27;:state.data===&#x27;stale&#x27;?&#x27;10.24 기록 · 3일 전&#x27;:m.date}&lt;/span&gt;&lt;/button&gt;`;
+}
+function vitals(){
+ if([&#x27;body-only&#x27;,&#x27;single&#x27;].includes(state.data))return &#x27;&#x27;;
+ return `&lt;section class=&quot;surface&quot; data-card=&quot;vitals&quot;&gt;${heading(&#x27;건강 지표&#x27;,null,&#x27;heart-pulse&#x27;)}&lt;p class=&quot;small muted&quot;&gt;각 기록의 측정 시각을 함께 확인해요.&lt;/p&gt;&lt;div class=&quot;metric-grid&quot;&gt;${metrics.slice(0,6).map(metric).join(&#x27;&#x27;)}&lt;/div&gt;${summary(&#x27;심폐 체력 · 심박 회복&#x27;,`&lt;div class=&quot;metric-grid&quot;&gt;${metrics.slice(6).map(metric).join(&#x27;&#x27;)}&lt;/div&gt;`)}${state.data===&#x27;partial&#x27;?&#x27;&lt;p class=&quot;detail-copy&quot;&gt;일부 지표를 불러오지 못했어요. 다른 기록은 계속 볼 수 있어요.&lt;/p&gt;&#x27;:&#x27;&#x27;}&lt;/section&gt;`;
+}
+const bodyMetrics=[
+ {id:&#x27;weight&#x27;,route:&#x27;body-weight&#x27;,name:&#x27;체중&#x27;,icon:&#x27;weight&#x27;,value:&#x27;68.4&#x27;,unit:&#x27;kg&#x27;,previous:&#x27;68.6&#x27;,delta:&#x27;−0.2&#x27;,deltaUnit:&#x27;kg&#x27;,direction:&#x27;arrow-down-right&#x27;,history:[68.6,68.5,68.6,68.5,68.4,68.5,68.4]},
+ {id:&#x27;fat&#x27;,route:&#x27;body-0&#x27;,name:&#x27;체지방률&#x27;,icon:&#x27;droplets&#x27;,value:&#x27;18.2&#x27;,unit:&#x27;%&#x27;,previous:&#x27;18.6&#x27;,delta:&#x27;−0.4&#x27;,deltaUnit:&#x27;%p&#x27;,direction:&#x27;arrow-down-right&#x27;,history:[18.5,18.6,18.4,18.4,18.3,18.3,18.2]},
+ {id:&#x27;lean&#x27;,route:&#x27;body-1&#x27;,name:&#x27;제지방량&#x27;,icon:&#x27;person-standing&#x27;,value:&#x27;55.9&#x27;,unit:&#x27;kg&#x27;,previous:&#x27;55.8&#x27;,delta:&#x27;+0.1&#x27;,deltaUnit:&#x27;kg&#x27;,direction:&#x27;arrow-up-right&#x27;,history:[]},
+ {id:&#x27;bmi&#x27;,route:&#x27;body-2&#x27;,name:&#x27;BMI&#x27;,icon:&#x27;ruler&#x27;,value:&#x27;22.1&#x27;,unit:&#x27;&#x27;,previous:&#x27;22.2&#x27;,delta:&#x27;−0.1&#x27;,deltaUnit:&#x27;&#x27;,direction:&#x27;arrow-down-right&#x27;,history:[]}
+];
+function bodyMetric(m){
+ return `&lt;button class=&quot;body-panel cursor-interaction&quot; data-body=&quot;${m.id}&quot; data-route=&quot;${m.route}&quot;&gt;&lt;span class=&quot;metric-title&quot;&gt;${icon(m.icon)}&lt;span&gt;${m.name}&lt;/span&gt;${icon(&#x27;chevron-right&#x27;)}&lt;/span&gt;&lt;span class=&quot;value&quot;&gt;&lt;span&gt;${m.value}&lt;/span&gt;&lt;small&gt;${m.unit}&lt;/small&gt;&lt;/span&gt;${state.bodyComparison?`&lt;span class=&quot;delta&quot;&gt;${icon(m.direction)}&lt;span&gt;${m.delta} ${m.deltaUnit}&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;small muted&quot;&gt;이전 ${m.previous}${m.unit}&lt;/span&gt;`:&#x27;&lt;span class=&quot;no-comparison&quot;&gt;비교 기록 없음&lt;/span&gt;&#x27;}${spark(m.history)}&lt;span class=&quot;stamp&quot;&gt;10.27 기록${m.history.length?&#x27; · 최근 7일 흐름&#x27;:&#x27;&#x27;}&lt;/span&gt;&lt;/button&gt;`;
+}
+function bodyCard(){
+ const no=[&#x27;partial&#x27;,&#x27;single&#x27;].includes(state.data);
+ return `&lt;section class=&quot;surface&quot; data-card=&quot;body&quot;&gt;${heading(&#x27;신체 변화&#x27;,no?null:&#x27;body-history&#x27;,&#x27;person-standing&#x27;)}${no?`&lt;p class=&quot;empty-copy&quot;&gt;아직 신체 기록이 없어요. 체중부터 가볍게 남길 수 있어요.&lt;/p&gt;${action(&#x27;신체 기록 추가&#x27;,&#x27;body-record&#x27;)}`:`&lt;div class=&quot;body-comparison-label&quot;&gt;${icon(&#x27;calendar-days&#x27;)}&lt;span&gt;${state.bodyComparison?&#x27;10.20 → 10.27 · 7일 비교&#x27;:&#x27;10.27 · 최근 측정값&#x27;}&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;body-panels&quot;&gt;${bodyMetrics.map(bodyMetric).join(&#x27;&#x27;)}&lt;/div&gt;&lt;p class=&quot;detail-copy&quot;&gt;${state.bodyComparison?&#x27;비교 기록이 있는 경우 · 예시&#x27;:&#x27;비교 기록이 없는 경우 · 예시&#x27;}&lt;/p&gt;${action(&#x27;신체 기록 추가&#x27;,&#x27;body-record&#x27;)}`}&lt;/section&gt;`;
+}
+function watchCard(){
+ const off=state.data===&#x27;watch-off&#x27;||[&#x27;body-only&#x27;,&#x27;single&#x27;].includes(state.data);
+ return `&lt;section class=&quot;surface&quot; data-card=&quot;watch&quot;&gt;${heading(&#x27;Watch 자세&#x27;,null,&#x27;watch&#x27;,off?&#x27;&#x27;:&#x27;&lt;span class=&quot;small muted&quot;&gt;오늘 · 09:35 수신&lt;/span&gt;&#x27;)}${off?`&lt;p class=&quot;empty-copy&quot;&gt;${state.data===&#x27;watch-off&#x27;?&#x27;자세 모니터링이 꺼져 있어요. Watch에서 켤 수 있어요.&#x27;:&#x27;아직 Watch 자세 기록이 없어요.&#x27;}&lt;/p&gt;`:`&lt;div class=&quot;watch-grid&quot;&gt;&lt;div&gt;&lt;div class=&quot;small muted&quot;&gt;앉아 있던 시간&lt;/div&gt;&lt;div class=&quot;value&quot;&gt;&lt;span&gt;42&lt;/span&gt;&lt;small&gt;분&lt;/small&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div class=&quot;small muted&quot;&gt;걸은 시간&lt;/div&gt;&lt;div class=&quot;value&quot;&gt;&lt;span&gt;18&lt;/span&gt;&lt;small&gt;분&lt;/small&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div class=&quot;small muted&quot;&gt;스트레칭 알림&lt;/div&gt;&lt;div class=&quot;value&quot;&gt;&lt;span&gt;1&lt;/span&gt;&lt;small&gt;회&lt;/small&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;p class=&quot;detail-copy&quot;&gt;모니터링 중 쌓인 기록이에요. 하루 전체 활동 시간과는 달라요.&lt;/p&gt;`}&lt;/section&gt;`;
+}
+function posture(){
+ const no=[&#x27;body-only&#x27;,&#x27;single&#x27;].includes(state.data);
+ return `&lt;section class=&quot;surface&quot; data-card=&quot;posture&quot;&gt;${heading(&#x27;자세 평가&#x27;,no?null:&#x27;posture-history&#x27;,&#x27;scan-line&#x27;)}&lt;div class=&quot;posture-overview&quot;&gt;&lt;figure class=&quot;capture-guide&quot; style=&quot;margin:0&quot; aria-label=&quot;촬영 안내 도식. 실제 자세 평가 결과가 아닙니다.&quot;&gt;&lt;div class=&quot;guide-frame&quot;&gt;${icon(&#x27;person-standing&#x27;)}&lt;/div&gt;&lt;figcaption&gt;정면 · 측면&lt;br&gt;촬영 안내&lt;/figcaption&gt;&lt;/figure&gt;&lt;div&gt;&lt;div class=&quot;small muted&quot;&gt;${no?&#x27;내 자세를 기록해 볼까요&#x27;:&#x27;최근 사진 평가 · 10.26&#x27;}&lt;/div&gt;${no?&#x27;&lt;p class=&quot;detail-copy&quot;&gt;사진으로 자세를 남기고 변화를 살펴보세요.&lt;/p&gt;&#x27;:`&lt;div class=&quot;posture-score&quot;&gt;&lt;span&gt;80&lt;/span&gt;&lt;small&gt;/100&lt;/small&gt;&lt;/div&gt;&lt;div class=&quot;posture-meter&quot; role=&quot;meter&quot; aria-label=&quot;사진 자세 평가 예시 80점&quot; aria-valuenow=&quot;80&quot; aria-valuemin=&quot;0&quot; aria-valuemax=&quot;100&quot;&gt;&lt;i&gt;&lt;/i&gt;&lt;/div&gt;&lt;p class=&quot;detail-copy&quot;&gt;사진 촬영으로 남긴 평가예요.&lt;/p&gt;`}&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;posture-foot&quot;&gt;${icon(&#x27;scan-line&#x27;)}&lt;span&gt;사진 평가와 Watch의 일상 기록을 따로 봐요.&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;assessment-actions&quot;&gt;&lt;button class=&quot;primary cursor-interaction&quot; data-route=&quot;posture-capture&quot;&gt;${icon(&#x27;camera&#x27;)}자세 촬영&lt;/button&gt;&lt;button class=&quot;secondary-action cursor-interaction&quot; data-route=&quot;posture-live&quot;&gt;${icon(&#x27;scan&#x27;)}실시간 확인&lt;/button&gt;&lt;/div&gt;&lt;/section&gt;`;
+}
+function injury(){
+ const active=state.data===&#x27;injury&#x27;;
+ return `&lt;section class=&quot;surface ${active?&#x27;injury-active&#x27;:&#x27;&#x27;}&quot; data-card=&quot;injury&quot;&gt;${heading(active?&#x27;관리 중인 부상&#x27;:&#x27;부상 기록&#x27;,active?&#x27;injury-detail&#x27;:null,&#x27;bandage&#x27;)}${active?`&lt;h3&gt;오른쪽 어깨&lt;/h3&gt;&lt;p class=&quot;detail-copy&quot;&gt;직접 남긴 기록 · 10.25 시작&lt;/p&gt;${action(&#x27;기록 수정&#x27;,&#x27;injury-edit&#x27;)}`:`&lt;p class=&quot;small muted&quot;&gt;등록된 부상이 없어요.&lt;/p&gt;${action(&#x27;부상 기록 추가&#x27;,&#x27;injury-record&#x27;)}`}&lt;/section&gt;`;
+}
+function toolbar(){return `&lt;div class=&quot;chrome&quot;&gt;&lt;div class=&quot;status&quot; aria-hidden=&quot;true&quot;&gt;&lt;span&gt;9:41&lt;/span&gt;&lt;div class=&quot;island&quot;&gt;&lt;/div&gt;&lt;span class=&quot;signals&quot;&gt;${icon(&#x27;signal&#x27;)}${icon(&#x27;wifi&#x27;)}${icon(&#x27;battery-full&#x27;)}&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;titlebar&quot;&gt;&lt;h1&gt;Wellness&lt;/h1&gt;&lt;div class=&quot;tools&quot;&gt;&lt;button class=&quot;round cursor-interaction&quot; data-route=&quot;compare&quot; aria-label=&quot;지표 비교&quot; ${blank()||[&#x27;body-only&#x27;,&#x27;single&#x27;].includes(state.data)?&#x27;disabled&#x27;:&#x27;&#x27;}&gt;${icon(&#x27;chart-no-axes-combined&#x27;)}&lt;/button&gt;&lt;button class=&quot;round cursor-interaction&quot; data-route=&quot;add&quot; aria-label=&quot;기록 추가&quot;&gt;${icon(&#x27;plus&#x27;)}&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;date&quot;&gt;10월 27일 화요일&lt;/div&gt;&lt;/div&gt;`;}
+const nav=()=&gt;`&lt;div class=&quot;bottomnav&quot; aria-label=&quot;탭 위치 미리보기&quot;&gt;${[[&#x27;Today&#x27;,&#x27;sun&#x27;],[&#x27;Activity&#x27;,&#x27;activity&#x27;],[&#x27;Wellness&#x27;,&#x27;leaf&#x27;],[&#x27;Life&#x27;,&#x27;circle-check&#x27;]].map((a,i)=&gt;`&lt;span class=&quot;navitem ${i===2?&#x27;selected&#x27;:&#x27;&#x27;}&quot; ${i===2?&#x27;aria-current=&quot;page&quot;&#x27;:&#x27;&#x27;}&gt;${icon(a[1])}&lt;span&gt;${a[0]}&lt;/span&gt;&lt;/span&gt;`).join(&#x27;&#x27;)}&lt;/div&gt;&lt;div class=&quot;home&quot; aria-hidden=&quot;true&quot;&gt;&lt;/div&gt;`;
+function screen(design){
+ let content=&#x27;&#x27;;
+ if(blank())content=hero(design)+(state.data===&#x27;loading&#x27;?&#x27;&lt;section class=&quot;surface&quot;&gt;&lt;div class=&quot;skeleton&quot;&gt;&lt;/div&gt;&lt;div class=&quot;skeleton short&quot;&gt;&lt;/div&gt;&lt;/section&gt;&#x27;:`&lt;section class=&quot;surface&quot;&gt;${heading(&#x27;기록 시작&#x27;,null,&#x27;plus&#x27;)}${state.data===&#x27;access&#x27;?action(&#x27;건강 데이터 접근 확인&#x27;,&#x27;health-access&#x27;):state.data===&#x27;sync&#x27;?action(&#x27;동기화 다시 확인&#x27;,&#x27;sync&#x27;):&#x27;&#x27;}${action(&#x27;신체 기록 추가&#x27;,&#x27;body-record&#x27;)}${action(&#x27;자세 촬영&#x27;,&#x27;posture-capture&#x27;)}${action(&#x27;부상 기록 추가&#x27;,&#x27;injury-record&#x27;)}&lt;/section&gt;`);
+ else if(design===&#x27;flow&#x27;)content=hero(design)+`&lt;div class=&quot;wide-pair&quot;&gt;${sleepCard()}${prediction()}&lt;/div&gt;`+(state.data===&#x27;injury&#x27;?injury():&#x27;&#x27;)+`&lt;div class=&quot;wide-pair&quot;&gt;${vitals()}${bodyCard()}&lt;/div&gt;&lt;div class=&quot;wide-pair&quot;&gt;${watchCard()}${posture()}&lt;/div&gt;`+(state.data===&#x27;injury&#x27;?&#x27;&#x27;:injury());
+ else content=hero(design)+prediction()+bodyCard()+vitals()+watchCard()+posture()+injury();
+ return `&lt;div class=&quot;dunes&quot; aria-hidden=&quot;true&quot;&gt;&lt;div class=&quot;dune&quot;&gt;&lt;/div&gt;&lt;div class=&quot;dune&quot;&gt;&lt;/div&gt;&lt;/div&gt;${toolbar()}&lt;main&gt;${state.data===&#x27;partial&#x27;?&#x27;&lt;div class=&quot;surface small&quot; role=&quot;status&quot;&gt;일부 기록을 불러오지 못했어요. 확인된 기록부터 보여 드려요.&lt;/div&gt;&#x27;:&#x27;&#x27;}${content}&lt;/main&gt;${nav()}`;
+}
+function persist(){window.openai?.setWidgetState?.({modelContent:{wellnessDesign:{...state}},privateContent:null}).catch(()=&gt;{});}
+function render(){
+ root.style.setProperty(&#x27;--w-width&#x27;,`${state.width}px`);root.style.setProperty(&#x27;--w-type&#x27;,state.text/100);
+ root.querySelectorAll(&#x27;.phone&#x27;).forEach(phone=&gt;{phone.dataset.mode=state.appearance;phone.classList.toggle(&#x27;large&#x27;,state.text&gt;=160);phone.innerHTML=screen(phone.dataset.design);routes.delete(phone);});
+ if(globalThis.lucide)lucide.createIcons({attrs:{width:18,height:18}});
+ equalize();
+}
+function equalize(){
+ let tallest=0;
+ root.querySelectorAll(&#x27;[data-variant]&#x27;).forEach(section=&gt;{const was=section.hidden,css=section.style.cssText;section.hidden=false;section.style.position=&#x27;absolute&#x27;;section.style.visibility=&#x27;hidden&#x27;;section.style.width=&#x27;100%&#x27;;tallest=Math.max(tallest,section.querySelector(&#x27;.phone&#x27;).getBoundingClientRect().height+44);section.hidden=was;section.style.cssText=css;});
+ root.querySelectorAll(&#x27;.stage&#x27;).forEach(stage=&gt;stage.style.minHeight=`${tallest}px`);
+}
+const detailTitles={wellness:&#x27;웰니스 점수&#x27;,sleep:&#x27;수면 기록&#x27;,prediction:&#x27;오늘 밤 수면 예측&#x27;,&#x27;body-history&#x27;:&#x27;신체 기록 이력&#x27;,&#x27;posture-history&#x27;:&#x27;자세 평가 이력&#x27;,&#x27;posture-capture&#x27;:&#x27;자세 촬영&#x27;,&#x27;posture-live&#x27;:&#x27;실시간 자세 확인&#x27;,&#x27;injury-detail&#x27;:&#x27;부상 기록&#x27;,&#x27;injury-edit&#x27;:&#x27;부상 기록 수정&#x27;,&#x27;injury-record&#x27;:&#x27;부상 기록 추가&#x27;,compare:&#x27;지표 비교&#x27;,add:&#x27;기록 추가&#x27;,&#x27;body-record&#x27;:&#x27;신체 기록 추가&#x27;,&#x27;health-access&#x27;:&#x27;건강 데이터 접근&#x27;,sync:&#x27;동기화 상태&#x27;};
+function detail(phone,route){
+ const scrollY=window.scrollY;
+ routes.set(phone,{html:phone.innerHTML,scrollY,route});
+ let body=&#x27;&#x27;;const m=metrics.find(m=&gt;`metric-${m.id}`===route);
+ if(route===&#x27;add&#x27;)body=action(&#x27;신체 기록&#x27;,&#x27;body-record&#x27;)+action(&#x27;부상 기록&#x27;,&#x27;injury-record&#x27;)+action(&#x27;자세 촬영&#x27;,&#x27;posture-capture&#x27;);
+ else if(route===&#x27;body-record&#x27;)body=`&lt;form data-record-form&gt;&lt;label&gt;체중 · kg&lt;input class=&quot;field&quot; type=&quot;number&quot; min=&quot;1&quot; max=&quot;500&quot; step=&quot;0.1&quot; value=&quot;68.4&quot; required aria-label=&quot;체중 kg&quot;&gt;&lt;/label&gt;&lt;button class=&quot;primary cursor-interaction&quot; type=&quot;submit&quot;&gt;입력 확인&lt;/button&gt;&lt;p class=&quot;detail-copy&quot; data-confirmation aria-live=&quot;polite&quot;&gt;시안에서 입력 형식만 확인해요.&lt;/p&gt;&lt;/form&gt;`;
+ else if(route===&#x27;sleep&#x27;){const list=state.data===&#x27;single&#x27;?[432]:samples;const end=state.data===&#x27;stale&#x27;?24:27;body=sleepContent()+summary(&#x27;날짜별 기록&#x27;,list.map((n,i)=&gt;`&lt;p class=&quot;detail-copy&quot;&gt;10.${end-list.length+1+i} · ${duration(n)}&lt;/p&gt;`).join(&#x27;&#x27;));}
+ else if(route===&#x27;prediction&#x27;)body=prediction()+`&lt;p class=&quot;detail-copy&quot;&gt;예측과 관측 기록을 구분해요. 새 취침 시간이나 임의의 목표 시각을 제안하지 않아요.&lt;/p&gt;`;
+ else if(route===&#x27;wellness&#x27;)body=hero(&#x27;flow&#x27;);
+ else if(route===&#x27;body-history&#x27;)body=bodyCard();
+ else if(m)body=`&lt;div class=&quot;value&quot;&gt;&lt;span&gt;${m.v}&lt;/span&gt;&lt;small&gt;${m.unit}&lt;/small&gt;&lt;/div&gt;&lt;p class=&quot;detail-copy&quot;&gt;${state.data===&#x27;stale&#x27;?&#x27;10.24 기록 · 3일 전&#x27;:m.date}&lt;/p&gt;${spark(m.a)}&lt;p class=&quot;detail-copy&quot;&gt;최근 7개 기록: ${m.a.join(&#x27; · &#x27;)} ${m.unit}&lt;/p&gt;`;
+ else if(route===&#x27;compare&#x27;)body=`&lt;p class=&quot;detail-copy&quot;&gt;서로 다른 단위는 축을 나누어 확인해요.&lt;/p&gt;${heading(&#x27;HRV&#x27;,null,&#x27;activity&#x27;)}${spark(metrics[0].a)}${heading(&#x27;안정 시 심박&#x27;,null,&#x27;heart&#x27;)}${spark(metrics[1].a)}`;
+ else if(route===&#x27;posture-capture&#x27;||route===&#x27;posture-live&#x27;)body=&#x27;&lt;p class=&quot;empty-copy&quot;&gt;카메라를 사용하는 자세 확인 화면으로 이어져요.&lt;/p&gt;&lt;p class=&quot;detail-copy&quot;&gt;현재는 촬영 전 진입 시안이에요.&lt;/p&gt;&#x27;;
+ else if(route===&#x27;health-access&#x27;)body=&#x27;&lt;p class=&quot;empty-copy&quot;&gt;건강 앱에서 DUNE의 데이터 접근 설정을 확인해 주세요.&lt;/p&gt;&#x27;;
+ else if(route===&#x27;sync&#x27;)body=&#x27;&lt;p class=&quot;empty-copy&quot;&gt;iPhone의 기록이 이 기기에 동기화되면 표시돼요.&lt;/p&gt;&#x27;;
+ else if(route.startsWith(&#x27;injury&#x27;))body=state.data===&#x27;injury&#x27;?&#x27;&lt;h3&gt;오른쪽 어깨&lt;/h3&gt;&lt;p class=&quot;detail-copy&quot;&gt;10.25 시작 · 직접 기록&lt;/p&gt;&#x27;:&#x27;&lt;p class=&quot;empty-copy&quot;&gt;부위·시작일·경과를 남기는 입력 화면으로 이어져요.&lt;/p&gt;&#x27;;
+ else if(route===&#x27;posture-history&#x27;)body=&#x27;&lt;div class=&quot;value&quot;&gt;&lt;span&gt;80&lt;/span&gt;&lt;small&gt;/100&lt;/small&gt;&lt;/div&gt;&lt;p class=&quot;detail-copy&quot;&gt;10.26 · 사진 자세 평가&lt;/p&gt;&#x27;;
+ else if(route.startsWith(&#x27;body-&#x27;)){const a=bodyMetrics.find(m=&gt;m.route===route);if(a)body=`&lt;h3&gt;${a.name}&lt;/h3&gt;&lt;div class=&quot;value&quot;&gt;&lt;span&gt;${a.value}&lt;/span&gt;&lt;small&gt;${a.unit}&lt;/small&gt;&lt;/div&gt;&lt;p class=&quot;detail-copy&quot;&gt;10.27 기록&lt;/p&gt;${state.bodyComparison?`&lt;div class=&quot;delta&quot;&gt;${icon(a.direction)}${a.delta} ${a.deltaUnit}&lt;/div&gt;&lt;p class=&quot;detail-copy&quot;&gt;10.20의 ${a.previous}${a.unit} → 10.27의 ${a.value}${a.unit}&lt;/p&gt;&lt;p class=&quot;detail-copy&quot;&gt;비교 기록이 있는 경우 · 예시&lt;/p&gt;`:&#x27;&lt;p class=&quot;detail-copy&quot;&gt;비교 기록 없음&lt;/p&gt;&#x27;}${spark(a.history)}`;}
+ phone.innerHTML=`&lt;div class=&quot;chrome&quot;&gt;&lt;button class=&quot;back cursor-interaction&quot; data-back&gt;${icon(&#x27;chevron-left&#x27;)}웰니스로&lt;/button&gt;&lt;/div&gt;&lt;main class=&quot;detail-page&quot;&gt;&lt;h2&gt;${escape(detailTitles[route]||m?.name||&#x27;신체 지표&#x27;)}&lt;/h2&gt;&lt;div class=&quot;surface&quot;&gt;${body}&lt;/div&gt;&lt;/main&gt;${nav()}`;
+ if(globalThis.lucide)lucide.createIcons({attrs:{width:18,height:18}});
+ phone.querySelector(&#x27;[data-back]&#x27;).focus({preventScroll:true});phone.scrollIntoView({block:&#x27;start&#x27;});
+}
+root.addEventListener(&#x27;click&#x27;,e=&gt;{
+ const phone=e.target.closest(&#x27;.phone&#x27;);if(!phone)return;
+ const back=e.target.closest(&#x27;[data-back]&#x27;);if(back){const prev=routes.get(phone);if(prev){phone.innerHTML=screen(phone.dataset.design);const target=phone.querySelector(`[data-route=&quot;${prev.route}&quot;]`);target?.focus({preventScroll:true});window.scrollTo(0,prev.scrollY);routes.delete(phone);if(globalThis.lucide)lucide.createIcons({attrs:{width:18,height:18}});}return;}
+ const button=e.target.closest(&#x27;[data-route]&#x27;);if(button&amp;&amp;!button.disabled)detail(phone,button.dataset.route);
+});
+root.addEventListener(&#x27;submit&#x27;,e=&gt;{if(!e.target.matches(&#x27;[data-record-form]&#x27;))return;e.preventDefault();e.target.querySelector(&#x27;[data-confirmation]&#x27;).textContent=&#x27;입력 형식을 확인했어요. 실제 기록은 저장하지 않았어요.&#x27;;});
+root.addEventListener(&#x27;toggle&#x27;,equalize,true);
+root.updatePreview=patch=&gt;{Object.assign(state,patch);state.width=Math.max(280,Math.min(1100,Number(state.width)||402));state.text=Math.max(100,Math.min(200,Number(state.text)||100));render();};
+root.previewState=state;
+render();
+if(globalThis.Tweak){const tweak=new Tweak({container:root,onChange:()=&gt;{render();persist();}});tweak.addSelect(state,&#x27;appearance&#x27;,{label:&#x27;밝기&#x27;,options:[{label:&#x27;시스템&#x27;,value:&#x27;auto&#x27;},{label:&#x27;밝음&#x27;,value:&#x27;light&#x27;},{label:&#x27;어두움&#x27;,value:&#x27;dark&#x27;}]});tweak.addSelect(state,&#x27;width&#x27;,{label:&#x27;화면 폭&#x27;,options:[{label:&#x27;작은 화면 · 320&#x27;,value:320},{label:&#x27;iPhone · 402&#x27;,value:402},{label:&#x27;Duo 접힘 · 466&#x27;,value:466},{label:&#x27;Duo 펼침 · 951&#x27;,value:951},{label:&#x27;iPad · 1032&#x27;,value:1032}]});tweak.addSlider(state,&#x27;text&#x27;,{label:&#x27;글씨 크기&#x27;,min:100,max:200,step:25,unit:&#x27;%&#x27;});tweak.addSelect(state,&#x27;data&#x27;,{label:&#x27;기록 상태&#x27;,options:[{label:&#x27;기본 기록&#x27;,value:&#x27;complete&#x27;},{label:&#x27;일부 조회 누락&#x27;,value:&#x27;partial&#x27;},{label:&#x27;첫 수면 1일&#x27;,value:&#x27;single&#x27;},{label:&#x27;신체 기록만&#x27;,value:&#x27;body-only&#x27;},{label:&#x27;최근 기록 3일 전&#x27;,value:&#x27;stale&#x27;},{label:&#x27;Watch 모니터링 꺼짐&#x27;,value:&#x27;watch-off&#x27;},{label:&#x27;관리 중인 부상&#x27;,value:&#x27;injury&#x27;},{label:&#x27;전체 기록 없음&#x27;,value:&#x27;empty&#x27;},{label:&#x27;건강 기록 접근 확인&#x27;,value:&#x27;access&#x27;},{label:&#x27;동기화 대기&#x27;,value:&#x27;sync&#x27;},{label:&#x27;초기 로딩&#x27;,value:&#x27;loading&#x27;}]});tweak.addSlider(state,&#x27;score&#x27;,{label:&#x27;웰니스 예시 점수&#x27;,min:0,max:100,step:1});tweak.addToggle(state,&#x27;bodyComparison&#x27;,{label:&#x27;신체 비교 기록 있음&#x27;});}
+window.addEventListener(&#x27;openai:set_globals&#x27;,event=&gt;{const value=event.detail?.globals?.widgetState?.modelContent?.wellnessDesign;if(value)root.updatePreview(value);});
+new ResizeObserver(()=&gt;equalize()).observe(root);
+})();
+&lt;/script&gt;
+
+&lt;script src=&quot;https://unpkg.com/@floating-ui/core@1.7.3/dist/floating-ui.core.umd.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;https://unpkg.com/@floating-ui/dom@1.7.4/dist/floating-ui.dom.umd.min.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+(() =&gt; {
+  if (window.FloatingUIDOM == null) {
+    return;
+  }
+  const { autoUpdate, computePosition, flip, offset, shift, size } =
+    window.FloatingUIDOM;
+  const tooltipPlacements = new Set([&quot;top&quot;, &quot;right&quot;, &quot;bottom&quot;, &quot;left&quot;]);
+  const tooltipId = `codex-visualization-tooltip-${
+    window.crypto?.randomUUID?.() ?? Date.now().toString(36)
+  }`;
+  const tooltipGap = 5;
+  const hoverDelay = 700;
+  const skipDelay = 300;
+  let activeTrigger = null;
+  let pendingTrigger = null;
+  let tooltip = null;
+  let openTimeout = null;
+  let autoUpdateCleanup = null;
+  let positionRequest = 0;
+  let skipDelayUntil = 0;
+  let lastPointerWasTouch = false;
+  let pinnedByTouch = false;
+
+  const getTrigger = (event) =&gt; {
+    for (const target of event.composedPath()) {
+      if (target?.nodeType === Node.ELEMENT_NODE) {
+        const trigger = target.closest(&quot;[data-tooltip]&quot;);
+        if (trigger) return trigger;
+      }
+    }
+    return null;
+  };
+  const containsTarget = (trigger, target) =&gt;
+    target?.nodeType != null &amp;&amp; trigger.contains(target);
+  const getContent = (trigger) =&gt;
+    trigger.getAttribute(&quot;data-tooltip&quot;)?.trim() ?? &quot;&quot;;
+  const getPlacement = (trigger) =&gt; {
+    const placement = trigger.getAttribute(&quot;data-tooltip-placement&quot;);
+    return tooltipPlacements.has(placement) ? placement : &quot;top&quot;;
+  };
+  const getTooltip = () =&gt; {
+    if (tooltip == null) {
+      tooltip = document.createElement(&quot;div&quot;);
+      tooltip.id = tooltipId;
+      tooltip.className = &quot;tooltip&quot;;
+      tooltip.setAttribute(&quot;role&quot;, &quot;tooltip&quot;);
+    }
+    return tooltip;
+  };
+  const setDescribedBy = (trigger, described) =&gt; {
+    const ids = new Set(
+      (trigger.getAttribute(&quot;aria-describedby&quot;) ?? &quot;&quot;)
+        .split(/\s+/)
+        .filter(Boolean),
+    );
+    if (described) {
+      ids.add(tooltipId);
+    } else {
+      ids.delete(tooltipId);
+    }
+    if (ids.size === 0) {
+      trigger.removeAttribute(&quot;aria-describedby&quot;);
+    } else {
+      trigger.setAttribute(&quot;aria-describedby&quot;, [...ids].join(&quot; &quot;));
+    }
+  };
+  const clearOpenTimeout = () =&gt; {
+    if (openTimeout != null) {
+      window.clearTimeout(openTimeout);
+      openTimeout = null;
+    }
+    pendingTrigger = null;
+  };
+  const closeTooltip = (activateSkipDelay = true) =&gt; {
+    clearOpenTimeout();
+    pinnedByTouch = false;
+    positionRequest += 1;
+    autoUpdateCleanup?.();
+    autoUpdateCleanup = null;
+    if (activeTrigger == null) {
+      return;
+    }
+    setDescribedBy(activeTrigger, false);
+    activeTrigger = null;
+    tooltip?.remove();
+    if (activateSkipDelay) {
+      skipDelayUntil = Date.now() + skipDelay;
+    }
+  };
+  const updatePosition = (trigger, floating) =&gt; {
+    const request = ++positionRequest;
+    void computePosition(trigger, floating, {
+      middleware: [
+        offset(tooltipGap),
+        flip({ padding: tooltipGap }),
+        shift({ padding: tooltipGap }),
+        size({
+          padding: tooltipGap,
+          apply({ availableHeight, availableWidth, elements }) {
+            elements.floating.style.setProperty(
+              &quot;--tooltip-available-width&quot;,
+              `${Math.max(0, availableWidth)}px`,
+            );
+            elements.floating.style.setProperty(
+              &quot;--tooltip-available-height&quot;,
+              `${Math.max(0, availableHeight)}px`,
+            );
+          },
+        }),
+      ],
+      placement: getPlacement(trigger),
+      strategy: &quot;fixed&quot;,
+    })
+      .then(({ x, y }) =&gt; {
+        if (activeTrigger !== trigger || request !== positionRequest) {
+          return;
+        }
+        const scale = window.devicePixelRatio || 1;
+        floating.style.transform = `translate(${Math.round(x * scale) / scale}px, ${Math.round(y * scale) / scale}px)`;
+        floating.style.visibility = &quot;visible&quot;;
+      })
+      .catch(() =&gt; {
+        if (activeTrigger === trigger &amp;&amp; request === positionRequest) {
+          closeTooltip(false);
+        }
+      });
+  };
+  const openTooltip = (trigger) =&gt; {
+    const content = getContent(trigger);
+    if (!trigger.isConnected || content.length === 0) {
+      return;
+    }
+    clearOpenTimeout();
+    if (activeTrigger === trigger) {
+      return;
+    }
+    closeTooltip();
+    const floating = getTooltip();
+    floating.textContent = content;
+    floating.style.visibility = &quot;hidden&quot;;
+    floating.style.transform = &quot;translate(0, 0)&quot;;
+    document.body.appendChild(floating);
+    activeTrigger = trigger;
+    setDescribedBy(trigger, true);
+    autoUpdateCleanup = autoUpdate(trigger, floating, () =&gt; {
+      updatePosition(trigger, floating);
+    });
+  };
+  const requestOpen = (trigger, immediate = false) =&gt; {
+    if (
+      getContent(trigger).length === 0 ||
+      activeTrigger === trigger ||
+      pendingTrigger === trigger
+    ) {
+      return;
+    }
+    clearOpenTimeout();
+    pendingTrigger = trigger;
+    const delay =
+      immediate || activeTrigger != null || Date.now() &lt; skipDelayUntil
+        ? 0
+        : hoverDelay;
+    if (delay === 0) {
+      openTooltip(trigger);
+      return;
+    }
+    openTimeout = window.setTimeout(() =&gt; {
+      openTimeout = null;
+      pendingTrigger = null;
+      openTooltip(trigger);
+    }, delay);
+  };
+  const handlePointerOpen = (event) =&gt; {
+    if (event.pointerType === &quot;touch&quot;) {
+      return;
+    }
+    const trigger = getTrigger(event);
+    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
+      return;
+    }
+    requestOpen(trigger);
+  };
+  const handlePointer = (event) =&gt; {
+    lastPointerWasTouch =
+      event.type === &quot;pointerdown&quot; &amp;&amp; event.pointerType === &quot;touch&quot;;
+  };
+  const handleTouchClick = (event) =&gt; {
+    const isTouch = event.pointerType === &quot;touch&quot; || lastPointerWasTouch;
+    lastPointerWasTouch = false;
+    if (!isTouch || event.detail === 0) {
+      return;
+    }
+    const trigger = getTrigger(event);
+    if (
+      trigger == null ||
+      !trigger.isConnected ||
+      getContent(trigger).length === 0 ||
+      (pinnedByTouch &amp;&amp; activeTrigger === trigger)
+    ) {
+      if (pinnedByTouch) {
+        closeTooltip();
+      }
+      return;
+    }
+    openTooltip(trigger);
+    pinnedByTouch = activeTrigger === trigger;
+    window.setTimeout(() =&gt; {
+      if (activeTrigger === trigger &amp;&amp; !trigger.isConnected) {
+        closeTooltip(false);
+      }
+    }, 0);
+  };
+  const handleLeave = (event) =&gt; {
+    if (pinnedByTouch) {
+      return;
+    }
+    const trigger = getTrigger(event);
+    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
+      return;
+    }
+    if (activeTrigger === trigger || pendingTrigger === trigger) {
+      closeTooltip();
+    }
+  };
+  const handleFocusIn = (event) =&gt; {
+    const trigger = getTrigger(event);
+    if (trigger?.matches(&quot;:focus-visible&quot;)) {
+      requestOpen(trigger, true);
+    }
+  };
+  const handleKeyDown = (event) =&gt; {
+    if (event.key === &quot;Escape&quot;) {
+      closeTooltip();
+    }
+  };
+  const handleContextMenu = (event) =&gt; {
+    lastPointerWasTouch = false;
+    const trigger = getTrigger(event);
+    if (activeTrigger === trigger || pendingTrigger === trigger) {
+      closeTooltip();
+    }
+  };
+  const handlers = {
+    pointerover: handlePointerOpen,
+    pointerdown: handlePointer,
+    pointercancel: handlePointer,
+    click: handleTouchClick,
+    pointerout: handleLeave,
+    focusin: handleFocusIn,
+    focusout: handleLeave,
+    keydown: handleKeyDown,
+    contextmenu: handleContextMenu,
+  };
+  const roots = new Map();
+  const handledEvents = new WeakSet();
+  const handleEvent = (event) =&gt; {
+    if (handledEvents.has(event)) return;
+    handledEvents.add(event);
+    handlers[event.type](event);
+  };
+  const discoverRoots = (node) =&gt; {
+    if (node.shadowRoot) listen(node.shadowRoot);
+    for (const element of node.querySelectorAll(&quot;*&quot;)) {
+      if (element.shadowRoot) listen(element.shadowRoot);
+    }
+  };
+  const listen = (root) =&gt; {
+    if (roots.has(root)) return;
+    for (const type of Object.keys(handlers)) root.addEventListener(type, handleEvent);
+    const observer = new window.MutationObserver((records) =&gt; {
+      for (const { addedNodes } of records) {
+        for (const node of addedNodes) {
+          if (node.nodeType === Node.ELEMENT_NODE) discoverRoots(node);
+        }
+      }
+      for (const [root, cleanup] of roots) {
+        if (root.host &amp;&amp; !root.host.isConnected) {
+          cleanup();
+          roots.delete(root);
+        }
+      }
+      if (activeTrigger &amp;&amp; !activeTrigger.isConnected) closeTooltip(false);
+    });
+    observer.observe(root, { childList: true, subtree: true });
+    roots.set(root, () =&gt; {
+      observer.disconnect();
+      for (const type of Object.keys(handlers)) root.removeEventListener(type, handleEvent);
+    });
+    discoverRoots(root);
+  };
+  const destroy = () =&gt; {
+    closeTooltip(false);
+    lastPointerWasTouch = false;
+    for (const cleanup of roots.values()) cleanup();
+    roots.clear();
+    tooltip = null;
+  };
+
+  // Events between children of one shadow root never reach the document.
+  listen(document);
+  window.addEventListener(&quot;pagehide&quot;, destroy, { once: true });
+})();
+&lt;/script&gt;
+&lt;script id=&quot;codex-visualization-tabs&quot;&gt;
+(() =&gt; {
+  const selector = &#x27;.nav[role=&quot;tablist&quot;] [role=&quot;tab&quot;]&#x27;;
+  const disabled = &#x27;:disabled,[aria-disabled=&quot;true&quot;]&#x27;;
+  const selectTab = (selected) =&gt; {
+    const panelId = selected.getAttribute(&quot;aria-controls&quot;);
+    for (const tab of selected.closest(&#x27;[role=&quot;tablist&quot;]&#x27;).querySelectorAll(&#x27;[role=&quot;tab&quot;]&#x27;)) {
+      const active = tab === selected;
+      tab.classList.toggle(&quot;active&quot;, active);
+      tab.setAttribute(&quot;aria-selected&quot;, String(active));
+      const id = tab.getAttribute(&quot;aria-controls&quot;);
+      const panel = id &amp;&amp; document.getElementById(id);
+      if (panel != null) {
+        panel.hidden = id !== panelId;
+        if (!panel.hidden &amp;&amp; selected.id) {
+          panel.setAttribute(&quot;aria-labelledby&quot;, selected.id);
+        }
+      }
+    }
+  };
+  const interact = (event) =&gt; {
+    const tab = event.target?.closest?.(selector);
+    if (event.defaultPrevented || tab == null || tab.matches(disabled)) {
+      return;
+    }
+    if (event.type === &quot;click&quot;) {
+      selectTab(tab);
+      return;
+    }
+    const tabs = Array.from(
+      tab.closest(&#x27;[role=&quot;tablist&quot;]&#x27;).querySelectorAll(&#x27;[role=&quot;tab&quot;]&#x27;),
+    ).filter((candidate) =&gt; !candidate.matches(disabled));
+    const current = tabs.indexOf(tab);
+    let next;
+    if (event.key === &quot;ArrowRight&quot; || event.key === &quot;ArrowDown&quot;) {
+      next = (current + 1) % tabs.length;
+    } else if (event.key === &quot;ArrowLeft&quot; || event.key === &quot;ArrowUp&quot;) {
+      next = (current + tabs.length - 1) % tabs.length;
+    } else if (event.key === &quot;Home&quot;) {
+      next = 0;
+    } else if (event.key === &quot;End&quot;) {
+      next = tabs.length - 1;
+    } else {
+      return;
+    }
+    event.preventDefault();
+    tabs[next].focus();
+    selectTab(tabs[next]);
+  };
+
+  for (const list of document.querySelectorAll(&#x27;.nav[role=&quot;tablist&quot;]&#x27;)) {
+    const selected =
+      list.querySelector(&#x27;[role=&quot;tab&quot;][aria-selected=&quot;true&quot;]&#x27;) ??
+      list.querySelector(&#x27;[role=&quot;tab&quot;].active&#x27;) ??
+      list.querySelector(&#x27;[role=&quot;tab&quot;]&#x27;);
+    if (selected != null) {
+      selectTab(selected);
+    }
+  }
+  document.addEventListener(&quot;click&quot;, interact);
+  document.addEventListener(&quot;keydown&quot;, interact);
+  window.addEventListener(&quot;pagehide&quot;, () =&gt; {
+    document.removeEventListener(&quot;click&quot;, interact);
+    document.removeEventListener(&quot;keydown&quot;, interact);
+  }, { once: true });
+})();
+&lt;/script&gt;
+&lt;script id=&quot;codex-visualization-carousel&quot;&gt;
+  (() =&gt; {
+    for (const root of document.querySelectorAll(&quot;.viz-carousel&quot;)) {
+      const panels = Array.from(
+        root.querySelectorAll(&quot;:scope &gt; [data-variant]&quot;),
+      );
+      if (panels.length === 0) {
+        continue;
+      }
+      root.setAttribute(&quot;role&quot;, &quot;group&quot;);
+      panels.forEach((panel, index) =&gt; {
+        panel.hidden = index !== 0;
+        panel.setAttribute(&quot;role&quot;, &quot;group&quot;);
+        if (!panel.hasAttribute(&quot;aria-label&quot;)) {
+          panel.setAttribute(&quot;aria-label&quot;, panel.dataset.variant);
+        }
+      });
+      root.dataset.activeVariant = panels[0].dataset.variant;
+      if (panels.length === 1) {
+        continue;
+      }
+
+      const controls = document.createElement(&quot;div&quot;);
+      controls.className = &quot;viz-carousel-controls&quot;;
+      // Portable copy of the settings dropdown&#x27;s legacy glyph; no 14px icon-package preset matches it.
+      // https://github.com/openai/openai/blob/master/codex/codex-apps/webview/src/icons/chevron.svg
+      controls.innerHTML = `
+      &lt;button type=&quot;button&quot; class=&quot;viz-carousel-previous cursor-interaction&quot;&gt;&lt;i data-lucide=&quot;chevron-left&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/button&gt;
+      &lt;details class=&quot;viz-carousel-picker&quot;&gt;
+        &lt;summary class=&quot;cursor-interaction&quot;&gt;
+          &lt;span class=&quot;viz-carousel-count tabular-nums&quot;&gt;&lt;/span&gt;
+          &lt;span class=&quot;viz-carousel-name&quot;&gt;&lt;/span&gt;
+          &lt;svg class=&quot;viz-carousel-caret&quot; width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 20 21&quot; fill=&quot;none&quot; aria-hidden=&quot;true&quot; focusable=&quot;false&quot;&gt;
+            &lt;path d=&quot;M15.2793 7.71101C15.539 7.45131 15.961 7.45131 16.2207 7.71101C16.4804 7.97071 16.4804 8.39272 16.2207 8.65242L10.4707 14.4024C10.211 14.6621 9.78902 14.6621 9.52932 14.4024L3.77932 8.65242L3.69436 8.54792C3.52385 8.28979 3.55205 7.93828 3.77932 7.71101C4.00659 7.48374 4.3581 7.45554 4.61623 7.62605L4.72073 7.71101L10 12.9903L15.2793 7.71101Z&quot; fill=&quot;currentColor&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;0.6&quot; /&gt;
+          &lt;/svg&gt;
+        &lt;/summary&gt;
+        &lt;div class=&quot;viz-carousel-options&quot;&gt;&lt;/div&gt;
+      &lt;/details&gt;
+      &lt;button type=&quot;button&quot; class=&quot;viz-carousel-next cursor-interaction&quot;&gt;&lt;i data-lucide=&quot;chevron-right&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/button&gt;`;
+      const previous = controls.querySelector(&quot;.viz-carousel-previous&quot;);
+      const next = controls.querySelector(&quot;.viz-carousel-next&quot;);
+      const picker = controls.querySelector(&quot;.viz-carousel-picker&quot;);
+      const summary = picker.querySelector(&quot;summary&quot;);
+      const count = controls.querySelector(&quot;.viz-carousel-count&quot;);
+      const name = controls.querySelector(&quot;.viz-carousel-name&quot;);
+      const options = controls.querySelector(&quot;.viz-carousel-options&quot;);
+      const status = document.createElement(&quot;span&quot;);
+      status.className = &quot;sr-only&quot;;
+      status.setAttribute(&quot;role&quot;, &quot;status&quot;);
+      status.setAttribute(&quot;aria-live&quot;, &quot;polite&quot;);
+      status.setAttribute(&quot;aria-atomic&quot;, &quot;true&quot;);
+      previous.setAttribute(
+        &quot;aria-label&quot;,
+        root.dataset.previousLabel ?? &quot;Previous variant&quot;,
+      );
+      next.setAttribute(&quot;aria-label&quot;, root.dataset.nextLabel ?? &quot;Next variant&quot;);
+
+      let active = 0;
+      let mousePointerId = null;
+      let summaryPointerHandled = false;
+      summary.addEventListener(&quot;pointerdown&quot;, (event) =&gt; {
+        summaryPointerHandled =
+          event.pointerType === &quot;mouse&quot; &amp;&amp; event.button === 0 &amp;&amp; !event.ctrlKey;
+        if (!summaryPointerHandled) {
+          return;
+        }
+        event.preventDefault();
+        summary.focus({ preventScroll: true });
+        picker.open = !picker.open;
+        mousePointerId = picker.open ? event.pointerId : null;
+      });
+      summary.addEventListener(&quot;click&quot;, (event) =&gt; {
+        if (summaryPointerHandled &amp;&amp; event.detail &gt; 0) {
+          event.preventDefault();
+        }
+      });
+      const choices = panels.map((panel, index) =&gt; {
+        const choice = document.createElement(&quot;button&quot;);
+        choice.type = &quot;button&quot;;
+        choice.className = &quot;cursor-interaction&quot;;
+        choice.textContent = panel.dataset.variant;
+        choice.addEventListener(&quot;click&quot;, () =&gt; {
+          select(index);
+          summary.focus();
+        });
+        choice.addEventListener(&quot;pointerup&quot;, (event) =&gt; {
+          if (
+            picker.open &amp;&amp;
+            event.pointerType === &quot;mouse&quot; &amp;&amp;
+            event.button === 0 &amp;&amp;
+            event.pointerId === mousePointerId
+          ) {
+            choice.click();
+          }
+        });
+        options.appendChild(choice);
+        return choice;
+      });
+      const select = (index) =&gt; {
+        const changed = active !== index;
+        active = index;
+        panels.forEach((panel, position) =&gt; {
+          panel.hidden = position !== active;
+          choices[position].setAttribute(
+            &quot;aria-current&quot;,
+            String(position === active),
+          );
+        });
+        root.dataset.activeVariant = panels[active].dataset.variant;
+        count.textContent = `${active + 1} / ${panels.length}`;
+        name.textContent = panels[active].dataset.variant;
+        picker.open = false;
+        mousePointerId = null;
+        if (changed) {
+          status.textContent = `${count.textContent}: ${name.textContent}`;
+        }
+      };
+      previous.addEventListener(&quot;click&quot;, () =&gt;
+        select((active + panels.length - 1) % panels.length),
+      );
+      next.addEventListener(&quot;click&quot;, () =&gt;
+        select((active + 1) % panels.length),
+      );
+      picker.addEventListener(&quot;keydown&quot;, (event) =&gt; {
+        if (event.key === &quot;Escape&quot; &amp;&amp; picker.open) {
+          event.preventDefault();
+          picker.open = false;
+          mousePointerId = null;
+          summary.focus();
+          return;
+        }
+        if (event.altKey || event.ctrlKey || event.metaKey) {
+          return;
+        }
+        const index = choices.indexOf(document.activeElement);
+        let nextIndex;
+        if (event.key === &quot;ArrowDown&quot;) {
+          nextIndex = index &lt; 0 ? active : (index + 1) % choices.length;
+        } else if (event.key === &quot;ArrowUp&quot;) {
+          nextIndex = index &lt; 0 ? active : (index + choices.length - 1) % choices.length;
+        } else if (picker.open &amp;&amp; event.key === &quot;Home&quot;) {
+          nextIndex = 0;
+        } else if (picker.open &amp;&amp; event.key === &quot;End&quot;) {
+          nextIndex = choices.length - 1;
+        } else {
+          return;
+        }
+        event.preventDefault();
+        picker.open = true;
+        choices[nextIndex].focus();
+      });
+      picker.addEventListener(&quot;focusout&quot;, (event) =&gt; {
+        if (!picker.contains(event.relatedTarget)) {
+          picker.open = false;
+          mousePointerId = null;
+        }
+      });
+      const dismiss = (event) =&gt; {
+        if (!summary.contains(event.target)) {
+          mousePointerId = null;
+        }
+        if (!picker.contains(event.target)) {
+          picker.open = false;
+        }
+      };
+      const endPointerSelection = () =&gt; {
+        mousePointerId = null;
+      };
+      const sizePicker = () =&gt; {
+        root.style.setProperty(
+          &quot;--viz-carousel-picker-height&quot;,
+          `${picker.open ? options.offsetHeight : 0}px`,
+        );
+      };
+      picker.addEventListener(&quot;toggle&quot;, sizePicker);
+      window.addEventListener(&quot;resize&quot;, sizePicker);
+      document.addEventListener(&quot;pointerdown&quot;, dismiss);
+      document.addEventListener(&quot;pointerup&quot;, endPointerSelection);
+      document.addEventListener(&quot;pointercancel&quot;, endPointerSelection);
+      window.addEventListener(&quot;blur&quot;, endPointerSelection);
+      window.addEventListener(
+        &quot;pagehide&quot;,
+        () =&gt; {
+          document.removeEventListener(&quot;pointerdown&quot;, dismiss);
+          document.removeEventListener(&quot;pointerup&quot;, endPointerSelection);
+          document.removeEventListener(&quot;pointercancel&quot;, endPointerSelection);
+          window.removeEventListener(&quot;blur&quot;, endPointerSelection);
+          window.removeEventListener(&quot;resize&quot;, sizePicker);
+        },
+        { once: true },
+      );
+      root.append(controls, status);
+      select(0);
+    }
+  })();
+&lt;/script&gt;
+&lt;script id=&quot;codex-visualization-lucide&quot; async src=&quot;https://unpkg.com/lucide@1.17.0/dist/umd/lucide.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+(() =&gt; {
+  const initialize = () =&gt; {
+    globalThis.lucide?.createIcons({ attrs: { width: 16, height: 16 } });
+  };
+  if (globalThis.lucide != null) {
+    initialize();
+    return;
+  }
+  document
+    .getElementById(&quot;codex-visualization-lucide&quot;)
+    ?.addEventListener(&quot;load&quot;, initialize, { once: true });
+})();
+&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+"></iframe>
+
+<script>(() => {
+  const frame = document.getElementById("codex-visualization");
+  if (!(frame instanceof HTMLIFrameElement)) {
+    return;
+  }
+  const isShare = document.documentElement.classList.contains(
+    "visualization-share-root",
+  );
+  let viewportHeight = globalThis.innerHeight;
+  let sizeFingerprint = null;
+  let sizeWriteTimeout;
+  let lastSize = null;
+  let pendingSize = null;
+  const storageKey = `codex:visualization-widget-state-v2:${JSON.stringify([
+    globalThis.location.pathname,
+    globalThis.location.search,
+  ])}`;
+  const sizeStorageKey = `${storageKey}:share-size-v1`;
+  const parseState = (serializedState) => {
+    if (
+      typeof serializedState !== "string" ||
+      new TextEncoder().encode(serializedState).length > 16 * 1024
+    ) {
+      throw new TypeError(
+        "Widget state must be a JSON object of at most 16 KiB",
+      );
+    }
+    /** @type {unknown} */
+    const state = JSON.parse(serializedState);
+    if (
+      state == null ||
+      typeof state !== "object" ||
+      Array.isArray(state) ||
+      ("imageIds" in state &&
+        (!Array.isArray(state.imageIds) || state.imageIds.length > 0))
+    ) {
+      throw new TypeError("Widget state must be a JSON object");
+    }
+    const storedState = { modelContent: null, privateContent: null, ...state };
+    const canonicalState = JSON.stringify(
+      storedState,
+      (_key, /** @type {unknown} */ value) => {
+        if (typeof value === "number" && !Number.isFinite(value)) {
+          throw new TypeError("Widget state must contain finite numbers");
+        }
+        return value;
+      },
+    );
+    if (new TextEncoder().encode(canonicalState).length > 16 * 1024) {
+      throw new TypeError(
+        "Widget state must be a JSON object of at most 16 KiB",
+      );
+    }
+    return storedState;
+  };
+  let storage = null;
+  let state = null;
+  try {
+    const localStorage = globalThis.localStorage;
+    const probeKey = `${storageKey}:probe`;
+    localStorage.setItem(probeKey, "1");
+    localStorage.removeItem(probeKey);
+    storage = localStorage;
+    const savedState = storage.getItem(storageKey);
+    if (savedState != null) {
+      try {
+        state = parseState(savedState);
+      } catch {
+        // Invalid saved state does not disable future writes.
+      }
+    }
+  } catch {
+    storage = null;
+  }
+  const persistSize = () => {
+    globalThis.clearTimeout(sizeWriteTimeout);
+    if (pendingSize == null) {
+      return;
+    }
+    try {
+      storage?.setItem(sizeStorageKey, pendingSize);
+    } catch {
+      // A denied or full cache must not affect the visualization.
+    }
+    pendingSize = null;
+  };
+  if (isShare) {
+    globalThis.addEventListener("pagehide", persistSize);
+  }
+  const initialGlobals = {
+    widgetState: state,
+    statePersistence: storage == null ? "none" : "local",
+  };
+
+  const channel = new MessageChannel();
+  channel.port1.addEventListener("message", (event) => {
+    const data = event.data;
+    if (typeof data !== "object" || data == null) {
+      return;
+    }
+    if (data.type === "widget-state-write") {
+      if (!Number.isSafeInteger(data.id) || data.id <= 0) {
+        return;
+      }
+      let ok = false;
+      try {
+        if (storage != null) {
+          const state = parseState(data.state);
+          storage.setItem(storageKey, JSON.stringify(state));
+          ok = true;
+        }
+      } catch {
+        // Storage denial, quota limits, and invalid state return a failed receipt.
+      }
+      channel.port1.postMessage({
+        type: "widget-state-result",
+        id: data.id,
+        ok,
+      });
+      return;
+    }
+    if (data.type === "height") {
+      const height = data.height;
+      if (
+        typeof height !== "number" ||
+        !Number.isFinite(height) ||
+        height < 0
+      ) {
+        return;
+      }
+      if (height <= 10_000) {
+        const width = isShare && storage != null ? frame.clientWidth : null;
+        frame.style.height = Math.ceil(height) + "px";
+        if (isShare && storage != null) {
+          const size = JSON.stringify({
+            fingerprint: sizeFingerprint,
+            width,
+            viewportHeight: globalThis.innerHeight,
+            dark: globalThis.matchMedia("(prefers-color-scheme: dark)").matches,
+            scale: globalThis.devicePixelRatio,
+            height: Math.ceil(height),
+          });
+          if (size !== lastSize) {
+            lastSize = size;
+            pendingSize = size;
+            globalThis.clearTimeout(sizeWriteTimeout);
+            sizeWriteTimeout = globalThis.setTimeout(persistSize, 100);
+          }
+        }
+      }
+      if (isShare) {
+        // Keep unusually tall content accessible without accepting an unbounded height.
+        if (height > 10_000 && Number.parseFloat(frame.style.height) === 0) {
+          frame.style.removeProperty("height");
+        }
+        frame.scrolling = height > 10_000 ? "auto" : "no";
+        document.documentElement.classList.add("visualization-share-ready");
+      }
+      return;
+    }
+    if (data.type === "scroll-to") {
+      const top = data.top;
+      if (
+        typeof top === "number" &&
+        Number.isFinite(top) &&
+        top >= 0 &&
+        globalThis.navigator.userActivation?.isActive === true
+      ) {
+        globalThis.scrollTo({
+          top: Math.ceil(
+            globalThis.scrollY + frame.getBoundingClientRect().top + top,
+          ),
+        });
+      }
+      return;
+    }
+    if (data.type === "open-external") {
+      const rawHref = data.href;
+      if (typeof rawHref !== "string") {
+        return;
+      }
+      let href;
+      try {
+        const url = new URL(rawHref, document.baseURI);
+        if (url.protocol !== "https:") {
+          return;
+        }
+        href = url.href;
+      } catch {
+        return;
+      }
+      if (globalThis.navigator.userActivation?.isActive === true) {
+        const anchor = document.createElement("a");
+        anchor.href = href;
+        anchor.rel = "noopener noreferrer";
+        anchor.target = "_blank";
+        document.body.appendChild(anchor);
+        anchor.click();
+        anchor.remove();
+      }
+      return;
+    }
+    if (data.type === "follow-up") {
+      const prompt = data.prompt;
+      if (
+        typeof prompt !== "string" ||
+        globalThis.navigator.userActivation?.isActive !== true
+      ) {
+        return;
+      }
+      const title = data.title;
+      globalThis.prompt(typeof title === "string" ? title : prompt, prompt);
+    }
+  });
+  channel.port1.start();
+  const srcdoc = frame.dataset.srcdoc;
+  if (srcdoc == null) {
+    return;
+  }
+  globalThis.addEventListener("resize", () => {
+    const height = Number.parseFloat(frame.style.height);
+    if (!isShare && (!Number.isFinite(height) || height <= viewportHeight)) {
+      frame.style.removeProperty("height");
+    }
+    viewportHeight = globalThis.innerHeight;
+    channel.port1.postMessage({ type: "measure" });
+  });
+  frame.addEventListener(
+    "load",
+    () => {
+      frame.contentWindow?.postMessage(
+        { type: "codex-visualization-initialize" },
+        "*",
+        [channel.port2],
+      );
+    },
+    { once: true },
+  );
+  // Match the trusted bootstrap element, not the same text in an authored title.
+  const frameHtml = srcdoc.replace(
+    '<script type="application/json" id="codex-visualization-widget-state">__CODEX_VISUALIZATION_WIDGET_STATE__<\/script>',
+    () =>
+      '<script type="application/json" id="codex-visualization-widget-state">' +
+      JSON.stringify(initialGlobals).replaceAll("<", "\\u003c") +
+      "<\/script>",
+  );
+  if (isShare && storage != null) {
+    // Fingerprint the rendered document, including restored widget state, without
+    // storing its content. This is a layout cache, not a security identity.
+    let hash = 5381;
+    for (let index = 0; index < frameHtml.length; index += 1) {
+      hash = (hash * 33 + frameHtml.charCodeAt(index)) % 4_294_967_296;
+    }
+    sizeFingerprint = hash.toString(36);
+    try {
+      const size = JSON.parse(storage.getItem(sizeStorageKey) ?? "null");
+      if (
+        size?.fingerprint === sizeFingerprint &&
+        size.width === frame.clientWidth &&
+        size.viewportHeight === globalThis.innerHeight &&
+        size.dark ===
+          globalThis.matchMedia("(prefers-color-scheme: dark)").matches &&
+        size.scale === globalThis.devicePixelRatio &&
+        typeof size.height === "number" &&
+        Number.isFinite(size.height) &&
+        size.height >= 0 &&
+        size.height <= 10_000
+      ) {
+        frame.style.height = size.height + "px";
+      }
+    } catch {
+      // Ignore missing or invalid cache entries and measure the live frame.
+    }
+  }
+  frame.srcdoc = frameHtml;
+  delete frame.dataset.srcdoc;
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,986 @@
+{
+  "date": "2026-10-27",
+  "kind": "browser-prototype-only",
+  "sourceSHA256": "1f0419b80d6b29b54da96c592137aa8d343ba5be384e545306228f4038704ec1",
+  "browser": "Installed Google Chrome via Playwright",
+  "nativeValidation": false,
+  "layouts": [
+    {
+      "design": "flow",
+      "width": 320,
+      "text": 100,
+      "appearance": "light",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "width": 320,
+      "text": 100,
+      "appearance": "dark",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "width": 320,
+      "text": 125,
+      "appearance": "light",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "width": 320,
+      "text": 125,
+      "appearance": "dark",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "width": 320,
+      "text": 160,
+      "appearance": "light",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "width": 320,
+      "text": 160,
+      "appearance": "dark",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "width": 320,
+      "text": 200,
+      "appearance": "light",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "width": 320,
+      "text": 200,
+      "appearance": "dark",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "width": 402,
+      "text": 100,
+      "appearance": "light",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "width": 402,
+      "text": 100,
+      "appearance": "dark",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "width": 402,
+      "text": 125,
+      "appearance": "light",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "width": 402,
+      "text": 125,
+      "appearance": "dark",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "width": 402,
+      "text": 160,
+      "appearance": "light",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "width": 402,
+      "text": 160,
+      "appearance": "dark",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "width": 402,
+      "text": 200,
+      "appearance": "light",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "width": 402,
+      "text": 200,
+      "appearance": "dark",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "width": 466,
+      "text": 100,
+      "appearance": "light",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "width": 466,
+      "text": 100,
+      "appearance": "dark",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "width": 466,
+      "text": 125,
+      "appearance": "light",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "width": 466,
+      "text": 125,
+      "appearance": "dark",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "width": 466,
+      "text": 160,
+      "appearance": "light",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "width": 466,
+      "text": 160,
+      "appearance": "dark",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "width": 466,
+      "text": 200,
+      "appearance": "light",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "width": 466,
+      "text": 200,
+      "appearance": "dark",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "width": 951,
+      "text": 100,
+      "appearance": "light",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "width": 951,
+      "text": 100,
+      "appearance": "dark",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "width": 951,
+      "text": 125,
+      "appearance": "light",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "width": 951,
+      "text": 125,
+      "appearance": "dark",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "width": 951,
+      "text": 160,
+      "appearance": "light",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "width": 951,
+      "text": 160,
+      "appearance": "dark",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "width": 951,
+      "text": 200,
+      "appearance": "light",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "width": 951,
+      "text": 200,
+      "appearance": "dark",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "width": 1032,
+      "text": 100,
+      "appearance": "light",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "width": 1032,
+      "text": 100,
+      "appearance": "dark",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "width": 1032,
+      "text": 125,
+      "appearance": "light",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "width": 1032,
+      "text": 125,
+      "appearance": "dark",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "width": 1032,
+      "text": 160,
+      "appearance": "light",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "width": 1032,
+      "text": 160,
+      "appearance": "dark",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "width": 1032,
+      "text": 200,
+      "appearance": "light",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "width": 1032,
+      "text": 200,
+      "appearance": "dark",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "width": 320,
+      "text": 100,
+      "appearance": "light",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "width": 320,
+      "text": 100,
+      "appearance": "dark",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "width": 320,
+      "text": 125,
+      "appearance": "light",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "width": 320,
+      "text": 125,
+      "appearance": "dark",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "width": 320,
+      "text": 160,
+      "appearance": "light",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "width": 320,
+      "text": 160,
+      "appearance": "dark",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "width": 320,
+      "text": 200,
+      "appearance": "light",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "width": 320,
+      "text": 200,
+      "appearance": "dark",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "width": 402,
+      "text": 100,
+      "appearance": "light",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "width": 402,
+      "text": 100,
+      "appearance": "dark",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "width": 402,
+      "text": 125,
+      "appearance": "light",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "width": 402,
+      "text": 125,
+      "appearance": "dark",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "width": 402,
+      "text": 160,
+      "appearance": "light",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "width": 402,
+      "text": 160,
+      "appearance": "dark",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "width": 402,
+      "text": 200,
+      "appearance": "light",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "width": 402,
+      "text": 200,
+      "appearance": "dark",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "width": 466,
+      "text": 100,
+      "appearance": "light",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "width": 466,
+      "text": 100,
+      "appearance": "dark",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "width": 466,
+      "text": 125,
+      "appearance": "light",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "width": 466,
+      "text": 125,
+      "appearance": "dark",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "width": 466,
+      "text": 160,
+      "appearance": "light",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "width": 466,
+      "text": 160,
+      "appearance": "dark",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "width": 466,
+      "text": 200,
+      "appearance": "light",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "width": 466,
+      "text": 200,
+      "appearance": "dark",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "width": 951,
+      "text": 100,
+      "appearance": "light",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "width": 951,
+      "text": 100,
+      "appearance": "dark",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "width": 951,
+      "text": 125,
+      "appearance": "light",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "width": 951,
+      "text": 125,
+      "appearance": "dark",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "width": 951,
+      "text": 160,
+      "appearance": "light",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "width": 951,
+      "text": 160,
+      "appearance": "dark",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "width": 951,
+      "text": 200,
+      "appearance": "light",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "width": 951,
+      "text": 200,
+      "appearance": "dark",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "width": 1032,
+      "text": 100,
+      "appearance": "light",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "width": 1032,
+      "text": 100,
+      "appearance": "dark",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "width": 1032,
+      "text": 125,
+      "appearance": "light",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "width": 1032,
+      "text": 125,
+      "appearance": "dark",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "width": 1032,
+      "text": 160,
+      "appearance": "light",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "width": 1032,
+      "text": 160,
+      "appearance": "dark",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "width": 1032,
+      "text": 200,
+      "appearance": "light",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "width": 1032,
+      "text": 200,
+      "appearance": "dark",
+      "pass": true
+    }
+  ],
+  "states": [
+    {
+      "design": "flow",
+      "data": "partial",
+      "width": 320,
+      "text": 200,
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "data": "single",
+      "width": 320,
+      "text": 200,
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "data": "body-only",
+      "width": 320,
+      "text": 200,
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "data": "stale",
+      "width": 320,
+      "text": 200,
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "data": "watch-off",
+      "width": 320,
+      "text": 200,
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "data": "injury",
+      "width": 320,
+      "text": 200,
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "data": "empty",
+      "width": 320,
+      "text": 200,
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "data": "access",
+      "width": 320,
+      "text": 200,
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "data": "sync",
+      "width": 320,
+      "text": 200,
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "data": "loading",
+      "width": 320,
+      "text": 200,
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "data": "partial",
+      "width": 320,
+      "text": 200,
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "data": "single",
+      "width": 320,
+      "text": 200,
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "data": "body-only",
+      "width": 320,
+      "text": 200,
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "data": "stale",
+      "width": 320,
+      "text": 200,
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "data": "watch-off",
+      "width": 320,
+      "text": 200,
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "data": "injury",
+      "width": 320,
+      "text": 200,
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "data": "empty",
+      "width": 320,
+      "text": 200,
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "data": "access",
+      "width": 320,
+      "text": 200,
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "data": "sync",
+      "width": 320,
+      "text": 200,
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "data": "loading",
+      "width": 320,
+      "text": 200,
+      "pass": true
+    }
+  ],
+  "interactions": [
+    {
+      "score": 0,
+      "pass": true
+    },
+    {
+      "score": 1,
+      "pass": true
+    },
+    {
+      "score": 99,
+      "pass": true
+    },
+    {
+      "score": 100,
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "route": "wellness",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "route": "sleep",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "route": "prediction",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "route": "body-history",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "route": "body-record",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "route": "posture-history",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "route": "posture-capture",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "route": "posture-live",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "route": "injury-record",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "route": "compare",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "route": "add",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "route": "metric-hrv",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "route": "metric-rhr",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "route": "metric-heart",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "route": "metric-spo2",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "route": "metric-resp",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "route": "metric-temp",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "route": "metric-vo2",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "route": "metric-recovery",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "route": "body-0",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "route": "body-1",
+      "pass": true
+    },
+    {
+      "design": "flow",
+      "route": "body-2",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "route": "wellness",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "route": "sleep",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "route": "prediction",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "route": "body-history",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "route": "body-record",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "route": "posture-history",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "route": "posture-capture",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "route": "posture-live",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "route": "injury-record",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "route": "compare",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "route": "add",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "route": "metric-hrv",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "route": "metric-rhr",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "route": "metric-heart",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "route": "metric-spo2",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "route": "metric-resp",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "route": "metric-temp",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "route": "metric-vo2",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "route": "metric-recovery",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "route": "body-0",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "route": "body-1",
+      "pass": true
+    },
+    {
+      "design": "compact",
+      "route": "body-2",
+      "pass": true
+    },
+    {
+      "data": "access",
+      "route": "health-access",
+      "pass": true
+    },
+    {
+      "data": "sync",
+      "route": "sync",
+      "pass": true
+    },
+    {
+      "data": "injury",
+      "route": "injury-detail",
+      "pass": true
+    },
+    {
+      "data": "single",
+      "route": "sleep-detail-one-sample",
+      "pass": true
+    }
+  ],
+  "screenshots": [
+    "wellness-initial-flow-light-full.png",
+    "wellness-initial-flow-dark-full.png"
+  ],
+  "errors": [],
+  "result": "passed",
+  "remediation": {
+    "scope": "Unchanged source: reused 80 layouts, 20 states, 52 interactions and 12 screenshots; only capture-environment initialization rechecked.",
+    "initialCapture": "The sandboxed iframe clipped the first long screenshot; it was discarded. Captures use the direct inner document.",
+    "environmentFailure": [
+      "Cannot read properties of null (reading 'widgetState')"
+    ],
+    "correction": "Direct-document harness now supplies the same empty globals object as the standalone shell instead of an unresolved placeholder or null. Direct document and original sandboxed standalone load without page errors."
+  },
+  "archived": true,
+  "originalScreenshotCount": 12,
+  "captureRetention": "Only these two original full-screen captures are retained. Other original capture paths were refreshed for the later proposal and are not evidence for this archived source."
+}

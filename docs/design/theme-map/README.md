@@ -9,6 +9,12 @@ status: in-progress
 
 [테마 맵 열기](index.html) · [8개 테마 전체 구현 맵](../full-redesign-map/index.html) · [7개 테마 앱 적용 맵](app-contract.md) · [UX·비주얼 명세](../2026-10-17-ux-visual-spec.md) · [실제 화면 디자인맵 열기](../phone-design-map/actual/index.html)
 
+## Wellness 개편 제안 · 2026-10-27
+
+[Wellness Flow / Compact](themes/dune-wellness-redesign.html)는 Today Compact·Activity Flow와 같은 DUNE 브라운·골드·모래 능선·104px 링·WELLNESS·100점 근거 막대·전체 헤더 상세를 사용한다. 권장 Flow는 점수/수면을 나누고 관측 수면→예측→건강 지표→신체→자세/부상으로 연결한다. 활성 부상은 예측 다음으로 올리며 Compact는 현행 묶음·순서를 정돈한다. 수면·컨디션·신체·자세 네 항목, 유효 수면 평균·측정 날짜·예측 신뢰도·수동 기록 경로를 보존한다.
+
+[배치·데이터·상태 계약](../layout-map/wellness-redesign-proposal.md), [편집 원본](themes/assets/wellness-redesign-fragment.html), [브라우저 검사](themes/assets/wellness-redesign-qa.json)와 최신PNG20장을 저장했다. 히어로는 골드 링·능선 질감, 건강 지표는 큰 수치·카테고리별 면적 그래프, 신체는2×2 항목별 변화, 자세는 촬영 안내/큰 점수로 보완하고 Astra의 원본·개선본 자문을 반영했다. 신체 비교값은 날짜·%p·예시 표시와 비교 없음 상태를 제공하며 현재 체중 외 변화량에는 후속 실제 이력 연결이 필요하다. 두 방향의80개 배치·20개 추가 상태·60개 동작과 마지막 자세 아이콘의24개 한정 배치를 확인했다. 캡처 문제는 원인 수정 후 캡처만 재실행했고 초기 시안은 별도 보존한다. 실제 앱 캡처·Native Dynamic Type 검증이 아니며 앱의 기존 테마·점수 계산은 변경하지 않았다. 방향 선택과 네이티브 적용은 후속 단계다.
+
 [4탭 레이아웃 기준맵](../layout-map/index.html)은 배치와 정보 순서의 별도 기준이다. 이 테마 맵은 색·장면·링·움직임을 정의한다.
 
 2026-10-17까지 논의한 **8개 테마 방향 시안**과 공통 능선 표현 연구안을 저장소에 보존한다. 이 자료는 움직이는 디자인 제안이며 앱의 현재 구현이나 실제 시뮬레이터 캡처가 아니다. 시안의 컨디션 수치와 문구는 예시다.
