@@ -13,6 +13,7 @@ struct WellnessView: View {
     @Environment(\.appTheme) private var theme
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.horizontalSizeClass) private var sizeClass
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     private let scrollToTopSignal: Int
     private let openWeightEntrySignal: Int
@@ -90,105 +91,59 @@ struct WellnessView: View {
                             partialFailureBanner(message)
                         }
 
-                        // Hero Card
-                        if viewModel.wellnessScore != nil {
-                            WellnessHeroCard(
-                                score: viewModel.wellnessScore,
-                                sleepScore: viewModel.sleepScore,
-                                conditionScore: viewModel.conditionScore,
-                                bodyScore: viewModel.bodyScore,
-                                hourlySparkline: viewModel.wellnessSparkline.nonEmptyOrNil,
+                        WellnessHeroCard(
+                            score: viewModel.wellnessScore,
+                            sleepScore: viewModel.sleepScore,
+                            conditionScore: viewModel.conditionScore,
+                            bodyScore: viewModel.bodyScore,
+                            hourlySparkline: viewModel.wellnessSparkline.nonEmptyOrNil
+                        )
+                        .reportTabHeroFrame()
+                        .staggeredAppear(index: 0)
+
+                        flowPair {
+                            WellnessSleepSummaryCard(
                                 sleepTrend: viewModel.sleepDetailTrend,
                                 sleepMetric: sleepMetric
                             )
-                            .reportTabHeroFrame()
-                            .staggeredAppear(index: 0)
-                        } else {
-                            WellnessHeroCard(
-                                score: viewModel.wellnessScore,
-                                sleepScore: viewModel.sleepScore,
-                                conditionScore: viewModel.conditionScore,
-                                bodyScore: viewModel.bodyScore,
-                                hourlySparkline: viewModel.wellnessSparkline.nonEmptyOrNil,
-                                sleepTrend: viewModel.sleepDetailTrend
-                            )
-                            .reportTabHeroFrame()
-                            .staggeredAppear(index: 0)
+                        } trailing: {
+                            WellnessSleepPredictionCard(prediction: viewModel.sleepPrediction)
                         }
 
-                        // Sleep Prediction
-                        SectionGroup(title: "Sleep Prediction", icon: "moon.zzz",
-                                     iconColor: DS.Color.sleep,
-                                     sectionIdentifier: "wellness-section-sleep-prediction",
-                                     headerLink: viewModel.sleepPrediction == nil ? nil : { label in
-                            AnyView(NavigationLink(value: SleepPredictionDestination()) {
-                                CardNavigationHeader { label }
-                            }
-                            .buttonStyle(CardNavigationButtonStyle())
-                            .accessibilityIdentifier("wellness-sleep-prediction-detail-link"))
-                        }) {
-                            if let prediction = viewModel.sleepPrediction {
-                                NavigationLink(value: SleepPredictionDestination()) {
-                                    predictionSummary(prediction)
-                                }
-                                .buttonStyle(CardNavigationButtonStyle())
-                                .accessibilityIdentifier("wellness-sleep-prediction-detail-content")
-                            } else {
-                                SleepPredictionCard(prediction: nil)
-                            }
-                        }
-                        .staggeredAppear(index: 1)
-
-
-                        // Physical section
-                        if !viewModel.physicalCards.isEmpty {
-                            WellnessSectionGroup(
-                                title: "Physical",
-                                icon: "figure.stand",
-                                iconColor: DS.Color.body
-                            ) {
-                                cardGrid(cards: viewModel.physicalCards)
-                            }
-                            .staggeredAppear(index: 2)
-                        }
-
-                        // Active Indicators section
-                        if !viewModel.activeCards.isEmpty {
-                            WellnessSectionGroup(
-                                title: "Active Indicators",
-                                icon: "heart.text.square",
-                                iconColor: DS.Color.vitals
-                            ) {
-                                cardGrid(cards: viewModel.activeCards)
-                            }
-                            .staggeredAppear(index: 3)
-                        }
-
-                        // Watch Posture Summary
-                        WatchPostureSummaryCard(
-                            summary: viewModel.watchPostureSummary,
-                            isWatchAppInstalled: WatchSessionManager.shared.isWatchAppInstalled
-                        )
-                        .staggeredAppear(index: 4)
-
-                        // Posture Assessment (isolated @Query)
-                        PostureAssessmentLinkView(
-                            onCapture: { isShowingPostureCapture = true },
-                            onRealtime: { isShowingRealtimePosture = true },
-                            onScoreUpdate: { viewModel.postureScore = $0 }
-                        )
-                        .staggeredAppear(index: 5)
-
-                        // Injury Banner (isolated @Query — re-renders independently)
                         WellnessInjuryBannerView(
-                            onEdit: { record in injuryViewModel.startEditing(record) },
+                            placement: .active,
+                            onEdit: { injuryViewModel.startEditing($0) },
                             onAdd: { startAddingInjury() }
                         )
-                        .staggeredAppear(index: 6)
 
-                        // Body History link (isolated @Query — only renders when records exist)
-                        BodyHistoryLinkView()
-                        .staggeredAppear(index: 7)
+                        flowPair {
+                            healthIndicatorsSection
+                        } trailing: {
+                            WellnessBodySummaryCard(
+                                cards: viewModel.physicalCards,
+                                comparisons: viewModel.bodyComparisons,
+                                onAdd: openBodyRecord
+                            )
+                        }
+
+                        flowPair {
+                            WatchPostureSummaryCard(
+                                summary: viewModel.watchPostureSummary,
+                                isWatchAppInstalled: WatchSessionManager.shared.isWatchAppInstalled
+                            )
+                        } trailing: {
+                            PostureAssessmentLinkView(
+                                onCapture: { isShowingPostureCapture = true },
+                                onRealtime: { isShowingRealtimePosture = true },
+                                onScoreUpdate: { viewModel.postureScore = $0 }
+                            )
+                        }
+
+                        WellnessInjuryBannerView(
+                            placement: .history,
+                            onEdit: { injuryViewModel.startEditing($0) },
+                            onAdd: { startAddingInjury() }
+                        )
                     }
                 }
                 .padding(isRegular ? DS.Spacing.xxl : DS.Spacing.lg)
@@ -416,32 +371,52 @@ struct WellnessView: View {
         bodyViewModel.isShowingAddSheet = true
     }
 
-    private func predictionSummary(_ prediction: SleepQualityPrediction) -> some View {
-        StandardCard {
-            HStack(spacing: DS.Spacing.md) {
-                Image(systemName: "moon.zzz")
-                    .font(.title3)
-                    .foregroundStyle(DS.Color.sleep)
-                    .accessibilityHidden(true)
+    private func flowPair<Leading: View, Trailing: View>(
+        @ViewBuilder leading: () -> Leading,
+        @ViewBuilder trailing: () -> Trailing
+    ) -> some View {
+        let layout = isRegular && !dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(HStackLayout(alignment: .top, spacing: DS.Spacing.lg))
+            : AnyLayout(VStackLayout(spacing: DS.Spacing.lg))
+        return layout {
+            leading().frame(maxWidth: .infinity, alignment: .topLeading)
+            trailing().frame(maxWidth: .infinity, alignment: .topLeading)
+        }
+    }
 
-                VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-                    Text("Tonight's Sleep")
-                        .font(.subheadline.weight(.semibold))
-                    Text(prediction.outlook.displayName)
-                        .font(.subheadline)
-                    Text(prediction.confidence.displayName)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+    @ViewBuilder
+    private var healthIndicatorsSection: some View {
+        let order: [HealthMetric.Category] = [
+            .hrv, .rhr, .heartRate, .spo2, .respiratoryRate, .wristTemperature,
+            .vo2Max, .heartRateRecovery
+        ]
+        let cards = viewModel.activeCards.filter { $0.category != .sleep }.sorted { left, right in
+            if left.isStale != right.isStale { return !left.isStale }
+            return (order.firstIndex(of: left.category) ?? order.count)
+                < (order.firstIndex(of: right.category) ?? order.count)
+        }
+        let primary = cards.filter { $0.category != .vo2Max && $0.category != .heartRateRecovery }
+        let fitness = cards.filter { $0.category == .vo2Max || $0.category == .heartRateRecovery }
+        if !cards.isEmpty {
+            SectionGroup(
+                title: "Health Indicators",
+                icon: "heart.text.square",
+                iconColor: DS.Color.vitals,
+                sectionIdentifier: "wellness-section-health-indicators"
+            ) {
+                VStack(alignment: .leading, spacing: DS.Spacing.md) {
+                    healthMetricGrid(cards: primary)
+                    if !fitness.isEmpty {
+                        DisclosureGroup("Cardio Fitness and Heart Rate Recovery") {
+                            healthMetricGrid(cards: fitness)
+                                .padding(.top, DS.Spacing.sm)
+                        }
+                        .font(.caption.weight(.medium))
+                        .tint(theme.accentColor)
+                        .accessibilityIdentifier("wellness-fitness-disclosure")
+                    }
                 }
-
-                Spacer(minLength: DS.Spacing.xs)
-
-                Text("\(prediction.predictedScore)")
-                    .font(DS.Typography.cardScore)
-                    .monospacedDigit()
-                    .foregroundStyle(theme.heroTextGradient)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
 
@@ -467,25 +442,24 @@ struct WellnessView: View {
         }
     }
 
-    /// Eager two-column grid — avoids LazyVGrid layout recalculation during scroll bounce.
-    private func cardGrid(cards: [VitalCardData]) -> some View {
-        let rows: [(left: VitalCardData, right: VitalCardData?)] = stride(from: 0, to: cards.count, by: 2).map { i in
-            (left: cards[i], right: i + 1 < cards.count ? cards[i + 1] : nil)
+    /// Eager rows keep SwiftData observations from feeding lazy scroll layout changes.
+    private func healthMetricGrid(cards: [VitalCardData]) -> some View {
+        let columns = dynamicTypeSize.isAccessibilitySize ? 1 : 2
+        let rows = stride(from: 0, to: cards.count, by: columns).map { index in
+            (id: cards[index].id, cards: Array(cards[index..<min(index + columns, cards.count)]))
         }
-        return VStack(spacing: DS.Spacing.md) {
-            ForEach(rows, id: \.left.id) { row in
-                HStack(spacing: DS.Spacing.md) {
-                    NavigationLink(value: row.left.metric) {
-                        VitalCard(data: row.left)
-                    }
-                    .buttonStyle(CardNavigationButtonStyle())
-                    if let right = row.right {
-                        NavigationLink(value: right.metric) {
-                            VitalCard(data: right)
+        return VStack(spacing: DS.Spacing.sm) {
+            ForEach(rows, id: \.id) { row in
+                HStack(alignment: .top, spacing: DS.Spacing.sm) {
+                    ForEach(row.cards) { card in
+                        NavigationLink(value: card.metric) {
+                            WellnessMetricCard(data: card)
                         }
                         .buttonStyle(CardNavigationButtonStyle())
-                    } else {
-                        Color.clear
+                        .frame(maxWidth: .infinity, alignment: .topLeading)
+                    }
+                    if row.cards.count < columns {
+                        Color.clear.frame(maxWidth: .infinity)
                     }
                 }
             }
@@ -514,11 +488,15 @@ private struct WellnessInjuryBannerView: View {
     @Query(sort: \InjuryRecord.startDate, order: .reverse) private var injuryRecords: [InjuryRecord]
     @Environment(\.appTheme) private var theme
 
+    enum Placement { case active, history }
+
+    let placement: Placement
     let onEdit: (InjuryRecord) -> Void
     let onAdd: () -> Void
 
     var body: some View {
         let activeInjuries = injuryRecords.filter(\.isActive)
+        if (placement == .active) == !activeInjuries.isEmpty {
         StandardCard {
             VStack(alignment: .leading, spacing: DS.Spacing.sm) {
                 if !injuryRecords.isEmpty {
@@ -564,6 +542,7 @@ private struct WellnessInjuryBannerView: View {
                 }
             }
         }
+        }
     }
 }
 
@@ -580,11 +559,11 @@ private struct PostureAssessmentLinkView: View {
 
     var body: some View {
         StandardCard {
-            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+            VStack(alignment: .leading, spacing: DS.Spacing.md) {
                 if !records.isEmpty {
                     NavigationLink(value: PostureHistoryDestination()) {
                         CardNavigationHeader {
-                            Label("Posture Assessment", systemImage: "figure.stand")
+                            Label("Posture Assessment", systemImage: "viewfinder")
                                 .font(.subheadline.weight(.semibold))
                         }
                     }
@@ -592,27 +571,105 @@ private struct PostureAssessmentLinkView: View {
                     .accessibilityIdentifier("wellness-link-posturehistory")
                     .accessibilityHint("View All")
                 } else {
-                    Label("Posture Assessment", systemImage: "figure.stand")
+                    Label("Posture Assessment", systemImage: "viewfinder")
                         .font(.subheadline.weight(.semibold))
                 }
 
-                // Action buttons: Camera Capture + Realtime Analysis
+                if let latest = records.first {
+                    NavigationLink(value: PostureRecordDestination(id: latest.id)) {
+                        assessmentSummary(latest)
+                            .contentShape(Rectangle())
+                    }
+                    .buttonStyle(CardNavigationButtonStyle())
+                    .accessibilityIdentifier("wellness-posture-record-\(latest.id.uuidString)")
+                } else {
+                    assessmentSummary(nil)
+                }
+
+                Label("Photo assessments and Watch records are shown separately.", systemImage: "viewfinder")
+                    .font(.caption)
+                    .foregroundStyle(DS.Color.textSecondary)
+                    .fixedSize(horizontal: false, vertical: true)
+
                 actionButtons
 
-                // Recent records (up to 3) — tap to navigate to detail
-                if !records.isEmpty {
-                    ForEach(records.prefix(3)) { record in
-                        NavigationLink(value: PostureRecordDestination(id: record.id)) {
-                            recordRow(record)
-                        }
-                        .buttonStyle(CardNavigationButtonStyle())
-                        .accessibilityIdentifier("wellness-posture-record-\(record.id.uuidString)")
+                ForEach(records.dropFirst().prefix(2)) { record in
+                    NavigationLink(value: PostureRecordDestination(id: record.id)) {
+                        recordRow(record)
                     }
+                    .buttonStyle(CardNavigationButtonStyle())
+                    .accessibilityIdentifier("wellness-posture-record-\(record.id.uuidString)")
                 }
             }
         }
-        .task(id: records.first?.overallScore) {
-            onScoreUpdate?(records.first?.overallScore)
+        .task(id: records.first?.allMetrics) {
+            let measured = records.first?.allMetrics.contains { $0.status != .unmeasurable } ?? false
+            onScoreUpdate?(measured ? records.first?.overallScore : nil)
+        }
+    }
+
+    private func assessmentSummary(_ record: PostureAssessmentRecord?) -> some View {
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.md))
+            : AnyLayout(HStackLayout(alignment: .center, spacing: DS.Spacing.lg))
+        return layout {
+            if !dynamicTypeSize.isAccessibilitySize {
+                VStack(spacing: DS.Spacing.sm) {
+                    Image(systemName: "figure.stand")
+                        .font(.system(size: 48, weight: .ultraLight))
+                        .frame(width: 72, height: 84)
+                        .background(DS.Color.body.opacity(0.06), in: RoundedRectangle(cornerRadius: DS.Radius.md))
+                    Text("Front and side capture guide")
+                        .font(.caption2)
+                        .multilineTextAlignment(.center)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                .padding(DS.Spacing.md)
+                .frame(width: 112)
+                .foregroundStyle(DS.Color.body)
+                .background(DS.Color.body.opacity(0.08), in: RoundedRectangle(cornerRadius: DS.Radius.lg))
+                .accessibilityHidden(true)
+            }
+            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                if let record {
+                    Text(record.date.formatted(.dateTime.month(.abbreviated).day()))
+                        .font(.caption)
+                        .foregroundStyle(DS.Color.textSecondary)
+                    if record.allMetrics.contains(where: { $0.status != .unmeasurable }) {
+                        HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xs) {
+                            Text(record.overallScore.formatted())
+                                .font(.largeTitle.weight(.semibold).monospacedDigit())
+                                .accessibilityIdentifier("wellness-posture-score")
+                            Text(verbatim: "/100")
+                                .font(.caption)
+                                .foregroundStyle(DS.Color.textSecondary)
+                        }
+                        GeometryReader { geometry in
+                            Capsule().fill(DS.Color.body.opacity(0.12))
+                                .overlay(alignment: .leading) {
+                                    Capsule().fill(DS.Color.body)
+                                        .frame(width: geometry.size.width * CGFloat(max(0, min(100, record.overallScore))) / 100)
+                                }
+                        }
+                        .frame(height: 7)
+                        .accessibilityHidden(true)
+                    } else {
+                        Text("Unable to measure")
+                            .font(.headline)
+                    }
+                    Text("Photo assessment")
+                        .font(.caption)
+                        .foregroundStyle(DS.Color.textSecondary)
+                } else {
+                    Text("Record your posture")
+                        .font(.headline)
+                    Text("Use a photo or realtime analysis to get started.")
+                        .font(.caption)
+                        .foregroundStyle(DS.Color.textSecondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
 
@@ -634,7 +691,7 @@ private struct PostureAssessmentLinkView: View {
                         .fixedSize(horizontal: false, vertical: true)
                 }
                 .frame(maxWidth: .infinity)
-                .padding(.vertical, DS.Spacing.sm)
+                .frame(minHeight: 44)
                 .background(DS.Color.body.opacity(0.12), in: RoundedRectangle(cornerRadius: DS.Radius.sm))
             }
             .buttonStyle(.plain)
@@ -652,7 +709,7 @@ private struct PostureAssessmentLinkView: View {
                         .fixedSize(horizontal: false, vertical: true)
                 }
                 .frame(maxWidth: .infinity)
-                .padding(.vertical, DS.Spacing.sm)
+                .frame(minHeight: 44)
                 .background(DS.Color.body.opacity(0.12), in: RoundedRectangle(cornerRadius: DS.Radius.sm))
             }
             .buttonStyle(.plain)
@@ -709,34 +766,6 @@ private struct PostureAssessmentLinkView: View {
 
     private func scoreColor(_ score: Int) -> Color {
         postureScoreColor(score)
-    }
-}
-
-/// Body History link with its own @Query — only renders when records exist.
-private struct BodyHistoryLinkView: View {
-    @Query(sort: \BodyCompositionRecord.date, order: .reverse) private var records: [BodyCompositionRecord]
-
-    var body: some View {
-        if !records.isEmpty {
-            NavigationLink(value: BodyHistoryDestination()) {
-                HStack {
-                    Image(systemName: "figure.stand")
-                        .font(.subheadline)
-                        .foregroundStyle(DS.Color.body)
-                    CardNavigationHeader(minimumHeight: 0) {
-                        Text("Body Composition History")
-                            .font(.subheadline)
-                    }
-                }
-                .padding(DS.Spacing.lg)
-                .background {
-                    RoundedRectangle(cornerRadius: DS.Radius.md)
-                        .fill(.thinMaterial)
-                }
-            }
-            .buttonStyle(CardNavigationButtonStyle())
-            .accessibilityIdentifier("wellness-link-bodyhistory")
-        }
     }
 }
 
