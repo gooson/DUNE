@@ -33,3 +33,5 @@ iPad `body-light`는 첫 viewport의 신체 카드 시작 부분만 보이므로
 Duo 닫힘은 외부 `LCD`, 펼침은 내부 `LCD-1`의 활성 패널과 native viewport를 전후 display readback, 실제 PNG 크기, AX viewport×scale, 새 hierarchy로 확인했다. 각 상태의 H01 10장만 gallery card에 넣고 짝이 되는 비활성 검은 PNG와 두 system view chrome을 `proof/duo-*`에 보존했다. 호스트 getter가 접힘각을 돌려주지 않아 `actualAngle=null`, `angleVerified=false`다. 따라서 물리 접힘각이 아니라 활성 패널과 viewport를 검증한 결과다. 이 호스트 사진을 XCResult screenshot으로 표시하지 않는다.
 
 이 증거는 요청한 기기·상태의 대상 검사다. 전체 UI 재실행은 요청되지 않았고, Watch의 nonempty 상태, VoiceOver 실제 조작, 한국어·일본어 런타임, 전체 테마 조합은 검증하지 않았다. `proof/verification.json`은 실제 실행 영수증의 복사본·해시와 이미지·proof 파일 해시를 기록한다.
+
+호스트 실행 원본 로그 두 개는 `proof/duo-*/ui.log.gz`에 무손실 gzip으로 보존했다. 원본의 공백을 고치지 않았으며 압축 해제한 SHA256과 archive SHA256을 `proof/verification.json`에 함께 기록한다.

@@ -877,9 +877,13 @@
       "bytes": 1133
     },
     {
-      "path": "proof/duo-closed/ui.log",
-      "sha256": "5a4f32f577547d6843c62b628b4679e89ca2ea405ecf19cb1a2921ca0cbc50b5",
-      "bytes": 100149
+      "path": "proof/duo-closed/ui.log.gz",
+      "sha256": "954807848191d76d91d7320419e7f628a4c8ee27a89eaad79b5a91bfa4eb0756",
+      "bytes": 9802,
+      "encoding": "gzip",
+      "originalPath": "proof/duo-closed/ui.log",
+      "decodedSHA256": "5a4f32f577547d6843c62b628b4679e89ca2ea405ecf19cb1a2921ca0cbc50b5",
+      "decodedBytes": 100149
     },
     {
       "path": "proof/duo-open/002-1398x2034.png",
@@ -1067,9 +1071,13 @@
       "bytes": 1134
     },
     {
-      "path": "proof/duo-open/ui.log",
-      "sha256": "e6ab872505a16c61a2bda25707c1d0b3de29f7e37644c6030d19f6c2e38b5d83",
-      "bytes": 58341
+      "path": "proof/duo-open/ui.log.gz",
+      "sha256": "74941100a6c6e5acbbd89675862f93b2bdc01e660fbeeabcad117e7f38f3593a",
+      "bytes": 6966,
+      "encoding": "gzip",
+      "originalPath": "proof/duo-open/ui.log",
+      "decodedSHA256": "e6ab872505a16c61a2bda25707c1d0b3de29f7e37644c6030d19f6c2e38b5d83",
+      "decodedBytes": 58341
     },
     {
       "path": "proof/receipts/duo-closed-ui.log.result.json",
