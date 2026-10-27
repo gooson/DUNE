@@ -131,6 +131,13 @@ final class WellnessFlowUITests: SeededUITestBaseCase {
         let badge = reveal("wellness-prediction-confidence")
         XCTAssertTrue(badge.label.contains("Low Confidence"))
         XCTAssertTrue(badge.isHittable)
+        // A hittable midpoint can leave the second line behind the floating tab bar.
+        app.scrollViews.firstMatch.swipeUp(velocity: .slow)
+        let window = app.windows.firstMatch.frame
+        let top = max(window.minY, app.navigationBars.firstMatch.frame.maxY)
+        let bottom = app.tabBars.firstMatch.exists ? app.tabBars.firstMatch.frame.minY : window.maxY
+        XCTAssertTrue(CGRect(x: window.minX, y: top, width: window.width, height: bottom - top)
+            .contains(badge.frame), "The entire confidence badge should be visible above the tab bar")
         addScreenshotAttachment(named: "H01-prediction-37-MaxAX-confidence")
 
         configuration = launchConfiguration
