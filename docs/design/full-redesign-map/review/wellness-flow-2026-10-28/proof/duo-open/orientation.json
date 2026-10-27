@@ -1,0 +1,30 @@
+{
+  "info" : {
+    "arguments" : [
+      "devicectl",
+      "device",
+      "orientation",
+      "get",
+      "--device",
+      "CF4E3CE3-8E9A-4595-8AE1-9BE271EB22C2",
+      "--timeout",
+      "10",
+      "--quiet",
+      "--json-output",
+      ".codex-checks/wellness/duo-open/orientation.json"
+    ],
+    "commandType" : "devicectl.device.orientation.get",
+    "environment" : {
+      "TERM" : "dumb"
+    },
+    "jsonVersion" : 5,
+    "outcome" : "success",
+    "version" : "651.13.5"
+  },
+  "result" : {
+    "deviceIdentifier" : "CF4E3CE3-8E9A-4595-8AE1-9BE271EB22C2",
+    "deviceIsOrientationLocked" : false,
+    "deviceOrientation" : "portrait",
+    "deviceOrientationNonFlat" : "portrait"
+  }
+}

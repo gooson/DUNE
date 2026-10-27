@@ -9,7 +9,15 @@ status: draft
 
 [전체 시안 열기](../theme-map/themes/dune-wellness-redesign.html) · [Flow 첫 화면](../theme-map/themes/assets/wellness-flow-light.png) · [Flow 전체](../theme-map/themes/assets/wellness-flow-light-full.png) · [어두움](../theme-map/themes/assets/wellness-flow-dark-full.png) · [큰 글씨](../theme-map/themes/assets/wellness-flow-large.png) · [넓은 화면](../theme-map/themes/assets/wellness-flow-wide.png)
 
-H01 웰니스 탭의 **구현 전 제안**이다. 사용자 요청에 따라 기존 개편 기록·현재 SwiftUI·점수 모델을 먼저 대조했다. 권장안 Flow와 현재 순서를 정돈한 Compact를 비교한다. 모든 수치·시각·사진 평가·부상은 예시이며 브라우저 PNG는 실제 앱 캡처가 아니다. 앱 구현 방향이 선택되기 전까지 현재 네이티브 배치와 실제 화면맵을 덮어쓰지 않는다.
+H01 웰니스 탭의 **2026-10-27 당시 구현 전 제안**이다. 아래의 “현재 앱”과 구현 필요 항목은 당시 조사 기준이다. 2026-10-28 최신 Flow 시안을 네이티브에 적용했다. 시안의 예시 수치와 브라우저 PNG는 실제 앱 캡처가 아니며, [현재 배치](index.html#wellness)와 [새 실제 화면·출처](../full-redesign-map/review/wellness-flow-2026-10-28/index.html)는 별도다. 사용자 요청에 따라 기존 개편 기록·현재 SwiftUI·점수 모델을 먼저 대조했다. 권장안 Flow와 현재 순서를 정돈한 Compact를 비교한다. 모든 수치·시각·사진 평가·부상은 예시이며 브라우저 PNG는 실제 앱 캡처가 아니다. 이하 구현 전 비교는 당시 기록으로 보존한다.
+
+## 2026-10-28 네이티브 적용 기록
+
+최신 Flow를 실제 Wellness에 적용했다. 104pt 링과 네 항목의 실제 점수 근거, 관측 수면과 예측의 별도 상세, 범주별 건강 지표, 체중·체지방률·제지방량·BMI의 실제 측정일/변화량, 사진 자세의 최신 점수와 행동을 연결했다. 체지방률 차이는 %p이며 각 최신 측정일의 7일 전 기준일 이하에서 가장 최근 유효 관측과 비교한다. 비교 기록이 없으면 이를 명시하고 현재 값을 유지한다. 손목 온도는 개인 기준선 대비 변화라고 표시한다.
+
+[실제 화면 66장](../full-redesign-map/review/wellness-flow-2026-10-28/index.html)과 이미지별 출처를 보존했다. 선택한 기기별 검사 57건이 통과했고 공통 smoke의 알림 2건은 아침 브리핑 오버레이 상태의 범위 밖 실패로 별도 기록했다. 전체 회귀를 통과한 것으로 확대하지 않는다. Astra·SwiftUI·Apple UX의 현재 P1/P2는 0건이며 선택적 시각 다듬기 사항은 [최종 리뷰](../../reviews/2026-10-28-wellness-flow.md)에 기록한다. Duo는 활성 외부/내부 패널과 실제 viewport를 확인했고 물리 힌지 각도는 확인하지 못했다.
+
+아래는 2026-10-27 시안 조사 당시의 비교·제약이다. 현재 구현/검증 범위는 위 기록과 실제 갤러리를 따른다.
 
 ## 확인한 개편 이력
 

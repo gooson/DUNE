@@ -15,7 +15,7 @@ status: in-progress
 
 미리보기 폭은 이번 실제 캡처 기기의 논리 폭(iPhone 402pt, Duo 외부 세로 466pt, Duo 내부 펼침 가로 951×669pt, iPad 1032pt)이다. 캡처 기기가 바뀌면 표시 폭과 배치 전환을 다시 대조한다.
 
-4탭 첫 카드의 링은 Today의 124pt 크기·호·중앙 수치·상태 문구를 공통 기준으로 한다. Activity는 실제 준비도 점수, Wellness는 실제 웰니스 점수, Life는 오늘 완료 수/대상 수를 표시한다. 수치가 없으면 빈 상태를 사용하며 임의 점수나 완료율을 만들지 않는다. 접근성 글씨 크기에서는 링과 설명을 세로로 배치한다.
+2026-10-28 현재 Today Compact·Activity Flow·Wellness Flow는 104pt 전용 링을 사용한다. Life는 기존 공유 링을 유지한다. Activity는 실제 준비도 점수, Wellness는 실제 웰니스 점수, Life는 오늘 완료 수/대상 수를 표시한다. 수치가 없으면 빈 상태를 사용하며 임의 점수나 완료율을 만들지 않는다. Wellness 접근성 글씨 크기는 외부 점수와 한 열 근거를 사용한다. 아래 124pt 비교 기록은 2026-10-22 당시의 검증 이력이다.
 
 Today T03의 큰 제목은 시스템 스크롤에 따라 접히고 펼쳐진다. 상단 근처에서 멈춘 부분 스크롤은 그대로 유지하며, 감속 종료를 이유로 자동으로 맨 위에 정렬하지 않는다. 맨 위로 이동하는 프로그램 동작은 Today 탭 재선택처럼 명시적인 사용자 행동에서만 수행한다. 상단 복귀·실제 당겨서 새로고침의 손 해제 중 제목과 첫 카드가 연속적으로 움직여야 한다.
 
@@ -40,7 +40,7 @@ Life의 링 옆에는 현재 진행 상태를 설명하는 문장을 둔다. 히
 | 범위 | 맵 |
 |---|---|
 | Today T03·Activity A01·Wellness H01·Life L01 | [4탭 레이아웃 맵](index.html) |
-| Wellness H01 개편 · 구현 전 제안 | [Flow / Compact 전체 시안](../theme-map/themes/dune-wellness-redesign.html) · [순서·데이터·상태 계약](wellness-redesign-proposal.md) |
+| Wellness H01 · 적용된 Flow와 보존된 Compact 제안 | [현재 배치](index.html#wellness) · [실제 화면](../full-redesign-map/review/wellness-flow-2026-10-28/index.html) · [원본 시안/계약](wellness-redesign-proposal.md) |
 | DESERT HORIZON 4탭 상세 배치 | [밝음·어두움 시안](../theme-map/themes/dune-final-four-tab.html) · [상세 계약](desert-horizon-final.md) |
 | Today 하단 읽기 위계 | [회복·스트레스·요약 V2](today-reading-proposal.md) · [원본 대비 시안](../theme-map/themes/dune-today-reading.html) |
 | Today T03 요약 · 본문 더 보기 선택 후 | [세부 배치·펼침 기준](digest-read-more-refinement.md) · [핵심 먼저·한 문장 먼저·지표 행 비교](digest-read-more-refinement.html) |
@@ -100,4 +100,4 @@ Activity 후속 시안은 개인 기록에 금빛 메달·최고 값·개선량�
 
 ## Wellness 개편 시안 · 2026-10-27
 
-[Flow / Compact](../theme-map/themes/dune-wellness-redesign.html)는 Today Compact·Activity Flow의 개편 기록을 이어가는 H01 구현 전 제안이다. 권장 Flow는 점수→최근 수면→오늘 밤 예측→건강 지표→신체→자세/부상 순서이며 활성 부상은 예측 다음에 표시한다. Compact는 기존 점수/수면 묶음과 순서를 정돈한다. WELLNESS·104px 링·네 항목의100점 막대·제목 옆 전체 헤더 상세·큰 글씨 외부 점수를 공유한다. 후속 요청의 골드 히어로·건강 지표 면적/수치·신체 항목별 비교·촬영 안내와 점수 강조를 반영하고 Astra에게 두 차례 자문받았다. [데이터 제약·비교 예시·검증 범위](wellness-redesign-proposal.md), 초기 원본·최신PNG20장·80개 배치/20개 상태/60개 동작과 마지막 아이콘24개 한정 배치 기록을 함께 보존했다. 최종 방향 선택·네이티브 구현·실제 H01 캡처는 아직 수행하지 않았다.
+[Flow / Compact](../theme-map/themes/dune-wellness-redesign.html)는 Today Compact·Activity Flow의 개편 기록을 이어가는 H01 구현 전 제안이다. 권장 Flow는 점수→최근 수면→오늘 밤 예측→건강 지표→신체→자세/부상 순서이며 활성 부상은 예측 다음에 표시한다. Compact는 기존 점수/수면 묶음과 순서를 정돈한다. WELLNESS·104px 링·네 항목의100점 막대·제목 옆 전체 헤더 상세·큰 글씨 외부 점수를 공유한다. 후속 요청의 골드 히어로·건강 지표 면적/수치·신체 항목별 비교·촬영 안내와 점수 강조를 반영하고 Astra에게 두 차례 자문받았다. [데이터 제약·비교 예시·검증 범위](wellness-redesign-proposal.md), 초기 원본·최신PNG20장·80개 배치/20개 상태/60개 동작과 마지막 아이콘24개 한정 배치 기록을 함께 보존했다. 이 문단은 2026-10-27 구현 전 시안의 보존 기록이다. 2026-10-28 Flow를 네이티브에 적용했고 [현재 H01 배치](index.html#wellness)와 [새 실제 화면·검증 범위](../full-redesign-map/review/wellness-flow-2026-10-28/index.html)를 현재 기준으로 따른다. Compact와 예시 수치의 브라우저 PNG는 시안으로 남긴다.

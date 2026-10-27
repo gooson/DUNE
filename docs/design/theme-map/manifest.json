@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-27",
+  "updated": "2026-10-28",
   "app_contract": "app-contract.md",
   "themes": [
     {
@@ -170,7 +170,12 @@
       "name": "Wellness 개편 · Flow / Compact",
       "title": "Wellness · 수면에서 몸의 변화로",
       "file": "dune-wellness-redesign.html",
-      "detail": "2026-10-27 구현 전 제안. Today Compact·Activity Flow의 DUNE 브라운·골드·104px 링·WELLNESS·전체 헤더 상세를 통일. 권장 Flow는 점수→최근 수면→예측→건강 지표→신체→자세/부상, 활성 부상은 예측 다음. Compact는 현행 순서 정돈. 후속 요청의 골드 히어로·건강 지표 면적/큰 숫자·2×2 신체 항목별 비교·촬영 안내/점수 강조를 반영하고 Astra에게 원본·개선본 자문. 비교 날짜·%p·예시/비교없음을 명시하며 체중 외 변화량은 후속 이력 연결 필요. 80개 배치·20개 상태·60개 동작·마지막 아이콘24개 한정 배치 및 최신PNG20장 확인. 초기안 보존, 앱 적용/실제 캡처 아님."
+      "detail": "2026-10-27 브라우저 제안 보존. Today Compact·Activity Flow의 DUNE 브라운·골드·104px 링·WELLNESS·전체 헤더 상세를 통일. 권장 Flow는 점수→최근 수면→예측→건강 지표→신체→자세/부상, 활성 부상은 예측 다음. Compact는 현행 순서 정돈. 후속 요청의 골드 히어로·건강 지표 면적/큰 숫자·2×2 신체 항목별 비교·촬영 안내/점수 강조를 반영하고 Astra에게 원본·개선본 자문. 비교 날짜·%p·예시/비교없음을 명시하며 체중 외 변화량은 후속 이력 연결 필요. 80개 배치·20개 상태·60개 동작·마지막 아이콘24개 한정 배치 및 최신PNG20장 확인. 초기안 보존. 이 study의 예시 PNG는 실제 앱 캡처가 아니다. Flow는 2026-10-28 네이티브에 별도 적용했다.",
+      "implementation": {
+        "layout": "../layout-map/wellness-redesign-proposal.md",
+        "actual_captures": "../full-redesign-map/review/wellness-flow-2026-10-28/index.html",
+        "status": "flow-implemented-see-gallery-for-device-coverage"
+      }
     },
     {
       "id": "activity-final",

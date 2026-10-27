@@ -1,0 +1,252 @@
+{
+  "branch": "codex/wellness-flow",
+  "sourceHead": "08b320c7",
+  "applicationSource": "6c1d3f77",
+  "reviewers_run": [
+    "security",
+    "performance",
+    "architecture",
+    "data-integrity",
+    "simplicity"
+  ],
+  "reviewers_skipped": [
+    {
+      "name": "agent-native",
+      "reason": "No .claude/.codex instruction or prompt source changed"
+    }
+  ],
+  "method": "large diff exception: parent folder-based five-perspective review, with independent specialist findings",
+  "findings": [
+    {
+      "id": "W01",
+      "reviewer": "SwiftUI",
+      "priority": "P1",
+      "status": "Resolved",
+      "title": "Independent records hidden without health summaries",
+      "file": "DUNE/Presentation/Wellness/WellnessView.swift",
+      "issue": "Root empty gate hid local injury/posture data",
+      "resolution": "8085e875; records-only UI route passed",
+      "accepted": false
+    },
+    {
+      "id": "W02",
+      "reviewer": "SwiftUI/Data",
+      "priority": "P1",
+      "status": "Resolved",
+      "title": "Missing exact target day discarded earlier actual observations",
+      "file": "DUNE/Presentation/Wellness/WellnessBodyComparison.swift",
+      "issue": "Comparison did not accept a valid earlier measurement",
+      "resolution": "8085e875; latest at/before target calendar cutoff; unit and no-prior UI passed",
+      "accepted": false
+    },
+    {
+      "id": "W03",
+      "reviewer": "SwiftUI",
+      "priority": "P1",
+      "status": "Resolved",
+      "title": "Manual body entry unavailable in records-only state",
+      "file": "DUNE/Presentation/Wellness/WellnessView.swift",
+      "issue": "Empty-state body Add was omitted",
+      "resolution": "8ce1b517; dedicated records-only UI passed",
+      "accepted": false
+    },
+    {
+      "id": "W04",
+      "reviewer": "Apple UX",
+      "priority": "P1",
+      "status": "Resolved",
+      "title": "Watch summary labeled Today regardless of actual date",
+      "file": "DUNE/Presentation/Wellness/Components/WatchPostureSummaryCard.swift",
+      "issue": "Older Watch summary could imply a current observation",
+      "resolution": "22ea46ae; actual date at source; nonempty Watch native remains unverified",
+      "accepted": false
+    },
+    {
+      "id": "W05",
+      "reviewer": "SwiftUI/Data",
+      "priority": "P2",
+      "status": "Resolved",
+      "title": "Body sparklines reversed",
+      "file": "DUNE/Presentation/Wellness/WellnessViewModel.swift",
+      "issue": "Descending histories were drawn newest to oldest",
+      "resolution": "8085e875; sorted chronological; unit test passed",
+      "accepted": false
+    },
+    {
+      "id": "W06",
+      "reviewer": "SwiftUI",
+      "priority": "P2",
+      "status": "Resolved",
+      "title": "Latest posture update identity incomplete",
+      "file": "DUNE/Presentation/Wellness/WellnessView.swift",
+      "issue": "Record identity/payload changes could retain an old callback value",
+      "resolution": "8085e875; task key includes ID/score/front/side payload",
+      "accepted": false
+    },
+    {
+      "id": "W07",
+      "reviewer": "SwiftUI/Data",
+      "priority": "P2",
+      "status": "Resolved",
+      "title": "Unmeasurable posture rendered a numeric score",
+      "file": "DUNE/Presentation/Wellness/WellnessView.swift",
+      "issue": "Insufficient observations could look measured",
+      "resolution": "8085e875; explicit unable-to-measure branches and measured metric count",
+      "accepted": false
+    },
+    {
+      "id": "W08",
+      "reviewer": "Apple UX",
+      "priority": "P2",
+      "status": "Resolved",
+      "title": "Watch metrics fixed horizontally at accessibility sizes",
+      "file": "DUNE/Presentation/Wellness/Components/WatchPostureSummaryCard.swift",
+      "issue": "Large values risked narrow columns",
+      "resolution": "22ea46ae; accessibility VStack; nonempty native not claimed",
+      "accepted": false
+    },
+    {
+      "id": "W09",
+      "reviewer": "Apple UX",
+      "priority": "P2",
+      "status": "Resolved",
+      "title": "Forecast score lacked an explicit prediction label",
+      "file": "DUNE/Presentation/Wellness/Components/WellnessSleepPredictionCard.swift",
+      "issue": "Measured and predicted scores need independent meaning",
+      "resolution": "22ea46ae; Predicted score label and independent detail route",
+      "accepted": false
+    },
+    {
+      "id": "W10",
+      "reviewer": "SwiftUI",
+      "priority": "P3",
+      "status": "Resolved",
+      "title": "Hero VoiceOver value omitted narrative/date",
+      "file": "DUNE/Presentation/Wellness/Components/WellnessHeroCard.swift",
+      "issue": "Score link omitted contextual description",
+      "resolution": "8085e875; accessibilityValue includes narrative and evaluation date",
+      "accepted": false
+    },
+    {
+      "id": "W11",
+      "reviewer": "Parent Architecture/Design",
+      "priority": "P2",
+      "status": "Resolved",
+      "title": "Non-Desert ring used the fixed warm palette",
+      "file": "DUNE/Presentation/Wellness/Components/WellnessHeroCard.swift",
+      "issue": "Theme inconsistency with Activity compact ring",
+      "resolution": "b1dbdfda; AppTheme accent/dusk/track; native Ocean passed and Astra inspected",
+      "accepted": false
+    },
+    {
+      "id": "R01",
+      "reviewer": "Astra app-quality-gate",
+      "priority": "P2",
+      "status": "Resolved",
+      "title": "Wrist temperature baseline context missing",
+      "file": "DUNE/Presentation/Wellness/Components/WellnessMetricCard.swift",
+      "issue": "Baseline-subtracted value could be read as absolute temperature",
+      "resolution": "6c1d3f77; localized explicit context; iPad semantic UI and Astra pixels verified; phone final health passed",
+      "accepted": false
+    },
+    {
+      "id": "R02",
+      "reviewer": "Parent Simplicity",
+      "priority": "P3",
+      "status": "Resolved",
+      "title": "Unused hero inputs",
+      "file": "DUNE/Presentation/Wellness/Components/WellnessHeroCard.swift",
+      "issue": "Six legacy inputs no longer influenced the compact hero",
+      "resolution": "6c1d3f77; remove unused properties/call arguments; subsequent UI compiled",
+      "accepted": false
+    },
+    {
+      "id": "R03",
+      "reviewer": "Astra app-quality-gate",
+      "priority": "P3",
+      "status": "Resolved",
+      "title": "Sleep bars saturated above ten hours",
+      "file": "DUNE/Presentation/Wellness/Components/WellnessSleepSummaryCard.swift",
+      "issue": "Fixed 600-minute ceiling hid duration differences",
+      "resolution": "6c1d3f77; scale includes actual sample maximum, retains finite/date filtering",
+      "accepted": false
+    },
+    {
+      "id": "R04",
+      "reviewer": "Apple UX",
+      "priority": "P3",
+      "status": "Resolved",
+      "title": "Maximum AX posture heading split a word",
+      "file": "DUNE/Presentation/Wellness/WellnessView.swift",
+      "issue": "Icon consumed the full-word title width",
+      "resolution": "b1dbdfda; title-only at accessibility size; fresh AX PNG inspected",
+      "accepted": false
+    },
+    {
+      "id": "N01",
+      "reviewer": "Astra/Apple UX",
+      "priority": "P3",
+      "status": "Open",
+      "title": "Compact injury memo preview",
+      "file": "DUNE/Presentation/Injury/InjuryCardView.swift",
+      "issue": "One-line memo is truncated visually",
+      "resolution": "Accepted existing compact preview; full memo accessible by opening the record; no data loss",
+      "accepted": true
+    },
+    {
+      "id": "N02",
+      "reviewer": "Astra app-quality-gate",
+      "priority": "P3",
+      "status": "Open",
+      "title": "Wide sleep capsules resemble circles",
+      "file": "DUNE/Presentation/Wellness/Components/WellnessSleepSummaryCard.swift",
+      "issue": "Stylistic bar shape can be refined",
+      "resolution": "Accepted compact chart styling for this iteration; actual duration/date and corrected scale preserved",
+      "accepted": true
+    },
+    {
+      "id": "N03",
+      "reviewer": "Apple UX",
+      "priority": "P3",
+      "status": "Open",
+      "title": "Long labels/dates wrap in nested wide tiles",
+      "file": "DUNE/Presentation/Wellness/Components/WellnessMetricCard.swift",
+      "issue": "Half-width groups produce some multi-line labels",
+      "resolution": "Accepted two-group density; actual iPad complete tile frames and values are readable; optional typography refinement",
+      "accepted": true
+    }
+  ],
+  "summary": {
+    "p1": 0,
+    "p2": 0,
+    "p3": 3
+  },
+  "resolved": {
+    "p1": 4,
+    "p2": 7,
+    "p3": 4
+  },
+  "status": "reviewed; no open P1/P2; three accepted P3 visual tradeoffs",
+  "sourceChecks": {
+    "security": "No new network, persistence write or secret paths; UI fixture gates verified",
+    "performance": "Four parallel bounded 40-calendar-day queries; eager <=8 metric rows; isolated Query children; no new bulk processing",
+    "architecture": "Feature-scoped SwiftUI components and Foundation DTO; existing service protocols/navigation; iOS-only presentation target membership confirmed",
+    "data-integrity": "Real latest observation dates, valid older cutoff sample, future/nonfinite filtering, current metric/date guard and request guard verified; weights 35/30/20/15 match use case",
+    "simplicity": "Unused six hero inputs removed; remaining P3 are explicit visual tradeoffs",
+    "localization": "New Text/helper strings localized; WELLNESS is deliberate verbatim brand eyebrow; final catalog/format checks pending formal phase"
+  },
+  "timestamp": "2026-10-27T16:51:56.316878+00:00",
+  "diff_lines": 9962,
+  "snapshot": "/var/folders/fs/kn1rj4b522jcn45jm__5jwx40000gq/T/codex-context-1d99cf48",
+  "localization": {
+    "changedKeys": 24,
+    "languages": [
+      "en",
+      "ko",
+      "ja"
+    ],
+    "missing": [],
+    "formatCheck": "passed"
+  },
+  "finalDocumentReview": "Maps/gallery copied after source freeze; hashes/links/theme checks passed; app source unchanged6c1d3f77"
+}

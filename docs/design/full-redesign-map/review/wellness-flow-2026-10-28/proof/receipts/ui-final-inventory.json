@@ -1,0 +1,278 @@
+{
+  "scope": "targeted selected related behaviors + scoped common smoke; full not requested",
+  "perDevice": {
+    "phone": {
+      "WellnessFlowUITests/testSeededReadingOrderAndEvidence": {
+        "status": "passed",
+        "log": "ui-phone-probe.log"
+      },
+      "ActivitySmokeTests/testActivityScrollRemainsResponsive": {
+        "status": "passed",
+        "log": "ui-phone.log"
+      },
+      "ActivitySmokeTests/testActivityTabLoads": {
+        "status": "passed",
+        "log": "ui-phone.log"
+      },
+      "ActivitySmokeTests/testExercisePickerOpens": {
+        "status": "passed",
+        "log": "ui-phone.log"
+      },
+      "ActivitySmokeTests/testExercisePickerSearchAvailable": {
+        "status": "passed",
+        "log": "ui-phone.log"
+      },
+      "ActivitySmokeTests/testHeroReadinessCardExists": {
+        "status": "passed",
+        "log": "ui-phone.log"
+      },
+      "ActivitySmokeTests/testInlineQuickStartSearchExists": {
+        "status": "passed",
+        "log": "ui-phone.log"
+      },
+      "ActivitySmokeTests/testToolbarAddButtonExists": {
+        "status": "passed",
+        "log": "ui-phone.log"
+      },
+      "ActivitySmokeTests/testToolbarAddOpensExercisePickerWithoutDuplicateHeroAction": {
+        "status": "passed",
+        "log": "ui-phone.log"
+      },
+      "DashboardSmokeTests/testAllTabsExist": {
+        "status": "passed",
+        "log": "ui-phone.log"
+      },
+      "DashboardSmokeTests/testAppLaunchesOnDashboard": {
+        "status": "passed",
+        "log": "ui-phone.log"
+      },
+      "DashboardSmokeTests/testConditionTrendAndHeroDetailRoute": {
+        "status": "passed",
+        "log": "ui-phone.log"
+      },
+      "DashboardSmokeTests/testDashboardNavigationBarExists": {
+        "status": "passed",
+        "log": "ui-phone.log"
+      },
+      "DashboardSmokeTests/testNavigateToNotificationHub": {
+        "status": "failed",
+        "log": "ui-phone.log"
+      },
+      "DashboardSmokeTests/testNavigateToSettings": {
+        "status": "passed",
+        "log": "ui-phone.log"
+      },
+      "DashboardSmokeTests/testNavigateToWhatsNew": {
+        "status": "passed",
+        "log": "ui-phone.log"
+      },
+      "DashboardSmokeTests/testNotificationButtonExists": {
+        "status": "passed",
+        "log": "ui-phone.log"
+      },
+      "DashboardSmokeTests/testNotificationHubSummaryAtMaximumAccessibilitySize": {
+        "status": "failed",
+        "log": "ui-phone.log"
+      },
+      "DashboardSmokeTests/testSettingsButtonExists": {
+        "status": "passed",
+        "log": "ui-phone.log"
+      },
+      "DashboardSmokeTests/testTabBarExists": {
+        "status": "passed",
+        "log": "ui-phone.log"
+      },
+      "DashboardSmokeTests/testTabNavigationRoundTrip": {
+        "status": "passed",
+        "log": "ui-phone.log"
+      },
+      "DashboardSmokeTests/testTodayLogWeightOpensWellnessBodyForm": {
+        "status": "passed",
+        "log": "ui-phone.log"
+      },
+      "LifeSmokeTests/testEmptyStarterAddCancelPreservesEmptyState": {
+        "status": "passed",
+        "log": "ui-phone.log"
+      },
+      "LifeSmokeTests/testEmptyStarterOpensTemplates": {
+        "status": "passed",
+        "log": "ui-phone.log"
+      },
+      "LifeSmokeTests/testEmptyStarterRemainsActionableAtMaximumAccessibilityTextSize": {
+        "status": "passed",
+        "log": "ui-phone.log"
+      },
+      "LifeSmokeTests/testHabitFormCancelDismisses": {
+        "status": "passed",
+        "log": "ui-phone.log"
+      },
+      "LifeSmokeTests/testHabitFormOpens": {
+        "status": "passed",
+        "log": "ui-phone.log"
+      },
+      "LifeSmokeTests/testLifeTabLoads": {
+        "status": "passed",
+        "log": "ui-phone.log"
+      },
+      "LifeSmokeTests/testSaveEmptyHabitKeepsFormPresented": {
+        "status": "passed",
+        "log": "ui-phone.log"
+      },
+      "LifeSmokeTests/testToolbarAddButtonExists": {
+        "status": "passed",
+        "log": "ui-phone.log"
+      },
+      "WellnessFlowUITests/testBodyMeasurementsAndHeaderEdge": {
+        "status": "passed",
+        "log": "ui-phone-corrections.log"
+      },
+      "WellnessFlowUITests/testBodyWithoutPriorMeasurementsKeepsLatestValues": {
+        "status": "passed",
+        "log": "ui-phone.log"
+      },
+      "WellnessFlowUITests/testCaptureH01DarkFlow": {
+        "status": "passed",
+        "log": "ui-phone.log"
+      },
+      "WellnessFlowUITests/testCaptureH01LightFlow": {
+        "status": "passed",
+        "log": "ui-phone.log"
+      },
+      "WellnessFlowUITests/testCaptureH01MaximumAXFlow": {
+        "status": "passed",
+        "log": "ui-phone-final-delta.log"
+      },
+      "WellnessFlowUITests/testMaximumAccessibilityValueFrames": {
+        "status": "passed",
+        "log": "ui-phone-corrections.log"
+      },
+      "WellnessFlowUITests/testPostureHistoryAndActionsRemainIndependent": {
+        "status": "passed",
+        "log": "ui-phone.log"
+      },
+      "WellnessFlowUITests/testRecordedPostureAndInjuryRemainReachableWithoutHealthData": {
+        "status": "passed",
+        "log": "ui-phone.log"
+      },
+      "WellnessFlowUITests/testSleepAndPredictionOpenIndependentDetails": {
+        "status": "passed",
+        "log": "ui-phone.log"
+      },
+      "WellnessRegressionTests/testDesertHeroKeepsSleepEmptyStateAndScoreNavigation": {
+        "status": "passed",
+        "log": "ui-phone.log"
+      },
+      "WellnessSeededSmokeTests/testSeededSleepSummarySeparatesLatestFromSevenDayAverage": {
+        "status": "passed",
+        "log": "ui-phone.log"
+      },
+      "WellnessSeededSmokeTests/testSeededSleepSummarySkipsTrailingZeroSample": {
+        "status": "passed",
+        "log": "ui-phone.log"
+      },
+      "WellnessSeededSmokeTests/testSeededToolbarBodyRecordOpensForm": {
+        "status": "passed",
+        "log": "ui-phone.log"
+      },
+      "WellnessSeededSmokeTests/testSeededWellnessHeroScoreOpensScoreDetail": {
+        "status": "passed",
+        "log": "ui-phone.log"
+      },
+      "WellnessSeededSmokeTests/testSeededWellnessHeroSleepOpensSleepMetricDetail": {
+        "status": "passed",
+        "log": "ui-phone.log"
+      },
+      "WellnessSeededSmokeTests/testSleepPredictionSummaryOpensDetail": {
+        "status": "passed",
+        "log": "ui-phone-corrections.log"
+      },
+      "WellnessSmokeTests/testWellnessTabLoads": {
+        "status": "passed",
+        "log": "ui-phone.log"
+      },
+      "WellnessFlowUITests/testCaptureHealthIndicatorDetails": {
+        "status": "passed",
+        "log": "ui-phone-health-baseline-final.log"
+      },
+      "WellnessFlowUITests/testCaptureOceanHeroFlow": {
+        "status": "passed",
+        "log": "ui-phone-final-delta.log"
+      }
+    },
+    "ipad": {
+      "WellnessFlowUITests/testBodyMeasurementsAndHeaderEdge": {
+        "status": "passed",
+        "log": "ui-ipad.log"
+      },
+      "WellnessFlowUITests/testCaptureH01LightFlow": {
+        "status": "passed",
+        "log": "ui-ipad.log"
+      },
+      "WellnessFlowUITests/testCaptureH01MaximumAXFlow": {
+        "status": "passed",
+        "log": "ui-ipad.log"
+      },
+      "WellnessFlowUITests/testCaptureHealthIndicatorDetails": {
+        "status": "passed",
+        "log": "ui-ipad-health-final.log"
+      },
+      "WellnessFlowUITests/testSeededReadingOrderAndEvidence": {
+        "status": "passed",
+        "log": "ui-ipad.log"
+      },
+      "WellnessFlowUITests/testCaptureWideBodyMeasurementFrames": {
+        "status": "passed",
+        "log": "ui-ipad-body-final.log"
+      }
+    },
+    "duo-closed": {
+      "WellnessFlowUITests/testCaptureH01LightFlow": {
+        "status": "passed",
+        "log": "duo-closed/ui.log"
+      },
+      "WellnessFlowUITests/testCaptureHealthIndicatorDetails": {
+        "status": "passed",
+        "log": "duo-closed/ui.log"
+      }
+    },
+    "duo-open": {
+      "WellnessFlowUITests/testCaptureH01LightFlow": {
+        "status": "passed",
+        "log": "duo-open/ui.log"
+      },
+      "WellnessFlowUITests/testCaptureHealthIndicatorDetails": {
+        "status": "passed",
+        "log": "duo-open/ui.log"
+      }
+    }
+  },
+  "counts": {
+    "phone": {
+      "passed": 47,
+      "excluded_failures": 2
+    },
+    "ipad": {
+      "passed": 6,
+      "excluded_failures": 0
+    },
+    "duo-closed": {
+      "passed": 2,
+      "excluded_failures": 0
+    },
+    "duo-open": {
+      "passed": 2,
+      "excluded_failures": 0
+    }
+  },
+  "passedDeviceCases": 57,
+  "excluded": {
+    "ids": [
+      "DashboardSmokeTests/testNavigateToNotificationHub",
+      "DashboardSmokeTests/testNotificationHubSummaryAtMaximumAccessibilitySize"
+    ],
+    "reason": "Observed Korean Morning Briefing overlay; no changed Today/notification source or default seed behavior; raw failures preserved, not passed"
+  },
+  "appSource": "6c1d3f77",
+  "finalTestSource": "08b320c7",
+  "reuse": "Earlier unaffected features retained with per-image source; final changed wrist context recaptured. Unit data/model code unchanged since recorded 19 tests."
+}

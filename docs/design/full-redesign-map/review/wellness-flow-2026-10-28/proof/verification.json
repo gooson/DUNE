@@ -1,0 +1,1418 @@
+{
+  "schemaVersion": 1,
+  "kind": "copied-source-receipts-and-file-hashes",
+  "scope": "targeted Wellness UI executions; original phone batch includes out-of-scope failures",
+  "imageCount": 66,
+  "deviceImageCounts": {
+    "duo-closed": 10,
+    "duo-open": 10,
+    "ipad": 19,
+    "iphone": 27
+  },
+  "sourceReceipts": [
+    {
+      "source": ".codex-checks/wellness/ui-phone.log.result.json",
+      "copy": "proof/receipts/ui-phone.log.result.json",
+      "sha256": "845a0b3ddd72aaee69645fe370cdff3f5a57819633eccb0d954bcc3ebfc109d6",
+      "content": {
+        "schema_version": 1,
+        "status": "failed",
+        "target": "DUNEUITests",
+        "run_exit_status": 65,
+        "requested_selectors": [
+          "DUNEUITests/DashboardSmokeTests",
+          "DUNEUITests/ActivitySmokeTests",
+          "DUNEUITests/WellnessSmokeTests/testWellnessTabLoads",
+          "DUNEUITests/LifeSmokeTests",
+          "DUNEUITests/WellnessFlowUITests",
+          "DUNEUITests/WellnessSeededSmokeTests",
+          "DUNEUITests/WellnessRegressionTests/testDesertHeroKeepsSleepEmptyStateAndScoreNavigation"
+        ],
+        "skipped_selectors": [
+          "DUNEUITests/ActivitySmokeTests/testPullToRefreshShowsWaveIndicator",
+          "DUNEUITests/LifeSmokeTests/testWeeklyFrequencyShowsStepper",
+          "DUNEUITests/WellnessSmokeTests/testBodyFormSaveEnablesAfterInput",
+          "DUNEUITests/WellnessSmokeTests/testInjuryRecoveredToggleShowsEndDate",
+          "DUNEUITests/SettingsSmokeTests/testAppearanceSectionExists",
+          "DUNEUITests/SettingsSmokeTests/testDataPrivacySectionExists",
+          "DUNEUITests/SettingsSmokeTests/testAboutSectionExists",
+          "DUNEUITests/SettingsSmokeTests/testPreferredExercisesLinkExists",
+          "DUNEUITests/SettingsSmokeTests/testNavigateToPreferredExercises",
+          "DUNEUITests/SettingsSmokeTests/testWhatsNewLinkExists",
+          "DUNEUITests/SettingsSmokeTests/testNavigateToWhatsNew",
+          "DUNEUITests/SettingsSmokeTests/testWhatsNewNotificationsDetailShowsArtwork",
+          "DUNEUITests/SettingsSmokeTests/testWhatsNewSleepDebtDetailExists",
+          "DUNEUITests/SettingsSmokeTests/testWhatsNewWidgetDetailExists",
+          "DUNEUITests/SettingsSmokeTests/testWhatsNewMuscleMapDetailExists",
+          "DUNEUITests/WellnessFlowUITests/testSeededReadingOrderAndEvidence"
+        ],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 46,
+          "passed": 41,
+          "skipped": 0,
+          "failed": 5
+        },
+        "passed_cases": 41,
+        "failures": [
+          "909: /Users/shanks/.codex/worktrees/80fd/Health/DUNEUITests/Smoke/DashboardSmokeTests.swift:88: error: -[DUNEUITests.DashboardSmokeTests testNavigateToNotificationHub] : XCTAssertTrue failed - Notifications navigation title should appear",
+          "2468: /Users/shanks/.codex/worktrees/80fd/Health/DUNEUITests/Visual/WellnessFlowUITests.swift:88: error: -[DUNEUITests.WellnessFlowUITests testBodyMeasurementsAndHeaderEdge] : XCTAssertGreaterThanOrEqual failed: (\"43.99999999999977\") is less than (\"44.0\")",
+          "2482: Test Case '-[DUNEUITests.WellnessFlowUITests testBodyMeasurementsAndHeaderEdge]' failed (25.411 seconds).",
+          "3996: /Users/shanks/.codex/worktrees/80fd/Health/DUNEUITests/Visual/WellnessFlowUITests.swift:20: error: -[DUNEUITests.WellnessFlowUITests testMaximumAccessibilityValueFrames] : XCTAssertTrue failed - wellness-card-weight should be reachable",
+          "4010: Test Case '-[DUNEUITests.WellnessFlowUITests testMaximumAccessibilityValueFrames]' failed (140.368 seconds).",
+          "4396: Test Suite 'WellnessFlowUITests' failed at 2026-10-28 01:09:39.016.",
+          "5048: /Users/shanks/.codex/worktrees/80fd/Health/DUNEUITests/Smoke/WellnessSmokeTests.swift:238: error: -[DUNEUITests.WellnessSeededSmokeTests testSleepPredictionSummaryOpensDetail] : XCTAssertTrue failed - Sleep Prediction section should be reachable",
+          "5062: Test Case '-[DUNEUITests.WellnessSeededSmokeTests testSleepPredictionSummaryOpensDetail]' failed (64.351 seconds).",
+          "5063: Test Suite 'WellnessSeededSmokeTests' failed at 2026-10-28 01:12:49.796.",
+          "5116: Test Suite 'DUNEUITests.xctest' failed at 2026-10-28 01:13:03.522.",
+          "5118: Test Suite 'Selected tests' failed at 2026-10-28 01:13:03.524.",
+          "5137: ** TEST FAILED **",
+          "xcodebuild exited 65",
+          "UI test log reports 5 failures"
+        ],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/80fd/Health/.codex-checks/wellness/ui-phone.log"
+      }
+    },
+    {
+      "source": ".codex-checks/wellness/ui-phone-corrections.log.result.json",
+      "copy": "proof/receipts/ui-phone-corrections.log.result.json",
+      "sha256": "f62971d03d94f83e1f6155f911048796b063bc75fc555c658f133e2dee4c8630",
+      "content": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/WellnessFlowUITests/testBodyMeasurementsAndHeaderEdge",
+          "DUNEUITests/WellnessFlowUITests/testMaximumAccessibilityValueFrames",
+          "DUNEUITests/WellnessSeededSmokeTests/testSleepPredictionSummaryOpensDetail"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 3,
+          "passed": 3,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 3,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/80fd/Health/.codex-checks/wellness/ui-phone-corrections.log"
+      }
+    },
+    {
+      "source": ".codex-checks/wellness/ui-phone-probe.log.result.json",
+      "copy": "proof/receipts/ui-phone-probe.log.result.json",
+      "sha256": "d0ea3850c4c511ad282ba1244900fd44d2aab2b7416bd48c5a6e22d8d15a9beb",
+      "content": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/WellnessFlowUITests/testSeededReadingOrderAndEvidence"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/80fd/Health/.codex-checks/wellness/ui-phone-probe.log"
+      }
+    },
+    {
+      "source": ".codex-checks/wellness/ui-phone-final-delta.log.result.json",
+      "copy": "proof/receipts/ui-phone-final-delta.log.result.json",
+      "sha256": "c88ee31ec6820a294c318df057660636aed4f693c4d1c3998c8b6e377433c2f5",
+      "content": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/WellnessFlowUITests/testCaptureHealthIndicatorDetails",
+          "DUNEUITests/WellnessFlowUITests/testCaptureOceanHeroFlow",
+          "DUNEUITests/WellnessFlowUITests/testCaptureH01MaximumAXFlow"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 3,
+          "passed": 3,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 3,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/80fd/Health/.codex-checks/wellness/ui-phone-final-delta.log"
+      }
+    },
+    {
+      "source": ".codex-checks/wellness/ui-phone-health-baseline-final.log.result.json",
+      "copy": "proof/receipts/ui-phone-health-baseline-final.log.result.json",
+      "sha256": "e98f4126733d3a0e77a38a6d160afe7ddc79a2f4363918887dea8668a496cf04",
+      "content": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/WellnessFlowUITests/testCaptureHealthIndicatorDetails"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/80fd/Health/.codex-checks/wellness/ui-phone-health-baseline-final.log"
+      }
+    },
+    {
+      "source": ".codex-checks/wellness/ui-ipad.log.result.json",
+      "copy": "proof/receipts/ui-ipad.log.result.json",
+      "sha256": "3fb0515442510dd7700fbc7640d578c1fa813ba6b1a65ef12f78cc0fbc325b29",
+      "content": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/WellnessFlowUITests/testSeededReadingOrderAndEvidence",
+          "DUNEUITests/WellnessFlowUITests/testBodyMeasurementsAndHeaderEdge",
+          "DUNEUITests/WellnessFlowUITests/testCaptureH01LightFlow",
+          "DUNEUITests/WellnessFlowUITests/testCaptureH01MaximumAXFlow",
+          "DUNEUITests/WellnessFlowUITests/testCaptureHealthIndicatorDetails"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 5,
+          "passed": 5,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 5,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/80fd/Health/.codex-checks/wellness/ui-ipad.log"
+      }
+    },
+    {
+      "source": ".codex-checks/wellness/ui-ipad-health-final.log.result.json",
+      "copy": "proof/receipts/ui-ipad-health-final.log.result.json",
+      "sha256": "27c0db5c29c712d566464566b3c17471f0a7d0718df4b0d3fb83d0c61214d7f2",
+      "content": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/WellnessFlowUITests/testCaptureHealthIndicatorDetails"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/80fd/Health/.codex-checks/wellness/ui-ipad-health-final.log"
+      }
+    },
+    {
+      "source": ".codex-checks/wellness/ui-ipad-body-final.log.result.json",
+      "copy": "proof/receipts/ui-ipad-body-final.log.result.json",
+      "sha256": "1d838d5a62a8f0f1c3c2c5015116db1093cfde61a887484402f6a484be596b72",
+      "content": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/WellnessFlowUITests/testCaptureWideBodyMeasurementFrames"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/80fd/Health/.codex-checks/wellness/ui-ipad-body-final.log"
+      }
+    },
+    {
+      "source": ".codex-checks/wellness/duo-closed/ui.log.result.json",
+      "copy": "proof/receipts/duo-closed-ui.log.result.json",
+      "sha256": "e304c915d274d4610acbf5a6c61e201d6c57d694de9b8107cb7bacc1ca42d932",
+      "content": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/WellnessFlowUITests/testCaptureH01LightFlow",
+          "DUNEUITests/WellnessFlowUITests/testCaptureHealthIndicatorDetails"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 2,
+          "passed": 2,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 2,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/80fd/Health/.codex-checks/wellness/duo-closed/ui.log"
+      }
+    },
+    {
+      "source": ".codex-checks/wellness/duo-open/ui.log.result.json",
+      "copy": "proof/receipts/duo-open-ui.log.result.json",
+      "sha256": "55c954d7e5d31702cbb2f70a7387e66066f4f0a96dc11019bb6f661e2bc39875",
+      "content": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/WellnessFlowUITests/testCaptureH01LightFlow",
+          "DUNEUITests/WellnessFlowUITests/testCaptureHealthIndicatorDetails"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 2,
+          "passed": 2,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 2,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/80fd/Health/.codex-checks/wellness/duo-open/ui.log"
+      }
+    },
+    {
+      "source": ".codex-checks/wellness/unit-counts.json",
+      "copy": "proof/receipts/unit-counts.json",
+      "sha256": "b68de10ff4f9090a6acc1aaf3e1ba4e1a96b3d59c8a841e8ccee2f079e4655ab",
+      "content": {
+        "exit": 0,
+        "executed": 19,
+        "suites": 2,
+        "status": "passed"
+      }
+    }
+  ],
+  "files": [
+    {
+      "path": "images/duo-closed-H01-Wellness-Flow-body-light.png",
+      "sha256": "ba01f4ff714b00b6b379e526f4c61c1d201b7255e7b1a215142c4a2497a095b0",
+      "bytes": 625695
+    },
+    {
+      "path": "images/duo-closed-H01-Wellness-Flow-health-detail-dark.png",
+      "sha256": "fe27fddb7411e8b0c4a5c1e670f4388c36243f980fde6672f955ca14392cab0d",
+      "bytes": 916649
+    },
+    {
+      "path": "images/duo-closed-H01-Wellness-Flow-health-detail-light.png",
+      "sha256": "e63ba634ff395c58e64cb3314720680f76d59ec02f928738d85a7c51ee22b789",
+      "bytes": 927993
+    },
+    {
+      "path": "images/duo-closed-H01-Wellness-Flow-health-light.png",
+      "sha256": "c53da1019f7e7b3f13ba82ade2743cd1628f6407eb0c5e8ce022de14226c2122",
+      "bytes": 691071
+    },
+    {
+      "path": "images/duo-closed-H01-Wellness-Flow-hero-light.png",
+      "sha256": "4aab11011f052c97694e6fca95ca75414fc5911328d6ba981ead640aa1d7e221",
+      "bytes": 745572
+    },
+    {
+      "path": "images/duo-closed-H01-Wellness-Flow-injury-light.png",
+      "sha256": "c53da1019f7e7b3f13ba82ade2743cd1628f6407eb0c5e8ce022de14226c2122",
+      "bytes": 691071
+    },
+    {
+      "path": "images/duo-closed-H01-Wellness-Flow-posture-actions-light.png",
+      "sha256": "577ec4319926b7dea443958243f3a6d82563f088a25fee65243801fe88b3fea1",
+      "bytes": 543867
+    },
+    {
+      "path": "images/duo-closed-H01-Wellness-Flow-posture-light.png",
+      "sha256": "1d17b61995e214d57336334baf6008e43f6574dd3d6d4ac9c55b25c4233b06c4",
+      "bytes": 543589
+    },
+    {
+      "path": "images/duo-closed-H01-Wellness-Flow-prediction-light.png",
+      "sha256": "ec0397931cffcf075cceec1a5c659e15f4237d5d09c61d4663e4536ce9f3a92e",
+      "bytes": 527234
+    },
+    {
+      "path": "images/duo-closed-H01-Wellness-Flow-sleep-light.png",
+      "sha256": "ec0397931cffcf075cceec1a5c659e15f4237d5d09c61d4663e4536ce9f3a92e",
+      "bytes": 527234
+    },
+    {
+      "path": "images/duo-open-H01-Wellness-Flow-body-light.png",
+      "sha256": "58c24ac44f99df23ae943a5aab4f3473bbe6cca15334d1e9210751a34b148ae3",
+      "bytes": 1344654
+    },
+    {
+      "path": "images/duo-open-H01-Wellness-Flow-health-detail-dark.png",
+      "sha256": "5c721a8d54952154c238c0ed45d6be81fa0154bc63f2ed461c51647c36b10e03",
+      "bytes": 951576
+    },
+    {
+      "path": "images/duo-open-H01-Wellness-Flow-health-detail-light.png",
+      "sha256": "d29e7f91197809c35f318ddd9743ffbd88c95673d2b8e99bb921317eefdb6923",
+      "bytes": 938289
+    },
+    {
+      "path": "images/duo-open-H01-Wellness-Flow-health-light.png",
+      "sha256": "58c24ac44f99df23ae943a5aab4f3473bbe6cca15334d1e9210751a34b148ae3",
+      "bytes": 1344654
+    },
+    {
+      "path": "images/duo-open-H01-Wellness-Flow-hero-light.png",
+      "sha256": "97ba2109b76ba2a9d509a85fece070fecd180a68c05a2a44dc638d686af8202f",
+      "bytes": 960328
+    },
+    {
+      "path": "images/duo-open-H01-Wellness-Flow-injury-light.png",
+      "sha256": "39a2640ef9a1dad72590883b77c6af7b066348ba2807f97c5e8a7cd3b4eecfe1",
+      "bytes": 1415535
+    },
+    {
+      "path": "images/duo-open-H01-Wellness-Flow-posture-actions-light.png",
+      "sha256": "3a033b7c0a009450e27295c0b464ff0bf522a75ee6b41fc44f6ebd3531c64a53",
+      "bytes": 793037
+    },
+    {
+      "path": "images/duo-open-H01-Wellness-Flow-posture-light.png",
+      "sha256": "3a033b7c0a009450e27295c0b464ff0bf522a75ee6b41fc44f6ebd3531c64a53",
+      "bytes": 793037
+    },
+    {
+      "path": "images/duo-open-H01-Wellness-Flow-prediction-light.png",
+      "sha256": "97ba2109b76ba2a9d509a85fece070fecd180a68c05a2a44dc638d686af8202f",
+      "bytes": 960328
+    },
+    {
+      "path": "images/duo-open-H01-Wellness-Flow-sleep-light.png",
+      "sha256": "97ba2109b76ba2a9d509a85fece070fecd180a68c05a2a44dc638d686af8202f",
+      "bytes": 960328
+    },
+    {
+      "path": "images/ipad-H01-Wellness-Flow-body-MaxAX.png",
+      "sha256": "bee67234213b63a67acbd82a8992dc3ebde2bd0cecff53f5cb34e256f98d28b4",
+      "bytes": 713664
+    },
+    {
+      "path": "images/ipad-H01-Wellness-Flow-body-detail-light.png",
+      "sha256": "ebf7f281911f2a6a07c8d97e411b91cf4c95634ad4ece1f0d20d8d34902d65a7",
+      "bytes": 856470
+    },
+    {
+      "path": "images/ipad-H01-Wellness-Flow-body-light.png",
+      "sha256": "513827f51d924c0f960094f80f1515da89032ce0009a70b4022e6470c0d0fc4f",
+      "bytes": 777008
+    },
+    {
+      "path": "images/ipad-H01-Wellness-Flow-health-MaxAX.png",
+      "sha256": "047fab0541eb8abe91c223359947079516cc321bfb5ddc498bc3c82b6f43683a",
+      "bytes": 866452
+    },
+    {
+      "path": "images/ipad-H01-Wellness-Flow-health-detail-dark.png",
+      "sha256": "32327798656fba713e8f01638247565deefcc54b8e9c06e1e9cce53751331a00",
+      "bytes": 902420
+    },
+    {
+      "path": "images/ipad-H01-Wellness-Flow-health-detail-light.png",
+      "sha256": "28b333548c1f2a63cd7e0853d08fbf77cad3c71085aaade15fb976a5c8b077c0",
+      "bytes": 911917
+    },
+    {
+      "path": "images/ipad-H01-Wellness-Flow-health-light.png",
+      "sha256": "513827f51d924c0f960094f80f1515da89032ce0009a70b4022e6470c0d0fc4f",
+      "bytes": 777008
+    },
+    {
+      "path": "images/ipad-H01-Wellness-Flow-hero-MaxAX.png",
+      "sha256": "186aa64b01bfac2109d3eb76052dd7ee248a2a27b5ca2c3dac9883cf102e8934",
+      "bytes": 587434
+    },
+    {
+      "path": "images/ipad-H01-Wellness-Flow-hero-light.png",
+      "sha256": "4a954bb94d6d86c77f40ddb8858702df574a99f16df5f11a302c48be24f79b17",
+      "bytes": 776758
+    },
+    {
+      "path": "images/ipad-H01-Wellness-Flow-injury-MaxAX.png",
+      "sha256": "047fab0541eb8abe91c223359947079516cc321bfb5ddc498bc3c82b6f43683a",
+      "bytes": 866452
+    },
+    {
+      "path": "images/ipad-H01-Wellness-Flow-injury-light.png",
+      "sha256": "513827f51d924c0f960094f80f1515da89032ce0009a70b4022e6470c0d0fc4f",
+      "bytes": 777008
+    },
+    {
+      "path": "images/ipad-H01-Wellness-Flow-posture-MaxAX.png",
+      "sha256": "d5514e11b27d4b37c3ce455e871a31a5e6b8111498ae41d4da6cdeebef75e9ba",
+      "bytes": 659987
+    },
+    {
+      "path": "images/ipad-H01-Wellness-Flow-posture-actions-MaxAX.png",
+      "sha256": "d0a8a0352b6a5b0e9331ff745fb58b7a84d2f833ecc8252ae1043bc491f6f80f",
+      "bytes": 687088
+    },
+    {
+      "path": "images/ipad-H01-Wellness-Flow-posture-actions-light.png",
+      "sha256": "fa18423b0a7f939706db06b9c920ef0ad9b0ae9820cf753b1e514ff3036c8b48",
+      "bytes": 809190
+    },
+    {
+      "path": "images/ipad-H01-Wellness-Flow-posture-light.png",
+      "sha256": "9d6ae82628cbbc9143b6ed5f028b7a9479e20d1f171c2264996b40b01115ca71",
+      "bytes": 918996
+    },
+    {
+      "path": "images/ipad-H01-Wellness-Flow-prediction-MaxAX.png",
+      "sha256": "2395b9ae2d74e76dca746307df1659a9507bc46e574c0512d0aa5a547cffb2e4",
+      "bytes": 688149
+    },
+    {
+      "path": "images/ipad-H01-Wellness-Flow-prediction-light.png",
+      "sha256": "513827f51d924c0f960094f80f1515da89032ce0009a70b4022e6470c0d0fc4f",
+      "bytes": 777008
+    },
+    {
+      "path": "images/ipad-H01-Wellness-Flow-sleep-MaxAX.png",
+      "sha256": "4a77362a0465967cdcc1c5ed7caa9673d88c1748f47991aaad3f8409ee35f279",
+      "bytes": 587088
+    },
+    {
+      "path": "images/ipad-H01-Wellness-Flow-sleep-light.png",
+      "sha256": "513827f51d924c0f960094f80f1515da89032ce0009a70b4022e6470c0d0fc4f",
+      "bytes": 777008
+    },
+    {
+      "path": "images/iphone-H01-Wellness-Flow-body-MaxAX.png",
+      "sha256": "3a893b278216c30187f40caeb46983eee0daf190f3941f9258f1d8483d2d4ce5",
+      "bytes": 759208
+    },
+    {
+      "path": "images/iphone-H01-Wellness-Flow-body-dark.png",
+      "sha256": "b7d4d781e181f3e02c533569251ffa6fcb73f07196c5a00c21427a996c5dfa16",
+      "bytes": 781834
+    },
+    {
+      "path": "images/iphone-H01-Wellness-Flow-body-light.png",
+      "sha256": "537e2558c06a7a4ea2874d4a26cc08ba0627768feddf53d95af7db8d1c12b36d",
+      "bytes": 773446
+    },
+    {
+      "path": "images/iphone-H01-Wellness-Flow-health-MaxAX.png",
+      "sha256": "c244dcb92d427c35c9814f2efd659f8ed09bcbfa6f8ecb42529693fd227bf1e5",
+      "bytes": 1005488
+    },
+    {
+      "path": "images/iphone-H01-Wellness-Flow-health-dark.png",
+      "sha256": "e9748da8daed43713b2a9bcaf90cfea677292bf3bf14f9dab6947b1c9f064c79",
+      "bytes": 823306
+    },
+    {
+      "path": "images/iphone-H01-Wellness-Flow-health-detail-dark.png",
+      "sha256": "4dfa9fe0b2a6c1d0de5c0c6791562885c88c4a74ea484fcb27c65ed368e8982f",
+      "bytes": 852992
+    },
+    {
+      "path": "images/iphone-H01-Wellness-Flow-health-detail-light.png",
+      "sha256": "85d642d61bd9df53c9725e4d9986edc220705bd75ecec324324ec007b4caa615",
+      "bytes": 829560
+    },
+    {
+      "path": "images/iphone-H01-Wellness-Flow-health-light.png",
+      "sha256": "4b87c7162cc14eb8f35f7042b54af09032da257a99a3c13023e5b2587765fcf5",
+      "bytes": 819301
+    },
+    {
+      "path": "images/iphone-H01-Wellness-Flow-hero-MaxAX.png",
+      "sha256": "a83c452d37229ab3a89ac20b84d35fc12b27552736cbc35025c6211466e3692a",
+      "bytes": 489998
+    },
+    {
+      "path": "images/iphone-H01-Wellness-Flow-hero-Ocean.png",
+      "sha256": "a52ba5387adca82e6683b7e9c1e1725290e2e5f2b4a95e0a85e77a00b8a0da61",
+      "bytes": 1022618
+    },
+    {
+      "path": "images/iphone-H01-Wellness-Flow-hero-dark.png",
+      "sha256": "85c6882095cdbe86c68f63d85bea1d9f8eed6644d3b273f9651e4c8c11c34c46",
+      "bytes": 562925
+    },
+    {
+      "path": "images/iphone-H01-Wellness-Flow-hero-light.png",
+      "sha256": "8072b9a1f0bf362c22e75989bff5c2a1f536ca2cb5846a249688a5eb03366554",
+      "bytes": 568555
+    },
+    {
+      "path": "images/iphone-H01-Wellness-Flow-injury-MaxAX.png",
+      "sha256": "def47fe441bdc5e3833797c1b6a7e17e858d07b0206399ac820ff23423664456",
+      "bytes": 853521
+    },
+    {
+      "path": "images/iphone-H01-Wellness-Flow-injury-dark.png",
+      "sha256": "e9748da8daed43713b2a9bcaf90cfea677292bf3bf14f9dab6947b1c9f064c79",
+      "bytes": 823306
+    },
+    {
+      "path": "images/iphone-H01-Wellness-Flow-injury-light.png",
+      "sha256": "4b87c7162cc14eb8f35f7042b54af09032da257a99a3c13023e5b2587765fcf5",
+      "bytes": 819301
+    },
+    {
+      "path": "images/iphone-H01-Wellness-Flow-posture-MaxAX.png",
+      "sha256": "485aafa8501243b4436a10770cd3e6a1071c2292e8aa4d6d74b7bfe6cff59061",
+      "bytes": 752058
+    },
+    {
+      "path": "images/iphone-H01-Wellness-Flow-posture-actions-MaxAX.png",
+      "sha256": "56ca221532b2581429c75b1f19b6fc72a8cd0daa931af5676f2a2deedf32af3c",
+      "bytes": 733213
+    },
+    {
+      "path": "images/iphone-H01-Wellness-Flow-posture-actions-dark.png",
+      "sha256": "1889ee4b1a6c497a67575f687dd76635ecaf29fdd236ac20993590ce224178bf",
+      "bytes": 729387
+    },
+    {
+      "path": "images/iphone-H01-Wellness-Flow-posture-actions-light.png",
+      "sha256": "7488af013853730c435dbee016eb467f8cf180e300117ecb3fd707ed107b01c5",
+      "bytes": 737925
+    },
+    {
+      "path": "images/iphone-H01-Wellness-Flow-posture-dark.png",
+      "sha256": "1889ee4b1a6c497a67575f687dd76635ecaf29fdd236ac20993590ce224178bf",
+      "bytes": 729387
+    },
+    {
+      "path": "images/iphone-H01-Wellness-Flow-posture-light.png",
+      "sha256": "7488af013853730c435dbee016eb467f8cf180e300117ecb3fd707ed107b01c5",
+      "bytes": 737925
+    },
+    {
+      "path": "images/iphone-H01-Wellness-Flow-prediction-MaxAX.png",
+      "sha256": "97792bfdab84e06d421c6f4bf6a9cff5273d62eb4b17e23b18c7c0af0267500d",
+      "bytes": 729281
+    },
+    {
+      "path": "images/iphone-H01-Wellness-Flow-prediction-dark.png",
+      "sha256": "e9748da8daed43713b2a9bcaf90cfea677292bf3bf14f9dab6947b1c9f064c79",
+      "bytes": 823306
+    },
+    {
+      "path": "images/iphone-H01-Wellness-Flow-prediction-light.png",
+      "sha256": "4b87c7162cc14eb8f35f7042b54af09032da257a99a3c13023e5b2587765fcf5",
+      "bytes": 819301
+    },
+    {
+      "path": "images/iphone-H01-Wellness-Flow-sleep-MaxAX.png",
+      "sha256": "f207afe050ce97e7ea783323eac3d23304d2a0d5b4834b47e2c5c3052ac33cd4",
+      "bytes": 773963
+    },
+    {
+      "path": "images/iphone-H01-Wellness-Flow-sleep-dark.png",
+      "sha256": "85c6882095cdbe86c68f63d85bea1d9f8eed6644d3b273f9651e4c8c11c34c46",
+      "bytes": 562925
+    },
+    {
+      "path": "images/iphone-H01-Wellness-Flow-sleep-light.png",
+      "sha256": "8072b9a1f0bf362c22e75989bff5c2a1f536ca2cb5846a249688a5eb03366554",
+      "bytes": 568555
+    },
+    {
+      "path": "proof/duo-closed/002-1398x2034.png",
+      "sha256": "4aab11011f052c97694e6fca95ca75414fc5911328d6ba981ead640aa1d7e221",
+      "bytes": 745572
+    },
+    {
+      "path": "proof/duo-closed/002-2007x2853.png",
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e",
+      "bytes": 106123
+    },
+    {
+      "path": "proof/duo-closed/002-hierarchy.txt",
+      "sha256": "972c2a90d122a90ea229f3788d3cd33aef9a4dbff110e7a7270dfa9d9d1d644c",
+      "bytes": 44119
+    },
+    {
+      "path": "proof/duo-closed/003-1398x2034.png",
+      "sha256": "ec0397931cffcf075cceec1a5c659e15f4237d5d09c61d4663e4536ce9f3a92e",
+      "bytes": 527234
+    },
+    {
+      "path": "proof/duo-closed/003-2007x2853.png",
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e",
+      "bytes": 106123
+    },
+    {
+      "path": "proof/duo-closed/003-hierarchy.txt",
+      "sha256": "0a0728e00077bf877066abc813477258ed4ca7223a22cff619bc2ad53fc1c301",
+      "bytes": 43734
+    },
+    {
+      "path": "proof/duo-closed/004-1398x2034.png",
+      "sha256": "ec0397931cffcf075cceec1a5c659e15f4237d5d09c61d4663e4536ce9f3a92e",
+      "bytes": 527234
+    },
+    {
+      "path": "proof/duo-closed/004-2007x2853.png",
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e",
+      "bytes": 106123
+    },
+    {
+      "path": "proof/duo-closed/004-hierarchy.txt",
+      "sha256": "cfeadd5aec0f3e1220b815bd13fe192d917923529544756a6696c8befae7f1d9",
+      "bytes": 43734
+    },
+    {
+      "path": "proof/duo-closed/005-1398x2034.png",
+      "sha256": "c53da1019f7e7b3f13ba82ade2743cd1628f6407eb0c5e8ce022de14226c2122",
+      "bytes": 691071
+    },
+    {
+      "path": "proof/duo-closed/005-2007x2853.png",
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e",
+      "bytes": 106123
+    },
+    {
+      "path": "proof/duo-closed/005-hierarchy.txt",
+      "sha256": "3469f9324332d53298da41670dd24ee2b58b00e37b44ed1b4ce22b9ac3bacc74",
+      "bytes": 43716
+    },
+    {
+      "path": "proof/duo-closed/006-1398x2034.png",
+      "sha256": "c53da1019f7e7b3f13ba82ade2743cd1628f6407eb0c5e8ce022de14226c2122",
+      "bytes": 691071
+    },
+    {
+      "path": "proof/duo-closed/006-2007x2853.png",
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e",
+      "bytes": 106123
+    },
+    {
+      "path": "proof/duo-closed/006-hierarchy.txt",
+      "sha256": "e02aa4e177d5c08f28167e0f9801d9470cfc7d2e1352e09cf098c26dd81b6e86",
+      "bytes": 43716
+    },
+    {
+      "path": "proof/duo-closed/007-1398x2034.png",
+      "sha256": "ba01f4ff714b00b6b379e526f4c61c1d201b7255e7b1a215142c4a2497a095b0",
+      "bytes": 625695
+    },
+    {
+      "path": "proof/duo-closed/007-2007x2853.png",
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e",
+      "bytes": 106123
+    },
+    {
+      "path": "proof/duo-closed/007-hierarchy.txt",
+      "sha256": "71a342166ff978a80927eb71d7fc09097a96200fffd305039eee3c300a5f0967",
+      "bytes": 43724
+    },
+    {
+      "path": "proof/duo-closed/008-1398x2034.png",
+      "sha256": "1d17b61995e214d57336334baf6008e43f6574dd3d6d4ac9c55b25c4233b06c4",
+      "bytes": 543589
+    },
+    {
+      "path": "proof/duo-closed/008-2007x2853.png",
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e",
+      "bytes": 106123
+    },
+    {
+      "path": "proof/duo-closed/008-hierarchy.txt",
+      "sha256": "f1db3f05a6bb6e308686863172e0c2e5dbc03813bcd534a86ffb859231a66a5d",
+      "bytes": 43875
+    },
+    {
+      "path": "proof/duo-closed/009-1398x2034.png",
+      "sha256": "577ec4319926b7dea443958243f3a6d82563f088a25fee65243801fe88b3fea1",
+      "bytes": 543867
+    },
+    {
+      "path": "proof/duo-closed/009-2007x2853.png",
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e",
+      "bytes": 106123
+    },
+    {
+      "path": "proof/duo-closed/009-hierarchy.txt",
+      "sha256": "8f5a2b3c1981a435fe6a1ac2ed900d77a379d93736d51d7991cd087063bd40d3",
+      "bytes": 43875
+    },
+    {
+      "path": "proof/duo-closed/012-1398x2034.png",
+      "sha256": "e63ba634ff395c58e64cb3314720680f76d59ec02f928738d85a7c51ee22b789",
+      "bytes": 927993
+    },
+    {
+      "path": "proof/duo-closed/012-2007x2853.png",
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e",
+      "bytes": 106123
+    },
+    {
+      "path": "proof/duo-closed/012-hierarchy.txt",
+      "sha256": "4834b0e5d5ad3cf1e2ce6d64bfba34751ba1bba6dbba2e568a971089f6a421f6",
+      "bytes": 44372
+    },
+    {
+      "path": "proof/duo-closed/013-1398x2034.png",
+      "sha256": "fe27fddb7411e8b0c4a5c1e670f4388c36243f980fde6672f955ca14392cab0d",
+      "bytes": 916649
+    },
+    {
+      "path": "proof/duo-closed/013-2007x2853.png",
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e",
+      "bytes": 106123
+    },
+    {
+      "path": "proof/duo-closed/013-hierarchy.txt",
+      "sha256": "e81fae893a4ba5d268b81a01bc023effba7c231c7941cbc243ee0b8de3cd9dd4",
+      "bytes": 44372
+    },
+    {
+      "path": "proof/duo-closed/captures.tsv",
+      "sha256": "e9889f2f3c228756ad9ff95897461766a94372675552ec4763368f4938775619",
+      "bytes": 4340
+    },
+    {
+      "path": "proof/duo-closed/checkpoints.jsonl",
+      "sha256": "732109e9dd8d9abdb956240f88247936abb69626b7a1fd28c3bc2933bc0d3e49",
+      "bytes": 3546
+    },
+    {
+      "path": "proof/duo-closed/displays-after.json",
+      "sha256": "1f6b756478e506379302ee06c350a55027e1d004c685ddaec50cf9a9e63e0067",
+      "bytes": 2438
+    },
+    {
+      "path": "proof/duo-closed/displays-before.json",
+      "sha256": "720a5dafe655446e894443d4ee87a2a7af48493e76e97c924592f49a98db9d2e",
+      "bytes": 2443
+    },
+    {
+      "path": "proof/duo-closed/orientation.json",
+      "sha256": "0a71f230e082e17a3992c96a9e83451b430ea4bcd3206628accec8c31ba7c905",
+      "bytes": 703
+    },
+    {
+      "path": "proof/duo-closed/runner-result.json",
+      "sha256": "1730524ad3880f66b3fedf0134bccd45b0ce01852660bd394ee21158a312b74a",
+      "bytes": 105
+    },
+    {
+      "path": "proof/duo-closed/state.json",
+      "sha256": "00addc6e95fb743ea2985a0c50222f67fa1b43896027a5b9ab212ea2cdc1ceae",
+      "bytes": 1133
+    },
+    {
+      "path": "proof/duo-closed/ui.log",
+      "sha256": "5a4f32f577547d6843c62b628b4679e89ca2ea405ecf19cb1a2921ca0cbc50b5",
+      "bytes": 100149
+    },
+    {
+      "path": "proof/duo-open/002-1398x2034.png",
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+      "bytes": 53236
+    },
+    {
+      "path": "proof/duo-open/002-2007x2853.png",
+      "sha256": "97ba2109b76ba2a9d509a85fece070fecd180a68c05a2a44dc638d686af8202f",
+      "bytes": 960328
+    },
+    {
+      "path": "proof/duo-open/002-hierarchy.txt",
+      "sha256": "0f7485da875303909342b82b325fdb4c7be8f00c179b36eaf794c1f18810dde1",
+      "bytes": 44422
+    },
+    {
+      "path": "proof/duo-open/003-1398x2034.png",
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+      "bytes": 53236
+    },
+    {
+      "path": "proof/duo-open/003-2007x2853.png",
+      "sha256": "97ba2109b76ba2a9d509a85fece070fecd180a68c05a2a44dc638d686af8202f",
+      "bytes": 960328
+    },
+    {
+      "path": "proof/duo-open/003-hierarchy.txt",
+      "sha256": "e854e61b9947e2586348ff63317634dfb7aad769a5188628526dc794735e7405",
+      "bytes": 44422
+    },
+    {
+      "path": "proof/duo-open/004-1398x2034.png",
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+      "bytes": 53236
+    },
+    {
+      "path": "proof/duo-open/004-2007x2853.png",
+      "sha256": "97ba2109b76ba2a9d509a85fece070fecd180a68c05a2a44dc638d686af8202f",
+      "bytes": 960328
+    },
+    {
+      "path": "proof/duo-open/004-hierarchy.txt",
+      "sha256": "1f8a3d353d3edcd3645e90e9d8d63537ece811c32e24630c927b6f825268b585",
+      "bytes": 44422
+    },
+    {
+      "path": "proof/duo-open/005-1398x2034.png",
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+      "bytes": 53236
+    },
+    {
+      "path": "proof/duo-open/005-2007x2853.png",
+      "sha256": "39a2640ef9a1dad72590883b77c6af7b066348ba2807f97c5e8a7cd3b4eecfe1",
+      "bytes": 1415535
+    },
+    {
+      "path": "proof/duo-open/005-hierarchy.txt",
+      "sha256": "23ebce931e0b97808b3f9229844f398581d9d98b2dba1a6674008dd12caba3a9",
+      "bytes": 44462
+    },
+    {
+      "path": "proof/duo-open/006-1398x2034.png",
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+      "bytes": 53236
+    },
+    {
+      "path": "proof/duo-open/006-2007x2853.png",
+      "sha256": "58c24ac44f99df23ae943a5aab4f3473bbe6cca15334d1e9210751a34b148ae3",
+      "bytes": 1344654
+    },
+    {
+      "path": "proof/duo-open/006-hierarchy.txt",
+      "sha256": "36e0eaa6845c22778ef93de9069b44bb6841fdc382b82b134063f72bd6bc583f",
+      "bytes": 44453
+    },
+    {
+      "path": "proof/duo-open/007-1398x2034.png",
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+      "bytes": 53236
+    },
+    {
+      "path": "proof/duo-open/007-2007x2853.png",
+      "sha256": "58c24ac44f99df23ae943a5aab4f3473bbe6cca15334d1e9210751a34b148ae3",
+      "bytes": 1344654
+    },
+    {
+      "path": "proof/duo-open/007-hierarchy.txt",
+      "sha256": "227aaba4cfda229793ac133398ea2e612effac4e3f15e732bb6cd4359503dbcc",
+      "bytes": 44453
+    },
+    {
+      "path": "proof/duo-open/008-1398x2034.png",
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+      "bytes": 53236
+    },
+    {
+      "path": "proof/duo-open/008-2007x2853.png",
+      "sha256": "3a033b7c0a009450e27295c0b464ff0bf522a75ee6b41fc44f6ebd3531c64a53",
+      "bytes": 793037
+    },
+    {
+      "path": "proof/duo-open/008-hierarchy.txt",
+      "sha256": "d2c5f951b8b4b979c2a56469f3fa0587969ee09a965a16b5fd09f5408a5fa760",
+      "bytes": 44145
+    },
+    {
+      "path": "proof/duo-open/009-1398x2034.png",
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+      "bytes": 53236
+    },
+    {
+      "path": "proof/duo-open/009-2007x2853.png",
+      "sha256": "3a033b7c0a009450e27295c0b464ff0bf522a75ee6b41fc44f6ebd3531c64a53",
+      "bytes": 793037
+    },
+    {
+      "path": "proof/duo-open/009-hierarchy.txt",
+      "sha256": "ca55eb95c042d45dbf5c9512e3bac665592d5350926c86851b6f0ce17bfabeb7",
+      "bytes": 44145
+    },
+    {
+      "path": "proof/duo-open/012-1398x2034.png",
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+      "bytes": 53236
+    },
+    {
+      "path": "proof/duo-open/012-2007x2853.png",
+      "sha256": "d29e7f91197809c35f318ddd9743ffbd88c95673d2b8e99bb921317eefdb6923",
+      "bytes": 938289
+    },
+    {
+      "path": "proof/duo-open/012-hierarchy.txt",
+      "sha256": "adbe61dd989437458c74bfdc499203b2cb98234b9362ce7519c5794a15ff25ac",
+      "bytes": 43750
+    },
+    {
+      "path": "proof/duo-open/013-1398x2034.png",
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+      "bytes": 53236
+    },
+    {
+      "path": "proof/duo-open/013-2007x2853.png",
+      "sha256": "5c721a8d54952154c238c0ed45d6be81fa0154bc63f2ed461c51647c36b10e03",
+      "bytes": 951576
+    },
+    {
+      "path": "proof/duo-open/013-hierarchy.txt",
+      "sha256": "89ee9820310b3cf1b0fc2c337c51da46df1745818346524db6a7fcc047e3ab59",
+      "bytes": 43745
+    },
+    {
+      "path": "proof/duo-open/captures.tsv",
+      "sha256": "dc01000a1981faae08f796eca7cf43548a0116f705daa3d6f89237ee87305270",
+      "bytes": 4334
+    },
+    {
+      "path": "proof/duo-open/checkpoints.jsonl",
+      "sha256": "9dff4c5aff1ef514cfce8e080d8e3a17cb3e860e6dee96767c0c8f8c0d14ebd7",
+      "bytes": 3539
+    },
+    {
+      "path": "proof/duo-open/displays-after.json",
+      "sha256": "4312a365c6cd8ce06453ca886a45a9648f7fb5cbeafaa737edee6082ce162a6a",
+      "bytes": 2449
+    },
+    {
+      "path": "proof/duo-open/displays-before.json",
+      "sha256": "ca4fe366a1f1b3b6f333fc9387aeae0dd029540a94e7118d97e58f0646bd311d",
+      "bytes": 2450
+    },
+    {
+      "path": "proof/duo-open/orientation.json",
+      "sha256": "3c25b6cf747edcf2345713c55175e7f3fb74a9e374aba96af3cff0c919f8c344",
+      "bytes": 701
+    },
+    {
+      "path": "proof/duo-open/runner-result.json",
+      "sha256": "7d4c07080857653e82df5497315237d457f7f7e77346c3a5fc364f2d1d782ed9",
+      "bytes": 105
+    },
+    {
+      "path": "proof/duo-open/state.json",
+      "sha256": "d09ca21362edfdbdd302abd5f79fed4650b1693175745eda77639160142b9152",
+      "bytes": 1134
+    },
+    {
+      "path": "proof/duo-open/ui.log",
+      "sha256": "e6ab872505a16c61a2bda25707c1d0b3de29f7e37644c6030d19f6c2e38b5d83",
+      "bytes": 58341
+    },
+    {
+      "path": "proof/receipts/duo-closed-ui.log.result.json",
+      "sha256": "e304c915d274d4610acbf5a6c61e201d6c57d694de9b8107cb7bacc1ca42d932",
+      "bytes": 656
+    },
+    {
+      "path": "proof/receipts/duo-open-ui.log.result.json",
+      "sha256": "55c954d7e5d31702cbb2f70a7387e66066f4f0a96dc11019bb6f661e2bc39875",
+      "bytes": 654
+    },
+    {
+      "path": "proof/receipts/ui-final-inventory.json",
+      "sha256": "84925a40c8ace00e89e98c573c0a40f9eec0638c16794d6e38ae3355fe9691e1",
+      "bytes": 9002
+    },
+    {
+      "path": "proof/receipts/ui-ipad-body-final.log.result.json",
+      "sha256": "1d838d5a62a8f0f1c3c2c5015116db1093cfde61a887484402f6a484be596b72",
+      "bytes": 601
+    },
+    {
+      "path": "proof/receipts/ui-ipad-health-final.log.result.json",
+      "sha256": "27c0db5c29c712d566464566b3c17471f0a7d0718df4b0d3fb83d0c61214d7f2",
+      "bytes": 600
+    },
+    {
+      "path": "proof/receipts/ui-ipad.log.result.json",
+      "sha256": "3fb0515442510dd7700fbc7640d578c1fa813ba6b1a65ef12f78cc0fbc325b29",
+      "bytes": 863
+    },
+    {
+      "path": "proof/receipts/ui-phone-corrections.log.result.json",
+      "sha256": "f62971d03d94f83e1f6155f911048796b063bc75fc555c658f133e2dee4c8630",
+      "bytes": 757
+    },
+    {
+      "path": "proof/receipts/ui-phone-final-delta.log.result.json",
+      "sha256": "c88ee31ec6820a294c318df057660636aed4f693c4d1c3998c8b6e377433c2f5",
+      "bytes": 731
+    },
+    {
+      "path": "proof/receipts/ui-phone-health-baseline-final.log.result.json",
+      "sha256": "e98f4126733d3a0e77a38a6d160afe7ddc79a2f4363918887dea8668a496cf04",
+      "bytes": 610
+    },
+    {
+      "path": "proof/receipts/ui-phone-probe.log.result.json",
+      "sha256": "d0ea3850c4c511ad282ba1244900fd44d2aab2b7416bd48c5a6e22d8d15a9beb",
+      "bytes": 594
+    },
+    {
+      "path": "proof/receipts/ui-phone.log.result.json",
+      "sha256": "845a0b3ddd72aaee69645fe370cdff3f5a57819633eccb0d954bcc3ebfc109d6",
+      "bytes": 3795
+    },
+    {
+      "path": "proof/receipts/unit-counts.json",
+      "sha256": "b68de10ff4f9090a6acc1aaf3e1ba4e1a96b3d59c8a841e8ccee2f079e4655ab",
+      "bytes": 61
+    }
+  ],
+  "selectedCaseInventory": {
+    "source": ".codex-checks/wellness/ui-final-inventory.json",
+    "copy": "proof/receipts/ui-final-inventory.json",
+    "sha256": "84925a40c8ace00e89e98c573c0a40f9eec0638c16794d6e38ae3355fe9691e1",
+    "content": {
+      "scope": "targeted selected related behaviors + scoped common smoke; full not requested",
+      "perDevice": {
+        "phone": {
+          "WellnessFlowUITests/testSeededReadingOrderAndEvidence": {
+            "status": "passed",
+            "log": "ui-phone-probe.log"
+          },
+          "ActivitySmokeTests/testActivityScrollRemainsResponsive": {
+            "status": "passed",
+            "log": "ui-phone.log"
+          },
+          "ActivitySmokeTests/testActivityTabLoads": {
+            "status": "passed",
+            "log": "ui-phone.log"
+          },
+          "ActivitySmokeTests/testExercisePickerOpens": {
+            "status": "passed",
+            "log": "ui-phone.log"
+          },
+          "ActivitySmokeTests/testExercisePickerSearchAvailable": {
+            "status": "passed",
+            "log": "ui-phone.log"
+          },
+          "ActivitySmokeTests/testHeroReadinessCardExists": {
+            "status": "passed",
+            "log": "ui-phone.log"
+          },
+          "ActivitySmokeTests/testInlineQuickStartSearchExists": {
+            "status": "passed",
+            "log": "ui-phone.log"
+          },
+          "ActivitySmokeTests/testToolbarAddButtonExists": {
+            "status": "passed",
+            "log": "ui-phone.log"
+          },
+          "ActivitySmokeTests/testToolbarAddOpensExercisePickerWithoutDuplicateHeroAction": {
+            "status": "passed",
+            "log": "ui-phone.log"
+          },
+          "DashboardSmokeTests/testAllTabsExist": {
+            "status": "passed",
+            "log": "ui-phone.log"
+          },
+          "DashboardSmokeTests/testAppLaunchesOnDashboard": {
+            "status": "passed",
+            "log": "ui-phone.log"
+          },
+          "DashboardSmokeTests/testConditionTrendAndHeroDetailRoute": {
+            "status": "passed",
+            "log": "ui-phone.log"
+          },
+          "DashboardSmokeTests/testDashboardNavigationBarExists": {
+            "status": "passed",
+            "log": "ui-phone.log"
+          },
+          "DashboardSmokeTests/testNavigateToNotificationHub": {
+            "status": "failed",
+            "log": "ui-phone.log"
+          },
+          "DashboardSmokeTests/testNavigateToSettings": {
+            "status": "passed",
+            "log": "ui-phone.log"
+          },
+          "DashboardSmokeTests/testNavigateToWhatsNew": {
+            "status": "passed",
+            "log": "ui-phone.log"
+          },
+          "DashboardSmokeTests/testNotificationButtonExists": {
+            "status": "passed",
+            "log": "ui-phone.log"
+          },
+          "DashboardSmokeTests/testNotificationHubSummaryAtMaximumAccessibilitySize": {
+            "status": "failed",
+            "log": "ui-phone.log"
+          },
+          "DashboardSmokeTests/testSettingsButtonExists": {
+            "status": "passed",
+            "log": "ui-phone.log"
+          },
+          "DashboardSmokeTests/testTabBarExists": {
+            "status": "passed",
+            "log": "ui-phone.log"
+          },
+          "DashboardSmokeTests/testTabNavigationRoundTrip": {
+            "status": "passed",
+            "log": "ui-phone.log"
+          },
+          "DashboardSmokeTests/testTodayLogWeightOpensWellnessBodyForm": {
+            "status": "passed",
+            "log": "ui-phone.log"
+          },
+          "LifeSmokeTests/testEmptyStarterAddCancelPreservesEmptyState": {
+            "status": "passed",
+            "log": "ui-phone.log"
+          },
+          "LifeSmokeTests/testEmptyStarterOpensTemplates": {
+            "status": "passed",
+            "log": "ui-phone.log"
+          },
+          "LifeSmokeTests/testEmptyStarterRemainsActionableAtMaximumAccessibilityTextSize": {
+            "status": "passed",
+            "log": "ui-phone.log"
+          },
+          "LifeSmokeTests/testHabitFormCancelDismisses": {
+            "status": "passed",
+            "log": "ui-phone.log"
+          },
+          "LifeSmokeTests/testHabitFormOpens": {
+            "status": "passed",
+            "log": "ui-phone.log"
+          },
+          "LifeSmokeTests/testLifeTabLoads": {
+            "status": "passed",
+            "log": "ui-phone.log"
+          },
+          "LifeSmokeTests/testSaveEmptyHabitKeepsFormPresented": {
+            "status": "passed",
+            "log": "ui-phone.log"
+          },
+          "LifeSmokeTests/testToolbarAddButtonExists": {
+            "status": "passed",
+            "log": "ui-phone.log"
+          },
+          "WellnessFlowUITests/testBodyMeasurementsAndHeaderEdge": {
+            "status": "passed",
+            "log": "ui-phone-corrections.log"
+          },
+          "WellnessFlowUITests/testBodyWithoutPriorMeasurementsKeepsLatestValues": {
+            "status": "passed",
+            "log": "ui-phone.log"
+          },
+          "WellnessFlowUITests/testCaptureH01DarkFlow": {
+            "status": "passed",
+            "log": "ui-phone.log"
+          },
+          "WellnessFlowUITests/testCaptureH01LightFlow": {
+            "status": "passed",
+            "log": "ui-phone.log"
+          },
+          "WellnessFlowUITests/testCaptureH01MaximumAXFlow": {
+            "status": "passed",
+            "log": "ui-phone-final-delta.log"
+          },
+          "WellnessFlowUITests/testMaximumAccessibilityValueFrames": {
+            "status": "passed",
+            "log": "ui-phone-corrections.log"
+          },
+          "WellnessFlowUITests/testPostureHistoryAndActionsRemainIndependent": {
+            "status": "passed",
+            "log": "ui-phone.log"
+          },
+          "WellnessFlowUITests/testRecordedPostureAndInjuryRemainReachableWithoutHealthData": {
+            "status": "passed",
+            "log": "ui-phone.log"
+          },
+          "WellnessFlowUITests/testSleepAndPredictionOpenIndependentDetails": {
+            "status": "passed",
+            "log": "ui-phone.log"
+          },
+          "WellnessRegressionTests/testDesertHeroKeepsSleepEmptyStateAndScoreNavigation": {
+            "status": "passed",
+            "log": "ui-phone.log"
+          },
+          "WellnessSeededSmokeTests/testSeededSleepSummarySeparatesLatestFromSevenDayAverage": {
+            "status": "passed",
+            "log": "ui-phone.log"
+          },
+          "WellnessSeededSmokeTests/testSeededSleepSummarySkipsTrailingZeroSample": {
+            "status": "passed",
+            "log": "ui-phone.log"
+          },
+          "WellnessSeededSmokeTests/testSeededToolbarBodyRecordOpensForm": {
+            "status": "passed",
+            "log": "ui-phone.log"
+          },
+          "WellnessSeededSmokeTests/testSeededWellnessHeroScoreOpensScoreDetail": {
+            "status": "passed",
+            "log": "ui-phone.log"
+          },
+          "WellnessSeededSmokeTests/testSeededWellnessHeroSleepOpensSleepMetricDetail": {
+            "status": "passed",
+            "log": "ui-phone.log"
+          },
+          "WellnessSeededSmokeTests/testSleepPredictionSummaryOpensDetail": {
+            "status": "passed",
+            "log": "ui-phone-corrections.log"
+          },
+          "WellnessSmokeTests/testWellnessTabLoads": {
+            "status": "passed",
+            "log": "ui-phone.log"
+          },
+          "WellnessFlowUITests/testCaptureHealthIndicatorDetails": {
+            "status": "passed",
+            "log": "ui-phone-health-baseline-final.log"
+          },
+          "WellnessFlowUITests/testCaptureOceanHeroFlow": {
+            "status": "passed",
+            "log": "ui-phone-final-delta.log"
+          }
+        },
+        "ipad": {
+          "WellnessFlowUITests/testBodyMeasurementsAndHeaderEdge": {
+            "status": "passed",
+            "log": "ui-ipad.log"
+          },
+          "WellnessFlowUITests/testCaptureH01LightFlow": {
+            "status": "passed",
+            "log": "ui-ipad.log"
+          },
+          "WellnessFlowUITests/testCaptureH01MaximumAXFlow": {
+            "status": "passed",
+            "log": "ui-ipad.log"
+          },
+          "WellnessFlowUITests/testCaptureHealthIndicatorDetails": {
+            "status": "passed",
+            "log": "ui-ipad-health-final.log"
+          },
+          "WellnessFlowUITests/testSeededReadingOrderAndEvidence": {
+            "status": "passed",
+            "log": "ui-ipad.log"
+          },
+          "WellnessFlowUITests/testCaptureWideBodyMeasurementFrames": {
+            "status": "passed",
+            "log": "ui-ipad-body-final.log"
+          }
+        },
+        "duo-closed": {
+          "WellnessFlowUITests/testCaptureH01LightFlow": {
+            "status": "passed",
+            "log": "duo-closed/ui.log"
+          },
+          "WellnessFlowUITests/testCaptureHealthIndicatorDetails": {
+            "status": "passed",
+            "log": "duo-closed/ui.log"
+          }
+        },
+        "duo-open": {
+          "WellnessFlowUITests/testCaptureH01LightFlow": {
+            "status": "passed",
+            "log": "duo-open/ui.log"
+          },
+          "WellnessFlowUITests/testCaptureHealthIndicatorDetails": {
+            "status": "passed",
+            "log": "duo-open/ui.log"
+          }
+        }
+      },
+      "counts": {
+        "phone": {
+          "passed": 47,
+          "excluded_failures": 2
+        },
+        "ipad": {
+          "passed": 6,
+          "excluded_failures": 0
+        },
+        "duo-closed": {
+          "passed": 2,
+          "excluded_failures": 0
+        },
+        "duo-open": {
+          "passed": 2,
+          "excluded_failures": 0
+        }
+      },
+      "passedDeviceCases": 57,
+      "excluded": {
+        "ids": [
+          "DashboardSmokeTests/testNavigateToNotificationHub",
+          "DashboardSmokeTests/testNotificationHubSummaryAtMaximumAccessibilitySize"
+        ],
+        "reason": "Observed Korean Morning Briefing overlay; no changed Today/notification source or default seed behavior; raw failures preserved, not passed"
+      },
+      "appSource": "6c1d3f77",
+      "finalTestSource": "08b320c7",
+      "reuse": "Earlier unaffected features retained with per-image source; final changed wrist context recaptured. Unit data/model code unchanged since recorded 19 tests."
+    }
+  }
+}
