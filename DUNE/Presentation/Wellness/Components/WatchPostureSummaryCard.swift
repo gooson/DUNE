@@ -8,6 +8,7 @@ struct WatchPostureSummaryCard: View {
     let isWatchAppInstalled: Bool
 
     @Environment(\.appTheme) private var theme
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
         let state = cardState
@@ -59,8 +60,8 @@ struct WatchPostureSummaryCard: View {
                 .fontWeight(.medium)
                 .foregroundStyle(DS.Color.textSecondary)
             Spacer(minLength: 0)
-            if case .hasData = state {
-                Text("Today")
+            if case let .hasData(data) = state {
+                Text(data.date.formatted(.dateTime.month(.abbreviated).day()))
                     .font(.caption2)
                     .foregroundStyle(DS.Color.textTertiary)
             }
@@ -70,7 +71,10 @@ struct WatchPostureSummaryCard: View {
     // MARK: - Metrics
 
     private func metricsRow(_ summary: DailyPostureSummary) -> some View {
-        HStack(spacing: DS.Spacing.lg) {
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.md))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.lg))
+        return layout {
             metricItem(
                 icon: "figure.seated.seatbelt",
                 value: PostureFormatting.formatMinutes(summary.sedentaryMinutes),

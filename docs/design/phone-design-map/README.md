@@ -9,6 +9,8 @@ status: in-progress
 
 [폰·패드·Duo·Watch 통합 디자인맵 열기](actual/index.html)
 
+2026-10-28 Wellness H01 Flow의 [새 실제 화면과 기기별 출처](../full-redesign-map/review/wellness-flow-2026-10-28/index.html)를 전용 갤러리에 보존한다. 이전 `actual/*/images/H01.png`는 다른 UDID의 캡처이므로 이번 변경의 증거로 덮어쓰지 않았다. 완료한 기기·상태와 남은 범위는 갤러리 README와 이미지별 manifest를 따른다.
+
 2026-10-26 Today의 실제 피드백 수정은 [새 실제 화면·검증 제한](../full-redesign-map/review/today-repair-2026-10-26/index.html)에서 확인한다. 최종 T03은 폰·iPad·Duo 외부 LCD에서 새로 촬영했으며, 폰 T06은 수면 지표의 push·백그라운드 복귀·뒤로·재진입 표본이다. 기존 다른 UDID의 인덱스 이미지는 덮어쓰지 않았다. Duo 내부는 LCD-1 활성 readback을 확인했으나 히트테스트 실패와 검은 PNG로 미갱신이다. X 추가 실클릭 검사는 사용자 요청으로 실행하지 않았다.
 
 

@@ -382,8 +382,32 @@ enum SimulatorAdvancedMockDataProvider {
     }
 
     private static func buildDataSet(referenceDate: Date) -> SimulatorAdvancedMockDataSet {
+        if ProcessInfo.processInfo.arguments.contains("--uitesting") &&
+            ProcessInfo.processInfo.arguments.contains("--ui-test-wellness-records-only") {
+            return SimulatorAdvancedMockDataSet(
+                referenceDate: referenceDate,
+                sharedHealthSnapshot: SharedHealthSnapshot(
+                    hrvSamples: [], todayRHR: nil, yesterdayRHR: nil,
+                    latestRHR: nil, rhrCollection: [],
+                    todaySleepStages: [], yesterdaySleepStages: [],
+                    latestSleepStages: nil, sleepDailyDurations: [],
+                    conditionScore: nil, baselineStatus: nil,
+                    recentConditionScores: [], failedSources: [], fetchedAt: referenceDate
+                ),
+                workouts: [], weightSamples: [], bodyFatSamples: [],
+                leanBodyMassSamples: [], bmiSamples: [], stepsCollection: [],
+                vitals: SimulatorAdvancedMockVitals(
+                    oxygenSaturation: [], respiratoryRate: [], vo2Max: [],
+                    heartRateRecovery: [], wristTemperature: [], generalHeartRate: []
+                )
+            )
+        }
         let snapshot = buildSharedHealthSnapshot(referenceDate: referenceDate)
         let workouts = buildWorkouts(referenceDate: referenceDate)
+        // UI-only state: preserve each actual latest sample, but offer no prior
+        // observation from which Wellness could manufacture a comparison.
+        let latestBodyOnly = ProcessInfo.processInfo.arguments.contains("--uitesting") &&
+            ProcessInfo.processInfo.arguments.contains("--ui-test-no-body-comparison")
         let weightSamples = buildBodyCompositionSeries(
             referenceDate: referenceDate,
             base: 78.4,
@@ -415,10 +439,10 @@ enum SimulatorAdvancedMockDataProvider {
             referenceDate: referenceDate,
             sharedHealthSnapshot: snapshot,
             workouts: workouts,
-            weightSamples: weightSamples,
-            bodyFatSamples: bodyFatSamples,
-            leanBodyMassSamples: leanBodyMassSamples,
-            bmiSamples: bmiSamples,
+            weightSamples: latestBodyOnly ? Array(weightSamples.prefix(1)) : weightSamples,
+            bodyFatSamples: latestBodyOnly ? Array(bodyFatSamples.prefix(1)) : bodyFatSamples,
+            leanBodyMassSamples: latestBodyOnly ? Array(leanBodyMassSamples.prefix(1)) : leanBodyMassSamples,
+            bmiSamples: latestBodyOnly ? Array(bmiSamples.prefix(1)) : bmiSamples,
             stepsCollection: stepsCollection,
             vitals: vitals
         )

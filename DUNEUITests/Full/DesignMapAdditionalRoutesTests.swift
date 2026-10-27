@@ -27,7 +27,7 @@ final class DesignMapAdditionalRoutesTests: SeededUITestBaseCase {
 
     func testSleepPredictionOpensFromWellness() throws {
         navigateToWellness()
-        let sectionID = "wellness-section-sleep-prediction"
+        let sectionID = "wellness-sleep-prediction-card"
         XCTAssertTrue(app.scrollToElementIfNeeded(sectionID), "Sleep prediction card should be reachable")
         let section = app.descendants(matching: .any)[sectionID].firstMatch
         XCTAssertTrue(section.waitForExistence(timeout: 5))

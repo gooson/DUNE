@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "target": "DUNEUITests",
+  "run_exit_status": 0,
+  "requested_selectors": [
+    "DUNEUITests/WellnessFlowUITests/testCaptureHealthIndicatorDetails",
+    "DUNEUITests/WellnessFlowUITests/testCaptureOceanHeroFlow",
+    "DUNEUITests/WellnessFlowUITests/testCaptureH01MaximumAXFlow"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 3,
+    "passed": 3,
+    "skipped": 0,
+    "failed": 0
+  },
+  "passed_cases": 3,
+  "failures": [],
+  "required_selectors_missing": [],
+  "log_path": "/Users/shanks/.codex/worktrees/80fd/Health/.codex-checks/wellness/ui-phone-final-delta.log"
+}

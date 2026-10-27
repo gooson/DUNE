@@ -252,11 +252,13 @@ enum TestDataSeeder {
         into context: ModelContext,
         scenario: UITestSeedScenario = .defaultSeeded
     ) {
+        let recordsOnly = ProcessInfo.processInfo.arguments.contains("--uitesting") &&
+            ProcessInfo.processInfo.arguments.contains("--ui-test-wellness-records-only")
         configureTodayDefaults()
-        seedSharedHealthSnapshot(into: context)
+        if !recordsOnly { seedSharedHealthSnapshot(into: context) }
         seedExerciseDefaults(into: context)
         seedExerciseRecords(into: context)
-        seedBodyCompositionRecords(into: context)
+        if !recordsOnly { seedBodyCompositionRecords(into: context) }
         seedInjuryRecords(into: context)
         seedHabitDefinitions(into: context)
         seedNotificationInbox(scenario: scenario)
@@ -270,7 +272,7 @@ enum TestDataSeeder {
                 habit.autoLinkSourceRaw = "exercise"
             }
         }
-        if ProcessInfo.processInfo.arguments.contains("--ui-visual-posture-fixtures") {
+        if recordsOnly || ProcessInfo.processInfo.arguments.contains("--ui-visual-posture-fixtures") {
             seedVisualPostureFixtures(into: context)
         }
         try? context.save()

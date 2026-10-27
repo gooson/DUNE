@@ -1,0 +1,284 @@
+<style>
+#wellness-redesign{--w-type:1;--w-width:402px;font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo',sans-serif}
+#wellness-redesign *{box-sizing:border-box}#wellness-redesign [hidden]{display:none!important}
+#wellness-redesign .preview-label{text-align:center;font-size:12px;color:light-dark(#695d50,#cdbdad);margin:8px 0}
+#wellness-redesign .stage{display:flex;justify-content:center;align-items:flex-start;padding:16px 3px 28px}
+#wellness-redesign .phone{--w-ink:light-dark(#302b26,#fff4e8);--w-muted:light-dark(#695d50,#cdbdad);--w-line:light-dark(#d9caba,#5b4a3d);--w-surface:light-dark(#fffaf2,#2c2722);--w-inset:light-dark(#f3e9dc,#373029);--w-gold:light-dark(#8a5632,#ecc287);--w-green:light-dark(#46674a,#b6d19a);--w-sleep:light-dark(#5e6d92,#b6bfe9);--w-teal:light-dark(#3e776e,#9bcbc0);--w-pink:light-dark(#9c5b54,#e8b0a3);--w-faint:light-dark(#e4d6c2,#4f4539);color-scheme:light dark;color:var(--w-ink);width:min(100%,var(--w-width));min-width:0;border-radius:36px;position:relative;isolation:isolate;container-type:inline-size;background:linear-gradient(180deg,light-dark(#ead9c0,#3b302b) 0,light-dark(#d4ae8d,#614b3e) 160px,light-dark(#e9d5bb,#3d3029) 340px,light-dark(#f6eee2,#25211d) 610px,transparent 1050px),linear-gradient(180deg,light-dark(#f1e4d2,#201c19),light-dark(#fbf7ef,#181716) 50%,light-dark(#f9f4eb,#141312));box-shadow:0 18px 60px #0002,0 0 0 1px #8883;font-size:calc(14px * var(--w-type));line-height:1.45;overflow:clip}
+#wellness-redesign .phone[data-mode=light]{color-scheme:light}#wellness-redesign .phone[data-mode=dark]{color-scheme:dark}
+#wellness-redesign .phone button,#wellness-redesign .phone input{font:inherit;color:inherit}#wellness-redesign .phone button{border:0;background:none;text-align:left;cursor:inherit}
+#wellness-redesign .phone button:disabled{opacity:.65;cursor:default}#wellness-redesign .phone button:active{filter:brightness(.9)}
+#wellness-redesign .phone h1,#wellness-redesign .phone h2,#wellness-redesign .phone h3,#wellness-redesign .phone p{margin:0}
+#wellness-redesign .phone h1{font-size:calc(31px * var(--w-type));line-height:1.12;letter-spacing:-1.2px;font-weight:740}
+#wellness-redesign .phone h2{font-size:calc(15px * var(--w-type));line-height:1.35;font-weight:650;letter-spacing:-.3px;min-width:0}
+#wellness-redesign .phone h3{font-size:calc(14px * var(--w-type));font-weight:600}
+#wellness-redesign .phone p,#wellness-redesign .phone span,#wellness-redesign .phone h2,#wellness-redesign .phone h3{word-break:keep-all;overflow-wrap:anywhere}
+#wellness-redesign .phone svg[data-lucide]{width:18px;height:18px;flex:none}
+#wellness-redesign .muted{color:var(--w-muted)}#wellness-redesign .small{font-size:calc(11px * var(--w-type));line-height:1.5}
+#wellness-redesign .dunes{position:absolute;inset:65px 0 auto;height:350px;pointer-events:none;z-index:-1;mask-image:linear-gradient(#000,transparent)}
+#wellness-redesign .dune{position:absolute;inset:0;background:light-dark(#c79b79,#8b624b);opacity:.38;clip-path:ellipse(88% 52% at 22% 70%)}
+#wellness-redesign .dune:last-child{background:light-dark(#a97455,#76503e);clip-path:ellipse(95% 50% at 88% 84%);opacity:.28}
+#wellness-redesign .chrome{padding:16px 18px 14px}#wellness-redesign .status{height:25px;display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:650;padding:0 8px;position:relative}
+#wellness-redesign .island{width:104px;height:27px;border-radius:30px;background:#080808;position:absolute;left:50%;top:-3px;transform:translateX(-50%)}#wellness-redesign .signals{display:flex;gap:4px}#wellness-redesign .signals svg[data-lucide]{width:14px;height:14px}
+#wellness-redesign .titlebar{display:flex;justify-content:space-between;align-items:center;gap:10px;padding-top:23px;flex-wrap:wrap}#wellness-redesign .date{margin-top:4px;color:var(--w-muted);font-size:calc(11px * var(--w-type))}
+#wellness-redesign .tools{display:flex;gap:8px}#wellness-redesign .phone .round{border:1px solid var(--w-line);background:var(--w-surface);border-radius:50%;width:44px;height:44px;display:grid;place-items:center;flex:none}
+#wellness-redesign main{padding:0 16px;display:grid;gap:12px;position:relative}#wellness-redesign .surface{padding:15px;border:1px solid var(--w-line);border-radius:20px;background:var(--w-surface);min-width:0;box-shadow:inset 0 1px 0 light-dark(#fff9,#fff1)}
+#wellness-redesign .head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}#wellness-redesign .head h2{flex:1 0 140px}
+#wellness-redesign .phone .heading{display:flex;align-items:center;gap:6px;width:100%;min-height:44px;padding:0;border-radius:8px;text-align:left;font-weight:650;color:inherit}
+#wellness-redesign .heading .title{display:inline-flex;align-items:center;gap:4px;min-width:0}#wellness-redesign .heading .title>span{min-width:0}
+#wellness-redesign .heading>svg{color:var(--w-gold)}#wellness-redesign .heading svg[data-lucide=chevron-right]{width:13px;height:13px;color:var(--w-gold)}
+#wellness-redesign .pill{display:inline-flex;align-items:center;gap:4px;background:var(--w-inset);color:var(--w-muted);padding:4px 8px;border-radius:9px;font-size:calc(11px * var(--w-type));max-width:100%}
+#wellness-redesign .hero{background:radial-gradient(ellipse at 90% 0%,#ce995616,transparent 62%),#352e29;color:#fff5e8;border-color:#765b43;box-shadow:inset 0 1px 0 #fff1,0 8px 26px #0001}
+#wellness-redesign .hero .muted{color:#d0c1ae}#wellness-redesign .hero .heading,#wellness-redesign .hero .heading svg{color:#e7c48e}#wellness-redesign .eyebrow{font-size:calc(11px * var(--w-type));letter-spacing:.12em;font-weight:600}
+#wellness-redesign .hero-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}#wellness-redesign .hero-top h2{flex:1}#wellness-redesign .hero-row{display:grid;grid-template-columns:104px minmax(0,1fr);align-items:center;gap:12px;margin-top:6px}
+#wellness-redesign .ring{width:104px;height:104px;position:relative;display:grid;place-items:center;flex:none}
+#wellness-redesign .ring svg{position:absolute;inset:0;width:104px;height:104px}#wellness-redesign .ring strong{font-size:36px;font-weight:650;letter-spacing:-1.5px;line-height:1;font-variant-numeric:tabular-nums}
+#wellness-redesign .hero-title{font-size:calc(20px * var(--w-type));font-weight:650;line-height:1.35;letter-spacing:-.6px}
+#wellness-redesign .hero-copy{font-size:calc(12px * var(--w-type));color:#d0c1ae;margin-top:5px!important}
+#wellness-redesign .external-score{display:none;font-size:calc(30px * var(--w-type));font-weight:650;margin:4px 0 10px}#wellness-redesign .external-score small{font-size:calc(14px * var(--w-type));font-weight:400}
+#wellness-redesign .evidence{margin-top:14px;padding-top:12px;border-top:1px solid #a9937145;display:grid;gap:7px}
+#wellness-redesign .caption-row{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap;font-size:calc(11px * var(--w-type));color:var(--w-muted)}#wellness-redesign .hero .caption-row{color:#d0c1ae}
+#wellness-redesign .evidence-row{display:grid;grid-template-columns:57px minmax(0,1fr) auto;gap:10px;align-items:center;min-height:27px;font-size:calc(12px * var(--w-type))}
+#wellness-redesign .evidence-row>span{color:#d0c1ae}#wellness-redesign .evidence-row strong{font-size:calc(16px * var(--w-type));font-weight:600;white-space:nowrap}#wellness-redesign .evidence-row strong small{font-size:calc(11px * var(--w-type));font-weight:400;color:#d0c1ae}
+#wellness-redesign .track{height:7px;background:#baa37829;border-radius:5px;overflow:hidden;min-width:0}#wellness-redesign .track i{display:block;height:100%;background:linear-gradient(90deg,#bd8e4d,#edcb83);border-radius:5px}#wellness-redesign .missing .track{background:transparent}
+#wellness-redesign .phone details{border-top:1px solid var(--w-line);margin-top:12px;min-width:0}#wellness-redesign .hero details{border-color:#a9937145}
+#wellness-redesign .phone summary{min-height:44px;display:flex;justify-content:space-between;align-items:center;gap:8px;list-style:none;font-size:calc(12px * var(--w-type));font-weight:550;cursor:inherit}#wellness-redesign summary::-webkit-details-marker{display:none}#wellness-redesign details[open]>summary svg{transform:rotate(90deg)}
+#wellness-redesign .detail-copy{font-size:calc(12px * var(--w-type));line-height:1.6;margin:8px 0!important;color:var(--w-muted)}#wellness-redesign .hero .detail-copy{color:#d0c1ae}
+#wellness-redesign .sleep-overview{display:flex;justify-content:space-between;gap:14px;align-items:flex-end;flex-wrap:wrap}
+#wellness-redesign .value{font-size:calc(34px * var(--w-type));line-height:1.2;font-weight:650;letter-spacing:-1px;font-variant-numeric:tabular-nums;display:flex;gap:5px;align-items:baseline;flex-wrap:wrap}
+#wellness-redesign .value>span{white-space:nowrap}#wellness-redesign .value small{font-size:calc(14px * var(--w-type));font-weight:450;letter-spacing:0;color:var(--w-muted)}#wellness-redesign .value.secondary{font-size:calc(21px * var(--w-type))}
+#wellness-redesign .sleep-chart{margin-top:18px;position:relative;padding-top:12px}
+#wellness-redesign .plot{height:100px;position:relative;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));align-items:end;gap:10px;border-bottom:1px solid var(--w-line);background:repeating-linear-gradient(to top,transparent 0,transparent 32px,var(--w-line) 33px,transparent 34px)}
+#wellness-redesign .sleep-bar{width:100%;max-width:24px;justify-self:center;border-radius:5px 5px 0 0;background:var(--w-teal);opacity:.48;min-height:1px}#wellness-redesign .sleep-bar.latest{opacity:1}#wellness-redesign .sleep-bar.empty{background:transparent;min-height:0}
+#wellness-redesign .days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;margin-top:6px;font-size:11px;color:var(--w-muted);text-align:center}
+#wellness-redesign .sleep-meta{margin-top:10px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:calc(11px * var(--w-type));color:var(--w-muted)}
+#wellness-redesign .prediction{background:linear-gradient(135deg,light-dark(#edf0f8,#2d2c3b),var(--w-surface) 80%)}#wellness-redesign .prediction .heading>svg{color:var(--w-sleep)}
+#wellness-redesign .prediction-main{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center}#wellness-redesign .prediction-title{font-size:calc(19px * var(--w-type));font-weight:650;line-height:1.4}
+#wellness-redesign .prediction-value{font-size:calc(34px * var(--w-type));font-weight:650;font-variant-numeric:tabular-nums;line-height:1.2}#wellness-redesign .prediction-value small{font-size:calc(12px * var(--w-type));font-weight:400}
+#wellness-redesign .tip{display:flex;gap:8px;align-items:flex-start;border-top:1px solid var(--w-line);padding-top:12px;margin-top:12px;font-size:calc(12px * var(--w-type))}#wellness-redesign .tip>svg{color:var(--w-sleep);margin-top:1px}
+#wellness-redesign .metric-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 16px}
+#wellness-redesign .phone .metric{display:block;width:100%;padding:13px 0;min-width:0;border-bottom:1px solid var(--w-line)}
+#wellness-redesign .metric-title{display:flex;align-items:center;gap:5px;flex-wrap:wrap;font-size:calc(12px * var(--w-type));color:var(--w-muted)}#wellness-redesign .metric-title svg[data-lucide]{width:14px;height:14px;color:var(--w-pink)}
+#wellness-redesign .metric .value{font-size:calc(27px * var(--w-type));margin-top:7px;gap:4px}#wellness-redesign .metric .value small{font-size:calc(11px * var(--w-type))}
+#wellness-redesign .mini-chart{width:100%;height:25px;display:block;margin-top:9px;color:var(--w-gold)}#wellness-redesign .stamp{font-size:calc(11px * var(--w-type));color:var(--w-muted);margin-top:6px}
+#wellness-redesign .group-label{margin-top:6px!important;font-size:calc(11px * var(--w-type));color:var(--w-muted);letter-spacing:.02em}
+#wellness-redesign .body-lead{display:flex;justify-content:space-between;gap:12px;align-items:flex-end;flex-wrap:wrap;padding:0 0 12px;border-bottom:1px solid var(--w-line)}#wellness-redesign .body-change{font-size:calc(12px * var(--w-type));color:var(--w-muted)}
+#wellness-redesign .body-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:2px}#wellness-redesign .body-grid .value{font-size:calc(22px * var(--w-type));gap:3px}
+#wellness-redesign .phone .text-action{min-height:44px;width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;color:var(--w-gold);font-size:calc(12px * var(--w-type));padding:8px 0}
+#wellness-redesign .watch-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}#wellness-redesign .watch-grid .value{font-size:calc(23px * var(--w-type));margin-top:5px}#wellness-redesign .watch-grid .value small{font-size:calc(11px * var(--w-type))}
+#wellness-redesign .management{display:grid;gap:12px}#wellness-redesign .assessment{display:flex;gap:12px;align-items:center;flex-wrap:wrap}#wellness-redesign .assessment strong{font-size:calc(30px * var(--w-type));font-weight:650}#wellness-redesign .assessment .copy{flex:1;min-width:120px}
+#wellness-redesign .assessment-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}#wellness-redesign .phone .primary{background:var(--w-gold);color:var(--w-surface);border-radius:12px;padding:10px 14px;min-height:44px;font-size:calc(12px * var(--w-type));font-weight:600}
+#wellness-redesign .phone .secondary-action{border:1px solid var(--w-line);border-radius:12px;padding:10px 14px;min-height:44px;font-size:calc(12px * var(--w-type))}
+#wellness-redesign .injury-active{border-color:light-dark(#b08a65,#b39473);background:linear-gradient(135deg,var(--w-inset),var(--w-surface))}
+#wellness-redesign .empty-copy{font-size:calc(13px * var(--w-type));line-height:1.65;color:var(--w-muted);margin:8px 0!important}#wellness-redesign .hero .empty-copy{color:#d0c1ae}
+#wellness-redesign .skeleton{height:13px;border-radius:5px;background:var(--w-faint);margin:12px 0;width:78%}#wellness-redesign .skeleton.short{width:45%}
+#wellness-redesign .wide-pair{display:grid;gap:12px;align-items:start}#wellness-redesign .wide-pair>*{min-width:0}
+#wellness-redesign .bottomnav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:3px;margin:20px 14px 10px;padding:6px;border-radius:28px;border:1px solid var(--w-line);background:var(--w-surface)}
+#wellness-redesign .navitem{padding:5px 2px;min-height:51px;display:flex;flex-direction:column;gap:3px;align-items:center;justify-content:center;font-size:11px;border-radius:24px;color:var(--w-muted)}#wellness-redesign .navitem.selected{background:var(--w-inset);color:var(--w-gold);font-weight:650}
+#wellness-redesign .home{width:110px;height:4px;background:var(--w-ink);opacity:.6;border-radius:3px;margin:10px auto}
+#wellness-redesign .detail-page{min-height:650px}#wellness-redesign .detail-page h2{font-size:calc(22px * var(--w-type));margin:10px 0}#wellness-redesign .detail-page .surface{margin-top:12px}#wellness-redesign .phone .back{display:flex;align-items:center;gap:5px;min-height:44px;color:var(--w-gold);padding:0;font-size:calc(13px * var(--w-type))}
+#wellness-redesign .phone .field{display:block;width:100%;background:var(--w-inset);border:1px solid var(--w-line);border-radius:10px;padding:10px;margin:7px 0 14px;font-size:16px;min-height:44px}
+#wellness-redesign .compact-sleep{border-top:1px solid #a9937145;margin-top:12px;padding-top:10px}#wellness-redesign .hero .compact-sleep .value small{color:#d0c1ae}#wellness-redesign .hero .compact-sleep .sleep-bar{background:#9bcbc0}#wellness-redesign .hero .compact-sleep .days,#wellness-redesign .hero .compact-sleep .sleep-meta{color:#d0c1ae}
+#wellness-redesign .phone.large .hero-row{display:block}#wellness-redesign .phone.large .ring{display:none}#wellness-redesign .phone.large .external-score{display:block}
+#wellness-redesign .phone.large .evidence-row{grid-template-columns:minmax(0,1fr) auto;gap:6px 10px}#wellness-redesign .phone.large .evidence-row .track{grid-row:2;grid-column:1/-1}
+#wellness-redesign .phone.large .metric-grid,#wellness-redesign .phone.large .body-grid,#wellness-redesign .phone.large .watch-grid,#wellness-redesign .phone.large .prediction-main{grid-template-columns:minmax(0,1fr)}
+#wellness-redesign .phone.large .sleep-overview{display:grid;gap:14px}#wellness-redesign .phone.large .hero-top{align-items:flex-start}#wellness-redesign .phone.large .hero-top h2{flex-basis:100%}
+#wellness-redesign .phone.large .head{align-items:flex-start}#wellness-redesign .phone.large .head h2{flex-basis:100%}
+#wellness-redesign .hero{position:relative;isolation:isolate;overflow:hidden;background:radial-gradient(ellipse at 6% 5%,#aa80432b,transparent 62%),linear-gradient(135deg,#40352a,#302a26 75%);border-color:#897052}
+#wellness-redesign .hero:before{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(170deg,#b1854938,transparent 70%);clip-path:ellipse(85% 50% at 100% 100%)}
+#wellness-redesign .hero:after{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(160deg,transparent,#d8ba7a0b);clip-path:ellipse(100% 35% at 20% 110%)}
+#wellness-redesign .ring{filter:drop-shadow(0 3px 12px #edc97720)}#wellness-redesign .ring strong{text-shadow:0 2px 20px #ffdfa015}
+#wellness-redesign .evidence{gap:9px;padding-top:14px}#wellness-redesign .evidence-row{grid-template-columns:83px minmax(0,1fr) auto;min-height:31px}
+#wellness-redesign .evidence-name{display:flex;gap:7px;align-items:center}#wellness-redesign .evidence-name svg[data-lucide]{width:15px;height:15px;color:#d8bb8d}
+#wellness-redesign .hero .track{background:#e4c99a18}#wellness-redesign .hero .track i{background:linear-gradient(90deg,#b89050,#f0d28c)}#wellness-redesign .hero .missing .track{background:transparent}
+#wellness-redesign .phone [data-card=vitals]{background:linear-gradient(150deg,light-dark(#f9f0e7,#302821),var(--w-surface) 60%)}
+#wellness-redesign .phone [data-card=vitals] .metric-grid{gap:10px;margin-top:12px}
+#wellness-redesign .phone .vital-tile{--metric-tone:var(--w-pink);--metric-wash:light-dark(#9c5b5409,#e8b0a309);padding:12px;background:var(--metric-wash);border:0;border-radius:14px;position:relative}
+#wellness-redesign .phone .vital-tile[data-category=hrv],#wellness-redesign .phone .vital-tile[data-category=vo2]{--metric-tone:var(--w-gold);--metric-wash:light-dark(#8a56320a,#ecc2870a)}
+#wellness-redesign .phone .vital-tile[data-category=spo2],#wellness-redesign .phone .vital-tile[data-category=resp]{--metric-tone:var(--w-teal);--metric-wash:light-dark(#3e776e0a,#9bcbc00a)}
+#wellness-redesign .phone .vital-tile[data-category=temp]{--metric-tone:var(--w-sleep);--metric-wash:light-dark(#5e6d920a,#b6bfe90a)}
+#wellness-redesign .vital-tile .metric-title{color:var(--w-ink);gap:5px;min-height:30px;font-weight:550}
+#wellness-redesign .vital-tile .metric-title>svg:first-child{width:21px;height:21px;color:var(--metric-tone)}#wellness-redesign .vital-tile .metric-title>svg:last-child{width:12px;height:12px;color:var(--w-muted);margin-left:auto}
+#wellness-redesign .vital-tile .value{font-size:calc(32px * var(--w-type));margin-top:9px}#wellness-redesign .vital-tile .stamp{display:block}
+#wellness-redesign .vital-tile .mini-chart{height:34px;margin-top:10px}#wellness-redesign .spark-caption{display:block;font-size:calc(11px * var(--w-type));color:var(--w-muted);margin-top:4px}
+#wellness-redesign .phone [data-card=body]{background:linear-gradient(140deg,light-dark(#f5ead9,#352c22),var(--w-surface) 60%)}
+#wellness-redesign .body-comparison-label{display:flex;align-items:center;gap:5px;font-size:calc(11px * var(--w-type));color:var(--w-muted);margin-bottom:13px}
+#wellness-redesign .body-panels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+#wellness-redesign .phone .body-panel{display:flex;flex-direction:column;width:100%;min-width:0;min-height:180px;background:light-dark(#fffaf2b8,#fff1);padding:13px;border:0;border-radius:15px;text-align:left}
+#wellness-redesign .body-panel .metric-title{color:var(--w-ink);font-weight:550}#wellness-redesign .body-panel .metric-title>svg{color:var(--w-gold);width:19px;height:19px}
+#wellness-redesign .body-panel .value{font-size:calc(30px * var(--w-type));margin:12px 0 8px;gap:4px}#wellness-redesign .body-panel .value small{font-size:calc(12px * var(--w-type))}
+#wellness-redesign .delta{font-size:calc(13px * var(--w-type));font-weight:600;display:flex;align-items:center;flex-wrap:wrap;gap:5px;color:var(--w-ink);min-width:0}#wellness-redesign .delta svg[data-lucide]{width:15px;height:15px;color:var(--w-gold)}
+#wellness-redesign .delta small{font-size:calc(11px * var(--w-type));font-weight:400;color:var(--w-muted)}#wellness-redesign .body-panel .stamp{margin-top:auto;padding-top:10px;display:block}
+#wellness-redesign .body-panel .mini-chart{height:26px;margin:10px 0 0}#wellness-redesign .no-comparison{font-size:calc(11px * var(--w-type));font-weight:400;color:var(--w-muted)}
+#wellness-redesign .phone [data-card=posture]{background:linear-gradient(145deg,light-dark(#eef1e7,#2c3027),var(--w-surface) 65%)}
+#wellness-redesign .posture-overview{display:grid;grid-template-columns:104px minmax(0,1fr);gap:16px;align-items:center}
+#wellness-redesign .capture-guide{display:grid;place-items:center;gap:8px;padding:12px 8px;border-radius:17px;background:light-dark(#e2e9d8,#3a4232);color:var(--w-green);text-align:center}
+#wellness-redesign .guide-frame{display:grid;place-items:center;width:72px;height:90px;border:1px solid light-dark(#60704c3b,#b6d19a3b);border-radius:13px;position:relative;background:light-dark(#f3f5ed,#323b2a)}
+#wellness-redesign .guide-frame:before{content:'';position:absolute;inset:10px;border-top:1px dashed light-dark(#60704c4a,#b6d19a4a);border-bottom:1px dashed light-dark(#60704c4a,#b6d19a4a);pointer-events:none}
+#wellness-redesign .phone .guide-frame svg[data-lucide]{width:46px!important;height:64px!important;stroke-width:1.2}#wellness-redesign .capture-guide figcaption{font-size:calc(11px * var(--w-type));line-height:1.4}#wellness-redesign .capture-guide figure{margin:0}
+#wellness-redesign .posture-score{font-size:calc(42px * var(--w-type));font-weight:650;line-height:1.15;letter-spacing:-1.5px;margin:8px 0;display:flex;align-items:baseline;gap:5px;flex-wrap:wrap}#wellness-redesign .posture-score small{font-size:calc(13px * var(--w-type));font-weight:400;letter-spacing:0;color:var(--w-muted)}
+#wellness-redesign .posture-meter{height:7px;background:light-dark(#61714c1a,#b6d19a1a);border-radius:6px;margin-top:11px}#wellness-redesign .posture-meter i{display:block;width:80%;height:100%;border-radius:6px;background:var(--w-green)}
+#wellness-redesign .posture-foot{display:flex;gap:7px;align-items:center;color:var(--w-muted);font-size:calc(11px * var(--w-type));margin-top:14px;padding-top:12px;border-top:1px solid var(--w-line)}#wellness-redesign .posture-foot svg[data-lucide]{width:15px;height:15px}
+#wellness-redesign .assessment-actions>*{flex:1;display:flex;align-items:center;justify-content:center;gap:6px}#wellness-redesign .assessment-actions svg[data-lucide]{width:16px;height:16px}
+#wellness-redesign .phone.large .body-panels,#wellness-redesign .phone.large .posture-overview{grid-template-columns:minmax(0,1fr)}#wellness-redesign .phone.large .body-panel{min-height:0}#wellness-redesign .phone.large .capture-guide{display:none}
+#wellness-redesign .phone.large .assessment-actions{flex-direction:column}#wellness-redesign .phone.large .assessment-actions>*{width:100%}
+@container(min-width:700px){#wellness-redesign .phone:not(.large) .wide-pair{grid-template-columns:repeat(2,minmax(0,1fr))}#wellness-redesign .phone:not(.large) main{padding:0 24px}#wellness-redesign .phone:not(.large) .hero{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 24px}#wellness-redesign .phone:not(.large) .hero-top,#wellness-redesign .phone:not(.large) .hero>details,#wellness-redesign .phone:not(.large) .compact-sleep{grid-column:1/-1}#wellness-redesign .phone:not(.large) .hero-row{grid-template-columns:104px minmax(0,1fr)}#wellness-redesign .phone:not(.large) .hero .evidence{border-top:0;border-left:1px solid #a9937145;margin-top:0;padding:0 0 0 20px}#wellness-redesign .phone:not(.large) .hero-status{align-self:center}}
+@container(max-width:350px){#wellness-redesign .body-grid{grid-template-columns:minmax(0,1fr)}#wellness-redesign .watch-grid{grid-template-columns:minmax(0,1fr)}}
+@media(prefers-reduced-motion:reduce){#wellness-redesign *{scroll-behavior:auto!important}}
+</style>
+<div id="wellness-redesign" aria-label="웰니스 개편 시안">
+  <div class="preview-label">개편 시안 · 예시 기록 · 앱 적용 전</div>
+  <div class="viz-carousel viz-dotted-background" aria-label="웰니스 개편 방향" data-previous-label="이전 시안" data-next-label="다음 시안">
+    <section data-variant="Flow" aria-label="Flow · 수면에서 몸의 변화로"><div class="stage"><div class="phone" data-design="flow" aria-label="Flow 웰니스"></div></div></section>
+    <section data-variant="Compact" aria-label="Compact · 기존 순서 정돈" hidden><div class="stage"><div class="phone" data-design="compact" aria-label="Compact 웰니스"></div></div></section>
+  </div>
+</div>
+<script>
+(()=>{
+const root=document.getElementById('wellness-redesign');
+const defaults={appearance:'auto',width:402,text:100,data:'complete',score:79,bodyComparison:true};
+const saved=window.openai?.widgetState?.modelContent?.wellnessDesign;
+const state={...defaults,...(saved&&typeof saved==='object'?saved:{})};
+const routes=new Map();
+const icon=name=>`<i data-lucide="${name}" aria-hidden="true"></i>`;
+const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const heading=(title,route,ic,extra='')=>`<div class="head"><h2>${route?`<button class="heading cursor-interaction" data-route="${route}">${ic?icon(ic):''}<span class="title"><span>${title}</span>${icon('chevron-right')}</span></button>`:`<span class="heading">${ic?icon(ic):''}<span>${title}</span></span>`}</h2>${extra}</div>`;
+const action=(label,route)=>`<button class="text-action cursor-interaction" data-route="${route}"><span>${label}</span>${icon('chevron-right')}</button>`;
+const summary=(label,content)=>`<details><summary>${label}${icon('chevron-right')}</summary>${content}</details>`;
+const blank=()=>['empty','access','sync','loading'].includes(state.data);
+const duration=m=>`${Math.floor(m/60)}시간 ${m%60}분`;
+const samples=[398,420,435,405,441,430,432];
+function spark(values,color='var(--w-gold)'){
+ if(values.length<2)return '';
+ const min=Math.min(...values),range=Math.max(...values)-min||1;
+ const pts=values.map((v,i)=>`${2+i/(values.length-1)*296},${23-(v-min)/range*20}`).join(' ');
+ const lastY=23-(values[values.length-1]-min)/range*20;
+ return `<svg class="mini-chart" viewBox="0 0 300 26" preserveAspectRatio="none" role="img" aria-label="최근 기록 흐름. ${values.join(', ')}"><polygon points="2,26 ${pts} 298,26" fill="${color}" opacity=".10"/><polyline points="${pts}" fill="none" stroke="${color}" stroke-width="2" vector-effect="non-scaling-stroke"/><circle cx="298" cy="${lastY}" r="2.6" fill="${color}"/></svg>`;
+}
+function hero(design){
+ if(blank())return `<section class="surface hero" data-card="hero"><div class="eyebrow">WELLNESS</div><h3 style="margin-top:14px">${state.data==='loading'?'기록을 불러오는 중이에요':state.data==='sync'?'iPhone의 기록을 기다리고 있어요':'아직 웰니스 점수가 없어요'}</h3>${state.data==='loading'?'<div class="skeleton"></div><div class="skeleton short"></div>':`<p class="empty-copy">${state.data==='access'?'건강 기록이 보이지 않아요. 건강 앱의 데이터 접근 설정을 확인할 수 있어요.':state.data==='sync'?'동기화가 끝나면 이곳에 기록이 표시돼요.':'수면이나 신체 기록이 쌓이면 함께 살펴볼 수 있어요.'}</p>`}</section>`;
+ const bodyOnly=state.data==='body-only',partial=state.data==='partial',single=state.data==='single';
+ const score=bodyOnly?78:partial?78:single?86:Math.max(0,Math.min(100,Number(state.score)||0));
+ const components=bodyOnly?[null,null,75,null]:partial?[83,64,null,80]:single?[83,null,null,null]:[83,64,75,80];
+ const copy=bodyOnly?'신체 기록부터 모으고 있어요':single?'첫 수면 기록이 도착했어요':score<40?'회복에 여유를 주세요':score<60?'몸의 흐름을 살펴보세요':'회복의 흐름을 이어가요';
+ const ring=`<div class="ring" role="img" aria-label="웰니스 ${score}점, 100점 기준"><svg viewBox="0 0 104 104" aria-hidden="true"><defs><linearGradient id="w-ring-${design}" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#b38a4a"/><stop offset=".55" stop-color="#edc66c"/><stop offset="1" stop-color="#f9dfa0"/></linearGradient></defs><circle cx="52" cy="52" r="48.5" fill="none" stroke="#baa37829" stroke-width="7"/><circle cx="52" cy="52" r="48.5" fill="none" stroke="url(#w-ring-${design})" stroke-width="7" stroke-linecap="round" transform="rotate(-90 52 52)" stroke-dasharray="${score/100*304.734} 304.734" ${score===0?'visibility="hidden"':''}/></svg><strong>${score}</strong></div>`;
+ const evidence=components.map((n,i)=>`<div class="evidence-row ${n===null?'missing':''}"><span class="evidence-name">${icon(['moon','activity','person-standing','scan-line'][i])}<span>${['수면','컨디션','신체','자세'][i]}</span></span><div class="track" ${n===null?'aria-hidden="true"':`role="meter" aria-label="${['수면','컨디션','신체','자세'][i]} 점수" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${n}"`}>${n===null?'':`<i style="width:${n}%"></i>`}</div><strong>${n===null?'—':`${n}<small>/100</small>`}</strong></div>`).join('');
+ return `<section class="surface hero" data-card="hero"><div class="hero-top"><h2><button class="heading cursor-interaction" data-route="wellness"><span class="title eyebrow"><span>WELLNESS</span>${icon('chevron-right')}</span></button></h2><span class="small muted">10.27 · 09:41</span></div><div class="hero-status"><div class="external-score">${score} <small>웰니스 / 100</small></div><div class="hero-row">${ring}<div><div class="hero-title">${copy}</div><p class="hero-copy">${bodyOnly?'수면·컨디션·자세는 기록이 생기면 함께 반영해요.':single?'하루의 기록이에요. 흐름은 며칠 더 모아 볼게요.':partial?'수면·컨디션·자세 기록을 반영했어요. 신체 기록은 아직 없어요.':'수면·컨디션·신체·자세 기록을 함께 반영했어요.'}</p></div></div></div><div class="evidence"><div class="caption-row"><span>웰니스 근거</span><span>각 100점 기준</span></div>${evidence}</div>${summary('점수에 반영한 기록',`<p class="detail-copy">${components.filter(n=>n!==null).length}개 항목 반영 · 기록이 없는 항목은 점수 계산에서 제외해요. 막대는 각 항목의 점수이며 합산 비율이 아니에요.</p><p class="detail-copy">09:41 평가 · 시간대 보정 +3점 포함</p>`)}${design==='compact'?`<div class="compact-sleep">${sleepContent(true)}</div>`:''}</section>`;
+}
+function sleepContent(compact=false){
+ const missing=state.data==='body-only';
+ if(missing)return `<p class="empty-copy">아직 수면 기록이 없어요. Apple Watch를 착용하고 자면 수면 흐름을 볼 수 있어요.</p>`;
+ const single=state.data==='single',stale=state.data==='stale';
+ const vals=single?[0,0,0,0,0,0,432]:samples;
+ const avg=single?null:Math.round(samples.reduce((a,b)=>a+b,0)/samples.length);
+ const end=stale?24:27;
+ return `${compact?heading('최근 수면','sleep','moon'):''}<div class="sleep-overview"><div><div class="small muted">최근 기록 · 10.${end}</div><div class="value"><span>7<small>시간</small></span><span>12<small>분</small></span></div></div><div><div class="small muted">${single?'기록을 모으는 중':'최근 7일 평균'}</div><div class="value secondary">${avg===null?'—':`<span>7<small>시간</small></span><span>3<small>분</small></span>`}</div></div></div><div class="sleep-chart" role="img" aria-label="최근 7일 수면. ${vals.map((n,i)=>`10월 ${end-6+i}일 ${n?duration(n):'기록 없음'}`).join(', ')}"><div class="plot">${vals.map((n,i)=>`<i class="sleep-bar ${i===6?'latest':''} ${n?'':'empty'}" style="height:${n/600*100}%"></i>`).join('')}</div><div class="days" aria-hidden="true">${vals.map((_,i)=>`<span>${end-6+i}</span>`).join('')}</div></div><div class="sleep-meta"><span>${single?'1일 기록 · 평균은 2일 이상부터':`10.${end-6}–10.${end} · 유효 기록 7일`}</span><span>${stale?'3일 전 기록 · 오늘 기록 없음':'수면 시간 · 0–10시간'}</span></div>${stale?'<p class="detail-copy">오늘 수면으로 바꾸어 표시하지 않아요.</p>':''}`;
+}
+const sleepCard=()=>`<section class="surface" data-card="sleep">${heading('최근 수면','sleep','moon')}<div>${sleepContent()}</div></section>`;
+function prediction(){
+ const no=state.data==='body-only',single=state.data==='single';
+ if(no)return `<section class="surface prediction" data-card="prediction">${heading('오늘 밤 수면',null,'moon-star')}<p class="empty-copy">수면 기록이 생기면 오늘 밤의 수면 예측을 볼 수 있어요.</p></section>`;
+ return `<section class="surface prediction" data-card="prediction">${heading('오늘 밤 수면','prediction','moon-star',`<span class="pill">예측 · 신뢰도 ${single?'낮음':'보통'}</span>`)}<div class="prediction-main"><div><div class="prediction-title">${single?'기록을 더 모으고 있어요':'편안한 수면이 기대돼요'}</div><p class="detail-copy">${single?'하루의 기록을 바탕으로 한 초기 추정이에요.':'최근 수면 시간과 컨디션을 바탕으로 살펴봤어요.'}</p></div><div class="prediction-value">${single?'—':'78'}<small>${single?'':' /100'}</small></div></div><div class="tip">${icon('sparkles')}<span>${single?'기록이 적을 때는 예측 수치를 강조하지 않아요.':'오늘 밤도 평소의 수면 리듬을 이어가 보세요.'}</span></div>${summary('예측에 사용한 기록',`<p class="detail-copy">최근 수면 시간 · HRV 흐름 · 현재 컨디션</p><p class="detail-copy">관측된 수면 점수와 다른 추정값이에요. 수면 시간의 변동을 실제 취침 시각으로 표시하지 않아요.</p>`)}</section>`;
+}
+const metrics=[
+ {id:'hrv',name:'HRV',v:'48',unit:'ms',date:'오늘 08:12',ic:'activity',a:[53,50,49,51,47,46,48]},
+ {id:'rhr',name:'안정 시 심박',v:'58',unit:'bpm',date:'오늘 07:42',ic:'heart',a:[60,58,59,57,58,59,58]},
+ {id:'heart',name:'심박수',v:'72',unit:'bpm',date:'오늘 09:18',ic:'heart-pulse',a:[74,78,69,73,70,71,72]},
+ {id:'spo2',name:'혈중 산소',v:'98',unit:'%',date:'오늘 06:54',ic:'droplets',a:[98,97,98,99,98,98,98]},
+ {id:'resp',name:'호흡수',v:'15',unit:'회/분',date:'오늘 06:54',ic:'wind',a:[16,15,15,14,15,16,15]},
+ {id:'temp',name:'손목 온도 변화',v:'+0.2',unit:'°C',date:'오늘 06:54 · 개인 기준선 대비',ic:'thermometer',a:[.1,0,.2,.1,0,.1,.2]},
+ {id:'vo2',name:'심폐 체력',v:'44.2',unit:'ml/kg/min',date:'10.25 기록',ic:'footprints',a:[43.6,43.8,43.7,44,44.1,44,44.2]},
+ {id:'recovery',name:'심박 회복',v:'28',unit:'bpm',date:'10.25 기록',ic:'heart-handshake',a:[26,25,26,28,27,29,28]}
+];
+function metric(m){
+ const isMissing=state.data==='partial'&&['spo2','temp'].includes(m.id);
+ const single=state.data==='single';
+ return `<button class="metric vital-tile cursor-interaction" data-category="${m.id}" data-route="metric-${m.id}" ${isMissing?'disabled':''}><span class="metric-title">${icon(m.ic)}<span>${m.name}</span>${isMissing?'':icon('chevron-right')}</span><span class="value"><span>${isMissing?'—':m.v}</span>${isMissing?'':`<small>${m.unit}</small>`}</span>${isMissing?'':spark(single?[Number(m.v)]:m.a,'var(--metric-tone)')}<span class="spark-caption">${isMissing?'':single?'':'최근 기록'}</span><span class="stamp">${isMissing?'기록을 불러오지 못했어요':single?'첫 기록 · 추세 대기':state.data==='stale'?'10.24 기록 · 3일 전':m.date}</span></button>`;
+}
+function vitals(){
+ if(['body-only','single'].includes(state.data))return '';
+ return `<section class="surface" data-card="vitals">${heading('건강 지표',null,'heart-pulse')}<p class="small muted">각 기록의 측정 시각을 함께 확인해요.</p><div class="metric-grid">${metrics.slice(0,6).map(metric).join('')}</div>${summary('심폐 체력 · 심박 회복',`<div class="metric-grid">${metrics.slice(6).map(metric).join('')}</div>`)}${state.data==='partial'?'<p class="detail-copy">일부 지표를 불러오지 못했어요. 다른 기록은 계속 볼 수 있어요.</p>':''}</section>`;
+}
+const bodyMetrics=[
+ {id:'weight',route:'body-weight',name:'체중',icon:'weight',value:'68.4',unit:'kg',previous:'68.6',delta:'−0.2',deltaUnit:'kg',direction:'arrow-down-right',history:[68.6,68.5,68.6,68.5,68.4,68.5,68.4]},
+ {id:'fat',route:'body-0',name:'체지방률',icon:'droplets',value:'18.2',unit:'%',previous:'18.6',delta:'−0.4',deltaUnit:'%p',direction:'arrow-down-right',history:[18.5,18.6,18.4,18.4,18.3,18.3,18.2]},
+ {id:'lean',route:'body-1',name:'제지방량',icon:'person-standing',value:'55.9',unit:'kg',previous:'55.8',delta:'+0.1',deltaUnit:'kg',direction:'arrow-up-right',history:[]},
+ {id:'bmi',route:'body-2',name:'BMI',icon:'ruler',value:'22.1',unit:'',previous:'22.2',delta:'−0.1',deltaUnit:'',direction:'arrow-down-right',history:[]}
+];
+function bodyMetric(m){
+ return `<button class="body-panel cursor-interaction" data-body="${m.id}" data-route="${m.route}"><span class="metric-title">${icon(m.icon)}<span>${m.name}</span>${icon('chevron-right')}</span><span class="value"><span>${m.value}</span><small>${m.unit}</small></span>${state.bodyComparison?`<span class="delta">${icon(m.direction)}<span>${m.delta} ${m.deltaUnit}</span></span><span class="small muted">이전 ${m.previous}${m.unit}</span>`:'<span class="no-comparison">비교 기록 없음</span>'}${spark(m.history)}<span class="stamp">10.27 기록${m.history.length?' · 최근 7일 흐름':''}</span></button>`;
+}
+function bodyCard(){
+ const no=['partial','single'].includes(state.data);
+ return `<section class="surface" data-card="body">${heading('신체 변화',no?null:'body-history','person-standing')}${no?`<p class="empty-copy">아직 신체 기록이 없어요. 체중부터 가볍게 남길 수 있어요.</p>${action('신체 기록 추가','body-record')}`:`<div class="body-comparison-label">${icon('calendar-days')}<span>${state.bodyComparison?'10.20 → 10.27 · 7일 비교':'10.27 · 최근 측정값'}</span></div><div class="body-panels">${bodyMetrics.map(bodyMetric).join('')}</div><p class="detail-copy">${state.bodyComparison?'비교 기록이 있는 경우 · 예시':'비교 기록이 없는 경우 · 예시'}</p>${action('신체 기록 추가','body-record')}`}</section>`;
+}
+function watchCard(){
+ const off=state.data==='watch-off'||['body-only','single'].includes(state.data);
+ return `<section class="surface" data-card="watch">${heading('Watch 자세',null,'watch',off?'':'<span class="small muted">오늘 · 09:35 수신</span>')}${off?`<p class="empty-copy">${state.data==='watch-off'?'자세 모니터링이 꺼져 있어요. Watch에서 켤 수 있어요.':'아직 Watch 자세 기록이 없어요.'}</p>`:`<div class="watch-grid"><div><div class="small muted">앉아 있던 시간</div><div class="value"><span>42</span><small>분</small></div></div><div><div class="small muted">걸은 시간</div><div class="value"><span>18</span><small>분</small></div></div><div><div class="small muted">스트레칭 알림</div><div class="value"><span>1</span><small>회</small></div></div></div><p class="detail-copy">모니터링 중 쌓인 기록이에요. 하루 전체 활동 시간과는 달라요.</p>`}</section>`;
+}
+function posture(){
+ const no=['body-only','single'].includes(state.data);
+ return `<section class="surface" data-card="posture">${heading('자세 평가',no?null:'posture-history','scan-line')}<div class="posture-overview"><figure class="capture-guide" style="margin:0" aria-label="촬영 안내 도식. 실제 자세 평가 결과가 아닙니다."><div class="guide-frame">${icon('person-standing')}</div><figcaption>정면 · 측면<br>촬영 안내</figcaption></figure><div><div class="small muted">${no?'내 자세를 기록해 볼까요':'최근 사진 평가 · 10.26'}</div>${no?'<p class="detail-copy">사진으로 자세를 남기고 변화를 살펴보세요.</p>':`<div class="posture-score"><span>80</span><small>/100</small></div><div class="posture-meter" role="meter" aria-label="사진 자세 평가 예시 80점" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"><i></i></div><p class="detail-copy">사진 촬영으로 남긴 평가예요.</p>`}</div></div><div class="posture-foot">${icon('scan-line')}<span>사진 평가와 Watch의 일상 기록을 따로 봐요.</span></div><div class="assessment-actions"><button class="primary cursor-interaction" data-route="posture-capture">${icon('camera')}자세 촬영</button><button class="secondary-action cursor-interaction" data-route="posture-live">${icon('scan')}실시간 확인</button></div></section>`;
+}
+function injury(){
+ const active=state.data==='injury';
+ return `<section class="surface ${active?'injury-active':''}" data-card="injury">${heading(active?'관리 중인 부상':'부상 기록',active?'injury-detail':null,'bandage')}${active?`<h3>오른쪽 어깨</h3><p class="detail-copy">직접 남긴 기록 · 10.25 시작</p>${action('기록 수정','injury-edit')}`:`<p class="small muted">등록된 부상이 없어요.</p>${action('부상 기록 추가','injury-record')}`}</section>`;
+}
+function toolbar(){return `<div class="chrome"><div class="status" aria-hidden="true"><span>9:41</span><div class="island"></div><span class="signals">${icon('signal')}${icon('wifi')}${icon('battery-full')}</span></div><div class="titlebar"><h1>Wellness</h1><div class="tools"><button class="round cursor-interaction" data-route="compare" aria-label="지표 비교" ${blank()||['body-only','single'].includes(state.data)?'disabled':''}>${icon('chart-no-axes-combined')}</button><button class="round cursor-interaction" data-route="add" aria-label="기록 추가">${icon('plus')}</button></div></div><div class="date">10월 27일 화요일</div></div>`;}
+const nav=()=>`<div class="bottomnav" aria-label="탭 위치 미리보기">${[['Today','sun'],['Activity','activity'],['Wellness','leaf'],['Life','circle-check']].map((a,i)=>`<span class="navitem ${i===2?'selected':''}" ${i===2?'aria-current="page"':''}>${icon(a[1])}<span>${a[0]}</span></span>`).join('')}</div><div class="home" aria-hidden="true"></div>`;
+function screen(design){
+ let content='';
+ if(blank())content=hero(design)+(state.data==='loading'?'<section class="surface"><div class="skeleton"></div><div class="skeleton short"></div></section>':`<section class="surface">${heading('기록 시작',null,'plus')}${state.data==='access'?action('건강 데이터 접근 확인','health-access'):state.data==='sync'?action('동기화 다시 확인','sync'):''}${action('신체 기록 추가','body-record')}${action('자세 촬영','posture-capture')}${action('부상 기록 추가','injury-record')}</section>`);
+ else if(design==='flow')content=hero(design)+`<div class="wide-pair">${sleepCard()}${prediction()}</div>`+(state.data==='injury'?injury():'')+`<div class="wide-pair">${vitals()}${bodyCard()}</div><div class="wide-pair">${watchCard()}${posture()}</div>`+(state.data==='injury'?'':injury());
+ else content=hero(design)+prediction()+bodyCard()+vitals()+watchCard()+posture()+injury();
+ return `<div class="dunes" aria-hidden="true"><div class="dune"></div><div class="dune"></div></div>${toolbar()}<main>${state.data==='partial'?'<div class="surface small" role="status">일부 기록을 불러오지 못했어요. 확인된 기록부터 보여 드려요.</div>':''}${content}</main>${nav()}`;
+}
+function persist(){window.openai?.setWidgetState?.({modelContent:{wellnessDesign:{...state}},privateContent:null}).catch(()=>{});}
+function render(){
+ root.style.setProperty('--w-width',`${state.width}px`);root.style.setProperty('--w-type',state.text/100);
+ root.querySelectorAll('.phone').forEach(phone=>{phone.dataset.mode=state.appearance;phone.classList.toggle('large',state.text>=160);phone.innerHTML=screen(phone.dataset.design);routes.delete(phone);});
+ if(globalThis.lucide)lucide.createIcons({attrs:{width:18,height:18}});
+ equalize();
+}
+function equalize(){
+ let tallest=0;
+ root.querySelectorAll('[data-variant]').forEach(section=>{const was=section.hidden,css=section.style.cssText;section.hidden=false;section.style.position='absolute';section.style.visibility='hidden';section.style.width='100%';tallest=Math.max(tallest,section.querySelector('.phone').getBoundingClientRect().height+44);section.hidden=was;section.style.cssText=css;});
+ root.querySelectorAll('.stage').forEach(stage=>stage.style.minHeight=`${tallest}px`);
+}
+const detailTitles={wellness:'웰니스 점수',sleep:'수면 기록',prediction:'오늘 밤 수면 예측','body-history':'신체 기록 이력','posture-history':'자세 평가 이력','posture-capture':'자세 촬영','posture-live':'실시간 자세 확인','injury-detail':'부상 기록','injury-edit':'부상 기록 수정','injury-record':'부상 기록 추가',compare:'지표 비교',add:'기록 추가','body-record':'신체 기록 추가','health-access':'건강 데이터 접근',sync:'동기화 상태'};
+function detail(phone,route){
+ const scrollY=window.scrollY;
+ routes.set(phone,{html:phone.innerHTML,scrollY,route});
+ let body='';const m=metrics.find(m=>`metric-${m.id}`===route);
+ if(route==='add')body=action('신체 기록','body-record')+action('부상 기록','injury-record')+action('자세 촬영','posture-capture');
+ else if(route==='body-record')body=`<form data-record-form><label>체중 · kg<input class="field" type="number" min="1" max="500" step="0.1" value="68.4" required aria-label="체중 kg"></label><button class="primary cursor-interaction" type="submit">입력 확인</button><p class="detail-copy" data-confirmation aria-live="polite">시안에서 입력 형식만 확인해요.</p></form>`;
+ else if(route==='sleep'){const list=state.data==='single'?[432]:samples;const end=state.data==='stale'?24:27;body=sleepContent()+summary('날짜별 기록',list.map((n,i)=>`<p class="detail-copy">10.${end-list.length+1+i} · ${duration(n)}</p>`).join(''));}
+ else if(route==='prediction')body=prediction()+`<p class="detail-copy">예측과 관측 기록을 구분해요. 새 취침 시간이나 임의의 목표 시각을 제안하지 않아요.</p>`;
+ else if(route==='wellness')body=hero('flow');
+ else if(route==='body-history')body=bodyCard();
+ else if(m)body=`<div class="value"><span>${m.v}</span><small>${m.unit}</small></div><p class="detail-copy">${state.data==='stale'?'10.24 기록 · 3일 전':m.date}</p>${spark(m.a)}<p class="detail-copy">최근 7개 기록: ${m.a.join(' · ')} ${m.unit}</p>`;
+ else if(route==='compare')body=`<p class="detail-copy">서로 다른 단위는 축을 나누어 확인해요.</p>${heading('HRV',null,'activity')}${spark(metrics[0].a)}${heading('안정 시 심박',null,'heart')}${spark(metrics[1].a)}`;
+ else if(route==='posture-capture'||route==='posture-live')body='<p class="empty-copy">카메라를 사용하는 자세 확인 화면으로 이어져요.</p><p class="detail-copy">현재는 촬영 전 진입 시안이에요.</p>';
+ else if(route==='health-access')body='<p class="empty-copy">건강 앱에서 DUNE의 데이터 접근 설정을 확인해 주세요.</p>';
+ else if(route==='sync')body='<p class="empty-copy">iPhone의 기록이 이 기기에 동기화되면 표시돼요.</p>';
+ else if(route.startsWith('injury'))body=state.data==='injury'?'<h3>오른쪽 어깨</h3><p class="detail-copy">10.25 시작 · 직접 기록</p>':'<p class="empty-copy">부위·시작일·경과를 남기는 입력 화면으로 이어져요.</p>';
+ else if(route==='posture-history')body='<div class="value"><span>80</span><small>/100</small></div><p class="detail-copy">10.26 · 사진 자세 평가</p>';
+ else if(route.startsWith('body-')){const a=bodyMetrics.find(m=>m.route===route);if(a)body=`<h3>${a.name}</h3><div class="value"><span>${a.value}</span><small>${a.unit}</small></div><p class="detail-copy">10.27 기록</p>${state.bodyComparison?`<div class="delta">${icon(a.direction)}${a.delta} ${a.deltaUnit}</div><p class="detail-copy">10.20의 ${a.previous}${a.unit} → 10.27의 ${a.value}${a.unit}</p><p class="detail-copy">비교 기록이 있는 경우 · 예시</p>`:'<p class="detail-copy">비교 기록 없음</p>'}${spark(a.history)}`;}
+ phone.innerHTML=`<div class="chrome"><button class="back cursor-interaction" data-back>${icon('chevron-left')}웰니스로</button></div><main class="detail-page"><h2>${escape(detailTitles[route]||m?.name||'신체 지표')}</h2><div class="surface">${body}</div></main>${nav()}`;
+ if(globalThis.lucide)lucide.createIcons({attrs:{width:18,height:18}});
+ phone.querySelector('[data-back]').focus({preventScroll:true});phone.scrollIntoView({block:'start'});
+}
+root.addEventListener('click',e=>{
+ const phone=e.target.closest('.phone');if(!phone)return;
+ const back=e.target.closest('[data-back]');if(back){const prev=routes.get(phone);if(prev){phone.innerHTML=screen(phone.dataset.design);const target=phone.querySelector(`[data-route="${prev.route}"]`);target?.focus({preventScroll:true});window.scrollTo(0,prev.scrollY);routes.delete(phone);if(globalThis.lucide)lucide.createIcons({attrs:{width:18,height:18}});}return;}
+ const button=e.target.closest('[data-route]');if(button&&!button.disabled)detail(phone,button.dataset.route);
+});
+root.addEventListener('submit',e=>{if(!e.target.matches('[data-record-form]'))return;e.preventDefault();e.target.querySelector('[data-confirmation]').textContent='입력 형식을 확인했어요. 실제 기록은 저장하지 않았어요.';});
+root.addEventListener('toggle',equalize,true);
+root.updatePreview=patch=>{Object.assign(state,patch);state.width=Math.max(280,Math.min(1100,Number(state.width)||402));state.text=Math.max(100,Math.min(200,Number(state.text)||100));render();};
+root.previewState=state;
+render();
+if(globalThis.Tweak){const tweak=new Tweak({container:root,onChange:()=>{render();persist();}});tweak.addSelect(state,'appearance',{label:'밝기',options:[{label:'시스템',value:'auto'},{label:'밝음',value:'light'},{label:'어두움',value:'dark'}]});tweak.addSelect(state,'width',{label:'화면 폭',options:[{label:'작은 화면 · 320',value:320},{label:'iPhone · 402',value:402},{label:'Duo 접힘 · 466',value:466},{label:'Duo 펼침 · 951',value:951},{label:'iPad · 1032',value:1032}]});tweak.addSlider(state,'text',{label:'글씨 크기',min:100,max:200,step:25,unit:'%'});tweak.addSelect(state,'data',{label:'기록 상태',options:[{label:'기본 기록',value:'complete'},{label:'일부 조회 누락',value:'partial'},{label:'첫 수면 1일',value:'single'},{label:'신체 기록만',value:'body-only'},{label:'최근 기록 3일 전',value:'stale'},{label:'Watch 모니터링 꺼짐',value:'watch-off'},{label:'관리 중인 부상',value:'injury'},{label:'전체 기록 없음',value:'empty'},{label:'건강 기록 접근 확인',value:'access'},{label:'동기화 대기',value:'sync'},{label:'초기 로딩',value:'loading'}]});tweak.addSlider(state,'score',{label:'웰니스 예시 점수',min:0,max:100,step:1});tweak.addToggle(state,'bodyComparison',{label:'신체 비교 기록 있음'});}
+window.addEventListener('openai:set_globals',event=>{const value=event.detail?.globals?.widgetState?.modelContent?.wellnessDesign;if(value)root.updatePreview(value);});
+new ResizeObserver(()=>equalize()).observe(root);
+})();
+</script>

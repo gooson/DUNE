@@ -1,0 +1,45 @@
+{
+  "device": "CF4E3CE3-8E9A-4595-8AE1-9BE271EB22C2",
+  "requestedAngle": 180.0,
+  "actualAngle": null,
+  "angleVerified": false,
+  "angleGetStatus": 1,
+  "activeDisplay": {
+    "active": true,
+    "backlightState": "off",
+    "bounds": [
+      [
+        0,
+        0
+      ],
+      [
+        2007,
+        2853
+      ]
+    ],
+    "chromeIdentifier": "com.apple.dt.devicekit.chrome.phone14",
+    "currentOrientation": "rot90",
+    "displayId": 3,
+    "framebufferMaskIdentifier": "BF0DC480-5EE2-4EC1-B02B-C75E94759832",
+    "name": "LCD-1",
+    "nativeOrientation": "rot0",
+    "nativeSize": [
+      2007,
+      2853
+    ],
+    "physicalSize": [
+      4.363043308258057,
+      6.202173709869385
+    ],
+    "pointScale": 3,
+    "primary": false,
+    "type": {
+      "integrated": {}
+    },
+    "uniqueId": "34F13DD8-128F-46C8-BC6D-0FFBA3A9690E"
+  },
+  "panelVerified": true,
+  "scope": "actual external/internal viewport; physical hinge angle unverified when getter unavailable",
+  "helperSourceCommit": "7acb090dd7d28fb0aea8e1907211ceff15aa450e",
+  "helperSHA256": "f7d6996d6240aaa2f72a0e7fea731b692fe1ac6987491e9c5a597fb890cedcef"
+}
