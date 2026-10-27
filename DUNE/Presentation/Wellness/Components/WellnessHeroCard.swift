@@ -2,12 +2,6 @@ import SwiftUI
 
 struct WellnessHeroCard: View {
     let score: WellnessScore?
-    let sleepScore: Int?
-    let conditionScore: Int?
-    let bodyScore: Int?
-    var hourlySparkline: HourlySparklineData?
-    var sleepTrend: [SleepDailySample] = []
-    var sleepMetric: HealthMetric?
 
     @State private var showsEvidence = false
     @Environment(\.appTheme) private var theme
@@ -210,7 +204,7 @@ struct WellnessHeroCard: View {
 
 #Preview {
     NavigationStack {
-        WellnessHeroCard(score: WellnessScore(score: 79, sleepScore: 83, conditionScore: 64, bodyScore: 75, postureScore: 80), sleepScore: 83, conditionScore: 64, bodyScore: 75)
+        WellnessHeroCard(score: WellnessScore(score: 79, sleepScore: 83, conditionScore: 64, bodyScore: 75, postureScore: 80))
             .padding()
     }
 }

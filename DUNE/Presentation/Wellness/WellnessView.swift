@@ -89,13 +89,7 @@ struct WellnessView: View {
                                 )
                             }
                         } else {
-                            WellnessHeroCard(
-                                score: viewModel.wellnessScore,
-                                sleepScore: viewModel.sleepScore,
-                                conditionScore: viewModel.conditionScore,
-                                bodyScore: viewModel.bodyScore,
-                                hourlySparkline: viewModel.wellnessSparkline.nonEmptyOrNil
-                            )
+                            WellnessHeroCard(score: viewModel.wellnessScore)
                             .reportTabHeroFrame()
                             .staggeredAppear(index: 0)
 

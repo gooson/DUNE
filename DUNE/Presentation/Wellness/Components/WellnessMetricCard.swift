@@ -90,7 +90,12 @@ struct WellnessMetricCard: View {
 
     @ViewBuilder
     private var healthContext: some View {
-        if let detail = data.baselineDetail {
+        if data.category == .wristTemperature {
+            Text("Change from personal baseline")
+                .font(.caption)
+                .foregroundStyle(DS.Color.textSecondary)
+                .fixedSize(horizontal: false, vertical: true)
+        } else if let detail = data.baselineDetail {
             BaselineTrendBadge(detail: detail, inversePolarity: data.inversePolarity)
         } else if let change = data.change {
             Text(change)

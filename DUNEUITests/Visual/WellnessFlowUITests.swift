@@ -201,6 +201,9 @@ final class WellnessFlowUITests: SeededUITestBaseCase {
                 start.press(forDuration: 0.05, thenDragTo: start.withOffset(CGVector(dx: 0, dy: -max(-240, min(240, offset)))))
             }
             XCTAssertTrue(metric.isHittable)
+            XCTAssertTrue(element("wellness-card-wristTemperature")
+                .staticTexts["Change from personal baseline"].waitForExistence(timeout: 5),
+                "Wrist temperature must identify a change from the personal baseline")
             let name = "H01-Wellness-Flow-health-detail-\(style)"
             if VisualAudit.isEnabled {
                 VisualAudit.capture(name)

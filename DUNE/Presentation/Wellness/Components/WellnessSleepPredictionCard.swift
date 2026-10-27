@@ -17,7 +17,7 @@ struct WellnessSleepPredictionCard: View {
                         VStack(alignment: .leading, spacing: DS.Spacing.md) {
                             CardNavigationHeader(chevronColor: ink) {
                                 Text("Tonight's Sleep")
-                        .accessibilityIdentifier("wellness-sleep-prediction-card")
+                                    .accessibilityIdentifier("wellness-sleep-prediction-card")
                                     .font(.headline.weight(.semibold))
                                     .foregroundStyle(ink)
                             }

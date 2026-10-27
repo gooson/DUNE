@@ -25,6 +25,10 @@ struct WellnessSleepSummaryCard: View {
 
     private var latest: SleepDailySample? { recentSamples.last }
 
+    private var barScaleMinutes: Double {
+        max(600, recentSamples.map(\.minutes).max() ?? 600)
+    }
+
     private var meanMinutes: Int? {
         guard recentSamples.count >= 2 else { return nil }
         return Int((recentSamples.reduce(0) { $0 + $1.minutes } / Double(recentSamples.count)).rounded())
@@ -77,7 +81,7 @@ struct WellnessSleepSummaryCard: View {
                             VStack(spacing: DS.Spacing.xs) {
                                 Capsule()
                                     .fill(DS.Color.sleep.opacity(sample.date == latest.date ? 1 : 0.6))
-                                    .frame(height: max(8, min(54, CGFloat(sample.minutes / 600 * 54))))
+                                    .frame(height: max(8, min(54, CGFloat(sample.minutes / barScaleMinutes * 54))))
                                     .frame(maxHeight: 54, alignment: .bottom)
                                 Text(sample.date.formatted(.dateTime.day()))
                                     .font(.caption2).foregroundStyle(muted)
