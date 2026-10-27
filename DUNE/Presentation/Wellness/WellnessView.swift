@@ -464,6 +464,7 @@ struct WellnessView: View {
                             WellnessMetricCard(data: card)
                         }
                         .buttonStyle(CardNavigationButtonStyle())
+                        .accessibilityIdentifier("wellness-card-\(card.category.rawValue)")
                         .frame(maxWidth: .infinity, alignment: .topLeading)
                     }
                     if row.cards.count < columns {

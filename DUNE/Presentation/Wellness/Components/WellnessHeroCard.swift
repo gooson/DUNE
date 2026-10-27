@@ -127,11 +127,16 @@ struct WellnessHeroCard: View {
 
     private func evidence(_ score: WellnessScore) -> some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            Text("Score evidence").font(.subheadline.weight(.semibold)).foregroundStyle(ink)
-            evidenceRow("Sleep", icon: "moon.fill", value: score.sleepScore, color: DS.Color.sleep)
-            evidenceRow("Condition", icon: "heart.fill", value: score.conditionScore, color: DS.Color.hrv)
-            evidenceRow("Body", icon: "figure.stand", value: score.bodyScore, color: DS.Color.body)
-            evidenceRow("Posture", icon: "figure.stand", value: score.postureScore, color: DS.Color.posture)
+            HStack(alignment: .firstTextBaseline) {
+                Text("Score evidence").font(.subheadline.weight(.semibold)).foregroundStyle(ink)
+                    .accessibilityIdentifier("wellness-hero-evidence")
+                Spacer(minLength: DS.Spacing.sm)
+                Text("Each out of 100").font(.caption2).foregroundStyle(muted)
+            }
+            evidenceRow("Sleep", icon: "moon.fill", value: score.sleepScore, color: DS.Color.sleep, identifier: "sleep")
+            evidenceRow("Condition", icon: "heart.fill", value: score.conditionScore, color: DS.Color.hrv, identifier: "condition")
+            evidenceRow("Body", icon: "figure.stand", value: score.bodyScore, color: DS.Color.body, identifier: "body")
+            evidenceRow("Posture", icon: "figure.stand", value: score.postureScore, color: DS.Color.posture, identifier: "posture")
             Button {
                 withAnimation(DS.Animation.standard) { showsEvidence.toggle() }
             } label: {
@@ -154,10 +159,9 @@ struct WellnessHeroCard: View {
                     .accessibilityIdentifier("wellness-hero-evidence-explanation")
             }
         }
-        .accessibilityIdentifier("wellness-hero-evidence")
     }
 
-    private func evidenceRow(_ title: LocalizedStringKey, icon: String, value: Int?, color: Color) -> some View {
+    private func evidenceRow(_ title: LocalizedStringKey, icon: String, value: Int?, color: Color, identifier: String) -> some View {
         Group {
             if dynamicTypeSize.isAccessibilitySize {
                 VStack(alignment: .leading, spacing: DS.Spacing.xs) {
@@ -178,6 +182,7 @@ struct WellnessHeroCard: View {
         }
         .frame(minHeight: 28)
         .accessibilityElement(children: .combine)
+        .accessibilityIdentifier("wellness-hero-component-\(identifier)")
     }
 
     private func evidenceLabel(_ title: LocalizedStringKey, icon: String, value: Int?, color: Color) -> some View {

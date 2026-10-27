@@ -86,7 +86,6 @@ struct WellnessMetricCard: View {
                     .fill(tint.opacity(colorScheme == .dark ? 0.10 : 0.06))
             }
         }
-        .accessibilityIdentifier("wellness-card-\(data.category.rawValue)")
     }
 
     @ViewBuilder

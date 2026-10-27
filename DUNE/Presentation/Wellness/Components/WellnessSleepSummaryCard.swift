@@ -46,13 +46,13 @@ struct WellnessSleepSummaryCard: View {
                 }
             }
         }
-        .accessibilityIdentifier("wellness-sleep-summary-card")
     }
 
     private func content(showsChevron: Bool) -> some View {
         VStack(alignment: .leading, spacing: DS.Spacing.md) {
             CardNavigationHeader(showsChevron: showsChevron, chevronColor: ink) {
                 Text("Recent Sleep")
+                    .accessibilityIdentifier("wellness-sleep-summary-card")
                     .font(.headline.weight(.semibold))
                     .foregroundStyle(ink)
             }

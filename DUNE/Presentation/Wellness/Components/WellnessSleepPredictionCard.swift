@@ -17,6 +17,7 @@ struct WellnessSleepPredictionCard: View {
                         VStack(alignment: .leading, spacing: DS.Spacing.md) {
                             CardNavigationHeader(chevronColor: ink) {
                                 Text("Tonight's Sleep")
+                        .accessibilityIdentifier("wellness-sleep-prediction-card")
                                     .font(.headline.weight(.semibold))
                                     .foregroundStyle(ink)
                             }
@@ -53,6 +54,7 @@ struct WellnessSleepPredictionCard: View {
                     }
                 } else {
                     Text("Tonight's Sleep")
+                        .accessibilityIdentifier("wellness-sleep-prediction-card")
                         .font(.headline.weight(.semibold)).foregroundStyle(ink)
                     Text("Sleep a few nights to see your sleep quality prediction.")
                         .font(.subheadline).foregroundStyle(muted)
@@ -60,11 +62,13 @@ struct WellnessSleepPredictionCard: View {
                 }
             }
         }
-        .accessibilityIdentifier("wellness-sleep-prediction-card")
     }
 
     private func predictionContent(_ prediction: SleepQualityPrediction) -> some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+            Text("Predicted score")
+                .font(.caption)
+                .foregroundStyle(muted)
             HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.sm) {
                 Text(prediction.predictedScore.formatted())
                     .font(.title2.weight(.bold).monospacedDigit())

@@ -42,11 +42,10 @@ final class WellnessFlowUITests: SeededUITestBaseCase {
         XCTAssertEqual(ring.frame.width, 104, accuracy: 1)
         XCTAssertEqual(ring.frame.height, ring.frame.width, accuracy: 1)
         XCTAssertTrue(hero.label.contains("Wellness score"))
-        for title in ["Sleep", "Condition", "Body", "Posture"] {
-            let row = evidence.descendants(matching: .any).matching(
-                NSPredicate(format: "label BEGINSWITH %@", title)
-            ).firstMatch
-            XCTAssertTrue(row.exists, "\(title) should have its own score evidence row")
+        XCTAssertTrue(evidence.exists)
+        for (key, title) in [("sleep", "Sleep"), ("condition", "Condition"), ("body", "Body"), ("posture", "Posture")] {
+            let row = waitForElement("wellness-hero-component-\(key)", timeout: 5)
+            XCTAssertTrue(row.label.contains(title), "\(title) should have its own score evidence row")
             XCTAssertTrue(row.label.range(of: #"\d{1,3}"#, options: .regularExpression) != nil,
                           "\(title) should expose a measured score: \(row.label)")
         }

@@ -77,6 +77,7 @@ struct WellnessBodySummaryCard: View {
             WellnessMetricCard(data: card, comparison: comparisons[card.category], isBodyMetric: true)
         }
         .buttonStyle(CardNavigationButtonStyle())
+        .accessibilityIdentifier("wellness-card-\(card.category.rawValue)")
     }
 }
 
