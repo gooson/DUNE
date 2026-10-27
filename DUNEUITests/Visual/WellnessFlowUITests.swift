@@ -213,8 +213,12 @@ final class WellnessFlowUITests: SeededUITestBaseCase {
         }
     }
 
-    func testCaptureWideBodyMeasurementFrames() {
+    func testCaptureWideBodyMeasurementFrames() throws {
         navigateToWellness()
+        let window = app.windows.firstMatch.frame
+        guard window.width >= 700, window.height >= 1000 else {
+            throw XCTSkip("Requires a large viewport to inspect all four body tiles together.")
+        }
         let header = waitForElement("wellness-link-bodyhistory", timeout: 10)
         let scroll = app.scrollViews.firstMatch
         let desiredY = app.navigationBars.firstMatch.frame.maxY + 24
