@@ -182,12 +182,14 @@ final class WellnessSeededSmokeTests: SeededUITestBaseCase {
     }
 
     func testSeededSleepSummarySeparatesLatestFromSevenDayAverage() throws {
-        let sleepLink = app.buttons["wellness-hero-sleep"].firstMatch
-        XCTAssertTrue(sleepLink.waitForExistence(timeout: 10), "Sleep summary should be accessible")
-        let summary = sleepLink.label
-        XCTAssertTrue(summary.hasPrefix("Sleep "), "Summary should identify the latest dated sleep duration")
-        XCTAssertTrue(summary.contains(", 7h 54min. 7d Average 7h 26min"),
-                      "Latest 474-minute sleep and the seven-day 446-minute average should be distinct: \(summary)")
+        XCTAssertTrue(app.buttons["wellness-hero-sleep"].firstMatch.waitForExistence(timeout: 10))
+        let latest = app.staticTexts["wellness-sleep-latest"].firstMatch
+        let average = app.staticTexts["wellness-sleep-average"].firstMatch
+        XCTAssertTrue(latest.waitForExistence(timeout: 5))
+        XCTAssertTrue(average.waitForExistence(timeout: 5))
+        XCTAssertEqual(latest.label, "7h 54min", "Latest observed sleep should be 474 minutes")
+        XCTAssertEqual(average.label, "7-day average · 7h 26min",
+                       "The seven valid days should average 446 minutes")
         addScreenshotAttachment(named: "Wellness latest sleep and seven-day average")
     }
 
@@ -197,11 +199,14 @@ final class WellnessSeededSmokeTests: SeededUITestBaseCase {
         launchApp(with: configuration)
         navigateToWellness()
 
-        let sleepLink = app.buttons["wellness-hero-sleep"].firstMatch
-        XCTAssertTrue(sleepLink.waitForExistence(timeout: 10), "Sleep summary should be accessible")
-        let summary = sleepLink.label
-        XCTAssertTrue(summary.contains(", 7h 42min. 7d Average 7h 21min"),
-                      "A zero-minute latest day should use yesterday's 462 minutes and the six valid-day average of 441 minutes: \(summary)")
+        XCTAssertTrue(app.buttons["wellness-hero-sleep"].firstMatch.waitForExistence(timeout: 10))
+        let latest = app.staticTexts["wellness-sleep-latest"].firstMatch
+        let average = app.staticTexts["wellness-sleep-average"].firstMatch
+        XCTAssertTrue(latest.waitForExistence(timeout: 5))
+        XCTAssertTrue(average.waitForExistence(timeout: 5))
+        XCTAssertEqual(latest.label, "7h 42min", "Zero-minute today must leave yesterday as the latest observation")
+        XCTAssertEqual(average.label, "7-day average · 7h 21min",
+                       "Only six valid days should contribute to the 441-minute average")
     }
 
     func testSeededWellnessHeroScoreOpensScoreDetail() throws {

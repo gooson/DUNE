@@ -1,0 +1,181 @@
+@preconcurrency import XCTest
+
+/// Seeded H01 reading order, independent routes, and design-map captures.
+@MainActor
+final class WellnessFlowUITests: SeededUITestBaseCase {
+    override var initialTabSelectionArgument: String? { "wellness" }
+
+    override var additionalLaunchArguments: [String] {
+        ["-morningBriefingDisabled", "YES",
+         "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+         "--ui-test-theme", "desertWarm", "--ui-test-style", "light",
+         "--ui-design-map-sleep-prediction"]
+    }
+
+    private func element(_ id: String) -> XCUIElement {
+        app.descendants(matching: .any)[id].firstMatch
+    }
+
+    private func reveal(_ id: String) -> XCUIElement {
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(id, maxSwipes: 16), "\(id) should be reachable")
+        let target = element(id)
+        let scroll = app.scrollViews.firstMatch
+        for _ in 0..<10 {
+            let viewport = scroll.frame.intersection(app.windows.firstMatch.frame)
+                .insetBy(dx: 8, dy: 60)
+            if viewport.contains(CGPoint(x: target.frame.midX, y: target.frame.midY)) { break }
+            if target.frame.midY > viewport.midY {
+                scroll.swipeUp(velocity: .slow)
+            } else {
+                scroll.swipeDown(velocity: .slow)
+            }
+        }
+        return target
+    }
+
+    func testSeededReadingOrderAndEvidence() {
+        navigateToWellness()
+        let hero = waitForElement("wellness-hero-score", timeout: 15)
+        let ring = waitForElement("wellness-hero-ring", timeout: 10)
+        let evidence = waitForElement("wellness-hero-evidence", timeout: 10)
+        XCTAssertEqual(waitForElement("wellness-hero-heading").label, "WELLNESS")
+        XCTAssertEqual(ring.frame.width, 104, accuracy: 1)
+        XCTAssertEqual(ring.frame.height, ring.frame.width, accuracy: 1)
+        XCTAssertTrue(hero.label.contains("Wellness score"))
+        for title in ["Sleep", "Condition", "Body", "Posture"] {
+            let row = evidence.descendants(matching: .any).matching(
+                NSPredicate(format: "label BEGINSWITH %@", title)
+            ).firstMatch
+            XCTAssertTrue(row.exists, "\(title) should have its own score evidence row")
+            XCTAssertTrue(row.label.range(of: #"\d{1,3}"#, options: .regularExpression) != nil,
+                          "\(title) should expose a measured score: \(row.label)")
+        }
+
+        let sleep = waitForElement("wellness-sleep-summary-card", timeout: 10)
+        let prediction = waitForElement("wellness-sleep-prediction-card", timeout: 10)
+        let injury = waitForElement("wellness-link-injuryhistory", timeout: 10)
+        let health = waitForElement("wellness-section-health-indicators", timeout: 10)
+        let body = waitForElement("wellness-link-bodyhistory", timeout: 10)
+        let posture = waitForElement("wellness-link-posturehistory", timeout: 10)
+        XCTAssertGreaterThan(sleep.frame.minY, hero.frame.minY)
+        if prediction.frame.minX > sleep.frame.minX + 80 {
+            XCTAssertLessThan(abs(sleep.frame.minY - prediction.frame.minY), 40,
+                              "Wide layout should pair observed and predicted sleep")
+        } else {
+            XCTAssertGreaterThan(prediction.frame.minY, sleep.frame.minY,
+                                 "Narrow layout should place prediction after observed sleep")
+        }
+        XCTAssertGreaterThan(injury.frame.minY, prediction.frame.minY)
+        XCTAssertGreaterThan(health.frame.minY, injury.frame.minY)
+        XCTAssertGreaterThan(body.frame.minY, injury.frame.minY)
+        XCTAssertGreaterThan(posture.frame.minY, body.frame.minY)
+        XCTAssertFalse(element("wellness-card-sleep").exists, "Sleep should not repeat in health indicators")
+        XCTAssertTrue(element("wellness-card-hrv").exists)
+    }
+
+    func testSleepAndPredictionOpenIndependentDetails() {
+        navigateToWellness()
+        reveal("wellness-hero-sleep").tap()
+        XCTAssertTrue(waitForElement(AXID.metricDetailScreen("sleep"), timeout: 10).exists)
+        launchApp()
+        navigateToWellness()
+        reveal("wellness-sleep-prediction-detail-link").tap()
+        XCTAssertTrue(waitForElement("wellness-sleep-prediction-detail-screen", timeout: 10).exists)
+    }
+
+    func testBodyMeasurementsAndHeaderEdge() {
+        navigateToWellness()
+        let body = reveal("wellness-link-bodyhistory")
+        XCTAssertGreaterThanOrEqual(body.frame.height, 44)
+        for category in ["weight", "bodyFat", "leanBodyMass", "bmi"] {
+            let card = waitForElement("wellness-card-\(category)", timeout: 10)
+            XCTAssertTrue(card.staticTexts["Previous measurement"].exists,
+                          "\(category) should show a real prior measurement")
+        }
+        XCTAssertTrue(reveal("wellness-add-body-record").isHittable)
+        reveal("wellness-link-bodyhistory")
+            .coordinate(withNormalizedOffset: CGVector(dx: 0.92, dy: 0.5)).tap()
+        XCTAssertTrue(waitForElement("body-history-detail-screen", timeout: 10).exists)
+    }
+
+    func testPostureHistoryAndActionsRemainIndependent() {
+        navigateToWellness()
+        XCTAssertTrue(reveal("wellness-button-posture-capture").isHittable)
+        XCTAssertTrue(reveal("wellness-button-posture-realtime").isHittable)
+        XCTAssertTrue(element("wellness-posture-score").exists)
+        reveal("wellness-link-posturehistory").tap()
+        XCTAssertTrue(waitForElement("posture-history-screen", timeout: 10).exists)
+    }
+
+    func testMaximumAccessibilityValueFrames() {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ]
+        launchApp(with: configuration)
+        navigateToWellness()
+        let ring = waitForElement("wellness-hero-ring", timeout: 15)
+        XCTAssertEqual(ring.frame.width, 104, accuracy: 1)
+        for id in ["wellness-sleep-latest", "wellness-posture-score"] {
+            let value = reveal(id)
+            let viewport = app.scrollViews.firstMatch.frame.intersection(app.windows.firstMatch.frame)
+            XCTAssertGreaterThan(value.frame.width, 0)
+            XCTAssertGreaterThan(value.frame.height, 0)
+            XCTAssertTrue(viewport.insetBy(dx: -1, dy: -1).contains(value.frame),
+                          "\(id) should fit entirely in the scrolling viewport at maximum text size")
+        }
+        let weight = reveal("wellness-card-weight")
+        let number = weight.staticTexts.matching(
+            NSPredicate(format: "label MATCHES %@", #"^[0-9][0-9.,]*$"#)
+        ).firstMatch
+        XCTAssertTrue(number.exists, "Weight should expose its numeric value")
+        XCTAssertGreaterThan(number.frame.width, 0)
+        XCTAssertGreaterThan(number.frame.height, 0)
+    }
+
+    func testCaptureH01LightFlow() {
+        captureH01Flow(suffix: "light")
+    }
+
+    func testCaptureH01DarkFlow() {
+        var configuration = launchConfiguration
+        if let style = configuration.additionalArguments.firstIndex(of: "--ui-test-style") {
+            configuration.additionalArguments[style + 1] = "dark"
+        }
+        launchApp(with: configuration)
+        captureH01Flow(suffix: "dark")
+    }
+
+    func testCaptureH01MaximumAXFlow() {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ]
+        launchApp(with: configuration)
+        captureH01Flow(suffix: "MaxAX")
+    }
+
+    private func captureH01Flow(suffix: String) {
+        navigateToWellness()
+        let stops: [(String, String)] = [
+            ("wellness-hero-score", "hero"),
+            ("wellness-sleep-summary-card", "sleep"),
+            ("wellness-sleep-prediction-card", "prediction"),
+            ("wellness-link-injuryhistory", "injury"),
+            ("wellness-section-health-indicators", "health"),
+            ("wellness-link-bodyhistory", "body"),
+            ("wellness-link-posturehistory", "posture"),
+            ("wellness-button-posture-capture", "posture-actions")
+        ]
+        for (id, section) in stops {
+            let target = reveal(id)
+            XCTAssertGreaterThan(target.frame.height, 0)
+            let name = "H01-Wellness-Flow-\(section)-\(suffix)"
+            if VisualAudit.isEnabled {
+                VisualAudit.capture(name)
+            } else {
+                addScreenshotAttachment(named: name)
+            }
+        }
+    }
+}

@@ -32,9 +32,10 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
         XCTAssertTrue(hero.waitForExistence(timeout: 15), "Desert Wellness hero should retain the seeded score")
         XCTAssertTrue(sleepEmptyState.waitForExistence(timeout: 10),
                       "Missing sleep trend should show an honest empty state inside the hero")
-        XCTAssertTrue(sleepEmptyState.isHittable, "Sleep empty state should be visible in the hero")
+        XCTAssertTrue(app.descendants(matching: .any)["wellness-sleep-summary-card"].firstMatch.exists,
+                      "The sleep empty state should belong to the independent sleep card")
         XCTAssertTrue(hero.frame.minY < sleepEmptyState.frame.minY,
-                      "Sleep empty state should remain below the hero score in the Desert layout")
+                      "Independent sleep should follow the hero in the Desert layout")
 
         hero.tap()
         let detail = app.descendants(matching: .any)[AXID.wellnessScoreDetailScreen].firstMatch
