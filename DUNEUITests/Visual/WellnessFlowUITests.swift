@@ -98,6 +98,23 @@ final class WellnessFlowUITests: SeededUITestBaseCase {
         XCTAssertTrue(waitForElement("body-history-detail-screen", timeout: 10).exists)
     }
 
+    func testBodyWithoutPriorMeasurementsKeepsLatestValues() {
+        var configuration = launchConfiguration
+        configuration.additionalArguments.append("--ui-test-no-body-comparison")
+        launchApp(with: configuration)
+        navigateToWellness()
+
+        for category in ["weight", "bodyFat", "leanBodyMass", "bmi"] {
+            let card = waitForElement("wellness-card-\(category)", timeout: 10)
+            let currentValue = card.staticTexts.matching(
+                NSPredicate(format: "label MATCHES %@", #"^[0-9][0-9.,]*$"#)
+            ).firstMatch
+            XCTAssertTrue(currentValue.exists, "\(category) should retain its measured latest value")
+            XCTAssertFalse(card.staticTexts["Previous measurement"].exists,
+                           "\(category) should not imply a comparison without a prior observation")
+        }
+    }
+
     func testPostureHistoryAndActionsRemainIndependent() {
         navigateToWellness()
         XCTAssertTrue(reveal("wellness-button-posture-capture").isHittable)
@@ -114,9 +131,10 @@ final class WellnessFlowUITests: SeededUITestBaseCase {
         ]
         launchApp(with: configuration)
         navigateToWellness()
-        let ring = waitForElement("wellness-hero-ring", timeout: 15)
-        XCTAssertEqual(ring.frame.width, 104, accuracy: 1)
-        for id in ["wellness-sleep-latest", "wellness-posture-score"] {
+        XCTAssertTrue(waitForElement("wellness-hero-score", timeout: 15).exists)
+        XCTAssertFalse(element("wellness-hero-ring").exists,
+                       "Accessibility sizes should use an external score instead of a fixed ring")
+        for id in ["wellness-hero-external-score", "wellness-sleep-latest", "wellness-posture-score"] {
             let value = reveal(id)
             let viewport = app.scrollViews.firstMatch.frame.intersection(app.windows.firstMatch.frame)
             XCTAssertGreaterThan(value.frame.width, 0)

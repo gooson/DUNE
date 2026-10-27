@@ -84,8 +84,8 @@ struct WellnessHeroCard: View {
                         Text(score.score.formatted())
                             .font(.largeTitle.weight(.bold).monospacedDigit())
                             .foregroundStyle(ink)
+                            .accessibilityIdentifier("wellness-hero-external-score")
                         Text(score.status.label).font(.headline).foregroundStyle(ink)
-                        scoreRing(score)
                     }
                 } else {
                     HStack(alignment: .center, spacing: DS.Spacing.lg) {
