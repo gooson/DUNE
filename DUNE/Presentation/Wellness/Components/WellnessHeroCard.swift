@@ -8,102 +8,101 @@ struct WellnessHeroCard: View {
     var hourlySparkline: HourlySparklineData?
     var sleepTrend: [SleepDailySample] = []
     var sleepMetric: HealthMetric?
+
+    @State private var showsEvidence = false
     @Environment(\.appTheme) private var theme
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @Environment(\.horizontalSizeClass) private var sizeClass
 
-    private var usesSideBySideLayout: Bool {
-        horizontalSizeClass == .regular && !dynamicTypeSize.isAccessibilitySize
-    }
-
-    private var recentSleepSamples: [SleepDailySample] {
-        Array(sleepTrend.suffix(7))
-    }
-
-    private var validSleepSamples: [SleepDailySample] {
-        recentSleepSamples.filter { $0.minutes > 0 }
-    }
-
-    private var latestSleepSample: SleepDailySample? {
-        validSleepSamples.last
-    }
-
-    private var averageSleepMinutes: Int? {
-        guard validSleepSamples.count >= 2 else { return nil }
-        return Int((validSleepSamples.map(\.minutes).reduce(0, +) / Double(validSleepSamples.count)).rounded())
-    }
-
-    private func sleepDuration(_ minutes: Int) -> String {
-        String(localized: "\(minutes / 60)h \(minutes % 60)min")
-    }
-
-    private var sleepAccessibilitySummary: String {
-        guard let latestSleepSample else {
-            return "\(String(localized: "Sleep")), \(String(localized: "Need More Data"))"
-        }
-        let latest = sleepDuration(Int(latestSleepSample.minutes))
-        let date = latestSleepSample.date.formatted(.dateTime.month(.abbreviated).day())
-        guard let averageSleepMinutes else {
-            return "\(String(localized: "Sleep")) \(date), \(latest)"
-        }
-        return "\(String(localized: "Sleep")) \(date), \(latest). \(String(localized: "7d")) \(String(localized: "Average")) \(sleepDuration(averageSleepMinutes))"
-    }
+    private var isWide: Bool { sizeClass == .regular && !dynamicTypeSize.isAccessibilitySize }
+    private var ink: Color { theme == .desertWarm ? DesertPalette.ink : theme.directionPreviewTextColor }
+    private var muted: Color { theme == .desertWarm ? DesertPalette.muted : theme.directionPreviewTextColor.opacity(0.74) }
 
     var body: some View {
-        if let score {
-            themeSleepSummary(score: score)
-        } else {
-            emptyCard
-        }
-    }
-
-    private func themeSleepSummary(score: WellnessScore) -> some View {
-        VStack(alignment: .leading, spacing: 16) {
-            if usesSideBySideLayout {
-                HStack(alignment: .top, spacing: 24) {
-                    wellnessScoreLink(score)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    sleepSection
-                        .frame(maxWidth: .infinity, alignment: .leading)
+        VStack(alignment: .leading, spacing: DS.Spacing.lg) {
+            if let score {
+                if isWide {
+                    HStack(alignment: .top, spacing: DS.Spacing.xxl) {
+                        scoreLink(score).frame(maxWidth: .infinity, alignment: .leading)
+                        evidence(score).frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                } else {
+                    scoreLink(score)
+                    evidence(score)
                 }
             } else {
-                wellnessScoreLink(score)
-                sleepSection
+                Text(verbatim: "WELLNESS")
+                    .font(.caption.weight(.semibold))
+                    .tracking(1.5)
+                    .foregroundStyle(ink)
+                    .accessibilityIdentifier("wellness-hero-heading")
+                Text("Need More Data").font(.headline).foregroundStyle(ink)
+                Text("Wear your Apple Watch tonight to start tracking your wellness score.")
+                    .font(.subheadline).foregroundStyle(muted)
+                    .fixedSize(horizontal: false, vertical: true)
             }
         }
-        .padding(20)
+        .padding(DS.Spacing.xl)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background {
             if theme == .desertWarm {
                 DesertCardSurface(cornerRadius: DS.Radius.xxl)
             } else {
-                RoundedRectangle(cornerRadius: 23)
+                RoundedRectangle(cornerRadius: DS.Radius.xxl)
                     .fill(theme.directionPreviewBackground)
                     .overlay {
-                        RoundedRectangle(cornerRadius: 23)
+                        RoundedRectangle(cornerRadius: DS.Radius.xxl)
                             .strokeBorder(theme.accentColor.opacity(0.25), lineWidth: 1)
                     }
             }
         }
+        .overlay(alignment: .bottomTrailing) {
+            if theme == .desertWarm {
+                Ellipse()
+                    .fill(DesertPalette.duneFar.opacity(0.12))
+                    .frame(width: 200, height: 45)
+                    .offset(x: 45, y: 23)
+                    .allowsHitTesting(false)
+                    .accessibilityHidden(true)
+            }
+        }
+        .clipShape(RoundedRectangle(cornerRadius: DS.Radius.xxl))
     }
 
-    private func wellnessScoreLink(_ score: WellnessScore) -> some View {
+    private func scoreLink(_ score: WellnessScore) -> some View {
         NavigationLink(value: WellnessScoreDestination()) {
-            VStack(alignment: .leading, spacing: 16) {
-                CardNavigationHeader(
-                    minimumHeight: 0,
-                    chevronColor: theme == .desertWarm ? DesertPalette.ink : theme.directionPreviewTextColor
-                ) {
+            VStack(alignment: .leading, spacing: DS.Spacing.md) {
+                CardNavigationHeader(minimumHeight: 0, chevronColor: ink) {
                     Text(verbatim: "WELLNESS")
                         .font(.caption.weight(.semibold))
                         .tracking(1.5)
+                        .foregroundStyle(ink)
                         .accessibilityIdentifier("wellness-hero-heading")
-                        .foregroundStyle(theme == .desertWarm ? DesertPalette.ink : theme.directionPreviewTextColor)
                 }
-                wellnessStatus(score)
-                wellnessNarrative(score)
+                if dynamicTypeSize.isAccessibilitySize {
+                    VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                        Text(score.score.formatted())
+                            .font(.largeTitle.weight(.bold).monospacedDigit())
+                            .foregroundStyle(ink)
+                        Text(score.status.label).font(.headline).foregroundStyle(ink)
+                        scoreRing(score)
+                    }
+                } else {
+                    HStack(alignment: .center, spacing: DS.Spacing.lg) {
+                        scoreRing(score)
+                        Text(score.status.label)
+                            .font(.headline.weight(.semibold))
+                            .foregroundStyle(ink)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                }
+                Text(score.narrativeMessage)
+                    .font(.subheadline).foregroundStyle(muted)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .accessibilityIdentifier("wellness-hero-narrative")
+                Text(score.evaluationDate.formatted(.dateTime.month(.abbreviated).day().hour().minute()))
+                    .font(.caption).foregroundStyle(muted)
             }
-            .frame(maxWidth: .infinity, maxHeight: usesSideBySideLayout ? .infinity : nil, alignment: .topLeading)
             .contentShape(Rectangle())
         }
         .buttonStyle(CardNavigationButtonStyle())
@@ -112,175 +111,100 @@ struct WellnessHeroCard: View {
         .accessibilityHint("Wellness Details")
     }
 
-    @ViewBuilder
-    private var sleepSection: some View {
-        if let sleepMetric {
-            NavigationLink(value: sleepMetric) {
-                sleepSectionContent
-                    .contentShape(Rectangle())
-            }
-            .buttonStyle(CardNavigationButtonStyle())
-            .accessibilityIdentifier("wellness-hero-sleep")
-            .accessibilityLabel(sleepAccessibilitySummary)
-        } else {
-            sleepSectionContent
-        }
-    }
-
-    private var sleepSectionContent: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            CardNavigationHeader(
-                showsChevron: sleepMetric != nil,
-                minimumHeight: 0,
-                chevronColor: theme == .desertWarm
-                    ? DesertPalette.muted
-                    : theme.directionPreviewTextColor.opacity(0.74)
-            ) {
-                Text("Sleep")
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(theme == .desertWarm ? DesertPalette.muted : theme.directionPreviewTextColor.opacity(0.74))
-            }
-            sleepSummary
-        }
-        .frame(maxWidth: .infinity, maxHeight: usesSideBySideLayout ? .infinity : nil, alignment: .topLeading)
-    }
-
-    @ViewBuilder
-    private func wellnessStatus(_ score: WellnessScore) -> some View {
-        if dynamicTypeSize.isAccessibilitySize {
-            VStack(alignment: .leading, spacing: 12) {
-                wellnessRing(score)
-                wellnessCopy(score)
-            }
-        } else {
-            HStack(alignment: .center, spacing: 18) {
-                wellnessRing(score)
-                wellnessCopy(score)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            }
-        }
-    }
-
-    private func wellnessNarrative(_ score: WellnessScore) -> some View {
-        Text(score.narrativeMessage)
-            .font(.subheadline)
-            .foregroundStyle(theme == .desertWarm ? DesertPalette.muted : theme.directionPreviewTextColor.opacity(0.74))
-            .fixedSize(horizontal: false, vertical: true)
-            .accessibilityIdentifier("wellness-hero-narrative")
-    }
-
-    @ViewBuilder
-    private var sleepSummary: some View {
-        if dynamicTypeSize.isAccessibilitySize {
-            VStack(alignment: .leading, spacing: 12) {
-                sleepBars
-                sleepCopy
-            }
-        } else {
-            HStack(alignment: .center, spacing: 18) {
-                sleepBars
-                sleepCopy
-            }
-        }
-    }
-
-    private var sleepBars: some View {
-        Group {
-            if !validSleepSamples.isEmpty {
-                HStack(alignment: .bottom, spacing: 5) {
-                    ForEach(Array(recentSleepSamples.enumerated()), id: \.offset) { _, sample in
-                        if sample.minutes > 0 {
-                            RoundedRectangle(cornerRadius: 5)
-                                .fill((theme == .desertWarm
-                                    ? Color(red: 0.350, green: 0.690, blue: 0.588)
-                                    : theme.metricSleep).opacity(sample.date == latestSleepSample?.date ? 1 : 0.55))
-                                .frame(width: 12, height: max(9, min(60, CGFloat(sample.minutes / 600) * 60)))
-                        } else {
-                            Color.clear.frame(width: 12, height: 0)
-                        }
-                    }
-                }
-                .accessibilityLabel("Sleep")
-            } else {
-                Text("Need More Data")
-                    .font(.caption.weight(.medium))
-                    .foregroundStyle(theme == .desertWarm ? DesertPalette.muted : theme.directionPreviewTextColor.opacity(0.74))
-                    .accessibilityIdentifier("wellness-sleep-empty-state")
-            }
-        }
-        .frame(minWidth: 88, minHeight: 62, alignment: .bottomLeading)
-    }
-
-    private var sleepCopy: some View {
-        VStack(alignment: .leading, spacing: 5) {
-            if let latestSleepSample {
-                Text(sleepDuration(Int(latestSleepSample.minutes)))
-                    .font(.headline.weight(.semibold))
-                    .foregroundStyle(theme == .desertWarm ? DesertPalette.ink : theme.directionPreviewTextColor)
-                    .accessibilityIdentifier("wellness-sleep-latest")
-                Text(latestSleepSample.date.formatted(.dateTime.month(.abbreviated).day()))
-                    .font(.caption)
-                    .foregroundStyle(theme == .desertWarm ? DesertPalette.muted : theme.directionPreviewTextColor.opacity(0.74))
-            } else {
-                Text("Need More Data")
-                    .font(.headline.weight(.semibold))
-                    .foregroundStyle(theme == .desertWarm ? DesertPalette.ink : theme.directionPreviewTextColor)
-            }
-            Text("Sleep")
-                .font(.subheadline)
-                .foregroundStyle(theme == .desertWarm ? DesertPalette.muted : theme.directionPreviewTextColor.opacity(0.74))
-            if let averageSleepMinutes {
-                Text("7d Average · \(sleepDuration(averageSleepMinutes))")
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(theme == .desertWarm ? DesertPalette.muted : theme.directionPreviewTextColor.opacity(0.74))
-                    .fixedSize(horizontal: false, vertical: true)
-                    .accessibilityIdentifier("wellness-sleep-average")
-            }
-        }
-    }
-
-    private func wellnessRing(_ score: WellnessScore) -> some View {
-        TabHeroScoreRing(
-            progress: Double(score.score) / 100,
-            value: score.score.formatted(),
-            caption: "",
+    private func scoreRing(_ score: WellnessScore) -> some View {
+        CompactConditionRing(
+            score: score.score,
+            ringColor: DS.Color.warmGlow,
+            highlightColor: DS.Color.body,
             tipColor: score.status.color,
+            trackColor: DS.Color.warmGlow,
+            textColor: ink,
             accessibilityLabel: "Wellness score \(score.score), \(score.status.label)",
             accessibilityIdentifier: "wellness-hero-ring"
         )
     }
 
-    private func wellnessCopy(_ score: WellnessScore) -> some View {
-        Text(score.status.label)
-            .font(.headline.weight(.semibold))
-            .foregroundStyle(theme == .desertWarm ? DesertPalette.ink : theme.directionPreviewTextColor)
+    private func evidence(_ score: WellnessScore) -> some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+            Text("Score evidence").font(.subheadline.weight(.semibold)).foregroundStyle(ink)
+            evidenceRow("Sleep", icon: "moon.fill", value: score.sleepScore, color: DS.Color.sleep)
+            evidenceRow("Condition", icon: "heart.fill", value: score.conditionScore, color: DS.Color.hrv)
+            evidenceRow("Body", icon: "figure.stand", value: score.bodyScore, color: DS.Color.body)
+            evidenceRow("Posture", icon: "figure.stand", value: score.postureScore, color: DS.Color.posture)
+            Button {
+                withAnimation(DS.Animation.standard) { showsEvidence.toggle() }
+            } label: {
+                HStack {
+                    Text("How this score is calculated")
+                    Spacer(minLength: DS.Spacing.sm)
+                    Image(systemName: showsEvidence ? "chevron.up" : "chevron.down")
+                }
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(ink)
+                .frame(minHeight: 44)
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .accessibilityIdentifier("wellness-hero-evidence-disclosure")
+            if showsEvidence {
+                Text("Sleep 35%, Condition 30%, Body 20%, Posture 15%. Available scores are reweighted when a component is missing.")
+                    .font(.caption).foregroundStyle(muted)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .accessibilityIdentifier("wellness-hero-evidence-explanation")
+            }
+        }
+        .accessibilityIdentifier("wellness-hero-evidence")
     }
 
-    // MARK: - Empty State
-
-    private var emptyCard: some View {
-        HeroCard(tintColor: DS.Color.fitness.opacity(0.5)) {
-            VStack(alignment: .leading, spacing: DS.Spacing.md) {
-                Text(verbatim: "WELLNESS")
-                    .font(.caption.weight(.semibold))
-                    .tracking(1.5)
-                    .foregroundStyle(theme == .desertWarm ? DesertPalette.ink : theme.directionPreviewTextColor)
-                    .accessibilityIdentifier("wellness-hero-heading")
-                Image(systemName: "heart.text.clipboard")
-                    .font(.system(size: 36))
-                    .foregroundStyle(.quaternary)
-
-                Text("Need More Data")
-                    .font(.headline)
-                    .foregroundStyle(DS.Color.textSecondary)
-
-                Text("Wear your Apple Watch tonight to start tracking your wellness score.")
-                    .font(.subheadline)
-                    .foregroundStyle(.tertiary)
-                    .multilineTextAlignment(.center)
+    private func evidenceRow(_ title: LocalizedStringKey, icon: String, value: Int?, color: Color) -> some View {
+        Group {
+            if dynamicTypeSize.isAccessibilitySize {
+                VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                    evidenceLabel(title, icon: icon, value: value, color: color)
+                    evidenceBar(value: value, color: color)
+                        .frame(height: 6)
+                }
+            } else {
+                HStack(spacing: DS.Spacing.sm) {
+                    Image(systemName: icon).font(.caption).foregroundStyle(color).frame(width: 18)
+                    Text(title).font(.caption).foregroundStyle(ink).frame(width: 72, alignment: .leading)
+                    evidenceBar(value: value, color: color).frame(height: 6)
+                    Text(value.map { $0.formatted() } ?? "—")
+                        .font(.caption.monospacedDigit()).foregroundStyle(ink)
+                        .frame(width: 28, alignment: .trailing)
+                }
             }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, DS.Spacing.lg)
         }
+        .frame(minHeight: 28)
+        .accessibilityElement(children: .combine)
+    }
+
+    private func evidenceLabel(_ title: LocalizedStringKey, icon: String, value: Int?, color: Color) -> some View {
+        HStack(spacing: DS.Spacing.sm) {
+            Image(systemName: icon).font(.caption).foregroundStyle(color).frame(width: 18)
+            Text(title).font(.caption).foregroundStyle(ink)
+            Spacer(minLength: DS.Spacing.sm)
+            Text(value.map { $0.formatted() } ?? "—")
+                .font(.caption.monospacedDigit()).foregroundStyle(ink)
+        }
+    }
+
+    private func evidenceBar(value: Int?, color: Color) -> some View {
+        GeometryReader { geometry in
+            Capsule().fill(color.opacity(0.15))
+                .overlay(alignment: .leading) {
+                    if let value {
+                        Capsule().fill(color)
+                            .frame(width: geometry.size.width * CGFloat(max(0, min(100, value))) / 100)
+                    }
+                }
+        }
+    }
+}
+
+#Preview {
+    NavigationStack {
+        WellnessHeroCard(score: WellnessScore(score: 79, sleepScore: 83, conditionScore: 64, bodyScore: 75, postureScore: 80), sleepScore: 83, conditionScore: 64, bodyScore: 75)
+            .padding()
     }
 }
