@@ -76,13 +76,13 @@ if has_staged_match "^todos/.*\\.md$"; then
     fi
 fi
 
-for catalog in Shared/Resources/Localizable.xcstrings DUNEWatch/Resources/Localizable.xcstrings; do
+for catalog in Shared/Resources/Localizable.xcstrings DUNEWatch/Resources/Localizable.xcstrings DUNEWatch/Resources/InfoPlist.xcstrings; do
     if has_staged_match "^${catalog//./\\.}$"; then
         staged_catalog="$(mktemp)"
         git show ":$catalog" > "$staged_catalog"
-        if ! swift "$ROOT_DIR/scripts/format-xcstrings.swift" --check "$staged_catalog"; then
+        if ! swift "$ROOT_DIR/scripts/format-xcstrings.swift" --check --check-manual "$staged_catalog"; then
             rm -f "$staged_catalog"
-            echo "Format the staged catalog and add it again: $catalog"
+            echo "Format the staged catalog and add it again (extractionState must be manual): $catalog"
             exit 1
         fi
         rm -f "$staged_catalog"

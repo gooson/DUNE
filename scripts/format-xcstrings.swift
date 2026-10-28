@@ -5,11 +5,13 @@ import Foundation
 private enum CatalogError: LocalizedError {
     case duplicateKey(String)
     case malformed
+    case unmanagedKeys([String])
 
     var errorDescription: String? {
         switch self {
         case .duplicateKey(let key): "Duplicate JSON key: \(key)"
         case .malformed: "Invalid JSON structure"
+        case .unmanagedKeys(let keys): "Set extractionState to manual: \(keys.joined(separator: ", "))"
         }
     }
 }
@@ -115,11 +117,13 @@ private struct DuplicateKeyValidator {
 
 let arguments = Array(CommandLine.arguments.dropFirst())
 let checkOnly = arguments.contains("--check")
-let requestedPaths = arguments.filter { $0 != "--check" }
+let checkManual = arguments.contains("--check-manual")
+let requestedPaths = arguments.filter { $0 != "--check" && $0 != "--check-manual" }
 let repositoryRoot = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent()
 let defaultPaths = [
     "Shared/Resources/Localizable.xcstrings",
-    "DUNEWatch/Resources/Localizable.xcstrings"
+    "DUNEWatch/Resources/Localizable.xcstrings",
+    "DUNEWatch/Resources/InfoPlist.xcstrings"
 ]
 let paths = requestedPaths.isEmpty ? defaultPaths.map { repositoryRoot.appendingPathComponent($0).path } : requestedPaths
 
@@ -138,6 +142,13 @@ for path in paths {
               root["version"] is String else {
             throw NSError(domain: "StringCatalogFormat", code: 1,
                           userInfo: [NSLocalizedDescriptionKey: "Invalid string catalog structure"])
+        }
+
+        if checkManual, let strings = root["strings"] as? [String: Any] {
+            let unmanaged = strings.keys.filter {
+                (strings[$0] as? [String: Any])?["extractionState"] as? String != "manual"
+            }.sorted()
+            guard unmanaged.isEmpty else { throw CatalogError.unmanagedKeys(unmanaged) }
         }
 
         // Xcode's catalog serializer uses these Foundation options and no trailing newline.
