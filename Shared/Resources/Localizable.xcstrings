@@ -345,6 +345,16 @@
         }
       }
     },
+    "%@ / %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ / %2$@"
+          }
+        }
+      }
+    },
     "%@ %@" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -5768,6 +5778,9 @@
           }
         }
       }
+    },
+    "Average heart rate: %@ bpm" : {
+
     },
     "Average heart rate: %lld bpm" : {
       "extractionState" : "manual",
