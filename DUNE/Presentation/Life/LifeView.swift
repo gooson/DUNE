@@ -647,15 +647,20 @@ private struct HabitListQueryView: View {
                         }
                     }
                 }
+                .accessibilityElement(children: .contain)
                 .accessibilityIdentifier("life-habit-group-weekly")
             }
             let upcoming = filteredProgresses(viewModel.upcomingHabitProgresses)
             if !upcoming.isEmpty {
-                DisclosureGroup(isExpanded: $showsUpcoming) {
-                    timeOfDayRows(upcoming)
-                } label: {
-                    Text("Upcoming Habits").font(.headline).frame(minHeight: 44)
+                VStack(alignment: .leading, spacing: DS.Spacing.md) {
+                    DisclosureGroup(isExpanded: $showsUpcoming) {
+                        timeOfDayRows(upcoming)
+                    } label: {
+                        Text("Upcoming Habits").font(.headline).frame(minHeight: 44)
+                    }
+                    .accessibilityIdentifier("life-upcoming-toggle")
                 }
+                .accessibilityElement(children: .contain)
                 .accessibilityIdentifier("life-habit-group-upcoming")
             }
         }

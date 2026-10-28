@@ -159,6 +159,9 @@ final class LifeSeededSmokeTests: SeededUITestBaseCase {
     }
 
     func testWeeklyReflectionOpensMeasuredComparison() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
+        launchApp(with: configuration)
         XCTAssertTrue(app.scrollToHittableElementIfNeeded("life-weekly-report-button", maxSwipes: 12),
                       "Weekly reflection should remain reachable below the Life rhythm")
         for identifier in ["life-weekly-days-recorded", "life-weekly-completed-practices"] {

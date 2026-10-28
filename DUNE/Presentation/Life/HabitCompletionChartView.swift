@@ -76,6 +76,7 @@ struct HabitCompletionChartView: View {
             RoundedRectangle(cornerRadius: DS.Radius.sm)
                 .fill(.ultraThinMaterial)
         }
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier("habit-completion-chart")
     }
 

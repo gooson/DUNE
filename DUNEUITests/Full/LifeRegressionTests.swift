@@ -76,14 +76,19 @@ final class LifeRegressionTests: SeededUITestBaseCase {
         XCTAssertTrue(today.waitForExistence(timeout: 5), "Seeded daily habits should remain in Today")
         XCTAssertTrue(weekly.waitForExistence(timeout: 5), "Weekly group should appear after adding a weekly habit")
         XCTAssertTrue(upcoming.waitForExistence(timeout: 5), "Upcoming group should appear for a recurring habit awaiting its first completion")
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.lifeHeroProgress, maxSwipes: 8, direction: .down))
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("life-completed-toggle", maxSwipes: 8))
         let completedToggle = app.buttons["life-completed-toggle"].firstMatch
         XCTAssertTrue(completedToggle.waitForExistence(timeout: 5), "Completed habits should have a disclosure")
         completedToggle.auditTap()
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.lifeHabitRow("Morning Stretch"), maxSwipes: 8))
         XCTAssertTrue(today.descendants(matching: .any)[AXID.lifeHabitRow("Morning Stretch")].firstMatch.exists)
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.lifeHabitRow("Weekly Swim"), maxSwipes: 8))
         XCTAssertTrue(weekly.descendants(matching: .any)[AXID.lifeHabitRow("Weekly Swim")].firstMatch.exists)
-        let upcomingToggle = app.buttons["life-habit-group-upcoming"].firstMatch
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded("life-habit-group-upcoming", maxSwipes: 8))
+        let upcomingToggle = app.buttons["life-upcoming-toggle"].firstMatch
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("life-upcoming-toggle", maxSwipes: 8))
         upcomingToggle.auditTap()
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.lifeHabitRow("Seven Day Reset"), maxSwipes: 8))
         XCTAssertTrue(upcoming.descendants(matching: .any)[AXID.lifeHabitRow("Seven Day Reset")].firstMatch.exists)
         XCTAssertFalse(today.descendants(matching: .any)[AXID.lifeHabitRow("Weekly Swim")].firstMatch.exists)
         XCTAssertFalse(today.descendants(matching: .any)[AXID.lifeHabitRow("Seven Day Reset")].firstMatch.exists)
@@ -322,13 +327,13 @@ final class LifeRegressionTests: SeededUITestBaseCase {
         expectation(for: NSPredicate(format: "exists == false"), evaluatedWith: nameField)
         waitForExpectations(timeout: 5)
         if startsOnFirstCompletion {
-            XCTAssertTrue(app.scrollToHittableElementIfNeeded("life-habit-group-upcoming", maxSwipes: 8))
-            app.buttons["life-habit-group-upcoming"].firstMatch.auditTap()
+            XCTAssertTrue(app.scrollToHittableElementIfNeeded("life-upcoming-toggle", maxSwipes: 8))
+            app.buttons["life-upcoming-toggle"].firstMatch.auditTap()
         }
         XCTAssertTrue(app.descendants(matching: .any)[AXID.lifeHabitRow(name)].firstMatch.waitForExistence(timeout: 8),
                       "\(name) should appear on the Life list")
         if startsOnFirstCompletion {
-            app.buttons["life-habit-group-upcoming"].firstMatch.auditTap()
+            app.buttons["life-upcoming-toggle"].firstMatch.auditTap()
         }
     }
 
