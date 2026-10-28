@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/LifeRegressionTests/testWeeklyAndFutureRecurringHabitsStayOutsideTodayProgress",
+    "DUNEUITests/LifeSmokeTests/testHabitFormOpens",
+    "DUNEUITests/LifeSmokeTests/testWeeklyFrequencyShowsStepper",
+    "DUNEUITests/LifeSeededSmokeTests/testHabitActionsMenuOpensEditSheet"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 4,
+    "passed": 3,
+    "skipped": 0,
+    "failed": 1
+  },
+  "passed_cases": 3,
+  "failures": [
+    "654: /Users/shanks/.codex/worktrees/4d0d/Health/DUNEUITests/Full/LifeRegressionTests.swift:313: error: -[DUNEUITests.LifeRegressionTests testWeeklyAndFutureRecurringHabitsStayOutsideTodayProgress] : XCTAssertTrue failed - Recurring habit should wait for its first completion",
+    "663: Test Case '-[DUNEUITests.LifeRegressionTests testWeeklyAndFutureRecurringHabitsStayOutsideTodayProgress]' failed (115.534 seconds).",
+    "664: Test Suite 'LifeRegressionTests' failed at 2026-10-29 00:59:52.214.",
+    "1042: Test Suite 'DUNEUITests.xctest' failed at 2026-10-29 01:01:41.014.",
+    "1044: Test Suite 'Selected tests' failed at 2026-10-29 01:01:41.016.",
+    "1059: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log reports 1 failures",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/LifeRegressionTests/testWeeklyAndFutureRecurringHabitsStayOutsideTodayProgress"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/4d0d/Health/.codex-checks/life-run/ui-phone-form-fix.log"
+}

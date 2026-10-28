@@ -1,58 +1,24 @@
-# Life Flow 네이티브 구현 · 검증 진행 기록
+# Life Flow 구현 · 최종 검증
 
-기준 브랜치 `codex/life-flow`, PR base `origin/main`. 구현 소스는 `62d3c097`, 최신 main 통합은 `1b3805f6`이다. **필수 UI 게이트 미완료이며 머지하지 않는다.**
+Life 시안을 실제 앱에 구현하고 영향 범위 UI 게이트를 완료했다. [PR #854](https://github.com/gooson/DUNE/pull/854)의 현재 머지 상태는 GitHub에서 확인한다. 히어로의 링·능선·메달과 남은 수, 오늘 카드·44pt 조작, 오늘/주간/예정 분리, 지난 날짜 총합 교체, 실제 기록 기반 리듬을 반영했다.
 
-## 변경과 근거
-
-- 104pt 링·능선·습관 메달을 사용하는 짧은 히어로, 개별 오늘 카드, 완료 접기, 오늘/주간/예정 분리, 4개 표시용 목적 필터.
-- 지난 날짜 총합 입력·교체·0 표식, 입력 전 검증, 주기 미리보기, 늦은 기록 표시, 동기화 총합 해석 및 undo 충돌 방지.
-- 실제 수동 실천에서 계산하는 7일·28일 시각화, 자동 목표 우선 순서, 기존 이력·완료율·주간 보고 상세 유지.
-- 원래 브라우저 시안의 QA는 네이티브 검증 증거로 사용하지 않는다.
-
-## 실행 증거
-
-| 범위 | 결과 | 출처 |
+| 검증 범위 | 최종 결과 | 증거 |
 |---|---|---|
-| 최종 통합 iOS build | 성공, 실제 BUILD SUCCEEDED | ios-build-final.log.gz |
-| 관련 단위 9개 suite | 113개 통과; 전체 iOS suite 아님 | unit-targeted.log.gz |
-| 최초 선택 UI | 49개 실행:36통과·3skip·10실패, exit65 | ui-phone-initial.result.json / log.gz |
-| 실패 Life 선택 재검증 | 7개 실행:4통과·3실패, exit65 | ui-phone-corrections.result.json / log.gz |
-| 테마 맵·카탈로그 포맷 | check 통과 | 표준 builder --check / formatter --check |
+| iOS 일반 build | 성공 | ios-build-final.log.gz |
+| 관련 unit9suite | 113통과 | unit-targeted.log.gz |
+| iPhone Life 선택 case | 최신 결과26통과·옵트인3skip | life-case-summary.json |
+| 주간/예정 최종 회귀 | 1/1통과·exit0 | ui-phone-final.result.json |
+| iPad 시각 흐름 | 1/1통과·exit0 | ui-ipad-final.result.json |
+| Duo 외부 밝음/다크/최대글씨 | 각각1/1통과·exit0 | ui-duo-closed-split-*.log.result.json |
+| Duo 내부 밝음/다크/최대글씨 | 3/3통과·exit0, 한 runner | ui-duo-open-retry.log.result.json |
+| 정적 리뷰 | 미해결P1/P2/P3=0/0/0 | final-review.md, findings.json |
 
-넓은 unit 실행은 무관한 AI 평가 진행 중 중단됐으며 통과로 집계하지 않는다. 타깃 unit은 수정된 조회 그래프 fixture로 1회 재검증해 성공했다. source19의 UI 재검증에서 링104, 편집 이름 저장, 기본/다크/최대글씨 히어로, 빈 이름 저장 시 폼 유지가 통과했다.
+[실제 화면74장](../../design/full-redesign-map/review/life-flow-2026-10-28/index.html)은 원본·소스·해시·실행 결과를 구분한다. Duo 명명 checkpoint30개의 ACK와 활성/비활성 display·AX를 보존했다. 수치 hinge 각도는 조회되지 않았다. iCloud 동의 활성화는 사용자의 명시적 지시에 따라 수행했으며 CloudKit 전송 성공 검증은 아니다.
 
-## 남은 UI 항목과 재개 조건
+전체 UI/unit suite 통과로 확대하지 않는다. 무관한 Today/알림3개 초기 실패와 중단된 AI unit 실행, 허용 추가 실행의1실패는 그대로 보존한다. L08 다크/최대글씨·전체 테마·전체 VoiceOver는 이번 변경 범위 밖이다. 최대글씨 지난 기록 PNG는 폼의 한 스크롤 viewport다.
 
-| 항목 | 확인한 원인 | 준비한 수정 | 상태 |
-|---|---|---|---|
-| L07 차트 제목 AXID | 부모 chart ID가 제목·선택기·플롯에 전파됨. 실제 AX 텍스트에서 확인 | 차트 컨테이너 children contain | 같은 원인 재시도1회 소진, 추가 실행 전 사용자 예외 필요 |
-| 주간/예정 소속 확인 | 화면 밖 Weekly Swim 조회 및 컨테이너 경계 불명확 | 주간/예정 AX 그룹 명시, 별도 예정 toggle ID, 각 행 스크롤 후 확인 | 수정 후 미검증 |
-| 주간 비교 문구 | 한국어 기본 실행에서 영문 Last Week 조회 | 해당 검사 en/en_US 명시 | 수정 후 미검증 |
+앱·unit·Shared는62d3c097 이후 동일함을 diff/해시로 확인했다([소스 일치](app-source-equivalence.json)). 이후 UI helper의 화면 밖Return·Form CollectionView·반복 안내문 스크롤을 수정했고, Duo host 캡처는 같은 본문을 외관별로 분리했다. 기존300초 testcase deadline을 늘리지 않았다. 새 원인·수정·재시도는 이전 실패를 지우지 않고 기록했다([이전 기록](history-before-final.md), new-helper-causes.json, keyboard-resume.json). 캡처 타임아웃과 결과 정리는 앱 assertion과 구분한다.
 
-초기 공통 smoke의 Today 추세/알림 허브3건은 Life diff 외부 실패로 보존한다. 이 작업에서 Today 소스를 변경하지 않으며 최신 main 통합만 반영했다. 최신 상태에서 통과했다고 승격하지 않는다.
+[검증 집계](verification.json), [파이프라인·확인 방법](execution-summary.md), [키보드 해결책](../../solutions/testing/2026-10-29-simulator-keyboard-and-visible-form.md)을 함께 보존한다.
 
-`.codex/skill-compat.md`는 “같은 원인에 대한 자동 재시도는 최대 1회”와 재시도 후 같은 원인이 남으면 실행 경로 중단을 요구한다. 차트 검사 경로를 다른 명령·phase·모델로 반복하지 않는다. 추가 실행 승인 시 남은3개 selector부터 확인한다.
-
-## 실제 화면과 기기 범위
-
-[실제 화면 갤러리](../../design/full-redesign-map/review/life-flow-2026-10-28/index.html)에는19f43ee3의 새 iPhone 캡처와 개별 테스트 결과를 기록한다. 이후 AX 수정본의 최종 캡처가 아니다. L01·L02·L07 히트맵 일부·L09 밝음 단계가 수집됐고, capture-test가 나중에 실패한 이미지는 부분 증거로 분류한다.
-
-전용 iPhone18Pro UDID E31D1A6A-8649-4FCF-9DAE-76DD59DE0192, iOS27.0. iPad·Duo 접힘/펼침은 아직 미실행·미갱신이다. L07 완료율 및 L08/L09 어두움·최대글씨 등 누락 상태를 완료 처리하지 않는다. Watch UI는 이번 PR 변경 대상이 아니다.
-
-## 사전 리뷰
-
-기존 diff의 security/performance/architecture/data/simplicity와 UX/SwiftUI/app-quality/pr-reviewer 검토를 보존한다. 초기 finding은 코드 수정으로 해결했으나, 정적 해결 판정은 UI 통과를 뜻하지 않는다. 최신 delta review를 별도 보존한다. Agent Native는 지침 변경이 없어 해당 없음이다.
-
-## 파이프라인
-
-0 Init·1 Plan·2 Work는 완료.2.5 UI는 실패/재개 조건 대기.3 Review·3.5 Quality는 선행 정적 검토만 보존.4 Resolve는 최종 UI 확인 전.5 Compound 문서는 준비.5.5 Pre-Ship·6 Ship은 미완료. 초안 PR 생성은 검토용 산출물이며 Ship 완료가 아니다.
-
-## 확인 경로
-
-Life → 오늘 ±/시간 입력 → 취소 → 지난 기록에서 어제 총합 변경 → 이력의 늦은 기록 → 주간·예정 → 리듬 → 주간 보고를 확인한다. 저장 후 오늘 수치가 과거 기록으로 증가하지 않고, 잘못된 입력은 폼과 기존 기록을 보존해야 한다. 기본/다크/최대글씨와 iPad/Duo의 영향 상태는 새 실행으로 확인한다.
-
-## 사용자 승인 추가1회 · 최종 업데이트
-
-사용자 허용 범위에서3개 selector를 추가 실행했다. 결과는 **2통과·1실패, exit65**다. 차트 제목·L01/L09 밝음/다크/최대글씨 캡처 흐름과 주간 보고 비교가 통과했다. 주간/예정 검사는 첫 새 습관 폼이 열리지 않아296행에서 실패했고 기존 행 소속 검사는 실행되지 않았다. 실패 시 실제 화면에는 New Habit 메뉴가 남아 있다. 정확한 메뉴 활성화 실패 원인은 미확정이며 근거 없는 앱/테스트 수정을 하지 않았다. [추가 실행 기록](authorized-attempt.md), [receipt](ui-phone-authorized.result.json)을 확인한다.
-
-원래 남은3건 중 차트와 보고 검사는 검증됐으나, UI 게이트는 계속 실패다. 새 캡처15장을 더해 실제 갤러리는25장이다. iPad/Duo 추가 실행은 시작하지 않았다. PR#854는 초안 상태로 유지하며 머지하지 않는다. 허용된1회를 소진했으므로 추가 실행은 별도 재개 지시가 필요하다.
+최대글씨 리듬 캡처도 카드 상단 viewport이므로 전체 플롯·축의 동시 표시를 증명하지 않는다. 기본 크기의 리듬 수치·막대·28일 패턴은 별도 원본에서 확인했다.

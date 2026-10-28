@@ -1,0 +1,634 @@
+{
+  "source_revision": "791b8bf4983cd5991297655a6f67faa2cf511c2e",
+  "app_source_revision": "62d3c097",
+  "device": "iPhone Duo-wt-Health-4d0d-62cf3693c151",
+  "udid": "8B6A9C9D-1364-4EBA-A6F9-832F1BEB201D",
+  "pose": "external; target0 set; angle readback unavailable",
+  "display_readback": {
+    "LCD": {
+      "displayId": 1,
+      "active": true,
+      "native_pixels": [
+        1398,
+        2034
+      ]
+    },
+    "LCD-1": {
+      "displayId": 3,
+      "active": false,
+      "native_pixels": [
+        2007,
+        2853
+      ]
+    }
+  },
+  "selectors": {
+    "light": ".codex-checks/life-run/ui-duo-closed-split-light.log.result.json",
+    "dark": ".codex-checks/life-run/ui-duo-closed-split-dark.log.result.json",
+    "maximum-ax": ".codex-checks/life-run/ui-duo-closed-split-maximum-ax.log.result.json"
+  },
+  "overall": "all three selectors passed, each one executed, exit0",
+  "named_checkpoint_count": 15,
+  "named_checkpoints": [
+    {
+      "pose": "external",
+      "capture_mode": "light",
+      "sequence": 2,
+      "action": "DUNE_VISUAL_AUDIT_READY L01-Life-Habits-hero-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793205678.738574",
+      "acknowledged": true,
+      "valid_evidence": true,
+      "elapsed_seconds": 2.293,
+      "active_display": {
+        "id": 1,
+        "name": "LCD",
+        "path": {
+          "path": ".codex-checks/life-run/duo-closed-split/light/002-1398x2034.png",
+          "pixel_size": [
+            1398,
+            2034
+          ],
+          "bytes": 1275438
+        }
+      },
+      "paired_inactive_display": {
+        "id": 3,
+        "name": "LCD-1",
+        "path": {
+          "path": ".codex-checks/life-run/duo-closed-split/light/002-2007x2853.png",
+          "pixel_size": [
+            2007,
+            2853
+          ],
+          "bytes": 106123
+        }
+      },
+      "ax_hierarchy_path": ".codex-checks/life-run/duo-closed-split/light/002-hierarchy.txt",
+      "actual_main_window_frame_points": [
+        0.0,
+        0.0,
+        466.0,
+        678.0
+      ]
+    },
+    {
+      "pose": "external",
+      "capture_mode": "light",
+      "sequence": 3,
+      "action": "DUNE_VISUAL_AUDIT_READY L01-Life-Habits-today-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793205685.281563",
+      "acknowledged": true,
+      "valid_evidence": true,
+      "elapsed_seconds": 2.188,
+      "active_display": {
+        "id": 1,
+        "name": "LCD",
+        "path": {
+          "path": ".codex-checks/life-run/duo-closed-split/light/003-1398x2034.png",
+          "pixel_size": [
+            1398,
+            2034
+          ],
+          "bytes": 1281948
+        }
+      },
+      "paired_inactive_display": {
+        "id": 3,
+        "name": "LCD-1",
+        "path": {
+          "path": ".codex-checks/life-run/duo-closed-split/light/003-2007x2853.png",
+          "pixel_size": [
+            2007,
+            2853
+          ],
+          "bytes": 106123
+        }
+      },
+      "ax_hierarchy_path": ".codex-checks/life-run/duo-closed-split/light/003-hierarchy.txt",
+      "actual_main_window_frame_points": [
+        0.0,
+        0.0,
+        466.0,
+        678.0
+      ]
+    },
+    {
+      "pose": "external",
+      "capture_mode": "light",
+      "sequence": 4,
+      "action": "DUNE_VISUAL_AUDIT_READY L01-Life-Habits-rhythm-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793205700.244739",
+      "acknowledged": true,
+      "valid_evidence": true,
+      "elapsed_seconds": 2.493,
+      "active_display": {
+        "id": 1,
+        "name": "LCD",
+        "path": {
+          "path": ".codex-checks/life-run/duo-closed-split/light/004-1398x2034.png",
+          "pixel_size": [
+            1398,
+            2034
+          ],
+          "bytes": 497442
+        }
+      },
+      "paired_inactive_display": {
+        "id": 3,
+        "name": "LCD-1",
+        "path": {
+          "path": ".codex-checks/life-run/duo-closed-split/light/004-2007x2853.png",
+          "pixel_size": [
+            2007,
+            2853
+          ],
+          "bytes": 106123
+        }
+      },
+      "ax_hierarchy_path": ".codex-checks/life-run/duo-closed-split/light/004-hierarchy.txt",
+      "actual_main_window_frame_points": [
+        0.0,
+        0.0,
+        466.0,
+        678.0
+      ]
+    },
+    {
+      "pose": "external",
+      "capture_mode": "light",
+      "sequence": 6,
+      "action": "DUNE_VISUAL_AUDIT_READY L09-Past-Record-form-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793205721.456193",
+      "acknowledged": true,
+      "valid_evidence": true,
+      "elapsed_seconds": 3.58,
+      "active_display": {
+        "id": 1,
+        "name": "LCD",
+        "path": {
+          "path": ".codex-checks/life-run/duo-closed-split/light/006-1398x2034.png",
+          "pixel_size": [
+            1398,
+            2034
+          ],
+          "bytes": 1690711
+        }
+      },
+      "paired_inactive_display": {
+        "id": 3,
+        "name": "LCD-1",
+        "path": {
+          "path": ".codex-checks/life-run/duo-closed-split/light/006-2007x2853.png",
+          "pixel_size": [
+            2007,
+            2853
+          ],
+          "bytes": 106123
+        }
+      },
+      "ax_hierarchy_path": ".codex-checks/life-run/duo-closed-split/light/006-hierarchy.txt",
+      "actual_main_window_frame_points": [
+        0.0,
+        0.0,
+        466.0,
+        678.0
+      ]
+    },
+    {
+      "pose": "external",
+      "capture_mode": "light",
+      "sequence": 9,
+      "action": "DUNE_VISUAL_AUDIT_READY L07-Habit-history-summary-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793205748.340744",
+      "acknowledged": true,
+      "valid_evidence": true,
+      "elapsed_seconds": 2.168,
+      "active_display": {
+        "id": 1,
+        "name": "LCD",
+        "path": {
+          "path": ".codex-checks/life-run/duo-closed-split/light/009-1398x2034.png",
+          "pixel_size": [
+            1398,
+            2034
+          ],
+          "bytes": 1159518
+        }
+      },
+      "paired_inactive_display": {
+        "id": 3,
+        "name": "LCD-1",
+        "path": {
+          "path": ".codex-checks/life-run/duo-closed-split/light/009-2007x2853.png",
+          "pixel_size": [
+            2007,
+            2853
+          ],
+          "bytes": 106123
+        }
+      },
+      "ax_hierarchy_path": ".codex-checks/life-run/duo-closed-split/light/009-hierarchy.txt",
+      "actual_main_window_frame_points": [
+        0.0,
+        0.0,
+        466.0,
+        678.0
+      ]
+    },
+    {
+      "pose": "external",
+      "capture_mode": "light",
+      "sequence": 10,
+      "action": "DUNE_VISUAL_AUDIT_READY L07-Habit-history-rates-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793205755.874052",
+      "acknowledged": true,
+      "valid_evidence": true,
+      "elapsed_seconds": 2.117,
+      "active_display": {
+        "id": 1,
+        "name": "LCD",
+        "path": {
+          "path": ".codex-checks/life-run/duo-closed-split/light/010-1398x2034.png",
+          "pixel_size": [
+            1398,
+            2034
+          ],
+          "bytes": 1050496
+        }
+      },
+      "paired_inactive_display": {
+        "id": 3,
+        "name": "LCD-1",
+        "path": {
+          "path": ".codex-checks/life-run/duo-closed-split/light/010-2007x2853.png",
+          "pixel_size": [
+            2007,
+            2853
+          ],
+          "bytes": 106123
+        }
+      },
+      "ax_hierarchy_path": ".codex-checks/life-run/duo-closed-split/light/010-hierarchy.txt",
+      "actual_main_window_frame_points": [
+        0.0,
+        0.0,
+        466.0,
+        678.0
+      ]
+    },
+    {
+      "pose": "external",
+      "capture_mode": "light",
+      "sequence": 12,
+      "action": "DUNE_VISUAL_AUDIT_READY L08-Weekly-report-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793205798.755682",
+      "acknowledged": true,
+      "valid_evidence": true,
+      "elapsed_seconds": 2.918,
+      "active_display": {
+        "id": 1,
+        "name": "LCD",
+        "path": {
+          "path": ".codex-checks/life-run/duo-closed-split/light/012-1398x2034.png",
+          "pixel_size": [
+            1398,
+            2034
+          ],
+          "bytes": 996823
+        }
+      },
+      "paired_inactive_display": {
+        "id": 3,
+        "name": "LCD-1",
+        "path": {
+          "path": ".codex-checks/life-run/duo-closed-split/light/012-2007x2853.png",
+          "pixel_size": [
+            2007,
+            2853
+          ],
+          "bytes": 106123
+        }
+      },
+      "ax_hierarchy_path": ".codex-checks/life-run/duo-closed-split/light/012-hierarchy.txt",
+      "actual_main_window_frame_points": [
+        0.0,
+        0.0,
+        466.0,
+        678.0
+      ]
+    },
+    {
+      "pose": "external",
+      "capture_mode": "dark",
+      "sequence": 2,
+      "action": "DUNE_VISUAL_AUDIT_READY L01-Life-Habits-hero-dark [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793205859.8499699",
+      "acknowledged": true,
+      "valid_evidence": true,
+      "elapsed_seconds": 2.103,
+      "active_display": {
+        "id": 1,
+        "name": "LCD",
+        "path": {
+          "path": ".codex-checks/life-run/duo-closed-split/dark/002-1398x2034.png",
+          "pixel_size": [
+            1398,
+            2034
+          ],
+          "bytes": 938002
+        }
+      },
+      "paired_inactive_display": {
+        "id": 3,
+        "name": "LCD-1",
+        "path": {
+          "path": ".codex-checks/life-run/duo-closed-split/dark/002-2007x2853.png",
+          "pixel_size": [
+            2007,
+            2853
+          ],
+          "bytes": 106123
+        }
+      },
+      "ax_hierarchy_path": ".codex-checks/life-run/duo-closed-split/dark/002-hierarchy.txt",
+      "actual_main_window_frame_points": [
+        0.0,
+        0.0,
+        466.0,
+        678.0
+      ]
+    },
+    {
+      "pose": "external",
+      "capture_mode": "dark",
+      "sequence": 3,
+      "action": "DUNE_VISUAL_AUDIT_READY L01-Life-Habits-today-dark [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793205865.629103",
+      "acknowledged": true,
+      "valid_evidence": true,
+      "elapsed_seconds": 2.241,
+      "active_display": {
+        "id": 1,
+        "name": "LCD",
+        "path": {
+          "path": ".codex-checks/life-run/duo-closed-split/dark/003-1398x2034.png",
+          "pixel_size": [
+            1398,
+            2034
+          ],
+          "bytes": 939409
+        }
+      },
+      "paired_inactive_display": {
+        "id": 3,
+        "name": "LCD-1",
+        "path": {
+          "path": ".codex-checks/life-run/duo-closed-split/dark/003-2007x2853.png",
+          "pixel_size": [
+            2007,
+            2853
+          ],
+          "bytes": 106123
+        }
+      },
+      "ax_hierarchy_path": ".codex-checks/life-run/duo-closed-split/dark/003-hierarchy.txt",
+      "actual_main_window_frame_points": [
+        0.0,
+        0.0,
+        466.0,
+        678.0
+      ]
+    },
+    {
+      "pose": "external",
+      "capture_mode": "dark",
+      "sequence": 4,
+      "action": "DUNE_VISUAL_AUDIT_READY L01-Life-Habits-rhythm-dark [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793205880.309338",
+      "acknowledged": true,
+      "valid_evidence": true,
+      "elapsed_seconds": 2.618,
+      "active_display": {
+        "id": 1,
+        "name": "LCD",
+        "path": {
+          "path": ".codex-checks/life-run/duo-closed-split/dark/004-1398x2034.png",
+          "pixel_size": [
+            1398,
+            2034
+          ],
+          "bytes": 493944
+        }
+      },
+      "paired_inactive_display": {
+        "id": 3,
+        "name": "LCD-1",
+        "path": {
+          "path": ".codex-checks/life-run/duo-closed-split/dark/004-2007x2853.png",
+          "pixel_size": [
+            2007,
+            2853
+          ],
+          "bytes": 106123
+        }
+      },
+      "ax_hierarchy_path": ".codex-checks/life-run/duo-closed-split/dark/004-hierarchy.txt",
+      "actual_main_window_frame_points": [
+        0.0,
+        0.0,
+        466.0,
+        678.0
+      ]
+    },
+    {
+      "pose": "external",
+      "capture_mode": "dark",
+      "sequence": 6,
+      "action": "DUNE_VISUAL_AUDIT_READY L09-Past-Record-form-dark [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793205901.3043652",
+      "acknowledged": true,
+      "valid_evidence": true,
+      "elapsed_seconds": 2.619,
+      "active_display": {
+        "id": 1,
+        "name": "LCD",
+        "path": {
+          "path": ".codex-checks/life-run/duo-closed-split/dark/006-1398x2034.png",
+          "pixel_size": [
+            1398,
+            2034
+          ],
+          "bytes": 1028477
+        }
+      },
+      "paired_inactive_display": {
+        "id": 3,
+        "name": "LCD-1",
+        "path": {
+          "path": ".codex-checks/life-run/duo-closed-split/dark/006-2007x2853.png",
+          "pixel_size": [
+            2007,
+            2853
+          ],
+          "bytes": 106123
+        }
+      },
+      "ax_hierarchy_path": ".codex-checks/life-run/duo-closed-split/dark/006-hierarchy.txt",
+      "actual_main_window_frame_points": [
+        0.0,
+        0.0,
+        466.0,
+        678.0
+      ]
+    },
+    {
+      "pose": "external",
+      "capture_mode": "maximum-ax",
+      "sequence": 2,
+      "action": "DUNE_VISUAL_AUDIT_READY L01-Life-Habits-hero-MaxAX [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793205946.2585158",
+      "acknowledged": true,
+      "valid_evidence": true,
+      "elapsed_seconds": 2.163,
+      "active_display": {
+        "id": 1,
+        "name": "LCD",
+        "path": {
+          "path": ".codex-checks/life-run/duo-closed-split/maximum-ax/002-1398x2034.png",
+          "pixel_size": [
+            1398,
+            2034
+          ],
+          "bytes": 943405
+        }
+      },
+      "paired_inactive_display": {
+        "id": 3,
+        "name": "LCD-1",
+        "path": {
+          "path": ".codex-checks/life-run/duo-closed-split/maximum-ax/002-2007x2853.png",
+          "pixel_size": [
+            2007,
+            2853
+          ],
+          "bytes": 106123
+        }
+      },
+      "ax_hierarchy_path": ".codex-checks/life-run/duo-closed-split/maximum-ax/002-hierarchy.txt",
+      "actual_main_window_frame_points": [
+        0.0,
+        0.0,
+        466.0,
+        678.0
+      ]
+    },
+    {
+      "pose": "external",
+      "capture_mode": "maximum-ax",
+      "sequence": 3,
+      "action": "DUNE_VISUAL_AUDIT_READY L01-Life-Habits-today-MaxAX [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793205956.343569",
+      "acknowledged": true,
+      "valid_evidence": true,
+      "elapsed_seconds": 2.127,
+      "active_display": {
+        "id": 1,
+        "name": "LCD",
+        "path": {
+          "path": ".codex-checks/life-run/duo-closed-split/maximum-ax/003-1398x2034.png",
+          "pixel_size": [
+            1398,
+            2034
+          ],
+          "bytes": 647128
+        }
+      },
+      "paired_inactive_display": {
+        "id": 3,
+        "name": "LCD-1",
+        "path": {
+          "path": ".codex-checks/life-run/duo-closed-split/maximum-ax/003-2007x2853.png",
+          "pixel_size": [
+            2007,
+            2853
+          ],
+          "bytes": 106123
+        }
+      },
+      "ax_hierarchy_path": ".codex-checks/life-run/duo-closed-split/maximum-ax/003-hierarchy.txt",
+      "actual_main_window_frame_points": [
+        0.0,
+        0.0,
+        466.0,
+        678.0
+      ]
+    },
+    {
+      "pose": "external",
+      "capture_mode": "maximum-ax",
+      "sequence": 4,
+      "action": "DUNE_VISUAL_AUDIT_READY L01-Life-Habits-rhythm-MaxAX [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793205987.780699",
+      "acknowledged": true,
+      "valid_evidence": true,
+      "elapsed_seconds": 2.317,
+      "active_display": {
+        "id": 1,
+        "name": "LCD",
+        "path": {
+          "path": ".codex-checks/life-run/duo-closed-split/maximum-ax/004-1398x2034.png",
+          "pixel_size": [
+            1398,
+            2034
+          ],
+          "bytes": 522116
+        }
+      },
+      "paired_inactive_display": {
+        "id": 3,
+        "name": "LCD-1",
+        "path": {
+          "path": ".codex-checks/life-run/duo-closed-split/maximum-ax/004-2007x2853.png",
+          "pixel_size": [
+            2007,
+            2853
+          ],
+          "bytes": 106123
+        }
+      },
+      "ax_hierarchy_path": ".codex-checks/life-run/duo-closed-split/maximum-ax/004-hierarchy.txt",
+      "actual_main_window_frame_points": [
+        0.0,
+        0.0,
+        466.0,
+        678.0
+      ]
+    },
+    {
+      "pose": "external",
+      "capture_mode": "maximum-ax",
+      "sequence": 6,
+      "action": "DUNE_VISUAL_AUDIT_READY L09-Past-Record-form-MaxAX [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793206029.638803",
+      "acknowledged": true,
+      "valid_evidence": true,
+      "elapsed_seconds": 2.194,
+      "active_display": {
+        "id": 1,
+        "name": "LCD",
+        "path": {
+          "path": ".codex-checks/life-run/duo-closed-split/maximum-ax/006-1398x2034.png",
+          "pixel_size": [
+            1398,
+            2034
+          ],
+          "bytes": 1129932
+        }
+      },
+      "paired_inactive_display": {
+        "id": 3,
+        "name": "LCD-1",
+        "path": {
+          "path": ".codex-checks/life-run/duo-closed-split/maximum-ax/006-2007x2853.png",
+          "pixel_size": [
+            2007,
+            2853
+          ],
+          "bytes": 106123
+        }
+      },
+      "ax_hierarchy_path": ".codex-checks/life-run/duo-closed-split/maximum-ax/006-hierarchy.txt",
+      "actual_main_window_frame_points": [
+        0.0,
+        0.0,
+        466.0,
+        678.0
+      ]
+    }
+  ]
+}

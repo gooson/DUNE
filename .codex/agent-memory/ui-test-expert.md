@@ -6,6 +6,7 @@
 - 이후 입력 폼·텍스트 필드·키보드 검사는 전용 Simulator에서 하드웨어 키보드 연결을 해제하고 화면 키보드가 활성화되는지 먼저 확인한다. 메뉴 선택 뒤 폼이 열리지 않는 실패에서도 앱/테스트 코드 변경보다 이 환경 확인을 앞세운다.
 - 사용자 확인을 환경 복구 근거로 보존한다. 직접 확인한 기기 범위 밖으로 확대하거나 모든 메뉴 실패의 공통 원인으로 단정하지 않는다. 설정 전환만으로 실패한 testcase를 통과 처리하거나 기존 재시도 횟수를 초기화하지 않는다.
 - 절차의 canonical source는 [UI 실행 환경 진단의 소프트웨어 키보드 확인](../ui-execution.md#소프트웨어-키보드-확인)이다.
+- 후속 자동 실행에서도 Life 주간/예정 회귀가 c80b5f1e에서 1/1·exit0으로 통과했다. 복구 후 드러난 별도 helper 오류는 화면 밖 키를 `exists && isHittable`로 거르고, 실제 Form의 보이는 CollectionView를 스크롤 대상으로 선택해 해결했다. [검증된 범위와 이전 실패](../../docs/solutions/testing/2026-10-29-simulator-keyboard-and-visible-form.md)를 구분해 재사용한다.
 
 ## Duo 접힘은 GUI 대기 전에 CLI 전환 경로를 검증한다
 
@@ -57,6 +58,11 @@
 - AX에서 전체 높이 700pt 미만일 때 header/footer를 scroll에 포함하고 현재 action을 history보다 먼저 둔다. 휴식 종료 시 weight/reps 영역 위쪽으로 animation 없이 이동한다. 입력 binding·timer deadline·Skip 동작은 유지한다.
 - 수정 후 Closed portrait 강화 검사는 175.391초, 1/1 passed, exit 0으로 Skip 직후 두 입력 전체 frame을 추가 swipe 없이 확인했고 native KG 60 / REPS 10 및 증감 버튼을 확인했다. 최종 실제 90°→180°→0° 휴식은 275.743초 exit 0으로 whole countdown·완료 세트·Skip·다음 kg/reps 전체 frame·Done까지 통과했다. 높이 조건 변경 후 Book maxAX 물리 회전도 156.163초 exit 0으로 입력값 62.5/11을 유지했다. 회전의 전체 field 도달성과 두 field 동시 표시를 혼동하지 않는다.
 
+
+## DUNE 초기 동기화와 Duo Open 복구 (2026-10-29)
+
+- 사용자는 DUNE의 iCloud 동기화 동의 화면이 나오면 `iCloud 동기화 활성화`를 누르도록 명시했다. 전용 기기에서 `cloud-sync-consent-enable-button`을 선택하고 modal 종료를 확인한다. 이 선택을 되묻거나 로컬 저장으로 우회하지 않는다. 실제 동기화 전송 성공은 별도 검증이다. 실행 기준은 `.codex/ui-execution.md`를 따른다.
+- iOS 27.1 Duo에서 검토된 hinge setter의 성공 exit만으로 Open을 판단하지 않는다. 이번 실행은 기존 Device Hub(`com.apple.dt.Devices`)의 정확한 소유 기기 창에서 Open을 선택해 LCD-1/displayId3 active, LCD/displayId1 inactive를 실제 readback으로 확인했다. landscapeRight의 native2853×2007과 AX951×669가 후속 캡처 기준이다. 수치 hinge angle은 조회되지 않았으므로 측정했다고 기록하지 않는다.
 
 ## 사용자 기기 격리와 잔여 화면 진단 (2026-10-06)
 

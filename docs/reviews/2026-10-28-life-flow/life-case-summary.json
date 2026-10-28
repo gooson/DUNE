@@ -1,0 +1,125 @@
+{
+  "scope": "Distinct Life cases, latest outcome percase. Selected-scope evidence only, not full suite.",
+  "counts": {
+    "passed": 26,
+    "skipped": 3
+  },
+  "cases": {
+    "LifeFlowUITests/testCaptureL01AndPastRecordLightDarkAndMaximumAX": {
+      "status": "passed",
+      "log": "ui-phone-authorized.log"
+    },
+    "LifeFlowUITests/testCategoryFilterDoesNotChangeHeroProgress": {
+      "status": "passed",
+      "log": "ui-phone.log"
+    },
+    "LifeFlowUITests/testCompactHeroAndTodayReadingOrder": {
+      "status": "passed",
+      "log": "ui-phone-corrections.log"
+    },
+    "LifeFlowUITests/testOpeningPastRecordMenuDoesNotMutateToday": {
+      "status": "passed",
+      "log": "ui-phone.log"
+    },
+    "LifeFlowUITests/testPastReadTotalReplacesYesterdayAndLeavesTodayUnchanged": {
+      "status": "passed",
+      "log": "ui-phone.log"
+    },
+    "LifeFlowUITests/testWaterIncrementAndUndoRestoresTodayValue": {
+      "status": "passed",
+      "log": "ui-phone.log"
+    },
+    "LifeRegressionTests/testDesertHeroKeepsTodayReachableWithoutChecklistCTA": {
+      "status": "passed",
+      "log": "ui-phone.log"
+    },
+    "LifeRegressionTests/testEditFlowRenamesSeededHabit": {
+      "status": "passed",
+      "log": "ui-phone-corrections.log"
+    },
+    "LifeRegressionTests/testHabitHistoryShowsEmptyStateForHabitWithoutLogs": {
+      "status": "passed",
+      "log": "ui-phone.log"
+    },
+    "LifeRegressionTests/testHabitHistoryShowsSeededEntriesAndDismisses": {
+      "status": "passed",
+      "log": "ui-phone.log"
+    },
+    "LifeRegressionTests/testLifeRootRendersAndAddFlowCreatesNewHabit": {
+      "status": "passed",
+      "log": "ui-phone.log"
+    },
+    "LifeRegressionTests/testVisualAuditHabitHeatmap": {
+      "status": "skipped",
+      "log": "ui-phone.log"
+    },
+    "LifeRegressionTests/testVisualAuditHabitManagement": {
+      "status": "skipped",
+      "log": "ui-phone.log"
+    },
+    "LifeRegressionTests/testVisualAuditWeeklyReport": {
+      "status": "skipped",
+      "log": "ui-phone.log"
+    },
+    "LifeRegressionTests/testWeeklyAndFutureRecurringHabitsStayOutsideTodayProgress": {
+      "status": "passed",
+      "log": "ui-phone-final.log"
+    },
+    "LifeSeededSmokeTests/testCompactHeroLayout": {
+      "status": "passed",
+      "log": "ui-phone-corrections.log"
+    },
+    "LifeSeededSmokeTests/testHeroProgressExists": {
+      "status": "passed",
+      "log": "ui-phone.log"
+    },
+    "LifeSeededSmokeTests/testSparseTrendKeepsHabitListAndHistoryAccessible": {
+      "status": "passed",
+      "log": "ui-phone.log"
+    },
+    "LifeSeededSmokeTests/testWeeklyReflectionOpensMeasuredComparison": {
+      "status": "passed",
+      "log": "ui-phone-authorized.log"
+    },
+    "LifeSmokeTests/testEmptyStarterAddCancelPreservesEmptyState": {
+      "status": "passed",
+      "log": "ui-phone.log"
+    },
+    "LifeSmokeTests/testEmptyStarterOpensTemplates": {
+      "status": "passed",
+      "log": "ui-phone.log"
+    },
+    "LifeSmokeTests/testEmptyStarterRemainsActionableAtMaximumAccessibilityTextSize": {
+      "status": "passed",
+      "log": "ui-phone.log"
+    },
+    "LifeSmokeTests/testHabitFormCancelDismisses": {
+      "status": "passed",
+      "log": "ui-phone.log"
+    },
+    "LifeSmokeTests/testHabitFormOpens": {
+      "status": "passed",
+      "log": "ui-phone-form-fix.log"
+    },
+    "LifeSmokeTests/testLifeTabLoads": {
+      "status": "passed",
+      "log": "ui-phone.log"
+    },
+    "LifeSmokeTests/testSaveEmptyHabitKeepsFormPresented": {
+      "status": "passed",
+      "log": "ui-phone-corrections.log"
+    },
+    "LifeSmokeTests/testToolbarAddButtonExists": {
+      "status": "passed",
+      "log": "ui-phone.log"
+    },
+    "LifeSeededSmokeTests/testHabitActionsMenuOpensEditSheet": {
+      "status": "passed",
+      "log": "ui-phone-form-fix.log"
+    },
+    "LifeSmokeTests/testWeeklyFrequencyShowsStepper": {
+      "status": "passed",
+      "log": "ui-phone-form-fix.log"
+    }
+  }
+}

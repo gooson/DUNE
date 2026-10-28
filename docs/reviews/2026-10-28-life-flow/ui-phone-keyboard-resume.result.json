@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/LifeRegressionTests/testWeeklyAndFutureRecurringHabitsStayOutsideTodayProgress"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 1,
+    "passed": 0,
+    "skipped": 0,
+    "failed": 1
+  },
+  "passed_cases": 0,
+  "failures": [
+    "178: t =    26.48s         Failed: Failed to scroll to visible (by AX action) Button, {{300.7, 1087.0}, {99.0, 54.0}}, identifier: 'Return', label: 'return', error: Error kAXErrorFailure performing AXAction kAXScrollToVisibleAction on element AX element pid: 15699, elementOrHash.elementID: 4652018704.465",
+    "187: t =    27.68s             Failed: Failed to scroll to visible (by AX action) Button, {{300.7, 1087.0}, {99.0, 54.0}}, identifier: 'Return', label: 'return', error: Error kAXErrorFailure performing AXAction kAXScrollToVisibleAction on element AX element pid: 15699, elementOrHash.elementID: 4652018704…",
+    "196: t =    28.87s             Failed: Failed to scroll to visible (by AX action) Button, {{300.7, 1087.0}, {99.0, 54.0}}, identifier: 'Return', label: 'return', error: Error kAXErrorFailure performing AXAction kAXScrollToVisibleAction on element AX element pid: 15699, elementOrHash.elementID: 4652018704…",
+    "198: /Users/shanks/.codex/worktrees/4d0d/Health/DUNEUITests/Helpers/UITestHelpers.swift:106: error: -[DUNEUITests.LifeRegressionTests testWeeklyAndFutureRecurringHabitsStayOutsideTodayProgress] : Failed to failed to scroll to visible (by AX action) Button, {{300.7, 1087.0}, {99.0, 54.0}}, identifier: 'Re…",
+    "207: Test Case '-[DUNEUITests.LifeRegressionTests testWeeklyAndFutureRecurringHabitsStayOutsideTodayProgress]' failed (30.607 seconds).",
+    "208: Test Suite 'LifeRegressionTests' failed at 2026-10-29 00:32:14.851.",
+    "210: Test Suite 'DUNEUITests.xctest' failed at 2026-10-29 00:32:14.852.",
+    "212: Test Suite 'Selected tests' failed at 2026-10-29 00:32:14.853.",
+    "228: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log has no positive passed-test count",
+    "UI test log has no identifiable passed UI test cases",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/LifeRegressionTests/testWeeklyAndFutureRecurringHabitsStayOutsideTodayProgress"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/4d0d/Health/.codex-checks/life-run/ui-phone-keyboard-resume.log"
+}

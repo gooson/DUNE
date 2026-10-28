@@ -1,46 +1,21 @@
 ---
-tags: [life, actual-screen, iphone, partial-evidence]
-date: 2026-10-28
-status: partial
+tags: [life, actual-screen, iphone, ipad, duo]
+date: 2026-10-29
+status: verified-selected-scope
 ---
 
-# Life Flow · 네이티브 실제 화면 (부분 검증)
+# Life Flow · 네이티브 실제 화면
 
-## 최신 추가 실행 · dd18af04
+iPhone·iPad·Duo 외부/내부의 새 네이티브 PNG74장을 보존한다. 통과한 테스트에서68장, 초기 실패 실행의 부분 증거6장이다. 시안 렌더가 아니며 바이트를 수정하지 않았다. manifest에 각 이미지의 소스·기기·원본·결과·SHA-256을 기록한다.
 
-사용자 승인 추가1회의 표준 runner는3개 검사 중2통과·1실패, exit65로 종료했다. 통과한 캡처 흐름의 새 PNG15장을 더해 총25장을 보존한다. 최신 L01/L09는 밝음·다크·최대글씨, L07 히트맵·완료율과 L08 주간 리포트는 밝음이다. 이미지별 sourceCommit과 testcase 결과를 manifest에서 구분한다.
+- iPhone: 초기10장(부분6 포함), 승인 추가 실행15장, 최종 주간/예정 회귀4장.
+- iPad: 기본·다크·최대글씨의 히어로/오늘/리듬/지난 기록 및 밝은 히트맵/보고15장.
+- Duo 외부/내부: 자세별 같은15장. 기본·다크·최대글씨 검사 각각 통과했고 모든 명명 checkpoint ACK가 유효하다. 활성 display PNG를 표시하고 비활성 paired PNG·AX는 검증 폴더에 보존한다.
 
-최신 PNG의 히어로·지난 기록 기본/다크/최대글씨, L07 차트, L08 주간 수치를 육안 확인했다. 최대글씨 지난 기록 sheet는 시스템 picker 값이 중간 생략되며, 화면 전체 폼을 한 PNG로 보여주지는 않는다. 이 캡처가 모든 폼 조작이나 전체 VoiceOver를 검증하지 않는다.
+앱 소스는62d3c097 이후 동일하다. iPhone 캡처는19f43ee3/dd18af04/c80b5f1e, iPad는c80b5f1e, Duo는791b8bf4의 UI 전용 split 검사에서 수집했다. L07은 native 제목 Activity Detail인 HabitHeatmapDetailView이고 루트 주간 요약은L01, Weekly Report 상세는L08이다.
 
-주간/예정 검사는 새 습관 메뉴에서 폼이 열리지 않아 실패했다. iPad/Duo, L08 다크·최대글씨는 미검증이다. UI 게이트 및 머지는 미완료다. 아래는 이전 소스의 초기10장 기록이다.
+Duo 외부는1398×2034/LCD1, 내부는2853×2007/LCD-1·display3 활성이다. 실제 display readback과 AX frame으로 자세를 확인했으며 숫자 hinge 각도는 측정되지 않았다. 각 자세의 대표 히어로·리듬·지난 기록을 육안 검토했다. 최대글씨 폼 PNG는 스크롤 중 한 viewport이므로 전체 폼의 동시 표시/VoiceOver 검증이 아니다. L08 다크·최대글씨와 모든 테마는 이번 범위 밖이다.
 
-## 초기 수집 ·19f43ee3
+[전체 검증·이전 실패](../../../../reviews/2026-10-28-life-flow/README.md), [출처](manifest.json), [시안](../../../theme-map/themes/dune-life-redesign.html)을 각각 구분한다.
 
-이 갤러리의 PNG 10장은 **iPhone 18 Pro 전용 시뮬레이터**에서 XCTest가 첨부한 실제 앱 화면을 원본 바이트 그대로 복사했다. 시안 렌더가 아니다. 실행 앱 소스는 `19f43ee3`이며, xcresult는 `.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.28_14-42-50-+0900.xcresult`다. 기기 UDID는 `E31D1A6A-8649-4FCF-9DAE-76DD59DE0192`다. 각 파일의 원본 첨부명, 테스트, 통과 여부, 해시와 크기는 [manifest.json](manifest.json)에 있다.
-
-## 확보한 범위
-
-| 화면 | 증거 | 테스트 상태 |
-|---|---|---|
-| L01 밝은 모드 | 히어로, 오늘 습관 카드, 리듬 | 캡처는 완료. `testCaptureL01AndPastRecordLightDarkAndMaximumAX`는 이후 접근성 제목 앵커에서 실패 |
-| L01 compact hero | 밝음, 어두움, Accessibility XXXL | `testCompactHeroLayout` 통과 |
-| L02 습관 편집 | 이름 입력 화면 | `testEditFlowRenamesSeededHabit` 통과 |
-| L09 지난 기록 | 밝은 모드 sheet | 캡처는 완료. 위 L01/L09 종합 테스트가 이후 단계에서 실패 |
-| L01 주간 돌아보기 카드 | 밝은 모드 요약 | 캡처는 완료. `testWeeklyReflectionOpensMeasuredComparison`는 이후 한국어/영어 문구 기대치 불일치로 실패 |
-
-## 이미지 육안 확인
-
-- 밝은 L01 히어로는 `1 / 3` 링과 큰 `2 Remaining`을 같은 카드에 보여 준다. 독서 카드의 시간 값과 수분 카드의 `0 / 8 glasses`가 서로 다른 표면과 아이콘으로 구분된다.
-- 어두운 compact hero는 밝은 골드 링과 텍스트를 유지한다. Accessibility XXXL에서는 링 대신 `3개 중 1개 완료`, 큰 남은 수를 표시한다. 첫 화면의 카드 하단은 스크롤 아래로 이어지므로 이 PNG 하나로 전체 카드 높이를 판정하지 않는다.
-- L09 sheet는 중간 높이 상태로 촬영되어 아래 입력 영역은 화면 밖에 있다. 스크롤 가능한 Form의 일부이며 전체 저장 흐름의 통과 증거가 아니다.
-- L01 리듬 PNG는 스크롤 위치에서 촬영되어 상단 제목 일부가 내비게이션 바 아래에 있다. 보이는 7일 막대·28일 패턴·주간 요약의 내용만 확인했다.
-
-## 미확인·제외
-
-- L01/L09 종합 테스트는 후속 접근성 제목 앵커에서 실패했다. **L09 어두운 모드·최대 글씨 화면은 생성되지 않았다.** 이후 AX 전용 수정과 main 병합을 포함한 최종 소스의 재촬영 증거도 없다.
-- L07은 카탈로그의 `HabitHeatmapDetailView`다. 실제 내비게이션 제목이 **Activity Detail**인 것을 소스와 화면 목록에서 확인해 히트맵 요약 캡처를 포함했다. L05/L06 개별 습관 이력과 구분하며, L07 완료율 차트의 최종 수정 검증은 남아 있다.
-- 주간 돌아보기 요약은 L01 루트 카드다. L08 주간 리포트 상세로 분류하지 않는다.
-- L08/L09의 어두운 모드·최대 글씨, iPad, Duo 접힘·펼침은 이 xcresult에 없다. 기존 디자인맵 이미지를 이번 실행의 증거로 재사용하지 않았다.
-- 이 갤러리는 **UI 게이트 통과나 최종 병합 검증 완료를 뜻하지 않는다.** 실패한 테스트와 남은 범위는 실행 기록에 남는다.
-
-[이미지 갤러리](index.html) · [통합 실제 화면 포털](../../../phone-design-map/actual/index.html)
+최대글씨 리듬 캡처도 카드 상단 viewport이므로 전체 플롯·축의 동시 표시를 증명하지 않는다. 기본 크기의 리듬 수치·막대·28일 패턴은 별도 원본에서 확인했다.

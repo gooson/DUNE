@@ -121,6 +121,13 @@
       "title": "큰 글씨 시간 편집",
       "status": "Resolved",
       "resolution": "vertical layout"
+    },
+    {
+      "id": "final-doc-summary-consistency",
+      "priority": "P3",
+      "title": "Duo 최종 실행 요약 누락 및 이전 top-level 실패 상태 잔여",
+      "status": "Resolved",
+      "resolution": "latestRuns에 Duo각15장/3pass 추가, iPad0중복 제거, collection최신성공 상태와 이전실패값 분리; final reviewer 재확인"
     }
   ],
   "summary": {
@@ -128,9 +135,9 @@
     "p2": 0,
     "p3": 0
   },
-  "ui_gate": "pending",
-  "currentSource": "62d3c097",
-  "uiGate": "failed-new-habit-form-not-opened",
+  "ui_gate": "passed-selected-Life-scope",
+  "currentSource": "791b8bf4983cd5991297655a6f67faa2cf511c2e",
+  "uiGate": "passed-selected-Life-scope-with-device-captures",
   "runtimePending": [
     {
       "priority": "P2",
@@ -142,7 +149,7 @@
     {
       "priority": "P2",
       "id": "UI-WEEKLY-ROW",
-      "status": "not-reached-new-habit-menu-remained-open",
+      "status": "verified-by-ui-phone-final-1pass-exit0",
       "cause": "Offscreen row and unclear container boundary",
       "automaticRetries": 1
     },
@@ -164,5 +171,27 @@
     },
     "runnerExitStatus": 65,
     "receipt": "ui-phone-authorized.result.json"
-  }
+  },
+  "keyboardResume": {
+    "userConfirmedRecovery": true,
+    "newHelperCauses": [
+      "offscreen Return key",
+      "missing CollectionView form candidate",
+      "offscreen recurring hint assertion"
+    ],
+    "fixCommits": [
+      "e2838920",
+      "1982ebe0",
+      "c80b5f1e"
+    ],
+    "latestRemainingSelector": {
+      "executed": 1,
+      "passed": 1,
+      "failed": 0,
+      "exit": 0,
+      "receipt": "ui-phone-final.result.json"
+    }
+  },
+  "finalVerification": "verification.json",
+  "finalDecision": "No open P1/P2/P3; selected Life static/runtime gate passed"
 }

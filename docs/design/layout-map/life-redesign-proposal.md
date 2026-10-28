@@ -139,3 +139,7 @@ L01: 진행 중, 전체 완료, 전체 없음, 오늘 대상 없음/주간만 �
 큰글씨에서는메달을생략하고수치/텍스트를우선한다. 반복되는반짝임·회전·점멸애니메이션은쓰지않는다. 밝음은아이보리/샌드위의골드,어두움은브론즈/브라운위의골드를사용한다. native구현시AppTheme/DS색과ReduceMotion을따르고이시안의금속표면을새게임보상처럼연결하지않는다.
 
 기존수치중심히어로는`life-hero-before-ornament-light.png`/`dark.png`로비교보존하고최신hero/전체/큰글씨PNG를갱신한다. 이번변경은시안표현만이며앱/actual화면은변경하지않는다.
+
+## 네이티브 반영 · 2026-10-29
+
+Life Flow를 실제 앱에 반영했다. [검증 보고](../../reviews/2026-10-28-life-flow/README.md)와 [실제 iPhone·iPad·Duo 양쪽74장](../full-redesign-map/review/life-flow-2026-10-28/index.html)을 따른다. 앞의 시안 단계 설명은 제안 당시 기록이며 시안과 실제 캡처는 별도로 보존한다.

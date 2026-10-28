@@ -45,3 +45,7 @@ status: draft
 등록 전/오늘/미래 날짜, 기존 부분기록·완료기록, 같은 날짜 재저장, 숫자 범위 초과, 체크/횟수/시간, 주간 날짜 중복, 반복의 이전/이후 완료·미룸, 자동/생성일이 오늘인 습관, 취소를 다룬다. 조회 중/일부 오류·오래된 동기화 데이터는 실제 DTO 상태로 구분해야 한다.
 
 시안은 최소44px 조작과320/402/1032px·기본/200%·밝음/어두움의 폼을 검사한다. 네이티브 날짜 선택기·VoiceOver·CloudKit 경쟁/원자성·알림 복구는 브라우저 검사로 입증하지 않는다. 최신 결과는 [Life QA](../theme-map/themes/assets/life-redesign-qa.json)와 [통합 계획](../../plans/2026-10-28-life-tab-redesign.md)에 기록한다.
+
+## 네이티브 반영 · 2026-10-29
+
+Life Flow를 실제 앱에 반영했다. [검증 보고](../../reviews/2026-10-28-life-flow/README.md)와 [실제 iPhone·iPad·Duo 양쪽74장](../full-redesign-map/review/life-flow-2026-10-28/index.html)을 따른다. 앞의 시안 단계 설명은 제안 당시 기록이며 시안과 실제 캡처는 별도로 보존한다.

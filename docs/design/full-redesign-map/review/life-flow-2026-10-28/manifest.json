@@ -1,18 +1,12 @@
 {
-  "date": "2026-10-28",
+  "date": "2026-10-29",
   "kind": "actual-native-XCTest-screenshots",
-  "status": "partial-validation",
+  "status": "verified-selected-native-scope",
   "sourceCommit": "per-capture",
-  "currentSourceAfterCapture": "Latest captures use dd18af04; initial19f43ee3 captures retained with separate provenance. UI gate failed.",
-  "xcresult": ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.28_14-42-50-+0900.xcresult",
-  "device": {
-    "name": "iPhone 18 Pro-wt-Health-4d0d-62cf3693c151",
-    "udid": "E31D1A6A-8649-4FCF-9DAE-76DD59DE0192",
-    "platform": "iOS Simulator"
-  },
+  "currentSourceAfterCapture": "App/unit/Shared sources unchanged from62d3c097; UI-only helpers and appearance split through791b8bf4. Each image retains its actual source. Historical failures retained separately.",
   "summary": {
-    "images": 25,
-    "passedTestImages": 19,
+    "images": 74,
+    "passedTestImages": 68,
     "partialOrUnknownImages": 6
   },
   "captures": [
@@ -585,6 +579,1324 @@
       "testOutcome": "passed",
       "capturedAtUnix": 1793199676.531,
       "provenance": "Unmodified XCTest PNG; test outcome independently parsed from runner log"
+    },
+    {
+      "file": "images/iphone-schedule-final-L01-Upcoming-habits.png",
+      "screen": "L01",
+      "label": "L01 Upcoming habits",
+      "deviceKind": "iphone-schedule-final",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "sha256": "9f63a5e1bdb11a0b7e172c74b475f9a3d0cf1745dbdf5abb88dd1becb7513bc7",
+      "sourceCommit": "c80b5f1e3e690704421ba6b595c182f12bb4c2f8",
+      "xcresult": ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.29_01-06-25-+0900.xcresult",
+      "device": {
+        "name": "iPhone 18 Pro-wt-Health-4d0d-62cf3693c151",
+        "udid": "E31D1A6A-8649-4FCF-9DAE-76DD59DE0192"
+      },
+      "originalAttachment": "6B330F96-7ADC-4D4E-8493-6839AD37EAF9.png",
+      "originalTest": "LifeRegressionTests/testWeeklyAndFutureRecurringHabitsStayOutsideTodayProgress()",
+      "testOutcome": "passed",
+      "capturedAtUnix": 1793203773.102,
+      "provenance": "Unmodified XCTest PNG; test outcome independently parsed from runner log"
+    },
+    {
+      "file": "images/iphone-schedule-final-L01-Weekly-habits.png",
+      "screen": "L01",
+      "label": "L01 Weekly habits",
+      "deviceKind": "iphone-schedule-final",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "sha256": "3d3a7ce7c46b68cb1156a53762b6ab18208e104b6496a7212c24ed89e07b083b",
+      "sourceCommit": "c80b5f1e3e690704421ba6b595c182f12bb4c2f8",
+      "xcresult": ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.29_01-06-25-+0900.xcresult",
+      "device": {
+        "name": "iPhone 18 Pro-wt-Health-4d0d-62cf3693c151",
+        "udid": "E31D1A6A-8649-4FCF-9DAE-76DD59DE0192"
+      },
+      "originalAttachment": "E849C0BD-44F2-4CCD-9ECD-FAFED47E7764.png",
+      "originalTest": "LifeRegressionTests/testWeeklyAndFutureRecurringHabitsStayOutsideTodayProgress()",
+      "testOutcome": "passed",
+      "capturedAtUnix": 1793203770.611,
+      "provenance": "Unmodified XCTest PNG; test outcome independently parsed from runner log"
+    },
+    {
+      "file": "images/iphone-schedule-final-L01-Today-checklist.png",
+      "screen": "L01",
+      "label": "L01 Today checklist",
+      "deviceKind": "iphone-schedule-final",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "sha256": "06389590d3351d4e319521eab350f473a92b2b7a937f68847f829a683282c4ae",
+      "sourceCommit": "c80b5f1e3e690704421ba6b595c182f12bb4c2f8",
+      "xcresult": ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.29_01-06-25-+0900.xcresult",
+      "device": {
+        "name": "iPhone 18 Pro-wt-Health-4d0d-62cf3693c151",
+        "udid": "E31D1A6A-8649-4FCF-9DAE-76DD59DE0192"
+      },
+      "originalAttachment": "55A326B5-8704-4277-97E4-2DDD7CA9E27A.png",
+      "originalTest": "LifeRegressionTests/testWeeklyAndFutureRecurringHabitsStayOutsideTodayProgress()",
+      "testOutcome": "passed",
+      "capturedAtUnix": 1793203764.664,
+      "provenance": "Unmodified XCTest PNG; test outcome independently parsed from runner log"
+    },
+    {
+      "file": "images/iphone-schedule-final-L01-Today-hero-with-scheduled-habits.png",
+      "screen": "L01",
+      "label": "L01 Today hero with scheduled habits",
+      "deviceKind": "iphone-schedule-final",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "sha256": "411255e3d44afc1e97a71f4cb8c02899e2ea247f87b67eaa3d25bc7cee2f72c5",
+      "sourceCommit": "c80b5f1e3e690704421ba6b595c182f12bb4c2f8",
+      "xcresult": ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.29_01-06-25-+0900.xcresult",
+      "device": {
+        "name": "iPhone 18 Pro-wt-Health-4d0d-62cf3693c151",
+        "udid": "E31D1A6A-8649-4FCF-9DAE-76DD59DE0192"
+      },
+      "originalAttachment": "7A9A2526-F8B7-4064-A2B5-4363DBA30642.png",
+      "originalTest": "LifeRegressionTests/testWeeklyAndFutureRecurringHabitsStayOutsideTodayProgress()",
+      "testOutcome": "passed",
+      "capturedAtUnix": 1793203763.01,
+      "provenance": "Unmodified XCTest PNG; test outcome independently parsed from runner log"
+    },
+    {
+      "file": "images/ipad-final-L01-Life-Habits-hero-light.png",
+      "screen": "L01",
+      "label": "L01-Life-Habits-hero-light",
+      "deviceKind": "ipad-final",
+      "pixels": [
+        2064,
+        2752
+      ],
+      "sha256": "9d7ffd1a93f9618262ec8a49c6d1d0f938f0a4df44a31f1df672240afb99a7d0",
+      "sourceCommit": "c80b5f1e3e690704421ba6b595c182f12bb4c2f8",
+      "xcresult": ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.29_01-16-48-+0900.xcresult",
+      "device": {
+        "name": null,
+        "udid": null
+      },
+      "originalAttachment": "278DAC73-CA05-4C51-BEE4-A8D1F24DEAB2.png",
+      "originalTest": "LifeFlowUITests/testCaptureL01AndPastRecordLightDarkAndMaximumAX()",
+      "testOutcome": "passed",
+      "capturedAtUnix": 1793204287.356,
+      "provenance": "Unmodified XCTest PNG; test outcome independently parsed from runner log"
+    },
+    {
+      "file": "images/ipad-final-L01-Life-Habits-today-light.png",
+      "screen": "L01",
+      "label": "L01-Life-Habits-today-light",
+      "deviceKind": "ipad-final",
+      "pixels": [
+        2064,
+        2752
+      ],
+      "sha256": "bcd4bd08b0404fa6f14835e42659e423a463a34213dcaf8e1daf16b752d99c7e",
+      "sourceCommit": "c80b5f1e3e690704421ba6b595c182f12bb4c2f8",
+      "xcresult": ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.29_01-16-48-+0900.xcresult",
+      "device": {
+        "name": null,
+        "udid": null
+      },
+      "originalAttachment": "5A4125A6-0971-4B3F-B412-7DDF5970101E.png",
+      "originalTest": "LifeFlowUITests/testCaptureL01AndPastRecordLightDarkAndMaximumAX()",
+      "testOutcome": "passed",
+      "capturedAtUnix": 1793204291.738,
+      "provenance": "Unmodified XCTest PNG; test outcome independently parsed from runner log"
+    },
+    {
+      "file": "images/ipad-final-L01-Life-Habits-rhythm-light.png",
+      "screen": "L01",
+      "label": "L01-Life-Habits-rhythm-light",
+      "deviceKind": "ipad-final",
+      "pixels": [
+        2064,
+        2752
+      ],
+      "sha256": "a57de87e52266edb0e932e5d8c6561d4f8500b9b42b235e785f90bc997ed8891",
+      "sourceCommit": "c80b5f1e3e690704421ba6b595c182f12bb4c2f8",
+      "xcresult": ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.29_01-16-48-+0900.xcresult",
+      "device": {
+        "name": null,
+        "udid": null
+      },
+      "originalAttachment": "876347F3-69B7-4B28-BD97-33624820B443.png",
+      "originalTest": "LifeFlowUITests/testCaptureL01AndPastRecordLightDarkAndMaximumAX()",
+      "testOutcome": "passed",
+      "capturedAtUnix": 1793204300.697,
+      "provenance": "Unmodified XCTest PNG; test outcome independently parsed from runner log"
+    },
+    {
+      "file": "images/ipad-final-L09-Past-Record-form-light.png",
+      "screen": "L09",
+      "label": "L09-Past-Record-form-light",
+      "deviceKind": "ipad-final",
+      "pixels": [
+        2064,
+        2752
+      ],
+      "sha256": "43396fe67f7deb53b180c89c67b549a46d6a05b544471751524673baf3735b19",
+      "sourceCommit": "c80b5f1e3e690704421ba6b595c182f12bb4c2f8",
+      "xcresult": ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.29_01-16-48-+0900.xcresult",
+      "device": {
+        "name": null,
+        "udid": null
+      },
+      "originalAttachment": "2841A831-5764-4102-A70F-8E7592C0A12F.png",
+      "originalTest": "LifeFlowUITests/testCaptureL01AndPastRecordLightDarkAndMaximumAX()",
+      "testOutcome": "passed",
+      "capturedAtUnix": 1793204312.519,
+      "provenance": "Unmodified XCTest PNG; test outcome independently parsed from runner log"
+    },
+    {
+      "file": "images/ipad-final-L07-Habit-history-summary-light.png",
+      "screen": "L07",
+      "label": "L07-Habit-history-summary-light",
+      "deviceKind": "ipad-final",
+      "pixels": [
+        2064,
+        2752
+      ],
+      "sha256": "17ab54f3d8171530d7da061680c3b568c7bc50682d1f2f6d953eab4ffa864636",
+      "sourceCommit": "c80b5f1e3e690704421ba6b595c182f12bb4c2f8",
+      "xcresult": ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.29_01-16-48-+0900.xcresult",
+      "device": {
+        "name": null,
+        "udid": null
+      },
+      "originalAttachment": "05104115-4A7E-4C1B-ACE7-D3639140D413.png",
+      "originalTest": "LifeFlowUITests/testCaptureL01AndPastRecordLightDarkAndMaximumAX()",
+      "testOutcome": "passed",
+      "capturedAtUnix": 1793204327.526,
+      "provenance": "Unmodified XCTest PNG; test outcome independently parsed from runner log"
+    },
+    {
+      "file": "images/ipad-final-L07-Habit-history-rates-light.png",
+      "screen": "L07",
+      "label": "L07-Habit-history-rates-light",
+      "deviceKind": "ipad-final",
+      "pixels": [
+        2064,
+        2752
+      ],
+      "sha256": "4bcc5a4bbf667fcb9ab9e20f9cf76098350e81b2530f53dadc236b2529fb4b18",
+      "sourceCommit": "c80b5f1e3e690704421ba6b595c182f12bb4c2f8",
+      "xcresult": ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.29_01-16-48-+0900.xcresult",
+      "device": {
+        "name": null,
+        "udid": null
+      },
+      "originalAttachment": "99EF30A4-591E-4068-BFC5-CF69E4334614.png",
+      "originalTest": "LifeFlowUITests/testCaptureL01AndPastRecordLightDarkAndMaximumAX()",
+      "testOutcome": "passed",
+      "capturedAtUnix": 1793204332.612,
+      "provenance": "Unmodified XCTest PNG; test outcome independently parsed from runner log"
+    },
+    {
+      "file": "images/ipad-final-L08-Weekly-report-light.png",
+      "screen": "L08",
+      "label": "L08-Weekly-report-light",
+      "deviceKind": "ipad-final",
+      "pixels": [
+        2064,
+        2752
+      ],
+      "sha256": "19151b04e2e710a06f8460f277946ceb8f90514d8be57e3278b54495d4a5e4a5",
+      "sourceCommit": "c80b5f1e3e690704421ba6b595c182f12bb4c2f8",
+      "xcresult": ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.29_01-16-48-+0900.xcresult",
+      "device": {
+        "name": null,
+        "udid": null
+      },
+      "originalAttachment": "14969F02-F826-4D40-9BA0-44FDCFF8C295.png",
+      "originalTest": "LifeFlowUITests/testCaptureL01AndPastRecordLightDarkAndMaximumAX()",
+      "testOutcome": "passed",
+      "capturedAtUnix": 1793204350.779,
+      "provenance": "Unmodified XCTest PNG; test outcome independently parsed from runner log"
+    },
+    {
+      "file": "images/ipad-final-L01-Life-Habits-hero-dark.png",
+      "screen": "L01",
+      "label": "L01-Life-Habits-hero-dark",
+      "deviceKind": "ipad-final",
+      "pixels": [
+        2064,
+        2752
+      ],
+      "sha256": "e94cef74abcaa42476e8227242c80663cd6a6d03c51d5e21786bd560e594337f",
+      "sourceCommit": "c80b5f1e3e690704421ba6b595c182f12bb4c2f8",
+      "xcresult": ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.29_01-16-48-+0900.xcresult",
+      "device": {
+        "name": null,
+        "udid": null
+      },
+      "originalAttachment": "FD49304E-CB11-4BB8-AC17-D13591D4DA26.png",
+      "originalTest": "LifeFlowUITests/testCaptureL01AndPastRecordLightDarkAndMaximumAX()",
+      "testOutcome": "passed",
+      "capturedAtUnix": 1793204362.0,
+      "provenance": "Unmodified XCTest PNG; test outcome independently parsed from runner log"
+    },
+    {
+      "file": "images/ipad-final-L01-Life-Habits-today-dark.png",
+      "screen": "L01",
+      "label": "L01-Life-Habits-today-dark",
+      "deviceKind": "ipad-final",
+      "pixels": [
+        2064,
+        2752
+      ],
+      "sha256": "59dee30a03cf7b675d6a6c0f16279563f39dbc602d31e8af440ea44b3c3e2c4f",
+      "sourceCommit": "c80b5f1e3e690704421ba6b595c182f12bb4c2f8",
+      "xcresult": ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.29_01-16-48-+0900.xcresult",
+      "device": {
+        "name": null,
+        "udid": null
+      },
+      "originalAttachment": "645C48C6-4B54-4160-B016-CC2D62BF8394.png",
+      "originalTest": "LifeFlowUITests/testCaptureL01AndPastRecordLightDarkAndMaximumAX()",
+      "testOutcome": "passed",
+      "capturedAtUnix": 1793204365.532,
+      "provenance": "Unmodified XCTest PNG; test outcome independently parsed from runner log"
+    },
+    {
+      "file": "images/ipad-final-L01-Life-Habits-rhythm-dark.png",
+      "screen": "L01",
+      "label": "L01-Life-Habits-rhythm-dark",
+      "deviceKind": "ipad-final",
+      "pixels": [
+        2064,
+        2752
+      ],
+      "sha256": "fe1117530ab92412032fd2cd3b4c38a258c294ecf3177d17f3f75cc32659e44c",
+      "sourceCommit": "c80b5f1e3e690704421ba6b595c182f12bb4c2f8",
+      "xcresult": ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.29_01-16-48-+0900.xcresult",
+      "device": {
+        "name": null,
+        "udid": null
+      },
+      "originalAttachment": "B0AB4467-801D-41F1-BD77-E1D68992C504.png",
+      "originalTest": "LifeFlowUITests/testCaptureL01AndPastRecordLightDarkAndMaximumAX()",
+      "testOutcome": "passed",
+      "capturedAtUnix": 1793204374.063,
+      "provenance": "Unmodified XCTest PNG; test outcome independently parsed from runner log"
+    },
+    {
+      "file": "images/ipad-final-L09-Past-Record-form-dark.png",
+      "screen": "L09",
+      "label": "L09-Past-Record-form-dark",
+      "deviceKind": "ipad-final",
+      "pixels": [
+        2064,
+        2752
+      ],
+      "sha256": "e8d57c4a6101c07610c6b3216636ee871f3d0c9f5b4745e9bf94f8d13dfb934d",
+      "sourceCommit": "c80b5f1e3e690704421ba6b595c182f12bb4c2f8",
+      "xcresult": ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.29_01-16-48-+0900.xcresult",
+      "device": {
+        "name": null,
+        "udid": null
+      },
+      "originalAttachment": "B36CE23A-3CB0-44C8-8421-51683C5F2A35.png",
+      "originalTest": "LifeFlowUITests/testCaptureL01AndPastRecordLightDarkAndMaximumAX()",
+      "testOutcome": "passed",
+      "capturedAtUnix": 1793204386.609,
+      "provenance": "Unmodified XCTest PNG; test outcome independently parsed from runner log"
+    },
+    {
+      "file": "images/ipad-final-L01-Life-Habits-hero-MaxAX.png",
+      "screen": "L01",
+      "label": "L01-Life-Habits-hero-MaxAX",
+      "deviceKind": "ipad-final",
+      "pixels": [
+        2064,
+        2752
+      ],
+      "sha256": "bc14ea9cb0fa28af7ebcc391d5522e758e467f1807a9f373b962b87526c66967",
+      "sourceCommit": "c80b5f1e3e690704421ba6b595c182f12bb4c2f8",
+      "xcresult": ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.29_01-16-48-+0900.xcresult",
+      "device": {
+        "name": null,
+        "udid": null
+      },
+      "originalAttachment": "965358D7-2C15-4AC5-85E0-918E2198C1A4.png",
+      "originalTest": "LifeFlowUITests/testCaptureL01AndPastRecordLightDarkAndMaximumAX()",
+      "testOutcome": "passed",
+      "capturedAtUnix": 1793204400.161,
+      "provenance": "Unmodified XCTest PNG; test outcome independently parsed from runner log"
+    },
+    {
+      "file": "images/ipad-final-L01-Life-Habits-today-MaxAX.png",
+      "screen": "L01",
+      "label": "L01-Life-Habits-today-MaxAX",
+      "deviceKind": "ipad-final",
+      "pixels": [
+        2064,
+        2752
+      ],
+      "sha256": "e78a7a359e41636d707ef10a5f7e6a205de0fd26f64d9f5ec0f796b5e5fce1d3",
+      "sourceCommit": "c80b5f1e3e690704421ba6b595c182f12bb4c2f8",
+      "xcresult": ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.29_01-16-48-+0900.xcresult",
+      "device": {
+        "name": null,
+        "udid": null
+      },
+      "originalAttachment": "1390AB80-4AF8-45AA-8F6A-6F25F8596130.png",
+      "originalTest": "LifeFlowUITests/testCaptureL01AndPastRecordLightDarkAndMaximumAX()",
+      "testOutcome": "passed",
+      "capturedAtUnix": 1793204403.686,
+      "provenance": "Unmodified XCTest PNG; test outcome independently parsed from runner log"
+    },
+    {
+      "file": "images/ipad-final-L01-Life-Habits-rhythm-MaxAX.png",
+      "screen": "L01",
+      "label": "L01-Life-Habits-rhythm-MaxAX",
+      "deviceKind": "ipad-final",
+      "pixels": [
+        2064,
+        2752
+      ],
+      "sha256": "db02ba4f0964378ca1a303d0f9bee325cafe8a7928eb9bc424e78b0433506a2c",
+      "sourceCommit": "c80b5f1e3e690704421ba6b595c182f12bb4c2f8",
+      "xcresult": ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.29_01-16-48-+0900.xcresult",
+      "device": {
+        "name": null,
+        "udid": null
+      },
+      "originalAttachment": "33EAE2FD-B07E-418B-A673-C059160AFD31.png",
+      "originalTest": "LifeFlowUITests/testCaptureL01AndPastRecordLightDarkAndMaximumAX()",
+      "testOutcome": "passed",
+      "capturedAtUnix": 1793204419.802,
+      "provenance": "Unmodified XCTest PNG; test outcome independently parsed from runner log"
+    },
+    {
+      "file": "images/ipad-final-L09-Past-Record-form-MaxAX.png",
+      "screen": "L09",
+      "label": "L09-Past-Record-form-MaxAX",
+      "deviceKind": "ipad-final",
+      "pixels": [
+        2064,
+        2752
+      ],
+      "sha256": "5c0316e70479acea60a1dbe028fa98e7017782a02f4e0b9fd4084303e3b68df7",
+      "sourceCommit": "c80b5f1e3e690704421ba6b595c182f12bb4c2f8",
+      "xcresult": ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.29_01-16-48-+0900.xcresult",
+      "device": {
+        "name": null,
+        "udid": null
+      },
+      "originalAttachment": "DDD09D30-54E8-4E31-AF7A-794089E1888C.png",
+      "originalTest": "LifeFlowUITests/testCaptureL01AndPastRecordLightDarkAndMaximumAX()",
+      "testOutcome": "passed",
+      "capturedAtUnix": 1793204439.328,
+      "provenance": "Unmodified XCTest PNG; test outcome independently parsed from runner log"
+    },
+    {
+      "file": "images/duo-external-L01-Life-Habits-hero-light.png",
+      "screen": "L01",
+      "label": "L01-Life-Habits-hero-light",
+      "deviceKind": "duo-external",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "5a93627344ab3a47a26cb4e9287ffed21db20a5b6d5a8671cde5aec56ce0c4a6",
+      "sourceCommit": "791b8bf4983cd5991297655a6f67faa2cf511c2e",
+      "device": {
+        "name": "iPhone Duo-wt-Health-4d0d-62cf3693c151",
+        "udid": "8B6A9C9D-1364-4EBA-A6F9-832F1BEB201D"
+      },
+      "originalAttachment": ".codex-checks/life-run/duo-closed-split/light/002-1398x2034.png",
+      "originalTest": "LifeFlowUITests/testHostCaptureLight()",
+      "testOutcome": "passed",
+      "provenance": "Unmodified native host PNG; valid checkpoint ACK; runner exit0; paired inactive display and AX preserved",
+      "activeDisplay": "LCD",
+      "actualWindowPoints": [
+        0.0,
+        0.0,
+        466.0,
+        678.0
+      ],
+      "pairedInactiveProof": "docs/reviews/2026-10-28-life-flow/duo-external/L01-Life-Habits-hero-light-inactive.png",
+      "axProof": "docs/reviews/2026-10-28-life-flow/duo-external/L01-Life-Habits-hero-light-hierarchy.txt.gz",
+      "checkpoint": 2
+    },
+    {
+      "file": "images/duo-external-L01-Life-Habits-today-light.png",
+      "screen": "L01",
+      "label": "L01-Life-Habits-today-light",
+      "deviceKind": "duo-external",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "82c5317b69e2df26e086e19c501918bfbe612766958b52ae6aeb7051beba7f0e",
+      "sourceCommit": "791b8bf4983cd5991297655a6f67faa2cf511c2e",
+      "device": {
+        "name": "iPhone Duo-wt-Health-4d0d-62cf3693c151",
+        "udid": "8B6A9C9D-1364-4EBA-A6F9-832F1BEB201D"
+      },
+      "originalAttachment": ".codex-checks/life-run/duo-closed-split/light/003-1398x2034.png",
+      "originalTest": "LifeFlowUITests/testHostCaptureLight()",
+      "testOutcome": "passed",
+      "provenance": "Unmodified native host PNG; valid checkpoint ACK; runner exit0; paired inactive display and AX preserved",
+      "activeDisplay": "LCD",
+      "actualWindowPoints": [
+        0.0,
+        0.0,
+        466.0,
+        678.0
+      ],
+      "pairedInactiveProof": "docs/reviews/2026-10-28-life-flow/duo-external/L01-Life-Habits-today-light-inactive.png",
+      "axProof": "docs/reviews/2026-10-28-life-flow/duo-external/L01-Life-Habits-today-light-hierarchy.txt.gz",
+      "checkpoint": 3
+    },
+    {
+      "file": "images/duo-external-L01-Life-Habits-rhythm-light.png",
+      "screen": "L01",
+      "label": "L01-Life-Habits-rhythm-light",
+      "deviceKind": "duo-external",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "925b2ad37c36bdbdba84b2dd45fe8ac86196b47d6c67e5474cd3e77feef598ab",
+      "sourceCommit": "791b8bf4983cd5991297655a6f67faa2cf511c2e",
+      "device": {
+        "name": "iPhone Duo-wt-Health-4d0d-62cf3693c151",
+        "udid": "8B6A9C9D-1364-4EBA-A6F9-832F1BEB201D"
+      },
+      "originalAttachment": ".codex-checks/life-run/duo-closed-split/light/004-1398x2034.png",
+      "originalTest": "LifeFlowUITests/testHostCaptureLight()",
+      "testOutcome": "passed",
+      "provenance": "Unmodified native host PNG; valid checkpoint ACK; runner exit0; paired inactive display and AX preserved",
+      "activeDisplay": "LCD",
+      "actualWindowPoints": [
+        0.0,
+        0.0,
+        466.0,
+        678.0
+      ],
+      "pairedInactiveProof": "docs/reviews/2026-10-28-life-flow/duo-external/L01-Life-Habits-rhythm-light-inactive.png",
+      "axProof": "docs/reviews/2026-10-28-life-flow/duo-external/L01-Life-Habits-rhythm-light-hierarchy.txt.gz",
+      "checkpoint": 4
+    },
+    {
+      "file": "images/duo-external-L09-Past-Record-form-light.png",
+      "screen": "L09",
+      "label": "L09-Past-Record-form-light",
+      "deviceKind": "duo-external",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "eb8f675197564d9cf0fbd71eb60149ef0c8a31cb5a2a8a9402bc87551c9527f1",
+      "sourceCommit": "791b8bf4983cd5991297655a6f67faa2cf511c2e",
+      "device": {
+        "name": "iPhone Duo-wt-Health-4d0d-62cf3693c151",
+        "udid": "8B6A9C9D-1364-4EBA-A6F9-832F1BEB201D"
+      },
+      "originalAttachment": ".codex-checks/life-run/duo-closed-split/light/006-1398x2034.png",
+      "originalTest": "LifeFlowUITests/testHostCaptureLight()",
+      "testOutcome": "passed",
+      "provenance": "Unmodified native host PNG; valid checkpoint ACK; runner exit0; paired inactive display and AX preserved",
+      "activeDisplay": "LCD",
+      "actualWindowPoints": [
+        0.0,
+        0.0,
+        466.0,
+        678.0
+      ],
+      "pairedInactiveProof": "docs/reviews/2026-10-28-life-flow/duo-external/L09-Past-Record-form-light-inactive.png",
+      "axProof": "docs/reviews/2026-10-28-life-flow/duo-external/L09-Past-Record-form-light-hierarchy.txt.gz",
+      "checkpoint": 6
+    },
+    {
+      "file": "images/duo-external-L07-Habit-history-summary-light.png",
+      "screen": "L07",
+      "label": "L07-Habit-history-summary-light",
+      "deviceKind": "duo-external",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "962ed4f7b3e89cfa4200acd8cd6ddb8a251f4a2b7735953c61b058d29d2b1053",
+      "sourceCommit": "791b8bf4983cd5991297655a6f67faa2cf511c2e",
+      "device": {
+        "name": "iPhone Duo-wt-Health-4d0d-62cf3693c151",
+        "udid": "8B6A9C9D-1364-4EBA-A6F9-832F1BEB201D"
+      },
+      "originalAttachment": ".codex-checks/life-run/duo-closed-split/light/009-1398x2034.png",
+      "originalTest": "LifeFlowUITests/testHostCaptureLight()",
+      "testOutcome": "passed",
+      "provenance": "Unmodified native host PNG; valid checkpoint ACK; runner exit0; paired inactive display and AX preserved",
+      "activeDisplay": "LCD",
+      "actualWindowPoints": [
+        0.0,
+        0.0,
+        466.0,
+        678.0
+      ],
+      "pairedInactiveProof": "docs/reviews/2026-10-28-life-flow/duo-external/L07-Habit-history-summary-light-inactive.png",
+      "axProof": "docs/reviews/2026-10-28-life-flow/duo-external/L07-Habit-history-summary-light-hierarchy.txt.gz",
+      "checkpoint": 9
+    },
+    {
+      "file": "images/duo-external-L07-Habit-history-rates-light.png",
+      "screen": "L07",
+      "label": "L07-Habit-history-rates-light",
+      "deviceKind": "duo-external",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "3f6fb91b74d8cf1e6a8791ffa71d40c3302e68765f363f0a01ac5a577efcdd73",
+      "sourceCommit": "791b8bf4983cd5991297655a6f67faa2cf511c2e",
+      "device": {
+        "name": "iPhone Duo-wt-Health-4d0d-62cf3693c151",
+        "udid": "8B6A9C9D-1364-4EBA-A6F9-832F1BEB201D"
+      },
+      "originalAttachment": ".codex-checks/life-run/duo-closed-split/light/010-1398x2034.png",
+      "originalTest": "LifeFlowUITests/testHostCaptureLight()",
+      "testOutcome": "passed",
+      "provenance": "Unmodified native host PNG; valid checkpoint ACK; runner exit0; paired inactive display and AX preserved",
+      "activeDisplay": "LCD",
+      "actualWindowPoints": [
+        0.0,
+        0.0,
+        466.0,
+        678.0
+      ],
+      "pairedInactiveProof": "docs/reviews/2026-10-28-life-flow/duo-external/L07-Habit-history-rates-light-inactive.png",
+      "axProof": "docs/reviews/2026-10-28-life-flow/duo-external/L07-Habit-history-rates-light-hierarchy.txt.gz",
+      "checkpoint": 10
+    },
+    {
+      "file": "images/duo-external-L08-Weekly-report-light.png",
+      "screen": "L08",
+      "label": "L08-Weekly-report-light",
+      "deviceKind": "duo-external",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "b4d72004abe8d6a48bbec6cf5c6af6bb7252b02fcebafa011c2ce49bc3c2b6a1",
+      "sourceCommit": "791b8bf4983cd5991297655a6f67faa2cf511c2e",
+      "device": {
+        "name": "iPhone Duo-wt-Health-4d0d-62cf3693c151",
+        "udid": "8B6A9C9D-1364-4EBA-A6F9-832F1BEB201D"
+      },
+      "originalAttachment": ".codex-checks/life-run/duo-closed-split/light/012-1398x2034.png",
+      "originalTest": "LifeFlowUITests/testHostCaptureLight()",
+      "testOutcome": "passed",
+      "provenance": "Unmodified native host PNG; valid checkpoint ACK; runner exit0; paired inactive display and AX preserved",
+      "activeDisplay": "LCD",
+      "actualWindowPoints": [
+        0.0,
+        0.0,
+        466.0,
+        678.0
+      ],
+      "pairedInactiveProof": "docs/reviews/2026-10-28-life-flow/duo-external/L08-Weekly-report-light-inactive.png",
+      "axProof": "docs/reviews/2026-10-28-life-flow/duo-external/L08-Weekly-report-light-hierarchy.txt.gz",
+      "checkpoint": 12
+    },
+    {
+      "file": "images/duo-external-L01-Life-Habits-hero-dark.png",
+      "screen": "L01",
+      "label": "L01-Life-Habits-hero-dark",
+      "deviceKind": "duo-external",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "034397de8d4ab98d23ce3d5d317b3b753d061759753c37a2f5b1b19931c6b310",
+      "sourceCommit": "791b8bf4983cd5991297655a6f67faa2cf511c2e",
+      "device": {
+        "name": "iPhone Duo-wt-Health-4d0d-62cf3693c151",
+        "udid": "8B6A9C9D-1364-4EBA-A6F9-832F1BEB201D"
+      },
+      "originalAttachment": ".codex-checks/life-run/duo-closed-split/dark/002-1398x2034.png",
+      "originalTest": "LifeFlowUITests/testHostCaptureDark()",
+      "testOutcome": "passed",
+      "provenance": "Unmodified native host PNG; valid checkpoint ACK; runner exit0; paired inactive display and AX preserved",
+      "activeDisplay": "LCD",
+      "actualWindowPoints": [
+        0.0,
+        0.0,
+        466.0,
+        678.0
+      ],
+      "pairedInactiveProof": "docs/reviews/2026-10-28-life-flow/duo-external/L01-Life-Habits-hero-dark-inactive.png",
+      "axProof": "docs/reviews/2026-10-28-life-flow/duo-external/L01-Life-Habits-hero-dark-hierarchy.txt.gz",
+      "checkpoint": 2
+    },
+    {
+      "file": "images/duo-external-L01-Life-Habits-today-dark.png",
+      "screen": "L01",
+      "label": "L01-Life-Habits-today-dark",
+      "deviceKind": "duo-external",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "16e78858944a82093cb411f82e823f622c498a3b2596b7d9eda19686e81a3ada",
+      "sourceCommit": "791b8bf4983cd5991297655a6f67faa2cf511c2e",
+      "device": {
+        "name": "iPhone Duo-wt-Health-4d0d-62cf3693c151",
+        "udid": "8B6A9C9D-1364-4EBA-A6F9-832F1BEB201D"
+      },
+      "originalAttachment": ".codex-checks/life-run/duo-closed-split/dark/003-1398x2034.png",
+      "originalTest": "LifeFlowUITests/testHostCaptureDark()",
+      "testOutcome": "passed",
+      "provenance": "Unmodified native host PNG; valid checkpoint ACK; runner exit0; paired inactive display and AX preserved",
+      "activeDisplay": "LCD",
+      "actualWindowPoints": [
+        0.0,
+        0.0,
+        466.0,
+        678.0
+      ],
+      "pairedInactiveProof": "docs/reviews/2026-10-28-life-flow/duo-external/L01-Life-Habits-today-dark-inactive.png",
+      "axProof": "docs/reviews/2026-10-28-life-flow/duo-external/L01-Life-Habits-today-dark-hierarchy.txt.gz",
+      "checkpoint": 3
+    },
+    {
+      "file": "images/duo-external-L01-Life-Habits-rhythm-dark.png",
+      "screen": "L01",
+      "label": "L01-Life-Habits-rhythm-dark",
+      "deviceKind": "duo-external",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "a091dcbba22a171dbb977095812d6567a0fc96289f158b1b4caa1e427cbffd39",
+      "sourceCommit": "791b8bf4983cd5991297655a6f67faa2cf511c2e",
+      "device": {
+        "name": "iPhone Duo-wt-Health-4d0d-62cf3693c151",
+        "udid": "8B6A9C9D-1364-4EBA-A6F9-832F1BEB201D"
+      },
+      "originalAttachment": ".codex-checks/life-run/duo-closed-split/dark/004-1398x2034.png",
+      "originalTest": "LifeFlowUITests/testHostCaptureDark()",
+      "testOutcome": "passed",
+      "provenance": "Unmodified native host PNG; valid checkpoint ACK; runner exit0; paired inactive display and AX preserved",
+      "activeDisplay": "LCD",
+      "actualWindowPoints": [
+        0.0,
+        0.0,
+        466.0,
+        678.0
+      ],
+      "pairedInactiveProof": "docs/reviews/2026-10-28-life-flow/duo-external/L01-Life-Habits-rhythm-dark-inactive.png",
+      "axProof": "docs/reviews/2026-10-28-life-flow/duo-external/L01-Life-Habits-rhythm-dark-hierarchy.txt.gz",
+      "checkpoint": 4
+    },
+    {
+      "file": "images/duo-external-L09-Past-Record-form-dark.png",
+      "screen": "L09",
+      "label": "L09-Past-Record-form-dark",
+      "deviceKind": "duo-external",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "08ba38102d5ee5db77e580f0e0e86176c9b179b5ff1a4410c7b69a372312da6c",
+      "sourceCommit": "791b8bf4983cd5991297655a6f67faa2cf511c2e",
+      "device": {
+        "name": "iPhone Duo-wt-Health-4d0d-62cf3693c151",
+        "udid": "8B6A9C9D-1364-4EBA-A6F9-832F1BEB201D"
+      },
+      "originalAttachment": ".codex-checks/life-run/duo-closed-split/dark/006-1398x2034.png",
+      "originalTest": "LifeFlowUITests/testHostCaptureDark()",
+      "testOutcome": "passed",
+      "provenance": "Unmodified native host PNG; valid checkpoint ACK; runner exit0; paired inactive display and AX preserved",
+      "activeDisplay": "LCD",
+      "actualWindowPoints": [
+        0.0,
+        0.0,
+        466.0,
+        678.0
+      ],
+      "pairedInactiveProof": "docs/reviews/2026-10-28-life-flow/duo-external/L09-Past-Record-form-dark-inactive.png",
+      "axProof": "docs/reviews/2026-10-28-life-flow/duo-external/L09-Past-Record-form-dark-hierarchy.txt.gz",
+      "checkpoint": 6
+    },
+    {
+      "file": "images/duo-external-L01-Life-Habits-hero-MaxAX.png",
+      "screen": "L01",
+      "label": "L01-Life-Habits-hero-MaxAX",
+      "deviceKind": "duo-external",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "6340990a6d05d83e7fc08744f1224f353a1fa191915ae24207d7d9c5bc58834f",
+      "sourceCommit": "791b8bf4983cd5991297655a6f67faa2cf511c2e",
+      "device": {
+        "name": "iPhone Duo-wt-Health-4d0d-62cf3693c151",
+        "udid": "8B6A9C9D-1364-4EBA-A6F9-832F1BEB201D"
+      },
+      "originalAttachment": ".codex-checks/life-run/duo-closed-split/maximum-ax/002-1398x2034.png",
+      "originalTest": "LifeFlowUITests/testHostCaptureMaximumAX()",
+      "testOutcome": "passed",
+      "provenance": "Unmodified native host PNG; valid checkpoint ACK; runner exit0; paired inactive display and AX preserved",
+      "activeDisplay": "LCD",
+      "actualWindowPoints": [
+        0.0,
+        0.0,
+        466.0,
+        678.0
+      ],
+      "pairedInactiveProof": "docs/reviews/2026-10-28-life-flow/duo-external/L01-Life-Habits-hero-MaxAX-inactive.png",
+      "axProof": "docs/reviews/2026-10-28-life-flow/duo-external/L01-Life-Habits-hero-MaxAX-hierarchy.txt.gz",
+      "checkpoint": 2
+    },
+    {
+      "file": "images/duo-external-L01-Life-Habits-today-MaxAX.png",
+      "screen": "L01",
+      "label": "L01-Life-Habits-today-MaxAX",
+      "deviceKind": "duo-external",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "e8f1ba3f7e3d618d721167b379c4a40858fc07a8fd14d4f5f31c62919499cf34",
+      "sourceCommit": "791b8bf4983cd5991297655a6f67faa2cf511c2e",
+      "device": {
+        "name": "iPhone Duo-wt-Health-4d0d-62cf3693c151",
+        "udid": "8B6A9C9D-1364-4EBA-A6F9-832F1BEB201D"
+      },
+      "originalAttachment": ".codex-checks/life-run/duo-closed-split/maximum-ax/003-1398x2034.png",
+      "originalTest": "LifeFlowUITests/testHostCaptureMaximumAX()",
+      "testOutcome": "passed",
+      "provenance": "Unmodified native host PNG; valid checkpoint ACK; runner exit0; paired inactive display and AX preserved",
+      "activeDisplay": "LCD",
+      "actualWindowPoints": [
+        0.0,
+        0.0,
+        466.0,
+        678.0
+      ],
+      "pairedInactiveProof": "docs/reviews/2026-10-28-life-flow/duo-external/L01-Life-Habits-today-MaxAX-inactive.png",
+      "axProof": "docs/reviews/2026-10-28-life-flow/duo-external/L01-Life-Habits-today-MaxAX-hierarchy.txt.gz",
+      "checkpoint": 3
+    },
+    {
+      "file": "images/duo-external-L01-Life-Habits-rhythm-MaxAX.png",
+      "screen": "L01",
+      "label": "L01-Life-Habits-rhythm-MaxAX",
+      "deviceKind": "duo-external",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "326bffbdf64cf547e7e2d5ec7b4fbc330387360bece8be1676b4d199b7a8d456",
+      "sourceCommit": "791b8bf4983cd5991297655a6f67faa2cf511c2e",
+      "device": {
+        "name": "iPhone Duo-wt-Health-4d0d-62cf3693c151",
+        "udid": "8B6A9C9D-1364-4EBA-A6F9-832F1BEB201D"
+      },
+      "originalAttachment": ".codex-checks/life-run/duo-closed-split/maximum-ax/004-1398x2034.png",
+      "originalTest": "LifeFlowUITests/testHostCaptureMaximumAX()",
+      "testOutcome": "passed",
+      "provenance": "Unmodified native host PNG; valid checkpoint ACK; runner exit0; paired inactive display and AX preserved",
+      "activeDisplay": "LCD",
+      "actualWindowPoints": [
+        0.0,
+        0.0,
+        466.0,
+        678.0
+      ],
+      "pairedInactiveProof": "docs/reviews/2026-10-28-life-flow/duo-external/L01-Life-Habits-rhythm-MaxAX-inactive.png",
+      "axProof": "docs/reviews/2026-10-28-life-flow/duo-external/L01-Life-Habits-rhythm-MaxAX-hierarchy.txt.gz",
+      "checkpoint": 4
+    },
+    {
+      "file": "images/duo-external-L09-Past-Record-form-MaxAX.png",
+      "screen": "L09",
+      "label": "L09-Past-Record-form-MaxAX",
+      "deviceKind": "duo-external",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "c2118e25b6612a14b1b81b352786193ca6ae601e29809500c29374d0b758825a",
+      "sourceCommit": "791b8bf4983cd5991297655a6f67faa2cf511c2e",
+      "device": {
+        "name": "iPhone Duo-wt-Health-4d0d-62cf3693c151",
+        "udid": "8B6A9C9D-1364-4EBA-A6F9-832F1BEB201D"
+      },
+      "originalAttachment": ".codex-checks/life-run/duo-closed-split/maximum-ax/006-1398x2034.png",
+      "originalTest": "LifeFlowUITests/testHostCaptureMaximumAX()",
+      "testOutcome": "passed",
+      "provenance": "Unmodified native host PNG; valid checkpoint ACK; runner exit0; paired inactive display and AX preserved",
+      "activeDisplay": "LCD",
+      "actualWindowPoints": [
+        0.0,
+        0.0,
+        466.0,
+        678.0
+      ],
+      "pairedInactiveProof": "docs/reviews/2026-10-28-life-flow/duo-external/L09-Past-Record-form-MaxAX-inactive.png",
+      "axProof": "docs/reviews/2026-10-28-life-flow/duo-external/L09-Past-Record-form-MaxAX-hierarchy.txt.gz",
+      "checkpoint": 6
+    },
+    {
+      "file": "images/duo-internal-L01-Life-Habits-hero-dark.png",
+      "screen": "L01",
+      "label": "L01-Life-Habits-hero-dark",
+      "deviceKind": "duo-internal",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "74abef4033c7893568973088e253a1b49dba2be1cb3c4b6c6a8b9ab3903dc9d7",
+      "sourceCommit": "791b8bf4983cd5991297655a6f67faa2cf511c2e",
+      "device": {
+        "name": "iPhone Duo-wt-Health-4d0d-62cf3693c151",
+        "udid": "8B6A9C9D-1364-4EBA-A6F9-832F1BEB201D"
+      },
+      "originalAttachment": ".codex-checks/life-run/duo-open-retry/002-2007x2853.png",
+      "originalTest": "LifeFlowUITests/testHostCaptureDark()",
+      "testOutcome": "passed",
+      "provenance": "Unmodified native host PNG; valid checkpoint ACK; runner exit0; paired inactive display and AX preserved",
+      "activeDisplay": "LCD-1",
+      "actualWindowPoints": [
+        0.0,
+        -0.0,
+        951.0,
+        669.0
+      ],
+      "pairedInactiveProof": "docs/reviews/2026-10-28-life-flow/duo-internal/L01-Life-Habits-hero-dark-inactive.png",
+      "axProof": "docs/reviews/2026-10-28-life-flow/duo-internal/L01-Life-Habits-hero-dark-hierarchy.txt.gz",
+      "checkpoint": 2
+    },
+    {
+      "file": "images/duo-internal-L01-Life-Habits-today-dark.png",
+      "screen": "L01",
+      "label": "L01-Life-Habits-today-dark",
+      "deviceKind": "duo-internal",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "6b5a1962a8c8fd855a10c9a3f7fdcd344bbef579ff694ccd4e482ba41e513965",
+      "sourceCommit": "791b8bf4983cd5991297655a6f67faa2cf511c2e",
+      "device": {
+        "name": "iPhone Duo-wt-Health-4d0d-62cf3693c151",
+        "udid": "8B6A9C9D-1364-4EBA-A6F9-832F1BEB201D"
+      },
+      "originalAttachment": ".codex-checks/life-run/duo-open-retry/003-2007x2853.png",
+      "originalTest": "LifeFlowUITests/testHostCaptureDark()",
+      "testOutcome": "passed",
+      "provenance": "Unmodified native host PNG; valid checkpoint ACK; runner exit0; paired inactive display and AX preserved",
+      "activeDisplay": "LCD-1",
+      "actualWindowPoints": [
+        0.0,
+        -0.0,
+        951.0,
+        669.0
+      ],
+      "pairedInactiveProof": "docs/reviews/2026-10-28-life-flow/duo-internal/L01-Life-Habits-today-dark-inactive.png",
+      "axProof": "docs/reviews/2026-10-28-life-flow/duo-internal/L01-Life-Habits-today-dark-hierarchy.txt.gz",
+      "checkpoint": 3
+    },
+    {
+      "file": "images/duo-internal-L01-Life-Habits-rhythm-dark.png",
+      "screen": "L01",
+      "label": "L01-Life-Habits-rhythm-dark",
+      "deviceKind": "duo-internal",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "71e124a9e1ac341ef874fe9e9601253a35dc9a7abd77ee4795c5de4bdb10f668",
+      "sourceCommit": "791b8bf4983cd5991297655a6f67faa2cf511c2e",
+      "device": {
+        "name": "iPhone Duo-wt-Health-4d0d-62cf3693c151",
+        "udid": "8B6A9C9D-1364-4EBA-A6F9-832F1BEB201D"
+      },
+      "originalAttachment": ".codex-checks/life-run/duo-open-retry/004-2007x2853.png",
+      "originalTest": "LifeFlowUITests/testHostCaptureDark()",
+      "testOutcome": "passed",
+      "provenance": "Unmodified native host PNG; valid checkpoint ACK; runner exit0; paired inactive display and AX preserved",
+      "activeDisplay": "LCD-1",
+      "actualWindowPoints": [
+        0.0,
+        -0.0,
+        951.0,
+        669.0
+      ],
+      "pairedInactiveProof": "docs/reviews/2026-10-28-life-flow/duo-internal/L01-Life-Habits-rhythm-dark-inactive.png",
+      "axProof": "docs/reviews/2026-10-28-life-flow/duo-internal/L01-Life-Habits-rhythm-dark-hierarchy.txt.gz",
+      "checkpoint": 4
+    },
+    {
+      "file": "images/duo-internal-L09-Past-Record-form-dark.png",
+      "screen": "L09",
+      "label": "L09-Past-Record-form-dark",
+      "deviceKind": "duo-internal",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "3e1e75310f6d2d8c828c90116dfaec2d909377f2e5408a06aeaad2c36b7baea9",
+      "sourceCommit": "791b8bf4983cd5991297655a6f67faa2cf511c2e",
+      "device": {
+        "name": "iPhone Duo-wt-Health-4d0d-62cf3693c151",
+        "udid": "8B6A9C9D-1364-4EBA-A6F9-832F1BEB201D"
+      },
+      "originalAttachment": ".codex-checks/life-run/duo-open-retry/006-2007x2853.png",
+      "originalTest": "LifeFlowUITests/testHostCaptureDark()",
+      "testOutcome": "passed",
+      "provenance": "Unmodified native host PNG; valid checkpoint ACK; runner exit0; paired inactive display and AX preserved",
+      "activeDisplay": "LCD-1",
+      "actualWindowPoints": [
+        0.0,
+        -0.0,
+        951.0,
+        669.0
+      ],
+      "pairedInactiveProof": "docs/reviews/2026-10-28-life-flow/duo-internal/L09-Past-Record-form-dark-inactive.png",
+      "axProof": "docs/reviews/2026-10-28-life-flow/duo-internal/L09-Past-Record-form-dark-hierarchy.txt.gz",
+      "checkpoint": 6
+    },
+    {
+      "file": "images/duo-internal-L01-Life-Habits-hero-light.png",
+      "screen": "L01",
+      "label": "L01-Life-Habits-hero-light",
+      "deviceKind": "duo-internal",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "2e3b3f17e71805aae5d67027022207d236b6f5384c89d89b9c16c73689f361f7",
+      "sourceCommit": "791b8bf4983cd5991297655a6f67faa2cf511c2e",
+      "device": {
+        "name": "iPhone Duo-wt-Health-4d0d-62cf3693c151",
+        "udid": "8B6A9C9D-1364-4EBA-A6F9-832F1BEB201D"
+      },
+      "originalAttachment": ".codex-checks/life-run/duo-open-retry/009-2007x2853.png",
+      "originalTest": "LifeFlowUITests/testHostCaptureLight()",
+      "testOutcome": "passed",
+      "provenance": "Unmodified native host PNG; valid checkpoint ACK; runner exit0; paired inactive display and AX preserved",
+      "activeDisplay": "LCD-1",
+      "actualWindowPoints": [
+        0.0,
+        -0.0,
+        951.0,
+        669.0
+      ],
+      "pairedInactiveProof": "docs/reviews/2026-10-28-life-flow/duo-internal/L01-Life-Habits-hero-light-inactive.png",
+      "axProof": "docs/reviews/2026-10-28-life-flow/duo-internal/L01-Life-Habits-hero-light-hierarchy.txt.gz",
+      "checkpoint": 9
+    },
+    {
+      "file": "images/duo-internal-L01-Life-Habits-today-light.png",
+      "screen": "L01",
+      "label": "L01-Life-Habits-today-light",
+      "deviceKind": "duo-internal",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "6ae589c975cb2309b34a12b971cf7e3f3d4d4abef161dc7b9d91f18ab38e34c0",
+      "sourceCommit": "791b8bf4983cd5991297655a6f67faa2cf511c2e",
+      "device": {
+        "name": "iPhone Duo-wt-Health-4d0d-62cf3693c151",
+        "udid": "8B6A9C9D-1364-4EBA-A6F9-832F1BEB201D"
+      },
+      "originalAttachment": ".codex-checks/life-run/duo-open-retry/010-2007x2853.png",
+      "originalTest": "LifeFlowUITests/testHostCaptureLight()",
+      "testOutcome": "passed",
+      "provenance": "Unmodified native host PNG; valid checkpoint ACK; runner exit0; paired inactive display and AX preserved",
+      "activeDisplay": "LCD-1",
+      "actualWindowPoints": [
+        0.0,
+        -0.0,
+        951.0,
+        669.0
+      ],
+      "pairedInactiveProof": "docs/reviews/2026-10-28-life-flow/duo-internal/L01-Life-Habits-today-light-inactive.png",
+      "axProof": "docs/reviews/2026-10-28-life-flow/duo-internal/L01-Life-Habits-today-light-hierarchy.txt.gz",
+      "checkpoint": 10
+    },
+    {
+      "file": "images/duo-internal-L01-Life-Habits-rhythm-light.png",
+      "screen": "L01",
+      "label": "L01-Life-Habits-rhythm-light",
+      "deviceKind": "duo-internal",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "6d68b66c3a8953a55a129f66c89098cdeaa0f5e46cc664669eb12d6419a8f094",
+      "sourceCommit": "791b8bf4983cd5991297655a6f67faa2cf511c2e",
+      "device": {
+        "name": "iPhone Duo-wt-Health-4d0d-62cf3693c151",
+        "udid": "8B6A9C9D-1364-4EBA-A6F9-832F1BEB201D"
+      },
+      "originalAttachment": ".codex-checks/life-run/duo-open-retry/011-2007x2853.png",
+      "originalTest": "LifeFlowUITests/testHostCaptureLight()",
+      "testOutcome": "passed",
+      "provenance": "Unmodified native host PNG; valid checkpoint ACK; runner exit0; paired inactive display and AX preserved",
+      "activeDisplay": "LCD-1",
+      "actualWindowPoints": [
+        0.0,
+        -0.0,
+        951.0,
+        669.0
+      ],
+      "pairedInactiveProof": "docs/reviews/2026-10-28-life-flow/duo-internal/L01-Life-Habits-rhythm-light-inactive.png",
+      "axProof": "docs/reviews/2026-10-28-life-flow/duo-internal/L01-Life-Habits-rhythm-light-hierarchy.txt.gz",
+      "checkpoint": 11
+    },
+    {
+      "file": "images/duo-internal-L09-Past-Record-form-light.png",
+      "screen": "L09",
+      "label": "L09-Past-Record-form-light",
+      "deviceKind": "duo-internal",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "2d1843f1de779539b1e4e4fd4541c504f8ed1117c9d6e4787591afe8b9517e16",
+      "sourceCommit": "791b8bf4983cd5991297655a6f67faa2cf511c2e",
+      "device": {
+        "name": "iPhone Duo-wt-Health-4d0d-62cf3693c151",
+        "udid": "8B6A9C9D-1364-4EBA-A6F9-832F1BEB201D"
+      },
+      "originalAttachment": ".codex-checks/life-run/duo-open-retry/013-2007x2853.png",
+      "originalTest": "LifeFlowUITests/testHostCaptureLight()",
+      "testOutcome": "passed",
+      "provenance": "Unmodified native host PNG; valid checkpoint ACK; runner exit0; paired inactive display and AX preserved",
+      "activeDisplay": "LCD-1",
+      "actualWindowPoints": [
+        0.0,
+        -0.0,
+        951.0,
+        669.0
+      ],
+      "pairedInactiveProof": "docs/reviews/2026-10-28-life-flow/duo-internal/L09-Past-Record-form-light-inactive.png",
+      "axProof": "docs/reviews/2026-10-28-life-flow/duo-internal/L09-Past-Record-form-light-hierarchy.txt.gz",
+      "checkpoint": 13
+    },
+    {
+      "file": "images/duo-internal-L07-Habit-history-summary-light.png",
+      "screen": "L07",
+      "label": "L07-Habit-history-summary-light",
+      "deviceKind": "duo-internal",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "1bb4b1fe1eec5f58fa4e5027231fc3e3c3b79b7dacc0ed645553fe04aaa24afd",
+      "sourceCommit": "791b8bf4983cd5991297655a6f67faa2cf511c2e",
+      "device": {
+        "name": "iPhone Duo-wt-Health-4d0d-62cf3693c151",
+        "udid": "8B6A9C9D-1364-4EBA-A6F9-832F1BEB201D"
+      },
+      "originalAttachment": ".codex-checks/life-run/duo-open-retry/016-2007x2853.png",
+      "originalTest": "LifeFlowUITests/testHostCaptureLight()",
+      "testOutcome": "passed",
+      "provenance": "Unmodified native host PNG; valid checkpoint ACK; runner exit0; paired inactive display and AX preserved",
+      "activeDisplay": "LCD-1",
+      "actualWindowPoints": [
+        0.0,
+        -0.0,
+        951.0,
+        669.0
+      ],
+      "pairedInactiveProof": "docs/reviews/2026-10-28-life-flow/duo-internal/L07-Habit-history-summary-light-inactive.png",
+      "axProof": "docs/reviews/2026-10-28-life-flow/duo-internal/L07-Habit-history-summary-light-hierarchy.txt.gz",
+      "checkpoint": 16
+    },
+    {
+      "file": "images/duo-internal-L07-Habit-history-rates-light.png",
+      "screen": "L07",
+      "label": "L07-Habit-history-rates-light",
+      "deviceKind": "duo-internal",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "d968349d2cd00a88342808fb66cbb10a803fa995982b065db4cc3778cec50661",
+      "sourceCommit": "791b8bf4983cd5991297655a6f67faa2cf511c2e",
+      "device": {
+        "name": "iPhone Duo-wt-Health-4d0d-62cf3693c151",
+        "udid": "8B6A9C9D-1364-4EBA-A6F9-832F1BEB201D"
+      },
+      "originalAttachment": ".codex-checks/life-run/duo-open-retry/017-2007x2853.png",
+      "originalTest": "LifeFlowUITests/testHostCaptureLight()",
+      "testOutcome": "passed",
+      "provenance": "Unmodified native host PNG; valid checkpoint ACK; runner exit0; paired inactive display and AX preserved",
+      "activeDisplay": "LCD-1",
+      "actualWindowPoints": [
+        0.0,
+        -0.0,
+        951.0,
+        669.0
+      ],
+      "pairedInactiveProof": "docs/reviews/2026-10-28-life-flow/duo-internal/L07-Habit-history-rates-light-inactive.png",
+      "axProof": "docs/reviews/2026-10-28-life-flow/duo-internal/L07-Habit-history-rates-light-hierarchy.txt.gz",
+      "checkpoint": 17
+    },
+    {
+      "file": "images/duo-internal-L08-Weekly-report-light.png",
+      "screen": "L08",
+      "label": "L08-Weekly-report-light",
+      "deviceKind": "duo-internal",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "3108f47edb489fc300227131e3830a86c73f9d87dfb000a204b7a9f2a2318b1c",
+      "sourceCommit": "791b8bf4983cd5991297655a6f67faa2cf511c2e",
+      "device": {
+        "name": "iPhone Duo-wt-Health-4d0d-62cf3693c151",
+        "udid": "8B6A9C9D-1364-4EBA-A6F9-832F1BEB201D"
+      },
+      "originalAttachment": ".codex-checks/life-run/duo-open-retry/019-2007x2853.png",
+      "originalTest": "LifeFlowUITests/testHostCaptureLight()",
+      "testOutcome": "passed",
+      "provenance": "Unmodified native host PNG; valid checkpoint ACK; runner exit0; paired inactive display and AX preserved",
+      "activeDisplay": "LCD-1",
+      "actualWindowPoints": [
+        0.0,
+        -0.0,
+        951.0,
+        669.0
+      ],
+      "pairedInactiveProof": "docs/reviews/2026-10-28-life-flow/duo-internal/L08-Weekly-report-light-inactive.png",
+      "axProof": "docs/reviews/2026-10-28-life-flow/duo-internal/L08-Weekly-report-light-hierarchy.txt.gz",
+      "checkpoint": 19
+    },
+    {
+      "file": "images/duo-internal-L01-Life-Habits-hero-MaxAX.png",
+      "screen": "L01",
+      "label": "L01-Life-Habits-hero-MaxAX",
+      "deviceKind": "duo-internal",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "171b574608125d13a7f8234080e06d4194dad7c19ff682f6a966ba5c9d2d459b",
+      "sourceCommit": "791b8bf4983cd5991297655a6f67faa2cf511c2e",
+      "device": {
+        "name": "iPhone Duo-wt-Health-4d0d-62cf3693c151",
+        "udid": "8B6A9C9D-1364-4EBA-A6F9-832F1BEB201D"
+      },
+      "originalAttachment": ".codex-checks/life-run/duo-open-retry/022-2007x2853.png",
+      "originalTest": "LifeFlowUITests/testHostCaptureMaximumAX()",
+      "testOutcome": "passed",
+      "provenance": "Unmodified native host PNG; valid checkpoint ACK; runner exit0; paired inactive display and AX preserved",
+      "activeDisplay": "LCD-1",
+      "actualWindowPoints": [
+        0.0,
+        -0.0,
+        951.0,
+        669.0
+      ],
+      "pairedInactiveProof": "docs/reviews/2026-10-28-life-flow/duo-internal/L01-Life-Habits-hero-MaxAX-inactive.png",
+      "axProof": "docs/reviews/2026-10-28-life-flow/duo-internal/L01-Life-Habits-hero-MaxAX-hierarchy.txt.gz",
+      "checkpoint": 22
+    },
+    {
+      "file": "images/duo-internal-L01-Life-Habits-today-MaxAX.png",
+      "screen": "L01",
+      "label": "L01-Life-Habits-today-MaxAX",
+      "deviceKind": "duo-internal",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "f7a8f1611c35e8fd0c1f82764c4b88ad03dfcc7e0e6f80d9d6d4c66b10b4a365",
+      "sourceCommit": "791b8bf4983cd5991297655a6f67faa2cf511c2e",
+      "device": {
+        "name": "iPhone Duo-wt-Health-4d0d-62cf3693c151",
+        "udid": "8B6A9C9D-1364-4EBA-A6F9-832F1BEB201D"
+      },
+      "originalAttachment": ".codex-checks/life-run/duo-open-retry/023-2007x2853.png",
+      "originalTest": "LifeFlowUITests/testHostCaptureMaximumAX()",
+      "testOutcome": "passed",
+      "provenance": "Unmodified native host PNG; valid checkpoint ACK; runner exit0; paired inactive display and AX preserved",
+      "activeDisplay": "LCD-1",
+      "actualWindowPoints": [
+        0.0,
+        -0.0,
+        951.0,
+        669.0
+      ],
+      "pairedInactiveProof": "docs/reviews/2026-10-28-life-flow/duo-internal/L01-Life-Habits-today-MaxAX-inactive.png",
+      "axProof": "docs/reviews/2026-10-28-life-flow/duo-internal/L01-Life-Habits-today-MaxAX-hierarchy.txt.gz",
+      "checkpoint": 23
+    },
+    {
+      "file": "images/duo-internal-L01-Life-Habits-rhythm-MaxAX.png",
+      "screen": "L01",
+      "label": "L01-Life-Habits-rhythm-MaxAX",
+      "deviceKind": "duo-internal",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "95bd54222e202b4b42a4f77424485e6a086be6012d9b99e3be0ef4466d2fb07e",
+      "sourceCommit": "791b8bf4983cd5991297655a6f67faa2cf511c2e",
+      "device": {
+        "name": "iPhone Duo-wt-Health-4d0d-62cf3693c151",
+        "udid": "8B6A9C9D-1364-4EBA-A6F9-832F1BEB201D"
+      },
+      "originalAttachment": ".codex-checks/life-run/duo-open-retry/024-2007x2853.png",
+      "originalTest": "LifeFlowUITests/testHostCaptureMaximumAX()",
+      "testOutcome": "passed",
+      "provenance": "Unmodified native host PNG; valid checkpoint ACK; runner exit0; paired inactive display and AX preserved",
+      "activeDisplay": "LCD-1",
+      "actualWindowPoints": [
+        0.0,
+        -0.0,
+        951.0,
+        669.0
+      ],
+      "pairedInactiveProof": "docs/reviews/2026-10-28-life-flow/duo-internal/L01-Life-Habits-rhythm-MaxAX-inactive.png",
+      "axProof": "docs/reviews/2026-10-28-life-flow/duo-internal/L01-Life-Habits-rhythm-MaxAX-hierarchy.txt.gz",
+      "checkpoint": 24
+    },
+    {
+      "file": "images/duo-internal-L09-Past-Record-form-MaxAX.png",
+      "screen": "L09",
+      "label": "L09-Past-Record-form-MaxAX",
+      "deviceKind": "duo-internal",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "b1a261ac3253ac8f16c33a78197eafd707b00e355fd91882ac0b16645cde1075",
+      "sourceCommit": "791b8bf4983cd5991297655a6f67faa2cf511c2e",
+      "device": {
+        "name": "iPhone Duo-wt-Health-4d0d-62cf3693c151",
+        "udid": "8B6A9C9D-1364-4EBA-A6F9-832F1BEB201D"
+      },
+      "originalAttachment": ".codex-checks/life-run/duo-open-retry/026-2007x2853.png",
+      "originalTest": "LifeFlowUITests/testHostCaptureMaximumAX()",
+      "testOutcome": "passed",
+      "provenance": "Unmodified native host PNG; valid checkpoint ACK; runner exit0; paired inactive display and AX preserved",
+      "activeDisplay": "LCD-1",
+      "actualWindowPoints": [
+        0.0,
+        -0.0,
+        951.0,
+        669.0
+      ],
+      "pairedInactiveProof": "docs/reviews/2026-10-28-life-flow/duo-internal/L09-Past-Record-form-MaxAX-inactive.png",
+      "axProof": "docs/reviews/2026-10-28-life-flow/duo-internal/L09-Past-Record-form-MaxAX-hierarchy.txt.gz",
+      "checkpoint": 26
     }
   ],
   "excludedAttachments": [],
@@ -603,6 +1915,64 @@
         "LifeSeededSmokeTests/testWeeklyReflectionOpensMeasuredComparison()": "passed"
       },
       "captureCount": 15
+    },
+    {
+      "device": "iphone-schedule-final",
+      "source": "c80b5f1e3e690704421ba6b595c182f12bb4c2f8",
+      "xcresult": ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.29_01-06-25-+0900.xcresult",
+      "testOutcomes": {
+        "LifeRegressionTests/testWeeklyAndFutureRecurringHabitsStayOutsideTodayProgress()": "passed"
+      },
+      "captureCount": 4
+    },
+    {
+      "device": "ipad-final",
+      "source": "c80b5f1e3e690704421ba6b595c182f12bb4c2f8",
+      "xcresult": ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.29_01-16-48-+0900.xcresult",
+      "testOutcomes": {
+        "LifeFlowUITests/testCaptureL01AndPastRecordLightDarkAndMaximumAX()": "passed"
+      },
+      "captureCount": 15
+    },
+    {
+      "device": "duo-external",
+      "source": "791b8bf4983cd5991297655a6f67faa2cf511c2e",
+      "captureCount": 15,
+      "testOutcomes": {
+        "Light": "passed",
+        "Dark": "passed",
+        "MaximumAX": "passed"
+      },
+      "runnerExit": 0,
+      "proof": "../../../../reviews/2026-10-28-life-flow/duo-external/named-capture-map.json"
+    },
+    {
+      "device": "duo-internal",
+      "source": "791b8bf4983cd5991297655a6f67faa2cf511c2e",
+      "captureCount": 15,
+      "testOutcomes": {
+        "Light": "passed",
+        "Dark": "passed",
+        "MaximumAX": "passed"
+      },
+      "runnerExit": 0,
+      "proof": "../../../../reviews/2026-10-28-life-flow/duo-internal/named-capture-map.json"
     }
-  ]
+  ],
+  "limitations": [
+    "Selected Life scope, not full UI suite or all themes/VoiceOver",
+    "L08 captured light only; legacy unchanged dark/maxAX not captured",
+    "Past-record maxAX PNG is a viewport, not whole scrollable form",
+    "Duo active display and viewport verified; numeric hinge angle unavailable",
+    "Cloud sync consent enabled by explicit user instruction; actual CloudKit transfer not verified",
+    "Maximum AX rhythm capture is a partial card viewport, not whole plot/axes visibility proof"
+  ],
+  "initialRun": {
+    "xcresult": ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.28_14-42-50-+0900.xcresult",
+    "device": {
+      "name": "iPhone 18 Pro-wt-Health-4d0d-62cf3693c151",
+      "udid": "E31D1A6A-8649-4FCF-9DAE-76DD59DE0192",
+      "platform": "iOS Simulator"
+    }
+  }
 }

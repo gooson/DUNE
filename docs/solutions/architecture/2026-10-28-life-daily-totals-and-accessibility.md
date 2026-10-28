@@ -3,7 +3,7 @@ tags: [life, habits, swiftdata, daily-total, cloudkit, accessibility]
 category: architecture
 date: 2026-10-28
 severity: important
-status: implementation-complete-ui-validation-pending
+status: verified-selected-scope
 related_files:
   - DUNE/Presentation/Life/HabitLogResolution.swift
   - DUNE/Presentation/Life/LifeViewModel.swift
@@ -69,3 +69,7 @@ related_solutions:
 ## Lessons Learned
 
 데이터 입력의 의미를 명시해야 시각적 요약도 정확해진다. 화면에 보이는 제목이 존재해도 접근성 ID는 부모 modifier에 의해 달라질 수 있으므로, 실패 PNG와 AX 트리를 함께 읽어 수정 원인을 좁힌다. 재시도 한도에 도달하면 패치와 미검증 범위를 보존하고 같은 실행을 다른 이름으로 반복하지 않는다.
+
+## 최종 검증
+
+관련unit113개와 Life 선택26개, iPad1개, Duo외부/내부 각3개가 통과했다. 소스 일치·범위·실패 이력은 [최종 보고](../../reviews/2026-10-28-life-flow/README.md)에서 구분한다. 모든 CloudKit 동시성·전체 접근성 인증으로 확대하지 않는다.

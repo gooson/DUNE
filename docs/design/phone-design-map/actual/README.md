@@ -9,3 +9,7 @@
 ## Life 추가1회 검증
 
 최신 dd18af04의 통과한 캡처 경로에서 원본15장을 추가해 Life 갤러리는총25장이다. L01/L09 밝음·다크·최대글씨와 L07/L08 밝음을 새로 보존했다. 표준 runner는2통과·1실패(exit65)다. 주간/예정 검사는 New Habit 메뉴에서 폼이 열리지 않아 미확인이다. iPad/Duo와 L08 다크·최대글씨도 남아 있으므로 맵 전체나 UI 게이트 완료로 표시하지 않는다.
+
+## Life Flow 최종 갱신 · 2026-10-29
+
+[Life Flow 실제74장](../../full-redesign-map/review/life-flow-2026-10-28/index.html)에 새 iPhone·iPad·Duo 외부/내부 원본을 갱신했다. L01/L09는 밝음·다크·최대글씨, L07/L08은 밝음이며 최대글씨 폼은 스크롤 viewport다. 68장은 통과 실행,6장은 초기 실패 부분 증거로 구분했다. 과거 기기별 인덱스의 PNG는 새 기기 출처로 덮어쓰지 않는다. [검증 범위와 receipt](../../../reviews/2026-10-28-life-flow/README.md)를 따른다. Watch UI는 변경하지 않았다.
