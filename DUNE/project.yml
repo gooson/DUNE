@@ -257,6 +257,7 @@ targets:
       - sdk: HealthKit.framework
       - sdk: WatchConnectivity.framework
       - sdk: CoreMotion.framework
+      - sdk: CoreLocation.framework
 
   DUNEWidget:
     type: app-extension

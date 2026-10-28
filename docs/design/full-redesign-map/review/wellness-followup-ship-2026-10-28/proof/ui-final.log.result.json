@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/TodayCompactUITests/testWellnessStylePinnedMetricsHaveEqualRowHeights",
+    "DUNEUITests/WellnessFlowUITests/testBodyMeasurementsAndHeaderEdge"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 2,
+    "passed": 1,
+    "skipped": 0,
+    "failed": 1
+  },
+  "passed_cases": 1,
+  "failures": [
+    "1026: /Users/shanks/.codex/worktrees/80fd/Health/DUNEUITests/Visual/WellnessFlowUITests.swift:20: error: -[DUNEUITests.WellnessFlowUITests testBodyMeasurementsAndHeaderEdge] : XCTAssertTrue failed - wellness-link-bodyhistory should be reachable",
+    "1040: Test Case '-[DUNEUITests.WellnessFlowUITests testBodyMeasurementsAndHeaderEdge]' failed (87.489 seconds).",
+    "1041: Test Suite 'WellnessFlowUITests' failed at 2026-10-28 09:32:33.437.",
+    "1043: Test Suite 'DUNEUITests.xctest' failed at 2026-10-28 09:32:33.437.",
+    "1045: Test Suite 'Selected tests' failed at 2026-10-28 09:32:33.438.",
+    "1060: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log reports 1 failures",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/WellnessFlowUITests/testBodyMeasurementsAndHeaderEdge"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/80fd/Health/.codex-checks/wellness-followup-review-ship/ui-final.log"
+}

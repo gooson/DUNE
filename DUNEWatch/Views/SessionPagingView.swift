@@ -124,6 +124,16 @@ private struct CardioSessionPagingView: View {
                 Text(cardioAlertMessage)
             }
         )
+        .alert("End stair workout?", isPresented: stairExitAlertBinding) {
+            Button("Keep Running", role: .cancel) {
+                workoutManager.keepStairWorkoutRunning()
+            }
+            Button("End Workout", role: .destructive) {
+                workoutManager.end()
+            }
+        } message: {
+            Text("Movement detected.")
+        }
     }
 
     private var isRunning: Bool {
@@ -146,6 +156,13 @@ private struct CardioSessionPagingView: View {
                     workoutManager.keepCardioWorkoutRunning()
                 }
             }
+        )
+    }
+
+    private var stairExitAlertBinding: Binding<Bool> {
+        Binding(
+            get: { workoutManager.isStairExitPromptPresented },
+            set: { if !$0 { workoutManager.keepStairWorkoutRunning() } }
         )
     }
 

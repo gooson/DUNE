@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "status": "planned-not-executed",
+  "platforms": {
+    "ios": {
+      "mode": "full",
+      "selectors": []
+    },
+    "watch": {
+      "mode": "full",
+      "selectors": []
+    }
+  },
+  "changes": [
+    {
+      "path": "DUNE/Data/Services/SimulatorAdvancedMockData.swift",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "DUNE/Presentation/Wellness/Components/WellnessSleepSummaryCard.swift",
+      "reason": "Wellness feature: related suites plus smoke; consumer review required"
+    },
+    {
+      "path": "DUNEUITests/Visual/WellnessFlowUITests.swift",
+      "reason": "UI tests/helpers/plans changed: validate the complete iOS test contract"
+    },
+    {
+      "path": "docs/design/layout-map/wellness-redesign-proposal.md",
+      "reason": "documentation: no app runtime change"
+    },
+    {
+      "path": "docs/plans/2026-10-28-wellness-sparse-sleep-bars.md",
+      "reason": "documentation: no app runtime change"
+    },
+    {
+      "path": "docs/solutions/general/2026-10-28-wellness-sparse-sleep-bars.md",
+      "reason": "documentation: no app runtime change"
+    }
+  ],
+  "commands": [
+    {
+      "platform": "ios",
+      "argv": [
+        "scripts/test-ui.sh"
+      ]
+    },
+    {
+      "platform": "watch",
+      "argv": [
+        "scripts/test-watch-ui.sh"
+      ]
+    }
+  ],
+  "additional_validation": [],
+  "review_required": [
+    "Confirm changed symbols have no consumers outside the selected features; otherwise use full.",
+    "Confirm new behavior has tests; selection does not establish coverage.",
+    "Preserve seeded gesture/layout and device-specific validation requirements.",
+    "Full plans exclude manual HealthKit permission tests; permission changes need device evidence.",
+    "Record passed tests and skipped tests; no execution or zero tests is not a passed gate."
+  ],
+  "base": "origin/main",
+  "merge_base": "465186a2232035ca6d49e6899fe58927c42d3606",
+  "head": "52988932fc71d07b5f89bb6acc89b686a99c7e66"
+}

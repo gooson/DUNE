@@ -5,7 +5,15 @@ category: plan
 status: in-progress
 ---
 
+2026-10-28 후속 최종 카드 비교 수정 후 [새 Today iPhone4장과 검증 출처](../full-redesign-map/review/wellness-followup-ship-2026-10-28/index.html)를 통합 포털에 추가했다. 과거 기록만 바뀌는 Observation 단위 회귀와 관련 UI2개 고유 selector가 각각 통과했다. Wellness body는 최초 테스트 스크롤 방향 실패를 보존하고 해당1개만 보정 후 재실행했다. 기존 iPad/큰 글씨 PNG를 최종 equality delta의 새 실행으로 표시하지 않으며 Duo/full UI는 미검증이다.
+
 # DUNE 전체 디자인맵
+
+2026-10-28 T03 지표는 Wellness 계층과 같은 범주색·면·큰 값·실제 추세를 적용하고 같은 행의 자연 높이를 맞췄다. [새 원본10장과 검증 범위](../full-redesign-map/review/today-wellness-metrics-2026-10-28/index.html)에서 iPhone·iPad 출처와 Duo 등 미갱신 범위를 구분한다.
+
+2026-10-28 H01 오늘 밤 수면의 점수·달 상징·게이지·신뢰도·팁 영역을 [새 실제 화면](../full-redesign-map/review/wellness-prediction-visual-2026-10-28/index.html)에서 확인한다. 원본별 소스·기기·검증 범위를 기록하며 이전 예측 PNG는 이 개선의 증거로 바꾸지 않는다.
+
+2026-10-28 H01 최근 수면의 적은 기록 상태를 [새 실제 화면](../full-redesign-map/review/wellness-sparse-sleep-2026-10-28/index.html)에서 추적한다. 고정7일 위치·16pt 세로 막대를 적용했다. iPhone·iPad의 상태별 출처를 기록하며 Duo 접힘·펼침의 이 수정은 미갱신이다. 이전 Flow66장을 이번 수정의 새 캡처로 계산하지 않는다.
 
 [폰·패드·Duo·Watch 통합 디자인맵 열기](actual/index.html)
 
@@ -57,6 +65,10 @@ Watch의 [68개 상태별 맵](actual/watch/index.html)에는 기본 글자 크�
 2026-10-22 컨디션 일간 이력과 히어로 점수 정렬 수정 후, 이 작업의 전용 시뮬레이터에서 일반 iPhone·iPad의 T04와 Duo 접힘의 A01·H01·L01·T04를 새로 캡처했다. 해당 테스트는 각각 1개·1개·4개 통과했다. Duo 접힘 T03은 기존 캡처 테스트의 시작 탭 누락으로 실패했고, 후속 실행은 Xcode가 모든 시뮬레이터 목적지를 인식하지 못해 시작되지 않았다. 사용자 지시로 추가 캡처 검증을 중단하고 이 한계를 기록한다. Duo 접힘 T03과 Duo 펼침 T04는 최신 변경의 캡처로 갱신하지 못했으며, 기존 이미지를 이번 변경의 완료 증거로 사용하지 않는다. `xcodebuild -showdestinations -project DUNE/DUNE.xcodeproj -scheme DUNEUITests`에 전용 Duo가 다시 나타나면 두 화면만 재검증한다.
 
 ## 화면 수정 시 갱신
+
+같은 날 C19 본문의 중복 질문을 제거해 ‘이동이 감지됐어요.’로 줄였다. 전용 40mm Watch에서 관련 UI 1개가 통과했고 `Test-DUNEWatchUITests-2026.10.28_10-22-32-+0900.xcresult`의 새 C19 원본으로 갱신했다. C10과 다른 화면의 기존 검증 출처는 유지한다.
+
+2026-10-28 Watch 계단 운동의 C10 진행과 새 C19 기구 이탈 안내를 전용 Apple Watch SE 3 (40mm), watchOS 27.0에서 새로 캡처했다. [실제 Watch 맵](actual/watch/index.html)의 두 원본과 출처를 갱신하고 직접 확인했다. GPS/걸음 fixture를 통한 안내 유지·계속 운동·명시적 종료와 기존 무알림 진행의 관련 UI 3개가 모두 통과했다. 현재 총 69개 중 66개 상태가 캡처돼 있으며 S08·S11·C12의 기존 미완료 상태는 유지한다. 한국어·기본 글씨·40mm 세로만 이번 증거이며, 실제 GPS 수집·손목을 내린 진동·배터리 사용은 [실기기 확인 항목](../../solutions/general/2026-10-28-watch-stair-gps-exit-reminder.md)으로 남긴다. iPhone·iPad·Duo 화면은 이번 변경의 소비자가 아니다.
 
 2026-10-25 Today 스크롤 조사에서는 닫힌 inspector의 내비게이션 내부 배치가 큰 제목·상단 여백 피드백을 만드는 것을 원인 격리로 확인했다. inspector를 Today NavigationStack 밖으로 옮긴 소스에서 iPhone UI10건과 iPad UI4건이 통과했다. 최신 main 통합 후 iPhone10·iPad4·Duo접힘2·펼침2와 내부 화면 native 캡처용 추가1건이 통과했다. [새 실제 화면 갤러리와 영수증](../full-redesign-map/review/today-scroll-root-cause-2026-10-25/index.html), [해결책 기록](../../solutions/performance/2026-10-24-today-scroll-root-cause.md)에서 출처와 검증 제한을 추적한다. 기존 통합 인덱스의 다른 UDID 캡처를 이번 수정의 완료 증거로 덮어쓰지 않는다.
 

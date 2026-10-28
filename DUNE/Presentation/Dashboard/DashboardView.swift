@@ -664,10 +664,9 @@ struct DashboardView: View {
                     }
                 } else {
                     ViewThatFits(in: .horizontal) {
-                        HStack(alignment: .top, spacing: 10) {
+                        TodayMetricRow {
                             ForEach(row) { card in
                                 metricCard(card, index: metrics.firstIndex(where: { $0.id == card.id }) ?? 0)
-                                    .frame(minWidth: 150)
                             }
                         }
                         VStack(spacing: 10) {

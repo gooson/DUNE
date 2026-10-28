@@ -68,6 +68,7 @@ struct VitalCardData: Identifiable, Hashable, Sendable {
     static func == (lhs: VitalCardData, rhs: VitalCardData) -> Bool {
         lhs.id == rhs.id
             && lhs.value == rhs.value
+            && lhs.sparklineData == rhs.sparklineData
             && lhs.lastUpdated == rhs.lastUpdated
             && lhs.inversePolarity == rhs.inversePolarity
             && lhs.baselineDetail?.label == rhs.baselineDetail?.label
@@ -77,6 +78,7 @@ struct VitalCardData: Identifiable, Hashable, Sendable {
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
         hasher.combine(value)
+        hasher.combine(sparklineData)
         hasher.combine(lastUpdated)
         hasher.combine(inversePolarity)
         hasher.combine(baselineDetail?.label)

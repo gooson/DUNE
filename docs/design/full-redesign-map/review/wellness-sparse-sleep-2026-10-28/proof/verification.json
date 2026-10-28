@@ -1,0 +1,53 @@
+{
+  "sourceCommit": "52988932",
+  "sourceHashes": {
+    "DUNE/Presentation/Wellness/Components/WellnessSleepSummaryCard.swift": "8c26f27d93f45154dd75ec9659ff7d5b57a49e1678a0d1cd96f095f73df2e60c",
+    "DUNE/Data/Services/SimulatorAdvancedMockData.swift": "0de138c8cc38c46d525b09438864d778767a9abd4f3b97b7db11fad89c96e731",
+    "DUNEUITests/Visual/WellnessFlowUITests.swift": "576e06006216c78fcd35d1168f595423c9be3a18474651d6185124214ac8175c"
+  },
+  "proofHashes": {
+    "ui-phone.log.result.json": "8d69adb865074ba59509402ad53e8642b4610cb521718cf380711e96004db6a8",
+    "ui-phone-retry.log.result.json": "e408cc46890552f37b161c732adeb9e9d754db7370ea6c1a293be87130b723fa",
+    "ui-phone-axis-final.log.result.json": "d36e5283df5b9f9d6629292864ee3840199e7a9af7b085257b3cc7689da478e8",
+    "ui-ipad.log.result.json": "28d162eecec235801d9458ef751d0ff0e26a31cbbf8b5ab1a7eebd6a5a66dc88",
+    "ui-plan.json": "c6639ef4e643c384394aa7b5a0e13450b9e983789cd8c0418d9e17d9e9b835b1"
+  },
+  "finalSourceDeviceCases": 3,
+  "initialPassedReusedCases": 2,
+  "initialFailedCases": 2,
+  "initialFailureCause": "Chart ancestor accessibility identifier overrode individual bar identifiers; removed, explicit bar elements added, two related tests passed after correction.",
+  "visualFollowup": "Maximum Dynamic Type labels were visually truncated despite passing width checks. Date labels moved to a separate three-label axis; final source captures checked again.",
+  "unverified": [
+    "Duo closed/open H01 sparse sleep states",
+    "iPad maximum Dynamic Type/dark",
+    "full regression",
+    "real HealthKit authorization/data"
+  ],
+  "rawLogs": {
+    "ui-phone.log": {
+      "archive": "ui-phone.log.gz",
+      "rawSha256": "99a25702b4222ebf729a33f74e5d9f93e561248c0102e7d27a41d6183d98b3e8",
+      "archiveSha256": "fa05c367110b5ab90ef368b8eb290b935df4cb289cde272a73407805888f0aaf"
+    },
+    "ui-phone-retry.log": {
+      "archive": "ui-phone-retry.log.gz",
+      "rawSha256": "8637540cf5b4a099802afb9885e62c83894e6b280a2c70f4aa915cdc8e9b26cd",
+      "archiveSha256": "e212f820b8159d85f2be28937736437f070b5ff05afa4afa75fddd501f5f92b6"
+    },
+    "ui-phone-axis-final.log": {
+      "archive": "ui-phone-axis-final.log.gz",
+      "rawSha256": "07758cdf4787425e5491b557f2b7d83d6ed7f663c611b767b4d1502866a1c095",
+      "archiveSha256": "61ce81828b0197d979c18aec134fb2f2e754b56edef870fd9e54357c525dad59"
+    },
+    "ui-ipad.log": {
+      "archive": "ui-ipad.log.gz",
+      "rawSha256": "769ea006c4df7a1c9750ac7865620b35db95d79996af9dd46a5cca0b53ef2ada",
+      "archiveSha256": "c235d44318472e58d36b43aee34a4ac9120f3d5fe4f17b9b6e08091283815cfd"
+    },
+    "ios-build-final.log": {
+      "archive": "ios-build-final.log.gz",
+      "rawSha256": "c845e767ee968f7b7cd34b29151ee5313288edd6d60e09d5d9e0df19ddd733a5",
+      "archiveSha256": "16e69d24d986590033446d6dc19182dd9a5ca712011b7aa92f6ce54b73050295"
+    }
+  }
+}

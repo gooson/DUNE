@@ -1,3 +1,4 @@
+import CoreLocation
 import Foundation
 import HealthKit
 import Observation
@@ -89,6 +90,8 @@ final class WorkoutManager: NSObject {
     private(set) var cardioInactivityPrompt: CardioInactivityPrompt?
     /// Remaining seconds before auto-end once confirmation is active.
     private(set) var cardioAutoEndCountdown: Int?
+    /// Recommendation only; keeps recording until the user explicitly ends the workout.
+    private(set) var isStairExitPromptPresented = false
 
     // MARK: - Live Metrics
 
@@ -155,6 +158,8 @@ final class WorkoutManager: NSObject {
     private var lastObservedFloorsClimbed: Double = 0
     private var lastObservedActiveCalories: Double = 0
     private var autoEndDeadline: Date?
+    @ObservationIgnored private var stairExitMonitor: StairMachineExitMonitor?
+    private(set) var hasDismissedStairExitPrompt = false
 
     /// Average heart rate across the entire session.
     var averageHeartRate: Double {
@@ -484,6 +489,7 @@ final class WorkoutManager: NSObject {
         self.completedDuration = nil
         self.pausedDuration = 0
         self.pauseStart = nil
+        self.hasDismissedStairExitPrompt = false
         self.resetCardioInactivityTracking(clearInteractionTimestamp: true)
 
         if Self.isSimulatorRuntime {
@@ -698,6 +704,12 @@ final class WorkoutManager: NSObject {
     func pauseFromCardioInactivityPrompt() {
         keepCardioWorkoutRunning()
         pause()
+    }
+
+    func keepStairWorkoutRunning() {
+        hasDismissedStairExitPrompt = true
+        stopStairExitMonitoring()
+        persistRecoveryState()
     }
 
     /// Wait briefly for HealthKit workout finalization after `.ended` to reduce UUID races.
@@ -1001,6 +1013,7 @@ final class WorkoutManager: NSObject {
         cardioInactivityPrompt = nil
         cardioAutoEndCountdown = nil
         autoEndDeadline = nil
+        hasDismissedStairExitPrompt = false
         lastMotionDate = nil
         lastInteractionDate = nil
         lastObservedDistance = 0
@@ -1062,6 +1075,7 @@ final class WorkoutManager: NSObject {
             if isSessionEnded {
                 notifyWorkoutEndedIfNeeded()
             } else {
+                startInactivityMonitoringIfNeeded()
                 startMirrorTransport(for: recovered)
             }
         } catch {
@@ -1128,7 +1142,8 @@ final class WorkoutManager: NSObject {
             pauseStart: pauseStart,
             machineLevelWeightedSeconds: machineLevelWeightedSeconds,
             machineLevelWeightedSum: machineLevelWeightedSum,
-            lastMachineLevelSampleDate: lastMachineLevelSampleDate
+            lastMachineLevelSampleDate: lastMachineLevelSampleDate,
+            hasDismissedStairExitPrompt: hasDismissedStairExitPrompt
         )
         guard let data = try? JSONEncoder().encode(state),
               data.count < 64_000 else { return }
@@ -1163,6 +1178,7 @@ final class WorkoutManager: NSObject {
         completedSetsData = state.completedSets
         startDate = state.startDate
         workoutMode = state.workoutMode ?? .strength
+        hasDismissedStairExitPrompt = state.hasDismissedStairExitPrompt ?? false
         cardioSecondaryUnit = state.cardioSecondaryUnit
         currentMachineLevel = state.currentMachineLevel
         averageMachineLevel = state.averageMachineLevel
@@ -1452,6 +1468,7 @@ final class WorkoutManager: NSObject {
         runningVoiceFeedback.suspendProgress()
         announceRunning(.paused)
         clearInactivityPrompt()
+        stopStairExitMonitoring()
         persistRecoveryState()
     }
 
@@ -1469,6 +1486,7 @@ final class WorkoutManager: NSObject {
         }
         isPaused = false
         if wasPaused, announcesResume, !isSessionEnded {
+            startStairExitMonitoringIfNeeded()
             runningVoiceFeedback.resumeProgress(
                 distanceMeters: distance,
                 activeElapsed: activeElapsedTime(at: date)
@@ -1502,12 +1520,18 @@ final class WorkoutManager: NSObject {
         guard isCardioMode else { return }
 
         resetCardioInactivityTracking(clearInteractionTimestamp: true)
+        startStairExitMonitoringIfNeeded()
 
 #if DEBUG && targetEnvironment(simulator)
         if ProcessInfo.processInfo.arguments.contains("--ui-watch-stair-exit-regression"),
            case .cardio(let activityType, _) = workoutMode,
            activityType.isStairBased {
             simulateFormerStairExitTimeline()
+        }
+        if ProcessInfo.processInfo.arguments.contains("--ui-watch-stair-gps-exit"),
+           case .cardio(let activityType, _) = workoutMode,
+           activityType.isStairBased {
+            simulateStairGPSExitTimeline()
         }
 #endif
 
@@ -1534,12 +1558,61 @@ final class WorkoutManager: NSObject {
             evaluateCardioInactivity(at: start.addingTimeInterval(seconds))
         }
     }
+
+    private func simulateStairGPSExitTimeline() {
+        let start = Date().addingTimeInterval(-240)
+        startDate = start
+        var detector = StairMachineExitDetector(startedAt: start)
+        for seconds in stride(from: 120.0, through: 240.0, by: 10.0) {
+            steps = seconds - 120
+            let location = CLLocation(
+                coordinate: CLLocationCoordinate2D(latitude: 37 + (seconds - 120) * 0.000012, longitude: 127),
+                altitude: 0, horizontalAccuracy: 5, verticalAccuracy: 5,
+                timestamp: start.addingTimeInterval(seconds)
+            )
+            if detector.observe(location: location, steps: steps, now: location.timestamp) {
+                presentStairExitPrompt()
+            }
+        }
+    }
 #endif
 
     private func stopInactivityMonitoring() {
         inactivityMonitorTask?.cancel()
         inactivityMonitorTask = nil
         clearInactivityPrompt()
+        stopStairExitMonitoring()
+    }
+
+    private func startStairExitMonitoringIfNeeded() {
+        guard isActive, !isPaused, !hasDismissedStairExitPrompt,
+              stairExitMonitor == nil,
+              case .cardio(let activityType, _) = workoutMode,
+              activityType.isStairBased,
+              !Self.isSimulatorRuntime else { return }
+        let monitor = StairMachineExitMonitor(
+            startedAt: startDate ?? Date(),
+            steps: { [weak self] in self?.steps ?? 0 },
+            onExit: { [weak self] in self?.presentStairExitPrompt() }
+        )
+        stairExitMonitor = monitor
+        monitor.start()
+    }
+
+    private func stopStairExitMonitoring() {
+        stairExitMonitor?.stop()
+        stairExitMonitor = nil
+        isStairExitPromptPresented = false
+    }
+
+    private func presentStairExitPrompt() {
+        guard isActive, !isPaused, !hasDismissedStairExitPrompt,
+              !isStairExitPromptPresented,
+              case .cardio(let activityType, _) = workoutMode,
+              activityType.isStairBased else { return }
+        isStairExitPromptPresented = true
+        // Active HKWorkoutSession permits haptics even when the view is not foreground.
+        WKInterfaceDevice.current().play(.notification)
     }
 
     private func resetCardioInactivityTracking(clearInteractionTimestamp: Bool) {
@@ -1660,6 +1733,7 @@ extension WorkoutManager: HKWorkoutSessionDelegate {
                 if completedDuration == nil { completedDuration = activeElapsedTime(at: date) }
                 endPause(at: date, announcesResume: false)
                 isSessionEnded = true
+                stopInactivityMonitoring()
                 isFinalizingWorkout = true
                 notifyWorkoutEndedIfNeeded()
                 startFinalizationTimeoutWatchdog()
@@ -2058,6 +2132,7 @@ private struct WorkoutRecoveryState: Codable {
     let machineLevelWeightedSeconds: TimeInterval
     let machineLevelWeightedSum: Double
     let lastMachineLevelSampleDate: Date?
+    let hasDismissedStairExitPrompt: Bool?
 }
 
 private struct MachineLevelRecoveryEntry: Codable {

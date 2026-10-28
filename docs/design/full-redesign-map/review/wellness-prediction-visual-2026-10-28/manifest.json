@@ -1,0 +1,253 @@
+[
+  {
+    "device": "iphone",
+    "label": "H01-prediction-37-low-dark",
+    "image": "images/iphone-H01-prediction-37-low-dark.png",
+    "kind": "xcresult",
+    "source": {
+      "kind": "working-tree",
+      "baseCommit": "27dc939fce0a22adfc8d0aa21cda255721768fd0",
+      "patch": "proof/phone-initial-source.patch.gz",
+      "patchSha256": "a2158b130249719d642859ed903099562155975e35d7335cfb36bc1c5b88c40a",
+      "componentIdenticalToCommit": "464cadcd10f9fa8231d1f6713d734a7685557841",
+      "patchCompression": "gzip",
+      "patchRawSha256": "748c6d136a3a797c1df2e646df4564fcd88a717c5feb32f8618fbd144b1a8814"
+    },
+    "deviceName": "iPhone 18 Pro-wt-Health-80fd-deee0cef58a1",
+    "udid": "012B9C73-47F2-4F96-9A96-4903CB6BC286",
+    "test": "WellnessFlowUITests/testPredictionVisualScoreConfidenceAndFactors()",
+    "testLog": ".codex-checks/wellness-prediction-visual/ui-phone.log",
+    "timestamp": 1793144088.515,
+    "pixelSize": [
+      1206,
+      2622
+    ],
+    "sha256": "4d3dfef9d736d0b7b808d968cf239585ac842dae22f9670a86fbc833ea5ce078",
+    "executionStatus": "passed"
+  },
+  {
+    "device": "iphone",
+    "label": "H01-prediction-0-low-light",
+    "image": "images/iphone-H01-prediction-0-low-light.png",
+    "kind": "xcresult",
+    "source": {
+      "kind": "working-tree",
+      "baseCommit": "27dc939fce0a22adfc8d0aa21cda255721768fd0",
+      "patch": "proof/phone-initial-source.patch.gz",
+      "patchSha256": "a2158b130249719d642859ed903099562155975e35d7335cfb36bc1c5b88c40a",
+      "componentIdenticalToCommit": "464cadcd10f9fa8231d1f6713d734a7685557841",
+      "patchCompression": "gzip",
+      "patchRawSha256": "748c6d136a3a797c1df2e646df4564fcd88a717c5feb32f8618fbd144b1a8814"
+    },
+    "deviceName": "iPhone 18 Pro-wt-Health-80fd-deee0cef58a1",
+    "udid": "012B9C73-47F2-4F96-9A96-4903CB6BC286",
+    "test": "WellnessFlowUITests/testPredictionVisualScoreConfidenceAndFactors()",
+    "testLog": ".codex-checks/wellness-prediction-visual/ui-phone.log",
+    "timestamp": 1793144170.61,
+    "pixelSize": [
+      1206,
+      2622
+    ],
+    "sha256": "5811107b72200a992d2e1d1a73c6d3497433104ed5a3c72ff429b8ffda76c1d7",
+    "executionStatus": "passed"
+  },
+  {
+    "device": "iphone",
+    "label": "H01-prediction-100-high-light",
+    "image": "images/iphone-H01-prediction-100-high-light.png",
+    "kind": "xcresult",
+    "source": {
+      "kind": "working-tree",
+      "baseCommit": "27dc939fce0a22adfc8d0aa21cda255721768fd0",
+      "patch": "proof/phone-initial-source.patch.gz",
+      "patchSha256": "a2158b130249719d642859ed903099562155975e35d7335cfb36bc1c5b88c40a",
+      "componentIdenticalToCommit": "464cadcd10f9fa8231d1f6713d734a7685557841",
+      "patchCompression": "gzip",
+      "patchRawSha256": "748c6d136a3a797c1df2e646df4564fcd88a717c5feb32f8618fbd144b1a8814"
+    },
+    "deviceName": "iPhone 18 Pro-wt-Health-80fd-deee0cef58a1",
+    "udid": "012B9C73-47F2-4F96-9A96-4903CB6BC286",
+    "test": "WellnessFlowUITests/testPredictionVisualScoreConfidenceAndFactors()",
+    "testLog": ".codex-checks/wellness-prediction-visual/ui-phone.log",
+    "timestamp": 1793144211.882,
+    "pixelSize": [
+      1206,
+      2622
+    ],
+    "sha256": "128abbf6d0a31d8782be95740e08513751ac3999d85908a625d6471cf2d102cb",
+    "executionStatus": "passed"
+  },
+  {
+    "device": "iphone",
+    "label": "H01-prediction-37-MaxAX-confidence",
+    "image": "images/iphone-H01-prediction-37-MaxAX-confidence.png",
+    "kind": "xcresult",
+    "source": {
+      "kind": "commit",
+      "commit": "b83a05e9ee363d2ae9dab626e14cfa809d1c6e57"
+    },
+    "deviceName": "iPhone 18 Pro-wt-Health-80fd-deee0cef58a1",
+    "udid": "012B9C73-47F2-4F96-9A96-4903CB6BC286",
+    "test": "WellnessFlowUITests/testPredictionMaximumAXAndEmptyState()",
+    "testLog": ".codex-checks/wellness-prediction-visual/ui-phone-capture-retry.log",
+    "timestamp": 1793144845.91,
+    "pixelSize": [
+      1206,
+      2622
+    ],
+    "sha256": "52c2ef0f69338b5a9a50f7acb096fd8665d73979e11a94399072e31f0158e79e",
+    "executionStatus": "passed"
+  },
+  {
+    "device": "iphone",
+    "label": "H01-prediction-37-MaxAX-score",
+    "image": "images/iphone-H01-prediction-37-MaxAX-score.png",
+    "kind": "xcresult",
+    "source": {
+      "kind": "commit",
+      "commit": "b83a05e9ee363d2ae9dab626e14cfa809d1c6e57"
+    },
+    "deviceName": "iPhone 18 Pro-wt-Health-80fd-deee0cef58a1",
+    "udid": "012B9C73-47F2-4F96-9A96-4903CB6BC286",
+    "test": "WellnessFlowUITests/testPredictionMaximumAXAndEmptyState()",
+    "testLog": ".codex-checks/wellness-prediction-visual/ui-phone-capture-retry.log",
+    "timestamp": 1793144838.165,
+    "pixelSize": [
+      1206,
+      2622
+    ],
+    "sha256": "ba70d52ee01f605297793aea46df43fbf2fb6ac557953e31b6348420404bdded",
+    "executionStatus": "passed"
+  },
+  {
+    "device": "iphone",
+    "label": "H01-prediction-78-medium-light",
+    "image": "images/iphone-H01-prediction-78-medium-light.png",
+    "kind": "xcresult",
+    "source": {
+      "kind": "working-tree",
+      "baseCommit": "27dc939fce0a22adfc8d0aa21cda255721768fd0",
+      "patch": "proof/phone-initial-source.patch.gz",
+      "patchSha256": "a2158b130249719d642859ed903099562155975e35d7335cfb36bc1c5b88c40a",
+      "componentIdenticalToCommit": "464cadcd10f9fa8231d1f6713d734a7685557841",
+      "patchCompression": "gzip",
+      "patchRawSha256": "748c6d136a3a797c1df2e646df4564fcd88a717c5feb32f8618fbd144b1a8814"
+    },
+    "deviceName": "iPhone 18 Pro-wt-Health-80fd-deee0cef58a1",
+    "udid": "012B9C73-47F2-4F96-9A96-4903CB6BC286",
+    "test": "WellnessFlowUITests/testPredictionVisualScoreConfidenceAndFactors()",
+    "testLog": ".codex-checks/wellness-prediction-visual/ui-phone.log",
+    "timestamp": 1793144129.71,
+    "pixelSize": [
+      1206,
+      2622
+    ],
+    "sha256": "6331c2043c3e024d2809edd14b954be8a8f887951768b32631ddecd877a649b7",
+    "executionStatus": "passed"
+  },
+  {
+    "device": "iphone",
+    "label": "H01-prediction-empty",
+    "image": "images/iphone-H01-prediction-empty.png",
+    "kind": "xcresult",
+    "source": {
+      "kind": "commit",
+      "commit": "b83a05e9ee363d2ae9dab626e14cfa809d1c6e57"
+    },
+    "deviceName": "iPhone 18 Pro-wt-Health-80fd-deee0cef58a1",
+    "udid": "012B9C73-47F2-4F96-9A96-4903CB6BC286",
+    "test": "WellnessFlowUITests/testPredictionMaximumAXAndEmptyState()",
+    "testLog": ".codex-checks/wellness-prediction-visual/ui-phone-capture-retry.log",
+    "timestamp": 1793144877.204,
+    "pixelSize": [
+      1206,
+      2622
+    ],
+    "sha256": "75d9b316d193f10de22712a37ba53f9021fbb7c38035e55c36b2fedfe88f9031",
+    "executionStatus": "passed"
+  },
+  {
+    "device": "ipad",
+    "label": "H01-prediction-37-low-dark",
+    "image": "images/ipad-H01-prediction-37-low-dark.png",
+    "kind": "xcresult",
+    "source": {
+      "kind": "commit",
+      "commit": "464cadcd10f9fa8231d1f6713d734a7685557841"
+    },
+    "deviceName": "iPad Pro 13-inch (M5)-wt-Health-80fd-deee0cef58a1",
+    "udid": "653BA9FF-3C4A-48FC-9236-83337533EF84",
+    "test": "WellnessFlowUITests/testPredictionVisualScoreConfidenceAndFactors()",
+    "testLog": ".codex-checks/wellness-prediction-visual/ui-ipad.log",
+    "timestamp": 1793144458.749,
+    "pixelSize": [
+      2064,
+      2752
+    ],
+    "sha256": "93d40f98485289466d31da3e467666ac499cf049ccf6eb381d5936f7e1af2950",
+    "executionStatus": "passed"
+  },
+  {
+    "device": "ipad",
+    "label": "H01-prediction-0-low-light",
+    "image": "images/ipad-H01-prediction-0-low-light.png",
+    "kind": "xcresult",
+    "source": {
+      "kind": "commit",
+      "commit": "464cadcd10f9fa8231d1f6713d734a7685557841"
+    },
+    "deviceName": "iPad Pro 13-inch (M5)-wt-Health-80fd-deee0cef58a1",
+    "udid": "653BA9FF-3C4A-48FC-9236-83337533EF84",
+    "test": "WellnessFlowUITests/testPredictionVisualScoreConfidenceAndFactors()",
+    "testLog": ".codex-checks/wellness-prediction-visual/ui-ipad.log",
+    "timestamp": 1793144524.308,
+    "pixelSize": [
+      2064,
+      2752
+    ],
+    "sha256": "e919277dac98247e3e394fa19ff1a566a625e948131d15f404c17abe43ae636a",
+    "executionStatus": "passed"
+  },
+  {
+    "device": "ipad",
+    "label": "H01-prediction-100-high-light",
+    "image": "images/ipad-H01-prediction-100-high-light.png",
+    "kind": "xcresult",
+    "source": {
+      "kind": "commit",
+      "commit": "464cadcd10f9fa8231d1f6713d734a7685557841"
+    },
+    "deviceName": "iPad Pro 13-inch (M5)-wt-Health-80fd-deee0cef58a1",
+    "udid": "653BA9FF-3C4A-48FC-9236-83337533EF84",
+    "test": "WellnessFlowUITests/testPredictionVisualScoreConfidenceAndFactors()",
+    "testLog": ".codex-checks/wellness-prediction-visual/ui-ipad.log",
+    "timestamp": 1793144569.871,
+    "pixelSize": [
+      2064,
+      2752
+    ],
+    "sha256": "15dbe40d7640f6076bdd855b2409a94975b7ad71ee4ab505b5e113262819d213",
+    "executionStatus": "passed"
+  },
+  {
+    "device": "ipad",
+    "label": "H01-prediction-78-medium-light",
+    "image": "images/ipad-H01-prediction-78-medium-light.png",
+    "kind": "xcresult",
+    "source": {
+      "kind": "commit",
+      "commit": "464cadcd10f9fa8231d1f6713d734a7685557841"
+    },
+    "deviceName": "iPad Pro 13-inch (M5)-wt-Health-80fd-deee0cef58a1",
+    "udid": "653BA9FF-3C4A-48FC-9236-83337533EF84",
+    "test": "WellnessFlowUITests/testPredictionVisualScoreConfidenceAndFactors()",
+    "testLog": ".codex-checks/wellness-prediction-visual/ui-ipad.log",
+    "timestamp": 1793144486.132,
+    "pixelSize": [
+      2064,
+      2752
+    ],
+    "sha256": "7ea1799ee5026fa2ff78aba0f91b2d78566d2ec241f1feca45f993a09db2ef0d",
+    "executionStatus": "passed"
+  }
+]

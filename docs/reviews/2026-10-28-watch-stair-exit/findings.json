@@ -1,0 +1,64 @@
+{
+  "branch": "codex/watch-stair-exit-reminder",
+  "timestamp": "2026-10-28T12:23:01.169262+09:00",
+  "base": "origin/main",
+  "base_sha": "c10cf77c276d9c9317c652988ba6adaca4dcc865",
+  "diff_lines": 630,
+  "reviewers_run": [
+    "security",
+    "performance",
+    "architecture",
+    "data-integrity",
+    "simplicity",
+    "agent-native"
+  ],
+  "reviewers_skipped": [],
+  "findings": [
+    {
+      "id": "arch-001",
+      "reviewer": "Architecture / Simplicity",
+      "priority": "P2",
+      "status": "Resolved",
+      "title": "Keep Running 선택이 같은 운동의 복구 후 초기화됨",
+      "file": "DUNEWatch/Managers/WorkoutManager.swift",
+      "line": 1518,
+      "issue": "dismissal이 메모리에만 있고 recovery에서 모니터 시작 시 false로 초기화된다.",
+      "suggestion": "복구 snapshot에 optional Bool로 저장하고 새 운동에서만 초기화한다.",
+      "resolution": "optional 복구 필드에 즉시 저장·복원하고 새 workout 시작에서만 초기화. legacy/roundtrip/new-workout 테스트 3개 통과 및 Architecture delta 재검토 완료."
+    },
+    {
+      "id": "style-001",
+      "reviewer": "Parent",
+      "priority": "P3",
+      "status": "Resolved",
+      "title": "새 테스트 파일의 줄 끝 공백",
+      "file": "DUNEWatchTests/StairMachineExitDetectorTests.swift",
+      "line": 16,
+      "issue": "untracked 파일의 두 줄에 trailing whitespace가 있어 기존 git diff --check에서 놓쳤다.",
+      "suggestion": "줄 끝 공백만 제거한다.",
+      "resolution": "두 줄 trailing whitespace 제거와 새 테스트 파일 whitespace 검사 통과."
+    },
+    {
+      "id": "docs-001",
+      "reviewer": "Parent",
+      "priority": "P3",
+      "status": "Resolved",
+      "title": "계획서의 Affected Files 표 누락",
+      "file": "docs/plans/2026-10-28-watch-stair-exit-reminder.md",
+      "line": 14,
+      "issue": "documentation-standards의 계획서 변경 파일 표가 없다.",
+      "suggestion": "이번 변경 파일을 역할별 표로 추가한다.",
+      "resolution": "Affected Files 표와 Implementation Steps 구획 추가."
+    }
+  ],
+  "summary": {
+    "p1": 0,
+    "p2": 1,
+    "p3": 2
+  },
+  "open_summary": {
+    "p1": 0,
+    "p2": 0,
+    "p3": 0
+  }
+}

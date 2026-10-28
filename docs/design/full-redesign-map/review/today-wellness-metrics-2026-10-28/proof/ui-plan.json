@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "status": "planned-not-executed",
+  "platforms": {
+    "ios": {
+      "mode": "full",
+      "selectors": []
+    },
+    "watch": {
+      "mode": "skip",
+      "selectors": []
+    }
+  },
+  "changes": [
+    {
+      "path": "DUNE/Presentation/Dashboard/Components/TodayMetricCard.swift",
+      "reason": "Dashboard feature: related suites plus smoke; consumer review required"
+    },
+    {
+      "path": "DUNE/Presentation/Dashboard/DashboardView.swift",
+      "reason": "Dashboard feature: related suites plus smoke; consumer review required"
+    },
+    {
+      "path": "DUNE/Presentation/Dashboard/DashboardViewModel.swift",
+      "reason": "Dashboard feature: related suites plus smoke; consumer review required"
+    },
+    {
+      "path": "DUNETests/DashboardViewModelTests.swift",
+      "reason": "unit test source only: run the affected unit tests"
+    },
+    {
+      "path": "DUNEUITests/Visual/TodayCompactUITests.swift",
+      "reason": "UI tests/helpers/plans changed: validate the complete iOS test contract"
+    },
+    {
+      "path": "docs/design/layout-map/today-case-matrix.md",
+      "reason": "documentation: no app runtime change"
+    }
+  ],
+  "commands": [
+    {
+      "platform": "ios",
+      "argv": [
+        "scripts/test-ui.sh"
+      ]
+    }
+  ],
+  "additional_validation": [],
+  "review_required": [
+    "Confirm changed symbols have no consumers outside the selected features; otherwise use full.",
+    "Confirm new behavior has tests; selection does not establish coverage.",
+    "Preserve seeded gesture/layout and device-specific validation requirements.",
+    "Full plans exclude manual HealthKit permission tests; permission changes need device evidence.",
+    "Record passed tests and skipped tests; no execution or zero tests is not a passed gate."
+  ],
+  "base": "HEAD",
+  "merge_base": "cedfeb033a08566b45621d343758c6d68c90cdae",
+  "head": "cedfeb033a08566b45621d343758c6d68c90cdae"
+}

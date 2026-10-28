@@ -6,9 +6,12 @@
 	<string>AppIcon</string>
 	<key>NSMotionUsageDescription</key>
 	<string>DUNE uses motion data to monitor your daily posture and walking patterns.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>DUNE uses your location during stair workouts to ask if you have finished after you walk away from the machine.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>audio</string>
+		<string>location</string>
 		<string>remote-notification</string>
 	</array>
 	<key>WKBackgroundModes</key>
