@@ -438,6 +438,9 @@
         }
       }
     },
+    "%@ completions" : {
+
+    },
     "%@ days" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -710,6 +713,16 @@
         }
       }
     },
+    "%@ of %@ complete" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ of %2$@ complete"
+          }
+        }
+      }
+    },
     "%@ of %@ completed" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -717,6 +730,16 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "%1$@ of %2$@ completed"
+          }
+        }
+      }
+    },
+    "%@ of %@ days" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ of %2$@ days"
           }
         }
       }
@@ -10082,6 +10105,9 @@
           }
         }
       }
+    },
+    "Completed %@" : {
+
     },
     "Completed %lld" : {
       "extractionState" : "manual",
@@ -45688,6 +45714,9 @@
           }
         }
       }
+    },
+    "Weekly goal: %@ days" : {
+
     },
     "Weekly goal: %lld days" : {
       "extractionState" : "manual",
