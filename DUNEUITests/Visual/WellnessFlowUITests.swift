@@ -262,7 +262,7 @@ final class WellnessFlowUITests: SeededUITestBaseCase {
                           "\(category) should show a real prior measurement")
         }
         XCTAssertTrue(reveal("wellness-add-body-record").isHittable)
-        reveal("wellness-link-bodyhistory")
+        reveal("wellness-link-bodyhistory", direction: .down)
             .coordinate(withNormalizedOffset: CGVector(dx: 0.92, dy: 0.5)).tap()
         XCTAssertTrue(waitForElement("body-history-detail-screen", timeout: 10).exists)
     }
