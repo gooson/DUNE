@@ -295,10 +295,12 @@ final class LifeFlowUITests: SeededUITestBaseCase {
 
     private func alignWorkoutCapture(_ id: String, maximumAX: Bool, alignBottom: Bool = false) {
         let target = reveal(id)
-        guard maximumAX else { return }
+        guard maximumAX || isHostCapture else { return }
         let window = app.windows.firstMatch.frame
         let top = max(window.minY, app.navigationBars.firstMatch.frame.maxY) + 20
-        let bottom = (app.tabBars.firstMatch.exists ? app.tabBars.firstMatch.frame.minY : window.maxY) - 20
+        let tabBar = app.tabBars.firstMatch
+        let hasBottomTabBar = tabBar.exists && tabBar.frame.minY > window.midY && tabBar.frame.width > window.width / 2
+        let bottom = (hasBottomTabBar ? tabBar.frame.minY : window.maxY) - 20
         let scroll = app.scrollViews.firstMatch
         for _ in 0..<8 {
             let offset = alignBottom ? max(0, target.frame.maxY - bottom) : target.frame.minY - top
