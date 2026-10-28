@@ -975,7 +975,12 @@ extension XCUIApplication {
             return true
         }
 
-        let formContainer = tables.firstMatch.exists ? tables.firstMatch : scrollViews.firstMatch
+        let formCandidates = collectionViews.allElementsBoundByIndex
+            + tables.allElementsBoundByIndex
+            + scrollViews.allElementsBoundByIndex
+        guard let formContainer = formCandidates.first(where: { $0.exists && $0.isHittable }) else {
+            return false
+        }
         for _ in 0..<maxSwipes where !element.waitForExistence(timeout: timeoutPerCheck) {
             formContainer.swipeUp()
         }
