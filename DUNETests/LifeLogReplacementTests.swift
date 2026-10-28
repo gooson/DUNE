@@ -69,7 +69,8 @@ struct LifeLogReplacementTests {
 
             let plan = vm.prepareLogReplacement(for: habit, value: 0, date: yesterday, referenceDate: now, isPastEntry: true)
             #expect(plan?.existingLogs.map(\.id) == [manual.id])
-            #expect(plan?.newLog == nil)
+            #expect(plan?.newLog?.value == 0)
+            #expect(plan?.newLog?.memo == HabitLogResolution.dailyTotalMemo)
             #expect(vm.isSaving)
             vm.didFinishSaving()
         }
@@ -139,7 +140,7 @@ struct LifeLogReplacementTests {
 
             let plan = vm.prepareLogReplacement(for: habit, value: 0, date: older, referenceDate: now, isPastEntry: true)
             #expect(plan?.existingLogs.map(\.id) == [oldLog.id])
-            #expect(plan?.newLog == nil)
+            #expect(plan?.newLog?.value == 0)
             #expect(habit.logs?.map(\.id) == [oldLog.id, latestLog.id])
             #expect(vm.cycleSnapshot(for: habit, referenceDate: now)?.nextDueDate == beforeCycle)
             vm.didFinishSaving()
@@ -208,4 +209,160 @@ struct LifeLogReplacementTests {
         #expect(habit.logs?.map(\.id) == [old.id])
         #expect(!vm.isSaving)
     }
+
+    @Test("Latest synced daily total wins instead of adding concurrent totals")
+    func concurrentTotalsResolve() {
+        let now = Date()
+        let habit = habit(createdAt: day(-10, from: now))
+        let date = day(-1, from: now)
+        let earlier = HabitLog(date: date, value: 8, completedAt: now.addingTimeInterval(-60), memo: HabitLogResolution.dailyTotalMemo)
+        let later = HabitLog(date: date, value: 5, completedAt: now, memo: HabitLogResolution.dailyTotalMemo)
+        let oldIncrement = HabitLog(date: date, value: 3, completedAt: now.addingTimeInterval(-120))
+        habit.logs = [earlier, later, oldIncrement]
+
+        let resolved = HabitLogResolution.resolve(habit.logs ?? [], habitID: habit.id)
+        #expect(resolved.map(\.id) == [later.id])
+        #expect(resolved.reduce(0) { $0 + $1.value } == 5)
+    }
+
+    @Test("Equal completed timestamps use a stable UUID tie breaker")
+    func sameTimestampTie() {
+        let now = Date()
+        let habit = habit(createdAt: day(-10, from: now))
+        let date = day(-1, from: now)
+        let first = HabitLog(date: date, value: 8, completedAt: now, memo: HabitLogResolution.dailyTotalMemo)
+        let second = HabitLog(date: date, value: 5, completedAt: now, memo: HabitLogResolution.dailyTotalMemo)
+        let expected = first.id.uuidString > second.id.uuidString ? first.id : second.id
+
+        #expect(HabitLogResolution.resolve([first, second], habitID: habit.id).map(\.id) == [expected])
+        #expect(HabitLogResolution.resolve([second, first], habitID: habit.id).map(\.id) == [expected])
+    }
+
+    @Test("Zero total tombstone suppresses older increments but keeps auto logs")
+    func zeroTombstoneResolution() {
+        let now = Date()
+        let habit = habit(createdAt: day(-10, from: now))
+        let date = day(-1, from: now)
+        let old = HabitLog(date: date, value: 3, completedAt: now.addingTimeInterval(-60))
+        let zero = HabitLog(date: date, value: 0, completedAt: now, memo: HabitLogResolution.dailyTotalMemo)
+        let auto = HabitLog(date: date, value: 2, isAutoCompleted: true)
+
+        let resolved = HabitLogResolution.resolve([old, zero, auto], habitID: habit.id)
+        #expect(Set(resolved.map(\.id)) == Set([zero.id, auto.id]))
+        #expect(!resolved.contains { $0.id == old.id })
+    }
+
+    @Test("Legacy manual increments remain additive without a marked total")
+    func legacyIncrementsRemainAdditive() {
+        let now = Date()
+        let habit = habit(createdAt: day(-10, from: now))
+        let date = day(-1, from: now)
+        let first = HabitLog(date: date, value: 2)
+        let second = HabitLog(date: date, value: 3)
+
+        let resolved = HabitLogResolution.resolve([first, second], habitID: habit.id)
+        #expect(resolved.count == 2)
+        #expect(resolved.reduce(0) { $0 + $1.value } == 5)
+    }
+
+    @Test("Independent log query supplies missing relationship logs for replacement")
+    func additionalLogsFillRelationshipGap() {
+        let now = Date()
+        let date = day(-1, from: now)
+        let habit = habit(createdAt: day(-10, from: now))
+        let queried = HabitLog(date: date, value: 3)
+        let queryOwner = self.habit(createdAt: day(-10, from: now))
+        queryOwner.id = habit.id
+        queried.habitDefinition = queryOwner
+        habit.logs = nil
+        let vm = LifeViewModel()
+
+        let plan = vm.prepareLogReplacement(
+            for: habit,
+            value: 8,
+            date: date,
+            referenceDate: now,
+            isPastEntry: true,
+            additionalLogs: [queried]
+        )
+
+        #expect(plan?.existingLogs.map(\.id) == [queried.id])
+        #expect(plan?.newLog?.value == 8)
+        vm.didFinishSaving()
+    }
+
+    @Test("A later explicit cycle action survives a same-day total")
+    func laterCycleActionSurvives() {
+        let now = Date()
+        let date = day(-1, from: now)
+        let habit = habit(type: .check, frequency: .interval(days: 7), createdAt: day(-20, from: now))
+        let total = HabitLog(date: date, value: 1, completedAt: now.addingTimeInterval(-60), memo: HabitLogResolution.dailyTotalMemo)
+        let skip = HabitLog(date: date, value: 0, completedAt: now, memo: "[dune-life-cycle-skip]")
+
+        let resolved = HabitLogResolution.resolve([skip, total], habitID: habit.id)
+        #expect(Set(resolved.map(\.id)) == Set([total.id, skip.id]))
+    }
+
+    @Test("A zero total does not start a first-completion cycle")
+    func zeroDoesNotStartFirstCompletionCycle() {
+        let now = Date()
+        let habit = habit(type: .check, frequency: .interval(days: 7), createdAt: day(-20, from: now))
+        habit.recurringStartPointRaw = HabitRecurringStartPoint.firstCompletion.rawValue
+        let old = HabitLog(date: day(-8, from: now), value: 1, completedAt: now.addingTimeInterval(-60))
+        let zero = HabitLog(date: day(-8, from: now), value: 0, completedAt: now, memo: HabitLogResolution.dailyTotalMemo)
+        habit.logs = [old, zero]
+        let vm = LifeViewModel()
+
+        let snapshot = vm.cycleSnapshot(for: habit, referenceDate: now)
+        #expect(snapshot?.startDate == nil)
+        #expect(snapshot?.lastCompletedAt == nil)
+        #expect(snapshot?.nextDueDate == nil)
+        #expect(vm.historyEntries(for: habit).isEmpty)
+    }
+
+    @Test("Cycle replay orders same-day actions by completion time")
+    func stableCycleOrdering() {
+        let now = Date()
+        let habit = habit(type: .check, frequency: .interval(days: 7), createdAt: day(-20, from: now))
+        let date = day(-1, from: now)
+        let complete = HabitLog(date: date, value: 1, completedAt: now.addingTimeInterval(-60))
+        let skip = HabitLog(date: date, value: 0, completedAt: now, memo: "[dune-life-cycle-skip]")
+        let vm = LifeViewModel()
+
+        habit.logs = [complete, skip]
+        let first = vm.cycleSnapshot(for: habit, referenceDate: now)
+        habit.logs = [skip, complete]
+        let second = vm.cycleSnapshot(for: habit, referenceDate: now)
+
+        #expect(first?.lastAction == .skip)
+        #expect(second?.lastAction == .skip)
+        #expect(first?.nextDueDate == second?.nextDueDate)
+    }
+    @Test("Independent query logs drive progress, history, streak, and cycle consistently")
+    func queryLogsDriveAllReadPaths() {
+        let now = Date()
+        let daily = habit(createdAt: day(-10, from: now))
+        let todayLog = HabitLog(date: now, value: 5, completedAt: now, memo: HabitLogResolution.dailyTotalMemo)
+        let queryOwner = habit(createdAt: day(-10, from: now))
+        queryOwner.id = daily.id
+        todayLog.habitDefinition = queryOwner
+        daily.logs = nil
+        let vm = LifeViewModel()
+        vm.calculateProgresses(habits: [daily], todayExerciseExists: false, referenceDate: now, additionalLogs: [todayLog])
+        #expect(vm.completedCount == 1)
+        #expect(vm.habitProgresses.first?.todayValue == 5)
+        #expect(vm.habitProgresses.first?.streak == 1)
+        #expect(vm.historyEntries(for: daily, additionalLogs: [todayLog]).map(\.id) == [todayLog.id])
+
+        let recurring = habit(type: .check, frequency: .interval(days: 7), createdAt: day(-30, from: now))
+        let past = HabitLog(date: day(-1, from: now), value: 1, completedAt: now)
+        let cycleOwner = habit(type: .check, frequency: .interval(days: 7), createdAt: day(-30, from: now))
+        cycleOwner.id = recurring.id
+        past.habitDefinition = cycleOwner
+        recurring.logs = nil
+        let cycle = vm.cycleSnapshot(for: recurring, referenceDate: now, additionalLogs: [past])
+        #expect(cycle?.nextDueDate == day(6, from: now))
+        #expect(cycle?.historyCount == 1)
+    }
+
 }

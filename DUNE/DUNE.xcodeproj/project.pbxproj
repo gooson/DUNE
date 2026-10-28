@@ -234,6 +234,7 @@
 		271BDF2562D5891B8A1C8A89 /* WorkoutSuggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC02C2BBA32E5A341AE19985 /* WorkoutSuggestion.swift */; };
 		271DC2AD68798AFCD9906F57 /* WatchLibrarySyncRequestPolicyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817CA990C629A95CC2FDA761 /* WatchLibrarySyncRequestPolicyTests.swift */; };
 		279E47BE3A0E139AECB7347D /* AppSchemaVersions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58514E1E986A1EEBF81E6549 /* AppSchemaVersions.swift */; };
+		27BE7673BA5BD81560CCA0EE /* HabitLogResolution.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56D42D95139ED0AC6E0148C /* HabitLogResolution.swift */; };
 		282468A9042619D69ECC706C /* WorkoutZoneDistribution.swift in Sources */ = {isa = PBXBuildFile; fileRef = B52619C7918FCEC29FBAF9B7 /* WorkoutZoneDistribution.swift */; };
 		283877D1823947D0F1488673 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7483B0DEF534D4B2732250 /* ContentView.swift */; };
 		2850CDE867B19510CEE69E78 /* WellnessScore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A53D3C9DB618E1E7EA14258 /* WellnessScore.swift */; };
@@ -2180,6 +2181,7 @@
 		A48EAEECCE6E1BA497534C92 /* LifeRegressionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifeRegressionTests.swift; sourceTree = "<group>"; };
 		A4B05EF5BDDE8FC9E990C8EF /* MetricHistoryQueryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricHistoryQueryService.swift; sourceTree = "<group>"; };
 		A5350D512DD22DCC8FDE5363 /* OneRMEstimationServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneRMEstimationServiceTests.swift; sourceTree = "<group>"; };
+		A56D42D95139ED0AC6E0148C /* HabitLogResolution.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitLogResolution.swift; sourceTree = "<group>"; };
 		A5A285DE9A2F5124B8CA9DCB /* WhatsNewStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNewStore.swift; sourceTree = "<group>"; };
 		A5C003DA18BE49A13E183E69 /* WorkoutShareCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutShareCard.swift; sourceTree = "<group>"; };
 		A5C8A5B143FE0F1D9E6ABF91 /* NotificationSettingsStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettingsStoreTests.swift; sourceTree = "<group>"; };
@@ -2737,6 +2739,7 @@
 				A310B4212D28D0A2F364B013 /* HabitFormSheet.swift */,
 				E6B3C4D4532F36D377DAFC3F /* HabitHeatmapDetailView.swift */,
 				714D5DEBC94FFD751878BE04 /* HabitHeatmapView.swift */,
+				A56D42D95139ED0AC6E0148C /* HabitLogResolution.swift */,
 				AC6E1C2A562F13B576BFBB3F /* HabitManagementView.swift */,
 				910B1A5425548E6FA9CC54C9 /* HabitPastRecordSheet.swift */,
 				FB294CD60DE4377538627626 /* HabitReminderSyncView.swift */,
@@ -5204,6 +5207,7 @@
 				B119C183105573B0B7A82A5B /* HabitHeatmapDetailView.swift in Sources */,
 				EF91584848F4D68BE910A5B3 /* HabitHeatmapView.swift in Sources */,
 				620CE9213F1BA6809EC687EF /* HabitLog.swift in Sources */,
+				27BE7673BA5BD81560CCA0EE /* HabitLogResolution.swift in Sources */,
 				CB8441BEF91C1A514252A476 /* HabitManagementView.swift in Sources */,
 				F3025A987303FDEB0F449B21 /* HabitPastRecordSheet.swift in Sources */,
 				08782A7E0DB340F7684566F8 /* HabitPurpose+View.swift in Sources */,

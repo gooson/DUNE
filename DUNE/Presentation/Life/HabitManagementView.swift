@@ -58,6 +58,7 @@ struct HabitManagementView: View {
             hasher.combine(log.date)
             hasher.combine(log.value)
             hasher.combine(log.memo)
+            hasher.combine(log.completedAt)
         }
         for habit in activeHabits + archivedHabits {
             hasher.combine(habit.id)
@@ -80,7 +81,7 @@ struct HabitManagementView: View {
             .padding(DS.Spacing.lg)
         }
         .task(id: logSignature) {
-            let snapshots = allLogs.map { log in
+            let snapshots = HabitLogResolution.resolve(allLogs).filter { !HabitLogResolution.isZeroTombstone($0) }.map { log in
                 HabitLogSnapshot(
                     habitID: log.habitDefinition?.id ?? UUID(),
                     date: log.date,

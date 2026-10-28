@@ -83,12 +83,7 @@ struct LifeWeeklyReviewCard: View {
     @Environment(\.appTheme) private var theme
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
-    private var currentWeek: [WeeklyHeroTrendPoint] {
-        var calendar = Calendar.current
-        calendar.firstWeekday = 2
-        let start = calendar.dateInterval(of: .weekOfYear, for: Date())?.start ?? Date()
-        return points.filter { $0.date >= start }
-    }
+    private var currentWeek: [WeeklyHeroTrendPoint] { points }
 
     var body: some View {
         StandardCard {

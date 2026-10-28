@@ -111,11 +111,6 @@ struct LifeView: View {
                     HabitListQueryView(
                         viewModel: viewModel,
                         refreshSignal: refreshSignal + localRefreshSignal,
-                        onOpenChecklist: {
-                            withAnimation(DS.Animation.standard) {
-                                proxy.scrollTo(LifeScrollAnchor.checklist, anchor: .top)
-                            }
-                        },
                         historySelection: $historySelection
                     )
                 }
@@ -201,7 +196,14 @@ struct LifeView: View {
                     isEdit: true,
                     onSave: {
                         if let habit = viewModel.editingHabit, viewModel.applyUpdate(to: habit) {
-                            viewModel.refreshReminderSchedule(for: habit)
+                            let habitID = habit.id
+                            do {
+                                let descriptor = FetchDescriptor<HabitLog>(predicate: #Predicate { $0.habitDefinition?.id == habitID })
+                                let logs = try modelContext.fetch(descriptor)
+                                viewModel.refreshReminderSchedule(for: habit, additionalLogs: logs)
+                            } catch {
+                                AppLogger.notification.error("Habit reminder query failed: \(error.localizedDescription, privacy: .private)")
+                            }
                             viewModel.didFinishSaving()
                             viewModel.isShowingEditSheet = false
                             viewModel.resetForm()
@@ -262,13 +264,11 @@ private struct HabitListQueryView: View {
     @Bindable var viewModel: LifeViewModel
     @Environment(\.scenePhase) private var scenePhase
     let refreshSignal: Int
-    let onOpenChecklist: () -> Void
 
     @Environment(\.modelContext) private var modelContext
     @Environment(\.appTheme) private var theme
     @Environment(\.horizontalSizeClass) private var sizeClass
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-    @Environment(\.colorScheme) private var colorScheme
 
     // Correction #68: O(1) lookup instead of O(N) per row
     @State private var habitsByID: [UUID: HabitDefinition] = [:]
@@ -289,9 +289,9 @@ private struct HabitListQueryView: View {
     @State private var weeklyRates: [WeeklyCompletionRate] = []
     @State private var monthlyRates: [MonthlyCompletionRate] = []
     @State private var heatmapData: [DailyCompletionCount] = []
-    @State private var availableContentWidth: CGFloat = 0
     @State private var weeklyReport: WeeklyHabitReport?
     @State private var heroTrendPoints: [WeeklyHeroTrendPoint] = []
+    @State private var currentWeekTrend: [WeeklyHeroTrendPoint] = []
     @State private var showingReport = false
     @State private var showingHeatmapDetail = false
 
@@ -311,7 +311,7 @@ private struct HabitListQueryView: View {
         let habitID: UUID
         let removed: [SavedLog]
         let insertedIDs: Set<UUID>
-        let expectedIDs: Set<UUID>
+        let expectedSignature: Int
         let date: Date
     }
 
@@ -348,7 +348,7 @@ private struct HabitListQueryView: View {
 
         }
         .sheet(item: $pastSelection) { selection in
-            HabitPastRecordSheet(habits: habits, selectedHabit: selection.habit) { habit, date, value in
+            HabitPastRecordSheet(habits: habits, additionalLogs: habitLogs, selectedHabit: selection.habit) { habit, date, value in
                 replaceValue(for: habit, value: value, date: date, isPastEntry: true)
             }
         }
@@ -359,11 +359,6 @@ private struct HabitListQueryView: View {
             Button("OK") { viewModel.validationError = nil }
         } message: {
             Text(viewModel.validationError ?? "")
-        }
-        .onGeometryChange(for: CGFloat.self) { geometry in
-            geometry.size.width
-        } action: { width in
-            availableContentWidth = width
         }
         .background {
             // Isolated @Query child — keeps today's exercise lookup off the main body path.
@@ -452,6 +447,7 @@ private struct HabitListQueryView: View {
             hasher.combine(log.habitDefinition?.id)
             hasher.combine(log.date)
             hasher.combine(log.value)
+            hasher.combine(log.completedAt)
             hasher.combine(log.isAutoCompleted)
             hasher.combine(log.memo ?? "")
         }
@@ -464,7 +460,7 @@ private struct HabitListQueryView: View {
         VStack(spacing: DS.Spacing.lg) {
             if heroTrendPoints.contains(where: { ($0.value ?? 0) > 0 }) {
                 LifeRhythmCard(points: heroTrendPoints) { showingHeatmapDetail = true }
-                LifeWeeklyReviewCard(points: heroTrendPoints) { showingReport = true }
+                LifeWeeklyReviewCard(points: currentWeekTrend) { showingReport = true }
             } else {
                 StandardCard {
                     VStack(alignment: .leading, spacing: DS.Spacing.md) {
@@ -483,17 +479,7 @@ private struct HabitListQueryView: View {
             }
         }
         .navigationDestination(isPresented: $showingHeatmapDetail) {
-            ScrollView {
-                VStack(spacing: DS.Spacing.lg) {
-                    Text("Based on currently registered habits")
-                        .font(.caption).foregroundStyle(.secondary)
-                    HabitCompletionChartView(weeklyRates: weeklyRates, monthlyRates: monthlyRates)
-                    HabitHeatmapView(data: heatmapData) { }
-                }
-                .padding(DS.Spacing.lg)
-            }
-            .background { DetailWaveBackground() }
-            .englishNavigationTitle("Habit Trends")
+            HabitHeatmapDetailView(data: heatmapData, weeklyRates: weeklyRates, monthlyRates: monthlyRates)
         }
     }
 
@@ -705,12 +691,19 @@ private struct HabitListQueryView: View {
     }
 
     private func timeOfDayRows(_ progresses: [HabitProgress]) -> some View {
-        let groups = groupedProgresses(progresses)
-        return ForEach(groups, id: \.timeOfDay) { group in
-            if groups.count > 1 || group.timeOfDay != .anytime {
-                timeOfDayHeader(group.timeOfDay, count: group.items.count)
+        let overdue = progresses.filter(\.isOverdue)
+        let groups = groupedProgresses(progresses.filter { !$0.isOverdue })
+        return VStack(alignment: .leading, spacing: DS.Spacing.md) {
+            if !overdue.isEmpty {
+                Text("Overdue").font(.caption.weight(.semibold)).foregroundStyle(.secondary)
+                habitRows(overdue)
             }
-            habitRows(group.items)
+            ForEach(groups, id: \.timeOfDay) { group in
+                if groups.count > 1 || group.timeOfDay != .anytime {
+                    timeOfDayHeader(group.timeOfDay, count: group.items.count)
+                }
+                habitRows(group.items)
+            }
         }
     }
 
@@ -723,7 +716,7 @@ private struct HabitListQueryView: View {
                 trailingAccessory: AnyView(habitActionsButton(for: progress)),
                 onValidateValue: { value in
                     guard let habit = habitsByID[progress.id] else { return false }
-                    guard viewModel.prepareLogReplacement(for: habit, value: value) != nil else { return false }
+                    guard viewModel.prepareLogReplacement(for: habit, value: value, additionalLogs: habitLogs) != nil else { return false }
                     viewModel.didFinishSaving()
                     return true
                 }
@@ -1115,16 +1108,9 @@ private struct HabitListQueryView: View {
 
     // MARK: - Actions
 
-    private func todayLogs(for habit: HabitDefinition, date: Date = Date()) -> [HabitLog] {
-        let calendar = Calendar.current
-        let relationshipLogs = (habit.logs ?? []).filter { calendar.isDate($0.date, inSameDayAs: date) }
-        if !relationshipLogs.isEmpty {
-            return relationshipLogs
-        }
-
-        return habitLogs.filter {
-            $0.habitDefinition?.id == habit.id && calendar.isDate($0.date, inSameDayAs: date)
-        }
+    private func allLogs(for habit: HabitDefinition) -> [HabitLog] {
+        let merged = (habit.logs ?? []) + habitLogs.filter { $0.habitDefinition?.id == habit.id }
+        return Array(Dictionary(merged.map { ($0.id, $0) }, uniquingKeysWith: { _, last in last }).values)
     }
 
     private func insertLog(_ log: HabitLog, into habit: HabitDefinition) {
@@ -1158,7 +1144,7 @@ private struct HabitListQueryView: View {
     @discardableResult
     private func replaceValue(for habit: HabitDefinition, value: Double, date: Date = Date(), isPastEntry: Bool = false) -> Bool {
         guard let replacement = viewModel.prepareLogReplacement(
-            for: habit, value: value, date: date, isPastEntry: isPastEntry
+            for: habit, value: value, date: date, isPastEntry: isPastEntry, additionalLogs: habitLogs
         ) else { return false }
         let wasCompleted = viewModel.habitProgresses.first { $0.id == habit.id }?.isCompleted ?? false
         let saved = replacement.existingLogs.map {
@@ -1169,27 +1155,39 @@ private struct HabitListQueryView: View {
             if let log = replacement.newLog { insertLog(log, into: habit) }
         }
         undoRecord = UndoRecord(habitID: habit.id, removed: saved,
-                                insertedIDs: Set(replacement.newLog.map { [$0.id] } ?? []), expectedIDs: Set(replacement.newLog.map { [$0.id] } ?? []), date: Calendar.current.startOfDay(for: date))
+                                insertedIDs: Set(replacement.newLog.map { [$0.id] } ?? []), expectedSignature: logSignature(replacement.newLog.map { [$0] } ?? []), date: Calendar.current.startOfDay(for: date))
         viewModel.didFinishSaving()
-        viewModel.refreshReminderSchedule(for: habit)
+        viewModel.refreshReminderSchedule(for: habit, additionalLogs: allLogs(for: habit))
         recalculate()
         let isCompleted = viewModel.habitProgresses.first { $0.id == habit.id }?.isCompleted ?? false
         if !isPastEntry && !showsCompleted && wasCompleted != isCompleted { todayFocused = true }
         return true
     }
 
+    private func logSignature(_ logs: [HabitLog]) -> Int {
+        var hasher = Hasher()
+        for log in logs.sorted(by: { $0.id.uuidString < $1.id.uuidString }) {
+            hasher.combine(log.id)
+            hasher.combine(log.value)
+            hasher.combine(log.date)
+            hasher.combine(log.completedAt)
+            hasher.combine(log.memo)
+        }
+        return hasher.finalize()
+    }
+
     private func undoLastRecord(_ record: UndoRecord) {
         guard let habit = habitsByID[record.habitID] else { undoRecord = nil; return }
-        let current = (habit.logs ?? []).filter { !$0.isAutoCompleted && Calendar.current.isDate($0.date, inSameDayAs: record.date) }
-        guard Set(current.map(\.id)) == record.expectedIDs else { undoRecord = nil; return }
+        let current = allLogs(for: habit).filter { !$0.isAutoCompleted && Calendar.current.isDate($0.date, inSameDayAs: record.date) }
+        guard logSignature(current) == record.expectedSignature else { undoRecord = nil; return }
         withAnimation(DS.Animation.snappy) {
-            deleteLogs((habit.logs ?? []).filter { record.insertedIDs.contains($0.id) }, from: habit)
+            deleteLogs(allLogs(for: habit).filter { record.insertedIDs.contains($0.id) }, from: habit)
             for saved in record.removed {
                 insertLog(HabitLog(date: saved.date, value: saved.value, completedAt: saved.completedAt, memo: saved.memo), into: habit)
             }
         }
         undoRecord = nil
-        viewModel.refreshReminderSchedule(for: habit)
+        viewModel.refreshReminderSchedule(for: habit, additionalLogs: allLogs(for: habit))
         recalculate()
         todayFocused = true
     }
@@ -1197,14 +1195,14 @@ private struct HabitListQueryView: View {
     private func skipCycle(habitId: UUID) {
         guard let habit = habitsByID[habitId] else { return }
         guard habit.frequency.intervalDays != nil else { return }
-        guard let snapshot = viewModel.cycleSnapshot(for: habit), snapshot.isDue else { return }
+        guard let snapshot = viewModel.cycleSnapshot(for: habit, additionalLogs: allLogs(for: habit)), snapshot.isDue else { return }
 
         if let log = viewModel.createCycleActionLog(for: habit, action: .skip) {
             insertLog(log, into: habit)
             undoRecord = UndoRecord(habitID: habit.id, removed: [], insertedIDs: [log.id],
-                expectedIDs: Set((habit.logs ?? []).filter { !$0.isAutoCompleted && Calendar.current.isDate($0.date, inSameDayAs: log.date) }.map(\.id)), date: log.date)
+                expectedSignature: logSignature(allLogs(for: habit).filter { !$0.isAutoCompleted && Calendar.current.isDate($0.date, inSameDayAs: log.date) }), date: log.date)
             viewModel.didFinishSaving()
-            viewModel.refreshReminderSchedule(for: habit)
+            viewModel.refreshReminderSchedule(for: habit, additionalLogs: allLogs(for: habit))
             recalculate()
         }
     }
@@ -1212,17 +1210,17 @@ private struct HabitListQueryView: View {
     private func snoozeCycle(habitId: UUID, days: Int) {
         guard let habit = habitsByID[habitId] else { return }
         guard habit.frequency.intervalDays != nil else { return }
-        guard let snapshot = viewModel.cycleSnapshot(for: habit), snapshot.isDue else { return }
-        guard let snoozeDate = viewModel.suggestedSnoozeDate(for: habit, days: days) else { return }
+        guard let snapshot = viewModel.cycleSnapshot(for: habit, additionalLogs: allLogs(for: habit)), snapshot.isDue else { return }
+        guard let snoozeDate = viewModel.suggestedSnoozeDate(for: habit, days: days, additionalLogs: allLogs(for: habit)) else { return }
         guard let nextDueDate = snapshot.nextDueDate else { return }
         guard snoozeDate > nextDueDate else { return }
 
         if let log = viewModel.createCycleActionLog(for: habit, action: .snooze, date: snoozeDate) {
             insertLog(log, into: habit)
             undoRecord = UndoRecord(habitID: habit.id, removed: [], insertedIDs: [log.id],
-                expectedIDs: Set((habit.logs ?? []).filter { !$0.isAutoCompleted && Calendar.current.isDate($0.date, inSameDayAs: log.date) }.map(\.id)), date: log.date)
+                expectedSignature: logSignature(allLogs(for: habit).filter { !$0.isAutoCompleted && Calendar.current.isDate($0.date, inSameDayAs: log.date) }), date: log.date)
             viewModel.didFinishSaving()
-            viewModel.refreshReminderSchedule(for: habit)
+            viewModel.refreshReminderSchedule(for: habit, additionalLogs: allLogs(for: habit))
             recalculate()
         }
     }
@@ -1237,7 +1235,7 @@ private struct HabitListQueryView: View {
             habitName: habit.name,
             iconCategory: habit.iconCategory,
             habitType: habit.habitType,
-            entries: viewModel.historyEntries(for: habit),
+            entries: viewModel.historyEntries(for: habit, additionalLogs: allLogs(for: habit)),
             onAddPastRecord: {
                 historySelection = nil
                 Task { @MainActor in
@@ -1257,7 +1255,8 @@ private struct HabitListQueryView: View {
         }
         viewModel.calculateProgresses(
             habits: habits,
-            todayExerciseExists: cachedTodayExerciseExists
+            todayExerciseExists: cachedTodayExerciseExists,
+            additionalLogs: habitLogs
         )
         viewModel.calculateAutoExerciseProgresses(
             exerciseRecords: exerciseRecords
@@ -1268,7 +1267,7 @@ private struct HabitListQueryView: View {
     private func recalculateAnalytics() {
         let manualHabits = habits.filter { !$0.isAutoLinked }
         let manualByID = Dictionary(manualHabits.map { ($0.id, $0) }, uniquingKeysWith: { _, last in last })
-        let eligibleLogs = habitLogs.filter { log in
+        let eligibleLogs = HabitLogResolution.resolve(habitLogs).filter { log in
             guard !log.isAutoCompleted, let id = log.habitDefinition?.id, let habit = manualByID[id] else { return false }
             return log.date >= Calendar.current.startOfDay(for: habit.createdAt) && log.date <= Date()
         }
@@ -1298,7 +1297,7 @@ private struct HabitListQueryView: View {
                     isAutoLinked: habit.isAutoLinked
                 )
             },
-            logs: habitLogs.map { log in
+            logs: HabitLogResolution.resolve(habitLogs).map { log in
                 LifeHeroLogSnapshot(
                     analyticsLog: HabitLogSnapshot(
                         habitID: log.habitDefinition?.id ?? UUID(),
@@ -1315,15 +1314,14 @@ private struct HabitListQueryView: View {
         var calendar = Calendar.current
         calendar.firstWeekday = 2
         let weekStart = calendar.dateInterval(of: .weekOfYear, for: Date())?.start ?? calendar.startOfDay(for: Date())
+        currentWeekTrend = heroTrendPoints.filter { $0.date >= weekStart }
         weeklyDays = (0..<7).compactMap { calendar.date(byAdding: .day, value: $0, to: weekStart) }
+        let weekLogs = Dictionary(grouping: eligibleLogs.filter { $0.date >= weekStart && $0.value > 0 }, by: { $0.habitDefinition?.id })
         weeklyDates = Dictionary(manualHabits.map { habit in
-            let totals = Dictionary(grouping: eligibleLogs.filter { $0.habitDefinition?.id == habit.id && $0.date >= weekStart && $0.value > 0 }, by: { calendar.startOfDay(for: $0.date) })
+            let totals = Dictionary(grouping: weekLogs[habit.id] ?? [], by: { calendar.startOfDay(for: $0.date) })
             return (habit.id, Set(totals.filter { $0.value.reduce(0) { $0 + $1.value } >= habit.goalValue }.map(\.key)))
         }, uniquingKeysWith: { _, last in last })
-        weeklyCompletedDays = Dictionary(manualHabits.map { habit in
-            let dayTotals = Dictionary(grouping: eligibleLogs.filter { $0.habitDefinition?.id == habit.id && $0.date >= weekStart && $0.value > 0 }, by: { calendar.startOfDay(for: $0.date) })
-            return (habit.id, dayTotals.values.filter { $0.reduce(0) { $0 + $1.value } >= habit.goalValue }.count)
-        }, uniquingKeysWith: { _, last in last })
+        weeklyCompletedDays = weeklyDates.mapValues(\.count)
 
         weeklyRates = HabitAnalyticsService.weeklyCompletionRates(
             logs: logSnapshots, habits: habitSnapshots

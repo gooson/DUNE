@@ -75,11 +75,13 @@ final class LifeFlowUITests: SeededUITestBaseCase {
         let increase = app.buttons["Increase Water"].firstMatch
         XCTAssertTrue(increase.waitForExistence(timeout: 5))
         increase.auditTap()
+        XCTAssertEqual(element("life-habit-value-Water").label, "1")
         XCTAssertTrue(element(AXID.lifeHabitRow("Water")).exists)
         XCTAssertEqual(hero.label, baseline, "One glass does not complete an eight-glass goal")
         let undo = app.buttons["life-undo-button"].firstMatch
         XCTAssertTrue(undo.waitForExistence(timeout: 5), "A new record should offer an undo action")
         undo.auditTap()
+        XCTAssertEqual(element("life-habit-value-Water").label, "0")
         XCTAssertEqual(hero.label, baseline)
         XCTAssertTrue(increase.waitForExistence(timeout: 5), "The Water row should remain actionable")
         XCTAssertTrue(app.buttons["Decrease Water"].firstMatch.exists)
@@ -114,12 +116,11 @@ final class LifeFlowUITests: SeededUITestBaseCase {
         XCTAssertTrue(total.waitForExistence(timeout: 5))
         XCTAssertTrue(total.value.map { String(describing: $0).contains("30") } ?? false,
                       "The fixture should preload yesterday's 30-minute total")
-        total.auditTap()
-        total.typeText(String(repeating: XCUIKeyboardKey.delete.rawValue, count: 4) + "40")
+        XCTAssertTrue(app.fillTextInput("habit-past-record-total", with: "40"))
         let save = app.buttons["habit-past-record-save"].firstMatch
         XCTAssertTrue(save.waitForExistence(timeout: 5))
         save.auditTap()
-        XCTAssertFalse(app.navigationBars["Past Record"].waitForExistence(timeout: 3))
+        XCTAssertTrue(app.navigationBars["Past Record"].waitForNonExistence(timeout: 5))
         XCTAssertEqual(hero.label, baseline, "A past record must not change today's completion")
         XCTAssertTrue(app.openLifeHabitActions(named: "Read", maxSwipes: 8))
         app.buttons[AXID.lifeHabitActionHistory].firstMatch.auditTap()

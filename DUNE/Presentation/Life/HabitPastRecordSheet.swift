@@ -2,6 +2,7 @@ import SwiftUI
 
 struct HabitPastRecordSheet: View {
     let habits: [HabitDefinition]
+    let additionalLogs: [HabitLog]
     let onSave: (HabitDefinition, Date, Double) -> Bool
 
     @Environment(\.dismiss) private var dismiss
@@ -15,11 +16,13 @@ struct HabitPastRecordSheet: View {
 
     init(
         habits: [HabitDefinition],
+        additionalLogs: [HabitLog] = [],
         selectedHabit: HabitDefinition? = nil,
         selectedDate: Date? = nil,
         onSave: @escaping (HabitDefinition, Date, Double) -> Bool
     ) {
         self.habits = habits
+        self.additionalLogs = additionalLogs
         self.onSave = onSave
         let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date()) ?? Date()
         _selectedHabitID = State(initialValue: selectedHabit?.id ?? habits.first(where: Self.isEligible)?.id)
@@ -103,7 +106,9 @@ struct HabitPastRecordSheet: View {
     private var existingLogs: [HabitLog] {
         guard let selectedHabit else { return [] }
         let calendar = Calendar.current
-        return (selectedHabit.logs ?? []).filter {
+        let merged = (selectedHabit.logs ?? []) + additionalLogs.filter { $0.habitDefinition?.id == selectedHabit.id }
+        let unique = Dictionary(merged.map { ($0.id, $0) }, uniquingKeysWith: { _, last in last })
+        return HabitLogResolution.resolve(Array(unique.values), habitID: selectedHabit.id).filter {
             !$0.isAutoCompleted && calendar.isDate($0.date, inSameDayAs: selectedDate)
         }
     }
@@ -127,7 +132,8 @@ struct HabitPastRecordSheet: View {
         return previewViewModel.previewPastRecordNextDueDate(
             for: selectedHabit,
             value: enteredValue,
-            date: selectedDate
+            date: selectedDate,
+            additionalLogs: additionalLogs
         )
     }
 

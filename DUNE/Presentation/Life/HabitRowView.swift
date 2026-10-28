@@ -24,7 +24,7 @@ struct HabitRowView: View {
     private var value: Double { max(0, progress.todayValue) }
     private var goal: Double { max(0, progress.goalValue) }
     private var toggleDisabled: Bool {
-        progress.isAutoLinked || progress.isAutoCompleted || (progress.isCycleBased && !progress.canCompleteCycle)
+        progress.isAutoLinked || progress.isAutoCompleted || (progress.isCycleBased && !progress.isCompleted && !progress.canCompleteCycle)
     }
 
     var body: some View {
@@ -133,10 +133,11 @@ struct HabitRowView: View {
             } else {
                 HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.sm) {
                     Text(value.formatted())
+                        .accessibilityIdentifier("life-habit-value-\(progress.name)")
                         .font(.system(.title, design: .rounded, weight: .bold))
                         .monospacedDigit()
                         .foregroundStyle(tint)
-                    Text("/ \(goal.formatted()) \(progress.goalUnit ?? String(localized: "min"))")
+                    Text(verbatim: "/ \(goal.formatted()) \(progress.goalUnit ?? String(localized: "min"))")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                     Spacer(minLength: 0)
@@ -170,9 +171,10 @@ struct HabitRowView: View {
                 .accessibilityLabel(Text("Decrease \(progress.name)"))
                 HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xs) {
                     Text(value.formatted())
+                        .accessibilityIdentifier("life-habit-value-\(progress.name)")
                         .font(.system(.title, design: .rounded, weight: .bold))
                         .foregroundStyle(tint)
-                    Text("/ \(goal.formatted()) \(progress.goalUnit ?? "")")
+                    Text(verbatim: "/ \(goal.formatted()) \(progress.goalUnit ?? "")")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
