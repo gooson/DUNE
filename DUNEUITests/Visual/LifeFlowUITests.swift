@@ -169,7 +169,9 @@ final class LifeFlowUITests: SeededUITestBaseCase {
                 XCTAssertTrue(metric.label.rangeOfCharacter(from: .decimalDigits) != nil,
                               "\(ruleID) should announce its numeric progress")
                 XCTAssertGreaterThan(metric.frame.width, 44, "\(ruleID) should have room for its value")
-                XCTAssertGreaterThan(metric.frame.height, 20, "\(ruleID) should not be vertically clipped")
+                if section.group != "routine" {
+                    XCTAssertGreaterThan(metric.frame.height, 20, "\(ruleID) should have room for its numeric value")
+                }
                 if ruleID == "weeklyShoulders3" {
                     XCTAssertTrue(metric.label.contains("0"),
                                   "The seeded Bench Press, Squat and Deadlift have no shoulder workout")

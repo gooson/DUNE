@@ -1,5 +1,12 @@
 import SwiftUI
 
+private enum BoardMedalColors {
+    static let highlight = Color("WorkoutMedalHighlight")
+    static let gold = Color("WorkoutMedalGold")
+    static let shadow = Color("WorkoutMedalShadow")
+    static let engraving = Color("WorkoutMedalEngraving")
+}
+
 /// Display-only grouping and bounded visual progress for the weekly board.
 struct WorkoutAchievementBoardModel {
     struct Group: Identifiable {
@@ -174,14 +181,24 @@ struct WorkoutAchievementBoard: View {
 
     private var medal: some View {
         Image(systemName: "trophy")
-            .font(.system(size: 29, weight: .light))
-            .foregroundStyle(theme.bronzeColor)
+            .font(.system(size: 29, weight: .regular))
+            .foregroundStyle(theme == .desertWarm ? BoardMedalColors.engraving : theme.cardBackground)
             .frame(width: 66, height: 66)
             .background {
-                Circle().fill(LinearGradient(colors: [lightGold, gold, theme.duskColor], startPoint: .topLeading, endPoint: .bottomTrailing))
+                Circle().fill(LinearGradient(
+                    colors: theme == .desertWarm
+                        ? [BoardMedalColors.highlight, BoardMedalColors.gold, BoardMedalColors.shadow]
+                        : [lightGold, gold, theme.duskColor],
+                    startPoint: .topLeading, endPoint: .bottomTrailing
+                ))
             }
             .padding(7)
-            .background(Circle().strokeBorder(gold.opacity(0.8), lineWidth: 7))
+            .background(Circle().strokeBorder(
+                LinearGradient(
+                    colors: theme == .desertWarm ? [BoardMedalColors.highlight, BoardMedalColors.shadow] : [lightGold, gold],
+                    startPoint: .topLeading, endPoint: .bottomTrailing
+                ), lineWidth: 7
+            ))
             .opacity(model.completedCount == 0 ? 0.72 : 1)
     }
 
