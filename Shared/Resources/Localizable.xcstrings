@@ -662,6 +662,29 @@
         }
       }
     },
+    "%@ km remaining" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ km remaining"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "残り%@ km"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ km 남음"
+          }
+        }
+      }
+    },
     "%@ min" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -25574,6 +25597,29 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "내 목표"
+          }
+        }
+      }
+    },
+    "My Goals · Today" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "My Goals · Today"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "マイ目標 · 今日"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "내 목표 · 오늘"
           }
         }
       }
