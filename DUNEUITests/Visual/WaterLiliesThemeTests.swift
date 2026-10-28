@@ -74,7 +74,8 @@ final class WaterLiliesThemeTests: SeededUITestBaseCase {
         navigateToLife()
         XCTAssertTrue(waitForElement(AXID.lifeHeroProgress, timeout: 10).exists)
         XCTAssertTrue(waitForElement("life-hero-ring", timeout: 10).exists)
-        XCTAssertTrue(waitForElement("life-hero-checklist-button", timeout: 10).exists)
+        XCTAssertFalse(app.buttons["life-hero-checklist-button"].exists)
+        XCTAssertTrue(app.scrollToElementIfNeeded(AXID.lifeSectionHabits, maxSwipes: 6))
         addScreenshotAttachment(named: "Water Lilies Life \(style)")
 
         navigateToDashboard()

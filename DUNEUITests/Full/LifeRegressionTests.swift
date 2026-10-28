@@ -17,27 +17,18 @@ final class LifeRegressionTests: SeededUITestBaseCase {
         try super.setUpWithError()
     }
 
-    func testDesertHeroChecklistButtonScrollsToHabits() throws {
+    func testDesertHeroKeepsTodayReachableWithoutChecklistCTA() throws {
         var configuration = launchConfiguration
         configuration.additionalArguments += ["--ui-test-theme", "desertWarm"]
         launchApp(with: configuration)
         ensureLifeRoot()
 
-        let checklistButton = app.buttons["life-hero-checklist-button"].firstMatch
-        XCTAssertTrue(checklistButton.waitForExistence(timeout: 8), "Desert hero checklist CTA should be a button")
-        XCTAssertTrue(checklistButton.isHittable, "Checklist CTA should be tappable in the hero")
-
-        let habitsSection = app.descendants(matching: .any)[AXID.lifeSectionHabits].firstMatch
-        XCTAssertTrue(habitsSection.waitForExistence(timeout: 5), "Habits section should exist below the hero")
-        let initialY = habitsSection.frame.minY
-        checklistButton.tap()
-
-        let reachedHabits = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
-            habitsSection.exists && habitsSection.isHittable
-                && habitsSection.frame.minY < initialY - 20
-        }, object: nil)
-        XCTAssertEqual(XCTWaiter.wait(for: [reachedHabits], timeout: 5), .completed,
-                       "Checklist CTA should scroll the Habits section into view")
+        XCTAssertTrue(waitForElement(AXID.lifeHeroProgress, timeout: 8).exists)
+        XCTAssertFalse(app.buttons["life-hero-checklist-button"].exists,
+                       "The compact hero should leave checklist navigation to the Today section")
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.lifeSectionHabits, maxSwipes: 6),
+                      "Today should remain reachable by scrolling below the compact hero")
+        XCTAssertTrue(waitForElement("life-habit-group-today").exists)
     }
 
     func testLifeRootRendersAndAddFlowCreatesNewHabit() throws {
@@ -85,8 +76,14 @@ final class LifeRegressionTests: SeededUITestBaseCase {
         XCTAssertTrue(today.waitForExistence(timeout: 5), "Seeded daily habits should remain in Today")
         XCTAssertTrue(weekly.waitForExistence(timeout: 5), "Weekly group should appear after adding a weekly habit")
         XCTAssertTrue(upcoming.waitForExistence(timeout: 5), "Upcoming group should appear for a recurring habit awaiting its first completion")
+        let completedToggle = app.buttons["life-completed-toggle"].firstMatch
+        XCTAssertTrue(completedToggle.waitForExistence(timeout: 5), "Completed habits should have a disclosure")
+        completedToggle.auditTap()
         XCTAssertTrue(today.descendants(matching: .any)[AXID.lifeHabitRow("Morning Stretch")].firstMatch.exists)
         XCTAssertTrue(weekly.descendants(matching: .any)[AXID.lifeHabitRow("Weekly Swim")].firstMatch.exists)
+        let upcomingToggle = app.buttons["life-habit-group-upcoming"].firstMatch
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("life-habit-group-upcoming", maxSwipes: 8))
+        upcomingToggle.auditTap()
         XCTAssertTrue(upcoming.descendants(matching: .any)[AXID.lifeHabitRow("Seven Day Reset")].firstMatch.exists)
         XCTAssertFalse(today.descendants(matching: .any)[AXID.lifeHabitRow("Weekly Swim")].firstMatch.exists)
         XCTAssertFalse(today.descendants(matching: .any)[AXID.lifeHabitRow("Seven Day Reset")].firstMatch.exists)
@@ -162,7 +159,9 @@ final class LifeRegressionTests: SeededUITestBaseCase {
             .matching(NSPredicate(format: "identifier BEGINSWITH %@", "life-habit-history-row-"))
             .firstMatch
         XCTAssertTrue(firstRow.waitForExistence(timeout: 5), "Seeded habit history should expose at least one action row")
-        XCTAssertTrue(firstRow.label.contains("Completed"), "Seeded Morning Stretch history should show its completion")
+        let rowText = ([firstRow.label] + firstRow.staticTexts.allElementsBoundByIndex.map(\.label))
+            .joined(separator: " ")
+        XCTAssertTrue(rowText.contains("Completed"), "Seeded Morning Stretch history should show its completion")
 
         XCTAssertTrue(
             app.dismissModalIfPresent(cancelIdentifiers: [AXID.lifeHabitHistoryClose]),
@@ -348,6 +347,11 @@ final class LifeRegressionTests: SeededUITestBaseCase {
 
     private func openActionsMenu(for habitName: String) {
         ensureLifeRoot()
+        if habitName == "Morning Stretch" {
+            let completedToggle = app.buttons["life-completed-toggle"].firstMatch
+            XCTAssertTrue(app.scrollToHittableElementIfNeeded("life-completed-toggle", maxSwipes: 8))
+            completedToggle.auditTap()
+        }
         XCTAssertTrue(
             app.openLifeHabitActions(named: habitName, maxSwipes: 8),
             "\(habitName) actions menu should be reachable"

@@ -37,27 +37,25 @@ final class HeroRhythmUITests: SeededUITestBaseCase {
                       "The original readiness destination should open")
     }
 
-    func testLifeSummaryRecordedCompletionsAndChecklist() {
+    func testLifeCompactHeroRecordedCompletionsAndToday() {
         navigateToLife()
 
         let ring = waitForElement("life-hero-ring", timeout: 15)
-        let narrative = waitForElement("life-hero-narrative", timeout: 15)
-        let summary = waitForElement("life-hero-summary", timeout: 15)
+        XCTAssertEqual(ring.frame.width, 104, accuracy: 1)
+        let progressLabel = waitForElement(AXID.lifeHeroProgress).label
+        XCTAssertTrue(progressLabel.contains("1") && progressLabel.contains("3"),
+                      "Life hero should expose one completed habit out of three")
+        XCTAssertTrue(waitForElement("life-hero-remaining").label.contains("2"))
+        XCTAssertFalse(app.descendants(matching: .any)["life-hero-narrative"].firstMatch.exists)
+        XCTAssertFalse(app.descendants(matching: .any)["life-hero-summary"].firstMatch.exists)
+        XCTAssertFalse(app.buttons["life-hero-checklist-button"].exists)
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("life-hero-trend", maxSwipes: 8))
         let trend = waitForElement("life-hero-trend", timeout: 15)
-        XCTAssertFalse(ring.label.isEmpty, "Life ring must speak current progress")
-        XCTAssertFalse(narrative.label.isEmpty, "Life hero must explain current status")
-        for value in ["1", "2", "3"] {
-            XCTAssertTrue(summary.staticTexts.matching(NSPredicate(format: "label == %@", value)).firstMatch.exists,
-                          "Completed, remaining, and target counts should be accessible: \(value)")
-        }
         assertRecordedTrend(trend, identifier: "life-hero-trend",
                             entries: [(3, "1"), (1, "2")], title: "Life")
 
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded("life-hero-checklist-button", maxSwipes: 3),
-                      "Checklist action should remain reachable below history")
-        app.buttons["life-hero-checklist-button"].firstMatch.tap()
-        XCTAssertTrue(app.scrollToElementIfNeeded(AXID.lifeSectionHabits, maxSwipes: 4),
-                      "Checklist action should bring the habit list into view")
+        XCTAssertTrue(app.scrollToElementIfNeeded(AXID.lifeSectionHabits, maxSwipes: 8, direction: .down),
+                      "Today should remain reachable below the compact hero")
     }
 
     func testSparseHistoryExplainsMissingActivityAndLifeData() {

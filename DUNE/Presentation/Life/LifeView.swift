@@ -41,7 +41,8 @@ enum LifeHeroTrend {
     static func points(
         habits: [LifeHeroHabitSnapshot],
         logs: [LifeHeroLogSnapshot],
-        referenceDate: Date = Date()
+        referenceDate: Date = Date(),
+        dayCount: Int = 7
     ) -> [WeeklyHeroTrendPoint] {
         let calendar = Calendar.current
         let manualHabits = habits.filter { !$0.isAutoLinked }
@@ -59,7 +60,7 @@ enum LifeHeroTrend {
         let counts = HabitAnalyticsService.dailyCompletionCounts(
             logs: eligibleLogs,
             habits: manualHabits.map(\.analyticsHabit),
-            dayCount: 7,
+            dayCount: dayCount,
             referenceDate: referenceDate
         )
         return counts.map { day in
@@ -219,7 +220,8 @@ struct LifeView: View {
                     habitName: selection.habitName,
                     iconCategory: selection.iconCategory,
                     habitType: selection.habitType,
-                    entries: selection.entries
+                    entries: selection.entries,
+                    onAddPastRecord: selection.onAddPastRecord
                 )
                 .inspectorColumnWidth(min: 300, ideal: 360, max: 460)
             }
@@ -243,6 +245,7 @@ private struct HabitHistorySelection: Identifiable {
     let iconCategory: HabitIconCategory
     let habitType: HabitType
     let entries: [LifeViewModel.HabitHistoryEntry]
+    let onAddPastRecord: () -> Void
 }
 
 // MARK: - Isolated @Query Child View
@@ -273,8 +276,16 @@ private struct HabitListQueryView: View {
     @State private var cachedTodayExerciseExists = false
     @Binding var historySelection: HabitHistorySelection?
     @State private var actionSelection: HabitActionSelection?
-    @State private var heroAppeared = false
-    @State private var selectedCategoryFilter: HabitIconCategory?
+    @State private var selectedCategoryFilter: HabitPurpose?
+    @State private var showsCompleted = false
+    @State private var showsUpcoming = false
+    @State private var showsDefaultGoals = true
+    @State private var pastSelection: PastSelection?
+    @State private var undoRecord: UndoRecord?
+    @State private var weeklyCompletedDays: [UUID: Int] = [:]
+    @State private var weeklyDays: [Date] = []
+    @State private var weeklyDates: [UUID: Set<Date>] = [:]
+    @AccessibilityFocusState private var todayFocused: Bool
     @State private var weeklyRates: [WeeklyCompletionRate] = []
     @State private var monthlyRates: [MonthlyCompletionRate] = []
     @State private var heatmapData: [DailyCompletionCount] = []
@@ -284,6 +295,26 @@ private struct HabitListQueryView: View {
     @State private var showingReport = false
     @State private var showingHeatmapDetail = false
 
+    private struct PastSelection: Identifiable {
+        let id = UUID()
+        let habit: HabitDefinition?
+    }
+
+    private struct SavedLog {
+        let date: Date
+        let value: Double
+        let completedAt: Date?
+        let memo: String?
+    }
+
+    private struct UndoRecord {
+        let habitID: UUID
+        let removed: [SavedLog]
+        let insertedIDs: Set<UUID>
+        let expectedIDs: Set<UUID>
+        let date: Date
+    }
+
     private struct HabitActionSelection: Identifiable {
         let id: UUID
     }
@@ -292,34 +323,42 @@ private struct HabitListQueryView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.lg) {
-            // Hero: completion rate
-            Group {
-                if habits.allSatisfy(\.isAutoLinked) {
-                    starterSection
-                } else {
-                    heroSection
-                }
-            }
+            heroSection
                 .reportTabHeroFrame()
                 .accessibilityElement(children: .contain)
+                .accessibilityLabel(Text("Life progress \(viewModel.completedCount) of \(viewModel.totalActiveCount)"))
                 .accessibilityIdentifier("life-hero-progress")
-                .staggeredAppear(index: 0)
 
-            if habits.isEmpty {
-                ArchivedHabitCountView()
-                autoAchievementsSection()
-            } else {
-                let layout = isRegular && availableContentWidth >= 700 && !dynamicTypeSize.isAccessibilitySize
-                    ? AnyLayout(HStackLayout(alignment: .top, spacing: DS.Spacing.md))
-                    : AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.lg))
-                layout {
-                    habitsSection()
-                    autoAchievementsSection(useTwoColumnCards: false)
-                }
-
+            habitsSection()
+            autoAchievementsSection()
+            if habits.contains(where: { !$0.isAutoLinked }) {
                 analyticsSection
-                    .staggeredAppear(index: 2)
             }
+            NavigationLink(value: LifeRoute.habitManagement) {
+                CardNavigationHeader {
+                    Label("Manage Habits", systemImage: "slider.horizontal.3")
+                        .font(.headline)
+                }
+                .padding(DS.Spacing.lg)
+                .background(.thinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.xl))
+            }
+            .buttonStyle(CardNavigationButtonStyle())
+            .accessibilityIdentifier("life-manage-habits")
+            ArchivedHabitCountView()
+
+        }
+        .sheet(item: $pastSelection) { selection in
+            HabitPastRecordSheet(habits: habits, selectedHabit: selection.habit) { habit, date, value in
+                replaceValue(for: habit, value: value, date: date, isPastEntry: true)
+            }
+        }
+        .alert("Check your entry", isPresented: Binding(
+            get: { viewModel.validationError != nil && pastSelection == nil },
+            set: { if !$0 { viewModel.validationError = nil } }
+        )) {
+            Button("OK") { viewModel.validationError = nil }
+        } message: {
+            Text(viewModel.validationError ?? "")
         }
         .onGeometryChange(for: CGFloat.self) { geometry in
             geometry.size.width
@@ -421,55 +460,21 @@ private struct HabitListQueryView: View {
 
     // MARK: - Analytics Section
 
-    // A week of actual completed days gives the trend a readable sample.
-    private var hasMeaningfulTrend: Bool {
-        HabitAnalyticsService.hasMeaningfulTrend(heatmapData)
-    }
-
     private var analyticsSection: some View {
-        VStack(spacing: DS.Spacing.md) {
-            if hasMeaningfulTrend {
-                HabitCompletionChartView(
-                    weeklyRates: weeklyRates,
-                    monthlyRates: monthlyRates
-                )
-
-                HabitHeatmapView(data: heatmapData) {
-                    showingHeatmapDetail = true
-                }
+        VStack(spacing: DS.Spacing.lg) {
+            if heroTrendPoints.contains(where: { ($0.value ?? 0) > 0 }) {
+                LifeRhythmCard(points: heroTrendPoints) { showingHeatmapDetail = true }
+                LifeWeeklyReviewCard(points: heroTrendPoints) { showingReport = true }
             } else {
-                InlineCard {
-                    HStack(spacing: DS.Spacing.sm) {
-                        Image(systemName: "chart.bar.xaxis")
-                            .foregroundStyle(DS.Color.tabLife)
-                            .accessibilityHidden(true)
-                        Text("Not enough data to show trend.")
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                        Spacer(minLength: 0)
+                StandardCard {
+                    VStack(alignment: .leading, spacing: DS.Spacing.md) {
+                        Text("First record").font(.headline)
+                        Text("Not enough data to show trend.").font(.subheadline).foregroundStyle(.secondary)
+                        Button("History") { showingHeatmapDetail = true }
+                            .frame(minHeight: 44)
+                            .accessibilityIdentifier("habit-heatmap")
                     }
                 }
-
-                Button {
-                    showingHeatmapDetail = true
-                } label: {
-                    Label("History", systemImage: "square.grid.3x3.fill")
-                        .font(.subheadline)
-                        .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
-                }
-                .buttonStyle(.bordered)
-                .accessibilityIdentifier("habit-heatmap")
-            }
-
-            if let report = weeklyReport {
-                Button {
-                    showingReport = true
-                } label: {
-                    WeeklyHabitSummaryCard(report: report)
-                }
-                .buttonStyle(CardNavigationButtonStyle())
-                .accessibilityIdentifier("life-weekly-report-button")
-                .accessibilityHint("View Weekly Report")
             }
         }
         .navigationDestination(isPresented: $showingReport) {
@@ -478,7 +483,17 @@ private struct HabitListQueryView: View {
             }
         }
         .navigationDestination(isPresented: $showingHeatmapDetail) {
-            HabitHeatmapDetailView(data: heatmapData)
+            ScrollView {
+                VStack(spacing: DS.Spacing.lg) {
+                    Text("Based on currently registered habits")
+                        .font(.caption).foregroundStyle(.secondary)
+                    HabitCompletionChartView(weeklyRates: weeklyRates, monthlyRates: monthlyRates)
+                    HabitHeatmapView(data: heatmapData) { }
+                }
+                .padding(DS.Spacing.lg)
+            }
+            .background { DetailWaveBackground() }
+            .englishNavigationTitle("Habit Trends")
         }
     }
 
@@ -491,7 +506,7 @@ private struct HabitListQueryView: View {
                     selectedCategoryFilter = nil
                 }
 
-                ForEach(activeCategories, id: \.self) { category in
+                ForEach(HabitPurpose.allCases) { category in
                     filterChip(
                         label: category.displayName,
                         icon: category.iconName,
@@ -504,11 +519,6 @@ private struct HabitListQueryView: View {
             .padding(.horizontal, DS.Spacing.xxs)
         }
         .scrollBounceBehavior(.basedOnSize)
-    }
-
-    private var activeCategories: [HabitIconCategory] {
-        let used = Set(viewModel.habitProgresses.filter { !$0.isAutoLinked }.map(\.iconCategory))
-        return HabitIconCategory.allCases.filter { used.contains($0) }
     }
 
     private func filterChip(
@@ -528,7 +538,8 @@ private struct HabitListQueryView: View {
                     .fontWeight(isSelected ? .semibold : .regular)
             }
             .padding(.horizontal, DS.Spacing.sm)
-            .padding(.vertical, DS.Spacing.xs)
+            .frame(minWidth: 44, minHeight: 44)
+            .contentShape(Rectangle())
             .background {
                 if isSelected {
                     Capsule().fill(DS.Color.tabLife.opacity(DS.Opacity.medium))
@@ -545,13 +556,15 @@ private struct HabitListQueryView: View {
         }
         .buttonStyle(.plain)
         .foregroundStyle(isSelected ? DS.Color.tabLife : .secondary)
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
+        .accessibilityIdentifier("life-filter-\(icon == nil ? "all" : (HabitPurpose.allCases.first { $0.iconName == icon }?.rawValue ?? "all"))")
     }
 
     // MARK: - Filtered & Grouped Progresses
 
     private func filteredProgresses(_ progresses: [HabitProgress]) -> [HabitProgress] {
         guard let filter = selectedCategoryFilter else { return progresses }
-        return progresses.filter { $0.iconCategory == filter }
+        return progresses.filter { $0.iconCategory.purpose == filter }
     }
 
     private func groupedProgresses(_ progresses: [HabitProgress]) -> [(timeOfDay: HabitTimeOfDay, items: [HabitProgress])] {
@@ -565,72 +578,98 @@ private struct HabitListQueryView: View {
 
     // MARK: - Sections
 
-    private func habitsSection(fillHeight: Bool = false) -> some View {
-        SectionGroup(
-            title: "My Habits",
-            icon: "checklist",
-            iconColor: DS.Color.tabLife,
-            sectionIdentifier: "life-section-habits",
-            fillHeight: fillHeight
-        ) {
-            VStack(spacing: DS.Spacing.sm) {
-                if habits.isEmpty {
-                    EmptyStateView(
-                        icon: "checklist",
-                        title: "No Habits Yet",
-                        message: "Add your first habit to start tracking your daily routine."
-                    )
-                } else {
-                    // Category filter chips
-                    if activeCategories.count > 1 || selectedCategoryFilter != nil {
-                        categoryFilterSection
-                    }
-
-                    let today = filteredProgresses(viewModel.todayHabitProgresses)
-                    if !today.isEmpty || selectedCategoryFilter == nil {
-                        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-                            habitGroupHeader("Today's Habits", count: today.count)
-                            if today.isEmpty {
-                                Text("No habits due today")
-                                    .font(.subheadline)
-                                    .foregroundStyle(.secondary)
-                                    .fixedSize(horizontal: false, vertical: true)
-                            }
-                            timeOfDayRows(today)
-                        }
-                        .accessibilityElement(children: .contain)
-                        .accessibilityIdentifier("life-habit-group-today")
-                    }
-
-                    let weekly = filteredProgresses(viewModel.weeklyHabitProgresses)
-                    if !weekly.isEmpty {
-                        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-                            habitGroupHeader("Weekly Habits", count: weekly.count)
-                            timeOfDayRows(weekly)
-                        }
-                        .accessibilityElement(children: .contain)
-                        .accessibilityIdentifier("life-habit-group-weekly")
-                    }
-
-                    let upcoming = filteredProgresses(viewModel.upcomingHabitProgresses)
-                    if !upcoming.isEmpty {
-                        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-                            habitGroupHeader("Upcoming Habits", count: upcoming.count)
-                            timeOfDayRows(upcoming)
-                        }
-                        .accessibilityElement(children: .contain)
-                        .accessibilityIdentifier("life-habit-group-upcoming")
-                    }
-                    if selectedCategoryFilter != nil && today.isEmpty && weekly.isEmpty && upcoming.isEmpty {
-                        Text("No habits match this filter")
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                            .fixedSize(horizontal: false, vertical: true)
+    private func habitsSection() -> some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.lg) {
+            HStack(alignment: .firstTextBaseline) {
+                Text("Today's Practice")
+                    .font(DS.Typography.sectionTitle)
+                    .accessibilityIdentifier("life-section-habits")
+                    .accessibilityFocused($todayFocused)
+                    .accessibilityAddTraits(.isHeader)
+                Spacer(minLength: DS.Spacing.sm)
+                Button { pastSelection = PastSelection(habit: nil) } label: {
+                    Label("Past Record", systemImage: "clock.arrow.circlepath")
+                        .font(.caption.weight(.semibold))
+                        .frame(minHeight: 44)
+                }
+                .accessibilityIdentifier("life-past-record-button")
+                .disabled(habits.allSatisfy { $0.isAutoLinked })
+            }
+            if let undoRecord {
+                HStack {
+                    Text("Record updated").font(.caption)
+                    Spacer()
+                    Button("Undo") { undoLastRecord(undoRecord) }
+                        .frame(minWidth: 44, minHeight: 44)
+                        .accessibilityIdentifier("life-undo-button")
+                }
+            }
+            categoryFilterSection
+            let today = filteredProgresses(viewModel.todayHabitProgresses)
+            let pending = today.filter { !$0.isCompleted }
+            let completed = today.filter(\.isCompleted)
+            VStack(alignment: .leading, spacing: DS.Spacing.md) {
+                if pending.isEmpty {
+                    if selectedCategoryFilter != nil && today.isEmpty {
+                        Text("No habits match this filter").font(.subheadline).foregroundStyle(.secondary)
+                        Button("Show all") { selectedCategoryFilter = nil }
+                            .frame(minHeight: 44)
+                    } else {
+                        Text(today.isEmpty ? "No habits due today" : "All done today")
+                            .font(.subheadline).foregroundStyle(.secondary)
                     }
                 }
-
-                // Archived habits link — shown regardless of active habit count
-                ArchivedHabitCountView()
+                timeOfDayRows(pending.sorted { $0.isOverdue && !$1.isOverdue })
+                if !completed.isEmpty {
+                    DisclosureGroup(isExpanded: $showsCompleted) {
+                        habitRows(completed)
+                    } label: {
+                        Text("Completed \(completed.count)")
+                            .font(.subheadline.weight(.semibold))
+                            .frame(minHeight: 44)
+                    }
+                    .accessibilityIdentifier("life-completed-toggle")
+                }
+            }
+            .accessibilityElement(children: .contain)
+            .accessibilityIdentifier("life-habit-group-today")
+            let weekly = filteredProgresses(viewModel.weeklyHabitProgresses)
+            if !weekly.isEmpty {
+                VStack(alignment: .leading, spacing: DS.Spacing.md) {
+                    habitGroupHeader("Weekly Habits", count: weekly.count)
+                    ForEach(weekly) { progress in
+                        VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                            if case .weekly(let target) = progress.frequency {
+                                Text("\(weeklyCompletedDays[progress.id, default: 0]) of \(target) days")
+                                    .font(.headline).foregroundStyle(theme.accentColor)
+                            }
+                            HStack(spacing: DS.Spacing.sm) {
+                                ForEach(weeklyDays, id: \.self) { day in
+                                    VStack(spacing: DS.Spacing.xs) {
+                                        Text(day, format: .dateTime.weekday(.narrow)).font(.caption2)
+                                        Image(systemName: weeklyDates[progress.id, default: []].contains(day) ? "checkmark.circle.fill" : "circle")
+                                            .font(.caption)
+                                    }
+                                    .foregroundStyle(theme.accentColor)
+                                    .accessibilityElement(children: .ignore)
+                                    .accessibilityLabel(Text(day, format: .dateTime.month().day()))
+                                    .accessibilityValue(weeklyDates[progress.id, default: []].contains(day) ? Text("Completed") : Text("No record"))
+                                }
+                            }
+                            habitRows([progress])
+                        }
+                    }
+                }
+                .accessibilityIdentifier("life-habit-group-weekly")
+            }
+            let upcoming = filteredProgresses(viewModel.upcomingHabitProgresses)
+            if !upcoming.isEmpty {
+                DisclosureGroup(isExpanded: $showsUpcoming) {
+                    timeOfDayRows(upcoming)
+                } label: {
+                    Text("Upcoming Habits").font(.headline).frame(minHeight: 44)
+                }
+                .accessibilityIdentifier("life-habit-group-upcoming")
             }
         }
         .id(LifeScrollAnchor.checklist)
@@ -681,7 +720,13 @@ private struct HabitListQueryView: View {
                 progress: progress,
                 onToggle: { toggleCheck(habitId: progress.id) },
                 onUpdateValue: { value in updateValue(habitId: progress.id, value: value) },
-                trailingAccessory: AnyView(habitActionsButton(for: progress))
+                trailingAccessory: AnyView(habitActionsButton(for: progress)),
+                onValidateValue: { value in
+                    guard let habit = habitsByID[progress.id] else { return false }
+                    guard viewModel.prepareLogReplacement(for: habit, value: value) != nil else { return false }
+                    viewModel.didFinishSaving()
+                    return true
+                }
             )
             .contextMenu {
                 habitActionItems(for: progress, deferred: true)
@@ -702,7 +747,8 @@ private struct HabitListQueryView: View {
                 .labelStyle(.iconOnly)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
-                .padding(6)
+                .frame(width: 44, height: 44)
+                .contentShape(Rectangle())
                 .background(.ultraThinMaterial, in: Circle())
         }
         .buttonStyle(.plain)
@@ -738,7 +784,7 @@ private struct HabitListQueryView: View {
                 Label("Snooze 1 Day", systemImage: "clock.arrow.trianglehead.2.counterclockwise.rotate.90")
             }
             .accessibilityIdentifier("life-habit-action-snooze")
-            .disabled(!progress.isDue)
+            .disabled(!progress.isDue || progress.isCompleted)
 
             Button {
                 performHabitAction(deferred: deferred) {
@@ -748,7 +794,18 @@ private struct HabitListQueryView: View {
                 Label("Skip Cycle", systemImage: "forward.end")
             }
             .accessibilityIdentifier("life-habit-action-skip")
-            .disabled(!progress.isDue)
+            .disabled(!progress.isDue || progress.isCompleted)
+        }
+
+        if let habit, !habit.isAutoLinked {
+            Button {
+                performHabitAction(deferred: deferred) {
+                    pastSelection = PastSelection(habit: habit)
+                }
+            } label: {
+                Label("Past Record", systemImage: "clock.arrow.circlepath")
+            }
+            .accessibilityIdentifier("life-habit-action-past-record")
         }
 
         Button {
@@ -792,7 +849,7 @@ private struct HabitListQueryView: View {
         ) {
             VStack(alignment: .leading, spacing: DS.Spacing.sm) {
                 HStack(alignment: .firstTextBaseline) {
-                    Text("HealthKit-based weekly goals (Mon-Sun)")
+                    Text("Workouts · Mon–Sun · DUNE + Apple Health")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                     Spacer()
@@ -803,29 +860,6 @@ private struct HabitListQueryView: View {
                             .padding(.horizontal, DS.Spacing.sm)
                             .padding(.vertical, DS.Spacing.xxs)
                             .background(.ultraThinMaterial, in: Capsule())
-                    }
-                }
-
-                if viewModel.autoExerciseProgresses.isEmpty && customGoals.isEmpty {
-                    StandardCard {
-                        Text("No HealthKit-linked workouts yet")
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                    }
-                } else if showTwoColumns {
-                    LazyVGrid(
-                        columns: [GridItem(.flexible(), spacing: DS.Spacing.md), GridItem(.flexible())],
-                        spacing: DS.Spacing.md
-                    ) {
-                        ForEach(groups) { group in
-                            autoAchievementGroupCard(group)
-                        }
-                    }
-                } else {
-                    VStack(spacing: DS.Spacing.sm) {
-                        ForEach(groups) { group in
-                            autoAchievementGroupCard(group)
-                        }
                     }
                 }
 
@@ -853,6 +887,33 @@ private struct HabitListQueryView: View {
                         }
                     }
                 }
+
+                DisclosureGroup(isExpanded: $showsDefaultGoals) {
+                if viewModel.autoExerciseProgresses.isEmpty && customGoals.isEmpty {
+                    StandardCard {
+                        Text("No HealthKit-linked workouts yet")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
+                } else if showTwoColumns {
+                    Grid(horizontalSpacing: DS.Spacing.md, verticalSpacing: DS.Spacing.md) {
+                        ForEach(groups) { group in
+                            GridRow { autoAchievementGroupCard(group) }
+                        }
+                    }
+                } else {
+                    VStack(spacing: DS.Spacing.sm) {
+                        ForEach(groups) { group in
+                            autoAchievementGroupCard(group)
+                        }
+                    }
+                }
+                } label: {
+                    Text("Workout Challenges").font(.subheadline.weight(.semibold)).frame(minHeight: 44)
+                }
+
+
+
             }
         }
     }
@@ -963,7 +1024,7 @@ private struct HabitListQueryView: View {
     }
 
     private var autoAchievementGroups: [AutoAchievementGroup] {
-        let byID = Dictionary(uniqueKeysWithValues: viewModel.autoExerciseProgresses.map { ($0.id, $0) })
+        let byID = Dictionary(viewModel.autoExerciseProgresses.map { ($0.id, $0) }, uniquingKeysWith: { _, last in last })
         let grouped: [AutoAchievementGroup] = [
             makeAutoGroup(
                 id: "routine",
@@ -1027,165 +1088,12 @@ private struct HabitListQueryView: View {
 
     // MARK: - Hero
 
-    private var starterSection: some View {
-        StandardCard {
-            VStack(alignment: .leading, spacing: DS.Spacing.md) {
-                Label("Start Your Habit Routine", systemImage: "checklist")
-                    .font(DS.Typography.sectionTitle)
-                Text("Add your first habit to start tracking your daily routine.")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-        }
-    }
-
-
     private var heroSection: some View {
-        themeHeroSection
-        .accessibilityElement(children: .contain)
-        .accessibilityLabel(Text("Life progress \(viewModel.completedCount) of \(viewModel.totalActiveCount)"))
-        .sensoryFeedback(.impact(weight: .light), trigger: heroAppeared)
-        .onAppear {
-            guard !heroAppeared else { return }
-            heroAppeared = true
-        }
-    }
-
-    private var themeHeroSection: some View {
-        VStack(alignment: .leading, spacing: 15) {
-            let headingLayout = dynamicTypeSize.isAccessibilitySize
-                ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.xs))
-                : AnyLayout(HStackLayout())
-            headingLayout {
-                Text(verbatim: "HABITS")
-                    .font(.caption.weight(.semibold))
-                    .tracking(1.5)
-                    .accessibilityIdentifier("life-hero-heading")
-                    .foregroundStyle(theme == .desertWarm ? DesertPalette.ink : theme.directionPreviewTextColor)
-                if !dynamicTypeSize.isAccessibilitySize { Spacer() }
-                Text("Today's Habits")
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(theme == .desertWarm
-                        ? DesertPalette.muted
-                        : theme.directionPreviewTextColor.opacity(0.74))
-            }
-
-            if dynamicTypeSize.isAccessibilitySize {
-                VStack(alignment: .leading, spacing: 12) {
-                    lifeProgressRing
-                    lifeProgressNarrative
-                }
-            } else {
-                HStack(alignment: .center, spacing: 17) {
-                    lifeProgressRing
-                    lifeProgressNarrative
-                }
-            }
-
-            lifeProgressSummary
-
-            Divider()
-                .overlay(lifeHeroMuted.opacity(0.25))
-
-            WeeklyHeroTrendView(
-                points: heroTrendPoints,
-                title: "Daily completions",
-                upperBound: max(1, heroTrendPoints.compactMap(\.value).max() ?? 0),
-                tint: theme.accentColor,
-                accessibilityIdentifier: "life-hero-trend"
-            )
-
-            Button(action: onOpenChecklist) {
-                HStack(spacing: 6) {
-                    Text("Today's Habits")
-                    Image(systemName: "arrow.right")
-                }
-                .frame(minHeight: 44, alignment: .leading)
-            }
-            .buttonStyle(.plain)
-            .accessibilityIdentifier("life-hero-checklist-button")
-            .font(.subheadline.weight(.semibold))
-            .foregroundStyle(theme == .desertWarm
-                ? (colorScheme == .dark
-                    ? Color(red: 0.898, green: 0.678, blue: 0.514)
-                    : Color(red: 0.588, green: 0.349, blue: 0.220))
-                : theme.directionPreviewActionColor(for: colorScheme))
-        }
-        .padding(20)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background {
-            if theme == .desertWarm {
-                DesertCardSurface(cornerRadius: DS.Radius.xxl)
-            } else {
-                RoundedRectangle(cornerRadius: 23)
-                    .fill(theme.directionPreviewBackground)
-                    .overlay {
-                        RoundedRectangle(cornerRadius: 23)
-                            .strokeBorder(theme.accentColor.opacity(0.25), lineWidth: 1)
-                    }
-            }
-        }
-    }
-
-    private var lifeProgressRing: some View {
-        TabHeroScoreRing(
-            progress: viewModel.totalActiveCount > 0
-                ? Double(viewModel.completedCount) / Double(viewModel.totalActiveCount)
-                : 0,
-            value: "\(viewModel.completedCount)/\(viewModel.totalActiveCount)",
-            caption: "Today",
-            tipColor: theme.accentColor,
-            accessibilityLabel: "Life progress \(viewModel.completedCount) of \(viewModel.totalActiveCount)",
-            accessibilityIdentifier: "life-hero-ring"
+        LifeHabitHeroView(
+            completedCount: viewModel.completedCount,
+            totalCount: viewModel.totalActiveCount,
+            progresses: viewModel.todayHabitProgresses
         )
-    }
-
-    private var lifeProgressNarrative: some View {
-        Text(viewModel.heroNarrative)
-            .font(.headline)
-            .foregroundStyle(theme == .desertWarm ? DesertPalette.ink : theme.directionPreviewTextColor)
-            .fixedSize(horizontal: false, vertical: true)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .accessibilityIdentifier("life-hero-narrative")
-    }
-
-    private var lifeProgressSummary: some View {
-        let remaining = max(0, viewModel.totalActiveCount - viewModel.completedCount)
-        return VStack(alignment: .leading, spacing: DS.Spacing.xs) {
-            Text("Current progress")
-                .font(.caption)
-                .foregroundStyle(lifeHeroMuted)
-
-            let layout = dynamicTypeSize.isAccessibilitySize
-                ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.sm))
-                : AnyLayout(HStackLayout(alignment: .top, spacing: DS.Spacing.sm))
-            layout {
-                lifeSummaryMetric(viewModel.completedCount, title: "Completed")
-                lifeSummaryMetric(viewModel.totalActiveCount, title: "Today's Habits")
-                lifeSummaryMetric(remaining, title: "Remaining")
-            }
-        }
-        .accessibilityElement(children: .contain)
-        .accessibilityIdentifier("life-hero-summary")
-    }
-
-    private var lifeHeroMuted: Color {
-        theme == .desertWarm ? DesertPalette.muted : theme.directionPreviewTextColor.opacity(0.74)
-    }
-
-    private func lifeSummaryMetric(_ value: Int, title: LocalizedStringKey) -> some View {
-        HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xs) {
-            Text(value.formattedWithSeparator)
-                .font(.subheadline.weight(.bold))
-                .foregroundStyle(theme == .desertWarm ? DesertPalette.ink : theme.directionPreviewTextColor)
-            Text(title)
-                .font(.caption)
-                .foregroundStyle(lifeHeroMuted)
-                .fixedSize(horizontal: false, vertical: true)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private func timeOfDayHeader(_ timeOfDay: HabitTimeOfDay, count: Int) -> some View {
@@ -1235,55 +1143,55 @@ private struct HabitListQueryView: View {
     }
 
     private func toggleCheck(habitId: UUID) {
-        guard let habit = habitsByID[habitId] else { return }
-
-        if let progress = viewModel.habitProgresses.first(where: { $0.id == habitId }), progress.isCycleBased {
-            guard progress.canCompleteCycle else { return }
-            deleteLogs(todayLogs(for: habit), from: habit)
-            if let log = viewModel.createCycleActionLog(for: habit, action: .complete) {
-                insertLog(log, into: habit)
-                viewModel.didFinishSaving()
-                // Rescheduling queues removal before adding the next cycle's reminders.
-                viewModel.refreshReminderSchedule(for: habit)
-            }
-            recalculate()
-            return
-        }
-
-        let existingLogs = todayLogs(for: habit)
-
-        if !existingLogs.isEmpty {
-            // Toggle off: remove log
-            withAnimation {
-                deleteLogs(existingLogs, from: habit)
-            }
-            viewModel.refreshReminderSchedule(for: habit)
-        } else {
-            // Toggle on: add log
-            if let log = viewModel.createValidatedLog(for: habit, value: 1.0) {
-                insertLog(log, into: habit)
-                viewModel.didFinishSaving()
-                viewModel.refreshReminderSchedule(for: habit)
-            }
-        }
-        recalculate()
+        guard let habit = habitsByID[habitId],
+              let progress = viewModel.habitProgresses.first(where: { $0.id == habitId }),
+              !progress.isAutoLinked else { return }
+        if progress.isCycleBased && !progress.isCompleted && !progress.canCompleteCycle { return }
+        _ = replaceValue(for: habit, value: progress.isCompleted ? 0 : habit.goalValue)
     }
 
     private func updateValue(habitId: UUID, value: Double) {
         guard let habit = habitsByID[habitId] else { return }
+        _ = replaceValue(for: habit, value: value)
+    }
 
-        // Remove existing today logs
-        deleteLogs(todayLogs(for: habit), from: habit)
+    @discardableResult
+    private func replaceValue(for habit: HabitDefinition, value: Double, date: Date = Date(), isPastEntry: Bool = false) -> Bool {
+        guard let replacement = viewModel.prepareLogReplacement(
+            for: habit, value: value, date: date, isPastEntry: isPastEntry
+        ) else { return false }
+        let wasCompleted = viewModel.habitProgresses.first { $0.id == habit.id }?.isCompleted ?? false
+        let saved = replacement.existingLogs.map {
+            SavedLog(date: $0.date, value: $0.value, completedAt: $0.completedAt, memo: $0.memo)
+        }
+        withAnimation(DS.Animation.snappy) {
+            deleteLogs(replacement.existingLogs, from: habit)
+            if let log = replacement.newLog { insertLog(log, into: habit) }
+        }
+        undoRecord = UndoRecord(habitID: habit.id, removed: saved,
+                                insertedIDs: Set(replacement.newLog.map { [$0.id] } ?? []), expectedIDs: Set(replacement.newLog.map { [$0.id] } ?? []), date: Calendar.current.startOfDay(for: date))
+        viewModel.didFinishSaving()
+        viewModel.refreshReminderSchedule(for: habit)
+        recalculate()
+        let isCompleted = viewModel.habitProgresses.first { $0.id == habit.id }?.isCompleted ?? false
+        if !isPastEntry && !showsCompleted && wasCompleted != isCompleted { todayFocused = true }
+        return true
+    }
 
-        // Add new log with updated value
-        if value > 0 {
-            if let log = viewModel.createValidatedLog(for: habit, value: value) {
-                insertLog(log, into: habit)
-                viewModel.didFinishSaving()
-                viewModel.refreshReminderSchedule(for: habit)
+    private func undoLastRecord(_ record: UndoRecord) {
+        guard let habit = habitsByID[record.habitID] else { undoRecord = nil; return }
+        let current = (habit.logs ?? []).filter { !$0.isAutoCompleted && Calendar.current.isDate($0.date, inSameDayAs: record.date) }
+        guard Set(current.map(\.id)) == record.expectedIDs else { undoRecord = nil; return }
+        withAnimation(DS.Animation.snappy) {
+            deleteLogs((habit.logs ?? []).filter { record.insertedIDs.contains($0.id) }, from: habit)
+            for saved in record.removed {
+                insertLog(HabitLog(date: saved.date, value: saved.value, completedAt: saved.completedAt, memo: saved.memo), into: habit)
             }
         }
+        undoRecord = nil
+        viewModel.refreshReminderSchedule(for: habit)
         recalculate()
+        todayFocused = true
     }
 
     private func skipCycle(habitId: UUID) {
@@ -1293,6 +1201,8 @@ private struct HabitListQueryView: View {
 
         if let log = viewModel.createCycleActionLog(for: habit, action: .skip) {
             insertLog(log, into: habit)
+            undoRecord = UndoRecord(habitID: habit.id, removed: [], insertedIDs: [log.id],
+                expectedIDs: Set((habit.logs ?? []).filter { !$0.isAutoCompleted && Calendar.current.isDate($0.date, inSameDayAs: log.date) }.map(\.id)), date: log.date)
             viewModel.didFinishSaving()
             viewModel.refreshReminderSchedule(for: habit)
             recalculate()
@@ -1309,6 +1219,8 @@ private struct HabitListQueryView: View {
 
         if let log = viewModel.createCycleActionLog(for: habit, action: .snooze, date: snoozeDate) {
             insertLog(log, into: habit)
+            undoRecord = UndoRecord(habitID: habit.id, removed: [], insertedIDs: [log.id],
+                expectedIDs: Set((habit.logs ?? []).filter { !$0.isAutoCompleted && Calendar.current.isDate($0.date, inSameDayAs: log.date) }.map(\.id)), date: log.date)
             viewModel.didFinishSaving()
             viewModel.refreshReminderSchedule(for: habit)
             recalculate()
@@ -1325,7 +1237,14 @@ private struct HabitListQueryView: View {
             habitName: habit.name,
             iconCategory: habit.iconCategory,
             habitType: habit.habitType,
-            entries: viewModel.historyEntries(for: habit)
+            entries: viewModel.historyEntries(for: habit),
+            onAddPastRecord: {
+                historySelection = nil
+                Task { @MainActor in
+                    await Task.yield()
+                    pastSelection = PastSelection(habit: habit)
+                }
+            }
         )
     }
 
@@ -1347,7 +1266,13 @@ private struct HabitListQueryView: View {
     }
 
     private func recalculateAnalytics() {
-        let logSnapshots = habitLogs.map { log in
+        let manualHabits = habits.filter { !$0.isAutoLinked }
+        let manualByID = Dictionary(manualHabits.map { ($0.id, $0) }, uniquingKeysWith: { _, last in last })
+        let eligibleLogs = habitLogs.filter { log in
+            guard !log.isAutoCompleted, let id = log.habitDefinition?.id, let habit = manualByID[id] else { return false }
+            return log.date >= Calendar.current.startOfDay(for: habit.createdAt) && log.date <= Date()
+        }
+        let logSnapshots = eligibleLogs.map { log in
             HabitLogSnapshot(
                 habitID: log.habitDefinition?.id ?? UUID(),
                 date: log.date,
@@ -1355,7 +1280,7 @@ private struct HabitListQueryView: View {
                 memo: log.memo
             )
         }
-        let habitSnapshots = habits.map { habit in
+        let habitSnapshots = manualHabits.map { habit in
             HabitSnapshot(
                 id: habit.id,
                 name: habit.name,
@@ -1366,7 +1291,7 @@ private struct HabitListQueryView: View {
         }
 
         heroTrendPoints = LifeHeroTrend.points(
-            habits: zip(habits, habitSnapshots).map { habit, snapshot in
+            habits: zip(manualHabits, habitSnapshots).map { habit, snapshot in
                 LifeHeroHabitSnapshot(
                     analyticsHabit: snapshot,
                     createdAt: habit.createdAt,
@@ -1383,8 +1308,22 @@ private struct HabitListQueryView: View {
                     ),
                     isAutoCompleted: log.isAutoCompleted
                 )
-            }
+            },
+            dayCount: 28
         )
+
+        var calendar = Calendar.current
+        calendar.firstWeekday = 2
+        let weekStart = calendar.dateInterval(of: .weekOfYear, for: Date())?.start ?? calendar.startOfDay(for: Date())
+        weeklyDays = (0..<7).compactMap { calendar.date(byAdding: .day, value: $0, to: weekStart) }
+        weeklyDates = Dictionary(manualHabits.map { habit in
+            let totals = Dictionary(grouping: eligibleLogs.filter { $0.habitDefinition?.id == habit.id && $0.date >= weekStart && $0.value > 0 }, by: { calendar.startOfDay(for: $0.date) })
+            return (habit.id, Set(totals.filter { $0.value.reduce(0) { $0 + $1.value } >= habit.goalValue }.map(\.key)))
+        }, uniquingKeysWith: { _, last in last })
+        weeklyCompletedDays = Dictionary(manualHabits.map { habit in
+            let dayTotals = Dictionary(grouping: eligibleLogs.filter { $0.habitDefinition?.id == habit.id && $0.date >= weekStart && $0.value > 0 }, by: { calendar.startOfDay(for: $0.date) })
+            return (habit.id, dayTotals.values.filter { $0.reduce(0) { $0 + $1.value } >= habit.goalValue }.count)
+        }, uniquingKeysWith: { _, last in last })
 
         weeklyRates = HabitAnalyticsService.weeklyCompletionRates(
             logs: logSnapshots, habits: habitSnapshots
@@ -1422,6 +1361,7 @@ private struct HabitHistorySheet: View {
     let iconCategory: HabitIconCategory
     let habitType: HabitType
     let entries: [LifeViewModel.HabitHistoryEntry]
+    var onAddPastRecord: (() -> Void)? = nil
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
@@ -1431,6 +1371,13 @@ private struct HabitHistorySheet: View {
             // Header with single close button
             header
 
+            if let onAddPastRecord {
+                Button(action: onAddPastRecord) {
+                    Label("Past Record", systemImage: "plus")
+                        .frame(maxWidth: .infinity, minHeight: 44)
+                }
+                .accessibilityIdentifier("life-habit-history-past-record")
+            }
             Divider()
 
             if entries.isEmpty {
@@ -1474,6 +1421,7 @@ private struct HabitHistorySheet: View {
                     .font(.title3)
                     .symbolRenderingMode(.hierarchical)
                     .foregroundStyle(.secondary)
+                    .frame(width: 44, height: 44)
             }
             .buttonStyle(.plain)
             .accessibilityIdentifier("life-habit-history-close")
@@ -1526,7 +1474,7 @@ private struct HabitHistorySheet: View {
             }
         }
         .padding(.vertical, DS.Spacing.sm)
-        .accessibilityElement(children: .combine)
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier("life-habit-history-row-\(entry.id.uuidString.prefix(8))")
     }
 
@@ -1543,6 +1491,13 @@ private struct HabitHistorySheet: View {
 
     private func entryContent(_ entry: LifeViewModel.HabitHistoryEntry) -> some View {
         VStack(alignment: .leading, spacing: 2) {
+            if let completedAt = entry.completedAt,
+               Calendar.current.startOfDay(for: completedAt) > Calendar.current.startOfDay(for: entry.date),
+               entry.action == .complete {
+                Text("Recorded later")
+                    .font(.caption2).foregroundStyle(.secondary)
+                    .accessibilityIdentifier("life-habit-history-late-\(entry.id)")
+            }
             Text(actionTitle(for: entry))
                 .font(.subheadline)
                 .fontWeight(.medium)

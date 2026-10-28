@@ -15,11 +15,11 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
     }
 
     func testDesertHeroRingsByInitialTab() {
-        let roots: [(tab: String, argument: String, hero: String, ring: String, action: String)] = [
+        let roots: [(tab: String, argument: String, hero: String, ring: String, action: String?)] = [
             ("Today", "today", AXID.dashboardHeroCondition, "dashboard-hero-ring", AXID.dashboardHeroCondition),
             ("Activity", "train", AXID.activityHeroReadiness, "activity-hero-ring", AXID.activityToolbarAdd),
             ("Wellness", "wellness", AXID.wellnessHeroScore, "wellness-hero-ring", "wellness-hero-sleep"),
-            ("Life", "life", AXID.lifeHeroProgress, "life-hero-ring", "life-hero-checklist-button")
+            ("Life", "life", AXID.lifeHeroProgress, "life-hero-ring", nil)
         ]
 
         for style in ["Light", "Dark"] {
@@ -38,7 +38,7 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
                 let hero = app.descendants(matching: .any)[root.hero].firstMatch
                 XCTAssertTrue(hero.waitForExistence(timeout: 10), "\(combination): hero should load")
                 assertRing(root.ring, combination: combination)
-                assertAction(root.action, combination: combination)
+                if let action = root.action { assertAction(action, combination: combination) }
                 if root.argument == "today" {
                     XCTAssertFalse(app.buttons["dashboard-primary-activity"].exists,
                                    "\(combination): Today hero should have no cross-tab action")
@@ -47,14 +47,19 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
                 let ring = app.descendants(matching: .any)[root.ring].firstMatch
                 // Shared 124pt rings include their outer 11pt stroke in AX bounds.
                 let expectedDiameter: CGFloat =
-                    root.argument == "today" || root.argument == "train" ? 104 : 135
+                    root.argument == "wellness" ? 135 : 104
                 XCTAssertEqual(ring.frame.width, expectedDiameter, accuracy: 1,
                                "\(combination): hero ring should use its tab's established diameter")
                 XCTAssertEqual(ring.frame.height, ring.frame.width, accuracy: 1,
                                "\(combination): ring should remain circular")
                 XCTAssertTrue(app.windows.firstMatch.frame.contains(ring.frame), "\(combination): whole ring should fit on screen")
-                XCTAssertTrue(app.descendants(matching: .any)[root.action].firstMatch.isHittable,
-                              "\(combination): hero action should be reachable")
+                if let action = root.action {
+                    XCTAssertTrue(app.descendants(matching: .any)[action].firstMatch.isHittable,
+                                  "\(combination): hero action should be reachable")
+                } else {
+                    XCTAssertFalse(app.buttons["life-hero-checklist-button"].exists,
+                                   "\(combination): compact Life hero should have no checklist CTA")
+                }
                 if root.argument == "wellness" {
                     let narrative = app.descendants(matching: .any)["wellness-hero-narrative"].firstMatch
                     XCTAssertTrue(narrative.waitForExistence(timeout: 10))
@@ -276,7 +281,8 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
         navigateToLife()
         captureRoot(AXID.lifeHeroProgress, tab: "Life", combination: combination)
         assertRing("life-hero-ring", combination: combination)
-        assertAction("life-hero-checklist-button", combination: combination)
+        XCTAssertFalse(app.buttons["life-hero-checklist-button"].exists)
+        XCTAssertTrue(app.scrollToElementIfNeeded(AXID.lifeSectionHabits, maxSwipes: 6))
     }
 
     private func captureRoot(_ identifier: String, tab: String, combination: String) {
