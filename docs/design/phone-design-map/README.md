@@ -66,6 +66,10 @@ Watch의 [68개 상태별 맵](actual/watch/index.html)에는 기본 글자 크�
 
 ## 화면 수정 시 갱신
 
+같은 날 C19 본문의 중복 질문을 제거해 ‘이동이 감지됐어요.’로 줄였다. 전용 40mm Watch에서 관련 UI 1개가 통과했고 `Test-DUNEWatchUITests-2026.10.28_10-22-32-+0900.xcresult`의 새 C19 원본으로 갱신했다. C10과 다른 화면의 기존 검증 출처는 유지한다.
+
+2026-10-28 Watch 계단 운동의 C10 진행과 새 C19 기구 이탈 안내를 전용 Apple Watch SE 3 (40mm), watchOS 27.0에서 새로 캡처했다. [실제 Watch 맵](actual/watch/index.html)의 두 원본과 출처를 갱신하고 직접 확인했다. GPS/걸음 fixture를 통한 안내 유지·계속 운동·명시적 종료와 기존 무알림 진행의 관련 UI 3개가 모두 통과했다. 현재 총 69개 중 66개 상태가 캡처돼 있으며 S08·S11·C12의 기존 미완료 상태는 유지한다. 한국어·기본 글씨·40mm 세로만 이번 증거이며, 실제 GPS 수집·손목을 내린 진동·배터리 사용은 [실기기 확인 항목](../../solutions/general/2026-10-28-watch-stair-gps-exit-reminder.md)으로 남긴다. iPhone·iPad·Duo 화면은 이번 변경의 소비자가 아니다.
+
 2026-10-25 Today 스크롤 조사에서는 닫힌 inspector의 내비게이션 내부 배치가 큰 제목·상단 여백 피드백을 만드는 것을 원인 격리로 확인했다. inspector를 Today NavigationStack 밖으로 옮긴 소스에서 iPhone UI10건과 iPad UI4건이 통과했다. 최신 main 통합 후 iPhone10·iPad4·Duo접힘2·펼침2와 내부 화면 native 캡처용 추가1건이 통과했다. [새 실제 화면 갤러리와 영수증](../full-redesign-map/review/today-scroll-root-cause-2026-10-25/index.html), [해결책 기록](../../solutions/performance/2026-10-24-today-scroll-root-cause.md)에서 출처와 검증 제한을 추적한다. 기존 통합 인덱스의 다른 UDID 캡처를 이번 수정의 완료 증거로 덮어쓰지 않는다.
 
 2026-10-25 러닝 거리 우선 C14·일시 정지 C15·음성 제어 C16·거리/볼륨 C17·목표 페이스 C18의 새 실제 캡처를 등록했다. 전용 40mm Watch, en_US, 기본 글씨에서 서로 다른 UI 4건이 통과했고 거리 화면의 심박 frame을 추가 1건으로 재검증했다. C16은 음성 설정에 접근하기 위해 스크롤한 상태다. 전체 68개 중 65개를 캡처했으며 기존 S08·S11·C12는 이번 범위 밖의 미완료 상태다. [최종 리뷰와 검증 receipt](../../reviews/2026-10-25-watch-running-feedback-review-ship.md)에 출처·범위·실기기 오디오 제한을 기록했다.

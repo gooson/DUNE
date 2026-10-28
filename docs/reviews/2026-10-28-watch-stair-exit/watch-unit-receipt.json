@@ -1,0 +1,21 @@
+{
+  "status": "passed",
+  "runner_exit_status": 0,
+  "tests": 34,
+  "suites": 6,
+  "summary": "Test run with 34 tests in 6 suites passed after 0.214 seconds.",
+  "note": "XCTest host reports 0; actual Swift Testing report confirms 34.",
+  "log_path": "/Users/shanks/.codex/worktrees/80fd/Health/.xcodebuild/stair-review-unit.log",
+  "log_sha256": "12c8486e0a773ff20a38e7a536edc3be0d5f250a8ea16c117afcfbce1d9494cd",
+  "selected_suites": [
+    "StairMachineExitRecoveryTests",
+    "StairMachineExitDetectorTests",
+    "StairMachineExitMonitorTests",
+    "CardioInactivityPolicyTests",
+    "CardioInactivitySignalTests",
+    "WorkoutElapsedTimeTests"
+  ],
+  "device_udid": "AE78BB39-ABEA-4311-886D-A6C42D03F805",
+  "runtime": "watchOS 27.0",
+  "xcode": "Xcode 27.1\nBuild version 27A9275"
+}
