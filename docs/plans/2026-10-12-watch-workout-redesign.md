@@ -148,6 +148,7 @@ related_solutions:
 | C16 | 러닝 음성 안내 제어 | `ControlsView` |
 | C17 | 러닝 안내 거리·볼륨 설정 | `RunningFeedbackSettingsView` |
 | C18 | 러닝 목표 페이스·허용 범위 설정 | `RunningFeedbackSettingsView` |
+| C19 | 계단 기구 이탈 후 종료 여부 확인 (실제 GPS 이동·보행, 자동 종료 없음) | `SessionPagingView` |
 | F01 | 근력 요약 | `SessionSummaryView` |
 | F02 | 유산소 요약 | `SessionSummaryView` |
 | F03 | 운동별 세트 내역 | `SessionSummaryView` |

@@ -183,6 +183,54 @@ final class WatchWorkoutFlowSmokeTests: WatchUITestBaseCase {
         XCTAssertGreaterThanOrEqual(components[0] * 60 + components[1], 3)
     }
 
+    func testStairGPSExitReminderKeepsRecordingUntilUserChooses() throws {
+        startStairGPSExitFixture()
+        let title = app.staticTexts["계단 운동을 마칠까요?"].firstMatch
+        XCTAssertTrue(title.waitForExistence(timeout: 10))
+        addScreenshotAttachment(named: "watch-design-map-C19")
+
+        // The regular inactivity countdown is 10s. This recommendation must outlive it.
+        let shownAt = Date()
+        let observation = XCTNSPredicateExpectation(
+            predicate: NSPredicate { _, _ in Date().timeIntervalSince(shownAt) >= 12 },
+            object: nil
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [observation], timeout: 15), .completed)
+        XCTAssertTrue(title.exists)
+        XCTAssertTrue(tapElement("계속 운동"))
+
+        let elapsed = app.staticTexts["watch-cardio-elapsed-time"].firstMatch
+        XCTAssertTrue(elapsed.waitForExistence(timeout: 5))
+        let initialTime = elapsed.label
+        let advanced = expectation(for: NSPredicate(format: "label != %@", initialTime), evaluatedWith: elapsed)
+        wait(for: [advanced], timeout: 5)
+        XCTAssertFalse(title.exists)
+        XCTAssertTrue(elementExists("watch-cardio-main-metrics", timeout: 5))
+        addScreenshotAttachment(named: "watch-stair-gps-exit-continued")
+    }
+
+    func testStairGPSExitReminderEndsOnlyOnExplicitAction() throws {
+        startStairGPSExitFixture()
+        XCTAssertTrue(app.staticTexts["계단 운동을 마칠까요?"].firstMatch.waitForExistence(timeout: 10))
+        XCTAssertTrue(tapElement("운동 종료"))
+        XCTAssertTrue(elementExists(WatchAXID.sessionSummaryDoneButton, timeout: 10))
+        XCTAssertFalse(elementExists("watch-cardio-main-metrics", timeout: 1))
+    }
+
+    private func startStairGPSExitFixture() {
+        launchApp(with: LaunchConfiguration(
+            scenario: .responsiveLayout,
+            additionalArguments: ["--ui-watch-home-empty", "--ui-watch-stair-gps-exit"]
+        ))
+        openAllExercises()
+        guard let exercise = findQuickStartExercise(identifier: "watch-quickstart-exercise-stair-climber") else {
+            XCTFail("Stair climber fixture must be reachable")
+            return
+        }
+        exercise.tap()
+        XCTAssertTrue(tapElement(WatchAXID.workoutPreviewCardioIndoorButton))
+    }
+
     private func captureCardioPrompt(exerciseID: String, argument: String, code: String) {
         launchApp(with: LaunchConfiguration(scenario: .responsiveLayout, additionalArguments: [argument]))
         openAllExercises()

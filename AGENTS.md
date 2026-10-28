@@ -130,6 +130,11 @@ A skill is a set of local instructions to follow that is stored in a `SKILL.md` 
 
 ## Codex Adapter Layer
 
+### UX Writing
+
+- 사용자 대면 문구를 작성·수정·검토할 때 `copy-voice`와 함께 [UX Writing 보완 규칙](.codex/ux-writing.md)을 읽는다. 해당 문서가 제목·본문·버튼의 역할, 의미 중복, 행동명, 실제 상태 표현, Watch 길이 기준의 Codex 적용 기준이다.
+- `.claude/skills/copy-voice/SKILL.md` 원본은 유지한다. 단어 수 상한·일괄 오류 표현·고정 번역 길이 비율 등과 충돌하면 위 보완 규칙의 명시적인 대체 기준을 따른다. 기존 localization·디자인맵 검증 의무는 유지한다.
+
 ### String Catalog Format
 
 - `Localizable.xcstrings`에 항목을 생성하거나 수정한 뒤 `swift scripts/format-xcstrings.swift`를 실행합니다. Shared와 Watch 카탈로그를 Xcode의 JSON 직렬화 형식으로 정렬하며 번역 값은 변경하지 않습니다.
