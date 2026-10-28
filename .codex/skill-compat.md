@@ -148,6 +148,7 @@ Codex가 iOS·iPadOS·Duo·watchOS의 보이는 화면 배치, 글자, 상태, �
 
 ### /ui-testing
 
+- **입력 UI의 키보드 사전 조건**: 폼·텍스트 입력·키보드가 포함된 Simulator 검사는 현재 worktree 전용 기기에서 하드웨어 키보드 연결을 해제하고 소프트웨어 키보드 표시 상태를 확인한다. 메뉴 탭 뒤 폼이 열리지 않거나 입력 필드·키보드 조회가 실패하면 앱/테스트 코드를 수정하기 전에 이 설정을 먼저 확인한다. 확인 절차와 사용자 확인 근거는 [소프트웨어 키보드 확인](ui-execution.md#소프트웨어-키보드-확인)을 따른다. 키보드 활성화 확인과 해당 UI 검사 통과는 별도로 기록한다.
 - 환경 실패·화면 잠금·실행권 대기가 발생하면 `.codex/ui-execution.md`를 읽고 단계를 분류한다. 저장소 simulator 실행 잠금과 Mac 화면 잠금은 다르다. 실행기 `<log>.host.json`은 진단 자료이며 UI 통과 증거가 아니다.
 - `agent: ui-test-expert`는 agent-map의 실제 모델 배정을 사용한다. 테스트 실행 자체에는 agent가 필요 없으며, 여러 화면 조작·증거 수집은 위 **실행 검증 수집 위임**의 조건과 역할 제한을 따른다. 테스트 설계·구현과 시각적 품질 판단은 실행 수집 모드로 내리지 않는다.
 - Unit/UI/watch 테스트는 기존 `scripts/test-unit.sh`, `scripts/test-ui.sh`, `scripts/test-watch-ui.sh`를 표준 경로로 사용한다. 기본 파일 로그/요약을 유지하고 필요한 때만 streaming한다.
