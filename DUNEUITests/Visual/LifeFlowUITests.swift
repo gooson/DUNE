@@ -143,8 +143,32 @@ final class LifeFlowUITests: SeededUITestBaseCase {
         capture("L05-Life-history-recorded-later")
     }
 
-    func testCaptureL01AndPastRecordLightDarkAndMaximumAX() {
-        for (style, maximumAX) in [("light", false), ("dark", false), ("dark", true)] {
+    func testCaptureL01AndPastRecordLightDarkAndMaximumAX() throws {
+        try XCTSkipIf(isHostCapture, "Use the per-appearance host capture cases")
+        captureLifeStates([("light", false), ("dark", false), ("dark", true)])
+    }
+
+    func testHostCaptureLight() throws {
+        try XCTSkipUnless(isHostCapture, "Host native capture only")
+        captureLifeStates([("light", false)])
+    }
+
+    func testHostCaptureDark() throws {
+        try XCTSkipUnless(isHostCapture, "Host native capture only")
+        captureLifeStates([("dark", false)])
+    }
+
+    func testHostCaptureMaximumAX() throws {
+        try XCTSkipUnless(isHostCapture, "Host native capture only")
+        captureLifeStates([("dark", true)])
+    }
+
+    private var isHostCapture: Bool {
+        ProcessInfo.processInfo.environment["DUNE_VISUAL_AUDIT_HOST_ONLY"] == "1"
+    }
+
+    private func captureLifeStates(_ states: [(String, Bool)]) {
+        for (style, maximumAX) in states {
             var configuration = launchConfiguration
             if let index = configuration.additionalArguments.firstIndex(of: "--ui-test-style") {
                 configuration.additionalArguments[index + 1] = style
