@@ -1,0 +1,271 @@
+// Proposal-only layout and interaction evidence. Native tests are a later gate.
+const fs = require('fs');
+const path = require('path');
+const assert = require('assert/strict');
+const crypto = require('crypto');
+const { chromium } = require('/Users/shanks/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+const file = path.resolve(__dirname, '../dune-life-redesign.html');
+const report = { date: '2026-10-28', kind: 'browser-proposal-only', nativeValidation: false, sourceSHA256: crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex'), layouts: [], states: [], interactions: [], screenshots: [], errors: [] };
+let browser;
+(async () => {
+  browser = await chromium.launch({ executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', headless: true });
+  const page = await browser.newPage({ viewport: { width: 1400, height: 1100 }, deviceScaleFactor: 1 });
+  page.on('pageerror', error => report.errors.push(error.message));
+  await page.goto(`file://${file}`);
+  const set = patch => page.evaluate(patch => window.lifePreview.set(patch), patch);
+  const get = () => page.evaluate(() => window.lifePreview.get());
+  const measure = () => page.locator('#phone').evaluate(el => {
+    const box = el.getBoundingClientRect();
+    const visible = [...el.querySelectorAll('*')].filter(e => e.getClientRects().length && getComputedStyle(e).visibility !== 'hidden');
+    const overflow = visible.filter(e => { const r = e.getBoundingClientRect(); return r.left < box.left - 1 || r.right > box.right + 1; }).map(e => `${e.tagName}.${e.className?.baseVal ?? e.className}`);
+    const targets = visible.filter(e => e.matches('button,summary,input,select')).map(e => ({ label: e.getAttribute('aria-label') || e.textContent.trim(), width: e.getBoundingClientRect().width, height: e.getBoundingClientRect().height }));
+    const ring = el.querySelector('.ring');
+    return { width: box.width, overflow, smallTargets: targets.filter(e => e.width < 43.5 || e.height < 43.5), ring: ring && getComputedStyle(ring).display !== 'none' ? [ring.getBoundingClientRect().width, ring.getBoundingClientRect().height] : null, cards: [...el.querySelectorAll('[data-card]')].map(e => e.dataset.card) };
+  });
+  for (const design of ['flow', 'compact']) for (const width of [320, 402, 466, 951, 1032]) for (const text of [100, 125, 160, 200]) for (const mode of ['light', 'dark']) {
+    await set({ design, width, text, mode, state: 'normal' });
+    const r = await measure();
+    assert.equal(r.width, width);
+    assert.deepEqual(r.overflow, [], `${design} ${width} ${text} ${mode}`);
+    assert.deepEqual(r.smallTargets, [], `${design} ${width} ${text} ${mode}`);
+    assert.deepEqual(r.ring, text < 160 ? [104, 104] : null);
+    assert.equal(r.cards[0], 'hero');
+    assert.equal(r.cards[1], 'today');
+    assert.equal(await page.locator('.hero button,.hero p,.hero-meta,[data-action=jump]').count(), 0);
+    assert.equal(await page.locator('.remaining strong').innerText(), '3');
+    assert.equal(await page.locator('.hero-medal').count(), 5);
+    assert.equal(await page.locator('.hero-medal.is-complete').count(), 2);
+    report.layouts.push({ design, width, text, mode, passed: true });
+  }
+  for (const design of ['flow', 'compact']) for (const state of ['empty', 'all-done', 'no-due', 'auto-only', 'new', 'sync', 'filtered']) {
+    await set({ design, state, width: 320, text: 200, mode: 'dark' });
+    const r = await measure();
+    assert.deepEqual(r.overflow, [], `${design} ${state}`);
+    assert.deepEqual(r.smallTargets, []);
+    if (state === 'auto-only') assert.deepEqual(r.cards, ['hero', 'auto', 'manage']);
+    if (state === 'empty') assert.equal(await page.locator('.ring,.chart,.heat').count(), 0);
+    if (state === 'new') assert.equal(await page.locator('.chart,.heat').count(), 0);
+    if (state === 'filtered') assert.ok((await page.locator('.today-card').innerText()).includes('이 분류에는 일정 없음'));
+    if (state === 'all-done') assert.equal(await page.locator('.habit-list>.habit').count(), 0);
+    if (state === 'sync') assert.equal(await page.locator('[data-card=auto] .value,[data-card=auto] .meter').count(), 0);
+    report.states.push({ design, state, passed: true });
+  }
+  await set({ design: 'flow', state: 'normal', width: 402, text: 100, mode: 'light' });
+  const initial = await get();
+  assert.equal(await page.locator('.water-unit.filled').count(), 4);
+  await page.locator('[data-action="plus:water"]').click();
+  assert.equal(await page.locator('.water-unit.filled').count(), 5);
+  assert.equal((await get()).habits.find(h => h.id === 'water').value, 5);
+  await page.locator('[data-action=undo]').click();
+  assert.equal((await get()).habits.find(h => h.id === 'water').value, 4);
+  await page.locator('[data-action="minus:water"]').click();
+  assert.equal((await get()).habits.find(h => h.id === 'water').value, 3);
+  assert.equal(await page.locator('.water-unit.filled').count(), 3);
+  report.interactions.push('count-add-reduce-undo');
+  await set({ state: 'normal' });
+  await page.locator('[data-action="menu:water"]').click();
+  assert.deepEqual((await get()).habits, initial.habits);
+  await page.locator('[data-action=back]').click();
+  report.interactions.push('menu-does-not-change-value');
+  await page.locator('[data-action="edit:reading"]').click();
+  await page.locator('#value-input').fill('1441');
+  await page.locator('[data-action=save]').click();
+  assert.equal((await get()).habits.find(h => h.id === 'reading').value, 10);
+  assert.ok((await page.locator('#error').innerText()).includes('기존 기록은 유지'));
+  await page.locator('#value-input').fill('25');
+  await page.locator('[data-action=save]').click();
+  assert.equal((await get()).habits.find(h => h.id === 'reading').value, 25);
+  report.interactions.push('duration-validate-before-replace');
+  await page.locator('[data-action="toggle:plant"]').click();
+  assert.equal((await get()).habits.find(h => h.id === 'plant').value, 1);
+  assert.equal(await page.locator('.hero-medal.is-complete').count(), 3);
+  assert.equal(await page.evaluate(() => document.activeElement.id), 'today-heading');
+  await page.locator('[data-action=undo]').click();
+  assert.equal((await get()).habits.find(h => h.id === 'plant').value, 0);
+  report.interactions.push('completion-focus-and-undo');
+  await page.locator('[data-action="snooze:plant"]').click();
+  assert.equal((await get()).habits.some(h => h.id === 'plant'), false);
+  await page.locator('.upcoming summary').click();
+  assert.ok((await page.locator('[data-card=upcoming]').innerText()).includes('내일 10.29'));
+  await page.locator('[data-action=undo]').click();
+  assert.equal((await get()).habits.some(h => h.id === 'plant'), true);
+  report.interactions.push('snooze-removes-today-adds-upcoming-undo');
+  const heroBefore = await page.locator('.ring').getAttribute('aria-label');
+  await page.locator('[data-action=weekly-check]').click();
+  assert.equal(await page.locator('.ring').getAttribute('aria-label'), heroBefore);
+  assert.ok((await page.locator('[data-card=weekly]').innerText()).includes('2 / 2일'));
+  await page.locator('[data-action=weekly-log]').click();
+  await page.locator('#value-input').fill('20');
+  await page.locator('[data-action=save]').click();
+  assert.ok((await page.locator('[data-card=weekly]').innerText()).includes('3 / 3일'));
+  assert.equal(await page.locator('.ring').getAttribute('aria-label'), heroBefore);
+  report.interactions.push('weekly-day-count-and-today-minutes-separate-from-hero');
+  await set({ state: 'normal' });
+  await page.locator('[data-action="filter:growth"]').click();
+  assert.equal(await page.locator('.habit:visible').count(), 1);
+  assert.ok((await page.locator('.today-card').innerText()).includes('책 읽기'));
+  report.interactions.push('purpose-filter');
+  await set({ state: 'normal' });
+  for (const route of ['weekly', 'auto', 'rhythm', 'report', 'manage']) {
+    const target = page.locator(`[data-route="${route}"]`);
+    const box = await target.boundingBox();
+    await target.click({ position: { x: box.width - 5, y: box.height / 2 } });
+    assert.equal((await get()).route, route);
+    await page.locator('[data-action=back]').click();
+    report.interactions.push(`header-trailing-space-${route}`);
+  }
+  await page.locator('[data-action=add]').first().click();
+  await page.locator('#name-input').fill('저녁 스트레칭');
+  await page.locator('[data-action=create]').click();
+  assert.ok((await get()).habits.some(h => h.name === '저녁 스트레칭'));
+  report.interactions.push('create-local-habit');
+  await set({ state: 'normal' });
+  const counts = await page.locator('.bar-wrap>span').allTextContents();
+  const levels = await page.locator('.heat .cell').evaluateAll(cells => cells.slice(-7).map(c => c.dataset.level));
+  assert.deepEqual(levels, counts.map(n => String(Math.min(3, Number(n)))));
+  report.interactions.push('seven-day-bars-match-heatmap-source');
+  assert.equal(await page.locator('.hero').evaluate(el => el.getBoundingClientRect().height < 200), true);
+  report.interactions.push('hero-compact-numeric-no-scroll-cta');
+  for (const state of ['empty', 'auto-only']) {
+    await set({ state });
+    if (state === 'auto-only') {
+      await page.locator('[data-action=add]').first().click();
+    } else await page.locator('[data-action=add]').first().click();
+    await page.locator('#name-input').fill('첫 습관');
+    await page.locator('[data-action=create]').click();
+    assert.equal(await page.locator('[data-card=today]').count(), 1);
+    assert.ok((await page.locator('[data-card=today]').innerText()).includes('첫 습관'));
+    assert.ok(!(await page.locator('.hero').innerText()).includes('첫 습관 만들기'));
+    assert.equal(await page.locator('[data-card=weekly]').count(), 0);
+    report.interactions.push(`${state}-first-manual-create-visible`);
+  }
+  await set({ state: 'all-done' });
+  await page.locator('[data-action=weekly-check]').click();
+  await page.locator('[data-action=weekly-log]').click();
+  await page.locator('#value-input').fill('20');
+  await page.locator('[data-action=save]').click();
+  assert.ok((await page.locator('.chart').innerText()).includes('7'));
+  assert.ok((await page.locator('.chart').innerText()).includes('최대 7건'));
+  const maxBar = await page.locator('.bar').evaluateAll(bars => Math.max(...bars.map(b => b.getBoundingClientRect().height)));
+  assert.ok(maxBar <= 80);
+  await page.locator('.completed summary').click();
+  await page.locator('[data-action="menu:plant"]').click();
+  assert.equal(await page.locator('[data-action="snooze:plant"]').count(), 0);
+  report.interactions.push('dynamic-chart-scale-above-five-and-completed-cycle-no-snooze');
+
+  await set({ state: 'normal', width: 402, text: 100, mode: 'light' });
+  const heroBeforePast = await page.locator('.ring').getAttribute('aria-label');
+  const oldCounts = await page.locator('.bar-wrap>span').allTextContents();
+  await page.locator('[data-action=past]').first().click();
+  assert.equal(await page.locator('#past-habit').inputValue(), 'water');
+  assert.equal(await page.locator('#past-date').inputValue(), '2026-10-27');
+  assert.equal(await page.locator('#past-value').inputValue(), '3');
+  await page.locator('#past-value').fill('8');
+  await page.locator('[data-action=save-past]').click();
+  assert.equal((await get()).route, 'history');
+  assert.ok((await page.locator('.detail').innerText()).includes('8 잔 · 완료 · 나중에 기록'));
+  assert.equal((await get()).habits.find(h => h.id === 'water').value, 4);
+  await page.locator('[data-action=back]').click();
+  assert.equal(await page.locator('.ring').getAttribute('aria-label'), heroBeforePast);
+  const newCounts = await page.locator('.bar-wrap>span').allTextContents();
+  assert.equal(Number(newCounts[5]), Number(oldCounts[5]) + 1);
+  report.interactions.push('past-water-upsert-updates-yesterday-not-today');
+  await page.locator('[data-action="menu:water"]').click();
+  await page.locator('[data-action="past:water"]').click();
+  await page.locator('[data-action=save-past]').click();
+  assert.equal((await get()).pastRecords.filter(r => r.habitID === 'water' && r.date === '2026-10-27').length, 1);
+  await page.locator('[data-action=back]').click();
+  assert.deepEqual(await page.locator('.bar-wrap>span').allTextContents(), newCounts);
+  report.interactions.push('past-existing-day-replace-not-double-count');
+  await page.locator('[data-action="menu:reading"]').click();
+  await page.locator('[data-action="past:reading"]').click();
+  await page.locator('#past-date').fill('2026-10-29');
+  await page.locator('[data-action=save-past]').click();
+  assert.ok((await page.locator('#past-error').innerText()).includes('어제까지'));
+  await page.locator('#past-date').fill('2026-10-02');
+  await page.locator('[data-action=save-past]').click();
+  assert.ok((await page.locator('#past-error').innerText()).includes('시작일부터'));
+  await page.locator('#past-date').fill('2026-10-27');
+  await page.locator('#past-value').fill('1441');
+  await page.locator('[data-action=save-past]').click();
+  assert.ok((await page.locator('#past-error').innerText()).includes('1440'));
+  assert.equal((await get()).pastRecords.some(r => r.habitID === 'reading' && r.date === '2026-10-27'), false);
+  await page.locator('#past-value').fill('30');
+  await page.locator('[data-action=save-past]').click();
+  assert.equal((await get()).habits.find(h => h.id === 'reading').value, 10);
+  report.interactions.push('past-date-range-and-value-validation-before-write');
+  await set({ state: 'normal' });
+  await page.locator('[data-action=past]').first().click();
+  await page.locator('#past-habit').selectOption('weekly-social');
+  await page.locator('#past-date').fill('2026-10-26');
+  await page.locator('[data-action=save-past]').click();
+  await page.locator('[data-action=back]').click();
+  assert.ok((await page.locator('[data-card=weekly]').innerText()).includes('2 / 2일'));
+  assert.equal(await page.locator('.ring').getAttribute('aria-label'), heroBeforePast);
+  report.interactions.push('past-weekly-completion-day-recounts-week');
+  await set({ state: 'normal' });
+  await page.locator('[data-action="menu:plant"]').click();
+  await page.locator('[data-action="past:plant"]').click();
+  assert.ok((await page.locator('#past-impact').innerText()).includes('11.03'));
+  await page.locator('[data-action=save-past]').click();
+  assert.equal((await get()).rescheduled[0].nextDueDate, '2026-11-03');
+  assert.equal((await get()).habits.some(h => h.id === 'plant'), false);
+  assert.ok((await page.locator('.detail').innerText()).includes('10.27'));
+  await page.locator('[data-action=undo]').click();
+  assert.equal((await get()).rescheduled.length, 0);
+  assert.ok((await get()).habits.some(h => h.id === 'plant'));
+  report.interactions.push('past-cycle-previews-next-date-and-undo-restores-schedule');
+  for (const width of [320, 402, 1032]) for (const text of [100, 200]) for (const mode of ['light', 'dark']) {
+    await set({ state: 'normal', width, text, mode });
+    await page.locator('[data-action=past]').first().click();
+    const r = await measure();
+    assert.deepEqual(r.overflow, [], `past-form ${width} ${text} ${mode}`);
+    assert.deepEqual(r.smallTargets, []);
+    assert.equal(await page.locator('#past-habit option[value="auto"]').count(), 0);
+    report.layouts.push({ screen: 'past-record', width, text, mode, passed: true });
+  }
+  await set({ state: 'normal', width: 402, text: 100, mode: 'light' });
+  await page.locator('[data-action=past]').first().click();
+  await page.locator('#past-value').fill('8');
+  await page.locator('#phone').screenshot({ path: path.join(__dirname, 'life-past-record-form.png') });
+  await page.locator('[data-action=save-past]').click();
+  await page.locator('#phone').screenshot({ path: path.join(__dirname, 'life-past-record-history.png') });
+  report.screenshots.push('life-past-record-form.png', 'life-past-record-history.png');
+  for (const mode of ['light', 'dark']) {
+    await set({ state: 'normal', design: 'flow', width: 402, text: 100, mode });
+    const full = path.join(__dirname, `life-flow-${mode}-full.png`);
+    await page.locator('#phone').screenshot({ path: full });
+    report.screenshots.push(path.basename(full));
+    if (mode === 'light') {
+      const box = await page.locator('#phone').boundingBox();
+      await page.screenshot({ path: path.join(__dirname, 'life-flow-overview.png'), clip: { x: box.x, y: box.y, width: box.width, height: 1000 } });
+      report.screenshots.push('life-flow-overview.png');
+    }
+    for (const card of ['hero', 'today', 'rhythm', 'report']) {
+      const dest = path.join(__dirname, `life-flow-${card}-${mode}.png`);
+      await page.locator(`[data-card=${card}]`).screenshot({ path: dest });
+      report.screenshots.push(path.basename(dest));
+    }
+  }
+  for (const [name, patch] of [['large', { width: 320, text: 200, mode: 'light' }], ['ipad', { width: 1032, text: 100, mode: 'light' }], ['empty', { width: 402, text: 100, state: 'empty', mode: 'light' }]]) {
+    await set({ state: 'normal', ...patch });
+    const dest = path.join(__dirname, `life-flow-${name}.png`);
+    await page.locator('#phone').screenshot({ path: dest });
+    report.screenshots.push(path.basename(dest));
+    if (name === 'large') {
+      const closeup = path.join(__dirname, 'life-flow-hero-large.png');
+      await page.locator('[data-card=hero]').screenshot({ path: closeup });
+      report.screenshots.push(path.basename(closeup));
+    }
+  }
+  await page.setViewportSize({ width: 320, height: 800 });
+  await set({ width: 402, text: 100, state: 'normal' });
+  assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
+  report.interactions.push('320px-host-no-horizontal-overflow');
+  assert.deepEqual(report.errors, []);
+  report.result = 'passed';
+})().catch(error => { report.result = 'failed'; report.failure = error.stack; process.exitCode = 1; }).finally(async () => {
+  if (browser) await browser.close();
+  fs.writeFileSync(path.join(__dirname, 'life-redesign-qa.json'), JSON.stringify(report, null, 2) + '\n');
+  console.log(JSON.stringify({ result: report.result, layouts: report.layouts.length, states: report.states.length, interactions: report.interactions.length, screenshots: report.screenshots.length, failure: report.failure }));
+});

@@ -125,3 +125,15 @@ Activity 운동 구성은 덤벨·발자국, 큰 68%/32%, 금빛/녹색의 16px 
 각 탭의 히어로 제목도 [공통 표기 계약](../layout-map/hero-heading-style.md)에 따라 CONDITION·READINESS·WELLNESS·HABITS의 영어 대문자로 통일하는 개편 범위에 포함한다. 현재 Activity 최종 시안의 READINESS가 기준이며 설명은 사용자 언어를 유지한다.
 
 2026-10-27 Activity Flow와 4탭 대문자 제목을 네이티브에 적용했다. [레이아웃 계약](../layout-map/activity-final-proposal.md)과 [새 실제 화면](../full-redesign-map/review/activity-flow-2026-10-27/index.html)에서 현재 앱·검증 제한을 확인한다. 위 시안의 PNG/브라우저 검사와 앱 캡처를 구분하며, 실제 비율은 기록 항목 수 기준이고 원래 DS 범주 색을 따른다.
+
+## Life Flow 통합 시안 · 2026-10-28
+
+[Life Flow / Compact](themes/dune-life-redesign.html)는 남은 Life 개편 제안이다. 기존3탭의 실제 진행과 Astra 독립계획/2차 자문을 대조해 [통합 계약](../layout-map/life-redesign-proposal.md)에 기록했다. DUNE 모래 능선·아이보리/브라운 카드·골드·104pt링과 영어 HABITS를 유지하며 오늘 실행과 독립44px 조작,주간일수/오늘분 구별,예정/자동 분리,큰 완료 건수·7일/28일 패턴을 강조한다. 자동의 미지원 걸음 예시를 제거하고 exercise-only/횟수·거리·로컬+HealthKit source 의미를 유지했다. 과거 통계는 현재 등록습관/목표 기준 한계를 명시한다. 고정 예시이며 앱 미적용. [실행검사와 소스해시](themes/assets/life-redesign-qa.json),[재현검사](themes/assets/life-redesign-qa.cjs),life-flow PNG와[통합계획](../../plans/2026-10-28-life-tab-redesign.md)을 보존한다. 실제 앱 캡처로 표시하지 않는다.
+
+2026-10-28 후속 피드백: Life 시안의 긴 히어로 설명·중복 하단 요약·아래 이동 버튼을 제거했다. 골드 그라데이션104px 링의 완료 수와64px 남은 숫자로 줄이고 다른 카드의 안내 문장도 축약했다. 상단+는 실제 추가 동작으로 유지한다. 새 시안 PNG와 검증 해시를 갱신하며 앱 적용을 의미하지 않는다.
+
+2026-10-28 추가 요청으로 Life에 `지난 기록` 경로를 넣었다. 날짜·습관·총값을 선택하고 기존 날짜 기록을 수정하며, 오늘 완료와 과거 실천을 구분한다. 반복은 다음 예정일을 미리 보여 준다. [별도 화면 계약](../layout-map/habit-past-record-proposal.md)·life-past-record PNG·QA를 보존하며 실제 앱 저장은 수행하지 않는다.
+
+2026-10-28 오늘의 실천 카드 보완: 평면 목록 대신 큰 아이콘·세이지/골드/청록의 습관별 카드,큰 기록값·막대·물방울8개 진행 표시로 다듬었다. 필터를 한 묶음으로 정리하고 지난 기록·44px 독립 조작과 큰 글씨/넓은 폭 배치를 유지한다. 브라우저 시안이며 앱 미적용이다.
+
+2026-10-28 Life 히어로의 시각적 강조를 보완했다. 골드 능선·브론즈 반사·입체 링과 실제 완료 습관만 채워지는 작은 메달을 추가했다. 짧은 수치·104px 링·문장/스크롤버튼 없음·큰 글씨 우선 정책을 유지한다. 이전 수치형 PNG를 비교 보존하며 최신 시안 PNG와 QA를 갱신한다. 앱 미적용이다.
