@@ -1,0 +1,275 @@
+{
+  "schema_version": 1,
+  "status": "planned-not-executed",
+  "platforms": {
+    "ios": {
+      "mode": "full",
+      "selectors": []
+    },
+    "watch": {
+      "mode": "full",
+      "selectors": []
+    }
+  },
+  "changes": [
+    {
+      "path": "DUNE/DUNE.xcodeproj/project.pbxproj",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "DUNE/Presentation/Life/HabitCompletionChartView.swift",
+      "reason": "Life feature: related suites plus smoke; consumer review required"
+    },
+    {
+      "path": "DUNE/Presentation/Life/HabitFormSheet.swift",
+      "reason": "Life feature: related suites plus smoke; consumer review required"
+    },
+    {
+      "path": "DUNE/Presentation/Life/HabitHeatmapDetailView.swift",
+      "reason": "Life feature: related suites plus smoke; consumer review required"
+    },
+    {
+      "path": "DUNE/Presentation/Life/HabitLogResolution.swift",
+      "reason": "Life feature: related suites plus smoke; consumer review required"
+    },
+    {
+      "path": "DUNE/Presentation/Life/HabitManagementView.swift",
+      "reason": "Life feature: related suites plus smoke; consumer review required"
+    },
+    {
+      "path": "DUNE/Presentation/Life/HabitPastRecordSheet.swift",
+      "reason": "Life feature: related suites plus smoke; consumer review required"
+    },
+    {
+      "path": "DUNE/Presentation/Life/HabitReminderSyncView.swift",
+      "reason": "Life feature: related suites plus smoke; consumer review required"
+    },
+    {
+      "path": "DUNE/Presentation/Life/HabitRowView.swift",
+      "reason": "Life feature: related suites plus smoke; consumer review required"
+    },
+    {
+      "path": "DUNE/Presentation/Life/LifeHabitHeroView.swift",
+      "reason": "Life feature: related suites plus smoke; consumer review required"
+    },
+    {
+      "path": "DUNE/Presentation/Life/LifeRhythmCard.swift",
+      "reason": "Life feature: related suites plus smoke; consumer review required"
+    },
+    {
+      "path": "DUNE/Presentation/Life/LifeView.swift",
+      "reason": "Life feature: related suites plus smoke; consumer review required"
+    },
+    {
+      "path": "DUNE/Presentation/Life/LifeViewModel.swift",
+      "reason": "Life feature: related suites plus smoke; consumer review required"
+    },
+    {
+      "path": "DUNE/Presentation/Shared/Extensions/HabitPurpose+View.swift",
+      "reason": "shared/unmapped presentation or missing suite: conservative full fallback"
+    },
+    {
+      "path": "DUNETests/LifeHeroTrendTests.swift",
+      "reason": "unit test source only: run the affected unit tests"
+    },
+    {
+      "path": "DUNETests/LifeLogReplacementTests.swift",
+      "reason": "unit test source only: run the affected unit tests"
+    },
+    {
+      "path": "DUNEUITests/Full/LifeRegressionTests.swift",
+      "reason": "UI tests/helpers/plans changed: validate the complete iOS test contract"
+    },
+    {
+      "path": "DUNEUITests/Smoke/LifeSmokeTests.swift",
+      "reason": "UI tests/helpers/plans changed: validate the complete iOS test contract"
+    },
+    {
+      "path": "DUNEUITests/Visual/HeroRhythmUITests.swift",
+      "reason": "UI tests/helpers/plans changed: validate the complete iOS test contract"
+    },
+    {
+      "path": "DUNEUITests/Visual/LifeFlowUITests.swift",
+      "reason": "UI tests/helpers/plans changed: validate the complete iOS test contract"
+    },
+    {
+      "path": "DUNEUITests/Visual/ThemeMatrixUITests.swift",
+      "reason": "UI tests/helpers/plans changed: validate the complete iOS test contract"
+    },
+    {
+      "path": "DUNEUITests/Visual/WaterLiliesThemeTests.swift",
+      "reason": "UI tests/helpers/plans changed: validate the complete iOS test contract"
+    },
+    {
+      "path": "Shared/Resources/Localizable.xcstrings",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/layout-map/README.md",
+      "reason": "documentation: no app runtime change"
+    },
+    {
+      "path": "docs/design/layout-map/habit-past-record-proposal.md",
+      "reason": "documentation: no app runtime change"
+    },
+    {
+      "path": "docs/design/layout-map/index.html",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/layout-map/life-redesign-proposal.md",
+      "reason": "documentation: no app runtime change"
+    },
+    {
+      "path": "docs/design/phone-design-map/build-phone-design-maps.py",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/phone-design-map/screen-catalog.py",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/phone-design-map/screen-inventory.md",
+      "reason": "documentation: no app runtime change"
+    },
+    {
+      "path": "docs/design/theme-map/README.md",
+      "reason": "documentation: no app runtime change"
+    },
+    {
+      "path": "docs/design/theme-map/index.html",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/theme-map/manifest.json",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/theme-map/themes/assets/life-flow-dark-full.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/theme-map/themes/assets/life-flow-empty.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/theme-map/themes/assets/life-flow-hero-dark.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/theme-map/themes/assets/life-flow-hero-large.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/theme-map/themes/assets/life-flow-hero-light.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/theme-map/themes/assets/life-flow-ipad.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/theme-map/themes/assets/life-flow-large.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/theme-map/themes/assets/life-flow-light-full.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/theme-map/themes/assets/life-flow-overview.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/theme-map/themes/assets/life-flow-report-dark.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/theme-map/themes/assets/life-flow-report-light.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/theme-map/themes/assets/life-flow-rhythm-dark.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/theme-map/themes/assets/life-flow-rhythm-light.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/theme-map/themes/assets/life-flow-today-dark.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/theme-map/themes/assets/life-flow-today-light.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/theme-map/themes/assets/life-hero-before-ornament-dark.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/theme-map/themes/assets/life-hero-before-ornament-light.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/theme-map/themes/assets/life-past-record-form.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/theme-map/themes/assets/life-past-record-history.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/theme-map/themes/assets/life-redesign-qa.cjs",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/theme-map/themes/assets/life-redesign-qa.json",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/theme-map/themes/dune-life-redesign.html",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/plans/2026-10-28-life-flow-native.md",
+      "reason": "documentation: no app runtime change"
+    },
+    {
+      "path": "docs/plans/2026-10-28-life-tab-astra-review.md",
+      "reason": "documentation: no app runtime change"
+    },
+    {
+      "path": "docs/plans/2026-10-28-life-tab-redesign.md",
+      "reason": "documentation: no app runtime change"
+    }
+  ],
+  "commands": [
+    {
+      "platform": "ios",
+      "argv": [
+        "scripts/test-ui.sh"
+      ]
+    },
+    {
+      "platform": "watch",
+      "argv": [
+        "scripts/test-watch-ui.sh"
+      ]
+    }
+  ],
+  "additional_validation": [
+    "widget/visionOS: inspect target membership and validate affected targets"
+  ],
+  "review_required": [
+    "Confirm changed symbols have no consumers outside the selected features; otherwise use full.",
+    "Confirm new behavior has tests; selection does not establish coverage.",
+    "Preserve seeded gesture/layout and device-specific validation requirements.",
+    "Full plans exclude manual HealthKit permission tests; permission changes need device evidence.",
+    "Record passed tests and skipped tests; no execution or zero tests is not a passed gate."
+  ],
+  "base": "origin/main",
+  "merge_base": "ea404059db30d047238046b69bc24d010ac0df62",
+  "head": "1b3805f6e498fa7ced6495e28791167abdc20655"
+}

@@ -1,0 +1,157 @@
+{
+  "branch": "codex/life-flow",
+  "base": "main",
+  "reviewed_head": "d1519a44",
+  "diff_lines": 7798,
+  "reviewers_run": [
+    "security(parent)",
+    "performance(parent)",
+    "architecture(parent)",
+    "data-integrity(parent+agent)",
+    "simplicity(parent)"
+  ],
+  "reviewers_skipped": [
+    {
+      "name": "agent-native",
+      "reason": ".claude/.codex/prompt changes absent"
+    }
+  ],
+  "findings": [
+    {
+      "id": "data-concurrent-total",
+      "priority": "P1",
+      "title": "동기화 총합 중복",
+      "status": "Resolved",
+      "resolution": "latest marked total resolver"
+    },
+    {
+      "id": "data-query-replacement",
+      "priority": "P2",
+      "title": "관계 누락 시 교체 대상 누락",
+      "status": "Resolved",
+      "resolution": "raw query union"
+    },
+    {
+      "id": "data-cycle-order",
+      "priority": "P2",
+      "title": "동일 날짜 반복 이벤트 순서",
+      "status": "Resolved",
+      "resolution": "completedAt/UUID stable ordering"
+    },
+    {
+      "id": "data-query-reads",
+      "priority": "P2",
+      "title": "조회/관계의 진행·이력 불일치",
+      "status": "Resolved",
+      "resolution": "all read APIs accept queried logs"
+    },
+    {
+      "id": "data-edit-reminders",
+      "priority": "P2",
+      "title": "편집 알림 관계 지연",
+      "status": "Resolved",
+      "resolution": "ModelContext fetch before refresh"
+    },
+    {
+      "id": "ux-purpose",
+      "priority": "P2",
+      "title": "관계 목적 분류",
+      "status": "Resolved",
+      "resolution": "social mapped to mind"
+    },
+    {
+      "id": "ux-units",
+      "priority": "P2",
+      "title": "수분 단위",
+      "status": "Resolved",
+      "resolution": "configured unit visible"
+    },
+    {
+      "id": "ux-focus",
+      "priority": "P2",
+      "title": "증감 때 초점 이동",
+      "status": "Resolved",
+      "resolution": "completion movement only"
+    },
+    {
+      "id": "ux-preview",
+      "priority": "P2",
+      "title": "반복 다음 예정일 미리보기",
+      "status": "Resolved",
+      "resolution": "pure simulated snapshot"
+    },
+    {
+      "id": "ux-first-record",
+      "priority": "P2",
+      "title": "첫 기록 전 차트",
+      "status": "Resolved",
+      "resolution": "history gate"
+    },
+    {
+      "id": "ux-filter-empty",
+      "priority": "P2",
+      "title": "빈 필터 복귀",
+      "status": "Resolved",
+      "resolution": "inline Show all"
+    },
+    {
+      "id": "ux-locale-number",
+      "priority": "P2",
+      "title": "소수점 해석",
+      "status": "Resolved",
+      "resolution": "locale separator normalization"
+    },
+    {
+      "id": "test-entry-clear",
+      "priority": "P2",
+      "title": "UI 입력 커서 의존",
+      "status": "Resolved",
+      "resolution": "fillTextInput helper"
+    },
+    {
+      "id": "ux-weekdays",
+      "priority": "P3",
+      "title": "주간 요일 시각화",
+      "status": "Resolved",
+      "resolution": "distinct day strip"
+    },
+    {
+      "id": "ux-editor-large",
+      "priority": "P3",
+      "title": "큰 글씨 시간 편집",
+      "status": "Resolved",
+      "resolution": "vertical layout"
+    }
+  ],
+  "summary": {
+    "p1": 0,
+    "p2": 0,
+    "p3": 0
+  },
+  "ui_gate": "pending",
+  "currentSource": "62d3c097",
+  "uiGate": "failed-corrections-pending-authorized-verification",
+  "runtimePending": [
+    {
+      "priority": "P2",
+      "id": "UI-CHART-AX",
+      "status": "patched-unverified",
+      "cause": "Parent chart identifier overwrites title identifier",
+      "automaticRetries": 1
+    },
+    {
+      "priority": "P2",
+      "id": "UI-WEEKLY-ROW",
+      "status": "patched-unverified",
+      "cause": "Offscreen row and unclear container boundary",
+      "automaticRetries": 1
+    },
+    {
+      "priority": "P2",
+      "id": "UI-REPORT-LOCALE",
+      "status": "patched-unverified",
+      "cause": "English text queried in Korean runtime",
+      "automaticRetries": 1
+    }
+  ]
+}

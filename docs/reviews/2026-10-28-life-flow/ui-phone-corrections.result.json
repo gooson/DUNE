@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/LifeFlowUITests/testCaptureL01AndPastRecordLightDarkAndMaximumAX",
+    "DUNEUITests/LifeFlowUITests/testCompactHeroAndTodayReadingOrder",
+    "DUNEUITests/LifeRegressionTests/testEditFlowRenamesSeededHabit",
+    "DUNEUITests/LifeRegressionTests/testWeeklyAndFutureRecurringHabitsStayOutsideTodayProgress",
+    "DUNEUITests/LifeSeededSmokeTests/testCompactHeroLayout",
+    "DUNEUITests/LifeSeededSmokeTests/testWeeklyReflectionOpensMeasuredComparison",
+    "DUNEUITests/LifeSmokeTests/testSaveEmptyHabitKeepsFormPresented"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 7,
+    "passed": 4,
+    "skipped": 0,
+    "failed": 3
+  },
+  "passed_cases": 4,
+  "failures": [
+    "974: /Users/shanks/.codex/worktrees/4d0d/Health/DUNEUITests/Visual/LifeFlowUITests.swift:20: error: -[DUNEUITests.LifeFlowUITests testCaptureL01AndPastRecordLightDarkAndMaximumAX] : XCTAssertTrue failed - habit-completion-chart-title should be reachable",
+    "983: Test Case '-[DUNEUITests.LifeFlowUITests testCaptureL01AndPastRecordLightDarkAndMaximumAX]' failed (117.355 seconds).",
+    "1039: Test Suite 'LifeFlowUITests' failed at 2026-10-28 14:45:30.651.",
+    "1559: /Users/shanks/.codex/worktrees/4d0d/Health/DUNEUITests/Full/LifeRegressionTests.swift:83: error: -[DUNEUITests.LifeRegressionTests testWeeklyAndFutureRecurringHabitsStayOutsideTodayProgress] : XCTAssertTrue failed",
+    "1568: Test Case '-[DUNEUITests.LifeRegressionTests testWeeklyAndFutureRecurringHabitsStayOutsideTodayProgress]' failed (106.781 seconds).",
+    "1569: Test Suite 'LifeRegressionTests' failed at 2026-10-28 14:47:52.010.",
+    "1822: /Users/shanks/.codex/worktrees/4d0d/Health/DUNEUITests/Smoke/LifeSmokeTests.swift:174: error: -[DUNEUITests.LifeSeededSmokeTests testWeeklyReflectionOpensMeasuredComparison] : XCTAssertTrue failed - The detail should preserve the prior-week comparison",
+    "1831: Test Case '-[DUNEUITests.LifeSeededSmokeTests testWeeklyReflectionOpensMeasuredComparison]' failed (29.276 seconds).",
+    "1832: Test Suite 'LifeSeededSmokeTests' failed at 2026-10-28 14:49:11.004.",
+    "1887: Test Suite 'DUNEUITests.xctest' failed at 2026-10-28 14:49:24.998.",
+    "1889: Test Suite 'Selected tests' failed at 2026-10-28 14:49:24.999.",
+    "1906: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log reports 3 failures",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/LifeFlowUITests/testCaptureL01AndPastRecordLightDarkAndMaximumAX",
+    "DUNEUITests/LifeRegressionTests/testWeeklyAndFutureRecurringHabitsStayOutsideTodayProgress",
+    "DUNEUITests/LifeSeededSmokeTests/testWeeklyReflectionOpensMeasuredComparison"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/4d0d/Health/.codex-checks/life-run/ui-phone-corrections.log"
+}

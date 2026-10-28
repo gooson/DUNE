@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/DashboardSmokeTests",
+    "DUNEUITests/ActivitySmokeTests",
+    "DUNEUITests/WellnessSmokeTests/testWellnessTabLoads",
+    "DUNEUITests/LifeSmokeTests",
+    "DUNEUITests/LifeFlowUITests",
+    "DUNEUITests/LifeRegressionTests",
+    "DUNEUITests/LifeSeededSmokeTests/testHeroProgressExists",
+    "DUNEUITests/LifeSeededSmokeTests/testWeeklyReflectionOpensMeasuredComparison",
+    "DUNEUITests/LifeSeededSmokeTests/testCompactHeroLayout",
+    "DUNEUITests/LifeSeededSmokeTests/testSparseTrendKeepsHabitListAndHistoryAccessible"
+  ],
+  "skipped_selectors": [
+    "DUNEUITests/ActivitySmokeTests/testPullToRefreshShowsWaveIndicator",
+    "DUNEUITests/LifeSmokeTests/testWeeklyFrequencyShowsStepper",
+    "DUNEUITests/WellnessSmokeTests/testBodyFormSaveEnablesAfterInput",
+    "DUNEUITests/WellnessSmokeTests/testInjuryRecoveredToggleShowsEndDate",
+    "DUNEUITests/SettingsSmokeTests/testAppearanceSectionExists",
+    "DUNEUITests/SettingsSmokeTests/testDataPrivacySectionExists",
+    "DUNEUITests/SettingsSmokeTests/testAboutSectionExists",
+    "DUNEUITests/SettingsSmokeTests/testPreferredExercisesLinkExists",
+    "DUNEUITests/SettingsSmokeTests/testNavigateToPreferredExercises",
+    "DUNEUITests/SettingsSmokeTests/testWhatsNewLinkExists",
+    "DUNEUITests/SettingsSmokeTests/testNavigateToWhatsNew",
+    "DUNEUITests/SettingsSmokeTests/testWhatsNewNotificationsDetailShowsArtwork",
+    "DUNEUITests/SettingsSmokeTests/testWhatsNewSleepDebtDetailExists",
+    "DUNEUITests/SettingsSmokeTests/testWhatsNewWidgetDetailExists",
+    "DUNEUITests/SettingsSmokeTests/testWhatsNewMuscleMapDetailExists"
+  ],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 49,
+    "passed": 36,
+    "skipped": 3,
+    "failed": 10
+  },
+  "passed_cases": 36,
+  "failures": [
+    "8998: /Users/shanks/.codex/worktrees/4d0d/Health/DUNEUITests/Smoke/DashboardSmokeTests.swift:153: error: -[DUNEUITests.DashboardSmokeTests testConditionTrendAndHeroDetailRoute] : XCTAssertTrue failed - Daily history should render the seven-day fallback chart",
+    "11722: /Users/shanks/.codex/worktrees/4d0d/Health/DUNEUITests/Smoke/LifeSmokeTests.swift:242: error: -[DUNEUITests.LifeSeededSmokeTests testCompactHeroLayout] : XCTAssertEqualWithAccuracy failed: (\"111.0\") is not equal to (\"104.0\") +/- (\"1.0\") - Light: normal text should keep the compact 104pt ring",
+    "11731: Test Case '-[DUNEUITests.LifeSeededSmokeTests testCompactHeroLayout]' failed (19.386 seconds).",
+    "11873: /Users/shanks/.codex/worktrees/4d0d/Health/DUNEUITests/Smoke/LifeSmokeTests.swift:164: error: -[DUNEUITests.LifeSeededSmokeTests testWeeklyReflectionOpensMeasuredComparison] : XCTAssertTrue failed",
+    "11882: Test Case '-[DUNEUITests.LifeSeededSmokeTests testWeeklyReflectionOpensMeasuredComparison]' failed (22.425 seconds).",
+    "11883: Test Suite 'LifeSeededSmokeTests' failed at 2026-10-28 14:28:25.514.",
+    "12304: /Users/shanks/.codex/worktrees/4d0d/Health/DUNEUITests/Smoke/LifeSmokeTests.swift:122: error: -[DUNEUITests.LifeSmokeTests testSaveEmptyHabitKeepsFormPresented] : XCTAssertTrue failed - Habit form should remain visible on validation failure",
+    "12313: Test Case '-[DUNEUITests.LifeSmokeTests testSaveEmptyHabitKeepsFormPresented]' failed (16.166 seconds).",
+    "12337: Test Suite 'LifeSmokeTests' failed at 2026-10-28 14:30:36.369.",
+    "12373: Test Suite 'DUNEUITests.xctest' failed at 2026-10-28 14:30:46.598.",
+    "12375: Test Suite 'Selected tests' failed at 2026-10-28 14:30:46.599.",
+    "12400: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log reports 10 failures",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/LifeSeededSmokeTests/testWeeklyReflectionOpensMeasuredComparison",
+    "DUNEUITests/LifeSeededSmokeTests/testCompactHeroLayout"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/4d0d/Health/.codex-checks/life-run/ui-phone.log"
+}

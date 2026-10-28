@@ -1,0 +1,265 @@
+{
+  "date": "2026-10-28",
+  "kind": "actual-native-XCTest-screenshots",
+  "status": "partial",
+  "sourceCommit": "19f43ee3",
+  "currentSourceAfterCapture": "AX-only patch and origin/main merge may differ; these images are not post-patch validation",
+  "xcresult": ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.28_14-42-50-+0900.xcresult",
+  "device": {
+    "name": "iPhone 18 Pro-wt-Health-4d0d-62cf3693c151",
+    "udid": "E31D1A6A-8649-4FCF-9DAE-76DD59DE0192",
+    "platform": "iOS Simulator"
+  },
+  "summary": {
+    "images": 10,
+    "passedTestImages": 4,
+    "failedLaterStepImages": 6
+  },
+  "captures": [
+    {
+      "file": "images/L01-hero-light.png",
+      "screen": "L01",
+      "label": "Hero, light",
+      "appearance": "light",
+      "dynamicType": "default",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "sha256": "5c2bd3bf9b4d3b196e0d3c2e51f0c93858b333b39d7c157e97a5beff6b331ecb",
+      "sourceCommit": "19f43ee3",
+      "xcresult": ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.28_14-42-50-+0900.xcresult",
+      "device": {
+        "name": "iPhone 18 Pro-wt-Health-4d0d-62cf3693c151",
+        "udid": "E31D1A6A-8649-4FCF-9DAE-76DD59DE0192",
+        "platform": "iOS Simulator"
+      },
+      "originalAttachment": "C1C5EBD3-E983-4B62-AA20-54F87DCE1710.png",
+      "originalTest": "LifeFlowUITests/testCaptureL01AndPastRecordLightDarkAndMaximumAX()",
+      "testOutcome": "failed-later-step",
+      "attachmentAssociatedWithFailure": false,
+      "capturedAtUnix": 1793166212.799
+    },
+    {
+      "file": "images/L01-today-light.png",
+      "screen": "L01",
+      "label": "Today habit cards, light",
+      "appearance": "light",
+      "dynamicType": "default",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "sha256": "fde1d846b9a17500093a725a5c2d291a96c5d3d11116a275a891f610a158f83b",
+      "sourceCommit": "19f43ee3",
+      "xcresult": ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.28_14-42-50-+0900.xcresult",
+      "device": {
+        "name": "iPhone 18 Pro-wt-Health-4d0d-62cf3693c151",
+        "udid": "E31D1A6A-8649-4FCF-9DAE-76DD59DE0192",
+        "platform": "iOS Simulator"
+      },
+      "originalAttachment": "E35C62B3-3568-43C5-A5CC-C51604283BCF.png",
+      "originalTest": "LifeFlowUITests/testCaptureL01AndPastRecordLightDarkAndMaximumAX()",
+      "testOutcome": "failed-later-step",
+      "attachmentAssociatedWithFailure": false,
+      "capturedAtUnix": 1793166215.049
+    },
+    {
+      "file": "images/L01-rhythm-light.png",
+      "screen": "L01",
+      "label": "Rhythm and weekly review, light",
+      "appearance": "light",
+      "dynamicType": "default",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "sha256": "219dfec8aa9e34a0700f6ad2bef41c888abc7294bc1b5c71d7c75fa186ad9672",
+      "sourceCommit": "19f43ee3",
+      "xcresult": ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.28_14-42-50-+0900.xcresult",
+      "device": {
+        "name": "iPhone 18 Pro-wt-Health-4d0d-62cf3693c151",
+        "udid": "E31D1A6A-8649-4FCF-9DAE-76DD59DE0192",
+        "platform": "iOS Simulator"
+      },
+      "originalAttachment": "88180F88-2671-4406-9BFD-D5C3E7313DB1.png",
+      "originalTest": "LifeFlowUITests/testCaptureL01AndPastRecordLightDarkAndMaximumAX()",
+      "testOutcome": "failed-later-step",
+      "attachmentAssociatedWithFailure": false,
+      "capturedAtUnix": 1793166226.025
+    },
+    {
+      "file": "images/L09-past-record-light.png",
+      "screen": "L09",
+      "label": "Past record sheet, light",
+      "appearance": "light",
+      "dynamicType": "default",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "sha256": "0041327aaf5cfb4053d5bf93816ab16d4849ee44b53f74ea9540624ab6bd119f",
+      "sourceCommit": "19f43ee3",
+      "xcresult": ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.28_14-42-50-+0900.xcresult",
+      "device": {
+        "name": "iPhone 18 Pro-wt-Health-4d0d-62cf3693c151",
+        "udid": "E31D1A6A-8649-4FCF-9DAE-76DD59DE0192",
+        "platform": "iOS Simulator"
+      },
+      "originalAttachment": "E8125C03-995D-43D3-BCFB-79A0A2CFAE88.png",
+      "originalTest": "LifeFlowUITests/testCaptureL01AndPastRecordLightDarkAndMaximumAX()",
+      "testOutcome": "failed-later-step",
+      "attachmentAssociatedWithFailure": false,
+      "capturedAtUnix": 1793166238.619
+    },
+    {
+      "file": "images/L02-edit-name-light.png",
+      "screen": "L02",
+      "label": "Edit habit name, light",
+      "appearance": "light",
+      "dynamicType": "default",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "sha256": "6607e0ca8112566bc99e1c647507d5a8d9c0f24abbe15a93c58d38931aed3181",
+      "sourceCommit": "19f43ee3",
+      "xcresult": ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.28_14-42-50-+0900.xcresult",
+      "device": {
+        "name": "iPhone 18 Pro-wt-Health-4d0d-62cf3693c151",
+        "udid": "E31D1A6A-8649-4FCF-9DAE-76DD59DE0192",
+        "platform": "iOS Simulator"
+      },
+      "originalAttachment": "3FC85FA9-0DF4-4A85-B807-49EC349FE859.png",
+      "originalTest": "LifeRegressionTests/testEditFlowRenamesSeededHabit()",
+      "testOutcome": "passed",
+      "attachmentAssociatedWithFailure": false,
+      "capturedAtUnix": 1793166359.12
+    },
+    {
+      "file": "images/L01-compact-hero-light.png",
+      "screen": "L01",
+      "label": "Compact hero, light",
+      "appearance": "light",
+      "dynamicType": "default",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "sha256": "07a155cfbf1c15a9780040b1e6e8a0ae0cfc31133fa9847bd5d6109ee9743db0",
+      "sourceCommit": "19f43ee3",
+      "xcresult": ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.28_14-42-50-+0900.xcresult",
+      "device": {
+        "name": "iPhone 18 Pro-wt-Health-4d0d-62cf3693c151",
+        "udid": "E31D1A6A-8649-4FCF-9DAE-76DD59DE0192",
+        "platform": "iOS Simulator"
+      },
+      "originalAttachment": "0DD183BB-1C8A-4ED0-A71B-2BED4EF902C1.png",
+      "originalTest": "LifeSeededSmokeTests/testCompactHeroLayout()",
+      "testOutcome": "passed",
+      "attachmentAssociatedWithFailure": false,
+      "capturedAtUnix": 1793166491.098
+    },
+    {
+      "file": "images/L01-compact-hero-dark.png",
+      "screen": "L01",
+      "label": "Compact hero, dark",
+      "appearance": "dark",
+      "dynamicType": "default",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "sha256": "1df65b1b8b903d292e86685e0188d5157e5fc6179efbeea175dd9e38a34ae0e6",
+      "sourceCommit": "19f43ee3",
+      "xcresult": ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.28_14-42-50-+0900.xcresult",
+      "device": {
+        "name": "iPhone 18 Pro-wt-Health-4d0d-62cf3693c151",
+        "udid": "E31D1A6A-8649-4FCF-9DAE-76DD59DE0192",
+        "platform": "iOS Simulator"
+      },
+      "originalAttachment": "FDD838EC-97AE-47CC-8EC3-A6F320B95345.png",
+      "originalTest": "LifeSeededSmokeTests/testCompactHeroLayout()",
+      "testOutcome": "passed",
+      "attachmentAssociatedWithFailure": false,
+      "capturedAtUnix": 1793166505.324
+    },
+    {
+      "file": "images/L01-compact-hero-AXXXL.png",
+      "screen": "L01",
+      "label": "Compact hero, Accessibility XXXL",
+      "appearance": "light",
+      "dynamicType": "accessibility-XXXL",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "sha256": "27e58a7d7e15d116123f16d7b07ac105599a743fb80539c0c41eca73dd7bed45",
+      "sourceCommit": "19f43ee3",
+      "xcresult": ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.28_14-42-50-+0900.xcresult",
+      "device": {
+        "name": "iPhone 18 Pro-wt-Health-4d0d-62cf3693c151",
+        "udid": "E31D1A6A-8649-4FCF-9DAE-76DD59DE0192",
+        "platform": "iOS Simulator"
+      },
+      "originalAttachment": "83FB1C7C-841C-4F7E-AB0A-DD8ADD6CE164.png",
+      "originalTest": "LifeSeededSmokeTests/testCompactHeroLayout()",
+      "testOutcome": "passed",
+      "attachmentAssociatedWithFailure": false,
+      "capturedAtUnix": 1793166519.081
+    },
+    {
+      "file": "images/L01-weekly-summary-light.png",
+      "screen": "L01",
+      "label": "Root weekly reflection summary, light",
+      "appearance": "light",
+      "dynamicType": "default",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "sha256": "e4fa8dc12de6cdbbb01b8f5338057eff36e698504f930ad854f9e0b5eff7c383",
+      "sourceCommit": "19f43ee3",
+      "xcresult": ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.28_14-42-50-+0900.xcresult",
+      "device": {
+        "name": "iPhone 18 Pro-wt-Health-4d0d-62cf3693c151",
+        "udid": "E31D1A6A-8649-4FCF-9DAE-76DD59DE0192",
+        "platform": "iOS Simulator"
+      },
+      "originalAttachment": "7D8A8EBE-1ADE-4AA9-9D27-6D1D22782223.png",
+      "originalTest": "LifeSeededSmokeTests/testWeeklyReflectionOpensMeasuredComparison()",
+      "testOutcome": "failed-later-step",
+      "attachmentAssociatedWithFailure": false,
+      "capturedAtUnix": 1793166541.477
+    },
+    {
+      "file": "images/L07-heatmap-summary-light.png",
+      "screen": "L07",
+      "label": "Habit heatmap detail (Activity Detail), light",
+      "appearance": "light",
+      "dynamicType": "default",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "sha256": "b2367c2906754d64f11a06357e9b84f2528ce55093e7db66ef383f87d0c2b25a",
+      "sourceCommit": "19f43ee3",
+      "xcresult": ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.28_14-42-50-+0900.xcresult",
+      "device": {
+        "name": "iPhone 18 Pro-wt-Health-4d0d-62cf3693c151",
+        "udid": "E31D1A6A-8649-4FCF-9DAE-76DD59DE0192",
+        "platform": "iOS Simulator"
+      },
+      "originalAttachment": "285AE854-7C02-43BF-8CF6-B0D12D68EC8F.png",
+      "originalTest": "LifeFlowUITests/testCaptureL01AndPastRecordLightDarkAndMaximumAX()",
+      "testOutcome": "failed-later-step",
+      "attachmentAssociatedWithFailure": false,
+      "capturedAtUnix": 1793166248.066
+    }
+  ],
+  "excludedAttachments": [],
+  "screenIdentityNotes": {
+    "L07": "HabitHeatmapDetailView is titled Activity Detail; catalog and view source confirm Life heatmap route.",
+    "L01-weekly-summary": "Root reflection card, not L08 WeeklyHabitReportView detail."
+  }
+}
