@@ -1,0 +1,565 @@
+{
+  "schema_version": 1,
+  "status": "planned-not-executed",
+  "platforms": {
+    "ios": {
+      "mode": "full",
+      "selectors": []
+    },
+    "watch": {
+      "mode": "full",
+      "selectors": []
+    }
+  },
+  "changes": [
+    {
+      "path": "DUNE/Data/Services/SimulatorAdvancedMockData.swift",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "DUNE/Presentation/Dashboard/Components/TodayMetricCard.swift",
+      "reason": "Dashboard feature: related suites plus smoke; consumer review required"
+    },
+    {
+      "path": "DUNE/Presentation/Dashboard/DashboardView.swift",
+      "reason": "Dashboard feature: related suites plus smoke; consumer review required"
+    },
+    {
+      "path": "DUNE/Presentation/Dashboard/DashboardViewModel.swift",
+      "reason": "Dashboard feature: related suites plus smoke; consumer review required"
+    },
+    {
+      "path": "DUNE/Presentation/Shared/Models/VitalCardData.swift",
+      "reason": "shared/unmapped presentation or missing suite: conservative full fallback"
+    },
+    {
+      "path": "DUNE/Presentation/Wellness/Components/WellnessSleepPredictionCard.swift",
+      "reason": "Wellness feature: related suites plus smoke; consumer review required"
+    },
+    {
+      "path": "DUNE/Presentation/Wellness/Components/WellnessSleepSummaryCard.swift",
+      "reason": "Wellness feature: related suites plus smoke; consumer review required"
+    },
+    {
+      "path": "DUNE/Presentation/Wellness/WellnessViewModel.swift",
+      "reason": "Wellness feature: related suites plus smoke; consumer review required"
+    },
+    {
+      "path": "DUNETests/DashboardViewModelTests.swift",
+      "reason": "unit test source only: run the affected unit tests"
+    },
+    {
+      "path": "DUNEUITests/Visual/TodayCompactUITests.swift",
+      "reason": "UI tests/helpers/plans changed: validate the complete iOS test contract"
+    },
+    {
+      "path": "DUNEUITests/Visual/WellnessFlowUITests.swift",
+      "reason": "UI tests/helpers/plans changed: validate the complete iOS test contract"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/today-compact-2026-10-26/index.html",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/today-wellness-metrics-2026-10-28/README.md",
+      "reason": "documentation: no app runtime change"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/today-wellness-metrics-2026-10-28/images/ipad-T03-pinned-wellness-row-0-dark.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/today-wellness-metrics-2026-10-28/images/ipad-T03-pinned-wellness-row-0-light.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/today-wellness-metrics-2026-10-28/images/ipad-T03-pinned-wellness-row-1-dark.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/today-wellness-metrics-2026-10-28/images/ipad-T03-pinned-wellness-row-1-light.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/today-wellness-metrics-2026-10-28/images/iphone-T03-pinned-wellness-hrv-MaxAX.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/today-wellness-metrics-2026-10-28/images/iphone-T03-pinned-wellness-row-0-dark.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/today-wellness-metrics-2026-10-28/images/iphone-T03-pinned-wellness-row-0-light.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/today-wellness-metrics-2026-10-28/images/iphone-T03-pinned-wellness-row-1-dark.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/today-wellness-metrics-2026-10-28/images/iphone-T03-pinned-wellness-row-1-light.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/today-wellness-metrics-2026-10-28/images/iphone-T03-pinned-wellness-weight-MaxAX.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/today-wellness-metrics-2026-10-28/index.html",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/today-wellness-metrics-2026-10-28/manifest.json",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/today-wellness-metrics-2026-10-28/proof/astra-review.md",
+      "reason": "documentation: no app runtime change"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/today-wellness-metrics-2026-10-28/proof/ios-build.log.gz",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/today-wellness-metrics-2026-10-28/proof/phone-initial-source.patch.gz",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/today-wellness-metrics-2026-10-28/proof/targeted-unit.xctestplan",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/today-wellness-metrics-2026-10-28/proof/ui-ipad.log.gz",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/today-wellness-metrics-2026-10-28/proof/ui-ipad.log.result.json",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/today-wellness-metrics-2026-10-28/proof/ui-phone-retry.log.gz",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/today-wellness-metrics-2026-10-28/proof/ui-phone-retry.log.result.json",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/today-wellness-metrics-2026-10-28/proof/ui-phone.log.gz",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/today-wellness-metrics-2026-10-28/proof/ui-phone.log.result.json",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/today-wellness-metrics-2026-10-28/proof/ui-plan.json",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/today-wellness-metrics-2026-10-28/proof/unit-focused.log.gz",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/today-wellness-metrics-2026-10-28/proof/unit-scheme-restoration.json",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/today-wellness-metrics-2026-10-28/proof/unit-targeted.log.gz",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/today-wellness-metrics-2026-10-28/proof/unit.log.gz",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/today-wellness-metrics-2026-10-28/proof/verification.json",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-flow-2026-10-28/index.html",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-followup-ship-2026-10-28/README.md",
+      "reason": "documentation: no app runtime change"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-followup-ship-2026-10-28/images/iphone-T03-pinned-wellness-row-0-dark.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-followup-ship-2026-10-28/images/iphone-T03-pinned-wellness-row-0-light.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-followup-ship-2026-10-28/images/iphone-T03-pinned-wellness-row-1-dark.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-followup-ship-2026-10-28/images/iphone-T03-pinned-wellness-row-1-light.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-followup-ship-2026-10-28/index.html",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-followup-ship-2026-10-28/manifest.json",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-followup-ship-2026-10-28/proof/initial-body-scroll-failure.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-followup-ship-2026-10-28/proof/initial-body-scroll-hierarchy.txt.gz",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-followup-ship-2026-10-28/proof/ios-build.log.gz",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-followup-ship-2026-10-28/proof/ui-body-retry.log.gz",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-followup-ship-2026-10-28/proof/ui-body-retry.log.result.json",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-followup-ship-2026-10-28/proof/ui-final.log.gz",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-followup-ship-2026-10-28/proof/ui-final.log.result.json",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-followup-ship-2026-10-28/proof/ui-plan.json",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-followup-ship-2026-10-28/proof/ui-test-build.log.gz",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-followup-ship-2026-10-28/proof/unit-build.log.gz",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-followup-ship-2026-10-28/proof/unit-focused.log.gz",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-followup-ship-2026-10-28/proof/verification.json",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-prediction-visual-2026-10-28/README.md",
+      "reason": "documentation: no app runtime change"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-prediction-visual-2026-10-28/images/ipad-H01-prediction-0-low-light.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-prediction-visual-2026-10-28/images/ipad-H01-prediction-100-high-light.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-prediction-visual-2026-10-28/images/ipad-H01-prediction-37-low-dark.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-prediction-visual-2026-10-28/images/ipad-H01-prediction-78-medium-light.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-prediction-visual-2026-10-28/images/iphone-H01-prediction-0-low-light.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-prediction-visual-2026-10-28/images/iphone-H01-prediction-100-high-light.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-prediction-visual-2026-10-28/images/iphone-H01-prediction-37-MaxAX-confidence.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-prediction-visual-2026-10-28/images/iphone-H01-prediction-37-MaxAX-score.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-prediction-visual-2026-10-28/images/iphone-H01-prediction-37-low-dark.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-prediction-visual-2026-10-28/images/iphone-H01-prediction-78-medium-light.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-prediction-visual-2026-10-28/images/iphone-H01-prediction-empty.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-prediction-visual-2026-10-28/index.html",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-prediction-visual-2026-10-28/manifest.json",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-prediction-visual-2026-10-28/proof/astra-review.md",
+      "reason": "documentation: no app runtime change"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-prediction-visual-2026-10-28/proof/ios-build.log.gz",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-prediction-visual-2026-10-28/proof/phone-initial-source.patch.gz",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-prediction-visual-2026-10-28/proof/ui-compile.log.gz",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-prediction-visual-2026-10-28/proof/ui-ipad.log.gz",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-prediction-visual-2026-10-28/proof/ui-ipad.log.result.json",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-prediction-visual-2026-10-28/proof/ui-phone-capture-final.log.gz",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-prediction-visual-2026-10-28/proof/ui-phone-capture-final.log.result.json",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-prediction-visual-2026-10-28/proof/ui-phone-capture-retry.log.gz",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-prediction-visual-2026-10-28/proof/ui-phone-capture-retry.log.result.json",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-prediction-visual-2026-10-28/proof/ui-phone-retry.log.gz",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-prediction-visual-2026-10-28/proof/ui-phone-retry.log.result.json",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-prediction-visual-2026-10-28/proof/ui-phone.log.gz",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-prediction-visual-2026-10-28/proof/ui-phone.log.result.json",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-prediction-visual-2026-10-28/proof/ui-plan.json",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-prediction-visual-2026-10-28/proof/verification.json",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-sparse-sleep-2026-10-28/README.md",
+      "reason": "documentation: no app runtime change"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-sparse-sleep-2026-10-28/images/ipad-H01-sleep-1-records.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-sparse-sleep-2026-10-28/images/ipad-H01-sleep-2-records.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-sparse-sleep-2026-10-28/images/ipad-H01-sleep-4-records.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-sparse-sleep-2026-10-28/images/ipad-H01-sleep-7-records.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-sparse-sleep-2026-10-28/images/iphone-H01-sleep-1-records.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-sparse-sleep-2026-10-28/images/iphone-H01-sleep-2-records-MaxAX.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-sparse-sleep-2026-10-28/images/iphone-H01-sleep-2-records-dark.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-sparse-sleep-2026-10-28/images/iphone-H01-sleep-2-records.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-sparse-sleep-2026-10-28/images/iphone-H01-sleep-4-records.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-sparse-sleep-2026-10-28/images/iphone-H01-sleep-7-records.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-sparse-sleep-2026-10-28/index.html",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-sparse-sleep-2026-10-28/manifest.json",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-sparse-sleep-2026-10-28/proof/ios-build-final.log.gz",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-sparse-sleep-2026-10-28/proof/ui-ipad.log.gz",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-sparse-sleep-2026-10-28/proof/ui-ipad.log.result.json",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-sparse-sleep-2026-10-28/proof/ui-phone-axis-final.log.gz",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-sparse-sleep-2026-10-28/proof/ui-phone-axis-final.log.result.json",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-sparse-sleep-2026-10-28/proof/ui-phone-retry.log.gz",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-sparse-sleep-2026-10-28/proof/ui-phone-retry.log.result.json",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-sparse-sleep-2026-10-28/proof/ui-phone.log.gz",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-sparse-sleep-2026-10-28/proof/ui-phone.log.result.json",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-sparse-sleep-2026-10-28/proof/ui-plan.json",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/full-redesign-map/review/wellness-sparse-sleep-2026-10-28/proof/verification.json",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/layout-map/README.md",
+      "reason": "documentation: no app runtime change"
+    },
+    {
+      "path": "docs/design/layout-map/today-case-matrix.md",
+      "reason": "documentation: no app runtime change"
+    },
+    {
+      "path": "docs/design/layout-map/wellness-redesign-proposal.md",
+      "reason": "documentation: no app runtime change"
+    },
+    {
+      "path": "docs/design/phone-design-map/README.md",
+      "reason": "documentation: no app runtime change"
+    },
+    {
+      "path": "docs/design/phone-design-map/actual/index.html",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/plans/2026-10-28-today-wellness-metrics.md",
+      "reason": "documentation: no app runtime change"
+    },
+    {
+      "path": "docs/plans/2026-10-28-wellness-prediction-visual.md",
+      "reason": "documentation: no app runtime change"
+    },
+    {
+      "path": "docs/plans/2026-10-28-wellness-sparse-sleep-bars.md",
+      "reason": "documentation: no app runtime change"
+    },
+    {
+      "path": "docs/reviews/2026-10-28-wellness-followup-review-ship.md",
+      "reason": "documentation: no app runtime change"
+    },
+    {
+      "path": "docs/reviews/2026-10-28-wellness-followup/findings-before-resolve.json",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/reviews/2026-10-28-wellness-followup/findings.json",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/reviews/2026-10-28-wellness-followup/pr-review.md",
+      "reason": "documentation: no app runtime change"
+    },
+    {
+      "path": "docs/solutions/architecture/2026-10-28-vital-card-history-observation.md",
+      "reason": "documentation: no app runtime change"
+    },
+    {
+      "path": "docs/solutions/general/2026-10-28-today-metric-natural-row-heights.md",
+      "reason": "documentation: no app runtime change"
+    },
+    {
+      "path": "docs/solutions/general/2026-10-28-wellness-prediction-visual-hierarchy.md",
+      "reason": "documentation: no app runtime change"
+    },
+    {
+      "path": "docs/solutions/general/2026-10-28-wellness-sparse-sleep-bars.md",
+      "reason": "documentation: no app runtime change"
+    }
+  ],
+  "commands": [
+    {
+      "platform": "ios",
+      "argv": [
+        "scripts/test-ui.sh"
+      ]
+    },
+    {
+      "platform": "watch",
+      "argv": [
+        "scripts/test-watch-ui.sh"
+      ]
+    }
+  ],
+  "additional_validation": [],
+  "review_required": [
+    "Confirm changed symbols have no consumers outside the selected features; otherwise use full.",
+    "Confirm new behavior has tests; selection does not establish coverage.",
+    "Preserve seeded gesture/layout and device-specific validation requirements.",
+    "Full plans exclude manual HealthKit permission tests; permission changes need device evidence.",
+    "Record passed tests and skipped tests; no execution or zero tests is not a passed gate."
+  ],
+  "base": "origin/main",
+  "merge_base": "8a89b34e7ac98389f7242db0f1425c3784fb42bd",
+  "head": "206415ae314bbebdd2880334dc5025fc47e13552"
+}

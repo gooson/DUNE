@@ -5,6 +5,8 @@ category: plan
 status: in-progress
 ---
 
+2026-10-28 후속 최종 카드 비교 수정 후 [새 Today iPhone4장과 검증 출처](../full-redesign-map/review/wellness-followup-ship-2026-10-28/index.html)를 통합 포털에 추가했다. 과거 기록만 바뀌는 Observation 단위 회귀와 관련 UI2개 고유 selector가 각각 통과했다. Wellness body는 최초 테스트 스크롤 방향 실패를 보존하고 해당1개만 보정 후 재실행했다. 기존 iPad/큰 글씨 PNG를 최종 equality delta의 새 실행으로 표시하지 않으며 Duo/full UI는 미검증이다.
+
 # DUNE 전체 디자인맵
 
 2026-10-28 T03 지표는 Wellness 계층과 같은 범주색·면·큰 값·실제 추세를 적용하고 같은 행의 자연 높이를 맞췄다. [새 원본10장과 검증 범위](../full-redesign-map/review/today-wellness-metrics-2026-10-28/index.html)에서 iPhone·iPad 출처와 Duo 등 미갱신 범위를 구분한다.

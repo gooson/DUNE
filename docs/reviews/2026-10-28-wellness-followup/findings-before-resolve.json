@@ -1,0 +1,41 @@
+{
+  "branch": "codex/wellness-sleep-bars",
+  "timestamp": "2026-10-28T09:25:28.157675+09:00",
+  "diff_lines": 2969,
+  "reviewedHead": "2eebefa9",
+  "base": "origin/main",
+  "snapshot": "/var/folders/fs/kn1rj4b522jcn45jm__5jwx40000gq/T/codex-context-agkvqvk9",
+  "reviewers_run": [
+    "security",
+    "performance",
+    "architecture",
+    "data-integrity",
+    "simplicity"
+  ],
+  "reviewMode": "parent folder-by-folder: diff >= 2000 lines",
+  "reviewers_skipped": [
+    {
+      "name": "agent-native",
+      "reason": "No instruction or agent source changes"
+    }
+  ],
+  "findings": [
+    {
+      "id": "data-001",
+      "reviewer": "Data Integrity Guardian",
+      "priority": "P2",
+      "status": "Open",
+      "title": "과거 기록만 바뀌면 Today 추세 갱신 알림이 생략됨",
+      "file": "DUNE/Presentation/Shared/Models/VitalCardData.swift",
+      "line": 68,
+      "issue": "sparklineData가 Equatable에서 누락되어 최신 값과 시각이 같은 과거 기록 수정은 @Observable pinnedCards 배열과 같다고 판단된다. 실제 Observation 축소 재현에서 알림 0회를 확인했다.",
+      "suggestion": "Equality와 hash에 sparklineData를 포함하고 실제 Observation 알림 회귀 테스트 추가"
+    }
+  ],
+  "summary": {
+    "p1": 0,
+    "p2": 1,
+    "p3": 0
+  },
+  "localization": "Changed user-facing strings use existing localized keys; en/ko/ja and typed helpers verified. No new catalog entries needed."
+}

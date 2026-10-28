@@ -5,6 +5,8 @@ category: plan
 status: implemented-with-coverage-limits
 ---
 
+2026-10-28 과거 기록만 수정되고 최신 수치·측정일이 같아도 Today 추세가 갱신되어야 한다. 카드 equality/hash에 시계열을 포함하며 실제 Observation 알림 회귀로 확인했다. 배치·색·큰 글씨 계약은 그대로이며 [최종 새 실제 화면](../full-redesign-map/review/wellness-followup-ship-2026-10-28/index.html)을 별도 보존한다.
+
 # Today 전체 상태·배치 계약
 
 [방향 시안](../theme-map/themes/dune-today-restart.html) · [재설계 근거](today-restart-proposal.md). 실제 앱 캡처나 네이티브 검증 결과가 아닌, 현재 코드의 표시 조건을 확인해 만든 디자인 계약이다. 테마는 기존 **DUNE / Desert Warm**을 공통으로 유지한다. Compact·Metrics·Editorial은 배치 대안이며 새 테마가 아니다.

@@ -1,0 +1,99 @@
+{
+  "sourceCommit": "206415ae314bbebdd2880334dc5025fc47e13552",
+  "sourceHashes": {
+    "DUNE/Presentation/Shared/Models/VitalCardData.swift": "937e1dbb19baad32c274a5a786d3a0cc5b66973728e63e771aa32a2a48cc291d",
+    "DUNETests/DashboardViewModelTests.swift": "09bcb7c464f97e753e87279d9f61dbdd14f1ee8efb65b82fb4b9f4dee539fef0",
+    "DUNEUITests/Visual/TodayCompactUITests.swift": "6283057588db803879a9d40056a2ec26f5dc1f6418f63df4df026edde341ddfc",
+    "DUNEUITests/Visual/WellnessFlowUITests.swift": "24729c0f68d647cbb2b4f14214cb5271c3262fe36010f42cd1e800619877f135"
+  },
+  "logSources": {
+    "ui-final.log": {
+      "commit": "240ecde38331c30163eefb585550511493dcdebc"
+    },
+    "ui-body-retry.log": {
+      "kind": "working-tree",
+      "baseCommit": "240ecde38331c30163eefb585550511493dcdebc",
+      "testAndApplicationSourcesIdenticalToFinalCommit": "206415ae314bbebdd2880334dc5025fc47e13552"
+    },
+    "unit-focused.log": {
+      "kind": "working-tree",
+      "baseCommit": "2eebefa9",
+      "applicationAndUnitSourcesIdenticalToCommit": "72dc049d"
+    },
+    "unit-build.log": {
+      "kind": "working-tree",
+      "baseCommit": "2eebefa9",
+      "applicationAndUnitSourcesIdenticalToCommit": "72dc049d"
+    },
+    "ios-build.log": {
+      "kind": "pre-commit",
+      "applicationSourcesIdenticalToCommit": "72dc049d"
+    },
+    "integrationDelta": "240ecde3 merges origin/main catalog-only change; final UI build compiles that integrated state.",
+    "ui-test-build.log": {
+      "kind": "pre-commit",
+      "testAndApplicationSourcesIdenticalToCommit": "206415ae"
+    }
+  },
+  "rawLogs": {
+    "unit-focused.log": {
+      "archive": "unit-focused.log.gz",
+      "rawSha256": "46a572b3ef07dd9dc927644598113c1549c5a1300fdfabbf9dd77f8f67096ac8",
+      "archiveSha256": "f95942d294296d8971a1ca0298c1d2dd5c7e4774e6817c8d86758827cc3fb3c6"
+    },
+    "unit-build.log": {
+      "archive": "unit-build.log.gz",
+      "rawSha256": "9252db48df56a940277e01c19554427db90cd64a4e38b1d6b12591247d98fa5a",
+      "archiveSha256": "16e1b8218427258a616cad689893260fda9412eaab2fdf4cc9cf69e735a272e9"
+    },
+    "ios-build.log": {
+      "archive": "ios-build.log.gz",
+      "rawSha256": "b27a11589037e7685a1d29061bf191113061982d3ba9cdfcc7bfb353182ea40d",
+      "archiveSha256": "79fd726a93ff082408d0dbf9eee5d04d041505e5ef3971fe14b5a3090e4975a8"
+    },
+    "ui-final.log": {
+      "archive": "ui-final.log.gz",
+      "rawSha256": "7b2e5ccf76d2a984ca5850d2b96874aff6ce61aba229b65b8723384677113dbc",
+      "archiveSha256": "5bb10736bc7cc95e6e09fe8b582be8a25d261323f80d25ef713943c6bed75b4c"
+    },
+    "ui-body-retry.log": {
+      "archive": "ui-body-retry.log.gz",
+      "rawSha256": "4c32808191caa8f48f57a8f121652b91548f6e93193903403b4af291ef4b7744",
+      "archiveSha256": "45b0968a5004a14b4ddb58d9940304a136b8295950cc6e03bba0dbc1536423e7"
+    },
+    "ui-test-build.log": {
+      "archive": "ui-test-build.log.gz",
+      "rawSha256": "5beb9079c42d39b4382b36ddd9e92b5aad44a68f492dd3cd5cfee88b7033900c",
+      "archiveSha256": "ea7f7e4e3d7184a7bf5fcaa4f3d831762baf768d45fa517b575123a0022a6596"
+    }
+  },
+  "unitTestsPassed": 3,
+  "uiReceipts": [
+    "ui-final.log.result.json",
+    "ui-body-retry.log.result.json"
+  ],
+  "initialUI": {
+    "passed": 1,
+    "failed": 1,
+    "reason": "After revealing Add Body Record, test searched for the header above using upward scroll. Failure hierarchy header y=-414.3 proves overshoot."
+  },
+  "retryUI": {
+    "passed": 1,
+    "failed": 0,
+    "change": "Final body-header reveal uses direction .down; no app/helper/runner changes; only failed method retried once."
+  },
+  "uiGate": {
+    "automatic": "ios/watch full fallback",
+    "executed": "iPhone targeted Today row geometry/detail + Wellness body/detail",
+    "reason": "Latest adapter executes full only on explicit request. VitalCardData references are in iOS Dashboard and Wellness; chart equality adds no Watch consumer or UI geometry. Unchanged sleep summary/prediction source has independent earlier evidence.",
+    "fullUI": "unverified"
+  },
+  "unitFallback": "Canonical test build then exact Swift Testing selectors in test-without-building under repository simulator lock and 180s/90s owned deadline; standard unit runner has no selector. Prior zero-test attempts are excluded.",
+  "unverified": [
+    "Duo closed/open T03",
+    "full UI regression",
+    "iPad and maximum Dynamic Type on final equality-only delta",
+    "VoiceOver traversal"
+  ],
+  "parentVisualReview": "Fresh Today dark row0 and light row1 viewed: paired boundaries align, text not clipped, own-scale caption and missing weight comparison preserved."
+}
