@@ -224,9 +224,15 @@ final class LifeFlowUITests: SeededUITestBaseCase {
         XCTAssertTrue(summary.label.contains("DUNE"))
         XCTAssertTrue(summary.label.contains("Apple 건강"))
         XCTAssertTrue(waitForElement("life-workout-source").label.contains("Apple 건강"))
+        capture("L01-Life-workout-summary-ko")
         XCTAssertTrue(reveal("life-workout-group-routine").exists)
+        capture("L01-Life-workout-routine-ko")
         XCTAssertTrue(reveal("life-workout-group-strength").exists)
+        XCTAssertTrue(reveal("life-workout-metric-weeklyArms3").exists)
+        capture("L01-Life-workout-strength-end-ko")
         XCTAssertTrue(reveal("life-workout-group-running").exists)
+        XCTAssertTrue(reveal("life-workout-source").exists)
+        capture("L01-Life-workout-running-end-ko")
     }
 
     func testCaptureL01WorkoutBoardLight() {
@@ -258,6 +264,7 @@ final class LifeFlowUITests: SeededUITestBaseCase {
 
     private func captureWorkoutBoard(style: String, maximumAX: Bool) {
         var configuration = launchConfiguration
+        configuration.additionalArguments.append("--ui-workout-board-goal-fixture")
         if let index = configuration.additionalArguments.firstIndex(of: "--ui-test-style") {
             configuration.additionalArguments[index + 1] = style
         }

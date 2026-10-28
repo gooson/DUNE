@@ -47,7 +47,8 @@ struct WorkoutAchievementBoardModel {
 
 struct WorkoutAchievementBoard: View {
     let customGoals: [HabitProgress]
-    let metrics: [LifeAutoAchievementProgress]
+    private let model: WorkoutAchievementBoardModel
+    private let weekDates: (Date, Date)
     @Binding var isExpanded: Bool
     let actionButton: (HabitProgress) -> AnyView
     let contextMenu: (HabitProgress) -> AnyView
@@ -57,20 +58,29 @@ struct WorkoutAchievementBoard: View {
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @ScaledMetric(relativeTo: .body) private var tileMinWidth: CGFloat = 86
 
-    private var model: WorkoutAchievementBoardModel {
-        WorkoutAchievementBoardModel(customGoals: customGoals, metrics: metrics)
-    }
     private var gold: Color { theme == .desertWarm ? DS.Color.desertBronze : theme.accentColor }
     private var lightGold: Color { theme == .desertWarm ? DS.Color.warmGlow : theme.sandColor }
-    private var weekDates: (Date, Date) {
+    init(
+        customGoals: [HabitProgress],
+        metrics: [LifeAutoAchievementProgress],
+        isExpanded: Binding<Bool>,
+        actionButton: @escaping (HabitProgress) -> AnyView,
+        contextMenu: @escaping (HabitProgress) -> AnyView
+    ) {
+        self.customGoals = customGoals
+        self.model = WorkoutAchievementBoardModel(customGoals: customGoals, metrics: metrics)
+        self._isExpanded = isExpanded
+        self.actionButton = actionButton
+        self.contextMenu = contextMenu
+        let referenceDate = Date()
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = Calendar.current.timeZone
         calendar.locale = Calendar.current.locale
         calendar.firstWeekday = 2
         calendar.minimumDaysInFirstWeek = 4
-        let start = calendar.dateInterval(of: .weekOfYear, for: Date())?.start ?? calendar.startOfDay(for: Date())
+        let start = calendar.dateInterval(of: .weekOfYear, for: referenceDate)?.start ?? calendar.startOfDay(for: referenceDate)
         let end = calendar.date(byAdding: .day, value: 6, to: start) ?? start
-        return (start, end)
+        self.weekDates = (start, end)
     }
 
     var body: some View {
@@ -126,11 +136,19 @@ struct WorkoutAchievementBoard: View {
                 }
             }
             if !dynamicTypeSize.isAccessibilitySize && model.totalCount > 0 {
-                HStack(spacing: DS.Spacing.xs) {
-                    ForEach(0..<min(model.totalCount, 12), id: \.self) { index in
-                        Circle()
-                            .fill(index < model.completedCount ? gold : gold.opacity(0.16))
-                            .frame(width: 13, height: 13)
+                Group {
+                    if model.totalCount <= 12 {
+                        HStack(spacing: DS.Spacing.xs) {
+                            ForEach(0..<model.totalCount, id: \.self) { index in
+                                Circle()
+                                    .fill(index < model.completedCount ? gold : gold.opacity(0.16))
+                                    .frame(width: 13, height: 13)
+                            }
+                        }
+                    } else {
+                        ProgressView(value: Double(model.completedCount), total: Double(model.totalCount))
+                            .tint(gold)
+                            .frame(maxWidth: 240)
                     }
                 }
                 .accessibilityHidden(true)
@@ -149,7 +167,8 @@ struct WorkoutAchievementBoard: View {
                 }
         }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(String(localized: "\(model.completedCount)/\(model.totalCount) done") + ", " + weekDates.0.formatted(.dateTime.month(.abbreviated).day()) + " – " + weekDates.1.formatted(.dateTime.month(.abbreviated).day()) + ", " + String(localized: "Workouts · Mon–Sun · DUNE + Apple Health"))
+        .accessibilityAddTraits(.isHeader)
+        .accessibilityLabel(String(localized: "Weekly Workout Achievements") + ", " + String(localized: "\(model.completedCount)/\(model.totalCount) done") + ", " + weekDates.0.formatted(.dateTime.month(.abbreviated).day()) + " – " + weekDates.1.formatted(.dateTime.month(.abbreviated).day()) + ", " + String(localized: "Workouts · Mon–Sun · DUNE + Apple Health"))
         .accessibilityIdentifier("life-workout-summary")
     }
 
@@ -203,7 +222,7 @@ struct WorkoutAchievementBoard: View {
 
     private func goalName(_ goal: HabitProgress) -> some View {
         VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-            Text("My Goals · Today")
+            Text("My Goals · Today's workout records")
                 .font(.caption2)
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
@@ -267,6 +286,7 @@ struct WorkoutAchievementBoard: View {
                     .accessibilityHidden(true)
                 Text(groupTitle(group.id))
                     .font(.subheadline.weight(.semibold))
+                    .accessibilityAddTraits(.isHeader)
                     .accessibilityIdentifier("life-workout-group-\(group.id)")
                 Spacer()
                 Text("\(group.completedCount)/\(group.metrics.count)")
@@ -402,8 +422,7 @@ struct WorkoutAchievementBoard: View {
                     .stroke(gold, style: StrokeStyle(lineWidth: 5, lineCap: .round))
             }
             .frame(height: 67)
-            .accessibilityElement(children: .ignore)
-            .accessibilityLabel(String(localized: "Running Distance"))
+            .accessibilityHidden(true)
             .accessibilityIdentifier("life-workout-running-track")
             HStack {
                 Text("0 km")

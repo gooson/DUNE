@@ -61,6 +61,15 @@ struct WorkoutAchievementBoardTests {
         #expect(board.completedCount == 0)
     }
 
+    @Test("More than twelve goals retain the real incomplete total")
+    func manyGoals() {
+        let goals = (0..<13).map { goal("Goal \($0)", completed: $0 < 12) }
+        let board = WorkoutAchievementBoardModel(customGoals: goals, metrics: [])
+        #expect(board.totalCount == 13)
+        #expect(board.completedCount == 12)
+        #expect(WorkoutAchievementBoardModel.fraction(current: Double(board.completedCount), target: Double(board.totalCount)) < 1)
+    }
+
     @Test("Board symbols resolve on the target OS")
     func symbolsResolve() {
         let names = ["figure.run", "trophy", "star.fill", "chevron.down",

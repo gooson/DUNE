@@ -271,6 +271,7 @@ enum TestDataSeeder {
                 iconCategory: .fitness,
                 habitType: .check,
                 goalValue: 1,
+                goalUnit: nil,
                 frequency: .daily,
                 sortOrder: 3
             )

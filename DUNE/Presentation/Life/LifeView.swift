@@ -838,7 +838,10 @@ private struct HabitListQueryView: View {
             customGoals: viewModel.autoLinkedProgresses,
             metrics: viewModel.autoExerciseProgresses,
             isExpanded: $showsDefaultGoals,
-            actionButton: { progress in AnyView(habitActionsButton(for: progress)) },
+            actionButton: { progress in
+                AnyView(habitActionsButton(for: progress)
+                    .accessibilityLabel(String(localized: "More actions for \(progress.name)")))
+            },
             contextMenu: { progress in AnyView(habitActionItems(for: progress, deferred: true)) }
         )
     }
