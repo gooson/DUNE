@@ -7,6 +7,10 @@ status: in-progress
 
 # DUNE 테마 맵
 
+## 주간 운동 업적 시안 · 2026-10-29
+
+[성과 보드 / 숫자 중심](themes/dune-workout-achievements.html)은 Life L01의 해당 영역만 바꾼 제안이다. 브라운·골드와 능선을 유지하고 큰 완료 수·횟수 분절·근력 부위 타일·거리 곡선으로 카드/막대 반복을 줄였다. 첨부 화면의 기본 수치와 진행·모두 완료·기록 없음, 밝음/어두움·큰 글씨를 비교한다. [배치·집계 계약](../layout-map/workout-achievements-proposal.md), [편집 원본](themes/assets/workout-achievement-fragment.html), [브라우저 QA](themes/assets/workout-achievement-qa.json)와 PNG를 보존한다. 전체 상세 화면·기존 화면 병렬 비교는 정정된 요청으로 제외했다. 앱 미적용이며 PNG는 실제 앱 캡처가 아니다.
+
 [테마 맵 열기](index.html) · [8개 테마 전체 구현 맵](../full-redesign-map/index.html) · [7개 테마 앱 적용 맵](app-contract.md) · [UX·비주얼 명세](../2026-10-17-ux-visual-spec.md) · [실제 화면 디자인맵 열기](../phone-design-map/actual/index.html)
 
 ## Wellness 개편 제안 · 2026-10-27
