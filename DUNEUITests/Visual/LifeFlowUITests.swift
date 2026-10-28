@@ -136,6 +136,7 @@ final class LifeFlowUITests: SeededUITestBaseCase {
             .matching(NSPredicate(format: "identifier BEGINSWITH %@", "life-habit-history-late-"))
             .firstMatch
         XCTAssertTrue(late.waitForExistence(timeout: 5), "The past entry should identify late recording")
+        capture("L05-Life-history-recorded-later")
     }
 
     func testCaptureL01AndPastRecordLightDarkAndMaximumAX() {
@@ -168,7 +169,20 @@ final class LifeFlowUITests: SeededUITestBaseCase {
             XCTAssertTrue(reveal("life-past-record-button", direction: .down).exists)
             app.buttons["life-past-record-button"].firstMatch.auditTap()
             XCTAssertTrue(app.navigationBars["Past Record"].waitForExistence(timeout: 5))
-            capture("L-P01-Past-Record-form-\(suffix)")
+            capture("L09-Past-Record-form-\(suffix)")
+            if style == "light" && !maximumAX {
+                app.buttons["habit-past-record-cancel"].firstMatch.auditTap()
+                reveal("habit-heatmap").auditTap()
+                XCTAssertTrue(app.navigationBars["Activity Detail"].waitForExistence(timeout: 8))
+                capture("L07-Habit-history-summary-light")
+                reveal("habit-completion-chart-title")
+                capture("L07-Habit-history-rates-light")
+                launchApp(with: configuration)
+                navigateToLife()
+                reveal("life-weekly-report-button").auditTap()
+                XCTAssertTrue(app.navigationBars["Weekly Report"].waitForExistence(timeout: 8))
+                capture("L08-Weekly-report-light")
+            }
         }
     }
 }

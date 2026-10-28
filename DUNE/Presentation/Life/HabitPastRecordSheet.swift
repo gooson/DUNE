@@ -54,7 +54,7 @@ struct HabitPastRecordSheet: View {
             }
             .scrollContentBackground(.hidden)
             .background { SheetWaveBackground() }
-            .navigationTitle("Past Record")
+            .englishNavigationTitle("Past Record")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
