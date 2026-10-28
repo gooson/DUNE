@@ -1,0 +1,95 @@
+{
+  "sourceCommit": "33402ec6e00fe250555cb8ec3cfe5864cd78fe2b",
+  "sourceHashes": {
+    "DUNE/Presentation/Dashboard/Components/TodayMetricCard.swift": "2b38481a9a488859afe58ba9759fde8e9ee0cc4806e975612e991f304c74e468",
+    "DUNE/Presentation/Dashboard/DashboardView.swift": "3ec6d4b7f6285146d82ce1a706111788bd7c3ffff4c1e8e5036b6d9fd6a11e9e",
+    "DUNE/Presentation/Dashboard/DashboardViewModel.swift": "605e8f9a186899ce0c5262c2e2041635bd25831c243003621f1da4a999513560",
+    "DUNETests/DashboardViewModelTests.swift": "a4c4df1cffc9fc2f84e2f4d6688e3630c4f656b23a112c90f0f015180e06d5a4",
+    "DUNEUITests/Visual/TodayCompactUITests.swift": "6283057588db803879a9d40056a2ec26f5dc1f6418f63df4df026edde341ddfc"
+  },
+  "initialSourceHashes": {
+    "DUNE/Presentation/Dashboard/Components/TodayMetricCard.swift": "2b38481a9a488859afe58ba9759fde8e9ee0cc4806e975612e991f304c74e468",
+    "DUNE/Presentation/Dashboard/DashboardView.swift": "3ec6d4b7f6285146d82ce1a706111788bd7c3ffff4c1e8e5036b6d9fd6a11e9e",
+    "DUNE/Presentation/Dashboard/DashboardViewModel.swift": "605e8f9a186899ce0c5262c2e2041635bd25831c243003621f1da4a999513560",
+    "DUNETests/DashboardViewModelTests.swift": "a4c4df1cffc9fc2f84e2f4d6688e3630c4f656b23a112c90f0f015180e06d5a4",
+    "DUNEUITests/Visual/TodayCompactUITests.swift": "de7e0c798375920d88a0623daf8b99fe383e471d9257a06611a25aae087f11a3"
+  },
+  "initialSourcePatch": {
+    "baseCommit": "cedfeb033a08566b45621d343758c6d68c90cdae",
+    "archive": "phone-initial-source.patch.gz",
+    "sha256": "c6c77172d7ad4b4070a033ded6989f116687c4ff7b5f3c89f2eafe3de554affe",
+    "rawSha256": "ae4cd1869c67381183b171714153657298f2fd91026c9d2d4af3aa07e24a2505"
+  },
+  "proofHashes": {
+    "ui-phone.log.result.json": "26a63a81e46235ccdf84f372fbd9592726c6cef205f8ef1d42d5677599cffa76",
+    "ui-phone-retry.log.result.json": "b6e62ec33a1647a1bbc5a49aa307c935ec9311d9bc053e7e344b25feb0a0932a",
+    "ui-ipad.log.result.json": "d5002c790eede4e55224a36f15b762a52e86b77ad93c9af91bf1c5bfe7e77502",
+    "ui-plan.json": "37ef68f2ab3de74189b200c9392fcb7fea6f9c8506b7e1b03d35a929fcbf3199",
+    "unit-scheme-restoration.json": "c2c23dfd17cc4975f0d6c6da3cf4f751838f9d96b17677e38e33ab8ec2d07443",
+    "targeted-unit.xctestplan": "7831e3f83ddf67d59ce2e606114f4c1b1afb43c0381ec7de8d1b70270cb7f3f6"
+  },
+  "rawLogs": {
+    "ui-phone.log": {
+      "archive": "ui-phone.log.gz",
+      "rawSha256": "6a8b86a78095d113889d237bdad8f7fcda0e8af268c80da0f374a5d4198b9ef0",
+      "archiveSha256": "744d30f40d80566a78078a7dadc9d060a5cb97b41821bb572e2ba0d9e3bf4360"
+    },
+    "ui-phone-retry.log": {
+      "archive": "ui-phone-retry.log.gz",
+      "rawSha256": "0a5198f293ec74b65dd5f7a63a5ad983315c7293b9d3eb05af9d9de80afeb8db",
+      "archiveSha256": "b79719a9e1bbc1b0cd3561e184e2cc5f0867e43894b55e9b8b7a98c7a71b5d50"
+    },
+    "ui-ipad.log": {
+      "archive": "ui-ipad.log.gz",
+      "rawSha256": "5c8ed271ce95cf2a0cca4bd6b851f26ffb20af7fdcc0122d6469ef74dcfa4610",
+      "archiveSha256": "86f834e0099738d787d40ef499c7d17c151fa3f7aaa804c80a9bb1c8e43b6790"
+    },
+    "ios-build.log": {
+      "archive": "ios-build.log.gz",
+      "rawSha256": "4f938dfdadc1cf8dfa7542700b25a86c81845edb4a0f7228e45a2b4d5723a0ba",
+      "archiveSha256": "3970f32955f82cdb028d436ae4804025e4b44c9117add913372e5453dcdb2b22"
+    },
+    "unit.log": {
+      "archive": "unit.log.gz",
+      "rawSha256": "ae6a83b64d2703529801c6767545185d033579972e7f454efe3dd206195acb6f",
+      "archiveSha256": "b114001cf33b182a3d544890daeac2cc6af9ab7080ed43c0f3ee254d903b35ff"
+    },
+    "unit-targeted.log": {
+      "archive": "unit-targeted.log.gz",
+      "rawSha256": "1eff4b6610fbe846f946d9087b4f99502cc11d0164553e3ea4c566bd3084e3e5",
+      "archiveSha256": "df579a590450ea41bc4e03d85f4c954df403f270494ebd80f085c51e54d131e8"
+    },
+    "unit-focused.log": {
+      "archive": "unit-focused.log.gz",
+      "rawSha256": "7d2eda85c13d9aebdbae199713c71321ff50534336b59731f4138f0b54562f19",
+      "archiveSha256": "9a5e53caef7815f7741831e7b7027874b1093b9cac78bcce155bc9e426a5e631"
+    }
+  },
+  "uniquePassedUIDeviceCases": 5,
+  "relatedUnitCasesPassed": 2,
+  "initialUIFailedCases": 1,
+  "reuseReason": "Only UI editor scrolling was corrected after the initial run; all three application sources are byte-identical to commit33402ec6.",
+  "fullUnitAttempt": {
+    "status": "timed-out",
+    "exitCode": 124,
+    "unrelatedFailure": "AIFeatureEvaluationTests/evaluatesHealthDataQA medical safety 1/3",
+    "stalledCase": "evaluatesWorkoutTemplateGeneration",
+    "idleTimeoutSeconds": 300
+  },
+  "unitSelectionAttempt": {
+    "status": "invalid-zero-tests",
+    "countedAsPassed": false,
+    "schemeRestored": true
+  },
+  "focusedUnitFallback": {
+    "mode": "test-without-building",
+    "reason": "Standard unit script has no selector flag; temporary plan selection yielded zero Swift Testing cases. Exact two identifiers were discovered with read-only Xcode enumeration and executed under the same repository lock and owned deadline. No runner file changed."
+  },
+  "unverified": [
+    "Duo closed/open T03 metric cards",
+    "iPad maximum Dynamic Type",
+    "other language/theme variants",
+    "full UI regression",
+    "VoiceOver traversal"
+  ]
+}

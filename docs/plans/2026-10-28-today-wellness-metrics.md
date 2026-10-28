@@ -2,7 +2,7 @@
 tags: [today, wellness, metrics, equal-height, swiftui]
 date: 2026-10-28
 category: plan
-status: in-progress
+status: implemented
 ---
 
 # Today 지표 카드 통일과 행 높이
@@ -28,3 +28,5 @@ status: in-progress
 3. 전용 iPhone에서 밝음·어두움·최대 글씨, 홀수와 운동 행을 확인한다.
 4. 기존 관측 전달의 unit 검사와 iPad 두 열 상태를 확인한다. 전체 UI 회귀는 실행하지 않는다.
 5. 새 실제 화면·출처·검증 범위를 디자인맵에 보존한다. Duo 미실행 상태를 구분한다.
+
+관련 UI5개 device-case·새 단위2개와 iOS 빌드를 확인했다. 전체 단위 실행의 무관한 AI 실패/시간 초과,0건 선택을 구분하고 원래 scheme을 복원했다. [원본10장·Astra·제한](../design/full-redesign-map/review/today-wellness-metrics-2026-10-28/index.html)을 따른다.

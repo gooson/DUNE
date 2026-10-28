@@ -7,6 +7,8 @@ status: in-progress
 
 # DUNE 레이아웃 맵
 
+2026-10-28 Today 지표의 Wellness 표현과 동일 행 높이는 [상태/배치 계약](today-case-matrix.md), [새 실제 화면](../full-redesign-map/review/today-wellness-metrics-2026-10-28/index.html)을 따른다. 큰 글씨 한 열과 홀수 전체 폭은 유지한다.
+
 2026-10-28 H01 오늘 밤 수면은 큰 예측 점수·달 상징·0–100 가로 게이지와 실제3단계 신뢰도 배지·팁 영역을 사용한다. [배치 계약](wellness-redesign-proposal.md)과 [실제 화면](../full-redesign-map/review/wellness-prediction-visual-2026-10-28/index.html)을 함께 따른다. 큰 글씨는 세로 전환한다.
 
 2026-10-28 H01 최근 수면은 적은 기록에서도7일 날짜 위치와16pt 막대 폭을 유지한다. 누락일은 비워 두고 큰 글씨의 날짜 축은 첫날·중간·마지막을 표시한다. [후속 계약](wellness-redesign-proposal.md)과 [새 실제 화면](../full-redesign-map/review/wellness-sparse-sleep-2026-10-28/index.html)을 따른다. 테마 팔레트·카드·탭 순서는 유지한다.
