@@ -1,4 +1,5 @@
 import Foundation
+import Observation
 import Testing
 @testable import DUNE
 
@@ -1549,9 +1550,43 @@ struct DashboardViewModelTests {
 
 // MARK: - VitalCardData Conversion Tests
 
+@Observable
+private final class VitalCardObservationFixture {
+    var cards: [VitalCardData] = []
+}
+
 @Suite("DashboardViewModel VitalCardData")
 @MainActor
 struct DashboardViewModelVitalCardTests {
+
+    @Test("History-only corrections notify card observers even when the latest reading is unchanged")
+    func historyOnlyCorrectionNotifiesObservers() async {
+        let date = Date(timeIntervalSince1970: 1_800_000_000)
+        let metric = HealthMetric(id: "hrv", name: "HRV", value: 48,
+                                  unit: "ms", change: nil, date: date, category: .hrv)
+        func card(history: [Double]) -> VitalCardData {
+            VitalCardData(id: metric.id, category: .hrv, section: .active,
+                          title: "HRV", value: "48", unit: "ms", change: nil,
+                          changeIsPositive: nil, sparklineData: history, metric: metric,
+                          lastUpdated: date, isStale: false)
+        }
+        let original = card(history: [40, 48])
+        let corrected = card(history: [44, 48])
+        #expect(original != corrected)
+        #expect(Set([original, corrected]).count == 2)
+        #expect(Set([original, card(history: [40, 48])]).count == 1)
+
+        let fixture = VitalCardObservationFixture()
+        fixture.cards = [original]
+        await confirmation("History correction invalidates observed cards", expectedCount: 1) { changed in
+            withObservationTracking {
+                _ = fixture.cards
+            } onChange: {
+                changed()
+            }
+            fixture.cards = [corrected]
+        }
+    }
 
     @Test("Metric trends use existing chronological observations without inventing body history")
     func metricTrendsUseObservedValues() async {
