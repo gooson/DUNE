@@ -1,0 +1,42 @@
+{
+  "configurations": [
+    {
+      "id": "8DF15638-DC24-4E64-A90F-21D350A4140A",
+      "name": "Today Metric Validation",
+      "options": {}
+    }
+  ],
+  "defaultOptions": {
+    "targetForVariableExpansion": {
+      "containerPath": "container:DUNE.xcodeproj",
+      "identifier": "A4ACD568A2B7000DFD7E7C13",
+      "name": "DUNE"
+    }
+  },
+  "testTargets": [
+    {
+      "target": {
+        "containerPath": "container:DUNE.xcodeproj",
+        "identifier": "F7CBC4C7F676358AC40B083E",
+        "name": "DUNETests"
+      },
+      "selectedTests": [
+        "DashboardViewModelVitalCardTests/activityCardsContainStepsAndExercise()",
+        "DashboardViewModelVitalCardTests/baselineDetailPopulated()",
+        "DashboardViewModelVitalCardTests/bodyCardsContainWeightAndBMI()",
+        "DashboardViewModelVitalCardTests/conditionCardsContainHRVAndRHR()",
+        "DashboardViewModelVitalCardTests/emptyInputProducesEmptyCards()",
+        "DashboardViewModelVitalCardTests/metricTrendsUseObservedValues()",
+        "DashboardViewModelVitalCardTests/pinnedExcludedFromSections()",
+        "DashboardViewModelVitalCardTests/rhrInversePolarity()",
+        "DashboardViewModelVitalCardTests/singleObservationHasNoTrend()",
+        "DashboardViewModelVitalCardTests/staleCardMarking()",
+        "DashboardViewModelVitalCardTests/todayActivityWorkoutCardPrefersStoredHealthKitTitle()",
+        "DashboardViewModelVitalCardTests/vitalCardValueFormatting()",
+        "DashboardViewModelVitalCardTests/walkingStepCardAdded()"
+      ],
+      "parallelizable": false
+    }
+  ],
+  "version": 1
+}

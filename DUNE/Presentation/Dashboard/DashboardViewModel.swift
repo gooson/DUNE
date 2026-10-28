@@ -1720,13 +1720,38 @@ final class DashboardViewModel {
             unit: metric.resolvedUnitLabel,
             change: changeStr,
             changeIsPositive: changePositive,
-            sparklineData: [],
+            sparklineData: metricTrendValues(for: metric),
             metric: metric,
             lastUpdated: metric.date,
             isStale: isStale,
             baselineDetail: baseline,
             inversePolarity: metric.category == .rhr
         )
+    }
+
+    private func metricTrendValues(for metric: HealthMetric) -> [Double] {
+        let observations: [(date: Date, value: Double)]
+        switch metric.category {
+        case .hrv:
+            observations = conditionHourlySamples.map { ($0.date, $0.value) }
+        case .rhr:
+            observations = conditionHourlyRHR.map { ($0.date, $0.value) }
+        case .sleep:
+            observations = sleepDeficitAnalysis?.dailyDeficits.map { ($0.date, $0.actualMinutes) } ?? []
+        case .weight, .bmi, .bodyFat, .leanBodyMass, .heartRate, .exercise, .steps,
+             .spo2, .respiratoryRate, .vo2Max, .heartRateRecovery, .wristTemperature, .breathingDisturbances:
+            observations = []
+        }
+        let calendar = Calendar.current
+        guard let start = calendar.date(byAdding: .day, value: -6,
+                                        to: calendar.startOfDay(for: metric.date)) else { return [] }
+        // Oldest-first actual observations; missing days are never filled with zero.
+        let values = observations
+            .filter { $0.date >= start && $0.date <= metric.date && $0.value.isFinite && $0.value > 0 }
+            .sorted { $0.date < $1.date }
+            .suffix(7)
+            .map(\.value)
+        return values.count >= 2 ? values : []
     }
 
     private func buildRecentScores(

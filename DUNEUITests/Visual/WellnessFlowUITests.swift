@@ -82,6 +82,175 @@ final class WellnessFlowUITests: SeededUITestBaseCase {
         XCTAssertTrue(waitForElement("wellness-sleep-prediction-detail-screen", timeout: 10).exists)
     }
 
+    func testPredictionVisualScoreConfidenceAndFactors() {
+        for (score, confidence, label, style) in [
+            (37, "low", "Low Confidence", "dark"),
+            (78, "medium", "Medium Confidence", "light"),
+            (0, "low", "Low Confidence", "light"),
+            (100, "high", "High Confidence", "light")
+        ] {
+            var configuration = launchConfiguration
+            configuration.additionalEnvironment["DUNE_UI_SLEEP_PREDICTION_SCORE"] = String(score)
+            configuration.additionalEnvironment["DUNE_UI_SLEEP_PREDICTION_CONFIDENCE"] = confidence
+            if let index = configuration.additionalArguments.firstIndex(of: "--ui-test-style") {
+                configuration.additionalArguments[index + 1] = style
+            }
+            launchApp(with: configuration)
+            navigateToWellness()
+            alignPredictionHeaderForCapture()
+            let value = waitForElement("wellness-prediction-score-value")
+            XCTAssertEqual(value.label, String(score))
+            let meter = waitForElement("wellness-prediction-score-meter")
+            XCTAssertEqual(meter.value as? String, "\(score) / 100")
+            let badge = waitForElement("wellness-prediction-confidence")
+            XCTAssertTrue(badge.label.contains(label))
+            XCTAssertTrue(value.isHittable)
+            XCTAssertTrue(meter.isHittable)
+            XCTAssertTrue(badge.isHittable)
+            addScreenshotAttachment(named: "H01-prediction-\(score)-\(confidence)-\(style)")
+            let factors = reveal("wellness-prediction-factors-disclosure")
+            factors.tap()
+            XCTAssertTrue(app.staticTexts["Recent sleep has been consistent"].waitForExistence(timeout: 5))
+            factors.tap()
+            XCTAssertFalse(app.staticTexts["Recent sleep has been consistent"].exists)
+        }
+    }
+
+    func testPredictionMaximumAXAndEmptyState() {
+        var configuration = launchConfiguration
+        configuration.additionalEnvironment["DUNE_UI_SLEEP_PREDICTION_SCORE"] = "37"
+        configuration.additionalEnvironment["DUNE_UI_SLEEP_PREDICTION_CONFIDENCE"] = "low"
+        configuration.additionalArguments += [
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ]
+        launchApp(with: configuration)
+        navigateToWellness()
+        alignPredictionHeaderForCapture()
+        XCTAssertEqual(waitForElement("wellness-prediction-score-value").label, "37")
+        addScreenshotAttachment(named: "H01-prediction-37-MaxAX-score")
+        let badge = reveal("wellness-prediction-confidence")
+        XCTAssertTrue(badge.label.contains("Low Confidence"))
+        XCTAssertTrue(badge.isHittable)
+        // A hittable midpoint can leave the second line behind the floating tab bar.
+        let window = app.windows.firstMatch.frame
+        let top = max(window.minY, app.navigationBars.firstMatch.frame.maxY)
+        let bottom = app.tabBars.firstMatch.exists ? app.tabBars.firstMatch.frame.minY : window.maxY
+        let viewport = CGRect(x: window.minX, y: top + 16, width: window.width, height: bottom - top - 32)
+        for _ in 0..<4 {
+            if viewport.contains(badge.frame) { break }
+            let offset = max(-220, min(220, badge.frame.midY - viewport.midY))
+            let start = app.scrollViews.firstMatch.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+            start.press(forDuration: 0.1, thenDragTo: start.withOffset(CGVector(dx: 0, dy: -offset)),
+                        withVelocity: .slow, thenHoldForDuration: 0.3)
+        }
+        XCTAssertTrue(viewport.contains(badge.frame),
+                      "The entire confidence badge should be visible above the tab bar")
+        addScreenshotAttachment(named: "H01-prediction-37-MaxAX-confidence")
+
+        configuration = launchConfiguration
+        configuration.additionalEnvironment["DUNE_UI_SLEEP_PREDICTION_SCORE"] = "none"
+        launchApp(with: configuration)
+        navigateToWellness()
+        alignPredictionHeaderForCapture()
+        XCTAssertFalse(element("wellness-prediction-score-meter").exists)
+        XCTAssertFalse(element("wellness-prediction-confidence").exists)
+        XCTAssertTrue(app.staticTexts["Sleep a few nights to see your sleep quality prediction."].exists)
+        addScreenshotAttachment(named: "H01-prediction-empty")
+    }
+
+    private func alignPredictionHeaderForCapture() {
+        let header = waitForElement("wellness-sleep-prediction-card", timeout: 15)
+        let scroll = app.scrollViews.firstMatch
+        let desiredY = max(app.navigationBars.firstMatch.frame.maxY, scroll.frame.minY) + 20
+        for _ in 0..<8 {
+            let offset = header.frame.minY - desiredY
+            if abs(offset) < 16 { break }
+            let start = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.55))
+            start.press(forDuration: 0.05, thenDragTo: start.withOffset(
+                CGVector(dx: 0, dy: -max(-240, min(240, offset)))
+            ))
+        }
+    }
+
+    func testSparseSleepBarsKeepCalendarPositionsAndWidth() {
+        for (count, slots) in [(1, [6]), (2, [2, 6]), (4, [0, 3, 5, 6]), (7, Array(0..<7))] {
+            var configuration = launchConfiguration
+            configuration.additionalEnvironment["DUNE_UI_SLEEP_SAMPLE_COUNT"] = String(count)
+            launchApp(with: configuration)
+            navigateToWellness()
+            reveal("wellness-sleep-bar-6")
+            let bars = slots.map { waitForElement("wellness-sleep-bar-\($0)", timeout: 10) }
+            for index in 0..<7 {
+                XCTAssertEqual(element("wellness-sleep-bar-\(index)").exists, slots.contains(index),
+                               "Missing dates must remain empty: count=\(count), slot=\(index)")
+            }
+            for bar in bars {
+                XCTAssertEqual(bar.frame.width, 16, accuracy: 0.5)
+                XCTAssertLessThanOrEqual(bar.frame.height, 64.5)
+                XCTAssertTrue(bar.isHittable)
+            }
+            if bars.count > 1 {
+                let slotWidth = (bars.last!.frame.midX - bars.first!.frame.midX) /
+                    CGFloat(slots.last! - slots.first!)
+                for index in 1..<bars.count {
+                    XCTAssertEqual(bars[index].frame.midX - bars[index - 1].frame.midX,
+                                   CGFloat(slots[index] - slots[index - 1]) * slotWidth, accuracy: 1)
+                }
+            }
+            XCTAssertEqual(element("wellness-sleep-average").exists, count >= 2)
+            reveal("wellness-hero-sleep", direction: .down)
+            addScreenshotAttachment(named: "H01-sleep-\(count)-records")
+        }
+    }
+
+    func testSparseSleepDarkAndAccessibility() {
+        for maximumAX in [false, true] {
+            var configuration = launchConfiguration
+            configuration.additionalEnvironment["DUNE_UI_SLEEP_SAMPLE_COUNT"] = "2"
+            if let index = configuration.additionalArguments.firstIndex(of: "--ui-test-style") {
+                configuration.additionalArguments[index + 1] = "dark"
+            }
+            if maximumAX {
+                configuration.additionalArguments += [
+                    "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+                ]
+            }
+            launchApp(with: configuration)
+            navigateToWellness()
+            reveal("wellness-sleep-bar-6")
+            let viewport = app.scrollViews.firstMatch.frame.intersection(app.windows.firstMatch.frame)
+            for slot in [2, 6] {
+                let bar = waitForElement("wellness-sleep-bar-\(slot)", timeout: 10)
+                XCTAssertEqual(bar.frame.width, 16, accuracy: 0.5)
+                XCTAssertTrue(viewport.contains(bar.frame))
+            }
+            if maximumAX {
+                let labels = [0, 3, 6].map { waitForElement("wellness-sleep-date-\($0)") }
+                for label in labels {
+                    XCTAssertFalse(label.label.contains("…"))
+                    XCTAssertTrue(viewport.contains(label.frame))
+                    XCTAssertTrue(label.isHittable)
+                }
+                XCTAssertLessThan(labels[0].frame.maxX, labels[1].frame.minX)
+                XCTAssertLessThan(labels[1].frame.maxX, labels[2].frame.minX)
+            } else {
+                reveal("wellness-hero-sleep", direction: .down)
+            }
+            addScreenshotAttachment(named: "H01-sleep-2-records-\(maximumAX ? "MaxAX" : "dark")")
+        }
+    }
+
+    func testNoSleepRecordsShowsEmptyState() {
+        var configuration = launchConfiguration
+        configuration.additionalEnvironment["DUNE_UI_SLEEP_SAMPLE_COUNT"] = "0"
+        launchApp(with: configuration)
+        navigateToWellness()
+        XCTAssertTrue(reveal("wellness-sleep-empty-state").isHittable)
+        XCTAssertFalse(element("wellness-sleep-bar-6").exists)
+        XCTAssertFalse(element("wellness-sleep-average").exists)
+        addScreenshotAttachment(named: "H01-sleep-0-records")
+    }
+
     func testBodyMeasurementsAndHeaderEdge() {
         navigateToWellness()
         let body = reveal("wellness-link-bodyhistory")
@@ -93,7 +262,7 @@ final class WellnessFlowUITests: SeededUITestBaseCase {
                           "\(category) should show a real prior measurement")
         }
         XCTAssertTrue(reveal("wellness-add-body-record").isHittable)
-        reveal("wellness-link-bodyhistory")
+        reveal("wellness-link-bodyhistory", direction: .down)
             .coordinate(withNormalizedOffset: CGVector(dx: 0.92, dy: 0.5)).tap()
         XCTAssertTrue(waitForElement("body-history-detail-screen", timeout: 10).exists)
     }

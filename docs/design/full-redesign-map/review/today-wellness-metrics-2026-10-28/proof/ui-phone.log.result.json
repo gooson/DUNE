@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/TodayCompactUITests/testWellnessStylePinnedMetricsHaveEqualRowHeights",
+    "DUNEUITests/TodayCompactUITests/testWellnessStylePinnedMetricsAtMaximumTextSize",
+    "DUNEUITests/TodayCompactUITests/testOddPinnedMetricOccupiesFullFinalRow",
+    "DUNEUITests/TodayCompactUITests/testCompactWorkoutRowPreservesDateValueAndDetailRoute"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 4,
+    "passed": 3,
+    "skipped": 0,
+    "failed": 1
+  },
+  "passed_cases": 3,
+  "failures": [
+    "697: /Users/shanks/.codex/worktrees/80fd/Health/DUNEUITests/Visual/TodayCompactUITests.swift:89: error: -[DUNEUITests.TodayCompactUITests testWellnessStylePinnedMetricsAtMaximumTextSize] : XCTAssertTrue failed",
+    "711: Test Case '-[DUNEUITests.TodayCompactUITests testWellnessStylePinnedMetricsAtMaximumTextSize]' failed (56.488 seconds).",
+    "1072: Test Suite 'TodayCompactUITests' failed at 2026-10-28 08:57:58.485.",
+    "1074: Test Suite 'DUNEUITests.xctest' failed at 2026-10-28 08:57:58.486.",
+    "1076: Test Suite 'Selected tests' failed at 2026-10-28 08:57:58.487.",
+    "1091: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log reports 1 failures",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/TodayCompactUITests/testWellnessStylePinnedMetricsAtMaximumTextSize"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/80fd/Health/.codex-checks/today-wellness-metrics/ui-phone.log"
+}

@@ -465,7 +465,23 @@ enum SimulatorAdvancedMockDataProvider {
             return (date: date, min: average - 2, max: average + 3, average: average)
         }
 
+        // UI-only sparse weeks include interior gaps, rather than only a shorter prefix.
+        let sleepOffsets: Set<Int>?
+        if ProcessInfo.processInfo.arguments.contains("--uitesting"),
+           let count = ProcessInfo.processInfo.environment["DUNE_UI_SLEEP_SAMPLE_COUNT"] {
+            switch count {
+            case "0": sleepOffsets = []
+            case "1": sleepOffsets = [0]
+            case "2": sleepOffsets = [0, 4]
+            case "4": sleepOffsets = [0, 1, 3, 6]
+            case "7": sleepOffsets = Set(0..<7)
+            default: sleepOffsets = nil
+            }
+        } else {
+            sleepOffsets = nil
+        }
         let sleepDailyDurations: [SharedHealthSnapshot.SleepDailyDuration] = ProcessInfo.processInfo.arguments.contains("--ui-test-no-sleep-trend") ? [] : (0..<30).compactMap { offset in
+            if let sleepOffsets, !sleepOffsets.contains(offset) { return nil }
             guard let date = calendar.date(byAdding: .day, value: -offset, to: today) else { return nil }
             let deep = max(74, 104 - Double(offset % 6) * 4)
             let rem = max(86, 112 - Double(offset % 5) * 3)

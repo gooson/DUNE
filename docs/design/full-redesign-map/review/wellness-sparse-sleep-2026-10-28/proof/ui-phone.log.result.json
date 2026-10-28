@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/WellnessFlowUITests/testSparseSleepBarsKeepCalendarPositionsAndWidth",
+    "DUNEUITests/WellnessFlowUITests/testSparseSleepDarkAndAccessibility",
+    "DUNEUITests/WellnessFlowUITests/testNoSleepRecordsShowsEmptyState",
+    "DUNEUITests/WellnessFlowUITests/testSleepAndPredictionOpenIndependentDetails"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 4,
+    "passed": 2,
+    "skipped": 0,
+    "failed": 2
+  },
+  "passed_cases": 2,
+  "failures": [
+    "8743: /Users/shanks/.codex/worktrees/80fd/Health/DUNEUITests/Helpers/UITestBaseCase.swift:208: error: -[DUNEUITests.WellnessFlowUITests testSparseSleepBarsKeepCalendarPositionsAndWidth] : XCTAssertTrue failed - Element 'wellness-sleep-bar-6' should exist",
+    "8752: Test Case '-[DUNEUITests.WellnessFlowUITests testSparseSleepBarsKeepCalendarPositionsAndWidth]' failed (32.295 seconds).",
+    "8842: /Users/shanks/.codex/worktrees/80fd/Health/DUNEUITests/Helpers/UITestBaseCase.swift:208: error: -[DUNEUITests.WellnessFlowUITests testSparseSleepDarkAndAccessibility] : XCTAssertTrue failed - Element 'wellness-sleep-bar-2' should exist",
+    "8851: Test Case '-[DUNEUITests.WellnessFlowUITests testSparseSleepDarkAndAccessibility]' failed (34.571 seconds).",
+    "8852: Test Suite 'WellnessFlowUITests' failed at 2026-10-28 08:11:59.142.",
+    "8854: Test Suite 'DUNEUITests.xctest' failed at 2026-10-28 08:11:59.143.",
+    "8856: Test Suite 'Selected tests' failed at 2026-10-28 08:11:59.144.",
+    "8872: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log reports 2 failures",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/WellnessFlowUITests/testSparseSleepBarsKeepCalendarPositionsAndWidth",
+    "DUNEUITests/WellnessFlowUITests/testSparseSleepDarkAndAccessibility"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/80fd/Health/.codex-checks/wellness-sleep-bars/ui-phone.log"
+}

@@ -1,0 +1,232 @@
+[
+  {
+    "device": "iphone",
+    "label": "T03-pinned-wellness-row-0-dark",
+    "image": "images/iphone-T03-pinned-wellness-row-0-dark.png",
+    "kind": "xcresult",
+    "source": {
+      "kind": "working-tree",
+      "baseCommit": "cedfeb033a08566b45621d343758c6d68c90cdae",
+      "patch": "proof/phone-initial-source.patch.gz",
+      "patchCompression": "gzip",
+      "patchSha256": "c6c77172d7ad4b4070a033ded6989f116687c4ff7b5f3c89f2eafe3de554affe",
+      "patchRawSha256": "ae4cd1869c67381183b171714153657298f2fd91026c9d2d4af3aa07e24a2505",
+      "applicationCodeIdenticalToCommit": "33402ec6e00fe250555cb8ec3cfe5864cd78fe2b"
+    },
+    "deviceName": "iPhone 18 Pro-wt-Health-80fd-deee0cef58a1",
+    "udid": "012B9C73-47F2-4F96-9A96-4903CB6BC286",
+    "test": "TodayCompactUITests/testWellnessStylePinnedMetricsHaveEqualRowHeights()",
+    "testLog": ".codex-checks/today-wellness-metrics/ui-phone.log",
+    "timestamp": 1793145434.954,
+    "pixelSize": [
+      1206,
+      2622
+    ],
+    "sha256": "931a201dbf2a70f34fbc601396cbe21686478be75f40dccea6187404ab142826",
+    "executionStatus": "passed"
+  },
+  {
+    "device": "iphone",
+    "label": "T03-pinned-wellness-hrv-MaxAX",
+    "image": "images/iphone-T03-pinned-wellness-hrv-MaxAX.png",
+    "kind": "xcresult",
+    "source": {
+      "kind": "commit",
+      "commit": "33402ec6e00fe250555cb8ec3cfe5864cd78fe2b"
+    },
+    "deviceName": "iPhone 18 Pro-wt-Health-80fd-deee0cef58a1",
+    "udid": "012B9C73-47F2-4F96-9A96-4903CB6BC286",
+    "test": "TodayCompactUITests/testWellnessStylePinnedMetricsAtMaximumTextSize()",
+    "testLog": ".codex-checks/today-wellness-metrics/ui-phone-retry.log",
+    "timestamp": 1793145575.388,
+    "pixelSize": [
+      1206,
+      2622
+    ],
+    "sha256": "5f2737605d0da9125a71ba0c81982618d4c7931daf49a2205c93c8bd6772a608",
+    "executionStatus": "passed"
+  },
+  {
+    "device": "iphone",
+    "label": "T03-pinned-wellness-row-0-light",
+    "image": "images/iphone-T03-pinned-wellness-row-0-light.png",
+    "kind": "xcresult",
+    "source": {
+      "kind": "working-tree",
+      "baseCommit": "cedfeb033a08566b45621d343758c6d68c90cdae",
+      "patch": "proof/phone-initial-source.patch.gz",
+      "patchCompression": "gzip",
+      "patchSha256": "c6c77172d7ad4b4070a033ded6989f116687c4ff7b5f3c89f2eafe3de554affe",
+      "patchRawSha256": "ae4cd1869c67381183b171714153657298f2fd91026c9d2d4af3aa07e24a2505",
+      "applicationCodeIdenticalToCommit": "33402ec6e00fe250555cb8ec3cfe5864cd78fe2b"
+    },
+    "deviceName": "iPhone 18 Pro-wt-Health-80fd-deee0cef58a1",
+    "udid": "012B9C73-47F2-4F96-9A96-4903CB6BC286",
+    "test": "TodayCompactUITests/testWellnessStylePinnedMetricsHaveEqualRowHeights()",
+    "testLog": ".codex-checks/today-wellness-metrics/ui-phone.log",
+    "timestamp": 1793145470.295,
+    "pixelSize": [
+      1206,
+      2622
+    ],
+    "sha256": "bdce586117280a7236067de7d259678f94a3740978b2fee8699ed8a663ac34b6",
+    "executionStatus": "passed"
+  },
+  {
+    "device": "iphone",
+    "label": "T03-pinned-wellness-row-1-dark",
+    "image": "images/iphone-T03-pinned-wellness-row-1-dark.png",
+    "kind": "xcresult",
+    "source": {
+      "kind": "working-tree",
+      "baseCommit": "cedfeb033a08566b45621d343758c6d68c90cdae",
+      "patch": "proof/phone-initial-source.patch.gz",
+      "patchCompression": "gzip",
+      "patchSha256": "c6c77172d7ad4b4070a033ded6989f116687c4ff7b5f3c89f2eafe3de554affe",
+      "patchRawSha256": "ae4cd1869c67381183b171714153657298f2fd91026c9d2d4af3aa07e24a2505",
+      "applicationCodeIdenticalToCommit": "33402ec6e00fe250555cb8ec3cfe5864cd78fe2b"
+    },
+    "deviceName": "iPhone 18 Pro-wt-Health-80fd-deee0cef58a1",
+    "udid": "012B9C73-47F2-4F96-9A96-4903CB6BC286",
+    "test": "TodayCompactUITests/testWellnessStylePinnedMetricsHaveEqualRowHeights()",
+    "testLog": ".codex-checks/today-wellness-metrics/ui-phone.log",
+    "timestamp": 1793145438.466,
+    "pixelSize": [
+      1206,
+      2622
+    ],
+    "sha256": "3909882225c91d6d7131aae6c71f28fc94d794cabbdb12fe81f54a336fe32226",
+    "executionStatus": "passed"
+  },
+  {
+    "device": "iphone",
+    "label": "T03-pinned-wellness-row-1-light",
+    "image": "images/iphone-T03-pinned-wellness-row-1-light.png",
+    "kind": "xcresult",
+    "source": {
+      "kind": "working-tree",
+      "baseCommit": "cedfeb033a08566b45621d343758c6d68c90cdae",
+      "patch": "proof/phone-initial-source.patch.gz",
+      "patchCompression": "gzip",
+      "patchSha256": "c6c77172d7ad4b4070a033ded6989f116687c4ff7b5f3c89f2eafe3de554affe",
+      "patchRawSha256": "ae4cd1869c67381183b171714153657298f2fd91026c9d2d4af3aa07e24a2505",
+      "applicationCodeIdenticalToCommit": "33402ec6e00fe250555cb8ec3cfe5864cd78fe2b"
+    },
+    "deviceName": "iPhone 18 Pro-wt-Health-80fd-deee0cef58a1",
+    "udid": "012B9C73-47F2-4F96-9A96-4903CB6BC286",
+    "test": "TodayCompactUITests/testWellnessStylePinnedMetricsHaveEqualRowHeights()",
+    "testLog": ".codex-checks/today-wellness-metrics/ui-phone.log",
+    "timestamp": 1793145473.82,
+    "pixelSize": [
+      1206,
+      2622
+    ],
+    "sha256": "92b23d76ac962d3c977ccdd196e5c8a139f05eeec8b3c06f5a355ea617d804e6",
+    "executionStatus": "passed"
+  },
+  {
+    "device": "iphone",
+    "label": "T03-pinned-wellness-weight-MaxAX",
+    "image": "images/iphone-T03-pinned-wellness-weight-MaxAX.png",
+    "kind": "xcresult",
+    "source": {
+      "kind": "commit",
+      "commit": "33402ec6e00fe250555cb8ec3cfe5864cd78fe2b"
+    },
+    "deviceName": "iPhone 18 Pro-wt-Health-80fd-deee0cef58a1",
+    "udid": "012B9C73-47F2-4F96-9A96-4903CB6BC286",
+    "test": "TodayCompactUITests/testWellnessStylePinnedMetricsAtMaximumTextSize()",
+    "testLog": ".codex-checks/today-wellness-metrics/ui-phone-retry.log",
+    "timestamp": 1793145589.458,
+    "pixelSize": [
+      1206,
+      2622
+    ],
+    "sha256": "ca7b32740b3b13ab42ee6a2af1c978b121a8497812f519d265faf36a60dcb46d",
+    "executionStatus": "passed"
+  },
+  {
+    "device": "ipad",
+    "label": "T03-pinned-wellness-row-0-dark",
+    "image": "images/ipad-T03-pinned-wellness-row-0-dark.png",
+    "kind": "xcresult",
+    "source": {
+      "kind": "commit",
+      "commit": "33402ec6e00fe250555cb8ec3cfe5864cd78fe2b"
+    },
+    "deviceName": "iPad Pro 13-inch (M5)-wt-Health-80fd-deee0cef58a1",
+    "udid": "653BA9FF-3C4A-48FC-9236-83337533EF84",
+    "test": "TodayCompactUITests/testWellnessStylePinnedMetricsHaveEqualRowHeights()",
+    "testLog": ".codex-checks/today-wellness-metrics/ui-ipad.log",
+    "timestamp": 1793146543.741,
+    "pixelSize": [
+      2064,
+      2752
+    ],
+    "sha256": "8bca15896eec1389519ebfd05a52691ea132902ec82f2882a8c0878c13fd9a32",
+    "executionStatus": "passed"
+  },
+  {
+    "device": "ipad",
+    "label": "T03-pinned-wellness-row-0-light",
+    "image": "images/ipad-T03-pinned-wellness-row-0-light.png",
+    "kind": "xcresult",
+    "source": {
+      "kind": "commit",
+      "commit": "33402ec6e00fe250555cb8ec3cfe5864cd78fe2b"
+    },
+    "deviceName": "iPad Pro 13-inch (M5)-wt-Health-80fd-deee0cef58a1",
+    "udid": "653BA9FF-3C4A-48FC-9236-83337533EF84",
+    "test": "TodayCompactUITests/testWellnessStylePinnedMetricsHaveEqualRowHeights()",
+    "testLog": ".codex-checks/today-wellness-metrics/ui-ipad.log",
+    "timestamp": 1793146588.941,
+    "pixelSize": [
+      2064,
+      2752
+    ],
+    "sha256": "4ab9d5fb54c99cb7203ac4a43d3fb440c16c11e2696bc766ca841f8111755456",
+    "executionStatus": "passed"
+  },
+  {
+    "device": "ipad",
+    "label": "T03-pinned-wellness-row-1-dark",
+    "image": "images/ipad-T03-pinned-wellness-row-1-dark.png",
+    "kind": "xcresult",
+    "source": {
+      "kind": "commit",
+      "commit": "33402ec6e00fe250555cb8ec3cfe5864cd78fe2b"
+    },
+    "deviceName": "iPad Pro 13-inch (M5)-wt-Health-80fd-deee0cef58a1",
+    "udid": "653BA9FF-3C4A-48FC-9236-83337533EF84",
+    "test": "TodayCompactUITests/testWellnessStylePinnedMetricsHaveEqualRowHeights()",
+    "testLog": ".codex-checks/today-wellness-metrics/ui-ipad.log",
+    "timestamp": 1793146547.381,
+    "pixelSize": [
+      2064,
+      2752
+    ],
+    "sha256": "a7d82ad58c91a007f80b47355e7b8fba325d56e88e19b65521d9fb34808d381d",
+    "executionStatus": "passed"
+  },
+  {
+    "device": "ipad",
+    "label": "T03-pinned-wellness-row-1-light",
+    "image": "images/ipad-T03-pinned-wellness-row-1-light.png",
+    "kind": "xcresult",
+    "source": {
+      "kind": "commit",
+      "commit": "33402ec6e00fe250555cb8ec3cfe5864cd78fe2b"
+    },
+    "deviceName": "iPad Pro 13-inch (M5)-wt-Health-80fd-deee0cef58a1",
+    "udid": "653BA9FF-3C4A-48FC-9236-83337533EF84",
+    "test": "TodayCompactUITests/testWellnessStylePinnedMetricsHaveEqualRowHeights()",
+    "testLog": ".codex-checks/today-wellness-metrics/ui-ipad.log",
+    "timestamp": 1793146603.872,
+    "pixelSize": [
+      2064,
+      2752
+    ],
+    "sha256": "d79eb0751f4f168c41bc4735c4ed3c261a9e37978614eeb9bcb742ed59c0e65a",
+    "executionStatus": "passed"
+  }
+]

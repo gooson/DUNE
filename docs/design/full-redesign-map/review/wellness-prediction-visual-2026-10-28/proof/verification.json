@@ -1,0 +1,78 @@
+{
+  "finalSourceCommit": "b83a05e9ee363d2ae9dab626e14cfa809d1c6e57",
+  "applicationSourceCommit": "464cadcd10f9fa8231d1f6713d734a7685557841",
+  "sourceHashes": {
+    "DUNE/Presentation/Wellness/Components/WellnessSleepPredictionCard.swift": "abf5e6b7102dbd2b8f33bcee059cabf15a3c341288aaa8c332b185f43c165a54",
+    "DUNE/Presentation/Wellness/WellnessViewModel.swift": "6eb55a86ef9a38c7d44dee18721eea3175dc31b228985b2307e18b6100709457",
+    "DUNEUITests/Visual/WellnessFlowUITests.swift": "024792f6a6a2c8a856b007d2515d49b30105685d2aff25141a4513d53779a454"
+  },
+  "initialSourceHashes": {
+    "DUNE/Presentation/Wellness/Components/WellnessSleepPredictionCard.swift": "abf5e6b7102dbd2b8f33bcee059cabf15a3c341288aaa8c332b185f43c165a54",
+    "DUNE/Presentation/Wellness/WellnessViewModel.swift": "1d1b68ea97cf2fdd3d0ae301ebf962700d92e5db5f498a82169e4a6524ae6aa1",
+    "DUNEUITests/Visual/WellnessFlowUITests.swift": "06f969bf88b8e1f9d6eff13ba919202ac63adba5f84cd05d536c2a4c31d870d6"
+  },
+  "initialSourceBaseCommit": "27dc939fce0a22adfc8d0aa21cda255721768fd0",
+  "initialSourcePatchSha256": "748c6d136a3a797c1df2e646df4564fcd88a717c5feb32f8618fbd144b1a8814",
+  "proofHashes": {
+    "ui-phone.log.result.json": "5963e15b518d452a92a55fe01a1cb2863459b3af097b631d2b751ffd13d525b1",
+    "ui-phone-retry.log.result.json": "80ada4af1fce329441acc8b1678dfa445db0d73db25b4115b9fd3396c98a4633",
+    "ui-phone-capture-final.log.result.json": "175938b2980ac3bdec2ed018e7fe3266313015b16be9131998423bc211da9cb3",
+    "ui-phone-capture-retry.log.result.json": "a7b89b767c9fce1ecca92822e1236fc805c50594466c2fe2f380be22c622e055",
+    "ui-ipad.log.result.json": "968f565a6c345c18e0cb82b3f8171e8068b82f1bd1cb34b332cac824ca5b3d6b",
+    "ui-plan.json": "d489f5db2abbd733988a1ea7301c8aa0f02288ffaeb6333f72d55b4b9e4bf53c"
+  },
+  "rawLogs": {
+    "ui-phone.log": {
+      "archive": "ui-phone.log.gz",
+      "rawSha256": "764bf3b0f63656c12946472f8982814fe18baa4b9bd17bdcdf841cea76910c1e",
+      "archiveSha256": "9e96e23e5dd4539c2b257417f103d47ae0657cba2f233f9f099c3fc36ecbb154"
+    },
+    "ui-phone-retry.log": {
+      "archive": "ui-phone-retry.log.gz",
+      "rawSha256": "256f944d9a622986f80d34258885a60b8d95aab6f6c59aaebe56aac3fadb1394",
+      "archiveSha256": "57dcb14a884427562ac4757e12aca796a1e1cffc2787bb3e962d805f3a99bad0"
+    },
+    "ui-phone-capture-final.log": {
+      "archive": "ui-phone-capture-final.log.gz",
+      "rawSha256": "6a49493881196658630802d2e0d6d6111bf689dfefa1e9fca98edd18e92d750a",
+      "archiveSha256": "de0732a3605f8686d80b0ac12043f5d6e99f5955443427cd8a9001d022b931a8"
+    },
+    "ui-phone-capture-retry.log": {
+      "archive": "ui-phone-capture-retry.log.gz",
+      "rawSha256": "364f507f962a5d0769be104e953678da10c07d6365e1366b47a966039a1c1b0a",
+      "archiveSha256": "831fb20f39d33b13b96b0156d134f9c49dd506f2cbcd5a984696e3bb9de43561"
+    },
+    "ui-ipad.log": {
+      "archive": "ui-ipad.log.gz",
+      "rawSha256": "ee034fb86a3c17fcad3d05f0a28c56b05595211d5964aa4fe08912c4c1bad37e",
+      "archiveSha256": "d34cae5c1f560160cf7b7f4944d601ba55f4b61182146098de42dee59189aa16"
+    },
+    "ios-build.log": {
+      "archive": "ios-build.log.gz",
+      "rawSha256": "3a550fc5b18f024bc002186f36b04535802ab773c024e0e63589b126d40cdf55",
+      "archiveSha256": "50fcaeb14f20675f179e16e82129c5a45b009d5756e4905a242dbd7e8a7e3e3e"
+    },
+    "ui-compile.log": {
+      "archive": "ui-compile.log.gz",
+      "rawSha256": "6953559e51c831c0f85185153210a0aeba027d4bf66ea05875158227a3a8b6b1",
+      "archiveSha256": "2bc6ee78e7bc223b44e23dfbf6e21de17a3a884bb0ce32db364ffec2656835b0"
+    }
+  },
+  "uniquePassedDeviceCases": 4,
+  "initialFailedCases": 1,
+  "captureFailedCases": 1,
+  "reuseReason": "Only explicit UI-only none fixture and its empty-state setup changed after initial execution; component bytes and all nonempty fixture behavior unchanged. Initial score/confidence/factor and independent route passes remain valid.",
+  "unverified": [
+    "Duo closed/open H01 prediction card",
+    "iPad maximum Dynamic Type/empty",
+    "all language/theme variants",
+    "full regression",
+    "VoiceOver traversal"
+  ],
+  "initialSourcePatchArchive": {
+    "path": "phone-initial-source.patch.gz",
+    "compression": "gzip",
+    "sha256": "a2158b130249719d642859ed903099562155975e35d7335cfb36bc1c5b88c40a",
+    "rawSha256": "748c6d136a3a797c1df2e646df4564fcd88a717c5feb32f8618fbd144b1a8814"
+  }
+}
