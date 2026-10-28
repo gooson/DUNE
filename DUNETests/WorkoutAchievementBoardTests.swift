@@ -61,6 +61,18 @@ struct WorkoutAchievementBoardTests {
         #expect(board.completedCount == 0)
     }
 
+    @Test("Strength marks clamp malformed targets before integer conversion")
+    func safeStrengthMarks() {
+        #expect(WorkoutAchievementBoardModel.strengthMarkCount(target: -.greatestFiniteMagnitude) == 0)
+        #expect(WorkoutAchievementBoardModel.strengthMarkCount(target: -3) == 0)
+        #expect(WorkoutAchievementBoardModel.strengthMarkCount(target: .nan) == 0)
+        #expect(WorkoutAchievementBoardModel.strengthMarkCount(target: .infinity) == 0)
+        #expect(WorkoutAchievementBoardModel.strengthMarkCount(target: .greatestFiniteMagnitude) == 3)
+        for target in 0...3 {
+            #expect(WorkoutAchievementBoardModel.strengthMarkCount(target: Double(target)) == target)
+        }
+    }
+
     @Test("More than twelve goals retain the real incomplete total")
     func manyGoals() {
         let goals = (0..<13).map { goal("Goal \($0)", completed: $0 < 12) }

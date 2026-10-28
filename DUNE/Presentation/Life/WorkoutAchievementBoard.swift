@@ -38,7 +38,6 @@ struct WorkoutAchievementBoardModel {
     var totalCount: Int { customGoals.count + groups.reduce(0) { $0 + $1.metrics.count } }
     var challengeCompletedCount: Int { groups.reduce(0) { $0 + $1.completedCount } }
     var challengeCount: Int { groups.reduce(0) { $0 + $1.metrics.count } }
-    var maxStreakWeeks: Int { groups.map(\.maxStreakWeeks).max() ?? 0 }
 
     static func safeValue(_ value: Double) -> Double { value.isFinite ? max(0, value) : 0 }
 
@@ -49,6 +48,10 @@ struct WorkoutAchievementBoardModel {
 
     static func display(_ value: Double) -> String {
         safeValue(value).formatted(.number.precision(.fractionLength(0...1)))
+    }
+
+    static func strengthMarkCount(target: Double) -> Int {
+        Int(min(3, safeValue(target)))
     }
 }
 
@@ -116,7 +119,13 @@ struct WorkoutAchievementBoard: View {
 
     private var header: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            Label("Weekly Workout Achievements", systemImage: "figure.run")
+            Group {
+                if dynamicTypeSize.isAccessibilitySize {
+                    Text("Weekly Workout Achievements")
+                } else {
+                    Label("Weekly Workout Achievements", systemImage: "figure.run")
+                }
+            }
                 .font(.title3.weight(.semibold))
                 .fixedSize(horizontal: false, vertical: true)
                 .foregroundStyle(gold)
@@ -297,19 +306,34 @@ struct WorkoutAchievementBoard: View {
     @ViewBuilder
     private func groupView(_ group: WorkoutAchievementBoardModel.Group) -> some View {
         VStack(alignment: .leading, spacing: DS.Spacing.md) {
-            HStack(spacing: DS.Spacing.xs) {
-                Image(systemName: groupIcon(group.id))
-                    .foregroundStyle(gold)
-                    .accessibilityHidden(true)
-                Text(groupTitle(group.id))
-                    .font(.subheadline.weight(.semibold))
-                    .accessibilityAddTraits(.isHeader)
-                    .accessibilityIdentifier("life-workout-group-\(group.id)")
-                Spacer()
-                Text("\(group.completedCount)/\(group.metrics.count)")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .monospacedDigit()
+            if dynamicTypeSize.isAccessibilitySize {
+                VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                    Text(groupTitle(group.id))
+                        .font(.subheadline.weight(.semibold))
+                        .fixedSize(horizontal: false, vertical: true)
+                        .accessibilityAddTraits(.isHeader)
+                        .accessibilityIdentifier("life-workout-group-\(group.id)")
+                    Text("\(group.completedCount)/\(group.metrics.count)")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .monospacedDigit()
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            } else {
+                HStack(spacing: DS.Spacing.xs) {
+                    Image(systemName: groupIcon(group.id))
+                        .foregroundStyle(gold)
+                        .accessibilityHidden(true)
+                    Text(groupTitle(group.id))
+                        .font(.subheadline.weight(.semibold))
+                        .accessibilityAddTraits(.isHeader)
+                        .accessibilityIdentifier("life-workout-group-\(group.id)")
+                    Spacer()
+                    Text("\(group.completedCount)/\(group.metrics.count)")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .monospacedDigit()
+                }
             }
             if group.id == "routine" { routine(group) }
             if group.id == "strength" { strength(group) }
@@ -394,7 +418,7 @@ struct WorkoutAchievementBoard: View {
                     }
                     .monospacedDigit()
                     HStack(spacing: 3) {
-                        ForEach(0..<min(3, max(0, Int(metric.targetValue.isFinite ? min(metric.targetValue, 3) : 0))), id: \.self) { index in
+                        ForEach(0..<WorkoutAchievementBoardModel.strengthMarkCount(target: metric.targetValue), id: \.self) { index in
                             Capsule().fill(Double(index) < WorkoutAchievementBoardModel.safeValue(metric.currentValue) ? gold : gold.opacity(0.15))
                                 .frame(height: 5)
                         }

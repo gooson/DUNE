@@ -278,18 +278,39 @@ final class LifeFlowUITests: SeededUITestBaseCase {
         launchApp(with: configuration)
         navigateToLife()
         let suffix = maximumAX ? "MaxAX" : style
-        XCTAssertTrue(reveal("life-workout-summary").exists)
+        alignWorkoutCapture("life-workout-summary", maximumAX: maximumAX)
         capture("L01-Life-workout-summary-\(suffix)")
         for group in ["routine", "strength", "running"] {
-            XCTAssertTrue(reveal("life-workout-group-\(group)").exists)
+            alignWorkoutCapture("life-workout-group-\(group)", maximumAX: maximumAX)
             capture("L01-Life-workout-\(group)-\(suffix)")
             if group == "strength" {
-                XCTAssertTrue(reveal("life-workout-metric-weeklyArms3").exists)
+                alignWorkoutCapture("life-workout-metric-weeklyArms3", maximumAX: maximumAX)
                 capture("L01-Life-workout-strength-end-\(suffix)")
             } else if group == "running" {
-                XCTAssertTrue(reveal("life-workout-source").exists)
+                alignWorkoutCapture("life-workout-source", maximumAX: maximumAX, alignBottom: true)
                 capture("L01-Life-workout-running-end-\(suffix)")
             }
+        }
+    }
+
+    private func alignWorkoutCapture(_ id: String, maximumAX: Bool, alignBottom: Bool = false) {
+        let target = reveal(id)
+        guard maximumAX else { return }
+        let window = app.windows.firstMatch.frame
+        let top = max(window.minY, app.navigationBars.firstMatch.frame.maxY) + 20
+        let bottom = (app.tabBars.firstMatch.exists ? app.tabBars.firstMatch.frame.minY : window.maxY) - 20
+        let scroll = app.scrollViews.firstMatch
+        for _ in 0..<8 {
+            let offset = alignBottom ? max(0, target.frame.maxY - bottom) : target.frame.minY - top
+            if abs(offset) < 16 { break }
+            let start = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.55))
+            start.press(forDuration: 0.05,
+                        thenDragTo: start.withOffset(CGVector(dx: 0, dy: -max(-240, min(240, offset)))),
+                        withVelocity: .slow, thenHoldForDuration: 0.3)
+        }
+        if target.frame.height <= bottom - top {
+            XCTAssertGreaterThanOrEqual(target.frame.minY, top - 16, "\(id) should clear the navigation bar")
+            XCTAssertLessThanOrEqual(target.frame.maxY, bottom + 16, "\(id) should clear the floating tab bar")
         }
     }
 
