@@ -310,7 +310,12 @@ final class LifeRegressionTests: SeededUITestBaseCase {
             let firstCompletion = app.buttons["First Completion"].firstMatch
             XCTAssertTrue(firstCompletion.waitForExistence(timeout: 5), "First Completion should be available as a start point")
             firstCompletion.auditTap()
-            XCTAssertTrue(app.staticTexts["Schedule starts after the first completion"].firstMatch.waitForExistence(timeout: 5),
+            let startHint = app.staticTexts["Schedule starts after the first completion"].firstMatch
+            let form = app.collectionViews.firstMatch
+            for _ in 0..<6 where !startHint.exists {
+                form.swipeUp()
+            }
+            XCTAssertTrue(startHint.waitForExistence(timeout: 5),
                           "Recurring habit should wait for its first completion")
         }
 
