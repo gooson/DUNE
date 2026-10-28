@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/LifeFlowUITests/testCaptureL01AndPastRecordLightDarkAndMaximumAX",
+    "DUNEUITests/LifeRegressionTests/testWeeklyAndFutureRecurringHabitsStayOutsideTodayProgress",
+    "DUNEUITests/LifeSeededSmokeTests/testWeeklyReflectionOpensMeasuredComparison"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 3,
+    "passed": 2,
+    "skipped": 0,
+    "failed": 1
+  },
+  "passed_cases": 2,
+  "failures": [
+    "2400: /Users/shanks/.codex/worktrees/4d0d/Health/DUNEUITests/Full/LifeRegressionTests.swift:296: error: -[DUNEUITests.LifeRegressionTests testWeeklyAndFutureRecurringHabitsStayOutsideTodayProgress] : XCTAssertTrue failed - New Habit form should open for Weekly Swim",
+    "2409: Test Case '-[DUNEUITests.LifeRegressionTests testWeeklyAndFutureRecurringHabitsStayOutsideTodayProgress]' failed (20.185 seconds).",
+    "2410: Test Suite 'LifeRegressionTests' failed at 2026-10-29 00:04:30.079.",
+    "2527: Test Suite 'DUNEUITests.xctest' failed at 2026-10-29 00:05:03.325.",
+    "2529: Test Suite 'Selected tests' failed at 2026-10-29 00:05:03.326.",
+    "2545: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log reports 1 failures",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/LifeRegressionTests/testWeeklyAndFutureRecurringHabitsStayOutsideTodayProgress"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/4d0d/Health/.codex-checks/life-run/ui-phone-authorized.log"
+}

@@ -130,28 +130,39 @@
   },
   "ui_gate": "pending",
   "currentSource": "62d3c097",
-  "uiGate": "failed-corrections-pending-authorized-verification",
+  "uiGate": "failed-new-habit-form-not-opened",
   "runtimePending": [
     {
       "priority": "P2",
       "id": "UI-CHART-AX",
-      "status": "patched-unverified",
+      "status": "verified-by-authorized-attempt",
       "cause": "Parent chart identifier overwrites title identifier",
       "automaticRetries": 1
     },
     {
       "priority": "P2",
       "id": "UI-WEEKLY-ROW",
-      "status": "patched-unverified",
+      "status": "not-reached-new-habit-menu-remained-open",
       "cause": "Offscreen row and unclear container boundary",
       "automaticRetries": 1
     },
     {
       "priority": "P2",
       "id": "UI-REPORT-LOCALE",
-      "status": "patched-unverified",
+      "status": "verified-by-authorized-attempt",
       "cause": "English text queried in Korean runtime",
       "automaticRetries": 1
     }
-  ]
+  ],
+  "authorizedExecution": {
+    "source": "62d3c097",
+    "head": "dd18af04",
+    "extraAttemptsUsed": 1,
+    "testcases": {
+      "passed": 2,
+      "failed": 1
+    },
+    "runnerExitStatus": 65,
+    "receipt": "ui-phone-authorized.result.json"
+  }
 }

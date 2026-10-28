@@ -4,7 +4,17 @@ date: 2026-10-28
 status: partial
 ---
 
-# Life Flow · 네이티브 실제 화면 (부분 증거)
+# Life Flow · 네이티브 실제 화면 (부분 검증)
+
+## 최신 추가 실행 · dd18af04
+
+사용자 승인 추가1회의 표준 runner는3개 검사 중2통과·1실패, exit65로 종료했다. 통과한 캡처 흐름의 새 PNG15장을 더해 총25장을 보존한다. 최신 L01/L09는 밝음·다크·최대글씨, L07 히트맵·완료율과 L08 주간 리포트는 밝음이다. 이미지별 sourceCommit과 testcase 결과를 manifest에서 구분한다.
+
+최신 PNG의 히어로·지난 기록 기본/다크/최대글씨, L07 차트, L08 주간 수치를 육안 확인했다. 최대글씨 지난 기록 sheet는 시스템 picker 값이 중간 생략되며, 화면 전체 폼을 한 PNG로 보여주지는 않는다. 이 캡처가 모든 폼 조작이나 전체 VoiceOver를 검증하지 않는다.
+
+주간/예정 검사는 새 습관 메뉴에서 폼이 열리지 않아 실패했다. iPad/Duo, L08 다크·최대글씨는 미검증이다. UI 게이트 및 머지는 미완료다. 아래는 이전 소스의 초기10장 기록이다.
+
+## 초기 수집 ·19f43ee3
 
 이 갤러리의 PNG 10장은 **iPhone 18 Pro 전용 시뮬레이터**에서 XCTest가 첨부한 실제 앱 화면을 원본 바이트 그대로 복사했다. 시안 렌더가 아니다. 실행 앱 소스는 `19f43ee3`이며, xcresult는 `.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.28_14-42-50-+0900.xcresult`다. 기기 UDID는 `E31D1A6A-8649-4FCF-9DAE-76DD59DE0192`다. 각 파일의 원본 첨부명, 테스트, 통과 여부, 해시와 크기는 [manifest.json](manifest.json)에 있다.
 

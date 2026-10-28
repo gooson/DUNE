@@ -72,3 +72,5 @@ related_solutions:
 ## Execution status · 2026-10-28
 
 구현과 최신 main 통합 후 빌드는 완료했다. 관련113개 unit 통과. UI 재검증7개 중4개 통과·3개 실패 후 수정본62d3c097을 준비했다. 동일 원인 자동 재시도 한도에 따라 추가 실행은 예외 확인 대기다. [초안 PR #854](https://github.com/gooson/DUNE/pull/854), [검증 기록](../reviews/2026-10-28-life-flow/README.md), [부분 실제 화면](../design/full-redesign-map/review/life-flow-2026-10-28/index.html)을 보존한다. UI·추가 기기 캡처·최종 게이트·머지는 완료하지 않았다.
+
+사용자가 허용한 추가1회에서 차트·주간 비교2개는 통과했다. 주간/예정 검사는 새 습관 메뉴의 폼 미진입으로 실패했고 해당 그룹 확인에 도달하지 못했다. runner는3실행·2통과·1실패, exit65다. 최신 실제 PNG15장을 추가 보존했다. UI 게이트·iPad/Duo·머지는 미완료이며 추가 실행을 하지 않았다.
