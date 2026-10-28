@@ -1,0 +1,178 @@
+{
+  "source_revision": "c80b5f1e3e690704421ba6b595c182f12bb4c2f8",
+  "app_source_revision": "62d3c097",
+  "status": "passed_ipad_and_duo_external_internal_selected_capture_scope",
+  "ownership_registry": ".codex-checks/worktree-simulators.json",
+  "requested_capture_selector": "DUNEUITests/LifeFlowUITests/testCaptureL01AndPastRecordLightDarkAndMaximumAX",
+  "existing_iphone": {
+    "name": "iPhone 18 Pro-wt-Health-4d0d-62cf3693c151",
+    "udid": "E31D1A6A-8649-4FCF-9DAE-76DD59DE0192",
+    "selector": "DUNEUITests/LifeRegressionTests/testWeeklyAndFutureRecurringHabitsStayOutsideTodayProgress",
+    "result_receipt": ".codex-checks/life-run/ui-phone-final.log.result.json",
+    "status": "passed",
+    "counts": {
+      "executed": 1,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0
+    },
+    "normal_exit": 0,
+    "scope_note": "Existing phone selector, not the capture selector or keyboard test"
+  },
+  "ipad": {
+    "name": "iPad Pro 13-inch (M5)-wt-Health-4d0d-62cf3693c151",
+    "udid": "48083538-F9F9-4A38-959E-4125477F6914",
+    "plan": "DUNEUITests-DesignCapture",
+    "selector": "DUNEUITests/LifeFlowUITests/testCaptureL01AndPastRecordLightDarkAndMaximumAX",
+    "command": "bash scripts/test-ui.sh --no-regen --no-stream-log --test-plan DUNEUITests-DesignCapture --simulator-udid 48083538-F9F9-4A38-959E-4125477F6914 --only-testing DUNEUITests/LifeFlowUITests/testCaptureL01AndPastRecordLightDarkAndMaximumAX --log-file .codex-checks/life-run/ui-ipad-final.log",
+    "log": ".codex-checks/life-run/ui-ipad-final.log",
+    "receipt": ".codex-checks/life-run/ui-ipad-final.log.result.json",
+    "xcresult": ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.29_01-16-48-+0900.xcresult",
+    "status": "passed",
+    "counts": {
+      "executed": 1,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0
+    },
+    "normal_exit": 0,
+    "attachments_exported": 61,
+    "export_path": ".codex-checks/life-run/export-ipad-final",
+    "native_viewport_pixels": [
+      2064,
+      2752
+    ]
+  },
+  "duo": {
+    "name": "iPhone Duo-wt-Health-4d0d-62cf3693c151",
+    "udid": "8B6A9C9D-1364-4EBA-A6F9-832F1BEB201D",
+    "hinge_source_revision": "7acb090dd7d28fb0aea8e1907211ceff15aa450e",
+    "posture_setup": "external target 0 setter exited successfully; no actual hinge readback available",
+    "angle_status": "unverified",
+    "display_readback": [
+      {
+        "displayId": 1,
+        "name": "LCD",
+        "active": true,
+        "bounds": [
+          0,
+          0,
+          1398,
+          2034
+        ],
+        "nativeSize": [
+          1398,
+          2034
+        ],
+        "backlight": "on"
+      },
+      {
+        "displayId": 3,
+        "name": "LCD-1",
+        "active": false,
+        "bounds": [
+          0,
+          0,
+          2007,
+          2853
+        ],
+        "nativeSize": [
+          2007,
+          2853
+        ],
+        "backlight": "off"
+      }
+    ],
+    "collector_command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer python3 scripts/duo-visual-audit.py .codex-checks/life-run/duo-closed-final 8B6A9C9D-1364-4EBA-A6F9-832F1BEB201D all bash scripts/test-ui.sh --no-regen --stream-log --test-plan DUNEUITests-DuoAudit --simulator-udid 8B6A9C9D-1364-4EBA-A6F9-832F1BEB201D --only-testing DUNEUITests/LifeFlowUITests/testCaptureL01AndPastRecordLightDarkAndMaximumAX --log-file .codex-checks/life-run/ui-duo-closed-final.log",
+    "status": "named_capture_evidence_collected_but_selector_failed",
+    "runner_result": ".codex-checks/life-run/duo-closed-final/runner-result.json",
+    "checkpoints": ".codex-checks/life-run/duo-closed-final/checkpoints.jsonl",
+    "captures": ".codex-checks/life-run/duo-closed-final/captures.tsv",
+    "log": ".codex-checks/life-run/duo-closed-final/run.log",
+    "checkpoint_count": 1,
+    "acknowledged": false,
+    "valid_evidence": false,
+    "usable_paired_captures": 0,
+    "retry_count": 0,
+    "internal_posture_run": "not_attempted_after_failed_selector",
+    "retry": {
+      "directory": ".codex-checks/life-run/duo-closed-retry",
+      "log": ".codex-checks/life-run/ui-duo-closed-retry.log",
+      "runner_result": ".codex-checks/life-run/duo-closed-retry/runner-result.json",
+      "status": "failed_after_21_valid_named_capture_checkpoints",
+      "xcodebuild_exit": 65,
+      "failure": "XCTest exceeded 300-second execution allowance during subsequent Past Record path",
+      "valid_acknowledged_checkpoints": 21,
+      "named_checkpoint_map": ".codex-checks/life-run/duo-closed-retry/named-capture-map.json",
+      "named_checkpoint_count": 14,
+      "retry_count": 1,
+      "sync_setup_prompt_observed": false,
+      "internal_posture_run": "not_attempted_after_failed_selector"
+    },
+    "external_split": {
+      "status": "passed_all_three_focused_selectors",
+      "selectors": {
+        "light": {
+          "selector": "DUNEUITests/LifeFlowUITests/testHostCaptureLight",
+          "receipt": ".codex-checks/life-run/ui-duo-closed-split-light.log.result.json",
+          "log": ".codex-checks/life-run/ui-duo-closed-split-light.log",
+          "passed": 1,
+          "normal_exit": 0
+        },
+        "dark": {
+          "selector": "DUNEUITests/LifeFlowUITests/testHostCaptureDark",
+          "receipt": ".codex-checks/life-run/ui-duo-closed-split-dark.log.result.json",
+          "log": ".codex-checks/life-run/ui-duo-closed-split-dark.log",
+          "passed": 1,
+          "normal_exit": 0
+        },
+        "maximum_ax": {
+          "selector": "DUNEUITests/LifeFlowUITests/testHostCaptureMaximumAX",
+          "receipt": ".codex-checks/life-run/ui-duo-closed-split-maximum-ax.log.result.json",
+          "log": ".codex-checks/life-run/ui-duo-closed-split-maximum-ax.log",
+          "passed": 1,
+          "normal_exit": 0
+        }
+      },
+      "named_checkpoint_map": ".codex-checks/life-run/duo-closed-split/named-capture-map.json",
+      "named_checkpoint_count": 15,
+      "active_display": "LCD displayId1 1398x2034; inactive LCD-1 displayId3 2007x2853",
+      "angle_status": "unverified; SDK has no hinge get"
+    },
+    "internal_posture": {
+      "status": "passed_after_one_conditional_retry",
+      "gui_display_readback": ".codex-checks/life-run/duo-open-gui-displays.json",
+      "sync_setup_evidence": ".codex-checks/life-run/duo-gui-open-and-sync.json",
+      "retry_warmup_screenshot": ".codex-checks/life-run/duo-internal-after-timeout.png",
+      "combined_log": ".codex-checks/life-run/ui-duo-open-retry.log",
+      "receipt": ".codex-checks/life-run/ui-duo-open-retry.log.result.json",
+      "runner_result": ".codex-checks/life-run/duo-open-retry/runner-result.json",
+      "selectors": [
+        "DUNEUITests/LifeFlowUITests/testHostCaptureLight",
+        "DUNEUITests/LifeFlowUITests/testHostCaptureDark",
+        "DUNEUITests/LifeFlowUITests/testHostCaptureMaximumAX"
+      ],
+      "counts": {
+        "executed": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0
+      },
+      "normal_exit": 0,
+      "valid_acknowledged_checkpoints": 27,
+      "named_checkpoint_map": ".codex-checks/life-run/duo-open-retry/named-capture-map.json",
+      "named_checkpoint_count": 15,
+      "active_display": "LCD-1 displayId3 landscapeRight, 2007x2853 panel pixels; app window951x669 points",
+      "inactive_display": "LCD displayId1, 1398x2034 panel pixels",
+      "retry_count": 1
+    }
+  },
+  "environment_diagnosis": {
+    "initial_default_probe": "sandbox access refused CoreSimulatorService connection",
+    "corrected_classification": "sandbox access restriction; elevated probe succeeded, simulator service healthy",
+    "evidence": ".codex-checks/life-run/devices-elevated-probe.json"
+  },
+  "keyboard_testing": "not_in_scope; user-confirmed phone keyboard evidence is separate",
+  "source_revision_split_captures": "791b8bf4983cd5991297655a6f67faa2cf511c2e",
+  "previousTopLevelStatus": "partial_ipad_pass_duo_external_capture_failed"
+}

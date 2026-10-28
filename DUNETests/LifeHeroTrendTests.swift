@@ -81,4 +81,18 @@ struct LifeHeroTrendTests {
         #expect(points.count == 7)
         #expect(points.allSatisfy { $0.value == nil })
     }
+    @Test("28-day rhythm shares the last seven daily counts with the compact trend")
+    func rhythmWindowParity() {
+        let id = UUID()
+        let habits = [habit(id: id, created: 3)]
+        let logs = [log(id: id, day: 22), log(id: id, day: 24), log(id: id, day: 24)]
+        let long = LifeHeroTrend.points(habits: habits, logs: logs, referenceDate: date(28), dayCount: 28)
+        let short = LifeHeroTrend.points(habits: habits, logs: logs, referenceDate: date(28))
+        #expect(long.count == 28)
+        #expect(long.prefix(2).allSatisfy { $0.value == nil })
+        #expect(long.dropFirst(2).allSatisfy { $0.value != nil })
+        #expect(Array(long.suffix(7)).map(\.value) == short.map(\.value))
+        #expect(long.compactMap(\.value).reduce(0, +) == 2)
+    }
+
 }

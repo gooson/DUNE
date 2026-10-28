@@ -4,367 +4,224 @@ struct HabitRowView: View {
     let progress: HabitProgress
     let onToggle: () -> Void
     let onUpdateValue: (Double) -> Void
+    let onValidateValue: ((Double) -> Bool)?
     let trailingAccessory: AnyView?
 
     @Environment(\.appTheme) private var theme
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-    @State private var inputText: String = ""
+    @State private var inputText = ""
     @State private var isEditing = false
 
-    init(
-        progress: HabitProgress,
-        onToggle: @escaping () -> Void,
-        onUpdateValue: @escaping (Double) -> Void,
-        trailingAccessory: AnyView? = nil
-    ) {
+    init(progress: HabitProgress, onToggle: @escaping () -> Void, onUpdateValue: @escaping (Double) -> Void, trailingAccessory: AnyView? = nil, onValidateValue: ((Double) -> Bool)? = nil) {
         self.progress = progress
         self.onToggle = onToggle
         self.onUpdateValue = onUpdateValue
+        self.onValidateValue = onValidateValue
         self.trailingAccessory = trailingAccessory
     }
 
+    private var tint: Color { progress.iconCategory.themeColor(for: theme) }
+    private var value: Double { max(0, progress.todayValue) }
+    private var goal: Double { max(0, progress.goalValue) }
+    private var toggleDisabled: Bool {
+        progress.isAutoLinked || progress.isAutoCompleted || (progress.isCycleBased && !progress.isCompleted && !progress.canCompleteCycle)
+    }
+
     var body: some View {
-        Group {
-            if isWholeRowToggle {
-                cardContent
-                    .accessibilityElement(children: .contain)
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        guard !isToggleDisabled else { return }
-                        onToggle()
-                    }
-                    .accessibilityAddTraits(.isButton)
-                    .accessibilityAction {
-                        guard !isToggleDisabled else { return }
-                        onToggle()
-                    }
-                    .accessibilityLabel(progress.name)
-            } else {
-                cardContent
-                    .accessibilityElement(children: .contain)
-                    .accessibilityLabel(progress.name)
-            }
-        }
-    }
-
-    private var rowIdentifier: String {
-        "life-habit-row-\(progress.name)"
-    }
-
-    private var isWholeRowToggle: Bool {
-        progress.isCycleBased || progress.isAutoLinked || progress.type == .check
-    }
-
-    private var isToggleDisabled: Bool {
-        if progress.isCycleBased {
-            return !progress.canCompleteCycle
-        }
-        return progress.isAutoLinked || progress.isAutoCompleted
-    }
-
-    private var cardContent: some View {
-        StandardCard {
-            HStack(spacing: DS.Spacing.md) {
-                // Icon
-                iconView
-
-                // Content
+        VStack(alignment: .leading, spacing: DS.Spacing.md) {
+            HStack(alignment: .top, spacing: DS.Spacing.md) {
+                Image(systemName: progress.iconCategory.iconName)
+                    .font(.title2)
+                    .foregroundStyle(tint)
+                    .frame(width: 52, height: 52)
+                    .background(tint.opacity(DS.Opacity.medium), in: RoundedRectangle(cornerRadius: DS.Radius.md))
+                    .accessibilityHidden(true)
                 VStack(alignment: .leading, spacing: DS.Spacing.xs) {
-                    VStack(alignment: .leading, spacing: DS.Spacing.xs) {
-                        Text(progress.name)
-                            .font(.subheadline)
-                            .fontWeight(.medium)
-                            .accessibilityIdentifier(rowIdentifier)
-                            .fixedSize(horizontal: false, vertical: true)
-
-                        HStack(spacing: DS.Spacing.xs) {
-                            streakBadge
-
-                            if let trailingAccessory {
-                                trailingAccessory
-                            }
-                        }
-                    }
-
-                    habitInput
-
+                    Text(progress.name)
+                        .font(.headline)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .accessibilityIdentifier("life-habit-row-\(progress.name)")
                     if progress.isCycleBased {
-                        cycleMetadata
+                        Text(cycleStatusText)
+                            .font(.caption)
+                            .foregroundStyle(progress.isOverdue ? DS.Color.negative : theme.secondaryTextColor)
+                    } else if case .weekly(let days) = progress.frequency {
+                        Text("Weekly goal: \(days) days")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    if progress.isAutoLinked {
+                        Text("Auto")
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
                     }
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                if let trailingAccessory {
+                    trailingAccessory.frame(minWidth: 44, minHeight: 44)
+                }
             }
+            inputContent
         }
-    }
-
-    // MARK: - Icon
-
-    private var iconView: some View {
-        Image(systemName: progress.iconCategory.iconName)
-            .font(.title3)
-            .foregroundStyle(progress.isCompleted ? progress.iconCategory.themeColor : .secondary)
-            .frame(width: 36, height: 36)
-            .background {
-                Circle()
-                    .fill(progress.iconCategory.themeColor.opacity(progress.isCompleted ? DS.Opacity.medium : DS.Opacity.subtle))
-            }
-    }
-
-    // MARK: - Streak Badge
-
-    @ViewBuilder
-    private var streakBadge: some View {
-        if progress.streak > 0 {
-            HStack(spacing: DS.Spacing.xxs) {
-                Image(systemName: "flame.fill")
-                    .font(.caption2)
-                Text("\(progress.streak)")
-                    .font(.caption2)
-                    .fontWeight(.semibold)
-            }
-            .foregroundStyle(theme.accentColor)
-            .padding(.horizontal, DS.Spacing.sm)
-            .padding(.vertical, DS.Spacing.xxs)
-            .background {
-                Capsule()
-                    .fill(theme.accentColor.opacity(DS.Opacity.light))
-            }
+        .padding(DS.Spacing.lg)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background {
+            RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous)
+                .fill(theme.cardBackground)
+                .overlay {
+                    RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous)
+                        .fill(tint.opacity(DS.Opacity.subtle))
+                }
+                .overlay {
+                    RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous)
+                        .strokeBorder(tint.opacity(DS.Opacity.border), lineWidth: 1)
+                }
         }
+        .accessibilityElement(children: .contain)
     }
 
-    // MARK: - Habit Input (type-specific)
-
-    @ViewBuilder
-    private var habitInput: some View {
-        if progress.isCycleBased {
-            cycleCheckInput
-        } else if progress.isAutoLinked {
+    @ViewBuilder private var inputContent: some View {
+        if progress.isCycleBased || progress.isAutoLinked || progress.type == .check {
             checkInput
         } else {
             switch progress.type {
-            case .check:
-                checkInput
-            case .duration:
-                valueInput(unit: progress.goalUnit ?? "min")
-            case .count:
-                countInput
+            case .check: checkInput
+            case .duration: durationInput
+            case .count: countInput
             }
         }
     }
-
-    // MARK: - Check Type
 
     private var checkInput: some View {
-        HStack(spacing: DS.Spacing.sm) {
-            Image(systemName: progress.isCompleted ? "checkmark.circle.fill" : "circle")
-                .font(.title2)
-                .foregroundStyle(progress.isCompleted ? AnyShapeStyle(DS.Color.positive) : AnyShapeStyle(.tertiary))
-
-            Text(progress.isCompleted ? String(localized: "Done") : String(localized: "Tap to complete"))
-                .font(.caption)
-                .foregroundStyle(progress.isCompleted ? .primary : .secondary)
-
-            if progress.isAutoCompleted {
-                Text("Auto")
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-                    .padding(.horizontal, DS.Spacing.xs)
-                    .padding(.vertical, 1)
-                    .background {
-                        Capsule().fill(.quaternary)
-                    }
-            }
-
+        HStack {
             Spacer(minLength: 0)
-        }
-        .contentShape(Rectangle())
-    }
-
-    private var cycleCheckInput: some View {
-        HStack(spacing: DS.Spacing.sm) {
-            Image(systemName: progress.isCompleted ? "checkmark.circle.fill" : "circle")
-                .font(.title2)
-                .foregroundStyle(progress.isCompleted ? AnyShapeStyle(DS.Color.positive) : AnyShapeStyle(.tertiary))
-
-            Text(cycleStatusText)
-                .font(.caption)
-                .foregroundStyle((progress.isDue || progress.isOverdue) ? AnyShapeStyle(DS.Color.negative) : AnyShapeStyle(.secondary))
-
-            if progress.isDue {
-                Text("Due")
-                    .font(.caption2)
-                    .foregroundStyle(.white)
-                    .padding(.horizontal, DS.Spacing.xs)
-                    .padding(.vertical, 1)
-                    .background {
-                        Capsule().fill(progress.isOverdue ? DS.Color.negative : progress.iconCategory.themeColor)
-                    }
+            Button(action: onToggle) {
+                Label(progress.isCompleted ? "Undo" : "Complete", systemImage: progress.isCompleted ? "arrow.uturn.backward" : "checkmark")
+                    .font(.subheadline.weight(.semibold))
+                    .frame(minWidth: 96, minHeight: 44)
+                    .padding(.horizontal, DS.Spacing.sm)
+                    .background(progress.isCompleted ? tint.opacity(DS.Opacity.medium) : tint, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+                    .foregroundStyle(progress.isCompleted ? tint : DS.Color.onBrightAction)
             }
-
-            Spacer(minLength: 0)
+            .buttonStyle(.plain)
+            .disabled(toggleDisabled)
+            .accessibilityLabel(progress.isCompleted ? Text("Undo \(progress.name)") : Text("Complete \(progress.name)"))
         }
-        .contentShape(Rectangle())
     }
 
-    // MARK: - Duration/Value Type
-
-    private var inputLayout: AnyLayout {
-        dynamicTypeSize.isAccessibilitySize
-            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.sm))
-            : AnyLayout(HStackLayout(spacing: DS.Spacing.sm))
-    }
-
-    private func valueInput(unit: String) -> some View {
-        inputLayout {
-            ProgressView(
-                value: Swift.min(progress.todayValue, progress.goalValue),
-                total: progress.goalValue
-            )
-            .tint(progress.isCompleted ? DS.Color.positive : progress.iconCategory.themeColor)
-
+    private var durationInput: some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
             if isEditing {
-                inputLayout {
+                let editorLayout = dynamicTypeSize.isAccessibilitySize
+                    ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.sm))
+                    : AnyLayout(HStackLayout(spacing: DS.Spacing.sm))
+                editorLayout {
                     TextField("0", text: $inputText)
                         .keyboardType(.decimalPad)
                         .textFieldStyle(.roundedBorder)
-                        .frame(width: dynamicTypeSize.isAccessibilitySize ? nil : 60)
-
+                        .frame(maxWidth: 100)
                     Button("Save") {
-                        if let value = Double(inputText.trimmingCharacters(in: .whitespaces)), value > 0 {
-                            onUpdateValue(value)
+                        let decimalSeparator = Locale.current.decimalSeparator ?? "."
+                        let normalized = inputText.trimmingCharacters(in: .whitespaces).replacingOccurrences(of: decimalSeparator, with: ".")
+                        if let newValue = Double(normalized), newValue >= 0, onValidateValue?(newValue) ?? true {
+                            onUpdateValue(newValue)
                             isEditing = false
                         }
                     }
-                    .font(.caption)
-                    .fontWeight(.medium)
+                    .frame(minWidth: 44, minHeight: 44)
                 }
             } else {
-                Button {
-                    inputText = progress.todayValue > 0 ? String(format: "%.0f", progress.todayValue) : ""
-                    isEditing = true
-                } label: {
-                    Text("\(Int(progress.todayValue))/\(Int(progress.goalValue)) \(unit)")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.sm) {
+                    Text(value.formatted())
+                        .accessibilityIdentifier("life-habit-value-\(progress.name)")
+                        .font(.system(.title, design: .rounded, weight: .bold))
                         .monospacedDigit()
-                        .lineLimit(nil)
-                        .fixedSize(horizontal: false, vertical: true)
+                        .foregroundStyle(tint)
+                    Text(verbatim: "/ \(goal.formatted()) \(progress.goalUnit ?? String(localized: "min"))")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                    Spacer(minLength: 0)
+                    Button("Edit time") {
+                        inputText = value.formatted(.number.grouping(.never))
+                        isEditing = true
+                    }
+                    .font(.subheadline.weight(.medium))
+                    .frame(minHeight: 44)
+                    .disabled(progress.isAutoLinked)
+                }
+            }
+            meter
+        }
+    }
+
+    private var countInput: some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+            let layout = dynamicTypeSize.isAccessibilitySize
+                ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.sm))
+                : AnyLayout(HStackLayout(spacing: DS.Spacing.sm))
+            layout {
+                Button { onUpdateValue(max(0, value - 1)) } label: {
+                    Image(systemName: "minus")
+                        .font(.headline)
+                        .frame(width: 44, height: 44)
+                        .background(tint.opacity(DS.Opacity.medium), in: RoundedRectangle(cornerRadius: DS.Radius.md))
                 }
                 .buttonStyle(.plain)
+                .disabled(value <= 0)
+                .accessibilityLabel(Text("Decrease \(progress.name)"))
+                HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xs) {
+                    Text(value.formatted())
+                        .accessibilityIdentifier("life-habit-value-\(progress.name)")
+                        .font(.system(.title, design: .rounded, weight: .bold))
+                        .foregroundStyle(tint)
+                    Text(verbatim: "/ \(goal.formatted()) \(progress.goalUnit ?? "")")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+                .monospacedDigit()
+                Button { onUpdateValue(value + 1) } label: {
+                    Image(systemName: "plus")
+                        .font(.headline)
+                        .frame(width: 44, height: 44)
+                        .background(tint.opacity(DS.Opacity.medium), in: RoundedRectangle(cornerRadius: DS.Radius.md))
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(Text("Increase \(progress.name)"))
+            }
+            if progress.iconCategory == .hydration, goal > 0, goal <= 12 {
+                HStack(spacing: DS.Spacing.xs) {
+                    ForEach(0..<Int(goal.rounded(.up)), id: \.self) { index in
+                        Image(systemName: index < Int(value) ? "drop.fill" : "drop")
+                            .font(.caption)
+                            .foregroundStyle(index < Int(value) ? tint : tint.opacity(0.35))
+                    }
+                }
+                .accessibilityHidden(true)
+            } else {
+                meter
             }
         }
     }
 
-    // MARK: - Count Type
-
-    private var countInput: some View {
-        inputLayout {
-            ProgressView(
-                value: Swift.min(progress.todayValue, progress.goalValue),
-                total: progress.goalValue
-            )
-            .tint(progress.isCompleted ? DS.Color.positive : progress.iconCategory.themeColor)
-
-            HStack(spacing: DS.Spacing.xs) {
-                Button {
-                    let newValue = Swift.max(0, progress.todayValue - 1)
-                    onUpdateValue(newValue)
-                } label: {
-                    Image(systemName: "minus.circle")
-                        .font(.body)
-                        .foregroundStyle(.secondary)
-                }
-                .buttonStyle(.plain)
-                .disabled(progress.todayValue <= 0)
-
-                Text("\(Int(progress.todayValue))/\(Int(progress.goalValue))")
-                    .font(.caption)
-                    .fontWeight(.medium)
-                    .monospacedDigit()
-                    .frame(minWidth: 40)
-                    .fixedSize(horizontal: false, vertical: true)
-
-                Button {
-                    let newValue = progress.todayValue + 1
-                    onUpdateValue(newValue)
-                } label: {
-                    Image(systemName: "plus.circle.fill")
-                        .font(.body)
-                        .foregroundStyle(progress.iconCategory.themeColor)
-                }
-                .buttonStyle(.plain)
-            }
-        }
+    private var meter: some View {
+        ProgressView(value: min(value, goal), total: max(goal, 1))
+            .tint(tint)
+            .accessibilityLabel(Text("\(progress.name) progress"))
     }
 
     private var cycleStatusText: String {
         if progress.isScheduled {
             if progress.cycleStartPoint == .firstCompletion, progress.cycleStartDate == nil {
-                return String(localized: "Scheduled · Waiting for first completion")
+                return String(localized: "Waiting for first completion")
             }
             if let startDate = progress.cycleStartDate {
-                return String(localized: "Scheduled · Starts \(startDate.formatted(date: .abbreviated, time: .omitted))")
+                return String(localized: "Starts \(startDate.formatted(date: .abbreviated, time: .omitted))")
             }
             return String(localized: "Scheduled")
         }
-
-        guard let nextDueDate = progress.nextDueDate else {
-            return String(localized: "Tap to complete")
-        }
-
-        if progress.isOverdue {
-            return String(localized: "Overdue · Tap to complete")
-        }
-        if progress.isDue {
-            return String(localized: "Due today · Tap to complete")
-        }
-
-        let dueText = nextDueDate.formatted(date: .abbreviated, time: .omitted)
-        switch progress.lastCycleAction {
-        case .complete:
-            return String(localized: "Done · Next \(dueText)")
-        case .skip:
-            return String(localized: "Skipped · Next \(dueText)")
-        case .snooze:
-            return String(localized: "Snoozed · Next \(dueText)")
-        case .none:
-            return String(localized: "Next due \(dueText)")
-        }
-    }
-
-    @ViewBuilder
-    private var cycleMetadata: some View {
-        if progress.isScheduled {
-            if let startDate = progress.cycleStartDate {
-                HStack(spacing: DS.Spacing.xs) {
-                    Image(systemName: "calendar.badge.clock")
-                        .font(.caption2)
-                    Text("Starts \(startDate.formatted(date: .abbreviated, time: .omitted))")
-                        .font(.caption2)
-                        .lineLimit(nil)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-                .foregroundStyle(.secondary)
-            } else if progress.cycleStartPoint == .firstCompletion {
-                HStack(spacing: DS.Spacing.xs) {
-                    Image(systemName: "calendar.badge.clock")
-                        .font(.caption2)
-                    Text("Starts on first completion")
-                        .font(.caption2)
-                        .lineLimit(nil)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-                .foregroundStyle(.secondary)
-            }
-        } else if let nextDueDate = progress.nextDueDate {
-            HStack(spacing: DS.Spacing.xs) {
-                Image(systemName: "calendar")
-                    .font(.caption2)
-                Text("Next due \(nextDueDate.formatted(date: .abbreviated, time: .omitted))")
-                    .font(.caption2)
-                    .lineLimit(nil)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-            .foregroundStyle(.secondary)
-        }
+        guard let dueDate = progress.nextDueDate else { return String(localized: "Due today") }
+        if progress.isOverdue { return String(localized: "Overdue") }
+        if progress.isDue { return String(localized: "Due today") }
+        return String(localized: "Next due \(dueDate.formatted(date: .abbreviated, time: .omitted))")
     }
 }

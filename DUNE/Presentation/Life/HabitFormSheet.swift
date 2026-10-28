@@ -54,8 +54,22 @@ struct HabitFormSheet: View {
 
     private var nameSection: some View {
         Section("Name") {
-            TextField("Habit name", text: $viewModel.name)
-                .accessibilityIdentifier("habit-form-name")
+            HStack(spacing: DS.Spacing.xs) {
+                TextField("Habit name", text: $viewModel.name)
+                    .accessibilityIdentifier("habit-form-name")
+                if !viewModel.name.isEmpty {
+                    Button {
+                        viewModel.name = ""
+                    } label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .foregroundStyle(.secondary)
+                            .frame(width: 44, height: 44)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("Clear habit name")
+                    .accessibilityIdentifier("habit-form-name-clear")
+                }
+            }
         }
     }
 

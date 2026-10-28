@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/LifeRegressionTests/testWeeklyAndFutureRecurringHabitsStayOutsideTodayProgress"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 1,
+    "passed": 0,
+    "skipped": 0,
+    "failed": 1
+  },
+  "passed_cases": 0,
+  "failures": [
+    "379: /Users/shanks/.codex/worktrees/4d0d/Health/DUNEUITests/Helpers/UITestHelpers.swift:980: error: -[DUNEUITests.LifeRegressionTests testWeeklyAndFutureRecurringHabitsStayOutsideTodayProgress] : Failed to unable to perform Swipe up on ScrollView at {{0.0, 874.0}, {402.0, 10.0}}: visible frame is empty, …",
+    "388: Test Case '-[DUNEUITests.LifeRegressionTests testWeeklyAndFutureRecurringHabitsStayOutsideTodayProgress]' failed (41.815 seconds).",
+    "389: Test Suite 'LifeRegressionTests' failed at 2026-10-29 00:45:43.569.",
+    "391: Test Suite 'DUNEUITests.xctest' failed at 2026-10-29 00:45:43.574.",
+    "393: Test Suite 'Selected tests' failed at 2026-10-29 00:45:43.575.",
+    "409: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log has no positive passed-test count",
+    "UI test log has no identifiable passed UI test cases",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/LifeRegressionTests/testWeeklyAndFutureRecurringHabitsStayOutsideTodayProgress"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/4d0d/Health/.codex-checks/life-run/ui-phone-keyboard-fix.log"
+}

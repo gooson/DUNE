@@ -1,0 +1,48 @@
+{
+  "source": "791b8bf4983cd5991297655a6f67faa2cf511c2e",
+  "appSource": "62d3c097",
+  "unit": {
+    "passed": 113,
+    "suites": 9,
+    "scope": "targeted"
+  },
+  "phone": {
+    "latestDistinctPassed": 26,
+    "optInSkipped": 3,
+    "scope": "selected Life cases, latest outcome each"
+  },
+  "ipad": {
+    "executed": 1,
+    "passed": 1,
+    "exit": 0
+  },
+  "duoExternal": {
+    "executed": 3,
+    "passed": 3,
+    "exit": 0
+  },
+  "duoInternal": {
+    "executed": 3,
+    "passed": 3,
+    "exit": 0
+  },
+  "gallery": {
+    "images": 74,
+    "passedTestImages": 68,
+    "partialOrUnknownImages": 6
+  },
+  "limitations": [
+    "Selected Life scope, not full UI suite or all themes/VoiceOver",
+    "L08 captured light only; legacy unchanged dark/maxAX not captured",
+    "Past-record maxAX PNG is a viewport, not whole scrollable form",
+    "Duo active display and viewport verified; numeric hinge angle unavailable",
+    "Cloud sync consent enabled by explicit user instruction; actual CloudKit transfer not verified",
+    "Maximum AX rhythm screenshot includes the card header viewport; whole plot/axes simultaneous visibility not verified"
+  ],
+  "priorFailuresPreserved": true,
+  "openStaticFindings": {
+    "P1": 0,
+    "P2": 0,
+    "P3": 0
+  }
+}

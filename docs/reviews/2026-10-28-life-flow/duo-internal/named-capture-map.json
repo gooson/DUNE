@@ -1,0 +1,452 @@
+{
+  "source_revision": "791b8bf4983cd5991297655a6f67faa2cf511c2e",
+  "app_source_revision": "62d3c097",
+  "device": "iPhone Duo-wt-Health-4d0d-62cf3693c151",
+  "udid": "8B6A9C9D-1364-4EBA-A6F9-832F1BEB201D",
+  "posture": "internal, parent-verified Device Hub state",
+  "display_readback_path": ".codex-checks/life-run/duo-open-gui-displays.json",
+  "display_readback": {
+    "active": {
+      "display_id": 3,
+      "name": "LCD-1",
+      "orientation": "rot90",
+      "bounds": [
+        2007,
+        2853
+      ],
+      "point_scale": 3
+    },
+    "inactive": {
+      "display_id": 1,
+      "name": "LCD",
+      "orientation": "rot90",
+      "bounds": [
+        1398,
+        2034
+      ]
+    }
+  },
+  "selectors": [
+    "DUNEUITests/LifeFlowUITests/testHostCaptureLight",
+    "DUNEUITests/LifeFlowUITests/testHostCaptureDark",
+    "DUNEUITests/LifeFlowUITests/testHostCaptureMaximumAX"
+  ],
+  "run_receipt": ".codex-checks/life-run/ui-duo-open-retry.log.result.json",
+  "runner_result": ".codex-checks/life-run/duo-open-retry/runner-result.json",
+  "status": "passed",
+  "counts": {
+    "executed": 3,
+    "passed": 3,
+    "skipped": 0,
+    "failed": 0
+  },
+  "valid_acknowledged_checkpoints": 27,
+  "named_checkpoint_count": 15,
+  "named_checkpoints": [
+    {
+      "sequence": 2,
+      "action": "DUNE_VISUAL_AUDIT_READY L01-Life-Habits-hero-dark [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793207020.848604",
+      "acknowledged": true,
+      "valid_evidence": true,
+      "elapsed_seconds": 2.917,
+      "active_native_png": {
+        "display_id": 3,
+        "path": ".codex-checks/life-run/duo-open-retry/002-2007x2853.png",
+        "pixel_size": [
+          2853,
+          2007
+        ],
+        "bytes": 1148039
+      },
+      "paired_inactive_native_png": {
+        "display_id": 1,
+        "path": ".codex-checks/life-run/duo-open-retry/002-1398x2034.png",
+        "pixel_size": [
+          2034,
+          1398
+        ],
+        "bytes": 53236
+      },
+      "ax_hierarchy_path": ".codex-checks/life-run/duo-open-retry/002-hierarchy.txt",
+      "actual_window_frame_points": null
+    },
+    {
+      "sequence": 3,
+      "action": "DUNE_VISUAL_AUDIT_READY L01-Life-Habits-today-dark [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793207027.65828",
+      "acknowledged": true,
+      "valid_evidence": true,
+      "elapsed_seconds": 2.275,
+      "active_native_png": {
+        "display_id": 3,
+        "path": ".codex-checks/life-run/duo-open-retry/003-2007x2853.png",
+        "pixel_size": [
+          2853,
+          2007
+        ],
+        "bytes": 1146000
+      },
+      "paired_inactive_native_png": {
+        "display_id": 1,
+        "path": ".codex-checks/life-run/duo-open-retry/003-1398x2034.png",
+        "pixel_size": [
+          2034,
+          1398
+        ],
+        "bytes": 53236
+      },
+      "ax_hierarchy_path": ".codex-checks/life-run/duo-open-retry/003-hierarchy.txt",
+      "actual_window_frame_points": null
+    },
+    {
+      "sequence": 4,
+      "action": "DUNE_VISUAL_AUDIT_READY L01-Life-Habits-rhythm-dark [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793207043.1194081",
+      "acknowledged": true,
+      "valid_evidence": true,
+      "elapsed_seconds": 2.156,
+      "active_native_png": {
+        "display_id": 3,
+        "path": ".codex-checks/life-run/duo-open-retry/004-2007x2853.png",
+        "pixel_size": [
+          2853,
+          2007
+        ],
+        "bytes": 568640
+      },
+      "paired_inactive_native_png": {
+        "display_id": 1,
+        "path": ".codex-checks/life-run/duo-open-retry/004-1398x2034.png",
+        "pixel_size": [
+          2034,
+          1398
+        ],
+        "bytes": 53236
+      },
+      "ax_hierarchy_path": ".codex-checks/life-run/duo-open-retry/004-hierarchy.txt",
+      "actual_window_frame_points": null
+    },
+    {
+      "sequence": 6,
+      "action": "DUNE_VISUAL_AUDIT_READY L09-Past-Record-form-dark [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793207063.8283339",
+      "acknowledged": true,
+      "valid_evidence": true,
+      "elapsed_seconds": 2.208,
+      "active_native_png": {
+        "display_id": 3,
+        "path": ".codex-checks/life-run/duo-open-retry/006-2007x2853.png",
+        "pixel_size": [
+          2853,
+          2007
+        ],
+        "bytes": 1362795
+      },
+      "paired_inactive_native_png": {
+        "display_id": 1,
+        "path": ".codex-checks/life-run/duo-open-retry/006-1398x2034.png",
+        "pixel_size": [
+          2034,
+          1398
+        ],
+        "bytes": 53236
+      },
+      "ax_hierarchy_path": ".codex-checks/life-run/duo-open-retry/006-hierarchy.txt",
+      "actual_window_frame_points": null
+    },
+    {
+      "sequence": 9,
+      "action": "DUNE_VISUAL_AUDIT_READY L01-Life-Habits-hero-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793207094.204673",
+      "acknowledged": true,
+      "valid_evidence": true,
+      "elapsed_seconds": 2.425,
+      "active_native_png": {
+        "display_id": 3,
+        "path": ".codex-checks/life-run/duo-open-retry/009-2007x2853.png",
+        "pixel_size": [
+          2853,
+          2007
+        ],
+        "bytes": 1855086
+      },
+      "paired_inactive_native_png": {
+        "display_id": 1,
+        "path": ".codex-checks/life-run/duo-open-retry/009-1398x2034.png",
+        "pixel_size": [
+          2034,
+          1398
+        ],
+        "bytes": 53236
+      },
+      "ax_hierarchy_path": ".codex-checks/life-run/duo-open-retry/009-hierarchy.txt",
+      "actual_window_frame_points": null
+    },
+    {
+      "sequence": 10,
+      "action": "DUNE_VISUAL_AUDIT_READY L01-Life-Habits-today-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793207100.606884",
+      "acknowledged": true,
+      "valid_evidence": true,
+      "elapsed_seconds": 2.302,
+      "active_native_png": {
+        "display_id": 3,
+        "path": ".codex-checks/life-run/duo-open-retry/010-2007x2853.png",
+        "pixel_size": [
+          2853,
+          2007
+        ],
+        "bytes": 1856125
+      },
+      "paired_inactive_native_png": {
+        "display_id": 1,
+        "path": ".codex-checks/life-run/duo-open-retry/010-1398x2034.png",
+        "pixel_size": [
+          2034,
+          1398
+        ],
+        "bytes": 53236
+      },
+      "ax_hierarchy_path": ".codex-checks/life-run/duo-open-retry/010-hierarchy.txt",
+      "actual_window_frame_points": null
+    },
+    {
+      "sequence": 11,
+      "action": "DUNE_VISUAL_AUDIT_READY L01-Life-Habits-rhythm-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793207115.838145",
+      "acknowledged": true,
+      "valid_evidence": true,
+      "elapsed_seconds": 2.435,
+      "active_native_png": {
+        "display_id": 3,
+        "path": ".codex-checks/life-run/duo-open-retry/011-2007x2853.png",
+        "pixel_size": [
+          2853,
+          2007
+        ],
+        "bytes": 577251
+      },
+      "paired_inactive_native_png": {
+        "display_id": 1,
+        "path": ".codex-checks/life-run/duo-open-retry/011-1398x2034.png",
+        "pixel_size": [
+          2034,
+          1398
+        ],
+        "bytes": 53236
+      },
+      "ax_hierarchy_path": ".codex-checks/life-run/duo-open-retry/011-hierarchy.txt",
+      "actual_window_frame_points": null
+    },
+    {
+      "sequence": 13,
+      "action": "DUNE_VISUAL_AUDIT_READY L09-Past-Record-form-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793207139.536756",
+      "acknowledged": true,
+      "valid_evidence": true,
+      "elapsed_seconds": 2.338,
+      "active_native_png": {
+        "display_id": 3,
+        "path": ".codex-checks/life-run/duo-open-retry/013-2007x2853.png",
+        "pixel_size": [
+          2853,
+          2007
+        ],
+        "bytes": 2290725
+      },
+      "paired_inactive_native_png": {
+        "display_id": 1,
+        "path": ".codex-checks/life-run/duo-open-retry/013-1398x2034.png",
+        "pixel_size": [
+          2034,
+          1398
+        ],
+        "bytes": 53236
+      },
+      "ax_hierarchy_path": ".codex-checks/life-run/duo-open-retry/013-hierarchy.txt",
+      "actual_window_frame_points": null
+    },
+    {
+      "sequence": 16,
+      "action": "DUNE_VISUAL_AUDIT_READY L07-Habit-history-summary-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793207166.787642",
+      "acknowledged": true,
+      "valid_evidence": true,
+      "elapsed_seconds": 2.198,
+      "active_native_png": {
+        "display_id": 3,
+        "path": ".codex-checks/life-run/duo-open-retry/016-2007x2853.png",
+        "pixel_size": [
+          2853,
+          2007
+        ],
+        "bytes": 963178
+      },
+      "paired_inactive_native_png": {
+        "display_id": 1,
+        "path": ".codex-checks/life-run/duo-open-retry/016-1398x2034.png",
+        "pixel_size": [
+          2034,
+          1398
+        ],
+        "bytes": 53236
+      },
+      "ax_hierarchy_path": ".codex-checks/life-run/duo-open-retry/016-hierarchy.txt",
+      "actual_window_frame_points": null
+    },
+    {
+      "sequence": 17,
+      "action": "DUNE_VISUAL_AUDIT_READY L07-Habit-history-rates-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793207175.629414",
+      "acknowledged": true,
+      "valid_evidence": true,
+      "elapsed_seconds": 2.404,
+      "active_native_png": {
+        "display_id": 3,
+        "path": ".codex-checks/life-run/duo-open-retry/017-2007x2853.png",
+        "pixel_size": [
+          2853,
+          2007
+        ],
+        "bytes": 1004479
+      },
+      "paired_inactive_native_png": {
+        "display_id": 1,
+        "path": ".codex-checks/life-run/duo-open-retry/017-1398x2034.png",
+        "pixel_size": [
+          2034,
+          1398
+        ],
+        "bytes": 53236
+      },
+      "ax_hierarchy_path": ".codex-checks/life-run/duo-open-retry/017-hierarchy.txt",
+      "actual_window_frame_points": null
+    },
+    {
+      "sequence": 19,
+      "action": "DUNE_VISUAL_AUDIT_READY L08-Weekly-report-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793207205.148571",
+      "acknowledged": true,
+      "valid_evidence": true,
+      "elapsed_seconds": 2.218,
+      "active_native_png": {
+        "display_id": 3,
+        "path": ".codex-checks/life-run/duo-open-retry/019-2007x2853.png",
+        "pixel_size": [
+          2853,
+          2007
+        ],
+        "bytes": 917694
+      },
+      "paired_inactive_native_png": {
+        "display_id": 1,
+        "path": ".codex-checks/life-run/duo-open-retry/019-1398x2034.png",
+        "pixel_size": [
+          2034,
+          1398
+        ],
+        "bytes": 53236
+      },
+      "ax_hierarchy_path": ".codex-checks/life-run/duo-open-retry/019-hierarchy.txt",
+      "actual_window_frame_points": null
+    },
+    {
+      "sequence": 22,
+      "action": "DUNE_VISUAL_AUDIT_READY L01-Life-Habits-hero-MaxAX [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793207235.270886",
+      "acknowledged": true,
+      "valid_evidence": true,
+      "elapsed_seconds": 2.534,
+      "active_native_png": {
+        "display_id": 3,
+        "path": ".codex-checks/life-run/duo-open-retry/022-2007x2853.png",
+        "pixel_size": [
+          2853,
+          2007
+        ],
+        "bytes": 1477162
+      },
+      "paired_inactive_native_png": {
+        "display_id": 1,
+        "path": ".codex-checks/life-run/duo-open-retry/022-1398x2034.png",
+        "pixel_size": [
+          2034,
+          1398
+        ],
+        "bytes": 53236
+      },
+      "ax_hierarchy_path": ".codex-checks/life-run/duo-open-retry/022-hierarchy.txt",
+      "actual_window_frame_points": null
+    },
+    {
+      "sequence": 23,
+      "action": "DUNE_VISUAL_AUDIT_READY L01-Life-Habits-today-MaxAX [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793207242.477683",
+      "acknowledged": true,
+      "valid_evidence": true,
+      "elapsed_seconds": 2.807,
+      "active_native_png": {
+        "display_id": 3,
+        "path": ".codex-checks/life-run/duo-open-retry/023-2007x2853.png",
+        "pixel_size": [
+          2853,
+          2007
+        ],
+        "bytes": 1475341
+      },
+      "paired_inactive_native_png": {
+        "display_id": 1,
+        "path": ".codex-checks/life-run/duo-open-retry/023-1398x2034.png",
+        "pixel_size": [
+          2034,
+          1398
+        ],
+        "bytes": 53236
+      },
+      "ax_hierarchy_path": ".codex-checks/life-run/duo-open-retry/023-hierarchy.txt",
+      "actual_window_frame_points": null
+    },
+    {
+      "sequence": 24,
+      "action": "DUNE_VISUAL_AUDIT_READY L01-Life-Habits-rhythm-MaxAX [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793207265.027669",
+      "acknowledged": true,
+      "valid_evidence": true,
+      "elapsed_seconds": 3.534,
+      "active_native_png": {
+        "display_id": 3,
+        "path": ".codex-checks/life-run/duo-open-retry/024-2007x2853.png",
+        "pixel_size": [
+          2853,
+          2007
+        ],
+        "bytes": 666322
+      },
+      "paired_inactive_native_png": {
+        "display_id": 1,
+        "path": ".codex-checks/life-run/duo-open-retry/024-1398x2034.png",
+        "pixel_size": [
+          2034,
+          1398
+        ],
+        "bytes": 53236
+      },
+      "ax_hierarchy_path": ".codex-checks/life-run/duo-open-retry/024-hierarchy.txt",
+      "actual_window_frame_points": null
+    },
+    {
+      "sequence": 26,
+      "action": "DUNE_VISUAL_AUDIT_READY L09-Past-Record-form-MaxAX [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793207303.355531",
+      "acknowledged": true,
+      "valid_evidence": true,
+      "elapsed_seconds": 3.406,
+      "active_native_png": {
+        "display_id": 3,
+        "path": ".codex-checks/life-run/duo-open-retry/026-2007x2853.png",
+        "pixel_size": [
+          2853,
+          2007
+        ],
+        "bytes": 2153981
+      },
+      "paired_inactive_native_png": {
+        "display_id": 1,
+        "path": ".codex-checks/life-run/duo-open-retry/026-1398x2034.png",
+        "pixel_size": [
+          2034,
+          1398
+        ],
+        "bytes": 53236
+      },
+      "ax_hierarchy_path": ".codex-checks/life-run/duo-open-retry/026-hierarchy.txt",
+      "actual_window_frame_points": null
+    }
+  ]
+}

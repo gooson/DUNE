@@ -2,6 +2,8 @@ import SwiftUI
 
 struct HabitHeatmapDetailView: View {
     let data: [DailyCompletionCount]
+    var weeklyRates: [WeeklyCompletionRate] = []
+    var monthlyRates: [MonthlyCompletionRate] = []
 
     var body: some View {
         ScrollView {
@@ -10,6 +12,11 @@ struct HabitHeatmapDetailView: View {
                 statsRow
                 heatmapCard
                 weekdayBreakdownCard
+                if !weeklyRates.isEmpty || !monthlyRates.isEmpty {
+                    Text("Based on currently registered habits")
+                        .font(.caption).foregroundStyle(.secondary)
+                    HabitCompletionChartView(weeklyRates: weeklyRates, monthlyRates: monthlyRates)
+                }
             }
             .padding(DS.Spacing.md)
         }

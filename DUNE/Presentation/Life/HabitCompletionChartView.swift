@@ -51,11 +51,11 @@ struct HabitCompletionChartView: View {
                     Label {
                         Text("Completion Rate")
                             .font(.headline)
-                            .accessibilityIdentifier("habit-completion-chart-title")
                     } icon: {
                         Image(systemName: "chart.bar.fill")
                             .foregroundStyle(DS.Color.tabLife)
                     }
+                    .accessibilityIdentifier("habit-completion-chart-title")
 
                     Spacer()
 
@@ -76,6 +76,7 @@ struct HabitCompletionChartView: View {
             RoundedRectangle(cornerRadius: DS.Radius.sm)
                 .fill(.ultraThinMaterial)
         }
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier("habit-completion-chart")
     }
 

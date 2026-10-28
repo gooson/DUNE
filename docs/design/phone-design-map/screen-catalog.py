@@ -114,6 +114,7 @@ GROUPS = {
         "HabitHistoryDetailSheet|관리 중 습관 이력|습관 관리|sheet|기록/수정/닫기",
         "HabitHeatmapDetailView|습관 히트맵 상세|라이프 분석|push|기간/히트맵/범례",
         "WeeklyHabitReportView|주간 습관 리포트|라이프 분석|push|완료율/좋은 습관/변화",
+        "HabitPastRecordSheet|지난 날짜 습관 기록|라이프·습관 이력|sheet|습관/날짜/그날 총합/다음 예정일",
     ],
     "설정 · 기타": [
         "SettingsView|설정|오늘 도구막대|push|운동 기본값/테마/권한",

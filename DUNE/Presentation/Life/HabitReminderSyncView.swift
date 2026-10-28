@@ -37,6 +37,7 @@ struct HabitReminderSyncView: View {
             hasher.combine(log.date)
             hasher.combine(log.value)
             hasher.combine(log.memo)
+            hasher.combine(log.completedAt)
         }
         return hasher.finalize()
     }
@@ -67,7 +68,7 @@ struct HabitReminderSyncView: View {
         let currentIDs = Set(habits.map(\.id))
         viewModel.cleanupOrphanedReminders(validHabitIDs: currentIDs)
         for habit in habits {
-            viewModel.refreshReminderSchedule(for: habit)
+            viewModel.refreshReminderSchedule(for: habit, additionalLogs: logs)
         }
     }
 }

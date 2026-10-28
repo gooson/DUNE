@@ -975,7 +975,12 @@ extension XCUIApplication {
             return true
         }
 
-        let formContainer = tables.firstMatch.exists ? tables.firstMatch : scrollViews.firstMatch
+        let formCandidates = collectionViews.allElementsBoundByIndex
+            + tables.allElementsBoundByIndex
+            + scrollViews.allElementsBoundByIndex
+        guard let formContainer = formCandidates.first(where: { $0.exists && $0.isHittable }) else {
+            return false
+        }
         for _ in 0..<maxSwipes where !element.waitForExistence(timeout: timeoutPerCheck) {
             formContainer.swipeUp()
         }
@@ -1062,9 +1067,10 @@ extension XCUIApplication {
                 "Next"
             ].map { keyboard.buttons[$0] }
 
-            if let button = keyboardButtons.first(where: \.exists) {
+            // Dismissed keyboard keys can remain in AX below the window.
+            if let button = keyboardButtons.first(where: { $0.exists && $0.isHittable }) {
                 button.auditTap()
-            } else if let toolbarDone = toolbars.buttons.matching(NSPredicate(format: "label == 'Done'")).allElementsBoundByIndex.first(where: \.exists) {
+            } else if let toolbarDone = toolbars.buttons.matching(NSPredicate(format: "label == 'Done'")).allElementsBoundByIndex.first(where: { $0.exists && $0.isHittable }) {
                 toolbarDone.auditTap()
             } else if navigationBars.firstMatch.exists {
                 navigationBars.firstMatch.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).auditTap()

@@ -1,0 +1,22 @@
+{
+  "priorMenuFailure": "resolved by user-confirmed software keyboard recovery; sheet/focus/value observed",
+  "ReturnCause": {
+    "firstRun": "ui-phone-keyboard-resume.log",
+    "failure": "AX Return frame below viewport, exists-only candidate",
+    "fixCommit": "e2838920",
+    "retry": "ui-phone-keyboard-fix.log",
+    "result": "Return no longer failed; new form-container cause reached"
+  },
+  "FormContainerCause": {
+    "firstRun": "ui-phone-keyboard-fix.log",
+    "failure": "tables/scrollViews-only helper swiped invisible10pt ScrollView",
+    "fixCommit": "1982ebe0",
+    "retryCount": 0,
+    "nextSelectors": [
+      "DUNEUITests/LifeRegressionTests/testWeeklyAndFutureRecurringHabitsStayOutsideTodayProgress",
+      "DUNEUITests/LifeSmokeTests/testHabitFormOpens",
+      "DUNEUITests/LifeSmokeTests/testWeeklyFrequencyShowsStepper",
+      "DUNEUITests/LifeSeededSmokeTests/testHabitActionsMenuOpensEditSheet"
+    ]
+  }
+}

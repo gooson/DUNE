@@ -7,27 +7,27 @@ status: draft
 
 # 폰 계열 전체 화면 인벤토리
 
-SwiftUI View와 인라인 프레젠테이션 **108개**를 화면 단위로 대조한다. W17·W18은 소스에 남아 있지만 현재 앱에서 호출하는 곳이 없어 캡처 대상 수에서 제외한다. 차트·카드·버튼 같은 내부 컴포넌트는 별도 화면이 아니다.
+SwiftUI View와 인라인 프레젠테이션 **109개**를 화면 단위로 대조한다. W17·W18은 소스에 남아 있지만 현재 앱에서 호출하는 곳이 없어 캡처 대상 수에서 제외한다. 차트·카드·버튼 같은 내부 컴포넌트는 별도 화면이 아니다.
 
 ## 시작 · 오늘 · 알림 (18)
 
 | ID | 화면 | 진입 | 표시 방식 | 일반 iPhone | iPad | Duo | 코드 |
 |---|---|---|---|---|---|---|---|
-| T01 | 앱 시작 | 앱 실행 | launch | 앱 시작 · 준비 상태 | 앱 시작 · 준비 상태 | 앱 시작 · 준비 상태 | `DUNE/App/DUNEApp.swift:1121` |
+| T01 | 앱 시작 | 앱 실행 | launch | 앱 시작 · 준비 상태 | 앱 시작 · 준비 상태 | 앱 시작 · 준비 상태 | `DUNE/App/DUNEApp.swift:1197` |
 | T02 | iCloud 동기화 동의 | 앱 시작 | sheet | 화면 내 시트 | 시트 · 보조 패널 | 닫힘/내부 시트 | `DUNE/Presentation/Shared/CloudSyncConsentView.swift:3` |
 | T03 | 오늘 | 탭 | root | 하단 탭 · 한 열 | 사이드바 · 넓은 콘텐츠 | 외부 한 열 → 내부 확장 | `DUNE/Presentation/Dashboard/DashboardView.swift:4` |
 | T04 | 컨디션 상세 | 오늘 점수 | push | 상세 push · 한 열 | 상세 콘텐츠 | 선택·스크롤 유지 | `DUNE/Presentation/Dashboard/ConditionScoreDetailView.swift:8` |
 | T05 | 누적 스트레스 | 오늘 카드 | push | 상세 push · 한 열 | 상세 콘텐츠 | 선택·스크롤 유지 | `DUNE/Presentation/Dashboard/CumulativeStressDetailView.swift:7` |
-| T06 | 건강 지표 상세 | 오늘·웰니스 카드 | Today push · Wellness 기존 경로 | Today 상세 push · 한 열 | Today 상세 push · Wellness 선택 상세 | Today 두 자세 push | `DUNE/Presentation/Shared/Detail/MetricDetailView.swift:5` |
+| T06 | 건강 지표 상세 | 오늘·웰니스 카드 | push/inspector | 상세 push · 선택 상태 | push 또는 선택 상세 inspector | 닫힘 push → 내부 선택 상세 | `DUNE/Presentation/Shared/Detail/MetricDetailView.swift:5` |
 | T07 | 전체 데이터 | 지표 상세 | push | 상세 push · 한 열 | 상세 콘텐츠 | 선택·스크롤 유지 | `DUNE/Presentation/Shared/Detail/AllDataView.swift:4` |
 | T08 | 날씨 상세 | 오늘 브리핑 | push | 상세 push · 한 열 | 상세 콘텐츠 | 선택·스크롤 유지 | `DUNE/Presentation/Dashboard/WeatherDetailView.swift:5` |
 | T09 | 아침 브리핑 | 오늘 카드·자동 표시 | sheet | 화면 내 시트 | 시트 · 보조 패널 | 닫힘/내부 시트 | `DUNE/Presentation/Dashboard/MorningBriefingView.swift:4` |
 | T10 | 일간 요약 | 알림·오늘 | push | 상세 push · 한 열 | 상세 콘텐츠 | 선택·스크롤 유지 | `DUNE/Presentation/Dashboard/DailyDigestNotificationView.swift:4` |
 | T11 | 알림함 | 오늘 도구막대 | push | 상세 push · 한 열 | 상세 콘텐츠 | 선택·스크롤 유지 | `DUNE/Presentation/Dashboard/NotificationHubView.swift:161` |
-| T12 | 알림 메시지 | 알림함 | push | 상세 push · 한 열 | 상세 콘텐츠 | 선택·스크롤 유지 | `DUNE/Presentation/Dashboard/NotificationHubView.swift:562` |
-| T13 | 알림 대상 없음 | 알림함 | push | 상세 push · 한 열 | 상세 콘텐츠 | 선택·스크롤 유지 | `DUNE/Presentation/Dashboard/NotificationHubView.swift:586` |
+| T12 | 알림 메시지 | 알림함 | push | 상세 push · 한 열 | 상세 콘텐츠 | 선택·스크롤 유지 | `DUNE/Presentation/Dashboard/NotificationHubView.swift:718` |
+| T13 | 알림 대상 없음 | 알림함 | push | 상세 push · 한 열 | 상세 콘텐츠 | 선택·스크롤 유지 | `DUNE/Presentation/Dashboard/NotificationHubView.swift:742` |
 | T14 | 운동 기록 없음 | 운동 알림 | push | 상세 push · 한 열 | 상세 콘텐츠 | 선택·스크롤 유지 | `DUNE/Presentation/Shared/NotificationTargetNotFoundView.swift:4` |
-| T15 | 수면 알림 상세 | 수면 알림 | push | 상세 push · 한 열 | 상세 콘텐츠 | 선택·스크롤 유지 | `DUNE/App/ContentView.swift:491` |
+| T15 | 수면 알림 상세 | 수면 알림 | push | 상세 push · 한 열 | 상세 콘텐츠 | 선택·스크롤 유지 | `DUNE/App/ContentView.swift:558` |
 | T16 | 기록 알림 상세 | 개인 기록 알림 | push | 상세 push · 한 열 | 상세 콘텐츠 | 선택·스크롤 유지 | `DUNE/Presentation/Shared/NotificationPersonalRecordsPushView.swift:3` |
 | T17 | 건강 데이터 질문 | 오늘 카드 | inspector | 좁은 폭에서는 시트 | 선택 상세 inspector | 닫힘 시트 → 내부 보조 | `DUNE/Presentation/Dashboard/HealthDataQASheet.swift:3` |
 | T18 | 고정 지표 편집 | 오늘 지표 | sheet | 화면 내 시트 | 시트 · 보조 패널 | 닫힘/내부 시트 | `DUNE/Presentation/Dashboard/Components/PinnedMetricsEditorView.swift:3` |
@@ -47,7 +47,7 @@ SwiftUI View와 인라인 프레젠테이션 **108개**를 화면 단위로 대�
 | A09 | 주간 운동 리포트 | 활동 리포트 | push | 상세 push · 한 열 | 상세 콘텐츠 | 선택·스크롤 유지 | `DUNE/Presentation/Activity/WorkoutReportDetail/WorkoutReportDetailView.swift:4` |
 | A10 | 개인 기록 | 활동 기록 | push | 상세 push · 한 열 | 상세 콘텐츠 | 선택·스크롤 유지 | `DUNE/Presentation/Activity/PersonalRecords/PersonalRecordsDetailView.swift:5` |
 | A11 | 운동 일관성 | 활동 카드 | push | 상세 push · 한 열 | 상세 콘텐츠 | 선택·스크롤 유지 | `DUNE/Presentation/Activity/Consistency/ConsistencyDetailView.swift:16` |
-| A12 | 운동 구성 | 활동 카드 | push | 상세 push · 한 열 | 상세 콘텐츠 | 선택·스크롤 유지 | `DUNE/Presentation/Activity/ExerciseMix/ExerciseMixDetailView.swift:6` |
+| A12 | 운동 구성 | 활동 카드 | push | 상세 push · 한 열 | 상세 콘텐츠 | 선택·스크롤 유지 | `DUNE/Presentation/Activity/ExerciseMix/ExerciseMixDetailView.swift:5` |
 | A13 | 근육 상세 팝오버 | 근육 지도 | sheet | 화면 내 시트 | 시트 · 보조 패널 | 닫힘/내부 시트 | `DUNE/Presentation/Activity/Components/MuscleDetailPopover.swift:6` |
 | A14 | 피로도 설명 | 근육 상세 | sheet | 화면 내 시트 | 시트 · 보조 패널 | 닫힘/내부 시트 | `DUNE/Presentation/Activity/Components/FatigueInfoSheet.swift:4` |
 | A15 | 피로도 계산 설명 | 회복 지도 | sheet | 화면 내 시트 | 시트 · 보조 패널 | 닫힘/내부 시트 | `DUNE/Presentation/Activity/Components/FatigueAlgorithmSheet.swift:5` |
@@ -55,7 +55,7 @@ SwiftUI View와 인라인 프레젠테이션 **108개**를 화면 단위로 대�
 | A17 | 개인 기록 설명 | 활동 기록 | sheet | 화면 내 시트 | 시트 · 보조 패널 | 닫힘/내부 시트 | `DUNE/Presentation/Activity/Components/PersonalRecordsInfoSheet.swift:4` |
 | A18 | 일관성 설명 | 활동 카드 | sheet | 화면 내 시트 | 시트 · 보조 패널 | 닫힘/내부 시트 | `DUNE/Presentation/Activity/Components/ConsistencyInfoSheet.swift:4` |
 | A19 | 운동 구성 설명 | 활동 카드 | sheet | 화면 내 시트 | 시트 · 보조 패널 | 닫힘/내부 시트 | `DUNE/Presentation/Activity/Components/ExerciseMixInfoSheet.swift:4` |
-| A20 | 추천 장비 정보 | 추천 운동 | sheet | 화면 내 시트 | 시트 · 보조 패널 | 닫힘/내부 시트 | `DUNE/Presentation/Activity/Components/SuggestedWorkoutSection.swift:603` |
+| A20 | 추천 장비 정보 | 추천 운동 | sheet | 화면 내 시트 | 시트 · 보조 패널 | 닫힘/내부 시트 | `DUNE/Presentation/Activity/Components/SuggestedWorkoutSection.swift:601` |
 
 ## 운동 · 계획 · 기록 (33)
 
@@ -74,7 +74,7 @@ SwiftUI View와 인라인 프레젠테이션 **108개**를 화면 단위로 대�
 | W11 | 운동 공유 | 운동 완료·기록 | sheet | 화면 내 시트 | 시트 · 보조 패널 | 닫힘/내부 시트 | `DUNE/Presentation/Exercise/Components/ShareImageSheet.swift:10` |
 | W12 | 운동 템플릿 목록 | 운동 도구막대 | push | 상세 push · 한 열 | 상세 콘텐츠 | 선택·스크롤 유지 | `DUNE/Presentation/Exercise/Components/WorkoutTemplateListView.swift:4` |
 | W13 | 템플릿 편집 | 템플릿·추천 | sheet | 화면 내 시트 | 시트 · 보조 패널 | 닫힘/내부 시트 | `DUNE/Presentation/Exercise/Components/CreateTemplateView.swift:13` |
-| W14 | 템플릿 운동 선택 | 템플릿 편집 | sheet | 화면 내 시트 | 시트 · 보조 패널 | 닫힘/내부 시트 | `DUNE/Presentation/Exercise/Components/CreateTemplateView.swift:549` |
+| W14 | 템플릿 운동 선택 | 템플릿 편집 | sheet | 화면 내 시트 | 시트 · 보조 패널 | 닫힘/내부 시트 | `DUNE/Presentation/Exercise/Components/CreateTemplateView.swift:551` |
 | W15 | 주간 운동 계획 | 템플릿 목록 | push | 상세 push · 한 열 | 적응형 두 pane | 접힘 후 pane 재배치 | `DUNE/Presentation/Exercise/WeeklyWorkoutPlanView.swift:4` |
 | W16 | 템플릿 운동 세션 | 템플릿 시작 | cover | 전체 화면 흐름 | 전체 화면 흐름 | 촬영·세션 상태 유지 | `DUNE/Presentation/Exercise/TemplateWorkoutContainerView.swift:16` |
 | W17 | 템플릿 운동 (현재 진입 경로 없음) | 템플릿 세션 | state | 현재 흐름 내부 | 세션 내부 | 초안·타이머 유지 | `DUNE/Presentation/Exercise/TemplateWorkoutView.swift:6` |
@@ -105,7 +105,7 @@ SwiftUI View와 인라인 프레젠테이션 **108개**를 화면 단위로 대�
 | H04 | 지표 비교 | 웰니스 도구막대 | sheet | 화면 내 시트 | 시트 · 보조 패널 | 닫힘/내부 시트 | `DUNE/Presentation/Wellness/MetricComparisonView.swift:5` |
 | H05 | 신체 기록 입력·수정 | 웰니스 추가·이력 | sheet | 화면 내 시트 | 시트 · 보조 패널 | 닫힘/내부 시트 | `DUNE/Presentation/BodyComposition/BodyCompositionFormSheet.swift:3` |
 | H06 | 신체 기록 이력 | 웰니스 | push | 상세 push · 한 열 | 상세 콘텐츠 | 선택·스크롤 유지 | `DUNE/Presentation/Wellness/BodyHistoryDetailView.swift:4` |
-| H07 | 자세 기록 열기 | 웰니스 최근 자세 | push | 상세 push · 한 열 | 상세 콘텐츠 | 선택·스크롤 유지 | `DUNE/Presentation/Wellness/WellnessView.swift:702` |
+| H07 | 자세 기록 열기 | 웰니스 최근 자세 | push | 상세 push · 한 열 | 상세 콘텐츠 | 선택·스크롤 유지 | `DUNE/Presentation/Wellness/WellnessView.swift:801` |
 | H08 | 부상 기록 입력·수정 | 웰니스 추가·이력 | sheet | 화면 내 시트 | 시트 · 보조 패널 | 닫힘/내부 시트 | `DUNE/Presentation/Injury/InjuryFormSheet.swift:3` |
 | H09 | 부상 이력 | 웰니스 | push | 상세 push · 한 열 | 상세 콘텐츠 | 선택·스크롤 유지 | `DUNE/Presentation/Injury/InjuryHistoryView.swift:5` |
 | H10 | 부상 기록 상세 | 부상 이력 | push | 상세 push · 한 열 | 상세 콘텐츠 | 선택·스크롤 유지 | `DUNE/Presentation/Injury/InjuryHistoryView.swift:238` |
@@ -127,18 +127,19 @@ SwiftUI View와 인라인 프레젠테이션 **108개**를 화면 단위로 대�
 | P07 | 자세 대칭 상세 | 자세 기록 | push | 상세 push · 한 열 | 상세 콘텐츠 | 선택·스크롤 유지 | `DUNE/Presentation/Posture/PostureSymmetryView.swift:4` |
 | P08 | 자세 전후 비교 | 자세 이력 | push | 상세 push · 한 열 | 적응형 두 pane | 접힘 후 pane 재배치 | `DUNE/Presentation/Posture/PostureComparisonView.swift:3` |
 
-## 라이프 · 습관 (8)
+## 라이프 · 습관 (9)
 
 | ID | 화면 | 진입 | 표시 방식 | 일반 iPhone | iPad | Duo | 코드 |
 |---|---|---|---|---|---|---|---|
-| L01 | 라이프 | 탭 | root | 하단 탭 · 한 열 | 사이드바 · 넓은 콘텐츠 | 외부 한 열 → 내부 확장 | `DUNE/Presentation/Life/LifeView.swift:27` |
+| L01 | 라이프 | 탭 | root | 하단 탭 · 한 열 | 사이드바 · 넓은 콘텐츠 | 외부 한 열 → 내부 확장 | `DUNE/Presentation/Life/LifeView.swift:77` |
 | L02 | 습관 추가·수정 | 라이프·관리 | sheet | 화면 내 시트 | 시트 · 보조 패널 | 닫힘/내부 시트 | `DUNE/Presentation/Life/HabitFormSheet.swift:3` |
 | L03 | 습관 템플릿 | 라이프 | sheet | 화면 내 시트 | 시트 · 보조 패널 | 닫힘/내부 시트 | `DUNE/Presentation/Life/HabitTemplateSheet.swift:3` |
 | L04 | 습관 관리 | 라이프 | push | 상세 push · 한 열 | 상세 콘텐츠 | 선택·스크롤 유지 | `DUNE/Presentation/Life/HabitManagementView.swift:4` |
-| L05 | 습관 이력 | 라이프 카드 | inspector | 좁은 폭에서는 시트 | 선택 상세 inspector | 닫힘 시트 → 내부 보조 | `DUNE/Presentation/Life/LifeView.swift:1224` |
-| L06 | 관리 중 습관 이력 | 습관 관리 | sheet | 화면 내 시트 | 시트 · 보조 패널 | 닫힘/내부 시트 | `DUNE/Presentation/Life/HabitManagementView.swift:264` |
+| L05 | 습관 이력 | 라이프 카드 | inspector | 좁은 폭에서는 시트 | 선택 상세 inspector | 닫힘 시트 → 내부 보조 | `DUNE/Presentation/Life/LifeView.swift:1357` |
+| L06 | 관리 중 습관 이력 | 습관 관리 | sheet | 화면 내 시트 | 시트 · 보조 패널 | 닫힘/내부 시트 | `DUNE/Presentation/Life/HabitManagementView.swift:266` |
 | L07 | 습관 히트맵 상세 | 라이프 분석 | push | 상세 push · 한 열 | 상세 콘텐츠 | 선택·스크롤 유지 | `DUNE/Presentation/Life/HabitHeatmapDetailView.swift:3` |
 | L08 | 주간 습관 리포트 | 라이프 분석 | push | 상세 push · 한 열 | 상세 콘텐츠 | 선택·스크롤 유지 | `DUNE/Presentation/Life/WeeklyHabitReportView.swift:3` |
+| L09 | 지난 날짜 습관 기록 | 라이프·습관 이력 | sheet | 화면 내 시트 | 시트 · 보조 패널 | 닫힘/내부 시트 | `DUNE/Presentation/Life/HabitPastRecordSheet.swift:3` |
 
 ## 설정 · 기타 (7)
 
@@ -150,12 +151,4 @@ SwiftUI View와 인라인 프레젠테이션 **108개**를 화면 단위로 대�
 | S04 | 선호 운동 | 설정 | push | 상세 push · 한 열 | 상세 콘텐츠 | 선택·스크롤 유지 | `DUNE/Presentation/Settings/Components/PreferredExercisesListView.swift:5` |
 | S05 | 새 소식 | 오늘·설정·앱 시작 | push/sheet | 상세 push 또는 시트 | 상세 push 또는 시트 | push 또는 시트 · 상태 유지 | `DUNE/Presentation/WhatsNew/WhatsNewView.swift:8` |
 | S06 | 새 기능 상세 | 새 소식 | push | 상세 push · 한 열 | 상세 콘텐츠 | 선택·스크롤 유지 | `DUNE/Presentation/WhatsNew/WhatsNewView.swift:151` |
-| S07 | 운동 분석 별도 창 | iPad 운동 중 | window | 운동 분석 시트로 대체 | 별도 읽기 전용 창 | 운동 분석 시트로 대체 | `DUNE/App/DUNEApp.swift:1074` |
-
-## 앱 밖의 시스템 표면
-
-이 표면은 위 108개 앱 화면 수에 포함하지 않는다. 캡처 출처도 앱 내부 화면과 별도로 관리한다.
-
-| ID | 표면 | 진입 | 상태 | 실제 화면 맵 |
-|---|---|---|---|---|
-| WLA01 | Watch 운동 Live Activity | Watch 운동 미러링 → ActivityKit | iPhone 알림 센터 진행·일시 정지·연결 대기, Dynamic Island compact·expanded 진행·일시 정지 | [WLA01 실제 화면](actual/live-activity/index.html) |
+| S07 | 운동 분석 별도 창 | iPad 운동 중 | window | 운동 분석 시트로 대체 | 별도 읽기 전용 창 | 운동 분석 시트로 대체 | `DUNE/App/DUNEApp.swift:1150` |

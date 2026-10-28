@@ -5,6 +5,11 @@ import UserNotifications
 @Observable
 @MainActor
 final class LifeViewModel {
+    struct HabitLogReplacement {
+        let existingLogs: [HabitLog]
+        let newLog: HabitLog?
+    }
+
     private let maxNameLength = 50
     private let maxGoalValue: Double = 1440 // 24 hours in minutes
     private let maxCountGoal: Double = 999
@@ -94,6 +99,7 @@ final class LifeViewModel {
         let goalValue: Double
         let goalUnit: String?
         let habitType: HabitType
+        let completedAt: Date?
     }
 
     // MARK: - Habit CRUD
@@ -173,6 +179,133 @@ final class LifeViewModel {
 
     // MARK: - Log CRUD
 
+    /// Prepares a daily total replacement. The View applies both parts to its ModelContext.
+    func prepareLogReplacement(
+        for habit: HabitDefinition,
+        value: Double,
+        date: Date = Date(),
+        referenceDate: Date = Date(),
+        isPastEntry: Bool = false,
+        additionalLogs: [HabitLog] = []
+    ) -> HabitLogReplacement? {
+        guard !isSaving else { return nil }
+        validationError = nil
+
+        guard !habit.isArchived, !habit.isAutoLinked else {
+            validationError = String(localized: "This habit cannot be recorded manually")
+            return nil
+        }
+
+        let calendar = Calendar.current
+        let selectedDay = calendar.startOfDay(for: date)
+        let today = calendar.startOfDay(for: referenceDate)
+        let createdDay = calendar.startOfDay(for: habit.createdAt)
+        let configuredDay = habit.frequency.intervalDays == nil
+            ? createdDay
+            : calendar.startOfDay(for: habit.recurringStartConfiguredAt ?? habit.createdAt)
+        guard selectedDay >= max(createdDay, configuredDay) else {
+            validationError = String(localized: "Date is before this habit started")
+            return nil
+        }
+        guard selectedDay <= today, !isPastEntry || selectedDay < today else {
+            validationError = String(localized: "Choose a date before today")
+            return nil
+        }
+
+        guard value.isFinite else {
+            validationError = String(localized: "Enter a valid total")
+            return nil
+        }
+        switch habit.habitType {
+        case .check:
+            guard value == 0 || value == 1 else {
+                validationError = String(localized: "Completion must be 0 or 1")
+                return nil
+            }
+        case .duration:
+            guard value >= 0, value <= maxGoalValue else {
+                validationError = String(localized: "Duration must be between 0 and \(Int(maxGoalValue)) minutes")
+                return nil
+            }
+        case .count:
+            guard value >= 0, value <= maxCountGoal else {
+                validationError = String(localized: "Count must be between 0 and \(Int(maxCountGoal))")
+                return nil
+            }
+        }
+
+        // Include same-day cycle actions so the cycle engine replays remaining events.
+        let existingLogs = rawLogs(for: habit, additionalLogs: additionalLogs).filter {
+            !$0.isAutoCompleted && calendar.isDate($0.date, inSameDayAs: selectedDay)
+        }
+        let newLog = HabitLog(
+            date: selectedDay,
+            value: value,
+            completedAt: referenceDate,
+            memo: HabitLogResolution.dailyTotalMemo
+        )
+        isSaving = true
+        return HabitLogReplacement(existingLogs: existingLogs, newLog: newLog)
+    }
+
+    /// Evaluates a past total against a temporary log list without changing persistence or save state.
+    func previewPastRecordNextDueDate(
+        for habit: HabitDefinition,
+        value: Double,
+        date: Date,
+        referenceDate: Date = Date(),
+        additionalLogs: [HabitLog] = []
+    ) -> Date? {
+        guard habit.frequency.intervalDays != nil,
+              !habit.isArchived,
+              !habit.isAutoLinked,
+              value.isFinite else { return nil }
+
+        let calendar = Calendar.current
+        let selectedDay = calendar.startOfDay(for: date)
+        let today = calendar.startOfDay(for: referenceDate)
+        let createdDay = calendar.startOfDay(for: habit.createdAt)
+        let configuredDay = calendar.startOfDay(for: habit.recurringStartConfiguredAt ?? habit.createdAt)
+        guard selectedDay >= max(createdDay, configuredDay), selectedDay < today else { return nil }
+
+        switch habit.habitType {
+        case .check:
+            guard value == 0 || value == 1 else { return nil }
+        case .duration:
+            guard value >= 0, value <= maxGoalValue else { return nil }
+        case .count:
+            guard value >= 0, value <= maxCountGoal else { return nil }
+        }
+
+        var simulatedLogs = rawLogs(for: habit, additionalLogs: additionalLogs).filter {
+            $0.isAutoCompleted || !calendar.isDate($0.date, inSameDayAs: selectedDay)
+        }
+        simulatedLogs.append(HabitLog(
+            date: selectedDay,
+            value: value,
+            completedAt: referenceDate,
+            memo: HabitLogResolution.dailyTotalMemo
+        ))
+        return makeCycleSnapshot(
+            for: habit,
+            referenceDate: referenceDate,
+            calendar: calendar,
+            logsOverride: simulatedLogs
+        )?.nextDueDate
+    }
+
+    private func rawLogs(for habit: HabitDefinition, additionalLogs: [HabitLog]) -> [HabitLog] {
+        var seen = Set<UUID>()
+        var result: [HabitLog] = []
+        for log in habit.logs ?? [] {
+            if seen.insert(log.id).inserted { result.append(log) }
+        }
+        for log in additionalLogs where log.habitDefinition?.id == habit.id {
+            if seen.insert(log.id).inserted { result.append(log) }
+        }
+        return result
+    }
+
     func createValidatedLog(for habit: HabitDefinition, value: Double, date: Date = Date()) -> HabitLog? {
         guard !isSaving else { return nil }
 
@@ -228,12 +361,14 @@ final class LifeViewModel {
 
     // MARK: - Cycle Snapshot / History
 
-    func cycleSnapshot(for habit: HabitDefinition, referenceDate: Date = Date()) -> HabitCycleSnapshot? {
-        makeCycleSnapshot(for: habit, referenceDate: referenceDate, calendar: Calendar.current)
+    func cycleSnapshot(for habit: HabitDefinition, referenceDate: Date = Date(), additionalLogs: [HabitLog] = []) -> HabitCycleSnapshot? {
+        makeCycleSnapshot(for: habit, referenceDate: referenceDate, calendar: Calendar.current, logsOverride: rawLogs(for: habit, additionalLogs: additionalLogs))
     }
 
-    func historyEntries(for habit: HabitDefinition) -> [HabitHistoryEntry] {
-        let logs = (habit.logs ?? []).sorted { $0.date > $1.date }
+    func historyEntries(for habit: HabitDefinition, additionalLogs: [HabitLog] = []) -> [HabitHistoryEntry] {
+        let logs = HabitLogResolution.resolve(rawLogs(for: habit, additionalLogs: additionalLogs), habitID: habit.id)
+            .filter { !HabitLogResolution.isZeroTombstone($0) }
+            .sorted { $0.date > $1.date }
         return logs.map { log in
             HabitHistoryEntry(
                 id: log.id,
@@ -242,13 +377,14 @@ final class LifeViewModel {
                 value: log.value,
                 goalValue: habit.goalValue,
                 goalUnit: habit.goalUnit,
-                habitType: habit.habitType
+                habitType: habit.habitType,
+                completedAt: log.completedAt
             )
         }
     }
 
-    func suggestedSnoozeDate(for habit: HabitDefinition, days: Int = 1, referenceDate: Date = Date()) -> Date? {
-        guard let snapshot = cycleSnapshot(for: habit, referenceDate: referenceDate) else { return nil }
+    func suggestedSnoozeDate(for habit: HabitDefinition, days: Int = 1, referenceDate: Date = Date(), additionalLogs: [HabitLog] = []) -> Date? {
+        guard let snapshot = cycleSnapshot(for: habit, referenceDate: referenceDate, additionalLogs: additionalLogs) else { return nil }
         guard let nextDueDate = snapshot.nextDueDate else { return nil }
         return Calendar.current.date(
             byAdding: .day,
@@ -257,8 +393,8 @@ final class LifeViewModel {
         )
     }
 
-    func refreshReminderSchedule(for habit: HabitDefinition, referenceDate: Date = Date()) {
-        let snapshot = cycleSnapshot(for: habit, referenceDate: referenceDate)
+    func refreshReminderSchedule(for habit: HabitDefinition, referenceDate: Date = Date(), additionalLogs: [HabitLog] = []) {
+        let snapshot = cycleSnapshot(for: habit, referenceDate: referenceDate, additionalLogs: additionalLogs)
         let requests = HabitReminderScheduler.makeRequests(
             habitID: habit.id,
             habitName: habit.name,
@@ -292,15 +428,18 @@ final class LifeViewModel {
     func calculateProgresses(
         habits: [HabitDefinition],
         todayExerciseExists: Bool,
-        referenceDate: Date = Date()
+        referenceDate: Date = Date(),
+        additionalLogs: [HabitLog] = []
     ) {
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: referenceDate)
 
         var progresses: [HabitProgress] = []
 
+        let logsByHabit = Dictionary(grouping: additionalLogs, by: { $0.habitDefinition?.id })
         for habit in habits where !habit.isArchived {
-            if let cycleSnapshot = makeCycleSnapshot(for: habit, referenceDate: referenceDate, calendar: calendar) {
+            let raw = rawLogs(for: habit, additionalLogs: logsByHabit[habit.id] ?? [])
+            if let cycleSnapshot = makeCycleSnapshot(for: habit, referenceDate: referenceDate, calendar: calendar, logsOverride: raw) {
                 let isCompleted = cycleSnapshot.lastAction == .complete
                     && cycleSnapshot.lastCompletedAt.map { calendar.isDate($0, inSameDayAs: today) } == true
                 let effectiveValue = isCompleted ? habit.goalValue : 0
@@ -333,7 +472,7 @@ final class LifeViewModel {
                 continue
             }
 
-            let logs = (habit.logs ?? [])
+            let logs = HabitLogResolution.resolve(raw, habitID: habit.id)
             let todayLogs = logs.filter { calendar.isDate($0.date, inSameDayAs: today) }
             let todayValue = todayLogs.reduce(0.0) { $0 + $1.value }
 
@@ -351,7 +490,7 @@ final class LifeViewModel {
             let isCompleted = effectiveValue >= habit.goalValue
 
             let streak = HabitStreakService.calculateStreak(
-                completedDates: streakDates(habit: habit, todayCompleted: isAutoCompleted, today: today),
+                completedDates: streakDates(habit: habit, logs: logs, todayCompleted: isAutoCompleted, today: today),
                 frequency: habit.frequency,
                 referenceDate: referenceDate
             )
@@ -378,7 +517,7 @@ final class LifeViewModel {
                 isDue: false,
                 isOverdue: false,
                 lastCycleAction: nil,
-                historyCount: logs.count,
+                historyCount: logs.filter { !HabitLogResolution.isZeroTombstone($0) }.count,
                 timeOfDay: habit.timeOfDay
             ))
         }
@@ -530,8 +669,8 @@ final class LifeViewModel {
         Calendar.current.startOfDay(for: date)
     }
 
-    private func streakDates(habit: HabitDefinition, todayCompleted: Bool, today: Date) -> [Date] {
-        let logs = (habit.logs ?? []).map {
+    private func streakDates(habit: HabitDefinition, logs: [HabitLog], todayCompleted: Bool, today: Date) -> [Date] {
+        let logs = HabitLogResolution.resolve(logs, habitID: habit.id).map {
             HabitLogSnapshot(habitID: habit.id, date: $0.date, value: $0.value, memo: $0.memo)
         }
         var dates = HabitStreakService.completedDates(logs: logs, for: habit.id, goalValue: habit.goalValue)
@@ -545,11 +684,17 @@ final class LifeViewModel {
     private func makeCycleSnapshot(
         for habit: HabitDefinition,
         referenceDate: Date,
-        calendar: Calendar
+        calendar: Calendar,
+        logsOverride: [HabitLog]? = nil
     ) -> HabitCycleSnapshot? {
         guard let intervalDays = habit.frequency.intervalDays else { return nil }
 
-        let allLogs = (habit.logs ?? []).sorted { $0.date < $1.date }
+        let allLogs = HabitLogResolution.resolve(logsOverride ?? habit.logs ?? [], habitID: habit.id)
+            .filter { !HabitLogResolution.isZeroTombstone($0) }
+            .sorted {
+                if $0.date != $1.date { return $0.date < $1.date }
+                return HabitLogResolution.isEarlier($0, $1)
+            }
         let configuredAt = calendarStartOfDay(habit.recurringStartConfiguredAt ?? habit.createdAt)
         let logs = allLogs.filter { calendarStartOfDay($0.date) >= configuredAt }
         let startPoint = habit.recurringStartPoint

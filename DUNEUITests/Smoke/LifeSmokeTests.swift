@@ -158,46 +158,58 @@ final class LifeSeededSmokeTests: SeededUITestBaseCase {
         XCTAssertFalse(app.buttons["life-empty-template"].exists, "Seeded habits should not show the empty template entry")
     }
 
-    func testWeeklyReportShowsMeasuredComparison() throws {
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded("life-weekly-report-button", maxSwipes: 8),
-                      "Weekly report summary should be reachable")
-        let current = app.descendants(matching: .any)["life-weekly-current-rate"].firstMatch
-        let previous = app.descendants(matching: .any)["life-weekly-previous-rate"].firstMatch
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded("life-weekly-previous-rate", maxSwipes: 8),
-                      "Measured weekly rates should be visible")
-        XCTAssertTrue(current.isHittable, "Current completion rate should come from habit logs")
-        XCTAssertTrue(previous.isHittable, "Previous completion rate should come from habit logs")
-        XCTAssertTrue(app.buttons["life-weekly-report-button"].firstMatch.exists,
-                      "The existing weekly report detail route should remain available")
-        addScreenshotAttachment(named: "Life weekly report summary")
+    func testWeeklyReflectionOpensMeasuredComparison() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
+        launchApp(with: configuration)
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("life-weekly-report-button", maxSwipes: 12),
+                      "Weekly reflection should remain reachable below the Life rhythm")
+        for identifier in ["life-weekly-days-recorded", "life-weekly-completed-practices"] {
+            XCTAssertTrue(app.scrollToHittableElementIfNeeded(identifier, maxSwipes: 6))
+            XCTAssertEqual(app.descendants(matching: .any)[identifier].firstMatch.label, "1")
+        }
+        addScreenshotAttachment(named: "Life weekly reflection summary")
+
+        app.buttons["life-weekly-report-button"].firstMatch.auditTap()
+        XCTAssertTrue(app.navigationBars["Weekly Report"].waitForExistence(timeout: 8),
+                      "The full measured report should open from the reflection card")
+        XCTAssertTrue(app.scrollViews["life-weekly-report-scroll"].firstMatch.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["Last Week"].firstMatch.waitForExistence(timeout: 5),
+                      "The detail should preserve the prior-week comparison")
+        let percentages = app.staticTexts.matching(
+            NSPredicate(format: "label MATCHES %@", #"^[0-9]+%$"#)
+        ).allElementsBoundByIndex.compactMap { Int($0.label.dropLast()) }
+        XCTAssertTrue(percentages.contains(0), "The empty prior week should measure zero percent")
+        XCTAssertTrue(percentages.contains(where: { $0 > 0 }),
+                      "Today's seeded completion should produce a measured nonzero current rate")
     }
 
-    func testHeroNarrativeLayout() throws {
+    func testCompactHeroLayout() throws {
         let states: [(name: String, style: String, category: String?)] = [
             ("Light", "light", nil),
             ("Dark", "dark", nil),
             ("Accessibility XXXL", "dark", "UICTContentSizeCategoryAccessibilityXXXL")
         ]
         for state in states {
-            verifyHeroNarrativeLayout(theme: "desertWarm", style: state.style,
+            verifyCompactHeroLayout(theme: "desertWarm", style: state.style,
                                       category: state.category, name: state.name)
         }
     }
 
-    func testHeroNarrativeRemainingThemes() throws {
+    func testCompactHeroRemainingThemes() throws {
         let themes = [
             "oceanCool", "forestGreen", "sakuraCalm", "arcticDawn",
             "solarPop", "contourAtlas", "waterLilies"
         ]
         for theme in themes {
             for style in ["light", "dark"] {
-                verifyHeroNarrativeLayout(theme: theme, style: style, name: "\(theme) \(style)")
+                verifyCompactHeroLayout(theme: theme, style: style, name: "\(theme) \(style)")
             }
         }
     }
 
-    private func verifyHeroNarrativeLayout(theme: String, style: String,
-                                           category: String? = nil, name: String) {
+    private func verifyCompactHeroLayout(theme: String, style: String,
+                                         category: String? = nil, name: String) {
         var configuration = launchConfiguration
         configuration.additionalArguments += [
             "--ui-test-theme", theme, "--ui-test-style", style,
@@ -211,27 +223,36 @@ final class LifeSeededSmokeTests: SeededUITestBaseCase {
 
         let hero = app.descendants(matching: .any)[AXID.lifeHeroProgress].firstMatch
         let ring = app.descendants(matching: .any)["life-hero-ring"].firstMatch
-        let narrative = app.descendants(matching: .any)["life-hero-narrative"].firstMatch
-        let action = app.buttons["life-hero-checklist-button"].firstMatch
-        XCTAssertTrue(narrative.waitForExistence(timeout: 10))
-        XCTAssertFalse(narrative.label.isEmpty, "\(name): progress should have a text explanation")
-        XCTAssertTrue(hero.frame.contains(narrative.frame), "\(name): narrative should fit inside the hero")
-        XCTAssertTrue(app.windows.firstMatch.frame.contains(ring.frame), "\(name): ring should fit on screen")
-        XCTAssertFalse(hero.staticTexts["Morning Stretch"].exists, "Habit names belong in the execution list below the hero")
+        let external = app.descendants(matching: .any)["life-hero-external-progress"].firstMatch
+        let remaining = app.descendants(matching: .any)["life-hero-remaining"].firstMatch
+        XCTAssertTrue(hero.waitForExistence(timeout: 10), "\(name): Life hero should load")
+        XCTAssertTrue(app.descendants(matching: .any)["life-hero-heading"].firstMatch.exists)
+        XCTAssertTrue(remaining.waitForExistence(timeout: 5))
+        XCTAssertTrue(remaining.label.contains("2"), "\(name): two of three seeded habits remain")
+        XCTAssertTrue(hero.frame.contains(remaining.frame), "\(name): remaining count should fit inside the hero")
+        XCTAssertFalse(app.descendants(matching: .any)["life-hero-narrative"].firstMatch.exists)
+        XCTAssertFalse(app.buttons["life-hero-checklist-button"].exists)
+        XCTAssertFalse(hero.staticTexts["Morning Stretch"].exists,
+                       "\(name): habit names belong in the execution list below the hero")
         if category != nil {
-            XCTAssertGreaterThanOrEqual(narrative.frame.minY, ring.frame.maxY,
-                                        "Large text should place the explanation below the ring")
+            XCTAssertFalse(ring.exists, "\(name): maximum text size should use external progress")
+            XCTAssertTrue(external.waitForExistence(timeout: 5))
+            XCTAssertTrue(hero.frame.contains(external.frame),
+                          "\(name): external progress should fit inside the hero")
         } else {
-            XCTAssertGreaterThanOrEqual(narrative.frame.minX, ring.frame.maxX,
-                                        "Default text should place the explanation beside the ring")
+            XCTAssertTrue(ring.waitForExistence(timeout: 5))
+            XCTAssertEqual(ring.frame.width, 104, accuracy: 1,
+                           "\(name): normal text should keep the compact 104pt ring")
+            XCTAssertEqual(ring.frame.height, ring.frame.width, accuracy: 1)
+            XCTAssertTrue(hero.frame.contains(ring.frame), "\(name): ring should fit inside the hero")
+            XCTAssertFalse(external.exists)
         }
-        VisualAudit.capture("Life hero narrative \(name)")
+        VisualAudit.capture("Life compact hero \(name)")
         if !VisualAudit.isEnabled {
-            addScreenshotAttachment(named: "Life hero narrative \(name)")
+            addScreenshotAttachment(named: "Life compact hero \(name)")
         }
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded("life-hero-checklist-button", maxSwipes: 10),
-                      "\(name): checklist action should remain reachable below the expanded hero")
-        XCTAssertTrue(action.isHittable, "\(name): checklist action should remain reachable")
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.lifeSectionHabits, maxSwipes: 8),
+                      "\(name): Today's Practice should remain reachable below the hero")
     }
 
     func testSparseTrendKeepsHabitListAndHistoryAccessible() throws {
@@ -256,7 +277,17 @@ final class LifeSeededSmokeTests: SeededUITestBaseCase {
         )
     }
 
+    private func expandCompletedSeededHabit() {
+        let disclosure = app.buttons["life-completed-toggle"].firstMatch
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("life-completed-toggle", maxSwipes: 8),
+                      "The seeded completed habit should have a reachable disclosure")
+        disclosure.auditTap()
+        XCTAssertTrue(app.scrollToLifeHabit(named: "Morning Stretch", maxSwipes: 8),
+                      "The completed Morning Stretch row should be revealed")
+    }
+
     func testHabitActionsMenuOpensEditSheet() throws {
+        expandCompletedSeededHabit()
         XCTAssertTrue(
             app.openLifeHabitActions(named: "Morning Stretch", maxSwipes: 8),
             "Habit actions should open from the seeded habit row"
@@ -276,6 +307,7 @@ final class LifeSeededSmokeTests: SeededUITestBaseCase {
     }
 
     func testHabitActionsMenuArchivesHabit() throws {
+        expandCompletedSeededHabit()
         let archivedHabitName = "Morning Stretch"
         XCTAssertTrue(
             app.scrollToLifeHabit(named: archivedHabitName, maxSwipes: 8),
