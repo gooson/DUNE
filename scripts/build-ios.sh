@@ -57,6 +57,9 @@ done
 mkdir -p "$LOG_DIR" "$DERIVED_DATA_DIR"
 regen_project
 
+echo "Checking string catalog format and manual extraction state..."
+swift scripts/format-xcstrings.swift --check --check-manual
+
 echo "Building scheme '$SCHEME' for destination '$DESTINATION'..."
 if [[ -n "$XCODEBUILD_JOBS" ]]; then
     echo "Using xcodebuild job cap: $XCODEBUILD_JOBS"
@@ -91,3 +94,10 @@ fi
 
 echo "Build succeeded."
 grep -a -n -E "BUILD (SUCCEEDED|FAILED)" "$LOG_FILE" | tail -n 20 || true
+
+# Xcode may discover missing Swift or Info.plist keys while building.
+# Preserve that evidence and fail validation until the entries are reviewed.
+if ! swift scripts/format-xcstrings.swift --check --check-manual; then
+    echo "String catalogs changed during the build. Register new keys as manual, review translations, format, and rebuild."
+    exit 1
+fi
