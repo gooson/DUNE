@@ -204,9 +204,9 @@ final class LifeFlowUITests: SeededUITestBaseCase {
         XCTAssertTrue(app.buttons[AXID.lifeHabitActionArchive].firstMatch.exists)
         XCTAssertFalse(app.buttons["life-habit-action-past-record"].firstMatch.exists,
                        "Auto-linked goals should not offer manual past recording")
-        app.buttons[AXID.lifeHabitActionEdit].firstMatch.auditTap()
-        XCTAssertTrue(app.textFields[AXID.habitFormName].firstMatch.waitForExistence(timeout: 5))
-        app.buttons[AXID.habitFormCancel].firstMatch.auditTap()
+        app.buttons[AXID.lifeHabitActionHistory].firstMatch.auditTap()
+        XCTAssertTrue(waitForElement(AXID.lifeHabitHistoryScreen, timeout: 8).exists)
+        XCTAssertTrue(app.dismissModalIfPresent(cancelIdentifiers: [AXID.lifeHabitHistoryClose]))
         XCTAssertTrue(element("life-workout-goal-Weekly Move").exists)
     }
 
