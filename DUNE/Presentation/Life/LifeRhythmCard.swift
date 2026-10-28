@@ -104,8 +104,8 @@ struct LifeWeeklyReviewCard: View {
                     ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.lg))
                     : AnyLayout(HStackLayout(alignment: .top, spacing: DS.Spacing.xl))
                 layout {
-                    metric(currentWeek.filter { ($0.value ?? 0) > 0 }.count, title: "Days recorded")
-                    metric(currentWeek.compactMap(\.value).reduce(0, +), title: "Completed practices")
+                    metric(currentWeek.filter { ($0.value ?? 0) > 0 }.count, title: "Days recorded", identifier: "life-weekly-days-recorded")
+                    metric(currentWeek.compactMap(\.value).reduce(0, +), title: "Completed practices", identifier: "life-weekly-completed-practices")
                 }
                 Text("Based on currently registered habits")
                     .font(.caption).foregroundStyle(.secondary)
@@ -113,9 +113,10 @@ struct LifeWeeklyReviewCard: View {
         }
     }
 
-    private func metric(_ value: Int, title: LocalizedStringKey) -> some View {
+    private func metric(_ value: Int, title: LocalizedStringKey, identifier: String) -> some View {
         VStack(alignment: .leading, spacing: DS.Spacing.xs) {
             Text(value.formattedWithSeparator)
+                .accessibilityIdentifier(identifier)
                 .font(.largeTitle.bold()).monospacedDigit().foregroundStyle(theme.accentColor)
             Text(title).font(.caption).foregroundStyle(.secondary)
         }

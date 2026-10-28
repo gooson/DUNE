@@ -23,6 +23,10 @@ final class LifeFlowUITests: SeededUITestBaseCase {
     }
 
     private func capture(_ name: String) {
+        let hierarchy = XCTAttachment(string: app.debugDescription)
+        hierarchy.name = "AX-" + name
+        hierarchy.lifetime = .keepAlways
+        add(hierarchy)
         if VisualAudit.isEnabled {
             VisualAudit.capture(name)
         } else {

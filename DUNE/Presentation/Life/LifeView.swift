@@ -174,7 +174,7 @@ struct LifeView: View {
                 }
             )
         }
-        .sheet(isPresented: $viewModel.isShowingAddSheet) {
+        .sheet(isPresented: $viewModel.isShowingAddSheet, onDismiss: { viewModel.validationError = nil }) {
             HabitFormSheet(
                 viewModel: viewModel,
                 isEdit: false,
@@ -189,7 +189,7 @@ struct LifeView: View {
                 }
             )
         }
-        .sheet(isPresented: $viewModel.isShowingEditSheet) {
+        .sheet(isPresented: $viewModel.isShowingEditSheet, onDismiss: { viewModel.validationError = nil }) {
             if viewModel.editingHabit != nil {
                 HabitFormSheet(
                     viewModel: viewModel,
@@ -347,13 +347,14 @@ private struct HabitListQueryView: View {
             ArchivedHabitCountView()
 
         }
-        .sheet(item: $pastSelection) { selection in
+        .sheet(item: $pastSelection, onDismiss: { viewModel.validationError = nil }) { selection in
             HabitPastRecordSheet(habits: habits, additionalLogs: habitLogs, selectedHabit: selection.habit) { habit, date, value in
                 replaceValue(for: habit, value: value, date: date, isPastEntry: true)
             }
         }
         .alert("Check your entry", isPresented: Binding(
-            get: { viewModel.validationError != nil && pastSelection == nil },
+            get: { viewModel.validationError != nil && pastSelection == nil
+                && !viewModel.isShowingAddSheet && !viewModel.isShowingEditSheet },
             set: { if !$0 { viewModel.validationError = nil } }
         )) {
             Button("OK") { viewModel.validationError = nil }

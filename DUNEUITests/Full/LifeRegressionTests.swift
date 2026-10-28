@@ -125,14 +125,12 @@ final class LifeRegressionTests: SeededUITestBaseCase {
         let nameField = app.textFields[AXID.habitFormName].firstMatch
         XCTAssertTrue(nameField.waitForExistence(timeout: 5), "Edit habit form should appear")
         XCTAssertTrue(app.fillTextInput(AXID.habitFormName, with: "Morning Stretch AM"), "Edit form should allow renaming a habit")
+        XCTAssertEqual(nameField.value as? String, "Morning Stretch AM")
+        attachLifeScreenshot("L02 Edit habit name before save")
 
-        XCTAssertTrue(
-            app.waitAndTap(AXID.habitFormSave, timeout: 5) || app.buttons["Save"].firstMatch.waitForExistence(timeout: 2),
-            "Habit save button should exist in edit mode"
-        )
-        if app.buttons["Save"].firstMatch.exists {
-            app.buttons["Save"].firstMatch.auditTap()
-        }
+        let saveButton = app.buttons[AXID.habitFormSave].firstMatch
+        XCTAssertTrue(saveButton.waitForExistence(timeout: 5), "Habit save button should exist in edit mode")
+        saveButton.auditTap()
 
         let dismissed = NSPredicate(format: "exists == false")
         expectation(for: dismissed, evaluatedWith: nameField)
@@ -323,8 +321,15 @@ final class LifeRegressionTests: SeededUITestBaseCase {
         saveButton.auditTap()
         expectation(for: NSPredicate(format: "exists == false"), evaluatedWith: nameField)
         waitForExpectations(timeout: 5)
+        if startsOnFirstCompletion {
+            XCTAssertTrue(app.scrollToHittableElementIfNeeded("life-habit-group-upcoming", maxSwipes: 8))
+            app.buttons["life-habit-group-upcoming"].firstMatch.auditTap()
+        }
         XCTAssertTrue(app.descendants(matching: .any)[AXID.lifeHabitRow(name)].firstMatch.waitForExistence(timeout: 8),
                       "\(name) should appear on the Life list")
+        if startsOnFirstCompletion {
+            app.buttons["life-habit-group-upcoming"].firstMatch.auditTap()
+        }
     }
 
     private func attachLifeScreenshot(_ name: String) {

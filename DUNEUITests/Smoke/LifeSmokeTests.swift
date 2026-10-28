@@ -161,11 +161,10 @@ final class LifeSeededSmokeTests: SeededUITestBaseCase {
     func testWeeklyReflectionOpensMeasuredComparison() throws {
         XCTAssertTrue(app.scrollToHittableElementIfNeeded("life-weekly-report-button", maxSwipes: 12),
                       "Weekly reflection should remain reachable below the Life rhythm")
-        XCTAssertTrue(app.staticTexts["Days recorded"].firstMatch.waitForExistence(timeout: 5))
-        XCTAssertTrue(app.staticTexts["Completed practices"].firstMatch.waitForExistence(timeout: 5))
-        let oneCount = app.staticTexts.matching(NSPredicate(format: "label == %@", "1")).count
-        XCTAssertGreaterThanOrEqual(oneCount, 2,
-                                    "One seeded completion today should give one recorded day and one practice")
+        for identifier in ["life-weekly-days-recorded", "life-weekly-completed-practices"] {
+            XCTAssertTrue(app.scrollToHittableElementIfNeeded(identifier, maxSwipes: 6))
+            XCTAssertEqual(app.descendants(matching: .any)[identifier].firstMatch.label, "1")
+        }
         addScreenshotAttachment(named: "Life weekly reflection summary")
 
         app.buttons["life-weekly-report-button"].firstMatch.auditTap()

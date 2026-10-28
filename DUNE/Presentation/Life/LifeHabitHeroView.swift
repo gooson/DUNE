@@ -98,9 +98,10 @@ struct LifeHabitHeroView: View {
                 .fill(gold.opacity(0.08))
                 .padding(13)
             Circle()
-                .stroke(gold.opacity(0.17), lineWidth: 7)
+                .strokeBorder(gold.opacity(0.17), lineWidth: 7)
             if fraction > 0 {
                 Circle()
+                    .inset(by: 3.5)
                     .trim(from: 0, to: fraction)
                     .stroke(AngularGradient(colors: [gold, lightGold, gold], center: .center), style: StrokeStyle(lineWidth: 7, lineCap: .round))
                     .rotationEffect(.degrees(-90))
