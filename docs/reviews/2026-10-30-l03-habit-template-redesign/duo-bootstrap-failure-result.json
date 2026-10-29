@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/LifeStarterTemplateRegularTextTests/testWaterTemplateCardPrefillsCountGoal"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": null,
+    "passed": null,
+    "skipped": null,
+    "failed": null
+  },
+  "passed_cases": 0,
+  "failures": [
+    "172: Testing failed:",
+    "173: DUNEUITests-Runner (17141) encountered an error (Early unexpected exit, operation never finished bootstrapping - no restart will be attempted. (Underlying Error: The test runner crashed while preparing to run tests: DUNEUITests-Runner at -[XCTWaiter(StallHandling) handleStalledWait:]))",
+    "175: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log has no executed-test count",
+    "UI test log has no identifiable passed UI test cases",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/LifeStarterTemplateRegularTextTests/testWaterTemplateCardPrefillsCountGoal"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.xcodebuild/l03-duo-closed-ui-retry.log",
+  "source_revision": "4f052fa7",
+  "device_scope": "duo-closed-fresh-device"
+}

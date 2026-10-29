@@ -4,7 +4,8 @@
   "source_worktree_dirty": true,
   "xcresults": [
     "/Users/shanks/.codex/worktrees/c658/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_14-49-17-+0900.xcresult",
-    ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_14-53-15-+0900.xcresult"
+    ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_14-53-15-+0900.xcresult",
+    ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.30_01-43-26-+0900.xcresult"
   ],
   "processed_capture_candidates": 116,
   "captured": {
@@ -373,12 +374,15 @@
     "L03": {
       "row_id": "L03",
       "evidence": "habit-template-list",
-      "test": "DuoLifeStarterTemplateTests/testEmptyStarterTemplateCreatesHabitAndRendersHabitsSection()",
-      "action": "tap life-empty-template",
-      "timestamp": 1791829652.336,
-      "image": "DC844F0F-9288-4133-8F1B-0A3D77B54869.png",
-      "screen": "screen-1-2006x2852-tap life-empty-template_1_CC1A7E6F-900A-4EFD-ABCB-534BE90E4C0B.png",
-      "file": "L03.png"
+      "test": "LifeStarterTemplateRegularTextTests/testWaterTemplateCardPrefillsCountGoal()",
+      "action": "tap life-toolbar-template",
+      "timestamp": 1793292230.195,
+      "image": "A693F4C9-D8BB-4340-A6B9-B661D8EA1FB4.png",
+      "screen": "screen-1-2006x2852-tap life-toolbar-template_1_1DC70C8C-6076-4B81-A8F5-D9AD8CF12B80.png",
+      "file": "L03.png",
+      "source_revision": "9c376f2b3ca52620c8a1891538a734b88eb62bb1",
+      "source_worktree_dirty": false,
+      "simulator_udid": "F8804553-93D0-4ACF-9A72-DC466957BCC4"
     },
     "L02": {
       "row_id": "L02",
