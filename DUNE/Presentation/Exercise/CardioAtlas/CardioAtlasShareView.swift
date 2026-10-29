@@ -128,6 +128,8 @@ struct CardioAtlasShareView: View {
         }
         .navigationTitle("Share workout")
         .navigationBarTitleDisplayMode(.inline)
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("cardio-atlas-share-screen")
         .task(id: renderKey) { await renderCard() }
         .onDisappear { snapshotter?.cancel() }
     }

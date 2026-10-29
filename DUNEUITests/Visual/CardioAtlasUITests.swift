@@ -16,8 +16,9 @@ final class CardioAtlasUITests: ActivityExerciseSeededUITestBaseCase {
 
         XCTAssertTrue(app.scrollToHittableElementIfNeeded("cardio-atlas-journey", maxSwipes: 8))
         element("cardio-atlas-journey").tap()
-        XCTAssertTrue(element("cardio-atlas-journey-detail").waitForExistence(timeout: 8))
+        assertAtlasDestinationVisible("cardio-atlas-journey-detail")
         atlasScreenshot(named: "Cardio Atlas Journey progress")
+        closeAtlasDestination()
     }
 
     func testImportedCardioDetailPreservesAnalysis() {
@@ -40,14 +41,16 @@ final class CardioAtlasUITests: ActivityExerciseSeededUITestBaseCase {
         openRecord("running")
         XCTAssertTrue(app.scrollToHittableElementIfNeeded("cardio-atlas-passport", maxSwipes: 8))
         element("cardio-atlas-passport").tap()
-        XCTAssertTrue(element("cardio-atlas-passport-detail").waitForExistence(timeout: 8))
+        assertAtlasDestinationVisible("cardio-atlas-passport-detail")
         atlasScreenshot(named: "Cardio Atlas Passport progress")
+        closeAtlasDestination()
     }
 
     func testShareStylesAndPrivateLocationDefault() {
         openRecord("running")
         XCTAssertTrue(app.scrollToHittableElementIfNeeded("cardio-atlas-share", maxSwipes: 8))
         element("cardio-atlas-share").tap()
+        assertAtlasDestinationVisible("cardio-atlas-share-screen")
         XCTAssertTrue(element("cardio-atlas-share-preview").waitForExistence(timeout: 10))
         let location = element("cardio-atlas-share-location")
         XCTAssertTrue(location.exists)
@@ -55,29 +58,34 @@ final class CardioAtlasUITests: ActivityExerciseSeededUITestBaseCase {
         XCTAssertTrue(element("cardio-atlas-share-action").waitForExistence(timeout: 10))
         atlasScreenshot(named: "Cardio Atlas share private Atlas")
 
-        location.tap()
+        visibleAtlasShareControl("cardio-atlas-share-location").tap()
         XCTAssertEqual(location.value as? String, "1")
         XCTAssertTrue(element("cardio-atlas-share-trim").exists)
         XCTAssertTrue(element("cardio-atlas-share-action").waitForExistence(timeout: 10))
+        _ = visibleAtlasShareControl("style-cardio-atlas-atlas", direction: .down)
         atlasScreenshot(named: "Cardio Atlas share Atlas route")
 
-        location.tap()
+        visibleAtlasShareControl("cardio-atlas-share-location").tap()
         XCTAssertEqual(location.value as? String, "0")
         XCTAssertTrue(element("cardio-atlas-share-map-image").waitForNonExistence(timeout: 5))
         XCTAssertTrue(element("cardio-atlas-share-action").waitForExistence(timeout: 10))
+        _ = visibleAtlasShareControl("style-cardio-atlas-atlas", direction: .down)
         atlasScreenshot(named: "Cardio Atlas location removed from shared image")
-        location.tap()
+        visibleAtlasShareControl("cardio-atlas-share-location").tap()
         XCTAssertTrue(element("cardio-atlas-share-action").waitForExistence(timeout: 10))
 
         let ribbon = element("style-cardio-atlas-paceRibbon")
         XCTAssertTrue(ribbon.exists && ribbon.isEnabled)
-        ribbon.tap()
+        visibleAtlasShareControl("style-cardio-atlas-paceRibbon", direction: .down).tap()
         XCTAssertTrue(element("cardio-atlas-share-action").waitForExistence(timeout: 10))
+        _ = visibleAtlasShareControl("style-cardio-atlas-atlas", direction: .down)
         atlasScreenshot(named: "Cardio Atlas share Pace Ribbon")
 
-        element("style-cardio-atlas-signature").tap()
+        visibleAtlasShareControl("style-cardio-atlas-signature", direction: .down).tap()
         XCTAssertTrue(element("cardio-atlas-share-action").waitForExistence(timeout: 10))
+        _ = visibleAtlasShareControl("style-cardio-atlas-atlas", direction: .down)
         atlasScreenshot(named: "Cardio Atlas share Signature")
+        closeAtlasDestination()
     }
 
     func testIndoorPlacePickerCancelPreservesPlace() {
@@ -140,8 +148,9 @@ final class CardioAtlasLargeTextUITests: ActivityExerciseSeededUITestBaseCase {
         atlasScreenshot(named: "Cardio Atlas Korean large text detail")
         XCTAssertTrue(app.scrollToHittableElementIfNeeded("cardio-atlas-passport", maxSwipes: 10))
         element("cardio-atlas-passport").tap()
-        XCTAssertTrue(element("cardio-atlas-passport-detail").waitForExistence(timeout: 8))
+        assertAtlasDestinationVisible("cardio-atlas-passport-detail")
         atlasScreenshot(named: "Cardio Atlas Korean large text Passport")
+        closeAtlasDestination()
     }
 
     private func atlasScreenshot(named name: String) {
@@ -164,5 +173,43 @@ final class CardioAtlasLargeTextUITests: ActivityExerciseSeededUITestBaseCase {
 
     private func element(_ identifier: String) -> XCUIElement {
         app.descendants(matching: .any)[identifier].firstMatch
+    }
+}
+
+@MainActor
+private extension UITestBaseCase {
+    func assertAtlasDestinationVisible(_ identifier: String, file: StaticString = #filePath, line: UInt = #line) {
+        let destination = app.descendants(matching: .any)[identifier].firstMatch
+        let visible = XCTNSPredicateExpectation(
+            predicate: NSPredicate { _, _ in destination.exists && destination.isHittable },
+            object: destination
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [visible], timeout: 10), .completed, file: file, line: line)
+    }
+
+    func closeAtlasDestination(file: StaticString = #filePath, line: UInt = #line) {
+        let done = app.buttons["cardio-atlas-destination-close"].firstMatch
+        XCTAssertTrue(done.exists && done.isHittable, file: file, line: line)
+        done.tap()
+        assertAtlasDestinationVisible("exercise-session-detail-scroll", file: file, line: line)
+    }
+
+    func visibleAtlasShareControl(
+        _ identifier: String,
+        direction: ScrollDirection = .up,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) -> XCUIElement {
+        let control = app.descendants(matching: .any)[identifier].firstMatch
+        let scroll = app.descendants(matching: .any)["cardio-atlas-share-screen"].firstMatch
+        for _ in 0..<8 {
+            if control.exists && control.isHittable { return control }
+            switch direction {
+            case .up: scroll.swipeUp()
+            case .down: scroll.swipeDown()
+            }
+        }
+        XCTFail("Share control is not visible: \(identifier)", file: file, line: line)
+        return control
     }
 }

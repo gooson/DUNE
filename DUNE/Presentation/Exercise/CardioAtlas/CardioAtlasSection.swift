@@ -3,6 +3,20 @@ import SwiftData
 
 /// One extension point shared by local and HealthKit workout details.
 struct CardioAtlasSection: View {
+    private enum Destination: Identifiable {
+        case share
+        case journey(CardioAtlasProgress)
+        case passport(CardioAtlasProgress)
+
+        var id: String {
+            switch self {
+            case .share: "share"
+            case .journey: "journey"
+            case .passport: "passport"
+            }
+        }
+    }
+
     let session: CardioAtlasSession
     let localRecordID: UUID?
     let healthKitWorkoutID: String?
@@ -19,6 +33,7 @@ struct CardioAtlasSection: View {
     @State private var routeUnavailable = false
     @State private var historyUnavailable = false
     @State private var showPlacePicker = false
+    @State private var destination: Destination?
     @State private var displayLocation = WorkoutLocationPayload()
     @State private var preparedProgress: CardioAtlasProgress?
     @State private var mapRevision = UUID()
@@ -126,6 +141,41 @@ struct CardioAtlasSection: View {
         .sheet(isPresented: $showPlacePicker) {
             CardioAtlasPlacePicker(initialPlace: displayLocation.place, onSave: savePlace)
         }
+        .sheet(item: $destination) { destination in
+            // An inspector can route NavigationLinks into its presenting tab's stack.
+            // Keep Atlas destinations in their own visible modal navigation context.
+            NavigationStack {
+                destinationContent(destination)
+                    .toolbar {
+                        ToolbarItem(placement: .confirmationAction) {
+                            Button("Done") { self.destination = nil }
+                                .accessibilityIdentifier("cardio-atlas-destination-close")
+                        }
+                    }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func destinationContent(_ destination: Destination) -> some View {
+        switch destination {
+        case .share:
+            CardioAtlasShareView(
+                session: session,
+                location: displayLocation,
+                journeySummary: isLoading ? nil : preparedProgress.map { CardioAtlasFormatting.journey($0.journey) },
+                passportSummary: isLoading ? nil : preparedProgress.map { CardioAtlasFormatting.passport(count: $0.achievements.count) }
+            )
+        case .journey(let progress):
+            CardioAtlasJourneyView(
+                progress: progress,
+                distanceGoal: $distanceGoal,
+                durationGoal: $durationGoal,
+                activityType: session.activityType
+            )
+        case .passport(let progress):
+            CardioAtlasPassportView(progress: progress, activityType: session.activityType)
+        }
     }
 
     @ViewBuilder
@@ -162,13 +212,8 @@ struct CardioAtlasSection: View {
                 Label("Place", systemImage: "mappin.and.ellipse")
             }
             .accessibilityIdentifier("cardio-atlas-place")
-            NavigationLink {
-                CardioAtlasShareView(
-                    session: session,
-                    location: displayLocation,
-                    journeySummary: isLoading ? nil : preparedProgress.map { CardioAtlasFormatting.journey($0.journey) },
-                    passportSummary: isLoading ? nil : preparedProgress.map { CardioAtlasFormatting.passport(count: $0.achievements.count) }
-                )
+            Button {
+                destination = .share
             } label: {
                 Label("Share", systemImage: "square.and.arrow.up")
             }
@@ -181,13 +226,8 @@ struct CardioAtlasSection: View {
 
     private func progressLinks(_ progress: CardioAtlasProgress) -> some View {
         VStack(spacing: DS.Spacing.md) {
-            NavigationLink {
-                CardioAtlasJourneyView(
-                    progress: progress,
-                    distanceGoal: $distanceGoal,
-                    durationGoal: $durationGoal,
-                    activityType: session.activityType
-                )
+            Button {
+                destination = .journey(progress)
             } label: {
                 VStack(alignment: .leading, spacing: DS.Spacing.sm) {
                     HStack {
@@ -202,8 +242,8 @@ struct CardioAtlasSection: View {
             }
             .accessibilityIdentifier("cardio-atlas-journey")
             Divider()
-            NavigationLink {
-                CardioAtlasPassportView(progress: progress, activityType: session.activityType)
+            Button {
+                destination = .passport(progress)
             } label: {
                 HStack {
                     Label("Passport", systemImage: "medal")
