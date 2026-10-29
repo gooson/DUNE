@@ -58,3 +58,7 @@ Mac 잠금 해제 후 정확한 전용 Duo를 Device Hub에서 Open으로 전환
 ## 수동 확인
 
 Life → 이번 주 운동 업적에서 큰 완료 수와 메달을 확인한다. 운동 도전을 접었다 펼쳐 루틴 7분절·0회를 포함한 근력6항목·러닝 거리/남은 거리를 확인한다. 자동 연동 운동 목표가 있으면 더보기 → 이력을 열고 닫는다. 설정의 글씨를 최대로 키우면 메달이 숨겨지고 제목/근력 타일이 줄바꿈되는지 확인한다. 실제 수치는 해당 주의 운동과 등록한 자동 연동 목표에 따라 다르다.
+
+## 최신 main 통합 검증
+
+PR #855의 문자열 카탈로그 수동 추출/빌드 전후 guard를 충돌 없이 통합했다. `git diff e6550815 -- DUNE DUNETests DUNEUITests`는 비어 있고 Shared catalog를 `extractionState`만 제거해 비교한 JSON은 동일했다. 런타임 문자열/번역과 앱·테스트 Swift 코드는 그대로다. 새 `swift scripts/format-xcstrings.swift --check --check-manual`과 `python3 -B -m unittest scripts.tests.test_format_xcstrings`가 성공했고 관련 Python9개가 통과했다. [통합 검사 원본](catalog-integration.log)은 앱 전체 재빌드/회귀 성공을 의미하지 않는다. 앱 소스가 같고 카탈로그 차이는 메타데이터여서 기존 기기 검증을 중복 실행하지 않았다.

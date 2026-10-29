@@ -31,3 +31,11 @@
 최종 iOS 빌드 성공, 관련 단위 52/52, 최종 iPhone 3/3와 추가 보드 4/4, iPad 1/1, Duo 외부 1/1은 [실행 보고](README.md)의 보존 로그/receipt 범위다. 공통 실행 **31/34**의 Today 3건은 이전 기준 실행에도 실패했고 해당 앱/테스트 소스가 변경되지 않았다. 전체 회귀는 실행되지 않았으며 성공으로 표시하지 않는다.
 
 **필수 미완료:** Duo 내부 전환 CLI가 exit 0을 반환했지만 공식 readback의 활성 LCD는 닫힌 상태였고 Mac 잠금으로 GUI 전환도 차단됐다. Duo 내부 L01 새 테스트·원본 PNG·갤러리 출처가 확보되기 전에는 `/run`의 실제 화면 게이트를 통과시키거나 PR을 merge하지 않는다. Mac 잠금 해제 후 현재 worktree 전용 Duo에서 내부 활성 화면 readback, 해당 L01 테스트와 새 캡처, 디자인맵·manifest 갱신을 확인해야 한다.
+
+## Final delta addendum · Duo 내부 게이트 해소
+
+위 미완료 기록은 당시 판단으로 보존한다. Mac 잠금 해제 뒤 해당 전용 Duo `DB1B9B76-36A1-47DA-AFAD-1DD7C380F3CF`를 GUI Open으로 전환했다. 보존된 공식 `devicectl` 검사 전후의 활성 화면은 **LCD-1 active / LCD inactive**, 방향은 `landscapeRight`다. 정확한 `LifeFlowUITests/testHostCaptureWorkoutBoardLight` receipt는 **1/1 passed**, host audit는 8개 checkpoint·runner exit 0·cleanup error 없음이다. 최종 app-quality agent는 새 내부 화면의 요약, 근력 6항목, 러닝 및 출처 원본을 확인하고 feature finding **P1/P2/P3 = 0/0/0**을 유지했다.
+
+`e6550815` 이후 재검토에서 `DUNE/`, `DUNETests/`, `DUNEUITests/` 변경은 없다. 갤러리 manifest는 새 Duo 내부를 포함한 **52 원본(활성 40, 비활성 짝패널 12)**을 가리키며 pending 항목이 없다. 모든 manifest 파일 존재와 SHA-256 일치를 확인했고, 실제 화면 인덱스·README·검증 보고가 내부 완료 및 이전 CLI 실패를 구분해 기술한다. `git diff --check e6550815` 통과. 이후 `main` 통합으로 들어온 formatter/build guard 및 catalog의 extraction metadata는 별도 pipeline 검증 대상이며 이 보드 UI 판정에 새 앱 기능 변경을 만들지 않는다.
+
+**최종 보드 판정: PASS WITH NOTES, 병합을 막던 Duo 내부 화면 게이트는 해소.** 이전 Today 3건으로 broader selected 실행은 여전히 31/34이고 전체 회귀는 미실행이다. 이 addendum은 새 formatter/build guard 검증의 결과나 원격 PR merge 상태를 승인하지 않는다.
