@@ -9,7 +9,7 @@
 - [새 실제 원본 갤러리](../../design/full-redesign-map/review/workout-achievement-board-2026-10-29/index.html)
 - [해결책](../../solutions/general/2026-10-29-workout-achievement-board.md)
 - [코드 리뷰](review.md) · [최종 품질](final-quality.md) · [PR 리뷰](pr-review.md)
-- [/run 체크포인트·변경 확인 가이드](execution-summary.md) · [Draft PR #856](https://github.com/gooson/DUNE/pull/856)
+- [/run 체크포인트·변경 확인 가이드](execution-summary.md) · [PR #856](https://github.com/gooson/DUNE/pull/856)
 
 ## 검증 결과
 
@@ -22,7 +22,7 @@
 | 공통 smoke를 포함한 broader selected 실행 | **31/34**, 기존 Today3실패 | `ui-phone-rest.log.result.json`·원본로그, exit65 보존 |
 | iPad light | **1/1** | `ui-ipad.log.result.json`, d86210fc 일반 글씨 배치는 최종과 동일 |
 | Duo 외부 light | **1/1**, host8checkpoints 정상 | `ui-duo-closed.log.result.json`, 공식 active LCD + 새 AX/양쪽PNG |
-| Duo 내부 light | **대기** | CLI setter exit0이나 active LCD 유지. GUI는 Mac 잠금으로 차단 |
+| Duo 내부 light | **1/1**, host8checkpoints 정상 | `ui-duo-open.log.result.json`, GUI Open 후 공식 LCD-1 active/LCD inactive·landscapeRight·새 AX/양쪽PNG |
 | 문자열 | 포맷 검사 통과 | 새3개키 en/ko/ja, 기존 키 재사용 |
 
 전역 자동 UI planner는 seed/Shared catalog/project/docs 때문에 iOS/Watch full fallback을 출력했다. 실제 소비자 검색 결과 새 Board·색·키는 Life 전용이고 seeder는 DEBUG opt-in이다. 생성 프로젝트는 새 view/unit 참조만 추가한다. Watch 소비자가 없어 제외했다. 사용자 요청 없이 full 회귀를 확장하지 않는 `.codex/skill-compat.md`에 따라 관련 Life + 공통 smoke 합집합과 영향 L01 기기 캡처를 선택했다. 전체 회귀는 **미실행**이다.
@@ -46,6 +46,8 @@ Dashboard/Notifications/해당 테스트의 `git diff main...HEAD`는 비어 있
 3. routine caption에 큰 metric과 같은20pt 최소 높이를 요구하던 assertion이14.3pt caption을 잘못 실패시켰다. 큰 타일에만 최소 높이 검사를 적용하고2/2통과했다.
 4. 초기 MaxAX screenshot은 일부만 hittable이어도 캡처해 요약이 잘렸다. native를 보고 큰 글씨의 제목 폭과 그룹 세로 배치를 개선하고 viewport 정렬을 추가했다. 최종3/3통과 및 전체 요약/러닝 출처 PNG를 확인했다.
 5. Duo CLI open setter 성공만으로 펼침을 주장하지 않는다. 실제 active display를 읽고 GUI 대체 경로를 사용한다. 수치 hinge angle getter는 현재 SDK에서 지원되지 않아 측정했다고 보고하지 않는다.
+
+Mac 잠금 해제 후 정확한 전용 Duo를 Device Hub에서 Open으로 전환했다. 공식 검사 전후 readback 모두 LCD-1 active/LCD inactive, landscapeRight였다. 표준 DuoAudit의 관련1case·8host checkpoint·exit0을 확인했고 요약/근력6항목/러닝/출처 새 PNG를 부모와 품질 agent가 검토했다. 이전 CLI 전환 실패 기록은 갤러리 evidence에 별도로 보존한다. 갤러리의 총52원본은 활성40장+비활성 짝패널12장이며 과거 다른 작업 PNG를 새 캡처로 재사용하지 않았다.
 
 ## 출처와 제한
 

@@ -1,0 +1,14 @@
+{
+  "mode": "open",
+  "device": "DB1B9B76-36A1-47DA-AFAD-1DD7C380F3CF",
+  "sourceCommit": "7acb090dd7d28fb0aea8e1907211ceff15aa450e",
+  "setterStatus": 0,
+  "angleGetterStatus": 1,
+  "angleOutput": "Error: Unknown option '-d'\nUsage: devicectl device [--verbose] [--quiet] [--timeout <seconds>] [--json-output <path>] [--omit-deprecated-fields-in-json] [--log-output <path>] <subcommand>\n  See 'devicectl device --help' for more information.\nhinge: failed to read hinge angle\n",
+  "active": [
+    "LCD"
+  ],
+  "expected": [
+    "LCD-1"
+  ]
+}

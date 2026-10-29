@@ -571,6 +571,7 @@
       "screen": "L01",
       "label": "Duo closed · summary-light",
       "sourceCommit": "72365af1",
+      "capturedAtUnix": 1793232853.7947726,
       "originalTest": "LifeFlowUITests/testHostCaptureWorkoutBoardLight()",
       "testOutcome": "passed",
       "device": {
@@ -601,6 +602,7 @@
       "screen": "L01",
       "label": "Duo closed · summary-light",
       "sourceCommit": "72365af1",
+      "capturedAtUnix": 1793232854.3033786,
       "originalTest": "LifeFlowUITests/testHostCaptureWorkoutBoardLight()",
       "testOutcome": "passed",
       "device": {
@@ -631,6 +633,7 @@
       "screen": "L01",
       "label": "Duo closed · routine-light",
       "sourceCommit": "72365af1",
+      "capturedAtUnix": 1793232867.0584853,
       "originalTest": "LifeFlowUITests/testHostCaptureWorkoutBoardLight()",
       "testOutcome": "passed",
       "device": {
@@ -661,6 +664,7 @@
       "screen": "L01",
       "label": "Duo closed · routine-light",
       "sourceCommit": "72365af1",
+      "capturedAtUnix": 1793232866.5978713,
       "originalTest": "LifeFlowUITests/testHostCaptureWorkoutBoardLight()",
       "testOutcome": "passed",
       "device": {
@@ -691,6 +695,7 @@
       "screen": "L01",
       "label": "Duo closed · strength-light",
       "sourceCommit": "72365af1",
+      "capturedAtUnix": 1793232875.1771517,
       "originalTest": "LifeFlowUITests/testHostCaptureWorkoutBoardLight()",
       "testOutcome": "passed",
       "device": {
@@ -721,6 +726,7 @@
       "screen": "L01",
       "label": "Duo closed · strength-light",
       "sourceCommit": "72365af1",
+      "capturedAtUnix": 1793232874.629188,
       "originalTest": "LifeFlowUITests/testHostCaptureWorkoutBoardLight()",
       "testOutcome": "passed",
       "device": {
@@ -751,6 +757,7 @@
       "screen": "L01",
       "label": "Duo closed · strength-end-light",
       "sourceCommit": "72365af1",
+      "capturedAtUnix": 1793232884.5062912,
       "originalTest": "LifeFlowUITests/testHostCaptureWorkoutBoardLight()",
       "testOutcome": "passed",
       "device": {
@@ -781,6 +788,7 @@
       "screen": "L01",
       "label": "Duo closed · strength-end-light",
       "sourceCommit": "72365af1",
+      "capturedAtUnix": 1793232885.0434036,
       "originalTest": "LifeFlowUITests/testHostCaptureWorkoutBoardLight()",
       "testOutcome": "passed",
       "device": {
@@ -811,6 +819,7 @@
       "screen": "L01",
       "label": "Duo closed · running-light",
       "sourceCommit": "72365af1",
+      "capturedAtUnix": 1793232894.2893317,
       "originalTest": "LifeFlowUITests/testHostCaptureWorkoutBoardLight()",
       "testOutcome": "passed",
       "device": {
@@ -841,6 +850,7 @@
       "screen": "L01",
       "label": "Duo closed · running-light",
       "sourceCommit": "72365af1",
+      "capturedAtUnix": 1793232894.7357306,
       "originalTest": "LifeFlowUITests/testHostCaptureWorkoutBoardLight()",
       "testOutcome": "passed",
       "device": {
@@ -871,6 +881,7 @@
       "screen": "L01",
       "label": "Duo closed · running-end-light",
       "sourceCommit": "72365af1",
+      "capturedAtUnix": 1793232902.8068237,
       "originalTest": "LifeFlowUITests/testHostCaptureWorkoutBoardLight()",
       "testOutcome": "passed",
       "device": {
@@ -901,6 +912,7 @@
       "screen": "L01",
       "label": "Duo closed · running-end-light",
       "sourceCommit": "72365af1",
+      "capturedAtUnix": 1793232902.1726556,
       "originalTest": "LifeFlowUITests/testHostCaptureWorkoutBoardLight()",
       "testOutcome": "passed",
       "device": {
@@ -925,9 +937,378 @@
         "valid_evidence": true,
         "error": null
       }
+    },
+    {
+      "file": "images/duo-open-summary-light-2853x2007.png",
+      "screen": "L01",
+      "label": "Duo open · summary-light",
+      "sourceCommit": "e6550815",
+      "capturedAtUnix": 1793233801.2191112,
+      "originalTest": "LifeFlowUITests/testHostCaptureWorkoutBoardLight()",
+      "testOutcome": "passed",
+      "device": {
+        "udid": "DB1B9B76-36A1-47DA-AFAD-1DD7C380F3CF",
+        "activeDisplays": [
+          "LCD-1"
+        ],
+        "display": "LCD-1",
+        "displayActive": true
+      },
+      "originalAttachment": ".codex-checks/workout-board/duo-open/002-2007x2853.png",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "29620081d935cfc5c1102d56195355d4357436c7a97f45014a7f67c2527e303c",
+      "checkpoint": {
+        "sequence": 2,
+        "action": "DUNE_VISUAL_AUDIT_READY L01-Life-workout-summary-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793233828.136973",
+        "elapsed_seconds": 9.707,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      }
+    },
+    {
+      "file": "images/duo-open-summary-light-2034x1398.png",
+      "screen": "L01",
+      "label": "Duo open · summary-light",
+      "sourceCommit": "e6550815",
+      "capturedAtUnix": 1793233807.4280639,
+      "originalTest": "LifeFlowUITests/testHostCaptureWorkoutBoardLight()",
+      "testOutcome": "passed",
+      "device": {
+        "udid": "DB1B9B76-36A1-47DA-AFAD-1DD7C380F3CF",
+        "activeDisplays": [
+          "LCD-1"
+        ],
+        "display": "LCD",
+        "displayActive": false
+      },
+      "originalAttachment": ".codex-checks/workout-board/duo-open/002-1398x2034.png",
+      "pixels": [
+        2034,
+        1398
+      ],
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+      "checkpoint": {
+        "sequence": 2,
+        "action": "DUNE_VISUAL_AUDIT_READY L01-Life-workout-summary-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793233828.136973",
+        "elapsed_seconds": 9.707,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      }
+    },
+    {
+      "file": "images/duo-open-routine-light-2034x1398.png",
+      "screen": "L01",
+      "label": "Duo open · routine-light",
+      "sourceCommit": "e6550815",
+      "capturedAtUnix": 1793233819.9995883,
+      "originalTest": "LifeFlowUITests/testHostCaptureWorkoutBoardLight()",
+      "testOutcome": "passed",
+      "device": {
+        "udid": "DB1B9B76-36A1-47DA-AFAD-1DD7C380F3CF",
+        "activeDisplays": [
+          "LCD-1"
+        ],
+        "display": "LCD",
+        "displayActive": false
+      },
+      "originalAttachment": ".codex-checks/workout-board/duo-open/003-1398x2034.png",
+      "pixels": [
+        2034,
+        1398
+      ],
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+      "checkpoint": {
+        "sequence": 3,
+        "action": "DUNE_VISUAL_AUDIT_READY L01-Life-workout-routine-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793233847.270599",
+        "elapsed_seconds": 2.742,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      }
+    },
+    {
+      "file": "images/duo-open-routine-light-2853x2007.png",
+      "screen": "L01",
+      "label": "Duo open · routine-light",
+      "sourceCommit": "e6550815",
+      "capturedAtUnix": 1793233818.429158,
+      "originalTest": "LifeFlowUITests/testHostCaptureWorkoutBoardLight()",
+      "testOutcome": "passed",
+      "device": {
+        "udid": "DB1B9B76-36A1-47DA-AFAD-1DD7C380F3CF",
+        "activeDisplays": [
+          "LCD-1"
+        ],
+        "display": "LCD-1",
+        "displayActive": true
+      },
+      "originalAttachment": ".codex-checks/workout-board/duo-open/003-2007x2853.png",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "a24ce09966b91f253c0d1cf298b8048d6aff3c5ba77931ff67bc06149503b05a",
+      "checkpoint": {
+        "sequence": 3,
+        "action": "DUNE_VISUAL_AUDIT_READY L01-Life-workout-routine-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793233847.270599",
+        "elapsed_seconds": 2.742,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      }
+    },
+    {
+      "file": "images/duo-open-strength-light-2034x1398.png",
+      "screen": "L01",
+      "label": "Duo open · strength-light",
+      "sourceCommit": "e6550815",
+      "capturedAtUnix": 1793233829.732953,
+      "originalTest": "LifeFlowUITests/testHostCaptureWorkoutBoardLight()",
+      "testOutcome": "passed",
+      "device": {
+        "udid": "DB1B9B76-36A1-47DA-AFAD-1DD7C380F3CF",
+        "activeDisplays": [
+          "LCD-1"
+        ],
+        "display": "LCD",
+        "displayActive": false
+      },
+      "originalAttachment": ".codex-checks/workout-board/duo-open/004-1398x2034.png",
+      "pixels": [
+        2034,
+        1398
+      ],
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+      "checkpoint": {
+        "sequence": 4,
+        "action": "DUNE_VISUAL_AUDIT_READY L01-Life-workout-strength-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793233856.9611468",
+        "elapsed_seconds": 2.784,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      }
+    },
+    {
+      "file": "images/duo-open-strength-light-2853x2007.png",
+      "screen": "L01",
+      "label": "Duo open · strength-light",
+      "sourceCommit": "e6550815",
+      "capturedAtUnix": 1793233828.153361,
+      "originalTest": "LifeFlowUITests/testHostCaptureWorkoutBoardLight()",
+      "testOutcome": "passed",
+      "device": {
+        "udid": "DB1B9B76-36A1-47DA-AFAD-1DD7C380F3CF",
+        "activeDisplays": [
+          "LCD-1"
+        ],
+        "display": "LCD-1",
+        "displayActive": true
+      },
+      "originalAttachment": ".codex-checks/workout-board/duo-open/004-2007x2853.png",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "6628b467677bda3f343b6cced06b67b649635092effc4f4204b8e1f7f56e284e",
+      "checkpoint": {
+        "sequence": 4,
+        "action": "DUNE_VISUAL_AUDIT_READY L01-Life-workout-strength-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793233856.9611468",
+        "elapsed_seconds": 2.784,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      }
+    },
+    {
+      "file": "images/duo-open-strength-end-light-2853x2007.png",
+      "screen": "L01",
+      "label": "Duo open · strength-end-light",
+      "sourceCommit": "e6550815",
+      "capturedAtUnix": 1793233837.924997,
+      "originalTest": "LifeFlowUITests/testHostCaptureWorkoutBoardLight()",
+      "testOutcome": "passed",
+      "device": {
+        "udid": "DB1B9B76-36A1-47DA-AFAD-1DD7C380F3CF",
+        "activeDisplays": [
+          "LCD-1"
+        ],
+        "display": "LCD-1",
+        "displayActive": true
+      },
+      "originalAttachment": ".codex-checks/workout-board/duo-open/005-2007x2853.png",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "5986915f1c9a7ec41dbad4676747d332c1582bab4a843f415661c9e2cc7eac8a",
+      "checkpoint": {
+        "sequence": 5,
+        "action": "DUNE_VISUAL_AUDIT_READY L01-Life-workout-strength-end-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793233866.947017",
+        "elapsed_seconds": 2.612,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      }
+    },
+    {
+      "file": "images/duo-open-strength-end-light-2034x1398.png",
+      "screen": "L01",
+      "label": "Duo open · strength-end-light",
+      "sourceCommit": "e6550815",
+      "capturedAtUnix": 1793233839.4852595,
+      "originalTest": "LifeFlowUITests/testHostCaptureWorkoutBoardLight()",
+      "testOutcome": "passed",
+      "device": {
+        "udid": "DB1B9B76-36A1-47DA-AFAD-1DD7C380F3CF",
+        "activeDisplays": [
+          "LCD-1"
+        ],
+        "display": "LCD",
+        "displayActive": false
+      },
+      "originalAttachment": ".codex-checks/workout-board/duo-open/005-1398x2034.png",
+      "pixels": [
+        2034,
+        1398
+      ],
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+      "checkpoint": {
+        "sequence": 5,
+        "action": "DUNE_VISUAL_AUDIT_READY L01-Life-workout-strength-end-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793233866.947017",
+        "elapsed_seconds": 2.612,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      }
+    },
+    {
+      "file": "images/duo-open-running-light-2853x2007.png",
+      "screen": "L01",
+      "label": "Duo open · running-light",
+      "sourceCommit": "e6550815",
+      "capturedAtUnix": 1793233847.6382987,
+      "originalTest": "LifeFlowUITests/testHostCaptureWorkoutBoardLight()",
+      "testOutcome": "passed",
+      "device": {
+        "udid": "DB1B9B76-36A1-47DA-AFAD-1DD7C380F3CF",
+        "activeDisplays": [
+          "LCD-1"
+        ],
+        "display": "LCD-1",
+        "displayActive": true
+      },
+      "originalAttachment": ".codex-checks/workout-board/duo-open/006-2007x2853.png",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "3f70b370fd2068cd20a5ec352e75d72a61c15cb07f8d5f8f0cdbb46dfa894bcc",
+      "checkpoint": {
+        "sequence": 6,
+        "action": "DUNE_VISUAL_AUDIT_READY L01-Life-workout-running-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793233876.5731602",
+        "elapsed_seconds": 2.649,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      }
+    },
+    {
+      "file": "images/duo-open-running-light-2034x1398.png",
+      "screen": "L01",
+      "label": "Duo open · running-light",
+      "sourceCommit": "e6550815",
+      "capturedAtUnix": 1793233849.2090018,
+      "originalTest": "LifeFlowUITests/testHostCaptureWorkoutBoardLight()",
+      "testOutcome": "passed",
+      "device": {
+        "udid": "DB1B9B76-36A1-47DA-AFAD-1DD7C380F3CF",
+        "activeDisplays": [
+          "LCD-1"
+        ],
+        "display": "LCD",
+        "displayActive": false
+      },
+      "originalAttachment": ".codex-checks/workout-board/duo-open/006-1398x2034.png",
+      "pixels": [
+        2034,
+        1398
+      ],
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+      "checkpoint": {
+        "sequence": 6,
+        "action": "DUNE_VISUAL_AUDIT_READY L01-Life-workout-running-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793233876.5731602",
+        "elapsed_seconds": 2.649,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      }
+    },
+    {
+      "file": "images/duo-open-running-end-light-2034x1398.png",
+      "screen": "L01",
+      "label": "Duo open · running-end-light",
+      "sourceCommit": "e6550815",
+      "capturedAtUnix": 1793233856.7197497,
+      "originalTest": "LifeFlowUITests/testHostCaptureWorkoutBoardLight()",
+      "testOutcome": "passed",
+      "device": {
+        "udid": "DB1B9B76-36A1-47DA-AFAD-1DD7C380F3CF",
+        "activeDisplays": [
+          "LCD-1"
+        ],
+        "display": "LCD",
+        "displayActive": false
+      },
+      "originalAttachment": ".codex-checks/workout-board/duo-open/007-1398x2034.png",
+      "pixels": [
+        2034,
+        1398
+      ],
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+      "checkpoint": {
+        "sequence": 7,
+        "action": "DUNE_VISUAL_AUDIT_READY L01-Life-workout-running-end-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793233884.0017629",
+        "elapsed_seconds": 2.73,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      }
+    },
+    {
+      "file": "images/duo-open-running-end-light-2853x2007.png",
+      "screen": "L01",
+      "label": "Duo open · running-end-light",
+      "sourceCommit": "e6550815",
+      "capturedAtUnix": 1793233855.0076125,
+      "originalTest": "LifeFlowUITests/testHostCaptureWorkoutBoardLight()",
+      "testOutcome": "passed",
+      "device": {
+        "udid": "DB1B9B76-36A1-47DA-AFAD-1DD7C380F3CF",
+        "activeDisplays": [
+          "LCD-1"
+        ],
+        "display": "LCD-1",
+        "displayActive": true
+      },
+      "originalAttachment": ".codex-checks/workout-board/duo-open/007-2007x2853.png",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "17eb6ddbddcb54c2fc89053bae0dce9cd8bc2d50512f098973363ec24c5a3474",
+      "checkpoint": {
+        "sequence": 7,
+        "action": "DUNE_VISUAL_AUDIT_READY L01-Life-workout-running-end-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793233884.0017629",
+        "elapsed_seconds": 2.73,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      }
     }
-  ],
-  "pending": [
-    "Duo open: CLI setter did not change active LCD; Mac locked"
   ]
 }
