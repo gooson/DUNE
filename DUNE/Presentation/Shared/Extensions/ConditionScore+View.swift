@@ -42,3 +42,11 @@ extension ConditionScoreDetail {
         return rhrAdjustment
     }
 }
+
+extension ScoreContribution {
+    /// A baseline-building or fallback RHR sample has no applied scoring impact.
+    func conditionImpactForDisplay(detail: ConditionScoreDetail?) -> Impact? {
+        if factor == .rhr, detail?.rhrAdjustmentForDisplay == nil { return nil }
+        return impact
+    }
+}

@@ -133,8 +133,11 @@ private struct ConditionContributionTile: View {
     private var formattedValue: String {
         value.map { "\($0.formattedWithSeparator(fractionDigits: factor == .hrv ? 1 : 0)) \(unit)" } ?? "—"
     }
+    private var displayImpact: ScoreContribution.Impact? {
+        contribution?.conditionImpactForDisplay(detail: detail)
+    }
     private var impactColor: Color {
-        switch contribution?.impact {
+        switch displayImpact {
         case .positive: DS.Color.positive
         case .neutral: DS.Color.caution
         case .negative: DS.Color.negative
@@ -157,7 +160,7 @@ private struct ConditionContributionTile: View {
                 Text(formattedValue)
                     .font(.title3.bold().monospacedDigit())
                     .accessibilityIdentifier("condition-contribution-value-\(factor.rawValue)")
-                Text(contribution?.impact.accessibilityName ?? String(localized: "Impact unavailable"))
+                Text(displayImpact?.accessibilityName ?? String(localized: "Impact unavailable"))
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(impactColor)
                     .accessibilityIdentifier("condition-contribution-impact-\(factor.rawValue)")
