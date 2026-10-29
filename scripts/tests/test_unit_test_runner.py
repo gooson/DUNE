@@ -12,8 +12,8 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
 RUNNER = ROOT / "scripts/test-unit.sh"
-IOS = "DUNETests/ConditionScoreTests"
-WATCH = "DUNEWatchTests/WatchScoreTests"
+IOS = "DUNETests/CalculateConditionScoreUseCaseTests"
+WATCH = "DUNEWatchTests/WatchRPEEstimatorTests"
 
 
 def option_values(command: list[str], flag: str) -> list[str]:
@@ -37,12 +37,18 @@ class UnitRunnerTests(unittest.TestCase):
         self.assertEqual([option_values(command, "-only-testing") for command in commands],
                          [["DUNETests"], ["DUNEWatchTests"]])
 
+    def test_nested_ios_test_source_is_selectable(self) -> None:
+        result, commands = self.dry_run("--only-testing", "DUNETests/PredictSleepDebtRecoveryUseCaseTests")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(option_values(commands[0], "-only-testing"),
+                         ["DUNETests/PredictSleepDebtRecoveryUseCaseTests"])
+
     def test_repeated_selectors_route_to_their_target(self) -> None:
-        result, commands = self.dry_run("--only-testing", IOS, "--only-testing", IOS + "/score",
+        result, commands = self.dry_run("--only-testing", IOS, "--only-testing", IOS + "/scoreClamped",
                                         "--only-testing", WATCH)
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual([option_values(command, "-only-testing") for command in commands],
-                         [[IOS, IOS + "/score"], [WATCH]])
+                         [[IOS, IOS + "/scoreClamped"], [WATCH]])
 
     def test_single_target_selector_skips_other_suite(self) -> None:
         for mode, selector, scheme in (("--ios-only", IOS, "DUNETests"),
@@ -59,6 +65,9 @@ class UnitRunnerTests(unittest.TestCase):
                      ("--only-testing", "--ios-only"),
                      ("--only-testing", "DUNETests/Full/ConditionScoreTests/extra"),
                      ("--only-testing", "DUNETests/Bad-Class"),
+                     ("--only-testing", "DUNETests/UnknownSuite"),
+                     ("--only-testing", IOS + "/unknownMethod"),
+                     ("--only-testing", "DUNEWatchTests/RunningFeedbackSettingsTests/targetAlert"),
                      ("--watch-only", "--only-testing", IOS),
                      ("--ios-only", "--only-testing", WATCH),
                      ("--ios-only", "--watch-only")):
@@ -109,6 +118,13 @@ class UnitRunnerTests(unittest.TestCase):
                              [[IOS], [WATCH]])
             self.assertTrue((path / "unit test.log").exists())
             self.assertTrue((path / "unit test-watch.log").exists())
+
+    def test_mixed_valid_and_unknown_selector_does_not_launch(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            result, commands = self.fake_run(Path(directory), "--only-testing", IOS,
+                                             "--only-testing", "DUNETests/UnknownSuite")
+            self.assertEqual(result.returncode, 2)
+            self.assertEqual(commands, [])
 
     def test_invalid_selector_does_not_launch_fake_xcodebuild(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

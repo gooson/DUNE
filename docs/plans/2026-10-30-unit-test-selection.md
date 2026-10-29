@@ -1,7 +1,7 @@
 ---
 topic: Unit test runner selection
 date: 2026-10-30
-status: approved
+status: implemented
 confidence: high
 related_solutions:
   - docs/solutions/testing/2026-09-27-simulator-test-serialization.md
@@ -24,7 +24,7 @@ The standard unit runner always launches every iOS test before a Watch run. Scre
 
 ## Approach
 
-Parse and validate selectors before side effects, then partition them by target. A focused invocation runs only targets that received selectors. Add dry-run command output for isolated argv checks and use the existing summary patterns for positive-count verification.
+Parse and validate selector syntax and source declarations before side effects, then partition them by target. A focused invocation runs only targets that received selectors. Add dry-run command output for isolated argv checks and use the existing summary patterns for positive-count verification.
 
 ### Alternative Approaches Considered
 
@@ -40,6 +40,7 @@ Parse and validate selectors before side effects, then partition them by target.
 |---|---|---|
 | `scripts/test-unit.sh` | Modify | Parse, validate, route selectors and dry-run commands |
 | `scripts/tests/test_unit_test_runner.py` | Add | Mocked CLI argv and error-path tests |
+| `scripts/lib/validate-unit-test-selectors.py` | Add | Reject unknown suites and methods before launch |
 | `docs/solutions/testing/2026-10-30-unit-test-selection.md` | Add | Record result and usage |
 
 ## Implementation Steps

@@ -129,6 +129,10 @@ for selector in ${ONLY_TESTING[@]+"${ONLY_TESTING[@]}"}; do
     esac
 done
 
+if [[ ${#ONLY_TESTING[@]} -gt 0 ]]; then
+    python3 "$ROOT_DIR/scripts/lib/validate-unit-test-selectors.py" "${ONLY_TESTING[@]}"
+fi
+
 RUN_IOS=0
 RUN_WATCH=0
 if [[ ${#ONLY_TESTING[@]} -eq 0 ]]; then
