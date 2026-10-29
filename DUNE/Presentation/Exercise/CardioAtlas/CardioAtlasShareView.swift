@@ -25,6 +25,7 @@ struct CardioAtlasShareView: View {
     @State private var imageUnavailable = false
     @State private var snapshotter: MKMapSnapshotter?
     @State private var renderID = UUID()
+    @State private var readyRenderKey: String?
 
     private var publishedLocation: WorkoutLocationPayload {
         location.shareLocation(showPlace: showPlace, trimDistanceMeters: trimEnds ? 300 : 0)
@@ -44,7 +45,12 @@ struct CardioAtlasShareView: View {
     }
 
     private var renderKey: String {
-        "\(style.rawValue)-\(showPlace)-\(trimEnds)-\(includeJourney)-\(includePassport)-\(location.hashValue)-\(session.id)-\(colorScheme)-\(locale.identifier)-\(dynamicTypeSize)-\(theme)"
+        [style.rawValue, String(showPlace), String(trimEnds), String(includeJourney), String(includePassport),
+         String(location.hashValue), session.id, session.activityType.rawValue,
+         String(session.date.timeIntervalSinceReferenceDate), String(session.duration),
+         session.distanceMeters.map { String($0) } ?? "", String(describing: session.isIndoor),
+         journeySummary ?? "", passportSummary ?? "", String(describing: colorScheme),
+         locale.identifier, String(describing: dynamicTypeSize), String(describing: theme)].joined(separator: "|")
     }
 
     var body: some View {
@@ -56,13 +62,14 @@ struct CardioAtlasShareView: View {
                     session: session,
                     location: publishedLocation,
                     style: style,
-                    mapImage: mapImage,
+                    mapImage: readyRenderKey == renderKey ? mapImage : nil,
                     snapshotUnavailable: snapshotUnavailable,
                     locationStatus: locationStatus,
                     journeySummary: includeJourney ? journeySummary : nil,
                     passportSummary: includePassport ? passportSummary : nil
                 )
                 .frame(maxWidth: 410)
+                .accessibilityElement(children: .contain)
                 .accessibilityIdentifier("cardio-atlas-share-preview")
 
                 VStack(alignment: .leading, spacing: DS.Spacing.md) {
@@ -102,7 +109,7 @@ struct CardioAtlasShareView: View {
                         .disabled(isRendering)
                         .accessibilityIdentifier("cardio-atlas-share-retry-image")
                 }
-                if let shareImage {
+                if let shareImage, readyRenderKey == renderKey {
                     ShareLink(
                         item: Image(uiImage: shareImage),
                         preview: SharePreview(session.activityType.displayName, image: Image(uiImage: shareImage))
@@ -152,6 +159,8 @@ struct CardioAtlasShareView: View {
 
     @MainActor
     private func renderCard() async {
+        let expectedKey = renderKey
+        readyRenderKey = nil
         snapshotter?.cancel()
         snapshotter = nil
         shareImage = nil
@@ -215,6 +224,7 @@ struct CardioAtlasShareView: View {
         guard !Task.isCancelled, renderID == expectedID else { return }
         if let image = renderer.uiImage {
             shareImage = image
+            readyRenderKey = expectedKey
         } else {
             imageUnavailable = true
         }
@@ -325,6 +335,8 @@ struct CardioAtlasShareCard: View {
                     .frame(height: 250)
                     .clipped()
                     .clipShape(RoundedRectangle(cornerRadius: DS.Radius.sm))
+                    .accessibilityLabel("Shared workout map")
+                    .accessibilityIdentifier("cardio-atlas-share-map-image")
             } else if snapshotUnavailable {
                 Label("Map could not be loaded", systemImage: "wifi.exclamationmark")
                     .font(.caption)

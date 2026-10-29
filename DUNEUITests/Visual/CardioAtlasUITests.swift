@@ -3,24 +3,9 @@
 /// Native screenshots use the opt-in synthetic route and place fixtures.
 @MainActor
 final class CardioAtlasUITests: ActivityExerciseSeededUITestBaseCase {
+    override var initialTabSelectionArgument: String? { "activity" }
     override var additionalLaunchArguments: [String] {
         ["--ui-cardio-atlas-fixture", "-morningBriefingDisabled", "YES"]
-    }
-
-    func testKoreanLargeTextDetailAndPassport() {
-        var configuration = launchConfiguration
-        configuration.additionalArguments += [
-            "-AppleLanguages", "(ko)", "-AppleLocale", "ko_KR",
-            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
-        ]
-        launchApp(with: configuration)
-        openRecord("running")
-        XCTAssertTrue(element("cardio-atlas-section").waitForExistence(timeout: 10))
-        addScreenshotAttachment(named: "Cardio Atlas Korean large text detail")
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded("cardio-atlas-passport", maxSwipes: 10))
-        element("cardio-atlas-passport").tap()
-        XCTAssertTrue(element("cardio-atlas-passport-detail").waitForExistence(timeout: 8))
-        addScreenshotAttachment(named: "Cardio Atlas Korean large text Passport")
     }
 
     func testRecordedRouteDetailAndProgress() {
@@ -36,7 +21,16 @@ final class CardioAtlasUITests: ActivityExerciseSeededUITestBaseCase {
     }
 
     func testImportedCardioDetailPreservesAnalysis() {
-        openRecord("ui-test-activity-workout-running", healthKit: true)
+        navigateToDashboard()
+        XCTAssertTrue(element(AXID.dashboardHeroCondition).waitForExistence(timeout: 12))
+        let notifications = element(AXID.dashboardToolbarNotifications)
+        XCTAssertTrue(notifications.waitForExistence(timeout: 8))
+        notifications.tap()
+        XCTAssertTrue(element(AXID.notificationHubScreen).waitForExistence(timeout: 8))
+        let row = element(AXID.notificationWorkoutRow("ui-test-activity-workout-running"))
+        XCTAssertTrue(row.waitForExistence(timeout: 8))
+        row.tap()
+        XCTAssertTrue(element("healthkit-workout-detail-screen").waitForExistence(timeout: 10))
         XCTAssertTrue(element("cardio-atlas-section").waitForExistence(timeout: 10))
         XCTAssertTrue(element("healthkit-workout-edit-title").exists)
         addScreenshotAttachment(named: "Cardio Atlas imported HealthKit detail")
@@ -66,6 +60,14 @@ final class CardioAtlasUITests: ActivityExerciseSeededUITestBaseCase {
         XCTAssertTrue(element("cardio-atlas-share-trim").exists)
         XCTAssertTrue(element("cardio-atlas-share-action").waitForExistence(timeout: 10))
         addScreenshotAttachment(named: "Cardio Atlas share Atlas route")
+
+        location.tap()
+        XCTAssertEqual(location.value as? String, "0")
+        XCTAssertTrue(element("cardio-atlas-share-map-image").waitForNonExistence(timeout: 5))
+        XCTAssertTrue(element("cardio-atlas-share-action").waitForExistence(timeout: 10))
+        addScreenshotAttachment(named: "Cardio Atlas location removed from shared image")
+        location.tap()
+        XCTAssertTrue(element("cardio-atlas-share-action").waitForExistence(timeout: 10))
 
         let ribbon = element("style-cardio-atlas-paceRibbon")
         XCTAssertTrue(ribbon.exists && ribbon.isEnabled)
@@ -98,7 +100,7 @@ final class CardioAtlasUITests: ActivityExerciseSeededUITestBaseCase {
         addScreenshotAttachment(named: "Cardio Atlas location not recorded")
     }
 
-    private func openRecord(_ definitionID: String, healthKit: Bool = false) {
+    private func openRecord(_ definitionID: String) {
         navigateToActivity()
         XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.activityRecentSeeAll, maxSwipes: 20))
         app.buttons[AXID.activityRecentSeeAll].firstMatch.tap()
@@ -106,8 +108,44 @@ final class CardioAtlasUITests: ActivityExerciseSeededUITestBaseCase {
         let rowID = "exercise-row-\(definitionID)"
         XCTAssertTrue(app.scrollToHittableElementIfNeeded(rowID, maxSwipes: 8))
         element(rowID).tap()
-        let detailID = healthKit ? "healthkit-workout-detail-screen" : "exercise-session-detail-scroll"
-        XCTAssertTrue(element(detailID).waitForExistence(timeout: 8))
+        XCTAssertTrue(element("exercise-session-detail-scroll").waitForExistence(timeout: 8))
+    }
+
+    private func element(_ identifier: String) -> XCUIElement {
+        app.descendants(matching: .any)[identifier].firstMatch
+    }
+}
+
+
+/// Launch once with large text: avoids a second app installation/reset during setup.
+@MainActor
+final class CardioAtlasLargeTextUITests: ActivityExerciseSeededUITestBaseCase {
+    override var initialTabSelectionArgument: String? { "activity" }
+    override var additionalLaunchArguments: [String] {
+        ["--ui-cardio-atlas-fixture", "-morningBriefingDisabled", "YES",
+         "-AppleLanguages", "(ko)", "-AppleLocale", "ko_KR",
+         "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"]
+    }
+
+    func testKoreanLargeTextDetailAndPassport() {
+        openRecord("running")
+        XCTAssertTrue(element("cardio-atlas-section").waitForExistence(timeout: 10))
+        addScreenshotAttachment(named: "Cardio Atlas Korean large text detail")
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("cardio-atlas-passport", maxSwipes: 10))
+        element("cardio-atlas-passport").tap()
+        XCTAssertTrue(element("cardio-atlas-passport-detail").waitForExistence(timeout: 8))
+        addScreenshotAttachment(named: "Cardio Atlas Korean large text Passport")
+    }
+
+    private func openRecord(_ definitionID: String) {
+        navigateToActivity()
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.activityRecentSeeAll, maxSwipes: 20))
+        app.buttons[AXID.activityRecentSeeAll].firstMatch.tap()
+        XCTAssertTrue(element(AXID.exerciseViewScreen).waitForExistence(timeout: 10))
+        let rowID = "exercise-row-\(definitionID)"
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(rowID, maxSwipes: 8))
+        element(rowID).tap()
+        XCTAssertTrue(element("exercise-session-detail-scroll").waitForExistence(timeout: 8))
     }
 
     private func element(_ identifier: String) -> XCUIElement {

@@ -116,6 +116,7 @@ struct CardioAtlasSection: View {
         }
         .padding(DS.Spacing.lg)
         .background(.thinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.lg))
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier("cardio-atlas-section")
         .onChange(of: historyInputs, initial: true) { prepareProgress() }
         .onChange(of: locationInputs, initial: true) { prepareLocation() }

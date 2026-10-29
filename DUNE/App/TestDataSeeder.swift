@@ -131,7 +131,7 @@ enum TestDataSeeder {
             activityType: .running,
             duration: 35 * 60,
             calories: 420,
-            distance: 6.2,
+            distance: 6_200,
             date: date,
             isFromThisApp: false,
             heartRateAvg: 148,
@@ -476,23 +476,35 @@ enum TestDataSeeder {
     @MainActor
     private static func seedCardioAtlasFixtures(into context: ModelContext) {
         let now = Date()
+        let start = now.addingTimeInterval(-1_800)
         let course: [(Double, Double)] = [
             (37.5465, 127.0415), (37.54875, 127.0415), (37.5510, 127.0415),
             (37.5510, 127.0443), (37.5510, 127.0471),
             (37.54875, 127.0471), (37.5465, 127.0471),
             (37.5465, 127.0443), (37.5465, 127.0415)
         ]
-        let route = course.enumerated().compactMap { index, coordinate in
-            WorkoutRoutePoint(
-                latitude: coordinate.0,
-                longitude: coordinate.1,
-                timestamp: now.addingTimeInterval(Double(index * 150 - 1_500)),
-                startsNewSegment: index == 5
-            )
+        // Realistic sampling cadence: sparse corner-only points would correctly be split
+        // into isolated segments by the production gap filter and could not test a route.
+        var route: [WorkoutRoutePoint] = []
+        for index in 0...160 {
+            let leg = min(index / 20, course.count - 2)
+            let fraction = Double(index - leg * 20) / 20
+            let from = course[leg]
+            let to = course[leg + 1]
+            let elapsed = Double(index * 8 + (index >= 81 ? 60 : 0))
+            if let point = WorkoutRoutePoint(
+                latitude: from.0 + (to.0 - from.0) * fraction,
+                longitude: from.1 + (to.1 - from.1) * fraction,
+                timestamp: start.addingTimeInterval(elapsed),
+                horizontalAccuracy: 8,
+                startsNewSegment: index == 0 || index == 81
+            ) {
+                route.append(point)
+            }
         }
         let run = ExerciseRecord(
-            date: now.addingTimeInterval(-300), exerciseType: "Atlas Route Run",
-            duration: 1_350, calories: 210, distance: 2.0,
+            date: start, exerciseType: "Atlas Route Run",
+            duration: 1_280, calories: 210, distance: 2.0,
             exerciseDefinitionID: "running"
         )
         context.insert(run)

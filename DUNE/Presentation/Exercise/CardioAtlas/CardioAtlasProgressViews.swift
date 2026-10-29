@@ -93,6 +93,7 @@ struct CardioAtlasJourneyView: View {
         .background { DetailWaveBackground() }
         .navigationTitle("Journey")
         .navigationBarTitleDisplayMode(.inline)
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier("cardio-atlas-journey-detail")
     }
 }
@@ -154,6 +155,7 @@ struct CardioAtlasPassportView: View {
         .background { DetailWaveBackground() }
         .navigationTitle("Passport")
         .navigationBarTitleDisplayMode(.inline)
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier("cardio-atlas-passport-detail")
     }
 }

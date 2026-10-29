@@ -20,7 +20,7 @@ struct CardioAtlasMapView: View {
     }
 
     var body: some View {
-        Group {
+        VStack(spacing: 0) {
             if let coordinate {
                 Map(initialPosition: .region(CardioAtlasRouteGeometry.region(for: segments, fallback: coordinate))) {
                     ForEach(segments.indices, id: \.self) { index in
@@ -38,7 +38,6 @@ struct CardioAtlasMapView: View {
                 }
                 .mapControls { MapCompass(); MapScaleView() }
                 .frame(height: expanded ? 420 : 240)
-                .accessibilityIdentifier("cardio-atlas-map")
                 .clipShape(RoundedRectangle(cornerRadius: DS.Radius.md))
                 .overlay(alignment: .topTrailing) {
                     if !expanded {
@@ -48,6 +47,7 @@ struct CardioAtlasMapView: View {
                             Label("Expand map", systemImage: "arrow.up.left.and.arrow.down.right")
                                 .labelStyle(.iconOnly)
                                 .padding(DS.Spacing.sm)
+                                .frame(minWidth: 44, minHeight: 44)
                         }
                         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
                         .padding(DS.Spacing.sm)
@@ -75,9 +75,10 @@ struct CardioAtlasMapView: View {
                 .frame(maxWidth: .infinity)
                 .frame(height: expanded ? 420 : 240)
                 .background(DS.Color.cardBackground, in: RoundedRectangle(cornerRadius: DS.Radius.md))
-                .accessibilityIdentifier("cardio-atlas-map")
             }
         }
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("cardio-atlas-map")
     }
 }
 
