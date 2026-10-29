@@ -91,3 +91,10 @@ Store route/place metadata in a separate CloudKit-compatible `WorkoutLocationRec
 ## Confidence Assessment
 
 Medium: accepted UX and extension points are clear; HealthKit route APIs, shared Watch schema and native export need real build/test validation. User-visible progress is based on available authorized history, not an assertion that every historical workout was readable.
+
+
+## Scope closure · Watch and local-only cardio
+
+The all-outdoor-cardio requirement also needs DUNE Watch sessions to produce routes, so the initial phone-only capture scope is extended before ship. `WorkoutRouteRecorder` collects real GPS only for active outdoor cardio; existing indoor stair-exit permissions remain unchanged. Associated HealthKit route writes preserve pause/gap segments, run as separate bounded jobs after workout success and never change workout success on route failure. Watch purpose text is en/ko/ja, and fake-provider lifecycle/save/timeout tests are required. No new Watch layout is introduced.
+
+Existing lists deferred every no-set cardio record to HealthKit. Both lists now keep a valid local-only cardio fallback when a matching HealthKit summary is unavailable, preserving the richer HK row on exact or legitimate unlinked match. A nonempty link ID takes precedence over time/type similarity so an unrelated simultaneous Watch workout cannot consume it. Native fixtures contain no fabricated strength sets, use actual route sampling cadence and meter units matching HK input contracts.

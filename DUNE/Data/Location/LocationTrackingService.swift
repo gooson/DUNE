@@ -90,6 +90,7 @@ final class LocationTrackingService: NSObject, LocationTrackingServiceProtocol, 
         try Task.checkCancellation()
         lock.withLock {
             _routePoints = []
+            isPaused = false
             trackingStartedAt = Date()
             _totalDistanceMeters = 0
             _totalElevationGainMeters = 0
@@ -104,6 +105,7 @@ final class LocationTrackingService: NSObject, LocationTrackingServiceProtocol, 
         locationManager.stopUpdatingLocation()
         let distance: Double = lock.withLock {
             isTracking = false
+            isPaused = false
             return _totalDistanceMeters
         }
         logger.info("[Location] GPS tracking stopped. Total: \(String(format: "%.0f", distance))m")

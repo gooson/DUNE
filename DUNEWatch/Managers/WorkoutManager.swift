@@ -63,6 +63,10 @@ final class WorkoutManager: NSObject {
     private(set) var isFinalizingWorkout = false
     /// Timeout watchdog for flaky simulator callback paths.
     private var finalizationTimeoutTask: Task<Void, Never>?
+    private var routeRecorder: WorkoutRouteRecorder?
+    private var capturedRoute: [WorkoutRoutePoint] = []
+    // Completed-workout jobs are independent of session/reset generation and own immutable inputs.
+    private var routeSaveJobs: [UUID: WorkoutRouteSaveJob] = [:]
     /// Ensures `workoutEnded` signal is sent only once per session.
     private var didNotifyWorkoutEnded = false
     private(set) var startDate: Date?
@@ -305,7 +309,8 @@ final class WorkoutManager: NSObject {
         }
 
         let shareTypes: Set<HKSampleType> = [
-            HKQuantityType.workoutType()
+            HKQuantityType.workoutType(),
+            HKSeriesType.workoutRoute()
         ]
         let readTypes: Set<HKObjectType> = [
             HKQuantityType(.heartRate),
@@ -315,7 +320,8 @@ final class WorkoutManager: NSObject {
             HKQuantityType(.distanceCycling),
             HKQuantityType(.distanceSwimming),
             HKCharacteristicType(.dateOfBirth),
-            HKQuantityType(.flightsClimbed)
+            HKQuantityType(.flightsClimbed),
+            HKSeriesType.workoutRoute()
         ]
 
         Self.logger.info("Requesting HealthKit authorization for workout session")
@@ -470,6 +476,9 @@ final class WorkoutManager: NSObject {
 
     /// Common HK session setup shared by strength and cardio flows.
     private func startHKSession(config: HKWorkoutConfiguration, templateName: String) async throws {
+        routeRecorder?.cancel()
+        routeRecorder = nil
+        capturedRoute = []
         runningVoiceFeedback.stop()
         runningVoiceFeedback.resetProgress()
         stopMirrorTransport()
@@ -537,6 +546,7 @@ final class WorkoutManager: NSObject {
                 try await newBuilder.beginCollection(at: now)
             }
 
+            startRouteCaptureIfNeeded(at: Date())
             // Persist recovery state
             persistRecoveryState()
 
@@ -546,6 +556,9 @@ final class WorkoutManager: NSObject {
             startMirrorTransport(for: newSession)
             announceRunning(.started)
         } catch {
+            routeRecorder?.cancel()
+            routeRecorder = nil
+            capturedRoute = []
             Self.logger.error("Failed to start HK session: \(String(describing: error), privacy: .public)")
             newSession.end()
             session = nil
@@ -666,6 +679,7 @@ final class WorkoutManager: NSObject {
             runningVoiceFeedback.stop()
         }
         let endDate = Date()
+        stopRouteCapture()
         completedDuration = activeElapsedTime(at: endDate)
         captureMachineLevelSegment(until: endDate)
         endPause(at: endDate, announcesResume: false)
@@ -967,6 +981,9 @@ final class WorkoutManager: NSObject {
     }
 
     func reset() {
+        routeRecorder?.cancel()
+        routeRecorder = nil
+        capturedRoute = []
         runningVoiceFeedback.stop()
         runningVoiceFeedback.resetProgress()
         stopMirrorTransport()
@@ -1075,6 +1092,8 @@ final class WorkoutManager: NSObject {
             if isSessionEnded {
                 notifyWorkoutEndedIfNeeded()
             } else {
+                startRouteCaptureIfNeeded(at: Date())
+                if isPaused { routeRecorder?.pause(at: Date()) }
                 startInactivityMonitoringIfNeeded()
                 startMirrorTransport(for: recovered)
             }
@@ -1436,6 +1455,36 @@ final class WorkoutManager: NSObject {
         }
     }
 
+    private func startRouteCaptureIfNeeded(at date: Date) {
+        guard !Self.isSimulatorRuntime, !isSessionEnded, !isPaused,
+              routeRecorder == nil, session?.state == .running,
+              WorkoutRouteRecorder.shouldRecord(mode: workoutMode) else { return }
+        let recorder = WorkoutRouteRecorder()
+        routeRecorder = recorder
+        recorder.start(at: date)
+    }
+
+    private func stopRouteCapture() {
+        guard let routeRecorder else { return }
+        capturedRoute = routeRecorder.stop()
+        self.routeRecorder = nil
+    }
+
+    private func enqueueRouteSave(_ points: [WorkoutRoutePoint], workout: HKWorkout) {
+        guard !points.isEmpty, routeSaveJobs[workout.uuid] == nil else { return }
+        // Bound concurrent optional enrichment even if workouts are ended in rapid succession.
+        if routeSaveJobs.count >= 2, let existingID = routeSaveJobs.keys.sorted(by: { $0.uuidString < $1.uuidString }).first {
+            routeSaveJobs[existingID]?.cancel()
+        }
+        let id = workout.uuid
+        let job = WorkoutRouteSaveJob(
+            points: points,
+            writer: HealthKitWorkoutRouteSegmentWriter(store: healthStore, workout: workout)
+        ) { [weak self] in self?.routeSaveJobs[id] = nil }
+        routeSaveJobs[id] = job
+        job.start()
+    }
+
     private func notifyWorkoutEndedIfNeeded() {
         guard !didNotifyWorkoutEnded else { return }
         didNotifyWorkoutEnded = true
@@ -1457,6 +1506,7 @@ final class WorkoutManager: NSObject {
     }
 
     private func beginPause(at date: Date) {
+        routeRecorder?.pause(at: date)
         guard pauseStart == nil else {
             isPaused = true
             return
@@ -1486,6 +1536,8 @@ final class WorkoutManager: NSObject {
         }
         isPaused = false
         if wasPaused, announcesResume, !isSessionEnded {
+            routeRecorder?.resume(at: date)
+            startRouteCaptureIfNeeded(at: date)
             startStairExitMonitoringIfNeeded()
             runningVoiceFeedback.resumeProgress(
                 distanceMeters: distance,
@@ -1725,11 +1777,15 @@ extension WorkoutManager: HKWorkoutSessionDelegate {
             switch toState {
             case .running:
                 endPause(at: date)
+                startRouteCaptureIfNeeded(at: date)
                 enqueueMirrorSnapshot()
             case .paused:
                 beginPause(at: date)
                 enqueueMirrorSnapshot()
             case .ended:
+                stopRouteCapture()
+                let endedRoute = capturedRoute
+                capturedRoute = []
                 if completedDuration == nil { completedDuration = activeElapsedTime(at: date) }
                 endPause(at: date, announcesResume: false)
                 isSessionEnded = true
@@ -1761,6 +1817,9 @@ extension WorkoutManager: HKWorkoutSessionDelegate {
                            let workoutID = workout?.uuid.uuidString, !workoutID.isEmpty {
                             healthKitWorkoutUUID = workoutID
                         }
+                        if let workout, !endedRoute.isEmpty {
+                            enqueueRouteSave(endedRoute, workout: workout)
+                        }
                     }
                 } catch {
                     Self.logger.error("Failed to finish workout: \(error.localizedDescription, privacy: .public)")
@@ -1777,6 +1836,9 @@ extension WorkoutManager: HKWorkoutSessionDelegate {
     ) {
         Task { @MainActor in
             guard let currentSession = session, workoutSession === currentSession else { return }
+            routeRecorder?.cancel()
+            routeRecorder = nil
+            capturedRoute = []
             Self.logger.error("Workout session failed: \(error.localizedDescription, privacy: .public)")
             runningVoiceFeedback.stop()
             finalizationTimeoutTask?.cancel()
