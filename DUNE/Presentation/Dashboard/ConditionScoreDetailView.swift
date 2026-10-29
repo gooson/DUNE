@@ -180,7 +180,7 @@ struct ConditionScoreDetailView: View {
                     trendLine: viewModel.trendLineData, scrollDomain: viewModel.scrollDomain,
                     scrollPosition: $viewModel.scrollPosition
                 )
-                .frame(height: chartHeight)
+                // The chart owns its scaled height so AX text cannot overflow into period controls.
                 .overlay {
                     ChartUITestSurface(identifier: "detail-chart-surface", label: "Condition Detail Chart",
                                        value: viewModel.visibleRangeLabel)

@@ -185,6 +185,15 @@ final class ConditionDetailRedesignTests: SeededUITestBaseCase {
         XCTAssertTrue(app.descendants(matching: .any)["condition-trend-card"].firstMatch.exists)
         XCTAssertTrue(revealWhole(app.staticTexts["score-detail-chart-visible-range"].firstMatch))
         VisualAudit.capture("Condition maximum AX trend header viewport")
+        let renderedChart = app.otherElements["chart-selection-probe"].firstMatch
+        XCTAssertTrue(renderedChart.exists, "The rendered plot should expose its actual footprint")
+        let controlsBottom = max(
+            app.staticTexts["score-detail-chart-visible-range"].firstMatch.frame.maxY,
+            max(app.buttons["condition-period-previous"].firstMatch.frame.maxY,
+                app.buttons["condition-period-next"].firstMatch.frame.maxY)
+        )
+        XCTAssertGreaterThanOrEqual(renderedChart.frame.minY + 0.000001, controlsBottom,
+                                    "The rendered plot must not overlap period controls at AX sizes")
         XCTAssertTrue(revealWhole(app.staticTexts["condition-summary-average"].firstMatch))
         VisualAudit.capture("Condition maximum AX visible summary viewport")
         XCTAssertTrue(revealWhole(app.staticTexts["How the Score Works"].firstMatch, requireHittable: true))
