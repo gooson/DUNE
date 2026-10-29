@@ -250,10 +250,9 @@ final class DuoLifeStarterTemplateTests: UITestBaseCase {
         let templateList = app.scrollViews["habit-template-list"].firstMatch
         XCTAssertTrue(templateList.waitForExistence(timeout: 8), "Habit template picker should open")
         VisualAudit.capture("Habit template picker upper viewport")
-        let finalTemplate = templateList.buttons.matching(
-            NSPredicate(format: "label CONTAINS %@", "Connect with Friends")
-        ).firstMatch
-        for _ in 0..<12 where !(finalTemplate.exists && finalTemplate.isHittable
+        let finalTemplate = templateList.buttons["habit-template-card-social"].firstMatch
+        // One accessibility-size column can require crossing all 20 tall cards.
+        for _ in 0..<36 where !(finalTemplate.exists && finalTemplate.isHittable
                               && templateList.frame.intersection(app.windows.firstMatch.frame).contains(finalTemplate.frame)) {
             templateList.swipeUp()
         }
@@ -262,24 +261,27 @@ final class DuoLifeStarterTemplateTests: UITestBaseCase {
         XCTAssertTrue(templateList.frame.intersection(app.windows.firstMatch.frame).contains(finalTemplate.frame),
                       "The lower template control should fit in the visible picker")
         VisualAudit.capture("Habit template picker lower viewport")
-        // Template cards currently have no dedicated identifier; their accessible
-        // button label includes the localized template name and frequency.
-        let vitamins = templateList.buttons.matching(
-            NSPredicate(format: "label CONTAINS %@", "Take Vitamins")
-        ).firstMatch
-        for _ in 0..<12 where !(vitamins.exists && vitamins.isHittable
+        let vitamins = templateList.buttons["habit-template-card-vitamins"].firstMatch
+        for _ in 0..<36 where !(vitamins.exists && vitamins.isHittable
                               && templateList.frame.intersection(app.windows.firstMatch.frame).contains(vitamins.frame)) {
             templateList.swipeDown()
         }
         XCTAssertTrue(vitamins.exists && vitamins.isHittable, "Take Vitamins template should be selectable")
         XCTAssertTrue(templateList.frame.intersection(app.windows.firstMatch.frame).contains(vitamins.frame),
                       "The whole template card should fit in the visible picker")
-        VisualAudit.capture("Habit template Take Vitamins card")
+        for text in ["Take Vitamins", "Morning", "Every day"] {
+            XCTAssertTrue(vitamins.label.contains(text), "Template card should expose the full localized \(text)")
+        }
+        VisualAudit.capture("Habit template Take Vitamins card at accessibility XXXL")
         vitamins.auditTap()
 
         let nameField = app.textFields[AXID.habitFormName].firstMatch
         XCTAssertTrue(nameField.waitForExistence(timeout: 8), "Template should open a prefilled habit form")
         XCTAssertEqual(nameField.value as? String, "Take Vitamins", "Template name should populate the form")
+        XCTAssertTrue(app.scrollToElementInPrimaryFormIfNeeded(AXID.habitFormFrequencyDaily, maxSwipes: 6),
+                      "The prefilled daily frequency should be reachable")
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.habitFormFrequencyDaily].firstMatch.isSelected,
+                      "Take Vitamins should prefill daily frequency")
         let save = app.buttons[AXID.habitFormSave].firstMatch
         XCTAssertTrue(save.waitForExistence(timeout: 5) && save.isEnabled,
                       "The prefilled template should be saveable")
@@ -299,5 +301,47 @@ final class DuoLifeStarterTemplateTests: UITestBaseCase {
         XCTAssertTrue(app.windows.firstMatch.frame.insetBy(dx: 2, dy: 2).contains(actions.frame),
                       "Created habit control should fit inside the window")
         VisualAudit.capture("Life habits section after template creation")
+    }
+}
+
+
+/// Covers the default text size independently of the maximum Dynamic Type route.
+@MainActor
+final class LifeStarterTemplateRegularTextTests: UITestBaseCase {
+    override var initialTabSelectionArgument: String? { "life" }
+    override var additionalLaunchArguments: [String] {
+        ["-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+         "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryL"]
+    }
+
+    func testWaterTemplateCardPrefillsCountGoal() throws {
+        XCTAssertTrue(app.waitAndTap(AXID.lifeToolbarAdd), "Life add menu should open")
+        XCTAssertTrue(app.waitAndTap(AXID.lifeToolbarTemplate), "Template route should open")
+
+        let templateList = app.scrollViews["habit-template-list"].firstMatch
+        XCTAssertTrue(templateList.waitForExistence(timeout: 8), "Template picker should appear")
+        let water = templateList.buttons["habit-template-card-water"].firstMatch
+        XCTAssertTrue(water.waitForExistence(timeout: 5) && water.isHittable,
+                      "The entire Drink Water card should be a button")
+        XCTAssertTrue(templateList.frame.intersection(app.windows.firstMatch.frame).contains(water.frame),
+                      "The full card should fit in the visible picker")
+        for text in ["Drink Water", "Anytime", "Every day", "8"] {
+            XCTAssertTrue(water.label.contains(text), "Water card should expose the full localized \(text)")
+        }
+        VisualAudit.capture("Habit template Drink Water card at regular text size")
+        water.auditTap()
+
+        let nameField = app.textFields[AXID.habitFormName].firstMatch
+        XCTAssertTrue(nameField.waitForExistence(timeout: 8), "Water should open the prefilled form")
+        XCTAssertEqual(nameField.value as? String, "Drink Water")
+        XCTAssertTrue(app.scrollToElementInPrimaryFormIfNeeded(AXID.habitFormGoalValue, maxSwipes: 6),
+                      "Water goal should be reachable in the form")
+        let goal = app.textFields[AXID.habitFormGoalValue].firstMatch
+        XCTAssertEqual(goal.value as? String, "8", "Water should retain its count goal")
+        XCTAssertTrue(app.scrollToElementInPrimaryFormIfNeeded(AXID.habitFormFrequencyDaily, maxSwipes: 6),
+                      "Water frequency should be reachable in the form")
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.habitFormFrequencyDaily].firstMatch.isSelected,
+                      "Water should prefill daily frequency")
+        VisualAudit.capture("Prefilled Drink Water habit form")
     }
 }

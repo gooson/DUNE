@@ -6,7 +6,8 @@
     "/Users/shanks/.codex/worktrees/condition-review-ship/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.21_09-40-32-+0900.xcresult",
     "/Users/shanks/.codex/worktrees/condition-review-ship/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.22_00-46-16-+0900.xcresult",
     "/Users/shanks/Documents/Codex/2026-10-22/new-chat/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.22_18-42-30-+0900.xcresult",
-    "/Users/shanks/Documents/Codex/2026-10-22/new-chat/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.22_21-54-56-+0900.xcresult"
+    "/Users/shanks/Documents/Codex/2026-10-22/new-chat/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.22_21-54-56-+0900.xcresult",
+    ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.30_00-49-06-+0900.xcresult"
   ],
   "processed_capture_candidates": 111,
   "captured": {
@@ -496,12 +497,15 @@
     "L03": {
       "row_id": "L03",
       "evidence": "habit-template-list",
-      "test": "DuoLifeStarterTemplateTests/testEmptyStarterTemplateCreatesHabitAndRendersHabitsSection()",
-      "action": "tap life-empty-template",
-      "timestamp": 1791819162.717,
-      "image": "9CC3895A-C90B-4052-8392-C69F9FF2AD95.png",
-      "screen": "screen-0-1320x2868-tap life-empty-template_0_62FE4AB1-4C3A-486F-8C4D-CB9AE7539D94.png",
-      "file": "L03.png"
+      "test": "LifeStarterTemplateRegularTextTests/testWaterTemplateCardPrefillsCountGoal()",
+      "action": "tap life-toolbar-template",
+      "timestamp": 1793289310.05,
+      "image": "637CD668-035A-46EF-A148-87890AB94185.png",
+      "screen": "screen-0-1320x2868-tap life-toolbar-template_0_EF07A473-9143-4785-B4E6-79E0175A00B3.png",
+      "file": "L03.png",
+      "source_revision": "4f052fa771693fa85b93fb67a6edf5c88feb2ee8",
+      "source_worktree_dirty": false,
+      "simulator_udid": "15B032B0-FEA4-465A-B5C1-A10F7CADA216"
     },
     "L07": {
       "row_id": "L07",

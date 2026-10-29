@@ -46,3 +46,5 @@
 현재 통합/crash 위험은 별도 최종 pr-reviewer/app-quality-gate read-only 검토에서 추가 actionable finding 없이 통과했다. 당시 조건이었던 최종 검색 단위 실행도59/162 통과로 충족했다. 기존 P1/P2를 현재 코드에서 재확인했고 Open finding은0건이다. L10N 포맷·manual 상태와 whitespace도 확인한다. MapKit의 기존 placemark API 및 SDK 메타데이터 deprecation/추출 경고는 남아 있으며 런타임 실패로 처리하지 않는다. 이번 PR에서 주소 API 의미를 바꾸는 별도 마이그레이션은 하지 않는다.
 
 새 CA02 실제11원본은 [리뷰 후 갤러리](../../design/full-redesign-map/review/cardio-atlas-polish-2026-10-30/index.html)에 보존했다. 공유/업적/운동명 별도 갤러리는 해당 작업 시점의 source hash와 실행 범위를 유지한다. 이후 opt-in fixture/다른 테스트/계단 번역 변경을 이전 결과의 전체 앱 재실행으로 주장하지 않는다. 검증하지 못한 iPad/Duo/Watch 상태는 계속 미완료다.
+
+Ship 사전 동기화: 원격 main의 Life 템플릿 PR#858(60bd7c4b)을 통합했다. 기능 소스는 겹치지 않았고 통합 실제 디자인맵 HTML의 링크 충돌만 양쪽 href 전부 보존해 해결했다. 원본 빌드/테스트 로그는 gzip으로 무손실 보존하며 raw SHA-256은 evidence/compressed-logs.json에 기록했다. CSV는 값 변경 없이 LF로 정렬했다.

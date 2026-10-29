@@ -4,6 +4,8 @@ struct HabitTemplateSheet: View {
     @Bindable var viewModel: LifeViewModel
     let onSelect: () -> Void
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @State private var contentWidth: CGFloat = 0
 
     var body: some View {
         NavigationStack {
@@ -14,6 +16,11 @@ struct HabitTemplateSheet: View {
                     }
                 }
                 .padding(DS.Spacing.md)
+            }
+            .onGeometryChange(for: CGFloat.self) { proxy in
+                proxy.size.width
+            } action: { width in
+                contentWidth = width
             }
             .accessibilityIdentifier("habit-template-list")
             .background { SheetWaveBackground() }
@@ -35,8 +42,13 @@ struct HabitTemplateSheet: View {
                 .font(.headline)
                 .foregroundStyle(DS.Color.tabLife)
 
-            let columns = [GridItem(.flexible()), GridItem(.flexible())]
-            LazyVGrid(columns: columns, spacing: DS.Spacing.sm) {
+            let count = contentWidth >= 700 ? 4 : 2
+            let columnCount = dynamicTypeSize.isAccessibilitySize ? count / 2 : count
+            let columns = Array(
+                repeating: GridItem(.flexible(), spacing: DS.Spacing.md),
+                count: columnCount
+            )
+            LazyVGrid(columns: columns, spacing: DS.Spacing.md) {
                 ForEach(HabitTemplate.templates(for: category)) { template in
                     templateCard(template)
                 }
@@ -50,40 +62,14 @@ struct HabitTemplateSheet: View {
             dismiss()
             onSelect()
         } label: {
-            VStack(alignment: .leading, spacing: DS.Spacing.xs) {
-                HStack {
-                    Image(systemName: template.iconCategory.iconName)
-                        .font(.title3)
-                        .foregroundStyle(template.iconCategory.themeColor)
-                    Spacer()
-                    Image(systemName: template.suggestedTimeOfDay.iconName)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-
-                Text(template.name)
-                    .font(.subheadline.bold())
-                    .foregroundStyle(.primary)
-                    .lineLimit(1)
-
-                Text(frequencyDescription(template.suggestedFrequency))
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-
-                if template.type != .check {
-                    Text(goalDescription(template))
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-            }
-            .padding(DS.Spacing.sm)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background {
-                RoundedRectangle(cornerRadius: DS.Radius.sm)
-                    .fill(.ultraThinMaterial)
-            }
+            HabitTemplateCardLabel(
+                template: template,
+                frequency: frequencyDescription(template.suggestedFrequency),
+                goal: goalDescription(template)
+            )
         }
         .buttonStyle(.plain)
+        .accessibilityIdentifier("habit-template-card-\(template.id)")
     }
 
     private func frequencyDescription(_ frequency: HabitFrequency) -> String {
@@ -106,6 +92,106 @@ struct HabitTemplateSheet: View {
         case .count:
             let unit = template.suggestedGoalUnit ?? ""
             return "\(Int(template.suggestedGoalValue)) \(unit)".trimmingCharacters(in: .whitespaces)
+        }
+    }
+}
+
+
+private struct HabitTemplateCardLabel: View {
+    let template: HabitTemplate
+    let frequency: String
+    let goal: String
+
+    @Environment(\.appTheme) private var theme
+    @ScaledMetric(relativeTo: .largeTitle) private var iconSize = 38.0
+    @ScaledMetric(relativeTo: .largeTitle) private var iconTileSize = 62.0
+
+    private var tint: Color { template.iconCategory.themeColor(for: theme) }
+    private var shape: RoundedRectangle {
+        RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous)
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.lg) {
+            ViewThatFits(in: .horizontal) {
+                HStack(alignment: .top, spacing: DS.Spacing.sm) {
+                    icon
+                    Spacer(minLength: 0)
+                    timeOfDay
+                }
+                VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                    icon
+                    timeOfDay
+                }
+            }
+
+            Text(template.name)
+                .font(.headline)
+                .foregroundStyle(.primary)
+                .fixedSize(horizontal: false, vertical: true)
+
+            Spacer(minLength: DS.Spacing.xs)
+
+            ViewThatFits(in: .horizontal) {
+                HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.sm) {
+                    schedule
+                    Spacer(minLength: 0)
+                    goalValue
+                }
+                VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                    schedule
+                    goalValue
+                }
+            }
+        }
+        .padding(DS.Spacing.lg)
+        .frame(maxWidth: .infinity, minHeight: 208, alignment: .topLeading)
+        .background {
+            shape.fill(.thinMaterial)
+            shape.fill(tint.opacity(0.08))
+            Circle()
+                .strokeBorder(tint.opacity(0.12), lineWidth: 22)
+                .frame(width: 174, height: 174)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
+                .offset(x: 82, y: 100)
+                .allowsHitTesting(false)
+        }
+        .clipShape(shape)
+        .overlay { shape.strokeBorder(tint.opacity(0.22), lineWidth: 1) }
+        .contentShape(shape)
+        .accessibilityElement(children: .combine)
+    }
+
+    private var icon: some View {
+        Image(systemName: template.iconCategory.iconName)
+            .font(.system(size: Swift.min(iconSize, 52), weight: .semibold))
+            .foregroundStyle(tint)
+            .frame(width: Swift.min(iconTileSize, 84), height: Swift.min(iconTileSize, 84))
+            .background(tint.opacity(0.12), in: RoundedRectangle(cornerRadius: DS.Radius.lg))
+            .accessibilityHidden(true)
+    }
+
+    private var timeOfDay: some View {
+        Label(template.suggestedTimeOfDay.displayName, systemImage: template.suggestedTimeOfDay.iconName)
+            .font(.caption)
+            .foregroundStyle(.secondary)
+            .fixedSize(horizontal: false, vertical: true)
+    }
+
+    private var schedule: some View {
+        Text(frequency)
+            .font(.subheadline)
+            .foregroundStyle(.secondary)
+    }
+
+    @ViewBuilder
+    private var goalValue: some View {
+        if template.type != .check {
+            Text(goal)
+                .font(.title2.bold())
+                .foregroundStyle(.primary)
+                .monospacedDigit()
+                .fixedSize(horizontal: false, vertical: true)
         }
     }
 }
