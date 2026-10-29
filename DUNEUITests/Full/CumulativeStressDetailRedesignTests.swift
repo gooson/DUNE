@@ -118,6 +118,58 @@ final class CumulativeStressDetailRedesignTests: SeededUITestBaseCase {
         VisualAudit.capture("Stress restored week and trend toggled")
     }
 
+    func testChartDragSelectionAndVisibleWindow() {
+        openStressDetail()
+        let picker = app.segmentedControls["stress-period-picker"].firstMatch
+        let week = picker.buttons["W"].firstMatch
+        let range = app.staticTexts["score-detail-chart-visible-range"].firstMatch
+        XCTAssertTrue(revealWhole(week, requireHittable: true))
+        let monthRange = range.label
+        week.tap()
+        XCTAssertTrue(waitForPeriod(week, range: range, replacing: monthRange))
+        XCTAssertTrue(waitForVisibleHistory(), "Seeded week must have recorded points")
+
+        let chart = app.descendants(matching: .any)["detail-chart-surface"].firstMatch
+        let selection = app.otherElements["chart-selection-probe"].firstMatch
+        let summary = app.descendants(matching: .any)["stress-visible-summary"].firstMatch
+        XCTAssertTrue(revealWhole(chart), "The entire plot must be in the viewport before gestures")
+        XCTAssertTrue(selection.waitForExistence(timeout: 10))
+        XCTAssertEqual(selection.label, "none", "No point should be selected before the drag")
+        XCTAssertTrue(summary.waitForExistence(timeout: 10))
+        let originalRange = range.label
+        let originalSummary = summaryText(summary)
+
+        let dragStart = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.20, dy: 0.55))
+        let dragEnd = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.80, dy: 0.55))
+        dragStart.press(forDuration: 0.05, thenDragTo: dragEnd)
+        if range.label == originalRange {
+            dragStart.press(forDuration: 0.05, thenDragTo: dragEnd)
+        }
+        XCTAssertNotEqual(waitForLabelChange(range, from: originalRange), originalRange,
+                          "Actual horizontal chart drag must move the visible week")
+        XCTAssertTrue(waitForVisibleHistory(), "The dragged window must retain real history")
+        XCTAssertNotEqual(waitForSummaryChange(summary, from: originalSummary), originalSummary,
+                          "Summary must follow the dragged chart window")
+        XCTAssertEqual(selection.label, "none", "Quick drag must not activate point selection")
+        VisualAudit.capture("Stress dragged chart window and recalculated summary")
+
+        XCTAssertTrue(revealWhole(chart))
+        let pressStart = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.42, dy: 0.55))
+        let pressEnd = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.58, dy: 0.55))
+        let draggedRange = range.label
+        pressStart.press(forDuration: 0.45, thenDragTo: pressEnd)
+        let selected = XCTNSPredicateExpectation(
+            predicate: NSPredicate { _, _ in selection.label != "none" && !selection.label.isEmpty },
+            object: selection
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [selected], timeout: 5), .completed,
+                       "Long press must update the actual chart selection readback")
+        XCTAssertEqual(range.label, draggedRange, "Selecting a point must not move the visible week")
+        XCTAssertTrue(app.descendants(matching: .any)["chart-selection-overlay"].firstMatch
+            .waitForNonExistence(timeout: 2), "Selection overlay must clear after release")
+        VisualAudit.capture("Stress chart point selected without moving the week")
+    }
+
     func testSingleDisclosureRetainsAllOriginalExplanationsAndActualFactors() {
         openStressDetail()
         let title = app.staticTexts["stress-score-explainer"].firstMatch
