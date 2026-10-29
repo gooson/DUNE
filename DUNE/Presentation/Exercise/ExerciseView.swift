@@ -440,6 +440,11 @@ struct ExerciseView: View {
             let deleteService = WorkoutDeleteService(manager: .shared)
             do {
                 try await deleteService.deleteWorkout(uuid: workout.id)
+                do {
+                    try WorkoutLocationRecordCleanup.delete(healthKitWorkoutID: workout.id, from: modelContext)
+                } catch {
+                    AppLogger.data.error("HealthKit workout location cleanup failed: \(error.localizedDescription)")
+                }
             } catch {
                 AppLogger.healthKit.error("HealthKit-only workout delete failed: \(error.localizedDescription)")
                 WatchSessionManager.shared.requestWatchWorkoutDeletion(workoutUUID: workout.id)

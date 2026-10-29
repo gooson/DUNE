@@ -28,6 +28,18 @@ struct ConfirmDeleteRecordModifier: ViewModifier {
                         WorkoutActivityType.infer(from: record.exerciseType)
                         ?? (record.hasSetData ? .traditionalStrengthTraining : nil)
 
+                    do {
+                        try WorkoutLocationRecordCleanup.delete(
+                            localRecordID: record.id,
+                            healthKitWorkoutID: hkWorkoutID,
+                            from: modelContext
+                        )
+                    } catch {
+                        AppLogger.data.error("Workout location cleanup failed: \(error.localizedDescription)")
+                        recordToDelete = nil
+                        return
+                    }
+
                     // Record tombstone before delete to prevent re-creation via bulk sync/backfill
                     if let hkID = hkWorkoutID, !hkID.isEmpty {
                         DeletedWorkoutTombstoneStore.shared.recordDeletion(healthKitWorkoutID: hkID)
