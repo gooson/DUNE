@@ -189,3 +189,7 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 
 
 2026-10-30 리뷰 후 CA02의 [새 복구·전체 선택 경로·한글 원본](../full-redesign-map/review/cardio-atlas-polish-2026-10-30/index.html)을 추가했다. 키보드 추천 영역을 피한 단일 드래그의 실제 이동을 확인한 뒤 원래 실패한 긴 목록 선택/재선택/저장/재열기를 재개해 통과했다. 상단 저장 중복은 제거했고 한글/초성 선택·하단 저장도 최종 통과했다. 다른 기기의 미갱신 상태는 유지한다.
+
+## 2026-10-30 T04 컨디션 상세 개편
+
+[기기별 이전·새 실제 화면 비교](../full-redesign-map/review/condition-detail-2026-10-30/index.html)를 추가했다. iPhone7·Duo 펼침6·접힘1·iPad1의 고유 선택 UI15개와 관련 단위32개가 통과했다. 펼침은5pass/1fail과 탐색 수정 후1pass를 분리해 보존한다. 밝음·영어·DUNE·DEBUG fixture100이며, 기존84점 촬영본과 입력이 다르다. T04의 네 기기 이미지만 갱신했고 다른 capture-index 항목은 보존했다. 출처는 각 PNG의 source JSON과 검증 문서에서 확인한다. 다른 화면·테마·locale 전체의 완료 증거는 아니다.

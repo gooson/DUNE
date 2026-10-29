@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-29",
+  "updated": "2026-10-30",
   "app_contract": "app-contract.md",
   "themes": [
     {
@@ -127,6 +127,27 @@
         "#8abf75",
         "#c47cc5"
       ]
+    },
+    {
+      "id": "condition-detail-redesign",
+      "name": "컨디션 상세 개편",
+      "title": "T04 · Condition Score",
+      "file": "dune-condition-detail-redesign.html",
+      "detail": "검토한 밝음·어두움 브라우저 시안과 화면별 JSON 보존. 탭과 같은 링·실제 HRV/RHR·통합 기간 추세·계산/설명의 단일 펼침. 시안의 고정 비율은 실제 모델에 맞는 값으로 수정. PNG는 앱 증거와 구분한다.",
+      "implementation": {
+        "layout": "../layout-map/condition-detail-redesign-proposal.md",
+        "actual_captures": "../full-redesign-map/review/condition-detail-2026-10-30/index.html",
+        "verification": "../../reviews/2026-10-30-t04-condition-detail-redesign.md",
+        "status": "native-implemented-scoped-validation-complete"
+      },
+      "colors": [
+        "#302b2a",
+        "#b2854c",
+        "#e1b453",
+        "#f5d778"
+      ],
+      "motif": "기존 DUNE 팔레트·원래 심볼",
+      "motion": "정적 브라우저 검토 캡처 보존본"
     }
   ],
   "studies": [

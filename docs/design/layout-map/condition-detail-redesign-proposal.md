@@ -11,3 +11,11 @@
 7. native 단일 설명 펼침: 계산 전체 행과 기존4개 설명 항목. 펼침/접힘 chevron과44pt 조작 영역.
 
 가용 폭과 Dynamic Type으로 배치하며 iPad/Duo에서도 필요한 텍스트를 생략하지 않는다. 새 실제 캡처는 일반 iPhone/iPad/Duo 접힘·펼침의 T04만 갱신하고 기존 다른 화면/포털 링크를 보존한다.
+
+## Native Resolve 배치 계약
+
+- 고정 길이의 가시 구간과 한 번 캡처한 참조 시점을 공유해 날짜·차트·요약을 맞춘다. 월말/DST에서도 이전·다음은 완전한 구간 하나씩만 이동한다.
+- 날짜는 locale-aware interval formatter로 한 번 표시하고 요약 행에서 반복하지 않는다.
+- 차트의 높이는 `DotLineChartView`의 ScaledMetric이 결정한다. 소비 화면이 더 작은 고정 frame으로 감싸 AX 차트를 주변 조작 영역에 넘치게 하지 않는다.
+- 이전·다음 및 추세 전환은 최소44pt frame 안에 Rectangle contentShape를 둔다.
+- 계산·기존 설명은 하나의 native DisclosureGroup에 보존한다.

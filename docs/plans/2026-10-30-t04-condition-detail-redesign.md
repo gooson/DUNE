@@ -51,7 +51,7 @@ Repo·Solution·Apple UX 조사3개를 실행했다. 관련 해결책은2026-02-
 
 ## Phase Tracking
 
-0 Init completed; 1 Plan completed; 2 Work pending; 2.5 UI pending; 3 Review pending; 3.5 Quality pending; 4 Resolve pending; 5 Compound pending; 5.5 Pre-Ship pending; 6 Ship pending.
+0 Init completed; 1 Plan completed; 2 Work completed; 2.5 final UI completed (32 unit /15 unique device UI); 3 Review completed; 3.5 Quality completed; 4 Resolve completed; 5 Compound completed; 5.5 Pre-Ship evidence completed / commit-CI pending; 6 Ship pending.
 
 Work 사전 검토에서 AX 숫자의 VoiceOver 레이블과 시간대4열·계산행의 큰 글씨 배치를 보완했다. TimeOfDayCard adaptive 옵션은 T04만 사용하며 다른 소비자의 기본 표현은 보존한다. 전체 iOS 단위 실행은 변경하지 않은 live AI 평가에서 실패/정체되어 owner idle deadline600초로 종료됐다. 관련 Condition 단위 통과는 아직 확인하지 않았으며, 선택 실행용 공통 도구 PR을 별도 작업 폴더에서 준비한다.
 
@@ -70,3 +70,13 @@ Duo 펼침의 첫5개 검사 중 Hero·최대AX Hero/설명·기간 전환3개�
 Resolve後두suite단위30개가실제통과했다. 신규edge UI첫실행은44pt크기는통과했으나버튼이viewport669밖y922에있어서좌표탭이닿지않았다. 기존공용scrollToElementIfNeeded는존재확인용임을AX로확인, T04test로컬거터reveal에서전체frame/hittable를검증한뒤edge tap하도록수정한다. 다른체크포인트도실제보이는대상을촬영하도록강화했으며이동작실패만원인수정후1회재검증한다.
 
 가시성수정후edge검사는목표컨트롤에실제로도달했지만AX좌표44가43.99999999999994로계산되어새부동소수점기대오류가발생했다. 허용오차0.000001pt만더해44pt기준을유지한다(실제이전8ptglyph는계속실패). 이새원인에대해한번만재검증한다.
+
+최종 새 PNG의 최대AX 요약에서 이전 outer360pt frame과 내부 scaled620pt chart가 충돌해100눈금이 날짜/화살표로 나오는 새P2를 발견했다. 032c68e0에서 T04의 바깥 고정 높이만 제거해 공유 차트의 자체 scaled height가 배치를 결정하도록 했다. 내부 chart-selection-probe의 실제 minY가 날짜·화살표 하단 이상인지 UI 단언을 추가했다. Duo 펼침 정상/최대AX2개 재실행 모두 통과했고, 새 AX는 날짜 하단371.2/차트 시작383.3으로12.1pt 분리됐다. AppleUX/SwiftUI delta에서 기존P2 닫힘·추가P1/P2 없음. 수정전 시각 원본은 review evidence/p2-chart-height-before에 출처와 보존했다. 정상 iPad의 내부 plot220pt는 동일하고 불필요한 outer140pt만 사라진다.
+
+새 차트 footprint가 스크롤 배치에 영향을 주므로 네 기기의 Hero 캡처와 AX·기간·조작·기존 하위 차트 관련15개 고유 UI를 032c68e0에서 마무리한다. 아직 끝나지 않은 선택 검사는 통과로 표시하지 않는다.
+
+최종AppQuality가기여tile의nonemptyneutral contribution경로에서는기존RHR조정eligibility가적용되지않은부분을발견했다. 수정전iPhone7개실행은own xcodebuild82588만부모가TERM해exit143으로중단하고통과로계산하지않았다. abe732c1에서shared conditionImpactForDisplay가RHR에동일한baseline규칙을적용하고label/color가모두gatedimpact를사용한다. 측정/설명/날짜는유지. 부족0/1/6일·fallback·missingdetail 및eligible3종·HRVpassthrough2단위추가. Data/AppQualitydelta는원래RHR P2전경로닫힘·새P1/P2없음확인. 최종32단위(26+6)xcresult가통과0fail0skip임을확인했다. archive의존재하지않는unit sidecar경로가실패한것은실제xcresult에서복구해단위를다시돌리지않았다.
+
+abe최종iPhone7/7와Duo펼침5/6가통과했다. 실패한legacyCondition구성검사는HRV값y752.2–817.9가669ptviewport아래에남았다. 값높이65.7은화면보다작고카드가y599에부분노출된PNG/AX로배치잘림이아닌탐색수렴문제임을확인했다. revealCardContent가AX존재만보고coarse스크롤을건너뛴조건을Condition에서만실제viewport/card교차확인으로고쳤다. 반복한도/전체frame검증/다른화면경로는유지하며실패한1개만원인수정후1회재검증한다. batch5pass/1fail은summary/result/log와실패PNG/AX에보존하며6통과로바꾸지않는다. 이미통과한Hero/AX/기간/edge/하위차트의새원본은개별testPassed및원래batch실패1출처를유지해수집했다.
+
+최종정리:구성검사85.547초통과,접힘1/iPad1통과. `final-validation.json`에서testcase합집합15,32단위0fail0skip,새4기기이미지해시를확인했다. 앱ABE와UI헬퍼EE사이앱/단위코드diff없음. 가상완료나기존PNG의새증거전용없이각출처와원래실패기록을유지했다. Compound해결책을architecture/2026-10-30-condition-detail-redesign.md에저장했다.

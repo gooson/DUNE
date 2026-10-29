@@ -1,0 +1,219 @@
+Attributes: Application, 0x106590640, pid: 46800, label: 'DUNE'
+Element subtree:
+ →Application, 0x106590640, pid: 46800, label: 'DUNE'
+    Window, 0x106590780, {{0.0, -0.0}, {951.0, 669.0}}
+      Other, 0x1065908c0, {{0.0, -0.0}, {951.0, 669.0}}
+      Other, 0x106590a00, {{0.0, -0.0}, {951.0, 669.0}}
+        Other, 0x106590b40, {{0.0, -0.0}, {951.0, 669.0}}
+          Other, 0x106592f80, {{0.0, -0.0}, {951.0, 669.0}}
+            Other, 0x1065930c0, {{0.0, -0.0}, {951.0, 669.0}}
+              Other, 0x106593200, {{0.0, -0.0}, {867.0, 635.0}}
+              Other, 0x106593340, {{0.0, -0.0}, {951.0, 669.0}}
+                Other, 0x1065935c0, {{0.0, -0.0}, {951.0, 669.0}}
+                  Other, 0x106593700, {{0.0, -0.0}, {951.0, 669.0}}
+                    Other, 0x106593840, {{0.0, -0.0}, {951.0, 669.0}}
+                      Other, 0x106593980, {{0.0, -0.0}, {951.0, 669.0}}
+                        Other, 0x106593ac0, {{0.0, -0.0}, {951.0, 669.0}}
+                          Other, 0x106593c00, {{0.0, -0.0}, {951.0, 669.0}}
+                            Other, 0x106593e80, {{0.0, -0.0}, {951.0, 669.0}}
+                              Other, 0x106593d40, {{0.0, -0.0}, {951.0, 669.0}}
+                                Other, 0x106593480, {{0.0, -0.0}, {951.0, 669.0}}
+                                  Other, 0x106590000, {{0.0, -0.0}, {951.0, 669.0}}
+                                    Other, 0x106591cc0, {{0.0, -0.0}, {951.0, 669.0}}
+                                      Other, 0x106591e00, {{0.0, -0.0}, {951.0, 669.0}}
+                                        NavigationBar, 0x106592d00, {{0.0, 24.0}, {951.0, 58.0}}, identifier: 'Condition Score'
+                                        Other, 0x106592e40, {{0.0, -0.0}, {951.0, 669.0}}
+                                          Other, 0x106591b80, {{0.0, -0.0}, {951.0, 669.0}}
+                                            Other, 0x102e97840, {{0.0, -0.0}, {951.0, 669.0}}
+                                              Other, 0x102e975c0, {{0.0, -0.0}, {951.0, 669.0}}
+                                                ScrollView, 0x102e95040, {{0.0, -0.0}, {951.0, 669.0}}, identifier: 'condition-score-detail-screen'
+                                                  Other, 0x102e97480, {{0.0, -5418.0}, {867.0, 6184.0}}
+                                                    StaticText, 0x102e970c0, {{78.0, -5373.9}, {276.2, 58.7}}, label: 'Condition'
+                                                    StaticText, 0x102e97200, {{73.5, -5299.2}, {117.3, 71.7}}, identifier: 'condition-detail-score', label: 'Condition score 100, Excellent'
+                                                    StaticText, 0x102ff70c0, {{73.5, -5211.5}, {223.7, 65.7}}, identifier: 'condition-detail-hero-status', label: 'Excellent'
+                                                    StaticText, 0x102ff57c0, {{73.5, -5137.9}, {691.7, 58.7}}, label: 'Top shape — HRV above baseline'
+                                                    StaticText, 0x102ff6300, {{73.5, -5063.2}, {298.3, 51.3}}, label: 'Oct 30 at 06:49'
+                                                    Other, 0x102ff52c0, {{53.7, -4641.0}, {760.0, 316.0}}
+                                                      Other, 0x102ff6080, {{53.7, -4641.0}, {760.0, 316.0}}, identifier: 'condition-contribution-rhr'
+                                                        Image, 0x102ff4dc0, {{73.7, -4621.0}, {84.3, 76.3}}, identifier: 'heart.fill', label: 'Love'
+                                                        StaticText, 0x102ff7700, {{73.5, -4536.5}, {243.7, 58.7}}, label: 'Resting HR'
+                                                        StaticText, 0x102ff6a80, {{73.5, -4469.9}, {192.3, 65.7}}, identifier: 'condition-contribution-value-rhr', label: '54 bpm'
+                                                        StaticText, 0x102ff75c0, {{73.5, -4396.2}, {362.3, 51.3}}, identifier: 'condition-contribution-impact-rhr', label: 'Impact unavailable'
+                                                    StaticText, 0x102ff5900, {{53.5, -4304.9}, {760.2, 469.2}}, label: 'Excellent, You're in peak condition, A great day to try high-intensity workouts or challenging goals. Your body is well-recovered, so push yourself a bit more than usual.', Selected
+                                                      StaticText, 0x102ff6800, {{53.5, -4304.9}, {356.7, 63.3}}, label: 'Today's Insight'
+                                                      Image, 0x102ff5040, {{58.7, -4208.7}, {58.0, 58.0}}, identifier: 'checkmark.circle.fill', label: 'Selected', Selected
+                                                      StaticText, 0x102ff7e80, {{121.5, -4213.5}, {550.0, 63.3}}, label: 'You're in peak condition'
+                                                      StaticText, 0x102ff7480, {{121.5, -4142.2}, {660.0, 290.7}}, label: 'A great day to try high-intensity workouts or challenging goals. Your body is well-recovered, so push yourself a bit more than usual.'
+                                                    StaticText, 0x102ff4c80, {{73.5, -3795.5}, {416.0, 58.7}}, identifier: 'condition-time-of-day', label: 'Time-of-day Effect'
+                                                    StaticText, 0x102ff6940, {{73.5, -3728.9}, {388.3, 51.3}}, identifier: 'condition-time-of-day', label: 'Current adjustment 0'
+                                                    StaticText, 0x1065c9680, {{73.5, -3667.6}, {174.7, 128.3}}, identifier: 'condition-time-of-day', label: 'Night, 100'
+                                                      StaticText, 0x1065cb340, {{79.7, -3667.6}, {168.5, 58.7}}, label: 'Night'
+                                                      Image, 0x1065cbac0, {{79.7, -3665.3}, {48.0, 50.0}}, identifier: 'moon.stars', label: 'Clear Night'
+                                                      StaticText, 0x1065cb5c0, {{73.5, -3604.9}, {105.3, 65.7}}, label: '100'
+                                                    StaticText, 0x1065c8280, {{73.5, -3523.3}, {254.7, 135.1}}, identifier: 'condition-time-of-day', label: 'Morning, 100'
+                                                      StaticText, 0x1065c9e00, {{76.7, -3523.3}, {251.5, 60.9}}, label: 'Morning'
+                                                      Image, 0x1065ca1c0, {{76.7, -3519.0}, {68.0, 56.7}}, identifier: 'sunrise', label: 'Sunrise'
+                                                      StaticText, 0x1065c83c0, {{73.5, -3453.9}, {105.3, 65.7}}, label: '100'
+                                                    StaticText, 0x1065c8c80, {{73.5, -3371.3}, {182.3, 129.4}}, identifier: 'condition-time-of-day', label: 'Noon, 100'
+                                                      Image, 0x1065cad00, {{78.0, -3368.0}, {52.0, 52.0}}, identifier: 'sun.max', label: 'Brightness Higher'
+                                                      StaticText, 0x1065c8500, {{78.0, -3371.3}, {177.8, 58.7}}, label: 'Noon'
+                                                      StaticText, 0x1065c8f00, {{73.5, -3307.5}, {105.3, 65.7}}, label: '100'
+                                                    StaticText, 0x1065cbe80, {{73.5, -3225.9}, {247.7, 135.1}}, identifier: 'condition-time-of-day', label: 'Evening, 97'
+                                                      StaticText, 0x1065cb700, {{76.7, -3225.9}, {244.5, 61.2}}, label: 'Evening'
+                                                      Image, 0x1065ca580, {{76.7, -3221.3}, {68.0, 56.7}}, identifier: 'sunset', label: 'Sunset'
+                                                      StaticText, 0x1065c92c0, {{73.5, -3156.5}, {70.3, 65.7}}, label: '97'
+                                                    Other, 0x1065c97c0, {{53.7, -3050.7}, {760.0, 1347.7}}, identifier: 'condition-trend-card'
+                                                      StaticText, 0x1065cbd40, {{79.7, -3030.8}, {416.2, 58.7}}, label: 'Condition Trend'
+                                                      Image, 0x1065c88c0, {{79.7, -3024.7}, {53.3, 46.3}}, identifier: 'chart.xyaxis.line', label: 'Xy Axis With A Trend Line'
+                                                      Button, 0x1065cb840, {{605.7, -3027.0}, {188.0, 51.3}}, identifier: 'score-chart-trend-toggle', label: 'Trend', value: Off
+                                                        StaticText, 0x1065c8140, {{605.7, -3027.0}, {188.0, 51.3}}, label: 'Trend'
+                                                        Image, 0x10fbb0000, {{619.0, -3021.3}, {46.3, 40.0}}, identifier: 'chart.line.uptrend.xyaxis', label: 'Chart Line'
+                                                      SegmentedControl, 0x10fbb0140, {{73.7, -2960.0}, {720.0, 31.0}}, identifier: 'condition-period-picker'
+                                                        Button, 0x10fbb0280, {{73.7, -2960.0}, {144.0, 32.0}}, label: 'D'
+                                                        Button, 0x10fbb03c0, {{217.7, -2960.0}, {144.0, 32.0}}, label: 'W', Selected
+                                                        Button, 0x10fbb0500, {{361.7, -2960.0}, {144.0, 32.0}}, label: 'M'
+                                                        Button, 0x10fbb0640, {{505.7, -2960.0}, {144.0, 32.0}}, label: '6M'
+                                                        Button, 0x10fbb0780, {{649.7, -2960.0}, {144.0, 32.0}}, label: 'Y'
+                                                      Button, 0x10fbb08c0, {{73.7, -2909.7}, {44.0, 44.0}}, identifier: 'condition-period-previous', label: 'Previous period'
+                                                      StaticText, 0x10fbb0a00, {{242.2, -2917.1}, {382.7, 58.7}}, identifier: 'score-detail-chart-visible-range', label: 'Oct 24 – 30, 2026'
+                                                      Button, 0x10fbb0b40, {{749.7, -2909.7}, {44.0, 44.0}}, identifier: 'condition-period-next', label: 'Next period', Disabled
+                                                      Other, 0x10fbb0c80, {{73.7, -2846.3}, {720.0, 620.0}}
+                                                      Other, 0x10fbb0dc0, {{73.7, -2846.3}, {720.0, 620.0}}, identifier: 'chart-selection-probe', label: 'none'
+                                                      Other, 0x10fbb0f00, {{73.7, -2846.3}, {720.0, 620.0}}, identifier: 'chart-trend-probe', label: 'trend-endpoints:none'
+                                                      Other, 0x10fbb1040, {{73.7, -2846.3}, {720.0, 620.0}}, identifier: 'detail-chart-surface', label: 'Condition Detail Chart', value: Oct 24 – 30, 2026
+                                                      Other, 0x10fbb1180, {{73.7, -2846.3}, {720.0, 620.0}}, identifier: 'condition-history-probe', label: 'visible-points:7'
+                                                      ScrollView, 0x10fbb12c0, {{145.7, -2846.3}, {648.0, 568.0}}
+                                                        Other, 0x10fbb1400, {{-2446.3, -2846.3}, {3240.0, 568.0}}
+                                                          Other, 0x10fbb1540, {{-3144.3, -2896.3}, {4636.0, 680.0}}
+                                                            Other, 0x10fbb1680, {{-1705.8, -2820.7}, {648.0, 516.7}}, label: 'Oct 4, 2026 at 00 to Oct 11, 2026 at 00', value: starts at 55, vari...
+                                                            Other, 0x10fbb17c0, {{-1057.8, -2820.7}, {648.0, 516.7}}, label: 'Oct 11, 2026 at 00 to Oct 18, 2026 at 00', value: starts at 58, vari...
+                                                            Other, 0x10fbb1900, {{-409.8, -2820.7}, {648.0, 516.7}}, label: 'Oct 18, 2026 at 00 to Oct 25, 2026 at 00', value: starts at 58, vari...
+                                                            Other, 0x10fbb1a40, {{238.2, -2820.7}, {648.0, 516.7}}, label: 'Oct 25, 2026 at 00 to Nov 1, 2026 at 00', value: 55 to 100, increas...
+                                                            Other, 0x10fbb1b80, {{-2446.3, -2330.3}, {3240.0, 1.0}}, value: 50
+                                                      Other, 0x10fbb1cc0, {{73.5, -2201.5}, {302.0, 478.3}}, identifier: 'condition-visible-summary'
+                                                        StaticText, 0x10fbb1e00, {{73.5, -2201.5}, {302.0, 51.3}}, label: 'Period Summary'
+                                                        StaticText, 0x10fbb1f40, {{73.5, -2142.1}, {65.7, 48.0}}, label: 'Avg'
+                                                        StaticText, 0x10fbb2080, {{73.5, -2092.1}, {70.3, 65.7}}, identifier: 'condition-summary-average', label: '66'
+                                                        StaticText, 0x10fbb21c0, {{73.5, -2018.5}, {64.0, 48.0}}, label: 'Min'
+                                                        StaticText, 0x10fbb2300, {{73.5, -1968.5}, {70.3, 65.7}}, identifier: 'condition-summary-min', label: '55'
+                                                        StaticText, 0x10fbb2440, {{73.5, -1894.8}, {72.7, 48.0}}, label: 'Max'
+                                                        StaticText, 0x10fbb2580, {{73.5, -1844.8}, {105.3, 65.7}}, identifier: 'condition-summary-max', label: '100'
+                                                        StaticText, 0x10fbb26c0, {{114.5, -1771.1}, {84.3, 48.0}}, identifier: 'condition-summary-change', label: '17%'
+                                                        Image, 0x10fbb2800, {{78.3, -1761.7}, {29.3, 29.0}}, identifier: 'condition-summary-change', label: 'Up-Right Diagonal Arrow'
+                                                    StaticText, 0x10fbb2940, {{53.5, -1683.1}, {225.3, 58.7}}, label: 'Highlights'
+                                                    StaticText, 0x10fbb2a80, {{105.5, -1600.5}, {159.0, 51.3}}, label: 'Best day'
+                                                    Image, 0x10fbb2bc0, {{55.0, -1571.0}, {53.0, 53.0}}, identifier: 'arrow.up.circle.fill', label: 'Arrow Up Circle'
+                                                    StaticText, 0x10fbb2d00, {{105.5, -1547.1}, {84.7, 58.7}}, label: '100'
+                                                    StaticText, 0x10fbb2e40, {{668.8, -1570.1}, {128.7, 51.3}}, label: 'Oct 30'
+                                                    StaticText, 0x10fbb2f80, {{105.5, -1448.5}, {209.3, 51.3}}, label: 'Lowest day'
+                                                    Image, 0x10fbb30c0, {{55.0, -1419.0}, {53.0, 53.0}}, identifier: 'arrow.down.circle.fill', label: 'Arrow Down Circle'
+                                                    StaticText, 0x10fbb3200, {{105.5, -1395.1}, {59.7, 58.7}}, label: '55'
+                                                    StaticText, 0x10fbb3340, {{670.8, -1418.1}, {126.7, 51.3}}, label: 'Oct 25'
+                                                    StaticText, 0x10fbb3480, {{105.5, -1296.5}, {215.0, 51.3}}, label: 'Trending up'
+                                                    Image, 0x10fbb35c0, {{53.7, -1264.3}, {55.7, 48.0}}, identifier: 'chart.line.uptrend.xyaxis', label: 'Chart Line'
+                                                    StaticText, 0x10fbb3700, {{105.5, -1243.1}, {51.7, 58.7}}, label: '21'
+                                                    StaticText, 0x10fbb3840, {{668.8, -1266.1}, {128.7, 51.3}}, label: 'Oct 30'
+                                                    Other, 0x10fbb3980, {{53.7, -1148.3}, {760.0, 589.0}}, identifier: 'condition-subscore-hrv'
+                                                      StaticText, 0x10fbb3ac0, {{65.5, -1136.5}, {99.0, 58.7}}, label: 'HRV'
+                                                      StaticText, 0x10fbb3c00, {{65.5, -1073.8}, {229.0, 51.3}}, label: 'Avg 75.8 ms'
+                                                      Other, 0x10fbb3d40, {{65.7, -1014.3}, {736.0, 443.0}}, identifier: 'subscore-trend-plot'
+                                                        Other, 0x10fbb3e80, {{65.7, -1014.3}, {93.0, 391.0}}, label: 'Oct 24, 2026 at 00 to Oct 25, 2026 at 00', value: 73.3 to 73.3, 2 va...
+                                                        Other, 0x10fbb4000, {{158.7, -1014.3}, {93.0, 391.0}}, label: 'Oct 25, 2026 at 00 to Oct 26, 2026 at 00', value: 72.45 to 72.45, 2 ...
+                                                        Other, 0x10fbb4140, {{251.7, -1014.3}, {93.0, 391.0}}, label: 'Oct 26, 2026 at 00 to Oct 27, 2026 at 00', value: 78.6 to 78.6, 2 va...
+                                                        Other, 0x10fbb4280, {{344.7, -1014.3}, {93.0, 391.0}}, label: 'Oct 27, 2026 at 00 to Oct 28, 2026 at 00', value: 77.75 to 77.75, 2 ...
+                                                        Other, 0x10fbb43c0, {{437.7, -1014.3}, {93.0, 391.0}}, label: 'Oct 28, 2026 at 00 to Oct 29, 2026 at 00', value: 76.9 to 76.9, 2 va...
+                                                        Other, 0x10fbb4500, {{530.7, -1014.3}, {93.0, 391.0}}, label: 'Oct 29, 2026 at 00 to Oct 30, 2026 at 00', value: 76.05 to 76.05, 2 ...
+                                                        Other, 0x10fbb4640, {{623.7, -1014.3}, {93.0, 391.0}}, label: 'Oct 30, 2026 at 00 to Oct 31, 2026 at 00', value: 75.2 to 75.2, 2 va...
+                                                      Other, 0x10fbb4780, {{65.7, -1014.3}, {736.0, 443.0}}, identifier: 'subscore-trend-plot'
+                                                    Other, 0x10fbb48c0, {{53.7, -539.3}, {760.0, 589.0}}, identifier: 'condition-subscore-rhr'
+                                                      StaticText, 0x10fbb4a00, {{65.5, -527.5}, {410.7, 58.7}}, label: 'Resting Heart Rate'
+                                                      StaticText, 0x10fbb4b40, {{65.5, -464.8}, {222.0, 51.3}}, label: 'Avg 52 bpm'
+                                                      Other, 0x10fbb4c80, {{65.7, -405.3}, {736.0, 443.0}}, identifier: 'subscore-trend-plot'
+                                                        Other, 0x10fbb4dc0, {{65.7, -405.3}, {97.4, 391.0}}, label: 'Oct 24, 2026 at 00 to Oct 25, 2026 at 00', value: 53.6 to 53.6, 2 va...
+                                                        Other, 0x10fbb4f00, {{163.1, -405.3}, {97.4, 391.0}}, label: 'Oct 25, 2026 at 00 to Oct 26, 2026 at 00', value: 55 to 55, 2 values
+                                                        Other, 0x10fbb5040, {{260.5, -405.3}, {97.4, 391.0}}, label: 'Oct 26, 2026 at 00 to Oct 27, 2026 at 00', value: 53.4 to 53.4, 2 va...
+                                                        Other, 0x10fbb5180, {{358.0, -405.3}, {97.4, 391.0}}, label: 'Oct 27, 2026 at 00 to Oct 28, 2026 at 00', value: 51.8 to 51.8, 2 va...
+                                                        Other, 0x10fbb52c0, {{455.4, -405.3}, {97.4, 391.0}}, label: 'Oct 28, 2026 at 00 to Oct 29, 2026 at 00', value: 53.2 to 53.2, 2 va...
+                                                        Other, 0x10fbb5400, {{552.8, -405.3}, {97.4, 391.0}}, label: 'Oct 29, 2026 at 00 to Oct 30, 2026 at 00', value: 51.6 to 51.6, 2 va...
+                                                        Other, 0x10fbb5540, {{650.2, -405.3}, {97.4, 391.0}}, label: 'Oct 30, 2026 at 00 to Oct 31, 2026 at 00', value: 50 to 50, 2 values
+                                                      Other, 0x10fbb5680, {{65.7, -405.3}, {736.0, 443.0}}, identifier: 'subscore-trend-plot'
+                                                    Other, 0x10fbb57c0, {{53.7, 69.7}, {760.0, 545.7}}, identifier: 'score-composition-card'
+                                                      StaticText, 0x10fbb5900, {{73.5, 89.5}, {421.7, 58.7}}, label: 'Score Components'
+                                                      Image, 0x10fbb5a40, {{73.7, 160.3}, {80.7, 81.7}}, identifier: 'waveform.path.ecg', label: 'Ecg Waveform Path'
+                                                      StaticText, 0x10fbb5b80, {{166.2, 160.2}, {317.7, 58.7}}, label: 'HRV (Z-Score)'
+                                                      StaticText, 0x10fbb5cc0, {{166.2, 222.9}, {153.3, 65.7}}, identifier: 'condition-component-value-hrv', label: '+2.00'
+                                                      Image, 0x10fbb5e00, {{73.7, 313.7}, {83.3, 74.7}}, identifier: 'heart.fill', label: 'Love'
+                                                      StaticText, 0x10fbb5f40, {{168.8, 313.5}, {354.7, 58.7}}, label: 'RHR Adjustment'
+                                                      StaticText, 0x10fbb6080, {{168.8, 376.2}, {83.3, 65.7}}, identifier: 'condition-component-value-rhr', label: '0.0'
+                                                      Image, 0x10fbb61c0, {{73.7, 467.0}, {80.0, 80.3}}, identifier: 'clock', label: 'Clock'
+                                                      StaticText, 0x10fbb6300, {{165.8, 466.9}, {407.0, 58.7}}, label: 'Time-of-day Effect'
+                                                      StaticText, 0x10fbb6440, {{165.8, 529.5}, {83.3, 65.7}}, identifier: 'condition-component-value-time', label: '0.0'
+                                                    Button, 0x10fbb6580, {{73.7, 655.3}, {720.0, 66.7}}, identifier: 'condition-score-explainer', label: 'How the Score Works'
+                                                      StaticText, 0x10fbb66c0, {{73.7, 655.3}, {720.0, 66.7}}, identifier: 'condition-score-explainer', label: 'How the Score Works'
+                                                      Image, 0x10fbb6800, {{78.0, 663.7}, {50.0, 50.0}}, identifier: 'info.circle.fill', label: 'Info'
+                                                      Image, 0x10fbb6940, {{769.7, 670.0}, {21.7, 37.3}}, identifier: 'collapsed'
+                                                  Other, 0x10fbb6a80, {{918.0, 82.0}, {30.0, 532.0}}, label: 'Vertical scroll bar, 11 pages', value: 98%
+                                                    Other, 0x10fbb6bc0, {{945.0, 543.7}, {3.0, 56.3}}
+                                                  Other, 0x10fbb6d00, {{918.0, 82.0}, {30.0, 532.0}}, label: 'Vertical scroll bar, 11 pages', value: 98%
+                                                    Other, 0x10fbb6e40, {{945.0, 543.7}, {3.0, 56.3}}
+                                        Toolbar, 0x10fbb6f80, {{0.0, -0.0}, {951.0, 669.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                          Other, 0x10fbb70c0, {{0.0, -0.0}, {951.0, 669.0}}
+                                Toolbar, 0x10fbb7200, {{0.0, -0.0}, {951.0, 669.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                  Other, 0x10fbb7340, {{0.0, -0.0}, {951.0, 669.0}}
+                            Other, 0x10fbb7480, {{0.0, -0.0}, {951.0, 669.0}}
+                              Other, 0x10fbb75c0, {{0.0, -0.0}, {951.0, 669.0}}
+                Other, 0x10fbb7700, {{0.0, -0.0}, {951.0, 669.0}}
+                  Toolbar, 0x10fbb7840, {{0.0, -0.0}, {951.0, 669.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                    Other, 0x10fbb7980, {{0.0, -0.0}, {951.0, 669.0}}
+                      Other, 0x10fbb7ac0, {{0.0, -0.0}, {951.0, 669.0}}
+                        Other, 0x10fbb7c00, {{0.0, -0.0}, {951.0, 669.0}}
+                          Other, 0x10fbb7d40, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x10fbb7e80, {{879.0, 124.0}, {48.0, 48.0}}
+                              Other, 0x10fbbc000, {{879.0, 124.0}, {48.0, 48.0}}
+                                Other, 0x10fbbc140, {{884.0, 129.0}, {38.0, 38.0}}
+                                  Other, 0x10fbbc280, {{884.0, 129.0}, {38.0, 38.0}}
+                                    Button, 0x10fbbc3c0, {{884.0, 129.0}, {38.0, 38.0}}, identifier: 'BackButton'
+                        Other, 0x10fbbc500, {{0.0, -0.0}, {951.0, 669.0}}
+                          Other, 0x10fbbc640, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x10fbbc780, {{879.0, 433.0}, {48.0, 212.0}}
+                              Other, 0x10fbbc8c0, {{879.0, 433.0}, {48.0, 212.0}}
+                                Other, 0x10fbbca00, {{879.0, 433.0}, {48.0, 212.0}}
+                                  Other, 0x10fbbcb40, {{879.0, 433.0}, {48.0, 212.0}}
+                                    Other, 0x10fbbcc80, {{879.0, 433.0}, {48.0, 212.0}}
+                                      Other, 0x10fbbcdc0, {{879.0, 433.0}, {48.0, 212.0}}
+                                        Other, 0x10fbbcf00, {{879.0, 433.0}, {44.0, 58.0}}
+                                        Other, 0x10fbbd040, {{879.0, 433.0}, {48.0, 212.0}}
+                                          Button, 0x10fbbd180, {{881.0, 435.0}, {44.0, 58.0}}, identifier: 'tab-today', label: 'Today', Selected
+                                            Image, 0x10fbbd2c0, {{890.3, 447.3}, {25.3, 31.7}}, identifier: 'heart.text.clipboard.fill', label: 'Heart on a text clipboard, filled'
+                                          Button, 0x10fbbd400, {{881.0, 485.0}, {44.0, 58.0}}, identifier: 'tab-activity', label: 'Activity'
+                                            Image, 0x10fbbd540, {{891.3, 498.7}, {23.3, 28.7}}, identifier: 'flame.fill', label: 'Flame'
+                                          Button, 0x10fbbd680, {{881.0, 535.0}, {44.0, 58.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                                            Image, 0x10fbbd7c0, {{888.7, 551.3}, {28.7, 25.3}}, identifier: 'leaf.fill', label: 'Leaf'
+                                          Button, 0x10fbbd900, {{881.0, 585.0}, {44.0, 58.0}}, identifier: 'tab-life', label: 'Life'
+                                            Image, 0x10fbbda40, {{887.0, 600.3}, {32.0, 27.3}}, identifier: 'checklist', label: 'Checklist with checkmarks'
+                                        Other, 0x10fbbdb80, {{879.0, 433.0}, {48.0, 212.0}}
+                                        Other, 0x10fbbdcc0, {{879.0, 433.0}, {48.0, 212.0}}
+                                          Other, 0x10fbbde00, {{879.0, 433.0}, {48.0, 212.0}}
+                                            Other, 0x10fbbdf40, {{879.0, 433.0}, {48.0, 212.0}}
+                                              Other, 0x10fbbe080, {{879.0, 433.0}, {48.0, 212.0}}
+                                                Other, 0x10fbbe1c0, {{879.0, 433.0}, {48.0, 212.0}}
+                                                  Other, 0x10fbbe300, {{879.0, 433.0}, {48.0, 212.0}}
+                                              Other, 0x10fbbe440, {{879.0, 433.0}, {48.0, 212.0}}
+                                                Other, 0x10fbbe580, {{879.0, 433.0}, {48.0, 212.0}}
+                                        Other, 0x10fbbe6c0, {{881.0, 435.0}, {44.0, 58.0}}
+                                          Other, 0x10fbbe800, {{881.0, 435.0}, {44.0, 58.0}}
+                                            Other, 0x10fbbe940, {{881.0, 435.0}, {44.0, 58.0}}
+                                            Other, 0x10fbbea80, {{881.0, 435.0}, {44.0, 58.0}}
+                                              Other, 0x10fbbebc0, {{881.0, 435.0}, {44.0, 58.0}}
+                                                Other, 0x10fbbed00, {{881.0, 435.0}, {44.0, 58.0}}
+                                                  Other, 0x10fbbee40, {{881.0, 435.0}, {44.0, 58.0}}
+                                                Other, 0x10fbbef80, {{881.0, 435.0}, {44.0, 58.0}}
+                                              Other, 0x10fbbf0c0, {{881.0, 435.0}, {44.0, 58.0}}
+              Other, 0x10fbbf200, {{433.5, 317.5}, {0.0, 0.0}}
+Path to element:
+ →Application, 0x106590640, pid: 46800, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x10fbbf340, pid: 46800, label: 'DUNE'
+  }
