@@ -163,3 +163,5 @@ Life Flow를 실제 앱에 반영했다. [검증 보고](../../reviews/2026-10-2
 사용자 요청으로 [단일 통합 시안](themes/dune-cardio-atlas-integrated.html)을 추가했다. 아틀라스 기본 상세 → 공유 스타일 선택 → 저니 누적 진행·패스포트 업적을 하나의 기록에 연결한다. 앞의 다섯 방향은 비교 이력으로 보존한다. [레이아웃 계약](../layout-map/cardio-atlas-integrated-proposal.md), [편집 원본](themes/assets/cardio-atlas-integrated-fragment.html), [브라우저 검사](themes/assets/cardio-atlas-integrated-qa.json)를 따른다. 실내외 모든 유산소가 범위이며 경로가 없는 운동에는 장소와 해당 단위의 수치를 사용한다. 네이티브 앱/실제 사용자 기록/시뮬레이터 캡처가 아니다.
 
 Cardio Atlas 네이티브 구현의 [2026-10-29 실제54장과 검증 범위](../full-redesign-map/review/cardio-atlas-2026-10-29/index.html)를 별도 actual 갤러리에 연결했다. 위 브라우저 시안은 보존하며 native PNG와 구분한다. iPhone·iPad·Duo 접힘·펼침의 관련 UI 및 변경 후 장소 검색 화면 검증을 마쳤다.
+
+- 2026-10-30: L03 습관 템플릿의 검토된 밝음/어두움 브라우저 시안을 보존했다. 네이티브 구현은 화면별 별도 PR로 진행하며 시안 JPEG와 새 앱 캡처를 구분한다.
