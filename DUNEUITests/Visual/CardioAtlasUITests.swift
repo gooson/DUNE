@@ -3,7 +3,6 @@
 /// Native screenshots use the opt-in synthetic route and place fixtures.
 @MainActor
 final class CardioAtlasUITests: ActivityExerciseSeededUITestBaseCase {
-    override var initialTabSelectionArgument: String? { "activity" }
     override var additionalLaunchArguments: [String] {
         ["--ui-cardio-atlas-fixture", "-morningBriefingDisabled", "YES"]
     }
@@ -149,7 +148,6 @@ final class CardioAtlasUITests: ActivityExerciseSeededUITestBaseCase {
 /// Launch once with large text: avoids a second app installation/reset during setup.
 @MainActor
 final class CardioAtlasLargeTextUITests: ActivityExerciseSeededUITestBaseCase {
-    override var initialTabSelectionArgument: String? { "activity" }
     override var additionalLaunchArguments: [String] {
         ["--ui-cardio-atlas-fixture", "-morningBriefingDisabled", "YES",
          "-AppleLanguages", "(ko)", "-AppleLocale", "ko_KR",
