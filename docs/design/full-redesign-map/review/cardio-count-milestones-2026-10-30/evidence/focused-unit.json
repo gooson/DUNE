@@ -1,0 +1,15 @@
+{
+  "status": "passed",
+  "test_definitions": 15,
+  "invocations_including_parameterized_cases": 26,
+  "environment": "standalone macOS Swift Package; actual Foundation domain sources and test file copied without modification",
+  "package_path": "/tmp/cardio-count-milestone-tests",
+  "command": "SWIFT_MODULECACHE_PATH=/tmp/cardio-place-swift-cache CLANG_MODULE_CACHE_PATH=/tmp/cardio-place-swift-cache swift test --package-path /tmp/cardio-count-milestone-tests --cache-path /tmp/cardio-place-package-cache --disable-sandbox",
+  "log_sha256": "94106e4af308edfc5200f9c1911117613a8e386cef3c79a77d2c775e2f4d5469",
+  "unmodified_input_sha256": {
+    "DUNE/Domain/Models/CardioAtlasProgress.swift": "03d412df99183e19d6ea0c3076417cd00e7252249348987f653b653c34e4c89f",
+    "DUNE/Domain/Models/WorkoutActivityType.swift": "78a98fcb0e80fa21a81116415fb7e6e22902d611babd0739e1f7ea6c68521ac2",
+    "DUNE/Domain/Models/MuscleGroup.swift": "23ef1287e2c164126fe24c4345e763111ab4c71d60a6b8a7e8d5be9cdae02700",
+    "DUNETests/CardioAtlasProgressTests.swift": "311a38355c53fc5408a260051e42744d669c985340b4277b140ea553d7356a73"
+  }
+}

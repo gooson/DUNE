@@ -171,6 +171,137 @@ struct CardioAtlasProgressTests {
         #expect(after.nextAchievements.first { $0.kind == .singleDistance }?.currentValue == 500)
     }
 
+    @Test("Session count awards continue every hundred with the next milestone always available",
+          arguments: [99, 100, 101, 199, 200, 201, 299, 300, 350, 1_000, 1_001])
+    func continuingCountMilestones(count: Int) throws {
+        let sessions = countSessions(count)
+
+        let progress = try #require(CardioAtlasProgress.calculate(
+            sessions: sessions, currentSessionID: "s\(count)"
+        ))
+
+        let base = [1, 5, 10, 20, 50, 100]
+        let later = count >= 200 ? Array(stride(from: 200, through: count, by: 100)) : []
+        let expectedAwards = (base.filter { $0 <= count } + later).map(Double.init)
+        let countAwards = progress.achievements.filter { $0.kind == .sessionCount }
+        let nextThreshold = base.first { $0 > count } ?? ((count / 100) + 1) * 100
+        let next = try #require(progress.nextAchievements.first { $0.kind == .sessionCount })
+
+        #expect(progress.sessionCount == count)
+        #expect(countAwards.map(\.threshold) == expectedAwards)
+        #expect(next.threshold == Double(nextThreshold))
+        #expect(next.currentValue == Double(count))
+        #expect(next.fraction == Double(count) / Double(nextThreshold))
+    }
+
+    @Test("Original count milestones retain their IDs and first-crossing dates")
+    func originalCountMilestoneContracts() throws {
+        let sessions = countSessions(100)
+        let progress = try #require(CardioAtlasProgress.calculate(
+            sessions: sessions, currentSessionID: "s100"
+        ))
+
+        for threshold in [1, 5, 10, 20, 50, 100] {
+            let award = try #require(progress.achievements.first {
+                $0.kind == .sessionCount && $0.threshold == Double(threshold)
+            })
+            #expect(award.id == "running-sessionCount-\(threshold)")
+            #expect(award.awardedSessionID == "s\(threshold)")
+            #expect(award.awardedAt == sessions[threshold - 1].date)
+            #expect(award.achievedValue == Double(threshold))
+        }
+    }
+
+    @Test("A hundred-count award belongs to exactly its chronological crossing", arguments: [200, 300])
+    func countMilestoneFirstCrossing(threshold: Int) throws {
+        let sessions = countSessions(threshold + 1)
+        let atCrossing = try #require(CardioAtlasProgress.calculate(
+            sessions: sessions, currentSessionID: "s\(threshold)"
+        ))
+        let afterCrossing = try #require(CardioAtlasProgress.calculate(
+            sessions: sessions, currentSessionID: "s\(threshold + 1)"
+        ))
+        let award = try #require(atCrossing.achievements.first {
+            $0.kind == .sessionCount && $0.threshold == Double(threshold)
+        })
+
+        #expect(award.id == "running-sessionCount-\(threshold)")
+        #expect(award.awardedSessionID == "s\(threshold)")
+        #expect(award.awardedAt == sessions[threshold - 1].date)
+        #expect(award.achievedValue == Double(threshold))
+        #expect(atCrossing.earnedInCurrentSession.contains { $0.id == award.id })
+        #expect(afterCrossing.achievements.first { $0.id == award.id } == award)
+        #expect(!afterCrossing.earnedInCurrentSession.contains { $0.id == award.id })
+    }
+
+    @Test("Reordered duplicates, unrelated activities, and invalid rows do not advance count awards")
+    func countIgnoresUnrelatedRows() throws {
+        let sessions = countSessions(200)
+        let unrelated = (1...20).map { index in
+            session("cycling\(index)", .cycling, day: index, duration: 600, distance: 1_000)
+        }
+        let invalid = [
+            session("zero", .running, day: 50, duration: 0, distance: 1_000),
+            session("nan", .running, day: 100, duration: .nan, distance: 1_000),
+        ]
+        let source = Array(sessions.reversed()) + unrelated + invalid + [sessions[0], sessions[99], sessions[199]]
+
+        let progress = try #require(CardioAtlasProgress.calculate(
+            sessions: source, currentSessionID: "s200"
+        ))
+        let award = try #require(progress.achievements.first {
+            $0.kind == .sessionCount && $0.threshold == 200
+        })
+
+        #expect(progress.sessionCount == 200)
+        #expect(award.awardedSessionID == "s200")
+        #expect(award.awardedAt == sessions[199].date)
+        #expect(progress.achievements.filter { $0.kind == .sessionCount && $0.threshold == 200 }.count == 1)
+        #expect(progress.nextAchievements.first { $0.kind == .sessionCount }?.threshold == 300)
+    }
+
+    @Test("A historical current workout excludes later hundred-count awards")
+    func historicalCountStopsAtCurrent() throws {
+        let sessions = countSessions(300)
+
+        let progress = try #require(CardioAtlasProgress.calculate(
+            sessions: Array(sessions.reversed()), currentSessionID: "s199"
+        ))
+
+        #expect(progress.sessionCount == 199)
+        #expect(!progress.achievements.contains { $0.kind == .sessionCount && $0.threshold == 200 })
+        #expect(progress.nextAchievements.first { $0.kind == .sessionCount }?.threshold == 200)
+        #expect(progress.nextAchievements.first { $0.kind == .sessionCount }?.currentValue == 199)
+    }
+
+    @Test("Deleting a workout before the 200th retracts that milestone")
+    func deletionRetractsCountMilestone() throws {
+        let sessions = countSessions(200)
+        let reduced = sessions.filter { $0.id != "s50" }
+
+        let before = try #require(CardioAtlasProgress.calculate(
+            sessions: sessions, currentSessionID: "s200"
+        ))
+        let after = try #require(CardioAtlasProgress.calculate(
+            sessions: reduced, currentSessionID: "s200"
+        ))
+        let next = try #require(after.nextAchievements.first { $0.kind == .sessionCount })
+
+        #expect(before.achievements.contains { $0.kind == .sessionCount && $0.threshold == 200 })
+        #expect(after.sessionCount == 199)
+        #expect(!after.achievements.contains { $0.kind == .sessionCount && $0.threshold == 200 })
+        #expect(!after.earnedInCurrentSession.contains { $0.kind == .sessionCount && $0.threshold == 200 })
+        #expect(next.threshold == 200)
+        #expect(next.currentValue == 199)
+        #expect(next.fraction == 199.0 / 200)
+    }
+
+    private func countSessions(_ count: Int) -> [CardioAtlasSession] {
+        (1...count).map { index in
+            session("s\(index)", .running, day: index, duration: 600, distance: 1_000)
+        }
+    }
+
     private func session(
         _ id: String,
         _ activity: WorkoutActivityType,

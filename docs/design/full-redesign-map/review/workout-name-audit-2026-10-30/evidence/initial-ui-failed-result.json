@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/WorkoutNameAuditUITests/testGenericCorrectionsLocalizeAndMachineStairsRemainDistinct"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 1,
+    "passed": 0,
+    "skipped": 0,
+    "failed": 1
+  },
+  "passed_cases": 0,
+  "failures": [
+    "4483: /Users/shanks/.codex/worktrees/96f8/Health/DUNEUITests/Visual/WorkoutNameAuditUITests.swift:31: error: -[DUNEUITests.WorkoutNameAuditUITests testGenericCorrectionsLocalizeAndMachineStairsRemainDistinct] : Failed to tap \"healthkit-workout-edit-title\" Any: No matches found for first query match sequen…",
+    "4497: Test Case '-[DUNEUITests.WorkoutNameAuditUITests testGenericCorrectionsLocalizeAndMachineStairsRemainDistinct]' failed (48.530 seconds).",
+    "4498: Test Suite 'WorkoutNameAuditUITests' failed at 2026-10-30 01:36:09.177.",
+    "4500: Test Suite 'DUNEUITests.xctest' failed at 2026-10-30 01:36:09.179.",
+    "4502: Test Suite 'Selected tests' failed at 2026-10-30 01:36:09.180.",
+    "4517: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log has no positive passed-test count",
+    "UI test log has no identifiable passed UI test cases",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/WorkoutNameAuditUITests/testGenericCorrectionsLocalizeAndMachineStairsRemainDistinct"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/96f8/Health/.codex-checks/workout-name-audit/phone-ui.log"
+}

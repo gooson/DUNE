@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/CardioAtlasUITests/testSearchSelectionScrollsToTopAndUpdatesMap",
+    "DUNEUITests/CardioAtlasUITests/testSearchSelectionCancelPreservesOriginalPlace",
+    "DUNEUITests/CardioAtlasUITests/testKoreanWordAndInitialSearchExcludeUnrelatedPlaces"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 3,
+    "passed": 2,
+    "skipped": 0,
+    "failed": 1
+  },
+  "passed_cases": 2,
+  "failures": [
+    "1491: /Users/shanks/.codex/worktrees/96f8/Health/DUNEUITests/Visual/CardioAtlasUITests.swift:229: error: -[DUNEUITests.CardioAtlasUITests testSearchSelectionScrollsToTopAndUpdatesMap] : XCTAssertTrue failed",
+    "1505: Test Case '-[DUNEUITests.CardioAtlasUITests testSearchSelectionScrollsToTopAndUpdatesMap]' failed (88.043 seconds).",
+    "1506: Test Suite 'CardioAtlasUITests' failed at 2026-10-29 23:45:47.138.",
+    "1508: Test Suite 'DUNEUITests.xctest' failed at 2026-10-29 23:45:47.139.",
+    "1510: Test Suite 'Selected tests' failed at 2026-10-29 23:45:47.139.",
+    "1525: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log reports 1 failures",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/CardioAtlasUITests/testSearchSelectionScrollsToTopAndUpdatesMap"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/96f8/Health/.codex-checks/cardio-place-search/checked-ui.log"
+}

@@ -65,7 +65,9 @@ struct HealthKitWorkoutDetailView: View {
 
     private var resolvedTitle: String {
         if let correctedTitle, !correctedTitle.isEmpty {
-            return correctedTitle
+            return WorkoutActivityType.localizedDisplayName(
+                forStoredTitle: correctedTitle, preferredActivity: workout.activityType
+            ) ?? correctedTitle
         }
         return workout.localizedTitle
     }

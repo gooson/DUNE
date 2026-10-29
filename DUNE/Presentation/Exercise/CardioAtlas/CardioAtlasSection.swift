@@ -148,17 +148,29 @@ struct CardioAtlasSection: View {
             CardioAtlasPlacePicker(initialPlace: displayLocation.place, onSave: savePlace)
         }
         .sheet(item: $destination) { destination in
-            // An inspector can route NavigationLinks into its presenting tab's stack.
-            // Keep Atlas destinations in their own visible modal navigation context.
-            NavigationStack {
-                destinationContent(destination)
-                    .toolbar {
-                        ToolbarItem(placement: .confirmationAction) {
-                            Button("Done") { self.destination = nil }
-                                .accessibilityIdentifier("cardio-atlas-destination-close")
-                        }
-                    }
+            if case .share = destination {
+                destinationNavigation(destination)
+                    .presentationSizing(.page)
+                    .presentationDetents([.large])
+                    .presentationBackground(DS.Color.surfacePrimary)
+                    .presentationContentInteraction(.scrolls)
+                    .presentationDragIndicator(.visible)
+            } else {
+                destinationNavigation(destination)
             }
+        }
+    }
+
+    private func destinationNavigation(_ destination: Destination) -> some View {
+        // Keep modal navigation independent of the presenting workout inspector.
+        NavigationStack {
+            destinationContent(destination)
+                .toolbar {
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Done") { self.destination = nil }
+                            .accessibilityIdentifier("cardio-atlas-destination-close")
+                    }
+                }
         }
     }
 

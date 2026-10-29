@@ -38,6 +38,14 @@ enum TestDataSeeder {
             WorkoutSettingsStore.shared.setCount = 1
         }
         configureSimulatorAdvancedMockData(for: scenario)
+        if ProcessInfo.processInfo.arguments.contains("--ui-workout-name-audit") {
+            for (suffix, title) in [
+                ("running", "Running"), ("machine", "Stair Climbing"),
+                ("stairs", "Stair Stepper"), ("custom", "My Bench Press")
+            ] {
+                WorkoutTypeCorrectionStore.shared.setCorrectedTitle(title, for: "ui-name-audit-\(suffix)")
+            }
+        }
 
         switch scenario {
         case .empty:
@@ -186,6 +194,10 @@ enum TestDataSeeder {
         referenceDate: Date
     ) -> [WorkoutSummary] {
         guard scenario == .activityExerciseSeeded else { return [] }
+
+        if ProcessInfo.processInfo.arguments.contains("--ui-workout-name-audit") {
+            return SimulatorAdvancedMockDataSet.workoutNameAuditFixtures(referenceDate: referenceDate)
+        }
 
         let calendar = Calendar.current
         let referenceMorning = calendar.date(
@@ -532,6 +544,17 @@ enum TestDataSeeder {
             duration: 900, exerciseDefinitionID: "rowing-machine"
         )
         context.insert(unlocated)
+
+        if ProcessInfo.processInfo.arguments.contains("--ui-cardio-count-milestones") {
+            for index in 1...350 {
+                context.insert(ExerciseRecord(
+                    date: now.addingTimeInterval(-Double(352 - index) * 86_400),
+                    exerciseType: "Atlas Count Milestone Fixture",
+                    duration: 600, calories: 60, distance: 1.0,
+                    exerciseDefinitionID: "running"
+                ))
+            }
+        }
 
         do {
             try context.save()
