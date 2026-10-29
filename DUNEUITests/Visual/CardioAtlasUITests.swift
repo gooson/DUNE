@@ -12,6 +12,11 @@ final class CardioAtlasUITests: ActivityExerciseSeededUITestBaseCase {
         openRecord("running")
         XCTAssertTrue(element("cardio-atlas-section").waitForExistence(timeout: 10))
         XCTAssertTrue(element("cardio-atlas-map").exists)
+        XCTAssertLessThanOrEqual(
+            element("cardio-atlas-place").frame.height,
+            element("cardio-atlas-share").frame.height + 1,
+            "Header actions should retain the same single-line height"
+        )
         atlasScreenshot(named: "Cardio Atlas recorded route detail")
 
         XCTAssertTrue(app.scrollToHittableElementIfNeeded("cardio-atlas-journey", maxSwipes: 8))
@@ -202,6 +207,14 @@ private extension UITestBaseCase {
 
     func closeAtlasDestination(file: StaticString = #filePath, line: UInt = #line) {
         let done = app.buttons["cardio-atlas-destination-close"].firstMatch
+        let share = app.descendants(matching: .any)["cardio-atlas-share-screen"].firstMatch
+        // On compact Duo, scrolling the share preview can collapse the navigation
+        // bar. Reveal its controls before asking XCTest to tap the modal's Done.
+        if share.exists {
+            for _ in 0..<3 where !done.exists || !done.isHittable {
+                share.swipeDown()
+            }
+        }
         XCTAssertTrue(done.exists && done.isHittable, file: file, line: line)
         done.tap()
         assertAtlasDestinationVisible("exercise-session-detail-scroll", file: file, line: line)

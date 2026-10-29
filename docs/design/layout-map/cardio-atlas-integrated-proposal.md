@@ -63,3 +63,5 @@ Map snapshots in native share previews preserve their full aspect ratio within t
 At accessibility sizes, the native Atlas heading and actions use a vertical layout, with full-width Place/Share buttons. Action words must remain readable as words rather than stacking individual Korean syllables.
 
 Pace Ribbon must remain visually distinct from Atlas in the default theme. Its measured speed bands use the existing activityWater/activityStrength chart tokens and its card includes the existing localized Pace Ribbon style label. Distinct chart tokens keep pace bands separate from the Atlas accent stroke.
+
+Compact non-accessibility headers also measure the horizontal heading/actions candidate at its uncompressed ideal width. If it does not fit, ViewThatFits chooses the stacked header instead of splitting the Place action into syllables.

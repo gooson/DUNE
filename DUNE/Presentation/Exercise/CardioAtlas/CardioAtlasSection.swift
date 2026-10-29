@@ -110,6 +110,7 @@ struct CardioAtlasSection: View {
             } else {
                 ViewThatFits(in: .horizontal) {
                     HStack { heading; Spacer(); actions }
+                        .fixedSize(horizontal: true, vertical: false)
                     VStack(alignment: .leading, spacing: DS.Spacing.sm) { heading; actions }
                 }
             }
