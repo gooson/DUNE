@@ -154,6 +154,7 @@ struct CardioAtlasShareView: View {
                 .tint(style == option ? theme.accentColor : DS.Color.textSecondary)
                 .disabled(option == .paceRibbon && !hasPaceSegments)
                 .accessibilityIdentifier("style-cardio-atlas-\(option.rawValue)")
+                .accessibilityAddTraits(style == option ? .isSelected : [])
             }
         }
         .frame(maxWidth: 410)
@@ -328,13 +329,19 @@ struct CardioAtlasShareCard: View {
                 .minimumScaleFactor(0.7)
                 .lineLimit(2)
 
+            if style == .paceRibbon {
+                Label(style.title, systemImage: style.symbol)
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(DS.Color.textSecondary)
+            }
+
             if style == .signature {
                 signatureVisual
             } else if let mapImage {
                 Image(uiImage: mapImage)
                     .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(height: 250)
+                    .aspectRatio(contentMode: .fit)
+                    .frame(maxWidth: .infinity)
                     .clipped()
                     .clipShape(RoundedRectangle(cornerRadius: DS.Radius.sm))
                     .accessibilityLabel("Shared workout map")
@@ -481,7 +488,8 @@ private enum CardioAtlasSnapshotDrawing {
                 for segment in paceSegments {
                     let fraction = (segment.metersPerSecond - speedRange.minimum)
                         / max(0.1, speedRange.maximum - speedRange.minimum)
-                    graphics.setStrokeColor((fraction < 0.5 ? accent : UIColor(DS.Color.activity)).cgColor)
+                    let bandColor = fraction < 0.5 ? DS.Color.activityWater : DS.Color.activityStrength
+                    graphics.setStrokeColor(UIColor(bandColor).cgColor)
                     graphics.move(to: snapshot.point(for: segment.start))
                     graphics.addLine(to: snapshot.point(for: segment.end))
                     graphics.strokePath()

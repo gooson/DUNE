@@ -56,6 +56,7 @@ final class CardioAtlasUITests: ActivityExerciseSeededUITestBaseCase {
         XCTAssertTrue(location.exists)
         XCTAssertEqual(location.value as? String, "0", "Location sharing should start off")
         XCTAssertTrue(element("cardio-atlas-share-action").waitForExistence(timeout: 10))
+        assertAtlasShareFitsWidth()
         atlasScreenshot(named: "Cardio Atlas share private Atlas")
 
         visibleAtlasShareControl("cardio-atlas-share-location").tap()
@@ -63,6 +64,7 @@ final class CardioAtlasUITests: ActivityExerciseSeededUITestBaseCase {
         XCTAssertTrue(element("cardio-atlas-share-trim").exists)
         XCTAssertTrue(element("cardio-atlas-share-action").waitForExistence(timeout: 10))
         _ = visibleAtlasShareControl("style-cardio-atlas-atlas", direction: .down)
+        assertAtlasShareFitsWidth()
         atlasScreenshot(named: "Cardio Atlas share Atlas route")
 
         visibleAtlasShareControl("cardio-atlas-share-location").tap()
@@ -70,6 +72,7 @@ final class CardioAtlasUITests: ActivityExerciseSeededUITestBaseCase {
         XCTAssertTrue(element("cardio-atlas-share-map-image").waitForNonExistence(timeout: 5))
         XCTAssertTrue(element("cardio-atlas-share-action").waitForExistence(timeout: 10))
         _ = visibleAtlasShareControl("style-cardio-atlas-atlas", direction: .down)
+        assertAtlasShareFitsWidth()
         atlasScreenshot(named: "Cardio Atlas location removed from shared image")
         visibleAtlasShareControl("cardio-atlas-share-location").tap()
         XCTAssertTrue(element("cardio-atlas-share-action").waitForExistence(timeout: 10))
@@ -77,13 +80,17 @@ final class CardioAtlasUITests: ActivityExerciseSeededUITestBaseCase {
         let ribbon = element("style-cardio-atlas-paceRibbon")
         XCTAssertTrue(ribbon.exists && ribbon.isEnabled)
         visibleAtlasShareControl("style-cardio-atlas-paceRibbon", direction: .down).tap()
+        XCTAssertTrue(ribbon.isSelected)
         XCTAssertTrue(element("cardio-atlas-share-action").waitForExistence(timeout: 10))
         _ = visibleAtlasShareControl("style-cardio-atlas-atlas", direction: .down)
+        assertAtlasShareFitsWidth()
         atlasScreenshot(named: "Cardio Atlas share Pace Ribbon")
 
         visibleAtlasShareControl("style-cardio-atlas-signature", direction: .down).tap()
+        XCTAssertTrue(element("style-cardio-atlas-signature").isSelected)
         XCTAssertTrue(element("cardio-atlas-share-action").waitForExistence(timeout: 10))
         _ = visibleAtlasShareControl("style-cardio-atlas-atlas", direction: .down)
+        assertAtlasShareFitsWidth()
         atlasScreenshot(named: "Cardio Atlas share Signature")
         closeAtlasDestination()
     }
@@ -118,10 +125,12 @@ final class CardioAtlasUITests: ActivityExerciseSeededUITestBaseCase {
     private func openRecord(_ definitionID: String) {
         navigateToActivity()
         XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.activityRecentSeeAll, maxSwipes: 20))
+        if definitionID == "running" { atlasScreenshot(named: "Cardio Atlas recent cardio records") }
         app.buttons[AXID.activityRecentSeeAll].firstMatch.tap()
         XCTAssertTrue(element(AXID.exerciseViewScreen).waitForExistence(timeout: 10))
         let rowID = "exercise-row-\(definitionID)"
         XCTAssertTrue(app.scrollToHittableElementIfNeeded(rowID, maxSwipes: 8))
+        if definitionID == "running" { atlasScreenshot(named: "Cardio Atlas local cardio workout list") }
         element(rowID).tap()
         XCTAssertTrue(element("exercise-session-detail-scroll").waitForExistence(timeout: 8))
     }
@@ -145,6 +154,8 @@ final class CardioAtlasLargeTextUITests: ActivityExerciseSeededUITestBaseCase {
     func testKoreanLargeTextDetailAndPassport() {
         openRecord("running")
         XCTAssertTrue(element("cardio-atlas-section").waitForExistence(timeout: 10))
+        let placeAction = element("cardio-atlas-place").frame
+        XCTAssertGreaterThan(placeAction.width, placeAction.height, "Large-text action should not stack syllables")
         atlasScreenshot(named: "Cardio Atlas Korean large text detail")
         XCTAssertTrue(app.scrollToHittableElementIfNeeded("cardio-atlas-passport", maxSwipes: 10))
         element("cardio-atlas-passport").tap()
@@ -163,10 +174,12 @@ final class CardioAtlasLargeTextUITests: ActivityExerciseSeededUITestBaseCase {
     private func openRecord(_ definitionID: String) {
         navigateToActivity()
         XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.activityRecentSeeAll, maxSwipes: 20))
+        if definitionID == "running" { atlasScreenshot(named: "Cardio Atlas recent cardio records") }
         app.buttons[AXID.activityRecentSeeAll].firstMatch.tap()
         XCTAssertTrue(element(AXID.exerciseViewScreen).waitForExistence(timeout: 10))
         let rowID = "exercise-row-\(definitionID)"
         XCTAssertTrue(app.scrollToHittableElementIfNeeded(rowID, maxSwipes: 8))
+        if definitionID == "running" { atlasScreenshot(named: "Cardio Atlas local cardio workout list") }
         element(rowID).tap()
         XCTAssertTrue(element("exercise-session-detail-scroll").waitForExistence(timeout: 8))
     }
@@ -192,6 +205,16 @@ private extension UITestBaseCase {
         XCTAssertTrue(done.exists && done.isHittable, file: file, line: line)
         done.tap()
         assertAtlasDestinationVisible("exercise-session-detail-scroll", file: file, line: line)
+    }
+
+    func assertAtlasShareFitsWidth(file: StaticString = #filePath, line: UInt = #line) {
+        let viewport = app.descendants(matching: .any)["cardio-atlas-share-screen"].firstMatch.frame
+        for identifier in ["cardio-atlas-share-preview", "style-cardio-atlas-atlas",
+                           "style-cardio-atlas-paceRibbon", "style-cardio-atlas-signature"] {
+            let frame = app.descendants(matching: .any)[identifier].firstMatch.frame
+            XCTAssertGreaterThanOrEqual(frame.minX, viewport.minX - 1, identifier, file: file, line: line)
+            XCTAssertLessThanOrEqual(frame.maxX, viewport.maxX + 1, identifier, file: file, line: line)
+        }
     }
 
     func visibleAtlasShareControl(

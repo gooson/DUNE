@@ -23,6 +23,7 @@ struct CardioAtlasSection: View {
 
     @Environment(\.modelContext) private var modelContext
     @Environment(\.appTheme) private var theme
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Query(sort: \ExerciseRecord.date) private var records: [ExerciseRecord]
     @Query private var locationRecords: [WorkoutLocationRecord]
     @AppStorage("cardioAtlas.journey.distanceGoalMeters") private var distanceGoal = 20_000.0
@@ -104,9 +105,13 @@ struct CardioAtlasSection: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.lg) {
-            ViewThatFits(in: .horizontal) {
-                HStack { heading; Spacer(); actions }
+            if dynamicTypeSize.isAccessibilitySize {
                 VStack(alignment: .leading, spacing: DS.Spacing.sm) { heading; actions }
+            } else {
+                ViewThatFits(in: .horizontal) {
+                    HStack { heading; Spacer(); actions }
+                    VStack(alignment: .leading, spacing: DS.Spacing.sm) { heading; actions }
+                }
             }
             mapContent
             if isLoading {
@@ -207,15 +212,20 @@ struct CardioAtlasSection: View {
     }
 
     private var actions: some View {
-        HStack(spacing: DS.Spacing.md) {
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.md))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.md))
+        return layout {
             Button { showPlacePicker = true } label: {
                 Label("Place", systemImage: "mappin.and.ellipse")
+                    .frame(maxWidth: dynamicTypeSize.isAccessibilitySize ? .infinity : nil, alignment: .leading)
             }
             .accessibilityIdentifier("cardio-atlas-place")
             Button {
                 destination = .share
             } label: {
                 Label("Share", systemImage: "square.and.arrow.up")
+                    .frame(maxWidth: dynamicTypeSize.isAccessibilitySize ? .infinity : nil, alignment: .leading)
             }
             .accessibilityIdentifier("cardio-atlas-share")
         }

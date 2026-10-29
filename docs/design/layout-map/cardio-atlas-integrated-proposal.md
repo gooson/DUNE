@@ -57,3 +57,9 @@ Native implementation is present, including Watch outdoor GPS recording. Focused
 ### Native destination ownership correction · 18:00 retry
 
 The native exercise list opens records in an inspector. Actual screenshots showed Atlas NavigationLinks pushing Journey/Passport/Share beneath that inspector. Atlas now owns one enum-driven secondary sheet with a local NavigationStack and Done action, matching the existing visible place editor presentation. Journey and Passport capture their progress value at entry; goal bindings continue to update the Journey target. Closing an Atlas destination returns to the same workout detail. The parent exercise inspector and other detail redesign remain intact. Visibility checks must confirm hittable destination roots and fresh native PNGs; existence in an obscured underlying stack is insufficient.
+
+Map snapshots in native share previews preserve their full aspect ratio within the sheet width. A fixed image height must not expand the card or crop the route. Style buttons expose the selected accessibility trait; native checks verify actual selection and that preview/selector frames stay within the sheet.
+
+At accessibility sizes, the native Atlas heading and actions use a vertical layout, with full-width Place/Share buttons. Action words must remain readable as words rather than stacking individual Korean syllables.
+
+Pace Ribbon must remain visually distinct from Atlas in the default theme. Its measured speed bands use the existing activityWater/activityStrength chart tokens and its card includes the existing localized Pace Ribbon style label. Distinct chart tokens keep pace bands separate from the Atlas accent stroke.
