@@ -399,10 +399,10 @@
       "title": "Cardio Atlas indoor place",
       "file": "captures/duo-unfolded/cardio-atlas-indoor-place.png",
       "test": "CardioAtlasUITests/testIndoorPlacePickerCancelPreservesPlace()",
-      "source_bundle": ".codex-checks/cardio-atlas/retry-1800/duo-open-ui.log",
-      "source_commit": "4f2b1f40",
-      "source_attachment": "003-2007x2853.png",
-      "sha256": "aad29ff14d953151295253845f39005c76daad90674dd07d48f60b3cf23534e5",
+      "source_bundle": ".codex-checks/cardio-atlas/continue/duo-editor-ui.log",
+      "source_commit": "7eb7e3be",
+      "source_attachment": "002-2007x2853.png",
+      "sha256": "5d791b3f271770467cea3bf98d3c7cca54c3d4d0a6220f7cb319f3c963705cb7",
       "pixels": [
         2853,
         2007
@@ -546,6 +546,216 @@
       "pixels": [
         2853,
         2007
+      ]
+    },
+    {
+      "device": "ipad",
+      "title": "Cardio Atlas selected place editor",
+      "file": "captures/ipad/cardio-atlas-selected-place-editor.png",
+      "test": "CardioAtlasUITests/testIndoorPlacePickerCancelPreservesPlace()",
+      "source_bundle": "/Users/shanks/.codex/worktrees/2ee8/Health/.deriveddata/build-ios/Logs/Test/Test-DUNEUITests-2026.10.29_22-40-53-+0900.xcresult",
+      "source_commit": "7eb7e3be",
+      "source_attachment": "B6661231-E749-4FDE-A65E-EC590EB54803.png",
+      "sha256": "29f37466b097b071633a777de55c04e32264823650178f6ec4caf4de02b8f818",
+      "pixels": [
+        2064,
+        2752
+      ]
+    },
+    {
+      "device": "ipad",
+      "title": "Cardio Atlas indoor place",
+      "file": "captures/ipad/cardio-atlas-indoor-place.png",
+      "test": "CardioAtlasUITests/testIndoorPlacePickerCancelPreservesPlace()",
+      "source_bundle": "/Users/shanks/.codex/worktrees/2ee8/Health/.deriveddata/build-ios/Logs/Test/Test-DUNEUITests-2026.10.29_22-40-53-+0900.xcresult",
+      "source_commit": "7eb7e3be",
+      "source_attachment": "ABC42E4A-A52B-49BC-98FA-ADEB9B5B3923.png",
+      "sha256": "a1daa6ab71d00db7dac456b4897bf377967df977d7785be24aa0ed7976846c9d",
+      "pixels": [
+        2064,
+        2752
+      ]
+    },
+    {
+      "device": "ipad",
+      "title": "Cardio Atlas Passport progress",
+      "file": "captures/ipad/cardio-atlas-passport-progress.png",
+      "test": "CardioAtlasUITests/testPassportFromRecordedRoute()",
+      "source_bundle": "/Users/shanks/.codex/worktrees/2ee8/Health/.deriveddata/build-ios/Logs/Test/Test-DUNEUITests-2026.10.29_22-40-53-+0900.xcresult",
+      "source_commit": "7eb7e3be",
+      "source_attachment": "2BEB7671-30D8-45FD-8D99-3EF0C23776ED.png",
+      "sha256": "b8f63c2bd7a3828c2c79f83ff29fd2b51bf44507564fc9508bcef1c0277024b4",
+      "pixels": [
+        2064,
+        2752
+      ]
+    },
+    {
+      "device": "ipad",
+      "title": "Cardio Atlas local cardio workout list",
+      "file": "captures/ipad/cardio-atlas-local-cardio-workout-list.png",
+      "test": "CardioAtlasUITests/testShareStylesAndPrivateLocationDefault()",
+      "source_bundle": "/Users/shanks/.codex/worktrees/2ee8/Health/.deriveddata/build-ios/Logs/Test/Test-DUNEUITests-2026.10.29_22-40-53-+0900.xcresult",
+      "source_commit": "7eb7e3be",
+      "source_attachment": "0A85F804-6EC3-49C5-A1A7-CF0A26A1670B.png",
+      "sha256": "c56ea71d0738ca2b0c486da184748f3c5146483579dbb3ee51e09ebbcefedf6d",
+      "pixels": [
+        2064,
+        2752
+      ]
+    },
+    {
+      "device": "ipad",
+      "title": "Cardio Atlas recent cardio records",
+      "file": "captures/ipad/cardio-atlas-recent-cardio-records.png",
+      "test": "CardioAtlasUITests/testShareStylesAndPrivateLocationDefault()",
+      "source_bundle": "/Users/shanks/.codex/worktrees/2ee8/Health/.deriveddata/build-ios/Logs/Test/Test-DUNEUITests-2026.10.29_22-40-53-+0900.xcresult",
+      "source_commit": "7eb7e3be",
+      "source_attachment": "89852950-55CF-403F-BF31-F33BE8CF639F.png",
+      "sha256": "eca497245fd81968cddadde5aa1bb7e66f1e15271c65f929176014dae01bbfa2",
+      "pixels": [
+        2064,
+        2752
+      ]
+    },
+    {
+      "device": "ipad",
+      "title": "Cardio Atlas Journey progress",
+      "file": "captures/ipad/cardio-atlas-journey-progress.png",
+      "test": "CardioAtlasUITests/testRecordedRouteDetailAndProgress()",
+      "source_bundle": "/Users/shanks/.codex/worktrees/2ee8/Health/.deriveddata/build-ios/Logs/Test/Test-DUNEUITests-2026.10.29_22-40-53-+0900.xcresult",
+      "source_commit": "7eb7e3be",
+      "source_attachment": "95AA7989-D5F6-43A7-84CD-E06BF77C0392.png",
+      "sha256": "45dadd323088170f877259537250e339aed5378ba063e9cf75dfa9ffd09e6c0c",
+      "pixels": [
+        2064,
+        2752
+      ]
+    },
+    {
+      "device": "ipad",
+      "title": "Cardio Atlas recorded route detail",
+      "file": "captures/ipad/cardio-atlas-recorded-route-detail.png",
+      "test": "CardioAtlasUITests/testRecordedRouteDetailAndProgress()",
+      "source_bundle": "/Users/shanks/.codex/worktrees/2ee8/Health/.deriveddata/build-ios/Logs/Test/Test-DUNEUITests-2026.10.29_22-40-53-+0900.xcresult",
+      "source_commit": "7eb7e3be",
+      "source_attachment": "D29B2815-C6AC-4C42-BE52-F43079DD932E.png",
+      "sha256": "a74562ba2ed41e76540b4992818035a4c429c44136468074a79dd30170117e88",
+      "pixels": [
+        2064,
+        2752
+      ]
+    },
+    {
+      "device": "ipad",
+      "title": "Cardio Atlas share Signature",
+      "file": "captures/ipad/cardio-atlas-share-signature.png",
+      "test": "CardioAtlasUITests/testShareStylesAndPrivateLocationDefault()",
+      "source_bundle": "/Users/shanks/.codex/worktrees/2ee8/Health/.deriveddata/build-ios/Logs/Test/Test-DUNEUITests-2026.10.29_22-40-53-+0900.xcresult",
+      "source_commit": "7eb7e3be",
+      "source_attachment": "E1A34869-AFA6-4CE4-BB38-28438449C8E1.png",
+      "sha256": "7b1b9b0f14bb45fc1595e3f473e8e376bf1b4988d43323de38370dfb121662ae",
+      "pixels": [
+        2064,
+        2752
+      ]
+    },
+    {
+      "device": "ipad",
+      "title": "Cardio Atlas share Pace Ribbon",
+      "file": "captures/ipad/cardio-atlas-share-pace-ribbon.png",
+      "test": "CardioAtlasUITests/testShareStylesAndPrivateLocationDefault()",
+      "source_bundle": "/Users/shanks/.codex/worktrees/2ee8/Health/.deriveddata/build-ios/Logs/Test/Test-DUNEUITests-2026.10.29_22-40-53-+0900.xcresult",
+      "source_commit": "7eb7e3be",
+      "source_attachment": "9DA69976-A961-4841-A983-CA177180602A.png",
+      "sha256": "28eb828fa1eea0e9435c4958c8f196678078877bbd05c69785e83e729a44b4e3",
+      "pixels": [
+        2064,
+        2752
+      ]
+    },
+    {
+      "device": "ipad",
+      "title": "Cardio Atlas location removed from shared image",
+      "file": "captures/ipad/cardio-atlas-location-removed-from-shared-image.png",
+      "test": "CardioAtlasUITests/testShareStylesAndPrivateLocationDefault()",
+      "source_bundle": "/Users/shanks/.codex/worktrees/2ee8/Health/.deriveddata/build-ios/Logs/Test/Test-DUNEUITests-2026.10.29_22-40-53-+0900.xcresult",
+      "source_commit": "7eb7e3be",
+      "source_attachment": "3954309A-9287-49F7-B69A-1CF73A1461D0.png",
+      "sha256": "9188247bc9b66888758e7cf982dbb99ebe8fa40e255da9fe068f5b99b09fc7d3",
+      "pixels": [
+        2064,
+        2752
+      ]
+    },
+    {
+      "device": "ipad",
+      "title": "Cardio Atlas share Atlas route",
+      "file": "captures/ipad/cardio-atlas-share-atlas-route.png",
+      "test": "CardioAtlasUITests/testShareStylesAndPrivateLocationDefault()",
+      "source_bundle": "/Users/shanks/.codex/worktrees/2ee8/Health/.deriveddata/build-ios/Logs/Test/Test-DUNEUITests-2026.10.29_22-40-53-+0900.xcresult",
+      "source_commit": "7eb7e3be",
+      "source_attachment": "F6705EDF-772C-40C5-A85F-D920F59FC47F.png",
+      "sha256": "2cf0666bd045faa77dcf79c8e256a2b4aa842c8f67ba08fb082cb58548f1302f",
+      "pixels": [
+        2064,
+        2752
+      ]
+    },
+    {
+      "device": "ipad",
+      "title": "Cardio Atlas share private Atlas",
+      "file": "captures/ipad/cardio-atlas-share-private-atlas.png",
+      "test": "CardioAtlasUITests/testShareStylesAndPrivateLocationDefault()",
+      "source_bundle": "/Users/shanks/.codex/worktrees/2ee8/Health/.deriveddata/build-ios/Logs/Test/Test-DUNEUITests-2026.10.29_22-40-53-+0900.xcresult",
+      "source_commit": "7eb7e3be",
+      "source_attachment": "66DB8FC4-4E3A-4328-9291-D52B9B5EECFB.png",
+      "sha256": "87b4c54103f77a09bba59ff5d864cc321d1641659127bb3a44883520c63f9e2e",
+      "pixels": [
+        2064,
+        2752
+      ]
+    },
+    {
+      "device": "duo-unfolded",
+      "title": "Cardio Atlas selected place editor",
+      "file": "captures/duo-unfolded/cardio-atlas-selected-place-editor.png",
+      "test": "CardioAtlasUITests/testIndoorPlacePickerCancelPreservesPlace()",
+      "source_bundle": ".codex-checks/cardio-atlas/continue/duo-editor-ui.log",
+      "source_commit": "7eb7e3be",
+      "source_attachment": "003-2007x2853.png",
+      "sha256": "1614cda0b0618dab07ed1162a48d4bad6582acc02fe94c79483bbf90fd477a67",
+      "pixels": [
+        2853,
+        2007
+      ]
+    },
+    {
+      "device": "duo-folded",
+      "title": "Cardio Atlas indoor place",
+      "file": "captures/duo-folded/cardio-atlas-indoor-place.png",
+      "test": "CardioAtlasUITests/testIndoorPlacePickerCancelPreservesPlace()",
+      "source_bundle": ".codex-checks/cardio-atlas/continue/duo-folded-editor-ui.log",
+      "source_commit": "7eb7e3be",
+      "source_attachment": "002-1398x2034.png",
+      "sha256": "67a25321218347dbe59ecb2ac5d442fef5a1577f582f57014d0cb3d3e16ef9b4",
+      "pixels": [
+        1398,
+        2034
+      ]
+    },
+    {
+      "device": "duo-folded",
+      "title": "Cardio Atlas selected place editor",
+      "file": "captures/duo-folded/cardio-atlas-selected-place-editor.png",
+      "test": "CardioAtlasUITests/testIndoorPlacePickerCancelPreservesPlace()",
+      "source_bundle": ".codex-checks/cardio-atlas/continue/duo-folded-editor-ui.log",
+      "source_commit": "7eb7e3be",
+      "source_attachment": "003-1398x2034.png",
+      "sha256": "120b6f45f6190a625082f5211506036d587a8a961e44b1eea903200bb45edb6d",
+      "pixels": [
+        1398,
+        2034
       ]
     }
   ]

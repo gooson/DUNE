@@ -164,6 +164,6 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 
 2026-10-29 L01 주간 운동 업적을 성과 보드로 적용하고 [새 원본과 출처](../full-redesign-map/review/workout-achievement-board-2026-10-29/index.html)를 연결했다. iPhone 밝음/어두움/한국어/최대 글씨, iPad, Duo 외부를 새로 수집했다. Duo 내부는 최초 CLI readback 불일치와 Mac 잠금 기록을 보존하고, 해제 후 GUI Open·공식 LCD-1 활성/새 AX/원본 캡처·관련1/1통과로 갱신했다. 총52원본은 활성40장+비활성 짝패널12장이다. 다른 기기의 기존 PNG로 대체하지 않았다. Watch는 소비자가 없어 영향이 없다.
 
-2026-10-29 Cardio Atlas의 W27·W28·CA01–CA08 및 세트 없는 유산소 목록 상태를 구현했다. [검증 상태](../full-redesign-map/review/cardio-atlas-2026-10-29/index.html)에 영향 기기와 미완료 상태를 기록했다. 큰 글씨는 Activity 진입 전 AX 질의가 한도를 넘었고, 기본 글씨는 테스트 시작 전 정체와 복구 후 기기 사용 불가로 최종 캡처를 확보하지 못했다. iPad·Duo 두 자세도 미완료이며 기존 이미지를 새 증거로 쓰지 않는다.
+2026-10-29 Cardio Atlas의 W27·W28·CA01–CA08 및 세트 없는 유산소 목록 상태를 구현했다. 초기 검증의 기동·AX 실패 이력은 [검증 기록](../../reviews/2026-10-29-cardio-atlas/README.md)에 보존한다. 이후 테스트 시작 탭을 바로잡고 전용 Duo를 복구한 최종 결과는 아래와 같다.
 
-2026-10-29 18시 Cardio Atlas 재시도에서 [새 iPhone·Duo 실제39장](../full-redesign-map/review/cardio-atlas-2026-10-29/index.html)을 확보했다. 경로·공유3종·위치 제외·저니·패스포트·최대 글씨를 실제 PNG로 확인했고 발견한 이동·너비·줄바꿈 문제를 수정했다. iPad SDK 시작/응답 대기와 변경 후 Duo 장소 편집 화면은 미완료로 기록하며 전체 디자인맵 완료로 계산하지 않는다.
+2026-10-29 Cardio Atlas의 [새 실제54장](../full-redesign-map/review/cardio-atlas-2026-10-29/index.html)을 확보했다. iPhone 기본·최대 글씨, iPad4/4, Duo 접힘·펼침의 관련 Atlas 흐름과 최신 장소 편집을 확인했다. 실제 PNG와 출처·해시를 보존했고 관련 UI 게이트를 통과했다. 전체 앱 디자인맵이나 전체 UI 테스트 완료로 확대하지 않는다.

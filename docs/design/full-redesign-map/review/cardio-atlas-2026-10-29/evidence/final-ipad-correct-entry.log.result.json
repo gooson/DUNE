@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "target": "DUNEUITests",
+  "run_exit_status": 0,
+  "requested_selectors": [
+    "DUNEUITests/CardioAtlasUITests/testIndoorPlacePickerCancelPreservesPlace",
+    "DUNEUITests/CardioAtlasUITests/testRecordedRouteDetailAndProgress",
+    "DUNEUITests/CardioAtlasUITests/testPassportFromRecordedRoute",
+    "DUNEUITests/CardioAtlasUITests/testShareStylesAndPrivateLocationDefault"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 4,
+    "passed": 4,
+    "skipped": 0,
+    "failed": 0
+  },
+  "passed_cases": 4,
+  "failures": [],
+  "required_selectors_missing": [],
+  "log_path": "/Users/shanks/.codex/worktrees/2ee8/Health/.codex-checks/cardio-atlas/continue/ipad-correct-entry.log"
+}

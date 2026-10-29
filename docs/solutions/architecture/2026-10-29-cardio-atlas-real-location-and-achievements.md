@@ -2,7 +2,7 @@
 tags: [cardio-atlas, healthkit, watchos, swiftdata, cloudkit, workout-route, location-privacy, achievements, accessibility]
 date: 2026-10-29
 category: architecture
-status: draft
+status: resolved
 severity: important
 related_files:
   - DUNE/Domain/Models/WorkoutLocation.swift
@@ -77,7 +77,7 @@ let publicLocation = location.shareLocation(
 )
 ```
 
-## Validation status (2026-10-29, UI verification blocked)
+## Initial validation history (superseded by final verification)
 
 - 핵심 집중 단위 73 tests / 10 suites, 목록·가시성 31 tests / 5 suites, Watch 경로 12 tests 통과. 첫 두 집계에는 겹치는 사례가 있어 합산 고유 테스트 수로 표시하지 않는다.
 - Watch 전체 209개 실행에서는 변경하지 않은 음성 피드백 테스트의 영어 기대값과 한국어 결과 사이 21개 assertion issue가 있었다. 광범위 iOS 단위 시도에서도 기존 AI medical safety 0/3 실패가 있었다. 전체 통과로 표시하지 않는다.
@@ -108,6 +108,10 @@ iPad verification subsequently hit the five-minute allowance during initial app 
 
 위치의 실제 기록 여부, 운동 정체성, 공유 공개 범위는 각각 따로 모델링해야 한다. 실내 여부만으로 경로를 삭제하거나 시간 근접성만으로 운동을 합치면 유효한 가져온 경로와 Watch 운동을 잃는다. native UI 테스트는 단위 테스트가 찾지 못한 접근성 컨테이너 식별자 상속 문제를 드러냈으며, 실패 뒤 수정한 코드는 해당 UI 실행 결과가 나올 때까지 검증 완료로 표시하지 않는다.
 
-## Final follow-up scope
+## Final verification
 
-Current implementation221cd7ab has focused phone delta2/2 pass. The inline map reserves gestures for the expanded view; directional small drags avoid overshooting a Passport button on short inspector viewports. The place editor uses an always-visible navigation search drawer, verified on portrait iPhone. Its changed unfolded-Duo layout and iPad remain unverified for the documented runtime/readiness reasons. New actual39images are preserved; this document stays draft until the UI pipeline can finish.
+구현221cd7ab, 테스트 진입 수정7eb7e3be를 기준으로 관련 UI 게이트가 통과했다. iPad4/4와 새 Duo 장소 편집 접힘·펼침 각각1/1이 exit0이며, 앞서 통과한 phone 및 Duo 관련 회귀를 재사용했다. 새 실제 원본54장을 갤러리에 보존했고 시각·PR delta 검토에 미해결 P1/P2가 없다. 전체 테스트 실행이나 실제 기기 GPS/HealthKit/CloudKit 검증 완료로 확대하지 않는다.
+
+테스트 클래스가 유효하지 않은 `activity` 시작 탭으로 base의 `train`을 덮어쓴 것이 준비 검사를 불안정하게 만들었다. 중복 재정의를 없애고 공통 seeded base의 내비게이션 계약을 사용한다. 환경 장애로 분류하기 전에 앱의 실제 raw value와 테스트 설정을 대조한다. Duo 런타임 마이그레이션 오류는 별개의 관측된 장애였고 예시 데이터만 든 소유 기기 초기화로 복구했다.
+
+Compound 변경 분석은 feature 로그와 diff로 수행했다. 기존 내비게이션·테스트·개인정보 규칙으로 예방 가능해 Claude source of truth에 새 전역 규칙을 추가하지 않는다. 위 Prevention과 이번 회귀로 기록한다.
