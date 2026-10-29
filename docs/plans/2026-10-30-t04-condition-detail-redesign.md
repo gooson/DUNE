@@ -58,3 +58,5 @@ Work 사전 검토에서 AX 숫자의 VoiceOver 레이블과 시간대4열·계�
 첫 iPhone 정상 크기 UI는3개 중 기간/앞뒤/통계/추세 전환1개 통과, 나머지2개 실패했다. 실제 AX에서 설명은 펼쳐져 있었고 Raw Score도 존재했다. DisclosureGroup 전체의 identifier가 자식 식별자를 덮은 원인을 제목 Text에만 식별자를 부여해 해소한다. fixture는 contributions가 비어 있으므로 영향 상태 테스트는 임의 평가 대신 Impact unavailable을 정확히 기대하도록 수정한다. 최초 결과 JSON을 보존하고 원인 수정 후 한 번 재검증한다. 공통 선택 실행기 PR860을 포함한 main을 이 브랜치에 통합했다.
 
 컨디션 VM 선택 실행의 실제 xcresult는20개 통과/실패0/skip0이다. Swift Testing의 `20 tests in 1 suite passed` 형식을 기존 wrapper가 인식하지 못해 wrapper exit1이 된 차이는 focused-unit-result.json에 그대로 보존했다. 출력 파서 보완은 별도 공통 PR에서 진행하며, 같은 단위20개를 불필요하게 재실행하지 않는다.
+
+Duo 펼침의 첫5개 검사 중 Hero·최대AX Hero/설명·기간 전환3개는 통과했다. 기존 두 수치/하위 차트 검사는 화면 아래 항목을 찾는 중앙 드래그가 차트에 소비되어 같은 오프스크린 좌표에 멈췄다. 원본 AX에서 항목 ID·크기는 정상이며 y2274 등으로 남아 있었다. Condition 화면만 좌측 거터 드래그/최대32회로 수정하고 전체 요소 포함 여부·수치·plot 검증은 유지한다. 이 두 실패만 수정 후1회 재검증한다. 새10개 문자열에는 영어 source fallback과 같은 명시적 en 항목을 추가해 en/ko/ja를 모두 등록했다.

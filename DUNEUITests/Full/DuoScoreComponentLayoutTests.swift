@@ -215,25 +215,41 @@ final class DuoScoreComponentLayoutTests: SeededUITestBaseCase {
 
     private func revealCardContent(_ card: XCUIElement, in scroll: XCUIElement) -> Bool {
         guard scroll.waitForExistence(timeout: 8) else { return false }
-        for _ in 0..<20 {
+        let isCondition = scroll.identifier == AXID.conditionScoreDetailScreen
+        for _ in 0..<(isCondition ? 32 : 20) {
             if card.exists && card.staticTexts.firstMatch.exists { return true }
-            scroll.swipeUp(velocity: .slow)
+            if isCondition {
+                // Keep the drag outside the nested chart plots, which consume center gestures.
+                scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.05, dy: 0.75))
+                    .press(forDuration: 0.05, thenDragTo: scroll.coordinate(
+                        withNormalizedOffset: CGVector(dx: 0.05, dy: 0.25)
+                    ), withVelocity: .slow, thenHoldForDuration: 0.2)
+            } else {
+                scroll.swipeUp(velocity: .slow)
+            }
         }
         return card.exists && card.staticTexts.firstMatch.exists
     }
 
     private func revealWhole(_ element: XCUIElement, in scroll: XCUIElement) -> Bool {
         guard scroll.waitForExistence(timeout: 8) else { return false }
-        for _ in 0..<20 {
+        let isCondition = scroll.identifier == AXID.conditionScoreDetailScreen
+        for _ in 0..<(isCondition ? 32 : 20) {
             let viewport = scroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 4)
             if element.exists && viewport.contains(element.frame) { return true }
             if element.exists && viewport.height > 0 {
                 let delta = element.frame.midY - viewport.midY
                 let travel = min(max(abs(delta), 20), viewport.height * 0.25) / scroll.frame.height
                 let startY: CGFloat = delta < 0 ? 0.3 : 0.7
-                scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: startY))
+                let dragX: CGFloat = isCondition ? 0.05 : 0.5
+                scroll.coordinate(withNormalizedOffset: CGVector(dx: dragX, dy: startY))
                     .press(forDuration: 0.05, thenDragTo: scroll.coordinate(
-                        withNormalizedOffset: CGVector(dx: 0.5, dy: startY + (delta < 0 ? travel : -travel))
+                        withNormalizedOffset: CGVector(dx: dragX, dy: startY + (delta < 0 ? travel : -travel))
+                    ), withVelocity: .slow, thenHoldForDuration: 0.2)
+            } else if isCondition {
+                scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.05, dy: 0.75))
+                    .press(forDuration: 0.05, thenDragTo: scroll.coordinate(
+                        withNormalizedOffset: CGVector(dx: 0.05, dy: 0.25)
                     ), withVelocity: .slow, thenHoldForDuration: 0.2)
             } else {
                 scroll.swipeUp(velocity: .slow)
