@@ -1,0 +1,14 @@
+{
+  "baselineSource": "docs/reviews/2026-10-28-life-flow/ui-phone-initial.log.gz",
+  "baselineFailures": [
+    "Test Case '-[DUNEUITests.DashboardSmokeTests testConditionTrendAndHeroDetailRoute]' failed (20.400 seconds).",
+    "Test Case '-[DUNEUITests.DashboardSmokeTests testNavigateToNotificationHub]' failed (19.737 seconds).",
+    "Test Case '-[DUNEUITests.DashboardSmokeTests testNotificationHubSummaryAtMaximumAccessibilitySize]' failed (78.278 seconds)."
+  ],
+  "currentUnchangedPaths": [
+    "DUNE/Presentation/Dashboard",
+    "DUNE/Presentation/Notifications",
+    "DUNEUITests/Smoke/DashboardSmokeTests.swift"
+  ],
+  "consumerEvidence": "git diff main...HEAD on these paths is empty; new seeder is DEBUG opt-in flag absent in DashboardSmokeTests"
+}

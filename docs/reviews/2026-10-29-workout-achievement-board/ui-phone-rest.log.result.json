@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/DashboardSmokeTests",
+    "DUNEUITests/ActivitySmokeTests",
+    "DUNEUITests/WellnessSmokeTests/testWellnessTabLoads",
+    "DUNEUITests/LifeSmokeTests",
+    "DUNEUITests/LifeFlowUITests/testWeeklyWorkoutBoardCustomGoalActions",
+    "DUNEUITests/LifeFlowUITests/testWeeklyWorkoutBoardKoreanReadingOrder",
+    "DUNEUITests/LifeFlowUITests/testCaptureL01WorkoutBoardDark",
+    "DUNEUITests/LifeFlowUITests/testCaptureL01WorkoutBoardMaximumAX"
+  ],
+  "skipped_selectors": [
+    "DUNEUITests/ActivitySmokeTests/testPullToRefreshShowsWaveIndicator",
+    "DUNEUITests/LifeSmokeTests/testWeeklyFrequencyShowsStepper",
+    "DUNEUITests/WellnessSmokeTests/testBodyFormSaveEnablesAfterInput",
+    "DUNEUITests/WellnessSmokeTests/testInjuryRecoveredToggleShowsEndDate",
+    "DUNEUITests/SettingsSmokeTests/testAppearanceSectionExists",
+    "DUNEUITests/SettingsSmokeTests/testDataPrivacySectionExists",
+    "DUNEUITests/SettingsSmokeTests/testAboutSectionExists",
+    "DUNEUITests/SettingsSmokeTests/testPreferredExercisesLinkExists",
+    "DUNEUITests/SettingsSmokeTests/testNavigateToPreferredExercises",
+    "DUNEUITests/SettingsSmokeTests/testWhatsNewLinkExists",
+    "DUNEUITests/SettingsSmokeTests/testNavigateToWhatsNew",
+    "DUNEUITests/SettingsSmokeTests/testWhatsNewNotificationsDetailShowsArtwork",
+    "DUNEUITests/SettingsSmokeTests/testWhatsNewSleepDebtDetailExists",
+    "DUNEUITests/SettingsSmokeTests/testWhatsNewWidgetDetailExists",
+    "DUNEUITests/SettingsSmokeTests/testWhatsNewMuscleMapDetailExists"
+  ],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 34,
+    "passed": 31,
+    "skipped": 0,
+    "failed": 3
+  },
+  "passed_cases": 31,
+  "failures": [
+    "766: /Users/shanks/.codex/worktrees/7e2f/Health/DUNEUITests/Smoke/DashboardSmokeTests.swift:153: error: -[DUNEUITests.DashboardSmokeTests testConditionTrendAndHeroDetailRoute] : XCTAssertTrue failed - Daily history should render the seven-day fallback chart",
+    "780: Test Case '-[DUNEUITests.DashboardSmokeTests testConditionTrendAndHeroDetailRoute]' failed (23.430 seconds).",
+    "915: /Users/shanks/.codex/worktrees/7e2f/Health/DUNEUITests/Smoke/DashboardSmokeTests.swift:88: error: -[DUNEUITests.DashboardSmokeTests testNavigateToNotificationHub] : XCTAssertTrue failed - Notifications navigation title should appear",
+    "929: Test Case '-[DUNEUITests.DashboardSmokeTests testNavigateToNotificationHub]' failed (27.874 seconds).",
+    "1493: /Users/shanks/.codex/worktrees/7e2f/Health/DUNEUITests/Smoke/DashboardSmokeTests.swift:121: error: -[DUNEUITests.DashboardSmokeTests testNotificationHubSummaryAtMaximumAccessibilitySize] : XCTAssertTrue failed - notifications-open-settings-button should be reachable at maximum accessibility size",
+    "1507: Test Case '-[DUNEUITests.DashboardSmokeTests testNotificationHubSummaryAtMaximumAccessibilitySize]' failed (89.086 seconds).",
+    "1752: Test Suite 'DashboardSmokeTests' failed at 2026-10-29 03:25:38.327.",
+    "3136: Test Suite 'DUNEUITests.xctest' failed at 2026-10-29 03:32:10.746.",
+    "3138: Test Suite 'Selected tests' failed at 2026-10-29 03:32:10.747.",
+    "3155: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log reports 3 failures"
+  ],
+  "required_selectors_missing": [],
+  "log_path": "/Users/shanks/.codex/worktrees/7e2f/Health/.codex-checks/workout-board/ui-phone-rest.log"
+}

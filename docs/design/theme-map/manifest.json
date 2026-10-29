@@ -206,7 +206,13 @@
       "name": "주간 운동 업적 · 성과 보드 / 숫자 중심",
       "title": "Life · Workout Achievements",
       "file": "dune-workout-achievements.html",
-      "detail": "2026-10-29 첨부 화면의 해당 영역만 재설계한 시안. 브라운·골드·능선을 유지하고 큰 완료 수·운동 횟수 분절·근력 6부위 타일·거리 곡선으로 반복 카드/막대를 대체. 기본0/10·진행·모두완료·기록없음,밝음/어두움·큰글씨. 전체상세/기존병렬비교는 정정되어 제외. 앱 미적용, 실제 앱 캡처 아님."
+      "detail": "2026-10-29 첨부 화면의 해당 영역만 재설계한 시안. 브라운·골드·능선을 유지하고 큰 완료 수·운동 횟수 분절·근력 6부위 타일·거리 곡선으로 반복 카드/막대를 대체. 기본0/10·진행·모두완료·기록없음,밝음/어두움·큰글씨. 전체상세/기존병렬비교는 정정되어 제외. 브라우저 시안이며 실제 앱 캡처 아님. 사용자 선택 성과 보드는 2026-10-29 SwiftUI에 적용했다. 가변 총계·최대 글씨 단일열·기존 목표 메뉴를 유지하며 기기별 실제 캡처/검증 범위는 별도 갤러리를 따른다.",
+      "implementation": {
+        "layout": "../layout-map/workout-achievements-proposal.md",
+        "actual_captures": "../full-redesign-map/review/workout-achievement-board-2026-10-29/index.html",
+        "verification": "../../reviews/2026-10-29-workout-achievement-board/README.md",
+        "status": "board-implemented-targeted-verification"
+      }
     }
   ]
 }

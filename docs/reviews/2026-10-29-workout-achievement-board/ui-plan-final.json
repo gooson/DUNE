@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "status": "planned-not-executed",
+  "platforms": {
+    "ios": {
+      "mode": "full",
+      "selectors": []
+    },
+    "watch": {
+      "mode": "full",
+      "selectors": []
+    }
+  },
+  "changes": [
+    {
+      "path": "DUNE/App/TestDataSeeder.swift",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "DUNE/DUNE.xcodeproj/project.pbxproj",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "DUNE/Presentation/Life/LifeView.swift",
+      "reason": "Life feature: related suites plus smoke; consumer review required"
+    },
+    {
+      "path": "DUNE/Presentation/Life/WorkoutAchievementBoard.swift",
+      "reason": "Life feature: related suites plus smoke; consumer review required"
+    },
+    {
+      "path": "DUNETests/WorkoutAchievementBoardTests.swift",
+      "reason": "unit test source only: run the affected unit tests"
+    },
+    {
+      "path": "DUNEUITests/Visual/LifeFlowUITests.swift",
+      "reason": "UI tests/helpers/plans changed: validate the complete iOS test contract"
+    },
+    {
+      "path": "Shared/Resources/Colors.xcassets/WorkoutMedalEngraving.colorset/Contents.json",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "Shared/Resources/Colors.xcassets/WorkoutMedalGold.colorset/Contents.json",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "Shared/Resources/Colors.xcassets/WorkoutMedalHighlight.colorset/Contents.json",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "Shared/Resources/Colors.xcassets/WorkoutMedalShadow.colorset/Contents.json",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "Shared/Resources/Localizable.xcstrings",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/layout-map/index.html",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/layout-map/workout-achievements-proposal.md",
+      "reason": "documentation: no app runtime change"
+    },
+    {
+      "path": "docs/design/theme-map/README.md",
+      "reason": "documentation: no app runtime change"
+    },
+    {
+      "path": "docs/design/theme-map/index.html",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/theme-map/manifest.json",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/theme-map/themes/assets/workout-achievement-board-dark.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/theme-map/themes/assets/workout-achievement-board-light-progress.png",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/theme-map/themes/assets/workout-achievement-fragment.html",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/theme-map/themes/assets/workout-achievement-qa.json",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/design/theme-map/themes/dune-workout-achievements.html",
+      "reason": "shared, configuration, data/domain, tooling or unknown change: full fallback"
+    },
+    {
+      "path": "docs/plans/2026-10-29-workout-achievement-board.md",
+      "reason": "documentation: no app runtime change"
+    }
+  ],
+  "commands": [
+    {
+      "platform": "ios",
+      "argv": [
+        "scripts/test-ui.sh"
+      ]
+    },
+    {
+      "platform": "watch",
+      "argv": [
+        "scripts/test-watch-ui.sh"
+      ]
+    }
+  ],
+  "additional_validation": [
+    "widget/visionOS: inspect target membership and validate affected targets"
+  ],
+  "review_required": [
+    "Confirm changed symbols have no consumers outside the selected features; otherwise use full.",
+    "Confirm new behavior has tests; selection does not establish coverage.",
+    "Preserve seeded gesture/layout and device-specific validation requirements.",
+    "Full plans exclude manual HealthKit permission tests; permission changes need device evidence.",
+    "Record passed tests and skipped tests; no execution or zero tests is not a passed gate."
+  ],
+  "base": "main",
+  "merge_base": "04b1ff395a1385d4b7dbbad542ee9eeac58da567",
+  "head": "72365af15b63d3e205bc6ccafa974cfc43c5ae5b"
+}

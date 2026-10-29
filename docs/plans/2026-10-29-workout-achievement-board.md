@@ -3,7 +3,7 @@ topic: workout-achievement-board
 tags: [life, achievements, swiftui, design]
 date: 2026-10-29
 category: plan
-status: approved
+status: implemented
 confidence: high
 related_solutions:
   - ../solutions/architecture/2026-03-22-auto-linked-habit-section-routing.md
@@ -82,3 +82,7 @@ related_solutions:
 ## Confidence
 
 높음. 표시 계층에 한정되며 기존 Domain/저장/운동 기록 경로를 바꾸지 않는다. 관련 기존 Life 설계·자동 연동 해결책을 실제 검색·검토했다. 새 API가 필요 없는 SwiftUI 기본 구성은 저장소의 Life 히어로·카드 패턴을 재사용한다.
+
+## Execution
+
+선택한 성과 보드를 적용했다. 새 표시 모델·52개 관련 단위 테스트·기존 목표 이력/접기 동작·기기별 캡처를 [실행 보고](../reviews/2026-10-29-workout-achievement-board/README.md)와 [실제 화면](../design/full-redesign-map/review/workout-achievement-board-2026-10-29/index.html)에 연결한다. 표준 unit 실행기가 selector를 지원하지 않아 기존 simulator lock/boot helper를 사용하는 bounded targeted xcodebuild fallback을 기록했다. 전체 회귀는 요청 범위가 아니므로 미실행이다.

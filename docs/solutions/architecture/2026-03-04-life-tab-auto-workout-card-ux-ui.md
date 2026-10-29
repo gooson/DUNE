@@ -13,6 +13,8 @@ related_solutions:
 
 # Solution: Life 탭 자동 운동 카드 통합 UX/UI
 
+> 2026-10-29 표시 구조 후속: 이 문서의 그룹 카드·0회 숨김은 당시 구현이다. 현재는 [성과 보드](../general/2026-10-29-workout-achievement-board.md)로 바꾸고 근력 0회 항목도 표시한다. 도메인 집계 유지 원칙은 그대로다.
+
 ## Problem
 
 Life 탭의 `Auto Workout Achievements`가 rule 단위 카드(9개)로 길게 나열되어, 루틴 사용자가 핵심 질문(루틴을 지켰는지)을 빠르게 확인하기 어려웠다.

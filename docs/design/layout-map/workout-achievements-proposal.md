@@ -2,7 +2,7 @@
 tags: [life, workout, achievements, design, prototype]
 date: 2026-10-29
 category: plan
-status: draft
+status: implemented
 ---
 
 # L01 주간 운동 업적 시안
@@ -11,7 +11,7 @@ status: draft
 
 ## 범위
 
-사용자가 첨부한 Life의 **이번 주 운동 업적 영역만** 재설계한다. 전체 상세 화면이나 기존 화면 병렬 비교는 다른 세션 요청으로 정정되어 제외했다. 앱 소스와 실제 화면 디자인맵은 변경하지 않는다. 이 문서의 그림은 브라우저 시안이며 실제 앱 캡처가 아니다.
+사용자가 첨부한 Life의 **이번 주 운동 업적 영역만** 재설계한다. 전체 상세 화면이나 기존 화면 병렬 비교는 다른 세션 요청으로 정정되어 제외했다. 아래 두 방향은 제안 당시의 브라우저 시안이며 실제 앱 캡처가 아니다. 사용자가 선택한 **성과 보드**를 2026-10-29 네이티브 앱에 적용했다. [실제 화면과 출처](../full-redesign-map/review/workout-achievement-board-2026-10-29/index.html)를 별도로 보존한다.
 
 ## 정보와 표현
 
@@ -39,4 +39,13 @@ status: draft
 
 폭 320/402/736, 밝음/어두움, 기본/125%/160% 글씨, 4개 기록 상태, 2개 방향을 브라우저에서 검사한다. 큰 글씨는 근력 2열·메달 숨김·문구 줄바꿈을 적용한다. 색 외에 수치·체크·단위를 제공한다. 더보기는 44px, 펼침 헤더는 최소 65px이다. 이 검사는 SwiftUI Dynamic Type, VoiceOver, iPad/Duo 네이티브 배치의 검증을 대체하지 않는다.
 
-검증 결과와 시안 PNG는 [브라우저 QA](../theme-map/themes/assets/workout-achievement-qa.json), [어두움 기본값](../theme-map/themes/assets/workout-achievement-board-dark.png), [밝음 진행 예시](../theme-map/themes/assets/workout-achievement-board-light-progress.png)에 보존한다. 구현은 사용자 방향 선택 후 별도 작업이다.
+검증 결과와 시안 PNG는 [브라우저 QA](../theme-map/themes/assets/workout-achievement-qa.json), [어두움 기본값](../theme-map/themes/assets/workout-achievement-board-dark.png), [밝음 진행 예시](../theme-map/themes/assets/workout-achievement-board-light-progress.png)에 보존한다.
+
+## 네이티브 적용 계약 · 2026-10-29
+
+- 큰 완료 수·골드 메달·능선, 운동 횟수 7분절, 근력 6항목 타일과 러닝 곡선을 한 표면에 배치한다. 내 목표 메뉴와 도전 접기/펼치기는 기존 부모 동작을 사용한다.
+- 실제 분모는 사용자 목표 수와 현재 서비스의 도전 수로 계산한다. 시안의 10개를 고정하지 않는다. 총계가 12개를 넘으면 정확한 비율의 진행 막대를 사용한다.
+- 일반 iPhone의 근력은 3열, 넓은 화면은 adaptive 배치다. 최대 접근성 글씨는 1열까지 허용하고 메달·장식 표식을 숨긴다. 그룹 제목과 완료 수는 세로로 배치한다.
+- 0회인 가슴·하체·어깨도 숨기지 않는다. 최고 연속 주, 월–일 기간, 오늘 운동 기록 자동 연동 의미, DUNE + Apple 건강 출처를 유지한다.
+- 새 보상·집계·HealthKit/SwiftData 저장 경로를 추가하지 않는다. 장식은 VoiceOver에서 제외하고 목표 메뉴는 해당 목표 이름을 읽는다.
+- 기기·상태별 확인 결과와 미검증 범위는 [실행 보고](../../reviews/2026-10-29-workout-achievement-board/README.md)를 따른다. 시안의 모든 예시 상태를 네이티브에서 실행했다고 해석하지 않는다.

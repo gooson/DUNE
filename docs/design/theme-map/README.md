@@ -145,3 +145,7 @@ Activity 운동 구성은 덤벨·발자국, 큰 68%/32%, 금빛/녹색의 16px 
 ## 네이티브 반영 · 2026-10-29
 
 Life Flow를 실제 앱에 반영했다. [검증 보고](../../reviews/2026-10-28-life-flow/README.md)와 [실제 iPhone·iPad·Duo 양쪽74장](../full-redesign-map/review/life-flow-2026-10-28/index.html)을 따른다. 앞의 시안 단계 설명은 제안 당시 기록이며 시안과 실제 캡처는 별도로 보존한다.
+
+## 주간 운동 성과 보드 · 2026-10-29
+
+사용자가 선택한 성과 보드를 SwiftUI에 적용했다. [보존 시안](themes/dune-workout-achievements.html)과 [네이티브 계약](../layout-map/workout-achievements-proposal.md), [새 실제 캡처](../full-redesign-map/review/workout-achievement-board-2026-10-29/index.html)를 구분한다. 가변 총계·6개 근력 항목·기존 목표 동작을 유지하고 최대 글씨는 장식 숨김/한 열까지 허용한다. 세부 검증과 기존 Today 실패는 실행 보고를 따른다.
