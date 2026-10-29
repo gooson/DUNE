@@ -1,0 +1,43 @@
+{
+  "devicesAndConfigurations": [
+    {
+      "device": {
+        "architecture": "arm64",
+        "deviceId": "15B032B0-FEA4-465A-B5C1-A10F7CADA216",
+        "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-l03-19e74dbe28e2",
+        "modelName": "iPhone 18 Pro Max",
+        "osBuildNumber": "24A434",
+        "osVersion": "27.0",
+        "platform": "iOS Simulator"
+      },
+      "expectedFailures": 0,
+      "failedTests": 0,
+      "passedTests": 20,
+      "skippedTests": 0,
+      "testPlanConfiguration": {
+        "configurationId": "1",
+        "configurationName": "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription": "DUNETests · Built with macOS 27.2",
+  "expectedFailures": 0,
+  "failedTests": 0,
+  "finishTime": 1793298912.586,
+  "passedTests": 20,
+  "result": "Passed",
+  "runtimeWarnings": [],
+  "skippedTests": 0,
+  "startTime": 1793298826.192,
+  "statistics": [],
+  "testFailures": [],
+  "title": "Test - DUNETests",
+  "topInsights": [],
+  "totalTestCount": 20,
+  "runner_exit": 1,
+  "runner_issue": "Existing summary parser/positive-count guard omitted Swift Testing output: Test run with 20 tests in 1 suite passed. Actual xcresult and 20 individual tests passed.",
+  "xcresult_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNETests-2026.10.30_03-33-46-+0900.xcresult",
+  "source_revision": "99ae49c91113c44f4f42aa2ee6d5742646d8a529",
+  "source_dirty": true,
+  "selector": "DUNETests/ConditionScoreDetailViewModelTests"
+}

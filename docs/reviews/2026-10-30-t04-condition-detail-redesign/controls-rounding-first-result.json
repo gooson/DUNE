@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/ConditionDetailRedesignTests/testPeriodControlsKeep44PointTargetsAndAcceptEdgeTaps"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 1,
+    "passed": 0,
+    "skipped": 0,
+    "failed": 1
+  },
+  "passed_cases": 0,
+  "failures": [
+    "252: /Users/shanks/.codex/worktrees/detail-redesign-l03/Health/DUNEUITests/Full/ConditionDetailRedesignTests.swift:121: error: -[DUNEUITests.ConditionDetailRedesignTests testPeriodControlsKeep44PointTargetsAndAcceptEdgeTaps] : XCTAssertGreaterThanOrEqual failed: (\"43.99999999999994\") is less than (\"44.0\"…",
+    "270: Test Case '-[DUNEUITests.ConditionDetailRedesignTests testPeriodControlsKeep44PointTargetsAndAcceptEdgeTaps]' failed (46.350 seconds).",
+    "271: Test Suite 'ConditionDetailRedesignTests' failed at 2026-10-30 05:34:39.445.",
+    "273: Test Suite 'DUNEUITests.xctest' failed at 2026-10-30 05:34:39.448.",
+    "275: Test Suite 'Selected tests' failed at 2026-10-30 05:34:39.449.",
+    "293: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log has no positive passed-test count",
+    "UI test log has no identifiable passed UI test cases",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/ConditionDetailRedesignTests/testPeriodControlsKeep44PointTargetsAndAcceptEdgeTaps"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.xcodebuild/t04-resolved-duo-controls-final-ui.log"
+}

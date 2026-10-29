@@ -7,7 +7,9 @@
     "/Users/shanks/.codex/worktrees/condition-review-ship/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.22_00-46-16-+0900.xcresult",
     "/Users/shanks/Documents/Codex/2026-10-22/new-chat/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.22_18-42-30-+0900.xcresult",
     "/Users/shanks/Documents/Codex/2026-10-22/new-chat/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.22_21-54-56-+0900.xcresult",
-    ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.30_00-49-06-+0900.xcresult"
+    ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.30_00-49-06-+0900.xcresult",
+    ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.30_03-42-34-+0900.xcresult",
+    "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.30_06-19-55-+0900.xcresult"
   ],
   "processed_capture_candidates": 111,
   "captured": {
@@ -1126,12 +1128,20 @@
     "T04": {
       "row_id": "T04",
       "evidence": "condition-score-detail-screen",
-      "test": "TodaySettingsRegressionTests/testConditionHeroOpensConditionScoreDetail()",
-      "action": "tap dashboard-hero-condition",
-      "timestamp": 1792597717.741,
-      "image": "E0E26E16-A2BE-4764-82C2-BEA0E1C24039.png",
-      "screen": "screen-0-1320x2868-tap dashboard-hero-condition_0_3F299432-9577-407D-91E8-5963E22E3C49.png",
-      "file": "T04.png"
+      "test": "ConditionDetailRedesignTests/testHeroContributionsAndUnifiedTrendAreReachable()",
+      "action": "Condition detail top hero",
+      "timestamp": 1793309033.533,
+      "image": "E038C322-87E7-467E-BC48-CB14DAF5C930.png",
+      "screen": "screen-0-1320x2868-Condition detail top hero_0_231CB4AE-1427-4929-AA82-DF9E5B885275.png",
+      "file": "T04.png",
+      "source_revision": "abe732c1",
+      "source_worktree_dirty": true,
+      "device_id": "15B032B0-FEA4-465A-B5C1-A10F7CADA216",
+      "fixture": "fixture100",
+      "selected_test_result": "Passed",
+      "original_run_failed_tests": 0,
+      "fixture_data_note": "DEBUG test fixture data; not real user health records.",
+      "xcresult": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.30_06-19-55-+0900.xcresult"
     }
   },
   "unmatched": [],

@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/ConditionDetailRedesignTests/testHeroContributionsAndUnifiedTrendAreReachable",
+    "DUNEUITests/ConditionDetailRedesignTests/testMaximumAccessibilitySizeKeepsHeroTrendAndExplainerUsable",
+    "DUNEUITests/ConditionDetailRedesignTests/testPeriodWindowAndTrendControlsUpdateVisibleReadback",
+    "DUNEUITests/ConditionDetailRedesignTests/testPeriodControlsKeep44PointTargetsAndAcceptEdgeTaps",
+    "DUNEUITests/DuoScoreComponentLayoutTests/testConditionCompositionValuesFitAtMaximumTextSize",
+    "DUNEUITests/DuoScoreComponentLayoutTests/testConditionSubscoreChartsFitAtMaximumTextSize"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 6,
+    "passed": 5,
+    "skipped": 0,
+    "failed": 1
+  },
+  "passed_cases": 5,
+  "failures": [
+    "2165: /Users/shanks/.codex/worktrees/detail-redesign-l03/Health/DUNEUITests/Full/DuoScoreComponentLayoutTests.swift:81: error: -[DUNEUITests.DuoScoreComponentLayoutTests testConditionCompositionValuesFitAtMaximumTextSize] : XCTAssertTrue failed - condition-component-value-hrv should fit at maximum AX size",
+    "2183: Test Case '-[DUNEUITests.DuoScoreComponentLayoutTests testConditionCompositionValuesFitAtMaximumTextSize]' failed (101.554 seconds).",
+    "2961: Test Suite 'DuoScoreComponentLayoutTests' failed at 2026-10-30 06:41:02.104.",
+    "2963: Test Suite 'DUNEUITests.xctest' failed at 2026-10-30 06:41:02.116.",
+    "2965: Test Suite 'Selected tests' failed at 2026-10-30 06:41:02.117.",
+    "2983: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log reports 1 failures",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/DuoScoreComponentLayoutTests/testConditionCompositionValuesFitAtMaximumTextSize"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.xcodebuild/t04-release-duo-open-ui.log"
+}

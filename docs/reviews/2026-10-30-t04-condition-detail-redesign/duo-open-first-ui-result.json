@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/ConditionDetailRedesignTests/testHeroContributionsAndUnifiedTrendAreReachable",
+    "DUNEUITests/ConditionDetailRedesignTests/testPeriodWindowAndTrendControlsUpdateVisibleReadback",
+    "DUNEUITests/ConditionDetailRedesignTests/testMaximumAccessibilitySizeKeepsHeroTrendAndExplainerUsable",
+    "DUNEUITests/DuoScoreComponentLayoutTests/testConditionCompositionValuesFitAtMaximumTextSize",
+    "DUNEUITests/DuoScoreComponentLayoutTests/testConditionSubscoreChartsFitAtMaximumTextSize"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 5,
+    "passed": 3,
+    "skipped": 0,
+    "failed": 2
+  },
+  "passed_cases": 3,
+  "failures": [
+    "1220: /Users/shanks/.codex/worktrees/detail-redesign-l03/Health/DUNEUITests/Full/DuoScoreComponentLayoutTests.swift:76: error: -[DUNEUITests.DuoScoreComponentLayoutTests testConditionCompositionValuesFitAtMaximumTextSize] : XCTAssertTrue failed - condition-component-value-hrv should fit at maximum AX size",
+    "1238: Test Case '-[DUNEUITests.DuoScoreComponentLayoutTests testConditionCompositionValuesFitAtMaximumTextSize]' failed (73.093 seconds).",
+    "1694: /Users/shanks/.codex/worktrees/detail-redesign-l03/Health/DUNEUITests/Full/DuoScoreComponentLayoutTests.swift:157: error: -[DUNEUITests.DuoScoreComponentLayoutTests testConditionSubscoreChartsFitAtMaximumTextSize] : XCTAssertTrue failed - HRV heading should fit in the viewport",
+    "1712: Test Case '-[DUNEUITests.DuoScoreComponentLayoutTests testConditionSubscoreChartsFitAtMaximumTextSize]' failed (74.295 seconds).",
+    "1713: Test Suite 'DuoScoreComponentLayoutTests' failed at 2026-10-30 04:20:31.689.",
+    "1715: Test Suite 'DUNEUITests.xctest' failed at 2026-10-30 04:20:31.693.",
+    "1717: Test Suite 'Selected tests' failed at 2026-10-30 04:20:31.713.",
+    "1736: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log reports 2 failures",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/DuoScoreComponentLayoutTests/testConditionCompositionValuesFitAtMaximumTextSize",
+    "DUNEUITests/DuoScoreComponentLayoutTests/testConditionSubscoreChartsFitAtMaximumTextSize"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.xcodebuild/t04-duo-open-ui.log"
+}

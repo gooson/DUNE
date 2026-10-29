@@ -1,14 +1,17 @@
 import SwiftUI
 
-/// Shared time-of-day effect card for score detail views.
-/// Shows how the score adjusts across 4 time phases (Night/Morning/Noon/Evening).
+/// Shared projection data; T04 opts into an accessible phase layout during its rollout.
 struct TimeOfDayCard: View {
     let currentAdjustment: Double
+    let usesAdaptiveLayout: Bool
 
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     private let phases: [(title: LocalizedStringKey, projected: Int)]
+    private let phaseIcons = ["moon.stars", "sunrise", "sun.max", "sunset"]
 
-    init(currentAdjustment: Double, baseScore: Double) {
+    init(currentAdjustment: Double, baseScore: Double, usesAdaptiveLayout: Bool = false) {
         self.currentAdjustment = currentAdjustment
+        self.usesAdaptiveLayout = usesAdaptiveLayout
         let calendar = Calendar.current
         let now = Date()
         self.phases = [(LocalizedStringKey("Night"), 2),
@@ -27,22 +30,41 @@ struct TimeOfDayCard: View {
             VStack(alignment: .leading, spacing: DS.Spacing.sm) {
                 Text("Time-of-day Effect")
                     .font(.subheadline.weight(.semibold))
-
                 Text("Current adjustment \(currentAdjustment.formattedWithSeparator(fractionDigits: 0, alwaysShowSign: true))")
                     .font(.caption)
                     .foregroundStyle(DS.Color.textSecondary)
 
-                HStack {
-                    ForEach(Array(phases.enumerated()), id: \.offset) { _, phase in
-                        VStack(spacing: DS.Spacing.xxs) {
-                            Text(phase.title)
-                                .font(.caption2)
-                                .foregroundStyle(.tertiary)
-                            Text("\(phase.projected)")
-                                .font(.caption.weight(.semibold))
-                                .monospacedDigit()
+                if usesAdaptiveLayout && dynamicTypeSize.isAccessibilitySize {
+                    VStack(alignment: .leading, spacing: DS.Spacing.lg) {
+                        ForEach(Array(phases.enumerated()), id: \.offset) { index, phase in
+                            VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                                Label(phase.title, systemImage: phaseIcons[index])
+                                    .font(.subheadline)
+                                Text(phase.projected.formatted())
+                                    .font(.title3.bold().monospacedDigit())
+                            }
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .accessibilityElement(children: .combine)
+                            .accessibilityIdentifier("condition-time-phase-\(index)")
                         }
-                        .frame(maxWidth: .infinity)
+                    }
+                } else {
+                    HStack {
+                        ForEach(Array(phases.enumerated()), id: \.offset) { index, phase in
+                            VStack(spacing: DS.Spacing.xxs) {
+                                if usesAdaptiveLayout {
+                                    Label(phase.title, systemImage: phaseIcons[index])
+                                        .font(.caption2)
+                                        .foregroundStyle(DS.Color.textSecondary)
+                                } else {
+                                    Text(phase.title).font(.caption2).foregroundStyle(.tertiary)
+                                }
+                                Text("\(phase.projected)")
+                                    .font(.caption.weight(.semibold))
+                                    .monospacedDigit()
+                            }
+                            .frame(maxWidth: .infinity)
+                        }
                     }
                 }
             }
