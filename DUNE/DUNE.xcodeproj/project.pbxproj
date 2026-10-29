@@ -720,6 +720,7 @@
 		858EEEA955BB0F637CA1D4B3 /* LifeLogReplacementTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E78391735B56238D944E707D /* LifeLogReplacementTests.swift */; };
 		859B77E27807125C750586B5 /* WellnessSmokeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E939EC2882FFF467DEA00F2C /* WellnessSmokeTests.swift */; };
 		859DEC45A140E53056BDDA09 /* ContourBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42468472DC99785D919840E1 /* ContourBackground.swift */; };
+		85A82802D05AD7F23222467C /* ScoreDetailHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 021495B2F1A57940113E872F /* ScoreDetailHistory.swift */; };
 		86036D6DCA45A36FA5EE3E00 /* WellnessScore+View.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0968CD4A6C3CE457CF16287 /* WellnessScore+View.swift */; };
 		861F647BE0120BB0AEED3197 /* TemplateReportFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF266E2685360157FC15D35C /* TemplateReportFormatter.swift */; };
 		86256A00D673157EAE65DAD4 /* BodyPart.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF967E3F8E93D54A406F60D8 /* BodyPart.swift */; };
@@ -1520,6 +1521,7 @@
 		01758FB89E84504B925EF060 /* CardioAtlasProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardioAtlasProgress.swift; sourceTree = "<group>"; };
 		0185066E2B99B6620E4EEF06 /* ConditionHeroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionHeroView.swift; sourceTree = "<group>"; };
 		01BA218FDE5877760D7B6204 /* Speech.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Speech.framework; path = System/Library/Frameworks/Speech.framework; sourceTree = SDKROOT; };
+		021495B2F1A57940113E872F /* ScoreDetailHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreDetailHistory.swift; sourceTree = "<group>"; };
 		0238CEC74AD7BCBFBDB72EEB /* TodayCoachingCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayCoachingCard.swift; sourceTree = "<group>"; };
 		023F2A7199D07AEE4AAEF35E /* SleepExerciseCorrelationCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepExerciseCorrelationCard.swift; sourceTree = "<group>"; };
 		024E7E2FDC099CD98EF04E38 /* OpenMeteoAirQualityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenMeteoAirQualityService.swift; sourceTree = "<group>"; };
@@ -3981,6 +3983,7 @@
 				02DF92D75B1B56BC723FDE5C /* MetricDetailViewModel.swift */,
 				8116CDD0E5D63DDE1F0E9506 /* MetricHighlightsView.swift */,
 				305386DE1E55069D329E0F30 /* MetricSummaryHeader.swift */,
+				021495B2F1A57940113E872F /* ScoreDetailHistory.swift */,
 			);
 			path = Detail;
 			sourceTree = "<group>";
@@ -5552,6 +5555,7 @@
 				946E090D7F46588B4943A8BC /* ScoreDetailChartHeader.swift in Sources */,
 				2A086600E5EF3C6A37B7BDF7 /* ScoreDetailEmptyState.swift in Sources */,
 				40F81CBD781E6724035CA0A8 /* ScoreDetailHighlights.swift in Sources */,
+				85A82802D05AD7F23222467C /* ScoreDetailHistory.swift in Sources */,
 				3F725014A01EF8C77C4A7B57 /* ScoreDetailSummaryStats.swift in Sources */,
 				8C5C8A7F1A67291098965A94 /* ScoreHeroPalette.swift in Sources */,
 				22D4F5B0BD8EC6CC2DB29DA3 /* ScoreRefreshService.swift in Sources */,
