@@ -12,12 +12,12 @@ final class CardioAtlasUITests: ActivityExerciseSeededUITestBaseCase {
         openRecord("running")
         XCTAssertTrue(element("cardio-atlas-section").waitForExistence(timeout: 10))
         XCTAssertTrue(element("cardio-atlas-map").exists)
-        addScreenshotAttachment(named: "Cardio Atlas recorded route detail")
+        atlasScreenshot(named: "Cardio Atlas recorded route detail")
 
         XCTAssertTrue(app.scrollToHittableElementIfNeeded("cardio-atlas-journey", maxSwipes: 8))
         element("cardio-atlas-journey").tap()
         XCTAssertTrue(element("cardio-atlas-journey-detail").waitForExistence(timeout: 8))
-        addScreenshotAttachment(named: "Cardio Atlas Journey progress")
+        atlasScreenshot(named: "Cardio Atlas Journey progress")
     }
 
     func testImportedCardioDetailPreservesAnalysis() {
@@ -33,7 +33,7 @@ final class CardioAtlasUITests: ActivityExerciseSeededUITestBaseCase {
         XCTAssertTrue(element("healthkit-workout-detail-screen").waitForExistence(timeout: 10))
         XCTAssertTrue(element("cardio-atlas-section").waitForExistence(timeout: 10))
         XCTAssertTrue(element("healthkit-workout-edit-title").exists)
-        addScreenshotAttachment(named: "Cardio Atlas imported HealthKit detail")
+        atlasScreenshot(named: "Cardio Atlas imported HealthKit detail")
     }
 
     func testPassportFromRecordedRoute() {
@@ -41,7 +41,7 @@ final class CardioAtlasUITests: ActivityExerciseSeededUITestBaseCase {
         XCTAssertTrue(app.scrollToHittableElementIfNeeded("cardio-atlas-passport", maxSwipes: 8))
         element("cardio-atlas-passport").tap()
         XCTAssertTrue(element("cardio-atlas-passport-detail").waitForExistence(timeout: 8))
-        addScreenshotAttachment(named: "Cardio Atlas Passport progress")
+        atlasScreenshot(named: "Cardio Atlas Passport progress")
     }
 
     func testShareStylesAndPrivateLocationDefault() {
@@ -53,19 +53,19 @@ final class CardioAtlasUITests: ActivityExerciseSeededUITestBaseCase {
         XCTAssertTrue(location.exists)
         XCTAssertEqual(location.value as? String, "0", "Location sharing should start off")
         XCTAssertTrue(element("cardio-atlas-share-action").waitForExistence(timeout: 10))
-        addScreenshotAttachment(named: "Cardio Atlas share private Atlas")
+        atlasScreenshot(named: "Cardio Atlas share private Atlas")
 
         location.tap()
         XCTAssertEqual(location.value as? String, "1")
         XCTAssertTrue(element("cardio-atlas-share-trim").exists)
         XCTAssertTrue(element("cardio-atlas-share-action").waitForExistence(timeout: 10))
-        addScreenshotAttachment(named: "Cardio Atlas share Atlas route")
+        atlasScreenshot(named: "Cardio Atlas share Atlas route")
 
         location.tap()
         XCTAssertEqual(location.value as? String, "0")
         XCTAssertTrue(element("cardio-atlas-share-map-image").waitForNonExistence(timeout: 5))
         XCTAssertTrue(element("cardio-atlas-share-action").waitForExistence(timeout: 10))
-        addScreenshotAttachment(named: "Cardio Atlas location removed from shared image")
+        atlasScreenshot(named: "Cardio Atlas location removed from shared image")
         location.tap()
         XCTAssertTrue(element("cardio-atlas-share-action").waitForExistence(timeout: 10))
 
@@ -73,22 +73,22 @@ final class CardioAtlasUITests: ActivityExerciseSeededUITestBaseCase {
         XCTAssertTrue(ribbon.exists && ribbon.isEnabled)
         ribbon.tap()
         XCTAssertTrue(element("cardio-atlas-share-action").waitForExistence(timeout: 10))
-        addScreenshotAttachment(named: "Cardio Atlas share Pace Ribbon")
+        atlasScreenshot(named: "Cardio Atlas share Pace Ribbon")
 
         element("style-cardio-atlas-signature").tap()
         XCTAssertTrue(element("cardio-atlas-share-action").waitForExistence(timeout: 10))
-        addScreenshotAttachment(named: "Cardio Atlas share Signature")
+        atlasScreenshot(named: "Cardio Atlas share Signature")
     }
 
     func testIndoorPlacePickerCancelPreservesPlace() {
         openRecord("elliptical")
         XCTAssertTrue(element("cardio-atlas-map").waitForExistence(timeout: 10))
-        addScreenshotAttachment(named: "Cardio Atlas indoor place")
+        atlasScreenshot(named: "Cardio Atlas indoor place")
         XCTAssertTrue(app.scrollToHittableElementIfNeeded("cardio-atlas-place", maxSwipes: 8))
         element("cardio-atlas-place").tap()
         XCTAssertTrue(element("cardio-atlas-place-cancel").waitForExistence(timeout: 8))
         XCTAssertTrue(element("cardio-atlas-place-remove").exists)
-        addScreenshotAttachment(named: "Cardio Atlas selected place editor")
+        atlasScreenshot(named: "Cardio Atlas selected place editor")
         element("cardio-atlas-place-cancel").tap()
         XCTAssertTrue(element("cardio-atlas-map").waitForExistence(timeout: 8))
     }
@@ -97,7 +97,14 @@ final class CardioAtlasUITests: ActivityExerciseSeededUITestBaseCase {
         openRecord("rowing-machine")
         XCTAssertTrue(element("cardio-atlas-map").waitForExistence(timeout: 10))
         XCTAssertTrue(element("cardio-atlas-map-empty").exists)
-        addScreenshotAttachment(named: "Cardio Atlas location not recorded")
+        atlasScreenshot(named: "Cardio Atlas location not recorded")
+    }
+
+    private func atlasScreenshot(named name: String) {
+        addScreenshotAttachment(named: name)
+        if ProcessInfo.processInfo.environment["DUNE_VISUAL_AUDIT_HOST_ONLY"] == "1" {
+            VisualAudit.capture(name)
+        }
     }
 
     private func openRecord(_ definitionID: String) {
@@ -130,11 +137,18 @@ final class CardioAtlasLargeTextUITests: ActivityExerciseSeededUITestBaseCase {
     func testKoreanLargeTextDetailAndPassport() {
         openRecord("running")
         XCTAssertTrue(element("cardio-atlas-section").waitForExistence(timeout: 10))
-        addScreenshotAttachment(named: "Cardio Atlas Korean large text detail")
+        atlasScreenshot(named: "Cardio Atlas Korean large text detail")
         XCTAssertTrue(app.scrollToHittableElementIfNeeded("cardio-atlas-passport", maxSwipes: 10))
         element("cardio-atlas-passport").tap()
         XCTAssertTrue(element("cardio-atlas-passport-detail").waitForExistence(timeout: 8))
-        addScreenshotAttachment(named: "Cardio Atlas Korean large text Passport")
+        atlasScreenshot(named: "Cardio Atlas Korean large text Passport")
+    }
+
+    private func atlasScreenshot(named name: String) {
+        addScreenshotAttachment(named: name)
+        if ProcessInfo.processInfo.environment["DUNE_VISUAL_AUDIT_HOST_ONLY"] == "1" {
+            VisualAudit.capture(name)
+        }
     }
 
     private func openRecord(_ definitionID: String) {

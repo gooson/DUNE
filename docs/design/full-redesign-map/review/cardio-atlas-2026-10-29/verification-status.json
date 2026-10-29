@@ -1,0 +1,25 @@
+{
+  "status": "blocked",
+  "implementation_commit": "31e1bf62",
+  "native_screenshots": [],
+  "affected_screens": [
+    "A01 cardio rows",
+    "W27 cardio",
+    "W28",
+    "CA01",
+    "CA02",
+    "CA03",
+    "CA04",
+    "CA05",
+    "CA06",
+    "CA07",
+    "CA08"
+  ],
+  "pending_devices": [
+    "iPhone 18 Pro normal and Korean accessibilityXXXL",
+    "iPad Pro 13-inch",
+    "Duo folded 0 degrees",
+    "Duo unfolded 180 degrees"
+  ],
+  "resume_condition": "Registered owned simulator must be queryable, bootable and responsive to AX before focused UI tests and new capture collection. No shared simulator or global service reset."
+}
