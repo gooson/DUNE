@@ -92,11 +92,37 @@ struct SimulatorAdvancedMockDataSet: Sendable {
     let vitals: SimulatorAdvancedMockVitals
 
     func workoutSummaries(start: Date, end: Date) -> [WorkoutSummary] {
-        workouts
+        #if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("--ui-workout-name-audit") {
+            return Self.workoutNameAuditFixtures(referenceDate: referenceDate)
+                .filter { $0.date >= start && $0.date < end }
+        }
+        #endif
+        return workouts
             .map(\.summary)
             .filter { $0.date >= start && $0.date < end }
             .sorted { $0.date > $1.date }
     }
+
+    #if DEBUG
+    /// Opt-in imported-workout fixtures; never changes HealthKit or persisted workout data.
+    static func workoutNameAuditFixtures(referenceDate: Date) -> [WorkoutSummary] {
+        let cases: [(String, String, WorkoutActivityType)] = [
+            ("running", "Running", .running),
+            ("machine", "Stair Climbing", .stairClimbing),
+            ("stairs", "Stair Stepper", .stairStepper),
+            ("custom", "Bench Press", .traditionalStrengthTraining)
+        ]
+        return cases.enumerated().map { index, fixture in
+            WorkoutSummary(
+                id: "ui-name-audit-\(fixture.0)", type: fixture.1, activityType: fixture.2,
+                duration: 1_800, calories: 200, distance: nil,
+                date: referenceDate.addingTimeInterval(-Double(index + 1) * 3_600),
+                isFromThisApp: false, heartRateAvg: 130
+            )
+        }
+    }
+    #endif
 
     func workout(withID workoutID: String) -> SimulatorAdvancedMockWorkout? {
         workouts.first { $0.summary.id == workoutID }

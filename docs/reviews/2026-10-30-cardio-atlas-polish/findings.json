@@ -1,0 +1,113 @@
+{
+  "branch": "codex/cardio-atlas-polish",
+  "base": "origin/main",
+  "base_sha": "25ebca1be35551f2799e6017f73cf06351d7b9f4",
+  "timestamp": "2026-10-30T01:59:29.374016+09:00",
+  "diff_lines": 2255,
+  "reviewers_run": [
+    "security (direct large-diff exception)",
+    "performance (direct)",
+    "architecture (direct)",
+    "data-integrity (direct)",
+    "simplicity (direct)",
+    "swift-ui-expert",
+    "apple-ux-expert",
+    "ui-test-expert",
+    "localization (direct)"
+  ],
+  "reviewers_skipped": [
+    {
+      "name": "agent-native",
+      "reason": "No agent/prompt/instruction changes"
+    }
+  ],
+  "findings": [
+    {
+      "id": "verify-001",
+      "reviewer": "UI Test Expert",
+      "priority": "P1",
+      "status": "Resolved",
+      "title": "Long empty-place selection flow lacks passing direct gesture evidence",
+      "file": "DUNEUITests/Visual/CardioAtlasUITests.swift",
+      "line": 123,
+      "issue": "Prior failure from keyboard suggestion-strip interception; final helper correction not executed",
+      "suggestion": "First verify keyboard-safe native gesture with frames/PNG and actual scrolling; then resume only failed selector",
+      "reason": "Native one-drag probe proves keyboard strip avoidance and actual movement; original failed selector then resumed once and passed including save/reopen"
+    },
+    {
+      "id": "verify-002",
+      "reviewer": "UI Test Expert",
+      "priority": "P2",
+      "status": "Resolved",
+      "title": "Place search and milestone native iOS unit execution missing",
+      "file": "DUNETests/CardioAtlasPlaceSearchTests.swift",
+      "line": 9,
+      "issue": "Only actual-source macOS package runs exist for search19/count15 definitions",
+      "suggestion": "Run CardioAtlasPlaceSearchTests and CardioAtlasProgressTests in iOS app test target",
+      "reason": "Final native iOS59 definitions/162 cases passed: search21, progress15, display5, correction12, migration6. Includes all Resolve fixes."
+    },
+    {
+      "id": "data-001",
+      "reviewer": "Data Integrity (primary direct review)",
+      "priority": "P2",
+      "status": "Resolved",
+      "title": "Unknown default exercise IDs can be rewritten without an existing base",
+      "file": "DUNE/Data/Services/ExerciseVariantMigration.swift",
+      "line": 133,
+      "issue": "migrateExerciseDefaults accepts suffix-stripped IDs without library.exercise lookup; unknown/imported IDs may lose their original reference",
+      "suggestion": "Require a canonical base definition to exist, preserving unknown IDs and adding regression coverage",
+      "reason": "Default ID rewrites now require a real library base; known/unknown/empty-library tests passed in native iOS run"
+    },
+    {
+      "id": "ux-001",
+      "reviewer": "Apple UX Expert",
+      "priority": "P3",
+      "status": "Resolved",
+      "title": "Duplicate primary save actions",
+      "file": "DUNE/Presentation/Exercise/CardioAtlas/CardioAtlasPlacePicker.swift",
+      "line": 143,
+      "issue": "Top and sticky bottom Save are simultaneously visible after selection",
+      "suggestion": "Keep sticky Save and toolbar Cancel as the single confirmation/cancel pair",
+      "reason": "Removed redundant toolbar Save; sticky primary Save and toolbar Cancel remain. Final selection UI verification follows under verify-001"
+    },
+    {
+      "id": "search-001",
+      "reviewer": "Primary + SwiftUI reviewer",
+      "priority": "P2",
+      "status": "Resolved",
+      "title": "Regional generic facility searches drop categorized gyms without a literal keyword",
+      "file": "DUNE/Presentation/Exercise/CardioAtlas/CardioAtlasPlaceSearch.swift",
+      "line": 108,
+      "issue": "강남 헬스 drops Gold Fitness even with matching 강남 address and fitnessCenter category",
+      "suggestion": "Allow a category to satisfy only its generic facility word while retaining every location/name word",
+      "resolution_in_progress": "Per-word matching implemented; positive/negative district/category tests added, native run pending",
+      "reason": "Per-word facility-category match retains each district/name term; 4 positive/negative regional variants and literal unclassified-name regression passed in native iOS run"
+    }
+  ],
+  "summary": {
+    "p1": 1,
+    "p2": 3,
+    "p3": 1
+  },
+  "phase": "Review and Resolve complete; ready for Ship",
+  "summary_open": {
+    "p1": 0,
+    "p2": 0,
+    "p3": 0
+  },
+  "final_pr_review": {
+    "reviewer": "final_pr_review",
+    "verdict": "Pass with notes: no new actionable findings, final native59/162 and final Korean UI passed"
+  },
+  "verification": {
+    "native_definitions": 59,
+    "native_cases": 162,
+    "native_exit": 0,
+    "keyboard_probe_passed": true,
+    "original_long_flow_passed": true,
+    "korean_flow_final_passed": true,
+    "supplemental_initial_korean_timeout": 124,
+    "korean_retry": 1,
+    "new_native_pngs": 11
+  }
+}

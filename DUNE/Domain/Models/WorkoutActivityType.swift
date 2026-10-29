@@ -14,6 +14,8 @@ enum WorkoutActivityType: String, Codable, Sendable, CaseIterable {
     case elliptical
     case rowing
     case stairClimbing
+    // Legacy persisted name for HKWorkoutActivityType.stairs (actual stairs, not a machine).
+    // Keep the raw value and HealthKit mapping stable; presentation labels clarify the distinction.
     case stairStepper
     case jumpRope
     case stepTraining

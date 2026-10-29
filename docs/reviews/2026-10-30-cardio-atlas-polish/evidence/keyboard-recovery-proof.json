@@ -1,0 +1,39 @@
+{
+  "status": "recovered-with-direct-native-evidence",
+  "device": "9905027B-0A4A-4A45-84D0-98431BE94BAC",
+  "list_frame": [
+    0,
+    72,
+    402,
+    802
+  ],
+  "field_frame": [
+    16,
+    88,
+    315,
+    44
+  ],
+  "keyboard_ax_frame": [
+    0,
+    590,
+    402,
+    226
+  ],
+  "prediction_guard_top": 530,
+  "prediction_strip_visual_top_approx": 546,
+  "start": [
+    201,
+    490
+  ],
+  "end": [
+    201,
+    350
+  ],
+  "single_drag_count": 1,
+  "actual_list_movement": true,
+  "source": "Probe passed and native before/after images+AX show first result disappearing and Gym3 entering at y230.3",
+  "before": "07BDA981-C695-47E3-B065-1309DD1D1F3E.png",
+  "after": "401215D3-F2F4-40C2-B332-21DCFCBD3CB0.png",
+  "prior_failed_flow_retries_preserved": true,
+  "next_action": "Resume original failed selector once, no alternate/repeated runner if same cause recurs"
+}

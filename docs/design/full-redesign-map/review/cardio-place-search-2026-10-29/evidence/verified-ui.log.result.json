@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/CardioAtlasUITests/testSearchSelectionScrollsToTopAndUpdatesMap",
+    "DUNEUITests/CardioAtlasUITests/testSearchSelectionCancelPreservesOriginalPlace",
+    "DUNEUITests/CardioAtlasUITests/testKoreanWordAndInitialSearchExcludeUnrelatedPlaces"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": null,
+    "passed": null,
+    "skipped": null,
+    "failed": null
+  },
+  "passed_cases": 0,
+  "failures": [
+    "144: /Users/shanks/.codex/worktrees/96f8/Health/DUNE/Presentation/Exercise/CardioAtlas/CardioAtlasPlacePicker.swift:222:30: error: 'init(pointsOfInterestRequest:)' has been renamed to 'init(request:)'",
+    "148: |                              `- error: 'init(pointsOfInterestRequest:)' has been renamed to 'init(request:)'",
+    "212: Testing failed:",
+    "216: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log has no executed-test count",
+    "UI test log has no identifiable passed UI test cases",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/CardioAtlasUITests/testSearchSelectionScrollsToTopAndUpdatesMap",
+    "DUNEUITests/CardioAtlasUITests/testSearchSelectionCancelPreservesOriginalPlace",
+    "DUNEUITests/CardioAtlasUITests/testKoreanWordAndInitialSearchExcludeUnrelatedPlaces"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/96f8/Health/.codex-checks/cardio-place-search/verified-ui.log"
+}

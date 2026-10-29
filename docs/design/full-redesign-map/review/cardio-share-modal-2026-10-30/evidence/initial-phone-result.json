@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/CardioAtlasShareModalDarkUITests/testKoreanDarkShareModalSurvivesBodySwipesAndDismissesFromHeader",
+    "DUNEUITests/CardioAtlasShareModalLightUITests/testKoreanLightShareModalSurvivesBodySwipesAndDismissesFromHeader",
+    "DUNEUITests/CardioAtlasShareModalAXDarkUITests/testLongShareContentSurvivesScrollingAndHeaderDismissal"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 3,
+    "passed": 0,
+    "skipped": 0,
+    "failed": 3
+  },
+  "passed_cases": 0,
+  "failures": [
+    "3230: /Users/shanks/.codex/worktrees/96f8/Health/DUNEUITests/Visual/CardioAtlasUITests.swift:392: error: -[DUNEUITests.CardioAtlasShareModalAXDarkUITests testLongShareContentSurvivesScrollingAndHeaderDismissal] : XCTAssertTrue failed",
+    "3244: Test Case '-[DUNEUITests.CardioAtlasShareModalAXDarkUITests testLongShareContentSurvivesScrollingAndHeaderDismissal]' failed (91.573 seconds).",
+    "3245: Test Suite 'CardioAtlasShareModalAXDarkUITests' failed at 2026-10-30 00:37:27.398.",
+    "3492: /Users/shanks/.codex/worktrees/96f8/Health/DUNEUITests/Visual/CardioAtlasUITests.swift:367: error: -[DUNEUITests.CardioAtlasShareModalDarkUITests testKoreanDarkShareModalSurvivesBodySwipesAndDismissesFromHeader] : XCTAssertTrue failed",
+    "3506: Test Case '-[DUNEUITests.CardioAtlasShareModalDarkUITests testKoreanDarkShareModalSurvivesBodySwipesAndDismissesFromHeader]' failed (57.852 seconds).",
+    "3507: Test Suite 'CardioAtlasShareModalDarkUITests' failed at 2026-10-30 00:38:25.251.",
+    "3732: /Users/shanks/.codex/worktrees/96f8/Health/DUNEUITests/Visual/CardioAtlasUITests.swift:379: error: -[DUNEUITests.CardioAtlasShareModalLightUITests testKoreanLightShareModalSurvivesBodySwipesAndDismissesFromHeader] : XCTAssertTrue failed",
+    "3746: Test Case '-[DUNEUITests.CardioAtlasShareModalLightUITests testKoreanLightShareModalSurvivesBodySwipesAndDismissesFromHeader]' failed (54.221 seconds).",
+    "3747: Test Suite 'CardioAtlasShareModalLightUITests' failed at 2026-10-30 00:39:19.473.",
+    "3749: Test Suite 'DUNEUITests.xctest' failed at 2026-10-30 00:39:19.474.",
+    "3751: Test Suite 'Selected tests' failed at 2026-10-30 00:39:19.474.",
+    "3768: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log has no positive passed-test count",
+    "UI test log has no identifiable passed UI test cases",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/CardioAtlasShareModalDarkUITests/testKoreanDarkShareModalSurvivesBodySwipesAndDismissesFromHeader",
+    "DUNEUITests/CardioAtlasShareModalLightUITests/testKoreanLightShareModalSurvivesBodySwipesAndDismissesFromHeader",
+    "DUNEUITests/CardioAtlasShareModalAXDarkUITests/testLongShareContentSurvivesScrollingAndHeaderDismissal"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/96f8/Health/.codex-checks/cardio-share-modal/phone-ui.log"
+}

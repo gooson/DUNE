@@ -1,0 +1,15 @@
+{
+  "initial_exit": 124,
+  "wall_timeout_seconds": 180,
+  "phase": "testcase after cold build",
+  "last_elapsed_test_seconds": 82.97,
+  "last_observation": "Korean results found and unrelated-place assertions proceeded",
+  "recovery_evidence": [
+    "Owned xcodebuild/test runner process absent in ps readback",
+    "Repository/worktree lock acquired and screenshot command completed",
+    "Fresh native PNG shows search 헬스 and relevant two results with software keyboard visible"
+  ],
+  "remaining_process_group_warning": "Watchdog reported signal permission error; subsequent scoped ps and lock acquisition found no surviving owner",
+  "retry_limit": 1,
+  "retry_change": "Reuse already built app/project via --no-regen; bounded300s total deadline"
+}

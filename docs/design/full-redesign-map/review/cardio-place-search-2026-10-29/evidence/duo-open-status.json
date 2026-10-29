@@ -1,0 +1,14 @@
+{
+  "status": "failed",
+  "phase": "test-start",
+  "exit_status": 124,
+  "wall_timeout_seconds": 900,
+  "executed_tests": null,
+  "passed_tests": null,
+  "reason": "No test-start/case evidence before the runner deadline; Device Hub AX returned unknown. Not an app assertion failure.",
+  "device_udid": "25D0A3A5-22BA-4DF8-A71E-BB9476ABAFEE",
+  "selector": "DUNEUITests/CardioAtlasUITests/testKoreanWordAndInitialSearchExcludeUnrelatedPlaces",
+  "log_path": "/Users/shanks/.codex/worktrees/96f8/Health/.codex-checks/cardio-place-search/duo-open-ui.log",
+  "capture_status": "CA02 Duo inner not refreshed",
+  "resume_condition": "Restore own Duo app/AX/test-runner startup, then run only this selector."
+}
