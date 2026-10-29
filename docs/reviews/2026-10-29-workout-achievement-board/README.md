@@ -9,6 +9,7 @@
 - [새 실제 원본 갤러리](../../design/full-redesign-map/review/workout-achievement-board-2026-10-29/index.html)
 - [해결책](../../solutions/general/2026-10-29-workout-achievement-board.md)
 - [코드 리뷰](review.md) · [최종 품질](final-quality.md) · [PR 리뷰](pr-review.md)
+- [/run 체크포인트·변경 확인 가이드](execution-summary.md) · [Draft PR #856](https://github.com/gooson/DUNE/pull/856)
 
 ## 검증 결과
 
