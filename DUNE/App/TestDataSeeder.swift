@@ -47,6 +47,9 @@ enum TestDataSeeder {
         case .activityExerciseSeeded:
             seedDefaultRecords(into: context)
             seedActivityExerciseFixtures(into: context)
+            if ProcessInfo.processInfo.arguments.contains("--ui-cardio-atlas-fixture") {
+                seedCardioAtlasFixtures(into: context)
+            }
         case .fatigueRegression:
             seedFatigueRegression(into: context)
         }
@@ -467,6 +470,74 @@ enum TestDataSeeder {
             _ = PersonalRecordStore.shared.evaluateReward(for: workout, newPRTypes: [.fastestPace])
         }
         try? context.save()
+    }
+
+    /// Opt-in UI-only locations. The square course is synthetic and never presented as a user's GPS history.
+    @MainActor
+    private static func seedCardioAtlasFixtures(into context: ModelContext) {
+        let now = Date()
+        let course: [(Double, Double)] = [
+            (37.5465, 127.0415), (37.54875, 127.0415), (37.5510, 127.0415),
+            (37.5510, 127.0443), (37.5510, 127.0471),
+            (37.54875, 127.0471), (37.5465, 127.0471),
+            (37.5465, 127.0443), (37.5465, 127.0415)
+        ]
+        let route = course.enumerated().compactMap { index, coordinate in
+            WorkoutRoutePoint(
+                latitude: coordinate.0,
+                longitude: coordinate.1,
+                timestamp: now.addingTimeInterval(Double(index * 150 - 1_500)),
+                startsNewSegment: index == 5
+            )
+        }
+        let run = ExerciseRecord(
+            date: now.addingTimeInterval(-300), exerciseType: "Atlas Route Run",
+            duration: 1_350, calories: 210, distance: 2.0,
+            exerciseDefinitionID: "running"
+        )
+        context.insert(run)
+        let runSet = WorkoutSet(setNumber: 1, duration: 1_350, distance: 2.0, isCompleted: true)
+        runSet.exerciseRecord = run
+        context.insert(runSet)
+        run.sets = [runSet]
+        context.insert(WorkoutLocationRecord(
+            localRecordID: run.id,
+            payload: WorkoutLocationPayload(isIndoor: false, route: route)
+        ))
+
+        let elliptical = ExerciseRecord(
+            date: now.addingTimeInterval(-3_600), exerciseType: "Atlas Indoor Cardio",
+            duration: 1_200, calories: 180, exerciseDefinitionID: "elliptical"
+        )
+        context.insert(elliptical)
+        let ellipticalSet = WorkoutSet(setNumber: 1, duration: 1_200, isCompleted: true)
+        ellipticalSet.exerciseRecord = elliptical
+        context.insert(ellipticalSet)
+        elliptical.sets = [ellipticalSet]
+        let place = WorkoutPlace(
+            latitude: 37.5445, longitude: 127.0438,
+            name: "Atlas Indoor Gym (UI Fixture)", source: .manual
+        )
+        context.insert(WorkoutLocationRecord(
+            localRecordID: elliptical.id,
+            payload: WorkoutLocationPayload(isIndoor: true, place: place)
+        ))
+
+        let unlocated = ExerciseRecord(
+            date: now.addingTimeInterval(-7_200), exerciseType: "Atlas Unlocated Cardio",
+            duration: 900, exerciseDefinitionID: "rowing-machine"
+        )
+        context.insert(unlocated)
+        let unlocatedSet = WorkoutSet(setNumber: 1, duration: 900, isCompleted: true)
+        unlocatedSet.exerciseRecord = unlocated
+        context.insert(unlocatedSet)
+        unlocated.sets = [unlocatedSet]
+
+        do {
+            try context.save()
+        } catch {
+            assertionFailure("Failed to seed Cardio Atlas UI fixtures: \(error)")
+        }
     }
 
     @MainActor

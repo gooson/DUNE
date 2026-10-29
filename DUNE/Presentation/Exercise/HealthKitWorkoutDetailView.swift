@@ -15,6 +15,16 @@ struct HealthKitWorkoutDetailView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: DS.Spacing.lg) {
                 workoutHeader
+                if workout.activityType.isAtlasSupported {
+                    CardioAtlasSection(
+                        session: CardioAtlasSession(
+                            id: workout.id, activityType: workout.activityType, date: workout.date,
+                            duration: workout.duration, distanceMeters: workout.distance,
+                            isIndoor: workout.isIndoor
+                        ),
+                        healthKitWorkoutID: workout.id
+                    )
+                }
                 badgesSection
                 statsGrid
                 heartRateSection

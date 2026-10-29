@@ -44,3 +44,10 @@ iPhone·접힌 Duo는 순서대로 읽는 한 열, iPad·펼친 Duo 폭은 지�
 ## 브라우저 확인 결과
 
 320/736/1024px, 밝음·어두움, 실외 이동/실내/실외 제자리/경로 미수신의 상세·공유·저니·패스포트, 실내11종목과 큰 글씨를 포함한111개 배치/조작 검사를 수행했다. 공유 스타일3종·경로 geometry 숨김·Journey/Passport 포함 선택·공유 위치 제외와 개인 지도 보존을 확인했다. 하단 평균 심박의 종목별 바인딩 수정 후3개 값 상태를 한정 확인했다. 실패/잘림/브라우저 오류는 없었다. 소스 해시와 재사용 범위는 `cardio-atlas-integrated-qa.json`에 있다. 초기 공유 옵션 검사에서 조작 중인 체크박스까지 교체되는 문제를 수정해 현재는 카드 콘텐츠만 갱신한다. 실제 센서·권한·네이티브 앱·고정 크기 PNG 내보내기 검증은 수행하지 않았다.
+
+
+## Native implementation contract · 2026-10-29
+
+Accepted by user invocation of `/run`. This section supersedes proposal-only status for the native work in progress; browser PNGs remain concept evidence. Existing local and HealthKit detail headers lead into Atlas, then existing metrics/analysis. New IDs: `cardio-atlas-section`, `cardio-atlas-map`, `cardio-atlas-share`, `cardio-atlas-place`, `cardio-atlas-journey`, `cardio-atlas-passport`. Journey/Passport destinations: `cardio-atlas-journey-detail`, `cardio-atlas-passport-detail`. Native routes are segmented actual GPS; indoor/stationary location is an editable selected place, never a generated route. No location is a valid editable state.
+
+Target states: phone compact, tablet regular, Duo folded/unfolded, larger text; light/dark follow existing theme tokens. Header actions wrap vertically when necessary; progress pages center within readable widths. Place editor is a cancellable native search sheet. Location sharing starts OFF. Explicit location sharing can trim first/last300m; private detail does not change. Online map errors provide retry and block incomplete Atlas export. Signature/private cards work without network. Source units remain actual meters or elapsed seconds. Native captures are collected separately after build/UI validation. Watch UI is unchanged; shared schema builds and imported authorized Watch routes are supported.
