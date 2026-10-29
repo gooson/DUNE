@@ -194,13 +194,31 @@ class UnitRunnerTests(unittest.TestCase):
                              [["DUNETests"], ["DUNEWatchTests"]])
 
     def test_zero_and_missing_execution_count_fail(self) -> None:
-        for log_text in ("Executed 0 tests, with 0 failures", "** TEST SUCCEEDED **"):
+        for log_text in ("Executed 0 tests, with 0 failures", "** TEST SUCCEEDED **",
+                         "Test run with 0 tests in 1 suite passed after 0.1 seconds."):
             with self.subTest(log_text=log_text), tempfile.TemporaryDirectory() as directory:
                 result, commands = self.fake_run(Path(directory), "--ios-only", "--only-testing", IOS,
                                                  log_text=log_text)
                 self.assertEqual(len(commands), 1)
                 self.assertEqual(result.returncode, 1)
                 self.assertIn("no positive execution count", result.stderr)
+
+    def test_modern_swift_testing_count_after_xctest_zero(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            result, commands = self.fake_run(
+                Path(directory), "--ios-only", "--only-testing", IOS,
+                log_text="Executed 0 tests, with 0 failures (0 unexpected)\n"
+                         "✔ Test run with 20 tests in 1 suite passed after 0.236 seconds.")
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            self.assertEqual(len(commands), 1)
+            self.assertIn("Last reported test count: 20", result.stdout)
+
+    def test_modern_swift_testing_plural_suites(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            result, _ = self.fake_run(Path(directory), "--ios-only", "--only-testing", IOS,
+                                      log_text="Test run with 21 tests in 2 suites passed after 0.3 seconds.")
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            self.assertIn("Last reported test count: 21", result.stdout)
 
     def test_swift_testing_count_and_nonzero_exit(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
