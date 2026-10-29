@@ -36,7 +36,8 @@ struct CumulativeStressDisplayTests {
         #expect(displayed == expectedDisplayed[subset])
         #expect(displayed.reduce(0, +) == 100)
         #expect(abs(shares.values.reduce(0, +) - 1) < 0.000_001)
-        #expect(shares.values.allSatisfy(\.isFinite))
+        let allSharesAreFinite = shares.values.allSatisfy { $0.isFinite }
+        #expect(allSharesAreFinite)
         #expect(score == original)
         let weightedRaw = score.contributions.reduce(0) { $0 + $1.rawScore * $1.weight }
         let baseTotal = score.contributions.reduce(0) { $0 + $1.weight }
