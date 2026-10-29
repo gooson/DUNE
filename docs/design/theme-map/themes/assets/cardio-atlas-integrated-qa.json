@@ -1,0 +1,934 @@
+{
+  "sourceSHA256": "a7e8c6c399bd0f240fbbd70e2f0dcbed777cdb537d06b168bc1e0c2d74c97a08",
+  "scope": "Integrated browser proposal only. No native app, location/sensor recording, HealthKit or image export verification.",
+  "checks": 111,
+  "failures": [],
+  "errors": [],
+  "interactions": [
+    "Detail share button",
+    "Three share styles change actual poster",
+    "Route geometry trimming",
+    "Journey and Passport inclusion switches",
+    "Share privacy keeps private map"
+  ],
+  "stylePaths": [
+    {
+      "style": "atlas",
+      "backgroundPaths": 444
+    },
+    {
+      "style": "spectrum",
+      "backgroundPaths": 444
+    },
+    {
+      "style": "signature",
+      "backgroundPaths": 0
+    }
+  ],
+  "rows": [
+    {
+      "width": 320,
+      "appearance": "light",
+      "environment": "outdoor",
+      "screen": "detail",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 320,
+      "appearance": "light",
+      "environment": "outdoor",
+      "screen": "share",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 320,
+      "appearance": "light",
+      "environment": "outdoor",
+      "screen": "journey",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 320,
+      "appearance": "light",
+      "environment": "outdoor",
+      "screen": "passport",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 320,
+      "appearance": "light",
+      "environment": "indoor",
+      "screen": "detail",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 320,
+      "appearance": "light",
+      "environment": "indoor",
+      "screen": "share",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 320,
+      "appearance": "light",
+      "environment": "indoor",
+      "screen": "journey",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 320,
+      "appearance": "light",
+      "environment": "indoor",
+      "screen": "passport",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 320,
+      "appearance": "light",
+      "environment": "stationary",
+      "screen": "detail",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 320,
+      "appearance": "light",
+      "environment": "stationary",
+      "screen": "share",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 320,
+      "appearance": "light",
+      "environment": "stationary",
+      "screen": "journey",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 320,
+      "appearance": "light",
+      "environment": "stationary",
+      "screen": "passport",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 320,
+      "appearance": "light",
+      "environment": "missing",
+      "screen": "detail",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 320,
+      "appearance": "light",
+      "environment": "missing",
+      "screen": "share",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 320,
+      "appearance": "light",
+      "environment": "missing",
+      "screen": "journey",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 320,
+      "appearance": "light",
+      "environment": "missing",
+      "screen": "passport",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 320,
+      "appearance": "dark",
+      "environment": "outdoor",
+      "screen": "detail",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 320,
+      "appearance": "dark",
+      "environment": "outdoor",
+      "screen": "share",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 320,
+      "appearance": "dark",
+      "environment": "outdoor",
+      "screen": "journey",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 320,
+      "appearance": "dark",
+      "environment": "outdoor",
+      "screen": "passport",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 320,
+      "appearance": "dark",
+      "environment": "indoor",
+      "screen": "detail",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 320,
+      "appearance": "dark",
+      "environment": "indoor",
+      "screen": "share",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 320,
+      "appearance": "dark",
+      "environment": "indoor",
+      "screen": "journey",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 320,
+      "appearance": "dark",
+      "environment": "indoor",
+      "screen": "passport",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 320,
+      "appearance": "dark",
+      "environment": "stationary",
+      "screen": "detail",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 320,
+      "appearance": "dark",
+      "environment": "stationary",
+      "screen": "share",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 320,
+      "appearance": "dark",
+      "environment": "stationary",
+      "screen": "journey",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 320,
+      "appearance": "dark",
+      "environment": "stationary",
+      "screen": "passport",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 320,
+      "appearance": "dark",
+      "environment": "missing",
+      "screen": "detail",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 320,
+      "appearance": "dark",
+      "environment": "missing",
+      "screen": "share",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 320,
+      "appearance": "dark",
+      "environment": "missing",
+      "screen": "journey",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 320,
+      "appearance": "dark",
+      "environment": "missing",
+      "screen": "passport",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 736,
+      "appearance": "light",
+      "environment": "outdoor",
+      "screen": "detail",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 736,
+      "appearance": "light",
+      "environment": "outdoor",
+      "screen": "share",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 736,
+      "appearance": "light",
+      "environment": "outdoor",
+      "screen": "journey",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 736,
+      "appearance": "light",
+      "environment": "outdoor",
+      "screen": "passport",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 736,
+      "appearance": "light",
+      "environment": "indoor",
+      "screen": "detail",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 736,
+      "appearance": "light",
+      "environment": "indoor",
+      "screen": "share",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 736,
+      "appearance": "light",
+      "environment": "indoor",
+      "screen": "journey",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 736,
+      "appearance": "light",
+      "environment": "indoor",
+      "screen": "passport",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 736,
+      "appearance": "light",
+      "environment": "stationary",
+      "screen": "detail",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 736,
+      "appearance": "light",
+      "environment": "stationary",
+      "screen": "share",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 736,
+      "appearance": "light",
+      "environment": "stationary",
+      "screen": "journey",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 736,
+      "appearance": "light",
+      "environment": "stationary",
+      "screen": "passport",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 736,
+      "appearance": "light",
+      "environment": "missing",
+      "screen": "detail",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 736,
+      "appearance": "light",
+      "environment": "missing",
+      "screen": "share",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 736,
+      "appearance": "light",
+      "environment": "missing",
+      "screen": "journey",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 736,
+      "appearance": "light",
+      "environment": "missing",
+      "screen": "passport",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 736,
+      "appearance": "dark",
+      "environment": "outdoor",
+      "screen": "detail",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 736,
+      "appearance": "dark",
+      "environment": "outdoor",
+      "screen": "share",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 736,
+      "appearance": "dark",
+      "environment": "outdoor",
+      "screen": "journey",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 736,
+      "appearance": "dark",
+      "environment": "outdoor",
+      "screen": "passport",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 736,
+      "appearance": "dark",
+      "environment": "indoor",
+      "screen": "detail",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 736,
+      "appearance": "dark",
+      "environment": "indoor",
+      "screen": "share",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 736,
+      "appearance": "dark",
+      "environment": "indoor",
+      "screen": "journey",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 736,
+      "appearance": "dark",
+      "environment": "indoor",
+      "screen": "passport",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 736,
+      "appearance": "dark",
+      "environment": "stationary",
+      "screen": "detail",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 736,
+      "appearance": "dark",
+      "environment": "stationary",
+      "screen": "share",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 736,
+      "appearance": "dark",
+      "environment": "stationary",
+      "screen": "journey",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 736,
+      "appearance": "dark",
+      "environment": "stationary",
+      "screen": "passport",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 736,
+      "appearance": "dark",
+      "environment": "missing",
+      "screen": "detail",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 736,
+      "appearance": "dark",
+      "environment": "missing",
+      "screen": "share",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 736,
+      "appearance": "dark",
+      "environment": "missing",
+      "screen": "journey",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 736,
+      "appearance": "dark",
+      "environment": "missing",
+      "screen": "passport",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 1024,
+      "appearance": "light",
+      "environment": "outdoor",
+      "screen": "detail",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 1024,
+      "appearance": "light",
+      "environment": "outdoor",
+      "screen": "share",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 1024,
+      "appearance": "light",
+      "environment": "outdoor",
+      "screen": "journey",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 1024,
+      "appearance": "light",
+      "environment": "outdoor",
+      "screen": "passport",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 1024,
+      "appearance": "light",
+      "environment": "indoor",
+      "screen": "detail",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 1024,
+      "appearance": "light",
+      "environment": "indoor",
+      "screen": "share",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 1024,
+      "appearance": "light",
+      "environment": "indoor",
+      "screen": "journey",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 1024,
+      "appearance": "light",
+      "environment": "indoor",
+      "screen": "passport",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 1024,
+      "appearance": "light",
+      "environment": "stationary",
+      "screen": "detail",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 1024,
+      "appearance": "light",
+      "environment": "stationary",
+      "screen": "share",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 1024,
+      "appearance": "light",
+      "environment": "stationary",
+      "screen": "journey",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 1024,
+      "appearance": "light",
+      "environment": "stationary",
+      "screen": "passport",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 1024,
+      "appearance": "light",
+      "environment": "missing",
+      "screen": "detail",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 1024,
+      "appearance": "light",
+      "environment": "missing",
+      "screen": "share",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 1024,
+      "appearance": "light",
+      "environment": "missing",
+      "screen": "journey",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 1024,
+      "appearance": "light",
+      "environment": "missing",
+      "screen": "passport",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 1024,
+      "appearance": "dark",
+      "environment": "outdoor",
+      "screen": "detail",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 1024,
+      "appearance": "dark",
+      "environment": "outdoor",
+      "screen": "share",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 1024,
+      "appearance": "dark",
+      "environment": "outdoor",
+      "screen": "journey",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 1024,
+      "appearance": "dark",
+      "environment": "outdoor",
+      "screen": "passport",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 1024,
+      "appearance": "dark",
+      "environment": "indoor",
+      "screen": "detail",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 1024,
+      "appearance": "dark",
+      "environment": "indoor",
+      "screen": "share",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 1024,
+      "appearance": "dark",
+      "environment": "indoor",
+      "screen": "journey",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 1024,
+      "appearance": "dark",
+      "environment": "indoor",
+      "screen": "passport",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 1024,
+      "appearance": "dark",
+      "environment": "stationary",
+      "screen": "detail",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 1024,
+      "appearance": "dark",
+      "environment": "stationary",
+      "screen": "share",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 1024,
+      "appearance": "dark",
+      "environment": "stationary",
+      "screen": "journey",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 1024,
+      "appearance": "dark",
+      "environment": "stationary",
+      "screen": "passport",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 1024,
+      "appearance": "dark",
+      "environment": "missing",
+      "screen": "detail",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 1024,
+      "appearance": "dark",
+      "environment": "missing",
+      "screen": "share",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 1024,
+      "appearance": "dark",
+      "environment": "missing",
+      "screen": "journey",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 1024,
+      "appearance": "dark",
+      "environment": "missing",
+      "screen": "passport",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 736,
+      "environment": "indoor",
+      "activity": "running",
+      "screen": "detail",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 736,
+      "environment": "indoor",
+      "activity": "walking",
+      "screen": "detail",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 736,
+      "environment": "indoor",
+      "activity": "cycling",
+      "screen": "detail",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 736,
+      "environment": "indoor",
+      "activity": "elliptical",
+      "screen": "detail",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 736,
+      "environment": "indoor",
+      "activity": "stairs",
+      "screen": "detail",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 736,
+      "environment": "indoor",
+      "activity": "stepper",
+      "screen": "detail",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 736,
+      "environment": "indoor",
+      "activity": "rowing",
+      "screen": "detail",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 736,
+      "environment": "indoor",
+      "activity": "jumpRope",
+      "screen": "detail",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 736,
+      "environment": "indoor",
+      "activity": "hiit",
+      "screen": "detail",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 736,
+      "environment": "indoor",
+      "activity": "swimming",
+      "screen": "detail",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 736,
+      "environment": "indoor",
+      "activity": "other",
+      "screen": "detail",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 320,
+      "large": true,
+      "environment": "indoor",
+      "screen": "detail",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 320,
+      "large": true,
+      "environment": "indoor",
+      "screen": "share",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 320,
+      "large": true,
+      "environment": "indoor",
+      "screen": "journey",
+      "overflow": false,
+      "clipped": []
+    },
+    {
+      "width": 320,
+      "large": true,
+      "environment": "indoor",
+      "screen": "passport",
+      "overflow": false,
+      "clipped": []
+    }
+  ],
+  "layoutSourceSHA256": "9d58bee8fc7091dda157b2a0fc92eb74962565c64be8f79ed71b8cf65bd6b50a",
+  "finalDataChecks": [
+    "Elliptical average heart rate matches 142 bpm",
+    "HIIT average heart rate matches 150 bpm",
+    "Other cardio average heart rate matches 144 bpm"
+  ],
+  "reuseNote": "111 layout/interaction checks reused after footer heart-rate binding correction; 3 final data checks run against current source.",
+  "visualInspection": [
+    "cardio-integrated-detail.png",
+    "cardio-integrated-share-atlas.png",
+    "cardio-integrated-share-spectrum.png",
+    "cardio-integrated-share-signature.png",
+    "cardio-integrated-indoor-dark.png",
+    "cardio-integrated-journey.png",
+    "cardio-integrated-passport.png"
+  ]
+}

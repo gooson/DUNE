@@ -47,6 +47,9 @@ enum TestDataSeeder {
         case .activityExerciseSeeded:
             seedDefaultRecords(into: context)
             seedActivityExerciseFixtures(into: context)
+            if ProcessInfo.processInfo.arguments.contains("--ui-cardio-atlas-fixture") {
+                seedCardioAtlasFixtures(into: context)
+            }
         case .fatigueRegression:
             seedFatigueRegression(into: context)
         }
@@ -128,7 +131,7 @@ enum TestDataSeeder {
             activityType: .running,
             duration: 35 * 60,
             calories: 420,
-            distance: 6.2,
+            distance: 6_200,
             date: date,
             isFromThisApp: false,
             heartRateAvg: 148,
@@ -467,6 +470,74 @@ enum TestDataSeeder {
             _ = PersonalRecordStore.shared.evaluateReward(for: workout, newPRTypes: [.fastestPace])
         }
         try? context.save()
+    }
+
+    /// Opt-in UI-only locations. The square course is synthetic and never presented as a user's GPS history.
+    @MainActor
+    private static func seedCardioAtlasFixtures(into context: ModelContext) {
+        let now = Date()
+        let start = now.addingTimeInterval(-1_800)
+        let course: [(Double, Double)] = [
+            (37.5465, 127.0415), (37.54875, 127.0415), (37.5510, 127.0415),
+            (37.5510, 127.0443), (37.5510, 127.0471),
+            (37.54875, 127.0471), (37.5465, 127.0471),
+            (37.5465, 127.0443), (37.5465, 127.0415)
+        ]
+        // Realistic sampling cadence: sparse corner-only points would correctly be split
+        // into isolated segments by the production gap filter and could not test a route.
+        var route: [WorkoutRoutePoint] = []
+        for index in 0...160 {
+            let leg = min(index / 20, course.count - 2)
+            let fraction = Double(index - leg * 20) / 20
+            let from = course[leg]
+            let to = course[leg + 1]
+            let elapsed = Double(index * 8 + (index >= 81 ? 60 : 0))
+            if let point = WorkoutRoutePoint(
+                latitude: from.0 + (to.0 - from.0) * fraction,
+                longitude: from.1 + (to.1 - from.1) * fraction,
+                timestamp: start.addingTimeInterval(elapsed),
+                horizontalAccuracy: 8,
+                startsNewSegment: index == 0 || index == 81
+            ) {
+                route.append(point)
+            }
+        }
+        let run = ExerciseRecord(
+            date: start, exerciseType: "Atlas Route Run",
+            duration: 1_280, calories: 210, distance: 2.0,
+            exerciseDefinitionID: "running"
+        )
+        context.insert(run)
+        context.insert(WorkoutLocationRecord(
+            localRecordID: run.id,
+            payload: WorkoutLocationPayload(isIndoor: false, route: route)
+        ))
+
+        let elliptical = ExerciseRecord(
+            date: now.addingTimeInterval(-3_600), exerciseType: "Atlas Indoor Cardio",
+            duration: 1_200, calories: 180, exerciseDefinitionID: "elliptical"
+        )
+        context.insert(elliptical)
+        let place = WorkoutPlace(
+            latitude: 37.5445, longitude: 127.0438,
+            name: "Atlas Indoor Gym (UI Fixture)", source: .manual
+        )
+        context.insert(WorkoutLocationRecord(
+            localRecordID: elliptical.id,
+            payload: WorkoutLocationPayload(isIndoor: true, place: place)
+        ))
+
+        let unlocated = ExerciseRecord(
+            date: now.addingTimeInterval(-7_200), exerciseType: "Atlas Unlocated Cardio",
+            duration: 900, exerciseDefinitionID: "rowing-machine"
+        )
+        context.insert(unlocated)
+
+        do {
+            try context.save()
+        } catch {
+            assertionFailure("Failed to seed Cardio Atlas UI fixtures: \(error)")
+        }
     }
 
     @MainActor

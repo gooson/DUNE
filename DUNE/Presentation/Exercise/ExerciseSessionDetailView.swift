@@ -32,6 +32,16 @@ struct ExerciseSessionDetailView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: DS.Spacing.lg) {
                 sessionHeader
+                if resolvedActivityType.isAtlasSupported {
+                    CardioAtlasSection(
+                        session: CardioAtlasSession(
+                            id: record.id.uuidString, activityType: resolvedActivityType, date: record.date,
+                            duration: record.duration, distanceMeters: record.distance.map { $0 * 1_000 }
+                        ),
+                        localRecordID: record.id,
+                        healthKitWorkoutID: record.healthKitWorkoutID
+                    )
+                }
                 cardioMetricsSection
                 CardioMachineLevelHistoryView(changes: record.cardioMachineLevelChanges)
                 healthKitBadge
@@ -53,6 +63,15 @@ struct ExerciseSessionDetailView: View {
     }
 
     // MARK: - Header
+
+    private var resolvedActivityType: WorkoutActivityType {
+        if activityType != .other { return activityType }
+        return WorkoutActivityType(rawValue: record.exerciseType)
+            ?? record.exerciseDefinitionID.flatMap { WorkoutActivityType(rawValue: $0) }
+            ?? WorkoutActivityType.infer(from: record.exerciseDefinitionID ?? "")
+            ?? WorkoutActivityType.infer(from: record.exerciseType)
+            ?? .other
+    }
 
     private var sessionHeader: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {

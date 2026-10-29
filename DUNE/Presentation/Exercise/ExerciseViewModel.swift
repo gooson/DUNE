@@ -38,10 +38,12 @@ final class ExerciseViewModel {
     private func invalidateCache() {
         let tombstoned = DeletedWorkoutTombstoneStore.shared.tombstonedIDs
 
-        // Dedup strategy aligned with Activity tab's ExerciseListSection:
-        // Only records with set data (strength exercises) participate in dedup.
-        // Non-set records (cardio/walking) always defer to HealthKit WorkoutSummary.
+        // Set-backed records retain the established dedup preference.
         let setRecords = manualRecords.filter(\.hasSetData)
+        let localRecords = healthKitWorkouts.localRecordsForDisplay(
+            against: manualRecords,
+            tombstonedIDs: tombstoned
+        )
         var externalWorkouts = healthKitWorkouts.filteringAppDuplicates(
             against: setRecords,
             tombstonedIDs: tombstoned
@@ -57,15 +59,14 @@ final class ExerciseViewModel {
         }
 
         var items: [ExerciseListItem] = []
-        items.reserveCapacity(externalWorkouts.count + manualRecords.count)
+        items.reserveCapacity(externalWorkouts.count + localRecords.count)
 
         for workout in externalWorkouts {
             items.append(.fromWorkoutSummary(workout))
         }
 
-        // Only add manual records with set data (strength exercises).
-        // Non-set records are represented by their HealthKit workout above.
-        for record in setRecords {
+        // Cardio records without sets are visible when their HealthKit counterpart is unavailable.
+        for record in localRecords {
             items.append(.fromManualRecord(record, library: exerciseLibrary))
         }
 

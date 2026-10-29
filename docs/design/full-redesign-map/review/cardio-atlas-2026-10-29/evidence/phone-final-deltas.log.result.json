@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "target": "DUNEUITests",
+  "run_exit_status": 0,
+  "requested_selectors": [
+    "DUNEUITests/CardioAtlasUITests/testRecordedRouteDetailAndProgress",
+    "DUNEUITests/CardioAtlasUITests/testIndoorPlacePickerCancelPreservesPlace"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 2,
+    "passed": 2,
+    "skipped": 0,
+    "failed": 0
+  },
+  "passed_cases": 2,
+  "failures": [],
+  "required_selectors_missing": [],
+  "log_path": "/Users/shanks/.codex/worktrees/2ee8/Health/.codex-checks/cardio-atlas/retry-1800/phone-final-deltas.log"
+}

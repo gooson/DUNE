@@ -22,6 +22,9 @@ struct CardioSessionRecord: Sendable {
     let startDate: Date
     /// VO2 Max (cardio fitness) from HealthKit at workout time (ml/kg/min).
     let cardioFitnessVO2Max: Double?
+    let locationPayload: WorkoutLocationPayload
+    let endDate: Date
+    let pauseIntervals: [DateInterval]
 }
 
 /// Manages state for an iOS cardio live tracking session.
@@ -140,6 +143,10 @@ final class CardioSessionViewModel {
     private let calorieService: CalorieEstimating
     private let stepsService: StepsQuerying?
     private let vitalsService: VitalsQuerying?
+    private var locationStartTask: Task<Void, Never>?
+    private var completedAt: Date?
+    private var pauseStartedAt: Date?
+    private var pauseIntervals: [DateInterval] = []
     private var timerTask: Task<Void, Never>?
     private var pausedAccumulated: TimeInterval = 0
     private var lastResumeDate: Date?
@@ -211,10 +218,17 @@ final class CardioSessionViewModel {
         }
 
         if isOutdoor, let locationService {
-            Task {
+            locationStartTask?.cancel()
+            locationStartTask = Task {
                 do {
                     try await locationService.startTracking()
+                    if Task.isCancelled || state == .finished {
+                        _ = await locationService.stopTracking()
+                    } else if state == .paused {
+                        locationService.pauseTracking()
+                    }
                 } catch {
+                    guard !Task.isCancelled else { return }
                     errorMessage = String(localized: "Could not start GPS tracking. Distance will use step-based fallback.")
                     AppLogger.healthKit.error("[CardioSession] Location start failed: \(error)")
                 }
@@ -231,20 +245,33 @@ final class CardioSessionViewModel {
         lastMachineLevelSampleDate = nil
         lastResumeDate = nil
         state = .paused
+        pauseStartedAt = Date()
+        locationService?.pauseTracking()
         timerTask?.cancel()
     }
 
     func resume() {
         guard state == .paused else { return }
         lastResumeDate = Date()
+        if let pauseStartedAt, let lastResumeDate {
+            pauseIntervals.append(DateInterval(start: pauseStartedAt, end: lastResumeDate))
+        }
+        pauseStartedAt = nil
         lastMachineLevelSampleDate = lastResumeDate
         state = .running
+        locationService?.resumeTracking()
         startTimer()
     }
 
     func end() async {
         guard state == .running || state == .paused else { return }
         let endDate = Date()
+        completedAt = endDate
+        if let pauseStartedAt {
+            pauseIntervals.append(DateInterval(start: pauseStartedAt, end: endDate))
+            self.pauseStartedAt = nil
+        }
+        locationStartTask?.cancel()
 
         // Cancel timer FIRST to prevent race condition
         timerTask?.cancel()
@@ -567,7 +594,10 @@ final class CardioSessionViewModel {
                 : exercise.metValue,
             autoIntensityRaw: cardioUnit.normalizedMachineLevelScore(safeAverageMachineLevel),
             startDate: startDate,
-            cardioFitnessVO2Max: cardioFitnessVO2Max
+            cardioFitnessVO2Max: cardioFitnessVO2Max,
+            locationPayload: WorkoutLocationPayload(isIndoor: !isOutdoor, route: locationService?.routePoints ?? []),
+            endDate: completedAt ?? startDate.addingTimeInterval(elapsedSeconds),
+            pauseIntervals: pauseIntervals
         )
     }
 }

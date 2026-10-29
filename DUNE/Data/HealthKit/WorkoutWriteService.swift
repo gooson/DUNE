@@ -1,5 +1,6 @@
 import Foundation
 import HealthKit
+import CoreLocation
 
 /// Lightweight DTO for workout write — avoids SwiftData dependency.
 struct WorkoutWriteInput: Sendable {
@@ -23,6 +24,10 @@ struct WorkoutWriteInput: Sendable {
     let floorsAscended: Double?
     /// Activity type for distance type resolution (nil uses category-based fallback).
     let activityType: WorkoutActivityType?
+    let isIndoor: Bool?
+    let routePoints: [WorkoutRoutePoint]
+    let endDate: Date?
+    let pauseIntervals: [DateInterval]
 
     init(
         startDate: Date,
@@ -37,7 +42,11 @@ struct WorkoutWriteInput: Sendable {
         averageCadenceStepsPerMinute: Double? = nil,
         elevationGainMeters: Double? = nil,
         floorsAscended: Double? = nil,
-        activityType: WorkoutActivityType? = nil
+        activityType: WorkoutActivityType? = nil,
+        isIndoor: Bool? = nil,
+        routePoints: [WorkoutRoutePoint] = [],
+        endDate: Date? = nil,
+        pauseIntervals: [DateInterval] = []
     ) {
         self.startDate = startDate
         self.duration = duration
@@ -52,6 +61,10 @@ struct WorkoutWriteInput: Sendable {
         self.elevationGainMeters = elevationGainMeters
         self.floorsAscended = floorsAscended
         self.activityType = activityType
+        self.isIndoor = isIndoor
+        self.routePoints = isIndoor == true ? [] : WorkoutLocationPayload.normalizedRoute(routePoints)
+        self.endDate = endDate
+        self.pauseIntervals = pauseIntervals
     }
 }
 
@@ -93,10 +106,17 @@ struct WorkoutWriteService: WorkoutWriting, Sendable {
             )
 
         let store = await manager.healthStore
-        let endDate = input.startDate.addingTimeInterval(input.duration)
+        let endDate = input.endDate ?? input.startDate.addingTimeInterval(input.duration)
+        guard input.startDate.timeIntervalSinceReferenceDate.isFinite,
+              endDate.timeIntervalSinceReferenceDate.isFinite,
+              endDate > input.startDate,
+              endDate.timeIntervalSince(input.startDate) <= 86_400 else {
+            throw WorkoutWriteError.invalidDuration
+        }
 
         let config = HKWorkoutConfiguration()
         config.activityType = activityType
+        config.locationType = input.isIndoor.map { $0 ? .indoor : .outdoor } ?? .unknown
 
         let builder = HKWorkoutBuilder(
             healthStore: store,
@@ -154,6 +174,14 @@ struct WorkoutWriteService: WorkoutWriting, Sendable {
         }
 
         var metadata: [String: Any] = [:]
+        if let isIndoor = input.isIndoor { metadata[HKMetadataKeyIndoorWorkout] = isIndoor }
+        let pauseEvents = input.pauseIntervals.filter {
+            $0.start >= input.startDate && $0.end <= endDate && $0.duration > 0
+        }.flatMap { interval in
+            [HKWorkoutEvent(type: .pause, dateInterval: DateInterval(start: interval.start, duration: 0), metadata: nil),
+             HKWorkoutEvent(type: .resume, dateInterval: DateInterval(start: interval.end, duration: 0), metadata: nil)]
+        }
+        if !pauseEvents.isEmpty { try await builder.addWorkoutEvents(pauseEvents) }
 
         if let elevation = input.elevationGainMeters,
            elevation > 0, elevation.isFinite, elevation < 20_000 {
@@ -194,12 +222,44 @@ struct WorkoutWriteService: WorkoutWriting, Sendable {
             throw WorkoutWriteError.builderReturnedNil
         }
 
+        // A route is optional enrichment. Once the workout is saved, route failures must
+        // never trigger a workout retry (which would create a duplicate).
+        if !input.routePoints.isEmpty,
+           store.authorizationStatus(for: HKSeriesType.workoutRoute()) == .sharingAuthorized {
+            do {
+                try await saveRoutes(input.routePoints, workout: workout, store: store)
+            } catch {
+                AppLogger.healthKit.warning("Workout saved; optional route write failed: \(error)")
+            }
+        }
+
         AppLogger.healthKit.info("Saved workout to HealthKit: \(workout.uuid.uuidString)")
         return workout.uuid.uuidString
     }
 }
 
 private extension WorkoutWriteService {
+    func saveRoutes(_ points: [WorkoutRoutePoint], workout: HKWorkout, store: HKHealthStore) async throws {
+        var segments: [[CLLocation]] = []
+        for point in points where point.timestamp >= workout.startDate && point.timestamp <= workout.endDate {
+            if point.startsNewSegment || segments.isEmpty { segments.append([]) }
+            segments[segments.count - 1].append(CLLocation(
+                coordinate: CLLocationCoordinate2D(latitude: point.latitude, longitude: point.longitude),
+                altitude: point.altitude ?? 0,
+                horizontalAccuracy: point.horizontalAccuracy ?? 10,
+                verticalAccuracy: point.altitude == nil ? -1 : 10,
+                timestamp: point.timestamp
+            ))
+        }
+        // Separate HK routes preserve pause/jump gaps when this workout is imported again.
+        for segment in segments where segment.count >= 2 {
+            try Task.checkCancellation()
+            let routeBuilder = HKWorkoutRouteBuilder(healthStore: store, device: .local())
+            try await routeBuilder.insertRouteData(segment)
+            _ = try await routeBuilder.finishRoute(with: workout, metadata: nil)
+        }
+    }
+
     /// Resolves the appropriate HKQuantityType for distance based on workout activity type.
     static func distanceQuantityType(for activityType: HKWorkoutActivityType) -> HKQuantityType {
         switch activityType {

@@ -1,7 +1,7 @@
 import SwiftUI
 
-/// Manual records eligible for compact recent-list deduplication.
-/// Compact list renders only records with set data, so dedup should use the same subset.
+/// Set-backed records that take precedence over matching HealthKit summaries.
+/// Set-free cardio fallback rows are selected separately by `localRecordsForDisplay`.
 func recentListDedupRecords(from records: [ExerciseRecord]) -> [ExerciseRecord] {
     records.filter(\.hasSetData)
 }
@@ -150,11 +150,11 @@ struct ExerciseListSection: View {
     // MARK: - Build Items + Index Atomically
 
     private func buildItemsAndIndex() -> ([ExerciseListItem], [UUID: ExerciseRecord]) {
-        // Keep dedup criteria aligned with rows that are actually rendered in this section.
-        // Compact recent list intentionally shows only manual records with set data.
-        // If we dedup against all manual records, cardio records without sets can hide
-        // HealthKit workouts while not being rendered themselves.
-        let setRecords = recentListDedupRecords(from: exerciseRecords)
+        let localRecords = workouts.localRecordsForDisplay(
+            against: exerciseRecords,
+            tombstonedIDs: tombstonedIDs
+        )
+        let setRecords = recentListDedupRecords(from: localRecords)
         let externalWorkouts = workouts.filteringAppDuplicates(
             against: setRecords,
             tombstonedIDs: tombstonedIDs
@@ -168,16 +168,16 @@ struct ExerciseListSection: View {
             result.append(.fromWorkoutSummary(workout))
         }
 
-        // Manual records (with set data only, matching original behavior)
-        for record in setRecords {
+        // Set-backed records and cardio fallback rows without a visible HealthKit match.
+        for record in localRecords {
             result.append(.fromManualRecord(record, library: exerciseLibrary))
         }
 
         let sorted = result.sorted { $0.date > $1.date }
 
-        // Build index only for records with set data (safe merge for duplicate IDs)
+        // Build the destination index for every rendered local row.
         let index = Dictionary(
-            setRecords.map { ($0.id, $0) },
+            localRecords.map { ($0.id, $0) },
             uniquingKeysWith: { existing, _ in existing }
         )
 

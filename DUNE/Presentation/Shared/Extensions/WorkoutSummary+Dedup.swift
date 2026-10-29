@@ -1,6 +1,41 @@
 import Foundation
 
 extension Array where Element == WorkoutSummary {
+    /// Local rows to display beside visible HealthKit summaries.
+    /// A set-free cardio record is a fallback only when its richer HealthKit row is unavailable.
+    func localRecordsForDisplay(
+        against records: [ExerciseRecord],
+        tombstonedIDs: Set<String> = []
+    ) -> [ExerciseRecord] {
+        let visibleWorkouts = filter { !tombstonedIDs.contains($0.id) }
+        let visibleIDs = Set(visibleWorkouts.map(\.id))
+
+        return records.filter { record in
+            if record.hasSetData { return true }
+            guard record.duration.isFinite, record.duration > 0, record.duration <= 31_622_400,
+                  record.date.timeIntervalSinceReferenceDate.isFinite else { return false }
+            let activityType = WorkoutActivityType(rawValue: record.exerciseType)
+                ?? record.exerciseDefinitionID.flatMap { WorkoutActivityType(rawValue: $0) }
+                ?? record.exerciseDefinitionID.flatMap { WorkoutActivityType.infer(from: $0) }
+                ?? WorkoutActivityType.infer(from: record.exerciseType)
+            guard let activityType else { return false }
+            switch activityType.category {
+            case .cardio, .dance, .water, .winter, .outdoor, .multiSport, .sports, .combat: break
+            default: return false
+            }
+
+            if let linkedID = record.healthKitWorkoutID, !linkedID.isEmpty {
+                // A known foreign ID is authoritative even when that workout is outside this page.
+                return !visibleIDs.contains(linkedID)
+            }
+            return !visibleWorkouts.contains { workout in
+                workout.isFromThisApp
+                    && abs(record.date.timeIntervalSince(workout.date)) < 120
+                    && [workout].filteringAppDuplicates(against: [record]).isEmpty
+            }
+        }
+    }
+
     /// Filters out HealthKit workouts that duplicate app-created SwiftData records.
     ///
     /// Strategy:
@@ -31,6 +66,9 @@ extension Array where Element == WorkoutSummary {
             // Without type+date check, Watch workouts with no ExerciseRecord are lost.
             if workout.isFromThisApp {
                 let hasProbableMatch = records.contains { record in
+                    // Exact linked identities were handled above. A different linked workout
+                    // must not erase a simultaneous Watch session through the legacy fallback.
+                    if let linkedID = record.healthKitWorkoutID, !linkedID.isEmpty { return false }
                     guard abs(record.date.timeIntervalSince(workout.date)) < 120 else {
                         return false
                     }
@@ -43,6 +81,13 @@ extension Array where Element == WorkoutSummary {
                     // Name inference match (e.g., cardio names like "Running")
                     if let inferred = WorkoutActivityType.infer(from: record.exerciseType),
                        inferred == workout.activityType {
+                        return true
+                    }
+
+                    // Custom local titles can still retain a known cardio definition ID.
+                    if let definitionID = record.exerciseDefinitionID,
+                       (WorkoutActivityType(rawValue: definitionID)
+                        ?? WorkoutActivityType.infer(from: definitionID)) == workout.activityType {
                         return true
                     }
 

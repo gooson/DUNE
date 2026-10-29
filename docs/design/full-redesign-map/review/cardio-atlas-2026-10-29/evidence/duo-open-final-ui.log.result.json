@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/CardioAtlasUITests/testPassportFromRecordedRoute",
+    "DUNEUITests/CardioAtlasUITests/testIndoorPlacePickerCancelPreservesPlace"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 2,
+    "passed": 0,
+    "skipped": 1,
+    "failed": 1
+  },
+  "passed_cases": 1,
+  "failures": [
+    "309: /Users/shanks/.codex/worktrees/2ee8/Health/DUNEUITests/Helpers/UITestBaseCase.swift:145: error: -[DUNEUITests.CardioAtlasUITests testIndoorPlacePickerCancelPreservesPlace] : failed: caught error: \"Error Domain=DUNEVisualAudit Code=1 \"Visual audit coverage unavailable: Primary navigation (tab bar/sid…",
+    "324: Test Case '-[DUNEUITests.CardioAtlasUITests testIndoorPlacePickerCancelPreservesPlace]' failed (28.642 seconds).",
+    "504: Test Suite 'CardioAtlasUITests' failed at 2026-10-29 19:35:03.310.",
+    "506: Test Suite 'DUNEUITests.xctest' failed at 2026-10-29 19:35:03.314.",
+    "508: Test Suite 'Selected tests' failed at 2026-10-29 19:35:03.315.",
+    "526: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log has no positive passed-test count",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/CardioAtlasUITests/testIndoorPlacePickerCancelPreservesPlace"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/2ee8/Health/.codex-checks/cardio-atlas/retry-1800/duo-open-final-ui.log"
+}

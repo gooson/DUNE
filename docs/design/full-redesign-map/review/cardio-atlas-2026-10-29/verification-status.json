@@ -1,0 +1,27 @@
+{
+  "status": "targeted-ui-passed",
+  "implementation_commit": "221cd7ab",
+  "native_screenshot_count": 54,
+  "native_screenshots": "capture-index.json",
+  "verified": [
+    "iPhone baseline6 plus affected render/privacy/large-text/scroll deltas",
+    "iPad four Atlas flows4/4 after inheriting valid train initial tab",
+    "Duo folded route/Journey/Passport/share plus fresh revised editor1/1",
+    "Duo unfolded route/Journey/Passport/share plus fresh revised editor1/1"
+  ],
+  "pending": [],
+  "duo_pose": {
+    "folded": "Official readback: LCD active, LCD-1 inactive",
+    "unfolded": "Device Hub changed only registered owned device; official readback LCD-1 active, LCD inactive",
+    "numeric_hinge_angle": null,
+    "numeric_hinge_reason": "Installed devicectl651.13.5 lacks device motion subcommand; setter success alone not treated as state proof"
+  },
+  "ship": "UI and final native build gates passed; PR creation/merge result is recorded by GitHub",
+  "resolved_history": {
+    "ipad27.0": "Two5-minute allowances (initial launch and Activity interaction); route/Journey passed between them; finalization hit300s inactivity deadline",
+    "ipad27.1": "Simulator create failed domain=com.apple.CoreSimulator.SimError code403 incompatible device",
+    "duo_editor": "Initial primary-navigation readiness check failed before revised editor could be reached",
+    "final_resolution": "Removed invalid activity initial-tab overrides; inherited train. iPad4/4. Owned Duo migration fault recovered by erasing only disposable owned device; revised editor1/1 in both poses."
+  },
+  "validation_commit": "7eb7e3be"
+}

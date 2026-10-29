@@ -163,3 +163,7 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 [새 실제 화면25장·출처·실패와 복구 이력](../full-redesign-map/review/daily-summary-reading-2026-10-27/index.html)에 T03 Today와 T10 알림 요약의 제목/날짜·두 지표 구분·본문 더 보기를 보존했다. 일반 iPhone 기본/최대 글씨·iPad·Duo 외부/내부의 관련 검사가 통과했다. Duo 내부 첫 실행은 teardown 디스플레이 열거8초 초과로 중단됐고 별도 native 캡처와 simctl list도 응답하지 않았다. 공식 CoreDevice 명령으로 전용 Duo만 재부팅한 뒤 실제 조회와 PNG 생성, 내부 포트 캡처의 정상화를 확인하고 미완료 두 selector를1회 실행해2/2 통과·정상 종료했다. 기존 실패는 보존하며 최종 내부 T03/T10 원본으로 갤러리를 갱신했다. 활성 LCD/LCD-1·새 AX 창·원본 해상도는 기록했지만 수치 힌지 각도·물리 회전 검사는 미완료다. 기존 다른 UDID 인덱스는 유지했다. 어두움·다른 테마·iPad/Duo 최대 글씨·기록 없음은 이번 갤러리 범위 밖이며 Watch는 공유 소비자가 아니다.
 
 2026-10-29 L01 주간 운동 업적을 성과 보드로 적용하고 [새 원본과 출처](../full-redesign-map/review/workout-achievement-board-2026-10-29/index.html)를 연결했다. iPhone 밝음/어두움/한국어/최대 글씨, iPad, Duo 외부를 새로 수집했다. Duo 내부는 최초 CLI readback 불일치와 Mac 잠금 기록을 보존하고, 해제 후 GUI Open·공식 LCD-1 활성/새 AX/원본 캡처·관련1/1통과로 갱신했다. 총52원본은 활성40장+비활성 짝패널12장이다. 다른 기기의 기존 PNG로 대체하지 않았다. Watch는 소비자가 없어 영향이 없다.
+
+2026-10-29 Cardio Atlas의 W27·W28·CA01–CA08 및 세트 없는 유산소 목록 상태를 구현했다. 초기 검증의 기동·AX 실패 이력은 [검증 기록](../../reviews/2026-10-29-cardio-atlas/README.md)에 보존한다. 이후 테스트 시작 탭을 바로잡고 전용 Duo를 복구한 최종 결과는 아래와 같다.
+
+2026-10-29 Cardio Atlas의 [새 실제54장](../full-redesign-map/review/cardio-atlas-2026-10-29/index.html)을 확보했다. iPhone 기본·최대 글씨, iPad4/4, Duo 접힘·펼침의 관련 Atlas 흐름과 최신 장소 편집을 확인했다. 실제 PNG와 출처·해시를 보존했고 관련 UI 게이트를 통과했다. 전체 앱 디자인맵이나 전체 UI 테스트 완료로 확대하지 않는다.

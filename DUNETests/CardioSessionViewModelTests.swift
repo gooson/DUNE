@@ -13,6 +13,12 @@ struct CardioSessionViewModelTests {
         var totalElevationGainMeters: Double
         var finalDistanceMeters: Double
         var shouldThrowStart = false
+        var routePoints: [WorkoutRoutePoint] = []
+        var pauseCount = 0
+        var resumeCount = 0
+        var startCount = 0
+        func pauseTracking() { pauseCount += 1 }
+        func resumeTracking() { resumeCount += 1 }
 
         init(
             totalDistanceMeters: Double = 0,
@@ -25,6 +31,7 @@ struct CardioSessionViewModelTests {
         }
 
         func startTracking() async throws {
+            startCount += 1
             if shouldThrowStart {
                 throw LocationTrackingError.notAuthorized
             }
@@ -182,6 +189,41 @@ struct CardioSessionViewModelTests {
             stepsService: stepsService ?? MockStepsService(todaySteps: 0),
             vitalsService: vitalsService ?? MockVitalsService()
         )
+    }
+
+    @Test("Outdoor completion preserves route and pause intervals; pause controls capture")
+    func routeCaptureLifecycle() async throws {
+        let location = MockLocationTrackingService()
+        let point = try #require(WorkoutRoutePoint(latitude: 37, longitude: 127, timestamp: Date()))
+        location.routePoints = [point]
+        let vm = makeVM(locationService: location)
+        vm.start()
+        await Task.yield()
+        vm.pause()
+        #expect(location.pauseCount >= 1)
+        vm.resume()
+        #expect(location.resumeCount == 1)
+        await vm.end()
+        let record = try #require(vm.createExerciseRecord())
+        #expect(record.locationPayload.isIndoor == false)
+        #expect(record.locationPayload.route.first?.latitude == 37)
+        #expect(record.pauseIntervals.count == 1)
+        #expect(record.endDate >= record.startDate)
+    }
+
+    @Test("Indoor completion neither requests GPS nor fabricates a route")
+    func indoorOmitsGPS() async throws {
+        let location = MockLocationTrackingService()
+        location.routePoints = [try #require(WorkoutRoutePoint(latitude: 37, longitude: 127, timestamp: Date()))]
+        let vm = makeVM(isOutdoor: false, locationService: location)
+        vm.start()
+        await Task.yield()
+        await vm.end()
+        let record = try #require(vm.createExerciseRecord())
+        #expect(location.startCount == 0)
+        #expect(record.locationPayload.isIndoor == true)
+        #expect(record.locationPayload.route.isEmpty)
+        #expect(record.locationPayload.place == nil)
     }
 
     // MARK: - Initial State

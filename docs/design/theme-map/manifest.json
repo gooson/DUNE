@@ -213,6 +213,28 @@
         "verification": "../../reviews/2026-10-29-workout-achievement-board/README.md",
         "status": "board-implemented-targeted-verification"
       }
+    },
+    {
+      "id": "running-map-sharing",
+      "name": "유산소 장소·러닝 경로·공유 · 다섯 방향",
+      "title": "Running · Atlas / Pace Ribbon / Route Signature / Journey / Passport",
+      "file": "dune-running-map-sharing.html",
+      "detail": "2026-10-29 경로 기록·예쁜 공유 중심. 땅 소유 대신 개인 업적. 실제 OSM 서울숲 geometry를 투영한 설명용 경로, 실외·실내·경로 미수신, 상세/공유, 출발·도착 geometry 숨김, 밝음/어두움·큰글씨·공유 포맷. Atlas 지도 포스터·Pace 구간색·Signature 경로형·Journey 가상여정·Passport 업적 모음. da96 상세 개편의 W23/W24/W25/W28과 합칠 경계만 제안. 모든 수치는 fixture이며 앱 미적용·실제 앱 캡처 아님. 후속 보완: 실내에도 운동한 시설의 장소 지도/핀을 표시. 두 설명용 장소 직접 선택·미지정·공유 장소 제외를 제공하고 가상 여정과 실제 장소 지도를 구별한다. 추가 정정: 모든 실내 유산소 공통 장소 지도. 종목 선택과 km/m/층수/횟수/시간 지표, 거리 없는 운동의 시간 목표·운동 횟수 업적을 구분.",
+      "implementation": {
+        "layout": "../layout-map/running-map-share-proposal.md",
+        "status": "proposal-only"
+      }
+    },
+    {
+      "id": "cardio-atlas-integrated",
+      "name": "유산소 아틀라스 · 통합 시안",
+      "title": "Atlas + Share Styles + Journey + Passport",
+      "file": "dune-cardio-atlas-integrated.html",
+      "detail": "2026-10-29 사용자 요청 통합안. 단일 아틀라스 기본 상세에 저니 진행·패스포트 업적을 연결하고 공유 카드에서 Atlas/페이스 리본/시그니처와 포함 항목을 선택한다. 실내외 유산소·이동 경로/장소 핀·종목별 단위·경로 미수신·공유 공개 범위를 구분한다. 이전 다섯 방향은 비교 이력으로 보존. 예시 데이터의 브라우저 시안이며 실제 앱 미적용.",
+      "implementation": {
+        "layout": "../layout-map/cardio-atlas-integrated-proposal.md",
+        "status": "integrated-proposal-only"
+      }
     }
   ]
 }
