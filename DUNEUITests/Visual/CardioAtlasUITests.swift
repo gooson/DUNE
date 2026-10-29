@@ -19,7 +19,7 @@ final class CardioAtlasUITests: ActivityExerciseSeededUITestBaseCase {
         )
         atlasScreenshot(named: "Cardio Atlas recorded route detail")
 
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded("cardio-atlas-journey", maxSwipes: 8))
+        XCTAssertTrue(scrollToAtlasDetailControl("cardio-atlas-journey"))
         element("cardio-atlas-journey").tap()
         assertAtlasDestinationVisible("cardio-atlas-journey-detail")
         atlasScreenshot(named: "Cardio Atlas Journey progress")
@@ -44,7 +44,7 @@ final class CardioAtlasUITests: ActivityExerciseSeededUITestBaseCase {
 
     func testPassportFromRecordedRoute() {
         openRecord("running")
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded("cardio-atlas-passport", maxSwipes: 8))
+        XCTAssertTrue(scrollToAtlasDetailControl("cardio-atlas-passport"))
         element("cardio-atlas-passport").tap()
         assertAtlasDestinationVisible("cardio-atlas-passport-detail")
         atlasScreenshot(named: "Cardio Atlas Passport progress")
@@ -53,7 +53,7 @@ final class CardioAtlasUITests: ActivityExerciseSeededUITestBaseCase {
 
     func testShareStylesAndPrivateLocationDefault() {
         openRecord("running")
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded("cardio-atlas-share", maxSwipes: 8))
+        XCTAssertTrue(scrollToAtlasDetailControl("cardio-atlas-share"))
         element("cardio-atlas-share").tap()
         assertAtlasDestinationVisible("cardio-atlas-share-screen")
         XCTAssertTrue(element("cardio-atlas-share-preview").waitForExistence(timeout: 10))
@@ -104,7 +104,7 @@ final class CardioAtlasUITests: ActivityExerciseSeededUITestBaseCase {
         openRecord("elliptical")
         XCTAssertTrue(element("cardio-atlas-map").waitForExistence(timeout: 10))
         atlasScreenshot(named: "Cardio Atlas indoor place")
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded("cardio-atlas-place", maxSwipes: 8))
+        XCTAssertTrue(scrollToAtlasDetailControl("cardio-atlas-place"))
         element("cardio-atlas-place").tap()
         XCTAssertTrue(element("cardio-atlas-place-cancel").waitForExistence(timeout: 8))
         XCTAssertTrue(element("cardio-atlas-place-remove").exists)
@@ -162,7 +162,7 @@ final class CardioAtlasLargeTextUITests: ActivityExerciseSeededUITestBaseCase {
         let placeAction = element("cardio-atlas-place").frame
         XCTAssertGreaterThan(placeAction.width, placeAction.height, "Large-text action should not stack syllables")
         atlasScreenshot(named: "Cardio Atlas Korean large text detail")
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded("cardio-atlas-passport", maxSwipes: 10))
+        XCTAssertTrue(scrollToAtlasDetailControl("cardio-atlas-passport"))
         element("cardio-atlas-passport").tap()
         assertAtlasDestinationVisible("cardio-atlas-passport-detail")
         atlasScreenshot(named: "Cardio Atlas Korean large text Passport")
@@ -196,6 +196,22 @@ final class CardioAtlasLargeTextUITests: ActivityExerciseSeededUITestBaseCase {
 
 @MainActor
 private extension UITestBaseCase {
+    func scrollToAtlasDetailControl(_ identifier: String) -> Bool {
+        let control = app.descendants(matching: .any)[identifier].firstMatch
+        let scroll = app.descendants(matching: .any)["exercise-session-detail-scroll"].firstMatch
+        for _ in 0..<12 {
+            let viewport = scroll.frame.intersection(app.frame).insetBy(dx: 0, dy: 12)
+            if control.exists && control.isHittable && viewport.contains(CGPoint(x: control.frame.midX, y: control.frame.midY)) {
+                return true
+            }
+            let revealAbove = control.exists && control.frame.midY < viewport.minY
+            let start = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: revealAbove ? 0.4 : 0.65))
+            let end = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: revealAbove ? 0.65 : 0.4))
+            start.press(forDuration: 0.1, thenDragTo: end)
+        }
+        return control.exists && control.isHittable
+    }
+
     func assertAtlasDestinationVisible(_ identifier: String, file: StaticString = #filePath, line: UInt = #line) {
         let destination = app.descendants(matching: .any)[identifier].firstMatch
         let visible = XCTNSPredicateExpectation(

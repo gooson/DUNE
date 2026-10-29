@@ -65,3 +65,7 @@ At accessibility sizes, the native Atlas heading and actions use a vertical layo
 Pace Ribbon must remain visually distinct from Atlas in the default theme. Its measured speed bands use the existing activityWater/activityStrength chart tokens and its card includes the existing localized Pace Ribbon style label. Distinct chart tokens keep pace bands separate from the Atlas accent stroke.
 
 Compact non-accessibility headers also measure the horizontal heading/actions candidate at its uncompressed ideal width. If it does not fit, ViewThatFits chooses the stacked header instead of splitting the Place action into syllables.
+
+The inline workout map is a preview: pan/zoom gestures are reserved for Expand map. This lets vertical drags reach the surrounding workout detail and its Passport row on short wide viewports. Expanded maps retain full interaction.
+
+Place search uses the native navigation-bar drawer with always-visible search placement, keeping results and their empty state above the search field in short landscape sheets.

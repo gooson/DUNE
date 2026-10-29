@@ -22,7 +22,10 @@ struct CardioAtlasMapView: View {
     var body: some View {
         VStack(spacing: 0) {
             if let coordinate {
-                Map(initialPosition: .region(CardioAtlasRouteGeometry.region(for: segments, fallback: coordinate))) {
+                Map(
+                    initialPosition: .region(CardioAtlasRouteGeometry.region(for: segments, fallback: coordinate)),
+                    interactionModes: expanded ? .all : []
+                ) {
                     ForEach(segments.indices, id: \.self) { index in
                         MapPolyline(coordinates: segments[index])
                             .stroke(theme.accentColor, style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))

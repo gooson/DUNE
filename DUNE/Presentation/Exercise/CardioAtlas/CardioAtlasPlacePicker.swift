@@ -94,7 +94,7 @@ struct CardioAtlasPlacePicker: View {
             }
             .navigationTitle("Choose place")
             .navigationBarTitleDisplayMode(.inline)
-            .searchable(text: $query, prompt: "Place or address")
+            .searchable(text: $query, placement: .navigationBarDrawer(displayMode: .always), prompt: "Place or address")
             .accessibilityIdentifier("cardio-atlas-place-picker")
             .onChange(of: query) { _, newValue in search(newValue) }
             .onReceive(locator.$coordinate) { coordinate in
