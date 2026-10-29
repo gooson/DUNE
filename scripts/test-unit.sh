@@ -339,7 +339,7 @@ run_suite() {
     if [[ "$test_exit" -ne 0 ]]; then
         exit "$test_exit"
     fi
-    if [[ ${#ONLY_TESTING[@]} -gt 0 ]] && ! grep -Eq 'Executed [1-9][0-9]* tests?, with|Test run with [1-9][0-9]* tests? (passed|failed)' "$log_file"; then
+    if [[ ${#ONLY_TESTING[@]} -gt 0 ]] && ! grep -Eq 'Executed [1-9][0-9]* tests?, with|Test run with [1-9][0-9]* tests?( in [1-9][0-9]* suites?)? (passed|failed)' "$log_file"; then
         echo "${suite_name}: selected tests have no positive execution count in $log_file" >&2
         exit 1
     fi
