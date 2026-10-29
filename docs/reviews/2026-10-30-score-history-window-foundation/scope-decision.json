@@ -1,0 +1,29 @@
+{
+  "automatic": "ios/watch full fallback dueShared/project paths",
+  "selected_ios": [
+    "DUNEUITests/DashboardSmokeTests/testAppLaunchesOnDashboard",
+    "DUNEUITests/ConditionDetailRedesignTests/testPeriodWindowAndTrendControlsUpdateVisibleReadback"
+  ],
+  "unit": [
+    "DUNETests/ConditionScoreDetailViewModelTests"
+  ],
+  "watch": "not affected: explicit targetsource list contains neither VM nor new helper",
+  "full_not_executed": "No explicit userfull request; latest adapter requires targeted impacted tests. All other tab consumers unchanged.",
+  "captures": "not required: exact pure body extraction, no visible layout/text/state/navigation change. No existing PNG claimed fresh.",
+  "scope_expert": "Read-only Sol/medium ui-test-expert confirmed minimal targetedpair +26VM unit; exact moved bodies and onlyiOSconsumer; no visual approval or execution claimed.",
+  "original_ui_failure": {
+    "source_revision": "2ecfa3ff",
+    "original_plan": "DUNEUITests-Full",
+    "normal_runner_exit": false,
+    "case_log_passed": [
+      "ConditionDetailRedesignTests/testPeriodWindowAndTrendControlsUpdateVisibleReadback"
+    ],
+    "case_log_failed": [
+      "DashboardSmokeTests/testConditionTrendAndHeroDetailRoute: weekly fallback identifier missing before hero tap"
+    ],
+    "owner_cleanup": "No activity300s, own process group stopped by standard runner. Not a passing receipt.",
+    "cause_scope": "Unrelated pre-detail fixture-conditional assertion. Hourly chart can legitimately take precedence; actual rendered branch and baseline reproduction not confirmed. New helper reached only in detail VM.",
+    "decision": "No app/test source fix. Substitute existing basic foreground smoke; period test rerun because prior runner result did not finalize. Use DesignCapture to disable post-failure sysdiagnose collection. One conditionally changed follow-up, no repeated failing selector."
+  },
+  "scope_expert_followup": "Sol read-only confirmed no pre-detail helper path; alternative foreground smoke sufficient because period method itself exercises Today hero-to-detail route and window/statistics."
+}

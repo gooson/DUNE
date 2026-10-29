@@ -21,8 +21,9 @@ related_solutions:
 ## Current Execution
 
 - L03 습관 템플릿: 네이티브 구현, iPhone 2/2·iPad 1/1·Duo 접힘 1/1·펼침 1/1 UI와 새 네 기기 캡처, 리뷰, CI 완료. [PR #858](https://github.com/gooson/DUNE/pull/858) MERGED, merge commit `60bd7c4b`. 화면별 첫 `/run`의 Ship 후 정리까지 완료했다.
-- 실행 worktree: `/Users/shanks/.codex/worktrees/detail-redesign-l03/Health`, branch `codex/t04-condition-detail-redesign`.
-- T04 컨디션 상세: [PR #862](https://github.com/gooson/DUNE/pull/862). 실제 구현·리뷰 수정·관련 단위32개·기기별 고유UI15개·새 네 기기 원본·Compound 완료. 최종 PR/Ship 점검 중이며 머지 완료 표시는 아니다.
+- 실행 worktree: `/Users/shanks/.codex/worktrees/detail-redesign-l03/Health`, branch `codex/score-history-window-foundation`.
+- T04 컨디션 상세: [PR #862](https://github.com/gooson/DUNE/pull/862) MERGED, merge `9fa10e46`. 단위32·기기별UI15·새4기기원본·리뷰·Compound·CI·Ship·브랜치정리·표준regen/build까지 완료.
+- 공통 기간 계산 선행: [PR #863](https://github.com/gooson/DUNE/pull/863). 동일 함수2개 추출, 관련26단위·선택UI2·리뷰·Compound 완료. Ship 점검 중이며 T05 화면 PR과 분리한다.
 - 다음 화면은 T05 누적 스트레스다. 코드·검토 시안·가중치 재배분·기존 캡처의 READ-ONLY 조사를 완료했다. 원본 시안은 da96에 유지하고 실행 목록은 native 저장소에도 보존한다.
 
 ## Requirements

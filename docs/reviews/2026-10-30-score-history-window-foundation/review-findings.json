@@ -1,0 +1,26 @@
+{
+  "branch": "codex/score-history-window-foundation",
+  "timestamp": "2026-10-29T22:45:41.577177+00:00",
+  "source_revision": "2ecfa3ff",
+  "diff_lines": 186,
+  "reviewers_run": [
+    "security",
+    "performance",
+    "architecture",
+    "data-integrity",
+    "simplicity"
+  ],
+  "reviewers_skipped": [
+    {
+      "name": "agent-native",
+      "reason": "No AI instruction/prompt/config change."
+    }
+  ],
+  "findings": [],
+  "summary": {
+    "p1": 0,
+    "p2": 0,
+    "p3": 0
+  },
+  "localization": "No rendered string/API change; pure Foundation body move only."
+}
