@@ -1,0 +1,16 @@
+{
+  "retrieved": "2026-10-29",
+  "source": "https://api.openstreetmap.org/api/0.6/map?bbox=127.033,37.539,127.049,37.550",
+  "license": "ODbL 1.0",
+  "attribution": "© OpenStreetMap contributors",
+  "licenseURL": "https://www.openstreetmap.org/copyright",
+  "features": 479,
+  "route": "Illustrative loop through connected OSM walkable ways, not actual GPS or a navigation recommendation. All statistics are design fixtures.",
+  "distanceMeters": 6277,
+  "excluded": "Buildings, private access, construction, service roads, steps. No user location data.",
+  "projection": "D3 7.9.0 geoMercator + geoPath; route fit extent [28,22]–[372,350]. OSM closed outer rings normalized clockwise. SVG paths embedded offline in fragment.",
+  "projectionLibrary": "https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js",
+  "routeDistanceFixture": "6.28 km / 36:25 / 5:48 per km; derived loop is 6277m rounded. Pace bins, HR and achievement examples are illustrative, not measured.",
+  "virtualJourney": "10 km cumulative target, schematic progress along OSM-derived geometry; not a real 10 km navigable course. No actual place visit claimed.",
+  "indoorVenues": "running-map-venues.json: OSM-tagged example facility building centroids; manually chosen fixture, not measured user position or verification of treadmill facilities."
+}

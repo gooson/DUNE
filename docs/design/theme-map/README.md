@@ -149,3 +149,15 @@ Life Flow를 실제 앱에 반영했다. [검증 보고](../../reviews/2026-10-2
 ## 주간 운동 성과 보드 · 2026-10-29
 
 사용자가 선택한 성과 보드를 SwiftUI에 적용했다. [보존 시안](themes/dune-workout-achievements.html)과 [네이티브 계약](../layout-map/workout-achievements-proposal.md), [새 실제 캡처](../full-redesign-map/review/workout-achievement-board-2026-10-29/index.html)를 구분한다. 가변 총계·6개 근력 항목·기존 목표 동작을 유지하고 최대 글씨는 장식 숨김/한 열까지 허용한다. 세부 검증과 기존 Today 실패는 실행 보고를 따른다.
+
+## 러닝 지도와 공유 카드 다섯 방향 · 2026-10-29
+
+[Atlas·Pace Ribbon·Route Signature·Journey·Passport](themes/dune-running-map-sharing.html)는 경로 기록과 예쁜 공유 카드를 중심으로 한 다섯 제안이다. 영역 경쟁 대신 개인 업적을 연결하고 실외 경로·실내 거리·가상 여정을 구분한다. [레이아웃과 상세 개편 연결 계약](../layout-map/running-map-share-proposal.md), [공식 사례 조사](../../brainstorms/2026-10-29-running-map-sharing-achievements.md), [편집 원본](themes/assets/running-map-sharing-fragment.html), [지도 출처](themes/assets/running-map-provenance.json), [브라우저 검사](themes/assets/running-map-sharing-qa.json)를 보존한다. 지도는 실제 OpenStreetMap 데이터를 D3로 투영했지만 경로는 설명용이며 건강 수치는 예시다. 다른 상세 개편 worktree를 읽어 W23/W24/W25/W28과 연결할 경계를 정했으며 다른 세션·앱 소스는 변경하지 않았다. 네이티브 캡처와 구분한다.
+
+2026-10-29 실내 장소 보완: 러닝머신에서도 운동한 시설을 지도와 핀으로 표시한다. 실내 거리/가상 여정만 보여주던 이전 시안을 보완하고 두 예시 시설 선택·장소 미지정·공유에서 장소 제외를 추가했다. [장소 원천](themes/assets/running-map-venues.json)과 [해당 변경 한정 검증](themes/assets/running-map-indoor-qa.json)을 보존한다. 실제 사용자 위치나 시설 이용 기록이 아니다.
+
+2026-10-29 범위 확대: 장소 지도는 모든 실내 유산소의 공통 기능이다. 다섯 시안에 종목 선택을 추가하고 자전거·일립티컬·계단/스텝퍼·로잉·줄넘기·인터벌·수영·기타의 거리/층수/횟수/시간을 구분했다. 거리 없는 종목에 가상 km나 러닝 업적을 생성하지 않는다. 검증은 `running-map-cardio-qa.json`을 따른다.
+
+## 유산소 아틀라스 통합안 · 2026-10-29
+
+사용자 요청으로 [단일 통합 시안](themes/dune-cardio-atlas-integrated.html)을 추가했다. 아틀라스 기본 상세 → 공유 스타일 선택 → 저니 누적 진행·패스포트 업적을 하나의 기록에 연결한다. 앞의 다섯 방향은 비교 이력으로 보존한다. [레이아웃 계약](../layout-map/cardio-atlas-integrated-proposal.md), [편집 원본](themes/assets/cardio-atlas-integrated-fragment.html), [브라우저 검사](themes/assets/cardio-atlas-integrated-qa.json)를 따른다. 실내외 모든 유산소가 범위이며 경로가 없는 운동에는 장소와 해당 단위의 수치를 사용한다. 네이티브 앱/실제 사용자 기록/시뮬레이터 캡처가 아니다.
