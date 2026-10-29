@@ -42,6 +42,18 @@ class UnitRunnerTests(unittest.TestCase):
         self.assertEqual(result.returncode, 2)
         self.assertEqual(commands, [])
 
+    def test_condition_score_detail_suite_is_selectable(self) -> None:
+        result, commands = self.dry_run("--only-testing", "DUNETests/ConditionScoreDetailViewModelTests")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(option_values(commands[0], "-only-testing"),
+                         ["DUNETests/ConditionScoreDetailViewModelTests"])
+
+    def test_xctest_case_method_is_selectable(self) -> None:
+        selector = "DUNETests/WorkoutTypeCorrectionStoreTests/testSetAndGetCorrectedTitle"
+        result, commands = self.dry_run("--only-testing", selector)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(option_values(commands[0], "-only-testing"), [selector])
+
     def test_repeated_selectors_route_to_their_target(self) -> None:
         result, commands = self.dry_run("--only-testing", IOS, "--only-testing", IOS + "/scoreClamped",
                                         "--only-testing", WATCH)
@@ -65,6 +77,8 @@ class UnitRunnerTests(unittest.TestCase):
                      ("--only-testing", "DUNETests/Full/ConditionScoreTests/extra"),
                      ("--only-testing", "DUNETests/Bad-Class"),
                      ("--only-testing", "DUNETests/UnknownSuite"),
+                     ("--only-testing", "DUNETests/MockHRVService"),
+                     ("--only-testing", "DUNETests/MockHRVService/fetchHRVSamples"),
                      ("--only-testing", IOS + "/unknownMethod"),
                      ("--only-testing", "DUNEWatchTests/RunningFeedbackSettingsTests/targetAlert"),
                      ("--watch-only", "--only-testing", IOS),
@@ -117,6 +131,14 @@ class UnitRunnerTests(unittest.TestCase):
                              [[IOS], [WATCH]])
             self.assertTrue((path / "unit test.log").exists())
             self.assertTrue((path / "unit test-watch.log").exists())
+
+    def test_valid_and_helper_selectors_do_not_launch(self) -> None:
+        for helper in ("DUNETests/MockHRVService", "DUNETests/MockHRVService/fetchHRVSamples"):
+            with self.subTest(helper=helper), tempfile.TemporaryDirectory() as directory:
+                result, commands = self.fake_run(Path(directory), "--only-testing", IOS,
+                                                 "--only-testing", helper)
+                self.assertEqual(result.returncode, 2)
+                self.assertEqual(commands, [])
 
     def test_mixed_valid_and_unknown_selector_does_not_launch(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

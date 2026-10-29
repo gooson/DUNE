@@ -31,7 +31,7 @@ The runner hardcoded `-only-testing DUNETests` and `-only-testing DUNEWatchTests
 | File | Change | Reason |
 |---|---|---|
 | `scripts/test-unit.sh` | Accept repeated `--only-testing`, validate before lock, route by target, offer side-effect-free `--dry-run`, check focused log counts | Preserve the existing runner while enabling focused tests |
-| `scripts/lib/validate-unit-test-selectors.py` | Check each requested suite and method within its top-level test type in target Swift sources | Prevent a valid selector from hiding another selector that runs no tests |
+| `scripts/lib/validate-unit-test-selectors.py` | Require each selected type to have Swift Testing `@Test` methods or XCTestCase `test*` methods, and check selected methods against that set | Prevent a valid selector from hiding another selector that runs no tests |
 | `scripts/tests/test_unit_test_runner.py` | Exercise real CLI parser with fake tools and log fixtures | Verify argv, rejection, split logs, and exit status without a simulator |
 
 ### Key Code
@@ -42,7 +42,7 @@ scripts/test-unit.sh --only-testing DUNETests/CalculateConditionScoreUseCaseTest
 scripts/test-unit.sh --dry-run --only-testing DUNETests/CalculateConditionScoreUseCaseTests
 ```
 
-No selector keeps the original sequential iOS and Watch full-target runs. Focused runs require a positive XCTest or Swift Testing executed-test count in each selected suite log. Source validation scopes methods to their suite and scans only the `DUNETests/` and `DUNEWatchTests/` roots configured in `DUNE/project.yml`. The old `DUNE/DUNETests/` directory is outside the target.
+No selector keeps the original sequential iOS and Watch full-target runs. Focused runs require a positive XCTest or Swift Testing executed-test count in each selected suite log. Source validation accepts only test methods within their suite and scans only the `DUNETests/` and `DUNEWatchTests/` roots configured in `DUNE/project.yml`. The old `DUNE/DUNETests/` directory is outside the target.
 
 ## Validation
 

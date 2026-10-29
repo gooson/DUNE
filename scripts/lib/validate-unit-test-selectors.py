@@ -19,6 +19,10 @@ TOP_LEVEL_TYPE = re.compile(
 )
 
 
+SWIFT_TEST = re.compile(r"@Test\b(?:(?!\bfunc\b)[\s\S])*?\bfunc\s+([A-Za-z_][A-Za-z_0-9]*)\s*\(")
+XCTEST_METHOD = re.compile(r"\bfunc\s+(test[A-Za-z_0-9]*)\s*\(")
+
+
 def validate(selector: str) -> None:
     parts = selector.split("/")
     target, suite = parts[:2]
@@ -32,12 +36,18 @@ def validate(selector: str) -> None:
             for index, declaration in enumerate(declarations):
                 if declaration.group(1) != suite:
                     continue
-                suite_found = True
-                if method is None:
-                    continue
                 end = declarations[index + 1].start() if index + 1 < len(declarations) else len(source)
                 section = source[declaration.end():end]
-                if re.search(r"\bfunc\s+" + re.escape(method) + r"\s*\(", section):
+                header_end = source.find("{", declaration.end(), end)
+                header = source[declaration.start():header_end if header_end >= 0 else declaration.end()]
+                is_xctest = "XCTestCase" in header
+                test_methods = {match.group(1) for match in SWIFT_TEST.finditer(section)}
+                if is_xctest:
+                    test_methods.update(match.group(1) for match in XCTEST_METHOD.finditer(section))
+                if not test_methods:
+                    continue
+                suite_found = True
+                if method in test_methods:
                     method_found = True
     if not suite_found:
         raise ValueError(f"unknown unit test suite: {selector}")
