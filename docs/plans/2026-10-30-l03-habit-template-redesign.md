@@ -38,11 +38,11 @@ scripts/plan-ui-tests.py --base origin/main 판정과 호출부 조사 후 scrip
 
 - 0 Init: completed (clean native worktree, codex branch, origin/main base)
 - 1 Plan: completed (plan file + 3 research results)
-- 2 Work: in_progress
-- 2.5 UI: pending
-- 3 Review: pending
-- 3.5 Quality: pending
+- 2 Work: completed (4f052fa7, build, iPhone2/iPad1)
+- 2.5 UI: in_progress (Duo bootstrap recovery + Mac unlock pending)
+- 3 Review: preliminary code review completed; final UI gate pending
+- 3.5 Quality: static + iPhone/iPad visual completed; Duo pending
 - 4 Resolve: pending
-- 5 Compound: pending
+- 5 Compound: prepared (partial-verification solution doc)
 - 5.5 Pre-Ship: pending
-- 6 Ship: pending
+- 6 Ship: draft PR858 published; merge gate incomplete
