@@ -13,17 +13,18 @@ final class ConditionDetailRedesignTests: SeededUITestBaseCase {
         openConditionDetail()
         let screen = detailScreen
         let ring = app.descendants(matching: .any)["condition-detail-hero-ring"].firstMatch
-        XCTAssertTrue(ring.waitForExistence(timeout: 10))
+        XCTAssertTrue(revealWhole(ring), "The complete hero ring should be in the captured viewport")
         XCTAssertTrue(ring.label.contains("100"), "Opt-in fixture should preserve the actual 100-point hero")
-        XCTAssertTrue(app.staticTexts["condition-detail-hero-status"].firstMatch.exists)
+        XCTAssertTrue(revealWhole(app.staticTexts["condition-detail-hero-status"].firstMatch))
         VisualAudit.capture("Condition detail top hero")
 
         for (metric, unit) in [("hrv", "ms"), ("rhr", "bpm")] {
             let id = "condition-contribution-\(metric)"
-            XCTAssertTrue(app.scrollToElementIfNeeded(id, maxSwipes: 8), "\(id) should be reachable")
             XCTAssertTrue(app.descendants(matching: .any)[id].firstMatch.exists)
             let value = app.staticTexts["condition-contribution-value-\(metric)"].firstMatch
             let impact = app.staticTexts["condition-contribution-impact-\(metric)"].firstMatch
+            XCTAssertTrue(revealWhole(value), "\(id) measurement should be fully visible")
+            XCTAssertTrue(revealWhole(impact), "\(id) impact should be fully visible")
             XCTAssertTrue(value.exists && value.label.contains(unit)
                           && value.label.rangeOfCharacter(from: .decimalDigits) != nil,
                           "\(metric) should show a numeric \(unit) measurement")
@@ -33,24 +34,25 @@ final class ConditionDetailRedesignTests: SeededUITestBaseCase {
             VisualAudit.capture("Condition \(id) measurement and impact")
         }
 
-        XCTAssertTrue(app.scrollToElementIfNeeded("condition-trend-card", maxSwipes: 8))
         XCTAssertTrue(app.descendants(matching: .any)["condition-trend-card"].firstMatch.exists)
         XCTAssertTrue(app.descendants(matching: .any)["detail-chart-surface"].firstMatch.waitForExistence(timeout: 15))
-        XCTAssertTrue(app.staticTexts["score-detail-chart-visible-range"].firstMatch.exists)
-        XCTAssertTrue(app.buttons["score-chart-trend-toggle"].firstMatch.exists)
+        let visibleRange = app.staticTexts["score-detail-chart-visible-range"].firstMatch
+        let trend = app.buttons["score-chart-trend-toggle"].firstMatch
+        XCTAssertTrue(revealWhole(visibleRange), "Trend header should be fully visible")
+        XCTAssertTrue(revealWhole(trend, requireHittable: true), "Trend toggle should be visible and usable")
+        VisualAudit.capture("Condition unified trend header and controls")
         XCTAssertTrue(app.descendants(matching: .any)["condition-visible-summary"].firstMatch.exists)
         for id in ["condition-summary-average", "condition-summary-min", "condition-summary-max"] {
-            XCTAssertTrue(app.staticTexts[id].firstMatch.exists, "Visible summary should expose \(id)")
+            XCTAssertTrue(revealWhole(app.staticTexts[id].firstMatch), "Visible summary row \(id) should fit")
         }
-        VisualAudit.capture("Condition unified trend and visible summary")
+        VisualAudit.capture("Condition visible summary rows")
         XCTAssertTrue(screen.exists)
     }
 
     func testPeriodWindowAndTrendControlsUpdateVisibleReadback() {
         openConditionDetail()
         let picker = app.segmentedControls["condition-period-picker"].firstMatch
-        XCTAssertTrue(app.scrollToElementIfNeeded("condition-period-picker", maxSwipes: 8))
-        XCTAssertTrue(picker.waitForExistence(timeout: 10))
+        XCTAssertTrue(revealWhole(picker, requireHittable: true), "Period picker should fit in the viewport")
         XCTAssertEqual(picker.buttons.count, 5, "Condition should offer D, W, M, 6M, and Y")
         let range = app.staticTexts["score-detail-chart-visible-range"].firstMatch
         XCTAssertTrue(range.waitForExistence(timeout: 10))
@@ -58,6 +60,7 @@ final class ConditionDetailRedesignTests: SeededUITestBaseCase {
             let option = picker.buttons[period].firstMatch
             XCTAssertTrue(option.exists, "Missing \(period) period")
             let previousRange = range.label
+            XCTAssertTrue(revealWhole(option, requireHittable: true), "\(period) should be tappable")
             option.tap()
             XCTAssertTrue(waitForPeriod(option, range: range, replacing: previousRange),
                           "Selecting \(period) should update the selected segment and visible range")
@@ -65,6 +68,7 @@ final class ConditionDetailRedesignTests: SeededUITestBaseCase {
 
         let week = picker.buttons["W"].firstMatch
         let yearRange = range.label
+        XCTAssertTrue(revealWhole(week, requireHittable: true))
         week.tap()
         XCTAssertTrue(waitForPeriod(week, range: range, replacing: yearRange),
                       "Week should be restored before moving its visible window")
@@ -73,19 +77,23 @@ final class ConditionDetailRedesignTests: SeededUITestBaseCase {
         let initialRange = range.label
         let initialSummary = summaryText(summary)
         XCTAssertFalse(initialSummary.isEmpty, "Week should expose a visible-window summary")
-        VisualAudit.capture("Condition week window and summary")
+        XCTAssertTrue(revealWhole(app.staticTexts["condition-summary-average"].firstMatch))
+        VisualAudit.capture("Condition week window summary")
 
         let previous = app.buttons["condition-period-previous"].firstMatch
         let next = app.buttons["condition-period-next"].firstMatch
         XCTAssertTrue(previous.waitForExistence(timeout: 10))
         XCTAssertTrue(next.waitForExistence(timeout: 10))
+        XCTAssertTrue(revealWhole(previous, requireHittable: true))
         previous.tap()
         XCTAssertNotEqual(waitForLabelChange(range, from: initialRange), initialRange,
                           "Previous should move the visible window")
         XCTAssertNotEqual(summaryText(summary), initialSummary,
                           "Visible summary should follow the moved window")
-        VisualAudit.capture("Condition previous week and recalculated summary")
+        XCTAssertTrue(revealWhole(app.staticTexts["condition-summary-average"].firstMatch))
+        VisualAudit.capture("Condition previous week recalculated summary")
         let previousRange = range.label
+        XCTAssertTrue(revealWhole(next, requireHittable: true))
         next.tap()
         XCTAssertEqual(waitForLabelChange(range, from: previousRange), initialRange,
                        "Next should restore the current week")
@@ -97,6 +105,7 @@ final class ConditionDetailRedesignTests: SeededUITestBaseCase {
             return
         }
         XCTAssertTrue(["On", "Off"].contains(initialTrend), "Trend should expose On/Off accessibility state")
+        XCTAssertTrue(revealWhole(trend, requireHittable: true))
         trend.tap()
         XCTAssertNotEqual(trend.value as? String, initialTrend, "Trend control should change state")
         VisualAudit.capture("Condition trend toggled")
@@ -104,7 +113,7 @@ final class ConditionDetailRedesignTests: SeededUITestBaseCase {
 
     func testPeriodControlsKeep44PointTargetsAndAcceptEdgeTaps() {
         openConditionDetail()
-        XCTAssertTrue(app.scrollToElementIfNeeded("condition-period-previous", maxSwipes: 18))
+        XCTAssertTrue(revealWhole(app.buttons["condition-period-previous"].firstMatch, requireHittable: true))
         let previous = app.buttons["condition-period-previous"].firstMatch
         let next = app.buttons["condition-period-next"].firstMatch
         let trend = app.buttons["score-chart-trend-toggle"].firstMatch
@@ -114,11 +123,14 @@ final class ConditionDetailRedesignTests: SeededUITestBaseCase {
         }
         let range = app.staticTexts["score-detail-chart-visible-range"].firstMatch
         let initial = range.label
+        XCTAssertTrue(revealWhole(previous, requireHittable: true), "Previous edge needs the full 44pt frame")
         previous.coordinate(withNormalizedOffset: CGVector(dx: 0.1, dy: 0.1)).tap()
         XCTAssertNotEqual(waitForLabelChange(range, from: initial), initial)
+        XCTAssertTrue(revealWhole(next, requireHittable: true), "Next edge needs the full 44pt frame")
         next.coordinate(withNormalizedOffset: CGVector(dx: 0.9, dy: 0.9)).tap()
         let restored = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in range.label == initial }, object: range)
         XCTAssertEqual(XCTWaiter.wait(for: [restored], timeout: 5), .completed)
+        XCTAssertTrue(revealWhole(trend, requireHittable: true), "Trend edge needs the full 44pt frame")
         trend.coordinate(withNormalizedOffset: CGVector(dx: 0.1, dy: 0.1)).tap()
         let enabled = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in trend.value as? String == "On" }, object: trend)
         XCTAssertEqual(XCTWaiter.wait(for: [enabled], timeout: 5), .completed)
@@ -127,7 +139,7 @@ final class ConditionDetailRedesignTests: SeededUITestBaseCase {
 
     func testSingleNativeExplainerExpandsCalculationAndOriginalItems() {
         openConditionDetail()
-        XCTAssertTrue(app.scrollToElementIfNeeded("condition-score-explainer", maxSwipes: 18))
+        XCTAssertTrue(revealWhole(app.staticTexts["How the Score Works"].firstMatch, requireHittable: true))
         let disclosure = app.descendants(matching: .any)["condition-score-explainer"].firstMatch
         let calculation = app.descendants(matching: .any)["condition-calculation-content"].firstMatch
         XCTAssertTrue(disclosure.waitForExistence(timeout: 10))
@@ -154,16 +166,26 @@ final class ConditionDetailRedesignTests: SeededUITestBaseCase {
         launchApp(with: configuration)
         openConditionDetail(relaunch: false)
         let score = app.staticTexts["condition-detail-score"].firstMatch
-        XCTAssertTrue(score.waitForExistence(timeout: 10))
+        XCTAssertTrue(revealWhole(score), "The AX hero score should fit in the captured viewport")
         XCTAssertTrue(score.label.contains("100"), "The accessible score label should retain its numeric value")
         VisualAudit.capture("Condition maximum AX hero")
 
-        for id in ["condition-contribution-hrv", "condition-contribution-rhr", "condition-time-of-day", "condition-trend-card", "condition-score-explainer"] {
-            XCTAssertTrue(app.scrollToElementIfNeeded(id, maxSwipes: 18), "\(id) should remain reachable at maximum AX")
-            XCTAssertTrue(app.descendants(matching: .any)[id].firstMatch.exists,
-                          "\(id) should remain in the accessibility tree")
-            VisualAudit.capture("Condition maximum AX \(id) viewport")
+        for metric in ["hrv", "rhr"] {
+            let id = "condition-contribution-\(metric)"
+            XCTAssertTrue(app.descendants(matching: .any)[id].firstMatch.exists)
+            XCTAssertTrue(revealWhole(app.staticTexts["condition-contribution-value-\(metric)"].firstMatch))
+            VisualAudit.capture("Condition maximum AX \(id) value viewport")
         }
+        let timeOfDay = app.descendants(matching: .any)["condition-time-of-day"].firstMatch
+        XCTAssertTrue(revealCenter(timeOfDay), "Time-of-day card should have a visible viewport")
+        VisualAudit.capture("Condition maximum AX time-of-day viewport")
+        XCTAssertTrue(app.descendants(matching: .any)["condition-trend-card"].firstMatch.exists)
+        XCTAssertTrue(revealWhole(app.staticTexts["score-detail-chart-visible-range"].firstMatch))
+        VisualAudit.capture("Condition maximum AX trend header viewport")
+        XCTAssertTrue(revealWhole(app.staticTexts["condition-summary-average"].firstMatch))
+        VisualAudit.capture("Condition maximum AX visible summary viewport")
+        XCTAssertTrue(revealWhole(app.staticTexts["How the Score Works"].firstMatch, requireHittable: true))
+        VisualAudit.capture("Condition maximum AX explainer header viewport")
         tapExplainerHeader()
         XCTAssertTrue(app.descendants(matching: .any)["condition-calculation-content"].firstMatch.waitForExistence(timeout: 10))
         VisualAudit.capture("Condition maximum AX expanded explanation")
@@ -171,19 +193,44 @@ final class ConditionDetailRedesignTests: SeededUITestBaseCase {
 
     private func tapExplainerHeader() {
         let title = app.staticTexts["How the Score Works"].firstMatch
-        XCTAssertTrue(title.waitForExistence(timeout: 5), "Native disclosure title should exist")
-        for _ in 0..<18 {
-            if title.isHittable {
-                title.tap() // Tap the 44pt header text frame, never the expanded group's full frame.
-                return
-            }
-            if title.frame.midY < detailScreen.frame.minY {
-                detailScreen.swipeDown(velocity: .slow)
-            } else {
-                detailScreen.swipeUp(velocity: .slow)
-            }
+        XCTAssertTrue(revealWhole(title, requireHittable: true), "Native disclosure title should be reachable")
+        title.tap() // Tap the header text frame, never the expanded group's full frame.
+    }
+
+    private func revealWhole(_ target: XCUIElement, requireHittable: Bool = false) -> Bool {
+        reveal(target, requireWholeFrame: true, requireHittable: requireHittable)
+    }
+
+    private func revealCenter(_ target: XCUIElement) -> Bool {
+        reveal(target, requireWholeFrame: false, requireHittable: false)
+    }
+
+    /// Use the outer scroll gutter so a nested chart cannot consume the vertical drag.
+    private func reveal(_ target: XCUIElement, requireWholeFrame: Bool, requireHittable: Bool) -> Bool {
+        guard detailScreen.waitForExistence(timeout: 10), target.waitForExistence(timeout: 10) else { return false }
+        let scroll = detailScreen
+        for _ in 0..<32 {
+            let viewport = scroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 4)
+            let frame = target.frame
+            let visible = requireWholeFrame ? viewport.contains(frame) : viewport.contains(
+                CGPoint(x: frame.midX, y: frame.midY)
+            )
+            if visible && (!requireHittable || target.isHittable) { return true }
+            let targetY = frame.midY
+            let moveUp = targetY > viewport.midY
+            let startY: CGFloat = moveUp ? 0.75 : 0.25
+            let endY: CGFloat = moveUp ? 0.25 : 0.75
+            scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.05, dy: startY))
+                .press(forDuration: 0.05, thenDragTo: scroll.coordinate(
+                    withNormalizedOffset: CGVector(dx: 0.05, dy: endY)
+                ), withVelocity: .slow, thenHoldForDuration: 0.2)
         }
-        XCTFail("Native disclosure title should be reachable")
+        let viewport = scroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 4)
+        let frame = target.frame
+        let visible = requireWholeFrame ? viewport.contains(frame) : viewport.contains(
+            CGPoint(x: frame.midX, y: frame.midY)
+        )
+        return visible && (!requireHittable || target.isHittable)
     }
 
     private func waitForPeriod(_ option: XCUIElement, range: XCUIElement, replacing prior: String) -> Bool {

@@ -66,3 +66,5 @@ Duo 펼침의 첫5개 검사 중 Hero·최대AX Hero/설명·기간 전환3개�
 ## Resolve 검토 반영
 
 공식5관점+SwiftUI/AppleUX/AppQuality에서P2네 범주(RHR미적용0, 고정/달력범위, 작은hit area, deadsummary조회)와P3두개(미사용palette passthrough, 기간전환fade)를확인했다. RHReligibility는DomainrequiredDays를참조하는Presentation공유계산으로2소비자에적용하고Wellness기본표시는유지한다. T04고정window는한참조시점의end에맞추어today를포함하고, full±duration만이동하며query범위는기존달력preload와합집합으로한다. deadsummary와전용2조회제거, highlights/subscore범위보존. actualdateIntervalFormatter로중복연도축약. 세plaincontrols에contentShape를부여하고44pt크기/가장자리탭UI검증추가. P3정리및ReduceMotion을따르는fade복원. 표준generic iOS빌드성공. Data/Architecture/Simplicity정적delta재검토는기존지적닫힘/신규P1P2없음; 관련새단위와영향UI검증은이후실행한다.
+
+Resolve後두suite단위30개가실제통과했다. 신규edge UI첫실행은44pt크기는통과했으나버튼이viewport669밖y922에있어서좌표탭이닿지않았다. 기존공용scrollToElementIfNeeded는존재확인용임을AX로확인, T04test로컬거터reveal에서전체frame/hittable를검증한뒤edge tap하도록수정한다. 다른체크포인트도실제보이는대상을촬영하도록강화했으며이동작실패만원인수정후1회재검증한다.
