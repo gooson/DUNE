@@ -1,0 +1,467 @@
+{
+  "source": "/Users/shanks/.codex/worktrees/da96/Health/docs/design/detail-redesign-map/manifest.json",
+  "source_sha256": "ca3557caea37893829f622ae8c89a42aa43cf65ee84fe7b90ae0abbc9fbb8429",
+  "note": "User-reviewed prototype; example data only; not native capture. Weight semantics corrected by native contract.",
+  "screen": {
+    "id": "T05",
+    "group": "시작 · 오늘 · 알림",
+    "title": "누적 스트레스",
+    "parent": "오늘 카드",
+    "kind": "push",
+    "anatomy": "점수/추세/설명",
+    "type": "CumulativeStressDetailView",
+    "source": "DUNE/Presentation/Dashboard/CumulativeStressDetailView.swift",
+    "line": 7,
+    "key": "T05",
+    "entry": "오늘 카드",
+    "sections": [
+      "Stress score/trend",
+      "Stress insight",
+      "Contributing factors",
+      "Cumulative stress explainer and level guide"
+    ],
+    "controls": [
+      "back",
+      "scroll"
+    ],
+    "catalog_ids": [
+      "T05"
+    ],
+    "proposal": {
+      "eyebrow": "누적 스트레스",
+      "summary": "소스의 표시·조작·조건부 상태를 보존한 로컬 예시입니다.",
+      "changes": [
+        "점수 구성과 계산 설명을 한 카드로 통합합니다.",
+        "요인별 가중치·설명을 한 행에서 확인하고 펼치기·접기로 자세히 봅니다."
+      ],
+      "blocks": [
+        {
+          "kind": "tabs",
+          "title": "표시 상태",
+          "bind": "loadState",
+          "value": "ready",
+          "options": [
+            {
+              "value": "ready",
+              "label": "기록 있음",
+              "blocks": [
+                {
+                  "kind": "hero",
+                  "label": "누적 스트레스",
+                  "value": "38",
+                  "unit": "/ 100",
+                  "note": "보통 · 최근 30일 생체 신호 기준 예시",
+                  "symbol": "exclamationmark.circle"
+                },
+                {
+                  "kind": "info",
+                  "title": "스트레스 해석",
+                  "text": "스트레스가 보통 범위로 관측됐어요. 수면 규칙성과 회복 추세를 살펴봐요.",
+                  "collapsed": false,
+                  "symbol": "exclamationmark.circle"
+                },
+                {
+                  "kind": "rows",
+                  "title": "기여 요인",
+                  "items": [
+                    {
+                      "title": "HRV 변동성",
+                      "value": "34점",
+                      "note": "40% · 일별 HRV 변동",
+                      "symbol": "waveform.path.ecg",
+                      "visualRole": "hrv"
+                    },
+                    {
+                      "title": "수면 일관성",
+                      "value": "40점",
+                      "note": "35% · 수면 시각의 규칙성",
+                      "symbol": "moon.zzz.fill",
+                      "visualRole": "sleep"
+                    },
+                    {
+                      "title": "활동 부하",
+                      "value": "42점",
+                      "note": "25% · 만성 운동량 대비 최근 부하",
+                      "symbol": "figure.run"
+                    }
+                  ],
+                  "rowVisual": "summary"
+                },
+                {
+                  "kind": "rows",
+                  "title": "스트레스 수준",
+                  "items": [
+                    {
+                      "title": "낮음",
+                      "value": "0–29",
+                      "note": "회복 상태가 안정적으로 관측됐어요.",
+                      "symbol": "checkmark.circle"
+                    },
+                    {
+                      "title": "보통 · 현재",
+                      "value": "30–54",
+                      "note": "수면과 회복 추세를 함께 살펴봐요.",
+                      "symbol": "exclamationmark.circle"
+                    },
+                    {
+                      "title": "높아지는 중",
+                      "value": "55–74",
+                      "note": "회복 시간을 더 확보하는 데 참고해요.",
+                      "symbol": "exclamationmark.triangle"
+                    },
+                    {
+                      "title": "높음",
+                      "value": "75–100",
+                      "note": "휴식과 운동 강도 조절에 참고해요.",
+                      "symbol": "exclamationmark.triangle.fill"
+                    }
+                  ],
+                  "rowVisual": "summary"
+                },
+                {
+                  "kind": "chart",
+                  "title": "누적 스트레스 추세",
+                  "values": [
+                    42,
+                    39,
+                    46,
+                    44,
+                    41,
+                    36,
+                    38
+                  ],
+                  "unit": "점",
+                  "style": "line",
+                  "labels": [
+                    "월",
+                    "화",
+                    "수",
+                    "목",
+                    "금",
+                    "토",
+                    "일"
+                  ]
+                },
+                {
+                  "kind": "rows",
+                  "title": "기간 요약",
+                  "items": [
+                    {
+                      "title": "평균",
+                      "value": "41점",
+                      "note": "",
+                      "symbol": "calendar"
+                    },
+                    {
+                      "title": "최저",
+                      "value": "36점",
+                      "note": "",
+                      "symbol": "calendar"
+                    },
+                    {
+                      "title": "최고",
+                      "value": "46점",
+                      "note": "",
+                      "symbol": "calendar"
+                    },
+                    {
+                      "title": "지난 기간 대비",
+                      "value": "−4.2%",
+                      "note": "",
+                      "symbol": "arrow.down.right"
+                    }
+                  ],
+                  "rowVisual": "summary"
+                },
+                {
+                  "kind": "rows",
+                  "title": "하이라이트",
+                  "items": [
+                    {
+                      "title": "최고",
+                      "value": "46점",
+                      "note": "10월 22일",
+                      "symbol": "arrow.up.circle.fill"
+                    },
+                    {
+                      "title": "최저",
+                      "value": "36점",
+                      "note": "10월 25일",
+                      "symbol": "arrow.down.circle.fill"
+                    }
+                  ],
+                  "rowVisual": "summary"
+                },
+                {
+                  "kind": "group",
+                  "title": "점수 구성과 계산",
+                  "collapsed": true,
+                  "blocks": [
+                    {
+                      "kind": "info",
+                      "title": "30일 복합 지표",
+                      "text": "HRV 변동성, 수면 패턴, 훈련 부하를 조합해 최근 30일의 생리적 스트레스 누적을 추정해요.",
+                      "collapsed": false,
+                      "symbol": "chart.line.uptrend.xyaxis"
+                    },
+                    {
+                      "kind": "rows",
+                      "items": [
+                        {
+                          "title": "HRV 변동성",
+                          "value": "40%",
+                          "note": "날마다 HRV가 얼마나 변하는지 반영해요.",
+                          "symbol": "waveform.path.ecg",
+                          "visualRole": "hrv"
+                        },
+                        {
+                          "title": "수면 일관성",
+                          "value": "35%",
+                          "note": "수면 시각의 규칙성을 반영해요.",
+                          "symbol": "moon.zzz.fill",
+                          "visualRole": "sleep"
+                        },
+                        {
+                          "title": "활동 부하",
+                          "value": "25%",
+                          "note": "최근 운동량을 만성 기준선과 비교해요. 과부하와 갑작스러운 운동량 감소를 반영해요.",
+                          "symbol": "figure.run"
+                        }
+                      ],
+                      "rowVisual": "summary"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "value": "loading",
+              "label": "불러오는 중",
+              "blocks": [
+                {
+                  "kind": "info",
+                  "title": "불러오는 중",
+                  "text": "기록을 불러오는 중이에요.",
+                  "collapsed": false,
+                  "symbol": "arrow.triangle.2.circlepath"
+                }
+              ]
+            },
+            {
+              "value": "empty",
+              "label": "기록 없음",
+              "blocks": [
+                {
+                  "kind": "info",
+                  "title": "아직 기록이 없어요",
+                  "text": "기록을 받으면 여기에 표시돼요.",
+                  "collapsed": false,
+                  "symbol": "chart.bar.xaxis"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "fixture": true,
+      "symbol": "exclamationmark.circle",
+      "periodConfig": {
+        "mainTitle": "누적 스트레스 추세",
+        "options": [
+          "day",
+          "week",
+          "month",
+          "sixMonths",
+          "year"
+        ],
+        "dayHiddenTitles": [],
+        "baseline": 50
+      }
+    },
+    "dormant": false,
+    "captures": [
+      {
+        "path": "../phone-design-map/actual/regular/images/T05.png",
+        "exists": true,
+        "device": "regular",
+        "state": null,
+        "theme": null,
+        "date": "2026-10-12T20:33:18.964000+00:00",
+        "provenance": "docs/design/phone-design-map/actual",
+        "source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+        "test": "TodaySettingsRegressionTests/testVisualAuditCumulativeStress()",
+        "evidence": "cumulative-stress-detail-screen",
+        "capture_index": "../phone-design-map/actual/regular/capture-index.json",
+        "identity_label": "누적 스트레스",
+        "identity_note": "캡처 출처의 목적지·조작과 이미지의 제목·본문을 대조했습니다.",
+        "identity_keys": [
+          "T05"
+        ],
+        "identity_sha256": "2b76261d6db3cf3bf294550df6dd3c777abbef113496f360013bc8fa7c5e7fcb",
+        "pixels": [
+          1320,
+          2868
+        ]
+      },
+      {
+        "path": "../phone-design-map/actual/ipad/images/T05.png",
+        "exists": true,
+        "device": "ipad",
+        "state": null,
+        "theme": null,
+        "date": "2026-10-12T16:03:57.043000+00:00",
+        "provenance": "docs/design/phone-design-map/actual",
+        "source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+        "test": "TodaySettingsRegressionTests/testVisualAuditCumulativeStress()",
+        "evidence": "cumulative-stress-detail-screen",
+        "capture_index": "../phone-design-map/actual/ipad/capture-index.json",
+        "identity_label": "누적 스트레스",
+        "identity_note": "캡처 출처의 목적지·조작과 이미지의 제목·본문을 대조했습니다.",
+        "identity_keys": [
+          "T05"
+        ],
+        "identity_sha256": "c3342d6b524565bc0d0a3bd31edf580aa3082da64e49f21df6cd56800234f548",
+        "pixels": [
+          2064,
+          2752
+        ]
+      },
+      {
+        "path": "../phone-design-map/actual/duo/images/T05.png",
+        "exists": true,
+        "device": "duo",
+        "state": null,
+        "theme": null,
+        "date": "2026-10-12T17:08:05.921000+00:00",
+        "provenance": "docs/design/phone-design-map/actual",
+        "source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+        "test": "TodaySettingsRegressionTests/testVisualAuditCumulativeStress()",
+        "evidence": "cumulative-stress-detail-screen",
+        "capture_index": "../phone-design-map/actual/duo/capture-index.json",
+        "identity_label": "누적 스트레스",
+        "identity_note": "캡처 출처의 목적지·조작과 이미지의 제목·본문을 대조했습니다.",
+        "identity_keys": [
+          "T05"
+        ],
+        "identity_sha256": "25879e30608e0fd65c4686edaccff38346d7fd977ef21bd998716af06a029719",
+        "pixels": [
+          1398,
+          2034
+        ]
+      },
+      {
+        "path": "../phone-design-map/actual/duo-open/images/T05.png",
+        "exists": true,
+        "device": "duo-open",
+        "state": null,
+        "theme": null,
+        "date": "2026-10-12T20:04:39.898000+00:00",
+        "provenance": "docs/design/phone-design-map/actual",
+        "source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+        "test": "TodaySettingsRegressionTests/testVisualAuditCumulativeStress()",
+        "evidence": "cumulative-stress-detail-screen",
+        "capture_index": "../phone-design-map/actual/duo-open/capture-index.json",
+        "identity_label": "누적 스트레스",
+        "identity_note": "캡처 출처의 목적지·조작과 이미지의 제목·본문을 대조했습니다.",
+        "identity_keys": [
+          "T05"
+        ],
+        "identity_sha256": "17419cecfc6c2a9c2843d1aa4648c8dcdf451952db16e4f22c88174f603658b4",
+        "pixels": [
+          2006,
+          2852
+        ]
+      }
+    ],
+    "representative": false,
+    "nav_title": "Cumulative Stress",
+    "feature_contract": [
+      {
+        "id": "stress-factors",
+        "label": "세 기여 요인·가중치·해석",
+        "sources": [
+          {
+            "path": "DUNE/Presentation/Dashboard/CumulativeStressDetailView.swift",
+            "line": 187
+          }
+        ],
+        "representation": "기여 요인"
+      },
+      {
+        "id": "stress-levels",
+        "label": "네 수준과 현재 범위",
+        "sources": [
+          {
+            "path": "DUNE/Presentation/Dashboard/CumulativeStressDetailView.swift",
+            "line": 63
+          }
+        ],
+        "representation": "스트레스 수준"
+      },
+      {
+        "id": "stress-chart",
+        "label": "기간·추세·통계·선택",
+        "sources": [
+          {
+            "path": "DUNE/Presentation/Dashboard/CumulativeStressDetailView.swift",
+            "line": 67
+          }
+        ],
+        "representation": "누적 스트레스 추세"
+      },
+      {
+        "id": "stress-formula",
+        "label": "30일 복합 지표 계산 설명",
+        "sources": [
+          {
+            "path": "DUNE/Presentation/Dashboard/CumulativeStressDetailView.swift",
+            "line": 138
+          }
+        ],
+        "representation": "점수 구성과 계산: 30일 복합 지표 안내와 HRV40%·수면35%·활동25%의 설명을 함께 표시"
+      }
+    ],
+    "capture_pairing": {
+      "regular": {
+        "screen": "T05",
+        "device": "regular",
+        "status": "matched",
+        "reason": "",
+        "paths": [
+          "../phone-design-map/actual/regular/images/T05.png"
+        ],
+        "removed_paths": []
+      },
+      "ipad": {
+        "screen": "T05",
+        "device": "ipad",
+        "status": "matched",
+        "reason": "",
+        "paths": [
+          "../phone-design-map/actual/ipad/images/T05.png"
+        ],
+        "removed_paths": []
+      },
+      "duo": {
+        "screen": "T05",
+        "device": "duo",
+        "status": "matched",
+        "reason": "",
+        "paths": [
+          "../phone-design-map/actual/duo/images/T05.png"
+        ],
+        "removed_paths": []
+      },
+      "duo-open": {
+        "screen": "T05",
+        "device": "duo-open",
+        "status": "matched",
+        "reason": "",
+        "paths": [
+          "../phone-design-map/actual/duo-open/images/T05.png"
+        ],
+        "removed_paths": []
+      }
+    }
+  }
+}

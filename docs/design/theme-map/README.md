@@ -173,3 +173,5 @@ L03 네이티브 구현은 기존20개 템플릿의 선택·자동 입력을 유
 `themes/dune-condition-detail-redesign.html`에 검토한 밝음·어두움 브라우저 PNG와 원본 화면 JSON을 보존한다. 이 시안의 고정 점수 비율은 실제 모델과 달라 앱에서는 실제 Z-score·심박/시간 조정으로 표시한다. 새 실제 앱 검증은 별도 T04 비교 갤러리와 리뷰 증거로 구분한다.
 
 T04 native 구현은 단위32개·기기별 선택 UI15개와 새4기기 실제 원본으로 검증했다. 검토용 PNG/JSON은 브라우저 시안이며 새 native 캡처와 구분한다. 실제 입력이 없는70/30 예시 구성은 사용하지 않는다.
+
+- T05 누적 스트레스 상세: `themes/dune-cumulative-stress-redesign.html`과 원본 검토 JSON을 보존했다. 현재는 native 구현 전 배치이며 새 실제 캡처 완료를 뜻하지 않는다.
