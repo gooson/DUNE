@@ -47,12 +47,12 @@ struct WorkoutLocationTests {
         #expect(WorkoutLocationPayload.normalizedRoute(points) == payload.route)
     }
 
-    @Test("Indoor workouts preserve a real place but never retain a route")
+    @Test("Indoor metadata preserves an actually recorded imported route and place")
     func indoorPlace() throws {
         let place = try #require(WorkoutPlace(latitude: 37, longitude: 127, name: " Gym ", source: .manual))
         let point = try #require(WorkoutRoutePoint(latitude: 37, longitude: 127, timestamp: date))
         let payload = WorkoutLocationPayload(isIndoor: true, route: [point], place: place)
-        #expect(payload.route.isEmpty)
+        #expect(payload.route.count == 1)
         #expect(payload.place?.name == "Gym")
         #expect(payload.place?.source == .manual)
         let decoded = try JSONDecoder().decode(WorkoutLocationPayload.self, from: JSONEncoder().encode(payload))

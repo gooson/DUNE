@@ -440,23 +440,26 @@ struct ExerciseView: View {
             let deleteService = WorkoutDeleteService(manager: .shared)
             do {
                 try await deleteService.deleteWorkout(uuid: workout.id)
-                do {
-                    try WorkoutLocationRecordCleanup.delete(healthKitWorkoutID: workout.id, from: modelContext)
-                } catch {
-                    AppLogger.data.error("HealthKit workout location cleanup failed: \(error.localizedDescription)")
-                }
             } catch {
                 AppLogger.healthKit.error("HealthKit-only workout delete failed: \(error.localizedDescription)")
                 WatchSessionManager.shared.requestWatchWorkoutDeletion(workoutUUID: workout.id)
             }
 
             let linkedRecords = manualRecords.filter { $0.healthKitWorkoutID == workout.id }
-            if !linkedRecords.isEmpty {
+            do {
+                // The existing Watch fallback also removes local aliases after an HK failure.
+                // Remove their precise location metadata in the same local save in both paths.
+                try WorkoutLocationRecordCleanup.delete(
+                    localRecordIDs: linkedRecords.map(\.id), healthKitWorkoutID: workout.id, from: modelContext
+                )
                 withAnimation {
                     for record in linkedRecords {
                         modelContext.delete(record)
                     }
                 }
+                try modelContext.save()
+            } catch {
+                AppLogger.data.error("Workout and location cleanup failed: \(error.localizedDescription)")
             }
 
             await viewModel.loadHealthKitWorkouts()

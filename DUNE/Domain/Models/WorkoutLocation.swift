@@ -74,7 +74,9 @@ struct WorkoutLocationPayload: Codable, Sendable, Hashable {
 
     init(isIndoor: Bool? = nil, route: [WorkoutRoutePoint] = [], place: WorkoutPlace? = nil) {
         self.isIndoor = isIndoor
-        self.route = isIndoor == true ? [] : Self.normalizedRoute(route)
+        // Indoor metadata describes the workout, not whether an actual route can exist.
+        // Indoor recording never requests GPS automatically, but imported recorded paths survive.
+        self.route = Self.normalizedRoute(route)
         self.place = place.flatMap {
             WorkoutPlace(latitude: $0.latitude, longitude: $0.longitude, name: $0.name, source: $0.source)
         }

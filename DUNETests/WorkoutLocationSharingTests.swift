@@ -28,12 +28,13 @@ struct WorkoutLocationSharingTests {
         let place = try #require(WorkoutPlace(latitude: 0, longitude: 0, name: "Park", source: .manual))
         let route = [point(0, at: 0), point(0.001, at: 10)]
         let original = WorkoutLocationPayload(route: route, place: place)
+        let originalRoute = original.route
 
         let shared = original.shareLocation(showPlace: true, trimDistanceMeters: 100)
 
         #expect(shared.route.isEmpty)
         #expect(shared.place == place)
-        #expect(original.route == route)
+        #expect(original.route == originalRoute)
         #expect(WorkoutLocationPayload(route: [route[0]]).shareLocation(showPlace: true, trimDistanceMeters: 0).route.isEmpty)
     }
 
@@ -41,6 +42,7 @@ struct WorkoutLocationSharingTests {
     func endpointTrimming() {
         let route = (0...10).map { point(Double($0) * 0.001, at: $0 * 10) }
         let original = WorkoutLocationPayload(route: route)
+        let originalRoute = original.route
 
         let shared = original.shareLocation(showPlace: true, trimDistanceMeters: 300)
 
@@ -48,7 +50,7 @@ struct WorkoutLocationSharingTests {
         #expect(shared.route.first?.longitude == 0.003)
         #expect(shared.route.last?.longitude == 0.007)
         #expect(shared.route.first?.startsNewSegment == true)
-        #expect(original.route == route)
+        #expect(original.route == originalRoute)
     }
 
     @Test("Gaps add no travelled distance and retained segment starts remain marked")

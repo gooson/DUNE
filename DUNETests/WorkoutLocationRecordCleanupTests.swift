@@ -6,6 +6,26 @@ import Testing
 @Suite("WorkoutLocationRecordCleanup")
 @MainActor
 struct WorkoutLocationRecordCleanupTests {
+    @Test("A queued remote deletion also removes every local alias including metadata without an HK link")
+    func remoteFailureLocalAliases() throws {
+        let context = try makeContext()
+        let first = UUID()
+        let second = UUID()
+        let rows = [
+            WorkoutLocationRecord(localRecordID: first, payload: WorkoutLocationPayload()),
+            WorkoutLocationRecord(localRecordID: second, payload: WorkoutLocationPayload()),
+            WorkoutLocationRecord(healthKitWorkoutID: "queued-hk", payload: WorkoutLocationPayload()),
+        ]
+        let unrelated = WorkoutLocationRecord(localRecordID: UUID(), payload: WorkoutLocationPayload())
+        (rows + [unrelated]).forEach { context.insert($0) }
+        try context.save()
+        try WorkoutLocationRecordCleanup.delete(localRecordIDs: [first, second, first],
+                                               healthKitWorkoutID: "queued-hk", from: context)
+        try context.save()
+        let survivors = try context.fetch(FetchDescriptor<WorkoutLocationRecord>())
+        #expect(survivors.count == 1)
+        #expect(survivors.first?.id == unrelated.id)
+    }
     @Test("A local deletion removes matching local and dual-linked metadata only")
     func deletesByLocalID() throws {
         let context = try makeContext()

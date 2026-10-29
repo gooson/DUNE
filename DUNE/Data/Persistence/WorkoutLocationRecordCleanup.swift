@@ -9,10 +9,20 @@ enum WorkoutLocationRecordCleanup {
         healthKitWorkoutID: String? = nil,
         from context: ModelContext
     ) throws {
-        guard localRecordID != nil || (healthKitWorkoutID?.isEmpty == false) else { return }
+        try delete(localRecordIDs: localRecordID.map { [$0] } ?? [],
+                   healthKitWorkoutID: healthKitWorkoutID, from: context)
+    }
+
+    /// Fetch every alias before mutating, so one failed fetch cannot leave partial cleanup.
+    static func delete(
+        localRecordIDs: [UUID],
+        healthKitWorkoutID: String? = nil,
+        from context: ModelContext
+    ) throws {
+        guard !localRecordIDs.isEmpty || (healthKitWorkoutID?.isEmpty == false) else { return }
 
         var matches: [WorkoutLocationRecord] = []
-        if let localRecordID {
+        for localRecordID in Set(localRecordIDs) {
             let predicate = #Predicate<WorkoutLocationRecord> { $0.localRecordID == localRecordID }
             matches += try context.fetch(FetchDescriptor(predicate: predicate))
         }

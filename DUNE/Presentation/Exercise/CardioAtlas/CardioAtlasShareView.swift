@@ -22,6 +22,7 @@ struct CardioAtlasShareView: View {
     @State private var shareImage: UIImage?
     @State private var isRendering = false
     @State private var snapshotUnavailable = false
+    @State private var imageUnavailable = false
     @State private var snapshotter: MKMapSnapshotter?
     @State private var renderID = UUID()
 
@@ -31,6 +32,15 @@ struct CardioAtlasShareView: View {
 
     private var hasPaceSegments: Bool {
         !CardioAtlasPaceSegments.from(location.route).isEmpty
+    }
+
+    private var locationStatus: CardioAtlasShareLocationStatus {
+        CardioAtlasShareLocationStatus.resolve(
+            source: location,
+            published: publishedLocation,
+            showPlace: showPlace,
+            trimEnds: trimEnds
+        )
     }
 
     private var renderKey: String {
@@ -48,6 +58,7 @@ struct CardioAtlasShareView: View {
                     style: style,
                     mapImage: mapImage,
                     snapshotUnavailable: snapshotUnavailable,
+                    locationStatus: locationStatus,
                     journeySummary: includeJourney ? journeySummary : nil,
                     passportSummary: includePassport ? passportSummary : nil
                 )
@@ -57,9 +68,14 @@ struct CardioAtlasShareView: View {
                 VStack(alignment: .leading, spacing: DS.Spacing.md) {
                     Toggle("Include location on card", isOn: $showPlace)
                         .accessibilityIdentifier("cardio-atlas-share-location")
-                    if showPlace, !location.route.isEmpty {
+                    if showPlace, location.route.count >= 2 {
                         Toggle("Hide first and last 300 m", isOn: $trimEnds)
                             .accessibilityIdentifier("cardio-atlas-share-trim")
+                        if trimEnds, location.place != nil {
+                            Text("Selected place stays visible.")
+                                .font(.caption)
+                                .foregroundStyle(DS.Color.textSecondary)
+                        }
                     }
                     if journeySummary != nil {
                         Toggle("Include Journey", isOn: $includeJourney)
@@ -78,6 +94,13 @@ struct CardioAtlasShareView: View {
                     Button("Retry map") { Task { await renderCard() } }
                         .disabled(isRendering)
                         .accessibilityIdentifier("cardio-atlas-share-retry-map")
+                }
+                if imageUnavailable {
+                    Text("Image could not be prepared")
+                        .foregroundStyle(DS.Color.textSecondary)
+                    Button("Retry image") { Task { await renderCard() } }
+                        .disabled(isRendering)
+                        .accessibilityIdentifier("cardio-atlas-share-retry-image")
                 }
                 if let shareImage {
                     ShareLink(
@@ -134,6 +157,7 @@ struct CardioAtlasShareView: View {
         shareImage = nil
         mapImage = nil
         snapshotUnavailable = false
+        imageUnavailable = false
         isRendering = true
         let expectedID = UUID()
         renderID = expectedID
@@ -177,6 +201,7 @@ struct CardioAtlasShareView: View {
             style: style,
             mapImage: snapshot,
             snapshotUnavailable: false,
+            locationStatus: locationStatus,
             journeySummary: includeJourney ? journeySummary : nil,
             passportSummary: includePassport ? passportSummary : nil
         )
@@ -187,7 +212,12 @@ struct CardioAtlasShareView: View {
             .environment(\.dynamicTypeSize, dynamicTypeSize))
         renderer.proposedSize = ProposedViewSize(width: 400, height: nil)
         renderer.scale = max(2, displayScale)
-        shareImage = renderer.uiImage
+        guard !Task.isCancelled, renderID == expectedID else { return }
+        if let image = renderer.uiImage {
+            shareImage = image
+        } else {
+            imageUnavailable = true
+        }
         isRendering = false
         snapshotter = nil
     }
@@ -213,12 +243,41 @@ enum CardioAtlasShareStyle: String, CaseIterable, Identifiable {
     }
 }
 
+enum CardioAtlasShareLocationStatus: Equatable {
+    case available
+    case missing
+    case excluded
+    case trimmed
+
+    static func resolve(
+        source: WorkoutLocationPayload,
+        published: WorkoutLocationPayload,
+        showPlace: Bool,
+        trimEnds: Bool
+    ) -> Self {
+        if source.route.isEmpty, source.place == nil { return .missing }
+        if !showPlace { return .excluded }
+        if trimEnds, !source.route.isEmpty, published.route.isEmpty { return .trimmed }
+        return .available
+    }
+
+    var message: String? {
+        switch self {
+        case .available: nil
+        case .missing: String(localized: "Location not recorded")
+        case .excluded: String(localized: "Location excluded")
+        case .trimmed: String(localized: "Route hidden by endpoint trimming")
+        }
+    }
+}
+
 struct CardioAtlasShareCard: View {
     let session: CardioAtlasSession
     let location: WorkoutLocationPayload
     let style: CardioAtlasShareStyle
     let mapImage: UIImage?
     let snapshotUnavailable: Bool
+    let locationStatus: CardioAtlasShareLocationStatus
     let journeySummary: String?
     let passportSummary: String?
 
@@ -272,8 +331,8 @@ struct CardioAtlasShareCard: View {
                     .foregroundStyle(DS.Color.textSecondary)
                     .frame(maxWidth: .infinity, minHeight: 100)
                     .background(DS.Color.surfacePrimary, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
-            } else if location.route.isEmpty, location.place == nil {
-                Text("Location excluded")
+            } else if let message = locationStatus.message {
+                Text(message)
                     .font(.caption)
                     .foregroundStyle(DS.Color.textSecondary)
                     .frame(maxWidth: .infinity, minHeight: 100)
@@ -284,6 +343,11 @@ struct CardioAtlasShareCard: View {
                     .font(.caption2)
                     .foregroundStyle(DS.Color.textSecondary)
                     .frame(maxWidth: .infinity, alignment: .trailing)
+            }
+            if (mapImage != nil || style == .signature), let message = locationStatus.message {
+                Text(message)
+                    .font(.caption)
+                    .foregroundStyle(DS.Color.textSecondary)
             }
 
             HStack(alignment: .firstTextBaseline) {
@@ -337,7 +401,9 @@ struct CardioAtlasShareCard: View {
                     for segment in segments where segment.count > 1 {
                         var path = Path()
                         for (index, coordinate) in segment.enumerated() {
-                            let x = (coordinate.longitude - region.center.longitude) / region.span.longitudeDelta + 0.5
+                            let x = CardioAtlasRouteGeometry.longitudeDelta(
+                                from: region.center.longitude, to: coordinate.longitude
+                            ) / region.span.longitudeDelta + 0.5
                             let y = 0.5 - (coordinate.latitude - region.center.latitude) / region.span.latitudeDelta
                             let point = CGPoint(x: x * size.width, y: y * size.height)
                             if index == 0 { path.move(to: point) } else { path.addLine(to: point) }
@@ -370,7 +436,7 @@ struct CardioAtlasPaceSegments {
             let start = CLLocation(latitude: previous.latitude, longitude: previous.longitude)
             let end = CLLocation(latitude: current.latitude, longitude: current.longitude)
             let distance = start.distance(from: end)
-            guard distance >= max(1, duration * 0.25), distance / duration <= 15 else { continue }
+            guard distance >= max(1, duration * 0.25), distance / duration <= 50 else { continue }
             result.append(Self(start: start.coordinate, end: end.coordinate, metersPerSecond: distance / duration))
         }
         return result
@@ -387,18 +453,20 @@ private enum CardioAtlasSnapshotDrawing {
     ) -> UIImage {
         let size = snapshot.image.size
         let renderer = UIGraphicsImageRenderer(size: size)
-        let paceSegments = CardioAtlasPaceSegments.from(location.route)
-        let speeds = paceSegments.map(\.metersPerSecond).sorted()
+        let paceSegments = pace ? CardioAtlasPaceSegments.from(location.route) : []
+        let speedRange = paceSegments.reduce((minimum: Double.infinity, maximum: 0.0)) { bounds, segment in
+            (min(bounds.minimum, segment.metersPerSecond), max(bounds.maximum, segment.metersPerSecond))
+        }
         return renderer.image { context in
             snapshot.image.draw(at: .zero)
             let graphics = context.cgContext
             graphics.setLineCap(.round)
             graphics.setLineJoin(.round)
             graphics.setLineWidth(9)
-            if pace, !speeds.isEmpty {
+            if pace, !paceSegments.isEmpty {
                 for segment in paceSegments {
-                    let fraction = (segment.metersPerSecond - (speeds.first ?? 0))
-                        / max(0.1, (speeds.last ?? 0) - (speeds.first ?? 0))
+                    let fraction = (segment.metersPerSecond - speedRange.minimum)
+                        / max(0.1, speedRange.maximum - speedRange.minimum)
                     graphics.setStrokeColor((fraction < 0.5 ? accent : UIColor(DS.Color.activity)).cgColor)
                     graphics.move(to: snapshot.point(for: segment.start))
                     graphics.addLine(to: snapshot.point(for: segment.end))

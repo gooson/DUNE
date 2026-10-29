@@ -19,7 +19,11 @@ struct CardioAtlasSection: View {
     @State private var routeUnavailable = false
     @State private var historyUnavailable = false
     @State private var showPlacePicker = false
-    @State private var saveError = false
+    @State private var displayLocation = WorkoutLocationPayload()
+    @State private var preparedProgress: CardioAtlasProgress?
+    @State private var mapRevision = UUID()
+    @State private var isPreparingLocation = true
+    @State private var isLoadingRoute = false
 
     init(session: CardioAtlasSession, localRecordID: UUID? = nil, healthKitWorkoutID: String? = nil) {
         self.session = session
@@ -37,22 +41,50 @@ struct CardioAtlasSection: View {
         )
     }
 
-    private var location: WorkoutLocationPayload {
+    private func prepareLocation() {
         let saved = locationRecords.first?.payload
-        return WorkoutLocationPayload(
+        let next = WorkoutLocationPayload(
             isIndoor: saved?.isIndoor ?? session.isIndoor,
             route: saved?.route.isEmpty == false ? (saved?.route ?? []) : healthKitRoute,
             place: saved?.place
         )
+        if next != displayLocation {
+            displayLocation = next
+            mapRevision = UUID()
+        }
+        isPreparingLocation = false
     }
 
-    private var progress: CardioAtlasProgress? {
-        CardioAtlasProgress.calculate(
+    private func prepareProgress() {
+        preparedProgress = CardioAtlasProgress.calculate(
             sessions: CardioAtlasHistory.sessions(records: records, workouts: workouts, current: session),
             currentSessionID: session.id,
             distanceGoalMeters: distanceGoal,
             durationGoalSeconds: durationGoal
         )
+    }
+
+    private func prepareProgressGoal() {
+        preparedProgress = preparedProgress?.updatingJourneyGoal(
+            distanceMeters: distanceGoal, durationSeconds: durationGoal
+        )
+    }
+
+    // Cheap scalar projections observe edits as well as insertion/deletion without repeatedly
+    // sorting history or decoding thousands of coordinates during unrelated body updates.
+    private var historyInputs: [CardioAtlasRecordRevision] {
+        records.map { record in
+            CardioAtlasRecordRevision(
+                id: record.id, date: record.date.timeIntervalSinceReferenceDate.isFinite ? record.date : .distantPast,
+                type: record.exerciseType, definitionID: record.exerciseDefinitionID,
+                duration: record.duration.isFinite ? record.duration : 0,
+                distance: record.distance.flatMap { $0.isFinite ? $0 : nil }, healthKitID: record.healthKitWorkoutID
+            )
+        }
+    }
+
+    private var locationInputs: [CardioAtlasLocationRevision] {
+        locationRecords.map { CardioAtlasLocationRevision(id: $0.id, updatedAt: $0.updatedAt) }
     }
 
     var body: some View {
@@ -61,23 +93,19 @@ struct CardioAtlasSection: View {
                 HStack { heading; Spacer(); actions }
                 VStack(alignment: .leading, spacing: DS.Spacing.sm) { heading; actions }
             }
-            CardioAtlasMapView(location: location)
-                .id(location)
+            mapContent
             if isLoading {
                 ProgressView("Loading recorded history")
                     .font(.caption)
-            } else if routeUnavailable, location.route.isEmpty {
-                Text("Recorded route could not be loaded.")
-                    .font(.caption)
-                    .foregroundStyle(DS.Color.textSecondary)
+            } else if routeUnavailable, displayLocation.route.isEmpty {
                 Button("Try again") { Task { await loadHistory() } }
             }
-            if let place = location.place {
+            if let place = displayLocation.place {
                 Label(place.name, systemImage: "mappin.and.ellipse")
                     .font(.subheadline)
                     .accessibilityIdentifier("cardio-atlas-place-name")
             }
-            if let progress {
+            if let progress = preparedProgress, !isLoading {
                 progressLinks(progress)
             }
             Text(historyUnavailable
@@ -89,14 +117,29 @@ struct CardioAtlasSection: View {
         .padding(DS.Spacing.lg)
         .background(.thinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.lg))
         .accessibilityIdentifier("cardio-atlas-section")
+        .onChange(of: historyInputs, initial: true) { prepareProgress() }
+        .onChange(of: locationInputs, initial: true) { prepareLocation() }
+        .onChange(of: distanceGoal) { prepareProgressGoal() }
+        .onChange(of: durationGoal) { prepareProgressGoal() }
         .task(id: healthKitWorkoutID) { await loadHistory() }
         .sheet(isPresented: $showPlacePicker) {
-            CardioAtlasPlacePicker(initialPlace: location.place, onSave: savePlace)
+            CardioAtlasPlacePicker(initialPlace: displayLocation.place, onSave: savePlace)
         }
-        .alert("Could not save place", isPresented: $saveError) {
-            Button("OK", role: .cancel) { }
-        } message: {
-            Text("Please try again.")
+    }
+
+    @ViewBuilder
+    private var mapContent: some View {
+        if displayLocation.route.isEmpty && displayLocation.place == nil && (isPreparingLocation || isLoadingRoute) {
+            ProgressView("Loading recorded route")
+                .frame(maxWidth: .infinity).frame(height: 240)
+                .accessibilityIdentifier("cardio-atlas-map-loading")
+        } else if displayLocation.route.isEmpty && displayLocation.place == nil && routeUnavailable {
+            ContentUnavailableView("Recorded route could not be loaded.", systemImage: "map",
+                                   description: Text("Workout metrics are still available."))
+                .frame(height: 240)
+                .accessibilityIdentifier("cardio-atlas-map-error")
+        } else {
+            CardioAtlasMapView(location: displayLocation).id(mapRevision)
         }
     }
 
@@ -104,7 +147,7 @@ struct CardioAtlasSection: View {
         VStack(alignment: .leading, spacing: DS.Spacing.xs) {
             Label("Atlas", systemImage: "map")
                 .font(.title3.weight(.semibold))
-            if let indoor = location.isIndoor {
+            if let indoor = displayLocation.isIndoor {
                 Text(indoor ? String(localized: "Indoor") : String(localized: "Outdoor"))
                     .font(.caption)
                     .foregroundStyle(DS.Color.textSecondary)
@@ -121,9 +164,9 @@ struct CardioAtlasSection: View {
             NavigationLink {
                 CardioAtlasShareView(
                     session: session,
-                    location: location,
-                    journeySummary: progress.map { CardioAtlasFormatting.journey($0.journey) },
-                    passportSummary: progress.map { CardioAtlasFormatting.passport(count: $0.achievements.count) }
+                    location: displayLocation,
+                    journeySummary: isLoading ? nil : preparedProgress.map { CardioAtlasFormatting.journey($0.journey) },
+                    passportSummary: isLoading ? nil : preparedProgress.map { CardioAtlasFormatting.passport(count: $0.achievements.count) }
                 )
             } label: {
                 Label("Share", systemImage: "square.and.arrow.up")
@@ -142,8 +185,7 @@ struct CardioAtlasSection: View {
                     progress: progress,
                     distanceGoal: $distanceGoal,
                     durationGoal: $durationGoal,
-                    session: session,
-                    sessions: CardioAtlasHistory.sessions(records: records, workouts: workouts, current: session)
+                    activityType: session.activityType
                 )
             } label: {
                 VStack(alignment: .leading, spacing: DS.Spacing.sm) {
@@ -181,6 +223,7 @@ struct CardioAtlasSection: View {
         isLoading = true
         routeUnavailable = false
         historyUnavailable = false
+        isLoadingRoute = healthKitWorkoutID != nil && locationRecords.first?.payload?.route.isEmpty != false
         // Existing Activity history uses the same ten-year authorized window.
         async let loadedWorkouts = loadWorkouts()
         if let healthKitWorkoutID, locationRecords.first?.payload?.route.isEmpty != false {
@@ -193,10 +236,13 @@ struct CardioAtlasSection: View {
                 routeUnavailable = true
             }
         }
+        isLoadingRoute = false
+        prepareLocation()
         let result = await loadedWorkouts
         guard !Task.isCancelled else { return }
         workouts = result.workouts
         historyUnavailable = result.failed
+        prepareProgress()
         isLoading = false
     }
 
@@ -209,11 +255,12 @@ struct CardioAtlasSection: View {
     }
 
     @MainActor
-    private func savePlace(_ place: WorkoutPlace?) {
-        var updated = location
+    private func savePlace(_ place: WorkoutPlace?) -> Bool {
+        var updated = displayLocation
         updated.place = place
         let existing = locationRecords.first
-        let previous = existing?.payload
+        let previousData = existing?.payloadData
+        let previousUpdatedAt = existing?.updatedAt
         let record = existing ?? WorkoutLocationRecord(
             localRecordID: localRecordID, healthKitWorkoutID: healthKitWorkoutID, payload: updated
         )
@@ -221,11 +268,34 @@ struct CardioAtlasSection: View {
         record.payload = updated
         do {
             try modelContext.save()
+            prepareLocation()
+            return true
         } catch {
-            if existing == nil { modelContext.delete(record) } else { record.payload = previous }
-            saveError = true
+            if existing == nil {
+                modelContext.delete(record)
+            } else {
+                record.payloadData = previousData
+                if let previousUpdatedAt { record.updatedAt = previousUpdatedAt }
+            }
+            AppLogger.ui.error("Could not save workout place: \(error.localizedDescription)")
+            return false
         }
     }
+}
+
+private struct CardioAtlasRecordRevision: Equatable {
+    let id: UUID
+    let date: Date
+    let type: String
+    let definitionID: String?
+    let duration: TimeInterval
+    let distance: Double?
+    let healthKitID: String?
+}
+
+private struct CardioAtlasLocationRevision: Equatable {
+    let id: UUID
+    let updatedAt: Date
 }
 
 /// View-layer adapter centralizes the same local/HealthKit identity rules as Activity.
@@ -235,9 +305,11 @@ enum CardioAtlasHistory {
         let local = records.compactMap { record -> CardioAtlasSession? in
             // An imported detail may be opened by HK identity even when a local alias exists.
             guard record.healthKitWorkoutID != current.id else { return nil }
-            guard let type = WorkoutActivityType(rawValue: record.exerciseType)
+            let resolvedType = WorkoutActivityType(rawValue: record.exerciseType)
+                ?? record.exerciseDefinitionID.flatMap { WorkoutActivityType(rawValue: $0) }
                 ?? WorkoutActivityType.infer(from: record.exerciseDefinitionID ?? "")
-                ?? WorkoutActivityType.infer(from: record.exerciseType), type.isAtlasSupported else { return nil }
+                ?? WorkoutActivityType.infer(from: record.exerciseType)
+            guard let type = resolvedType, type.isAtlasSupported else { return nil }
             return CardioAtlasSession(
                 id: record.id.uuidString, activityType: type, date: record.date,
                 duration: record.duration, distanceMeters: record.distance.map { $0 * 1_000 }

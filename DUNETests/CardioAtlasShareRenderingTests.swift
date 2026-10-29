@@ -1,5 +1,6 @@
 import Foundation
 import SwiftUI
+import MapKit
 import Testing
 @testable import DUNE
 
@@ -7,6 +8,17 @@ import Testing
 @MainActor
 struct CardioAtlasShareRenderingTests {
     private let date = Date(timeIntervalSince1970: 1_700_000_000)
+
+    @Test("A short route crossing the date line keeps a local, valid map region")
+    func dateLineGeometry() {
+        let coordinates = [CLLocationCoordinate2D(latitude: 37, longitude: 179.999),
+                           CLLocationCoordinate2D(latitude: 37.001, longitude: -179.999)]
+        let region = CardioAtlasRouteGeometry.region(for: [coordinates], fallback: coordinates[0])
+        #expect(region.span.longitudeDelta < 0.01)
+        #expect(abs(region.center.longitude) > 179)
+        let delta = CardioAtlasRouteGeometry.longitudeDelta(from: region.center.longitude, to: coordinates[0].longitude)
+        #expect(abs(delta) < region.span.longitudeDelta / 2)
+    }
 
     @Test("Private Atlas and Signature cards render a positive-size image without a map snapshot")
     func privateCardsRender() throws {
@@ -17,11 +29,25 @@ struct CardioAtlasShareRenderingTests {
         let hidden = routeLocation.shareLocation(showPlace: false, trimDistanceMeters: 300)
         #expect(hidden.route.isEmpty)
         #expect(hidden.place == nil)
+        let excludedStatus = CardioAtlasShareLocationStatus.resolve(
+            source: routeLocation, published: hidden, showPlace: false, trimEnds: true
+        )
+        #expect(excludedStatus == .excluded)
+        let missingStatus = CardioAtlasShareLocationStatus.resolve(
+            source: WorkoutLocationPayload(), published: WorkoutLocationPayload(),
+            showPlace: false, trimEnds: true
+        )
+        #expect(missingStatus == .missing)
+        let trimmed = routeLocation.shareLocation(showPlace: true, trimDistanceMeters: 300)
+        let trimmedStatus = CardioAtlasShareLocationStatus.resolve(
+            source: routeLocation, published: trimmed, showPlace: true, trimEnds: true
+        )
+        #expect(trimmedStatus == .trimmed)
 
         for style in [CardioAtlasShareStyle.atlas, .signature] {
             let card = CardioAtlasShareCard(
                 session: session, location: hidden, style: style,
-                mapImage: nil, snapshotUnavailable: false,
+                mapImage: nil, snapshotUnavailable: false, locationStatus: .excluded,
                 journeySummary: nil, passportSummary: nil
             )
             let renderer = ImageRenderer(content: card.frame(width: 400))
@@ -47,18 +73,38 @@ struct CardioAtlasShareRenderingTests {
 
     @Test("One-hertz GPS samples remain eligible without bridging a pause")
     func oneHertzPace() {
-        let points = (0..<60).compactMap { index in
-            WorkoutRoutePoint(
-                latitude: 37.54 + Double(index < 30 ? index : index + 100) * 0.000025,
-                longitude: 127.04,
-                timestamp: date.addingTimeInterval(Double(index < 30 ? index : index + 180)),
-                startsNewSegment: index == 30
+        let points: [WorkoutRoutePoint] = (0..<60).compactMap { (index: Int) -> WorkoutRoutePoint? in
+            let latitude = 37.54 + Double(index < 30 ? index : index + 100) * 0.000025
+            let timestamp = date.addingTimeInterval(Double(index < 30 ? index : index + 180))
+            return WorkoutRoutePoint(
+                latitude: latitude, longitude: 127.04,
+                timestamp: timestamp, startsNewSegment: index == 30
             )
         }
         let pace = CardioAtlasPaceSegments.from(points)
         #expect(pace.count == 58)
-        #expect(pace.allSatisfy { $0.metersPerSecond > 0 && $0.metersPerSecond <= 15 })
-        #expect(!pace.contains { $0.start.latitude == points[29].latitude && $0.end.latitude == points[30].latitude })
+        let hasInvalidSpeed = pace.contains { $0.metersPerSecond <= 0 || $0.metersPerSecond > 50 }
+        #expect(!hasInvalidSpeed)
+        let beforePauseLatitude = points[29].latitude
+        let afterPauseLatitude = points[30].latitude
+        let containsBridge = pace.contains { segment in
+            segment.start.latitude == beforePauseLatitude && segment.end.latitude == afterPauseLatitude
+        }
+        #expect(!containsBridge)
+    }
+
+    @Test("Measured fast cycling interval is retained")
+    func fastCyclingInterval() throws {
+        let first = try #require(WorkoutRoutePoint(
+            latitude: 37.54, longitude: 127.04, timestamp: date
+        ))
+        let second = try #require(WorkoutRoutePoint(
+            latitude: 37.54025, longitude: 127.04, timestamp: date.addingTimeInterval(1)
+        ))
+        let pace = CardioAtlasPaceSegments.from([first, second])
+        #expect(pace.count == 1)
+        #expect(pace[0].metersPerSecond > 15)
+        #expect(pace[0].metersPerSecond < 50)
     }
 
     private var routeLocation: WorkoutLocationPayload {

@@ -39,21 +39,17 @@ struct CardioAtlasJourneyView: View {
     let progress: CardioAtlasProgress
     @Binding var distanceGoal: Double
     @Binding var durationGoal: Double
-    let session: CardioAtlasSession
-    let sessions: [CardioAtlasSession]
+    let activityType: WorkoutActivityType
     @Environment(\.appTheme) private var theme
 
     private var journey: CardioJourneyProgress {
-        CardioAtlasProgress.calculate(
-            sessions: sessions, currentSessionID: session.id,
-            distanceGoalMeters: distanceGoal, durationGoalSeconds: durationGoal
-        )?.journey ?? progress.journey
+        progress.updatingJourneyGoal(distanceMeters: distanceGoal, durationSeconds: durationGoal).journey
     }
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: DS.Spacing.xxl) {
-                Label(session.activityType.displayName, systemImage: session.activityType.iconName)
+                Label(activityType.displayName, systemImage: activityType.iconName)
                     .font(.title2.weight(.semibold))
                 Text(CardioAtlasFormatting.journey(journey))
                     .font(.largeTitle.weight(.bold).monospacedDigit())

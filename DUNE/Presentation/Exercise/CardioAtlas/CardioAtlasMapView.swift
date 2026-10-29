@@ -105,18 +105,28 @@ enum CardioAtlasRouteGeometry {
             return MKCoordinateRegion(center: fallback, latitudinalMeters: 800, longitudinalMeters: 800)
         }
         let latitudes = coordinates.map(\.latitude)
-        let longitudes = coordinates.map(\.longitude)
+        let referenceLongitude = coordinates.first?.longitude ?? fallback.longitude
+        let longitudes = coordinates.map {
+            referenceLongitude + longitudeDelta(from: referenceLongitude, to: $0.longitude)
+        }
         let minLat = latitudes.min() ?? fallback.latitude
         let maxLat = latitudes.max() ?? fallback.latitude
         let minLon = longitudes.min() ?? fallback.longitude
         let maxLon = longitudes.max() ?? fallback.longitude
         return MKCoordinateRegion(
-            center: CLLocationCoordinate2D(latitude: (minLat + maxLat) / 2, longitude: (minLon + maxLon) / 2),
+            center: CLLocationCoordinate2D(
+                latitude: (minLat + maxLat) / 2,
+                longitude: longitudeDelta(from: 0, to: (minLon + maxLon) / 2)
+            ),
             span: MKCoordinateSpan(
-                latitudeDelta: max(0.006, (maxLat - minLat) * 1.35),
-                longitudeDelta: max(0.006, (maxLon - minLon) * 1.35)
+                latitudeDelta: min(180, max(0.006, (maxLat - minLat) * 1.35)),
+                longitudeDelta: min(360, max(0.006, (maxLon - minLon) * 1.35))
             )
         )
+    }
+
+    static func longitudeDelta(from origin: Double, to destination: Double) -> Double {
+        (destination - origin + 540).truncatingRemainder(dividingBy: 360) - 180
     }
 }
 

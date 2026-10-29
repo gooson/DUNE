@@ -6,6 +6,30 @@ import Testing
 struct CardioAtlasProgressTests {
     private let day = Date(timeIntervalSince1970: 1_700_000_000)
 
+    @Test("Corrupt finite extremes cannot overflow totals or duration formatting")
+    func finiteExtremes() throws {
+        let invalid = session("huge", .running, day: 0, duration: .greatestFiniteMagnitude, distance: 1_000)
+        #expect(CardioAtlasProgress.calculate(sessions: [invalid], currentSessionID: invalid.id) == nil)
+        let valid = session("actual-time", .stairClimbing, day: 0, duration: 600, distance: .greatestFiniteMagnitude)
+        let progress = try #require(CardioAtlasProgress.calculate(sessions: [valid], currentSessionID: valid.id,
+                                                               durationGoalSeconds: .greatestFiniteMagnitude))
+        #expect(progress.journey.kind == .durationSeconds)
+        #expect(progress.journey.total == 600)
+        #expect(progress.journey.target == 10_800)
+    }
+
+    @Test("Editing a goal preserves actual totals and earned achievements")
+    func goalEdit() throws {
+        let recorded = session("recorded", .running, day: 0, duration: 1_800, distance: 5_000)
+        let original = try #require(CardioAtlasProgress.calculate(sessions: [recorded], currentSessionID: recorded.id))
+        let changed = original.updatingJourneyGoal(distanceMeters: 10_000, durationSeconds: 600)
+        #expect(changed.journey.target == 10_000)
+        #expect(changed.journey.total == original.journey.total)
+        #expect(changed.achievements == original.achievements)
+        #expect(changed.sessionCount == original.sessionCount)
+        #expect(original.updatingJourneyGoal(distanceMeters: .nan, durationSeconds: 600).journey.target == 20_000)
+    }
+
     @Test("Measured distance drives the journey across indoor and outdoor sessions")
     func distanceJourney() throws {
         let sessions = [

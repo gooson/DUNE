@@ -74,6 +74,20 @@ struct CardioAtlasProgress: Sendable, Equatable {
     let sessionCount: Int
     let activeDaysInCurrentMonth: Int
 
+    /// Goal edits change only a target; recorded totals and earned awards do not need recalculation.
+    func updatingJourneyGoal(distanceMeters: Double, durationSeconds: Double) -> Self {
+        let distance = journey.kind == .distanceMeters
+        let target = Self.validGoal(distance ? distanceMeters : durationSeconds,
+                                    fallback: distance ? 20_000 : 10_800)
+        return Self(
+            journey: CardioJourneyProgress(kind: journey.kind, currentContribution: journey.currentContribution,
+                                          total: journey.total, target: target),
+            achievements: achievements, nextAchievements: nextAchievements,
+            earnedInCurrentSession: earnedInCurrentSession,
+            sessionCount: sessionCount, activeDaysInCurrentMonth: activeDaysInCurrentMonth
+        )
+    }
+
     static func calculate(
         sessions: [CardioAtlasSession],
         currentSessionID: String,
@@ -175,7 +189,7 @@ struct CardioAtlasProgress: Sendable, Equatable {
     }
 
     private static func validGoal(_ value: Double, fallback: Double) -> Double {
-        value.isFinite && value > 0 ? value : fallback
+        value.isFinite && value > 0 && value <= 1_000_000_000_000 ? value : fallback
     }
 
     private static func achievementID(
@@ -193,8 +207,8 @@ struct CardioAtlasProgress: Sendable, Equatable {
             return lhs.activityType.rawValue < rhs.activityType.rawValue
         }
         if lhs.duration != rhs.duration { return lhs.duration < rhs.duration }
-        if (lhs.distanceMeters ?? 0) != (rhs.distanceMeters ?? 0) {
-            return (lhs.distanceMeters ?? 0) < (rhs.distanceMeters ?? 0)
+        if (lhs.validDistanceMeters ?? 0) != (rhs.validDistanceMeters ?? 0) {
+            return (lhs.validDistanceMeters ?? 0) < (rhs.validDistanceMeters ?? 0)
         }
         return (lhs.isIndoor == true ? 1 : 0) < (rhs.isIndoor == true ? 1 : 0)
     }
@@ -202,11 +216,13 @@ struct CardioAtlasProgress: Sendable, Equatable {
 
 private extension CardioAtlasSession {
     var isValid: Bool {
-        !id.isEmpty && date.timeIntervalSinceReferenceDate.isFinite && duration.isFinite && duration > 0
+        !id.isEmpty && date.timeIntervalSinceReferenceDate.isFinite
+            && duration.isFinite && duration > 0 && duration <= 31_622_400
     }
 
     var validDistanceMeters: Double? {
-        guard let distanceMeters, distanceMeters.isFinite, distanceMeters > 0 else { return nil }
+        guard let distanceMeters, distanceMeters.isFinite,
+              distanceMeters > 0, distanceMeters <= 100_000_000 else { return nil }
         return distanceMeters
     }
 }

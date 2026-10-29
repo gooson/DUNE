@@ -4,7 +4,7 @@ import CoreLocation
 
 struct CardioAtlasPlacePicker: View {
     let initialPlace: WorkoutPlace?
-    let onSave: (WorkoutPlace?) -> Void
+    let onSave: (WorkoutPlace?) -> Bool
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.appTheme) private var theme
@@ -16,6 +16,7 @@ struct CardioAtlasPlacePicker: View {
     @State private var activeSearch: MKLocalSearch?
     @State private var isSearching = false
     @State private var searchMessage: String?
+    @State private var showSaveError = false
 
     var body: some View {
         NavigationStack {
@@ -112,13 +113,21 @@ struct CardioAtlasPlacePicker: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
-                        onSave(selectedPlace)
-                        dismiss()
+                        if onSave(selectedPlace) {
+                            dismiss()
+                        } else {
+                            showSaveError = true
+                        }
                     }
                     .accessibilityIdentifier("cardio-atlas-place-save")
                 }
             }
             .onAppear { selectedPlace = initialPlace }
+            .alert("Could not save place", isPresented: $showSaveError) {
+                Button("OK", role: .cancel) { }
+            } message: {
+                Text("Please try again.")
+            }
             .onDisappear {
                 searchTask?.cancel()
                 activeSearch?.cancel()
@@ -222,5 +231,5 @@ private final class CardioAtlasOneShotLocator: NSObject, ObservableObject, @prec
 }
 
 #Preview {
-    CardioAtlasPlacePicker(initialPlace: nil) { _ in }
+    CardioAtlasPlacePicker(initialPlace: nil) { _ in true }
 }
