@@ -165,3 +165,5 @@ Life Flow를 실제 앱에 반영했다. [검증 보고](../../reviews/2026-10-2
 Cardio Atlas 네이티브 구현의 [2026-10-29 실제54장과 검증 범위](../full-redesign-map/review/cardio-atlas-2026-10-29/index.html)를 별도 actual 갤러리에 연결했다. 위 브라우저 시안은 보존하며 native PNG와 구분한다. iPhone·iPad·Duo 접힘·펼침의 관련 UI 및 변경 후 장소 검색 화면 검증을 마쳤다.
 
 - 2026-10-30: L03 습관 템플릿의 검토된 밝음/어두움 브라우저 시안을 보존했다. 네이티브 구현은 화면별 별도 PR로 진행하며 시안 JPEG와 새 앱 캡처를 구분한다.
+
+L03 네이티브 구현은 기존20개 템플릿의 선택·자동 입력을 유지한다. [새 실제 네 기기 캡처](../full-redesign-map/review/habit-template-2026-10-30/index.html)와 [검증 기록](../../reviews/2026-10-30-l03-habit-template-redesign.md)을 따른다. iPhone 기본/접근성XXXL, iPad 기본, Duo 접힘·펼침 UI가 통과했다. 실제 이미지는 밝음·영어이며 앞의 브라우저 시안과 구분한다.

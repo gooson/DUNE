@@ -34,15 +34,17 @@ scripts/plan-ui-tests.py --base origin/main 판정과 호출부 조사 후 scrip
 - 실행 환경 차단 시 리뷰/문서는 계속하되 UI·캡처 게이트를 통과시키지 않는다.
 - 기존 da96 시안은 보존하며159개 전체 변경을 이 PR에 섞지 않는다.
 
-## Phase Tracking
+## Phase Tracking (최종 검증 시점)
 
 - 0 Init: completed (clean native worktree, codex branch, origin/main base)
 - 1 Plan: completed (plan file + 3 research results)
-- 2 Work: completed (4f052fa7, build, iPhone2/iPad1)
-- 2.5 UI: in_progress (Duo bootstrap recovery + Mac unlock pending)
-- 3 Review: preliminary code review completed; final UI gate pending
-- 3.5 Quality: static + iPhone/iPad visual completed; Duo pending
-- 4 Resolve: pending
-- 5 Compound: prepared (partial-verification solution doc)
-- 5.5 Pre-Ship: pending
-- 6 Ship: draft PR858 published; merge gate incomplete
+- 2 Work: completed (4f052fa7, standard build)
+- 2.5 UI: completed (iPhone 2/2, iPad 1/1, Duo closed 1/1, Duo open 1/1; four fresh L03 captures)
+- 3 Review: completed (five applicable general reviewers; unchanged implementation reviewed at 4f052fa7)
+- 3.5 Quality: completed (SwiftUI static, Apple UX actual four-device visual review)
+- 4 Resolve: completed (collector portal-link P2 fixed and rechecked; no introduced P1/P2/P3)
+- 5 Compound: completed (architecture solution and verification report)
+- 5.5 Pre-Ship: final documentation commit/push and clean-state confirmation follow this snapshot
+- 6 Ship: reuse PR858; final merge outcome is recorded by the PR state
+
+현재 구현의 앱·테스트 소스는4f052fa7 이후 동일하다. 실제 캡처 출처 revision은 해당 실행의 HEAD를 기록한다. 밝은 테마·영어의 실제 캡처와 iPhone 접근성XXXL 실행이 검증 범위이며 모든 테마/언어 UI 실행을 뜻하지 않는다.
