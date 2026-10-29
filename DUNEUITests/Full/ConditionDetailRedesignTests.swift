@@ -117,9 +117,12 @@ final class ConditionDetailRedesignTests: SeededUITestBaseCase {
         let previous = app.buttons["condition-period-previous"].firstMatch
         let next = app.buttons["condition-period-next"].firstMatch
         let trend = app.buttons["score-chart-trend-toggle"].firstMatch
+        let coordinateRoundingTolerance: CGFloat = 0.000_001
         for button in [previous, next, trend] {
-            XCTAssertGreaterThanOrEqual(button.frame.height, 44, "The full control height must be tappable")
-            XCTAssertGreaterThanOrEqual(button.frame.width, 44, "The full control width must be tappable")
+            XCTAssertGreaterThanOrEqual(button.frame.height + coordinateRoundingTolerance, 44,
+                                        "The full control height must be tappable")
+            XCTAssertGreaterThanOrEqual(button.frame.width + coordinateRoundingTolerance, 44,
+                                        "The full control width must be tappable")
         }
         let range = app.staticTexts["score-detail-chart-visible-range"].firstMatch
         let initial = range.label
