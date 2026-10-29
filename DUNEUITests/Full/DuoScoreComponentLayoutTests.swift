@@ -220,7 +220,9 @@ final class DuoScoreComponentLayoutTests: SeededUITestBaseCase {
         guard scroll.waitForExistence(timeout: 8) else { return false }
         let isCondition = scroll.identifier == AXID.conditionScoreDetailScreen
         for _ in 0..<(isCondition ? 32 : 20) {
-            if card.exists && card.staticTexts.firstMatch.exists { return true }
+            if card.exists && card.staticTexts.firstMatch.exists,
+               !isCondition || scroll.frame.intersection(app.windows.firstMatch.frame)
+                    .insetBy(dx: 4, dy: 4).intersects(card.frame) { return true }
             if isCondition {
                 // Keep the drag outside the nested chart plots, which consume center gestures.
                 scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.05, dy: 0.75))
@@ -232,6 +234,8 @@ final class DuoScoreComponentLayoutTests: SeededUITestBaseCase {
             }
         }
         return card.exists && card.staticTexts.firstMatch.exists
+            && (!isCondition || scroll.frame.intersection(app.windows.firstMatch.frame)
+                .insetBy(dx: 4, dy: 4).intersects(card.frame))
     }
 
     private func revealWhole(_ element: XCUIElement, in scroll: XCUIElement) -> Bool {
