@@ -51,7 +51,7 @@ Repo·Solution·Apple UX 조사3개를 실행했다. 관련 해결책은2026-02-
 
 ## Phase Tracking
 
-0 Init completed; 1 Plan completed; 2 Work completed; 2.5 final UI completed (32 unit /15 unique device UI); 3 Review completed; 3.5 Quality completed; 4 Resolve completed; 5 Compound completed; 5.5 Pre-Ship evidence completed / commit-CI pending; 6 Ship pending.
+0 Init completed; 1 Plan completed; 2 Work completed; 2.5 final UI completed (32 unit /15 unique device UI); 3 Review completed; 3.5 Quality completed; 4 Resolve completed; 5 Compound completed; 5.5 Pre-Ship completed; 6 Ship completed (PR862,9fa10e46,cleanup/standardregen/buildPASS).
 
 Work 사전 검토에서 AX 숫자의 VoiceOver 레이블과 시간대4열·계산행의 큰 글씨 배치를 보완했다. TimeOfDayCard adaptive 옵션은 T04만 사용하며 다른 소비자의 기본 표현은 보존한다. 전체 iOS 단위 실행은 변경하지 않은 live AI 평가에서 실패/정체되어 owner idle deadline600초로 종료됐다. 관련 Condition 단위 통과는 아직 확인하지 않았으며, 선택 실행용 공통 도구 PR을 별도 작업 폴더에서 준비한다.
 
@@ -80,3 +80,5 @@ Resolve後두suite단위30개가실제통과했다. 신규edge UI첫실행은44p
 abe최종iPhone7/7와Duo펼침5/6가통과했다. 실패한legacyCondition구성검사는HRV값y752.2–817.9가669ptviewport아래에남았다. 값높이65.7은화면보다작고카드가y599에부분노출된PNG/AX로배치잘림이아닌탐색수렴문제임을확인했다. revealCardContent가AX존재만보고coarse스크롤을건너뛴조건을Condition에서만실제viewport/card교차확인으로고쳤다. 반복한도/전체frame검증/다른화면경로는유지하며실패한1개만원인수정후1회재검증한다. batch5pass/1fail은summary/result/log와실패PNG/AX에보존하며6통과로바꾸지않는다. 이미통과한Hero/AX/기간/edge/하위차트의새원본은개별testPassed및원래batch실패1출처를유지해수집했다.
 
 최종정리:구성검사85.547초통과,접힘1/iPad1통과. `final-validation.json`에서testcase합집합15,32단위0fail0skip,새4기기이미지해시를확인했다. 앱ABE와UI헬퍼EE사이앱/단위코드diff없음. 가상완료나기존PNG의새증거전용없이각출처와원래실패기록을유지했다. Compound해결책을architecture/2026-10-30-condition-detail-redesign.md에저장했다.
+
+Ship완료기록:PR862를검증된HEADbd5605b7로merge하여9fa10e46이생성됐다. 관리worktree만origin/main으로detach하고전용branch의local/remote를삭제했다. 사용자primarycheckout은변경하지않았다. buildcache정리후표준regen/genericiOSbuild가통과했고작업tree는깨끗했다.

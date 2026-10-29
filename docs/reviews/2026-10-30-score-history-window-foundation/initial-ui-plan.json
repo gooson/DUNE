@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "status": "planned-not-executed",
+  "platforms": {
+    "ios": {
+      "mode": "skip",
+      "selectors": []
+    },
+    "watch": {
+      "mode": "skip",
+      "selectors": []
+    }
+  },
+  "changes": [],
+  "commands": [],
+  "additional_validation": [],
+  "review_required": [
+    "Confirm changed symbols have no consumers outside the selected features; otherwise use full.",
+    "Confirm new behavior has tests; selection does not establish coverage.",
+    "Preserve seeded gesture/layout and device-specific validation requirements.",
+    "Full plans exclude manual HealthKit permission tests; permission changes need device evidence.",
+    "Record passed tests and skipped tests; no execution or zero tests is not a passed gate."
+  ],
+  "base": "origin/main",
+  "merge_base": "9fa10e4633930801ef5060b6ff6b3acb4abf3707",
+  "head": "9fa10e4633930801ef5060b6ff6b3acb4abf3707"
+}

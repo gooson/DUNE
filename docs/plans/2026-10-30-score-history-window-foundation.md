@@ -47,7 +47,7 @@ T04의 실제 구현 [PR862](https://github.com/gooson/DUNE/pull/862)가 `9fa10e
 
 1. 기존 함수 body와 호출자를 대조하고 동일 계산을 이동한다. T04 진입점은 유지한다.
 2. 표준 project regen/build와 관련 Condition VM 단위를 실행한다. 새 구현을 되풀이하는 테스트는 추가하지 않고 기존 의미 있는 경계 테스트를 유지한다.
-3. 최종 UI 판정기를 재실행하고 iOS의 공통 smoke와 T04 기간/통계 테스트를 선택해 확인한다. full 판정이더라도 사용자 명시 요청이 없어 full 실행은 하지 않고 근거·미실행 범위를 기록한다.
+3. 최종 UI 판정기를 재실행하고 iOS의 기본 foreground smoke와 T04 기간/통계 테스트를 선택해 확인한다. full 판정이더라도 사용자 명시 요청이 없어 full 실행은 하지 않고 근거·미실행 범위를 기록한다.
 4. 필수 일반 리뷰5관점과 필요한 품질 검토, Resolve, Compound, Pre-Ship, 별도 PR/Ship을 수행한다.
 
 ## Edge Cases / Verification
@@ -67,4 +67,8 @@ T04의 실제 구현 [PR862](https://github.com/gooson/DUNE/pull/862)가 `9fa10e
 
 ## Phase Ledger
 
-Init complete; Plan in progress; Work/UI/Review/Quality/Resolve/Compound/Pre-Ship/Ship pending. 증거는 `.codex-checks/score-history-window/`에 기록한다. T04는32단위·15기기별 UI·CI·리뷰·Ship·정리·regen 완료이며 이 PR의 검증으로 재분류하지 않는다.
+Init/Plan/Work/UI/Review/Quality/Resolve/Compound complete; Pre-Ship review complete; Ship commit/CI in progress. 증거는 `.codex-checks/score-history-window/`에 기록한다. T04는32단위·15기기별 UI·CI·리뷰·Ship·정리·regen 완료이며 이 PR의 검증으로 재분류하지 않는다.
+
+최종검증:source2ecfa3ff에서generic build·기존단위26개·정상선택UI2개통과. 원래주간차트전제before-tap실패와300초resultidle는별도보존했다. 소스변경없이scope전문가승인기본foreground로대체하고DesignCapture조건에서기간검사를재확인했다. 전체/full은미검증이며관련코드밖의실패를수정하지않았다. 일반5리뷰·AppQuality신규지적0개.
+
+최종PRreviewer도소스·문서·증거의도입된P1/P2/P3없음으로확인했다. 원래before-detail검사실패는재현된기존버그로단정하지않고범위밖의fixture조건실패로보존했다.

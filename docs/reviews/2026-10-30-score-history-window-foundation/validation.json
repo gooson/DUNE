@@ -1,0 +1,34 @@
+{
+  "source_revision": "2ecfa3ff",
+  "base": "9fa10e46",
+  "unit": {
+    "passed": 26,
+    "failed": 0,
+    "skipped": 0,
+    "receipt": "unit-summary.json"
+  },
+  "ui": {
+    "passed": 2,
+    "failed": 0,
+    "skipped": 0,
+    "receipt": "ui-result.json",
+    "selectors": [
+      "DUNEUITests/DashboardSmokeTests/testAppLaunchesOnDashboard",
+      "DUNEUITests/ConditionDetailRedesignTests/testPeriodWindowAndTrendControlsUpdateVisibleReadback"
+    ],
+    "device": "7AA4DF0B-171B-427C-B9C5-BC2C116AEF30",
+    "test_plan": "DUNEUITests-DesignCapture"
+  },
+  "full": "Not run: no explicit userfullrequest; automated fallback preserved with callgraph/platformexpert narrowing.",
+  "original_ui": "Weekly-only pre-detail assertion failed and resultcleanup idle300; original outcome not promoted tosuccess.",
+  "maps": "No visible change; no new actual/theme capture claimed.",
+  "review": {
+    "general_roles": 5,
+    "open_p1": 0,
+    "open_p2": 0,
+    "open_p3": 0,
+    "app_quality": "PASS",
+    "swiftui_appleux": "N/A no View/layout/interaction/newAPI",
+    "perf_optimizer": "N/A unchangedtwo pure bodies"
+  }
+}
