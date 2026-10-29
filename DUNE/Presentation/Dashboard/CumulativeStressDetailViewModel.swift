@@ -1,110 +1,141 @@
 import Foundation
 import Observation
-import OSLog
 
-/// ViewModel for CumulativeStressDetailView — loads period-based stress scores
-/// from persisted HourlyScoreSnapshot data.
+/// Displays recorded stress history without recalculating or backfilling scores.
 @Observable
 @MainActor
 final class CumulativeStressDetailViewModel {
+    typealias HistoryLoader = @MainActor (Date, Date, Calendar) async throws -> [(date: Date, score: Double)]
+
     var selectedPeriod: TimePeriod = .month {
         didSet {
-            if oldValue != selectedPeriod {
-                resetScrollPosition()
-                triggerReload()
-            }
+            if oldValue != selectedPeriod { triggerReload() }
         }
     }
-    var scrollPosition: Date = .now
-    var showTrendLine: Bool = false {
+    var scrollPosition: Date = .now {
+        didSet { recalculateVisibleState() }
+    }
+    var showTrendLine = false {
         didSet { recalculateTrendLine() }
     }
-    var chartData: [ChartDataPoint] = []
-    var summaryStats: MetricSummary?
-    var highlights: [Highlight] = []
-    var isLoading = false
-
+    private(set) var chartData: [ChartDataPoint] = []
+    private(set) var summaryStats: MetricSummary?
+    private(set) var highlights: [Highlight] = []
+    private(set) var isLoading = false
+    private(set) var loadError: String?
+    private(set) var visibleRangeLabel = ""
+    private(set) var visibleChartPointCount = 0
     private(set) var trendLineData: [ChartDataPoint]?
     private(set) var scrollDomain: ClosedRange<Date> = Date.now...Date.now
     private(set) var currentScore: CumulativeStressScore?
 
+    private var summarySourceData: [ChartDataPoint] = []
+    private var visibleChartData: [ChartDataPoint] = []
+    private var latestWindowStart: Date = .now
     private let scoreRefreshService: ScoreRefreshService?
     private let nowProvider: @Sendable () -> Date
+    private let calendar: Calendar
+    private let rangeFormatter: DateIntervalFormatter
+    private let historyLoader: HistoryLoader?
     private var reloadRequestID = 0
+    private var reloadTask: Task<Void, Never>?
 
     init(
         scoreRefreshService: ScoreRefreshService? = nil,
-        nowProvider: @escaping @Sendable () -> Date = Date.init
+        nowProvider: @escaping @Sendable () -> Date = Date.init,
+        calendar: Calendar = .current,
+        historyLoader: HistoryLoader? = nil
     ) {
         self.scoreRefreshService = scoreRefreshService
         self.nowProvider = nowProvider
-        recalculateScrollDomain()
+        self.calendar = calendar
+        self.historyLoader = historyLoader
+        let formatter = DateIntervalFormatter()
+        formatter.calendar = calendar
+        formatter.timeZone = calendar.timeZone
+        formatter.locale = .current
+        self.rangeFormatter = formatter
+        resetScrollPosition()
     }
 
     func configure(stressScore: CumulativeStressScore) {
-        self.currentScore = stressScore
+        currentScore = stressScore
         resetScrollPosition()
-        recalculateScrollDomain()
     }
 
     func loadData() async {
+        reloadTask?.cancel()
         let requestID = beginReloadRequest()
-        isLoading = true
-        highlights = []
-        defer { finishReloadRequest(requestID) }
-
         await loadSnapshotData(requestID: requestID)
-        guard isCurrentReloadRequest(requestID) else { return }
-        buildHighlights()
-        recalculateTrendLine()
     }
 
-    // MARK: - Scroll Position
+    // MARK: - Visible Window
 
-    var visibleRangeLabel: String {
-        selectedPeriod.visibleRangeLabel(from: scrollPosition)
+    var canStepBackward: Bool {
+        scrollPosition.addingTimeInterval(-selectedPeriod.visibleDomainSeconds) >= scrollDomain.lowerBound
+    }
+
+    var canStepForward: Bool {
+        scrollPosition.addingTimeInterval(selectedPeriod.visibleDomainSeconds) <= latestWindowStart
+    }
+
+    func stepVisiblePeriod(by offset: Int) {
+        guard (offset == -1 && canStepBackward) || (offset == 1 && canStepForward) else { return }
+        scrollPosition = scrollPosition.addingTimeInterval(Double(offset) * selectedPeriod.visibleDomainSeconds)
     }
 
     private func resetScrollPosition() {
-        // Include today's complete chart bucket, whose mark is centered within the day.
-        let upperBound = selectedPeriod.scrollDomainUpperBound(referenceDate: nowProvider())
-        scrollPosition = upperBound.addingTimeInterval(-selectedPeriod.visibleDomainSeconds)
+        let referenceDate = nowProvider()
+        let window = ScoreDetailHistory.window(
+            for: selectedPeriod, referenceDate: referenceDate, calendar: calendar
+        )
+        latestWindowStart = window.latestStart
+        scrollDomain = window.domain
+        scrollPosition = window.latestStart
     }
 
-    // MARK: - Extended Range
-
-    private var extendedRange: (start: Date, end: Date) {
-        let now = nowProvider()
-        let currentRange = selectedPeriod.dateRange(offset: 0, referenceDate: now)
-        let bufferRange = selectedPeriod.dateRange(offset: -selectedPeriod.scrollBufferPeriods, referenceDate: now)
-        return (start: bufferRange.start, end: currentRange.end)
-    }
-
-    private func recalculateScrollDomain() {
-        let range = extendedRange
-        let upperBound = selectedPeriod.scrollDomainUpperBound(referenceDate: range.end)
-        scrollDomain = range.start...max(range.end, upperBound)
+    private func recalculateVisibleState() {
+        let duration = selectedPeriod.visibleDomainSeconds
+        let end = scrollPosition.addingTimeInterval(duration)
+        rangeFormatter.dateTemplate = selectedPeriod == .day ? "MMMdE" : "yMMMd"
+        visibleRangeLabel = rangeFormatter.string(from: scrollPosition, to: end.addingTimeInterval(-1))
+        visibleChartData = chartData.filter { $0.date >= scrollPosition && $0.date < end }
+        visibleChartPointCount = visibleChartData.count
+        summaryStats = ScoreDetailHistory.summary(
+            from: summarySourceData, start: scrollPosition, duration: duration
+        )
+        let visibleSource = summarySourceData.filter { $0.date >= scrollPosition && $0.date < end }
+        highlights = HighlightBuilder.buildHighlights(
+            from: visibleSource,
+            highLabel: String(localized: "Most stressed"),
+            lowLabel: String(localized: "Least stressed")
+        )
+        recalculateTrendLine()
     }
 
     private func recalculateTrendLine() {
         guard showTrendLine else { trendLineData = nil; return }
+        // Prefilter half-open boundaries before calling the shared regression helper.
         trendLineData = MetricDetailViewModel.computeTrendLine(
-            from: chartData, period: selectedPeriod, scrollPosition: scrollPosition
+            from: visibleChartData, period: selectedPeriod, scrollPosition: scrollPosition
         )
     }
 
-    // MARK: - Private
-
-    private var reloadTask: Task<Void, Never>?
+    // MARK: - Loading
 
     private func triggerReload() {
-        reloadRequestID += 1
         reloadTask?.cancel()
-        reloadTask = Task { await loadData() }
+        let requestID = beginReloadRequest()
+        reloadTask = Task { await loadSnapshotData(requestID: requestID) }
     }
 
     private func beginReloadRequest() -> Int {
         reloadRequestID += 1
+        isLoading = true
+        loadError = nil
+        summarySourceData = []
+        chartData = []
+        resetScrollPosition()
         return reloadRequestID
     }
 
@@ -112,91 +143,57 @@ final class CumulativeStressDetailViewModel {
         requestID == reloadRequestID && !Task.isCancelled
     }
 
-    private func finishReloadRequest(_ requestID: Int) {
-        if requestID == reloadRequestID {
-            isLoading = false
-        }
-    }
-
-    /// Load stress scores from persisted HourlyScoreSnapshot data.
-    /// Aggregates hourly snapshots to daily averages for chart display.
     private func loadSnapshotData(requestID: Int) async {
-        guard let service = scoreRefreshService else { return }
-
-        let range = extendedRange
-        let calendar = Calendar.current
-
-        // Fetch snapshots from ScoreRefreshService's ModelContext
-        let snapshots = await service.fetchStressSnapshots(
-            from: range.start,
-            to: range.end
-        )
-
+        defer {
+            if requestID == reloadRequestID { isLoading = false }
+        }
         guard isCurrentReloadRequest(requestID) else { return }
+        let period = selectedPeriod
+        let domain = scrollDomain
+        let previousStart = domain.lowerBound.addingTimeInterval(-period.visibleDomainSeconds)
+        // Fixed-duration pages can cross DST. Fetch the full first daily bucket.
+        let fetchStart = period == .day ? previousStart : calendar.startOfDay(for: previousStart)
 
-        // Aggregate to daily averages
-        let dailyGroups = Dictionary(grouping: snapshots) { snapshot in
-            calendar.startOfDay(for: snapshot.date)
+        do {
+            let snapshots: [(date: Date, score: Double)]
+            if let historyLoader {
+                snapshots = try await historyLoader(fetchStart, domain.upperBound, calendar)
+            } else if let scoreRefreshService {
+                snapshots = try await scoreRefreshService.fetchStressHistory(
+                    from: fetchStart, to: domain.upperBound, calendar: calendar
+                )
+            } else {
+                snapshots = []
+            }
+            guard isCurrentReloadRequest(requestID) else { return }
+            let source = Self.summaryPoints(from: snapshots, period: period, calendar: calendar)
+            let plotSource = source.filter { $0.date >= domain.lowerBound && $0.date < domain.upperBound }
+            let plot = period == .sixMonths || period == .year
+                ? HealthDataAggregator.aggregateByAverage(plotSource, unit: period.aggregationUnit, calendar: calendar)
+                : plotSource
+            summarySourceData = source
+            chartData = plot
+            recalculateVisibleState()
+        } catch is CancellationError {
+            // Cancellation is not a failed or empty history result.
+        } catch {
+            guard isCurrentReloadRequest(requestID) else { return }
+            loadError = String(localized: "Could not load data.")
         }
-
-        chartData = dailyGroups.compactMap { day, daySnapshots in
-            let values = daySnapshots.compactMap(\.stressScore)
-            guard !values.isEmpty else { return nil }
-            let avg = values.reduce(0, +) / Double(values.count)
-            return ChartDataPoint(date: day, value: avg)
-        }
-        .sorted { $0.date < $1.date }
-
-        // Aggregate for longer periods
-        if selectedPeriod == .sixMonths || selectedPeriod == .year {
-            chartData = HealthDataAggregator.aggregateByAverage(
-                chartData, unit: selectedPeriod.aggregationUnit
-            )
-        }
-
-        // Previous period for comparison
-        let currentPeriodRange = selectedPeriod.dateRange(offset: 0)
-        let prevRange = HealthDataAggregator.previousPeriodRange(for: selectedPeriod, offset: 0)
-
-        let prevSnapshots = await service.fetchStressSnapshots(
-            from: prevRange.start,
-            to: prevRange.end
-        )
-
-        let prevDailyGroups = Dictionary(grouping: prevSnapshots) { snapshot in
-            calendar.startOfDay(for: snapshot.date)
-        }
-
-        let previousValues = prevDailyGroups.compactMap { _, daySnapshots -> Double? in
-            let values = daySnapshots.compactMap(\.stressScore)
-            guard !values.isEmpty else { return nil }
-            return values.reduce(0, +) / Double(values.count)
-        }
-
-        let currentPeriodScores = chartData.filter {
-            $0.date >= currentPeriodRange.start && $0.date <= currentPeriodRange.end
-        }
-
-        summaryStats = HealthDataAggregator.computeSummary(
-            from: currentPeriodScores.map(\.value),
-            previousPeriodValues: previousValues.isEmpty ? nil : previousValues
-        )
-
-        recalculateScrollDomain()
     }
 
-    // MARK: - Highlights
-
-    private func buildHighlights() {
-        let currentPeriodRange = selectedPeriod.dateRange(offset: 0)
-        let currentValues = chartData.filter {
-            $0.date >= currentPeriodRange.start && $0.date <= currentPeriodRange.end
-        }
-        // For stress, high = worst day, low = best day
-        highlights = HighlightBuilder.buildHighlights(
-            from: currentValues,
-            highLabel: String(localized: "Most stressed"),
-            lowLabel: String(localized: "Least stressed")
-        )
+    /// The service has already resolved duplicate hours. Keep every actual hour
+    /// for D; for W and longer, each recorded day has equal statistical weight.
+    static func summaryPoints(
+        from snapshots: [(date: Date, score: Double)],
+        period: TimePeriod,
+        calendar: Calendar = .current
+    ) -> [ChartDataPoint] {
+        let hourly = snapshots.compactMap { snapshot -> ChartDataPoint? in
+            guard snapshot.score.isFinite, (0...100).contains(snapshot.score) else { return nil }
+            return ChartDataPoint(date: snapshot.date, value: snapshot.score)
+        }.sorted { $0.date < $1.date } // oldest-first
+        guard period != .day else { return hourly }
+        return HealthDataAggregator.aggregateByAverage(hourly, unit: .day, calendar: calendar)
     }
 }

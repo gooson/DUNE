@@ -50,6 +50,7 @@ related_solutions:
 | Dashboard/CumulativeStressDetailViewModel.swift | 고정 가시 구간·원본 통계·paging·loading/error·주기 경합 방지 |
 | Dashboard/CumulativeStressDetailView.swift | 통합 추세·간격·요인 bar·단일 설명·반응형 배치 |
 | Dashboard/Components/CumulativeStressDetailHeader.swift | 같은 팔레트/링·실제 상태/날짜 히어로 |
+| Dashboard/Components/CumulativeStressLevelGuide.swift | 기존 단계 심볼·큰 글씨 세로 헤더 |
 | Dashboard/Components/CumulativeStressExplainerSection.swift | 기존4설명 보존, embedded 기본값으로 원래 호출 계약 보존 |
 | Shared/Extensions/CumulativeStressScore+View.swift | 표시 전용 실제 비중·방어·기본 비중과 구분 |
 | DUNETests/ScoreRefreshServiceTests.swift / CumulativeStressDetailViewModelTests.swift / 표시 비중 테스트 | 데이터·경계·부족 요인·오염 값 회귀 |
