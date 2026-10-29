@@ -37,11 +37,10 @@ class UnitRunnerTests(unittest.TestCase):
         self.assertEqual([option_values(command, "-only-testing") for command in commands],
                          [["DUNETests"], ["DUNEWatchTests"]])
 
-    def test_nested_ios_test_source_is_selectable(self) -> None:
+    def test_uncompiled_ios_test_source_is_rejected(self) -> None:
         result, commands = self.dry_run("--only-testing", "DUNETests/PredictSleepDebtRecoveryUseCaseTests")
-        self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertEqual(option_values(commands[0], "-only-testing"),
-                         ["DUNETests/PredictSleepDebtRecoveryUseCaseTests"])
+        self.assertEqual(result.returncode, 2)
+        self.assertEqual(commands, [])
 
     def test_repeated_selectors_route_to_their_target(self) -> None:
         result, commands = self.dry_run("--only-testing", IOS, "--only-testing", IOS + "/scoreClamped",

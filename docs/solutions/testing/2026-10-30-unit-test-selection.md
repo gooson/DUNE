@@ -42,7 +42,7 @@ scripts/test-unit.sh --only-testing DUNETests/CalculateConditionScoreUseCaseTest
 scripts/test-unit.sh --dry-run --only-testing DUNETests/CalculateConditionScoreUseCaseTests
 ```
 
-No selector keeps the original sequential iOS and Watch full-target runs. Focused runs require a positive XCTest or Swift Testing executed-test count in each selected suite log. Source validation scopes methods to their suite, and checks both `DUNETests/` and `DUNE/DUNETests/` plus `DUNEWatchTests/`.
+No selector keeps the original sequential iOS and Watch full-target runs. Focused runs require a positive XCTest or Swift Testing executed-test count in each selected suite log. Source validation scopes methods to their suite and scans only the `DUNETests/` and `DUNEWatchTests/` roots configured in `DUNE/project.yml`. The old `DUNE/DUNETests/` directory is outside the target.
 
 ## Validation
 

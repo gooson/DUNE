@@ -8,7 +8,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 SOURCES = {
-    "DUNETests": (ROOT / "DUNETests", ROOT / "DUNE" / "DUNETests"),
+    "DUNETests": (ROOT / "DUNETests",),
     "DUNEWatchTests": (ROOT / "DUNEWatchTests",),
 }
 

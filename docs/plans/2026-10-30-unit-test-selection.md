@@ -40,7 +40,7 @@ Parse and validate selector syntax and source declarations before side effects, 
 |---|---|---|
 | `scripts/test-unit.sh` | Modify | Parse, validate, route selectors and dry-run commands |
 | `scripts/tests/test_unit_test_runner.py` | Add | Mocked CLI argv and error-path tests |
-| `scripts/lib/validate-unit-test-selectors.py` | Add | Reject unknown suites and methods before launch |
+| `scripts/lib/validate-unit-test-selectors.py` | Add | Reject unknown suites and methods in configured test source roots before launch |
 | `docs/solutions/testing/2026-10-30-unit-test-selection.md` | Add | Record result and usage |
 
 ## Implementation Steps
