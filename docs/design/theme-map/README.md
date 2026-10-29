@@ -7,6 +7,10 @@ status: in-progress
 
 # DUNE 테마 맵
 
+## 주간 운동 업적 시안 · 2026-10-29
+
+[성과 보드 / 숫자 중심](themes/dune-workout-achievements.html)은 Life L01의 해당 영역만 바꾼 제안이다. 브라운·골드와 능선을 유지하고 큰 완료 수·횟수 분절·근력 부위 타일·거리 곡선으로 카드/막대 반복을 줄였다. 첨부 화면의 기본 수치와 진행·모두 완료·기록 없음, 밝음/어두움·큰 글씨를 비교한다. [배치·집계 계약](../layout-map/workout-achievements-proposal.md), [편집 원본](themes/assets/workout-achievement-fragment.html), [브라우저 QA](themes/assets/workout-achievement-qa.json)와 PNG를 보존한다. 전체 상세 화면·기존 화면 병렬 비교는 정정된 요청으로 제외했다. 앱 미적용이며 PNG는 실제 앱 캡처가 아니다.
+
 [테마 맵 열기](index.html) · [8개 테마 전체 구현 맵](../full-redesign-map/index.html) · [7개 테마 앱 적용 맵](app-contract.md) · [UX·비주얼 명세](../2026-10-17-ux-visual-spec.md) · [실제 화면 디자인맵 열기](../phone-design-map/actual/index.html)
 
 ## Wellness 개편 제안 · 2026-10-27
@@ -141,3 +145,7 @@ Activity 운동 구성은 덤벨·발자국, 큰 68%/32%, 금빛/녹색의 16px 
 ## 네이티브 반영 · 2026-10-29
 
 Life Flow를 실제 앱에 반영했다. [검증 보고](../../reviews/2026-10-28-life-flow/README.md)와 [실제 iPhone·iPad·Duo 양쪽74장](../full-redesign-map/review/life-flow-2026-10-28/index.html)을 따른다. 앞의 시안 단계 설명은 제안 당시 기록이며 시안과 실제 캡처는 별도로 보존한다.
+
+## 주간 운동 성과 보드 · 2026-10-29
+
+사용자가 선택한 성과 보드를 SwiftUI에 적용했다. [보존 시안](themes/dune-workout-achievements.html)과 [네이티브 계약](../layout-map/workout-achievements-proposal.md), [새 실제 캡처](../full-redesign-map/review/workout-achievement-board-2026-10-29/index.html)를 구분한다. 가변 총계·6개 근력 항목·기존 목표 동작을 유지하고 최대 글씨는 장식 숨김/한 열까지 허용한다. 세부 검증과 기존 Today 실패는 실행 보고를 따른다.

@@ -265,6 +265,20 @@ enum TestDataSeeder {
         if ProcessInfo.processInfo.arguments.contains("--ui-hero-rhythm-fixtures") {
             seedHeroRhythmHistory(into: context)
         }
+        if ProcessInfo.processInfo.arguments.contains("--ui-workout-board-goal-fixture") {
+            let goal = HabitDefinition(
+                name: "Weekly Move",
+                iconCategory: .fitness,
+                habitType: .check,
+                goalValue: 1,
+                goalUnit: nil,
+                frequency: .daily,
+                sortOrder: 3
+            )
+            goal.isAutoLinked = true
+            goal.autoLinkSourceRaw = "exercise"
+            context.insert(goal)
+        }
         if ProcessInfo.processInfo.arguments.contains("--ui-hero-rhythm-auto-only") {
             let habits = (try? context.fetch(FetchDescriptor<HabitDefinition>())) ?? []
             for habit in habits {

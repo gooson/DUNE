@@ -1,0 +1,1314 @@
+{
+  "date": "2026-10-29",
+  "kind": "actual-native-simulator-screenshots",
+  "status": "verified-selected-scope",
+  "sourceCommit": "per-capture",
+  "appSource": "e7867868; final UI positioning helper 72365af1. d86210fc default-size light/dark/ko/iPad layout is identical; final app delta only AX header and malformed-target safety.",
+  "scope": "L01 workout board only; Watch has no consumer. Full regression, physical VoiceOver gestures, all locales/themes and all record states are not tested.",
+  "captures": [
+    {
+      "file": "images/iphone-running-end-light.png",
+      "screen": "L01",
+      "label": "iphone · running-end-light",
+      "sourceCommit": "72365af1",
+      "originalTest": "LifeFlowUITests/testCaptureL01WorkoutBoardLight()",
+      "testOutcome": "passed",
+      "originalAttachment": "8E1FF03A-60D9-4862-8559-5138C35C7C4C.png",
+      "device": {
+        "name": "iPhone 18 Pro-wt-Health-7e2f-e54fef230d54",
+        "udid": "C14BA168-97C4-4E17-A3C5-99E57F58C370"
+      },
+      "capturedAtUnix": 1793213322.397,
+      "xcresult": ".deriveddata/build-ios/Logs/Test/Test-DUNEUITests-2026.10.29_03-46-32-+0900.xcresult",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "sha256": "ae4191b1249631ab1dcff617fd147b9c0f94b104580b4902345b482eb00e5729"
+    },
+    {
+      "file": "images/iphone-running-light.png",
+      "screen": "L01",
+      "label": "iphone · running-light",
+      "sourceCommit": "72365af1",
+      "originalTest": "LifeFlowUITests/testCaptureL01WorkoutBoardLight()",
+      "testOutcome": "passed",
+      "originalAttachment": "F668BAA1-7250-4627-8A98-8702CFB2C6BE.png",
+      "device": {
+        "name": "iPhone 18 Pro-wt-Health-7e2f-e54fef230d54",
+        "udid": "C14BA168-97C4-4E17-A3C5-99E57F58C370"
+      },
+      "capturedAtUnix": 1793213318.564,
+      "xcresult": ".deriveddata/build-ios/Logs/Test/Test-DUNEUITests-2026.10.29_03-46-32-+0900.xcresult",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "sha256": "33986e15a78a9ae1a021c90051b3e73434c7aecf7ae86162b8487b2cadf0b098"
+    },
+    {
+      "file": "images/iphone-strength-end-light.png",
+      "screen": "L01",
+      "label": "iphone · strength-end-light",
+      "sourceCommit": "72365af1",
+      "originalTest": "LifeFlowUITests/testCaptureL01WorkoutBoardLight()",
+      "testOutcome": "passed",
+      "originalAttachment": "70DEA011-B0C8-497B-AFA8-C3ABA527F356.png",
+      "device": {
+        "name": "iPhone 18 Pro-wt-Health-7e2f-e54fef230d54",
+        "udid": "C14BA168-97C4-4E17-A3C5-99E57F58C370"
+      },
+      "capturedAtUnix": 1793213314.791,
+      "xcresult": ".deriveddata/build-ios/Logs/Test/Test-DUNEUITests-2026.10.29_03-46-32-+0900.xcresult",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "sha256": "66d0127c08f0e090bbc2adb3a465be7928ae13ce8f80ad58f05dc9a903c528d7"
+    },
+    {
+      "file": "images/iphone-strength-light.png",
+      "screen": "L01",
+      "label": "iphone · strength-light",
+      "sourceCommit": "72365af1",
+      "originalTest": "LifeFlowUITests/testCaptureL01WorkoutBoardLight()",
+      "testOutcome": "passed",
+      "originalAttachment": "26276193-4C91-4293-99E6-95238259B8DF.png",
+      "device": {
+        "name": "iPhone 18 Pro-wt-Health-7e2f-e54fef230d54",
+        "udid": "C14BA168-97C4-4E17-A3C5-99E57F58C370"
+      },
+      "capturedAtUnix": 1793213305.49,
+      "xcresult": ".deriveddata/build-ios/Logs/Test/Test-DUNEUITests-2026.10.29_03-46-32-+0900.xcresult",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "sha256": "fe897d3b2da00653f71b3c4c1f9d5ed240567311a4166baa7b3804b18e6a7c56"
+    },
+    {
+      "file": "images/iphone-routine-light.png",
+      "screen": "L01",
+      "label": "iphone · routine-light",
+      "sourceCommit": "72365af1",
+      "originalTest": "LifeFlowUITests/testCaptureL01WorkoutBoardLight()",
+      "testOutcome": "passed",
+      "originalAttachment": "A98E10CA-A1C1-4A43-A147-5CFEF6D7B458.png",
+      "device": {
+        "name": "iPhone 18 Pro-wt-Health-7e2f-e54fef230d54",
+        "udid": "C14BA168-97C4-4E17-A3C5-99E57F58C370"
+      },
+      "capturedAtUnix": 1793213301.401,
+      "xcresult": ".deriveddata/build-ios/Logs/Test/Test-DUNEUITests-2026.10.29_03-46-32-+0900.xcresult",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "sha256": "a20a57f481faf29443b80e5b385a8ff17eccb9c0976fcb9ede7b24eaabcb31e2"
+    },
+    {
+      "file": "images/iphone-summary-light.png",
+      "screen": "L01",
+      "label": "iphone · summary-light",
+      "sourceCommit": "72365af1",
+      "originalTest": "LifeFlowUITests/testCaptureL01WorkoutBoardLight()",
+      "testOutcome": "passed",
+      "originalAttachment": "2ADB480B-CBBF-4DD2-A4F8-8644EB9FC881.png",
+      "device": {
+        "name": "iPhone 18 Pro-wt-Health-7e2f-e54fef230d54",
+        "udid": "C14BA168-97C4-4E17-A3C5-99E57F58C370"
+      },
+      "capturedAtUnix": 1793213297.228,
+      "xcresult": ".deriveddata/build-ios/Logs/Test/Test-DUNEUITests-2026.10.29_03-46-32-+0900.xcresult",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "sha256": "54d7207587d96871a0c6547ed8c4be40fca837ed7f09fa32fc637f983e60afa2"
+    },
+    {
+      "file": "images/iphone-running-end-MaxAX.png",
+      "screen": "L01",
+      "label": "iphone · running-end-MaxAX",
+      "sourceCommit": "72365af1",
+      "originalTest": "LifeFlowUITests/testCaptureL01WorkoutBoardMaximumAX()",
+      "testOutcome": "passed",
+      "originalAttachment": "6D22C7AA-AADA-4767-96C9-A30EA12ECB6D.png",
+      "device": {
+        "name": "iPhone 18 Pro-wt-Health-7e2f-e54fef230d54",
+        "udid": "C14BA168-97C4-4E17-A3C5-99E57F58C370"
+      },
+      "capturedAtUnix": 1793213399.951,
+      "xcresult": ".deriveddata/build-ios/Logs/Test/Test-DUNEUITests-2026.10.29_03-46-32-+0900.xcresult",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "sha256": "a2d635d33063f37984150611c2ae9dd4a4f32a946c14c3e141fdaf1ed0db6373"
+    },
+    {
+      "file": "images/iphone-running-MaxAX.png",
+      "screen": "L01",
+      "label": "iphone · running-MaxAX",
+      "sourceCommit": "72365af1",
+      "originalTest": "LifeFlowUITests/testCaptureL01WorkoutBoardMaximumAX()",
+      "testOutcome": "passed",
+      "originalAttachment": "CD3EDC5E-7992-4FBB-983F-BBCA6AA40935.png",
+      "device": {
+        "name": "iPhone 18 Pro-wt-Health-7e2f-e54fef230d54",
+        "udid": "C14BA168-97C4-4E17-A3C5-99E57F58C370"
+      },
+      "capturedAtUnix": 1793213395.359,
+      "xcresult": ".deriveddata/build-ios/Logs/Test/Test-DUNEUITests-2026.10.29_03-46-32-+0900.xcresult",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "sha256": "da3cfc6b7c7ab13d78fa789a6ccc362d58de3a059ecfaf56960919bfa1af86ff"
+    },
+    {
+      "file": "images/iphone-strength-end-MaxAX.png",
+      "screen": "L01",
+      "label": "iphone · strength-end-MaxAX",
+      "sourceCommit": "72365af1",
+      "originalTest": "LifeFlowUITests/testCaptureL01WorkoutBoardMaximumAX()",
+      "testOutcome": "passed",
+      "originalAttachment": "483FA38D-A085-4494-81FC-D369579B1029.png",
+      "device": {
+        "name": "iPhone 18 Pro-wt-Health-7e2f-e54fef230d54",
+        "udid": "C14BA168-97C4-4E17-A3C5-99E57F58C370"
+      },
+      "capturedAtUnix": 1793213387.968,
+      "xcresult": ".deriveddata/build-ios/Logs/Test/Test-DUNEUITests-2026.10.29_03-46-32-+0900.xcresult",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "sha256": "b390eb7253ac3cce4634c308d36b52724ff14f5a3cd31b876091ff3078f03108"
+    },
+    {
+      "file": "images/iphone-strength-MaxAX.png",
+      "screen": "L01",
+      "label": "iphone · strength-MaxAX",
+      "sourceCommit": "72365af1",
+      "originalTest": "LifeFlowUITests/testCaptureL01WorkoutBoardMaximumAX()",
+      "testOutcome": "passed",
+      "originalAttachment": "EBC48ED7-6256-4E2F-B3BB-852A4E4609E1.png",
+      "device": {
+        "name": "iPhone 18 Pro-wt-Health-7e2f-e54fef230d54",
+        "udid": "C14BA168-97C4-4E17-A3C5-99E57F58C370"
+      },
+      "capturedAtUnix": 1793213375.201,
+      "xcresult": ".deriveddata/build-ios/Logs/Test/Test-DUNEUITests-2026.10.29_03-46-32-+0900.xcresult",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "sha256": "f7b706d371d4143065d660804da9da3841fdc7919d76648e3a70467bd659a431"
+    },
+    {
+      "file": "images/iphone-routine-MaxAX.png",
+      "screen": "L01",
+      "label": "iphone · routine-MaxAX",
+      "sourceCommit": "72365af1",
+      "originalTest": "LifeFlowUITests/testCaptureL01WorkoutBoardMaximumAX()",
+      "testOutcome": "passed",
+      "originalAttachment": "905713DA-40F9-4CDE-ADE3-4ACF2DDE2B05.png",
+      "device": {
+        "name": "iPhone 18 Pro-wt-Health-7e2f-e54fef230d54",
+        "udid": "C14BA168-97C4-4E17-A3C5-99E57F58C370"
+      },
+      "capturedAtUnix": 1793213366.722,
+      "xcresult": ".deriveddata/build-ios/Logs/Test/Test-DUNEUITests-2026.10.29_03-46-32-+0900.xcresult",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "sha256": "4ed1dd4e6c4442a5f6729021f51d3a71b9950faffaca6e0b19dafa707d00137c"
+    },
+    {
+      "file": "images/iphone-summary-MaxAX.png",
+      "screen": "L01",
+      "label": "iphone · summary-MaxAX",
+      "sourceCommit": "72365af1",
+      "originalTest": "LifeFlowUITests/testCaptureL01WorkoutBoardMaximumAX()",
+      "testOutcome": "passed",
+      "originalAttachment": "81FFB583-40AB-4503-B09D-19280736EE93.png",
+      "device": {
+        "name": "iPhone 18 Pro-wt-Health-7e2f-e54fef230d54",
+        "udid": "C14BA168-97C4-4E17-A3C5-99E57F58C370"
+      },
+      "capturedAtUnix": 1793213354.277,
+      "xcresult": ".deriveddata/build-ios/Logs/Test/Test-DUNEUITests-2026.10.29_03-46-32-+0900.xcresult",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "sha256": "da6d0ad621bc1b726af1f5d17c7f97a949cab6e528c854077f9eb17390807674"
+    },
+    {
+      "file": "images/iphone-running-end-dark.png",
+      "screen": "L01",
+      "label": "iphone · running-end-dark",
+      "sourceCommit": "d86210fc",
+      "originalTest": "LifeFlowUITests/testCaptureL01WorkoutBoardDark()",
+      "testOutcome": "passed",
+      "originalAttachment": "4635A61A-CE39-4C70-977D-DF602CC94282.png",
+      "device": {
+        "name": "iPhone 18 Pro-wt-Health-7e2f-e54fef230d54",
+        "udid": "C14BA168-97C4-4E17-A3C5-99E57F58C370"
+      },
+      "capturedAtUnix": 1793211983.306,
+      "xcresult": ".deriveddata/build-ios/Logs/Test/Test-DUNEUITests-2026.10.29_03-16-56-+0900.xcresult",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "sha256": "7378fab504c365dac52fce804edc25ab5763b6f35b7f80a6fd03485dd9ff7b87"
+    },
+    {
+      "file": "images/iphone-running-dark.png",
+      "screen": "L01",
+      "label": "iphone · running-dark",
+      "sourceCommit": "d86210fc",
+      "originalTest": "LifeFlowUITests/testCaptureL01WorkoutBoardDark()",
+      "testOutcome": "passed",
+      "originalAttachment": "26B64D80-57C0-4E27-8BE1-45FE71E9D0C9.png",
+      "device": {
+        "name": "iPhone 18 Pro-wt-Health-7e2f-e54fef230d54",
+        "udid": "C14BA168-97C4-4E17-A3C5-99E57F58C370"
+      },
+      "capturedAtUnix": 1793211979.502,
+      "xcresult": ".deriveddata/build-ios/Logs/Test/Test-DUNEUITests-2026.10.29_03-16-56-+0900.xcresult",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "sha256": "513ddd829e201449397ce655a7f6a3239074464baaec63ac424abb886fe2a998"
+    },
+    {
+      "file": "images/iphone-strength-end-dark.png",
+      "screen": "L01",
+      "label": "iphone · strength-end-dark",
+      "sourceCommit": "d86210fc",
+      "originalTest": "LifeFlowUITests/testCaptureL01WorkoutBoardDark()",
+      "testOutcome": "passed",
+      "originalAttachment": "88A68768-3C6F-4010-B097-E883553D8A93.png",
+      "device": {
+        "name": "iPhone 18 Pro-wt-Health-7e2f-e54fef230d54",
+        "udid": "C14BA168-97C4-4E17-A3C5-99E57F58C370"
+      },
+      "capturedAtUnix": 1793211975.901,
+      "xcresult": ".deriveddata/build-ios/Logs/Test/Test-DUNEUITests-2026.10.29_03-16-56-+0900.xcresult",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "sha256": "ecd088303c9b42af7d067a101b8c5b0524b3eb864030abfcb800d7314c2b4c18"
+    },
+    {
+      "file": "images/iphone-strength-dark.png",
+      "screen": "L01",
+      "label": "iphone · strength-dark",
+      "sourceCommit": "d86210fc",
+      "originalTest": "LifeFlowUITests/testCaptureL01WorkoutBoardDark()",
+      "testOutcome": "passed",
+      "originalAttachment": "49280850-0D91-4DF6-AA88-373505CC36C6.png",
+      "device": {
+        "name": "iPhone 18 Pro-wt-Health-7e2f-e54fef230d54",
+        "udid": "C14BA168-97C4-4E17-A3C5-99E57F58C370"
+      },
+      "capturedAtUnix": 1793211967.274,
+      "xcresult": ".deriveddata/build-ios/Logs/Test/Test-DUNEUITests-2026.10.29_03-16-56-+0900.xcresult",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "sha256": "91fa1a84977873f2d00133a48173ea5f04d31cdc6f5d618fc9c26e4a084cfede"
+    },
+    {
+      "file": "images/iphone-routine-dark.png",
+      "screen": "L01",
+      "label": "iphone · routine-dark",
+      "sourceCommit": "d86210fc",
+      "originalTest": "LifeFlowUITests/testCaptureL01WorkoutBoardDark()",
+      "testOutcome": "passed",
+      "originalAttachment": "623B7265-7D4E-46B9-8FCE-3A99B6249117.png",
+      "device": {
+        "name": "iPhone 18 Pro-wt-Health-7e2f-e54fef230d54",
+        "udid": "C14BA168-97C4-4E17-A3C5-99E57F58C370"
+      },
+      "capturedAtUnix": 1793211963.629,
+      "xcresult": ".deriveddata/build-ios/Logs/Test/Test-DUNEUITests-2026.10.29_03-16-56-+0900.xcresult",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "sha256": "c361c5b4f23cff045962ca9e491cba49b78ec285b1191cc4cf87e7d7a2ef3e2c"
+    },
+    {
+      "file": "images/iphone-summary-dark.png",
+      "screen": "L01",
+      "label": "iphone · summary-dark",
+      "sourceCommit": "d86210fc",
+      "originalTest": "LifeFlowUITests/testCaptureL01WorkoutBoardDark()",
+      "testOutcome": "passed",
+      "originalAttachment": "678936BA-0373-4832-AFA9-71774118D034.png",
+      "device": {
+        "name": "iPhone 18 Pro-wt-Health-7e2f-e54fef230d54",
+        "udid": "C14BA168-97C4-4E17-A3C5-99E57F58C370"
+      },
+      "capturedAtUnix": 1793211959.919,
+      "xcresult": ".deriveddata/build-ios/Logs/Test/Test-DUNEUITests-2026.10.29_03-16-56-+0900.xcresult",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "sha256": "6448c79aec96d80689aba38b6f5ac35f7acbb861638ea7564a3480e50cb24daf"
+    },
+    {
+      "file": "images/iphone-running-end-ko.png",
+      "screen": "L01",
+      "label": "iphone · running-end-ko",
+      "sourceCommit": "d86210fc",
+      "originalTest": "LifeFlowUITests/testWeeklyWorkoutBoardKoreanReadingOrder()",
+      "testOutcome": "passed",
+      "originalAttachment": "24BDE149-CAA1-403A-AFA4-44DE23A29CF8.png",
+      "device": {
+        "name": "iPhone 18 Pro-wt-Health-7e2f-e54fef230d54",
+        "udid": "C14BA168-97C4-4E17-A3C5-99E57F58C370"
+      },
+      "capturedAtUnix": 1793212128.247,
+      "xcresult": ".deriveddata/build-ios/Logs/Test/Test-DUNEUITests-2026.10.29_03-16-56-+0900.xcresult",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "sha256": "f66616d92baf2923afaae49f0a52bf87fdf45a0d6a5a876e4c86265985caf86b"
+    },
+    {
+      "file": "images/iphone-strength-end-ko.png",
+      "screen": "L01",
+      "label": "iphone · strength-end-ko",
+      "sourceCommit": "d86210fc",
+      "originalTest": "LifeFlowUITests/testWeeklyWorkoutBoardKoreanReadingOrder()",
+      "testOutcome": "passed",
+      "originalAttachment": "B8385754-75B6-4F2F-AEEC-CE6119C09340.png",
+      "device": {
+        "name": "iPhone 18 Pro-wt-Health-7e2f-e54fef230d54",
+        "udid": "C14BA168-97C4-4E17-A3C5-99E57F58C370"
+      },
+      "capturedAtUnix": 1793212118.707,
+      "xcresult": ".deriveddata/build-ios/Logs/Test/Test-DUNEUITests-2026.10.29_03-16-56-+0900.xcresult",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "sha256": "0a5fe00388aa63ec740e9cbe1c4eb710c2e53b619139382263b5ca53bbb19649"
+    },
+    {
+      "file": "images/iphone-routine-ko.png",
+      "screen": "L01",
+      "label": "iphone · routine-ko",
+      "sourceCommit": "d86210fc",
+      "originalTest": "LifeFlowUITests/testWeeklyWorkoutBoardKoreanReadingOrder()",
+      "testOutcome": "passed",
+      "originalAttachment": "61DDB553-4FDA-43D1-B3E6-9DAB2A6ABD24.png",
+      "device": {
+        "name": "iPhone 18 Pro-wt-Health-7e2f-e54fef230d54",
+        "udid": "C14BA168-97C4-4E17-A3C5-99E57F58C370"
+      },
+      "capturedAtUnix": 1793212113.12,
+      "xcresult": ".deriveddata/build-ios/Logs/Test/Test-DUNEUITests-2026.10.29_03-16-56-+0900.xcresult",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "sha256": "13551bcce97ddc05c8fa15427363b9d3bfa0f8e5b0ff7679f4c847e2a5d5fd0c"
+    },
+    {
+      "file": "images/iphone-summary-ko.png",
+      "screen": "L01",
+      "label": "iphone · summary-ko",
+      "sourceCommit": "d86210fc",
+      "originalTest": "LifeFlowUITests/testWeeklyWorkoutBoardKoreanReadingOrder()",
+      "testOutcome": "passed",
+      "originalAttachment": "4C55BFEA-7E60-4583-8F41-B3C5114B2232.png",
+      "device": {
+        "name": "iPhone 18 Pro-wt-Health-7e2f-e54fef230d54",
+        "udid": "C14BA168-97C4-4E17-A3C5-99E57F58C370"
+      },
+      "capturedAtUnix": 1793212108.75,
+      "xcresult": ".deriveddata/build-ios/Logs/Test/Test-DUNEUITests-2026.10.29_03-16-56-+0900.xcresult",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "sha256": "7fcbad0b6902372fb9aec97dd9469e9cad6b8d7ab8206f6a4cf26b0a721f3cc3"
+    },
+    {
+      "file": "images/ipad-running-end-light.png",
+      "screen": "L01",
+      "label": "ipad · running-end-light",
+      "sourceCommit": "d86210fc",
+      "originalTest": "LifeFlowUITests/testCaptureL01WorkoutBoardLight()",
+      "testOutcome": "passed",
+      "originalAttachment": "C180B7BE-F8B8-4BE9-B151-B74BCECEBDD7.png",
+      "device": {
+        "name": "iPad Pro 13-inch (M5)-wt-Health-7e2f-e54fef230d54",
+        "udid": "56195427-34A3-457D-AEFE-13CBE0E7CCC3"
+      },
+      "capturedAtUnix": 1793212483.278,
+      "xcresult": ".deriveddata/build-ios/Logs/Test/Test-DUNEUITests-2026.10.29_03-33-14-+0900.xcresult",
+      "pixels": [
+        2064,
+        2752
+      ],
+      "sha256": "702de7c00cc68a933099091d50c9361ee112daff9fd7822bf9c8006197684100"
+    },
+    {
+      "file": "images/ipad-running-light.png",
+      "screen": "L01",
+      "label": "ipad · running-light",
+      "sourceCommit": "d86210fc",
+      "originalTest": "LifeFlowUITests/testCaptureL01WorkoutBoardLight()",
+      "testOutcome": "passed",
+      "originalAttachment": "E2011CC7-3606-4AD0-A65D-1F9E5C180B9E.png",
+      "device": {
+        "name": "iPad Pro 13-inch (M5)-wt-Health-7e2f-e54fef230d54",
+        "udid": "56195427-34A3-457D-AEFE-13CBE0E7CCC3"
+      },
+      "capturedAtUnix": 1793212479.695,
+      "xcresult": ".deriveddata/build-ios/Logs/Test/Test-DUNEUITests-2026.10.29_03-33-14-+0900.xcresult",
+      "pixels": [
+        2064,
+        2752
+      ],
+      "sha256": "68db2a89fea3cba24df928bae85fe92f4a33e70c3442be5c8effbc45dc9c7454"
+    },
+    {
+      "file": "images/ipad-strength-end-light.png",
+      "screen": "L01",
+      "label": "ipad · strength-end-light",
+      "sourceCommit": "d86210fc",
+      "originalTest": "LifeFlowUITests/testCaptureL01WorkoutBoardLight()",
+      "testOutcome": "passed",
+      "originalAttachment": "42BA28A3-FFB7-463E-842A-2F85940F3212.png",
+      "device": {
+        "name": "iPad Pro 13-inch (M5)-wt-Health-7e2f-e54fef230d54",
+        "udid": "56195427-34A3-457D-AEFE-13CBE0E7CCC3"
+      },
+      "capturedAtUnix": 1793212476.199,
+      "xcresult": ".deriveddata/build-ios/Logs/Test/Test-DUNEUITests-2026.10.29_03-33-14-+0900.xcresult",
+      "pixels": [
+        2064,
+        2752
+      ],
+      "sha256": "b7f477f7c6f3e1f1dcd59806d716b1d57a1cc543327e9a850545baf95292b556"
+    },
+    {
+      "file": "images/ipad-strength-light.png",
+      "screen": "L01",
+      "label": "ipad · strength-light",
+      "sourceCommit": "d86210fc",
+      "originalTest": "LifeFlowUITests/testCaptureL01WorkoutBoardLight()",
+      "testOutcome": "passed",
+      "originalAttachment": "0800938B-5713-4908-B59D-1915AB56901F.png",
+      "device": {
+        "name": "iPad Pro 13-inch (M5)-wt-Health-7e2f-e54fef230d54",
+        "udid": "56195427-34A3-457D-AEFE-13CBE0E7CCC3"
+      },
+      "capturedAtUnix": 1793212472.157,
+      "xcresult": ".deriveddata/build-ios/Logs/Test/Test-DUNEUITests-2026.10.29_03-33-14-+0900.xcresult",
+      "pixels": [
+        2064,
+        2752
+      ],
+      "sha256": "af61e4b8785836abbf5d4b8fadb59518dfbad48b6bbb56bdd90c99e2ccb8b5cc"
+    },
+    {
+      "file": "images/ipad-routine-light.png",
+      "screen": "L01",
+      "label": "ipad · routine-light",
+      "sourceCommit": "d86210fc",
+      "originalTest": "LifeFlowUITests/testCaptureL01WorkoutBoardLight()",
+      "testOutcome": "passed",
+      "originalAttachment": "B809D8EA-C4FD-4388-BD50-572028C2493D.png",
+      "device": {
+        "name": "iPad Pro 13-inch (M5)-wt-Health-7e2f-e54fef230d54",
+        "udid": "56195427-34A3-457D-AEFE-13CBE0E7CCC3"
+      },
+      "capturedAtUnix": 1793212462.896,
+      "xcresult": ".deriveddata/build-ios/Logs/Test/Test-DUNEUITests-2026.10.29_03-33-14-+0900.xcresult",
+      "pixels": [
+        2064,
+        2752
+      ],
+      "sha256": "ec92765ada290c1e28a2529b92b154d08ba1fb92af39c3f5a7b0118aaa879d44"
+    },
+    {
+      "file": "images/ipad-summary-light.png",
+      "screen": "L01",
+      "label": "ipad · summary-light",
+      "sourceCommit": "d86210fc",
+      "originalTest": "LifeFlowUITests/testCaptureL01WorkoutBoardLight()",
+      "testOutcome": "passed",
+      "originalAttachment": "218160BD-1FCD-436C-BA97-98703287D68A.png",
+      "device": {
+        "name": "iPad Pro 13-inch (M5)-wt-Health-7e2f-e54fef230d54",
+        "udid": "56195427-34A3-457D-AEFE-13CBE0E7CCC3"
+      },
+      "capturedAtUnix": 1793212458.978,
+      "xcresult": ".deriveddata/build-ios/Logs/Test/Test-DUNEUITests-2026.10.29_03-33-14-+0900.xcresult",
+      "pixels": [
+        2064,
+        2752
+      ],
+      "sha256": "49153eb7bdfa64585bd2421cd72360b1ba16b4980a9473763a39bedb6d38b581"
+    },
+    {
+      "file": "images/duo-closed-summary-light-2007x2853.png",
+      "screen": "L01",
+      "label": "Duo closed · summary-light",
+      "sourceCommit": "72365af1",
+      "capturedAtUnix": 1793232853.7947726,
+      "originalTest": "LifeFlowUITests/testHostCaptureWorkoutBoardLight()",
+      "testOutcome": "passed",
+      "device": {
+        "udid": "DB1B9B76-36A1-47DA-AFAD-1DD7C380F3CF",
+        "activeDisplays": [
+          "LCD"
+        ],
+        "display": "LCD-1",
+        "displayActive": false
+      },
+      "originalAttachment": ".codex-checks/workout-board/duo-closed/002-2007x2853.png",
+      "pixels": [
+        2007,
+        2853
+      ],
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e",
+      "checkpoint": {
+        "sequence": 2,
+        "action": "DUNE_VISUAL_AUDIT_READY L01-Life-workout-summary-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793232881.832006",
+        "elapsed_seconds": 2.481,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      }
+    },
+    {
+      "file": "images/duo-closed-summary-light-1398x2034.png",
+      "screen": "L01",
+      "label": "Duo closed · summary-light",
+      "sourceCommit": "72365af1",
+      "capturedAtUnix": 1793232854.3033786,
+      "originalTest": "LifeFlowUITests/testHostCaptureWorkoutBoardLight()",
+      "testOutcome": "passed",
+      "device": {
+        "udid": "DB1B9B76-36A1-47DA-AFAD-1DD7C380F3CF",
+        "activeDisplays": [
+          "LCD"
+        ],
+        "display": "LCD",
+        "displayActive": true
+      },
+      "originalAttachment": ".codex-checks/workout-board/duo-closed/002-1398x2034.png",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "2910432d7f8cc478965d1c77335aa29803f87e16d4f779592648267dc37fa32b",
+      "checkpoint": {
+        "sequence": 2,
+        "action": "DUNE_VISUAL_AUDIT_READY L01-Life-workout-summary-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793232881.832006",
+        "elapsed_seconds": 2.481,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      }
+    },
+    {
+      "file": "images/duo-closed-routine-light-1398x2034.png",
+      "screen": "L01",
+      "label": "Duo closed · routine-light",
+      "sourceCommit": "72365af1",
+      "capturedAtUnix": 1793232867.0584853,
+      "originalTest": "LifeFlowUITests/testHostCaptureWorkoutBoardLight()",
+      "testOutcome": "passed",
+      "device": {
+        "udid": "DB1B9B76-36A1-47DA-AFAD-1DD7C380F3CF",
+        "activeDisplays": [
+          "LCD"
+        ],
+        "display": "LCD",
+        "displayActive": true
+      },
+      "originalAttachment": ".codex-checks/workout-board/duo-closed/003-1398x2034.png",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "ecdc209bb91dc8742022c9b107c3a7bce74e825771b627cc337136ded71cfd63",
+      "checkpoint": {
+        "sequence": 3,
+        "action": "DUNE_VISUAL_AUDIT_READY L01-Life-workout-routine-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793232893.653661",
+        "elapsed_seconds": 3.414,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      }
+    },
+    {
+      "file": "images/duo-closed-routine-light-2007x2853.png",
+      "screen": "L01",
+      "label": "Duo closed · routine-light",
+      "sourceCommit": "72365af1",
+      "capturedAtUnix": 1793232866.5978713,
+      "originalTest": "LifeFlowUITests/testHostCaptureWorkoutBoardLight()",
+      "testOutcome": "passed",
+      "device": {
+        "udid": "DB1B9B76-36A1-47DA-AFAD-1DD7C380F3CF",
+        "activeDisplays": [
+          "LCD"
+        ],
+        "display": "LCD-1",
+        "displayActive": false
+      },
+      "originalAttachment": ".codex-checks/workout-board/duo-closed/003-2007x2853.png",
+      "pixels": [
+        2007,
+        2853
+      ],
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e",
+      "checkpoint": {
+        "sequence": 3,
+        "action": "DUNE_VISUAL_AUDIT_READY L01-Life-workout-routine-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793232893.653661",
+        "elapsed_seconds": 3.414,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      }
+    },
+    {
+      "file": "images/duo-closed-strength-light-1398x2034.png",
+      "screen": "L01",
+      "label": "Duo closed · strength-light",
+      "sourceCommit": "72365af1",
+      "capturedAtUnix": 1793232875.1771517,
+      "originalTest": "LifeFlowUITests/testHostCaptureWorkoutBoardLight()",
+      "testOutcome": "passed",
+      "device": {
+        "udid": "DB1B9B76-36A1-47DA-AFAD-1DD7C380F3CF",
+        "activeDisplays": [
+          "LCD"
+        ],
+        "display": "LCD",
+        "displayActive": true
+      },
+      "originalAttachment": ".codex-checks/workout-board/duo-closed/004-1398x2034.png",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "ea78a7791045e909dff6c76453a12752c9b78fdf3e84fb4986518d236f85b0be",
+      "checkpoint": {
+        "sequence": 4,
+        "action": "DUNE_VISUAL_AUDIT_READY L01-Life-workout-strength-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793232902.971253",
+        "elapsed_seconds": 2.223,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      }
+    },
+    {
+      "file": "images/duo-closed-strength-light-2007x2853.png",
+      "screen": "L01",
+      "label": "Duo closed · strength-light",
+      "sourceCommit": "72365af1",
+      "capturedAtUnix": 1793232874.629188,
+      "originalTest": "LifeFlowUITests/testHostCaptureWorkoutBoardLight()",
+      "testOutcome": "passed",
+      "device": {
+        "udid": "DB1B9B76-36A1-47DA-AFAD-1DD7C380F3CF",
+        "activeDisplays": [
+          "LCD"
+        ],
+        "display": "LCD-1",
+        "displayActive": false
+      },
+      "originalAttachment": ".codex-checks/workout-board/duo-closed/004-2007x2853.png",
+      "pixels": [
+        2007,
+        2853
+      ],
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e",
+      "checkpoint": {
+        "sequence": 4,
+        "action": "DUNE_VISUAL_AUDIT_READY L01-Life-workout-strength-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793232902.971253",
+        "elapsed_seconds": 2.223,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      }
+    },
+    {
+      "file": "images/duo-closed-strength-end-light-2007x2853.png",
+      "screen": "L01",
+      "label": "Duo closed · strength-end-light",
+      "sourceCommit": "72365af1",
+      "capturedAtUnix": 1793232884.5062912,
+      "originalTest": "LifeFlowUITests/testHostCaptureWorkoutBoardLight()",
+      "testOutcome": "passed",
+      "device": {
+        "udid": "DB1B9B76-36A1-47DA-AFAD-1DD7C380F3CF",
+        "activeDisplays": [
+          "LCD"
+        ],
+        "display": "LCD-1",
+        "displayActive": false
+      },
+      "originalAttachment": ".codex-checks/workout-board/duo-closed/005-2007x2853.png",
+      "pixels": [
+        2007,
+        2853
+      ],
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e",
+      "checkpoint": {
+        "sequence": 5,
+        "action": "DUNE_VISUAL_AUDIT_READY L01-Life-workout-strength-end-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793232912.541637",
+        "elapsed_seconds": 4.219,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      }
+    },
+    {
+      "file": "images/duo-closed-strength-end-light-1398x2034.png",
+      "screen": "L01",
+      "label": "Duo closed · strength-end-light",
+      "sourceCommit": "72365af1",
+      "capturedAtUnix": 1793232885.0434036,
+      "originalTest": "LifeFlowUITests/testHostCaptureWorkoutBoardLight()",
+      "testOutcome": "passed",
+      "device": {
+        "udid": "DB1B9B76-36A1-47DA-AFAD-1DD7C380F3CF",
+        "activeDisplays": [
+          "LCD"
+        ],
+        "display": "LCD",
+        "displayActive": true
+      },
+      "originalAttachment": ".codex-checks/workout-board/duo-closed/005-1398x2034.png",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "57088afb46ef677b353e11da6210753a989debef2f029d4ad5f2c3650edfbf55",
+      "checkpoint": {
+        "sequence": 5,
+        "action": "DUNE_VISUAL_AUDIT_READY L01-Life-workout-strength-end-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793232912.541637",
+        "elapsed_seconds": 4.219,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      }
+    },
+    {
+      "file": "images/duo-closed-running-light-2007x2853.png",
+      "screen": "L01",
+      "label": "Duo closed · running-light",
+      "sourceCommit": "72365af1",
+      "capturedAtUnix": 1793232894.2893317,
+      "originalTest": "LifeFlowUITests/testHostCaptureWorkoutBoardLight()",
+      "testOutcome": "passed",
+      "device": {
+        "udid": "DB1B9B76-36A1-47DA-AFAD-1DD7C380F3CF",
+        "activeDisplays": [
+          "LCD"
+        ],
+        "display": "LCD-1",
+        "displayActive": false
+      },
+      "originalAttachment": ".codex-checks/workout-board/duo-closed/006-2007x2853.png",
+      "pixels": [
+        2007,
+        2853
+      ],
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e",
+      "checkpoint": {
+        "sequence": 6,
+        "action": "DUNE_VISUAL_AUDIT_READY L01-Life-workout-running-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793232922.660071",
+        "elapsed_seconds": 2.085,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      }
+    },
+    {
+      "file": "images/duo-closed-running-light-1398x2034.png",
+      "screen": "L01",
+      "label": "Duo closed · running-light",
+      "sourceCommit": "72365af1",
+      "capturedAtUnix": 1793232894.7357306,
+      "originalTest": "LifeFlowUITests/testHostCaptureWorkoutBoardLight()",
+      "testOutcome": "passed",
+      "device": {
+        "udid": "DB1B9B76-36A1-47DA-AFAD-1DD7C380F3CF",
+        "activeDisplays": [
+          "LCD"
+        ],
+        "display": "LCD",
+        "displayActive": true
+      },
+      "originalAttachment": ".codex-checks/workout-board/duo-closed/006-1398x2034.png",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "a9bb420f2ca3452787179c2356f0a17ff6ce598cccdbb3ee70cd73db05aa2977",
+      "checkpoint": {
+        "sequence": 6,
+        "action": "DUNE_VISUAL_AUDIT_READY L01-Life-workout-running-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793232922.660071",
+        "elapsed_seconds": 2.085,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      }
+    },
+    {
+      "file": "images/duo-closed-running-end-light-1398x2034.png",
+      "screen": "L01",
+      "label": "Duo closed · running-end-light",
+      "sourceCommit": "72365af1",
+      "capturedAtUnix": 1793232902.8068237,
+      "originalTest": "LifeFlowUITests/testHostCaptureWorkoutBoardLight()",
+      "testOutcome": "passed",
+      "device": {
+        "udid": "DB1B9B76-36A1-47DA-AFAD-1DD7C380F3CF",
+        "activeDisplays": [
+          "LCD"
+        ],
+        "display": "LCD",
+        "displayActive": true
+      },
+      "originalAttachment": ".codex-checks/workout-board/duo-closed/007-1398x2034.png",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "60c1030dd4c92504b0cf1daf8a6896c11a91600f740547c3cf115115750e662b",
+      "checkpoint": {
+        "sequence": 7,
+        "action": "DUNE_VISUAL_AUDIT_READY L01-Life-workout-running-end-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793232929.351213",
+        "elapsed_seconds": 3.472,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      }
+    },
+    {
+      "file": "images/duo-closed-running-end-light-2007x2853.png",
+      "screen": "L01",
+      "label": "Duo closed · running-end-light",
+      "sourceCommit": "72365af1",
+      "capturedAtUnix": 1793232902.1726556,
+      "originalTest": "LifeFlowUITests/testHostCaptureWorkoutBoardLight()",
+      "testOutcome": "passed",
+      "device": {
+        "udid": "DB1B9B76-36A1-47DA-AFAD-1DD7C380F3CF",
+        "activeDisplays": [
+          "LCD"
+        ],
+        "display": "LCD-1",
+        "displayActive": false
+      },
+      "originalAttachment": ".codex-checks/workout-board/duo-closed/007-2007x2853.png",
+      "pixels": [
+        2007,
+        2853
+      ],
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e",
+      "checkpoint": {
+        "sequence": 7,
+        "action": "DUNE_VISUAL_AUDIT_READY L01-Life-workout-running-end-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793232929.351213",
+        "elapsed_seconds": 3.472,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      }
+    },
+    {
+      "file": "images/duo-open-summary-light-2853x2007.png",
+      "screen": "L01",
+      "label": "Duo open · summary-light",
+      "sourceCommit": "e6550815",
+      "capturedAtUnix": 1793233801.2191112,
+      "originalTest": "LifeFlowUITests/testHostCaptureWorkoutBoardLight()",
+      "testOutcome": "passed",
+      "device": {
+        "udid": "DB1B9B76-36A1-47DA-AFAD-1DD7C380F3CF",
+        "activeDisplays": [
+          "LCD-1"
+        ],
+        "display": "LCD-1",
+        "displayActive": true
+      },
+      "originalAttachment": ".codex-checks/workout-board/duo-open/002-2007x2853.png",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "29620081d935cfc5c1102d56195355d4357436c7a97f45014a7f67c2527e303c",
+      "checkpoint": {
+        "sequence": 2,
+        "action": "DUNE_VISUAL_AUDIT_READY L01-Life-workout-summary-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793233828.136973",
+        "elapsed_seconds": 9.707,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      }
+    },
+    {
+      "file": "images/duo-open-summary-light-2034x1398.png",
+      "screen": "L01",
+      "label": "Duo open · summary-light",
+      "sourceCommit": "e6550815",
+      "capturedAtUnix": 1793233807.4280639,
+      "originalTest": "LifeFlowUITests/testHostCaptureWorkoutBoardLight()",
+      "testOutcome": "passed",
+      "device": {
+        "udid": "DB1B9B76-36A1-47DA-AFAD-1DD7C380F3CF",
+        "activeDisplays": [
+          "LCD-1"
+        ],
+        "display": "LCD",
+        "displayActive": false
+      },
+      "originalAttachment": ".codex-checks/workout-board/duo-open/002-1398x2034.png",
+      "pixels": [
+        2034,
+        1398
+      ],
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+      "checkpoint": {
+        "sequence": 2,
+        "action": "DUNE_VISUAL_AUDIT_READY L01-Life-workout-summary-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793233828.136973",
+        "elapsed_seconds": 9.707,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      }
+    },
+    {
+      "file": "images/duo-open-routine-light-2034x1398.png",
+      "screen": "L01",
+      "label": "Duo open · routine-light",
+      "sourceCommit": "e6550815",
+      "capturedAtUnix": 1793233819.9995883,
+      "originalTest": "LifeFlowUITests/testHostCaptureWorkoutBoardLight()",
+      "testOutcome": "passed",
+      "device": {
+        "udid": "DB1B9B76-36A1-47DA-AFAD-1DD7C380F3CF",
+        "activeDisplays": [
+          "LCD-1"
+        ],
+        "display": "LCD",
+        "displayActive": false
+      },
+      "originalAttachment": ".codex-checks/workout-board/duo-open/003-1398x2034.png",
+      "pixels": [
+        2034,
+        1398
+      ],
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+      "checkpoint": {
+        "sequence": 3,
+        "action": "DUNE_VISUAL_AUDIT_READY L01-Life-workout-routine-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793233847.270599",
+        "elapsed_seconds": 2.742,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      }
+    },
+    {
+      "file": "images/duo-open-routine-light-2853x2007.png",
+      "screen": "L01",
+      "label": "Duo open · routine-light",
+      "sourceCommit": "e6550815",
+      "capturedAtUnix": 1793233818.429158,
+      "originalTest": "LifeFlowUITests/testHostCaptureWorkoutBoardLight()",
+      "testOutcome": "passed",
+      "device": {
+        "udid": "DB1B9B76-36A1-47DA-AFAD-1DD7C380F3CF",
+        "activeDisplays": [
+          "LCD-1"
+        ],
+        "display": "LCD-1",
+        "displayActive": true
+      },
+      "originalAttachment": ".codex-checks/workout-board/duo-open/003-2007x2853.png",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "a24ce09966b91f253c0d1cf298b8048d6aff3c5ba77931ff67bc06149503b05a",
+      "checkpoint": {
+        "sequence": 3,
+        "action": "DUNE_VISUAL_AUDIT_READY L01-Life-workout-routine-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793233847.270599",
+        "elapsed_seconds": 2.742,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      }
+    },
+    {
+      "file": "images/duo-open-strength-light-2034x1398.png",
+      "screen": "L01",
+      "label": "Duo open · strength-light",
+      "sourceCommit": "e6550815",
+      "capturedAtUnix": 1793233829.732953,
+      "originalTest": "LifeFlowUITests/testHostCaptureWorkoutBoardLight()",
+      "testOutcome": "passed",
+      "device": {
+        "udid": "DB1B9B76-36A1-47DA-AFAD-1DD7C380F3CF",
+        "activeDisplays": [
+          "LCD-1"
+        ],
+        "display": "LCD",
+        "displayActive": false
+      },
+      "originalAttachment": ".codex-checks/workout-board/duo-open/004-1398x2034.png",
+      "pixels": [
+        2034,
+        1398
+      ],
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+      "checkpoint": {
+        "sequence": 4,
+        "action": "DUNE_VISUAL_AUDIT_READY L01-Life-workout-strength-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793233856.9611468",
+        "elapsed_seconds": 2.784,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      }
+    },
+    {
+      "file": "images/duo-open-strength-light-2853x2007.png",
+      "screen": "L01",
+      "label": "Duo open · strength-light",
+      "sourceCommit": "e6550815",
+      "capturedAtUnix": 1793233828.153361,
+      "originalTest": "LifeFlowUITests/testHostCaptureWorkoutBoardLight()",
+      "testOutcome": "passed",
+      "device": {
+        "udid": "DB1B9B76-36A1-47DA-AFAD-1DD7C380F3CF",
+        "activeDisplays": [
+          "LCD-1"
+        ],
+        "display": "LCD-1",
+        "displayActive": true
+      },
+      "originalAttachment": ".codex-checks/workout-board/duo-open/004-2007x2853.png",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "6628b467677bda3f343b6cced06b67b649635092effc4f4204b8e1f7f56e284e",
+      "checkpoint": {
+        "sequence": 4,
+        "action": "DUNE_VISUAL_AUDIT_READY L01-Life-workout-strength-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793233856.9611468",
+        "elapsed_seconds": 2.784,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      }
+    },
+    {
+      "file": "images/duo-open-strength-end-light-2853x2007.png",
+      "screen": "L01",
+      "label": "Duo open · strength-end-light",
+      "sourceCommit": "e6550815",
+      "capturedAtUnix": 1793233837.924997,
+      "originalTest": "LifeFlowUITests/testHostCaptureWorkoutBoardLight()",
+      "testOutcome": "passed",
+      "device": {
+        "udid": "DB1B9B76-36A1-47DA-AFAD-1DD7C380F3CF",
+        "activeDisplays": [
+          "LCD-1"
+        ],
+        "display": "LCD-1",
+        "displayActive": true
+      },
+      "originalAttachment": ".codex-checks/workout-board/duo-open/005-2007x2853.png",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "5986915f1c9a7ec41dbad4676747d332c1582bab4a843f415661c9e2cc7eac8a",
+      "checkpoint": {
+        "sequence": 5,
+        "action": "DUNE_VISUAL_AUDIT_READY L01-Life-workout-strength-end-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793233866.947017",
+        "elapsed_seconds": 2.612,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      }
+    },
+    {
+      "file": "images/duo-open-strength-end-light-2034x1398.png",
+      "screen": "L01",
+      "label": "Duo open · strength-end-light",
+      "sourceCommit": "e6550815",
+      "capturedAtUnix": 1793233839.4852595,
+      "originalTest": "LifeFlowUITests/testHostCaptureWorkoutBoardLight()",
+      "testOutcome": "passed",
+      "device": {
+        "udid": "DB1B9B76-36A1-47DA-AFAD-1DD7C380F3CF",
+        "activeDisplays": [
+          "LCD-1"
+        ],
+        "display": "LCD",
+        "displayActive": false
+      },
+      "originalAttachment": ".codex-checks/workout-board/duo-open/005-1398x2034.png",
+      "pixels": [
+        2034,
+        1398
+      ],
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+      "checkpoint": {
+        "sequence": 5,
+        "action": "DUNE_VISUAL_AUDIT_READY L01-Life-workout-strength-end-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793233866.947017",
+        "elapsed_seconds": 2.612,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      }
+    },
+    {
+      "file": "images/duo-open-running-light-2853x2007.png",
+      "screen": "L01",
+      "label": "Duo open · running-light",
+      "sourceCommit": "e6550815",
+      "capturedAtUnix": 1793233847.6382987,
+      "originalTest": "LifeFlowUITests/testHostCaptureWorkoutBoardLight()",
+      "testOutcome": "passed",
+      "device": {
+        "udid": "DB1B9B76-36A1-47DA-AFAD-1DD7C380F3CF",
+        "activeDisplays": [
+          "LCD-1"
+        ],
+        "display": "LCD-1",
+        "displayActive": true
+      },
+      "originalAttachment": ".codex-checks/workout-board/duo-open/006-2007x2853.png",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "3f70b370fd2068cd20a5ec352e75d72a61c15cb07f8d5f8f0cdbb46dfa894bcc",
+      "checkpoint": {
+        "sequence": 6,
+        "action": "DUNE_VISUAL_AUDIT_READY L01-Life-workout-running-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793233876.5731602",
+        "elapsed_seconds": 2.649,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      }
+    },
+    {
+      "file": "images/duo-open-running-light-2034x1398.png",
+      "screen": "L01",
+      "label": "Duo open · running-light",
+      "sourceCommit": "e6550815",
+      "capturedAtUnix": 1793233849.2090018,
+      "originalTest": "LifeFlowUITests/testHostCaptureWorkoutBoardLight()",
+      "testOutcome": "passed",
+      "device": {
+        "udid": "DB1B9B76-36A1-47DA-AFAD-1DD7C380F3CF",
+        "activeDisplays": [
+          "LCD-1"
+        ],
+        "display": "LCD",
+        "displayActive": false
+      },
+      "originalAttachment": ".codex-checks/workout-board/duo-open/006-1398x2034.png",
+      "pixels": [
+        2034,
+        1398
+      ],
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+      "checkpoint": {
+        "sequence": 6,
+        "action": "DUNE_VISUAL_AUDIT_READY L01-Life-workout-running-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793233876.5731602",
+        "elapsed_seconds": 2.649,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      }
+    },
+    {
+      "file": "images/duo-open-running-end-light-2034x1398.png",
+      "screen": "L01",
+      "label": "Duo open · running-end-light",
+      "sourceCommit": "e6550815",
+      "capturedAtUnix": 1793233856.7197497,
+      "originalTest": "LifeFlowUITests/testHostCaptureWorkoutBoardLight()",
+      "testOutcome": "passed",
+      "device": {
+        "udid": "DB1B9B76-36A1-47DA-AFAD-1DD7C380F3CF",
+        "activeDisplays": [
+          "LCD-1"
+        ],
+        "display": "LCD",
+        "displayActive": false
+      },
+      "originalAttachment": ".codex-checks/workout-board/duo-open/007-1398x2034.png",
+      "pixels": [
+        2034,
+        1398
+      ],
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+      "checkpoint": {
+        "sequence": 7,
+        "action": "DUNE_VISUAL_AUDIT_READY L01-Life-workout-running-end-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793233884.0017629",
+        "elapsed_seconds": 2.73,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      }
+    },
+    {
+      "file": "images/duo-open-running-end-light-2853x2007.png",
+      "screen": "L01",
+      "label": "Duo open · running-end-light",
+      "sourceCommit": "e6550815",
+      "capturedAtUnix": 1793233855.0076125,
+      "originalTest": "LifeFlowUITests/testHostCaptureWorkoutBoardLight()",
+      "testOutcome": "passed",
+      "device": {
+        "udid": "DB1B9B76-36A1-47DA-AFAD-1DD7C380F3CF",
+        "activeDisplays": [
+          "LCD-1"
+        ],
+        "display": "LCD-1",
+        "displayActive": true
+      },
+      "originalAttachment": ".codex-checks/workout-board/duo-open/007-2007x2853.png",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "17eb6ddbddcb54c2fc89053bae0dce9cd8bc2d50512f098973363ec24c5a3474",
+      "checkpoint": {
+        "sequence": 7,
+        "action": "DUNE_VISUAL_AUDIT_READY L01-Life-workout-running-end-light [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793233884.0017629",
+        "elapsed_seconds": 2.73,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      }
+    }
+  ]
+}

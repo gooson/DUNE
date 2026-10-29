@@ -143,6 +143,179 @@ final class LifeFlowUITests: SeededUITestBaseCase {
         capture("L05-Life-history-recorded-later")
     }
 
+    func testWeeklyWorkoutBoardSeededContentAndCollapse() {
+        navigateToLife()
+        let summary = reveal("life-workout-summary")
+        XCTAssertTrue(summary.label.contains("DUNE"))
+        XCTAssertTrue(summary.label.contains("Apple Health"))
+        XCTAssertTrue(summary.label.contains("/"), "The summary should announce completed and total goals")
+        XCTAssertTrue(summary.label.contains("–"), "The summary should announce the current week")
+        XCTAssertTrue(waitForElement("life-workout-source").label.contains("DUNE"))
+
+        let toggle = app.buttons["life-workout-challenges-toggle"].firstMatch
+        XCTAssertTrue(toggle.waitForExistence(timeout: 5))
+        XCTAssertGreaterThanOrEqual(toggle.frame.height, 44)
+
+        let sections: [(group: String, metrics: [String])] = [
+            ("routine", ["weeklyWorkout5", "weeklyWorkout7"]),
+            ("strength", ["weeklyStrength3", "weeklyChest3", "weeklyBack3",
+                          "weeklyLowerBody3", "weeklyShoulders3", "weeklyArms3"]),
+            ("running", ["weeklyRunning15km"])
+        ]
+        for section in sections {
+            XCTAssertTrue(reveal("life-workout-group-\(section.group)").exists)
+            for ruleID in section.metrics {
+                let metric = reveal("life-workout-metric-\(ruleID)")
+                XCTAssertTrue(metric.label.rangeOfCharacter(from: .decimalDigits) != nil,
+                              "\(ruleID) should announce its numeric progress")
+                XCTAssertGreaterThan(metric.frame.width, 44, "\(ruleID) should have room for its value")
+                if section.group != "routine" {
+                    XCTAssertGreaterThan(metric.frame.height, 20, "\(ruleID) should have room for its numeric value")
+                }
+                if ruleID == "weeklyShoulders3" {
+                    XCTAssertTrue(metric.label.contains("0"),
+                                  "The seeded Bench Press, Squat and Deadlift have no shoulder workout")
+                }
+            }
+        }
+
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("life-workout-challenges-toggle", maxSwipes: 24, direction: .down))
+        toggle.auditTap()
+        for section in sections {
+            XCTAssertFalse(element("life-workout-group-\(section.group)").exists,
+                           "Collapsing challenges should remove \(section.group) content")
+        }
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("life-workout-challenges-toggle", maxSwipes: 12))
+        toggle.auditTap()
+        for section in sections {
+            XCTAssertTrue(reveal("life-workout-group-\(section.group)").exists,
+                          "Expanding challenges should restore \(section.group) content")
+        }
+    }
+
+    func testWeeklyWorkoutBoardCustomGoalActions() {
+        var configuration = launchConfiguration
+        configuration.additionalArguments.append("--ui-workout-board-goal-fixture")
+        launchApp(with: configuration)
+        navigateToLife()
+        XCTAssertTrue(reveal("life-workout-goal-Weekly Move").exists)
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("life-habit-actions-Weekly Move", maxSwipes: 20))
+        app.buttons["life-habit-actions-Weekly Move"].firstMatch.auditTap()
+        XCTAssertTrue(app.buttons[AXID.lifeHabitActionEdit].firstMatch.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.buttons[AXID.lifeHabitActionHistory].firstMatch.exists)
+        XCTAssertTrue(app.buttons[AXID.lifeHabitActionArchive].firstMatch.exists)
+        XCTAssertFalse(app.buttons["life-habit-action-past-record"].firstMatch.exists,
+                       "Auto-linked goals should not offer manual past recording")
+        app.buttons[AXID.lifeHabitActionHistory].firstMatch.auditTap()
+        XCTAssertTrue(waitForElement(AXID.lifeHabitHistoryScreen, timeout: 8).exists)
+        XCTAssertTrue(app.dismissModalIfPresent(cancelIdentifiers: [AXID.lifeHabitHistoryClose]))
+        XCTAssertTrue(element("life-workout-goal-Weekly Move").exists)
+    }
+
+    func testWeeklyWorkoutBoardKoreanReadingOrder() {
+        var configuration = launchConfiguration
+        if let language = configuration.additionalArguments.firstIndex(of: "-AppleLanguages") {
+            configuration.additionalArguments[language + 1] = "(ko)"
+        }
+        if let locale = configuration.additionalArguments.firstIndex(of: "-AppleLocale") {
+            configuration.additionalArguments[locale + 1] = "ko_KR"
+        }
+        launchApp(with: configuration)
+        navigateToLife()
+        let summary = reveal("life-workout-summary")
+        XCTAssertTrue(summary.label.contains("DUNE"))
+        XCTAssertTrue(summary.label.contains("Apple 건강"))
+        XCTAssertTrue(waitForElement("life-workout-source").label.contains("Apple 건강"))
+        capture("L01-Life-workout-summary-ko")
+        XCTAssertTrue(reveal("life-workout-group-routine").exists)
+        capture("L01-Life-workout-routine-ko")
+        XCTAssertTrue(reveal("life-workout-group-strength").exists)
+        XCTAssertTrue(reveal("life-workout-metric-weeklyArms3").exists)
+        capture("L01-Life-workout-strength-end-ko")
+        XCTAssertTrue(reveal("life-workout-group-running").exists)
+        XCTAssertTrue(reveal("life-workout-source").exists)
+        capture("L01-Life-workout-running-end-ko")
+    }
+
+    func testCaptureL01WorkoutBoardLight() {
+        captureWorkoutBoard(style: "light", maximumAX: false)
+    }
+
+    func testCaptureL01WorkoutBoardDark() {
+        captureWorkoutBoard(style: "dark", maximumAX: false)
+    }
+
+    func testCaptureL01WorkoutBoardMaximumAX() {
+        captureWorkoutBoard(style: "dark", maximumAX: true)
+    }
+
+    func testHostCaptureWorkoutBoardLight() throws {
+        try XCTSkipUnless(isHostCapture, "Host native capture only")
+        captureWorkoutBoard(style: "light", maximumAX: false)
+    }
+
+    func testHostCaptureWorkoutBoardDark() throws {
+        try XCTSkipUnless(isHostCapture, "Host native capture only")
+        captureWorkoutBoard(style: "dark", maximumAX: false)
+    }
+
+    func testHostCaptureWorkoutBoardMaximumAX() throws {
+        try XCTSkipUnless(isHostCapture, "Host native capture only")
+        captureWorkoutBoard(style: "dark", maximumAX: true)
+    }
+
+    private func captureWorkoutBoard(style: String, maximumAX: Bool) {
+        var configuration = launchConfiguration
+        configuration.additionalArguments.append("--ui-workout-board-goal-fixture")
+        if let index = configuration.additionalArguments.firstIndex(of: "--ui-test-style") {
+            configuration.additionalArguments[index + 1] = style
+        }
+        if maximumAX {
+            configuration.additionalArguments += [
+                "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+            ]
+        }
+        launchApp(with: configuration)
+        navigateToLife()
+        let suffix = maximumAX ? "MaxAX" : style
+        alignWorkoutCapture("life-workout-summary", maximumAX: maximumAX)
+        capture("L01-Life-workout-summary-\(suffix)")
+        for group in ["routine", "strength", "running"] {
+            alignWorkoutCapture("life-workout-group-\(group)", maximumAX: maximumAX)
+            capture("L01-Life-workout-\(group)-\(suffix)")
+            if group == "strength" {
+                alignWorkoutCapture("life-workout-metric-weeklyArms3", maximumAX: maximumAX)
+                capture("L01-Life-workout-strength-end-\(suffix)")
+            } else if group == "running" {
+                alignWorkoutCapture("life-workout-source", maximumAX: maximumAX, alignBottom: true)
+                capture("L01-Life-workout-running-end-\(suffix)")
+            }
+        }
+    }
+
+    private func alignWorkoutCapture(_ id: String, maximumAX: Bool, alignBottom: Bool = false) {
+        let target = reveal(id)
+        guard maximumAX || isHostCapture else { return }
+        let window = app.windows.firstMatch.frame
+        let top = max(window.minY, app.navigationBars.firstMatch.frame.maxY) + 20
+        let tabBar = app.tabBars.firstMatch
+        let hasBottomTabBar = tabBar.exists && tabBar.frame.minY > window.midY && tabBar.frame.width > window.width / 2
+        let bottom = (hasBottomTabBar ? tabBar.frame.minY : window.maxY) - 20
+        let scroll = app.scrollViews.firstMatch
+        for _ in 0..<8 {
+            let offset = alignBottom ? max(0, target.frame.maxY - bottom) : target.frame.minY - top
+            if abs(offset) < 16 { break }
+            let start = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.55))
+            start.press(forDuration: 0.05,
+                        thenDragTo: start.withOffset(CGVector(dx: 0, dy: -max(-240, min(240, offset)))),
+                        withVelocity: .slow, thenHoldForDuration: 0.3)
+        }
+        if target.frame.height <= bottom - top {
+            XCTAssertGreaterThanOrEqual(target.frame.minY, top - 16, "\(id) should clear the navigation bar")
+            XCTAssertLessThanOrEqual(target.frame.maxY, bottom + 16, "\(id) should clear the floating tab bar")
+        }
+    }
+
     func testCaptureL01AndPastRecordLightDarkAndMaximumAX() throws {
         try XCTSkipIf(isHostCapture, "Use the per-appearance host capture cases")
         captureLifeStates([("light", false), ("dark", false), ("dark", true)])

@@ -1,0 +1,161 @@
+<style>
+#dune-achievement-study{font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif}
+#dune-achievement-study .da-stage{min-height:1180px;display:flex;align-items:flex-start;justify-content:center;padding:28px 14px 34px}
+#dune-achievement-study .da-phone{--da-ink:light-dark(#382e26,#f9efdf);--da-muted:light-dark(#7b6c5b,#c3b29c);--da-ground:light-dark(#eee2cf,#28231f);--da-surface:light-dark(#fffaf0,#342d26);--da-inset:light-dark(#f2e6d4,#40362b);--da-line:light-dark(#d7c6ad,#62503c);--da-gold:light-dark(#986325,#e9be74);--da-gold-ink:light-dark(#774c1b,#f5d9a4);--da-faint:light-dark(#dfd0b8,#594b3a);--da-green:light-dark(#426b58,#aad2b5);--da-scale:1;width:100%;max-width:414px;color:var(--da-ink);background:var(--da-ground);padding:26px 18px 22px;border-radius:28px;box-shadow:0 20px 60px #20180f26;container-type:inline-size;font-size:calc(14px * var(--da-scale));line-height:1.45;isolation:isolate;position:relative;overflow:clip}
+#dune-achievement-study .da-phone[data-appearance=dark]{color-scheme:dark}#dune-achievement-study .da-phone[data-appearance=light]{color-scheme:light}
+#dune-achievement-study .da-phone *{box-sizing:border-box;min-width:0}#dune-achievement-study .da-phone p,#dune-achievement-study .da-phone h2,#dune-achievement-study .da-phone h3{margin:0;word-break:keep-all;overflow-wrap:anywhere}
+#dune-achievement-study .da-phone button{font:inherit;color:inherit;border:0;touch-action:manipulation}#dune-achievement-study .da-phone svg{width:19px;height:19px;flex-shrink:0}
+#dune-achievement-study .da-phone button:focus-visible,#dune-achievement-study .da-phone summary:focus-visible{outline:3px solid var(--da-green);outline-offset:3px}
+#dune-achievement-study .da-context{display:flex;justify-content:space-between;align-items:center;margin:0 2px 17px;color:var(--da-muted);font-size:11px;letter-spacing:.15em;font-weight:600}
+#dune-achievement-study .da-context span:last-child{letter-spacing:0;font-weight:400}
+#dune-achievement-study .da-board{background:var(--da-surface);border-radius:22px;overflow:clip;box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--da-line) 65%,transparent)}
+#dune-achievement-study .da-top{position:relative;isolation:isolate;overflow:hidden;padding:23px 22px 20px;background:radial-gradient(ellipse at 80% 28%,light-dark(#e6bd724a,#c6933e2d),transparent 62%),linear-gradient(135deg,light-dark(#fcf1d7,#48371f),light-dark(#f0dfbe,#30271d));border-bottom:1px solid var(--da-line)}
+#dune-achievement-study .da-top:before,#dune-achievement-study .da-top:after{content:"";position:absolute;z-index:-1;width:155%;height:90px;left:-15%;border-radius:50%;border-top:1px solid color-mix(in srgb,var(--da-gold) 28%,transparent);transform:rotate(-13deg);bottom:-33px;background:color-mix(in srgb,var(--da-gold) 6%,transparent)}
+#dune-achievement-study .da-top:after{bottom:-56px;left:-45%;transform:rotate(9deg);height:95px}
+#dune-achievement-study .da-eyebrow{color:var(--da-gold-ink);font-size:10px;letter-spacing:.17em;font-weight:650;display:flex;align-items:center;gap:7px;margin-bottom:8px}
+#dune-achievement-study .da-eyebrow svg{width:14px;height:14px}
+#dune-achievement-study h2.da-title{font-size:calc(21px * var(--da-scale));letter-spacing:-.04em;font-weight:700;line-height:1.25}
+#dune-achievement-study .da-date{color:var(--da-muted);font-size:calc(11px * var(--da-scale));margin-top:7px}
+#dune-achievement-study .da-score-row{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:21px}
+#dune-achievement-study .da-score{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;font-variant-numeric:tabular-nums}
+#dune-achievement-study .da-score strong{font-size:calc(59px * var(--da-scale));font-weight:700;letter-spacing:-.075em;line-height:.95}
+#dune-achievement-study .da-score .da-total{font-size:calc(22px * var(--da-scale));font-weight:500;color:var(--da-muted);letter-spacing:-.04em}
+#dune-achievement-study .da-score .da-done{font-size:calc(12px * var(--da-scale));color:var(--da-gold-ink);margin-left:4px}
+#dune-achievement-study .da-seals{display:flex;gap:4px;margin-top:15px;flex-wrap:wrap}
+#dune-achievement-study .da-seal{width:18px;height:18px;display:grid;place-items:center;border-radius:50%;background:color-mix(in srgb,var(--da-gold) 9%,var(--da-surface));color:color-mix(in srgb,var(--da-muted) 65%,var(--da-surface));font-size:10px;box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--da-gold) 25%,transparent)}
+#dune-achievement-study .da-seal.da-earned{background:linear-gradient(135deg,#f8de9f,#bd8b3e);color:#553a17;box-shadow:inset 0 1px 0 #fff2c8}
+#dune-achievement-study .da-medallion{flex:none;width:83px;height:83px;border-radius:50%;padding:8px;background:repeating-conic-gradient(from 7deg,#d0a45c 0deg 7deg,#a97a37 7deg 14deg);box-shadow:0 7px 15px #33231126,inset 0 1px 0 #ffe5ab;transform:rotate(8deg)}
+#dune-achievement-study .da-medallion>span{display:grid;place-items:center;width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 30% 20%,#fbe4ac,#dcaf62 60%,#b88236);box-shadow:inset 0 0 0 1px #9e6f31,inset 0 2px 1px #fff2c0;color:#79501e}
+#dune-achievement-study .da-medallion svg{width:35px;height:35px;stroke-width:1.4;filter:drop-shadow(0 1px 0 #ffe9b6)}
+#dune-achievement-study .da-medallion.da-locked{filter:saturate(.65);opacity:.8}
+#dune-achievement-study .da-content{padding:0 20px 20px}
+#dune-achievement-study .da-goal{display:flex;gap:11px;align-items:center;padding:19px 0;border-bottom:1px solid var(--da-line);position:relative}
+#dune-achievement-study .da-goal-icon{display:grid;place-items:center;flex-shrink:0;width:39px;height:43px;border-radius:12px;color:var(--da-gold-ink);background:var(--da-inset)}
+#dune-achievement-study .da-goal-copy{flex:1}
+#dune-achievement-study .da-kicker{font-size:calc(10px * var(--da-scale));color:var(--da-muted);margin-bottom:3px}
+#dune-achievement-study .da-goal-name{font-size:calc(14px * var(--da-scale));font-weight:600}
+#dune-achievement-study .da-goal-state{font-size:calc(11px * var(--da-scale));color:var(--da-muted);white-space:nowrap}
+#dune-achievement-study .da-goal-state.da-yes{color:var(--da-green)}
+#dune-achievement-study .da-mini-button{background:transparent;min-width:44px;min-height:44px;display:grid;place-items:center;border-radius:50%}
+#dune-achievement-study .da-goal-menu{position:absolute;top:66px;right:0;z-index:3;background:var(--da-surface);padding:6px;border-radius:13px;box-shadow:0 5px 25px #21170e40;min-width:150px;border:1px solid var(--da-line)}
+#dune-achievement-study .da-goal-menu p{padding:10px 12px;font-size:calc(13px * var(--da-scale))}
+#dune-achievement-study .da-disclosure{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:65px;font-size:calc(13px * var(--da-scale));font-weight:650;color:var(--da-gold-ink)}
+#dune-achievement-study .da-disclosure::-webkit-details-marker{display:none}
+#dune-achievement-study .da-disclosure>span{display:flex;align-items:center;gap:7px}
+#dune-achievement-study .da-disclosure>span:last-child{color:var(--da-muted);font-size:calc(10px * var(--da-scale));font-weight:400}
+#dune-achievement-study .da-chevron{transition:transform .15s}#dune-achievement-study details:not([open]) .da-chevron{transform:rotate(-90deg)}
+#dune-achievement-study .da-section{padding-bottom:22px;margin-bottom:21px;border-bottom:1px solid var(--da-line)}
+#dune-achievement-study .da-section:last-child{border-bottom:0;margin-bottom:0;padding-bottom:0}
+#dune-achievement-study .da-section-head{display:flex;justify-content:space-between;align-items:center;gap:9px;margin-bottom:11px}
+#dune-achievement-study .da-section h3{display:flex;gap:7px;align-items:center;font-size:calc(14px * var(--da-scale));font-weight:650}
+#dune-achievement-study .da-section h3 svg{color:var(--da-gold);width:17px;height:17px}
+#dune-achievement-study .da-section-count{font-size:calc(11px * var(--da-scale));color:var(--da-muted);font-variant-numeric:tabular-nums}
+#dune-achievement-study .da-main-number{display:flex;align-items:baseline;gap:5px;flex-wrap:wrap;font-variant-numeric:tabular-nums}
+#dune-achievement-study .da-main-number strong{font-size:calc(35px * var(--da-scale));letter-spacing:-.06em;line-height:1.15;font-weight:650}
+#dune-achievement-study .da-main-number small{font-size:calc(12px * var(--da-scale));color:var(--da-muted)}
+#dune-achievement-study .da-routine-top{display:flex;justify-content:space-between;align-items:end;gap:10px}
+#dune-achievement-study .da-next{font-size:calc(11px * var(--da-scale));color:var(--da-gold-ink);text-align:right}
+#dune-achievement-study .da-session-track{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;margin-top:14px}
+#dune-achievement-study .da-session{height:23px;border-radius:6px;background:var(--da-faint);display:grid;place-items:center;color:var(--da-muted);font-size:11px}
+#dune-achievement-study .da-session.da-filled{background:linear-gradient(180deg,light-dark(#d9ad68,#eccb8c),light-dark(#b17e3c,#bd8f48));color:light-dark(#fff5dc,#3e2c15)}
+#dune-achievement-study .da-milestones{display:flex;justify-content:flex-end;gap:12px;margin-top:8px;font-size:calc(10px * var(--da-scale));color:var(--da-muted)}
+#dune-achievement-study .da-milestones span{display:flex;gap:4px;align-items:center}
+#dune-achievement-study .da-milestones .da-hit{color:var(--da-green)}
+#dune-achievement-study .da-milestones svg{width:12px;height:12px}
+#dune-achievement-study .da-strength-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+#dune-achievement-study .da-strength{background:var(--da-inset);border-radius:12px;padding:12px 10px 11px}
+#dune-achievement-study .da-strength-name{font-size:calc(11px * var(--da-scale));color:var(--da-muted)}
+#dune-achievement-study .da-strength-value{display:flex;align-items:baseline;gap:3px;flex-wrap:wrap;margin-top:5px;font-variant-numeric:tabular-nums}
+#dune-achievement-study .da-strength-value strong{font-size:calc(25px * var(--da-scale));font-weight:600;letter-spacing:-.045em}
+#dune-achievement-study .da-strength-value small{font-size:calc(10px * var(--da-scale));color:var(--da-muted)}
+#dune-achievement-study .da-strength-marks{display:flex;gap:4px;margin-top:8px}
+#dune-achievement-study .da-strength-marks i{display:block;height:5px;border-radius:3px;flex:1;background:var(--da-faint)}
+#dune-achievement-study .da-strength-marks i.da-filled{background:var(--da-gold)}
+#dune-achievement-study .da-strength.da-complete .da-strength-name{color:var(--da-green)}
+#dune-achievement-study .da-strength.da-complete .da-strength-marks i{background:var(--da-green)}
+#dune-achievement-study .da-running{position:relative;min-height:111px;padding-top:1px;isolation:isolate;overflow:hidden}
+#dune-achievement-study .da-phone svg.da-run-art{width:100%;height:64px;display:block;margin-top:10px;color:var(--da-gold)}
+#dune-achievement-study .da-run-art .da-terrain{stroke:var(--da-line);fill:none;stroke-width:1;opacity:.6}
+#dune-achievement-study .da-run-art .da-road{stroke:var(--da-faint);stroke-width:5;fill:none;stroke-linecap:round}
+#dune-achievement-study .da-run-art .da-distance{stroke:var(--da-gold);stroke-width:5;fill:none;stroke-linecap:round}
+#dune-achievement-study .da-run-axis{display:flex;justify-content:space-between;margin-top:0;color:var(--da-muted);font-size:calc(10px * var(--da-scale))}
+#dune-achievement-study .da-footer{font-size:calc(10px * var(--da-scale));color:var(--da-muted);margin:15px 2px 0;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+#dune-achievement-study .da-quiet .da-top{padding-bottom:22px}
+#dune-achievement-study .da-quiet .da-medallion,#dune-achievement-study .da-quiet .da-seals{display:none}
+#dune-achievement-study .da-quiet .da-score-row{margin-top:18px}
+#dune-achievement-study .da-quiet .da-score strong{font-size:calc(44px * var(--da-scale))}
+#dune-achievement-study .da-quiet .da-strength-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+#dune-achievement-study .da-quiet .da-strength{background:transparent;border-radius:0;border-bottom:1px solid var(--da-line);padding:8px 0 11px}
+#dune-achievement-study .da-quiet .da-strength-value strong{font-size:calc(29px * var(--da-scale))}
+#dune-achievement-study .da-quiet .da-strength-marks{display:none}
+#dune-achievement-study .da-quiet .da-session{height:8px;color:transparent;border-radius:4px}
+#dune-achievement-study .da-phone.da-quiet svg.da-run-art{height:45px}
+#dune-achievement-study .da-phone[data-large=true] .da-strength-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+#dune-achievement-study .da-phone[data-large=true] .da-score-row{align-items:flex-start}
+#dune-achievement-study .da-phone[data-large=true] .da-medallion{display:none}
+#dune-achievement-study .da-phone[data-large=true] .da-goal{flex-wrap:wrap}
+#dune-achievement-study .da-phone[data-large=true] .da-routine-top{align-items:flex-start;flex-direction:column}
+#dune-achievement-study .da-phone[data-large=true] .da-next{text-align:left}
+#dune-achievement-study .da-phone[data-large=true] .da-section-head{align-items:flex-start;flex-wrap:wrap}
+@media(max-width:380px){#dune-achievement-study .da-stage{padding:20px 4px 28px}#dune-achievement-study .da-phone{padding:20px 12px}#dune-achievement-study .da-content{padding-inline:16px}#dune-achievement-study .da-top{padding-inline:16px}#dune-achievement-study .da-strength{padding-inline:8px}#dune-achievement-study .da-milestones{gap:8px}}
+@media(prefers-reduced-motion:reduce){#dune-achievement-study *{transition:none!important}}
+</style>
+<div id="dune-achievement-study" class="viz-carousel viz-dotted-background" aria-label="주간 운동 업적 시안" data-previous-label="이전 시안" data-next-label="다음 시안">
+  <section data-variant="성과 보드" aria-label="성과 보드 시안"><div class="da-stage"><div class="da-phone" data-design="board" aria-label="성과 보드 설정"></div></div></section>
+  <section data-variant="숫자 중심" aria-label="숫자 중심 시안" hidden><div class="da-stage"><div class="da-phone da-quiet" data-design="quiet" aria-label="숫자 중심 설정"></div></div></section>
+</div>
+<script>
+(()=>{
+const root=document.getElementById('dune-achievement-study');
+const saved=window.openai?.widgetState?.modelContent;
+const settings={appearance:saved?.appearance||'dark',fixture:saved?.fixture||'reference',text:saved?.text||'100'};
+const names=['근력','가슴','등','하체','어깨','팔'];
+const fixtures={reference:{sessions:4,strength:[2,0,1,0,1,2],distance:0,custom:0},progress:{sessions:5,strength:[3,1,3,2,3,2],distance:12.4,custom:1},complete:{sessions:7,strength:[3,3,3,3,3,3],distance:15,custom:1},empty:{sessions:0,strength:[0,0,0,0,0,0],distance:0,custom:0}};
+const icon=name=>`<i data-lucide="${name}" aria-hidden="true"></i>`;
+function remember(){window.openai?.setWidgetState?.({modelContent:{...settings},privateContent:null}).catch(()=>{});}
+function render(){
+ const d=fixtures[settings.fixture]||fixtures.reference;
+ const strengthDone=d.strength.filter(n=>n>=3).length;
+ const routineDone=Number(d.sessions>=5)+Number(d.sessions>=7);
+ const total=d.custom+routineDone+strengthDone+Number(d.distance>=15);
+ const next=d.sessions<5?`5회 목표까지 ${5-d.sessions}회`:d.sessions<7?`7회 목표까지 ${7-d.sessions}회`:'두 목표 모두 완료';
+ const sealMarkup=Array.from({length:10},(_,i)=>`<span class="da-seal ${i<total?'da-earned':''}" aria-hidden="true">${i<total?'✓':'·'}</span>`).join('');
+ const muscleMarkup=names.map((name,i)=>`<div class="da-strength ${d.strength[i]>=3?'da-complete':''}" aria-label="${name} ${d.strength[i]}회, 목표 3회${d.strength[i]>=3?', 완료':''}"><div class="da-strength-name">${name}${d.strength[i]>=3?' ✓':''}</div><div class="da-strength-value"><strong>${d.strength[i]}</strong><small>/ 3회</small></div><div class="da-strength-marks" aria-hidden="true">${Array.from({length:3},(_,j)=>`<i class="${j<d.strength[i]?'da-filled':''}"></i>`).join('')}</div></div>`).join('');
+ for(const phone of root.querySelectorAll('.da-phone')){
+  phone.dataset.appearance=settings.appearance;
+  phone.dataset.large=Number(settings.text)>=160;
+  phone.style.setProperty('--da-scale',Number(settings.text)/100);
+  const open=phone.querySelector('details')?.open??true;
+  phone.innerHTML=`<div class="da-context"><span>LIFE / WORKOUTS</span><span>디자인 시안 · 예시 데이터</span></div>
+   <article class="da-board">
+    <header class="da-top"><div class="da-eyebrow">${icon('award')} THIS WEEK</div><h2 class="da-title">이번 주 운동 업적</h2><p class="da-date">10.26 — 11.01 · 월–일</p>
+    <div class="da-score-row"><div><div class="da-score" aria-label="목표 10개 중 ${total}개 완료"><strong>${total}</strong><span class="da-total">/ 10</span><span class="da-done">완료</span></div><div class="da-seals" aria-hidden="true">${sealMarkup}</div></div><div class="da-medallion ${total===0?'da-locked':''}" aria-hidden="true"><span>${icon('trophy')}</span></div></div></header>
+    <div class="da-content">
+     <div class="da-goal"><span class="da-goal-icon">${icon('star')}</span><div class="da-goal-copy"><div class="da-kicker">내 목표 · 오늘 운동 기록 연동</div><p class="da-goal-name">매일 달리기</p></div><span class="da-goal-state ${d.custom?'da-yes':''}">${d.custom?'완료 ✓':'0 / 1'}</span><button type="button" class="da-mini-button cursor-interaction" aria-label="매일 달리기 더보기" aria-expanded="false">${icon('ellipsis')}</button><div class="da-goal-menu" hidden><p>수정</p><p>이력</p><p>보관</p></div></div>
+     <details ${open?'open':''}><summary class="da-disclosure cursor-interaction"><span>운동 도전</span><span>${routineDone+strengthDone+Number(d.distance>=15)} / 9 완료 ${icon('chevron-down')}</span></summary>
+      <section class="da-section"><div class="da-section-head"><h3>${icon('calendar-check-2')}루틴 일관성</h3><span class="da-section-count">${routineDone} / 2</span></div>
+       <div class="da-routine-top"><div class="da-main-number"><strong>${d.sessions}</strong><small>회 운동</small></div><span class="da-next">${next}</span></div>
+       <div class="da-session-track" role="img" aria-label="이번 주 운동 ${d.sessions}회. 목표는 5회와 7회이며 요일 표시가 아닙니다.">${Array.from({length:7},(_,i)=>`<span class="da-session ${i<d.sessions?'da-filled':''}">${i<d.sessions?'✓':i+1}</span>`).join('')}</div>
+       <div class="da-milestones"><span class="${d.sessions>=5?'da-hit':''}">${icon(d.sessions>=5?'circle-check':'flag')}5회 목표</span><span class="${d.sessions>=7?'da-hit':''}">${icon(d.sessions>=7?'circle-check':'flag')}7회 목표</span></div>
+      </section>
+      <section class="da-section"><div class="da-section-head"><h3>${icon('dumbbell')}근력 분할</h3><span class="da-section-count">${strengthDone} / 6</span></div><div class="da-strength-grid">${muscleMarkup}</div></section>
+      <section class="da-section"><div class="da-section-head"><h3>${icon('footprints')}러닝 거리</h3><span class="da-section-count">${Number(d.distance>=15)} / 1</span></div>
+       <div class="da-running"><div class="da-routine-top"><div class="da-main-number"><strong>${d.distance}</strong><small>/ 15 km</small></div><span class="da-next">${d.distance>=15?'목표 완료':`${Number((15-d.distance).toFixed(1))} km 남음`}</span></div>
+       <svg class="da-run-art" viewBox="0 0 320 64" preserveAspectRatio="none" role="img" aria-label="달리기 ${d.distance} km, 목표 15 km"><path class="da-terrain" d="M-20 63Q70 3 166 29T350 2M-20 70Q70 10 166 36T350 9M-20 77Q70 17 166 43T350 16"/><path class="da-road" d="M8 46C70 46 83 19 153 19S242 46 312 19" pathLength="100"/>${d.distance>0?`<path class="da-distance" d="M8 46C70 46 83 19 153 19S242 46 312 19" pathLength="100" stroke-dasharray="${Math.min(100,d.distance/15*100)} 100"/>`:''}<circle cx="8" cy="46" r="4" fill="currentColor"/><circle cx="312" cy="19" r="3" fill="currentColor"/></svg><div class="da-run-axis"><span>0 km</span><span>15 km</span></div></div>
+      </section>
+     </details>
+    </div>
+   </article><div class="da-footer"><span>DUNE + Apple 건강</span><span>운동 횟수·거리 기준</span></div>`;
+  const toggle=phone.querySelector('.da-mini-button');
+  toggle.addEventListener('click',()=>{const menu=phone.querySelector('.da-goal-menu');menu.hidden=!menu.hidden;toggle.setAttribute('aria-expanded',String(!menu.hidden));});
+  const arrow=phone.querySelector('.da-disclosure i[data-lucide]');
+  if(arrow)arrow.classList.add('da-chevron');
+ }
+ if(globalThis.lucide)lucide.createIcons({attrs:{width:19,height:19}});
+}
+render();
+if(globalThis.Tweak){const tweak=new Tweak({container:root,onChange:()=>{render();remember();}});tweak.addSelect(settings,'appearance',{label:'화면',options:[{label:'어두움',value:'dark'},{label:'밝음',value:'light'}]});tweak.addSelect(settings,'fixture',{label:'기록 상태',options:[{label:'첨부 화면과 같은 수치',value:'reference'},{label:'진행 예시',value:'progress'},{label:'모두 완료',value:'complete'},{label:'기록 없음',value:'empty'}]});tweak.addSelect(settings,'text',{label:'글씨',options:[{label:'기본',value:'100'},{label:'크게',value:'125'},{label:'접근성 크기',value:'160'}]});}
+window.addEventListener('openai:set_globals',event=>{const s=event.detail?.globals?.widgetState?.modelContent;if(s){Object.assign(settings,s);render();}});
+root.duneStudy={set(patch){Object.assign(settings,patch);render();},get(){return {...settings};}};
+})();
+</script>
