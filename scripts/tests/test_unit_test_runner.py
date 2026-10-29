@@ -154,6 +154,45 @@ class UnitRunnerTests(unittest.TestCase):
             self.assertEqual(commands, [])
             self.assertFalse((Path(directory) / "unit test.log").exists())
 
+    def test_no_argument_invocation_reenters_lock_wrapper(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory)
+            fake_bin = path / "bin"
+            fake_bin.mkdir()
+            argv_file = path / "argv.jsonl"
+            log_file = path / "default.log"
+            python = fake_bin / "python3"
+            python.write_text("#!/bin/sh\n"
+                              'case "$1:$3" in\n'
+                              '  */simulator-test-lock.py:--)\n'
+                              '    shift 3\n'
+                              '    [ "$#" -eq 1 ] || exit 42\n'
+                              '    DUNE_SIM_TEST_LOCK_FD=fixture exec "$1" --no-regen --log-file "$FAKE_DEFAULT_LOG" ;;\n'
+                              '  */simulator-test-lock.py:--verify) exit 0 ;;\n'
+                              'esac\n'
+                              f'exec "{sys.executable}" "$@"\n')
+            python.chmod(0o755)
+            xcodegen = fake_bin / "xcodegen"
+            xcodegen.write_text("#!/bin/sh\nexit 0\n")
+            xcodegen.chmod(0o755)
+            xcodebuild = fake_bin / "xcodebuild"
+            xcodebuild.write_text(f"#!{sys.executable}\n"
+                                  "import json, os, sys\n"
+                                  "with open(os.environ['FAKE_ARGV'], 'a') as output:\n"
+                                  "    output.write(json.dumps(sys.argv[1:]) + '\\n')\n"
+                                  "print('Executed 1 test, with 0 failures')\n")
+            xcodebuild.chmod(0o755)
+            env = {**os.environ, "PATH": str(fake_bin) + os.pathsep + os.environ["PATH"],
+                   "FAKE_ARGV": str(argv_file), "FAKE_DEFAULT_LOG": str(log_file),
+                   "DAILVE_IOS_DESTINATION": "platform=iOS Simulator,name=Fixture",
+                   "DAILVE_WATCH_DESTINATION": "platform=watchOS Simulator,name=Fixture"}
+            result = subprocess.run(["bash", str(RUNNER)], cwd=ROOT, env=env,
+                                    capture_output=True, text=True, timeout=15)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            commands = [json.loads(line) for line in argv_file.read_text().splitlines()]
+            self.assertEqual([option_values(command, "-only-testing") for command in commands],
+                             [["DUNETests"], ["DUNEWatchTests"]])
+
     def test_zero_and_missing_execution_count_fail(self) -> None:
         for log_text in ("Executed 0 tests, with 0 failures", "** TEST SUCCEEDED **"):
             with self.subTest(log_text=log_text), tempfile.TemporaryDirectory() as directory:

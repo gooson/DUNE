@@ -147,7 +147,7 @@ if [[ "$DRY_RUN" -eq 0 ]]; then
     if [[ -n "${DUNE_SIM_TEST_LOCK_FD:-}" ]]; then
         python3 "$ROOT_DIR/scripts/lib/simulator-test-lock.py" "$ROOT_DIR" --verify
     else
-        exec python3 "$ROOT_DIR/scripts/lib/simulator-test-lock.py" "$ROOT_DIR" -- "$ROOT_DIR/scripts/test-unit.sh" "${ORIGINAL_ARGS[@]}"
+        exec python3 "$ROOT_DIR/scripts/lib/simulator-test-lock.py" "$ROOT_DIR" -- "$ROOT_DIR/scripts/test-unit.sh" ${ORIGINAL_ARGS[@]+"${ORIGINAL_ARGS[@]}"}
     fi
     if [[ "${CLEANUP_MODE:-0}" -eq 1 ]]; then
         cleanup_worktree_simulators --owned
