@@ -69,3 +69,35 @@ Compact non-accessibility headers also measure the horizontal heading/actions ca
 The inline workout map is a preview: pan/zoom gestures are reserved for Expand map. This lets vertical drags reach the surrounding workout detail and its Passport row on short wide viewports. Expanded maps retain full interaction.
 
 Place search uses the native navigation-bar drawer with always-visible search placement, keeping results and their empty state above the search field in short landscape sheets.
+
+### 장소 선택·가까운 검색 보완 · 2026-10-29
+
+- 검색 결과 선택 시 검색 키보드를 닫고 목록 상단의 선택 장소명·지도로 이동한다. 같은 결과를 다시 누르거나 다른 장소를 선택해도 해당 지도 중심을 갱신한다. 저장 전 선택 상태이며 취소하면 원래 기록을 유지한다.
+- 선택 후에는 하단 고정 `저장` 버튼으로 기록 반영을 완료한다. 검색 모드가 상단 toolbar를 가려도 선택·저장 경로를 찾을 수 있게 한다.
+- 이미 위치 권한이 있으면 단발 현재 위치를 검색 기준으로 받는다. 검색을 위해 새 권한 창을 띄우거나 그 위치를 운동 장소로 자동 저장하지 않는다. 현재 위치가 없으면 기존 운동 장소, 둘 다 없으면 지도 검색 기본 순서를 사용한다.
+- 기준점 주변을 우선 검색하되 먼 지역의 명시적 검색을 차단하지 않는다. 받은 결과는 기준점과 가까운 순으로 정렬하며 같은 거리에서는 원래 검색 순서를 유지한다.
+- 단독 초성·조합 중인 모음은 완성될 때까지 원격 검색을 보류한다. 두 글자 이상 초성·완성형/초성 혼합 검색은 주변 후보의 한글 음절 초성을 대조한다. `헬스` 같은 일반 시설 검색은 피트니스 시설을 대상으로 하며, 한글 이름·주소 단어와 무관한 해외 유사음 결과는 제외한다.
+- 영향 화면은 CA02 장소 편집이다. 일반 iPhone·iPad·Duo 접힘/펼침이 같은 편집기를 사용하며 Watch UI는 영향이 없다. 새 실제 캡처·검증 결과는 별도 기록한다.
+
+이번 장소 검색 보완의 [새 실제 화면·상태별 검증·미완료 경로](../full-redesign-map/review/cardio-place-search-2026-10-29/index.html)를 통합 실제 화면맵에서 연결한다. 테마 시안은 변경하지 않았다.
+
+### 공유 스타일 버튼 밀도 보완 · 2026-10-30
+
+CA05–CA07 공유 편집의 스타일 선택은 큰 아이콘/이름 2단 pill 대신 아이콘과 이름을 한 줄에 둔 작은 시스템 버튼을 사용한다. 기본 글씨는 같은 너비의 3열, 접근성 글씨는 전체 너비의 3행이다. 상단 여백은 8pt, 미리보기까지는 16pt로 줄여 컨트롤과 카드의 연결을 분명하게 한다. 실제 터치 영역은 44pt 이상으로 확인한다. 선택 강조·사용할 수 없는 Pace Ribbon·기존 스타일별 식별자와 공유 공개 범위는 유지한다. iPhone·iPad·Duo의 같은 공유 편집기가 영향 대상이며 Watch는 소비자가 없다. 색/테마 방향과 공유 카드 출력 자체는 변경하지 않는다.
+
+공유 버튼 간격 보완은 [새 실제 원본 8장과 관련 UI 3건](../full-redesign-map/review/cardio-share-spacing-2026-10-30/index.html)으로 iPhone 기본/최대 글씨와 iPad를 확인했다. Duo 접힘·펼침은 기존 AX/러너 기동 장애가 해결되지 않아 갱신 대기다.
+
+### 공유 모달 배경·드래그 보완 · 2026-10-30
+
+CA05–CA07 공유 편집은 알파 1의 `surfacePrimary`를 모달 바탕과 내비게이션 바에 사용하고 본문에는 `SheetWaveBackground`를 겹친다. 스크롤 영역 밖이나 bounce 중에도 아래 운동 상세가 모달 안으로 비치지 않게 한다. 공유 목적지에만 page sizing·large detent·본문 scroll 우선·닫기 손잡이를 지정하고 본문은 제안된 전체 영역을 채운다. 위아래 본문 드래그 후 내용이 빈 시트가 되지 않아야 하며, 드래그 닫기는 같은 운동 상세로 정상 복귀해야 한다. 다시 열기와 완료 버튼 닫기도 검증한다. Journey/Passport 목적지의 표시 설정은 유지한다.
+
+공유 모달 배경·드래그 보완은 [새 실제 20장·관련 UI 4건 통과](../full-redesign-map/review/cardio-share-modal-2026-10-30/index.html)로 검증했다. iPhone 밝음/어두움/최대 글씨와 iPad만 새로 촬영했고, 두 Duo 상태는 기존 실행 장애가 남아 갱신 대기다.
+
+### Passport 운동 횟수 업적 확장 · 2026-10-30
+
+CA04의 횟수 업적은 기존 1·5·10·20·50·100회를 유지하고, 이후 200·300·400회처럼 100회마다 계속 생성한다. 선택한 운동까지의 유효하고 중복 없는 같은 종목 기록을 기준으로 하며, 달성일과 연결 기록은 해당 횟수를 처음 채운 실제 세션이다. `다음 업적`은 100회에서 끝나지 않고 다음 100회 단위 목표와 현재 진행률을 표시한다. 기록 수정·삭제·과거 기록 선택에도 다시 계산한다. 그리드와 번역 문구는 유지하며 새로 늘어난 업적/다음 목표 상태를 캡처한다.
+
+횟수 업적 확장의 [새 CA04 실제 화면·검증 범위·미갱신 기기](../full-redesign-map/review/cardio-count-milestones-2026-10-30/index.html)를 통합 실제 화면맵에서 연결한다. 이번 변경은 데이터 상태 확장이며 테마 시안은 변경하지 않았다.
+
+
+2026-10-30 리뷰 후속: 기존 실패/재시도 이력은 보존한다. 새 native 단일 드래그 진단에서 추천 영역 밖의 y490→350 조작과 실제 목록 이동을 확인한 뒤, 원래 긴 목록 선택·재선택·저장/재열기 selector가 정상 종료·통과했다. 저장은 하단 하나로 정리했고 지역+시설 단어 카테고리 매칭도 보완했다. 최신 증거는 docs/design/full-redesign-map/review/cardio-atlas-polish-2026-10-30/를 따른다. 다른 기기의 기존 시작 장애를 복구 또는 통과로 바꾸지 않는다.

@@ -7,12 +7,8 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+ORIGINAL_ARGS=("$@")
 cd "$ROOT_DIR"
-if [[ -n "${DUNE_SIM_TEST_LOCK_FD:-}" ]]; then
-    python3 "$ROOT_DIR/scripts/lib/simulator-test-lock.py" "$ROOT_DIR" --verify
-else
-    exec python3 "$ROOT_DIR/scripts/lib/simulator-test-lock.py" "$ROOT_DIR" -- "$ROOT_DIR/scripts/test-unit.sh" "$@"
-fi
 source "$ROOT_DIR/scripts/lib/regen-project.sh"
 source "$ROOT_DIR/scripts/lib/simulator-boot.sh"
 source "$ROOT_DIR/scripts/lib/simulator-worktree.sh"
@@ -34,6 +30,10 @@ LOG_FILE="$LOG_DIR/unit-test.log"
 REGENERATE=1
 MODE="all"
 STREAM_LOGS=0
+DRY_RUN=0
+IOS_ONLY_TESTING=()
+WATCH_ONLY_TESTING=()
+ONLY_TESTING=()
 
 if [[ "${CI:-}" == "true" ]]; then
     STREAM_LOGS=1
@@ -46,10 +46,18 @@ while [[ $# -gt 0 ]]; do
             shift
             ;;
         --ios-only)
+            if [[ "$MODE" == "watch" ]]; then
+                echo "--ios-only and --watch-only cannot be combined" >&2
+                exit 2
+            fi
             MODE="ios"
             shift
             ;;
         --watch-only)
+            if [[ "$MODE" == "ios" ]]; then
+                echo "--ios-only and --watch-only cannot be combined" >&2
+                exit 2
+            fi
             MODE="watch"
             shift
             ;;
@@ -62,23 +70,92 @@ while [[ $# -gt 0 ]]; do
             shift
             ;;
         --log-file)
+            if [[ $# -lt 2 || -z "$2" || "$2" == --* ]]; then
+                echo "--log-file requires a path" >&2
+                exit 2
+            fi
             LOG_FILE="$2"
             shift 2
             ;;
+        --only-testing)
+            if [[ $# -lt 2 || -z "$2" || "$2" == --* ]]; then
+                echo "--only-testing requires a target-qualified selector" >&2
+                exit 2
+            fi
+            ONLY_TESTING+=("$2")
+            shift 2
+            ;;
+        --dry-run)
+            DRY_RUN=1
+            shift
+            ;;
         --cleanup-simulators)
-            cleanup_worktree_simulators --owned
-            exit 0
+            CLEANUP_MODE=1
+            shift
             ;;
         *)
             echo "Unknown option: $1"
-            echo "Usage: $0 [--no-regen] [--ios-only | --watch-only] [--stream-log | --no-stream-log] [--log-file <path>] [--cleanup-simulators]"
+            echo "Usage: $0 [--no-regen] [--ios-only | --watch-only] [--stream-log | --no-stream-log] [--log-file <path>] [--only-testing <target/class[/method]> ...] [--dry-run] [--cleanup-simulators]"
             exit 2
             ;;
     esac
 done
 
-mkdir -p "$LOG_DIR" "$DERIVED_DATA_DIR"
-regen_project
+if [[ "${CLEANUP_MODE:-0}" -eq 1 && ( "$DRY_RUN" -eq 1 || ${#ONLY_TESTING[@]} -gt 0 ) ]]; then
+    echo "--cleanup-simulators cannot be combined with --dry-run or --only-testing" >&2
+    exit 2
+fi
+
+for selector in ${ONLY_TESTING[@]+"${ONLY_TESTING[@]}"}; do
+    if [[ ! "$selector" =~ ^(DUNETests|DUNEWatchTests)/[A-Za-z_][A-Za-z_0-9]*(/[A-Za-z_][A-Za-z_0-9]*)?$ ]]; then
+        echo "Invalid unit test selector: $selector" >&2
+        exit 2
+    fi
+    case "$selector" in
+        DUNETests/*)
+            if [[ "$MODE" == "watch" ]]; then
+                echo "iOS selector is incompatible with --watch-only: $selector" >&2
+                exit 2
+            fi
+            IOS_ONLY_TESTING+=("$selector")
+            ;;
+        DUNEWatchTests/*)
+            if [[ "$MODE" == "ios" ]]; then
+                echo "Watch selector is incompatible with --ios-only: $selector" >&2
+                exit 2
+            fi
+            WATCH_ONLY_TESTING+=("$selector")
+            ;;
+    esac
+done
+
+if [[ ${#ONLY_TESTING[@]} -gt 0 ]]; then
+    python3 "$ROOT_DIR/scripts/lib/validate-unit-test-selectors.py" "${ONLY_TESTING[@]}"
+fi
+
+RUN_IOS=0
+RUN_WATCH=0
+if [[ ${#ONLY_TESTING[@]} -eq 0 ]]; then
+    [[ "$MODE" == "watch" ]] || RUN_IOS=1
+    [[ "$MODE" == "ios" ]] || RUN_WATCH=1
+else
+    [[ ${#IOS_ONLY_TESTING[@]} -eq 0 ]] || RUN_IOS=1
+    [[ ${#WATCH_ONLY_TESTING[@]} -eq 0 ]] || RUN_WATCH=1
+fi
+
+if [[ "$DRY_RUN" -eq 0 ]]; then
+    if [[ -n "${DUNE_SIM_TEST_LOCK_FD:-}" ]]; then
+        python3 "$ROOT_DIR/scripts/lib/simulator-test-lock.py" "$ROOT_DIR" --verify
+    else
+        exec python3 "$ROOT_DIR/scripts/lib/simulator-test-lock.py" "$ROOT_DIR" -- "$ROOT_DIR/scripts/test-unit.sh" ${ORIGINAL_ARGS[@]+"${ORIGINAL_ARGS[@]}"}
+    fi
+    if [[ "${CLEANUP_MODE:-0}" -eq 1 ]]; then
+        cleanup_worktree_simulators --owned
+        exit 0
+    fi
+    mkdir -p "$LOG_DIR" "$DERIVED_DATA_DIR"
+    regen_project
+fi
 
 resolve_sim_destination() {
     local platform="$1"
@@ -166,19 +243,19 @@ sys.exit(1)
     echo "$requested"
 }
 
-if [[ "$MODE" != "watch" && -z "${DAILVE_IOS_DESTINATION:-}" ]]; then
+if [[ "$DRY_RUN" -eq 0 && "$RUN_IOS" -eq 1 && -z "${DAILVE_IOS_DESTINATION:-}" ]]; then
     IOS_DESTINATION="$(resolve_sim_destination "iOS" "iOS-${IOS_SIM_OS//./-}" "$IOS_SIM_NAME" "$IOS_SIM_OS" "27")"
 fi
 
-if [[ "$MODE" != "ios" && -z "${DAILVE_WATCH_DESTINATION:-}" ]]; then
+if [[ "$DRY_RUN" -eq 0 && "$RUN_WATCH" -eq 1 && -z "${DAILVE_WATCH_DESTINATION:-}" ]]; then
     WATCH_DESTINATION="$(resolve_sim_destination "watchOS" "watchOS-${WATCH_SIM_OS//./-}" "$WATCH_SIM_NAME" "$WATCH_SIM_OS" "27")"
 fi
 
-if [[ "$MODE" != "watch" ]]; then
+if [[ "$DRY_RUN" -eq 0 && "$RUN_IOS" -eq 1 ]]; then
     IOS_DESTINATION=$(apply_worktree_destination "$IOS_DESTINATION" "$IOS_SIM_NAME" "iOS")
 fi
 
-if [[ "$MODE" != "ios" ]]; then
+if [[ "$DRY_RUN" -eq 0 && "$RUN_WATCH" -eq 1 ]]; then
     WATCH_DESTINATION=$(apply_worktree_destination "$WATCH_DESTINATION" "$WATCH_SIM_NAME" "watchOS")
 fi
 
@@ -194,17 +271,17 @@ preboot_from_destination() {
     wait_for_simulator_boot "$udid" "$label"
 }
 
-if [[ "$MODE" != "watch" ]]; then
+if [[ "$DRY_RUN" -eq 0 && "$RUN_IOS" -eq 1 ]]; then
     preboot_from_destination "$IOS_DESTINATION" "iOS"
 fi
 
-if [[ "$MODE" != "ios" ]]; then
+if [[ "$DRY_RUN" -eq 0 && "$RUN_WATCH" -eq 1 ]]; then
     preboot_from_destination "$WATCH_DESTINATION" "watchOS"
 fi
 
 IOS_LOG_FILE="$LOG_FILE"
 WATCH_LOG_FILE="$LOG_FILE"
-if [[ "$MODE" == "all" ]]; then
+if [[ "$RUN_IOS" -eq 1 && "$RUN_WATCH" -eq 1 ]]; then
     if [[ "$LOG_FILE" == *.log ]]; then
         WATCH_LOG_FILE="${LOG_FILE%.log}-watch.log"
     else
@@ -216,8 +293,9 @@ run_suite() {
     local suite_name="$1"
     local scheme="$2"
     local destination="$3"
-    local only_testing="$4"
-    local log_file="$5"
+    local log_file="$4"
+    shift 4
+    local selectors=("$@")
     local test_cmd
 
     echo "Running ${suite_name} with scheme '$scheme' for destination '$destination'..."
@@ -225,10 +303,18 @@ run_suite() {
     test_cmd=(xcodebuild test -project "$PROJECT_FILE"
         -scheme "$scheme"
         -destination "$destination"
-        -derivedDataPath "$DERIVED_DATA_DIR"
-        -only-testing "$only_testing"
-        CODE_SIGNING_ALLOWED=NO
-        CODE_SIGNING_REQUIRED=NO)
+        -derivedDataPath "$DERIVED_DATA_DIR")
+    for selector in "${selectors[@]}"; do
+        test_cmd+=(-only-testing "$selector")
+    done
+    test_cmd+=(CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO)
+
+    if [[ "$DRY_RUN" -eq 1 ]]; then
+        printf 'DRY_RUN_COMMAND='
+        printf '%q ' "${test_cmd[@]}"
+        printf '\n'
+        return
+    fi
 
     mkdir -p "$(dirname "$log_file")"
 
@@ -253,12 +339,22 @@ run_suite() {
     if [[ "$test_exit" -ne 0 ]]; then
         exit "$test_exit"
     fi
+    if [[ ${#ONLY_TESTING[@]} -gt 0 ]] && ! grep -Eq 'Executed [1-9][0-9]* tests?, with|Test run with [1-9][0-9]* tests? (passed|failed)' "$log_file"; then
+        echo "${suite_name}: selected tests have no positive execution count in $log_file" >&2
+        exit 1
+    fi
 }
 
-if [[ "$MODE" == "ios" || "$MODE" == "all" ]]; then
-    run_suite "iOS unit tests" "$IOS_SCHEME" "$IOS_DESTINATION" "DUNETests" "$IOS_LOG_FILE"
+if [[ "$RUN_IOS" -eq 1 ]]; then
+    if [[ ${#ONLY_TESTING[@]} -eq 0 ]]; then
+        IOS_ONLY_TESTING=(DUNETests)
+    fi
+    run_suite "iOS unit tests" "$IOS_SCHEME" "$IOS_DESTINATION" "$IOS_LOG_FILE" "${IOS_ONLY_TESTING[@]}"
 fi
 
-if [[ "$MODE" == "watch" || "$MODE" == "all" ]]; then
-    run_suite "Watch unit tests" "$WATCH_SCHEME" "$WATCH_DESTINATION" "DUNEWatchTests" "$WATCH_LOG_FILE"
+if [[ "$RUN_WATCH" -eq 1 ]]; then
+    if [[ ${#ONLY_TESTING[@]} -eq 0 ]]; then
+        WATCH_ONLY_TESTING=(DUNEWatchTests)
+    fi
+    run_suite "Watch unit tests" "$WATCH_SCHEME" "$WATCH_DESTINATION" "$WATCH_LOG_FILE" "${WATCH_ONLY_TESTING[@]}"
 fi

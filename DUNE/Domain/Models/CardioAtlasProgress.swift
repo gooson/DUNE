@@ -67,6 +67,8 @@ struct CardioAtlasAchievementProgress: Identifiable, Sendable, Equatable {
 
 /// Recomputed from actual session history so edits and deletions immediately change progress.
 struct CardioAtlasProgress: Sendable, Equatable {
+    private static let initialSessionCountThresholds = [1, 5, 10, 20, 50, 100]
+
     let journey: CardioJourneyProgress
     let achievements: [CardioAtlasAchievement]
     let nextAchievements: [CardioAtlasAchievementProgress]
@@ -128,7 +130,7 @@ struct CardioAtlasProgress: Sendable, Equatable {
         let thresholds: [(CardioAtlasAchievement.Kind, Double)] = [
             (.singleDistance, distanceThreshold),
             (.singleDuration, 1_800),
-        ] + [1, 5, 10, 20, 50, 100].map { (.sessionCount, Double($0)) }
+        ]
 
         var achievements: [CardioAtlasAchievement] = []
         var earnedIDs = Set<String>()
@@ -158,10 +160,26 @@ struct CardioAtlasProgress: Sendable, Equatable {
                     awardedAt: session.date
                 ))
             }
+            if initialSessionCountThresholds.contains(count) || (count > 100 && count.isMultiple(of: 100)) {
+                let threshold = Double(count)
+                let id = achievementID(type: current.activityType, kind: .sessionCount, threshold: threshold)
+                earnedIDs.insert(id)
+                achievements.append(CardioAtlasAchievement(
+                    id: id,
+                    kind: .sessionCount,
+                    threshold: threshold,
+                    achievedValue: threshold,
+                    awardedSessionID: session.id,
+                    awardedAt: session.date
+                ))
+            }
         }
 
+        let nextCountThreshold = initialSessionCountThresholds.first { $0 > count }.map(Double.init)
+            ?? Double(count / 100 + 1) * 100
+        let nextThresholds = thresholds + [(.sessionCount, nextCountThreshold)]
         var nextKinds = Set<CardioAtlasAchievement.Kind>()
-        let nextAchievements = thresholds.compactMap { achievementKind, threshold -> CardioAtlasAchievementProgress? in
+        let nextAchievements = nextThresholds.compactMap { achievementKind, threshold -> CardioAtlasAchievementProgress? in
             let id = achievementID(type: current.activityType, kind: achievementKind, threshold: threshold)
             guard !earnedIDs.contains(id), nextKinds.insert(achievementKind).inserted else { return nil }
             let value: Double = switch achievementKind {

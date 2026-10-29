@@ -2,111 +2,8 @@ import SwiftUI
 
 extension WorkoutActivityType {
 
-    /// Localized display name for the activity type.
-    var displayName: String {
-        switch self {
-        case .running: String(localized: "Running")
-        case .walking: String(localized: "Walking")
-        case .cycling: String(localized: "Cycling")
-        case .swimming: String(localized: "Swimming")
-        case .hiking: String(localized: "Hiking")
-        case .yoga: String(localized: "Yoga")
-        case .traditionalStrengthTraining: String(localized: "Weight Training")
-        case .functionalStrengthTraining: String(localized: "Functional Strength")
-        case .highIntensityIntervalTraining: String(localized: "HIIT")
-        case .elliptical: String(localized: "Elliptical")
-        case .rowing: String(localized: "Rowing")
-        case .coreTraining: String(localized: "Core Training")
-        case .flexibility: String(localized: "Flexibility")
-        case .socialDance: String(localized: "Social Dance")
-        case .cardioDance: String(localized: "Cardio Dance")
-        case .pilates: String(localized: "Pilates")
-        case .boxing: String(localized: "Boxing")
-        case .martialArts: String(localized: "Martial Arts")
-        case .wrestling: String(localized: "Wrestling")
-        case .kickboxing: String(localized: "Kickboxing")
-        case .fencing: String(localized: "Fencing")
-        case .basketball: String(localized: "Basketball")
-        case .soccer: String(localized: "Soccer")
-        case .tennis: String(localized: "Tennis")
-        case .badminton: String(localized: "Badminton")
-        case .tableTennis: String(localized: "Table Tennis")
-        case .volleyball: String(localized: "Volleyball")
-        case .baseball: String(localized: "Baseball")
-        case .softball: String(localized: "Softball")
-        case .americanFootball: String(localized: "American Football")
-        case .rugby: String(localized: "Rugby")
-        case .hockey: String(localized: "Hockey")
-        case .lacrosse: String(localized: "Lacrosse")
-        case .cricket: String(localized: "Cricket")
-        case .handball: String(localized: "Handball")
-        case .racquetball: String(localized: "Racquetball")
-        case .squash: String(localized: "Squash")
-        case .pickleball: String(localized: "Pickleball")
-        case .bowling: String(localized: "Bowling")
-        case .golf: String(localized: "Golf")
-        case .discSports: String(localized: "Disc Sports")
-        case .australianFootball: String(localized: "Australian Football")
-        case .gymnastics: String(localized: "Gymnastics")
-        case .paddleSports: String(localized: "Paddle Sports")
-        case .surfingSports: String(localized: "Surfing")
-        case .waterFitness: String(localized: "Water Fitness")
-        case .waterPolo: String(localized: "Water Polo")
-        case .waterSports: String(localized: "Water Sports")
-        case .sailing: String(localized: "Sailing")
-        case .downhillSkiing: String(localized: "Skiing")
-        case .snowboarding: String(localized: "Snowboarding")
-        case .crossCountrySkiing: String(localized: "Cross-Country Skiing")
-        case .snowSports: String(localized: "Snow Sports")
-        case .skating: String(localized: "Skating")
-        case .climbing: String(localized: "Climbing")
-        case .mountaineering: String(localized: "Mountaineering")
-        case .equestrianSports: String(localized: "Equestrian")
-        case .fishing: String(localized: "Fishing")
-        case .hunting: String(localized: "Hunting")
-        case .archery: String(localized: "Archery")
-        case .trackAndField: String(localized: "Track & Field")
-        case .curling: String(localized: "Curling")
-        case .jumpRope: String(localized: "Jump Rope")
-        case .stairClimbing: String(localized: "Stair Climbing")
-        case .stairStepper: String(localized: "Stair Stepper")
-        case .stepTraining: String(localized: "Step Training")
-        case .mixedCardio: String(localized: "Mixed Cardio")
-        case .crossTraining: String(localized: "Cross Training")
-        case .handCycling: String(localized: "Hand Cycling")
-        case .taiChi: String(localized: "Tai Chi")
-        case .mindAndBody: String(localized: "Mind & Body")
-        case .barre: String(localized: "Barre")
-        case .cooldown: String(localized: "Cooldown")
-        case .preparationAndRecovery: String(localized: "Recovery")
-        case .swimBikeRun: String(localized: "Triathlon")
-        case .transition: String(localized: "Transition")
-        case .fitnessGaming: String(localized: "Fitness Gaming")
-        case .play: String(localized: "Play")
-        case .underwaterDiving: String(localized: "Diving")
-        case .wheelchairRunPace: String(localized: "Wheelchair Running")
-        case .wheelchairWalkPace: String(localized: "Wheelchair Walking")
-        case .other: String(localized: "Workout")
-        }
-    }
-
     /// Category-based color for the activity type (Desert Horizon palette).
     var color: Color { category.color }
-
-    /// Resolves a localized display name when a legacy English type name/raw value is stored.
-    static func localizedDisplayName(forStoredTitle storedTitle: String) -> String? {
-        let normalized = storedTitle.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !normalized.isEmpty else { return nil }
-
-        guard let activityType = allCases.first(where: {
-            $0.typeName.caseInsensitiveCompare(normalized) == .orderedSame ||
-            $0.rawValue.caseInsensitiveCompare(normalized) == .orderedSame
-        }) else {
-            return nil
-        }
-
-        return activityType.displayName
-    }
 }
 
 extension ActivityCategory {
@@ -281,9 +178,11 @@ extension WorkoutSummary {
 
     func localizedTitle(using correctionStore: WorkoutTypeCorrectionStore = .shared) -> String {
         if let corrected = correctionStore.correctedTitle(for: id) {
-            return corrected
+            return WorkoutActivityType.localizedDisplayName(
+                forStoredTitle: corrected, preferredActivity: activityType
+            ) ?? corrected
         }
-        if let localized = WorkoutActivityType.localizedDisplayName(forStoredTitle: type) {
+        if let localized = WorkoutActivityType.localizedDisplayName(forStoredTitle: type, preferredActivity: activityType) {
             return localized
         }
         // type that differs from activityType.typeName is a custom exercise name

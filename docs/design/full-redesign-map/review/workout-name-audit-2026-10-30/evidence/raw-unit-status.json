@@ -1,0 +1,15 @@
+{
+  "initial": {
+    "test_case_failed": true,
+    "reason": "Generic other raw value displayed literally",
+    "command_exit": 124,
+    "cleanup": "Test result failed before Xcode result finalization stalled; standard deadline stopped owned process group at 300s"
+  },
+  "retry": {
+    "attempt": 1,
+    "fix": "Apply exact generic-title localization before the other/raw fallback",
+    "test_case_passed": true,
+    "command_exit": 0,
+    "manual_raw_values_checked": 82
+  }
+}

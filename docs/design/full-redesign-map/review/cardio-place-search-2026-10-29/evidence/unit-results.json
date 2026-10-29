@@ -1,0 +1,13 @@
+{
+  "framework": "Swift Testing",
+  "host": "macOS standalone Swift Package",
+  "source_files": [
+    "DUNE/Presentation/Exercise/CardioAtlas/CardioAtlasPlaceSearch.swift",
+    "DUNE/Domain/Models/WorkoutLocation.swift",
+    "DUNETests/CardioAtlasPlaceSearchTests.swift"
+  ],
+  "passed": 19,
+  "failed": 0,
+  "log": "/tmp/cardio-place-unit-latest.log",
+  "scope": "Focused helper tests only; not the full iOS unit suite"
+}

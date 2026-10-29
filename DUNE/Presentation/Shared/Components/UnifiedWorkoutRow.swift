@@ -119,9 +119,8 @@ struct UnifiedWorkoutRow: View {
             VStack(alignment: .leading, spacing: DS.Spacing.xs) {
                 titleRow
 
-                if item.source == .manual, let localized = item.localizedType,
-                   !localized.isEmpty, localized != item.type {
-                    Text(item.type)
+                if let secondaryName = item.secondaryDisplayName {
+                    Text(secondaryName)
                         .font(.caption)
                         .foregroundStyle(.tertiary)
                 }

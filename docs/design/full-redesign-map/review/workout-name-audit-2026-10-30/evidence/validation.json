@@ -1,0 +1,39 @@
+{
+  "native_unit": {
+    "final_same_source_run": true,
+    "test_definitions_passed": 21,
+    "swift_testing_definitions": 9,
+    "swift_testing_cases": 98,
+    "xctest_methods": 12,
+    "total_invocations_including_parameterized_cases": 110,
+    "exit_code": 0,
+    "log_sha256": "cb2498b956067e1d94beea92dbc711d7e8076b99171f4e5642ccd8a776dd4ffb",
+    "deadline_seconds": 180,
+    "scope": "WorkoutDisplayNameTests, WorkoutTypeCorrectionStoreTests, ExerciseVariantMigrationTests only"
+  },
+  "native_ui": {
+    "passed": 2,
+    "retry": 1,
+    "fresh_original_pngs": 5,
+    "screens": [
+      "W26",
+      "W28"
+    ],
+    "device_udid": "9905027B-0A4A-4A45-84D0-98431BE94BAC",
+    "final_same_source_run": true,
+    "selectors": [
+      "DUNEUITests/WorkoutNameAuditUITests/testGenericCorrectionsLocalizeAndMachineStairsRemainDistinct",
+      "DUNEUITests/WorkoutNameAuditUITests/testManualGenericCodeIsNotRepeatedBelowLocalizedName"
+    ]
+  },
+  "unchanged_inputs_and_original_capture_hashes": true,
+  "catalog_check": "--check --check-manual passed after build",
+  "diff_check": "passed",
+  "not_captured": [
+    "A01 recent workout state",
+    "iPad W26/W28",
+    "Duo closed/open W26/W28",
+    "Watch C10/F07"
+  ],
+  "frozen_source_count": 16
+}

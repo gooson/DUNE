@@ -118,4 +118,52 @@ final class WorkoutTypeCorrectionStoreTests: XCTestCase {
 
         XCTAssertEqual(workout.localizedTitle(using: store), "My Custom Workout")
     }
+
+    func testGenericCorrectionsLocalizeWithoutRewritingStoredTitles() {
+        for activity in WorkoutActivityType.allCases {
+            let id = "generic-\(activity.rawValue)"
+            store.setCorrectedTitle(activity.typeName, for: id)
+            let workout = WorkoutSummary(
+                id: id, type: activity.typeName, activityType: activity,
+                duration: 900, calories: 100, distance: nil, date: Date()
+            )
+            XCTAssertEqual(workout.localizedTitle(using: store), activity.displayName)
+            XCTAssertEqual(store.correctedTitle(for: id), activity.typeName)
+            XCTAssertEqual(workout.type, activity.typeName)
+            XCTAssertEqual(workout.activityType, activity)
+        }
+    }
+
+    func testCustomCorrectionRemainsVerbatim() {
+        store.setCorrectedTitle("My Running Intervals", for: "custom-running")
+        let workout = WorkoutSummary(
+            id: "custom-running", type: "Running", activityType: .running,
+            duration: 900, calories: 100, distance: nil, date: Date()
+        )
+        XCTAssertEqual(workout.localizedTitle(using: store), "My Running Intervals")
+        XCTAssertEqual(store.correctedTitle(for: "custom-running"), "My Running Intervals")
+    }
+
+    func testManualLegacyRawValuesKeepActivityClassification() {
+        let library = ExerciseLibraryService(exercises: [])
+        for activity in WorkoutActivityType.allCases {
+            let record = ExerciseRecord(exerciseType: activity.rawValue, duration: 900)
+            let item = ExerciseListItem.fromManualRecord(record, library: library)
+            XCTAssertEqual(item.activityType, activity)
+            XCTAssertEqual(item.displayName, activity.displayName)
+            XCTAssertEqual(record.exerciseType, activity.rawValue)
+            let namedItem = ExerciseListItem(
+                id: record.id.uuidString, type: activity.typeName, localizedType: "Localized exercise",
+                activityType: activity, duration: 900, calories: nil, distance: nil,
+                date: record.date, source: .manual
+            )
+            XCTAssertNil(namedItem.secondaryDisplayName)
+        }
+        let custom = ExerciseListItem(
+            id: "custom", type: "Bench Press", localizedType: "바벨 벤치프레스",
+            activityType: .traditionalStrengthTraining, duration: 900,
+            calories: nil, distance: nil, date: Date(), source: .manual
+        )
+        XCTAssertEqual(custom.secondaryDisplayName, "Bench Press")
+    }
 }
