@@ -63,10 +63,24 @@ final class DuoScoreComponentLayoutTests: SeededUITestBaseCase {
         }
     }
 
-    func testConditionCompositionScoresFitAtMaximumTextSize() throws {
-        try auditSharedComposition(tab: "today", hero: AXID.dashboardHeroCondition,
-                                   screen: AXID.conditionScoreDetailScreen, route: "Condition",
-                                   extraArguments: ["--ui-visual-condition-components-fixture"])
+    func testConditionCompositionValuesFitAtMaximumTextSize() throws {
+        guard VisualAudit.isEnabled else { throw XCTSkip("Opt-in native Condition composition audit only") }
+        launchSeededTab("today", extraArguments: ["--ui-visual-condition-components-fixture"])
+        openDetail(from: AXID.dashboardHeroCondition, screen: AXID.conditionScoreDetailScreen)
+
+        let scroll = app.scrollViews[AXID.conditionScoreDetailScreen].firstMatch
+        let card = app.descendants(matching: .any)["score-composition-card"].firstMatch
+        XCTAssertTrue(revealCardContent(card, in: scroll), "Condition composition should be reachable")
+        for id in ["condition-component-value-hrv", "condition-component-value-rhr", "condition-component-value-time"] {
+            let value = app.staticTexts[id].firstMatch
+            XCTAssertTrue(revealWhole(value, in: scroll), "\(id) should fit at maximum AX size")
+            XCTAssertFalse(value.label.isEmpty, "\(id) should expose its actual calculation value")
+            XCTAssertTrue(value.label.hasPrefix("+") || value.label.hasPrefix("−") || value.label.hasPrefix("-"),
+                          "\(id) should be a signed calculation value")
+            VisualAudit.capture("Condition maximum AX \(id) complete value")
+        }
+        XCTAssertFalse(card.staticTexts["70%"].exists, "Condition must not imply a 70% HRV weight")
+        XCTAssertFalse(card.staticTexts["30%"].exists, "Condition must not imply a 30% RHR weight")
     }
 
     func testWellnessCompositionScoresFitAtMaximumTextSize() throws {
@@ -173,7 +187,6 @@ final class DuoScoreComponentLayoutTests: SeededUITestBaseCase {
             XCTAssertTrue(revealWhole(score, in: scroll), "\(route) component score should fit in the viewport")
             let value = try XCTUnwrap(Int(score.label), "Component score should be numeric")
             XCTAssertTrue((0...100).contains(value), "\(route) component score should be within 0...100")
-            if route == "Condition" { XCTAssertEqual(value, 100, "Condition should retain the three-digit fixture") }
             if value > 0 { populated += 1 }
             let reference = weights.min { abs($0.frame.midY - score.frame.midY) < abs($1.frame.midY - score.frame.midY) }
             if let reference { assertSingleLine(score, against: reference, description: "\(route) component") }

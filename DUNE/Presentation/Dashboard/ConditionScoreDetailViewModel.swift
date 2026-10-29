@@ -34,6 +34,8 @@ final class ConditionScoreDetailViewModel {
     private(set) var currentScore: ConditionScore?
     private(set) var limitedHistoryStartDate: Date?
 
+    private var summarySourceData: [ChartDataPoint] = []
+
     private let hrvService: HRVQuerying
     private let historyService: any MetricHistoryQuerying
     private let scoreUseCase = CalculateConditionScoreUseCase()
@@ -102,14 +104,49 @@ final class ConditionScoreDetailViewModel {
         return chartData.count { $0.date >= scrollPosition && $0.date < end }
     }
 
+    /// Summary follows the plotted window, using daily/hourly values before plot aggregation.
+    var visibleSummaryStats: MetricSummary? {
+        guard !isLoading else { return nil }
+        return Self.makeVisibleSummary(
+            from: summarySourceData,
+            start: scrollPosition,
+            duration: selectedPeriod.visibleDomainSeconds
+        )
+    }
+
+    static func makeVisibleSummary(
+        from points: [ChartDataPoint], start: Date, duration: TimeInterval
+    ) -> MetricSummary? {
+        guard duration.isFinite, duration > 0 else { return nil }
+        let end = start.addingTimeInterval(duration)
+        let previousStart = start.addingTimeInterval(-duration)
+        let values = points.filter { $0.date >= start && $0.date < end }.map(\.value)
+        let previous = points.filter { $0.date >= previousStart && $0.date < start }.map(\.value)
+        return HealthDataAggregator.computeSummary(
+            from: values, previousPeriodValues: previous.isEmpty ? nil : previous
+        )
+    }
+
+    private var latestWindowStart: Date = TimePeriod.week.dateRange(offset: 0).start
+
+    var canStepBackward: Bool { scrollPosition > scrollDomain.lowerBound }
+    var canStepForward: Bool { scrollPosition < latestWindowStart }
+
+    func stepVisiblePeriod(by offset: Int) {
+        guard offset == -1 || offset == 1 else { return }
+        let target = scrollPosition.addingTimeInterval(Double(offset) * selectedPeriod.visibleDomainSeconds)
+        scrollPosition = max(scrollDomain.lowerBound, min(target, latestWindowStart))
+    }
+
     private func resetScrollPosition() {
+        let start: Date
         if selectedPeriod == .day {
-            // Rolling 24h: scroll to show the full 24h window starting from now-24h
-            scrollPosition = nowProvider().addingTimeInterval(-ScoreRefreshService.rollingWindowSeconds)
+            start = nowProvider().addingTimeInterval(-ScoreRefreshService.rollingWindowSeconds)
         } else {
-            let range = selectedPeriod.dateRange(offset: 0)
-            scrollPosition = range.start
+            start = selectedPeriod.dateRange(offset: 0).start
         }
+        latestWindowStart = start
+        scrollPosition = start
     }
 
     // MARK: - Extended Range
@@ -234,6 +271,7 @@ final class ConditionScoreDetailViewModel {
         )
 
         guard isCurrentReloadRequest(requestID) else { return }
+        summarySourceData = allScores
         chartData = allScores
 
         // Sub-score trends: daily HRV averages and RHR averages within current period
@@ -375,6 +413,8 @@ final class ConditionScoreDetailViewModel {
             now: now,
             calendar: calendar
         )
+
+        summarySourceData = chartData
 
         let values = chartData.filter { $0.date >= twentyFourHoursAgo }.map(\.value)
         let previousValues = chartData.filter {

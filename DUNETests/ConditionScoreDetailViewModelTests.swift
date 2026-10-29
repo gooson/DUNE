@@ -543,3 +543,81 @@ struct ConditionScoreDetailViewModelTests {
         #expect(vm.isLoading == false)
     }
 }
+
+
+// MARK: - Visible history card
+
+extension ConditionScoreDetailViewModelTests {
+    @Test("Visible summary uses half-open current and previous windows")
+    func visibleSummaryRespectsWindowBoundaries() throws {
+        let start = Date(timeIntervalSince1970: 1_700_000_000)
+        let duration: TimeInterval = 604_800
+        let points = [
+            ChartDataPoint(date: start.addingTimeInterval(-duration - 1), value: 999),
+            ChartDataPoint(date: start.addingTimeInterval(-duration), value: 20),
+            ChartDataPoint(date: start.addingTimeInterval(-1), value: 40),
+            ChartDataPoint(date: start, value: 60),
+            ChartDataPoint(date: start.addingTimeInterval(duration - 1), value: 100),
+            ChartDataPoint(date: start.addingTimeInterval(duration), value: 999)
+        ]
+        let summary = try #require(ConditionScoreDetailViewModel.makeVisibleSummary(
+            from: points, start: start, duration: duration
+        ))
+        #expect(summary.average == 80)
+        #expect(summary.min == 60)
+        #expect(summary.max == 100)
+        #expect(summary.count == 2)
+        #expect(summary.previousPeriodAverage == 30)
+    }
+
+    @Test("Missing history is not synthesized as a zero score")
+    func visibleSummaryDistinguishesZeroFromNoData() throws {
+        let start = Date(timeIntervalSince1970: 1_700_000_000)
+        #expect(ConditionScoreDetailViewModel.makeVisibleSummary(
+            from: [], start: start, duration: 60
+        ) == nil)
+        let summary = try #require(ConditionScoreDetailViewModel.makeVisibleSummary(
+            from: [ChartDataPoint(date: start, value: 0)], start: start, duration: 60
+        ))
+        #expect(summary.average == 0)
+        #expect(summary.count == 1)
+        #expect(summary.previousPeriodAverage == nil)
+        #expect(summary.changePercentage == nil)
+    }
+
+    @Test("Long-window summary weights raw days, not monthly plot means")
+    func visibleSummaryRetainsDailyWeighting() throws {
+        let start = Date(timeIntervalSince1970: 1_700_000_000)
+        var points = (0..<31).map { day in
+            ChartDataPoint(date: start.addingTimeInterval(Double(day) * 86_400), value: 80)
+        }
+        points.append(ChartDataPoint(date: start.addingTimeInterval(31 * 86_400), value: 20))
+        let summary = try #require(ConditionScoreDetailViewModel.makeVisibleSummary(
+            from: points, start: start, duration: TimePeriod.sixMonths.visibleDomainSeconds
+        ))
+        #expect(summary.average == 78.125)
+        #expect(summary.count == 32)
+        #expect(summary.min == 20)
+    }
+
+    @Test("Period actions stop at loaded history and the current anchor")
+    func periodActionsRespectHistoryBounds() {
+        let now = Date()
+        let vm = ConditionScoreDetailViewModel(
+            hrvService: MockHRVService(),
+            historyService: StubLimitedConditionHistory(hrvStart: nil, rhrStart: nil),
+            nowProvider: { now }
+        )
+        vm.configure(score: ConditionScore(score: 50, date: now))
+        let current = vm.scrollPosition
+        #expect(!vm.canStepForward)
+        for _ in 0..<20 { vm.stepVisiblePeriod(by: -1) }
+        #expect(vm.scrollPosition == vm.scrollDomain.lowerBound)
+        #expect(!vm.canStepBackward)
+        for _ in 0..<20 { vm.stepVisiblePeriod(by: 1) }
+        #expect(vm.scrollPosition == current)
+        #expect(!vm.canStepForward)
+        vm.stepVisiblePeriod(by: 2)
+        #expect(vm.scrollPosition == current)
+    }
+}
