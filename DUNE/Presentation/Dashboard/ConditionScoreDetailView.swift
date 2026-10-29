@@ -234,12 +234,16 @@ struct ConditionScoreDetailView: View {
                 }
                 .padding(.top, DS.Spacing.md)
             } label: {
-                Label("How the Score Works", systemImage: "info.circle.fill")
-                    .font(.subheadline.weight(.semibold))
-                    .frame(minHeight: 44, alignment: .leading)
+                Label {
+                    Text("How the Score Works")
+                        .accessibilityIdentifier("condition-score-explainer")
+                } icon: {
+                    Image(systemName: "info.circle.fill")
+                }
+                .font(.subheadline.weight(.semibold))
+                .frame(minHeight: 44, alignment: .leading)
             }
             .tint(theme.sandColor)
-            .accessibilityIdentifier("condition-score-explainer")
         }
     }
 

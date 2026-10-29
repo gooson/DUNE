@@ -54,3 +54,7 @@ Repo·Solution·Apple UX 조사3개를 실행했다. 관련 해결책은2026-02-
 0 Init completed; 1 Plan completed; 2 Work pending; 2.5 UI pending; 3 Review pending; 3.5 Quality pending; 4 Resolve pending; 5 Compound pending; 5.5 Pre-Ship pending; 6 Ship pending.
 
 Work 사전 검토에서 AX 숫자의 VoiceOver 레이블과 시간대4열·계산행의 큰 글씨 배치를 보완했다. TimeOfDayCard adaptive 옵션은 T04만 사용하며 다른 소비자의 기본 표현은 보존한다. 전체 iOS 단위 실행은 변경하지 않은 live AI 평가에서 실패/정체되어 owner idle deadline600초로 종료됐다. 관련 Condition 단위 통과는 아직 확인하지 않았으며, 선택 실행용 공통 도구 PR을 별도 작업 폴더에서 준비한다.
+
+첫 iPhone 정상 크기 UI는3개 중 기간/앞뒤/통계/추세 전환1개 통과, 나머지2개 실패했다. 실제 AX에서 설명은 펼쳐져 있었고 Raw Score도 존재했다. DisclosureGroup 전체의 identifier가 자식 식별자를 덮은 원인을 제목 Text에만 식별자를 부여해 해소한다. fixture는 contributions가 비어 있으므로 영향 상태 테스트는 임의 평가 대신 Impact unavailable을 정확히 기대하도록 수정한다. 최초 결과 JSON을 보존하고 원인 수정 후 한 번 재검증한다. 공통 선택 실행기 PR860을 포함한 main을 이 브랜치에 통합했다.
+
+컨디션 VM 선택 실행의 실제 xcresult는20개 통과/실패0/skip0이다. Swift Testing의 `20 tests in 1 suite passed` 형식을 기존 wrapper가 인식하지 못해 wrapper exit1이 된 차이는 focused-unit-result.json에 그대로 보존했다. 출력 파서 보완은 별도 공통 PR에서 진행하며, 같은 단위20개를 불필요하게 재실행하지 않는다.

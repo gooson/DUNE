@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/ConditionDetailRedesignTests/testHeroContributionsAndUnifiedTrendAreReachable",
+    "DUNEUITests/ConditionDetailRedesignTests/testPeriodWindowAndTrendControlsUpdateVisibleReadback",
+    "DUNEUITests/ConditionDetailRedesignTests/testSingleNativeExplainerExpandsCalculationAndOriginalItems"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 3,
+    "passed": 1,
+    "skipped": 0,
+    "failed": 2
+  },
+  "passed_cases": 1,
+  "failures": [
+    "7569: /Users/shanks/.codex/worktrees/detail-redesign-l03/Health/DUNEUITests/Full/ConditionDetailRedesignTests.swift:30: error: -[DUNEUITests.ConditionDetailRedesignTests testHeroContributionsAndUnifiedTrendAreReachable] : XCTAssertTrue failed - hrv should show its model impact",
+    "7583: Test Case '-[DUNEUITests.ConditionDetailRedesignTests testHeroContributionsAndUnifiedTrendAreReachable]' failed (47.467 seconds).",
+    "7907: /Users/shanks/.codex/worktrees/detail-redesign-l03/Health/DUNEUITests/Full/ConditionDetailRedesignTests.swift:114: error: -[DUNEUITests.ConditionDetailRedesignTests testSingleNativeExplainerExpandsCalculationAndOriginalItems] : XCTAssertTrue failed",
+    "7921: Test Case '-[DUNEUITests.ConditionDetailRedesignTests testSingleNativeExplainerExpandsCalculationAndOriginalItems]' failed (37.234 seconds).",
+    "7922: Test Suite 'ConditionDetailRedesignTests' failed at 2026-10-30 03:23:40.308.",
+    "7924: Test Suite 'DUNEUITests.xctest' failed at 2026-10-30 03:23:40.309.",
+    "7926: Test Suite 'Selected tests' failed at 2026-10-30 03:23:40.310.",
+    "7942: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log reports 2 failures",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/ConditionDetailRedesignTests/testHeroContributionsAndUnifiedTrendAreReachable",
+    "DUNEUITests/ConditionDetailRedesignTests/testSingleNativeExplainerExpandsCalculationAndOriginalItems"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.xcodebuild/t04-iphone-normal-ui.log"
+}

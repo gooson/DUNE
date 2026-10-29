@@ -27,8 +27,9 @@ final class ConditionDetailRedesignTests: SeededUITestBaseCase {
             XCTAssertTrue(value.exists && value.label.contains(unit)
                           && value.label.rangeOfCharacter(from: .decimalDigits) != nil,
                           "\(metric) should show a numeric \(unit) measurement")
-            XCTAssertTrue(impact.exists && ["Positive", "Neutral", "Negative"].contains(impact.label),
-                          "\(metric) should show its model impact")
+            XCTAssertTrue(impact.exists, "\(metric) should expose its contribution impact")
+            XCTAssertEqual(impact.label, "Impact unavailable",
+                           "The opt-in score fixture has no contributions, so impact must not be inferred")
             VisualAudit.capture("Condition \(id) measurement and impact")
         }
 
@@ -110,7 +111,7 @@ final class ConditionDetailRedesignTests: SeededUITestBaseCase {
         XCTAssertTrue(app.staticTexts["How the Score Works"].firstMatch.exists,
                       "The single explainer should keep its existing title")
         XCTAssertFalse(calculation.exists, "Calculation starts collapsed")
-        explainerHeader.tap()
+        tapExplainerHeader()
         XCTAssertTrue(calculation.waitForExistence(timeout: 10))
         for id in ["condition-explanation-hrv", "condition-explanation-baseline", "condition-explanation-score", "condition-explanation-rhr"] {
             XCTAssertTrue(app.descendants(matching: .any)[id].firstMatch.exists,
@@ -120,8 +121,7 @@ final class ConditionDetailRedesignTests: SeededUITestBaseCase {
             XCTAssertTrue(app.staticTexts[row].firstMatch.exists, "Calculation row \(row) should remain")
         }
         VisualAudit.capture("Condition expanded calculation and explanations")
-        XCTAssertTrue(app.scrollToElementIfNeeded("condition-score-explainer", maxSwipes: 18))
-        explainerHeader.tap()
+        tapExplainerHeader()
         XCTAssertTrue(calculation.waitForNonExistence(timeout: 5), "Disclosure should collapse its calculation")
     }
 
@@ -141,14 +141,26 @@ final class ConditionDetailRedesignTests: SeededUITestBaseCase {
                           "\(id) should remain in the accessibility tree")
             VisualAudit.capture("Condition maximum AX \(id) viewport")
         }
-        explainerHeader.tap()
+        tapExplainerHeader()
         XCTAssertTrue(app.descendants(matching: .any)["condition-calculation-content"].firstMatch.waitForExistence(timeout: 10))
         VisualAudit.capture("Condition maximum AX expanded explanation")
     }
 
-    private var explainerHeader: XCUIElement {
-        let identifiedButton = app.buttons["condition-score-explainer"].firstMatch
-        return identifiedButton.exists ? identifiedButton : app.buttons["How the Score Works"].firstMatch
+    private func tapExplainerHeader() {
+        let title = app.staticTexts["How the Score Works"].firstMatch
+        XCTAssertTrue(title.waitForExistence(timeout: 5), "Native disclosure title should exist")
+        for _ in 0..<18 {
+            if title.isHittable {
+                title.tap() // Tap the 44pt header text frame, never the expanded group's full frame.
+                return
+            }
+            if title.frame.midY < detailScreen.frame.minY {
+                detailScreen.swipeDown(velocity: .slow)
+            } else {
+                detailScreen.swipeUp(velocity: .slow)
+            }
+        }
+        XCTFail("Native disclosure title should be reachable")
     }
 
     private func waitForPeriod(_ option: XCUIElement, range: XCUIElement, replacing prior: String) -> Bool {
