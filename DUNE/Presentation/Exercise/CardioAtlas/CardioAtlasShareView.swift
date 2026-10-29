@@ -56,21 +56,23 @@ struct CardioAtlasShareView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: DS.Spacing.xl) {
-                stylePicker
+                VStack(spacing: DS.Spacing.lg) {
+                    stylePicker
 
-                CardioAtlasShareCard(
-                    session: session,
-                    location: publishedLocation,
-                    style: style,
-                    mapImage: readyRenderKey == renderKey ? mapImage : nil,
-                    snapshotUnavailable: snapshotUnavailable,
-                    locationStatus: locationStatus,
-                    journeySummary: includeJourney ? journeySummary : nil,
-                    passportSummary: includePassport ? passportSummary : nil
-                )
-                .frame(maxWidth: 410)
-                .accessibilityElement(children: .contain)
-                .accessibilityIdentifier("cardio-atlas-share-preview")
+                    CardioAtlasShareCard(
+                        session: session,
+                        location: publishedLocation,
+                        style: style,
+                        mapImage: readyRenderKey == renderKey ? mapImage : nil,
+                        snapshotUnavailable: snapshotUnavailable,
+                        locationStatus: locationStatus,
+                        journeySummary: includeJourney ? journeySummary : nil,
+                        passportSummary: includePassport ? passportSummary : nil
+                    )
+                    .frame(maxWidth: 410)
+                    .accessibilityElement(children: .contain)
+                    .accessibilityIdentifier("cardio-atlas-share-preview")
+                }
 
                 VStack(alignment: .leading, spacing: DS.Spacing.md) {
                     Toggle("Include location on card", isOn: $showPlace)
@@ -123,11 +125,24 @@ struct CardioAtlasShareView: View {
                     .accessibilityIdentifier("cardio-atlas-share-action")
                 }
             }
-            .padding(DS.Spacing.lg)
+            .padding(.horizontal, DS.Spacing.lg)
+            .padding(.top, DS.Spacing.sm)
+            .padding(.bottom, DS.Spacing.lg)
             .frame(maxWidth: .infinity)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .scrollBounceBehavior(.basedOnSize)
+        .background {
+            ZStack {
+                DS.Color.surfacePrimary
+                SheetWaveBackground()
+            }
+            .ignoresSafeArea()
         }
         .navigationTitle("Share workout")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbarBackground(DS.Color.surfacePrimary, for: .navigationBar)
+        .toolbarBackground(.visible, for: .navigationBar)
         .accessibilityElement(children: .contain)
         .accessibilityIdentifier("cardio-atlas-share-screen")
         .task(id: renderKey) { await renderCard() }
@@ -135,29 +150,41 @@ struct CardioAtlasShareView: View {
     }
 
     private var stylePicker: some View {
-        HStack(spacing: DS.Spacing.sm) {
-            ForEach(CardioAtlasShareStyle.allCases) { option in
-                Button {
-                    style = option
-                } label: {
-                    VStack(spacing: DS.Spacing.xs) {
-                        Image(systemName: option.symbol)
-                            .font(.title3)
-                        Text(option.title)
-                            .font(.caption.weight(.semibold))
-                            .lineLimit(2)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .frame(minHeight: 62)
+        Group {
+            if dynamicTypeSize.isAccessibilitySize {
+                VStack(spacing: DS.Spacing.sm) {
+                    styleButtons
                 }
-                .buttonStyle(.bordered)
-                .tint(style == option ? theme.accentColor : DS.Color.textSecondary)
-                .disabled(option == .paceRibbon && !hasPaceSegments)
-                .accessibilityIdentifier("style-cardio-atlas-\(option.rawValue)")
-                .accessibilityAddTraits(style == option ? .isSelected : [])
+            } else {
+                HStack(spacing: DS.Spacing.sm) {
+                    styleButtons
+                }
             }
         }
         .frame(maxWidth: 410)
+    }
+
+    private var styleButtons: some View {
+        ForEach(CardioAtlasShareStyle.allCases) { option in
+            Button {
+                style = option
+            } label: {
+                HStack(spacing: DS.Spacing.xs) {
+                    Image(systemName: option.symbol)
+                    Text(option.title)
+                        .lineLimit(2)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                .font(.caption.weight(.semibold))
+                .frame(maxWidth: .infinity, minHeight: 36)
+            }
+            .buttonStyle(.bordered)
+            .controlSize(.small)
+            .tint(style == option ? theme.accentColor : DS.Color.textSecondary)
+            .disabled(option == .paceRibbon && !hasPaceSegments)
+            .accessibilityIdentifier("style-cardio-atlas-\(option.rawValue)")
+            .accessibilityAddTraits(style == option ? .isSelected : [])
+        }
     }
 
     @MainActor

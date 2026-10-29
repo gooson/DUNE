@@ -133,6 +133,7 @@ struct CardioAtlasPassportView: View {
                         .padding(DS.Spacing.lg)
                         .background(.thinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.lg))
                         .accessibilityElement(children: .combine)
+                        .accessibilityIdentifier("cardio-passport-earned-\(achievement.id)")
                     }
                 }
                 if !progress.nextAchievements.isEmpty {
@@ -145,6 +146,8 @@ struct CardioAtlasPassportView: View {
                             )
                             ProgressView(value: next.fraction).tint(theme.accentColor)
                         }
+                        .accessibilityElement(children: .contain)
+                        .accessibilityIdentifier("cardio-passport-next-\(next.id)")
                     }
                 }
             }

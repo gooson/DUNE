@@ -85,14 +85,31 @@ struct ExerciseListItem: Identifiable {
     var displayName: String {
         if source == .healthKit,
            let corrected = WorkoutTypeCorrectionStore.shared.correctedTitle(for: id) {
-            return corrected
+            return WorkoutActivityType.localizedDisplayName(
+                forStoredTitle: corrected, preferredActivity: activityType
+            ) ?? corrected
         }
         if let localized = localizedType, !localized.isEmpty {
+            return localized
+        }
+        if let localized = WorkoutActivityType.localizedDisplayName(
+            forStoredTitle: type, preferredActivity: activityType
+        ) {
             return localized
         }
         if activityType != .other {
             return activityType.displayName
         }
+        return type
+    }
+
+    /// Preserve a distinct custom/manual title, without repeating a generic storage code.
+    var secondaryDisplayName: String? {
+        guard source == .manual, let localizedType, !localizedType.isEmpty,
+              localizedType != type,
+              WorkoutActivityType.localizedDisplayName(
+                forStoredTitle: type, preferredActivity: activityType
+              ) == nil else { return nil }
         return type
     }
 
@@ -139,6 +156,7 @@ struct ExerciseListItem: Identifiable {
         }
         let localizedName = definition?.localizedName
         let activityType = definition?.resolvedActivityType
+            ?? WorkoutActivityType(rawValue: record.exerciseType)
             ?? WorkoutActivityType.infer(from: record.exerciseType)
             ?? .other
         let hasHKLink = record.healthKitWorkoutID.map { !$0.isEmpty } ?? false
