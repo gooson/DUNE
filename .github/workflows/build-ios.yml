@@ -12,6 +12,9 @@ on:
       - 'Shared/**'
       - 'scripts/build-ios.sh'
       - 'scripts/lib/regen-project.sh'
+      - 'scripts/format-xcstrings.swift'
+      - 'scripts/hooks/pre-commit.sh'
+      - 'scripts/tests/test_format_xcstrings.py'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -31,6 +34,9 @@ jobs:
 
       - name: Install xcodegen
         run: brew install xcodegen
+
+      - name: Validate string catalog extraction
+        run: python3 -B -m unittest scripts.tests.test_format_xcstrings
 
       - name: Build iOS
         run: scripts/build-ios.sh
