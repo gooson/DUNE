@@ -76,10 +76,11 @@ struct ConditionCalculationCard: View {
             rhrDeltaText = "—"
         }
 
-        rhrAdjustmentText = detail.rhrAdjustment.formattedWithSeparator(
+        let adjustment = isEmbedded ? detail.rhrAdjustmentForDisplay : detail.rhrAdjustment
+        rhrAdjustmentText = adjustment?.formattedWithSeparator(
             fractionDigits: 1,
             alwaysShowSign: true
-        )
+        ) ?? "—"
     }
 
     var body: some View {

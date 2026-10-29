@@ -32,3 +32,13 @@ extension ConditionScore.Status {
         }
     }
 }
+
+
+extension ConditionScoreDetail {
+    /// A neutral adjustment is displayable only when the scoring baseline was eligible.
+    var rhrAdjustmentForDisplay: Double? {
+        guard todayRHR != nil, baselineRHR != nil, rhrDeltaFromBaseline != nil,
+              rhrBaselineDays >= CalculateConditionScoreUseCase().requiredDays else { return nil }
+        return rhrAdjustment
+    }
+}

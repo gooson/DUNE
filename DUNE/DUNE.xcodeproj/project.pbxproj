@@ -843,6 +843,7 @@
 		99ABDB0221D5A75C40681683 /* NotificationThrottleStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55CF45307941E934039DD334 /* NotificationThrottleStore.swift */; };
 		99D8C8997A36C805067D2D8B /* NotificationSettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9909F5A1A22FA3CE72C4DD39 /* NotificationSettingsStore.swift */; };
 		99E1424A61707A91F18BB5F7 /* HabitLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A92AD21513190FD67FA1D72 /* HabitLog.swift */; };
+		9A0683CEBB2ABFCD5B3CAB08 /* ConditionScoreDisplayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4613C46B189054989D14B510 /* ConditionScoreDisplayTests.swift */; };
 		9A69B16F73B8CB619B95D053 /* MetricSummaryHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 305386DE1E55069D329E0F30 /* MetricSummaryHeader.swift */; };
 		9A75E528501EE4C34FA26612 /* TimeInterval+Formatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 683B7582AF0C03EF6ADF2358 /* TimeInterval+Formatting.swift */; };
 		9B248C7F2BA24DCF7614D9D5 /* WeatherAtmosphereTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FB16EAD728EAD7FA18A1524 /* WeatherAtmosphereTests.swift */; };
@@ -1824,6 +1825,7 @@
 		45FD948E7B3B1199E83C4EAC /* UITestBaseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestBaseCase.swift; sourceTree = "<group>"; };
 		46042A019450D3D3F1655E11 /* WellnessHeroCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WellnessHeroCard.swift; sourceTree = "<group>"; };
 		46061CCAFFEBA38BF47935AD /* ExerciseLibraryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseLibraryService.swift; sourceTree = "<group>"; };
+		4613C46B189054989D14B510 /* ConditionScoreDisplayTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionScoreDisplayTests.swift; sourceTree = "<group>"; };
 		46A29FD286A69B5FCDB300B0 /* WeeklyHeroTrendPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyHeroTrendPoint.swift; sourceTree = "<group>"; };
 		46CCA9D40E7CA8C86C4A16F1 /* ContourThemeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContourThemeTests.swift; sourceTree = "<group>"; };
 		46D6834210CEDA85D3A1E5CA /* WatchWorkoutLiveActivityUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchWorkoutLiveActivityUITests.swift; sourceTree = "<group>"; };
@@ -4529,6 +4531,7 @@
 				8B42EB9CDCBEAE86A5456EE2 /* CoachingEngineTests.swift */,
 				4ED31F1292D8B7C32E304DC8 /* CompoundWorkoutViewModelTests.swift */,
 				6E736AA70B9072AF70B1B273 /* ConditionScoreDetailViewModelTests.swift */,
+				4613C46B189054989D14B510 /* ConditionScoreDisplayTests.swift */,
 				2B1490E4490153478CEF2E5B /* ConditionScoreHRVDensityTests.swift */,
 				ED575155D1B85574E902CC69 /* ConditionScoreTests.swift */,
 				947694D9ACDE099BA4065E25 /* ConfettiModifierTests.swift */,
@@ -6232,6 +6235,7 @@
 				A50E53C911338ED02BE66AE7 /* CoachingEngineTests.swift in Sources */,
 				78854C55AA44801DB342BEF6 /* CompoundWorkoutViewModelTests.swift in Sources */,
 				FC0943D4FF8DA0E245BA51A3 /* ConditionScoreDetailViewModelTests.swift in Sources */,
+				9A0683CEBB2ABFCD5B3CAB08 /* ConditionScoreDisplayTests.swift in Sources */,
 				C5BBBD4D659A80BA5EC77151 /* ConditionScoreHRVDensityTests.swift in Sources */,
 				17DAF57781589D20337E69A7 /* ConditionScoreTests.swift in Sources */,
 				E90C1D976F7C1477D8BF1D20 /* ConfettiModifierTests.swift in Sources */,

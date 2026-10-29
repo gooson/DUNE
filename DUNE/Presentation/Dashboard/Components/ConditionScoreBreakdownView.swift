@@ -13,7 +13,7 @@ struct ConditionScoreBreakdownView: View {
                 row("HRV (Z-Score)", icon: "waveform.path.ecg", value: detail?.zScore,
                     color: DS.Color.hrv, fractionDigits: 2, identifier: "hrv")
                 Divider()
-                row("RHR Adjustment", icon: "heart.fill", value: rhrAdjustment,
+                row("RHR Adjustment", icon: "heart.fill", value: detail?.rhrAdjustmentForDisplay,
                     color: DS.Color.rhr, fractionDigits: 1, identifier: "rhr")
                 Divider()
                 row("Time-of-day Effect", icon: "clock", value: detail?.timeOfDayAdjustment,
@@ -22,12 +22,6 @@ struct ConditionScoreBreakdownView: View {
         }
         .accessibilityElement(children: .contain)
         .accessibilityIdentifier("score-composition-card")
-    }
-
-    private var rhrAdjustment: Double? {
-        guard let detail, detail.todayRHR != nil, detail.baselineRHR != nil,
-              detail.rhrDeltaFromBaseline != nil else { return nil }
-        return detail.rhrAdjustment
     }
 
     private func row(_ title: LocalizedStringKey, icon: String, value: Double?, color: Color,

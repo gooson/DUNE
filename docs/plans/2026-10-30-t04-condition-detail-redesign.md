@@ -62,3 +62,7 @@ Work 사전 검토에서 AX 숫자의 VoiceOver 레이블과 시간대4열·계�
 Duo 펼침의 첫5개 검사 중 Hero·최대AX Hero/설명·기간 전환3개는 통과했다. 기존 두 수치/하위 차트 검사는 화면 아래 항목을 찾는 중앙 드래그가 차트에 소비되어 같은 오프스크린 좌표에 멈췄다. 원본 AX에서 항목 ID·크기는 정상이며 y2274 등으로 남아 있었다. Condition 화면만 좌측 거터 드래그/최대32회로 수정하고 전체 요소 포함 여부·수치·plot 검증은 유지한다. 이 두 실패만 수정 후1회 재검증한다. 새10개 문자열에는 영어 source fallback과 같은 명시적 en 항목을 추가해 en/ko/ja를 모두 등록했다.
 
 거터 수정 후 하위 HRV/RHR 차트 전체 검사는 통과했고 구성 HRV/RHR 수치도 화면 안으로 이동했다. 새로 도달한 RHR 수치에서 테스트가0.0에도 부호를 요구하는 별도 기대 오류가 드러났다. 실제 AX는 HRV +2.00/RHR0.0/time0.0이며 공통 formatter는 양수에만+를 붙인다. 실제 fixture값 세 개를 정확히 단언하도록 수정하고 이 새 실패1개만 재검증한다. 기존 스크롤 실패를 다시 반복하는 것이 아니다.
+
+## Resolve 검토 반영
+
+공식5관점+SwiftUI/AppleUX/AppQuality에서P2네 범주(RHR미적용0, 고정/달력범위, 작은hit area, deadsummary조회)와P3두개(미사용palette passthrough, 기간전환fade)를확인했다. RHReligibility는DomainrequiredDays를참조하는Presentation공유계산으로2소비자에적용하고Wellness기본표시는유지한다. T04고정window는한참조시점의end에맞추어today를포함하고, full±duration만이동하며query범위는기존달력preload와합집합으로한다. deadsummary와전용2조회제거, highlights/subscore범위보존. actualdateIntervalFormatter로중복연도축약. 세plaincontrols에contentShape를부여하고44pt크기/가장자리탭UI검증추가. P3정리및ReduceMotion을따르는fade복원. 표준generic iOS빌드성공. Data/Architecture/Simplicity정적delta재검토는기존지적닫힘/신규P1P2없음; 관련새단위와영향UI검증은이후실행한다.

@@ -99,6 +99,7 @@ struct ConditionScoreDetailView: View {
                         viewModel.stepVisiblePeriod(by: -1)
                     } label: {
                         Image(systemName: "chevron.left").frame(width: 44, height: 44)
+                            .contentShape(Rectangle())
                     }
                     .accessibilityLabel("Previous period")
                     .accessibilityIdentifier("condition-period-previous")
@@ -115,6 +116,7 @@ struct ConditionScoreDetailView: View {
                         viewModel.stepVisiblePeriod(by: 1)
                     } label: {
                         Image(systemName: "chevron.right").frame(width: 44, height: 44)
+                            .contentShape(Rectangle())
                     }
                     .accessibilityLabel("Next period")
                     .accessibilityIdentifier("condition-period-next")
@@ -158,6 +160,7 @@ struct ConditionScoreDetailView: View {
                 .frame(minHeight: 44)
                 .background(viewModel.showTrendLine ? theme.accentColor.opacity(0.12) : Color.clear,
                             in: Capsule())
+                .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
         .foregroundStyle(viewModel.showTrendLine ? theme.accentColor : .secondary)
@@ -187,6 +190,8 @@ struct ConditionScoreDetailView: View {
             }
         }
         .id(viewModel.selectedPeriod)
+        .transition(.opacity)
+        .animation(reduceMotion ? nil : .easeInOut(duration: 0.25), value: viewModel.selectedPeriod)
     }
 
     private func visibleSummary(_ summary: MetricSummary) -> some View {

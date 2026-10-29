@@ -17,7 +17,6 @@ struct DesertHorizonConditionHeroView: View {
     private var surface: Color { palette.surface }
     private var border: Color { palette.border }
     private var gold: Color { palette.gold }
-    private var paleGold: Color { palette.paleGold }
     private var heroAccent: Color { palette.heroAccent }
     private var heroHighlight: Color { palette.heroHighlight }
     private var heroPositive: Color { palette.heroPositive }

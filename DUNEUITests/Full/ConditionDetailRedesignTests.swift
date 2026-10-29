@@ -102,6 +102,29 @@ final class ConditionDetailRedesignTests: SeededUITestBaseCase {
         VisualAudit.capture("Condition trend toggled")
     }
 
+    func testPeriodControlsKeep44PointTargetsAndAcceptEdgeTaps() {
+        openConditionDetail()
+        XCTAssertTrue(app.scrollToElementIfNeeded("condition-period-previous", maxSwipes: 18))
+        let previous = app.buttons["condition-period-previous"].firstMatch
+        let next = app.buttons["condition-period-next"].firstMatch
+        let trend = app.buttons["score-chart-trend-toggle"].firstMatch
+        for button in [previous, next, trend] {
+            XCTAssertGreaterThanOrEqual(button.frame.height, 44, "The full control height must be tappable")
+            XCTAssertGreaterThanOrEqual(button.frame.width, 44, "The full control width must be tappable")
+        }
+        let range = app.staticTexts["score-detail-chart-visible-range"].firstMatch
+        let initial = range.label
+        previous.coordinate(withNormalizedOffset: CGVector(dx: 0.1, dy: 0.1)).tap()
+        XCTAssertNotEqual(waitForLabelChange(range, from: initial), initial)
+        next.coordinate(withNormalizedOffset: CGVector(dx: 0.9, dy: 0.9)).tap()
+        let restored = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in range.label == initial }, object: range)
+        XCTAssertEqual(XCTWaiter.wait(for: [restored], timeout: 5), .completed)
+        trend.coordinate(withNormalizedOffset: CGVector(dx: 0.1, dy: 0.1)).tap()
+        let enabled = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in trend.value as? String == "On" }, object: trend)
+        XCTAssertEqual(XCTWaiter.wait(for: [enabled], timeout: 5), .completed)
+        VisualAudit.capture("Condition full period control hit targets")
+    }
+
     func testSingleNativeExplainerExpandsCalculationAndOriginalItems() {
         openConditionDetail()
         XCTAssertTrue(app.scrollToElementIfNeeded("condition-score-explainer", maxSwipes: 18))
