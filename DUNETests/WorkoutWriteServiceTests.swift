@@ -252,3 +252,31 @@ struct HealthKitWorkoutTitleTests {
         #expect(title == WorkoutActivityType.traditionalStrengthTraining.typeName)
     }
 }
+
+@Suite("WorkoutWriteInput location")
+struct WorkoutWriteInputLocationTests {
+    @Test("Legacy callers do not infer indoor state or invent route points")
+    func locationDefaults() {
+        let input = WorkoutWriteInput(startDate: Date(), duration: 600, category: .cardio,
+                                      exerciseName: "Run", estimatedCalories: nil, isFromHealthKit: false)
+        #expect(input.isIndoor == nil)
+        #expect(input.routePoints.isEmpty)
+        #expect(input.endDate == nil)
+        #expect(input.pauseIntervals.isEmpty)
+    }
+
+    @Test("Indoor writes discard supplied route data while retaining actual session times")
+    func indoorRouteExcluded() throws {
+        let start = Date()
+        let point = try #require(WorkoutRoutePoint(latitude: 37, longitude: 127, timestamp: start))
+        let end = start.addingTimeInterval(700)
+        let pause = DateInterval(start: start.addingTimeInterval(300), duration: 100)
+        let input = WorkoutWriteInput(startDate: start, duration: 600, category: .cardio,
+                                      exerciseName: "Run", estimatedCalories: nil, isFromHealthKit: false,
+                                      isIndoor: true, routePoints: [point], endDate: end, pauseIntervals: [pause])
+        #expect(input.isIndoor == true)
+        #expect(input.routePoints.isEmpty)
+        #expect(input.endDate == end)
+        #expect(input.pauseIntervals == [pause])
+    }
+}

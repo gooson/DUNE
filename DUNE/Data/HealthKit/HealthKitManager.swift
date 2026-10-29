@@ -41,6 +41,7 @@ actor HealthKitManager: HealthKitManaging {
         HKQuantityType(.distanceCycling),
         HKQuantityType(.distanceSwimming),
         HKQuantityType(.runningSpeed),
+        HKSeriesType.workoutRoute(),
         HKQuantityType(.bodyMass),
         HKQuantityType(.bodyFatPercentage),
         HKQuantityType(.leanBodyMass),
@@ -70,6 +71,7 @@ actor HealthKitManager: HealthKitManaging {
                 HKQuantityType(.activeEnergyBurned),
                 HKQuantityType(.distanceWalkingRunning),
                 HKQuantityType.workoutType(),
+                HKSeriesType.workoutRoute(),
                 HKCategoryType(.mindfulSession),
             ]
         )

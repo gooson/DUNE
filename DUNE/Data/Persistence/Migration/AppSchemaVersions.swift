@@ -417,7 +417,17 @@ enum AppSchemaV19: VersionedSchema {
     }
 }
 
+// MARK: - Current Schema (V20)
+
+/// Add the location entity without changing any deployed V19 model fields.
+enum AppSchemaV20: VersionedSchema {
+    static let versionIdentifier = Schema.Version(20, 0, 0)
+    static var models: [any PersistentModel.Type] {
+        AppSchemaV19.models + [WorkoutLocationRecord.self]
+    }
+}
+
 /// Provides the current schema for ModelContainer initialization.
 enum AppSchema {
-    static let currentSchema = Schema(AppSchemaV19.models)
+    static let currentSchema = Schema(AppSchemaV20.models)
 }

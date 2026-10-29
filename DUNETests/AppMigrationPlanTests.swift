@@ -22,7 +22,8 @@ struct AppSchemaTests {
         #expect(currentModelNames.contains("HealthSnapshotMirrorRecord"))
         #expect(currentModelNames.contains("HourlyScoreSnapshot"))
         #expect(currentModelNames.contains("PostureAssessmentRecord"))
-        #expect(currentModelNames.count == 13)
+        #expect(currentModelNames.contains("WorkoutLocationRecord"))
+        #expect(currentModelNames.count == 14)
     }
 
     @Test("Schema builds an in-memory model container")
@@ -33,11 +34,11 @@ struct AppSchemaTests {
         )
     }
 
-    @Test("V17 entity names remain stable in V18")
+    @Test("Historical entity names remain in the current schema")
     func historicalEntityNames() {
         let oldNames = Set(Schema(AppSchemaV17.models).entities.map(\.name))
         let newNames = Set(AppSchema.currentSchema.entities.map(\.name))
-        #expect(oldNames == newNames)
+        #expect(oldNames.isSubset(of: newNames))
         #expect(oldNames.contains("ExerciseRecord"))
         #expect(oldNames.contains("WorkoutSet"))
     }
@@ -163,6 +164,43 @@ struct AppSchemaTests {
         let reopened = try ModelContainer(for: AppSchema.currentSchema, configurations: configuration)
         let saved = try #require(ModelContext(reopened).fetch(FetchDescriptor<ExerciseRecord>()).first)
         #expect(saved.cardioMachineLevelChanges == changes)
+    }
+
+    @Test("V19 store migrates to V20 without changing exercise data; location survives reopen")
+    func v19LocationMigratesAndReopens() throws {
+        let storeURL = makeTemporaryStoreURL()
+        defer { removeStoreFiles(at: storeURL) }
+        let oldSchema = Schema(AppSchemaV19.models)
+        #expect(oldSchema.entities.count == 13)
+        let recordID: UUID
+        do {
+            let configuration = ModelConfiguration(schema: oldSchema, url: storeURL, cloudKitDatabase: .none)
+            let container = try ModelContainer(for: oldSchema, configurations: configuration)
+            let context = ModelContext(container)
+            let record = ExerciseRecord(exerciseType: "running", duration: 600)
+            recordID = record.id
+            context.insert(record)
+            try context.save()
+        }
+        let configuration = ModelConfiguration(schema: AppSchema.currentSchema, url: storeURL, cloudKitDatabase: .none)
+        let place = try #require(WorkoutPlace(latitude: 37, longitude: 127, name: "Gym", source: .manual))
+        do {
+            let container = try ModelContainer(for: AppSchema.currentSchema, configurations: configuration)
+            let context = ModelContext(container)
+            let exercise = try #require(context.fetch(FetchDescriptor<ExerciseRecord>()).first)
+            #expect(exercise.id == recordID)
+            #expect(exercise.duration == 600)
+            #expect(try context.fetchCount(FetchDescriptor<WorkoutLocationRecord>()) == 0)
+            context.insert(WorkoutLocationRecord(localRecordID: recordID,
+                healthKitWorkoutID: "workout-id", payload: WorkoutLocationPayload(isIndoor: true, place: place)))
+            try context.save()
+        }
+        let reopened = try ModelContainer(for: AppSchema.currentSchema, configurations: configuration)
+        let location = try #require(ModelContext(reopened).fetch(FetchDescriptor<WorkoutLocationRecord>()).first)
+        #expect(location.localRecordID == recordID)
+        #expect(location.healthKitWorkoutID == "workout-id")
+        #expect(location.payload?.place == place)
+        #expect(location.payload?.isIndoor == true)
     }
 
     private func makeTemporaryStoreURL() -> URL {

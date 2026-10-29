@@ -13,6 +13,23 @@ final class LocationTrackingService: NSObject, LocationTrackingServiceProtocol, 
     private var _totalDistanceMeters: Double = 0
     private var _totalElevationGainMeters: Double = 0
     private var isTracking = false
+    private var isPaused = false
+    private var _routePoints: [WorkoutRoutePoint] = []
+    private var trackingStartedAt: Date?
+
+    var routePoints: [WorkoutRoutePoint] { lock.withLock { _routePoints } }
+
+    func pauseTracking() {
+        lock.withLock { isPaused = true; lastLocation = nil }
+    }
+
+    func resumeTracking() {
+        lock.withLock {
+            isPaused = false
+            lastLocation = nil
+            trackingStartedAt = Date()
+        }
+    }
     private var authContinuation: CheckedContinuation<CLAuthorizationStatus, Never>?
 
     var totalDistanceMeters: Double {
@@ -48,10 +65,10 @@ final class LocationTrackingService: NSObject, LocationTrackingServiceProtocol, 
     func startTracking() async throws {
         let status = locationManager.authorizationStatus
         if status == .notDetermined {
-            locationManager.requestWhenInUseAuthorization()
             // Wait for the actual authorization callback with 30s timeout
             let grantedStatus: CLAuthorizationStatus = await withCheckedContinuation { continuation in
                 self.storeAuthContinuation(continuation)
+                locationManager.requestWhenInUseAuthorization()
 
                 // Timeout: resume with .denied after 30s if delegate hasn't fired
                 Task { [weak self] in
@@ -70,7 +87,10 @@ final class LocationTrackingService: NSObject, LocationTrackingServiceProtocol, 
             }
         }
 
+        try Task.checkCancellation()
         lock.withLock {
+            _routePoints = []
+            trackingStartedAt = Date()
             _totalDistanceMeters = 0
             _totalElevationGainMeters = 0
             lastLocation = nil
@@ -96,27 +116,46 @@ final class LocationTrackingService: NSObject, LocationTrackingServiceProtocol, 
 extension LocationTrackingService: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         lock.withLock {
-            guard isTracking else { return }
+            guard isTracking, !isPaused else { return }
             for location in locations {
                 // Filter inaccurate readings (> 20m horizontal accuracy)
                 guard location.horizontalAccuracy >= 0,
-                      location.horizontalAccuracy < 20 else { continue }
+                      location.horizontalAccuracy < 20,
+                      let trackingStartedAt,
+                      location.timestamp >= trackingStartedAt,
+                      abs(location.timestamp.timeIntervalSinceNow) < 30,
+                      var point = WorkoutRoutePoint(
+                        latitude: location.coordinate.latitude,
+                        longitude: location.coordinate.longitude,
+                        timestamp: location.timestamp,
+                        altitude: location.verticalAccuracy >= 0 ? location.altitude : nil,
+                        horizontalAccuracy: location.horizontalAccuracy
+                      ) else { lastLocation = nil; continue }
 
+                point.startsNewSegment = lastLocation == nil
                 if let last = lastLocation {
+                    let interval = location.timestamp.timeIntervalSince(last.timestamp)
+                    guard interval > 0 else { continue }
                     let delta = location.distance(from: last)
                     // Ignore impossibly large jumps (> 100m between updates) — GPS glitch
-                    if delta >= 0, delta < 100 {
-                        _totalDistanceMeters += delta
-                    }
+                    let continuous = delta.isFinite && delta >= 0 && delta < 100 && interval <= 30
+                    point.startsNewSegment = !continuous
+                    if continuous { _totalDistanceMeters += delta }
 
                     let verticalDelta = location.altitude - last.altitude
-                    if verticalDelta > 0,
+                    if continuous, verticalDelta > 0,
                        verticalDelta.isFinite,
                        verticalDelta < 25,
                        location.verticalAccuracy >= 0,
                        location.verticalAccuracy < 20 {
                         _totalElevationGainMeters += verticalDelta
                     }
+                }
+                _routePoints.append(point)
+                if _routePoints.count > WorkoutLocationPayload.maxRoutePoints {
+                    _routePoints = WorkoutLocationPayload.normalizedRoute(
+                        _routePoints, limit: WorkoutLocationPayload.maxRoutePoints / 2
+                    )
                 }
                 lastLocation = location
             }

@@ -13,6 +13,7 @@ struct CardioSessionSummaryView: View {
 
     @State private var isSaving = false
     @State private var hasSaved = false
+    @State private var showsSaveError = false
 
     var body: some View {
         ScrollView {
@@ -34,6 +35,11 @@ struct CardioSessionSummaryView: View {
         .englishNavigationTitle("Summary")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
+        .alert("Error", isPresented: $showsSaveError) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text("Could not save the workout. Please try again.")
+        }
     }
 
     // MARK: - Completion Header
@@ -240,6 +246,18 @@ struct CardioSessionSummaryView: View {
         )
 
         modelContext.insert(record)
+        let locationRecord = WorkoutLocationRecord(localRecordID: record.id, payload: data.locationPayload)
+        modelContext.insert(locationRecord)
+        do {
+            try modelContext.save()
+        } catch {
+            modelContext.delete(locationRecord)
+            modelContext.delete(record)
+            isSaving = false
+            showsSaveError = true
+            AppLogger.healthKit.error("Could not save cardio workout locally: \(error)")
+            return
+        }
         hasSaved = true
         isSaving = false
 
@@ -257,7 +275,11 @@ struct CardioSessionSummaryView: View {
             averageCadenceStepsPerMinute: data.averageCadenceStepsPerMinute,
             elevationGainMeters: data.elevationGainMeters,
             floorsAscended: data.floorsAscended,
-            activityType: viewModel.activityType
+            activityType: viewModel.activityType,
+            isIndoor: data.locationPayload.isIndoor,
+            routePoints: data.locationPayload.route,
+            endDate: data.endDate,
+            pauseIntervals: data.pauseIntervals
         )
 
         let recordID = record.persistentModelID
@@ -266,6 +288,9 @@ struct CardioSessionSummaryView: View {
                 let hkID = try await WorkoutWriteService().saveWorkout(input)
                 if let liveRecord = modelContext.model(for: recordID) as? ExerciseRecord {
                     liveRecord.healthKitWorkoutID = hkID
+                    locationRecord.healthKitWorkoutID = hkID
+                    locationRecord.updatedAt = Date()
+                    try modelContext.save()
                 }
             } catch {
                 AppLogger.healthKit.error("Failed to write cardio workout to HealthKit: \(error)")
