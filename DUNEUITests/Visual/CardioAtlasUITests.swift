@@ -7,6 +7,22 @@ final class CardioAtlasUITests: ActivityExerciseSeededUITestBaseCase {
         ["--ui-cardio-atlas-fixture", "-morningBriefingDisabled", "YES"]
     }
 
+    func testKoreanLargeTextDetailAndPassport() {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-AppleLanguages", "(ko)", "-AppleLocale", "ko_KR",
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ]
+        launchApp(with: configuration)
+        openRecord("running")
+        XCTAssertTrue(element("cardio-atlas-section").waitForExistence(timeout: 10))
+        addScreenshotAttachment(named: "Cardio Atlas Korean large text detail")
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("cardio-atlas-passport", maxSwipes: 10))
+        element("cardio-atlas-passport").tap()
+        XCTAssertTrue(element("cardio-atlas-passport-detail").waitForExistence(timeout: 8))
+        addScreenshotAttachment(named: "Cardio Atlas Korean large text Passport")
+    }
+
     func testRecordedRouteDetailAndProgress() {
         openRecord("running")
         XCTAssertTrue(element("cardio-atlas-section").waitForExistence(timeout: 10))
@@ -17,6 +33,13 @@ final class CardioAtlasUITests: ActivityExerciseSeededUITestBaseCase {
         element("cardio-atlas-journey").tap()
         XCTAssertTrue(element("cardio-atlas-journey-detail").waitForExistence(timeout: 8))
         addScreenshotAttachment(named: "Cardio Atlas Journey progress")
+    }
+
+    func testImportedCardioDetailPreservesAnalysis() {
+        openRecord("ui-test-activity-workout-running", healthKit: true)
+        XCTAssertTrue(element("cardio-atlas-section").waitForExistence(timeout: 10))
+        XCTAssertTrue(element("healthkit-workout-edit-title").exists)
+        addScreenshotAttachment(named: "Cardio Atlas imported HealthKit detail")
     }
 
     func testPassportFromRecordedRoute() {
@@ -75,7 +98,7 @@ final class CardioAtlasUITests: ActivityExerciseSeededUITestBaseCase {
         addScreenshotAttachment(named: "Cardio Atlas location not recorded")
     }
 
-    private func openRecord(_ definitionID: String) {
+    private func openRecord(_ definitionID: String, healthKit: Bool = false) {
         navigateToActivity()
         XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.activityRecentSeeAll, maxSwipes: 20))
         app.buttons[AXID.activityRecentSeeAll].firstMatch.tap()
@@ -83,7 +106,8 @@ final class CardioAtlasUITests: ActivityExerciseSeededUITestBaseCase {
         let rowID = "exercise-row-\(definitionID)"
         XCTAssertTrue(app.scrollToHittableElementIfNeeded(rowID, maxSwipes: 8))
         element(rowID).tap()
-        XCTAssertTrue(element("exercise-session-detail-scroll").waitForExistence(timeout: 8))
+        let detailID = healthKit ? "healthkit-workout-detail-screen" : "exercise-session-detail-scroll"
+        XCTAssertTrue(element(detailID).waitForExistence(timeout: 8))
     }
 
     private func element(_ identifier: String) -> XCUIElement {

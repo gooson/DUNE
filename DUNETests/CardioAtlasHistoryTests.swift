@@ -7,6 +7,16 @@ import Testing
 struct CardioAtlasHistoryTests {
     private let date = Date(timeIntervalSince1970: 1_700_000_000)
 
+    @Test("A different known local link never consumes a simultaneous Watch history entry")
+    func differentKnownIdentity() {
+        let record = ExerciseRecord(date: date, exerciseType: "running", duration: 600, distance: 2)
+        record.healthKitWorkoutID = "HK-outside-history-page"
+        let watch = workout(id: "HK-simultaneous-watch", fromApp: true)
+        let result = CardioAtlasHistory.sessions(records: [record], workouts: [watch], current: session(id: record.id.uuidString))
+        #expect(result.count == 2)
+        #expect(result.contains { $0.id == watch.id })
+    }
+
     @Test("Local kilometers convert to meters and linked HealthKit samples count once")
     func linkedSources() throws {
         let record = ExerciseRecord(date: date, exerciseType: "running", duration: 600, distance: 2)

@@ -67,6 +67,7 @@ struct ExerciseSessionDetailView: View {
     private var resolvedActivityType: WorkoutActivityType {
         if activityType != .other { return activityType }
         return WorkoutActivityType(rawValue: record.exerciseType)
+            ?? record.exerciseDefinitionID.flatMap { WorkoutActivityType(rawValue: $0) }
             ?? WorkoutActivityType.infer(from: record.exerciseDefinitionID ?? "")
             ?? WorkoutActivityType.infer(from: record.exerciseType)
             ?? .other

@@ -496,10 +496,6 @@ enum TestDataSeeder {
             exerciseDefinitionID: "running"
         )
         context.insert(run)
-        let runSet = WorkoutSet(setNumber: 1, duration: 1_350, distance: 2.0, isCompleted: true)
-        runSet.exerciseRecord = run
-        context.insert(runSet)
-        run.sets = [runSet]
         context.insert(WorkoutLocationRecord(
             localRecordID: run.id,
             payload: WorkoutLocationPayload(isIndoor: false, route: route)
@@ -510,10 +506,6 @@ enum TestDataSeeder {
             duration: 1_200, calories: 180, exerciseDefinitionID: "elliptical"
         )
         context.insert(elliptical)
-        let ellipticalSet = WorkoutSet(setNumber: 1, duration: 1_200, isCompleted: true)
-        ellipticalSet.exerciseRecord = elliptical
-        context.insert(ellipticalSet)
-        elliptical.sets = [ellipticalSet]
         let place = WorkoutPlace(
             latitude: 37.5445, longitude: 127.0438,
             name: "Atlas Indoor Gym (UI Fixture)", source: .manual
@@ -528,10 +520,6 @@ enum TestDataSeeder {
             duration: 900, exerciseDefinitionID: "rowing-machine"
         )
         context.insert(unlocated)
-        let unlocatedSet = WorkoutSet(setNumber: 1, duration: 900, isCompleted: true)
-        unlocatedSet.exerciseRecord = unlocated
-        context.insert(unlocatedSet)
-        unlocated.sets = [unlocatedSet]
 
         do {
             try context.save()
