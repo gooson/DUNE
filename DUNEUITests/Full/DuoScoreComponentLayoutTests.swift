@@ -71,12 +71,15 @@ final class DuoScoreComponentLayoutTests: SeededUITestBaseCase {
         let scroll = app.scrollViews[AXID.conditionScoreDetailScreen].firstMatch
         let card = app.descendants(matching: .any)["score-composition-card"].firstMatch
         XCTAssertTrue(revealCardContent(card, in: scroll), "Condition composition should be reachable")
-        for id in ["condition-component-value-hrv", "condition-component-value-rhr", "condition-component-value-time"] {
+        let expectedValues = [
+            ("condition-component-value-hrv", "+2.00"),
+            ("condition-component-value-rhr", "0.0"),
+            ("condition-component-value-time", "0.0")
+        ]
+        for (id, expected) in expectedValues {
             let value = app.staticTexts[id].firstMatch
             XCTAssertTrue(revealWhole(value, in: scroll), "\(id) should fit at maximum AX size")
-            XCTAssertFalse(value.label.isEmpty, "\(id) should expose its actual calculation value")
-            XCTAssertTrue(value.label.hasPrefix("+") || value.label.hasPrefix("−") || value.label.hasPrefix("-"),
-                          "\(id) should be a signed calculation value")
+            XCTAssertEqual(value.label, expected, "\(id) should retain its actual fixture value; zero has no sign")
             VisualAudit.capture("Condition maximum AX \(id) complete value")
         }
         XCTAssertFalse(card.staticTexts["70%"].exists, "Condition must not imply a 70% HRV weight")
