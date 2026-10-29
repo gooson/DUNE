@@ -86,14 +86,28 @@ let publicLocation = location.shareLocation(
 - 최종 코드 재검토에 미해결 P1/P2는 없지만, UI 게이트 통과와 PR 머지는 완료되지 않았다. [검증 기록](../../reviews/2026-10-29-cardio-atlas/README.md)과 [실제 화면 갱신 상태](../../design/full-redesign-map/review/cardio-atlas-2026-10-29/index.html)를 따른다.
 - 로컬 원본 로그는 `.codex-checks/cardio-atlas/`에 보존한다. 실제 기기 GPS·HK route sync·CloudKit 다른 기기 동기화는 미검증이다.
 
+## Native follow-up findings at 18:00
+
+The scheduled retry restored a fresh owned iPhone to a responsive state. Native images exposed a navigation bug that existence-only AX checks had missed: Share/Journey/Passport were pushed underneath the exercise inspector. Atlas now owns enum sheet destinations, each with a local NavigationStack and Done that clears only the Atlas state. Progress values are captured at entry while Journey goal bindings remain live. Tests require hittable destination roots and return to the same detail.
+
+Visual review also caught a map image expanding its preview horizontally because aspect-fill was combined with a fixed250pt height. Aspect-fit at available width preserves the full route. Share tests verify actual style selection and preview/selector bounds. Pace uses distinct existing chart tokens plus the existing localized style caption. At accessibility sizes, full-width vertical Place/Share actions prevent Korean syllables from stacking. The corresponding focused phone cases passed and the new images were independently inspected with no remaining P1/P2 in those deltas.
+
+iPad verification subsequently hit the five-minute allowance during initial app launch and during an Activity interaction; the intervening route/Journey case passed. These results are preserved separately rather than reporting the whole device as passed. Further device verification and the UI gate remain subject to the final review record.
+
 ## Prevention
 
 - 스키마 확장은 배포된 모델의 checksum을 먼저 확인하고, 독립 모델의 optional/default 필드로 추가한다. 위치 payload는 입력·저장·읽기 경계에서 같은 정규화를 적용한다.
 - 운동 성공과 선택적인 route 저장 성공을 별도로 검증한다. pause·gap·중복 시각·GPS 점프, 취소 전 등록/후 등록/늦은 callback, 5초 제한과 소유권 해제를 재현 가능한 fake provider로 확인한다.
 - 이력 합계는 정확한 HK 링크를 먼저 확인한 뒤 좁은 fallback을 사용한다. 다른 ID의 동시 Watch 운동, HK 조회 누락, 세트 없는 유산소를 회귀 사례로 유지한다.
 - 공유 검증은 타일·핀·경로·이름을 모두 검사하고, 자르기 전후 비공개 데이터와 운동 통계가 같은지 확인한다. UI fixture의 GPS 표본은 150초 공백 대신 실제적인 약 8초 간격을 사용한다.
+- AX 존재만으로 전면 목적지를 검증하지 않는다. native PNG와 hittable 상태를 확인하며 inspector 내부 이동은 presentation ownership을 검토한다.
+- 고정 높이 이미지의 intrinsic width가 부모 ScrollView를 확장하지 않게 종횡비를 보존하고 실제 시트 경계를 검사한다.
 - native AX 식별자를 section/container에 줄 때는 `.accessibilityElement(children: .contain)`으로 자식 식별자를 보존한다. 큰 글씨 UI 테스트는 앱 중복 실행을 피하고, 목표 화면에 진입하기 전의 기존 루트 오류와 해당 화면 배치 검증을 구분한다.
 
 ## Lessons Learned
 
 위치의 실제 기록 여부, 운동 정체성, 공유 공개 범위는 각각 따로 모델링해야 한다. 실내 여부만으로 경로를 삭제하거나 시간 근접성만으로 운동을 합치면 유효한 가져온 경로와 Watch 운동을 잃는다. native UI 테스트는 단위 테스트가 찾지 못한 접근성 컨테이너 식별자 상속 문제를 드러냈으며, 실패 뒤 수정한 코드는 해당 UI 실행 결과가 나올 때까지 검증 완료로 표시하지 않는다.
+
+## Final follow-up scope
+
+Current implementation221cd7ab has focused phone delta2/2 pass. The inline map reserves gestures for the expanded view; directional small drags avoid overshooting a Passport button on short inspector viewports. The place editor uses an always-visible navigation search drawer, verified on portrait iPhone. Its changed unfolded-Duo layout and iPad remain unverified for the documented runtime/readiness reasons. New actual39images are preserved; this document stays draft until the UI pipeline can finish.

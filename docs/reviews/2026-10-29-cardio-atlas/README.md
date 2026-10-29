@@ -1,6 +1,6 @@
 # Cardio Atlas 검증 기록
 
-상태: 코드 구현·집중 단위 검증 완료. 최종 네이티브 UI 게이트는 환경 장애로 미완료. 브라우저 시안과 실제 앱 화면은 구분한다.
+상태: 코드 구현·집중 단위 검증 및 iPhone·주요 Duo 흐름 검증 완료. iPad와 최신 Duo 장소 편집 화면의 UI 게이트는 미완료. 브라우저 시안과 실제 앱 화면은 구분한다.
 
 ## 구현 범위
 
@@ -47,3 +47,23 @@
 [최종 실제 화면 검증 상태](../../design/full-redesign-map/review/cardio-atlas-2026-10-29/index.html)에 미완료 화면·기기·재개 조건을 등록했다. UI 게이트가 통과하지 않아 Ship와 PR 머지는 진행하지 않았다. 이전 시안 PNG나 실패 실행 PNG를 새 구현의 완료 근거로 재사용하지 않는다.
 
 실제 기기의 GPS 수신·권한 선택, Apple Health 경로 동기화 지연, CloudKit 다른 기기 동기화는 시뮬레이터 결과만으로 확인했다고 주장하지 않는다. 실내 계단 이탈 감지의 기존 위치 권한 동작은 유지하며 새 경로 수집기는 실외 유산소에서만 시작한다.
+
+## 18시 예약 재시도 결과
+
+새 전용 iPhone은38초 부팅과 정상 AX 응답을 확인했다. 네이티브 이미지에서 추가 발견한 inspector 아래로의 잘못된 화면 이동, 공유 이미지 가로 넘침, 큰 글씨·접힘 헤더의 음절 줄바꿈, 구분이 약한 페이스 리본을 수정했다. 전체 UI를 반복하지 않고 실패·변경과 연결된 사례만 재검증했다.
+
+| 확인 | 최종 유효 근거 |
+|---|---|
+| iPhone 기본6기능 | 6/6·exit0, phone-modal-fix.log |
+| 공유 스타일·위치·너비·선택 | 해당1사례·exit0, phone-pace-distinction.log; 실제 이미지 확인 |
+| 한국어 최대 글씨 | 해당1사례·exit0, phone-large-action-fix.log; 실제 이미지 확인 |
+| 최종 지도·헤더·장소 검색 delta | 2/2·exit0, phone-final-deltas.log |
+| Duo 접힘 | Passport/route 정상 사례, 실패한 실내·공유2/2 재검증, 헤더1/1 수정 검증. close 툴바를 스크롤로 드러낸 뒤 복귀 확인 |
+| Duo 펼침 | 실내·route·share 정상 사례. Map pan을 Expand로 제한해 세로 스크롤이 움직이는 것을 확인했고, 이어 드러난 테스트 드래그 overshoot를 보정한 Passport 사례 통과 |
+| iPad | 앱 시작·Activity 응답에서5분 한도2건, 중간 route/Journey만 통과. 결과 정리300초 무갱신 종료.27.1 대체 런타임 생성은 incompatible device403. 미완료 |
+| 새 장소 검색의 Duo landscape | 검색창·빈 안내 겹침을 상단 drawer로 수정. iPhone 새 캡처 정상, Duo 변경 후 화면은 루트 준비 실패로 미검증 |
+| 카탈로그 | --check --check-manual 통과, formatter 회귀9개 통과 |
+
+위 집계는 겹치는 사례를 포함하므로 합산 고유 테스트 수로 표시하지 않는다. 전문 코드 delta 리뷰와 최신 iPhone·Duo 캡처 검토에서 확인 범위 내 미해결 P1/P2는 없었으며, 변경 후 Duo 검색 배치의 시각 검증은 별도 미완료로 유지한다. 새 actual 갤러리에 원본39장·해시·출처·디스플레이 readback을 보존했다. 기존 PNG를 미검증 상태의 완료 증거로 재사용하지 않는다.
+
+로그 원본은 `.codex-checks/cardio-atlas/retry-1800/`에 있다. 반복 실패 경로를 추가 실행하지 않고 UI 게이트를 미완료로 유지했다. 모든 선행 코드 검토는 UI 통과나 Ship 허가로 해석하지 않는다.

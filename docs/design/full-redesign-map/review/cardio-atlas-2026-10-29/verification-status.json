@@ -1,25 +1,27 @@
 {
-  "status": "blocked",
-  "implementation_commit": "31e1bf62",
-  "native_screenshots": [],
-  "affected_screens": [
-    "A01 cardio rows",
-    "W27 cardio",
-    "W28",
-    "CA01",
-    "CA02",
-    "CA03",
-    "CA04",
-    "CA05",
-    "CA06",
-    "CA07",
-    "CA08"
+  "status": "partial-blocked",
+  "implementation_commit": "221cd7ab",
+  "native_screenshot_count": 39,
+  "native_screenshots": "capture-index.json",
+  "verified": [
+    "iPhone baseline6; targeted final render/privacy/large-text deltas",
+    "Duo folded route/Journey/Passport/share and prior place flow",
+    "Duo unfolded route/Journey/Passport/share and prior place flow"
   ],
-  "pending_devices": [
-    "iPhone 18 Pro normal and Korean accessibilityXXXL",
-    "iPad Pro 13-inch",
-    "Duo folded 0 degrees",
-    "Duo unfolded 180 degrees"
+  "pending": [
+    "iPad launch and Activity quiescence failures; no finalized capture bundle",
+    "Duo place-editor new search placement after landscape overlap fix; latest capture only confirmed on portrait iPhone"
   ],
-  "resume_condition": "Registered owned simulator must be queryable, bootable and responsive to AX before focused UI tests and new capture collection. No shared simulator or global service reset."
+  "device_failures": {
+    "ipad27.0": "Two5-minute allowances (initial launch and Activity interaction); route/Journey passed between them; finalization hit300s inactivity deadline",
+    "ipad27.1": "Simulator create failed domain=com.apple.CoreSimulator.SimError code403 incompatible device",
+    "duo_editor": "Initial primary-navigation readiness check failed before revised editor could be reached"
+  },
+  "duo_pose": {
+    "folded": "Official readback: LCD active, LCD-1 inactive",
+    "unfolded": "Device Hub changed only registered owned device; official readback LCD-1 active, LCD inactive",
+    "numeric_hinge_angle": null,
+    "numeric_hinge_reason": "Installed devicectl651.13.5 lacks device motion subcommand; setter success alone not treated as state proof"
+  },
+  "ship": "not entered; required remaining UI verification incomplete"
 }
