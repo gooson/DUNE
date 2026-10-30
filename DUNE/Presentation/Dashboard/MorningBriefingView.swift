@@ -5,8 +5,10 @@ struct MorningBriefingView: View {
     let data: MorningBriefingData
     @State private var viewModel = MorningBriefingViewModel()
     @State private var visibleSections: Set<Int> = []
+    @State private var currentPeriod = LocalDayPeriod(date: DashboardClock.now())
     @Environment(\.dismiss) private var dismiss
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
         NavigationStack {
@@ -61,7 +63,9 @@ struct MorningBriefingView: View {
                 .padding(.vertical, DS.Spacing.xl)
             }
             .background { SheetWaveBackground() }
-            .navigationTitle(String(localized: "Good Morning"))
+            .navigationTitle(currentPeriod == .morning
+                ? String(localized: "Good Morning")
+                : String(localized: "Morning Briefing"))
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
@@ -71,6 +75,12 @@ struct MorningBriefingView: View {
             }
         }
         .accessibilityIdentifier("dashboard-morning-briefing-screen")
+        .onReceive(Timer.publish(every: 60, on: .main, in: .common).autoconnect()) { _ in
+            currentPeriod = LocalDayPeriod(date: DashboardClock.now())
+        }
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active { currentPeriod = LocalDayPeriod(date: DashboardClock.now()) }
+        }
         .onDisappear {
             MorningBriefingViewModel.markBriefingShown()
         }

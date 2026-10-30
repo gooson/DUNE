@@ -597,10 +597,11 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
 
     func testVisualAuditMorningBriefing() throws {
         guard VisualAudit.isEnabled else { throw XCTSkip("Opt-in visual audit only") }
-        // Reset only this scenario's presentation gate. At night the manual
-        // entry is hidden, and an earlier test may already have marked today.
+        // Pin the local morning and reset only this scenario's presentation gate.
+        // The briefing must not auto-present outside the morning window.
         var configuration = launchConfiguration
         configuration.additionalArguments += [
+            "--ui-dashboard-hour", "6",
             "-lastBriefingDate", "1900-01-01", "-morningBriefingDisabled", "NO"
         ]
         launchApp(with: configuration)

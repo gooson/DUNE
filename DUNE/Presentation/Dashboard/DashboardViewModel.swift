@@ -1517,12 +1517,17 @@ final class DashboardViewModel {
         )
 
         lastCoachingInput = input
-        let output = coachingEngine.generate(from: input)
+        let localHour = Self.dashboardHour()
+        let output = coachingEngine.generate(from: input, localHour: localHour)
         focusInsight = output.focusInsight
 
         // Batch load dismissed IDs (single UserDefaults read) then filter
         let dismissed = dismissStore.dismissedIDs()
-        insightCards = output.insightCards
+        // The daytime brief (which owns the focus insight) is hidden at night.
+        let visibleInsights = LocalDayPeriod(hour: localHour) == .night
+            ? [output.focusInsight] + output.insightCards
+            : output.insightCards
+        insightCards = visibleInsights
             .filter { !dismissed.contains($0.id) }
             .map { InsightCardData(from: $0) }
         rebuildInsightPartitions()
@@ -1535,9 +1540,11 @@ final class DashboardViewModel {
 
         enhanceCoachingTask?.cancel()
         let expectedInsightID = insight.id
+        let expectedPeriod = LocalDayPeriod(date: DashboardClock.now())
         enhanceCoachingTask = Task {
             let enhanced = await enhancer.enhance(insight: insight, context: input)
             guard !Task.isCancelled,
+                  LocalDayPeriod(date: DashboardClock.now()) == expectedPeriod,
                   focusInsight?.id == expectedInsightID else { return }
             focusInsight = enhanced
             coachingMessage = enhanced.message
@@ -1793,37 +1800,14 @@ final class DashboardViewModel {
 
     // MARK: - Time-Aware Dashboard (Phase 3)
 
-    enum DashboardTimeBand: String, Sendable {
-        case morning   // 06-10
-        case daytime   // 10-17
-        case evening   // 17-22
-        case night     // 22-06
-
-        static func from(hour: Int) -> DashboardTimeBand {
-            switch hour {
-            case 6..<10: .morning
-            case 10..<17: .daytime
-            case 17..<22: .evening
-            default: .night
-            }
-        }
-    }
+    typealias DashboardTimeBand = LocalDayPeriod
 
     private static func dashboardHour() -> Int {
-        #if DEBUG
-        let arguments = ProcessInfo.processInfo.arguments
-        if arguments.contains("--uitesting"),
-           let index = arguments.firstIndex(of: "--ui-dashboard-hour"),
-           arguments.indices.contains(index + 1),
-           let hour = Int(arguments[index + 1]),
-           (0...23).contains(hour) {
-            return hour
-        }
-        #endif
-        return Calendar.current.component(.hour, from: Date())
+        Calendar.autoupdatingCurrent.component(.hour, from: DashboardClock.now())
     }
 
-    private(set) var currentTimeBand: DashboardTimeBand = .morning
+    private(set) var currentTimeBand = DashboardTimeBand(date: DashboardClock.now())
+    private var lastMessageHour: Int?
 
     // Time-band visibility flags — stored to avoid observation feedback loops.
     // Computed properties reading currentTimeBand from body cause cascade invalidation
@@ -1951,7 +1935,8 @@ final class DashboardViewModel {
 
     private func buildAdaptiveHeroMessage() {
         let hour = Self.dashboardHour()
-        currentTimeBand = DashboardTimeBand.from(hour: hour)
+        lastMessageHour = hour
+        currentTimeBand = DashboardTimeBand(hour: hour)
         updateTimeBandVisibility()
         let exerciseMetric = sortedMetrics.first { $0.category == .exercise }
         let workoutDone = exerciseMetric != nil && (exerciseMetric?.value ?? 0) > 0
@@ -1967,6 +1952,24 @@ final class DashboardViewModel {
         // Pre-compute metric values for progress rings (avoids repeated body lookups)
         todayStepsValue = sortedMetrics.first { $0.category == .steps }?.value ?? 0
         todaySleepMinutes = sortedMetrics.first { $0.category == .sleep }?.value ?? 0
+    }
+
+    /// Refresh local-clock copy without reloading HealthKit or recomputing scores.
+    func refreshTimeContext() {
+        guard Self.dashboardHour() != lastMessageHour else { return }
+        let previousBand = currentTimeBand
+        buildAdaptiveHeroMessage()
+        if currentTimeBand != previousBand {
+            enhanceCoachingTask?.cancel()
+            buildCoachingInsights()
+            coachingMessage = focusInsight?.message ?? buildCoachingMessage()
+            syncWeatherCardInsight()
+            enhanceCoachingMessageIfAvailable()
+        }
+        shouldShowYesterdayRecap = (6..<12).contains(Self.dashboardHour())
+            && (yesterdayConditionScore != nil || yesterdaySleepMinutes != nil)
+        shouldShowDailyDigest = dailyDigest != nil
+            && (currentTimeBand == .evening || currentTimeBand == .night)
     }
 
     // MARK: - Yesterday Recap

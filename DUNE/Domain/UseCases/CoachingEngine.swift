@@ -34,7 +34,7 @@ struct CoachingOutput: Sendable {
 /// - Additional matches become insight cards (max 3)
 struct CoachingEngine: Sendable {
 
-    func generate(from input: CoachingInput) -> CoachingOutput {
+    func generate(from input: CoachingInput, localHour: Int? = nil) -> CoachingOutput {
         var allInsights: [CoachingInsight] = []
 
         // Evaluate all trigger categories
@@ -44,6 +44,24 @@ struct CoachingEngine: Sendable {
         allInsights.append(contentsOf: evaluateTrainingTriggers(input))
         allInsights.append(contentsOf: evaluateMotivationTriggers(input))
         allInsights.append(contentsOf: evaluateDefaultTriggers(input))
+
+        if let localHour, LocalDayPeriod(hour: localHour) == .night {
+            allInsights.removeAll { insight in
+                insight.category == .training
+                    || insight.category == .general
+                    || insight.actionHint == "startWorkout"
+                    || (insight.category == .weather && insight.priority > .high)
+            }
+            allInsights.append(CoachingInsight(
+                id: "night-rest",
+                priority: .standard,
+                category: .recovery,
+                title: String(localized: "Recovery"),
+                message: String(localized: "Wind down for a restful night"),
+                iconName: "moon.stars.fill",
+                actionHint: "sleepDetail"
+            ))
+        }
 
         // Sort by priority (lower rawValue = higher priority)
         allInsights.sort { $0.priority < $1.priority }
