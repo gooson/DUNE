@@ -719,22 +719,54 @@ private struct NotificationMessageDetailView: View {
     let title: String
     let message: String
 
+    @Environment(\.appTheme) private var theme
+    @Environment(\.colorScheme) private var colorScheme
+    @ScaledMetric(relativeTo: .largeTitle) private var heroSymbolSize: CGFloat = 48
+
+    private var palette: ScoreHeroPalette { ScoreHeroPalette(theme: theme, colorScheme: colorScheme) }
+
     var body: some View {
         ScrollView {
-            StandardCard {
-                VStack(alignment: .leading, spacing: DS.Spacing.md) {
+            VStack(alignment: .leading, spacing: DS.Spacing.md) {
+                VStack(alignment: .leading, spacing: DS.Spacing.xxl) {
+                    Image(systemName: "bell")
+                        .font(.system(size: heroSymbolSize, weight: .medium))
+                        .foregroundStyle(palette.heroAccent)
+                        .padding(DS.Spacing.md)
+                        .background(
+                            palette.muted.opacity(DS.Opacity.overlay),
+                            in: RoundedRectangle(cornerRadius: DS.Radius.lg)
+                        )
+                        .accessibilityHidden(true)
+
                     Text(title)
-                        .font(.title3.weight(.semibold))
+                        .font(.largeTitle.bold())
+                        .foregroundStyle(palette.ink)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .accessibilityIdentifier("notification-message-title")
+                }
+                .padding(DS.Spacing.xxl)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(palette.surface, in: RoundedRectangle(cornerRadius: DS.Radius.xxl))
+
+                StandardCard {
                     Text(message)
                         .font(.body)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(.primary)
+                        .lineSpacing(5)
+                        .textSelection(.enabled)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .accessibilityIdentifier("notification-message-body")
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
             }
+            .frame(maxWidth: 680)
+            .frame(maxWidth: .infinity)
             .padding(DS.Spacing.lg)
         }
         .accessibilityIdentifier("notification-message-detail-screen")
         .background { DetailWaveBackground() }
+        .navigationBarTitleDisplayMode(.inline)
         .englishNavigationTitle("Notification")
     }
 }

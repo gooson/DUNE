@@ -152,6 +152,17 @@
   ],
   "studies": [
     {
+      "id": "notification-message-detail",
+      "name": "T12 알림 메시지 상세",
+      "title": "Notification Message · Reading Detail",
+      "file": "dune-notification-message-detail.html",
+      "detail": "2026-10-31 T12 저장 제목·본문만으로 구성한 밝음·어두움 읽기 시안. 원본 알림 심볼과 테마별 불투명 어두운 히어로, 한 열·680pt 읽기 폭을 제안한다. 테스트 fixture 문구는 예시이며 실제 앱 캡처가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/notification-message-detail-proposal.md",
+        "status": "native-source-implemented-pending-runtime-validation"
+      }
+    },
+    {
       "id": "crest-language",
       "name": "공통 능선 언어",
       "title": "Theme Crest Language",
