@@ -24,13 +24,14 @@ struct MetricHistorySummary: View {
             if let summary {
                 Text(summary.basis.displayName)
                     .font(.caption)
+                    .accessibilityIdentifier("detail-chart-summary-basis")
                     .foregroundStyle(DS.Color.textSecondary)
                     .fixedSize(horizontal: false, vertical: true)
             }
 
             // Exercise already has its dedicated visible totals section below the chart.
             if category == .steps {
-                stat(label: "Total", icon: "sum", value: summary?.total)
+                stat(label: "Total", icon: "sum", value: summary?.total, identifier: "detail-chart-summary-total")
             }
 
             if dynamicTypeSize.isAccessibilitySize {
@@ -49,12 +50,14 @@ struct MetricHistorySummary: View {
 
     @ViewBuilder
     private var stats: some View {
-        stat(label: "Avg", icon: "chart.bar.xaxis", value: summary?.statistics.average)
-        stat(label: "Min", icon: "arrow.down", value: summary?.statistics.min)
-        stat(label: "Max", icon: "arrow.up", value: summary?.statistics.max)
+        stat(label: "Avg", icon: "chart.bar.xaxis", value: summary?.statistics.average, identifier: "detail-chart-summary-average")
+        stat(label: "Min", icon: "arrow.down", value: summary?.statistics.min, identifier: "detail-chart-summary-minimum")
+        stat(label: "Max", icon: "arrow.up", value: summary?.statistics.max, identifier: "detail-chart-summary-maximum")
     }
 
-    private func stat(label: LocalizedStringKey, icon: String, value: Double?) -> some View {
+    private func stat(
+        label: LocalizedStringKey, icon: String, value: Double?, identifier: String
+    ) -> some View {
         HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xs) {
             Image(systemName: icon)
                 .foregroundStyle(category.themeColor)
@@ -79,6 +82,7 @@ struct MetricHistorySummary: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .accessibilityElement(children: .combine)
+        .accessibilityIdentifier(identifier)
     }
 
     private func comparison(_ change: Double) -> some View {

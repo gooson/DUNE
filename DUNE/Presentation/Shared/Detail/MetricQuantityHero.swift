@@ -21,12 +21,15 @@ struct MetricQuantityHero: View {
     private var formattedValue: String { formatter.string(from: metric.value) }
     private var resolvedUnit: String { formatter.unit }
     private var radius: CGFloat { sizeClass == .regular ? DS.Radius.xxl : DS.Radius.xl }
+    private var updatedText: Text {
+        Text("Updated \(metric.date, format: .relative(presentation: .named))")
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.lg) {
             identity
             quantity
-            Text("Updated \(metric.date, format: .relative(presentation: .named))")
+            updatedText
                 .font(.caption2)
                 .foregroundStyle(palette.muted)
                 .fixedSize(horizontal: false, vertical: true)
@@ -47,6 +50,7 @@ struct MetricQuantityHero: View {
         }
         .accessibilityElement(children: .combine)
         .accessibilityLabel("\(metric.category.displayName), \(formattedValue) \(resolvedUnit)")
+        .accessibilityValue(updatedText)
         .accessibilityIdentifier("metric-summary-header")
     }
 

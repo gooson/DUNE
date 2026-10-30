@@ -67,6 +67,9 @@ final class MetricDetailRedesignTests: SeededUITestBaseCase {
         if !expected.unit.isEmpty {
             XCTAssertTrue(label.contains(expected.unit), "Expected \(key) unit \(expected.unit), got \(label)")
         }
+        let updatedValue = summary.value as? String ?? ""
+        XCTAssertTrue(updatedValue.hasPrefix("Updated ") && updatedValue.count > "Updated ".count,
+                      "\(key) must expose a nonempty measurement date to accessibility")
         XCTAssertTrue(app.buttons["metric-detail-show-all-data"].waitForExistence(timeout: 10), "\(key) All Data route must remain")
         XCTAssertTrue(app.segmentedControls.firstMatch.waitForExistence(timeout: 10), "\(key) time period control must remain")
 
@@ -101,11 +104,114 @@ final class MetricDetailRedesignTests: SeededUITestBaseCase {
         XCTAssertTrue(app.buttons["metric-detail-show-all-data"].exists)
     }
 
+    func testHRVPeriodSegmentsUpdateVisibleSummary() throws {
+        XCTAssertTrue(app.descendants(matching: .any)["metric-detail-screen-hrv"].firstMatch.waitForExistence(timeout: 15))
+        let period = app.segmentedControls.firstMatch
+        let range = app.staticTexts["detail-chart-visible-range"].firstMatch
+        let basis = app.staticTexts["detail-chart-summary-basis"].firstMatch
+        let average = app.descendants(matching: .any)["detail-chart-summary-average"].firstMatch
+        let minimum = app.descendants(matching: .any)["detail-chart-summary-minimum"].firstMatch
+        let maximum = app.descendants(matching: .any)["detail-chart-summary-maximum"].firstMatch
+        XCTAssertTrue(period.waitForExistence(timeout: 10))
+        XCTAssertTrue(range.waitForExistence(timeout: 10))
+        var previousRange = range.label
+
+        for (title, expectedBasis) in [
+            ("D", "Hourly averages"), ("W", "Daily averages"),
+            ("M", "Daily averages"), ("6M", "Weekly averages"),
+            ("Y", "Monthly averages")
+        ] {
+            let option = period.buttons[title]
+            XCTAssertTrue(option.exists, "Missing \(title) period")
+            option.tap()
+            XCTAssertTrue(option.isSelected, "\(title) period should be selected")
+            XCTAssertTrue(waitForLabelChange(of: range, from: previousRange),
+                          "\(title) must publish its own visible range")
+            XCTAssertTrue(waitForLabel(basis, equalTo: expectedBasis),
+                          "\(title) must publish the source cadence")
+            for stat in [average, minimum, maximum] {
+                XCTAssertTrue(waitForPopulatedStat(stat),
+                              "\(title) must publish visible Avg/Min/Max instead of a loading placeholder")
+            }
+            previousRange = range.label
+        }
+    }
+
+    func testBodyUnsupportedPeerStates() throws {
+        for key in ["bodyFat", "leanBodyMass"] {
+            var configuration = launchConfiguration
+            configuration.additionalArguments = [
+                "--ui-t06-metric", key, "--ui-disable-animations",
+                "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+                "-morningBriefingDisabled", "YES"
+            ]
+            launchApp(with: configuration)
+            XCTAssertTrue(app.descendants(matching: .any)["metric-detail-screen-\(key)"].firstMatch.waitForExistence(timeout: 15))
+            XCTAssertTrue(app.scrollToHittableElementIfNeeded("body-peer-card", maxSwipes: 8))
+            XCTAssertTrue(app.staticTexts["A comparable survey mean is not available for this measure."].firstMatch.exists)
+            XCTAssertFalse(app.buttons["body-peer-criteria-cta"].exists,
+                           "\(key) must not offer an unsupported comparison cohort")
+            XCTAssertFalse(app.buttons["body-peer-source"].exists)
+            XCTAssertFalse(app.descendants(matching: .any)["body-peer-reference"].firstMatch.exists)
+            XCTAssertFalse(app.descendants(matching: .any)["body-peer-difference"].firstMatch.exists)
+            attach("T06-\(key)-unsupported-peer")
+        }
+    }
+
+    func testHRVDarkDetailReadability() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments = [
+            "--ui-t06-metric", "hrv", "--ui-test-style", "dark",
+            "--ui-disable-animations", "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+            "-morningBriefingDisabled", "YES"
+        ]
+        launchApp(with: configuration)
+        let screen = app.descendants(matching: .any)["metric-detail-screen-hrv"].firstMatch
+        XCTAssertTrue(screen.waitForExistence(timeout: 15))
+        let hero = app.descendants(matching: .any)["metric-summary-header"].firstMatch
+        XCTAssertTrue(hero.waitForExistence(timeout: 10))
+        XCTAssertTrue(hero.label.contains("75") && hero.label.contains("ms"))
+        let updatedValue = hero.value as? String ?? ""
+        XCTAssertTrue(updatedValue.hasPrefix("Updated ") && updatedValue.count > "Updated ".count)
+        attach("T06-hrv-dark-hero")
+        XCTAssertTrue(revealWholeDetailRow("detail-chart-visible-range", in: screen),
+                      "Dark history range must fit inside the visible scroll viewport")
+        attach("T06-hrv-dark-history")
+    }
+
+    func testWeightMaximumAccessibilitySizeKeepsContentReachable() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments = [
+            "--ui-t06-metric", "weight", "--ui-disable-animations",
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL",
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+            "-morningBriefingDisabled", "YES"
+        ]
+        launchApp(with: configuration)
+        let screen = app.descendants(matching: .any)["metric-detail-screen-weight"].firstMatch
+        XCTAssertTrue(screen.waitForExistence(timeout: 15))
+        let hero = app.descendants(matching: .any)["metric-summary-header"].firstMatch
+        XCTAssertTrue(hero.waitForExistence(timeout: 10))
+        XCTAssertTrue(hero.label.contains("78.4") && hero.label.contains("kg"))
+        let updatedValue = hero.value as? String ?? ""
+        XCTAssertTrue(updatedValue.hasPrefix("Updated ") && updatedValue.count > "Updated ".count)
+        attach("T06-weight-maximum-AX-hero")
+
+        for id in ["detail-chart-visible-range", "detail-chart-summary-average"] {
+            XCTAssertTrue(revealWholeDetailRow(id, in: screen),
+                          "\(id) must fit inside the visible scroll viewport at maximum accessibility size")
+            attach("T06-weight-maximum-AX-\(id)")
+        }
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("body-peer-criteria-cta", maxSwipes: 10))
+        attach("T06-weight-maximum-AX-peer-entry")
+    }
+
     func testWeightPeerCriteriaCancelApplyAndSource() throws {
         var configuration = launchConfiguration
         configuration.additionalArguments = [
             "--ui-t06-metric", "weight", "--ui-disable-animations",
-            "-AppleLanguages", "(en)", "-AppleLocale", "en_US"
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+            "-morningBriefingDisabled", "YES"
         ]
         launchApp(with: configuration)
         XCTAssertTrue(app.descendants(matching: .any)["metric-detail-screen-weight"].firstMatch.waitForExistence(timeout: 15))
@@ -152,6 +258,65 @@ final class MetricDetailRedesignTests: SeededUITestBaseCase {
                       "HRV All Data button must be reachable by scrolling")
         allDataButton.tap()
         XCTAssertTrue(app.descendants(matching: .any)["all-data-screen-hrv"].firstMatch.waitForExistence(timeout: 10))
+    }
+
+    /// Scrolls along the gutter so the chart cannot intercept the gesture.
+    /// Checks a single row against the real viewport, not the oversized hero/card frame.
+    private func revealWholeDetailRow(
+        _ identifier: String, in scroll: XCUIElement, maxSwipes: Int = 10
+    ) -> Bool {
+        let row = app.descendants(matching: .any)[identifier].firstMatch
+        guard scroll.waitForExistence(timeout: 5), row.waitForExistence(timeout: 5) else { return false }
+        for _ in 0..<maxSwipes {
+            let viewport = visibleDetailViewport(for: scroll)
+            guard !viewport.isNull else { return false }
+            if viewport.contains(row.frame) { return true }
+            let moveUp = row.frame.midY > viewport.midY
+            let startY: CGFloat = moveUp ? 0.75 : 0.25
+            let endY: CGFloat = moveUp ? 0.25 : 0.75
+            scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.05, dy: startY))
+                .press(forDuration: 0.05, thenDragTo: scroll.coordinate(
+                    withNormalizedOffset: CGVector(dx: 0.05, dy: endY)
+                ), withVelocity: .slow, thenHoldForDuration: 0.2)
+        }
+        return visibleDetailViewport(for: scroll).contains(row.frame)
+    }
+
+    private func visibleDetailViewport(for scroll: XCUIElement) -> CGRect {
+        let scrollFrame = scroll.frame.intersection(app.windows.firstMatch.frame)
+        let navigationBar = app.navigationBars.firstMatch
+        let tabBar = app.tabBars.firstMatch
+        let top = max(scrollFrame.minY, navigationBar.exists ? navigationBar.frame.maxY : scrollFrame.minY)
+        let bottom = min(scrollFrame.maxY, tabBar.exists ? tabBar.frame.minY : scrollFrame.maxY)
+        guard bottom > top + 8 else { return .null }
+        return CGRect(x: scrollFrame.minX, y: top,
+                      width: scrollFrame.width, height: bottom - top).insetBy(dx: 4, dy: 4)
+    }
+
+    private func waitForLabel(
+        _ element: XCUIElement, equalTo expected: String, timeout: TimeInterval = 10
+    ) -> Bool {
+        let expectation = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "label == %@", expected), object: element
+        )
+        return XCTWaiter.wait(for: [expectation], timeout: timeout) == .completed
+    }
+
+    private func waitForLabelChange(
+        of element: XCUIElement, from previous: String, timeout: TimeInterval = 10
+    ) -> Bool {
+        let expectation = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "label != %@", previous), object: element
+        )
+        return XCTWaiter.wait(for: [expectation], timeout: timeout) == .completed
+    }
+
+    private func waitForPopulatedStat(_ element: XCUIElement) -> Bool {
+        let expectation = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "label CONTAINS %@ AND NOT label CONTAINS %@", "ms", "—"),
+            object: element
+        )
+        return XCTWaiter.wait(for: [expectation], timeout: 10) == .completed
     }
 
     private func attach(_ name: String) {
