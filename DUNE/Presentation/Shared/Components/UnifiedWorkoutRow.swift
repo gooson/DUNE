@@ -61,7 +61,7 @@ struct UnifiedWorkoutRow: View {
         rowLayout {
             activityIcon(size: 28, font: .body)
 
-            VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+            VStack(alignment: .leading, spacing: DS.Spacing.xs) {
                 titleRow
 
                 HStack(spacing: DS.Spacing.sm) {
@@ -317,94 +317,20 @@ private struct WorkoutAchievementBadge: View {
 
     let model: Model
 
-    private enum Palette {
-        static let gold = DS.Color.activityCardio
-        static let bronze = DS.Color.desertBronze
-        static let sand = DS.Color.sandMuted
-        static let card = DS.Color.cardBackground
-
-        static let medalFace = LinearGradient(
-            colors: [sand, gold, bronze],
-            startPoint: .topLeading,
-            endPoint: .bottomTrailing
-        )
-        static let achievementFill = LinearGradient(
-            colors: [card, gold.opacity(0.20)],
-            startPoint: .topLeading,
-            endPoint: .bottomTrailing
-        )
-        static let recordFill = LinearGradient(
-            colors: [gold.opacity(0.72), sand, gold.opacity(0.55)],
-            startPoint: .topLeading,
-            endPoint: .bottomTrailing
-        )
-    }
-
     var body: some View {
         HStack(spacing: DS.Spacing.xs) {
-            emblem
+            Image(systemName: model.isRecord ? "trophy.fill" : "medal.fill")
+                .foregroundStyle(DS.Color.activityCardio)
+                .accessibilityHidden(true)
 
             Text(model.text)
-                .font(.caption2.weight(.semibold))
+                .foregroundStyle(DS.Color.textSecondary)
                 .fixedSize(horizontal: false, vertical: true)
-
-            if model.isRecord {
-                Image(systemName: "sparkle")
-                    .font(.caption2)
-                    .foregroundStyle(Palette.bronze)
-                    .accessibilityHidden(true)
-            }
         }
-        .foregroundStyle(model.isRecord ? DS.Color.onBrightAction : DS.Color.textSecondary)
-        .padding(.leading, 4)
-        .padding(.trailing, DS.Spacing.sm)
-        .padding(.vertical, 4)
-        .background(
-            model.isRecord ? Palette.recordFill : Palette.achievementFill,
-            in: RoundedRectangle(cornerRadius: DS.Radius.sm)
-        )
-        .overlay {
-            RoundedRectangle(cornerRadius: DS.Radius.sm)
-                .strokeBorder(Palette.gold.opacity(0.65), lineWidth: 1)
-        }
+        .font(.caption2.weight(.semibold))
+        .accessibilityElement(children: .ignore)
         .accessibilityLabel(model.isRecord
             ? Text("Personal record: \(model.text)")
             : Text("Achievement: \(model.text)"))
-    }
-
-    private var emblem: some View {
-        ZStack {
-            if !model.isRecord {
-                MedalRibbon()
-                    .fill(Palette.bronze.gradient)
-                    .frame(width: 13, height: 13)
-                    .offset(y: 12)
-            }
-            Circle()
-                .fill(Palette.medalFace)
-                .frame(width: 26, height: 26)
-                .overlay {
-                    Circle()
-                        .strokeBorder(Palette.gold.opacity(0.8), lineWidth: 1)
-                }
-            Image(systemName: model.isRecord ? "trophy.fill" : "medal.fill")
-                .font(.caption2.weight(.bold))
-                .foregroundStyle(DS.Color.onBrightAction)
-        }
-        .frame(width: 26, height: 30)
-        .accessibilityHidden(true)
-    }
-}
-
-private struct MedalRibbon: Shape {
-    func path(in rect: CGRect) -> Path {
-        Path { path in
-            path.move(to: CGPoint(x: rect.minX, y: rect.minY))
-            path.addLine(to: CGPoint(x: rect.maxX, y: rect.minY))
-            path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
-            path.addLine(to: CGPoint(x: rect.midX, y: rect.maxY * 0.72))
-            path.addLine(to: CGPoint(x: rect.minX, y: rect.maxY))
-            path.closeSubpath()
-        }
     }
 }

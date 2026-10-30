@@ -170,8 +170,14 @@ Cardio Atlas 네이티브 구현의 [2026-10-29 실제54장과 검증 범위](..
 
 L03 네이티브 구현은 기존20개 템플릿의 선택·자동 입력을 유지한다. [새 실제 네 기기 캡처](../full-redesign-map/review/habit-template-2026-10-30/index.html)와 [검증 기록](../../reviews/2026-10-30-l03-habit-template-redesign.md)을 따른다. iPhone 기본/접근성XXXL, iPad 기본, Duo 접힘·펼침 UI가 통과했다. 실제 이미지는 밝음·영어이며 앞의 브라우저 시안과 구분한다.
 
+## Live Activity 골드 임팩트와 종목별 선택 · 2026-10-30
+
+[골드 임팩트 / 내 선택 / 심박 우선](themes/dune-live-activity-size-state.html)을 보존한다. [배치·상태 계약](../layout-map/live-activity-size-state-proposal.md)에 따라 SwiftUI 구현을 반영했다. 기존 브라우저 PNG는 시안 초기 버전이며 현재 앱의 실제 캡처가 아니다. 네이티브 검증과 기기별 갱신 상태는 실제 화면맵에서 별도로 기록한다.
+
 ## T04 컨디션 상세 검토본
 
 `themes/dune-condition-detail-redesign.html`에 검토한 밝음·어두움 브라우저 PNG와 원본 화면 JSON을 보존한다. 이 시안의 고정 점수 비율은 실제 모델과 달라 앱에서는 실제 Z-score·심박/시간 조정으로 표시한다. 새 실제 앱 검증은 별도 T04 비교 갤러리와 리뷰 증거로 구분한다.
 
 T04 native 구현은 단위32개·기기별 선택 UI15개와 새4기기 실제 원본으로 검증했다. 검토용 PNG/JSON은 브라우저 시안이며 새 native 캡처와 구분한다. 실제 입력이 없는70/30 예시 구성은 사용하지 않는다.
+
+Gold Impact 네이티브 일반 빌드·관련 단위51개와 S01 설정 저장 검증은 통과했다. [새 실제 설정 2장](../phone-design-map/actual/live-activity/gold-impact-2026-10-30/index.html)과 [남은 시스템 UI 게이트](../../reviews/2026-10-30-live-activity-gold-preferences.md)를 구분한다. WLA01 최종 캡처는 환경 조회 무응답으로 미완료이며 보존 시안·이전 PNG를 새 검증 증거로 사용하지 않는다.

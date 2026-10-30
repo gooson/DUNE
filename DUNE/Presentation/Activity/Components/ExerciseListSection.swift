@@ -122,6 +122,7 @@ struct ExerciseListSection: View {
             )
         }
         .buttonStyle(.plain)
+        .accessibilityIdentifier("activity-recent-workout-\(item.id)")
     }
 
     @ViewBuilder

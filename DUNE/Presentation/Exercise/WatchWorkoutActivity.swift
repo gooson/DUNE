@@ -96,6 +96,13 @@ final class WatchWorkoutActivity {
 
     func waitForPendingUpdates() async { await updateTask?.value }
 
+    /// Re-publish the latest mirrored state after a preference change, in Watch update order.
+    func refreshPreferences() {
+        guard let mirrorID, let snapshot, snapshot.phase != .ended,
+              !acceptsInitialStartCorrection else { return }
+        enqueue(Update(mirrorID: mirrorID, snapshot: snapshot))
+    }
+
     private func enqueue(_ update: Update) {
         if let last = pending.last, last.mirrorID == update.mirrorID,
            !last.didRequest, !update.didRequest, last.snapshot.phase != .ended {
@@ -151,8 +158,13 @@ private struct SystemWatchWorkoutActivityDriver: WatchWorkoutActivityDriving {
 
     func end(id: String) async { await Self.endActivity(id: id) }
 
-    nonisolated private static func content(_ snapshot: WatchWorkoutSnapshot) -> ActivityContent<WatchWorkoutSnapshot> {
-        ActivityContent(state: snapshot, staleDate: snapshot.updatedAt.addingTimeInterval(30))
+    nonisolated private static func content(
+        _ snapshot: WatchWorkoutSnapshot
+    ) -> ActivityContent<WatchWorkoutAttributes.ContentState> {
+        ActivityContent(
+            state: .init(snapshot: snapshot, preferences: .read()),
+            staleDate: snapshot.updatedAt.addingTimeInterval(30)
+        )
     }
 
     nonisolated private static func updateActivity(id: String, snapshot: WatchWorkoutSnapshot) async {
@@ -172,7 +184,7 @@ enum WatchWorkoutActivityRequest {
     nonisolated static func finish(matching final: WatchWorkoutSnapshot) async {
         guard final.isValid, final.phase == .ended else { return }
         for activity in Activity<WatchWorkoutAttributes>.activities
-        where activity.content.state.isSameWorkout(as: final) {
+        where activity.content.state.snapshot.isSameWorkout(as: final) {
             await activity.end(nil, dismissalPolicy: .immediate)
         }
     }
@@ -182,7 +194,10 @@ enum WatchWorkoutActivityRequest {
         let abandonedIDs = Activity<WatchWorkoutAttributes>.activities.map(\.id)
         let id = try Activity.request(
             attributes: WatchWorkoutAttributes(mirrorID: mirrorID),
-            content: ActivityContent(state: snapshot, staleDate: snapshot.updatedAt.addingTimeInterval(30)),
+            content: ActivityContent(
+                state: .init(snapshot: snapshot, preferences: .read()),
+                staleDate: snapshot.updatedAt.addingTimeInterval(30)
+            ),
             pushType: nil
         ).id
         Task {

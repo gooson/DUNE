@@ -26,6 +26,11 @@ append_unique_target() {
     TARGETED_BUILDS+=("$target")
 }
 
+run_build_check() {
+    DAILVE_FAST_LOCAL_BUILD=1 python3 "$ROOT_DIR/scripts/lib/command-deadline.py" \
+        --seconds "${DUNE_BUILD_WALL_TIMEOUT:-900}" -- "$@"
+}
+
 echo "Running pre-commit checks..."
 
 # Ensure xcscheme clean filter is configured (idempotent, fast).
@@ -116,9 +121,9 @@ if has_staged_match "^(DUNE/.*\\.(swift|plist|entitlements)|DUNE/project\\.yml|D
         if [ "$FULL_BUILD_REQUIRED" -eq 1 ]; then
             echo "Running full app build check..."
             if [ "$REGEN_REQUIRED" -eq 1 ]; then
-                DAILVE_FAST_LOCAL_BUILD=1 "$ROOT_DIR/scripts/build-ios.sh"
+                run_build_check "$ROOT_DIR/scripts/build-ios.sh"
             else
-                DAILVE_FAST_LOCAL_BUILD=1 "$ROOT_DIR/scripts/build-ios.sh" --no-regen
+                run_build_check "$ROOT_DIR/scripts/build-ios.sh" --no-regen
             fi
         else
             if has_staged_match "^DUNETests/.*\\.(swift|plist)$"; then
@@ -138,7 +143,7 @@ if has_staged_match "^(DUNE/.*\\.(swift|plist|entitlements)|DUNE/project\\.yml|D
                 [[ -z "$target" ]] && continue
                 read -r scheme platform <<<"$target"
                 echo "Running targeted compile check for $scheme..."
-                DAILVE_FAST_LOCAL_BUILD=1 "$ROOT_DIR/scripts/build-target.sh" \
+                run_build_check "$ROOT_DIR/scripts/build-target.sh" \
                     --scheme "$scheme" \
                     --platform "$platform" \
                     --build-for-testing \

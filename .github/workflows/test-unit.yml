@@ -13,6 +13,7 @@ on:
       - 'DUNETests/**'
       - 'DUNEWatchTests/**'
       - 'scripts/test-unit.sh'
+      - 'scripts/lib/xcodebuild-resources.sh'
       - 'scripts/lib/regen-project.sh'
       - 'scripts/lib/simulator-boot.sh'
       - 'scripts/lib/simulator-worktree.sh'

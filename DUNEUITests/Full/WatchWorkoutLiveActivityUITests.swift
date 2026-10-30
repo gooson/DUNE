@@ -9,40 +9,152 @@ final class WatchWorkoutLiveActivityUITests: UITestBaseCase {
     }
 
     func testRunningNotificationCenterPresentation() {
-        captureNotificationCenter(phase: "running", expectedStatuses: ["Workout", "운동", "ワークアウト"])
+        captureNotificationCenter(
+            phase: "running", expectedStatuses: ["Workout", "운동", "ワークアウト"],
+            activityType: "running"
+        )
+    }
+
+    func testCyclingNotificationCenterPresentation() {
+        captureNotificationCenter(
+            phase: "running", expectedStatuses: ["Workout", "운동", "ワークアウト"],
+            activityType: "cycling",
+            exerciseName: "Outdoor Cycle", evidenceName: "cycling"
+        )
     }
 
     func testPausedNotificationCenterPresentation() {
-        captureNotificationCenter(phase: "paused", expectedStatuses: ["Paused", "일시 정지", "一時停止"])
+        captureNotificationCenter(
+            phase: "paused", expectedStatuses: ["Paused", "일시 정지", "一時停止"],
+            activityType: "running"
+        )
     }
 
     func testStaleNotificationCenterHidesOutdatedMetrics() {
-        captureNotificationCenter(phase: "stale", expectedStatuses: ["Waiting for Watch", "Watch 연결 대기", "Watchとの接続待ち"])
+        captureNotificationCenter(
+            phase: "stale", expectedStatuses: ["Waiting for Watch", "Watch 연결 대기", "Watchとの接続待ち"],
+            activityType: "running"
+        )
     }
 
     func testLongStrengthNameNotificationCenterPresentation() {
         captureNotificationCenter(
             phase: "running",
             expectedStatuses: ["Workout", "운동", "ワークアウト"],
+            activityType: "traditionalStrengthTraining",
             exerciseName: "체스트 프레스 머신 · 플레이트 로드",
             evidenceName: "strength-long-name"
+        )
+    }
+
+    func testGoldCardioDistancePresentation() {
+        captureNotificationCenter(
+            phase: "running", expectedStatuses: ["Workout", "운동", "ワークアウト"],
+            activityType: "running", evidenceName: "gold-cardio-distance",
+            metric: "distance", style: "goldImpact", theme: "evergreen", expectedPrimaryFragments: ["1.2", "km"]
+        )
+    }
+
+    func testZeroDistanceIsPresentedAsARealValue() {
+        captureNotificationCenter(
+            phase: "running", expectedStatuses: ["Workout", "운동", "ワークアウト"],
+            activityType: "running", evidenceName: "gold-cardio-zero-distance",
+            metric: "distance", style: "goldImpact",
+            fixtureArguments: ["--ui-watch-live-activity-zero-distance"],
+            expectedPrimaryFragments: ["0"]
+        )
+    }
+
+    func testUnsupportedDistanceFallsBackToElapsedTime() {
+        captureNotificationCenter(
+            phase: "running", expectedStatuses: ["Workout", "운동", "ワークアウト"],
+            activityType: "running", evidenceName: "gold-cardio-no-distance",
+            metric: "distance", style: "goldImpact",
+            fixtureArguments: ["--ui-watch-live-activity-no-distance"],
+            expectedPrimaryFragments: [":"], absentMetricIdentifier: "watch-workout-distance"
+        )
+    }
+
+    func testGoldStrengthCurrentWeightPresentation() {
+        captureNotificationCenter(
+            phase: "running", expectedStatuses: ["Workout", "운동", "ワークアウト"],
+            activityType: "traditionalStrengthTraining", exerciseName: "Strength Training",
+            evidenceName: "gold-strength-weight", metric: "weight", style: "goldImpact",
+            expectedPrimaryFragments: ["60", "kg"], expectsWeight: true
+        )
+    }
+
+    func testMissingCurrentWeightFallsBackToElapsedTime() {
+        captureNotificationCenter(
+            phase: "running", expectedStatuses: ["Workout", "운동", "ワークアウト"],
+            activityType: "traditionalStrengthTraining", exerciseName: "Strength Training",
+            evidenceName: "gold-strength-no-weight", metric: "weight", style: "goldImpact",
+            fixtureArguments: ["--ui-watch-live-activity-missing-weight"],
+            expectedPrimaryFragments: [":"], expectsWeight: false
+        )
+    }
+
+    func testZeroCurrentWeightIsPresentedAsARealValue() {
+        captureNotificationCenter(
+            phase: "running", expectedStatuses: ["Workout", "운동", "ワークアウト"],
+            activityType: "traditionalStrengthTraining", exerciseName: "Strength Training",
+            evidenceName: "gold-strength-zero-weight", metric: "weight", style: "goldImpact",
+            fixtureArguments: ["--ui-watch-live-activity-zero-weight"],
+            expectedPrimaryFragments: ["0", "kg"], expectsWeight: true
+        )
+    }
+
+    func testStandardHeartRatePresentation() {
+        captureNotificationCenter(
+            phase: "running", expectedStatuses: ["Workout", "운동", "ワークアウト"],
+            activityType: "running", evidenceName: "standard-heart-rate",
+            metric: "heartRate", style: "standard", expectedPrimaryFragments: ["142", "bpm"]
+        )
+    }
+
+    func testPausedGoldStrengthKeepsSelectedWeight() {
+        captureNotificationCenter(
+            phase: "paused", expectedStatuses: ["Paused", "일시 정지", "一時停止"],
+            activityType: "traditionalStrengthTraining", exerciseName: "Strength Training",
+            evidenceName: "paused-gold-strength-weight", metric: "weight", style: "goldImpact",
+            expectedPrimaryFragments: ["60", "kg"], expectsWeight: true
+        )
+    }
+
+    func testStaleGoldDistanceHidesSelectedAndSecondaryMetrics() {
+        captureNotificationCenter(
+            phase: "stale", expectedStatuses: ["Waiting for Watch", "Watch 연결 대기", "Watchとの接続待ち"],
+            activityType: "running", evidenceName: "stale-gold-cardio-distance",
+            metric: "distance", style: "goldImpact"
         )
     }
 
     private func captureNotificationCenter(
         phase: String,
         expectedStatuses: [String],
+        activityType: String,
         exerciseName: String = "Outdoor Run",
-        evidenceName: String? = nil
+        evidenceName: String? = nil,
+        metric: String = "elapsedTime",
+        style: String = "goldImpact",
+        theme: String = "desertWarm",
+        fixtureArguments: [String] = [],
+        expectedPrimaryFragments: [String] = [],
+        expectsWeight: Bool? = nil,
+        absentMetricIdentifier: String? = nil
     ) {
         var configuration = launchConfiguration
         configuration.additionalArguments += [
             "--ui-watch-live-activity", phase,
             "--ui-watch-live-activity-name", exerciseName,
-            "--ui-test-theme", "desertWarm",
+            "--ui-watch-live-activity-type", activityType,
+            "--ui-watch-live-activity-metric", metric,
+            "--ui-watch-live-activity-style", style,
+            "--ui-test-theme", theme,
             "--ui-test-style", "dark",
             "-AppleLanguages", "(en)", "-AppleLocale", "en_US"
         ]
+        configuration.additionalArguments += fixtureArguments
         launchApp(with: configuration)
         XCTAssertTrue(app.wait(for: .runningForeground, timeout: 10))
 
@@ -53,22 +165,21 @@ final class WatchWorkoutLiveActivityUITests: UITestBaseCase {
         let bottom = springboard.coordinate(withNormalizedOffset: CGVector(dx: 0.08, dy: 0.72))
         top.press(forDuration: 0.05, thenDragTo: bottom)
 
-        let title = springboard.descendants(matching: .any)
-            .matching(NSPredicate(format: "label CONTAINS %@", exerciseName))
-            .firstMatch
+        let title = springboard.staticTexts["watch-workout-title"].firstMatch
         let didFindTitle = title.waitForExistence(timeout: 15)
         // Extensions use SpringBoard's language, independent of the app launch locale.
         let allow = springboard.buttons.matching(NSPredicate(format: "label IN %@", ["Allow", "허용", "許可"])).firstMatch
         if allow.waitForExistence(timeout: 2) { allow.tap() }
 
-        let activity = springboard.otherElements.containing(.staticText, identifier: exerciseName)
-            .allElementsBoundByIndex
-            .filter { $0.frame.width > 250 && $0.frame.height > 48 && $0.frame.height < 220 }
+        // The system card owns the complete surface. A Group accessibility ID
+        // can propagate to a decorative descendant and is not a card boundary.
+        let activity = springboard.buttons.matching(identifier: "ListCell").allElementsBoundByIndex
+            .filter { $0.frame.contains(title.frame) }
             .min { $0.frame.width * $0.frame.height < $1.frame.width * $1.frame.height }
         if phase == "stale", let activity {
             let waiting = activity.descendants(matching: .any)
                 .matching(NSPredicate(format: "label IN %@", expectedStatuses)).firstMatch
-            XCTAssertTrue(waiting.waitForExistence(timeout: 12), "The system should transition to its stale presentation")
+            XCTAssertTrue(waiting.waitForExistence(timeout: 25), "The system should transition to its stale presentation")
         }
         let hierarchy = springboard.debugDescription
         attachEvidence(phase: evidenceName ?? phase, hierarchy: hierarchy, activity: activity)
@@ -79,6 +190,8 @@ final class WatchWorkoutLiveActivityUITests: UITestBaseCase {
         if let activity {
             XCTAssertTrue(springboard.windows.firstMatch.frame.contains(activity.frame),
                           "The complete Live Activity must fit in the system viewport")
+            // The header icon is decorative for VoiceOver. Verify its glyph visually
+            // in the attachment; snapshot unit tests cover symbol selection.
             let brand = activity.staticTexts["watch-workout-brand"].firstMatch
             XCTAssertTrue(brand.exists, "The Live Activity should identify DUNE")
             if brand.exists {
@@ -87,7 +200,7 @@ final class WatchWorkoutLiveActivityUITests: UITestBaseCase {
             }
             let activityHierarchy = activity.debugDescription
             if phase == "stale" {
-                for identifier in ["watch-workout-elapsed", "watch-workout-heart-rate", "watch-workout-calories", "watch-workout-distance"] {
+                for identifier in ["watch-workout-primary-metric", "watch-workout-weight", "watch-workout-elapsed", "watch-workout-heart-rate", "watch-workout-calories", "watch-workout-distance"] {
                     XCTAssertFalse(activity.descendants(matching: .any)[identifier].firstMatch.exists,
                                    "Outdated \(identifier) must be hidden")
                 }
@@ -101,11 +214,34 @@ final class WatchWorkoutLiveActivityUITests: UITestBaseCase {
                         XCTAssertTrue(activity.frame.contains(element.frame), "\(identifier) must fit inside the activity")
                     }
                 }
+                let primary = activity.descendants(matching: .any)["watch-workout-primary-metric"].firstMatch
+                XCTAssertTrue(primary.exists, "The system should expose the selected primary metric")
+                if primary.exists {
+                    XCTAssertTrue(activity.frame.contains(primary.frame), "The selected metric must fit inside the activity")
+                    let accessibleText = ([primary] + primary.descendants(matching: .any).allElementsBoundByIndex)
+                        .map { "\($0.label) \($0.value ?? "")" }.joined(separator: " ")
+                    for fragment in expectedPrimaryFragments {
+                        XCTAssertTrue(accessibleText.contains(fragment), "Primary metric should expose \(fragment): \(accessibleText)")
+                    }
+                }
+                if let expectsWeight {
+                    let weight = activity.descendants(matching: .any)["watch-workout-weight"].firstMatch
+                    XCTAssertEqual(weight.exists, expectsWeight, "Only a current set weight should be exposed")
+                }
+                if let absentMetricIdentifier {
+                    XCTAssertFalse(activity.descendants(matching: .any)[absentMetricIdentifier].firstMatch.exists,
+                                   "Unavailable metric \(absentMetricIdentifier) must be hidden")
+                }
             }
         }
     }
 
     private func attachEvidence(phase: String, hierarchy: String, activity: XCUIElement?) {
+        let hierarchyAttachment = XCTAttachment(string: hierarchy)
+        hierarchyAttachment.name = "WLA01-\(phase)-springboard-hierarchy"
+        hierarchyAttachment.lifetime = .keepAlways
+        add(hierarchyAttachment)
+
         // Capture only our Live Activity; unrelated notifications may exist on the simulator.
         XCTAssertNotNil(activity, "The system should expose the workout activity container")
         if let activity {
@@ -115,10 +251,6 @@ final class WatchWorkoutLiveActivityUITests: UITestBaseCase {
             add(screenshot)
         }
 
-        let hierarchyAttachment = XCTAttachment(string: hierarchy)
-        hierarchyAttachment.name = "WLA01-\(phase)-springboard-hierarchy"
-        hierarchyAttachment.lifetime = .keepAlways
-        add(hierarchyAttachment)
     }
 }
 

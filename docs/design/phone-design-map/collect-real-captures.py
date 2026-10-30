@@ -482,11 +482,16 @@ def render_portal() -> None:
                    f'<div class="meta"><strong>Apple Watch · 운동</strong><span>{watch_count} / {watch_state_count} 상태 실제 캡처</span></div></a>')
     live_index = HERE / "actual" / "live-activity" / "capture-index.json"
     live_data = json.loads(live_index.read_text()) if live_index.exists() else {"captured": {}, "states": {}}
-    live_count = len(live_data["captured"])
+    live_count = sum(item.get("current_layout", True) for item in live_data["captured"].values())
     live_total = len(live_data["states"])
+    live_running = live_data["captured"].get("iphone_notification_running", {})
+    live_running_current = (live_running.get("current_layout") is True
+                            and live_data["states"].get("iphone_notification_running", {}).get("status") == "captured")
     live_preview_path = HERE / "actual" / "live-activity" / "images" / "iphone_notification_running.png"
     live_preview = ('<img src="live-activity/images/iphone_notification_running.png" alt="WLA01 운동 진행 실제 캡처">'
-                    if live_preview_path.exists() else '<div class="pending">캡처 대기</div>')
+                    if live_running_current and live_preview_path.exists() else '<div class="pending">새 레이아웃 캡처 대기</div>')
+    if live_data.get("pending_layout_note"):
+        pending_notes.add(live_data["pending_layout_note"])
     entries.append(f'<a class="card" href="live-activity/index.html">{live_preview}<div class="meta">'
                    f'<strong>WLA01 · Watch 운동 Live Activity</strong><span>{live_count} / {live_total} 상태 실제 캡처</span></div></a>')
     pending_html = ''.join(f'<p style="color:#e8bf94">{escape(note)}</p>' for note in sorted(pending_notes))

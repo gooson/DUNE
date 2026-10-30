@@ -232,7 +232,7 @@ final class HealthQuerySmokeTests: SeededUITestBaseCase {
 
         for attempt in 0...8 {
             let window = app.windows.firstMatch.frame
-            var viewport = menu.frame.intersection(window.insetBy(dx: 0, dy: 34))
+            var viewport = menu.frame.intersection(window)
             // UIKit exposes the collection's full height, including the clipped
             // portion below its popup. Its ancestor is the actual visible menu.
             for container in app.otherElements.containing(kindButtons).allElementsBoundByIndex {
@@ -320,38 +320,38 @@ final class HealthQuerySmokeTests: SeededUITestBaseCase {
     }
 
     private func capture(_ name: String) {
+        let started = Date()
         if ProcessInfo.processInfo.environment["DUNE_VISUAL_AUDIT_HOST_ONLY"] == "1" {
             VisualAudit.capture(name)
         } else {
-            let started = Date()
             let screenshot = app.screenshot()
             let attachment = XCTAttachment(screenshot: screenshot)
             attachment.name = name
             attachment.lifetime = .keepAlways
             add(attachment)
-            let frame = app.windows.firstMatch.frame
-            let metadata: [String: Any] = [
-                "captureStartedAt": ISO8601DateFormatter().string(from: started),
-                "captureFinishedAt": ISO8601DateFormatter().string(from: Date()),
-                "viewportPoints": ["x": Double(frame.minX), "y": Double(frame.minY),
-                                   "width": Double(frame.width), "height": Double(frame.height)],
-                "orientation": XCUIDevice.shared.orientation.rawValue,
-                "softwareKeyboardVisible": app.keyboards.firstMatch.exists,
-                "dataKind": app.launchArguments.contains("--ui-health-query-fixture")
-                    ? "synthetic DEBUG health-query fixture"
-                    : "synthetic seeded SwiftData records; production query service"
-            ]
-            if let data = try? JSONSerialization.data(withJSONObject: metadata, options: [.sortedKeys]),
-               let text = String(data: data, encoding: .utf8) {
-                let readback = XCTAttachment(string: text)
-                readback.name = name + "-metadata"
-                readback.lifetime = .keepAlways
-                add(readback)
-            }
-            let hierarchy = XCTAttachment(string: app.debugDescription)
-            hierarchy.name = name + "-hierarchy"
-            hierarchy.lifetime = .keepAlways
-            add(hierarchy)
         }
+        let frame = app.windows.firstMatch.frame
+        let metadata: [String: Any] = [
+            "captureStartedAt": ISO8601DateFormatter().string(from: started),
+            "captureFinishedAt": ISO8601DateFormatter().string(from: Date()),
+            "viewportPoints": ["x": Double(frame.minX), "y": Double(frame.minY),
+                               "width": Double(frame.width), "height": Double(frame.height)],
+            "orientation": XCUIDevice.shared.orientation.rawValue,
+            "softwareKeyboardVisible": app.keyboards.firstMatch.exists,
+            "dataKind": app.launchArguments.contains("--ui-health-query-fixture")
+                ? "synthetic DEBUG health-query fixture"
+                : "synthetic seeded SwiftData records; production query service"
+        ]
+        if let data = try? JSONSerialization.data(withJSONObject: metadata, options: [.sortedKeys]),
+           let text = String(data: data, encoding: .utf8) {
+            let readback = XCTAttachment(string: text)
+            readback.name = name + "-metadata"
+            readback.lifetime = .keepAlways
+            add(readback)
+        }
+        let hierarchy = XCTAttachment(string: app.debugDescription)
+        hierarchy.name = name + "-hierarchy"
+        hierarchy.lifetime = .keepAlways
+        add(hierarchy)
     }
 }

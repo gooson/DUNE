@@ -1,0 +1,22 @@
+{
+  "source_revision": "93fa6959",
+  "generic_build": "passed",
+  "ui_build_for_testing": "passed",
+  "native_unit": {
+    "ios_passed": 46,
+    "watch_passed": 5
+  },
+  "settings_ui": {
+    "passed": 1,
+    "revision": "5ef25439"
+  },
+  "final_system_ui": {
+    "status": "blocked_before_testcase",
+    "executed": 0,
+    "last_exit": 124,
+    "reason": "host context5s / simulator query30s / inactivity180s timeouts",
+    "no_test_pass_claim": true
+  },
+  "pre_ship": "blocked by required UI gate",
+  "ship": "not merged; draft PR only"
+}

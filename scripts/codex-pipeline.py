@@ -15,6 +15,7 @@ import hashlib
 import importlib.util
 import json
 import os
+import re
 from pathlib import Path
 import signal
 import subprocess
@@ -145,6 +146,7 @@ def check_record(root, store, name, context, scope, command, content_only, cache
     last = attempts[-1]
     if last.get("status") != "success":
         raise ValueError("last check did not succeed")
+    audited_deferrals(root, store, record)
     if (last.get("context"), last.get("scope"), last.get("command"), last.get("content_only")) != (context, scope, command, content_only):
         raise ValueError("check inputs changed")
     log = safe_path(store / last["log"])
@@ -160,6 +162,158 @@ def check_record(root, store, name, context, scope, command, content_only, cache
     return last
 
 
+# Reviewed pre-lock source closures, including all shell sources and watchdog.
+# These are content/mode hashes, not attestations of a historical execution.
+LOCK_SOURCES = (
+    "scripts/test-ui.sh", "scripts/lib/regen-project.sh", "scripts/lib/simulator-boot.sh",
+    "scripts/lib/simulator-worktree.sh", "scripts/lib/xcodebuild-resources.sh",
+    "scripts/lib/command-deadline.py", "scripts/lib/simulator-test-lock.py",
+)
+LOCK_SOURCE_PROFILES = {
+    "90cbfa3a0ddf8cbd59be62a6f6483251e6f0a2830df5d27ca76563a0b98552dd",  # a9d4cecc
+    "9fd7c67ef0bee58702eb920ee49621730fc6fda7a7a65f7c13dc792260b8ea21",  # 9a21f364
+}
+
+
+def object_hash(value):
+    return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+
+
+def lock_source_profile(root, revision=None):
+    entries = {}
+    if revision is not None:
+        if not isinstance(revision, str) or not re.fullmatch(r"[0-9a-f]{40}", revision):
+            raise ValueError("lock audit requires a full source commit")
+        if CHECK.git(root, "rev-parse", f"{revision}^{{commit}}").decode().strip() != revision:
+            raise ValueError("lock audit source is not a commit")
+        tree = CHECK.git(root, "ls-tree", revision, "--", *LOCK_SOURCES).decode().splitlines()
+        modes = {line.split("\t", 1)[1]: line.split()[0] for line in tree}
+    for name in LOCK_SOURCES:
+        if revision is None:
+            path = safe_path(root / name)
+            entries[name] = None if not path.exists() else {
+                "mode": "100755" if path.stat().st_mode & 0o111 else "100644",
+                "sha256": CHECK.file_hash(path),
+            }
+        else:
+            mode = modes.get(name)
+            if mode is not None and mode not in ("100644", "100755"):
+                raise ValueError("lock audit source is not a regular file")
+            entries[name] = None if mode is None else {
+                "mode": mode,
+                "sha256": hashlib.sha256(CHECK.git(root, "show", f"{revision}:{name}")).hexdigest(),
+            }
+    profile = object_hash(entries)
+    if profile not in LOCK_SOURCE_PROFILES:
+        raise ValueError("unreviewed simulator runner source closure")
+    return profile
+
+
+def validate_lock_command(root, command):
+    # No shell, env wrapper, alternate runner, dry-run, or cleanup invocation.
+    if not isinstance(command, list) or not command or command[0] != "scripts/test-ui.sh":
+        raise ValueError("lock deferral requires direct scripts/test-ui.sh invocation")
+    safe_path(root / command[0])
+    switches = {"--no-regen", "--stream-log", "--no-stream-log", "--smoke"}
+    values = {"--log-file", "--skip-testing", "--only-testing", "--test-plan", "--simulator-udid"}
+    index = 1
+    while index < len(command):
+        option = command[index]
+        if option in switches:
+            index += 1
+        elif (option in values and index + 1 < len(command)
+              and isinstance(command[index + 1], str) and command[index + 1]
+              and not command[index + 1].startswith("--")):
+            if option == "--simulator-udid" and not re.fullmatch(r"[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}", command[index + 1]):
+                raise ValueError("invalid simulator UUID in audited command")
+            index += 2
+        else:
+            raise ValueError("unsupported arguments in audited runner invocation")
+
+
+def validate_lock_deferral(root, store, record, entry):
+    if record.get("worktree") != str(root):
+        raise ValueError("lock audit worktree mismatch")
+    matches = [a for a in record["attempts"] if a.get("log") == entry.get("log")]
+    if len(matches) != 1:
+        raise ValueError("lock audit attempt missing or ambiguous")
+    attempt = matches[0]
+    if object_hash(attempt) != entry.get("attempt_hash"):
+        raise ValueError("lock audit attempt changed")
+    if attempt.get("status") != "failed" or type(attempt.get("exit_code")) is not int or attempt["exit_code"] != 2:
+        raise ValueError("lock deferral requires failed exit 2")
+    for before, after in (("before", "after"), ("before_content", "after_content")):
+        if not re.fullmatch(r"[0-9a-f]{64}", attempt.get(before, "")) or attempt[before] != attempt.get(after):
+            raise ValueError("lock deferral requires unchanged execution fingerprints")
+    if attempt.get("reason"):
+        raise ValueError("lock attempt has an additional failure reason")
+    validate_lock_command(root, attempt.get("command"))
+    log = safe_path(store / entry["log"])
+    if log.parent != store or not re.fullmatch(rf"check-{key_for(record['id'])}-[0-9a-f]{{32}}\.log", log.name):
+        raise ValueError("invalid lock attempt log path")
+    if not log.is_file() or CHECK.file_hash(log) != attempt.get("log_hash"):
+        raise ValueError("lock attempt log missing or changed")
+    if not re.fullmatch(rb"Simulator test lock: (?:repository|worktree) simulator test lock remained busy for (?:0|[1-9][0-9]*)(?:\.[0-9]+)?s\n", log.read_bytes()):
+        raise ValueError("lock attempt is not an exclusive pre-start busy message")
+    audit_path = document_path(root, entry["audit"]["file"])
+    if CHECK.file_hash(audit_path) != entry["audit"]["hash"]:
+        raise ValueError("lock audit changed")
+    audit = read_json(audit_path, {})
+    expected = {"schema_version": 1, "check_id": record["id"], "worktree": str(root),
+                "attempt_log": entry["log"], "attempt_hash": entry["attempt_hash"]}
+    if any(audit.get(key) != value for key, value in expected.items()):
+        raise ValueError("lock audit identity mismatch")
+    provenance = audit.get("provenance", {})
+    if not isinstance(provenance, dict) or provenance.get("kind") != "operator-attested" or not all(
+        isinstance(provenance.get(key), str) and provenance[key].strip()
+        for key in ("reviewer", "source", "environment")
+    ):
+        raise ValueError("historical source and environment require explicit operator attestation")
+    evidence = audit.get("evidence")
+    if not isinstance(evidence, list) or not evidence:
+        raise ValueError("lock audit requires provenance evidence files")
+    for item in evidence:
+        if CHECK.file_hash(document_path(root, item["file"])) != item["hash"]:
+            raise ValueError("lock audit provenance evidence changed")
+    if not isinstance(audit.get("source_revision"), str):
+        raise ValueError("lock audit source commit missing")
+    lock_source_profile(root, audit["source_revision"])
+    lock_source_profile(root)
+    return attempt
+
+
+def audited_deferrals(root, store, record):
+    entries = record.get("lock_deferrals", [])
+    logs = set()
+    for entry in entries:
+        attempt = validate_lock_deferral(root, store, record, entry)
+        if attempt["log"] in logs:
+            raise ValueError("duplicate lock deferral")
+        logs.add(attempt["log"])
+    return logs
+
+
+def defer_lock(root, store, args):
+    unresolved_runs(store)
+    path = store / f"check-{key_for(args.id)}.json"
+    record = read_json(path, {})
+    if record.get("id") != args.id or not record.get("attempts"):
+        raise ValueError("no check to audit")
+    audit_path = document_path(root, args.audit_file)
+    audit = read_json(audit_path, {})
+    entry = {"log": audit.get("attempt_log"), "attempt_hash": audit.get("attempt_hash"),
+             "audit": {"file": str(audit_path.relative_to(root)), "hash": CHECK.file_hash(audit_path)},
+             "recorded": time.time()}
+    logs = audited_deferrals(root, store, record)
+    validate_lock_deferral(root, store, record, entry)
+    if entry["log"] in logs:
+        raise ValueError("lock deferral already recorded")
+    record.setdefault("lock_deferrals", []).append(entry)
+    write_json(path, record)
+    print(f"deferred (operator-attested; not test success): {args.id}; original attempt unchanged")
+    return 1
+
+
 def run_check(root, store, args):
     unresolved_runs(store)
     path = store / f"check-{key_for(args.id)}.json"
@@ -168,6 +322,15 @@ def run_check(root, store, args):
     if record.get("id") != args.id or not isinstance(record.get("attempts"), list):
         raise ValueError("invalid check history")
     attempts = record["attempts"]
+    deferred_logs = audited_deferrals(root, store, record)
+    if deferred_logs:
+        validate_lock_command(root, args.command)
+    real_failures = []
+    for prior in reversed(attempts):
+        if prior["status"] == "success":
+            break
+        if prior.get("log") not in deferred_logs:
+            real_failures.append(prior)
     if attempts:
         last = attempts[-1]
         if last["status"] == "running":
@@ -179,20 +342,16 @@ def run_check(root, store, args):
                 pass
             else:
                 raise ValueError("successful evidence already valid; reuse it")
-        else:
-            failures = 0
-            for prior in reversed(attempts):
-                if prior["status"] == "success":
-                    break
-                failures += 1
-            if failures >= 2:
+        elif real_failures:
+            last_failure = real_failures[0]
+            if len(real_failures) >= 2:
                 raise ValueError("retry limit reached for this check ID")
             if not args.retry_cause or not args.remediation or not args.retry_evidence:
                 raise ValueError("retry requires --retry-cause, --remediation, and --retry-evidence")
             current_content = CHECK.fingerprint(root, True)
-            if current_content == last.get("after_content") and args.context == last.get("context"):
+            if current_content == last_failure.get("after_content") and args.context == last_failure.get("context"):
                 raise ValueError("retry requires changed content or context")
-            if "after_content" not in last and args.context == last.get("context"):
+            if "after_content" not in last_failure and args.context == last_failure.get("context"):
                 raise ValueError("older failure lacks content change evidence; change context explicitly")
     elif args.retry_cause or args.remediation or args.retry_evidence:
         raise ValueError("retry evidence is only valid after failure")
@@ -252,7 +411,7 @@ def run_check(root, store, args):
         for sig, handler in previous.items():
             signal.signal(sig, handler)
         write_json(path, record)
-    if attempt["status"] == "success":
+    if attempt["status"] == "success" and not record.get("lock_deferrals"):
         for prior in attempts[:-1]:
             if prior["status"] != "success":
                 continue
@@ -333,6 +492,9 @@ def main():
     item.add_argument("--scope")
     item.add_argument("--content-only", action="store_true")
     item.add_argument("--reason")
+    item = sub.add_parser("defer-lock")
+    item.add_argument("id")
+    item.add_argument("--audit-file", required=True)
     item = sub.add_parser("recover")
     item.add_argument("id")
     item.add_argument("--reason", required=True)
@@ -354,7 +516,7 @@ def main():
     try:
         root = CHECK.repo_root()
         store = store_for(root)
-        with lock_store(store, exclusive=args.action in ("run", "phase", "recover") or
+        with lock_store(store, exclusive=args.action in ("run", "phase", "recover", "defer-lock") or
                         (args.action == "doc" and args.operation == "remember")):
             if args.action in ("run", "check"):
                 if not args.command:
@@ -408,6 +570,8 @@ def main():
                         record["content_only"] = args.content_only
                 write_json(store / f"phase-{key_for(args.name)}.json", record)
                 print(f"phase {args.name}: {args.status}")
+            elif args.action == "defer-lock":
+                return defer_lock(root, store, args)
             elif args.action == "recover":
                 path = store / f"check-{key_for(args.id)}.json"
                 record = read_json(path, {})
@@ -437,6 +601,14 @@ def main():
                     if last:
                         item = {"id": state.get("id"), "status": last[0].get("status"),
                                 "attempts": len(state["attempts"]), "log": last[0].get("log")}
+                        if state.get("lock_deferrals"):
+                            try:
+                                logs = audited_deferrals(root, store, state)
+                                if item["log"] in logs:
+                                    item.update(status="deferred", original_status=last[0]["status"],
+                                                provenance="operator-attested", test_success=False)
+                            except (ValueError, OSError, KeyError, TypeError) as error:
+                                item.update(status="invalid-audit", reason=str(error))
                         if item["status"] == "success":
                             try:
                                 check_record(root, store, item["id"], last[0]["context"], last[0]["scope"],

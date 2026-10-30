@@ -12,6 +12,8 @@ cd "$ROOT_DIR"
 source "$ROOT_DIR/scripts/lib/regen-project.sh"
 source "$ROOT_DIR/scripts/lib/simulator-boot.sh"
 source "$ROOT_DIR/scripts/lib/simulator-worktree.sh"
+source "$ROOT_DIR/scripts/lib/xcodebuild-resources.sh"
+configure_xcodebuild_resources unit
 TEST_SUMMARY="$ROOT_DIR/scripts/lib/test-log-summary.py"
 
 PROJECT_SPEC="DUNE/project.yml"
@@ -303,7 +305,8 @@ run_suite() {
     test_cmd=(xcodebuild test -project "$PROJECT_FILE"
         -scheme "$scheme"
         -destination "$destination"
-        -derivedDataPath "$DERIVED_DATA_DIR")
+        -derivedDataPath "$DERIVED_DATA_DIR"
+        ${XCODEBUILD_RESOURCE_ARGS[@]+"${XCODEBUILD_RESOURCE_ARGS[@]}"})
     for selector in "${selectors[@]}"; do
         test_cmd+=(-only-testing "$selector")
     done

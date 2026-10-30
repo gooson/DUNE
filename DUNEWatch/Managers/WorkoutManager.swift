@@ -232,6 +232,7 @@ final class WorkoutManager: NSObject {
     private(set) var currentExerciseIndex: Int = 0
     private(set) var currentSetIndex: Int = 0
     private(set) var completedSetsData: [[CompletedSetData]] = []
+    private(set) var currentSetWeightKg: Double?
 
     /// Extra sets added beyond the default per exercise (indexed by exercise index).
     private(set) var extraSetsPerExercise: [Int: Int] = [:]
@@ -296,6 +297,31 @@ final class WorkoutManager: NSObject {
         let exerciseID = snapshot.entries[currentExerciseIndex].exerciseDefinitionID
         return snapshot.procedureSetsByExerciseID?[exerciseID]?
             .first { $0.setNumber == currentSetIndex + 1 }
+    }
+
+    /// Publishes the editable current-set input for the mirrored activity, never a completed set.
+    func updateCurrentSetWeightKg(_ weight: Double?) {
+        guard case .strength = workoutMode else {
+            clearCurrentSetWeight()
+            return
+        }
+        guard let weight else {
+            clearCurrentSetWeight()
+            return
+        }
+        guard weight.isFinite, (0...500).contains(weight) else {
+            clearCurrentSetWeight()
+            return
+        }
+        guard currentSetWeightKg != weight else { return }
+        currentSetWeightKg = weight
+        enqueueMirrorSnapshot()
+    }
+
+    private func clearCurrentSetWeight() {
+        guard currentSetWeightKg != nil else { return }
+        currentSetWeightKg = nil
+        enqueueMirrorSnapshot()
     }
 
     // MARK: - HealthKit Authorization
@@ -392,6 +418,7 @@ final class WorkoutManager: NSObject {
         let previousMachineLevelChanges = machineLevelChanges
 
         self.workoutMode = .cardio(activityType: activityType, isOutdoor: isOutdoor)
+        self.currentSetWeightKg = nil
         self.cardioSecondaryUnit = secondaryUnit
         self.distance = 0
         self.lastAnnouncedKilometer = 0
@@ -444,6 +471,7 @@ final class WorkoutManager: NSObject {
     /// Common strength HK session setup.
     private func startStrengthSession(with snapshot: WorkoutSessionTemplate) async throws {
         self.workoutMode = .strength
+        self.currentSetWeightKg = nil
         self.cardioSecondaryUnit = nil
         var resolvedSnapshot = snapshot
         resolvedSnapshot.entries = snapshot.entries.map {
@@ -763,6 +791,7 @@ final class WorkoutManager: NSObject {
             completedSetsData[currentExerciseIndex].append(data)
         }
         persistRecoveryState()
+        clearCurrentSetWeight()
     }
 
     /// Record rest duration on the last completed set for the current exercise.
@@ -785,6 +814,7 @@ final class WorkoutManager: NSObject {
     }
 
     func advanceToNextSet() {
+        clearCurrentSetWeight()
         if currentSetIndex < effectiveTotalSets - 1 {
             currentSetIndex += 1
         }
@@ -798,6 +828,7 @@ final class WorkoutManager: NSObject {
 
     func advanceToNextExercise() {
         guard let snapshot = templateSnapshot else { return }
+        clearCurrentSetWeight()
         // Skip-aware: find next non-skipped, non-completed exercise
         if let nextIdx = nextPendingExerciseIndex(after: currentExerciseIndex) {
             currentExerciseIndex = nextIdx
@@ -815,6 +846,7 @@ final class WorkoutManager: NSObject {
     @discardableResult
     func skipExercise() -> Bool {
         guard templateSnapshot != nil else { return false }
+        clearCurrentSetWeight()
         skippedExerciseIndices.insert(currentExerciseIndex)
 
         if let nextIdx = nextPendingExerciseIndex(after: currentExerciseIndex) {
@@ -997,6 +1029,7 @@ final class WorkoutManager: NSObject {
         cardioSecondaryUnit = nil
         currentExerciseIndex = 0
         currentSetIndex = 0
+        currentSetWeightKg = nil
         completedSetsData = []
         extraSetsPerExercise = [:]
         skippedExerciseIndices = []
@@ -1370,6 +1403,17 @@ final class WorkoutManager: NSObject {
 
     private func workoutSnapshot(at now: Date = Date()) -> WatchWorkoutSnapshot? {
         guard let startDate else { return nil }
+        let activityType: WorkoutActivityType
+        if let session {
+            // Recovery metadata can be absent; the live HealthKit session remains authoritative.
+            activityType = WorkoutActivityType(healthKit: session.workoutConfiguration.activityType)
+        } else {
+            activityType = switch workoutMode {
+            case .cardio(let activityType, _): activityType
+            case .strength: .traditionalStrengthTraining
+            }
+        }
+        let effectiveCardio = isCardioMode || (isRecoveredSession && activityType.category == .cardio)
         let snapshot = WatchWorkoutSnapshot(
             startedAt: startDate,
             updatedAt: now,
@@ -1378,7 +1422,13 @@ final class WorkoutManager: NSObject {
             phase: isSessionEnded ? .ended : (isPaused ? .paused : .running),
             heartRate: (20...250).contains(heartRate) ? heartRate : nil,
             activeCalories: activeCalories,
-            distanceMeters: isCardioMode ? distance : 0
+            // Without recovered mode metadata the builder distance was not restored.
+            // Keep distance unavailable instead of presenting an invented zero.
+            distanceMeters: isCardioMode ? distance : 0,
+            exerciseIconName: activityType.iconName,
+            workoutKind: effectiveCardio ? .cardio : .strength,
+            supportsDistance: isCardioMode && activityType.isDistanceBased,
+            currentSetWeightKg: effectiveCardio ? nil : currentSetWeightKg
         )
         return snapshot.isValid ? snapshot : nil
     }

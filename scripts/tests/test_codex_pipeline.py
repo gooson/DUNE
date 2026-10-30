@@ -1,6 +1,9 @@
 """Behavior tests for explicit pipeline evidence and retry limits."""
 
 import json
+import fcntl
+import hashlib
+import os
 import importlib.util
 import io
 from pathlib import Path
@@ -53,6 +56,324 @@ class PipelineTests(unittest.TestCase):
         key = hashlib.sha256(ident.encode()).hexdigest()[:24]
         return json.loads((self.root / ".codex-checks" / "pipeline" / f"check-{key}.json").read_text())
 
+    def prepare_lock_fixture(self):
+        self.root = self.root.resolve()
+        spec = importlib.util.spec_from_file_location("pipeline_lock_test", SCRIPT_DIR / "codex-pipeline.py")
+        pipeline = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(pipeline)
+        for name in pipeline.LOCK_SOURCES:
+            target = self.root / name
+            target.parent.mkdir(exist_ok=True, parents=True)
+            shutil.copy2(SCRIPT_DIR.parent / name, target)
+        self.git("add", "scripts")
+        self.git("commit", "-qm", "reviewed runner fixture")
+        self.pipeline = pipeline
+        self.store = pipeline.store_for(self.root)
+        self.lock_command = ["scripts/test-ui.sh", "--no-regen", "--only-testing", "DUNEUITests/Fake/testCase"]
+        return pipeline
+
+    def busy_lock_run(self, context="fixture", retry=False):
+        # Only temporary-repository file locks are used. The real runner must
+        # exit before any simulator query, build, installation, or test starts.
+        spec = importlib.util.spec_from_file_location("lock_fixture", SCRIPT_DIR / "lib/simulator-test-lock.py")
+        lock = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(lock)
+        path = lock.lock_path(self.root)
+        worktree_path, _ = lock.worktree_lock_path(self.root)
+        fd = lock.open_lock(path)
+        fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        args = self.verify_args(command=self.lock_command, context=context)
+        if retry:
+            position = args.index("--")
+            args[position:position] = ["--retry-cause", "launch failure", "--remediation", "launch recovered",
+                                      "--retry-evidence", "review.md"]
+        env = os.environ.copy()
+        env["DUNE_SIM_TEST_LOCK_WAIT_SECONDS"] = "0"
+        for key in ("DUNE_SIM_TEST_LOCK_FD", "DUNE_SIM_TEST_WORKTREE_LOCK_FD", "DUNE_SIM_TEST_LOCK_SCOPE",
+                    "DUNE_UI_WATCHDOG_ACTIVE", "BASH_ENV", "ENV"):
+            env.pop(key, None)
+        try:
+            return subprocess.run([sys.executable, "scripts/codex-pipeline.py", *args], cwd=self.root,
+                                  env=env, capture_output=True, text=True, timeout=15)
+        finally:
+            os.close(fd)
+            path.unlink(missing_ok=True)
+            worktree_path.unlink(missing_ok=True)
+
+    def archived_lock_attempt(self, number=1):
+        # Synthetic archived receipt, with the same strict shape as the real
+        # busy-lock fixture. Negative tests vary one independently checked field.
+        p = self.pipeline
+        fingerprint = p.CHECK.fingerprint(self.root, True)
+        log = f"check-{p.key_for('unit')}-{number:032x}.log"
+        output = b"Simulator test lock: repository simulator test lock remained busy for 0s\n"
+        (self.store / log).write_bytes(output)
+        return {"status": "failed", "exit_code": 2, "command": self.lock_command,
+                "context": "fixture", "scope": "unit", "content_only": True,
+                "before": fingerprint, "after": fingerprint, "before_content": fingerprint,
+                "after_content": fingerprint, "log": log, "log_hash": hashlib.sha256(output).hexdigest()}
+
+    def save_lock_history(self, attempts):
+        self.pipeline.write_json(self.store / f"check-{self.pipeline.key_for('unit')}.json",
+                                 {"schema_version": 1, "id": "unit", "worktree": str(self.root), "attempts": attempts})
+
+    def write_lock_audit(self, attempt):
+        audit = {"schema_version": 1, "check_id": "unit", "worktree": str(self.root),
+                 "attempt_log": attempt["log"], "attempt_hash": self.pipeline.object_hash(attempt),
+                 "source_revision": self.git("rev-parse", "HEAD").stdout.decode().strip(),
+                 "provenance": {"kind": "operator-attested", "reviewer": "contract fixture",
+                                "source": "Fixture copies reviewed source closure before invocation.",
+                                "environment": "Known test Python/PATH, no shell startup hooks; file lock held before start."},
+                 "evidence": [{"file": "review.md", "hash": self.pipeline.CHECK.file_hash(self.root / "review.md")}]}
+        path = self.root / ".codex-checks" / "lock-audit.json"
+        path.write_text(json.dumps(audit))
+        return path, audit
+
+    def classify_lock(self):
+        return self.cli("defer-lock", "unit", "--audit-file", ".codex-checks/lock-audit.json")
+
+    def test_genuine_prestart_lock_is_audited_non_success_without_history_mutation(self):
+        self.prepare_lock_fixture()
+        result = self.busy_lock_run()
+        self.assertNotEqual(result.returncode, 0, result.stderr)
+        original = self.state()
+        attempt = original["attempts"][-1]
+        self.assertEqual(attempt["exit_code"], 2)
+        self.assertEqual((self.store / attempt["log"]).read_bytes(),
+                         b"Simulator test lock: repository simulator test lock remained busy for 0s\n")
+        self.write_lock_audit(attempt)
+        before = self.pipeline.CHECK.fingerprint(self.root)
+        result = self.classify_lock()
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("deferred (operator-attested", result.stdout, result.stderr)
+        self.assertEqual(self.state()["attempts"], original["attempts"])
+        self.assertEqual(before, self.pipeline.CHECK.fingerprint(self.root))
+        report = json.loads(self.cli("status", "unit").stdout)["checks"][0]
+        self.assertEqual(report["status"], "deferred")
+        self.assertEqual(report["original_status"], "failed")
+        self.assertFalse(report["test_success"])
+        self.assertNotEqual(self.cli(*self.verify_args("check", command=self.lock_command)).returncode, 0)
+        self.assertNotEqual(self.cli("phase", "UI", "passed", "--evidence", "unit").returncode, 0)
+        self.assertIn("already recorded", self.classify_lock().stderr)
+        # No retry metadata/content change needed for a deferred-only history,
+        # but the next invocation must acquire the actual lock again.
+        self.assertIn("direct scripts/test-ui.sh", self.cli(*self.verify_args()).stderr)
+        again = self.busy_lock_run()
+        self.assertNotEqual(again.returncode, 0)
+        self.assertEqual(len(self.state()["attempts"]), 2)
+        self.assertEqual(self.state()["attempts"][0], original["attempts"][0])
+
+    def test_spoofed_command_output_and_non_lock_failures_rejected(self):
+        self.prepare_lock_fixture()
+        mutations = [
+            ("fake command", {"command": [sys.executable, "-c", "print('lock busy')"]}),
+            ("shell wrapper", {"command": ["bash", "scripts/test-ui.sh"]}),
+            ("dry run", {"command": ["scripts/test-ui.sh", "--dry-run"]}),
+            ("cleanup", {"command": ["scripts/test-ui.sh", "--cleanup-simulators"]}),
+            ("unknown argument", {"command": ["scripts/test-ui.sh", "--unknown"]}),
+            ("real timeout", {"status": "timeout", "exit_code": None}),
+            ("runner timeout", {"exit_code": 124}),
+            ("app failure", {"exit_code": 65}),
+            ("unknown exit", {"exit_code": None}),
+            ("success", {"status": "success", "exit_code": 0}),
+            ("changed fingerprint", {"after_content": "0" * 64}),
+        ]
+        for label, mutation in mutations:
+            with self.subTest(label=label):
+                attempt = self.archived_lock_attempt()
+                attempt.update(mutation)
+                self.save_lock_history([attempt])
+                self.write_lock_audit(attempt)
+                result = self.classify_lock()
+                self.assertNotEqual(result.returncode, 0)
+                self.assertNotIn("lock_deferrals", self.state(), result.stdout)
+        for output in (b"BUILD STARTED\nSimulator test lock: repository simulator test lock remained busy for 0s\n",
+                       b"Simulator test lock: repository simulator test lock remained busy for 0s\nTest failed\n",
+                       b"Simulator test lock: unknown failure\n", b"", b"Executed 0 tests\n"):
+            with self.subTest(output=output):
+                attempt = self.archived_lock_attempt()
+                (self.store / attempt["log"]).write_bytes(output)
+                attempt["log_hash"] = hashlib.sha256(output).hexdigest()
+                self.save_lock_history([attempt])
+                self.write_lock_audit(attempt)
+                self.assertIn("exclusive pre-start", self.classify_lock().stderr)
+                self.assertNotIn("lock_deferrals", self.state())
+
+    def test_missing_tampered_symlink_and_wrong_path_logs_rejected(self):
+        self.prepare_lock_fixture()
+        for kind in ("missing", "tampered", "symlink", "outside"):
+            with self.subTest(kind=kind):
+                attempt = self.archived_lock_attempt()
+                log = self.store / attempt["log"]
+                if kind == "missing":
+                    log.unlink()
+                elif kind == "tampered":
+                    log.write_bytes(b"changed")
+                elif kind == "symlink":
+                    log.unlink()
+                    log.symlink_to(self.root / "review.md")
+                else:
+                    attempt["log"] = "../outside.log"
+                self.save_lock_history([attempt])
+                self.write_lock_audit(attempt)
+                self.assertNotIn("deferred (", self.classify_lock().stdout)
+                self.assertNotIn("lock_deferrals", self.state())
+                log.unlink(missing_ok=True)
+
+    def test_source_and_provenance_must_be_reviewed_and_bound(self):
+        self.prepare_lock_fixture()
+        attempt = self.archived_lock_attempt()
+        for field, value in (("source_revision", None), ("source_revision", "HEAD"),
+                             ("provenance", {}), ("evidence", []), ("attempt_hash", "0" * 64)):
+            with self.subTest(field=field, value=value):
+                self.save_lock_history([attempt])
+                path, audit = self.write_lock_audit(attempt)
+                audit[field] = value
+                path.write_text(json.dumps(audit))
+                self.assertNotIn("deferred (", self.classify_lock().stdout)
+                self.assertNotIn("lock_deferrals", self.state())
+        for name in ("scripts/test-ui.sh", "scripts/lib/simulator-boot.sh", "scripts/lib/command-deadline.py"):
+            with self.subTest(source=name):
+                self.save_lock_history([attempt])
+                self.write_lock_audit(attempt)
+                source = self.root / name
+                original = source.read_bytes()
+                source.write_bytes(original + b"\n# modified\n")
+                self.assertIn("unreviewed", self.classify_lock().stderr)
+                source.write_bytes(original)
+        source = self.root / "scripts/test-ui.sh"
+        original = source.read_bytes()
+        source.unlink()
+        source.symlink_to(SCRIPT_DIR / "test-ui.sh")
+        self.assertIn("symlink rejected", self.classify_lock().stderr)
+        source.unlink()
+        source.write_bytes(original)
+        source.chmod(0o755)
+
+    def test_tampered_audit_evidence_history_and_source_revoke_deferral(self):
+        self.prepare_lock_fixture()
+        attempt = self.archived_lock_attempt()
+        self.save_lock_history([attempt])
+        audit_path, _ = self.write_lock_audit(attempt)
+        self.classify_lock()
+        state_path = self.store / f"check-{self.pipeline.key_for('unit')}.json"
+        for target in (audit_path, self.root / "review.md", self.store / attempt["log"],
+                       self.root / "scripts/lib/simulator-test-lock.py", state_path):
+            with self.subTest(target=target.name):
+                original = target.read_bytes()
+                if target == state_path:
+                    changed = json.loads(original)
+                    changed["attempts"][0]["context"] = "tampered"
+                    target.write_text(json.dumps(changed))
+                else:
+                    target.write_bytes(original + b"\n")
+                status = json.loads(self.cli("status", "unit").stdout)["checks"][0]
+                self.assertEqual(status["status"], "invalid-audit")
+                result = self.cli(*self.verify_args(command=self.lock_command))
+                self.assertNotEqual(result.returncode, 0)
+                self.assertEqual(len(self.state()["attempts"]), 1)
+                target.write_bytes(original)
+
+    def test_real_failure_before_deferral_still_requires_original_remediation(self):
+        self.prepare_lock_fixture()
+        failure = self.archived_lock_attempt(1)
+        failure.update(exit_code=124, context="original-launch")
+        deferred = self.archived_lock_attempt(2)
+        deferred.update(context="recovered-launch")
+        self.save_lock_history([failure, deferred])
+        self.write_lock_audit(deferred)
+        self.classify_lock()
+        self.assertIn("retry requires", self.cli(*self.verify_args(command=self.lock_command, context="recovered-launch")).stderr)
+        unchanged = self.busy_lock_run(context="original-launch", retry=True)
+        self.assertIn("changed content or context", unchanged.stderr)
+        self.assertEqual(len(self.state()["attempts"]), 2)
+        # Compare against the real failure, not the newer deferred attempt.
+        allowed = self.busy_lock_run(context="recovered-launch", retry=True)
+        self.assertNotEqual(allowed.returncode, 0)
+        self.assertEqual(len(self.state()["attempts"]), 3, allowed.stderr)
+        self.assertEqual(self.state()["attempts"][:2], [failure, deferred])
+        self.assertEqual(self.state()["attempts"][-1]["retry_cause"], "launch failure")
+        self.assertEqual(self.state()["attempts"][-1]["exit_code"], 2)
+
+    def test_two_real_failures_plus_deferral_cannot_execute(self):
+        self.prepare_lock_fixture()
+        failures = [self.archived_lock_attempt(1), self.archived_lock_attempt(2)]
+        for failure in failures:
+            failure["exit_code"] = 124
+        deferred = self.archived_lock_attempt(3)
+        self.save_lock_history([*failures, deferred])
+        self.write_lock_audit(deferred)
+        self.classify_lock()
+        result = self.busy_lock_run(context="changed", retry=True)
+        self.assertIn("retry limit reached", result.stderr)
+        self.assertEqual(self.state()["attempts"], [*failures, deferred])
+
+    def test_reviewed_legacy_source_and_sixty_second_worktree_message(self):
+        self.prepare_lock_fixture()
+        # Reconstruct the reviewed pre-resource-budget runner exactly, without
+        # requiring the main repository's old commits in the isolated fixture.
+        runner = self.root / "scripts/test-ui.sh"
+        text = "".join(line for line in runner.read_text().splitlines(keepends=True)
+                       if "xcodebuild-resources.sh" not in line
+                       and line != "configure_xcodebuild_resources ui\n"
+                       and "XCODEBUILD_RESOURCE_ARGS" not in line)
+        runner.write_text(text)
+        (self.root / "scripts/lib/xcodebuild-resources.sh").unlink()
+        self.git("add", "scripts")
+        self.git("commit", "-qm", "legacy runner fixture")
+        self.assertEqual(self.pipeline.lock_source_profile(self.root),
+                         "90cbfa3a0ddf8cbd59be62a6f6483251e6f0a2830df5d27ca76563a0b98552dd")
+        attempt = self.archived_lock_attempt()
+        output = b"Simulator test lock: worktree simulator test lock remained busy for 60s\n"
+        (self.store / attempt["log"]).write_bytes(output)
+        attempt["log_hash"] = hashlib.sha256(output).hexdigest()
+        self.save_lock_history([attempt])
+        self.write_lock_audit(attempt)
+        result = self.classify_lock()
+        self.assertIn("deferred (operator-attested", result.stdout, result.stderr)
+
+    def test_unknown_historical_source_is_rejected_even_if_current_source_is_reviewed(self):
+        self.prepare_lock_fixture()
+        source = self.root / "scripts/lib/simulator-test-lock.py"
+        original = source.read_bytes()
+        source.write_bytes(original + b"\n# unreviewed historical version\n")
+        self.git("add", "scripts")
+        self.git("commit", "-qm", "unreviewed historical source")
+        source.write_bytes(original)
+        attempt = self.archived_lock_attempt()
+        self.save_lock_history([attempt])
+        self.write_lock_audit(attempt)
+        self.assertIn("unreviewed simulator", self.classify_lock().stderr)
+        self.assertNotIn("lock_deferrals", self.state())
+
+    def test_later_success_retains_all_audited_history_and_checks_audit_integrity(self):
+        self.prepare_lock_fixture()
+        old_success = self.archived_lock_attempt(1)
+        old_success.update(status="success", exit_code=0)
+        deferred = self.archived_lock_attempt(2)
+        self.save_lock_history([old_success, deferred])
+        audit, _ = self.write_lock_audit(deferred)
+        self.classify_lock()
+        args = mock.Mock(id="unit", command=self.lock_command, context="fixture", scope="unit",
+                         content_only=True, timeout=1, retry_cause=None, remediation=None, retry_evidence=None)
+        child = mock.Mock(pid=999999)
+        child.wait.return_value = 0
+        # Simulate only a successful subprocess return to exercise receipt
+        # preservation; this is not claimed as a UI/test execution.
+        original_popen = subprocess.Popen
+
+        def execute(command, *positional, **keywords):
+            return child if command == self.lock_command else original_popen(command, *positional, **keywords)
+
+        with mock.patch.object(self.pipeline.subprocess, "Popen", side_effect=execute), redirect_stdout(io.StringIO()):
+            self.assertEqual(self.pipeline.run_check(self.root, self.store, args), 0)
+        self.assertEqual(self.state()["attempts"][:2], [old_success, deferred])
+        self.assertTrue((self.store / old_success["log"]).is_file())
+        self.assertTrue((self.store / deferred["log"]).is_file())
+        self.assertEqual(self.cli(*self.verify_args("check", command=self.lock_command)).returncode, 0)
+        audit.write_text(audit.read_text() + "\n")
+        self.assertNotEqual(self.cli(*self.verify_args("check", command=self.lock_command)).returncode, 0)
+
     def test_success_reuse_and_mutation(self):
         args = self.verify_args()
         self.assertEqual(self.cli(*args).returncode, 0)
@@ -103,10 +424,31 @@ class PipelineTests(unittest.TestCase):
         command = [sys.executable, "scripts/codex-pipeline.py", "run", "signal", "--context", "fixture",
                    "--scope", "unit", "--", *sleeper]
         process = subprocess.Popen(command, cwd=self.root, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        time.sleep(0.3)
-        process.send_signal(signal.SIGTERM)
-        process.communicate(timeout=5)
-        self.assertEqual(self.state("signal")["attempts"][-1]["status"], "interrupted")
+        try:
+            deadline = time.monotonic() + 5
+            while time.monotonic() < deadline:
+                try:
+                    attempt = self.state("signal")["attempts"][-1]
+                    if attempt.get("status") == "running" and attempt.get("child_pid"):
+                        break
+                except FileNotFoundError:
+                    pass
+                time.sleep(0.02)
+            else:
+                self.fail("signal check did not record a running child within 5s")
+            process.send_signal(signal.SIGTERM)
+            process.communicate(timeout=5)
+            self.assertEqual(self.state("signal")["attempts"][-1]["status"], "interrupted")
+            with self.assertRaises(ProcessLookupError):
+                os.killpg(attempt["child_pgid"], 0)
+        finally:
+            if process.poll() is None:
+                process.terminate()
+                try:
+                    process.communicate(timeout=5)
+                except subprocess.TimeoutExpired:
+                    process.kill()
+                    process.communicate(timeout=5)
 
     def test_timeout_stops_descendant(self):
         marker = self.root / "orphan.txt"

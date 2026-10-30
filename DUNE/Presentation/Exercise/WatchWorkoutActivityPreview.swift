@@ -37,6 +37,36 @@ enum WatchWorkoutActivityPreview {
         } else {
             exerciseName = "Outdoor Run"
         }
+        let activityType: WorkoutActivityType
+        if let typeIndex = arguments.firstIndex(of: "--ui-watch-live-activity-type"),
+           arguments.indices.contains(typeIndex + 1),
+           let requestedType = WorkoutActivityType(rawValue: arguments[typeIndex + 1]) {
+            activityType = requestedType
+        } else {
+            activityType = .running
+        }
+        let isStrength = activityType == .traditionalStrengthTraining
+        let workoutKind: WatchWorkoutSnapshot.WorkoutKind = isStrength ? .strength : .cardio
+        let selectedMetric = argument(after: "--ui-watch-live-activity-metric")
+            .flatMap(WorkoutLiveActivityMetric.init(rawValue:)) ?? .elapsedTime
+        let selectedStyle = argument(after: "--ui-watch-live-activity-style")
+            .flatMap(WorkoutLiveActivityStyle.init(rawValue:)) ?? .goldImpact
+        var preferences = WorkoutLiveActivityPreferences()
+        if isStrength {
+            preferences.strengthMetric = selectedMetric
+        } else {
+            preferences.cardioMetric = selectedMetric
+        }
+        preferences.style = selectedStyle
+        preferences.save()
+
+        // Explicit fixture values distinguish an actual zero from unavailable data.
+        let isMissingWeight = arguments.contains("--ui-watch-live-activity-missing-weight")
+        let supportsDistance = !arguments.contains("--ui-watch-live-activity-no-distance")
+        let distanceMeters = arguments.contains("--ui-watch-live-activity-zero-distance") ? 0.0 : 1_200.0
+        let currentSetWeightKg: Double? = isStrength && !isMissingWeight
+            ? (arguments.contains("--ui-watch-live-activity-zero-weight") ? 0.0 : 60.0)
+            : nil
         let snapshot = WatchWorkoutSnapshot(
             startedAt: now.addingTimeInterval(-73),
             updatedAt: now,
@@ -45,16 +75,24 @@ enum WatchWorkoutActivityPreview {
             phase: phase == .paused ? .paused : .running,
             heartRate: 142,
             activeCalories: 86,
-            distanceMeters: 1_200
+            distanceMeters: distanceMeters,
+            exerciseIconName: activityType.iconName,
+            workoutKind: workoutKind,
+            supportsDistance: supportsDistance,
+            currentSetWeightKg: currentSetWeightKg
         )
         guard snapshot.isValid else { return }
 
-        // Seed already-outdated content instead of relying on a scheduled system refresh.
-        let staleDate = phase == .stale ? now.addingTimeInterval(-60) : now.addingTimeInterval(300)
+        // An already-expired request may never get a system card. Start a real
+        // activity first and let its short deadline exercise the stale transition.
+        let staleDate = now.addingTimeInterval(phase == .stale ? 15 : 300)
         do {
             _ = try Activity.request(
                 attributes: WatchWorkoutAttributes(mirrorID: UUID()),
-                content: ActivityContent(state: snapshot, staleDate: staleDate),
+                content: ActivityContent(
+                    state: WatchWorkoutAttributes.ContentState(snapshot: snapshot, preferences: preferences),
+                    staleDate: staleDate
+                ),
                 pushType: nil
             )
         } catch {
@@ -64,6 +102,12 @@ enum WatchWorkoutActivityPreview {
 
     private enum PreviewPhase: String {
         case running, paused, stale
+    }
+
+    private static func argument(after flag: String) -> String? {
+        let arguments = ProcessInfo.processInfo.arguments
+        guard let index = arguments.firstIndex(of: flag), arguments.indices.contains(index + 1) else { return nil }
+        return arguments[index + 1]
     }
 }
 #endif

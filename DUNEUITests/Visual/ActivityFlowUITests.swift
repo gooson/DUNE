@@ -146,6 +146,49 @@ final class ActivityFlowUITests: SeededUITestBaseCase {
         }
     }
 
+    func testCaptureRecentWorkoutAchievements() {
+        captureRecentWorkoutAchievements(maximumText: false)
+    }
+
+    func testCaptureRecentWorkoutAchievementsMaximumText() {
+        captureRecentWorkoutAchievements(maximumText: true)
+    }
+
+    private func captureRecentWorkoutAchievements(maximumText: Bool) {
+        var configuration = launchConfiguration
+        if let style = configuration.additionalArguments.firstIndex(of: "--ui-test-style") {
+            configuration.additionalArguments[style + 1] = "dark"
+        }
+        if let languages = configuration.additionalArguments.firstIndex(of: "-AppleLanguages") {
+            configuration.additionalArguments[languages + 1] = "(en)"
+        }
+        if maximumText {
+            configuration.additionalArguments += [
+                "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+            ]
+        }
+        launchApp(with: configuration)
+        navigateToActivity()
+        XCTAssertTrue(waitForElement("activity-hero-readiness", timeout: 15).exists)
+        alignActivityCaptureHeader("activity-recent-seeall")
+
+        // The imported run earns a distance milestone and PR together. Its
+        // longer 10K label also exercises the layout used by a 5K milestone.
+        let rowID = "activity-recent-workout-mock-workout-running-tempo"
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(rowID, maxSwipes: 12),
+                      "The seeded recent run must be visible")
+        let rewardedRow = app.buttons[rowID].firstMatch
+        XCTAssertTrue(rewardedRow.waitForExistence(timeout: 10))
+        XCTAssertTrue(rewardedRow.label.contains("Achievement: 10K"),
+                      "The recent run must expose its distance achievement")
+        XCTAssertTrue(rewardedRow.label.contains("Personal record:"),
+                      "The same run must expose its personal record semantics")
+        let suffix = maximumText ? "maximum-text" : "default-text"
+        capture("A01-recent-achievements-\(suffix)")
+        captureTallCardSections(start: "activity-recent-seeall", next: "activity-section-pr",
+                                name: "A01-recent-achievements-\(suffix)")
+    }
+
     func testCaptureA01SeededFlow() {
         captureA01Flow(suffix: "")
     }

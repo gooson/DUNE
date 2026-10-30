@@ -28,7 +28,9 @@ python3 scripts/audit-agent-sessions.py --start 2026-10-04T08:55:00+00:00 --end 
 - UI runner의 전체 deadline에는 잠금·부팅·빌드·테스트·결과 정리가 포함되고 로그 무갱신 15분에도 종료된다. 같은 테스트를 raw `xcodebuild`, wrapper, 다른 로그 이름으로 중복 실행하지 않는다. `DUNE_UI_TEST_WALL_TIMEOUT`/`DUNE_UI_TEST_IDLE_TIMEOUT` 조정은 실행 전 예상 검증 범위와 근거가 있을 때만 한다.
 - 정상 결과는 종료 상태·로그 경로·보고된 테스트 수만 확인한다. 실패 시 제한된 오류 요약 → 해당 로그 구간 → 관련 소스 순서로 읽는다. 요약에서 수를 알 수 없으면 unknown이며 0건 성공으로 간주하지 않는다.
 - iOS/watch UI 실행은 `<log>.result.json`에 target, 실제 종료 코드, executed/passed/skipped/failed 수, 누락 selector, 실패 요약을 기록한다. 최초 오류와 최근의 서로 다른 오류를 제한된 길이로 보존한다. JSON의 `status`와 실행기 종료 상태를 함께 확인한다. unknown/0건/식별 가능한 passed case 없음/필수 selector 누락은 실패다. 이 결과는 명시한 선택 범위의 실행 증거이며 full 커버리지·시각적 레이아웃 인증은 아니다.
-- 개발 중 `test-ui.sh --only-testing <target/class/method>` 또는 `--smoke`로 빠르게 확인할 수 있다. 둘을 함께 주면 명시적 선택과 smoke의 합집합을 실행한다. `/run`의 최종 범위는 `.codex/skill-compat.md`의 변경 범위 기반 UI 게이트를 적용하고, 그 외는 source skill이 요구하는 범위를 유지한다. full 판정을 smoke/targeted로 대신하지 않는다. 단위 테스트의 `--ios-only`/`--watch-only`는 실제 변경 범위와 최종 요구조건에 맞게 사용한다.
+- 개발 중과 최종 검증 모두 `skill-compat.md`의 **모든 스킬의 핵심 검증과 점유 예산** 및 변경 범위 기반 UI 게이트를 적용한다. `test-ui.sh --only-testing <target/class/method>`로 변경 동작을 확인하고, 공통 흐름에도 영향이 있을 때만 `--smoke`를 합친다. 사용자 요청 full을 targeted로 대체하지 않으며, 요청하지 않은 full을 실패 게이트로 만들지 않는다. unit은 `test-unit.sh --ios-only --only-testing DUNETests/<실제Suite>`처럼 target과 selector를 명시한다. Watch 영향이 있으면 필요한 Watch selector만 추가한다.
+- 표준 실행기의 로컬 기본값은 `-jobs 2`·index store `NO`·병렬 테스트 `NO`다. build/unit/UI/capture는 한 worktree에 하나만 실행한다. build/unit도 canonical 예산에 맞는 command-deadline 또는 pipeline timeout으로 감싸고, UI는 해당 명령에 `DUNE_UI_TEST_WALL_TIMEOUT=1200`을 전달한다. 동일 앱 target의 컴파일을 포함한 테스트 성공 뒤 별도 build-only를 반복하지 않는다. CI 기본값·기존 test 선택 동작은 유지한다.
+- 화면 잠금/환경 오류가 의심되면 [UI 실행 환경 진단](ui-execution.md)을 읽는다. `host_locked=yes`는 실행 차단 조건이 아니며 Mac GUI 실패를 guest XCTest·캡처 실패로 일반화하지 않는다. 진단용 전체 테스트·별도 기기 실행을 추가하지 않고 필요한 selector에서 확인한다.
 - 실패 분류, 최대 1회 조건부 재시도, polling/범위 확장 제한은 `skill-compat.md`의 **재시도와 범위 확장 제한**을 따른다. 실패 로그는 최초 원인과 변경된 부분만 읽고 같은 전체 로그를 다시 로드하지 않는다.
 - 제스처/차트/레이아웃 관련 source 규칙의 seeded/mock 재현 의무는 유지한다. 요소 존재만으로 시각적 레이아웃 전체를 검증했다고 보고하지 않는다.
 
@@ -68,8 +70,8 @@ python3 scripts/codex-pipeline.py check parity --context 'adapter-check-v1' --sc
 여러 phase에서 같은 검증을 사용하는 작업은 `scripts/codex-pipeline.py`를 사용한다. 위 `codex-check.py`의 fingerprint/원자적 저장/hash 구현을 공유하며, 상태는 ignored `.codex-checks/pipeline/`에 저장한다. 검증 ID는 작업과 검증을 식별하는 고정 이름으로 정하고 phase 이름 변경으로 새 ID를 만들지 않는다.
 
 ```sh
-python3 scripts/codex-pipeline.py run tooling-contracts --context python-local --scope tooling --content-only -- python3 -B -m unittest discover -s scripts/tests
-python3 scripts/codex-pipeline.py check tooling-contracts --context python-local --scope tooling --content-only -- python3 -B -m unittest discover -s scripts/tests
+python3 scripts/codex-pipeline.py run tooling-contracts --context python-local --scope tooling --content-only --timeout 120 -- python3 -B -m unittest scripts.tests.test_unit_test_runner
+python3 scripts/codex-pipeline.py check tooling-contracts --context python-local --scope tooling --content-only -- python3 -B -m unittest scripts.tests.test_unit_test_runner
 python3 scripts/codex-pipeline.py phase Work/tooling-contracts passed --evidence tooling-contracts
 python3 scripts/codex-pipeline.py doc remember .codex/skill-compat.md
 python3 scripts/codex-pipeline.py doc check .codex/skill-compat.md
@@ -85,6 +87,73 @@ python3 scripts/codex-pipeline.py report
 - `phase <이름> skipped --reason <근거>`는 정당한 면제 기록에만 사용한다. `report`/`status`에서 stale 증거는 재사용 불가다. 외부 상태·ignored 파일은 context와 별도 확인이 필요하다.
 - fingerprint는 안전을 위해 worktree 전체를 포함한다. `--scope`는 설명/일치 조건이며 의존성 추론이나 부분 hash 옵션이 아니다. 문서만 추가해도 기존 증거는 stale이 된다. 리뷰의 영향 밖 변경이라면 기존 findings와 이후 diff를 사람이/agent가 재확인한 근거 파일을 작성하고 해당 관점의 review 기록을 새로 등록한다. 이 절차는 기존 검토를 다시 전부 수행하라는 뜻이 아니며, 오래된 자동 테스트 receipt를 임의로 갱신하는 데 사용하지 않는다.
 - 문서를 실제 읽은 뒤 `doc remember`로 hash를 기록한다. `doc check`는 변경 유무만 확인하며 원문 이해를 증명하지 않는다. 내용이 컨텍스트에서 사라졌다면 다시 읽는다. 별도의 원문 복제본이나 자동 축약본을 source of truth로 만들지 않는다.
+
+## 실행 전 lock 대기의 명시적 감사
+
+`defer-lock`은 자동 로그 분류기가 아니다. legacy receipt는 당시 실행 소스·PATH·shell startup hook·Python import 환경을 보존하지 않았다. 실행 기록과 당시 clean source 확인을 검토한 담당자가 다음 JSON을 ignored 경로에 작성한다. 소스와 환경의 연결은 **operator attestation**이며 암호학적 런타임 증명이 아니다. 동일 사용자가 store·감사·코드를 함께 위조하는 공격을 막는 인증 시스템도 아니다.
+
+```json
+{
+  "schema_version": 1,
+  "check_id": "existing-ui-check",
+  "worktree": "/absolute/current/worktree",
+  "attempt_log": "check-<id hash>-<attempt uuid>.log",
+  "attempt_hash": "<SHA256 of json.dumps(attempt, sort_keys=True, separators=(comma, colon))>",
+  "source_revision": "<full 40-character executed source commit>",
+  "provenance": {
+    "kind": "operator-attested",
+    "reviewer": "<reviewing operator/agent>",
+    "source": "<how the executed clean runner and all sourced pre-lock helpers were established>",
+    "environment": "<how direct invocation, trusted PATH/Python/shell, absent injected startup hooks and pre-start lock failure were established>"
+  },
+  "evidence": [
+    {"file": ".codex-checks/lock-audit/provenance.md", "hash": "<file SHA256>"}
+  ]
+}
+```
+
+복구 대상 worktree의 루트에서 다음 읽기 전용 예시로 receipt 경로와 **마지막 시도**를 확인한다. `existing-ui-check`는 기존 ID로 바꾸며 새 ID를 만들지 않는다. 다른 시도를 감사하려면 그 시도의 로그를 명시적으로 선택하고 원본을 따로 확인한다.
+
+```bash
+python3 -B - <<'AUDIT_FIELDS'
+import hashlib, json
+from pathlib import Path
+check_id = "existing-ui-check"
+root = Path.cwd().resolve()
+key = hashlib.sha256(check_id.encode()).hexdigest()[:24]
+receipt = root / ".codex-checks/pipeline" / f"check-{key}.json"
+record = json.loads(receipt.read_text())
+assert record["id"] == check_id and record["worktree"] == str(root)
+attempt = record["attempts"][-1]
+print(json.dumps({
+    "receipt": str(receipt), "check_id": check_id, "worktree": str(root),
+    "attempt_log": attempt["log"],
+    "attempt_hash": hashlib.sha256(json.dumps(
+        attempt, sort_keys=True, separators=(",", ":")
+    ).encode()).hexdigest(),
+    "inspect_before_audit": {name: attempt.get(name) for name in
+        ("status", "exit_code", "command", "context", "before", "after")}
+}, ensure_ascii=False, indent=2))
+AUDIT_FIELDS
+shasum -a 256 .codex-checks/lock-audit/provenance.md
+```
+
+마지막 `shasum`은 담당자가 먼저 작성한 출처·환경 근거 파일의 hash를 제공한다. 위 출력은 감사 승인이나 실행 시작 증거가 아니다. `source_revision`은 당시 실행한 소스를 보존한 기록에서 확인한다. `git rev-parse HEAD`를 사용할 수 있는 경우는 **현재 HEAD가 검토한 당시 실행 소스와 같은 경우뿐**이며, 도구 적용 후의 새 HEAD를 과거 실행 소스로 대입하지 않는다.
+
+- `attempt_hash`는 Python `hashlib.sha256(json.dumps(attempt, sort_keys=True, separators=(",", ":")).encode()).hexdigest()`다. 원본 record의 해당 attempt 전체를 사용한다. 감사 근거에는 실제 검토한 호출·환경·당시 소스와 exact 로그 판정을 남긴다. 확인하지 않은 항목에 단순히 “verified”를 넣지 않는다. 별도 근거 파일을 최소 한 개 연결한다.
+- 허용되는 소스 묶음은 `a9d4cecc`와 `9a21f364`에서 검토한 `scripts/test-ui.sh`, sourced shell helpers, command deadline, simulator lock helper의 내용/mode다. 전체 source closure의 digest를 코드에 고정한다. historical revision과 현재 파일 모두 허용된 closure여야 한다. 새 runner 버전은 별도 검토 전까지 보수적으로 거부한다.
+- 직접 `scripts/test-ui.sh` argv만 허용한다. shell/env wrapper, dry-run/cleanup, 다른 runner는 제외한다. exit 2와 동일한 before/after 및 content fingerprint, 정확히 한 줄인 `Simulator test lock: repository|worktree simulator test lock remained busy for <seconds>s` 출력과 원본 hash를 함께 확인한다. 추가 출력, timeout/unknown exit, 누락·변조·symlink 로그나 source는 거부한다.
+
+```sh
+python3 scripts/codex-pipeline.py defer-lock existing-ui-check --audit-file .codex-checks/lock-audit/audit.json
+python3 scripts/codex-pipeline.py status existing-ui-check
+```
+
+`defer-lock`의 **exit 1은 의도된 non-success**다. 출력에 `deferred (operator-attested; not test success)`가 있고 status에 `deferred`, `original_status: failed`, `test_success: false`가 있어야 분류가 저장된 것이다. 이 명령 뒤에 테스트를 셸 체인으로 자동 실행하지 않는다. `check`와 `phase passed`는 계속 거부한다.
+
+원본 attempt와 로그는 분류 전후 그대로 유지한다. 부가 감사 파일·근거·attempt·log·source closure를 이후 run/status/check에서 다시 검증하고 변경되면 재사용/실행을 차단한다. 감사 이력이 있는 check는 후속 성공 때도 기존 성공 로그와 메타데이터를 정리하지 않는다. 감사 전 역사 기록을 보존하기 위해서다.
+
+실제 실패가 없는 deferred-only 이력은 입력을 바꾸지 않고 다음 필요한 실행을 할 수 있다. 실제 실패가 남아 있으면 마지막 **실제 실패**를 기준으로 기존 `--retry-cause`, `--remediation`, `--retry-evidence`와 내용/context 변화를 요구한다. deferred 시도보다 이전 실패에 대한 원인 해소가 유효한지 실행자가 다시 확인한다. 실제 실패 두 번이면 중단한다. 분류된 ID의 다음 실행은 같은 표준 runner 직접 호출이며 lock을 정상적으로 다시 획득해야 한다. 잠금 해제 확인 없이 반복 재시도하지 않는다.
 
 ## 절감 효과 확인
 
