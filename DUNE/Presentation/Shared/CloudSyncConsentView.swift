@@ -140,13 +140,20 @@ private struct InfoRow: View {
     let description: LocalizedStringKey
     let accent: Color
     @ScaledMetric(relativeTo: .title3) private var badgeSize: CGFloat = 44
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
-        HStack(alignment: .top, spacing: DS.Spacing.lg) {
+        let usesVerticalLayout = dynamicTypeSize.isAccessibilitySize
+        let layout = usesVerticalLayout
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.md))
+            : AnyLayout(HStackLayout(alignment: .top, spacing: DS.Spacing.lg))
+        let resolvedBadgeSize = usesVerticalLayout ? min(badgeSize, 64) : badgeSize
+
+        layout {
             Image(systemName: icon)
-                .font(.title3)
+                .font(usesVerticalLayout ? .system(size: 32) : .title3)
                 .foregroundStyle(accent)
-                .frame(width: badgeSize, height: badgeSize)
+                .frame(width: resolvedBadgeSize, height: resolvedBadgeSize)
                 .background(accent.opacity(0.13), in: RoundedRectangle(cornerRadius: DS.Radius.md))
                 .accessibilityHidden(true)
 
@@ -159,7 +166,9 @@ private struct InfoRow: View {
                     .fixedSize(horizontal: false, vertical: true)
             }
 
-            Spacer(minLength: 0)
+            if !usesVerticalLayout {
+                Spacer(minLength: 0)
+            }
         }
         .padding(DS.Spacing.lg)
         .frame(maxWidth: .infinity, alignment: .leading)

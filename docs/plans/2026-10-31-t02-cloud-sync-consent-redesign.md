@@ -98,3 +98,7 @@ related_brainstorms: []
 
 - **Overall**: High
 - **Reasoning**: 기존 시트 구조와 deterministic UI hook이 있으며 서비스 로직은 건드리지 않는다.
+
+## Fresh maximum-text visual review
+
+The e7167f3f maximum-accessibility test passed after its gesture was moved above the pinned footer. Native inspection then found a separate presentation problem: the scaled leading icon narrowed the explanation to frequent one-word lines. At accessibility sizes only, InfoRow now uses a vertical icon/text layout, caps decorative badge size at64pt, and leaves text at the user's system size. Normal layout, original symbols, copy, callbacks and footer remain unchanged. Re-run only the existing maximum-text method and inspect its fresh information capture. This is a new visual finding; the resolved gesture failure and all original receipts stay preserved.
