@@ -14,6 +14,21 @@ struct WatchWorkoutSnapshot: Codable, Hashable, Sendable {
     var heartRate: Double?
     var activeCalories: Double
     var distanceMeters: Double
+    /// Canonical WorkoutActivityType.iconName from the producer; absent on older Watch versions.
+    var exerciseIconName: String? = nil
+
+    func phaseIconName(isStale: Bool) -> String {
+        if isStale { return "wifi.slash" }
+        switch phase {
+        case .running:
+            guard let exerciseIconName,
+                  !exerciseIconName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+                  exerciseIconName.count <= 100 else { return "figure" }
+            return exerciseIconName
+        case .paused: return "pause.fill"
+        case .ended: return "checkmark"
+        }
+    }
 
     var isValid: Bool {
         startedAt.timeIntervalSince1970.isFinite

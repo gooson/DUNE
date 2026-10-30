@@ -121,7 +121,6 @@ private struct WatchWorkoutHeader: View {
                 .font(compact ? .subheadline : .body)
                 .foregroundStyle(isIsland ? .white : WorkoutPalette.accent)
                 .frame(width: compact ? 18 : 22)
-                .accessibilityHidden(true)
 
             VStack(alignment: .leading, spacing: 1) {
                 Text(state.exerciseName)
@@ -161,15 +160,12 @@ private struct WatchWorkoutPhaseIcon: View {
     var body: some View {
         Image(systemName: symbol)
             .accessibilityLabel(accessibilityLabel)
+            .accessibilityIdentifier("watch-workout-icon-\(symbol)")
+            .privacySensitive()
     }
 
     private var symbol: String {
-        if isStale { return "wifi.slash" }
-        return switch state.phase {
-        case .running: "figure"
-        case .paused: "pause.fill"
-        case .ended: "checkmark"
-        }
+        state.phaseIconName(isStale: isStale)
     }
 
     private var accessibilityLabel: Text {
@@ -365,7 +361,8 @@ private extension WatchWorkoutSnapshot {
     static var previewRunning: Self {
         Self(startedAt: .now.addingTimeInterval(-1_373), updatedAt: .now,
              exerciseName: "Outdoor Run", elapsedSeconds: 1_373, phase: .running,
-             heartRate: 142, activeCalories: 186, distanceMeters: 4_200)
+             heartRate: 142, activeCalories: 186, distanceMeters: 4_200,
+             exerciseIconName: "figure.run")
     }
 
     static var previewPaused: Self {
