@@ -168,7 +168,7 @@
     "status": "awaiting_capture",
     "source_revision": "0cbde618",
     "new_captures": 0,
-    "reason": "Disk shortage initially; after space recovery, standard system UI runner exited 2 because repository simulator lock remained busy for 60s. No tests executed.",
+    "reason": "Initial repository simulator lock timeout (60s, exit 2); after owner exit and lock recovery, single retry ended BUILD INTERRUPTED. No final result receipt and no XCTest case start markers. UI gate not passed.",
     "owned_iphone_udid": "9905027B-0A4A-4A45-84D0-98431BE94BAC",
     "unverified": [
       "iphone_notification_running",
@@ -185,6 +185,11 @@
       "duo_open",
       "paired_device_mirroring_recovery"
     ],
-    "prior_pngs_are_current_evidence": false
+    "prior_pngs_are_current_evidence": false,
+    "pr": "https://github.com/gooson/DUNE/pull/864",
+    "merge_status": "draft_not_merged",
+    "observed_test_case_start_markers": 0,
+    "executed": "unknown: no final result receipt",
+    "runner_exit": null
   }
 }
