@@ -62,3 +62,7 @@ Implement the scene in the existing view file to avoid project regeneration. Use
 
 - Hero contrast and AX clipping: verify native screenshots and adjust scrim/height.
 - Canvas compositing cost: fixed geometry, at most 12 frames per second while visible and active; inspect scroll performance only if there is a symptom.
+
+## Final native validation
+
+Three focused phone methods passed atae9ef78e; iPad and Duo folded0°/unfolded180° normal entries passed ata52ddbeb after a test-only top-tab viewport correction. All four new actual T08 images and original matched images are preserved in the native comparison and actual map. Independent final quality gate returned PASS WITH NOTES and no open P1–P3. Live WeatherKit accuracy and sustained animation/energy are outside the static mock evidence. No production calculation changed, so no new unit suite or full local regression was required.

@@ -270,12 +270,18 @@
     "T08": {
       "row_id": "T08",
       "evidence": "weather-detail-screen",
-      "test": "TodaySettingsRegressionTests/testWeatherCardOpensWeatherDetail()",
-      "action": "tap 21°C",
-      "timestamp": 1791817940.251,
-      "image": "A3129246-1088-484C-8360-69B0F6D7EF7F.png",
-      "screen": "screen-0-1320x2868-tap 21°C_0_948ECFDB-64BB-4BDA-9CEC-E5B77CD313B5.png",
-      "file": "T08.png"
+      "test": "DUNEUITests/TodaySettingsRegressionTests/testWeatherCardOpensWeatherDetail",
+      "action": "screen-0-1320x2868-before teardown -[TodaySettingsRegressionTests testWeatherCardOpensWeatherDetail]_0_32B4EAEB-3D41-441D-8F02-12CF47D1BC0A.png",
+      "timestamp": 1793387843.805,
+      "timestamp_kind": "XCTest attachment capture timestamp",
+      "image": "01E64EDA-D276-4A4C-B918-62279E0C9DF5.png",
+      "screen": "01E64EDA-D276-4A4C-B918-62279E0C9DF5.png",
+      "file": "T08.png",
+      "source_revision": "ae9ef78e",
+      "source_worktree_dirty": false,
+      "device_udid": "D570FA5C-1FAF-442E-9294-DE9CB733BA2F",
+      "sha256": "6d14c3c0beeabf83e8696991222134a7bb9936ddd320dd02cac41f192bf8f0c8",
+      "source_json": "../../../full-redesign-map/review/weather-detail-2026-10-31/evidence.json"
     },
     "A07": {
       "row_id": "A07",
@@ -1158,9 +1164,9 @@
   },
   "unmatched": [],
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
-  "last_refresh_revision": "5ef25439",
+  "last_refresh_revision": "ae9ef78e",
   "last_refresh_screens": [
-    "S01"
+    "T08"
   ],
-  "last_refresh_note": "Live Activity 선택 설정의 새 실제 화면. 다른 화면 출처는 각 항목을 따른다."
+  "last_refresh_note": "T08 native redesign only; all unrelated records and original global provenance preserved."
 }
