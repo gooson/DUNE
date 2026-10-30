@@ -826,6 +826,13 @@ final class CloudSyncConsentRegressionTests: UITestBaseCase {
         XCTAssertTrue(app.staticTexts["Private storage"].exists, "Privacy explanation should be visible")
         XCTAssertTrue(app.staticTexts["Across devices"].exists, "Sync explanation should be visible")
         XCTAssertTrue(app.staticTexts["Use without iCloud"].exists, "Local option should be visible")
+        for identifier in [AXID.cloudSyncConsentEnable, AXID.cloudSyncConsentLocalOnly] {
+            let choice = app.buttons[identifier].firstMatch
+            XCTAssertTrue(choice.waitForExistence(timeout: 5))
+            XCTAssertGreaterThanOrEqual(choice.frame.height, 44,
+                                        "Each choice needs a 44-point minimum touch target")
+            XCTAssertTrue(choice.isHittable)
+        }
         VisualAudit.capture("Cloud sync consent before dismissal")
 
         let button = app.buttons[AXID.cloudSyncConsentLocalOnly].firstMatch
