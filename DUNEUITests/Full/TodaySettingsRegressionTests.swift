@@ -595,6 +595,54 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         captureTodayAuditScroll("Today cumulative stress")
     }
 
+    func testMorningBriefingSectionsAndDismissal() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-lastBriefingDate", "1900-01-01", "-morningBriefingDisabled", "NO"
+        ]
+        launchApp(with: configuration)
+
+        let briefing = app.descendants(matching: .any)[AXID.dashboardMorningBriefingScreen].firstMatch
+        XCTAssertTrue(briefing.waitForExistence(timeout: 8), "Seeded Today should present the briefing")
+        XCTAssertTrue(app.descendants(matching: .any)["dashboard-morning-briefing-hero"].firstMatch.exists)
+        XCTAssertTrue(app.descendants(matching: .any)["dashboard-morning-briefing-recovery"].firstMatch.exists)
+        XCTAssertTrue(app.descendants(matching: .any)["dashboard-morning-briefing-guide"].firstMatch.exists)
+        let weekly = app.descendants(matching: .any)["dashboard-morning-briefing-weekly"].firstMatch
+        XCTAssertTrue(weekly.exists)
+        XCTAssertTrue(app.descendants(matching: .any)["dashboard-morning-briefing-weather"].firstMatch.exists,
+                      "The default seeded weather snapshot should include the optional card")
+        app.scrollViews.firstMatch.swipeUp()
+        XCTAssertTrue(weekly.isHittable, "The weekly context should remain readable after scrolling")
+        XCTAssertTrue(app.waitAndTap(AXID.dashboardMorningBriefingDismiss))
+        expectation(for: NSPredicate(format: "exists == false"), evaluatedWith: briefing)
+        waitForExpectations(timeout: 3)
+    }
+
+    func testMorningBriefingAtDarkMaximumAccessibilitySize() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "--ui-test-theme", "desertWarm", "--ui-test-style", "dark",
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL",
+            "-lastBriefingDate", "1900-01-01", "-morningBriefingDisabled", "NO"
+        ]
+        launchApp(with: configuration)
+
+        let briefing = app.descendants(matching: .any)[AXID.dashboardMorningBriefingScreen].firstMatch
+        XCTAssertTrue(briefing.waitForExistence(timeout: 8))
+        let hero = app.descendants(matching: .any)["dashboard-morning-briefing-hero"].firstMatch
+        let recovery = app.descendants(matching: .any)["dashboard-morning-briefing-recovery"].firstMatch
+        XCTAssertTrue(hero.exists)
+        XCTAssertTrue(recovery.exists)
+        let heading = app.descendants(matching: .any)["dashboard-morning-briefing-heading"].firstMatch
+        let recoveryTitle = app.descendants(matching: .any)["dashboard-morning-briefing-recovery-title"].firstMatch
+        XCTAssertFalse(heading.label.isEmpty)
+        XCTAssertFalse(recoveryTitle.label.isEmpty)
+        let window = app.windows.firstMatch.frame
+        XCTAssertGreaterThanOrEqual(recovery.frame.minX, window.minX - 2)
+        XCTAssertLessThanOrEqual(recovery.frame.maxX, window.maxX + 2)
+        XCTAssertTrue(app.waitAndTap(AXID.dashboardMorningBriefingDismiss))
+    }
+
     func testVisualAuditMorningBriefing() throws {
         guard VisualAudit.isEnabled else { throw XCTSkip("Opt-in visual audit only") }
         // Reset only this scenario's presentation gate. At night the manual
