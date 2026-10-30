@@ -136,6 +136,36 @@ class StringCatalogFormattingTests(unittest.TestCase):
                         self.assertEqual(copy.read_bytes(), original,
                                          "Xcode sync rewrote the catalog")
 
+    @unittest.skipUnless(shutil.which("xcrun"), "Xcode tools required")
+    def test_health_query_extraction_does_not_add_unmanaged_keys(self):
+        # Captured from the user's Xcode build. Existing %lld and single-%
+        # entries do not cover %@ and escaped-percent extraction variants.
+        keys = ["/100", "× %@", "Relative change: %@%%",
+                "Showing the latest 50 of %@ sources."]
+        original = CATALOGS[0].read_bytes()
+        strings = json.loads(original)["strings"]
+        for key in keys:
+            with self.subTest(key=key):
+                self.assertEqual(strings.get(key, {}).get("extractionState"), "manual")
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            directory = Path(temporary_directory)
+            catalog = directory / "Localizable.xcstrings"
+            catalog.write_bytes(original)
+            extracted = directory / "HealthQueryResultCard.stringsdata"
+            extracted.write_text(json.dumps({
+                "source": "HealthQueryResultCard.swift",
+                "tables": {"Localizable": [{"key": key, "comment": ""} for key in keys]},
+                "version": 1,
+            }), encoding="utf-8")
+            result = subprocess.run(
+                ["xcrun", "xcstringstool", "sync", str(catalog),
+                 "--stringsdata", str(extracted)],
+                capture_output=True, text=True, check=False,
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertEqual(catalog.read_bytes(), original,
+                             "Health query extraction changed the catalog")
+
     def test_formats_and_checks_without_changing_catalog_values(self):
         with tempfile.TemporaryDirectory() as temporary_directory:
             catalog = Path(temporary_directory) / "Localizable.xcstrings"
