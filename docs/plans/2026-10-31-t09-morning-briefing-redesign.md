@@ -90,3 +90,7 @@ UI 캡처에 필요하면 기존 opt-in `TodaySettingsRegressionTests/testVisual
 부모가 전달한 예비 source review는 2개 agent의 5개 관점과 SwiftUI·Apple UX·성능 확인을 포함했다. 이 과정의 P2 두 건(주간 막대/날씨 장식의 데이터 오인, 접근성 제목 부재)을 소스에서 수정했다. 이는 최종 reviewer 판정이나 네이티브 실행 통과가 아니다.
 
 **Confidence: medium.** 데이터 경계와 정적 구문·맵 동기화는 확인했다. 타입 검사, 대상 UI 실행, iPad/Duo 실제 화면과 새 캡처는 남아 있다.
+
+## Fresh maximum-text visual finding
+
+The normal and dark maximum-text methods passed at306f352c. Native PNG3E96011B-78D7-4941-996A-DD14F87E9EFF then showed the scaled leading icon narrowing long briefing prose. Resolve this distinct visual finding with an accessibility-only vertical original-symbol/text layout and32pt decorative symbol. Keep normal HStack/artwork, full original text, header traits and callbacks. Recheck only the existing dark maximum-text method and inspect a fresh image; retain both original successful receipts with their actual source.
