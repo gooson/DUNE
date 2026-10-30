@@ -13,6 +13,19 @@ struct HealthQueryServiceTests {
                            configurations: ModelConfiguration(isStoredInMemoryOnly: true))
     }
 
+    @Test("A natural latest-workout question finds the same older record as the typed query")
+    func latestQuestionUsesCanonicalHistoryWindow() async throws {
+        let clock = now
+        let oldWorkout = WorkoutSummary(id: "older-record", type: "Running", activityType: .running,
+            duration: 600, calories: 100, distance: 1_000, date: now.addingTimeInterval(-45 * 86_400))
+        let service = HealthQueryService(container: try store(), workoutService: QueryWorkoutStub(records: [oldWorkout]), nowProvider: { clock })
+        let request = try #require(HealthQueryAssistant.fallbackRequest("최근 운동", now: now))
+        let natural = try await service.execute(request)
+        let typed = try await service.execute(HealthQueryRequest(kind: .latestWorkout))
+        #expect(natural.records.map(\.id) == typed.records.map(\.id))
+        #expect(natural.records.first?.healthKitWorkoutID == "older-record")
+    }
+
     @Test("A locked device returns no health data and does not start HealthKit queries")
     func lockedBeforeRead() async throws {
         let probe = QueryAccessProbe()

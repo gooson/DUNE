@@ -82,7 +82,7 @@ actor HealthQueryAssistant: HealthQueryAssisting {
         Only reuse supplied context IDs if the user explicitly refers to that workout/exercise.
         Never invent IDs. Use empty strings for absent IDs, comparison period, or search text.
         Set period to context only when referring to the supplied context's period.
-        Default to last30Days for latest records and today for condition.
+        Default to last365Days for latest records, matching the typed health-query service, and today for condition.
         Sleep is attributed to the waking day: last night's sleep uses today, not yesterday.
         Use yesterday only when the person explicitly asks for the previous calendar day's sleep records.
         Context kind: \(context?.kind.rawValue ?? "none"); workout ID: \(context?.workoutID ?? "none");
@@ -145,9 +145,9 @@ actor HealthQueryAssistant: HealthQueryAssisting {
         let period: HealthQueryPeriod
         switch question.lowercased() {
         case "latest workout", "최근 운동", "最近のワークアウト":
-            kind = .latestWorkout; period = .last30Days
+            kind = .latestWorkout; period = .last365Days
         case "latest body measurements", "최근 신체 기록", "最近の身体測定":
-            kind = .latestBody; period = .last30Days
+            kind = .latestBody; period = .last365Days
         case "today's condition", "오늘 컨디션", "今日のコンディション":
             kind = .condition; period = .today
         case "last night's sleep", "어젯밤 수면", "昨夜の睡眠":
