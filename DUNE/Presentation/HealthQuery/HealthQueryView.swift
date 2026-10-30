@@ -3,6 +3,7 @@ import UIKit
 
 struct HealthQueryView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var model: HealthQueryViewModel
     private let queryService: any HealthQuerying
     @State private var kind: HealthQueryKind
@@ -34,23 +35,88 @@ struct HealthQueryView: View {
                     .font(.subheadline)
                     .foregroundStyle(DS.Color.textSecondary)
                     .accessibilityIdentifier("health-query-screen")
-                Picker("Information", selection: $kind) {
-                    ForEach(HealthQueryKind.allCases, id: \.self) { item in
-                        Text(item.displayName).tag(item)
+                if dynamicTypeSize.isAccessibilitySize {
+                    Menu {
+                        ForEach(HealthQueryKind.allCases, id: \.self) { item in
+                            Button {
+                                kind = item
+                            } label: {
+                                if kind == item {
+                                    Label {
+                                        Text(item.displayName)
+                                    } icon: {
+                                        Image(systemName: "checkmark")
+                                    }
+                                } else {
+                                    Text(item.displayName)
+                                }
+                            }
                             .accessibilityIdentifier("health-query-kind-\(item.rawValue)")
+                            .accessibilityAddTraits(kind == item ? .isSelected : [])
+                        }
+                    } label: {
+                        accessibilitySelectorLabel(title: "Information", value: kind.displayName)
                     }
+                    .accessibilityLabel("Information")
+                    .accessibilityValue(kind.displayName)
+                    .accessibilityIdentifier("health-query-kind")
+                } else {
+                    Picker("Information", selection: $kind) {
+                        ForEach(HealthQueryKind.allCases, id: \.self) { item in
+                            Text(item.displayName).tag(item)
+                                .accessibilityIdentifier("health-query-kind-\(item.rawValue)")
+                        }
+                    }
+                    .pickerStyle(.menu)
+                    .accessibilityIdentifier("health-query-kind")
                 }
-                .pickerStyle(.menu)
-                .accessibilityIdentifier("health-query-kind")
-                Picker("Period", selection: $period) {
-                    if period == nil { Text("Custom period").tag(nil as HealthQueryPeriod?) }
-                    ForEach(HealthQueryPeriod.allCases, id: \.self) { item in
-                        Text(item.displayName).tag(item as HealthQueryPeriod?)
+                if dynamicTypeSize.isAccessibilitySize {
+                    Menu {
+                        if period == nil {
+                            Button {
+                                period = nil
+                            } label: {
+                                Label("Custom period", systemImage: "checkmark")
+                            }
+                            .accessibilityAddTraits(.isSelected)
+                        }
+                        ForEach(HealthQueryPeriod.allCases, id: \.self) { item in
+                            Button {
+                                period = item
+                            } label: {
+                                if period == item {
+                                    Label {
+                                        Text(item.displayName)
+                                    } icon: {
+                                        Image(systemName: "checkmark")
+                                    }
+                                } else {
+                                    Text(item.displayName)
+                                }
+                            }
                             .accessibilityIdentifier("health-query-period-\(item.rawValue)")
+                            .accessibilityAddTraits(period == item ? .isSelected : [])
+                        }
+                    } label: {
+                        accessibilitySelectorLabel(
+                            title: "Period",
+                            value: period?.displayName ?? String(localized: "Custom period")
+                        )
                     }
+                    .accessibilityLabel("Period")
+                    .accessibilityValue(period?.displayName ?? String(localized: "Custom period"))
+                    .accessibilityIdentifier("health-query-period")
+                } else {
+                    Picker("Period", selection: $period) {
+                        if period == nil { Text("Custom period").tag(nil as HealthQueryPeriod?) }
+                        ForEach(HealthQueryPeriod.allCases, id: \.self) { item in
+                            Text(item.displayName).tag(item as HealthQueryPeriod?)
+                                .accessibilityIdentifier("health-query-period-\(item.rawValue)")
+                        }
+                    }
+                    .pickerStyle(.menu)
+                    .accessibilityIdentifier("health-query-period")
                 }
-                .pickerStyle(.menu)
-                .accessibilityIdentifier("health-query-period")
                 if kind == .memoSearch {
                     HStack {
                         TextField("Search workout notes", text: $searchText)
@@ -150,6 +216,27 @@ struct HealthQueryView: View {
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.protectedDataDidBecomeAvailableNotification)) { _ in
             if case .loaded(let result) = model.state, result.status == .locked { load() }
         }
+    }
+
+    private func accessibilitySelectorLabel(title: LocalizedStringKey, value: String) -> some View {
+        HStack(alignment: .center, spacing: DS.Spacing.sm) {
+            VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                Text(title)
+                    .font(.subheadline)
+                    .foregroundStyle(DS.Color.textSecondary)
+                Text(value)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            Image(systemName: "chevron.up.chevron.down")
+                .font(.caption)
+                .foregroundStyle(DS.Color.textSecondary)
+                .accessibilityHidden(true)
+        }
+        .padding(DS.Spacing.md)
+        .frame(maxWidth: .infinity, minHeight: 44)
+        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+        .contentShape(RoundedRectangle(cornerRadius: DS.Radius.md))
     }
 
     private func load() {

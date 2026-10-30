@@ -167,6 +167,12 @@ final class HealthQuerySmokeTests: SeededUITestBaseCase {
         for (kind, captureName) in [("latestBody", "SQ06-accessibility-body"),
                                      ("latestWorkout", "SQ01-accessibility-duration")] {
             selectKind(kind)
+            XCTAssertTrue(element("health-query-result-kind-\(kind)").waitForExistence(timeout: 8))
+            XCTAssertTrue(element("health-query-kind").isHittable)
+            capture(captureName + "-selector")
+            selectPeriod("last30Days")
+            XCTAssertTrue(element("health-query-result-kind-\(kind)").waitForExistence(timeout: 8))
+            capture(captureName + "-period")
             let value = element("health-query-hero-value")
             XCTAssertTrue(value.waitForExistence(timeout: 5))
             let scroll = app.scrollViews.containing(
