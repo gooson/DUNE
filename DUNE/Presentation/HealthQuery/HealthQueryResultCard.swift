@@ -4,13 +4,16 @@ import SwiftUI
 struct HealthQueryResultCard: View {
     let result: HealthQueryResult
     let queryService: any HealthQuerying
+    let searchText: String?
     @State private var showingSpeech = false
     @State private var showingReportPreview = false
     @ScaledMetric(relativeTo: .largeTitle) private var heroFontSize = 56
 
-    init(result: HealthQueryResult, queryService: any HealthQuerying = HealthQueryService.shared) {
+    init(result: HealthQueryResult, queryService: any HealthQuerying = HealthQueryService.shared,
+         searchText: String? = nil) {
         self.result = result
         self.queryService = queryService
+        self.searchText = searchText
     }
 
     var body: some View {
@@ -27,7 +30,9 @@ struct HealthQueryResultCard: View {
             } else if result.status == .noData {
                 Label("No records found for this period.", systemImage: "tray")
                     .accessibilityIdentifier("health-query-no-data")
-            } else if result.status == .unavailable || result.status == .invalidRequest {
+            } else if result.status == .invalidRequest {
+                Label("This request needs changes.", systemImage: "exclamationmark.circle")
+            } else if result.status == .unavailable {
                 Label("This information is unavailable.", systemImage: "exclamationmark.circle")
             } else {
                 availableContent
@@ -40,13 +45,13 @@ struct HealthQueryResultCard: View {
 
     private var availableContent: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.md) {
-            kindVisual
             if [.latestWorkout, .strengthSets, .personalRecord, .cardioDetail].contains(result.kind),
                let record = result.records.first {
                 Text(record.name).font(.title3.bold())
                 Text(record.date.formatted(date: .abbreviated, time: .shortened))
                     .font(.subheadline).foregroundStyle(DS.Color.textSecondary)
             }
+            kindVisual
             if !usesKindVisualForPrimaryMetrics, let metric = heroMetric, metric.value.isFinite {
                 VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                     Text(metric.title).font(.subheadline)
@@ -77,6 +82,9 @@ struct HealthQueryResultCard: View {
                         }
                     }
                 }
+            }
+            if result.kind == .sleep, !sleepStages.isEmpty {
+                sleepStageSummary
             }
             ForEach(secondaryMetrics) { metric in
                 if metric.value.isFinite {
@@ -151,7 +159,14 @@ struct HealthQueryResultCard: View {
                             if let distance = set.distanceMeters { Text("\(distance.formatted()) m") }
                         }.font(.subheadline)
                     }
-                    if !record.memo.isEmpty { Text(record.memo).font(.body) }
+                    if !record.memo.isEmpty {
+                        if result.kind == .memoSearch, let searchText,
+                           !searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                            highlightedMemo(record.memo, searchText: searchText).font(.body)
+                        } else {
+                            Text(record.memo).font(.body)
+                        }
+                    }
                     if record.localRecordID != nil || record.healthKitWorkoutID != nil {
                         NavigationLink {
                             HealthQueryRecordDetailView(snapshot: record, queryService: queryService)
@@ -223,7 +238,7 @@ struct HealthQueryResultCard: View {
     }
 
     private var usesKindVisualForPrimaryMetrics: Bool {
-        result.kind == .condition || result.kind == .metricComparison || result.kind == .workoutComparison
+        [.condition, .metricComparison, .workoutComparison, .cardioDetail].contains(result.kind)
     }
 
     private var secondaryMetrics: [HealthQueryMetric] {
@@ -231,6 +246,8 @@ struct HealthQueryResultCard: View {
             if result.kind == .metricComparison || result.kind == .workoutComparison {
                 return metric.comparisonValue?.isFinite != true
             }
+            if result.kind == .cardioDetail, ["distance", "pace"].contains(metric.id) { return false }
+            if result.kind == .sleep, sleepStages.contains(where: { $0.id == metric.id }) { return false }
             return metric.id != heroMetric?.id
         }
     }
@@ -304,7 +321,17 @@ struct HealthQueryResultCard: View {
             Image(systemName: "scalemass.fill")
                 .font(.system(size: 40)).foregroundStyle(DS.Color.warmGlow)
                 .accessibilityHidden(true)
-        case .latestWorkout, .strengthSets, .cardioDetail:
+        case .cardioDetail:
+            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                Image(systemName: result.kind.symbolName)
+                    .font(.system(size: 44)).foregroundStyle(DS.Color.warmGlow)
+                    .accessibilityHidden(true)
+                ViewThatFits(in: .horizontal) {
+                    HStack(alignment: .top, spacing: DS.Spacing.sm) { cardioValues }
+                    VStack(alignment: .leading, spacing: DS.Spacing.sm) { cardioValues }
+                }
+            }
+        case .latestWorkout, .strengthSets:
             Image(systemName: result.kind.symbolName)
                 .font(.system(size: 44)).foregroundStyle(DS.Color.warmGlow)
                 .accessibilityHidden(true)
@@ -332,6 +359,83 @@ struct HealthQueryResultCard: View {
                 .font(.system(size: 40)).foregroundStyle(DS.Color.warmGlow)
                 .accessibilityHidden(true)
         }
+    }
+
+    private var sleepStages: [HealthQueryMetric] {
+        result.metrics.filter {
+            ["sleep-deep", "sleep-rem", "sleep-core"].contains($0.id) && $0.value.isFinite && $0.value > 0
+        }
+    }
+
+    private var sleepStagesTotal: Double { sleepStages.reduce(0) { $0 + $1.value } }
+
+    private var sleepStageSummary: some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+            Text("Recorded sleep stage totals").font(.headline)
+            GeometryReader { geometry in
+                HStack(spacing: DS.Spacing.xxs) {
+                    ForEach(Array(sleepStages.enumerated()), id: \.element.id) { index, stage in
+                        RoundedRectangle(cornerRadius: DS.Radius.sm)
+                            .fill(DS.Color.sleep.opacity(0.45 + Double(index) * 0.22))
+                            .frame(width: max(0, (geometry.size.width - CGFloat(sleepStages.count - 1) * DS.Spacing.xxs)
+                                * CGFloat(stage.value / sleepStagesTotal)))
+                    }
+                }
+            }
+            .frame(height: 16)
+            .accessibilityHidden(true)
+            ForEach(sleepStages) { stage in
+                ViewThatFits(in: .horizontal) {
+                    HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.sm) {
+                        Text(stage.title).fixedSize(horizontal: true, vertical: false)
+                        Spacer(minLength: 0)
+                        Text(stage.unit.displayValue(stage.value))
+                            .bold().fixedSize(horizontal: true, vertical: false)
+                    }
+                    VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                        Text(stage.title)
+                        Text(stage.unit.displayValue(stage.value)).bold()
+                    }
+                }
+                .font(.subheadline)
+            }
+        }
+    }
+
+    @ViewBuilder private var cardioValues: some View {
+        ForEach(result.metrics.filter { ["distance", "pace"].contains($0.id) && $0.value.isFinite }) { metric in
+            VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                Text(metric.title).font(.subheadline)
+                Text(metric.unit.displayValue(metric.value)).font(.title.bold())
+                    .minimumScaleFactor(0.7)
+                    .accessibilityIdentifier(metric.id == "distance" ? "health-query-hero-value" : "health-query-cardio-pace")
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(DS.Spacing.sm)
+            .background(.thinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
+        }
+    }
+
+    private func highlightedMemo(_ memo: String, searchText: String) -> Text {
+        let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        let options: String.CompareOptions = [.caseInsensitive, .diacriticInsensitive]
+        guard let firstMatch = memo.range(of: query, options: options) else { return Text(memo) }
+        let start = memo.index(firstMatch.lowerBound, offsetBy: -80, limitedBy: memo.startIndex) ?? memo.startIndex
+        let end = memo.index(firstMatch.upperBound, offsetBy: 160, limitedBy: memo.endIndex) ?? memo.endIndex
+        let excerpt = String(memo[start..<end])
+        var output = Text(start == memo.startIndex ? "" : "…")
+        var cursor = excerpt.startIndex
+        var highlightedCount = 0
+        while highlightedCount < 50,
+              let match = excerpt.range(of: query, options: options, range: cursor..<excerpt.endIndex),
+              match.upperBound > cursor {
+            output = output + Text(String(excerpt[cursor..<match.lowerBound]))
+                + Text(String(excerpt[match])).bold().foregroundColor(DS.Color.warmGlow)
+            cursor = match.upperBound
+            highlightedCount += 1
+        }
+        output = output + Text(String(excerpt[cursor...]))
+        return output + Text(end == memo.endIndex ? "" : "…")
     }
 
     private func comparisonRow(_ metric: HealthQueryMetric) -> some View {

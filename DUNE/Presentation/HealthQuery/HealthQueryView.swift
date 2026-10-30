@@ -23,7 +23,7 @@ struct HealthQueryView: View {
                     && abs(generated.end.timeIntervalSince(incoming.end)) < 60
             }
         }
-        _period = State(initialValue: request == nil ? .last30Days : selected)
+        _period = State(initialValue: request?.interval == nil ? .last30Days : selected)
         _searchText = State(initialValue: request?.searchText ?? "")
     }
 
@@ -79,10 +79,17 @@ struct HealthQueryView: View {
                     Button("Cancel analysis") { model.cancel() }
                         .accessibilityIdentifier("health-query-cancel")
                 case .loaded(let result):
-                    HealthQueryResultCard(result: result, queryService: queryService)
-                    if result.status == .unavailable || result.status == .invalidRequest {
+                    HealthQueryResultCard(result: result, queryService: queryService,
+                                          searchText: kind == .memoSearch ? request.searchText : nil)
+                    if result.status == .unavailable {
                         Button("Try again") { load() }
                             .accessibilityIdentifier("health-query-retry")
+                    }
+                    if result.status == .invalidRequest {
+                        Text(result.spokenSummary.isEmpty
+                             ? String(localized: "Check the information, period, and search words, then update your request.")
+                             : result.spokenSummary)
+                            .font(.footnote).foregroundStyle(DS.Color.textSecondary)
                     }
                     if result.status == .noData {
                         Text("Choose another period to look for records.")

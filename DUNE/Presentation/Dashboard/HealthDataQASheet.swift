@@ -184,6 +184,7 @@ struct HealthDataQASheet: View {
                     .font(.system(size: 28, weight: .semibold))
             }
             .disabled(!viewModel.canSend)
+            .accessibilityLabel("Send question")
             .accessibilityIdentifier("health-qa-send")
         }
     }
