@@ -434,14 +434,19 @@ enum SimulatorAdvancedMockDataProvider {
         if ProcessInfo.processInfo.arguments.contains("--uitesting"),
            let index = ProcessInfo.processInfo.arguments.firstIndex(of: "--ui-t06-metric"),
            ProcessInfo.processInfo.arguments.indices.contains(index + 1),
-           ProcessInfo.processInfo.arguments[index + 1] == "exercise-km" {
-            let running = WorkoutSummary(
-                id: "t06-capture-running", type: "Running", activityType: .running,
-                duration: 48 * 60, calories: 612, distance: 10_200,
+           ["exercise-km", "exercise-m"].contains(ProcessInfo.processInfo.arguments[index + 1]) {
+            let isSwimming = ProcessInfo.processInfo.arguments[index + 1] == "exercise-m"
+            let workout = WorkoutSummary(
+                id: isSwimming ? "t06-capture-swimming" : "t06-capture-running",
+                type: isSwimming ? "Swimming" : "Running",
+                activityType: isSwimming ? .swimming : .running,
+                duration: isSwimming ? 38 * 60 : 48 * 60,
+                calories: isSwimming ? 310 : 612,
+                distance: isSwimming ? 1_314 : 10_200,
                 date: Calendar.current.date(byAdding: .day, value: -1, to: referenceDate) ?? referenceDate
             )
             workouts.append(SimulatorAdvancedMockWorkout(
-                summary: running, heartRateSamples: [], heartRateRecovery: nil
+                summary: workout, heartRateSamples: [], heartRateRecovery: nil
             ))
         }
         #endif

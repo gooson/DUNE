@@ -175,6 +175,7 @@ final class MetricDetailRedesignTests: SeededUITestBaseCase {
         "sleep": .init(category: "sleep", title: "Sleep", value: "7h 54min", unit: ""),
         "exercise-min": .init(category: "exercise", title: "Exercise", value: "42", unit: "min"),
         "exercise-km": .init(category: "exercise", title: "Exercise", value: "10.2", unit: "km"),
+        "exercise-m": .init(category: "exercise", title: "Exercise", value: "1,314", unit: "m"),
         "steps": .init(category: "steps", title: "Steps", value: "8,200", unit: "steps"),
         "weight": .init(category: "weight", title: "Weight", value: "78.4", unit: "kg"),
         "bmi": .init(category: "bmi", title: "BMI", value: "24.7", unit: ""),
@@ -189,7 +190,7 @@ final class MetricDetailRedesignTests: SeededUITestBaseCase {
     ]
 
     private static let matrixOrder = [
-        "hrv", "rhr", "heartRate", "sleep", "exercise-min", "exercise-km",
+        "hrv", "rhr", "heartRate", "sleep", "exercise-min", "exercise-km", "exercise-m",
         "steps", "weight", "bmi", "bodyFat", "leanBodyMass", "spo2",
         "respiratoryRate", "vo2Max", "heartRateRecovery", "wristTemperature",
         "breathingDisturbances"

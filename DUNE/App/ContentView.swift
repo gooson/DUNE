@@ -577,7 +577,7 @@ struct ContentView: View {
 /// Capture input only. These readings are synthetic and never represent a user profile.
 private enum T06MetricCaptureFixture {
     static func make(_ key: String) -> HealthMetric? {
-        let categoryKey = key == "exercise-km" || key == "exercise-min" ? "exercise" : key
+        let categoryKey = ["exercise-km", "exercise-min", "exercise-m"].contains(key) ? "exercise" : key
         guard let category = HealthMetric.Category(rawValue: categoryKey) else { return nil }
         let value: Double? = switch key {
         case "hrv": 75.2
@@ -585,6 +585,7 @@ private enum T06MetricCaptureFixture {
         case "heartRate": 72
         case "sleep": 474
         case "exercise-km": 10.2
+        case "exercise-m": 1314
         case "exercise", "exercise-min": 42
         case "steps": 8_200
         case "weight": 78.4
@@ -600,7 +601,7 @@ private enum T06MetricCaptureFixture {
         default: nil
         }
         guard let value else { return nil }
-        let unit = key == "exercise-km" ? "km" : category.unitLabel
+        let unit = key == "exercise-km" ? "km" : (key == "exercise-m" ? "m" : category.unitLabel)
         return HealthMetric(
             id: "t06-capture-\(key)",
             name: category.displayName,
@@ -609,7 +610,7 @@ private enum T06MetricCaptureFixture {
             change: nil,
             date: Date(),
             category: category,
-            workoutTypeKey: key == "exercise-km" ? "Running" : nil
+            workoutTypeKey: key == "exercise-km" ? "Running" : (key == "exercise-m" ? "Swimming" : nil)
         )
     }
 }
