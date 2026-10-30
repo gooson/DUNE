@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-30",
+  "updated": "2026-10-31",
   "app_contract": "app-contract.md",
   "themes": [
     {
@@ -296,6 +296,17 @@
       "implementation": {
         "layout": "../layout-map/weather-detail-redesign-proposal.md",
         "status": "native-implementation-pending-runtime-validation"
+      }
+    },
+    {
+      "id": "cloud-sync-consent-t02",
+      "name": "T02 · iCloud 동기화 동의",
+      "title": "동의 시트 · 밝음/어두움",
+      "file": "dune-cloud-sync-consent-t02.html",
+      "detail": "승인된 T02 정보 순서와 기존 DUNE 팔레트·ScoreHeroPalette를 이용한 화면별 정적 표현. 새 테마·움직임은 추가하지 않으며 웹 그림은 실제 SF Symbol 또는 앱 캡처가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/cloud-sync-consent-t02.html",
+        "status": "native-source-ready-captures-pending"
       }
     }
   ]
