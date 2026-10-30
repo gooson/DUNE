@@ -156,7 +156,15 @@ final class HealthQueryService: HealthQuerying {
     }
 
     func dateText(_ date: Date) -> String {
-        date.formatted(Date.FormatStyle(date: .abbreviated, time: .shortened, locale: HealthQueryLocalization.locale))
+        date.formatted(Date.FormatStyle(date: .long, time: .shortened, locale: HealthQueryLocalization.locale))
+    }
+
+    func dateOnlyText(_ date: Date) -> String {
+        date.formatted(Date.FormatStyle(date: .long, time: .omitted, locale: HealthQueryLocalization.locale))
+    }
+
+    func periodText(_ interval: DateInterval) -> String {
+        String(localized: "From \(dateOnlyText(interval.start)) through \(dateOnlyText(interval.end.addingTimeInterval(-0.001))).", locale: HealthQueryLocalization.locale)
     }
 
     func number(_ value: Double, digits: Int = 0) -> String {

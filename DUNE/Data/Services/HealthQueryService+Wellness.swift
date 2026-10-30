@@ -156,7 +156,7 @@ extension HealthQueryService {
                           metrics: metrics,
                           series: [HealthQuerySeries(id: "sleep", title: String(localized: "Sleep", locale: HealthQueryLocalization.locale), unit: .seconds, points: points)],
                           sources: points.map { HealthQuerySource(kind: .healthKit, measuredAt: $0.date, fetchedAt: fetchedAt) },
-                          summary: String(localized: "From \(dateText(interval.start)) through \(dateText(interval.end)).", locale: HealthQueryLocalization.locale) + " " + String(localized: "Sleep totals include only nights with recorded sleep.", locale: HealthQueryLocalization.locale))
+                          summary: periodText(interval) + " " + String(localized: "Sleep totals include only nights with recorded sleep.", locale: HealthQueryLocalization.locale))
         } catch is CancellationError { throw CancellationError() }
         catch {
             return result(request.kind, status: .unavailable, interval: interval,

@@ -17,7 +17,7 @@ struct HealthQueryResultCard: View {
             Label(result.title, systemImage: result.kind.symbolName)
                 .font(.title2.bold())
                 .accessibilityIdentifier("health-query-result-kind-\(result.kind.rawValue)")
-            Text("Period: \(result.interval.start.formatted(date: .abbreviated, time: .omitted)) – \(result.interval.end.formatted(date: .abbreviated, time: .omitted))")
+            Text("Period: \(result.interval.start.formatted(date: .abbreviated, time: .omitted)) – \(result.interval.end.addingTimeInterval(-0.001).formatted(date: .abbreviated, time: .omitted))")
                 .font(.subheadline)
                 .foregroundStyle(DS.Color.textSecondary)
             if result.status == .locked {
@@ -301,7 +301,7 @@ struct HealthQueryResultCard: View {
 
     private var reportText: String {
         ([result.title, result.interval.start.formatted(date: .abbreviated, time: .omitted)
-          + " – " + result.interval.end.formatted(date: .abbreviated, time: .omitted)] + result.metrics.filter(\.value.isFinite).map {
+          + " – " + result.interval.end.addingTimeInterval(-0.001).formatted(date: .abbreviated, time: .omitted)] + result.metrics.filter(\.value.isFinite).map {
             "\($0.title): \($0.unit.formatted($0.value)) \($0.unit.displayUnit(for: $0.value))"
         } + result.limitations).joined(separator: "\n")
     }

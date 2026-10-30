@@ -21,14 +21,14 @@ extension HealthQueryService {
             var metric = metric
             if let old = priorMetrics.first(where: { $0.id == metric.id && $0.unit == metric.unit }) {
                 metric.comparisonValue = old.value
-                metric.comparisonDate = previous.end
+                metric.comparisonDate = previous.end.addingTimeInterval(-0.001)
             }
             return metric
         }
         if let current = currentSleep.metrics.first(where: { $0.id == "sleepAverage" }) {
             var sleep = current
             sleep.comparisonValue = priorSleep.metrics.first(where: { $0.id == "sleepAverage" })?.value
-            sleep.comparisonDate = sleep.comparisonValue == nil ? nil : previous.end
+            sleep.comparisonDate = sleep.comparisonValue == nil ? nil : previous.end.addingTimeInterval(-0.001)
             metrics.append(sleep)
         }
         let complete = currentWorkouts.complete && priorWorkouts.complete && currentSleep.isComplete && priorSleep.isComplete
@@ -52,7 +52,7 @@ extension HealthQueryService {
                       series: [dailySeries(currentWorkouts.records, interval: interval)] + currentSleep.series,
                       records: Array(currentWorkouts.records.prefix(request.limit)),
                       sources: sources(for: currentWorkouts.records + priorWorkouts.records) + currentSleep.sources + priorSleep.sources,
-                      summary: String(localized: "Comparing \(dateText(interval.start)) through \(dateText(interval.end)) with \(dateText(previous.start)) through \(dateText(previous.end)).", locale: HealthQueryLocalization.locale) + " " + metricSummary(metrics),
+                      summary: String(localized: "Comparing \(dateOnlyText(interval.start)) through \(dateOnlyText(interval.end.addingTimeInterval(-0.001))) with \(dateOnlyText(previous.start)) through \(dateOnlyText(previous.end.addingTimeInterval(-0.001))).", locale: HealthQueryLocalization.locale) + " " + metricSummary(metrics),
                       limitations: Array(Set(limitations)).sorted(), isComplete: complete)
     }
 
@@ -79,7 +79,7 @@ extension HealthQueryService {
         return result(request.kind, status: available ? (complete ? .available : .partial) : (complete ? .noData : .unavailable),
                       interval: interval, metrics: metrics, series: results.flatMap(\.series), records: workouts.records,
                       sources: results.flatMap(\.sources),
-                      summary: String(localized: "Recorded health information from \(dateText(interval.start)) through \(dateText(interval.end)).", locale: HealthQueryLocalization.locale) + " " + metricSummary(metrics),
+                      summary: periodText(interval) + " " + metricSummary(metrics),
                       limitations: Array(Set(results.flatMap(\.limitations) + [String(localized: "This summary uses available records and does not provide a medical diagnosis.", locale: HealthQueryLocalization.locale)])).sorted(),
                       isComplete: complete)
     }

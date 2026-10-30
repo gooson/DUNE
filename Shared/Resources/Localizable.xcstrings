@@ -425,13 +425,13 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@拍/分"
+            "value" : "1分あたり%@拍"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ 분당 박동"
+            "value" : "분당 %@회"
           }
         }
       }
@@ -10775,6 +10775,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@부터 %@까지와 %@부터 %@까지를 비교해요."
+          }
+        }
+      }
+    },
+    "Comparison date: %@." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "比較日は%@です。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "비교 기준일은 %@입니다."
           }
         }
       }
@@ -35545,6 +35562,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "기록 날짜"
+          }
+        }
+      }
+    },
+    "Record date: %@." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "記録日は%@です。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기록 날짜는 %@입니다."
           }
         }
       }

@@ -8,7 +8,7 @@ struct HealthQuerySnippetView: View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
             Label(result.title, systemImage: result.kind.symbolName)
                 .font(.headline)
-            Text("Period: \(result.interval.start.formatted(date: .abbreviated, time: .omitted)) – \(result.interval.end.formatted(date: .abbreviated, time: .omitted))")
+            Text("Period: \(result.interval.start.formatted(date: .abbreviated, time: .omitted)) – \(result.interval.end.addingTimeInterval(-0.001).formatted(date: .abbreviated, time: .omitted))")
                 .font(.caption)
                 .foregroundStyle(DS.Color.textSecondary)
             switch result.status {

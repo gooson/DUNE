@@ -69,7 +69,31 @@ struct HealthQueryLocalizationTests {
             let duration = HealthQueryMetric(id: "duration", title: "Duration", value: 3_661, unit: .seconds)
             #expect(service.formattedMetric(weight) == "75.5 킬로그램")
             #expect(service.formattedMetric(duration) == "1시간 1분 1초")
+            let heartRate = HealthQueryMetric(id: "heartRate", title: "Heart Rate", value: 63, unit: .bpm)
+            #expect(service.formattedMetric(heartRate) == "분당 63회")
         }
+    }
+
+    @Test("Speech announces each calendar date once and omits redundant workout dates")
+    func spokenDatesDoNotRepeat() {
+        let service = HealthQueryService()
+        let date = Date(timeIntervalSince1970: 1_790_000_000)
+        let metrics = [HealthQueryMetric(id: "weight", title: "Weight", value: 75, unit: .kilograms, date: date),
+                       HealthQueryMetric(id: "fat", title: "Body Fat", value: 18, unit: .percent, date: date.addingTimeInterval(60))]
+        let day = service.dateOnlyText(date)
+        #expect(service.metricSummary(metrics).components(separatedBy: day).count == 2)
+        #expect(!service.metricSummary(metrics, includeDates: false).contains(day))
+    }
+
+    @Test("Spoken calendar range excludes the following midnight")
+    func spokenExclusiveEnd() throws {
+        let service = HealthQueryService()
+        let calendar = Calendar.current
+        let start = try #require(calendar.date(from: DateComponents(year: 2026, month: 9, day: 1)))
+        let end = try #require(calendar.date(from: DateComponents(year: 2026, month: 10, day: 1)))
+        let text = service.periodText(DateInterval(start: start, end: end))
+        #expect(text.contains(service.dateOnlyText(end.addingTimeInterval(-1))))
+        #expect(!text.contains(service.dateOnlyText(end)))
     }
 
     @Test("Assistant fallback preserves the invoking locale through the query actor hop",

@@ -54,7 +54,7 @@ extension HealthQueryService {
             let latest = records[0]
             let metrics = workoutMetrics(latest)
             let measured = dateText(latest.date)
-            let summary = String(localized: "\(latest.name), recorded \(measured).", locale: HealthQueryLocalization.locale) + " " + metricSummary(metrics)
+            let summary = String(localized: "\(latest.name), recorded \(measured).", locale: HealthQueryLocalization.locale) + " " + metricSummary(metrics, includeDates: false)
             return workoutResponse(request.kind, interval: interval, load: load, records: [latest], metrics: metrics, summary: summary)
         case .personalRecord:
             let latest = records[0]
@@ -86,7 +86,7 @@ extension HealthQueryService {
                                        metrics: workoutMetrics(current), summary: String(localized: "No earlier record of the same exercise was found in this period.", locale: HealthQueryLocalization.locale))
             }
             let metrics = comparisonMetrics(current: current, previous: previous)
-            let summary = String(localized: "Comparing \(current.name) on \(dateText(current.date)) with \(dateText(previous.date)).", locale: HealthQueryLocalization.locale) + " " + metricSummary(metrics)
+            let summary = String(localized: "Comparing \(current.name) on \(dateText(current.date)) with \(dateText(previous.date)).", locale: HealthQueryLocalization.locale) + " " + metricSummary(metrics, includeDates: false)
             return workoutResponse(request.kind, interval: interval, load: load, records: [current, previous], metrics: metrics, summary: summary)
         case .memoSearch:
             let visible = Array(records.prefix(request.limit))
@@ -103,7 +103,7 @@ extension HealthQueryService {
             let series = dailySeries(records, interval: interval)
             return workoutResponse(request.kind, interval: interval, load: load,
                                    records: Array(records.prefix(request.limit)), metrics: metrics, series: [series],
-                                   summary: String(localized: "From \(dateText(interval.start)) through \(dateText(interval.end)).", locale: HealthQueryLocalization.locale) + " " + metricSummary(metrics))
+                                   summary: periodText(interval) + " " + metricSummary(metrics))
         case .latestBody, .bodyTrend, .sleep, .condition, .metricComparison, .longAnalysis:
             throw HealthQueryServiceError.notConfigured
         }
@@ -205,15 +205,21 @@ extension HealthQueryService {
         }
     }
 
-    func metricSummary(_ metrics: [HealthQueryMetric]) -> String {
-        metrics.prefix(6).map { metric in
+    func metricSummary(_ metrics: [HealthQueryMetric], includeDates: Bool = true) -> String {
+        var spokenDates: Set<String> = []
+        return metrics.prefix(6).map { metric in
             let formatted = formattedMetric(metric)
-            let date = metric.date.map { " · " + dateText($0) } ?? ""
-            var sentence = "\(metric.title): \(formatted)\(date)."
+            var sentence = "\(metric.title): \(formatted)."
+            if includeDates, let date = metric.date, spokenDates.insert(dateOnlyText(date)).inserted {
+                sentence += " " + String(localized: "Record date: \(dateOnlyText(date)).", locale: HealthQueryLocalization.locale)
+            }
             if let previous = metric.comparisonValue {
                 let comparison = HealthQueryMetric(id: metric.id, title: metric.title, value: previous,
                                                    unit: metric.unit, date: metric.comparisonDate)
                 sentence += " " + String(localized: "Previously \(formattedMetric(comparison)).", locale: HealthQueryLocalization.locale)
+                if includeDates, let date = metric.comparisonDate, spokenDates.insert(dateOnlyText(date)).inserted {
+                    sentence += " " + String(localized: "Comparison date: \(dateOnlyText(date)).", locale: HealthQueryLocalization.locale)
+                }
             }
             return sentence
         }.joined(separator: " ")
