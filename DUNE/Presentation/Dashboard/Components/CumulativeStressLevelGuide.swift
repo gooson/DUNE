@@ -4,6 +4,7 @@ import SwiftUI
 struct CumulativeStressLevelGuide: View {
     let currentLevel: CumulativeStressScore.Level
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @ScaledMetric(relativeTo: .body) private var levelIconWidth: CGFloat = 24
 
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
@@ -25,7 +26,7 @@ struct CumulativeStressLevelGuide: View {
             Image(systemName: level.iconName)
                 .font(.body)
                 .foregroundStyle(level.color)
-                .frame(width: 24)
+                .frame(width: levelIconWidth)
                 .accessibilityHidden(true)
 
             VStack(alignment: .leading, spacing: DS.Spacing.xxs) {

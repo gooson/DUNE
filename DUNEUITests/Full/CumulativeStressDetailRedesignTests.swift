@@ -177,13 +177,26 @@ final class CumulativeStressDetailRedesignTests: SeededUITestBaseCase {
         XCTAssertEqual(title.label, "How Stress Score Works")
         XCTAssertFalse(app.staticTexts["What is Cumulative Stress?"].firstMatch.exists)
         title.tap()
-        let headings = [
-            "What is Cumulative Stress?", "HRV Variability (40%)",
-            "Sleep Consistency (35%)", "Activity Load (25%)"
+        let explanationRows: [(icon: String, heading: String, rawScore: String?)] = [
+            ("definition", "What is Cumulative Stress?", nil),
+            ("hrvVariability", "HRV Variability (40%)", "40"),
+            ("sleepConsistency", "Sleep Consistency (35%)", "46"),
+            ("activityLoad", "Activity Load (25%)", "38")
         ]
-        for heading in headings {
-            XCTAssertTrue(app.staticTexts[heading].firstMatch.waitForExistence(timeout: 10),
-                          "Original explanation must survive the single disclosure: \(heading)")
+        for row in explanationRows {
+            let icon = app.images["stress-explainer-icon-\(row.icon)"].firstMatch
+            let heading = app.staticTexts[row.heading].firstMatch
+            XCTAssertTrue(revealWhole(icon), "Original \(row.icon) icon must reach the viewport")
+            XCTAssertTrue(revealWhole(heading), "Original \(row.icon) heading must reach the viewport")
+            XCTAssertLessThanOrEqual(icon.frame.maxX, heading.frame.minX + 1,
+                                     "\(row.icon) icon must not overlap its heading")
+            if let rawScore = row.rawScore {
+                let actual = app.staticTexts["stress-explainer-score-\(row.icon)"].firstMatch
+                XCTAssertTrue(revealWhole(actual), "\(row.icon) current score must reach the viewport")
+                XCTAssertTrue(actual.label.contains(rawScore),
+                              "Expanded calculation must retain \(row.icon)'s current raw score")
+            }
+            VisualAudit.capture("Stress expanded \(row.icon) icon, heading and current score")
         }
         for phrase in [
             "A 30-day composite indicator",
@@ -194,12 +207,6 @@ final class CumulativeStressDetailRedesignTests: SeededUITestBaseCase {
             XCTAssertTrue(app.staticTexts.matching(
                 NSPredicate(format: "label CONTAINS %@", phrase)
             ).firstMatch.exists, "Original explanation body must remain: \(phrase)")
-        }
-        for item in factors {
-            let actual = app.staticTexts["stress-explainer-score-\(item.id)"].firstMatch
-            XCTAssertTrue(actual.exists, "Expanded calculation must include \(item.id)")
-            XCTAssertTrue(actual.label.contains(item.rawScore),
-                          "Expanded calculation must retain the current raw score")
         }
         VisualAudit.capture("Stress single expanded calculation and original explanations")
 
@@ -251,9 +258,30 @@ final class CumulativeStressDetailRedesignTests: SeededUITestBaseCase {
         let title = app.staticTexts["stress-score-explainer"].firstMatch
         XCTAssertTrue(revealWhole(title, requireHittable: true))
         title.tap()
+        let explanationRows: [(icon: String, heading: String, rawScore: String?)] = [
+            ("definition", "What is Cumulative Stress?", nil),
+            ("hrvVariability", "HRV Variability (40%)", "40"),
+            ("sleepConsistency", "Sleep Consistency (35%)", "46"),
+            ("activityLoad", "Activity Load (25%)", "38")
+        ]
+        for row in explanationRows {
+            let icon = app.images["stress-explainer-icon-\(row.icon)"].firstMatch
+            let heading = app.staticTexts[row.heading].firstMatch
+            XCTAssertTrue(revealWhole(icon), "Maximum AX \(row.icon) icon must be scroll reachable")
+            XCTAssertTrue(revealWhole(heading), "Maximum AX \(row.icon) heading must be scroll reachable")
+            XCTAssertLessThanOrEqual(icon.frame.maxX, heading.frame.minX + 1,
+                                     "Maximum AX \(row.icon) icon must not overlap its heading")
+            if let rawScore = row.rawScore {
+                let actual = app.staticTexts["stress-explainer-score-\(row.icon)"].firstMatch
+                XCTAssertTrue(revealWhole(actual), "Maximum AX \(row.icon) current score must be visible")
+                XCTAssertTrue(actual.label.contains(rawScore))
+            }
+            VisualAudit.capture("Stress maximum AX \(row.icon) explanation row")
+        }
+        XCTAssertTrue(revealWhole(title, requireHittable: true))
+        title.tap()
         XCTAssertTrue(app.staticTexts["What is Cumulative Stress?"].firstMatch
-            .waitForExistence(timeout: 10))
-        VisualAudit.capture("Stress maximum AX expanded explanation")
+            .waitForNonExistence(timeout: 5), "Maximum AX disclosure must collapse")
     }
 
     func testDarkAppearanceKeepsKeyContentReachable() {

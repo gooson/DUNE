@@ -8,6 +8,8 @@ struct CumulativeStressExplainerSection: View {
     @State private var isExpanded = false
     @Environment(\.appTheme) private var theme
     @Environment(\.horizontalSizeClass) private var sizeClass
+    @ScaledMetric(relativeTo: .body) private var compactIconWidth: CGFloat = 24
+    @ScaledMetric(relativeTo: .title3) private var regularIconWidth: CGFloat = 28
 
     private var isRegular: Bool { sizeClass == .regular }
 
@@ -68,7 +70,8 @@ struct CumulativeStressExplainerSection: View {
             Image(systemName: icon)
                 .font(isRegular ? .title3 : .body)
                 .foregroundStyle(factor?.color ?? DS.Color.hrv)
-                .frame(width: isRegular ? 28 : 24, alignment: .center)
+                .frame(width: isRegular ? regularIconWidth : compactIconWidth, alignment: .center)
+                .accessibilityIdentifier("stress-explainer-icon-\(factor?.rawValue ?? "definition")")
 
             VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                 Text(title)
