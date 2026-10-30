@@ -8,8 +8,8 @@ struct WatchWorkoutLiveActivity: Widget {
         let preferences = WorkoutLiveActivityPreferences.read()
         return ActivityConfiguration(for: WatchWorkoutAttributes.self) { context in
             WatchWorkoutActivityContent(state: context.state, isStale: context.isStale, preferences: preferences)
-                .activityBackgroundTint(WidgetDS.isDesertWarm ? WidgetDS.Color.warmSurface : .black.opacity(0.8))
-                .activitySystemActionForegroundColor(WidgetDS.isDesertWarm ? WidgetDS.Color.warmInk : .white)
+                .activityBackgroundTint(WorkoutPalette.usesWarmSurface ? WidgetDS.Color.warmSurface : .black.opacity(0.8))
+                .activitySystemActionForegroundColor(WorkoutPalette.usesWarmSurface ? WidgetDS.Color.warmInk : .white)
         } dynamicIsland: { context in
             DynamicIsland {
                 DynamicIslandExpandedRegion(.leading) {
@@ -45,7 +45,7 @@ struct WatchWorkoutLiveActivity: Widget {
                         .accessibilityLabel("Heart Rate")
                 } else {
                     WatchWorkoutPhaseIcon(state: context.state, isStale: context.isStale)
-                        .foregroundStyle(WidgetDS.isDesertWarm ? WidgetDS.themeAccent : .white)
+                        .foregroundStyle(WorkoutPalette.usesWarmSurface ? WorkoutPalette.islandAccent : .white)
                 }
             } compactTrailing: {
                 if context.isStale {
@@ -68,9 +68,12 @@ struct WatchWorkoutLiveActivity: Widget {
 }
 
 private enum WorkoutPalette {
-    static var primary: Color { WidgetDS.isDesertWarm ? WidgetDS.Color.warmInk : .white }
-    static var secondary: Color { WidgetDS.isDesertWarm ? Color("DesertHorizonMuted") : .white.opacity(0.7) }
-    static var accent: Color { WidgetDS.isDesertWarm ? WidgetDS.Color.warmAccent : .white }
+    static var isGold: Bool { WorkoutLiveActivityPreferences.read().style == .goldImpact }
+    static var usesWarmSurface: Bool { WidgetDS.isDesertWarm || isGold }
+    static var primary: Color { usesWarmSurface ? WidgetDS.Color.warmInk : .white }
+    static var secondary: Color { usesWarmSurface ? Color("DesertHorizonMuted") : .white.opacity(0.7) }
+    static var accent: Color { usesWarmSurface ? WidgetDS.Color.warmAccent : .white }
+    static var islandAccent: Color { isGold ? Color("WorkoutMedalGold") : WidgetDS.themeAccent }
     static let heart = Color("MetricHeartRate")
     static let calories = Color("MetricActivity")
     static let distance = Color("MetricSteps")
@@ -97,7 +100,7 @@ private struct WatchWorkoutActivityContent: View {
         .padding(isSmall ? 10 : 16)
         .foregroundStyle(WorkoutPalette.primary)
         .background {
-            if preferences.style == .goldImpact && WidgetDS.isDesertWarm {
+            if preferences.style == .goldImpact {
                 WorkoutGoldSurface()
             }
         }
@@ -165,7 +168,7 @@ private struct WatchWorkoutHeader: View {
                     Text(verbatim: "DUNE")
                         .font(.system(.caption2, design: .rounded, weight: .bold))
                         .tracking(1.5)
-                        .foregroundStyle(isIsland ? WidgetDS.themeAccent : WorkoutPalette.accent)
+                        .foregroundStyle(isIsland ? WorkoutPalette.islandAccent : WorkoutPalette.accent)
                         .fixedSize(horizontal: true, vertical: false)
                         .accessibilityIdentifier("watch-workout-brand")
 
@@ -293,7 +296,8 @@ private struct WorkoutIslandMetric: View {
             }
         }
         .frame(width: isLimitedInWidth ? 28 : (minimal ? 45 : 60), height: isLimitedInWidth ? 28 : nil)
-        .foregroundStyle(WidgetDS.isDesertWarm ? WidgetDS.themeAccent : .white)
+        .foregroundStyle(WorkoutPalette.usesWarmSurface ? WorkoutPalette.islandAccent : .white)
+        .privacySensitive()
     }
 }
 
@@ -313,7 +317,7 @@ private struct WorkoutPrimaryMetric: View {
                 metricValue
                     .accessibilityElement(children: .ignore)
                     .accessibilityLabel(Text(metric.displayName))
-                    .accessibilityValue(Text(verbatim: "\(value) \(unit)"))
+                    .accessibilityValue(Text(verbatim: "\(fullValue) \(unit)"))
                     .accessibilityIdentifier(metric == .distance ? "watch-workout-distance" :
                                                (metric == .weight ? "watch-workout-weight" : "watch-workout-heart-rate"))
             }
@@ -357,6 +361,13 @@ private struct WorkoutPrimaryMetric: View {
         }
     }
 
+    private var fullValue: String {
+        if metric == .distance {
+            return (state.distanceMeters / 1_000).formatted(.number.precision(.fractionLength(0...3)))
+        }
+        return value
+    }
+
     private var unit: String {
         switch metric {
         case .distance: "km"
@@ -374,16 +385,20 @@ private struct WorkoutMetricHero: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            HStack(spacing: 12) {
-                WorkoutPrimaryMetric(state: state, preferences: preferences)
-                    .font(.system(.largeTitle, design: .rounded, weight: .bold))
-                    .foregroundStyle(isIsland ? WidgetDS.themeAccent : WorkoutPalette.accent)
-                    .minimumScaleFactor(0.75)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                if preferences.style == .goldImpact {
-                    WorkoutGoldEmblem(state: state)
+            ViewThatFits(in: .horizontal) {
+                HStack(spacing: 12) {
+                    WorkoutPrimaryMetric(state: state, preferences: preferences)
+                        .fixedSize(horizontal: true, vertical: false)
+                    if preferences.style == .goldImpact {
+                        WorkoutGoldEmblem(state: state)
+                    }
                 }
+                WorkoutPrimaryMetric(state: state, preferences: preferences)
+                    .minimumScaleFactor(0.75)
             }
+            .font(.system(.largeTitle, design: .rounded, weight: .bold))
+            .foregroundStyle(isIsland ? WorkoutPalette.islandAccent : WorkoutPalette.accent)
+            .frame(maxWidth: .infinity, alignment: .leading)
             if preferences.resolvedMetric(for: state) != .elapsedTime {
                 WorkoutElapsedTime(state: state)
                     .font(.caption)

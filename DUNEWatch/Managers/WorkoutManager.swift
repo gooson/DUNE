@@ -1422,10 +1422,12 @@ final class WorkoutManager: NSObject {
             phase: isSessionEnded ? .ended : (isPaused ? .paused : .running),
             heartRate: (20...250).contains(heartRate) ? heartRate : nil,
             activeCalories: activeCalories,
-            distanceMeters: effectiveCardio ? distance : 0,
+            // Without recovered mode metadata the builder distance was not restored.
+            // Keep distance unavailable instead of presenting an invented zero.
+            distanceMeters: isCardioMode ? distance : 0,
             exerciseIconName: activityType.iconName,
             workoutKind: effectiveCardio ? .cardio : .strength,
-            supportsDistance: effectiveCardio && activityType.isDistanceBased,
+            supportsDistance: isCardioMode && activityType.isDistanceBased,
             currentSetWeightKg: effectiveCardio ? nil : currentSetWeightKg
         )
         return snapshot.isValid ? snapshot : nil

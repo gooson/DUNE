@@ -169,6 +169,8 @@ struct SettingsView: View {
             .accessibilityIdentifier("settings-watch-live-activity-style")
         } header: {
             Text("Workout Live Activity")
+        } footer: {
+            Text("Unavailable readings show elapsed time instead.")
         }
     }
 
