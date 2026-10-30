@@ -32,14 +32,14 @@ extension HealthQueryService {
         let fetchedAt = nowProvider()
         var limitations: [String] = []
         if records.count > Self.maximumRecords {
-            limitations.append(String(localized: "The result is limited to the most recent 2,000 records in this period."))
+            limitations.append(String(localized: "The result is limited to the most recent 2,000 records in this period.", locale: HealthQueryLocalization.locale))
         }
         // Project all SwiftData values before the first suspension.
         let definitions: [(String, String, HealthQueryUnit, ClosedRange<Double>, BodyCompositionSampleKind?)] = [
-            ("weight", String(localized: "Weight"), .kilograms, 0.001...500, .weight),
-            ("bodyFat", String(localized: "Body Fat"), .percent, 0...100, .bodyFatPercentage),
-            ("leanBodyMass", String(localized: "Lean Body Mass"), .kilograms, 0.001...300, .leanBodyMass),
-            ("bmi", String(localized: "BMI"), .bodyMassIndex, 0.001...100, nil)
+            ("weight", String(localized: "Weight", locale: HealthQueryLocalization.locale), .kilograms, 0.001...500, .weight),
+            ("bodyFat", String(localized: "Body Fat", locale: HealthQueryLocalization.locale), .percent, 0...100, .bodyFatPercentage),
+            ("leanBodyMass", String(localized: "Lean Body Mass", locale: HealthQueryLocalization.locale), .kilograms, 0.001...300, .leanBodyMass),
+            ("bmi", String(localized: "BMI", locale: HealthQueryLocalization.locale), .bodyMassIndex, 0.001...100, nil)
         ]
         let localValues: [[BodyQueryValue]] = definitions.map { definition in
             records.prefix(Self.maximumRecords).compactMap { record in
@@ -81,7 +81,7 @@ extension HealthQueryService {
             return results
         }
         if remote.count != definitions.count {
-            limitations.append(String(localized: "Some Health app body measurements could not be read. Available records are shown."))
+            limitations.append(String(localized: "Some Health app body measurements could not be read. Available records are shown.", locale: HealthQueryLocalization.locale))
         }
         var metrics: [HealthQueryMetric] = []
         var series: [HealthQuerySeries] = []
@@ -89,7 +89,7 @@ extension HealthQueryService {
         for (index, definition) in definitions.enumerated() {
             let samples = remote[index] ?? []
             if samples.count > Self.maximumRecords {
-                limitations.append(String(localized: "Health app results are limited to the most recent 2,000 records in this period."))
+                limitations.append(String(localized: "Health app results are limited to the most recent 2,000 records in this period.", locale: HealthQueryLocalization.locale))
             }
             let healthValues = samples.filter { $0.date >= start && $0.date < end }
                 .sorted { $0.date > $1.date }.prefix(Self.maximumRecords).compactMap { sample -> BodyQueryValue? in
@@ -110,8 +110,8 @@ extension HealthQueryService {
                 sources.append(contentsOf: values.map(\.source))
             } else { sources.append(latest.source) }
         }
-        let summary = metrics.isEmpty ? String(localized: "No body measurements were found in this period.")
-            : String(localized: "Your available body measurements are shown with their measurement dates.")
+        let summary = metrics.isEmpty ? String(localized: "No body measurements were found in this period.", locale: HealthQueryLocalization.locale)
+            : String(localized: "Your available body measurements are shown with their measurement dates.", locale: HealthQueryLocalization.locale)
         return result(request.kind, status: limitations.isEmpty ? (metrics.isEmpty ? .noData : .available) : .partial,
                       interval: interval, metrics: metrics, series: series, sources: sources, summary: summary,
                       limitations: Array(Set(limitations)).sorted(), isComplete: limitations.isEmpty)
@@ -130,15 +130,15 @@ extension HealthQueryService {
             }.sorted { $0.date < $1.date }
             guard !points.isEmpty else {
                 return result(request.kind, status: .noData, interval: interval,
-                              summary: String(localized: "No sleep records were found in this period."))
+                              summary: String(localized: "No sleep records were found in this period.", locale: HealthQueryLocalization.locale))
             }
             let total = points.reduce(0) { $0 + $1.value }
             let fetchedAt = nowProvider()
             let measurementDate = points.count == 1 ? points.first?.date : nil
-            var metrics = [HealthQueryMetric(id: "sleepTotal", title: String(localized: "Total Sleep"), value: total, unit: .seconds, date: measurementDate),
-                           HealthQueryMetric(id: "sleepAverage", title: String(localized: "Average Recorded Sleep"), value: total / Double(points.count), unit: .seconds, date: measurementDate),
-                           HealthQueryMetric(id: "recordedNights", title: String(localized: "Recorded Nights"), value: Double(points.count), unit: .count)]
-            let stages: [(SleepStage.Stage, String)] = [(.deep, String(localized: "Deep Sleep")), (.rem, String(localized: "REM Sleep")), (.core, String(localized: "Core Sleep"))]
+            var metrics = [HealthQueryMetric(id: "sleepTotal", title: String(localized: "Total Sleep", locale: HealthQueryLocalization.locale), value: total, unit: .seconds, date: measurementDate),
+                           HealthQueryMetric(id: "sleepAverage", title: String(localized: "Average Recorded Sleep", locale: HealthQueryLocalization.locale), value: total / Double(points.count), unit: .seconds, date: measurementDate),
+                           HealthQueryMetric(id: "recordedNights", title: String(localized: "Recorded Nights", locale: HealthQueryLocalization.locale), value: Double(points.count), unit: .count)]
+            let stages: [(SleepStage.Stage, String)] = [(.deep, String(localized: "Deep Sleep", locale: HealthQueryLocalization.locale)), (.rem, String(localized: "REM Sleep", locale: HealthQueryLocalization.locale)), (.core, String(localized: "Core Sleep", locale: HealthQueryLocalization.locale))]
             for (stage, title) in stages {
                 let values = days.filter { $0.date >= interval.start && $0.date < interval.end && Self.valid($0.totalMinutes, in: 0.001...1_440) != nil }
                     .compactMap { Self.valid($0.stageBreakdown[stage], in: 0...1_440) }
@@ -148,20 +148,20 @@ extension HealthQueryService {
             }
             return result(request.kind, interval: interval,
                           metrics: metrics,
-                          series: [HealthQuerySeries(id: "sleep", title: String(localized: "Sleep"), unit: .seconds, points: points)],
+                          series: [HealthQuerySeries(id: "sleep", title: String(localized: "Sleep", locale: HealthQueryLocalization.locale), unit: .seconds, points: points)],
                           sources: points.map { HealthQuerySource(kind: .healthKit, measuredAt: $0.date, fetchedAt: fetchedAt) },
-                          summary: String(localized: "From \(dateText(interval.start)) through \(dateText(interval.end)).") + " " + String(localized: "Sleep totals include only nights with recorded sleep."))
+                          summary: String(localized: "From \(dateText(interval.start)) through \(dateText(interval.end)).", locale: HealthQueryLocalization.locale) + " " + String(localized: "Sleep totals include only nights with recorded sleep.", locale: HealthQueryLocalization.locale))
         } catch is CancellationError { throw CancellationError() }
         catch {
             return result(request.kind, status: .unavailable, interval: interval,
-                          summary: String(localized: "Sleep records could not be read. Try again later."), isComplete: false)
+                          summary: String(localized: "Sleep records could not be read. Try again later.", locale: HealthQueryLocalization.locale), isComplete: false)
         }
     }
 
     func conditionResult(_ request: HealthQueryRequest, interval: DateInterval) async throws -> HealthQueryResult {
         guard let sharedHealthDataService else {
             return result(request.kind, status: .unavailable, interval: interval,
-                          summary: String(localized: "Condition data is not available yet. Open DUNE and try again."), isComplete: false)
+                          summary: String(localized: "Condition data is not available yet. Open DUNE and try again.", locale: HealthQueryLocalization.locale), isComplete: false)
         }
         let snapshot = await sharedHealthDataService.fetchSnapshot()
         try Task.checkCancellation()
@@ -174,21 +174,21 @@ extension HealthQueryService {
         let points = byDate.values.sorted { $0.date < $1.date }.map { HealthQueryPoint(date: $0.date, value: Double($0.score)) }
         var limitations: [String] = []
         if !snapshot.failedSources.isEmpty {
-            limitations.append(String(localized: "Some health sources could not be refreshed. Available condition scores are shown."))
+            limitations.append(String(localized: "Some health sources could not be refreshed. Available condition scores are shown.", locale: HealthQueryLocalization.locale))
         }
         let age = nowProvider().timeIntervalSince(snapshot.fetchedAt)
         if !age.isFinite || age < -1 || age > 3_600 {
-            limitations.append(String(localized: "Condition data was last refreshed earlier. Check the source dates."))
+            limitations.append(String(localized: "Condition data was last refreshed earlier. Check the source dates.", locale: HealthQueryLocalization.locale))
         }
         let latest = points.last
         return result(request.kind, status: limitations.isEmpty ? (latest == nil ? .noData : .available) : .partial,
                       interval: interval,
-                      metrics: latest.map { [HealthQueryMetric(id: "condition", title: String(localized: "Condition Score"),
+                      metrics: latest.map { [HealthQueryMetric(id: "condition", title: String(localized: "Condition Score", locale: HealthQueryLocalization.locale),
                                                                value: $0.value, unit: .score, date: $0.date)] } ?? [],
-                      series: points.isEmpty ? [] : [HealthQuerySeries(id: "condition", title: String(localized: "Condition Score"), unit: .score, points: points)],
+                      series: points.isEmpty ? [] : [HealthQuerySeries(id: "condition", title: String(localized: "Condition Score", locale: HealthQueryLocalization.locale), unit: .score, points: points)],
                       sources: points.map { HealthQuerySource(kind: .calculated, measuredAt: $0.date, fetchedAt: snapshot.fetchedAt) },
-                      summary: latest == nil ? String(localized: "No condition scores were found in this period.")
-                        : String(localized: "Condition scores describe recorded wellness trends and are not a medical assessment."),
+                      summary: latest == nil ? String(localized: "No condition scores were found in this period.", locale: HealthQueryLocalization.locale)
+                        : String(localized: "Condition scores describe recorded wellness trends and are not a medical assessment.", locale: HealthQueryLocalization.locale),
                       limitations: limitations, isComplete: limitations.isEmpty)
     }
 }

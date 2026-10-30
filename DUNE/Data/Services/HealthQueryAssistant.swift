@@ -21,7 +21,7 @@ actor HealthQueryAssistant: HealthQueryAssisting {
 
     init(queryService: any HealthQuerying,
          availabilityProvider: @escaping @Sendable () -> Bool = { SystemLanguageModel.default.isAvailable },
-         localeProvider: @escaping @Sendable () -> Locale = { .current },
+         localeProvider: @escaping @Sendable () -> Locale = { HealthQueryLocalization.locale },
          nowProvider: @escaping @Sendable () -> Date = Date.init) {
         self.queryService = queryService
         self.availabilityProvider = availabilityProvider
@@ -108,11 +108,11 @@ actor HealthQueryAssistant: HealthQueryAssisting {
             return answer
         }
         if metric.value > previous {
-            answer.explanation = String(localized: "The selected metric is higher than in the comparison period.")
+            answer.explanation = String(localized: "The selected metric is higher than in the comparison period.", locale: HealthQueryLocalization.locale)
         } else if metric.value < previous {
-            answer.explanation = String(localized: "The selected metric is lower than in the comparison period.")
+            answer.explanation = String(localized: "The selected metric is lower than in the comparison period.", locale: HealthQueryLocalization.locale)
         } else {
-            answer.explanation = String(localized: "The selected metric is unchanged from the comparison period.")
+            answer.explanation = String(localized: "The selected metric is unchanged from the comparison period.", locale: HealthQueryLocalization.locale)
         }
         answer.explanation = metric.title + ": " + (answer.explanation ?? "")
         answer.explanationStatus = .generated
@@ -122,9 +122,9 @@ actor HealthQueryAssistant: HealthQueryAssisting {
     private func unavailable(kind: HealthQueryKind) -> HealthQueryResult {
         let now = nowProvider()
         return HealthQueryResult(kind: kind, status: .unavailable,
-            title: String(localized: "Health Question"), generatedAt: now,
+            title: String(localized: "Health Question", locale: HealthQueryLocalization.locale), generatedAt: now,
             interval: HealthQueryPeriod.today.interval(endingAt: now),
-            spokenSummary: String(localized: "Choose a health topic and period to view your records. This question could not be interpreted."),
+            spokenSummary: String(localized: "Choose a health topic and period to view your records. This question could not be interpreted.", locale: HealthQueryLocalization.locale),
             explanationStatus: .unavailable, isComplete: false)
     }
 

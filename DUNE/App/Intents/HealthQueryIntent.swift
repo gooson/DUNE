@@ -162,26 +162,40 @@ struct QueryHealthInformationIntent: AppIntent {
     func perform() async throws -> some IntentResult & ReturnsValue<HealthQueryAnswerEntity> & ProvidesDialog & ShowsSnippetIntent {
         try await MainActor.run { try HealthQueryIntentAccess.requireProtectedData() }
         let request = makeRequest()
+        let locale = intentLocale
         let result: HealthQueryResult
 #if compiler(>=6.4)
         if #available(iOS 27.0, *), request.kind == .longAnalysis {
             progress.totalUnitCount = 1
             result = try await performBackgroundTask {
-                try await HealthQueryService.shared.execute(request)
+                try await HealthQueryLocalization.$locale.withValue(locale) {
+                    try await HealthQueryService.shared.execute(request)
+                }
             }
             progress.completedUnitCount = 1
         } else {
-            result = try await HealthQueryService.shared.execute(request)
+            result = try await HealthQueryLocalization.$locale.withValue(locale) {
+                try await HealthQueryService.shared.execute(request)
+            }
         }
 #else
-        result = try await HealthQueryService.shared.execute(request)
+        result = try await HealthQueryLocalization.$locale.withValue(locale) {
+            try await HealthQueryService.shared.execute(request)
+        }
 #endif
         try Task.checkCancellation()
         try await MainActor.run { try HealthQueryIntentAccess.requireProtectedData() }
         let answer = await MainActor.run { HealthQueryIntentState.shared.retain(result) }
         var snippet = HealthQuerySnippetIntent()
         snippet.answerID = answer.id
-        return .result(value: answer, dialog: IntentDialog(stringLiteral: result.spokenSummary), snippetIntent: snippet)
+        return .result(value: answer, dialog: healthQueryDialog(result), snippetIntent: snippet)
+    }
+
+    private var intentLocale: Locale {
+#if compiler(>=6.4)
+        if #available(iOS 27.0, *) { return systemContext.locale }
+#endif
+        return .current
     }
 
     func makeRequest(now: Date = Date(), calendar: Calendar = .current) -> HealthQueryRequest {
@@ -211,6 +225,7 @@ struct AskDUNEHealthIntent: AppIntent {
         try await MainActor.run { try HealthQueryIntentAccess.requireProtectedData() }
         try Task.checkCancellation()
         let askedQuestion = question
+        let locale = intentLocale
 #if compiler(>=6.4)
         if #available(iOS 27.0, *) { progress.totalUnitCount = 1 }
 #endif
@@ -218,13 +233,19 @@ struct AskDUNEHealthIntent: AppIntent {
 #if compiler(>=6.4)
         if #available(iOS 27.0, *) {
             result = try await performBackgroundTask {
-                try await HealthQueryAssistant.shared.ask(askedQuestion, context: nil)
+                try await HealthQueryLocalization.$locale.withValue(locale) {
+                    try await HealthQueryAssistant.shared.ask(askedQuestion, context: nil)
+                }
             }
         } else {
-            result = try await HealthQueryAssistant.shared.ask(askedQuestion, context: nil)
+            result = try await HealthQueryLocalization.$locale.withValue(locale) {
+                try await HealthQueryAssistant.shared.ask(askedQuestion, context: nil)
+            }
         }
 #else
-        result = try await HealthQueryAssistant.shared.ask(askedQuestion, context: nil)
+        result = try await HealthQueryLocalization.$locale.withValue(locale) {
+            try await HealthQueryAssistant.shared.ask(askedQuestion, context: nil)
+        }
 #endif
         try Task.checkCancellation()
 #if compiler(>=6.4)
@@ -234,8 +255,22 @@ struct AskDUNEHealthIntent: AppIntent {
         let answer = await MainActor.run { HealthQueryIntentState.shared.retain(result) }
         var snippet = HealthQuerySnippetIntent()
         snippet.answerID = answer.id
-        return .result(value: answer, dialog: IntentDialog(stringLiteral: result.spokenSummary), snippetIntent: snippet)
+        return .result(value: answer, dialog: healthQueryDialog(result), snippetIntent: snippet)
     }
+
+    private var intentLocale: Locale {
+#if compiler(>=6.4)
+        if #available(iOS 27.0, *) { return systemContext.locale }
+#endif
+        return .current
+    }
+}
+
+private func healthQueryDialog(_ result: HealthQueryResult) -> IntentDialog {
+    IntentDialog(
+        full: LocalizedStringResource(stringLiteral: result.spokenSummary),
+        supporting: LocalizedStringResource(stringLiteral: result.spokenSummary)
+    )
 }
 
 struct HealthQuerySnippetIntent: SnippetIntent {
@@ -250,7 +285,12 @@ struct HealthQuerySnippetIntent: SnippetIntent {
         guard let result = await MainActor.run(body: { HealthQueryIntentState.shared.result(for: answerID) }) else {
             throw DUNEAppIntentError.itemNotFound
         }
-        return .result(view: HealthQueryResultCard(result: result))
+        return await makeSnippet(result)
+    }
+
+    @MainActor
+    private func makeSnippet(_ result: HealthQueryResult) -> some IntentResult & ShowsSnippetView {
+        .result(view: HealthQueryResultCard(result: result))
     }
 }
 

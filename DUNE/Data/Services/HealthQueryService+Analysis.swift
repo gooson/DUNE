@@ -10,7 +10,7 @@ extension HealthQueryService {
               previous.duration > 0, previous.duration <= 367 * 86_400,
               previous.end <= nowProvider().addingTimeInterval(1) else {
             return result(request.kind, status: .invalidRequest, interval: interval,
-                          summary: String(localized: "Choose a valid comparison period of up to one year."))
+                          summary: String(localized: "Choose a valid comparison period of up to one year.", locale: HealthQueryLocalization.locale))
         }
         let currentWorkouts = try await loadWorkouts(in: interval)
         try Task.checkCancellation()
@@ -36,9 +36,9 @@ extension HealthQueryService {
         let complete = currentWorkouts.complete && priorWorkouts.complete && currentSleep.isComplete && priorSleep.isComplete
         let hasRecords = !currentWorkouts.records.isEmpty || !priorWorkouts.records.isEmpty || !currentSleep.metrics.isEmpty || !priorSleep.metrics.isEmpty
         var limitations = currentWorkouts.limitations + priorWorkouts.limitations + currentSleep.limitations + priorSleep.limitations
-        limitations.append(String(localized: "The comparison describes recorded activity and sleep. It does not establish that one caused the other."))
+        limitations.append(String(localized: "The comparison describes recorded activity and sleep. It does not establish that one caused the other.", locale: HealthQueryLocalization.locale))
         if abs(interval.duration - previous.duration) > 60 {
-            limitations.append(String(localized: "These periods have different lengths. Totals are not normalized by day."))
+            limitations.append(String(localized: "These periods have different lengths. Totals are not normalized by day.", locale: HealthQueryLocalization.locale))
         }
         if !complete {
             // A missing source cannot support an apparent zero or an exact period delta.
@@ -54,7 +54,7 @@ extension HealthQueryService {
                       series: [dailySeries(currentWorkouts.records, interval: interval)] + currentSleep.series,
                       records: Array(currentWorkouts.records.prefix(request.limit)),
                       sources: sources(for: currentWorkouts.records + priorWorkouts.records) + currentSleep.sources + priorSleep.sources,
-                      summary: String(localized: "Comparing \(dateText(interval.start)) through \(dateText(interval.end)) with \(dateText(previous.start)) through \(dateText(previous.end)).") + " " + metricSummary(metrics),
+                      summary: String(localized: "Comparing \(dateText(interval.start)) through \(dateText(interval.end)) with \(dateText(previous.start)) through \(dateText(previous.end)).", locale: HealthQueryLocalization.locale) + " " + metricSummary(metrics),
                       limitations: Array(Set(limitations)).sorted(), isComplete: complete)
     }
 
@@ -70,8 +70,8 @@ extension HealthQueryService {
         return result(request.kind, status: available ? (complete ? .available : .partial) : (complete ? .noData : .unavailable),
                       interval: interval, metrics: metrics, series: results.flatMap(\.series), records: workouts.records,
                       sources: results.flatMap(\.sources),
-                      summary: String(localized: "Recorded health information from \(dateText(interval.start)) through \(dateText(interval.end)).") + " " + metricSummary(metrics),
-                      limitations: Array(Set(results.flatMap(\.limitations) + [String(localized: "This summary uses available records and does not provide a medical diagnosis.")])).sorted(),
+                      summary: String(localized: "Recorded health information from \(dateText(interval.start)) through \(dateText(interval.end)).", locale: HealthQueryLocalization.locale) + " " + metricSummary(metrics),
+                      limitations: Array(Set(results.flatMap(\.limitations) + [String(localized: "This summary uses available records and does not provide a medical diagnosis.", locale: HealthQueryLocalization.locale)])).sorted(),
                       isComplete: complete)
     }
 }

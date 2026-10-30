@@ -55,7 +55,7 @@ final class HealthQueryService: HealthQuerying {
         let interval = request.interval ?? defaultPeriod(for: request.kind).interval(endingAt: now, calendar: calendar)
         guard protectedDataProvider() else {
             return result(request.kind, status: .locked, interval: interval,
-                          summary: String(localized: "Unlock your device to read health records."))
+                          summary: String(localized: "Unlock your device to read health records.", locale: HealthQueryLocalization.locale))
         }
         guard interval.start.timeIntervalSinceReferenceDate.isFinite,
               interval.end.timeIntervalSinceReferenceDate.isFinite,
@@ -66,11 +66,11 @@ final class HealthQueryService: HealthQuerying {
               (request.exerciseID?.count ?? 0) <= 200,
               (request.workoutID?.count ?? 0) <= 200 else {
             return result(request.kind, status: .invalidRequest, interval: interval,
-                          summary: String(localized: "Choose a valid period of up to one year and a shorter search."))
+                          summary: String(localized: "Choose a valid period of up to one year and a shorter search.", locale: HealthQueryLocalization.locale))
         }
         guard container != nil else {
             return result(request.kind, status: .unavailable, interval: interval,
-                          summary: String(localized: "App records are not available yet. Open DUNE and try again."))
+                          summary: String(localized: "App records are not available yet. Open DUNE and try again.", locale: HealthQueryLocalization.locale))
         }
         let response: HealthQueryResult
         switch request.kind {
@@ -92,7 +92,7 @@ final class HealthQueryService: HealthQuerying {
         // Protected data can become unavailable while HealthKit requests are in flight.
         guard protectedDataProvider() else {
             return result(request.kind, status: .locked, interval: interval,
-                          summary: String(localized: "Unlock your device to read health records."))
+                          summary: String(localized: "Unlock your device to read health records.", locale: HealthQueryLocalization.locale))
         }
         return response
     }
@@ -117,7 +117,7 @@ final class HealthQueryService: HealthQuerying {
             spokenSummary += " " + metricSummary(metrics)
         }
         if !isComplete {
-            spokenSummary += " " + String(localized: "Some records could not be read, so this answer may be incomplete.")
+            spokenSummary += " " + String(localized: "Some records could not be read, so this answer may be incomplete.", locale: HealthQueryLocalization.locale)
         }
         return HealthQueryResult(kind: kind, status: status, title: Self.title(for: kind), generatedAt: nowProvider(),
                           interval: interval, metrics: metrics, series: series, records: records,
@@ -126,20 +126,20 @@ final class HealthQueryService: HealthQuerying {
 
     static func title(for kind: HealthQueryKind) -> String {
         switch kind {
-        case .latestWorkout: String(localized: "Latest Workout")
-        case .workoutSummary: String(localized: "Workout Summary")
-        case .strengthSets: String(localized: "Completed Strength Sets")
-        case .personalRecord: String(localized: "Highest Recorded Weight")
-        case .cardioDetail: String(localized: "Latest Cardio Workout")
-        case .latestBody: String(localized: "Latest Body Measurements")
-        case .bodyTrend: String(localized: "Body Measurement Change")
-        case .sleep: String(localized: "Sleep Records")
-        case .condition: String(localized: "Condition and Recovery")
-        case .metricComparison: String(localized: "Workout and Sleep Comparison")
-        case .workoutComparison: String(localized: "Compare Workout Records")
-        case .memoSearch: String(localized: "Search Workout Notes")
-        case .report: String(localized: "Workout Report")
-        case .longAnalysis: String(localized: "Health Record Analysis")
+        case .latestWorkout: String(localized: "Latest Workout", locale: HealthQueryLocalization.locale)
+        case .workoutSummary: String(localized: "Workout Summary", locale: HealthQueryLocalization.locale)
+        case .strengthSets: String(localized: "Completed Strength Sets", locale: HealthQueryLocalization.locale)
+        case .personalRecord: String(localized: "Highest Recorded Weight", locale: HealthQueryLocalization.locale)
+        case .cardioDetail: String(localized: "Latest Cardio Workout", locale: HealthQueryLocalization.locale)
+        case .latestBody: String(localized: "Latest Body Measurements", locale: HealthQueryLocalization.locale)
+        case .bodyTrend: String(localized: "Body Measurement Change", locale: HealthQueryLocalization.locale)
+        case .sleep: String(localized: "Sleep Records", locale: HealthQueryLocalization.locale)
+        case .condition: String(localized: "Condition and Recovery", locale: HealthQueryLocalization.locale)
+        case .metricComparison: String(localized: "Workout and Sleep Comparison", locale: HealthQueryLocalization.locale)
+        case .workoutComparison: String(localized: "Compare Workout Records", locale: HealthQueryLocalization.locale)
+        case .memoSearch: String(localized: "Search Workout Notes", locale: HealthQueryLocalization.locale)
+        case .report: String(localized: "Workout Report", locale: HealthQueryLocalization.locale)
+        case .longAnalysis: String(localized: "Health Record Analysis", locale: HealthQueryLocalization.locale)
         }
     }
 
@@ -154,11 +154,11 @@ final class HealthQueryService: HealthQuerying {
     }
 
     func dateText(_ date: Date) -> String {
-        date.formatted(date: .abbreviated, time: .shortened)
+        date.formatted(Date.FormatStyle(date: .abbreviated, time: .shortened, locale: HealthQueryLocalization.locale))
     }
 
     func number(_ value: Double, digits: Int = 0) -> String {
-        value.formatted(.number.precision(.fractionLength(digits)).grouping(.automatic))
+        value.formatted(.number.precision(.fractionLength(digits)).grouping(.automatic).locale(HealthQueryLocalization.locale))
     }
 }
 
@@ -183,13 +183,13 @@ extension HealthQueryService {
         let local = models.prefix(Self.maximumRecords).compactMap(Self.projectWorkout)
         var limitations: [String] = []
         var complete = models.count <= Self.maximumRecords
-        if !complete { limitations.append(String(localized: "The result is limited to the most recent 2,000 records in this period.")) }
+        if !complete { limitations.append(String(localized: "The result is limited to the most recent 2,000 records in this period.", locale: HealthQueryLocalization.locale)) }
         let remote: [HealthQueryWorkoutSnapshot]
         do {
             let workouts = try await workoutService.fetchWorkouts(start: start, end: end)
             if workouts.count > Self.maximumRecords {
                 complete = false
-                limitations.append(String(localized: "Health app results are limited to the most recent 2,000 records in this period."))
+                limitations.append(String(localized: "Health app results are limited to the most recent 2,000 records in this period.", locale: HealthQueryLocalization.locale))
             }
             remote = workouts.filter { $0.date >= start && $0.date < end }
                 .sorted { $0.date > $1.date }.prefix(Self.maximumRecords).compactMap(Self.projectWorkout)
@@ -199,7 +199,7 @@ extension HealthQueryService {
             AppLogger.healthKit.notice("Health query workouts unavailable: \(String(describing: error), privacy: .private)")
             remote = []
             complete = false
-            limitations.append(String(localized: "Health app workouts could not be read. Available DUNE records are shown."))
+            limitations.append(String(localized: "Health app workouts could not be read. Available DUNE records are shown.", locale: HealthQueryLocalization.locale))
         }
         try Task.checkCancellation()
         return WorkoutLoad(records: Self.mergeWorkouts(local: local, healthKit: remote, tombstones: tombstonesProvider()),
