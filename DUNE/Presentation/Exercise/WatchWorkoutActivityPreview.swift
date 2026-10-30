@@ -88,7 +88,10 @@ enum WatchWorkoutActivityPreview {
         do {
             _ = try Activity.request(
                 attributes: WatchWorkoutAttributes(mirrorID: UUID()),
-                content: ActivityContent(state: snapshot, staleDate: staleDate),
+                content: ActivityContent(
+                    state: WatchWorkoutAttributes.ContentState(snapshot: snapshot, preferences: preferences),
+                    staleDate: staleDate
+                ),
                 pushType: nil
             )
         } catch {

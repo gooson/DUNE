@@ -5,19 +5,26 @@ import WidgetKit
 
 struct WatchWorkoutLiveActivity: Widget {
     var body: some WidgetConfiguration {
-        let preferences = WorkoutLiveActivityPreferences.read()
         return ActivityConfiguration(for: WatchWorkoutAttributes.self) { context in
-            WatchWorkoutActivityContent(state: context.state, isStale: context.isStale, preferences: preferences)
-                .activityBackgroundTint(WorkoutPalette.usesWarmSurface ? WidgetDS.Color.warmSurface : .black.opacity(0.8))
-                .activitySystemActionForegroundColor(WorkoutPalette.usesWarmSurface ? WidgetDS.Color.warmInk : .white)
+            let state = context.state.snapshot
+            let preferences = context.state.preferences
+            let palette = WorkoutPalette(style: preferences.style)
+            WatchWorkoutActivityContent(state: state, isStale: context.isStale, preferences: preferences)
+                .environment(\.workoutLiveActivityStyle, preferences.style)
+                .activityBackgroundTint(palette.usesWarmSurface ? WidgetDS.Color.warmSurface : .black.opacity(0.8))
+                .activitySystemActionForegroundColor(palette.usesWarmSurface ? WidgetDS.Color.warmInk : .white)
         } dynamicIsland: { context in
-            DynamicIsland {
+            let state = context.state.snapshot
+            let preferences = context.state.preferences
+            let palette = WorkoutPalette(style: preferences.style)
+            return DynamicIsland {
                 DynamicIslandExpandedRegion(.leading) {
-                    WatchWorkoutHeader(state: context.state, isStale: context.isStale, isIsland: true)
+                    WatchWorkoutHeader(state: state, isStale: context.isStale, isIsland: true)
+                        .environment(\.workoutLiveActivityStyle, preferences.style)
                 }
                 DynamicIslandExpandedRegion(.trailing) {
                     if !context.isStale && preferences.style == .standard {
-                        WorkoutPrimaryMetric(state: context.state, preferences: preferences)
+                        WorkoutPrimaryMetric(state: state, preferences: preferences)
                             .font(.system(.title3, design: .rounded, weight: .bold))
                             .foregroundStyle(.white)
                     }
@@ -26,40 +33,41 @@ struct WatchWorkoutLiveActivity: Widget {
                     if !context.isStale {
                         VStack(alignment: .leading, spacing: 10) {
                             if preferences.style == .goldImpact {
-                                WorkoutMetricHero(state: context.state, preferences: preferences, isIsland: true)
-                            } else if preferences.resolvedMetric(for: context.state) != .elapsedTime {
-                                WorkoutElapsedTime(state: context.state)
+                                WorkoutMetricHero(state: state, preferences: preferences, isIsland: true)
+                            } else if preferences.resolvedMetric(for: state) != .elapsedTime {
+                                WorkoutElapsedTime(state: state)
                                     .font(.caption).foregroundStyle(.white.opacity(0.7))
                             }
-                            WatchWorkoutMetrics(state: context.state, isIsland: true,
-                                                primaryMetric: preferences.resolvedMetric(for: context.state))
+                            WatchWorkoutMetrics(state: state, isIsland: true,
+                                                primaryMetric: preferences.resolvedMetric(for: state))
                         }
                         .padding(.top, 8)
+                        .environment(\.workoutLiveActivityStyle, preferences.style)
                     }
                 }
             } compactLeading: {
-                if !context.isStale, context.state.phase == .running,
-                   preferences.resolvedMetric(for: context.state) == .heartRate {
+                if !context.isStale, state.phase == .running,
+                   preferences.resolvedMetric(for: state) == .heartRate {
                     Image(systemName: "heart.fill")
                         .foregroundStyle(WorkoutPalette.heart)
                         .accessibilityLabel("Heart Rate")
                 } else {
-                    WatchWorkoutPhaseIcon(state: context.state, isStale: context.isStale)
-                        .foregroundStyle(WorkoutPalette.usesWarmSurface ? WorkoutPalette.islandAccent : .white)
+                    WatchWorkoutPhaseIcon(state: state, isStale: context.isStale)
+                        .foregroundStyle(palette.usesWarmSurface ? palette.islandAccent : .white)
                 }
             } compactTrailing: {
                 if context.isStale {
                     Image(systemName: "wifi.slash")
                         .accessibilityLabel("Waiting for Watch")
                 } else {
-                    WorkoutIslandMetric(state: context.state, preferences: preferences)
+                    WorkoutIslandMetric(state: state, preferences: preferences)
                 }
             } minimal: {
-                if context.isStale || context.state.phase != .running {
-                    WatchWorkoutPhaseIcon(state: context.state, isStale: context.isStale)
-                        .foregroundStyle(WorkoutPalette.islandAccent)
+                if context.isStale || state.phase != .running {
+                    WatchWorkoutPhaseIcon(state: state, isStale: context.isStale)
+                        .foregroundStyle(palette.islandAccent)
                 } else {
-                    WorkoutIslandMetric(state: context.state, preferences: preferences, minimal: true)
+                    WorkoutIslandMetric(state: state, preferences: preferences, minimal: true)
                 }
             }
         }
@@ -67,25 +75,38 @@ struct WatchWorkoutLiveActivity: Widget {
     }
 }
 
-private enum WorkoutPalette {
-    static var isGold: Bool { WorkoutLiveActivityPreferences.read().style == .goldImpact }
-    static var usesWarmSurface: Bool { WidgetDS.isDesertWarm || isGold }
-    static var primary: Color { usesWarmSurface ? WidgetDS.Color.warmInk : .white }
-    static var secondary: Color { usesWarmSurface ? Color("DesertHorizonMuted") : .white.opacity(0.7) }
-    static var accent: Color { usesWarmSurface ? WidgetDS.Color.warmAccent : .white }
-    static var islandAccent: Color { isGold ? Color("WorkoutMedalGold") : WidgetDS.themeAccent }
+private struct WorkoutLiveActivityStyleKey: EnvironmentKey {
+    static let defaultValue = WorkoutLiveActivityStyle.goldImpact
+}
+
+private extension EnvironmentValues {
+    var workoutLiveActivityStyle: WorkoutLiveActivityStyle {
+        get { self[WorkoutLiveActivityStyleKey.self] }
+        set { self[WorkoutLiveActivityStyleKey.self] = newValue }
+    }
+}
+
+private struct WorkoutPalette {
+    let style: WorkoutLiveActivityStyle
+    var isGold: Bool { style == .goldImpact }
+    var usesWarmSurface: Bool { WidgetDS.isDesertWarm || isGold }
+    var primary: Color { usesWarmSurface ? WidgetDS.Color.warmInk : .white }
+    var secondary: Color { usesWarmSurface ? Color("DesertHorizonMuted") : .white.opacity(0.7) }
+    var accent: Color { usesWarmSurface ? WidgetDS.Color.warmAccent : .white }
+    var islandAccent: Color { isGold ? Color("WorkoutMedalGold") : WidgetDS.themeAccent }
     static let heart = Color("MetricHeartRate")
     static let calories = Color("MetricActivity")
     static let distance = Color("MetricSteps")
 }
 
 private struct WatchWorkoutActivityContent: View {
+    private var palette: WorkoutPalette { WorkoutPalette(style: preferences.style) }
     @Environment(\.activityFamily) private var activityFamily
 
     let state: WatchWorkoutSnapshot
     let isStale: Bool
     var previewSmall = false
-    var preferences = WorkoutLiveActivityPreferences.read()
+    var preferences = WorkoutLiveActivityPreferences()
 
     private var isSmall: Bool { previewSmall || activityFamily == .small }
 
@@ -98,12 +119,14 @@ private struct WatchWorkoutActivityContent: View {
             }
         }
         .padding(isSmall ? 10 : 16)
-        .foregroundStyle(WorkoutPalette.primary)
+        .foregroundStyle(palette.primary)
         .background {
             if preferences.style == .goldImpact {
                 WorkoutGoldSurface()
             }
         }
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("watch-workout-activity")
     }
 
     private var fullContent: some View {
@@ -127,7 +150,7 @@ private struct WatchWorkoutActivityContent: View {
             if !isStale {
                 WorkoutPrimaryMetric(state: state, preferences: preferences)
                     .font(.system(.title2, design: .rounded, weight: .bold))
-                    .foregroundStyle(WorkoutPalette.accent)
+                    .foregroundStyle(palette.accent)
                     .minimumScaleFactor(0.7)
 
                 if preferences.resolvedMetric(for: state) != .elapsedTime {
@@ -142,6 +165,8 @@ private struct WatchWorkoutActivityContent: View {
 }
 
 private struct WatchWorkoutHeader: View {
+    @Environment(\.workoutLiveActivityStyle) private var activityStyle
+    private var palette: WorkoutPalette { WorkoutPalette(style: activityStyle) }
     let state: WatchWorkoutSnapshot
     let isStale: Bool
     var compact = false
@@ -151,14 +176,14 @@ private struct WatchWorkoutHeader: View {
         HStack(alignment: .center, spacing: 9) {
             WatchWorkoutPhaseIcon(state: state, isStale: isStale)
                 .font(compact ? .subheadline : .body)
-                .foregroundStyle(isIsland ? .white : WorkoutPalette.accent)
+                .foregroundStyle(isIsland ? .white : palette.accent)
                 .frame(width: compact ? 18 : 22)
                 .accessibilityHidden(true)
 
             VStack(alignment: .leading, spacing: 1) {
                 Text(state.exerciseName)
                     .font(compact ? .subheadline.weight(.semibold) : .headline.weight(.semibold))
-                    .foregroundStyle(isIsland ? .white : WorkoutPalette.primary)
+                    .foregroundStyle(isIsland ? .white : palette.primary)
                     .lineLimit(1)
                     .minimumScaleFactor(0.8)
                     .privacySensitive()
@@ -168,13 +193,13 @@ private struct WatchWorkoutHeader: View {
                     Text(verbatim: "DUNE")
                         .font(.system(.caption2, design: .rounded, weight: .bold))
                         .tracking(1.5)
-                        .foregroundStyle(isIsland ? WorkoutPalette.islandAccent : WorkoutPalette.accent)
+                        .foregroundStyle(isIsland ? palette.islandAccent : palette.accent)
                         .fixedSize(horizontal: true, vertical: false)
                         .accessibilityIdentifier("watch-workout-brand")
 
                     Text(verbatim: "·")
                         .font(.caption)
-                        .foregroundStyle(isIsland ? Color.white.opacity(0.7) : WorkoutPalette.secondary)
+                        .foregroundStyle(isIsland ? Color.white.opacity(0.7) : palette.secondary)
                         .accessibilityHidden(true)
 
                     WatchWorkoutStatus(state: state, isStale: isStale, isIsland: isIsland)
@@ -216,6 +241,8 @@ private struct WatchWorkoutPhaseIcon: View {
 }
 
 private struct WatchWorkoutStatus: View {
+    @Environment(\.workoutLiveActivityStyle) private var activityStyle
+    private var palette: WorkoutPalette { WorkoutPalette(style: activityStyle) }
     let state: WatchWorkoutSnapshot
     let isStale: Bool
     var isIsland = false
@@ -233,7 +260,7 @@ private struct WatchWorkoutStatus: View {
             }
         }
         .font(.caption)
-        .foregroundStyle(isIsland ? Color.white.opacity(0.7) : WorkoutPalette.secondary)
+        .foregroundStyle(isIsland ? Color.white.opacity(0.7) : palette.secondary)
         .lineLimit(1)
         .accessibilityIdentifier("watch-workout-status")
     }
@@ -267,6 +294,7 @@ private struct WorkoutElapsedTime: View {
 }
 
 private struct WorkoutIslandMetric: View {
+    private var palette: WorkoutPalette { WorkoutPalette(style: preferences.style) }
     @Environment(\.isDynamicIslandLimitedInWidth) private var isLimitedInWidth
 
     let state: WatchWorkoutSnapshot
@@ -296,7 +324,7 @@ private struct WorkoutIslandMetric: View {
             }
         }
         .frame(width: isLimitedInWidth ? 28 : (minimal ? 45 : 60), height: isLimitedInWidth ? 28 : nil)
-        .foregroundStyle(WorkoutPalette.usesWarmSurface ? WorkoutPalette.islandAccent : .white)
+        .foregroundStyle(palette.usesWarmSurface ? palette.islandAccent : .white)
         .privacySensitive()
     }
 }
@@ -379,6 +407,7 @@ private struct WorkoutPrimaryMetric: View {
 }
 
 private struct WorkoutMetricHero: View {
+    private var palette: WorkoutPalette { WorkoutPalette(style: preferences.style) }
     let state: WatchWorkoutSnapshot
     let preferences: WorkoutLiveActivityPreferences
     var isIsland = false
@@ -397,12 +426,12 @@ private struct WorkoutMetricHero: View {
                     .minimumScaleFactor(0.75)
             }
             .font(.system(.largeTitle, design: .rounded, weight: .bold))
-            .foregroundStyle(isIsland ? WorkoutPalette.islandAccent : WorkoutPalette.accent)
+            .foregroundStyle(isIsland ? palette.islandAccent : palette.accent)
             .frame(maxWidth: .infinity, alignment: .leading)
             if preferences.resolvedMetric(for: state) != .elapsedTime {
                 WorkoutElapsedTime(state: state)
                     .font(.caption)
-                    .foregroundStyle(isIsland ? .white.opacity(0.7) : WorkoutPalette.secondary)
+                    .foregroundStyle(isIsland ? .white.opacity(0.7) : palette.secondary)
             }
         }
     }
@@ -457,6 +486,8 @@ private struct WorkoutGoldSurface: View {
 }
 
 private struct WatchWorkoutMetrics: View {
+    @Environment(\.workoutLiveActivityStyle) private var activityStyle
+    private var palette: WorkoutPalette { WorkoutPalette(style: activityStyle) }
     let state: WatchWorkoutSnapshot
     var compact = false
     var isIsland = false
@@ -531,12 +562,12 @@ private struct WatchWorkoutMetrics: View {
 
             value
                 .font(compact ? .caption.weight(.semibold) : .subheadline.weight(.semibold))
-                .foregroundStyle(isIsland ? .white : WorkoutPalette.primary)
+                .foregroundStyle(isIsland ? .white : palette.primary)
 
             if let unit {
                 unit
                     .font(.caption2)
-                    .foregroundStyle(isIsland ? Color.white.opacity(0.7) : WorkoutPalette.secondary)
+                    .foregroundStyle(isIsland ? Color.white.opacity(0.7) : palette.secondary)
             }
         }
         .lineLimit(1)

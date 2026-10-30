@@ -131,3 +131,5 @@ Life Flow를 실제 앱에 반영했다. [검증 보고](../../reviews/2026-10-2
 2026-10-29 [유산소 아틀라스 통합 시안](cardio-atlas-integrated-proposal.md)을 추가했다. 다섯 상세 화면 선택 대신 단일 기본 상세와 공유 스타일, 저니·패스포트의 연결로 통합한다. 이전 비교안은 보존하고 앱 소스/실제 화면 캡처는 변경하지 않았다.
 
 - [L03 습관 템플릿 개편](habit-template-redesign-proposal.md): 검토된 카드 시안의 네이티브 배치·동작 계약.
+
+[WLA01 골드 임팩트 · 종목별 지표 선택](live-activity-size-state-proposal.md) · [보존 시안](../theme-map/themes/dune-live-activity-size-state.html) · 네이티브 구현·검증 진행 중.

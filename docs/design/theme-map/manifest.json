@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-29",
+  "updated": "2026-10-30",
   "app_contract": "app-contract.md",
   "themes": [
     {
@@ -246,6 +246,17 @@
         "layout": "../layout-map/habit-template-redesign-proposal.md",
         "actual_captures": "../full-redesign-map/review/habit-template-2026-10-30/index.html",
         "status": "native-implemented-verified-selected-scope"
+      }
+    },
+    {
+      "id": "live-activity-size-state",
+      "name": "Live Activity · 크기와 상태",
+      "title": "WLA01 · 골드 임팩트 / 내 선택 / 심박 우선",
+      "file": "dune-live-activity-size-state.html",
+      "detail": "2026-10-30 음악 동시 표시의 크기·상태 시안. 후속 요청 반영: 유산소 시간/누적 km/심박, 웨이트 시간/현재 세트 입력 kg/심박을 각각 선택하고 취향을 별도로 기억. 일반·28pt compact/minimal·expanded·잠금 화면·small, 진행/일시 정지/연결 대기/종료, 소수 중량·0·미수신 fallback 비교. 예시 데이터의 브라우저 시안이며 앱 설정 저장·현재 세트 중량 전달·실제 시스템 캡처는 미구현. 후속 비주얼 강조안 골드 임팩트 추가: 큰 골드 수치·금속 운동 심벌·잠금 화면의 금빛 능선. 시스템 검정 Island 배경·28pt 크기·미수신/종료 계약 유지. 정적 장식이며 보상/진행률/실제 센서 그래프 아님.",
+      "implementation": {
+        "layout": "../layout-map/live-activity-size-state-proposal.md",
+        "status": "proposal-only"
       }
     }
   ]

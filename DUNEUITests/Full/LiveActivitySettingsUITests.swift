@@ -2,12 +2,19 @@
 
 @MainActor
 final class LiveActivitySettingsUITests: UITestBaseCase {
+    override var additionalLaunchArguments: [String] {
+        ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
+    }
+
     func testSportMetricsAndStylePersistIndependently() {
         navigateToSettings()
 
         select("settings-watch-live-activity-cardio-metric", option: "settings-watch-live-activity-cardio-distance")
         select("settings-watch-live-activity-strength-metric", option: "settings-watch-live-activity-strength-weight")
         select("settings-watch-live-activity-style", option: "settings-watch-live-activity-style-standard")
+        assertSelected("settings-watch-live-activity-cardio-metric", value: "Distance")
+        assertSelected("settings-watch-live-activity-strength-metric", value: "Current Set Weight")
+        assertSelected("settings-watch-live-activity-style", value: "Standard")
         addScreenshotAttachment(named: "WLA02-settings-distance-weight-standard")
 
         // Relaunch without --ui-reset to exercise the App Group persistence path.

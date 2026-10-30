@@ -167,3 +167,7 @@ Cardio Atlas 네이티브 구현의 [2026-10-29 실제54장과 검증 범위](..
 - 2026-10-30: L03 습관 템플릿의 검토된 밝음/어두움 브라우저 시안을 보존했다. 네이티브 구현은 화면별 별도 PR로 진행하며 시안 JPEG와 새 앱 캡처를 구분한다.
 
 L03 네이티브 구현은 기존20개 템플릿의 선택·자동 입력을 유지한다. [새 실제 네 기기 캡처](../full-redesign-map/review/habit-template-2026-10-30/index.html)와 [검증 기록](../../reviews/2026-10-30-l03-habit-template-redesign.md)을 따른다. iPhone 기본/접근성XXXL, iPad 기본, Duo 접힘·펼침 UI가 통과했다. 실제 이미지는 밝음·영어이며 앞의 브라우저 시안과 구분한다.
+
+## Live Activity 골드 임팩트와 종목별 선택 · 2026-10-30
+
+[골드 임팩트 / 내 선택 / 심박 우선](themes/dune-live-activity-size-state.html)을 보존한다. [배치·상태 계약](../layout-map/live-activity-size-state-proposal.md)에 따라 SwiftUI 구현 중이다. 기존 브라우저 PNG는 시안 초기 버전이며 현재 앱의 실제 캡처가 아니다. 네이티브 검증과 기기별 갱신 상태는 실제 화면맵에서 별도로 기록한다.

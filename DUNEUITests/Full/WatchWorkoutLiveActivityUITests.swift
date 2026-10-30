@@ -165,18 +165,14 @@ final class WatchWorkoutLiveActivityUITests: UITestBaseCase {
         let bottom = springboard.coordinate(withNormalizedOffset: CGVector(dx: 0.08, dy: 0.72))
         top.press(forDuration: 0.05, thenDragTo: bottom)
 
-        let title = springboard.descendants(matching: .any)
-            .matching(NSPredicate(format: "label CONTAINS %@", exerciseName))
-            .firstMatch
+        let title = springboard.staticTexts["watch-workout-title"].firstMatch
         let didFindTitle = title.waitForExistence(timeout: 15)
         // Extensions use SpringBoard's language, independent of the app launch locale.
         let allow = springboard.buttons.matching(NSPredicate(format: "label IN %@", ["Allow", "허용", "許可"])).firstMatch
         if allow.waitForExistence(timeout: 2) { allow.tap() }
 
-        let activity = springboard.otherElements.containing(.staticText, identifier: exerciseName)
-            .allElementsBoundByIndex
-            .filter { $0.frame.width > 250 && $0.frame.height > 48 && $0.frame.height < 220 }
-            .min { $0.frame.width * $0.frame.height < $1.frame.width * $1.frame.height }
+        let root = springboard.descendants(matching: .any)["watch-workout-activity"].firstMatch
+        let activity: XCUIElement? = root.waitForExistence(timeout: 5) ? root : nil
         if phase == "stale", let activity {
             let waiting = activity.descendants(matching: .any)
                 .matching(NSPredicate(format: "label IN %@", expectedStatuses)).firstMatch
