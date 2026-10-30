@@ -36,13 +36,11 @@ actor HealthQueryAssistant: HealthQueryAssisting {
         try Task.checkCancellation()
         let text = question.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty, text.count <= 500 else { return unavailable(kind: context?.kind ?? .report) }
-        if modelStatus() != .onDevice {
-            // Exact example phrases only: arbitrary questions are never guessed by keyword matching.
-            guard let request = Self.fallbackRequest(text, now: nowProvider()) else {
-                return unavailable(kind: context?.kind ?? .report)
-            }
+        // Exact supported phrases need no model inference or extra latency.
+        if let request = Self.fallbackRequest(text, now: nowProvider()) {
             return try await queryService.execute(request)
         }
+        guard modelStatus() == .onDevice else { return unavailable(kind: context?.kind ?? .report) }
         let instructions = Self.planningInstructions(context: context)
         let now = nowProvider()
         #if compiler(>=6.4)
@@ -84,7 +82,9 @@ actor HealthQueryAssistant: HealthQueryAssisting {
         Only reuse supplied context IDs if the user explicitly refers to that workout/exercise.
         Never invent IDs. Use empty strings for absent IDs, comparison period, or search text.
         Set period to context only when referring to the supplied context's period.
-        Default to last30Days for latest records, today for condition and yesterday for sleep.
+        Default to last30Days for latest records and today for condition.
+        Sleep is attributed to the waking day: last night's sleep uses today, not yesterday.
+        Use yesterday only when the person explicitly asks for the previous calendar day's sleep records.
         Context kind: \(context?.kind.rawValue ?? "none"); workout ID: \(context?.workoutID ?? "none");
         exercise ID: \(context?.exerciseID ?? "none"); interval: \(String(describing: context?.interval)).
         """
@@ -151,7 +151,7 @@ actor HealthQueryAssistant: HealthQueryAssisting {
         case "today's condition", "오늘 컨디션", "今日のコンディション":
             kind = .condition; period = .today
         case "last night's sleep", "어젯밤 수면", "昨夜の睡眠":
-            kind = .sleep; period = .yesterday
+            kind = .sleep; period = .today
         default: return nil
         }
         return HealthQueryRequest(kind: kind, interval: period.interval(endingAt: now))

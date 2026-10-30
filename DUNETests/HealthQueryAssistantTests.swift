@@ -7,6 +7,27 @@ import Testing
 struct HealthQueryAssistantTests {
     private let now = Date(timeIntervalSince1970: 1_790_000_000)
 
+    @Test("Last night's sleep uses the waking day in each supported language")
+    func lastNightSleepAttribution() throws {
+        let expected = HealthQueryPeriod.today.interval(endingAt: now)
+        for question in ["last night's sleep", "어젯밤 수면", "昨夜の睡眠"] {
+            let request = try #require(HealthQueryAssistant.fallbackRequest(question, now: now))
+            #expect(request.kind == .sleep)
+            #expect(request.interval == expected)
+        }
+    }
+
+    @Test("Exact supported questions bypass model inference even when enabled")
+    func exactQuestionNeedsNoModel() async throws {
+        let service = AssistantQueryStub(now: now)
+        let clock = now
+        let assistant = HealthQueryAssistant(queryService: service, availabilityProvider: { true }, nowProvider: { clock })
+        let result = try await assistant.ask("어젯밤 수면")
+        #expect(result == service.result)
+        #expect(service.requests.count == 1)
+        #expect(service.requests.first?.interval == HealthQueryPeriod.today.interval(endingAt: now))
+    }
+
     @Test("Unavailable model uses only exact supported fallback questions")
     func narrowFallback() async throws {
         let service = AssistantQueryStub(now: now)
