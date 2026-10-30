@@ -34,13 +34,10 @@ final class AllDataDetailRedesignTests: SeededUITestBaseCase {
         XCTAssertTrue(todaySection(in: screen, daysAgo: 0).waitForExistence(timeout: 15))
         let row = row(containing: "7h 46min", in: screen)
         XCTAssertTrue(row.waitForExistence(timeout: 15))
-        let stageStart = Calendar.current.date(byAdding: .hour, value: 1,
-                                               to: Calendar.current.startOfDay(for: Date()))!
-        let expectedTime = stageStart.formatted(
-            .dateTime.hour().minute().locale(Locale(identifier: "en_US"))
-        )
-        XCTAssertTrue(row.label.contains(expectedTime),
-                      "Sleep time must use the first non-awake stage, not the reporting-day midnight: \(row.label)")
+        // The fixture's first non-awake stage starts at 01:00. Respect the
+        // simulator's 12/24-hour setting even with an English app locale.
+        XCTAssertNotNil(row.label.range(of: #"^0?1:00(?:\s*AM)?,\s*"#, options: .regularExpression),
+                        "Sleep time must use the first non-awake stage, not reporting-day midnight: \(row.label)")
         captureNativeState(named: "T07-sleep-reporting-day-native")
     }
 
@@ -129,7 +126,7 @@ final class AllDataDetailRedesignTests: SeededUITestBaseCase {
         let escapedValue = NSRegularExpression.escapedPattern(for: value)
         return screen.descendants(matching: .any)
             .matching(NSPredicate(format: "label MATCHES %@",
-                                  "^[0-9]{1,2}:[0-9]{2}\\s*(AM|PM),\\s*.*\(escapedValue).*$"))
+                                  "^[0-9]{1,2}:[0-9]{2}(?:\\s*(?:AM|PM))?,\\s*\(escapedValue)$"))
             .firstMatch
     }
 
@@ -138,7 +135,7 @@ final class AllDataDetailRedesignTests: SeededUITestBaseCase {
     }
 
     nonisolated private static func hasTimePrefix(_ label: String) -> Bool {
-        label.range(of: #"^\d{1,2}:\d{2}\s*(AM|PM),\s*"#, options: .regularExpression) != nil
+        label.range(of: #"^\d{1,2}:\d{2}(?:\s*(?:AM|PM))?,\s*"#, options: .regularExpression) != nil
     }
 
     private struct ReadyFixture {
