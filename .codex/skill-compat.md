@@ -89,6 +89,13 @@ Claude skill 문서를 그대로 유지하면서 Codex에서 실행 semantics를
 - 무관한 기존 실패는 이번 작업의 diff에 원인이 있는지 먼저 확인한다. 관계가 없으면 별도 이슈로 기록하고 현재 작업의 검증 범위를 다시 확정한다. 완료 조건을 맞추려고 관계없는 앱/테스트를 수정하거나 검증 중 실행기 파일을 수정하지 않는다.
 - 이미 유효한 검증/리뷰가 있으면 같은 내용을 다시 실행하지 않는다. 수정 후 재리뷰는 바뀐 부분과 영향을 받는 관점만 수행하고 기존 결과의 유효 범위를 함께 기록한다. 실행만을 위한 agent 생성, 변화 없는 agent 재호출, 해결 근거 없는 모델 상향을 하지 않는다.
 
+### 검증된 실행 전 simulator lock 대기
+
+- 별도 tooling PR에 명시적으로 승인된 예외: `codex-pipeline.py defer-lock`의 감사 검증을 통과한 **실행 전** 표준 iOS UI runner의 lock busy만 실제 실행 실패 횟수에서 제외한다. 원본 attempt/status/log/hash를 유지하고 부가 `lock_deferrals` 기록을 추가한다. 분류·원래 실행은 nonzero이며 테스트 성공, 0건 성공, phase passed의 근거가 아니다.
+- 기존 receipt에는 당시 소스/환경 증명이 없으므로 로그 문구만으로 자동 분류하지 않는다. 검토한 runner 소스 closure·직접 argv·exit 2·실행 전후 동일 fingerprint·정확히 한 줄인 로그/hash와 별도 operator-attested 감사 근거를 함께 검증한다. 사용법과 신뢰 경계는 `token-efficiency.md`를 따른다. 근거를 확인할 수 없으면 실제 실패로 남긴다.
+- 다음 실행도 같은 검증 ID와 표준 runner 직접 호출을 사용한다. worktree ownership, 실제 lock 획득, deadline은 그대로 유지한다. 실제 실패가 하나라도 남아 있으면 **마지막 실제 실패**의 원인 해소·증거·내용/context 변화가 있어야 한 번 조건부 재시도할 수 있다. 실제 실패 두 번은 계속 차단한다. 앱/build/test 실패, timeout, 알 수 없는 exit/output, post-start 출력은 면제하지 않는다.
+- 감사 분류는 원인 해소나 즉시 재실행 허가가 아니다. 다른 작업의 잠금 해제를 확인하고 현재 worktree 실행이 없음을 확인한 뒤에만 필요했던 실행을 재개한다. 잠금 대기를 반복 호출하거나 check ID를 바꿔 예산을 우회하지 않는다.
+
 ### /run
 
 - Phase tracking은 사용 가능한 계획 도구 또는 phase 상태 기록으로 관리한다.
