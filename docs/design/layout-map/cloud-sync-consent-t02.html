@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>T02 · iCloud 동기화 동의 배치</title>
+  <style>
+    :root { color-scheme: light dark; font-family: system-ui, sans-serif; }
+    body { max-width: 860px; margin: 0 auto; padding: 24px; line-height: 1.55; background: #faf8f3; color: #29231f; }
+    h1 { margin-bottom: 4px; } .note { color: #665b52; }
+    .sheet { max-width: 430px; margin: 28px auto; padding: 24px; border-radius: 28px; background: #fffdfa; box-shadow: 0 12px 40px #6c57442a; }
+    .hero { border-radius: 24px; padding: 26px 22px; background: #352e29; color: #fff3e8; }
+    .hero .icon { font-size: 48px; line-height: 1; color: #e2b780; }
+    .eyebrow { margin: 22px 0 4px; color: #d5b78f; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
+    .hero h2 { margin: 0; font-size: 28px; } .hero p { margin: 10px 0 0; color: #e1d3c7; }
+    .section { margin: 28px 0 8px; font-weight: 700; }
+    .row { display: flex; gap: 14px; padding: 16px 0; border-bottom: 1px solid #e8e2db; }
+    .row .icon { display: grid; place-items: center; flex: 0 0 40px; height: 40px; border-radius: 12px; background: #f3e9dd; color: #7c5738; }
+    .row strong { display: block; } .row span { display: block; color: #665b52; font-size: 14px; }
+    .actions { margin-top: 24px; display: grid; gap: 12px; text-align: center; }
+    .actions div { padding: 13px; border-radius: 14px; } .actions .primary { background: #c9966d; color: white; font-weight: 700; }
+    @media (prefers-color-scheme: dark) { body { background: #0b0b0f; color: #f5eee8; } .sheet { background: #242124; } .row { border-color: #514a47; } .row span, .note { color: #c7bdb5; } .row .icon { background: #41372e; color: #e7b98d; } }
+  </style>
+</head>
+<body>
+  <p><a href="index.html">4탭 레이아웃 맵</a> · <a href="../theme-map/index.html">테마 맵</a> · <a href="../phone-design-map/actual/index.html">실제 화면 맵</a></p>
+  <h1>T02 · iCloud 동기화 동의</h1>
+  <p class="note">2026-10-31 <a href="cloud-sync-consent-t02-reviewed-proposal.json">승인안 원본</a>의 배치 기준 시안. 아래 도식은 HTML 예시이며 실제 앱 캡처가 아니다. T02는 앱 시작 시 강제 선택하는 시트다.</p>
+  <div class="sheet" aria-label="T02 정보 순서 시안">
+    <div class="hero"><div class="icon" aria-hidden="true">☁︎↑</div><div class="eyebrow">데이터와 개인정보</div><h2>iCloud 동기화</h2><p>건강 기록을 기기 간 동기화할지 선택합니다.</p></div>
+    <div class="section">선택 전 알아보기</div>
+    <div class="row"><div class="icon" aria-hidden="true">♙</div><div><strong>비공개 저장</strong><span>개인 iCloud 컨테이너에 기록 저장</span></div></div>
+    <div class="row"><div class="icon" aria-hidden="true">↻</div><div><strong>기기 간 동기화</strong><span>Apple 기기 간 신체·운동 기록 연결</span></div></div>
+    <div class="row"><div class="icon" aria-hidden="true">▣</div><div><strong>로컬 사용</strong><span>iCloud 없이 이 기기에서 계속 사용</span></div></div>
+    <div class="actions"><div class="primary">iCloud 동기화 켜기</div><div>이 기기에만 보관</div></div>
+  </div>
+  <h2>구현 계약</h2>
+  <ul>
+    <li>정보 순서: iCloud 히어로 → 비공개 저장 → 기기 간 동기화 → 로컬 사용 → 두 결정. 제목과 설명은 의미를 나누고 기존 기능 범위를 넘는 보장을 추가하지 않는다.</li>
+    <li>iPhone 402pt와 Duo 접힘 466pt: 한 열. iPad와 Duo 펼침: 시트 중앙의 본문 최대 폭을 제한한다. 최대 접근성 글씨에서는 본문이 스크롤되고 두 버튼은 안전 영역에 남는다.</li>
+    <li>배경과 강조색은 기존 앱 테마, 글자와 카드 대비는 디자인 시스템을 따른다. 이 화면의 배치만 바꾸며 테마 방향 시안은 변경하지 않는다.</li>
+    <li>첫 버튼은 현재 `CloudSyncPreferenceStore.setEnabled(true)`, 두 번째는 `false`를 호출한다. 두 경우 모두 기존 표시 완료와 시트 닫기를 유지하며, 결정 전 제스처 닫기는 허용하지 않는다.</li>
+  </ul>
+  <p class="note">변경 전 실제 T02 캡처: regular, iPad, Duo 접힘·펼침의 `actual/*/images/T02.png`. 새 구현 후 동일 화면 ID를 새 캡처와 출처로 갱신해야 한다.</p>
+</body>
+</html>
