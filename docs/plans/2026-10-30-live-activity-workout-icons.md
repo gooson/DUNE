@@ -88,3 +88,9 @@ optional `exerciseIconName`을 snapshot 끝에 추가하고 Watch에서 canonica
 ## Research / Confidence
 
 관련 solutions·brainstorms·todos를 실제 검색했다. 동일 아이콘 TODO나 계획은 없었다. 기존 아이콘 매핑·snapshot producer/consumer 및 WLA01 맵을 확인했다. Apple [Live Activities HIG](https://developer.apple.com/design/human-interface-guidelines/live-activities)와 [ActivityKit 표시 문서](https://developer.apple.com/documentation/activitykit/displaying-live-data-with-live-activities)를 확인했다. 코드 구조는 rg/Read를 사용했다(Serena 없음). 확신 high, 실행 환경은 공간 확보 전 미확정이다.
+
+## 최종 UI 범위 조정 근거
+
+Shared 경로 자동 fallback은 full이지만 `.codex/skill-compat.md`의 자동 범위 축소 기록 규칙에 따라 실제 소비자를 추적했다. 새 optional field와 선택 함수의 표시 소비자는 `DUNEWidget/WatchWorkoutLiveActivity.swift` 하나다. Watch/phone producer는 canonical 문자열만 추가하며 HealthKit 저장·SwiftData·다른 앱 화면의 레이아웃/상태/내비게이션은 바꾸지 않는다. 기존 receiver의 validation·identity·lifecycle은 유지한다. 실제 production source를 참조하는 Snapshot Swift Testing 15개와 통합 빌드를 통과했다.
+
+따라서 최종 UI는 전용 iPhone의 `--smoke --only-testing DUNEUITests/WatchWorkoutLiveActivityUITests` 합집합으로 확정한다. Watch 앱 화면의 full suite는 이번 필드의 소비자가 없어 제외한다. Widget이 제공하는 Watch small·Island 및 iPad/Duo의 실제 아이콘 캡처는 iPhone 증거로 대신하지 않고 미확인 범위로 남긴다. 초기 UI 실행은 저장소 잠금 60초 대기로 실패했다. 소유 프로세스 종료 및 즉시 lock 획득 성공을 확인한 후 같은 실행 경로를 1회만 재시도한다.

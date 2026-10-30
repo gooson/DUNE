@@ -41,4 +41,4 @@ Apple의 [Live Activities HIG](https://developer.apple.com/design/human-interfac
 
 일시 정지는 `pause.fill`, 종료는 `checkmark`, 연결 대기는 `wifi.slash`가 운동 기호보다 우선한다. 구버전 Watch의 누락 필드와 빈/과도한 길이의 값은 기존 `figure`로 대체하고 운동 수치는 계속 갱신한다. 첫 미러 snapshot은 HealthKit 세션의 종류를 사용한다. 색·크기·배치·테마 시안은 변경하지 않는다.
 
-WLA01의 이번 변경 캡처는 디스크 공간 부족으로 아직 미갱신이다. 기존 PNG를 운동별 아이콘의 새 증거로 사용하지 않는다. iPhone 잠금 화면의 러닝·사이클·근력 및 정지/연결 대기, iPad·Duo 양쪽·Watch small·Dynamic Island 상태는 새 검증 전까지 미확인이다.
+WLA01의 이번 변경 캡처는 아직 미갱신이다. 초기 디스크 공간 부족은 해소됐으나 전용 iPhone 실행이 다른 작업의 저장소 시뮬레이터 잠금 때문에 60초 후 실패했다. 기존 PNG를 운동별 아이콘의 새 증거로 사용하지 않는다. iPhone 잠금 화면의 러닝·사이클·근력 및 정지/연결 대기, iPad·Duo 양쪽·Watch small·Dynamic Island 상태는 새 검증 전까지 미확인이다.

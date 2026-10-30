@@ -162,5 +162,29 @@
     "core_log": ".xcodebuild/watch-end-core-tests-final.log",
     "build_log": ".xcodebuild/watch-end-cleanup-verified-build.log",
     "reason": "Prior SDK simulator result-finalization failure remains unresolved. Actual Watch/locked iPhone terminal delivery cannot be demonstrated by seeded SpringBoard snapshots."
+  },
+  "workout_icon_update": {
+    "date": "2026-10-30",
+    "status": "awaiting_capture",
+    "source_revision": "0cbde618",
+    "new_captures": 0,
+    "reason": "Disk shortage initially; after space recovery, standard system UI runner exited 2 because repository simulator lock remained busy for 60s. No tests executed.",
+    "owned_iphone_udid": "9905027B-0A4A-4A45-84D0-98431BE94BAC",
+    "unverified": [
+      "iphone_notification_running",
+      "iphone_notification_cycling",
+      "iphone_notification_strength",
+      "iphone_notification_paused",
+      "iphone_notification_stale",
+      "island_compact",
+      "island_minimal",
+      "island_expanded",
+      "watch_small",
+      "ipad",
+      "duo_folded",
+      "duo_open",
+      "paired_device_mirroring_recovery"
+    ],
+    "prior_pngs_are_current_evidence": false
   }
 }

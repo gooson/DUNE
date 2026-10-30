@@ -37,3 +37,12 @@ iPad, Duo 접힘·펼침, Watch small family도 이 작업에서 캡처하지 �
 ## Watch 종료 후 제거 경로 수정
 
 Watch의 종료 데이터를 미러와 독립적인 WC lifecycle로 전달하고 iPhone의 ActivityKit 정리에 연결했다. 실제 Watch 종료 후 iPhone 카드 제거는 새 검증 상태로 추가했으며 미캡처다. 기존 SpringBoard 시드 PNG는 Watch의 실제 종료 경로를 검증하지 않는다. SDK UI 결과 정리 장애가 정상화된 뒤 실제 쌍 기기의 종료·끊김·재연결을 확인해야 한다. 구현·코어 검증 범위는 [종료 정리 해결 문서](../../../../solutions/general/2026-10-25-watch-workout-ended-live-activity-cleanup.md)에 기록했다.
+
+
+## 2026-10-30 운동별 아이콘 · 새 캡처 대기
+
+현재 소스는 Watch/초기 미러 세션의 실제 운동 종류를 사용한다. 러닝·걷기·사이클·수영·근력 등의 기존 canonical SF Symbol을 전달하며, paused/ended/stale 기호는 유지한다. 복구 메타데이터가 없는 유산소 세션도 HealthKit 종류를 우선한다. 미지원 기호는 figure로 대체하고 헤더 장식 아이콘은 VoiceOver에서 숨긴다.
+
+초기 ENOSPC로 별도 작업트리를 만들지 못했다. 이후 공간이 확보되어 현재 작업트리 전용 iPhone 18 Pro(iOS 27.0, UDID 9905027B-0A4A-4A45-84D0-98431BE94BAC)의 소유권을 확인하고 표준 `scripts/test-ui.sh`로 `WatchWorkoutLiveActivityUITests`를 실행했으나, 다른 작업의 저장소 시뮬레이터 잠금이 60초 동안 해제되지 않아 exit 2로 시작하지 못했다. 테스트 0건은 통과가 아니다. 현재 실행의 로그와 출처는 `.codex-checks/live-activity-icons/`에 남긴다.
+
+새 PNG는 없으며 위의 이전 PNG를 운동별 기호의 증거로 재사용하지 않는다. 미갱신은 WLA01 iPhone 잠금 화면/알림 센터의 러닝·사이클·근력·일시 정지·연결 대기, Dynamic Island compact/minimal/expanded, Watch small, iPad와 Duo 접힘·펼침이다. 실제 Watch↔iPhone 연동·복구도 미확인이다. 저장소 잠금이 해제되면 관련 시스템 UI와 Xcode 단위 테스트를 우선 실행하고 최종 요구 UI 범위(iOS/Watch full)를 충족한 뒤 새 원본과 SHA-256·기기·시각·selector를 기록한다.
