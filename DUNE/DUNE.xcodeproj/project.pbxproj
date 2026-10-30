@@ -457,6 +457,7 @@
 		4B3168C602FD094FA848D37E /* HabitManagementSmokeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B85A984BF3860DCDEB5FC6E /* HabitManagementSmokeTests.swift */; };
 		4B5F3A35D0951F2A59E4D1CC /* GlassCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3FDB2DA9908F5F63BBE4303 /* GlassCard.swift */; };
 		4BD6CA5935222D0D7FFE72CC /* CheckInjuryConflictUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02CBCE3C28E07A44605422B2 /* CheckInjuryConflictUseCase.swift */; };
+		4C08DB14D8DB36B5531EEC91 /* AppShortcuts.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 1DD54268A8DB0A05B4C56AB2 /* AppShortcuts.xcstrings */; };
 		4C3CE9CA7BE7F08B1E147697 /* DesertHorizonConditionHeroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2C1F46C1D2FAC6A4345F655 /* DesertHorizonConditionHeroView.swift */; };
 		4C3E24E071FF96B5030C1DBB /* WaveShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9D6BE56DF7F329B9A53CB6 /* WaveShape.swift */; };
 		4C4CC6494E4AD4595B599CC9 /* HealthDataQuestionAnswering.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8DAFF1C2C1AC3E63633247E /* HealthDataQuestionAnswering.swift */; };
@@ -1683,6 +1684,7 @@
 		1D49441B0B1762A905127BD5 /* TemplateWorkoutConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateWorkoutConfig.swift; sourceTree = "<group>"; };
 		1D78294462431799CDD5ECAB /* ExerciseTypeSummaryRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseTypeSummaryRow.swift; sourceTree = "<group>"; };
 		1D843DE1D4098676C47A9B23 /* BodyCompositionViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyCompositionViewModelTests.swift; sourceTree = "<group>"; };
+		1DD54268A8DB0A05B4C56AB2 /* AppShortcuts.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = AppShortcuts.xcstrings; sourceTree = "<group>"; };
 		1E351F3EEEA566A369A425F1 /* SharedHealthDataServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedHealthDataServiceTests.swift; sourceTree = "<group>"; };
 		1E52CD57AE49785F7CC13B3E /* WorkoutZoneDetailUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutZoneDetailUITests.swift; sourceTree = "<group>"; };
 		1EA52F79D1A58E905E3D7491 /* HeartRateQueryServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartRateQueryServiceTests.swift; sourceTree = "<group>"; };
@@ -3619,6 +3621,7 @@
 			isa = PBXGroup;
 			children = (
 				4C6602DE773DE9F46086DD2E /* Models */,
+				1DD54268A8DB0A05B4C56AB2 /* AppShortcuts.xcstrings */,
 				63765429B77F16BB36CD8D6D /* Assets.xcassets */,
 				784FEB5BF718A90FAD1E4318 /* DUNE.entitlements */,
 				36F945536ED672B490649FB8 /* Info.plist */,
@@ -5115,8 +5118,11 @@
 			knownRegions = (
 				Base,
 				en,
+				es,
 				ja,
 				ko,
+				"zh-Hans",
+				"zh-Hant",
 			);
 			mainGroup = FCDAEB9076CD2CC414294FE1;
 			minimizedProjectReferenceProxies = 1;
@@ -5151,6 +5157,7 @@
 				D704BC244762B2E43B7B3258 /* 0.6.0.json in Resources */,
 				2CE0298724134930DE4AEF90 /* 0.7.0.json in Resources */,
 				6B7EA7A287318F11EFFEB9CF /* 0.8.0.json in Resources */,
+				4C08DB14D8DB36B5531EEC91 /* AppShortcuts.xcstrings in Resources */,
 				3D95DBEFE4CEC05E6A55412F /* Assets.xcassets in Resources */,
 				1730E2939253AC8AE0AF8FCC /* Colors.xcassets in Resources */,
 				12B7CC5C9237A51478D8EC2F /* Localizable.xcstrings in Resources */,
