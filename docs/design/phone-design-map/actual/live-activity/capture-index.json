@@ -166,10 +166,10 @@
   "workout_icon_update": {
     "date": "2026-10-30",
     "status": "awaiting_capture",
-    "source_revision": "0cbde618",
+    "source_revision": "f9805d1c",
     "new_captures": 0,
-    "reason": "Initial repository simulator lock timeout (60s, exit 2); after owner exit and lock recovery, single retry ended BUILD INTERRUPTED. No final result receipt and no XCTest case start markers. UI gate not passed.",
-    "owned_iphone_udid": "9905027B-0A4A-4A45-84D0-98431BE94BAC",
+    "reason": "Latest main integrated; GitHub build passed. Standard WLA01+smoke runner exited 1 before tests: dedicated iPhone failed to boot twice within 120s. UI exception decision pending.",
+    "owned_iphone_udid": "859833FC-D42F-4D9F-9A6D-73786F747C8B",
     "unverified": [
       "iphone_notification_running",
       "iphone_notification_cycling",
@@ -189,7 +189,8 @@
     "pr": "https://github.com/gooson/DUNE/pull/864",
     "merge_status": "draft_not_merged",
     "observed_test_case_start_markers": 0,
-    "executed": "unknown: no final result receipt",
-    "runner_exit": null
+    "executed": 0,
+    "runner_exit": 1,
+    "ui_exception": "pending_user_decision"
   }
 }
