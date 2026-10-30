@@ -17,6 +17,7 @@ Claude skill 문서를 그대로 유지하면서 Codex에서 실행 semantics를
 ## Core Rules
 
 - `.claude/**` 는 source of truth이고, Codex 문서는 delta-only adapter다.
+- **모든 스킬의 브랜치 검증은 아래 핵심 검증·점유 예산을 우선 적용한다.** `/run` 전용 예외가 아니다. 원본 skill/agent/rule의 무조건 전체 테스트·별도 재빌드·기계적 반복 요구와 충돌하면 이 명시적 사용자 예외를 따른다. `.claude/**`는 수정하지 않는다.
 - review 단계에서는 **findings-first, read-only** 를 기본값으로 한다.
 - Resolve/Work 단계에서만 수정/테스트 추가를 수행한다.
 - sub-agent spawning은 Codex 런타임 정책을 따른다. 이 정책은 독립적으로 실행 가능한 구현/테스트/리뷰 하위 작업의 모델 분담을 요청한다. 단순 셸 실행이나 한 줄 수정은 별도 agent를 만들지 않는다.
@@ -41,6 +42,38 @@ Claude skill 문서를 그대로 유지하면서 Codex에서 실행 semantics를
 - 위임 후에도 전용 시뮬레이터 소유권, 표준 실행기, 저장소 잠금, deadline, 최대 1회 조건부 재시도를 유지한다. parent와 child가 같은 runner/기기를 동시에 조작하지 않는다. 다른 agent가 앱·테스트·seed·실행 입력을 바꾸면 해당 실행 증거의 유효성을 다시 확인하고 기존 성공을 최종 상태에 재사용하지 않는다.
 - 수집 모드의 결과 형식은 source 역할의 매 응답 리뷰 템플릿(Findings/Missing Test Cases/iPad-Specific Risks/Coverage Rating)을 대신해 `token-efficiency.md`의 수집 결과 계약만 따른다. parent는 기기·실제 이미지와 출처 및 테스트 실행을 맡긴 경우 receipt·selector를 확인해 필요한 게이트를 판단한다. 예상 상태 불일치·불충분한 증거는 기존 자료와 함께 담당 전문가에게 넘긴다. 모델 상향이나 phase 전환으로 재시도 횟수를 초기화하거나 자동 재실행하지 않는다.
 
+### 모든 스킬의 핵심 검증과 점유 예산
+
+2026-10-30 사용자 요청에 따른 Codex 로컬 브랜치 기본값이다. 테스트 개수보다 **변경한 동작·실패 위험을 직접 확인하는지**로 범위를 정한다. CI/nightly 설정을 이 문서로 변경하지 않는다.
+
+1. 실행 전 `변경 동작 → 영향받는 호출부/플랫폼 → 검증할 성공·실패/경계 조건 → 정확한 selector/명령 → 종료 조건`을 짧게 정한다. 실제 PR base와 현재 dirty/untracked 변경까지 확인한다. 파일명이나 가장 가까운 테스트 하나만으로 영향 범위를 결정하지 않는다.
+2. 문서·지침만 변경하면 diff/참조/parity만 확인한다. 도구 변경은 해당 계약 테스트·구문·dry-run을 확인한다. 앱이 바뀌지 않았으면 앱 빌드·시뮬레이터·smoke·캡처를 실행하지 않는다. 설치·부팅·기기 선택 등을 바꿨다면 그 경로의 필요한 통합 검증을 추가한다.
+3. 앱 로직은 변경 분기·경계·오류를 확인하는 관련 unit class/method를 선택한다. UI는 변경 상태의 렌더링과 핵심 사용자 동작을 확인하는 최소 selector를 선택한다. 공통 smoke는 앱 진입·전역 탐색 등 공통 동작에 영향이 있을 때만 추가한다. 모든 feature 수정에 smoke 합집합을 강제하지 않는다.
+4. 공유 코드도 소비자를 확인해 영향받는 대표 흐름과 플랫폼의 selector를 선택한다. 영향이 불명확하면 호출부를 더 조사하고 남은 위험을 기록한다. 이를 이유로 자동 full 실행하지 않는다. 필요한 핵심 검사가 없으면 작성하거나 허용된 재현 검증으로 보완한다. 전체 회귀는 사용자가 명시적으로 요청했을 때만 로컬에서 실행한다.
+5. 최종 상태에서 정한 핵심 검증이 모두 통과하면 해당 범위의 게이트를 충족한다. **요청하지 않은 full 회귀를 미완료 필수 게이트로 남겨 브랜치 완료/Ship를 막지 않는다.** 판정기의 `full`은 영향 조사 경고이지 전체 실행 명령이 아니다. targeted 결과를 전체 통과로 표현하지 않는다. 필수 핵심 검사의 실패·미실행과 사용자 요청 full의 미실행은 계속 미완료다.
+6. 앱 테스트가 같은 target/configuration의 컴파일까지 성공했다면 그 target의 별도 build-only를 반복하지 않는다. 테스트가 빌드하지 않은 영향 target만 추가 빌드한다. `.xcstrings`·프로젝트 후처리 등 관련 검사는 유지한다. Work → UI → Review → Resolve → Ship에서도 이미 유효한 검증은 재사용하고 이후 변경에 영향받는 항목만 갱신한다.
+
+| 자원 | 로컬 기본값과 종료 조건 |
+|------|--------------------------|
+| 무거운 실행 | 한 worktree에 build/unit/UI/capture 중 **하나만** 진행. agent도 같은 예산을 공유한다. 읽기/문서 작업만 병행한다. 다른 worktree와의 simulator 병행은 아래 사용자 명시 예외만 허용한다. |
+| 컴파일·테스트 병렬성 | 표준 build-ios/build-target/unit/iOS UI/watch UI 실행기의 기본 `-jobs 2`, index store `NO`. 커밋 훅의 target compile도 포함한다. 로컬 unit 병렬 테스트는 `NO`, UI도 기존 `NO` 유지. `DAILVE_XCODEBUILD_JOBS=1`로 더 줄일 수 있다. 증가는 실행 전 근거와 함께 명시한다. 이 값은 Xcode build job 제한이며 전체 host 프로세스 수·CPU 사용률 상한은 아니다. |
+| 시간 | build는 900초, targeted unit/UI는 1200초를 시작 예산으로 정한다. build/unit는 `scripts/lib/command-deadline.py --seconds <예산> -- <표준 실행기 ...>` 또는 같은 timeout의 pipeline wrapper로 소유 프로세스를 제한한다. 커밋 훅의 build도 같은 watchdog을 사용하며 `DUNE_BUILD_WALL_TIMEOUT` 기본값은 900초다. UI는 `DUNE_UI_TEST_WALL_TIMEOUT=1200`을 해당 명령에 전달한다. 예상 범위상 부족하면 실행 **전** 근거와 예산을 조정하고 실행 중 무기한 연장하지 않는다. |
+| 기기·캡처 | 영향받는 기기/상태만 순차 사용. 테스트 attachment와 필요한 디자인맵 PNG를 한 실행에서 수집할 수 있으면 재활용한다. 검증 뒤 이번 작업이 boot한 소유 기기만, 활성 runner가 없음을 확인한 뒤 shutdown한다. 사용자/다른 worktree 기기와 공용 service는 건드리지 않는다. |
+| 캐시·대기 | worktree 전용 DerivedData를 증분 재사용한다. 원인 근거 없는 clean/캐시 삭제/시뮬레이터 재생성/전체 rebuild는 금지한다. 기존 session에서 대기하고 완료/timeout 뒤 소유 자식 정리를 확인한다. `killall`, 광범위 `pkill`, 전역 CoreSimulator 재시작으로 해결하지 않는다. |
+
+스킬별 적용 지점은 다음과 같다. 각 스킬의 기능·산출물과 검증 범위를 분리하며, 스킬을 읽었다는 이유만으로 전체 파이프라인을 새로 시작하지 않는다.
+
+| 스킬 | 적용 |
+|------|------|
+| run | Phase 1에서 핵심 검증 계약을 정하고 Work/2.5/Resolve/Ship가 같은 증거를 공유한다. phase마다 전체 테스트·빌드를 반복하지 않는다. |
+| plan, brainstorm | 영향·핵심 위험·선택 검사·예산을 계획한다. 계획 작성 자체에 앱 실행을 요구하지 않는다. |
+| work, debug | 관련 unit → 필요한 UI 순서로 확인한다. 실패는 해당 경로부터 수정·검증하고 최종 영향 범위만 확인한다. |
+| testing-patterns, ui-testing, xcode-project | 원본의 전체 target/raw xcodebuild 예시는 그대로 실행하지 않고 표준 실행기와 정확한 selector로 변환한다. |
+| review, triage | 검증 receipt와 diff를 읽어 검토한다. 관점마다 실행기를 띄우지 않는다. 부족한 검사는 한 담당자가 한 번 수행한다. |
+| ship | 최신 diff·검증·미해결 finding을 확인한다. Ship 진입 자체는 전체 테스트/재빌드 사유가 아니다. |
+| compound, retrospective, changelog, onboard, cleanup | 문서·정리 작업에 앱 테스트를 추가하지 않는다. 실제 실행 도구를 변경한 경우에만 해당 계약을 검증한다. |
+| code-style, copy-voice, design-system, agent-architecture | 변경한 코드/문구/디자인/지침의 영향 범위를 따른다. 화면 변경의 실제 디자인맵 의무는 유지하되 무관한 화면·기기는 실행하지 않는다. |
+
 ### 재시도와 범위 확장 제한
 
 사용자가 요청한 무의미한 재시도 방지 규칙이다. Claude 원본의 반복 실행 지시보다 이 Codex 실행 한도를 우선한다.
@@ -63,8 +96,8 @@ Claude skill 문서를 그대로 유지하면서 Codex에서 실행 semantics를
 - Proof Ledger는 별도 파일이 아니라 각 phase 완료 메시지와 최종 summary에 집계한다.
 - review/quality 단계는 공통 위임 정책과 agent-map을 따른다. 각 필수 관점의 판단/결과는 유지한다.
 - Work의 테스트와 Quality 결과를 뒤 phase에서 다시 사용할 때는 `.codex/token-efficiency.md`의 증거 일치 조건을 확인한다. 유효한 동일 검증은 재실행 대신 evidence 경로를 기록한다. 이는 phase 생략이 아니며, 변경/누락된 검증은 실행한다.
-- `/run` 안의 `/work`는 구현/QC까지만 담당하고 Compound/Ship는 parent가 한 번 수행한다. UI 최종 범위는 아래 변경 범위 기반 UI 게이트로 결정한다. full로 판정된 검증은 smoke로 대체하지 않는다.
-- `/run` parent가 검증/리뷰 관점별 실행 담당을 한 번 배정한다. Work에서 완료한 전문 검토는 Phase 3.5에서 증거·대상·환경의 유효성을 확인해 재사용하고, 이후 변경으로 영향을 받는 관점만 다시 수행한다. Phase 3.5의 적용 여부 판단과 결과 보고는 유지하며, standalone `/work`의 검증 의무는 바꾸지 않는다.
+- `/run` 안의 `/work`는 구현/QC까지만 담당하고 Compound/Ship는 parent가 한 번 수행한다. UI 최종 범위는 아래 변경 범위 기반 UI 게이트로 결정한다. 사용자가 요청한 full을 smoke로 대체하지 않는다.
+- `/run` parent가 검증/리뷰 관점별 실행 담당을 한 번 배정한다. Work에서 완료한 전문 검토는 Phase 3.5에서 증거·대상·환경의 유효성을 확인해 재사용하고, 이후 변경으로 영향을 받는 관점만 다시 수행한다. standalone `/work`에도 동일한 핵심 검증·점유 예산을 적용한다.
 - UI 실행권·환경이 막혀도 독립적인 read-only 코드 검토, 로그 분석, 문서 준비까지 전부 중단하지 않는다. UI 게이트는 미완료로 유지하고 선행 검토의 대상 diff·결과를 보존한다. 실행 환경이 복구되면 미검증 selector와 이후 변경분만 이어서 확인하며, 선행 검토를 UI 통과나 Ship 허가로 해석하지 않는다.
 - phase 상태·증거·문서 확인 이력은 `scripts/codex-pipeline.py`로 기록/검사한다(사용법은 `.codex/token-efficiency.md`). 기록의 존재만으로 완료를 선언하지 않는다. 원문과 adapter를 이번 실행에 적용한 판단은 parent가 유지하며, 문서 hash 확인은 원문 읽기/이해의 대체가 아니다. tool의 compact report를 바탕으로 필수 시작/완료 안내와 최종 증빙을 집계하고 같은 로그/절차를 반복 서술하지 않는다.
 - Ship 단계는 auth/network/remote 조건이 충족될 때만 실제 `gh` 작업을 수행한다. 막히면 manual recovery를 출력한다.
@@ -73,23 +106,23 @@ Claude skill 문서를 그대로 유지하면서 Codex에서 실행 semantics를
 
 사용자가 승인한 UI 검증 비용 개선에 따른 Codex 전용 실행 예외다. Claude 원본 S11 및 Phase 2.5의 무조건 full 요구를 다음 범위 판정으로 대체한다. Phase 자체나 결과 보고는 생략하지 않는다. `.claude/**` 원본과 Claude 실행 정책은 유지한다.
 
-사용자의 최신 지시에 따라 아래 판정이 `full`이어도 전체 테스트는 사용자가 명시적으로 요청한 경우에만 실행한다. 요청이 없으면 코드 영향 범위의 targeted 테스트로 확인하고, 실행하지 않은 full 게이트는 미검증으로 기록한다.
+모든 스킬에 위 핵심 검증 정책을 적용한다. 아래 판정이 `full`이어도 전체 테스트는 사용자가 명시적으로 요청한 경우에만 로컬 실행한다. 요청이 없으면 영향 조사 후 필요한 targeted selector를 확정하고 그 통과로 게이트를 판단한다. 전체 회귀 미실행은 검증 범위의 한계이며 별도 실패 게이트가 아니다.
 
 1. Phase 1에서 `python3 scripts/plan-ui-tests.py --base main`으로 계획하고, Phase 2.5 및 Resolve 후 최종 변경 상태에서 다시 실행한다. 출력 JSON은 로그 디렉터리에 저장한다. base가 다른 작업은 실제 PR base를 지정한다. merge-base부터 tracked 현재 상태, untracked 파일, 삭제/rename 양쪽 경로가 포함된다. Git 실패를 변경 없음으로 취급하지 않는다.
-2. 파일별 이유, 플랫폼별 `skip/targeted/full`, 명령 argv를 검토한다. 판정기는 의존성 분석/테스트 실행/통과 인증기가 아니다. 변경 symbol의 다른 feature 소비자를 `rg` 또는 심볼 도구로 확인하고, 선택 범위를 벗어나거나 영향이 불명확하면 full로 상향한다. 새 화면/동작의 테스트가 없으면 작성한다. View 파일명만으로 판단하지 않는다.
+2. 파일별 이유, 플랫폼별 `skip/targeted/full`, 명령 argv를 검토한다. 판정기는 의존성 분석/테스트 실행/통과 인증기가 아니다. 변경 symbol의 다른 feature 소비자를 `rg` 또는 심볼 도구로 확인하고 필요한 selector를 보완한다. 출력 argv를 무조건 실행하지 않는다. 새 화면/동작의 테스트가 없으면 작성한다. View 파일명만으로 판단하지 않는다.
 3. 기본 범위:
    - 문서/지침 Markdown만 변경: UI `skipped`, 경로와 근거 기록. 앱 리소스 안의 Markdown은 면제하지 않는다.
    - unit test Swift 파일만 변경: 관련 unit 검증, UI `skipped`.
    - UI 게이트 판정기/CLI 선택/로그 검증 및 해당 계약 테스트만 변경: Python 계약 테스트, shell 구문, dry-run argv와 diff 리뷰로 검증하고 앱 UI는 `skipped`. 도구 수정 자체를 이유로 전체 UI나 공통 smoke를 실행하지 않는다. 판정기의 정확한 tooling 경로 목록은 검증 의무를 표시하며, 실행/설치/seed/기기 선택/CI 실행 환경 변경이 포함되면 영향을 받는 통합 검증으로 상향한다.
-   - Codex snapshot/receipt/pipeline/parity 도구와 정확히 매핑된 계약 테스트만 변경: 해당 Python 계약·parity 검증과 diff 리뷰를 수행한다. watch 실행기의 로그/결과 검증만 변경한 경우도 tooling 검증 대상이다. 파일 경로 면제는 잠정 분류이며 실행 명령·설치·seed·기기·CI 변경이 없는지 확인해야 한다. 미매핑 script는 기존 full fallback을 유지한다.
-   - 매핑된 feature 화면/ViewModel: 관련 UI suite + 공통 smoke 합집합. `test-ui.sh --smoke --only-testing DUNEUITests/ClassName`를 사용한다. CLI는 디렉터리명이 아닌 실제 class/method selector를 받는다.
-   - App/Domain/Data/Shared, 내비게이션/전역 테마/저장/프로젝트 설정, 공유 test helper 또는 미매핑 변경: 영향 플랫폼 full. watch는 별도 runner로 검증한다. 공유 소스/플랫폼이 불명확하면 iOS/watch 모두 full로 올리고 widget/visionOS 등 추가 타깃도 확인한다.
-   - 화면 영향이 없는 순수 계산 로직: 자동 면제하지 않는다. 호출부 분석으로 UI/저장/공유 소비자에 영향이 없음을 증명하고 관련 단위 테스트 통과를 기록한 경우에만 UI `skipped` 판단 가능하다. 근거가 부족하면 full 유지.
-   - nightly/릴리스 전: 전체 회귀 유지. HealthKit 권한 등 full plan의 기존 manual 제외는 별도 실제 기기 검증을 요구한다.
+   - Codex snapshot/receipt/pipeline/parity 도구와 정확히 매핑된 계약 테스트만 변경: 해당 Python 계약·parity 검증과 diff 리뷰를 수행한다. watch 실행기의 로그/결과 검증만 변경한 경우도 tooling 검증 대상이다. 파일 경로 면제는 잠정 분류이며 실행 명령·설치·seed·기기·CI 변경이 없는지 확인해야 한다. 미매핑 script는 실제 동작·호출부를 조사해 필요한 계약/통합 검증을 정한다.
+   - 매핑된 feature 화면/ViewModel: 관련 UI class/method를 선택한다. 공통 탐색에 영향이 있을 때만 `--smoke`를 합친다. CLI는 디렉터리명이 아닌 실제 class/method selector를 받는다.
+   - App/Domain/Data/Shared, 내비게이션/전역 테마/저장/프로젝트 설정, 공유 test helper 또는 미매핑 변경: `full` 경고를 바탕으로 소비자와 플랫폼을 조사해 핵심 selector를 정한다. watch·widget·visionOS 등 실제 영향 target만 별도 검증한다. 공유 폴더라는 이유만으로 모든 플랫폼 전체 회귀를 실행하지 않는다.
+   - 화면 영향이 없는 순수 계산 로직: 호출부 분석과 관련 단위 테스트 통과를 기록하고 UI `skipped`로 판단할 수 있다. 근거가 부족하면 관련 소비자의 UI selector를 보완한다.
+   - CI/nightly의 기존 전체 회귀는 유지한다. 로컬 릴리스 점검도 사용자 요청 범위를 따른다. HealthKit 권한 등 Simulator로 검증할 수 없는 필수 동작은 별도 실제 기기 검증으로 기록한다.
 4. `--smoke`만 실행해서 변경 기능 검증을 대체하지 않는다. 테스트 선택이 새 동작 커버리지를 증명하지 않는다. 제스처/차트의 seeded lifecycle, 번역/Dynamic Type/iPad/watch 등 해당 변경의 기존 검증 의무를 유지한다.
 5. 완료 증빙: 변경 경로/판정 이유, 실제 명령·plan·기기, 결과 로그, 수행/skip 수, 관련 suite 실행 여부를 기록한다. UI가 필요한데 미실행/0개/unknown count/필수 suite 누락/실패면 게이트 실패다. 정당한 UI 면제는 `skipped`로 기록하고 “UI 통과/레이아웃 확인 완료”라고 보고하지 않는다.
 6. 수정 중에는 실패 관련 테스트부터 확인한다. 최종 변경 상태에 필요한 범위가 모두 통과해야 Review/Ship로 진행한다. 동일 성공 증거 재사용은 `.codex/token-efficiency.md` 조건을 따르며 targeted 성공을 full 증거로 승격하지 않는다.
-7. 자동 판정 범위를 축소한 경우 근거와 대체 검증을 Proof Ledger에 남긴다. 인프라 변경은 실행기 fixture/구문/parity 검증도 수행한다. 빌드, 리뷰, Compound, Ship의 다른 게이트는 유지한다.
+7. 자동 판정 범위를 축소한 경우 근거와 대체 검증을 Proof Ledger에 남긴다. 인프라 변경은 실행기 fixture/구문/parity 검증도 수행한다. 다른 게이트에도 위 핵심 검증·중복 빌드 방지 정책을 동일하게 적용한다.
    - 앱 소스·프로젝트·UI test body·seed/helper가 동일한 CLI 선택 변경은 fixture와 dry-run 검증 결과 및 앱 관련 diff 없음으로 증빙한다. 검증 도중 발견한 무관한 기존 UI 실패를 수정하느라 작업 범위를 확장하지 않는다. 중단한 UI 실행은 통과 증거가 아니며 이번 도구 작업의 완료 조건으로 삼지 않는다.
 
 ### 실제 화면 디자인맵 동기화
@@ -111,6 +144,19 @@ Codex가 iOS·iPadOS·Duo·watchOS의 보이는 화면 배치, 글자, 상태, �
 - detached HEAD 또는 `main` 에서는 구현 커밋 전에 `codex/` prefix 작업 브랜치를 만든다.
 - baseline dirty 파일은 자동 커밋 범위에서 제외한다.
 - quality agents는 기본적으로 findings를 내고, 실제 수정은 같은 Work phase의 구현 단위 또는 Resolve phase로 넘긴다.
+- standalone 실행도 위 핵심 검증 계약을 사용한다. build/test를 같은 커밋·phase에서 중복 실행하지 않는다.
+
+### /debug
+
+- 재현은 실패한 동작·selector 하나에서 시작하고 원인 수정 뒤 해당 검사와 영향받는 회귀만 실행한다. 환경 장애는 앱 코드 실패와 분리한다. 화면 잠금 추정으로 재현을 생략하지 않고 [UI 실행 환경 진단](ui-execution.md)을 따른다.
+
+### /testing-patterns
+
+- 변경된 분기·경계·오류의 테스트 작성 의무는 유지하되 실행은 관련 class/method만 선택한다. `scripts/test-unit.sh --ios-only --only-testing DUNETests/<실제Suite>`처럼 target을 한정한다. Watch 영향이 있을 때만 해당 Watch selector를 추가한다. selector 없는 unit 실행은 전체 요청 때만 사용한다.
+
+### /xcode-project
+
+- 생성·빌드는 기존 표준 실행기/후처리를 유지한다. 소스나 프로젝트 변경이 없으면 재생성·빌드하지 않는다. 로컬 job 예산은 `scripts/lib/xcodebuild-resources.sh`를 따르며, standalone 실행에도 동일한 deadline을 씌운다. 캐시 불일치 증거 없이 clean을 선행하지 않는다.
 
 ### /review
 
@@ -176,16 +222,16 @@ Codex가 iOS·iPadOS·Duo·watchOS의 보이는 화면 배치, 글자, 상태, �
 ### /ui-testing
 
 - **입력 UI의 키보드 사전 조건**: 폼·텍스트 입력·키보드가 포함된 Simulator 검사는 현재 worktree 전용 기기에서 하드웨어 키보드 연결을 해제하고 소프트웨어 키보드 표시 상태를 확인한다. 메뉴 탭 뒤 폼이 열리지 않거나 입력 필드·키보드 조회가 실패하면 앱/테스트 코드를 수정하기 전에 이 설정을 먼저 확인한다. 확인 절차와 사용자 확인 근거는 [소프트웨어 키보드 확인](ui-execution.md#소프트웨어-키보드-확인)을 따른다. 키보드 활성화 확인과 해당 UI 검사 통과는 별도로 기록한다.
-- 환경 실패·화면 잠금·실행권 대기가 발생하면 `.codex/ui-execution.md`를 읽고 단계를 분류한다. 저장소 simulator 실행 잠금과 Mac 화면 잠금은 다르다. 실행기 `<log>.host.json`은 진단 자료이며 UI 통과 증거가 아니다.
+- 환경 실패·화면 잠금·실행권 대기가 발생하면 `.codex/ui-execution.md`를 읽고 단계를 분류한다. **Mac 화면 잠금만으로 불가 판정·사용자 잠금 해제 요청·대기 전환하지 않는다.** 기존 잠금 상태 성공 근거를 읽고 같은 예산 안에서 표준 XCTest·guest 캡처·필요한 CLI/readback 경로를 확인한다. 저장소 simulator 실행 잠금과 Mac 화면 잠금은 다르다. 실행기 `<log>.host.json`은 진단 자료이며 UI 통과 증거가 아니다.
 - `agent: ui-test-expert`는 agent-map의 실제 모델 배정을 사용한다. 테스트 실행 자체에는 agent가 필요 없으며, 여러 화면 조작·증거 수집은 위 **실행 검증 수집 위임**의 조건과 역할 제한을 따른다. 테스트 설계·구현과 시각적 품질 판단은 실행 수집 모드로 내리지 않는다.
 - Unit/UI/watch 테스트는 기존 `scripts/test-unit.sh`, `scripts/test-ui.sh`, `scripts/test-watch-ui.sh`를 표준 경로로 사용한다. 기본 파일 로그/요약을 유지하고 필요한 때만 streaming한다.
-- **UI 실행 점유 제한**: Codex 로컬 UI 테스트는 raw `xcodebuild test` 대신 표준 UI 실행기를 사용한다. 실행기에는 시뮬레이터 잠금 대기 60초, 로그 무갱신 15분, 전체 실행 deadline이 있다. focused/smoke 기본 30분, full 기본 3시간이며 정당한 장시간 검증은 `DUNE_UI_TEST_WALL_TIMEOUT`과 `DUNE_UI_TEST_IDLE_TIMEOUT`으로 실행 전에 명시한다. deadline 124, 잠금 대기 실패, 테스트 결과 정체는 실패 증거다. 별도 PID를 임의 종료하거나 같은 명령을 이름만 바꿔 재시도하지 않는다.
+- **UI 실행 점유 제한**: Codex 로컬 UI 테스트는 raw `xcodebuild test` 대신 표준 UI 실행기를 사용한다. 실행기에는 시뮬레이터 잠금 대기 60초, 로그 무갱신 15분, 전체 실행 deadline이 있다. 실행기 자체의 fallback은 focused/smoke 30분·full 3시간이지만 Codex는 위 점유 예산에 따라 targeted 실행에 `DUNE_UI_TEST_WALL_TIMEOUT=1200`을 전달한다. 더 긴 검증은 범위와 이유를 정한 뒤 `DUNE_UI_TEST_WALL_TIMEOUT`과 필요한 `DUNE_UI_TEST_IDLE_TIMEOUT`을 실행 전에 명시한다. deadline 124, 잠금 대기 실패, 테스트 결과 정체는 실패 증거다. 별도 PID를 임의 종료하거나 같은 명령을 이름만 바꿔 재시도하지 않는다.
 - **전용 시뮬레이터 사용**: 사용자가 특정 기기를 직접 지정한 경우 외에는 현재 worktree 소유로 등록된 clone을 단독 사용한다. iPhone·iPad·Duo·Watch의 UI 테스트, 앱 설치·초기화, 수동 캡처, 자세·회전 전환에 모두 적용한다. 명시적 UDID를 넘기기 전에도 `.codex-checks/worktree-simulators.json`의 worktree·UDID·이름과 실제 기기를 대조한다. `booted` 선택이나 공용 원본·다른 worktree 기기로의 fallback은 사용하지 않는다. 전용 기기 조회·생성·소유권 확인이 실패하면 해당 실행을 중단하고 원인과 재개 조건을 기록한다. 전용 기기도 저장소 잠금과 실행 deadline을 유지한다.
 - UI 명령 시작 전 변경 범위와 정확한 selector/기기/plan을 정한다. 일반 기능 수정은 영향받는 단일 기기와 테스트부터 실행하고, 추가 기기·full·전체 디자인맵은 실제 영향 또는 명시적 사용자 요청이 있을 때만 연다. 한 저장소에서 한 번에 한 UI runner만 진행하고 테스트 완료 전에 새 runner를 만들지 않는다.
 - **사용자가 별도 기기로 병행 검증을 요청한 경우**: 연결된 다른 worktree의 전용 기기·DerivedData·로그가 모두 격리됐고 현재 worktree에 기존 실행이 없음을 확인한 뒤 `DUNE_SIM_TEST_LOCK_SCOPE=worktree`를 명시할 수 있다. 이 경우에만 저장소 단위 직렬화의 예외이며, 현재 worktree 잠금과 실행 deadline은 유지한다. 업데이트 전 runner는 worktree 잠금을 갖고 있지 않으므로 프로세스의 작업 경로·대상 UDID도 확인한다. 공용 기기 fallback, 다른 worktree 기기 조작, 공유 build/result 경로, 전역 Simulator/GUI 조작에는 이 예외를 적용하지 않는다. 환경 변수는 해당 명령에만 전달하고 기본값으로 저장하지 않는다.
 - iPhone 검증 후 watchOS 검증으로 넘어갈 때 iPhone runner 종료와 결과 receipt를 먼저 확인한다. watch runner는 잠금을 얻은 뒤 이 worktree가 소유한 동일 이름의 Watch clone을 삭제 확인하고 새로 생성한다. 삭제·소유권 확인에 실패하면 Watch 검증을 시작하지 않는다. 공용 원본·다른 worktree 기기는 삭제하지 않는다.
 - 실행기 계약 테스트도 같은 호스트에서는 순차 실행한다. 동시 fixture·시뮬레이터 조회가 대기 시간을 늘린 경우 실행을 중지하고 소유 자식이 정리됐는지 확인한 뒤 해당 실패만 다시 진단한다. 프로세스 수를 줄이기 위한 진단 중에 새 백그라운드 runner를 시작하지 않는다.
 - `xcodebuild`의 개별 testcase allowance는 빌드, CoreSimulator 부팅, 테스트 발견, `.xcresult` 정리 시간을 제한하지 않는다. 실행기가 timeout이면 마지막 testcase·로그 상태를 분류하고, 앱 실패와 SDK/host 정체를 구분한다. 정상 종료와 정확한 selector 결과 receipt가 확인되기 전에는 통과로 보고하지 않는다.
-- 개발 중 관련 테스트를 먼저 실행하고 `/run`은 위 변경 범위 기반 UI 게이트, 그 외는 source skill의 최종 필수 범위를 검증한다. 동일 검증의 재사용 조건은 `.codex/token-efficiency.md`를 따른다.
+- 개발 중과 최종 검증 모두 위 변경 범위 기반 UI 게이트를 적용한다. `/run` 밖에서도 동일하다. 동일 검증의 재사용 조건은 `.codex/token-efficiency.md`를 따른다.
 - UI 변경에서는 `swift-ui-expert`, `apple-ux-expert`, `ui-test-expert` 3개 관점을 분리해 판단한다.
 - UI 테스트 작성 요청이 아닌 단순 UI 리뷰에서는 `ui-test-expert`를 findings-only로 사용할 수 있다.

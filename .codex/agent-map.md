@@ -4,6 +4,8 @@
 
 공통 실행 규칙은 `.codex/skill-compat.md` 를 canonical source로 사용한다. 이 문서는 **agent별 차이점만** 기록한다.
 
+모든 역할은 canonical 문서의 **모든 스킬의 핵심 검증과 점유 예산**을 공유한다. 역할별 전체 테스트·별도 빌드 지시는 해당 예산과 변경 범위 기준으로 해석한다. parent와 agent가 실행기를 중복 시작하지 않는다. Mac 화면 잠금만으로 중단하거나 잠금 해제를 요청하지 않고, 환경 제약 판단은 `.codex/ui-execution.md`의 실제 실패·백그라운드 대안 확인 절차를 따른다.
+
 ## Model Routing
 
 - 일반 구현/새 테스트/리뷰: `gpt-6-sol`, `medium`.
