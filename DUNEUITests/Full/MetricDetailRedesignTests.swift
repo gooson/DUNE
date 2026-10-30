@@ -13,7 +13,7 @@ final class MetricDetailRedesignTests: SeededUITestBaseCase {
             "--ui-t06-metric", selectedKey,
             "--ui-disable-animations",
             "-AppleLanguages", "(en)",
-            "-AppleLocale", "en_US"
+            "-AppleLocale", "en_US", "-morningBriefingDisabled", "YES"
         ]
     }
 
@@ -38,7 +38,7 @@ final class MetricDetailRedesignTests: SeededUITestBaseCase {
                 "--ui-t06-metric", key,
                 "--ui-disable-animations",
                 "-AppleLanguages", "(en)",
-                "-AppleLocale", "en_US"
+                "-AppleLocale", "en_US", "-morningBriefingDisabled", "YES"
             ]
             // --ui-reset and --seed-mock are retained by launchConfiguration.
             // A new AUT launch prevents navigation, scroll, and fixture carryover.
@@ -83,7 +83,7 @@ final class MetricDetailRedesignTests: SeededUITestBaseCase {
 
     func testHRVRealWellnessEntryAndAllData() throws {
         var configuration = launchConfiguration
-        configuration.additionalArguments = ["--ui-disable-animations", "-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
+        configuration.additionalArguments = ["--ui-disable-animations", "-AppleLanguages", "(en)", "-AppleLocale", "en_US", "-morningBriefingDisabled", "YES"]
         configuration.initialTabSelectionArgument = "wellness"
         launchApp(with: configuration)
         navigateToWellness()
