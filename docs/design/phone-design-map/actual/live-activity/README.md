@@ -46,3 +46,19 @@ Watch의 종료 데이터를 미러와 독립적인 WC lifecycle로 전달하고
 초기 ENOSPC로 별도 작업트리를 만들지 못했다. 이후 공간이 확보되어 현재 작업트리 전용 iPhone 18 Pro(iOS 27.0, UDID 9905027B-0A4A-4A45-84D0-98431BE94BAC)의 소유권을 확인하고 표준 `scripts/test-ui.sh`로 `WatchWorkoutLiveActivityUITests`를 실행했으나, 다른 작업의 저장소 시뮬레이터 잠금이 60초 동안 해제되지 않아 exit 2로 시작하지 못했다. 테스트 0건은 통과가 아니다. 현재 실행의 로그와 출처는 `.codex-checks/live-activity-icons/`에 남긴다.
 
 새 PNG는 없으며 위의 이전 PNG를 운동별 기호의 증거로 재사용하지 않는다. 미갱신은 WLA01 iPhone 잠금 화면/알림 센터의 러닝·사이클·근력·일시 정지·연결 대기, Dynamic Island compact/minimal/expanded, Watch small, iPad와 Duo 접힘·펼침이다. 실제 Watch↔iPhone 연동·복구도 미확인이다. 저장소 잠금이 해제되면 관련 시스템 UI와 Xcode 단위 테스트를 우선 실행하고 최종 요구 UI 범위(iOS/Watch full)를 충족한 뒤 새 원본과 SHA-256·기기·시각·selector를 기록한다.
+
+
+## 최종 실행 결과 · 2026-10-30
+
+시스템 UI 재시도 로그는 `** BUILD INTERRUPTED **`로 끝났다. XCTest case 시작 기록은 0개이며 최종 `.result.json`이 없어 실행 건수·종료 코드를 확정할 수 없다. 테스트 통과나 UI 게이트 완료로 처리하지 않는다. 새 WLA01 PNG는 없고 기존 캡처는 이번 운동별 아이콘의 증거가 아니다.
+
+구현·최종 통합 빌드·실제 Snapshot Swift Testing 15개·5관점 및 전문 코드 리뷰는 완료했다. [Draft PR #864](https://github.com/gooson/DUNE/pull/864)에 보존했으며 UI 검증 미완료로 머지하지 않았다. 재개 조건은 빌드 실행 환경 정상화 후 전용 iPhone의 WLA01+smoke 실행이 최종 receipt와 새 캡처를 생성하는 것이다. 다른 작업의 미커밋 소스·문서는 커밋하거나 정리하지 않았다.
+
+
+## 재개 검증 · 2026-10-30
+
+최신 main(04c6437d)을 통합했고 실제 화면맵 인덱스 충돌은 최신 링크와 WLA01 캡처 대기 표시를 모두 보존해 해결했다(f9805d1c). 아이콘·공유 모델·관련 테스트 7개 파일이 이전 검증본과 바이트 단위로 동일함을 확인했다. 최종 통합 코드 리뷰에서 열린 P1/P2는 없고 GitHub `build` 체크도 성공했다.
+
+격리된 관리 작업트리에서 표준 실행기로 WLA01+smoke를 재개했다. 컴파일 정체 대응으로 Xcode 빌드 작업을 2개로 제한하고 index store를 끄도록 실행 환경을 준비했으나, 새 전용 iPhone 18 Pro(iOS 27.0, UDID 859833FC-D42F-4D9F-9A6D-73786F747C8B)가 두 번 모두 120초 안에 부팅되지 않아 실행기 exit 1로 테스트 전에 종료됐다. 마지막 readback은 Booting이며, 소유 simctl 명령의 SIGKILL 이후 정리 불완전 메시지도 남았다. 테스트는 시작하지 않았고 새 캡처는 없다. 기존 캡처를 이번 변경의 증거로 사용하지 않는다.
+
+사용자가 2026-10-30에 “UI 미검증을 기록하고 지금 머지”를 명시적으로 선택했다. 이번 UI 게이트만 예외로 승인받아 PR #864를 머지한다. 부팅 실패·테스트 미실행·캡처 미갱신 사실은 유지하며 UI 통과로 처리하지 않는다. 원래 작업트리의 다른 소스·디자인 변경은 그대로 보존했다.

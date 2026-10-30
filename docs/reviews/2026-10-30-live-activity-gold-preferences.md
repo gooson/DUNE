@@ -60,3 +60,5 @@ stale 요청을 처음부터 만료된 상태로 시작하면 운동 제목과 W
 Init·Plan·Work와 소스 리뷰·수정·해결 문서는 준비했다. UI gate는 실패이며 Quality의 런타임 확인, Pre-Ship, Ship은 통과하지 않았다. 초안 PR은 코드 검토를 위한 보존본이며 머지하지 않는다. 일반 iPhone S01은 저장·재실행 새 캡처를 반영하고, WLA01의 최종 Gold 화면과 다른 기기 S01을 완료 캡처로 표시하지 않는다.
 
 초안 PR 검토에서 포털 미리보기가 다른 상태의 current flag에 의존하는 P2를 발견해 수정했다. running 자체의 current_layout=true와 captured 상태를 요구하며, 다른 상태만 최신·running 최신·running metadata 없음의 세 문서 fixture로 확인했다. 앱·시뮬레이터는 실행하지 않았다.
+
+2026-10-30 사용자가 PR #868의 즉시 머지를 명시적으로 지시했다. UI 미검증 상태는 그대로 기록하고 사용자 승인에 따라 머지하며 추가 테스트는 실행하지 않는다.
