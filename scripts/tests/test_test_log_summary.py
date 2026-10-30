@@ -59,6 +59,17 @@ class TestLogSummaryTests(unittest.TestCase):
         self.assertIn("Last reported test count: 5", summary)
         self.assertNotIn("Failure details:", summary)
 
+    def test_modern_swift_testing_count_overrides_xctest_zero(self) -> None:
+        summary, _ = self.summarize(
+            "Executed 0 tests, with 0 failures (0 unexpected)\n"
+            "✔ Test run with 20 tests in 1 suite passed after 0.236 seconds.\n", 0)
+        self.assertIn("Last reported test count: 20", summary)
+        self.assertNotIn("Last reported failures: 0", summary)
+
+    def test_modern_swift_testing_plural_suites(self) -> None:
+        summary, _ = self.summarize("Test run with 21 tests in 2 suites passed after 1 second.\n", 0)
+        self.assertIn("Last reported test count: 21", summary)
+
     def test_xctest_skipped_count_is_reported(self) -> None:
         summary, _ = self.summarize("Executed 3 tests, with 1 test skipped and 0 failures\n", 0)
         self.assertIn("Last reported test count: 3", summary)

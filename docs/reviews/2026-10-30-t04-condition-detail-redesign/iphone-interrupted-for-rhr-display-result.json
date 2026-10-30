@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 143,
+  "requested_selectors": [
+    "DUNEUITests/ConditionDetailRedesignTests/testHeroContributionsAndUnifiedTrendAreReachable",
+    "DUNEUITests/ConditionDetailRedesignTests/testMaximumAccessibilitySizeKeepsHeroTrendAndExplainerUsable",
+    "DUNEUITests/ConditionDetailRedesignTests/testSingleNativeExplainerExpandsCalculationAndOriginalItems",
+    "DUNEUITests/ConditionDetailRedesignTests/testPeriodControlsKeep44PointTargetsAndAcceptEdgeTaps",
+    "DUNEUITests/ChartInteractionRegressionUITests/testConditionTrendFollowsHistoryScroll",
+    "DUNEUITests/ChartInteractionRegressionUITests/testConditionDayChartRetainsPointsWhenScrollingToPreviousDays",
+    "DUNEUITests/LimitedHealthHistoryUITests/testConditionDetailExplainsLimitedHistory"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": null,
+    "passed": null,
+    "skipped": null,
+    "failed": null
+  },
+  "passed_cases": 1,
+  "failures": [
+    "xcodebuild exited 143",
+    "UI test log has no executed-test count",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/ConditionDetailRedesignTests/testHeroContributionsAndUnifiedTrendAreReachable",
+    "DUNEUITests/ConditionDetailRedesignTests/testMaximumAccessibilitySizeKeepsHeroTrendAndExplainerUsable",
+    "DUNEUITests/ConditionDetailRedesignTests/testSingleNativeExplainerExpandsCalculationAndOriginalItems",
+    "DUNEUITests/ConditionDetailRedesignTests/testPeriodControlsKeep44PointTargetsAndAcceptEdgeTaps",
+    "DUNEUITests/ChartInteractionRegressionUITests/testConditionTrendFollowsHistoryScroll",
+    "DUNEUITests/LimitedHealthHistoryUITests/testConditionDetailExplainsLimitedHistory"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.xcodebuild/t04-final-iphone-ui.log"
+}

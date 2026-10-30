@@ -131,3 +131,5 @@ Life Flow를 실제 앱에 반영했다. [검증 보고](../../reviews/2026-10-2
 2026-10-29 [유산소 아틀라스 통합 시안](cardio-atlas-integrated-proposal.md)을 추가했다. 다섯 상세 화면 선택 대신 단일 기본 상세와 공유 스타일, 저니·패스포트의 연결로 통합한다. 이전 비교안은 보존하고 앱 소스/실제 화면 캡처는 변경하지 않았다.
 
 - [L03 습관 템플릿 개편](habit-template-redesign-proposal.md): 검토된 카드 시안의 네이티브 배치·동작 계약.
+
+- [T04 컨디션 상세 개편](condition-detail-redesign-proposal.md): 링·실측 기여·기간/차트/통계·단일 설명 펼침의 화면별 native 계약.

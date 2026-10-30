@@ -1,0 +1,31 @@
+{
+  "app_revision": "abe732c1",
+  "test_revision": "ee113c0e",
+  "general_review": [
+    "Security",
+    "Performance",
+    "Architecture",
+    "Data Integrity",
+    "Simplicity"
+  ],
+  "specialist_review": [
+    "SwiftUI",
+    "AppleUX",
+    "AppQuality",
+    "PR reviewer"
+  ],
+  "open_findings": {
+    "P1": 0,
+    "P2": 0,
+    "P3": 0
+  },
+  "resolved_findings": {
+    "P2": 5,
+    "P3": 2
+  },
+  "final_artifact_gate": "PASS",
+  "scope": "Selected T04 iPhone/iPad/Duo, default DUNE light/en DEBUG fixture100. Not full app/all themes/locales. Initial full-unit liveAI failure/idle retained.",
+  "agent_native": "Skipped: no instruction/prompt/config changes.",
+  "reviews_read_only": true,
+  "latest_evidence": "final-validation.json"
+}
