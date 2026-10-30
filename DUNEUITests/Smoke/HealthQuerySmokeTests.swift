@@ -167,9 +167,7 @@ final class HealthQuerySmokeTests: SeededUITestBaseCase {
     }
 
     private func selectKind(_ kind: String) {
-        let picker = element("health-query-kind")
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded("health-query-kind", maxSwipes: 8, direction: .down))
-        picker.tap()
+        tapVisiblePicker("health-query-kind")
         let choice = app.buttons["health-query-kind-\(kind)"].firstMatch
         XCTAssertTrue(choice.waitForExistence(timeout: 5), "Information menu should offer \(kind)")
         choice.tap()

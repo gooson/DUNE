@@ -7,7 +7,9 @@ status: ui-verification-blocked
 
 # Siri 건강 정보 조회 — 구현과 검증 기록
 
-구현 소스 기준은 `401cbf3d`이다. Xcode 27.1 / SDK 27.1에서 최종 generic iOS 빌드는 성공했다. 관련 단위 테스트는 `3999e507`에서 **62개·9개 suite 통과**했으며, 이후 변경은 컨디션 링·수면 단계 구성·유산소 지표·메모 강조·기간/오류 안내와 접근성 문구다. Domain·Data·App Intents 및 단위 테스트 소스는 `3999e507` 이후 동일하다. 문서 변경을 앱 코드의 재빌드로 오인하지 않는다.
+구현 소스 기준은 `19754ce6`이다. 20시 재개 후 **Xcode 27.2 (27B52) / Swift 6.4.2 / SDK 27.2**로 generic iOS 빌드와 관련 **63개·9개 suite** 단위 테스트가 통과했다. 실제 SDK 선언 감사에서 현재 Siri·App Intents·Foundation Models 경로의 필수 API 교체는 발견되지 않았다. [27.2 SDK 확인](sdk-27-2-audit.md)과 [실행 증거](evidence/sdk272-executions.json)를 따른다.
+
+이전 `3999e507`의 62개 검증 이후 `19754ce6`에서 비교 기간 메타데이터와 회귀 검증을 추가하고 차트 단위를 표시했다. 따라서 이전의 Domain·Data 동일성 설명을 최신 소스에 적용하지 않는다.
 
 **최종 UI 및 Ship 게이트는 미완료다.** 디자인 시안 PNG는 실제 앱 캡처가 아니며, 수정 전 실패 진단용 캡처도 최종 화면 증거로 재사용하지 않는다.
 
@@ -33,28 +35,28 @@ SDK 27의 `IntentSystemContext.locale`을 요청별 TaskLocal로 전달하여 �
 
 | 검증 | 결과와 범위 |
 |---|---|
-| 최종 iOS 빌드 | `401cbf3d`, `scripts/build-ios.sh --no-regen`, generic iOS, 성공 |
-| 관련 단위 테스트 | `3999e507`, `scripts/test-unit.sh`, 62개·9개 suite 통과 |
+| 최종 iOS 빌드 | `19754ce6`, Xcode 27.2 / SDK 27.2, `scripts/build-ios.sh --no-regen`, 성공 |
+| 관련 단위 테스트 | `19754ce6`, iOS 27.2 전용 기기, `scripts/test-unit.sh`, **63개·9개 suite 통과** |
 | 문자열 포맷·manual | `swift scripts/format-xcstrings.swift --check --check-manual`, 성공 |
 | 테마맵 동기화 | `python3 docs/design/theme-map/build-theme-map.py --check`, 성공 |
 | 초기 iPhone UI | `9ae252af`, 실제 **DUNEUITests-Full / FullConfiguration**, 선택된 34개 중 27개 통과·7개 실패 |
-| 수정 후 iPhone UI | 테스트 시작 전 저장소 시뮬레이터 잠금 대기 60초 만료. 0개 실행, 통과 아님 |
+| 추가 승인 후 iPhone UI | `2282ab87`, 4개 중 2개 통과: 14종 전환·소프트웨어 키보드, 기록 없음. 기간 탭·공유 닫기 가정 2건 실패 후 테스트 보정. 두 검사 재실행은 잠금 대기에서 시작되지 못함 |
 | iPad·Duo 접힘/펼침·최대 글씨 | 최종 구현 미실행·새 캡처 없음 |
 | Vision 빌드 | 변경하지 않은 bedtime reminder protocol 의존성 오류로 실패. 통과 아님 |
-| Xcode 27.2 | 설치된 컴파일러가 27.1이므로 실제 27.2 빌드 미검증 |
+| Xcode 27.2 | 설치·SDK 선언·앱 빌드·관련 단위 실행 확인. 최신 네이티브 화면은 별도 확인 필요 |
 
 초기 UI의 공통 smoke 3개 실패는 Dashboard의 7일 추세 그래프·알림함 제목·최대 글씨의 설정 버튼이다. 해당 소스와 테스트는 당시 `origin/main`과 동일했지만, main 자체의 동일 환경 실행으로 기존 실패를 입증한 것은 아니다. 이번 변경의 성공으로 합산하거나 관계없는 화면을 수정하지 않았다. 정확한 실패는 [초기 실행 오류](evidence/ui-initial-errors.log)에 보존한다.
 
-나머지 4개는 `HealthQuerySmokeTests`다. 실제 PNG에는 값이 렌더링됐지만 결과 카드 부모의 접근성 ID가 자식에게 전파되어 테스트의 종류·상태 ID가 사라졌다. [접근성 트리 발췌](evidence/root-identifier-proof.txt)를 확인하고 ID를 독립된 기간 Text로 옮겼다. 중복 제목·날짜, `45:00 s` 표기, 큰 값의 배치도 수정했다. 정적 재검토에서 기존 SwiftUI 발견사항은 해결됐으나 **수정 후 런타임 성공은 아직 없다**.
+나머지 4개는 `HealthQuerySmokeTests`다. 실제 PNG에는 값이 렌더링됐지만 결과 카드 부모의 접근성 ID가 자식에게 전파되어 테스트의 종류·상태 ID가 사라졌다. [접근성 트리 발췌](evidence/root-identifier-proof.txt)를 확인하고 ID를 독립된 기간 Text로 옮겼다. 중복 제목·날짜, `45:00 s` 표기, 큰 값의 배치도 수정했다. 추가 승인 실행에서 종류·출처·no-data 식별자는 정상 조회돼 이전 AX 원인 해소가 확인됐다. 14종 캡처와 키보드 검사는 통과했다. 남은 두 실패는 가려진 기간 버튼의 탭 위치와 실제 시스템 공유 popover의 닫기 방식 가정이었고 `89df4b83`에서 테스트를 보정했다. 그 재실행은 잠금 대기에서 시작되지 못했다.
 
-## 실행권 차단과 재개 조건
+## 실행 환경과 남은 검증
 
-- 분류: `waiting-for-owner`. Mac 화면 잠금이나 앱 크래시로 분류하지 않는다.
-- 소유 작업: `live-activity-gold-preferences/Health`의 `test-ui.sh`, 다른 전용 UDID의 실제 XCTest 실행. 소유 작업과 기기는 종료·변경하지 않았다.
-- 이 작업의 iPhone: `396B168F-7AB7-4118-BD8C-A209A3C672FE`, iPhone 18 Pro, iOS 27.0. iPad 및 Duo도 worktree 전용 clone으로 등록되어 있다.
-- 기존 `siri-ui-iphone` 검증 ID는 초기 assertion 실패와 수정 후 잠금 실패, 두 시도를 보존한다. 새 ID·다른 실행기·수동 캡처로 같은 검증의 재시도 제한을 우회하지 않는다.
-- 재개하려면 소유 실행이 끝나 실행권이 정상임을 확인하고, 이미 사용한 재시도 한도에 대한 추가 실행 승인이 필요하다. 소유 작업을 중단시키는 승인을 요청하는 것은 아니다.
-- 먼저 미검증 4개 owned selector를 확인한다. 그 뒤 영향받는 iPad·Duo 두 자세·최대 글씨와 소프트웨어 키보드를 순차 검증한다. 새 PNG·접근성 계층·viewport·시각·소스 커밋을 함께 수집한다. 전체 suite는 요청하지 않았으므로 자동 확대하지 않는다.
+- 이전 27.0/27.1 전용 기기 세 대는 20시의 정상 목록에서 사라졌다. 기존 실패와 UDID 기록은 보존한다.
+- 새 iOS 27.2 iPhone `094E24A5-1AFD-4E52-ADA4-2F2BD2B396ED`를 생성하고 baseline·정확한 이름·소유권을 등록했다. 표준 부팅 helper와 readback에서 정상 Booted를 확인한 뒤 단위 검증을 한 번 재개해 63개가 통과했다.
+- 공유 기기를 종료하거나 다른 작업과 병렬 검증하지 않았다. 사용자에게서 병렬 실행 승인은 받지 않았다.
+- `siri-ui-iphone` 및 승인 후 추가 검사 이력은 삭제하지 않는다. 두 조작 검사의 미검증 상태를 통과로 바꾸지 않는다.
+- 최신 비교 기간·차트 축 수정본의 새 PNG, 최대 글씨, iPad·Duo 두 자세, 실제 Siri 청취는 남아 있다. 전체 suite는 요청되지 않았으므로 자동 확대하지 않는다.
+- 과거 generic simulator build-for-testing timeout은 통과가 아니다. 이번 실제 iOS 27.2 단위 실행은 해당 테스트 타깃의 컴파일과 실행을 별도로 확인한 증거다.
 
 ## 디자인맵 상태
 
@@ -64,12 +66,12 @@ SDK 27의 `IntentSystemContext.locale`을 요청별 TaskLocal로 전달하여 �
 
 ## 리뷰와 파이프라인
 
-Security·Data Integrity·Performance·Architecture·Simplicity 리뷰의 소스 발견사항을 수정했다. Agent-Native는 지침·에이전트 설정 변경이 없어 제외했다. 이후 변경분은 SwiftUI·앱 품질 관점으로 재검토했고 새로운 확정 소스 발견사항은 없었다. 정적 검토를 시각적 승인이나 UI 통과로 승격하지 않는다. [리뷰 보존본](reviews/)과 [기계 실행 증거](evidence/executions.json)를 따른다.
+Security·Data Integrity·Performance·Architecture·Simplicity 리뷰의 소스 발견사항을 수정했다. `19754ce6`의 비교 기간·단위 수정은 별도 데이터 정합성 재검토에서 새 발견사항이 없었다. Agent-Native는 지침·에이전트 설정 변경이 없어 제외했다. 이후 변경분은 SwiftUI·앱 품질 관점으로 재검토했고 새로운 확정 소스 발견사항은 없었다. 정적 검토를 시각적 승인이나 UI 통과로 승격하지 않는다. [리뷰 보존본](reviews/)과 [기계 실행 증거](evidence/executions.json)를 따른다.
 
 | 단계 | 상태 |
 |---|---|
 | Init / Plan / Work | 완료. 계획서·소스·빌드·관련 단위 검증 보존 |
-| UI Test | 차단. 수정 후 owned 4개 및 최종 캡처 미검증 |
+| UI Test | 이전 2개 부분 성공 보존. 최신 UI·두 조작·다른 기기와 최종 캡처 미완료 |
 | Review / Quality | 독립적인 정적 검토 수행. UI 증거를 포함한 최종 승인 보류 |
 | Resolve | 소스 수정 완료. 런타임 재확인 보류 |
 | Compound | 해결한 설계·음성 처리 문서 준비. 파이프라인 완료 선언 보류 |
