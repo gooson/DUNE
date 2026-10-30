@@ -2229,7 +2229,8 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         openNotificationHub()
 
         let missingRouteRow = app.buttons[AXID.notificationWorkoutRow(Fixture.notificationMissingRouteID)].firstMatch
-        XCTAssertTrue(missingRouteRow.waitForExistence(timeout: 8))
+        XCTAssertTrue(t14RevealMissingWorkoutRouteRow(missingRouteRow),
+                      "The missing workout notification should be reachable in the front hub list")
         missingRouteRow.auditTap()
 
         let scroll = app.scrollViews[AXID.notificationTargetNotFoundScreen].firstMatch
@@ -2255,6 +2256,37 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         tapBackButton()
         XCTAssertTrue(app.scrollViews[AXID.activityRootScroll].firstMatch.waitForExistence(timeout: 8),
                       "Native Back should return to Activity")
+    }
+
+    private func t14RevealMissingWorkoutRouteRow(_ row: XCUIElement) -> Bool {
+        let hub = app.collectionViews[AXID.notificationHubScreen].firstMatch
+        guard hub.exists else { return false }
+        let window = app.windows.firstMatch.frame
+        let navigationBar = app.navigationBars["Notifications"].firstMatch
+        let tabBar = app.tabBars.firstMatch
+        let top = max(window.minY, navigationBar.exists ? navigationBar.frame.maxY : window.minY)
+        let bottom = tabBar.exists && tabBar.isHittable && tabBar.frame.minY > window.midY
+            ? min(window.maxY, tabBar.frame.minY) : window.maxY
+        let viewport = hub.frame.intersection(CGRect(x: window.minX, y: top,
+                                                     width: window.width, height: max(0, bottom - top)))
+            .insetBy(dx: 0, dy: 4)
+        guard !viewport.isNull && viewport.height > 80 && hub.frame.height > 0 else { return false }
+
+        for attempt in 0..<10 {
+            if row.exists {
+                let frame = row.frame
+                if viewport.contains(frame) && row.isHittable { return true }
+            }
+            if attempt == 9 { break }
+            let startY = viewport.minY + viewport.height * 0.75
+            let endY = viewport.minY + viewport.height * 0.35
+            let start = hub.coordinate(withNormalizedOffset:
+                CGVector(dx: 0.5, dy: (startY - hub.frame.minY) / hub.frame.height))
+            let end = hub.coordinate(withNormalizedOffset:
+                CGVector(dx: 0.5, dy: (endY - hub.frame.minY) / hub.frame.height))
+            start.press(forDuration: 0.05, thenDragTo: end)
+        }
+        return false
     }
 
     private enum T14FallbackTextPosition { case whole, start, end }
