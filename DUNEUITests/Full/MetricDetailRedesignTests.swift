@@ -57,10 +57,10 @@ final class MetricDetailRedesignTests: SeededUITestBaseCase {
         _ = loading.waitForExistence(timeout: 1)
         XCTAssertTrue(loading.waitForNonExistence(timeout: 15), "\(key) must finish loading before identity and capture")
 
-        // The original summary is one combined accessibility element. Assert its
+        // The current quantity hero is one combined accessibility element. Assert its
         // category-specific value and unit before accepting any image as evidence.
         let summary = app.descendants(matching: .any)["metric-summary-header"].firstMatch
-        XCTAssertTrue(summary.waitForExistence(timeout: 10), "\(key) original metric header must exist")
+        XCTAssertTrue(summary.waitForExistence(timeout: 10), "\(key) quantity hero must exist")
         let label = summary.label
         XCTAssertTrue(label.contains(expected.title), "Expected \(key) title \(expected.title), got \(label)")
         XCTAssertTrue(label.contains(expected.value), "Expected \(key) value \(expected.value), got \(label)")
@@ -79,6 +79,60 @@ final class MetricDetailRedesignTests: SeededUITestBaseCase {
         }
         screen.swipeUp()
         attach("T06-\(key)-lower")
+    }
+
+    func testHRVIntegratedHistoryPagesAndKeepsStatistics() throws {
+        XCTAssertTrue(app.descendants(matching: .any)["metric-detail-screen-hrv"].firstMatch.waitForExistence(timeout: 15))
+        let range = app.staticTexts["detail-chart-visible-range"].firstMatch
+        let stats = app.descendants(matching: .any)["detail-chart-visible-summary"].firstMatch
+        let previous = app.buttons["detail-chart-previous-period"]
+        let next = app.buttons["detail-chart-next-period"]
+        XCTAssertTrue(range.waitForExistence(timeout: 10))
+        XCTAssertTrue(stats.waitForExistence(timeout: 10))
+        XCTAssertTrue(previous.waitForExistence(timeout: 10))
+        XCTAssertTrue(next.waitForExistence(timeout: 10))
+        let current = range.label
+        XCTAssertFalse(next.isEnabled)
+        previous.tap()
+        XCTAssertNotEqual(range.label, current)
+        XCTAssertTrue(next.isEnabled)
+        next.tap()
+        XCTAssertEqual(range.label, current)
+        XCTAssertTrue(app.buttons["metric-detail-show-all-data"].exists)
+    }
+
+    func testWeightPeerCriteriaCancelApplyAndSource() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments = [
+            "--ui-t06-metric", "weight", "--ui-disable-animations",
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US"
+        ]
+        launchApp(with: configuration)
+        XCTAssertTrue(app.descendants(matching: .any)["metric-detail-screen-weight"].firstMatch.waitForExistence(timeout: 15))
+        let criteria = app.buttons["body-peer-criteria-cta"]
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("body-peer-criteria-cta", maxSwipes: 8))
+        criteria.tap()
+        XCTAssertFalse(app.buttons["body-peer-apply"].isEnabled)
+        app.buttons["Cancel"].tap()
+        XCTAssertFalse(app.descendants(matching: .any)["body-peer-reference"].firstMatch.exists)
+        criteria.tap()
+        let age = app.descendants(matching: .any)["body-peer-age-selection"].firstMatch
+        let sex = app.descendants(matching: .any)["body-peer-sex-selection"].firstMatch
+        age.tap()
+        app.staticTexts["30–39 years"].firstMatch.tap()
+        sex.tap()
+        app.staticTexts["Male (survey)"].firstMatch.tap()
+        let apply = app.buttons["body-peer-apply"]
+        XCTAssertTrue(apply.isEnabled)
+        apply.tap()
+        XCTAssertTrue(app.descendants(matching: .any)["body-peer-current"].firstMatch.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.descendants(matching: .any)["body-peer-reference"].firstMatch.exists)
+        XCTAssertTrue(app.descendants(matching: .any)["body-peer-difference"].firstMatch.exists)
+        let source = app.buttons["body-peer-source"]
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("body-peer-source", maxSwipes: 4))
+        source.tap()
+        XCTAssertTrue(app.staticTexts["Survey source"].firstMatch.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.links["Open free original report"].firstMatch.exists)
     }
 
     func testHRVRealWellnessEntryAndAllData() throws {
