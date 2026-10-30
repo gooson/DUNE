@@ -37,6 +37,14 @@ enum WatchWorkoutActivityPreview {
         } else {
             exerciseName = "Outdoor Run"
         }
+        let activityType: WorkoutActivityType
+        if let typeIndex = arguments.firstIndex(of: "--ui-watch-live-activity-type"),
+           arguments.indices.contains(typeIndex + 1),
+           let requestedType = WorkoutActivityType(rawValue: arguments[typeIndex + 1]) {
+            activityType = requestedType
+        } else {
+            activityType = .running
+        }
         let snapshot = WatchWorkoutSnapshot(
             startedAt: now.addingTimeInterval(-73),
             updatedAt: now,
@@ -45,7 +53,8 @@ enum WatchWorkoutActivityPreview {
             phase: phase == .paused ? .paused : .running,
             heartRate: 142,
             activeCalories: 86,
-            distanceMeters: 1_200
+            distanceMeters: 1_200,
+            exerciseIconName: activityType.iconName
         )
         guard snapshot.isValid else { return }
 
