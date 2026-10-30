@@ -884,19 +884,35 @@ final class CloudSyncConsentRegressionTests: UITestBaseCase {
         XCTAssertTrue(heroTitle.exists && heroTitle.isHittable, "Hero title should be visible at the top")
         VisualAudit.capture("T02 maximum text hero")
 
+        let window = app.windows.firstMatch
+        let enableButton = app.buttons[AXID.cloudSyncConsentEnable].firstMatch
+        XCTAssertTrue(window.exists && enableButton.waitForExistence(timeout: 5))
+        let scrollFrame = consentView.frame
+        let contentTop = max(scrollFrame.minY, window.frame.minY) + 24
+        let contentBottom = min(scrollFrame.maxY, enableButton.frame.minY) - 24
+        XCTAssertGreaterThan(contentBottom - contentTop, 100, "Scrollable content needs room above the pinned choices")
+        let visibleContent = CGRect(
+            x: scrollFrame.minX, y: contentTop,
+            width: scrollFrame.width, height: contentBottom - contentTop
+        )
+        let start = consentView.coordinate(withNormalizedOffset: CGVector(
+            dx: 0.5, dy: (contentBottom - scrollFrame.minY) / scrollFrame.height
+        ))
+        let end = consentView.coordinate(withNormalizedOffset: CGVector(
+            dx: 0.5, dy: (contentTop - scrollFrame.minY) / scrollFrame.height
+        ))
         for title in ["Private storage", "Across devices", "Use without iCloud"] {
             let rowTitle = app.staticTexts[title].firstMatch
             XCTAssertTrue(rowTitle.exists, "\(title) should remain in the scrollable content")
-            for _ in 0..<6 {
-                if rowTitle.isHittable { break }
-                consentView.swipeUp()
+            for _ in 0..<8 {
+                if visibleContent.contains(rowTitle.frame) && rowTitle.isHittable { break }
+                start.press(forDuration: 0.05, thenDragTo: end)
             }
-            XCTAssertTrue(rowTitle.isHittable, "\(title) should be reachable by scrolling")
+            XCTAssertTrue(visibleContent.contains(rowTitle.frame) && rowTitle.isHittable,
+                          "\(title) should fit and be reachable above the pinned choices")
         }
         VisualAudit.capture("T02 maximum text information")
 
-        let window = app.windows.firstMatch
-        XCTAssertTrue(window.exists)
         let visibleWindow = window.frame.insetBy(dx: -1, dy: -1)
         for identifier in [AXID.cloudSyncConsentEnable, AXID.cloudSyncConsentLocalOnly] {
             let button = app.buttons[identifier].firstMatch
