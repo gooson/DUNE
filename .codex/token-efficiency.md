@@ -112,6 +112,34 @@ python3 scripts/codex-pipeline.py report
 }
 ```
 
+복구 대상 worktree의 루트에서 다음 읽기 전용 예시로 receipt 경로와 **마지막 시도**를 확인한다. `existing-ui-check`는 기존 ID로 바꾸며 새 ID를 만들지 않는다. 다른 시도를 감사하려면 그 시도의 로그를 명시적으로 선택하고 원본을 따로 확인한다.
+
+```bash
+python3 -B - <<'AUDIT_FIELDS'
+import hashlib, json
+from pathlib import Path
+check_id = "existing-ui-check"
+root = Path.cwd().resolve()
+key = hashlib.sha256(check_id.encode()).hexdigest()[:24]
+receipt = root / ".codex-checks/pipeline" / f"check-{key}.json"
+record = json.loads(receipt.read_text())
+assert record["id"] == check_id and record["worktree"] == str(root)
+attempt = record["attempts"][-1]
+print(json.dumps({
+    "receipt": str(receipt), "check_id": check_id, "worktree": str(root),
+    "attempt_log": attempt["log"],
+    "attempt_hash": hashlib.sha256(json.dumps(
+        attempt, sort_keys=True, separators=(",", ":")
+    ).encode()).hexdigest(),
+    "inspect_before_audit": {name: attempt.get(name) for name in
+        ("status", "exit_code", "command", "context", "before", "after")}
+}, ensure_ascii=False, indent=2))
+AUDIT_FIELDS
+shasum -a 256 .codex-checks/lock-audit/provenance.md
+```
+
+마지막 `shasum`은 담당자가 먼저 작성한 출처·환경 근거 파일의 hash를 제공한다. 위 출력은 감사 승인이나 실행 시작 증거가 아니다. `source_revision`은 당시 실행한 소스를 보존한 기록에서 확인한다. `git rev-parse HEAD`를 사용할 수 있는 경우는 **현재 HEAD가 검토한 당시 실행 소스와 같은 경우뿐**이며, 도구 적용 후의 새 HEAD를 과거 실행 소스로 대입하지 않는다.
+
 - `attempt_hash`는 Python `hashlib.sha256(json.dumps(attempt, sort_keys=True, separators=(",", ":")).encode()).hexdigest()`다. 원본 record의 해당 attempt 전체를 사용한다. 감사 근거에는 실제 검토한 호출·환경·당시 소스와 exact 로그 판정을 남긴다. 확인하지 않은 항목에 단순히 “verified”를 넣지 않는다. 별도 근거 파일을 최소 한 개 연결한다.
 - 허용되는 소스 묶음은 `a9d4cecc`와 `9a21f364`에서 검토한 `scripts/test-ui.sh`, sourced shell helpers, command deadline, simulator lock helper의 내용/mode다. 전체 source closure의 digest를 코드에 고정한다. historical revision과 현재 파일 모두 허용된 closure여야 한다. 새 runner 버전은 별도 검토 전까지 보수적으로 거부한다.
 - 직접 `scripts/test-ui.sh` argv만 허용한다. shell/env wrapper, dry-run/cleanup, 다른 runner는 제외한다. exit 2와 동일한 before/after 및 content fingerprint, 정확히 한 줄인 `Simulator test lock: repository|worktree simulator test lock remained busy for <seconds>s` 출력과 원본 hash를 함께 확인한다. 추가 출력, timeout/unknown exit, 누락·변조·symlink 로그나 source는 거부한다.
