@@ -372,6 +372,20 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         XCTAssertTrue(app.hasPrimaryNavigation(timeout: 8), "Seeded Today should load with a fixed daytime fixture")
         dismissMorningBriefingIfNeeded()
 
+        let weatherCard = revealWeatherCardForDetail()
+        weatherCard.auditTap()
+
+        let weatherDetail = app.descendants(matching: .any)[AXID.weatherDetailScreen].firstMatch
+        XCTAssertTrue(weatherDetail.waitForExistence(timeout: 5), "Weather detail should open from weather card")
+        XCTAssertTrue(app.staticTexts["weather-detail-temperature"].exists,
+                      "Current temperature should remain visible in the weather sky")
+        XCTAssertTrue(app.staticTexts["weather-detail-condition"].exists,
+                      "The original condition label should remain in the hero")
+        XCTAssertTrue(app.staticTexts["Outdoor Fitness Score"].exists,
+                      "The outdoor score section should remain below current weather")
+    }
+
+    private func revealWeatherCardForDetail() -> XCUIElement {
         let weatherCard = app.descendants(matching: .any)[AXID.dashboardWeatherCard].firstMatch
         XCTAssertTrue(weatherCard.waitForExistence(timeout: 10), "Seeded Today state should render weather card")
         let dashboardScroll = app.scrollViews["dashboard-root-scroll"].firstMatch
@@ -395,32 +409,47 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         XCTAssertTrue(weatherCard.isHittable && visibleWeatherViewport().contains(weatherCard.frame),
                       "Weather card should be fully below the navigation bar before opening its detail")
         XCTAssertGreaterThanOrEqual(weatherCard.frame.height, 44, "Weather row should have a finger-sized tap target")
-        weatherCard.auditTap()
-
-        let weatherDetail = app.descendants(matching: .any)[AXID.weatherDetailScreen].firstMatch
-        XCTAssertTrue(weatherDetail.waitForExistence(timeout: 5), "Weather detail should open from weather card")
-        XCTAssertTrue(app.staticTexts["weather-detail-temperature"].exists,
-                      "Current temperature should remain visible in the weather sky")
-        XCTAssertTrue(app.staticTexts["weather-detail-condition"].exists,
-                      "The original condition label should remain in the hero")
-        XCTAssertTrue(app.staticTexts["Outdoor Fitness Score"].exists,
-                      "The outdoor score section should remain below current weather")
+        return weatherCard
     }
 
     func testWeatherDetailRainNightInDarkAppearance() throws {
         openWeatherDetailVariant("rain-night", style: "dark", maximumAX: false)
-        XCTAssertTrue(app.staticTexts["Rain"].exists)
+        assertWeatherVariantHero(condition: "Rain")
         addScreenshotAttachment(named: "T08 rain night dark")
     }
 
     func testWeatherDetailSnowAtMaximumAccessibilitySize() throws {
         openWeatherDetailVariant("snow-day", style: "light", maximumAX: true)
-        let temperature = app.staticTexts["weather-detail-temperature"].firstMatch
-        XCTAssertTrue(temperature.exists)
-        XCTAssertGreaterThan(temperature.frame.height, 44,
-                             "Maximum accessibility temperature should retain its full text height")
-        XCTAssertTrue(app.staticTexts["Snow"].exists)
+        assertWeatherVariantHero(condition: "Snow", minimumTemperatureHeight: 44)
         addScreenshotAttachment(named: "T08 snow day maximum AX")
+    }
+
+    private func assertWeatherVariantHero(condition: String, minimumTemperatureHeight: CGFloat = 0) {
+        let detail = app.scrollViews[AXID.weatherDetailScreen].firstMatch
+        XCTAssertTrue(detail.waitForExistence(timeout: 5))
+        let temperature = app.staticTexts["weather-detail-temperature"].firstMatch
+        let conditionText = app.staticTexts["weather-detail-condition"].firstMatch
+        XCTAssertTrue(temperature.waitForExistence(timeout: 5))
+        XCTAssertTrue(conditionText.waitForExistence(timeout: 5))
+        XCTAssertFalse(temperature.label.isEmpty)
+        XCTAssertTrue(temperature.label.contains("°C"), "Weather hero needs a Celsius temperature")
+        XCTAssertEqual(conditionText.label, condition)
+
+        let window = app.windows.firstMatch.frame
+        let scrollViewport = detail.frame.intersection(window)
+        let top = max(scrollViewport.minY, app.navigationBars.firstMatch.frame.maxY + 8)
+        let tabBar = app.tabBars.firstMatch
+        let bottom = tabBar.exists && tabBar.isHittable
+            ? min(scrollViewport.maxY, tabBar.frame.minY - 8) : scrollViewport.maxY
+        let heroViewport = CGRect(x: scrollViewport.minX, y: top,
+                                  width: scrollViewport.width, height: max(0, bottom - top))
+        XCTAssertTrue(heroViewport.contains(temperature.frame) && temperature.isHittable,
+                      "Temperature must be fully readable in the weather hero")
+        XCTAssertTrue(heroViewport.contains(conditionText.frame) && conditionText.isHittable,
+                      "Condition must be fully readable in the weather hero")
+        if minimumTemperatureHeight > 0 {
+            XCTAssertGreaterThan(temperature.frame.height, minimumTemperatureHeight)
+        }
     }
 
     private func openWeatherDetailVariant(_ variant: String, style: String, maximumAX: Bool) {
@@ -439,9 +468,7 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         launchApp(with: configuration)
         XCTAssertTrue(app.hasPrimaryNavigation(timeout: 8))
         dismissMorningBriefingIfNeeded()
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.dashboardWeatherCard, maxSwipes: 24))
-        let weatherCard = app.descendants(matching: .any)[AXID.dashboardWeatherCard].firstMatch
-        XCTAssertTrue(weatherCard.waitForExistence(timeout: 5))
+        let weatherCard = revealWeatherCardForDetail()
         weatherCard.auditTap()
         XCTAssertTrue(app.descendants(matching: .any)[AXID.weatherDetailScreen].firstMatch.waitForExistence(timeout: 5))
     }
