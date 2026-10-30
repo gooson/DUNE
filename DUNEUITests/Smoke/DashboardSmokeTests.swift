@@ -172,7 +172,8 @@ final class DashboardSmokeTests: UITestBaseCase {
         let navigation = app.navigationBars.firstMatch
         let top = max(frame.minY, navigation.exists ? navigation.frame.maxY + 8 : frame.minY)
         let tabBar = app.tabBars.firstMatch
-        let bottom = tabBar.exists && tabBar.isHittable ? min(frame.maxY, tabBar.frame.minY - 8) : frame.maxY
+        let bottom = tabBar.exists && tabBar.isHittable && tabBar.frame.minY > frame.midY
+            ? min(frame.maxY, tabBar.frame.minY - 8) : frame.maxY
         return CGRect(x: frame.minX, y: top, width: frame.width, height: max(0, bottom - top))
     }
 
