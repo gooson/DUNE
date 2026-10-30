@@ -54,7 +54,7 @@ struct MetricQuantityHero: View {
         HStack(alignment: .center, spacing: DS.Spacing.md) {
             Image(systemName: metric.resolvedIconName)
                 .font(.system(size: iconSize, weight: .semibold))
-                .foregroundStyle(metric.category.themeColor)
+                .foregroundStyle(palette.ink)
                 .frame(width: iconColumn, height: iconColumn)
                 .background(palette.ink.opacity(0.08), in: RoundedRectangle(cornerRadius: DS.Radius.md))
                 .accessibilityHidden(true)

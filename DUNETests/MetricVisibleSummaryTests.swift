@@ -52,10 +52,9 @@ struct MetricVisibleSummaryTests {
         #expect(result.statistics.previousPeriodAverage == nil)
     }
 
-    @Test("Limited current stays partial and never compares an unauthorized prior window")
+    @Test("Limited current excludes unauthorized prior observations")
     func limitedHistory() throws {
         let result = try #require(make([(-9, 4), (0, 5), (3, 10)], limited: 2))
-        #expect(result.isPartialHistory)
         #expect(result.statistics.count == 1)
         #expect(result.statistics.average == 10)
         #expect(result.statistics.previousPeriodAverage == nil)
@@ -65,7 +64,6 @@ struct MetricVisibleSummaryTests {
     func totals() throws {
         let result = try #require(make([(-9, 0), (0, 10), (1, 20)], additive: true))
         #expect(result.total == 30)
-        #expect(result.previousTotal == 0)
         #expect(result.statistics.previousPeriodAverage == 0)
         #expect(result.statistics.changePercentage == nil)
         #expect(make([(-9, 3)]) == nil)

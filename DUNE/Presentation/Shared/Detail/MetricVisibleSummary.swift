@@ -52,10 +52,8 @@ struct MetricVisibleSummary {
     let statistics: MetricSummary
     let basis: Basis
     let unit: String
-    let isPartialHistory: Bool
     /// Only additive categories have totals. Comparison of averages lives in statistics.
     let total: Double?
-    let previousTotal: Double?
 
     static func make(
         points: [ChartDataPoint], start: Date, duration: TimeInterval,
@@ -88,9 +86,7 @@ struct MetricVisibleSummary {
            stats.min.isFinite, stats.max.isFinite else { return nil }
         return Self(
             statistics: stats, basis: basis, unit: unit,
-            isPartialHistory: limitedStart.map { start < $0 } ?? false,
-            total: isAdditive ? stats.sum : nil,
-            previousTotal: isAdditive && !usablePrior.isEmpty ? priorSum : nil
+            total: isAdditive ? stats.sum : nil
         )
     }
 }
