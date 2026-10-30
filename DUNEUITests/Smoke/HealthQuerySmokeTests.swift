@@ -61,7 +61,12 @@ final class HealthQuerySmokeTests: SeededUITestBaseCase {
         let detail = element("exercise-session-detail-scroll")
         XCTAssertTrue(detail.waitForExistence(timeout: 10), "Resolve the actual seeded SwiftData record")
         capture("SQ03-seeded-record-detail")
-        app.navigationBars.buttons.element(boundBy: 0).tap()
+        let back = app.navigationBars.buttons.matching(
+            NSPredicate(format: "label == %@", "Health information")
+        ).firstMatch
+        XCTAssertTrue(back.waitForExistence(timeout: 5))
+        XCTAssertTrue(back.isHittable)
+        back.tap()
         XCTAssertTrue(detail.waitForNonExistence(timeout: 5))
         XCTAssertTrue(element("health-query-result-kind-strengthSets").exists)
         capture("SQ03-seeded-record-return")
@@ -112,10 +117,10 @@ final class HealthQuerySmokeTests: SeededUITestBaseCase {
 
         XCTAssertTrue(app.scrollToHittableElementIfNeeded("health-query-share", maxSwipes: 8))
         app.buttons["health-query-share"].firstMatch.tap()
-        let shareSheet = app.otherElements["ActivityListView"].firstMatch
-        XCTAssertTrue(shareSheet.waitForExistence(timeout: 8), "System share sheet should open")
         let shareCaption = app.descendants(matching: .any)["LP.CaptionBar.BottomCaption"].firstMatch
-        XCTAssertTrue(shareCaption.waitForExistence(timeout: 5))
+        XCTAssertTrue(shareCaption.waitForExistence(timeout: 20), "Wait for the cold system share service to present its content")
+        let shareSheet = app.descendants(matching: .any)["ActivityListView"].firstMatch
+        XCTAssertTrue(shareSheet.waitForExistence(timeout: 5), "System share sheet should open")
         XCTAssertTrue(shareCaption.label.contains("Workout Report"), "The shared item should be the report")
         capture("SQ13-report-share")
 
@@ -163,14 +168,30 @@ final class HealthQuerySmokeTests: SeededUITestBaseCase {
                                      ("latestWorkout", "SQ01-accessibility-duration")] {
             selectKind(kind)
             let value = element("health-query-hero-value")
-            XCTAssertTrue(app.scrollToHittableElementIfNeeded("health-query-hero-value", maxSwipes: 10))
-            for _ in 0..<4 where !app.windows.firstMatch.frame.contains(value.frame) {
-                let upward = value.frame.maxY > app.windows.firstMatch.frame.maxY
-                let start = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: upward ? 0.7 : 0.4))
-                let end = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: upward ? 0.5 : 0.6))
-                start.press(forDuration: 0.05, thenDragTo: end)
+            XCTAssertTrue(value.waitForExistence(timeout: 5))
+            let scroll = app.scrollViews.containing(
+                NSPredicate(format: "identifier == %@", "health-query-hero-value")
+            ).firstMatch
+            XCTAssertTrue(scroll.exists)
+            let frame = scroll.frame.intersection(app.windows.firstMatch.frame)
+            let navigationBottom = app.navigationBars["Health information"].firstMatch.frame.maxY
+            let top = max(frame.minY, navigationBottom) + 8
+            let bottom = frame.maxY - 16
+            let viewport = CGRect(x: frame.minX, y: top, width: frame.width, height: bottom - top)
+            for _ in 0..<6 where !viewport.contains(value.frame) {
+                let upward = value.frame.maxY > bottom
+                let needed = upward ? value.frame.maxY - bottom : top - value.frame.minY
+                let distance = min(max(needed + 16, 24), viewport.height * 0.45)
+                let startY = upward ? bottom - 40 : top + 40
+                let endY = upward ? startY - distance : startY + distance
+                let origin = scroll.coordinate(withNormalizedOffset: .zero)
+                let x = frame.midX - scroll.frame.minX
+                origin.withOffset(CGVector(dx: x, dy: startY - scroll.frame.minY))
+                    .press(forDuration: 0.05, thenDragTo:
+                        origin.withOffset(CGVector(dx: x, dy: endY - scroll.frame.minY)),
+                        withVelocity: .slow, thenHoldForDuration: 0.3)
             }
-            XCTAssertTrue(app.windows.firstMatch.frame.contains(value.frame), "The large value must fit in the native viewport")
+            XCTAssertTrue(viewport.contains(value.frame), "The large value must fit below navigation in the query pane")
             capture(captureName)
         }
     }
@@ -310,7 +331,7 @@ final class HealthQuerySmokeTests: SeededUITestBaseCase {
                 "softwareKeyboardVisible": app.keyboards.firstMatch.exists,
                 "dataKind": app.launchArguments.contains("--ui-health-query-fixture")
                     ? "synthetic DEBUG health-query fixture"
-                    : "synthetic seeded SwiftData records and mock HealthKit"
+                    : "synthetic seeded SwiftData records; production query service"
             ]
             if let data = try? JSONSerialization.data(withJSONObject: metadata, options: [.sortedKeys]),
                let text = String(data: data, encoding: .utf8) {
