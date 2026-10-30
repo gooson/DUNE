@@ -485,7 +485,7 @@ struct NotificationHubView: View {
                             if release.isUnread {
                                 Text("Unread")
                                     .font(.caption2.weight(.semibold))
-                                    .foregroundStyle(.tint)
+                                    .foregroundStyle(.primary)
                             }
                             Label("Open Release", systemImage: "arrow.up.right")
                                 .font(.caption2)
@@ -648,7 +648,7 @@ struct NotificationHubView: View {
                         if !item.isRead {
                             Text("Unread")
                                 .font(.caption2.weight(.semibold))
-                                .foregroundStyle(.tint)
+                                .foregroundStyle(.primary)
                         }
                     }
                 }
