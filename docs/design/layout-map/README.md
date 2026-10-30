@@ -132,6 +132,8 @@ Life Flow를 실제 앱에 반영했다. [검증 보고](../../reviews/2026-10-2
 
 - [L03 습관 템플릿 개편](habit-template-redesign-proposal.md): 검토된 카드 시안의 네이티브 배치·동작 계약.
 
+[WLA01 골드 임팩트 · 종목별 지표 선택](live-activity-size-state-proposal.md) · [보존 시안](../theme-map/themes/dune-live-activity-size-state.html) · 네이티브 구현·검증 진행 중.
+
 - [T04 컨디션 상세 개편](condition-detail-redesign-proposal.md): 링·실측 기여·기간/차트/통계·단일 설명 펼침의 화면별 native 계약.
 
 - [T05 누적 스트레스 상세 개편](cumulative-stress-redesign-proposal.md): 동일 히어로·통합 기간/통계·요인 막대·하나의 계산 펼침.

@@ -130,6 +130,12 @@ A skill is a set of local instructions to follow that is stored in a `SKILL.md` 
 
 ## Codex Adapter Layer
 
+### 브랜치 핵심 검증과 프로세스 점유
+
+- **`run`을 포함한 모든 스킬**에서 `.codex/skill-compat.md`의 **모든 스킬의 핵심 검증과 점유 예산**을 우선 적용한다. 원본의 무조건 전체 테스트·반복 재빌드 요구에 대한 명시적 사용자 예외다. 변경 동작·소비자·영향 플랫폼을 확인해 정확한 unit/UI selector만 실행하며, 로컬 전체 회귀는 사용자가 명시적으로 요청한 경우에만 실행한다. 요청하지 않은 full을 필수 미완료 게이트로 남기지 않는다.
+- 한 worktree의 build/unit/UI/capture는 한 번에 하나만 실행한다. 표준 실행기의 로컬 기본값은 build jobs 2·index store OFF·test 병렬 실행 OFF이며 CI 정책은 유지한다. build/unit에도 소유 프로세스 deadline을 적용하고, 동일 증거는 phase가 바뀌어도 재사용한다. 자세한 예산·종료·재시도·캐시 기준은 위 canonical 문서를 따른다.
+- **Mac 화면 잠금은 검증 중단 사유가 아니다.** 잠금 해제 요청이나 대기 전환 전에 `.codex/ui-execution.md`의 잠금 상태 성공 근거와 백그라운드 XCTest·guest PNG·필요한 CLI/readback 경로를 확인한다. 실제 실패 단계·명령/오류·미검증 범위 없이 “화면이 잠겨서 불가”라고 보고하지 않는다. 사용자 인증을 우회하거나 다른 작업의 기기를 조작하지 않는다.
+
 ### UX Writing
 
 - 사용자 대면 문구를 작성·수정·검토할 때 `copy-voice`와 함께 [UX Writing 보완 규칙](.codex/ux-writing.md)을 읽는다. 해당 문서가 제목·본문·버튼의 역할, 의미 중복, 행동명, 실제 상태 표현, Watch 길이 기준의 Codex 적용 기준이다.
@@ -142,7 +148,7 @@ A skill is a set of local instructions to follow that is stored in a `SKILL.md` 
 - `InfoPlist.xcstrings`를 추가하면 Xcode가 해당 타깃의 앱 이름과 권한 설명도 추출합니다. `Info.plist`와 `project.yml`의 관련 값을 함께 등록하고 `python3 -B -m unittest scripts.tests.test_format_xcstrings`로 누락과 Xcode sync 불변성을 검사합니다.
 - 문자열 보간 키는 코드가 의도한 `%lld`와 실제 추출된 `%@`가 다를 수 있습니다. 실제 추출 키를 확인하고 번역의 보간 타입·인자 순서를 맞춥니다. 빌드 전후 검사 또는 커밋 검사 실패를 카탈로그 되돌리기나 자동 추출 비활성화로 숨기지 않습니다.
 
-- 사용자 요청으로 개선한 Codex `/run` UI 게이트는 `.codex/skill-compat.md`의 **변경 범위 기반 UI 게이트**를 따른다. 이 명시적 예외는 Claude 원본의 S11 및 Phase 2.5 전체 UI 강제 실행보다 우선한다. `.claude/**` 원본은 변경하지 않으며, Claude에서 직접 실행하는 `/run` 정책은 유지된다.
+- 사용자 요청으로 개선한 Codex UI 게이트는 모든 스킬에서 `.codex/skill-compat.md`의 **변경 범위 기반 UI 게이트**를 따른다. 이 명시적 예외는 Claude 원본의 S11 및 Phase 2.5 전체 UI 강제 실행보다 우선한다. `.claude/**` 원본은 변경하지 않으며, Claude에서 직접 실행하는 정책은 유지된다.
 - 무의미한 재시도·토큰 낭비 방지는 `.codex/skill-compat.md`의 **재시도와 범위 확장 제한**을 따른다. 같은 실패는 원인에 대응한 변화가 확인된 경우에만 최대 1회 재시도한다. 이 제한은 phase/turn 전환 후에도 유지하고, 무관한 UI 실패 수정·전체 재검증으로 작업 범위를 넓히지 않는다.
 - Codex의 UI 테스트는 `.codex/skill-compat.md`의 **UI 실행 점유 제한**을 따른다. 표준 실행기와 소유 프로세스 deadline을 사용하고, 한 번에 한 시뮬레이터 실행만 유지한다. 진행 중인 실행을 다시 시작하거나 결과 정리를 무기한 기다리지 않는다.
 - 시뮬레이터는 `.codex/skill-compat.md`의 **전용 시뮬레이터 사용**을 따른다. 현재 worktree 소유로 등록된 기기를 단독 사용하며, 테스트·수동 캡처·Duo 자세 전환에도 같은 소유권 기준을 적용한다.
@@ -153,6 +159,7 @@ A skill is a set of local instructions to follow that is stored in a `SKILL.md` 
   - `.codex/skill-compat.md`
   - `.codex/agent-memory/README.md`
 - 공통 실행 규칙(`Task tool`, `TodoWrite`, read-only review, memory policy)은 `.codex/skill-compat.md` 를 canonical source로 사용합니다.
+- `/cleanup` 및 `/ship`에서 worktree를 제거하기 전에 `.codex/skill-compat.md`의 **외부 DerivedData 정리** 절차로 해당 worktree 소유 캐시만 함께 삭제합니다. `info.plist`의 `WorkspacePath`로 소유를 확인하며 다른 worktree·main·공용·소유 미확인 캐시는 보존합니다.
 - agent별 모델/추론/edit policy/memory source는 `.codex/agent-map.md` 를 canonical source로 사용합니다.
 - 모델 분담과 토큰 절감 실행은 `.codex/skill-compat.md`의 공통 정책을 따릅니다. 위임 시 `.codex/agent-map.md`의 모델을 실제 호출 인자로 전달하며, 테스트/검증 재사용 시에만 `.codex/token-efficiency.md`를 읽습니다. 문서 배정은 현재 작업이나 앱 전역 모델을 자동 변경하지 않습니다.
 - `.claude/agents/*.md` 또는 핵심 skill 목록이 바뀌면 Codex adapter 문서를 함께 갱신하고 `python3 scripts/check-codex-claude-parity.py` 로 drift를 검사합니다.

@@ -11,6 +11,8 @@ on:
       - 'DUNEWidget/**'
       - 'Shared/**'
       - 'scripts/build-ios.sh'
+      - 'scripts/build-target.sh'
+      - 'scripts/lib/xcodebuild-resources.sh'
       - 'scripts/lib/regen-project.sh'
       - 'scripts/format-xcstrings.swift'
       - 'scripts/hooks/pre-commit.sh'

@@ -9,6 +9,8 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT_DIR"
 source "$ROOT_DIR/scripts/lib/regen-project.sh"
+source "$ROOT_DIR/scripts/lib/xcodebuild-resources.sh"
+configure_xcodebuild_resources build
 
 PROJECT_SPEC="DUNE/project.yml"
 PROJECT_FILE="DUNE/DUNE.xcodeproj"
@@ -17,8 +19,6 @@ DESTINATION="${DAILVE_IOS_DESTINATION:-generic/platform=iOS}"
 DERIVED_DATA_DIR="${DAILVE_BUILD_DERIVED_DATA_DIR:-.deriveddata/build-ios}"
 LOG_DIR=".xcodebuild"
 LOG_FILE="$LOG_DIR/ios-build.log"
-XCODEBUILD_JOBS="${DAILVE_XCODEBUILD_JOBS-4}"
-INDEX_STORE_ENABLED="${DAILVE_COMPILER_INDEX_STORE_ENABLE-NO}"
 REGENERATE=1
 XCODEBUILD_SETTINGS=(
     CODE_SIGNING_ALLOWED=NO
@@ -29,10 +29,6 @@ if [[ "${DAILVE_FAST_LOCAL_BUILD:-0}" == "1" ]]; then
     XCODEBUILD_SETTINGS+=(
         ONLY_ACTIVE_ARCH=YES
         COMPILER_INDEX_STORE_ENABLE=NO
-    )
-else
-    XCODEBUILD_SETTINGS+=(
-        COMPILER_INDEX_STORE_ENABLE="$INDEX_STORE_ENABLED"
     )
 fi
 
@@ -61,9 +57,6 @@ echo "Checking string catalog format and manual extraction state..."
 swift scripts/format-xcstrings.swift --check --check-manual
 
 echo "Building scheme '$SCHEME' for destination '$DESTINATION'..."
-if [[ -n "$XCODEBUILD_JOBS" ]]; then
-    echo "Using xcodebuild job cap: $XCODEBUILD_JOBS"
-fi
 set +e
 build_cmd=(
     xcodebuild
@@ -71,10 +64,8 @@ build_cmd=(
     -scheme "$SCHEME"
     -destination "$DESTINATION"
     -derivedDataPath "$DERIVED_DATA_DIR"
+    ${XCODEBUILD_RESOURCE_ARGS[@]+"${XCODEBUILD_RESOURCE_ARGS[@]}"}
 )
-if [[ -n "$XCODEBUILD_JOBS" ]]; then
-    build_cmd+=(-jobs "$XCODEBUILD_JOBS")
-fi
 build_cmd+=(
     "${XCODEBUILD_SETTINGS[@]}"
     build

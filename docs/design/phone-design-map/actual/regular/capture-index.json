@@ -9,7 +9,8 @@
     "/Users/shanks/Documents/Codex/2026-10-22/new-chat/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.22_21-54-56-+0900.xcresult",
     ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.30_00-49-06-+0900.xcresult",
     ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.30_03-42-34-+0900.xcresult",
-    "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.30_06-19-55-+0900.xcresult"
+    "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.30_06-19-55-+0900.xcresult",
+    "Test-DUNEUITests-2026.10.30_13-10-59-+0900.xcresult"
   ],
   "processed_capture_candidates": 111,
   "captured": {
@@ -379,12 +380,23 @@
     "S01": {
       "row_id": "S01",
       "evidence": "title:Settings",
-      "test": "SettingsSmokeTests/testWhatsNewMuscleMapDetailExists()",
+      "test": "LiveActivitySettingsUITests/testSportMetricsAndStylePersistIndependently()",
       "action": "tap dashboard-toolbar-settings",
-      "timestamp": 1791817255.552,
-      "image": "2DACF79B-C40A-41C0-A6A0-912A893E9A4E.png",
-      "screen": "screen-0-1320x2868-tap dashboard-toolbar-settings_0_ECBBB5F5-6D52-40D3-BA77-28D0F37FD801.png",
-      "file": "S01.png"
+      "timestamp": 1793333556.522,
+      "image": "F0459EC5-1695-4FCD-B90F-F8ABE973525E.png",
+      "screen": "WLA02-settings-persisted_0_482E7695-6073-41C8-8DE1-3C8857D43B1B.png",
+      "file": "S01.png",
+      "source_revision": "5ef25439",
+      "device": "iPhone 18 Pro-wt-Health-live-activity-gold-preferences-444cd41db4f6",
+      "device_id": "1CFE5A47-37B5-408A-95D1-6C60FB16D3F6",
+      "runtime": "iOS 27.0",
+      "sha256": "6a9e7f7bf9946f1816267c646f7dd2059bf07b9fe2565e260cb9671c143fc64f",
+      "payload": "F0459EC5-1695-4FCD-B90F-F8ABE973525E.png",
+      "current_verification": "passed",
+      "current_verification_note": "Live Activity 종목별 지표·스타일 저장과 재실행 유지 UI 통과. 새 원본 캡처.",
+      "xcresult": "Test-DUNEUITests-2026.10.30_13-10-59-+0900.xcresult",
+      "source_worktree_dirty": false,
+      "consumer_inputs_unchanged_since_capture": true
     },
     "L05": {
       "row_id": "L05",
@@ -1146,10 +1158,9 @@
   },
   "unmatched": [],
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
-  "last_refresh_revision": "56f62feceb8e9ec5724a44f4e1881ff19ff75fc8",
+  "last_refresh_revision": "5ef25439",
   "last_refresh_screens": [
-    "T03",
-    "T18"
+    "S01"
   ],
-  "last_refresh_note": "Only per-screen entries T03/T18 were refreshed; top-level source_revision and other entries retain prior provenance."
+  "last_refresh_note": "Live Activity 선택 설정의 새 실제 화면. 다른 화면 출처는 각 항목을 따른다."
 }

@@ -12,6 +12,10 @@ final class WatchWorkoutMirrorManager: NSObject {
     private var mirrorID: UUID?
     private var isObserving = false
 
+    func refreshLiveActivityPreferences() {
+        activity.refreshPreferences()
+    }
+
     func startObserving() {
         guard !isObserving, HKHealthStore.isHealthDataAvailable() else { return }
         isObserving = true
@@ -27,7 +31,8 @@ final class WatchWorkoutMirrorManager: NSObject {
             let initial = WatchWorkoutSnapshot(
                 startedAt: start, updatedAt: now, exerciseName: String(localized: "Workout"),
                 elapsedSeconds: 0, phase: session.state == .paused ? .paused : .running,
-                heartRate: nil, activeCalories: 0, distanceMeters: 0
+                heartRate: nil, activeCalories: 0, distanceMeters: 0,
+                exerciseIconName: WorkoutActivityType(healthKit: session.workoutConfiguration.activityType).iconName
             )
             var requestedID: String?
             if reportedStart != nil {

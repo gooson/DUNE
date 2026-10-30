@@ -162,5 +162,46 @@
     "core_log": ".xcodebuild/watch-end-core-tests-final.log",
     "build_log": ".xcodebuild/watch-end-cleanup-verified-build.log",
     "reason": "Prior SDK simulator result-finalization failure remains unresolved. Actual Watch/locked iPhone terminal delivery cannot be demonstrated by seeded SpringBoard snapshots."
+  },
+  "workout_icon_update": {
+    "date": "2026-10-30",
+    "status": "awaiting_capture",
+    "source_revision": "f9805d1c",
+    "new_captures": 0,
+    "reason": "Latest main integrated; GitHub build passed. Standard WLA01+smoke runner exited 1 before tests: dedicated iPhone failed to boot twice within 120s. User explicitly approved merging with UI unverified on 2026-10-30.",
+    "owned_iphone_udid": "859833FC-D42F-4D9F-9A6D-73786F747C8B",
+    "unverified": [
+      "iphone_notification_running",
+      "iphone_notification_cycling",
+      "iphone_notification_strength",
+      "iphone_notification_paused",
+      "iphone_notification_stale",
+      "island_compact",
+      "island_minimal",
+      "island_expanded",
+      "watch_small",
+      "ipad",
+      "duo_folded",
+      "duo_open",
+      "paired_device_mirroring_recovery"
+    ],
+    "prior_pngs_are_current_evidence": false,
+    "pr": "https://github.com/gooson/DUNE/pull/864",
+    "merge_status": "approved_for_merge",
+    "observed_test_case_start_markers": 0,
+    "executed": 0,
+    "runner_exit": 1,
+    "ui_exception": "approved_by_user_2026-10-30"
+  },
+  "pending_layout_note": "WLA01 Gold Impact·선택 지표 최종 캡처 미완료: UI 앱 빌드는 통과했으나 환경 조회가 응답하지 않아 새 testcase 0건. 이전 PNG는 현재 구현의 증거가 아니다.",
+  "gold_preferences_update": {
+    "source_revision": "93fa6959",
+    "status": "ui_gate_blocked",
+    "settings_gallery": "gold-impact-2026-10-30/index.html",
+    "unit_ios_passed": 46,
+    "unit_watch_passed": 5,
+    "pr": "https://github.com/gooson/DUNE/pull/868",
+    "merge_status": "explicitly_approved_by_user",
+    "ui_exception": "approved_by_user_2026-10-30"
   }
 }

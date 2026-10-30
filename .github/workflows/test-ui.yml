@@ -11,6 +11,12 @@ on:
       - 'DUNEWatchUITests/**'
       - 'Shared/**'
       - 'scripts/test-ui.sh'
+      - 'scripts/build-ios.sh'
+      - 'scripts/build-target.sh'
+      - 'scripts/test-unit.sh'
+      - 'scripts/lib/xcodebuild-resources.sh'
+      - 'scripts/tests/test_xcodebuild_resources.py'
+      - 'scripts/hooks/pre-commit.sh'
       - 'scripts/plan-ui-tests.py'
       - 'scripts/lib/verify-ui-test-log.py'
       - 'scripts/tests/test_plan_ui_tests.py'
@@ -68,13 +74,14 @@ jobs:
         run: |
           python3 -B -m unittest discover -s scripts/tests -p test_plan_ui_tests.py -v
           python3 -B -m unittest discover -s scripts/tests -p test_ui_test_runner.py -v
-          for pattern in test_test_log_summary.py test_codex_context.py test_codex_pipeline.py; do
+          for pattern in test_test_log_summary.py test_codex_context.py test_codex_pipeline.py test_xcodebuild_resources.py; do
             python3 -B -m unittest discover -s scripts/tests -p "$pattern"
           done
           python3 -B scripts/tests/test-codex-check.py
           python3 scripts/check-codex-claude-parity.py
           bash -n scripts/test-ui.sh
           bash -n scripts/test-watch-ui.sh
+          bash -n scripts/lib/xcodebuild-resources.sh scripts/build-ios.sh scripts/build-target.sh scripts/test-unit.sh scripts/hooks/pre-commit.sh
 
   ios-ui-tests:
     needs: ui-gate-contracts

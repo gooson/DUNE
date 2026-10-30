@@ -1,0 +1,117 @@
+unit-targeted.log
+✔ Test "Requests once, updates the activity, and ends it on finish" passed after 0.001 seconds.
+◇ Test "Adopts the activity requested on HealthKit's background callback without requesting twice" started.
+✔ Test "Adopts the activity requested on HealthKit's background callback without requesting twice" passed after 0.001 seconds.
+◇ Test "Rejects stale timestamps, wrong mirror IDs, and mismatched workout start times" started.
+✔ Test "Rejects stale timestamps, wrong mirror IDs, and mismatched workout start times" passed after 0.001 seconds.
+◇ Test "Does not revive an activity after finish" started.
+✔ Test "Does not revive an activity after finish" passed after 0.001 seconds.
+◇ Test "A provisional start date is corrected exactly once by the Watch payload" started.
+✔ Test "A provisional start date is corrected exactly once by the Watch payload" passed after 0.001 seconds.
+◇ Test "Replaces an activity when a different mirrored session starts" started.
+✔ Test "Replaces an activity when a different mirrored session starts" passed after 0.002 seconds.
+◇ Test "A disabled Live Activity request is attempted only once per session" started.
+✔ Test "A disabled Live Activity request is attempted only once per session" passed after 0.001 seconds.
+◇ Test "A failed Live Activity request is attempted only once per session" started.
+✔ Test "A failed Live Activity request is attempted only once per session" passed after 0.014 seconds.
+◇ Test "An in-flight update completes before ending the activity" started.
+✔ Test "An in-flight update completes before ending the activity" passed after 0.001 seconds.
+◇ Test "Preference refresh follows an in-flight Watch update and never replays stale state" started.
+✔ Test "Preference refresh follows an in-flight Watch update and never replays stale state" passed after 0.001 seconds.
+◇ Test "Preference refresh does not start an unidentified mirror" started.
+✔ Test "Preference refresh does not start an unidentified mirror" passed after 0.001 seconds.
+◇ Test "A WatchConnectivity terminal snapshot closes the matching activity" started.
+✔ Test "A WatchConnectivity terminal snapshot closes the matching activity" passed after 0.001 seconds.
+◇ Test "A delayed end from an older workout cannot dismiss a newer workout" started.
+✔ Test "A delayed end from an older workout cannot dismiss a newer workout" passed after 0.001 seconds.
+◇ Test "An end received before the mirror attaches also closes a pre-requested activity" started.
+✔ Test "An end received before the mirror attaches also closes a pre-requested activity" passed after 0.001 seconds.
+◇ Test "Invalid terminal data does not close or mark a workout as ended" started.
+✔ Test "Invalid terminal data does not close or mark a workout as ended" passed after 0.001 seconds.
+◇ Test "Terminal context is serialized after an in-flight activity update" started.
+✔ Test "Terminal context is serialized after an in-flight activity update" passed after 0.001 seconds.
+◇ Test "An end cannot close another workout started less than two seconds later" started.
+✔ Test "An end cannot close another workout started less than two seconds later" passed after 0.001 seconds.
+◇ Test "An unidentified mirror never creates a stranded placeholder activity" started.
+✔ Test "An unidentified mirror never creates a stranded placeholder activity" passed after 0.001 seconds.
+◇ Test "An end arriving before an unidentified mirror cannot leave a late activity" started.
+✔ Test "An end arriving before an unidentified mirror cannot leave a late activity" passed after 0.001 seconds.
+◇ Test "Multiple terminal events remain available for delayed session attachments" started.
+✔ Test "Multiple terminal events remain available for delayed session attachments" passed after 0.001 seconds.
+✔ Suite "WatchWorkoutActivity" passed after 0.027 seconds.
+◇ Suite "Watch workout Activity content state" started.
+◇ Test "Current Activity state carries selected preferences" started.
+✔ Test "Current Activity state carries selected preferences" passed after 0.004 seconds.
+◇ Test "Flat Activity state from earlier versions decodes with safe defaults" started.
+✔ Test "Flat Activity state from earlier versions decodes with safe defaults" passed after 0.001 seconds.
+✔ Suite "Watch workout Activity content state" passed after 0.004 seconds.
+◇ Suite "WatchWorkoutSnapshot" started.
+◇ Test "Round trips through JSON" started.
+✔ Test "Round trips through JSON" passed after 0.001 seconds.
+◇ Test "Older payloads without an icon remain decodable" started.
+✔ Test "Older payloads without an icon remain decodable" passed after 0.001 seconds.
+◇ Test "Older payloads without workout metadata remain decodable" started.
+✔ Test "Older payloads without workout metadata remain decodable" passed after 0.001 seconds.
+◇ Test "Unknown workout kind values are ignored while telemetry remains decodable" started.
+✔ Test "Unknown workout kind values are ignored while telemetry remains decodable" passed after 0.001 seconds.
+◇ Test "Current-set weight preserves explicit zero and validates bounds" started.
+◇ Test case passing 1 argument weight → 0.0 to "Current-set weight preserves explicit zero and validates bounds" started.
+◇ Test "Missing current-set weight remains distinct from explicit zero" started.
+✔ Test "Missing current-set weight remains distinct from explicit zero" passed after 0.001 seconds.
+◇ Test "Older receivers can ignore the additional icon field" started.
+✔ Test "Older receivers can ignore the additional icon field" passed after 0.001 seconds.
+◇ Test "Workout symbols use the existing canonical mapping" started.
+◇ Test case passing 1 argument activityType → .running to "Workout symbols use the existing canonical mapping" started.
+◇ Test "Workout identity stays stable when the current exercise symbol changes" started.
+✔ Test "Workout identity stays stable when the current exercise symbol changes" passed after 0.001 seconds.
+◇ Test "Missing or invalid icon metadata uses the generic figure" started.
+◇ Test case passing 1 argument icon → nil to "Missing or invalid icon metadata uses the generic figure" started.
+◇ Test "Status symbols take priority over the exercise" started.
+◇ Test case passing 1 argument phase → .running to "Status symbols take priority over the exercise" started.
+◇ Test "Rejects non-finite and out-of-range numeric values" started.
+✔ Test "Rejects non-finite and out-of-range numeric values" passed after 0.001 seconds.
+◇ Test "Accepts an omitted heart rate" started.
+✔ Test "Accepts an omitted heart rate" passed after 0.001 seconds.
+◇ Test "Rejects missing, whitespace-only, and oversized exercise names" started.
+✔ Test "Rejects missing, whitespace-only, and oversized exercise names" passed after 0.001 seconds.
+◇ Test "Rejects an update timestamp before the workout start" started.
+✔ Test "Rejects an update timestamp before the workout start" passed after 0.001 seconds.
+◇ Test "Running elapsed time advances while paused elapsed time stays fixed" started.
+✔ Test "Running elapsed time advances while paused elapsed time stays fixed" passed after 0.001 seconds.
+◇ Test "Derives the system timer start date from the latest elapsed snapshot" started.
+✔ Test "Derives the system timer start date from the latest elapsed snapshot" passed after 0.001 seconds.
+◇ Test "Workout identity uses the exact Watch start, including closely spaced workouts" started.
+✔ Test "Workout identity uses the exact Watch start, including closely spaced workouts" passed after 0.001 seconds.
+◇ Test "Older lifecycle messages cannot replace a newer Watch session state" started.
+✔ Test "Older lifecycle messages cannot replace a newer Watch session state" passed after 0.001 seconds.
+✔ Suite "WatchWorkoutSnapshot" passed after 0.016 seconds.
+◇ Suite "Workout Live Activity preferences" started.
+◇ Test "Defaults and unknown stored values retain elapsed time and Gold Impact" started.
+✔ Test "Defaults and unknown stored values retain elapsed time and Gold Impact" passed after 0.005 seconds.
+◇ Test "Choices persist independently" started.
+✔ Test "Choices persist independently" passed after 0.004 seconds.
+◇ Test "Older snapshots and unavailable distance fall back to elapsed time" started.
+✔ Test "Older snapshots and unavailable distance fall back to elapsed time" passed after 0.001 seconds.
+◇ Test "Heart rate requires a finite physiological value" started.
+✔ Test "Heart rate requires a finite physiological value" passed after 0.001 seconds.
+◇ Test "Current set weight accepts zero and the upper boundary" started.
+✔ Test "Current set weight accepts zero and the upper boundary" passed after 0.001 seconds.
+✔ Suite "Workout Live Activity preferences" passed after 0.010 seconds.
+✔ Test run with 46 tests in 4 suites passed after 0.061 seconds.
+** TEST SUCCEEDED **
+unit-targeted-watch.log
+◇ Test run started.
+◇ Suite "Watch exercise drag reorder" started.
+◇ Test "Current-set input weight preserves zero and clears when the set advances" started.
+✔ Test "Current-set input weight preserves zero and clears when the set advances" passed after 0.062 seconds.
+◇ Test "Drag keeps sets, extras, skipped state, and current exercise with their entries" started.
+✔ Test "Drag keeps sets, extras, skipped state, and current exercise with their entries" passed after 0.007 seconds.
+◇ Test "Moves multiple source IDs in displayed order before the destination" started.
+✔ Test "Moves multiple source IDs in displayed order before the destination" passed after 0.003 seconds.
+◇ Test "Keeps completed exercise in its original slot" started.
+✔ Test "Keeps completed exercise in its original slot" passed after 0.001 seconds.
+◇ Test "Rejects unknown and duplicate drag IDs" started.
+✔ Test "Rejects unknown and duplicate drag IDs" passed after 0.001 seconds.
+✔ Suite "Watch exercise drag reorder" passed after 0.075 seconds.
+✔ Test run with 5 tests in 1 suite passed after 0.076 seconds.
+** TEST SUCCEEDED **

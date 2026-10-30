@@ -191,6 +191,43 @@ struct WatchWorkoutActivityTests {
         ])
     }
 
+    @Test("Preference refresh follows an in-flight Watch update and never replays stale state")
+    func refreshPreferencesKeepsWatchOrdering() async {
+        let driver = MockWatchWorkoutActivityDriver(blockUpdates: true)
+        let activity = WatchWorkoutActivity(driver: driver)
+        activity.start(mirrorID: mirrorID, snapshot: snapshot())
+        await activity.waitForPendingUpdates()
+
+        let inFlight = snapshot(updatedAtOffset: 20, elapsedSeconds: 20)
+        activity.receive(inFlight, mirrorID: mirrorID)
+        await driver.waitForBlockedUpdate()
+
+        activity.refreshPreferences()
+        let newest = snapshot(updatedAtOffset: 30, elapsedSeconds: 30)
+        activity.receive(newest, mirrorID: mirrorID)
+        #expect(activity.snapshot == newest)
+
+        driver.releaseBlockedUpdate()
+        await activity.waitForPendingUpdates()
+
+        #expect(driver.updates.map(\.snapshot) == [inFlight, newest])
+        #expect(driver.events == [
+            "start",
+            "update-start:activity-1", "update-end:activity-1",
+            "update-start:activity-1", "update-end:activity-1"
+        ])
+    }
+
+    @Test("Preference refresh does not start an unidentified mirror")
+    func refreshPreferencesWaitsForAuthoritativeStart() async {
+        let driver = MockWatchWorkoutActivityDriver()
+        let activity = WatchWorkoutActivity(driver: driver)
+        activity.start(mirrorID: mirrorID, snapshot: snapshot(), allowsStartCorrection: true)
+        activity.refreshPreferences()
+        await activity.waitForPendingUpdates()
+        #expect(driver.starts.isEmpty)
+    }
+
     @Test("A WatchConnectivity terminal snapshot closes the matching activity")
     func terminalContextClosesMatchingWorkout() async {
         let driver = MockWatchWorkoutActivityDriver()
@@ -355,14 +392,14 @@ private final class MockWatchWorkoutActivityDriver: WatchWorkoutActivityDriving 
     private(set) var updates: [UpdateCall] = []
     private(set) var events: [String] = []
     private let startBehavior: StartBehavior
-    private let blockUpdates: Bool
+    private var shouldBlockNextUpdate: Bool
     private var blockedUpdateContinuation: CheckedContinuation<Void, Never>?
     private var updateStartedContinuation: CheckedContinuation<Void, Never>?
     private var updateHasStarted = false
 
     init(startBehavior: StartBehavior = .succeeds, blockUpdates: Bool = false) {
         self.startBehavior = startBehavior
-        self.blockUpdates = blockUpdates
+        shouldBlockNextUpdate = blockUpdates
     }
 
     func start(mirrorID: UUID, snapshot: WatchWorkoutSnapshot) throws -> String? {
@@ -385,7 +422,8 @@ private final class MockWatchWorkoutActivityDriver: WatchWorkoutActivityDriving 
         updateStartedContinuation?.resume()
         updateStartedContinuation = nil
 
-        if blockUpdates {
+        if shouldBlockNextUpdate {
+            shouldBlockNextUpdate = false
             await withCheckedContinuation { blockedUpdateContinuation = $0 }
         }
 

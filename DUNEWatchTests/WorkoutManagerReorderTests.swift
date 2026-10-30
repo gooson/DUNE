@@ -5,6 +5,28 @@ import Testing
 @Suite("Watch exercise drag reorder", .serialized)
 @MainActor
 struct WorkoutManagerReorderTests {
+    @Test("Current-set input weight preserves zero and clears when the set advances")
+    func currentSetWeightClearsOnSetAdvance() async throws {
+        let manager = WorkoutManager.shared
+        manager.reset()
+        defer { manager.reset() }
+        try await manager.startQuickWorkout(with: WorkoutSessionTemplate(
+            name: "Weight input", entries: [TemplateEntry(exerciseDefinitionID: "A", exerciseName: "A")]
+        ))
+
+        manager.updateCurrentSetWeightKg(0)
+        #expect(manager.currentSetWeightKg == 0)
+        manager.updateCurrentSetWeightKg(501)
+        #expect(manager.currentSetWeightKg == nil)
+        manager.updateCurrentSetWeightKg(0)
+        manager.advanceToNextSet()
+        #expect(manager.currentSetWeightKg == nil)
+
+        manager.updateCurrentSetWeightKg(25)
+        manager.advanceToNextExercise()
+        #expect(manager.currentSetWeightKg == nil)
+    }
+
     @Test("Drag keeps sets, extras, skipped state, and current exercise with their entries")
     func reordersAssociatedWorkoutState() async throws {
         let manager = WorkoutManager.shared

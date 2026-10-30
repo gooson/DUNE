@@ -1,0 +1,41 @@
+{
+  "screen_id": "S01",
+  "captured": [
+    {
+      "screen_id": "S01",
+      "path": "images/settings-persisted.png",
+      "source_revision": "5ef25439",
+      "source_worktree_dirty": false,
+      "test": "LiveActivitySettingsUITests/testSportMetricsAndStylePersistIndependently()",
+      "status": "passed",
+      "device": "iPhone 18 Pro-wt-Health-live-activity-gold-preferences-444cd41db4f6",
+      "device_id": "1CFE5A47-37B5-408A-95D1-6C60FB16D3F6",
+      "runtime": "iOS 27.0",
+      "timestamp": 1793333556.522,
+      "xcresult": "Test-DUNEUITests-2026.10.30_13-10-59-+0900.xcresult",
+      "payload": "F0459EC5-1695-4FCD-B90F-F8ABE973525E.png",
+      "sha256": "6a9e7f7bf9946f1816267c646f7dd2059bf07b9fe2565e260cb9671c143fc64f",
+      "provenance": "actual_app_settings_raw_png",
+      "current_layout": true
+    },
+    {
+      "screen_id": "S01",
+      "path": "images/settings-selected.png",
+      "source_revision": "5ef25439",
+      "source_worktree_dirty": false,
+      "test": "LiveActivitySettingsUITests/testSportMetricsAndStylePersistIndependently()",
+      "status": "passed",
+      "device": "iPhone 18 Pro-wt-Health-live-activity-gold-preferences-444cd41db4f6",
+      "device_id": "1CFE5A47-37B5-408A-95D1-6C60FB16D3F6",
+      "runtime": "iOS 27.0",
+      "timestamp": 1793333537.319,
+      "xcresult": "Test-DUNEUITests-2026.10.30_13-10-59-+0900.xcresult",
+      "payload": "40F1F6CD-C91E-4803-AB38-140D1507C5A2.png",
+      "sha256": "49b1ff77ca417541b91943edf8d37c674e6a77d11c0498e68f59695505b12d99",
+      "provenance": "actual_app_settings_raw_png",
+      "current_layout": true
+    }
+  ],
+  "wla01_status": "final native UI gate blocked; no final captures claimed",
+  "note": "Settings and its active inputs are unchanged after 5ef25439. Prototype and actual screenshots are separate."
+}

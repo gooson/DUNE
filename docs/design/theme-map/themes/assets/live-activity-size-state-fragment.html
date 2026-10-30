@@ -1,0 +1,357 @@
+<style>
+#dune-live-study{--ls-paper:light-dark(#f5efe6,#251f1b);--ls-panel:light-dark(#fffbf5,#302822);--ls-ink:light-dark(#372b23,#f6ecdf);--ls-muted:light-dark(#776757,#c1af99);--ls-line:light-dark(#ddcfbd,#554638);--ls-gold:light-dark(#855a27,#e6bd7c);--ls-island-gold:#e6bd7c;--ls-heart:#f3918d;--ls-metric:light-dark(#a14642,#f3918d);--ls-screen:light-dark(#eee4d6,#201b18);font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif;color:var(--ls-ink);color-scheme:light dark}
+#dune-live-study *{box-sizing:border-box;min-width:0}
+#dune-live-study[data-appearance=light]{color-scheme:light}#dune-live-study[data-appearance=dark]{color-scheme:dark}
+#dune-live-study button,#dune-live-study select{font:inherit;color:inherit}
+#dune-live-study button:focus-visible,#dune-live-study select:focus-visible{outline:3px solid var(--ls-gold);outline-offset:3px}
+#dune-live-study .ls-shell{padding:26px 20px 18px;background:var(--ls-paper);border-radius:24px;overflow:hidden}
+#dune-live-study .ls-overline{font-size:11px;letter-spacing:.16em;color:var(--ls-gold);margin-bottom:12px}
+#dune-live-study h2{font-size:32px;font-weight:500;line-height:1.16;letter-spacing:-.055em;margin:0}
+#dune-live-study .ls-subtitle{font-size:12px;color:var(--ls-muted);margin:12px 0 22px;line-height:1.6}
+#dune-live-study .ls-controls{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:end;padding:16px 0 20px;border-top:1px solid var(--ls-line)}
+#dune-live-study .ls-label{display:grid;gap:7px;font-size:11px;color:var(--ls-muted)}
+#dune-live-study .ls-segment{display:flex;flex-wrap:wrap;gap:4px}
+#dune-live-study .ls-segment button{border:1px solid var(--ls-line);border-radius:9px;background:var(--ls-panel);padding:8px 11px;font-size:12px;min-height:36px}
+#dune-live-study .ls-segment button[aria-pressed=true]{background:var(--ls-ink);color:var(--ls-paper);border-color:var(--ls-ink)}
+#dune-live-study select{background:var(--ls-panel);border:1px solid var(--ls-line);border-radius:9px;padding:8px 10px;min-height:36px;font-size:12px}
+#dune-live-study .ls-stage{padding:0 0 8px}
+#dune-live-study .ls-variant-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:4px 0 12px}
+#dune-live-study h3{font-size:18px;font-weight:500;letter-spacing:-.04em;margin:0}
+#dune-live-study .ls-variant-head span{font-size:11px;color:var(--ls-gold)}
+#dune-live-study .ls-context{background:var(--ls-panel);border:1px solid var(--ls-line);border-radius:18px;padding:18px 12px 14px;margin-bottom:16px}
+#dune-live-study .ls-context-label{display:flex;justify-content:space-between;gap:8px;font-size:11px;color:var(--ls-muted);margin:0 4px 15px}
+#dune-live-study .ls-system-bar{max-width:393px;width:100%;min-height:68px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:7px;background:var(--ls-panel)}
+#dune-live-study .ls-system-clock{font-size:19px;font-weight:500;letter-spacing:-.05em;font-variant-numeric:tabular-nums}
+#dune-live-study .ls-attached{display:flex;align-items:center;flex:none;height:36.67px;border-radius:30px;background:#000;color:var(--ls-island-gold)}
+#dune-live-study .ls-attached .ls-camera{width:90px}
+#dune-live-study .ls-player{display:flex;align-items:center;gap:6px;justify-content:center;flex:none;width:54px;height:36.67px;background:#000;border-radius:24px;color:#92c6a3}
+#dune-live-study .ls-art{width:22px;height:22px;border-radius:5px;background:radial-gradient(ellipse at 40% 35%,#b5bb70,transparent 50%),linear-gradient(145deg,#385b49,#254854 60%,#918361)}
+#dune-live-study .ls-player svg{width:16px;height:16px}
+#dune-live-study .ls-status-icons{display:flex;align-items:center;gap:4px}#dune-live-study .ls-status-icons svg{width:16px;height:16px}
+#dune-live-study .ls-context-caption{font-size:11px;color:var(--ls-muted);text-align:center;margin-top:12px;line-height:1.55}
+#dune-live-study .ls-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+#dune-live-study .ls-tile{border:1px solid var(--ls-line);border-radius:17px;background:var(--ls-panel);overflow:hidden}
+#dune-live-study .ls-tile-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:16px 16px 0}
+#dune-live-study .ls-tile-top h4{font-size:13px;font-weight:500;margin:0;letter-spacing:-.02em}
+#dune-live-study .ls-spec{font-size:10px;color:var(--ls-muted);text-align:right;line-height:1.4}
+#dune-live-study .ls-preview{display:flex;align-items:center;justify-content:center;gap:18px;min-height:125px;padding:18px 12px;background:var(--ls-panel)}
+#dune-live-study .ls-preview.ls-tall{min-height:230px;background:var(--ls-screen);margin:12px 10px 0;border-radius:12px;padding:16px 10px}
+#dune-live-study .ls-tile-note{font-size:11px;line-height:1.6;color:var(--ls-muted);padding:0 16px 15px;min-height:50px}
+#dune-live-study .ls-tall+.ls-tile-note{padding-top:12px;min-height:63px}
+#dune-live-study .ls-capsule{display:flex;align-items:center;height:36.67px;background:#000;border-radius:30px;color:var(--ls-island-gold);flex:none}
+#dune-live-study .ls-camera{height:28px;width:114px;flex:none;position:relative;background:#000;border-radius:20px}
+#dune-live-study .ls-camera:after{content:"";position:absolute;right:11px;top:10px;width:8px;height:8px;border-radius:50%;background:radial-gradient(circle,#12202b 1px,#080b0d 3px,#000 4px)}
+#dune-live-study .ls-slot{display:flex;align-items:center;justify-content:center;gap:3px;width:52.33px;height:36.67px;flex:none;white-space:nowrap;font-size:11px;font-weight:500;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+#dune-live-study .ls-slot svg{width:18px;height:18px;flex:none}
+#dune-live-study .ls-slot.ls-short{width:28px;height:28px;font-size:12px;letter-spacing:-.04em}
+#dune-live-study .ls-slot.ls-short svg{width:17px;height:17px}
+#dune-live-study .ls-capsule.ls-limited .ls-camera{width:96px}
+#dune-live-study .ls-capsule.ls-limited{padding:4.33px 0}
+#dune-live-study .ls-minimal{display:flex;align-items:center;justify-content:center;flex:none;width:45px;height:36.67px;border-radius:24px;background:#000;color:var(--ls-island-gold)}
+#dune-live-study .ls-minimal .ls-slot{width:45px}
+#dune-live-study .ls-minimal.ls-tiny{width:28px;height:28px}
+#dune-live-study .ls-minimal.ls-tiny .ls-slot{width:28px;height:28px}
+#dune-live-study .ls-size-pair{display:grid;justify-items:center;gap:10px}
+#dune-live-study .ls-size-pair>span{font-size:10px;color:var(--ls-muted)}
+#dune-live-study .ls-heart{color:var(--ls-heart)}
+#dune-live-study .ls-heart-inline{display:flex;align-items:center;gap:3px}#dune-live-study .ls-heart-inline svg{width:12px;height:12px}
+#dune-live-study .ls-heart-stack{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;font-size:11px;line-height:12px}
+#dune-live-study .ls-slot .ls-heart-stack svg{width:9px;height:9px}
+#dune-live-study .ls-value-stack{display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px;line-height:12px;letter-spacing:-.04em}
+#dune-live-study .ls-value-stack small{font-size:8px;line-height:9px;letter-spacing:0}
+#dune-live-study .ls-selected-value{font-size:32px;line-height:1.2;margin-top:15px;color:var(--ls-island-gold);font-variant-numeric:tabular-nums}
+#dune-live-study .ls-selected-value small{font-size:12px;margin-left:5px}
+#dune-live-study .ls-lock .ls-selected-value{color:var(--ls-gold)}
+#dune-live-study .ls-island-expanded{width:100%;max-width:340px;border-radius:30px;background:#000;color:#fff;padding:14px 15px 17px;align-self:center}
+#dune-live-study .ls-island-camera{width:114px;height:25px;border-radius:18px;background:#090909;margin:0 auto 14px}
+#dune-live-study .ls-activity-heading{display:flex;gap:9px;align-items:center;min-width:0}
+#dune-live-study .ls-phase-symbol{color:var(--ls-island-gold);display:flex;align-items:center;flex:none}
+#dune-live-study .ls-phase-symbol svg{width:20px;height:20px}
+#dune-live-study .ls-title{font-size:13px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:1.4;letter-spacing:-.02em}
+#dune-live-study .ls-brandline{font-size:10px;line-height:1.6;color:#c7b9a7;display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;margin-top:2px}
+#dune-live-study .ls-brand{font-weight:500;letter-spacing:.12em;color:var(--ls-island-gold)}
+#dune-live-study .ls-big-time{font-size:32px;letter-spacing:-.05em;font-weight:500;line-height:1.1;font-variant-numeric:tabular-nums;color:var(--ls-island-gold);margin-top:14px}
+#dune-live-study .ls-metrics{display:flex;gap:14px;flex-wrap:wrap;align-items:baseline;margin-top:14px;font-size:13px;font-variant-numeric:tabular-nums}
+#dune-live-study .ls-metric{display:flex;align-items:center;gap:4px}
+#dune-live-study .ls-metric small{font-size:10px;color:#c7b9a7}
+#dune-live-study .ls-metric svg{width:13px;height:13px;color:var(--ls-island-gold)}
+#dune-live-study .ls-metric:first-child svg{color:var(--ls-heart)}
+#dune-live-study .ls-lock{max-width:340px;width:100%;background:light-dark(#fbf4e9,#392c20);color:var(--ls-ink);border-radius:23px;padding:18px}
+#dune-live-study .ls-lock .ls-big-time{color:var(--ls-gold);font-size:38px;margin-top:18px}
+#dune-live-study .ls-lock .ls-brand,#dune-live-study .ls-lock .ls-phase-symbol{color:var(--ls-gold)}
+#dune-live-study .ls-lock .ls-brandline,#dune-live-study .ls-lock .ls-metric small{color:var(--ls-muted)}
+#dune-live-study .ls-lock .ls-metric svg{color:var(--ls-gold)}
+#dune-live-study .ls-lock .ls-metric:first-child svg{color:var(--ls-metric)}
+#dune-live-study .ls-small{width:184px;max-width:100%;border-radius:25px;padding:15px;background:light-dark(#fbf4e9,#392c20);color:var(--ls-ink)}
+#dune-live-study .ls-small .ls-big-time{font-size:29px}.ls-small .ls-metrics{gap:8px}
+#dune-live-study .ls-small .ls-title{font-size:12px}
+#dune-live-study .ls-waiting{display:flex;align-items:center;gap:8px;color:var(--ls-muted);font-size:12px;margin-top:17px;line-height:1.5}
+#dune-live-study .ls-island-expanded .ls-waiting{color:#c7b9a7}
+#dune-live-study .ls-waiting svg{width:18px;height:18px;flex:none}
+#dune-live-study .ls-primary-heart{font-size:29px;color:var(--ls-heart);display:flex;align-items:center;gap:8px;line-height:1.15;font-variant-numeric:tabular-nums;margin-top:15px;flex-wrap:wrap}
+#dune-live-study .ls-primary-heart svg{width:21px;height:21px}
+#dune-live-study .ls-primary-heart small{font-size:11px;color:#c7b9a7}
+#dune-live-study .ls-lock .ls-primary-heart{color:var(--ls-metric)}
+#dune-live-study .ls-lock .ls-primary-heart small{color:var(--ls-muted)}
+#dune-live-study .ls-secondary-time{font-size:13px;color:#c7b9a7;font-variant-numeric:tabular-nums;margin-top:10px}
+#dune-live-study .ls-lock .ls-secondary-time{color:var(--ls-muted)}
+#dune-live-study .ls-removed{font-size:12px;line-height:1.6;color:var(--ls-muted);display:flex;align-items:center;justify-content:center;gap:8px;min-height:100px;text-align:center}
+#dune-live-study .ls-removed svg{width:18px;height:18px;flex:none}
+#dune-live-study .ls-status-sweep{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:16px;padding-top:16px;border-top:1px solid var(--ls-line)}
+#dune-live-study .ls-status-cell{display:grid;justify-items:center;align-content:start;gap:9px;text-align:center}
+#dune-live-study .ls-status-cell>span{font-size:11px;color:var(--ls-muted)}
+#dune-live-study .ls-ended-mark{height:36.67px;display:grid;align-items:center;font-size:11px;color:var(--ls-muted)}
+#dune-live-study .ls-status-cell[aria-current=true]>span{color:var(--ls-gold)}
+#dune-live-study .ls-footnote{font-size:11px;line-height:1.65;color:var(--ls-muted);padding-top:17px;border-top:1px solid var(--ls-line);margin-top:14px}
+#dune-live-study[data-large=true] .ls-title{font-size:17px;white-space:normal;overflow-wrap:anywhere}
+#dune-live-study[data-large=true] .ls-big-time{font-size:44px}
+#dune-live-study[data-large=true] .ls-metrics{font-size:17px;gap:12px}
+#dune-live-study[data-large=true] .ls-brandline{font-size:12px}
+#dune-live-study[data-large=true] .ls-small .ls-big-time{font-size:34px}
+#dune-live-study[data-long-time=true] .ls-small .ls-big-time{font-size:24px}
+#dune-live-study #ls-fallback-controls[hidden]{display:none}
+#dune-live-study .ls-glam{--ls-island-gold:#f5d68e}
+#dune-live-study .ls-glam .ls-capsule,#dune-live-study .ls-glam .ls-minimal,#dune-live-study .ls-glam .ls-attached{color:#ffe0a0}
+#dune-live-study .ls-glam .ls-slot{font-weight:500;text-shadow:0 0 7px #efbd4e55}
+#dune-live-study .ls-glam .ls-slot svg{stroke-width:2.3;filter:drop-shadow(0 0 3px #eab85466)}
+#dune-live-study .ls-glam .ls-island-expanded,#dune-live-study .ls-glam .ls-lock{position:relative;isolation:isolate;overflow:hidden}
+#dune-live-study .ls-glam .ls-lock{background:radial-gradient(ellipse at 100% 0%,light-dark(#f2cf8e,#745023) 0%,transparent 62%),linear-gradient(140deg,light-dark(#fff3d5,#40301e),light-dark(#ebd0a5,#241d17));box-shadow:inset 0 1px 0 light-dark(#fffaf0aa,#f5cf874d),0 12px 26px #26160720}
+#dune-live-study .ls-glam .ls-lock:before,#dune-live-study .ls-glam .ls-lock:after{content:"";position:absolute;z-index:-1;pointer-events:none;width:180%;height:100px;left:-40%;bottom:-50px;border-radius:50%;transform:rotate(-13deg);background:linear-gradient(180deg,#d7a34422,transparent);border-top:1px solid #d7a34444}
+#dune-live-study .ls-glam .ls-lock:after{left:-10%;bottom:-66px;transform:rotate(11deg);background:#b1782620;border-top-color:#e6bf7a66}
+#dune-live-study .ls-glam .ls-brand{letter-spacing:.22em;color:#f8d68e}
+#dune-live-study .ls-glam .ls-lock .ls-brand{color:var(--ls-gold)}
+#dune-live-study .ls-impact-main{display:grid;grid-template-columns:minmax(0,1fr) 60px;gap:10px;align-items:center;margin-top:18px}
+#dune-live-study .ls-impact-kicker{font-size:10px;letter-spacing:.09em;color:#d0b685;margin-bottom:5px}
+#dune-live-study .ls-lock .ls-impact-kicker{color:var(--ls-muted)}
+#dune-live-study .ls-impact-main .ls-selected-value,#dune-live-study .ls-impact-main .ls-big-time,#dune-live-study .ls-impact-main .ls-primary-heart{font-size:42px;margin:0;line-height:1.05;letter-spacing:-.055em;color:#ffdda0;filter:drop-shadow(0 1px 6px #e4b45635)}
+#dune-live-study .ls-impact-main .ls-primary-heart svg{display:none}
+#dune-live-study .ls-lock .ls-impact-main .ls-selected-value,#dune-live-study .ls-lock .ls-impact-main .ls-big-time,#dune-live-study .ls-lock .ls-impact-main .ls-primary-heart{color:light-dark(#82521b,#f9d48a)}
+#dune-live-study .ls-impact-emblem{display:grid;place-items:center;position:relative;width:60px;height:68px;border-radius:20px;transform:rotate(7deg);background:linear-gradient(135deg,#fff0b3 0%,#dfb35d 25%,#a97628 60%,#edc571 85%,#fff0bb);box-shadow:inset 0 1px 1px #fff6cf,0 6px 15px #0007}
+#dune-live-study .ls-impact-emblem:before{content:"";position:absolute;inset:5px;border-radius:16px;box-shadow:inset 0 0 0 1px #714b2566,inset 0 1px 3px #fff5b6aa;background:linear-gradient(130deg,#f7dc98,#b78539)}
+#dune-live-study .ls-impact-emblem svg{width:34px;height:34px;z-index:1;color:#704719;filter:drop-shadow(0 1px 0 #ffe5a4);transform:rotate(-7deg);stroke-width:1.7}
+#dune-live-study .ls-glam .ls-metrics{margin-top:17px;padding-top:12px;border-top:1px solid #ab803f44;gap:10px;font-size:14px}
+#dune-live-study .ls-glam .ls-secondary-time{font-size:12px;color:#ddc59e}
+#dune-live-study .ls-glam .ls-lock .ls-secondary-time{color:var(--ls-muted)}
+#dune-live-study .ls-glam .ls-small .ls-impact-main{grid-template-columns:minmax(0,1fr);gap:9px;margin-top:14px}
+#dune-live-study .ls-glam .ls-small .ls-impact-emblem{display:none}
+#dune-live-study .ls-glam .ls-small .ls-impact-main .ls-selected-value,#dune-live-study .ls-glam .ls-small .ls-impact-main .ls-big-time,#dune-live-study .ls-glam .ls-small .ls-impact-main .ls-primary-heart{font-size:35px}
+#dune-live-study[data-long-time=true] .ls-glam .ls-impact-main{grid-template-columns:minmax(0,1fr)}
+#dune-live-study[data-long-time=true] .ls-glam .ls-impact-emblem{display:none}
+#dune-live-study[data-long-time=true] .ls-glam .ls-impact-main .ls-big-time{font-size:32px}
+#dune-live-study[data-long-time=true] .ls-glam .ls-small .ls-impact-main .ls-big-time{font-size:25px}
+#dune-live-study .ls-glam .ls-subdued .ls-impact-emblem{opacity:.55;filter:saturate(.5)}
+#dune-live-study .ls-glam .ls-subdued .ls-slot{ text-shadow:none }
+#dune-live-study .ls-glam .ls-waiting{padding:12px 0 3px}
+#dune-live-study[data-large=true] .ls-glam .ls-impact-main{grid-template-columns:minmax(0,1fr)}
+#dune-live-study[data-large=true] .ls-glam .ls-impact-emblem{display:none}
+@media(max-width:580px){#dune-live-study .ls-shell{padding:22px 12px 14px}#dune-live-study h2{font-size:28px}#dune-live-study .ls-grid{grid-template-columns:minmax(0,1fr)}#dune-live-study .ls-preview{min-height:108px}#dune-live-study .ls-preview.ls-tall{min-height:210px}#dune-live-study .ls-status-icons{display:none}#dune-live-study .ls-controls{gap:12px}#dune-live-study .ls-segment button{padding:8px 9px;min-height:42px}#dune-live-study select{font-size:16px}#dune-live-study .ls-variant-head{align-items:flex-start;flex-direction:column;gap:4px}}
+</style>
+<div id="dune-live-study" aria-label="DUNE 라이브 액티비티 크기와 상태 시안" data-appearance="light" data-large="false">
+  <div class="ls-shell">
+    <div class="ls-overline">DUNE / LIVE ACTIVITY / SIZE STUDY</div>
+    <h2>작아져도,<br>운동은 읽히게.</h2>
+    <div class="ls-subtitle">WLA01 · 크기별 6개 표면 × 진행·일시 정지·연결 대기·종료<br>브라우저 시안 · 예시 수치 · 실제 앱 미적용</div>
+    <div class="ls-controls" aria-label="종목별 표시 취향">
+      <label class="ls-label">운동 종류<select id="ls-sport" aria-label="운동 종류"><option value="cardio">유산소 · 달리기</option><option value="strength">웨이트 · 벤치 프레스</option></select></label>
+      <label class="ls-label">먼저 볼 정보<select id="ls-primary" aria-label="먼저 볼 정보"></select></label>
+      <label class="ls-label"><span id="ls-data-label">거리 데이터</span><select id="ls-data" aria-label="선택 지표 데이터"></select></label>
+      <span class="ls-label">유산소·웨이트 선택을 각각 기억해요.</span>
+    </div>
+    <div class="ls-controls" aria-label="시안 상태 선택">
+      <div class="ls-label">운동 상태
+        <div class="ls-segment" role="group" aria-label="운동 상태">
+          <button type="button" class="cursor-interaction" data-phase="running" aria-pressed="true">진행</button>
+          <button type="button" class="cursor-interaction" data-phase="paused" aria-pressed="false">일시 정지</button>
+          <button type="button" class="cursor-interaction" data-phase="stale" aria-pressed="false">연결 대기</button>
+          <button type="button" class="cursor-interaction" data-phase="ended" aria-pressed="false">종료</button>
+        </div>
+      </div>
+      <label class="ls-label">경과 시간
+        <select aria-label="경과 시간" id="ls-duration"><option value="1394">23분 14초</option><option value="45">45초</option><option value="4845">1시간 20분 45초</option><option value="43320">12시간 2분</option></select>
+      </label>
+      <label class="ls-label">심박 데이터
+        <select aria-label="심박 데이터" id="ls-heart"><option value="yes">142 bpm</option><option value="no">미수신</option></select>
+      </label>
+    </div>
+    <div class="ls-controls" id="ls-fallback-controls" aria-label="표현 비교" hidden>
+      <label class="ls-label">표면<select id="ls-appearance" aria-label="표면"><option value="light">밝음</option><option value="dark">어두움</option></select></label>
+      <label class="ls-label">본문 글씨<select id="ls-large" aria-label="본문 글씨"><option value="no">기본</option><option value="yes">크게</option></select></label>
+      <label class="ls-label">운동명<select id="ls-name" aria-label="운동명"><option value="short">실외 달리기</option><option value="long">긴 근력 운동명</option></select></label>
+    </div>
+    <div class="viz-carousel viz-dotted-background" aria-label="표시 우선순위 비교" data-previous-label="이전 시안" data-next-label="다음 시안">
+      <section data-variant="골드 임팩트" aria-label="비주얼 강조 시안"><div class="ls-stage ls-glam" data-direction="glam"></div></section>
+      <section data-variant="내 선택" aria-label="종목별 선택 시안" hidden><div class="ls-stage" data-direction="time"></div></section>
+      <section data-variant="심박 우선" aria-label="심박 우선 시안" hidden><div class="ls-stage" data-direction="heart"></div></section>
+    </div>
+    <div class="ls-footnote">28pt 제한 폭은 내용 영역 기준 · 카메라와 시스템 배치는 설명용<br>분·시간 축약은 내림 표시 · 일시 정지는 정지 기호 우선 · 연결 대기는 오래된 수치 숨김 · 종료 시 제거<br>시안 글씨 확대는 웹 배치 연구이며 iOS Dynamic Type 검증과 구분합니다.</div>
+    <span class="ls-announcement" aria-live="polite" style="position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip-path:inset(50%)"></span>
+  </div>
+</div>
+<script>
+(() => {
+  const root = document.getElementById('dune-live-study');
+  const state = { phase:'running', duration:1394, heart:true, appearance:'light', large:false, longName:false, sport:'cardio', cardioMetric:'distance', strengthMetric:'weight', distance:'4.2', weight:'60' };
+  const phases = { running:'운동 중', paused:'일시 정지', stale:'Watch 연결 대기', ended:'운동 종료' };
+  const icon = (name, css='') => `<i data-lucide="${name}" class="${css}" aria-hidden="true"></i>`;
+  const pad = x => String(x).padStart(2,'0');
+  function times() {
+    const h=Math.floor(state.duration/3600), m=Math.floor(state.duration/60)%60, s=state.duration%60;
+    return {
+      full: h ? `${h}:${pad(m)}:${pad(s)}` : `${m}:${pad(s)}`,
+      minimal: h ? `${h}h${pad(m)}` : `${m}:${pad(s)}`,
+      short: state.duration < 60 ? `${s}″` : state.duration < 6000 ? `${Math.floor(state.duration/60)}′` : `${h}h`,
+      spoken: `${h ? h+'시간 ' : ''}${m}분 ${s}초`
+    };
+  }
+  function phaseIcon(phase) { return icon(({running:'accessibility',paused:'pause',stale:'wifi-off',ended:'check'})[phase]); }
+  function preference() {return state.sport==='cardio'?state.cardioMetric:state.strengthMetric;}
+  function selected(direction) {
+    let kind=direction==='heart'?'heart':preference();
+    const missing=(kind==='heart'&&!state.heart)||(kind==='distance'&&state.distance==='missing')||(kind==='weight'&&state.weight==='missing');
+    if(missing) kind='time';
+    const meta={time:{name:'경과 시간',symbol:state.sport==='strength'?'dumbbell':'accessibility'},heart:{name:'심박수',symbol:'heart'},distance:{name:'누적 거리',symbol:'map-pin'},weight:{name:'현재 세트 중량',symbol:'dumbbell'}}[kind];
+    return {kind,missing,...meta,value:kind==='distance'?Number(state.distance).toFixed(2):kind==='weight'?state.weight:kind==='heart'?'142':times().full,unit:kind==='distance'?'km':kind==='weight'?'kg':kind==='heart'?'bpm':''};
+  }
+  function slot(direction, phase, limited=false, minimal=false, leading=false) {
+    let content, label;
+    const chosen=selected(direction);
+    if (phase === 'stale') { content=phaseIcon(phase); label=phases.stale; }
+    else if (phase === 'paused' && (minimal || leading)) { content=phaseIcon(phase); label='운동 일시 정지'; }
+    else if (leading) { content=phase==='paused'?phaseIcon(phase):icon(chosen.symbol,chosen.kind==='heart'?'ls-heart':''); label=chosen.name; }
+    else if (chosen.kind==='heart' && phase==='running') {
+      content=minimal ? `<span class="ls-heart-stack">${icon('heart','ls-heart')}<span>142</span></span>` : '142';
+      label='심박수 142 bpm';
+    } else if (chosen.kind==='distance'||chosen.kind==='weight') {
+      const value=chosen.kind==='distance'&&limited?Number(state.distance).toFixed(1):chosen.value;
+      content=(limited||minimal)?`<span class="ls-value-stack"><span>${value}</span><small>${chosen.unit}</small></span>`:`${value} ${chosen.unit}`;
+      label=`${chosen.name} ${chosen.value} ${chosen.unit}`;
+    } else {
+      const t=times(); content=limited?t.short:minimal?t.minimal:t.full;
+      label=`${phase==='paused'?'일시 정지, ':''}경과 시간 ${t.spoken}`;
+    }
+    return `<span class="ls-slot${limited?' ls-short':''}" role="img" aria-label="${label}">${content}</span>`;
+  }
+  function minimal(direction, phase, limited=false) {
+    if(phase==='ended') return '<span class="ls-ended-mark">제거됨</span>';
+    return `<div class="ls-minimal${limited?' ls-tiny':''}">${slot(direction,phase,limited,true)}</div>`;
+  }
+  function compact(direction, limited=false) {
+    if(state.phase==='ended') return `<div class="ls-removed">${icon('check')}<span>DUNE 액티비티 제거</span></div>`;
+    return `<div class="ls-capsule${limited?' ls-limited':''}">${slot(direction,state.phase,limited,false,true)}<span class="ls-camera" aria-label="시스템 카메라 영역"></span>${state.phase==='stale'?'':slot(direction,state.phase,limited)}</div>`;
+  }
+  function header() {
+    const name=state.longName?'체스트 프레스 머신 · 플레이트 로드':state.sport==='strength'?'벤치 프레스 · 3세트':'실외 달리기';
+    return `<div class="ls-activity-heading"><span class="ls-phase-symbol">${phaseIcon(state.phase)}</span><div><div class="ls-title">${name}</div><div class="ls-brandline"><span class="ls-brand">DUNE</span><span>· ${phases[state.phase]}</span></div></div></div>`;
+  }
+  function metrics(includeHeart=true, excludeSport=false) {
+    const sportMetric=state.sport==='cardio'?(state.distance==='missing'?'':`<span class="ls-metric">${icon('map-pin')}${Number(state.distance).toFixed(2)} <small>km</small></span>`):(state.weight==='missing'?'':`<span class="ls-metric">${icon('dumbbell')}${state.weight} <small>kg · 현재 세트</small></span>`);
+    return `<div class="ls-metrics">${includeHeart&&state.heart?`<span class="ls-metric">${icon('heart')}142 <small>bpm</small></span>`:''}<span class="ls-metric">${icon('flame')}186 <small>kcal</small></span>${excludeSport?'':sportMetric}</div>`;
+  }
+  function detail(direction, type) {
+    if(state.phase==='ended') return `<div class="ls-removed">${icon('check')}<span>종료 후 액티비티 제거<br>완료 카드를 남기지 않음</span></div>`;
+    const chosen=selected(direction);
+    const primaryHeart=chosen.kind==='heart'&&state.phase==='running';
+    const glam=direction==='glam';
+    let content=header();
+    if(state.phase==='stale') content+=`<div class="ls-waiting">${icon('watch')}<span>Watch 데이터를 기다려요.</span></div>`;
+    else if(primaryHeart) content+=`<div class="ls-primary-heart">${icon('heart')}142 <small>bpm</small></div><div class="ls-secondary-time">경과 ${times().full}</div>${metrics(false)}`;
+    else if(chosen.kind==='distance'||chosen.kind==='weight') content+=`<div class="ls-selected-value" aria-label="${chosen.name}">${chosen.value}<small>${chosen.unit}</small></div><div class="ls-secondary-time">${chosen.name}${state.phase==='paused'?' · 일시 정지':''} · 경과 ${times().full}</div>${metrics(true,true)}`;
+    else content+=`<div class="ls-big-time">${times().full}</div>${metrics()}`;
+    if(glam&&state.phase!=='stale') {
+      const value=primaryHeart?`<div class="ls-primary-heart">142 <small>bpm</small></div>`:chosen.kind==='distance'||chosen.kind==='weight'?`<div class="ls-selected-value">${chosen.value}<small>${chosen.unit}</small></div>`:`<div class="ls-big-time">${times().full}</div>`;
+      const caption=state.phase==='paused'?'일시 정지 · 마지막 수치':chosen.name;
+      content=header()+`<div class="ls-impact-main"><div><div class="ls-impact-kicker">${caption}</div>${value}</div><div class="ls-impact-emblem" aria-hidden="true">${icon(state.sport==='strength'?'dumbbell':'footprints')}</div></div>${chosen.kind==='time'?'':`<div class="ls-secondary-time">경과 ${times().full}</div>`}${metrics(!primaryHeart,chosen.kind==='distance'||chosen.kind==='weight')}`;
+    }
+    return `<div class="${type==='expanded'?'ls-island-expanded':type==='small'?'ls-lock ls-small':'ls-lock'}${state.phase==='paused'?' ls-subdued':''}" aria-label="${phases[state.phase]} ${type}">${type==='expanded'?'<div class="ls-island-camera" aria-label="시스템 카메라 영역"></div>':''}${content}</div>`;
+  }
+  function tile(title,spec,preview,note,tall=false) {
+    return `<article class="ls-tile"><div class="ls-tile-top"><h4>${title}</h4><span class="ls-spec">${spec}</span></div><div class="ls-preview${tall?' ls-tall':''}">${preview}</div><div class="ls-tile-note">${note}</div></article>`;
+  }
+  function syncStageHeights() {
+    const panels=[...root.querySelectorAll('[data-variant]')];
+    panels.forEach(panel=>{panel.querySelector('.ls-stage').style.minHeight='0px';});
+    const height=Math.max(...panels.map(panel=>{
+      const hidden=panel.hidden;panel.hidden=false;
+      const height=panel.querySelector('.ls-stage').getBoundingClientRect().height;
+      panel.hidden=hidden;return height;
+    }));
+    panels.forEach(panel=>{panel.querySelector('.ls-stage').style.minHeight=`${Math.ceil(height)}px`;});
+  }
+  function render() {
+    const sportMetric=state.sport==='cardio'?'distance':'weight';
+    const primaryOptions=[['time','시간'],[sportMetric,state.sport==='cardio'?'거리 (km)':'현재 세트 중량 (kg)'],['heart','심박']];
+    root.querySelector('#ls-sport').value=state.sport;
+    root.querySelector('#ls-primary').innerHTML=primaryOptions.map(([value,name])=>`<option value="${value}">${name}</option>`).join('');
+    root.querySelector('#ls-primary').value=preference();
+    root.querySelector('#ls-data-label').textContent=state.sport==='cardio'?'거리 데이터':'현재 세트 입력 중량';
+    const dataOptions=state.sport==='cardio'?[['4.2','4.20 km'],['42.2','42.20 km'],['0','0.00 km'],['missing','미수신 → 시간']]:[['60','60 kg · 3세트'],['12.5','12.5 kg · 3세트'],['0','0 kg · 입력값'],['missing','미입력 → 시간']];
+    root.querySelector('#ls-data').innerHTML=dataOptions.map(([value,name])=>`<option value="${value}">${name}</option>`).join('');
+    root.querySelector('#ls-data').value=state[sportMetric];
+    root.dataset.appearance=state.appearance; root.dataset.large=String(state.large);
+    root.dataset.longTime=String(state.duration>=3600);
+    root.querySelector('#ls-appearance').value=state.appearance;root.querySelector('#ls-large').value=state.large?'yes':'no';root.querySelector('#ls-name').value=state.longName?'long':'short';
+    root.querySelectorAll('[data-phase]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.phase===state.phase)));
+    root.querySelector('#ls-duration').value=String(state.duration);root.querySelector('#ls-heart').value=state.heart?'yes':'no';
+    root.querySelectorAll('[data-direction]').forEach(stage=>{
+      const direction=stage.dataset.direction;
+      const chosen=selected(direction),heartView=chosen.kind==='heart';
+      const metricSummary=chosen.kind==='time'?'경과 '+times().minimal:`${chosen.name} ${chosen.value} ${chosen.unit}`;
+      const smallMinimal=state.phase==='ended'?'':slot(direction,state.phase,false,true);
+      const attached=`<div class="ls-attached">${smallMinimal}<span class="ls-camera" aria-label="시스템 카메라 영역"></span></div>`;
+      const context=`<div class="ls-context"><div class="ls-context-label"><span>사진 상황 · 음악과 동시 표시</span><span>시스템 배치 예시</span></div><div class="ls-system-bar"><span class="ls-system-clock">08:54</span>${attached}<div class="ls-player" aria-label="다른 앱 음악 재생"><span class="ls-art"></span>${icon('audio-lines')}</div><span class="ls-status-icons">${icon('signal')}${icon('battery-full')}</span></div><div class="ls-context-caption">${state.phase==='ended'?'DUNE 표시는 제거되고 다른 활동만 유지':state.phase==='stale'?'연결 대기 · 오래된 수치 숨김':state.phase==='paused'?'정지 기호로 운동 상태를 먼저 구분':(chosen.missing?'선택 지표 미수신 → ':'핵심 정보: ')+metricSummary}</div></div>`;
+      const chosenNote=chosen.kind==='distance'?'누적 거리와 km 단위. 좁은 폭은 소수 한 자리.':chosen.kind==='weight'?'현재 세트의 입력 중량과 kg 단위. 소수 중량도 유지.':heartView?'심장 기호와 심박수.':'경과 시간. 좁은 폭은 분·시간 축약.';
+      const tiles=[
+        tile('Compact','일반 폭 · 좌우 표시',compact(direction),chosenNote),
+        tile('Compact · 제한 폭','내용 각 28 × 28pt',compact(direction,true),chosenNote),
+        tile('Minimal','일반 / 제한 폭',`<div class="ls-size-pair">${minimal(direction,state.phase)}<span>36.67–45pt</span></div><div class="ls-size-pair">${minimal(direction,state.phase,true)}<span>28pt</span></div>`,chosenNote+' 정지·연결 대기는 상태 우선.'),
+        tile('Expanded','길게 누름 · 가변 높이',detail(direction,'expanded'),'운동명·DUNE·상태와 시간·지표. 시스템 검은 표면 유지.',true),
+        tile('잠금 화면','기본 family',detail(direction,'lock'),'기존 따뜻한 표면. 값 미수신과 실제 0을 구분.',true),
+        tile('Small','Watch / CarPlay · 배치 연구',detail(direction,'small'),'작은 family용 정보 순서. 실제 호스트 크기는 별도 검증.',true)
+      ].join('');
+      stage.innerHTML=`<div class="ls-variant-head"><h3>${direction==='glam'?'골드 임팩트':direction==='time'?'내 선택 · '+primaryOptions.find(([key])=>key===preference())[1]:'심박 우선'}</h3><span>${direction==='glam'?'큰 수치 · 입체 심벌 · 골드 능선':direction==='time'?(state.sport==='cardio'?'유산소':'웨이트')+' · 종목별 취향':'비교안 · 실시간 강도 확인'}</span></div>${context}<div class="ls-grid">${tiles}</div><div class="ls-status-sweep" aria-label="상태별 minimal 비교">${Object.keys(phases).map(p=>`<div class="ls-status-cell" aria-current="${state.phase===p}">${minimal(direction,p)}<span>${phases[p]}</span></div>`).join('')}</div>`;
+    });
+    if(globalThis.lucide) lucide.createIcons({attrs:{width:18,height:18,'stroke-width':1.8}});
+    syncStageHeights();
+  }
+  function persist() {
+    if(window.openai?.setWidgetState) window.openai.setWidgetState({modelContent:{study:'WLA01 종목별 표시 선택',phase:state.phase,sport:state.sport,cardioMetric:state.cardioMetric,strengthMetric:state.strengthMetric},privateContent:{...state}}).catch(()=>{});
+  }
+  function restore(saved) {
+    if(!saved?.privateContent) return;
+    const s=saved.privateContent;
+    if(Object.hasOwn(phases,s.phase)) state.phase=s.phase;
+    if([45,1394,4845,43320].includes(s.duration)) state.duration=s.duration;
+    if(typeof s.heart==='boolean') state.heart=s.heart;
+    if(['light','dark'].includes(s.appearance)) state.appearance=s.appearance;
+    if(typeof s.large==='boolean') state.large=s.large;
+    if(typeof s.longName==='boolean') state.longName=s.longName;
+    if(['cardio','strength'].includes(s.sport)) state.sport=s.sport;
+    if(['time','distance','heart'].includes(s.cardioMetric)) state.cardioMetric=s.cardioMetric;
+    if(['time','weight','heart'].includes(s.strengthMetric)) state.strengthMetric=s.strengthMetric;
+    if(['4.2','42.2','0','missing'].includes(s.distance)) state.distance=s.distance;
+    if(['60','12.5','0','missing'].includes(s.weight)) state.weight=s.weight;
+  }
+  function changed() {render();persist();root.querySelector('.ls-announcement').textContent=`${phases[state.phase]}, 경과 ${times().spoken}, 심박 ${state.heart?'142 bpm':'미수신'}`;}
+  root.querySelectorAll('[data-phase]').forEach(b=>b.addEventListener('click',()=>{state.phase=b.dataset.phase;changed();}));
+  root.querySelector('#ls-duration').addEventListener('change',e=>{state.duration=Number(e.target.value);changed();});
+  root.querySelector('#ls-heart').addEventListener('change',e=>{state.heart=e.target.value==='yes';changed();});
+  root.querySelector('#ls-sport').addEventListener('change',e=>{state.sport=e.target.value;changed();});
+  root.querySelector('#ls-primary').addEventListener('change',e=>{state[state.sport==='cardio'?'cardioMetric':'strengthMetric']=e.target.value;changed();});
+  root.querySelector('#ls-data').addEventListener('change',e=>{state[state.sport==='cardio'?'distance':'weight']=e.target.value;changed();});
+  root.querySelector('#ls-appearance').addEventListener('change',e=>{state.appearance=e.target.value;changed();});
+  root.querySelector('#ls-large').addEventListener('change',e=>{state.large=e.target.value==='yes';changed();});
+  root.querySelector('#ls-name').addEventListener('change',e=>{state.longName=e.target.value==='long';changed();});
+  restore(window.openai?.widgetState);render();
+  let previousWidth=0;
+  new ResizeObserver(entries=>{const width=entries[0].contentRect.width;if(Math.abs(width-previousWidth)>.5){previousWidth=width;syncStageHeights();}}).observe(root);
+  window.addEventListener('openai:set_globals',e=>{restore(e.detail?.globals?.widgetState);render();});
+  if(globalThis.Tweak) {
+    const tweak=new Tweak({container:root,onChange:changed});
+    tweak.addSelect(state,'appearance',{label:'표면',options:[{label:'밝음',value:'light'},{label:'어두움',value:'dark'}]});
+    tweak.addToggle(state,'large',{label:'본문 큰 글씨'});
+    tweak.addToggle(state,'longName',{label:'긴 근력 운동명'});
+  } else {
+    root.querySelector('#ls-fallback-controls').hidden=false;
+  }
+})();
+</script>
