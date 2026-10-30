@@ -219,8 +219,16 @@ extension HealthQueryService {
         case .milliseconds: return String(localized: "\(number(value)) milliseconds")
         case .score: return String(localized: "\(number(value)) out of 100")
         case .seconds:
-            let minutes = Int((value / 60).rounded())
-            return String(localized: "\(minutes) minutes")
+            if value > 0, value < 1 { return String(localized: "Less than one second") }
+            let total = Int(value.rounded())
+            let hours = total / 3_600
+            let minutes = (total % 3_600) / 60
+            let seconds = total % 60
+            var parts: [String] = []
+            if hours > 0 { parts.append(String(localized: "\(hours) hours")) }
+            if minutes > 0 { parts.append(String(localized: "\(minutes) minutes")) }
+            if seconds > 0 || parts.isEmpty { parts.append(String(localized: "\(seconds) seconds")) }
+            return parts.joined(separator: " ")
         case .secondsPerKilometer:
             let seconds = Int(value.rounded())
             return String(localized: "\(seconds / 60) minutes \(seconds % 60) seconds per kilometer")

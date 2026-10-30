@@ -34,6 +34,7 @@ struct HealthQueryWellnessTests {
         #expect(response.metrics.count == 1)
         #expect(response.metrics.first?.value == 72)
         #expect(response.metrics.first?.date == now.addingTimeInterval(-60))
+        #expect(response.spokenSummary.contains("72"))
     }
 
     @Test("HealthKit failure retains local measurements and reports incomplete coverage")

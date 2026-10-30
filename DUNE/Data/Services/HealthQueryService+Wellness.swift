@@ -134,13 +134,23 @@ extension HealthQueryService {
             }
             let total = points.reduce(0) { $0 + $1.value }
             let fetchedAt = nowProvider()
+            let measurementDate = points.count == 1 ? points.first?.date : nil
+            var metrics = [HealthQueryMetric(id: "sleepTotal", title: String(localized: "Total Sleep"), value: total, unit: .seconds, date: measurementDate),
+                           HealthQueryMetric(id: "sleepAverage", title: String(localized: "Average Recorded Sleep"), value: total / Double(points.count), unit: .seconds, date: measurementDate),
+                           HealthQueryMetric(id: "recordedNights", title: String(localized: "Recorded Nights"), value: Double(points.count), unit: .count)]
+            let stages: [(SleepStage.Stage, String)] = [(.deep, String(localized: "Deep Sleep")), (.rem, String(localized: "REM Sleep")), (.core, String(localized: "Core Sleep"))]
+            for (stage, title) in stages {
+                let values = days.filter { $0.date >= interval.start && $0.date < interval.end && Self.valid($0.totalMinutes, in: 0.001...1_440) != nil }
+                    .compactMap { Self.valid($0.stageBreakdown[stage], in: 0...1_440) }
+                if !values.isEmpty {
+                    metrics.append(HealthQueryMetric(id: "sleep-\(String(describing: stage))", title: title, value: values.reduce(0, +) * 60, unit: .seconds, date: measurementDate))
+                }
+            }
             return result(request.kind, interval: interval,
-                          metrics: [HealthQueryMetric(id: "sleepTotal", title: String(localized: "Total Sleep"), value: total, unit: .seconds),
-                                    HealthQueryMetric(id: "sleepAverage", title: String(localized: "Average Recorded Sleep"),
-                                                      value: total / Double(points.count), unit: .seconds)],
+                          metrics: metrics,
                           series: [HealthQuerySeries(id: "sleep", title: String(localized: "Sleep"), unit: .seconds, points: points)],
                           sources: points.map { HealthQuerySource(kind: .healthKit, measuredAt: $0.date, fetchedAt: fetchedAt) },
-                          summary: String(localized: "Sleep totals include only nights with recorded sleep."))
+                          summary: String(localized: "From \(dateText(interval.start)) through \(dateText(interval.end)).") + " " + String(localized: "Sleep totals include only nights with recorded sleep."))
         } catch is CancellationError { throw CancellationError() }
         catch {
             return result(request.kind, status: .unavailable, interval: interval,
