@@ -1370,6 +1370,16 @@ final class WorkoutManager: NSObject {
 
     private func workoutSnapshot(at now: Date = Date()) -> WatchWorkoutSnapshot? {
         guard let startDate else { return nil }
+        let activityType: WorkoutActivityType
+        if let session {
+            // Recovery metadata can be absent; the live HealthKit session remains authoritative.
+            activityType = WorkoutActivityType(healthKit: session.workoutConfiguration.activityType)
+        } else {
+            activityType = switch workoutMode {
+            case .cardio(let activityType, _): activityType
+            case .strength: .traditionalStrengthTraining
+            }
+        }
         let snapshot = WatchWorkoutSnapshot(
             startedAt: startDate,
             updatedAt: now,
@@ -1378,7 +1388,8 @@ final class WorkoutManager: NSObject {
             phase: isSessionEnded ? .ended : (isPaused ? .paused : .running),
             heartRate: (20...250).contains(heartRate) ? heartRate : nil,
             activeCalories: activeCalories,
-            distanceMeters: isCardioMode ? distance : 0
+            distanceMeters: isCardioMode ? distance : 0,
+            exerciseIconName: activityType.iconName
         )
         return snapshot.isValid ? snapshot : nil
     }

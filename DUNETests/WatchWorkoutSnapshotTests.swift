@@ -13,7 +13,8 @@ struct WatchWorkoutSnapshotTests {
         heartRate: Double? = 142,
         activeCalories: Double = 24.5,
         distanceMeters: Double = 1_250,
-        exerciseName: String = "Outdoor Run"
+        exerciseName: String = "Outdoor Run",
+        exerciseIconName: String? = nil
     ) -> WatchWorkoutSnapshot {
         WatchWorkoutSnapshot(
             startedAt: startedAt,
@@ -23,18 +24,89 @@ struct WatchWorkoutSnapshotTests {
             phase: phase,
             heartRate: heartRate,
             activeCalories: activeCalories,
-            distanceMeters: distanceMeters
+            distanceMeters: distanceMeters,
+            exerciseIconName: exerciseIconName
         )
     }
 
     @Test("Round trips through JSON")
     func jsonRoundTrip() throws {
-        let original = snapshot()
+        let original = snapshot(exerciseIconName: WorkoutActivityType.running.iconName)
         let data = try JSONEncoder().encode(original)
         let decoded = try JSONDecoder().decode(WatchWorkoutSnapshot.self, from: data)
 
         #expect(decoded == original)
         #expect(decoded.isValid)
+    }
+
+    @Test("Older payloads without an icon remain decodable")
+    func legacyPayload() throws {
+        let data = try JSONEncoder().encode(snapshot())
+        let object = try #require(JSONSerialization.jsonObject(with: data) as? [String: Any])
+        #expect(object["exerciseIconName"] == nil)
+        let decoded = try JSONDecoder().decode(WatchWorkoutSnapshot.self, from: data)
+        #expect(decoded.exerciseIconName == nil)
+        #expect(decoded.isValid)
+        #expect(decoded.phaseIconName(isStale: false) == "figure")
+    }
+
+    @Test("Older receivers can ignore the additional icon field")
+    func legacyReceiver() throws {
+        struct LegacySnapshot: Decodable {
+            let exerciseName: String
+            let phase: WatchWorkoutSnapshot.Phase
+            let elapsedSeconds: TimeInterval
+        }
+        let original = snapshot(exerciseIconName: WorkoutActivityType.running.iconName)
+        let data = try JSONEncoder().encode(original)
+        let decoded = try JSONDecoder().decode(LegacySnapshot.self, from: data)
+        #expect(decoded.exerciseName == original.exerciseName)
+        #expect(decoded.phase == original.phase)
+        #expect(decoded.elapsedSeconds == original.elapsedSeconds)
+    }
+
+    @Test("Workout symbols use the existing canonical mapping", arguments: [
+        WorkoutActivityType.running, .walking, .cycling, .swimming, .yoga,
+        .rowing, .traditionalStrengthTraining, .functionalStrengthTraining
+    ])
+    func workoutSymbols(activityType: WorkoutActivityType) throws {
+        let original = snapshot(exerciseIconName: activityType.iconName)
+        let decoded = try JSONDecoder().decode(WatchWorkoutSnapshot.self, from: JSONEncoder().encode(original))
+        #expect(decoded.phaseIconName(isStale: false) == activityType.iconName)
+        #expect(decoded.isValid)
+    }
+
+    @Test("Workout identity stays stable when the current exercise symbol changes")
+    func symbolChange() {
+        let original = snapshot(exerciseIconName: WorkoutActivityType.running.iconName)
+        var changed = original
+        changed.exerciseIconName = WorkoutActivityType.cycling.iconName
+        #expect(changed != original)
+        #expect(changed.isSameWorkout(as: original))
+        #expect(changed.phaseIconName(isStale: false) == "figure.outdoor.cycle")
+    }
+
+    @Test("Missing or invalid icon metadata uses the generic figure", arguments: [
+        nil, "", " \n\t ", String(repeating: "x", count: 101)
+    ] as [String?])
+    func iconFallback(icon: String?) {
+        let value = snapshot(exerciseIconName: icon)
+        #expect(value.isValid)
+        #expect(value.phaseIconName(isStale: false) == "figure")
+    }
+
+    @Test("Status symbols take priority over the exercise", arguments: [
+        WatchWorkoutSnapshot.Phase.running, .paused, .ended
+    ])
+    func statusSymbolPriority(phase: WatchWorkoutSnapshot.Phase) {
+        let value = snapshot(phase: phase, exerciseIconName: WorkoutActivityType.running.iconName)
+        let expected: String = switch phase {
+        case .running: "figure.run"
+        case .paused: "pause.fill"
+        case .ended: "checkmark"
+        }
+        #expect(value.phaseIconName(isStale: false) == expected)
+        #expect(value.phaseIconName(isStale: true) == "wifi.slash")
     }
 
     @Test("Rejects non-finite and out-of-range numeric values")
