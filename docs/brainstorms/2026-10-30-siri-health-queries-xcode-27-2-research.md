@@ -240,3 +240,9 @@ HealthKit의 읽기 권한 비공개와 잠금 상태 제약은 [Protecting user
 이 조사의 미검증 항목은 Xcode 27.2 실빌드, 한국어 Siri의 개별 발화 라우팅, 실제 낭독과 후속 문맥, PCC entitlement·적격성, 잠금 기기와 Watch에서의 접근·실행이다. 앱 코드는 변경하지 않았으며 실제 사용자 건강 데이터도 조회하지 않았다.
 
 후속 디자인으로 [SQ01–SQ14 배치·상태 계약](../design/layout-map/siri-health-queries-proposal.md)과 [기능별 비주얼 시안](../design/theme-map/themes/dune-siri-health-queries.html)을 추가했다. V1/V2·밝음/어두움·기기 폭·큰 글씨·데이터 상태를 비교할 수 있으며 테마맵과 레이아웃맵에서 연결한다. 합성 데이터의 HTML 제안이고 앱 구현·실제 Siri 화면이 아니다.
+
+## /run 후속: 자연스러운 시스템 낭독
+
+건강 조회는 `ProvidesDialog`를 반환하여 시스템 Siri가 읽는다. 앱에서 AVSpeechSynthesizer로 Siri 음색을 복제하지 않는다. [Apple 음성 안내](https://developer.apple.com/videos/play/wwdc2020/10022/)에서 이 두 음성 경로를 구분한다. 최신 SDK의 [IntentSystemContext.locale](https://developer.apple.com/documentation/appintents/intentsystemcontext/locale)은 요청 언어가 앱 언어와 다른 경우를 처리한다. 이 값을 요청별 TaskLocal로 전달하여 단위·숫자·날짜와 조회 안내를 같은 언어로 만든다. 전체 답변과 supporting 답변 모두 검증한 값을 포함해 화면이 있는 호출에서도 제목만 읽지 않게 한다. 한국어 자연 단위·언어 격리 테스트와 실기기 음색·억양 청취는 별개이며, 후자는 아직 검증하지 않았다.
+
+현재 로컬은 Xcode 27.1 / SDK 27.1이다. 공개 27 API를 이 환경에서 컴파일하고 27.2 기술 방향과의 호환성을 설계했으며, Xcode 27.2로 직접 빌드했다고 표시하지 않는다. PCC는 실제 managed entitlement가 검증되지 않아 비활성이고, SpotlightSearchTool은 보호된 사용자 지정 인덱스로 검색 범위를 격리하는 계약을 확인하지 못해 연결하지 않았다. 정확한 운동 메모 검색은 공통 조회 서비스에서 제공한다.
