@@ -140,6 +140,33 @@ Codex가 iOS·iPadOS·Duo·watchOS의 보이는 화면 배치, 글자, 상태, �
 - 정리 명령은 기록의 worktree/UDID/이름을 현재 `simctl` 목록과 대조하고 종료·삭제·삭제 확인을 수행한다. 복구 표식이 있는 기기는 수동 확인 대상으로 보고하고 삭제하지 않는다. 실패하거나 소유가 불명확한 기기는 보존하며 나머지는 계속 처리한다. `--cleanup-all`과 `simctl delete all`은 Ship에서 사용하지 않는다. 기록을 읽지 못하거나 미정리 기기·복구 표식이 남으면 Step 4 이후 로컬 정리를 중단하여 worktree의 기록과 복구 경로를 보존한다. 원격 머지는 완료됐고 로컬 정리는 미완료임을 보고한다.
 - 최종 결과에 삭제한 기기 수와 남은 기기/사유를 포함한다. 목록 조회나 삭제 실패를 정리 성공으로 보고하지 않는다.
 
+#### Ship 외부 DerivedData 정리
+
+- 원격 머지 성공 후 **제거가 확정된 linked worktree만** 아래 `/cleanup`의 외부 DerivedData 정리 대상으로 삼는다. primary checkout에서 브랜치만 정리하는 Ship은 이 외부 캐시 정리를 건너뛴다. `/run`과 `/work`에서 호출하는 Ship에도 동일하게 적용하며, 머지 실패 시 캐시를 유지한다.
+- Ship에 이미 승인된 정리 범위라면 별도 승인을 반복하지 않는다. 삭제 실패·잠금 충돌 시 worktree를 보존하고 원격 머지 완료/로컬 정리 미완료를 구분해 보고한다.
+
+#### Ship linked worktree의 로컬 정리 순서
+
+- Step 1에서 `git worktree list --porcelain`과 `git rev-parse --git-dir --git-common-dir`로 현재 checkout이 linked worktree인지 판별하고 정확한 worktree 경로·브랜치·primary checkout을 기록한다. main 체크아웃이 다른 위치에 있으면 실제 main checkout을 사용한다. primary checkout에서 실행하는 Ship은 원본 Step 4를 유지한다.
+- linked worktree에서는 원본 Step 4의 `git checkout main`을 실행하지 않는다. **원격 머지를 확인한 뒤**, main checkout이 `main`이고 변경사항이 없음을 확인하고 그 경로에서 `git pull --ff-only`로 먼저 갱신한다. 이 확인이나 갱신에 실패하면 linked worktree와 캐시를 보존하고 로컬 정리 미완료로 보고한다.
+- main 갱신 후 현재 linked worktree에 미커밋·신규 파일이 없고 해당 PR의 머지 커밋이 main에 포함됐는지 확인한다. 이어서 위 소유 simulator 정리와 외부 DerivedData 정리를 실행한다. 이 linked 흐름에서는 이 순서가 기존의 원격 머지 직후 simulator 정리 시점보다 우선한다. 진행 중인 빌드·테스트, 복구 표식, 정리 실패가 있으면 worktree 제거를 중단한다.
+- 모두 성공한 뒤 **main checkout 경로에서** `git worktree remove "<대상 worktree>"`와 `git branch -d "<대상 branch>"`를 실행한다. force는 사용하지 않는다. 원격 브랜치 삭제 성공도 확인한다. 이후 Step 5 아티팩트 정리와 Step 6 프로젝트 재생성은 갱신된 main checkout에서 실행한다. primary checkout의 `.claude/**`나 기존 변경사항은 자동 커밋하지 않는다.
+
+### /cleanup
+
+- 원본의 PR 머지 확인·worktree 보호·삭제 승인 규칙을 유지한다. **삭제가 확정된 worktree만** 외부 DerivedData 정리 대상으로 삼고, 단순 로컬 브랜치 삭제·보호됨·보류 대상의 캐시는 건드리지 않는다.
+- 삭제 후보를 제시할 때 `python3 scripts/cleanup-worktree-deriveddata.py --worktree "<대상 worktree 절대 경로>"`로 dry run하여 캐시 경로와 소유 프로젝트를 함께 표시한다. 기본 탐색 위치는 `~/Library/Developer/Xcode/DerivedData`이며, 별도 외부 캐시 부모가 확인되면 `--derived-data-root "<부모 경로>"`를 반복 전달한다. 이 옵션은 기본 위치를 대체하므로 기본 위치도 필요하면 함께 명시한다. 디스크 전체나 이름 패턴으로 탐색하지 않는다.
+- 사용자 지정 부모는 모두 존재하는 디렉터리여야 하며 서로 포함 관계인 경로는 거부한다. 오타나 중첩 경로가 있으면 캐시를 삭제하지 않고 실패한다. 기본 Xcode 캐시 위치가 아직 없는 경우만 정상 no-op으로 처리한다.
+- 워크트리 소유권은 캐시 직속 `info.plist`의 절대 `WorkspacePath`를 정규화한 경로로 판정한다. 대상은 기존 linked worktree 루트만 허용하며 primary checkout은 거부한다. 동일 이름의 다른 worktree·main·공용 캐시·소유 미확인·손상된 메타데이터·symlink 캐시와 중첩 checkout은 보존한다. 외부 사용자 지정 경로도 동일 기준을 적용하며 메타데이터가 없으면 추정 삭제하지 않는다. 여러 worktree가 공유한다고 알려진 사용자 지정 경로는 전달하지 않는다.
+- 승인된 worktree를 제거하기 **전**, 해당 worktree의 Xcode 빌드가 실행 중이지 않음을 확인하고 다음 명령을 실행한다. `<저장소>`는 스크립트가 존재하는 checkout의 절대 경로다. dry run과 동일한 외부 부모 옵션을 전달한다. 잠금은 대상 worktree 기준이며 충돌 시 기다리지 않고 정리를 보류한다.
+
+  ```bash
+  DUNE_SIM_TEST_LOCK_WAIT_SECONDS=0 python3 "<저장소>/scripts/lib/simulator-test-lock.py" "<대상 worktree>" -- python3 "<저장소>/scripts/cleanup-worktree-deriveddata.py" --worktree "<대상 worktree>" --apply
+  ```
+
+- 스크립트는 삭제 직전 소유권과 디렉터리 identity를 다시 확인한다. 캐시를 같은 부모의 전용 임시 디렉터리로 원자적으로 이동하고 다시 검증한 뒤 삭제하여, 원래 경로에 새로 생성된 캐시를 보호한다. 이동 후 검증/삭제가 실패하면 잔여 캐시를 보존하고 `Recovery required`에 실제 보존 경로와 원래 경로를 출력한다. 복구 경로는 자동 재삭제하지 않는다. 캐시 삭제 후 빈 임시 디렉터리만 제거하지 못한 경우에는 삭제 건수를 유지하면서 남은 경로와 실패를 별도로 보고한다. 스캔/삭제 실패는 성공으로 숨기지 않고 해당 worktree 제거를 중단한다. 보존한 캐시는 사유와 함께 보고한다. 캐시 삭제에 성공한 뒤 원본의 `git worktree remove`와 브랜치 정리를 진행한다. worktree가 이미 없어졌다면 소유 확인을 생략하거나 이름으로 삭제하지 않는다.
+- 이 절차는 Codex의 `/cleanup`·`/ship` 실행 지침이다. 수동 `git worktree remove`, Codex 앱 자체 삭제, pre-commit에서 자동 실행되는 hook은 아니다. `.claude/**` 원본과 pre-commit의 캐시 보존 동작은 변경하지 않는다.
+
 ### /copy-voice
 
 - 원본: `.claude/skills/copy-voice/SKILL.md`. 사용자 대면 문구 작성·수정·검토 시 [UX Writing 보완 규칙](ux-writing.md)을 함께 읽는다.
