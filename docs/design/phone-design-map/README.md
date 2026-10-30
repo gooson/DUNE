@@ -196,3 +196,6 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 
 
 2026-10-30 A01 최근 운동의 5K/PR 성취 표시를 작은 골드 SF Symbol과 caption2 텍스트로 정리했다. 메달 원판·리본·그라데이션 상자·테두리·내부 패딩을 제거하고 제목·날짜·성취 간격을 4pt로 맞췄다. 영향은 iPhone·iPad·Duo 접힘/펼침의 A01 최근 운동이며 Watch·전체 운동 목록은 변경하지 않았다. 현재 worktree 등록 iPhone `9905027B-0A4A-4A45-84D0-98431BE94BAC`, iPad `8ADADB52-8A4A-435C-83C7-3F779A693499`, Duo `25D0A3A5-22BA-4DF8-A71E-BB9476ABAFEE`가 실제 Simulator 목록에 없어 새 캡처와 큰 글씨 검증을 수행하지 못했다. A01 네 기기 상태는 미갱신이며 이전 PNG는 이번 수정의 증거가 아니다. 소유권 등록과 실제 기기를 복구한 뒤 해당 최근 운동 상태만 다시 캡처한다. [수정·검증 기록](../../solutions/general/2026-10-30-compact-workout-achievement-spacing.md).
+
+
+2026-10-30 최근 운동 배지 재개 검증에서는 별도 main 기반 worktree의 소유 iPhone을 새로 생성·등록하고 기존 UI 검증 종료 후 실행했다. 테스트 bundle 생성 후 실행 초기화가 정체돼 300초 로그 무갱신/exit124로 끝났고 testcase 통과 증거는 없다. iPhone·iPad·Duo 접힘/펼침 A01의 배지·기본/큰 글씨 새 캡처는 여전히 미갱신이다. 원래 worktree의 기기 부재와 새 worktree의 실행 장애를 구분하며 [상세 리뷰·복구 조건](../../reviews/2026-10-30-compact-workout-achievement.md)을 따른다.

@@ -40,3 +40,6 @@ related_solutions: []
 ## Review and Ship 후속
 
 5개 코드 리뷰 관점과 SwiftUI·Apple UX·UI 테스트·앱 품질 정적 검토에서 P1/P2/P3 결함은 발견되지 않았다. 기존 Live Activity PR #864를 포함하지 않도록 main 기반 `codex/compact-workout-achievement` 브랜치를 `/private/tmp/Health-workout-badge-review`에 분리했다. 그곳에서도 repository simulator 실행 잠금이 사용 중이어서 새 기기 생성과 UI 검증은 시작하지 못했다. 원인 해소 근거 없이 재실행하지 않으며 필수 검증 전 PR 생성·머지를 진행하지 않는다. [리뷰와 재개 조건](../../reviews/2026-10-30-compact-workout-achievement.md).
+
+
+재개 시 새 소유 iPhone을 만들고 기존 검증 종료 후 순차 실행했으나, 테스트 bundle 생성 이후 SDK/host 초기화 단계에서 300초 로그 무갱신으로 exit 124였다. SDK 문자열 진단은 관찰값이며 원인 확정이 아니다. 통과 증거가 없으므로 iPad·Duo로 실행을 확대하지 않고 PR/merge도 진행하지 않았다. 배지 구현의 기존 빌드 성공과 이번 UI 실행 실패는 별도로 보존한다. 상세 명령·로그·복구 조건은 위 리뷰 기록을 따른다.
