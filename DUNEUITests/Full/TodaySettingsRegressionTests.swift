@@ -801,6 +801,9 @@ final class TodaySettingsEmptyStateRegressionTests: UITestBaseCase {
 
 @MainActor
 final class CloudSyncConsentRegressionTests: UITestBaseCase {
+    override var shouldSeedMockData: Bool { true }
+    override var uiScenario: LaunchScenario? { .empty }
+
     override var additionalLaunchArguments: [String] {
         [
             "--ui-force-cloud-sync-consent",
@@ -819,6 +822,17 @@ final class CloudSyncConsentRegressionTests: UITestBaseCase {
     func testCloudSyncConsentHookPresentsAndDismissesSheet() throws {
         let consentView = app.descendants(matching: .any)[AXID.cloudSyncConsentView].firstMatch
         XCTAssertTrue(consentView.waitForExistence(timeout: 5), "Consent hook should present cloud sync consent sheet")
+        XCTAssertTrue(app.staticTexts["iCloud Sync"].exists, "Consent title should identify the decision")
+        XCTAssertTrue(app.staticTexts["Private storage"].exists, "Privacy explanation should be visible")
+        XCTAssertTrue(app.staticTexts["Across devices"].exists, "Sync explanation should be visible")
+        XCTAssertTrue(app.staticTexts["Use without iCloud"].exists, "Local option should be visible")
+        for identifier in [AXID.cloudSyncConsentEnable, AXID.cloudSyncConsentLocalOnly] {
+            let choice = app.buttons[identifier].firstMatch
+            XCTAssertTrue(choice.waitForExistence(timeout: 5))
+            XCTAssertGreaterThanOrEqual(choice.frame.height, 44,
+                                        "Each choice needs a 44-point minimum touch target")
+            XCTAssertTrue(choice.isHittable)
+        }
         VisualAudit.capture("Cloud sync consent before dismissal")
 
         let button = app.buttons[AXID.cloudSyncConsentLocalOnly].firstMatch
@@ -829,5 +843,91 @@ final class CloudSyncConsentRegressionTests: UITestBaseCase {
         let dismissed = NSPredicate(format: "exists == false")
         expectation(for: dismissed, evaluatedWith: consentView)
         waitForExpectations(timeout: 5)
+    }
+
+    func testCloudSyncConsentEnableChoiceDismissesSheet() throws {
+        let consentView = app.descendants(matching: .any)[AXID.cloudSyncConsentView].firstMatch
+        XCTAssertTrue(consentView.waitForExistence(timeout: 5), "Consent hook should present cloud sync consent sheet")
+
+        let button = app.buttons[AXID.cloudSyncConsentEnable].firstMatch
+        XCTAssertTrue(button.waitForExistence(timeout: 5), "Enable iCloud Sync action should exist")
+        XCTAssertTrue(button.isHittable, "Enable iCloud Sync action must remain usable")
+        button.auditTap()
+
+        let dismissed = NSPredicate(format: "exists == false")
+        expectation(for: dismissed, evaluatedWith: consentView)
+        waitForExpectations(timeout: 5)
+    }
+
+    func testCloudSyncConsentDarkAppearanceKeepsChoicesReadable() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += ["--ui-test-style", "dark"]
+        launchApp(with: configuration)
+
+        let consentView = app.descendants(matching: .any)[AXID.cloudSyncConsentView].firstMatch
+        XCTAssertTrue(consentView.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["iCloud Sync"].exists)
+        for title in ["Private storage", "Across devices", "Use without iCloud"] {
+            XCTAssertTrue(app.staticTexts[title].exists, "\(title) should remain readable in dark appearance")
+        }
+        for identifier in [AXID.cloudSyncConsentEnable, AXID.cloudSyncConsentLocalOnly] {
+            let button = app.buttons[identifier].firstMatch
+            XCTAssertTrue(button.waitForExistence(timeout: 5))
+            XCTAssertTrue(button.isHittable, "\(identifier) should remain available in dark appearance")
+        }
+        VisualAudit.capture("T02 dark consent hero and choices")
+    }
+
+    func testCloudSyncConsentMaximumTextKeepsBothChoicesReachable() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ]
+        launchApp(with: configuration)
+
+        let consentView = app.descendants(matching: .any)[AXID.cloudSyncConsentView].firstMatch
+        XCTAssertTrue(consentView.waitForExistence(timeout: 5))
+        let heroTitle = app.staticTexts["iCloud Sync"].firstMatch
+        XCTAssertTrue(heroTitle.exists && heroTitle.isHittable, "Hero title should be visible at the top")
+        VisualAudit.capture("T02 maximum text hero")
+
+        let window = app.windows.firstMatch
+        let enableButton = app.buttons[AXID.cloudSyncConsentEnable].firstMatch
+        XCTAssertTrue(window.exists && enableButton.waitForExistence(timeout: 5))
+        let scrollFrame = consentView.frame
+        let contentTop = max(scrollFrame.minY, window.frame.minY) + 24
+        let contentBottom = min(scrollFrame.maxY, enableButton.frame.minY) - 24
+        XCTAssertGreaterThan(contentBottom - contentTop, 100, "Scrollable content needs room above the pinned choices")
+        let visibleContent = CGRect(
+            x: scrollFrame.minX, y: contentTop,
+            width: scrollFrame.width, height: contentBottom - contentTop
+        )
+        let start = consentView.coordinate(withNormalizedOffset: CGVector(
+            dx: 0.5, dy: (contentBottom - scrollFrame.minY) / scrollFrame.height
+        ))
+        let end = consentView.coordinate(withNormalizedOffset: CGVector(
+            dx: 0.5, dy: (contentTop - scrollFrame.minY) / scrollFrame.height
+        ))
+        for title in ["Private storage", "Across devices", "Use without iCloud"] {
+            let rowTitle = app.staticTexts[title].firstMatch
+            XCTAssertTrue(rowTitle.exists, "\(title) should remain in the scrollable content")
+            for _ in 0..<8 {
+                if visibleContent.contains(rowTitle.frame) && rowTitle.isHittable { break }
+                start.press(forDuration: 0.05, thenDragTo: end)
+            }
+            XCTAssertTrue(visibleContent.contains(rowTitle.frame) && rowTitle.isHittable,
+                          "\(title) should fit and be reachable above the pinned choices")
+        }
+        VisualAudit.capture("T02 maximum text information")
+
+        let visibleWindow = window.frame.insetBy(dx: -1, dy: -1)
+        for identifier in [AXID.cloudSyncConsentEnable, AXID.cloudSyncConsentLocalOnly] {
+            let button = app.buttons[identifier].firstMatch
+            XCTAssertTrue(button.waitForExistence(timeout: 5))
+            XCTAssertGreaterThanOrEqual(button.frame.height, 44, "\(identifier) needs a 44-point hit target")
+            XCTAssertTrue(visibleWindow.contains(button.frame), "\(identifier) must fit entirely inside the window")
+            XCTAssertTrue(button.isHittable, "\(identifier) must remain tappable at maximum text size")
+        }
+        VisualAudit.capture("T02 maximum text choice footer")
     }
 }
