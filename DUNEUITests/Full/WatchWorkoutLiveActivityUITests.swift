@@ -9,21 +9,39 @@ final class WatchWorkoutLiveActivityUITests: UITestBaseCase {
     }
 
     func testRunningNotificationCenterPresentation() {
-        captureNotificationCenter(phase: "running", expectedStatuses: ["Workout", "운동", "ワークアウト"])
+        captureNotificationCenter(
+            phase: "running", expectedStatuses: ["Workout", "운동", "ワークアウト"],
+            activityType: "running", expectedIcon: "figure.run"
+        )
+    }
+
+    func testCyclingNotificationCenterPresentation() {
+        captureNotificationCenter(
+            phase: "running", expectedStatuses: ["Workout", "운동", "ワークアウト"],
+            activityType: "cycling", expectedIcon: "figure.outdoor.cycle",
+            exerciseName: "Outdoor Cycle", evidenceName: "cycling"
+        )
     }
 
     func testPausedNotificationCenterPresentation() {
-        captureNotificationCenter(phase: "paused", expectedStatuses: ["Paused", "일시 정지", "一時停止"])
+        captureNotificationCenter(
+            phase: "paused", expectedStatuses: ["Paused", "일시 정지", "一時停止"],
+            activityType: "running", expectedIcon: "pause.fill"
+        )
     }
 
     func testStaleNotificationCenterHidesOutdatedMetrics() {
-        captureNotificationCenter(phase: "stale", expectedStatuses: ["Waiting for Watch", "Watch 연결 대기", "Watchとの接続待ち"])
+        captureNotificationCenter(
+            phase: "stale", expectedStatuses: ["Waiting for Watch", "Watch 연결 대기", "Watchとの接続待ち"],
+            activityType: "running", expectedIcon: "wifi.slash"
+        )
     }
 
     func testLongStrengthNameNotificationCenterPresentation() {
         captureNotificationCenter(
             phase: "running",
             expectedStatuses: ["Workout", "운동", "ワークアウト"],
+            activityType: "traditionalStrengthTraining", expectedIcon: "dumbbell.fill",
             exerciseName: "체스트 프레스 머신 · 플레이트 로드",
             evidenceName: "strength-long-name"
         )
@@ -32,6 +50,8 @@ final class WatchWorkoutLiveActivityUITests: UITestBaseCase {
     private func captureNotificationCenter(
         phase: String,
         expectedStatuses: [String],
+        activityType: String,
+        expectedIcon: String,
         exerciseName: String = "Outdoor Run",
         evidenceName: String? = nil
     ) {
@@ -39,6 +59,7 @@ final class WatchWorkoutLiveActivityUITests: UITestBaseCase {
         configuration.additionalArguments += [
             "--ui-watch-live-activity", phase,
             "--ui-watch-live-activity-name", exerciseName,
+            "--ui-watch-live-activity-type", activityType,
             "--ui-test-theme", "desertWarm",
             "--ui-test-style", "dark",
             "-AppleLanguages", "(en)", "-AppleLocale", "en_US"
@@ -79,6 +100,11 @@ final class WatchWorkoutLiveActivityUITests: UITestBaseCase {
         if let activity {
             XCTAssertTrue(springboard.windows.firstMatch.frame.contains(activity.frame),
                           "The complete Live Activity must fit in the system viewport")
+            let icon = activity.descendants(matching: .any)["watch-workout-icon-\(expectedIcon)"].firstMatch
+            XCTAssertTrue(icon.waitForExistence(timeout: 3), "The system should expose the workout phase icon")
+            if icon.exists {
+                XCTAssertTrue(activity.frame.contains(icon.frame), "The workout icon must fit inside the activity")
+            }
             let brand = activity.staticTexts["watch-workout-brand"].firstMatch
             XCTAssertTrue(brand.exists, "The Live Activity should identify DUNE")
             if brand.exists {
