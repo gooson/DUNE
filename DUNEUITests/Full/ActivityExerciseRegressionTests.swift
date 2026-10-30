@@ -2195,6 +2195,9 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
     }
 
     func testNotificationMissingWorkoutRouteShowsFallback() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
+        launchApp(with: configuration)
         openNotificationHub()
 
         let missingRouteRow = app.buttons[AXID.notificationWorkoutRow(Fixture.notificationMissingRouteID)].firstMatch
@@ -2205,6 +2208,122 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             app.descendants(matching: .any)[AXID.notificationTargetNotFoundScreen].firstMatch.waitForExistence(timeout: 10),
             "Missing workout route should open fallback screen"
         )
+        XCTAssertEqual(app.staticTexts["notification-target-not-found-title"].firstMatch.label,
+                       "Exercise not found")
+        XCTAssertEqual(app.staticTexts["notification-target-not-found-message"].firstMatch.label,
+                       "The notification target has been deleted or is not synced.")
+        XCTAssertEqual(app.staticTexts["notification-target-not-found-id"].firstMatch.label,
+                       "ID: \(Fixture.notificationMissingRouteID)")
+        addScreenshotAttachment(named: "T14 missing workout target before Back")
+        VisualAudit.capture("T14 missing workout target before Back")
+    }
+
+    func testNotificationMissingWorkoutRouteDarkMaximumAccessibilitySize() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+            "--ui-test-style", "dark",
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ]
+        launchApp(with: configuration)
+        openNotificationHub()
+
+        let missingRouteRow = app.buttons[AXID.notificationWorkoutRow(Fixture.notificationMissingRouteID)].firstMatch
+        XCTAssertTrue(missingRouteRow.waitForExistence(timeout: 8))
+        missingRouteRow.auditTap()
+
+        let scroll = app.scrollViews[AXID.notificationTargetNotFoundScreen].firstMatch
+        XCTAssertTrue(scroll.waitForExistence(timeout: 10), "The front fallback scroll should open")
+        let title = app.staticTexts["notification-target-not-found-title"].firstMatch
+        let message = app.staticTexts["notification-target-not-found-message"].firstMatch
+        let identifier = app.staticTexts["notification-target-not-found-id"].firstMatch
+        XCTAssertEqual(title.label, "Exercise not found")
+        XCTAssertEqual(message.label, "The notification target has been deleted or is not synced.")
+        XCTAssertEqual(identifier.label, "ID: \(Fixture.notificationMissingRouteID)")
+
+        t14RevealFallbackText(title, in: scroll, position: .whole)
+        addScreenshotAttachment(named: "T14 dark maximum text title")
+        VisualAudit.capture("T14 dark maximum text title")
+        t14RevealFallbackText(message, in: scroll, position: .start)
+        addScreenshotAttachment(named: "T14 dark maximum text message start")
+        t14RevealFallbackText(message, in: scroll, position: .end)
+        addScreenshotAttachment(named: "T14 dark maximum text message end")
+        t14RevealFallbackText(identifier, in: scroll, position: .whole)
+        addScreenshotAttachment(named: "T14 dark maximum text actual ID before Back")
+        VisualAudit.capture("T14 dark maximum text actual ID before Back")
+
+        tapBackButton()
+        XCTAssertTrue(app.scrollViews[AXID.activityRootScroll].firstMatch.waitForExistence(timeout: 8),
+                      "Native Back should return to Activity")
+    }
+
+    private enum T14FallbackTextPosition { case whole, start, end }
+
+    private func t14FallbackViewport(for scroll: XCUIElement) -> CGRect {
+        let scrollFrame = scroll.frame
+        var viewport = scrollFrame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 0)
+        let navigationBar = app.navigationBars["Notification"].firstMatch
+        if navigationBar.exists && navigationBar.frame.maxY < scrollFrame.midY {
+            let bottom = viewport.maxY
+            viewport.origin.y = max(viewport.minY, navigationBar.frame.maxY + 4)
+            viewport.size.height = max(0, bottom - viewport.minY)
+        }
+        let tabBar = app.tabBars.firstMatch
+        if tabBar.exists && tabBar.isHittable && tabBar.frame.minY > scrollFrame.midY {
+            viewport.size.height = max(0, min(viewport.maxY, tabBar.frame.minY - 4) - viewport.minY)
+        }
+        return viewport
+    }
+
+    private func t14RevealFallbackText(_ element: XCUIElement, in scroll: XCUIElement,
+                                       position: T14FallbackTextPosition) {
+        XCTAssertTrue(element.waitForExistence(timeout: 5))
+        for _ in 0..<12 {
+            let viewport = t14FallbackViewport(for: scroll)
+            XCTAssertGreaterThan(viewport.height, 72, "The fallback should have a readable viewport")
+            let frame = element.frame
+            let horizontalFit = frame.minX >= viewport.minX && frame.maxX <= viewport.maxX
+            let reached: Bool
+            switch position {
+            case .whole:
+                reached = viewport.contains(frame) && element.isHittable
+            case .start:
+                reached = horizontalFit && frame.minY >= viewport.minY
+                    && frame.intersection(viewport).height >= 24
+            case .end:
+                reached = horizontalFit && frame.maxY <= viewport.maxY
+                    && frame.intersection(viewport).height >= 24
+            }
+            if reached { return }
+
+            let moveUp: Bool
+            switch position {
+            case .whole, .start: moveUp = frame.minY >= viewport.midY
+            case .end: moveUp = frame.maxY > viewport.maxY
+            }
+            let startY = moveUp ? viewport.maxY - 24 : viewport.minY + 24
+            let endY = moveUp ? viewport.minY + 36 : viewport.maxY - 36
+            let start = scroll.coordinate(withNormalizedOffset:
+                CGVector(dx: 0.5, dy: (startY - scroll.frame.minY) / scroll.frame.height))
+            let end = scroll.coordinate(withNormalizedOffset:
+                CGVector(dx: 0.5, dy: (endY - scroll.frame.minY) / scroll.frame.height))
+            start.press(forDuration: 0.05, thenDragTo: end)
+        }
+        let viewport = t14FallbackViewport(for: scroll)
+        let frame = element.frame
+        XCTAssertGreaterThanOrEqual(frame.minX, viewport.minX, "Text should fit horizontally")
+        XCTAssertLessThanOrEqual(frame.maxX, viewport.maxX, "Text should fit horizontally")
+        switch position {
+        case .whole:
+            XCTAssertTrue(viewport.contains(frame) && element.isHittable,
+                          "The whole title or ID should be readable")
+        case .start:
+            XCTAssertGreaterThanOrEqual(frame.minY, viewport.minY)
+            XCTAssertGreaterThanOrEqual(frame.intersection(viewport).height, 24)
+        case .end:
+            XCTAssertLessThanOrEqual(frame.maxY, viewport.maxY)
+            XCTAssertGreaterThanOrEqual(frame.intersection(viewport).height, 24)
+        }
     }
 
     // MARK: - Helpers
