@@ -45,6 +45,8 @@ WLA01의 이번 변경 캡처는 아직 미갱신이다. 초기 디스크 공간
 
 ## 2026-10-30 골드 임팩트 · 종목별 주 지표
 
-[보존 시안과 계약](live-activity-size-state-proposal.md)을 기준으로 구현 중이다. iPhone Settings의 Workout Live Activity에서 유산소 시간/거리/심박, 웨이트 시간/현재 세트 중량/심박을 각각 선택한다. 기본값은 시간, 스타일은 Gold Impact이며 Standard도 제공한다. 거리 지원 여부와 현재 입력 중량은 Watch metadata를 사용한다. 0은 보존하고 nil은 시간으로 전환한다. stale에는 수치를 숨기고 종료는 즉시 제거한다. 펼침의 검정 배경과 28pt 제한 폭은 보존하며 잠금 화면의 금빛 표면·능선·장식 운동 심벌을 추가한다. 실제 시스템 캡처는 새 검증 결과 전까지 미갱신이다.
+[보존 시안과 계약](live-activity-size-state-proposal.md)을 기준으로 네이티브 구현을 반영했다. iPhone Settings의 Workout Live Activity에서 유산소 시간/거리/심박, 웨이트 시간/현재 세트 중량/심박을 각각 선택한다. 기본값은 시간, 스타일은 Gold Impact이며 Standard도 제공한다. 거리 지원 여부와 현재 입력 중량은 Watch metadata를 사용한다. 0은 보존하고 nil은 시간으로 전환한다. stale에는 수치를 숨기고 종료는 즉시 제거한다. 펼침의 검정 배경과 28pt 제한 폭은 보존하며 잠금 화면의 금빛 표면·능선·장식 운동 심벌을 추가한다. 실제 시스템 캡처는 새 검증 결과 전까지 미갱신이다.
 
 네이티브의 시간은 항상 시스템 `.timer`로 진행한다. 브라우저 초안의 `23′` 같은 정적 분 축약은 자동 갱신 검증이 없어 구현하지 않는다. 28pt/긴 값이 읽히지 않는 경우에는 해당 지표의 기호로 대체하고 접근성 값에 전체 수치를 유지한다. minimal/compact 기호는 일시 정지·연결 대기 상태가 우선하며, 심박 선택 시 심장 기호를 사용한다. Standard 펼침에서도 주 지표가 시간이 아니면 보조 시간을 유지한다.
+
+최종 일반 빌드와 관련 단위51개는 통과했다. [S01 새 실제 설정](../phone-design-map/actual/live-activity/gold-impact-2026-10-30/index.html)은 저장·재실행 검증을 포함한다. WLA01 최종 시스템 UI는 환경 조회 무응답으로 testcase0건이며 현재 캡처로 표시하지 않는다. [검증 기록](../../reviews/2026-10-30-live-activity-gold-preferences.md)을 따른다.

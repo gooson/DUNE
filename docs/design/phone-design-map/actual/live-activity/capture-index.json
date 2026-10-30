@@ -186,5 +186,13 @@
       "paired_device_mirroring_recovery"
     ],
     "prior_pngs_are_current_evidence": false
+  },
+  "pending_layout_note": "WLA01 Gold Impact·선택 지표 최종 캡처 미완료: UI 앱 빌드는 통과했으나 환경 조회가 응답하지 않아 새 testcase 0건. 이전 PNG는 현재 구현의 증거가 아니다.",
+  "gold_preferences_update": {
+    "source_revision": "93fa6959",
+    "status": "ui_gate_blocked",
+    "settings_gallery": "gold-impact-2026-10-30/index.html",
+    "unit_ios_passed": 46,
+    "unit_watch_passed": 5
   }
 }

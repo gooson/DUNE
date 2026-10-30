@@ -1,0 +1,77 @@
+{
+  "scope": "only the 4 requested iOS suites + Watch WorkoutManagerReorderTests; not all project tests",
+  "built_revision": "5ef25439",
+  "ios_passed": 46,
+  "watch_passed": 5,
+  "core_subjects": [
+    {
+      "path": "DUNE/Presentation/Exercise/WatchWorkoutActivity.swift",
+      "sha256": "27b3686595ef398e94e79fd480a9063d62075e733d37d4a7f4b79e7e2b5cfa7d",
+      "unchanged_since_unit_build": true
+    },
+    {
+      "path": "DUNE/Presentation/Exercise/WatchWorkoutMirrorManager.swift",
+      "sha256": "f849708d6de02cb815d6d303d02f8fd4fbbb7c0009b1f2b6be81df37861eb24d",
+      "unchanged_since_unit_build": true
+    },
+    {
+      "path": "DUNE/Presentation/Settings/SettingsView.swift",
+      "sha256": "42a9983a3c378f35d0c2be08b376e7b317268844221bdee3893cf2b37a1ed674",
+      "unchanged_since_unit_build": true
+    },
+    {
+      "path": "DUNETests/WatchWorkoutActivityTests.swift",
+      "sha256": "50348c6c06ad0c0fd48dde035ef0f61eaa7ff07926646aa55f8350108bbb8349",
+      "unchanged_since_unit_build": true
+    },
+    {
+      "path": "DUNETests/WatchWorkoutAttributesTests.swift",
+      "sha256": "a657648ec3565c1c9cb70e5db000bc12621a9dd28ec35b7f9dc2708bda80a378",
+      "unchanged_since_unit_build": true
+    },
+    {
+      "path": "DUNETests/WatchWorkoutSnapshotTests.swift",
+      "sha256": "8cb1e90172138deb028fbe5a71287a01af115e5293207d1ae3ff08879977704d",
+      "unchanged_since_unit_build": true
+    },
+    {
+      "path": "DUNETests/WorkoutLiveActivityPreferencesTests.swift",
+      "sha256": "21a6946426304557fdae3efe5f7c5f23986d2418704350f2abbb430202a987a8",
+      "unchanged_since_unit_build": true
+    },
+    {
+      "path": "DUNEWatch/Managers/WorkoutManager.swift",
+      "sha256": "738090636f84107d1280315167e6e21b00bd57066c3668e64daaa9573e0a92d3",
+      "unchanged_since_unit_build": true
+    },
+    {
+      "path": "DUNEWatch/Views/MetricsView.swift",
+      "sha256": "1ca222f2c66eec408f51a5081a3bc8fe4c8e00296310635b2ed4dd2d067c0a90",
+      "unchanged_since_unit_build": true
+    },
+    {
+      "path": "DUNEWatchTests/WorkoutManagerReorderTests.swift",
+      "sha256": "cb46ec1653e554dff486472906f072cb208cbd93bd6362b2fd4f53a71a362e54",
+      "unchanged_since_unit_build": true
+    },
+    {
+      "path": "Shared/WatchWorkoutAttributes.swift",
+      "sha256": "3e40374d533efaeb74be8abf03a670a8f44b13d1aed914f9d006699a5c86b8e1",
+      "unchanged_since_unit_build": true
+    },
+    {
+      "path": "Shared/WatchWorkoutSnapshot.swift",
+      "sha256": "579231360a9c34a8e853e2bfc6ead699b8422004fe703c330cc661db69571de1",
+      "unchanged_since_unit_build": true
+    },
+    {
+      "path": "Shared/WorkoutLiveActivityPreferences.swift",
+      "sha256": "e1856e1b69039b306a78e81911e6b6e92e1a81a0c3160dafba1c90c0bd14a122",
+      "unchanged_since_unit_build": true
+    }
+  ],
+  "subsequent_delta": "93fa6959 changes Widget container background/AX, debug-only stale fixture and UI-test locator; these unit subject sources remain byte-identical",
+  "generic_build_revision": "93fa6959",
+  "generic_build_log": "build-93fa6959.log",
+  "generic_build_passed": true
+}
