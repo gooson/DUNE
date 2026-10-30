@@ -64,6 +64,47 @@ struct WatchWorkoutSnapshot: Codable, Hashable, Sendable {
     }
 }
 
+extension WatchWorkoutSnapshot {
+    private enum CodingKeys: String, CodingKey {
+        case startedAt, updatedAt, exerciseName, elapsedSeconds, phase
+        case heartRate, activeCalories, distanceMeters, exerciseIconName
+        case workoutKind, supportsDistance, currentSetWeightKg
+    }
+
+    init(from decoder: any Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        startedAt = try values.decode(Date.self, forKey: .startedAt)
+        updatedAt = try values.decode(Date.self, forKey: .updatedAt)
+        exerciseName = try values.decode(String.self, forKey: .exerciseName)
+        elapsedSeconds = try values.decode(TimeInterval.self, forKey: .elapsedSeconds)
+        phase = try values.decode(Phase.self, forKey: .phase)
+        heartRate = try values.decodeIfPresent(Double.self, forKey: .heartRate)
+        activeCalories = try values.decode(Double.self, forKey: .activeCalories)
+        distanceMeters = try values.decode(Double.self, forKey: .distanceMeters)
+        exerciseIconName = try values.decodeIfPresent(String.self, forKey: .exerciseIconName)
+        let workoutKindRawValue = try values.decodeIfPresent(String.self, forKey: .workoutKind)
+        workoutKind = workoutKindRawValue.flatMap(WorkoutKind.init(rawValue:))
+        supportsDistance = try values.decodeIfPresent(Bool.self, forKey: .supportsDistance)
+        currentSetWeightKg = try values.decodeIfPresent(Double.self, forKey: .currentSetWeightKg)
+    }
+
+    func encode(to encoder: any Encoder) throws {
+        var values = encoder.container(keyedBy: CodingKeys.self)
+        try values.encode(startedAt, forKey: .startedAt)
+        try values.encode(updatedAt, forKey: .updatedAt)
+        try values.encode(exerciseName, forKey: .exerciseName)
+        try values.encode(elapsedSeconds, forKey: .elapsedSeconds)
+        try values.encode(phase, forKey: .phase)
+        try values.encodeIfPresent(heartRate, forKey: .heartRate)
+        try values.encode(activeCalories, forKey: .activeCalories)
+        try values.encode(distanceMeters, forKey: .distanceMeters)
+        try values.encodeIfPresent(exerciseIconName, forKey: .exerciseIconName)
+        try values.encodeIfPresent(workoutKind?.rawValue, forKey: .workoutKind)
+        try values.encodeIfPresent(supportsDistance, forKey: .supportsDistance)
+        try values.encodeIfPresent(currentSetWeightKg, forKey: .currentSetWeightKg)
+    }
+}
+
 /// Keeps delayed WatchConnectivity lifecycle messages from replacing newer state.
 struct WatchWorkoutLifecycleOrdering {
     private(set) var latestUpdate: Date?

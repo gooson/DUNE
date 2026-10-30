@@ -12,6 +12,10 @@ final class WatchWorkoutMirrorManager: NSObject {
     private var mirrorID: UUID?
     private var isObserving = false
 
+    func refreshLiveActivityPreferences() {
+        activity.refreshPreferences()
+    }
+
     func startObserving() {
         guard !isObserving, HKHealthStore.isHealthDataAvailable() else { return }
         isObserving = true

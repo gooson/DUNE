@@ -27,6 +27,9 @@ struct WatchWorkoutLiveActivity: Widget {
                         VStack(alignment: .leading, spacing: 10) {
                             if preferences.style == .goldImpact {
                                 WorkoutMetricHero(state: context.state, preferences: preferences, isIsland: true)
+                            } else if preferences.resolvedMetric(for: context.state) != .elapsedTime {
+                                WorkoutElapsedTime(state: context.state)
+                                    .font(.caption).foregroundStyle(.white.opacity(0.7))
                             }
                             WatchWorkoutMetrics(state: context.state, isIsland: true,
                                                 primaryMetric: preferences.resolvedMetric(for: context.state))
@@ -35,8 +38,15 @@ struct WatchWorkoutLiveActivity: Widget {
                     }
                 }
             } compactLeading: {
-                WatchWorkoutPhaseIcon(state: context.state, isStale: context.isStale)
-                    .foregroundStyle(WidgetDS.isDesertWarm ? WidgetDS.themeAccent : .white)
+                if !context.isStale, context.state.phase == .running,
+                   preferences.resolvedMetric(for: context.state) == .heartRate {
+                    Image(systemName: "heart.fill")
+                        .foregroundStyle(WorkoutPalette.heart)
+                        .accessibilityLabel("Heart Rate")
+                } else {
+                    WatchWorkoutPhaseIcon(state: context.state, isStale: context.isStale)
+                        .foregroundStyle(WidgetDS.isDesertWarm ? WidgetDS.themeAccent : .white)
+                }
             } compactTrailing: {
                 if context.isStale {
                     Image(systemName: "wifi.slash")
@@ -266,7 +276,21 @@ private struct WorkoutIslandMetric: View {
             WorkoutPrimaryMetric(state: state, preferences: preferences, abbreviated: constrained)
                 .font(.caption2.weight(.semibold))
                 .fixedSize(horizontal: constrained, vertical: false)
-            WatchWorkoutPhaseIcon(state: state, isStale: false)
+            if preferences.resolvedMetric(for: state) == .elapsedTime {
+                Image(systemName: "timer")
+                    .accessibilityLabel("Elapsed Time")
+                    .accessibilityValue(state.phase == .running ? Text(state.timerStartDate, style: .timer) :
+                                          Text(Duration.seconds(state.elapsedSeconds).formatted(.time(pattern: .hourMinuteSecond))))
+            } else {
+                Image(systemName: preferences.resolvedMetric(for: state) == .heartRate ? "heart.fill" :
+                        (preferences.resolvedMetric(for: state) == .weight ? "dumbbell.fill" : "location.fill"))
+                    .accessibilityLabel(Text(preferences.resolvedMetric(for: state).displayName))
+                    .accessibilityValue(Text(verbatim: preferences.resolvedMetric(for: state) == .weight ?
+                                             "\((state.currentSetWeightKg ?? 0).formatted()) kg" :
+                                             (preferences.resolvedMetric(for: state) == .distance ?
+                                              "\((state.distanceMeters / 1_000).formatted()) km" :
+                                              "\(Int((state.heartRate ?? 0).rounded()).formatted()) bpm")))
+            }
         }
         .frame(width: isLimitedInWidth ? 28 : (minimal ? 45 : 60), height: isLimitedInWidth ? 28 : nil)
         .foregroundStyle(WidgetDS.isDesertWarm ? WidgetDS.themeAccent : .white)
@@ -284,20 +308,7 @@ private struct WorkoutPrimaryMetric: View {
         VStack(alignment: .leading, spacing: 0) {
           Group {
             if metric == .elapsedTime {
-                if abbreviated {
-                    let seconds = state.elapsed(at: .now)
-                    let divisor: Double = seconds < 60 ? 1 : (seconds < 6_000 ? 60 : 3_600)
-                    VStack(spacing: 0) {
-                        Text(Int(seconds / divisor).formatted())
-                        Text(verbatim: seconds < 60 ? "″" : (seconds < 6_000 ? "′" : "h"))
-                            .font(.system(size: 8))
-                    }
-                    .accessibilityLabel("Elapsed Time")
-                    .accessibilityValue(Duration.seconds(state.elapsedSeconds).formatted(.time(pattern: .hourMinuteSecond)))
-                    .accessibilityIdentifier("watch-workout-elapsed")
-                } else {
-                    WorkoutElapsedTime(state: state)
-                }
+                WorkoutElapsedTime(state: state)
             } else {
                 metricValue
                     .accessibilityElement(children: .ignore)
@@ -319,8 +330,14 @@ private struct WorkoutPrimaryMetric: View {
         Group {
             if abbreviated {
                 VStack(spacing: 0) {
+                    if metric == .heartRate {
+                        Image(systemName: "heart.fill")
+                            .font(.system(size: 8)).foregroundStyle(WorkoutPalette.heart)
+                    }
                     Text(verbatim: value)
-                    Text(verbatim: unit).font(.system(size: 8))
+                    if metric != .heartRate {
+                        Text(verbatim: unit).font(.system(size: 8))
+                    }
                 }
             } else {
                 HStack(alignment: .firstTextBaseline, spacing: 4) {

@@ -96,6 +96,13 @@ final class WatchWorkoutActivity {
 
     func waitForPendingUpdates() async { await updateTask?.value }
 
+    /// Re-publish the latest mirrored state after a preference change, in Watch update order.
+    func refreshPreferences() {
+        guard let mirrorID, let snapshot, snapshot.phase != .ended,
+              !acceptsInitialStartCorrection else { return }
+        enqueue(Update(mirrorID: mirrorID, snapshot: snapshot))
+    }
+
     private func enqueue(_ update: Update) {
         if let last = pending.last, last.mirrorID == update.mirrorID,
            !last.didRequest, !update.didRequest, last.snapshot.phase != .ended {
@@ -168,15 +175,6 @@ private struct SystemWatchWorkoutActivityDriver: WatchWorkoutActivityDriving {
 
 /// Called directly on HealthKit's callback queue, before a cold launch can block MainActor.
 enum WatchWorkoutActivityRequest {
-    /// Re-publish the current state so the widget reads changed App Group preferences immediately.
-    nonisolated static func refreshActivePreferences() async {
-        for activity in Activity<WatchWorkoutAttributes>.activities {
-            let content = activity.content
-            guard content.state.phase != .ended else { continue }
-            await activity.update(ActivityContent(state: content.state, staleDate: content.staleDate))
-        }
-    }
-
     /// Also removes orphaned activities after the iPhone process was relaunched.
     nonisolated static func finish(matching final: WatchWorkoutSnapshot) async {
         guard final.isValid, final.phase == .ended else { return }

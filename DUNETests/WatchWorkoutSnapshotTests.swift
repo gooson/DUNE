@@ -72,6 +72,28 @@ struct WatchWorkoutSnapshotTests {
         #expect(decoded.isValid)
     }
 
+    @Test("Unknown workout kind values are ignored while telemetry remains decodable")
+    func unknownWorkoutKind() throws {
+        let data = try JSONEncoder().encode(snapshot(
+            heartRate: 151,
+            activeCalories: 88,
+            distanceMeters: 2_400,
+            workoutKind: .cardio,
+            supportsDistance: true
+        ))
+        var object = try #require(JSONSerialization.jsonObject(with: data) as? [String: Any])
+        object["workoutKind"] = "futureKind"
+        let futureData = try JSONSerialization.data(withJSONObject: object)
+
+        let decoded = try JSONDecoder().decode(WatchWorkoutSnapshot.self, from: futureData)
+        #expect(decoded.workoutKind == nil)
+        #expect(decoded.supportsDistance == true)
+        #expect(decoded.heartRate == 151)
+        #expect(decoded.activeCalories == 88)
+        #expect(decoded.distanceMeters == 2_400)
+        #expect(decoded.isValid)
+    }
+
     @Test("Current-set weight preserves explicit zero and validates bounds", arguments: [0.0, 500.0])
     func currentSetWeightBoundaries(weight: Double) throws {
         let original = snapshot(currentSetWeightKg: weight)

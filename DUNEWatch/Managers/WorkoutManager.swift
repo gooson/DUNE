@@ -1413,6 +1413,7 @@ final class WorkoutManager: NSObject {
             case .strength: .traditionalStrengthTraining
             }
         }
+        let effectiveCardio = isCardioMode || (isRecoveredSession && activityType.category == .cardio)
         let snapshot = WatchWorkoutSnapshot(
             startedAt: startDate,
             updatedAt: now,
@@ -1421,11 +1422,11 @@ final class WorkoutManager: NSObject {
             phase: isSessionEnded ? .ended : (isPaused ? .paused : .running),
             heartRate: (20...250).contains(heartRate) ? heartRate : nil,
             activeCalories: activeCalories,
-            distanceMeters: isCardioMode ? distance : 0,
+            distanceMeters: effectiveCardio ? distance : 0,
             exerciseIconName: activityType.iconName,
-            workoutKind: isCardioMode ? .cardio : .strength,
-            supportsDistance: isCardioMode && activityType.isDistanceBased,
-            currentSetWeightKg: currentSetWeightKg
+            workoutKind: effectiveCardio ? .cardio : .strength,
+            supportsDistance: effectiveCardio && activityType.isDistanceBased,
+            currentSetWeightKg: effectiveCardio ? nil : currentSetWeightKg
         )
         return snapshot.isValid ? snapshot : nil
     }

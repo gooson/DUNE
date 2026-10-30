@@ -70,6 +70,11 @@ struct WorkoutLiveActivityPreferencesTests {
         #expect(preferences.resolvedMetric(for: snapshot(kind: .cardio)) == .elapsedTime)
         #expect(preferences.resolvedMetric(for: snapshot(kind: .cardio, supportsDistance: false)) == .elapsedTime)
         #expect(preferences.resolvedMetric(for: snapshot(kind: .cardio, supportsDistance: true)) == .distance)
+        for distance in [Double.nan, .infinity, -1, 1_000_001] {
+            var invalid = snapshot(kind: .cardio, supportsDistance: true)
+            invalid.distanceMeters = distance
+            #expect(preferences.resolvedMetric(for: invalid) == .elapsedTime)
+        }
     }
 
     @Test("Heart rate requires a finite physiological value")

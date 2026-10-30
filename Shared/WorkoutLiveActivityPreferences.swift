@@ -69,7 +69,8 @@ struct WorkoutLiveActivityPreferences: Sendable {
         case .cardio:
             switch cardioMetric {
             case .distance:
-                return snapshot.supportsDistance == true ? .distance : .elapsedTime
+                return snapshot.supportsDistance == true && snapshot.distanceMeters.isFinite
+                    && (0...1_000_000).contains(snapshot.distanceMeters) ? .distance : .elapsedTime
             case .heartRate:
                 return Self.hasValidHeartRate(snapshot.heartRate) ? .heartRate : .elapsedTime
             case .elapsedTime:

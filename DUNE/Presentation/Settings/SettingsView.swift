@@ -192,7 +192,7 @@ struct SettingsView: View {
 
     private func saveLiveActivityPreferences() {
         liveActivityPreferences.save()
-        Task { await WatchWorkoutActivityRequest.refreshActivePreferences() }
+        WatchWorkoutMirrorManager.shared.refreshLiveActivityPreferences()
     }
 
     // MARK: - Exercise Defaults
