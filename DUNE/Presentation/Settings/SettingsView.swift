@@ -28,6 +28,7 @@ struct SettingsView: View {
     @State private var restSeconds: Double = WorkoutSettingsStore.shared.restSeconds
     @State private var setCount: Int = WorkoutSettingsStore.shared.setCount
     @State private var bodyWeightKg: Double = WorkoutSettingsStore.shared.bodyWeightKg
+    @State private var liveActivityPreferences = WorkoutLiveActivityPreferences.read()
     @State private var isProcessingSimulatorMockData = false
     @State private var simulatorMockStatusMessage: String?
     @State private var isSyncing = false
@@ -39,6 +40,7 @@ struct SettingsView: View {
         GeometryReader { geometry in
             Form {
                 workoutDefaultsSection
+                liveActivitySection
                 exerciseDefaultsSection
                 NotificationSettingsSection()
                 morningBriefingSection
@@ -68,6 +70,9 @@ struct SettingsView: View {
         }
         .onChange(of: bodyWeightKg) { _, newValue in
             store.bodyWeightKg = newValue
+        }
+        .onAppear {
+            liveActivityPreferences = WorkoutLiveActivityPreferences.read()
         }
         .onChange(of: scenePhase) { _, newPhase in
             if newPhase == .active {
@@ -124,6 +129,70 @@ struct SettingsView: View {
         } else {
             return "\(seconds)s"
         }
+    }
+
+    // MARK: - Live Activity
+
+    private var liveActivitySection: some View {
+        Section {
+            Picker("Cardio Metric", selection: liveActivityMetricBinding(for: .cardio)) {
+                ForEach([WorkoutLiveActivityMetric.elapsedTime, .distance, .heartRate], id: \.self) { metric in
+                    Text(metric.displayName)
+                        .tag(metric)
+                        .accessibilityIdentifier("settings-watch-live-activity-cardio-\(metric.rawValue)")
+                }
+            }
+            .accessibilityIdentifier("settings-watch-live-activity-cardio-metric")
+
+            Picker("Strength Metric", selection: liveActivityMetricBinding(for: .strength)) {
+                ForEach([WorkoutLiveActivityMetric.elapsedTime, .weight, .heartRate], id: \.self) { metric in
+                    Text(metric.displayName)
+                        .tag(metric)
+                        .accessibilityIdentifier("settings-watch-live-activity-strength-\(metric.rawValue)")
+                }
+            }
+            .accessibilityIdentifier("settings-watch-live-activity-strength-metric")
+
+            Picker("Live Activity Style", selection: Binding(
+                get: { liveActivityPreferences.style },
+                set: { newValue in
+                    liveActivityPreferences.style = newValue
+                    saveLiveActivityPreferences()
+                }
+            )) {
+                ForEach(WorkoutLiveActivityStyle.allCases, id: \.self) { style in
+                    Text(style.displayName)
+                        .tag(style)
+                        .accessibilityIdentifier("settings-watch-live-activity-style-\(style.rawValue)")
+                }
+            }
+            .accessibilityIdentifier("settings-watch-live-activity-style")
+        } header: {
+            Text("Workout Live Activity")
+        }
+    }
+
+    private func liveActivityMetricBinding(for kind: WatchWorkoutSnapshot.WorkoutKind) -> Binding<WorkoutLiveActivityMetric> {
+        Binding(
+            get: {
+                switch kind {
+                case .cardio: liveActivityPreferences.cardioMetric
+                case .strength: liveActivityPreferences.strengthMetric
+                }
+            },
+            set: { newValue in
+                switch kind {
+                case .cardio: liveActivityPreferences.cardioMetric = newValue
+                case .strength: liveActivityPreferences.strengthMetric = newValue
+                }
+                saveLiveActivityPreferences()
+            }
+        )
+    }
+
+    private func saveLiveActivityPreferences() {
+        liveActivityPreferences.save()
+        Task { await WatchWorkoutActivityRequest.refreshActivePreferences() }
     }
 
     // MARK: - Exercise Defaults
