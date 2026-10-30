@@ -222,12 +222,12 @@ final class MetricDetailRedesignTests: SeededUITestBaseCase {
         app.buttons["Cancel"].tap()
         XCTAssertFalse(app.descendants(matching: .any)["body-peer-reference"].firstMatch.exists)
         criteria.tap()
-        let age = app.descendants(matching: .any)["body-peer-age-selection"].firstMatch
-        let sex = app.descendants(matching: .any)["body-peer-sex-selection"].firstMatch
+        let age = app.buttons["body-peer-age-selection"].firstMatch
+        let sex = app.buttons["body-peer-sex-selection"].firstMatch
         age.tap()
-        app.staticTexts["30–39 years"].firstMatch.tap()
+        app.buttons["30–39 years"].firstMatch.tap()
         sex.tap()
-        app.staticTexts["Male (survey)"].firstMatch.tap()
+        app.buttons["Male (survey)"].firstMatch.tap()
         let apply = app.buttons["body-peer-apply"]
         XCTAssertTrue(apply.isEnabled)
         apply.tap()
