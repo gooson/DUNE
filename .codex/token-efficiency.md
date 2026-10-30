@@ -88,6 +88,45 @@ python3 scripts/codex-pipeline.py report
 - fingerprint는 안전을 위해 worktree 전체를 포함한다. `--scope`는 설명/일치 조건이며 의존성 추론이나 부분 hash 옵션이 아니다. 문서만 추가해도 기존 증거는 stale이 된다. 리뷰의 영향 밖 변경이라면 기존 findings와 이후 diff를 사람이/agent가 재확인한 근거 파일을 작성하고 해당 관점의 review 기록을 새로 등록한다. 이 절차는 기존 검토를 다시 전부 수행하라는 뜻이 아니며, 오래된 자동 테스트 receipt를 임의로 갱신하는 데 사용하지 않는다.
 - 문서를 실제 읽은 뒤 `doc remember`로 hash를 기록한다. `doc check`는 변경 유무만 확인하며 원문 이해를 증명하지 않는다. 내용이 컨텍스트에서 사라졌다면 다시 읽는다. 별도의 원문 복제본이나 자동 축약본을 source of truth로 만들지 않는다.
 
+## 실행 전 lock 대기의 명시적 감사
+
+`defer-lock`은 자동 로그 분류기가 아니다. legacy receipt는 당시 실행 소스·PATH·shell startup hook·Python import 환경을 보존하지 않았다. 실행 기록과 당시 clean source 확인을 검토한 담당자가 다음 JSON을 ignored 경로에 작성한다. 소스와 환경의 연결은 **operator attestation**이며 암호학적 런타임 증명이 아니다. 동일 사용자가 store·감사·코드를 함께 위조하는 공격을 막는 인증 시스템도 아니다.
+
+```json
+{
+  "schema_version": 1,
+  "check_id": "existing-ui-check",
+  "worktree": "/absolute/current/worktree",
+  "attempt_log": "check-<id hash>-<attempt uuid>.log",
+  "attempt_hash": "<SHA256 of json.dumps(attempt, sort_keys=True, separators=(comma, colon))>",
+  "source_revision": "<full 40-character executed source commit>",
+  "provenance": {
+    "kind": "operator-attested",
+    "reviewer": "<reviewing operator/agent>",
+    "source": "<how the executed clean runner and all sourced pre-lock helpers were established>",
+    "environment": "<how direct invocation, trusted PATH/Python/shell, absent injected startup hooks and pre-start lock failure were established>"
+  },
+  "evidence": [
+    {"file": ".codex-checks/lock-audit/provenance.md", "hash": "<file SHA256>"}
+  ]
+}
+```
+
+- `attempt_hash`는 Python `hashlib.sha256(json.dumps(attempt, sort_keys=True, separators=(",", ":")).encode()).hexdigest()`다. 원본 record의 해당 attempt 전체를 사용한다. 감사 근거에는 실제 검토한 호출·환경·당시 소스와 exact 로그 판정을 남긴다. 확인하지 않은 항목에 단순히 “verified”를 넣지 않는다. 별도 근거 파일을 최소 한 개 연결한다.
+- 허용되는 소스 묶음은 `a9d4cecc`와 `9a21f364`에서 검토한 `scripts/test-ui.sh`, sourced shell helpers, command deadline, simulator lock helper의 내용/mode다. 전체 source closure의 digest를 코드에 고정한다. historical revision과 현재 파일 모두 허용된 closure여야 한다. 새 runner 버전은 별도 검토 전까지 보수적으로 거부한다.
+- 직접 `scripts/test-ui.sh` argv만 허용한다. shell/env wrapper, dry-run/cleanup, 다른 runner는 제외한다. exit 2와 동일한 before/after 및 content fingerprint, 정확히 한 줄인 `Simulator test lock: repository|worktree simulator test lock remained busy for <seconds>s` 출력과 원본 hash를 함께 확인한다. 추가 출력, timeout/unknown exit, 누락·변조·symlink 로그나 source는 거부한다.
+
+```sh
+python3 scripts/codex-pipeline.py defer-lock existing-ui-check --audit-file .codex-checks/lock-audit/audit.json
+python3 scripts/codex-pipeline.py status existing-ui-check
+```
+
+`defer-lock`의 **exit 1은 의도된 non-success**다. 출력에 `deferred (operator-attested; not test success)`가 있고 status에 `deferred`, `original_status: failed`, `test_success: false`가 있어야 분류가 저장된 것이다. 이 명령 뒤에 테스트를 셸 체인으로 자동 실행하지 않는다. `check`와 `phase passed`는 계속 거부한다.
+
+원본 attempt와 로그는 분류 전후 그대로 유지한다. 부가 감사 파일·근거·attempt·log·source closure를 이후 run/status/check에서 다시 검증하고 변경되면 재사용/실행을 차단한다. 감사 이력이 있는 check는 후속 성공 때도 기존 성공 로그와 메타데이터를 정리하지 않는다. 감사 전 역사 기록을 보존하기 위해서다.
+
+실제 실패가 없는 deferred-only 이력은 입력을 바꾸지 않고 다음 필요한 실행을 할 수 있다. 실제 실패가 남아 있으면 마지막 **실제 실패**를 기준으로 기존 `--retry-cause`, `--remediation`, `--retry-evidence`와 내용/context 변화를 요구한다. deferred 시도보다 이전 실패에 대한 원인 해소가 유효한지 실행자가 다시 확인한다. 실제 실패 두 번이면 중단한다. 분류된 ID의 다음 실행은 같은 표준 runner 직접 호출이며 lock을 정상적으로 다시 획득해야 한다. 잠금 해제 확인 없이 반복 재시도하지 않는다.
+
 ## 절감 효과 확인
 
 - 대표 사례는 단순 테스트 추가, UI 테스트 실패 수정, 일반 기능 구현으로 나눈다. 기존 작업의 기록을 baseline으로 사용하며 비용 측정만을 위해 전체 파이프라인을 반복하지 않는다.
