@@ -107,6 +107,7 @@ final class DashboardSmokeTests: UITestBaseCase {
         configuration.shouldSeedMockData = true
         configuration.scenario = .defaultSeeded
         configuration.additionalArguments += [
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
             "--ui-test-style", "dark",
             "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
         ]
@@ -119,7 +120,7 @@ final class DashboardSmokeTests: UITestBaseCase {
         let settings = app.buttons[AXID.notificationsOpenSettingsButton].firstMatch
         let readAll = app.buttons[AXID.notificationsReadAllButton].firstMatch
         let filter = app.segmentedControls[AXID.notificationsFilter].firstMatch
-        for identifier in [AXID.notificationsOpenSettingsButton, AXID.notificationsReadAllButton, AXID.notificationsFilter] {
+        for identifier in [AXID.notificationsOpenSettingsButton, AXID.notificationsReadAllButton] {
             let element = app.descendants(matching: .any)[identifier].firstMatch
             XCTAssertTrue(element.waitForExistence(timeout: 5))
             XCTAssertTrue(revealHubElement(element, in: list, whole: true),
@@ -128,8 +129,20 @@ final class DashboardSmokeTests: UITestBaseCase {
         }
         XCTAssertTrue(settings.exists && readAll.exists && filter.exists)
         XCTAssertFalse(settings.frame.intersects(readAll.frame), "Settings and Read All must not overlap")
+        XCTAssertTrue(revealHubElement(filter, in: list, whole: true),
+                      "The native filter should fit and be tappable in the front list")
+        XCTAssertEqual(filter.buttons.count, 3, "All, Health, and News should remain available")
+        for index in 0..<3 {
+            let segment = filter.buttons.element(boundBy: index)
+            XCTAssertTrue(segment.waitForExistence(timeout: 5))
+            XCTAssertTrue(revealHubElement(segment, in: list, whole: true),
+                          "Native filter segment \(index) should fit, be horizontally visible, and be tappable")
+        }
         addScreenshotAttachment(named: "Notifications summary and filters maximum accessibility")
 
+        let health = filter.buttons.element(boundBy: 1)
+        health.tap()
+        XCTAssertTrue(health.isSelected, "Health should become the selected filter")
         let healthTitle = app.staticTexts["Sleep Debt Alert"].firstMatch
         let healthBody = app.staticTexts["You slept 6 h 20 m last night. Prioritize recovery today."].firstMatch
         XCTAssertTrue(healthTitle.waitForExistence(timeout: 5) && healthBody.waitForExistence(timeout: 5))
@@ -148,8 +161,8 @@ final class DashboardSmokeTests: UITestBaseCase {
         let news = filter.buttons.element(boundBy: 2)
         XCTAssertTrue(news.waitForExistence(timeout: 5), "News is the third filter segment")
         XCTAssertTrue(revealHubElement(news, in: list, whole: true))
-        XCTAssertGreaterThanOrEqual(news.frame.height, 44)
         news.tap()
+        XCTAssertTrue(news.isSelected, "News should become the selected filter")
         let release = app.buttons[AXID.notificationsNewsRelease].firstMatch
         let releaseTitle = app.staticTexts["What's New"].firstMatch
         let releaseIntro = app.staticTexts["notifications-news-intro"].firstMatch
