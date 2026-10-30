@@ -49,7 +49,7 @@ struct SleepPredictionDetailView: View {
                 Text("SLEEP")
             } icon: {
                 Image(systemName: prediction.outlook.iconName)
-                    .foregroundStyle(prediction.outlook.color)
+                    .foregroundStyle(palette.ink)
             }
             .font(.subheadline.weight(.semibold))
             .foregroundStyle(palette.heroAccent)
