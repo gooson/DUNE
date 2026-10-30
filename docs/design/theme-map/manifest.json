@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-30",
+  "updated": "2026-10-31",
   "app_contract": "app-contract.md",
   "themes": [
     {
@@ -297,6 +297,28 @@
       "title": "DUNE · 기록 조회와 근거 있는 설명",
       "file": "dune-siri-health-queries.html",
       "detail": "2026-10-30 제안. SQ01–SQ14 최근 운동·기간 집계·근력 세트·개인 기록·유산소·신체 최신값/추세·수면·컨디션·지표 비교·화면 문맥·메모 검색·보고서 공유·긴 분석. V1 기본과 V2 비주얼 강조, 밝음/어두움·320/402/466/951/1032 폭·100/160/200% 글씨·8개 데이터 상태. 큰 수치·골드·바벨/메달·측정 표본·수면 단계와 Watch 응답 3개. 합성 fixture의 로컬 인터랙션이며 실제 Siri/HealthKit/모델/공유 실행·앱 캡처가 아님. 배치 계약: ../layout-map/siri-health-queries-proposal.md."
+    },
+    {
+      "id": "weather-detail-redesign",
+      "name": "날씨 상세 개편",
+      "title": "T08 · Weather Detail",
+      "file": "dune-weather-detail-redesign.html",
+      "detail": "검토한 T08 밝음·어두움 브라우저 시안과 원본 JSON을 보존한다. 실제 조건·위치·점수·예보는 기존 앱 데이터를 사용한다. 네이티브 하늘 움직임은 히어로 가시 면적 50% 미만·비활성·Reduce Motion에서 정지한다. 기존 색 토큰을 사용한다. PNG는 네이티브 캡처가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/weather-detail-redesign-proposal.md",
+        "status": "native-implementation-pending-runtime-validation"
+      }
+    },
+    {
+      "id": "cloud-sync-consent-t02",
+      "name": "T02 · iCloud 동기화 동의",
+      "title": "동의 시트 · 밝음/어두움",
+      "file": "dune-cloud-sync-consent-t02.html",
+      "detail": "승인된 T02 정보 순서와 기존 DUNE 팔레트·ScoreHeroPalette를 이용한 화면별 정적 표현. 새 테마·움직임은 추가하지 않으며 웹 그림은 실제 SF Symbol 또는 앱 캡처가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/cloud-sync-consent-t02.html",
+        "status": "native-source-ready-captures-pending"
+      }
     }
   ]
 }
