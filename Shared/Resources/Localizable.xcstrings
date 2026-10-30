@@ -8317,6 +8317,23 @@
         }
       }
     },
+    "Body measurements could not be read. Try again later." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "身体測定の記録を読み込めませんでした。しばらくしてからもう一度お試しください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "신체 측정 기록을 불러오지 못했어요. 잠시 후 다시 시도해 주세요."
+          }
+        }
+      }
+    },
     "Body Part" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -8405,6 +8422,12 @@
     "Body trend" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Body trend"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8692,6 +8715,12 @@
     "Browse health records" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Browse health records"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8732,6 +8761,12 @@
     "Browse records" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Browse records"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8953,6 +8988,12 @@
     "Calculated from records" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calculated from records"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9163,6 +9204,12 @@
     "Cancel analysis" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel analysis"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9373,6 +9420,12 @@
     "Cardio detail" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cardio detail"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9677,6 +9730,52 @@
         }
       }
     },
+    "Change: %@ %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Change: %@ %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "変化: %1$@ %2$@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "변화: %1$@ %2$@"
+          }
+        }
+      }
+    },
+    "Chart of dated measurements" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chart of dated measurements"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "日付別測定値のグラフ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "날짜별 측정값 차트"
+          }
+        }
+      }
+    },
     "Check" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -9975,6 +10074,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "1년 이내의 올바른 기간과 더 짧은 검색어를 선택해 주세요."
+          }
+        }
+      }
+    },
+    "Choose another period to look for records." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "別の期間を選んで記録を探してください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "다른 기간을 선택해 기록을 찾아보세요."
           }
         }
       }
@@ -11306,6 +11422,12 @@
     "Condition" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Condition"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11526,6 +11648,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "컨디션이 좋습니다"
+          }
+        }
+      }
+    },
+    "Condition records could not be read. Try again later." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "コンディションの記録を読み込めませんでした。しばらくしてからもう一度お試しください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "컨디션 기록을 불러오지 못했어요. 잠시 후 다시 시도해 주세요."
+          }
+        }
+      }
+    },
+    "Condition records describe wellness trends and are not a medical assessment." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "コンディションの記録は健康状態の傾向を示すもので、医学的な評価ではありません。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "컨디션 기록은 건강 상태의 추세를 보여 주며, 의학적 평가가 아니에요."
           }
         }
       }
@@ -12157,6 +12313,12 @@
     "Could not explain this comparison." : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Could not explain this comparison."
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12208,6 +12370,12 @@
     "Could not load health data. Try again." : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Could not load health data. Try again."
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12638,6 +12806,12 @@
     "Current" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Current"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12885,6 +13059,29 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "직접 날짜"
+          }
+        }
+      }
+    },
+    "Custom period" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Custom period"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "カスタム期間"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "직접 지정한 기간"
           }
         }
       }
@@ -14081,6 +14278,12 @@
     "Done" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Done"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14382,6 +14585,12 @@
     "DUNE record" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DUNE record"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15509,6 +15718,12 @@
     "Enter words from a workout note to search your records." : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter words from a workout note to search your records."
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -16475,6 +16690,12 @@
     "Explain comparison" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Explain comparison"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -16492,6 +16713,12 @@
     "Explaining comparison..." : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Explaining comparison..."
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -16509,6 +16736,12 @@
     "Explanation is unavailable on this device." : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Explanation is unavailable on this device."
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -20159,6 +20392,12 @@
     "Health analysis" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Health analysis"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -20186,6 +20425,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "건강 앱 결과는 이 기간의 최근 기록 2,000개까지만 표시해요."
+          }
+        }
+      }
+    },
+    "Health app workouts could not be read. Available DUNE records are shown." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ヘルスケアアプリのワークアウトを読み込めませんでした。確認できるDUNEの記録を表示しています。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "건강 앱의 운동 기록을 불러오지 못했어요. 확인할 수 있는 DUNE 기록을 보여 드려요."
           }
         }
       }
@@ -20318,6 +20574,12 @@
     "Health information" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Health information"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -20534,6 +20796,12 @@
     "Health report" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Health report"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -22644,6 +22912,12 @@
     "Information" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Information"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -23743,6 +24017,12 @@
     "Last 7 days" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last 7 days"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -23800,6 +24080,12 @@
     "Last 30 days" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last 30 days"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -23834,6 +24120,12 @@
     "Last 90 days" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last 90 days"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -23868,6 +24160,12 @@
     "Last 365 days" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last 365 days"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -23902,6 +24200,12 @@
     "Last month" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last month"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -24084,6 +24388,12 @@
     "Last week" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last week"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -24152,6 +24462,12 @@
     "Latest body measurements" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Latest body measurements"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -24305,6 +24621,12 @@
     "Latest workout" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Latest workout"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -26604,6 +26926,12 @@
     "Metric comparison" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Metric comparison"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -29017,6 +29345,23 @@
         }
       }
     },
+    "No condition records were found in this period." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "この期間のコンディションの記録はありません。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 기간에 컨디션 기록이 없어요."
+          }
+        }
+      }
+    },
     "No condition scores were found in this period." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -29986,6 +30331,12 @@
     "No records found for this period." : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No records found for this period."
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -31227,6 +31578,12 @@
     "Open record" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open record"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -31460,6 +31817,12 @@
     "Opening record..." : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opening record..."
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -32254,6 +32617,12 @@
     "Period" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Period"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -32345,6 +32714,12 @@
     "Period: %@ – %@" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Period: %@ – %@"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -32413,6 +32788,12 @@
     "Personal record" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Personal record"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -33586,6 +33967,12 @@
     "Preview report" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preview report"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -33596,6 +33983,29 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "보고서 미리보기"
+          }
+        }
+      }
+    },
+    "Previous" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Previous"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "以前"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이전"
           }
         }
       }
@@ -33688,6 +34098,29 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "이전 운동 기록"
+          }
+        }
+      }
+    },
+    "Previous: %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Previous: %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "以前: %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이전: %@"
           }
         }
       }
@@ -34623,6 +35056,12 @@
     "Reading health records..." : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reading health records..."
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -35147,6 +35586,12 @@
     "Record no longer available" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Record no longer available"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -36021,6 +36466,29 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "상체/하체 비율을 정기적으로 점검하세요"
+          }
+        }
+      }
+    },
+    "Relative change: %@%" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Relative change: %@%"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "変化率: %@%"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "변화율: %@%"
           }
         }
       }
@@ -38366,6 +38834,12 @@
     "Search" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -38480,6 +38954,12 @@
     "Search workout notes" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search workout notes"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -39567,6 +40047,12 @@
     "Share report" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Share report"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -40116,6 +40602,29 @@
         }
       }
     },
+    "Showing the latest 120 chart points." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Showing the latest 120 chart points."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最新120件の測定値をグラフに表示します。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최근 120개 측정값을 차트에 표시해요."
+          }
+        }
+      }
+    },
     "Showing your latest synced night because today's sleep stages aren't available yet." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -40539,6 +41048,12 @@
     "Sleep" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sleep"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -41868,6 +42383,23 @@
         }
       }
     },
+    "Some health sources could not be refreshed. Available condition records are shown." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一部の健康データを更新できませんでした。確認できるコンディションの記録を表示しています。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "일부 건강 데이터를 새로 불러오지 못했어요. 확인할 수 있는 컨디션 기록을 보여 드려요."
+          }
+        }
+      }
+    },
     "Some health sources could not be refreshed. Available condition scores are shown." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -41905,6 +42437,12 @@
     "Some records may be missing." : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Some records may be missing."
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -42030,6 +42568,12 @@
     "Sources" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sources"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -42240,6 +42784,12 @@
     "Spoken answer" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spoken answer"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -43368,6 +43918,12 @@
     "Strength sets" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Strength sets"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -44703,6 +45259,23 @@
         }
       }
     },
+    "The selected workout could not be read. Try again later." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選択したワークアウトの記録を読み込めませんでした。しばらくしてからもう一度お試しください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "선택한 운동 기록을 불러오지 못했어요. 잠시 후 다시 시도해 주세요."
+          }
+        }
+      }
+    },
     "The selected workout is not available in this period." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -44979,6 +45552,12 @@
     "This information is unavailable." : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This information is unavailable."
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -45081,6 +45660,12 @@
     "This month" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This month"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -45200,6 +45785,12 @@
     "This week" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This week"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -45594,6 +46185,12 @@
     "Today" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Today"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -47577,6 +48174,12 @@
     "Unavailable" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unavailable"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -47753,6 +48356,12 @@
     "Unlock your device to view health data." : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unlock your device to view health data."
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -51130,6 +51739,12 @@
     "Workout comparison" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Workout comparison"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -51460,6 +52075,12 @@
     "Workout notes" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Workout notes"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -51487,6 +52108,29 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "운동 메모"
+          }
+        }
+      }
+    },
+    "Workout notes are excluded." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Workout notes are excluded."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ワークアウトのメモは含まれません。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "운동 메모는 제외돼요."
           }
         }
       }
@@ -51608,6 +52252,12 @@
     "Workout summary" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Workout summary"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -51847,6 +52497,12 @@
     "Yesterday" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yesterday"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
