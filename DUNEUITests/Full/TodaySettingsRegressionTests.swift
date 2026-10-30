@@ -399,6 +399,51 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
 
         let weatherDetail = app.descendants(matching: .any)[AXID.weatherDetailScreen].firstMatch
         XCTAssertTrue(weatherDetail.waitForExistence(timeout: 5), "Weather detail should open from weather card")
+        XCTAssertTrue(app.staticTexts["weather-detail-temperature"].exists,
+                      "Current temperature should remain visible in the weather sky")
+        XCTAssertTrue(app.staticTexts["weather-detail-condition"].exists,
+                      "The original condition label should remain in the hero")
+        XCTAssertTrue(app.staticTexts["Outdoor Fitness Score"].exists,
+                      "The outdoor score section should remain below current weather")
+    }
+
+    func testWeatherDetailRainNightInDarkAppearance() throws {
+        openWeatherDetailVariant("rain-night", style: "dark", maximumAX: false)
+        XCTAssertTrue(app.staticTexts["Rain"].exists)
+        addScreenshotAttachment(named: "T08 rain night dark")
+    }
+
+    func testWeatherDetailSnowAtMaximumAccessibilitySize() throws {
+        openWeatherDetailVariant("snow-day", style: "light", maximumAX: true)
+        let temperature = app.staticTexts["weather-detail-temperature"].firstMatch
+        XCTAssertTrue(temperature.exists)
+        XCTAssertGreaterThan(temperature.frame.height, 44,
+                             "Maximum accessibility temperature should retain its full text height")
+        XCTAssertTrue(app.staticTexts["Snow"].exists)
+        addScreenshotAttachment(named: "T08 snow day maximum AX")
+    }
+
+    private func openWeatherDetailVariant(_ variant: String, style: String, maximumAX: Bool) {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "--ui-weather-detail-variant", variant,
+            "--ui-test-style", style,
+            "--ui-dashboard-hour", "12",
+            "-morningBriefingDisabled", "YES"
+        ]
+        if maximumAX {
+            configuration.additionalArguments += [
+                "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+            ]
+        }
+        launchApp(with: configuration)
+        XCTAssertTrue(app.hasPrimaryNavigation(timeout: 8))
+        dismissMorningBriefingIfNeeded()
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.dashboardWeatherCard, maxSwipes: 24))
+        let weatherCard = app.descendants(matching: .any)[AXID.dashboardWeatherCard].firstMatch
+        XCTAssertTrue(weatherCard.waitForExistence(timeout: 5))
+        weatherCard.auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.weatherDetailScreen].firstMatch.waitForExistence(timeout: 5))
     }
 
     func testPinnedMetricsEditorOpensAndDismisses() throws {
