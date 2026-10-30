@@ -11,14 +11,14 @@ final class WatchWorkoutLiveActivityUITests: UITestBaseCase {
     func testRunningNotificationCenterPresentation() {
         captureNotificationCenter(
             phase: "running", expectedStatuses: ["Workout", "운동", "ワークアウト"],
-            activityType: "running", expectedIcon: "figure.run"
+            activityType: "running"
         )
     }
 
     func testCyclingNotificationCenterPresentation() {
         captureNotificationCenter(
             phase: "running", expectedStatuses: ["Workout", "운동", "ワークアウト"],
-            activityType: "cycling", expectedIcon: "figure.outdoor.cycle",
+            activityType: "cycling",
             exerciseName: "Outdoor Cycle", evidenceName: "cycling"
         )
     }
@@ -26,14 +26,14 @@ final class WatchWorkoutLiveActivityUITests: UITestBaseCase {
     func testPausedNotificationCenterPresentation() {
         captureNotificationCenter(
             phase: "paused", expectedStatuses: ["Paused", "일시 정지", "一時停止"],
-            activityType: "running", expectedIcon: "pause.fill"
+            activityType: "running"
         )
     }
 
     func testStaleNotificationCenterHidesOutdatedMetrics() {
         captureNotificationCenter(
             phase: "stale", expectedStatuses: ["Waiting for Watch", "Watch 연결 대기", "Watchとの接続待ち"],
-            activityType: "running", expectedIcon: "wifi.slash"
+            activityType: "running"
         )
     }
 
@@ -41,7 +41,7 @@ final class WatchWorkoutLiveActivityUITests: UITestBaseCase {
         captureNotificationCenter(
             phase: "running",
             expectedStatuses: ["Workout", "운동", "ワークアウト"],
-            activityType: "traditionalStrengthTraining", expectedIcon: "dumbbell.fill",
+            activityType: "traditionalStrengthTraining",
             exerciseName: "체스트 프레스 머신 · 플레이트 로드",
             evidenceName: "strength-long-name"
         )
@@ -51,7 +51,6 @@ final class WatchWorkoutLiveActivityUITests: UITestBaseCase {
         phase: String,
         expectedStatuses: [String],
         activityType: String,
-        expectedIcon: String,
         exerciseName: String = "Outdoor Run",
         evidenceName: String? = nil
     ) {
@@ -100,11 +99,8 @@ final class WatchWorkoutLiveActivityUITests: UITestBaseCase {
         if let activity {
             XCTAssertTrue(springboard.windows.firstMatch.frame.contains(activity.frame),
                           "The complete Live Activity must fit in the system viewport")
-            let icon = activity.descendants(matching: .any)["watch-workout-icon-\(expectedIcon)"].firstMatch
-            XCTAssertTrue(icon.waitForExistence(timeout: 3), "The system should expose the workout phase icon")
-            if icon.exists {
-                XCTAssertTrue(activity.frame.contains(icon.frame), "The workout icon must fit inside the activity")
-            }
+            // The header icon is decorative for VoiceOver. Verify its glyph visually
+            // in the attachment; snapshot unit tests cover symbol selection.
             let brand = activity.staticTexts["watch-workout-brand"].firstMatch
             XCTAssertTrue(brand.exists, "The Live Activity should identify DUNE")
             if brand.exists {

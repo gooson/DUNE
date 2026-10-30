@@ -1,5 +1,6 @@
 import ActivityKit
 import SwiftUI
+import UIKit
 import WidgetKit
 
 struct WatchWorkoutLiveActivity: Widget {
@@ -121,6 +122,7 @@ private struct WatchWorkoutHeader: View {
                 .font(compact ? .subheadline : .body)
                 .foregroundStyle(isIsland ? .white : WorkoutPalette.accent)
                 .frame(width: compact ? 18 : 22)
+                .accessibilityHidden(true)
 
             VStack(alignment: .leading, spacing: 1) {
                 Text(state.exerciseName)
@@ -156,16 +158,20 @@ private struct WatchWorkoutHeader: View {
 private struct WatchWorkoutPhaseIcon: View {
     let state: WatchWorkoutSnapshot
     let isStale: Bool
+    private let symbol: String
+
+    init(state: WatchWorkoutSnapshot, isStale: Bool) {
+        self.state = state
+        self.isStale = isStale
+        let proposed = state.phaseIconName(isStale: isStale)
+        symbol = UIImage(systemName: proposed) == nil ? "figure" : proposed
+    }
 
     var body: some View {
         Image(systemName: symbol)
             .accessibilityLabel(accessibilityLabel)
             .accessibilityIdentifier("watch-workout-icon-\(symbol)")
             .privacySensitive()
-    }
-
-    private var symbol: String {
-        state.phaseIconName(isStale: isStale)
     }
 
     private var accessibilityLabel: Text {
