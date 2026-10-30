@@ -61,12 +61,14 @@ final class HealthQuerySmokeTests: SeededUITestBaseCase {
         let detail = element("exercise-session-detail-scroll")
         XCTAssertTrue(detail.waitForExistence(timeout: 10), "Resolve the actual seeded SwiftData record")
         capture("SQ03-seeded-record-detail")
-        let back = app.navigationBars.buttons.matching(
+        let labelledBack = app.navigationBars.buttons.matching(
             NSPredicate(format: "label == %@", "Health information")
         ).firstMatch
-        XCTAssertTrue(back.waitForExistence(timeout: 5))
-        XCTAssertTrue(back.isHittable)
-        back.tap()
+        let back = labelledBack.exists && labelledBack.isHittable
+            ? labelledBack
+            : app.buttons.matching(identifier: "BackButton").allElementsBoundByIndex.first(where: \.isHittable)
+        XCTAssertNotNil(back, "Use the active navigation or Duo floating back control")
+        back?.tap()
         XCTAssertTrue(detail.waitForNonExistence(timeout: 5))
         XCTAssertTrue(element("health-query-result-kind-strengthSets").exists)
         capture("SQ03-seeded-record-return")
@@ -130,10 +132,8 @@ final class HealthQuerySmokeTests: SeededUITestBaseCase {
         } else {
             let window = app.windows.firstMatch.frame
             let popover = shareSheet.frame
-            let navigationBottom = max(
-                app.navigationBars["Health information"].firstMatch.frame.maxY,
-                app.buttons["health-query-done"].firstMatch.frame.maxY
-            )
+            let navigationBar = app.navigationBars["Health information"].firstMatch
+            let navigationBottom = navigationBar.exists ? navigationBar.frame.maxY : window.minY
             let candidates = [
                 CGPoint(x: window.midX, y: popover.minY - 24),
                 CGPoint(x: popover.minX - 24, y: popover.midY),
@@ -218,10 +218,13 @@ final class HealthQuerySmokeTests: SeededUITestBaseCase {
 
     private func selectKind(_ kind: String) {
         tapVisiblePicker("health-query-kind")
-        let prefix = "health-query-kind-"
+        selectMenuChoice(kind, prefix: "health-query-kind-", choices: queryKinds)
+    }
+
+    private func selectMenuChoice(_ kind: String, prefix: String, choices: [String]) {
         let kindButtons = NSPredicate(format: "identifier BEGINSWITH %@", prefix)
         let menu = app.collectionViews.containing(kindButtons).firstMatch
-        guard let targetIndex = queryKinds.firstIndex(of: kind),
+        guard let targetIndex = choices.firstIndex(of: kind),
               menu.waitForExistence(timeout: 5) else {
             XCTFail("Information menu should contain known choices")
             return
@@ -247,7 +250,7 @@ final class HealthQuerySmokeTests: SeededUITestBaseCase {
 
             let visibleKinds = menu.buttons.matching(kindButtons).allElementsBoundByIndex.compactMap { button -> Int? in
                 guard button.frame.intersects(viewport) else { return nil }
-                return queryKinds.firstIndex(of: String(button.identifier.dropFirst(prefix.count)))
+                return choices.firstIndex(of: String(button.identifier.dropFirst(prefix.count)))
             }
             guard let firstVisible = visibleKinds.min(), viewport.width > 0, viewport.height > 120 else {
                 XCTFail("Information menu should have visible choices")
@@ -274,9 +277,10 @@ final class HealthQuerySmokeTests: SeededUITestBaseCase {
 
     private func selectPeriod(_ period: String) {
         tapVisiblePicker("health-query-period")
-        let choice = app.buttons["health-query-period-\(period)"].firstMatch
-        XCTAssertTrue(choice.waitForExistence(timeout: 5))
-        choice.tap()
+        selectMenuChoice(period, prefix: "health-query-period-", choices: [
+            "today", "yesterday", "thisWeek", "lastWeek", "thisMonth", "lastMonth",
+            "last7Days", "last30Days", "last90Days", "last365Days"
+        ])
     }
 
     private func tapVisiblePicker(_ id: String) {
@@ -287,10 +291,8 @@ final class HealthQuerySmokeTests: SeededUITestBaseCase {
 
         for _ in 0..<4 {
             let viewport = scrollView.frame.intersection(app.windows.firstMatch.frame)
-            let navigationBottom = max(
-                app.navigationBars["Health information"].firstMatch.frame.maxY,
-                app.buttons["health-query-done"].firstMatch.frame.maxY
-            )
+            let navigationBar = app.navigationBars["Health information"].firstMatch
+            let navigationBottom = navigationBar.exists ? navigationBar.frame.maxY : viewport.minY
             let top = max(viewport.minY, navigationBottom) + 8
             let bottom = viewport.maxY - 16
             let pickerFrame = picker.frame
