@@ -13,7 +13,9 @@ HELPER = ROOT / "scripts/lib/simulator-boot.sh"
 
 
 class SimulatorBootTests(unittest.TestCase):
-    def run_with_large_device_list(self, device_id: str = "fixture-device") -> subprocess.CompletedProcess[str]:
+    def run_with_large_device_list(
+        self, device_id: str = "fixture-device", query_exit: int = 0
+    ) -> subprocess.CompletedProcess[str]:
         with tempfile.TemporaryDirectory() as directory:
             fake = Path(directory) / "xcrun"
             fake.write_text(
@@ -24,6 +26,10 @@ class SimulatorBootTests(unittest.TestCase):
                 f"    print({device_id!r} + ' (Booted)', flush=True)\n"
                 "    for _ in range(32):\n"
                 "        os.write(1, b'other-device (Shutdown)\\n' * 4096)\n"
+                "    status = int(os.environ['QUERY_EXIT'])\n"
+                "    if status:\n"
+                "        print('fixture lookup failure', file=sys.stderr)\n"
+                "    sys.exit(status)\n"
                 "elif command == 'bootstatus':\n"
                 "    sys.exit(0)\n"
             )
@@ -32,6 +38,7 @@ class SimulatorBootTests(unittest.TestCase):
                 ["bash", "-c", 'set -euo pipefail; source "$1"; wait_for_simulator_boot fixture-device fixture',
                  "boot-test", str(HELPER)],
                 env={**os.environ, "ROOT_DIR": str(ROOT),
+                     "QUERY_EXIT": str(query_exit),
                      "SIMULATOR_BOOT_TIMEOUT": "3", "SIMULATOR_BOOT_RETRIES": "0",
                      "PATH": directory + os.pathsep + os.environ["PATH"]},
                 capture_output=True, text=True, timeout=10,
@@ -47,6 +54,17 @@ class SimulatorBootTests(unittest.TestCase):
         self.assertEqual(result.returncode, 1, result.stderr[-800:])
         self.assertIn("not found in device list", result.stdout)
         self.assertNotIn("bootstatus confirmed", result.stdout)
+
+    def test_query_failure_is_not_reported_as_missing_device(self) -> None:
+        for status in (17, 124):
+            with self.subTest(status=status):
+                result = self.run_with_large_device_list(query_exit=status)
+                self.assertEqual(result.returncode, 1, result.stderr[-800:])
+                self.assertIn("device lookup failed", result.stdout)
+                self.assertIn(f"exit {status}", result.stdout)
+                self.assertIn("fixture lookup failure", result.stderr)
+                self.assertNotIn("not found in device list", result.stdout)
+                self.assertNotIn("bootstatus confirmed", result.stdout)
 
     def test_stalled_bootstatus_cannot_restart_the_attempt_budget(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
