@@ -17,7 +17,7 @@ final class LiveActivitySettingsUITests: UITestBaseCase {
         assertSelected("settings-watch-live-activity-style", value: "Standard")
         addScreenshotAttachment(named: "WLA02-settings-distance-weight-standard")
 
-        // Relaunch without --ui-reset to exercise the App Group persistence path.
+        // Relaunch without --ui-reset to exercise the persisted storage backend.
         var configuration = launchConfiguration
         configuration.resetState = false
         launchApp(with: configuration)
@@ -42,6 +42,12 @@ final class LiveActivitySettingsUITests: UITestBaseCase {
         let picker = waitForElement(pickerID)
         XCTAssertTrue(app.scrollToHittableElementIfNeeded(pickerID, maxSwipes: 8))
         let accessibleText = "\(picker.label) \(picker.value ?? "")"
-        XCTAssertTrue(accessibleText.contains(expectedValue), "\(pickerID) should retain \(expectedValue): \(accessibleText)")
+        let localizedValues = [
+            "Distance": ["Distance", "거리", "距離"],
+            "Current Set Weight": ["Current Set Weight", "현재 세트 중량", "現在のセット重量"],
+            "Standard": ["Standard", "기본", "標準"]
+        ][expectedValue] ?? [expectedValue]
+        XCTAssertTrue(localizedValues.contains(where: accessibleText.contains),
+                      "\(pickerID) should retain \(expectedValue): \(accessibleText)")
     }
 }

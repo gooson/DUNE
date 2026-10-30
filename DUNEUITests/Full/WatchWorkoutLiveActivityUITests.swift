@@ -215,7 +215,8 @@ final class WatchWorkoutLiveActivityUITests: UITestBaseCase {
                 XCTAssertTrue(primary.exists, "The system should expose the selected primary metric")
                 if primary.exists {
                     XCTAssertTrue(activity.frame.contains(primary.frame), "The selected metric must fit inside the activity")
-                    let accessibleText = primary.debugDescription
+                    let accessibleText = ([primary] + primary.descendants(matching: .any).allElementsBoundByIndex)
+                        .map { "\($0.label) \($0.value ?? "")" }.joined(separator: " ")
                     for fragment in expectedPrimaryFragments {
                         XCTAssertTrue(accessibleText.contains(fragment), "Primary metric should expose \(fragment): \(accessibleText)")
                     }
