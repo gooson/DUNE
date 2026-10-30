@@ -287,7 +287,9 @@ final class MetricDetailRedesignTests: SeededUITestBaseCase {
         let navigationBar = app.navigationBars.firstMatch
         let tabBar = app.tabBars.firstMatch
         let top = max(scrollFrame.minY, navigationBar.exists ? navigationBar.frame.maxY : scrollFrame.minY)
-        let bottom = min(scrollFrame.maxY, tabBar.exists ? tabBar.frame.minY : scrollFrame.maxY)
+        let hasBottomTabBar = tabBar.exists && tabBar.isHittable &&
+            tabBar.frame.minY > app.windows.firstMatch.frame.midY
+        let bottom = hasBottomTabBar ? min(scrollFrame.maxY, tabBar.frame.minY) : scrollFrame.maxY
         guard bottom > top + 8 else { return .null }
         return CGRect(x: scrollFrame.minX, y: top,
                       width: scrollFrame.width, height: bottom - top).insetBy(dx: 4, dy: 4)
