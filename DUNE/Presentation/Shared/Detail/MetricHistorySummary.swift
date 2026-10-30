@@ -45,6 +45,7 @@ struct MetricHistorySummary: View {
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier("detail-chart-visible-summary")
     }
 
