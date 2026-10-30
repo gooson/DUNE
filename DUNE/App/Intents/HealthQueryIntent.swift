@@ -290,7 +290,7 @@ struct HealthQuerySnippetIntent: SnippetIntent {
 
     @MainActor
     private func makeSnippet(_ result: HealthQueryResult) -> some IntentResult & ShowsSnippetView {
-        .result(view: HealthQueryResultCard(result: result))
+        .result(view: HealthQuerySnippetView(result: result))
     }
 }
 

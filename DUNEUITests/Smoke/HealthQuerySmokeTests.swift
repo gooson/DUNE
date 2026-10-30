@@ -42,7 +42,7 @@ final class HealthQuerySmokeTests: SeededUITestBaseCase {
     /// One launch captures every supported information choice. The source metadata
     /// records that these are native simulator screens populated by a test fixture.
     func testCaptureAllQueryKinds() {
-        openBrowse()
+        openBrowse(captureEntry: true)
         let kinds = [
             "latestWorkout", "workoutSummary", "strengthSets", "personalRecord",
             "cardioDetail", "latestBody", "bodyTrend", "sleep", "condition",
@@ -50,6 +50,26 @@ final class HealthQuerySmokeTests: SeededUITestBaseCase {
         ]
         for (index, kind) in kinds.enumerated() {
             if index > 0 { selectKind(kind) }
+            if kind == "memoSearch" {
+                let field = app.textFields["health-query-search-field"].firstMatch
+                XCTAssertTrue(field.waitForExistence(timeout: 5), "Memo search requires an explicit query")
+                field.tap()
+                XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 5),
+                              "The software keyboard must be active for text input")
+                field.typeText("Sample")
+                let keyboardSearch = app.keyboards.buttons.matching(
+                    NSPredicate(format: "label ==[c] %@", "search")
+                ).firstMatch
+                if keyboardSearch.isHittable {
+                    keyboardSearch.tap()
+                } else {
+                    let submit = app.buttons["health-query-search-submit"].firstMatch
+                    XCTAssertTrue(submit.waitForExistence(timeout: 5))
+                    submit.tap()
+                }
+                XCTAssertTrue(app.keyboards.firstMatch.waitForNonExistence(timeout: 5),
+                              "Dismiss the software keyboard before the native capture")
+            }
             XCTAssertTrue(element("health-query-result-kind-\(kind)").waitForExistence(timeout: 8),
                           "Loaded fixture should match \(kind)")
             XCTAssertTrue(element("health-query-source").exists, "Loaded \(kind) should name its source")
@@ -76,7 +96,7 @@ final class HealthQuerySmokeTests: SeededUITestBaseCase {
                       "Cancelling system share should return to the report")
     }
 
-    private func openBrowse() {
+    private func openBrowse(captureEntry: Bool = false) {
         navigateToDashboard()
         let cardID = "dashboard-health-qa-card"
         XCTAssertTrue(app.scrollToElementIfNeeded(cardID, maxSwipes: 18))
@@ -85,6 +105,7 @@ final class HealthQuerySmokeTests: SeededUITestBaseCase {
         card.tap()
         let browse = element("health-qa-browse-records")
         XCTAssertTrue(browse.waitForExistence(timeout: 8))
+        if captureEntry { capture("T17-health-qa-browse") }
         browse.tap()
         XCTAssertTrue(element("health-query-screen").waitForExistence(timeout: 8))
     }
