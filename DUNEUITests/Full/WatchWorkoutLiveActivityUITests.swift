@@ -171,12 +171,15 @@ final class WatchWorkoutLiveActivityUITests: UITestBaseCase {
         let allow = springboard.buttons.matching(NSPredicate(format: "label IN %@", ["Allow", "허용", "許可"])).firstMatch
         if allow.waitForExistence(timeout: 2) { allow.tap() }
 
-        let root = springboard.descendants(matching: .any)["watch-workout-activity"].firstMatch
-        let activity: XCUIElement? = root.waitForExistence(timeout: 5) ? root : nil
+        // The system card owns the complete surface. A Group accessibility ID
+        // can propagate to a decorative descendant and is not a card boundary.
+        let activity = springboard.buttons.matching(identifier: "ListCell").allElementsBoundByIndex
+            .filter { $0.frame.contains(title.frame) }
+            .min { $0.frame.width * $0.frame.height < $1.frame.width * $1.frame.height }
         if phase == "stale", let activity {
             let waiting = activity.descendants(matching: .any)
                 .matching(NSPredicate(format: "label IN %@", expectedStatuses)).firstMatch
-            XCTAssertTrue(waiting.waitForExistence(timeout: 12), "The system should transition to its stale presentation")
+            XCTAssertTrue(waiting.waitForExistence(timeout: 25), "The system should transition to its stale presentation")
         }
         let hierarchy = springboard.debugDescription
         attachEvidence(phase: evidenceName ?? phase, hierarchy: hierarchy, activity: activity)
@@ -234,6 +237,11 @@ final class WatchWorkoutLiveActivityUITests: UITestBaseCase {
     }
 
     private func attachEvidence(phase: String, hierarchy: String, activity: XCUIElement?) {
+        let hierarchyAttachment = XCTAttachment(string: hierarchy)
+        hierarchyAttachment.name = "WLA01-\(phase)-springboard-hierarchy"
+        hierarchyAttachment.lifetime = .keepAlways
+        add(hierarchyAttachment)
+
         // Capture only our Live Activity; unrelated notifications may exist on the simulator.
         XCTAssertNotNil(activity, "The system should expose the workout activity container")
         if let activity {
@@ -243,10 +251,6 @@ final class WatchWorkoutLiveActivityUITests: UITestBaseCase {
             add(screenshot)
         }
 
-        let hierarchyAttachment = XCTAttachment(string: hierarchy)
-        hierarchyAttachment.name = "WLA01-\(phase)-springboard-hierarchy"
-        hierarchyAttachment.lifetime = .keepAlways
-        add(hierarchyAttachment)
     }
 }
 

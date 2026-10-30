@@ -102,6 +102,7 @@ private struct WorkoutPalette {
 private struct WatchWorkoutActivityContent: View {
     private var palette: WorkoutPalette { WorkoutPalette(style: preferences.style) }
     @Environment(\.activityFamily) private var activityFamily
+    @Environment(\.showsWidgetContainerBackground) private var showsContainerBackground
 
     let state: WatchWorkoutSnapshot
     let isStale: Bool
@@ -121,12 +122,10 @@ private struct WatchWorkoutActivityContent: View {
         .padding(isSmall ? 10 : 16)
         .foregroundStyle(palette.primary)
         .background {
-            if preferences.style == .goldImpact {
+            if preferences.style == .goldImpact && showsContainerBackground {
                 WorkoutGoldSurface()
             }
         }
-        .accessibilityElement(children: .contain)
-        .accessibilityIdentifier("watch-workout-activity")
     }
 
     private var fullContent: some View {

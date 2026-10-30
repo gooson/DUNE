@@ -83,8 +83,9 @@ enum WatchWorkoutActivityPreview {
         )
         guard snapshot.isValid else { return }
 
-        // Seed already-outdated content instead of relying on a scheduled system refresh.
-        let staleDate = phase == .stale ? now.addingTimeInterval(-60) : now.addingTimeInterval(300)
+        // An already-expired request may never get a system card. Start a real
+        // activity first and let its short deadline exercise the stale transition.
+        let staleDate = now.addingTimeInterval(phase == .stale ? 15 : 300)
         do {
             _ = try Activity.request(
                 attributes: WatchWorkoutAttributes(mirrorID: UUID()),
