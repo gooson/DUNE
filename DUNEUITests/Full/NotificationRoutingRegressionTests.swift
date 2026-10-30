@@ -112,6 +112,8 @@ final class NotificationResponseRoutingUITests: SeededUITestBaseCase {
         let detail = app.descendants(matching: .any)["notification-daily-digest-screen"].firstMatch
         XCTAssertTrue(detail.waitForExistence(timeout: 15), "Notification response should open today's summary")
         XCTAssertTrue(app.descendants(matching: .any)["dashboard-daily-digest"].firstMatch.waitForExistence(timeout: 15))
+        XCTAssertTrue(app.descendants(matching: .any)["notification-daily-digest-cover"].firstMatch.exists)
+        XCTAssertTrue(app.descendants(matching: .any)["notification-daily-digest-activity"].firstMatch.exists)
         let todayTab = app.tabBars.buttons["Today"].firstMatch
         if todayTab.exists {
             XCTAssertTrue(todayTab.isSelected, "Notification response should select Today")
