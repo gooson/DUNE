@@ -57,7 +57,7 @@ struct WatchWorkoutLiveActivity: Widget {
             } minimal: {
                 if context.isStale || context.state.phase != .running {
                     WatchWorkoutPhaseIcon(state: context.state, isStale: context.isStale)
-                        .foregroundStyle(WidgetDS.themeAccent)
+                        .foregroundStyle(WorkoutPalette.islandAccent)
                 } else {
                     WorkoutIslandMetric(state: context.state, preferences: preferences, minimal: true)
                 }
@@ -420,7 +420,7 @@ private struct WorkoutGoldEmblem: View {
                 .frame(width: 56, height: 62)
                 .background {
                     RoundedRectangle(cornerRadius: 17)
-                        .fill(LinearGradient(colors: [Color("WorkoutMedalGold"), WidgetDS.themeAccent],
+                        .fill(LinearGradient(colors: [Color("WorkoutMedalGold"), WidgetDS.Color.warmAccent],
                                              startPoint: .topLeading, endPoint: .bottomTrailing))
                         .overlay {
                             RoundedRectangle(cornerRadius: 13)

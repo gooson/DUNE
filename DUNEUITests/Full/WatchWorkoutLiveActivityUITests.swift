@@ -51,7 +51,7 @@ final class WatchWorkoutLiveActivityUITests: UITestBaseCase {
         captureNotificationCenter(
             phase: "running", expectedStatuses: ["Workout", "운동", "ワークアウト"],
             activityType: "running", evidenceName: "gold-cardio-distance",
-            metric: "distance", style: "goldImpact", expectedPrimaryFragments: ["1.2", "km"]
+            metric: "distance", style: "goldImpact", theme: "evergreen", expectedPrimaryFragments: ["1.2", "km"]
         )
     }
 
@@ -137,6 +137,7 @@ final class WatchWorkoutLiveActivityUITests: UITestBaseCase {
         evidenceName: String? = nil,
         metric: String = "elapsedTime",
         style: String = "goldImpact",
+        theme: String = "desertWarm",
         fixtureArguments: [String] = [],
         expectedPrimaryFragments: [String] = [],
         expectsWeight: Bool? = nil,
@@ -149,7 +150,7 @@ final class WatchWorkoutLiveActivityUITests: UITestBaseCase {
             "--ui-watch-live-activity-type", activityType,
             "--ui-watch-live-activity-metric", metric,
             "--ui-watch-live-activity-style", style,
-            "--ui-test-theme", "desertWarm",
+            "--ui-test-theme", theme,
             "--ui-test-style", "dark",
             "-AppleLanguages", "(en)", "-AppleLocale", "en_US"
         ]
