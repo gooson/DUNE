@@ -64,6 +64,8 @@ Small 위젯의 세 점수 링과 하단 상태·시각은 카드 전체 높이�
 
 ## 갱신 방법
 
+2026-10-31 [T02 동의 시트 테마 표현 연구](themes/dune-cloud-sync-consent-t02.html)는 기존 DUNE 팔레트와 `ScoreHeroPalette`를 사용한 밝음·어두움의 정적 해석이다. 새로운 테마·동작 규칙을 추가하지 않는다. 화면 정보 순서와 선택 동작은 [T02 레이아웃 맵](../layout-map/cloud-sync-consent-t02.html)을 따르며, 이 HTML은 실제 앱 캡처가 아니다.
+
 2026-10-30 [Siri 건강 정보 질의 비주얼 시안](themes/dune-siri-health-queries.html)을 studies에 추가했다. 기본 V1과 골드·큰 수치·메달·바벨·측정 추세·수면 단계의 V2를 전환하며 14개 기능을 각각 검토한다. [배치·데이터·상태 계약](../layout-map/siri-health-queries-proposal.md), 기능별 브라우저 PNG, `themes/assets/siri-health-queries-qa.json`을 함께 보존한다. 밝음/어두움·기기 폭·200% 글씨·누락/잠금/AI/PCC 상태와 Watch 동반 응답을 포함한다. 실제 Siri 시스템 외곽의 교체나 네이티브 앱 적용을 의미하지 않는다. 실제 화면 디자인맵의 캡처는 변경하지 않았다.
 
 2026-10-26 [Today 재설계 세 방향 시안](themes/dune-today-restart.html)을 추가했다. 기존 DUNE 테마를 유지하며 Today 전체를 Compact, Metrics, Editorial로 비교하며, 글자 확대가 패딩과 그래프를 함께 확대하지 않도록 설계했다. [배치와 범위](../layout-map/today-restart-proposal.md)에 원인·데이터 계약·남은 범위를 기록한다. 신규 테마 구현이나 실제 앱 캡처가 아니며 방향 승인 전 제안이다. [편집 원본](themes/assets/today-restart-fragment.html)을 보존한다.
@@ -181,6 +183,10 @@ L03 네이티브 구현은 기존20개 템플릿의 선택·자동 입력을 유
 T04 native 구현은 단위32개·기기별 선택 UI15개와 새4기기 실제 원본으로 검증했다. 검토용 PNG/JSON은 브라우저 시안이며 새 native 캡처와 구분한다. 실제 입력이 없는70/30 예시 구성은 사용하지 않는다.
 
 Gold Impact 네이티브 일반 빌드·관련 단위51개와 S01 설정 저장 검증은 통과했다. [새 실제 설정 2장](../phone-design-map/actual/live-activity/gold-impact-2026-10-30/index.html)과 [남은 시스템 UI 게이트](../../reviews/2026-10-30-live-activity-gold-preferences.md)를 구분한다. WLA01 최종 캡처는 환경 조회 무응답으로 미완료이며 보존 시안·이전 PNG를 새 검증 증거로 사용하지 않는다.
+
+## T08 날씨 상세 검토본 · 2026-10-31
+
+[보존 시안](themes/dune-weather-detail-redesign.html)의 밝음·어두움 PNG와 원본 T08 JSON을 `themes/assets/condition-detail-redesign/`에 둔다. [네이티브 배치 계약](../layout-map/weather-detail-redesign-proposal.md)은 실제 날씨 상태와 수신 조건을 사용한다. 브라우저 시안은 앱 캡처가 아니며 T08 새 실제 화면은 런타임 검증 뒤 별도로 갱신한다.
 
 ## T10 오늘의 건강 리포트 (2026-10-31)
 
