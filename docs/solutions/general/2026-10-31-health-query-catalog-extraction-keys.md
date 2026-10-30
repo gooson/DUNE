@@ -2,6 +2,7 @@
 tags: [localization, xcstrings, extractionState, swiftui, pre-commit]
 category: general
 date: 2026-10-31
+status: implemented
 severity: important
 related_files:
   - Shared/Resources/Localizable.xcstrings
@@ -37,8 +38,10 @@ Xcode 빌드 후 Shared 카탈로그에 빈 항목 4개가 추가되고,
   번역 payload도 이번 작업에서 추가하지 않았다.
 - 사용자 빌드의 누락 키를 입력하는 `xcstringstool sync` 회귀 검사를 추가했다.
   기존 키의 일부만 재입력하는 검사와 달리 이번 누락을 직접 검출한다.
-- 현재 main의 staged 카탈로그에도 동일한 4개 상태만 반영했다.
+- 당시 main의 staged 카탈로그에도 동일한 4개 상태만 반영했다.
   적용 전 작업 파일과 index가 동일한지, 전체 JSON 차이가 이 4개뿐인지 확인했다.
+- Ship 시점에는 카탈로그 수정이 `4b0f73c1`로 이미 main에 반영돼 있었다.
+  최신 main을 통합한 PR의 추가 변경은 회귀 테스트와 이 해결 기록이다.
 
 ## Validation
 
