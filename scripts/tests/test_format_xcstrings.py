@@ -2,6 +2,7 @@ import json
 import os
 from pathlib import Path
 import plistlib
+import re
 import shutil
 import subprocess
 import tempfile
@@ -14,6 +15,7 @@ CATALOGS = (
     ROOT / "Shared/Resources/Localizable.xcstrings",
     ROOT / "DUNEWatch/Resources/Localizable.xcstrings",
     ROOT / "DUNEWatch/Resources/InfoPlist.xcstrings",
+    ROOT / "DUNE/Resources/AppShortcuts.xcstrings",
 )
 
 
@@ -51,6 +53,28 @@ class StringCatalogFormattingTests(unittest.TestCase):
                              if entry.get("extractionState") != "manual"]
                 self.assertEqual(unmanaged, [],
                                  f"Register catalog entries as manual: {unmanaged[:10]}")
+
+    def test_siri_trigger_phrases_have_all_requested_localizations(self):
+        source = (ROOT / "DUNE/App/Intents/DUNEShortcuts.swift").read_text(encoding="utf-8")
+        phrases = {
+            phrase.replace(r"\(.applicationName)", "${applicationName}")
+            for phrase in re.findall(r'"([^"\n]*\\\(\.applicationName\)[^"\n]*)"', source)
+        }
+        self.assertTrue(phrases, "No Siri trigger phrases found")
+        catalog = ROOT / "DUNE/Resources/AppShortcuts.xcstrings"
+        strings = json.loads(catalog.read_text(encoding="utf-8"))["strings"]
+        self.assertEqual(set(strings), phrases,
+                         "Every Siri phrase needs an AppShortcuts catalog entry")
+        for phrase in phrases:
+            for locale in ("en", "ko", "zh-Hans", "zh-Hant", "ja", "es"):
+                with self.subTest(phrase=phrase, locale=locale):
+                    unit = strings[phrase]["localizations"][locale]["stringUnit"]
+                    self.assertEqual(unit["state"], "translated")
+                    self.assertEqual(unit["value"].count("${applicationName}"), 1)
+                    if locale == "en":
+                        self.assertEqual(unit["value"], phrase)
+                    else:
+                        self.assertNotEqual(unit["value"], phrase)
 
     def test_manual_check_rejects_extracted_entries_without_rewriting(self):
         with tempfile.TemporaryDirectory() as temporary_directory:
@@ -135,6 +159,36 @@ class StringCatalogFormattingTests(unittest.TestCase):
                         self.assertEqual(result.returncode, 0, result.stderr)
                         self.assertEqual(copy.read_bytes(), original,
                                          "Xcode sync rewrote the catalog")
+
+    @unittest.skipUnless(shutil.which("xcrun"), "Xcode tools required")
+    def test_health_query_extraction_does_not_add_unmanaged_keys(self):
+        # Captured from the user's Xcode build. Existing %lld and single-%
+        # entries do not cover %@ and escaped-percent extraction variants.
+        keys = ["/100", "× %@", "Relative change: %@%%",
+                "Showing the latest 50 of %@ sources."]
+        original = CATALOGS[0].read_bytes()
+        strings = json.loads(original)["strings"]
+        for key in keys:
+            with self.subTest(key=key):
+                self.assertEqual(strings.get(key, {}).get("extractionState"), "manual")
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            directory = Path(temporary_directory)
+            catalog = directory / "Localizable.xcstrings"
+            catalog.write_bytes(original)
+            extracted = directory / "HealthQueryResultCard.stringsdata"
+            extracted.write_text(json.dumps({
+                "source": "HealthQueryResultCard.swift",
+                "tables": {"Localizable": [{"key": key, "comment": ""} for key in keys]},
+                "version": 1,
+            }), encoding="utf-8")
+            result = subprocess.run(
+                ["xcrun", "xcstringstool", "sync", str(catalog),
+                 "--stringsdata", str(extracted)],
+                capture_output=True, text=True, check=False,
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertEqual(catalog.read_bytes(), original,
+                             "Health query extraction changed the catalog")
 
     def test_formats_and_checks_without_changing_catalog_values(self):
         with tempfile.TemporaryDirectory() as temporary_directory:

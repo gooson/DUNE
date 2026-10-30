@@ -9,6 +9,8 @@ status: in-progress
 
 # DUNE 전체 디자인맵
 
+2026-10-30 Siri 건강 정보는 T17·T19 및 SQ01–SQ14를 추가했다. [시안 PNG와 실제 캡처 갱신 상태](../full-redesign-map/review/siri-health-queries-2026-10-30/index.html)를 구분한다. SDK27.2에서 새 iPhone 실제17장(14종·키보드·기록 없음)을 수집했고 관련 두 검사는 통과했다. 최대 글씨 메뉴 검사는 조건부 재시도까지 실패했으며 결과 완료 캡처는 없다. 기존 기간·출처/공유 취소 조작과 iPad·Duo 접힘/펼침은 미검증·미갱신이다. 합성 검증 기록이며 시스템 Siri 화면은 아니다. 이전 갤러리 개수와 PNG, 별도 실패 진단2장을 이번 완료 수에 합산하지 않는다.
+
 2026-10-28 T03 지표는 Wellness 계층과 같은 범주색·면·큰 값·실제 추세를 적용하고 같은 행의 자연 높이를 맞췄다. [새 원본10장과 검증 범위](../full-redesign-map/review/today-wellness-metrics-2026-10-28/index.html)에서 iPhone·iPad 출처와 Duo 등 미갱신 범위를 구분한다.
 
 2026-10-28 H01 오늘 밤 수면의 점수·달 상징·게이지·신뢰도·팁 영역을 [새 실제 화면](../full-redesign-map/review/wellness-prediction-visual-2026-10-28/index.html)에서 확인한다. 원본별 소스·기기·검증 범위를 기록하며 이전 예측 PNG는 이 개선의 증거로 바꾸지 않는다.
@@ -199,3 +201,12 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 
 
 2026-10-30 최근 운동 배지 재개 검증에서는 별도 main 기반 worktree의 소유 iPhone을 새로 생성·등록하고 기존 UI 검증 종료 후 실행했다. 테스트 bundle 생성 후 실행 초기화가 정체돼 300초 로그 무갱신/exit124로 끝났고 testcase 통과 증거는 없다. iPhone·iPad·Duo 접힘/펼침 A01의 배지·기본/큰 글씨 새 캡처는 여전히 미갱신이다. 원래 worktree의 기기 부재와 새 worktree의 실행 장애를 구분하며 [상세 리뷰·복구 조건](../../reviews/2026-10-30-compact-workout-achievement.md)을 따른다.
+
+
+2026-10-30 L01 제목·내비게이션 배경의 테마별 강제 설정을 제거하고 습관 기록 inspector를 Today와 같은 탭 NavigationStack 바깥으로 이동했다. 사용자 요청으로 테스트·캡처는 실행하지 않았다. iPhone·iPad·Duo 접힘/펼침의 L01 및 기록 패널은 새 실제 캡처 미갱신이며 이전 PNG를 이번 변경의 증거로 사용하지 않는다. Watch·visionOS는 이 LifeView를 사용하지 않는다. 스크롤 복귀 해결 여부와 기록 열기·닫기·과거 기록 추가의 실행 검증은 남아 있다.
+
+
+2026-10-31 T02 iCloud 동의 개편은 [네 기기 실제 앱 전후 비교](../full-redesign-map/review/cloud-sync-consent-2026-10-31/index.html)에 보존했다. 기존 화면과 원본 아이콘을 대조하고 iPhone·iPad·Duo 접힘0°·펼침180°의 새 PNG와 출처를 갱신했다. 두 선택의 기본 글씨 터치 높이는44pt 이상이며 어두움·최대 접근성 글씨의 별도 소스와 한계는 갤러리에 명시했다. 다른 화면·Watch·실제 iCloud 동기화나 사용자 건강 기록의 검증을 뜻하지 않는다.
+
+
+2026-10-31 T08 날씨 상세: [네 기기 실제 앱 전후 비교](../full-redesign-map/review/weather-detail-2026-10-31/index.html). iPhone·iPad·Duo 접힘0°/펼침180°의 새 실제 앱 캡처입니다. 어두운 비와 최대 글씨의 눈 화면은 별도 상태로 보존했습니다. 정적 UI 감사에서는 움직임을 멈추며, 모의 날씨 자료를 사용합니다. 각 이미지의 실제 소스가 표기되어 있고 전체 회귀나 실제 기상 관측을 검증한 것은 아닙니다.

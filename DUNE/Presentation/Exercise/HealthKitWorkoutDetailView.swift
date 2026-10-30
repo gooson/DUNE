@@ -1,4 +1,5 @@
 import SwiftUI
+import AppIntents
 
 /// Detail view for a HealthKit-only workout (not created by this app).
 /// Shows rich data: HR chart, pace, elevation, weather, badges.
@@ -36,6 +37,7 @@ struct HealthKitWorkoutDetailView: View {
             .padding(.horizontal, DS.Spacing.lg)
         }
         .accessibilityIdentifier("healthkit-workout-detail-screen")
+        .appEntityIdentifier(EntityIdentifier(for: HealthWorkoutEntity.self, identifier: "healthkit:\(workout.id)"))
         .background { DetailWaveBackground() }
         .englishNavigationTitle(resolvedTitle)
         .navigationBarTitleDisplayMode(.inline)

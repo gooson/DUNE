@@ -1,0 +1,969 @@
+{
+  "device": "iPhone Duo Open · explicit internal display3",
+  "udid": "40DF6CF9-5984-4137-84C0-2C2AE3E4CBD1",
+  "runtime": "iOS27.2 / Xcode27.2(27B52)",
+  "sourceCommit": "485e50eb",
+  "appSourceCommit": "485e50eb",
+  "xcresult": "Test-DUNEUITests-2026.10.30_23-21-25-+0900.xcresult",
+  "dataKind": "synthetic DEBUG snapshot or seeded SwiftData; see individual nativeReadback",
+  "siriSystemUI": false,
+  "captures": [
+    {
+      "id": "SQ00-no-data",
+      "file": "images/SQ00-no-data.png",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "cc8b48b3a967552d5b5d08dd7a576e63d18c286e70c8e8e84450235fccacc9d1",
+      "test": "HealthQuerySmokeTests/testNoDataIsExplicit()",
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T14:32:38Z",
+        "captureStartedAt": "2026-10-30T14:32:35Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 669,
+          "width": 951,
+          "x": 0,
+          "y": -5.684341886080802e-14
+        }
+      },
+      "hostCheckpoint": {
+        "sequence": 32,
+        "action": "DUNE_VISUAL_AUDIT_READY SQ00-no-data [DUNEUITests/HealthQuerySmokeTests.swift:325] DEADLINE=1793370787.3077989",
+        "elapsed_seconds": 0.741,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "captureMethod": "explicit simctl display3 during acknowledged XCTest viewport hold",
+      "hostHierarchy": "032-hierarchy.txt"
+    },
+    {
+      "id": "SQ01-accessibility-duration",
+      "file": "images/SQ01-accessibility-duration.png",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "a4e73782b86c2efd6fd2937ee82852674b945d6f70e1bc17a967e6718fa47553",
+      "test": "HealthQuerySmokeTests/testCaptureBodyAndDurationAtMaximumTextSize()",
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T14:31:58Z",
+        "captureStartedAt": "2026-10-30T14:31:56Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 669,
+          "width": 951,
+          "x": 0,
+          "y": -5.684341886080802e-14
+        }
+      },
+      "hostCheckpoint": {
+        "sequence": 29,
+        "action": "DUNE_VISUAL_AUDIT_READY SQ01-accessibility-duration [DUNEUITests/HealthQuerySmokeTests.swift:325] DEADLINE=1793370748.130311",
+        "elapsed_seconds": 0.771,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "captureMethod": "explicit simctl display3 during acknowledged XCTest viewport hold",
+      "hostHierarchy": "029-hierarchy.txt"
+    },
+    {
+      "id": "SQ01-accessibility-duration-period",
+      "file": "images/SQ01-accessibility-duration-period.png",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "d1c4e450f95e135a9dd5b1e05aa64bb5cb00fc495cc961a760c67aa3961029b8",
+      "test": "HealthQuerySmokeTests/testCaptureBodyAndDurationAtMaximumTextSize()",
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T14:31:41Z",
+        "captureStartedAt": "2026-10-30T14:31:38Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 669,
+          "width": 951,
+          "x": 0,
+          "y": -5.684341886080802e-14
+        }
+      },
+      "hostCheckpoint": {
+        "sequence": 28,
+        "action": "DUNE_VISUAL_AUDIT_READY SQ01-accessibility-duration-period [DUNEUITests/HealthQuerySmokeTests.swift:325] DEADLINE=1793370730.353486",
+        "elapsed_seconds": 0.659,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "captureMethod": "explicit simctl display3 during acknowledged XCTest viewport hold",
+      "hostHierarchy": "028-hierarchy.txt"
+    },
+    {
+      "id": "SQ01-accessibility-duration-selector",
+      "file": "images/SQ01-accessibility-duration-selector.png",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "119554f59716901e880ba56714dbb2fa97ddc461978178b8817a6c1fa336bc1b",
+      "test": "HealthQuerySmokeTests/testCaptureBodyAndDurationAtMaximumTextSize()",
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T14:31:14Z",
+        "captureStartedAt": "2026-10-30T14:31:12Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 669,
+          "width": 951,
+          "x": 0,
+          "y": -5.684341886080802e-14
+        }
+      },
+      "hostCheckpoint": {
+        "sequence": 27,
+        "action": "DUNE_VISUAL_AUDIT_READY SQ01-accessibility-duration-selector [DUNEUITests/HealthQuerySmokeTests.swift:325] DEADLINE=1793370703.59745",
+        "elapsed_seconds": 0.67,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "captureMethod": "explicit simctl display3 during acknowledged XCTest viewport hold",
+      "hostHierarchy": "027-hierarchy.txt"
+    },
+    {
+      "id": "SQ01-back-to-qa",
+      "file": "images/SQ01-back-to-qa.png",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "875a92e7c1b48babc96acdddb2737f67cb93a498e0e9e8c9a5a3fad30f5681e8",
+      "test": "HealthQuerySmokeTests/testBrowseEntryPeriodSourceAndBack()",
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T14:24:52Z",
+        "captureStartedAt": "2026-10-30T14:24:50Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 669,
+          "width": 951,
+          "x": 0,
+          "y": -5.684341886080802e-14
+        }
+      },
+      "hostCheckpoint": {
+        "sequence": 3,
+        "action": "DUNE_VISUAL_AUDIT_READY SQ01-back-to-qa [DUNEUITests/HealthQuerySmokeTests.swift:325] DEADLINE=1793370321.978107",
+        "elapsed_seconds": 0.676,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "captureMethod": "explicit simctl display3 during acknowledged XCTest viewport hold",
+      "hostHierarchy": "003-hierarchy.txt"
+    },
+    {
+      "id": "SQ01-latestWorkout",
+      "file": "images/SQ01-latestWorkout.png",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "62a9ad001e66cce5e1e8927d1e89da8d8fb85ca2e4c43a01bb73363b643d51a8",
+      "test": "HealthQuerySmokeTests/testCaptureAllQueryKinds()",
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T14:25:36Z",
+        "captureStartedAt": "2026-10-30T14:25:34Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 669,
+          "width": 951,
+          "x": 0,
+          "y": -5.684341886080802e-14
+        }
+      },
+      "hostCheckpoint": {
+        "sequence": 7,
+        "action": "DUNE_VISUAL_AUDIT_READY SQ01-latestWorkout [DUNEUITests/HealthQuerySmokeTests.swift:325] DEADLINE=1793370365.733752",
+        "elapsed_seconds": 0.945,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "captureMethod": "explicit simctl display3 during acknowledged XCTest viewport hold",
+      "hostHierarchy": "007-hierarchy.txt"
+    },
+    {
+      "id": "SQ01-period-source",
+      "file": "images/SQ01-period-source.png",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "c446d82a417d655425856916da9a67e66fd8650e8b9bfc20503cbcf65521475f",
+      "test": "HealthQuerySmokeTests/testBrowseEntryPeriodSourceAndBack()",
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T14:24:43Z",
+        "captureStartedAt": "2026-10-30T14:24:40Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 669,
+          "width": 951,
+          "x": 0,
+          "y": -5.684341886080802e-14
+        }
+      },
+      "hostCheckpoint": {
+        "sequence": 2,
+        "action": "DUNE_VISUAL_AUDIT_READY SQ01-period-source [DUNEUITests/HealthQuerySmokeTests.swift:325] DEADLINE=1793370312.047368",
+        "elapsed_seconds": 0.982,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "captureMethod": "explicit simctl display3 during acknowledged XCTest viewport hold",
+      "hostHierarchy": "002-hierarchy.txt"
+    },
+    {
+      "id": "SQ02-workoutSummary",
+      "file": "images/SQ02-workoutSummary.png",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "19a0a74cdf92627d6dc485eac0f025771ae50a5e277db0d1a40bd98b45b97c8f",
+      "test": "HealthQuerySmokeTests/testCaptureAllQueryKinds()",
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T14:25:50Z",
+        "captureStartedAt": "2026-10-30T14:25:47Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 669,
+          "width": 951,
+          "x": 0,
+          "y": -5.684341886080802e-14
+        }
+      },
+      "hostCheckpoint": {
+        "sequence": 8,
+        "action": "DUNE_VISUAL_AUDIT_READY SQ02-workoutSummary [DUNEUITests/HealthQuerySmokeTests.swift:325] DEADLINE=1793370379.360384",
+        "elapsed_seconds": 1.096,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "captureMethod": "explicit simctl display3 during acknowledged XCTest viewport hold",
+      "hostHierarchy": "008-hierarchy.txt"
+    },
+    {
+      "id": "SQ03-seeded-record-detail",
+      "file": "images/SQ03-seeded-record-detail.png",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "363226e95d4692778112b586b86807aa8eff488d881a26978fd5c3dbae1eb870",
+      "test": "HealthQuerySmokeTests/testOpenSeededWorkoutRecordAndBack()",
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T14:33:26Z",
+        "captureStartedAt": "2026-10-30T14:33:23Z",
+        "dataKind": "synthetic seeded SwiftData records; production query service",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 669,
+          "width": 951,
+          "x": 0,
+          "y": -5.684341886080802e-14
+        }
+      },
+      "hostCheckpoint": {
+        "sequence": 35,
+        "action": "DUNE_VISUAL_AUDIT_READY SQ03-seeded-record-detail [DUNEUITests/HealthQuerySmokeTests.swift:325] DEADLINE=1793370835.197946",
+        "elapsed_seconds": 0.813,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "captureMethod": "explicit simctl display3 during acknowledged XCTest viewport hold",
+      "hostHierarchy": "035-hierarchy.txt"
+    },
+    {
+      "id": "SQ03-seeded-record-return",
+      "file": "images/SQ03-seeded-record-return.png",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "565a1dc254850ac79ebd93242f62a4226ac1165aeb5cd0fe879fae786bf7e63b",
+      "test": "HealthQuerySmokeTests/testOpenSeededWorkoutRecordAndBack()",
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T14:33:32Z",
+        "captureStartedAt": "2026-10-30T14:33:30Z",
+        "dataKind": "synthetic seeded SwiftData records; production query service",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 669,
+          "width": 951,
+          "x": 0,
+          "y": -5.684341886080802e-14
+        }
+      },
+      "hostCheckpoint": {
+        "sequence": 36,
+        "action": "DUNE_VISUAL_AUDIT_READY SQ03-seeded-record-return [DUNEUITests/HealthQuerySmokeTests.swift:325] DEADLINE=1793370841.634924",
+        "elapsed_seconds": 0.616,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "captureMethod": "explicit simctl display3 during acknowledged XCTest viewport hold",
+      "hostHierarchy": "036-hierarchy.txt"
+    },
+    {
+      "id": "SQ03-strengthSets",
+      "file": "images/SQ03-strengthSets.png",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "230570a777428f634e47cf39930612191c3c66ecf7950ea7e0cd47ae5a017f68",
+      "test": "HealthQuerySmokeTests/testCaptureAllQueryKinds()",
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T14:26:08Z",
+        "captureStartedAt": "2026-10-30T14:26:04Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 669,
+          "width": 951,
+          "x": 0,
+          "y": -5.684341886080802e-14
+        }
+      },
+      "hostCheckpoint": {
+        "sequence": 9,
+        "action": "DUNE_VISUAL_AUDIT_READY SQ03-strengthSets [DUNEUITests/HealthQuerySmokeTests.swift:325] DEADLINE=1793370395.792122",
+        "elapsed_seconds": 2.148,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "captureMethod": "explicit simctl display3 during acknowledged XCTest viewport hold",
+      "hostHierarchy": "009-hierarchy.txt"
+    },
+    {
+      "id": "SQ04-personalRecord",
+      "file": "images/SQ04-personalRecord.png",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "03a9044842ebb916f1be083a36cea59c04c50bbd158f6a329bbb329008a23cb6",
+      "test": "HealthQuerySmokeTests/testCaptureAllQueryKinds()",
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T14:26:28Z",
+        "captureStartedAt": "2026-10-30T14:26:24Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 669,
+          "width": 951,
+          "x": 0,
+          "y": -5.684341886080802e-14
+        }
+      },
+      "hostCheckpoint": {
+        "sequence": 10,
+        "action": "DUNE_VISUAL_AUDIT_READY SQ04-personalRecord [DUNEUITests/HealthQuerySmokeTests.swift:325] DEADLINE=1793370416.964087",
+        "elapsed_seconds": 1.493,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "captureMethod": "explicit simctl display3 during acknowledged XCTest viewport hold",
+      "hostHierarchy": "010-hierarchy.txt"
+    },
+    {
+      "id": "SQ05-cardioDetail",
+      "file": "images/SQ05-cardioDetail.png",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "eb77b88b0561acaa3ffab5db5328b73a46280f3627fd8b9ae3216cbf72d67649",
+      "test": "HealthQuerySmokeTests/testCaptureAllQueryKinds()",
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T14:26:46Z",
+        "captureStartedAt": "2026-10-30T14:26:42Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 669,
+          "width": 951,
+          "x": 0,
+          "y": -5.684341886080802e-14
+        }
+      },
+      "hostCheckpoint": {
+        "sequence": 11,
+        "action": "DUNE_VISUAL_AUDIT_READY SQ05-cardioDetail [DUNEUITests/HealthQuerySmokeTests.swift:325] DEADLINE=1793370434.2435288",
+        "elapsed_seconds": 2.223,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "captureMethod": "explicit simctl display3 during acknowledged XCTest viewport hold",
+      "hostHierarchy": "011-hierarchy.txt"
+    },
+    {
+      "id": "SQ06-accessibility-body",
+      "file": "images/SQ06-accessibility-body.png",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "ac00d23ca4f40c0104501add1e6e1eceaf82260d835fbe4bcf3c0bcd76770c3e",
+      "test": "HealthQuerySmokeTests/testCaptureBodyAndDurationAtMaximumTextSize()",
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T14:30:52Z",
+        "captureStartedAt": "2026-10-30T14:30:50Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 669,
+          "width": 951,
+          "x": 0,
+          "y": -5.684341886080802e-14
+        }
+      },
+      "hostCheckpoint": {
+        "sequence": 26,
+        "action": "DUNE_VISUAL_AUDIT_READY SQ06-accessibility-body [DUNEUITests/HealthQuerySmokeTests.swift:325] DEADLINE=1793370681.7895641",
+        "elapsed_seconds": 0.747,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "captureMethod": "explicit simctl display3 during acknowledged XCTest viewport hold",
+      "hostHierarchy": "026-hierarchy.txt"
+    },
+    {
+      "id": "SQ06-accessibility-body-period",
+      "file": "images/SQ06-accessibility-body-period.png",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "a196be55d5e028c98e66ffbfff5c18cef96ef833a4af0b94ec167e08fef8f123",
+      "test": "HealthQuerySmokeTests/testCaptureBodyAndDurationAtMaximumTextSize()",
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T14:30:34Z",
+        "captureStartedAt": "2026-10-30T14:30:32Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 669,
+          "width": 951,
+          "x": 0,
+          "y": -5.684341886080802e-14
+        }
+      },
+      "hostCheckpoint": {
+        "sequence": 25,
+        "action": "DUNE_VISUAL_AUDIT_READY SQ06-accessibility-body-period [DUNEUITests/HealthQuerySmokeTests.swift:325] DEADLINE=1793370663.9452472",
+        "elapsed_seconds": 0.721,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "captureMethod": "explicit simctl display3 during acknowledged XCTest viewport hold",
+      "hostHierarchy": "025-hierarchy.txt"
+    },
+    {
+      "id": "SQ06-accessibility-body-selector",
+      "file": "images/SQ06-accessibility-body-selector.png",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "ece77fe2a3826133585d008f7b8beaffa4d49ccaf1fee99bba457fa107c32f44",
+      "test": "HealthQuerySmokeTests/testCaptureBodyAndDurationAtMaximumTextSize()",
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T14:30:07Z",
+        "captureStartedAt": "2026-10-30T14:30:05Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 669,
+          "width": 951,
+          "x": 0,
+          "y": -5.684341886080802e-14
+        }
+      },
+      "hostCheckpoint": {
+        "sequence": 24,
+        "action": "DUNE_VISUAL_AUDIT_READY SQ06-accessibility-body-selector [DUNEUITests/HealthQuerySmokeTests.swift:325] DEADLINE=1793370637.0921922",
+        "elapsed_seconds": 0.862,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "captureMethod": "explicit simctl display3 during acknowledged XCTest viewport hold",
+      "hostHierarchy": "024-hierarchy.txt"
+    },
+    {
+      "id": "SQ06-latestBody",
+      "file": "images/SQ06-latestBody.png",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "f00fb4ed2d4bb9ed97eaa8e2d0cfecac196a7c968aaea36896b1619f9105bb9f",
+      "test": "HealthQuerySmokeTests/testCaptureAllQueryKinds()",
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T14:27:06Z",
+        "captureStartedAt": "2026-10-30T14:27:03Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 669,
+          "width": 951,
+          "x": 0,
+          "y": -5.684341886080802e-14
+        }
+      },
+      "hostCheckpoint": {
+        "sequence": 12,
+        "action": "DUNE_VISUAL_AUDIT_READY SQ06-latestBody [DUNEUITests/HealthQuerySmokeTests.swift:325] DEADLINE=1793370455.04983",
+        "elapsed_seconds": 1.648,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "captureMethod": "explicit simctl display3 during acknowledged XCTest viewport hold",
+      "hostHierarchy": "012-hierarchy.txt"
+    },
+    {
+      "id": "SQ07-bodyTrend",
+      "file": "images/SQ07-bodyTrend.png",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "e4dc3b57032bf694fe21085f17cdd474d7fc900f0026379aad3f48b247b2a202",
+      "test": "HealthQuerySmokeTests/testCaptureAllQueryKinds()",
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T14:27:23Z",
+        "captureStartedAt": "2026-10-30T14:27:20Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 669,
+          "width": 951,
+          "x": 0,
+          "y": -5.684341886080802e-14
+        }
+      },
+      "hostCheckpoint": {
+        "sequence": 13,
+        "action": "DUNE_VISUAL_AUDIT_READY SQ07-bodyTrend [DUNEUITests/HealthQuerySmokeTests.swift:325] DEADLINE=1793370471.673718",
+        "elapsed_seconds": 1.709,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "captureMethod": "explicit simctl display3 during acknowledged XCTest viewport hold",
+      "hostHierarchy": "013-hierarchy.txt"
+    },
+    {
+      "id": "SQ08-sleep",
+      "file": "images/SQ08-sleep.png",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "4eb3eedcd726bdefe31bd11d5b7d435d5b62246e4e5c3d62029ea103702d0639",
+      "test": "HealthQuerySmokeTests/testCaptureAllQueryKinds()",
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T14:27:37Z",
+        "captureStartedAt": "2026-10-30T14:27:35Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 669,
+          "width": 951,
+          "x": 0,
+          "y": -5.684341886080802e-14
+        }
+      },
+      "hostCheckpoint": {
+        "sequence": 14,
+        "action": "DUNE_VISUAL_AUDIT_READY SQ08-sleep [DUNEUITests/HealthQuerySmokeTests.swift:325] DEADLINE=1793370486.620775",
+        "elapsed_seconds": 0.635,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "captureMethod": "explicit simctl display3 during acknowledged XCTest viewport hold",
+      "hostHierarchy": "014-hierarchy.txt"
+    },
+    {
+      "id": "SQ09-condition",
+      "file": "images/SQ09-condition.png",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "0fbb5a5a6d65dca146a202addcb3259517c9d9f3395cf93d436eaff1a0a48d99",
+      "test": "HealthQuerySmokeTests/testCaptureAllQueryKinds()",
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T14:27:50Z",
+        "captureStartedAt": "2026-10-30T14:27:48Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 669,
+          "width": 951,
+          "x": 0,
+          "y": -5.684341886080802e-14
+        }
+      },
+      "hostCheckpoint": {
+        "sequence": 15,
+        "action": "DUNE_VISUAL_AUDIT_READY SQ09-condition [DUNEUITests/HealthQuerySmokeTests.swift:325] DEADLINE=1793370500.079217",
+        "elapsed_seconds": 0.569,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "captureMethod": "explicit simctl display3 during acknowledged XCTest viewport hold",
+      "hostHierarchy": "015-hierarchy.txt"
+    },
+    {
+      "id": "SQ10-metricComparison",
+      "file": "images/SQ10-metricComparison.png",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "6a183bc6d9878e17ddff9ef6489a6fe9389557990710dcaca107dec4ba18a0c8",
+      "test": "HealthQuerySmokeTests/testCaptureAllQueryKinds()",
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T14:28:05Z",
+        "captureStartedAt": "2026-10-30T14:28:02Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 669,
+          "width": 951,
+          "x": 0,
+          "y": -5.684341886080802e-14
+        }
+      },
+      "hostCheckpoint": {
+        "sequence": 16,
+        "action": "DUNE_VISUAL_AUDIT_READY SQ10-metricComparison [DUNEUITests/HealthQuerySmokeTests.swift:325] DEADLINE=1793370514.364171",
+        "elapsed_seconds": 0.742,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "captureMethod": "explicit simctl display3 during acknowledged XCTest viewport hold",
+      "hostHierarchy": "016-hierarchy.txt"
+    },
+    {
+      "id": "SQ11-workoutComparison",
+      "file": "images/SQ11-workoutComparison.png",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "db003db4487594db66a51b48edc1a9125f1277d7b4ecf6fca26519d905c9248d",
+      "test": "HealthQuerySmokeTests/testCaptureAllQueryKinds()",
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T14:28:18Z",
+        "captureStartedAt": "2026-10-30T14:28:16Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 669,
+          "width": 951,
+          "x": 0,
+          "y": -5.684341886080802e-14
+        }
+      },
+      "hostCheckpoint": {
+        "sequence": 17,
+        "action": "DUNE_VISUAL_AUDIT_READY SQ11-workoutComparison [DUNEUITests/HealthQuerySmokeTests.swift:325] DEADLINE=1793370528.1286612",
+        "elapsed_seconds": 0.791,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "captureMethod": "explicit simctl display3 during acknowledged XCTest viewport hold",
+      "hostHierarchy": "017-hierarchy.txt"
+    },
+    {
+      "id": "SQ12-memoSearch",
+      "file": "images/SQ12-memoSearch.png",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "cdf333c6c589bcebfd6f5c5a7ec4beaf9fe1762cccdca8c948af899c25d3da70",
+      "test": "HealthQuerySmokeTests/testCaptureAllQueryKinds()",
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T14:28:46Z",
+        "captureStartedAt": "2026-10-30T14:28:44Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 669,
+          "width": 951,
+          "x": 0,
+          "y": -5.684341886080802e-14
+        }
+      },
+      "hostCheckpoint": {
+        "sequence": 19,
+        "action": "DUNE_VISUAL_AUDIT_READY SQ12-memoSearch [DUNEUITests/HealthQuerySmokeTests.swift:325] DEADLINE=1793370556.274514",
+        "elapsed_seconds": 0.652,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "captureMethod": "explicit simctl display3 during acknowledged XCTest viewport hold",
+      "hostHierarchy": "019-hierarchy.txt"
+    },
+    {
+      "id": "SQ12-software-keyboard",
+      "file": "images/SQ12-software-keyboard.png",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "54b1ca5e374569da108a09644ea80d42ade9c433d78b7b0d2a8343d3aa3037d6",
+      "test": "HealthQuerySmokeTests/testCaptureAllQueryKinds()",
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T14:28:39Z",
+        "captureStartedAt": "2026-10-30T14:28:37Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": true,
+        "viewportPoints": {
+          "height": 669,
+          "width": 951,
+          "x": 0,
+          "y": -5.684341886080802e-14
+        }
+      },
+      "hostCheckpoint": {
+        "sequence": 18,
+        "action": "DUNE_VISUAL_AUDIT_READY SQ12-software-keyboard [DUNEUITests/HealthQuerySmokeTests.swift:325] DEADLINE=1793370548.6164541",
+        "elapsed_seconds": 0.731,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "captureMethod": "explicit simctl display3 during acknowledged XCTest viewport hold",
+      "hostHierarchy": "018-hierarchy.txt"
+    },
+    {
+      "id": "SQ13-report",
+      "file": "images/SQ13-report.png",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "d4508ed345d041c46c420d97eca96d9ca9475a5fcc687597b9fb9859dfd75f3d",
+      "test": "HealthQuerySmokeTests/testCaptureAllQueryKinds()",
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T14:29:00Z",
+        "captureStartedAt": "2026-10-30T14:28:58Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 669,
+          "width": 951,
+          "x": 0,
+          "y": -5.684341886080802e-14
+        }
+      },
+      "hostCheckpoint": {
+        "sequence": 20,
+        "action": "DUNE_VISUAL_AUDIT_READY SQ13-report [DUNEUITests/HealthQuerySmokeTests.swift:325] DEADLINE=1793370569.6302528",
+        "elapsed_seconds": 0.851,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "captureMethod": "explicit simctl display3 during acknowledged XCTest viewport hold",
+      "hostHierarchy": "020-hierarchy.txt"
+    },
+    {
+      "id": "SQ13-report-preview",
+      "file": "images/SQ13-report-preview.png",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "486ab0e03b767f5dee003af38898888090c267a7fc673b651c7dac4dff46e541",
+      "test": "HealthQuerySmokeTests/testReportPreviewShareCancel()",
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T14:34:20Z",
+        "captureStartedAt": "2026-10-30T14:34:17Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 669,
+          "width": 951,
+          "x": 0,
+          "y": -5.684341886080802e-14
+        }
+      },
+      "hostCheckpoint": {
+        "sequence": 39,
+        "action": "DUNE_VISUAL_AUDIT_READY SQ13-report-preview [DUNEUITests/HealthQuerySmokeTests.swift:325] DEADLINE=1793370889.126879",
+        "elapsed_seconds": 1.002,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "captureMethod": "explicit simctl display3 during acknowledged XCTest viewport hold",
+      "hostHierarchy": "039-hierarchy.txt"
+    },
+    {
+      "id": "SQ13-report-share",
+      "file": "images/SQ13-report-share.png",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "e2ddcabb73c38f4d8d69909a95e596900346fc05698ee38bfcb4e590a53398dd",
+      "test": "HealthQuerySmokeTests/testReportPreviewShareCancel()",
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T14:34:35Z",
+        "captureStartedAt": "2026-10-30T14:34:32Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 669,
+          "width": 951,
+          "x": 0,
+          "y": -5.684341886080802e-14
+        }
+      },
+      "hostCheckpoint": {
+        "sequence": 40,
+        "action": "DUNE_VISUAL_AUDIT_READY SQ13-report-share [DUNEUITests/HealthQuerySmokeTests.swift:325] DEADLINE=1793370904.62801",
+        "elapsed_seconds": 0.734,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "captureMethod": "explicit simctl display3 during acknowledged XCTest viewport hold",
+      "hostHierarchy": "040-hierarchy.txt"
+    },
+    {
+      "id": "SQ14-longAnalysis",
+      "file": "images/SQ14-longAnalysis.png",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "9d59f73b93c81385292877a89508c1d0f008e85381b6bed4cd6c0a4007ddfbf0",
+      "test": "HealthQuerySmokeTests/testCaptureAllQueryKinds()",
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T14:29:14Z",
+        "captureStartedAt": "2026-10-30T14:29:11Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 669,
+          "width": 951,
+          "x": 0,
+          "y": -5.684341886080802e-14
+        }
+      },
+      "hostCheckpoint": {
+        "sequence": 21,
+        "action": "DUNE_VISUAL_AUDIT_READY SQ14-longAnalysis [DUNEUITests/HealthQuerySmokeTests.swift:325] DEADLINE=1793370583.496583",
+        "elapsed_seconds": 0.779,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "captureMethod": "explicit simctl display3 during acknowledged XCTest viewport hold",
+      "hostHierarchy": "021-hierarchy.txt"
+    },
+    {
+      "id": "T17-health-qa-browse",
+      "file": "images/T17-health-qa-browse.png",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "sha256": "26515714af45ae79f9175853611ac38ae6be917250332e509f0410319bd3d6a5",
+      "test": "HealthQuerySmokeTests/testCaptureAllQueryKinds()",
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T14:25:28Z",
+        "captureStartedAt": "2026-10-30T14:25:25Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 669,
+          "width": 951,
+          "x": 0,
+          "y": -5.684341886080802e-14
+        }
+      },
+      "hostCheckpoint": {
+        "sequence": 6,
+        "action": "DUNE_VISUAL_AUDIT_READY T17-health-qa-browse [DUNEUITests/HealthQuerySmokeTests.swift:325] DEADLINE=1793370357.4105911",
+        "elapsed_seconds": 1.364,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "captureMethod": "explicit simctl display3 during acknowledged XCTest viewport hold",
+      "hostHierarchy": "006-hierarchy.txt"
+    }
+  ]
+}

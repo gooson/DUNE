@@ -1,0 +1,176 @@
+{
+  "screen": "T02",
+  "source_revision": "69241c8f",
+  "locale": "en_US",
+  "theme": "DUNE light",
+  "fixture": "DEBUG forced consent, empty mock store",
+  "kind": "actual native captures, not browser proposals",
+  "devices": {
+    "regular": {
+      "before": {
+        "captured": {
+          "row_id": "T02",
+          "evidence": "cloud-sync-consent-view",
+          "test": "CloudSyncConsentRegressionTests/testCloudSyncConsentHookPresentsAndDismissesSheet()",
+          "action": "Cloud sync consent before dismissal",
+          "timestamp": 1791836627.119,
+          "image": "96C58EA4-CC29-4022-B6A4-0B0F1ECF2655.png",
+          "screen": "screen-0-1320x2868-Cloud sync consent before dismissal_0_5ACBF3E5-3CC9-46E2-834F-2D8F4FFB8A15.png",
+          "file": "T02.png"
+        },
+        "global_source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+        "device": "regular",
+        "image": "docs/design/phone-design-map/actual/regular/images/T02.png",
+        "preserved_file": ".codex-checks/t02/before-final-map/regular.png",
+        "sha256": "ba783053e15b44492b40fcb3a730f03c504b9f4bffadb57c7dc8abe549a8264c"
+      },
+      "after_source": ".codex-checks/t02/evidence/ui-iphone-final-44pt/attachments/A349C350-DD6D-436E-8A80-38A84521EE82.png",
+      "after_sha256": "657d61d2ede2f9f8af5a577695179e4cdd1c488ed04bd4bc208eed71118a4f53",
+      "source_revision": "69241c8f",
+      "device_udid": "E337026F-A2C2-46AA-95C8-99E69E14B15B",
+      "pixels": [
+        1320,
+        2868
+      ],
+      "collection_timestamp": 1793387546.078,
+      "collection_timestamp_kind": "XCTest screenshot attachment capture timestamp",
+      "test": "CloudSyncConsentRegressionTests/testCloudSyncConsentHookPresentsAndDismissesSheet",
+      "normal_choices_minimum_height": 44
+    },
+    "ipad": {
+      "before": {
+        "captured": {
+          "row_id": "T02",
+          "evidence": "cloud-sync-consent-view",
+          "test": "CloudSyncConsentRegressionTests/testCloudSyncConsentHookPresentsAndDismissesSheet()",
+          "action": "Cloud sync consent before dismissal",
+          "timestamp": 1791838619.882,
+          "image": "EFBE4EF1-93CA-453B-BD2A-B918306CE43F.png",
+          "screen": "screen-0-2064x2752-Cloud sync consent before dismissal_0_4410FB6C-D1DC-4315-BD36-D4439CFDE345.png",
+          "file": "T02.png"
+        },
+        "global_source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+        "device": "ipad",
+        "image": "docs/design/phone-design-map/actual/ipad/images/T02.png",
+        "preserved_file": ".codex-checks/t02/before-final-map/ipad.png",
+        "sha256": "79ed7294214b483135eecb057830883e931b6aa9fc81d1769bf67ef950c7ea34"
+      },
+      "after_source": ".codex-checks/t02/evidence/ui-ipad-final-44pt/attachments/DE40F54F-2303-4CAD-B7DF-3540163BD261.png",
+      "after_sha256": "bc6feedfdda44de1e35725488a560d1b888b2884ca5689971d4dc29d85501028",
+      "source_revision": "69241c8f",
+      "device_udid": "C12634CA-1885-4F47-AD63-913345248579",
+      "pixels": [
+        2064,
+        2752
+      ],
+      "collection_timestamp": 1793387225.481,
+      "collection_timestamp_kind": "XCTest screenshot attachment capture timestamp",
+      "test": "CloudSyncConsentRegressionTests/testCloudSyncConsentHookPresentsAndDismissesSheet",
+      "normal_choices_minimum_height": 44
+    },
+    "duo": {
+      "before": {
+        "captured": {
+          "row_id": "T02",
+          "evidence": "cloud-sync-consent-view",
+          "test": "CloudSyncConsentRegressionTests/testCloudSyncConsentHookPresentsAndDismissesSheet()",
+          "action": "Cloud sync consent before dismissal",
+          "timestamp": 1791824207.864,
+          "image": "14A2343C-0775-4249-852E-48C5B895132B.png",
+          "screen": "screen-0-1398x2034-Cloud sync consent before dismissal_0_328D323A-5272-4113-9527-3E6BAB17193B.png",
+          "file": "T02.png"
+        },
+        "global_source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+        "device": "duo",
+        "image": "docs/design/phone-design-map/actual/duo/images/T02.png",
+        "preserved_file": ".codex-checks/t02/before-final-map/duo.png",
+        "sha256": "4af916fa8efa0efd68ca1d74627d0f9e023e1f95fc0eb883c48155afc038ac78"
+      },
+      "after_source": ".codex-checks/t02/duo-closed-69241c8f/001-1398x2034.png",
+      "after_sha256": "fee161339eb94b6dbcbb6abb15431a0a6de76fb0800e6309b818911225a6ebba",
+      "source_revision": "69241c8f",
+      "device_udid": "6166B2F3-C5A7-41AC-B49C-45AADC66B872",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "collection_timestamp": 1793386727.8044615,
+      "collection_timestamp_kind": "native checkpoint file time",
+      "test": "CloudSyncConsentRegressionTests/testCloudSyncConsentHookPresentsAndDismissesSheet",
+      "normal_choices_minimum_height": 44,
+      "pose": {
+        "revision": "69241c8f",
+        "target": 0.0,
+        "angle_before": 0.0,
+        "angle_after": 0.0,
+        "active_display": "LCD",
+        "script_sha256": "e64102e2d3f68a0a10448628e6c813144866d1f565393bde48e007f6481597d4",
+        "captured_at": 1793386747.17403,
+        "native_visual_review": "passed-parent-and-independent-final-quality-agent"
+      },
+      "raw_pose_proof_sha256": "503ad103ef68c73975f300e0aebb74c6cddc07fa79026c019585a90a74340c09"
+    },
+    "duo-open": {
+      "before": {
+        "captured": {
+          "row_id": "T02",
+          "evidence": "cloud-sync-consent-view",
+          "test": "CloudSyncConsentRegressionTests/testCloudSyncConsentHookPresentsAndDismissesSheet()",
+          "action": "Cloud sync consent before dismissal",
+          "timestamp": 1791827290.258,
+          "image": "4A25176A-3C8B-42AD-907D-36B503AD0CF7.png",
+          "screen": "screen-1-2006x2852-Cloud sync consent before dismissal_1_411B20CC-9C0E-4261-BF24-AC51C370B3DA.png",
+          "file": "T02.png"
+        },
+        "global_source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+        "device": "duo-open",
+        "image": "docs/design/phone-design-map/actual/duo-open/images/T02.png",
+        "preserved_file": ".codex-checks/t02/before-final-map/duo-open.png",
+        "sha256": "a4438a2a789fa9367abc2bbc005509e667176fd3180e2152c58905d4af4a7015"
+      },
+      "after_source": ".codex-checks/t02/duo-open-69241c8f/001-2007x2853.png",
+      "after_sha256": "402c7aa4cc6724daf418f3ee21cb599235af904bce1ffaad2d90fc78953f6b5e",
+      "source_revision": "69241c8f",
+      "device_udid": "6166B2F3-C5A7-41AC-B49C-45AADC66B872",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "collection_timestamp": 1793386514.902052,
+      "collection_timestamp_kind": "native checkpoint file time",
+      "test": "CloudSyncConsentRegressionTests/testCloudSyncConsentHookPresentsAndDismissesSheet",
+      "normal_choices_minimum_height": 44,
+      "pose": {
+        "revision": "69241c8f",
+        "target": 180.0,
+        "angle_before": 180.0,
+        "angle_after": 180.0,
+        "active_display": "LCD-1",
+        "script_sha256": "e64102e2d3f68a0a10448628e6c813144866d1f565393bde48e007f6481597d4",
+        "captured_at": 1793386531.33497,
+        "native_visual_review": "passed-parent-and-independent-final-quality-agent"
+      },
+      "raw_pose_proof_sha256": "81df1e00e328469277aabcc26fbdc4bc708d2d64e05a9cda988b5016dc1dde05"
+    }
+  },
+  "final_quality_gate": {
+    "verdict": "PASS WITH NOTES",
+    "agent": "/root/t02_final_quality_gate",
+    "model": "gpt-6-sol",
+    "reasoning": "medium",
+    "reviewed_source": "69241c8f",
+    "findings": [],
+    "actual_images_reviewed": [
+      "regular",
+      "ipad",
+      "duo",
+      "duo-open",
+      "dark",
+      "maximum-text"
+    ],
+    "limits": [
+      "Forced mock tests verify presentation and dismissal, not real-account iCloud synchronization or persisted preference. Production callback/store semantics unchanged and statically reviewed.",
+      "Maximum-text and dark images retain actual earlier source revisions; final normal44pt selector passed all four tiers."
+    ]
+  }
+}
