@@ -271,16 +271,26 @@ struct HealthQueryResultCard: View {
         switch result.kind {
         case .condition:
             if let score = result.metrics.first(where: { $0.unit == .score }), score.value.isFinite {
-                ZStack {
-                    Circle().stroke(DS.Color.warmGlow.opacity(0.18), lineWidth: 12)
-                    Circle().trim(from: 0, to: min(max(score.value / 100, 0), 1))
-                        .stroke(DS.Color.warmGlow, style: StrokeStyle(lineWidth: 12, lineCap: .round))
-                        .rotationEffect(.degrees(-90))
-                    Text(score.unit.formatted(score.value)).font(.title.bold())
-                        .accessibilityIdentifier("health-query-hero-value")
+                VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                    ZStack {
+                        Circle().stroke(DS.Color.warmGlow.opacity(0.18), lineWidth: 12)
+                        Circle().trim(from: 0, to: min(max(score.value / 100, 0), 1))
+                            .stroke(DS.Color.warmGlow, style: StrokeStyle(lineWidth: 12, lineCap: .round))
+                            .rotationEffect(.degrees(-90))
+                        VStack(spacing: DS.Spacing.xxs) {
+                            Text(score.unit.formatted(score.value)).font(.title.bold())
+                                .accessibilityIdentifier("health-query-hero-value")
+                            Text("/100").font(.caption)
+                        }
+                    }
+                    .frame(width: min(244, max(104, heroFontSize * 2.2)), height: min(244, max(104, heroFontSize * 2.2)))
+                    .accessibilityLabel(score.title + " " + String(localized: "\(score.unit.formatted(score.value)) out of 100"))
+                    Text(score.title).font(.subheadline)
+                    if let date = score.date {
+                        Text(date.formatted(date: .abbreviated, time: .shortened))
+                            .font(.caption).foregroundStyle(DS.Color.textSecondary)
+                    }
                 }
-                .frame(width: 104, height: 104)
-                .accessibilityLabel(score.title + " " + score.unit.formatted(score.value))
             }
         case .personalRecord:
             Image(systemName: "medal.fill")
