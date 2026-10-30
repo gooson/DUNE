@@ -286,7 +286,7 @@ final class CumulativeStressDetailRedesignTests: SeededUITestBaseCase {
 
     func testDarkAppearanceKeepsKeyContentReachable() {
         var configuration = launchConfiguration
-        configuration.additionalArguments += ["-AppleInterfaceStyle", "Dark"]
+        configuration.additionalArguments += ["--ui-test-style", "dark"]
         launchApp(with: configuration)
         openStressDetail(relaunch: false)
         let ring = app.descendants(matching: .any)["stress-detail-hero-ring"].firstMatch
@@ -300,9 +300,9 @@ final class CumulativeStressDetailRedesignTests: SeededUITestBaseCase {
 
     private var factors: [(id: String, rawScore: String, weight: String)] {
         [
-            ("hrvVariability", "40", "50%"),
-            ("sleepConsistency", "46", "30%"),
-            ("activityLoad", "38", "20%")
+            ("hrvVariability", "40", "40%"),
+            ("sleepConsistency", "46", "35%"),
+            ("activityLoad", "38", "25%")
         ]
     }
 

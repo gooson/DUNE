@@ -1843,11 +1843,11 @@ final class DashboardViewModel {
                 score: 42,
                 level: .moderate,
                 contributions: [
-                    .init(factor: .hrvVariability, rawScore: 40, weight: 0.5,
+                    .init(factor: .hrvVariability, rawScore: 40, weight: 0.4,
                           detail: "Recent HRV pattern"),
-                    .init(factor: .sleepConsistency, rawScore: 46, weight: 0.3,
+                    .init(factor: .sleepConsistency, rawScore: 46, weight: 0.35,
                           detail: "Recent sleep consistency"),
-                    .init(factor: .activityLoad, rawScore: 38, weight: 0.2,
+                    .init(factor: .activityLoad, rawScore: 38, weight: 0.25,
                           detail: "Recent training load")
                 ],
                 trend: .stable
