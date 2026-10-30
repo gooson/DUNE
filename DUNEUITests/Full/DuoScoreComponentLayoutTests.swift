@@ -63,10 +63,27 @@ final class DuoScoreComponentLayoutTests: SeededUITestBaseCase {
         }
     }
 
-    func testConditionCompositionScoresFitAtMaximumTextSize() throws {
-        try auditSharedComposition(tab: "today", hero: AXID.dashboardHeroCondition,
-                                   screen: AXID.conditionScoreDetailScreen, route: "Condition",
-                                   extraArguments: ["--ui-visual-condition-components-fixture"])
+    func testConditionCompositionValuesFitAtMaximumTextSize() throws {
+        guard VisualAudit.isEnabled else { throw XCTSkip("Opt-in native Condition composition audit only") }
+        launchSeededTab("today", extraArguments: ["--ui-visual-condition-components-fixture"])
+        openDetail(from: AXID.dashboardHeroCondition, screen: AXID.conditionScoreDetailScreen)
+
+        let scroll = app.scrollViews[AXID.conditionScoreDetailScreen].firstMatch
+        let card = app.descendants(matching: .any)["score-composition-card"].firstMatch
+        XCTAssertTrue(revealCardContent(card, in: scroll), "Condition composition should be reachable")
+        let expectedValues = [
+            ("condition-component-value-hrv", "+2.00"),
+            ("condition-component-value-rhr", "0.0"),
+            ("condition-component-value-time", "0.0")
+        ]
+        for (id, expected) in expectedValues {
+            let value = app.staticTexts[id].firstMatch
+            XCTAssertTrue(revealWhole(value, in: scroll), "\(id) should fit at maximum AX size")
+            XCTAssertEqual(value.label, expected, "\(id) should retain its actual fixture value; zero has no sign")
+            VisualAudit.capture("Condition maximum AX \(id) complete value")
+        }
+        XCTAssertFalse(card.staticTexts["70%"].exists, "Condition must not imply a 70% HRV weight")
+        XCTAssertFalse(card.staticTexts["30%"].exists, "Condition must not imply a 30% RHR weight")
     }
 
     func testWellnessCompositionScoresFitAtMaximumTextSize() throws {
@@ -173,7 +190,6 @@ final class DuoScoreComponentLayoutTests: SeededUITestBaseCase {
             XCTAssertTrue(revealWhole(score, in: scroll), "\(route) component score should fit in the viewport")
             let value = try XCTUnwrap(Int(score.label), "Component score should be numeric")
             XCTAssertTrue((0...100).contains(value), "\(route) component score should be within 0...100")
-            if route == "Condition" { XCTAssertEqual(value, 100, "Condition should retain the three-digit fixture") }
             if value > 0 { populated += 1 }
             let reference = weights.min { abs($0.frame.midY - score.frame.midY) < abs($1.frame.midY - score.frame.midY) }
             if let reference { assertSingleLine(score, against: reference, description: "\(route) component") }
@@ -202,25 +218,45 @@ final class DuoScoreComponentLayoutTests: SeededUITestBaseCase {
 
     private func revealCardContent(_ card: XCUIElement, in scroll: XCUIElement) -> Bool {
         guard scroll.waitForExistence(timeout: 8) else { return false }
-        for _ in 0..<20 {
-            if card.exists && card.staticTexts.firstMatch.exists { return true }
-            scroll.swipeUp(velocity: .slow)
+        let isCondition = scroll.identifier == AXID.conditionScoreDetailScreen
+        for _ in 0..<(isCondition ? 32 : 20) {
+            if card.exists && card.staticTexts.firstMatch.exists,
+               !isCondition || scroll.frame.intersection(app.windows.firstMatch.frame)
+                    .insetBy(dx: 4, dy: 4).intersects(card.frame) { return true }
+            if isCondition {
+                // Keep the drag outside the nested chart plots, which consume center gestures.
+                scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.05, dy: 0.75))
+                    .press(forDuration: 0.05, thenDragTo: scroll.coordinate(
+                        withNormalizedOffset: CGVector(dx: 0.05, dy: 0.25)
+                    ), withVelocity: .slow, thenHoldForDuration: 0.2)
+            } else {
+                scroll.swipeUp(velocity: .slow)
+            }
         }
         return card.exists && card.staticTexts.firstMatch.exists
+            && (!isCondition || scroll.frame.intersection(app.windows.firstMatch.frame)
+                .insetBy(dx: 4, dy: 4).intersects(card.frame))
     }
 
     private func revealWhole(_ element: XCUIElement, in scroll: XCUIElement) -> Bool {
         guard scroll.waitForExistence(timeout: 8) else { return false }
-        for _ in 0..<20 {
+        let isCondition = scroll.identifier == AXID.conditionScoreDetailScreen
+        for _ in 0..<(isCondition ? 32 : 20) {
             let viewport = scroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 4)
             if element.exists && viewport.contains(element.frame) { return true }
             if element.exists && viewport.height > 0 {
                 let delta = element.frame.midY - viewport.midY
                 let travel = min(max(abs(delta), 20), viewport.height * 0.25) / scroll.frame.height
                 let startY: CGFloat = delta < 0 ? 0.3 : 0.7
-                scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: startY))
+                let dragX: CGFloat = isCondition ? 0.05 : 0.5
+                scroll.coordinate(withNormalizedOffset: CGVector(dx: dragX, dy: startY))
                     .press(forDuration: 0.05, thenDragTo: scroll.coordinate(
-                        withNormalizedOffset: CGVector(dx: 0.5, dy: startY + (delta < 0 ? travel : -travel))
+                        withNormalizedOffset: CGVector(dx: dragX, dy: startY + (delta < 0 ? travel : -travel))
+                    ), withVelocity: .slow, thenHoldForDuration: 0.2)
+            } else if isCondition {
+                scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.05, dy: 0.75))
+                    .press(forDuration: 0.05, thenDragTo: scroll.coordinate(
+                        withNormalizedOffset: CGVector(dx: 0.05, dy: 0.25)
                     ), withVelocity: .slow, thenHoldForDuration: 0.2)
             } else {
                 scroll.swipeUp(velocity: .slow)

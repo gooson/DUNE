@@ -1,0 +1,91 @@
+{
+  "app_revision": "abe732c134f90e141e31207e2e56dc7cf1a2978c",
+  "final_test_revision": "ee113c0e1d0fe00dc17631927b2af94d00a87324",
+  "app_and_unit_diff_since_abe": [],
+  "unit": {
+    "passed": 32,
+    "failed": 0,
+    "skipped": 0,
+    "receipt": "final-unit-result.json"
+  },
+  "ui": {
+    "regular": {
+      "passed": 7,
+      "failed": 0,
+      "skipped": 0,
+      "receipt": "release-iphone-summary.json"
+    },
+    "duo": {
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "receipt": "release-duo-closed-summary.json"
+    },
+    "ipad": {
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "receipt": "release-ipad-summary.json"
+    },
+    "duo-open": {
+      "unique_passed": 6,
+      "cases": [
+        "ConditionDetailRedesignTests/testHeroContributionsAndUnifiedTrendAreReachable()",
+        "ConditionDetailRedesignTests/testMaximumAccessibilitySizeKeepsHeroTrendAndExplainerUsable()",
+        "ConditionDetailRedesignTests/testPeriodControlsKeep44PointTargetsAndAcceptEdgeTaps()",
+        "ConditionDetailRedesignTests/testPeriodWindowAndTrendControlsUpdateVisibleReadback()",
+        "DuoScoreComponentLayoutTests/testConditionCompositionValuesFitAtMaximumTextSize()",
+        "DuoScoreComponentLayoutTests/testConditionSubscoreChartsFitAtMaximumTextSize()"
+      ],
+      "runs": [
+        {
+          "receipt": "release-duo-open-first-summary.json",
+          "passed": 5,
+          "failed": 1
+        },
+        {
+          "receipt": "release-duo-composition-retry-summary.json",
+          "passed": 1,
+          "failed": 0
+        }
+      ],
+      "note": "Original failed run retained; only the failed navigation case retried after test-helper predicate fix."
+    }
+  },
+  "total_unique_device_cases": 15,
+  "scope": "selected T04 tests; not full suite; DEBUG fixture100, English, light/default DUNE",
+  "captures": {
+    "regular": {
+      "source_revision": "abe732c1",
+      "device_id": "15B032B0-FEA4-465A-B5C1-A10F7CADA216",
+      "source_sidecar": "current-regular-source.json",
+      "image_sha256": "0a0f41163ad8f5b237cf3c6e11756ec9c3c419d986d9c03d0fbab332e024fe7e",
+      "accessibility_sha256": "8b5e02f6f7f153937e2582c875d70833fc7e93558c2a32a5f1a3c86deab5ae83",
+      "hashes_verified": true
+    },
+    "ipad": {
+      "source_revision": "ee113c0e",
+      "device_id": "7AA4DF0B-171B-427C-B9C5-BC2C116AEF30",
+      "source_sidecar": "current-ipad-source.json",
+      "image_sha256": "c17d81d575c2a3ec69893b246095edfe549c12a3ff901a3666c91ada52f35cf5",
+      "accessibility_sha256": "7fefe6c79a3391d47c7463ed2514e8fc2904457e4f666c218424f493dee65bc4",
+      "hashes_verified": true
+    },
+    "duo": {
+      "source_revision": "ee113c0e",
+      "device_id": "F8804553-93D0-4ACF-9A72-DC466957BCC4",
+      "source_sidecar": "current-duo-source.json",
+      "image_sha256": "b299c5e88353a63e2b60f7cd59067b2769602c05a6a3378d7a5531fd8c0f120f",
+      "accessibility_sha256": "740d53335b024e4cef48cb1b8575a8faa8a9a42b67dc8ccc6aa3b47e336a1749",
+      "hashes_verified": true
+    },
+    "duo-open": {
+      "source_revision": "abe732c1",
+      "device_id": "F8804553-93D0-4ACF-9A72-DC466957BCC4",
+      "source_sidecar": "current-duo-open-source.json",
+      "image_sha256": "991bd141aa9d21a5339bb017f3751c2199bd0c79e1a9cfef1693d01fdf0fbbb1",
+      "accessibility_sha256": "9bc199edcbbd226b173f56efa3cdce515756ca8f3a345c3497c040ff3264c6ac",
+      "hashes_verified": true
+    }
+  }
+}

@@ -10,7 +10,7 @@ from pathlib import Path
 EXECUTED = re.compile(
     r"Executed (\d+) tests?, with (?:(\d+) tests? skipped and )?(\d+) failures?(?: \((\d+) unexpected\))?"
 )
-SWIFT_TESTING = re.compile(r"Test run with (\d+) tests? (?:passed|failed)")
+SWIFT_TESTING = re.compile(r"Test run with (\d+) tests?(?: in [1-9]\d* suites?)? (?:passed|failed)")
 FAILURE = re.compile(
     r"(?:^|\s)(?:error:|Testing failed:|Test Case .* failed|Test .* failed|"
     r"\*\* TEST FAILED \*\*|Assertion Failure|failed - )",

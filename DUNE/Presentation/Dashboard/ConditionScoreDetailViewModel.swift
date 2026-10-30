@@ -24,7 +24,6 @@ final class ConditionScoreDetailViewModel {
     var chartData: [ChartDataPoint] = []
     var hrvTrend: [ChartDataPoint] = []
     var rhrTrend: [ChartDataPoint] = []
-    var summaryStats: MetricSummary?
     var highlights: [Highlight] = []
     var isLoading = false
     var errorMessage: String?
@@ -33,6 +32,8 @@ final class ConditionScoreDetailViewModel {
     private(set) var scrollDomain: ClosedRange<Date> = Date.now...Date.now
     private(set) var currentScore: ConditionScore?
     private(set) var limitedHistoryStartDate: Date?
+
+    private var summarySourceData: [ChartDataPoint] = []
 
     private let hrvService: HRVQuerying
     private let historyService: any MetricHistoryQuerying
@@ -52,14 +53,13 @@ final class ConditionScoreDetailViewModel {
         self.historyService = historyService ?? MetricHistoryQueryService(manager: healthKitManager)
         self.scoreRefreshService = scoreRefreshService
         self.nowProvider = nowProvider
-        recalculateScrollDomain()
+        resetScrollPosition()
     }
 
     func configure(score: ConditionScore) {
         self.currentScore = score
         limitedHistoryStartDate = nil
         resetScrollPosition()
-        recalculateScrollDomain()
     }
 
     func loadData() async {
@@ -94,7 +94,9 @@ final class ConditionScoreDetailViewModel {
 
     /// Label showing the currently visible date range, like Health app.
     var visibleRangeLabel: String {
-        selectedPeriod.visibleRangeLabel(from: scrollPosition)
+        Self.visibleRangeLabel(
+            from: scrollPosition, period: selectedPeriod
+        )
     }
 
     var visibleChartPointCount: Int {
@@ -102,28 +104,88 @@ final class ConditionScoreDetailViewModel {
         return chartData.count { $0.date >= scrollPosition && $0.date < end }
     }
 
-    private func resetScrollPosition() {
-        if selectedPeriod == .day {
-            // Rolling 24h: scroll to show the full 24h window starting from now-24h
-            scrollPosition = nowProvider().addingTimeInterval(-ScoreRefreshService.rollingWindowSeconds)
-        } else {
-            let range = selectedPeriod.dateRange(offset: 0)
-            scrollPosition = range.start
+    /// Summary follows the plotted window, using daily/hourly values before plot aggregation.
+    var visibleSummaryStats: MetricSummary? {
+        guard !isLoading else { return nil }
+        return Self.makeVisibleSummary(
+            from: summarySourceData,
+            start: scrollPosition,
+            duration: selectedPeriod.visibleDomainSeconds
+        )
+    }
+
+    static func makeVisibleSummary(
+        from points: [ChartDataPoint], start: Date, duration: TimeInterval
+    ) -> MetricSummary? {
+        ScoreDetailHistory.summary(from: points, start: start, duration: duration)
+    }
+
+    private var windowReferenceDate: Date = .now
+    private var latestWindowStart: Date = .now
+
+    var canStepBackward: Bool {
+        scrollPosition.addingTimeInterval(-selectedPeriod.visibleDomainSeconds) >= scrollDomain.lowerBound
+    }
+
+    var canStepForward: Bool {
+        scrollPosition.addingTimeInterval(selectedPeriod.visibleDomainSeconds) <= latestWindowStart
+    }
+
+    func stepVisiblePeriod(by offset: Int) {
+        guard (offset == -1 && canStepBackward) || (offset == 1 && canStepForward) else { return }
+        // A partial jump at either boundary would overlap the adjacent summary window.
+        scrollPosition = scrollPosition.addingTimeInterval(Double(offset) * selectedPeriod.visibleDomainSeconds)
+    }
+
+    /// Uses the chart's fixed duration for every page, including across DST and leap years.
+    static func historyWindow(
+        for period: TimePeriod,
+        referenceDate: Date,
+        calendar: Calendar = .current
+    ) -> (latestStart: Date, domain: ClosedRange<Date>) {
+        ScoreDetailHistory.window(for: period, referenceDate: referenceDate, calendar: calendar)
+    }
+
+    static func visibleRangeLabel(
+        from start: Date,
+        period: TimePeriod,
+        calendar: Calendar = .current,
+        locale: Locale = .current
+    ) -> String {
+        let displayEnd = start.addingTimeInterval(period.visibleDomainSeconds - 1)
+        if calendar.isDate(start, inSameDayAs: displayEnd) {
+            let formatter = DateFormatter()
+            formatter.calendar = calendar
+            formatter.timeZone = calendar.timeZone
+            formatter.locale = locale
+            formatter.setLocalizedDateFormatFromTemplate(period == .day ? "MMMdE" : "yMMMd")
+            return formatter.string(from: start)
         }
+        let formatter = DateIntervalFormatter()
+        formatter.calendar = calendar
+        formatter.timeZone = calendar.timeZone
+        formatter.locale = locale
+        formatter.dateTemplate = period == .day ? "MMMdE" : "yMMMd"
+        return formatter.string(from: start, to: displayEnd)
+    }
+
+    private func resetScrollPosition() {
+        windowReferenceDate = nowProvider()
+        let window = Self.historyWindow(for: selectedPeriod, referenceDate: windowReferenceDate)
+        latestWindowStart = window.latestStart
+        scrollDomain = window.domain
+        scrollPosition = window.latestStart
     }
 
     // MARK: - Extended Range
 
     private var extendedRange: (start: Date, end: Date) {
-        let currentRange = selectedPeriod.dateRange(offset: 0)
-        let bufferRange = selectedPeriod.dateRange(offset: -selectedPeriod.scrollBufferPeriods)
-        return (start: bufferRange.start, end: currentRange.end)
-    }
-
-    private func recalculateScrollDomain() {
-        let range = extendedRange
-        let upperBound = selectedPeriod.scrollDomainUpperBound(referenceDate: range.end)
-        scrollDomain = range.start...max(range.end, upperBound)
+        let bufferRange = selectedPeriod.dateRange(
+            offset: -selectedPeriod.scrollBufferPeriods, referenceDate: windowReferenceDate
+        )
+        // Preserve the calendar preload used by highlights/subscores, adding any
+        // history required by complete fixed-duration chart pages.
+        return (start: min(bufferRange.start, scrollDomain.lowerBound), end: windowReferenceDate)
     }
 
     private func recalculateTrendLine() {
@@ -164,48 +226,23 @@ final class ConditionScoreDetailViewModel {
 
         // Fetch all HRV samples for the extended period
         let calendar = Calendar.current
-        let daysInRange = max(1, calendar.dateComponents([.day], from: range.start, to: range.end).day ?? 7)
-        let currentRHRStart = calendar.date(
+        let baselineStart = calendar.date(
             byAdding: .day,
             value: -CalculateConditionScoreUseCase.conditionWindowDays,
             to: range.start
         ) ?? range.start
 
         async let currentSamplesTask = hrvService.fetchHRVSamples(
-            days: daysInRange + CalculateConditionScoreUseCase.conditionWindowDays
+            start: baselineStart, end: range.end
         )
         async let currentRHRTask = hrvService.fetchRHRCollection(
-            start: currentRHRStart,
+            start: baselineStart,
             end: range.end,
-            interval: DateComponents(day: 1)
-        )
-
-        // Previous period for comparison (based on current period, not extended)
-        let prevRange = HealthDataAggregator.previousPeriodRange(for: selectedPeriod, offset: 0)
-        let prevDays = max(1, calendar.dateComponents([.day], from: prevRange.start, to: prevRange.end).day ?? 7)
-        let currentPeriodDays = max(1, calendar.dateComponents(
-            [.day],
-            from: selectedPeriod.dateRange(offset: 0).start,
-            to: selectedPeriod.dateRange(offset: 0).end
-        ).day ?? 7)
-        let prevRHRStart = calendar.date(
-            byAdding: .day,
-            value: -CalculateConditionScoreUseCase.conditionWindowDays,
-            to: prevRange.start
-        ) ?? prevRange.start
-        async let prevSamplesTask = hrvService.fetchHRVSamples(
-            days: currentPeriodDays + prevDays + CalculateConditionScoreUseCase.conditionWindowDays
-        )
-        async let prevRHRTask = hrvService.fetchRHRCollection(
-            start: prevRHRStart,
-            end: prevRange.end,
             interval: DateComponents(day: 1)
         )
 
         let allSamples = try await currentSamplesTask
         let allRHR = try await currentRHRTask
-        let allSamplesForPrev = try await prevSamplesTask
-        let allRHRForPrev = try await prevRHRTask
 
         // Compute daily scores for the extended range
         var allScores = computeDailyScores(
@@ -225,15 +262,8 @@ final class ConditionScoreDetailViewModel {
             )
         }
 
-        // Compute daily scores for the previous period
-        let previousScores = computeDailyScores(
-            samples: allSamplesForPrev,
-            rhrCollection: allRHRForPrev,
-            range: (start: prevRange.start, end: prevRange.end),
-            calendar: calendar
-        )
-
         guard isCurrentReloadRequest(requestID) else { return }
+        summarySourceData = allScores
         chartData = allScores
 
         // Sub-score trends: daily HRV averages and RHR averages within current period
@@ -253,18 +283,6 @@ final class ConditionScoreDetailViewModel {
                 chartData, unit: selectedPeriod.aggregationUnit
             )
         }
-
-        // Summary stats from current period only
-        let currentPeriodScores = allScores.filter {
-            $0.date >= currentPeriodRange.start && $0.date <= currentPeriodRange.end
-        }
-
-        summaryStats = HealthDataAggregator.computeSummary(
-            from: currentPeriodScores.map(\.value),
-            previousPeriodValues: previousScores.isEmpty ? nil : previousScores.map(\.value)
-        )
-
-        recalculateScrollDomain()
     }
 
     /// Computes daily condition scores within the given range.
@@ -329,11 +347,9 @@ final class ConditionScoreDetailViewModel {
 
     private func loadHourlyData(requestID: Int) async throws {
         let calendar = Calendar.current
-        let now = nowProvider()
+        let now = windowReferenceDate
         let historyStart = extendedRange.start
         let displayStart = max(historyStart, limitedHistoryStartDate ?? historyStart)
-        let twentyFourHoursAgo = now.addingTimeInterval(-ScoreRefreshService.rollingWindowSeconds)
-        let fortyEightHoursAgo = now.addingTimeInterval(-ScoreRefreshService.rollingWindowSeconds * 2)
         let baselineStart = calendar.date(
             byAdding: .day,
             value: -CalculateConditionScoreUseCase.conditionWindowDays,
@@ -376,19 +392,11 @@ final class ConditionScoreDetailViewModel {
             calendar: calendar
         )
 
-        let values = chartData.filter { $0.date >= twentyFourHoursAgo }.map(\.value)
-        let previousValues = chartData.filter {
-            $0.date >= fortyEightHoursAgo && $0.date < twentyFourHoursAgo
-        }.map(\.value)
-        summaryStats = HealthDataAggregator.computeSummary(
-            from: values,
-            previousPeriodValues: previousValues.isEmpty ? nil : previousValues
-        )
+        summarySourceData = chartData
 
         // Sub-scores not shown for hourly view
         hrvTrend = []
         rhrTrend = []
-        recalculateScrollDomain()
     }
 
     /// Evaluates only hours backed by HRV measurements. Both Today and detail

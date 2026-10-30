@@ -1,0 +1,49 @@
+{
+  "devicesAndConfigurations": [
+    {
+      "device": {
+        "architecture": "arm64",
+        "deviceId": "F8804553-93D0-4ACF-9A72-DC466957BCC4",
+        "deviceName": "iPhone Duo initialized-wt-Health-detail-redesign-l03-19e74dbe28e2",
+        "modelName": "iPhone",
+        "osBuildNumber": "24A94425",
+        "osVersion": "27.1",
+        "platform": "iOS Simulator"
+      },
+      "expectedFailures": 0,
+      "failedTests": 1,
+      "passedTests": 5,
+      "skippedTests": 0,
+      "testPlanConfiguration": {
+        "configurationId": "1",
+        "configurationName": "Design Capture"
+      }
+    }
+  ],
+  "environmentDescription": "DUNEUITests-DesignCapture · Built with macOS 27.2",
+  "expectedFailures": 0,
+  "failedTests": 1,
+  "finishTime": 1793310062.538,
+  "passedTests": 5,
+  "result": "Failed",
+  "runtimeWarnings": [],
+  "skippedTests": 0,
+  "startTime": 1793309440.875,
+  "statistics": [],
+  "testFailures": [
+    {
+      "failureText": "XCTAssertTrue failed - condition-component-value-hrv should fit at maximum AX size",
+      "targetName": "DUNEUITests",
+      "testIdentifier": 5,
+      "testIdentifierString": "DuoScoreComponentLayoutTests/testConditionCompositionValuesFitAtMaximumTextSize()",
+      "testIdentifierURL": "test://com.apple.xcode/DUNE/DUNEUITests/DuoScoreComponentLayoutTests/testConditionCompositionValuesFitAtMaximumTextSize",
+      "testName": "testConditionCompositionValuesFitAtMaximumTextSize()"
+    }
+  ],
+  "title": "Test - DUNEUITests",
+  "topInsights": [],
+  "totalTestCount": 6,
+  "source_revision": "abe732c1",
+  "source_worktree_dirty": true,
+  "xcresult": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.30_06-30-40-+0900.xcresult"
+}

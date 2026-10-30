@@ -93,6 +93,32 @@ private struct StubLimitedConditionHistory: MetricHistoryQuerying {
     }
 }
 
+private actor RecordingConditionQueries: HRVQuerying {
+    private(set) var hrvRanges: [DateInterval] = []
+    private(set) var rhrRanges: [DateInterval] = []
+    private(set) var relativeHRVFetchCount = 0
+
+    func fetchHRVSamples(days: Int) async throws -> [HRVSample] {
+        relativeHRVFetchCount += 1
+        return []
+    }
+
+    func fetchHRVSamples(start: Date, end: Date) async throws -> [HRVSample] {
+        hrvRanges.append(DateInterval(start: start, end: end))
+        return []
+    }
+
+    func fetchRestingHeartRate(for date: Date) async throws -> Double? { nil }
+    func fetchLatestRestingHeartRate(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
+    func fetchHRVCollection(start: Date, end: Date, interval: DateComponents) async throws -> [(date: Date, average: Double)] { [] }
+    func fetchRHRCollection(
+        start: Date, end: Date, interval: DateComponents
+    ) async throws -> [(date: Date, min: Double, max: Double, average: Double)] {
+        rhrRanges.append(DateInterval(start: start, end: end))
+        return []
+    }
+}
+
 // MARK: - Tests
 
 @Suite("ConditionScoreDetailViewModel")
@@ -206,8 +232,8 @@ struct ConditionScoreDetailViewModelTests {
 
         await vm.loadData()
 
-        #expect(vm.summaryStats != nil)
-        if let stats = vm.summaryStats {
+        #expect(vm.visibleSummaryStats != nil)
+        if let stats = vm.visibleSummaryStats {
             #expect(stats.average >= 0 && stats.average <= 100)
             #expect(stats.min >= 0)
             #expect(stats.max <= 100)
@@ -225,7 +251,7 @@ struct ConditionScoreDetailViewModelTests {
         await vm.loadData()
 
         #expect(vm.chartData.isEmpty)
-        #expect(vm.summaryStats == nil)
+        #expect(vm.visibleSummaryStats == nil)
         #expect(vm.highlights.isEmpty)
     }
 
@@ -273,7 +299,7 @@ struct ConditionScoreDetailViewModelTests {
 
         #expect(vm.currentScore?.score == 75)
         #expect(vm.currentScore?.status == .good)
-        #expect(vm.scrollPosition == TimePeriod.week.dateRange.start)
+        #expect(vm.scrollPosition == vm.scrollDomain.upperBound.addingTimeInterval(-TimePeriod.week.visibleDomainSeconds))
     }
 
     // MARK: - Loading State
@@ -359,7 +385,7 @@ struct ConditionScoreDetailViewModelTests {
 
         // Rolling 24h: should include today + yesterday points within window
         #expect(vm.chartData.count >= 4)
-        #expect(vm.summaryStats != nil)
+        #expect(vm.visibleSummaryStats != nil)
 
         // The Today hero's shared calculation must match the visible detail
         // window when both use the same measured samples and current score.
@@ -439,8 +465,8 @@ struct ConditionScoreDetailViewModelTests {
         // At 3am: should include yesterday's hourly data within the 24h window
         #expect(vm.chartData.count >= 3)
         // Summary stats should reflect multiple data points
-        #expect(vm.summaryStats != nil)
-        if let stats = vm.summaryStats {
+        #expect(vm.visibleSummaryStats != nil)
+        if let stats = vm.visibleSummaryStats {
             #expect(stats.average > 0)
         }
     }
@@ -533,13 +559,245 @@ struct ConditionScoreDetailViewModelTests {
         await vm.loadData()
 
         #expect(vm.chartData.isEmpty)
-        #expect(vm.summaryStats == nil)
+        #expect(vm.visibleSummaryStats == nil)
 
         await service.resumeFirstFetch()
         await firstTask.value
 
         #expect(vm.chartData.isEmpty)
-        #expect(vm.summaryStats == nil)
+        #expect(vm.visibleSummaryStats == nil)
         #expect(vm.isLoading == false)
+    }
+}
+
+
+// MARK: - Visible history card
+
+extension ConditionScoreDetailViewModelTests {
+    @Test("Visible summary uses half-open current and previous windows")
+    func visibleSummaryRespectsWindowBoundaries() throws {
+        let start = Date(timeIntervalSince1970: 1_700_000_000)
+        let duration: TimeInterval = 604_800
+        let points = [
+            ChartDataPoint(date: start.addingTimeInterval(-duration - 1), value: 999),
+            ChartDataPoint(date: start.addingTimeInterval(-duration), value: 20),
+            ChartDataPoint(date: start.addingTimeInterval(-1), value: 40),
+            ChartDataPoint(date: start, value: 60),
+            ChartDataPoint(date: start.addingTimeInterval(duration - 1), value: 100),
+            ChartDataPoint(date: start.addingTimeInterval(duration), value: 999)
+        ]
+        let summary = try #require(ConditionScoreDetailViewModel.makeVisibleSummary(
+            from: points, start: start, duration: duration
+        ))
+        #expect(summary.average == 80)
+        #expect(summary.min == 60)
+        #expect(summary.max == 100)
+        #expect(summary.count == 2)
+        #expect(summary.previousPeriodAverage == 30)
+    }
+
+    @Test("Missing history is not synthesized as a zero score")
+    func visibleSummaryDistinguishesZeroFromNoData() throws {
+        let start = Date(timeIntervalSince1970: 1_700_000_000)
+        #expect(ConditionScoreDetailViewModel.makeVisibleSummary(
+            from: [], start: start, duration: 60
+        ) == nil)
+        let summary = try #require(ConditionScoreDetailViewModel.makeVisibleSummary(
+            from: [ChartDataPoint(date: start, value: 0)], start: start, duration: 60
+        ))
+        #expect(summary.average == 0)
+        #expect(summary.count == 1)
+        #expect(summary.previousPeriodAverage == nil)
+        #expect(summary.changePercentage == nil)
+    }
+
+    @Test("Long-window summary weights raw days, not monthly plot means")
+    func visibleSummaryRetainsDailyWeighting() throws {
+        let start = Date(timeIntervalSince1970: 1_700_000_000)
+        var points = (0..<31).map { day in
+            ChartDataPoint(date: start.addingTimeInterval(Double(day) * 86_400), value: 80)
+        }
+        points.append(ChartDataPoint(date: start.addingTimeInterval(31 * 86_400), value: 20))
+        let summary = try #require(ConditionScoreDetailViewModel.makeVisibleSummary(
+            from: points, start: start, duration: TimePeriod.sixMonths.visibleDomainSeconds
+        ))
+        #expect(summary.average == 78.125)
+        #expect(summary.count == 32)
+        #expect(summary.min == 20)
+    }
+
+    @Test("Period actions cover complete pages and stop at loaded history", arguments: TimePeriod.allCases)
+    func periodActionsRespectHistoryBounds(period: TimePeriod) {
+        let now = Date()
+        let vm = ConditionScoreDetailViewModel(
+            hrvService: MockHRVService(),
+            historyService: StubLimitedConditionHistory(hrvStart: nil, rhrStart: nil),
+            nowProvider: { now }
+        )
+        vm.configure(score: ConditionScore(score: 50, date: now))
+        vm.selectedPeriod = period
+        let current = vm.scrollPosition
+        #expect(!vm.canStepForward)
+        for _ in 0..<period.scrollBufferPeriods {
+            #expect(vm.canStepBackward)
+            let previousStart = vm.scrollPosition
+            vm.stepVisiblePeriod(by: -1)
+            #expect(vm.scrollPosition.addingTimeInterval(period.visibleDomainSeconds) == previousStart)
+        }
+        vm.stepVisiblePeriod(by: -1)
+        #expect(vm.scrollPosition == vm.scrollDomain.lowerBound)
+        #expect(!vm.canStepBackward)
+        for _ in 0..<20 { vm.stepVisiblePeriod(by: 1) }
+        #expect(vm.scrollPosition == current)
+        #expect(!vm.canStepForward)
+        vm.stepVisiblePeriod(by: 2)
+        #expect(vm.scrollPosition == current)
+    }
+}
+
+// MARK: - Fixed chart window boundaries
+
+extension ConditionScoreDetailViewModelTests {
+    private func gregorianCalendar(_ timeZone: String) -> Calendar {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(identifier: timeZone)!
+        return calendar
+    }
+
+    @Test("Six-month pages meet at May 1 without repeating April 30")
+    func sixMonthPagesDoNotOverlap() throws {
+        let calendar = gregorianCalendar("Asia/Seoul")
+        let reference = try #require(calendar.date(from: DateComponents(year: 2026, month: 10, day: 30, hour: 12)))
+        let window = ConditionScoreDetailViewModel.historyWindow(for: .sixMonths, referenceDate: reference, calendar: calendar)
+        let expectedStart = try #require(calendar.date(from: DateComponents(year: 2026, month: 5, day: 1)))
+        let expectedLower = try #require(calendar.date(from: DateComponents(year: 2025, month: 10, day: 30)))
+        #expect(window.latestStart == expectedStart)
+        #expect(window.domain.lowerBound == expectedLower)
+        #expect(window.domain.lowerBound.addingTimeInterval(TimePeriod.sixMonths.visibleDomainSeconds) == window.latestStart)
+
+        let summary = try #require(ConditionScoreDetailViewModel.makeVisibleSummary(
+            from: [
+                ChartDataPoint(date: expectedStart.addingTimeInterval(-1), value: 20),
+                ChartDataPoint(date: expectedStart, value: 80),
+                ChartDataPoint(date: calendar.startOfDay(for: reference), value: 100)
+            ], start: window.latestStart, duration: TimePeriod.sixMonths.visibleDomainSeconds
+        ))
+        #expect(summary.average == 90)
+        #expect(summary.previousPeriodAverage == 20)
+        #expect(summary.count == 2)
+    }
+
+    @Test("Month-end and leap-year windows retain today and their exact chart duration")
+    func monthEndAndLeapYearWindows() throws {
+        let calendar = gregorianCalendar("Asia/Seoul")
+        let cases: [(period: TimePeriod, year: Int, month: Int, day: Int, startYear: Int, startMonth: Int, startDay: Int)] = [
+            (.month, 2026, 3, 31, 2026, 3, 1),
+            (.month, 2026, 2, 28, 2026, 1, 29),
+            (.year, 2024, 3, 1, 2023, 3, 3),
+            (.year, 2025, 2, 28, 2024, 3, 1)
+        ]
+        for item in cases {
+            let reference = try #require(calendar.date(from: DateComponents(
+                year: item.year, month: item.month, day: item.day, hour: 12
+            )))
+            let expectedStart = try #require(calendar.date(from: DateComponents(
+                year: item.startYear, month: item.startMonth, day: item.startDay
+            )))
+            let window = ConditionScoreDetailViewModel.historyWindow(for: item.period, referenceDate: reference, calendar: calendar)
+            #expect(window.latestStart == expectedStart)
+            #expect(window.domain.upperBound.timeIntervalSince(window.latestStart) == item.period.visibleDomainSeconds)
+            #expect(calendar.startOfDay(for: reference) >= window.latestStart)
+            #expect(reference < window.domain.upperBound)
+        }
+    }
+
+    @Test("Fixed windows remain contiguous across spring and fall DST", arguments: TimePeriod.allCases)
+    func daylightSavingWindows(period: TimePeriod) throws {
+        let calendar = gregorianCalendar("America/Los_Angeles")
+        for (month, day) in [(3, 10), (11, 3)] {
+            let reference = try #require(calendar.date(from: DateComponents(year: 2026, month: month, day: day, hour: 12)))
+            let window = ConditionScoreDetailViewModel.historyWindow(for: period, referenceDate: reference, calendar: calendar)
+            let expectedEnd = period == .day ? reference : try #require(calendar.date(byAdding: .day, value: 1, to: calendar.startOfDay(for: reference)))
+            #expect(window.domain.upperBound == expectedEnd)
+            #expect(window.domain.upperBound.timeIntervalSince(window.latestStart) == period.visibleDomainSeconds)
+            #expect(window.latestStart.timeIntervalSince(window.domain.lowerBound)
+                    == Double(period.scrollBufferPeriods) * period.visibleDomainSeconds)
+            if period == .week {
+                #expect(calendar.component(.hour, from: window.latestStart) == (month == 3 ? 23 : 1))
+            }
+        }
+    }
+
+    @Test("Off-grid positions never jump a partial overlapping page")
+    func offGridPeriodActionsDoNotClamp() {
+        let now = Date()
+        let vm = ConditionScoreDetailViewModel(
+            hrvService: MockHRVService(),
+            historyService: StubLimitedConditionHistory(hrvStart: nil, rhrStart: nil),
+            nowProvider: { now }
+        )
+        let current = vm.scrollPosition
+        let nearLowerBound = vm.scrollDomain.lowerBound.addingTimeInterval(3600)
+        vm.scrollPosition = nearLowerBound
+        #expect(!vm.canStepBackward)
+        vm.stepVisiblePeriod(by: -1)
+        #expect(vm.scrollPosition == nearLowerBound)
+        #expect(vm.canStepForward)
+        vm.stepVisiblePeriod(by: 1)
+        #expect(vm.scrollPosition == nearLowerBound.addingTimeInterval(TimePeriod.week.visibleDomainSeconds))
+
+        let nearCurrent = current.addingTimeInterval(-3600)
+        vm.scrollPosition = nearCurrent
+        #expect(!vm.canStepForward)
+        vm.stepVisiblePeriod(by: 1)
+        #expect(vm.scrollPosition == nearCurrent)
+    }
+
+    @Test("One HRV and RHR query cover the calendar preload and fixed-window history")
+    func queryRangeCoversLoadedWindowsWithoutLegacyComparisonQueries() async throws {
+        let reference = try #require(calendar.date(from: DateComponents(year: 2026, month: 10, day: 30, hour: 12)))
+        let service = RecordingConditionQueries()
+        let vm = ConditionScoreDetailViewModel(
+            hrvService: service,
+            historyService: StubLimitedConditionHistory(hrvStart: nil, rhrStart: nil),
+            nowProvider: { reference }
+        )
+        await vm.loadData()
+
+        let hrvRanges = await service.hrvRanges
+        let rhrRanges = await service.rhrRanges
+        #expect(hrvRanges.count == 1)
+        #expect(rhrRanges.count == 1)
+        #expect(await service.relativeHRVFetchCount == 0)
+        let calendarStart = TimePeriod.week.dateRange(offset: -TimePeriod.week.scrollBufferPeriods, referenceDate: reference).start
+        let expectedStart = try #require(calendar.date(
+            byAdding: .day, value: -CalculateConditionScoreUseCase.conditionWindowDays,
+            to: min(calendarStart, vm.scrollDomain.lowerBound)
+        ))
+        let query = try #require(hrvRanges.first)
+        #expect(query.start == expectedStart)
+        #expect(query.end == reference)
+        #expect(rhrRanges.first == query)
+        #expect(query.start < vm.scrollDomain.lowerBound)
+        #expect(query.end > vm.scrollPosition)
+    }
+
+    @Test("Long-window labels show actual inclusive dates, including both years")
+    func visibleLabelsUseActualEndpoints() throws {
+        let calendar = gregorianCalendar("Asia/Seoul")
+        let locale = Locale(identifier: "en_US")
+        let sixMonthStart = try #require(calendar.date(from: DateComponents(year: 2026, month: 5, day: 1)))
+        let sixMonthLabel = ConditionScoreDetailViewModel.visibleRangeLabel(
+            from: sixMonthStart, period: .sixMonths, calendar: calendar, locale: locale
+        )
+        #expect(sixMonthLabel.contains("May 1"))
+        #expect(sixMonthLabel.contains("Oct 30"))
+        #expect(sixMonthLabel.components(separatedBy: "2026").count == 2)
+        let yearStart = try #require(calendar.date(from: DateComponents(year: 2023, month: 3, day: 3)))
+        let yearLabel = ConditionScoreDetailViewModel.visibleRangeLabel(
+            from: yearStart, period: .year, calendar: calendar, locale: locale
+        )
+        #expect(yearLabel.contains("Mar 3, 2023"))
+        #expect(yearLabel.contains("Mar 1, 2024"))
     }
 }

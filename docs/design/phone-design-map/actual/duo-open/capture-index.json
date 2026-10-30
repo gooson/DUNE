@@ -5,7 +5,11 @@
   "xcresults": [
     "/Users/shanks/.codex/worktrees/c658/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_14-49-17-+0900.xcresult",
     ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.19_14-53-15-+0900.xcresult",
-    ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.30_01-43-26-+0900.xcresult"
+    ".deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.30_01-43-26-+0900.xcresult",
+    "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.30_04-14-44-+0900.xcresult",
+    "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.30_05-40-15-+0900.xcresult",
+    "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.30_05-58-49-+0900.xcresult",
+    "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.30_06-30-40-+0900.xcresult"
   ],
   "processed_capture_candidates": 116,
   "captured": {
@@ -1114,12 +1118,20 @@
     "T04": {
       "row_id": "T04",
       "evidence": "condition-score-detail-screen",
-      "test": "TodaySettingsRegressionTests/testConditionHeroOpensConditionScoreDetail()",
-      "action": "tap dashboard-hero-condition",
-      "timestamp": 1792389050.79,
-      "image": "CBC745A5-DBA5-44AA-9831-D1A16FD6FE85.png",
-      "screen": "screen-1-2006x2852-tap dashboard-hero-condition_1_84C2D6F7-3DF5-4A37-A9AE-862A6D743EDD.png",
-      "file": "T04.png"
+      "test": "ConditionDetailRedesignTests/testHeroContributionsAndUnifiedTrendAreReachable()",
+      "action": "Condition detail top hero",
+      "timestamp": 1793309538.893,
+      "image": "CDFBD44B-97DF-4627-A761-C890C08810DD.png",
+      "screen": "screen-1-2006x2852-Condition detail top hero_1_62294A0C-A3F1-457C-AFD9-69306ECD143B.png",
+      "file": "T04.png",
+      "source_revision": "abe732c1",
+      "source_worktree_dirty": true,
+      "device_id": "F8804553-93D0-4ACF-9A72-DC466957BCC4",
+      "fixture": "fixture100",
+      "selected_test_result": "Passed",
+      "original_run_failed_tests": 1,
+      "fixture_data_note": "DEBUG test fixture data; not real user health records.",
+      "xcresult": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.30_06-30-40-+0900.xcresult"
     }
   },
   "unmatched": [],

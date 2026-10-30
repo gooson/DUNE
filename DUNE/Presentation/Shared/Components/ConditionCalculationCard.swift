@@ -4,6 +4,8 @@ import SwiftUI
 /// Used in both Dashboard (ConditionScoreDetailView) and Wellness (WellnessScoreDetailView).
 struct ConditionCalculationCard: View {
     let detail: ConditionScoreDetail
+    let isEmbedded: Bool
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     private let todayHRVText: String
     private let baselineHRVText: String
@@ -24,7 +26,8 @@ struct ConditionCalculationCard: View {
     private let rhrDeltaText: String
     private let rhrAdjustmentText: String
 
-    init(detail: ConditionScoreDetail) {
+    init(detail: ConditionScoreDetail, isEmbedded: Bool = false) {
+        self.isEmbedded = isEmbedded
         self.detail = detail
         todayHRVText = "\(detail.todayHRV.formattedWithSeparator(fractionDigits: 1)) ms"
         baselineHRVText = "\(detail.baselineHRV.formattedWithSeparator(fractionDigits: 1)) ms"
@@ -73,57 +76,82 @@ struct ConditionCalculationCard: View {
             rhrDeltaText = "—"
         }
 
-        rhrAdjustmentText = detail.rhrAdjustment.formattedWithSeparator(
+        let adjustment = isEmbedded ? detail.rhrAdjustmentForDisplay : detail.rhrAdjustment
+        rhrAdjustmentText = adjustment?.formattedWithSeparator(
             fractionDigits: 1,
             alwaysShowSign: true
-        )
+        ) ?? "—"
     }
 
     var body: some View {
-        StandardCard {
-            VStack(alignment: .leading, spacing: DS.Spacing.md) {
-                HStack(spacing: DS.Spacing.sm) {
-                    Image(systemName: "function")
-                        .foregroundStyle(DS.Color.textSecondary)
-                    Text("Condition Calculation")
-                        .font(.subheadline)
-                        .fontWeight(.semibold)
-                }
-
-                VStack(spacing: DS.Spacing.sm) {
-                    CalculationRow(label: "Today HRV", value: todayHRVText, sub: dateText)
-                    CalculationRow(label: "Baseline HRV", value: baselineHRVText, sub: "\(detail.daysInBaseline) days")
-
-                    Divider()
-
-                    CalculationRow(label: "Z-Score", value: zScoreText, sub: zScoreSub)
-                    CalculationRow(label: "StdDev (ln)", value: stdDevText, sub: stdDevSub)
-
-                    if hasRHRSection {
-                        Divider()
-
-                        CalculationRow(label: rhrPrimaryLabel, value: rhrPrimaryText, sub: rhrPrimarySub)
-                        CalculationRow(label: "RHR Baseline", value: rhrBaselineText, sub: rhrBaselineSub)
-
-                        if hasRHRComparison {
-                            CalculationRow(
-                                label: "RHR Delta",
-                                value: rhrDeltaText,
-                                sub: String(localized: "vs baseline")
-                            )
-                            CalculationRow(
-                                label: "RHR Adjustment",
-                                value: rhrAdjustmentText,
-                                sub: String(localized: "baseline-relative")
-                            )
-                        }
-                    }
-
-                    Divider()
-
-                    CalculationRow(label: "Raw Score", value: rawScoreText, sub: "clamped [0–100]")
-                }
+        Group {
+            if isEmbedded {
+                content.accessibilityIdentifier("condition-calculation-content")
+            } else {
+                StandardCard { content }
             }
+        }
+    }
+
+    private var content: some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.md) {
+            HStack(spacing: DS.Spacing.sm) {
+                Image(systemName: "function")
+                    .foregroundStyle(DS.Color.textSecondary)
+                Text("Condition Calculation")
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+            }
+
+            VStack(spacing: DS.Spacing.sm) {
+                calculationRow(label: "Today HRV", value: todayHRVText, sub: dateText)
+                calculationRow(label: "Baseline HRV", value: baselineHRVText, sub: "\(detail.daysInBaseline) days")
+
+                Divider()
+
+                calculationRow(label: "Z-Score", value: zScoreText, sub: zScoreSub)
+                calculationRow(label: "StdDev (ln)", value: stdDevText, sub: stdDevSub)
+
+                if hasRHRSection {
+                    Divider()
+
+                    calculationRow(label: rhrPrimaryLabel, value: rhrPrimaryText, sub: rhrPrimarySub)
+                    calculationRow(label: "RHR Baseline", value: rhrBaselineText, sub: rhrBaselineSub)
+
+                    if hasRHRComparison {
+                        calculationRow(
+                            label: "RHR Delta",
+                            value: rhrDeltaText,
+                            sub: String(localized: "vs baseline")
+                        )
+                        calculationRow(
+                            label: "RHR Adjustment",
+                            value: rhrAdjustmentText,
+                            sub: String(localized: "baseline-relative")
+                        )
+                    }
+                }
+
+                Divider()
+
+                calculationRow(label: "Raw Score", value: rawScoreText, sub: "clamped [0–100]")
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func calculationRow(label: String, value: String, sub: String) -> some View {
+        let resolvedLabel = isEmbedded ? String(localized: String.LocalizationValue(label)) : label
+        if isEmbedded && dynamicTypeSize.isAccessibilitySize {
+            VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                Text(resolvedLabel).font(.caption).foregroundStyle(DS.Color.textSecondary)
+                Text(value).font(.subheadline.weight(.medium)).monospacedDigit()
+                if !sub.isEmpty { Text(sub).font(.caption2).foregroundStyle(DS.Color.textSecondary) }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .accessibilityElement(children: .combine)
+        } else {
+            CalculationRow(label: resolvedLabel, value: value, sub: sub)
         }
     }
 
