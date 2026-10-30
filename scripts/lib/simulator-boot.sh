@@ -90,8 +90,9 @@ wait_for_simulator_boot() {
 
     echo "Waiting for ${label} simulator [$udid] to boot (timeout=${timeout}s, retries=${max_retries})..."
 
-    # Pre-flight: verify the device exists (anchored grep)
-    if ! python3 "$ROOT_DIR/scripts/lib/command-deadline.py" --seconds 30 -- xcrun simctl list devices 2>/dev/null | grep -qF "$udid"; then
+    # Drain the listing: grep -q can close the pipe early and turn a match into
+    # an upstream SIGPIPE failure when the caller enables pipefail.
+    if ! python3 "$ROOT_DIR/scripts/lib/command-deadline.py" --seconds 30 -- xcrun simctl list devices 2>/dev/null | grep -F "$udid" >/dev/null; then
         echo "ERROR: Simulator UDID [$udid] not found in device list."
         _dump_simulator_diagnostics "$udid"
         exit 1
