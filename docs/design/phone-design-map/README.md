@@ -9,6 +9,8 @@ status: in-progress
 
 # DUNE 전체 디자인맵
 
+2026-10-30 Siri 건강 정보는 T17·T19 및 SQ01–SQ14를 추가했다. [시안 PNG와 실제 캡처 갱신 상태](../full-redesign-map/review/siri-health-queries-2026-10-30/index.html)를 구분한다. 최종 iPhone UI 재검증은 다른 작업의 저장소 시뮬레이터 잠금으로 시작되지 않았으며, iPhone·iPad·Duo 접힘/펼침의 최종 원본은 미갱신이다. 이전 갤러리 개수와 PNG를 새 화면의 완료 증거로 계산하지 않는다.
+
 2026-10-28 T03 지표는 Wellness 계층과 같은 범주색·면·큰 값·실제 추세를 적용하고 같은 행의 자연 높이를 맞췄다. [새 원본10장과 검증 범위](../full-redesign-map/review/today-wellness-metrics-2026-10-28/index.html)에서 iPhone·iPad 출처와 Duo 등 미갱신 범위를 구분한다.
 
 2026-10-28 H01 오늘 밤 수면의 점수·달 상징·게이지·신뢰도·팁 영역을 [새 실제 화면](../full-redesign-map/review/wellness-prediction-visual-2026-10-28/index.html)에서 확인한다. 원본별 소스·기기·검증 범위를 기록하며 이전 예측 PNG는 이 개선의 증거로 바꾸지 않는다.

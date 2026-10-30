@@ -246,3 +246,5 @@ HealthKit의 읽기 권한 비공개와 잠금 상태 제약은 [Protecting user
 건강 조회는 `ProvidesDialog`를 반환하여 시스템 Siri가 읽는다. 앱에서 AVSpeechSynthesizer로 Siri 음색을 복제하지 않는다. [Apple 음성 안내](https://developer.apple.com/videos/play/wwdc2020/10022/)에서 이 두 음성 경로를 구분한다. 최신 SDK의 [IntentSystemContext.locale](https://developer.apple.com/documentation/appintents/intentsystemcontext/locale)은 요청 언어가 앱 언어와 다른 경우를 처리한다. 이 값을 요청별 TaskLocal로 전달하여 단위·숫자·날짜와 조회 안내를 같은 언어로 만든다. 전체 답변과 supporting 답변 모두 검증한 값을 포함해 화면이 있는 호출에서도 제목만 읽지 않게 한다. 한국어 자연 단위·언어 격리 테스트와 실기기 음색·억양 청취는 별개이며, 후자는 아직 검증하지 않았다.
 
 현재 로컬은 Xcode 27.1 / SDK 27.1이다. 공개 27 API를 이 환경에서 컴파일하고 27.2 기술 방향과의 호환성을 설계했으며, Xcode 27.2로 직접 빌드했다고 표시하지 않는다. PCC는 실제 managed entitlement가 검증되지 않아 비활성이고, SpotlightSearchTool은 보호된 사용자 지정 인덱스로 검색 범위를 격리하는 계약을 확인하지 못해 연결하지 않았다. 정확한 운동 메모 검색은 공통 조회 서비스에서 제공한다.
+
+[Apple의 Siri 음성·언어 설정 안내](https://support.apple.com/ko-kr/120499)를 2026-10-30 다시 확인했다. 기기의 Siri 음성 선택과 앱이 만드는 읽기 문장은 별도 제어 범위다. 앱은 시스템 음색을 강제하거나 청취하지 않은 음질을 보증하지 않는다. 이번 구현·빌드·언어 테스트와 남은 실기기 청취 범위는 [검증 기록](../reviews/2026-10-30-siri-health-queries/README.md)에 보존한다.

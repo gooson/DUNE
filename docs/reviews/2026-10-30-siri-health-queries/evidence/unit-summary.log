@@ -1,0 +1,72 @@
+✔ Test "Baseline summary includes condition sleep and HRV context" passed after 0.007 seconds.
+✔ Test "Condition summary includes trend and HRV baseline context" passed after 0.001 seconds.
+✔ Test "Workout summary includes session count and top activity types" passed after 0.001 seconds.
+✔ Test "Recovery summary highlights sleep and resting heart rate penalty" passed after 0.001 seconds.
+✔ Test "Asking on simulator falls back when Foundation Models are unavailable" passed after 0.001 seconds.
+✔ Test "Sleep summary live fallback includes the current day window" passed after 0.001 seconds.
+✔ Suite "HealthDataQAService" passed after 0.010 seconds.
+✔ Test "Last night's sleep uses the waking day in each supported language" passed after 0.001 seconds.
+✔ Test "Exact supported questions bypass model inference even when enabled" passed after 0.001 seconds.
+✔ Test "Unavailable model uses only exact supported fallback questions" passed after 0.001 seconds.
+✔ Test "Fallback never silently substitutes a prior screen context" passed after 0.001 seconds.
+✔ Test "Unknown IDs and unbounded periods are rejected before querying" passed after 0.001 seconds.
+✔ Test "Overlapping comparison periods are rejected" passed after 0.001 seconds.
+✔ Test "Unavailable cloud explanation preserves every original fact" passed after 0.001 seconds.
+✔ Test "Cancelled requests do not query data" passed after 0.001 seconds.
+✔ Test "Concurrent tool calls share a single data-read budget" passed after 0.001 seconds.
+✔ Test "Invalid tool arguments consume the attempt without reading or accepting a replacement plan" passed after 0.001 seconds.
+✔ Test "A failed data read cannot trigger a second tool execution" passed after 0.001 seconds.
+✔ Test "Tool evidence keeps memo text as data and preserves the validated scope" passed after 0.001 seconds.
+✔ Test "Tool dispatch preserves the invocation locale even from another task context" passed after 0.001 seconds.
+✔ Suite "HealthQueryAssistant" passed after 0.009 seconds.
+✔ Test "Every typed Siri query maps to the shared query kind" passed after 0.001 seconds.
+✔ Test "Typed query preserves selected periods and record context" passed after 0.001 seconds.
+✔ Suite "Health query intent contract" passed after 0.001 seconds.
+✔ Test "Evicts oldest answer and clears retained health data" passed after 0.009 seconds.
+✔ Suite "Transient health answer retention" passed after 0.009 seconds.
+✔ Test "Concurrent queries keep their number formats across actor hops" passed after 0.004 seconds.
+✔ Test "Nested request locale restores its parent after an error" passed after 0.001 seconds.
+✔ Test "Measurement dates use the invoking locale" passed after 0.003 seconds.
+✔ Test "Spoken measurements use Korean natural units" passed after 0.002 seconds.
+✔ Test "Speech announces each calendar date once and omits redundant workout dates" passed after 0.001 seconds.
+✔ Test "Spoken calendar range excludes the following midnight" passed after 0.012 seconds.
+✔ Test "Assistant fallback preserves the invoking locale through the query actor hop" passed after 0.001 seconds.
+✔ Suite "Health query request localization" passed after 0.025 seconds.
+✔ Test "A natural latest-workout question finds the same older record as the typed query" passed after 0.048 seconds.
+✔ Test "A locked device returns no health data and does not start HealthKit queries" passed after 0.002 seconds.
+✔ Test "Locking while HealthKit is in flight discards the returned records" passed after 0.002 seconds.
+✔ Test "Invalid future, oversized and limit requests stop before querying" passed after 0.002 seconds.
+✔ Test "Actual completed non-warmup sets determine volume, never planned repetitions" passed after 0.009 seconds.
+✔ Test "Linked HealthKit workouts enrich once and tombstones suppress both sources" passed after 0.001 seconds.
+✔ Test "Comparison chooses the nearest earlier identical exercise rather than the nearest workout" passed after 0.029 seconds.
+✔ Test "Display limits never truncate whole-period summary statistics" passed after 0.005 seconds.
+✔ Test "Selected workout read failure is unavailable rather than absent" passed after 0.013 seconds.
+✔ Test "Batch identifiers filter before the display cap and load history once" passed after 0.003 seconds.
+✔ Test "Oversized batches and identifiers are rejected without silently dropping records" passed after 0.002 seconds.
+✔ Test "Set-only days do not fabricate zero duration points" passed after 0.001 seconds.
+✔ Test "Only actual HealthKit enrichment adds supplemental provenance" passed after 0.001 seconds.
+✔ Test "Fallback dedup crosses bucket boundaries but preserves exact boundary and third-party workouts" passed after 0.001 seconds.
+✔ Test "Calendar comparisons retain full day boundaries across DST and partial current days" passed after 0.002 seconds.
+✔ Test "Explicit comparison intervals are honored and each history read requests the sentinel cap" passed after 0.003 seconds.
+✔ Test "Cancellation thrown by a query propagates without becoming an unavailable result" passed after 0.002 seconds.
+✔ Suite "Health query service integrity" passed after 0.129 seconds.
+✔ Test "Calendar day ranges preserve a daylight-saving transition" passed after 0.001 seconds.
+✔ Test "Previous month excludes this month's measurements" passed after 0.001 seconds.
+✔ Test "Volume uses actual completed set values and rejects invalid numbers" passed after 0.001 seconds.
+✔ Test "Unknown volume stays missing and completed set volumes add once" passed after 0.001 seconds.
+✔ Suite "HealthQuery contracts" passed after 0.001 seconds.
+✔ Test "Loads the requested kind and preserves the verified result" passed after 0.001 seconds.
+✔ Test "Cancellation leaves no completed result visible" passed after 0.001 seconds.
+✔ Test "Cancellation after a query completes keeps its verified answer" passed after 0.001 seconds.
+✔ Test "A failed query shows a recoverable state" passed after 0.001 seconds.
+✔ Test "Explains a verified comparison without replacing its measurements" passed after 0.001 seconds.
+✔ Suite "HealthQueryViewModel" passed after 0.001 seconds.
+✔ Test "A mirror is removed only when that metric exists locally" passed after 0.001 seconds.
+✔ Test "Latest body measurements include today's local record and retain missing values" passed after 0.007 seconds.
+✔ Test "HealthKit failure retains local measurements and reports incomplete coverage" passed after 0.002 seconds.
+✔ Test "All failed body reads without local measurements are unavailable" passed after 0.001 seconds.
+✔ Test "Condition failures reflect only sources used by condition and heart measurements" passed after 0.001 seconds.
+✔ Test "Condition includes dated HRV and RHR in the selected period without inventing freshness" passed after 0.001 seconds.
+✔ Test "Sleep excludes out-of-period, nonfinite and absent nights" passed after 0.001 seconds.
+✔ Suite "Health query wellness" passed after 0.014 seconds.
+✔ Test run with 62 tests in 9 suites passed after 0.206 seconds.
