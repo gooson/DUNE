@@ -4,7 +4,7 @@
 /// DUNE_T06_METRIC selects one key for focused diagnosis.
 @MainActor
 final class MetricDetailRedesignTests: SeededUITestBaseCase {
-    private var selectedKey: String {
+    nonisolated private var selectedKey: String {
         ProcessInfo.processInfo.environment["DUNE_T06_METRIC"] ?? "hrv"
     }
 
