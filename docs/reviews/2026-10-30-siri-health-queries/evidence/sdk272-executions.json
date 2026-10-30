@@ -505,6 +505,117 @@
       "id": "siri-unit-compile",
       "schema_version": 1,
       "worktree": "/Users/shanks/.codex/worktrees/siri-health-queries/Health"
+    },
+    {
+      "attempts": [
+        {
+          "after": "5d9aac44a782f7e3635d979d23cfe5bc01c30a40ccc9b64b07b5fb767dd2a31b",
+          "after_content": "5d9aac44a782f7e3635d979d23cfe5bc01c30a40ccc9b64b07b5fb767dd2a31b",
+          "before": "5d9aac44a782f7e3635d979d23cfe5bc01c30a40ccc9b64b07b5fb767dd2a31b",
+          "before_content": "5d9aac44a782f7e3635d979d23cfe5bc01c30a40ccc9b64b07b5fb767dd2a31b",
+          "child_pgid": 54119,
+          "child_pid": 54119,
+          "command": [
+            "python3",
+            "-B",
+            ".codex-checks/siri-wait-owned-runner.py",
+            "--",
+            "env",
+            "DUNE_UI_TEST_WALL_TIMEOUT=1200",
+            "DAILVE_UI_TEST_DERIVED_DATA_DIR=.deriveddata/unit-tests",
+            "scripts/test-ui.sh",
+            "--no-regen",
+            "--test-plan",
+            "DUNEUITests-DesignCapture",
+            "--simulator-udid",
+            "094E24A5-1AFD-4E52-ADA4-2F2BD2B396ED",
+            "--only-testing",
+            "DUNEUITests/HealthQuerySmokeTests/testCaptureAllQueryKinds",
+            "--only-testing",
+            "DUNEUITests/HealthQuerySmokeTests/testNoDataIsExplicit",
+            "--only-testing",
+            "DUNEUITests/HealthQuerySmokeTests/testCaptureBodyAndDurationAtMaximumTextSize",
+            "--log-file",
+            ".xcodebuild/siri-sdk272-native.log"
+          ],
+          "content_only": true,
+          "context": "Xcode27.2-27B52-iOS27.2-owned094E24A5-DesignCapture-en-static-fixture-AXXXXL",
+          "ended": 1793360559.563073,
+          "exit_code": 65,
+          "log": "check-e51aa989c267683affd5c88a-f74404c096af43e3b10be9fb1f771fd3.log",
+          "log_hash": "0855094d516ead3686f6fdda5782ea728dc0ee7c334d472ff8e60cbdb95cade7",
+          "scope": "SDK272-updated-period-axis-native14-keyboard-noData-and-first-maxAX",
+          "started": 1793359746.005941,
+          "status": "failed"
+        },
+        {
+          "after": "4dfffa272ccc5043738bb84c5a6caf5644b68cc1a6d38d2e310db8aaef788acd",
+          "after_content": "4dfffa272ccc5043738bb84c5a6caf5644b68cc1a6d38d2e310db8aaef788acd",
+          "before": "4dfffa272ccc5043738bb84c5a6caf5644b68cc1a6d38d2e310db8aaef788acd",
+          "before_content": "4dfffa272ccc5043738bb84c5a6caf5644b68cc1a6d38d2e310db8aaef788acd",
+          "child_pgid": 95619,
+          "child_pid": 95619,
+          "command": [
+            "python3",
+            "-B",
+            ".codex-checks/siri-wait-owned-runner.py",
+            "--",
+            "env",
+            "DUNE_UI_TEST_WALL_TIMEOUT=1200",
+            "DAILVE_UI_TEST_DERIVED_DATA_DIR=.deriveddata/unit-tests",
+            "scripts/test-ui.sh",
+            "--no-regen",
+            "--test-plan",
+            "DUNEUITests-DesignCapture",
+            "--simulator-udid",
+            "094E24A5-1AFD-4E52-ADA4-2F2BD2B396ED",
+            "--only-testing",
+            "DUNEUITests/HealthQuerySmokeTests/testCaptureBodyAndDurationAtMaximumTextSize",
+            "--log-file",
+            ".xcodebuild/siri-sdk272-maxax-retry.log"
+          ],
+          "content_only": true,
+          "context": "Xcode27.2-27B52-iOS27.2-owned094E24A5-DesignCapture-en-static-fixture-AXXXXL",
+          "ended": 1793361109.52798,
+          "exit_code": 65,
+          "log": "check-e51aa989c267683affd5c88a-7af65f9a0cb7410988911710676ce728.log",
+          "log_hash": "5a79aeaa39a81102b8885e24625ae107d9f9ac577bdd2aea99f8444a38a053bd",
+          "remediation": "Bounded native menu scrolling in actual collection/window intersection; application and seed unchanged; retry only failed maximum-text selector",
+          "retry_cause": "Native maximum-text menu virtualizes latestBody outside visible rows",
+          "retry_evidence": {
+            "file": ".codex-checks/siri-sdk272-maxax-remediation.md",
+            "hash": "b1acc2982a6e948eeda8481be42c02e5a289bb5556026bf797e2020dde8194e4"
+          },
+          "scope": "SDK272-updated-period-axis-native14-keyboard-noData-and-first-maxAX",
+          "started": 1793360973.158838,
+          "status": "failed"
+        }
+      ],
+      "id": "siri-sdk272-native-states",
+      "schema_version": 1,
+      "worktree": "/Users/shanks/.codex/worktrees/siri-health-queries/Health"
     }
-  ]
+  ],
+  "nativeUI": {
+    "appSourceCommit": "19754ce6",
+    "normalTestSourceCommit": "be22072d",
+    "maximumTextRetrySourceCommit": "a3877321",
+    "firstRun": {
+      "executed": 3,
+      "passed": 2,
+      "failed": 1
+    },
+    "conditionalRetry": {
+      "executed": 1,
+      "passed": 0,
+      "failed": 1
+    },
+    "uniqueSelectors": {
+      "passed": 2,
+      "failed": 1
+    },
+    "nativeCompletedPNGs": 17,
+    "maximumTextCompletedPNGs": 0,
+    "remaining": "maximum-text native menu full-row selection, previous two interaction cases, iPad/Duo and physical Siri; no further automatic retry"
+  }
 }

@@ -34,3 +34,5 @@ category: review
 UIKit의 기본 layoutMargins 변경은 iOS 27.1 이후의 내용이며, 이번 Siri 화면은 SwiftUI와 시스템 컨트롤을 사용한다. 이 경로에 일괄 margin 보정을 추가할 이유는 찾지 못했다.
 
 SDK 선언 확인과 빌드 성공은 실제 Siri 발화·음색·억양 검증과 다르다. 현재 기기의 음성을 청취했다고 보고하지 않는다. 단위·UI 실행 결과는 [실행 기록](README.md)의 소스 버전·기기·결과를 따른다. [SDK 선언별 상세 감사](reviews/review-siri-sdk272.md)에서 실제 SDK 경로와 줄 번호를 확인할 수 있다.
+
+관련 단위 63개·9개 suite가 실제 iOS 27.2 전용 기기에서 통과했다. 새 iPhone UI에서는 14종 전환·키보드와 기록 없음이 통과해 원본 17장을 보존했다. 최대 글씨 메뉴 선택은 한 번 보완한 재시도까지 실패했으므로 그 상태의 호환성을 승인하지 않는다. 앱 API 변경 없이 테스트의 메뉴 스크롤만 보완했으며, 앱 소스는 `19754ce6`과 동일하다. [새 실제 화면과 남은 범위](../../design/full-redesign-map/review/siri-health-queries-2026-10-30/index.html)를 확인할 수 있다.

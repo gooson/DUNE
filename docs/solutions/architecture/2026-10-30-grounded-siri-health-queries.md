@@ -56,7 +56,7 @@ let result = try await HealthQueryLocalization.$locale.withValue(locale) {
 
 ## Validation and limits
 
-앱 소스 `19754ce6`는 Xcode 27.2 / SDK 27.2 generic iOS 빌드와 관련 63개 단위 테스트·9개 suite를 통과했다. 집계 비교 기간은 `comparisonInterval`로 보존하고 실제 측정일과 구분했으며 차트의 원시 단위를 축에 명시했다. 이전 2282ab87의 18장 네이티브 캡처는 수정 전 중간 증거다. 최신 UI·다른 기기·실제 Siri 청취와 PCC entitlement는 별도 미검증 범위다. [실행·리뷰 기록](../../reviews/2026-10-30-siri-health-queries/README.md)을 따른다.
+앱 소스 `19754ce6`는 Xcode 27.2 / SDK 27.2 generic iOS 빌드와 관련 63개 단위 테스트·9개 suite를 통과했다. 집계 비교 기간은 `comparisonInterval`로 보존하고 실제 측정일과 구분했으며 차트의 원시 단위를 축에 명시했다. 이전 2282ab87의 18장 네이티브 캡처는 수정 전 중간 증거다. SDK27.2에서 최신 iPhone17장(14종·키보드·기록 없음)을 새로 수집했고 관련 두 검사는 통과했다. 최대 글씨 메뉴 검사는 조건부 재시도까지 실패했으며, 기존 두 조작 검사·다른 기기·실제 Siri 청취와 PCC entitlement는 별도 미검증 범위다. [실행·리뷰 기록](../../reviews/2026-10-30-siri-health-queries/README.md)을 따른다.
 
 ## Lessons Learned
 

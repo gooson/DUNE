@@ -13,6 +13,8 @@ status: ui-verification-blocked
 
 **최종 UI 및 Ship 게이트는 미완료다.** 디자인 시안 PNG는 실제 앱 캡처가 아니며, 수정 전 실패 진단용 캡처도 최종 화면 증거로 재사용하지 않는다.
 
+SDK 27.2에서 14종 전환·소프트웨어 키보드와 기록 없음 검사는 새로 통과했고 **네이티브 원본 17장**을 보존했다. 최대 글씨 검사는 메뉴의 화면 밖 행 선택에서 실패했고, 한 번 보완한 조건부 재시도도 목표 행이 일부만 보이는 상태로 실패했다. 최대 글씨 완료 캡처는 0장이다. 실패 이력과 자동 재시도 한도를 유지한다.
+
 ## 구현 범위
 
 - 최근 운동, 기간 운동량, 완료한 근력 세트, 개인 기록, 유산소 세부 정보.
@@ -41,9 +43,11 @@ SDK 27의 `IntentSystemContext.locale`을 요청별 TaskLocal로 전달하여 �
 | 테마맵 동기화 | `python3 docs/design/theme-map/build-theme-map.py --check`, 성공 |
 | 초기 iPhone UI | `9ae252af`, 실제 **DUNEUITests-Full / FullConfiguration**, 선택된 34개 중 27개 통과·7개 실패 |
 | 추가 승인 후 iPhone UI | `2282ab87`, 4개 중 2개 통과: 14종 전환·소프트웨어 키보드, 기록 없음. 기간 탭·공유 닫기 가정 2건 실패 후 테스트 보정. 두 검사 재실행은 잠금 대기에서 시작되지 못함 |
-| iPad·Duo 접힘/펼침·최대 글씨 | 최종 구현 미실행·새 캡처 없음 |
+| SDK 27.2 iPhone UI | `be22072d`, 3개 중 2개 통과: 14종·키보드 및 기록 없음. 새 원본 17장. 최대 글씨 1개 실패 |
+| 최대 글씨 조건부 재시도 | `a3877321`, 실패한 1개만 실행해 실패. 실제 메뉴 스크롤은 관찰됐으나 목표 행 전체 노출 실패. 추가 자동 실행 없음 |
+| iPad·Duo 접힘/펼침 | 최종 구현 미실행·새 캡처 없음 |
 | Vision 빌드 | 변경하지 않은 bedtime reminder protocol 의존성 오류로 실패. 통과 아님 |
-| Xcode 27.2 | 설치·SDK 선언·앱 빌드·관련 단위 실행 확인. 최신 네이티브 화면은 별도 확인 필요 |
+| Xcode 27.2 | 설치·SDK 선언·앱 빌드·관련 단위와 위의 제한된 iPhone UI 실행 확인. 실제 Siri 및 다른 기기 확인은 별도 |
 
 초기 UI의 공통 smoke 3개 실패는 Dashboard의 7일 추세 그래프·알림함 제목·최대 글씨의 설정 버튼이다. 해당 소스와 테스트는 당시 `origin/main`과 동일했지만, main 자체의 동일 환경 실행으로 기존 실패를 입증한 것은 아니다. 이번 변경의 성공으로 합산하거나 관계없는 화면을 수정하지 않았다. 정확한 실패는 [초기 실행 오류](evidence/ui-initial-errors.log)에 보존한다.
 
@@ -55,14 +59,16 @@ SDK 27의 `IntentSystemContext.locale`을 요청별 TaskLocal로 전달하여 �
 - 새 iOS 27.2 iPhone `094E24A5-1AFD-4E52-ADA4-2F2BD2B396ED`를 생성하고 baseline·정확한 이름·소유권을 등록했다. 표준 부팅 helper와 readback에서 정상 Booted를 확인한 뒤 단위 검증을 한 번 재개해 63개가 통과했다.
 - 공유 기기를 종료하거나 다른 작업과 병렬 검증하지 않았다. 사용자에게서 병렬 실행 승인은 받지 않았다.
 - `siri-ui-iphone` 및 승인 후 추가 검사 이력은 삭제하지 않는다. 두 조작 검사의 미검증 상태를 통과로 바꾸지 않는다.
-- 최신 비교 기간·차트 축 수정본의 새 PNG, 최대 글씨, iPad·Duo 두 자세, 실제 Siri 청취는 남아 있다. 전체 suite는 요청되지 않았으므로 자동 확대하지 않는다.
+- 최신 비교 기간·차트 축 수정본의 iPhone PNG 17장을 새로 수집했다. 최대 글씨 검사는 첫 실행과 조건부 재시도가 실패했으며, 기간·출처 및 공유 취소의 기존 두 조작 검사, iPad·Duo 두 자세, 실제 Siri 청취는 남아 있다. 전체 suite는 요청되지 않았으므로 자동 확대하지 않는다.
 - 과거 generic simulator build-for-testing timeout은 통과가 아니다. 이번 실제 iOS 27.2 단위 실행은 해당 테스트 타깃의 컴파일과 실행을 별도로 확인한 증거다.
 
 ## 디자인맵 상태
 
 [14개 기능별 비주얼 시안](../../design/theme-map/themes/dune-siri-health-queries.html), [PNG 모음](../../design/theme-map/themes/assets/siri-health-queries-overview.png), [배치·상태 계약](../../design/layout-map/siri-health-queries-proposal.md)은 테마맵과 레이아웃맵에 연결했다. 합성 데이터의 시안이며 시스템 Siri 외곽은 모식도다.
 
-실제 화면 인벤토리의 T17(Q&A 진입)·T19(건강 조회), SQ01–SQ14 및 no-data·출처·공유·키보드 상태는 iPhone·iPad·Duo 접힘/펼침에서 최종 캡처 미갱신이다. Watch는 이번 새 화면의 타깃 멤버가 아니며 시안만 있다. [통합 실제 화면맵의 갱신 상태](../../design/full-redesign-map/review/siri-health-queries-2026-10-30/index.html)에서도 이 차이를 표시한다.
+T17(Q&A 진입)·T19(건강 조회)의 SQ01–SQ14와 키보드·기록 없음은 최신 앱 소스 `19754ce6`와 같은 앱을 SDK 27.2로 실행한 새 iPhone 17장에 반영했다. [원본·기기·테스트·해시](../../design/full-redesign-map/review/siri-health-queries-2026-10-30/iphone-sdk272/manifest.json)를 보존한다. 이는 합성 검증 기록을 넣은 실제 네이티브 앱이며 시스템 Siri 화면은 아니다. 최대 글씨 실패 진단 PNG 2장은 별도로 표시하고 완료 수에 포함하지 않는다. 출처 상세·공유 취소, iPad·Duo 접힘/펼침은 미갱신이다. Watch는 이번 새 화면의 타깃 멤버가 아니며 시안만 있다. [통합 실제 화면맵](../../design/full-redesign-map/review/siri-health-queries-2026-10-30/index.html)에서도 범위를 구분한다.
+
+새 PNG 리뷰에서 SQ10의 집계 비교 기간은 해결을 확인했고 SQ02·SQ08의 초 단위 축을 확인했다. SQ10·SQ13의 축은 캡처 viewport 아래여서 시각 확인이 남아 있다. [SDK 27.2 실제 화면 재검토](reviews/review-siri-sdk272-native-delta.md)를 따른다.
 
 ## 리뷰와 파이프라인
 
@@ -71,7 +77,7 @@ Security·Data Integrity·Performance·Architecture·Simplicity 리뷰의 소스
 | 단계 | 상태 |
 |---|---|
 | Init / Plan / Work | 완료. 계획서·소스·빌드·관련 단위 검증 보존 |
-| UI Test | 이전 2개 부분 성공 보존. 최신 UI·두 조작·다른 기기와 최종 캡처 미완료 |
+| UI Test | SDK 27.2에서 고유 검사 3개 중 2개 통과·1개 실패, 실패 검사의 조건부 재시도도 실패. 새 iPhone 원본 17장. 기존 두 조작·다른 기기 미검증 |
 | Review / Quality | 독립적인 정적 검토 수행. UI 증거를 포함한 최종 승인 보류 |
 | Resolve | 소스 수정 완료. 런타임 재확인 보류 |
 | Compound | 해결한 설계·음성 처리 문서 준비. 파이프라인 완료 선언 보류 |
