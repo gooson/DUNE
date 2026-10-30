@@ -20,11 +20,17 @@ struct HealthQuerySnippetView: View {
                 Text("This information is unavailable.")
             case .available, .partial:
                 ForEach(result.metrics.filter(\.value.isFinite).prefix(3)) { metric in
-                    HStack(alignment: .firstTextBaseline) {
-                        Text(metric.title)
-                        Spacer()
-                        Text(metric.unit.formatted(metric.value) + " " + metric.unit.displayUnit(for: metric.value))
-                            .bold()
+                    ViewThatFits(in: .horizontal) {
+                        HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.sm) {
+                            Text(metric.title).fixedSize(horizontal: true, vertical: false)
+                            Spacer(minLength: 0)
+                            Text(metric.unit.displayValue(metric.value))
+                                .bold().fixedSize(horizontal: true, vertical: false)
+                        }
+                        VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                            Text(metric.title)
+                            Text(metric.unit.displayValue(metric.value)).bold()
+                        }
                     }
                     .font(.subheadline)
                 }
@@ -35,13 +41,20 @@ struct HealthQuerySnippetView: View {
                 if result.status == .partial { Text("Some records may be missing.").font(.caption) }
                 if result.kind == .report { Text("Workout notes are excluded.").font(.caption) }
                 if let source = result.sources.first {
-                    Label(source.kind == .healthKit ? String(localized: "Apple Health") : String(localized: "DUNE record"),
-                          systemImage: "checkmark.seal")
+                    Label(sourceLabel(source.kind), systemImage: "checkmark.seal")
                         .font(.caption)
                 }
             }
         }
         .padding(DS.Spacing.md)
         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+    }
+
+    private func sourceLabel(_ kind: HealthQuerySource.Kind) -> String {
+        switch kind {
+        case .app: String(localized: "DUNE record")
+        case .healthKit: String(localized: "Apple Health")
+        case .calculated: String(localized: "Calculated from records")
+        }
     }
 }

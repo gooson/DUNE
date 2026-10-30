@@ -6,6 +6,7 @@ struct HealthQueryResultCard: View {
     let queryService: any HealthQuerying
     @State private var showingSpeech = false
     @State private var showingReportPreview = false
+    @ScaledMetric(relativeTo: .largeTitle) private var heroFontSize = 56
 
     init(result: HealthQueryResult, queryService: any HealthQuerying = HealthQueryService.shared) {
         self.result = result
@@ -20,6 +21,7 @@ struct HealthQueryResultCard: View {
             Text("Period: \(result.interval.start.formatted(date: .abbreviated, time: .omitted)) – \(result.interval.end.addingTimeInterval(-0.001).formatted(date: .abbreviated, time: .omitted))")
                 .font(.subheadline)
                 .foregroundStyle(DS.Color.textSecondary)
+                .accessibilityIdentifier("health-query-result")
             if result.status == .locked {
                 Label("Unlock your device to view health data.", systemImage: "lock")
             } else if result.status == .noData {
@@ -45,14 +47,25 @@ struct HealthQueryResultCard: View {
                 Text(record.date.formatted(date: .abbreviated, time: .shortened))
                     .font(.subheadline).foregroundStyle(DS.Color.textSecondary)
             }
-            if let metric = heroMetric, metric.value.isFinite {
+            if !usesKindVisualForPrimaryMetrics, let metric = heroMetric, metric.value.isFinite {
                 VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                     Text(metric.title).font(.subheadline)
-                    HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xs) {
-                        Text(metric.unit.formatted(metric.value)).font(.system(.largeTitle, design: .rounded, weight: .bold))
-                        Text(metric.unit.displayUnit(for: metric.value)).font(.headline)
+                    ViewThatFits(in: .horizontal) {
+                        HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xs) {
+                            heroValue(metric)
+                            if !metric.unit.displayUnit(for: metric.value).isEmpty {
+                                Text(metric.unit.displayUnit(for: metric.value)).font(.headline)
+                                    .fixedSize(horizontal: true, vertical: false)
+                            }
+                        }
+                        VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                            heroValue(metric)
+                            if !metric.unit.displayUnit(for: metric.value).isEmpty {
+                                Text(metric.unit.displayUnit(for: metric.value)).font(.headline)
+                            }
+                        }
                     }
-                    if let date = metric.date {
+                    if let date = metric.date, shouldShowMetricDate(date, isHero: true) {
                         Text(date.formatted(date: .abbreviated, time: .shortened)).font(.caption)
                     }
                     if let previous = metric.comparisonValue, previous.isFinite {
@@ -65,20 +78,26 @@ struct HealthQueryResultCard: View {
                     }
                 }
             }
-            ForEach(result.metrics.filter { $0.id != heroMetric?.id }) { metric in
+            ForEach(secondaryMetrics) { metric in
                 if metric.value.isFinite {
-                    HStack(alignment: .firstTextBaseline) {
-                        Text(metric.title)
-                        Spacer()
-                        Text(metric.unit.formatted(metric.value) + " " + metric.unit.displayUnit(for: metric.value))
-                            .bold()
+                    ViewThatFits(in: .horizontal) {
+                        HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.sm) {
+                            Text(metric.title).fixedSize(horizontal: true, vertical: false)
+                            Spacer(minLength: 0)
+                            Text(metric.unit.displayValue(metric.value))
+                                .bold().fixedSize(horizontal: true, vertical: false)
+                        }
+                        VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                            Text(metric.title)
+                            Text(metric.unit.displayValue(metric.value)).bold()
+                        }
                     }
                     .font(.subheadline)
                     if let comparison = metric.comparisonValue, comparison.isFinite {
                         Text("Previous: \(metric.unit.formatted(comparison)) \(metric.unit.displayUnit(for: comparison))")
                             .font(.caption).foregroundStyle(DS.Color.textSecondary)
                     }
-                    if let date = metric.date {
+                    if let date = metric.date, shouldShowMetricDate(date, isHero: false) {
                         Text(date.formatted(date: .abbreviated, time: .shortened))
                             .font(.caption).foregroundStyle(DS.Color.textSecondary)
                     }
@@ -176,16 +195,59 @@ struct HealthQueryResultCard: View {
             if !result.sources.isEmpty {
                 VStack(alignment: .leading, spacing: DS.Spacing.xs) {
                     Text("Sources").font(.headline)
-                    ForEach(Array(result.sources.enumerated()), id: \.offset) { _, source in
+                    ForEach(Array(displayedSources.enumerated()), id: \.offset) { _, source in
                         Text(sourceLabel(source))
                             .font(.caption)
                     }
-                    Text("Updated \(result.generatedAt.formatted(date: .abbreviated, time: .shortened))")
+                    if result.sources.count > 50 {
+                        Text("Showing the latest 50 of \(result.sources.count) sources.")
+                            .font(.caption).foregroundStyle(DS.Color.textSecondary)
+                    }
+                    Text("Answer prepared \(result.generatedAt.formatted(date: .abbreviated, time: .shortened))")
                         .font(.caption)
+                    if let oldestFetchedAt = result.sources.map(\.fetchedAt).min() {
+                        Text("Oldest source retrieved \(oldestFetchedAt.formatted(date: .abbreviated, time: .shortened))")
+                            .font(.caption)
+                    }
                 }
                 .accessibilityIdentifier("health-query-source")
             }
         }
+    }
+
+    private var displayedSources: [HealthQuerySource] {
+        // newest-first; sources without a measurement use their retrieval time.
+        Array(result.sources.sorted {
+            ($0.measuredAt ?? $0.fetchedAt) > ($1.measuredAt ?? $1.fetchedAt)
+        }.prefix(50))
+    }
+
+    private var usesKindVisualForPrimaryMetrics: Bool {
+        result.kind == .condition || result.kind == .metricComparison || result.kind == .workoutComparison
+    }
+
+    private var secondaryMetrics: [HealthQueryMetric] {
+        result.metrics.filter { metric in
+            if result.kind == .metricComparison || result.kind == .workoutComparison {
+                return metric.comparisonValue?.isFinite != true
+            }
+            return metric.id != heroMetric?.id
+        }
+    }
+
+    private func shouldShowMetricDate(_ date: Date, isHero: Bool) -> Bool {
+        if [.latestWorkout, .strengthSets, .personalRecord, .cardioDetail].contains(result.kind),
+           result.records.first?.date == date { return false }
+        if !isHero, !usesKindVisualForPrimaryMetrics, date == heroMetric?.date { return false }
+        return true
+    }
+
+    private func heroValue(_ metric: HealthQueryMetric) -> some View {
+        Text(metric.unit.formatted(metric.value))
+            .font(.system(size: heroFontSize, weight: .bold, design: .rounded))
+            .lineLimit(1)
+            .minimumScaleFactor(0.6)
+            .accessibilityIdentifier("health-query-hero-value")
     }
 
     private var heroMetric: HealthQueryMetric? {
@@ -215,6 +277,7 @@ struct HealthQueryResultCard: View {
                         .stroke(DS.Color.warmGlow, style: StrokeStyle(lineWidth: 12, lineCap: .round))
                         .rotationEffect(.degrees(-90))
                     Text(score.unit.formatted(score.value)).font(.title.bold())
+                        .accessibilityIdentifier("health-query-hero-value")
                 }
                 .frame(width: 104, height: 104)
                 .accessibilityLabel(score.title + " " + score.unit.formatted(score.value))
@@ -239,7 +302,7 @@ struct HealthQueryResultCard: View {
             let comparable = result.metrics.filter { $0.value.isFinite && $0.comparisonValue?.isFinite == true }
             if !comparable.isEmpty {
                 VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-                    ForEach(comparable.prefix(3)) { metric in comparisonRow(metric) }
+                    ForEach(comparable) { metric in comparisonRow(metric) }
                 }
             }
         case .memoSearch:

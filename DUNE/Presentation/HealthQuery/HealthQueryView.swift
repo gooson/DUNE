@@ -30,8 +30,9 @@ struct HealthQueryView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: DS.Spacing.lg) {
-                Text("Health information")
-                    .font(.largeTitle.bold())
+                Text("Choose information and a period.")
+                    .font(.subheadline)
+                    .foregroundStyle(DS.Color.textSecondary)
                     .accessibilityIdentifier("health-query-screen")
                 Picker("Information", selection: $kind) {
                     ForEach(HealthQueryKind.allCases, id: \.self) { item in
@@ -79,7 +80,6 @@ struct HealthQueryView: View {
                         .accessibilityIdentifier("health-query-cancel")
                 case .loaded(let result):
                     HealthQueryResultCard(result: result, queryService: queryService)
-                        .accessibilityIdentifier("health-query-result")
                     if result.status == .unavailable || result.status == .invalidRequest {
                         Button("Try again") { load() }
                             .accessibilityIdentifier("health-query-retry")
@@ -112,6 +112,7 @@ struct HealthQueryView: View {
         }
         .background { SheetWaveBackground() }
         .navigationTitle("Health information")
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button("Done") { dismiss() }
@@ -119,6 +120,7 @@ struct HealthQueryView: View {
             }
         }
         .task {
+            if case .loaded = model.state { return }
             if kind == .memoSearch && searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                 model.clear()
             } else { load() }

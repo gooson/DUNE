@@ -77,13 +77,15 @@ final class HealthQueryViewModel {
     }
 
     func cancel() {
+        let keepLoadedResult: Bool
+        if case .loaded = state { keepLoadedResult = true } else { keepLoadedResult = false }
         generation += 1
         task?.cancel()
         explanationTask?.cancel()
         task = nil
         explanationTask = nil
         isExplaining = false
-        state = .cancelled
+        if !keepLoadedResult { state = .cancelled }
     }
 }
 

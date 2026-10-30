@@ -10,6 +10,7 @@ struct HealthQueryRecordDetailView: View {
     @State private var healthWorkout: WorkoutSummary?
     @State private var finishedLoading = false
     @State private var isLocked = false
+    @State private var reloadRevision = 0
 
     var body: some View {
         Group {
@@ -30,9 +31,18 @@ struct HealthQueryRecordDetailView: View {
             manualRecord = nil
             healthWorkout = nil
             isLocked = true
+            finishedLoading = false
         }
-        .task(id: snapshot.id) {
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.protectedDataDidBecomeAvailableNotification)) { _ in
+            guard isLocked else { return }
+            isLocked = false
+            finishedLoading = false
+            reloadRevision += 1
+        }
+        .task(id: reloadRevision) {
             guard UIApplication.shared.isProtectedDataAvailable else { isLocked = true; return }
+            isLocked = false
+            finishedLoading = false
             let calendar = Calendar.current
             let start = calendar.startOfDay(for: snapshot.date)
             let nextDay = calendar.date(byAdding: .day, value: 1, to: start) ?? start.addingTimeInterval(86_400)
@@ -40,10 +50,12 @@ struct HealthQueryRecordDetailView: View {
             guard end > start else { finishedLoading = true; return }
             let approvalRequest = HealthQueryRequest(kind: .latestWorkout,
                 interval: DateInterval(start: start, end: end), workoutID: snapshot.id)
-            guard let approval = try? await queryService.execute(approvalRequest),
+            let approval = try? await queryService.execute(approvalRequest)
+            guard !Task.isCancelled else { return }
+            guard UIApplication.shared.isProtectedDataAvailable else { isLocked = true; return }
+            guard let approval,
                   approval.status == .available || approval.status == .partial,
-                  approval.records.contains(where: { $0.id == snapshot.id }),
-                  !Task.isCancelled, UIApplication.shared.isProtectedDataAvailable else {
+                  approval.records.contains(where: { $0.id == snapshot.id }) else {
                 finishedLoading = true
                 return
             }
@@ -57,10 +69,12 @@ struct HealthQueryRecordDetailView: View {
                 let workouts = try? await WorkoutQueryService(manager: .shared).fetchWorkouts(start: start, end: end)
                 resolvedHealth = workouts?.first { $0.id == workoutID }
             }
-            guard let refreshed = try? await queryService.execute(approvalRequest),
+            let refreshed = try? await queryService.execute(approvalRequest)
+            guard !Task.isCancelled else { return }
+            guard UIApplication.shared.isProtectedDataAvailable else { isLocked = true; return }
+            guard let refreshed,
                   refreshed.status == .available || refreshed.status == .partial,
-                  refreshed.records.contains(where: { $0.id == snapshot.id }),
-                  !Task.isCancelled, UIApplication.shared.isProtectedDataAvailable else {
+                  refreshed.records.contains(where: { $0.id == snapshot.id }) else {
                 finishedLoading = true
                 return
             }

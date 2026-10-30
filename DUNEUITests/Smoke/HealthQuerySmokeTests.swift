@@ -13,7 +13,7 @@ final class HealthQuerySmokeTests: SeededUITestBaseCase {
     func testBrowseEntryPeriodSourceAndBack() {
         openBrowse()
         XCTAssertTrue(element("health-query-result-kind-latestWorkout").waitForExistence(timeout: 8))
-        XCTAssertTrue(app.scrollToElementIfNeeded("health-query-source", maxSwipes: 8))
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("health-query-source", maxSwipes: 8))
         XCTAssertTrue(element("health-query-source").exists, "A loaded answer should show its provenance")
 
         selectPeriod("last7Days")
@@ -57,6 +57,7 @@ final class HealthQuerySmokeTests: SeededUITestBaseCase {
                 XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 5),
                               "The software keyboard must be active for text input")
                 field.typeText("Sample")
+                capture("SQ12-software-keyboard")
                 let keyboardSearch = app.keyboards.buttons.matching(
                     NSPredicate(format: "label ==[c] %@", "search")
                 ).firstMatch
@@ -96,6 +97,30 @@ final class HealthQuerySmokeTests: SeededUITestBaseCase {
                       "Cancelling system share should return to the report")
     }
 
+    func testCaptureBodyAndDurationAtMaximumTextSize() {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "--ui-test-theme", "desertWarm", "--ui-test-style", "dark",
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ]
+        launchApp(with: configuration)
+        openBrowse()
+        for (kind, captureName) in [("latestBody", "SQ06-accessibility-body"),
+                                     ("latestWorkout", "SQ01-accessibility-duration")] {
+            selectKind(kind)
+            let value = element("health-query-hero-value")
+            XCTAssertTrue(app.scrollToHittableElementIfNeeded("health-query-hero-value", maxSwipes: 10))
+            for _ in 0..<4 where !app.windows.firstMatch.frame.contains(value.frame) {
+                let upward = value.frame.maxY > app.windows.firstMatch.frame.maxY
+                let start = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: upward ? 0.7 : 0.4))
+                let end = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: upward ? 0.5 : 0.6))
+                start.press(forDuration: 0.05, thenDragTo: end)
+            }
+            XCTAssertTrue(app.windows.firstMatch.frame.contains(value.frame), "The large value must fit in the native viewport")
+            capture(captureName)
+        }
+    }
+
     private func openBrowse(captureEntry: Bool = false) {
         navigateToDashboard()
         let cardID = "dashboard-health-qa-card"
@@ -112,7 +137,7 @@ final class HealthQuerySmokeTests: SeededUITestBaseCase {
 
     private func selectKind(_ kind: String) {
         let picker = element("health-query-kind")
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded("health-query-kind", maxSwipes: 8))
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("health-query-kind", maxSwipes: 8, direction: .down))
         picker.tap()
         let choice = app.buttons["health-query-kind-\(kind)"].firstMatch
         XCTAssertTrue(choice.waitForExistence(timeout: 5), "Information menu should offer \(kind)")
@@ -120,7 +145,7 @@ final class HealthQuerySmokeTests: SeededUITestBaseCase {
     }
 
     private func selectPeriod(_ period: String) {
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded("health-query-period", maxSwipes: 8))
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("health-query-period", maxSwipes: 8, direction: .down))
         element("health-query-period").tap()
         let choice = app.buttons["health-query-period-\(period)"].firstMatch
         XCTAssertTrue(choice.waitForExistence(timeout: 5))
@@ -135,7 +160,33 @@ final class HealthQuerySmokeTests: SeededUITestBaseCase {
         if ProcessInfo.processInfo.environment["DUNE_VISUAL_AUDIT_HOST_ONLY"] == "1" {
             VisualAudit.capture(name)
         } else {
-            addScreenshotAttachment(named: name)
+            let started = Date()
+            let screenshot = app.screenshot()
+            let attachment = XCTAttachment(screenshot: screenshot)
+            attachment.name = name
+            attachment.lifetime = .keepAlways
+            add(attachment)
+            let frame = app.windows.firstMatch.frame
+            let metadata: [String: Any] = [
+                "captureStartedAt": ISO8601DateFormatter().string(from: started),
+                "captureFinishedAt": ISO8601DateFormatter().string(from: Date()),
+                "viewportPoints": ["x": Double(frame.minX), "y": Double(frame.minY),
+                                   "width": Double(frame.width), "height": Double(frame.height)],
+                "orientation": XCUIDevice.shared.orientation.rawValue,
+                "softwareKeyboardVisible": app.keyboards.firstMatch.exists,
+                "dataKind": "synthetic DEBUG health-query fixture"
+            ]
+            if let data = try? JSONSerialization.data(withJSONObject: metadata, options: [.sortedKeys]),
+               let text = String(data: data, encoding: .utf8) {
+                let readback = XCTAttachment(string: text)
+                readback.name = name + "-metadata"
+                readback.lifetime = .keepAlways
+                add(readback)
+            }
+            let hierarchy = XCTAttachment(string: app.debugDescription)
+            hierarchy.name = name + "-hierarchy"
+            hierarchy.lifetime = .keepAlways
+            add(hierarchy)
         }
     }
 }

@@ -32,6 +32,22 @@ struct HealthQueryViewModelTests {
         #expect(model.state == .cancelled)
     }
 
+    @Test("Cancellation after a query completes keeps its verified answer")
+    func cancellationPreservesLoadedResult() async {
+        let model = HealthQueryViewModel(service: StubHealthQueryService())
+        model.load(HealthQueryRequest(kind: .sleep))
+        for _ in 0..<20 {
+            if case .loaded = model.state { break }
+            await Task.yield()
+        }
+        guard case .loaded(let original) = model.state else {
+            Issue.record("Expected a loaded result before cancellation")
+            return
+        }
+        model.cancel()
+        #expect(model.state == .loaded(original))
+    }
+
     @Test("A failed query shows a recoverable state")
     func failure() async {
         let model = HealthQueryViewModel(service: FailingHealthQueryService())

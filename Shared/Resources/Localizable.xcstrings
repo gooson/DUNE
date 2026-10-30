@@ -5600,6 +5600,23 @@
         }
       }
     },
+    "Answer prepared %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "回答の作成 %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "답변 생성 %@"
+          }
+        }
+      }
+    },
     "Answers are informational and based on your recent DUNE health data." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -10091,6 +10108,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "다른 기간을 선택해 기록을 찾아보세요."
+          }
+        }
+      }
+    },
+    "Choose information and a period." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "確認する情報と期間を選んでください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "확인할 정보와 기간을 선택하세요."
           }
         }
       }
@@ -31371,6 +31405,23 @@
         }
       }
     },
+    "Oldest source retrieved %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最も古い情報源の取得 %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "가장 오래된 출처 조회 %@"
+          }
+        }
+      }
+    },
     "On" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -40632,6 +40683,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "운동 더 보기"
+          }
+        }
+      }
+    },
+    "Showing the latest 50 of %lld sources." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld件の情報源のうち、最新の50件を表示します。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "출처 %lld개 중 최신 50개를 표시해요."
           }
         }
       }

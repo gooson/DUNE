@@ -98,7 +98,14 @@ extension HealthQueryUnit {
     }
 
     func displayUnit(for value: Double) -> String {
-        self == .meters && abs(value) >= 1_000 ? "km" : symbol
+        if self == .seconds { return "" }
+        if self == .secondsPerKilometer { return "min/km" }
+        return self == .meters && abs(value) >= 1_000 ? "km" : symbol
+    }
+
+    func displayValue(_ value: Double) -> String {
+        let unit = displayUnit(for: value)
+        return unit.isEmpty ? formatted(value) : formatted(value) + " " + unit
     }
 }
 
