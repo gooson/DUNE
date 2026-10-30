@@ -10,7 +10,7 @@ final class AllDataDetailRedesignTests: SeededUITestBaseCase {
     }
 
     func testAllCategoryReadyRowsAndCaptures() {
-        executionTimeAllowance = 600
+        executionTimeAllowance = 900
         for fixture in Self.readyFixtures {
             launch(category: fixture.category)
             let screen = allDataScreen(for: fixture.category)
@@ -23,7 +23,7 @@ final class AllDataDetailRedesignTests: SeededUITestBaseCase {
             XCTAssertTrue(Self.hasTimePrefix(row.label),
                           "\(fixture.category) row must combine a localized time and \(fixture.value): \(row.label)")
             XCTAssertFalse(screen.descendants(matching: .any)["all-data-empty-state"].firstMatch.exists)
-            addScreenshotAttachment(named: "T07-\(fixture.category)-native")
+            captureNativeState(named: "T07-\(fixture.category)-native")
         }
     }
 
@@ -41,7 +41,7 @@ final class AllDataDetailRedesignTests: SeededUITestBaseCase {
         )
         XCTAssertTrue(row.label.contains(expectedTime),
                       "Sleep time must use the first non-awake stage, not the reporting-day midnight: \(row.label)")
-        addScreenshotAttachment(named: "T07-sleep-reporting-day-native")
+        captureNativeState(named: "T07-sleep-reporting-day-native")
     }
 
     func testLimitedReadyAndLimitedEmptyStates() {
@@ -51,7 +51,7 @@ final class AllDataDetailRedesignTests: SeededUITestBaseCase {
         XCTAssertTrue(notice(in: screen).waitForExistence(timeout: 15))
         XCTAssertTrue(row(containing: "75 ms", in: screen).waitForExistence(timeout: 15))
         XCTAssertFalse(screen.descendants(matching: .any)["all-data-empty-state"].firstMatch.exists)
-        addScreenshotAttachment(named: "T07-hrv-limited-ready-native")
+        captureNativeState(named: "T07-hrv-limited-ready-native")
 
         launch(category: "hrv", extra: ["--uitest-limited-health-history", "--ui-test-wellness-records-only"])
         screen = allDataScreen(for: "hrv")
@@ -60,7 +60,7 @@ final class AllDataDetailRedesignTests: SeededUITestBaseCase {
         XCTAssertTrue(screen.descendants(matching: .any)["all-data-empty-state"].firstMatch
             .waitForExistence(timeout: 15))
         XCTAssertTrue(screen.staticTexts["No data in the available range."].firstMatch.exists)
-        addScreenshotAttachment(named: "T07-hrv-limited-empty-native")
+        captureNativeState(named: "T07-hrv-limited-empty-native")
     }
 
     func testEmptyHistoryAndBreathingReadyState() {
@@ -70,14 +70,14 @@ final class AllDataDetailRedesignTests: SeededUITestBaseCase {
         XCTAssertTrue(screen.descendants(matching: .any)["all-data-empty-state"].firstMatch
             .waitForExistence(timeout: 15))
         XCTAssertTrue(screen.staticTexts["No data available yet."].firstMatch.exists)
-        addScreenshotAttachment(named: "T07-breathingDisturbances-empty-native")
+        captureNativeState(named: "T07-breathingDisturbances-empty-native")
 
         launch(category: "breathingDisturbances")
         screen = allDataScreen(for: "breathingDisturbances")
         XCTAssertTrue(screen.waitForExistence(timeout: 15))
         XCTAssertTrue(todaySection(in: screen, daysAgo: 0).waitForExistence(timeout: 15))
         XCTAssertTrue(row(containing: "1.2/hr", in: screen).waitForExistence(timeout: 15))
-        addScreenshotAttachment(named: "T07-breathingDisturbances-ready-native")
+        captureNativeState(named: "T07-breathingDisturbances-ready-native")
     }
 
     func testDarkMaximumAccessibilityBaselineCapture() {
@@ -92,7 +92,13 @@ final class AllDataDetailRedesignTests: SeededUITestBaseCase {
         XCTAssertTrue(row.waitForExistence(timeout: 15))
         XCTAssertTrue(app.scrollToHittableElementIfNeeded("all-data-screen-wristTemperature", maxSwipes: 8))
         XCTAssertTrue(row.isHittable, "The seeded temperature row should remain available to accessibility; pixel reflow is assessed from baseline capture")
-        addScreenshotAttachment(named: "T07-wristTemperature-dark-maximum-AX-native")
+        captureNativeState(named: "T07-wristTemperature-dark-maximum-AX-native")
+    }
+
+    private func captureNativeState(named name: String) {
+        // Native collector adds fresh AX and both Duo LCDs at this ready state.
+        VisualAudit.capture(name)
+        addScreenshotAttachment(named: name)
     }
 
     private func launch(category: String, extra: [String] = []) {
@@ -101,7 +107,7 @@ final class AllDataDetailRedesignTests: SeededUITestBaseCase {
         launchApp(with: configuration)
     }
 
-    private func routeArguments(for category: String) -> [String] {
+    nonisolated private func routeArguments(for category: String) -> [String] {
         ["--ui-t07-all-data", category, "--ui-disable-animations",
          "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
          "-morningBriefingDisabled", "YES"]
