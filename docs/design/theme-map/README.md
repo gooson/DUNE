@@ -179,3 +179,7 @@ L03 네이티브 구현은 기존20개 템플릿의 선택·자동 입력을 유
 T04 native 구현은 단위32개·기기별 선택 UI15개와 새4기기 실제 원본으로 검증했다. 검토용 PNG/JSON은 브라우저 시안이며 새 native 캡처와 구분한다. 실제 입력이 없는70/30 예시 구성은 사용하지 않는다.
 
 Gold Impact 네이티브 일반 빌드·관련 단위51개와 S01 설정 저장 검증은 통과했다. [새 실제 설정 2장](../phone-design-map/actual/live-activity/gold-impact-2026-10-30/index.html)과 [남은 시스템 UI 게이트](../../reviews/2026-10-30-live-activity-gold-preferences.md)를 구분한다. WLA01 최종 캡처는 환경 조회 무응답으로 미완료이며 보존 시안·이전 PNG를 새 검증 증거로 사용하지 않는다.
+
+## T06 건강 지표 상세 · 2026-10-30
+
+[16개 지표의 보존 시안과 표현 방향](themes/dune-health-metric-detail-redesign.html) · [배치/기능/출처 계약](../layout-map/health-metric-detail-redesign-proposal.md). 원래 수치·단위·아이콘·수면/운동 분석을 보존하는 제안이다. 큰 수치와 통합 추세를 강조하며 실제 native 전후 캡처는 별도 검증한다. 원본 시안의 MCST 참조를 제품 허가된 데이터로 간주하지 않으며, 선택형 미국 체중/BMI 평균과 미지원 신체 비교를 구분한다.
