@@ -162,6 +162,7 @@ struct ContentView: View {
     @State private var isShowingLaunchPostureCapture = PostureCaptureService.shouldAutoOpenCaptureOnLaunch
     @State private var todayNavPath = NavigationPath()
     @State private var isShowingDashboardHealthDataQA = false
+    @State private var healthQueryNavigation = HealthQueryNavigation.shared
     @State private var trainNavPath = NavigationPath()
     @State private var wellnessNavPath = NavigationPath()
     @State private var lifeNavPath = NavigationPath()
@@ -203,7 +204,7 @@ struct ContentView: View {
         if isShowingDashboardHealthDataQA {
             HealthDataQASheet(
                 viewModel: HealthDataQAViewModel(
-                    service: HealthDataQAService(sharedHealthDataService: sharedHealthDataService),
+                    service: HealthDataQAService(sharedHealthDataService: sharedHealthDataService, queryService: HealthQueryService.shared),
                     isAvailable: HealthDataQAService.isAvailable
                 )
             )
@@ -338,6 +339,14 @@ struct ContentView: View {
         .environment(\.appTheme, selectedTheme)
         .tint(selectedTheme.accentColor)
         .tabViewStyle(.sidebarAdaptable)
+        .onChange(of: healthQueryNavigation.route?.id) { _, newID in
+            if newID != nil { isShowingDashboardHealthDataQA = false }
+        }
+        .sheet(item: $healthQueryNavigation.route) { route in
+            NavigationStack {
+                HealthQueryView(queryService: HealthQueryServiceRouting.current(), request: route.request)
+            }
+        }
         .task(id: shortcutTemplateSignal) {
             guard shortcutTemplateSignal > 0, shortcutTemplateID != nil else { return }
             selectedSection = .train
