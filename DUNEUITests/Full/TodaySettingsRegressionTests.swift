@@ -393,7 +393,9 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         func visibleWeatherViewport() -> CGRect {
             let scrollFrame = dashboardScroll.frame.intersection(app.windows.firstMatch.frame)
             let top = max(scrollFrame.minY, app.navigationBars.firstMatch.frame.maxY + 8)
-            let bottom = min(scrollFrame.maxY, app.tabBars.firstMatch.frame.minY - 8)
+            let tabBar = app.tabBars.firstMatch
+            let bottom = tabBar.exists && tabBar.isHittable && tabBar.frame.minY > scrollFrame.midY
+                ? min(scrollFrame.maxY, tabBar.frame.minY - 8) : scrollFrame.maxY
             return CGRect(x: scrollFrame.minX, y: top, width: scrollFrame.width,
                           height: max(0, bottom - top))
         }
@@ -439,7 +441,7 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         let scrollViewport = detail.frame.intersection(window)
         let top = max(scrollViewport.minY, app.navigationBars.firstMatch.frame.maxY + 8)
         let tabBar = app.tabBars.firstMatch
-        let bottom = tabBar.exists && tabBar.isHittable
+        let bottom = tabBar.exists && tabBar.isHittable && tabBar.frame.minY > scrollViewport.midY
             ? min(scrollViewport.maxY, tabBar.frame.minY - 8) : scrollViewport.maxY
         let heroViewport = CGRect(x: scrollViewport.minX, y: top,
                                   width: scrollViewport.width, height: max(0, bottom - top))
