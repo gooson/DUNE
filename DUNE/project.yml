@@ -393,6 +393,8 @@ targets:
       - path: Data/Persistence/NotificationSettingsStore.swift
       - path: Data/Persistence/NotificationThrottleStore.swift
       - path: Data/Persistence/PersonalRecordStore.swift
+      # Shared health-query services apply the same deleted-workout visibility policy.
+      - path: Data/Persistence/DeletedWorkoutTombstoneStore.swift
       # Shared HealthKit services
       - path: Data/HealthKit
         excludes:

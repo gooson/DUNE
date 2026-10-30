@@ -892,6 +892,7 @@
 		9E32E2E8ACEEBC725469C99B /* HealthDataQuestionAnswering.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8DAFF1C2C1AC3E63633247E /* HealthDataQuestionAnswering.swift */; };
 		9E7597452D4933613BAE3D74 /* AppRefreshCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0645CDC034E79FDF4FD65870 /* AppRefreshCoordinator.swift */; };
 		9E787E6B86E522571E860E02 /* GenerateWorkoutReportUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F38B2F8A2AA492F908E406 /* GenerateWorkoutReportUseCaseTests.swift */; };
+		9FCDDB2322DB816130BECBD7 /* DeletedWorkoutTombstoneStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A4BF33EF90B481000BDA86A /* DeletedWorkoutTombstoneStore.swift */; };
 		9FD1CAD985502E0D26263A34 /* TrainingLoadChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452C53BC912873CAE1EB8C80 /* TrainingLoadChartView.swift */; };
 		9FDCE6E9F720615781297E68 /* LimitedHealthHistoryNotice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A44E39455407395D1234BED5 /* LimitedHealthHistoryNotice.swift */; };
 		9FE5E83B6D65AF306947F5EE /* MuscleMapDetailViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB50864805F4D6E860B99E58 /* MuscleMapDetailViewModelTests.swift */; };
@@ -5958,6 +5959,7 @@
 				69996CEBABC93CD0BDA33E16 /* DUNEVisionApp.swift in Sources */,
 				58BA11746F77F092125B388E /* DailyDigest.swift in Sources */,
 				0A7B80A06C41645FE897A275 /* DailyDigestScheduler.swift in Sources */,
+				9FCDDB2322DB816130BECBD7 /* DeletedWorkoutTombstoneStore.swift in Sources */,
 				B7171402B365829CC9FE8F22 /* DetectNapsUseCase.swift in Sources */,
 				93D9EB57F2D4B2F0C4489689 /* Double+Formatting.swift in Sources */,
 				FA5E55560DEDE1440BAB4727 /* EffortScoreService.swift in Sources */,
