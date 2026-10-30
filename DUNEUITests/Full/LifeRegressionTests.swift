@@ -31,6 +31,38 @@ final class LifeRegressionTests: SeededUITestBaseCase {
         XCTAssertTrue(waitForElement("life-habit-group-today").exists)
     }
 
+    func testScrollReturnKeepsLifeHeroAtOriginalPosition() throws {
+        ensureLifeRoot()
+        let hero = app.descendants(matching: .any)[AXID.lifeHeroProgress].firstMatch
+        let scroll = app.scrollViews.firstMatch
+        XCTAssertTrue(hero.waitForExistence(timeout: 15))
+        XCTAssertTrue(scroll.waitForExistence(timeout: 8))
+        let visible = XCTNSPredicateExpectation(predicate: NSPredicate(format: "hittable == true"), object: hero)
+        XCTAssertEqual(XCTWaiter.wait(for: [visible], timeout: 5), .completed)
+        let initialY = hero.frame.minY
+        addScreenshotAttachment(named: "Life scroll return initial")
+
+        for _ in 0..<8 where hero.frame.intersects(scroll.frame) {
+            scroll.swipeUp(velocity: .slow)
+        }
+        XCTAssertFalse(hero.frame.intersects(scroll.frame), "The hero must leave the viewport before returning")
+        for _ in 0..<12 where hero.frame.minY < initialY - 12 {
+            scroll.swipeDown(velocity: .slow)
+        }
+        for _ in 0..<3 {
+            scroll.swipeDown(velocity: .slow)
+            let settled = XCTNSPredicateExpectation(
+                predicate: NSPredicate { _, _ in
+                    hero.exists && hero.isHittable && abs(hero.frame.minY - initialY) <= 12
+                },
+                object: nil
+            )
+            XCTAssertEqual(XCTWaiter.wait(for: [settled], timeout: 5), .completed,
+                           "Repeated returns must preserve the original hero position")
+        }
+        addScreenshotAttachment(named: "Life scroll return settled")
+    }
+
     func testLifeRootRendersAndAddFlowCreatesNewHabit() throws {
         ensureLifeRoot()
         XCTAssertTrue(waitForElement(AXID.lifeHeroProgress, timeout: 15).exists, "Life hero should exist in seeded state")

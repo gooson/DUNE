@@ -165,6 +165,7 @@ struct ContentView: View {
     @State private var trainNavPath = NavigationPath()
     @State private var wellnessNavPath = NavigationPath()
     @State private var lifeNavPath = NavigationPath()
+    @State private var lifeHistorySelection: HabitHistorySelection?
     @State private var notificationPresentationRequestID = 0
     @State private var notificationRouteSignal = 0
     @State private var notificationHubSignal = 0
@@ -314,6 +315,7 @@ struct ContentView: View {
             Tab(value: AppSection.life) {
                 NavigationStack(path: $lifeNavPath) {
                     LifeView(
+                        historySelection: $lifeHistorySelection,
                         scrollToTopSignal: lifeScrollToTopSignal,
                         refreshSignal: refreshSignal,
                         checklistSignal: lifeChecklistSignal
@@ -326,6 +328,23 @@ struct ContentView: View {
                         case .habitManagement:
                             HabitManagementView()
                         }
+                    }
+                }
+                // Match Today: keep the inspector host outside the navigation stack
+                // so its safe-area changes do not feed back into root scrolling.
+                .inspector(isPresented: Binding(
+                    get: { lifeHistorySelection != nil },
+                    set: { if !$0 { lifeHistorySelection = nil } }
+                )) {
+                    if let selection = lifeHistorySelection {
+                        HabitHistorySheet(
+                            habitName: selection.habitName,
+                            iconCategory: selection.iconCategory,
+                            habitType: selection.habitType,
+                            entries: selection.entries,
+                            onAddPastRecord: selection.onAddPastRecord
+                        )
+                        .inspectorColumnWidth(min: 300, ideal: 360, max: 460)
                     }
                 }
                 .environment(\.wavePreset, .life)

@@ -199,3 +199,6 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 
 
 2026-10-30 최근 운동 배지 재개 검증에서는 별도 main 기반 worktree의 소유 iPhone을 새로 생성·등록하고 기존 UI 검증 종료 후 실행했다. 테스트 bundle 생성 후 실행 초기화가 정체돼 300초 로그 무갱신/exit124로 끝났고 testcase 통과 증거는 없다. iPhone·iPad·Duo 접힘/펼침 A01의 배지·기본/큰 글씨 새 캡처는 여전히 미갱신이다. 원래 worktree의 기기 부재와 새 worktree의 실행 장애를 구분하며 [상세 리뷰·복구 조건](../../reviews/2026-10-30-compact-workout-achievement.md)을 따른다.
+
+
+2026-10-30 L01 제목·내비게이션 배경의 테마별 강제 설정을 제거하고 습관 기록 inspector를 Today와 같은 탭 NavigationStack 바깥으로 이동했다. 사용자 요청으로 테스트·캡처는 실행하지 않았다. iPhone·iPad·Duo 접힘/펼침의 L01 및 기록 패널은 새 실제 캡처 미갱신이며 이전 PNG를 이번 변경의 증거로 사용하지 않는다. Watch·visionOS는 이 LifeView를 사용하지 않는다. 스크롤 복귀 해결 여부와 기록 열기·닫기·과거 기록 추가의 실행 검증은 남아 있다.
