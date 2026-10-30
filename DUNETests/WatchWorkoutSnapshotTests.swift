@@ -14,7 +14,10 @@ struct WatchWorkoutSnapshotTests {
         activeCalories: Double = 24.5,
         distanceMeters: Double = 1_250,
         exerciseName: String = "Outdoor Run",
-        exerciseIconName: String? = nil
+        exerciseIconName: String? = nil,
+        workoutKind: WatchWorkoutSnapshot.WorkoutKind? = nil,
+        supportsDistance: Bool? = nil,
+        currentSetWeightKg: Double? = nil
     ) -> WatchWorkoutSnapshot {
         WatchWorkoutSnapshot(
             startedAt: startedAt,
@@ -25,7 +28,10 @@ struct WatchWorkoutSnapshotTests {
             heartRate: heartRate,
             activeCalories: activeCalories,
             distanceMeters: distanceMeters,
-            exerciseIconName: exerciseIconName
+            exerciseIconName: exerciseIconName,
+            workoutKind: workoutKind,
+            supportsDistance: supportsDistance,
+            currentSetWeightKg: currentSetWeightKg
         )
     }
 
@@ -48,6 +54,36 @@ struct WatchWorkoutSnapshotTests {
         #expect(decoded.exerciseIconName == nil)
         #expect(decoded.isValid)
         #expect(decoded.phaseIconName(isStale: false) == "figure")
+    }
+
+    @Test("Older payloads without workout metadata remain decodable")
+    func legacyWorkoutMetadataPayload() throws {
+        let data = try JSONEncoder().encode(snapshot())
+        var object = try #require(JSONSerialization.jsonObject(with: data) as? [String: Any])
+        object.removeValue(forKey: "workoutKind")
+        object.removeValue(forKey: "supportsDistance")
+        object.removeValue(forKey: "currentSetWeightKg")
+        let legacyData = try JSONSerialization.data(withJSONObject: object)
+
+        let decoded = try JSONDecoder().decode(WatchWorkoutSnapshot.self, from: legacyData)
+        #expect(decoded.workoutKind == nil)
+        #expect(decoded.supportsDistance == nil)
+        #expect(decoded.currentSetWeightKg == nil)
+        #expect(decoded.isValid)
+    }
+
+    @Test("Current-set weight preserves explicit zero and validates bounds", arguments: [0.0, 500.0])
+    func currentSetWeightBoundaries(weight: Double) throws {
+        let original = snapshot(currentSetWeightKg: weight)
+        let decoded = try JSONDecoder().decode(WatchWorkoutSnapshot.self, from: JSONEncoder().encode(original))
+        #expect(decoded.currentSetWeightKg == weight)
+        #expect(decoded.isValid)
+    }
+
+    @Test("Missing current-set weight remains distinct from explicit zero")
+    func currentSetWeightMissingAndZero() {
+        #expect(snapshot(currentSetWeightKg: nil).currentSetWeightKg == nil)
+        #expect(snapshot(currentSetWeightKg: 0).currentSetWeightKg == 0)
     }
 
     @Test("Older receivers can ignore the additional icon field")
@@ -130,6 +166,10 @@ struct WatchWorkoutSnapshotTests {
         invalidSnapshots.append(snapshot(distanceMeters: .infinity))
         invalidSnapshots.append(snapshot(distanceMeters: -1))
         invalidSnapshots.append(snapshot(distanceMeters: 1_000_001))
+        invalidSnapshots.append(snapshot(currentSetWeightKg: .nan))
+        invalidSnapshots.append(snapshot(currentSetWeightKg: .infinity))
+        invalidSnapshots.append(snapshot(currentSetWeightKg: -0.1))
+        invalidSnapshots.append(snapshot(currentSetWeightKg: 500.1))
 
         #expect(invalidSnapshots.allSatisfy { !$0.isValid })
     }

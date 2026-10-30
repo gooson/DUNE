@@ -2,6 +2,10 @@ import Foundation
 
 /// Small payload used only by the mirrored workout and its Live Activity.
 struct WatchWorkoutSnapshot: Codable, Hashable, Sendable {
+    enum WorkoutKind: String, Codable, Sendable {
+        case cardio, strength
+    }
+
     enum Phase: String, Codable, Sendable {
         case running, paused, ended
     }
@@ -16,6 +20,11 @@ struct WatchWorkoutSnapshot: Codable, Hashable, Sendable {
     var distanceMeters: Double
     /// Canonical WorkoutActivityType.iconName from the producer; absent on older Watch versions.
     var exerciseIconName: String? = nil
+    /// Session category and metric availability. Absent on older Watch versions.
+    var workoutKind: WorkoutKind? = nil
+    var supportsDistance: Bool? = nil
+    /// Live editable current-set input in kg; zero is a meaningful no-load value.
+    var currentSetWeightKg: Double? = nil
 
     func phaseIconName(isStale: Bool) -> String {
         if isStale { return "wifi.slash" }
@@ -40,6 +49,7 @@ struct WatchWorkoutSnapshot: Codable, Hashable, Sendable {
             && activeCalories.isFinite && (0...100_000).contains(activeCalories)
             && distanceMeters.isFinite && (0...1_000_000).contains(distanceMeters)
             && (heartRate == nil || heartRate.map { $0.isFinite && (20...250).contains($0) } == true)
+            && (currentSetWeightKg == nil || currentSetWeightKg.map { $0.isFinite && (0...500).contains($0) } == true)
     }
 
     /// A running system timer advances without a per-second transport update.

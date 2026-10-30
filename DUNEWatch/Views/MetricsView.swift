@@ -66,6 +66,9 @@ struct MetricsView: View {
             prefillFromEntry()
             refreshPreviousSetsCache()
         }
+        .onChange(of: weight) { _, _ in
+            publishCurrentSetWeight()
+        }
         .onAppear {
             prefillFromEntry()
             refreshPreviousSetsCache()
@@ -498,6 +501,7 @@ struct MetricsView: View {
                 weight = 0
             }
             usesAddedWeight = inputType == .setsReps && weight > 0
+            publishCurrentSetWeight()
         }
 
         if inputType == .durationIntensity {
@@ -539,6 +543,15 @@ struct MetricsView: View {
             )
             reps = fallbackReps
         }
+    }
+
+    private func publishCurrentSetWeight() {
+        guard currentInputType == .setsReps || currentInputType == .setsRepsWeight else {
+            workoutManager.updateCurrentSetWeightKg(nil)
+            return
+        }
+        // MetricsView and SetInputSheet store weight in kg.
+        workoutManager.updateCurrentSetWeightKg(weight)
     }
 
     /// Priority: within-session carry-forward → template entry → global default.
