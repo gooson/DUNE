@@ -9,6 +9,7 @@ struct HealthQueryView: View {
     @State private var period: HealthQueryPeriod?
     @State private var request: HealthQueryRequest
     @State private var searchText: String
+    @FocusState private var isSearchFocused: Bool
 
     init(queryService: any HealthQuerying, request: HealthQueryRequest? = nil) {
         self.queryService = queryService
@@ -54,9 +55,10 @@ struct HealthQueryView: View {
                         TextField("Search workout notes", text: $searchText)
                             .textFieldStyle(.roundedBorder)
                             .submitLabel(.search)
-                            .onSubmit { load() }
+                            .focused($isSearchFocused)
+                            .onSubmit { isSearchFocused = false; load() }
                             .accessibilityIdentifier("health-query-search-field")
-                        Button("Search") { load() }
+                        Button("Search") { isSearchFocused = false; load() }
                             .disabled(searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                             .accessibilityIdentifier("health-query-search-submit")
                     }
