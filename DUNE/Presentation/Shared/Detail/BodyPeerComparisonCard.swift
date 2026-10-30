@@ -89,6 +89,7 @@ struct BodyPeerComparisonCard: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
         }
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier("body-peer-card")
         .sheet(isPresented: $isChoosingCriteria) { criteriaSheet }
         .sheet(isPresented: $isShowingSource) { sourceSheet }
