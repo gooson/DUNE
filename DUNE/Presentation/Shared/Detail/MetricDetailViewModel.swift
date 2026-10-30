@@ -12,6 +12,7 @@ final class MetricDetailViewModel {
             if oldValue != selectedPeriod {
                 cancelHistoryPrefetch()
                 loadedHistoryRange = nil
+                clearVisibleSummarySource()
                 resetScrollPosition()
                 triggerReload()
             }
@@ -60,6 +61,11 @@ final class MetricDetailViewModel {
     var rangeData: [RangeDataPoint] = []
     var stackedData: [StackedDataPoint] = []
     var summaryStats: MetricSummary?
+    /// Separate from the legacy header: only accepted, covered viewport source rows.
+    private(set) var visibleSummary: MetricVisibleSummary?
+    private var visibleSummarySource: VisibleSummarySource?
+    private var pendingVisibleSummarySource: (requestID: Int, source: VisibleSummarySource)?
+
     var highlights: [Highlight] = []
     var isLoading = false
     var errorMessage: String?
@@ -67,8 +73,8 @@ final class MetricDetailViewModel {
     /// Raw workouts for the current period (stored for scroll-based totals recalculation).
     private var loadedWorkouts: [WorkoutSummary] = []
 
-    /// The unit label for the current metric (e.g. "km" for distance-based exercises).
-    /// Defaults to the category's standard unit; overridden for distance-based workout types.
+    /// Query-series unit, independent of the incoming headline quantity/unit.
+    /// Body mass queries use kg; each accepted exercise window resolves km or min.
     var metricUnit: String = ""
 
     private(set) var category: HealthMetric.Category = .hrv
@@ -120,6 +126,7 @@ final class MetricDetailViewModel {
         cancelHistoryPrefetch()
         scrollDebounceTask?.cancel()
         loadedHistoryRange = nil
+        clearVisibleSummarySource()
         requestedHistoryRange = nil
         historyBoundsLoaded = false
         earliestHistoryDate = nil
@@ -129,7 +136,12 @@ final class MetricDetailViewModel {
         self.hasConfiguredValue = true
         self.lastUpdated = lastUpdated
         self.workoutTypeName = workoutTypeName
-        self.metricUnit = metricUnit ?? ""
+        switch category {
+        case .weight, .leanBodyMass:
+            self.metricUnit = "kg"
+        default:
+            self.metricUnit = metricUnit ?? ""
+        }
         resetScrollPosition()
     }
 
@@ -140,6 +152,8 @@ final class MetricDetailViewModel {
             hasHistoryYDomain = false
             cancelHistoryPrefetch()
             loadedHistoryRange = nil
+            // Keep the matching accepted chart/source until a loader stages replacement.
+            // Configure and period changes already clear incompatible source snapshots.
             historyReferenceDate = Date()
         }
         let currentSummary = summaryStats
@@ -178,6 +192,10 @@ final class MetricDetailViewModel {
                 currentValue = headlineValue
             }
             loadedHistoryRange = range
+            if let pending = pendingVisibleSummarySource, pending.requestID == requestID {
+                visibleSummarySource = pending.source
+                pendingVisibleSummarySource = nil
+            }
             invalidateScrollCache()
             if !historyBoundsLoaded || !historyNavigation {
                 do {
@@ -258,6 +276,55 @@ final class MetricDetailViewModel {
     private func invalidateScrollCache() {
         recomputeExerciseTotals()
         recomputeTrendLine()
+        recomputeVisibleSummary()
+    }
+
+    private struct VisibleSummarySource {
+        let points: [ChartDataPoint]
+        let basis: MetricVisibleSummary.Basis
+        let unit: String
+        let coverage: DateInterval
+        let referenceDate: Date
+    }
+
+    private func clearVisibleSummarySource() {
+        visibleSummary = nil
+        visibleSummarySource = nil
+        pendingVisibleSummarySource = nil
+    }
+
+    /// Stage one bounded replacement; final load publication also validates coverage.
+    private func captureVisibleSummarySource(
+        _ points: [ChartDataPoint], requestID: Int, unit: String? = nil
+    ) {
+        guard isCurrentReloadRequest(requestID) else { return }
+        let range = extendedRange
+        // The loader publishes new chart rows immediately after staging. Discard the
+        // old accepted source now so didSet/debounce cannot pair it with those rows.
+        // A failure before this point keeps both the old chart and its source intact.
+        visibleSummarySource = nil
+        visibleSummary = nil
+        pendingVisibleSummarySource = (requestID, VisibleSummarySource(
+            points: points.filter { $0.value.isFinite && $0.date >= range.start && $0.date < range.end },
+            basis: MetricVisibleSummary.Basis.resolve(category: category, period: selectedPeriod),
+            unit: unit ?? metricUnit,
+            coverage: DateInterval(start: range.start, end: range.end),
+            referenceDate: historyReferenceDate
+        ))
+    }
+
+    private func recomputeVisibleSummary() {
+        guard let source = visibleSummarySource else {
+            visibleSummary = nil
+            return
+        }
+        visibleSummary = MetricVisibleSummary.make(
+            points: source.points, start: scrollPosition,
+            duration: selectedPeriod.visibleDomainSeconds, coverage: source.coverage,
+            referenceDate: source.referenceDate, limitedStart: limitedHistoryStartDate,
+            basis: source.basis, unit: source.unit,
+            isAdditive: category == .steps || category == .exercise
+        )
     }
 
     private func recomputeExerciseTotals() {
@@ -300,6 +367,24 @@ final class MetricDetailViewModel {
         let earliest = earliestHistoryDate ?? chartData.first?.date ?? range.start
         let start = min(Calendar.current.startOfDay(for: earliest), range.start)
         return start...max(range.end, selectedPeriod.scrollDomainUpperBound(referenceDate: range.end))
+    }
+
+    /// Page starts use the frozen query clock, not the chart's padded upper bound.
+    var canStepBackward: Bool {
+        scrollPosition.addingTimeInterval(-selectedPeriod.visibleDomainSeconds) >= scrollDomain.lowerBound
+    }
+
+    var canStepForward: Bool {
+        let currentStart = selectedPeriod.dateRange(offset: 0, referenceDate: historyReferenceDate).start
+        return scrollPosition.addingTimeInterval(selectedPeriod.visibleDomainSeconds) <= currentStart
+    }
+
+    func stepVisiblePeriod(by direction: Int) {
+        guard direction == -1 || direction == 1 else { return }
+        guard direction == -1 ? canStepBackward : canStepForward else { return }
+        scrollPosition = scrollPosition.addingTimeInterval(
+            Double(direction) * selectedPeriod.visibleDomainSeconds
+        )
     }
 
     private func historyWindow(around position: Date) -> (start: Date, end: Date) {
@@ -381,6 +466,10 @@ final class MetricDetailViewModel {
     }
 
     private func finishReloadRequest(_ requestID: Int) {
+        if pendingVisibleSummarySource?.requestID == requestID {
+            // Cancelled/stale staged rows must not become an accepted summary later.
+            pendingVisibleSummarySource = nil
+        }
         if requestID == reloadRequestID {
             isLoading = false
         }
@@ -404,6 +493,7 @@ final class MetricDetailViewModel {
         let previous = try await prevData
 
         guard isCurrentReloadRequest(requestID) else { return }
+        captureVisibleSummarySource(current.map { ChartDataPoint(date: $0.date, value: $0.average) }, requestID: requestID)
         chartData = current.map { ChartDataPoint(date: $0.date, value: $0.average) }
         summaryStats = HealthDataAggregator.computeSummary(
             from: currentPeriodValues(),
@@ -429,6 +519,7 @@ final class MetricDetailViewModel {
         let previous = try await prevData
 
         guard isCurrentReloadRequest(requestID) else { return }
+        captureVisibleSummarySource(current.map { ChartDataPoint(date: $0.date, value: $0.average) }, requestID: requestID)
         rangeData = current.map {
             RangeDataPoint(date: $0.date, min: $0.min, max: $0.max, average: $0.average)
         }
@@ -493,6 +584,7 @@ final class MetricDetailViewModel {
 
             // Build chart data (total minutes)
             guard isCurrentReloadRequest(requestID) else { return }
+            captureVisibleSummarySource(current.map { ChartDataPoint(date: $0.date, value: $0.totalMinutes) }, requestID: requestID)
             chartData = current.map {
                 ChartDataPoint(date: $0.date, value: $0.totalMinutes)
             }
@@ -911,6 +1003,7 @@ final class MetricDetailViewModel {
 
         let raw = current.map { ChartDataPoint(date: $0.date, value: $0.sum) }
         guard isCurrentReloadRequest(requestID) else { return }
+        captureVisibleSummarySource(raw, requestID: requestID)
 
         // For 6M/Y, aggregate sums by week/month
         if selectedPeriod == .sixMonths || selectedPeriod == .year {
@@ -974,9 +1067,13 @@ final class MetricDetailViewModel {
 
         // Update metric unit based on actual chart data type
         let useDistance = isDistanceBased && current.contains(where: { $0.distance != nil && $0.distance! > 0 })
-        metricUnit = useDistance ? "km" : "min"
-
         guard isCurrentReloadRequest(requestID) else { return }
+        metricUnit = useDistance ? "km" : "min"
+        let finiteWorkouts = current.filter {
+            useDistance ? ($0.distance ?? 0).isFinite : $0.duration.isFinite
+        }
+        let summaryPoints = groupWorkoutsByDay(finiteWorkouts, useDistance: useDistance)
+        captureVisibleSummarySource(summaryPoints, requestID: requestID, unit: metricUnit)
         // Aggregate for longer periods
         if selectedPeriod == .sixMonths || selectedPeriod == .year {
             chartData = HealthDataAggregator.aggregateBySum(
@@ -1036,6 +1133,7 @@ final class MetricDetailViewModel {
             .map(\.value)
 
         guard isCurrentReloadRequest(requestID) else { return }
+        captureVisibleSummarySource(current.map { ChartDataPoint(date: $0.date, value: $0.value) }, requestID: requestID)
         chartData = aggregated
         summaryStats = HealthDataAggregator.computeSummary(
             from: currentValues,
@@ -1075,6 +1173,7 @@ final class MetricDetailViewModel {
                 ? HealthDataAggregator.aggregateByAverage(raw, unit: period.aggregationUnit) : raw
         }.value
         guard isCurrentReloadRequest(requestID) else { return }
+        captureVisibleSummarySource(samples.map { ChartDataPoint(date: $0.date, value: $0.value) }, requestID: requestID)
         chartData = points
         summaryStats = HealthDataAggregator.computeSummary(from: currentPeriodValues())
     }
@@ -1083,6 +1182,7 @@ final class MetricDetailViewModel {
         let range = extendedRange
         let allSamples = try await breathingDisturbanceService.fetchNightlyDisturbances(start: range.start, end: range.end)
         guard isCurrentReloadRequest(requestID) else { return }
+        captureVisibleSummarySource(allSamples.map { ChartDataPoint(date: $0.date, value: $0.value) }, requestID: requestID)
         chartData = allSamples
             .filter { $0.date >= range.start && $0.date <= range.end }
             .map { ChartDataPoint(date: $0.date, value: $0.value) }
@@ -1104,6 +1204,7 @@ final class MetricDetailViewModel {
                 ? HealthDataAggregator.aggregateByAverage(raw, unit: period.aggregationUnit) : raw
         }.value
         guard isCurrentReloadRequest(requestID) else { return }
+        captureVisibleSummarySource(samples.map { ChartDataPoint(date: $0.date, value: $0.value) }, requestID: requestID)
         chartData = points
         summaryStats = HealthDataAggregator.computeSummary(from: currentPeriodValues())
     }
@@ -1135,9 +1236,9 @@ final class MetricDetailViewModel {
     }
 
     /// Groups workouts by day, summing either distance (km) or duration (min) based on workout type.
-    private func groupWorkoutsByDay(_ workouts: [WorkoutSummary]) -> [ChartDataPoint] {
+    private func groupWorkoutsByDay(_ workouts: [WorkoutSummary], useDistance override: Bool? = nil) -> [ChartDataPoint] {
         let calendar = Calendar.current
-        let useDistance = isDistanceBased && workouts.contains(where: { $0.distance != nil && $0.distance! > 0 })
+        let useDistance = override ?? (isDistanceBased && workouts.contains(where: { $0.distance != nil && $0.distance! > 0 }))
 
         var dailyValues: [Date: Double] = [:]
         for workout in workouts {

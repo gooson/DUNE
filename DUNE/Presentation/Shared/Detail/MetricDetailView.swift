@@ -15,56 +15,54 @@ struct MetricDetailView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.xl) {
-                // Summary header
-                MetricSummaryHeader(
-                    category: metric.category,
-                    currentValue: resolvedCurrentValue,
-                    summary: viewModel.summaryStats,
-                    lastUpdated: viewModel.lastUpdated,
-                    unitOverride: viewModel.metricUnit.isEmpty ? nil : viewModel.metricUnit
+                MetricQuantityHero(
+                    metric: resolvedMetric,
+                    unitOverride: resolvedMetric.unit
                 )
                 .staggeredAppear(index: 0)
 
-                // Period picker
-                Picker("Period", selection: $viewModel.selectedPeriod) {
-                    ForEach(TimePeriod.allCases, id: \.self) { period in
-                        Text(period.displayName).tag(period)
-                    }
-                }
-                .pickerStyle(.segmented)
-                .sensoryFeedback(.selection, trigger: viewModel.selectedPeriod)
-                .staggeredAppear(index: 1)
-
-                if let limitedStart = viewModel.limitedHistoryStartDate,
-                   viewModel.scrollPosition < limitedStart {
-                    LimitedHealthHistoryNotice()
-                }
-
-                // Chart header: visible range + trend toggle
-                chartHeader
-                    .staggeredAppear(index: 2)
-
-                // Chart (natively scrollable)
-                // Note: .id() forces full view recreation on period change,
-                // intentionally resetting chart @State (e.g. selectedDate) for clean transition.
                 StandardCard {
-                    Group {
-                        if viewModel.chartData.isEmpty && viewModel.earliestHistoryDate == nil && !viewModel.isLoading {
-                            chartEmptyState
-                        } else {
-                            chart
-                                .frame(height: chartHeight)
-                                .overlay {
-                                    ChartUITestSurface(
-                                        identifier: "detail-chart-surface",
-                                        label: "\(metric.category.englishDisplayName) Detail Chart",
-                                        value: viewModel.visibleRangeLabel
-                                    )
-                                }
+                    VStack(alignment: .leading, spacing: DS.Spacing.lg) {
+                        chartHeader
+                        Picker("Period", selection: $viewModel.selectedPeriod) {
+                            ForEach(TimePeriod.allCases, id: \.self) { period in
+                                Text(period.displayName).tag(period)
+                            }
                         }
+                        .pickerStyle(.segmented)
+                        .sensoryFeedback(.selection, trigger: viewModel.selectedPeriod)
+
+                        if let limitedStart = viewModel.limitedHistoryStartDate,
+                           viewModel.scrollPosition < limitedStart {
+                            LimitedHealthHistoryNotice()
+                        }
+
+                        historyNavigation
+
+                        // Recreate chart selection only when the period changes.
+                        Group {
+                            if viewModel.chartData.isEmpty && viewModel.earliestHistoryDate == nil && !viewModel.isLoading {
+                                chartEmptyState
+                            } else {
+                                chart
+                                    .overlay {
+                                        ChartUITestSurface(
+                                            identifier: "detail-chart-surface",
+                                            label: "\(metric.category.englishDisplayName) Detail Chart",
+                                            value: viewModel.visibleRangeLabel
+                                        )
+                                    }
+                            }
+                        }
+                        .id(viewModel.selectedPeriod)
+                        .transition(.opacity)
+
+                        MetricHistorySummary(
+                            category: metric.category,
+                            summary: viewModel.visibleSummary,
+                            unitOverride: viewModel.metricUnit.isEmpty ? metric.unit : viewModel.metricUnit
+                        )
                     }
-                    .id(viewModel.selectedPeriod)
-                    .transition(.opacity)
                 }
                 .overlay {
                     if showShimmer {
@@ -99,6 +97,11 @@ struct MetricDetailView: View {
                     shimmerTask = nil
                 }
                 .staggeredAppear(index: 3)
+
+                if [.weight, .bmi, .bodyFat, .leanBodyMass].contains(metric.category) {
+                    BodyPeerComparisonCard(metric: resolvedMetric)
+                        .staggeredAppear(index: 4)
+                }
 
                 // Sleep sections grouped by category
                 if metric.category == .sleep {
@@ -235,11 +238,12 @@ struct MetricDetailView: View {
         }
     }
 
-    private var resolvedCurrentValue: Double {
-        if metric.category == .steps, viewModel.hasConfiguredValue {
-            return viewModel.currentValue
-        }
-        return metric.value
+    private var resolvedMetric: HealthMetric {
+        MetricDetailHeadline.resolve(
+            metric,
+            stepsValue: viewModel.hasConfiguredValue ? viewModel.currentValue : nil,
+            stepsUpdated: viewModel.lastUpdated
+        )
     }
 
     // MARK: - Empty State
@@ -260,20 +264,15 @@ struct MetricDetailView: View {
                 .foregroundStyle(.tertiary)
         }
         .frame(maxWidth: .infinity)
-        .frame(height: chartHeight)
+        .frame(minHeight: 220)
     }
 
     // MARK: - Chart Header
 
     private var chartHeader: some View {
         HStack {
-            Text(viewModel.visibleRangeLabel)
-                .font(.subheadline)
-                .fontWeight(.medium)
-                .foregroundStyle(DS.Color.textSecondary)
-                .contentTransition(.numericText())
-                .animation(DS.Animation.snappy, value: viewModel.visibleRangeLabel)
-                .accessibilityIdentifier("detail-chart-visible-range")
+            Text("History")
+                .font(DS.Typography.sectionTitle)
 
             Spacer()
 
@@ -297,10 +296,45 @@ struct MetricDetailView: View {
                               ? metric.category.themeColor.opacity(0.12)
                               : Color.clear)
                 )
+                .frame(minHeight: 44)
+                .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
             .sensoryFeedback(.selection, trigger: viewModel.showTrendLine)
         }
+    }
+
+    private var historyNavigation: some View {
+        HStack(spacing: DS.Spacing.sm) {
+            Button {
+                viewModel.stepVisiblePeriod(by: -1)
+            } label: {
+                Image(systemName: "chevron.left")
+                    .frame(width: 44, height: 44)
+            }
+            .disabled(!viewModel.canStepBackward)
+            .accessibilityLabel("Previous period")
+            .accessibilityIdentifier("detail-chart-previous-period")
+
+            Text(viewModel.visibleRangeLabel)
+                .font(.subheadline.weight(.medium))
+                .foregroundStyle(DS.Color.textSecondary)
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: .infinity)
+                .fixedSize(horizontal: false, vertical: true)
+                .accessibilityIdentifier("detail-chart-visible-range")
+
+            Button {
+                viewModel.stepVisiblePeriod(by: 1)
+            } label: {
+                Image(systemName: "chevron.right")
+                    .frame(width: 44, height: 44)
+            }
+            .disabled(!viewModel.canStepForward)
+            .accessibilityLabel("Next period")
+            .accessibilityIdentifier("detail-chart-next-period")
+        }
+        .buttonStyle(.plain)
     }
 
     // MARK: - Chart
@@ -520,9 +554,6 @@ struct MetricDetailView: View {
         }
     }
 
-    private var chartHeight: CGFloat {
-        sizeClass == .regular ? 360 : 250
-    }
 }
 
 // MARK: - Navigation Destination

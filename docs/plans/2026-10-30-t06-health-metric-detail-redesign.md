@@ -71,3 +71,7 @@ The prototype's MCST reference is not automatically usable product data: its [of
 ## Risks and confidence
 
 Source preservation is high confidence. Runtime/capture scope and benchmark product UX are medium until implemented and verified. NHANES references are US survey means, not Korean norms or health targets. Body-fat/lean-mass comparison is intentionally not claimed supported; further applicable source work remains. Legacy Sleep pairings must be removed from HRV comparisons. Shared chart changes can affect other consumers, so prefer no shared behavioral change and document any required expansion. T05 execution-policy question is independent and must not be bypassed through T06.
+
+## Implementation checkpoint (isolated native branch)
+
+The original T06 capture worktree remains frozen at 0dc77dc4. The native implementation branch connects the reviewed quantity hero, visible-window statistics, period controls, and explicit US survey comparison. Source, UI, and catalog changes are local to this branch. A generic iOS build verifies Swift integration; unit/UI selectors, physical device presentation, and fresh actual design-map captures remain separate required gates. The body-fat and lean-mass peer means remain unavailable, while their existing history stays visible.
