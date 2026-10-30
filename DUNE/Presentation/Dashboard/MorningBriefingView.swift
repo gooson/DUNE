@@ -200,9 +200,12 @@ private struct BriefingSectionCard: View {
                         .accessibilityHidden(true)
                 }
 
-                HStack(alignment: .top, spacing: DS.Spacing.sm) {
+                let layout = dynamicTypeSize.isAccessibilitySize
+                    ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.md))
+                    : AnyLayout(HStackLayout(alignment: .top, spacing: DS.Spacing.sm))
+                layout {
                     Image(systemName: iconName)
-                        .font(.title2)
+                        .font(dynamicTypeSize.isAccessibilitySize ? .system(size: 32) : .title2)
                         .foregroundStyle(accentColor)
                         .accessibilityHidden(true)
 
@@ -216,7 +219,9 @@ private struct BriefingSectionCard: View {
                             .foregroundStyle(DS.Color.textSecondary)
                             .fixedSize(horizontal: false, vertical: true)
                     }
-                    Spacer(minLength: 0)
+                    if !dynamicTypeSize.isAccessibilitySize {
+                        Spacer(minLength: 0)
+                    }
                 }
             }
         }
