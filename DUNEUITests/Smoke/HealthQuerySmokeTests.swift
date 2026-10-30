@@ -25,6 +25,7 @@ final class HealthQuerySmokeTests: SeededUITestBaseCase {
         selectPeriod("last7Days")
         XCTAssertTrue(element("health-query-result-kind-latestWorkout").waitForExistence(timeout: 8))
         XCTAssertTrue(app.staticTexts.matching(NSPredicate(format: "label BEGINSWITH %@", "Period:")).firstMatch.exists)
+        capture("SQ01-period-source")
 
         let done = app.buttons["health-query-done"].firstMatch
         XCTAssertTrue(done.waitForExistence(timeout: 5))
@@ -32,6 +33,7 @@ final class HealthQuerySmokeTests: SeededUITestBaseCase {
         XCTAssertFalse(element("health-query-screen").waitForExistence(timeout: 2))
         XCTAssertTrue(element("health-qa-browse-records").waitForExistence(timeout: 5),
                       "Back navigation should restore the Q&A inspector")
+        capture("SQ01-back-to-qa")
     }
 
     func testNoDataIsExplicit() {
@@ -43,6 +45,26 @@ final class HealthQuerySmokeTests: SeededUITestBaseCase {
         XCTAssertTrue(element("health-query-no-data").exists)
         XCTAssertFalse(element("health-query-source").exists)
         capture("SQ00-no-data")
+    }
+
+    func testOpenSeededWorkoutRecordAndBack() {
+        var configuration = launchConfiguration
+        configuration.additionalArguments.removeAll { $0 == "--ui-health-query-fixture" }
+        launchApp(with: configuration)
+        openBrowse()
+        selectKind("strengthSets")
+        XCTAssertTrue(element("health-query-result-kind-strengthSets").waitForExistence(timeout: 8))
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("Open record", maxSwipes: 12))
+        let openRecord = app.buttons["Open record"].firstMatch
+        XCTAssertTrue(openRecord.isHittable)
+        openRecord.tap()
+        let detail = element("exercise-session-detail-scroll")
+        XCTAssertTrue(detail.waitForExistence(timeout: 10), "Resolve the actual seeded SwiftData record")
+        capture("SQ03-seeded-record-detail")
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+        XCTAssertTrue(detail.waitForNonExistence(timeout: 5))
+        XCTAssertTrue(element("health-query-result-kind-strengthSets").exists)
+        capture("SQ03-seeded-record-return")
     }
 
     /// One launch captures every supported information choice. The source metadata
@@ -180,7 +202,15 @@ final class HealthQuerySmokeTests: SeededUITestBaseCase {
 
         for attempt in 0...8 {
             let window = app.windows.firstMatch.frame
-            let viewport = menu.frame.intersection(window.insetBy(dx: 0, dy: 34))
+            var viewport = menu.frame.intersection(window.insetBy(dx: 0, dy: 34))
+            // UIKit exposes the collection's full height, including the clipped
+            // portion below its popup. Its ancestor is the actual visible menu.
+            for container in app.otherElements.containing(kindButtons).allElementsBoundByIndex {
+                let frame = container.frame
+                if frame.width >= menu.frame.width - 1, frame.height > 120, frame.intersects(viewport) {
+                    viewport = viewport.intersection(frame)
+                }
+            }
             let choice = menu.buttons["\(prefix)\(kind)"].firstMatch
             if choice.exists && viewport.contains(choice.frame) && choice.isHittable {
                 choice.tap()
@@ -197,13 +227,20 @@ final class HealthQuerySmokeTests: SeededUITestBaseCase {
                 return
             }
             let scrollUp = choice.exists ? choice.frame.maxY > viewport.maxY : targetIndex >= firstVisible
+            // Once materialized, move only the distance needed to expose this row.
+            // Full-height drags oscillate past tall accessibility menu rows.
+            let neededDistance = choice.exists
+                ? (scrollUp ? choice.frame.maxY - viewport.maxY : viewport.minY - choice.frame.minY) + 16
+                : viewport.height * 0.45
+            let distance = min(max(neededDistance, 24), viewport.height - 128)
             let startY = scrollUp ? viewport.maxY - 64 : viewport.minY + 64
-            let endY = scrollUp ? viewport.minY + 64 : viewport.maxY - 64
+            let endY = scrollUp ? startY - distance : startY + distance
             let origin = menu.coordinate(withNormalizedOffset: .zero)
             let x = viewport.midX - menu.frame.minX
             origin.withOffset(CGVector(dx: x, dy: startY - menu.frame.minY))
                 .press(forDuration: 0.05, thenDragTo:
-                    origin.withOffset(CGVector(dx: x, dy: endY - menu.frame.minY)))
+                    origin.withOffset(CGVector(dx: x, dy: endY - menu.frame.minY)),
+                    withVelocity: .slow, thenHoldForDuration: 0.3)
         }
         XCTFail("Information menu should offer a fully visible \(kind) within 8 scrolls")
     }
@@ -271,7 +308,9 @@ final class HealthQuerySmokeTests: SeededUITestBaseCase {
                                    "width": Double(frame.width), "height": Double(frame.height)],
                 "orientation": XCUIDevice.shared.orientation.rawValue,
                 "softwareKeyboardVisible": app.keyboards.firstMatch.exists,
-                "dataKind": "synthetic DEBUG health-query fixture"
+                "dataKind": app.launchArguments.contains("--ui-health-query-fixture")
+                    ? "synthetic DEBUG health-query fixture"
+                    : "synthetic seeded SwiftData records and mock HealthKit"
             ]
             if let data = try? JSONSerialization.data(withJSONObject: metadata, options: [.sortedKeys]),
                let text = String(data: data, encoding: .utf8) {
