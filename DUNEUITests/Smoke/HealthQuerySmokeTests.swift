@@ -3,6 +3,12 @@
 /// Exercises the real native query view with isolated, synthetic UI evidence.
 @MainActor
 final class HealthQuerySmokeTests: SeededUITestBaseCase {
+    private let queryKinds = [
+        "latestWorkout", "workoutSummary", "strengthSets", "personalRecord",
+        "cardioDetail", "latestBody", "bodyTrend", "sleep", "condition",
+        "metricComparison", "workoutComparison", "memoSearch", "report", "longAnalysis"
+    ]
+
     override var initialTabSelectionArgument: String? { "today" }
 
     override var additionalLaunchArguments: [String] {
@@ -43,12 +49,7 @@ final class HealthQuerySmokeTests: SeededUITestBaseCase {
     /// records that these are native simulator screens populated by a test fixture.
     func testCaptureAllQueryKinds() {
         openBrowse(captureEntry: true)
-        let kinds = [
-            "latestWorkout", "workoutSummary", "strengthSets", "personalRecord",
-            "cardioDetail", "latestBody", "bodyTrend", "sleep", "condition",
-            "metricComparison", "workoutComparison", "memoSearch", "report", "longAnalysis"
-        ]
-        for (index, kind) in kinds.enumerated() {
+        for (index, kind) in queryKinds.enumerated() {
             if index > 0 { selectKind(kind) }
             if kind == "memoSearch" {
                 let field = app.textFields["health-query-search-field"].firstMatch
@@ -168,9 +169,43 @@ final class HealthQuerySmokeTests: SeededUITestBaseCase {
 
     private func selectKind(_ kind: String) {
         tapVisiblePicker("health-query-kind")
-        let choice = app.buttons["health-query-kind-\(kind)"].firstMatch
-        XCTAssertTrue(choice.waitForExistence(timeout: 5), "Information menu should offer \(kind)")
-        choice.tap()
+        let prefix = "health-query-kind-"
+        let kindButtons = NSPredicate(format: "identifier BEGINSWITH %@", prefix)
+        let menu = app.collectionViews.containing(kindButtons).firstMatch
+        guard let targetIndex = queryKinds.firstIndex(of: kind),
+              menu.waitForExistence(timeout: 5) else {
+            XCTFail("Information menu should contain known choices")
+            return
+        }
+
+        for attempt in 0...8 {
+            let window = app.windows.firstMatch.frame
+            let viewport = menu.frame.intersection(window.insetBy(dx: 0, dy: 34))
+            let choice = menu.buttons["\(prefix)\(kind)"].firstMatch
+            if choice.exists && viewport.contains(choice.frame) && choice.isHittable {
+                choice.tap()
+                return
+            }
+            if attempt == 8 { break }
+
+            let visibleKinds = menu.buttons.matching(kindButtons).allElementsBoundByIndex.compactMap { button -> Int? in
+                guard button.frame.intersects(viewport) else { return nil }
+                return queryKinds.firstIndex(of: String(button.identifier.dropFirst(prefix.count)))
+            }
+            guard let firstVisible = visibleKinds.min(), viewport.width > 0, viewport.height > 120 else {
+                XCTFail("Information menu should have visible choices")
+                return
+            }
+            let scrollUp = choice.exists ? choice.frame.maxY > viewport.maxY : targetIndex >= firstVisible
+            let startY = scrollUp ? viewport.maxY - 64 : viewport.minY + 64
+            let endY = scrollUp ? viewport.minY + 64 : viewport.maxY - 64
+            let origin = menu.coordinate(withNormalizedOffset: .zero)
+            let x = viewport.midX - menu.frame.minX
+            origin.withOffset(CGVector(dx: x, dy: startY - menu.frame.minY))
+                .press(forDuration: 0.05, thenDragTo:
+                    origin.withOffset(CGVector(dx: x, dy: endY - menu.frame.minY)))
+        }
+        XCTFail("Information menu should offer a fully visible \(kind) within 8 scrolls")
     }
 
     private func selectPeriod(_ period: String) {
