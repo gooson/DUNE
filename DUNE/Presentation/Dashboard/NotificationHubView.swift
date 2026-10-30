@@ -730,7 +730,7 @@ private struct NotificationMessageDetailView: View {
             VStack(alignment: .leading, spacing: DS.Spacing.md) {
                 VStack(alignment: .leading, spacing: DS.Spacing.xxl) {
                     Image(systemName: "bell")
-                        .font(.system(size: heroSymbolSize, weight: .medium))
+                        .font(.system(size: min(heroSymbolSize, 64), weight: .medium))
                         .foregroundStyle(palette.heroAccent)
                         .padding(DS.Spacing.md)
                         .background(
@@ -745,6 +745,7 @@ private struct NotificationMessageDetailView: View {
                         .fixedSize(horizontal: false, vertical: true)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .accessibilityIdentifier("notification-message-title")
+                        .accessibilityAddTraits(.isHeader)
                 }
                 .padding(DS.Spacing.xxl)
                 .frame(maxWidth: .infinity, alignment: .leading)
