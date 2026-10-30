@@ -21,14 +21,14 @@ extension HealthQueryService {
             var metric = metric
             if let old = priorMetrics.first(where: { $0.id == metric.id && $0.unit == metric.unit }) {
                 metric.comparisonValue = old.value
-                metric.comparisonDate = previous.end.addingTimeInterval(-0.001)
             }
             return metric
         }
         if let current = currentSleep.metrics.first(where: { $0.id == "sleepAverage" }) {
             var sleep = current
             sleep.comparisonValue = priorSleep.metrics.first(where: { $0.id == "sleepAverage" })?.value
-            sleep.comparisonDate = sleep.comparisonValue == nil ? nil : previous.end.addingTimeInterval(-0.001)
+            // A period average remains an aggregate even when only one night was recorded.
+            sleep.date = nil
             metrics.append(sleep)
         }
         let complete = currentWorkouts.complete && priorWorkouts.complete && currentSleep.isComplete && priorSleep.isComplete
@@ -48,7 +48,7 @@ extension HealthQueryService {
             }
         }
         return result(request.kind, status: hasRecords ? (complete ? .available : .partial) : (complete ? .noData : .unavailable),
-                      interval: interval, metrics: metrics,
+                      interval: interval, comparisonInterval: previous, metrics: metrics,
                       series: [dailySeries(currentWorkouts.records, interval: interval)] + currentSleep.series,
                       records: Array(currentWorkouts.records.prefix(request.limit)),
                       sources: sources(for: currentWorkouts.records + priorWorkouts.records) + currentSleep.sources + priorSleep.sources,

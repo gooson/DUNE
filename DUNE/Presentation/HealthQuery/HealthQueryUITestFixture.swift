@@ -10,11 +10,14 @@ struct HealthQueryUITestFixture: HealthQuerying {
         let prior = interval.start.addingTimeInterval(interval.duration * 0.2)
         let middle = interval.start.addingTimeInterval(interval.duration * 0.5)
         let recent = interval.start.addingTimeInterval(interval.duration * 0.8)
-        let comparisonDate = interval.start.addingTimeInterval(-interval.duration * 0.5)
         let kind = request.kind
+        let comparisonInterval = kind == .metricComparison
+            ? request.comparisonInterval ?? HealthQueryService.shared.previousComparisonInterval(for: interval)
+            : nil
         if ProcessInfo.processInfo.arguments.contains("--ui-health-query-no-data") {
             return HealthQueryResult(kind: kind, status: .noData, title: HealthQueryService.title(for: kind),
-                                     generatedAt: now, interval: interval, spokenSummary: "No synthetic records.")
+                                     generatedAt: now, interval: interval, comparisonInterval: comparisonInterval,
+                                     spokenSummary: "No synthetic records.")
         }
 
         func m(_ id: String, _ title: String, _ value: Double, _ unit: HealthQueryUnit,
@@ -120,13 +123,16 @@ struct HealthQueryUITestFixture: HealthQuerying {
             series = [chart("condition", "Condition Score", .score, [(prior, 77), (recent, 82)])]
             sources = [HealthQuerySource(kind: .calculated, measuredAt: recent, fetchedAt: now)] + healthSources
         case .metricComparison:
-            metrics = [m("records", "Workout Records", 3, .count, recent, 2, comparisonDate),
-                       m("duration", "Active Duration", 6_900, .seconds, recent, 4_200, comparisonDate),
-                       m("sleepAverage", "Average Recorded Sleep", 27_900, .seconds, recent, 26_400, comparisonDate)]
+            metrics = [m("records", "Workout Records", 3, .count, nil, 2),
+                       m("duration", "Active Duration", 6_900, .seconds, nil, 4_200),
+                       m("sleepAverage", "Average Recorded Sleep", 27_900, .seconds, nil, 26_400)]
             series = [workoutChart, sleepChart]; records = workouts
             sources = workoutSources + healthSources
-                + [HealthQuerySource(kind: .app, measuredAt: comparisonDate, fetchedAt: now),
-                   HealthQuerySource(kind: .healthKit, measuredAt: comparisonDate, fetchedAt: now)]
+            if let comparisonInterval {
+                let comparisonDate = comparisonInterval.start.addingTimeInterval(comparisonInterval.duration * 0.5)
+                sources += [HealthQuerySource(kind: .app, measuredAt: comparisonDate, fetchedAt: now),
+                            HealthQuerySource(kind: .healthKit, measuredAt: comparisonDate, fetchedAt: now)]
+            }
             limitations.append("The comparison does not establish causation.")
         case .workoutComparison:
             metrics = [m("weight", "Recorded Weight", 40, .kilograms, recent, 35, prior),
@@ -150,7 +156,8 @@ struct HealthQueryUITestFixture: HealthQuerying {
             limitations.append("This summary is not a medical diagnosis.")
         }
         return HealthQueryResult(kind: kind, status: .available, title: HealthQueryService.title(for: kind),
-                                 generatedAt: now, interval: interval, metrics: metrics, series: series,
+                                 generatedAt: now, interval: interval, comparisonInterval: comparisonInterval,
+                                 metrics: metrics, series: series,
                                  records: records, sources: sources, spokenSummary: summary,
                                  explanation: kind == .longAnalysis ? "Synthetic activity, sleep, and body trends." : nil,
                                  limitations: limitations)

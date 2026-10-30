@@ -134,6 +134,7 @@ struct HealthQueryResultCard: View {
                         }
                         .chartXAxis { AxisMarks(values: .automatic(desiredCount: 4)) }
                         .chartYAxis { AxisMarks(position: .leading) }
+                        .chartYAxisLabel(position: .leading) { Text(verbatim: series.unit.symbol) }
                         .frame(height: 180)
                         .clipped()
                         .accessibilityLabel(series.title)
@@ -467,13 +468,26 @@ struct HealthQueryResultCard: View {
         VStack(alignment: .leading) {
             Text("Current").font(.caption)
             Text(metric.unit.formatted(metric.value) + " " + metric.unit.displayUnit(for: metric.value)).bold()
-            if let date = metric.date { Text(date.formatted(date: .abbreviated, time: .omitted)).font(.caption) }
+            if result.comparisonInterval != nil {
+                Text(verbatim: periodRange(result.interval)).font(.caption)
+            } else if let date = metric.date {
+                Text(date.formatted(date: .abbreviated, time: .omitted)).font(.caption)
+            }
         }.frame(maxWidth: .infinity, alignment: .leading)
         VStack(alignment: .leading) {
             Text("Previous").font(.caption)
             Text(metric.unit.formatted(previous) + " " + metric.unit.displayUnit(for: previous)).bold()
-            if let date = metric.comparisonDate { Text(date.formatted(date: .abbreviated, time: .omitted)).font(.caption) }
+            if let interval = result.comparisonInterval {
+                Text(verbatim: periodRange(interval)).font(.caption)
+            } else if let date = metric.comparisonDate {
+                Text(date.formatted(date: .abbreviated, time: .omitted)).font(.caption)
+            }
         }.frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private func periodRange(_ interval: DateInterval) -> String {
+        interval.start.formatted(date: .abbreviated, time: .omitted) + " – "
+            + interval.end.addingTimeInterval(-0.001).formatted(date: .abbreviated, time: .omitted)
     }
 
     private var reportText: String {

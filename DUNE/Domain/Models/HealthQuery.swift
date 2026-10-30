@@ -215,6 +215,8 @@ struct HealthQueryResult: Sendable, Equatable {
     let title: String
     let generatedAt: Date
     let interval: DateInterval
+    /// The actual aggregation window used for previous metric values, not a measurement date.
+    let comparisonInterval: DateInterval?
     var metrics: [HealthQueryMetric]
     var series: [HealthQuerySeries]
     var records: [HealthQueryWorkoutSnapshot]
@@ -226,7 +228,8 @@ struct HealthQueryResult: Sendable, Equatable {
     var isComplete: Bool
 
     init(kind: HealthQueryKind, status: HealthQueryStatus, title: String, generatedAt: Date,
-         interval: DateInterval, metrics: [HealthQueryMetric] = [], series: [HealthQuerySeries] = [],
+         interval: DateInterval, comparisonInterval: DateInterval? = nil,
+         metrics: [HealthQueryMetric] = [], series: [HealthQuerySeries] = [],
          records: [HealthQueryWorkoutSnapshot] = [], sources: [HealthQuerySource] = [],
          spokenSummary: String, explanation: String? = nil,
          explanationStatus: HealthQueryExplanationStatus = .notRequested,
@@ -236,6 +239,7 @@ struct HealthQueryResult: Sendable, Equatable {
         self.title = title
         self.generatedAt = generatedAt
         self.interval = interval
+        self.comparisonInterval = comparisonInterval
         self.metrics = metrics
         self.series = series
         self.records = records

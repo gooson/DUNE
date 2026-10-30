@@ -110,7 +110,7 @@ final class HealthQueryService: HealthQuerying {
 
     func result(
         _ kind: HealthQueryKind, status: HealthQueryStatus = .available, interval: DateInterval,
-        metrics: [HealthQueryMetric] = [], series: [HealthQuerySeries] = [],
+        comparisonInterval: DateInterval? = nil, metrics: [HealthQueryMetric] = [], series: [HealthQuerySeries] = [],
         records: [HealthQueryWorkoutSnapshot] = [], sources: [HealthQuerySource] = [],
         summary: String, limitations: [String] = [], isComplete: Bool = true
     ) -> HealthQueryResult {
@@ -122,7 +122,7 @@ final class HealthQueryService: HealthQuerying {
             spokenSummary += " " + String(localized: "Some records could not be read, so this answer may be incomplete.", locale: HealthQueryLocalization.locale)
         }
         return HealthQueryResult(kind: kind, status: status, title: Self.title(for: kind), generatedAt: nowProvider(),
-                          interval: interval, metrics: metrics, series: series, records: records,
+                          interval: interval, comparisonInterval: comparisonInterval, metrics: metrics, series: series, records: records,
                           sources: sources, spokenSummary: spokenSummary, limitations: limitations, isComplete: isComplete)
     }
 

@@ -125,6 +125,8 @@ struct HealthQueryServiceTests {
         let service = HealthQueryService(container: container, workoutService: QueryWorkoutStub(), nowProvider: { clock })
         let response = try await service.execute(HealthQueryRequest(kind: .workoutComparison))
         #expect(response.records.map(\.localRecordID) == [latest.id, nearest.id])
+        #expect(response.comparisonInterval == nil)
+        #expect(response.metrics.first { $0.id == "duration" }?.date == latest.date)
         #expect(response.metrics.first { $0.id == "duration" }?.comparisonValue == 500)
         #expect(response.metrics.first { $0.id == "duration" }?.comparisonDate == nearest.date)
     }
@@ -274,9 +276,44 @@ struct HealthQueryServiceTests {
         let response = try await service.execute(HealthQueryRequest(kind: .metricComparison,
             interval: current, comparisonInterval: previous))
         #expect(response.status == .noData)
+        #expect(response.interval == current)
+        #expect(response.comparisonInterval == previous)
         #expect(probe.intervals == [current, previous])
         #expect(probe.limits == [2_001, 2_001])
         #expect(!response.limitations.isEmpty)
+    }
+
+    @Test("Aggregate comparisons expose the queried periods without inventing measurement dates", arguments: [false, true])
+    func comparisonPeriodMetadata(explicit: Bool) async throws {
+        let clock = now
+        let current = DateInterval(start: now.addingTimeInterval(-3_600), end: now)
+        let explicitPrevious = DateInterval(start: now.addingTimeInterval(-30_000), end: now.addingTimeInterval(-20_000))
+        let previous = explicit ? explicitPrevious
+            : DateInterval(start: current.start.addingTimeInterval(-current.duration), end: current.start)
+        let currentDate = current.start.addingTimeInterval(60)
+        let previousDate = previous.start.addingTimeInterval(60)
+        let workouts = [currentDate, previousDate].enumerated().map { index, date in
+            WorkoutSummary(id: "comparison-\(index)", type: "Running", activityType: .running,
+                           duration: index == 0 ? 600 : 900, calories: 100, distance: 1_000, date: date)
+        }
+        let service = HealthQueryService(container: try store(),
+            workoutService: QueryWorkoutStub(records: workouts),
+            sleepService: ComparisonQuerySleepStub(dates: [currentDate, previousDate]), nowProvider: { clock })
+
+        let response = try await service.execute(HealthQueryRequest(kind: .metricComparison,
+            interval: current, comparisonInterval: explicit ? explicitPrevious : nil))
+
+        #expect(response.status == .available)
+        #expect(response.interval == current)
+        #expect(response.comparisonInterval == previous)
+        let duration = try #require(response.metrics.first { $0.id == "duration" })
+        #expect(duration.value == 600)
+        #expect(duration.comparisonValue == 900)
+        let sleep = try #require(response.metrics.first { $0.id == "sleepAverage" })
+        #expect(sleep.value == 25_200)
+        #expect(sleep.comparisonValue == 25_200)
+        #expect(response.metrics.allSatisfy { $0.date == nil && $0.comparisonDate == nil })
+        #expect(Set(response.sources.compactMap(\.measuredAt)) == Set([currentDate, previousDate]))
     }
 
     @Test("Cancellation thrown by a query propagates without becoming an unavailable result")
@@ -329,6 +366,16 @@ private struct BoundedQueryWorkoutStub: WorkoutQuerying {
     func fetchWorkouts(start: Date, end: Date, limit: Int) async throws -> [WorkoutSummary] {
         await onFetch(start, end, limit)
         return []
+    }
+}
+
+private struct ComparisonQuerySleepStub: SleepQuerying {
+    let dates: [Date]
+    func fetchSleepStages(for date: Date) async throws -> [SleepStage] { [] }
+    func fetchLatestSleepStages(withinDays days: Int) async throws -> (stages: [SleepStage], date: Date)? { nil }
+    func fetchLastNightSleepSummary(for date: Date) async throws -> SleepSummary? { nil }
+    func fetchDailySleepDurations(start: Date, end: Date) async throws -> [(date: Date, totalMinutes: Double, stageBreakdown: [SleepStage.Stage: Double])] {
+        dates.filter { $0 >= start && $0 < end }.map { (date: $0, totalMinutes: 420, stageBreakdown: [:]) }
     }
 }
 
