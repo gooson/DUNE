@@ -106,3 +106,7 @@ The e7167f3f maximum-accessibility test passed after its gesture was moved above
 ## Normal-text touch target verification
 
 Fresh Duo AX showed the plain secondary choice at42pt in standard text, despite the preliminary source estimate. Its padded label now has an explicit44pt minimum. The existing normal consent selector asserts both choice heights and tappability. Refresh the four normal-device images after this2pt layout correction; preserve earlier functional/dark/AX evidence with its actual source revision. Preference actions and text are unchanged.
+
+## Final validation
+
+Source69241c8f passed the standard consent method with both buttons at least44pt on iPhone, iPad, Duo closed0° and open180°. All new actual images and matching original screens are preserved in the [native comparison](../design/full-redesign-map/review/cloud-sync-consent-2026-10-31/index.html). Initial maximum-text gesture failure remains recorded; its bounded gesture fix and later full-width AX layout each passed focused rechecks. Independent final app-quality review found no P1–P3 issue. Mock visual/interaction coverage does not prove actual account synchronization or persisted preferences. No pure calculation changed; no new unit suite or full local regression was required.
