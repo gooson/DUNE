@@ -335,20 +335,20 @@ struct NotificationHubView: View {
     private var summarySection: some View {
         Section {
             StandardCard {
-                VStack(alignment: .leading, spacing: DS.Spacing.md) {
+                VStack(alignment: .leading, spacing: DS.Spacing.lg) {
                     if dynamicTypeSize.isAccessibilitySize {
                         unreadSummary
-                        settingsButton
                         readAllButton
-                        moreOptionsMenu
-                    } else {
                         HStack(spacing: DS.Spacing.sm) {
-                            unreadSummary
-                            Spacer(minLength: DS.Spacing.sm)
                             settingsButton
+                            moreOptionsMenu
                         }
+                    } else {
+                        unreadSummary
                         HStack(spacing: DS.Spacing.sm) {
                             readAllButton
+                            Spacer(minLength: DS.Spacing.sm)
+                            settingsButton
                             moreOptionsMenu
                         }
                     }
@@ -361,19 +361,40 @@ struct NotificationHubView: View {
     }
 
     private var unreadSummary: some View {
-        HStack(alignment: .top, spacing: DS.Spacing.sm) {
-            Image(systemName: combinedUnreadCount > 0 ? "bell.badge.fill" : "bell")
-                .font(.headline)
-                .foregroundStyle(.tint)
-            Group {
-                if combinedUnreadCount > 0 {
-                    Text("\(combinedUnreadCount) unread notifications")
-                } else {
-                    Text("Inbox is all caught up")
+        Group {
+            if dynamicTypeSize.isAccessibilitySize {
+                VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                    unreadStatusIcon
+                    unreadStatusText
+                }
+            } else {
+                HStack(alignment: .center, spacing: DS.Spacing.md) {
+                    unreadStatusIcon
+                    unreadStatusText
                 }
             }
-            .font(.subheadline.weight(.semibold))
-            .fixedSize(horizontal: false, vertical: true)
+        }
+    }
+
+    private var unreadStatusIcon: some View {
+        Image(systemName: combinedUnreadCount > 0 ? "bell.badge.fill" : "bell")
+            .font(.title2.weight(.semibold))
+            .foregroundStyle(.tint)
+            .frame(width: 52, height: 52)
+            .background(DS.Color.warmGlow.opacity(0.12), in: RoundedRectangle(cornerRadius: DS.Radius.md))
+            .accessibilityHidden(true)
+    }
+
+    @ViewBuilder
+    private var unreadStatusText: some View {
+        if combinedUnreadCount > 0 {
+            Text("\(combinedUnreadCount) unread notifications")
+                .font(.title2.weight(.bold))
+                .fixedSize(horizontal: false, vertical: true)
+        } else {
+            Text("Inbox is all caught up")
+                .font(.title2.weight(.bold))
+                .fixedSize(horizontal: false, vertical: true)
         }
     }
 
@@ -428,6 +449,7 @@ struct NotificationHubView: View {
             .accessibilityIdentifier("notifications-filter")
             .listRowSeparator(.hidden)
             .listRowBackground(Color.clear)
+            .listRowInsets(EdgeInsets(top: DS.Spacing.sm, leading: DS.Spacing.lg, bottom: DS.Spacing.sm, trailing: DS.Spacing.lg))
         }
     }
 
@@ -439,30 +461,35 @@ struct NotificationHubView: View {
                     destination = .whatsNew(version: release.release.version)
                 } label: {
                     InlineCard {
-                        HStack(alignment: .top, spacing: DS.Spacing.md) {
-                            Image(systemName: "sparkles")
-                                .foregroundStyle(.tint)
-                                .frame(width: 30, height: 30)
-                            VStack(alignment: .leading, spacing: DS.Spacing.xs) {
-                                HStack {
+                        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                            HStack(alignment: .top, spacing: DS.Spacing.md) {
+                                Image(systemName: "sparkles")
+                                    .font(.headline.weight(.semibold))
+                                    .foregroundStyle(.tint)
+                                    .frame(width: 44, height: 44)
+                                    .background(DS.Color.warmGlow.opacity(0.12), in: RoundedRectangle(cornerRadius: DS.Radius.md))
+                                    .accessibilityHidden(true)
+                                VStack(alignment: .leading, spacing: DS.Spacing.xs) {
                                     Text("What's New")
-                                        .font(.subheadline.weight(.semibold))
-                                    if release.isUnread {
-                                        Circle().fill(Color.accentColor).frame(width: 7, height: 7)
-                                    }
-                                    Spacer()
+                                        .font(.headline.weight(.semibold))
                                     Text(verbatim: release.release.version)
                                         .font(.caption)
                                         .foregroundStyle(.secondary)
                                 }
-                                Text(release.release.intro)
-                                    .font(.footnote)
-                                    .foregroundStyle(.secondary)
-                                    .fixedSize(horizontal: false, vertical: true)
-                                Label("Open Release", systemImage: "arrow.up.right")
-                                    .font(.caption2)
-                                    .foregroundStyle(.tertiary)
                             }
+                            Text(release.release.intro)
+                                .font(.footnote)
+                                .foregroundStyle(.secondary)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .accessibilityIdentifier("notifications-news-intro")
+                            if release.isUnread {
+                                Text("Unread")
+                                    .font(.caption2.weight(.semibold))
+                                    .foregroundStyle(.tint)
+                            }
+                            Label("Open Release", systemImage: "arrow.up.right")
+                                .font(.caption2)
+                                .foregroundStyle(.tertiary)
                         }
                     }
                 }
@@ -584,46 +611,56 @@ struct NotificationHubView: View {
         let hint = destinationHint(for: item)
 
         return InlineCard {
-            HStack(alignment: .top, spacing: DS.Spacing.sm) {
-                ZStack {
-                    Circle()
-                        .fill(iconTint(for: item.insightType).opacity(0.18))
-                        .frame(width: 30, height: 30)
+            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                HStack(alignment: .top, spacing: DS.Spacing.md) {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: DS.Radius.md)
+                            .fill(iconTint(for: item.insightType).opacity(0.18))
+                            .frame(width: 44, height: 44)
 
-                    Image(systemName: item.insightType.settingsIcon)
-                        .font(.footnote.weight(.semibold))
-                        .foregroundStyle(iconTint(for: item.insightType))
-                }
-
-                VStack(alignment: .leading, spacing: DS.Spacing.xs) {
-                    HStack(spacing: DS.Spacing.xs) {
-                        Text(item.title)
-                            .font(.subheadline.weight(.semibold))
-                            .foregroundStyle(.primary)
-                            .lineLimit(2)
-
-                        if !item.isRead {
-                            Circle()
-                                .fill(Color.accentColor)
-                                .frame(width: 7, height: 7)
-                        }
-
-                        Spacer()
-
-                        Text(item.createdAt, format: .relative(presentation: .named))
-                            .font(.caption2)
-                            .foregroundStyle(.secondary)
+                        Image(systemName: item.insightType.settingsIcon)
+                            .font(.headline.weight(.semibold))
+                            .foregroundStyle(iconTint(for: item.insightType))
                     }
+                    .accessibilityHidden(true)
 
-                    Text(item.body)
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                        .lineLimit(2)
-
-                    Label(hint.title, systemImage: hint.symbol)
-                        .font(.caption2)
-                        .foregroundStyle(.tertiary)
+                    VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                        if dynamicTypeSize.isAccessibilitySize {
+                            Text(item.title)
+                                .font(.headline.weight(.semibold))
+                                .foregroundStyle(.primary)
+                                .fixedSize(horizontal: false, vertical: true)
+                            Text(item.createdAt, format: .relative(presentation: .named))
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        } else {
+                            HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.sm) {
+                                Text(item.title)
+                                    .font(.headline.weight(.semibold))
+                                    .foregroundStyle(.primary)
+                                    .lineLimit(2)
+                                Spacer(minLength: DS.Spacing.xs)
+                                Text(item.createdAt, format: .relative(presentation: .named))
+                                    .font(.caption2)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                        if !item.isRead {
+                            Text("Unread")
+                                .font(.caption2.weight(.semibold))
+                                .foregroundStyle(.tint)
+                        }
+                    }
                 }
+
+                Text(item.body)
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 2)
+
+                Label(hint.title, systemImage: hint.symbol)
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
             }
         }
         .overlay {

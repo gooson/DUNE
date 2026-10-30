@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-30",
+  "updated": "2026-10-31",
   "app_contract": "app-contract.md",
   "themes": [
     {
@@ -278,6 +278,17 @@
       "implementation": {
         "layout": "../layout-map/live-activity-size-state-proposal.md",
         "status": "proposal-only"
+      }
+    },
+    {
+      "id": "notification-hub-redesign",
+      "name": "T11 알림함 · 상태와 행",
+      "title": "Unread status · native filters · icon-leading rows",
+      "file": "dune-notification-hub-redesign.html",
+      "detail": "2026-10-31 보존한 밝음·어두움 T11 브라우저 배치 시안. 실제 미독수는 건강 알림과 최신 출시 소식으로만 계산하고, All/Health/News 분류·원래 타입 아이콘 선행 행·읽음/설정/삭제 행동·빈 상태를 유지한다. 예시 수치와 알림은 앱 데이터나 실제 캡처가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/notification-inbox-proposal.md",
+        "status": "native-source-in-progress-capture-pending"
       }
     },
     {
