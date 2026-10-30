@@ -45,20 +45,21 @@ struct HealthWorkoutEntity: AppEntity {
 struct HealthWorkoutEntityQuery: EntityQuery {
     func entities(for identifiers: [String]) async throws -> [HealthWorkoutEntity] {
         try await MainActor.run { try HealthQueryIntentAccess.requireProtectedData() }
-        let ids = Array(Set(identifiers.filter(Self.hasSourcePrefix))).prefix(40)
+        var seen: Set<String> = []
+        let ids = Array(identifiers.lazy.filter {
+            $0.count <= 200 && Self.hasSourcePrefix($0) && seen.insert($0).inserted
+        }.prefix(40))
+        guard !ids.isEmpty else { return [] }
         let interval = HealthQueryPeriod.last365Days.interval(endingAt: Date())
-        var resolved: [String: HealthWorkoutEntity] = [:]
-        for id in ids {
-            try Task.checkCancellation()
-            let result = try await HealthQueryService.shared.execute(
-                HealthQueryRequest(kind: .latestWorkout, interval: interval, workoutID: id, limit: 1)
-            )
-            if let record = result.records.first(where: { $0.id == id }) {
-                resolved[id] = HealthWorkoutEntity(id: id, name: record.name)
-            }
-        }
+        let result = try await HealthQueryService.shared.execute(
+            HealthQueryRequest(kind: .workoutSummary, interval: interval, limit: 40, workoutIDs: ids)
+        )
+        let wanted = Set(ids)
+        let resolved = Dictionary(result.records.filter { wanted.contains($0.id) }.map {
+            ($0.id, HealthWorkoutEntity(id: $0.id, name: $0.name))
+        }, uniquingKeysWith: { first, _ in first })
         try await MainActor.run { try HealthQueryIntentAccess.requireProtectedData() }
-        return identifiers.compactMap { resolved[$0] }
+        return ids.compactMap { resolved[$0] }
     }
 
     func suggestedEntities() async throws -> [HealthWorkoutEntity] {

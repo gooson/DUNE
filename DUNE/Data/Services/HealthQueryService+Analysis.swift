@@ -2,9 +2,7 @@ import Foundation
 
 extension HealthQueryService {
     func comparisonResult(_ request: HealthQueryRequest, interval: DateInterval) async throws -> HealthQueryResult {
-        let previous = request.comparisonInterval ?? DateInterval(
-            start: interval.start.addingTimeInterval(-interval.duration), end: interval.start
-        )
+        let previous = request.comparisonInterval ?? previousComparisonInterval(for: interval)
         guard previous.start.timeIntervalSinceReferenceDate.isFinite,
               previous.end.timeIntervalSinceReferenceDate.isFinite,
               previous.duration > 0, previous.duration <= 367 * 86_400,
@@ -37,7 +35,7 @@ extension HealthQueryService {
         let hasRecords = !currentWorkouts.records.isEmpty || !priorWorkouts.records.isEmpty || !currentSleep.metrics.isEmpty || !priorSleep.metrics.isEmpty
         var limitations = currentWorkouts.limitations + priorWorkouts.limitations + currentSleep.limitations + priorSleep.limitations
         limitations.append(String(localized: "The comparison describes recorded activity and sleep. It does not establish that one caused the other.", locale: HealthQueryLocalization.locale))
-        if abs(interval.duration - previous.duration) > 60 {
+        if abs(interval.duration - previous.duration) > 0.001 {
             limitations.append(String(localized: "These periods have different lengths. Totals are not normalized by day.", locale: HealthQueryLocalization.locale))
         }
         if !complete {
@@ -56,6 +54,17 @@ extension HealthQueryService {
                       sources: sources(for: currentWorkouts.records + priorWorkouts.records) + currentSleep.sources + priorSleep.sources,
                       summary: String(localized: "Comparing \(dateText(interval.start)) through \(dateText(interval.end)) with \(dateText(previous.start)) through \(dateText(previous.end)).", locale: HealthQueryLocalization.locale) + " " + metricSummary(metrics),
                       limitations: Array(Set(limitations)).sorted(), isComplete: complete)
+    }
+
+    func previousComparisonInterval(for interval: DateInterval) -> DateInterval {
+        guard calendar.startOfDay(for: interval.start) == interval.start else {
+            return DateInterval(start: interval.start.addingTimeInterval(-interval.duration), end: interval.start)
+        }
+        let endDay = calendar.startOfDay(for: interval.end)
+        let fullDays = calendar.dateComponents([.day], from: interval.start, to: endDay).day ?? 0
+        let days = max(1, fullDays + (interval.end > endDay ? 1 : 0))
+        let start = calendar.date(byAdding: .day, value: -days, to: interval.start) ?? interval.start
+        return DateInterval(start: start, end: interval.start)
     }
 
     func analysisResult(_ request: HealthQueryRequest, interval: DateInterval) async throws -> HealthQueryResult {

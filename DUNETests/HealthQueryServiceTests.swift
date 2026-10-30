@@ -132,6 +132,138 @@ struct HealthQueryServiceTests {
         #expect(response.metrics.first { $0.id == "duration" }?.value == 1_800)
     }
 
+    @Test("Selected workout read failure is unavailable rather than absent")
+    func selectedWorkoutReadFailure() async throws {
+        let clock = now
+        let service = HealthQueryService(container: try store(),
+            workoutService: QueryWorkoutStub(onFetch: { throw CocoaError(.fileReadUnknown) }), nowProvider: { clock })
+        let response = try await service.execute(HealthQueryRequest(kind: .latestWorkout, workoutID: "missing"))
+        #expect(response.status == .unavailable)
+        #expect(!response.isComplete)
+        #expect(response.records.isEmpty)
+    }
+
+    @Test("Batch identifiers filter before the display cap and load history once")
+    func batchWorkoutLookup() async throws {
+        let probe = QueryAccessProbe()
+        let clock = now
+        let records = (0..<60).map { index in
+            WorkoutSummary(id: "remote-\(index)", type: "Running", activityType: .running,
+                           duration: 600, calories: nil, distance: nil, date: now.addingTimeInterval(Double(-60 - index)))
+        }
+        let service = HealthQueryService(container: try store(),
+            workoutService: QueryWorkoutStub(records: records, onFetch: { await probe.didFetch() }), nowProvider: { clock })
+        let response = try await service.execute(HealthQueryRequest(kind: .workoutSummary, limit: 2,
+            workoutIDs: ["healthkit:remote-59", "remote-58"]))
+        #expect(Set(response.records.compactMap(\.healthKitWorkoutID)) == Set(["remote-58", "remote-59"]))
+        #expect(probe.fetchCount == 1)
+        #expect(response.metrics.first { $0.id == "records" }?.value == 2)
+    }
+
+    @Test("Batch request retains a stable bounded prefix and rejects oversized identifiers")
+    func batchRequestBounds() async throws {
+        let identifiers = (0..<50).map { "id-\($0)" }
+        let request = HealthQueryRequest(kind: .workoutSummary, workoutIDs: identifiers)
+        #expect(request.workoutIDs == Array(identifiers.prefix(40)))
+        let probe = QueryAccessProbe()
+        let clock = now
+        let service = HealthQueryService(container: try store(),
+            workoutService: QueryWorkoutStub(onFetch: { await probe.didFetch() }), nowProvider: { clock })
+        let invalid = try await service.execute(HealthQueryRequest(kind: .workoutSummary,
+            workoutIDs: [String(repeating: "a", count: 201)]))
+        #expect(invalid.status == .invalidRequest)
+        #expect(probe.fetchCount == 0)
+    }
+
+    @Test("Set-only days do not fabricate zero duration points")
+    func missingDurationSeries() {
+        let service = HealthQueryService()
+        let setOnly = HealthQueryWorkoutSnapshot(id: "set-only", name: "Squat", date: now,
+            completedSets: [HealthQuerySetSnapshot(id: "set", number: 1, weightKilograms: 50, reps: 5)])
+        let interval = DateInterval(start: now.addingTimeInterval(-86_400), end: now.addingTimeInterval(1))
+        #expect(service.dailySeries([setOnly], interval: interval).points.isEmpty)
+        let timed = HealthQueryWorkoutSnapshot(id: "timed", name: "Run", date: now, durationSeconds: 90)
+        #expect(service.dailySeries([setOnly, timed], interval: interval).points.map(\.value) == [90])
+    }
+
+    @Test("Only actual HealthKit enrichment adds supplemental provenance")
+    func enrichmentProvenance() throws {
+        let clock = now
+        let service = HealthQueryService(nowProvider: { clock })
+        let local = HealthQueryWorkoutSnapshot(id: "local", healthKitWorkoutID: "linked", name: "Run", date: now,
+                                               durationSeconds: 60, distanceMeters: 200)
+        let remoteDate = now.addingTimeInterval(-1)
+        let remote = HealthQueryWorkoutSnapshot(id: "remote", healthKitWorkoutID: "linked", name: "Run", date: remoteDate,
+            durationSeconds: 70, distanceMeters: 210, averageHeartRate: 130, source: .healthKit)
+        let merged = HealthQueryService.mergeWorkouts(local: [local], healthKit: [remote], tombstones: [], fetchedAt: now)
+        let sources = service.sources(for: merged)
+        #expect(sources.map(\.kind) == [.app, .healthKit])
+        #expect(sources.last?.measuredAt == remoteDate)
+        #expect(sources.last?.fetchedAt == now)
+        var complete = local
+        complete.averageHeartRate = 140
+        let unchanged = HealthQueryService.mergeWorkouts(local: [complete], healthKit: [remote], tombstones: [], fetchedAt: now)
+        #expect(unchanged.first?.supplementalHealthKitSource == nil)
+        #expect(service.sources(for: unchanged).count == 1)
+    }
+
+    @Test("Fallback dedup crosses bucket boundaries but preserves exact boundary and third-party workouts")
+    func bucketedDuplicateMatching() {
+        let base = Date(timeIntervalSinceReferenceDate: 120_000)
+        let local = HealthQueryWorkoutSnapshot(id: "local", name: "Run", activityType: .running,
+                                               date: base.addingTimeInterval(-1), durationSeconds: 60)
+        func remote(_ id: String, offset: Double, own: Bool, activity: WorkoutActivityType = .running) -> HealthQueryWorkoutSnapshot {
+            HealthQueryWorkoutSnapshot(id: id, healthKitWorkoutID: id, name: "Workout", activityType: activity,
+                date: base.addingTimeInterval(offset), durationSeconds: 60, source: .healthKit, isFromThisApp: own)
+        }
+        let records = [remote("near", offset: 1, own: true), remote("boundary", offset: 119, own: true),
+                       remote("third-party", offset: 1, own: false), remote("cycling", offset: 1, own: true, activity: .cycling)]
+        let merged = HealthQueryService.mergeWorkouts(local: [local], healthKit: records, tombstones: [])
+        #expect(Set(merged.map(\.id)) == Set(["local", "boundary", "third-party", "cycling"]))
+        let strength = HealthQueryWorkoutSnapshot(id: "strength", name: "Squat", date: base,
+            completedSets: [HealthQuerySetSnapshot(id: "set", number: 1, reps: 3)])
+        let strengthRemote = remote("strength-remote", offset: 1, own: true, activity: .traditionalStrengthTraining)
+        #expect(HealthQueryService.mergeWorkouts(local: [strength], healthKit: [strengthRemote], tombstones: []).count == 1)
+    }
+
+    @Test("Calendar comparisons retain full day boundaries across DST and partial current days")
+    func calendarAlignedComparison() throws {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = try #require(TimeZone(identifier: "America/Los_Angeles"))
+        let end = try #require(calendar.date(from: DateComponents(year: 2026, month: 3, day: 10, hour: 12)))
+        let service = HealthQueryService(calendar: calendar)
+        for (period, days) in [(HealthQueryPeriod.last7Days, 7), (.last30Days, 30)] {
+            let current = period.interval(endingAt: end, calendar: calendar)
+            let previous = service.previousComparisonInterval(for: current)
+            #expect(previous.end == current.start)
+            #expect(previous.start == calendar.startOfDay(for: previous.start))
+            #expect(calendar.dateComponents([.day], from: previous.start, to: previous.end).day == days)
+            #expect(previous.duration != current.duration)
+        }
+        let rolling = DateInterval(start: end.addingTimeInterval(-3_600), end: end)
+        let previous = service.previousComparisonInterval(for: rolling)
+        #expect(previous.duration == rolling.duration)
+        #expect(previous.end == rolling.start)
+    }
+
+    @Test("Explicit comparison intervals are honored and each history read requests the sentinel cap")
+    func explicitComparisonAndQueryCap() async throws {
+        let probe = QueryAccessProbe()
+        let clock = now
+        let current = DateInterval(start: now.addingTimeInterval(-3_600), end: now)
+        let previous = DateInterval(start: now.addingTimeInterval(-30_000), end: now.addingTimeInterval(-20_000))
+        let service = HealthQueryService(container: try store(),
+            workoutService: BoundedQueryWorkoutStub(onFetch: { start, end, limit in
+                await probe.didFetchRange(start: start, end: end, limit: limit)
+            }), sleepService: EmptyQuerySleepStub(), nowProvider: { clock })
+        let response = try await service.execute(HealthQueryRequest(kind: .metricComparison,
+            interval: current, comparisonInterval: previous))
+        #expect(response.status == .noData)
+        #expect(probe.intervals == [current, previous])
+        #expect(probe.limits == [2_001, 2_001])
+        #expect(!response.limitations.isEmpty)
+    }
+
     @Test("Cancellation thrown by a query propagates without becoming an unavailable result")
     func cancellationPropagation() async throws {
         let clock = now
@@ -150,6 +282,12 @@ struct HealthQueryServiceTests {
 private final class QueryAccessProbe {
     var unlocked = true
     var fetchCount = 0
+    var intervals: [DateInterval] = []
+    var limits: [Int] = []
+    func didFetchRange(start: Date, end: Date, limit: Int) {
+        intervals.append(DateInterval(start: start, end: end))
+        limits.append(limit)
+    }
     func didFetch(lock: Bool = false) {
         fetchCount += 1
         if lock { unlocked = false }
@@ -167,4 +305,21 @@ private struct QueryWorkoutStub: WorkoutQuerying {
         try await onFetch()
         return records
     }
+}
+
+private struct BoundedQueryWorkoutStub: WorkoutQuerying {
+    let onFetch: @Sendable (Date, Date, Int) async -> Void
+    func fetchWorkouts(days: Int) async throws -> [WorkoutSummary] { throw CocoaError(.fileReadUnknown) }
+    func fetchWorkouts(start: Date, end: Date) async throws -> [WorkoutSummary] { throw CocoaError(.fileReadUnknown) }
+    func fetchWorkouts(start: Date, end: Date, limit: Int) async throws -> [WorkoutSummary] {
+        await onFetch(start, end, limit)
+        return []
+    }
+}
+
+private struct EmptyQuerySleepStub: SleepQuerying {
+    func fetchSleepStages(for date: Date) async throws -> [SleepStage] { [] }
+    func fetchLatestSleepStages(withinDays days: Int) async throws -> (stages: [SleepStage], date: Date)? { nil }
+    func fetchLastNightSleepSummary(for date: Date) async throws -> SleepSummary? { nil }
+    func fetchDailySleepDurations(start: Date, end: Date) async throws -> [(date: Date, totalMinutes: Double, stageBreakdown: [SleepStage.Stage: Double])] { [] }
 }

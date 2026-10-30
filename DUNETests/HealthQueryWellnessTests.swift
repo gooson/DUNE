@@ -53,6 +53,43 @@ struct HealthQueryWellnessTests {
         #expect(response.metrics.first?.value == 72)
     }
 
+    @Test("All failed body reads without local measurements are unavailable")
+    func bodyReadFailureWithoutRecords() async throws {
+        let container = try ModelContainer(for: BodyCompositionRecord.self,
+            configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+        let clock = now
+        let service = HealthQueryService(container: container, bodyService: WellnessBodyStub(fails: true), nowProvider: { clock })
+        let response = try await service.bodyResult(HealthQueryRequest(kind: .latestBody),
+            interval: DateInterval(start: now.addingTimeInterval(-3_600), end: now))
+        #expect(response.status == .unavailable)
+        #expect(!response.isComplete)
+        #expect(response.metrics.isEmpty)
+    }
+
+    @Test("Condition includes dated HRV and RHR in the selected period without inventing freshness")
+    func datedConditionMetrics() async throws {
+        let clock = now
+        let measuredAt = now.addingTimeInterval(-600)
+        let fetchedAt = now.addingTimeInterval(-120)
+        let snapshot = SharedHealthSnapshot(
+            hrvSamples: [HRVSample(value: 45, date: measuredAt), HRVSample(value: .nan, date: now.addingTimeInterval(-1)),
+                         HRVSample(value: 90, date: now.addingTimeInterval(-7_200))],
+            todayRHR: 100, yesterdayRHR: nil, latestRHR: .init(value: 55, date: measuredAt), rhrCollection: [],
+            todaySleepStages: [], yesterdaySleepStages: [], latestSleepStages: nil, sleepDailyDurations: [],
+            conditionScore: nil, baselineStatus: nil, recentConditionScores: [], failedSources: [], fetchedAt: fetchedAt)
+        let service = HealthQueryService(sharedHealthDataService: WellnessSnapshotStub(snapshot: snapshot), nowProvider: { clock })
+        let response = try await service.conditionResult(HealthQueryRequest(kind: .condition),
+            interval: DateInterval(start: now.addingTimeInterval(-3_600), end: now))
+        #expect(response.status == .available)
+        #expect(response.metrics.map(\.value) == [45, 55])
+        #expect(response.metrics.allSatisfy { $0.date == measuredAt })
+        #expect(response.sources.allSatisfy { $0.kind == .healthKit && $0.fetchedAt == fetchedAt && $0.measuredAt == measuredAt })
+        let empty = try await service.conditionResult(HealthQueryRequest(kind: .condition),
+            interval: DateInterval(start: now.addingTimeInterval(-300), end: now))
+        #expect(empty.status == .noData)
+        #expect(empty.metrics.isEmpty)
+    }
+
     @Test("Sleep excludes out-of-period, nonfinite and absent nights")
     func selectedSleepPeriod() async throws {
         let clock = now
@@ -60,7 +97,8 @@ struct HealthQueryWellnessTests {
         let service = HealthQueryService(sleepService: WellnessSleepStub(start: start), nowProvider: { clock })
         let response = try await service.sleepResult(HealthQueryRequest(kind: .sleep), interval: DateInterval(start: start, end: now))
         #expect(response.series.first?.points.count == 1)
-        #expect(response.metrics.first { $0.id == "sleepAverage" }?.value == 7 * 3_600)
+        let average = try #require(response.metrics.first { $0.id == "sleepAverage" }?.value)
+        #expect(average == 25_200.0)
         #expect(response.sources.first?.measuredAt == start)
     }
 }
@@ -94,4 +132,10 @@ private struct WellnessSleepStub: SleepQuerying {
         [(self.start.addingTimeInterval(-86_400), 500, [:]), (self.start, 420, [:]),
          (self.start.addingTimeInterval(1), .nan, [:])]
     }
+}
+
+private struct WellnessSnapshotStub: SharedHealthDataService {
+    let snapshot: SharedHealthSnapshot
+    func fetchSnapshot() async -> SharedHealthSnapshot { snapshot }
+    func invalidateCache() async {}
 }

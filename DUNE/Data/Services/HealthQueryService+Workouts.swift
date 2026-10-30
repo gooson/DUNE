@@ -8,10 +8,16 @@ extension HealthQueryService {
             let target = Self.normalized(exerciseID)
             records = records.filter { Self.normalized($0.exerciseID ?? "") == target || Self.normalized($0.name) == target }
         }
+        if !request.workoutIDs.isEmpty {
+            let identifiers = Set(request.workoutIDs)
+            records = records.filter { identifiers.contains($0.id) || $0.healthKitWorkoutID.map(identifiers.contains) == true }
+        }
         if let workoutID = request.workoutID {
             guard let selected = records.first(where: { $0.id == workoutID || $0.healthKitWorkoutID == workoutID }) else {
-                return result(request.kind, status: .noData, interval: interval,
-                              summary: String(localized: "The selected workout is not available in this period.", locale: HealthQueryLocalization.locale),
+                return result(request.kind, status: load.complete ? .noData : .unavailable, interval: interval,
+                              summary: load.complete
+                                ? String(localized: "The selected workout is not available in this period.", locale: HealthQueryLocalization.locale)
+                                : String(localized: "The selected workout could not be read. Try again later.", locale: HealthQueryLocalization.locale),
                               limitations: load.limitations, isComplete: load.complete)
             }
             if request.kind == .workoutComparison {
@@ -118,7 +124,11 @@ extension HealthQueryService {
     }
 
     func sources(for records: [HealthQueryWorkoutSnapshot]) -> [HealthQuerySource] {
-        records.prefix(50).map { HealthQuerySource(kind: $0.source, recordID: $0.id, measuredAt: $0.date, fetchedAt: nowProvider()) }
+        let fetchedAt = nowProvider()
+        return records.prefix(50).flatMap { record in
+            [HealthQuerySource(kind: record.source, recordID: record.id, measuredAt: record.date, fetchedAt: fetchedAt)]
+                + [record.supplementalHealthKitSource].compactMap { $0 }
+        }
     }
 
     func workoutMetrics(_ record: HealthQueryWorkoutSnapshot) -> [HealthQueryMetric] {
@@ -166,8 +176,12 @@ extension HealthQueryService {
     func dailySeries(_ records: [HealthQueryWorkoutSnapshot], interval: DateInterval) -> HealthQuerySeries {
         let grouped = Dictionary(grouping: records, by: { calendar.startOfDay(for: $0.date) })
         // Show observed days only; missing measurements are never represented as zero.
-        let points = grouped.keys.sorted().map { date in
-            HealthQueryPoint(date: date, value: (grouped[date] ?? []).compactMap(\.durationSeconds).reduce(0, +))
+        let points = grouped.keys.sorted().compactMap { date -> HealthQueryPoint? in
+            let durations = (grouped[date] ?? []).compactMap(\.durationSeconds)
+            guard !durations.isEmpty else { return nil }
+            let total = durations.reduce(0, +)
+            guard total.isFinite else { return nil }
+            return HealthQueryPoint(date: date, value: total)
         }
         return HealthQuerySeries(id: "workoutDuration", title: String(localized: "Workout Duration by Day", locale: HealthQueryLocalization.locale), unit: .seconds, points: points)
     }

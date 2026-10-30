@@ -64,7 +64,9 @@ final class HealthQueryService: HealthQuerying {
               (1...100).contains(request.limit),
               (request.searchText?.count ?? 0) <= 500,
               (request.exerciseID?.count ?? 0) <= 200,
-              (request.workoutID?.count ?? 0) <= 200 else {
+              (request.workoutID?.count ?? 0) <= 200,
+              request.workoutIDs.count <= 40,
+              request.workoutIDs.allSatisfy({ !$0.isEmpty && $0.count <= 200 }) else {
             return result(request.kind, status: .invalidRequest, interval: interval,
                           summary: String(localized: "Choose a valid period of up to one year and a shorter search.", locale: HealthQueryLocalization.locale))
         }
@@ -186,7 +188,7 @@ extension HealthQueryService {
         if !complete { limitations.append(String(localized: "The result is limited to the most recent 2,000 records in this period.", locale: HealthQueryLocalization.locale)) }
         let remote: [HealthQueryWorkoutSnapshot]
         do {
-            let workouts = try await workoutService.fetchWorkouts(start: start, end: end)
+            let workouts = try await workoutService.fetchWorkouts(start: start, end: end, limit: Self.maximumRecords + 1)
             if workouts.count > Self.maximumRecords {
                 complete = false
                 limitations.append(String(localized: "Health app results are limited to the most recent 2,000 records in this period.", locale: HealthQueryLocalization.locale))
@@ -202,7 +204,7 @@ extension HealthQueryService {
             limitations.append(String(localized: "Health app workouts could not be read. Available DUNE records are shown.", locale: HealthQueryLocalization.locale))
         }
         try Task.checkCancellation()
-        return WorkoutLoad(records: Self.mergeWorkouts(local: local, healthKit: remote, tombstones: tombstonesProvider()),
+        return WorkoutLoad(records: Self.mergeWorkouts(local: local, healthKit: remote, tombstones: tombstonesProvider(), fetchedAt: nowProvider()),
                            limitations: limitations, complete: complete)
     }
 
@@ -247,7 +249,8 @@ extension HealthQueryService {
     }
 
     static func mergeWorkouts(
-        local: [HealthQueryWorkoutSnapshot], healthKit: [HealthQueryWorkoutSnapshot], tombstones: Set<String>
+        local: [HealthQueryWorkoutSnapshot], healthKit: [HealthQueryWorkoutSnapshot], tombstones: Set<String>,
+        fetchedAt: Date = Date()
     ) -> [HealthQueryWorkoutSnapshot] {
         let local = local.filter { record in
             guard let id = record.healthKitWorkoutID else { return true }
@@ -262,18 +265,41 @@ extension HealthQueryService {
             enriched.distanceMeters = record.distanceMeters ?? remote.distanceMeters
             enriched.averagePaceSecondsPerKm = record.averagePaceSecondsPerKm ?? remote.averagePaceSecondsPerKm
             enriched.calories = record.calories ?? remote.calories
+            if enriched.averageHeartRate != record.averageHeartRate || enriched.distanceMeters != record.distanceMeters
+                || enriched.averagePaceSecondsPerKm != record.averagePaceSecondsPerKm || enriched.calories != record.calories {
+                enriched.supplementalHealthKitSource = HealthQuerySource(
+                    kind: .healthKit, recordID: remote.id, measuredAt: remote.date, fetchedAt: fetchedAt
+                )
+            }
             return enriched
         }
         let linkedIDs = Set(local.compactMap(\.healthKitWorkoutID))
+        // Only neighboring two-minute buckets can contain a fallback duplicate.
+        // The canonical activity/category and exact timestamp checks remain decisive.
+        let unlinked = local.filter { $0.healthKitWorkoutID == nil }
+        let byActivity = Dictionary(grouping: unlinked, by: { $0.activityType?.rawValue ?? "" })
+            .mapValues { records in
+                Dictionary(grouping: records, by: { floor($0.date.timeIntervalSinceReferenceDate / 120) })
+            }
+        let strengthByBucket = Dictionary(grouping: unlinked.filter { !$0.completedSets.isEmpty }) {
+            floor($0.date.timeIntervalSinceReferenceDate / 120)
+        }
         let remaining = remote.filter { remote in
             if let id = remote.healthKitWorkoutID, linkedIDs.contains(id) { return false }
             guard remote.isFromThisApp else { return true }
-            return !local.contains { local in
-                guard local.healthKitWorkoutID == nil,
-                      abs(local.date.timeIntervalSince(remote.date)) < 120 else { return false }
-                if let localType = local.activityType, localType == remote.activityType { return true }
-                return remote.activityType?.category == .strength && !local.completedSets.isEmpty
+            let bucket = floor(remote.date.timeIntervalSinceReferenceDate / 120)
+            let activityBuckets = remote.activityType.flatMap { byActivity[$0.rawValue] } ?? [:]
+            for nearby in [bucket - 1, bucket, bucket + 1] {
+                let candidates = (activityBuckets[nearby] ?? [])
+                    + (remote.activityType?.category == .strength ? (strengthByBucket[nearby] ?? []) : [])
+                let matches = candidates.contains { local in
+                    guard abs(local.date.timeIntervalSince(remote.date)) < 120 else { return false }
+                    if let localType = local.activityType, localType == remote.activityType { return true }
+                    return remote.activityType?.category == .strength && !local.completedSets.isEmpty
+                }
+                if matches { return false }
             }
+            return true
         }
         return (enriched + remaining).sorted { $0.date > $1.date }
     }

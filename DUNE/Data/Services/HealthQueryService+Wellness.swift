@@ -110,9 +110,15 @@ extension HealthQueryService {
                 sources.append(contentsOf: values.map(\.source))
             } else { sources.append(latest.source) }
         }
-        let summary = metrics.isEmpty ? String(localized: "No body measurements were found in this period.", locale: HealthQueryLocalization.locale)
-            : String(localized: "Your available body measurements are shown with their measurement dates.", locale: HealthQueryLocalization.locale)
-        return result(request.kind, status: limitations.isEmpty ? (metrics.isEmpty ? .noData : .available) : .partial,
+        let summary: String
+        if metrics.isEmpty {
+            summary = limitations.isEmpty
+                ? String(localized: "No body measurements were found in this period.", locale: HealthQueryLocalization.locale)
+                : String(localized: "Body measurements could not be read. Try again later.", locale: HealthQueryLocalization.locale)
+        } else {
+            summary = String(localized: "Your available body measurements are shown with their measurement dates.", locale: HealthQueryLocalization.locale)
+        }
+        return result(request.kind, status: metrics.isEmpty ? (limitations.isEmpty ? .noData : .unavailable) : (limitations.isEmpty ? .available : .partial),
                       interval: interval, metrics: metrics, series: series, sources: sources, summary: summary,
                       limitations: Array(Set(limitations)).sorted(), isComplete: limitations.isEmpty)
     }
@@ -174,21 +180,49 @@ extension HealthQueryService {
         let points = byDate.values.sorted { $0.date < $1.date }.map { HealthQueryPoint(date: $0.date, value: Double($0.score)) }
         var limitations: [String] = []
         if !snapshot.failedSources.isEmpty {
-            limitations.append(String(localized: "Some health sources could not be refreshed. Available condition scores are shown.", locale: HealthQueryLocalization.locale))
+            limitations.append(String(localized: "Some health sources could not be refreshed. Available condition records are shown.", locale: HealthQueryLocalization.locale))
         }
         let age = nowProvider().timeIntervalSince(snapshot.fetchedAt)
         if !age.isFinite || age < -1 || age > 3_600 {
             limitations.append(String(localized: "Condition data was last refreshed earlier. Check the source dates.", locale: HealthQueryLocalization.locale))
         }
         let latest = points.last
-        return result(request.kind, status: limitations.isEmpty ? (latest == nil ? .noData : .available) : .partial,
-                      interval: interval,
-                      metrics: latest.map { [HealthQueryMetric(id: "condition", title: String(localized: "Condition Score", locale: HealthQueryLocalization.locale),
-                                                               value: $0.value, unit: .score, date: $0.date)] } ?? [],
+        var metrics = latest.map {
+            [HealthQueryMetric(id: "condition", title: String(localized: "Condition Score", locale: HealthQueryLocalization.locale),
+                               value: $0.value, unit: .score, date: $0.date)]
+        } ?? []
+        var sources = points.map { HealthQuerySource(kind: .calculated, measuredAt: $0.date, fetchedAt: snapshot.fetchedAt) }
+        let hrv = snapshot.hrvSamples.filter {
+            $0.date >= interval.start && $0.date < interval.end && Self.valid($0.value, in: 0.001...500) != nil
+        }.max { $0.date < $1.date }
+        if let hrv {
+            metrics.append(HealthQueryMetric(id: "hrv", title: String(localized: "Heart Rate Variability", locale: HealthQueryLocalization.locale),
+                                             value: hrv.value, unit: .milliseconds, date: hrv.date))
+            sources.append(HealthQuerySource(kind: .healthKit, measuredAt: hrv.date, fetchedAt: snapshot.fetchedAt))
+        }
+        // Use dated samples, never assign today's date to an undated scalar.
+        let rhrSamples = snapshot.rhrCollection.map { SharedHealthSnapshot.RHRSample(value: $0.average, date: $0.date) }
+            + [snapshot.latestRHR].compactMap { $0 }
+        let rhr = rhrSamples.filter {
+            $0.date >= interval.start && $0.date < interval.end && Self.valid($0.value, in: 20...300) != nil
+        }.max { $0.date < $1.date }
+        if let rhr {
+            metrics.append(HealthQueryMetric(id: "restingHeartRate", title: String(localized: "Resting Heart Rate", locale: HealthQueryLocalization.locale),
+                                             value: rhr.value, unit: .bpm, date: rhr.date))
+            sources.append(HealthQuerySource(kind: .healthKit, measuredAt: rhr.date, fetchedAt: snapshot.fetchedAt))
+        }
+        let summary: String
+        if metrics.isEmpty {
+            summary = limitations.isEmpty
+                ? String(localized: "No condition records were found in this period.", locale: HealthQueryLocalization.locale)
+                : String(localized: "Condition records could not be read. Try again later.", locale: HealthQueryLocalization.locale)
+        } else {
+            summary = String(localized: "Condition records describe wellness trends and are not a medical assessment.", locale: HealthQueryLocalization.locale)
+        }
+        return result(request.kind, status: metrics.isEmpty ? (limitations.isEmpty ? .noData : .unavailable) : (limitations.isEmpty ? .available : .partial),
+                      interval: interval, metrics: metrics,
                       series: points.isEmpty ? [] : [HealthQuerySeries(id: "condition", title: String(localized: "Condition Score", locale: HealthQueryLocalization.locale), unit: .score, points: points)],
-                      sources: points.map { HealthQuerySource(kind: .calculated, measuredAt: $0.date, fetchedAt: snapshot.fetchedAt) },
-                      summary: latest == nil ? String(localized: "No condition scores were found in this period.", locale: HealthQueryLocalization.locale)
-                        : String(localized: "Condition scores describe recorded wellness trends and are not a medical assessment.", locale: HealthQueryLocalization.locale),
+                      sources: sources, summary: summary,
                       limitations: limitations, isComplete: limitations.isEmpty)
     }
 }

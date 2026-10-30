@@ -42,6 +42,7 @@ struct HealthQueryRequest: Sendable, Equatable {
     var interval: DateInterval?
     var comparisonInterval: DateInterval?
     var workoutID: String?
+    var workoutIDs: [String]
     var exerciseID: String?
     var searchText: String?
     var limit: Int
@@ -53,12 +54,14 @@ struct HealthQueryRequest: Sendable, Equatable {
         workoutID: String? = nil,
         exerciseID: String? = nil,
         searchText: String? = nil,
-        limit: Int = 20
+        limit: Int = 20,
+        workoutIDs: [String] = []
     ) {
         self.kind = kind
         self.interval = interval
         self.comparisonInterval = comparisonInterval
         self.workoutID = workoutID
+        self.workoutIDs = Array(workoutIDs.prefix(40))
         self.exerciseID = exerciseID
         self.searchText = searchText
         self.limit = limit
@@ -169,13 +172,16 @@ struct HealthQueryWorkoutSnapshot: Identifiable, Sendable, Equatable {
     var memo: String
     let source: HealthQuerySource.Kind
     var isFromThisApp: Bool
+    /// Present only when HealthKit supplied at least one otherwise absent measurement.
+    var supplementalHealthKitSource: HealthQuerySource?
 
     init(id: String, localRecordID: UUID? = nil, healthKitWorkoutID: String? = nil,
          exerciseID: String? = nil, name: String, activityType: WorkoutActivityType? = nil,
          date: Date, durationSeconds: Double? = nil, distanceMeters: Double? = nil,
          averagePaceSecondsPerKm: Double? = nil, averageHeartRate: Double? = nil,
          calories: Double? = nil, completedSets: [HealthQuerySetSnapshot] = [],
-         memo: String = "", source: HealthQuerySource.Kind = .app, isFromThisApp: Bool = false) {
+         memo: String = "", source: HealthQuerySource.Kind = .app, isFromThisApp: Bool = false,
+         supplementalHealthKitSource: HealthQuerySource? = nil) {
         self.id = id
         self.localRecordID = localRecordID
         self.healthKitWorkoutID = healthKitWorkoutID
@@ -192,6 +198,7 @@ struct HealthQueryWorkoutSnapshot: Identifiable, Sendable, Equatable {
         self.memo = memo
         self.source = source
         self.isFromThisApp = isFromThisApp
+        self.supplementalHealthKitSource = supplementalHealthKitSource
     }
 
     var volumeKilogramRepetitions: Double? {
