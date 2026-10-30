@@ -177,6 +177,7 @@ struct ContentView: View {
     #if DEBUG
     @State private var didOpenUITestNotification = false
     @State private var didOpenT06MetricFixture = false
+    @State private var didOpenT07AllDataFixture = false
     #endif
     private let notificationInboxManager = NotificationInboxManager.shared
 
@@ -439,6 +440,7 @@ struct ContentView: View {
             await MainActor.run {
                 openUITestNotificationIfRequested()
                 openT06MetricFixtureIfRequested()
+                openT07AllDataFixtureIfRequested()
             }
             #endif
         }
@@ -583,6 +585,21 @@ struct ContentView: View {
         selectedSection = .today
         todayNavPath = NavigationPath()
         todayNavPath.append(fixture)
+    }
+
+    /// Opt-in baseline route through DashboardView's registered All Data destination.
+    @MainActor
+    private func openT07AllDataFixtureIfRequested() {
+        guard !didOpenT07AllDataFixture else { return }
+        let arguments = ProcessInfo.processInfo.arguments
+        guard arguments.contains("--uitesting"), arguments.contains("--seed-mock"),
+              let index = arguments.firstIndex(of: "--ui-t07-all-data"),
+              arguments.indices.contains(index + 1),
+              let category = HealthMetric.Category(rawValue: arguments[index + 1]) else { return }
+        didOpenT07AllDataFixture = true
+        selectedSection = .today
+        todayNavPath = NavigationPath()
+        todayNavPath.append(AllDataDestination(category: category))
     }
 
     @MainActor
