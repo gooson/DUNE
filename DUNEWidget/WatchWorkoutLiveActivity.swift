@@ -5,8 +5,9 @@ import WidgetKit
 
 struct WatchWorkoutLiveActivity: Widget {
     var body: some WidgetConfiguration {
-        ActivityConfiguration(for: WatchWorkoutAttributes.self) { context in
-            WatchWorkoutActivityContent(state: context.state, isStale: context.isStale)
+        let preferences = WorkoutLiveActivityPreferences.read()
+        return ActivityConfiguration(for: WatchWorkoutAttributes.self) { context in
+            WatchWorkoutActivityContent(state: context.state, isStale: context.isStale, preferences: preferences)
                 .activityBackgroundTint(WidgetDS.isDesertWarm ? WidgetDS.Color.warmSurface : .black.opacity(0.8))
                 .activitySystemActionForegroundColor(WidgetDS.isDesertWarm ? WidgetDS.Color.warmInk : .white)
         } dynamicIsland: { context in
@@ -15,16 +16,22 @@ struct WatchWorkoutLiveActivity: Widget {
                     WatchWorkoutHeader(state: context.state, isStale: context.isStale, isIsland: true)
                 }
                 DynamicIslandExpandedRegion(.trailing) {
-                    if !context.isStale {
-                        WorkoutElapsedTime(state: context.state)
+                    if !context.isStale && preferences.style == .standard {
+                        WorkoutPrimaryMetric(state: context.state, preferences: preferences)
                             .font(.system(.title3, design: .rounded, weight: .bold))
                             .foregroundStyle(.white)
                     }
                 }
                 DynamicIslandExpandedRegion(.bottom) {
                     if !context.isStale {
-                        WatchWorkoutMetrics(state: context.state, isIsland: true)
-                            .padding(.top, 8)
+                        VStack(alignment: .leading, spacing: 10) {
+                            if preferences.style == .goldImpact {
+                                WorkoutMetricHero(state: context.state, preferences: preferences, isIsland: true)
+                            }
+                            WatchWorkoutMetrics(state: context.state, isIsland: true,
+                                                primaryMetric: preferences.resolvedMetric(for: context.state))
+                        }
+                        .padding(.top, 8)
                     }
                 }
             } compactLeading: {
@@ -35,11 +42,15 @@ struct WatchWorkoutLiveActivity: Widget {
                     Image(systemName: "wifi.slash")
                         .accessibilityLabel("Waiting for Watch")
                 } else {
-                    CompactWorkoutElapsedTime(state: context.state)
+                    WorkoutIslandMetric(state: context.state, preferences: preferences)
                 }
             } minimal: {
-                WatchWorkoutPhaseIcon(state: context.state, isStale: context.isStale)
-                    .foregroundStyle(WidgetDS.isDesertWarm ? WidgetDS.themeAccent : .white)
+                if context.isStale || context.state.phase != .running {
+                    WatchWorkoutPhaseIcon(state: context.state, isStale: context.isStale)
+                        .foregroundStyle(WidgetDS.themeAccent)
+                } else {
+                    WorkoutIslandMetric(state: context.state, preferences: preferences, minimal: true)
+                }
             }
         }
         .supplementalActivityFamilies([.small])
@@ -61,6 +72,7 @@ private struct WatchWorkoutActivityContent: View {
     let state: WatchWorkoutSnapshot
     let isStale: Bool
     var previewSmall = false
+    var preferences = WorkoutLiveActivityPreferences.read()
 
     private var isSmall: Bool { previewSmall || activityFamily == .small }
 
@@ -74,6 +86,11 @@ private struct WatchWorkoutActivityContent: View {
         }
         .padding(isSmall ? 10 : 16)
         .foregroundStyle(WorkoutPalette.primary)
+        .background {
+            if preferences.style == .goldImpact && WidgetDS.isDesertWarm {
+                WorkoutGoldSurface()
+            }
+        }
     }
 
     private var fullContent: some View {
@@ -81,12 +98,9 @@ private struct WatchWorkoutActivityContent: View {
             WatchWorkoutHeader(state: state, isStale: isStale)
 
             if !isStale {
-                WorkoutElapsedTime(state: state)
-                    .font(.system(.largeTitle, design: .rounded, weight: .bold))
-                    .foregroundStyle(WorkoutPalette.accent)
-                    .minimumScaleFactor(0.7)
+                WorkoutMetricHero(state: state, preferences: preferences)
 
-                WatchWorkoutMetrics(state: state)
+                WatchWorkoutMetrics(state: state, primaryMetric: preferences.resolvedMetric(for: state))
                     .padding(.top, 2)
             }
         }
@@ -98,12 +112,16 @@ private struct WatchWorkoutActivityContent: View {
             WatchWorkoutHeader(state: state, isStale: isStale, compact: true)
 
             if !isStale {
-                WorkoutElapsedTime(state: state)
+                WorkoutPrimaryMetric(state: state, preferences: preferences)
                     .font(.system(.title2, design: .rounded, weight: .bold))
                     .foregroundStyle(WorkoutPalette.accent)
                     .minimumScaleFactor(0.7)
 
-                WatchWorkoutMetrics(state: state, compact: true)
+                if preferences.resolvedMetric(for: state) != .elapsedTime {
+                    WorkoutElapsedTime(state: state).font(.caption2)
+                }
+                WatchWorkoutMetrics(state: state, compact: true,
+                                    primaryMetric: preferences.resolvedMetric(for: state))
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -235,19 +253,174 @@ private struct WorkoutElapsedTime: View {
     }
 }
 
-private struct CompactWorkoutElapsedTime: View {
+private struct WorkoutIslandMetric: View {
     @Environment(\.isDynamicIslandLimitedInWidth) private var isLimitedInWidth
 
     let state: WatchWorkoutSnapshot
+    let preferences: WorkoutLiveActivityPreferences
+    var minimal = false
 
     var body: some View {
-        if !isLimitedInWidth {
-            WorkoutElapsedTime(state: state)
-                .font(.caption2)
-                .minimumScaleFactor(0.75)
-                .frame(maxWidth: 60)
-                .foregroundStyle(WidgetDS.isDesertWarm ? WidgetDS.themeAccent : .white)
+        let constrained = isLimitedInWidth || minimal
+        ViewThatFits(in: .horizontal) {
+            WorkoutPrimaryMetric(state: state, preferences: preferences, abbreviated: constrained)
+                .font(.caption2.weight(.semibold))
+                .fixedSize(horizontal: constrained, vertical: false)
+            WatchWorkoutPhaseIcon(state: state, isStale: false)
         }
+        .frame(width: isLimitedInWidth ? 28 : (minimal ? 45 : 60), height: isLimitedInWidth ? 28 : nil)
+        .foregroundStyle(WidgetDS.isDesertWarm ? WidgetDS.themeAccent : .white)
+    }
+}
+
+private struct WorkoutPrimaryMetric: View {
+    let state: WatchWorkoutSnapshot
+    let preferences: WorkoutLiveActivityPreferences
+    var abbreviated = false
+
+    private var metric: WorkoutLiveActivityMetric { preferences.resolvedMetric(for: state) }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+          Group {
+            if metric == .elapsedTime {
+                if abbreviated {
+                    let seconds = state.elapsed(at: .now)
+                    let divisor: Double = seconds < 60 ? 1 : (seconds < 6_000 ? 60 : 3_600)
+                    VStack(spacing: 0) {
+                        Text(Int(seconds / divisor).formatted())
+                        Text(verbatim: seconds < 60 ? "″" : (seconds < 6_000 ? "′" : "h"))
+                            .font(.system(size: 8))
+                    }
+                    .accessibilityLabel("Elapsed Time")
+                    .accessibilityValue(Duration.seconds(state.elapsedSeconds).formatted(.time(pattern: .hourMinuteSecond)))
+                    .accessibilityIdentifier("watch-workout-elapsed")
+                } else {
+                    WorkoutElapsedTime(state: state)
+                }
+            } else {
+                metricValue
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel(Text(metric.displayName))
+                    .accessibilityValue(Text(verbatim: "\(value) \(unit)"))
+                    .accessibilityIdentifier(metric == .distance ? "watch-workout-distance" :
+                                               (metric == .weight ? "watch-workout-weight" : "watch-workout-heart-rate"))
+            }
+          }
+        }
+        .monospacedDigit()
+        .lineLimit(1)
+        .privacySensitive()
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("watch-workout-primary-metric")
+    }
+
+    private var metricValue: some View {
+        Group {
+            if abbreviated {
+                VStack(spacing: 0) {
+                    Text(verbatim: value)
+                    Text(verbatim: unit).font(.system(size: 8))
+                }
+            } else {
+                HStack(alignment: .firstTextBaseline, spacing: 4) {
+                    Text(verbatim: value)
+                    Text(verbatim: unit).font(.caption)
+                }
+            }
+        }
+    }
+
+    private var value: String {
+        switch metric {
+        case .distance: (state.distanceMeters / 1_000).formatted(.number.precision(.fractionLength(abbreviated ? 1 : 2)))
+        case .weight: (state.currentSetWeightKg ?? 0).formatted(.number.precision(.fractionLength(0...2)))
+        case .heartRate: Int((state.heartRate ?? 0).rounded()).formatted()
+        case .elapsedTime: ""
+        }
+    }
+
+    private var unit: String {
+        switch metric {
+        case .distance: "km"
+        case .weight: "kg"
+        case .heartRate: "bpm"
+        case .elapsedTime: ""
+        }
+    }
+}
+
+private struct WorkoutMetricHero: View {
+    let state: WatchWorkoutSnapshot
+    let preferences: WorkoutLiveActivityPreferences
+    var isIsland = false
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(spacing: 12) {
+                WorkoutPrimaryMetric(state: state, preferences: preferences)
+                    .font(.system(.largeTitle, design: .rounded, weight: .bold))
+                    .foregroundStyle(isIsland ? WidgetDS.themeAccent : WorkoutPalette.accent)
+                    .minimumScaleFactor(0.75)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                if preferences.style == .goldImpact {
+                    WorkoutGoldEmblem(state: state)
+                }
+            }
+            if preferences.resolvedMetric(for: state) != .elapsedTime {
+                WorkoutElapsedTime(state: state)
+                    .font(.caption)
+                    .foregroundStyle(isIsland ? .white.opacity(0.7) : WorkoutPalette.secondary)
+            }
+        }
+    }
+}
+
+private struct WorkoutGoldEmblem: View {
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    let state: WatchWorkoutSnapshot
+
+    var body: some View {
+        if !dynamicTypeSize.isAccessibilitySize {
+            WatchWorkoutPhaseIcon(state: state, isStale: false)
+                .font(.system(size: 28, weight: .semibold))
+                .foregroundStyle(Color("WorkoutMedalEngraving"))
+                .frame(width: 56, height: 62)
+                .background {
+                    RoundedRectangle(cornerRadius: 17)
+                        .fill(LinearGradient(colors: [Color("WorkoutMedalGold"), WidgetDS.themeAccent],
+                                             startPoint: .topLeading, endPoint: .bottomTrailing))
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 13)
+                                .strokeBorder(.white.opacity(0.3), lineWidth: 1).padding(4)
+                        }
+                }
+                .rotationEffect(.degrees(7))
+                .opacity(state.phase == .paused ? 0.55 : 1)
+                .accessibilityHidden(true)
+        }
+    }
+}
+
+private struct WorkoutGoldSurface: View {
+    var body: some View {
+        GeometryReader { geometry in
+            ZStack(alignment: .bottom) {
+                LinearGradient(colors: [WidgetDS.Color.warmSurface, WidgetDS.Color.warmTile],
+                               startPoint: .topLeading, endPoint: .bottomTrailing)
+                Ellipse()
+                    .fill(WidgetDS.Color.warmAccent.opacity(0.12))
+                    .frame(width: geometry.size.width * 1.7, height: 90)
+                    .rotationEffect(.degrees(-12)).offset(y: 65)
+                Ellipse()
+                    .fill(WidgetDS.Color.warmAccent.opacity(0.08))
+                    .frame(width: geometry.size.width * 1.5, height: 80)
+                    .rotationEffect(.degrees(10)).offset(x: 65, y: 57)
+            }
+        }
+        .clipped()
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
     }
 }
 
@@ -255,6 +428,7 @@ private struct WatchWorkoutMetrics: View {
     let state: WatchWorkoutSnapshot
     var compact = false
     var isIsland = false
+    var primaryMetric: WorkoutLiveActivityMetric = .elapsedTime
 
     var body: some View {
         Group {
@@ -294,7 +468,7 @@ private struct WatchWorkoutMetrics: View {
 
     @ViewBuilder
     private var basicMetrics: some View {
-        if let heartRate = state.heartRate {
+        if primaryMetric != .heartRate, let heartRate = state.heartRate {
             metric(value: Text(Int(heartRate.rounded()).formatted()),
                    unit: Text("bpm"), symbol: "heart.fill", color: WorkoutPalette.heart,
                    label: Text("Heart Rate"), accessibleValue: Text("\(Int(heartRate.rounded())) bpm"))
@@ -307,7 +481,7 @@ private struct WatchWorkoutMetrics: View {
 
     @ViewBuilder
     private var distanceMetric: some View {
-        if state.distanceMeters > 0 {
+        if primaryMetric != .distance, state.supportsDistance == true {
             metric(value: Text(Measurement(value: state.distanceMeters, unit: UnitLength.meters).formatted()),
                    unit: nil, symbol: "location.fill", color: WorkoutPalette.distance,
                    label: Text("Distance"),

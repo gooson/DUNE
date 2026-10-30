@@ -47,22 +47,113 @@ final class WatchWorkoutLiveActivityUITests: UITestBaseCase {
         )
     }
 
+    func testGoldCardioDistancePresentation() {
+        captureNotificationCenter(
+            phase: "running", expectedStatuses: ["Workout", "운동", "ワークアウト"],
+            activityType: "running", evidenceName: "gold-cardio-distance",
+            metric: "distance", style: "goldImpact", expectedPrimaryFragments: ["1.2", "km"]
+        )
+    }
+
+    func testZeroDistanceIsPresentedAsARealValue() {
+        captureNotificationCenter(
+            phase: "running", expectedStatuses: ["Workout", "운동", "ワークアウト"],
+            activityType: "running", evidenceName: "gold-cardio-zero-distance",
+            metric: "distance", style: "goldImpact",
+            fixtureArguments: ["--ui-watch-live-activity-zero-distance"],
+            expectedPrimaryFragments: ["0"]
+        )
+    }
+
+    func testUnsupportedDistanceFallsBackToElapsedTime() {
+        captureNotificationCenter(
+            phase: "running", expectedStatuses: ["Workout", "운동", "ワークアウト"],
+            activityType: "running", evidenceName: "gold-cardio-no-distance",
+            metric: "distance", style: "goldImpact",
+            fixtureArguments: ["--ui-watch-live-activity-no-distance"],
+            expectedPrimaryFragments: [":"], absentMetricIdentifier: "watch-workout-distance"
+        )
+    }
+
+    func testGoldStrengthCurrentWeightPresentation() {
+        captureNotificationCenter(
+            phase: "running", expectedStatuses: ["Workout", "운동", "ワークアウト"],
+            activityType: "traditionalStrengthTraining", exerciseName: "Strength Training",
+            evidenceName: "gold-strength-weight", metric: "weight", style: "goldImpact",
+            expectedPrimaryFragments: ["60", "kg"], expectsWeight: true
+        )
+    }
+
+    func testMissingCurrentWeightFallsBackToElapsedTime() {
+        captureNotificationCenter(
+            phase: "running", expectedStatuses: ["Workout", "운동", "ワークアウト"],
+            activityType: "traditionalStrengthTraining", exerciseName: "Strength Training",
+            evidenceName: "gold-strength-no-weight", metric: "weight", style: "goldImpact",
+            fixtureArguments: ["--ui-watch-live-activity-missing-weight"],
+            expectedPrimaryFragments: [":"], expectsWeight: false
+        )
+    }
+
+    func testZeroCurrentWeightIsPresentedAsARealValue() {
+        captureNotificationCenter(
+            phase: "running", expectedStatuses: ["Workout", "운동", "ワークアウト"],
+            activityType: "traditionalStrengthTraining", exerciseName: "Strength Training",
+            evidenceName: "gold-strength-zero-weight", metric: "weight", style: "goldImpact",
+            fixtureArguments: ["--ui-watch-live-activity-zero-weight"],
+            expectedPrimaryFragments: ["0", "kg"], expectsWeight: true
+        )
+    }
+
+    func testStandardHeartRatePresentation() {
+        captureNotificationCenter(
+            phase: "running", expectedStatuses: ["Workout", "운동", "ワークアウト"],
+            activityType: "running", evidenceName: "standard-heart-rate",
+            metric: "heartRate", style: "standard", expectedPrimaryFragments: ["142", "bpm"]
+        )
+    }
+
+    func testPausedGoldStrengthKeepsSelectedWeight() {
+        captureNotificationCenter(
+            phase: "paused", expectedStatuses: ["Paused", "일시 정지", "一時停止"],
+            activityType: "traditionalStrengthTraining", exerciseName: "Strength Training",
+            evidenceName: "paused-gold-strength-weight", metric: "weight", style: "goldImpact",
+            expectedPrimaryFragments: ["60", "kg"], expectsWeight: true
+        )
+    }
+
+    func testStaleGoldDistanceHidesSelectedAndSecondaryMetrics() {
+        captureNotificationCenter(
+            phase: "stale", expectedStatuses: ["Waiting for Watch", "Watch 연결 대기", "Watchとの接続待ち"],
+            activityType: "running", evidenceName: "stale-gold-cardio-distance",
+            metric: "distance", style: "goldImpact"
+        )
+    }
+
     private func captureNotificationCenter(
         phase: String,
         expectedStatuses: [String],
         activityType: String,
         exerciseName: String = "Outdoor Run",
-        evidenceName: String? = nil
+        evidenceName: String? = nil,
+        metric: String = "elapsedTime",
+        style: String = "goldImpact",
+        fixtureArguments: [String] = [],
+        expectedPrimaryFragments: [String] = [],
+        expectsWeight: Bool? = nil,
+        absentMetricIdentifier: String? = nil
     ) {
         var configuration = launchConfiguration
         configuration.additionalArguments += [
             "--ui-watch-live-activity", phase,
             "--ui-watch-live-activity-name", exerciseName,
             "--ui-watch-live-activity-type", activityType,
+            "--ui-watch-live-activity-metric", metric,
+            "--ui-watch-live-activity-style", style,
             "--ui-test-theme", "desertWarm",
             "--ui-test-style", "dark",
             "-AppleLanguages", "(en)", "-AppleLocale", "en_US"
         ]
+        configuration.additionalArguments += fixtureArguments
         launchApp(with: configuration)
         XCTAssertTrue(app.wait(for: .runningForeground, timeout: 10))
 
@@ -109,7 +200,7 @@ final class WatchWorkoutLiveActivityUITests: UITestBaseCase {
             }
             let activityHierarchy = activity.debugDescription
             if phase == "stale" {
-                for identifier in ["watch-workout-elapsed", "watch-workout-heart-rate", "watch-workout-calories", "watch-workout-distance"] {
+                for identifier in ["watch-workout-primary-metric", "watch-workout-weight", "watch-workout-elapsed", "watch-workout-heart-rate", "watch-workout-calories", "watch-workout-distance"] {
                     XCTAssertFalse(activity.descendants(matching: .any)[identifier].firstMatch.exists,
                                    "Outdated \(identifier) must be hidden")
                 }
@@ -122,6 +213,23 @@ final class WatchWorkoutLiveActivityUITests: UITestBaseCase {
                     if element.exists {
                         XCTAssertTrue(activity.frame.contains(element.frame), "\(identifier) must fit inside the activity")
                     }
+                }
+                let primary = activity.descendants(matching: .any)["watch-workout-primary-metric"].firstMatch
+                XCTAssertTrue(primary.exists, "The system should expose the selected primary metric")
+                if primary.exists {
+                    XCTAssertTrue(activity.frame.contains(primary.frame), "The selected metric must fit inside the activity")
+                    let accessibleText = primary.debugDescription
+                    for fragment in expectedPrimaryFragments {
+                        XCTAssertTrue(accessibleText.contains(fragment), "Primary metric should expose \(fragment): \(accessibleText)")
+                    }
+                }
+                if let expectsWeight {
+                    let weight = activity.descendants(matching: .any)["watch-workout-weight"].firstMatch
+                    XCTAssertEqual(weight.exists, expectsWeight, "Only a current set weight should be exposed")
+                }
+                if let absentMetricIdentifier {
+                    XCTAssertFalse(activity.descendants(matching: .any)[absentMetricIdentifier].firstMatch.exists,
+                                   "Unavailable metric \(absentMetricIdentifier) must be hidden")
                 }
             }
         }
