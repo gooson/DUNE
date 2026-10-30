@@ -61,6 +61,7 @@ struct MetricSummaryHeader: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .accessibilityElement(children: .combine)
         .accessibilityLabel("\(category.displayName), \(formattedCurrentValue) \(resolvedUnit)")
+        .accessibilityIdentifier("metric-summary-header")
     }
 
     // MARK: - Subviews

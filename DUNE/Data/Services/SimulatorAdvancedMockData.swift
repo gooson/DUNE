@@ -429,7 +429,22 @@ enum SimulatorAdvancedMockDataProvider {
             )
         }
         let snapshot = buildSharedHealthSnapshot(referenceDate: referenceDate)
-        let workouts = buildWorkouts(referenceDate: referenceDate)
+        var workouts = buildWorkouts(referenceDate: referenceDate)
+        #if DEBUG && targetEnvironment(simulator)
+        if ProcessInfo.processInfo.arguments.contains("--uitesting"),
+           let index = ProcessInfo.processInfo.arguments.firstIndex(of: "--ui-t06-metric"),
+           ProcessInfo.processInfo.arguments.indices.contains(index + 1),
+           ProcessInfo.processInfo.arguments[index + 1] == "exercise-km" {
+            let running = WorkoutSummary(
+                id: "t06-capture-running", type: "Running", activityType: .running,
+                duration: 48 * 60, calories: 612, distance: 10_200,
+                date: Calendar.current.date(byAdding: .day, value: -1, to: referenceDate) ?? referenceDate
+            )
+            workouts.append(SimulatorAdvancedMockWorkout(
+                summary: running, heartRateSamples: [], heartRateRecovery: nil
+            ))
+        }
+        #endif
         // UI-only state: preserve each actual latest sample, but offer no prior
         // observation from which Wellness could manufacture a comparison.
         let latestBodyOnly = ProcessInfo.processInfo.arguments.contains("--uitesting") &&
