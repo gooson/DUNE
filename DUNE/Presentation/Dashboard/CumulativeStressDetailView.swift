@@ -13,6 +13,8 @@ struct CumulativeStressDetailView: View {
     @Environment(\.horizontalSizeClass) private var sizeClass
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @ScaledMetric(relativeTo: .caption) private var contributorIconWidth: CGFloat = 20
+    // Match DotLineChartView's intrinsic scaled plot height in every loading state.
+    @ScaledMetric(relativeTo: .body) private var chartHeight: CGFloat = 220
 
     private var isRegular: Bool { sizeClass == .regular }
 
@@ -394,12 +396,6 @@ struct CumulativeStressDetailView: View {
             .font(.title3.bold().monospacedDigit())
             .fixedSize(horizontal: true, vertical: false)
             .accessibilityIdentifier("stress-contribution-score-\(contribution.factor.rawValue)")
-    }
-
-    // MARK: - Helpers
-
-    private var chartHeight: CGFloat {
-        isRegular ? 360 : 250
     }
 
 }
