@@ -57,6 +57,7 @@ struct DailyDigestNotificationView: View {
         .accessibilityIdentifier("notification-daily-digest-screen")
         .background { DetailWaveBackground() }
         .englishNavigationTitle("Today's Report")
+        .navigationBarTitleDisplayMode(.inline)
         .task(id: isReadyToLoad) {
             guard isReadyToLoad else { return }
             await viewModel.loadData(
@@ -81,6 +82,7 @@ struct DailyDigestNotificationView: View {
             narrativeSection(digest)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier("dashboard-daily-digest")
     }
 
@@ -110,6 +112,7 @@ struct DailyDigestNotificationView: View {
             LinearGradient(colors: [DS.Color.warmGlow, DS.Color.desertBronze], startPoint: .topLeading, endPoint: .bottomTrailing),
             in: RoundedRectangle(cornerRadius: DS.Radius.xxl)
         )
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier("notification-daily-digest-cover")
     }
 
@@ -158,6 +161,7 @@ struct DailyDigestNotificationView: View {
                     }
                     .font(.subheadline)
                     .foregroundStyle(DS.Color.textSecondary)
+                    .accessibilityElement(children: .contain)
                     .accessibilityIdentifier("notification-daily-digest-workout")
                 }
             }
@@ -228,9 +232,14 @@ struct DailyDigestNotificationView: View {
         StandardCard(padding: DS.Spacing.xl) {
             VStack(alignment: .leading, spacing: dynamicTypeSize.isAccessibilitySize ? DS.Spacing.lg : DS.Spacing.md) {
                 HStack(alignment: .top, spacing: DS.Spacing.md) {
-                    Label(title, systemImage: symbol)
+                    Label {
+                        Text(title)
+                            .foregroundStyle(.primary)
+                    } icon: {
+                        Image(systemName: symbol)
+                            .foregroundStyle(color)
+                    }
                         .font(DS.Typography.sectionTitle)
-                        .foregroundStyle(color)
                         .fixedSize(horizontal: false, vertical: true)
                         .accessibilityAddTraits(.isHeader)
                     if !dynamicTypeSize.isAccessibilitySize {
@@ -245,6 +254,7 @@ struct DailyDigestNotificationView: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
         }
+        .accessibilityElement(children: .contain)
     }
 }
 
