@@ -185,3 +185,7 @@ L03 네이티브 구현은 기존20개 템플릿의 선택·자동 입력을 유
 T04 native 구현은 단위32개·기기별 선택 UI15개와 새4기기 실제 원본으로 검증했다. 검토용 PNG/JSON은 브라우저 시안이며 새 native 캡처와 구분한다. 실제 입력이 없는70/30 예시 구성은 사용하지 않는다.
 
 Gold Impact 네이티브 일반 빌드·관련 단위51개와 S01 설정 저장 검증은 통과했다. [새 실제 설정 2장](../phone-design-map/actual/live-activity/gold-impact-2026-10-30/index.html)과 [남은 시스템 UI 게이트](../../reviews/2026-10-30-live-activity-gold-preferences.md)를 구분한다. WLA01 최종 캡처는 환경 조회 무응답으로 미완료이며 보존 시안·이전 PNG를 새 검증 증거로 사용하지 않는다.
+
+## T08 날씨 상세 검토본 · 2026-10-31
+
+[보존 시안](themes/dune-weather-detail-redesign.html)의 밝음·어두움 PNG와 원본 T08 JSON을 `themes/assets/condition-detail-redesign/`에 둔다. [네이티브 배치 계약](../layout-map/weather-detail-redesign-proposal.md)은 실제 날씨 상태와 수신 조건을 사용한다. 브라우저 시안은 앱 캡처가 아니며 T08 새 실제 화면은 런타임 검증 뒤 별도로 갱신한다.

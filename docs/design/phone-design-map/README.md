@@ -207,3 +207,6 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 
 
 2026-10-31 T02 iCloud 동의 개편은 [네 기기 실제 앱 전후 비교](../full-redesign-map/review/cloud-sync-consent-2026-10-31/index.html)에 보존했다. 기존 화면과 원본 아이콘을 대조하고 iPhone·iPad·Duo 접힘0°·펼침180°의 새 PNG와 출처를 갱신했다. 두 선택의 기본 글씨 터치 높이는44pt 이상이며 어두움·최대 접근성 글씨의 별도 소스와 한계는 갤러리에 명시했다. 다른 화면·Watch·실제 iCloud 동기화나 사용자 건강 기록의 검증을 뜻하지 않는다.
+
+
+2026-10-31 T08 날씨 상세: [네 기기 실제 앱 전후 비교](../full-redesign-map/review/weather-detail-2026-10-31/index.html). iPhone·iPad·Duo 접힘0°/펼침180°의 새 실제 앱 캡처입니다. 어두운 비와 최대 글씨의 눈 화면은 별도 상태로 보존했습니다. 정적 UI 감사에서는 움직임을 멈추며, 모의 날씨 자료를 사용합니다. 각 이미지의 실제 소스가 표기되어 있고 전체 회귀나 실제 기상 관측을 검증한 것은 아닙니다.
