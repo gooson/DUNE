@@ -179,6 +179,7 @@ class StringCatalogFormattingTests(unittest.TestCase):
             for relative in ("scripts/lib", "DUNE/DUNE.xcodeproj", "bin"):
                 (repository / relative).mkdir(parents=True)
             for relative in ("scripts/build-ios.sh", "scripts/lib/regen-project.sh",
+                             "scripts/lib/xcodebuild-resources.sh",
                              "scripts/format-xcstrings.swift"):
                 shutil.copy2(ROOT / relative, repository / relative)
             for original in CATALOGS:

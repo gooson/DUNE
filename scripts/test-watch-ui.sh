@@ -38,6 +38,8 @@ fi
 source "$ROOT_DIR/scripts/lib/regen-project.sh"
 source "$ROOT_DIR/scripts/lib/simulator-boot.sh"
 source "$ROOT_DIR/scripts/lib/simulator-worktree.sh"
+source "$ROOT_DIR/scripts/lib/xcodebuild-resources.sh"
+configure_xcodebuild_resources ui
 TEST_SUMMARY="$ROOT_DIR/scripts/lib/test-log-summary.py"
 TEST_VERIFY="$ROOT_DIR/scripts/lib/verify-ui-test-log.py"
 
@@ -235,6 +237,7 @@ TEST_CMD=(xcodebuild test -project "$PROJECT_FILE"
     -scheme "$SCHEME"
     -destination "$DESTINATION"
     -derivedDataPath "$DERIVED_DATA_DIR"
+    ${XCODEBUILD_RESOURCE_ARGS[@]+"${XCODEBUILD_RESOURCE_ARGS[@]}"}
     -parallel-testing-enabled NO
     -test-timeouts-enabled YES
     -default-test-execution-time-allowance 120

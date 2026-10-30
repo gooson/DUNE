@@ -28,7 +28,9 @@ python3 scripts/audit-agent-sessions.py --start 2026-10-04T08:55:00+00:00 --end 
 - UI runner의 전체 deadline에는 잠금·부팅·빌드·테스트·결과 정리가 포함되고 로그 무갱신 15분에도 종료된다. 같은 테스트를 raw `xcodebuild`, wrapper, 다른 로그 이름으로 중복 실행하지 않는다. `DUNE_UI_TEST_WALL_TIMEOUT`/`DUNE_UI_TEST_IDLE_TIMEOUT` 조정은 실행 전 예상 검증 범위와 근거가 있을 때만 한다.
 - 정상 결과는 종료 상태·로그 경로·보고된 테스트 수만 확인한다. 실패 시 제한된 오류 요약 → 해당 로그 구간 → 관련 소스 순서로 읽는다. 요약에서 수를 알 수 없으면 unknown이며 0건 성공으로 간주하지 않는다.
 - iOS/watch UI 실행은 `<log>.result.json`에 target, 실제 종료 코드, executed/passed/skipped/failed 수, 누락 selector, 실패 요약을 기록한다. 최초 오류와 최근의 서로 다른 오류를 제한된 길이로 보존한다. JSON의 `status`와 실행기 종료 상태를 함께 확인한다. unknown/0건/식별 가능한 passed case 없음/필수 selector 누락은 실패다. 이 결과는 명시한 선택 범위의 실행 증거이며 full 커버리지·시각적 레이아웃 인증은 아니다.
-- 개발 중 `test-ui.sh --only-testing <target/class/method>` 또는 `--smoke`로 빠르게 확인할 수 있다. 둘을 함께 주면 명시적 선택과 smoke의 합집합을 실행한다. `/run`의 최종 범위는 `.codex/skill-compat.md`의 변경 범위 기반 UI 게이트를 적용하고, 그 외는 source skill이 요구하는 범위를 유지한다. full 판정을 smoke/targeted로 대신하지 않는다. 단위 테스트의 `--ios-only`/`--watch-only`는 실제 변경 범위와 최종 요구조건에 맞게 사용한다.
+- 개발 중과 최종 검증 모두 `skill-compat.md`의 **모든 스킬의 핵심 검증과 점유 예산** 및 변경 범위 기반 UI 게이트를 적용한다. `test-ui.sh --only-testing <target/class/method>`로 변경 동작을 확인하고, 공통 흐름에도 영향이 있을 때만 `--smoke`를 합친다. 사용자 요청 full을 targeted로 대체하지 않으며, 요청하지 않은 full을 실패 게이트로 만들지 않는다. unit은 `test-unit.sh --ios-only --only-testing DUNETests/<실제Suite>`처럼 target과 selector를 명시한다. Watch 영향이 있으면 필요한 Watch selector만 추가한다.
+- 표준 실행기의 로컬 기본값은 `-jobs 2`·index store `NO`·병렬 테스트 `NO`다. build/unit/UI/capture는 한 worktree에 하나만 실행한다. build/unit도 canonical 예산에 맞는 command-deadline 또는 pipeline timeout으로 감싸고, UI는 해당 명령에 `DUNE_UI_TEST_WALL_TIMEOUT=1200`을 전달한다. 동일 앱 target의 컴파일을 포함한 테스트 성공 뒤 별도 build-only를 반복하지 않는다. CI 기본값·기존 test 선택 동작은 유지한다.
+- 화면 잠금/환경 오류가 의심되면 [UI 실행 환경 진단](ui-execution.md)을 읽는다. `host_locked=yes`는 실행 차단 조건이 아니며 Mac GUI 실패를 guest XCTest·캡처 실패로 일반화하지 않는다. 진단용 전체 테스트·별도 기기 실행을 추가하지 않고 필요한 selector에서 확인한다.
 - 실패 분류, 최대 1회 조건부 재시도, polling/범위 확장 제한은 `skill-compat.md`의 **재시도와 범위 확장 제한**을 따른다. 실패 로그는 최초 원인과 변경된 부분만 읽고 같은 전체 로그를 다시 로드하지 않는다.
 - 제스처/차트/레이아웃 관련 source 규칙의 seeded/mock 재현 의무는 유지한다. 요소 존재만으로 시각적 레이아웃 전체를 검증했다고 보고하지 않는다.
 
@@ -68,8 +70,8 @@ python3 scripts/codex-pipeline.py check parity --context 'adapter-check-v1' --sc
 여러 phase에서 같은 검증을 사용하는 작업은 `scripts/codex-pipeline.py`를 사용한다. 위 `codex-check.py`의 fingerprint/원자적 저장/hash 구현을 공유하며, 상태는 ignored `.codex-checks/pipeline/`에 저장한다. 검증 ID는 작업과 검증을 식별하는 고정 이름으로 정하고 phase 이름 변경으로 새 ID를 만들지 않는다.
 
 ```sh
-python3 scripts/codex-pipeline.py run tooling-contracts --context python-local --scope tooling --content-only -- python3 -B -m unittest discover -s scripts/tests
-python3 scripts/codex-pipeline.py check tooling-contracts --context python-local --scope tooling --content-only -- python3 -B -m unittest discover -s scripts/tests
+python3 scripts/codex-pipeline.py run tooling-contracts --context python-local --scope tooling --content-only --timeout 120 -- python3 -B -m unittest scripts.tests.test_unit_test_runner
+python3 scripts/codex-pipeline.py check tooling-contracts --context python-local --scope tooling --content-only -- python3 -B -m unittest scripts.tests.test_unit_test_runner
 python3 scripts/codex-pipeline.py phase Work/tooling-contracts passed --evidence tooling-contracts
 python3 scripts/codex-pipeline.py doc remember .codex/skill-compat.md
 python3 scripts/codex-pipeline.py doc check .codex/skill-compat.md
