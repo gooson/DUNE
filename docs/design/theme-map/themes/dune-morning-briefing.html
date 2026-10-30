@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>T09 · 아침 브리핑 시안</title>
+<style>
+  :root { font-family: -apple-system, BlinkMacSystemFont, sans-serif; color-scheme: light dark; --ink:#332b28; --muted:#685e55; --paper:#faf5ec; --card:#fffaf4; --gold:#d9a54d; --bronze:#996638; --stroke:#e6d5bd; }
+  * { box-sizing:border-box } body { margin:0; background:#e8ded0; color:var(--ink) } body.dark { --ink:#f6ead8; --muted:#cdbca8; --paper:#262322; --card:#37302a; --gold:#e5b65c; --bronze:#d5a873; --stroke:#5b4a3b; background:#171717 }
+  header { padding:16px; text-align:center } header p { font-size:13px; color:var(--muted) } button { font:inherit; cursor:pointer; border:1px solid var(--stroke); border-radius:10px; background:var(--card); color:var(--ink); padding:9px 12px }
+  .phone { max-width:440px; margin:0 auto 40px; background:var(--paper); min-height:760px; border-radius:30px; overflow:hidden; box-shadow:0 18px 48px #271c1755 }
+  .top { height:220px; position:relative; padding:28px 24px; background:linear-gradient(165deg,var(--paper) 8%,#eac993 62%,#b98b65 100%); overflow:hidden } .dark .top { background:linear-gradient(165deg,#302b2a 8%,#80644c 66%,#553e37 100%) }
+  .sun { position:absolute; width:115px; height:115px; right:37px; top:42px; border-radius:50%; background:#ffe3a2; box-shadow:0 0 0 17px #fff0c65c,0 0 50px #f4d392 } .ridge { position:absolute; left:-5%; bottom:-32px; width:115%; height:110px; border-radius:50% 50% 0 0; background:#b78b68 } .ridge.near { bottom:-64px; background:#ead1aa; transform:rotate(-7deg) } .dark .ridge.near { background:#806a53 }
+  .top h1 { position:relative; margin:40px 0 0; font-size:31px; letter-spacing:-.04em; z-index:2 } .done { position:absolute; right:22px; top:20px; z-index:2; background:transparent; border:0; color:var(--ink); font-weight:700 }
+  main { padding:20px 16px 28px; display:grid; gap:16px } article { background:var(--card); border:1px solid var(--stroke); border-radius:22px; padding:16px; min-height:154px; overflow:hidden } .art { height:76px; border-radius:14px; position:relative; margin-bottom:12px; background:linear-gradient(120deg,#e4c9a0,#fff1d6) } .dark .art { background:linear-gradient(120deg,#765d44,#483a31) } .art span { position:absolute; right:26px; top:7px; font-size:48px; color:var(--bronze) } .guide .art { background:linear-gradient(120deg,#c9d7c3,#edf3df) } .weekly .art { background:linear-gradient(120deg,#dfbe91,#f6e7c6) } .weather .art { background:linear-gradient(120deg,#b9cfca,#ecdfc7) } .dark .guide .art,.dark .weekly .art,.dark .weather .art { background:linear-gradient(120deg,#4b544d,#51463b) }
+  h2 { font-size:18px; margin:0 0 7px } p { margin:0; line-height:1.55; color:var(--muted) } .large h2 { font-size:26px } .large article p { font-size:23px } .large .art { height:48px } .large .art span { font-size:28px }
+  @media (min-width:700px) { .phone { max-width:760px } }
+</style>
+</head>
+<body><header><strong>T09 · 아침 브리핑 시안</strong><p>예시 문장·수치. 실제 건강 기록이나 앱 캡처가 아닙니다.</p><button onclick="document.body.classList.toggle('dark')">밝음/어두움</button> <button onclick="document.body.classList.toggle('large')">큰 글씨</button> <button onclick="document.querySelector('.weather').hidden=!document.querySelector('.weather').hidden">날씨 있음/없음</button></header>
+<div class="phone"><div class="top"><button class="done">완료</button><div class="sun"></div><div class="ridge"></div><div class="ridge near"></div><h1>좋은 아침이에요</h1></div><main>
+<article class="recovery"><div class="art" aria-hidden="true"><span>♡ 〰</span></div><h2>오늘의 회복</h2><p>컨디션 78점 · 지난밤 수면 7시간 24분. 최근 회복 기록을 함께 살펴봐요.</p></article>
+<article class="guide"><div class="art" aria-hidden="true"><span>◌ ↗</span></div><h2>오늘의 가이드</h2><p>오늘의 컨디션과 최근 운동량에 따른 예시 안내</p></article>
+<article class="weekly"><div class="art" aria-hidden="true"><span>〰 〰</span></div><h2>이번 주 운동</h2><p>3회 · 145분. 지난주보다 1회 늘었어요.</p></article>
+<article class="weather"><div class="art" aria-hidden="true"><span>☁</span></div><h2>오늘의 날씨</h2><p>서울 19°C · 맑음. 오후에 야외 활동하기 좋은 예시예요.</p></article>
+</main></div></body></html>

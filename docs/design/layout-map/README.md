@@ -37,6 +37,9 @@ Life의 링 옆에는 현재 진행 상태를 설명하는 문장을 둔다. 히
 
 ## 화면별 맵 목록
 
+2026-10-31 [T09 아침 브리핑 배치 계약](morning-briefing-proposal.md)은 일출 히어로 뒤에 회복·가이드·주간·조건부 날씨를 배치한다. [보존 시안](../theme-map/themes/dune-morning-briefing.html)은 예시로, 실제 앱 캡처와 구분한다.
+
+
 2026-10-30 [Siri 건강 정보 질의 SQ01–SQ14](siri-health-queries-proposal.md)와 [기능별 비주얼 시안](../theme-map/themes/dune-siri-health-queries.html)을 추가했다. 최근 운동·주간 운동량·세트·개인 기록·유산소·신체 최신값/추세·수면·컨디션·기간 비교·화면 문맥·메모 검색·보고서 공유·긴 분석의 V1/V2, 밝음/어두움, 폭·큰 글씨·데이터 상태를 비교한다. Watch 짧은 응답 3개를 함께 보존한다. 합성 데이터의 브라우저 제안이며 실제 Siri·앱 구현·실제 화면 캡처가 아니다.
 
 2026-10-26 [4탭 히어로 제목 표기](hero-heading-style.md)는 첫 카드 상단을 CONDITION·READINESS·WELLNESS·HABITS로 통일하는 공통 개편 기준이다. 영어 대문자 제목과 사용자 언어 설명을 구분하며 네이티브 적용 완료를 의미하지 않는다.

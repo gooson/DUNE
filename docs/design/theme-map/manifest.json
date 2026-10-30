@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-30",
+  "updated": "2026-10-31",
   "app_contract": "app-contract.md",
   "themes": [
     {
@@ -286,6 +286,17 @@
       "title": "DUNE · 기록 조회와 근거 있는 설명",
       "file": "dune-siri-health-queries.html",
       "detail": "2026-10-30 제안. SQ01–SQ14 최근 운동·기간 집계·근력 세트·개인 기록·유산소·신체 최신값/추세·수면·컨디션·지표 비교·화면 문맥·메모 검색·보고서 공유·긴 분석. V1 기본과 V2 비주얼 강조, 밝음/어두움·320/402/466/951/1032 폭·100/160/200% 글씨·8개 데이터 상태. 큰 수치·골드·바벨/메달·측정 표본·수면 단계와 Watch 응답 3개. 합성 fixture의 로컬 인터랙션이며 실제 Siri/HealthKit/모델/공유 실행·앱 캡처가 아님. 배치 계약: ../layout-map/siri-health-queries-proposal.md."
+    },
+    {
+      "id": "morning-briefing",
+      "name": "아침 브리핑",
+      "title": "T09 · Sunrise Briefing",
+      "file": "dune-morning-briefing.html",
+      "detail": "2026-10-31 승인된 T09 일출 히어로와 회복·가이드·주간·조건부 날씨 섹션 시안. 밝음·어두움·큰 글씨·날씨 유무를 비교한다. 수치는 예시이며 네이티브 구현과 실제 앱 캡처의 증거가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/morning-briefing-proposal.md",
+        "status": "native-source-in-progress"
+      }
     }
   ]
 }
