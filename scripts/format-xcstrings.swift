@@ -121,6 +121,7 @@ let checkManual = arguments.contains("--check-manual")
 let requestedPaths = arguments.filter { $0 != "--check" && $0 != "--check-manual" }
 let repositoryRoot = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent()
 let defaultPaths = [
+    "DUNE/Resources/AppShortcuts.xcstrings",
     "Shared/Resources/Localizable.xcstrings",
     "DUNEWatch/Resources/Localizable.xcstrings",
     "DUNEWatch/Resources/InfoPlist.xcstrings"

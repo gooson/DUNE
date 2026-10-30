@@ -66,7 +66,8 @@ def audit_presentations(known):
                     block = " ".join(lines[i:i + 12])
                     found.update(re.findall(r"\b([A-Z][A-Za-z0-9_]*(?:View|Sheet))\s*\(", block))
     # Type-erasing wrappers do not introduce a screen of their own.
-    system = {"AnyView", "ContentUnavailableView", "ProgressView", "ScrollView"}
+    # The health-query wrapper resolves to the existing app/HealthKit record detail screens.
+    system = {"AnyView", "ContentUnavailableView", "ProgressView", "ScrollView", "HealthQueryRecordDetailView"}
     missing = found - known - system
     if missing:
         raise ValueError("unmapped presentation targets: " + ", ".join(sorted(missing)))

@@ -7,9 +7,9 @@ status: draft
 
 # 폰 계열 전체 화면 인벤토리
 
-SwiftUI View와 인라인 프레젠테이션 **109개**를 화면 단위로 대조한다. W17·W18은 소스에 남아 있지만 현재 앱에서 호출하는 곳이 없어 캡처 대상 수에서 제외한다. 차트·카드·버튼 같은 내부 컴포넌트는 별도 화면이 아니다.
+SwiftUI View와 인라인 프레젠테이션 **110개**를 화면 단위로 대조한다. W17·W18은 소스에 남아 있지만 현재 앱에서 호출하는 곳이 없어 캡처 대상 수에서 제외한다. 차트·카드·버튼 같은 내부 컴포넌트는 별도 화면이 아니다.
 
-## 시작 · 오늘 · 알림 (18)
+## 시작 · 오늘 · 알림 (19)
 
 | ID | 화면 | 진입 | 표시 방식 | 일반 iPhone | iPad | Duo | 코드 |
 |---|---|---|---|---|---|---|---|
@@ -31,6 +31,7 @@ SwiftUI View와 인라인 프레젠테이션 **109개**를 화면 단위로 대�
 | T16 | 기록 알림 상세 | 개인 기록 알림 | push | 상세 push · 한 열 | 상세 콘텐츠 | 선택·스크롤 유지 | `DUNE/Presentation/Shared/NotificationPersonalRecordsPushView.swift:3` |
 | T17 | 건강 데이터 질문 | 오늘 카드 | inspector | 좁은 폭에서는 시트 | 선택 상세 inspector | 닫힘 시트 → 내부 보조 | `DUNE/Presentation/Dashboard/HealthDataQASheet.swift:3` |
 | T18 | 고정 지표 편집 | 오늘 지표 | sheet | 화면 내 시트 | 시트 · 보조 패널 | 닫힘/내부 시트 | `DUNE/Presentation/Dashboard/Components/PinnedMetricsEditorView.swift:3` |
+| T19 | 건강 정보 조회 | 오늘 질문·Siri | push/sheet | 정보 유형·기간·한 열 결과 | 넓은 시트·보조 탐색 | 접힘 한 열·펼침 확장 | `DUNE/Presentation/HealthQuery/HealthQueryView.swift:4` |
 
 ## 활동 · 분석 (20)
 

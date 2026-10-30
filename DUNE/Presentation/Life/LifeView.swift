@@ -77,11 +77,10 @@ enum LifeHeroTrend {
 struct LifeView: View {
     @State private var viewModel = LifeViewModel()
     @State private var localRefreshSignal = 0
-    @State private var historySelection: HabitHistorySelection?
+    @Binding private var historySelection: HabitHistorySelection?
     @State private var isShowingTemplateSheet = false
     @Environment(\.modelContext) private var modelContext
     @Environment(\.horizontalSizeClass) private var sizeClass
-    @Environment(\.appTheme) private var theme
 
     private let scrollToTopSignal: Int
     private let refreshSignal: Int
@@ -93,7 +92,8 @@ struct LifeView: View {
         case top
     }
 
-    init(scrollToTopSignal: Int = 0, refreshSignal: Int = 0, checklistSignal: Int = 0) {
+    init(historySelection: Binding<HabitHistorySelection?>, scrollToTopSignal: Int = 0, refreshSignal: Int = 0, checklistSignal: Int = 0) {
+        self._historySelection = historySelection
         self.scrollToTopSignal = scrollToTopSignal
         self.refreshSignal = refreshSignal
         self.checklistSignal = checklistSignal
@@ -212,26 +212,7 @@ struct LifeView: View {
                 )
             }
         }
-        // Inspector owns the screen, not the vertically unbounded scroll content.
-        .inspector(isPresented: Binding(
-            get: { historySelection != nil },
-            set: { if !$0 { historySelection = nil } }
-        )) {
-            if let selection = historySelection {
-                HabitHistorySheet(
-                    habitName: selection.habitName,
-                    iconCategory: selection.iconCategory,
-                    habitType: selection.habitType,
-                    entries: selection.entries,
-                    onAddPastRecord: selection.onAddPastRecord
-                )
-                .inspectorColumnWidth(min: 300, ideal: 360, max: 460)
-            }
-        }
         .englishNavigationTitle("Life")
-        .navigationBarTitleDisplayMode(theme == .desertWarm ? .large : .inline)
-        .toolbarBackground(.regularMaterial, for: .navigationBar)
-        .toolbarBackground(theme == .desertWarm ? .hidden : .visible, for: .navigationBar)
     }
 }
 
@@ -241,7 +222,7 @@ enum LifeRoute: Hashable {
     case habitManagement
 }
 
-private struct HabitHistorySelection: Identifiable {
+struct HabitHistorySelection: Identifiable {
     let id: UUID
     let habitName: String
     let iconCategory: HabitIconCategory
@@ -1121,7 +1102,7 @@ private struct HabitListQueryView: View {
     }
 }
 
-private struct HabitHistorySheet: View {
+struct HabitHistorySheet: View {
     let habitName: String
     let iconCategory: HabitIconCategory
     let habitType: HabitType
@@ -1440,8 +1421,9 @@ private struct ArchivedHabitCountView: View {
 }
 
 #Preview {
+    @Previewable @State var historySelection: HabitHistorySelection?
     NavigationStack {
-        LifeView()
+        LifeView(historySelection: $historySelection)
     }
     .modelContainer(for: [HabitDefinition.self, HabitLog.self, ExerciseRecord.self], inMemory: true)
 }

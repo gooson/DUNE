@@ -14,7 +14,7 @@ actor HealthDataQAService: HealthDataQuestionAnswering {
     private let nowProvider: @Sendable () -> Date
     private let availabilityProvider: @Sendable () -> Bool
     private let localeIdentifierProvider: @Sendable () -> String
-    private var session: LanguageModelSession?
+    private let queryService: (any HealthQuerying)?
 
     init(
         sharedHealthDataService: SharedHealthDataService?,
@@ -23,8 +23,10 @@ actor HealthDataQAService: HealthDataQuestionAnswering {
         hrvService: any HRVQuerying = HRVQueryService(manager: .shared),
         nowProvider: @escaping @Sendable () -> Date = Date.init,
         availabilityProvider: @escaping @Sendable () -> Bool = HealthDataQAService.defaultAvailabilityProvider,
-        localeIdentifierProvider: @escaping @Sendable () -> String = { Locale.current.identifier }
+        localeIdentifierProvider: @escaping @Sendable () -> String = { Locale.current.identifier },
+        queryService: (any HealthQuerying)? = nil
     ) {
+        self.queryService = queryService
         self.contextBuilder = HealthDataQAContextBuilder(
             sharedHealthDataService: sharedHealthDataService,
             sleepService: sleepService,
@@ -47,31 +49,30 @@ actor HealthDataQAService: HealthDataQuestionAnswering {
             )
         }
 
-        guard availabilityProvider() else {
-            return unsupportedReply()
+        if let queryService {
+            do {
+                let assistant = HealthQueryAssistant(queryService: queryService,
+                    availabilityProvider: availabilityProvider,
+                    localeProvider: { [localeIdentifierProvider] in Locale(identifier: localeIdentifierProvider()) },
+                    nowProvider: nowProvider)
+                let result = try await assistant.ask(trimmedQuestion)
+                return HealthDataQAReply(text: result.spokenSummary, generatedAt: result.generatedAt,
+                    isFallback: result.status != .available)
+            } catch {
+                // The legacy reply protocol is nonthrowing; cancellation is never retried.
+                return failureReply()
+            }
         }
-
+        guard availabilityProvider(), !Task.isCancelled else { return unsupportedReply() }
         do {
             return try await performInference(question: trimmedQuestion)
         } catch {
-            AppLogger.ai.notice(
-                "[HealthDataQA] retrying after transient failure: \(String(describing: error), privacy: .private)"
-            )
-            try? await Task.sleep(for: .seconds(1))
-            guard !Task.isCancelled else { return failureReply() }
-            do {
-                return try await performInference(question: trimmedQuestion)
-            } catch {
-                AppLogger.ai.error(
-                    "[HealthDataQA] inference failed after retry: \(String(describing: error), privacy: .private)"
-                )
-                return failureReply()
-            }
+            return failureReply()
         }
     }
 
     func resetConversation() async {
-        session = nil
+        // Sessions are request-isolated, so no sensitive history persists between questions.
     }
 
     func makeInstructions() async -> String {
@@ -138,10 +139,6 @@ actor HealthDataQAService: HealthDataQuestionAnswering {
     }
 
     private func activeSession() async throws -> LanguageModelSession {
-        if let session {
-            return session
-        }
-
         let instructions = await makeInstructions()
         let tools: [any Tool] = [
             ConditionSummaryTool(contextBuilder: contextBuilder),
@@ -150,7 +147,6 @@ actor HealthDataQAService: HealthDataQuestionAnswering {
             RecoverySummaryTool(contextBuilder: contextBuilder)
         ]
         let newSession = LanguageModelSession(tools: tools, instructions: instructions)
-        session = newSession
         return newSession
     }
 

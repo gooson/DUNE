@@ -105,9 +105,20 @@ enum TestDataSeeder {
     static func weatherSnapshot(for scenario: UITestSeedScenario) -> WeatherSnapshot? {
         switch scenario {
         case .empty, .fatigueRegression:
-            nil
+            return nil
         case .defaultSeeded, .activityExerciseSeeded, .notificationRoutingSeeded:
-            makeWeatherSnapshot()
+            let arguments = ProcessInfo.processInfo.arguments
+            guard arguments.contains("--uitesting"), arguments.contains("--seed-mock"),
+                  let index = arguments.firstIndex(of: "--ui-weather-detail-variant"),
+                  arguments.indices.contains(index + 1) else {
+                return makeWeatherSnapshot()
+            }
+            switch arguments[index + 1] {
+            case "rain-night": return makeWeatherSnapshot(condition: .rain, isDaytime: false)
+            case "snow-day": return makeWeatherSnapshot(condition: .snow)
+            case "fog-day": return makeWeatherSnapshot(condition: .fog)
+            default: return makeWeatherSnapshot()
+            }
         }
     }
 
@@ -992,7 +1003,11 @@ enum TestDataSeeder {
         return stages
     }
 
-    private static func makeWeatherSnapshot(referenceDate: Date = Date()) -> WeatherSnapshot {
+    private static func makeWeatherSnapshot(
+        referenceDate: Date = Date(),
+        condition: WeatherConditionType = .clear,
+        isDaytime: Bool = true
+    ) -> WeatherSnapshot {
         let calendar = Calendar.current
         let hourStart = calendar.dateInterval(of: .hour, for: referenceDate)?.start ?? referenceDate
 
@@ -1001,7 +1016,7 @@ enum TestDataSeeder {
             return WeatherSnapshot.HourlyWeather(
                 hour: hour,
                 temperature: 18 + Double(offset),
-                condition: offset < 3 ? .clear : .partlyCloudy,
+                condition: offset < 3 ? condition : .partlyCloudy,
                 feelsLike: 17 + Double(offset),
                 humidity: 0.55,
                 uvIndex: min(6, 2 + offset),
@@ -1016,7 +1031,7 @@ enum TestDataSeeder {
                 date: date,
                 temperatureMax: 23 + Double(offset),
                 temperatureMin: 12 + Double(offset),
-                condition: offset == 1 ? .partlyCloudy : .clear,
+                condition: offset == 0 ? condition : (offset == 1 ? .partlyCloudy : .clear),
                 precipitationProbabilityMax: offset == 2 ? 25 : 10,
                 uvIndexMax: 6 + offset
             )
@@ -1025,11 +1040,11 @@ enum TestDataSeeder {
         return WeatherSnapshot(
             temperature: 21,
             feelsLike: 22,
-            condition: .clear,
+            condition: condition,
             humidity: 0.56,
             uvIndex: 4,
             windSpeed: 12,
-            isDaytime: true,
+            isDaytime: isDaytime,
             fetchedAt: referenceDate,
             hourlyForecast: hourlyForecast,
             dailyForecast: dailyForecast,
