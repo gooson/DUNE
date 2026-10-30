@@ -114,5 +114,29 @@ struct DUNEAppShortcuts: AppShortcutsProvider {
             shortTitle: "Complete Habit",
             systemImageName: "checkmark.circle"
         )
+        AppShortcut(intent: QueryHealthInformationIntent(.latestWorkout),
+                    phrases: ["Show my latest workout in \(.applicationName)"],
+                    shortTitle: "Latest Workout", systemImageName: "figure.run")
+        AppShortcut(intent: QueryHealthInformationIntent(.workoutSummary),
+                    phrases: ["Show my workout summary in \(.applicationName)"],
+                    shortTitle: "Workout Summary", systemImageName: "chart.bar")
+        AppShortcut(intent: QueryHealthInformationIntent(.personalRecord),
+                    phrases: ["Show my personal record in \(.applicationName)"],
+                    shortTitle: "Personal Record", systemImageName: "trophy")
+        AppShortcut(intent: QueryHealthInformationIntent(.latestBody),
+                    phrases: ["Show my body measurements in \(.applicationName)"],
+                    shortTitle: "Body Measurements", systemImageName: "figure.stand")
+        AppShortcut(intent: QueryHealthInformationIntent(.sleep),
+                    phrases: ["Show my sleep in \(.applicationName)"],
+                    shortTitle: "Sleep", systemImageName: "bed.double")
+        AppShortcut(intent: QueryHealthInformationIntent(.condition),
+                    phrases: ["Show my condition in \(.applicationName)"],
+                    shortTitle: "Condition", systemImageName: "heart.text.square")
+        AppShortcut(intent: QueryHealthInformationIntent(.memoSearch),
+                    phrases: ["Search workout notes in \(.applicationName)"],
+                    shortTitle: "Search Workout Notes", systemImageName: "text.magnifyingglass")
+        AppShortcut(intent: AskDUNEHealthIntent(),
+                    phrases: ["Ask \(.applicationName) about my health"],
+                    shortTitle: "Ask DUNE", systemImageName: "waveform")
     }
 }
