@@ -89,10 +89,41 @@ final class HealthQuerySmokeTests: SeededUITestBaseCase {
 
         XCTAssertTrue(app.scrollToHittableElementIfNeeded("health-query-share", maxSwipes: 8))
         app.buttons["health-query-share"].firstMatch.tap()
-        let dismissShare = app.buttons["header.closeButton"].firstMatch
-        XCTAssertTrue(dismissShare.waitForExistence(timeout: 8), "System share sheet should open")
+        let shareSheet = app.otherElements["ActivityListView"].firstMatch
+        XCTAssertTrue(shareSheet.waitForExistence(timeout: 8), "System share sheet should open")
+        let shareCaption = app.descendants(matching: .any)["LP.CaptionBar.BottomCaption"].firstMatch
+        XCTAssertTrue(shareCaption.waitForExistence(timeout: 5))
+        XCTAssertTrue(shareCaption.label.contains("Workout Report"), "The shared item should be the report")
         capture("SQ13-report-share")
-        dismissShare.tap()
+
+        let dismissShare = app.buttons["header.closeButton"].firstMatch
+        if dismissShare.exists && dismissShare.isHittable {
+            dismissShare.tap()
+        } else {
+            let window = app.windows.firstMatch.frame
+            let popover = shareSheet.frame
+            let navigationBottom = max(
+                app.navigationBars["Health information"].firstMatch.frame.maxY,
+                app.buttons["health-query-done"].firstMatch.frame.maxY
+            )
+            let candidates = [
+                CGPoint(x: window.midX, y: popover.minY - 24),
+                CGPoint(x: popover.minX - 24, y: popover.midY),
+                CGPoint(x: popover.maxX + 24, y: popover.midY)
+            ]
+            let safePoint = candidates.first {
+                window.insetBy(dx: 12, dy: 12).contains($0)
+                    && $0.y > navigationBottom + 12
+                    && !popover.contains($0)
+            }
+            XCTAssertNotNil(safePoint, "Share popover should leave a safe dismissal point")
+            if let safePoint {
+                app.coordinate(withNormalizedOffset: .zero)
+                    .withOffset(CGVector(dx: safePoint.x - window.minX, dy: safePoint.y - window.minY))
+                    .tap()
+            }
+        }
+        XCTAssertTrue(shareSheet.waitForNonExistence(timeout: 5), "Cancelling should close the system share sheet")
         XCTAssertTrue(element("health-query-report-preview").waitForExistence(timeout: 5),
                       "Cancelling system share should return to the report")
     }
@@ -145,11 +176,44 @@ final class HealthQuerySmokeTests: SeededUITestBaseCase {
     }
 
     private func selectPeriod(_ period: String) {
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded("health-query-period", maxSwipes: 8, direction: .down))
-        element("health-query-period").tap()
+        tapVisiblePicker("health-query-period")
         let choice = app.buttons["health-query-period-\(period)"].firstMatch
         XCTAssertTrue(choice.waitForExistence(timeout: 5))
         choice.tap()
+    }
+
+    private func tapVisiblePicker(_ id: String) {
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(id, maxSwipes: 8, direction: .down))
+        let picker = element(id)
+        let scrollView = app.scrollViews.containing(.button, identifier: id).firstMatch
+        XCTAssertTrue(scrollView.exists, "\(id) should be in the query scroll view")
+
+        for _ in 0..<4 {
+            let viewport = scrollView.frame.intersection(app.windows.firstMatch.frame)
+            let navigationBottom = max(
+                app.navigationBars["Health information"].firstMatch.frame.maxY,
+                app.buttons["health-query-done"].firstMatch.frame.maxY
+            )
+            let top = max(viewport.minY, navigationBottom) + 8
+            let bottom = viewport.maxY - 16
+            let pickerFrame = picker.frame
+            if pickerFrame.minY >= top && pickerFrame.maxY <= bottom && picker.isHittable {
+                picker.tap()
+                return
+            }
+
+            let moveDown = pickerFrame.minY < top
+            let distance = moveDown ? top - pickerFrame.minY + 20 : pickerFrame.maxY - bottom + 20
+            let startY = moveDown ? top + 40 : bottom - 40
+            let endY = moveDown ? min(bottom - 20, startY + distance)
+                                : max(top + 20, startY - distance)
+            let origin = scrollView.coordinate(withNormalizedOffset: .zero)
+            let x = viewport.midX - scrollView.frame.minX
+            origin.withOffset(CGVector(dx: x, dy: startY - scrollView.frame.minY))
+                .press(forDuration: 0.05, thenDragTo:
+                    origin.withOffset(CGVector(dx: x, dy: endY - scrollView.frame.minY)))
+        }
+        XCTFail("\(id) did not become fully visible below the navigation bar")
     }
 
     private func element(_ id: String) -> XCUIElement {
