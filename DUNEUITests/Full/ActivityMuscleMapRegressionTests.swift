@@ -39,6 +39,8 @@ final class ActivityMuscleMapRegressionTests: ActivityExerciseSeededUITestBaseCa
         let open3D = app.buttons.matching(NSPredicate(format: "label IN %@", entryLabels)).firstMatch
         XCTAssertTrue(open3D.waitForExistence(timeout: 5), "The original 3D entry should remain visible")
         XCTAssertFalse(open3D.isEnabled, "A04 should disable the original 3D entry")
+        addScreenshotAttachment(named: "A03 default map with disabled 3D entry")
+        VisualAudit.capture("A03 default map with disabled 3D entry")
 
         tapFrontChestMuscle()
 
