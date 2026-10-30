@@ -38,3 +38,5 @@ status: implemented
 Device Hub 전환 준비용 lock lease는 90초 만료(exit 124)로 끝났다. 이후 내부 화면 활성 상태를 readback으로 확인하고, 새 표준 UI runner가 실행권을 다시 얻어 통과했다. 준비용 lease를 UI 통과로 계산하지 않았다.
 
 앱 소스는 최종 단위·기능 검증 이후 변경하지 않았다. 캡처 테스트에만 opt-in `VisualAudit.capture`를 추가했으며 일반 Full plan에서는 기존 기능 경로가 유지된다. 앱 소스 해시와 실행별 테스트 소스 증거는 manifest에 구분했다.
+
+Ship에서 main `41740ebe`의 Siri 트리거 번역·카탈로그 변경을 통합했다. 이번 인사·인사이트 구현 파일과 캡처 경로는 바뀌지 않아 위 검증을 재사용했다. 통합 후 현재 formatter의 카탈로그 계약 테스트 11개와 전체 카탈로그 format/manual 검사가 통과했다. Siri 변경을 새로 촬영한 화면으로 표시하지 않는다.
