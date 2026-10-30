@@ -16,6 +16,7 @@ struct AreaLineChartView: View {
     @ScaledMetric(relativeTo: .body) private var chartHeight: CGFloat = 220
 
     @Environment(\.appTheme) private var theme
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     @State private var selectedDate: Date?
     @State private var selectionGestureState = ChartSelectionGestureState()
@@ -80,7 +81,7 @@ struct AreaLineChartView: View {
             .chartXScale(domain: effectiveXDomain)
             .chartYScale(domain: yDomain)
             .chartXAxis {
-                AxisMarks(values: period.visibleAxisDates(around: scrollPosition)) { _ in
+                AxisMarks(values: visibleAxisDates) { _ in
                     AxisValueLabel(format: period.axisLabelFormat)
                         .foregroundStyle(theme.sandColor)
                     AxisGridLine()
@@ -135,6 +136,21 @@ struct AreaLineChartView: View {
         }
     }
 
+
+    private var visibleAxisDates: [Date] {
+        let calendar = Calendar.current
+        let dates = period.visibleAxisDates(around: scrollPosition, calendar: calendar)
+        guard dynamicTypeSize.isAccessibilitySize, period == .week else { return dates }
+
+        // Anchor sparse labels to the calendar so ticks stay stable while scrolling.
+        // The full date range and all chart data remain available at larger text sizes.
+        let firstWeekday = calendar.firstWeekday
+        let middleWeekday = (firstWeekday - 1 + 3) % 7 + 1
+        return dates.filter {
+            let weekday = calendar.component(.weekday, from: $0)
+            return weekday == firstWeekday || weekday == middleWeekday
+        }
+    }
 
     private var effectiveXDomain: ClosedRange<Date> {
         resolvedXDomain(scrollDomain: scrollDomain, dates: data.map(\.date))

@@ -75,3 +75,7 @@ Source preservation is high confidence. Runtime/capture scope and benchmark prod
 ## Implementation checkpoint (isolated native branch)
 
 The original T06 capture worktree remains frozen at 0dc77dc4. The native implementation branch connects the reviewed quantity hero, visible-window statistics, period controls, and explicit US survey comparison. Source, UI, and catalog changes are local to this branch. A generic iOS build verifies Swift integration; unit/UI selectors, physical device presentation, and fresh actual design-map captures remain separate required gates. The body-fat and lean-mass peer means remain unavailable, while their existing history stays visible.
+
+## Native maximum-text review follow-up
+
+The b95e366a maximum-accessibility Weight capture showed overlapping weekday labels despite functional reachability passing. AreaLineChartView is consumed only by MetricDetailView. At accessibility sizes, its weekly axis now retains two calendar-anchored weekdays; all data, selection, scroll, other periods, normal-size ticks, and the full range label remain unchanged. Verify only `MetricDetailRedesignTests/testWeightMaximumAccessibilitySizeKeepsContentReachable` and inspect its fresh axis PNG. Existing 57 model/domain tests are unaffected by this presentation-only density change. The separate normal-size DotLine date-label issue remains open under the T05 retry budget.
