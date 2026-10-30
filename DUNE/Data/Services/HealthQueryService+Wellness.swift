@@ -179,7 +179,8 @@ extension HealthQueryService {
         for score in scores { byDate[score.date] = score }
         let points = byDate.values.sorted { $0.date < $1.date }.map { HealthQueryPoint(date: $0.date, value: Double($0.score)) }
         var limitations: [String] = []
-        if !snapshot.failedSources.isEmpty {
+        let conditionSources: Set<SharedHealthSnapshot.Source> = [.hrvSamples, .todayRHR, .yesterdayRHR, .latestRHR, .rhrCollection]
+        if !snapshot.failedSources.isDisjoint(with: conditionSources) {
             limitations.append(String(localized: "Some health sources could not be refreshed. Available condition records are shown.", locale: HealthQueryLocalization.locale))
         }
         let age = nowProvider().timeIntervalSince(snapshot.fetchedAt)

@@ -66,6 +66,23 @@ struct HealthQueryWellnessTests {
         #expect(response.metrics.isEmpty)
     }
 
+    @Test("Condition failures reflect only sources used by condition and heart measurements")
+    func conditionRelevantFailures() async throws {
+        let clock = now
+        let cases: [(Set<SharedHealthSnapshot.Source>, HealthQueryStatus)] = [([.todaySteps], .noData), ([.hrvSamples], .unavailable)]
+        for (failed, expected) in cases {
+            let snapshot = SharedHealthSnapshot(hrvSamples: [], todayRHR: nil, yesterdayRHR: nil,
+                latestRHR: nil, rhrCollection: [], todaySleepStages: [], yesterdaySleepStages: [],
+                latestSleepStages: nil, sleepDailyDurations: [], conditionScore: nil, baselineStatus: nil,
+                recentConditionScores: [], failedSources: failed, fetchedAt: clock)
+            let service = HealthQueryService(sharedHealthDataService: WellnessSnapshotStub(snapshot: snapshot), nowProvider: { clock })
+            let response = try await service.conditionResult(HealthQueryRequest(kind: .condition),
+                interval: DateInterval(start: clock.addingTimeInterval(-3_600), end: clock))
+            #expect(response.status == expected)
+            #expect(response.isComplete == (expected == .noData))
+        }
+    }
+
     @Test("Condition includes dated HRV and RHR in the selected period without inventing freshness")
     func datedConditionMetrics() async throws {
         let clock = now

@@ -160,15 +160,17 @@ struct HealthQueryServiceTests {
         #expect(response.metrics.first { $0.id == "records" }?.value == 2)
     }
 
-    @Test("Batch request retains a stable bounded prefix and rejects oversized identifiers")
+    @Test("Oversized batches and identifiers are rejected without silently dropping records")
     func batchRequestBounds() async throws {
         let identifiers = (0..<50).map { "id-\($0)" }
         let request = HealthQueryRequest(kind: .workoutSummary, workoutIDs: identifiers)
-        #expect(request.workoutIDs == Array(identifiers.prefix(40)))
+        #expect(request.workoutIDs == identifiers)
         let probe = QueryAccessProbe()
         let clock = now
         let service = HealthQueryService(container: try store(),
             workoutService: QueryWorkoutStub(onFetch: { await probe.didFetch() }), nowProvider: { clock })
+        let oversized = try await service.execute(request)
+        #expect(oversized.status == .invalidRequest)
         let invalid = try await service.execute(HealthQueryRequest(kind: .workoutSummary,
             workoutIDs: [String(repeating: "a", count: 201)]))
         #expect(invalid.status == .invalidRequest)

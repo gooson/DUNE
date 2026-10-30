@@ -61,7 +61,7 @@ struct HealthQueryRequest: Sendable, Equatable {
         self.interval = interval
         self.comparisonInterval = comparisonInterval
         self.workoutID = workoutID
-        self.workoutIDs = Array(workoutIDs.prefix(40))
+        self.workoutIDs = workoutIDs
         self.exerciseID = exerciseID
         self.searchText = searchText
         self.limit = limit
