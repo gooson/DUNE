@@ -17,7 +17,8 @@ struct MetricDetailValueFormatterTests {
             value = 474
             expected = value.hoursMinutesFormatted
         case .weight, .bmi, .bodyFat, .leanBodyMass, .vo2Max, .breathingDisturbances:
-            value = 42.45
+            // Check precision without asserting a new policy for halfway rounding.
+            value = 42.46
             expected = "42.5"
         case .spo2:
             value = 0.98
