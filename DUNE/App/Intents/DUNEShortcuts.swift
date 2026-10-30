@@ -130,7 +130,11 @@ struct DUNEAppShortcuts: AppShortcutsProvider {
                     phrases: ["Show my sleep in \(.applicationName)"],
                     shortTitle: "Sleep", systemImageName: "bed.double")
         AppShortcut(intent: QueryHealthInformationIntent(.condition),
-                    phrases: ["Show my condition in \(.applicationName)"],
+                    phrases: [
+                        "Show my condition in \(.applicationName)",
+                        "How is my condition in \(.applicationName)",
+                        "Today's condition in \(.applicationName)"
+                    ],
                     shortTitle: "Condition", systemImageName: "heart.text.square")
         AppShortcut(intent: QueryHealthInformationIntent(.memoSearch),
                     phrases: ["Search workout notes in \(.applicationName)"],
