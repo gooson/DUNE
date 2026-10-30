@@ -1,0 +1,1063 @@
+{
+  "device": "Duo closed SDK27.2 first3passed methods",
+  "udid": "40DF6CF9-5984-4137-84C0-2C2AE3E4CBD1",
+  "runtime": "iOS27.2/Xcode27.2 LCD1 1398x2034",
+  "dataKind": "synthetic DEBUG snapshots or seeded SwiftData records; individual nativeReadback identifies the path",
+  "siriSystemUI": false,
+  "exportedAt": "2026-10-30T13:47:02.631659+00:00",
+  "appSourceCommits": [
+    "adac0a30"
+  ],
+  "sourceCohorts": [
+    {
+      "device": "Duo closed SDK27.2 first3passed methods",
+      "udid": "40DF6CF9-5984-4137-84C0-2C2AE3E4CBD1",
+      "runtime": "iOS27.2/Xcode27.2 LCD1 1398x2034",
+      "sourceCommit": "adac0a30",
+      "xcresult": "Test-DUNEUITests-2026.10.30_22-26-53-+0900.xcresult",
+      "dataKind": "synthetic DEBUG fixture in actual native app",
+      "siriSystemUI": false,
+      "exportedAt": "2026-10-30T13:47:02.631659+00:00",
+      "key": "siri-duo-closed-first-reviewed"
+    },
+    {
+      "device": "Duo closed source and share passed",
+      "udid": "40DF6CF9-5984-4137-84C0-2C2AE3E4CBD1",
+      "runtime": "iOS27.2/Xcode27.2 LCD1 1398x2034",
+      "sourceCommit": "adac0a30",
+      "xcresult": "Test-DUNEUITests-2026.10.30_22-44-07-+0900.xcresult",
+      "dataKind": "synthetic DEBUG fixture in actual native app",
+      "siriSystemUI": false,
+      "exportedAt": "2026-10-30T13:55:09.188305+00:00",
+      "key": "siri-duo-closed-toolbar-reviewed"
+    },
+    {
+      "device": "Duo closed maximumAX passed",
+      "udid": "40DF6CF9-5984-4137-84C0-2C2AE3E4CBD1",
+      "runtime": "iOS27.2/Xcode27.2 LCD1 1398x2034",
+      "sourceCommit": "adac0a30",
+      "xcresult": "Test-DUNEUITests-2026.10.30_22-50-37-+0900.xcresult",
+      "dataKind": "synthetic DEBUG fixture in actual native app",
+      "siriSystemUI": false,
+      "exportedAt": "2026-10-30T13:55:09.534772+00:00",
+      "key": "siri-duo-closed-max-reviewed"
+    }
+  ],
+  "captures": [
+    {
+      "id": "SQ00-no-data",
+      "file": "images/SQ00-no-data.png",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "d3561253b460fb2008b1f17ae87c3cdae46eaad94c4ed4884a1fe2f9924cd868",
+      "test": "HealthQuerySmokeTests/testNoDataIsExplicit()",
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "40DF6CF9-5984-4137-84C0-2C2AE3E4CBD1",
+        "deviceName": "iPhone Duo-wt-Health-siri-health-queries-112f217fc503",
+        "exportedFileName": "2694374C-470F-4714-9936-EA1C6A2AAFAC.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "SQ00-no-data_0_4D6BA0C6-70B5-4206-ABF6-713DFEBCAC78.png",
+        "timestamp": 1793367480.485
+      },
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T13:38:00Z",
+        "captureStartedAt": "2026-10-30T13:38:00Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 678,
+          "width": 466,
+          "x": 0,
+          "y": 0
+        }
+      },
+      "sourceCohort": "siri-duo-closed-first-reviewed",
+      "xcresult": "Test-DUNEUITests-2026.10.30_22-26-53-+0900.xcresult",
+      "appSourceCommit": "adac0a30"
+    },
+    {
+      "id": "SQ01-accessibility-duration",
+      "file": "images/SQ01-accessibility-duration.png",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "72b910f7f85f8380bc9f3fa6c508b9661494f54326d11d2a21a419231d0563c6",
+      "test": "HealthQuerySmokeTests/testCaptureBodyAndDurationAtMaximumTextSize()",
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "40DF6CF9-5984-4137-84C0-2C2AE3E4CBD1",
+        "deviceName": "iPhone Duo-wt-Health-siri-health-queries-112f217fc503",
+        "exportedFileName": "D3D54563-1C29-4039-8C16-795F55C163F6.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "SQ01-accessibility-duration_0_7ACF2037-A67C-4C37-AD26-CF8E2DDF24DD.png",
+        "timestamp": 1793368436.076
+      },
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T13:53:56Z",
+        "captureStartedAt": "2026-10-30T13:53:55Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 678,
+          "width": 466,
+          "x": 0,
+          "y": 0
+        }
+      },
+      "sourceCohort": "siri-duo-closed-max-reviewed",
+      "xcresult": "Test-DUNEUITests-2026.10.30_22-50-37-+0900.xcresult",
+      "appSourceCommit": "adac0a30"
+    },
+    {
+      "id": "SQ01-accessibility-duration-period",
+      "file": "images/SQ01-accessibility-duration-period.png",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "45c38719d37a9e6d583a93aa05bda7a8271b2ef6f935736bdf0fcd8d0dd1c7dd",
+      "test": "HealthQuerySmokeTests/testCaptureBodyAndDurationAtMaximumTextSize()",
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "40DF6CF9-5984-4137-84C0-2C2AE3E4CBD1",
+        "deviceName": "iPhone Duo-wt-Health-siri-health-queries-112f217fc503",
+        "exportedFileName": "6030C6A9-BCF3-4482-B158-5BCA436AC499.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "SQ01-accessibility-duration-period_0_EB6FF509-1AB3-4BC0-86AB-B7466B228F6F.png",
+        "timestamp": 1793368423.431
+      },
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T13:53:43Z",
+        "captureStartedAt": "2026-10-30T13:53:43Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 678,
+          "width": 466,
+          "x": 0,
+          "y": 0
+        }
+      },
+      "sourceCohort": "siri-duo-closed-max-reviewed",
+      "xcresult": "Test-DUNEUITests-2026.10.30_22-50-37-+0900.xcresult",
+      "appSourceCommit": "adac0a30"
+    },
+    {
+      "id": "SQ01-accessibility-duration-selector",
+      "file": "images/SQ01-accessibility-duration-selector.png",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "e079e020cfe152e7d475433691412e70bb1405e5ae53fc8799cb9a77b28eacb1",
+      "test": "HealthQuerySmokeTests/testCaptureBodyAndDurationAtMaximumTextSize()",
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "40DF6CF9-5984-4137-84C0-2C2AE3E4CBD1",
+        "deviceName": "iPhone Duo-wt-Health-siri-health-queries-112f217fc503",
+        "exportedFileName": "FB1623A7-9489-429C-A0E7-8D6261457014.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "SQ01-accessibility-duration-selector_0_F0F6178D-7596-47E4-944B-460915A393D5.png",
+        "timestamp": 1793368399.497
+      },
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T13:53:19Z",
+        "captureStartedAt": "2026-10-30T13:53:19Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 678,
+          "width": 466,
+          "x": 0,
+          "y": 0
+        }
+      },
+      "sourceCohort": "siri-duo-closed-max-reviewed",
+      "xcresult": "Test-DUNEUITests-2026.10.30_22-50-37-+0900.xcresult",
+      "appSourceCommit": "adac0a30"
+    },
+    {
+      "id": "SQ01-back-to-qa",
+      "file": "images/SQ01-back-to-qa.png",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "2b80401e914b47e4730c86491d78fd70354f09a695f9535d6ed349fb677aa2c9",
+      "test": "HealthQuerySmokeTests/testBrowseEntryPeriodSourceAndBack()",
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "40DF6CF9-5984-4137-84C0-2C2AE3E4CBD1",
+        "deviceName": "iPhone Duo-wt-Health-siri-health-queries-112f217fc503",
+        "exportedFileName": "8E06F962-06A3-4681-BE74-193B208B1EA7.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "SQ01-back-to-qa_0_D3010D8C-F37D-493B-9B24-D0300200E372.png",
+        "timestamp": 1793366953.511
+      },
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T13:29:13Z",
+        "captureStartedAt": "2026-10-30T13:29:13Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 678,
+          "width": 466,
+          "x": 0,
+          "y": 0
+        }
+      },
+      "sourceCohort": "siri-duo-closed-first-reviewed",
+      "xcresult": "Test-DUNEUITests-2026.10.30_22-26-53-+0900.xcresult",
+      "appSourceCommit": "adac0a30"
+    },
+    {
+      "id": "SQ01-latestWorkout",
+      "file": "images/SQ01-latestWorkout.png",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "d42b5ab89ce62861886c26dc58913ee23f75a6dc540b305166f4bfb3172d10b9",
+      "test": "HealthQuerySmokeTests/testCaptureAllQueryKinds()",
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "40DF6CF9-5984-4137-84C0-2C2AE3E4CBD1",
+        "deviceName": "iPhone Duo-wt-Health-siri-health-queries-112f217fc503",
+        "exportedFileName": "CB961AA9-F4CD-4859-A3EB-63310E50D857.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "SQ01-latestWorkout_0_48302894-8A86-49BE-AD75-728ABF9FAA27.png",
+        "timestamp": 1793366989.557
+      },
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T13:29:49Z",
+        "captureStartedAt": "2026-10-30T13:29:49Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 678,
+          "width": 466,
+          "x": 0,
+          "y": 0
+        }
+      },
+      "sourceCohort": "siri-duo-closed-first-reviewed",
+      "xcresult": "Test-DUNEUITests-2026.10.30_22-26-53-+0900.xcresult",
+      "appSourceCommit": "adac0a30"
+    },
+    {
+      "id": "SQ01-period-source",
+      "file": "images/SQ01-period-source.png",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "438191ede8d45cd11aa28d72c32ed4ee9521085267c711dae9974c0b389f6b2a",
+      "test": "HealthQuerySmokeTests/testBrowseEntryPeriodSourceAndBack()",
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "40DF6CF9-5984-4137-84C0-2C2AE3E4CBD1",
+        "deviceName": "iPhone Duo-wt-Health-siri-health-queries-112f217fc503",
+        "exportedFileName": "97624EE4-F681-46D8-9439-DDE1E9274735.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "SQ01-period-source_0_87BB4D7F-1767-4E48-9726-7A48F594B3C3.png",
+        "timestamp": 1793366946.677
+      },
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T13:29:06Z",
+        "captureStartedAt": "2026-10-30T13:29:06Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 678,
+          "width": 466,
+          "x": 0,
+          "y": 0
+        }
+      },
+      "sourceCohort": "siri-duo-closed-first-reviewed",
+      "xcresult": "Test-DUNEUITests-2026.10.30_22-26-53-+0900.xcresult",
+      "appSourceCommit": "adac0a30"
+    },
+    {
+      "id": "SQ02-workoutSummary",
+      "file": "images/SQ02-workoutSummary.png",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "5a0934b811633092d0dc72861fd2d974547e3b1a9a58c5706221ca7f474ba554",
+      "test": "HealthQuerySmokeTests/testCaptureAllQueryKinds()",
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "40DF6CF9-5984-4137-84C0-2C2AE3E4CBD1",
+        "deviceName": "iPhone Duo-wt-Health-siri-health-queries-112f217fc503",
+        "exportedFileName": "660ED5BF-7254-46A2-BE98-31C92D7DA192.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "SQ02-workoutSummary_0_DD48EC3E-F103-4138-9C3C-37D67DE3F49B.png",
+        "timestamp": 1793366999.243
+      },
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T13:29:59Z",
+        "captureStartedAt": "2026-10-30T13:29:59Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 678,
+          "width": 466,
+          "x": 0,
+          "y": 0
+        }
+      },
+      "sourceCohort": "siri-duo-closed-first-reviewed",
+      "xcresult": "Test-DUNEUITests-2026.10.30_22-26-53-+0900.xcresult",
+      "appSourceCommit": "adac0a30"
+    },
+    {
+      "id": "SQ03-seeded-record-detail",
+      "file": "images/SQ03-seeded-record-detail.png",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "50eb2a1819838e261c40bc31c82358f3fbff913d7a923c0841af5105cf229c67",
+      "test": "HealthQuerySmokeTests/testOpenSeededWorkoutRecordAndBack()",
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "40DF6CF9-5984-4137-84C0-2C2AE3E4CBD1",
+        "deviceName": "iPhone Duo-wt-Health-siri-health-queries-112f217fc503",
+        "exportedFileName": "47C60C37-452D-4E4A-88EE-B0325DDBA096.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "SQ03-seeded-record-detail_0_2313DB6F-E939-4444-B86B-5FDC0BF6A009.png",
+        "timestamp": 1793367980.022
+      },
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T13:46:20Z",
+        "captureStartedAt": "2026-10-30T13:46:19Z",
+        "dataKind": "synthetic seeded SwiftData records; production query service",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 678,
+          "width": 466,
+          "x": 0,
+          "y": 0
+        }
+      },
+      "sourceCohort": "siri-duo-closed-toolbar-reviewed",
+      "xcresult": "Test-DUNEUITests-2026.10.30_22-44-07-+0900.xcresult",
+      "appSourceCommit": "adac0a30"
+    },
+    {
+      "id": "SQ03-seeded-record-return",
+      "file": "images/SQ03-seeded-record-return.png",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "9b71caa3fdc1df2ad2dca894b979a772326221bffc1aedca936b4437761c23be",
+      "test": "HealthQuerySmokeTests/testOpenSeededWorkoutRecordAndBack()",
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "40DF6CF9-5984-4137-84C0-2C2AE3E4CBD1",
+        "deviceName": "iPhone Duo-wt-Health-siri-health-queries-112f217fc503",
+        "exportedFileName": "555B4436-FFFC-4F06-BA48-D08F6A8577AA.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "SQ03-seeded-record-return_0_35424ED4-4CB0-4E3A-8812-236A0719C3E1.png",
+        "timestamp": 1793367984.351
+      },
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T13:46:24Z",
+        "captureStartedAt": "2026-10-30T13:46:23Z",
+        "dataKind": "synthetic seeded SwiftData records; production query service",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 678,
+          "width": 466,
+          "x": 0,
+          "y": 0
+        }
+      },
+      "sourceCohort": "siri-duo-closed-toolbar-reviewed",
+      "xcresult": "Test-DUNEUITests-2026.10.30_22-44-07-+0900.xcresult",
+      "appSourceCommit": "adac0a30"
+    },
+    {
+      "id": "SQ03-strengthSets",
+      "file": "images/SQ03-strengthSets.png",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "3179ef55770af88aa80fe9243f65ae354a7f0d66bdfb3dcb449259ee0b65c273",
+      "test": "HealthQuerySmokeTests/testCaptureAllQueryKinds()",
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "40DF6CF9-5984-4137-84C0-2C2AE3E4CBD1",
+        "deviceName": "iPhone Duo-wt-Health-siri-health-queries-112f217fc503",
+        "exportedFileName": "D139B40E-0E3C-4C1A-A3E6-756EDDB49618.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "SQ03-strengthSets_0_9482287F-4B55-4C95-A157-41E568B8953F.png",
+        "timestamp": 1793367010.292
+      },
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T13:30:10Z",
+        "captureStartedAt": "2026-10-30T13:30:10Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 678,
+          "width": 466,
+          "x": 0,
+          "y": 0
+        }
+      },
+      "sourceCohort": "siri-duo-closed-first-reviewed",
+      "xcresult": "Test-DUNEUITests-2026.10.30_22-26-53-+0900.xcresult",
+      "appSourceCommit": "adac0a30"
+    },
+    {
+      "id": "SQ04-personalRecord",
+      "file": "images/SQ04-personalRecord.png",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "19d537324cea87562c0287fbfaab17651e6953cc3ff30a9668770906510b2a78",
+      "test": "HealthQuerySmokeTests/testCaptureAllQueryKinds()",
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "40DF6CF9-5984-4137-84C0-2C2AE3E4CBD1",
+        "deviceName": "iPhone Duo-wt-Health-siri-health-queries-112f217fc503",
+        "exportedFileName": "2CD9C30F-8923-47E9-969E-22B4B0857FA5.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "SQ04-personalRecord_0_AB537C90-4018-4C13-9E7D-34FBE4925057.png",
+        "timestamp": 1793367019.939
+      },
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T13:30:20Z",
+        "captureStartedAt": "2026-10-30T13:30:19Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 678,
+          "width": 466,
+          "x": 0,
+          "y": 0
+        }
+      },
+      "sourceCohort": "siri-duo-closed-first-reviewed",
+      "xcresult": "Test-DUNEUITests-2026.10.30_22-26-53-+0900.xcresult",
+      "appSourceCommit": "adac0a30"
+    },
+    {
+      "id": "SQ05-cardioDetail",
+      "file": "images/SQ05-cardioDetail.png",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "0b19ccef8097d0e9d76f914c55ab2e848c092ef456b44fda08f060aebbc7a30f",
+      "test": "HealthQuerySmokeTests/testCaptureAllQueryKinds()",
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "40DF6CF9-5984-4137-84C0-2C2AE3E4CBD1",
+        "deviceName": "iPhone Duo-wt-Health-siri-health-queries-112f217fc503",
+        "exportedFileName": "DAC0F7FD-BD8E-4DBE-A5D7-76FD37A18BB2.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "SQ05-cardioDetail_0_EE445EF1-899B-46BD-83A2-D456B77B20CB.png",
+        "timestamp": 1793367029.987
+      },
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T13:30:29Z",
+        "captureStartedAt": "2026-10-30T13:30:29Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 678,
+          "width": 466,
+          "x": 0,
+          "y": 0
+        }
+      },
+      "sourceCohort": "siri-duo-closed-first-reviewed",
+      "xcresult": "Test-DUNEUITests-2026.10.30_22-26-53-+0900.xcresult",
+      "appSourceCommit": "adac0a30"
+    },
+    {
+      "id": "SQ06-accessibility-body",
+      "file": "images/SQ06-accessibility-body.png",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "a6b2df31bf732e38bb959a2ad6e8c2a66a3d9561666732b20f7a607466373478",
+      "test": "HealthQuerySmokeTests/testCaptureBodyAndDurationAtMaximumTextSize()",
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "40DF6CF9-5984-4137-84C0-2C2AE3E4CBD1",
+        "deviceName": "iPhone Duo-wt-Health-siri-health-queries-112f217fc503",
+        "exportedFileName": "683409D9-0B2A-42B4-90AE-F2DC0CF2D7A0.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "SQ06-accessibility-body_0_59B4582A-7464-4C63-8423-A5532B27F277.png",
+        "timestamp": 1793368379.007
+      },
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T13:52:59Z",
+        "captureStartedAt": "2026-10-30T13:52:58Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 678,
+          "width": 466,
+          "x": 0,
+          "y": 0
+        }
+      },
+      "sourceCohort": "siri-duo-closed-max-reviewed",
+      "xcresult": "Test-DUNEUITests-2026.10.30_22-50-37-+0900.xcresult",
+      "appSourceCommit": "adac0a30"
+    },
+    {
+      "id": "SQ06-accessibility-body-period",
+      "file": "images/SQ06-accessibility-body-period.png",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "fc08f1a452e56e1e586f354a3b5f74308df2fa129cf131bfa4cbda63c5d0dcc4",
+      "test": "HealthQuerySmokeTests/testCaptureBodyAndDurationAtMaximumTextSize()",
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "40DF6CF9-5984-4137-84C0-2C2AE3E4CBD1",
+        "deviceName": "iPhone Duo-wt-Health-siri-health-queries-112f217fc503",
+        "exportedFileName": "026F934D-DF42-4370-85E1-B7DCB5A8C095.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "SQ06-accessibility-body-period_0_DD1358B4-35BB-485D-B6CF-C59C54DC7A6C.png",
+        "timestamp": 1793368368.141
+      },
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T13:52:48Z",
+        "captureStartedAt": "2026-10-30T13:52:47Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 678,
+          "width": 466,
+          "x": 0,
+          "y": 0
+        }
+      },
+      "sourceCohort": "siri-duo-closed-max-reviewed",
+      "xcresult": "Test-DUNEUITests-2026.10.30_22-50-37-+0900.xcresult",
+      "appSourceCommit": "adac0a30"
+    },
+    {
+      "id": "SQ06-accessibility-body-selector",
+      "file": "images/SQ06-accessibility-body-selector.png",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "88d65ee49db70fe3401ec32a64294d8e228e51c54674f26f35cd72324b08613c",
+      "test": "HealthQuerySmokeTests/testCaptureBodyAndDurationAtMaximumTextSize()",
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "40DF6CF9-5984-4137-84C0-2C2AE3E4CBD1",
+        "deviceName": "iPhone Duo-wt-Health-siri-health-queries-112f217fc503",
+        "exportedFileName": "6F3117BA-1181-4899-8B70-795356E4E2F3.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "SQ06-accessibility-body-selector_0_FCA88F8D-7387-4965-BD64-5F90C25FF0A4.png",
+        "timestamp": 1793368343.948
+      },
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T13:52:24Z",
+        "captureStartedAt": "2026-10-30T13:52:23Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 678,
+          "width": 466,
+          "x": 0,
+          "y": 0
+        }
+      },
+      "sourceCohort": "siri-duo-closed-max-reviewed",
+      "xcresult": "Test-DUNEUITests-2026.10.30_22-50-37-+0900.xcresult",
+      "appSourceCommit": "adac0a30"
+    },
+    {
+      "id": "SQ06-latestBody",
+      "file": "images/SQ06-latestBody.png",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "476dd5cb2f7758b9dbdad42761e6f415ff005bfa872294f6adaf9d53bcef76e8",
+      "test": "HealthQuerySmokeTests/testCaptureAllQueryKinds()",
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "40DF6CF9-5984-4137-84C0-2C2AE3E4CBD1",
+        "deviceName": "iPhone Duo-wt-Health-siri-health-queries-112f217fc503",
+        "exportedFileName": "22FDBBBC-FBAA-4E08-BE63-A381C9CB5134.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "SQ06-latestBody_0_54B0328A-59BE-4DF6-A64C-AD2DEA4A9AA1.png",
+        "timestamp": 1793367039.708
+      },
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T13:30:39Z",
+        "captureStartedAt": "2026-10-30T13:30:39Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 678,
+          "width": 466,
+          "x": 0,
+          "y": 0
+        }
+      },
+      "sourceCohort": "siri-duo-closed-first-reviewed",
+      "xcresult": "Test-DUNEUITests-2026.10.30_22-26-53-+0900.xcresult",
+      "appSourceCommit": "adac0a30"
+    },
+    {
+      "id": "SQ07-bodyTrend",
+      "file": "images/SQ07-bodyTrend.png",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "ff899f716674f4972483649aaa089e87080c999b371cea27284956457c460ddd",
+      "test": "HealthQuerySmokeTests/testCaptureAllQueryKinds()",
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "40DF6CF9-5984-4137-84C0-2C2AE3E4CBD1",
+        "deviceName": "iPhone Duo-wt-Health-siri-health-queries-112f217fc503",
+        "exportedFileName": "BEE348C4-8527-4CCC-8039-248221DAEE2F.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "SQ07-bodyTrend_0_2380A095-8DA5-41DF-94E9-52550108C6CE.png",
+        "timestamp": 1793367049.436
+      },
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T13:30:49Z",
+        "captureStartedAt": "2026-10-30T13:30:49Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 678,
+          "width": 466,
+          "x": 0,
+          "y": 0
+        }
+      },
+      "sourceCohort": "siri-duo-closed-first-reviewed",
+      "xcresult": "Test-DUNEUITests-2026.10.30_22-26-53-+0900.xcresult",
+      "appSourceCommit": "adac0a30"
+    },
+    {
+      "id": "SQ08-sleep",
+      "file": "images/SQ08-sleep.png",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "cd46002e50de43fdcc28de12830eea3a7708b335a52de8c08473e1ebbb57f11b",
+      "test": "HealthQuerySmokeTests/testCaptureAllQueryKinds()",
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "40DF6CF9-5984-4137-84C0-2C2AE3E4CBD1",
+        "deviceName": "iPhone Duo-wt-Health-siri-health-queries-112f217fc503",
+        "exportedFileName": "07D3E28C-8EAD-4FE5-8DD3-10BE0258DE1A.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "SQ08-sleep_0_EDAD05C1-2629-4048-ABE6-229158FF6222.png",
+        "timestamp": 1793367059.194
+      },
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T13:30:59Z",
+        "captureStartedAt": "2026-10-30T13:30:58Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 678,
+          "width": 466,
+          "x": 0,
+          "y": 0
+        }
+      },
+      "sourceCohort": "siri-duo-closed-first-reviewed",
+      "xcresult": "Test-DUNEUITests-2026.10.30_22-26-53-+0900.xcresult",
+      "appSourceCommit": "adac0a30"
+    },
+    {
+      "id": "SQ09-condition",
+      "file": "images/SQ09-condition.png",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "2f56892f313efa5b6663cc002fcf8559558c2ac746c000a64d659ccaf1887110",
+      "test": "HealthQuerySmokeTests/testCaptureAllQueryKinds()",
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "40DF6CF9-5984-4137-84C0-2C2AE3E4CBD1",
+        "deviceName": "iPhone Duo-wt-Health-siri-health-queries-112f217fc503",
+        "exportedFileName": "162C8B4E-F3A6-47C7-8292-532BDC062527.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "SQ09-condition_0_26AC8E26-96A0-4E25-8BD7-88C4DBBB667E.png",
+        "timestamp": 1793367069.048
+      },
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T13:31:09Z",
+        "captureStartedAt": "2026-10-30T13:31:08Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 678,
+          "width": 466,
+          "x": 0,
+          "y": 0
+        }
+      },
+      "sourceCohort": "siri-duo-closed-first-reviewed",
+      "xcresult": "Test-DUNEUITests-2026.10.30_22-26-53-+0900.xcresult",
+      "appSourceCommit": "adac0a30"
+    },
+    {
+      "id": "SQ10-metricComparison",
+      "file": "images/SQ10-metricComparison.png",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "bca985df6d7965d0fc19ea741e832e87a16c33fe56d0d4cffc2e70f95f57dacc",
+      "test": "HealthQuerySmokeTests/testCaptureAllQueryKinds()",
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "40DF6CF9-5984-4137-84C0-2C2AE3E4CBD1",
+        "deviceName": "iPhone Duo-wt-Health-siri-health-queries-112f217fc503",
+        "exportedFileName": "854740C2-530C-425A-A0F4-8E829910D82E.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "SQ10-metricComparison_0_AF8CF41A-D08A-41FC-81F0-A929AD5ECD44.png",
+        "timestamp": 1793367078.739
+      },
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T13:31:18Z",
+        "captureStartedAt": "2026-10-30T13:31:18Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 678,
+          "width": 466,
+          "x": 0,
+          "y": 0
+        }
+      },
+      "sourceCohort": "siri-duo-closed-first-reviewed",
+      "xcresult": "Test-DUNEUITests-2026.10.30_22-26-53-+0900.xcresult",
+      "appSourceCommit": "adac0a30"
+    },
+    {
+      "id": "SQ11-workoutComparison",
+      "file": "images/SQ11-workoutComparison.png",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "a242f14644ba8b4bccdf204450bc1876c35cef0ae16878c835f6c6bd1f109310",
+      "test": "HealthQuerySmokeTests/testCaptureAllQueryKinds()",
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "40DF6CF9-5984-4137-84C0-2C2AE3E4CBD1",
+        "deviceName": "iPhone Duo-wt-Health-siri-health-queries-112f217fc503",
+        "exportedFileName": "54050438-05F0-4951-B1D5-BA4B75FA836D.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "SQ11-workoutComparison_0_7B9A13D8-3FD4-4C4E-A091-09579856AF96.png",
+        "timestamp": 1793367088.849
+      },
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T13:31:28Z",
+        "captureStartedAt": "2026-10-30T13:31:28Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 678,
+          "width": 466,
+          "x": 0,
+          "y": 0
+        }
+      },
+      "sourceCohort": "siri-duo-closed-first-reviewed",
+      "xcresult": "Test-DUNEUITests-2026.10.30_22-26-53-+0900.xcresult",
+      "appSourceCommit": "adac0a30"
+    },
+    {
+      "id": "SQ12-memoSearch",
+      "file": "images/SQ12-memoSearch.png",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "1d7f82a4dc99045ee2ae5ac714bb17f2cb9878143248c421b681736e551a0e5a",
+      "test": "HealthQuerySmokeTests/testCaptureAllQueryKinds()",
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "40DF6CF9-5984-4137-84C0-2C2AE3E4CBD1",
+        "deviceName": "iPhone Duo-wt-Health-siri-health-queries-112f217fc503",
+        "exportedFileName": "60E66126-B512-4813-B82D-5F2A270DDAA9.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "SQ12-memoSearch_0_B680770C-1285-4A0A-B3EA-7E22E7EFAD77.png",
+        "timestamp": 1793367109.8
+      },
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T13:31:49Z",
+        "captureStartedAt": "2026-10-30T13:31:49Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 678,
+          "width": 466,
+          "x": 0,
+          "y": 0
+        }
+      },
+      "sourceCohort": "siri-duo-closed-first-reviewed",
+      "xcresult": "Test-DUNEUITests-2026.10.30_22-26-53-+0900.xcresult",
+      "appSourceCommit": "adac0a30"
+    },
+    {
+      "id": "SQ12-software-keyboard",
+      "file": "images/SQ12-software-keyboard.png",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "5c4bd8bf92ddf51d5ad4db11cb77790ab8d2509bb80f2e08fde72552da458324",
+      "test": "HealthQuerySmokeTests/testCaptureAllQueryKinds()",
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "40DF6CF9-5984-4137-84C0-2C2AE3E4CBD1",
+        "deviceName": "iPhone Duo-wt-Health-siri-health-queries-112f217fc503",
+        "exportedFileName": "26EE05B2-FE1C-479C-B776-5FF2B94415C2.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "SQ12-software-keyboard_0_51FACC51-E81D-457A-99A4-FAA7FD519320.png",
+        "timestamp": 1793367105.462
+      },
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T13:31:45Z",
+        "captureStartedAt": "2026-10-30T13:31:45Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": true,
+        "viewportPoints": {
+          "height": 678,
+          "width": 466,
+          "x": 0,
+          "y": 0
+        }
+      },
+      "sourceCohort": "siri-duo-closed-first-reviewed",
+      "xcresult": "Test-DUNEUITests-2026.10.30_22-26-53-+0900.xcresult",
+      "appSourceCommit": "adac0a30"
+    },
+    {
+      "id": "SQ13-report",
+      "file": "images/SQ13-report.png",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "ea26cea582d54328bc5de00337e8e2ace6aea2b762b7c2ab0810429659f01bef",
+      "test": "HealthQuerySmokeTests/testCaptureAllQueryKinds()",
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "40DF6CF9-5984-4137-84C0-2C2AE3E4CBD1",
+        "deviceName": "iPhone Duo-wt-Health-siri-health-queries-112f217fc503",
+        "exportedFileName": "A27333B4-16BB-47E5-ABC3-28B343E652C2.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "SQ13-report_0_7A798476-32F1-4093-BFBA-8F87B709E535.png",
+        "timestamp": 1793367119.577
+      },
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T13:31:59Z",
+        "captureStartedAt": "2026-10-30T13:31:59Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 678,
+          "width": 466,
+          "x": 0,
+          "y": 0
+        }
+      },
+      "sourceCohort": "siri-duo-closed-first-reviewed",
+      "xcresult": "Test-DUNEUITests-2026.10.30_22-26-53-+0900.xcresult",
+      "appSourceCommit": "adac0a30"
+    },
+    {
+      "id": "SQ13-report-preview",
+      "file": "images/SQ13-report-preview.png",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "75e82fb2656a3e1156898eac063e4c2c63fe9e47add4b4522ea3d451e1ef845c",
+      "test": "HealthQuerySmokeTests/testReportPreviewShareCancel()",
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "40DF6CF9-5984-4137-84C0-2C2AE3E4CBD1",
+        "deviceName": "iPhone Duo-wt-Health-siri-health-queries-112f217fc503",
+        "exportedFileName": "D324CAF2-BD43-414F-A826-D941E31D278C.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "SQ13-report-preview_0_5BCDCF70-9FA7-4C6D-8B46-D7A8EBC2C5AE.png",
+        "timestamp": 1793368029.588
+      },
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T13:47:09Z",
+        "captureStartedAt": "2026-10-30T13:47:09Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 678,
+          "width": 466,
+          "x": 0,
+          "y": 0
+        }
+      },
+      "sourceCohort": "siri-duo-closed-toolbar-reviewed",
+      "xcresult": "Test-DUNEUITests-2026.10.30_22-44-07-+0900.xcresult",
+      "appSourceCommit": "adac0a30"
+    },
+    {
+      "id": "SQ13-report-share",
+      "file": "images/SQ13-report-share.png",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "210cc4da7f2d9b436d441f06efa744199c06f0bd3d67d565d8ee48ca7b607be8",
+      "test": "HealthQuerySmokeTests/testReportPreviewShareCancel()",
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "40DF6CF9-5984-4137-84C0-2C2AE3E4CBD1",
+        "deviceName": "iPhone Duo-wt-Health-siri-health-queries-112f217fc503",
+        "exportedFileName": "D3904EF9-69E4-41D5-8202-FFAC8A8AEF9F.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "SQ13-report-share_0_34C75E45-C758-4804-B836-350950D05368.png",
+        "timestamp": 1793368039.556
+      },
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T13:47:19Z",
+        "captureStartedAt": "2026-10-30T13:47:19Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 678,
+          "width": 466,
+          "x": 0,
+          "y": 0
+        }
+      },
+      "sourceCohort": "siri-duo-closed-toolbar-reviewed",
+      "xcresult": "Test-DUNEUITests-2026.10.30_22-44-07-+0900.xcresult",
+      "appSourceCommit": "adac0a30"
+    },
+    {
+      "id": "SQ14-longAnalysis",
+      "file": "images/SQ14-longAnalysis.png",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "2eaf13f9338670ef7f5779d123fe6ba1c1559b6758c10e70147e1231a90d5cdc",
+      "test": "HealthQuerySmokeTests/testCaptureAllQueryKinds()",
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "40DF6CF9-5984-4137-84C0-2C2AE3E4CBD1",
+        "deviceName": "iPhone Duo-wt-Health-siri-health-queries-112f217fc503",
+        "exportedFileName": "622900C1-3E1C-4114-A6B1-62602CB52280.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "SQ14-longAnalysis_0_01103AC3-F808-4A54-902A-EE4C04879331.png",
+        "timestamp": 1793367130.072
+      },
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T13:32:10Z",
+        "captureStartedAt": "2026-10-30T13:32:09Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 678,
+          "width": 466,
+          "x": 0,
+          "y": 0
+        }
+      },
+      "sourceCohort": "siri-duo-closed-first-reviewed",
+      "xcresult": "Test-DUNEUITests-2026.10.30_22-26-53-+0900.xcresult",
+      "appSourceCommit": "adac0a30"
+    },
+    {
+      "id": "T17-health-qa-browse",
+      "file": "images/T17-health-qa-browse.png",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "sha256": "fd3b70f6bbd1e5aef2b0d28f223c28d1cf0deb9b7457492240612df68c4d83d3",
+      "test": "HealthQuerySmokeTests/testCaptureAllQueryKinds()",
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "40DF6CF9-5984-4137-84C0-2C2AE3E4CBD1",
+        "deviceName": "iPhone Duo-wt-Health-siri-health-queries-112f217fc503",
+        "exportedFileName": "FBC6D08D-7AC5-4213-8A1F-B6FEE2A572C4.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "T17-health-qa-browse_0_3AF80650-E561-4F0A-B926-35E0863DAC8A.png",
+        "timestamp": 1793366985.086
+      },
+      "nativeReadback": {
+        "captureFinishedAt": "2026-10-30T13:29:45Z",
+        "captureStartedAt": "2026-10-30T13:29:44Z",
+        "dataKind": "synthetic DEBUG health-query fixture",
+        "orientation": 0,
+        "softwareKeyboardVisible": false,
+        "viewportPoints": {
+          "height": 678,
+          "width": 466,
+          "x": 0,
+          "y": 0
+        }
+      },
+      "sourceCohort": "siri-duo-closed-first-reviewed",
+      "xcresult": "Test-DUNEUITests-2026.10.30_22-26-53-+0900.xcresult",
+      "appSourceCommit": "adac0a30"
+    }
+  ]
+}

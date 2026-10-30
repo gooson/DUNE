@@ -24,6 +24,12 @@ struct HealthDataQASheet: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             .navigationTitle("Health Q&A")
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    NavigationLink("Browse records") {
+                        HealthQueryView(queryService: HealthQueryServiceRouting.current())
+                    }
+                    .accessibilityIdentifier("health-qa-browse-records")
+                }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Done") {
                         dismiss()
@@ -65,9 +71,9 @@ struct HealthDataQASheet: View {
     }
 
     private var unavailableContent: some View {
-        Spacer()
-            .overlay {
-                VStack(spacing: DS.Spacing.md) {
+        VStack(spacing: DS.Spacing.md) {
+            Spacer()
+            VStack(spacing: DS.Spacing.md) {
                     Image(systemName: "sparkles.slash")
                         .font(.system(size: 28, weight: .semibold))
                         .foregroundStyle(.tertiary)
@@ -80,9 +86,16 @@ struct HealthDataQASheet: View {
                         .font(.footnote)
                         .foregroundStyle(DS.Color.textSecondary)
                         .multilineTextAlignment(.center)
-                }
-                .padding(.horizontal, DS.Spacing.xl)
             }
+            .padding(.horizontal, DS.Spacing.xl)
+            NavigationLink {
+                HealthQueryView(queryService: HealthQueryServiceRouting.current())
+            } label: {
+                Label("Browse health records", systemImage: "heart.text.square")
+            }
+            .accessibilityIdentifier("health-qa-browse-records")
+            Spacer()
+        }
     }
 
     private var suggestedPrompts: some View {
@@ -171,6 +184,7 @@ struct HealthDataQASheet: View {
                     .font(.system(size: 28, weight: .semibold))
             }
             .disabled(!viewModel.canSend)
+            .accessibilityLabel("Send question")
             .accessibilityIdentifier("health-qa-send")
         }
     }

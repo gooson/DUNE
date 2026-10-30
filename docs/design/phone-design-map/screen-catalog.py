@@ -24,6 +24,7 @@ GROUPS = {
         "NotificationPersonalRecordsPushView|기록 알림 상세|개인 기록 알림|push|기록/날짜/이동",
         "HealthDataQASheet|건강 데이터 질문|오늘 카드|inspector|질문/응답/근거",
         "PinnedMetricsEditorView|고정 지표 편집|오늘 지표|sheet|지표 선택/순서/완료",
+        "HealthQueryView|건강 정보 조회|오늘 질문·Siri|push/sheet|기간/14개 정보 유형/수치/추세/출처/보고서",
     ],
     "활동 · 분석": [
         "ActivityView|활동|탭|root|준비도/회복 지도/운동 기록",

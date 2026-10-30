@@ -1,0 +1,12 @@
+Test Case '-[DUNEUITests.HealthQuerySmokeTests testCaptureAllQueryKinds]' started.
+Test Case '-[DUNEUITests.HealthQuerySmokeTests testCaptureAllQueryKinds]' passed (232.491 seconds).
+Test Case '-[DUNEUITests.HealthQuerySmokeTests testCaptureBodyAndDurationAtMaximumTextSize]' started.
+/Users/shanks/.codex/worktrees/siri-health-queries/Health/DUNEUITests/Smoke/HealthQuerySmokeTests.swift:172: error: -[DUNEUITests.HealthQuerySmokeTests testCaptureBodyAndDurationAtMaximumTextSize] : XCTAssertTrue failed - Information menu should offer latestBody
+Test Case '-[DUNEUITests.HealthQuerySmokeTests testCaptureBodyAndDurationAtMaximumTextSize]' failed (48.577 seconds).
+Test Case '-[DUNEUITests.HealthQuerySmokeTests testNoDataIsExplicit]' started.
+Test Case '-[DUNEUITests.HealthQuerySmokeTests testNoDataIsExplicit]' passed (31.315 seconds).
+	 Executed 3 tests, with 1 failure (0 unexpected) in 312.382 (312.389) seconds
+	 Executed 3 tests, with 1 failure (0 unexpected) in 312.382 (312.391) seconds
+	 Executed 3 tests, with 1 failure (0 unexpected) in 312.382 (312.398) seconds
+	/Users/shanks/.codex/worktrees/siri-health-queries/Health/.deriveddata/unit-tests/Logs/Test/Test-DUNEUITests-2026.10.30_20-32-46-+0900.xcresult
+** TEST FAILED **

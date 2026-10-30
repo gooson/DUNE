@@ -64,6 +64,8 @@ Small 위젯의 세 점수 링과 하단 상태·시각은 카드 전체 높이�
 
 ## 갱신 방법
 
+2026-10-30 [Siri 건강 정보 질의 비주얼 시안](themes/dune-siri-health-queries.html)을 studies에 추가했다. 기본 V1과 골드·큰 수치·메달·바벨·측정 추세·수면 단계의 V2를 전환하며 14개 기능을 각각 검토한다. [배치·데이터·상태 계약](../layout-map/siri-health-queries-proposal.md), 기능별 브라우저 PNG, `themes/assets/siri-health-queries-qa.json`을 함께 보존한다. 밝음/어두움·기기 폭·200% 글씨·누락/잠금/AI/PCC 상태와 Watch 동반 응답을 포함한다. 실제 Siri 시스템 외곽의 교체나 네이티브 앱 적용을 의미하지 않는다. 실제 화면 디자인맵의 캡처는 변경하지 않았다.
+
 2026-10-26 [Today 재설계 세 방향 시안](themes/dune-today-restart.html)을 추가했다. 기존 DUNE 테마를 유지하며 Today 전체를 Compact, Metrics, Editorial로 비교하며, 글자 확대가 패딩과 그래프를 함께 확대하지 않도록 설계했다. [배치와 범위](../layout-map/today-restart-proposal.md)에 원인·데이터 계약·남은 범위를 기록한다. 신규 테마 구현이나 실제 앱 캡처가 아니며 방향 승인 전 제안이다. [편집 원본](themes/assets/today-restart-fragment.html)을 보존한다.
 
 테마의 색, 능선·배경, 링, 그래프, 움직임, 화면별 표현을 바꿀 때 **같은 작업에서** 아래를 갱신한다.

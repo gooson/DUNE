@@ -296,6 +296,12 @@ struct DUNEApp: App {
         let runtime = Self.makeAppRuntime(notificationService: notifService)
         _appRuntime = State(initialValue: runtime)
         DUNEAppIntentStore.shared.configure(container: runtime.modelContainer)
+        HealthQueryIntentState.shared.clear()
+        HealthQueryService.shared.configure(
+            container: runtime.modelContainer,
+            sharedHealthDataService: runtime.sharedHealthDataService,
+            protectedDataProvider: { UIApplication.shared.isProtectedDataAvailable }
+        )
         DUNEAppShortcuts.updateAppShortcutParameters()
     }
 
@@ -613,6 +619,12 @@ struct DUNEApp: App {
             cloudSyncEnabled: nextValue
         )
         DUNEAppIntentStore.shared.configure(container: appRuntime.modelContainer)
+        HealthQueryIntentState.shared.clear()
+        HealthQueryService.shared.configure(
+            container: appRuntime.modelContainer,
+            sharedHealthDataService: appRuntime.sharedHealthDataService,
+            protectedDataProvider: { UIApplication.shared.isProtectedDataAvailable }
+        )
 
         if isLaunchExperienceReady {
             hasStartedRuntimeServices = false

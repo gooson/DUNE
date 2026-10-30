@@ -3,6 +3,15 @@ import HealthKit
 protocol WorkoutQuerying: Sendable {
     func fetchWorkouts(days: Int) async throws -> [WorkoutSummary]
     func fetchWorkouts(start: Date, end: Date) async throws -> [WorkoutSummary]
+    func fetchWorkouts(start: Date, end: Date, limit: Int) async throws -> [WorkoutSummary]
+}
+
+extension WorkoutQuerying {
+    /// Compatibility for existing providers; production applies the cap in HealthKit.
+    func fetchWorkouts(start: Date, end: Date, limit: Int) async throws -> [WorkoutSummary] {
+        let records = try await fetchWorkouts(start: start, end: end)
+        return Array(records.sorted { $0.date > $1.date }.prefix(max(0, min(limit, 2_001))))
+    }
 }
 
 struct WorkoutQueryService: WorkoutQuerying, Sendable {
@@ -68,6 +77,24 @@ struct WorkoutQueryService: WorkoutQuerying, Sendable {
         return workouts.map { workout in
             toSummary(workout)
         }
+    }
+
+    func fetchWorkouts(start: Date, end: Date, limit: Int) async throws -> [WorkoutSummary] {
+        let boundedLimit = max(0, min(limit, 2_001))
+        guard boundedLimit > 0 else { return [] }
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            return Array(mockData.workoutSummaries(start: start, end: end)
+                .sorted { $0.date > $1.date }.prefix(boundedLimit))
+        }
+        guard manager.isAvailable else { return [] }
+        try await manager.ensureNotDenied(for: HKObjectType.workoutType())
+        let predicate = HKQuery.predicateForSamples(withStart: start, end: end, options: .strictStartDate)
+        let descriptor = HKSampleQueryDescriptor(
+            predicates: [.workout(predicate)],
+            sortDescriptors: [SortDescriptor(\.startDate, order: .reverse)],
+            limit: boundedLimit
+        )
+        return try await manager.execute(descriptor).map(toSummary)
     }
 
     // MARK: - HKWorkout → WorkoutSummary
