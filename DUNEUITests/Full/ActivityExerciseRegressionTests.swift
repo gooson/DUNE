@@ -876,16 +876,69 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
     }
 
     func testExerciseTypeDetailShowsTrendSurface() throws {
-        openTrainingVolumeDetailSurface()
+        try verifyManualExerciseTypeDetailAndCapture()
+    }
 
-        XCTAssertTrue(
-            app.scrollToElementIfNeeded(AXID.activityTrainingVolumeTypeList, maxSwipes: 10),
-            "Exercise type list should be reachable in Training Volume detail"
-        )
-        XCTAssertTrue(
-            app.scrollToHittableElementIfNeeded(AXID.activityTrainingVolumeRow(Fixture.manualStrengthTypeKey), maxSwipes: 10),
-            "Manual strength row should be reachable in Training Volume detail"
-        )
+    func testExerciseTypeDetailAtMaximumAccessibilityTextSize() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL",
+            "--ui-test-style", "dark"
+        ]
+        launchApp(with: configuration)
+        try verifyManualExerciseTypeDetailAndCapture(maximumAccessibilitySize: true)
+    }
+
+    private func verifyManualExerciseTypeDetailAndCapture(maximumAccessibilitySize: Bool = false) throws {
+        openTrainingVolumeDetailSurface(maximumAccessibilitySize: maximumAccessibilitySize)
+
+        // On the AX route, scope later reveals to the pushed detail scrolls. Activity's
+        // root scroll can remain in the accessibility tree behind a navigation push.
+        func revealInDetailScroll(_ scrollID: String, targetID: String, maxSwipes: Int = 12) -> Bool {
+            let scroll = app.scrollViews[scrollID].firstMatch
+            guard scroll.waitForExistence(timeout: 5) else { return false }
+            let target = app.descendants(matching: .any)[targetID].firstMatch
+            let window = app.windows.firstMatch
+            for _ in 0..<maxSwipes {
+                let viewport = scroll.frame.intersection(window.frame)
+                if target.exists && target.isHittable
+                    && viewport.contains(CGPoint(x: target.frame.midX, y: target.frame.midY)) {
+                    return true
+                }
+                if target.exists && target.frame.midY < viewport.midY {
+                    scroll.swipeDown(velocity: .slow)
+                } else {
+                    scroll.swipeUp(velocity: .slow)
+                }
+            }
+            let viewport = scroll.frame.intersection(window.frame)
+            return target.exists && target.isHittable
+                && viewport.contains(CGPoint(x: target.frame.midX, y: target.frame.midY))
+        }
+
+        if maximumAccessibilitySize {
+            XCTAssertTrue(app.descendants(matching: .any)[AXID.activityTrainingVolumeTypeList]
+                .firstMatch.waitForExistence(timeout: 10),
+                "Exercise type list should exist in Training Volume detail")
+            XCTAssertTrue(
+                revealInDetailScroll(
+                    AXID.activityTrainingVolumeDetailScreen,
+                    targetID: AXID.activityTrainingVolumeRow(Fixture.manualStrengthTypeKey)
+                ),
+                "Manual strength row should be reachable in Training Volume detail"
+            )
+        } else {
+            XCTAssertTrue(
+                app.scrollToElementIfNeeded(AXID.activityTrainingVolumeTypeList, maxSwipes: 10),
+                "Exercise type list should be reachable in Training Volume detail"
+            )
+            XCTAssertTrue(
+                app.scrollToHittableElementIfNeeded(
+                    AXID.activityTrainingVolumeRow(Fixture.manualStrengthTypeKey), maxSwipes: 10
+                ),
+                "Manual strength row should be reachable in Training Volume detail"
+            )
+        }
         let row = app.descendants(matching: .any)[AXID.activityTrainingVolumeRow(Fixture.manualStrengthTypeKey)].firstMatch
         XCTAssertTrue(row.waitForExistence(timeout: 8), "Manual strength row should exist in Training Volume detail")
         row.auditTap()
@@ -903,12 +956,47 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             "Exercise type detail should render the trend chart"
         )
 
+        let primaryValue = app.staticTexts["activity-exercise-type-primary-value"].firstMatch
+        let comparisonVolume = app.staticTexts["activity-exercise-type-comparison-current-volume"].firstMatch
+        XCTAssertTrue(primaryValue.waitForExistence(timeout: 15), "Seeded manual strength hero must finish loading")
+        XCTAssertEqual(primaryValue.label, "6.4t", "The actual completed-set weight × reps total should lead")
+        XCTAssertTrue(comparisonVolume.waitForExistence(timeout: 5))
+        XCTAssertEqual(comparisonVolume.label, primaryValue.label,
+                       "Hero and comparison must use the same selected type total")
+        XCTAssertFalse(app.descendants(matching: .any)[AXID.activityExerciseTypeRecentSessions].firstMatch.exists,
+                       "A manual type must not invent HealthKit workout history")
+        VisualAudit.capture("Exercise type manual strength Week loaded")
+        XCTAssertTrue(
+            maximumAccessibilitySize
+                ? revealInDetailScroll(
+                    AXID.activityExerciseTypeDetailScreen,
+                    targetID: "activity-exercise-type-comparison-row-volume"
+                )
+                : app.scrollToHittableElementIfNeeded("activity-exercise-type-comparison-row-volume", maxSwipes: 8),
+            "The real weighted-volume comparison should be reachable"
+        )
+        VisualAudit.capture("Exercise type manual strength Week comparison")
+
+        XCTAssertTrue(
+            maximumAccessibilitySize
+                ? revealInDetailScroll(
+                    AXID.activityExerciseTypeDetailScreen,
+                    targetID: AXID.activityExerciseTypePeriodPicker
+                )
+                : app.scrollToHittableElementIfNeeded(
+                    AXID.activityExerciseTypePeriodPicker, maxSwipes: 8, direction: .down
+                ),
+            "The exercise type period control should remain reachable after comparison"
+        )
         tapSegment(in: AXID.activityExerciseTypePeriodPicker, index: 1, timeout: 10)
 
         XCTAssertTrue(
             app.descendants(matching: .any)[AXID.activityExerciseTypeTrendChart].firstMatch.waitForExistence(timeout: 15),
             "Exercise type detail should keep the trend chart visible after period switching"
         )
+        XCTAssertEqual(primaryValue.label, "6.4t",
+                       "The seeded three manual sessions remain in the Month window")
+        VisualAudit.capture("Exercise type manual strength Month loaded")
     }
 
     func testPersonalRecordsDetailShowsTimelineRewardsAndHistory() throws {
@@ -2220,12 +2308,31 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         )
     }
 
-    private func openTrainingVolumeDetailSurface() {
-        openActivityDetail(
-            sectionIdentifier: AXID.activitySectionVolume,
-            destinationIdentifier: AXID.activityTrainingVolumeDetailScreen,
-            maxSwipes: 8
-        )
+    private func openTrainingVolumeDetailSurface(maximumAccessibilitySize: Bool = false) {
+        if maximumAccessibilitySize {
+            ensureActivityRoot()
+            let contentID = "activity-section-volume-content"
+            // AX puts this section several screens below the initial viewport. The
+            // existing summary test proves the content-center then header route.
+            XCTAssertTrue(app.scrollToHittableElementIfNeeded(contentID, maxSwipes: 32))
+            let card = app.buttons[contentID].firstMatch
+            let activityScroll = app.scrollViews[AXID.activityRootScroll].firstMatch
+            let viewport = activityScroll.frame.intersection(app.windows.firstMatch.frame)
+            XCTAssertTrue(card.exists && card.isHittable)
+            XCTAssertTrue(viewport.contains(CGPoint(x: card.frame.midX, y: card.frame.midY)))
+            XCTAssertTrue(app.scrollToHittableElementIfNeeded(
+                AXID.activitySectionVolume, maxSwipes: 8, direction: .down
+            ))
+            app.buttons[AXID.activitySectionVolume].firstMatch.auditTap()
+            XCTAssertTrue(app.descendants(matching: .any)[AXID.activityTrainingVolumeDetailScreen]
+                .firstMatch.waitForExistence(timeout: 10))
+        } else {
+            openActivityDetail(
+                sectionIdentifier: AXID.activitySectionVolume,
+                destinationIdentifier: AXID.activityTrainingVolumeDetailScreen,
+                maxSwipes: 8
+            )
+        }
     }
 
     private func openActivityDetail(
