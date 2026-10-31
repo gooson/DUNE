@@ -8,7 +8,7 @@ extension HealthQueryService {
               previous.duration > 0, previous.duration <= 367 * 86_400,
               previous.end <= nowProvider().addingTimeInterval(1) else {
             return result(request.kind, status: .invalidRequest, interval: interval,
-                          summary: String(localized: "Choose a valid comparison period of up to one year.", locale: HealthQueryLocalization.locale))
+                          summary: HealthQueryLocalization.localized("Choose a valid comparison period of up to one year."))
         }
         let currentWorkouts = try await loadWorkouts(in: interval)
         try Task.checkCancellation()
@@ -34,9 +34,9 @@ extension HealthQueryService {
         let complete = currentWorkouts.complete && priorWorkouts.complete && currentSleep.isComplete && priorSleep.isComplete
         let hasRecords = !currentWorkouts.records.isEmpty || !priorWorkouts.records.isEmpty || !currentSleep.metrics.isEmpty || !priorSleep.metrics.isEmpty
         var limitations = currentWorkouts.limitations + priorWorkouts.limitations + currentSleep.limitations + priorSleep.limitations
-        limitations.append(String(localized: "The comparison describes recorded activity and sleep. It does not establish that one caused the other.", locale: HealthQueryLocalization.locale))
+        limitations.append(HealthQueryLocalization.localized("The comparison describes recorded activity and sleep. It does not establish that one caused the other."))
         if abs(interval.duration - previous.duration) > 0.001 {
-            limitations.append(String(localized: "These periods have different lengths. Totals are not normalized by day.", locale: HealthQueryLocalization.locale))
+            limitations.append(HealthQueryLocalization.localized("These periods have different lengths. Totals are not normalized by day."))
         }
         if !complete {
             // A missing source cannot support an apparent zero or an exact period delta.
@@ -52,7 +52,7 @@ extension HealthQueryService {
                       series: [dailySeries(currentWorkouts.records, interval: interval)] + currentSleep.series,
                       records: Array(currentWorkouts.records.prefix(request.limit)),
                       sources: sources(for: currentWorkouts.records + priorWorkouts.records) + currentSleep.sources + priorSleep.sources,
-                      summary: String(localized: "Comparing \(dateOnlyText(interval.start)) through \(dateOnlyText(interval.end.addingTimeInterval(-0.001))) with \(dateOnlyText(previous.start)) through \(dateOnlyText(previous.end.addingTimeInterval(-0.001))).", locale: HealthQueryLocalization.locale) + " " + metricSummary(metrics),
+                      summary: HealthQueryLocalization.localized("Comparing \(dateOnlyText(interval.start)) through \(dateOnlyText(interval.end.addingTimeInterval(-0.001))) with \(dateOnlyText(previous.start)) through \(dateOnlyText(previous.end.addingTimeInterval(-0.001))).") + " " + metricSummary(metrics),
                       limitations: Array(Set(limitations)).sorted(), isComplete: complete)
     }
 
@@ -80,7 +80,7 @@ extension HealthQueryService {
                       interval: interval, metrics: metrics, series: results.flatMap(\.series), records: workouts.records,
                       sources: results.flatMap(\.sources),
                       summary: periodText(interval) + " " + metricSummary(metrics),
-                      limitations: Array(Set(results.flatMap(\.limitations) + [String(localized: "This summary uses available records and does not provide a medical diagnosis.", locale: HealthQueryLocalization.locale)])).sorted(),
+                      limitations: Array(Set(results.flatMap(\.limitations) + [HealthQueryLocalization.localized("This summary uses available records and does not provide a medical diagnosis.")])).sorted(),
                       isComplete: complete)
     }
 }

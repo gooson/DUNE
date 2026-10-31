@@ -120,11 +120,11 @@ actor HealthQueryAssistant: HealthQueryAssisting {
             return answer
         }
         if metric.value > previous {
-            answer.explanation = String(localized: "The selected metric is higher than in the comparison period.", locale: HealthQueryLocalization.locale)
+            answer.explanation = HealthQueryLocalization.localized("The selected metric is higher than in the comparison period.")
         } else if metric.value < previous {
-            answer.explanation = String(localized: "The selected metric is lower than in the comparison period.", locale: HealthQueryLocalization.locale)
+            answer.explanation = HealthQueryLocalization.localized("The selected metric is lower than in the comparison period.")
         } else {
-            answer.explanation = String(localized: "The selected metric is unchanged from the comparison period.", locale: HealthQueryLocalization.locale)
+            answer.explanation = HealthQueryLocalization.localized("The selected metric is unchanged from the comparison period.")
         }
         answer.explanation = metric.title + ": " + (answer.explanation ?? "")
         answer.explanationStatus = .generated
@@ -134,9 +134,9 @@ actor HealthQueryAssistant: HealthQueryAssisting {
     private func unavailable(kind: HealthQueryKind) -> HealthQueryResult {
         let now = nowProvider()
         return HealthQueryResult(kind: kind, status: .unavailable,
-            title: String(localized: "Health Question", locale: HealthQueryLocalization.locale), generatedAt: now,
+            title: HealthQueryLocalization.localized("Health Question"), generatedAt: now,
             interval: HealthQueryPeriod.today.interval(endingAt: now),
-            spokenSummary: String(localized: "Choose a health topic and period to view your records. This question could not be interpreted.", locale: HealthQueryLocalization.locale),
+            spokenSummary: HealthQueryLocalization.localized("Choose a health topic and period to view your records. This question could not be interpreted."),
             explanationStatus: .unavailable, isComplete: false)
     }
 
