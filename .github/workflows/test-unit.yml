@@ -29,8 +29,15 @@ env:
 
 jobs:
   unit-tests:
+    name: unit-tests (${{ matrix.platform }})
     runs-on: xcode-27
     timeout-minutes: 30
+    # Boot each runtime on its own runner. A Watch startup failure must not
+    # prevent iOS tests from starting, or leave both runtimes competing for RAM.
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [ios, watch]
 
     steps:
       - name: Checkout
@@ -54,13 +61,34 @@ jobs:
       - name: Install xcodegen
         run: brew install xcodegen
 
-      - name: Run Unit Tests
-        run: scripts/test-unit.sh --stream-log
+      # Use the same owned simulator-clone path verified by local test runs.
+      - name: Create isolated test worktree
+        run: git worktree add --detach "$RUNNER_TEMP/dune-unit-tests" HEAD
 
-      - name: Upload test log
+      - name: Run Unit Tests
+        shell: bash
+        working-directory: ${{ runner.temp }}/dune-unit-tests
+        run: |
+          mkdir -p .xcodebuild
+          scripts/test-unit.sh --${{ matrix.platform }}-only --stream-log 2>&1 | tee .xcodebuild/unit-test-runner.log
+
+      - name: Collect simulator state
+        if: always()
+        shell: bash
+        working-directory: ${{ runner.temp }}/dune-unit-tests
+        run: |
+          mkdir -p .xcodebuild
+          python3 scripts/lib/command-deadline.py --seconds 30 -- xcrun simctl list devices -j > .xcodebuild/unit-test-devices.json 2>&1 || true
+          python3 scripts/lib/command-deadline.py --seconds 30 -- xcrun simctl list pairs -j > .xcodebuild/unit-test-pairs.json 2>&1 || true
+
+      - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: unit-test-log
-          path: .xcodebuild/unit-test*.log
+          name: unit-test-log-${{ matrix.platform }}
+          path: |
+            ${{ runner.temp }}/dune-unit-tests/.xcodebuild/unit-test*
+            ${{ runner.temp }}/dune-unit-tests/.codex-checks/worktree-simulators.json
+            ${{ runner.temp }}/dune-unit-tests/.deriveddata/unit-tests/Logs/Test/*.xcresult
+          include-hidden-files: true
           retention-days: 7

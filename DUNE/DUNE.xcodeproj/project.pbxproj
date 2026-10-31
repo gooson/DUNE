@@ -5113,7 +5113,6 @@
 					};
 					7B503DA239023223B8865093 = {
 						DevelopmentTeam = 4GWU9QB2JZ;
-						TestTargetID = 33EB1CBD3B8E788B5F401232;
 					};
 					7CA335C885340A207CEB2A3E = {
 						DevelopmentTeam = 4GWU9QB2JZ;
@@ -7181,7 +7180,6 @@
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 4;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DUNEWatch.app/DUNEWatch";
-				TEST_TARGET_NAME = DUNEWatch;
 			};
 			name = Release;
 		};
@@ -7282,7 +7280,6 @@
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 4;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DUNEWatch.app/DUNEWatch";
-				TEST_TARGET_NAME = DUNEWatch;
 			};
 			name = Debug;
 		};
