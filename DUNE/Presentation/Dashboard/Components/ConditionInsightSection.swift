@@ -9,7 +9,14 @@ struct ConditionInsightSection: View {
     private var isRegular: Bool { sizeClass == .regular }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: isRegular ? DS.Spacing.md : DS.Spacing.sm) {
+        TimelineView(.periodic(from: .now, by: 60)) { _ in
+            content(period: LocalDayPeriod(date: DashboardClock.now()))
+        }
+    }
+
+    private func content(period: LocalDayPeriod) -> some View {
+        let guidance = ConditionInsightGuidance.message(status: status, period: period)
+        return VStack(alignment: .leading, spacing: isRegular ? DS.Spacing.md : DS.Spacing.sm) {
             Text("Today's Insight")
                 .font(isRegular ? .headline : .subheadline)
                 .fontWeight(.semibold)
@@ -50,21 +57,6 @@ struct ConditionInsightSection: View {
         case .fair:      String(localized: "You're at your usual level")
         case .tired:     String(localized: "Fatigue has been building up")
         case .warning:   String(localized: "Recovery is needed")
-        }
-    }
-
-    private var guidance: String {
-        switch status {
-        case .excellent:
-            String(localized: "A great day to try high-intensity workouts or challenging goals. Your body is well-recovered, so push yourself a bit more than usual.")
-        case .good:
-            String(localized: "Good state to maintain your regular workout routine. Keep up the balanced activity to sustain your condition.")
-        case .fair:
-            String(localized: "Moderate-intensity activities are recommended. Maintaining a regular sleep pattern can help improve your condition.")
-        case .tired:
-            String(localized: "Light walks or stretching-focused activities are recommended. Focus on recovery with adequate sleep and rest.")
-        case .warning:
-            String(localized: "Prioritize rest today. Stick to low-intensity activities and focus on improving your sleep quality.")
         }
     }
 }

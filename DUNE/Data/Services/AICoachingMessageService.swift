@@ -61,7 +61,12 @@ struct AICoachingMessageService: CoachingMessageEnhancing, Sendable {
 
     // MARK: - Prompt Construction
 
-    func buildPrompt(insight: CoachingInsight, context: CoachingInput) -> String {
+    func buildPrompt(
+        insight: CoachingInsight,
+        context: CoachingInput,
+        now: Date = Date(),
+        calendar: Calendar = .autoupdatingCurrent
+    ) -> String {
         var lines: [String] = []
 
         let languageInstruction = Self.localeInstruction()
@@ -70,6 +75,13 @@ struct AICoachingMessageService: CoachingMessageEnhancing, Sendable {
 
         // Context data
         lines.append("User context:")
+        let hour = calendar.component(.hour, from: now)
+        let period = LocalDayPeriod(date: now, calendar: calendar)
+        lines.append("- Current local hour: \(hour) (\(calendar.timeZone.identifier)); period: \(period.rawValue)")
+        lines.append("Do not add greetings or salutations. Do not infer the current time from health measurement dates.")
+        if period == .night {
+            lines.append("It is nighttime. Focus on rest and winding down; do not recommend starting a workout now. Preserve recovery warnings from the template.")
+        }
         if let score = context.conditionScore {
             lines.append("- Condition: \(score.score)/100 (\(score.status.rawValue))")
         }

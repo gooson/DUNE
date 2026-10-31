@@ -9,25 +9,27 @@ final class MorningBriefingViewModel {
 
     private static let lastBriefingDateKey = "lastBriefingDate"
 
-    private enum Cache {
-        static let dateFormatter: DateFormatter = {
-            let f = DateFormatter()
-            f.dateFormat = "yyyy-MM-dd"
-            f.locale = Locale(identifier: "en_US_POSIX")
-            return f
-        }()
-    }
-
-    /// Whether the briefing sheet should be presented today.
-    static func shouldShowBriefing() -> Bool {
-        let lastDate = UserDefaults.standard.string(forKey: lastBriefingDateKey)
-        let today = todayString()
+    /// Auto-presentation is reserved for the local morning, once per local day.
+    static func shouldShowBriefing(
+        now: Date = DashboardClock.now(),
+        calendar: Calendar = .autoupdatingCurrent,
+        defaults: UserDefaults = .standard
+    ) -> Bool {
+        guard LocalDayPeriod(date: now, calendar: calendar) == .morning else { return false }
+        let lastDate = defaults.string(forKey: lastBriefingDateKey)
+        let today = todayString(now: now, calendar: calendar)
         return lastDate != today
     }
 
     /// Record that the briefing was shown today.
-    static func markBriefingShown() {
-        UserDefaults.standard.set(todayString(), forKey: lastBriefingDateKey)
+    static func markBriefingShown(
+        now: Date = DashboardClock.now(),
+        calendar: Calendar = .autoupdatingCurrent,
+        defaults: UserDefaults = .standard
+    ) {
+        // A manual visit outside the morning must not consume the next morning's briefing.
+        guard LocalDayPeriod(date: now, calendar: calendar) == .morning else { return }
+        defaults.set(todayString(now: now, calendar: calendar), forKey: lastBriefingDateKey)
     }
 
     /// Whether the user has enabled morning briefing in settings.
@@ -42,7 +44,12 @@ final class MorningBriefingViewModel {
 
     // MARK: - Private
 
-    private static func todayString() -> String {
-        Cache.dateFormatter.string(from: Date())
+    private static func todayString(now: Date, calendar: Calendar) -> String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.calendar = Calendar(identifier: .gregorian)
+        formatter.timeZone = calendar.timeZone
+        formatter.dateFormat = "yyyy-MM-dd"
+        return formatter.string(from: now)
     }
 }
