@@ -61,6 +61,38 @@ final class TodayReadingUITests: SeededUITestBaseCase {
         app.staticTexts[identifier].firstMatch
     }
 
+    private func reportViewport(_ scroll: XCUIElement) -> CGRect {
+        let frame = scroll.frame.intersection(app.windows.firstMatch.frame)
+        let navigation = app.navigationBars.firstMatch
+        let top = max(frame.minY, navigation.exists ? navigation.frame.maxY + 8 : frame.minY)
+        let tabBar = app.tabBars.firstMatch
+        let bottom = tabBar.exists && tabBar.isHittable && tabBar.frame.minY > frame.midY
+            ? min(frame.maxY, tabBar.frame.minY - 8) : frame.maxY
+        return CGRect(x: frame.minX, y: top, width: frame.width, height: max(0, bottom - top))
+    }
+
+    private func revealReportElement(_ element: XCUIElement, in scroll: XCUIElement, whole: Bool) -> Bool {
+        for _ in 0..<12 {
+            let viewport = reportViewport(scroll)
+            let frame = element.frame
+            let horizontalFit = frame.minX >= viewport.minX - 2 && frame.maxX <= viewport.maxX + 2
+            let verticalFit = whole ? viewport.contains(frame) : frame.intersection(viewport).height >= 24
+            if horizontalFit && verticalFit && (!whole || element.isHittable) { return true }
+            guard viewport.height > 100, scroll.frame.height > 0 else { return false }
+            let movingUp = frame.midY >= viewport.midY
+            let startY = movingUp ? viewport.maxY - 24 : viewport.minY + 24
+            let endY = movingUp ? viewport.minY + 24 : viewport.maxY - 24
+            let start = scroll.coordinate(withNormalizedOffset: CGVector(
+                dx: 0.5, dy: (startY - scroll.frame.minY) / scroll.frame.height
+            ))
+            let end = scroll.coordinate(withNormalizedOffset: CGVector(
+                dx: 0.5, dy: (endY - scroll.frame.minY) / scroll.frame.height
+            ))
+            start.press(forDuration: 0.05, thenDragTo: end)
+        }
+        return false
+    }
+
     private func reveal(_ identifier: String, maxSwipes: Int = 16) {
         XCTAssertTrue(
             app.scrollToHittableElementIfNeeded(identifier, maxSwipes: maxSwipes),
@@ -279,7 +311,7 @@ final class TodayReadingUITests: SeededUITestBaseCase {
         XCTAssertEqual(toggle.value as? String, collapsedValue)
     }
 
-    func testNotificationDigestUsesSameExpandableCard() {
+    func testNotificationDigestReportPreservesDataAndDisclosure() {
         var configuration = launchConfiguration
         configuration.scenario = .notificationRoutingSeeded
         configuration.additionalArguments = readingArguments(style: "light", largeText: false) + [
@@ -289,18 +321,23 @@ final class TodayReadingUITests: SeededUITestBaseCase {
 
         XCTAssertTrue(waitForReadingElement("notification-daily-digest-screen", timeout: 15))
         XCTAssertTrue(waitForReadingElement("dashboard-daily-digest", timeout: 15))
+        XCTAssertTrue(waitForReadingElement("notification-daily-digest-cover"))
+        XCTAssertEqual(readableText(Fixture.digestHeader).label, "오늘의 리포트")
         XCTAssertTrue(waitForReadingElement(Fixture.digestCondition))
+        XCTAssertTrue(waitForReadingElement("notification-daily-digest-activity"))
+        XCTAssertTrue(waitForReadingElement("notification-daily-digest-workout"))
         XCTAssertTrue(waitForReadingElement("notification-daily-digest-sleep"))
+        XCTAssertTrue(waitForReadingElement("notification-daily-digest-narrative"))
         XCTAssertEqual(app.staticTexts.matching(NSPredicate(format: "label == %@", "컨디션")).count, 1,
-                       "The shared card should own the condition metric without a duplicate grid")
+                       "The report should show the recorded condition once")
         XCTAssertEqual(app.staticTexts.matching(NSPredicate(format: "label == %@", "걸음 수")).count, 1,
-                       "The shared card should own the steps metric without a duplicate grid")
+                       "The report should show the recorded steps once")
         reveal(Fixture.digestPreview)
         let preview = readableText(Fixture.digestPreview)
         XCTAssertTrue(preview.waitForExistence(timeout: 5))
         let firstSentence = preview.label
         XCTAssertFalse(readableText(Fixture.digestSummary).exists)
-        captureReading("T03-notification-digest-collapsed")
+        captureReading("T10-notification-report-collapsed")
         reveal(Fixture.digestToggle)
         app.buttons[Fixture.digestToggle].firstMatch.tap()
         reveal(Fixture.digestSummary)
@@ -310,6 +347,45 @@ final class TodayReadingUITests: SeededUITestBaseCase {
         XCTAssertTrue(summary.label.hasPrefix(firstSentence))
         XCTAssertGreaterThan(summary.label.count, firstSentence.count)
         XCTAssertFalse(readableText(Fixture.digestPreview).exists)
-        captureReading("T03-notification-digest-expanded")
+        captureReading("T10-notification-report-expanded")
+
+        configuration.additionalArguments = readingArguments(style: "dark", largeText: true) + [
+            "--ui-open-notification-title", "Daily Digest Route Fixture"
+        ]
+        launchApp(with: configuration)
+        XCTAssertTrue(waitForReadingElement("notification-daily-digest-screen", timeout: 15))
+        let reportScroll = app.scrollViews["notification-daily-digest-screen"].firstMatch
+        XCTAssertTrue(reportScroll.waitForExistence(timeout: 5), "Report needs its own front scroll view")
+        let title = readableText(Fixture.digestHeader)
+        XCTAssertTrue(title.waitForExistence(timeout: 10))
+        XCTAssertEqual(title.label, "오늘의 리포트")
+        XCTAssertTrue(revealReportElement(title, in: reportScroll, whole: true),
+                      "Report title must fit below navigation at maximum Dynamic Type")
+        captureReading("T10-notification-report-dark-ax-title")
+        for id in ["notification-daily-digest-workout", "notification-daily-digest-sleep"] {
+            let section = app.descendants(matching: .any)[id].firstMatch
+            XCTAssertTrue(section.waitForExistence(timeout: 5))
+            XCTAssertTrue(revealReportElement(section, in: reportScroll, whole: false),
+                          "\(id) must have a readable visible portion")
+        }
+        let largePreview = readableText(Fixture.digestPreview)
+        XCTAssertTrue(largePreview.waitForExistence(timeout: 5))
+        XCTAssertTrue(revealReportElement(largePreview, in: reportScroll, whole: false))
+        let largeFirstSentence = largePreview.label
+        let largeToggle = app.buttons[Fixture.digestToggle].firstMatch
+        XCTAssertTrue(largeToggle.waitForExistence(timeout: 5))
+        XCTAssertTrue(revealReportElement(largeToggle, in: reportScroll, whole: true),
+                      "Summary control must fit and be tappable below navigation")
+        XCTAssertGreaterThanOrEqual(largeToggle.frame.height, 44)
+        captureReading("T10-notification-report-dark-ax-control")
+        largeToggle.tap()
+        let largeSummary = readableText(Fixture.digestSummary)
+        XCTAssertTrue(largeSummary.waitForExistence(timeout: 5))
+        XCTAssertTrue(revealReportElement(largeSummary, in: reportScroll, whole: false),
+                      "Expanded summary needs an unclipped horizontal width and readable portion")
+        XCTAssertTrue(largeSummary.label.hasPrefix(largeFirstSentence))
+        XCTAssertGreaterThan(largeSummary.label.count, largeFirstSentence.count)
+        // The expanded paragraph may span more than one viewport; its text must remain intact.
+        captureReading("T10-notification-report-dark-ax")
     }
 }
