@@ -7,6 +7,10 @@ status: in-progress
 
 # DUNE 테마 맵
 
+## A05 주간 운동 통계 상세 방향 · 2026-10-31
+
+[밝음·어두움 브라우저 시안](themes/dune-weekly-stats-detail-a05.html)은 한 화면의 불투명 현재 기간 히어로, 원래 다섯 `ActivityStat.icon`, 이전 기간 네 비교 행과 단일 날짜 캡션을 제안한다. [화면별 배치·데이터 계약](../layout-map/activity-weekly-stats-detail-a05.html)을 함께 따른다. 숫자 자리와 차트 막대는 설명용이며 실제 운동 기록이나 앱 캡처가 아니다. 원본 `672d5fdb` 기기별 before와 구현 후 after는 아직 수집하지 않았다.
+
 ## 주간 운동 업적 시안 · 2026-10-29
 
 [성과 보드 / 숫자 중심](themes/dune-workout-achievements.html)은 Life L01의 해당 영역만 바꾼 제안이다. 브라운·골드와 능선을 유지하고 큰 완료 수·횟수 분절·근력 부위 타일·거리 곡선으로 카드/막대 반복을 줄였다. 첨부 화면의 기본 수치와 진행·모두 완료·기록 없음, 밝음/어두움·큰 글씨를 비교한다. [배치·집계 계약](../layout-map/workout-achievements-proposal.md), [편집 원본](themes/assets/workout-achievement-fragment.html), [브라우저 QA](themes/assets/workout-achievement-qa.json)와 PNG를 보존한다. 전체 상세 화면·기존 화면 병렬 비교는 정정된 요청으로 제외했다. 앱 미적용이며 PNG는 실제 앱 캡처가 아니다.
