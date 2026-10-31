@@ -11,21 +11,12 @@ struct TrainingReadinessDetailView: View {
 
     @State private var viewModel: TrainingReadinessDetailViewModel
     @Environment(\.horizontalSizeClass) private var sizeClass
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     init(readiness: TrainingReadiness?, scoreRefreshService: ScoreRefreshService? = nil) {
         self.readiness = readiness
         self.scoreRefreshService = scoreRefreshService
         _viewModel = State(initialValue: TrainingReadinessDetailViewModel(scoreRefreshService: scoreRefreshService))
-    }
-
-    private enum Labels {
-        static let scoreLabel = "READINESS"
-        static let hrv = String(localized: "HRV")
-        static let rhr = String(localized: "RHR")
-        static let sleep = String(localized: "Sleep")
-        static let recovery = String(localized: "Recovery")
-        static let trend = String(localized: "Trend")
-        static let calibrating = String(localized: "Calibrating")
     }
 
     var body: some View {
@@ -42,79 +33,14 @@ struct TrainingReadinessDetailView: View {
                     // 2. Time-of-Day Card
                     TimeOfDayCard(
                         currentAdjustment: readiness.timeOfDayAdjustment,
-                        baseScore: Double(readiness.score) - readiness.timeOfDayAdjustment
+                        baseScore: Double(readiness.score) - readiness.timeOfDayAdjustment,
+                        usesAdaptiveLayout: true
                     )
                     .staggeredAppear(index: 1)
 
-                    // 3. Period Picker
-                    Picker("Period", selection: $viewModel.selectedPeriod) {
-                        ForEach(TimePeriod.allCases, id: \.self) { period in
-                            Text(period.displayName).tag(period)
-                        }
-                    }
-                    .pickerStyle(.segmented)
-                    .accessibilityIdentifier("training-readiness-period-picker")
-                    .sensoryFeedback(.selection, trigger: viewModel.selectedPeriod)
-                    .staggeredAppear(index: 2)
-
-                    // 4. Chart Header
-                    ScoreDetailChartHeader(
-                        visibleRangeLabel: viewModel.visibleRangeLabel,
-                        showTrendLine: $viewModel.showTrendLine,
-                        tintColor: readiness.status.color
-                    )
-                    .staggeredAppear(index: 3)
-
-                    // 5. Main Trend Chart (DotLineChartView)
-                    StandardCard {
-                        Group {
-                            if viewModel.chartData.isEmpty && !viewModel.isLoading {
-                                ScoreDetailEmptyState(chartHeight: chartHeight)
-                            } else {
-                                DotLineChartView(
-                                    data: viewModel.chartData,
-                                    baseline: 50,
-                                    yAxisLabel: "Score",
-                                    timePeriod: viewModel.selectedPeriod,
-                                    tintColor: readiness.status.color,
-                                    trendLine: viewModel.trendLineData,
-                                    scrollDomain: viewModel.scrollDomain,
-                                    scrollPosition: $viewModel.scrollPosition
-                                )
-                                .frame(height: chartHeight)
-                                .accessibilityIdentifier("trainingreadiness-chart-trend")
-                            }
-                        }
-                        .id(viewModel.selectedPeriod)
-                        .transition(.opacity)
-                    }
-                    .accessibilityIdentifier("trainingreadiness-chart-trend")
-                    .animation(.easeInOut(duration: 0.25), value: viewModel.selectedPeriod)
-                    .staggeredAppear(index: 4)
-
-                    // 6. Summary Stats + 7. Highlights
-                    if sizeClass == .regular {
-                        HStack(alignment: .top, spacing: DS.Spacing.lg) {
-                            if let summary = viewModel.summaryStats {
-                                ScoreDetailSummaryStats(summary: summary)
-                                    .frame(maxWidth: .infinity)
-                            }
-                            if !viewModel.highlights.isEmpty {
-                                ScoreDetailHighlights(highlights: viewModel.highlights)
-                                    .frame(maxWidth: .infinity)
-                            }
-                        }
-                        .staggeredAppear(index: 5)
-                    } else {
-                        if let summary = viewModel.summaryStats {
-                            ScoreDetailSummaryStats(summary: summary)
-                                .staggeredAppear(index: 5)
-                        }
-                        if !viewModel.highlights.isEmpty {
-                            ScoreDetailHighlights(highlights: viewModel.highlights)
-                                .staggeredAppear(index: 5)
-                        }
-                    }
+                    // 3. Period, visible range, plot, and summary share one reading surface.
+                    trendCard(readiness)
+                        .staggeredAppear(index: 2)
 
                     // 8. Sub-Score Charts (HRV → RHR → Sleep)
                     if viewModel.selectedPeriod != .day {
@@ -176,6 +102,8 @@ struct TrainingReadinessDetailView: View {
                 }
             }
             .padding(sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.lg)
+            .frame(maxWidth: 680)
+            .frame(maxWidth: .infinity)
         }
         .accessibilityIdentifier("activity-training-readiness-detail-screen")
         .background { DetailWaveBackground() }
@@ -189,22 +117,76 @@ struct TrainingReadinessDetailView: View {
     // MARK: - Subviews
 
     private func scoreHero(_ readiness: TrainingReadiness) -> some View {
-        DetailScoreHero(
-            score: readiness.score,
-            scoreLabel: Labels.scoreLabel,
-            statusLabel: readiness.status.label,
-            statusIcon: readiness.status.iconName,
-            statusColor: readiness.status.color,
-            guideMessage: readiness.status.guideMessage,
-            subScores: [
-                .init(label: Labels.hrv, value: readiness.components.hrvScore, color: DS.Color.hrv),
-                .init(label: Labels.rhr, value: readiness.components.rhrScore, color: DS.Color.heartRate),
-                .init(label: Labels.sleep, value: readiness.components.sleepScore, color: DS.Color.sleep),
-                .init(label: Labels.recovery, value: readiness.components.fatigueScore, color: DS.Color.activity),
-                .init(label: Labels.trend, value: readiness.components.trendBonus, color: DS.Color.fitness),
-            ],
-            badgeText: readiness.isCalibrating ? Labels.calibrating : nil
-        )
+        A02ReadinessDetailHero(readiness: readiness)
+    }
+
+    private func trendCard(_ readiness: TrainingReadiness) -> some View {
+        StandardCard {
+            VStack(alignment: .leading, spacing: DS.Spacing.lg) {
+                Picker("Period", selection: $viewModel.selectedPeriod) {
+                    ForEach(TimePeriod.allCases, id: \.self) { period in
+                        Text(period.displayName).tag(period)
+                    }
+                }
+                .pickerStyle(.segmented)
+                .accessibilityIdentifier("training-readiness-period-picker")
+                .sensoryFeedback(.selection, trigger: viewModel.selectedPeriod)
+
+                ScoreDetailChartHeader(
+                    visibleRangeLabel: viewModel.visibleRangeLabel,
+                    showTrendLine: $viewModel.showTrendLine,
+                    tintColor: readiness.status.color
+                )
+
+                VStack(spacing: 0) {
+                    Group {
+                        if viewModel.chartData.isEmpty && !viewModel.isLoading {
+                            ScoreDetailEmptyState(chartHeight: chartHeight)
+                        } else {
+                            DotLineChartView(
+                                data: viewModel.chartData,
+                                baseline: 50,
+                                yAxisLabel: "Score",
+                                timePeriod: viewModel.selectedPeriod,
+                                tintColor: readiness.status.color,
+                                trendLine: viewModel.trendLineData,
+                                scrollDomain: viewModel.scrollDomain,
+                                scrollPosition: $viewModel.scrollPosition
+                            )
+                            .frame(height: dynamicTypeSize.isAccessibilitySize ? nil : chartHeight)
+                            .accessibilityIdentifier("trainingreadiness-chart-trend")
+                        }
+                    }
+                    .id(viewModel.selectedPeriod)
+                    .transition(.opacity)
+                }
+                .accessibilityElement(children: .contain)
+                .accessibilityIdentifier("trainingreadiness-chart-trend")
+
+                if sizeClass == .regular && !dynamicTypeSize.isAccessibilitySize {
+                    HStack(alignment: .top, spacing: DS.Spacing.lg) {
+                        if let summary = viewModel.summaryStats {
+                            ScoreDetailSummaryStats(summary: summary)
+                                .frame(maxWidth: .infinity)
+                        }
+                        if !viewModel.highlights.isEmpty {
+                            ScoreDetailHighlights(highlights: viewModel.highlights)
+                                .frame(maxWidth: .infinity)
+                        }
+                    }
+                } else {
+                    if let summary = viewModel.summaryStats {
+                        ScoreDetailSummaryStats(summary: summary)
+                    }
+                    if !viewModel.highlights.isEmpty {
+                        ScoreDetailHighlights(highlights: viewModel.highlights)
+                    }
+                }
+            }
+        }
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("training-readiness-detail-trend-card")
+        .animation(.easeInOut(duration: 0.25), value: viewModel.selectedPeriod)
     }
 
     private func calculationBullets(_ readiness: TrainingReadiness) -> [LocalizedStringKey] {
@@ -223,5 +205,198 @@ struct TrainingReadinessDetailView: View {
 
     private var chartHeight: CGFloat {
         sizeClass == .regular ? 360 : 250
+    }
+}
+
+/// A02 owns its score presentation so the shared detail hero keeps its other consumers.
+private struct A02ReadinessDetailHero: View {
+    let readiness: TrainingReadiness
+
+    @Environment(\.appTheme) private var theme
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
+    private var palette: ScoreHeroPalette { ScoreHeroPalette(theme: theme, colorScheme: colorScheme) }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.lg) {
+            HStack(spacing: DS.Spacing.sm) {
+                Image(systemName: readiness.status.iconName)
+                    .accessibilityLabel(readiness.status.label)
+                    .accessibilityIdentifier("training-readiness-detail-status-icon")
+                Text("Readiness")
+                    .textCase(.uppercase)
+            }
+            .font(.subheadline.weight(.semibold))
+            .foregroundStyle(palette.ink)
+            .accessibilityAddTraits(.isHeader)
+
+            if dynamicTypeSize.isAccessibilitySize {
+                Text(readiness.score.formatted())
+                    .font(.largeTitle.bold().monospacedDigit())
+                    .foregroundStyle(palette.ink)
+                    .accessibilityLabel("Training readiness \(readiness.score), \(readiness.status.label)")
+                    .accessibilityIdentifier("training-readiness-detail-external-score")
+                status
+            } else {
+                HStack(alignment: .center, spacing: DS.Spacing.lg) {
+                    CompactConditionRing(
+                        score: readiness.score,
+                        ringColor: palette.heroAccent,
+                        highlightColor: palette.heroHighlight,
+                        tipColor: readiness.status.color,
+                        trackColor: palette.track,
+                        textColor: palette.ink,
+                        accessibilityLabel: "Training readiness \(readiness.score), \(readiness.status.label)",
+                        accessibilityIdentifier: "training-readiness-detail-hero-ring"
+                    )
+                    status
+                }
+            }
+
+            Text(readiness.evaluationDate, format: .dateTime.month(.abbreviated).day().hour().minute())
+                .font(.caption)
+                .foregroundStyle(palette.muted)
+                .accessibilityIdentifier("training-readiness-detail-evaluation-date")
+
+            if readiness.isCalibrating {
+                Text("Calibrating")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(palette.ink)
+                    .padding(.horizontal, DS.Spacing.sm)
+                    .padding(.vertical, DS.Spacing.xs)
+                    .background(palette.ink.opacity(0.12), in: Capsule())
+                    .accessibilityIdentifier("training-readiness-detail-calibrating")
+            }
+
+            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                HStack(alignment: .firstTextBaseline) {
+                    Text("Score Composition")
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(palette.ink)
+                    Spacer(minLength: DS.Spacing.sm)
+                    Text("Each out of 100")
+                        .font(.caption2)
+                        .foregroundStyle(palette.muted)
+                }
+                ForEach(factors) { factor in
+                    factorRow(factor)
+                }
+            }
+            .padding(.top, DS.Spacing.sm)
+        }
+        .padding(DS.Spacing.xl)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background {
+            RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous)
+                .fill(palette.surface)
+                .overlay {
+                    RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous)
+                        .strokeBorder(palette.border, lineWidth: 1)
+                }
+                .accessibilityHidden(true)
+        }
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("training-readiness-detail-hero")
+    }
+
+    private var status: some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+            Text(readiness.status.label)
+                .font(.title3.weight(.semibold))
+                .foregroundStyle(palette.ink)
+                .accessibilityIdentifier("training-readiness-detail-status")
+            Text(readiness.status.guideMessage)
+                .font(.subheadline)
+                .foregroundStyle(palette.muted)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private struct Factor: Identifiable {
+        let id: String
+        let title: LocalizedStringKey
+        let icon: String
+        let score: Int
+        let weight: String
+        let color: Color
+    }
+
+    private var factors: [Factor] {
+        [
+            .init(id: "hrv", title: "HRV Variability", icon: "waveform.path.ecg",
+                  score: readiness.components.hrvScore, weight: "30%", color: DS.Color.hrv),
+            .init(id: "sleep", title: "Sleep Quality", icon: "moon.zzz.fill",
+                  score: readiness.components.sleepScore, weight: "25%", color: DS.Color.sleep),
+            .init(id: "rhr", title: "Resting Heart Rate", icon: "heart.fill",
+                  score: readiness.components.rhrScore, weight: "20%", color: DS.Color.heartRate),
+            .init(id: "recovery", title: "Recovery Status", icon: "heart.text.clipboard",
+                  score: readiness.components.fatigueScore, weight: "15%", color: DS.Color.activity),
+            .init(id: "trend", title: "Trend Bonus", icon: "chart.line.uptrend.xyaxis",
+                  score: readiness.components.trendBonus, weight: "10%", color: DS.Color.fitness)
+        ]
+    }
+
+    private func factorRow(_ factor: Factor) -> some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+            if dynamicTypeSize.isAccessibilitySize {
+                VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                    factorTitle(factor)
+                    HStack(spacing: DS.Spacing.sm) {
+                        Text(factor.weight)
+                            .font(.caption)
+                            .foregroundStyle(palette.muted)
+                        Spacer(minLength: DS.Spacing.sm)
+                        factorScore(factor)
+                    }
+                }
+            } else {
+                HStack(spacing: DS.Spacing.sm) {
+                    factorTitle(factor)
+                    Spacer(minLength: DS.Spacing.sm)
+                    Text(factor.weight)
+                        .font(.caption)
+                        .foregroundStyle(palette.muted)
+                    factorScore(factor)
+                }
+            }
+
+            GeometryReader { geometry in
+                Capsule()
+                    .fill(palette.ink.opacity(0.16))
+                    .overlay(alignment: .leading) {
+                        Capsule()
+                            .fill(factor.color)
+                            .frame(width: geometry.size.width * CGFloat(max(0, min(100, factor.score))) / 100)
+                    }
+            }
+            .frame(height: 6)
+            .accessibilityHidden(true)
+        }
+        .frame(minHeight: dynamicTypeSize.isAccessibilitySize ? 62 : 42)
+        .accessibilityElement(children: .combine)
+        .accessibilityIdentifier("training-readiness-detail-factor-\(factor.id)")
+    }
+
+    private func factorTitle(_ factor: Factor) -> some View {
+        HStack(spacing: DS.Spacing.sm) {
+            Image(systemName: factor.icon)
+                .font(dynamicTypeSize.isAccessibilitySize ? .system(size: 16, weight: .medium) : .caption)
+                .foregroundStyle(palette.ink)
+                .frame(width: dynamicTypeSize.isAccessibilitySize ? 26 : 20)
+                .clipped()
+                .accessibilityHidden(true)
+            Text(factor.title)
+                .font(.subheadline)
+                .foregroundStyle(palette.ink)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+    }
+
+    private func factorScore(_ factor: Factor) -> some View {
+        Text(factor.score.formatted())
+            .font(.subheadline.weight(.semibold).monospacedDigit())
+            .foregroundStyle(palette.ink)
     }
 }
