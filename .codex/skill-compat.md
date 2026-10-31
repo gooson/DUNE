@@ -201,7 +201,7 @@ Codex가 iOS·iPadOS·Duo·watchOS의 보이는 화면 배치, 글자, 상태, �
 #### Ship linked worktree의 로컬 정리 순서
 
 - Step 1에서 `git worktree list --porcelain`과 `git rev-parse --git-dir --git-common-dir`로 현재 checkout이 linked worktree인지 판별하고 정확한 worktree 경로·브랜치·primary checkout을 기록한다. main 체크아웃이 다른 위치에 있으면 실제 main checkout을 사용한다. primary checkout에서 실행하는 Ship은 원본 Step 4를 유지한다.
-- linked worktree에서는 원본 Step 4의 `git checkout main`을 실행하지 않는다. **원격 머지를 확인한 뒤**, main checkout이 `main`이고 변경사항이 없음을 확인하고 그 경로에서 `git pull --ff-only`로 먼저 갱신한다. 이 확인이나 갱신에 실패하면 linked worktree와 캐시를 보존하고 로컬 정리 미완료로 보고한다.
+- linked worktree에서는 원본 Step 4의 `git checkout main`을 실행하지 않는다. **원격 머지를 확인한 뒤**, main checkout이 `main`이고 변경사항이 없음을 확인하고 그 경로에서 `DUNE_AUTO_CLEANUP_RUNNING=1 git pull --ff-only`로 먼저 갱신한다. 이 명령에만 자동 정리 hook을 억제해 현재 linked worktree가 후속 소유 리소스 검증 전에 삭제되지 않게 한다. 이 확인이나 갱신에 실패하면 linked worktree와 캐시를 보존하고 로컬 정리 미완료로 보고한다.
 - main 갱신 후 현재 linked worktree에 미커밋·신규 파일이 없고 해당 PR의 머지 커밋이 main에 포함됐는지 확인한다. 이어서 위 소유 simulator 정리와 외부 DerivedData 정리를 실행한다. 이 linked 흐름에서는 이 순서가 기존의 원격 머지 직후 simulator 정리 시점보다 우선한다. 진행 중인 빌드·테스트, 복구 표식, 정리 실패가 있으면 worktree 제거를 중단한다.
 - 모두 성공한 뒤 **main checkout 경로에서** `git worktree remove "<대상 worktree>"`와 `git branch -d "<대상 branch>"`를 실행한다. force는 사용하지 않는다. 원격 브랜치 삭제 성공도 확인한다. 이후 Step 5 아티팩트 정리와 Step 6 프로젝트 재생성은 갱신된 main checkout에서 실행한다. primary checkout의 `.claude/**`나 기존 변경사항은 자동 커밋하지 않는다.
 
@@ -218,7 +218,17 @@ Codex가 iOS·iPadOS·Duo·watchOS의 보이는 화면 배치, 글자, 상태, �
   ```
 
 - 스크립트는 삭제 직전 소유권과 디렉터리 identity를 다시 확인한다. 캐시를 같은 부모의 전용 임시 디렉터리로 원자적으로 이동하고 다시 검증한 뒤 삭제하여, 원래 경로에 새로 생성된 캐시를 보호한다. 이동 후 검증/삭제가 실패하면 잔여 캐시를 보존하고 `Recovery required`에 실제 보존 경로와 원래 경로를 출력한다. 복구 경로는 자동 재삭제하지 않는다. 캐시 삭제 후 빈 임시 디렉터리만 제거하지 못한 경우에는 삭제 건수를 유지하면서 남은 경로와 실패를 별도로 보고한다. 스캔/삭제 실패는 성공으로 숨기지 않고 해당 worktree 제거를 중단한다. 보존한 캐시는 사유와 함께 보고한다. 캐시 삭제에 성공한 뒤 원본의 `git worktree remove`와 브랜치 정리를 진행한다. worktree가 이미 없어졌다면 소유 확인을 생략하거나 이름으로 삭제하지 않는다.
-- 이 절차는 Codex의 `/cleanup`·`/ship` 실행 지침이다. 수동 `git worktree remove`, Codex 앱 자체 삭제, pre-commit에서 자동 실행되는 hook은 아니다. `.claude/**` 원본과 pre-commit의 캐시 보존 동작은 변경하지 않는다.
+- 수동 `git worktree remove`, Codex 앱 자체 삭제, pre-commit에는 이 캐시 정리가 자동 연결되지 않는다. `.claude/**` 원본과 pre-commit의 캐시 보존 동작은 변경하지 않는다. 아래 사용자 요청 자동 hook은 별도의 진입점이다.
+
+#### 머지 관측 후 자동 정리 hook
+
+- 2026-10-31 사용자가 머지 후 hook 자동 정리를 요청했다. `python3 scripts/cleanup-merged-worktrees.py --install`로 현재 저장소의 공용 `reference-transaction` hook을 설치·활성화한다. 이 범위의 안전한 정리는 매번 재승인을 요구하지 않는다. `.claude/**`는 변경하지 않는다.
+- GitHub 원격 머지 자체는 로컬 Git hook을 호출하지 않는다. `fetch`/`pull` 등으로 `refs/remotes/origin/main` 또는 `refs/heads/main`이 실제 갱신된 committed transaction에서만 동작한다. 현재 호출 checkout과 primary checkout은 보존한다. 현재 작업 checkout은 기존 `/ship` 절차로 제거하거나, 다른 checkout에서 후속 main 갱신을 받아 정리한다.
+- main 이력에 포함된 로컬 브랜치 tip만 후보로 삼는다. GitHub commit-associated PR에서 merged 상태·동일 저장소의 main base·PR head까지의 조상 관계·main에 포함된 merge commit을 확인한다. 따라서 PR 이름과 다른 alias 브랜치도 실제 PR 커밋 증거가 있으면 허용한다. PR 없는 커밋, squash/rebase로 조상 증거가 없는 변경은 자동 삭제하지 않는다.
+- 미커밋/신규 파일, 검증할 simulator registry/lock 외 ignored 파일, worktree/Git 잠금, active process·열린 파일, 빌드·테스트 잠금, 소유권 조회 실패가 있으면 보존한다. 프로세스 조회 실패도 삭제 허가로 처리하지 않는다. 삭제 직전 상태를 다시 검사하고 force 없이 `git worktree remove`한다. ref 삭제에는 검사한 expected OID를 전달해 그 사이 진행된 브랜치를 보존하고 남은 tracking config도 정리한다.
+- worktree 삭제 전 기존 소유권 검증기로 simulator·외부 DerivedData를 정리한다. 외부 부모를 따로 지정할 경우 `git config --add dune.cleanupDerivedDataRoot /absolute/cache-parent`를 사용하며 이 설정은 기본 부모를 대체한다. main·공용·불명확한 소유 캐시는 보존한다. 어느 정리 단계든 실패하면 worktree를 보존한다.
+- 기본 조회는 `python3 scripts/cleanup-merged-worktrees.py`, 명시적 실행은 `--apply`다. 비활성화는 `git config dune.autoCleanupMerged false`다. 보호된 항목은 상태를 해소한 뒤 직접 `--apply`하거나 후속 main 갱신에서 다시 검사한다. hook은 원격 브랜치를 삭제하지 않는다.
+- 설치기는 기존 사용자 hook/custom hooksPath를 덮어쓰지 않는다. 공용 Git 디렉터리에 실행 도구와 소유권 helper를 복사해 원래 구현 worktree가 제거돼도 작동한다. 재귀와 동시 hook 실행을 차단하고 hook 오류가 Git ref 갱신 실패로 전파되지 않게 한다. 실행 결과는 공용 Git 디렉터리의 `dune-merge-cleanup.log`에 기록한다.
 
 ### /copy-voice
 
