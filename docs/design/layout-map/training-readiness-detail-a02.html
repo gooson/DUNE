@@ -48,7 +48,7 @@
         <div class="hero-top">figure.walk &nbsp; READINESS</div>
         <div class="hero-main"><div class="ring">75</div><div><div class="status">Moderate</div><div>Normal training is fine.</div></div></div>
         <div class="muted date">Evaluation date · from the actual model</div>
-        <div class="muted">Computed components · each out of 100</div>
+        <div class="muted">Score Composition · Each out of 100</div>
         <div class="factor" style="--fill:72%;--accent:#d6ab69"><span>♡</span><span>HRV Variability</span><strong>72</strong><small>30% weight</small><div class="track"><i></i></div></div>
         <div class="factor" style="--fill:82%;--accent:#b7b1e0"><span>☾</span><span>Sleep Quality</span><strong>82</strong><small>25% weight</small><div class="track"><i></i></div></div>
         <div class="factor" style="--fill:68%;--accent:#e49f83"><span>♥</span><span>Resting Heart Rate</span><strong>68</strong><small>20% weight</small><div class="track"><i></i></div></div>
@@ -64,8 +64,8 @@
     <div class="contract">
       <section class="rule"><h2>화면 순서</h2><p>원래 Activity 진입·내비게이션을 유지하고, 불투명 점수 히어로 → 시간 조정 → 기간/범위/추세/차트/요약 한 카드 → 비-일간 세 원천 추세 → 원래 점수 구성 → 계산 설명으로 읽습니다. 이전/다음 날짜 화살표는 ViewModel 계약이 없으므로 넣지 않습니다.</p></section>
       <section class="rule"><h2>값의 의미</h2><p>현재 점수는 다섯 계산 구성의 결과입니다. 구성 점수 72 같은 예시는 센서 수신의 증거가 아닙니다. 실제 계산은 중립 대체값을 포함할 수 있습니다. 막대 길이는 구성 점수/100이고 30% 같은 표시는 가중치입니다.</p><p>Day는 실제 rolling readiness snapshot입니다. W/M/6M/Y 이력은 HRV·RHR·수면 세 원천의 근사치이며 현재 다섯 구성 공식을 과거에 재계산한 값으로 말하지 않습니다.</p></section>
-      <section class="rule"><h2>상태와 폭</h2><p>nil 준비도에서는 기존 “Need More Data”만, 차트 조회 중에는 기존 로딩 표시만, 보정 중이면 실제 점수와 “Calibrating” 및 계산 bullet을 표시합니다. iPhone·Duo 접힘과 최대 글씨에서는 점수를 링 밖으로 빼고 구성 행을 세로로 전환할 수 있습니다. iPad·Duo 펼침도 수치·가중치·설명을 생략하지 않습니다.</p></section>
-      <section class="rule"><h2>원본 및 실제 증거</h2><p>기준 원본은 A02 base <code>672d5fdb</code>, View SHA-256 <code>87c2ed70…b296b2</code>, VM <code>ce05fcb2…acbd</code>. 원본 iPhone selector는 영어·최대 접근성 글씨에서 통과했고 <code>.codex-checks/a02/before-phone-current/</code>에 보존했습니다. iPad 첫 max-AX 사례만 통과했으며 나머지 원본 수집은 진행 중입니다. 일반 글씨 원본과 Duo 두 자세는 미완료입니다. 2026-10-12의 A02 PNG는 화면/기기 식별용 과거 자료입니다.</p></section>
+      <section class="rule"><h2>상태와 폭</h2><p>nil 준비도에서는 기존 “Need More Data”만, 차트 조회 중에는 기존 로딩 표시만, 보정 중이면 실제 점수와 “Calibrating” 및 계산 bullet을 표시합니다. 본문은 중앙 정렬된 최대 680pt 폭입니다. iPhone·Duo 접힘과 최대 글씨에서는 점수를 링 밖으로 빼고 구성 행과 차트 요약을 세로로 전환할 수 있습니다. iPad·Duo 펼침도 수치·가중치·설명을 생략하지 않습니다.</p></section>
+      <section class="rule"><h2>원본 및 실제 증거</h2><p>기준 원본은 A02 base <code>672d5fdb</code>, View SHA-256 <code>87c2ed70…b296b2</code>, VM <code>ce05fcb2…acbd</code>. 원본 iPhone 영어·최대 접근성 글씨와 iPad 영어·최대 접근성 글씨 및 일반 글씨 selector가 통과했습니다. 일반 글씨 iPhone과 Duo 두 자세는 미완료입니다. 2026-10-12의 A02 PNG는 화면/기기 식별용 과거 자료입니다.</p></section>
     </div>
   </div>
   <h2>원본 동작 계약</h2>

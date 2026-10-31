@@ -190,4 +190,4 @@ Gold Impact 네이티브 일반 빌드·관련 단위51개와 S01 설정 저장 
 
 ## A02 훈련 준비도 상세 방향 시안 · 2026-10-31
 
-[밝음·어두움 보존 시안](themes/dune-training-readiness-detail-a02.html)과 [화면별 배치·데이터 계약](../layout-map/training-readiness-detail-a02.html)을 연결한다. 불투명 히어로·원본 상태 SF Symbol·실제 모델에서 읽을 다섯 구성 점수와 별도 30/25/20/15/10 가중치, 기존 시간 조정·5기간/차트/요약·비-일간 세 원천 추세·계산 설명의 배치 방향이다. HTML의 75점·요인 수치·차트는 명시적인 설명용 예시다. 원본 iPhone 영어/max-AX selector 1개와 iPad 첫 max-AX 사례만 현재 통과했다. iPad 배치는 진행 중이며 일반 글씨 원본과 Duo는 미검증이다. 새 네이티브 실제 화면 캡처는 앱 구현 뒤 actual 디자인맵에 별도로 기록한다.
+[밝음·어두움 보존 시안](themes/dune-training-readiness-detail-a02.html)과 [화면별 배치·데이터 계약](../layout-map/training-readiness-detail-a02.html)을 연결한다. 불투명 히어로·원본 상태 SF Symbol·실제 모델에서 읽을 다섯 계산 구성 점수와 별도 30/25/20/15/10 가중치, 기존 시간 조정·5기간/차트/요약·비-일간 세 원천 추세·계산 설명의 배치 방향이다. 히어로 제목은 기존 번역 키 “Score Composition”을 쓰며 중립 대체 점수를 센서 관측의 증거로 표현하지 않는다. 본문은 중앙 정렬 최대 680pt이며 큰 글씨에서는 요약도 세로로 배치한다. HTML의 75점·요인 수치·차트는 명시적인 설명용 예시다. 원본 iPhone 영어/max-AX와 iPad 영어/max-AX 및 일반 글씨 selector가 통과했다. 일반 글씨 iPhone과 Duo는 미검증이다. 새 네이티브 실제 화면 캡처는 실제 화면맵에 별도로 기록한다.
