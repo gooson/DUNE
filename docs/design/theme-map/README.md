@@ -189,3 +189,5 @@ Gold Impact 네이티브 일반 빌드·관련 단위51개와 S01 설정 저장 
 ## T08 날씨 상세 검토본 · 2026-10-31
 
 [보존 시안](themes/dune-weather-detail-redesign.html)의 밝음·어두움 PNG와 원본 T08 JSON을 `themes/assets/condition-detail-redesign/`에 둔다. [네이티브 배치 계약](../layout-map/weather-detail-redesign-proposal.md)은 실제 날씨 상태와 수신 조건을 사용한다. 브라우저 시안은 앱 캡처가 아니며 T08 새 실제 화면은 런타임 검증 뒤 별도로 갱신한다.
+
+A06 네이티브 소스는 실제 현재·이전 네 지표와 원래 네 기간·세 도넛 모드를 유지한다. 히어로의 증감 텍스트는 대비를 확보하고 큰 글씨는 고정 링 밖의 주간 수치로 전환한다. 일별 차트는 실제 운동 시간과 맞는 제목·빈 상태를 세 언어로 준비했으며 실제 캡처 검증은 대기 중이다.

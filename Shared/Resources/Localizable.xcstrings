@@ -13478,6 +13478,29 @@
         }
       }
     },
+    "Daily Duration" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daily Duration"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "日別の運動時間"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "일별 운동 시간"
+          }
+        }
+      }
+    },
     "Daily habit completions over the last 90 days" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -29728,6 +29751,29 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "아직 주기 액션 기록이 없어요."
+          }
+        }
+      }
+    },
+    "No daily workout duration for this period" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No daily workout duration for this period"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "この期間に表示できる日別の運動時間はありません"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 기간에 표시할 일별 운동 시간이 없어요"
           }
         }
       }
