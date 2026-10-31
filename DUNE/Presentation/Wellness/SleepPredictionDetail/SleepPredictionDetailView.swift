@@ -199,11 +199,20 @@ struct SleepPredictionDetailView: View {
             : AnyLayout(HStackLayout(alignment: .center, spacing: DS.Spacing.md))
         return layout {
             HStack(alignment: .top, spacing: DS.Spacing.sm) {
-                Image(systemName: factor.type.iconName)
-                    .font(.title3)
-                    .foregroundStyle(factor.impact.color)
-                    .frame(width: 28)
-                    .accessibilityHidden(true)
+                Group {
+                    if dynamicTypeSize.isAccessibilitySize {
+                        Image(systemName: factor.type.iconName)
+                            .font(.system(size: 16))
+                            .frame(width: 26)
+                            .clipped()
+                    } else {
+                        Image(systemName: factor.type.iconName)
+                            .font(.title3)
+                            .frame(width: 28)
+                    }
+                }
+                .foregroundStyle(factor.impact.color)
+                .accessibilityHidden(true)
 
                 VStack(alignment: .leading, spacing: DS.Spacing.xs) {
                     Text(factor.type.displayName)
