@@ -1,4 +1,5 @@
 @preconcurrency import XCTest
+import UIKit
 
 @MainActor
 final class ActivityMuscleMapRegressionTests: ActivityExerciseSeededUITestBaseCase {
@@ -30,6 +31,29 @@ final class ActivityMuscleMapRegressionTests: ActivityExerciseSeededUITestBaseCa
             recoverySection.waitForExistence(timeout: 10),
             "Recovery Status section should exist on Muscle Map detail"
         )
+    }
+
+    func testRegularMuscleMapShowsFrontCalvesWithoutScrolling() throws {
+        guard UIDevice.current.userInterfaceIdiom == .pad else {
+            throw XCTSkip("The two-pane first-viewport contract applies to regular iPad layout")
+        }
+        navigateToMuscleMapDetail()
+
+        let mapScroll = app.scrollViews["musclemap-detail-map-scroll"].firstMatch
+        let summaryScroll = app.scrollViews["musclemap-detail-summary-scroll"].firstMatch
+        XCTAssertTrue(mapScroll.waitForExistence(timeout: 10) && summaryScroll.waitForExistence(timeout: 10),
+                      "Regular Muscle Map should expose both native pane scroll views")
+        let header = summaryScroll.descendants(matching: .any)["musclemap-detail-header"].firstMatch
+        XCTAssertTrue(header.waitForExistence(timeout: 5),
+                      "The recovery header should start the secondary pane on regular iPad")
+        let frontCalves = mapScroll.buttons["musclemap-body-front-calves"].firstMatch
+        XCTAssertTrue(frontCalves.waitForExistence(timeout: 5),
+                      "The original front calf hit target should remain in the SVG map")
+        let firstViewport = mapScroll.frame.intersection(app.windows.firstMatch.frame)
+        XCTAssertTrue(firstViewport.contains(frontCalves.frame),
+                      "The complete front calf hit target should fit in the first map viewport without scrolling")
+        addScreenshotAttachment(named: "A03 regular full-body first viewport")
+        VisualAudit.capture("A03 regular full-body first viewport")
     }
 
     func testMuscleMapDetailKeeps2DSelectionWith3DEntryDisabled() throws {

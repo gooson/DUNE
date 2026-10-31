@@ -24,11 +24,9 @@ struct MuscleMapDetailView: View {
         AdaptivePaneView {
             ScrollView {
                 VStack(spacing: DS.Spacing.lg) {
-                    A03MuscleMapHeader(
-                        recoveredCount: viewModel.recoveredCount,
-                        observedCount: fatigueStates.count,
-                        isLoaded: fatigueStates.isEmpty || !viewModel.fatigueByMuscle.isEmpty
-                    )
+                    if sizeClass != .regular {
+                        recoveryHeader
+                    }
 
                     // Preserve the real front/back SVG, mode selector, info sheets and legends.
                     StandardCard(padding: DS.Spacing.md) {
@@ -58,9 +56,14 @@ struct MuscleMapDetailView: View {
                 .frame(maxWidth: 680)
                 .frame(maxWidth: .infinity)
             }
+            .accessibilityIdentifier("musclemap-detail-map-scroll")
         } secondary: {
             ScrollView {
                 VStack(alignment: .leading, spacing: DS.Spacing.xl) {
+                if sizeClass == .regular {
+                    recoveryHeader
+                }
+
                 // Selected muscle inline detail
                 if let muscle = viewModel.selectedMuscle {
                     MuscleDetailPopover(
@@ -119,6 +122,7 @@ struct MuscleMapDetailView: View {
                 .frame(maxWidth: 680)
                 .frame(maxWidth: .infinity)
             }
+            .accessibilityIdentifier("musclemap-detail-summary-scroll")
         }
         .accessibilityIdentifier("activity-musclemap-detail-screen")
         .background { DetailWaveBackground() }
@@ -133,6 +137,14 @@ struct MuscleMapDetailView: View {
         .task {
             viewModel.loadData(fatigueStates: fatigueStates)
         }
+    }
+
+    private var recoveryHeader: some View {
+        A03MuscleMapHeader(
+            recoveredCount: viewModel.recoveredCount,
+            observedCount: fatigueStates.count,
+            isLoaded: fatigueStates.isEmpty || !viewModel.fatigueByMuscle.isEmpty
+        )
     }
 }
 
