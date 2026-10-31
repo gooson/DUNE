@@ -757,6 +757,25 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         XCTAssertTrue(app.descendants(matching: .any)["activity-injury-risk-detail-screen"].firstMatch
             .waitForExistence(timeout: 10))
 
+        // This score and two factors are the existing DEBUG route fixture, not production risk inputs.
+        let score = app.staticTexts["activity-injury-risk-score"].firstMatch
+        XCTAssertTrue(score.waitForExistence(timeout: 10))
+        XCTAssertEqual(score.label, "42")
+        let rows = app.descendants(matching: .any).matching(NSPredicate(
+            format: "identifier BEGINSWITH %@", "activity-injury-risk-factor-"
+        ))
+        XCTAssertEqual(rows.count, 2, "The route fixture supplies exactly two risk factors")
+        for (type, value) in [("muscleFatigue", "+24"), ("sleepDeficit", "+18")] {
+            XCTAssertTrue(app.descendants(matching: .any)["activity-injury-risk-factor-\(type)"]
+                .firstMatch.waitForExistence(timeout: 5))
+            let contribution = app.staticTexts["activity-injury-risk-contribution-\(type)"].firstMatch
+            XCTAssertEqual(contribution.label, value)
+        }
+        XCTAssertTrue(app.descendants(matching: .any)["activity-injury-risk-recommendations"]
+            .firstMatch.waitForExistence(timeout: 5))
+        addScreenshotAttachment(named: "Injury Risk loaded DEBUG route assessment")
+        VisualAudit.capture("Injury Risk loaded DEBUG route assessment")
+
         tapBackButton()
         ensureActivityRoot()
 
@@ -766,6 +785,77 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         waitForElement("activity-weeklyreport-detail-link", timeout: 5).auditTap()
         XCTAssertTrue(app.descendants(matching: .any)["activity-weekly-report-detail-screen"].firstMatch
             .waitForExistence(timeout: 10))
+    }
+
+    func testInjuryRiskAtMaximumAccessibilityTextSize() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments.append(contentsOf: [
+            "--ui-design-map-activity-routes",
+            "--ui-test-style", "dark",
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ])
+        launchApp(with: configuration)
+
+        let activityScroll = app.scrollViews[AXID.activityRootScroll].firstMatch
+        let riskLink = app.descendants(matching: .any)["activity-injuryrisk-detail-link"].firstMatch
+        XCTAssertTrue(activityScroll.waitForExistence(timeout: 5))
+        for _ in 0..<24 where !riskLink.isHittable { activityScroll.swipeUp(velocity: .slow) }
+        XCTAssertTrue(riskLink.isHittable)
+        riskLink.auditTap()
+
+        let riskScroll = app.scrollViews["activity-injury-risk-detail-screen"].firstMatch
+        XCTAssertTrue(riskScroll.waitForExistence(timeout: 10))
+        let window = app.windows.firstMatch
+        XCTAssertTrue(window.exists)
+
+        func revealInRiskScroll(_ element: XCUIElement, name: String) {
+            for _ in 0..<10 {
+                let viewport = riskScroll.frame.intersection(window.frame)
+                if element.exists && element.isHittable && viewport.contains(element.frame) { return }
+                if element.exists && element.frame.midY < viewport.midY {
+                    riskScroll.swipeDown(velocity: .slow)
+                } else {
+                    riskScroll.swipeUp(velocity: .slow)
+                }
+            }
+            let viewport = riskScroll.frame.intersection(window.frame)
+            XCTAssertTrue(element.exists && element.isHittable && viewport.contains(element.frame),
+                          "\(name) should fit within the Injury Risk detail scroll viewport")
+        }
+
+        // These values belong only to the existing DEBUG route assessment.
+        let score = app.staticTexts["activity-injury-risk-score"].firstMatch
+        XCTAssertTrue(score.waitForExistence(timeout: 10))
+        XCTAssertEqual(score.label, "42")
+        revealInRiskScroll(score, name: "Risk score")
+        XCTAssertTrue(app.descendants(matching: .any)["activity-injury-risk-level"].firstMatch.exists)
+        addScreenshotAttachment(named: "Injury Risk A08 dark maximum AX hero")
+        VisualAudit.capture("Injury Risk A08 dark maximum AX hero")
+
+        let factors = app.descendants(matching: .any).matching(NSPredicate(
+            format: "identifier BEGINSWITH %@", "activity-injury-risk-factor-"
+        ))
+        XCTAssertEqual(factors.count, 2)
+        for (type, value) in [("muscleFatigue", "+24"), ("sleepDeficit", "+18")] {
+            let row = app.descendants(matching: .any)["activity-injury-risk-factor-\(type)"].firstMatch
+            XCTAssertTrue(row.waitForExistence(timeout: 5))
+            revealInRiskScroll(row, name: "\(type) factor")
+            XCTAssertEqual(app.staticTexts["activity-injury-risk-contribution-\(type)"].firstMatch.label, value)
+        }
+        addScreenshotAttachment(named: "Injury Risk A08 dark maximum AX factors")
+        VisualAudit.capture("Injury Risk A08 dark maximum AX factors")
+
+        let recommendations = app.descendants(matching: .any)["activity-injury-risk-recommendations"].firstMatch
+        XCTAssertTrue(recommendations.waitForExistence(timeout: 5))
+        let lastRecommendation = app.staticTexts["activity-injury-risk-recommendation-2"].firstMatch
+        XCTAssertTrue(lastRecommendation.waitForExistence(timeout: 5))
+        revealInRiskScroll(lastRecommendation, name: "Last recommendation")
+        XCTAssertFalse(lastRecommendation.label.isEmpty)
+        addScreenshotAttachment(named: "Injury Risk A08 dark maximum AX last recommendation")
+        VisualAudit.capture("Injury Risk A08 dark maximum AX last recommendation")
+
+        tapBackButton()
+        ensureActivityRoot()
     }
 
     func testVisualAuditPersonalRecordsExplanation() throws {

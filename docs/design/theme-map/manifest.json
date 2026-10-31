@@ -308,6 +308,17 @@
         "layout": "../layout-map/cloud-sync-consent-t02.html",
         "status": "native-source-ready-captures-pending"
       }
+    },
+    {
+      "id": "injury-risk-detail-a08",
+      "name": "A08 · 부상 위험 상세",
+      "title": "DUNE 부상 위험 상세 · 밝음/어두움",
+      "file": "dune-injury-risk-detail-a08.html",
+      "detail": "원본 평가 점수·위험 단계 아이콘, 실제 공급된 요인의 상대 기여, 원래 권장 문구를 위한 화면별 정적 제안. 수치/웹 기호는 실제 평가나 네이티브 캡처가 아니다. DEBUG 점수42/두 요인은 제품 공식이 아니다.",
+      "implementation": {
+        "layout": "../layout-map/activity-injury-risk-detail-a08.html",
+        "status": "proposal-only-original-native-capture-pending"
+      }
     }
   ]
 }
