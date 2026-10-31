@@ -49,7 +49,8 @@ final class ActivityMuscleMapRegressionTests: ActivityExerciseSeededUITestBaseCa
         let screen3D = app.descendants(matching: .any)[AXID.activityMuscleMap3DScreen].firstMatch
         XCTAssertTrue(detailScreen.exists, "Muscle selection should remain on the 2D detail screen")
         XCTAssertTrue(inlineDetail.waitForExistence(timeout: 5), "Selected muscle detail should appear inline")
-        XCTAssertTrue(app.buttons["activity-muscle-detail-calculation"].firstMatch.waitForExistence(timeout: 5),
+        let calculation = app.buttons["activity-muscle-detail-calculation"].firstMatch
+        XCTAssertTrue(calculation.waitForExistence(timeout: 5),
                       "The selected muscle should retain its calculation button accessibility ID")
         XCTAssertFalse(screen3D.exists, "Muscle selection should not open the 3D viewer")
         let primaryScroll = app.scrollViews.firstMatch
@@ -57,8 +58,38 @@ final class ActivityMuscleMapRegressionTests: ActivityExerciseSeededUITestBaseCa
         for _ in 0..<8 where !visibleMap.contains(open3D.frame) { primaryScroll.swipeUp() }
         XCTAssertTrue(visibleMap.contains(open3D.frame), "The disabled 3D entry should remain visible on the map")
         XCTAssertFalse(open3D.isEnabled, "Selecting a 2D muscle should not enable the 3D entry")
-        addScreenshotAttachment(named: "A04 2D muscle selection and disabled 3D entry")
-        VisualAudit.capture("A04 2D muscle selection and disabled 3D entry")
+        addScreenshotAttachment(named: "A03 2D muscle selection and disabled 3D entry")
+        VisualAudit.capture("A03 2D muscle selection and disabled 3D entry")
+
+        let detailScroll = app.scrollViews.element(boundBy: app.scrollViews.count > 1 ? 1 : 0)
+        for _ in 0..<8 where !calculation.isHittable { detailScroll.swipeUp(velocity: .slow) }
+        XCTAssertTrue(calculation.isHittable, "The selected muscle's calculation action should be reachable")
+        addScreenshotAttachment(named: "A03 selected muscle detail before calculation")
+        VisualAudit.capture("A03 selected muscle detail before calculation")
+        calculation.auditTap()
+        let explanation = app.descendants(matching: .any)["activity-fatigue-info-sheet"].firstMatch
+        XCTAssertTrue(explanation.waitForExistence(timeout: 5), "Calculation should open the real fatigue explanation")
+        XCTAssertTrue(app.staticTexts["Fatigue Calculation"].exists)
+        addScreenshotAttachment(named: "A03 selected muscle fatigue calculation")
+        VisualAudit.capture("A03 selected muscle fatigue calculation")
+
+        // FatigueInfoSheet exposes a native drag indicator and no Close action.
+        let sheet = app.sheets.firstMatch
+        XCTAssertTrue(sheet.waitForExistence(timeout: 5), "Calculation should use a native sheet")
+        sheet.swipeDown()
+        XCTAssertTrue(explanation.waitForNonExistence(timeout: 5),
+                      "Calculation sheet should dismiss by its drag indicator")
+
+        let railBack = app.buttons["BackButton"].firstMatch
+        if railBack.exists && railBack.isHittable {
+            railBack.auditTap()
+        } else {
+            let back = app.navigationBars.buttons.element(boundBy: 0)
+            XCTAssertTrue(back.waitForExistence(timeout: 5), "Native Back should remain available")
+            back.auditTap()
+        }
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.activityHeroReadiness].firstMatch
+            .waitForExistence(timeout: 10), "Back should return to Activity")
     }
 
     func testMuscleMapDetailViewNavigatesTo3D() throws {
