@@ -4,6 +4,12 @@ import SwiftUI
 struct WorkoutReportDetailView: View {
     let report: WorkoutReport?
 
+    @Environment(\.appTheme) private var theme
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
+    private var palette: ScoreHeroPalette { ScoreHeroPalette(theme: theme, colorScheme: colorScheme) }
+
     private enum Labels {
         static let statistics = String(localized: "Statistics")
         static let summary = String(localized: "Summary")
@@ -15,13 +21,15 @@ struct WorkoutReportDetailView: View {
     var body: some View {
         ScrollView {
             if let report {
-                VStack(spacing: DS.Spacing.lg) {
-                    periodHeader(report)
-                    statsGrid(report)
+                VStack(alignment: .leading, spacing: DS.Spacing.lg) {
+                    reportHero(report)
+                    statisticsSection(report)
                     summarySection(report)
                     highlightsSection(report)
                     muscleBreakdownSection(report)
                 }
+                .frame(maxWidth: 680)
+                .frame(maxWidth: .infinity)
                 .padding()
             } else {
                 emptyState
@@ -29,67 +37,172 @@ struct WorkoutReportDetailView: View {
         }
         .background { DetailWaveBackground() }
         .englishNavigationTitle("Weekly Report")
+        .navigationBarTitleDisplayMode(.inline)
         .accessibilityIdentifier("activity-weekly-report-detail-screen")
     }
 
-    // MARK: - Period Header
+    // MARK: - Report Hero
 
-    private func periodHeader(_ report: WorkoutReport) -> some View {
-        VStack(spacing: DS.Spacing.xs) {
-            Text(report.period.displayName)
-                .font(.title2.weight(.bold))
-                .foregroundStyle(.primary)
+    private func reportHero(_ report: WorkoutReport) -> some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.lg) {
+            HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.sm) {
+                heroIcon("doc.text")
+                Text(report.period.displayName)
+                    .font(.headline)
+            }
+            .foregroundStyle(palette.ink)
+            .accessibilityAddTraits(.isHeader)
+
             Text(formatDateRange(start: report.startDate, end: report.endDate))
                 .font(.subheadline)
-                .foregroundStyle(DS.Color.textSecondary)
+                .foregroundStyle(palette.muted)
+                .accessibilityIdentifier("activity-weekly-report-date")
+
+            VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.sm) {
+                    heroIcon("dumbbell.fill")
+                    Text("Total Volume")
+                        .font(.subheadline.weight(.semibold))
+                }
+                .foregroundStyle(palette.muted)
+                Text(formatVolume(report.stats.totalVolume))
+                    .font(.largeTitle.bold().monospacedDigit())
+                    .foregroundStyle(palette.ink)
+                    .accessibilityIdentifier("activity-weekly-report-volume")
+            }
+
+            if dynamicTypeSize.isAccessibilitySize {
+                VStack(spacing: DS.Spacing.md) {
+                    heroMetric("\(report.stats.totalSessions)", label: "Sessions", icon: "figure.strengthtraining.traditional",
+                               identifier: "activity-weekly-report-sessions")
+                    heroMetric("\(report.stats.activeDays)", label: "Active Days", icon: "calendar",
+                               identifier: "activity-weekly-report-active-days")
+                    heroMetric("\(report.stats.totalDuration) min", label: "Total Duration", icon: "clock",
+                               identifier: "activity-weekly-report-duration")
+                }
+            } else {
+                HStack(alignment: .top, spacing: DS.Spacing.md) {
+                    heroMetric("\(report.stats.totalSessions)", label: "Sessions", icon: "figure.strengthtraining.traditional",
+                               identifier: "activity-weekly-report-sessions")
+                    heroMetric("\(report.stats.activeDays)", label: "Active Days", icon: "calendar",
+                               identifier: "activity-weekly-report-active-days")
+                    heroMetric("\(report.stats.totalDuration) min", label: "Total Duration", icon: "clock",
+                               identifier: "activity-weekly-report-duration")
+                }
+            }
         }
-        .frame(maxWidth: .infinity)
-        .padding(.vertical, DS.Spacing.sm)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(DS.Spacing.xl)
+        .background {
+            RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous)
+                .fill(palette.surface)
+                .overlay {
+                    RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous)
+                        .strokeBorder(palette.border, lineWidth: 1)
+                }
+        }
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("activity-weekly-report-hero")
     }
 
-    // MARK: - Stats Grid
+    private func heroMetric(_ value: String, label: LocalizedStringKey, icon: String, identifier: String) -> some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+            HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xs) {
+                heroIcon(icon)
+                Text(label)
+                    .font(.caption.weight(.semibold))
+            }
+            .foregroundStyle(palette.muted)
+            Text(value)
+                .font(.title3.bold().monospacedDigit())
+                .foregroundStyle(palette.ink)
+                .accessibilityIdentifier(identifier)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.top, DS.Spacing.sm)
+        .overlay(alignment: .top) {
+            Rectangle()
+                .fill(palette.border)
+                .frame(height: 1)
+        }
+    }
 
-    private func statsGrid(_ report: WorkoutReport) -> some View {
+    private func heroIcon(_ name: String) -> some View {
+        Image(systemName: name)
+            .font(dynamicTypeSize.isAccessibilitySize ? .system(size: 16) : .subheadline)
+            .frame(width: 26)
+            .clipped()
+            .accessibilityHidden(true)
+    }
+
+    // MARK: - Statistics
+
+    private func statisticsSection(_ report: WorkoutReport) -> some View {
         VStack(alignment: .leading, spacing: DS.Spacing.md) {
             Text(Labels.statistics)
                 .font(.headline)
                 .foregroundStyle(.primary)
 
-            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())], spacing: DS.Spacing.md) {
-                statCell(value: "\(report.stats.totalSessions)", label: "Sessions")
-                statCell(value: "\(report.stats.activeDays)", label: "Active Days")
-                statCell(value: formatVolume(report.stats.totalVolume), label: "Total Volume")
-                statCell(value: "\(report.stats.totalDuration) min", label: "Total Duration")
-                statCell(
-                    value: "\(Int(report.stats.averageIntensity * 100))%",
-                    label: "Avg Intensity"
-                )
-                if let change = report.stats.volumeChangePercent {
-                    statCell(
-                        value: formatChange(change),
-                        label: "Volume Change",
-                        valueColor: change >= 0 ? DS.Color.positive : DS.Color.negative
-                    )
-                }
+            statisticRow(value: "\(Int(report.stats.averageIntensity * 100))%",
+                         label: "Avg Intensity", icon: "gauge.medium",
+                         identifier: "activity-weekly-report-intensity")
+            if let change = report.stats.volumeChangePercent {
+                statisticRow(value: formatChange(change), label: "Volume Change",
+                             icon: "chart.line.uptrend.xyaxis",
+                             valueColor: change >= 0 ? DS.Color.positive : DS.Color.negative,
+                             identifier: "activity-weekly-report-change")
             }
         }
     }
 
-    private func statCell(value: String, label: LocalizedStringKey, valueColor: Color = .primary) -> some View {
-        VStack(spacing: DS.Spacing.xxs) {
-            Text(value)
-                .font(.title3.weight(.semibold).monospacedDigit())
-                .foregroundStyle(valueColor)
-            Text(label)
-                .font(.caption)
-                .foregroundStyle(DS.Color.textSecondary)
+    private func statisticRow(
+        value: String,
+        label: LocalizedStringKey,
+        icon: String,
+        valueColor: Color = .primary,
+        identifier: String
+    ) -> some View {
+        Group {
+            if dynamicTypeSize.isAccessibilitySize {
+                VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                    statisticLabel(label, icon: icon)
+                    Text(value)
+                        .font(.title3.weight(.semibold).monospacedDigit())
+                        .foregroundStyle(valueColor)
+                        .accessibilityIdentifier(identifier)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            } else {
+                HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.md) {
+                    statisticLabel(label, icon: icon)
+                    Spacer(minLength: DS.Spacing.sm)
+                    Text(value)
+                        .font(.title3.weight(.semibold).monospacedDigit())
+                        .foregroundStyle(valueColor)
+                        .multilineTextAlignment(.trailing)
+                        .accessibilityIdentifier(identifier)
+                }
+            }
         }
-        .frame(maxWidth: .infinity)
-        .padding(DS.Spacing.sm)
+        .padding(DS.Spacing.md)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
     }
 
-    // MARK: - Summary Section
+    private func statisticLabel(_ label: LocalizedStringKey, icon: String) -> some View {
+        HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.md) {
+            Image(systemName: icon)
+                .font(dynamicTypeSize.isAccessibilitySize ? .system(size: 16) : .subheadline)
+                .frame(width: 26)
+                .clipped()
+                .foregroundStyle(DS.Color.activity)
+                .accessibilityHidden(true)
+            Text(label)
+                .font(.subheadline)
+                .foregroundStyle(DS.Color.textSecondary)
+        }
+    }
+
+    // MARK: - Summary and Highlights
 
     private func summarySection(_ report: WorkoutReport) -> some View {
         Group {
@@ -101,15 +214,14 @@ struct WorkoutReportDetailView: View {
                     Text(summary)
                         .font(.subheadline)
                         .foregroundStyle(DS.Color.textSecondary)
-                        .padding(DS.Spacing.sm)
                         .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(DS.Spacing.md)
                         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+                        .accessibilityIdentifier("activity-weekly-report-summary")
                 }
             }
         }
     }
-
-    // MARK: - Highlights Section
 
     private func highlightsSection(_ report: WorkoutReport) -> some View {
         VStack(alignment: .leading, spacing: DS.Spacing.md) {
@@ -121,23 +233,27 @@ struct WorkoutReportDetailView: View {
                 Text(Labels.noHighlights)
                     .font(.subheadline)
                     .foregroundStyle(DS.Color.textSecondary)
-                    .padding(DS.Spacing.sm)
+                    .padding(DS.Spacing.md)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
             } else {
                 VStack(spacing: DS.Spacing.xs) {
                     ForEach(report.highlights) { highlight in
-                        HStack(spacing: DS.Spacing.sm) {
+                        HStack(alignment: .top, spacing: DS.Spacing.md) {
                             Image(systemName: highlightIcon(highlight.type))
-                                .font(.subheadline)
+                                .font(dynamicTypeSize.isAccessibilitySize ? .system(size: 16) : .subheadline)
                                 .foregroundStyle(DS.Color.activity)
-                                .frame(width: 24)
+                                .frame(width: 26)
+                                .clipped()
+                                .accessibilityHidden(true)
                             Text(highlight.description)
                                 .font(.subheadline)
                                 .foregroundStyle(DS.Color.textSecondary)
-                            Spacer(minLength: 0)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .accessibilityIdentifier("activity-weekly-report-highlight")
                         }
-                        .padding(DS.Spacing.sm)
+                        .padding(DS.Spacing.md)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
                     }
                 }
@@ -155,16 +271,21 @@ struct WorkoutReportDetailView: View {
                         .font(.headline)
                         .foregroundStyle(.primary)
 
-                    let maxVolume = report.muscleBreakdown.first?.volume ?? 1
+                    let maxVolume = report.muscleBreakdown.map(\.volume).max() ?? 1
 
-                    VStack(spacing: DS.Spacing.xs) {
+                    VStack(spacing: DS.Spacing.md) {
                         ForEach(report.muscleBreakdown) { stat in
-                            HStack(spacing: DS.Spacing.sm) {
-                                Text(stat.muscleGroup.displayName)
-                                    .font(.caption)
-                                    .foregroundStyle(DS.Color.textSecondary)
-                                    .frame(width: 80, alignment: .trailing)
-
+                            VStack(spacing: DS.Spacing.xs) {
+                                HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.sm) {
+                                    Text(stat.muscleGroup.displayName)
+                                        .font(.subheadline)
+                                        .foregroundStyle(DS.Color.textSecondary)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                    Text(formatVolume(stat.volume))
+                                        .font(.subheadline.weight(.semibold).monospacedDigit())
+                                        .foregroundStyle(.primary)
+                                        .accessibilityIdentifier("activity-weekly-report-muscle-volume")
+                                }
                                 GeometryReader { geo in
                                     let fraction = maxVolume > 0
                                         ? CGFloat(stat.volume) / CGFloat(maxVolume)
@@ -173,23 +294,20 @@ struct WorkoutReportDetailView: View {
                                         .fill(DS.Color.activity.opacity(0.6))
                                         .frame(width: geo.size.width * fraction)
                                 }
-                                .frame(height: 16)
-
-                                Text(formatVolume(stat.volume))
-                                    .font(.caption.monospacedDigit())
-                                    .foregroundStyle(.primary)
-                                    .frame(width: 50, alignment: .trailing)
+                                .frame(height: 8)
+                                .clipped()
+                                .accessibilityHidden(true)
                             }
                         }
                     }
-                    .padding(DS.Spacing.sm)
+                    .padding(DS.Spacing.md)
                     .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
                 }
             }
         }
     }
 
-    // MARK: - Helpers
+    // MARK: - Source Formatting
 
     private func formatVolume(_ volume: Double) -> String {
         if volume >= 1000 {
