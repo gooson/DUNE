@@ -201,7 +201,7 @@ Codex가 iOS·iPadOS·Duo·watchOS의 보이는 화면 배치, 글자, 상태, �
 #### Ship linked worktree의 로컬 정리 순서
 
 - Step 1에서 `git worktree list --porcelain`과 `git rev-parse --git-dir --git-common-dir`로 현재 checkout이 linked worktree인지 판별하고 정확한 worktree 경로·브랜치·primary checkout을 기록한다. main 체크아웃이 다른 위치에 있으면 실제 main checkout을 사용한다. primary checkout에서 실행하는 Ship은 원본 Step 4를 유지한다.
-- linked worktree에서는 원본 Step 4의 `git checkout main`을 실행하지 않는다. **원격 머지를 확인한 뒤**, main checkout이 `main`이고 변경사항이 없음을 확인하고 그 경로에서 `git pull --ff-only`로 먼저 갱신한다. 이 확인이나 갱신에 실패하면 linked worktree와 캐시를 보존하고 로컬 정리 미완료로 보고한다.
+- linked worktree에서는 원본 Step 4의 `git checkout main`을 실행하지 않는다. **원격 머지를 확인한 뒤**, main checkout이 `main`이고 변경사항이 없음을 확인하고 그 경로에서 `DUNE_AUTO_CLEANUP_RUNNING=1 git pull --ff-only`로 먼저 갱신한다. 이 명령에만 자동 정리 hook을 억제해 현재 linked worktree가 후속 소유 리소스 검증 전에 삭제되지 않게 한다. 이 확인이나 갱신에 실패하면 linked worktree와 캐시를 보존하고 로컬 정리 미완료로 보고한다.
 - main 갱신 후 현재 linked worktree에 미커밋·신규 파일이 없고 해당 PR의 머지 커밋이 main에 포함됐는지 확인한다. 이어서 위 소유 simulator 정리와 외부 DerivedData 정리를 실행한다. 이 linked 흐름에서는 이 순서가 기존의 원격 머지 직후 simulator 정리 시점보다 우선한다. 진행 중인 빌드·테스트, 복구 표식, 정리 실패가 있으면 worktree 제거를 중단한다.
 - 모두 성공한 뒤 **main checkout 경로에서** `git worktree remove "<대상 worktree>"`와 `git branch -d "<대상 branch>"`를 실행한다. force는 사용하지 않는다. 원격 브랜치 삭제 성공도 확인한다. 이후 Step 5 아티팩트 정리와 Step 6 프로젝트 재생성은 갱신된 main checkout에서 실행한다. primary checkout의 `.claude/**`나 기존 변경사항은 자동 커밋하지 않는다.
 

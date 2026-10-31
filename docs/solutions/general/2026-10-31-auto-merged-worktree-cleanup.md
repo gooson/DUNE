@@ -47,6 +47,8 @@ Git의 [reference-transaction hook](https://git-scm.com/docs/githooks#_reference
 
 hook 실행 사본은 공용 Git 디렉터리의 `dune-merge-cleanup/<content-hash>/`에 보관한다. 개발 worktree 제거·checkout 변경 후에도 남으며, 구현 변경 후 `--install`로 갱신한다. 로그는 공용 Git 디렉터리의 `dune-merge-cleanup.log`다. 재귀·중복 실행을 막고 실패를 Git ref 갱신의 실패로 전파하지 않는다. 원격 브랜치는 삭제하지 않는다.
 
+linked-worktree `/ship`이 primary main을 갱신할 때는 `DUNE_AUTO_CLEANUP_RUNNING=1 git pull --ff-only`를 해당 명령에만 적용한다. 그래야 hook이 현재 작업 checkout을 먼저 지우지 않고, Ship이 simulator·캐시 검증과 worktree 제거를 정해진 순서로 끝낸다. 이후 일반 fetch/pull의 자동 실행은 계속 활성 상태다.
+
 ## Verification
 
 - 신규 정리 계약 15개 및 기존 외부 DerivedData 소유권 검사 17개, 총 32개 통과. ignored 파일·열린 파일 보호 보완 후에는 신규 15개 계약을 다시 실행했다.
