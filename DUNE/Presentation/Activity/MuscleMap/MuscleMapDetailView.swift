@@ -12,6 +12,9 @@ struct MuscleMapDetailView: View {
     @State private var showing3DMap = false
     @State private var selected3DMuscle: MuscleGroup?
 
+    // Temporary A04 availability gate; retain the 3D destination for a later release.
+    private let is3DMuscleMapEntryAvailable = false
+
     init(fatigueStates: [MuscleFatigueState], library: ExerciseLibraryQuerying = ExerciseLibraryService.shared) {
         self.fatigueStates = fatigueStates
         self.library = library
@@ -30,7 +33,7 @@ struct MuscleMapDetailView: View {
                             viewModel.selectedMuscle = viewModel.selectedMuscle == muscle ? nil : muscle
                         }
                         selected3DMuscle = muscle
-                        if sizeClass != .regular { showing3DMap = true }
+                        if is3DMuscleMapEntryAvailable && sizeClass != .regular { showing3DMap = true }
                     }
                 )
 
@@ -40,6 +43,7 @@ struct MuscleMapDetailView: View {
                         Label("3D Muscle Map", systemImage: "cube")
                     }
                     .buttonStyle(.bordered)
+                    .disabled(!is3DMuscleMapEntryAvailable)
                 }
                 .padding(DS.Spacing.lg)
             }
@@ -54,6 +58,8 @@ struct MuscleMapDetailView: View {
                         library: library,
                         isInline: true
                     )
+                    .accessibilityElement(children: .contain)
+                    .accessibilityIdentifier("musclemap-detail-selected-muscle")
                     .transition(.opacity.combined(with: .move(edge: .top)))
                 }
 

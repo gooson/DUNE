@@ -32,8 +32,37 @@ final class ActivityMuscleMapRegressionTests: ActivityExerciseSeededUITestBaseCa
         )
     }
 
+    func testMuscleMapDetailKeeps2DSelectionWith3DEntryDisabled() throws {
+        navigateToMuscleMapDetail()
+
+        let entryLabels = ["3D Muscle Map", "3D 근육맵", "3Dマッスルマップ"]
+        let open3D = app.buttons.matching(NSPredicate(format: "label IN %@", entryLabels)).firstMatch
+        XCTAssertTrue(open3D.waitForExistence(timeout: 5), "The original 3D entry should remain visible")
+        XCTAssertFalse(open3D.isEnabled, "A04 should disable the original 3D entry")
+        addScreenshotAttachment(named: "A03 default map with disabled 3D entry")
+        VisualAudit.capture("A03 default map with disabled 3D entry")
+
+        tapFrontChestMuscle()
+
+        let detailScreen = app.descendants(matching: .any)[AXID.activityMuscleMapDetailScreen].firstMatch
+        let inlineDetail = app.descendants(matching: .any)["musclemap-detail-selected-muscle"].firstMatch
+        let screen3D = app.descendants(matching: .any)[AXID.activityMuscleMap3DScreen].firstMatch
+        XCTAssertTrue(detailScreen.exists, "Muscle selection should remain on the 2D detail screen")
+        XCTAssertTrue(inlineDetail.waitForExistence(timeout: 5), "Selected muscle detail should appear inline")
+        XCTAssertTrue(app.buttons["activity-muscle-detail-calculation"].firstMatch.waitForExistence(timeout: 5),
+                      "The selected muscle should retain its calculation button accessibility ID")
+        XCTAssertFalse(screen3D.exists, "Muscle selection should not open the 3D viewer")
+        let primaryScroll = app.scrollViews.firstMatch
+        let visibleMap = primaryScroll.frame.intersection(app.windows.firstMatch.frame)
+        for _ in 0..<8 where !visibleMap.contains(open3D.frame) { primaryScroll.swipeUp() }
+        XCTAssertTrue(visibleMap.contains(open3D.frame), "The disabled 3D entry should remain visible on the map")
+        XCTAssertFalse(open3D.isEnabled, "Selecting a 2D muscle should not enable the 3D entry")
+        addScreenshotAttachment(named: "A04 2D muscle selection and disabled 3D entry")
+        VisualAudit.capture("A04 2D muscle selection and disabled 3D entry")
+    }
+
     func testMuscleMapDetailViewNavigatesTo3D() throws {
-        navigateTo3DView()
+        try navigateTo3DView()
 
         let screen3D = app.descendants(matching: .any)[AXID.activityMuscleMap3DScreen].firstMatch
         XCTAssertTrue(
@@ -45,7 +74,7 @@ final class ActivityMuscleMapRegressionTests: ActivityExerciseSeededUITestBaseCa
     // MARK: - MuscleMap3DView Tests
 
     func testMuscleMap3DViewLoads() throws {
-        navigateTo3DView()
+        try navigateTo3DView()
 
         let screen = app.descendants(matching: .any)[AXID.activityMuscleMap3DScreen].firstMatch
         XCTAssertTrue(screen.waitForExistence(timeout: 10), "3D screen should appear")
@@ -58,7 +87,7 @@ final class ActivityMuscleMapRegressionTests: ActivityExerciseSeededUITestBaseCa
     }
 
     func testMuscleMap3DViewModePickerSwitches() throws {
-        navigateTo3DView()
+        try navigateTo3DView()
 
         let modePicker = app.descendants(matching: .any)[AXID.muscleMap3DModePicker].firstMatch
         XCTAssertTrue(modePicker.waitForExistence(timeout: 10), "Mode picker should exist")
@@ -74,7 +103,7 @@ final class ActivityMuscleMapRegressionTests: ActivityExerciseSeededUITestBaseCa
     }
 
     func testMuscleMap3DViewMuscleStripExists() throws {
-        navigateTo3DView()
+        try navigateTo3DView()
 
         let muscleStrip = app.descendants(matching: .any)[AXID.muscleMap3DMuscleStrip].firstMatch
         XCTAssertTrue(
@@ -88,7 +117,7 @@ final class ActivityMuscleMapRegressionTests: ActivityExerciseSeededUITestBaseCa
     }
 
     func testMuscleMap3DViewResetButton() throws {
-        navigateTo3DView()
+        try navigateTo3DView()
 
         let resetButton = app.descendants(matching: .any)[AXID.muscleMap3DResetButton].firstMatch
         XCTAssertTrue(
@@ -105,7 +134,7 @@ final class ActivityMuscleMapRegressionTests: ActivityExerciseSeededUITestBaseCa
     }
 
     func testMuscleMap3DViewerExists() throws {
-        navigateTo3DView()
+        try navigateTo3DView()
 
         let viewer = app.descendants(matching: .any)[AXID.muscleMap3DViewer].firstMatch
         XCTAssertTrue(
@@ -145,15 +174,23 @@ final class ActivityMuscleMapRegressionTests: ActivityExerciseSeededUITestBaseCa
         XCTAssertTrue(detailScreen.waitForExistence(timeout: 10), "Muscle Map detail should appear")
     }
 
-    private func navigateTo3DView() {
+    private func navigateTo3DView() throws {
         navigateToMuscleMapDetail()
+
+        let entryLabels = ["3D Muscle Map", "3D 근육맵", "3Dマッスルマップ"]
+        let open3D = app.buttons.matching(NSPredicate(format: "label IN %@", entryLabels)).firstMatch
+        guard open3D.waitForExistence(timeout: 5) else {
+            XCTFail("The original 3D entry should exist")
+            return
+        }
+        if !open3D.isEnabled {
+            throw XCTSkip("The original 3D entry is disabled for A04")
+        }
 
         tapFrontChestMuscle()
 
         let screen3D = app.descendants(matching: .any)[AXID.activityMuscleMap3DScreen].firstMatch
         // Regular-width layouts keep muscle selection in the adjacent detail pane.
-        let entryLabels = ["3D Muscle Map", "3D 근육맵", "3Dマッスルマップ"]
-        let open3D = app.buttons.matching(NSPredicate(format: "label IN %@", entryLabels)).firstMatch
         if !screen3D.exists && open3D.exists {
             let primaryScroll = app.scrollViews.firstMatch
             for _ in 0..<4 where !open3D.isHittable { primaryScroll.swipeUp() }
