@@ -23,8 +23,8 @@ related_solutions:
 - L03 습관 템플릿: 네이티브 구현, iPhone 2/2·iPad 1/1·Duo 접힘 1/1·펼침 1/1 UI와 새 네 기기 캡처, 리뷰, CI 완료. [PR #858](https://github.com/gooson/DUNE/pull/858) MERGED, merge commit `60bd7c4b`. 화면별 첫 `/run`의 Ship 후 정리까지 완료했다.
 - 실행 worktree: `/Users/shanks/.codex/worktrees/detail-redesign-l03/Health`, branch `codex/score-history-window-foundation`.
 - T04 컨디션 상세: [PR #862](https://github.com/gooson/DUNE/pull/862) MERGED, merge `9fa10e46`. 단위32·기기별UI15·새4기기원본·리뷰·Compound·CI·Ship·브랜치정리·표준regen/build까지 완료.
-- 공통 기간 계산 선행: [PR #863](https://github.com/gooson/DUNE/pull/863). 동일 함수2개 추출, 관련26단위·선택UI2·리뷰·Compound 완료. Ship 점검 중이며 T05 화면 PR과 분리한다.
-- 다음 화면은 T05 누적 스트레스다. 코드·검토 시안·가중치 재배분·기존 캡처의 READ-ONLY 조사를 완료했다. 원본 시안은 da96에 유지하고 실행 목록은 native 저장소에도 보존한다.
+- 공통 기간 계산 선행: [PR #863](https://github.com/gooson/DUNE/pull/863) MERGED, merge `04c6437d`. 관련26단위·선택UI2·5관점리뷰·품질·Compound·CI·브랜치정리·표준regen/build 완료. T05와 별도 PR로 보존한다.
+- 현재 T05 누적 스트레스 native 개편을 `codex/t05-cumulative-stress-redesign`에서 진행한다. 계획/배치/테마/검토원본 보존·서비스/VM/UI/선택테스트 구현과 iOS build 완료. 관련 단위·기기별UI·새실제캡처·리뷰/Ship는 아직 미완료다. 원본 시안은 da96에 유지한다.
 
 ## Requirements
 
@@ -89,9 +89,9 @@ related_solutions:
 
 | ID | 화면 | 분기 | 네이티브 진입 파일 | 추가 조건 |
 |---|---|---:|---|---|
-| T04 | 컨디션 상세 | 1 | `DUNE/Presentation/Dashboard/ConditionScoreDetailView.swift` | — |
+| T04 | 컨디션 상세 | 1 | `DUNE/Presentation/Dashboard/ConditionScoreDetailView.swift` | PR862 MERGED |
 | T02 | iCloud 동기화 동의 | 1 | `DUNE/Presentation/Shared/CloudSyncConsentView.swift` | — |
-| T05 | 누적 스트레스 | 1 | `DUNE/Presentation/Dashboard/CumulativeStressDetailView.swift` | — |
+| T05 | 누적 스트레스 | 1 | `DUNE/Presentation/Dashboard/CumulativeStressDetailView.swift` | native 구현/검증 진행 중 |
 | T06 | 건강 지표 상세 · HRV | 16 | `DUNE/Presentation/Shared/Detail/MetricDetailView.swift` | 16개 지표 포함 |
 | T07 | 전체 데이터 · HRV | 16 | `DUNE/Presentation/Shared/Detail/AllDataView.swift` | 16개 지표 포함 |
 | T08 | 날씨 상세 | 1 | `DUNE/Presentation/Dashboard/WeatherDetailView.swift` | — |

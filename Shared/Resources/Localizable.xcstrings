@@ -2231,6 +2231,29 @@
         }
       }
     },
+    "%lld of 100" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld of 100"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "100点中%lld点"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "100점 중 %lld점"
+          }
+        }
+      }
+    },
     "%lld overworked muscle groups" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2637,6 +2660,29 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld/%lld회"
+          }
+        }
+      }
+    },
+    "%lld%% applied" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld%% applied"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "適用割合 %lld%%"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "반영 비중 %lld%%"
           }
         }
       }
@@ -7349,6 +7395,29 @@
         }
       }
     },
+    "Base weights apply when all three factors are available. Missing factors are excluded from the applied weights." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Base weights apply when all three factors are available. Missing factors are excluded from the applied weights."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "基本割合は3つの要因がすべて揃っている場合に適用されます。記録のない要因は適用割合から除きます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기본 비중은 세 요인의 기록이 모두 있을 때 적용돼요. 기록이 없는 요인은 반영 비중에서 제외해요."
+          }
+        }
+      }
+    },
     "Baseball" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -10915,6 +10984,29 @@
         }
       }
     },
+    "Compared with previous period" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compared with previous period"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "前の期間との比較"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이전 기간 대비"
+          }
+        }
+      }
+    },
     "Compares recent training volume to your chronic baseline. Both overtraining and sudden detraining contribute to stress accumulation." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -12973,6 +13065,29 @@
         }
       }
     },
+    "Cumulative Stress Trend" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cumulative Stress Trend"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "累積ストレスの推移"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "누적 스트레스 추세"
+          }
+        }
+      }
+    },
     "Curling" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -13155,6 +13270,29 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "현재 진행"
+          }
+        }
+      }
+    },
+    "Current score %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Current score %lld"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "現在のスコア%lld点"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "현재 점수 %lld점"
           }
         }
       }
@@ -24283,6 +24421,29 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "언어 학습"
+          }
+        }
+      }
+    },
+    "Last %lld days" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last %lld days"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "過去%lld日間"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최근 %lld일"
           }
         }
       }
@@ -44761,6 +44922,29 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "스트레스가 잘 관리되고 있습니다."
+          }
+        }
+      }
+    },
+    "Stress score %lld, %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stress score %lld, %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ストレススコア%lld点、%@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "스트레스 점수 %lld점, %@"
           }
         }
       }

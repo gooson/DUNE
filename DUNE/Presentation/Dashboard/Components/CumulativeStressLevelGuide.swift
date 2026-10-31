@@ -3,6 +3,8 @@ import SwiftUI
 /// Displays all 4 stress levels with descriptions and highlights the current level.
 struct CumulativeStressLevelGuide: View {
     let currentLevel: CumulativeStressScore.Level
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @ScaledMetric(relativeTo: .body) private var levelIconWidth: CGFloat = 24
 
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
@@ -21,30 +23,19 @@ struct CumulativeStressLevelGuide: View {
         let isCurrent = level == currentLevel
 
         return HStack(alignment: .top, spacing: DS.Spacing.sm) {
-            Circle()
-                .fill(level.color)
-                .frame(width: 10, height: 10)
-                .padding(.top, 4)
+            Image(systemName: level.iconName)
+                .font(.body)
+                .foregroundStyle(level.color)
+                .frame(width: levelIconWidth)
+                .accessibilityHidden(true)
 
             VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-                HStack(spacing: DS.Spacing.xs) {
-                    Text(level.displayName)
-                        .font(.subheadline)
-                        .fontWeight(isCurrent ? .bold : .medium)
-
-                    Text(rangeLabel(for: level))
-                        .font(.caption2)
-                        .foregroundStyle(.tertiary)
-
-                    if isCurrent {
-                        Text("Current")
-                            .font(.caption2)
-                            .fontWeight(.semibold)
-                            .padding(.horizontal, 6)
-                            .padding(.vertical, 2)
-                            .background(Capsule().fill(level.color.opacity(0.15)))
-                            .foregroundStyle(level.color)
+                if dynamicTypeSize.isAccessibilitySize {
+                    VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                        levelHeading(level, isCurrent: isCurrent)
                     }
+                } else {
+                    HStack(spacing: DS.Spacing.xs) { levelHeading(level, isCurrent: isCurrent) }
                 }
 
                 Text(guidance(for: level))
@@ -56,6 +47,21 @@ struct CumulativeStressLevelGuide: View {
         .padding(.vertical, DS.Spacing.xxs)
         .opacity(isCurrent ? 1.0 : 0.7)
         .accessibilityElement(children: .combine)
+    }
+
+    @ViewBuilder
+    private func levelHeading(_ level: CumulativeStressScore.Level, isCurrent: Bool) -> some View {
+        Text(level.displayName)
+            .font(.subheadline.weight(isCurrent ? .bold : .medium))
+            .fixedSize(horizontal: false, vertical: true)
+        Text(rangeLabel(for: level)).font(.caption2).foregroundStyle(.tertiary)
+        if isCurrent {
+            Text("Current")
+                .font(.caption2.weight(.semibold))
+                .padding(.horizontal, DS.Spacing.xs).padding(.vertical, DS.Spacing.xxs)
+                .background(Capsule().fill(level.color.opacity(0.15)))
+                .foregroundStyle(level.color)
+        }
     }
 
     private func rangeLabel(for level: CumulativeStressScore.Level) -> String {

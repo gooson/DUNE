@@ -267,6 +267,73 @@ final class ScoreRefreshService {
         return (try? context.fetch(descriptor)) ?? []
     }
 
+    enum StressHistoryError: Error, Equatable {
+        case invalidDateRange
+    }
+
+    /// Fetch a complete, validated stress series for a half-open time range.
+    /// Date slices limit normal per-fetch work without imposing a physical row cap.
+    /// Duplicate rows in one absolute hour use the newest row update, then the higher score.
+    /// `createdAt` is not a stress-specific measurement timestamp.
+    func fetchStressHistory(
+        from start: Date,
+        to end: Date,
+        calendar: Calendar = .current
+    ) async throws -> [(date: Date, score: Double)] {
+        guard start.timeIntervalSinceReferenceDate.isFinite,
+              end.timeIntervalSinceReferenceDate.isFinite,
+              start < end else {
+            throw StressHistoryError.invalidDateRange
+        }
+
+        let maximumSliceDuration: TimeInterval = 31 * 24 * 60 * 60
+        var latestByHour: [Date: (createdAt: Date, score: Double)] = [:]
+        var sliceStart = start
+
+        while sliceStart < end {
+            try Task.checkCancellation()
+            let sliceEnd = min(end, sliceStart.addingTimeInterval(maximumSliceDuration))
+            guard sliceEnd > sliceStart else { throw StressHistoryError.invalidDateRange }
+            let queryStart = sliceStart
+            let descriptor = FetchDescriptor<HourlyScoreSnapshot>(
+                predicate: #Predicate {
+                    $0.date >= queryStart && $0.date < sliceEnd && $0.stressScore != nil
+                }
+            )
+            let snapshots: [HourlyScoreSnapshot]
+            do {
+                snapshots = try context.fetch(descriptor)
+            } catch {
+                AppLogger.data.error("[ScoreRefreshService] Failed to fetch stress history: \(error.localizedDescription, privacy: .private)")
+                throw error
+            }
+            try Task.checkCancellation()
+
+            for snapshot in snapshots {
+                guard let score = snapshot.stressScore,
+                      score.isFinite, (0...100).contains(score),
+                      let hour = calendar.dateInterval(of: .hour, for: snapshot.date)?.start else {
+                    continue
+                }
+                let createdAt = snapshot.createdAt
+                if let prior = latestByHour[hour],
+                   prior.createdAt > createdAt ||
+                    (prior.createdAt == createdAt && prior.score >= score) {
+                    continue
+                }
+                latestByHour[hour] = (createdAt: createdAt, score: score)
+            }
+
+            sliceStart = sliceEnd
+            if sliceStart < end {
+                try Task.checkCancellation()
+                await Task.yield()
+            }
+        }
+        try Task.checkCancellation()
+        return latestByHour.sorted { $0.key < $1.key }.map { (date: $0.key, score: $0.value.score) }
+    }
+
     // MARK: - Private
 
     private func rollingDescriptor(from startDate: Date, fetchLimit: Int) -> FetchDescriptor<HourlyScoreSnapshot> {
