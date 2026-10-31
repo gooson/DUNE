@@ -281,6 +281,17 @@
       }
     },
     {
+      "id": "h02-wellness-score-detail",
+      "name": "H02 웰니스 점수 상세",
+      "title": "실제 점수·네 구성·시간대와 통합 추세",
+      "file": "dune-h02-wellness-score-detail.html",
+      "detail": "2026-10-31 구현 전 밝음·어두움 브라우저 시안. T04/H01 불투명 ScoreHeroPalette와 상태별 아이콘, 네 optional 구성, 한 카드의 기간·가시 날짜·Trend·차트·요약 방향. 93점과 날짜·그래프는 전부 예시이며 앱/HealthKit 데이터나 실제 캡처가 아니다. 계산·하위 추세와 조건부 설명은 기존 View 계약을 유지한다.",
+      "implementation": {
+        "layout": "../layout-map/h02-wellness-score-detail-proposal.md",
+        "status": "proposal-only"
+      }
+    },
+    {
       "id": "siri-health-queries",
       "name": "Siri 건강 정보 · 기능별 비주얼 시안",
       "title": "DUNE · 기록 조회와 근거 있는 설명",

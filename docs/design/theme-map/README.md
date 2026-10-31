@@ -187,3 +187,7 @@ Gold Impact 네이티브 일반 빌드·관련 단위51개와 S01 설정 저장 
 ## T08 날씨 상세 검토본 · 2026-10-31
 
 [보존 시안](themes/dune-weather-detail-redesign.html)의 밝음·어두움 PNG와 원본 T08 JSON을 `themes/assets/condition-detail-redesign/`에 둔다. [네이티브 배치 계약](../layout-map/weather-detail-redesign-proposal.md)은 실제 날씨 상태와 수신 조건을 사용한다. 브라우저 시안은 앱 캡처가 아니며 T08 새 실제 화면은 런타임 검증 뒤 별도로 갱신한다.
+
+## H02 웰니스 점수 상세 · 2026-10-31
+
+[밝음·어두움 표현 방향](themes/dune-h02-wellness-score-detail.html)과 [상태·배치 계약](../layout-map/h02-wellness-score-detail-proposal.md)은 T04/H01의 불투명 히어로 언어를 H02에 잇는다. 상태별 아이콘과 실제 점수·평가 시각·네 선택적 구성, 시간대 조정, 기간·추세·요약, 계산 설명을 보존한다. 시안의 93점·구성·차트·날짜는 모두 예시이며 네이티브 구현이나 실제 캡처 완료를 뜻하지 않는다.
