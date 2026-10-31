@@ -25,6 +25,36 @@ final class MetricDetailRedesignTests: SeededUITestBaseCase {
         assertIdentityAndCapture(key: selectedKey, expected: expected)
     }
 
+    /// Records the frozen original UI's normalization, not correctness in meters.
+    func testOriginalSwimmingMeterInputLegacyUnitAndCapture() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments = [
+            "--ui-t06-metric", "exercise-m", "--ui-disable-animations",
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+            "-morningBriefingDisabled", "YES"
+        ]
+        launchApp(with: configuration)
+        let screen = app.descendants(matching: .any)["metric-detail-screen-exercise"].firstMatch
+        XCTAssertTrue(screen.waitForExistence(timeout: 15))
+        let loading = app.progressIndicators.firstMatch
+        _ = loading.waitForExistence(timeout: 1)
+        XCTAssertTrue(loading.waitForNonExistence(timeout: 15))
+        XCTAssertTrue(app.navigationBars["Swimming"].firstMatch.waitForExistence(timeout: 5))
+        let header = app.descendants(matching: .any)["metric-summary-header"].firstMatch
+        XCTAssertTrue(header.waitForExistence(timeout: 10))
+        // Old loadExerciseData replaces the incoming m with min for this seeded
+        // Swimming fixture. Preserve and label the actual old result explicitly.
+        XCTAssertEqual(header.label, "Exercise, 1,314 min")
+        XCTAssertTrue(app.buttons["metric-detail-show-all-data"].firstMatch.exists)
+        XCTContext.runActivity(named: "Original Swimming input and rendered unit") { activity in
+            let note = XCTAttachment(string: "Synthetic input: Swimming, 1314 m; original rendered header: \(header.label)")
+            note.lifetime = .keepAlways
+            activity.add(note)
+        }
+        addScreenshotAttachment(named: "T06-original-swimming-input-1314m-rendered-min")
+        VisualAudit.capture("Original Swimming input 1314 m; rendered 1,314 min")
+    }
+
     func testAllMetricIdentitiesAndCaptures() throws {
         // Budget is declared before the first matrix launch, not raised after a timeout.
         executionTimeAllowance = 600
