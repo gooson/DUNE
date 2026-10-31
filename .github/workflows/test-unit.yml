@@ -62,7 +62,10 @@ jobs:
         run: brew install xcodegen
 
       - name: Run Unit Tests
-        run: scripts/test-unit.sh --${{ matrix.platform }}-only --stream-log
+        shell: bash
+        run: |
+          mkdir -p .xcodebuild
+          scripts/test-unit.sh --${{ matrix.platform }}-only --stream-log 2>&1 | tee .xcodebuild/unit-test-runner.log
 
       - name: Upload test log
         if: always()
@@ -70,4 +73,5 @@ jobs:
         with:
           name: unit-test-log-${{ matrix.platform }}
           path: .xcodebuild/unit-test*.log
+          include-hidden-files: true
           retention-days: 7

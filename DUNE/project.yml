@@ -332,7 +332,6 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.raftel.dailve.watch.tests
         GENERATE_INFOPLIST_FILE: true
-        TEST_TARGET_NAME: DUNEWatch
     dependencies:
       - target: DUNEWatch
 
