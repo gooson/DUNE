@@ -267,7 +267,7 @@ final class MetricDetailRedesignTests: SeededUITestBaseCase {
     func testWeightPeerCriteriaCancelApplyAndSource() throws {
         var configuration = launchConfiguration
         configuration.additionalArguments = [
-            "--ui-t06-metric", "weight", "--ui-disable-animations",
+            "--ui-t06-metric", "weight", "--ui-t06-reset-peer-criteria", "--ui-disable-animations",
             "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
             "-morningBriefingDisabled", "YES"
         ]
