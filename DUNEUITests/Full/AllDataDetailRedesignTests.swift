@@ -92,6 +92,64 @@ final class AllDataDetailRedesignTests: SeededUITestBaseCase {
         captureNativeState(named: "T07-wristTemperature-dark-maximum-AX-native")
     }
 
+    func testMaximumAccessibilityReflowsSignedTemperatureAndVO2Units() {
+        for (category, title, value) in [
+            ("wristTemperature", "Wrist Temp", "+36.5 °C"),
+            ("vo2Max", "VO2 Max", "48.4 ml/kg/min")
+        ] {
+            launch(category: category, extra: [
+                "--ui-test-style", "dark",
+                "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+            ])
+            let screen = allDataScreen(for: category)
+            XCTAssertTrue(screen.waitForExistence(timeout: 15))
+            let header = screen.descendants(matching: .any)["all-data-header"].firstMatch
+            let icon = header.images["all-data-header-icon"].firstMatch
+            let heading = header.staticTexts["all-data-header-title"].firstMatch
+            XCTAssertTrue(header.waitForExistence(timeout: 10))
+            XCTAssertTrue(icon.exists && heading.exists, "The original metric icon and title should remain")
+            XCTAssertEqual(heading.label, title)
+            XCTAssertTrue(t07InsideVisibleViewport(icon, in: screen))
+            XCTAssertTrue(t07InsideVisibleViewport(heading, in: screen))
+
+            let metricRow = row(containing: value, in: screen)
+            XCTAssertTrue(t07RevealWhole(metricRow, in: screen), "\(category) row should be reachable")
+            XCTAssertTrue(Self.hasTimePrefix(metricRow.label))
+            let time = metricRow.staticTexts["all-data-row-time"].firstMatch
+            let quantity = metricRow.staticTexts["all-data-row-value"].firstMatch
+            XCTAssertTrue(time.exists && quantity.exists, "The reflowed row should expose time and value")
+            XCTAssertEqual(quantity.label, value, "The signed or long unit must remain complete")
+            XCTAssertTrue(t07InsideVisibleViewport(time, in: screen))
+            XCTAssertTrue(t07InsideVisibleViewport(quantity, in: screen))
+            XCTAssertGreaterThanOrEqual(quantity.frame.minY, time.frame.maxY,
+                                        "At maximum text size time should stack above the value")
+            captureNativeState(named: "T07-\(category)-dark-maximum-AX-after-reflow")
+        }
+    }
+
+    private func t07RevealWhole(_ element: XCUIElement, in screen: XCUIElement) -> Bool {
+        guard screen.exists else { return false }
+        for attempt in 0..<9 {
+            if element.exists && t07InsideVisibleViewport(element, in: screen) { return true }
+            if attempt < 8 { screen.swipeUp() }
+        }
+        return false
+    }
+
+    private func t07InsideVisibleViewport(_ element: XCUIElement, in screen: XCUIElement) -> Bool {
+        guard element.exists, screen.exists else { return false }
+        let window = app.windows.firstMatch.frame
+        let navigationBar = app.navigationBars.firstMatch
+        let tabBar = app.tabBars.firstMatch
+        let top = max(window.minY, navigationBar.exists ? navigationBar.frame.maxY : window.minY)
+        let bottom = tabBar.exists && tabBar.isHittable && tabBar.frame.minY > window.midY
+            ? min(window.maxY, tabBar.frame.minY) : window.maxY
+        let viewport = screen.frame.intersection(CGRect(x: window.minX, y: top,
+                                                         width: window.width, height: max(0, bottom - top)))
+        guard !viewport.isNull else { return false }
+        return viewport.contains(element.frame) && element.isHittable
+    }
+
     private func captureNativeState(named name: String) {
         // Native collector adds fresh AX and both Duo LCDs at this ready state.
         VisualAudit.capture(name)
