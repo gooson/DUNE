@@ -742,26 +742,63 @@ private struct NotificationMessageDetailView: View {
 private struct NotificationDestinationUnavailableView: View {
     let itemID: String
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.appTheme) private var theme
+    @Environment(\.colorScheme) private var colorScheme
+    @ScaledMetric(relativeTo: .largeTitle) private var symbolSize: CGFloat = 46
+
+    private var palette: ScoreHeroPalette { ScoreHeroPalette(theme: theme, colorScheme: colorScheme) }
 
     var body: some View {
-        EmptyStateView(
-            icon: "arrow.triangle.branch",
-            title: "Destination Unavailable",
-            message: "Could not find where this notification should open. Check your notification settings.",
-            actionTitle: "Go Back",
-            action: {
-                dismiss()
+        ScrollView {
+            VStack(alignment: .leading, spacing: DS.Spacing.xxl) {
+                VStack(alignment: .leading, spacing: DS.Spacing.md) {
+                    Image(systemName: "arrow.triangle.branch")
+                        .font(.system(size: min(symbolSize, 64), weight: .medium))
+                        .foregroundStyle(palette.heroAccent)
+                        .accessibilityHidden(true)
+
+                    Text("Destination Unavailable")
+                        .font(.largeTitle.bold())
+                        .foregroundStyle(palette.ink)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .accessibilityAddTraits(.isHeader)
+
+                    Text("Could not find where this notification should open. Check your notification settings.")
+                        .font(.body)
+                        .foregroundStyle(palette.muted)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(DS.Spacing.xxl)
+                .background(palette.surface, in: RoundedRectangle(cornerRadius: DS.Radius.xxl))
+
+                Button {
+                    dismiss()
+                } label: {
+                    Text("Go Back")
+                        .font(.headline)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, DS.Spacing.md)
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(theme.accentColor)
+                .foregroundStyle(theme.prominentButtonForegroundColor(for: colorScheme))
+                .accessibilityIdentifier("notification-destination-unavailable-back-button")
+
+                Text("ID: \(itemID)")
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .fixedSize(horizontal: false, vertical: true)
             }
-        )
-        .padding(.horizontal, DS.Spacing.lg)
+            .frame(maxWidth: 560)
+            .frame(maxWidth: .infinity)
+            .padding(.horizontal, DS.Spacing.lg)
+            .padding(.top, DS.Spacing.xxl)
+            .padding(.bottom, DS.Spacing.xxl)
+        }
         .accessibilityIdentifier("notification-destination-unavailable-screen")
         .background { DetailWaveBackground() }
-        .overlay(alignment: .bottom) {
-            Text("ID: \(itemID)")
-                .font(.caption2)
-                .foregroundStyle(.tertiary)
-                .padding(.bottom, DS.Spacing.lg)
-        }
         .englishNavigationTitle("Notification")
     }
 }

@@ -308,6 +308,17 @@
         "layout": "../layout-map/cloud-sync-consent-t02.html",
         "status": "native-source-ready-captures-pending"
       }
+    },
+    {
+      "id": "notification-unavailable-t13",
+      "name": "T13 · 알림 대상 없음",
+      "title": "대상 없음 · 밝음/어두움",
+      "file": "dune-notification-unavailable-t13.html",
+      "detail": "기존 DUNE ScoreHeroPalette와 DetailWaveBackground를 이용한 T13 정적 표현. 아이콘·기존 문구·Go Back·실제 ID를 보존하며 새 테마·움직임·허구 데이터는 추가하지 않는다. 앱 캡처가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/notification-destination-unavailable-t13.html",
+        "status": "native-source-pending-captures"
+      }
     }
   ]
 }
