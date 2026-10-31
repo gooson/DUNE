@@ -67,9 +67,9 @@ final class ActivityMuscleMapRegressionTests: ActivityExerciseSeededUITestBaseCa
         addScreenshotAttachment(named: "A03 selected muscle detail before calculation")
         VisualAudit.capture("A03 selected muscle detail before calculation")
         calculation.auditTap()
-        let explanation = app.descendants(matching: .any)["activity-fatigue-info-sheet"].firstMatch
+        let explanation = app.scrollViews["activity-fatigue-info-sheet"].firstMatch
         XCTAssertTrue(explanation.waitForExistence(timeout: 5), "Calculation should open the real fatigue explanation")
-        let calculationTitle = app.staticTexts.matching(NSPredicate(
+        let calculationTitle = explanation.staticTexts.matching(NSPredicate(
             format: "label IN %@", ["Fatigue Calculation", "피로도 계산", "疲労度計算"]
         )).firstMatch
         XCTAssertTrue(calculationTitle.waitForExistence(timeout: 5),
@@ -77,12 +77,31 @@ final class ActivityMuscleMapRegressionTests: ActivityExerciseSeededUITestBaseCa
         addScreenshotAttachment(named: "A03 selected muscle fatigue calculation")
         VisualAudit.capture("A03 selected muscle fatigue calculation")
 
-        // FatigueInfoSheet exposes a native drag indicator and no Close action.
-        let sheet = app.sheets.firstMatch
-        XCTAssertTrue(sheet.waitForExistence(timeout: 5), "Calculation should use a native sheet")
-        sheet.swipeDown()
+        // This iPad presentation exposes the native sheet as a scroll view with a drag indicator,
+        // not as an XCUIElementTypeSheet. Use the single observed system grabber.
+        let grabbers = app.buttons.matching(NSPredicate(format: "label == %@", "시트 손잡이"))
+        XCTAssertEqual(grabbers.count, 1, "The native sheet should expose one visible drag indicator")
+        let grabber = grabbers.element(boundBy: 0)
+        XCTAssertTrue(grabber.exists && grabber.isHittable, "The native sheet drag indicator should be reachable")
+        let window = app.windows.firstMatch
+        XCTAssertTrue(window.exists && window.frame.contains(explanation.frame),
+                      "Calculation content should be inside the active window")
+        XCTAssertTrue(window.frame.contains(grabber.frame) && explanation.frame.intersects(grabber.frame),
+                      "The native drag indicator should overlap the calculation sheet's top edge")
+        XCTAssertLessThanOrEqual(abs(grabber.frame.midY - explanation.frame.minY), grabber.frame.height,
+                                 "The native drag indicator should be at the calculation sheet's top edge")
+        let endY = min(window.frame.maxY - 60, grabber.frame.midY + window.frame.height * 0.6)
+        XCTAssertGreaterThan(endY - grabber.frame.midY, window.frame.height * 0.3,
+                             "The dismiss drag should travel down inside the window")
+        let start = grabber.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        let end = window.coordinate(withNormalizedOffset: .zero)
+            .withOffset(CGVector(dx: grabber.frame.midX - window.frame.minX,
+                                 dy: endY - window.frame.minY))
+        start.press(forDuration: 0.1, thenDragTo: end)
         XCTAssertTrue(explanation.waitForNonExistence(timeout: 5),
                       "Calculation sheet should dismiss by its drag indicator")
+        XCTAssertTrue(detailScreen.waitForExistence(timeout: 5), "The 2D map should remain after sheet dismissal")
+        XCTAssertTrue(inlineDetail.waitForExistence(timeout: 5), "The selected muscle should remain inline")
 
         let railBack = app.buttons["BackButton"].firstMatch
         if railBack.exists && railBack.isHittable {
