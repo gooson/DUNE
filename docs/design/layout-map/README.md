@@ -37,6 +37,9 @@ Life의 링 옆에는 현재 진행 상태를 설명하는 문장을 둔다. 히
 
 ## 화면별 맵 목록
 
+2026-10-31 [A06 Training Volume 상세 배치](activity-training-volume-detail-a06.html)는 실제 네 기간·네 현재/이전 지표·1W 주간 목표 링과 긴 기간의 실제 활동일 건수/별도 주간 참고·한 날짜 범위·도넛 세 모드·분 단위 일별 차트와 조건부 하위 그래프를 보존하는 제안이다. HTML 숫자는 예시이며 실제 앱 캡처가 아니다. [구현 계획](../../plans/2026-10-31-a06-training-volume-detail-redesign.md)과 [테마 표현](../theme-map/themes/dune-training-volume-detail-a06.html)을 함께 본다.
+
+
 2026-10-31 [T02 iCloud 동기화 동의 배치](cloud-sync-consent-t02.html)는 앱 시작 시트의 히어로→세 설명→두 선택, 폭·큰 글씨·동작 계약을 정한다. HTML은 구현 기준 시안이며 실제 앱 캡처가 아니다.
 
 2026-10-30 [Siri 건강 정보 질의 SQ01–SQ14](siri-health-queries-proposal.md)와 [기능별 비주얼 시안](../theme-map/themes/dune-siri-health-queries.html)을 추가했다. 최근 운동·주간 운동량·세트·개인 기록·유산소·신체 최신값/추세·수면·컨디션·기간 비교·화면 문맥·메모 검색·보고서 공유·긴 분석의 V1/V2, 밝음/어두움, 폭·큰 글씨·데이터 상태를 비교한다. Watch 짧은 응답 3개를 함께 보존한다. 합성 데이터의 브라우저 제안이며 실제 Siri·앱 구현·실제 화면 캡처가 아니다.
