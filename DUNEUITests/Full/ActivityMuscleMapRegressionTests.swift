@@ -69,7 +69,11 @@ final class ActivityMuscleMapRegressionTests: ActivityExerciseSeededUITestBaseCa
         calculation.auditTap()
         let explanation = app.descendants(matching: .any)["activity-fatigue-info-sheet"].firstMatch
         XCTAssertTrue(explanation.waitForExistence(timeout: 5), "Calculation should open the real fatigue explanation")
-        XCTAssertTrue(app.staticTexts["Fatigue Calculation"].exists)
+        let calculationTitle = app.staticTexts.matching(NSPredicate(
+            format: "label IN %@", ["Fatigue Calculation", "피로도 계산", "疲労度計算"]
+        )).firstMatch
+        XCTAssertTrue(calculationTitle.waitForExistence(timeout: 5),
+                      "The calculation sheet should expose its existing localized title")
         addScreenshotAttachment(named: "A03 selected muscle fatigue calculation")
         VisualAudit.capture("A03 selected muscle fatigue calculation")
 
