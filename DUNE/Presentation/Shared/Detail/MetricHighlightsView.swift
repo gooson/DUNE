@@ -4,10 +4,17 @@ import SwiftUI
 struct MetricHighlightsView: View {
     let highlights: [Highlight]
     let category: HealthMetric.Category
+    let resolvedChartUnit: String?
 
     @Environment(\.horizontalSizeClass) private var sizeClass
 
     private var isRegular: Bool { sizeClass == .regular }
+
+    init(highlights: [Highlight], category: HealthMetric.Category, resolvedChartUnit: String? = nil) {
+        self.highlights = highlights
+        self.category = category
+        self.resolvedChartUnit = resolvedChartUnit
+    }
 
     var body: some View {
         if !highlights.isEmpty {
@@ -28,9 +35,10 @@ struct MetricHighlightsView: View {
                                 Text(highlight.label)
                                     .font(isRegular ? .subheadline : .caption)
                                     .foregroundStyle(DS.Color.textSecondary)
-                                Text(formattedValue(highlight.value))
+                                Text(formattedValue(highlight))
                                     .font(isRegular ? .body : .subheadline)
                                     .fontWeight(.medium)
+                                    .accessibilityIdentifier("metric-highlight-value-\(highlight.type.rawValue)")
                             }
 
                             Spacer()
@@ -40,8 +48,12 @@ struct MetricHighlightsView: View {
                                 .foregroundStyle(.tertiary)
                         }
                     }
+                    .accessibilityElement(children: .contain)
+                    .accessibilityIdentifier("metric-highlight-row-\(highlight.type.rawValue)")
                 }
             }
+            .accessibilityElement(children: .contain)
+            .accessibilityIdentifier("metric-highlights")
         }
     }
 
@@ -63,13 +75,16 @@ struct MetricHighlightsView: View {
         }
     }
 
-    private func formattedValue(_ value: Double) -> String {
-        switch category {
+    private func formattedValue(_ highlight: Highlight) -> String {
+        let value = highlight.value
+        return switch category {
         case .hrv:               "\(value.formattedWithSeparator()) ms"
         case .rhr:               "\(value.formattedWithSeparator()) bpm"
         case .heartRate:         "\(value.formattedWithSeparator()) bpm"
         case .sleep:             value.hoursMinutesFormatted
-        case .exercise:          "\(value.formattedWithSeparator()) min"
+        case .exercise: ExerciseHighlightValueFormatter.string(
+            from: value, type: highlight.type, resolvedChartUnit: resolvedChartUnit
+        )
         case .steps:             value.formattedWithSeparator()
         case .weight:            "\(value.formattedWithSeparator(fractionDigits: 1)) kg"
         case .bmi:               value.formattedWithSeparator(fractionDigits: 1)
@@ -81,6 +96,25 @@ struct MetricHighlightsView: View {
         case .heartRateRecovery: "\(value.formattedWithSeparator()) bpm"
         case .wristTemperature:  "\(value.formattedWithSeparator(fractionDigits: 1, alwaysShowSign: true)) °C"
         case .breathingDisturbances: "\(value.formattedWithSeparator(fractionDigits: 1))/hr"
+        }
+    }
+}
+
+/// Chart high/low values use the resolved exercise unit; a trend is already a percent change.
+enum ExerciseHighlightValueFormatter {
+    static func string(
+        from value: Double,
+        type: Highlight.HighlightType,
+        resolvedChartUnit: String? = nil
+    ) -> String {
+        switch type {
+        case .high, .low:
+            if resolvedChartUnit == "km" {
+                return "\(value.formattedWithSeparator(fractionDigits: 1)) km"
+            }
+            return "\(value.formattedWithSeparator()) min"
+        case .trend:
+            return "\(value.formattedWithSeparator(fractionDigits: 1))%"
         }
     }
 }

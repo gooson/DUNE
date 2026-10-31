@@ -38,6 +38,43 @@ final class MetricDetailRedesignTests: SeededUITestBaseCase {
             return
         }
         assertIdentityAndCapture(key: "exercise-m", expected: expected)
+        let screen = app.scrollViews["metric-detail-screen-exercise"].firstMatch
+        XCTAssertTrue(revealWholeDetailRow("metric-highlight-row-high", in: screen),
+                      "Swimming highest-distance row must be fully visible")
+        let highlights = app.descendants(matching: .any)["metric-highlights"].firstMatch
+        let highest = highlights.descendants(matching: .any)["metric-highlight-row-high"].firstMatch
+        XCTAssertTrue(highest.staticTexts["Highest"].exists)
+        let value = highest.staticTexts["metric-highlight-value-high"].firstMatch
+        XCTAssertEqual(value.label, "1.3 km", "The 1,314 m swim history must use its resolved km chart unit")
+        attach("T06-exercise-m-corrected-highest-distance")
+    }
+
+    func testRunningKilometerHighlightUsesDistanceUnit() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments = [
+            "--ui-t06-metric", "exercise-km", "--ui-disable-animations",
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+            "-morningBriefingDisabled", "YES"
+        ]
+        launchApp(with: configuration)
+        guard let expected = Self.matrix["exercise-km"] else {
+            XCTFail("Missing Running kilometer contract")
+            return
+        }
+        assertIdentityAndCapture(key: "exercise-km", expected: expected)
+        let summary = app.descendants(matching: .any)["metric-summary-header"].firstMatch
+        XCTAssertEqual(summary.label, "Exercise, 10.2 km")
+        XCTAssertTrue(app.navigationBars["Running"].firstMatch.exists)
+        let screen = app.scrollViews["metric-detail-screen-exercise"].firstMatch
+        XCTAssertTrue(revealWholeDetailRow("metric-highlight-row-high", in: screen),
+                      "Running highest-distance row must be fully visible")
+        let highest = app.descendants(matching: .any)["metric-highlights"].firstMatch
+            .descendants(matching: .any)["metric-highlight-row-high"].firstMatch
+        XCTAssertTrue(highest.staticTexts["Highest"].exists)
+        let value = highest.staticTexts["metric-highlight-value-high"].firstMatch
+        XCTAssertEqual(value.label, "10.2 km",
+                       "The filtered Running workout must retain its actual grouped distance")
+        attach("T06-exercise-km-corrected-highest-distance")
     }
 
     func testAllMetricIdentitiesAndCaptures() throws {
@@ -239,7 +276,11 @@ final class MetricDetailRedesignTests: SeededUITestBaseCase {
         let criteria = app.buttons["body-peer-criteria-cta"]
         XCTAssertTrue(app.scrollToHittableElementIfNeeded("body-peer-criteria-cta", maxSwipes: 8))
         criteria.tap()
-        XCTAssertFalse(app.buttons["body-peer-apply"].isEnabled)
+        let apply = app.buttons["body-peer-apply"]
+        XCTAssertTrue(apply.waitForExistence(timeout: 5))
+        XCTAssertFalse(apply.isEnabled)
+        addScreenshotAttachment(named: "T06-weight-peer-criteria-unselected")
+        VisualAudit.capture("T06-weight-peer-criteria-unselected")
         app.buttons["Cancel"].tap()
         XCTAssertFalse(app.descendants(matching: .any)["body-peer-reference"].firstMatch.exists)
         criteria.tap()
@@ -249,8 +290,9 @@ final class MetricDetailRedesignTests: SeededUITestBaseCase {
         app.buttons["30–39 years"].firstMatch.tap()
         sex.tap()
         app.buttons["Male (survey)"].firstMatch.tap()
-        let apply = app.buttons["body-peer-apply"]
         XCTAssertTrue(apply.isEnabled)
+        addScreenshotAttachment(named: "T06-weight-peer-criteria-selected-before-apply")
+        VisualAudit.capture("T06-weight-peer-criteria-selected-before-apply")
         apply.tap()
         XCTAssertTrue(app.descendants(matching: .any)["body-peer-current"].firstMatch.waitForExistence(timeout: 5))
         XCTAssertTrue(app.descendants(matching: .any)["body-peer-reference"].firstMatch.exists)
