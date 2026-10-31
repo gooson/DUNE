@@ -253,7 +253,7 @@ def capture_checkpoint(line, sequence, output, device, requested_display,
                     ["xcrun", "simctl", "io", device, "screenshot",
                      f"--display={display}", str(destination)],
                     stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True,
-                    timeout=min(8, budget),
+                    timeout=min(15, budget),
                 )
                 capture_returncode = capture.returncode
             except subprocess.TimeoutExpired:
