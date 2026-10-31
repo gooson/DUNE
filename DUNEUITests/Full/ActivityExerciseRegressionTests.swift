@@ -876,6 +876,20 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
     }
 
     func testExerciseTypeDetailShowsTrendSurface() throws {
+        try verifyManualExerciseTypeDetailAndCapture()
+    }
+
+    func testExerciseTypeDetailAtMaximumAccessibilityTextSize() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL",
+            "--ui-test-style", "dark"
+        ]
+        launchApp(with: configuration)
+        try verifyManualExerciseTypeDetailAndCapture()
+    }
+
+    private func verifyManualExerciseTypeDetailAndCapture() throws {
         openTrainingVolumeDetailSurface()
 
         XCTAssertTrue(
@@ -913,7 +927,18 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         XCTAssertFalse(app.descendants(matching: .any)[AXID.activityExerciseTypeRecentSessions].firstMatch.exists,
                        "A manual type must not invent HealthKit workout history")
         VisualAudit.capture("Exercise type manual strength Week loaded")
+        XCTAssertTrue(
+            app.scrollToHittableElementIfNeeded("activity-exercise-type-comparison-row-volume", maxSwipes: 8),
+            "The real weighted-volume comparison should be reachable"
+        )
+        VisualAudit.capture("Exercise type manual strength Week comparison")
 
+        XCTAssertTrue(
+            app.scrollToHittableElementIfNeeded(
+                AXID.activityExerciseTypePeriodPicker, maxSwipes: 8, direction: .down
+            ),
+            "The exercise type period control should remain reachable after comparison"
+        )
         tapSegment(in: AXID.activityExerciseTypePeriodPicker, index: 1, timeout: 10)
 
         XCTAssertTrue(
