@@ -868,7 +868,12 @@ final class TodaySettingsEmptyStateRegressionTests: UITestBaseCase {
 
         let filter = app.segmentedControls[AXID.notificationsFilter].firstMatch
         XCTAssertTrue(filter.waitForExistence(timeout: 5))
-        filter.buttons["Health"].tap()
+        XCTAssertEqual(filter.buttons.count, 3, "All, Health, and News should remain available")
+        let health = filter.buttons.element(boundBy: 1)
+        XCTAssertTrue(health.waitForExistence(timeout: 5) && health.isHittable,
+                      "The Health segment should be tappable in the empty hub")
+        health.tap()
+        XCTAssertTrue(health.isSelected, "Health should become the selected filter")
         let emptyState = app.descendants(matching: .any)[AXID.notificationsEmptyState].firstMatch
         XCTAssertTrue(emptyState.waitForExistence(timeout: 5), "Health filter should show empty state without seeded notifications")
     }
