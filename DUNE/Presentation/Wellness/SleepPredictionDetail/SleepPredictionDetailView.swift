@@ -259,11 +259,20 @@ struct SleepPredictionDetailView: View {
                     VStack(spacing: DS.Spacing.sm) {
                         ForEach(prediction.tips, id: \.self) { tip in
                             HStack(alignment: .top, spacing: DS.Spacing.sm) {
-                                Image(systemName: "lightbulb.fill")
-                                    .font(.title3)
-                                    .foregroundStyle(DS.Color.caution)
-                                    .frame(width: 28)
-                                    .accessibilityHidden(true)
+                                Group {
+                                    if dynamicTypeSize.isAccessibilitySize {
+                                        Image(systemName: "lightbulb.fill")
+                                            .font(.system(size: 16))
+                                            .frame(width: 26)
+                                            .clipped()
+                                    } else {
+                                        Image(systemName: "lightbulb.fill")
+                                            .font(.title3)
+                                            .frame(width: 28)
+                                    }
+                                }
+                                .foregroundStyle(DS.Color.caution)
+                                .accessibilityHidden(true)
                                 Text(tip)
                                     .font(.subheadline)
                                     .foregroundStyle(.primary)
