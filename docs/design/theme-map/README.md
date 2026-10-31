@@ -62,6 +62,8 @@ Small 위젯의 세 점수 링과 하단 상태·시각은 카드 전체 높이�
 
 [원본 대비 V1·V2 시안](themes/dune-today-reading.html)을 보존했다. V2의 큰 수면 시간·분리된 수면 부족·접히는 스트레스 근거·지표형 요약을 실제 앱에 적용했으며 [실제 화면 갤러리](../full-redesign-map/review/today-reading-v2-2026-10-25/index.html)와 [구현 계획](../../plans/2026-10-25-today-reading-v2.md)에서 검증 범위를 추적한다. 이 HTML과 시안 PNG는 실제 앱 캡처가 아니다.
 
+2026-10-31 [A09 주간 운동 보고서 DUNE 표현 제안](themes/dune-weekly-report-detail-a09.html)은 원본 보고서 아이콘, 기간·실제 값·조건부 문장과 하이라이트를 불투명 히어로에 배치한 밝음·어두움 정적 시안이다. 수치/웹 기호는 실제 앱 캡처가 아니며 [A09 배치 계약](../layout-map/activity-weekly-report-detail-a09.html)과 구분한다.
+
 ## 갱신 방법
 
 2026-10-31 [T02 동의 시트 테마 표현 연구](themes/dune-cloud-sync-consent-t02.html)는 기존 DUNE 팔레트와 `ScoreHeroPalette`를 사용한 밝음·어두움의 정적 해석이다. 새로운 테마·동작 규칙을 추가하지 않는다. 화면 정보 순서와 선택 동작은 [T02 레이아웃 맵](../layout-map/cloud-sync-consent-t02.html)을 따르며, 이 HTML은 실제 앱 캡처가 아니다.

@@ -35,6 +35,8 @@ Life의 링 옆에는 현재 진행 상태를 설명하는 문장을 둔다. 히
 
 [Activity·Life 히어로 흐름과 근거 승인안](activity-life-hero-proposal.md)은 공통 링에 구성 점수·저장된 준비도·습관 완료 기록을 더하는 2026-10-25 구현 대상이다. 과거 습관 분모는 복원하지 않는다.
 
+2026-10-31 [A09 주간 운동 보고서 배치](activity-weekly-report-detail-a09.html)는 실제 기간·총 kg/분/세션/활동일/정규화 강도와 조건부 요약·하이라이트·근육별 바를 제안한다. [DUNE 테마 표현](../theme-map/themes/dune-weekly-report-detail-a09.html)은 정적 시안이다. 원본 iPad의 DEBUG 보고서 화면은 별도 실제 이미지로 확인됐으며 시안의 값은 그 이미지가 아니다.
+
 ## 화면별 맵 목록
 
 2026-10-31 [T02 iCloud 동기화 동의 배치](cloud-sync-consent-t02.html)는 앱 시작 시트의 히어로→세 설명→두 선택, 폭·큰 글씨·동작 계약을 정한다. HTML은 구현 기준 시안이며 실제 앱 캡처가 아니다.

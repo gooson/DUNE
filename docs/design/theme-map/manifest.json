@@ -308,6 +308,17 @@
         "layout": "../layout-map/cloud-sync-consent-t02.html",
         "status": "native-source-ready-captures-pending"
       }
+    },
+    {
+      "id": "weekly-report-detail-a09",
+      "name": "A09 · 주간 운동 보고서",
+      "title": "DUNE 보고서 상세 · 밝음/어두움",
+      "file": "dune-weekly-report-detail-a09.html",
+      "detail": "실제 보고서 기간·값·요약·타입별 하이라이트와 상대 근육 볼륨을 위한 화면별 정적 제안. 값/웹 아이콘은 실제 사용자 기록이나 네이티브 앱 캡처가 아니다. DEBUG 보고서 fixture는 제품 기본값이 아니다.",
+      "implementation": {
+        "layout": "../layout-map/activity-weekly-report-detail-a09.html",
+        "status": "proposal-only-original-ipad-before-reviewed-after-pending"
+      }
     }
   ]
 }
