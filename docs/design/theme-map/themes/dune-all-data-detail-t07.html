@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>T07 · 전체 데이터 상세 테마 방향</title>
+  <style>
+    :root { font-family:system-ui,-apple-system,sans-serif; --page:#f5f0e7; --ink:#302a26; --soft:#6a5f54; --card:#fffaf3; --line:#dfd2c0; --hero:#352e29; --hero-ink:#fff5e8; --gold:#e2b761; --accent:#be8550; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--page); color:var(--ink); line-height:1.5; }
+    header,main { max-width:1120px; padding:25px; margin:auto; }
+    h1 { margin:7px 0; font-size:clamp(27px,4vw,38px); line-height:1.15; }
+    h2 { margin:8px 0 4px; }
+    p { max-width:780px; }
+    a { color:#79552b; }
+    .note { color:var(--soft); }
+    .grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px; }
+    .panel { padding:17px; border:1px solid var(--line); border-radius:22px; background:var(--card); }
+    .panel.dark { --page:#151317; --ink:#f4ece1; --soft:#cabeb0; --card:#252126; --line:#50463d; --hero:#352e29; --hero-ink:#fff5e8; --gold:#e2b761; --accent:#e1ad70; background:var(--page); color:var(--ink); }
+    .panel h2 { font-size:18px; }
+    .screen { max-width:440px; min-height:440px; margin:17px auto 0; padding:17px; border-radius:22px; background:linear-gradient(170deg,#ecdcc1,var(--card) 34%); }
+    .dark .screen { background:linear-gradient(170deg,#332b2b,var(--card) 35%); }
+    .nav { display:flex; align-items:center; gap:8px; margin-bottom:17px; font-size:14px; }
+    .nav b { margin:auto; padding-right:20px; }
+    .hero { position:relative; display:flex; align-items:center; gap:17px; min-height:110px; padding:20px; border-radius:22px; color:var(--hero-ink); border:1px solid #756048; background:var(--hero); overflow:hidden; }
+    .hero:after { content:""; position:absolute; left:0; right:-10%; bottom:-47px; height:65px; border-radius:50% 50% 0 0; transform:rotate(-5deg); background:linear-gradient(90deg,#a8793930,#e2b7610c); }
+    .hero > * { position:relative; z-index:1; }
+    .glyph { flex:none; width:58px; height:58px; display:grid; place-items:center; border-radius:16px; background:#fff4dd18; color:var(--hero-ink); font-size:31px; }
+    .hero small { display:block; letter-spacing:.1em; text-transform:uppercase; font-weight:700; color:#e6c99c; }
+    .hero strong { display:block; margin-top:4px; font-size:22px; line-height:1.2; overflow-wrap:anywhere; }
+    .date { margin:22px 5px 8px; color:var(--soft); text-transform:uppercase; font-size:12px; font-weight:700; }
+    .rows { border:1px solid var(--line); background:var(--card); border-radius:16px; overflow:hidden; }
+    .row { display:flex; align-items:center; justify-content:space-between; gap:16px; min-height:53px; padding:12px 15px; border-bottom:1px solid var(--line); }
+    .row:last-child { border:0; }
+    .row time { color:var(--soft); white-space:nowrap; }
+    .row strong { text-align:right; font-variant-numeric:tabular-nums; overflow-wrap:anywhere; }
+    .rule { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin-top:25px; }
+    .rule div { border:1px solid var(--line); border-radius:15px; background:var(--card); padding:15px; }
+    .rule b { display:block; margin-bottom:5px; }
+    .rule span { color:var(--soft); font-size:13px; }
+    .swatch { display:inline-block; width:11px; height:11px; margin-right:6px; border-radius:50%; background:var(--accent); }
+    .wide { max-width:760px; margin:24px auto 0; padding:20px; border:1px solid var(--line); border-radius:20px; background:var(--card); }
+    .wide .row { background:var(--page); }
+    .wide .row.big { align-items:flex-start; flex-direction:column; gap:2px; }
+    code { font-size:12px; overflow-wrap:anywhere; }
+    @media(max-width:730px) { .grid,.rule { grid-template-columns:1fr; } header,main { padding:18px; } }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="../index.html">테마 맵</a> · <a href="../../layout-map/all-data-detail-t07.html">T07 배치 계약</a>
+    <h1>범주를 먼저 읽고, 기록은 날짜별로</h1>
+    <p class="note">T07 전체 데이터 상세의 <strong>구현 전 브라우저 시안</strong>. 아래 75 ms와 날짜는 행 형태를 보여 주는 예시이며 실제 HealthKit 값이나 앱 캡처가 아니다. 히어로에는 측정값을 넣지 않는다.</p>
+  </header>
+  <main>
+    <div class="grid">
+      <section class="panel" aria-label="밝은 화면 방향"><h2>밝은 주변 · 불투명 히어로</h2><span class="note"><span class="swatch"></span>HRV 범주색은 주변 강조</span>
+        <div class="screen"><div class="nav"><span aria-hidden="true">‹</span><b>Heart Rate Variability</b></div>
+          <div class="hero"><div class="glyph" aria-hidden="true">♡</div><div><small>History</small><strong>심박변이도</strong></div></div>
+          <div class="date">10월 31일 · 예시 날짜</div><div class="rows"><div class="row"><time>오전 8:15</time><strong>75 ms</strong></div><div class="row"><time>오전 7:50</time><strong>72 ms</strong></div></div>
+          <div class="date">10월 30일 · 예시 날짜</div><div class="rows"><div class="row"><time>오전 8:12</time><strong>71 ms</strong></div></div>
+        </div>
+      </section>
+      <section class="panel dark" aria-label="어두운 화면 방향"><h2>어두운 주변 · 같은 히어로 표면</h2><span class="note"><span class="swatch"></span>팔레트 전경 아이콘과 읽을 수 있는 값</span>
+        <div class="screen"><div class="nav"><span aria-hidden="true">‹</span><b>Heart Rate Variability</b></div>
+          <div class="hero"><div class="glyph" aria-hidden="true">♡</div><div><small>History</small><strong>심박변이도</strong></div></div>
+          <div class="date">10월 31일 · 예시 날짜</div><div class="rows"><div class="row"><time>오전 8:15</time><strong>75 ms</strong></div><div class="row"><time>오전 7:50</time><strong>72 ms</strong></div></div>
+          <div class="date">10월 30일 · 예시 날짜</div><div class="rows"><div class="row"><time>오전 8:12</time><strong>71 ms</strong></div></div>
+        </div>
+      </section>
+    </div>
+    <div class="wide"><h2>폭과 접근성</h2><p class="note">일반 행은 시각과 값을 좌우에 둔다. 좁은 Duo 또는 접근성 글씨에서는 시간 위, 값 아래로 배치한다. 이 도식의 값도 예시다.</p>
+      <div class="row big"><time>오전 8:15</time><strong>+36.5 °C</strong></div>
+      <p class="note">iPad·Duo 펼침은 읽기 폭을 약 680–760pt로 제한하고 한 열 목록을 유지한다. 60pt 고정 시각 폭이나 값 생략은 사용하지 않는다.</p>
+    </div>
+    <div class="rule">
+      <div><b>표면과 아이콘</b><span>T06 <code>ScoreHeroPalette.surface/ink/border</code>를 이어 쓴다. 브라우저 ♡는 도식일 뿐이며 네이티브는 16개 범주의 <code>category.iconName</code>을 사용한다.</span></div>
+      <div><b>색과 배경</b><span><code>category.themeColor</code>는 능선·작은 강조에, <code>DetailWaveBackground</code>는 기존 정적 화면 바탕에 사용한다. 값 자체를 건강 판정 색으로 코딩하지 않는다.</span></div>
+      <div><b>상태와 동작</b><span>기존 <code>.insetGrouped List</code>, 페이지 spinner, 제한 이력 notice, 빈 상태, 시스템 back과 AXID를 보존한다. 링·차트·움직임·기간 필터는 추가하지 않는다.</span></div>
+    </div>
+    <p class="note">16개 범주와 ready/loading/empty/limited/limited-empty의 정확한 정보 순서는 <a href="../../layout-map/all-data-detail-t07.html">레이아웃 계약</a>을 따른다. 네이티브 적용과 실제 전후 화면은 별도 캡처로 검증한다.</p>
+  </main>
+</body>
+</html>

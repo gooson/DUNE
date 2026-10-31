@@ -292,6 +292,17 @@
       }
     },
     {
+      "id": "all-data-detail-t07",
+      "name": "전체 데이터 상세 방향",
+      "title": "T07 · 16개 범주의 실제 날짜·시간·값 행",
+      "file": "dune-all-data-detail-t07.html",
+      "detail": "2026-10-31 구현 전 브라우저 방향 시안. T06 불투명 ScoreHeroPalette를 이어 받은 범주 이름·원래 SF Symbol 히어로, 정적 능선과 기존 insetGrouped List의 날짜/시간/값 위계, 제한 이력과 빈 상태, 큰 글씨의 세로 행을 제안한다. 도식의 수치·날짜·기호는 예시이며 실제 HealthKit 데이터·앱 캡처가 아니다. 16개 범주의 기존 데이터/서식/페이징과 시스템 내비게이션을 보존한다.",
+      "implementation": {
+        "layout": "../layout-map/all-data-detail-t07.html",
+        "status": "proposal-only"
+      }
+    },
+    {
       "id": "siri-health-queries",
       "name": "Siri 건강 정보 · 기능별 비주얼 시안",
       "title": "DUNE · 기록 조회와 근거 있는 설명",

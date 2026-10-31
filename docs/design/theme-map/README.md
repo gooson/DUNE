@@ -191,3 +191,7 @@ Gold Impact 네이티브 일반 빌드·관련 단위51개와 S01 설정 저장 
 ## T06 건강 지표 상세 · 2026-10-30
 
 [16개 지표의 보존 시안과 표현 방향](themes/dune-health-metric-detail-redesign.html) · [배치/기능/출처 계약](../layout-map/health-metric-detail-redesign-proposal.md). 원래 수치·단위·아이콘·수면/운동 분석을 보존하는 제안이다. 큰 수치와 통합 추세를 강조하며 실제 native 전후 캡처는 별도 검증한다. 원본 시안의 MCST 참조를 제품 허가된 데이터로 간주하지 않으며, 선택형 미국 체중/BMI 평균과 미지원 신체 비교를 구분한다.
+
+## T07 전체 데이터 상세 방향 · 2026-10-31
+
+[밝음·어두움 히어로와 날짜별 행 시안](themes/dune-all-data-detail-t07.html) · [16개 범주와 상태·배치 계약](../layout-map/all-data-detail-t07.html). T06의 불투명 `ScoreHeroPalette`를 범주 식별에만 사용하며 원래 SF Symbol·번역된 이름과 기존 “History”를 표시한다. 기존 정적 배경, `insetGrouped List`, 날짜 섹션·실제 시각/값, 제한 이력·빈 상태·페이징·시스템 back을 유지한다. 예시 값과 브라우저 기호는 앱 데이터나 SF Symbol 캡처가 아니며, 구현 전후 실제 화면은 별도 검증한다.

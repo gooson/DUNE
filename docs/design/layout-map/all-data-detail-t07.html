@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>T07 · 전체 데이터 상세 배치 계약</title>
+  <style>
+    :root { font-family: system-ui, -apple-system, sans-serif; color-scheme: light dark; --page:#f5f0e7; --ink:#302a26; --muted:#665e56; --line:#e4d8c7; --card:#fffaf2; --hero:#352e29; --hero-ink:#fff5e8; --tint:#d6a75e; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--page); color:var(--ink); line-height:1.55; }
+    header, main { max-width:1060px; margin:auto; padding:24px; }
+    h1 { margin:8px 0; font-size:clamp(26px,4vw,36px); line-height:1.2; }
+    h2 { margin-top:32px; }
+    .note { color:var(--muted); max-width:780px; }
+    a { color:#79572e; }
+    .grid { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:20px; align-items:start; }
+    .phone { width:100%; max-width:430px; margin:auto; padding:12px; border:1px solid var(--line); border-radius:34px; background:#f8f4ec; box-shadow:0 16px 36px #51402f18; }
+    .screen { min-height:580px; border-radius:25px; padding:18px 16px 30px; background:linear-gradient(175deg,#f2e6cf 0,#f8f4ec 32%,#f8f4ec 100%); }
+    .nav { display:flex; align-items:center; gap:12px; font-size:15px; padding:4px 2px 18px; }
+    .nav b { margin:auto; padding-right:25px; font-size:14px; }
+    .hero { display:flex; gap:15px; align-items:center; min-height:112px; padding:20px; border:1px solid #71583d; border-radius:23px; color:var(--hero-ink); background:linear-gradient(150deg,#544132 0,var(--hero) 54%,#302a27 100%); }
+    .symbol { width:58px; height:58px; flex:none; display:grid; place-items:center; border-radius:16px; background:#fff1d51a; color:var(--hero-ink); font-size:31px; }
+    .eyebrow { display:block; font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:#e2c89f; }
+    .hero strong { display:block; font-size:21px; line-height:1.2; margin-top:6px; overflow-wrap:anywhere; }
+    .date { margin:24px 6px 9px; font-weight:700; font-size:13px; text-transform:uppercase; color:#6d6258; }
+    .rows { overflow:hidden; border-radius:17px; background:var(--card); border:1px solid var(--line); }
+    .row { min-height:53px; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 16px; border-bottom:1px solid var(--line); }
+    .row:last-child { border:0; }
+    .row time { color:#665c52; white-space:nowrap; }
+    .row b { font-variant-numeric:tabular-nums; text-align:right; overflow-wrap:anywhere; }
+    .notice { margin:16px 0; padding:15px; border-radius:15px; border:1px solid #d6be8f; background:#fff2d7; color:#4f3d24; }
+    .state { text-align:center; padding:35px 12px; border:1px solid var(--line); border-radius:17px; background:var(--card); }
+    .state strong { display:block; font-size:18px; }
+    .state p { margin:6px 0 0; color:var(--muted); }
+    .caption { font-size:12px; color:var(--muted); margin:10px 2px 0; }
+    table { border-collapse:collapse; width:100%; font-size:13px; }
+    th,td { text-align:left; padding:8px 10px; border-bottom:1px solid var(--line); vertical-align:top; }
+    th { background:#ebdfcd; }
+    code { font-size:12px; overflow-wrap:anywhere; }
+    .contracts { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+    .contract { border:1px solid var(--line); border-radius:16px; background:var(--card); padding:16px; }
+    .contract h3 { margin:0 0 6px; font-size:16px; }
+    .contract p { margin:0; color:var(--muted); }
+    @media(max-width:760px) { .grid,.contracts { grid-template-columns:1fr; } header,main { padding:18px; } }
+    @media(min-width:761px) { .phone { max-width:680px; } .grid .phone { max-width:430px; } }
+  </style>
+</head>
+<body>
+  <header>
+    <nav><a href="index.html">4탭 레이아웃 맵</a> · <a href="../theme-map/themes/dune-all-data-detail-t07.html">T07 테마 방향</a> · <a href="../phone-design-map/actual/index.html">실제 화면 맵</a></nav>
+    <h1>T07 · 전체 데이터 상세</h1>
+    <p class="note">2026-10-31 구현 전 배치 계약. 아래 숫자와 날짜는 행 구조를 설명하는 <strong>예시</strong>이며 HealthKit 기록이나 앱 캡처가 아니다. 실제 값·섹션·상태는 현재 쿼리 결과에서만 만든다.</p>
+  </header>
+  <main>
+    <div class="grid">
+      <div><div class="phone"><div class="screen">
+        <div class="nav"><span aria-hidden="true">‹</span><b>Heart Rate Variability</b></div>
+        <div class="hero"><div class="symbol" aria-hidden="true">♡</div><div><span class="eyebrow">History</span><strong>심박변이도</strong></div></div>
+        <div class="date">예시 보고 날짜 · 10월 31일</div>
+        <div class="rows"><div class="row"><time>오전 8:15</time><b>75 ms</b></div><div class="row"><time>오전 7:50</time><b>72 ms</b></div></div>
+        <div class="date">예시 보고 날짜 · 10월 30일</div>
+        <div class="rows"><div class="row"><time>오전 8:12</time><b>71 ms</b></div></div>
+      </div></div><p class="caption">Ready · 일반 폭 예시. ♡는 브라우저 도식이며 네이티브는 <code>category.iconName</code>의 SF Symbol을 쓴다.</p></div>
+      <div><div class="phone"><div class="screen">
+        <div class="nav"><span aria-hidden="true">‹</span><b>Sleep</b></div>
+        <div class="hero"><div class="symbol" aria-hidden="true">☾</div><div><span class="eyebrow">History</span><strong>수면</strong></div></div>
+        <div class="notice">일부 기간의 건강 기록만 볼 수 있어요. <small>기존 제한 기록 안내의 자리.</small></div>
+        <div class="date">예시 보고 날짜 · 10월 31일</div>
+        <div class="rows"><div class="row"><time>오전 1:00</time><b>7h 46min</b></div></div>
+      </div></div><p class="caption">Limited + ready · 수면 섹션은 보고 날짜, 행의 시간은 실제 비각성 단계 시작 시각. 날짜와 값은 도식 예시.</p></div>
+    </div>
+    <h2>상태와 데이터 계약</h2>
+    <div class="contracts">
+      <div class="contract"><h3>조회 중 · 다음 페이지</h3><p>기존 List의 spinner와 <code>.task(id: dataPoints.count)</code>를 유지한다. 30은 행 수가 아닌 달력 일수다. 아직 불러온 기록을 전체 건수로 부르지 않는다.</p></div>
+      <div class="contract"><h3>기록 없음</h3><p>현재 <code>EmptyStateView</code>의 “No Data”와 “No data available yet.”를 유지한다. 0건이라는 임의 통계를 만들지 않는다.</p></div>
+      <div class="contract"><h3>제한된 이력 + 행</h3><p><code>LimitedHealthHistoryNotice</code>가 날짜 섹션 앞에 나온다. 보이는 행은 허용된 기간 안의 실제 조회 결과다.</p></div>
+      <div class="contract"><h3>제한된 이력 + 빈 상태</h3><p>같은 notice와 “No data in the available range.”를 함께 표시한다. 제한 기간 밖의 데이터가 없다고 단정하지 않는다.</p></div>
+    </div>
+    <h2>16개 범주 · 동일 화면 계약</h2>
+    <p class="note">아래 이름과 아이콘 식별자는 <code>HealthMetric+View.swift</code>의 현재 소스에서 온다. 각 행의 색은 <code>category.themeColor</code>로 주변 강조에만 사용한다. 브라우저 기호를 SF Symbol 증거로 취급하지 않는다.</p>
+    <table><thead><tr><th>Category raw value</th><th>원래 SF Symbol</th><th>테마 계열</th></tr></thead><tbody>
+      <tr><td>hrv</td><td><code>waveform.path.ecg</code></td><td>HRV</td></tr>
+      <tr><td>rhr</td><td><code>heart.fill</code></td><td>RHR</td></tr>
+      <tr><td>heartRate</td><td><code>bolt.heart.fill</code></td><td>Heart rate</td></tr>
+      <tr><td>sleep</td><td><code>moon.zzz.fill</code></td><td>Sleep</td></tr>
+      <tr><td>exercise</td><td><code>flame.fill</code></td><td>Activity</td></tr>
+      <tr><td>steps</td><td><code>figure.walk</code></td><td>Steps</td></tr>
+      <tr><td>weight</td><td><code>scalemass.fill</code></td><td>Body</td></tr>
+      <tr><td>bmi</td><td><code>figure.stand</code></td><td>Body</td></tr>
+      <tr><td>bodyFat</td><td><code>percent</code></td><td>Body</td></tr>
+      <tr><td>leanBodyMass</td><td><code>figure.strengthtraining.traditional</code></td><td>Body</td></tr>
+      <tr><td>spo2</td><td><code>lungs.fill</code></td><td>Vitals</td></tr>
+      <tr><td>respiratoryRate</td><td><code>wind</code></td><td>Vitals</td></tr>
+      <tr><td>vo2Max</td><td><code>figure.run</code></td><td>Fitness</td></tr>
+      <tr><td>heartRateRecovery</td><td><code>heart.circle</code></td><td>Fitness</td></tr>
+      <tr><td>wristTemperature</td><td><code>thermometer.medium</code></td><td>Vitals</td></tr>
+      <tr><td>breathingDisturbances</td><td><code>lungs</code></td><td>Sleep</td></tr>
+    </tbody></table>
+    <h2>네이티브 배치·행동</h2>
+    <ol>
+      <li>기존 영어 내비게이션 제목과 시스템 back을 유지한다. 상단에는 원래 아이콘, <code>category.displayName</code>, 번역된 기존 “History”만 둔다. 수치·마지막 업데이트·전체 건수·평균·필터는 추가하지 않는다.</li>
+      <li>불투명 <code>ScoreHeroPalette</code> 표면과 전경 대비를 T06과 공유한다. 범주 색은 배경 능선과 작은 강조에 사용하며 아이콘은 팔레트 전경색으로 읽힌다. 정적 <code>DetailWaveBackground</code>를 유지한다.</li>
+      <li>기존 <code>.insetGrouped</code> <code>List</code>에서 섹션은 <code>point.date</code>의 달력 날짜, 행의 시각은 <code>point.displayDate ?? point.date</code>, 값은 기존 <code>formattedValue</code>를 사용한다. 수면은 비각성 시간만 합산한다.</li>
+      <li>일반 크기에서는 시각과 값을 한 행에 둔다. 고정 60pt 시각 폭을 없애고 좁은 폭·최대 접근성 크기에서는 시각 위, 값 아래로 쌓는다. 값·단위는 줄바꿈으로 끝까지 읽히고, 행의 VoiceOver 레이블은 시간·값을 함께 전한다.</li>
+      <li>iPhone·Duo 접힘은 한 열. iPad·Duo 펼침은 본문 가독 폭을 약 680–760pt 안에서 제한해 지나치게 긴 행을 피한다. 실제 <code>List</code>의 스크롤·페이징·notice·empty AXID <code>all-data-screen-*</code>/<code>all-data-empty-state</code>를 보존한다.</li>
+    </ol>
+    <p class="note">이 HTML은 구현 전 방향이다. 변경 전 원본 16범주와 변경 후 동일 fixture의 실제 화면 비교는 네이티브 검증 및 실제 화면 맵에서만 판정한다.</p>
+  </main>
+</body>
+</html>
