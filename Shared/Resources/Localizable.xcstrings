@@ -41536,6 +41536,29 @@
         }
       }
     },
+    "SLEEP" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SLEEP"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "睡眠"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "수면"
+          }
+        }
+      }
+    },
     "Sleep (%)" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -42225,6 +42248,29 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "수면 점수"
+          }
+        }
+      }
+    },
+    "Sleep score %lld, %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sleep score %lld, %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "睡眠スコア%lld、%@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "수면 점수 %lld점, %@"
           }
         }
       }

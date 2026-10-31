@@ -308,6 +308,17 @@
         "layout": "../layout-map/cloud-sync-consent-t02.html",
         "status": "native-source-ready-captures-pending"
       }
+    },
+    {
+      "id": "sleep-prediction-detail-h03",
+      "name": "H03 · 오늘 밤 수면 예측 상세",
+      "title": "DUNE 수면 링·신뢰도·요인",
+      "file": "dune-sleep-prediction-detail-h03.html",
+      "detail": "기존 DetailScoreHero 링과 sleep 색상, 실제 low/medium/high 신뢰도 1/2/3 정성 마크, 원래 요인·팁 아이콘과 문구를 보존하는 H03/T15 공유 상세 방향. 브라우저 시안이며 앱 캡처나 새로운 확률·기록이 아니다.",
+      "implementation": {
+        "layout": "../layout-map/sleep-prediction-detail-h03.html",
+        "status": "source-contract-pending-native-validation"
+      }
     }
   ]
 }

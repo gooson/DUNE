@@ -16,7 +16,11 @@ final class NotificationRoutingRegressionTests: SeededUITestBaseCase {
             app.descendants(matching: .any)["notification-sleep-detail-screen"].firstMatch.waitForExistence(timeout: 10),
             "Bedtime reminder should push sleep detail"
         )
-        XCTAssertTrue(app.tabBars.buttons["Today"].isSelected, "Notification tap should keep the Today tab")
+        // iPad's floating navigation exposes the selected item outside a TabBar.
+        let identifiedToday = app.descendants(matching: .any)["tab-today"].firstMatch
+        let today = identifiedToday.exists ? identifiedToday : app.buttons["Today"].firstMatch
+        XCTAssertTrue(today.waitForExistence(timeout: 5), "Today navigation item should exist")
+        XCTAssertTrue(today.isSelected, "Notification tap should keep the Today tab")
     }
 
     func testLegacyPostureReminderPushesAssessment() {
