@@ -35,6 +35,8 @@ Life의 링 옆에는 현재 진행 상태를 설명하는 문장을 둔다. 히
 
 [Activity·Life 히어로 흐름과 근거 승인안](activity-life-hero-proposal.md)은 공통 링에 구성 점수·저장된 준비도·습관 완료 기록을 더하는 2026-10-25 구현 대상이다. 과거 습관 분모는 복원하지 않는다.
 
+2026-10-31 [A08 부상 위험 상세 배치](activity-injury-risk-detail-a08.html)는 실제 평가 점수·단계, 공급된 요인과 최대 요인 대비 상대 막대, 원래 권장 문구 및 nil/0점 분기를 구분한다. [DUNE 밝음·어두움 표현](../theme-map/themes/dune-injury-risk-detail-a08.html)은 정적 제안이다. DEBUG 점수42/두 요인은 라우트 검증용이고 원본 네이티브 캡처는 아직 확인 대기다.
+
 ## 화면별 맵 목록
 
 2026-10-31 [T02 iCloud 동기화 동의 배치](cloud-sync-consent-t02.html)는 앱 시작 시트의 히어로→세 설명→두 선택, 폭·큰 글씨·동작 계약을 정한다. HTML은 구현 기준 시안이며 실제 앱 캡처가 아니다.
