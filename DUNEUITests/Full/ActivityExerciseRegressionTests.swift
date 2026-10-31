@@ -764,8 +764,124 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         for _ in 0..<24 where !reportLink.isHittable { activityScroll.swipeUp(velocity: .slow) }
         XCTAssertTrue(reportLink.isHittable)
         waitForElement("activity-weeklyreport-detail-link", timeout: 5).auditTap()
-        XCTAssertTrue(app.descendants(matching: .any)["activity-weekly-report-detail-screen"].firstMatch
-            .waitForExistence(timeout: 10))
+        let report = app.descendants(matching: .any)["activity-weekly-report-detail-screen"].firstMatch
+        XCTAssertTrue(report.waitForExistence(timeout: 10))
+        XCTAssertEqual(app.staticTexts["activity-weekly-report-volume"].firstMatch.label, "2.4k")
+        XCTAssertEqual(app.staticTexts["activity-weekly-report-sessions"].firstMatch.label, "3")
+        XCTAssertEqual(app.staticTexts["activity-weekly-report-active-days"].firstMatch.label, "3")
+        XCTAssertEqual(app.staticTexts["activity-weekly-report-duration"].firstMatch.label, "5400 min")
+        XCTAssertEqual(app.staticTexts["activity-weekly-report-intensity"].firstMatch.label, "72%")
+        XCTAssertEqual(app.staticTexts["activity-weekly-report-change"].firstMatch.label, "+12%")
+        XCTAssertFalse(app.staticTexts["activity-weekly-report-date"].firstMatch.label.isEmpty)
+        addScreenshotAttachment(named: "Activity Weekly Report A09 loaded hero")
+        VisualAudit.capture("Activity Weekly Report A09 loaded hero")
+
+        let summary = app.staticTexts["activity-weekly-report-summary"].firstMatch
+        let highlight = app.staticTexts["activity-weekly-report-highlight"].firstMatch
+        XCTAssertTrue(summary.exists)
+        XCTAssertFalse(summary.label.isEmpty)
+        XCTAssertTrue(highlight.exists)
+        XCTAssertFalse(highlight.label.isEmpty)
+        let muscleValues = app.staticTexts.matching(identifier: "activity-weekly-report-muscle-volume")
+        XCTAssertEqual(muscleValues.count, 2)
+        XCTAssertEqual(Set((0..<muscleValues.count).map { muscleValues.element(boundBy: $0).label }),
+                       Set(["1.1k", "1.3k"]))
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("activity-weekly-report-muscle-volume", maxSwipes: 8))
+        addScreenshotAttachment(named: "Activity Weekly Report A09 highlights and muscle breakdown")
+        VisualAudit.capture("Activity Weekly Report A09 highlights and muscle breakdown")
+        tapBackButton()
+        ensureActivityRoot()
+    }
+
+    func testWeeklyReportAtMaximumAccessibilityTextSize() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments.append(contentsOf: [
+            "--ui-design-map-activity-routes",
+            "--ui-test-style", "dark",
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ])
+        launchApp(with: configuration)
+
+        let window = app.windows.firstMatch
+        let activityScroll = app.scrollViews[AXID.activityRootScroll].firstMatch
+        let reportLink = app.buttons["activity-weeklyreport-detail-link"].firstMatch
+        XCTAssertTrue(activityScroll.waitForExistence(timeout: 5))
+        for _ in 0..<32 {
+            let viewport = activityScroll.frame.intersection(window.frame)
+            if reportLink.exists && reportLink.isHittable && viewport.contains(reportLink.frame) { break }
+            if reportLink.exists && reportLink.frame.midY < viewport.midY {
+                activityScroll.swipeDown(velocity: .slow)
+            } else {
+                activityScroll.swipeUp(velocity: .slow)
+            }
+        }
+        XCTAssertTrue(reportLink.exists && reportLink.isHittable,
+                      "The report link should be reachable in the AX Activity root")
+        reportLink.auditTap()
+
+        let reportScroll = app.scrollViews["activity-weekly-report-detail-screen"].firstMatch
+        XCTAssertTrue(reportScroll.waitForExistence(timeout: 10))
+
+        func revealInReport(_ element: XCUIElement, name: String) {
+            for _ in 0..<12 {
+                let viewport = reportScroll.frame.intersection(window.frame)
+                if element.exists && element.isHittable && viewport.contains(element.frame) { return }
+                if element.exists && element.frame.midY < viewport.midY {
+                    reportScroll.swipeDown(velocity: .slow)
+                } else {
+                    reportScroll.swipeUp(velocity: .slow)
+                }
+            }
+            let viewport = reportScroll.frame.intersection(window.frame)
+            XCTAssertTrue(element.exists && element.isHittable && viewport.contains(element.frame),
+                          "\(name) should fit within the A09 report scroll viewport")
+        }
+
+        // These exact numbers are the existing DEBUG report fixture, not personal workouts.
+        let volume = app.staticTexts["activity-weekly-report-volume"].firstMatch
+        let sessions = app.staticTexts["activity-weekly-report-sessions"].firstMatch
+        let activeDays = app.staticTexts["activity-weekly-report-active-days"].firstMatch
+        let duration = app.staticTexts["activity-weekly-report-duration"].firstMatch
+        let intensity = app.staticTexts["activity-weekly-report-intensity"].firstMatch
+        let change = app.staticTexts["activity-weekly-report-change"].firstMatch
+        XCTAssertTrue(volume.waitForExistence(timeout: 10))
+        XCTAssertEqual(volume.label, "2.4k")
+        XCTAssertEqual(sessions.label, "3")
+        XCTAssertEqual(activeDays.label, "3")
+        XCTAssertEqual(duration.label, "5400 min")
+        XCTAssertEqual(intensity.label, "72%")
+        XCTAssertEqual(change.label, "+12%")
+        XCTAssertFalse(app.staticTexts["activity-weekly-report-date"].firstMatch.label.isEmpty)
+        revealInReport(volume, name: "Report volume")
+        addScreenshotAttachment(named: "A09 dark maximum AX report hero")
+        VisualAudit.capture("A09 dark maximum AX report hero")
+        revealInReport(duration, name: "Report duration in minutes")
+        addScreenshotAttachment(named: "A09 dark maximum AX hero duration")
+        VisualAudit.capture("A09 dark maximum AX hero duration")
+
+        let summary = app.staticTexts["activity-weekly-report-summary"].firstMatch
+        let highlight = app.staticTexts["activity-weekly-report-highlight"].firstMatch
+        XCTAssertTrue(summary.waitForExistence(timeout: 5))
+        XCTAssertTrue(highlight.waitForExistence(timeout: 5))
+        XCTAssertFalse(summary.label.isEmpty)
+        XCTAssertFalse(highlight.label.isEmpty)
+        revealInReport(summary, name: "Report summary")
+        addScreenshotAttachment(named: "A09 dark maximum AX summary")
+        VisualAudit.capture("A09 dark maximum AX summary")
+        revealInReport(highlight, name: "Report highlight")
+        addScreenshotAttachment(named: "A09 dark maximum AX highlight")
+        VisualAudit.capture("A09 dark maximum AX highlight")
+
+        let muscles = app.staticTexts.matching(identifier: "activity-weekly-report-muscle-volume")
+        XCTAssertEqual(muscles.count, 2)
+        XCTAssertEqual(muscles.element(boundBy: 0).label, "1.1k")
+        XCTAssertEqual(muscles.element(boundBy: 1).label, "1.3k")
+        revealInReport(muscles.element(boundBy: 1), name: "Second muscle volume")
+        addScreenshotAttachment(named: "A09 dark maximum AX relative muscle bars")
+        VisualAudit.capture("A09 dark maximum AX relative muscle bars")
+
+        tapBackButton()
+        ensureActivityRoot()
     }
 
     func testVisualAuditPersonalRecordsExplanation() throws {
