@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>A02 · Training Readiness detail layout contract</title>
+  <style>
+    :root{font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif;color:#24211d;background:#f7f4ed}
+    *{box-sizing:border-box}body{margin:0}header,main,footer{max-width:1120px;margin:auto;padding:24px}header{padding-top:42px}
+    h1{font-size:clamp(2rem,4vw,3rem);margin:.15em 0}h2{font-size:1.4rem;margin:0 0 14px}h3{margin:0 0 8px}p{line-height:1.55}
+    .eyebrow{text-transform:uppercase;letter-spacing:.15em;color:#795f3b;font-size:.76rem;font-weight:800}
+    .notice{background:#fff3d8;border:1px solid #d7ba79;border-radius:12px;padding:12px 16px;line-height:1.5}
+    .links a{color:#6b4e24}.layout{display:grid;grid-template-columns:minmax(270px,420px) minmax(0,1fr);gap:28px;align-items:start;margin:26px 0}
+    .phone{border:7px solid #2f2a26;border-radius:38px;background:#f7f4ed;padding:14px;box-shadow:0 16px 38px #302b2a22;max-height:770px;overflow:auto}
+    .nav{display:flex;gap:8px;align-items:center;padding:5px 4px 15px;font-weight:700}.back{font-size:1.3rem;color:#9b6a30}
+    .hero{background:#352e29;color:#fff5e8;border:1px solid #745f43;border-radius:24px;padding:20px}
+    .hero-top{font-size:.75rem;letter-spacing:.14em;font-weight:800}.hero-main{display:flex;gap:18px;align-items:center;margin:18px 0}
+    .ring{width:112px;height:112px;flex:none;border-radius:50%;border:11px solid #e4b861;display:grid;place-items:center;box-shadow:inset 0 0 0 7px #584631;font-size:2.15rem;font-weight:800}
+    .status{font-size:1.15rem;font-weight:800}.muted{color:#d5c4ab;font-size:.85rem}.date{margin:8px 0 18px}
+    .factor{display:grid;grid-template-columns:25px minmax(0,1fr) auto auto;gap:8px;padding:9px 0;border-top:1px solid #ffffff24;align-items:center;font-size:.87rem}
+    .factor strong{font-variant-numeric:tabular-nums}.factor small{color:#d5c4ab;font-size:.73rem;min-width:42px;text-align:right}
+    .track{height:5px;background:#ffffff28;border-radius:9px;grid-column:2/5}.track i{display:block;width:var(--fill);height:5px;border-radius:9px;background:var(--accent)}
+    .card{background:#fffcf6;border:1px solid #e6ddce;border-radius:18px;padding:18px;margin-top:14px;box-shadow:0 3px 12px #302b2a0b}
+    .periods{display:flex;gap:3px;background:#e9e2d6;border-radius:10px;padding:3px}.periods span{flex:1;text-align:center;font-size:.78rem;padding:7px 0}.periods .selected{background:white;border-radius:8px;font-weight:800}
+    .trend-head{display:flex;justify-content:space-between;align-items:center;margin:16px 0 6px;gap:8px}.trend-head strong{font-size:.87rem}.toggle{border:1px solid #ab8861;border-radius:9px;padding:5px 8px;font-size:.76rem}
+    .plot{height:140px;border-left:1px solid #a89d8b;border-bottom:1px solid #a89d8b;position:relative;margin:18px 6px 10px;background:repeating-linear-gradient(to top,transparent 0 34px,#ddd5c9 35px)}
+    .plot:after{content:"";position:absolute;left:6%;right:5%;top:45%;height:3px;background:#b88243;transform:rotate(-4deg);border-radius:5px;box-shadow:35px 12px 0 -1px #b88243,100px -10px 0 -1px #b88243}
+    .summary{font-size:.78rem;color:#6e665c}.sub{border-left:3px solid #b88243;padding-left:10px;margin:11px 0}.sub span{display:block;color:#746e64;font-size:.78rem}
+    .contract{display:grid;gap:12px}.rule{background:white;border:1px solid #e6ddce;border-radius:14px;padding:16px}.rule p{margin:.35em 0}
+    table{width:100%;border-collapse:collapse;background:white}th,td{padding:11px 10px;border:1px solid #ded6c9;text-align:left;vertical-align:top}th{background:#efe9de}
+    code{font-size:.88em;overflow-wrap:anywhere}footer{color:#746e64;font-size:.82rem;padding-bottom:50px}
+    @media(max-width:780px){.layout{grid-template-columns:1fr}.phone{margin:auto;width:min(100%,420px)}header,main,footer{padding-left:16px;padding-right:16px}}
+    @media(max-width:390px){.hero-main{display:block}.ring{margin-bottom:15px}.factor{grid-template-columns:22px minmax(0,1fr) auto}.factor small{grid-column:2/4;text-align:left}.track{grid-column:2/4}}
+  </style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">A02 · screen-specific layout map</div>
+  <h1>Training Readiness detail</h1>
+  <p class="notice"><strong>제안 배치입니다.</strong> 아래 75점·구성 점수·차트는 모두 설명용 예시이며 네이티브 캡처나 관측된 건강 기록이 아닙니다. 앱은 실제 <code>TrainingReadiness</code>와 기존 HealthKit 조회 결과만 표시합니다.</p>
+  <p class="links"><a href="../../plans/2026-10-31-a02-training-readiness-detail-redesign.md">구현 계획</a> · <a href="../theme-map/themes/dune-training-readiness-detail-a02.html">테마 방향 보존본</a> · <a href="../phone-design-map/actual/index.html">실제 화면맵</a></p>
+</header>
+<main>
+  <div class="layout">
+    <div class="phone" aria-label="Illustrative compact layout">
+      <div class="nav"><span class="back">‹</span> Training Readiness</div>
+      <section class="hero">
+        <div class="hero-top">figure.walk &nbsp; READINESS</div>
+        <div class="hero-main"><div class="ring">75</div><div><div class="status">Moderate</div><div>Normal training is fine.</div></div></div>
+        <div class="muted date">Evaluation date · from the actual model</div>
+        <div class="muted">Computed components · each out of 100</div>
+        <div class="factor" style="--fill:72%;--accent:#d6ab69"><span>♡</span><span>HRV Variability</span><strong>72</strong><small>30% weight</small><div class="track"><i></i></div></div>
+        <div class="factor" style="--fill:82%;--accent:#b7b1e0"><span>☾</span><span>Sleep Quality</span><strong>82</strong><small>25% weight</small><div class="track"><i></i></div></div>
+        <div class="factor" style="--fill:68%;--accent:#e49f83"><span>♥</span><span>Resting Heart Rate</span><strong>68</strong><small>20% weight</small><div class="track"><i></i></div></div>
+        <div class="factor" style="--fill:80%;--accent:#a1c4a0"><span>✦</span><span>Recovery Status</span><strong>80</strong><small>15% weight</small><div class="track"><i></i></div></div>
+        <div class="factor" style="--fill:70%;--accent:#b4cc9c"><span>⌁</span><span>Trend Bonus</span><strong>70</strong><small>10% weight</small><div class="track"><i></i></div></div>
+      </section>
+      <div class="card"><strong>Time of day</strong><p class="summary">Existing adjustment and adaptive projection layout</p></div>
+      <div class="card"><div class="periods"><span>D</span><span class="selected">W</span><span>M</span><span>6M</span><span>Y</span></div><div class="trend-head"><strong>Visible date range</strong><span class="toggle">Trend</span></div><div class="plot" aria-label="Illustrative trend line"></div><div class="summary">Existing visible summary and highlights · illustrative plot</div></div>
+      <div class="card"><strong>Source subtrends</strong><div class="sub">HRV <span>Visible outside Day only</span></div><div class="sub">Resting Heart Rate</div><div class="sub">Sleep Duration</div></div>
+      <div class="card"><strong>Score Composition</strong><p class="summary">Original five component scores and weights retained</p></div>
+      <div class="card"><strong>Calculation Method</strong><p class="summary">All three original bullets and conditional calibration bullet retained</p></div>
+    </div>
+    <div class="contract">
+      <section class="rule"><h2>화면 순서</h2><p>원래 Activity 진입·내비게이션을 유지하고, 불투명 점수 히어로 → 시간 조정 → 기간/범위/추세/차트/요약 한 카드 → 비-일간 세 원천 추세 → 원래 점수 구성 → 계산 설명으로 읽습니다. 이전/다음 날짜 화살표는 ViewModel 계약이 없으므로 넣지 않습니다.</p></section>
+      <section class="rule"><h2>값의 의미</h2><p>현재 점수는 다섯 계산 구성의 결과입니다. 구성 점수 72 같은 예시는 센서 수신의 증거가 아닙니다. 실제 계산은 중립 대체값을 포함할 수 있습니다. 막대 길이는 구성 점수/100이고 30% 같은 표시는 가중치입니다.</p><p>Day는 실제 rolling readiness snapshot입니다. W/M/6M/Y 이력은 HRV·RHR·수면 세 원천의 근사치이며 현재 다섯 구성 공식을 과거에 재계산한 값으로 말하지 않습니다.</p></section>
+      <section class="rule"><h2>상태와 폭</h2><p>nil 준비도에서는 기존 “Need More Data”만, 차트 조회 중에는 기존 로딩 표시만, 보정 중이면 실제 점수와 “Calibrating” 및 계산 bullet을 표시합니다. iPhone·Duo 접힘과 최대 글씨에서는 점수를 링 밖으로 빼고 구성 행을 세로로 전환할 수 있습니다. iPad·Duo 펼침도 수치·가중치·설명을 생략하지 않습니다.</p></section>
+      <section class="rule"><h2>원본 및 실제 증거</h2><p>기준 원본은 A02 base <code>672d5fdb</code>, View SHA-256 <code>87c2ed70…b296b2</code>, VM <code>ce05fcb2…acbd</code>. 원본 iPhone selector는 영어·최대 접근성 글씨에서 통과했고 <code>.codex-checks/a02/before-phone-current/</code>에 보존했습니다. iPad 첫 max-AX 사례만 통과했으며 나머지 원본 수집은 진행 중입니다. 일반 글씨 원본과 Duo 두 자세는 미완료입니다. 2026-10-12의 A02 PNG는 화면/기기 식별용 과거 자료입니다.</p></section>
+    </div>
+  </div>
+  <h2>원본 동작 계약</h2>
+  <table><thead><tr><th>구간</th><th>보존할 동작과 출처</th></tr></thead><tbody>
+    <tr><td>Score &amp; status</td><td>실제 <code>TrainingReadiness</code> 0–100, 네 상태의 기존 SF Symbol 및 <code>evaluationDate</code>. Ready ≥80, Moderate ≥60, Light ≥40, 그 아래 Rest.</td></tr>
+    <tr><td>Five components</td><td>HRV 30% (<code>waveform.path.ecg</code>), Sleep 25% (<code>moon.zzz.fill</code>), RHR 20% (<code>heart.fill</code>), Recovery 15% (<code>heart.text.clipboard</code>), Trend 10% (<code>chart.line.uptrend.xyaxis</code>). 실제 component score와 weight를 별도 레이블로 표시합니다. 브라우저 보조 글리프는 SF Symbol 캡처가 아닙니다.</td></tr>
+    <tr><td>Five periods</td><td>D/W/M/6M/Y, 실제 visible range, Trend toggle, chart point selection/scroll, summary/highlights, 비-일간 HRV/RHR/Sleep subtrend를 유지합니다.</td></tr>
+    <tr><td>Explanation</td><td>기존 <code>ScoreCompositionCard</code> 데이터와 <code>CalculationMethodCard</code> 전체 bullet을 유지하며 보정 bullet은 조건부입니다.</td></tr>
+  </tbody></table>
+</main>
+<footer>브라우저 레이아웃 계약 · 실제 앱 화면과 검증은 별도 actual 디자인맵에서 기록합니다.</footer>
+</body>
+</html>

@@ -187,3 +187,7 @@ Gold Impact 네이티브 일반 빌드·관련 단위51개와 S01 설정 저장 
 ## T08 날씨 상세 검토본 · 2026-10-31
 
 [보존 시안](themes/dune-weather-detail-redesign.html)의 밝음·어두움 PNG와 원본 T08 JSON을 `themes/assets/condition-detail-redesign/`에 둔다. [네이티브 배치 계약](../layout-map/weather-detail-redesign-proposal.md)은 실제 날씨 상태와 수신 조건을 사용한다. 브라우저 시안은 앱 캡처가 아니며 T08 새 실제 화면은 런타임 검증 뒤 별도로 갱신한다.
+
+## A02 훈련 준비도 상세 방향 시안 · 2026-10-31
+
+[밝음·어두움 보존 시안](themes/dune-training-readiness-detail-a02.html)과 [화면별 배치·데이터 계약](../layout-map/training-readiness-detail-a02.html)을 연결한다. 불투명 히어로·원본 상태 SF Symbol·실제 모델에서 읽을 다섯 구성 점수와 별도 30/25/20/15/10 가중치, 기존 시간 조정·5기간/차트/요약·비-일간 세 원천 추세·계산 설명의 배치 방향이다. HTML의 75점·요인 수치·차트는 명시적인 설명용 예시다. 원본 iPhone 영어/max-AX selector 1개와 iPad 첫 max-AX 사례만 현재 통과했다. iPad 배치는 진행 중이며 일반 글씨 원본과 Duo는 미검증이다. 새 네이티브 실제 화면 캡처는 앱 구현 뒤 actual 디자인맵에 별도로 기록한다.

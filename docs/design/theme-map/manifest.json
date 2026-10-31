@@ -152,6 +152,17 @@
   ],
   "studies": [
     {
+      "id": "training-readiness-detail-a02",
+      "name": "A02 훈련 준비도 상세",
+      "title": "Training Readiness · Opaque Score Hero",
+      "file": "dune-training-readiness-detail-a02.html",
+      "detail": "2026-10-31 A02 화면별 브라우저 방향 시안. 밝음/어두움의 불투명 히어로·모델 상태 심볼·링과 다섯 구성 점수/가중치, 시간 조정, 기존 5기간 차트·3원천 비-일간 근사 이력을 표현한다. 수치·그래프는 명시적인 예시이며 실제 센서 관측이나 앱 캡처가 아니다. 원본 iPhone 영어/max-AX 통과, iPad 첫 max-AX 사례 통과·배치 진행 중, 일반 글씨/Duo 미검증.",
+      "implementation": {
+        "layout": "../layout-map/training-readiness-detail-a02.html",
+        "status": "proposal-before-native-implementation"
+      }
+    },
+    {
       "id": "crest-language",
       "name": "공통 능선 언어",
       "title": "Theme Crest Language",
