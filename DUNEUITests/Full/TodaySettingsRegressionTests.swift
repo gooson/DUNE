@@ -372,6 +372,20 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         XCTAssertTrue(app.hasPrimaryNavigation(timeout: 8), "Seeded Today should load with a fixed daytime fixture")
         dismissMorningBriefingIfNeeded()
 
+        let weatherCard = revealWeatherCardForDetail()
+        weatherCard.auditTap()
+
+        let weatherDetail = app.descendants(matching: .any)[AXID.weatherDetailScreen].firstMatch
+        XCTAssertTrue(weatherDetail.waitForExistence(timeout: 5), "Weather detail should open from weather card")
+        XCTAssertTrue(app.staticTexts["weather-detail-temperature"].exists,
+                      "Current temperature should remain visible in the weather sky")
+        XCTAssertTrue(app.staticTexts["weather-detail-condition"].exists,
+                      "The original condition label should remain in the hero")
+        XCTAssertTrue(app.staticTexts["Outdoor Fitness Score"].exists,
+                      "The outdoor score section should remain below current weather")
+    }
+
+    private func revealWeatherCardForDetail() -> XCUIElement {
         let weatherCard = app.descendants(matching: .any)[AXID.dashboardWeatherCard].firstMatch
         XCTAssertTrue(weatherCard.waitForExistence(timeout: 10), "Seeded Today state should render weather card")
         let dashboardScroll = app.scrollViews["dashboard-root-scroll"].firstMatch
@@ -379,7 +393,9 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         func visibleWeatherViewport() -> CGRect {
             let scrollFrame = dashboardScroll.frame.intersection(app.windows.firstMatch.frame)
             let top = max(scrollFrame.minY, app.navigationBars.firstMatch.frame.maxY + 8)
-            let bottom = min(scrollFrame.maxY, app.tabBars.firstMatch.frame.minY - 8)
+            let tabBar = app.tabBars.firstMatch
+            let bottom = tabBar.exists && tabBar.isHittable && tabBar.frame.minY > scrollFrame.midY
+                ? min(scrollFrame.maxY, tabBar.frame.minY - 8) : scrollFrame.maxY
             return CGRect(x: scrollFrame.minX, y: top, width: scrollFrame.width,
                           height: max(0, bottom - top))
         }
@@ -395,10 +411,68 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         XCTAssertTrue(weatherCard.isHittable && visibleWeatherViewport().contains(weatherCard.frame),
                       "Weather card should be fully below the navigation bar before opening its detail")
         XCTAssertGreaterThanOrEqual(weatherCard.frame.height, 44, "Weather row should have a finger-sized tap target")
-        weatherCard.auditTap()
+        return weatherCard
+    }
 
-        let weatherDetail = app.descendants(matching: .any)[AXID.weatherDetailScreen].firstMatch
-        XCTAssertTrue(weatherDetail.waitForExistence(timeout: 5), "Weather detail should open from weather card")
+    func testWeatherDetailRainNightInDarkAppearance() throws {
+        openWeatherDetailVariant("rain-night", style: "dark", maximumAX: false)
+        assertWeatherVariantHero(condition: "Rain")
+        addScreenshotAttachment(named: "T08 rain night dark")
+    }
+
+    func testWeatherDetailSnowAtMaximumAccessibilitySize() throws {
+        openWeatherDetailVariant("snow-day", style: "light", maximumAX: true)
+        assertWeatherVariantHero(condition: "Snow", minimumTemperatureHeight: 44)
+        addScreenshotAttachment(named: "T08 snow day maximum AX")
+    }
+
+    private func assertWeatherVariantHero(condition: String, minimumTemperatureHeight: CGFloat = 0) {
+        let detail = app.scrollViews[AXID.weatherDetailScreen].firstMatch
+        XCTAssertTrue(detail.waitForExistence(timeout: 5))
+        let temperature = app.staticTexts["weather-detail-temperature"].firstMatch
+        let conditionText = app.staticTexts["weather-detail-condition"].firstMatch
+        XCTAssertTrue(temperature.waitForExistence(timeout: 5))
+        XCTAssertTrue(conditionText.waitForExistence(timeout: 5))
+        XCTAssertFalse(temperature.label.isEmpty)
+        XCTAssertTrue(temperature.label.contains("°C"), "Weather hero needs a Celsius temperature")
+        XCTAssertEqual(conditionText.label, condition)
+
+        let window = app.windows.firstMatch.frame
+        let scrollViewport = detail.frame.intersection(window)
+        let top = max(scrollViewport.minY, app.navigationBars.firstMatch.frame.maxY + 8)
+        let tabBar = app.tabBars.firstMatch
+        let bottom = tabBar.exists && tabBar.isHittable && tabBar.frame.minY > scrollViewport.midY
+            ? min(scrollViewport.maxY, tabBar.frame.minY - 8) : scrollViewport.maxY
+        let heroViewport = CGRect(x: scrollViewport.minX, y: top,
+                                  width: scrollViewport.width, height: max(0, bottom - top))
+        XCTAssertTrue(heroViewport.contains(temperature.frame) && temperature.isHittable,
+                      "Temperature must be fully readable in the weather hero")
+        XCTAssertTrue(heroViewport.contains(conditionText.frame) && conditionText.isHittable,
+                      "Condition must be fully readable in the weather hero")
+        if minimumTemperatureHeight > 0 {
+            XCTAssertGreaterThan(temperature.frame.height, minimumTemperatureHeight)
+        }
+    }
+
+    private func openWeatherDetailVariant(_ variant: String, style: String, maximumAX: Bool) {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "--ui-weather-detail-variant", variant,
+            "--ui-test-style", style,
+            "--ui-dashboard-hour", "12",
+            "-morningBriefingDisabled", "YES"
+        ]
+        if maximumAX {
+            configuration.additionalArguments += [
+                "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+            ]
+        }
+        launchApp(with: configuration)
+        XCTAssertTrue(app.hasPrimaryNavigation(timeout: 8))
+        dismissMorningBriefingIfNeeded()
+        let weatherCard = revealWeatherCardForDetail()
+        weatherCard.auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.weatherDetailScreen].firstMatch.waitForExistence(timeout: 5))
     }
 
     func testPinnedMetricsEditorOpensAndDismisses() throws {
@@ -802,6 +876,9 @@ final class TodaySettingsEmptyStateRegressionTests: UITestBaseCase {
 
 @MainActor
 final class CloudSyncConsentRegressionTests: UITestBaseCase {
+    override var shouldSeedMockData: Bool { true }
+    override var uiScenario: LaunchScenario? { .empty }
+
     override var additionalLaunchArguments: [String] {
         [
             "--ui-force-cloud-sync-consent",
@@ -820,6 +897,17 @@ final class CloudSyncConsentRegressionTests: UITestBaseCase {
     func testCloudSyncConsentHookPresentsAndDismissesSheet() throws {
         let consentView = app.descendants(matching: .any)[AXID.cloudSyncConsentView].firstMatch
         XCTAssertTrue(consentView.waitForExistence(timeout: 5), "Consent hook should present cloud sync consent sheet")
+        XCTAssertTrue(app.staticTexts["iCloud Sync"].exists, "Consent title should identify the decision")
+        XCTAssertTrue(app.staticTexts["Private storage"].exists, "Privacy explanation should be visible")
+        XCTAssertTrue(app.staticTexts["Across devices"].exists, "Sync explanation should be visible")
+        XCTAssertTrue(app.staticTexts["Use without iCloud"].exists, "Local option should be visible")
+        for identifier in [AXID.cloudSyncConsentEnable, AXID.cloudSyncConsentLocalOnly] {
+            let choice = app.buttons[identifier].firstMatch
+            XCTAssertTrue(choice.waitForExistence(timeout: 5))
+            XCTAssertGreaterThanOrEqual(choice.frame.height, 44,
+                                        "Each choice needs a 44-point minimum touch target")
+            XCTAssertTrue(choice.isHittable)
+        }
         VisualAudit.capture("Cloud sync consent before dismissal")
 
         let button = app.buttons[AXID.cloudSyncConsentLocalOnly].firstMatch
@@ -830,5 +918,91 @@ final class CloudSyncConsentRegressionTests: UITestBaseCase {
         let dismissed = NSPredicate(format: "exists == false")
         expectation(for: dismissed, evaluatedWith: consentView)
         waitForExpectations(timeout: 5)
+    }
+
+    func testCloudSyncConsentEnableChoiceDismissesSheet() throws {
+        let consentView = app.descendants(matching: .any)[AXID.cloudSyncConsentView].firstMatch
+        XCTAssertTrue(consentView.waitForExistence(timeout: 5), "Consent hook should present cloud sync consent sheet")
+
+        let button = app.buttons[AXID.cloudSyncConsentEnable].firstMatch
+        XCTAssertTrue(button.waitForExistence(timeout: 5), "Enable iCloud Sync action should exist")
+        XCTAssertTrue(button.isHittable, "Enable iCloud Sync action must remain usable")
+        button.auditTap()
+
+        let dismissed = NSPredicate(format: "exists == false")
+        expectation(for: dismissed, evaluatedWith: consentView)
+        waitForExpectations(timeout: 5)
+    }
+
+    func testCloudSyncConsentDarkAppearanceKeepsChoicesReadable() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += ["--ui-test-style", "dark"]
+        launchApp(with: configuration)
+
+        let consentView = app.descendants(matching: .any)[AXID.cloudSyncConsentView].firstMatch
+        XCTAssertTrue(consentView.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["iCloud Sync"].exists)
+        for title in ["Private storage", "Across devices", "Use without iCloud"] {
+            XCTAssertTrue(app.staticTexts[title].exists, "\(title) should remain readable in dark appearance")
+        }
+        for identifier in [AXID.cloudSyncConsentEnable, AXID.cloudSyncConsentLocalOnly] {
+            let button = app.buttons[identifier].firstMatch
+            XCTAssertTrue(button.waitForExistence(timeout: 5))
+            XCTAssertTrue(button.isHittable, "\(identifier) should remain available in dark appearance")
+        }
+        VisualAudit.capture("T02 dark consent hero and choices")
+    }
+
+    func testCloudSyncConsentMaximumTextKeepsBothChoicesReachable() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ]
+        launchApp(with: configuration)
+
+        let consentView = app.descendants(matching: .any)[AXID.cloudSyncConsentView].firstMatch
+        XCTAssertTrue(consentView.waitForExistence(timeout: 5))
+        let heroTitle = app.staticTexts["iCloud Sync"].firstMatch
+        XCTAssertTrue(heroTitle.exists && heroTitle.isHittable, "Hero title should be visible at the top")
+        VisualAudit.capture("T02 maximum text hero")
+
+        let window = app.windows.firstMatch
+        let enableButton = app.buttons[AXID.cloudSyncConsentEnable].firstMatch
+        XCTAssertTrue(window.exists && enableButton.waitForExistence(timeout: 5))
+        let scrollFrame = consentView.frame
+        let contentTop = max(scrollFrame.minY, window.frame.minY) + 24
+        let contentBottom = min(scrollFrame.maxY, enableButton.frame.minY) - 24
+        XCTAssertGreaterThan(contentBottom - contentTop, 100, "Scrollable content needs room above the pinned choices")
+        let visibleContent = CGRect(
+            x: scrollFrame.minX, y: contentTop,
+            width: scrollFrame.width, height: contentBottom - contentTop
+        )
+        let start = consentView.coordinate(withNormalizedOffset: CGVector(
+            dx: 0.5, dy: (contentBottom - scrollFrame.minY) / scrollFrame.height
+        ))
+        let end = consentView.coordinate(withNormalizedOffset: CGVector(
+            dx: 0.5, dy: (contentTop - scrollFrame.minY) / scrollFrame.height
+        ))
+        for title in ["Private storage", "Across devices", "Use without iCloud"] {
+            let rowTitle = app.staticTexts[title].firstMatch
+            XCTAssertTrue(rowTitle.exists, "\(title) should remain in the scrollable content")
+            for _ in 0..<8 {
+                if visibleContent.contains(rowTitle.frame) && rowTitle.isHittable { break }
+                start.press(forDuration: 0.05, thenDragTo: end)
+            }
+            XCTAssertTrue(visibleContent.contains(rowTitle.frame) && rowTitle.isHittable,
+                          "\(title) should fit and be reachable above the pinned choices")
+        }
+        VisualAudit.capture("T02 maximum text information")
+
+        let visibleWindow = window.frame.insetBy(dx: -1, dy: -1)
+        for identifier in [AXID.cloudSyncConsentEnable, AXID.cloudSyncConsentLocalOnly] {
+            let button = app.buttons[identifier].firstMatch
+            XCTAssertTrue(button.waitForExistence(timeout: 5))
+            XCTAssertGreaterThanOrEqual(button.frame.height, 44, "\(identifier) needs a 44-point hit target")
+            XCTAssertTrue(visibleWindow.contains(button.frame), "\(identifier) must fit entirely inside the window")
+            XCTAssertTrue(button.isHittable, "\(identifier) must remain tappable at maximum text size")
+        }
+        VisualAudit.capture("T02 maximum text choice footer")
     }
 }

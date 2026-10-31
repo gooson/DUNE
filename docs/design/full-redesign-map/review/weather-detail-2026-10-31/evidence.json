@@ -1,0 +1,200 @@
+{
+  "screen": "T08",
+  "title": "날씨 상세",
+  "date": "2026-10-31",
+  "base": "41740ebe",
+  "gallery": "weather-detail-2026-10-31",
+  "before_directory": ".codex-checks/t08/before-final-map",
+  "summary": "조건별 하늘·햇빛·달빛·비·눈과 날씨 히어로, 야외 활동 점수 및 예보를 시각적으로 강화했습니다. 기존 아이콘·단위·조건별 항목·뒤로 가기·스크롤을 유지합니다.",
+  "scope_note": "iPhone·iPad·Duo 접힘0°/펼침180°의 새 실제 앱 캡처입니다. 어두운 비와 최대 글씨의 눈 화면은 별도 상태로 보존했습니다. 정적 UI 감사에서는 움직임을 멈추며, 모의 날씨 자료를 사용합니다. 각 이미지의 실제 소스가 표기되어 있고 전체 회귀나 실제 기상 관측을 검증한 것은 아닙니다.",
+  "extra_states": [
+    {
+      "key": "rain-night-dark",
+      "label": "비 오는 밤 · 다크",
+      "image": ".codex-checks/t08/evidence/ui-iphone-weather-current/attachments/DA9D81DB-CC2B-49B9-A2B4-CA559D6D8A13.png",
+      "revision": "ae9ef78e",
+      "sha256": "ac48f4e1d1ca531b8e79982329fc3faff6d96e6f8dac1eb14a2918b1ed312cf5"
+    },
+    {
+      "key": "snow-maximum-text",
+      "label": "눈 · 최대 접근성 글씨",
+      "image": ".codex-checks/t08/evidence/ui-iphone-weather-current/attachments/C5DF06B4-31A6-4479-AB4E-3E2043545DAA.png",
+      "revision": "ae9ef78e",
+      "sha256": "8c24fc790c602e8a5027cc233c077234a3fc362f4e5304fbfa833a525d8069ef"
+    }
+  ],
+  "source_reuse": "a52ddbeb changes test-only viewport bounds for top/missing tab bars; production weather code identical to ae9ef78e phone captures",
+  "core_execution": "3 phone methods + 1 normal selector each on iPad and both Duo postures: all passed; no full local suite",
+  "kind": "actual native captures, not browser proposals",
+  "devices": {
+    "regular": {
+      "image": ".codex-checks/t08/evidence/ui-iphone-weather-current/attachments/01E64EDA-D276-4A4C-B918-62279E0C9DF5.png",
+      "revision": "ae9ef78e",
+      "udid": "D570FA5C-1FAF-442E-9294-DE9CB733BA2F",
+      "result": ".codex-checks/t08/evidence/ui-iphone-weather-current/result.json",
+      "selector": "DUNEUITests/TodaySettingsRegressionTests/testWeatherCardOpensWeatherDetail",
+      "action": "screen-0-1320x2868-before teardown -[TodaySettingsRegressionTests testWeatherCardOpensWeatherDetail]_0_32B4EAEB-3D41-441D-8F02-12CF47D1BC0A.png",
+      "timestamp": 1793387843.805,
+      "timestamp_kind": "XCTest attachment capture timestamp",
+      "sha256": "6d14c3c0beeabf83e8696991222134a7bb9936ddd320dd02cac41f192bf8f0c8",
+      "pixels": [
+        1320,
+        2868
+      ],
+      "before": {
+        "captured": {
+          "row_id": "T08",
+          "evidence": "weather-detail-screen",
+          "test": "TodaySettingsRegressionTests/testWeatherCardOpensWeatherDetail()",
+          "action": "tap 21°C",
+          "timestamp": 1791817940.251,
+          "image": "A3129246-1088-484C-8360-69B0F6D7EF7F.png",
+          "screen": "screen-0-1320x2868-tap 21°C_0_948ECFDB-64BB-4BDA-9CEC-E5B77CD313B5.png",
+          "file": "T08.png"
+        },
+        "global_source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+        "sha256": "ea9f28e6617f48ed6255a1f792a3a95f69fb13d395d441b7376c1c9f40628358",
+        "preserved_file": ".codex-checks/t08/before-final-map/regular.png"
+      },
+      "visual_review": "parent-viewed-fresh-native-image"
+    },
+    "ipad": {
+      "image": ".codex-checks/t08/evidence/ui-ipad-weather-current/attachments/341C818D-2B91-4E3C-A263-E93A4DDA2B7D.png",
+      "revision": "a52ddbeb",
+      "udid": "FAB047DE-257D-4D6E-9181-F4327A88BC38",
+      "result": ".codex-checks/t08/evidence/ui-ipad-weather-current/result.json",
+      "selector": "DUNEUITests/TodaySettingsRegressionTests/testWeatherCardOpensWeatherDetail",
+      "action": "screen-0-2064x2752-before teardown -[TodaySettingsRegressionTests testWeatherCardOpensWeatherDetail]_0_BF489F88-095F-4E6B-AC44-454B6FCC134B.png",
+      "timestamp": 1793388372.492,
+      "timestamp_kind": "XCTest attachment capture timestamp",
+      "sha256": "2854f9e8ad1987bf22baeb17f21994f050c8fe5e1425ffabc95835389f110fe8",
+      "pixels": [
+        2064,
+        2752
+      ],
+      "before": {
+        "captured": {
+          "row_id": "T08",
+          "evidence": "weather-detail-screen",
+          "test": "TodaySettingsRegressionTests/testWeatherCardOpensWeatherDetail()",
+          "action": "tap 21°C",
+          "timestamp": 1791821196.887,
+          "image": "4B752A46-A90B-4F00-8860-78420A43F1AF.png",
+          "screen": "screen-0-2064x2752-tap 21°C_0_A23BCFE0-78A0-4F18-9BED-4889F7D73401.png",
+          "file": "T08.png"
+        },
+        "global_source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+        "sha256": "60f25f8553e8b7caa7b60bbda240e928c10489b982d827662b1d73370bfa4634",
+        "preserved_file": ".codex-checks/t08/before-final-map/ipad.png"
+      },
+      "visual_review": "parent-viewed-fresh-native-image"
+    },
+    "duo": {
+      "image": ".codex-checks/t08/duo-closed-a52ddbeb/003-1398x2034.png",
+      "revision": "a52ddbeb",
+      "udid": "1875E6D9-E9E8-4F5C-82B5-DA44BD6EC530",
+      "result": ".codex-checks/t08/evidence/ui-duo-closed-weather-current/result.json",
+      "selector": "DUNEUITests/TodaySettingsRegressionTests/testWeatherCardOpensWeatherDetail",
+      "action": "DUNE_VISUAL_AUDIT_READY before teardown -[TodaySettingsRegressionTests testWeatherCardOpensWeatherDetail] [DUNEUITests/UITestBaseCase.swift:120] DEADLINE=1793389214.959676",
+      "timestamp": 1793389188.887001,
+      "timestamp_kind": "native checkpoint host file time",
+      "pose_directory": ".codex-checks/t08/duo-closed-a52ddbeb",
+      "sha256": "ef8c900e67a84658f5d687aba8fee23692ae2f8519216a1a378a0a4c79aa7388",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "before": {
+        "captured": {
+          "row_id": "T08",
+          "evidence": "weather-detail-screen",
+          "test": "TodaySettingsRegressionTests/testWeatherCardOpensWeatherDetail()",
+          "action": "tap 21°C",
+          "timestamp": 1791856081.432,
+          "image": "D3F1E991-D71A-4192-A5BC-11773AC64B79.png",
+          "screen": "screen-0-1398x2034-tap 21°C_0_BDA352B3-7267-4E28-8258-DCED32D3552D.png",
+          "file": "T08.png"
+        },
+        "global_source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+        "sha256": "3676f42f307e0c941ad4f48314bd829436d25eec4a8fbf210a4393f6dae19984",
+        "preserved_file": ".codex-checks/t08/before-final-map/duo.png"
+      },
+      "visual_review": "parent-viewed-fresh-native-image",
+      "pose": {
+        "revision": "a52ddbeb",
+        "target": 0.0,
+        "angle_before": 0.0,
+        "angle_after": 0.0,
+        "active_display": "LCD",
+        "script_sha256": "0e178ea0645a579cc83ace50631edf0bfef6846830abf478a3a9863d3144b559",
+        "captured_at": 1793389194.171937,
+        "native_visual_review": "passed-parent-and-independent-final-quality-agent"
+      },
+      "raw_pose_sha256": "ba1d25bcee60c69a195eb4a9375869d12760da78573842dc85ad2748c745297f"
+    },
+    "duo-open": {
+      "image": ".codex-checks/t08/duo-open-a52ddbeb/004-2007x2853.png",
+      "revision": "a52ddbeb",
+      "udid": "1875E6D9-E9E8-4F5C-82B5-DA44BD6EC530",
+      "result": ".codex-checks/t08/evidence/ui-duo-open-weather-current/result.json",
+      "selector": "DUNEUITests/TodaySettingsRegressionTests/testWeatherCardOpensWeatherDetail",
+      "action": "DUNE_VISUAL_AUDIT_READY before teardown -[TodaySettingsRegressionTests testWeatherCardOpensWeatherDetail] [DUNEUITests/UITestBaseCase.swift:120] DEADLINE=1793388956.750385",
+      "timestamp": 1793388927.5320694,
+      "timestamp_kind": "native checkpoint host file time",
+      "pose_directory": ".codex-checks/t08/duo-open-a52ddbeb",
+      "sha256": "bc4e459b7e894d162dbc25e6cc77b7484910b9c8ca287b96c9d1f8d69a43ca69",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "before": {
+        "captured": {
+          "row_id": "T08",
+          "evidence": "weather-detail-screen",
+          "test": "TodaySettingsRegressionTests/testWeatherCardOpensWeatherDetail()",
+          "action": "tap 21°C",
+          "timestamp": 1791828133.219,
+          "image": "AB3DFFC2-A088-4D24-9E21-7CF849930D2E.png",
+          "screen": "screen-1-2006x2852-tap 21°C_1_B999EB24-D1FD-437A-A1D3-66F54AE000E0.png",
+          "file": "T08.png"
+        },
+        "global_source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+        "sha256": "65441116d6927321354d336c7e351c43392c35f50336163932af6657514314a9",
+        "preserved_file": ".codex-checks/t08/before-final-map/duo-open.png"
+      },
+      "visual_review": "parent-viewed-fresh-native-image",
+      "pose": {
+        "revision": "a52ddbeb",
+        "target": 180.0,
+        "angle_before": 180.0,
+        "angle_after": 180.0,
+        "active_display": "LCD-1",
+        "script_sha256": "0e178ea0645a579cc83ace50631edf0bfef6846830abf478a3a9863d3144b559",
+        "captured_at": 1793388936.517697,
+        "native_visual_review": "passed-parent-and-independent-final-quality-agent"
+      },
+      "raw_pose_sha256": "b6bd44872b7bb760637c1fb122a0601d7e785250980cb50b2b94af51cc578b85"
+    }
+  },
+  "final_quality_gate": {
+    "agent": "/root/t02_final_quality_gate",
+    "model": "gpt-6-sol",
+    "reasoning": "medium",
+    "verdict": "PASS WITH NOTES",
+    "source": "a52ddbeb",
+    "findings": [],
+    "reviewed_native_images": [
+      "regular",
+      "ipad",
+      "duo",
+      "duo-open",
+      "rain-night-dark",
+      "snow-maximum-text"
+    ],
+    "limits": [
+      "Mock condition-art fixtures and static UI audit only; not live WeatherKit accuracy.",
+      "Ongoing animation/energy and every condition/theme combination not exercised.",
+      "Phone captures ae9ef78e; later a52ddbeb changes test-only tabbar viewport; app code identical."
+    ]
+  }
+}
