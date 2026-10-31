@@ -281,7 +281,10 @@ def hook(state):
         log_fd = os.open(common / "dune-merge-cleanup.log", os.O_WRONLY | os.O_CREAT | os.O_APPEND | os.O_NOFOLLOW, 0o600)
         with os.fdopen(log_fd, "a", buffering=1) as log, redirect_stdout(log), redirect_stderr(log):
             print(f"\nReference update: {changes}")
-            cleanup(root, apply=True)
+            # An idle Codex chat can own a clean checkout without a process or
+            # open file. Git cannot prove that chat has released its worktree.
+            print("Automatic cleanup is audit-only: chat ownership is unverified.")
+            cleanup(root, apply=False)
     finally:
         os.close(fd)
 

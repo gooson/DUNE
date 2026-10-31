@@ -160,7 +160,7 @@ A skill is a set of local instructions to follow that is stored in a `SKILL.md` 
   - `.codex/agent-memory/README.md`
 - 공통 실행 규칙(`Task tool`, `TodoWrite`, read-only review, memory policy)은 `.codex/skill-compat.md` 를 canonical source로 사용합니다.
 - `/cleanup` 및 `/ship`에서 worktree를 제거하기 전에 `.codex/skill-compat.md`의 **외부 DerivedData 정리** 절차로 해당 worktree 소유 캐시만 함께 삭제합니다. `info.plist`의 `WorkspacePath`로 소유를 확인하며 다른 worktree·main·공용·소유 미확인 캐시는 보존합니다.
-- 사용자 요청으로 머지 관측 후 로컬 정리를 자동 실행합니다. `.codex/skill-compat.md`의 **머지 관측 후 자동 정리 hook**을 따르며 `python3 scripts/cleanup-merged-worktrees.py --install`로 설치합니다. fetch/pull의 main 갱신에서 PR 커밋 증거가 있는 브랜치·깨끗한 비활성 worktree만 정리하며 현재/primary/dirty/locked worktree는 보존합니다.
+- 머지 관측 hook은 `.codex/skill-compat.md`의 **머지 관측 후 정리 hook**을 따릅니다. 활성 채팅 소유권을 Git·프로세스 상태만으로 증명할 수 없어 자동 실행은 후보를 조회·기록만 합니다. worktree·브랜치·소유 simulator/DerivedData의 실제 삭제는 소유자가 해당 채팅의 종료를 확인한 명시적 수동 `--apply` 또는 `/ship`·`/cleanup`에서만 수행합니다. 설치·갱신은 공용 hook 사본과 설정에 영향을 주므로 별도 검증 전 현재 `dune.autoCleanupMerged=false`를 유지합니다.
 - agent별 모델/추론/edit policy/memory source는 `.codex/agent-map.md` 를 canonical source로 사용합니다.
 - 모델 분담과 토큰 절감 실행은 `.codex/skill-compat.md`의 공통 정책을 따릅니다. 위임 시 `.codex/agent-map.md`의 모델을 실제 호출 인자로 전달하며, 테스트/검증 재사용 시에만 `.codex/token-efficiency.md`를 읽습니다. 문서 배정은 현재 작업이나 앱 전역 모델을 자동 변경하지 않습니다.
 - `.claude/agents/*.md` 또는 핵심 skill 목록이 바뀌면 Codex adapter 문서를 함께 갱신하고 `python3 scripts/check-codex-claude-parity.py` 로 drift를 검사합니다.
