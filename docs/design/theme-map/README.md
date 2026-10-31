@@ -64,6 +64,8 @@ Small 위젯의 세 점수 링과 하단 상태·시각은 카드 전체 높이�
 
 ## 갱신 방법
 
+2026-10-31 [A06 Training Volume 상세 표현 시안](themes/dune-training-volume-detail-a06.html)은 기존 DUNE 불투명 히어로·1W 주간 목표 링과 긴 기간의 실제 활동일 건수·밝음/어두움·원래 지표 의미색의 정적 제안이다. 값과 막대는 설명용이며 실제 네이티브 캡처가 아니다. [배치·데이터 계약](../layout-map/activity-training-volume-detail-a06.html)을 따른다.
+
 2026-10-31 [T02 동의 시트 테마 표현 연구](themes/dune-cloud-sync-consent-t02.html)는 기존 DUNE 팔레트와 `ScoreHeroPalette`를 사용한 밝음·어두움의 정적 해석이다. 새로운 테마·동작 규칙을 추가하지 않는다. 화면 정보 순서와 선택 동작은 [T02 레이아웃 맵](../layout-map/cloud-sync-consent-t02.html)을 따르며, 이 HTML은 실제 앱 캡처가 아니다.
 
 2026-10-30 [Siri 건강 정보 질의 비주얼 시안](themes/dune-siri-health-queries.html)을 studies에 추가했다. 기본 V1과 골드·큰 수치·메달·바벨·측정 추세·수면 단계의 V2를 전환하며 14개 기능을 각각 검토한다. [배치·데이터·상태 계약](../layout-map/siri-health-queries-proposal.md), 기능별 브라우저 PNG, `themes/assets/siri-health-queries-qa.json`을 함께 보존한다. 밝음/어두움·기기 폭·200% 글씨·누락/잠금/AI/PCC 상태와 Watch 동반 응답을 포함한다. 실제 Siri 시스템 외곽의 교체나 네이티브 앱 적용을 의미하지 않는다. 실제 화면 디자인맵의 캡처는 변경하지 않았다.
@@ -187,3 +189,5 @@ Gold Impact 네이티브 일반 빌드·관련 단위51개와 S01 설정 저장 
 ## T08 날씨 상세 검토본 · 2026-10-31
 
 [보존 시안](themes/dune-weather-detail-redesign.html)의 밝음·어두움 PNG와 원본 T08 JSON을 `themes/assets/condition-detail-redesign/`에 둔다. [네이티브 배치 계약](../layout-map/weather-detail-redesign-proposal.md)은 실제 날씨 상태와 수신 조건을 사용한다. 브라우저 시안은 앱 캡처가 아니며 T08 새 실제 화면은 런타임 검증 뒤 별도로 갱신한다.
+
+A06 네이티브 소스는 실제 현재·이전 네 지표와 원래 네 기간·세 도넛 모드를 유지한다. 히어로의 증감 텍스트는 대비를 확보하고 큰 글씨는 고정 링 밖의 주간 수치로 전환한다. 일별 차트는 실제 운동 시간과 맞는 제목·빈 상태를 세 언어로 준비했으며 실제 캡처 검증은 대기 중이다.

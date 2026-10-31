@@ -285,6 +285,70 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
         )
     }
 
+    func testTrainingVolumeGoalContextAndPreviousRangeAcrossPeriods() throws {
+        openTrainingVolumeDetail()
+
+        let activeDays = app.descendants(matching: .any)["activity-training-volume-current-active-days"].firstMatch
+        let weeklyGoal = app.staticTexts["activity-training-volume-weekly-goal-reference"].firstMatch
+        let previousDates = app.staticTexts["activity-training-volume-previous-period"].firstMatch
+        let dailyChart = app.descendants(matching: .any)[AXID.trainingVolumeChartDailyVolume].firstMatch
+        XCTAssertTrue(activeDays.waitForExistence(timeout: 15))
+        XCTAssertTrue(weeklyGoal.waitForExistence(timeout: 5))
+        XCTAssertTrue(previousDates.waitForExistence(timeout: 5),
+                      "The seeded previous window should expose its real date range once")
+        XCTAssertEqual(app.staticTexts.matching(identifier: "activity-training-volume-previous-period").count, 1)
+        XCTAssertTrue(dailyChart.waitForExistence(timeout: 5))
+        XCTAssertTrue(["Daily Duration", "일별 운동 시간", "日別の運動時間"].contains {
+            dailyChart.label.contains($0)
+        }, "The existing daily chart must identify duration instead of weight or sets")
+
+        let weekDays = try XCTUnwrap(Int(activeDays.value as? String ?? ""))
+        XCTAssertTrue(["1W", "1주", "1週"].contains { activeDays.label.contains($0) },
+                      "The current count should identify the selected week in the app language")
+        let weekGoalLabel = weeklyGoal.label
+        XCTAssertTrue(weekGoalLabel.contains("5"), "The seeded view model has a five-day weekly goal")
+        let weekPreviousDates = previousDates.label
+        // TrainingVolumeAnalysisService uses [today−14d, today−8d] for 1W's previous summary.
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let previousStart = try XCTUnwrap(calendar.date(byAdding: .day, value: -14, to: today))
+        let previousEnd = try XCTUnwrap(calendar.date(byAdding: .day, value: -8, to: today))
+        let supportedLocales = [Locale.current, Locale(identifier: "en_US"),
+                                Locale(identifier: "ko_KR"), Locale(identifier: "ja_JP")]
+        let expectedCaptions = supportedLocales.map { locale in
+            let format = Date.FormatStyle(date: .abbreviated, time: .omitted).locale(locale)
+            return "\(previousStart.formatted(format)) – \(previousEnd.formatted(format))"
+        }
+        XCTAssertTrue(expectedCaptions.contains(weekPreviousDates),
+                      "The previous caption must use the analysis service's real week boundaries")
+
+        tapSegment(in: AXID.activityTrainingVolumePeriodPicker, index: 1, timeout: 10)
+        let monthReady = XCTNSPredicateExpectation(
+            predicate: NSPredicate { _, _ in
+                guard activeDays.exists else { return false }
+                let label = activeDays.label
+                return ["1M", "1개월", "1ヶ月"].contains { label.contains($0) }
+            }, object: activeDays
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [monthReady], timeout: 15), .completed,
+                       "The active-day count should reload for the selected month")
+        let monthDays = try XCTUnwrap(Int(activeDays.value as? String ?? ""))
+        XCTAssertGreaterThanOrEqual(monthDays, weekDays,
+                                    "The rolling month includes the seeded week's active days")
+        XCTAssertFalse(activeDays.label.contains("of 5"),
+                       "A month-long count must not be presented as progress toward five days")
+        XCTAssertEqual(weeklyGoal.label, weekGoalLabel,
+                       "The five-day weekly reference should remain separate from the month count")
+        let monthPreviousDates = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "exists == true AND label != %@", weekPreviousDates),
+            object: previousDates
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [monthPreviousDates], timeout: 15), .completed,
+                       "The previous-period caption should follow the selected rolling window")
+        XCTAssertEqual(app.staticTexts.matching(identifier: "activity-training-volume-previous-period").count, 1)
+        XCTAssertTrue(dailyChart.exists, "The duration chart should survive the period change")
+    }
+
     func testHRVDetailChartScrollsToPastData() throws {
         launchLongMetricHistory()
         openWellnessMetricDetail(AXID.wellnessCardHRV)

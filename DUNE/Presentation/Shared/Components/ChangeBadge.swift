@@ -4,6 +4,7 @@ import SwiftUI
 struct ChangeBadge: View {
     let change: Double?
     var showNoData: Bool = false
+    var foregroundColor: Color? = nil
 
     var body: some View {
         if let change {
@@ -15,7 +16,7 @@ struct ChangeBadge: View {
                     .font(.caption2.weight(.medium))
                     .monospacedDigit()
             }
-            .foregroundStyle(isPositive ? DS.Color.positive : DS.Color.negative)
+            .foregroundStyle(foregroundColor ?? (isPositive ? DS.Color.positive : DS.Color.negative))
         } else if showNoData {
             Text("— No previous data")
                 .font(.caption2)
