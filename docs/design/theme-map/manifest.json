@@ -308,6 +308,17 @@
         "layout": "../layout-map/cloud-sync-consent-t02.html",
         "status": "native-source-ready-captures-pending"
       }
+    },
+    {
+      "id": "notification-target-not-found-t14",
+      "name": "T14 · 운동 기록 없음",
+      "title": "알림 목적지 상세 · 밝음/어두움",
+      "file": "dune-notification-target-not-found-t14.html",
+      "detail": "기존 DUNE ScoreHeroPalette의 불투명 히어로와 원래 알림 문구·돋보기 SF Symbol·실제 workoutID를 사용하는 T14 화면별 정적 방향. 브라우저 그림은 앱 캡처가 아니며 새 테마/움직임/가짜 기록/재시도 동작을 추가하지 않는다.",
+      "implementation": {
+        "layout": "../layout-map/notification-target-not-found-t14.html",
+        "status": "source-contract-pending-native-validation"
+      }
     }
   ]
 }
