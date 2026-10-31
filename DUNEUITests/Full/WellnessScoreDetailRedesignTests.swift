@@ -84,7 +84,7 @@ final class WellnessScoreDetailRedesignTests: SeededUITestBaseCase {
 
         let initialRange = range.label
         let scroll = app.scrollViews["wellness-score-detail-screen"].firstMatch
-        let trendProbe = app.otherElements["chart-trend-probe"].firstMatch
+        let trendProbe = trendStateProbe
         XCTAssertTrue(trendProbe.waitForExistence(timeout: 8))
         let initialTrend = trendProbe.label
         XCTAssertTrue(revealWhole(toggle, in: scroll) && toggle.isHittable)
@@ -136,8 +136,16 @@ final class WellnessScoreDetailRedesignTests: SeededUITestBaseCase {
 
     func testConditionCalculationPositiveFixtureKeepsMeasuredBranches() {
         var configuration = launchConfiguration
-        configuration.additionalArguments += ["--ui-visual-condition-components-fixture"]
+        // The seeded mirror owns this explicit detail fixture. Keep advanced mock on
+        // in the history tests; only this positive calculation case selects the mirror.
+        configuration.additionalArguments += ["--ui-visual-condition-components-fixture",
+                                              "-simulatorAdvancedMockDataEnabled", "NO"]
         launchApp(with: configuration)
+        navigateToWellness()
+        let fixtureCondition = app.descendants(matching: .any)["wellness-hero-component-condition"].firstMatch
+        XCTAssertTrue(fixtureCondition.waitForExistence(timeout: 10))
+        XCTAssertEqual(componentValue(from: fixtureCondition.label), "100",
+                       "The explicit mirror fixture must reach the actual Wellness input")
         openDetail()
         XCTAssertTrue(app.staticTexts["Condition Calculation"].firstMatch.waitForExistence(timeout: 10))
         XCTAssertTrue(app.staticTexts["Today HRV"].firstMatch.exists)
@@ -183,7 +191,7 @@ final class WellnessScoreDetailRedesignTests: SeededUITestBaseCase {
         openDetail()
         let scroll = app.scrollViews["wellness-score-detail-screen"].firstMatch
         let chart = app.descendants(matching: .any)["wellness-chart-trend"].firstMatch
-        let probe = app.otherElements["chart-selection-probe"].firstMatch
+        let probe = selectionStateProbe
         let visibleRange = app.staticTexts["score-detail-chart-visible-range"].firstMatch
         XCTAssertTrue(chart.waitForExistence(timeout: 15))
         XCTAssertTrue(probe.waitForExistence(timeout: 8))
@@ -201,6 +209,23 @@ final class WellnessScoreDetailRedesignTests: SeededUITestBaseCase {
         XCTAssertTrue(app.descendants(matching: .any)["chart-selection-overlay"].firstMatch
             .waitForNonExistence(timeout: 2), "Selection overlay must clear after release")
         addScreenshotAttachment(named: "H02-native-chart-selected-date-readback")
+    }
+
+    // Original and redesigned H02 both propagate the outer chart identifier to
+    // UIKit probe surfaces. Their stable label shapes distinguish the actual nodes;
+    // selection must remain matched when its label changes from "none" to a date.
+    private var trendStateProbe: XCUIElement {
+        app.otherElements.matching(NSPredicate(
+            format: "identifier == %@ AND label BEGINSWITH %@",
+            "wellness-chart-trend", "trend-endpoints:"
+        )).firstMatch
+    }
+
+    private var selectionStateProbe: XCUIElement {
+        app.otherElements.matching(NSPredicate(
+            format: "identifier == %@ AND label != '' AND NOT (label BEGINSWITH %@)",
+            "wellness-chart-trend", "trend-endpoints:"
+        )).firstMatch
     }
 
     private var detailScreen: XCUIElement {
