@@ -187,3 +187,7 @@ Gold Impact 네이티브 일반 빌드·관련 단위51개와 S01 설정 저장 
 ## T08 날씨 상세 검토본 · 2026-10-31
 
 [보존 시안](themes/dune-weather-detail-redesign.html)의 밝음·어두움 PNG와 원본 T08 JSON을 `themes/assets/condition-detail-redesign/`에 둔다. [네이티브 배치 계약](../layout-map/weather-detail-redesign-proposal.md)은 실제 날씨 상태와 수신 조건을 사용한다. 브라우저 시안은 앱 캡처가 아니며 T08 새 실제 화면은 런타임 검증 뒤 별도로 갱신한다.
+
+## A03 근육 지도 상세 2D 방향 · 2026-10-31
+
+[밝음·어두움 보존 시안](themes/dune-muscle-map-detail-a03.html)과 [화면별 배치·데이터 계약](../layout-map/activity-muscle-map-detail-a03.html)은 A04의 3D 버튼 비활성화와 compact 자동 이동 방지를 유지한다. 불투명 제목, 실제 앞/뒤 2D 지도, Recovery/Sets별 원래 색과 범례, 선택 근육·기존 가로 볼륨 막대·회복 정보를 정돈하는 제안이다. 도식 몸체와 막대는 실제 SVG·건강 기록·앱 캡처가 아니다. A04 phone 기본/선택 두 PNG만 현 소스와 맞는 before로 확인했고 iPad·Duo before 및 모든 A03 after는 별도 검증이 필요하다.

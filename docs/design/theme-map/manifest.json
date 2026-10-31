@@ -308,6 +308,17 @@
         "layout": "../layout-map/cloud-sync-consent-t02.html",
         "status": "native-source-ready-captures-pending"
       }
+    },
+    {
+      "id": "muscle-map-detail-a03",
+      "name": "A03 · 근육 지도 2D 상세",
+      "title": "Muscle Map · Recovery and Sets",
+      "file": "dune-muscle-map-detail-a03.html",
+      "detail": "A04 1f7f9900의 비활성 3D 진입을 유지하며 앞/뒤 실제 SVG 지도, 원래 Recovery 10단계와 Sets 5구간 범례, 선택 근육·13그룹 볼륨·관측 상태 회복을 정돈하는 밝음/어두움 제안. 브라우저 인체 그림과 막대는 설명용이며 실제 건강 수치나 앱 캡처가 아니다. A04 phone 기본/선택 before만 현 소스와 일치; iPad·Duo before와 A03 after는 대기 중.",
+      "implementation": {
+        "layout": "../layout-map/activity-muscle-map-detail-a03.html",
+        "status": "proposal-before-native-implementation"
+      }
     }
   ]
 }
