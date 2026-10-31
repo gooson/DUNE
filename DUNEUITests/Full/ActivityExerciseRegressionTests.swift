@@ -903,12 +903,26 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             "Exercise type detail should render the trend chart"
         )
 
+        let primaryValue = app.staticTexts["activity-exercise-type-primary-value"].firstMatch
+        let comparisonVolume = app.staticTexts["activity-exercise-type-comparison-current-volume"].firstMatch
+        XCTAssertTrue(primaryValue.waitForExistence(timeout: 15), "Seeded manual strength hero must finish loading")
+        XCTAssertEqual(primaryValue.label, "6.4t", "The actual completed-set weight × reps total should lead")
+        XCTAssertTrue(comparisonVolume.waitForExistence(timeout: 5))
+        XCTAssertEqual(comparisonVolume.label, primaryValue.label,
+                       "Hero and comparison must use the same selected type total")
+        XCTAssertFalse(app.descendants(matching: .any)[AXID.activityExerciseTypeRecentSessions].firstMatch.exists,
+                       "A manual type must not invent HealthKit workout history")
+        VisualAudit.capture("Exercise type manual strength Week loaded")
+
         tapSegment(in: AXID.activityExerciseTypePeriodPicker, index: 1, timeout: 10)
 
         XCTAssertTrue(
             app.descendants(matching: .any)[AXID.activityExerciseTypeTrendChart].firstMatch.waitForExistence(timeout: 15),
             "Exercise type detail should keep the trend chart visible after period switching"
         )
+        XCTAssertEqual(primaryValue.label, "6.4t",
+                       "The seeded three manual sessions remain in the Month window")
+        VisualAudit.capture("Exercise type manual strength Month loaded")
     }
 
     func testPersonalRecordsDetailShowsTimelineRewardsAndHistory() throws {
