@@ -28,6 +28,7 @@ related_solutions:
 - 로컬 기본 실행도 각 suite 직전에 해당 플랫폼의 destination을 결정하고 부팅한다. Watch 준비가 실패해도 먼저 완료한 iOS 테스트 결과와 로그가 남는다.
 - `DUNEWatchTests`의 `TEST_TARGET_NAME`을 제거한다. [XcodeGen 생성 코드](https://github.com/yonaskolb/XcodeGen/blob/master/Sources/XcodeGenKit/PBXProjGenerator.swift)는 이 설정을 UI test bundle에만 부여하고 unit test bundle에는 `TEST_HOST`를 생성한다. 생성된 Watch `TEST_HOST`와 `BUNDLE_LOADER`, 앱 타입, scheme은 유지한다.
 - CI runner의 전체 stdout·stderr를 별도 로그에 저장하고 `include-hidden-files: true`로 `.xcodebuild` 로그를 업로드한다. 명시적 `shell: bash`의 `pipefail`로 `tee` 뒤에서도 테스트 실패 코드를 유지한다.
+- CI도 linked worktree에서 실행해 기존 소유 시뮬레이터 clone 경로를 사용한다. 각 runner의 원본 시뮬레이터를 직접 쓰던 환경을 로컬에서 실제 테스트가 통과한 격리 경로와 맞춘다. 기기·페어링 상태, clone 소유 기록, `.xcresult`도 artifact에 보존한다.
 
 ## Verification
 
@@ -50,6 +51,8 @@ python3 -B scripts/lib/command-deadline.py --seconds 1200 -- \
 ```
 
 이 로컬 검증은 해당 Watch suite와 타깃 컴파일의 성공 근거다. 전체 suite의 원격 통과 여부는 [PR #877 검사](https://github.com/gooson/DUNE/pull/877/checks)에서 별도로 확인한다.
+
+`1c2d01d4`의 [후속 Watch 실행](https://github.com/gooson/DUNE/actions/runs/41162977457/job/124424374046)은 기기 선택 오류가 사라졌지만 테스트 프로세스와의 통신이 `Channel disconnected`로 끊어졌다. 이 메시지만으로 앱 crash·testmanager 오류·기기 페어링 중 원인을 확정할 수 없다. 로컬 성공 경로가 fresh worktree clone이고 CI가 원본 기기였다는 차이에 근거해 CI도 linked worktree에서 실행한다. 런타임과 서명 옵션을 동시에 바꾸지 않으며, 후속 실패는 보존된 결과 bundle의 시스템 진단을 근거로 조사한다.
 
 ## Prevention
 
