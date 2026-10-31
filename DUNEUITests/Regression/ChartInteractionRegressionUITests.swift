@@ -303,7 +303,8 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
         }, "The existing daily chart must identify duration instead of weight or sets")
 
         let weekDays = try XCTUnwrap(Int(activeDays.value as? String ?? ""))
-        XCTAssertTrue(activeDays.label.contains("1W"), "The current count should identify the selected week")
+        XCTAssertTrue(["1W", "1주", "1週"].contains { activeDays.label.contains($0) },
+                      "The current count should identify the selected week in the app language")
         let weekGoalLabel = weeklyGoal.label
         XCTAssertTrue(weekGoalLabel.contains("5"), "The seeded view model has a five-day weekly goal")
         let weekPreviousDates = previousDates.label
@@ -323,7 +324,11 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
 
         tapSegment(in: AXID.activityTrainingVolumePeriodPicker, index: 1, timeout: 10)
         let monthReady = XCTNSPredicateExpectation(
-            predicate: NSPredicate(format: "exists == true AND label CONTAINS %@", "1M"), object: activeDays
+            predicate: NSPredicate { _, _ in
+                guard activeDays.exists else { return false }
+                let label = activeDays.label
+                return ["1M", "1개월", "1ヶ月"].contains { label.contains($0) }
+            }, object: activeDays
         )
         XCTAssertEqual(XCTWaiter.wait(for: [monthReady], timeout: 15), .completed,
                        "The active-day count should reload for the selected month")
