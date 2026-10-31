@@ -35,6 +35,8 @@ Life의 링 옆에는 현재 진행 상태를 설명하는 문장을 둔다. 히
 
 [Activity·Life 히어로 흐름과 근거 승인안](activity-life-hero-proposal.md)은 공통 링에 구성 점수·저장된 준비도·습관 완료 기록을 더하는 2026-10-25 구현 대상이다. 과거 습관 분모는 복원하지 않는다.
 
+2026-10-31 [A07 운동 종류 상세 배치](activity-exercise-type-detail-a07.html)는 실제 유형별 시간·칼로리·세션, 조건부 거리/무게 볼륨, 4기간 분 추세, 건강 앱 최근 세션의 읽기 순서를 제안한다. 수치·도형은 설명용이며 원본 네이티브 Week/Month 캡처는 현재 확인 대기다. [테마 표현](../theme-map/themes/dune-exercise-type-detail-a07.html)은 별도 정적 시안이다.
+
 ## 화면별 맵 목록
 
 2026-10-31 [T02 iCloud 동기화 동의 배치](cloud-sync-consent-t02.html)는 앱 시작 시트의 히어로→세 설명→두 선택, 폭·큰 글씨·동작 계약을 정한다. HTML은 구현 기준 시안이며 실제 앱 캡처가 아니다.

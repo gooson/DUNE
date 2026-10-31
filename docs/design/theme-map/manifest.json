@@ -308,6 +308,17 @@
         "layout": "../layout-map/cloud-sync-consent-t02.html",
         "status": "native-source-ready-captures-pending"
       }
+    },
+    {
+      "id": "exercise-type-detail-a07",
+      "name": "A07 · 운동 종류 상세",
+      "title": "DUNE 운동 종류 상세 · 밝음/어두움",
+      "file": "dune-exercise-type-detail-a07.html",
+      "detail": "원본 유형·장비 식별 아이콘, 실제 유형별 값과 조건부 거리/무게 볼륨을 위한 화면별 정적 제안. 예시 값과 웹 기호는 실제 앱 데이터·SF Symbol·네이티브 캡처가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/activity-exercise-type-detail-a07.html",
+        "status": "proposal-only-original-native-capture-pending"
+      }
     }
   ]
 }
