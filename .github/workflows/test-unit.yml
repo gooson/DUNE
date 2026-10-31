@@ -29,8 +29,15 @@ env:
 
 jobs:
   unit-tests:
+    name: unit-tests (${{ matrix.platform }})
     runs-on: xcode-27
     timeout-minutes: 30
+    # Boot each runtime on its own runner. A Watch startup failure must not
+    # prevent iOS tests from starting, or leave both runtimes competing for RAM.
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [ios, watch]
 
     steps:
       - name: Checkout
@@ -55,12 +62,12 @@ jobs:
         run: brew install xcodegen
 
       - name: Run Unit Tests
-        run: scripts/test-unit.sh --stream-log
+        run: scripts/test-unit.sh --${{ matrix.platform }}-only --stream-log
 
       - name: Upload test log
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: unit-test-log
+          name: unit-test-log-${{ matrix.platform }}
           path: .xcodebuild/unit-test*.log
           retention-days: 7
