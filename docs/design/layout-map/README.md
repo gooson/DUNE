@@ -39,6 +39,8 @@ Life의 링 옆에는 현재 진행 상태를 설명하는 문장을 둔다. 히
 
 2026-10-31 [A03 근육 지도 상세 · A04 3D 진입 비활성화](activity-muscle-map-detail-a04.md)는 2D 선택, compact/regular 배치와 기존 테마 유지 계약이다. 실제 화면 캡처와 구분한다.
 
+2026-10-31 [A03 2D 근육 지도 상세 배치 시안](activity-muscle-map-detail-a03.html)은 A04의 비활성 3D 진입을 보존하면서 실제 앞/뒤 SVG 지도·Recovery/Sets 범례·선택 근육·볼륨·회복 정보의 새 위계를 정한다. 실제 iPad 기본 캡처의 종아리 가림을 반영해 regular에서는 회복 히어로를 secondary 첫 항목으로, compact에서는 primary 지도 위로 둔다. 도식의 몸체와 막대는 설명용이며 네이티브 캡처·측정값이 아니다.
+
 2026-10-31 [T02 iCloud 동기화 동의 배치](cloud-sync-consent-t02.html)는 앱 시작 시트의 히어로→세 설명→두 선택, 폭·큰 글씨·동작 계약을 정한다. HTML은 구현 기준 시안이며 실제 앱 캡처가 아니다.
 
 2026-10-30 [Siri 건강 정보 질의 SQ01–SQ14](siri-health-queries-proposal.md)와 [기능별 비주얼 시안](../theme-map/themes/dune-siri-health-queries.html)을 추가했다. 최근 운동·주간 운동량·세트·개인 기록·유산소·신체 최신값/추세·수면·컨디션·기간 비교·화면 문맥·메모 검색·보고서 공유·긴 분석의 V1/V2, 밝음/어두움, 폭·큰 글씨·데이터 상태를 비교한다. Watch 짧은 응답 3개를 함께 보존한다. 합성 데이터의 브라우저 제안이며 실제 Siri·앱 구현·실제 화면 캡처가 아니다.
@@ -57,7 +59,7 @@ Life의 링 옆에는 현재 진행 상태를 설명하는 문장을 둔다. 히
 | Today 하단 읽기 위계 | [회복·스트레스·요약 V2](today-reading-proposal.md) · [원본 대비 시안](../theme-map/themes/dune-today-reading.html) |
 | Today T03 요약 · 본문 더 보기 선택 후 | [세부 배치·펼침 기준](digest-read-more-refinement.md) · [핵심 먼저·한 문장 먼저·지표 행 비교](digest-read-more-refinement.html) |
 | Today 알림함·새로운 소식 | [알림함 배치·상태·목적지](notification-inbox-proposal.md) · [시안의 종 아이콘](../theme-map/themes/dune-final-four-tab.html) |
-| Activity A03 근육 지도 상세 · A04 진입 | [2D 선택·3D 진입 비활성화 계약](activity-muscle-map-detail-a04.md) |
+| Activity A03 근육 지도 상세 · A04 진입 | [2D 상세 배치](activity-muscle-map-detail-a03.html) · [3D 진입 비활성화 계약](activity-muscle-map-detail-a04.md) |
 | Activity 운동 구성 상세 | [근력·유산소와 부위별 구성 배치](exercise-mix-detail-proposal.md) · [4탭 시안](../theme-map/themes/dune-final-four-tab.html) |
 | Activity·Wellness·Life 기록 진입 | [상단 추가 버튼·메뉴 배치](record-entry-navigation.md) · [4탭 시안](../theme-map/themes/dune-final-four-tab.html) |
 | iOS 위젯·휴식 라이브 액티비티 | [크기·상태별 배치 기준](widget-live-activity-proposal.md) · [DESERT HORIZON 추가 시안](../theme-map/themes/dune-widget-live-activity.html) |

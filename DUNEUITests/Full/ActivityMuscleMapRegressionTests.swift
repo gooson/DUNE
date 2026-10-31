@@ -1,4 +1,5 @@
 @preconcurrency import XCTest
+import UIKit
 
 @MainActor
 final class ActivityMuscleMapRegressionTests: ActivityExerciseSeededUITestBaseCase {
@@ -32,6 +33,29 @@ final class ActivityMuscleMapRegressionTests: ActivityExerciseSeededUITestBaseCa
         )
     }
 
+    func testRegularMuscleMapShowsFrontCalvesWithoutScrolling() throws {
+        guard UIDevice.current.userInterfaceIdiom == .pad else {
+            throw XCTSkip("The two-pane first-viewport contract applies to regular iPad layout")
+        }
+        navigateToMuscleMapDetail()
+
+        let mapScroll = app.scrollViews["musclemap-detail-map-scroll"].firstMatch
+        let summaryScroll = app.scrollViews["musclemap-detail-summary-scroll"].firstMatch
+        XCTAssertTrue(mapScroll.waitForExistence(timeout: 10) && summaryScroll.waitForExistence(timeout: 10),
+                      "Regular Muscle Map should expose both native pane scroll views")
+        let header = summaryScroll.descendants(matching: .any)["musclemap-detail-header"].firstMatch
+        XCTAssertTrue(header.waitForExistence(timeout: 5),
+                      "The recovery header should start the secondary pane on regular iPad")
+        let frontCalves = mapScroll.buttons["musclemap-body-front-calves"].firstMatch
+        XCTAssertTrue(frontCalves.waitForExistence(timeout: 5),
+                      "The original front calf hit target should remain in the SVG map")
+        let firstViewport = mapScroll.frame.intersection(app.windows.firstMatch.frame)
+        XCTAssertTrue(firstViewport.contains(frontCalves.frame),
+                      "The complete front calf hit target should fit in the first map viewport without scrolling")
+        addScreenshotAttachment(named: "A03 regular full-body first viewport")
+        VisualAudit.capture("A03 regular full-body first viewport")
+    }
+
     func testMuscleMapDetailKeeps2DSelectionWith3DEntryDisabled() throws {
         navigateToMuscleMapDetail()
 
@@ -49,7 +73,8 @@ final class ActivityMuscleMapRegressionTests: ActivityExerciseSeededUITestBaseCa
         let screen3D = app.descendants(matching: .any)[AXID.activityMuscleMap3DScreen].firstMatch
         XCTAssertTrue(detailScreen.exists, "Muscle selection should remain on the 2D detail screen")
         XCTAssertTrue(inlineDetail.waitForExistence(timeout: 5), "Selected muscle detail should appear inline")
-        XCTAssertTrue(app.buttons["activity-muscle-detail-calculation"].firstMatch.waitForExistence(timeout: 5),
+        let calculation = app.buttons["activity-muscle-detail-calculation"].firstMatch
+        XCTAssertTrue(calculation.waitForExistence(timeout: 5),
                       "The selected muscle should retain its calculation button accessibility ID")
         XCTAssertFalse(screen3D.exists, "Muscle selection should not open the 3D viewer")
         let primaryScroll = app.scrollViews.firstMatch
@@ -57,8 +82,61 @@ final class ActivityMuscleMapRegressionTests: ActivityExerciseSeededUITestBaseCa
         for _ in 0..<8 where !visibleMap.contains(open3D.frame) { primaryScroll.swipeUp() }
         XCTAssertTrue(visibleMap.contains(open3D.frame), "The disabled 3D entry should remain visible on the map")
         XCTAssertFalse(open3D.isEnabled, "Selecting a 2D muscle should not enable the 3D entry")
-        addScreenshotAttachment(named: "A04 2D muscle selection and disabled 3D entry")
-        VisualAudit.capture("A04 2D muscle selection and disabled 3D entry")
+        addScreenshotAttachment(named: "A03 2D muscle selection and disabled 3D entry")
+        VisualAudit.capture("A03 2D muscle selection and disabled 3D entry")
+
+        let detailScroll = app.scrollViews.element(boundBy: app.scrollViews.count > 1 ? 1 : 0)
+        for _ in 0..<8 where !calculation.isHittable { detailScroll.swipeUp(velocity: .slow) }
+        XCTAssertTrue(calculation.isHittable, "The selected muscle's calculation action should be reachable")
+        addScreenshotAttachment(named: "A03 selected muscle detail before calculation")
+        VisualAudit.capture("A03 selected muscle detail before calculation")
+        calculation.auditTap()
+        let explanation = app.scrollViews["activity-fatigue-info-sheet"].firstMatch
+        XCTAssertTrue(explanation.waitForExistence(timeout: 5), "Calculation should open the real fatigue explanation")
+        let calculationTitle = explanation.staticTexts.matching(NSPredicate(
+            format: "label IN %@", ["Fatigue Calculation", "피로도 계산", "疲労度計算"]
+        )).firstMatch
+        XCTAssertTrue(calculationTitle.waitForExistence(timeout: 5),
+                      "The calculation sheet should expose its existing localized title")
+        addScreenshotAttachment(named: "A03 selected muscle fatigue calculation")
+        VisualAudit.capture("A03 selected muscle fatigue calculation")
+
+        // This iPad presentation exposes the native sheet as a scroll view with a drag indicator,
+        // not as an XCUIElementTypeSheet. Use the single observed system grabber.
+        let grabbers = app.buttons.matching(NSPredicate(format: "label == %@", "시트 손잡이"))
+        XCTAssertEqual(grabbers.count, 1, "The native sheet should expose one visible drag indicator")
+        let grabber = grabbers.element(boundBy: 0)
+        XCTAssertTrue(grabber.exists && grabber.isHittable, "The native sheet drag indicator should be reachable")
+        let window = app.windows.firstMatch
+        XCTAssertTrue(window.exists && window.frame.contains(explanation.frame),
+                      "Calculation content should be inside the active window")
+        XCTAssertTrue(window.frame.contains(grabber.frame) && explanation.frame.intersects(grabber.frame),
+                      "The native drag indicator should overlap the calculation sheet's top edge")
+        XCTAssertLessThanOrEqual(abs(grabber.frame.midY - explanation.frame.minY), grabber.frame.height,
+                                 "The native drag indicator should be at the calculation sheet's top edge")
+        let endY = min(window.frame.maxY - 60, grabber.frame.midY + window.frame.height * 0.6)
+        XCTAssertGreaterThan(endY - grabber.frame.midY, window.frame.height * 0.3,
+                             "The dismiss drag should travel down inside the window")
+        let start = grabber.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        let end = window.coordinate(withNormalizedOffset: .zero)
+            .withOffset(CGVector(dx: grabber.frame.midX - window.frame.minX,
+                                 dy: endY - window.frame.minY))
+        start.press(forDuration: 0.1, thenDragTo: end)
+        XCTAssertTrue(explanation.waitForNonExistence(timeout: 5),
+                      "Calculation sheet should dismiss by its drag indicator")
+        XCTAssertTrue(detailScreen.waitForExistence(timeout: 5), "The 2D map should remain after sheet dismissal")
+        XCTAssertTrue(inlineDetail.waitForExistence(timeout: 5), "The selected muscle should remain inline")
+
+        let railBack = app.buttons["BackButton"].firstMatch
+        if railBack.exists && railBack.isHittable {
+            railBack.auditTap()
+        } else {
+            let back = app.navigationBars.buttons.element(boundBy: 0)
+            XCTAssertTrue(back.waitForExistence(timeout: 5), "Native Back should remain available")
+            back.auditTap()
+        }
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.activityHeroReadiness].firstMatch
+            .waitForExistence(timeout: 10), "Back should return to Activity")
     }
 
     func testMuscleMapDetailViewNavigatesTo3D() throws {

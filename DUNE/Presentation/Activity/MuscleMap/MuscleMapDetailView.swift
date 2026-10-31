@@ -24,18 +24,24 @@ struct MuscleMapDetailView: View {
         AdaptivePaneView {
             ScrollView {
                 VStack(spacing: DS.Spacing.lg) {
-                // Muscle map (expanded)
-                MuscleRecoveryMapView(
-                    fatigueStates: fatigueStates,
-                    isExpanded: true,
-                    onMuscleSelected: { muscle in
-                        withAnimation(reduceMotion ? nil : DS.Animation.snappy) {
-                            viewModel.selectedMuscle = viewModel.selectedMuscle == muscle ? nil : muscle
-                        }
-                        selected3DMuscle = muscle
-                        if is3DMuscleMapEntryAvailable && sizeClass != .regular { showing3DMap = true }
+                    if sizeClass != .regular {
+                        recoveryHeader
                     }
-                )
+
+                    // Preserve the real front/back SVG, mode selector, info sheets and legends.
+                    StandardCard(padding: DS.Spacing.md) {
+                        MuscleRecoveryMapView(
+                            fatigueStates: fatigueStates,
+                            isExpanded: true,
+                            onMuscleSelected: { muscle in
+                                withAnimation(reduceMotion ? nil : DS.Animation.snappy) {
+                                    viewModel.selectedMuscle = viewModel.selectedMuscle == muscle ? nil : muscle
+                                }
+                                selected3DMuscle = muscle
+                                if is3DMuscleMapEntryAvailable && sizeClass != .regular { showing3DMap = true }
+                            }
+                        )
+                    }
 
                     Button {
                         showing3DMap = true
@@ -44,12 +50,20 @@ struct MuscleMapDetailView: View {
                     }
                     .buttonStyle(.bordered)
                     .disabled(!is3DMuscleMapEntryAvailable)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .padding(DS.Spacing.lg)
+                .frame(maxWidth: 680)
+                .frame(maxWidth: .infinity)
             }
+            .accessibilityIdentifier("musclemap-detail-map-scroll")
         } secondary: {
             ScrollView {
-                VStack(spacing: DS.Spacing.lg) {
+                VStack(alignment: .leading, spacing: DS.Spacing.xl) {
+                if sizeClass == .regular {
+                    recoveryHeader
+                }
+
                 // Selected muscle inline detail
                 if let muscle = viewModel.selectedMuscle {
                     MuscleDetailPopover(
@@ -60,6 +74,12 @@ struct MuscleMapDetailView: View {
                     )
                     .accessibilityElement(children: .contain)
                     .accessibilityIdentifier("musclemap-detail-selected-muscle")
+                    .overlay {
+                        RoundedRectangle(cornerRadius: DS.Radius.md)
+                            .strokeBorder(DS.Color.activity.opacity(0.45), lineWidth: 1)
+                            .accessibilityHidden(true)
+                            .allowsHitTesting(false)
+                    }
                     .transition(.opacity.combined(with: .move(edge: .top)))
                 }
 
@@ -96,9 +116,13 @@ struct MuscleMapDetailView: View {
                     )
                 }
                 .accessibilityIdentifier("musclemap-detail-recovery-section")
-            }
+                }
                 .padding(.horizontal, DS.Spacing.lg)
+                .padding(.vertical, DS.Spacing.lg)
+                .frame(maxWidth: 680)
+                .frame(maxWidth: .infinity)
             }
+            .accessibilityIdentifier("musclemap-detail-summary-scroll")
         }
         .accessibilityIdentifier("activity-musclemap-detail-screen")
         .background { DetailWaveBackground() }
@@ -113,5 +137,70 @@ struct MuscleMapDetailView: View {
         .task {
             viewModel.loadData(fatigueStates: fatigueStates)
         }
+    }
+
+    private var recoveryHeader: some View {
+        A03MuscleMapHeader(
+            recoveredCount: viewModel.recoveredCount,
+            observedCount: fatigueStates.count,
+            isLoaded: fatigueStates.isEmpty || !viewModel.fatigueByMuscle.isEmpty
+        )
+    }
+}
+
+/// A03's local recovery summary uses only the observed states and existing VM count.
+private struct A03MuscleMapHeader: View {
+    let recoveredCount: Int
+    let observedCount: Int
+    let isLoaded: Bool
+
+    @Environment(\.appTheme) private var theme
+    @Environment(\.colorScheme) private var colorScheme
+
+    private var palette: ScoreHeroPalette { ScoreHeroPalette(theme: theme, colorScheme: colorScheme) }
+
+    var body: some View {
+        HStack(spacing: DS.Spacing.md) {
+            Image(systemName: "heart.text.clipboard")
+                .font(.system(size: 22, weight: .semibold))
+                .foregroundStyle(palette.ink)
+                .frame(width: 44, height: 44)
+                .background(palette.ink.opacity(0.12), in: RoundedRectangle(cornerRadius: DS.Radius.sm))
+                .accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                Text("Recovery Status")
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(palette.muted)
+                    .accessibilityAddTraits(.isHeader)
+                if observedCount == 0 {
+                    Text("Start training to track recovery")
+                        .font(.headline)
+                        .foregroundStyle(palette.ink)
+                        .fixedSize(horizontal: false, vertical: true)
+                } else if isLoaded {
+                    Text("\(recoveredCount.formatted())/\(observedCount.formatted()) muscles ready")
+                        .font(.title.weight(.bold).monospacedDigit())
+                        .foregroundStyle(palette.ink)
+                        .fixedSize(horizontal: false, vertical: true)
+                } else {
+                    ProgressView()
+                        .tint(palette.ink)
+                }
+            }
+            Spacer(minLength: 0)
+        }
+        .padding(DS.Spacing.xl)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background {
+            RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous)
+                .fill(palette.surface)
+                .overlay {
+                    RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous)
+                        .strokeBorder(palette.border, lineWidth: 1)
+                }
+                .accessibilityHidden(true)
+        }
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("musclemap-detail-header")
     }
 }
