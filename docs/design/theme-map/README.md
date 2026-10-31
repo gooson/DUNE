@@ -191,3 +191,5 @@ Gold Impact 네이티브 일반 빌드·관련 단위51개와 S01 설정 저장 
 ## T08 날씨 상세 검토본 · 2026-10-31
 
 [보존 시안](themes/dune-weather-detail-redesign.html)의 밝음·어두움 PNG와 원본 T08 JSON을 `themes/assets/condition-detail-redesign/`에 둔다. [네이티브 배치 계약](../layout-map/weather-detail-redesign-proposal.md)은 실제 날씨 상태와 수신 조건을 사용한다. 브라우저 시안은 앱 캡처가 아니며 T08 새 실제 화면은 런타임 검증 뒤 별도로 갱신한다.
+
+A05 네이티브 소스는 원래 `ActivityStat.iconColor`를 불투명 히어로 위에 유지하고, 이전 기간의 실제 4개 값·하나의 기간 표기를 사용한다. 기본 fixture의 이전 세션 2회·빈 볼륨 증감률·이전 날짜 및 기간 전환 검증을 준비했으며 실제 캡처 통과로 표시하지 않는다.
