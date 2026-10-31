@@ -153,7 +153,7 @@ struct TrainingReadinessDetailView: View {
                                 scrollDomain: viewModel.scrollDomain,
                                 scrollPosition: $viewModel.scrollPosition
                             )
-                            .frame(height: chartHeight)
+                            .frame(height: dynamicTypeSize.isAccessibilitySize ? nil : chartHeight)
                             .accessibilityIdentifier("trainingreadiness-chart-trend")
                         }
                     }
@@ -382,9 +382,10 @@ private struct A02ReadinessDetailHero: View {
     private func factorTitle(_ factor: Factor) -> some View {
         HStack(spacing: DS.Spacing.sm) {
             Image(systemName: factor.icon)
-                .font(.caption)
+                .font(dynamicTypeSize.isAccessibilitySize ? .system(size: 16, weight: .medium) : .caption)
                 .foregroundStyle(palette.ink)
-                .frame(width: 20)
+                .frame(width: dynamicTypeSize.isAccessibilitySize ? 26 : 20)
+                .clipped()
                 .accessibilityHidden(true)
             Text(factor.title)
                 .font(.subheadline)
