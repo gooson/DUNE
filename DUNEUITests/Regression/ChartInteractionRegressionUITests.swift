@@ -296,7 +296,7 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
         XCTAssertTrue(weeklyGoal.waitForExistence(timeout: 5))
         XCTAssertTrue(previousDates.waitForExistence(timeout: 5),
                       "The seeded previous window should expose its real date range once")
-        XCTAssertEqual(app.staticTexts["activity-training-volume-previous-period"].count, 1)
+        XCTAssertEqual(app.staticTexts.matching(identifier: "activity-training-volume-previous-period").count, 1)
         XCTAssertTrue(dailyChart.waitForExistence(timeout: 5))
         XCTAssertTrue(["Daily Duration", "일별 운동 시간", "日別の運動時間"].contains {
             dailyChart.label.contains($0)
@@ -340,7 +340,7 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
         )
         XCTAssertEqual(XCTWaiter.wait(for: [monthPreviousDates], timeout: 15), .completed,
                        "The previous-period caption should follow the selected rolling window")
-        XCTAssertEqual(app.staticTexts["activity-training-volume-previous-period"].count, 1)
+        XCTAssertEqual(app.staticTexts.matching(identifier: "activity-training-volume-previous-period").count, 1)
         XCTAssertTrue(dailyChart.exists, "The duration chart should survive the period change")
     }
 
