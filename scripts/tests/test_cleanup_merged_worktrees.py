@@ -227,7 +227,8 @@ class MergedCleanupTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "hooksPath"):
             cleanup.install(self.root)
 
-    def test_real_reference_update_triggers_installed_hook_with_bundled_code(self):
+    def test_real_reference_update_audits_but_preserves_unknown_idle_chat_owner(self):
+        path = self.worktree()
         with contextlib.redirect_stdout(io.StringIO()):
             cleanup.install(self.root)
         binary = self.directory / "bin"
@@ -235,6 +236,12 @@ class MergedCleanupTests(unittest.TestCase):
         gh = binary / "gh"
         gh.write_text("#!/bin/sh\nprintf '%s' " + shlex.quote(json.dumps([self.pr])) + "\n")
         gh.chmod(0o700)
+        ps = binary / "ps"
+        ps.write_text("#!/bin/sh\nprintf '%s\\n' 'editor --background'\n")
+        ps.chmod(0o700)
+        lsof = binary / "lsof"
+        lsof.write_text("#!/bin/sh\nprintf '%s\\n' 'p123' 'n/elsewhere'\n")
+        lsof.chmod(0o700)
         # Set the old tracking ref with recursion suppressed, then let a real Git
         # reference transaction invoke the installed hook without our Python mocks.
         self.git("update-ref", "refs/remotes/origin/main", self.initial)
@@ -244,10 +251,18 @@ class MergedCleanupTests(unittest.TestCase):
         result = subprocess.run(["git", "-C", str(self.root), "update-ref", "refs/remotes/origin/main", self.merge],
                                 env=env, capture_output=True, text=True, timeout=20)
         self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertTrue(path.exists())
+        self.assertTrue(self.branch_exists("feature"))
+        self.assertTrue(self.branch_exists("alias"))
+        log = self.root / ".git/dune-merge-cleanup.log"
+        self.assertIn("Automatic cleanup is audit-only: chat ownership is unverified.", log.read_text())
+        self.assertNotIn("Deleted branch:", log.read_text())
+
+        # The manual path retains the existing checks and needs explicit action.
+        self.assertEqual(self.execute(), 0)
+        self.assertFalse(path.exists())
         self.assertFalse(self.branch_exists("feature"))
         self.assertFalse(self.branch_exists("alias"))
-        log = self.root / ".git/dune-merge-cleanup.log"
-        self.assertIn("Deleted branch: alias", log.read_text())
 
     def test_hook_ignores_prepared_unrelated_deleted_disabled_and_recursive_events(self):
         event = f"{self.initial} {self.merge} refs/remotes/origin/main\n"
