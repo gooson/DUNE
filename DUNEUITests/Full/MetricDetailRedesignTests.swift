@@ -25,6 +25,21 @@ final class MetricDetailRedesignTests: SeededUITestBaseCase {
         assertIdentityAndCapture(key: selectedKey, expected: expected)
     }
 
+    func testSwimmingMeterValueUnitAndCapture() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments = [
+            "--ui-t06-metric", "exercise-m", "--ui-disable-animations",
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+            "-morningBriefingDisabled", "YES"
+        ]
+        launchApp(with: configuration)
+        guard let expected = Self.matrix["exercise-m"] else {
+            XCTFail("Missing Swimming meter contract")
+            return
+        }
+        assertIdentityAndCapture(key: "exercise-m", expected: expected)
+    }
+
     func testAllMetricIdentitiesAndCaptures() throws {
         // Budget is declared before the first matrix launch, not raised after a timeout.
         executionTimeAllowance = 600
@@ -66,6 +81,12 @@ final class MetricDetailRedesignTests: SeededUITestBaseCase {
         XCTAssertTrue(label.contains(expected.value), "Expected \(key) value \(expected.value), got \(label)")
         if !expected.unit.isEmpty {
             XCTAssertTrue(label.contains(expected.unit), "Expected \(key) unit \(expected.unit), got \(label)")
+        }
+        if key == "exercise-m" {
+            XCTAssertEqual(label, "Exercise, 1,314 m",
+                           "Meter input must not be accepted as min or km")
+            XCTAssertTrue(app.navigationBars["Swimming"].firstMatch.exists,
+                          "The meter fixture must keep the actual Swimming destination")
         }
         let updatedValue = summary.value as? String ?? ""
         XCTAssertTrue(updatedValue.hasPrefix("Updated ") && updatedValue.count > "Updated ".count,
