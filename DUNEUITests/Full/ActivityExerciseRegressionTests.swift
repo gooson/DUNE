@@ -134,20 +134,61 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         VisualAudit.capture("Workout Insights presentation")
         captureFunctionalCheckpoint("Insights loaded at maximum accessibility size")
         if useQuickStart {
-            let metricPicker = app.buttons["weeklystats-chart-metric-picker"].firstMatch
-            for _ in 0..<8 where !(metricPicker.exists && metricPicker.isHittable) {
-                app.scrollViews.firstMatch.swipeUp(velocity: .slow)
+            let statsScroll = app.scrollViews["activity-weeklystats-detail-screen"].firstMatch
+            let chartHeading = statsScroll.staticTexts["weeklystats-chart-heading"].firstMatch
+            let metricPicker = statsScroll.buttons["weeklystats-chart-metric-picker"].firstMatch
+            let window = app.windows.firstMatch
+            let close = app.buttons["workout-insights-close"].firstMatch
+            XCTAssertTrue(statsScroll.exists && window.exists && close.exists,
+                          "Insights should expose its own scroll, window, and native close action")
+            XCTAssertTrue(chartHeading.waitForExistence(timeout: 5) && metricPicker.waitForExistence(timeout: 5),
+                          "The daily chart should expose both heading and metric menu")
+
+            func visibleContent() -> CGRect {
+                let scrollFrame = statsScroll.frame.intersection(window.frame)
+                var top = scrollFrame.minY
+                var bottom = scrollFrame.maxY
+                let navigation = app.navigationBars.firstMatch
+                if navigation.exists && navigation.frame.minY < scrollFrame.midY && navigation.frame.maxY > top {
+                    top = min(bottom, navigation.frame.maxY)
+                }
+                if close.isHittable && close.frame.midY > scrollFrame.midY && close.frame.minY < bottom {
+                    bottom = max(top, close.frame.minY)
+                }
+                return CGRect(x: scrollFrame.minX + 4, y: top + 4,
+                              width: max(0, scrollFrame.width - 8), height: max(0, bottom - top - 8))
             }
-            XCTAssertTrue(metricPicker.exists && metricPicker.isHittable,
-                          "The chart metric menu must be reachable at maximum accessibility size")
-            let statsScroll = app.scrollViews.firstMatch
-            statsScroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.25))
-                .press(forDuration: 0.05, thenDragTo: statsScroll.coordinate(
-                    withNormalizedOffset: CGVector(dx: 0.5, dy: 0.4)
-                ))
-            XCTAssertTrue(metricPicker.isHittable)
-            XCTAssertTrue(app.staticTexts["weeklystats-chart-heading"].firstMatch.isHittable,
-                          "The chart title must remain visible above its metric menu")
+
+            for _ in 0..<8 {
+                let viewport = visibleContent()
+                let chartControls = chartHeading.frame.union(metricPicker.frame)
+                if viewport.contains(chartControls) && chartHeading.isHittable && metricPicker.isHittable {
+                    break
+                }
+                let displacement: CGFloat
+                if chartControls.minY < viewport.minY {
+                    displacement = min(max(viewport.minY - chartControls.minY + 12, 44), viewport.height * 0.35)
+                } else if chartControls.maxY > viewport.maxY {
+                    displacement = -min(max(chartControls.maxY - viewport.maxY + 12, 44), viewport.height * 0.35)
+                } else {
+                    break
+                }
+                let origin = statsScroll.frame.origin
+                let start = statsScroll.coordinate(withNormalizedOffset: .zero)
+                    .withOffset(CGVector(dx: viewport.midX - origin.x, dy: viewport.midY - origin.y))
+                let end = statsScroll.coordinate(withNormalizedOffset: .zero)
+                    .withOffset(CGVector(dx: viewport.midX - origin.x,
+                                         dy: viewport.midY + displacement - origin.y))
+                start.press(forDuration: 0.05, thenDragTo: end)
+            }
+            let chartControls = chartHeading.frame.union(metricPicker.frame)
+            XCTAssertTrue(visibleContent().contains(chartControls),
+                          "The complete chart heading and menu must share the visible scroll viewport")
+            XCTAssertTrue(chartHeading.isHittable && metricPicker.isHittable,
+                          "The chart title and metric menu must both be reachable at maximum accessibility size")
+            XCTAssertLessThanOrEqual(chartHeading.frame.maxY, metricPicker.frame.minY,
+                                     "The chart title must remain above its metric menu")
+            addScreenshotAttachment(named: "Daily chart heading and accessible metric menu")
             VisualAudit.capture("Daily chart heading and accessible metric menu")
             metricPicker.auditTap()
             let volume = app.buttons.matching(NSPredicate(
