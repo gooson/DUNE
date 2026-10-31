@@ -157,11 +157,8 @@ struct ExerciseTypeDetailView: View {
 
     private func heroMetric(_ label: LocalizedStringKey, value: String, icon: String) -> some View {
         HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.sm) {
-            Image(systemName: icon)
-                .font(.subheadline.weight(.semibold))
-                .frame(width: 20)
+            metricIcon(icon)
                 .foregroundStyle(heroPalette.ink)
-                .accessibilityHidden(true)
             VStack(alignment: .leading, spacing: DS.Spacing.xs) {
                 Text(label)
                     .font(.caption)
@@ -174,6 +171,22 @@ struct ExerciseTypeDetailView: View {
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    @ViewBuilder
+    private func metricIcon(_ icon: String) -> some View {
+        if dynamicTypeSize.isAccessibilitySize {
+            Image(systemName: icon)
+                .font(.system(size: 16, weight: .semibold))
+                .frame(width: 26, height: 26)
+                .clipped()
+                .accessibilityHidden(true)
+        } else {
+            Image(systemName: icon)
+                .font(.subheadline.weight(.semibold))
+                .frame(width: 20)
+                .accessibilityHidden(true)
+        }
     }
 
     private enum PrimaryMetricKind: Equatable {
@@ -375,11 +388,8 @@ struct ExerciseTypeDetailView: View {
         change: Double?
     ) -> some View {
         HStack(alignment: .top, spacing: DS.Spacing.md) {
-            Image(systemName: icon)
-                .font(.subheadline.weight(.semibold))
-                .frame(width: 20)
+            metricIcon(icon)
                 .foregroundStyle(.primary)
-                .accessibilityHidden(true)
             VStack(alignment: .leading, spacing: DS.Spacing.sm) {
                 Text(label)
                     .font(.subheadline.weight(.semibold))
