@@ -1,21 +1,20 @@
 import SwiftUI
 
 /// Detail view for the Cumulative Stress Score.
-/// Follows the canonical score detail layout:
-/// Hero → Insight → Contributors → Level Guide → Period Picker → Chart Header
-/// → DotLineChart → Summary Stats → Highlights → Component Weights → Explainer
+/// Keeps original evidence and guidance around a unified history card and calculation disclosure.
 struct CumulativeStressDetailView: View {
     let stressScore: CumulativeStressScore
     let scoreRefreshService: ScoreRefreshService?
 
-    private enum Labels {
-        static let scoreLabel = "STRESS"
-    }
-
     @State private var viewModel: CumulativeStressDetailViewModel
+    @State private var isExplainerExpanded = false
+    @Environment(\.appTheme) private var theme
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.horizontalSizeClass) private var sizeClass
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @ScaledMetric(relativeTo: .caption) private var contributorIconWidth: CGFloat = 20
+    // Match DotLineChartView's intrinsic scaled plot height in every loading state.
+    @ScaledMetric(relativeTo: .body) private var chartHeight: CGFloat = 220
 
     private var isRegular: Bool { sizeClass == .regular }
 
@@ -27,148 +26,254 @@ struct CumulativeStressDetailView: View {
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: isRegular ? DS.Spacing.xxl : DS.Spacing.xl) {
-                // 1. Hero + Insight + Contributors
-                if isRegular {
-                    HStack(alignment: .top, spacing: DS.Spacing.xxl) {
-                        scoreHero
-                            .frame(maxWidth: .infinity)
-
-                        VStack(alignment: .leading, spacing: DS.Spacing.lg) {
-                            insightSection
-
-                            if !stressScore.contributions.isEmpty {
-                                StandardCard {
-                                    contributorsView
-                                }
-                            }
-                        }
-                        .frame(maxWidth: .infinity)
+            VStack(alignment: .leading, spacing: DS.Spacing.xl) {
+                if isRegular && !dynamicTypeSize.isAccessibilitySize {
+                    HStack(alignment: .top, spacing: DS.Spacing.xl) {
+                        scoreHero.frame(maxWidth: .infinity)
+                        insightSection.frame(maxWidth: .infinity)
                     }
-                    .staggeredAppear(index: 0)
                 } else {
                     scoreHero
-                        .staggeredAppear(index: 0)
                     insightSection
-                        .staggeredAppear(index: 1)
-
-                    if !stressScore.contributions.isEmpty {
-                        StandardCard {
-                            contributorsView
-                        }
-                        .staggeredAppear(index: 2)
-                    }
                 }
-
-                // 2. Level Guide
+                if !stressScore.contributions.isEmpty {
+                    StandardCard { contributorsView }
+                }
                 CumulativeStressLevelGuide(currentLevel: stressScore.level)
-                    .staggeredAppear(index: 3)
-
-                // 3. Period Picker
-                Picker("Period", selection: $viewModel.selectedPeriod) {
-                    ForEach(TimePeriod.allCases, id: \.self) { period in
-                        Text(period.displayName).tag(period)
-                    }
-                }
-                .pickerStyle(.segmented)
-                .sensoryFeedback(.selection, trigger: viewModel.selectedPeriod)
-                .staggeredAppear(index: 4)
-
-                // 4. Chart Header
-                ScoreDetailChartHeader(
-                    visibleRangeLabel: viewModel.visibleRangeLabel,
-                    showTrendLine: $viewModel.showTrendLine,
-                    tintColor: stressScore.level.color
-                )
-                .staggeredAppear(index: 5)
-
-                // 5. Main Trend Chart
-                StandardCard {
-                    Group {
-                        if viewModel.chartData.isEmpty && !viewModel.isLoading {
-                            ScoreDetailEmptyState(chartHeight: chartHeight)
-                        } else {
-                            DotLineChartView(
-                                data: viewModel.chartData,
-                                baseline: 50,
-                                yAxisLabel: "Score",
-                                timePeriod: viewModel.selectedPeriod,
-                                tintColor: stressScore.level.color,
-                                trendLine: viewModel.trendLineData,
-                                scrollDomain: viewModel.scrollDomain,
-                                scrollPosition: $viewModel.scrollPosition
-                            )
-                            .frame(height: chartHeight)
-                        }
-                    }
-                    .id(viewModel.selectedPeriod)
-                    .transition(.opacity)
-                }
-                .animation(.easeInOut(duration: 0.25), value: viewModel.selectedPeriod)
-                .staggeredAppear(index: 6)
-
-                // 6. Summary Stats + 7. Highlights
-                if isRegular {
-                    HStack(alignment: .top, spacing: DS.Spacing.lg) {
-                        if let summary = viewModel.summaryStats {
-                            ScoreDetailSummaryStats(summary: summary)
-                                .frame(maxWidth: .infinity)
-                        }
-                        if !viewModel.highlights.isEmpty {
-                            ScoreDetailHighlights(highlights: viewModel.highlights)
-                                .frame(maxWidth: .infinity)
-                        }
-                    }
-                    .staggeredAppear(index: 6)
-                } else {
-                    if let summary = viewModel.summaryStats {
-                        ScoreDetailSummaryStats(summary: summary)
-                            .staggeredAppear(index: 6)
-                    }
-                    if !viewModel.highlights.isEmpty {
-                        ScoreDetailHighlights(highlights: viewModel.highlights)
-                            .staggeredAppear(index: 6)
-                    }
-                }
-
-                // 8. Component Weights
-                stressComposition
-                    .staggeredAppear(index: 7)
-
-                // 9. Explainer
-                StandardCard {
-                    CumulativeStressExplainerSection()
-                }
-                .staggeredAppear(index: 8)
+                trendCard
+                if !viewModel.highlights.isEmpty { highlights }
+                explanation
             }
+            .frame(maxWidth: DS.Layout.rootContentMaxWidth)
             .padding(isRegular ? DS.Spacing.xxl : DS.Spacing.lg)
+            .frame(maxWidth: .infinity)
         }
         .accessibilityIdentifier("cumulative-stress-detail-screen")
         .background { DetailWaveBackground() }
         .englishNavigationTitle("Cumulative Stress")
         .navigationBarTitleDisplayMode(.large)
-        .overlay {
-            if viewModel.isLoading && viewModel.chartData.isEmpty {
-                ProgressView()
-            }
-        }
         .task {
             viewModel.configure(stressScore: stressScore)
             await viewModel.loadData()
         }
     }
 
+    private var trendCard: some View {
+        StandardCard {
+            VStack(alignment: .leading, spacing: DS.Spacing.md) {
+                ViewThatFits(in: .horizontal) {
+                    HStack {
+                        trendTitle
+                        Spacer()
+                        trendToggle
+                    }
+                    VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                        trendTitle
+                        trendToggle
+                    }
+                }
+                Picker("Period", selection: $viewModel.selectedPeriod) {
+                    ForEach(TimePeriod.allCases, id: \.self) { period in
+                        Text(period.displayName).tag(period)
+                    }
+                }
+                .pickerStyle(.segmented)
+                .accessibilityIdentifier("stress-period-picker")
+                .sensoryFeedback(.selection, trigger: viewModel.selectedPeriod)
+
+                HStack(spacing: DS.Spacing.xs) {
+                    Button { viewModel.stepVisiblePeriod(by: -1) } label: {
+                        Image(systemName: "chevron.left")
+                            .frame(width: 44, height: 44).contentShape(Rectangle())
+                    }
+                    .accessibilityLabel("Previous period")
+                    .accessibilityIdentifier("stress-period-previous")
+                    .disabled(!viewModel.canStepBackward)
+                    Text(viewModel.visibleRangeLabel)
+                        .font(.subheadline.weight(.medium))
+                        .multilineTextAlignment(.center)
+                        .frame(maxWidth: .infinity)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .accessibilityIdentifier("score-detail-chart-visible-range")
+                    Button { viewModel.stepVisiblePeriod(by: 1) } label: {
+                        Image(systemName: "chevron.right")
+                            .frame(width: 44, height: 44).contentShape(Rectangle())
+                    }
+                    .accessibilityLabel("Next period")
+                    .accessibilityIdentifier("stress-period-next")
+                    .disabled(!viewModel.canStepForward)
+                }
+                .buttonStyle(.plain)
+                .foregroundStyle(theme.sandColor)
+
+                chart
+                if let summary = viewModel.summaryStats {
+                    Divider()
+                    visibleSummary(summary)
+                }
+            }
+        }
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("stress-trend-card")
+    }
+
+    private var trendTitle: some View {
+        Label("Cumulative Stress Trend", systemImage: "chart.xyaxis.line")
+            .font(.subheadline.weight(.semibold))
+            .accessibilityAddTraits(.isHeader)
+            .fixedSize(horizontal: false, vertical: true)
+    }
+
+    private var trendToggle: some View {
+        Button {
+            withAnimation(reduceMotion ? nil : DS.Animation.snappy) {
+                viewModel.showTrendLine.toggle()
+            }
+        } label: {
+            Label("Trend", systemImage: "chart.line.uptrend.xyaxis")
+                .font(.caption.weight(.medium))
+                .padding(.horizontal, DS.Spacing.sm)
+                .frame(minHeight: 44)
+                .background(viewModel.showTrendLine ? theme.accentColor.opacity(0.12) : .clear, in: Capsule())
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .foregroundStyle(viewModel.showTrendLine ? theme.accentColor : .secondary)
+        .accessibilityIdentifier("score-chart-trend-toggle")
+        .accessibilityValue(viewModel.showTrendLine ? Text("On") : Text("Off"))
+        .sensoryFeedback(.selection, trigger: viewModel.showTrendLine)
+    }
+
+    private var chart: some View {
+        Group {
+            if let error = viewModel.loadError {
+                VStack(spacing: DS.Spacing.md) {
+                    Text(error).font(.subheadline).foregroundStyle(DS.Color.textSecondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .accessibilityIdentifier("stress-history-error")
+                    Button("Try Again") { Task { await viewModel.loadData() } }
+                        .buttonStyle(.bordered)
+                        .accessibilityIdentifier("stress-history-retry")
+                }
+                .frame(maxWidth: .infinity, minHeight: chartHeight)
+            } else if viewModel.isLoading && viewModel.chartData.isEmpty {
+                ProgressView().frame(maxWidth: .infinity, minHeight: chartHeight)
+            } else if viewModel.chartData.isEmpty {
+                ScoreDetailEmptyState(chartHeight: chartHeight)
+            } else {
+                DotLineChartView(
+                    data: viewModel.chartData, baseline: 50, yAxisLabel: "Score",
+                    timePeriod: viewModel.selectedPeriod, tintColor: stressScore.level.color,
+                    trendLine: viewModel.trendLineData, scrollDomain: viewModel.scrollDomain,
+                    scrollPosition: $viewModel.scrollPosition
+                )
+                // Let the chart own its scaled height so AX content cannot overlap controls.
+                .overlay {
+                    ChartUITestSurface(identifier: "detail-chart-surface", label: "Cumulative Stress Detail Chart",
+                                       value: viewModel.visibleRangeLabel)
+                }
+                .chartSelectionUITestProbe("visible-points:\(viewModel.visibleChartPointCount)",
+                                           identifier: "stress-history-probe")
+            }
+        }
+        .id(viewModel.selectedPeriod)
+        .transition(.opacity)
+        .animation(reduceMotion ? nil : .easeInOut(duration: 0.25), value: viewModel.selectedPeriod)
+    }
+
+    private func visibleSummary(_ summary: MetricSummary) -> some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+            Text("Period Summary").font(.caption).foregroundStyle(DS.Color.textSecondary)
+            if dynamicTypeSize.isAccessibilitySize {
+                summaryItems(summary)
+            } else {
+                HStack(alignment: .top, spacing: DS.Spacing.md) { summaryItems(summary) }
+            }
+            if let change = summary.changePercentage, change.isFinite {
+                Label {
+                    Text("\(abs(change).formattedWithSeparator())%")
+                } icon: {
+                    Image(systemName: change >= 0 ? "arrow.up.right" : "arrow.down.right")
+                }
+                .font(.caption.weight(.medium))
+                .foregroundStyle(change == 0 ? DS.Color.textSecondary : change > 0 ? DS.Color.negative : DS.Color.positive)
+                .accessibilityLabel("Compared with previous period")
+                .accessibilityValue(Text("\(change.formattedWithSeparator())%"))
+                .accessibilityIdentifier("stress-summary-change")
+            }
+        }
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("stress-visible-summary")
+    }
+
+    @ViewBuilder
+    private func summaryItems(_ summary: MetricSummary) -> some View {
+        summaryItem("Avg", value: summary.average, identifier: "average")
+        summaryItem("Min", value: summary.min, identifier: "min")
+        summaryItem("Max", value: summary.max, identifier: "max")
+    }
+
+    private func summaryItem(_ label: LocalizedStringKey, value: Double, identifier: String) -> some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+            Text(label).font(.caption2).foregroundStyle(DS.Color.textSecondary)
+            Text(value.formattedWithSeparator())
+                .font(.title3.bold().monospacedDigit())
+                .accessibilityIdentifier("stress-summary-\(identifier)")
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private var highlights: some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+            Text("Highlights").font(.subheadline.weight(.semibold))
+            ForEach(viewModel.highlights) { highlight in
+                InlineCard {
+                    VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                        HStack(spacing: DS.Spacing.md) {
+                            Image(systemName: highlight.type == .high ? "arrow.up.circle.fill"
+                                  : highlight.type == .low ? "arrow.down.circle.fill" : "chart.line.uptrend.xyaxis")
+                                .foregroundStyle(highlight.type == .high ? DS.Color.negative
+                                                 : highlight.type == .low ? DS.Color.positive : DS.Color.textSecondary)
+                            Text(highlight.label).font(.subheadline.weight(.semibold))
+                            Spacer(minLength: 0)
+                            Text(highlight.value.formattedWithSeparator()).font(.subheadline.bold().monospacedDigit())
+                        }
+                        if viewModel.selectedPeriod == .day {
+                            Text(highlight.date, format: .dateTime.month(.abbreviated).day().hour().minute())
+                                .font(.caption).foregroundStyle(DS.Color.textSecondary)
+                        } else {
+                            Text(highlight.date, format: .dateTime.month(.abbreviated).day())
+                                .font(.caption).foregroundStyle(DS.Color.textSecondary)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private var explanation: some View {
+        StandardCard {
+            DisclosureGroup(isExpanded: $isExplainerExpanded) {
+                CumulativeStressExplainerSection(isEmbedded: true, score: stressScore)
+                    .padding(.top, DS.Spacing.md)
+            } label: {
+                Label {
+                    Text("How Stress Score Works")
+                        .accessibilityIdentifier("stress-score-explainer")
+                } icon: {
+                    Image(systemName: "info.circle.fill")
+                }
+                .font(.subheadline.weight(.semibold))
+                .frame(minHeight: 44, alignment: .leading)
+            }
+            .tint(theme.sandColor)
+        }
+    }
+
     // MARK: - Subviews
 
     private var scoreHero: some View {
-        DetailScoreHero(
-            score: stressScore.score,
-            scoreLabel: Labels.scoreLabel,
-            statusLabel: stressScore.level.displayName,
-            statusIcon: stressScore.level.iconName,
-            statusColor: stressScore.level.color,
-            guideMessage: guideMessage
-        )
+        CumulativeStressDetailHeader(score: stressScore, guideMessage: guideMessage)
     }
 
     private var guideMessage: String {
@@ -239,86 +344,58 @@ struct CumulativeStressDetailView: View {
     }
 
     private var contributorsView: some View {
-        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            Text("Contributing Factors")
-                .font(.subheadline.weight(.semibold))
-
+        VStack(alignment: .leading, spacing: DS.Spacing.lg) {
+            Text("Contributing Factors").font(.subheadline.weight(.semibold))
             ForEach(stressScore.contributions) { contribution in
-                HStack(spacing: DS.Spacing.sm) {
-                    Image(systemName: contribution.factor.iconName)
-                        .font(.caption)
-                        .foregroundStyle(contribution.factor.color)
-                        .frame(width: contributorIconWidth)
-                        .accessibilityIdentifier("stress-contribution-icon-\(contribution.factor.rawValue)")
-
-                    VStack(alignment: .leading, spacing: 2) {
-                        if dynamicTypeSize.isAccessibilitySize {
-                            Text(contribution.factor.displayName)
-                                .font(.subheadline)
+                VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                    HStack(alignment: .top, spacing: DS.Spacing.md) {
+                        Image(systemName: contribution.factor.iconName)
+                            .font(.title3)
+                            .foregroundStyle(contribution.factor.color)
+                            .frame(width: contributorIconWidth, height: contributorIconWidth)
+                            .padding(DS.Spacing.sm)
+                            .background(contribution.factor.color.opacity(0.12), in: RoundedRectangle(cornerRadius: DS.Radius.sm))
+                            .accessibilityIdentifier("stress-contribution-icon-\(contribution.factor.rawValue)")
+                        VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                            if dynamicTypeSize.isAccessibilitySize {
+                                Text(contribution.factor.displayName).font(.subheadline.weight(.semibold))
+                                    .fixedSize(horizontal: false, vertical: true)
+                                contributorScore(contribution)
+                            } else {
+                                HStack(alignment: .firstTextBaseline) {
+                                    Text(contribution.factor.displayName).font(.subheadline.weight(.semibold))
+                                    Spacer(minLength: DS.Spacing.sm)
+                                    contributorScore(contribution)
+                                }
+                            }
+                            Text(contribution.detail).font(.caption).foregroundStyle(DS.Color.textSecondary)
                                 .fixedSize(horizontal: false, vertical: true)
-
-                            HStack {
-                                Text(String(format: "%.0f%%", contribution.weight * 100))
-                                    .font(.caption)
-                                    .foregroundStyle(.tertiary)
-                                Spacer()
-                                contributorScore(contribution)
-                            }
-                        } else {
-                            HStack {
-                                Text(contribution.factor.displayName)
-                                    .font(.subheadline)
-
-                                Spacer()
-
-                                Text(String(format: "%.0f%%", contribution.weight * 100))
-                                    .font(.caption)
-                                    .foregroundStyle(.tertiary)
-
-                                contributorScore(contribution)
-                                    .frame(width: 32, alignment: .trailing)
-                            }
                         }
-
-                        Text(contribution.detail)
-                            .font(.caption)
-                            .foregroundStyle(DS.Color.textSecondary)
-                            .lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 2)
-                            .fixedSize(horizontal: false, vertical: true)
-                            .accessibilityIdentifier("stress-contribution-detail-\(contribution.factor.rawValue)")
+                    }
+                    if contribution.rawScore.isFinite, (0...100).contains(contribution.rawScore) {
+                        ProgressView(value: contribution.rawScore, total: 100)
+                            .tint(contribution.factor.color)
+                            .accessibilityLabel(contribution.factor.displayName)
+                            .accessibilityValue(Text("\(Int(contribution.rawScore.rounded())) of 100"))
+                            .accessibilityIdentifier("stress-contribution-progress-\(contribution.factor.rawValue)")
+                    }
+                    if let weight = stressScore.effectiveContributionWeights?[contribution.id] {
+                        Text("\(Int((weight * 100).rounded()))% applied")
+                            .font(.caption.weight(.medium)).foregroundStyle(DS.Color.textSecondary)
+                            .accessibilityIdentifier("stress-contribution-weight-\(contribution.factor.rawValue)")
                     }
                 }
+                if contribution.id != stressScore.contributions.last?.id { Divider() }
             }
         }
     }
 
     private func contributorScore(_ contribution: CumulativeStressScore.Contribution) -> some View {
-        Text("\(Int(contribution.rawScore.rounded()))")
-            .font(.caption)
-            .fontWeight(.medium)
-            .monospacedDigit()
-            .fixedSize(horizontal: dynamicTypeSize.isAccessibilitySize, vertical: false)
+        Text(contribution.rawScore.isFinite && (0...100).contains(contribution.rawScore)
+             ? contribution.rawScore.formattedWithSeparator(fractionDigits: 0) : "—")
+            .font(.title3.bold().monospacedDigit())
+            .fixedSize(horizontal: true, vertical: false)
             .accessibilityIdentifier("stress-contribution-score-\(contribution.factor.rawValue)")
-    }
-
-    private var stressComposition: some View {
-        ScoreCompositionCard(
-            title: "Stress Components",
-            components: stressScore.contributions.map { contribution in
-                .init(
-                    label: contribution.factor.displayName,
-                    weight: String(format: "%.0f%%", contribution.weight * 100),
-                    score: Int(contribution.rawScore.rounded()),
-                    color: contribution.factor.color
-                )
-            }
-        )
-    }
-
-    // MARK: - Helpers
-
-    private var chartHeight: CGFloat {
-        isRegular ? 360 : 250
     }
 
 }
