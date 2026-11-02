@@ -203,16 +203,20 @@ struct DailyDigestNotificationView: View {
                             showsFullSummary.toggle()
                         }
                     } label: {
-                        Group {
+                        HStack(spacing: DS.Spacing.xs) {
                             if showsFullSummary {
                                 Text("Collapse summary")
                             } else {
                                 Text("Expand summary")
                             }
+                            Image(systemName: showsFullSummary ? "chevron.up" : "chevron.down")
+                                .font(.caption.weight(.semibold))
+                                .accessibilityHidden(true)
+                            Spacer(minLength: 0)
                         }
-                            .font(.subheadline.weight(.medium))
-                            .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
-                            .contentShape(Rectangle())
+                        .font(.subheadline.weight(.medium))
+                        .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+                        .contentShape(Rectangle())
                     }
                     .buttonStyle(CardNavigationButtonStyle())
                     .accessibilityValue(showsFullSummary ? Text("Expanded") : Text("Collapsed"))
