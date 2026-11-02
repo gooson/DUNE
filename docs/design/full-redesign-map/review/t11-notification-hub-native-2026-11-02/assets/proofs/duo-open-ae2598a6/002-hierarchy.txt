@@ -1,0 +1,180 @@
+Attributes: Application, 0x11430b700, pid: 49941, label: 'DUNE'
+Element subtree:
+ →Application, 0x11430b700, pid: 49941, label: 'DUNE'
+    Window, 0x114308000, {{0.0, -0.0}, {951.0, 669.0}}
+      Other, 0x114308140, {{0.0, -0.0}, {951.0, 669.0}}
+      Other, 0x114308280, {{0.0, -0.0}, {951.0, 669.0}}
+        Other, 0x1143083c0, {{0.0, -0.0}, {951.0, 669.0}}
+          Other, 0x114308500, {{0.0, -0.0}, {951.0, 669.0}}
+            Other, 0x114308640, {{0.0, -0.0}, {951.0, 669.0}}
+              Other, 0x114308780, {{0.0, -0.0}, {867.0, 635.0}}
+              Other, 0x1143088c0, {{0.0, -0.0}, {951.0, 669.0}}
+                Other, 0x114308a00, {{0.0, -0.0}, {951.0, 669.0}}
+                  Other, 0x114308b40, {{0.0, -0.0}, {951.0, 669.0}}
+                    Other, 0x114308c80, {{0.0, -0.0}, {951.0, 669.0}}
+                      Other, 0x114308dc0, {{0.0, -0.0}, {951.0, 669.0}}
+                        Other, 0x114308f00, {{0.0, -0.0}, {951.0, 669.0}}
+                          Other, 0x11430ad00, {{0.0, -0.0}, {951.0, 669.0}}
+                            Other, 0x11430ae40, {{0.0, -0.0}, {951.0, 669.0}}
+                              Other, 0x11430af80, {{0.0, -0.0}, {951.0, 669.0}}
+                                Toolbar, 0x11430b0c0, {{0.0, -0.0}, {951.0, 669.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                  Other, 0x11430b200, {{0.0, -0.0}, {951.0, 669.0}}
+                              Other, 0x11430b340, {{0.0, -0.0}, {951.0, 669.0}}
+                                Toolbar, 0x11430b480, {{0.0, -0.0}, {951.0, 669.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                  Other, 0x11430b5c0, {{0.0, -0.0}, {951.0, 669.0}}
+                                Other, 0x11430bc00, {{0.0, -0.0}, {951.0, 669.0}}
+                                  Other, 0x11430bd40, {{0.0, -0.0}, {951.0, 669.0}}
+                                    Other, 0x11430be80, {{0.0, -0.0}, {951.0, 669.0}}
+                                      Other, 0x114307480, {{0.0, -0.0}, {951.0, 669.0}}
+                                        NavigationBar, 0x1143075c0, {{0.0, 24.0}, {951.0, 58.0}}, identifier: 'Notifications'
+                                          StaticText, 0x114307700, {{20.0, 37.7}, {101.3, 20.7}}, label: 'Notifications'
+                                        Toolbar, 0x114307840, {{0.0, -0.0}, {951.0, 669.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                          Other, 0x114307980, {{0.0, -0.0}, {951.0, 669.0}}
+                                        Other, 0x114307ac0, {{0.0, -0.0}, {951.0, 669.0}}
+                                          Other, 0x114307c00, {{0.0, -0.0}, {951.0, 669.0}}
+                                            Other, 0x114307d40, {{0.0, -0.0}, {951.0, 669.0}}
+                                              Other, 0x114307e80, {{0.0, -0.0}, {951.0, 669.0}}
+                                                CollectionView, 0x106e6f700, {{73.7, -0.0}, {720.0, 669.0}}, identifier: 'notification-hub-screen'
+                                                  Other, 0x11357c000, {{73.7, -1256.0}, {720.0, 1506.0}}
+                                                  Other, 0x11357c140, {{73.7, -0.0}, {720.0, 669.0}}
+                                                    Other, 0x11357c280, {{73.7, -0.0}, {720.0, 122.0}}
+                                                  Other, 0x11357c3c0, {{73.7, -0.0}, {720.0, 669.0}}
+                                                  Cell, 0x11357c500, {{73.7, 82.0}, {720.0, 168.0}}
+                                                    Other, 0x11357c640, {{73.7, 82.0}, {720.0, 168.0}}
+                                                      Other, 0x11357c780, {{73.7, 82.0}, {720.0, 168.0}}
+                                                        Other, 0x11357c8c0, {{73.7, 82.0}, {720.0, 168.0}}
+                                                          Other, 0x11357ca00, {{73.7, 82.0}, {720.0, 168.0}}
+                                                    Other, 0x11357cb40, {{73.7, 82.0}, {720.0, 168.0}}
+                                                      Other, 0x11357cc80, {{73.7, 82.0}, {720.0, 168.0}}
+                                                        Other, 0x11357cdc0, {{73.7, 82.0}, {720.0, 168.0}}
+                                                          Image, 0x11357cf00, {{109.7, 110.0}, {52.0, 52.0}}, identifier: 'bell.badge.fill', label: 'Bell With A Notification Badge, Filled'
+                                                          StaticText, 0x11357d040, {{173.7, 122.8}, {224.3, 26.3}}, label: '3 unread notifications'
+                                                          Button, 0x11357d180, {{109.7, 183.0}, {86.0, 34.3}}, identifier: 'notifications-read-all-button', label: 'Read All'
+                                                          Button, 0x11357d2c0, {{713.7, 178.0}, {44.0, 44.0}}, identifier: 'notifications-more-options-button', label: 'More Options'
+                                                            Button, 0x11357d400, {{713.7, 178.0}, {44.0, 44.0}}
+                                                              Image, 0x11357d540, {{728.0, 198.3}, {15.7, 3.3}}, identifier: 'ellipsis', label: 'More'
+                                                          Button, 0x11357d680, {{674.7, 191.0}, {18.0, 18.0}}, identifier: 'notifications-open-settings-button', label: 'Notification Settings'
+                                                  Other, 0x11357d7c0, {{73.7, 250.0}, {720.0, 52.0}}
+                                                  Cell, 0x11357d900, {{73.7, 250.0}, {720.0, 52.0}}
+                                                    Other, 0x11357da40, {{73.7, 250.0}, {720.0, 52.0}}
+                                                      Other, 0x11357db80, {{73.7, 250.0}, {720.0, 52.0}}
+                                                        Other, 0x11357dcc0, {{73.7, 250.0}, {720.0, 52.0}}
+                                                          Other, 0x11357de00, {{73.7, 250.0}, {720.0, 52.0}}
+                                                    Other, 0x11357df40, {{73.7, 250.0}, {720.0, 52.0}}
+                                                      Other, 0x11357e080, {{73.7, 250.0}, {720.0, 52.0}}
+                                                        Other, 0x11357e1c0, {{73.7, 250.0}, {720.0, 52.0}}
+                                                          SegmentedControl, 0x11357e300, {{89.7, 260.7}, {688.0, 31.0}}, identifier: 'notifications-filter'
+                                                            Button, 0x11357e440, {{89.7, 260.7}, {229.3, 32.0}}, label: 'All', Selected
+                                                            Button, 0x11357e580, {{319.0, 260.7}, {229.3, 32.0}}, label: 'Health'
+                                                            Button, 0x11357e6c0, {{548.3, 260.7}, {229.3, 32.0}}, label: 'News'
+                                                  Other, 0x11357e800, {{73.7, 302.0}, {720.0, 172.3}}
+                                                  Cell, 0x11357e940, {{73.7, 302.0}, {720.0, 172.3}}
+                                                    Other, 0x11357ea80, {{73.7, 302.0}, {720.0, 172.3}}
+                                                      Other, 0x11357ebc0, {{73.7, 302.0}, {720.0, 172.3}}
+                                                        Other, 0x11357ed00, {{73.7, 302.0}, {720.0, 172.3}}
+                                                          Other, 0x11357ee40, {{73.7, 302.0}, {720.0, 172.3}}
+                                                    Other, 0x11357ef80, {{73.7, 302.0}, {720.0, 172.3}}
+                                                      Other, 0x11357f0c0, {{73.7, 302.0}, {720.0, 172.3}}
+                                                        Other, 0x11357f200, {{73.7, 302.0}, {720.0, 172.3}}
+                                                          Button, 0x11357f340, {{73.7, 302.0}, {720.0, 172.3}}, identifier: 'notifications-news-release', label: 'What's New, 0.8.0, Explore more of your health history with smoother charts, stress details, and clearer navigation., Unread, Open Release', value: Unread
+                                                            Image, 0x11357f480, {{89.7, 333.0}, {44.0, 44.0}}, identifier: 'sparkles', label: 'Sparkle'
+                                                            StaticText, 0x11357f5c0, {{145.7, 333.0}, {96.0, 20.3}}, label: 'What's New'
+                                                            StaticText, 0x11357f700, {{145.7, 357.3}, {28.3, 14.3}}, label: '0.8.0'
+                                                            StaticText, 0x11357f840, {{89.7, 385.0}, {576.3, 15.7}}, identifier: 'notifications-news-intro', label: 'Explore more of your health history with smoother charts, stress details, and clearer navigation.'
+                                                            StaticText, 0x11357f980, {{89.7, 408.7}, {39.7, 13.3}}, label: 'Unread'
+                                                            StaticText, 0x11357fac0, {{96.7, 430.0}, {105.3, 13.3}}, label: 'Open Release'
+                                                            Image, 0x11357fc00, {{96.7, 431.3}, {10.3, 10.3}}, identifier: 'arrow.up.right', label: 'Up-Right Diagonal Arrow'
+                                                  Other, 0x11357fd40, {{73.7, 474.3}, {720.0, 1596.0}}
+                                                  Cell, 0x11357fe80, {{73.7, 474.3}, {720.0, 129.0}}
+                                                    Other, 0x113580000, {{73.7, 474.3}, {720.0, 129.0}}
+                                                      Other, 0x113580140, {{73.7, 474.3}, {720.0, 129.0}}
+                                                        Other, 0x113580280, {{73.7, 474.3}, {720.0, 129.0}}
+                                                          Other, 0x1135803c0, {{73.7, 474.3}, {720.0, 129.0}}
+                                                    Other, 0x113580500, {{73.7, 474.3}, {720.0, 129.0}}
+                                                      Other, 0x113580640, {{73.7, 474.3}, {720.0, 129.0}}
+                                                        Other, 0x113580780, {{73.7, 474.3}, {720.0, 129.0}}
+                                                          Button, 0x1135808c0, {{73.7, 474.3}, {720.0, 129.0}}, identifier: 'notification-row-33AE04B9-9D51-484F-8FBE-BF985A2B64FF', label: 'Sleep Debt Alert, 19 hours ago, Unread, You slept 6 h 20 m last night. Prioritize recovery today., Sleep Detail'
+                                                            Image, 0x113580a00, {{105.7, 494.3}, {44.0, 44.0}}, identifier: 'moon.zzz.fill', label: 'Snooze'
+                                                            StaticText, 0x113580b40, {{161.7, 494.3}, {130.0, 20.3}}, label: 'Sleep Debt Alert'
+                                                            StaticText, 0x113580c80, {{694.0, 500.3}, {67.7, 13.3}}, label: '19 hours ago'
+                                                            StaticText, 0x113580dc0, {{161.7, 518.7}, {39.7, 13.3}}, label: 'Unread'
+                                                            StaticText, 0x113580f00, {{105.7, 546.3}, {330.3, 15.7}}, label: 'You slept 6 h 20 m last night. Prioritize recovery today.'
+                                                            Image, 0x113581040, {{111.0, 569.0}, {13.3, 15.7}}, identifier: 'moon.zzz.fill', label: 'Snooze'
+                                                            StaticText, 0x113581180, {{111.0, 569.0}, {97.7, 15.7}}, label: 'Sleep Detail'
+                                                  Cell, 0x1135812c0, {{73.7, 603.3}, {720.0, 129.0}}
+                                                    Other, 0x113581400, {{73.7, 603.3}, {720.0, 129.0}}
+                                                      Other, 0x113581540, {{73.7, 603.3}, {720.0, 129.0}}
+                                                        Other, 0x113581680, {{73.7, 603.3}, {720.0, 129.0}}
+                                                          Other, 0x1135817c0, {{73.7, 603.3}, {720.0, 129.0}}
+                                                    Other, 0x113581900, {{73.7, 603.3}, {720.0, 129.0}}
+                                                      Other, 0x113581a40, {{73.7, 603.3}, {720.0, 129.0}}
+                                                        Other, 0x113581b80, {{73.7, 603.3}, {720.0, 129.0}}
+                                                          Button, 0x113581cc0, {{73.7, 603.3}, {720.0, 129.0}}, identifier: 'notification-row-8925C884-E1C4-4F52-BD8B-FA0411C5FBB5', label: 'Step Goal Reached, 20 hours ago, Unread, You reached 9,800 steps today. Great momentum., Steps Detail'
+                                                            Image, 0x113581e00, {{105.7, 623.3}, {44.0, 44.0}}, identifier: 'figure.walk', label: 'Walk'
+                                                            StaticText, 0x113581f40, {{161.7, 623.3}, {150.7, 20.3}}, label: 'Step Goal Reached'
+                                                            StaticText, 0x113582080, {{692.3, 629.3}, {69.3, 13.3}}, label: '20 hours ago'
+                                                            StaticText, 0x1135821c0, {{161.7, 647.7}, {39.7, 13.3}}, label: 'Unread'
+                                                            StaticText, 0x113582300, {{105.7, 675.3}, {304.0, 15.7}}, label: 'You reached 9,800 steps today. Great momentum.'
+                                                            Image, 0x113582440, {{112.3, 697.7}, {10.3, 16.3}}, identifier: 'figure.walk', label: 'Walk'
+                                                            StaticText, 0x113582580, {{112.3, 697.7}, {97.0, 16.3}}, label: 'Steps Detail'
+                                                  Other, 0x1135826c0, {{760.7, 82.0}, {30.0, 587.0}}, label: 'Vertical scroll bar, 2 pages', value: 0%
+                                                    Other, 0x113582800, {{787.7, 175.0}, {3.0, 491.0}}
+                                                  Other, 0x113582940, {{760.7, 82.0}, {30.0, 587.0}}, label: 'Vertical scroll bar, 2 pages', value: 0%
+                                                    Other, 0x113582a80, {{787.7, 175.0}, {3.0, 491.0}}
+                            Other, 0x113582bc0, {{0.0, -0.0}, {951.0, 669.0}}
+                              Other, 0x113582d00, {{0.0, -0.0}, {951.0, 669.0}}
+                Other, 0x113582e40, {{0.0, -0.0}, {951.0, 669.0}}
+                  Toolbar, 0x113582f80, {{0.0, -0.0}, {951.0, 669.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                    Other, 0x1135830c0, {{0.0, -0.0}, {951.0, 669.0}}
+                      Other, 0x113583200, {{0.0, -0.0}, {951.0, 669.0}}
+                        Other, 0x113583340, {{0.0, -0.0}, {951.0, 669.0}}
+                          Other, 0x113583480, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x1135835c0, {{879.0, 124.0}, {48.0, 48.0}}
+                              Other, 0x113583700, {{879.0, 124.0}, {48.0, 48.0}}
+                                Other, 0x113583840, {{884.0, 129.0}, {38.0, 38.0}}
+                                  Other, 0x113583980, {{884.0, 129.0}, {38.0, 38.0}}
+                                    Button, 0x113583ac0, {{884.0, 129.0}, {38.0, 38.0}}, identifier: 'BackButton'
+                        Other, 0x113583c00, {{0.0, -0.0}, {951.0, 669.0}}
+                          Other, 0x113583d40, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x113583e80, {{879.0, 433.0}, {48.0, 212.0}}
+                              Other, 0x113594000, {{879.0, 433.0}, {48.0, 212.0}}
+                                Other, 0x113594140, {{879.0, 433.0}, {48.0, 212.0}}
+                                  Other, 0x113594280, {{879.0, 433.0}, {48.0, 212.0}}
+                                    Other, 0x1135943c0, {{879.0, 433.0}, {48.0, 212.0}}
+                                      Other, 0x113594500, {{879.0, 433.0}, {48.0, 212.0}}
+                                        Other, 0x113594640, {{879.0, 433.0}, {44.0, 58.0}}
+                                        Other, 0x113594780, {{879.0, 433.0}, {48.0, 212.0}}
+                                          Button, 0x1135948c0, {{881.0, 435.0}, {44.0, 58.0}}, identifier: 'tab-today', label: 'Today', Selected
+                                            Image, 0x113594a00, {{890.3, 447.3}, {25.3, 31.7}}, identifier: 'heart.text.clipboard.fill', label: 'Heart on a text clipboard, filled'
+                                          Button, 0x113594b40, {{881.0, 485.0}, {44.0, 58.0}}, identifier: 'tab-activity', label: 'Activity'
+                                            Image, 0x113594c80, {{891.3, 498.7}, {23.3, 28.7}}, identifier: 'flame.fill', label: 'Flame'
+                                          Button, 0x113594dc0, {{881.0, 535.0}, {44.0, 58.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                                            Image, 0x113594f00, {{888.7, 551.3}, {28.7, 25.3}}, identifier: 'leaf.fill', label: 'Leaf'
+                                          Button, 0x113595040, {{881.0, 585.0}, {44.0, 58.0}}, identifier: 'tab-life', label: 'Life'
+                                            Image, 0x113595180, {{887.0, 600.3}, {32.0, 27.3}}, identifier: 'checklist', label: 'Checklist with checkmarks'
+                                        Other, 0x1135952c0, {{879.0, 433.0}, {48.0, 212.0}}
+                                        Other, 0x113595400, {{879.0, 433.0}, {48.0, 212.0}}
+                                          Other, 0x113595540, {{879.0, 433.0}, {48.0, 212.0}}
+                                            Other, 0x113595680, {{879.0, 433.0}, {48.0, 212.0}}
+                                              Other, 0x1135957c0, {{879.0, 433.0}, {48.0, 212.0}}
+                                                Other, 0x113595900, {{879.0, 433.0}, {48.0, 212.0}}
+                                                  Other, 0x113595a40, {{879.0, 433.0}, {48.0, 212.0}}
+                                              Other, 0x113595b80, {{879.0, 433.0}, {48.0, 212.0}}
+                                                Other, 0x113595cc0, {{879.0, 433.0}, {48.0, 212.0}}
+                                        Other, 0x113595e00, {{881.0, 435.0}, {44.0, 58.0}}
+                                          Other, 0x113595f40, {{881.0, 435.0}, {44.0, 58.0}}
+                                            Other, 0x113596080, {{881.0, 435.0}, {44.0, 58.0}}
+                                            Other, 0x1135961c0, {{881.0, 435.0}, {44.0, 58.0}}
+                                              Other, 0x113596300, {{881.0, 435.0}, {44.0, 58.0}}
+                                                Other, 0x113596440, {{881.0, 435.0}, {44.0, 58.0}}
+                                                  Other, 0x113596580, {{881.0, 435.0}, {44.0, 58.0}}
+                                                Other, 0x1135966c0, {{881.0, 435.0}, {44.0, 58.0}}
+                                              Other, 0x113596800, {{881.0, 435.0}, {44.0, 58.0}}
+              Other, 0x113596940, {{433.5, 317.5}, {0.0, 0.0}}
+Path to element:
+ →Application, 0x11430b700, pid: 49941, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x113596a80, pid: 49941, label: 'DUNE'
+  }
