@@ -45,7 +45,6 @@ struct CumulativeStressLevelGuide: View {
             }
         }
         .padding(.vertical, DS.Spacing.xxs)
-        .opacity(isCurrent ? 1.0 : 0.7)
         .accessibilityElement(children: .combine)
     }
 
@@ -54,7 +53,7 @@ struct CumulativeStressLevelGuide: View {
         Text(level.displayName)
             .font(.subheadline.weight(isCurrent ? .bold : .medium))
             .fixedSize(horizontal: false, vertical: true)
-        Text(rangeLabel(for: level)).font(.caption2).foregroundStyle(.tertiary)
+        Text(rangeLabel(for: level)).font(.caption2).foregroundStyle(DS.Color.textSecondary)
         if isCurrent {
             Text("Current")
                 .font(.caption2.weight(.semibold))

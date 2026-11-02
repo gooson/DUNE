@@ -14,3 +14,8 @@
 가시 범위는 shared fixed duration, 통계는 실제 hour/day source, long chart bucket은 통계가 아니다. loading/empty/error를 구분하고 retry는 현재 기간 재조회다. 새 실제 캡처는 T05만 갱신하며 다른 화면·포털 링크를 보존한다. 기존 PNG는 이전 비교이며 새 증거로 사용하지 않는다.
 
 검증 계획/데이터 정책은 ../../plans/2026-10-30-t05-cumulative-stress-redesign.md를 따른다. 이 계약과 theme HTML은 앱 실제 캡처가 아니다.
+
+
+## 품질 검토: 구간 숫자 대비
+
+작은 스트레스 구간 숫자는 TextSecondary의 불투명 색을 사용하고 전체 행을 흐리게 하지 않는다. 현재 단계는 기존 굵은 제목·Current 배지로 구분한다. 네 원본 심벌·범위·순서·설명·점수는 보존하며 밝음·어두움 실제 캡처로 판독성을 확인한다.

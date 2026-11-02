@@ -77,3 +77,8 @@ related_solutions:
 MainActor fetch는 동기 구간이며 날짜 분할이 무제한 duplicate에 대한 성능 보장은 아니다. 성능 개선 수치를 주장하지 않는다. 중복 최신 정책은 표시의 conflict resolution이며 스트레스별 updatedAt이 아니다. 실제 스키마/계산은 보존한다. 서비스+VM 수정은 iOS 소비 범위와 다른 shared-target 포함 여부를 project.yml에서 재확인하고 필요한 compile 범위를 기록한다. 캡처·검증하지 못한 상태/테마는 완료로 표시하지 않는다.
 
 Overall high on source contracts; runtime/UI 품질은 실제 검사 전까지 미검증이다.
+
+
+### 2026-11-02 quality resolution in progress
+
+Actual iPad review found faint legend intervals (current about1.78:1, inactive about1.49:1). Replace tertiary interval text with the existing opaque TextSecondary asset and remove whole-row opacity. Keep all values, symbols, guidance and current-level bold/badge. Fresh post-fix light/dark capture verification remains pending; the6phone functional baseline atc763passed before this style-only fix.
