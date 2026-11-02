@@ -1,7 +1,7 @@
 ---
 topic: T09 morning briefing redesign
 date: 2026-10-31
-status: in-progress
+status: verified-pending-ship
 confidence: medium
 related_solutions:
   - docs/solutions/general/2026-03-14-morning-briefing-feature.md
@@ -102,3 +102,8 @@ Main added `LocalDayPeriod`/`DashboardClock` and a 06:00–09:59 `Good Morning` 
 ## 복구 병합 검증 체크포인트 (2026-11-02)
 
 추가 편집 전 인덱스 트리가 저장된 `c97f1adf`와 완전히 일치하는지 확인했고, 실제 `MERGE_HEAD=10fa29fb`를 유지했다. 기존 자동 브리핑 검사 두 개에 opt-in 아침 캡처와 같은 `--ui-dashboard-hour 6` 인자만 추가해 실제 낮 시각 때문에 진입이 막히지 않도록 했다. 전역 시계·아침 외 수동 진입·제품 표시 조건·fixture 값·assertion은 유지한다. 구문·프로젝트·카탈로그·맵 검사는 병합 트리의 빌드나 native 통과를 의미하지 않으며 해당 검증은 부모 작업에 남아 있다. 승인된 Duo 펼침 추가 실행 1회는 아직 사용하지 않았다.
+
+
+## 2026-11-02 최종 검증 보완
+
+제품 소스 7b31cd8e는 일출·네 카드·원래 아이콘·조건부 날씨·기존 템플릿과 로컬 시간 경계를 보존한다. iPad fd227b54의 기본·dark 최대 접근성 2/2 통과를 제품 소스 일치로 재사용하되 최종 helper 재실행으로 표시하지 않는다. 새 Duo 펼침 31718cae는 승인된 추가 1회에서 1/1·8 ACK·180° LCD-1 통과했으며 예산은 0이다. 접힘 첫 시도 실패는 보존하고, 툴바 자식의 부재를 처리하는 테스트 수정 후 94d7a48b에서 1/1·8 ACK·0° LCD 통과했다. 같은 최종 helper로 iPhone 기본·dark 최대 글씨 2/2 통과를 확인했다. 실제 닫기와 네 섹션 가독성 조건은 유지했다. 원격 60dc722f의 앱 빌드 및 iOS 2734/302 suites 통과, Watch는 테스트 전 host_support 서비스 실패이며 Watch 통과로 표시하지 않는다. 원래 Plan의 사후 작성 한계와 모든 최초 실패 기록을 유지한다.

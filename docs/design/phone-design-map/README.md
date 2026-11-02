@@ -221,3 +221,6 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 
 
 2026-11-02 T07 전체 데이터: [네 기기 실제 앱 전후 비교와 iPhone 16개 분류](../full-redesign-map/review/t07-all-data-native-2026-11-02/index.html). 정식 맵의 T07만 갱신했다. iPhone·iPad는 10월 31일 ed844d14, Duo 접힘·펼침은 11월 2일 e2759822의 실제 이미지다. 기존 10월 13일 원본의 정확한 이미지별 소스·Duo 각도는 미확인으로 보존했다. 새 Duo의 활성 LCD·각도·ACK 원문, host 파일 mtime과 XCTest 첨부 시각 구분은 갤러리 출처에서 확인한다. 전체 회귀·원격 CI 통과를 뜻하지 않는다.
+
+
+2026-11-02 T09 아침 브리핑: [네 기기 실제 전후 비교와 최대 접근성 글씨](../full-redesign-map/review/t09-morning-briefing-native-2026-11-02/index.html). 정식 맵의 T09만 갱신했다. 새 iPhone·Duo 접힘은 94d7a48b, Duo 펼침은 31718cae, iPad는 fd227b54의 실제 캡처다. 네 캡처의 제품 뷰는 동일하며 테스트 도우미 버전과 원본 촬영 날짜·기기 차이는 갤러리에 구분했다. 기존 원본의 정확한 소스와 과거 Duo 각도는 미확인으로 유지한다. 새 Duo의 각도·활성 화면·ACK 원문을 보존했다. 전체 회귀 통과를 뜻하지 않는다.
