@@ -9,6 +9,13 @@ final class AllDataDetailRedesignTests: SeededUITestBaseCase {
         routeArguments(for: "hrv")
     }
 
+    override func waitForInitialScreenReady() throws {
+        let identifier = "all-data-screen-hrv"
+        guard app.descendants(matching: .any)[identifier].firstMatch.waitForExistence(timeout: 15) else {
+            throw VisualAudit.unavailable("Initial T07 All Data route not found: \(identifier)")
+        }
+    }
+
     func testAllCategoryReadyRowsAndCaptures() {
         executionTimeAllowance = 900
         for fixture in Self.readyFixtures {
