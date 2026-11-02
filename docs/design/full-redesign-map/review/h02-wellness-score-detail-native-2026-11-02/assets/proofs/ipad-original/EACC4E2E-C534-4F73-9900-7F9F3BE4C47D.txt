@@ -1,0 +1,82 @@
+Attributes: Application, 0x1122e0640, pid: 7032, label: 'DUNE'
+Element subtree:
+ →Application, 0x1122e0640, pid: 7032, label: 'DUNE'
+    Window (Main), 0x1122e0780, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x1122e08c0, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x1122e0a00, {{0.0, 0.0}, {756.0, 1158.0}}
+        Other, 0x1122e0b40, {{0.0, 0.0}, {756.0, 1158.0}}
+          Other, 0x1122e0c80, {{0.0, 0.0}, {756.0, 1158.0}}
+            Other, 0x1122e0dc0, {{0.0, 0.0}, {756.0, 1158.0}}
+              Other, 0x1122e0f00, {{0.0, 0.0}, {756.0, 1158.0}}
+                Other, 0x1122e1040, {{0.0, 0.0}, {756.0, 1158.0}}
+                  Other, 0x1122e1180, {{0.0, 0.0}, {756.0, 1158.0}}
+                    Other, 0x1122e12c0, {{0.0, 0.0}, {756.0, 1158.0}}
+                      Other, 0x1122e1400, {{0.0, 0.0}, {756.0, 1158.0}}
+                        Other, 0x1122e1540, {{0.0, 96.0}, {756.0, 1062.0}}
+                          Other, 0x1122e1680, {{0.0, 96.0}, {756.0, 1062.0}}
+                            Other, 0x1122e17c0, {{0.0, 96.0}, {756.0, 1062.0}}
+                              Other, 0x1122e1900, {{0.0, 96.0}, {756.0, 1062.0}}
+                                Other, 0x1122e1a40, {{0.0, 96.0}, {756.0, 1062.0}}
+                                  Other, 0x1122e1b80, {{0.0, 96.0}, {756.0, 1062.0}}
+                                    Other, 0x1122e1cc0, {{0.0, 96.0}, {756.0, 1062.0}}
+                                      Other, 0x1122e1e00, {{0.0, 96.0}, {756.0, 1062.0}}
+                                        NavigationBar, 0x1122e1f40, {{0.0, 150.0}, {756.0, 54.0}}, identifier: 'Breathing Disturbances'
+                                          Button, 0x1122e2080, {{10.0, 150.0}, {44.0, 44.0}}, identifier: 'BackButton', label: 'Today'
+                                          StaticText, 0x1122e21c0, {{284.0, 161.5}, {187.5, 21.0}}, label: 'Breathing Disturbances'
+                                        Other, 0x1122e2300, {{0.0, 96.0}, {756.0, 1062.0}}
+                                          Other, 0x1122e2440, {{0.0, 96.0}, {756.0, 1062.0}}
+                                            Other, 0x1122e2580, {{0.0, 96.0}, {756.0, 1062.0}}
+                                              Other, 0x1122e26c0, {{0.0, 96.0}, {756.0, 1062.0}}
+                                                CollectionView, 0x1122e2800, {{0.0, 96.0}, {756.0, 1062.0}}, identifier: 'all-data-screen-breathingDisturbances'
+                                                  Other, 0x1122e2940, {{-20.0, -1920.0}, {796.0, 4360.5}}
+                                                  Other, 0x1122e2a80, {{0.0, 96.0}, {756.0, 1062.0}}
+                                                    Other, 0x1122e2bc0, {{0.0, 96.0}, {756.0, 148.0}}
+                                                  Other, 0x1122e2d00, {{0.0, 96.0}, {756.0, 1062.0}}
+                                                  Cell, 0x1122e2e40, {{20.0, 204.0}, {716.0, 40.5}}
+                                                    Other, 0x1122e2f80, {{20.0, 204.0}, {716.0, 40.5}}
+                                                    Other, 0x1122e30c0, {{20.0, 204.0}, {716.0, 40.5}}
+                                                      Other, 0x1122e3200, {{20.0, 204.0}, {716.0, 40.5}}
+                                                        Other, 0x1122e3340, {{20.0, 204.0}, {716.0, 40.5}}
+                                                          StaticText, 0x1122e3480, {{20.0, 204.0}, {716.0, 40.5}}, label: 'October 31, 2026'
+                                                  Cell, 0x1122e35c0, {{20.0, 244.5}, {716.0, 52.0}}
+                                                    Other, 0x1122e3700, {{20.0, 244.5}, {716.0, 52.0}}
+                                                      Other, 0x1122e3840, {{20.0, 244.5}, {716.0, 52.0}}
+                                                    Other, 0x1122e3980, {{20.0, 244.5}, {716.0, 52.0}}
+                                                      Other, 0x1122e3ac0, {{20.0, 244.5}, {716.0, 52.0}}
+                                                        Other, 0x1122e3c00, {{20.0, 244.5}, {716.0, 52.0}}
+                                                          StaticText, 0x1122e3d40, {{20.0, 244.5}, {716.0, 52.0}}, label: '01:00, 1.2/hr'
+                                                            StaticText, 0x1122e3e80, {{40.0, 261.5}, {39.0, 18.0}}, label: '01:00'
+                                                            StaticText, 0x104fce300, {{676.5, 261.5}, {39.5, 18.0}}, label: '1.2/hr'
+                                                  Other, 0x104fcda40, {{723.0, 204.0}, {30.0, 922.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                                                    Other, 0x1122d8000, {{750.0, 941.5}, {3.0, 181.5}}
+                                                  Other, 0x1122d8140, {{723.0, 204.0}, {30.0, 922.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                                                    Other, 0x1122d8280, {{750.0, 941.5}, {3.0, 181.5}}
+                                        Toolbar, 0x1122d83c0, {{0.0, 96.0}, {756.0, 1062.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                          Other, 0x1122d8500, {{0.0, 96.0}, {756.0, 1062.0}}
+                                Toolbar, 0x1122d8640, {{0.0, 96.0}, {756.0, 1062.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                  Other, 0x1122d8780, {{0.0, 96.0}, {756.0, 1062.0}}
+                            Other, 0x1122d88c0, {{0.0, 96.0}, {756.0, 1062.0}}
+                              Other, 0x1122d8a00, {{0.0, 96.0}, {756.0, 1062.0}}
+                Other, 0x1122d8b40, {{0.0, 0.0}, {756.0, 1158.0}}
+                  Other, 0x1122d8c80, {{0.0, 32.0}, {756.0, 44.0}}
+                    Button, 0x1122d8dc0, {{183.5, 36.0}, {56.0, 36.0}}, identifier: 'ToggleSideBar', label: 'Toggle sidebar'
+                    Button, 0x1122d8f00, {{239.5, 36.0}, {79.0, 36.0}}, identifier: 'tab-today', label: 'Today', Selected
+                      Button, 0x1122d9040, {{239.5, 36.0}, {79.0, 36.0}}, identifier: 'tab-today', label: 'Today', Selected
+                    Button, 0x1122d9180, {{318.5, 36.0}, {91.0, 36.0}}, identifier: 'tab-activity', label: 'Activity'
+                      Button, 0x1122d92c0, {{318.5, 36.0}, {91.0, 36.0}}, identifier: 'tab-activity', label: 'Activity'
+                    Button, 0x1122d9400, {{409.5, 36.0}, {102.0, 36.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                      Button, 0x1122d9540, {{409.5, 36.0}, {102.0, 36.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                    Button, 0x1122d9680, {{511.5, 36.0}, {61.0, 36.0}}, identifier: 'tab-life', label: 'Life'
+                      Button, 0x1122d97c0, {{511.5, 36.0}, {61.0, 36.0}}, identifier: 'tab-life', label: 'Life'
+              Other, 0x1122d9900, {{0.0, 32.0}, {756.0, 1106.0}}
+              Other, 0x1122d9a40, {{378.0, 585.0}, {0.0, 0.0}}
+    Window, 0x1122d9b80, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x1122d9cc0, {{0.0, 0.0}, {756.0, 1158.0}}
+        Other, 0x1122d9e00, {{0.0, 0.0}, {756.0, 1158.0}}
+Path to element:
+ →Application, 0x1122e0640, pid: 7032, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x1122d9f40, pid: 7032, label: 'DUNE'
+  }

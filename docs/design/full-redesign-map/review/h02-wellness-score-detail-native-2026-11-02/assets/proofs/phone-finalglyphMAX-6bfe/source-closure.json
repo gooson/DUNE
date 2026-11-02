@@ -1,0 +1,13 @@
+{
+  "public_revision": "fc8ba0cb",
+  "validation_revision": "6bfe7c85",
+  "app_sha256": "5f43837ebde432b7d2b21e86f5c16cef3d411fabcb2b8544b1ac2afa5ee2e13f",
+  "H02_test_sha256": "3d2954beaa1cf877fe9e787d299b8220f910c318af21acae5da1f59fdf2182e3",
+  "whole_app_file_public_equals_frozen_validation": true,
+  "whole_H02_test_file_public_equals_frozen_validation": true,
+  "MAX_method_equals_historical_finalglyph_e83": true,
+  "MAX_method_sha256": "78906f1eb1fb54207717b0e6ae7a04d73b1df939c9864f6d5e18bd3433cbed31",
+  "normalPhone_c7_app_delta": "diff --git a/DUNE/Presentation/Wellness/WellnessScoreDetailView.swift b/DUNE/Presentation/Wellness/WellnessScoreDetailView.swift\nindex ae37d0a9..13fb4a12 100644\n--- a/DUNE/Presentation/Wellness/WellnessScoreDetailView.swift\n+++ b/DUNE/Presentation/Wellness/WellnessScoreDetailView.swift\n@@ -328,11 +328,20 @@ private struct H02WellnessDetailHero: View {\n     private func evidenceRow(_ item: Evidence) -> some View {\n         VStack(alignment: .leading, spacing: DS.Spacing.xs) {\n             HStack(spacing: DS.Spacing.sm) {\n-                Image(systemName: item.icon)\n-                    .font(.caption)\n-                    .foregroundStyle(palette.ink)\n-                    .frame(width: 20)\n-                    .accessibilityHidden(true)\n+                Group {\n+                    if dynamicTypeSize.isAccessibilitySize {\n+                        Image(systemName: item.icon)\n+                            .font(.system(size: 16))\n+                            .frame(width: 26)\n+                            .clipped()\n+                    } else {\n+                        Image(systemName: item.icon)\n+                            .font(.caption)\n+                            .frame(width: 20)\n+                    }\n+                }\n+                .foregroundStyle(palette.ink)\n+                .accessibilityHidden(true)\n                 Text(item.title)\n                     .font(.subheadline)\n                     .foregroundStyle(palette.ink)\n",
+  "normalPhone_reuse_scope": "Only AX-size glyph branch differs from c7; normal branch retained. Historicalnormal doesnot execute newrailBacklookup; currentDuo covers that. Notwholehistoricalfileidentity.",
+  "whole_project_tree_equal": false
+}

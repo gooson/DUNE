@@ -38,6 +38,70 @@ struct TrainingVolumeAnalysisServiceTests {
         #expect(result.current.totalSessions == 1)
     }
 
+    @Test("Calendar comparisons contain exactly N dates and respect both boundaries", arguments: VolumePeriod.allCases)
+    func calendarBounds(period: VolumePeriod) throws {
+        let calendar = Calendar.current
+        let reference = calendar.date(bySettingHour: 12, minute: 0, second: 0, of: Date())!
+        let bounds = try #require(TrainingVolumeAnalysisService.CalendarBounds.inclusiveDays(period: period, referenceDate: reference))
+        func workout(_ date: Date) -> WorkoutSummary {
+            WorkoutSummary(id: UUID().uuidString, type: "Running", activityType: .running,
+                           duration: 600, calories: 100, distance: nil, date: date)
+        }
+        let manual = ManualExerciseSnapshot(date: bounds.previousStart.addingTimeInterval(3600), exerciseType: "Squat",
+            categoryRawValue: "strength", equipmentRawValue: nil, duration: 600, calories: 100, totalVolume: 0)
+        let result = TrainingVolumeAnalysisService.analyze(
+            workouts: [workout(bounds.previousStart), workout(bounds.currentStart),
+                       workout(bounds.previousStart.addingTimeInterval(-1)), workout(reference.addingTimeInterval(1))],
+            manualRecords: [manual], period: period, bounds: bounds)
+        #expect(result.current.dailyBreakdown.count == period.days)
+        #expect(result.previous?.dailyBreakdown.count == period.days)
+        #expect(result.current.totalSessions == 1)
+        #expect(result.previous?.totalSessions == 2)
+        #expect(result.previous?.totalDuration == 1200)
+        #expect(result.previous?.totalCalories == 200)
+        #expect(result.previous?.endDate == bounds.previousEnd)
+        #expect(calendar.startOfDay(for: calendar.date(byAdding: .day, value: 1, to: bounds.previousEnd)!) == bounds.currentStart)
+    }
+
+    @Test("Weekly goal excludes the preceding date")
+    func weeklyGoalUsesSevenDates() throws {
+        let calendar = Calendar.current
+        let reference = calendar.date(bySettingHour: 12, minute: 0, second: 0, of: Date())!
+        let today = calendar.startOfDay(for: reference)
+        let bounds = try #require(TrainingVolumeAnalysisService.CalendarBounds.inclusiveDays(period: .week, referenceDate: reference))
+        let dates = [0, 1, 2, 3, 7].map { calendar.date(byAdding: .day, value: -$0, to: today)! }
+        let records = dates.map { ManualExerciseSnapshot(date: $0, exerciseType: "Squat", categoryRawValue: "strength", equipmentRawValue: nil, duration: 600, calories: 10, totalVolume: 0) }
+        let result = TrainingVolumeAnalysisService.analyze(workouts: [], manualRecords: records, period: .week, bounds: bounds)
+        #expect(result.current.activeDays == 4)
+        #expect(result.previous?.activeDays == 1)
+    }
+
+    @Test("Calendar windows and buckets follow Santiago midnight DST transitions")
+    func midnightDSTTransition() throws {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = try #require(TimeZone(identifier: "America/Santiago"))
+        func date(_ day: Int, _ hour: Int, _ minute: Int = 0) -> Date {
+            calendar.date(from: DateComponents(year: 2026, month: 9, day: day, hour: hour, minute: minute))!
+        }
+        let reference = date(6, 12)
+        let bounds = try #require(TrainingVolumeAnalysisService.CalendarBounds.inclusiveDays(period: .week, referenceDate: reference, calendar: calendar))
+        let august31 = calendar.date(from: DateComponents(year: 2026, month: 8, day: 31))!
+        #expect(bounds.currentStart == august31)
+        let early = august31.addingTimeInterval(30 * 60)
+        let record = ManualExerciseSnapshot(date: early, exerciseType: "Squat", categoryRawValue: "strength", equipmentRawValue: nil, duration: 600, calories: 10, totalVolume: 0)
+        let comparison = TrainingVolumeAnalysisService.analyze(workouts: [], manualRecords: [record], period: .week, bounds: bounds)
+        #expect(comparison.current.activeDays == 1)
+        #expect(comparison.current.dailyBreakdown.count == 7)
+        #expect(comparison.current.dailyBreakdown.first?.totalDuration == 600)
+
+        let nextDay = date(7, 0, 30)
+        let nextRecord = ManualExerciseSnapshot(date: nextDay, exerciseType: "Squat", categoryRawValue: "strength", equipmentRawValue: nil, duration: 1200, calories: 10, totalVolume: 0)
+        let points = TrainingVolumeAnalysisService.buildHistoryDailyBreakdown(workouts: [], manualRecords: [record, nextRecord], start: august31, end: date(7, 12), calendar: calendar)
+        #expect(points.count == 8)
+        #expect(points.last?.date == calendar.startOfDay(for: nextDay))
+        #expect(points.last?.totalDuration == 1200)
+    }
+
     // MARK: - Helpers
 
     private func makeWorkout(

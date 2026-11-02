@@ -1,0 +1,53 @@
+{
+  "devices" : [
+    {
+      "architecture" : "arm64",
+      "deviceId" : "2A890E59-A90E-48DC-99B2-CB10AAEB6C38",
+      "deviceName" : "iPhone 18 Pro Max-wt-Health-detail-redesign-t14-679b64b65708",
+      "modelName" : "iPhone 18 Pro Max",
+      "osBuildNumber" : "24B8117",
+      "osVersion" : "27.2",
+      "platform" : "iOS Simulator"
+    }
+  ],
+  "testNodes" : [
+    {
+      "children" : [
+        {
+          "children" : [
+            {
+              "children" : [
+                {
+                  "duration" : "1분 18초",
+                  "durationInSeconds" : 78.99942207336426,
+                  "name" : "testNotificationMissingWorkoutRouteDarkMaximumAccessibilitySize()",
+                  "nodeIdentifier" : "ActivityExerciseRegressionTests/testNotificationMissingWorkoutRouteDarkMaximumAccessibilitySize()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests/ActivityExerciseRegressionTests/testNotificationMissingWorkoutRouteDarkMaximumAccessibilitySize",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "ActivityExerciseRegressionTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests/ActivityExerciseRegressionTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            }
+          ],
+          "name" : "DUNEUITests",
+          "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests",
+          "nodeType" : "UI test bundle",
+          "result" : "Passed"
+        }
+      ],
+      "name" : "DUNEUITests-DesignCapture",
+      "nodeType" : "Test Plan",
+      "result" : "Passed"
+    }
+  ],
+  "testPlanConfigurations" : [
+    {
+      "configurationId" : "1",
+      "configurationName" : "Design Capture"
+    }
+  ]
+}

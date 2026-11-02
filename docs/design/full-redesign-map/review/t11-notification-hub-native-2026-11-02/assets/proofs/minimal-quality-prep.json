@@ -1,0 +1,1189 @@
+{
+  "scope": "PR883 read-only minimal quality prep, not PASS",
+  "source_worktree_exists": false,
+  "registered_worktree_missing": true,
+  "branch": "codex/t11-notification-hub-redesign",
+  "head": "7be651484b30e70b4c374903bd732d303ad8afa8",
+  "main_reference": "8409827a8db5b42040dc1b9cbc2a9da4e4fdd1d2",
+  "merge_base": "672d5fdbcbc8eca70069ca3a8b328ed18f0c501f",
+  "merge_conflicts": [
+    "docs/design/theme-map/index.html",
+    "docs/design/theme-map/manifest.json"
+  ],
+  "blob_closure": {
+    "DUNE/Presentation/Dashboard/NotificationHubView.swift": {
+      "7be65148": "d9dedacb9946d0a7866690bf6b935178fabe4e6a",
+      "8409827a": "95ac7a757a7ce092ddf0f5e5101a7914e39d2ecb",
+      "f9c956e1": "ac8d6f834cee22bcbe6b38771c10012909845784"
+    },
+    "DUNEUITests/Smoke/DashboardSmokeTests.swift": {
+      "7be65148": "30dae69c0207160f69659c8fe319619052ca25ef",
+      "8409827a": "07fd225d4cda839e54cd43667e68ad190b777e1d",
+      "f9c956e1": "30dae69c0207160f69659c8fe319619052ca25ef"
+    },
+    "DUNEUITests/Full/TodaySettingsRegressionTests.swift": {
+      "7be65148": "f45c51704e77985fd651d77e8c056be92d66c17e",
+      "8409827a": "25675a61f318e8fb968a02c5199d2ca838797a6d",
+      "f9c956e1": "d1f5e2343452b373ee90248e60830fbe6b7aebb7"
+    }
+  },
+  "shared_file_ranges": {
+    "7be65148": {
+      "T11_prefix_sha256": "43addd7e052fef21fa6f129e26067a3a7a2470729a9001e0925868a9ba38e625",
+      "T12_T13_tail_sha256": "11b7cc481791b196169ff5f85467366f25a5742fc8451d803778d6143708fc2d"
+    },
+    "8409827a": {
+      "T11_prefix_sha256": "c724e85a0e0d94d9276ee9aab918bfb124b26bf52f3746b49b2a18b031c5775d",
+      "T12_T13_tail_sha256": "11b7cc481791b196169ff5f85467366f25a5742fc8451d803778d6143708fc2d"
+    },
+    "f9c956e1": {
+      "T11_prefix_sha256": "43addd7e052fef21fa6f129e26067a3a7a2470729a9001e0925868a9ba38e625",
+      "T12_T13_tail_sha256": "688f5c31ca704bf19d1c893e167111f13912dc8788e221aefec46699434ae098"
+    }
+  },
+  "approval_unchanged": {
+    "approvedExtra": 1,
+    "consumed": 0,
+    "duplicateApprovalNotAdded": true
+  },
+  "approval_derived_remaining": 1,
+  "original_lost_ID_fields": null,
+  "newly_recovered_authoritative_pipeline": {
+    "t11-ui-unread-caption-contrast": {
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/pipeline/check-b476e4922dc034d89ba3c361.json",
+      "sha256": "3832135427768d47c3beb76b932aff096b973b4fa4913455f73ef22d266d4e63",
+      "record": {
+        "attempts": [
+          {
+            "after": "4d29a8d034900fdea3ec09c4177901dae5233cc5fbe0ac93811755e8165a61aa",
+            "after_content": "b7ea2c107507cefaa8d884a31ddf023c3d131957f68afe88d8bc9d1a12cda53b",
+            "before": "4d29a8d034900fdea3ec09c4177901dae5233cc5fbe0ac93811755e8165a61aa",
+            "before_content": "b7ea2c107507cefaa8d884a31ddf023c3d131957f68afe88d8bc9d1a12cda53b",
+            "child_pgid": 51725,
+            "child_pid": 51725,
+            "command": [
+              "scripts/test-ui.sh",
+              "--no-regen",
+              "--test-plan",
+              "DUNEUITests-DesignCapture",
+              "--simulator-udid",
+              "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+              "--only-testing",
+              "DUNEUITests/TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState",
+              "--log-file",
+              ".xcodebuild/t11-unread-caption-contrast-7be65148.log"
+            ],
+            "content_only": false,
+            "context": "Xcode27.2-validationWT-7be65148-newAppcaption-primary-color-only-already-passed-normal-selector",
+            "ended": 1793400698.6877818,
+            "exit_code": 0,
+            "log": "check-b476e4922dc034d89ba3c361-1b9c9a7bb50942cb9cba6cae1d82b0e1.log",
+            "log_hash": "a6e4e47a0d00201c23a72857e403e8d4cc470b5993bc8756286b6deb9385abdb",
+            "scope": "new-unread-caption-contrast-Appdelta-only-normal3unread-Englishfixture-capture-controls-empty-originalfailedmaxAXNOTexecuted-or-waived",
+            "started": 1793400590.510807,
+            "status": "success"
+          }
+        ],
+        "id": "t11-ui-unread-caption-contrast",
+        "schema_version": 1,
+        "worktree": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health"
+      }
+    },
+    "t11-before-phone-seeded": {
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/pipeline/check-ef104846258f5466d64f2288.json",
+      "sha256": "e687e6038120b24c384736bc3faeef05c2098ff71aadef7787af3092b026ecee",
+      "record": {
+        "attempts": [
+          {
+            "after": "655f160a4fe9970b0643143be7a351874dc2cfca22f0cdf79eb8556d184fbe01",
+            "after_content": "cb57191ca26ca8770a6f066ca2da807a70f00377c0ffc97efb79db6e1674c545",
+            "before": "655f160a4fe9970b0643143be7a351874dc2cfca22f0cdf79eb8556d184fbe01",
+            "before_content": "cb57191ca26ca8770a6f066ca2da807a70f00377c0ffc97efb79db6e1674c545",
+            "child_pgid": 65501,
+            "child_pid": 65501,
+            "command": [
+              "scripts/test-ui.sh",
+              "--no-regen",
+              "--test-plan",
+              "DUNEUITests-DesignCapture",
+              "--simulator-udid",
+              "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+              "--only-testing",
+              "DUNEUITests/TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState",
+              "--log-file",
+              ".xcodebuild/t11-before-phone-seeded-583dcaf1.log"
+            ],
+            "content_only": false,
+            "context": "583dcaf1-main-identical-originalHub-prefix-seeded-English-owned340663",
+            "ended": 1793396029.331944,
+            "exit_code": 0,
+            "log": "check-ef104846258f5466d64f2288-5600d9161ca2484f89cf1995ff75666a.log",
+            "log_hash": "3f2b4851ce21c2f48fe45e27bbe3201dfc61e30c37193a846a332e7bb5d558b2",
+            "scope": "T11-matched-original-All-filter-three-unread-same-fixture-locale-as-redesign",
+            "started": 1793395966.0735319,
+            "status": "success"
+          }
+        ],
+        "id": "t11-before-phone-seeded",
+        "schema_version": 1,
+        "worktree": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health"
+      }
+    },
+    "t11-ui-hub": {
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/pipeline/check-9c602a5f40860c2606f9cf4c.json",
+      "sha256": "94e3f018c843f6b6c74eca4bbc494998652f89511dcf0c4fc26ff5d57845c273",
+      "record": {
+        "attempts": [
+          {
+            "after": "dcefcd126e0d0e5d383cba3d1b6d7db4a055d3bc802a137c2212067c4bd18a03",
+            "after_content": "c454cadf780d931a1817c4bc036f6dd728a2b3078df01c1775afec9a66a9cfa7",
+            "before": "dcefcd126e0d0e5d383cba3d1b6d7db4a055d3bc802a137c2212067c4bd18a03",
+            "before_content": "c454cadf780d931a1817c4bc036f6dd728a2b3078df01c1775afec9a66a9cfa7",
+            "child_pgid": 43021,
+            "child_pid": 43021,
+            "command": [
+              "scripts/test-ui.sh",
+              "--no-regen",
+              "--test-plan",
+              "DUNEUITests-DesignCapture",
+              "--simulator-udid",
+              "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+              "--only-testing",
+              "DUNEUITests/TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState",
+              "--only-testing",
+              "DUNEUITests/TodaySettingsEmptyStateRegressionTests/testNotificationHubShowsEmptyStateWithoutSeed",
+              "--only-testing",
+              "DUNEUITests/DashboardSmokeTests/testNavigateToWhatsNew",
+              "--only-testing",
+              "DUNEUITests/DashboardSmokeTests/testNotificationHubSummaryAtMaximumAccessibilitySize",
+              "--log-file",
+              ".xcodebuild/t11-iphone-730b39b4.log"
+            ],
+            "content_only": false,
+            "context": "Xcode27.2-validationWT-owned340663-730b39b4-phone-normal-darkmaxAX-oneVM",
+            "ended": 1793394480.8741372,
+            "exit_code": 65,
+            "log": "check-9c602a5f40860c2606f9cf4c-6cdc04329d0645159623b5444de82eba.log",
+            "log_hash": "470790d2bd71e915c5c9c2ed6d8e0631414e6338920cf99f36dea38c52a09cfb",
+            "scope": "T11-inbox-read-delete-filter-empty-release-navigation-and-frontmost-AX-layout",
+            "started": 1793394280.230616,
+            "status": "failed"
+          },
+          {
+            "after": "4e06d81181ba95592f2ea0a62546bda486cebd57d0eaf1563469b2b80d38c160",
+            "after_content": "18a607a93c73f818919d725e237ac500aa1498eb372929d4d9c835ba84d52195",
+            "before": "4e06d81181ba95592f2ea0a62546bda486cebd57d0eaf1563469b2b80d38c160",
+            "before_content": "18a607a93c73f818919d725e237ac500aa1498eb372929d4d9c835ba84d52195",
+            "child_pgid": 54734,
+            "child_pid": 54734,
+            "command": [
+              "scripts/test-ui.sh",
+              "--no-regen",
+              "--test-plan",
+              "DUNEUITests-DesignCapture",
+              "--simulator-udid",
+              "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+              "--only-testing",
+              "DUNEUITests/TodaySettingsEmptyStateRegressionTests/testNotificationHubShowsEmptyStateWithoutSeed",
+              "--only-testing",
+              "DUNEUITests/DashboardSmokeTests/testNotificationHubSummaryAtMaximumAccessibilitySize",
+              "--log-file",
+              ".xcodebuild/t11-iphone-b6ac0790.log"
+            ],
+            "content_only": false,
+            "context": "Xcode27.2-validationWT-owned340663-b6ac0790-phone-nativefilters-darkmaxAX-English-empty-defaultlocale-oneVM",
+            "ended": 1793395194.9088829,
+            "exit_code": 65,
+            "log": "check-9c602a5f40860c2606f9cf4c-991ca24cde0f464db4d4f0e20edab1d4.log",
+            "log_hash": "fb2f56db6d01f9432c9a17b87b967526cad52828cba5a2c5d72c3e3b5f699ab1",
+            "remediation": "preserve-native-picker-check-unobscured-segments-and-real-selection-pin-copy-locale-fix-only-failed-empty-method",
+            "retry_cause": "native-segment-AX-frame-assumption-and-English-only-Health-query-confirmed-in-original-AX",
+            "retry_evidence": {
+              "file": ".codex-checks/t11/ui-retry-remediation.json",
+              "hash": "082980247b786307678dcf34331aaca10f69c1c68149eb9f8ac2ec0b9cf97599"
+            },
+            "scope": "T11-failed-maxAX-native-filter-semantics-and-locale-stable-empty-state",
+            "started": 1793395080.250976,
+            "status": "failed"
+          }
+        ],
+        "id": "t11-ui-hub",
+        "schema_version": 1,
+        "worktree": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health"
+      }
+    },
+    "t11-before-phone": {
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/pipeline/check-5c6c407168648564e373a176.json",
+      "sha256": "1b93c5009b930aab322a977dcea62fa3800e08b4e9a0a902d2b19df6e95c384b",
+      "record": {
+        "attempts": [
+          {
+            "after": "f3eabd81170eb1f8f6d0dd31316734bfd06ad063022526e8c0aedc0806e3ddf2",
+            "after_content": "4938aca2e5a9e03f10f35e74c430e4dacd4d2391723668e72d76fc867a96ecc3",
+            "before": "f3eabd81170eb1f8f6d0dd31316734bfd06ad063022526e8c0aedc0806e3ddf2",
+            "before_content": "4938aca2e5a9e03f10f35e74c430e4dacd4d2391723668e72d76fc867a96ecc3",
+            "child_pgid": 21120,
+            "child_pid": 21120,
+            "command": [
+              "scripts/test-ui.sh",
+              "--no-regen",
+              "--test-plan",
+              "DUNEUITests-DesignCapture",
+              "--simulator-udid",
+              "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+              "--only-testing",
+              "DUNEUITests/DashboardSmokeTests/testNavigateToNotificationHub",
+              "--log-file",
+              ".xcodebuild/t11-before-phone-d369a940.log"
+            ],
+            "content_only": false,
+            "context": "d369a940-unchanged-hub-baseline-owned340663-phone",
+            "ended": 1793393708.139064,
+            "exit_code": 0,
+            "log": "check-5c6c407168648564e373a176-a07ef91bd5fd4dbdbe7684242485ac28.log",
+            "log_hash": "6b46e7818276b927d28da4bb9af249b53d76300d36f67f1a5ef81b4140685ac5",
+            "scope": "T11-matching-unfiltered-original-before-new-hub",
+            "started": 1793393481.244124,
+            "status": "success"
+          }
+        ],
+        "id": "t11-before-phone",
+        "schema_version": 1,
+        "worktree": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health"
+      }
+    }
+  },
+  "evidence_bundles": {
+    "before-phone-correct-unfiltered": {
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/before-phone-correct-unfiltered",
+      "provenance": {
+        "revision": "d369a940",
+        "source_worktree_dirty": false,
+        "original_xcresult": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.31_05-51-24-+0900.xcresult",
+        "xcode": "Xcode 27.2\nBuild version 27B52",
+        "test_plan": "DUNEUITests-DesignCapture"
+      },
+      "result": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/DashboardSmokeTests/testNavigateToNotificationHub"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/t11-before-phone-d369a940.log"
+      }
+    },
+    "ui-phone-initial-failure": {
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/ui-phone-initial-failure",
+      "provenance": {
+        "executed_revision": "730b39b4",
+        "executed_worktree": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health",
+        "source_worktree": "/Users/shanks/.codex/worktrees/detail-redesign-t11/Health",
+        "source_dirty": false,
+        "test_plan": "DUNEUITests-DesignCapture",
+        "counts": {
+          "executed": 4,
+          "passed": 2,
+          "skipped": 0,
+          "failed": 2
+        },
+        "remaining_conditional_retry": 1
+      },
+      "result": {
+        "schema_version": 1,
+        "status": "failed",
+        "target": "DUNEUITests",
+        "run_exit_status": 65,
+        "requested_selectors": [
+          "DUNEUITests/TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState",
+          "DUNEUITests/TodaySettingsEmptyStateRegressionTests/testNotificationHubShowsEmptyStateWithoutSeed",
+          "DUNEUITests/DashboardSmokeTests/testNavigateToWhatsNew",
+          "DUNEUITests/DashboardSmokeTests/testNotificationHubSummaryAtMaximumAccessibilitySize"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 4,
+          "passed": 2,
+          "skipped": 0,
+          "failed": 2
+        },
+        "passed_cases": 2,
+        "failures": [
+          "844: /Users/shanks/.codex/worktrees/detail-redesign-validation/Health/DUNEUITests/Smoke/DashboardSmokeTests.swift:127: error: -[DUNEUITests.DashboardSmokeTests testNotificationHubSummaryAtMaximumAccessibilitySize] : XCTAssertGreaterThanOrEqual failed: (\"31.333333333333258\") is less than (\"44.0\") - notifi…",
+          "855: Test Case '-[DUNEUITests.DashboardSmokeTests testNotificationHubSummaryAtMaximumAccessibilitySize]' failed (35.980 seconds).",
+          "856: Test Suite 'DashboardSmokeTests' failed at 2026-10-31 06:06:27.893.",
+          "916: /Users/shanks/.codex/worktrees/detail-redesign-validation/Health/DUNEUITests/Full/TodaySettingsRegressionTests.swift:870: error: -[DUNEUITests.TodaySettingsEmptyStateRegressionTests testNotificationHubShowsEmptyStateWithoutSeed] : Failed to tap \"Health\" Button: No matches found for Elements matching…",
+          "939: Test Case '-[DUNEUITests.TodaySettingsEmptyStateRegressionTests testNotificationHubShowsEmptyStateWithoutSeed]' failed (32.285 seconds).",
+          "940: Test Suite 'TodaySettingsEmptyStateRegressionTests' failed at 2026-10-31 06:07:00.181.",
+          "1083: Test Suite 'DUNEUITests.xctest' failed at 2026-10-31 06:07:53.446.",
+          "1085: Test Suite 'Selected tests' failed at 2026-10-31 06:07:53.447.",
+          "1098: ** TEST FAILED **",
+          "xcodebuild exited 65",
+          "UI test log reports 2 failures",
+          "requested UI test selector has no execution evidence"
+        ],
+        "required_selectors_missing": [
+          "DUNEUITests/TodaySettingsEmptyStateRegressionTests/testNotificationHubShowsEmptyStateWithoutSeed",
+          "DUNEUITests/DashboardSmokeTests/testNotificationHubSummaryAtMaximumAccessibilitySize"
+        ],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/t11-iphone-730b39b4.log"
+      }
+    },
+    "ui-phone-retry-failure": {
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/ui-phone-retry-failure",
+      "provenance": {
+        "executed_revision": "b6ac0790",
+        "executed_worktree": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health",
+        "source_worktree": "/Users/shanks/.codex/worktrees/detail-redesign-t11/Health",
+        "executed_worktree_dirty_at_run": false,
+        "test_plan": "DUNEUITests-DesignCapture",
+        "counts": {
+          "executed": 2,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 1
+        },
+        "remaining_automatic_retry": 0,
+        "cause": "test helper frame query on offscreen virtualized nativeList filter; originalEmpty test passed"
+      },
+      "result": {
+        "schema_version": 1,
+        "status": "failed",
+        "target": "DUNEUITests",
+        "run_exit_status": 65,
+        "requested_selectors": [
+          "DUNEUITests/TodaySettingsEmptyStateRegressionTests/testNotificationHubShowsEmptyStateWithoutSeed",
+          "DUNEUITests/DashboardSmokeTests/testNotificationHubSummaryAtMaximumAccessibilitySize"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 2,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 1
+        },
+        "passed_cases": 1,
+        "failures": [
+          "377: /Users/shanks/.codex/worktrees/detail-redesign-validation/Health/DUNEUITests/Smoke/DashboardSmokeTests.swift:196: error: -[DUNEUITests.DashboardSmokeTests testNotificationHubSummaryAtMaximumAccessibilitySize] : Failed to get matching snapshot: No matches found for first query match sequence: `Descen…",
+          "388: Test Case '-[DUNEUITests.DashboardSmokeTests testNotificationHubSummaryAtMaximumAccessibilitySize]' failed (55.927 seconds).",
+          "389: Test Suite 'DashboardSmokeTests' failed at 2026-10-31 06:19:13.303.",
+          "469: Test Suite 'DUNEUITests.xctest' failed at 2026-10-31 06:19:47.750.",
+          "471: Test Suite 'Selected tests' failed at 2026-10-31 06:19:47.751.",
+          "483: ** TEST FAILED **",
+          "xcodebuild exited 65",
+          "UI test log reports 1 failures",
+          "requested UI test selector has no execution evidence"
+        ],
+        "required_selectors_missing": [
+          "DUNEUITests/DashboardSmokeTests/testNotificationHubSummaryAtMaximumAccessibilitySize"
+        ],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/t11-iphone-b6ac0790.log"
+      }
+    },
+    "ui-phone-unread-caption-current": {
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/ui-phone-unread-caption-current",
+      "provenance": {
+        "revision": "7be65148",
+        "source_worktree_dirty": false,
+        "original_xcresult": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.31_07-49-53-+0900.xcresult",
+        "xcode": "Xcode 27.2\nBuild version 27B52",
+        "test_plan": "DUNEUITests-DesignCapture"
+      },
+      "result": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/t11-unread-caption-contrast-7be65148.log"
+      }
+    },
+    "before-phone-matched-seeded-English": {
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/before-phone-matched-seeded-English",
+      "provenance": {
+        "revision": "583dcaf1",
+        "source_worktree_dirty": false,
+        "original_xcresult": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.31_06-32-49-+0900.xcresult",
+        "xcode": "Xcode 27.2\nBuild version 27B52",
+        "test_plan": "DUNEUITests-DesignCapture"
+      },
+      "result": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/t11-before-phone-seeded-583dcaf1.log"
+      }
+    }
+  },
+  "native_images": {
+    "before-phone-correct-unfiltered": [
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/before-phone-correct-unfiltered/attachments/C20C16F4-8C09-43E5-97D4-55F1AA68EE8B.png",
+        "sha256": "a916087283f96377b77efcea33f45dc93d7e352c412727035e607490023d06c5",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "C20C16F4-8C09-43E5-97D4-55F1AA68EE8B.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-before teardown -[DashboardSmokeTests testNavigateToNotificationHub]_0_C4FA5D6B-A1F4-4D25-9088-5D2C996DC78B.png",
+          "timestamp": 1793393695.901
+        },
+        "selector": "DashboardSmokeTests/testNavigateToNotificationHub()"
+      },
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/before-phone-correct-unfiltered/attachments/01905A76-8A4B-467C-920E-97A17A6CD247.png",
+        "sha256": "3e61bed542cef412602b018ece2aafdf04a62fbfa728a663dbdc92c524420ea2",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "01905A76-8A4B-467C-920E-97A17A6CD247.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-tap dashboard-toolbar-notifications_0_60E01384-EAB3-4BDF-B527-8436D820BC3E.png",
+          "timestamp": 1793393687.17
+        },
+        "selector": "DashboardSmokeTests/testNavigateToNotificationHub()"
+      },
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/before-phone-correct-unfiltered/attachments/73FDBA98-91E0-4CA0-9082-DB85BB5CC13A.png",
+        "sha256": "cde7108f5087c504d652980c167829ab4f396c86bba9eb45354011570cd347a6",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "73FDBA98-91E0-4CA0-9082-DB85BB5CC13A.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-root after setup -[DashboardSmokeTests testNavigateToNotificationHub]_0_CE7F426E-9FB7-4C7E-8293-794DF9A2411C.png",
+          "timestamp": 1793393671.983
+        },
+        "selector": "DashboardSmokeTests/testNavigateToNotificationHub()"
+      }
+    ],
+    "ui-phone-initial-failure": [
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/ui-phone-initial-failure/attachments/0FBA58ED-A402-4FDC-B164-D825E249DBA7.png",
+        "sha256": "37bc63cf991818d80bd23f27fea2e5deff95ac9d973290d8cb07bfee862f8f54",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "0FBA58ED-A402-4FDC-B164-D825E249DBA7.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-before teardown -[DashboardSmokeTests testNavigateToWhatsNew]_0_EC2C1510-CA1A-46DC-8DAC-183905D68EBA.png",
+          "timestamp": 1793394350.306
+        },
+        "selector": "DashboardSmokeTests/testNavigateToWhatsNew()"
+      },
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/ui-phone-initial-failure/attachments/CAA30551-9401-4A56-817B-4F7094F111C1.png",
+        "sha256": "9530603b6893185f9663a095be1d605992061840f1577e4d52dc643e5239be62",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "CAA30551-9401-4A56-817B-4F7094F111C1.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "Notifications release detail_0_490349A6-370E-49FB-99D7-201BEA42400A.png",
+          "timestamp": 1793394348.323
+        },
+        "selector": "DashboardSmokeTests/testNavigateToWhatsNew()"
+      },
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/ui-phone-initial-failure/attachments/249C4E29-85A7-4AB6-9BD1-FEC80E4414D9.png",
+        "sha256": "a785ba33d2beeb7254f395dcf1fed18a2ec88856b14f94ed07b859b1bdd3680c",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "249C4E29-85A7-4AB6-9BD1-FEC80E4414D9.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "Notifications News release_0_C4732969-CD99-425D-B408-144799178C5D.png",
+          "timestamp": 1793394346.074
+        },
+        "selector": "DashboardSmokeTests/testNavigateToWhatsNew()"
+      },
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/ui-phone-initial-failure/attachments/4161BB97-19A2-47A0-ABBB-6344695B3D78.png",
+        "sha256": "58262161c0976f9910d652bfd7972ae9c288358628f1cad56527a2167aa8e587",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "4161BB97-19A2-47A0-ABBB-6344695B3D78.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-tap dashboard-toolbar-notifications_0_1D2E85CF-04A7-4F49-AAC2-1FA845B525F6.png",
+          "timestamp": 1793394340.492
+        },
+        "selector": "DashboardSmokeTests/testNavigateToWhatsNew()"
+      },
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/ui-phone-initial-failure/attachments/A36E490D-B9CC-4021-9FA0-C9B8D772927D.png",
+        "sha256": "e9e6fd1b50f42970ed16c4a8e5cbb30dffd5212a6364658b3dcd74b680ef7bcb",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "A36E490D-B9CC-4021-9FA0-C9B8D772927D.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-tap tab-today_0_B70AA9AA-5CBD-4D9E-8E40-9959F52B0560.png",
+          "timestamp": 1793394338.487
+        },
+        "selector": "DashboardSmokeTests/testNavigateToWhatsNew()"
+      },
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/ui-phone-initial-failure/attachments/9A4458E0-1D81-4234-9DC8-FC9FAC273E28.png",
+        "sha256": "e9d86761f5bc26fda5acdf0e2b6400007ce5ef7a992414f755399b565b70f6ba",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "9A4458E0-1D81-4234-9DC8-FC9FAC273E28.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-root after setup -[DashboardSmokeTests testNavigateToWhatsNew]_0_BB7A1BB2-F57F-4BE1-B401-6C16F2E41A3C.png",
+          "timestamp": 1793394335.195
+        },
+        "selector": "DashboardSmokeTests/testNavigateToWhatsNew()"
+      },
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/ui-phone-initial-failure/attachments/6741E50B-F265-472B-BCBC-E6B4F2B60770.png",
+        "sha256": "47f83b697dbc6ef04c9ae4aa671e09ce9e0d875c948616a7d35e12cbe4d823aa",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "6741E50B-F265-472B-BCBC-E6B4F2B60770.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "DashboardSmokeTests-testNotificationHubSummaryAtMaximumAccessibilitySize--failure_0_F0204AEE-D059-4EFD-8D93-6E116C0A5A86.png",
+          "timestamp": 1793394375.347
+        },
+        "selector": "DashboardSmokeTests/testNotificationHubSummaryAtMaximumAccessibilitySize()"
+      },
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/ui-phone-initial-failure/attachments/858E2E55-090E-48F4-855B-2CDC2FA21DCF.png",
+        "sha256": "4f2255b6eb9d08a15d38a4989e5996b145111b0957a5a232af0eb776dd56d4f6",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "858E2E55-090E-48F4-855B-2CDC2FA21DCF.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-before teardown -[DashboardSmokeTests testNotificationHubSummaryAtMaximumAccessibilitySize]_0_E7A05ED4-1CB2-4210-81FA-64C7B34F1FBF.png",
+          "timestamp": 1793394375.2
+        },
+        "selector": "DashboardSmokeTests/testNotificationHubSummaryAtMaximumAccessibilitySize()"
+      },
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/ui-phone-initial-failure/attachments/DA56FEC5-A2A6-4CCF-800D-DBA1B741031B.png",
+        "sha256": "4539bb1a7cf9f154dd93c48216573cde826d84570c9383079c8ad3a13a29aa00",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "DA56FEC5-A2A6-4CCF-800D-DBA1B741031B.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-tap dashboard-toolbar-notifications_0_C0434356-1F20-4EF7-8D7D-BED5BB2874AB.png",
+          "timestamp": 1793394367.458
+        },
+        "selector": "DashboardSmokeTests/testNotificationHubSummaryAtMaximumAccessibilitySize()"
+      },
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/ui-phone-initial-failure/attachments/FD62767E-9FAA-4DB3-964C-513730307656.png",
+        "sha256": "bfcfe5687fb97be5f496daa182e866c92dc74e15a16624892ffc64c4159fbaed",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "FD62767E-9FAA-4DB3-964C-513730307656.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-root after setup -[DashboardSmokeTests testNotificationHubSummaryAtMaximumAccessibilitySize]_0_3D19D19C-B2B6-4D77-85B5-31D9D724F31B.png",
+          "timestamp": 1793394358.805
+        },
+        "selector": "DashboardSmokeTests/testNotificationHubSummaryAtMaximumAccessibilitySize()"
+      },
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/ui-phone-initial-failure/attachments/26B346F7-92DD-47DF-BB52-75931C9F3B0C.png",
+        "sha256": "a13e678bd617d98e80cae1a36e59868fa0ea0b6643d859c9e4ee0e16d371f04e",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "26B346F7-92DD-47DF-BB52-75931C9F3B0C.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "TodaySettingsEmptyStateRegressionTests-testNotificationHubShowsEmptyStateWithoutSeed--failure_0_74FCAC6E-DB6E-47F0-A6CC-3BF4402C42AC.png",
+          "timestamp": 1793394406.105
+        },
+        "selector": "TodaySettingsEmptyStateRegressionTests/testNotificationHubShowsEmptyStateWithoutSeed()"
+      },
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/ui-phone-initial-failure/attachments/8DF4962E-A2F1-4BAA-AB6F-E3433965CBD0.png",
+        "sha256": "a10ada4e5b1947f604d3848a3b157bdd1978006efa31e91de9c5a084dee030c6",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "8DF4962E-A2F1-4BAA-AB6F-E3433965CBD0.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-before teardown -[TodaySettingsEmptyStateRegressionTests testNotificationHubShowsEmptyStateWithoutSeed]_0_8C71BF25-11B9-40FE-A8CA-93BD3246A6C5.png",
+          "timestamp": 1793394405.952
+        },
+        "selector": "TodaySettingsEmptyStateRegressionTests/testNotificationHubShowsEmptyStateWithoutSeed()"
+      },
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/ui-phone-initial-failure/attachments/E8F43665-FCC2-4EE0-A785-222543F57E87.png",
+        "sha256": "c139ba2e0c378de7b48661e227306a986b5f1dcd3924103194f75e6b058199a7",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "E8F43665-FCC2-4EE0-A785-222543F57E87.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-tap dashboard-toolbar-notifications_0_AA926D1F-AD10-4202-8F2F-E9A50DFAA9D0.png",
+          "timestamp": 1793394401.403
+        },
+        "selector": "TodaySettingsEmptyStateRegressionTests/testNotificationHubShowsEmptyStateWithoutSeed()"
+      },
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/ui-phone-initial-failure/attachments/8F943F91-E41F-4038-9CD5-080AA115D019.png",
+        "sha256": "0264b6824e93ec12292dc2eeaca4edf649f81e4b1960fe1b5de1bdb654845090",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "8F943F91-E41F-4038-9CD5-080AA115D019.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-tap tab-today_0_198554BF-9A5F-465C-B923-9DF46F0BE299.png",
+          "timestamp": 1793394398.413
+        },
+        "selector": "TodaySettingsEmptyStateRegressionTests/testNotificationHubShowsEmptyStateWithoutSeed()"
+      },
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/ui-phone-initial-failure/attachments/01C20B19-F5A3-4B72-8BA6-FC2FDC75098B.png",
+        "sha256": "7dd52b6f427317a36d195540c7cf8e179a5274ec8b0a8f3d2452ef715daff041",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "01C20B19-F5A3-4B72-8BA6-FC2FDC75098B.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-root after setup -[TodaySettingsEmptyStateRegressionTests testNotificationHubShowsEmptyStateWithoutSeed]_0_704A907C-870A-4F82-86F3-1FAF217C67FF.png",
+          "timestamp": 1793394395.129
+        },
+        "selector": "TodaySettingsEmptyStateRegressionTests/testNotificationHubShowsEmptyStateWithoutSeed()"
+      },
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/ui-phone-initial-failure/attachments/552B4B8B-6B90-465D-97E0-1CB39DAFF074.png",
+        "sha256": "750172f1ce0ab074da67d85338d2c54d70dfd2d9bb95438d3c434b92020dc2b5",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "552B4B8B-6B90-465D-97E0-1CB39DAFF074.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-before teardown -[TodaySettingsRegressionTests testNotificationHubControlsTransitionToEmptyState]_0_2C46BAD3-A031-48D6-A806-5C65E09786FE.png",
+          "timestamp": 1793394458.186
+        },
+        "selector": "TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState()"
+      },
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/ui-phone-initial-failure/attachments/0C5F26E1-8C7F-4D0E-A0E2-2E6ED9174EEF.png",
+        "sha256": "f819a5bce0a2906df3fbcff67e461a20004aefd2b37691675b0c3534639dd908",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "0C5F26E1-8C7F-4D0E-A0E2-2E6ED9174EEF.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-tap Delete All_0_0810461B-F298-4912-ACD6-09475F17CE1E.png",
+          "timestamp": 1793394452.667
+        },
+        "selector": "TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState()"
+      },
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/ui-phone-initial-failure/attachments/8DE1C92F-7156-4474-B369-74B1C44F1EA1.png",
+        "sha256": "a0bc21cfd08ecf053454e9ada9820786ff0e4f89925d0bf8fc5d972a7910a37b",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "8DE1C92F-7156-4474-B369-74B1C44F1EA1.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-tap notifications-delete-all-button_0_EFE0054C-AE8E-48AB-B475-5E6CCCE0ADBA.png",
+          "timestamp": 1793394449.552
+        },
+        "selector": "TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState()"
+      },
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/ui-phone-initial-failure/attachments/BF121C40-9E06-41E1-9A5D-E2FB18F601A4.png",
+        "sha256": "6ce76c590848599bfdac0a3a0e9a85e24f7b3f2d33ab26315630c584290bb016",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "BF121C40-9E06-41E1-9A5D-E2FB18F601A4.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-tap notifications-more-options-button_0_5DC0173E-D319-4929-B118-DC628E7D901B.png",
+          "timestamp": 1793394445.084
+        },
+        "selector": "TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState()"
+      },
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/ui-phone-initial-failure/attachments/2D1BAD0C-DEAB-446F-AB93-04D5AD6C31E0.png",
+        "sha256": "bf53e5288f00a4a525f5feb7c63ba7711de1c9730732f2e25f8fbd2d319cf90a",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "2D1BAD0C-DEAB-446F-AB93-04D5AD6C31E0.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-tap notifications-read-all-button_0_5A106080-37FE-4747-91F7-CB84EC0FFC4C.png",
+          "timestamp": 1793394439.664
+        },
+        "selector": "TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState()"
+      },
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/ui-phone-initial-failure/attachments/E5364027-48B4-4F2E-B30C-FBA522B44291.png",
+        "sha256": "14ec904ac2b8b4fdbee4b7f69e1855d63a6500245578ce84046560c5875d3ef3",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "E5364027-48B4-4F2E-B30C-FBA522B44291.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-tap dashboard-toolbar-notifications_0_FE1DA6C8-C580-4C0F-A858-A4DF6D350094.png",
+          "timestamp": 1793394434.126
+        },
+        "selector": "TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState()"
+      },
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/ui-phone-initial-failure/attachments/7D994390-687C-4F61-96A3-A664FAA92543.png",
+        "sha256": "fc163cb92d09531c460616879cdb7bd4a0b4b0520d1d796810785175ecf12b72",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "7D994390-687C-4F61-96A3-A664FAA92543.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-root after setup -[TodaySettingsRegressionTests testNotificationHubControlsTransitionToEmptyState]_0_F48F4074-88D3-47ED-B848-BE8926FAD6A6.png",
+          "timestamp": 1793394428.522
+        },
+        "selector": "TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState()"
+      }
+    ],
+    "ui-phone-retry-failure": [
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/ui-phone-retry-failure/attachments/057A072C-7D57-40DD-B67A-083034B64746.png",
+        "sha256": "5aa63827f28d90bfaaffdb244ccf8b644085349183be694a3511ba660f23adc0",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "057A072C-7D57-40DD-B67A-083034B64746.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "DashboardSmokeTests-testNotificationHubSummaryAtMaximumAccessibilitySize--failure_0_B21E1EB0-DC62-48E4-B0D7-E5A0E5C3A00A.png",
+          "timestamp": 1793395138.111
+        },
+        "selector": "DashboardSmokeTests/testNotificationHubSummaryAtMaximumAccessibilitySize()"
+      },
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/ui-phone-retry-failure/attachments/398BEB55-27E8-4FC4-8BF5-E3DF2B299A74.png",
+        "sha256": "bccaf1f1d4dd432e270e72e7be04c1d8166cb35bfb85c4d1a7e71cad8f381cfa",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "398BEB55-27E8-4FC4-8BF5-E3DF2B299A74.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-before teardown -[DashboardSmokeTests testNotificationHubSummaryAtMaximumAccessibilitySize]_0_C9064AAD-5996-4C8F-9856-E13029CCF951.png",
+          "timestamp": 1793395137.956
+        },
+        "selector": "DashboardSmokeTests/testNotificationHubSummaryAtMaximumAccessibilitySize()"
+      },
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/ui-phone-retry-failure/attachments/9545FA73-F190-4AAC-AD43-72BB72FD8550.png",
+        "sha256": "9515e8085a60bdfd67422d4a63fe2295af7f5993d1e1aaf31e63e2770fe785ba",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "9545FA73-F190-4AAC-AD43-72BB72FD8550.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "Notifications health row maximum accessibility dark_0_C69F5EEE-DC18-4E31-9268-DAB32F10CCA6.png",
+          "timestamp": 1793395134.024
+        },
+        "selector": "DashboardSmokeTests/testNotificationHubSummaryAtMaximumAccessibilitySize()"
+      },
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/ui-phone-retry-failure/attachments/2EE1E8D1-91E8-4C73-B2D2-48D4BE098934.png",
+        "sha256": "10de63895ee2f2183045f91a191bb63c29f236371106d380c7126b6f4038f31d",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "2EE1E8D1-91E8-4C73-B2D2-48D4BE098934.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "Notifications health title maximum accessibility dark_0_EB928712-F1F0-44A0-A1B2-C55DD6B31568.png",
+          "timestamp": 1793395130.562
+        },
+        "selector": "DashboardSmokeTests/testNotificationHubSummaryAtMaximumAccessibilitySize()"
+      },
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/ui-phone-retry-failure/attachments/1F47062D-0F2C-4D90-8B0D-C0D9EC3A4B6B.png",
+        "sha256": "27fd73cb18e0d04abc680d9d829464cccd3141c57383b66032257f0b79765a99",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "1F47062D-0F2C-4D90-8B0D-C0D9EC3A4B6B.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "Notifications summary and filters maximum accessibility_0_2F14F103-0DDF-4FE3-BC0D-0692F88FEC05.png",
+          "timestamp": 1793395125.717
+        },
+        "selector": "DashboardSmokeTests/testNotificationHubSummaryAtMaximumAccessibilitySize()"
+      },
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/ui-phone-retry-failure/attachments/6D756C6A-A2D6-4A4C-8CD3-1B89ED675BF7.png",
+        "sha256": "cd9c8a942487e83155c16f058d5a08e19e4bcd4a82643185e044b267ac0ef975",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "6D756C6A-A2D6-4A4C-8CD3-1B89ED675BF7.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-tap dashboard-toolbar-notifications_0_C0F97BBC-1C24-4300-B929-8D37952B7606.png",
+          "timestamp": 1793395115.952
+        },
+        "selector": "DashboardSmokeTests/testNotificationHubSummaryAtMaximumAccessibilitySize()"
+      },
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/ui-phone-retry-failure/attachments/57AF09EE-77D4-4729-9B23-741D74A160FC.png",
+        "sha256": "9c791f905741324e30b274af3b141bf55c80b38eb5aa76baf0ef911778199816",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "57AF09EE-77D4-4729-9B23-741D74A160FC.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-root after setup -[DashboardSmokeTests testNotificationHubSummaryAtMaximumAccessibilitySize]_0_2E8A00D5-6837-4FB5-B10B-D660363D7B46.png",
+          "timestamp": 1793395107.162
+        },
+        "selector": "DashboardSmokeTests/testNotificationHubSummaryAtMaximumAccessibilitySize()"
+      },
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/ui-phone-retry-failure/attachments/EBCC2853-43B7-433B-B9C4-B87071F80EB0.png",
+        "sha256": "0dd2eb631f154a1c8bd48a253a1bc6d6c7c7e88cb12623745d51aa2bc1fb7e56",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "EBCC2853-43B7-433B-B9C4-B87071F80EB0.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-before teardown -[TodaySettingsEmptyStateRegressionTests testNotificationHubShowsEmptyStateWithoutSeed]_0_34D5E13B-506F-4F47-906D-CA72A1EDB126.png",
+          "timestamp": 1793395173.579
+        },
+        "selector": "TodaySettingsEmptyStateRegressionTests/testNotificationHubShowsEmptyStateWithoutSeed()"
+      },
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/ui-phone-retry-failure/attachments/FEA01970-2A6D-47F8-B962-4F85116BAB14.png",
+        "sha256": "8fcd267531945726d301633326829a2885d4d7d35cb9d289a370dd213656714e",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "FEA01970-2A6D-47F8-B962-4F85116BAB14.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-tap dashboard-toolbar-notifications_0_B308EC7E-596D-4CA5-B1CF-70F410590394.png",
+          "timestamp": 1793395166.827
+        },
+        "selector": "TodaySettingsEmptyStateRegressionTests/testNotificationHubShowsEmptyStateWithoutSeed()"
+      },
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/ui-phone-retry-failure/attachments/80DF5BED-9F38-4027-9A86-E986460CE7AB.png",
+        "sha256": "f547c9181f16fb8d39d2c7c02739085b0917dc2af6071322e9fd18562314e51c",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "80DF5BED-9F38-4027-9A86-E986460CE7AB.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-tap tab-today_0_13DE5AFA-56BA-4546-946B-EE6DDE78EBEB.png",
+          "timestamp": 1793395163.71
+        },
+        "selector": "TodaySettingsEmptyStateRegressionTests/testNotificationHubShowsEmptyStateWithoutSeed()"
+      },
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/ui-phone-retry-failure/attachments/C85C2F8E-81CD-46DC-A702-EBB38FC74B01.png",
+        "sha256": "472df7dd62e29e97b57f0a3ba5589b277a2d60549d6a7646e19fbe22add95118",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "C85C2F8E-81CD-46DC-A702-EBB38FC74B01.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-root after setup -[TodaySettingsEmptyStateRegressionTests testNotificationHubShowsEmptyStateWithoutSeed]_0_A238B56D-2E60-47F1-9B27-EB562E3D97AE.png",
+          "timestamp": 1793395160.387
+        },
+        "selector": "TodaySettingsEmptyStateRegressionTests/testNotificationHubShowsEmptyStateWithoutSeed()"
+      }
+    ],
+    "ui-phone-unread-caption-current": [
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/ui-phone-unread-caption-current/attachments/56BD47C5-14C0-43E3-8DDC-7A56F4D0F62B.png",
+        "sha256": "91c5a3f5aaa41aa4e6dad2090f5bd6a29cb4d01dc4d0d3c38005edf438407fac",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "56BD47C5-14C0-43E3-8DDC-7A56F4D0F62B.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-before teardown -[TodaySettingsRegressionTests testNotificationHubControlsTransitionToEmptyState]_0_ADB6C485-DD56-476F-A60F-1383FE526E61.png",
+          "timestamp": 1793400679.234
+        },
+        "selector": "TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState()"
+      },
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/ui-phone-unread-caption-current/attachments/CF77FE65-DD09-47D4-880A-67A4D07ECDC9.png",
+        "sha256": "19b8ecefe7bf4b475c062b743638b7cb4b5b8996c72bed14d213e79df7031fdd",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "CF77FE65-DD09-47D4-880A-67A4D07ECDC9.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-tap Delete All_0_8D80AA0C-15C8-4F04-A864-94370DC13545.png",
+          "timestamp": 1793400673.75
+        },
+        "selector": "TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState()"
+      },
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/ui-phone-unread-caption-current/attachments/DDFDAF15-B3D3-4FC5-9D9C-09B85EC3A9D1.png",
+        "sha256": "b4979b51b1c32c192f56706b2cd1250a3306b7aa6712e151644dec44d1a35ef3",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "DDFDAF15-B3D3-4FC5-9D9C-09B85EC3A9D1.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-tap notifications-delete-all-button_0_BCD37333-6083-4D32-917F-E1D38C94FA0B.png",
+          "timestamp": 1793400670.6
+        },
+        "selector": "TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState()"
+      },
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/ui-phone-unread-caption-current/attachments/9B461CAB-EE44-424C-A853-A218A83F5D10.png",
+        "sha256": "dfa591a114d034bd9415a6f206351d9bb4de6ee62244f878d4da2ddad2d11f03",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "9B461CAB-EE44-424C-A853-A218A83F5D10.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-tap notifications-more-options-button_0_9B763323-828F-4015-A22A-7925702193A5.png",
+          "timestamp": 1793400666.296
+        },
+        "selector": "TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState()"
+      },
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/ui-phone-unread-caption-current/attachments/3724B4E5-3712-48F0-90E0-C92E44F7EC35.png",
+        "sha256": "7c6a4682b4365faeacc927dd361f6dba97e9f742f44101e02e4fefd67ca4d66c",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "3724B4E5-3712-48F0-90E0-C92E44F7EC35.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-tap notifications-read-all-button_0_6DEDB0E1-397A-4A4E-9A5A-D5A713D27018.png",
+          "timestamp": 1793400660.868
+        },
+        "selector": "TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState()"
+      },
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/ui-phone-unread-caption-current/attachments/EC6ED6DC-554B-4C50-BE91-B8E57C002783.png",
+        "sha256": "a066b5d44059014ea0a5192207f366f6b684cf21e13014e44d72934f90813d63",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "EC6ED6DC-554B-4C50-BE91-B8E57C002783.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-tap dashboard-toolbar-notifications_0_A52F39B5-3520-437A-87A0-A68C29FDF139.png",
+          "timestamp": 1793400655.253
+        },
+        "selector": "TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState()"
+      },
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/ui-phone-unread-caption-current/attachments/ACFF01F7-9A3B-4948-9476-EDAB26C30D40.png",
+        "sha256": "e0a3993bd6fbc741b40bc7422442f6191dcc1797da078bba462394d061e19c59",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "ACFF01F7-9A3B-4948-9476-EDAB26C30D40.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-root after setup -[TodaySettingsRegressionTests testNotificationHubControlsTransitionToEmptyState]_0_59DD30D3-77D4-4F1B-BEE5-9CAEA6A57F24.png",
+          "timestamp": 1793400649.554
+        },
+        "selector": "TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState()"
+      }
+    ],
+    "before-phone-matched-seeded-English": [
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/before-phone-matched-seeded-English/attachments/E2262DED-0E19-42DE-A677-2BA893AA4D15.png",
+        "sha256": "0d9218bb76486f6ea424d41394663abe156f4c558fa3076e9ff6783d9e057977",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "E2262DED-0E19-42DE-A677-2BA893AA4D15.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-before teardown -[TodaySettingsRegressionTests testNotificationHubControlsTransitionToEmptyState]_0_D4F1115C-437D-4A6E-A877-304A3DBFAB44.png",
+          "timestamp": 1793396014.876
+        },
+        "selector": "TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState()"
+      },
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/before-phone-matched-seeded-English/attachments/B5D0A7B9-D612-47ED-9ABD-009A46E53E7A.png",
+        "sha256": "84be19d61ac8617ce4bdde0147d47002de11bf6e202226060b9d375ed6b98896",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "B5D0A7B9-D612-47ED-9ABD-009A46E53E7A.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-tap Delete All_0_C1BA4C67-1508-4E7E-A046-B54DF82278B7.png",
+          "timestamp": 1793396009.373
+        },
+        "selector": "TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState()"
+      },
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/before-phone-matched-seeded-English/attachments/FFF90C12-7643-4CEE-BCE1-943176F4021F.png",
+        "sha256": "34a51695c9ed61aa6aab09e4c3794a8ceaa931ba5bdd5d8ff8b945c91d3977f8",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "FFF90C12-7643-4CEE-BCE1-943176F4021F.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-tap notifications-delete-all-button_0_AB5BF3A1-6544-4010-8BF8-8FE9627ED1D7.png",
+          "timestamp": 1793396006.237
+        },
+        "selector": "TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState()"
+      },
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/before-phone-matched-seeded-English/attachments/61123854-95FB-48A7-855B-3B746C5AC175.png",
+        "sha256": "b028b7f9e6f24c78350e29c10c8bf2148c8cfd77e75f8d9ea5a834c0456655be",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "61123854-95FB-48A7-855B-3B746C5AC175.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-tap notifications-more-options-button_0_DECFCD2B-9F89-4FF6-A789-912135CABF86.png",
+          "timestamp": 1793396001.892
+        },
+        "selector": "TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState()"
+      },
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/before-phone-matched-seeded-English/attachments/DD21FACA-64CA-4A11-9470-B420DB21474A.png",
+        "sha256": "578208ce2a7f2445765155e41f077cf00f17be6a94a5265928770a5fdb31feef",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "DD21FACA-64CA-4A11-9470-B420DB21474A.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-tap notifications-read-all-button_0_D7C387D4-D1DB-44B6-97DB-95E95ACF8866.png",
+          "timestamp": 1793395996.487
+        },
+        "selector": "TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState()"
+      },
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/before-phone-matched-seeded-English/attachments/8F6F0057-4C87-45AE-8FF1-E73E8EC87ADF.png",
+        "sha256": "a950a8c3b0af8dc90607a5d2da30e3f3841e6577e0048010865d79da108f0c66",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "8F6F0057-4C87-45AE-8FF1-E73E8EC87ADF.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-tap dashboard-toolbar-notifications_0_00200184-93C6-48EA-B630-32B3E8F1232A.png",
+          "timestamp": 1793395990.875
+        },
+        "selector": "TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState()"
+      },
+      {
+        "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/before-phone-matched-seeded-English/attachments/E624BE89-3E9F-4E27-BEAD-181B043BE704.png",
+        "sha256": "cabfcb9957c193ce31ec3ccc3ad49b8b7d0deb807a30c45154c2220a7b1edb91",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "E624BE89-3E9F-4E27-BEAD-181B043BE704.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-root after setup -[TodaySettingsRegressionTests testNotificationHubControlsTransitionToEmptyState]_0_64E2BBDC-E995-44B6-80B7-45E138596761.png",
+          "timestamp": 1793395985.223
+        },
+        "selector": "TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState()"
+      }
+    ]
+  },
+  "existing_approved_helper_remediation_diff": "diff --git a/DUNEUITests/Smoke/DashboardSmokeTests.swift b/DUNEUITests/Smoke/DashboardSmokeTests.swift\nindex 4988cd97..30dae69c 100644\n--- a/DUNEUITests/Smoke/DashboardSmokeTests.swift\n+++ b/DUNEUITests/Smoke/DashboardSmokeTests.swift\n@@ -123,19 +123,19 @@ final class DashboardSmokeTests: UITestBaseCase {\n         for identifier in [AXID.notificationsOpenSettingsButton, AXID.notificationsReadAllButton] {\n             let element = app.descendants(matching: .any)[identifier].firstMatch\n             XCTAssertTrue(element.waitForExistence(timeout: 5))\n-            XCTAssertTrue(revealHubElement(element, in: list, whole: true),\n+            XCTAssertTrue(revealHubElement(element, in: list, whole: true, missingDirection: .towardTop),\n                           \"\\(identifier) should fit and be tappable in the front list\")\n             XCTAssertGreaterThanOrEqual(element.frame.height, 44, \"\\(identifier) needs a 44-point hit target\")\n         }\n         XCTAssertTrue(settings.exists && readAll.exists && filter.exists)\n         XCTAssertFalse(settings.frame.intersects(readAll.frame), \"Settings and Read All must not overlap\")\n-        XCTAssertTrue(revealHubElement(filter, in: list, whole: true),\n+        XCTAssertTrue(revealHubElement(filter, in: list, whole: true, missingDirection: .towardTop),\n                       \"The native filter should fit and be tappable in the front list\")\n         XCTAssertEqual(filter.buttons.count, 3, \"All, Health, and News should remain available\")\n         for index in 0..<3 {\n             let segment = filter.buttons.element(boundBy: index)\n             XCTAssertTrue(segment.waitForExistence(timeout: 5))\n-            XCTAssertTrue(revealHubElement(segment, in: list, whole: true),\n+            XCTAssertTrue(revealHubElement(segment, in: list, whole: true, missingDirection: .towardTop),\n                           \"Native filter segment \\(index) should fit, be horizontally visible, and be tappable\")\n         }\n         addScreenshotAttachment(named: \"Notifications summary and filters maximum accessibility\")\n@@ -146,21 +146,21 @@ final class DashboardSmokeTests: UITestBaseCase {\n         let healthTitle = app.staticTexts[\"Sleep Debt Alert\"].firstMatch\n         let healthBody = app.staticTexts[\"You slept 6 h 20 m last night. Prioritize recovery today.\"].firstMatch\n         XCTAssertTrue(healthTitle.waitForExistence(timeout: 5) && healthBody.waitForExistence(timeout: 5))\n-        XCTAssertTrue(revealHubElement(healthTitle, in: list, whole: true),\n+        XCTAssertTrue(revealHubElement(healthTitle, in: list, whole: true, missingDirection: .towardBottom),\n                       \"The full health title should be readable\")\n         addScreenshotAttachment(named: \"Notifications health title maximum accessibility dark\")\n-        XCTAssertTrue(revealHubElement(healthBody, in: list, whole: false),\n+        XCTAssertTrue(revealHubElement(healthBody, in: list, whole: false, missingDirection: .towardBottom),\n                       \"The health body should have an unobscured readable portion\")\n         XCTAssertLessThan(healthBody.frame.minX, healthTitle.frame.minX,\n                           \"The health body should use the full card width below its icon-leading header\")\n         XCTAssertGreaterThan(healthBody.frame.height, 0, \"The health body should render its full text\")\n         addScreenshotAttachment(named: \"Notifications health row maximum accessibility dark\")\n \n-        XCTAssertTrue(revealHubElement(filter, in: list, whole: true),\n+        XCTAssertTrue(revealHubElement(filter, in: list, whole: true, missingDirection: .towardTop),\n                       \"News filter should fit before selection\")\n         let news = filter.buttons.element(boundBy: 2)\n         XCTAssertTrue(news.waitForExistence(timeout: 5), \"News is the third filter segment\")\n-        XCTAssertTrue(revealHubElement(news, in: list, whole: true))\n+        XCTAssertTrue(revealHubElement(news, in: list, whole: true, missingDirection: .towardTop))\n         news.tap()\n         XCTAssertTrue(news.isSelected, \"News should become the selected filter\")\n         let release = app.buttons[AXID.notificationsNewsRelease].firstMatch\n@@ -168,10 +168,10 @@ final class DashboardSmokeTests: UITestBaseCase {\n         let releaseIntro = app.staticTexts[\"notifications-news-intro\"].firstMatch\n         XCTAssertTrue(release.waitForExistence(timeout: 5))\n         XCTAssertTrue(releaseTitle.waitForExistence(timeout: 5) && releaseIntro.waitForExistence(timeout: 5))\n-        XCTAssertTrue(revealHubElement(releaseTitle, in: list, whole: true),\n+        XCTAssertTrue(revealHubElement(releaseTitle, in: list, whole: true, missingDirection: .towardBottom),\n                       \"The full release title should be readable\")\n         addScreenshotAttachment(named: \"Notifications release title maximum accessibility dark\")\n-        XCTAssertTrue(revealHubElement(releaseIntro, in: list, whole: false),\n+        XCTAssertTrue(revealHubElement(releaseIntro, in: list, whole: false, missingDirection: .towardBottom),\n                       \"The release intro should have an unobscured readable portion\")\n         XCTAssertLessThan(releaseIntro.frame.minX, releaseTitle.frame.minX,\n                           \"The release intro should use the full card width below its icon-leading header\")\n@@ -190,15 +190,26 @@ final class DashboardSmokeTests: UITestBaseCase {\n         return CGRect(x: frame.minX, y: top, width: frame.width, height: max(0, bottom - top))\n     }\n \n-    private func revealHubElement(_ element: XCUIElement, in list: XCUIElement, whole: Bool) -> Bool {\n+    private enum HubMissingDirection { case towardTop, towardBottom }\n+\n+    private func revealHubElement(_ element: XCUIElement, in list: XCUIElement, whole: Bool,\n+                                  missingDirection: HubMissingDirection) -> Bool {\n         for _ in 0..<10 {\n             let viewport = hubViewport(list)\n-            let frame = element.frame\n-            let horizontalFit = frame.minX >= viewport.minX - 2 && frame.maxX <= viewport.maxX + 2\n-            let verticalFit = whole ? viewport.contains(frame) : frame.intersection(viewport).height >= 24\n-            if horizontalFit && verticalFit && (!whole || element.isHittable) { return true }\n             guard viewport.height > 100, list.frame.height > 0 else { return false }\n-            let movingUp = frame.midY >= viewport.midY\n+            let movingUp: Bool\n+            if element.exists {\n+                let frame = element.frame\n+                let horizontalFit = frame.minX >= viewport.minX - 2 && frame.maxX <= viewport.maxX + 2\n+                let verticalFit = whole ? viewport.contains(frame) : frame.intersection(viewport).height >= 24\n+                if horizontalFit && verticalFit && (!whole || element.isHittable) { return true }\n+                movingUp = frame.midY >= viewport.midY\n+            } else {\n+                switch missingDirection {\n+                case .towardTop: movingUp = false\n+                case .towardBottom: movingUp = true\n+                }\n+            }\n             let startY = movingUp ? viewport.maxY - 24 : viewport.minY + 24\n             let endY = movingUp ? viewport.minY + 24 : viewport.maxY - 24\n             let start = list.coordinate(withNormalizedOffset: CGVector(",
+  "new_executions": 0
+}

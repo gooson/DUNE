@@ -1,0 +1,24 @@
+{
+  "screen": "A02",
+  "PR": 889,
+  "publicSource": "d48bf7930bf1b6c0704816f7a8a1b0ba7564ce38",
+  "actualMain": "129108052f77b2bff0069c5c1ffd042097b53539",
+  "validation": "2ea9688d2ffa330c25ba95a6bfaefe983c61fbfb",
+  "compile": "actualUI targetcompile200PASS invalidation, publicsource exactA02app/test7inputs; mainH03app2tests match; sourceoldmergehookdidnotcompile(no falsePASS)",
+  "reviews": "fiveactualsource P1=0 P2=0 P3=1dupmapDEFERRED maintenancecurrentvaluescorrect; Backtestdeltaindependent0",
+  "native": [
+    "DuoClosednormal1PASS5ACK0LCD",
+    "DuoOpennormal1PASS5ACK180LCD-1",
+    "PhoneNormal+MAX2active FE28oneownedPhone; Duo324deleted"
+  ],
+  "historicalReuse": "iPad2379fivePASSfunctional/normal+945dAX1PASS; scopedclosure andordinaryglyphclippedlimitrecorded, unknownglobalfailuresnotzero",
+  "publication": "masterqueuepr889 stagingbyagentt10; Phoneafterpending; onlyA02fourrows/Activityboards; currentmainH03/T15/H02/Watchpreserve",
+  "phases": {
+    "Plan": "approvedoriginalread+newminimumcontract",
+    "Work": "implemented+main129integrated+actualtargetcompiled, phasepushinprogress",
+    "UI": "2Duo positive/Phone2pending, iPadboundedreuse",
+    "Review": "source5completed P3deferred1, finalnativequalitypending",
+    "Compound": "pending",
+    "Ship": "pending"
+  }
+}

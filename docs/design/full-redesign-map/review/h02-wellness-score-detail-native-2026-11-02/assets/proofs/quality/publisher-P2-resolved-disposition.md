@@ -1,0 +1,3 @@
+# H02 publisher editorial P2 disposition — RESOLVED
+
+Independent publisherpreflight historicalP2 concerned onlyOpen limits4ACK0LCD typo. Correctedlimits now4ACK180LCD-1; closedremains4ACK0LCD, matchingrawpose/aftermetadata/HTML/README. /private/tmp/pr887-open-limit-correction.md records exactassembly-onlychange andimmutablebytespreservation. OpenP1=0/OpenP2=0/OpenP3=0 for thiseditorialfinding; finalstage nativequality nowcomplete fromactualPhoneMAX1PASS, not a field-only bypass. Originalindependentreview retained unchanged as earlier snapshot; this disposition doesnot impersonate thatreviewer. No publisher executed.
