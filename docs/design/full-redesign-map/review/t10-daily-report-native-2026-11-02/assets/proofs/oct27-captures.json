@@ -1,0 +1,719 @@
+{
+  "source_revision": "4f09dff36c0ad6de878bb097c4e8d8f923d9888a",
+  "app_source_sha256": "70be3deb0b1ebf86555e68a108c1c80522b1aad3615165f4f403b53408c5b957",
+  "final_test_artifact_sha256": "b2b5b4f72c3cf07bba863cd9d5cd970a7a6a273a457d9f8955a24685aaf17905",
+  "locale": "ko_KR",
+  "appearance": "light",
+  "theme": "desertWarm",
+  "seed": "mock metrics + visual stress fixture; dashboard hour21",
+  "numeric_duo_hinge_angle": "unverified",
+  "physical_rotation": "unverified",
+  "full_regression": "not run; targeted scope only",
+  "captures": [
+    {
+      "file": "images/iphone-T03-digest-expanded-body-ko-light.png",
+      "sha256": "6470c1ddd94d511d7d11cf94cd6893ab319110feac62b46f8ceeeb278e941491",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "device": "iphone",
+      "screen": "T03",
+      "action": "T03-digest-expanded-body-ko-light",
+      "test": "TodayReadingUITests/testDailyDigestCaptureTopLight()",
+      "timestamp": 1793032863.459,
+      "udid": "3712F209-B644-45C4-9726-44D5BF835B0B",
+      "source_export_file": "FDFE51F5-B6D2-49D1-99EC-D7D1EFFEF0EC.png",
+      "result_bundle": "Test-DUNEUITests-2026.10.27_01-38-33-+0900.xcresult",
+      "active": true,
+      "method": "XCTest app.screenshot attachment from passed selector",
+      "text_size": "default"
+    },
+    {
+      "file": "images/iphone-T03-digest-expanded-top-ko-light.png",
+      "sha256": "dbda2de608989861778e30ccb9c4ed2a430c78567d6b2d803aaa61c35df7c58e",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "device": "iphone",
+      "screen": "T03",
+      "action": "T03-digest-expanded-top-ko-light",
+      "test": "TodayReadingUITests/testDailyDigestCaptureTopLight()",
+      "timestamp": 1793032861.279,
+      "udid": "3712F209-B644-45C4-9726-44D5BF835B0B",
+      "source_export_file": "B956DC28-66F8-45FA-A5B4-3E75275EFF20.png",
+      "result_bundle": "Test-DUNEUITests-2026.10.27_01-38-33-+0900.xcresult",
+      "active": true,
+      "method": "XCTest app.screenshot attachment from passed selector",
+      "text_size": "default"
+    },
+    {
+      "file": "images/iphone-T03-digest-collapsed-top-ko-light.png",
+      "sha256": "7ac32fe3c472976fe453b262f9425a99ab2588ac0b0c54bce4f736ff620501cd",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "device": "iphone",
+      "screen": "T03",
+      "action": "T03-digest-collapsed-top-ko-light",
+      "test": "TodayReadingUITests/testDailyDigestCaptureTopLight()",
+      "timestamp": 1793032853.533,
+      "udid": "3712F209-B644-45C4-9726-44D5BF835B0B",
+      "source_export_file": "8C76DBB3-114D-407A-B79E-12A0029161D3.png",
+      "result_bundle": "Test-DUNEUITests-2026.10.27_01-38-33-+0900.xcresult",
+      "active": true,
+      "method": "XCTest app.screenshot attachment from passed selector",
+      "text_size": "default"
+    },
+    {
+      "file": "images/iphone-T03-notification-digest-expanded.png",
+      "sha256": "dd46d7e007dd93cd7ece2d0ea44cb5b6e29b2debb0fdfb20fdf9685b07dae51e",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "device": "iphone",
+      "screen": "T10",
+      "action": "T03-notification-digest-expanded",
+      "test": "TodayReadingUITests/testNotificationDigestUsesSameExpandableCard()",
+      "timestamp": 1793032891.935,
+      "udid": "3712F209-B644-45C4-9726-44D5BF835B0B",
+      "source_export_file": "1FB58829-E3E1-41DF-8519-CCCA6242D5DD.png",
+      "result_bundle": "Test-DUNEUITests-2026.10.27_01-38-33-+0900.xcresult",
+      "active": true,
+      "method": "XCTest app.screenshot attachment from passed selector",
+      "text_size": "default"
+    },
+    {
+      "file": "images/iphone-T03-notification-digest-collapsed.png",
+      "sha256": "0a1735d2edd4984c1eb617f8b8f91f6ed4b8bbcd21e9e0a833871a272d34806a",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "device": "iphone",
+      "screen": "T10",
+      "action": "T03-notification-digest-collapsed",
+      "test": "TodayReadingUITests/testNotificationDigestUsesSameExpandableCard()",
+      "timestamp": 1793032887.164,
+      "udid": "3712F209-B644-45C4-9726-44D5BF835B0B",
+      "source_export_file": "8D8439BF-E363-43E1-BB9B-54A5DD77837A.png",
+      "result_bundle": "Test-DUNEUITests-2026.10.27_01-38-33-+0900.xcresult",
+      "active": true,
+      "method": "XCTest app.screenshot attachment from passed selector",
+      "text_size": "default"
+    },
+    {
+      "file": "images/iphone-maxax-T03-digest-expanded-body-ko-axxxl.png",
+      "sha256": "aa891fc0ab599ec44fc3c0b7f788fb7c4fea4d6b7b26a79d7e466e6b2d3443bb",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "device": "iphone-maxax",
+      "screen": "T03",
+      "action": "T03-digest-expanded-body-ko-axxxl",
+      "test": "TodayReadingUITests/testDailyDigestCaptureTopAccessibilityText()",
+      "timestamp": 1793033314.372,
+      "udid": "3712F209-B644-45C4-9726-44D5BF835B0B",
+      "source_export_file": "23A8EE59-59BB-42AA-B7D7-5151A113126F.png",
+      "result_bundle": "Test-DUNEUITests-2026.10.27_01-47-13-+0900.xcresult",
+      "active": true,
+      "method": "XCTest app.screenshot attachment from passed selector",
+      "text_size": "AXXXL"
+    },
+    {
+      "file": "images/iphone-maxax-T03-digest-expanded-top-ko-axxxl.png",
+      "sha256": "a1078a2cddeacded6ab6fc9a9b72e6891ba8be144e89c13818bf8de2548d38e0",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "device": "iphone-maxax",
+      "screen": "T03",
+      "action": "T03-digest-expanded-top-ko-axxxl",
+      "test": "TodayReadingUITests/testDailyDigestCaptureTopAccessibilityText()",
+      "timestamp": 1793033312.585,
+      "udid": "3712F209-B644-45C4-9726-44D5BF835B0B",
+      "source_export_file": "689B46CE-ADA5-4B30-8832-9270AF2750D4.png",
+      "result_bundle": "Test-DUNEUITests-2026.10.27_01-47-13-+0900.xcresult",
+      "active": true,
+      "method": "XCTest app.screenshot attachment from passed selector",
+      "text_size": "AXXXL"
+    },
+    {
+      "file": "images/iphone-maxax-T03-digest-collapsed-top-ko-axxxl.png",
+      "sha256": "3ef3bc7a44975d920286acb3c41b5d50817fd0c56a0fc2709f692ba8f9f07a1f",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "device": "iphone-maxax",
+      "screen": "T03",
+      "action": "T03-digest-collapsed-top-ko-axxxl",
+      "test": "TodayReadingUITests/testDailyDigestCaptureTopAccessibilityText()",
+      "timestamp": 1793033296.601,
+      "udid": "3712F209-B644-45C4-9726-44D5BF835B0B",
+      "source_export_file": "1490D956-181A-4EF9-A1FA-3EA4039F360E.png",
+      "result_bundle": "Test-DUNEUITests-2026.10.27_01-47-13-+0900.xcresult",
+      "active": true,
+      "method": "XCTest app.screenshot attachment from passed selector",
+      "text_size": "AXXXL"
+    },
+    {
+      "file": "images/ipad-T03-digest-expanded-body-ko-light.png",
+      "sha256": "3f5eae73aada94d194e27f6e68fa65e81ea40f9cb248df5c148752ef9958c158",
+      "pixels": [
+        2064,
+        2752
+      ],
+      "device": "ipad",
+      "screen": "T03",
+      "action": "T03-digest-expanded-body-ko-light",
+      "test": "TodayReadingUITests/testDailyDigestCaptureTopLight()",
+      "timestamp": 1793033448.159,
+      "udid": "B5F1F37C-3383-46DF-AC6F-8DB7081336CE",
+      "source_export_file": "F6E0F50D-436E-4955-AD1F-639C7EA87681.png",
+      "result_bundle": "Test-DUNEUITests-2026.10.27_01-49-12-+0900.xcresult",
+      "active": true,
+      "method": "XCTest app.screenshot attachment from passed selector",
+      "text_size": "default"
+    },
+    {
+      "file": "images/ipad-T03-digest-expanded-top-ko-light.png",
+      "sha256": "1461a2a1b2afd0c45344d2731108b16e8a46531a615ea1624f4889cbf0097b8d",
+      "pixels": [
+        2064,
+        2752
+      ],
+      "device": "ipad",
+      "screen": "T03",
+      "action": "T03-digest-expanded-top-ko-light",
+      "test": "TodayReadingUITests/testDailyDigestCaptureTopLight()",
+      "timestamp": 1793033446.268,
+      "udid": "B5F1F37C-3383-46DF-AC6F-8DB7081336CE",
+      "source_export_file": "DD9C1F3E-772E-4236-A61C-29AC89AAF672.png",
+      "result_bundle": "Test-DUNEUITests-2026.10.27_01-49-12-+0900.xcresult",
+      "active": true,
+      "method": "XCTest app.screenshot attachment from passed selector",
+      "text_size": "default"
+    },
+    {
+      "file": "images/ipad-T03-digest-collapsed-top-ko-light.png",
+      "sha256": "7d86de2cdacbc49b09261c531160bc0e7583fb1d9fa999bb76dde9d0674dfe4f",
+      "pixels": [
+        2064,
+        2752
+      ],
+      "device": "ipad",
+      "screen": "T03",
+      "action": "T03-digest-collapsed-top-ko-light",
+      "test": "TodayReadingUITests/testDailyDigestCaptureTopLight()",
+      "timestamp": 1793033439.953,
+      "udid": "B5F1F37C-3383-46DF-AC6F-8DB7081336CE",
+      "source_export_file": "9BC79083-21A2-4C29-9BF7-9D2693234EC6.png",
+      "result_bundle": "Test-DUNEUITests-2026.10.27_01-49-12-+0900.xcresult",
+      "active": true,
+      "method": "XCTest app.screenshot attachment from passed selector",
+      "text_size": "default"
+    },
+    {
+      "file": "images/ipad-T03-notification-digest-expanded.png",
+      "sha256": "2c16d089ed31d97b5e74104e834e13b1565e4feb773e3a626059c05e8e8b8d5a",
+      "pixels": [
+        2064,
+        2752
+      ],
+      "device": "ipad",
+      "screen": "T10",
+      "action": "T03-notification-digest-expanded",
+      "test": "TodayReadingUITests/testNotificationDigestUsesSameExpandableCard()",
+      "timestamp": 1793033480.259,
+      "udid": "B5F1F37C-3383-46DF-AC6F-8DB7081336CE",
+      "source_export_file": "5115C493-EE61-4F3A-89CF-62E061022DFA.png",
+      "result_bundle": "Test-DUNEUITests-2026.10.27_01-49-12-+0900.xcresult",
+      "active": true,
+      "method": "XCTest app.screenshot attachment from passed selector",
+      "text_size": "default"
+    },
+    {
+      "file": "images/ipad-T03-notification-digest-collapsed.png",
+      "sha256": "eac30e6343bdc16e454ca512500af28cdaa94fc7b1ac03da9e2b60ec6b1dedd4",
+      "pixels": [
+        2064,
+        2752
+      ],
+      "device": "ipad",
+      "screen": "T10",
+      "action": "T03-notification-digest-collapsed",
+      "test": "TodayReadingUITests/testNotificationDigestUsesSameExpandableCard()",
+      "timestamp": 1793033474.246,
+      "udid": "B5F1F37C-3383-46DF-AC6F-8DB7081336CE",
+      "source_export_file": "A29C5A96-CD7F-4CE9-8BD6-3E47137CA4C9.png",
+      "result_bundle": "Test-DUNEUITests-2026.10.27_01-49-12-+0900.xcresult",
+      "active": true,
+      "method": "XCTest app.screenshot attachment from passed selector",
+      "text_size": "default"
+    },
+    {
+      "file": "images/iphone-maxax-lower-T03-digest-expanded-ko-axxxl.png",
+      "sha256": "67518f34e38919be48460577c6e269a5c39d1757dac2f81fbde99f45de50a2e2",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "device": "iphone-maxax-lower",
+      "screen": "T03",
+      "action": "T03-digest-expanded-ko-axxxl",
+      "test": "TodayReadingUITests/testDailyDigestAccessibilityText()",
+      "timestamp": 1793031977.098,
+      "udid": "3712F209-B644-45C4-9726-44D5BF835B0B",
+      "source_export_file": "7F8C6B5E-C02A-49AE-BC63-A7C7B14B4D9F.png",
+      "result_bundle": "Test-DUNEUITests-2026.10.27_01-24-49-+0900.xcresult",
+      "active": true,
+      "method": "XCTest app.screenshot attachment from passed selector",
+      "text_size": "AXXXL"
+    },
+    {
+      "file": "images/iphone-maxax-lower-T03-digest-collapsed-ko-axxxl.png",
+      "sha256": "dedb7e2560dbe7982a74f2569e397d46b2469e50c8b0f98ecff21ce7a8f8683b",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "device": "iphone-maxax-lower",
+      "screen": "T03",
+      "action": "T03-digest-collapsed-ko-axxxl",
+      "test": "TodayReadingUITests/testDailyDigestAccessibilityText()",
+      "timestamp": 1793031972.889,
+      "udid": "3712F209-B644-45C4-9726-44D5BF835B0B",
+      "source_export_file": "2F3802F0-C832-4182-AF69-398E37806505.png",
+      "result_bundle": "Test-DUNEUITests-2026.10.27_01-24-49-+0900.xcresult",
+      "active": true,
+      "method": "XCTest app.screenshot attachment from passed selector",
+      "text_size": "AXXXL"
+    },
+    {
+      "file": "paired/duo-closed-002-2007x2853.png",
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e",
+      "pixels": [
+        2007,
+        2853
+      ],
+      "device": "duo-closed",
+      "screen": "T03",
+      "action": "T03-digest-collapsed-top-ko-light",
+      "test": "TodayReadingUITests/testDailyDigestCaptureTopLight",
+      "timestamp": 1793033678.9090354,
+      "udid": "082E3835-4ED0-4323-874A-17DC5FCB194C",
+      "active": false,
+      "method": "native simctl screenshot at held XCTest checkpoint; paired displays",
+      "runner_exit": 0,
+      "test_outcome": "passed",
+      "hierarchy": "proof/duo-closed-002-hierarchy.txt",
+      "window": "Window (Main), 0x111f21cc0, {{0.0, 0.0}, {466.0, 678.0}}",
+      "text_size": "default"
+    },
+    {
+      "file": "images/duo-closed-002-1398x2034.png",
+      "sha256": "42fb7dece532dec97f02f1569820916995cf38f49bec53bf558e3142814b91b6",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "device": "duo-closed",
+      "screen": "T03",
+      "action": "T03-digest-collapsed-top-ko-light",
+      "test": "TodayReadingUITests/testDailyDigestCaptureTopLight",
+      "timestamp": 1793033679.4189146,
+      "udid": "082E3835-4ED0-4323-874A-17DC5FCB194C",
+      "active": true,
+      "method": "native simctl screenshot at held XCTest checkpoint; paired displays",
+      "runner_exit": 0,
+      "test_outcome": "passed",
+      "hierarchy": "proof/duo-closed-002-hierarchy.txt",
+      "window": "Window (Main), 0x111f21cc0, {{0.0, 0.0}, {466.0, 678.0}}",
+      "text_size": "default"
+    },
+    {
+      "file": "images/duo-closed-003-1398x2034.png",
+      "sha256": "01f534164e9607dee84eb9a5bc2b5bbaa629fb4aac82b13f449b7df35f7570d7",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "device": "duo-closed",
+      "screen": "T03",
+      "action": "T03-digest-expanded-top-ko-light",
+      "test": "TodayReadingUITests/testDailyDigestCaptureTopLight",
+      "timestamp": 1793033689.7070394,
+      "udid": "082E3835-4ED0-4323-874A-17DC5FCB194C",
+      "active": true,
+      "method": "native simctl screenshot at held XCTest checkpoint; paired displays",
+      "runner_exit": 0,
+      "test_outcome": "passed",
+      "hierarchy": "proof/duo-closed-003-hierarchy.txt",
+      "window": "Window (Main), 0x1111bb5c0, {{0.0, 0.0}, {466.0, 678.0}}",
+      "text_size": "default"
+    },
+    {
+      "file": "paired/duo-closed-003-2007x2853.png",
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e",
+      "pixels": [
+        2007,
+        2853
+      ],
+      "device": "duo-closed",
+      "screen": "T03",
+      "action": "T03-digest-expanded-top-ko-light",
+      "test": "TodayReadingUITests/testDailyDigestCaptureTopLight",
+      "timestamp": 1793033688.813838,
+      "udid": "082E3835-4ED0-4323-874A-17DC5FCB194C",
+      "active": false,
+      "method": "native simctl screenshot at held XCTest checkpoint; paired displays",
+      "runner_exit": 0,
+      "test_outcome": "passed",
+      "hierarchy": "proof/duo-closed-003-hierarchy.txt",
+      "window": "Window (Main), 0x1111bb5c0, {{0.0, 0.0}, {466.0, 678.0}}",
+      "text_size": "default"
+    },
+    {
+      "file": "images/duo-closed-004-1398x2034.png",
+      "sha256": "34b15a98248d1d4692541b711cea7d557ce9a1c9674ece2c7b351e1a848d7f04",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "device": "duo-closed",
+      "screen": "T03",
+      "action": "T03-digest-expanded-body-ko-light",
+      "test": "TodayReadingUITests/testDailyDigestCaptureTopLight",
+      "timestamp": 1793033694.8951888,
+      "udid": "082E3835-4ED0-4323-874A-17DC5FCB194C",
+      "active": true,
+      "method": "native simctl screenshot at held XCTest checkpoint; paired displays",
+      "runner_exit": 0,
+      "test_outcome": "passed",
+      "hierarchy": "proof/duo-closed-004-hierarchy.txt",
+      "window": "Window (Main), 0x111f23e80, {{0.0, 0.0}, {466.0, 678.0}}",
+      "text_size": "default"
+    },
+    {
+      "file": "paired/duo-closed-004-2007x2853.png",
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e",
+      "pixels": [
+        2007,
+        2853
+      ],
+      "device": "duo-closed",
+      "screen": "T03",
+      "action": "T03-digest-expanded-body-ko-light",
+      "test": "TodayReadingUITests/testDailyDigestCaptureTopLight",
+      "timestamp": 1793033694.3779664,
+      "udid": "082E3835-4ED0-4323-874A-17DC5FCB194C",
+      "active": false,
+      "method": "native simctl screenshot at held XCTest checkpoint; paired displays",
+      "runner_exit": 0,
+      "test_outcome": "passed",
+      "hierarchy": "proof/duo-closed-004-hierarchy.txt",
+      "window": "Window (Main), 0x111f23e80, {{0.0, 0.0}, {466.0, 678.0}}",
+      "text_size": "default"
+    },
+    {
+      "file": "images/duo-closed-007-1398x2034.png",
+      "sha256": "1bfc35c681d1c3234c3017e684fc43d8d7cec5bad0c98acc5d83ef774d0b1626",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "device": "duo-closed",
+      "screen": "T10",
+      "action": "T03-notification-digest-collapsed",
+      "test": "TodayReadingUITests/testNotificationDigestUsesSameExpandableCard",
+      "timestamp": 1793033728.9543586,
+      "udid": "082E3835-4ED0-4323-874A-17DC5FCB194C",
+      "active": true,
+      "method": "native simctl screenshot at held XCTest checkpoint; paired displays",
+      "runner_exit": 0,
+      "test_outcome": "passed",
+      "hierarchy": "proof/duo-closed-007-hierarchy.txt",
+      "window": "Window (Main), 0x104fea940, {{0.0, 0.0}, {466.0, 678.0}}",
+      "text_size": "default"
+    },
+    {
+      "file": "paired/duo-closed-007-2007x2853.png",
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e",
+      "pixels": [
+        2007,
+        2853
+      ],
+      "device": "duo-closed",
+      "screen": "T10",
+      "action": "T03-notification-digest-collapsed",
+      "test": "TodayReadingUITests/testNotificationDigestUsesSameExpandableCard",
+      "timestamp": 1793033728.4486728,
+      "udid": "082E3835-4ED0-4323-874A-17DC5FCB194C",
+      "active": false,
+      "method": "native simctl screenshot at held XCTest checkpoint; paired displays",
+      "runner_exit": 0,
+      "test_outcome": "passed",
+      "hierarchy": "proof/duo-closed-007-hierarchy.txt",
+      "window": "Window (Main), 0x104fea940, {{0.0, 0.0}, {466.0, 678.0}}",
+      "text_size": "default"
+    },
+    {
+      "file": "images/duo-closed-008-1398x2034.png",
+      "sha256": "cc36daad75c56e1c7b38c11c55223386842987aae84be4f7bbd88bc4999b1e9b",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "device": "duo-closed",
+      "screen": "T10",
+      "action": "T03-notification-digest-expanded",
+      "test": "TodayReadingUITests/testNotificationDigestUsesSameExpandableCard",
+      "timestamp": 1793033736.887276,
+      "udid": "082E3835-4ED0-4323-874A-17DC5FCB194C",
+      "active": true,
+      "method": "native simctl screenshot at held XCTest checkpoint; paired displays",
+      "runner_exit": 0,
+      "test_outcome": "passed",
+      "hierarchy": "proof/duo-closed-008-hierarchy.txt",
+      "window": "Window (Main), 0x111f16300, {{0.0, 0.0}, {466.0, 678.0}}",
+      "text_size": "default"
+    },
+    {
+      "file": "paired/duo-closed-008-2007x2853.png",
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e",
+      "pixels": [
+        2007,
+        2853
+      ],
+      "device": "duo-closed",
+      "screen": "T10",
+      "action": "T03-notification-digest-expanded",
+      "test": "TodayReadingUITests/testNotificationDigestUsesSameExpandableCard",
+      "timestamp": 1793033736.3728569,
+      "udid": "082E3835-4ED0-4323-874A-17DC5FCB194C",
+      "active": false,
+      "method": "native simctl screenshot at held XCTest checkpoint; paired displays",
+      "runner_exit": 0,
+      "test_outcome": "passed",
+      "hierarchy": "proof/duo-closed-008-hierarchy.txt",
+      "window": "Window (Main), 0x111f16300, {{0.0, 0.0}, {466.0, 678.0}}",
+      "text_size": "default"
+    },
+    {
+      "file": "images/duo-open-002-2007x2853.png",
+      "sha256": "4f0be86597d4ee7086a3dab6efe29f0915a461ebd18a5d089457a3d7fdf22aac",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "device": "duo-open",
+      "screen": "T03",
+      "action": "T03-digest-collapsed-top-ko-light",
+      "test": "TodayReadingUITests/testDailyDigestCaptureTopLight",
+      "timestamp": 1793035427.3959174,
+      "udid": "082E3835-4ED0-4323-874A-17DC5FCB194C",
+      "active": true,
+      "method": "native simctl screenshot at held XCTest checkpoint; paired displays",
+      "runner_exit": 0,
+      "test_outcome": "passed",
+      "hierarchy": "proof/duo-open-002-hierarchy.txt",
+      "window": "Window, 0x11428cc80, {{0.0, -0.0}, {951.0, 669.0}}",
+      "text_size": "default"
+    },
+    {
+      "file": "paired/duo-open-002-1398x2034.png",
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+      "pixels": [
+        2034,
+        1398
+      ],
+      "device": "duo-open",
+      "screen": "T03",
+      "action": "T03-digest-collapsed-top-ko-light",
+      "test": "TodayReadingUITests/testDailyDigestCaptureTopLight",
+      "timestamp": 1793035426.8536325,
+      "udid": "082E3835-4ED0-4323-874A-17DC5FCB194C",
+      "active": false,
+      "method": "native simctl screenshot at held XCTest checkpoint; paired displays",
+      "runner_exit": 0,
+      "test_outcome": "passed",
+      "hierarchy": "proof/duo-open-002-hierarchy.txt",
+      "window": "Window, 0x11428cc80, {{0.0, -0.0}, {951.0, 669.0}}",
+      "text_size": "default"
+    },
+    {
+      "file": "paired/duo-open-003-1398x2034.png",
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+      "pixels": [
+        2034,
+        1398
+      ],
+      "device": "duo-open",
+      "screen": "T03",
+      "action": "T03-digest-expanded-top-ko-light",
+      "test": "TodayReadingUITests/testDailyDigestCaptureTopLight",
+      "timestamp": 1793035437.157657,
+      "udid": "082E3835-4ED0-4323-874A-17DC5FCB194C",
+      "active": false,
+      "method": "native simctl screenshot at held XCTest checkpoint; paired displays",
+      "runner_exit": 0,
+      "test_outcome": "passed",
+      "hierarchy": "proof/duo-open-003-hierarchy.txt",
+      "window": "Window, 0x114297ac0, {{0.0, -0.0}, {951.0, 669.0}}",
+      "text_size": "default"
+    },
+    {
+      "file": "images/duo-open-003-2007x2853.png",
+      "sha256": "c62c33530033663fe6f98fc1429f75e9bd0d5fd26eda18aceca451af656de228",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "device": "duo-open",
+      "screen": "T03",
+      "action": "T03-digest-expanded-top-ko-light",
+      "test": "TodayReadingUITests/testDailyDigestCaptureTopLight",
+      "timestamp": 1793035437.7882996,
+      "udid": "082E3835-4ED0-4323-874A-17DC5FCB194C",
+      "active": true,
+      "method": "native simctl screenshot at held XCTest checkpoint; paired displays",
+      "runner_exit": 0,
+      "test_outcome": "passed",
+      "hierarchy": "proof/duo-open-003-hierarchy.txt",
+      "window": "Window, 0x114297ac0, {{0.0, -0.0}, {951.0, 669.0}}",
+      "text_size": "default"
+    },
+    {
+      "file": "paired/duo-open-004-1398x2034.png",
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+      "pixels": [
+        2034,
+        1398
+      ],
+      "device": "duo-open",
+      "screen": "T03",
+      "action": "T03-digest-expanded-body-ko-light",
+      "test": "TodayReadingUITests/testDailyDigestCaptureTopLight",
+      "timestamp": 1793035443.1835675,
+      "udid": "082E3835-4ED0-4323-874A-17DC5FCB194C",
+      "active": false,
+      "method": "native simctl screenshot at held XCTest checkpoint; paired displays",
+      "runner_exit": 0,
+      "test_outcome": "passed",
+      "hierarchy": "proof/duo-open-004-hierarchy.txt",
+      "window": "Window, 0x11428cc80, {{0.0, -0.0}, {951.0, 669.0}}",
+      "text_size": "default"
+    },
+    {
+      "file": "images/duo-open-004-2007x2853.png",
+      "sha256": "5521085baa2836b815d7c3bc3e234749c3a78f21810d3b30c44dbd5f6ee03f61",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "device": "duo-open",
+      "screen": "T03",
+      "action": "T03-digest-expanded-body-ko-light",
+      "test": "TodayReadingUITests/testDailyDigestCaptureTopLight",
+      "timestamp": 1793035443.839397,
+      "udid": "082E3835-4ED0-4323-874A-17DC5FCB194C",
+      "active": true,
+      "method": "native simctl screenshot at held XCTest checkpoint; paired displays",
+      "runner_exit": 0,
+      "test_outcome": "passed",
+      "hierarchy": "proof/duo-open-004-hierarchy.txt",
+      "window": "Window, 0x11428cc80, {{0.0, -0.0}, {951.0, 669.0}}",
+      "text_size": "default"
+    },
+    {
+      "file": "paired/duo-open-007-1398x2034.png",
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+      "pixels": [
+        2034,
+        1398
+      ],
+      "device": "duo-open",
+      "screen": "T10",
+      "action": "T03-notification-digest-collapsed",
+      "test": "TodayReadingUITests/testNotificationDigestUsesSameExpandableCard",
+      "timestamp": 1793035482.0321207,
+      "udid": "082E3835-4ED0-4323-874A-17DC5FCB194C",
+      "active": false,
+      "method": "native simctl screenshot at held XCTest checkpoint; paired displays",
+      "runner_exit": 0,
+      "test_outcome": "passed",
+      "hierarchy": "proof/duo-open-007-hierarchy.txt",
+      "window": "Window, 0x11428a080, {{0.0, -0.0}, {951.0, 669.0}}",
+      "text_size": "default"
+    },
+    {
+      "file": "images/duo-open-007-2007x2853.png",
+      "sha256": "0e67aecc5b57e031a4e77ecd36a197fdd9058a6748b2eb66931f8c378325c963",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "device": "duo-open",
+      "screen": "T10",
+      "action": "T03-notification-digest-collapsed",
+      "test": "TodayReadingUITests/testNotificationDigestUsesSameExpandableCard",
+      "timestamp": 1793035482.676728,
+      "udid": "082E3835-4ED0-4323-874A-17DC5FCB194C",
+      "active": true,
+      "method": "native simctl screenshot at held XCTest checkpoint; paired displays",
+      "runner_exit": 0,
+      "test_outcome": "passed",
+      "hierarchy": "proof/duo-open-007-hierarchy.txt",
+      "window": "Window, 0x11428a080, {{0.0, -0.0}, {951.0, 669.0}}",
+      "text_size": "default"
+    },
+    {
+      "file": "paired/duo-open-008-1398x2034.png",
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+      "pixels": [
+        2034,
+        1398
+      ],
+      "device": "duo-open",
+      "screen": "T10",
+      "action": "T03-notification-digest-expanded",
+      "test": "TodayReadingUITests/testNotificationDigestUsesSameExpandableCard",
+      "timestamp": 1793035491.9692137,
+      "udid": "082E3835-4ED0-4323-874A-17DC5FCB194C",
+      "active": false,
+      "method": "native simctl screenshot at held XCTest checkpoint; paired displays",
+      "runner_exit": 0,
+      "test_outcome": "passed",
+      "hierarchy": "proof/duo-open-008-hierarchy.txt",
+      "window": "Window, 0x1073d2bc0, {{0.0, -0.0}, {951.0, 669.0}}",
+      "text_size": "default"
+    },
+    {
+      "file": "images/duo-open-008-2007x2853.png",
+      "sha256": "152cd92510b2d8c35c6aaa75e811755380a107536e591169977d20a20b11c60a",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "device": "duo-open",
+      "screen": "T10",
+      "action": "T03-notification-digest-expanded",
+      "test": "TodayReadingUITests/testNotificationDigestUsesSameExpandableCard",
+      "timestamp": 1793035492.4983153,
+      "udid": "082E3835-4ED0-4323-874A-17DC5FCB194C",
+      "active": true,
+      "method": "native simctl screenshot at held XCTest checkpoint; paired displays",
+      "runner_exit": 0,
+      "test_outcome": "passed",
+      "hierarchy": "proof/duo-open-008-hierarchy.txt",
+      "window": "Window, 0x1073d2bc0, {{0.0, -0.0}, {951.0, 669.0}}",
+      "text_size": "default"
+    }
+  ]
+}

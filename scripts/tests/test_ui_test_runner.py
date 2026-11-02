@@ -466,7 +466,7 @@ class SimulatorVersionFloorTests(unittest.TestCase):
         source = runner.read_text()
         if runner == UNIT_RUNNER:
             start = source.index("resolve_sim_destination() {")
-            end = source.index('\nif [[ "$MODE" != "watch"', start)
+            end = source.index('\npreboot_from_destination() {', start)
             name = "iPhone 17" if platform == "iOS" else "Apple Watch Series 11 (46mm)"
             shell = source[start:end] + (
                 f'\nresolve_sim_destination "{platform}" "{platform}-27-0" "{name}" "27.0" "27"\n'

@@ -29,3 +29,12 @@ See `docs/design/layout-map/notification-destination-unavailable-t13.html` and `
 ## Risks and verification
 
 The fallback may be entered with a long ID; footer must wrap and remain reachable by scroll. On a short Duo landscape viewport, the action must stay reachable without clipped content. The T13 test checks the real seeded route and dismissal. Source checks compare pre/post T11/T12 text and confirm no new catalog keys. Runtime remains pending until the parent QA lane runs it.
+
+
+## Resumed minimum verification — 2026-11-02
+
+Actual latest main a6ec9be1 contains completed T11/T12. The merged prefix preserves both, while T13 equals original734db23d and frozen validation3fac15d4 (segment e76a). The entire shared app file also truly equals validation here; the UI test file does not, but the T13 normal/MAX/UUID/viewport-helper block is byte-identical to original and validation (dcece). No speculative back-query/capture patch is needed: T13 has its own Go Back identifier and a verified before-dismiss checkpoint.
+
+Reuse clean734 Phone normal+dark/MAX2/2 PASS under this exact product/test/route/payload closure. Add only one existing normal case on iPad and one each on Duo closed/open, preserving explicit Go Back tap and actual hub return, exact original copy and real UUID assertions. Duo uses owned registration, SDK/active-display readbacks and strict native checkpoints; one device at a time, deadline1200 and no parallel heavy runner. No additional local unit/full UI/Watch or standalone duplicate build is warranted for this presentation-only change.
+
+Five distinct source reviews and UI test-design/source quality found zero actionable findings. Theme union10themes/23studies, Swift parse and source preservation checks passed. Historical iPad baseline group contains a separate bedtime failure; only the original T13 node passed, and it is a before image, not redesigned runtime proof. New iPad/Duo results and final comparisons/Compound/ship remain pending at this checkpoint.

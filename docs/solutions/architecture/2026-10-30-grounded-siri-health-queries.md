@@ -44,6 +44,8 @@ let result = try await HealthQueryLocalization.$locale.withValue(locale) {
 
 낭독은 축약 단위를 풀어 `킬로그램`, `분당 63회`, `1시간 1분 1초`처럼 만든다. 같은 날짜를 지표마다 반복하지 않는다. 별도 AVSpeechSynthesizer로 Siri 음색을 복제하지 않는다. 음색과 억양은 시스템 소유다.
 
+번역 조회는 `HealthQueryLocalization.localized(_:)`가 요청 locale을 지정한 `LocalizedStringResource`로 수행한다. `String(localized:locale:)`만으로는 앱과 다른 Siri 언어의 번역을 선택하지 못한다. 영어 CI 환경에서 발견한 실패와 회귀 검증은 [요청 언어 번역 조회 해결책](../testing/2026-10-31-request-locale-string-lookup.md)에 기록한다.
+
 ## Prevention
 
 - 잠금과 잠금 해제 중 읽기, 부분 실패와 기록 없음, 실제 완료 세트, 중복·삭제, DST·기간 끝을 테스트한다.
