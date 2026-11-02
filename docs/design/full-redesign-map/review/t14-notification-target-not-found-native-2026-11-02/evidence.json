@@ -1,0 +1,1082 @@
+{
+  "schema_version": 1,
+  "screen": "T14",
+  "kind": "T14 actual four normal pairs and corrected Phone MAX Back PASS",
+  "stage_status": "installed four T14 rows; scoped Phone MAX Back",
+  "installed": true,
+  "target_install_directory": "docs/design/full-redesign-map/review/t14-notification-target-not-found-native-2026-11-02",
+  "pairs": {
+    "regular": {
+      "before": {
+        "image": "assets/canonical-regular-before.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-t14/Health/docs/design/phone-design-map/actual/regular/images/T14.png",
+        "sha256": "848f3776bff0b0ba679acaf477ab249ff3aa53541dfe3dafabf2f1b2b5c933ae",
+        "pixels": [
+          1320,
+          2868
+        ],
+        "exif_orientation": 1,
+        "revision": null,
+        "exact_per_image_revision_unknown": true,
+        "historical_global_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+        "global_source_dirty": true,
+        "original_capture_row": {
+          "row_id": "T14",
+          "evidence": "notification-target-not-found-screen",
+          "test": "ActivityExerciseRegressionTests/testNotificationMissingWorkoutRouteShowsFallback()",
+          "action": "tap notification-row-workout-ui-test-activity-workout-missing",
+          "timestamp": 1791818336.578,
+          "image": "D6A7D3AE-5365-4CE8-B5F0-F08709136A29.png",
+          "screen": "screen-0-1320x2868-tap notification-row-workout-ui-test-activity-workout-missing_0_AEC55492-5D44-4836-9E40-C976A23FCC01.png",
+          "file": "T14.png"
+        },
+        "capture_timestamp": 1791818336.578,
+        "timestamp_kind": "historical-capture-index timestamp; exact original attachment not relinked",
+        "selector": "ActivityExerciseRegressionTests/testNotificationMissingWorkoutRouteShowsFallback()",
+        "action": "tap notification-row-workout-ui-test-activity-workout-missing",
+        "pose_readback_verified": false,
+        "label": "일반 iPhone · 옛 정식 맵 원본",
+        "capture_time_kst": "2026-10-13T00:18:56.578000+09:00"
+      },
+      "after": {
+        "image": "assets/phone-normal-d310-46E01FF5.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t14/evidence/ui-phone-session-repair-result/attachments/46E01FF5-CB3C-4572-ACDF-8229C47FD7E1.png",
+        "sha256": "7a3582432358ffa9c23d4a186e2858757b3f2311fc87bd5b3f432c98663980b2",
+        "pixels": [
+          1320,
+          2868
+        ],
+        "exif_orientation": 1,
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "46E01FF5-CB3C-4572-ACDF-8229C47FD7E1.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "T14 missing workout target before Back_0_4274E9CE-89BF-4C37-9DF7-823AED5DF131.png",
+          "timestamp": 1793398690.027
+        },
+        "selector": "DUNEUITests/ActivityExerciseRegressionTests/testNotificationMissingWorkoutRouteShowsFallback",
+        "action": "T14 missing workout target before Back_0_4274E9CE-89BF-4C37-9DF7-823AED5DF131.png",
+        "capture_timestamp": 1793398690.027,
+        "timestamp_kind": "native-XCTest-attachment",
+        "device_udid": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+        "revision": "d3109533",
+        "source_worktree_dirty": null,
+        "label": "일반 iPhone · 역사적 normal 개별 PASS",
+        "case_result": "Passed",
+        "group_result": "Failed",
+        "normal_back_exercised": false,
+        "caveat": "Oct31 d310 normal nodePassed only; original groupFAILED2/1/1. Source dirty absent/unknown. BeforeBack caption does not mean actualBack tap.",
+        "capture_time_kst": "2026-10-31T07:18:10.027000+09:00"
+      },
+      "status": "historical normal individual case PASS; groupFAILED preserved"
+    },
+    "ipad": {
+      "before": {
+        "image": "assets/matched-ipad-F291-before.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-unavailable-workout-sleep-volume-types-initial/attachments/F291C432-92DE-4064-9BBB-79834F105F54.png",
+        "sha256": "2a37e07f66204c74db5fcf8551b73a03c43b82ea599b729fad310e0645b2fc01",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "exif_orientation": 1,
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+          "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "F291C432-92DE-4064-9BBB-79834F105F54.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1512x2316-tap notification-row-workout-ui-test-activity-workout-missing_0_47D7FEF3-E9BA-4EC9-9715-0562A141957E.png",
+          "timestamp": 1793421943.059
+        },
+        "selector": "DUNEUITests/ActivityExerciseRegressionTests/testNotificationMissingWorkoutRouteShowsFallback",
+        "action": "screen-0-1512x2316-tap notification-row-workout-ui-test-activity-workout-missing_0_47D7FEF3-E9BA-4EC9-9715-0562A141957E.png",
+        "capture_timestamp": 1793421943.059,
+        "timestamp_kind": "native-XCTest-attachment",
+        "device_udid": "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+        "revision": "1f7f9900",
+        "source_worktree_dirty": false,
+        "label": "iPad mini · 원래 missing-workout 개별 PASS",
+        "group_result": "Failed",
+        "case_result": "Passed",
+        "caveat": "Original6/5/1bedtimefailed group; exactT14casePassed, not groupPASS/redesignPASS. Mini versus future/currentPro13 differ.",
+        "capture_time_kst": "2026-10-31T13:45:43.059000+09:00"
+      },
+      "after": {
+        "image": "assets/ipad-normal-3fac-FFDAEB4B.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t14/evidence/ipad-normal-3fac15d4/attachments/FFDAEB4B-99A9-40F8-ACDB-040A7260B0A2.png",
+        "sha256": "09b16ed775f20eda9b4806e2bff1df2a47ed50a45b17482170cd89b7a5d59a8f",
+        "pixels": [
+          2064,
+          2752
+        ],
+        "exif_orientation": 1,
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "F2254EFA-F7EA-4964-84E3-FD0E283BEFC7",
+          "deviceName": "iPad Pro 13-inch (M5)-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "FFDAEB4B-99A9-40F8-ACDB-040A7260B0A2.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "T14 missing workout target before Back_0_CEC6BB24-85E8-46A7-88E1-E73C2692265A.png",
+          "timestamp": 1793621681.6
+        },
+        "selector": "DUNEUITests/ActivityExerciseRegressionTests/testNotificationMissingWorkoutRouteShowsFallback",
+        "action": "T14 missing workout target before Back_0_CEC6BB24-85E8-46A7-88E1-E73C2692265A.png",
+        "capture_timestamp": 1793621681.6,
+        "timestamp_kind": "native-XCTest-attachment",
+        "device_udid": "F2254EFA-F7EA-4964-84E3-FD0E283BEFC7",
+        "revision": "3fac15d4",
+        "source_worktree_dirty": false,
+        "label": "iPad Pro13 · normal 실제 1/1 PASS",
+        "normal_back_exercised": false,
+        "caveat": "Exact payload/ID/capture only; no normal Back tap/Activity return. Mini-before versus Pro13-after model/UID/date/viewport differ.",
+        "capture_time_kst": "2026-11-02T21:14:41.600000+09:00"
+      },
+      "status": "normal actual1PASS; noBackcoverage"
+    },
+    "duo": {
+      "before": {
+        "image": "assets/canonical-duo-before.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-t14/Health/docs/design/phone-design-map/actual/duo/images/T14.png",
+        "sha256": "22838fddb61dc415e253df04d0a213e3da89ccdc01278dc4476c093a9c4475c9",
+        "pixels": [
+          1398,
+          2034
+        ],
+        "exif_orientation": 1,
+        "revision": null,
+        "exact_per_image_revision_unknown": true,
+        "historical_global_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+        "global_source_dirty": true,
+        "original_capture_row": {
+          "row_id": "T14",
+          "evidence": "notification-target-not-found-screen",
+          "test": "ActivityExerciseRegressionTests/testNotificationMissingWorkoutRouteShowsFallback()",
+          "action": "tap notification-row-workout-ui-test-activity-workout-missing",
+          "timestamp": 1791825443.461,
+          "image": "30CF259D-151B-4792-97A1-61AC7F7032F2.png",
+          "screen": "screen-0-1398x2034-tap notification-row-workout-ui-test-activity-workout-missing_0_5EE60AE7-8EAC-4B66-AE9A-6D9487CF03F1.png",
+          "file": "T14.png"
+        },
+        "capture_timestamp": 1791825443.461,
+        "timestamp_kind": "historical-capture-index timestamp; exact original attachment not relinked",
+        "selector": "ActivityExerciseRegressionTests/testNotificationMissingWorkoutRouteShowsFallback()",
+        "action": "tap notification-row-workout-ui-test-activity-workout-missing",
+        "pose_readback_verified": false,
+        "label": "Duo 접힘 · 옛 정식 맵 원본",
+        "capture_time_kst": "2026-10-13T02:17:23.461000+09:00"
+      },
+      "after": {
+        "image": "assets/duo-closed-005-1398x2034.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t14/evidence/duo-closed-normal-3fac15d4/paired-host/005-1398x2034.png",
+        "sha256": "a683a201ba70ba62238814f631b1f0feca76910efabe7e810bb58680b21a8ef5",
+        "pixels": [
+          1398,
+          2034
+        ],
+        "exif_orientation": 1,
+        "selector": "DUNEUITests/ActivityExerciseRegressionTests/testNotificationMissingWorkoutRouteShowsFallback",
+        "action": "DUNE_VISUAL_AUDIT_READY T14 missing workout target before Back [DUNEUITests/ActivityExerciseRegressionTests.swift:2553] DEADLINE=1793622388.211197",
+        "capture_timestamp": 1793622360.327382,
+        "timestamp_kind": "host-file-mtime of paired native PNG; not XCTest attachment timestamp or checkpoint deadline",
+        "device_udid": "E282B799-FA8E-4689-9F56-02BCF6D1F25D",
+        "revision": "3fac15d4",
+        "source_worktree_dirty": false,
+        "angle_before": 0,
+        "angle_after": 0,
+        "active_display": "LCD",
+        "pose_readback_verified": true,
+        "strict_ack_count": 6,
+        "label": "Duo 접힘 · normal 실제 1/1 PASS",
+        "normal_back_exercised": false,
+        "post_collection_observation": "Parent viewed original activeLCD005 and reported correct fullT14 title/explanation/actualworkoutID clear; raw pending-parent not changed.",
+        "capture_time_kst": "2026-11-02T21:26:00.327382+09:00"
+      },
+      "status": "normal actual1PASS;6strictACK0LCD; noBackcoverage"
+    },
+    "duo-open": {
+      "before": {
+        "image": "assets/canonical-duo-open-before.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-t14/Health/docs/design/phone-design-map/actual/duo-open/images/T14.png",
+        "sha256": "dd3823e83cc1fb65613034d70440041b3bd1990b04a6f8ec1c10c02835b91720",
+        "pixels": [
+          2006,
+          2852
+        ],
+        "exif_orientation": 6,
+        "revision": null,
+        "exact_per_image_revision_unknown": true,
+        "historical_global_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+        "global_source_dirty": true,
+        "original_capture_row": {
+          "row_id": "T14",
+          "evidence": "notification-target-not-found-screen",
+          "test": "ActivityExerciseRegressionTests/testNotificationMissingWorkoutRouteShowsFallback()",
+          "action": "tap notification-row-workout-ui-test-activity-workout-missing",
+          "timestamp": 1791828509.223,
+          "image": "629AF254-4E40-4351-9B02-48318EE6286F.png",
+          "screen": "screen-1-2006x2852-tap notification-row-workout-ui-test-activity-workout-missing_1_81DED7AF-7782-471E-B2D3-54019168C648.png",
+          "file": "T14.png"
+        },
+        "capture_timestamp": 1791828509.223,
+        "timestamp_kind": "historical-capture-index timestamp; exact original attachment not relinked",
+        "selector": "ActivityExerciseRegressionTests/testNotificationMissingWorkoutRouteShowsFallback()",
+        "action": "tap notification-row-workout-ui-test-activity-workout-missing",
+        "pose_readback_verified": false,
+        "label": "Duo 펼침 · 옛 정식 맵 원본",
+        "capture_time_kst": "2026-10-13T03:08:29.223000+09:00"
+      },
+      "after": {
+        "image": "assets/duo-open-005-2007x2853.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t14/evidence/duo-open-normal-3fac15d4/paired-host/005-2007x2853.png",
+        "sha256": "977a66abf01d63afd102dda4e1a765dcb8905165657ab8cca15b4207049ab06d",
+        "pixels": [
+          2853,
+          2007
+        ],
+        "exif_orientation": 1,
+        "selector": "DUNEUITests/ActivityExerciseRegressionTests/testNotificationMissingWorkoutRouteShowsFallback",
+        "action": "DUNE_VISUAL_AUDIT_READY T14 missing workout target before Back [DUNEUITests/ActivityExerciseRegressionTests.swift:2553] DEADLINE=1793622522.128049",
+        "capture_timestamp": 1793622492.8145347,
+        "timestamp_kind": "host-file-mtime of paired native PNG; not XCTest attachment timestamp or checkpoint deadline",
+        "capture_time_kst": "2026-11-02T21:28:12.814535+09:00",
+        "device_udid": "E282B799-FA8E-4689-9F56-02BCF6D1F25D",
+        "revision": "3fac15d4",
+        "source_worktree_dirty": false,
+        "angle_before": 180,
+        "angle_after": 180,
+        "active_display": "LCD-1",
+        "pose_readback_verified": true,
+        "strict_ack_count": 6,
+        "label": "Duo 펼침 · normal 실제1/1PASS",
+        "normal_back_exercised": false,
+        "post_collection_observation": "Parent and this reviewer viewed activeLCD-1 original005, complete correct title/explanation/realID clear. Actual2853x2007EXIF1 preserved, rawpose pending-parent unchanged."
+      },
+      "status": "normal actual1PASS;6strictACK180LCD-1; noBackcoverage"
+    }
+  },
+  "historical_canonical_before": {
+    "regular": {
+      "image": "assets/canonical-regular-before.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-t14/Health/docs/design/phone-design-map/actual/regular/images/T14.png",
+      "sha256": "848f3776bff0b0ba679acaf477ab249ff3aa53541dfe3dafabf2f1b2b5c933ae",
+      "pixels": [
+        1320,
+        2868
+      ],
+      "exif_orientation": 1,
+      "revision": null,
+      "exact_per_image_revision_unknown": true,
+      "historical_global_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "global_source_dirty": true,
+      "original_capture_row": {
+        "row_id": "T14",
+        "evidence": "notification-target-not-found-screen",
+        "test": "ActivityExerciseRegressionTests/testNotificationMissingWorkoutRouteShowsFallback()",
+        "action": "tap notification-row-workout-ui-test-activity-workout-missing",
+        "timestamp": 1791818336.578,
+        "image": "D6A7D3AE-5365-4CE8-B5F0-F08709136A29.png",
+        "screen": "screen-0-1320x2868-tap notification-row-workout-ui-test-activity-workout-missing_0_AEC55492-5D44-4836-9E40-C976A23FCC01.png",
+        "file": "T14.png"
+      },
+      "capture_timestamp": 1791818336.578,
+      "timestamp_kind": "historical-capture-index timestamp; exact original attachment not relinked",
+      "selector": "ActivityExerciseRegressionTests/testNotificationMissingWorkoutRouteShowsFallback()",
+      "action": "tap notification-row-workout-ui-test-activity-workout-missing",
+      "pose_readback_verified": false,
+      "label": "일반 iPhone · 옛 정식 맵 원본",
+      "capture_time_kst": "2026-10-13T00:18:56.578000+09:00"
+    },
+    "ipad": {
+      "image": "assets/canonical-ipad-before.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-t14/Health/docs/design/phone-design-map/actual/ipad/images/T14.png",
+      "sha256": "42386d976f4fbff9c76322016a77b36139b54aac222b7fe77bf3651106663e23",
+      "pixels": [
+        2064,
+        2752
+      ],
+      "exif_orientation": 1,
+      "revision": null,
+      "exact_per_image_revision_unknown": true,
+      "historical_global_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "global_source_dirty": true,
+      "original_capture_row": {
+        "row_id": "T14",
+        "evidence": "notification-target-not-found-screen",
+        "test": "ActivityExerciseRegressionTests/testNotificationMissingWorkoutRouteShowsFallback()",
+        "action": "before teardown -[ActivityExerciseRegressionTests testNotificationMissingWorkoutRouteShowsFallback]",
+        "timestamp": 1791822074.436,
+        "image": "25B57EB0-906D-438D-8A6D-238B75EDFC4B.png",
+        "screen": "screen-0-2064x2752-before teardown -[ActivityExerciseRegressionTests testNotificationMissingWorkoutRouteShowsFallback]_0_7739E9C9-9199-4368-B901-B2E262C8AAF9.png",
+        "file": "T14.png"
+      },
+      "capture_timestamp": 1791822074.436,
+      "timestamp_kind": "historical-capture-index timestamp; exact original attachment not relinked",
+      "selector": "ActivityExerciseRegressionTests/testNotificationMissingWorkoutRouteShowsFallback()",
+      "action": "before teardown -[ActivityExerciseRegressionTests testNotificationMissingWorkoutRouteShowsFallback]",
+      "pose_readback_verified": false,
+      "label": "iPad · 옛 정식 맵 원본",
+      "capture_time_kst": "2026-10-13T01:21:14.436000+09:00"
+    },
+    "duo": {
+      "image": "assets/canonical-duo-before.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-t14/Health/docs/design/phone-design-map/actual/duo/images/T14.png",
+      "sha256": "22838fddb61dc415e253df04d0a213e3da89ccdc01278dc4476c093a9c4475c9",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "exif_orientation": 1,
+      "revision": null,
+      "exact_per_image_revision_unknown": true,
+      "historical_global_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "global_source_dirty": true,
+      "original_capture_row": {
+        "row_id": "T14",
+        "evidence": "notification-target-not-found-screen",
+        "test": "ActivityExerciseRegressionTests/testNotificationMissingWorkoutRouteShowsFallback()",
+        "action": "tap notification-row-workout-ui-test-activity-workout-missing",
+        "timestamp": 1791825443.461,
+        "image": "30CF259D-151B-4792-97A1-61AC7F7032F2.png",
+        "screen": "screen-0-1398x2034-tap notification-row-workout-ui-test-activity-workout-missing_0_5EE60AE7-8EAC-4B66-AE9A-6D9487CF03F1.png",
+        "file": "T14.png"
+      },
+      "capture_timestamp": 1791825443.461,
+      "timestamp_kind": "historical-capture-index timestamp; exact original attachment not relinked",
+      "selector": "ActivityExerciseRegressionTests/testNotificationMissingWorkoutRouteShowsFallback()",
+      "action": "tap notification-row-workout-ui-test-activity-workout-missing",
+      "pose_readback_verified": false,
+      "label": "Duo 접힘 · 옛 정식 맵 원본",
+      "capture_time_kst": "2026-10-13T02:17:23.461000+09:00"
+    },
+    "duo-open": {
+      "image": "assets/canonical-duo-open-before.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-t14/Health/docs/design/phone-design-map/actual/duo-open/images/T14.png",
+      "sha256": "dd3823e83cc1fb65613034d70440041b3bd1990b04a6f8ec1c10c02835b91720",
+      "pixels": [
+        2006,
+        2852
+      ],
+      "exif_orientation": 6,
+      "revision": null,
+      "exact_per_image_revision_unknown": true,
+      "historical_global_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "global_source_dirty": true,
+      "original_capture_row": {
+        "row_id": "T14",
+        "evidence": "notification-target-not-found-screen",
+        "test": "ActivityExerciseRegressionTests/testNotificationMissingWorkoutRouteShowsFallback()",
+        "action": "tap notification-row-workout-ui-test-activity-workout-missing",
+        "timestamp": 1791828509.223,
+        "image": "629AF254-4E40-4351-9B02-48318EE6286F.png",
+        "screen": "screen-1-2006x2852-tap notification-row-workout-ui-test-activity-workout-missing_1_81DED7AF-7782-471E-B2D3-54019168C648.png",
+        "file": "T14.png"
+      },
+      "capture_timestamp": 1791828509.223,
+      "timestamp_kind": "historical-capture-index timestamp; exact original attachment not relinked",
+      "selector": "ActivityExerciseRegressionTests/testNotificationMissingWorkoutRouteShowsFallback()",
+      "action": "tap notification-row-workout-ui-test-activity-workout-missing",
+      "pose_readback_verified": false,
+      "label": "Duo 펼침 · 옛 정식 맵 원본",
+      "capture_time_kst": "2026-10-13T03:08:29.223000+09:00"
+    }
+  },
+  "extra_states": [],
+  "diagnostic_failed_max": {
+    "image": "assets/diagnostic-failedMAX-36F1A1FD.png",
+    "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t14/evidence/phone-max-approved-extra-failed-3fac15d4/attachments/36F1A1FD-7A24-40C9-8675-DCB7C2BF3257.png",
+    "sha256": "1b773a043e45906edbda079bc7f4ccbbfe6837dde66768568221b14213112099",
+    "pixels": [
+      1320,
+      2868
+    ],
+    "exif_orientation": 1,
+    "native_attachment": {
+      "configurationName": "Design Capture",
+      "deviceId": "E990FD83-9610-4AFC-8CDA-7703456B2B17",
+      "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+      "exportedFileName": "36F1A1FD-7A24-40C9-8675-DCB7C2BF3257.png",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "ActivityExerciseRegressionTests-testNotificationMissingWorkoutRouteDarkMaximumAccessibilitySize--failure_0_B3ADD9E7-6B2A-41D3-ABEC-922C8AB41939.png",
+      "timestamp": 1793621353.56
+    },
+    "selector": "DUNEUITests/ActivityExerciseRegressionTests/testNotificationMissingWorkoutRouteDarkMaximumAccessibilitySize",
+    "action": "ActivityExerciseRegressionTests-testNotificationMissingWorkoutRouteDarkMaximumAccessibilitySize--failure_0_B3ADD9E7-6B2A-41D3-ABEC-922C8AB41939.png",
+    "capture_timestamp": 1793621353.56,
+    "timestamp_kind": "native-XCTest-attachment",
+    "device_udid": "E990FD83-9610-4AFC-8CDA-7703456B2B17",
+    "revision": "3fac15d4",
+    "source_worktree_dirty": false,
+    "label": "진단 전용 · Phone MAX 실제 FAILED1",
+    "result": "Failed",
+    "not_after_gate_proof": true,
+    "back_reached": false,
+    "cause": "SelectableID AX minX0 compared with artificial inset4; full actual glyphID visible. Later ID-only geometry correction source-reviewed, not executed.",
+    "capture_time_kst": "2026-11-02T21:09:13.560000+09:00"
+  },
+  "bundles": {
+    "phone-normal-historical-d310": {
+      "source_directory": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t14/evidence/ui-phone-session-repair-result",
+      "result": {
+        "schema_version": 1,
+        "status": "failed",
+        "target": "DUNEUITests",
+        "run_exit_status": 65,
+        "requested_selectors": [
+          "DUNEUITests/ActivityExerciseRegressionTests/testNotificationMissingWorkoutRouteShowsFallback",
+          "DUNEUITests/ActivityExerciseRegressionTests/testNotificationMissingWorkoutRouteDarkMaximumAccessibilitySize"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 2,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 1
+        },
+        "passed_cases": 1,
+        "failures": [
+          "206: /Users/shanks/.codex/worktrees/detail-redesign-validation/Health/DUNEUITests/Full/ActivityExerciseRegressionTests.swift:2232: error: -[DUNEUITests.ActivityExerciseRegressionTests testNotificationMissingWorkoutRouteDarkMaximumAccessibilitySize] : XCTAssertTrue failed",
+          "217: Test Case '-[DUNEUITests.ActivityExerciseRegressionTests testNotificationMissingWorkoutRouteDarkMaximumAccessibilitySize]' failed (40.912 seconds).",
+          "320: Test Suite 'ActivityExerciseRegressionTests' failed at 2026-10-31 07:18:13.385.",
+          "322: Test Suite 'DUNEUITests.xctest' failed at 2026-10-31 07:18:13.387.",
+          "324: Test Suite 'Selected tests' failed at 2026-10-31 07:18:13.387.",
+          "336: ** TEST FAILED **",
+          "xcodebuild exited 65",
+          "UI test log reports 1 failures",
+          "requested UI test selector has no execution evidence"
+        ],
+        "required_selectors_missing": [
+          "DUNEUITests/ActivityExerciseRegressionTests/testNotificationMissingWorkoutRouteDarkMaximumAccessibilitySize"
+        ],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/t14-iphone-d3109533-session-repaired.log"
+      },
+      "provenance": {
+        "executed_revision": "d3109533",
+        "executed_worktree": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health",
+        "counts": {
+          "executed": 2,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 1
+        },
+        "previous_PID_mapping_failure": "resolved: actualXCTestAXsnapshots PID13522+14106 andnormalcasePASS",
+        "new_failure": "darkmaxAXmissingrouteRowwait beforetargetscreen; inspectAXforvirtualization",
+        "automatic_retry_remaining": 0,
+        "original_first_failed_attempt_retained": true
+      },
+      "exact_passed_normal_node": {
+        "duration": "33초",
+        "durationInSeconds": 33.54851293563843,
+        "name": "testNotificationMissingWorkoutRouteShowsFallback()",
+        "nodeIdentifier": "ActivityExerciseRegressionTests/testNotificationMissingWorkoutRouteShowsFallback()",
+        "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNEUITests/ActivityExerciseRegressionTests/testNotificationMissingWorkoutRouteShowsFallback",
+        "nodeType": "Test Case",
+        "result": "Passed"
+      },
+      "proof_directory": "assets/proofs/phone-normal-historical-d310"
+    },
+    "original-ipad-baseline": {
+      "source_directory": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-unavailable-workout-sleep-volume-types-initial",
+      "result": {
+        "schema_version": 1,
+        "status": "failed",
+        "target": "DUNEUITests",
+        "run_exit_status": 65,
+        "requested_selectors": [
+          "DUNEUITests/DesignMapNotificationDetailTests/testNotificationDestinationUnavailable",
+          "DUNEUITests/ActivityExerciseRegressionTests/testNotificationMissingWorkoutRouteShowsFallback",
+          "DUNEUITests/DesignMapAdditionalRoutesTests/testSleepPredictionOpensFromWellness",
+          "DUNEUITests/NotificationRoutingRegressionTests/testBedtimeReminderPushesFromNotificationHub",
+          "DUNEUITests/ActivityExerciseRegressionTests/testActivityDetailRoutesOpenExpectedScreens",
+          "DUNEUITests/ActivityExerciseRegressionTests/testExerciseTypeDetailShowsTrendSurface"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 6,
+          "passed": 5,
+          "skipped": 0,
+          "failed": 1
+        },
+        "passed_cases": 5,
+        "failures": [
+          "1077: /Users/shanks/.codex/worktrees/detail-redesign-validation/Health/DUNEUITests/Full/NotificationRoutingRegressionTests.swift:19: error: -[DUNEUITests.NotificationRoutingRegressionTests testBedtimeReminderPushesFromNotificationHub] : Failed to get matching snapshot: No matches found for Descendants mat…",
+          "1116: Test Case '-[DUNEUITests.NotificationRoutingRegressionTests testBedtimeReminderPushesFromNotificationHub]' failed (32.730 seconds).",
+          "1117: Test Suite 'NotificationRoutingRegressionTests' failed at 2026-10-31 13:47:30.222.",
+          "1119: Test Suite 'DUNEUITests.xctest' failed at 2026-10-31 13:47:30.222.",
+          "1121: Test Suite 'Selected tests' failed at 2026-10-31 13:47:30.223.",
+          "1133: ** TEST FAILED **",
+          "xcodebuild exited 65",
+          "UI test log reports 1 failures",
+          "requested UI test selector has no execution evidence"
+        ],
+        "required_selectors_missing": [
+          "DUNEUITests/NotificationRoutingRegressionTests/testBedtimeReminderPushesFromNotificationHub"
+        ],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/original-ipad-unavailable-workout-sleep-volume-types-1f7f9900.log"
+      },
+      "provenance": {
+        "revision": "1f7f9900",
+        "source_worktree_dirty": false,
+        "original_xcresult": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.31_13-42-24-+0900.xcresult",
+        "xcode": "Xcode 27.2\nBuild version 27B52",
+        "test_plan": "DUNEUITests-DesignCapture"
+      },
+      "exact_passed_normal_node": {
+        "duration": "39초",
+        "durationInSeconds": 39.420660972595215,
+        "name": "testNotificationMissingWorkoutRouteShowsFallback()",
+        "nodeIdentifier": "ActivityExerciseRegressionTests/testNotificationMissingWorkoutRouteShowsFallback()",
+        "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNEUITests/ActivityExerciseRegressionTests/testNotificationMissingWorkoutRouteShowsFallback",
+        "nodeType": "Test Case",
+        "result": "Passed"
+      },
+      "proof_directory": "assets/proofs/original-ipad-baseline"
+    },
+    "ipad-normal-3fac": {
+      "source_directory": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t14/evidence/ipad-normal-3fac15d4",
+      "result": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/ActivityExerciseRegressionTests/testNotificationMissingWorkoutRouteShowsFallback"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/t14-ipad-normal-3fac15d4.log"
+      },
+      "provenance": {
+        "revision": "3fac15d4",
+        "source_worktree_dirty": false,
+        "original_xcresult": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.11.02_21-13-05-+0900.xcresult",
+        "xcode": "Xcode 27.2\nBuild version 27B52",
+        "test_plan": "DUNEUITests-DesignCapture"
+      },
+      "proof_directory": "assets/proofs/ipad-normal-3fac"
+    },
+    "duo-closed-normal-3fac": {
+      "source_directory": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t14/evidence/duo-closed-normal-3fac15d4",
+      "result": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/ActivityExerciseRegressionTests/testNotificationMissingWorkoutRouteShowsFallback"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/t14-duo-closed-3fac15d4.log"
+      },
+      "provenance": {
+        "revision": "3fac15d4",
+        "source_worktree_dirty": false,
+        "original_xcresult": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.11.02_21-23-55-+0900.xcresult",
+        "xcode": "Xcode 27.2\nBuild version 27B52",
+        "test_plan": "DUNEUITests-DuoAudit",
+        "device": "E282B799-FA8E-4689-9F56-02BCF6D1F25D",
+        "pose": "closed",
+        "poseProof": "paired-host/pose-proof.json"
+      },
+      "pose": {
+        "revision": "3fac15d4",
+        "target": 0.0,
+        "angle_before": 0.0,
+        "angle_after": 0.0,
+        "active_display": "LCD",
+        "script_sha256": "0e178ea0645a579cc83ace50631edf0bfef6846830abf478a3a9863d3144b559",
+        "captured_at": 1793622371.83902,
+        "native_visual_review": "pending-parent"
+      },
+      "strict_checkpoints": [
+        {
+          "sequence": 1,
+          "action": "DUNE_VISUAL_AUDIT_READY root after setup -[ActivityExerciseRegressionTests testNotificationMissingWorkoutRouteShowsFallback] [DUNEUITests/UITestBaseCase.swift:145] DEADLINE=1793622343.904395",
+          "elapsed_seconds": 2.795,
+          "acknowledged": true,
+          "valid_evidence": true,
+          "error": null
+        },
+        {
+          "sequence": 2,
+          "action": "DUNE_VISUAL_AUDIT_READY tap tab-today [DUNEUITests/UITestHelpers.swift:699] DEADLINE=1793622368.204458",
+          "elapsed_seconds": 3.152,
+          "acknowledged": true,
+          "valid_evidence": true,
+          "error": null
+        },
+        {
+          "sequence": 3,
+          "action": "DUNE_VISUAL_AUDIT_READY tap dashboard-toolbar-notifications [DUNEUITests/ActivityExerciseRegressionTests.swift:3069] DEADLINE=1793622376.436897",
+          "elapsed_seconds": 2.316,
+          "acknowledged": true,
+          "valid_evidence": true,
+          "error": null
+        },
+        {
+          "sequence": 4,
+          "action": "DUNE_VISUAL_AUDIT_READY tap notification-row-workout-ui-test-activity-workout-missing [DUNEUITests/ActivityExerciseRegressionTests.swift:2540] DEADLINE=1793622383.544188",
+          "elapsed_seconds": 2.305,
+          "acknowledged": true,
+          "valid_evidence": true,
+          "error": null
+        },
+        {
+          "sequence": 5,
+          "action": "DUNE_VISUAL_AUDIT_READY T14 missing workout target before Back [DUNEUITests/ActivityExerciseRegressionTests.swift:2553] DEADLINE=1793622388.211197",
+          "elapsed_seconds": 2.127,
+          "acknowledged": true,
+          "valid_evidence": true,
+          "error": null
+        },
+        {
+          "sequence": 6,
+          "action": "DUNE_VISUAL_AUDIT_READY before teardown -[ActivityExerciseRegressionTests testNotificationMissingWorkoutRouteShowsFallback] [DUNEUITests/UITestBaseCase.swift:120] DEADLINE=1793622391.340092",
+          "elapsed_seconds": 2.093,
+          "acknowledged": true,
+          "valid_evidence": true,
+          "error": null
+        }
+      ],
+      "proof_directory": "assets/proofs/duo-closed-normal-3fac"
+    },
+    "phone-max-approved-extra-failed": {
+      "source_directory": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t14/evidence/phone-max-approved-extra-failed-3fac15d4",
+      "result": {
+        "schema_version": 1,
+        "status": "failed",
+        "target": "DUNEUITests",
+        "run_exit_status": 65,
+        "requested_selectors": [
+          "DUNEUITests/ActivityExerciseRegressionTests/testNotificationMissingWorkoutRouteDarkMaximumAccessibilitySize"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 0,
+          "skipped": 0,
+          "failed": 1
+        },
+        "passed_cases": 0,
+        "failures": [
+          "682: /Users/shanks/.codex/worktrees/detail-redesign-validation/Health/DUNEUITests/Full/ActivityExerciseRegressionTests.swift:2681: error: -[DUNEUITests.ActivityExerciseRegressionTests testNotificationMissingWorkoutRouteDarkMaximumAccessibilitySize] : XCTAssertGreaterThanOrEqual failed: (\"0.0\") is less th…",
+          "693: Test Case '-[DUNEUITests.ActivityExerciseRegressionTests testNotificationMissingWorkoutRouteDarkMaximumAccessibilitySize]' failed (87.557 seconds).",
+          "694: Test Suite 'ActivityExerciseRegressionTests' failed at 2026-11-02 21:09:15.163.",
+          "696: Test Suite 'DUNEUITests.xctest' failed at 2026-11-02 21:09:15.164.",
+          "698: Test Suite 'Selected tests' failed at 2026-11-02 21:09:15.164.",
+          "710: ** TEST FAILED **",
+          "xcodebuild exited 65",
+          "UI test log has no positive passed-test count",
+          "UI test log has no identifiable passed UI test cases",
+          "requested UI test selector has no execution evidence"
+        ],
+        "required_selectors_missing": [
+          "DUNEUITests/ActivityExerciseRegressionTests/testNotificationMissingWorkoutRouteDarkMaximumAccessibilitySize"
+        ],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/t14-phone-max-approved-extra-3fac15d4.log"
+      },
+      "provenance": {
+        "revision": "3fac15d4",
+        "source_worktree_dirty": false,
+        "original_xcresult": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.11.02_21-07-06-+0900.xcresult",
+        "xcode": "Xcode 27.2\nBuild version 27B52",
+        "test_plan": "DUNEUITests-DesignCapture"
+      },
+      "proof_directory": "assets/proofs/phone-max-approved-extra-failed"
+    },
+    "duo-open-normal-3fac": {
+      "source_directory": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t14/evidence/duo-open-normal-3fac15d4",
+      "result": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/ActivityExerciseRegressionTests/testNotificationMissingWorkoutRouteShowsFallback"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/t14-duo-open-3fac15d4.log"
+      },
+      "provenance": {
+        "revision": "3fac15d4",
+        "source_worktree_dirty": false,
+        "original_xcresult": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.11.02_21-27-14-+0900.xcresult",
+        "xcode": "Xcode 27.2\nBuild version 27B52",
+        "test_plan": "DUNEUITests-DuoAudit",
+        "device": "E282B799-FA8E-4689-9F56-02BCF6D1F25D",
+        "pose": "open",
+        "poseProof": "paired-host/pose-proof.json"
+      },
+      "pose": {
+        "revision": "3fac15d4",
+        "target": 180.0,
+        "angle_before": 180.0,
+        "angle_after": 180.0,
+        "active_display": "LCD-1",
+        "script_sha256": "0e178ea0645a579cc83ace50631edf0bfef6846830abf478a3a9863d3144b559",
+        "captured_at": 1793622501.9427872,
+        "native_visual_review": "pending-parent"
+      },
+      "strict_checkpoints": [
+        {
+          "sequence": 1,
+          "action": "DUNE_VISUAL_AUDIT_READY root after setup -[ActivityExerciseRegressionTests testNotificationMissingWorkoutRouteShowsFallback] [DUNEUITests/UITestBaseCase.swift:145] DEADLINE=1793622483.130275",
+          "elapsed_seconds": 2.67,
+          "acknowledged": true,
+          "valid_evidence": true,
+          "error": null
+        },
+        {
+          "sequence": 2,
+          "action": "DUNE_VISUAL_AUDIT_READY tap tab-today [DUNEUITests/UITestHelpers.swift:699] DEADLINE=1793622502.732726",
+          "elapsed_seconds": 3.313,
+          "acknowledged": true,
+          "valid_evidence": true,
+          "error": null
+        },
+        {
+          "sequence": 3,
+          "action": "DUNE_VISUAL_AUDIT_READY tap dashboard-toolbar-notifications [DUNEUITests/ActivityExerciseRegressionTests.swift:3069] DEADLINE=1793622510.565662",
+          "elapsed_seconds": 2.259,
+          "acknowledged": true,
+          "valid_evidence": true,
+          "error": null
+        },
+        {
+          "sequence": 4,
+          "action": "DUNE_VISUAL_AUDIT_READY tap notification-row-workout-ui-test-activity-workout-missing [DUNEUITests/ActivityExerciseRegressionTests.swift:2540] DEADLINE=1793622517.501409",
+          "elapsed_seconds": 2.182,
+          "acknowledged": true,
+          "valid_evidence": true,
+          "error": null
+        },
+        {
+          "sequence": 5,
+          "action": "DUNE_VISUAL_AUDIT_READY T14 missing workout target before Back [DUNEUITests/ActivityExerciseRegressionTests.swift:2553] DEADLINE=1793622522.128049",
+          "elapsed_seconds": 2.193,
+          "acknowledged": true,
+          "valid_evidence": true,
+          "error": null
+        },
+        {
+          "sequence": 6,
+          "action": "DUNE_VISUAL_AUDIT_READY before teardown -[ActivityExerciseRegressionTests testNotificationMissingWorkoutRouteShowsFallback] [DUNEUITests/UITestBaseCase.swift:120] DEADLINE=1793622525.3785481",
+          "elapsed_seconds": 2.3,
+          "acknowledged": true,
+          "valid_evidence": true,
+          "error": null
+        }
+      ],
+      "proof_directory": "assets/proofs/duo-open-normal-3fac"
+    }
+  },
+  "t14_original_failure_history": {
+    "id": "t14-ui-missing-workout",
+    "record": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/pipeline/check-b4830a6483d594d8a900cdf2.json",
+    "sha256": "baebf39fc14aacfa3655c9712a1e124fbd1861c71c891b71ea9c5f90ea49fad4",
+    "failedAttempts": 2,
+    "selector": "DUNEUITests/ActivityExerciseRegressionTests/testNotificationMissingWorkoutRouteDarkMaximumAccessibilitySize",
+    "originalSource": "d3109533",
+    "fixedSource": "8e6f251c",
+    "currentAppFileSha256": "5d0f1d08ad14bfc5572b16ce210e2f784cb93802ec3487aa2d50041ad99a6439",
+    "appEqualsD310And8e6AndValidation": true,
+    "ledgerAuthority": "L03user-approval-ledger T14approved1consumed0; olderpendingtexts historical, notcurrentbudget"
+  },
+  "approval_snapshot": {
+    "approved_extra": 1,
+    "consumed": 1,
+    "remaining": 0,
+    "result": "Passed",
+    "approval_group": "2026-11-03-T14-stable-Back-one-further",
+    "old_failures_preserved": true
+  },
+  "source_closure": {
+    "executed_public": "90709df25c00be28574ffe39f49f845298502c87",
+    "fallback_leaf_sha256": "5d0f1d08ad14bfc5572b16ce210e2f784cb93802ec3487aa2d50041ad99a6439",
+    "normal_product": "historical normal fallback leaf visual/copy evidence only; no Back assertion",
+    "route_consumption": "new Activity per-event consumption; exact source in closure",
+    "MAX_delta": "actual 90709 stable Back selector passed",
+    "whole_UI_file_equal": false,
+    "final_public_checkpoint_pending": false,
+    "final_public_revision": "1fb821b38435750b6fd380d72f960cd3f4702655",
+    "closure_proof": "assets/proofs/stable-back-source/final-closure-1fb821b3.json"
+  },
+  "original_ipad_baseline_scope": "FAILED6/5/1bedtime; exactT14normalnodePassed only; not redesignedafter",
+  "normal_coverage": "exact title/explanation/realworkoutID+capture only; no Backtap/return",
+  "MAX_gate": "90709 exact MAX 1/1 PASS; actual Back, fallback absence and front Activity stable for three seconds; native quality PASS WITH NOTES and 1fb scoped source closure confirmed",
+  "maintenance_disposition": {
+    "P1": 0,
+    "P2": 0,
+    "P3": 1,
+    "P3_status": "maintenance-deferred; shared viewport helper duplication, no current behavior defect"
+  },
+  "limits": [
+    "Installed four T14 rows; final CI remains separate.",
+    "Historical normal cases cover fallback content/rendering only, not Back; exact corrected Phone MAX 90709 passed Back, fallback disappearance and front Activity for three-second observation.",
+    "Historical failure groups, earlier failed one-shot and ID-geometry failed Back are retained; original cause remains unproven.",
+    "Prior normal-device captures do not establish new route-consumption Back behavior on iPad or Duo.",
+    "No whole regression, VoiceOver, all-device Back or CI claim."
+  ],
+  "proof_sha256": {
+    "assets/proofs/phone-max-approved-extra-failed/summary.json": "8d698b77817af5230bf5b145c963b4af5dadf2beabed2c28a956d221d83e9e45",
+    "assets/proofs/phone-max-approved-extra-failed/tests.json": "dd8cce69d844b4ce5d831f612779755d9ee721dae04b36f9f428f7ee7290df6a",
+    "assets/proofs/phone-max-approved-extra-failed/provenance.json": "7f37cf41ad074d971b782a3e24ceb7d45ef2bc6b04c27f4b2c7c34d923a778f3",
+    "assets/proofs/phone-max-approved-extra-failed/result.json": "59ea6bbf9bcf91658ac70c192fb807fa4c4c863c601339638bdbe9050d7fdd7d",
+    "assets/proofs/phone-max-approved-extra-failed/failed-ID-AX.txt": "08970d412e362fb307e48c052e51beb030cc99472253a5d9443fc844fd9d443b",
+    "assets/proofs/phone-max-approved-extra-failed/manifest.json": "bfcf5e2c5a5744daab7ad310204fc458f5967527a8473fb001207f8cb6cd8572",
+    "assets/proofs/phone-normal-historical-d310/summary.json": "166549b20b0407a850c27495cf3154dd74fec56bcc12e03abc9ae39c9ff6aa26",
+    "assets/proofs/phone-normal-historical-d310/tests.json": "f114fc3c47058e621cdb80303684f961af2d95cc28c9f4d2448d9078d3b9077c",
+    "assets/proofs/phone-normal-historical-d310/provenance.json": "0c5ba17052a6bd7c7ce1050dbcecbf7259cff67f08c5e070b0f56e3ec1d3b99e",
+    "assets/proofs/phone-normal-historical-d310/result.json": "a853a9f2d0dc618b7e22fb979f1f2e7be67226948f5171034c44e494fd312d0f",
+    "assets/proofs/phone-normal-historical-d310/manifest.json": "ff390747bdf2b336177a0df902872e0e07160305a62a1ecc5da5a5282ca1f30f",
+    "assets/proofs/duo-open-normal-3fac/displays-before.json": "c89e11c73e87ee6a6a74f5da43f9e07b8a7d74f10337567cf15d050c749406fe",
+    "assets/proofs/duo-open-normal-3fac/runner-result.json": "873a98ea32a753861f09460809a892f8964b6a3ce09ee7d2aabbe22451ead8fb",
+    "assets/proofs/duo-open-normal-3fac/summary.json": "c5b2af0de2c340360bca4c3e436586625a0f4258e40b15b221e00ba12a6478b0",
+    "assets/proofs/duo-open-normal-3fac/tests.json": "ffa877e3263257b6d0341fda84d2256787e8104bbcaf73a059220c0942bf1579",
+    "assets/proofs/duo-open-normal-3fac/005-hierarchy.txt": "7b833d9f0a52fb46867ff569312e2e49ffd2c79eb46686aafd84934cd93b5c39",
+    "assets/proofs/duo-open-normal-3fac/provenance.json": "fcd2dc8fb13bdaf64f5c2d1969733534e3e5d837e69f1e15ae594af4f6513ae4",
+    "assets/proofs/duo-open-normal-3fac/result.json": "747be9e03d2955180755ab6d6fd4a6407da807f18d8cce9ddded6fb41134a36e",
+    "assets/proofs/duo-open-normal-3fac/angle-before.txt": "1e8ac0d84b7644b31324a78dee04aa7600daefcab3d96a422731f5b29245878e",
+    "assets/proofs/duo-open-normal-3fac/captures.tsv": "f0971f7f9bd5382b142f39314721ef164886b63d96796ba7e6e6ddf4560ad4c8",
+    "assets/proofs/duo-open-normal-3fac/angle-after.txt": "1e8ac0d84b7644b31324a78dee04aa7600daefcab3d96a422731f5b29245878e",
+    "assets/proofs/duo-open-normal-3fac/displays-after.json": "c89e11c73e87ee6a6a74f5da43f9e07b8a7d74f10337567cf15d050c749406fe",
+    "assets/proofs/duo-open-normal-3fac/checkpoints.jsonl": "0ba07545a2aeeb3faa8e82f4633da17083878e81676bb585032954271484a625",
+    "assets/proofs/duo-open-normal-3fac/parent-observation.json": "7bb2e345aad55e71aeb07466cb4354186ac08e88f37dc3b6bc3b9526e7cf9281",
+    "assets/proofs/duo-open-normal-3fac/pose-proof.json": "2d748aafa67e673d704f0008a853cae170399f42db88e01080b65994f284a663",
+    "assets/proofs/original-failure-history/recovered-original-max-history.json": "95a03aad9934005ac4346e7d2bd3efb8d64699e482211e7d38d4ff1ada6858b3",
+    "assets/proofs/original-failure-history/t14-ui-missing-workout.json": "baebf39fc14aacfa3655c9712a1e124fbd1861c71c891b71ea9c5f90ea49fad4",
+    "assets/proofs/duo-closed-normal-3fac/displays-before.json": "fa3ca4b2592010f865924bcd150b1c4502f6a529f3fc5eb5509bba4db204d8f0",
+    "assets/proofs/duo-closed-normal-3fac/runner-result.json": "4ac0a036473d19ec05042ed0e80066203cd6c3217464104ea4ffdb724a887941",
+    "assets/proofs/duo-closed-normal-3fac/summary.json": "b932e92d09ae2a3531d48f213ac3fd5119746c71f80e71ec4b6031bfb147586b",
+    "assets/proofs/duo-closed-normal-3fac/tests.json": "e89bfa7a2b29224a3cd79f897bf0185a54aec22571839766c45eeb572dda7e51",
+    "assets/proofs/duo-closed-normal-3fac/005-hierarchy.txt": "dc849baa15672c07bb937f466667dbcb2ce4877fa6a981442a137e24b8da9ed5",
+    "assets/proofs/duo-closed-normal-3fac/provenance.json": "69eaf0619244e2cbe09d38070b61db31dfc5af9d3b0a07a13f08899d0623c46b",
+    "assets/proofs/duo-closed-normal-3fac/result.json": "4a933c0a5fefc7a6b5b393cd52da5ebca8f1e1e9ec8d6039139e2bccbfbadfe5",
+    "assets/proofs/duo-closed-normal-3fac/angle-before.txt": "51ff0d2f0d3a5d61edec31785532ea0d570f8c348d58b15b94ff9c2ca6e926a4",
+    "assets/proofs/duo-closed-normal-3fac/captures.tsv": "825494073ce5e516df87f39f425d7d632865c3543ce8bf2e895911206b9a610f",
+    "assets/proofs/duo-closed-normal-3fac/angle-after.txt": "51ff0d2f0d3a5d61edec31785532ea0d570f8c348d58b15b94ff9c2ca6e926a4",
+    "assets/proofs/duo-closed-normal-3fac/displays-after.json": "fa3ca4b2592010f865924bcd150b1c4502f6a529f3fc5eb5509bba4db204d8f0",
+    "assets/proofs/duo-closed-normal-3fac/checkpoints.jsonl": "ef83b122b9ce81f58d5e97d58a80c6e1a76f3a4fcde7fe14d90194868d1b80ca",
+    "assets/proofs/duo-closed-normal-3fac/manifest.json": "656358afe5d55d381e9cb335bc12c4a2902ce6cb953d780be305dc4eec6031ab",
+    "assets/proofs/duo-closed-normal-3fac/parent-observation.json": "f72ab6a25d8fb57a9355d5f1c88e1cda55420c124c364e53f5ea01ff912d97d9",
+    "assets/proofs/duo-closed-normal-3fac/pose-proof.json": "7eee381e22c17e764ea4dc8560a40fec6d7c3ec61fccc1ea5dcc5f7fcf58b868",
+    "assets/proofs/original-ipad-baseline/summary.json": "f6f34bd0ea754822ea866f579b4969c059b0bbaa989e1c2aad77948d22f0057b",
+    "assets/proofs/original-ipad-baseline/tests.json": "d704fe0981a0fddf87a6349f3e25b4bb8a7810cdb45faf50174a9669e64dce02",
+    "assets/proofs/original-ipad-baseline/provenance.json": "6a88aa864f1f5ede273381a4d0a598a1b413366ca7db0249ba5422c8e08f5e8e",
+    "assets/proofs/original-ipad-baseline/result.json": "2be515f1d8b657ef1c622d56b37183d28667bb736629b0e71216e95c1cf942b4",
+    "assets/proofs/original-ipad-baseline/manifest.json": "a1224d0367a2afe9e85912f42817dec92e747288ba449f53d906d39e029a5cc4",
+    "assets/proofs/ipad-normal-3fac/summary.json": "e11d3a585444ef841e4419ab9a7a3e601ff42044dc745cffbe336cff4b8aee39",
+    "assets/proofs/ipad-normal-3fac/tests.json": "0743e4885301f5d81fcd0303b17b09e5fa6ef53fec40963d7d44422a684f2766",
+    "assets/proofs/ipad-normal-3fac/provenance.json": "8e31220d0656d8ab3f4680af5bb8ee2751a00b8fe0421a1ac12e1d0a14a319b0",
+    "assets/proofs/ipad-normal-3fac/result.json": "89ee5e198332edbab979d7fcdb28a6093a88062cd68514548a3b4fb19b17ded8",
+    "assets/proofs/ipad-normal-3fac/manifest.json": "01125f979cb5916c471eb0686ffd5ea42b8711d87982fc022a5bccf78dd8f90a",
+    "assets/proofs/reviews/pr886-id-geometry-fix-review.md": "efe0b3dafbd82c45983bc2156a3bc415de6fbff6e880cad4642153294846ad6e",
+    "assets/proofs/reviews/pr886-native-quality-review.md": "f05111e3975bd061d6d8a7386cd0f0509f97eade3bcb7f41c73b2ac341b078b9",
+    "assets/proofs/reviews/pr886-review-simplicity.md": "d1e879affa0b2ce4c4d24f4e77d227305696e99414ac14afddf3587719d4e641",
+    "assets/proofs/phone-max-stable-back-90709/result.json": "9022124d055d9ac46e1d9c3a6dd2b577c8033f289863bb64983e1764dc0f69a3",
+    "assets/proofs/phone-max-stable-back-90709/summary.json": "548a7aadc0917598e091475abce3f0c28c343647a5c38499279c91ccdcaef3f5",
+    "assets/proofs/phone-max-stable-back-90709/tests.json": "5345d771dfdd536dd9d47b257c10287fc7522544089ba2cc83b6c652cd246c97",
+    "assets/proofs/phone-max-stable-back-90709/provenance.json": "cfe71db58c3ee92e50ba9ed51a31260cb97e033e3b0cee808b080b89d17d37d3",
+    "assets/proofs/phone-max-stable-back-90709/approved-extra-consumed-once.json": "0eb7b9deada0c48aed158ac9d75aba42d96992cc81a7115641bb1dd4fece59c7",
+    "assets/proofs/phone-max-stable-back-90709/run.log.gz": "90ee663b20bfb7e2c97ccd3d3df911a9161401f1d8186cb01d34f1b4bb429f35",
+    "assets/proofs/phone-max-stable-back-90709/attachments/06F7CC5E-C1B7-4256-9282-26A7658A2C7E.txt": "54d41d5a5837b45cd98e4f14d316cd1ac4f804b2455a8a709f0a13657b6e611b",
+    "assets/proofs/phone-max-stable-back-90709/attachments/0B9A3176-2668-4A0F-86AA-865EF56D6037.png": "33ecc5c5a4562976cbc26c5116c4bfcbddb61de122e5014034458cd8a9cb4eb9",
+    "assets/proofs/phone-max-stable-back-90709/attachments/0DA71F1E-A313-4082-AEE6-4CD996525C94.txt": "bb74a7564d9a3cfc4b7f5e682c3cd790cc0955311d527544b251f6d02568fa88",
+    "assets/proofs/phone-max-stable-back-90709/attachments/0E714D40-B8EC-4586-A91E-1C3F500F826F.png": "b38df7698e2fe2816f8af19701262080597b843b7c9ec08da1a7fa1eca51c8c0",
+    "assets/proofs/phone-max-stable-back-90709/attachments/1C3413F3-3C67-4917-8EA1-7FDEDAC63D0F.png": "d427fedadefddac59edb340a42b7c3882d627165271634b28e68b659e3e4ef46",
+    "assets/proofs/phone-max-stable-back-90709/attachments/213268D1-5B26-47B6-AAEF-35EF029FD2E2.txt": "5ae22f1f46423074a1fa48e60dfe4c7eafa917fd1edffc0a3ec13c0255b8fff9",
+    "assets/proofs/phone-max-stable-back-90709/attachments/2B58E511-D817-4AE9-96D5-AC73A72F7E8C.png": "b305732494a7139b4778ea3e4f7d01f8091c20d45d823926241916f5e1dbcf99",
+    "assets/proofs/phone-max-stable-back-90709/attachments/3D486447-F6AA-454C-B5DC-CB773B25AFFB.png": "2e3e34e89c94e6d2ca9005e7e013f71a98d3b64a2525d226d8d5a19907f1790b",
+    "assets/proofs/phone-max-stable-back-90709/attachments/3E19703B-246B-476B-9975-DCC838102CDE.txt": "5b25801b778fb06c20de01d0d287bc2928f1b0bdbf63e7a68032916463705521",
+    "assets/proofs/phone-max-stable-back-90709/attachments/4CC13E84-C62A-4A56-AEDE-415D680DDE3A.png": "68e53ad686b2d5d2933f319b464e2ea881502ed73866d5343431a318616d2109",
+    "assets/proofs/phone-max-stable-back-90709/attachments/5A002B79-EA53-4150-8A6E-707C45C44072.txt": "b209f25f218011fff68fe33fee05486774004adc85cb1cd8704bfd757a4b03c9",
+    "assets/proofs/phone-max-stable-back-90709/attachments/5D4FEF3D-1E03-43FE-9AE3-9A585C9B92A0.png": "c87c8894a4c948ea12ec0f1f089eb741782cd8241580f0d9865e31639b9fca28",
+    "assets/proofs/phone-max-stable-back-90709/attachments/75A4E754-5AD4-4929-AF9D-09BD13B58CA7.png": "adcc7ebeb5f92b314b4864c1e45480b2b0cd8c3666cb6da21a0e5b5519c5aac6",
+    "assets/proofs/phone-max-stable-back-90709/attachments/7C1D009C-12E4-4613-B874-3057FCDFE5DF.txt": "2397bf8537fd710da5bd27e2036baeb61ccfa062e2ef49cc9b130ad2cd772cb6",
+    "assets/proofs/phone-max-stable-back-90709/attachments/7FA6C2AF-9CC4-4669-8D9F-BA737E3D1510.png": "a060a1943a837dd3e946ee4fa47440260f0612ee814e6632b6f42322c35d16c1",
+    "assets/proofs/phone-max-stable-back-90709/attachments/87B13B43-67FB-4FA9-B3A8-1AEA8AC91BB5.png": "b0923a550b0e1880b0506c3acc8854451bbae22e95f63f4752900feeb1068068",
+    "assets/proofs/phone-max-stable-back-90709/attachments/922E8164-DA44-4074-954E-B4348036FE7A.png": "c875fc19396616cdf9446ad96cbaf8c36b353fe866273c653ba35bd66f2c6dca",
+    "assets/proofs/phone-max-stable-back-90709/attachments/ACD0DBB8-B3EF-443F-B569-4EC7F3937235.txt": "e2693ee728f72da61bde6eade6d659fe58659d2c32351f7851be5d49eb0d19dd",
+    "assets/proofs/phone-max-stable-back-90709/attachments/DB2E8F28-0023-406F-91FE-A41C14E1C879.png": "8011917557aa974081cf6e9d298a1b7126a45ee2ca21c88be0f9e593cce7be02",
+    "assets/proofs/phone-max-stable-back-90709/attachments/F46AD00F-424D-410A-81BB-C75E93A9093A.txt": "e8e3c1fa2829f69476642e76127cb1f680aec8d4ee0a49c2f1ff4bb487532add",
+    "assets/proofs/phone-max-stable-back-90709/attachments/manifest.json": "8ca0114e3ce6e4c6d1e3f07fc844e09bd1c11959ab8c96e6578faf0f0c481e22",
+    "assets/proofs/reviews/pr886-route-consumption-data-review.md": "34b9afd0608b44baf748ab466213189d05953ac53b19c3f3bb537f644b8af563",
+    "assets/proofs/reviews/pr886-route-consumption-arch-perf-review.md": "d2e25065c459a2ccde73937b5d3c4177308304d6d7e0201a8de7e567927f2b0c",
+    "assets/proofs/reviews/pr886-route-consumption-astra-final-review.md": "0d82781590577956db4317b9818e75664d33833667df6ab8f2116531b61e131c",
+    "assets/proofs/stable-back-source/check-2cad8e6c2ca72cf890e50b07.json": "92b8856ea7f8c360902f0e8adafff6913bfb1d2c3f1bd8bb3ace245d9f5ad0f9",
+    "assets/proofs/stable-back-source/check-2cad8e6c2ca72cf890e50b07-8464afcbd6ae4b058e37aa7c9c6f9dae.log": "5cfcdfefae6afb95c5791b8daf7b9c1174b56f0efd676819117e83b483d457d7",
+    "assets/proofs/stable-back-source/stable-back-one-further-execution-proposal.md": "34a11cee9acd6208c3cdf2002a775662a9324544529f04387430eec7ab148447",
+    "assets/proofs/stable-back-history/check-b4830a6483d594d8a900cdf2.json": "baebf39fc14aacfa3655c9712a1e124fbd1861c71c891b71ea9c5f90ea49fad4",
+    "assets/proofs/stable-back-history/phone-max-approved-extra-3fac15d4-marker.json": "fbb92bbe219aa8421c550709f0d0a6f157f4ccbf9164600672d1bd89cb1943ea",
+    "assets/proofs/stable-back-history/check-46514019e9bb26a3ce132c37.json": "d0d16d9ecca5a25a692e6b5ca971ac7dbec0c1d31581beb1ed668e624af6a952",
+    "assets/proofs/stable-back-history/phone-max-id-geometry-approved-extra-6bfe7c85-marker.json": "7a71483e91f3279d2b5b96dee527f1f7334e0c716a7653b3107e13181922d058",
+    "assets/proofs/stable-back-history/check-4e514cba909012aa89fdee11.json": "08561aa33b54ac6a0d8e1b9b880f9660ac093b0cb3f98a53e6c2253c6b9c1d36",
+    "assets/proofs/stable-back-source/closure-90709.json": "40c4a6ff82ab0082aecaaa1cffbd78e5b4533bfac43bed5c79be7073f9149f9f",
+    "assets/proofs/stable-back-source/final-closure-1fb821b3.json": "a74f5e926245e66bb91289ec45a55efd5e3ea531a2407f00d6a1929532896673",
+    "assets/proofs/reviews/pr886-native-quality-final-stable-back.md": "df7434943b3dd925f674dddae1d7aa7eac7f48caba38fd85d317a2dd6ac70cf1",
+    "assets/proofs/stable-back-source/grant-snapshot.json": "19ed09e3307331cc1c38849560af20f81a174642306eef3a558d1e1a25b4a6e2"
+  },
+  "post_collection_reviewer_observation": {
+    "perspectives": [
+      "SwiftUI",
+      "Apple UX",
+      "UI-test evidence"
+    ],
+    "current_revision": "90709df25c00be28574ffe39f49f845298502c87",
+    "overallReady": true,
+    "MAX_actual": "1/1 PASS; actual native Back, fallback disappearance, front Activity and three-second sampled stability",
+    "normal_back_exercised": false,
+    "new_product_findings": {
+      "P1": 0,
+      "P2": 0,
+      "P3": 0
+    },
+    "quality_report": "assets/proofs/reviews/pr886-native-quality-final-stable-back.md",
+    "quality_verdict": "PASS WITH NOTES",
+    "final_source_revision": "1fb821b38435750b6fd380d72f960cd3f4702655",
+    "prior_failure_cause": "unproven",
+    "maintenanceP3": "1 deferred"
+  },
+  "phone_max_approved_extra": {
+    "source_directory": "/Users/shanks/.codex/worktrees/detail-redesign-t14/Health/.codex-checks/t14/evidence/phone-max-stable-back-90709df2",
+    "result": {
+      "schema_version": 1,
+      "status": "passed",
+      "target": "DUNEUITests",
+      "run_exit_status": 0,
+      "requested_selectors": [
+        "DUNEUITests/ActivityExerciseRegressionTests/testNotificationMissingWorkoutRouteDarkMaximumAccessibilitySize"
+      ],
+      "skipped_selectors": [],
+      "evidence_scope": {
+        "kind": "selector_execution",
+        "complete_test_inventory": false
+      },
+      "counts": {
+        "executed": 1,
+        "passed": 1,
+        "skipped": 0,
+        "failed": 0
+      },
+      "passed_cases": 1,
+      "failures": [],
+      "required_selectors_missing": [],
+      "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-t14/Health/.xcodebuild/t14-stable-back-one-further-90709.log"
+    },
+    "revision": "90709df25c00be28574ffe39f49f845298502c87",
+    "marker": "/Users/shanks/.codex/worktrees/detail-redesign-t14/Health/.codex-checks/t14/evidence/phone-max-stable-back-90709df2/approved-extra-consumed-once.json",
+    "source_closure": "assets/proofs/stable-back-source/closure-90709.json",
+    "visual_review_complete": true,
+    "native_back_asserted": true,
+    "stable_window_seconds": 3,
+    "images": {
+      "title": "assets/proofs/phone-max-stable-back-90709/attachments/3D486447-F6AA-454C-B5DC-CB773B25AFFB.png",
+      "actual_id": "assets/proofs/phone-max-stable-back-90709/attachments/87B13B43-67FB-4FA9-B3A8-1AEA8AC91BB5.png",
+      "after_back_supplement": "assets/proofs/phone-max-stable-back-90709/attachments/2B58E511-D817-4AE9-96D5-AC73A72F7E8C.png"
+    },
+    "limits": "post-Back Activity attachment is supplementary, not fallback detail; no causality claim"
+  },
+  "native_quality": {
+    "overallReady": true,
+    "pending": [],
+    "report": "assets/proofs/reviews/pr886-native-quality-final-stable-back.md",
+    "verdict": "PASS WITH NOTES",
+    "deferred": "existing P3 viewport helper duplication"
+  },
+  "output_baseline_sha256": {
+    "docs/design/phone-design-map/actual/index.html": "8cb75f91a707537ea1133935763f10dd1c95f653515b109de78f8d9e4dfcf613",
+    "docs/design/phone-design-map/actual/compare.html": "257c80b9e47d33468ace93c423d7bf097b0d4b72e128ac53258f476530ff70df",
+    "docs/design/phone-design-map/README.md": "ab55cf42c8a8a9f6c7f3de0620ce4bcbf2555a1b83c93049ed84fd69c18229d7",
+    "docs/design/phone-design-map/actual/regular/capture-index.json": "1d3f5a4f07f008c0bb1784cc55862e67a4ccde3cdd58a23f016c5118d448ef20",
+    "docs/design/phone-design-map/actual/regular/index.html": "ce4d4749c14afbd7a3662619168644a57dbf26459252095b8f4d0a48a82de0dc",
+    "docs/design/phone-design-map/actual/regular/images/T14.png": "848f3776bff0b0ba679acaf477ab249ff3aa53541dfe3dafabf2f1b2b5c933ae",
+    "docs/design/phone-design-map/actual/regular/boards/01-시작.png": "3ddbff45167e86501ee680a226b88313e4a7a7e0b9bccceb1580a8eb317a5b25",
+    "docs/design/phone-design-map/actual/ipad/capture-index.json": "ecbe16870579bf02b8e2febce940ca8a2d19f1ec68afb25c5991ca506f2ec96a",
+    "docs/design/phone-design-map/actual/ipad/index.html": "3ca389489ce156273cf8d68027c3a168efd1afb2404ff38c2165b4e078297e41",
+    "docs/design/phone-design-map/actual/ipad/images/T14.png": "42386d976f4fbff9c76322016a77b36139b54aac222b7fe77bf3651106663e23",
+    "docs/design/phone-design-map/actual/ipad/boards/01-시작.png": "57abf2762a95f5d2916fea8a1c39297169611deacfcc65efefd90764165983a6",
+    "docs/design/phone-design-map/actual/duo/capture-index.json": "745518c74c5148cf7d3e8c761424a4d5d7c3c4426afdef558290b7cf5f612205",
+    "docs/design/phone-design-map/actual/duo/index.html": "4f130e32d0fffeba65e574a7e48885cded6411c5ff251e694e347f7a61ae5ba8",
+    "docs/design/phone-design-map/actual/duo/images/T14.png": "22838fddb61dc415e253df04d0a213e3da89ccdc01278dc4476c093a9c4475c9",
+    "docs/design/phone-design-map/actual/duo/boards/01-시작.png": "efb502462ac56f6088a17755ee51a4399bf3dcb62419c4c32176020b23ccbf07",
+    "docs/design/phone-design-map/actual/duo-open/capture-index.json": "c0c6d9373f04e2cef34c284cf6235a7111ab877e89b58b9a49e16f1299715b3c",
+    "docs/design/phone-design-map/actual/duo-open/index.html": "e34044d48df0eb6c66b69540b9515d88a8214683290d3ad612934aabb6f0269e",
+    "docs/design/phone-design-map/actual/duo-open/images/T14.png": "dd3823e83cc1fb65613034d70440041b3bd1990b04a6f8ec1c10c02835b91720",
+    "docs/design/phone-design-map/actual/duo-open/boards/01-시작.png": "9a7999dd635af43b98b92626964f761f41297ebc1b8204305e9992ad1c3b1c57"
+  },
+  "renderer_sha256": "6245de4341dd88fe15c12ffa0ca38a58ce8344f074efc1c2cfcfef2d8e79eff2",
+  "stage_files_sha256": {},
+  "historical_pre_90709_post_collection_reviewer_observation": {
+    "perspectives": [
+      "SwiftUI",
+      "Apple UX",
+      "UI-test evidence"
+    ],
+    "reviewers": 1,
+    "duo_viewed_originals": [
+      "closed005-1398x2034.png",
+      "open005-2007x2853.png"
+    ],
+    "new_product_findings": {
+      "P1": 0,
+      "P2": 0,
+      "P3": 0
+    },
+    "normal_back_exercised": false,
+    "overallReady": false,
+    "MAX_actual": "Failed1; correctedruntimeunverified; allowance0",
+    "maintenanceP3": "1deferred"
+  }
+}

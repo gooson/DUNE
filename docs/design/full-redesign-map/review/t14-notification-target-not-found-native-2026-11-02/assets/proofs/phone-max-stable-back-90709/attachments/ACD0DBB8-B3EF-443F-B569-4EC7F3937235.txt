@@ -1,0 +1,82 @@
+Attributes: Application, 0x108177c00, pid: 24043, label: 'DUNE'
+Element subtree:
+ →Application, 0x108177c00, pid: 24043, label: 'DUNE'
+    Window (Main), 0x108176e40, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x108176f80, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x108174640, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x108174780, {{0.0, 0.0}, {440.0, 956.0}}
+          Other, 0x1081748c0, {{0.0, 0.0}, {440.0, 956.0}}
+            Other, 0x1081743c0, {{0.0, 0.0}, {440.0, 956.0}}
+              Other, 0x108174500, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x108174280, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x108174a00, {{0.0, 0.0}, {440.0, 956.0}}
+                    Other, 0x108174b40, {{0.0, 0.0}, {440.0, 956.0}}
+                      Other, 0x108175400, {{0.0, 0.0}, {440.0, 956.0}}
+                        Other, 0x108175540, {{0.0, 0.0}, {440.0, 956.0}}
+                          Other, 0x1081770c0, {{0.0, 0.0}, {440.0, 956.0}}
+                            NavigationBar, 0x1081761c0, {{0.0, 62.0}, {440.0, 54.0}}, identifier: 'Notification'
+                              Button, 0x108174000, {{20.0, 62.0}, {44.0, 44.0}}, identifier: 'BackButton', label: 'Activity'
+                              StaticText, 0x108174140, {{164.0, 71.3}, {111.7, 25.3}}, label: 'Notification'
+                            Other, 0x104bc5040, {{0.0, 0.0}, {440.0, 956.0}}
+                              Other, 0x104bc6440, {{0.0, 0.0}, {440.0, 956.0}}
+                                Other, 0x104bc4dc0, {{0.0, 0.0}, {440.0, 956.0}}
+                                  Other, 0x104bc7d40, {{0.0, 0.0}, {440.0, 956.0}}
+                                    ScrollView, 0x104bc7340, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'notification-target-not-found-screen'
+                                      Other, 0x104bc7c00, {{0.0, 0.0}, {440.0, 956.0}}
+                                        Other, 0x104bc5680, {{0.0, 0.0}, {440.0, 156.0}}
+                                        Other, 0x104bc5900, {{0.0, 823.0}, {440.0, 133.0}}
+                                      Other, 0x104bc57c0, {{0.0, 0.0}, {440.0, 956.0}}
+                                      Other, 0x104bc4640, {{0.0, 116.0}, {440.0, 695.0}}
+                                        Other, 0x104bc6d00, {{16.0, 132.0}, {408.0, 536.7}}, identifier: 'notification-target-not-found-hero'
+                                          Image, 0x104bc7980, {{47.3, 161.7}, {62.0, 62.3}}, identifier: 'exclamationmark.magnifyingglass', label: 'Exclamation Mark In A Magnifying Glass'
+                                          StaticText, 0x104bc6940, {{40.0, 241.7}, {263.0, 141.7}}, identifier: 'notification-target-not-found-title', label: 'Exercise not found'
+                                          StaticText, 0x104bc6f80, {{40.0, 395.3}, {360.0, 249.3}}, identifier: 'notification-target-not-found-message', label: 'The notification target has been deleted or is not synced.'
+                                        StaticText, 0x104bc6800, {{0.0, 676.7}, {379.0, 134.3}}, identifier: 'notification-target-not-found-id', label: 'ID: ui-test-activity-workout-missing'
+                                      Other, 0x104bc66c0, {{407.0, 116.0}, {30.0, 757.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                                        Other, 0x104bc7ac0, {{434.0, 181.0}, {3.0, 689.0}}
+                                      Other, 0x104bc6bc0, {{407.0, 116.0}, {30.0, 757.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                                        Other, 0x104bc5b80, {{434.0, 181.0}, {3.0, 689.0}}
+                            Toolbar, 0x104bc4f00, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                              Other, 0x104bc7200, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x1122a8000, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x1122a8140, {{0.0, 873.0}, {440.0, 83.0}}
+                    Other, 0x1122a8280, {{0.0, 0.0}, {440.0, 956.0}}
+                      TabBar, 0x1122a83c0, {{0.0, 873.0}, {440.0, 83.0}}, label: 'Tab Bar'
+                        Other, 0x1122a8500, {{21.0, 873.0}, {398.0, 62.0}}
+                          Other, 0x1122a8640, {{21.0, 873.0}, {104.5, 54.0}}
+                          Other, 0x1122a8780, {{21.0, 873.0}, {398.0, 62.0}}
+                            Button, 0x1122a88c0, {{25.0, 877.0}, {104.5, 54.0}}, identifier: 'tab-today', label: 'Today'
+                              Image, 0x1122a8a00, {{64.7, 880.3}, {25.3, 31.7}}, identifier: 'heart.text.clipboard.fill', label: 'Heart on a text clipboard, filled'
+                            Button, 0x1122a8b40, {{120.2, 877.0}, {104.5, 54.0}}, identifier: 'tab-activity', label: 'Activity', Selected
+                              Image, 0x1122a8c80, {{160.8, 881.7}, {23.3, 28.7}}, identifier: 'flame.fill', label: 'Flame'
+                            Button, 0x1122a8dc0, {{215.3, 877.0}, {104.5, 54.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                              Image, 0x1122a8f00, {{253.3, 884.3}, {28.7, 25.3}}, identifier: 'leaf.fill', label: 'Leaf'
+                            Button, 0x1122a9040, {{310.5, 877.0}, {104.5, 54.0}}, identifier: 'tab-life', label: 'Life'
+                              Image, 0x1122a9180, {{346.8, 883.3}, {32.0, 27.3}}, identifier: 'checklist', label: 'Checklist with checkmarks'
+                          Other, 0x1122a92c0, {{21.0, 873.0}, {398.0, 62.0}}
+                          Other, 0x1122a9400, {{120.2, 877.0}, {104.5, 54.0}}
+                            Other, 0x1122a9540, {{120.2, 877.0}, {104.3, 54.0}}
+                              Other, 0x1122a9680, {{120.2, 877.0}, {104.3, 54.0}}
+                              Other, 0x1122a97c0, {{120.2, 877.0}, {104.3, 54.0}}
+                                Other, 0x1122a9900, {{120.2, 877.0}, {104.3, 54.0}}
+                                  Other, 0x1122a9a40, {{120.2, 877.0}, {104.3, 54.0}}
+                                    Other, 0x1122a9b80, {{120.2, 877.0}, {104.3, 54.0}}
+                                  Other, 0x1122a9cc0, {{120.2, 877.0}, {104.3, 54.0}}
+                                Other, 0x1122a9e00, {{120.2, 877.0}, {104.3, 54.0}}
+                    Other, 0x1122a9f40, {{0.0, 873.0}, {440.0, 83.0}}
+                      Other, 0x1122aa080, {{0.0, 873.0}, {440.0, 83.0}}
+                        Other, 0x1122aa1c0, {{0.0, 873.0}, {440.0, 83.0}}
+                          Other, 0x1122aa300, {{0.0, 873.0}, {440.0, 83.0}}
+                            Other, 0x1122aa440, {{0.0, 873.0}, {440.0, 83.0}}
+                              Other, 0x1122aa580, {{0.0, 873.0}, {440.0, 83.0}}
+                          Other, 0x1122aa6c0, {{0.0, 873.0}, {440.0, 83.0}}
+                            Other, 0x1122aa800, {{0.0, 873.0}, {440.0, 83.0}}
+              Other, 0x1122aa940, {{0.0, 62.0}, {440.0, 860.0}}
+              Other, 0x1122aaa80, {{220.0, 492.0}, {0.0, 0.0}}
+Path to element:
+ →Application, 0x108177c00, pid: 24043, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x1122aabc0, pid: 24043, label: 'DUNE'
+  }

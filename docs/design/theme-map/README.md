@@ -7,6 +7,8 @@ status: in-progress
 
 # DUNE 테마 맵
 
+T14 운동 기록 없음 화면은 [방향 시안](themes/dune-notification-target-not-found-t14.html)과 [배치 계약](../layout-map/notification-target-not-found-t14.html)을 따른다. 기존 DUNE 팔레트의 불투명 히어로와 원래 문구·아이콘·실제 ID를 보존한다. 이 브라우저 시안은 네이티브 캡처가 아니다.
+
 H03 오늘 밤 수면 예측 상세와 T15 로드 완료 소비자는 [수면 상세 방향 시안](themes/dune-sleep-prediction-detail-h03.html)과 [배치 계약](../layout-map/sleep-prediction-detail-h03.html)을 따른다. 기존 DUNE sleep 팔레트·공유 링·원래 요인/팁 아이콘을 유지한다. HTML은 실제 앱 캡처가 아니다.
 
 ## T12 알림 메시지 상세 · 2026-10-31
