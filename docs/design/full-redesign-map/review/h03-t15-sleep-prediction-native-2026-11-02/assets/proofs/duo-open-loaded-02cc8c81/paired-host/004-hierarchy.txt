@@ -1,0 +1,115 @@
+Attributes: Application, 0x111186580, pid: 64093, label: 'DUNE'
+Element subtree:
+ →Application, 0x111186580, pid: 64093, label: 'DUNE'
+    Window, 0x111186e40, {{0.0, -0.0}, {951.0, 669.0}}
+      Other, 0x111186f80, {{0.0, -0.0}, {951.0, 669.0}}
+      Other, 0x1111870c0, {{0.0, -0.0}, {951.0, 669.0}}
+        Other, 0x111187200, {{0.0, -0.0}, {951.0, 669.0}}
+          Other, 0x111187340, {{0.0, -0.0}, {951.0, 669.0}}
+            Other, 0x111187480, {{0.0, -0.0}, {951.0, 669.0}}
+              Other, 0x1111875c0, {{0.0, -0.0}, {867.0, 635.0}}
+              Other, 0x111186d00, {{0.0, -0.0}, {951.0, 669.0}}
+                Other, 0x111185540, {{0.0, -0.0}, {951.0, 669.0}}
+                  Other, 0x1111857c0, {{0.0, -0.0}, {951.0, 669.0}}
+                    Other, 0x111185900, {{0.0, -0.0}, {951.0, 669.0}}
+                      Other, 0x111185a40, {{0.0, -0.0}, {951.0, 669.0}}
+                        Other, 0x111185b80, {{0.0, -0.0}, {951.0, 669.0}}
+                          Other, 0x111185e00, {{0.0, -0.0}, {951.0, 669.0}}
+                            NavigationBar, 0x111185f40, {{0.0, 24.0}, {951.0, 58.0}}, identifier: 'Tonight's Sleep'
+                              StaticText, 0x111186080, {{20.0, 31.0}, {201.0, 34.0}}, label: 'Tonight's Sleep'
+                            Toolbar, 0x1111861c0, {{0.0, -0.0}, {951.0, 669.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                              Other, 0x111186300, {{0.0, -0.0}, {951.0, 669.0}}
+                            Other, 0x111186440, {{0.0, -0.0}, {951.0, 669.0}}
+                              Other, 0x111187e80, {{0.0, -0.0}, {951.0, 669.0}}
+                                Other, 0x111184140, {{0.0, -0.0}, {951.0, 669.0}}
+                                  Other, 0x1111843c0, {{0.0, -0.0}, {951.0, 669.0}}
+                                    ScrollView, 0x111184500, {{0.0, -0.0}, {951.0, 669.0}}, identifier: 'wellness-sleep-prediction-detail-screen'
+                                      Other, 0x111184640, {{0.0, -0.0}, {951.0, 669.0}}
+                                        Other, 0x111184780, {{0.0, -0.0}, {951.0, 122.0}}
+                                      Other, 0x111184a00, {{0.0, -0.0}, {951.0, 669.0}}
+                                      Other, 0x111184b40, {{0.0, 82.0}, {867.0, 681.0}}
+                                        Other, 0x111184c80, {{92.1, 98.0}, {683.1, 180.9}}, identifier: 'sleep-prediction-hero'
+                                          Other, 0x111184dc0, {{92.1, 98.0}, {683.1, 180.9}}
+                                          StaticText, 0x111184f00, {{115.7, 119.3}, {68.8, 18.0}}, label: 'SLEEP'
+                                          Image, 0x111185040, {{115.7, 119.3}, {15.3, 16.3}}, identifier: 'moon.stars.fill', label: 'Clear Night'
+                                          Other, 0x111185180, {{113.7, 153.3}, {104.0, 104.0}}, identifier: 'sleep-prediction-hero-score', label: 'Sleep score 78, Excellent'
+                                            StaticText, 0x111187ac0, {{142.3, 183.8}, {46.3, 43.0}}, label: '78'
+                                          StaticText, 0x111187c00, {{233.5, 180.3}, {83.3, 24.0}}, identifier: 'sleep-prediction-hero-status', label: 'Excellent'
+                                          StaticText, 0x111187d40, {{233.5, 212.3}, {224.3, 18.0}}, identifier: 'sleep-prediction-hero-guide', label: 'Great conditions for restful sleep'
+                                        Other, 0x111186940, {{93.7, 297.3}, {680.0, 66.7}}, identifier: 'sleep-prediction-confidence'
+                                          Image, 0x111186a80, {{115.7, 319.3}, {22.7, 22.7}}, identifier: 'gauge.with.dots.needle.33percent', label: 'Gauge With Dots And Needle At 33 Percent'
+                                          StaticText, 0x111185680, {{148.2, 318.6}, {184.3, 24.0}}, identifier: 'sleep-prediction-confidence-label', label: 'Medium Confidence'
+                                          Other, 0x111185cc0, {{661.7, 326.7}, {92.0, 8.0}}
+                                        Other, 0x1111866c0, {{93.7, 384.0}, {680.0, 216.7}}, identifier: 'sleep-prediction-factors'
+                                          StaticText, 0x111186800, {{113.5, 404.0}, {96.7, 24.0}}, identifier: 'sleep-prediction-factors-title', label: 'All Factors'
+                                          Other, 0x111187840, {{113.7, 440.0}, {640.0, 66.3}}, identifier: 'sleep-prediction-factor-recentSleepPattern'
+                                            Image, 0x111187980, {{127.0, 453.7}, {25.0, 16.7}}, identifier: 'bed.double', label: 'Bedtime'
+                                            StaticText, 0x111186bc0, {{161.5, 452.0}, {167.3, 20.3}}, identifier: 'sleep-prediction-factor-title-recentSleepPattern', label: 'Recent Sleep Pattern'
+                                            StaticText, 0x111187700, {{686.8, 466.0}, {46.7, 14.3}}, label: 'Positive'
+                                            StaticText, 0x1111848c0, {{161.5, 476.3}, {230.3, 18.0}}, identifier: 'sleep-prediction-factor-detail-recentSleepPattern', label: 'Recent sleep has been consistent'
+                                          Other, 0x111184280, {{113.7, 514.3}, {640.0, 66.3}}, identifier: 'sleep-prediction-factor-conditionLevel'
+                                            Image, 0x104a630c0, {{129.7, 528.0}, {20.0, 20.0}}, identifier: 'gauge.with.dots.needle.33percent', label: 'Gauge With Dots And Needle At 33 Percent'
+                                            StaticText, 0x104a63980, {{161.5, 526.3}, {122.3, 20.3}}, identifier: 'sleep-prediction-factor-title-conditionLevel', label: 'Condition Level'
+                                            StaticText, 0x111e77980, {{689.8, 540.3}, {43.7, 14.3}}, label: 'Neutral'
+                                            StaticText, 0x111e77700, {{161.5, 550.6}, {185.7, 18.0}}, identifier: 'sleep-prediction-factor-detail-conditionLevel', label: 'Today's condition is steady'
+                                        Other, 0x111e77840, {{93.7, 620.7}, {680.0, 126.3}}, identifier: 'sleep-prediction-tips'
+                                          StaticText, 0x111e77200, {{113.5, 640.6}, {95.3, 24.0}}, identifier: 'sleep-prediction-tips-title', label: 'Sleep Tips'
+                                          Image, 0x111e775c0, {{133.0, 690.3}, {13.3, 23.0}}, identifier: 'lightbulb.fill', label: 'Lightbulb'
+                                          StaticText, 0x111e77480, {{161.5, 688.6}, {211.3, 18.0}}, label: 'Keep a regular bedtime tonight'
+                                      Other, 0x111e77340, {{918.0, 82.0}, {30.0, 532.0}}, label: 'Vertical scroll bar, 2 pages', value: 0%
+                                        Other, 0x111e76d00, {{945.0, 85.0}, {3.0, 445.0}}
+                                      Other, 0x111e770c0, {{918.0, 82.0}, {30.0, 532.0}}, label: 'Vertical scroll bar, 2 pages', value: 0%
+                                        Other, 0x111e76f80, {{945.0, 85.0}, {3.0, 445.0}}
+                Other, 0x111e76e40, {{0.0, -0.0}, {951.0, 669.0}}
+                  Toolbar, 0x111e76800, {{0.0, -0.0}, {951.0, 669.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                    Other, 0x111e76bc0, {{0.0, -0.0}, {951.0, 669.0}}
+                      Other, 0x111e76a80, {{0.0, -0.0}, {951.0, 669.0}}
+                        Other, 0x111e76940, {{0.0, -0.0}, {951.0, 669.0}}
+                          Other, 0x111e766c0, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x111e76580, {{879.0, 124.0}, {48.0, 48.0}}
+                              Other, 0x111e77ac0, {{879.0, 124.0}, {48.0, 48.0}}
+                                Other, 0x111e76440, {{884.0, 129.0}, {38.0, 38.0}}
+                                  Other, 0x111e76300, {{884.0, 129.0}, {38.0, 38.0}}
+                                    Button, 0x111e761c0, {{884.0, 129.0}, {38.0, 38.0}}, identifier: 'BackButton'
+                        Other, 0x111e75f40, {{0.0, -0.0}, {951.0, 669.0}}
+                          Other, 0x111e76080, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x111e77d40, {{879.0, 433.0}, {48.0, 212.0}}
+                              Other, 0x111e77e80, {{879.0, 433.0}, {48.0, 212.0}}
+                                Other, 0x111e77c00, {{879.0, 433.0}, {48.0, 212.0}}
+                                  Other, 0x1122ec000, {{879.0, 433.0}, {48.0, 212.0}}
+                                    Other, 0x1122ec140, {{879.0, 433.0}, {48.0, 212.0}}
+                                      Other, 0x1122ec280, {{879.0, 433.0}, {48.0, 212.0}}
+                                        Other, 0x1122ec3c0, {{879.0, 433.0}, {44.0, 58.0}}
+                                        Other, 0x1122ec500, {{879.0, 433.0}, {48.0, 212.0}}
+                                          Button, 0x1122ec640, {{881.0, 435.0}, {44.0, 58.0}}, identifier: 'tab-today', label: 'Today'
+                                            Image, 0x1122ec780, {{890.3, 447.3}, {25.3, 31.7}}, identifier: 'heart.text.clipboard.fill', label: 'Heart on a text clipboard, filled'
+                                          Button, 0x1122ec8c0, {{881.0, 485.0}, {44.0, 58.0}}, identifier: 'tab-activity', label: 'Activity'
+                                            Image, 0x1122eca00, {{891.3, 498.7}, {23.3, 28.7}}, identifier: 'flame.fill', label: 'Flame'
+                                          Button, 0x1122ecb40, {{881.0, 535.0}, {44.0, 58.0}}, identifier: 'tab-wellness', label: 'Wellness', Selected
+                                            Image, 0x1122ecc80, {{888.7, 551.3}, {28.7, 25.3}}, identifier: 'leaf.fill', label: 'Leaf'
+                                          Button, 0x1122ecdc0, {{881.0, 585.0}, {44.0, 58.0}}, identifier: 'tab-life', label: 'Life'
+                                            Image, 0x1122ecf00, {{887.0, 600.3}, {32.0, 27.3}}, identifier: 'checklist', label: 'Checklist with checkmarks'
+                                        Other, 0x1122ed040, {{879.0, 433.0}, {48.0, 212.0}}
+                                        Other, 0x1122ed180, {{879.0, 433.0}, {48.0, 212.0}}
+                                          Other, 0x1122ed2c0, {{879.0, 433.0}, {48.0, 212.0}}
+                                            Other, 0x1122ed400, {{879.0, 433.0}, {48.0, 212.0}}
+                                              Other, 0x1122ed540, {{879.0, 433.0}, {48.0, 212.0}}
+                                                Other, 0x1122ed680, {{879.0, 433.0}, {48.0, 212.0}}
+                                              Other, 0x1122ed7c0, {{879.0, 433.0}, {48.0, 212.0}}
+                                        Other, 0x1122ed900, {{881.0, 535.0}, {44.0, 58.0}}
+                                          Other, 0x1122eda40, {{881.0, 535.0}, {44.0, 58.0}}
+                                            Other, 0x1122edb80, {{881.0, 535.0}, {44.0, 58.0}}
+                                            Other, 0x1122edcc0, {{881.0, 535.0}, {44.0, 58.0}}
+                                              Other, 0x1122ede00, {{881.0, 535.0}, {44.0, 58.0}}
+                                                Other, 0x1122edf40, {{881.0, 535.0}, {44.0, 58.0}}
+                                                  Other, 0x1122ee080, {{881.0, 535.0}, {44.0, 58.0}}
+                                                Other, 0x1122ee1c0, {{881.0, 535.0}, {44.0, 58.0}}
+                                              Other, 0x1122ee300, {{881.0, 535.0}, {44.0, 58.0}}
+              Other, 0x1122ee440, {{433.5, 317.5}, {0.0, 0.0}}
+Path to element:
+ →Application, 0x111186580, pid: 64093, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x1122ee580, pid: 64093, label: 'DUNE'
+  }
