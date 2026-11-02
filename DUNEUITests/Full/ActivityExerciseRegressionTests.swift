@@ -2249,7 +2249,9 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         addScreenshotAttachment(named: "T14 dark maximum text message start")
         t14RevealFallbackText(message, in: scroll, position: .end)
         addScreenshotAttachment(named: "T14 dark maximum text message end")
-        t14RevealFallbackText(identifier, in: scroll, position: .whole)
+        // Selectable Text reports its AX origin at the scroll edge despite inset glyphs.
+        // Keep the ID inside the actual clip bounds without a synthetic 4-point inset.
+        t14RevealFallbackText(identifier, in: scroll, position: .whole, horizontalInset: 0)
         addScreenshotAttachment(named: "T14 dark maximum text actual ID before Back")
         VisualAudit.capture("T14 dark maximum text actual ID before Back")
 
@@ -2291,9 +2293,9 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
 
     private enum T14FallbackTextPosition { case whole, start, end }
 
-    private func t14FallbackViewport(for scroll: XCUIElement) -> CGRect {
+    private func t14FallbackViewport(for scroll: XCUIElement, horizontalInset: CGFloat = 4) -> CGRect {
         let scrollFrame = scroll.frame
-        var viewport = scrollFrame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 0)
+        var viewport = scrollFrame.intersection(app.windows.firstMatch.frame).insetBy(dx: horizontalInset, dy: 0)
         let navigationBar = app.navigationBars["Notification"].firstMatch
         if navigationBar.exists && navigationBar.frame.maxY < scrollFrame.midY {
             let bottom = viewport.maxY
@@ -2308,10 +2310,10 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
     }
 
     private func t14RevealFallbackText(_ element: XCUIElement, in scroll: XCUIElement,
-                                       position: T14FallbackTextPosition) {
+                                       position: T14FallbackTextPosition, horizontalInset: CGFloat = 4) {
         XCTAssertTrue(element.waitForExistence(timeout: 5))
         for _ in 0..<12 {
-            let viewport = t14FallbackViewport(for: scroll)
+            let viewport = t14FallbackViewport(for: scroll, horizontalInset: horizontalInset)
             XCTAssertGreaterThan(viewport.height, 72, "The fallback should have a readable viewport")
             let frame = element.frame
             let horizontalFit = frame.minX >= viewport.minX && frame.maxX <= viewport.maxX
@@ -2341,7 +2343,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
                 CGVector(dx: 0.5, dy: (endY - scroll.frame.minY) / scroll.frame.height))
             start.press(forDuration: 0.05, thenDragTo: end)
         }
-        let viewport = t14FallbackViewport(for: scroll)
+        let viewport = t14FallbackViewport(for: scroll, horizontalInset: horizontalInset)
         let frame = element.frame
         XCTAssertGreaterThanOrEqual(frame.minX, viewport.minX, "Text should fit horizontally")
         XCTAssertLessThanOrEqual(frame.maxX, viewport.maxX, "Text should fit horizontally")
