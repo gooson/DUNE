@@ -1,0 +1,51 @@
+{
+  "authorization": "수정된 T14 검사 1회 추가 허용",
+  "approvalGroup": "2026-11-03-T14-stable-Back-one-further",
+  "originalPipelineID": "t14-ui-missing-workout",
+  "proxyRecordID": "pr886-phone-stable-back-one-further-90709",
+  "selector": "DUNEUITests/ActivityExerciseRegressionTests/testNotificationMissingWorkoutRouteDarkMaximumAccessibilitySize",
+  "revision": "90709df25c00be28574ffe39f49f845298502c87",
+  "device": "2A890E59-A90E-48DC-99B2-CB10AAEB6C38",
+  "approvedExtra": 1,
+  "consumed": 1,
+  "remaining": 0,
+  "status": "passed",
+  "started": 1793637220.505753,
+  "historyPins": {
+    "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/pipeline/check-b4830a6483d594d8a900cdf2.json": "baebf39fc14aacfa3655c9712a1e124fbd1861c71c891b71ea9c5f90ea49fad4",
+    "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t14/phone-max-approved-extra-3fac15d4/approved-extra-consumed-once.json": "fbb92bbe219aa8421c550709f0d0a6f157f4ccbf9164600672d1bd89cb1943ea",
+    "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/pipeline/check-46514019e9bb26a3ce132c37.json": "d0d16d9ecca5a25a692e6b5ca971ac7dbec0c1d31581beb1ed668e624af6a952",
+    "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t14/phone-max-id-geometry-approved-extra-6bfe7c85/approved-extra-consumed-once.json": "7a71483e91f3279d2b5b96dee527f1f7334e0c716a7653b3107e13181922d058",
+    "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/pipeline/check-4e514cba909012aa89fdee11.json": "08561aa33b54ac6a0d8e1b9b880f9660ac093b0cb3f98a53e6c2253c6b9c1d36"
+  },
+  "compileFullXcodebuildLog": "removed by standard commit cleanup; pipeline receipt and output preserved",
+  "infraProof": "/Users/shanks/.codex/worktrees/detail-redesign-t14/Health/.codex-checks/t14/phone-stable-back-infra-90709df2/proof.json",
+  "exitCode": 0,
+  "nativeResult": {
+    "schema_version": 1,
+    "status": "passed",
+    "target": "DUNEUITests",
+    "run_exit_status": 0,
+    "requested_selectors": [
+      "DUNEUITests/ActivityExerciseRegressionTests/testNotificationMissingWorkoutRouteDarkMaximumAccessibilitySize"
+    ],
+    "skipped_selectors": [],
+    "evidence_scope": {
+      "kind": "selector_execution",
+      "complete_test_inventory": false
+    },
+    "counts": {
+      "executed": 1,
+      "passed": 1,
+      "skipped": 0,
+      "failed": 0
+    },
+    "passed_cases": 1,
+    "failures": [],
+    "required_selectors_missing": [],
+    "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-t14/Health/.xcodebuild/t14-stable-back-one-further-90709.log"
+  },
+  "sourceUnchanged": true,
+  "originalHistoryUnchanged": true,
+  "completed": 1793637531.965711
+}

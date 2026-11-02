@@ -1,0 +1,16 @@
+{
+  "previous": "de559046c2ed5d6d6fb90da51663ce238d9b3dfc",
+  "change": "compact one ScrollView around same original map and summary; regular AdaptivePaneView/two ScrollViews unchanged",
+  "preserved_normalized_blocks": {
+    "mapContent": "f6d24b3a23075c2ad2e53e3aedb0a8bf66bded32c0ddb503d68e0f0d27341417",
+    "summaryContent": "3f5a6a2060d40aadd3bcd23a8cb0b132674f5b6b3a43df06aac5eaf6761e2e0c"
+  },
+  "scope": "No data/copy/3D/test/helper changes; old Phone1PASS now pre-fix evidence only, final compact Phone/Closed fresh required; iPad regular layout tree remains same and upcoming Open fresh validates regular branch",
+  "native_before_visual_issue": "Phone598970DE map viewport cropped at torso while separate lower Volume pane begins; scrollable but fragmented",
+  "bothContentBlocksLineTokensEqual": true,
+  "normalisedLineHashes": {
+    "map": "e56d58f6c15278fc6257ed2c4e000dfbe2b9bee6387c2da2ef65baa9c240d582",
+    "summary": "bdd8db92a6781d0f562a2217db0aaabf380052456ba924ded9ecb81dbfdf2668"
+  },
+  "subsequentModeStateDelta": "Following initial extraction proof, mapContent gained ONLY modeSelection:$mapMode argument; current full block hash differs by that line. Parent owns mode across compact/regular branch; all original health data and summary content unchanged."
+}

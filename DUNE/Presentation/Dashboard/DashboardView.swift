@@ -25,6 +25,7 @@ struct DashboardView: View {
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.appTheme) private var theme
     @Environment(\.openURL) private var openURL
+    @Environment(\.scenePhase) private var scenePhase
     private let library: ExerciseLibraryQuerying = ExerciseLibraryService.shared
     private let inboxManager = NotificationInboxManager.shared
     private let scrollToTopSignal: Int
@@ -180,6 +181,16 @@ struct DashboardView: View {
         }
         .task {
             reloadUnreadCount()
+        }
+        .onReceive(Timer.publish(every: 60, on: .main, in: .common).autoconnect()) { _ in
+            guard scenePhase == .active else { return }
+            viewModel.refreshTimeContext()
+        }
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active { viewModel.refreshTimeContext() }
+        }
+        .onReceive(NotificationCenter.default.mainThreadPublisher(for: .NSSystemTimeZoneDidChange)) { _ in
+            viewModel.refreshTimeContext()
         }
         .onAppear {
             reloadUnreadCount()

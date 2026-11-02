@@ -107,30 +107,120 @@ final class DashboardSmokeTests: UITestBaseCase {
         configuration.shouldSeedMockData = true
         configuration.scenario = .defaultSeeded
         configuration.additionalArguments += [
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+            "--ui-test-style", "dark",
             "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
         ]
         launchApp(with: configuration)
         navigateToDashboard()
         XCTAssertTrue(app.waitAndTap(AXID.dashboardToolbarNotifications))
 
+        let list = app.descendants(matching: .any)[AXID.notificationHubScreen].firstMatch
+        XCTAssertTrue(list.waitForExistence(timeout: 5), "The front notification list must exist")
         let settings = app.buttons[AXID.notificationsOpenSettingsButton].firstMatch
         let readAll = app.buttons[AXID.notificationsReadAllButton].firstMatch
         let filter = app.segmentedControls[AXID.notificationsFilter].firstMatch
-        let window = app.windows.firstMatch.frame
-        for identifier in [AXID.notificationsOpenSettingsButton, AXID.notificationsReadAllButton, AXID.notificationsFilter] {
-            XCTAssertTrue(app.scrollToHittableElementIfNeeded(identifier, maxSwipes: 8),
-                          "\(identifier) should be reachable at maximum accessibility size")
+        for identifier in [AXID.notificationsOpenSettingsButton, AXID.notificationsReadAllButton] {
             let element = app.descendants(matching: .any)[identifier].firstMatch
-            XCTAssertTrue(window.contains(element.frame), "\(identifier) should fit inside the viewport")
+            XCTAssertTrue(element.waitForExistence(timeout: 5))
+            XCTAssertTrue(revealHubElement(element, in: list, whole: true, missingDirection: .towardTop),
+                          "\(identifier) should fit and be tappable in the front list")
+            XCTAssertGreaterThanOrEqual(element.frame.height, 44, "\(identifier) needs a 44-point hit target")
         }
         XCTAssertTrue(settings.exists && readAll.exists && filter.exists)
         XCTAssertFalse(settings.frame.intersects(readAll.frame), "Settings and Read All must not overlap")
+        XCTAssertTrue(revealHubElement(filter, in: list, whole: true, missingDirection: .towardTop),
+                      "The native filter should fit and be tappable in the front list")
+        XCTAssertEqual(filter.buttons.count, 3, "All, Health, and News should remain available")
+        for index in 0..<3 {
+            let segment = filter.buttons.element(boundBy: index)
+            XCTAssertTrue(segment.waitForExistence(timeout: 5))
+            XCTAssertTrue(revealHubElement(segment, in: list, whole: true, missingDirection: .towardTop),
+                          "Native filter segment \(index) should fit, be horizontally visible, and be tappable")
+        }
         addScreenshotAttachment(named: "Notifications summary and filters maximum accessibility")
 
+        let health = filter.buttons.element(boundBy: 1)
+        health.tap()
+        XCTAssertTrue(health.isSelected, "Health should become the selected filter")
+        let healthTitle = app.staticTexts["Sleep Debt Alert"].firstMatch
+        let healthBody = app.staticTexts["You slept 6 h 20 m last night. Prioritize recovery today."].firstMatch
+        XCTAssertTrue(healthTitle.waitForExistence(timeout: 5) && healthBody.waitForExistence(timeout: 5))
+        XCTAssertTrue(revealHubElement(healthTitle, in: list, whole: true, missingDirection: .towardBottom),
+                      "The full health title should be readable")
+        addScreenshotAttachment(named: "Notifications health title maximum accessibility dark")
+        XCTAssertTrue(revealHubElement(healthBody, in: list, whole: false, missingDirection: .towardBottom),
+                      "The health body should have an unobscured readable portion")
+        XCTAssertLessThan(healthBody.frame.minX, healthTitle.frame.minX,
+                          "The health body should use the full card width below its icon-leading header")
+        XCTAssertGreaterThan(healthBody.frame.height, 0, "The health body should render its full text")
+        addScreenshotAttachment(named: "Notifications health row maximum accessibility dark")
+
+        XCTAssertTrue(revealHubElement(filter, in: list, whole: true, missingDirection: .towardTop),
+                      "News filter should fit before selection")
         let news = filter.buttons.element(boundBy: 2)
         XCTAssertTrue(news.waitForExistence(timeout: 5), "News is the third filter segment")
+        XCTAssertTrue(revealHubElement(news, in: list, whole: true, missingDirection: .towardTop))
         news.tap()
-        XCTAssertTrue(app.buttons[AXID.notificationsNewsRelease].firstMatch.waitForExistence(timeout: 5))
+        XCTAssertTrue(news.isSelected, "News should become the selected filter")
+        let release = app.buttons[AXID.notificationsNewsRelease].firstMatch
+        let releaseTitle = app.staticTexts["What's New"].firstMatch
+        let releaseIntro = app.staticTexts["notifications-news-intro"].firstMatch
+        XCTAssertTrue(release.waitForExistence(timeout: 5))
+        XCTAssertTrue(releaseTitle.waitForExistence(timeout: 5) && releaseIntro.waitForExistence(timeout: 5))
+        XCTAssertTrue(revealHubElement(releaseTitle, in: list, whole: true, missingDirection: .towardBottom),
+                      "The full release title should be readable")
+        addScreenshotAttachment(named: "Notifications release title maximum accessibility dark")
+        XCTAssertTrue(revealHubElement(releaseIntro, in: list, whole: false, missingDirection: .towardBottom),
+                      "The release intro should have an unobscured readable portion")
+        XCTAssertLessThan(releaseIntro.frame.minX, releaseTitle.frame.minX,
+                          "The release intro should use the full card width below its icon-leading header")
+        XCTAssertFalse(releaseIntro.label.isEmpty, "The release intro should retain catalog content")
+        XCTAssertGreaterThan(releaseIntro.frame.height, 0)
+        addScreenshotAttachment(named: "Notifications release row maximum accessibility dark")
+    }
+
+    private func hubViewport(_ list: XCUIElement) -> CGRect {
+        let frame = list.frame.intersection(app.windows.firstMatch.frame)
+        let navigation = app.navigationBars.firstMatch
+        let top = max(frame.minY, navigation.exists ? navigation.frame.maxY + 8 : frame.minY)
+        let tabBar = app.tabBars.firstMatch
+        let bottom = tabBar.exists && tabBar.isHittable && tabBar.frame.minY > frame.midY
+            ? min(frame.maxY, tabBar.frame.minY - 8) : frame.maxY
+        return CGRect(x: frame.minX, y: top, width: frame.width, height: max(0, bottom - top))
+    }
+
+    private enum HubMissingDirection { case towardTop, towardBottom }
+
+    private func revealHubElement(_ element: XCUIElement, in list: XCUIElement, whole: Bool,
+                                  missingDirection: HubMissingDirection) -> Bool {
+        for _ in 0..<10 {
+            let viewport = hubViewport(list)
+            guard viewport.height > 100, list.frame.height > 0 else { return false }
+            let movingUp: Bool
+            if element.exists {
+                let frame = element.frame
+                let horizontalFit = frame.minX >= viewport.minX - 2 && frame.maxX <= viewport.maxX + 2
+                let verticalFit = whole ? viewport.contains(frame) : frame.intersection(viewport).height >= 24
+                if horizontalFit && verticalFit && (!whole || element.isHittable) { return true }
+                movingUp = frame.midY >= viewport.midY
+            } else {
+                switch missingDirection {
+                case .towardTop: movingUp = false
+                case .towardBottom: movingUp = true
+                }
+            }
+            let startY = movingUp ? viewport.maxY - 24 : viewport.minY + 24
+            let endY = movingUp ? viewport.minY + 24 : viewport.maxY - 24
+            let start = list.coordinate(withNormalizedOffset: CGVector(
+                dx: 0.5, dy: (startY - list.frame.minY) / list.frame.height
+            ))
+            let end = list.coordinate(withNormalizedOffset: CGVector(
+                dx: 0.5, dy: (endY - list.frame.minY) / list.frame.height
+            ))
+            start.press(forDuration: 0.05, thenDragTo: end)
+        }
+        return false
     }
 
     func testConditionTrendAndHeroDetailRoute() throws {

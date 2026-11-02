@@ -1,0 +1,12 @@
+{
+  "source": "3fac15d4",
+  "device": "E9E4F626-78B9-4DC2-B08C-DEBED235AD5D",
+  "pipelineID": "pr885-duo-closed-unavailable-detail",
+  "status": "FAILED PRETEST",
+  "executedTests": 0,
+  "xcresult": "none UI runner notstarted",
+  "evidence": "set.log simctl list devices --json timedout4s; bootstatusDataMigrationFailed preserved inpipelinelog",
+  "retry": "no retry executed yet; maximumone conditioned environment recovery only; same originalID retained",
+  "appChanged": false,
+  "runnerChanged": false
+}

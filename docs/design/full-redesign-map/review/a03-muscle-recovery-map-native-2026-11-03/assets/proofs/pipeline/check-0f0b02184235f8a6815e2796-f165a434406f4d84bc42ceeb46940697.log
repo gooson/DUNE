@@ -1,0 +1,14 @@
+Waiting for a03 Duo simulator [526C873B-9361-459E-86EF-8A986F409F88] to boot (timeout=120s, retries=1)...
+a03 Duo simulator already booted.
+Test Case '-[DUNEUITests.ActivityMuscleMapRegressionTests testMuscleMapDetailKeeps2DSelectionWith3DEntryDisabled]' started.
+capture 001: DUNE_VISUAL_AUDIT_READY root after setup -[ActivityMuscleMapRegressionTests testMuscleMapDetailKeeps2DSelectionWith3DEntryDisabled] [DUNEUITests/UITestBaseCase.swift:145] DEADLINE=1793642133.899451
+capture 002: DUNE_VISUAL_AUDIT_READY A03 default map with disabled 3D entry [DUNEUITests/ActivityMuscleMapRegressionTests.swift:67] DEADLINE=1793642146.9246821
+capture 003: DUNE_VISUAL_AUDIT_READY A03 2D muscle selection and disabled 3D entry [DUNEUITests/ActivityMuscleMapRegressionTests.swift:96] DEADLINE=1793642158.2283158
+capture 004: DUNE_VISUAL_AUDIT_READY A03 selected muscle detail before calculation [DUNEUITests/ActivityMuscleMapRegressionTests.swift:102] DEADLINE=1793642165.559846
+capture 005: DUNE_VISUAL_AUDIT_READY tap activity-muscle-detail-calculation [DUNEUITests/ActivityMuscleMapRegressionTests.swift:103] DEADLINE=1793642170.137858
+capture 006: DUNE_VISUAL_AUDIT_READY A03 selected muscle fatigue calculation [DUNEUITests/ActivityMuscleMapRegressionTests.swift:112] DEADLINE=1793642175.8521
+capture 007: DUNE_VISUAL_AUDIT_READY tap BackButton [DUNEUITests/ActivityMuscleMapRegressionTests.swift:142] DEADLINE=1793642187.3478122
+capture 008: DUNE_VISUAL_AUDIT_READY before teardown -[ActivityMuscleMapRegressionTests testMuscleMapDetailKeeps2DSelectionWith3DEntryDisabled] [DUNEUITests/UITestBaseCase.swift:120] DEADLINE=1793642193.6984649
+Test Case '-[DUNEUITests.ActivityMuscleMapRegressionTests testMuscleMapDetailKeeps2DSelectionWith3DEntryDisabled]' passed (80.403 seconds).
+** TEST SUCCEEDED **
+Verified actual angle and active display before/after; inspect new native PNG and AX

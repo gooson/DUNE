@@ -1,0 +1,62 @@
+{
+  "devices" : [
+    {
+      "architecture" : "arm64",
+      "deviceId" : "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+      "deviceName" : "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+      "modelName" : "iPhone 18 Pro Max",
+      "osBuildNumber" : "24B8117",
+      "osVersion" : "27.2",
+      "platform" : "iOS Simulator"
+    }
+  ],
+  "testNodes" : [
+    {
+      "children" : [
+        {
+          "children" : [
+            {
+              "children" : [
+                {
+                  "duration" : "32초",
+                  "durationInSeconds" : 32.422202944755554,
+                  "name" : "testNotificationDestinationUnavailable()",
+                  "nodeIdentifier" : "DesignMapNotificationDetailTests/testNotificationDestinationUnavailable()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests/DesignMapNotificationDetailTests/testNotificationDestinationUnavailable",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "1분 5초",
+                  "durationInSeconds" : 65.25893092155457,
+                  "name" : "testNotificationDestinationUnavailableDarkMaximumAccessibilitySize()",
+                  "nodeIdentifier" : "DesignMapNotificationDetailTests/testNotificationDestinationUnavailableDarkMaximumAccessibilitySize()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests/DesignMapNotificationDetailTests/testNotificationDestinationUnavailableDarkMaximumAccessibilitySize",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "DesignMapNotificationDetailTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests/DesignMapNotificationDetailTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            }
+          ],
+          "name" : "DUNEUITests",
+          "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests",
+          "nodeType" : "UI test bundle",
+          "result" : "Passed"
+        }
+      ],
+      "name" : "DUNEUITests-DesignCapture",
+      "nodeType" : "Test Plan",
+      "result" : "Passed"
+    }
+  ],
+  "testPlanConfigurations" : [
+    {
+      "configurationId" : "1",
+      "configurationName" : "Design Capture"
+    }
+  ]
+}

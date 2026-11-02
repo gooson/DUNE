@@ -26,6 +26,16 @@ PORTS = ("Port:\nDisplay class: 0\nUUID: AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA\n"
          "Default width: 2007\nDefault height: 2853\n")
 
 
+class _FakeClock:
+    def __init__(self):
+        self.wall = 1000.0
+        self.mono = 500.0
+
+    def advance(self, seconds):
+        self.wall += seconds
+        self.mono += seconds
+
+
 class CaptureContracts(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
@@ -89,6 +99,73 @@ class CaptureContracts(unittest.TestCase):
         self.assertFalse((self.output / "001-1398x2034.png").exists())
         self.assertFalse(self.ledger()["valid_evidence"])
         self.assertIn("\t124\t0", self.captures.getvalue())
+
+    def test_nine_second_primary_capture_fits_whole_checkpoint(self):
+        clock = _FakeClock()
+        timeouts = []
+
+        def capture(argv, **kwargs):
+            timeouts.append(kwargs["timeout"])
+            clock.advance(9 if len(timeouts) == 1 else 1)
+            return self.screenshot(argv)
+
+        with patch.object(audit.time, "time", side_effect=lambda: clock.wall), \
+             patch.object(audit.time, "monotonic", side_effect=lambda: clock.mono), \
+             patch.object(audit.subprocess, "check_output", return_value=PORTS), \
+             patch.object(audit.subprocess, "run", side_effect=capture):
+            self.run_checkpoint(self.line())
+
+        self.assertEqual(timeouts, [15, 15])
+        self.assertEqual(len(list(self.output.glob("*.png"))), 2)
+        self.assertTrue(self.ack.exists())
+        self.assertTrue(self.ledger()["valid_evidence"])
+        self.assertTrue(self.ledger()["acknowledged"])
+
+    def test_capture_over_fifteen_second_cap_never_acknowledges(self):
+        clock = _FakeClock()
+        timeouts = []
+
+        def capture(argv, **kwargs):
+            timeouts.append(kwargs["timeout"])
+            if len(timeouts) == 1:
+                clock.advance(15)
+                raise subprocess.TimeoutExpired(argv, kwargs["timeout"])
+            clock.advance(1)
+            return self.screenshot(argv)
+
+        with patch.object(audit.time, "time", side_effect=lambda: clock.wall), \
+             patch.object(audit.time, "monotonic", side_effect=lambda: clock.mono), \
+             patch.object(audit.subprocess, "check_output", return_value=PORTS), \
+             patch.object(audit.subprocess, "run", side_effect=capture):
+            with self.assertRaisesRegex(RuntimeError, "Capture failed"):
+                self.run_checkpoint(self.line())
+
+        self.assertEqual(timeouts, [15, 10])
+        self.assertFalse(self.ack.exists())
+        self.assertFalse(self.ledger()["valid_evidence"])
+        self.assertFalse(self.ledger()["acknowledged"])
+        self.assertIn("\t124\t0", self.captures.getvalue())
+
+    def test_short_remaining_deadline_caps_capture_and_never_acknowledges(self):
+        clock = _FakeClock()
+        timeouts = []
+
+        def capture(argv, **kwargs):
+            timeouts.append(kwargs["timeout"])
+            clock.advance(5)
+            raise subprocess.TimeoutExpired(argv, kwargs["timeout"])
+
+        with patch.object(audit.time, "time", side_effect=lambda: clock.wall), \
+             patch.object(audit.time, "monotonic", side_effect=lambda: clock.mono), \
+             patch.object(audit.subprocess, "check_output", return_value=PORTS), \
+             patch.object(audit.subprocess, "run", side_effect=capture):
+            with self.assertRaisesRegex(RuntimeError, "Capture failed"):
+                self.run_checkpoint(self.line(seconds=7))
+
+        self.assertEqual(timeouts, [5])
+        self.assertFalse(self.ack.exists())
+        self.assertFalse(self.ledger()["valid_evidence"])
+        self.assertFalse(self.ledger()["acknowledged"])
 
     @patch.object(audit.subprocess, "run", return_value=subprocess.CompletedProcess([], 0))
     @patch.object(audit.subprocess, "check_output", return_value=PORTS)
