@@ -45,3 +45,16 @@ extension CumulativeStressScore.Contribution.Factor {
         }
     }
 }
+
+extension CumulativeStressScore {
+    /// Current effective shares for display only; domain contributions retain base weights.
+    var effectiveContributionWeights: [UUID: Double]? {
+        guard !contributions.isEmpty,
+              contributions.allSatisfy({ $0.weight.isFinite && $0.weight >= 0 }) else { return nil }
+        let total = contributions.reduce(0) { $0 + $1.weight }
+        guard total.isFinite, total > 0 else { return nil }
+        return contributions.reduce(into: [:]) { shares, contribution in
+            shares[contribution.id] = contribution.weight / total
+        }
+    }
+}

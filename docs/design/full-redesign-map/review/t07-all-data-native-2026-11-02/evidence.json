@@ -1,0 +1,1596 @@
+{
+  "schema_version": 1,
+  "screen": "T07 All Data",
+  "assembly_date": "2026-11-02",
+  "capture_date": "2026-10-13 originals; 2026-10-31 Phone matrix/iPad after; 2026-11-02 Duo focused after",
+  "scope": "Published four-tier T07 actual native comparison: original Oct13 references; Oct31 Phone/iPad after; Nov2 Duo closed/open after. Canonical T07 only; historical Phone 16-category pairs retained separately.",
+  "test_count_note": "16 categories visited by one passing method in each historical matrix. New Duo closed and open each pass one focused method; no four-tier 16-category/full-regression claim.",
+  "phone_source_identity": {
+    "before_revision": "2dfe6e60",
+    "after_revision": "ed844d14",
+    "original_view_blob": "ccbbbfa2a693e1d3714d3f506c142a79e7df6375",
+    "original_and_after_VM_blob": "fe6cc55a7402ecb48c96787da28fb9ced91d3717",
+    "pairs": "See metrics records for per-image metadata."
+  },
+  "bundles": {
+    "ui-phone-before-matrix-current": {
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t07/evidence/ui-phone-before-matrix-current",
+      "provenance": {
+        "revision": "2dfe6e60",
+        "source_worktree_dirty": false,
+        "original_xcresult": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.31_08-46-35-+0900.xcresult",
+        "xcode": "Xcode 27.2\nBuild version 27B52",
+        "test_plan": "DUNEUITests-DesignCapture"
+      },
+      "official_result": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/AllDataDetailRedesignTests/testAllCategoryReadyRowsAndCaptures"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/t07-before-matrix-2dfe6e60-retry1.log"
+      },
+      "devices": [
+        {
+          "architecture": "arm64",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "modelName": "iPhone 18 Pro Max",
+          "osBuildNumber": "24B8117",
+          "osVersion": "27.2",
+          "platform": "iOS Simulator"
+        }
+      ]
+    },
+    "ui-phone-after-matrix-current": {
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t07/evidence/ui-phone-after-matrix-current",
+      "provenance": {
+        "revision": "ed844d14",
+        "source_worktree_dirty": false,
+        "original_xcresult": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.31_09-17-17-+0900.xcresult",
+        "xcode": "Xcode 27.2\nBuild version 27B52",
+        "test_plan": "DUNEUITests-DesignCapture"
+      },
+      "official_result": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/AllDataDetailRedesignTests/testAllCategoryReadyRowsAndCaptures"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/t07-after-matrix-ed844d14.log"
+      },
+      "devices": [
+        {
+          "architecture": "arm64",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "modelName": "iPhone 18 Pro Max",
+          "osBuildNumber": "24B8117",
+          "osVersion": "27.2",
+          "platform": "iOS Simulator"
+        }
+      ]
+    },
+    "ui-ipad-after-category-matrix-current": {
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t07/evidence/ui-ipad-after-category-matrix-current",
+      "provenance": {
+        "revision": "ed844d14",
+        "source_worktree_dirty": false,
+        "original_xcresult": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.31_12-16-07-+0900.xcresult",
+        "xcode": "Xcode 27.2\nBuild version 27B52",
+        "test_plan": "DUNEUITests-DesignCapture"
+      },
+      "official_result": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/AllDataDetailRedesignTests/testAllCategoryReadyRowsAndCaptures"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/t07-ipad-all-data-matrix-ed844d14.log"
+      },
+      "devices": [
+        {
+          "architecture": "arm64",
+          "deviceId": "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+          "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-validation-644069bf7efc",
+          "modelName": "iPad mini (A20 Pro)",
+          "osBuildNumber": "24B8117",
+          "osVersion": "27.2",
+          "platform": "iOS Simulator"
+        }
+      ]
+    },
+    "pr880-duo-closed-states-final-2026-11-02": {
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t07/evidence/pr880-duo-closed-states-final-2026-11-02",
+      "provenance": {
+        "revision": "e2759822",
+        "source_worktree_dirty": false,
+        "original_xcresult": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.11.02_16-02-08-+0900.xcresult",
+        "xcode": "Xcode 27.2\nBuild version 27B52",
+        "test_plan": "DUNEUITests-DuoAudit",
+        "device_udid": "3B4CDF09-2F57-421B-B10C-D02A3DEF1217",
+        "scope": "one focused case perpose; closedHRVlimited/empty, openSleepreportingdaytime; not16matrix/fullregression"
+      },
+      "official_result": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/AllDataDetailRedesignTests/testLimitedReadyAndLimitedEmptyStates"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/t07-duo-closed-e2759822.log"
+      },
+      "pose_proof": {
+        "revision": "e2759822",
+        "target": 0.0,
+        "angle_before": 0.0,
+        "angle_after": 0.0,
+        "active_display": "LCD",
+        "script_sha256": "0e178ea0645a579cc83ace50631edf0bfef6846830abf478a3a9863d3144b559",
+        "captured_at": 1793603068.858336,
+        "native_visual_review": "pending-parent"
+      },
+      "checkpoints": [
+        {
+          "sequence": 1,
+          "action": "DUNE_VISUAL_AUDIT_READY root after setup -[AllDataDetailRedesignTests testLimitedReadyAndLimitedEmptyStates] [DUNEUITests/UITestBaseCase.swift:145] DEADLINE=1793603022.738698",
+          "elapsed_seconds": 11.354,
+          "acknowledged": true,
+          "valid_evidence": true,
+          "error": null
+        },
+        {
+          "sequence": 2,
+          "action": "DUNE_VISUAL_AUDIT_READY T07-hrv-limited-ready-native [DUNEUITests/AllDataDetailRedesignTests.swift:162] DEADLINE=1793603046.2274551",
+          "elapsed_seconds": 5.927,
+          "acknowledged": true,
+          "valid_evidence": true,
+          "error": null
+        },
+        {
+          "sequence": 3,
+          "action": "DUNE_VISUAL_AUDIT_READY T07-hrv-limited-empty-native [DUNEUITests/AllDataDetailRedesignTests.swift:162] DEADLINE=1793603064.6733708",
+          "elapsed_seconds": 2.368,
+          "acknowledged": true,
+          "valid_evidence": true,
+          "error": null
+        },
+        {
+          "sequence": 4,
+          "action": "DUNE_VISUAL_AUDIT_READY before teardown -[AllDataDetailRedesignTests testLimitedReadyAndLimitedEmptyStates] [DUNEUITests/UITestBaseCase.swift:120] DEADLINE=1793603068.266778",
+          "elapsed_seconds": 2.299,
+          "acknowledged": true,
+          "valid_evidence": true,
+          "error": null
+        }
+      ],
+      "preserved_raw_evidence": {
+        "assets/proofs/duo/displays-before.json": "4248eeea2a4563b4744a32c2f2f08ee2b41c09e963a2c720b3b9a56c07d4ca25",
+        "assets/proofs/duo/runner-result.json": "9e602fe622aaf1481a2403452b34019e915e985fb5a9b8d3a585490f7b122760",
+        "assets/proofs/duo/provenance.json": "9db90766c7dde555cc785db02eed5ccecaa18ad737f9924ba798a7b4891e435c",
+        "assets/proofs/duo/result.json": "712b4f3a486c01fb413cb921e857c5ab69473f7707bedd0fedb7454a26fb48b4",
+        "assets/proofs/duo/angle-before.txt": "51ff0d2f0d3a5d61edec31785532ea0d570f8c348d58b15b94ff9c2ca6e926a4",
+        "assets/proofs/duo/captures.tsv": "3fffc07b394564425b2c143d19693439d6eb4c2c054fa4675f0c9f392875751e",
+        "assets/proofs/duo/angle-after.txt": "51ff0d2f0d3a5d61edec31785532ea0d570f8c348d58b15b94ff9c2ca6e926a4",
+        "assets/proofs/duo/displays-after.json": "a20bb703e13a6c0abf08c89572707eeae432c669f49057092d0d6a5542b04df5",
+        "assets/proofs/duo/checkpoints.jsonl": "fcb4086896b04d1977c56afa6561e62a7b33f2a4272c42deaca369894056b1c0",
+        "assets/proofs/duo/pose-proof.json": "6a0b37eec2af143c0ddea290d89ef52addf2661f013d85f92b4b895993b2b22b"
+      }
+    },
+    "pr880-duo-open-sleep-final-2026-11-02": {
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t07/evidence/pr880-duo-open-sleep-final-2026-11-02",
+      "provenance": {
+        "revision": "e2759822",
+        "source_worktree_dirty": false,
+        "original_xcresult": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.11.02_16-07-56-+0900.xcresult",
+        "xcode": "Xcode 27.2\nBuild version 27B52",
+        "test_plan": "DUNEUITests-DuoAudit",
+        "device_udid": "3B4CDF09-2F57-421B-B10C-D02A3DEF1217",
+        "scope": "one focused case perpose; closedHRVlimited/empty, openSleepreportingdaytime; not16matrix/fullregression"
+      },
+      "official_result": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/AllDataDetailRedesignTests/testSleepUsesReportingDateAndActualStageTime"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/t07-duo-open-e2759822.log"
+      },
+      "pose_proof": {
+        "revision": "e2759822",
+        "target": 180.0,
+        "angle_before": 180.0,
+        "angle_after": 180.0,
+        "active_display": "LCD-1",
+        "script_sha256": "0e178ea0645a579cc83ace50631edf0bfef6846830abf478a3a9863d3144b559",
+        "captured_at": 1793603318.480493,
+        "native_visual_review": "pending-parent"
+      },
+      "checkpoints": [
+        {
+          "sequence": 1,
+          "action": "DUNE_VISUAL_AUDIT_READY root after setup -[AllDataDetailRedesignTests testSleepUsesReportingDateAndActualStageTime] [DUNEUITests/UITestBaseCase.swift:145] DEADLINE=1793603323.3634949",
+          "elapsed_seconds": 2.661,
+          "acknowledged": true,
+          "valid_evidence": true,
+          "error": null
+        },
+        {
+          "sequence": 2,
+          "action": "DUNE_VISUAL_AUDIT_READY T07-sleep-reporting-day-native [DUNEUITests/AllDataDetailRedesignTests.swift:162] DEADLINE=1793603337.255225",
+          "elapsed_seconds": 2.308,
+          "acknowledged": true,
+          "valid_evidence": true,
+          "error": null
+        },
+        {
+          "sequence": 3,
+          "action": "DUNE_VISUAL_AUDIT_READY before teardown -[AllDataDetailRedesignTests testSleepUsesReportingDateAndActualStageTime] [DUNEUITests/UITestBaseCase.swift:120] DEADLINE=1793603340.90236",
+          "elapsed_seconds": 2.274,
+          "acknowledged": true,
+          "valid_evidence": true,
+          "error": null
+        }
+      ],
+      "preserved_raw_evidence": {
+        "assets/proofs/duo-open/displays-before.json": "b72766fb4982ea4da67d955e4b83e96bd42354882110f3ef36fc026510f37005",
+        "assets/proofs/duo-open/runner-result.json": "a67615004190f314b41aca37f6e3fa1f6b054448a934a80ed360f1cc5a19a68c",
+        "assets/proofs/duo-open/provenance.json": "a842f78e718998fcaedc7a322c4f8cb668ca0a130201caa89de3b2f49711c5e7",
+        "assets/proofs/duo-open/result.json": "099c8864561d9bbad8d114589d80d07f50b7ad016fe81de820441d4b1e12d0fb",
+        "assets/proofs/duo-open/angle-before.txt": "1e8ac0d84b7644b31324a78dee04aa7600daefcab3d96a422731f5b29245878e",
+        "assets/proofs/duo-open/captures.tsv": "92ed6f887f14665acd04ae2c05a76e19ad9efc39b9ba43c39b7beb5e9956b47f",
+        "assets/proofs/duo-open/angle-after.txt": "1e8ac0d84b7644b31324a78dee04aa7600daefcab3d96a422731f5b29245878e",
+        "assets/proofs/duo-open/displays-after.json": "b72766fb4982ea4da67d955e4b83e96bd42354882110f3ef36fc026510f37005",
+        "assets/proofs/duo-open/checkpoints.jsonl": "c15907205020ede03d0baae3240a4984eefd73942a176706cf7969b7ad83ae24",
+        "assets/proofs/duo-open/pose-proof.json": "d58886b64e4b001b5a10d4683d41850b426b5127c7a807bc6de16c7e4fb81491"
+      }
+    }
+  },
+  "metrics": {
+    "hrv": {
+      "title": "심박변이도",
+      "expected_first_value": "75 ms",
+      "visual_review": "Actual initial PNG pair viewed via bounded QA contact sheet: matching category/title/time/value/unit; no new clipping/overlap observed; initial state only.",
+      "before": {
+        "image": "assets/hrv-before.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t07/evidence/ui-phone-before-matrix-current/attachments/2633DF24-93C7-4C48-B432-A478BC7E167D.png",
+        "sha256": "4ee4b8ca342c4145dc78de13272a49e0cbfe8bbf408b16ef45e787570db7423f",
+        "pixels": [
+          1320,
+          2868
+        ],
+        "exif_orientation": 1,
+        "bundle": "ui-phone-before-matrix-current",
+        "revision": "2dfe6e60",
+        "source_worktree_dirty": false,
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "2633DF24-93C7-4C48-B432-A478BC7E167D.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "T07-hrv-native_0_942ACCC3-B55E-429F-92B1-0D1AF7C4AB4E.png",
+          "timestamp": 1793404023.457
+        },
+        "capture_timestamp": 1793404023.457,
+        "capture_time_kind": "native-XCTest-attachment",
+        "capture_time_kst": "2026-10-31T08:47:03.457000+09:00",
+        "selector": "DUNEUITests/AllDataDetailRedesignTests/testAllCategoryReadyRowsAndCaptures",
+        "historical": true
+      },
+      "after": {
+        "image": "assets/hrv-after.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t07/evidence/ui-phone-after-matrix-current/attachments/8111ECA7-BBC9-470A-AFBE-17A1F06FC6B7.png",
+        "sha256": "af4be8d12bd0b5443a78a62f72deae9a2d5fc3d8517ed973faded1723e5c1e24",
+        "pixels": [
+          1320,
+          2868
+        ],
+        "exif_orientation": 1,
+        "bundle": "ui-phone-after-matrix-current",
+        "revision": "ed844d14",
+        "source_worktree_dirty": false,
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "8111ECA7-BBC9-470A-AFBE-17A1F06FC6B7.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "T07-hrv-native_0_CF1869E8-1F74-45E8-AD07-75E4F5202999.png",
+          "timestamp": 1793405865.668
+        },
+        "capture_timestamp": 1793405865.668,
+        "capture_time_kind": "native-XCTest-attachment",
+        "capture_time_kst": "2026-10-31T09:17:45.668000+09:00",
+        "selector": "DUNEUITests/AllDataDetailRedesignTests/testAllCategoryReadyRowsAndCaptures",
+        "historical": true
+      }
+    },
+    "rhr": {
+      "title": "안정시 심박",
+      "expected_first_value": "50 bpm",
+      "visual_review": "Actual initial PNG pair viewed via bounded QA contact sheet: matching category/title/time/value/unit; no new clipping/overlap observed; initial state only.",
+      "before": {
+        "image": "assets/rhr-before.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t07/evidence/ui-phone-before-matrix-current/attachments/A4CD90BE-E569-4F65-A13E-D4EFC15EB250.png",
+        "sha256": "97e08c26fe394276a611ebc0da1196cf2d608cbf5d229ebb983b4b2fc5bf61bc",
+        "pixels": [
+          1320,
+          2868
+        ],
+        "exif_orientation": 1,
+        "bundle": "ui-phone-before-matrix-current",
+        "revision": "2dfe6e60",
+        "source_worktree_dirty": false,
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "A4CD90BE-E569-4F65-A13E-D4EFC15EB250.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "T07-rhr-native_0_7FBF17AF-F495-41CB-946D-A1CBB2830C3B.png",
+          "timestamp": 1793404035.089
+        },
+        "capture_timestamp": 1793404035.089,
+        "capture_time_kind": "native-XCTest-attachment",
+        "capture_time_kst": "2026-10-31T08:47:15.089000+09:00",
+        "selector": "DUNEUITests/AllDataDetailRedesignTests/testAllCategoryReadyRowsAndCaptures",
+        "historical": true
+      },
+      "after": {
+        "image": "assets/rhr-after.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t07/evidence/ui-phone-after-matrix-current/attachments/1A7DC2D8-1803-4F9B-8B84-206324A185C1.png",
+        "sha256": "208718744bb09ebd8f1143f22861acc14e90fa099807cdb2c57d774f50b3d242",
+        "pixels": [
+          1320,
+          2868
+        ],
+        "exif_orientation": 1,
+        "bundle": "ui-phone-after-matrix-current",
+        "revision": "ed844d14",
+        "source_worktree_dirty": false,
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "1A7DC2D8-1803-4F9B-8B84-206324A185C1.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "T07-rhr-native_0_5E379876-D4C0-4A20-AA02-68649D670EBA.png",
+          "timestamp": 1793405877.448
+        },
+        "capture_timestamp": 1793405877.448,
+        "capture_time_kind": "native-XCTest-attachment",
+        "capture_time_kst": "2026-10-31T09:17:57.448000+09:00",
+        "selector": "DUNEUITests/AllDataDetailRedesignTests/testAllCategoryReadyRowsAndCaptures",
+        "historical": true
+      }
+    },
+    "heartRate": {
+      "title": "심박수",
+      "expected_first_value": "67 bpm",
+      "visual_review": "Actual initial PNG pair viewed via bounded QA contact sheet: matching category/title/time/value/unit; no new clipping/overlap observed; initial state only.",
+      "before": {
+        "image": "assets/heartRate-before.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t07/evidence/ui-phone-before-matrix-current/attachments/7AE20757-E4C0-42E9-8544-B51071591D50.png",
+        "sha256": "8d818ddab608942034f4d8c228a02ce46e7a85a7c24e6a2d4db8de8bad92beea",
+        "pixels": [
+          1320,
+          2868
+        ],
+        "exif_orientation": 1,
+        "bundle": "ui-phone-before-matrix-current",
+        "revision": "2dfe6e60",
+        "source_worktree_dirty": false,
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "7AE20757-E4C0-42E9-8544-B51071591D50.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "T07-heartRate-native_0_543F8CF3-AFA5-4BD9-A534-B31A50FE0EDE.png",
+          "timestamp": 1793404046.688
+        },
+        "capture_timestamp": 1793404046.688,
+        "capture_time_kind": "native-XCTest-attachment",
+        "capture_time_kst": "2026-10-31T08:47:26.688000+09:00",
+        "selector": "DUNEUITests/AllDataDetailRedesignTests/testAllCategoryReadyRowsAndCaptures",
+        "historical": true
+      },
+      "after": {
+        "image": "assets/heartRate-after.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t07/evidence/ui-phone-after-matrix-current/attachments/8B79D715-5A8D-4672-BF59-611122AB5C54.png",
+        "sha256": "1537306151d6c88f759278086079feead780809fe0c3a331d173a5425579d3ec",
+        "pixels": [
+          1320,
+          2868
+        ],
+        "exif_orientation": 1,
+        "bundle": "ui-phone-after-matrix-current",
+        "revision": "ed844d14",
+        "source_worktree_dirty": false,
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "8B79D715-5A8D-4672-BF59-611122AB5C54.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "T07-heartRate-native_0_1E66B05F-1C1B-4A2D-B141-AB3344B84EFC.png",
+          "timestamp": 1793405890.058
+        },
+        "capture_timestamp": 1793405890.058,
+        "capture_time_kind": "native-XCTest-attachment",
+        "capture_time_kst": "2026-10-31T09:18:10.058000+09:00",
+        "selector": "DUNEUITests/AllDataDetailRedesignTests/testAllCategoryReadyRowsAndCaptures",
+        "historical": true
+      }
+    },
+    "sleep": {
+      "title": "수면",
+      "expected_first_value": "7h 46min",
+      "visual_review": "Actual initial PNG pair viewed via bounded QA contact sheet: matching category/title/time/value/unit; no new clipping/overlap observed; initial state only.",
+      "before": {
+        "image": "assets/sleep-before.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t07/evidence/ui-phone-before-matrix-current/attachments/BF5E51C7-2582-4F96-842F-94B133C0D7C7.png",
+        "sha256": "4e1cf2f0e9f5686528e0d74d686da517ccd0873ba73fea24ad8f565f7ecbc1aa",
+        "pixels": [
+          1320,
+          2868
+        ],
+        "exif_orientation": 1,
+        "bundle": "ui-phone-before-matrix-current",
+        "revision": "2dfe6e60",
+        "source_worktree_dirty": false,
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "BF5E51C7-2582-4F96-842F-94B133C0D7C7.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "T07-sleep-native_0_5784E162-0458-4531-9776-0A8AC3427A50.png",
+          "timestamp": 1793404067.759
+        },
+        "capture_timestamp": 1793404067.759,
+        "capture_time_kind": "native-XCTest-attachment",
+        "capture_time_kst": "2026-10-31T08:47:47.759000+09:00",
+        "selector": "DUNEUITests/AllDataDetailRedesignTests/testAllCategoryReadyRowsAndCaptures",
+        "historical": true
+      },
+      "after": {
+        "image": "assets/sleep-after.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t07/evidence/ui-phone-after-matrix-current/attachments/8521A8F3-141B-4980-92AC-A51D371BCD00.png",
+        "sha256": "3c6eb0cd4253609e7fe5bfaed60af498f62961f8e3ffd939a2ec8c073e384bb1",
+        "pixels": [
+          1320,
+          2868
+        ],
+        "exif_orientation": 1,
+        "bundle": "ui-phone-after-matrix-current",
+        "revision": "ed844d14",
+        "source_worktree_dirty": false,
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "8521A8F3-141B-4980-92AC-A51D371BCD00.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "T07-sleep-native_0_38AE8AFD-8F6A-481F-BCC3-0303B2BFD737.png",
+          "timestamp": 1793405901.31
+        },
+        "capture_timestamp": 1793405901.31,
+        "capture_time_kind": "native-XCTest-attachment",
+        "capture_time_kst": "2026-10-31T09:18:21.310000+09:00",
+        "selector": "DUNEUITests/AllDataDetailRedesignTests/testAllCategoryReadyRowsAndCaptures",
+        "historical": true
+      }
+    },
+    "exercise": {
+      "title": "운동 시간",
+      "expected_first_value": "48 min",
+      "visual_review": "Actual initial PNG pair viewed via bounded QA contact sheet: matching category/title/time/value/unit; no new clipping/overlap observed; initial state only.",
+      "before": {
+        "image": "assets/exercise-before.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t07/evidence/ui-phone-before-matrix-current/attachments/9E42C9A9-7AD3-4B4D-AF48-A6BFEB26850F.png",
+        "sha256": "f44fed8d61359f4179fabfd7f3cc20716ccdf75e27e546bb3f4f5e7081ccf38d",
+        "pixels": [
+          1320,
+          2868
+        ],
+        "exif_orientation": 1,
+        "bundle": "ui-phone-before-matrix-current",
+        "revision": "2dfe6e60",
+        "source_worktree_dirty": false,
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "9E42C9A9-7AD3-4B4D-AF48-A6BFEB26850F.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "T07-exercise-native_0_0CB819D8-134E-47E1-9097-91F6548301C9.png",
+          "timestamp": 1793404079.487
+        },
+        "capture_timestamp": 1793404079.487,
+        "capture_time_kind": "native-XCTest-attachment",
+        "capture_time_kst": "2026-10-31T08:47:59.487000+09:00",
+        "selector": "DUNEUITests/AllDataDetailRedesignTests/testAllCategoryReadyRowsAndCaptures",
+        "historical": true
+      },
+      "after": {
+        "image": "assets/exercise-after.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t07/evidence/ui-phone-after-matrix-current/attachments/11AF52A3-E2F7-474D-AB05-865860C85CCB.png",
+        "sha256": "3a890985d77e82b7fc9bb38f5756a144afee4256b234821c777c2df05e47a63d",
+        "pixels": [
+          1320,
+          2868
+        ],
+        "exif_orientation": 1,
+        "bundle": "ui-phone-after-matrix-current",
+        "revision": "ed844d14",
+        "source_worktree_dirty": false,
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "11AF52A3-E2F7-474D-AB05-865860C85CCB.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "T07-exercise-native_0_5A94796A-D005-434D-9C38-ABEEB6F1059E.png",
+          "timestamp": 1793405922.898
+        },
+        "capture_timestamp": 1793405922.898,
+        "capture_time_kind": "native-XCTest-attachment",
+        "capture_time_kst": "2026-10-31T09:18:42.898000+09:00",
+        "selector": "DUNEUITests/AllDataDetailRedesignTests/testAllCategoryReadyRowsAndCaptures",
+        "historical": true
+      }
+    },
+    "steps": {
+      "title": "걸음 수",
+      "expected_first_value": "8,200",
+      "visual_review": "Actual initial PNG pair viewed via bounded QA contact sheet: matching category/title/time/value/unit; no new clipping/overlap observed; initial state only.",
+      "before": {
+        "image": "assets/steps-before.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t07/evidence/ui-phone-before-matrix-current/attachments/84D1FE7F-92AD-4CC3-B7F6-63F1E07DF083.png",
+        "sha256": "5948ec2f370da0530dde519ba3cc8fa16708b10b67c0a34dd9d40319ae5fc884",
+        "pixels": [
+          1320,
+          2868
+        ],
+        "exif_orientation": 1,
+        "bundle": "ui-phone-before-matrix-current",
+        "revision": "2dfe6e60",
+        "source_worktree_dirty": false,
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "84D1FE7F-92AD-4CC3-B7F6-63F1E07DF083.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "T07-steps-native_0_DFE6D761-F0F6-455C-9DFA-402300E03A43.png",
+          "timestamp": 1793404101.28
+        },
+        "capture_timestamp": 1793404101.28,
+        "capture_time_kind": "native-XCTest-attachment",
+        "capture_time_kst": "2026-10-31T08:48:21.280000+09:00",
+        "selector": "DUNEUITests/AllDataDetailRedesignTests/testAllCategoryReadyRowsAndCaptures",
+        "historical": true
+      },
+      "after": {
+        "image": "assets/steps-after.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t07/evidence/ui-phone-after-matrix-current/attachments/FA6F058D-8901-4D14-A49D-40A3FC6C08A5.png",
+        "sha256": "8f631cbf53d0f6e26f820f2b4dc154a45d96efcf05360df173cddf90024dff38",
+        "pixels": [
+          1320,
+          2868
+        ],
+        "exif_orientation": 1,
+        "bundle": "ui-phone-after-matrix-current",
+        "revision": "ed844d14",
+        "source_worktree_dirty": false,
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "FA6F058D-8901-4D14-A49D-40A3FC6C08A5.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "T07-steps-native_0_2C615435-DB75-4E1B-ADCF-4E6D35337057.png",
+          "timestamp": 1793405934.544
+        },
+        "capture_timestamp": 1793405934.544,
+        "capture_time_kind": "native-XCTest-attachment",
+        "capture_time_kst": "2026-10-31T09:18:54.544000+09:00",
+        "selector": "DUNEUITests/AllDataDetailRedesignTests/testAllCategoryReadyRowsAndCaptures",
+        "historical": true
+      }
+    },
+    "weight": {
+      "title": "체중",
+      "expected_first_value": "78.3 kg",
+      "visual_review": "Actual initial PNG pair viewed via bounded QA contact sheet: matching category/title/time/value/unit; no new clipping/overlap observed; initial state only.",
+      "before": {
+        "image": "assets/weight-before.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t07/evidence/ui-phone-before-matrix-current/attachments/0B308B1C-6499-4CB3-B030-6D05423A2920.png",
+        "sha256": "52fdf68e55bf948b3d8b5c61cf1c32fbfe5a590b98353b13d3efe987614165b9",
+        "pixels": [
+          1320,
+          2868
+        ],
+        "exif_orientation": 1,
+        "bundle": "ui-phone-before-matrix-current",
+        "revision": "2dfe6e60",
+        "source_worktree_dirty": false,
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "0B308B1C-6499-4CB3-B030-6D05423A2920.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "T07-weight-native_0_DB566CBB-94EB-4479-BDF5-5F1F4339D216.png",
+          "timestamp": 1793404122.897
+        },
+        "capture_timestamp": 1793404122.897,
+        "capture_time_kind": "native-XCTest-attachment",
+        "capture_time_kst": "2026-10-31T08:48:42.897000+09:00",
+        "selector": "DUNEUITests/AllDataDetailRedesignTests/testAllCategoryReadyRowsAndCaptures",
+        "historical": true
+      },
+      "after": {
+        "image": "assets/weight-after.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t07/evidence/ui-phone-after-matrix-current/attachments/4C6BE9E3-C97E-4E5A-9F59-3FB0FCDEB0A1.png",
+        "sha256": "e799583126cb4f602a69c144824f3267d087e2134d0803d8ddc3106437f58afe",
+        "pixels": [
+          1320,
+          2868
+        ],
+        "exif_orientation": 1,
+        "bundle": "ui-phone-after-matrix-current",
+        "revision": "ed844d14",
+        "source_worktree_dirty": false,
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "4C6BE9E3-C97E-4E5A-9F59-3FB0FCDEB0A1.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "T07-weight-native_0_2948F7CE-CBDD-4275-A610-9B833A22CAB5.png",
+          "timestamp": 1793405956.022
+        },
+        "capture_timestamp": 1793405956.022,
+        "capture_time_kind": "native-XCTest-attachment",
+        "capture_time_kst": "2026-10-31T09:19:16.022000+09:00",
+        "selector": "DUNEUITests/AllDataDetailRedesignTests/testAllCategoryReadyRowsAndCaptures",
+        "historical": true
+      }
+    },
+    "bmi": {
+      "title": "BMI",
+      "expected_first_value": "24.7",
+      "visual_review": "Actual initial PNG pair viewed via bounded QA contact sheet: matching category/title/time/value/unit; no new clipping/overlap observed; initial state only.",
+      "before": {
+        "image": "assets/bmi-before.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t07/evidence/ui-phone-before-matrix-current/attachments/D8CE82EB-926B-48A4-AA09-FEB884D51FB9.png",
+        "sha256": "ae21b93a1241f9f8f594d8035ab3e4ea3705b935056a784cdd1688b4992274b1",
+        "pixels": [
+          1320,
+          2868
+        ],
+        "exif_orientation": 1,
+        "bundle": "ui-phone-before-matrix-current",
+        "revision": "2dfe6e60",
+        "source_worktree_dirty": false,
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "D8CE82EB-926B-48A4-AA09-FEB884D51FB9.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "T07-bmi-native_0_C59DA35F-C6DB-46A1-BC52-A5E0CD0AEF3B.png",
+          "timestamp": 1793404134.507
+        },
+        "capture_timestamp": 1793404134.507,
+        "capture_time_kind": "native-XCTest-attachment",
+        "capture_time_kst": "2026-10-31T08:48:54.507000+09:00",
+        "selector": "DUNEUITests/AllDataDetailRedesignTests/testAllCategoryReadyRowsAndCaptures",
+        "historical": true
+      },
+      "after": {
+        "image": "assets/bmi-after.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t07/evidence/ui-phone-after-matrix-current/attachments/6F3D616D-F066-4271-B1ED-B2A8FE715CC9.png",
+        "sha256": "42f16656b4b8be478c6b3807003b200521b43aa89d91fab2801ff776f8656ab0",
+        "pixels": [
+          1320,
+          2868
+        ],
+        "exif_orientation": 1,
+        "bundle": "ui-phone-after-matrix-current",
+        "revision": "ed844d14",
+        "source_worktree_dirty": false,
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "6F3D616D-F066-4271-B1ED-B2A8FE715CC9.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "T07-bmi-native_0_676B333A-7E2E-4B71-9A2D-5B5D935FF968.png",
+          "timestamp": 1793405966.767
+        },
+        "capture_timestamp": 1793405966.767,
+        "capture_time_kind": "native-XCTest-attachment",
+        "capture_time_kst": "2026-10-31T09:19:26.767000+09:00",
+        "selector": "DUNEUITests/AllDataDetailRedesignTests/testAllCategoryReadyRowsAndCaptures",
+        "historical": true
+      }
+    },
+    "bodyFat": {
+      "title": "체지방률",
+      "expected_first_value": "17.8%",
+      "visual_review": "Actual initial PNG pair viewed via bounded QA contact sheet: matching category/title/time/value/unit; no new clipping/overlap observed; initial state only.",
+      "before": {
+        "image": "assets/bodyFat-before.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t07/evidence/ui-phone-before-matrix-current/attachments/7B14F596-1240-47F0-9B4A-490AE3DF0E50.png",
+        "sha256": "849d4fca5ffae950a76d3903e28a8e4488750c73e60cf736a96d2fb7641bdd14",
+        "pixels": [
+          1320,
+          2868
+        ],
+        "exif_orientation": 1,
+        "bundle": "ui-phone-before-matrix-current",
+        "revision": "2dfe6e60",
+        "source_worktree_dirty": false,
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "7B14F596-1240-47F0-9B4A-490AE3DF0E50.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "T07-bodyFat-native_0_E13C03D5-B5B2-4A2D-B00E-47AA500DE0BA.png",
+          "timestamp": 1793404146.185
+        },
+        "capture_timestamp": 1793404146.185,
+        "capture_time_kind": "native-XCTest-attachment",
+        "capture_time_kst": "2026-10-31T08:49:06.185000+09:00",
+        "selector": "DUNEUITests/AllDataDetailRedesignTests/testAllCategoryReadyRowsAndCaptures",
+        "historical": true
+      },
+      "after": {
+        "image": "assets/bodyFat-after.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t07/evidence/ui-phone-after-matrix-current/attachments/F39093BF-1853-4CFF-A121-7A3DE30DBB66.png",
+        "sha256": "685d0c0699455c924beded5945416c4c4ead46955d801af3b79a4ad877d8076c",
+        "pixels": [
+          1320,
+          2868
+        ],
+        "exif_orientation": 1,
+        "bundle": "ui-phone-after-matrix-current",
+        "revision": "ed844d14",
+        "source_worktree_dirty": false,
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "F39093BF-1853-4CFF-A121-7A3DE30DBB66.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "T07-bodyFat-native_0_92E9034D-62EF-4DEB-81C3-D80EE39050CD.png",
+          "timestamp": 1793405977.597
+        },
+        "capture_timestamp": 1793405977.597,
+        "capture_time_kind": "native-XCTest-attachment",
+        "capture_time_kst": "2026-10-31T09:19:37.597000+09:00",
+        "selector": "DUNEUITests/AllDataDetailRedesignTests/testAllCategoryReadyRowsAndCaptures",
+        "historical": true
+      }
+    },
+    "leanBodyMass": {
+      "title": "제지방량",
+      "expected_first_value": "63.1 kg",
+      "visual_review": "Actual initial PNG pair viewed via bounded QA contact sheet: matching category/title/time/value/unit; no new clipping/overlap observed; initial state only.",
+      "before": {
+        "image": "assets/leanBodyMass-before.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t07/evidence/ui-phone-before-matrix-current/attachments/E06A4452-4EA1-4489-956B-29F2D8BBFDA4.png",
+        "sha256": "b2ea8c0d0c2f9271b5d79a7c253c706440f56653e08349581871459d2ff48bc1",
+        "pixels": [
+          1320,
+          2868
+        ],
+        "exif_orientation": 1,
+        "bundle": "ui-phone-before-matrix-current",
+        "revision": "2dfe6e60",
+        "source_worktree_dirty": false,
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "E06A4452-4EA1-4489-956B-29F2D8BBFDA4.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "T07-leanBodyMass-native_0_D65CEDBD-15C4-4F8D-8B6A-2D6F133EFFA1.png",
+          "timestamp": 1793404157.807
+        },
+        "capture_timestamp": 1793404157.807,
+        "capture_time_kind": "native-XCTest-attachment",
+        "capture_time_kst": "2026-10-31T08:49:17.807000+09:00",
+        "selector": "DUNEUITests/AllDataDetailRedesignTests/testAllCategoryReadyRowsAndCaptures",
+        "historical": true
+      },
+      "after": {
+        "image": "assets/leanBodyMass-after.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t07/evidence/ui-phone-after-matrix-current/attachments/1F195FAB-72F2-4628-863E-952A5E3758FC.png",
+        "sha256": "75494d0555b73d8471e97b77f584f65f6c928871dacecfafcfef27d21b4ee57e",
+        "pixels": [
+          1320,
+          2868
+        ],
+        "exif_orientation": 1,
+        "bundle": "ui-phone-after-matrix-current",
+        "revision": "ed844d14",
+        "source_worktree_dirty": false,
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "1F195FAB-72F2-4628-863E-952A5E3758FC.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "T07-leanBodyMass-native_0_987DDFD4-EFF3-44B7-9DC1-FACBF1F408FB.png",
+          "timestamp": 1793405989.027
+        },
+        "capture_timestamp": 1793405989.027,
+        "capture_time_kind": "native-XCTest-attachment",
+        "capture_time_kst": "2026-10-31T09:19:49.027000+09:00",
+        "selector": "DUNEUITests/AllDataDetailRedesignTests/testAllCategoryReadyRowsAndCaptures",
+        "historical": true
+      }
+    },
+    "spo2": {
+      "title": "혈중 산소",
+      "expected_first_value": "98%",
+      "visual_review": "Actual initial PNG pair viewed via bounded QA contact sheet: matching category/title/time/value/unit; no new clipping/overlap observed; initial state only.",
+      "before": {
+        "image": "assets/spo2-before.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t07/evidence/ui-phone-before-matrix-current/attachments/E7A853CA-E558-4D6E-8BEF-3B0AE36543AD.png",
+        "sha256": "ca153b19263cb99659a0bef57ac0492bbb4aed18d2735b62d7c0ae113efb4ab0",
+        "pixels": [
+          1320,
+          2868
+        ],
+        "exif_orientation": 1,
+        "bundle": "ui-phone-before-matrix-current",
+        "revision": "2dfe6e60",
+        "source_worktree_dirty": false,
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "E7A853CA-E558-4D6E-8BEF-3B0AE36543AD.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "T07-spo2-native_0_DEB68CA7-A44E-4A32-A271-F86FFD6FF356.png",
+          "timestamp": 1793404179.492
+        },
+        "capture_timestamp": 1793404179.492,
+        "capture_time_kind": "native-XCTest-attachment",
+        "capture_time_kst": "2026-10-31T08:49:39.492000+09:00",
+        "selector": "DUNEUITests/AllDataDetailRedesignTests/testAllCategoryReadyRowsAndCaptures",
+        "historical": true
+      },
+      "after": {
+        "image": "assets/spo2-after.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t07/evidence/ui-phone-after-matrix-current/attachments/FD4F1B93-A5E9-4D32-9203-3917120DE3B8.png",
+        "sha256": "678374a75a08f6f4a6394e20f22f3b26c8b601d76a0b02848c625b505afd0661",
+        "pixels": [
+          1320,
+          2868
+        ],
+        "exif_orientation": 1,
+        "bundle": "ui-phone-after-matrix-current",
+        "revision": "ed844d14",
+        "source_worktree_dirty": false,
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "FD4F1B93-A5E9-4D32-9203-3917120DE3B8.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "T07-spo2-native_0_6F8F82AA-4FAE-4CBE-92AA-840ECFC28D6B.png",
+          "timestamp": 1793406000.842
+        },
+        "capture_timestamp": 1793406000.842,
+        "capture_time_kind": "native-XCTest-attachment",
+        "capture_time_kst": "2026-10-31T09:20:00.842000+09:00",
+        "selector": "DUNEUITests/AllDataDetailRedesignTests/testAllCategoryReadyRowsAndCaptures",
+        "historical": true
+      }
+    },
+    "respiratoryRate": {
+      "title": "호흡수",
+      "expected_first_value": "14 breaths/min",
+      "visual_review": "Actual initial PNG pair viewed via bounded QA contact sheet: matching category/title/time/value/unit; no new clipping/overlap observed; initial state only.",
+      "before": {
+        "image": "assets/respiratoryRate-before.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t07/evidence/ui-phone-before-matrix-current/attachments/DF0EF3BB-BA7D-4051-A549-A36A9F8A4392.png",
+        "sha256": "4f0a15dbb11b7ef4c846db235ad6acda50640d888cc741d4ff4c53815f669cbb",
+        "pixels": [
+          1320,
+          2868
+        ],
+        "exif_orientation": 1,
+        "bundle": "ui-phone-before-matrix-current",
+        "revision": "2dfe6e60",
+        "source_worktree_dirty": false,
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "DF0EF3BB-BA7D-4051-A549-A36A9F8A4392.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "T07-respiratoryRate-native_0_D7401D3C-A200-4630-A329-BCE9F7B78A3E.png",
+          "timestamp": 1793404199.072
+        },
+        "capture_timestamp": 1793404199.072,
+        "capture_time_kind": "native-XCTest-attachment",
+        "capture_time_kst": "2026-10-31T08:49:59.072000+09:00",
+        "selector": "DUNEUITests/AllDataDetailRedesignTests/testAllCategoryReadyRowsAndCaptures",
+        "historical": true
+      },
+      "after": {
+        "image": "assets/respiratoryRate-after.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t07/evidence/ui-phone-after-matrix-current/attachments/1173F0F1-AC06-4848-B431-ED1E59AE9D08.png",
+        "sha256": "ea66a23a1cd3afe386a3a6d414dee1cc99bc68370a4c245f36464c8933bfde56",
+        "pixels": [
+          1320,
+          2868
+        ],
+        "exif_orientation": 1,
+        "bundle": "ui-phone-after-matrix-current",
+        "revision": "ed844d14",
+        "source_worktree_dirty": false,
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "1173F0F1-AC06-4848-B431-ED1E59AE9D08.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "T07-respiratoryRate-native_0_005D7575-2517-4CED-9D08-521140B3441C.png",
+          "timestamp": 1793406012.546
+        },
+        "capture_timestamp": 1793406012.546,
+        "capture_time_kind": "native-XCTest-attachment",
+        "capture_time_kst": "2026-10-31T09:20:12.546000+09:00",
+        "selector": "DUNEUITests/AllDataDetailRedesignTests/testAllCategoryReadyRowsAndCaptures",
+        "historical": true
+      }
+    },
+    "vo2Max": {
+      "title": "VO₂ Max",
+      "expected_first_value": "48.4 ml/kg/min",
+      "visual_review": "Actual initial PNG pair viewed via bounded QA contact sheet: matching category/title/time/value/unit; no new clipping/overlap observed; initial state only.",
+      "before": {
+        "image": "assets/vo2Max-before.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t07/evidence/ui-phone-before-matrix-current/attachments/4E310C1B-0C9E-4888-9BAF-CA7B25C3B7C9.png",
+        "sha256": "87ebc98cd43ae682f055c890ec49dac63e9ac924adebacc6dcf66887f7ca4a93",
+        "pixels": [
+          1320,
+          2868
+        ],
+        "exif_orientation": 1,
+        "bundle": "ui-phone-before-matrix-current",
+        "revision": "2dfe6e60",
+        "source_worktree_dirty": false,
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "4E310C1B-0C9E-4888-9BAF-CA7B25C3B7C9.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "T07-vo2Max-native_0_682BFCD0-13F9-4994-B558-81C904EF77BC.png",
+          "timestamp": 1793404211.334
+        },
+        "capture_timestamp": 1793404211.334,
+        "capture_time_kind": "native-XCTest-attachment",
+        "capture_time_kst": "2026-10-31T08:50:11.334000+09:00",
+        "selector": "DUNEUITests/AllDataDetailRedesignTests/testAllCategoryReadyRowsAndCaptures",
+        "historical": true
+      },
+      "after": {
+        "image": "assets/vo2Max-after.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t07/evidence/ui-phone-after-matrix-current/attachments/205C55F1-BD91-4C1B-BB8D-AB376CD2314E.png",
+        "sha256": "71a7064fde25570211a57d073de8f0000bf1ef46959a46a59ab429ad942abe4f",
+        "pixels": [
+          1320,
+          2868
+        ],
+        "exif_orientation": 1,
+        "bundle": "ui-phone-after-matrix-current",
+        "revision": "ed844d14",
+        "source_worktree_dirty": false,
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "205C55F1-BD91-4C1B-BB8D-AB376CD2314E.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "T07-vo2Max-native_0_539BC6F9-DB68-4BA4-B653-B25FBC2F7C1A.png",
+          "timestamp": 1793406024.506
+        },
+        "capture_timestamp": 1793406024.506,
+        "capture_time_kind": "native-XCTest-attachment",
+        "capture_time_kst": "2026-10-31T09:20:24.506000+09:00",
+        "selector": "DUNEUITests/AllDataDetailRedesignTests/testAllCategoryReadyRowsAndCaptures",
+        "historical": true
+      }
+    },
+    "heartRateRecovery": {
+      "title": "심박 회복",
+      "expected_first_value": "31 bpm",
+      "visual_review": "Actual initial PNG pair viewed via bounded QA contact sheet: matching category/title/time/value/unit; no new clipping/overlap observed; initial state only.",
+      "before": {
+        "image": "assets/heartRateRecovery-before.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t07/evidence/ui-phone-before-matrix-current/attachments/292ADBA6-6307-4A74-9180-53272125BF23.png",
+        "sha256": "7df3b032f937e90b63c26f8498a401f8d724eec9538c7c210589ee72605f2c54",
+        "pixels": [
+          1320,
+          2868
+        ],
+        "exif_orientation": 1,
+        "bundle": "ui-phone-before-matrix-current",
+        "revision": "2dfe6e60",
+        "source_worktree_dirty": false,
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "292ADBA6-6307-4A74-9180-53272125BF23.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "T07-heartRateRecovery-native_0_24861872-CDB3-4EBC-AE9F-23D921A14347.png",
+          "timestamp": 1793404233.637
+        },
+        "capture_timestamp": 1793404233.637,
+        "capture_time_kind": "native-XCTest-attachment",
+        "capture_time_kst": "2026-10-31T08:50:33.637000+09:00",
+        "selector": "DUNEUITests/AllDataDetailRedesignTests/testAllCategoryReadyRowsAndCaptures",
+        "historical": true
+      },
+      "after": {
+        "image": "assets/heartRateRecovery-after.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t07/evidence/ui-phone-after-matrix-current/attachments/8F4A213C-C8C2-4058-BFDD-83265B0E39B5.png",
+        "sha256": "c22b3c3ec5792cf4c43ae5032ae14c4d2434582fd36619c9d4a34d11b816095e",
+        "pixels": [
+          1320,
+          2868
+        ],
+        "exif_orientation": 1,
+        "bundle": "ui-phone-after-matrix-current",
+        "revision": "ed844d14",
+        "source_worktree_dirty": false,
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "8F4A213C-C8C2-4058-BFDD-83265B0E39B5.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "T07-heartRateRecovery-native_0_0E292B6C-32E4-4BF1-8849-54A66C13A5D9.png",
+          "timestamp": 1793406037.058
+        },
+        "capture_timestamp": 1793406037.058,
+        "capture_time_kind": "native-XCTest-attachment",
+        "capture_time_kst": "2026-10-31T09:20:37.058000+09:00",
+        "selector": "DUNEUITests/AllDataDetailRedesignTests/testAllCategoryReadyRowsAndCaptures",
+        "historical": true
+      }
+    },
+    "wristTemperature": {
+      "title": "손목 온도",
+      "expected_first_value": "+36.5 °C",
+      "visual_review": "Actual initial PNG pair viewed via bounded QA contact sheet: matching category/title/time/value/unit; no new clipping/overlap observed; initial state only.",
+      "before": {
+        "image": "assets/wristTemperature-before.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t07/evidence/ui-phone-before-matrix-current/attachments/CA90DE64-92E3-4B6D-80D6-E2F9CD4A1801.png",
+        "sha256": "7f117d0e72ce6c719a4d98235ece010e980b7772bfc7e9350c5c2cd4de3dd432",
+        "pixels": [
+          1320,
+          2868
+        ],
+        "exif_orientation": 1,
+        "bundle": "ui-phone-before-matrix-current",
+        "revision": "2dfe6e60",
+        "source_worktree_dirty": false,
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "CA90DE64-92E3-4B6D-80D6-E2F9CD4A1801.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "T07-wristTemperature-native_0_96560218-FA1D-4DCB-AEFB-15D399568989.png",
+          "timestamp": 1793404245.442
+        },
+        "capture_timestamp": 1793404245.442,
+        "capture_time_kind": "native-XCTest-attachment",
+        "capture_time_kst": "2026-10-31T08:50:45.442000+09:00",
+        "selector": "DUNEUITests/AllDataDetailRedesignTests/testAllCategoryReadyRowsAndCaptures",
+        "historical": true
+      },
+      "after": {
+        "image": "assets/wristTemperature-after.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t07/evidence/ui-phone-after-matrix-current/attachments/D033604D-E6BB-4556-AFCC-7BADEFE1559A.png",
+        "sha256": "842efea74a0b642b87688941be170dc6fb0a60b2beb90b320d924ce48fa52641",
+        "pixels": [
+          1320,
+          2868
+        ],
+        "exif_orientation": 1,
+        "bundle": "ui-phone-after-matrix-current",
+        "revision": "ed844d14",
+        "source_worktree_dirty": false,
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "D033604D-E6BB-4556-AFCC-7BADEFE1559A.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "T07-wristTemperature-native_0_61424891-DE25-43EC-83AE-A641D8041CEE.png",
+          "timestamp": 1793406048.604
+        },
+        "capture_timestamp": 1793406048.604,
+        "capture_time_kind": "native-XCTest-attachment",
+        "capture_time_kst": "2026-10-31T09:20:48.604000+09:00",
+        "selector": "DUNEUITests/AllDataDetailRedesignTests/testAllCategoryReadyRowsAndCaptures",
+        "historical": true
+      }
+    },
+    "breathingDisturbances": {
+      "title": "호흡 장애",
+      "expected_first_value": "1.2/hr",
+      "visual_review": "Actual initial PNG pair viewed via bounded QA contact sheet: matching category/title/time/value/unit; no new clipping/overlap observed; initial state only.",
+      "before": {
+        "image": "assets/breathingDisturbances-before.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t07/evidence/ui-phone-before-matrix-current/attachments/5A23EFFA-8EBB-44FE-9364-DA2FDB8176AD.png",
+        "sha256": "5250af95591a5c254da51530e449f6f5eda900683174fef2a36a0027d4996614",
+        "pixels": [
+          1320,
+          2868
+        ],
+        "exif_orientation": 1,
+        "bundle": "ui-phone-before-matrix-current",
+        "revision": "2dfe6e60",
+        "source_worktree_dirty": false,
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "5A23EFFA-8EBB-44FE-9364-DA2FDB8176AD.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "T07-breathingDisturbances-native_0_D1751BE4-6E6E-40F6-8651-0EF29DC1620F.png",
+          "timestamp": 1793404266.506
+        },
+        "capture_timestamp": 1793404266.506,
+        "capture_time_kind": "native-XCTest-attachment",
+        "capture_time_kst": "2026-10-31T08:51:06.506000+09:00",
+        "selector": "DUNEUITests/AllDataDetailRedesignTests/testAllCategoryReadyRowsAndCaptures",
+        "historical": true
+      },
+      "after": {
+        "image": "assets/breathingDisturbances-after.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t07/evidence/ui-phone-after-matrix-current/attachments/4ED82DEA-3354-4B65-A9A0-ED065AA67DBB.png",
+        "sha256": "87e6f18548dc554a1b2f123fc0e1395704fde24d53cc51bc0b0b67fabc0cf685",
+        "pixels": [
+          1320,
+          2868
+        ],
+        "exif_orientation": 1,
+        "bundle": "ui-phone-after-matrix-current",
+        "revision": "ed844d14",
+        "source_worktree_dirty": false,
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "4ED82DEA-3354-4B65-A9A0-ED065AA67DBB.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "T07-breathingDisturbances-native_0_6D5E4A33-20D0-4CAA-B1D3-769DA41D6FA2.png",
+          "timestamp": 1793406059.878
+        },
+        "capture_timestamp": 1793406059.878,
+        "capture_time_kind": "native-XCTest-attachment",
+        "capture_time_kst": "2026-10-31T09:20:59.878000+09:00",
+        "selector": "DUNEUITests/AllDataDetailRedesignTests/testAllCategoryReadyRowsAndCaptures",
+        "historical": true
+      }
+    }
+  },
+  "historical_canonical_before": {
+    "regular": {
+      "image": "assets/canonical-regular-before.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/docs/design/phone-design-map/actual/regular/images/T07.png",
+      "sha256": "293c02c8f5267518af67dd85c68fdabae051b5209ab8bb64c1a4553812607640",
+      "pixels": [
+        1320,
+        2868
+      ],
+      "exif_orientation": 1,
+      "category": "hrv",
+      "original_capture_row": {
+        "row_id": "T07",
+        "evidence": "all-data-screen-hrv",
+        "test": "WellnessRegressionTests/testHRVCardOpensMetricDetailAndAllData()",
+        "action": "tap metric-detail-show-all-data",
+        "timestamp": 1791819668.871,
+        "image": "AEE6F8DD-8602-476A-A141-EEB109236A60.png",
+        "screen": "screen-0-1320x2868-tap metric-detail-show-all-data_0_F0364998-CDF4-4293-8702-6A8A7D804E9B.png",
+        "file": "T07.png"
+      },
+      "capture_timestamp": 1791819668.871,
+      "capture_time_kind": "historical-capture-index timestamp; original attachment not independently relinked",
+      "capture_time_kst": "2026-10-13T00:41:08.871000+09:00",
+      "global_metadata_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "global_source_dirty": true,
+      "exact_per_image_source_revision": null,
+      "historical": true,
+      "limitation": "historical Oct13, per-image source/pose not freshly verified; not same-date fixture match",
+      "visual_review": "Genuine original HRV 75 ms.",
+      "orientation_observation": "Original pixels/orientation preserved.",
+      "pose_readback_verified": false
+    },
+    "ipad": {
+      "image": "assets/canonical-ipad-before.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/docs/design/phone-design-map/actual/ipad/images/T07.png",
+      "sha256": "46866da8b486a826f46ffd9628fdda6e7b3b637ca47dd21b73c672c75d11ce2c",
+      "pixels": [
+        2064,
+        2752
+      ],
+      "exif_orientation": 1,
+      "category": "sleep",
+      "original_capture_row": {
+        "row_id": "T07",
+        "evidence": "all-data-screen-sleep",
+        "test": "TodaySettingsRegressionTests/testSleepMetricOpensMetricDetailAndAllData()",
+        "action": "tap metric-detail-show-all-data",
+        "timestamp": 1791821012.867,
+        "image": "94E3726F-2E3F-4ED1-AA1E-1E4B6BBFA464.png",
+        "screen": "screen-0-2064x2752-tap metric-detail-show-all-data_0_D8ABCA6F-6FE2-4243-9012-C330A0228179.png",
+        "file": "T07.png"
+      },
+      "capture_timestamp": 1791821012.867,
+      "capture_time_kind": "historical-capture-index timestamp; original attachment not independently relinked",
+      "capture_time_kst": "2026-10-13T01:03:32.867000+09:00",
+      "global_metadata_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "global_source_dirty": true,
+      "exact_per_image_source_revision": null,
+      "historical": true,
+      "limitation": "historical Oct13, per-image source/pose not freshly verified; not same-date fixture match",
+      "visual_review": "Genuine original Sleep 7h46min, next 7h29min, with loading spinner.",
+      "orientation_observation": "Original pixels/orientation preserved.",
+      "pose_readback_verified": false
+    },
+    "duo": {
+      "image": "assets/canonical-duo-before.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/docs/design/phone-design-map/actual/duo/images/T07.png",
+      "sha256": "aa4fe614a5ad5689f060375476272f13333b089225bdc7532a97b75d29a70394",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "exif_orientation": 1,
+      "category": "hrv",
+      "original_capture_row": {
+        "row_id": "T07",
+        "evidence": "all-data-screen-hrv",
+        "test": "WellnessRegressionTests/testHRVCardOpensMetricDetailAndAllData()",
+        "action": "tap metric-detail-show-all-data",
+        "timestamp": 1791827070.98,
+        "image": "AE6D84DD-AE5E-4731-BFD8-4398F6566CAE.png",
+        "screen": "screen-0-1398x2034-tap metric-detail-show-all-data_0_A37A6247-F39D-4E79-BB33-5E711BA8D988.png",
+        "file": "T07.png"
+      },
+      "capture_timestamp": 1791827070.98,
+      "capture_time_kind": "historical-capture-index timestamp; original attachment not independently relinked",
+      "capture_time_kst": "2026-10-13T02:44:30.980000+09:00",
+      "global_metadata_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "global_source_dirty": true,
+      "exact_per_image_source_revision": null,
+      "historical": true,
+      "limitation": "historical Oct13, per-image source/pose not freshly verified; not same-date fixture match",
+      "visual_review": "Genuine original HRV 75 ms.",
+      "orientation_observation": "Original pixels/orientation preserved.",
+      "pose_readback_verified": false
+    },
+    "duo-open": {
+      "image": "assets/canonical-duo-open-before.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/docs/design/phone-design-map/actual/duo-open/images/T07.png",
+      "sha256": "718f8d4f5d0a5cfb1d926d4bdf3b4e967f4e541fc32d207212ec71f1884b6837",
+      "pixels": [
+        2006,
+        2852
+      ],
+      "exif_orientation": 6,
+      "category": "sleep",
+      "original_capture_row": {
+        "row_id": "T07",
+        "evidence": "all-data-screen-sleep",
+        "test": "TodaySettingsRegressionTests/testSleepMetricOpensMetricDetailAndAllData()",
+        "action": "tap metric-detail-show-all-data",
+        "timestamp": 1791827936.679,
+        "image": "7339479A-5C4C-473E-A762-D9CA2E0D133F.png",
+        "screen": "screen-1-2006x2852-tap metric-detail-show-all-data_1_F7CCC169-2F84-4C3D-B83C-B9A55C5C86E3.png",
+        "file": "T07.png"
+      },
+      "capture_timestamp": 1791827936.679,
+      "capture_time_kind": "historical-capture-index timestamp; original attachment not independently relinked",
+      "capture_time_kst": "2026-10-13T02:58:56.679000+09:00",
+      "global_metadata_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "global_source_dirty": true,
+      "exact_per_image_source_revision": null,
+      "historical": true,
+      "limitation": "historical Oct13, per-image source/pose not freshly verified; not same-date fixture match",
+      "visual_review": "Genuine original Sleep 7h46min, next 7h29min, with loading spinner.",
+      "orientation_observation": "Stored 2006x2852 with EXIF orientation6; browser image-orientation:from-image applies rotation for readability. Original PNG bytes preserved; orientation is not hinge proof.",
+      "pose_readback_verified": false
+    }
+  },
+  "limits": [
+    "Phone and iPad after images are genuine October31 ed844d14 native attachments, not new November2 or current final-HEAD captures. iPad baseline and after use different models/resolutions within iPad family; they are not pixel-identical device geometry.",
+    "October13 originals preserve HRV for Phone/closed Duo and Sleep for iPad/open Duo. Shared original metadata is dirty443a32ca; exact per-image source revision and old Duo hinge readback are unknown.",
+    "Original Duo-open PNG EXIF orientation6 is preserved; CSS image-orientation:from-image applies it once. EXIF is not hinge posture proof.",
+    "New Duo source is clean e2759822, not the assembly checkout or an invented current revision. Strict ACK0/LCD and ACK180/LCD-1 readback applies only to these November2 focused captures.",
+    "Native paired PNG host file mtime is recorded explicitly; capture checkpoint deadline is not treated as capture timestamp.",
+    "Visible Sleep pagination spinner is preserved; this frame does not prove completed pagination. Initial pixels do not establish all offscreen features, themes, maximum text sizes, production HealthKit privacy or full regression.",
+    "Remote CI run inventory was empty in the parent evidence; no CI PASS or final PR readiness is claimed by map publication."
+  ],
+  "review": {
+    "all16_phone_initial_pairs": "viewed32PNGsviafourQAcontactsheetstitle/icon/time/value/unit/layout",
+    "findings": {
+      "P1": 0,
+      "P2": 0,
+      "P3": 0
+    },
+    "bounded_scope": true
+  },
+  "four_tier_after": {
+    "regular": {
+      "image": "assets/hrv-after.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t07/evidence/ui-phone-after-matrix-current/attachments/8111ECA7-BBC9-470A-AFBE-17A1F06FC6B7.png",
+      "sha256": "af4be8d12bd0b5443a78a62f72deae9a2d5fc3d8517ed973faded1723e5c1e24",
+      "pixels": [
+        1320,
+        2868
+      ],
+      "exif_orientation": 1,
+      "bundle": "ui-phone-after-matrix-current",
+      "revision": "ed844d14",
+      "source_worktree_dirty": false,
+      "native_attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+        "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+        "exportedFileName": "8111ECA7-BBC9-470A-AFBE-17A1F06FC6B7.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "T07-hrv-native_0_CF1869E8-1F74-45E8-AD07-75E4F5202999.png",
+        "timestamp": 1793405865.668
+      },
+      "capture_timestamp": 1793405865.668,
+      "capture_time_kind": "native-XCTest-attachment",
+      "capture_time_kst": "2026-10-31T09:17:45.668000+09:00",
+      "selector": "DUNEUITests/AllDataDetailRedesignTests/testAllCategoryReadyRowsAndCaptures",
+      "historical": true,
+      "category": "hrv",
+      "device_udid": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+      "action": "T07-hrv-native_0_CF1869E8-1F74-45E8-AD07-75E4F5202999.png",
+      "pose_readback_verified": false,
+      "before_reference": "assets/canonical-regular-before.png"
+    },
+    "ipad": {
+      "image": "assets/candidate-ipad-sleep-after.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t07/evidence/ui-ipad-after-category-matrix-current/attachments/7912222C-04CB-4889-BC47-6BCB3E1DC67A.png",
+      "sha256": "8403057ad3ab337e789a5a347ea195e8c0d3b19a61c032c3fb1aa07aa0131442",
+      "pixels": [
+        1512,
+        2316
+      ],
+      "exif_orientation": 1,
+      "bundle": "ui-ipad-after-category-matrix-current",
+      "revision": "ed844d14",
+      "source_worktree_dirty": false,
+      "native_attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+        "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-validation-644069bf7efc",
+        "exportedFileName": "7912222C-04CB-4889-BC47-6BCB3E1DC67A.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "T07-sleep-native_0_346701D5-A937-49CB-B578-C19137E532B0.png",
+        "timestamp": 1793416758.444
+      },
+      "capture_timestamp": 1793416758.444,
+      "capture_time_kind": "native-XCTest-attachment",
+      "capture_time_kst": "2026-10-31T12:19:18.444000+09:00",
+      "selector": "DUNEUITests/AllDataDetailRedesignTests/testAllCategoryReadyRowsAndCaptures",
+      "historical": true,
+      "category": "sleep",
+      "device_udid": "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+      "action": "T07-sleep-native_0_346701D5-A937-49CB-B578-C19137E532B0.png",
+      "pose_readback_verified": false,
+      "before_reference": "assets/canonical-ipad-before.png"
+    },
+    "duo": {
+      "image": "assets/canonical-duo-after.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t07/evidence/pr880-duo-closed-states-final-2026-11-02/paired-host/001-1398x2034.png",
+      "sha256": "8a7b8f1a92c76d111bdd8b52517a916dd930e0086aa2d6de0b32a199872ceab4",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "exif_orientation": 1,
+      "bundle": "pr880-duo-closed-states-final-2026-11-02",
+      "revision": "e2759822",
+      "source_worktree_dirty": false,
+      "category": "hrv",
+      "device_udid": "3B4CDF09-2F57-421B-B10C-D02A3DEF1217",
+      "selector": "DUNEUITests/AllDataDetailRedesignTests/testLimitedReadyAndLimitedEmptyStates",
+      "capture_timestamp": 1793603003.9065394,
+      "capture_time_kind": "host-file-mtime of paired native PNG; not XCTest attachment timestamp",
+      "capture_time_kst": "2026-11-02T16:03:23.906539+09:00",
+      "action": "DUNE_VISUAL_AUDIT_READY root after setup -[AllDataDetailRedesignTests testLimitedReadyAndLimitedEmptyStates] [DUNEUITests/UITestBaseCase.swift:145] DEADLINE=1793603022.738698",
+      "sequence": 1,
+      "historical": false,
+      "active_display": "LCD",
+      "angle_before": 0,
+      "angle_after": 0,
+      "strict_ack_count": 4,
+      "pose_readback_verified": true,
+      "proof_directory": "assets/proofs/duo",
+      "visual_review": "Parent reported viewing original active-display PNG: HRV 75 ms / Sleep 01:00, 7h 46min, reporting date and existing pagination spinner clear. Raw pose-proof native_visual_review remains pending-parent as originally collected; this publication records the subsequent parent observation separately.",
+      "before_reference": "assets/canonical-duo-before.png"
+    },
+    "duo-open": {
+      "image": "assets/canonical-duo-open-after.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t07/evidence/pr880-duo-open-sleep-final-2026-11-02/paired-host/002-2007x2853.png",
+      "sha256": "3eabaad560074e334f2739f8e8b269cc0529e4c2c473182d98c40e3caa8594df",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "exif_orientation": 1,
+      "bundle": "pr880-duo-open-sleep-final-2026-11-02",
+      "revision": "e2759822",
+      "source_worktree_dirty": false,
+      "category": "sleep",
+      "device_udid": "3B4CDF09-2F57-421B-B10C-D02A3DEF1217",
+      "selector": "DUNEUITests/AllDataDetailRedesignTests/testSleepUsesReportingDateAndActualStageTime",
+      "capture_timestamp": 1793603308.0605075,
+      "capture_time_kind": "host-file-mtime of paired native PNG; not XCTest attachment timestamp",
+      "capture_time_kst": "2026-11-02T16:08:28.060508+09:00",
+      "action": "DUNE_VISUAL_AUDIT_READY T07-sleep-reporting-day-native [DUNEUITests/AllDataDetailRedesignTests.swift:162] DEADLINE=1793603337.255225",
+      "sequence": 2,
+      "historical": false,
+      "active_display": "LCD-1",
+      "angle_before": 180,
+      "angle_after": 180,
+      "strict_ack_count": 3,
+      "pose_readback_verified": true,
+      "proof_directory": "assets/proofs/duo-open",
+      "visual_review": "Parent reported viewing original active-display PNG: HRV 75 ms / Sleep 01:00, 7h 46min, reporting date and existing pagination spinner clear. Raw pose-proof native_visual_review remains pending-parent as originally collected; this publication records the subsequent parent observation separately.",
+      "before_reference": "assets/canonical-duo-open-before.png"
+    }
+  },
+  "additional_duo_states": [
+    {
+      "label": "Duo 접힘 · 제한 이력에 기록 있음",
+      "image": "assets/duo-state-002.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t07/evidence/pr880-duo-closed-states-final-2026-11-02/paired-host/002-1398x2034.png",
+      "sha256": "707865012a4ebf36a04b6321ac2c6b918d6eae167d2e4c28f6fe1c3b044525cc",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "revision": "e2759822",
+      "source_worktree_dirty": false,
+      "device_udid": "3B4CDF09-2F57-421B-B10C-D02A3DEF1217",
+      "selector": "DUNEUITests/AllDataDetailRedesignTests/testLimitedReadyAndLimitedEmptyStates",
+      "action": "DUNE_VISUAL_AUDIT_READY T07-hrv-limited-ready-native [DUNEUITests/AllDataDetailRedesignTests.swift:162] DEADLINE=1793603046.2274551",
+      "capture_timestamp": 1793603022.0034657,
+      "capture_time_kind": "host-file-mtime of paired native PNG; not XCTest attachment timestamp",
+      "active_display": "LCD",
+      "proof_directory": "assets/proofs/duo"
+    },
+    {
+      "label": "Duo 접힘 · 제한 이력에 기록 없음",
+      "image": "assets/duo-state-003.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t07/evidence/pr880-duo-closed-states-final-2026-11-02/paired-host/003-1398x2034.png",
+      "sha256": "5f078e3ca437a65f01ab2d065444ef200776b79b4d581126659f08893d1686e9",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "revision": "e2759822",
+      "source_worktree_dirty": false,
+      "device_udid": "3B4CDF09-2F57-421B-B10C-D02A3DEF1217",
+      "selector": "DUNEUITests/AllDataDetailRedesignTests/testLimitedReadyAndLimitedEmptyStates",
+      "action": "DUNE_VISUAL_AUDIT_READY T07-hrv-limited-empty-native [DUNEUITests/AllDataDetailRedesignTests.swift:162] DEADLINE=1793603064.6733708",
+      "capture_timestamp": 1793603037.0083194,
+      "capture_time_kind": "host-file-mtime of paired native PNG; not XCTest attachment timestamp",
+      "active_display": "LCD",
+      "proof_directory": "assets/proofs/duo"
+    }
+  ],
+  "publication": {
+    "date": "2026-11-02",
+    "canonical_screen": "T07",
+    "parent_declared_checkout_baseline": "95f5bc59",
+    "model_note": "Available gpt-6.1-sol medium fallback used; configured older gpt-6-sol unavailable due to quota. No claim of executing the older model.",
+    "raw_proofs_preserved": true,
+    "no_native_execution_by_publisher": true
+  }
+}

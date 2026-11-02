@@ -48,7 +48,9 @@ final class TrainingReadinessDetailRedesignTests: ActivityExerciseSeededUITestBa
             XCTAssertTrue(row.waitForExistence(timeout: 5), "Original \(title) \(weight) contribution should remain")
         }
 
-        let back = navigation.buttons.firstMatch
+        let railBack = app.buttons["BackButton"].firstMatch
+        let back = railBack.exists && railBack.isHittable
+            ? railBack : navigation.buttons.firstMatch
         XCTAssertTrue(back.exists && back.isHittable, "Native Back should be usable")
         back.auditTap()
         XCTAssertTrue(readinessHero.waitForExistence(timeout: 8), "Back should return to Activity")
@@ -206,7 +208,9 @@ final class TrainingReadinessDetailRedesignTests: ActivityExerciseSeededUITestBa
         addScreenshotAttachment(named: "A02 dark maximum AX calculation complete")
         VisualAudit.capture("A02 dark maximum AX calculation complete")
 
-        let back = app.navigationBars["Training Readiness"].buttons.firstMatch
+        let railBack = app.buttons["BackButton"].firstMatch
+        let back = railBack.exists && railBack.isHittable
+            ? railBack : app.navigationBars["Training Readiness"].buttons.firstMatch
         XCTAssertTrue(back.exists && back.isHittable, "Native Back must remain available")
         back.auditTap()
         XCTAssertTrue(app.descendants(matching: .any)[AXID.activityHeroReadiness].firstMatch
