@@ -623,8 +623,9 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
 
         XCTAssertTrue(readinessHero.exists, "Activity tab should be visible before opening training volume")
         let volumeSection = waitForElement(AXID.activitySectionVolume, timeout: 15)
+        let activityScroll = waitForElement(AXID.activityRootScroll, timeout: 15)
         XCTAssertTrue(
-            scrollUntilHittable(volumeSection, maxSwipes: 8),
+            scrollUntilHittable(volumeSection, maxSwipes: 8, scrollContainer: activityScroll),
             "Training volume section should be reachable before opening detail"
         )
         let detailScreen = app.descendants(matching: .any)[AXID.activityTrainingVolumeDetailScreen].firstMatch
@@ -637,7 +638,7 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
             }
 
             XCTAssertTrue(
-                scrollUntilHittable(volumeSection, maxSwipes: 3),
+                scrollUntilHittable(volumeSection, maxSwipes: 3, scrollContainer: activityScroll),
                 "Training volume section should remain tappable while retrying detail navigation"
             )
         }
