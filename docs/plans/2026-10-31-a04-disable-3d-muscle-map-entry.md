@@ -1,7 +1,7 @@
 ---
 topic: A04 3D muscle map entry disable
 date: 2026-10-31
-status: approved
+status: implemented
 confidence: high
 related_solutions: [docs/solutions/architecture/2026-02-27-muscle-map-detail-view-integration.md]
 related_brainstorms: []
@@ -25,7 +25,7 @@ The Activity root already removed its 3D shortcut, but `MuscleMapDetailView` sti
 
 - Use one clearly named temporary availability constant, local to the detail view.
 - No new user copy, global setting, theme change or 3D engine change.
-- Actual screen A03 requires fresh captures after app validation on affected iPhone, iPad and Duo states. Old PNGs do not prove A04.
+- Actual screen A03 requires source-matched captures after app validation on affected iPhone, iPad and Duo states. Original pre-A04 PNGs remain comparison evidence; the clean historical 1f7 Phone A04 run is reusable only under the documented source/input closure.
 
 ## Approach
 
@@ -73,7 +73,7 @@ Disable the original `MuscleMapDetailView` 3D button and gate compact automatic 
 | Case | Handling |
 |---|---|
 | Compact muscle selection | Still toggles 2D inline detail |
-| Regular width | Visible disabled button; adjacent detail remains |
+| Regular width | Visible disabled button; original adaptive inline/right-pane detail remains |
 | Re-enable later | Flip one local constant after restoring entry policy and tests |
 | Existing internal 3D destination | Retained without user entry from A03 |
 
@@ -94,5 +94,12 @@ Disable the original `MuscleMapDetailView` 3D button and gate compact automatic 
 
 ## Confidence Assessment
 
-- **Overall**: High for source scope; runtime pending parent validation.
+- **Overall**: High for narrow source scope; historical Phone and new iPad/Duo validation recorded in the review gallery.
 - **Reasoning**: Both known user paths are in one view; unchanged 3D implementation remains available in source.
+
+## Completed scoped validation
+
+- Historical clean Phone 1f7f9900 exact selector 1/1 PASS; bounded source/input reuse, not a new d563 execution.
+- Validation 8274d1cb: new iPad, Duo closed and Duo open each 1/1 PASS; strict Duo four ACKs per pose, actual 0°/LCD and 180°/LCD-1.
+- Five source review perspectives and final normal-text native quality review have no new P1/P2/P3.
+- New generic iOS app build and actual UI target/runtime validation passed. No additional full, 3D runtime, Back, VoiceOver or maximum-text claim.
