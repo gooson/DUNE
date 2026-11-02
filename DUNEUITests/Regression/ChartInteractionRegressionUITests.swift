@@ -308,11 +308,11 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
         let weekGoalLabel = weeklyGoal.label
         XCTAssertTrue(weekGoalLabel.contains("5"), "The seeded view model has a five-day weekly goal")
         let weekPreviousDates = previousDates.label
-        // TrainingVolumeAnalysisService uses [today−14d, today−8d] for 1W's previous summary.
+        // TrainingVolumeAnalysisService uses [today−13d, today−7d] for 1W's previous summary.
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: Date())
-        let previousStart = try XCTUnwrap(calendar.date(byAdding: .day, value: -14, to: today))
-        let previousEnd = try XCTUnwrap(calendar.date(byAdding: .day, value: -8, to: today))
+        let previousStart = try XCTUnwrap(calendar.date(byAdding: .day, value: -13, to: today))
+        let previousEnd = try XCTUnwrap(calendar.date(byAdding: .day, value: -7, to: today))
         let supportedLocales = [Locale.current, Locale(identifier: "en_US"),
                                 Locale(identifier: "ko_KR"), Locale(identifier: "ja_JP")]
         let expectedCaptions = supportedLocales.map { locale in

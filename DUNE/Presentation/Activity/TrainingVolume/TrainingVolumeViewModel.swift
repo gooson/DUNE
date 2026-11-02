@@ -37,7 +37,7 @@ final class TrainingVolumeViewModel {
 
     // MARK: - Loading
 
-    func loadData(manualRecords: [ExerciseRecord]) async {
+    func loadData(manualRecords: [ExerciseRecord], referenceDate: Date = Date()) async {
         guard !isLoading else { return }
         let requestID = beginLoadRequest()
         isLoading = true
@@ -65,13 +65,14 @@ final class TrainingVolumeViewModel {
 
         let period = selectedPeriod
         let fetchDays = period.days * 2 // Current + previous period
-        let calendar = Calendar.current
-        let historyEnd = Date()
-        let historyEndDay = calendar.startOfDay(for: historyEnd)
-        let historyStart = calendar.date(byAdding: .day, value: -(fetchDays - 1), to: historyEndDay) ?? historyEndDay
+        guard let bounds = TrainingVolumeAnalysisService.CalendarBounds.inclusiveDays(
+            period: period, referenceDate: referenceDate
+        ) else { return }
+        let historyEnd = referenceDate
+        let historyStart = bounds.previousStart
         let historySnapshots = snapshots.filter { $0.date >= historyStart && $0.date <= historyEnd }
 
-        async let workoutsTask = safeWorkoutsFetch(days: fetchDays)
+        async let workoutsTask = safeWorkoutsFetch(start: historyStart, end: historyEnd)
         async let trainingLoadTask = safeTrainingLoadFetch(
             historyDays: fetchDays,
             manualLoadSnapshots: manualLoadSnapshots
@@ -84,7 +85,7 @@ final class TrainingVolumeViewModel {
         let result = TrainingVolumeAnalysisService.analyze(
             workouts: workouts,
             manualRecords: snapshots,
-            period: period
+            period: period, bounds: bounds
         )
 
         guard isCurrentLoadRequest(requestID) else { return }
@@ -93,7 +94,7 @@ final class TrainingVolumeViewModel {
             workouts: workouts,
             manualRecords: historySnapshots,
             start: historyStart,
-            end: historyEnd
+            end: historyEnd, calendar: bounds.calendar
         )
         trainingLoadData = loadData
         rpeTrendData = Self.buildRPETrendData(from: manualRecords, historyDays: fetchDays)
@@ -130,9 +131,9 @@ final class TrainingVolumeViewModel {
         }
     }
 
-    private func safeWorkoutsFetch(days: Int) async -> [WorkoutSummary] {
+    private func safeWorkoutsFetch(start: Date, end: Date) async -> [WorkoutSummary] {
         do {
-            return try await workoutService.fetchWorkouts(days: days)
+            return try await workoutService.fetchWorkouts(start: start, end: end)
         } catch {
             AppLogger.ui.error("Volume workouts fetch failed: \(error.localizedDescription)")
             return []
