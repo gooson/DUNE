@@ -7,6 +7,8 @@ status: in-progress
 
 # DUNE 레이아웃 맵
 
+H03 수면 예측 상세와 이를 공유하는 T15 알림 수면 상세의 로드 완료 상태는 [전용 배치 계약](sleep-prediction-detail-h03.html)을 따른다. 기존 링·신뢰도·요인·팁을 한 열에서 읽고 큰 글씨에서는 세로로 쌓는다. 이 HTML은 시안이며 실제 앱 캡처가 아니다.
+
 2026-10-28 Today 지표의 Wellness 표현과 동일 행 높이는 [상태/배치 계약](today-case-matrix.md), [새 실제 화면](../full-redesign-map/review/today-wellness-metrics-2026-10-28/index.html)을 따른다. 큰 글씨 한 열과 홀수 전체 폭은 유지한다.
 
 2026-10-28 H01 오늘 밤 수면은 큰 예측 점수·달 상징·0–100 가로 게이지와 실제3단계 신뢰도 배지·팁 영역을 사용한다. [배치 계약](wellness-redesign-proposal.md)과 [실제 화면](../full-redesign-map/review/wellness-prediction-visual-2026-10-28/index.html)을 함께 따른다. 큰 글씨는 세로 전환한다.

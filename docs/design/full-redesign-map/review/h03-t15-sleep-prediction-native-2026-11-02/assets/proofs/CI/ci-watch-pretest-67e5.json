@@ -1,0 +1,15 @@
+{
+  "head": "67e5ea0916cacfbc843fa7b6cfc790a5861149b0",
+  "run": 41461717027,
+  "job": 125332157742,
+  "status": "failure",
+  "classification": "PRETEST clone401 then emptyDestination exit64; no Watch test executed",
+  "excerpt": [
+    "2026-11-02T14:28:07.3172800Z Clone error: An error was encountered processing the command (domain=com.apple.CoreSimulator.SimError, code=401):",
+    "2026-11-02T14:28:07.6313630Z Error: Clone failed; refusing to use shared source [4DA5F4CB-FB8D-4FFF-8A66-E222F1B25593].",
+    "2026-11-02T14:28:08.5179400Z xcodebuild: error: missing value for key 'id' of option 'Destination'",
+    "2026-11-02T14:28:08.5681280Z Watch unit tests: failed (exit 64)",
+    "2026-11-02T14:28:08.5682360Z   2: xcodebuild: error: missing value for key 'id' of option 'Destination'"
+  ],
+  "remaining": "iOSCI andlocalDuo routes pending; previousH02 Watch213PASS notthisrun"
+}

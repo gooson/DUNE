@@ -7,6 +7,8 @@ status: in-progress
 
 # DUNE 테마 맵
 
+H03 오늘 밤 수면 예측 상세와 T15 로드 완료 소비자는 [수면 상세 방향 시안](themes/dune-sleep-prediction-detail-h03.html)과 [배치 계약](../layout-map/sleep-prediction-detail-h03.html)을 따른다. 기존 DUNE sleep 팔레트·공유 링·원래 요인/팁 아이콘을 유지한다. HTML은 실제 앱 캡처가 아니다.
+
 ## T12 알림 메시지 상세 · 2026-10-31
 
 [밝음·어두움 브라우저 제안](themes/dune-notification-message-detail.html)은 실제 알림의 저장된 제목·본문만 쓰는 불투명한 어두운 제목 히어로와 밝은 본문 카드를 결합한 한 열 문서형 상세를 보여 준다. [배치·데이터 계약](../layout-map/notification-message-detail-proposal.md)에 680pt 읽기 폭과 큰 글씨·원문 보존을 기록했다. 문구는 테스트 fixture 예시이며 실제 앱 캡처가 아니다. 네이티브 소스 변경 후 iPhone·iPad·Duo 실제 T12 캡처와 런타임 검증은 별도로 갱신한다.

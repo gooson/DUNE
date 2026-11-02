@@ -10,13 +10,49 @@ final class NotificationRoutingRegressionTests: SeededUITestBaseCase {
 
     func testBedtimeReminderPushesFromNotificationHub() {
         openHub()
+        // The adaptive inbox virtualizes rows below the current viewport.
+        let bedtimeRow = app.staticTexts["Bedtime Route Fixture"].firstMatch
+        let inbox = app.descendants(matching: .any)[AXID.notificationHubScreen].firstMatch
+        for _ in 0..<16 where !bedtimeRow.exists || !bedtimeRow.isHittable {
+            inbox.swipeUp()
+        }
         tapNotification(title: "Bedtime Route Fixture")
 
-        XCTAssertTrue(
-            app.descendants(matching: .any)["notification-sleep-detail-screen"].firstMatch.waitForExistence(timeout: 10),
-            "Bedtime reminder should push sleep detail"
-        )
-        XCTAssertTrue(app.tabBars.buttons["Today"].isSelected, "Notification tap should keep the Today tab")
+        let detail = app.descendants(matching: .any)["notification-sleep-detail-screen"].firstMatch
+        XCTAssertTrue(detail.waitForExistence(timeout: 10),
+                      "Bedtime reminder should push sleep detail")
+        let score = app.descendants(matching: .any)["sleep-prediction-hero-score"].firstMatch
+        guard score.waitForExistence(timeout: 15) else {
+            XCTFail("Bedtime reminder should load the computed sleep prediction")
+            return
+        }
+        // The notification wrapper names the shared root; verify the loaded leaves directly.
+        XCTAssertTrue(app.staticTexts["sleep-prediction-hero-guide"].firstMatch.exists)
+        XCTAssertTrue(app.staticTexts["sleep-prediction-confidence-label"].firstMatch.exists)
+        XCTAssertTrue(score.isHittable, "The computed score should be visible before capture")
+
+        // iPad's floating navigation exposes the selected item outside a TabBar.
+        let identifiedToday = app.descendants(matching: .any)["tab-today"].firstMatch
+        let today = identifiedToday.exists ? identifiedToday : app.buttons["Today"].firstMatch
+        XCTAssertTrue(today.waitForExistence(timeout: 5), "Today navigation item should exist")
+        XCTAssertTrue(today.isSelected, "Notification tap should keep the Today tab")
+        VisualAudit.capture("T15 default computed sleep prediction loaded initial viewport")
+        addScreenshotAttachment(named: "T15 default computed sleep prediction loaded initial viewport")
+
+        let railBack = app.buttons["BackButton"].firstMatch
+        let back = railBack.exists && railBack.isHittable
+            ? railBack : app.navigationBars.buttons.firstMatch
+        XCTAssertTrue(back.waitForExistence(timeout: 5) && back.isHittable,
+                      "Loaded sleep detail should have a usable native back button")
+        back.tap()
+        XCTAssertTrue(detail.waitForNonExistence(timeout: 5), "Back should leave the sleep detail")
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.notificationHubScreen].firstMatch
+            .waitForExistence(timeout: 8), "Back should return to the Today notification hub")
+        let identifiedTodayAfterBack = app.descendants(matching: .any)["tab-today"].firstMatch
+        let todayAfterBack = identifiedTodayAfterBack.exists
+            ? identifiedTodayAfterBack : app.buttons["Today"].firstMatch
+        XCTAssertTrue(todayAfterBack.waitForExistence(timeout: 5))
+        XCTAssertTrue(todayAfterBack.isSelected, "Today should remain selected after Back")
     }
 
     func testLegacyPostureReminderPushesAssessment() {
