@@ -10,6 +10,12 @@ final class NotificationRoutingRegressionTests: SeededUITestBaseCase {
 
     func testBedtimeReminderPushesFromNotificationHub() {
         openHub()
+        // The adaptive inbox virtualizes rows below the current viewport.
+        let bedtimeRow = app.staticTexts["Bedtime Route Fixture"].firstMatch
+        let inbox = app.descendants(matching: .any)[AXID.notificationHubScreen].firstMatch
+        for _ in 0..<16 where !bedtimeRow.exists || !bedtimeRow.isHittable {
+            inbox.swipeUp()
+        }
         tapNotification(title: "Bedtime Route Fixture")
 
         let detail = app.descendants(matching: .any)["notification-sleep-detail-screen"].firstMatch
