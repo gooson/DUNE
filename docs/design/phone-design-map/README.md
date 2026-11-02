@@ -236,3 +236,6 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 
 
 2026-11-02 T13 알림 목적지 없음: [네 기기 실제 전후와 Go Back·실제 UUID](../full-redesign-map/review/t13-notification-unavailable-native-2026-11-02/index.html). T13 네 행만 갱신했다. 역사적 Phone734 normal·MAX2PASS와 새 iPad/Duo normal 실행을 구분했다. iPad baseline 전체FAILED6/5/1 중 해당 unavailable case만PASS라는 범위를 보존했다. iPad mini/Pro13 차이와 옛 Duo 각도 미확인, 새 Duo 각도·활성LCD·rawACK·펼침 PNG2853×2007 EXIF1을 명시했다. 전체 회귀나 새 현재HEAD CI 통과를 뜻하지 않는다.
+
+
+2026-11-02 H02 Wellness Score: [네 기기 실제 전후·MAX·출처](../full-redesign-map/review/h02-wellness-score-detail-native-2026-11-02/index.html). H02 네 행만 갱신했다. 역사적 Phone normal 개별 Passed/FAILED5·2·3 그룹과 같은ID 조건부3PASS, finalglyph iPad normal+MAX2PASS 및 새Duo normal·PhoneMAX는 각 원문 결과로 구분했다. normal은 실제Back 복귀, MAX는Back 미탭이다. 기기·날짜·실제값·옛Duo pose불확실성을 보존하며 전체회귀나 현재HEAD CI 통과를 뜻하지 않는다.

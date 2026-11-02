@@ -1,0 +1,1509 @@
+{
+  "schema_version": 1,
+  "screen": "H02",
+  "kind": "installed actual native comparison; four canonical H02 rows only",
+  "stage_status": "installed H02-only; final CI/PR tracked separately",
+  "installed": true,
+  "target_install_directory": "docs/design/full-redesign-map/review/h02-wellness-score-detail-native-2026-11-02",
+  "pairs": {
+    "regular": {
+      "before": {
+        "image": "assets/phone-original-5A0.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/h02/evidence/ui-phone-original-before/attachments/5A0BC1F7-89DA-4139-88D7-8468EE0FB63F.png",
+        "sha256": "79feadd06760fa45b9236577f0a820f5054358e9e35cb0e7efa92466da5d307d",
+        "pixels": [
+          1320,
+          2868
+        ],
+        "exif_orientation": 1,
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "5A0BC1F7-89DA-4139-88D7-8468EE0FB63F.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-tap wellness-hero-score_0_D843562E-64B5-4D10-8B9C-4DBFBEFD3182.png",
+          "timestamp": 1793403905.155
+        },
+        "revision": "2dfe6e60",
+        "selector": "DUNEUITests/WellnessRegressionTests/testWellnessRootRendersAndHeroOpensScoreDetail",
+        "action": "screen-0-1320x2868-tap wellness-hero-score_0_D843562E-64B5-4D10-8B9C-4DBFBEFD3182.png",
+        "capture_timestamp": 1793403905.155,
+        "timestamp_kind": "native-XCTest-attachment",
+        "device_udid": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+        "source_worktree_dirty": false,
+        "capture_time_kst": "2026-10-31T08:45:05.155000+09:00"
+      },
+      "after": {
+        "image": "assets/phone-historical-normal-7C26187A.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/h02/evidence/ui-phone-initial-failure/attachments/7C26187A-7223-4F34-B01E-313AE19E2937.png",
+        "sha256": "b8f7206bcb7f44d12229e06d737eedac36414aca0e75dc8c647a7b75fb851827",
+        "pixels": [
+          1320,
+          2868
+        ],
+        "exif_orientation": 1,
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "7C26187A-7223-4F34-B01E-313AE19E2937.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "H02-native-actual-score-components_0_4C477182-B81E-48E5-8F3F-84537B8FDC22.png",
+          "timestamp": 1793406651.856
+        },
+        "revision": "c7cfa366",
+        "selector": "DUNEUITests/WellnessScoreDetailRedesignTests/testActualScoreComponentsAndNativeBack",
+        "action": "H02-native-actual-score-components_0_4C477182-B81E-48E5-8F3F-84537B8FDC22.png",
+        "capture_timestamp": 1793406651.856,
+        "timestamp_kind": "native-XCTest-attachment",
+        "device_udid": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+        "source_worktree_dirty": null,
+        "case_result": "Passed",
+        "group_result": "Failed",
+        "normal_back_exercised": true,
+        "source_dirty_detail": "standardgeneratedPBXonly per raw provenance; no boolean clean claim",
+        "capture_time_kst": "2026-10-31T09:30:51.856000+09:00"
+      },
+      "status": "historical exact normal nodePassed; groupFAILED5/2/3"
+    },
+    "ipad": {
+      "before": {
+        "image": "assets/ipad-original-A1F0.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/detail-original-ipad/evidence/original-three-screen-current/attachments/A1F0FB5C-72FA-441C-AACC-A46526731135.png",
+        "sha256": "9ac8fa8227deb2f9da33db14e8283fbc029a75d22167ffcc57a26c83c3451c21",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "exif_orientation": 1,
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+          "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "A1F0FB5C-72FA-441C-AACC-A46526731135.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1512x2316-tap wellness-hero-score_0_7FA1BB12-DD21-48CE-A200-620E6C59547B.png",
+          "timestamp": 1793409175.278
+        },
+        "revision": "2dfe6e60",
+        "selector": "DUNEUITests/WellnessRegressionTests/testWellnessRootRendersAndHeroOpensScoreDetail",
+        "action": "screen-0-1512x2316-tap wellness-hero-score_0_7FA1BB12-DD21-48CE-A200-620E6C59547B.png",
+        "capture_timestamp": 1793409175.278,
+        "timestamp_kind": "native-XCTest-attachment",
+        "device_udid": "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+        "source_worktree_dirty": false,
+        "capture_time_kst": "2026-10-31T10:12:55.278000+09:00"
+      },
+      "after": {
+        "image": "assets/ipad-normal-final-glyph-05314F91.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/h02/evidence/ui-ipad-normal-and-dark-maxAX-glyph-resolved-2026-11-02/attachments/05314F91-FE27-4DAF-8CA6-DC702A65C5C9.png",
+        "sha256": "7b20d2991128251cb9724127ca69bdaf1cf8241a7f32c8ea3cbb158222d6e33b",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "exif_orientation": 1,
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+          "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "05314F91-FE27-4DAF-8CA6-DC702A65C5C9.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "H02-native-actual-score-components_0_D621ECB7-BDE1-4BAC-96EE-88DFF4F8F146.png",
+          "timestamp": 1793583798.968
+        },
+        "revision": "e83be1f5",
+        "selector": "DUNEUITests/WellnessScoreDetailRedesignTests/testActualScoreComponentsAndNativeBack",
+        "action": "H02-native-actual-score-components_0_D621ECB7-BDE1-4BAC-96EE-88DFF4F8F146.png",
+        "capture_timestamp": 1793583798.968,
+        "timestamp_kind": "native-XCTest-attachment",
+        "device_udid": "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+        "source_worktree_dirty": false,
+        "normal_back_exercised": true,
+        "capture_time_kst": "2026-11-02T10:43:18.968000+09:00"
+      },
+      "status": "historical finalglyph normal+MAX actual2PASS; older Back lookup"
+    },
+    "duo": {
+      "before": {
+        "image": "assets/canonical-duo-before.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-h02/Health/docs/design/phone-design-map/actual/duo/images/H02.png",
+        "sha256": "ae262a92ec1ce9a1eb8d6d30f4ebced7b7fe695ffa1a5183f2191eb15db97940",
+        "pixels": [
+          1398,
+          2034
+        ],
+        "exif_orientation": 1,
+        "revision": null,
+        "original_capture_row": {
+          "row_id": "H02",
+          "evidence": "wellness-score-detail-screen",
+          "test": "WellnessRegressionTests/testWellnessRootRendersAndHeroOpensScoreDetail()",
+          "action": "tap wellness-hero-score",
+          "timestamp": 1791827209.125,
+          "image": "53F8051C-44E1-4004-8BC4-AC905284A02C.png",
+          "screen": "screen-0-1398x2034-tap wellness-hero-score_0_C18A602B-86D2-402C-B249-2692B2C0DE6F.png",
+          "file": "H02.png"
+        },
+        "historical_global_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+        "global_source_dirty": true,
+        "exact_per_image_revision_unknown": true,
+        "selector": "WellnessRegressionTests/testWellnessRootRendersAndHeroOpensScoreDetail()",
+        "action": "tap wellness-hero-score",
+        "capture_timestamp": 1791827209.125,
+        "timestamp_kind": "historical-capture-index timestamp; raw attachment not relinked",
+        "pose_readback_verified": false,
+        "capture_time_kst": "2026-10-13T02:46:49.125000+09:00"
+      },
+      "after": {
+        "image": "assets/duo-closed-normal-002-1398x2034.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/h02/evidence/duo-closed-normal-6bfe7c85/paired-host/002-1398x2034.png",
+        "sha256": "83543488dd407bc7ba6c4f7d005a6930328638319d05b54d3ad1e9db905b8f24",
+        "pixels": [
+          1398,
+          2034
+        ],
+        "exif_orientation": 1,
+        "revision": "6bfe7c85",
+        "source_worktree_dirty": false,
+        "selector": "DUNEUITests/WellnessScoreDetailRedesignTests/testActualScoreComponentsAndNativeBack",
+        "action": "DUNE_VISUAL_AUDIT_READY tap wellness-hero-score [DUNEUITests/WellnessScoreDetailRedesignTests.swift:25] DEADLINE=1793623458.391006",
+        "capture_timestamp": 1793623430.5138662,
+        "timestamp_kind": "host-file-mtime of paired native PNG; not XCTest attachment or ACK deadline",
+        "device_udid": "E282B799-FA8E-4689-9F56-02BCF6D1F25D",
+        "capture_time_kst": "2026-11-02T21:43:50.513866+09:00",
+        "angle_before": 0,
+        "angle_after": 0,
+        "active_display": "LCD",
+        "strict_ack_count": 4,
+        "pose_readback_verified": true,
+        "normal_back_exercised": true,
+        "actual_score": 87,
+        "actual_status": "Excellent",
+        "actual_components": {
+          "Sleep": 99,
+          "Condition": 90,
+          "Body": 75,
+          "Posture": null
+        },
+        "record_difference": "Nov2 21:43 evening adjustment−3 versus historical Phone/iPad morning93; not identical record",
+        "post_collection_visual_review": "one reviewer personally viewed002 original: clear H02 detail hero87/components/native rail; raw pending-parent unchanged"
+      },
+      "status": "actual normal1PASS6bfe;4strictACK0LCD;nativeBackroot assertionsPASS"
+    },
+    "duo-open": {
+      "before": {
+        "image": "assets/canonical-duo-open-before.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-h02/Health/docs/design/phone-design-map/actual/duo-open/images/H02.png",
+        "sha256": "53e26630d08846d2f4b0ad4af63bc66fc01dafd7ff8ba9a13012ab18cf26ff0e",
+        "pixels": [
+          2006,
+          2852
+        ],
+        "exif_orientation": 6,
+        "revision": null,
+        "original_capture_row": {
+          "row_id": "H02",
+          "evidence": "wellness-score-detail-screen",
+          "test": "WellnessRegressionTests/testWellnessRootRendersAndHeroOpensScoreDetail()",
+          "action": "tap wellness-hero-score",
+          "timestamp": 1791830526.127,
+          "image": "42E1B696-A889-4093-AD01-BFB6094F46CB.png",
+          "screen": "screen-1-2006x2852-tap wellness-hero-score_1_6213C346-94C6-4B93-9C6D-E98C25E18192.png",
+          "file": "H02.png"
+        },
+        "historical_global_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+        "global_source_dirty": true,
+        "exact_per_image_revision_unknown": true,
+        "selector": "WellnessRegressionTests/testWellnessRootRendersAndHeroOpensScoreDetail()",
+        "action": "tap wellness-hero-score",
+        "capture_timestamp": 1791830526.127,
+        "timestamp_kind": "historical-capture-index timestamp; raw attachment not relinked",
+        "pose_readback_verified": false,
+        "capture_time_kst": "2026-10-13T03:42:06.127000+09:00"
+      },
+      "after": {
+        "image": "assets/duo-closed-normal-002-2007x2853.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/h02/evidence/duo-open-normal-6bfe7c85/paired-host/002-2007x2853.png",
+        "sha256": "27b10ff4b98a6a045a308d7fbe37c78d0a397a71565966b5423de047163cbcd0",
+        "pixels": [
+          2853,
+          2007
+        ],
+        "exif_orientation": 1,
+        "revision": "6bfe7c85",
+        "source_worktree_dirty": false,
+        "selector": "DUNEUITests/WellnessScoreDetailRedesignTests/testActualScoreComponentsAndNativeBack",
+        "action": "DUNE_VISUAL_AUDIT_READY tap wellness-hero-score [DUNEUITests/WellnessScoreDetailRedesignTests.swift:25] DEADLINE=1793623685.399548",
+        "capture_timestamp": 1793623656.2479708,
+        "timestamp_kind": "host-file-mtime of paired native PNG; not XCTest attachment or ACK deadline",
+        "device_udid": "E282B799-FA8E-4689-9F56-02BCF6D1F25D",
+        "capture_time_kst": "2026-11-02T21:47:36.247971+09:00",
+        "angle_before": 180,
+        "angle_after": 180,
+        "active_display": "LCD-1",
+        "strict_ack_count": 4,
+        "pose_readback_verified": true,
+        "normal_back_exercised": true,
+        "actual_score": 87,
+        "actual_status": "Excellent",
+        "actual_components": {
+          "Sleep": 99,
+          "Condition": 90,
+          "Body": 75,
+          "Posture": null
+        },
+        "record_difference": "Nov2 21:47 evening adjustment−3 versus historical Phone/iPad morning93; not identical record",
+        "post_collection_visual_review": "one reviewer personally viewed002 original: clear H02 detail hero87/components/native rail; raw pending-parent unchanged"
+      },
+      "status": "actual normal1PASS6bfe;4strictACK180LCD-1;nativeBackroot assertionsPASS"
+    }
+  },
+  "historical_canonical_before": {
+    "regular": {
+      "image": "assets/canonical-regular-before.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-h02/Health/docs/design/phone-design-map/actual/regular/images/H02.png",
+      "sha256": "d7d5506c6e7f0a4c0b57c36b1cfa75c99e94839667d224d0fb477d3b8400d538",
+      "pixels": [
+        1320,
+        2868
+      ],
+      "exif_orientation": 1,
+      "revision": null,
+      "original_capture_row": {
+        "row_id": "H02",
+        "evidence": "wellness-score-detail-screen",
+        "test": "WellnessRegressionTests/testWellnessRootRendersAndHeroOpensScoreDetail()",
+        "action": "tap wellness-hero-score",
+        "timestamp": 1791819804.49,
+        "image": "31DAF7CA-8F06-4AAE-946D-D87DD6B4783A.png",
+        "screen": "screen-0-1320x2868-tap wellness-hero-score_0_E344A809-7894-425B-A637-1FFCF8721638.png",
+        "file": "H02.png"
+      },
+      "historical_global_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "global_source_dirty": true,
+      "exact_per_image_revision_unknown": true,
+      "selector": "WellnessRegressionTests/testWellnessRootRendersAndHeroOpensScoreDetail()",
+      "action": "tap wellness-hero-score",
+      "capture_timestamp": 1791819804.49,
+      "timestamp_kind": "historical-capture-index timestamp; raw attachment not relinked",
+      "pose_readback_verified": false,
+      "capture_time_kst": "2026-10-13T00:43:24.490000+09:00"
+    },
+    "ipad": {
+      "image": "assets/canonical-ipad-before.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-h02/Health/docs/design/phone-design-map/actual/ipad/images/H02.png",
+      "sha256": "03e8f4aa053c7ee940fd31bb786f5a3082e4881b55eee109e37b7c1d8bd4829d",
+      "pixels": [
+        2064,
+        2752
+      ],
+      "exif_orientation": 1,
+      "revision": null,
+      "original_capture_row": {
+        "row_id": "H02",
+        "evidence": "wellness-score-detail-screen",
+        "test": "WellnessRegressionTests/testWellnessRootRendersAndHeroOpensScoreDetail()",
+        "action": "tap wellness-hero-score",
+        "timestamp": 1791824058.971,
+        "image": "A5A74952-0E38-48D1-803B-3942E23B4010.png",
+        "screen": "screen-0-2064x2752-tap wellness-hero-score_0_0BBE5315-4E31-4B78-B6D8-EE9EDAF8DCA1.png",
+        "file": "H02.png"
+      },
+      "historical_global_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "global_source_dirty": true,
+      "exact_per_image_revision_unknown": true,
+      "selector": "WellnessRegressionTests/testWellnessRootRendersAndHeroOpensScoreDetail()",
+      "action": "tap wellness-hero-score",
+      "capture_timestamp": 1791824058.971,
+      "timestamp_kind": "historical-capture-index timestamp; raw attachment not relinked",
+      "pose_readback_verified": false,
+      "capture_time_kst": "2026-10-13T01:54:18.971000+09:00"
+    },
+    "duo": {
+      "image": "assets/canonical-duo-before.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-h02/Health/docs/design/phone-design-map/actual/duo/images/H02.png",
+      "sha256": "ae262a92ec1ce9a1eb8d6d30f4ebced7b7fe695ffa1a5183f2191eb15db97940",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "exif_orientation": 1,
+      "revision": null,
+      "original_capture_row": {
+        "row_id": "H02",
+        "evidence": "wellness-score-detail-screen",
+        "test": "WellnessRegressionTests/testWellnessRootRendersAndHeroOpensScoreDetail()",
+        "action": "tap wellness-hero-score",
+        "timestamp": 1791827209.125,
+        "image": "53F8051C-44E1-4004-8BC4-AC905284A02C.png",
+        "screen": "screen-0-1398x2034-tap wellness-hero-score_0_C18A602B-86D2-402C-B249-2692B2C0DE6F.png",
+        "file": "H02.png"
+      },
+      "historical_global_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "global_source_dirty": true,
+      "exact_per_image_revision_unknown": true,
+      "selector": "WellnessRegressionTests/testWellnessRootRendersAndHeroOpensScoreDetail()",
+      "action": "tap wellness-hero-score",
+      "capture_timestamp": 1791827209.125,
+      "timestamp_kind": "historical-capture-index timestamp; raw attachment not relinked",
+      "pose_readback_verified": false,
+      "capture_time_kst": "2026-10-13T02:46:49.125000+09:00"
+    },
+    "duo-open": {
+      "image": "assets/canonical-duo-open-before.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-h02/Health/docs/design/phone-design-map/actual/duo-open/images/H02.png",
+      "sha256": "53e26630d08846d2f4b0ad4af63bc66fc01dafd7ff8ba9a13012ab18cf26ff0e",
+      "pixels": [
+        2006,
+        2852
+      ],
+      "exif_orientation": 6,
+      "revision": null,
+      "original_capture_row": {
+        "row_id": "H02",
+        "evidence": "wellness-score-detail-screen",
+        "test": "WellnessRegressionTests/testWellnessRootRendersAndHeroOpensScoreDetail()",
+        "action": "tap wellness-hero-score",
+        "timestamp": 1791830526.127,
+        "image": "42E1B696-A889-4093-AD01-BFB6094F46CB.png",
+        "screen": "screen-1-2006x2852-tap wellness-hero-score_1_6213C346-94C6-4B93-9C6D-E98C25E18192.png",
+        "file": "H02.png"
+      },
+      "historical_global_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "global_source_dirty": true,
+      "exact_per_image_revision_unknown": true,
+      "selector": "WellnessRegressionTests/testWellnessRootRendersAndHeroOpensScoreDetail()",
+      "action": "tap wellness-hero-score",
+      "capture_timestamp": 1791830526.127,
+      "timestamp_kind": "historical-capture-index timestamp; raw attachment not relinked",
+      "pose_readback_verified": false,
+      "capture_time_kst": "2026-10-13T03:42:06.127000+09:00"
+    }
+  },
+  "extra_states": [
+    {
+      "image": "assets/ipad-B6C7C6DD.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/h02/evidence/ui-ipad-normal-and-dark-maxAX-glyph-resolved-2026-11-02/attachments/B6C7C6DD-C008-41C0-B487-D4CAFF473251.png",
+      "sha256": "78bdc10d949e3edaea4d9864cfb5a67dfc83c11eaaabee9d3d140d2cf01a33ec",
+      "pixels": [
+        1512,
+        2316
+      ],
+      "exif_orientation": 1,
+      "native_attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+        "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-validation-644069bf7efc",
+        "exportedFileName": "B6C7C6DD-C008-41C0-B487-D4CAFF473251.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "H02-dark-max-AX-wellness-detail-external-score_0_7C1E2972-865D-479F-8D4A-DF7659393C0B.png",
+        "timestamp": 1793583832.409
+      },
+      "revision": "e83be1f5",
+      "selector": "DUNEUITests/WellnessScoreDetailRedesignTests/testDarkMaximumAccessibilityWholeContentReachability",
+      "action": "H02-dark-max-AX-wellness-detail-external-score_0_7C1E2972-865D-479F-8D4A-DF7659393C0B.png",
+      "capture_timestamp": 1793583832.409,
+      "timestamp_kind": "native-XCTest-attachment",
+      "device_udid": "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+      "source_worktree_dirty": false,
+      "label": "MAX hero",
+      "visual_content_usable": true,
+      "back_exercised": false,
+      "capture_time_kst": "2026-11-02T10:43:52.409000+09:00"
+    },
+    {
+      "image": "assets/ipad-38223B20.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/h02/evidence/ui-ipad-normal-and-dark-maxAX-glyph-resolved-2026-11-02/attachments/38223B20-0994-43DD-839B-0A2EB627527F.png",
+      "sha256": "3ae5c1939f6015252541228e504fe31eaad73a5ad4bc460f554efe10d23323f5",
+      "pixels": [
+        1512,
+        2316
+      ],
+      "exif_orientation": 1,
+      "native_attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+        "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-validation-644069bf7efc",
+        "exportedFileName": "38223B20-0994-43DD-839B-0A2EB627527F.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "H02-dark-max-AX-wellness-detail-status_0_1C16D155-8BE0-4488-A3B4-5D8CB3F2A64E.png",
+        "timestamp": 1793583834.207
+      },
+      "revision": "e83be1f5",
+      "selector": "DUNEUITests/WellnessScoreDetailRedesignTests/testDarkMaximumAccessibilityWholeContentReachability",
+      "action": "H02-dark-max-AX-wellness-detail-status_0_1C16D155-8BE0-4488-A3B4-5D8CB3F2A64E.png",
+      "capture_timestamp": 1793583834.207,
+      "timestamp_kind": "native-XCTest-attachment",
+      "device_udid": "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+      "source_worktree_dirty": false,
+      "label": "MAX status",
+      "visual_content_usable": true,
+      "back_exercised": false,
+      "capture_time_kst": "2026-11-02T10:43:54.207000+09:00"
+    },
+    {
+      "image": "assets/ipad-98B91E42.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/h02/evidence/ui-ipad-normal-and-dark-maxAX-glyph-resolved-2026-11-02/attachments/98B91E42-C285-461D-A4DC-96EE1FC00C82.png",
+      "sha256": "dee1bb29aa32af6d3058c17a78b85c8467e243d2d480f802ef4e5083d1903b18",
+      "pixels": [
+        1512,
+        2316
+      ],
+      "exif_orientation": 1,
+      "native_attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+        "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-validation-644069bf7efc",
+        "exportedFileName": "98B91E42-C285-461D-A4DC-96EE1FC00C82.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "H02-dark-max-AX-condition-time-phase-3_0_A508DEF1-CF85-4BEE-BA1C-76E2F74187B6.png",
+        "timestamp": 1793583852.528
+      },
+      "revision": "e83be1f5",
+      "selector": "DUNEUITests/WellnessScoreDetailRedesignTests/testDarkMaximumAccessibilityWholeContentReachability",
+      "action": "H02-dark-max-AX-condition-time-phase-3_0_A508DEF1-CF85-4BEE-BA1C-76E2F74187B6.png",
+      "capture_timestamp": 1793583852.528,
+      "timestamp_kind": "native-XCTest-attachment",
+      "device_udid": "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+      "source_worktree_dirty": false,
+      "label": "MAX time phase",
+      "visual_content_usable": true,
+      "back_exercised": false,
+      "capture_time_kst": "2026-11-02T10:44:12.528000+09:00"
+    },
+    {
+      "image": "assets/ipad-4F2BDA89.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/h02/evidence/ui-ipad-normal-and-dark-maxAX-glyph-resolved-2026-11-02/attachments/4F2BDA89-B0D6-4919-B910-63C0DF82415A.png",
+      "sha256": "e7118a01abd01805a987ff9e1a9b350c8049ca756d38e5744151e6f174017667",
+      "pixels": [
+        1512,
+        2316
+      ],
+      "exif_orientation": 1,
+      "native_attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+        "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-validation-644069bf7efc",
+        "exportedFileName": "4F2BDA89-B0D6-4919-B910-63C0DF82415A.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "H02-dark-max-AX-score-detail-chart-visible-range_0_928FE936-F483-4C01-AE25-770BB5544DD2.png",
+        "timestamp": 1793583854.425
+      },
+      "revision": "e83be1f5",
+      "selector": "DUNEUITests/WellnessScoreDetailRedesignTests/testDarkMaximumAccessibilityWholeContentReachability",
+      "action": "H02-dark-max-AX-score-detail-chart-visible-range_0_928FE936-F483-4C01-AE25-770BB5544DD2.png",
+      "capture_timestamp": 1793583854.425,
+      "timestamp_kind": "native-XCTest-attachment",
+      "device_udid": "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+      "source_worktree_dirty": false,
+      "label": "MAX range",
+      "visual_content_usable": true,
+      "back_exercised": false,
+      "capture_time_kst": "2026-11-02T10:44:14.425000+09:00"
+    },
+    {
+      "image": "assets/ipad-D6BF8099.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/h02/evidence/ui-ipad-normal-and-dark-maxAX-glyph-resolved-2026-11-02/attachments/D6BF8099-731F-4A7D-AE99-56599ECD2F3D.png",
+      "sha256": "4e96f96765910167788589fc71e99ed9937091e3f03ad9f3909b22fd347cff27",
+      "pixels": [
+        1512,
+        2316
+      ],
+      "exif_orientation": 1,
+      "native_attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+        "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-validation-644069bf7efc",
+        "exportedFileName": "D6BF8099-731F-4A7D-AE99-56599ECD2F3D.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "H02-dark-max-AX-full-method_0_73919504-DFBB-45A4-8DD0-8FE3330D0086.png",
+        "timestamp": 1793583902.014
+      },
+      "revision": "e83be1f5",
+      "selector": "DUNEUITests/WellnessScoreDetailRedesignTests/testDarkMaximumAccessibilityWholeContentReachability",
+      "action": "H02-dark-max-AX-full-method_0_73919504-DFBB-45A4-8DD0-8FE3330D0086.png",
+      "capture_timestamp": 1793583902.014,
+      "timestamp_kind": "native-XCTest-attachment",
+      "device_udid": "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+      "source_worktree_dirty": false,
+      "label": "MAX final calculation method",
+      "visual_content_usable": true,
+      "back_exercised": false,
+      "capture_time_kst": "2026-11-02T10:45:02.014000+09:00"
+    }
+  ],
+  "diagnostic_attachments": [],
+  "bundles": {
+    "phone-original": {
+      "source_directory": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/h02/evidence/ui-phone-original-before",
+      "result": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/WellnessRegressionTests/testWellnessRootRendersAndHeroOpensScoreDetail"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/h02-before-phone-2dfe6e60.log"
+      },
+      "provenance": {
+        "revision": "2dfe6e60",
+        "source_worktree_dirty": false,
+        "original_xcresult": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.31_08-44-34-+0900.xcresult",
+        "xcode": "Xcode 27.2\nBuild version 27B52",
+        "test_plan": "DUNEUITests-DesignCapture"
+      },
+      "exact_passed_nodes": [
+        {
+          "duration": "27초",
+          "durationInSeconds": 27.49589705467224,
+          "name": "testWellnessRootRendersAndHeroOpensScoreDetail()",
+          "nodeIdentifier": "WellnessRegressionTests/testWellnessRootRendersAndHeroOpensScoreDetail()",
+          "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNEUITests/WellnessRegressionTests/testWellnessRootRendersAndHeroOpensScoreDetail",
+          "nodeType": "Test Case",
+          "result": "Passed"
+        }
+      ],
+      "proof_directory": "assets/proofs/phone-original"
+    },
+    "ipad-original": {
+      "source_directory": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/detail-original-ipad/evidence/original-three-screen-current",
+      "result": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/AllDataDetailRedesignTests/testAllCategoryReadyRowsAndCaptures",
+          "DUNEUITests/WellnessRegressionTests/testWellnessRootRendersAndHeroOpensScoreDetail",
+          "DUNEUITests/ActivityExerciseRegressionTests/testTrainingReadinessDetailShowsTrendAndSubscoreSections"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 3,
+          "passed": 3,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 3,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/detail-original-ipad-2dfe6e60.log"
+      },
+      "provenance": {
+        "revision": "2dfe6e60",
+        "source_worktree_dirty": false,
+        "original_xcresult": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.31_10-06-25-+0900.xcresult",
+        "xcode": "Xcode 27.2\nBuild version 27B52",
+        "test_plan": "DUNEUITests-DesignCapture",
+        "execution_worktree": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health",
+        "device_udid": "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+        "actual_scope": {
+          "T07": "normal16categorymatrix1method",
+          "H02": "normaloriginalWellness1method;NoBackassertinoriginalcase",
+          "A02": "ENmaxAXoriginalReadiness1method;NOTnormal"
+        }
+      },
+      "exact_passed_nodes": [
+        {
+          "duration": "23초",
+          "durationInSeconds": 23.840920090675354,
+          "name": "testWellnessRootRendersAndHeroOpensScoreDetail()",
+          "nodeIdentifier": "WellnessRegressionTests/testWellnessRootRendersAndHeroOpensScoreDetail()",
+          "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNEUITests/WellnessRegressionTests/testWellnessRootRendersAndHeroOpensScoreDetail",
+          "nodeType": "Test Case",
+          "result": "Passed"
+        }
+      ],
+      "proof_directory": "assets/proofs/ipad-original"
+    },
+    "phone-historical": {
+      "source_directory": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/h02/evidence/ui-phone-initial-failure",
+      "result": {
+        "schema_version": 1,
+        "status": "failed",
+        "target": "DUNEUITests",
+        "run_exit_status": 65,
+        "requested_selectors": [
+          "DUNEUITests/WellnessScoreDetailRedesignTests/testActualScoreComponentsAndNativeBack",
+          "DUNEUITests/WellnessScoreDetailRedesignTests/testFivePeriodsTrendAndConditionalExplanation",
+          "DUNEUITests/WellnessScoreDetailRedesignTests/testConditionCalculationPositiveFixtureKeepsMeasuredBranches",
+          "DUNEUITests/WellnessScoreDetailRedesignTests/testDarkMaximumAccessibilityWholeContentReachability",
+          "DUNEUITests/WellnessScoreDetailRedesignTests/testExistingChartPointSelectionRemainsAvailable"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 5,
+          "passed": 2,
+          "skipped": 0,
+          "failed": 3
+        },
+        "passed_cases": 2,
+        "failures": [
+          "6615: /Users/shanks/.codex/worktrees/detail-redesign-validation/Health/DUNEUITests/Full/WellnessScoreDetailRedesignTests.swift:142: error: -[DUNEUITests.WellnessScoreDetailRedesignTests testConditionCalculationPositiveFixtureKeepsMeasuredBranches] : XCTAssertTrue failed",
+          "6626: Test Case '-[DUNEUITests.WellnessScoreDetailRedesignTests testConditionCalculationPositiveFixtureKeepsMeasuredBranches]' failed (34.350 seconds).",
+          "7456: /Users/shanks/.codex/worktrees/detail-redesign-validation/Health/DUNEUITests/Full/WellnessScoreDetailRedesignTests.swift:189: error: -[DUNEUITests.WellnessScoreDetailRedesignTests testExistingChartPointSelectionRemainsAvailable] : XCTAssertTrue failed",
+          "7467: Test Case '-[DUNEUITests.WellnessScoreDetailRedesignTests testExistingChartPointSelectionRemainsAvailable]' failed (25.252 seconds).",
+          "7553: /Users/shanks/.codex/worktrees/detail-redesign-validation/Health/DUNEUITests/Full/WellnessScoreDetailRedesignTests.swift:88: error: -[DUNEUITests.WellnessScoreDetailRedesignTests testFivePeriodsTrendAndConditionalExplanation] : XCTAssertTrue failed",
+          "7564: Test Case '-[DUNEUITests.WellnessScoreDetailRedesignTests testFivePeriodsTrendAndConditionalExplanation]' failed (39.576 seconds).",
+          "7565: Test Suite 'WellnessScoreDetailRedesignTests' failed at 2026-10-31 09:34:32.677.",
+          "7567: Test Suite 'DUNEUITests.xctest' failed at 2026-10-31 09:34:32.678.",
+          "7569: Test Suite 'Selected tests' failed at 2026-10-31 09:34:32.679.",
+          "7583: ** TEST FAILED **",
+          "xcodebuild exited 65",
+          "UI test log reports 3 failures",
+          "requested UI test selector has no execution evidence"
+        ],
+        "required_selectors_missing": [
+          "DUNEUITests/WellnessScoreDetailRedesignTests/testFivePeriodsTrendAndConditionalExplanation",
+          "DUNEUITests/WellnessScoreDetailRedesignTests/testConditionCalculationPositiveFixtureKeepsMeasuredBranches",
+          "DUNEUITests/WellnessScoreDetailRedesignTests/testExistingChartPointSelectionRemainsAvailable"
+        ],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/h02-phone-score-detail-c7cfa366.log"
+      },
+      "provenance": {
+        "revision": "c7cfa366",
+        "execution_worktree": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health",
+        "status": "FAILED2PASS3FAIL;passedindividualcasesretainednotglobalPASS",
+        "original_xcresult": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.31_09-28-57-+0900.xcresult",
+        "tracked_dirty": "standardgeneratedPBXonly"
+      },
+      "exact_passed_nodes": [
+        {
+          "duration": "33초",
+          "durationInSeconds": 33.42711699008942,
+          "name": "testActualScoreComponentsAndNativeBack()",
+          "nodeIdentifier": "WellnessScoreDetailRedesignTests/testActualScoreComponentsAndNativeBack()",
+          "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNEUITests/WellnessScoreDetailRedesignTests/testActualScoreComponentsAndNativeBack",
+          "nodeType": "Test Case",
+          "result": "Passed"
+        }
+      ],
+      "proof_directory": "assets/proofs/phone-historical"
+    },
+    "ipad-final-glyph": {
+      "source_directory": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/h02/evidence/ui-ipad-normal-and-dark-maxAX-glyph-resolved-2026-11-02",
+      "result": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/WellnessScoreDetailRedesignTests/testActualScoreComponentsAndNativeBack",
+          "DUNEUITests/WellnessScoreDetailRedesignTests/testDarkMaximumAccessibilityWholeContentReachability"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 2,
+          "passed": 2,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 2,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/h02-ipad-recovered-normal-and-AX-e83be1f5.log"
+      },
+      "provenance": {
+        "revision": "e83be1f5",
+        "source_worktree_dirty": false,
+        "original_xcresult": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.11.02_10-41-56-+0900.xcresult",
+        "xcode": "Xcode 27.2\nBuild version 27B52",
+        "test_plan": "DUNEUITests-DesignCapture"
+      },
+      "exact_passed_nodes": [
+        {
+          "duration": "38초",
+          "durationInSeconds": 38.189952969551086,
+          "name": "testActualScoreComponentsAndNativeBack()",
+          "nodeIdentifier": "WellnessScoreDetailRedesignTests/testActualScoreComponentsAndNativeBack()",
+          "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNEUITests/WellnessScoreDetailRedesignTests/testActualScoreComponentsAndNativeBack",
+          "nodeType": "Test Case",
+          "result": "Passed"
+        },
+        {
+          "duration": "1분 38초",
+          "durationInSeconds": 98.66323494911194,
+          "name": "testDarkMaximumAccessibilityWholeContentReachability()",
+          "nodeIdentifier": "WellnessScoreDetailRedesignTests/testDarkMaximumAccessibilityWholeContentReachability()",
+          "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNEUITests/WellnessScoreDetailRedesignTests/testDarkMaximumAccessibilityWholeContentReachability",
+          "nodeType": "Test Case",
+          "result": "Passed"
+        }
+      ],
+      "proof_directory": "assets/proofs/ipad-final-glyph"
+    },
+    "phone-conditional": {
+      "source_directory": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/h02/evidence/ui-phone-conditional-current",
+      "result": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/WellnessScoreDetailRedesignTests/testConditionCalculationPositiveFixtureKeepsMeasuredBranches",
+          "DUNEUITests/WellnessScoreDetailRedesignTests/testExistingChartPointSelectionRemainsAvailable",
+          "DUNEUITests/WellnessScoreDetailRedesignTests/testFivePeriodsTrendAndConditionalExplanation"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 3,
+          "passed": 3,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 3,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/h02-phone-score-detail-4b850b4f-conditional.log"
+      },
+      "provenance": {
+        "revision": "4b850b4f",
+        "source_worktree_dirty": false,
+        "original_xcresult": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.31_09-53-20-+0900.xcresult",
+        "xcode": "Xcode 27.2\nBuild version 27B52",
+        "test_plan": "DUNEUITests-DesignCapture"
+      },
+      "exact_passed_nodes": [
+        {
+          "duration": "37초",
+          "durationInSeconds": 37.32791304588318,
+          "name": "testConditionCalculationPositiveFixtureKeepsMeasuredBranches()",
+          "nodeIdentifier": "WellnessScoreDetailRedesignTests/testConditionCalculationPositiveFixtureKeepsMeasuredBranches()",
+          "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNEUITests/WellnessScoreDetailRedesignTests/testConditionCalculationPositiveFixtureKeepsMeasuredBranches",
+          "nodeType": "Test Case",
+          "result": "Passed"
+        },
+        {
+          "duration": "34초",
+          "durationInSeconds": 34.163069009780884,
+          "name": "testExistingChartPointSelectionRemainsAvailable()",
+          "nodeIdentifier": "WellnessScoreDetailRedesignTests/testExistingChartPointSelectionRemainsAvailable()",
+          "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNEUITests/WellnessScoreDetailRedesignTests/testExistingChartPointSelectionRemainsAvailable",
+          "nodeType": "Test Case",
+          "result": "Passed"
+        },
+        {
+          "duration": "1분 3초",
+          "durationInSeconds": 63.83759808540344,
+          "name": "testFivePeriodsTrendAndConditionalExplanation()",
+          "nodeIdentifier": "WellnessScoreDetailRedesignTests/testFivePeriodsTrendAndConditionalExplanation()",
+          "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNEUITests/WellnessScoreDetailRedesignTests/testFivePeriodsTrendAndConditionalExplanation",
+          "nodeType": "Test Case",
+          "result": "Passed"
+        }
+      ],
+      "proof_directory": "assets/proofs/phone-conditional"
+    },
+    "duo-closed-normal-6bfe": {
+      "source_directory": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/h02/evidence/duo-closed-normal-6bfe7c85",
+      "result": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/WellnessScoreDetailRedesignTests/testActualScoreComponentsAndNativeBack"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/h02-duo-closed-6bfe7c85.log"
+      },
+      "provenance": {
+        "revision": "6bfe7c85",
+        "source_worktree_dirty": false,
+        "original_xcresult": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.11.02_21-43-12-+0900.xcresult",
+        "xcode": "Xcode 27.2\nBuild version 27B52",
+        "test_plan": "DUNEUITests-DuoAudit",
+        "device": "E282B799-FA8E-4689-9F56-02BCF6D1F25D",
+        "pose": "closed",
+        "poseProof": "paired-host/pose-proof.json"
+      },
+      "pose": {
+        "revision": "6bfe7c85",
+        "target": 0.0,
+        "angle_before": 0.0,
+        "angle_after": 0.0,
+        "active_display": "LCD",
+        "script_sha256": "0e178ea0645a579cc83ace50631edf0bfef6846830abf478a3a9863d3144b559",
+        "captured_at": 1793623451.2962549,
+        "native_visual_review": "pending-parent"
+      },
+      "strict_checkpoints": [
+        {
+          "sequence": 1,
+          "action": "DUNE_VISUAL_AUDIT_READY root after setup -[WellnessScoreDetailRedesignTests testActualScoreComponentsAndNativeBack] [DUNEUITests/UITestBaseCase.swift:145] DEADLINE=1793623447.212853",
+          "elapsed_seconds": 2.325,
+          "acknowledged": true,
+          "valid_evidence": true,
+          "error": null
+        },
+        {
+          "sequence": 2,
+          "action": "DUNE_VISUAL_AUDIT_READY tap wellness-hero-score [DUNEUITests/WellnessScoreDetailRedesignTests.swift:25] DEADLINE=1793623458.391006",
+          "elapsed_seconds": 2.138,
+          "acknowledged": true,
+          "valid_evidence": true,
+          "error": null
+        },
+        {
+          "sequence": 3,
+          "action": "DUNE_VISUAL_AUDIT_READY tap BackButton [DUNEUITests/WellnessScoreDetailRedesignTests.swift:66] DEADLINE=1793623469.973549",
+          "elapsed_seconds": 2.244,
+          "acknowledged": true,
+          "valid_evidence": true,
+          "error": null
+        },
+        {
+          "sequence": 4,
+          "action": "DUNE_VISUAL_AUDIT_READY before teardown -[WellnessScoreDetailRedesignTests testActualScoreComponentsAndNativeBack] [DUNEUITests/UITestBaseCase.swift:120] DEADLINE=1793623475.244631",
+          "elapsed_seconds": 2.154,
+          "acknowledged": true,
+          "valid_evidence": true,
+          "error": null
+        }
+      ],
+      "proof_directory": "assets/proofs/duo-closed-normal-6bfe",
+      "parent_observation_sha256": "b87a00508834d161edbe1b53a8412639c3adf2eb7af1ee7b1f42665cbf563706"
+    },
+    "duo-open-normal-6bfe": {
+      "source_directory": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/h02/evidence/duo-open-normal-6bfe7c85",
+      "result": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/WellnessScoreDetailRedesignTests/testActualScoreComponentsAndNativeBack"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/h02-duo-open-6bfe7c85.log"
+      },
+      "provenance": {
+        "revision": "6bfe7c85",
+        "source_worktree_dirty": false,
+        "original_xcresult": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.11.02_21-47-09-+0900.xcresult",
+        "xcode": "Xcode 27.2\nBuild version 27B52",
+        "test_plan": "DUNEUITests-DuoAudit",
+        "device": "E282B799-FA8E-4689-9F56-02BCF6D1F25D",
+        "pose": "open",
+        "poseProof": "paired-host/pose-proof.json"
+      },
+      "pose": {
+        "revision": "6bfe7c85",
+        "target": 180.0,
+        "angle_before": 180.0,
+        "angle_after": 180.0,
+        "active_display": "LCD-1",
+        "script_sha256": "0e178ea0645a579cc83ace50631edf0bfef6846830abf478a3a9863d3144b559",
+        "captured_at": 1793623678.359812,
+        "native_visual_review": "pending-parent"
+      },
+      "strict_checkpoints": [
+        {
+          "sequence": 1,
+          "action": "DUNE_VISUAL_AUDIT_READY root after setup -[WellnessScoreDetailRedesignTests testActualScoreComponentsAndNativeBack] [DUNEUITests/UITestBaseCase.swift:145] DEADLINE=1793623674.800808",
+          "elapsed_seconds": 2.314,
+          "acknowledged": true,
+          "valid_evidence": true,
+          "error": null
+        },
+        {
+          "sequence": 2,
+          "action": "DUNE_VISUAL_AUDIT_READY tap wellness-hero-score [DUNEUITests/WellnessScoreDetailRedesignTests.swift:25] DEADLINE=1793623685.399548",
+          "elapsed_seconds": 2.347,
+          "acknowledged": true,
+          "valid_evidence": true,
+          "error": null
+        },
+        {
+          "sequence": 3,
+          "action": "DUNE_VISUAL_AUDIT_READY tap BackButton [DUNEUITests/WellnessScoreDetailRedesignTests.swift:66] DEADLINE=1793623697.295243",
+          "elapsed_seconds": 2.229,
+          "acknowledged": true,
+          "valid_evidence": true,
+          "error": null
+        },
+        {
+          "sequence": 4,
+          "action": "DUNE_VISUAL_AUDIT_READY before teardown -[WellnessScoreDetailRedesignTests testActualScoreComponentsAndNativeBack] [DUNEUITests/UITestBaseCase.swift:120] DEADLINE=1793623702.62484",
+          "elapsed_seconds": 2.245,
+          "acknowledged": true,
+          "valid_evidence": true,
+          "error": null
+        }
+      ],
+      "proof_directory": "assets/proofs/duo-open-normal-6bfe",
+      "parent_observation_sha256": "c2821ec1821eeda34c478534c8ff59905eb01ed3686f801d6adb3df39225c0b2"
+    },
+    "phone-finalglyphMAX-6bfe": {
+      "source_directory": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/h02/evidence/phone-max-fixed-glyph-6bfe7c85",
+      "result": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/WellnessScoreDetailRedesignTests/testDarkMaximumAccessibilityWholeContentReachability"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/h02-phone-max-fixed-glyph-6bfe7c85.log"
+      },
+      "provenance": {
+        "revision": "6bfe7c85",
+        "source_worktree_dirty": false,
+        "original_xcresult": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.11.02_21-54-03-+0900.xcresult",
+        "xcode": "Xcode 27.2\nBuild version 27B52",
+        "test_plan": "DUNEUITests-DesignCapture"
+      },
+      "proof_directory": "assets/proofs/phone-finalglyphMAX-6bfe"
+    }
+  },
+  "source_closure": {
+    "public_parent_declared": "fc8ba0cb",
+    "validation_parent_declared": "6bfe7c85",
+    "app_sha256": "5f43837ebde432b7d2b21e86f5c16cef3d411fabcb2b8544b1ac2afa5ee2e13f",
+    "app_equals_current_validation": true,
+    "test_sha256": "3d2954beaa1cf877fe9e787d299b8220f910c318af21acae5da1f59fdf2182e3",
+    "H02_test_equals_current_validation": true,
+    "whole_tree_equal": false,
+    "historical_normal_delta": "native BackButton rail preference +5s wait, original actual Back/rootreturn assertions retained; old Phone/iPad execute original navbar lookup",
+    "historical_iPad": "e83 treec402 finalglyph normal+MAX2PASS; product/MAX unchanged by query delta",
+    "final_readable_proof": "assets/proofs/phone-finalglyphMAX-6bfe/source-closure.json"
+  },
+  "history": {
+    "id": "h02-ui-score-detail",
+    "record": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/pipeline/check-c041afe2027134a112f8238d.json",
+    "sha256": "4bbeac0c2dc33f0a4345de4e8950d93cc4681408734900d62b79c7c9b2d52f43",
+    "initial": "FAILED5/2/3; exact normal and oldMAX nodePassed",
+    "conditional": "same logicalID3/3PASS cause-specificretry retained"
+  },
+  "pretest_display_mismatch": {
+    "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/h02/evidence/duo-closed-attempt1-pretest-display-mismatch-6bfe7c85",
+    "proof_hashes": {
+      "displays-before.json": "c89e11c73e87ee6a6a74f5da43f9e07b8a7d74f10337567cf15d050c749406fe",
+      "original-failed-pipeline-record.json": "0980122bc04388813c7d8a13dfa8904f92d79dace75497576c1ba0aea06d8815",
+      "angle-before.txt": "51ff0d2f0d3a5d61edec31785532ea0d570f8c348d58b15b94ff9c2ca6e926a4"
+    },
+    "status": "pretest failure; not casePASS"
+  },
+  "native_quality": {
+    "overallReady": true,
+    "three_perspectives_one_reviewer": true,
+    "report": "assets/proofs/pr887-native-quality-review.md",
+    "pending": [],
+    "normal_tier_visual_findings": {
+      "P1": 0,
+      "P2": 0,
+      "P3": 0
+    },
+    "normal_tier_review_complete": true,
+    "final_review_complete": true,
+    "findings": {
+      "P1": 0,
+      "P2": 0,
+      "P3": 0
+    },
+    "publisher_editorial_P2": "resolved; rawbytespreserved"
+  },
+  "limits": [
+    "Installed H02 four rows/images only; other rows/images and Watch preserved. CI/PR results remain in parent final quality records.",
+    "Parent publication completed for four H02 rows/images only; current CI/PR completion remains separate evidence.",
+    "Phone historicalnormal exactPassednode insideFAILED5/2/3 andsameIDconditional3PASS preserved. OldPhoneMAX not currentfinalglyphproof; fresh6bfeMAX1PASS supplied separately.",
+    "iPad e83finalglyph normal+MAX2PASS reused; historicalnormal predatesnative railquery, bothfreshDuo normalcasescoverit. NormalactuallyBack; MAXdoesnot.",
+    "GenuinePhone/iPad2dfebefore distinctfromalreadyredesigned4b. CanonicalDuo originals preserveOct13timestamps/global443dirty collection, exactperimage source andhistoricposeunknown.",
+    "RealPhone/iPadmorning93 versusDuo21:43/21:47 andPhoneMAX21:55evening87/Excellent/−3;99/90/75/— actual, notproposal81/percentile/record. Differentmodels/UID/dates/viewport notidenticalrecord.",
+    "Fresh Duo closednormal6bfe1PASS/4ACK0LCD andopennormal6bfe1PASS/4ACK180LCD-1; selected002detail,003Backroot/004teardownroot notdetailafter.",
+    "InitialClosedPRETEST0testdisplaymismatch andoneSAMEIDconditionalretryPASS/rawrecovery retained; no budgetreset or allowanceinference.",
+    "PhoneMAX firstnative largetitleellipsis retained; fullinlineafterScroll/fullAXtitle. Finalmethodcaption notsimultaneousallparagraphs. ExistingiPadstatus/rangeindividualview confirmedusable; mistakenblankclaimwithdrawn.",
+    "AllPNG/rawproofbytes unchanged, no rotation/resave. Rawposepending-parent preserved andlaterobservations separate. WholeUIhistoricfile/tree/fullregression/allthemeslanguages/currentCI notclaimed."
+  ],
+  "proof_sha256": {
+    "assets/proofs/pr887-integration-prep.md": "ac5a7ef2b1dcfa0d7a62d866841656cecd0cde075efebef2b2fa200c2486237c",
+    "assets/proofs/pr887-native-quality-review.md": "4a04e43a75dfd2fdd98e5ab33e6bf998e299f90b7cd41c3a4c2706b90c7d0a2f",
+    "assets/proofs/pr887-minimal-quality-prep.md": "5ecbc485cdd1a2d1a80632c7b3c1a9b1f3af1ccdbf7f045466e408018cfef399",
+    "assets/proofs/source-closure.json": "363646f68b8ca20a6963b3a1285ca2f2123fcd2e13d58f3a0d5cecefdcae8810",
+    "assets/proofs/duo-closed-normal-6bfe/displays-before.json": "fa3ca4b2592010f865924bcd150b1c4502f6a529f3fc5eb5509bba4db204d8f0",
+    "assets/proofs/duo-closed-normal-6bfe/runner-result.json": "539bdc99bb2a53c537b7ad49b3241c21b6446858e086c71b6f702b759f4244c2",
+    "assets/proofs/duo-closed-normal-6bfe/summary.json": "88c17e2c76e518d699a954816aa777b37a75ba2edca3346e4d36c1dc8569d3c3",
+    "assets/proofs/duo-closed-normal-6bfe/002-hierarchy.txt": "6213d79d6f8614eb0c98af8999cc43d37003093b3835a1227e3b74233f9460dd",
+    "assets/proofs/duo-closed-normal-6bfe/tests.json": "abd35b06fb1f54ede5c02017fab0d1a554f89bd26b1f5497b290b944bea84926",
+    "assets/proofs/duo-closed-normal-6bfe/provenance.json": "c60eb3b36ef5c3ddac406aec59ac99f859422d5c7acacd4dc22df225e7b73bb9",
+    "assets/proofs/duo-closed-normal-6bfe/result.json": "52346c5fa07bfa5a36b72b9ec3cffbc29d174312c7d3065111d1cd7b8c60a612",
+    "assets/proofs/duo-closed-normal-6bfe/angle-before.txt": "51ff0d2f0d3a5d61edec31785532ea0d570f8c348d58b15b94ff9c2ca6e926a4",
+    "assets/proofs/duo-closed-normal-6bfe/captures.tsv": "b76f1b6e3a10cda4edc4f94cabae931085296db9be6d12f30afb9abfd2acefb1",
+    "assets/proofs/duo-closed-normal-6bfe/closed-display-dependency-recovery.json": "a65e079a3e090531ceee18380f8bcae3986473e0f99d258b65b9ec79b3d3eaaa",
+    "assets/proofs/duo-closed-normal-6bfe/angle-after.txt": "51ff0d2f0d3a5d61edec31785532ea0d570f8c348d58b15b94ff9c2ca6e926a4",
+    "assets/proofs/duo-closed-normal-6bfe/displays-after.json": "fa3ca4b2592010f865924bcd150b1c4502f6a529f3fc5eb5509bba4db204d8f0",
+    "assets/proofs/duo-closed-normal-6bfe/checkpoints.jsonl": "4627f6e0ecb74272f8596443e72193172a81b77be7b7c88a43644a9d1d6247aa",
+    "assets/proofs/duo-closed-normal-6bfe/004-hierarchy.txt": "66ef118427a94fbc403f5c6875c503810c83dac504d800134d8a86f9f4395afe",
+    "assets/proofs/duo-closed-normal-6bfe/parent-observation.json": "b87a00508834d161edbe1b53a8412639c3adf2eb7af1ee7b1f42665cbf563706",
+    "assets/proofs/duo-closed-normal-6bfe/pose-proof.json": "08003c5e7891ba80615f4875fbad7d29539e53fe662789d487173765378859e4",
+    "assets/proofs/duo-closed-normal-6bfe/003-hierarchy.txt": "a545718b3518194a58dd35f6adde5dfe18f33a9251d1b939d453b5e288131c27",
+    "assets/proofs/phone-finalglyphMAX-6bfe/summary.json": "f469f580085566ab68b8ea8750f55a4fca78766c60b8bcb87668e9284d708b17",
+    "assets/proofs/phone-finalglyphMAX-6bfe/tests.json": "cf08fe3d2a1467ae6a1a44836d05eb499a475f11c50f174e85fbb54a1200633c",
+    "assets/proofs/phone-finalglyphMAX-6bfe/provenance.json": "fed8010acc3c730eecadcb657397ab5fe98f8a9cafd624cd60c1a60b9e76cba1",
+    "assets/proofs/phone-finalglyphMAX-6bfe/result.json": "a1291d95ae0b5aeb7b9b2c0a8f2fa2c1e85333df5302ea77d43e818987697611",
+    "assets/proofs/phone-finalglyphMAX-6bfe/A59D53B0-12FD-4AC2-B8A7-F9D1E6A00665.txt": "bd8be65f44fc3a310947c0b56dbc531db9765376ed00645e7de026f531b3cd77",
+    "assets/proofs/phone-finalglyphMAX-6bfe/compile-source-closure-6bfe7c85.json": "7af44582d8335699021663819915e6c2eca4c07b098b13bee30e806c6f8c43eb",
+    "assets/proofs/phone-finalglyphMAX-6bfe/5F3791B5-901D-440B-8492-2FD908E3A145.txt": "c2295d74aefd4b703fa726d456c0617ea76eeb55275b302197bc17cf33b5bc1c",
+    "assets/proofs/phone-finalglyphMAX-6bfe/manifest.json": "985e902d2cfaa561d7ceeae2fc4382bfb77bc43fb4aa36bd8695d911e8a503b8",
+    "assets/proofs/phone-finalglyphMAX-6bfe/FCB17429-A2E3-4F4D-AF4B-1A9D7681BB95.txt": "880eb800714d84bffe460dfe8c4bdd0669a60112d7df50de549af05cbae8b835",
+    "assets/proofs/phone-finalglyphMAX-6bfe/source-closure.json": "ca35238908d8379ddcc91536c885c147319d4e7c9747ba36d119dff824801676",
+    "assets/proofs/quality/pr887-native-quality-review.md": "4a04e43a75dfd2fdd98e5ab33e6bf998e299f90b7cd41c3a4c2706b90c7d0a2f",
+    "assets/proofs/quality/pr887-open-limit-correction.md": "a7b750d25793690f100a2549a0ef4ec48dc05e333a6902ee8e47e87081c1b1fe",
+    "assets/proofs/quality/pr887-review-security.md": "7a3d81194601a1be0bdbbf86ac917ff0a058f66de7a6fcfaa1ef8990d5adc634",
+    "assets/proofs/quality/pr887-review-performance.md": "fd802246857603a4940536b12a46040dd66aff087a441996445ebee00f1483f5",
+    "assets/proofs/quality/publisher-P2-resolved-disposition.md": "aad731dc82eff2b9e5132eae2cd5550fb90c58e48e1b10d94815952df668dff7",
+    "assets/proofs/quality/pr887-publisher-preflight-review.md": "4d5039e80abb95bb652cdf3f5a37ea6ce428e01f9d1fbd58595ad7f9c9b218e8",
+    "assets/proofs/quality/pr887-review-simplicity.md": "bcc7a018ed4bdbc47a530e0ddf9bd9ae06ef75e6ef65c2c52bfd0a80fdc59231",
+    "assets/proofs/quality/pr887-review-data.md": "8d024a4988fdb44c39fcb9927dfab55468f667454a3471ecfde001def7857c13",
+    "assets/proofs/quality/pr887-review-architecture.md": "903f5a3c501d652a62b3d5808054968be66d8c645e30168bb0dae572f20de757",
+    "assets/proofs/phone-original/summary.json": "7f3b6c91831323fd6ad90a5e2e0a5dbaf84928cf47df337e38fa7f7891b52882",
+    "assets/proofs/phone-original/0123680F-A09A-48B6-8677-AE3F8AF3A3D3.txt": "0ed8e3b493e996d734f4939934b706d4286e66210291f46fbf3e6516556d41ff",
+    "assets/proofs/phone-original/tests.json": "baad34a63d1eb9e05c0a73bd5b42f74802e1906295b21663f47916eb8655398b",
+    "assets/proofs/phone-original/provenance.json": "8ed13a3675c78208e1c3f4bca050fd8864b8094875d2bd914d3c54a87804d351",
+    "assets/proofs/phone-original/result.json": "86c69b69bd828f0c8e2af265cb6e707919ae81ef9f0918f63533ec8add403cbd",
+    "assets/proofs/phone-original/716ED740-1F33-4897-895F-C7A5449D813C.txt": "67934b5b81d2d63ffdb88d963e72f640c61745a6a89da5297a96e1fb4acdee76",
+    "assets/proofs/phone-original/manifest.json": "39659ca90c955f8f65c300ce331ad53a877c38bd8cba857914ee9b2b5baa1ce1",
+    "assets/proofs/phone-original/E78B4EBB-166B-4BA4-9100-5689F9081840.txt": "fa5a690b35060f607d643af28c2cd9c1f4757f9d2c520fcfac30a2505c00dbdc",
+    "assets/proofs/duo-open-normal-6bfe/displays-before.json": "c89e11c73e87ee6a6a74f5da43f9e07b8a7d74f10337567cf15d050c749406fe",
+    "assets/proofs/duo-open-normal-6bfe/runner-result.json": "17e46138c3cb00458bf03dd8a6ee8385035efc26c3fee809f00760abcf23a3fd",
+    "assets/proofs/duo-open-normal-6bfe/summary.json": "d3f1d0a9f632f75abb5a60bbb98ef2137a18d5d1a5e3af48211716f4f25e112d",
+    "assets/proofs/duo-open-normal-6bfe/002-hierarchy.txt": "92deb4b85b0ff726754370318bc82f79901553a1ea21cbd05c739d0a052c374b",
+    "assets/proofs/duo-open-normal-6bfe/tests.json": "e701a14ae5f95734ed6103869cfbb40d4320c975b635d0bb6742d6e283c948dc",
+    "assets/proofs/duo-open-normal-6bfe/provenance.json": "9d737a2bd40142c609a5dab9c29fe7bf6f67ec15c7ccb4bde38db991374f943e",
+    "assets/proofs/duo-open-normal-6bfe/result.json": "f754cb6b33ee504013250c2e9ad48f932b227eac0c06481b8316192b7052ec4b",
+    "assets/proofs/duo-open-normal-6bfe/angle-before.txt": "1e8ac0d84b7644b31324a78dee04aa7600daefcab3d96a422731f5b29245878e",
+    "assets/proofs/duo-open-normal-6bfe/captures.tsv": "6f49a05269f4faff72ec8b55f9a9e49b9e27ae4371327fe530f25e3e9efe04a0",
+    "assets/proofs/duo-open-normal-6bfe/closed-display-dependency-recovery.json": "a65e079a3e090531ceee18380f8bcae3986473e0f99d258b65b9ec79b3d3eaaa",
+    "assets/proofs/duo-open-normal-6bfe/angle-after.txt": "1e8ac0d84b7644b31324a78dee04aa7600daefcab3d96a422731f5b29245878e",
+    "assets/proofs/duo-open-normal-6bfe/displays-after.json": "c89e11c73e87ee6a6a74f5da43f9e07b8a7d74f10337567cf15d050c749406fe",
+    "assets/proofs/duo-open-normal-6bfe/checkpoints.jsonl": "3a3485710a7741807bb81654ea47ba6fc54506a105283c1c72841d8d99eaaa2f",
+    "assets/proofs/duo-open-normal-6bfe/004-hierarchy.txt": "b1aa2b38266244d60dc8f27187f5b063e90a162db66aadf529f0fe377b966464",
+    "assets/proofs/duo-open-normal-6bfe/parent-observation.json": "c2821ec1821eeda34c478534c8ff59905eb01ed3686f801d6adb3df39225c0b2",
+    "assets/proofs/duo-open-normal-6bfe/pose-proof.json": "4a4c70ec6b941c46d7d32829680ea025143a43fcadba7e33e9825236bea0211f",
+    "assets/proofs/duo-open-normal-6bfe/003-hierarchy.txt": "1eca6710222cb97589e4a606895cace81b80cbc1cec6a70e0e11cd12cb4b5407",
+    "assets/proofs/duo-closed-pretest-display-mismatch/displays-before.json": "c89e11c73e87ee6a6a74f5da43f9e07b8a7d74f10337567cf15d050c749406fe",
+    "assets/proofs/duo-closed-pretest-display-mismatch/original-failed-pipeline-record.json": "0980122bc04388813c7d8a13dfa8904f92d79dace75497576c1ba0aea06d8815",
+    "assets/proofs/duo-closed-pretest-display-mismatch/angle-before.txt": "51ff0d2f0d3a5d61edec31785532ea0d570f8c348d58b15b94ff9c2ca6e926a4",
+    "assets/proofs/phone-conditional/summary.json": "7f9123a6d33d45f5a06c26f0a5a64c2db8d5c7046280b5139163bd31d7b3692a",
+    "assets/proofs/phone-conditional/58584215-9DF5-49BD-87B6-D182D1D490D8.txt": "0d176a8510ff1ec813d2a36d1f88e4ba7a9a0f51940ff5712aa4220612180d92",
+    "assets/proofs/phone-conditional/tests.json": "7ecca5f5d53a15cecb6c097b2d22a817c127a09b250ba91e79f9c42915d49af7",
+    "assets/proofs/phone-conditional/provenance.json": "40725a600df7fe198784594061a4f0fac1ac72efab8b3fefbcc39e66cd4198f5",
+    "assets/proofs/phone-conditional/result.json": "8ec3d12c3ca92a4edf36081d0a8a9e8bddd2bf0eca20318a97faf0876d4bd226",
+    "assets/proofs/phone-conditional/E1C64131-2C3A-47DC-9189-4AC86BC9FDD3.txt": "c2fca48a92dd6ab2d9aa180d59b818f8ce2d81b31547d7ddbd728354ca832f9c",
+    "assets/proofs/phone-conditional/912920ED-2942-449A-A8D6-D9492C3D9B32.txt": "6d49ff6e7949f5a0e4f52c3fe2d44bbe0d6ae772370433380c87d85cefe6e4a9",
+    "assets/proofs/phone-conditional/65C8C3A2-7C8F-4FD2-BF40-73D600DBC7EE.txt": "aaa8eba25439879e361e9e336754dac10280579bdd208f941abd80012b1d983d",
+    "assets/proofs/phone-conditional/E9EFF550-EF7E-47C3-B714-47B0DE7306ED.txt": "41bff9c219d19367ddef1f686c9b7da786457bee0c9d2009c09c0e8c360052cd",
+    "assets/proofs/phone-conditional/7F9035C6-3828-4A02-914F-7A1D2557C715.txt": "21a70ca15f14c905e05868032c20f0cdb214fcaab89ade50cbd4578fd7c0c25b",
+    "assets/proofs/phone-conditional/0C9BFDF4-F8DD-41CF-8B52-FED2A6A03E31.txt": "fd3e08a3721b9fe5f16f52b9fb7ce63e4e018296ace836f3ed8ebe1a7460832f",
+    "assets/proofs/phone-conditional/414FC883-2533-4890-AB3F-B283ACF18047.txt": "67f6ca01a7012989a35bb1a2af1396dbc1336865918cf43af4709c310e20ade3",
+    "assets/proofs/phone-conditional/5E0C4A8A-DB44-4014-8CA7-FCCB11ECEB42.txt": "18d9eb4580e7beb07391fa6a228c9eb8ed8b3507cd78be23c5a094a7cee74013",
+    "assets/proofs/phone-conditional/CDF6DC23-0870-421B-AF95-66D3876E77AF.txt": "58589404ff5bd3797c331f0a8612b1aa38d52b1cd8ad932fc96dc34c49e5f34a",
+    "assets/proofs/phone-conditional/64722653-60B2-40E4-ADAD-DA952D420C99.txt": "0e8513c59cb04349c3596f9fa6a4e5927c8e0e5d6db15a15d896a91331dc1ee7",
+    "assets/proofs/phone-conditional/manifest.json": "693c95def2687f70af1665a8fece2009ed7d9a670c6f639ba1656e8245bca84f",
+    "assets/proofs/phone-conditional/860319F9-8DDB-4107-A1AC-D84A4066B238.txt": "14c56bc54c6921397a70a1254f2649afddaf54836f222bf9ca24eb021f866dea",
+    "assets/proofs/phone-conditional/776059DE-BB93-405B-8EC5-16A415954F0E.txt": "d30043c5b417ace72e72410df649a666e6404869045ec077d99d6937200c9060",
+    "assets/proofs/phone-conditional/952A81A1-00A5-415B-81A3-C4A06C3F1490.txt": "20d52dddc1a9de0225c9c696be8b8ff9a64a74541222263de6411687f07b4642",
+    "assets/proofs/phone-conditional/C4255F0F-4938-4A77-A7AA-EC2F8A635A0B.txt": "b2c87e56906f67ccc936bb9dee89c723e8e25542fb71bf04f2c403abf3765ded",
+    "assets/proofs/history/check-c041afe2027134a112f8238d.json": "4bbeac0c2dc33f0a4345de4e8950d93cc4681408734900d62b79c7c9b2d52f43",
+    "assets/proofs/ipad-original/summary.json": "e742102a1a7eda169d8d301cd083436b282e28926a142373207cea918c045e91",
+    "assets/proofs/ipad-original/E0A73859-7790-4622-8F16-E9A78B10B667.txt": "3b72cdc1b71dc205d5601c15fcd8291bad48d76eb0add4b41fae0810cc7c989f",
+    "assets/proofs/ipad-original/DA899D85-FD0A-4DB6-BB6C-7DF62362753D.txt": "797f043b0aee2549b4ee463bdfb33e8ac7a351f20e5eea92c560c0423c10c731",
+    "assets/proofs/ipad-original/493E391E-CB36-473C-A320-67C680FE7E09.txt": "3631ce2001e9549c0f5c3b6ec0cb4810435ad7da7b022a84cac24a0c48133ebf",
+    "assets/proofs/ipad-original/59EC39A6-1BA3-42C1-8046-8B7BD5A269AB.txt": "a7c19af8d45bed9359b18adf353f2b92baa7cb98540b8330f3ee76c70f885ae5",
+    "assets/proofs/ipad-original/5F9871F4-3CE6-4AF7-9FEB-48A4B901F802.txt": "191ddb8ecfcaa2364e452f95353248e24175bdfd567b33391e4e59163e4a5657",
+    "assets/proofs/ipad-original/tests.json": "ae3690342a1a26260d783b0f9aa6dc41ee43998578e98abd6442d9bab3f314e7",
+    "assets/proofs/ipad-original/provenance.json": "78228bcfe9934fe57d96bac3c33b429b0a553f9eca7b64a5fe615e14c4c2610f",
+    "assets/proofs/ipad-original/result.json": "142e18fa437c093a1ca560db4c52eb93d675b1cd91eab7b8fa0cf6cf7c0f9e85",
+    "assets/proofs/ipad-original/96C00FD0-F6FF-4AFD-ACB5-721BDEFCB173.txt": "05b04c09f0872e0ca103b38f306f6265301d47b60430c6c03bb1967951513558",
+    "assets/proofs/ipad-original/93D5C9E8-D973-47B5-A03D-6A2A7ADBD24C.txt": "afd30f8f1c04f74b98d8ea126e1075c1bb0678a41572d235974b3648f1ade630",
+    "assets/proofs/ipad-original/7ECD68AF-953E-4B57-9002-47BF91DB9E40.txt": "8315cd38a31318e0f0ee8c3410121156e1ee976773858b23f6ee7511893b1b67",
+    "assets/proofs/ipad-original/20BED5DE-E487-43EC-868D-F1A89617A2AE.txt": "fdab5f60ef33162d8816bafb9c321ae3c40c4019bd76c228fa65e2e617274737",
+    "assets/proofs/ipad-original/F65AA3B3-F50B-4488-8D82-B34B57F33D96.txt": "771c3765f7844d377eb4bd83424679200bef87019ff8e2e8c3e31dce58bb6f97",
+    "assets/proofs/ipad-original/9F92E047-7BA5-424D-B7B1-122FB79E5286.txt": "0f8dcfa760d797c30caed5837576d6caf329598f5e266496c481b55984a80ac7",
+    "assets/proofs/ipad-original/9AEAD960-3E08-456D-B507-693B3D19A94B.txt": "1e81b9c88058573465293e1ef60a4bebf346efcb694bb89bbef8eb2d1c94c9b0",
+    "assets/proofs/ipad-original/F7CF8721-0F39-41C3-9937-52A77676D758.txt": "0fa760688befe3d5f48b9a5f0ee9cbe4b3992869917b06c0d9cf210e70844d87",
+    "assets/proofs/ipad-original/AF76C357-ADF5-4823-9188-60D3B8A4C326.txt": "a6072a79fe601882ba6348add86563436d97c3e5af10bc5b6670987454cc94fa",
+    "assets/proofs/ipad-original/0B5A727F-FBC6-464F-8A49-3F029F7C4B73.txt": "f2f6a6b5c1f61fd652cc1e62946a48d59d45ca181a9cb35a5e7d529bb8713f7c",
+    "assets/proofs/ipad-original/EACC4E2E-C534-4F73-9900-7F9F3BE4C47D.txt": "7c11307cd497a5cabbd03f1225789b625c044436185569c240fad48797a38f99",
+    "assets/proofs/ipad-original/3D367C9E-AFDF-4AE0-B922-3273797FD5C4.txt": "7efb0ac551a75cbe92606357843ba94fc0a102650c59207fb4f125057992ee81",
+    "assets/proofs/ipad-original/manifest.json": "dd09e9a9f150c830de16de471592f0bf32dbb69d05f18e09b73d43d6bb9556db",
+    "assets/proofs/ipad-original/DB41B2F9-3467-4336-9BAC-B711CFE3A748.txt": "4789197fe3ad57dfe9e8ba9a228ef14b277f54c314d921976a056da61814fccc",
+    "assets/proofs/ipad-original/9DA21193-748B-4D3A-A683-8BCD6E379D94.txt": "7100cfde0e5e33f27f8e8a700cad8e21704c8e811354ba5af27d0f1bd0ce8708",
+    "assets/proofs/ipad-original/427C40C9-0E3B-4ACC-9382-B2BA6F8FA3B1.txt": "6b1420fa5fa82de8ba4d0647e932506166016c6916b824f24442b07324de6ede",
+    "assets/proofs/ipad-original/5E674E51-EBA6-45ED-8E43-043AEC958C80.txt": "25d52039e1cffe3068e6f4ce5df0c4a1098ab80333958915267e19eb75c7dfa9",
+    "assets/proofs/ipad-original/5CD90525-C20D-4A98-82C5-2821ACEB9A2C.txt": "76070ac89a2c27da9e195f780712078e97d13cbd745b98ca1c6f2b10c4fbb8a5",
+    "assets/proofs/ipad-original/AB782BB9-FE6E-4DF6-BC5A-1D1C7F468D30.txt": "7bbd8f0e5866e17738ebcbb576caf78199955500cfc3af883f380f71dbb8d6fe",
+    "assets/proofs/ipad-original/FA7EAE74-EA73-41C2-A72F-977260F569EF.txt": "1aad43829c27780b05b7a6a9fd10bb80ae761d00b3a1d1d0c34c4451968e8fc6",
+    "assets/proofs/ipad-original/CBC17872-D50E-4324-83C4-A7585593F1CF.txt": "be3606cfbe83b9751a0acc7881a290e8e55702136ae4a08e0c82d828f85c4902",
+    "assets/proofs/ipad-original/B6528592-9DE0-4A77-AC46-106454B9A5DF.txt": "56343bf3881856e165b181e21c97423eeca74a128c29440b55d5a0bf1886200f",
+    "assets/proofs/ipad-original/F23E6BBE-EE22-4C95-BDEB-D7F14F956DE7.txt": "e24b0bd744745adc3b21d8526ac4a307927718016ba490c81893534910540df4",
+    "assets/proofs/ipad-original/EBB10ACD-FFED-495C-A6A5-61F475BBF10A.txt": "3cbcb74014a0a3e7070446e840217d31544893302cfd18ad8e4e9e6875ab4ae4",
+    "assets/proofs/ipad-original/6C9048B6-E21C-4560-B0B2-D3448BB2DE9B.txt": "68d25a4e09243c3a50d5d8ff99f080ba45260d264f2519722023a306e7b283c6",
+    "assets/proofs/phone-historical/49FD47BC-80C1-4CDF-AA34-3870A8A97344.txt": "53c24c4998a84028f827e2d4aaf9a7d9ef8691a31148a164e964a25ba0bba91f",
+    "assets/proofs/phone-historical/summary.json": "ab6b5bf5f82229cb03be9fec2e36cc4ad8ccf79f00a1858d88f0a5c9e61cc401",
+    "assets/proofs/phone-historical/7C3A0D0D-20F8-4289-ABB4-F27626F091F9.txt": "15c5a336ee6da4131920c5cf22722cba03aa86fec6064b6f450db8edfb944bea",
+    "assets/proofs/phone-historical/7AD9F144-B4C9-4095-B47A-EFCA74D92652.txt": "0db8bd504ecc8167f3f1430f85a3d092f67f487acef799123e55e5d1f82d6bbf",
+    "assets/proofs/phone-historical/FA5AE6C0-A06D-4724-8FC1-D09A15DF6EFB.txt": "bd84941e3b6ec9941a7116c4feb3767923e47fab673bbdb602df897de09223ce",
+    "assets/proofs/phone-historical/A5A65FB8-36A2-4E14-A400-1BAB7A177D42.txt": "0db8bd504ecc8167f3f1430f85a3d092f67f487acef799123e55e5d1f82d6bbf",
+    "assets/proofs/phone-historical/tests.json": "4792cb2dc193deeb487ade1e5b05685ab9fd242d15057309be1b5fdf10ef7058",
+    "assets/proofs/phone-historical/provenance.json": "af4a47ecb83405216f85842d718ff8f90fd7b28c0c77151471d5d4240c7d8911",
+    "assets/proofs/phone-historical/result.json": "c156143a3a9bfe35bf634c35ee8d0ca81318684d3e8158393a4ab47a93846a7e",
+    "assets/proofs/phone-historical/DAC1AD2F-899B-4A1F-8F3A-A4B4FE7184B0.txt": "bd84941e3b6ec9941a7116c4feb3767923e47fab673bbdb602df897de09223ce",
+    "assets/proofs/phone-historical/E9497989-41FC-437D-ACA3-EE37CEE2B7AD.txt": "87c2df42b1acc3dc029512be4feb89116e7fc271d2f41cc384be3a709e100269",
+    "assets/proofs/phone-historical/AFB0F64F-7435-483D-BBEB-2BE41E661E6F.txt": "0db8bd504ecc8167f3f1430f85a3d092f67f487acef799123e55e5d1f82d6bbf",
+    "assets/proofs/phone-historical/7E9DA365-18C2-462E-994F-259CC19742DA.txt": "15c5a336ee6da4131920c5cf22722cba03aa86fec6064b6f450db8edfb944bea",
+    "assets/proofs/phone-historical/1A8CC046-B02B-49E0-AB41-84CE02E0CABD.txt": "15c5a336ee6da4131920c5cf22722cba03aa86fec6064b6f450db8edfb944bea",
+    "assets/proofs/phone-historical/AAD6DD25-CC8E-411F-8CFD-1E5313164BAF.txt": "a4206c6dd9b7a8cb99fa4efa89c510eec5789a19821d60f0734f9a6a5e61d3fa",
+    "assets/proofs/phone-historical/E65B016A-95C8-4386-8757-2ACDF6051657.txt": "3045bc7c7f31721bea6a68253c5bb0545828675bc2281c3a36be0474f90000c9",
+    "assets/proofs/phone-historical/8706BBDD-275A-4A93-BF62-396AEE6FBCC0.txt": "6b99d11ca27692c5ac430099900ac9f70a84216c238c61134cac086a2496a878",
+    "assets/proofs/phone-historical/9A31E474-C8CF-4111-A882-40B8EBDEB3DE.txt": "41cce6fe3cde90c4d5ab30c7cb06ebd6c9ecf1b4350de3bc0a9b2ded20dff36e",
+    "assets/proofs/phone-historical/A21C2031-4E52-4138-B8BC-E8BF50B05B0A.txt": "bd84941e3b6ec9941a7116c4feb3767923e47fab673bbdb602df897de09223ce",
+    "assets/proofs/phone-historical/B56B9253-ED72-441D-BE5A-8BEAA7960581.txt": "0db8bd504ecc8167f3f1430f85a3d092f67f487acef799123e55e5d1f82d6bbf",
+    "assets/proofs/phone-historical/84A828C3-C6E9-4609-AD7A-797B6152D758.txt": "0db8bd504ecc8167f3f1430f85a3d092f67f487acef799123e55e5d1f82d6bbf",
+    "assets/proofs/phone-historical/8D67543E-B14D-41D2-BE4F-02768BF0BD6C.txt": "15c5a336ee6da4131920c5cf22722cba03aa86fec6064b6f450db8edfb944bea",
+    "assets/proofs/phone-historical/2875BBAB-36B6-4E13-91BD-FA10293B227A.txt": "a78186fe2841dea977f92e3173384cb4278ea2e8e6a976aa3c6225f1a9ae5464",
+    "assets/proofs/phone-historical/E9642FA6-8B22-4E6A-A7A4-ECD00774BA3C.txt": "68604eb91fc6c2a605fd80dd017ef887d582380e3e141b346d919eef9382f7aa",
+    "assets/proofs/phone-historical/5F038C92-DADB-4E3B-8CC3-260F5FB1D4C5.txt": "9e6ec30f35b50e2a81caa5d1b8c58445e71a1e99f3d727eb9f826290cd38ebaa",
+    "assets/proofs/phone-historical/28CF8C54-973E-45DE-8BDE-8935EB4F13C8.txt": "bd84941e3b6ec9941a7116c4feb3767923e47fab673bbdb602df897de09223ce",
+    "assets/proofs/phone-historical/3DF022D4-15E4-4418-9FEE-F2DEE819C80C.txt": "378309470856b44c65a0146c792983757f9392510faffe9bc53c9e21e8160834",
+    "assets/proofs/phone-historical/FFBA76B8-EC12-4DF6-8FD7-F927627C2235.txt": "0db8bd504ecc8167f3f1430f85a3d092f67f487acef799123e55e5d1f82d6bbf",
+    "assets/proofs/phone-historical/1615C607-49A7-4A45-91BA-C24BE9FEEF4C.txt": "89e85f25f389023e6e7bf17a26c435abebad8202a4b01293308c4e5d2060261a",
+    "assets/proofs/phone-historical/C53E9933-B7B5-4114-A337-944DB6075940.txt": "b7fac50430a5138de291af09e4c60f42985ed8bfae9b6f337b7c94293584c5c7",
+    "assets/proofs/phone-historical/ECC97DE2-D7EC-42DE-A750-57CA3683DD80.txt": "15c5a336ee6da4131920c5cf22722cba03aa86fec6064b6f450db8edfb944bea",
+    "assets/proofs/phone-historical/5E646F10-B4DE-4370-9115-8C55340F5B19.txt": "e7d3ecdbb5a3ef5fc0d2cb506b9a6aff1dac2f37bbf1a38de97c22c930a4383c",
+    "assets/proofs/phone-historical/C88EAEA5-CF03-4961-BC27-66F92B8469C9.txt": "15c5a336ee6da4131920c5cf22722cba03aa86fec6064b6f450db8edfb944bea",
+    "assets/proofs/phone-historical/936E23EB-9EB7-4E7E-9E3F-9F992F95E988.txt": "44fa197e03d8e143c7c870b60b1dc04e18f72cf946c45ff48714461ab4b89757",
+    "assets/proofs/phone-historical/AF4EC212-7DF7-4A3B-83AF-208D20435F66.txt": "0db8bd504ecc8167f3f1430f85a3d092f67f487acef799123e55e5d1f82d6bbf",
+    "assets/proofs/phone-historical/67906359-6583-4520-813A-A76BDBE50A22.txt": "bd84941e3b6ec9941a7116c4feb3767923e47fab673bbdb602df897de09223ce",
+    "assets/proofs/phone-historical/75B5C1D0-C0BF-470B-A3C4-2BD49463119D.txt": "bd84941e3b6ec9941a7116c4feb3767923e47fab673bbdb602df897de09223ce",
+    "assets/proofs/phone-historical/20E4C630-7466-4587-8B99-82F4D89E0150.txt": "0db8bd504ecc8167f3f1430f85a3d092f67f487acef799123e55e5d1f82d6bbf",
+    "assets/proofs/phone-historical/manifest.json": "0921a6a3f9633b4d4f37f0243dc9cd564f846186a487ae913ecaa0b385ce52be",
+    "assets/proofs/phone-historical/DF9445FE-3058-4D2B-8ADB-5D86FD37C3B9.txt": "bd84941e3b6ec9941a7116c4feb3767923e47fab673bbdb602df897de09223ce",
+    "assets/proofs/phone-historical/BBC5CB87-849D-4B75-8966-52423703ED6B.txt": "15c5a336ee6da4131920c5cf22722cba03aa86fec6064b6f450db8edfb944bea",
+    "assets/proofs/phone-historical/7C283FB0-2937-4202-8DCE-5E46E0076DF0.txt": "15c5a336ee6da4131920c5cf22722cba03aa86fec6064b6f450db8edfb944bea",
+    "assets/proofs/phone-historical/3A28CCC0-2BAE-4341-B901-E205DDB7F395.txt": "07f9189d88a8a13544886429af2b2e7b9148645b689b2616d90e0eac640cf8db",
+    "assets/proofs/phone-historical/7CBC3AD8-4D56-4D7A-8E4C-0BAC6FCE5690.txt": "bd84941e3b6ec9941a7116c4feb3767923e47fab673bbdb602df897de09223ce",
+    "assets/proofs/phone-historical/EF40F528-04F0-40AC-A1C8-30640BBBF0F4.txt": "9202be6ed3ebcb8e7a0cdfa7731ca1844360235bb2a1f1b8e1b467cef69e6ef5",
+    "assets/proofs/phone-historical/8321ADD2-9BDD-4C8B-B0B2-9B46D9981218.txt": "bd84941e3b6ec9941a7116c4feb3767923e47fab673bbdb602df897de09223ce",
+    "assets/proofs/phone-historical/60ACF606-943A-4B77-AF96-270EC591E0F0.txt": "a23a351d60c40ba5621e8dd361f5f119c153c52a625d43ea9d816ece34a8b3bd",
+    "assets/proofs/phone-historical/5ECB4487-9BC3-4E73-A385-AE985891F271.txt": "bd84941e3b6ec9941a7116c4feb3767923e47fab673bbdb602df897de09223ce",
+    "assets/proofs/phone-historical/FF13C5FC-1F4E-4366-934A-87206B8EF97A.txt": "a57ce6201602b2814b1039776142664b451a049c83c2461a62211828bb8d6d53",
+    "assets/proofs/phone-historical/4676F823-3801-4604-A68A-E727BC787336.txt": "6c5972bd0d92c203a9d3d8715fc9da3eefd6531a4dcd40f0c8ecc24388c23ca3",
+    "assets/proofs/ipad-final-glyph/summary.json": "d40da26df091e80d8a21dee95aafcc0d456d86ed3c9f8f5a2e89b1b7e94e1994",
+    "assets/proofs/ipad-final-glyph/2AF68716-04D3-4A15-854E-7D1DA2A41C77.txt": "0094be8c4d1cae2f15786864fb387e4d0b6efef2aa858b0c9a31a92ec35d9a88",
+    "assets/proofs/ipad-final-glyph/CE62D834-0069-4F3D-A75A-F9FE2546402D.txt": "5832df08c91f2e62e7d618dcc65d84c5b806fa683bbee74b144f075a22e68103",
+    "assets/proofs/ipad-final-glyph/tests.json": "ad9cd27106faae77f0ec7c00f9d907863f36b055fd7a1d9c0afda122112a621a",
+    "assets/proofs/ipad-final-glyph/provenance.json": "8ded34043a595a378d0795a2d4990e8d51fd9cf98ab07607599131a056ef7bb3",
+    "assets/proofs/ipad-final-glyph/result.json": "73258b84f39eb2fbc77c8b4eef800393adf294807981b691fb76ded54e3ba5ad",
+    "assets/proofs/ipad-final-glyph/76125E88-4C39-4590-A370-3489F31685B8.txt": "a8f42acf2c65a0988642e334e1a18422a921f5801e4ea1641a6231c00bf4b11c",
+    "assets/proofs/ipad-final-glyph/DE5C7DFB-EA9D-470D-8E2D-A118E47A7B9B.txt": "9baa06cb2403838a58347fb838d3e27d3693849f06017f4c2a94712789a4b319",
+    "assets/proofs/ipad-final-glyph/EBD5C220-E6FF-40CC-888A-A517D9467CD7.txt": "da890c8a79e9facdda54444f9d52e7d20614c10ae488af3386e1144b213af0d4",
+    "assets/proofs/ipad-final-glyph/manifest.json": "ed1fd771636969a3a8797ebf910246a35709387089855b196fc428f98cc71b1f",
+    "assets/proofs/ipad-final-glyph/43F17000-B4F2-4F2B-954D-7EF5C28E4015.txt": "aed9168ad759e5d24450118ecdf5a895649347430b930cd2c8e1edc66dd4cda2",
+    "assets/proofs/ipad-final-glyph/478FD315-7ED9-4474-B4AD-EF973DDAC614.txt": "91d77fd05e003c75112de3b92f2d64839b342cfee20613d8b5363f8174399796",
+    "assets/proofs/duo-closed-normal-6bfe/first-pretest-failure/displays-before.json": "c89e11c73e87ee6a6a74f5da43f9e07b8a7d74f10337567cf15d050c749406fe",
+    "assets/proofs/duo-closed-normal-6bfe/first-pretest-failure/original-failed-pipeline-record.json": "0980122bc04388813c7d8a13dfa8904f92d79dace75497576c1ba0aea06d8815",
+    "assets/proofs/duo-closed-normal-6bfe/first-pretest-failure/angle-before.txt": "51ff0d2f0d3a5d61edec31785532ea0d570f8c348d58b15b94ff9c2ca6e926a4",
+    "assets/proofs/quality/pr887-final-review-before-assembly-fix.md": "6d884e43964c203edd99649ccc90c56aa7d945b5ad9863c280c44a6117cd6a27",
+    "assets/proofs/quality/pr887-installed-assembly-resolution.md": "68337e3341b484a2217e70ea1e9542e90330a153d017d313fa4ac1c270e98654",
+    "assets/proofs/quality/pr887-final-review.md": "0e03c77b27a8816725ae6bf3df11474b48421fefc4ee3fce9e655b4356e289d9",
+    "assets/proofs/quality/pr887-current-ci-result.json": "4bbe93d0b36348da0c357735783c769647e29a1efb216d19faa63944348fffbc"
+  },
+  "normal_four_tier_pairs_complete": true,
+  "phone_finalglyph_max": {
+    "source_directory": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/h02/evidence/phone-max-fixed-glyph-6bfe7c85",
+    "result": {
+      "schema_version": 1,
+      "status": "passed",
+      "target": "DUNEUITests",
+      "run_exit_status": 0,
+      "requested_selectors": [
+        "DUNEUITests/WellnessScoreDetailRedesignTests/testDarkMaximumAccessibilityWholeContentReachability"
+      ],
+      "skipped_selectors": [],
+      "evidence_scope": {
+        "kind": "selector_execution",
+        "complete_test_inventory": false
+      },
+      "counts": {
+        "executed": 1,
+        "passed": 1,
+        "skipped": 0,
+        "failed": 0
+      },
+      "passed_cases": 1,
+      "failures": [],
+      "required_selectors_missing": [],
+      "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/h02-phone-max-fixed-glyph-6bfe7c85.log"
+    },
+    "provenance": {
+      "revision": "6bfe7c85",
+      "source_worktree_dirty": false,
+      "original_xcresult": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.11.02_21-54-03-+0900.xcresult",
+      "xcode": "Xcode 27.2\nBuild version 27B52",
+      "test_plan": "DUNEUITests-DesignCapture"
+    },
+    "exact_passed_node": {
+      "duration": "2분 2초",
+      "durationInSeconds": 122.79568099975586,
+      "name": "testDarkMaximumAccessibilityWholeContentReachability()",
+      "nodeIdentifier": "WellnessScoreDetailRedesignTests/testDarkMaximumAccessibilityWholeContentReachability()",
+      "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNEUITests/WellnessScoreDetailRedesignTests/testDarkMaximumAccessibilityWholeContentReachability",
+      "nodeType": "Test Case",
+      "result": "Passed"
+    },
+    "images": [
+      {
+        "image": "assets/phone-MAX-BD49BC6F.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/h02/evidence/phone-max-fixed-glyph-6bfe7c85/attachments/BD49BC6F-12D6-446C-83B6-15814B1D07EF.png",
+        "sha256": "1f8e59a9da597ac078c2a5e85868da623716480737e641236ca0dd1d9633b6d7",
+        "pixels": [
+          1320,
+          2868
+        ],
+        "exif_orientation": 1,
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "74C70668-6815-41A4-834B-B137610A921B",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "BD49BC6F-12D6-446C-83B6-15814B1D07EF.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "H02-dark-max-AX-wellness-detail-external-score_0_FD74C4A3-269C-41C3-97EC-9D9982323033.png",
+          "timestamp": 1793624119.936
+        },
+        "selector": "DUNEUITests/WellnessScoreDetailRedesignTests/testDarkMaximumAccessibilityWholeContentReachability",
+        "action": "H02-dark-max-AX-wellness-detail-external-score_0_FD74C4A3-269C-41C3-97EC-9D9982323033.png",
+        "capture_timestamp": 1793624119.936,
+        "timestamp_kind": "native-XCTest-attachment",
+        "capture_time_kst": "2026-11-02T21:55:19.936000+09:00",
+        "device_udid": "74C70668-6815-41A4-834B-B137610A921B",
+        "revision": "6bfe7c85",
+        "source_worktree_dirty": false,
+        "label": "Phone MAX hero87/Excellent/date",
+        "back_exercised": false,
+        "visual_review_complete": true
+      },
+      {
+        "image": "assets/phone-MAX-CD2EBDE9.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/h02/evidence/phone-max-fixed-glyph-6bfe7c85/attachments/CD2EBDE9-DBCB-4E1E-93CA-8808149FBD14.png",
+        "sha256": "fc02da42c184c80a61f92cd2169ae0f788b92482636fae0dcef2b90dabd70b58",
+        "pixels": [
+          1320,
+          2868
+        ],
+        "exif_orientation": 1,
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "74C70668-6815-41A4-834B-B137610A921B",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "CD2EBDE9-DBCB-4E1E-93CA-8808149FBD14.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "H02-dark-max-AX-wellness-detail-component-posture_0_278EC569-27C0-422F-A616-97A5AE1CE433.png",
+          "timestamp": 1793624135.575
+        },
+        "selector": "DUNEUITests/WellnessScoreDetailRedesignTests/testDarkMaximumAccessibilityWholeContentReachability",
+        "action": "H02-dark-max-AX-wellness-detail-component-posture_0_278EC569-27C0-422F-A616-97A5AE1CE433.png",
+        "capture_timestamp": 1793624135.575,
+        "timestamp_kind": "native-XCTest-attachment",
+        "capture_time_kst": "2026-11-02T21:55:35.575000+09:00",
+        "device_udid": "74C70668-6815-41A4-834B-B137610A921B",
+        "revision": "6bfe7c85",
+        "source_worktree_dirty": false,
+        "label": "Phone MAX actualcomponents and fullicons",
+        "back_exercised": false,
+        "visual_review_complete": true
+      },
+      {
+        "image": "assets/phone-MAX-CB2BBF91.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/h02/evidence/phone-max-fixed-glyph-6bfe7c85/attachments/CB2BBF91-0758-42C2-805E-E3F8B6DC7004.png",
+        "sha256": "bb369e80bfa29d7bab20a7a07d500b12172e87873098092bbf2547258d5d0727",
+        "pixels": [
+          1320,
+          2868
+        ],
+        "exif_orientation": 1,
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "74C70668-6815-41A4-834B-B137610A921B",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "CB2BBF91-0758-42C2-805E-E3F8B6DC7004.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "H02-dark-max-AX-score-detail-chart-visible-range_0_DB2D39B4-C360-4977-8426-9DB58510E659.png",
+          "timestamp": 1793624148.962
+        },
+        "selector": "DUNEUITests/WellnessScoreDetailRedesignTests/testDarkMaximumAccessibilityWholeContentReachability",
+        "action": "H02-dark-max-AX-score-detail-chart-visible-range_0_DB2D39B4-C360-4977-8426-9DB58510E659.png",
+        "capture_timestamp": 1793624148.962,
+        "timestamp_kind": "native-XCTest-attachment",
+        "capture_time_kst": "2026-11-02T21:55:48.962000+09:00",
+        "device_udid": "74C70668-6815-41A4-834B-B137610A921B",
+        "revision": "6bfe7c85",
+        "source_worktree_dirty": false,
+        "label": "Phone MAX wrappedrange/periods/trend",
+        "back_exercised": false,
+        "visual_review_complete": true
+      },
+      {
+        "image": "assets/phone-MAX-448B47A4.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/h02/evidence/phone-max-fixed-glyph-6bfe7c85/attachments/448B47A4-5229-4671-A223-C278BB3EB306.png",
+        "sha256": "63a8016f16ff59ee94b0ddd24c836ff2dc2e4a4b02f72d3738d2572bade95897",
+        "pixels": [
+          1320,
+          2868
+        ],
+        "exif_orientation": 1,
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "74C70668-6815-41A4-834B-B137610A921B",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "448B47A4-5229-4671-A223-C278BB3EB306.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "H02-dark-max-AX-full-method_0_632CD224-165D-4488-B1AA-3B0326C06FC0.png",
+          "timestamp": 1793624210.566
+        },
+        "selector": "DUNEUITests/WellnessScoreDetailRedesignTests/testDarkMaximumAccessibilityWholeContentReachability",
+        "action": "H02-dark-max-AX-full-method_0_632CD224-165D-4488-B1AA-3B0326C06FC0.png",
+        "capture_timestamp": 1793624210.566,
+        "timestamp_kind": "native-XCTest-attachment",
+        "capture_time_kst": "2026-11-02T21:56:50.566000+09:00",
+        "device_udid": "74C70668-6815-41A4-834B-B137610A921B",
+        "revision": "6bfe7c85",
+        "source_worktree_dirty": false,
+        "label": "Phone MAX finalmethod paragraphs afterscroll",
+        "back_exercised": false,
+        "visual_review_complete": true
+      }
+    ],
+    "visual_review_complete": true,
+    "source_app_sha256": "5f43837ebde432b7d2b21e86f5c16cef3d411fabcb2b8544b1ac2afa5ee2e13f",
+    "source_MAX_method_matches_current": true,
+    "source_closure_proof": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/detail-rollout/quality-queue/pr887/staged-gallery/assets/proofs/phone-finalglyphMAX-6bfe/source-closure.json",
+    "source_closure_proof_sha256": "ca35238908d8379ddcc91536c885c147319d4e7c9747ba36d119dff824801676",
+    "back_exercised": false,
+    "proof_directory": "assets/proofs/phone-finalglyphMAX-6bfe"
+  },
+  "publication": {
+    "png_count": 19,
+    "canonical_screen": "H02",
+    "all_other_rows_images_preserved": true,
+    "watch_preserved": true,
+    "pose_summary": {
+      "duo": {
+        "ack_count": 4,
+        "angle_before": 0,
+        "angle_after": 0,
+        "active_display": "LCD",
+        "raw_pose_sha256": "08003c5e7891ba80615f4875fbad7d29539e53fe662789d487173765378859e4",
+        "raw_checkpoints_sha256": "4627f6e0ecb74272f8596443e72193172a81b77be7b7c88a43644a9d1d6247aa"
+      },
+      "duo-open": {
+        "ack_count": 4,
+        "angle_before": 180,
+        "angle_after": 180,
+        "active_display": "LCD-1",
+        "raw_pose_sha256": "4a4c70ec6b941c46d7d32829680ea025143a43fcadba7e33e9825236bea0211f",
+        "raw_checkpoints_sha256": "3a3485710a7741807bb81654ea47ba6fc54506a105283c1c72841d8d99eaaa2f"
+      }
+    },
+    "app_test_tool_changes_by_publisher": false,
+    "assembly_consistency": "Current README, HTML and limits corrected to installed; raw historical stage/proofs unchanged",
+    "finalReview": "CLEAR; prior Openlabel and currentinstalledassembly P2 resolved, no remainingP1/P2/P3",
+    "CI": {
+      "productSource": "fc8ba0cb9ad5f17425c41ac0221b284c5b39f97c",
+      "appBuild": {
+        "status": "SUCCESS",
+        "job": 125280573853
+      },
+      "ios": {
+        "status": "SUCCESS",
+        "job": 125280574566,
+        "swiftTestingTests": 2734,
+        "swiftTestingSuites": 302,
+        "xctestTests": 12,
+        "actualTestSuccessLog": "2026-11-02T13:02:06.5373640Z",
+        "logSHA256": "86eaa8cb9a5d335d6eef97475aae4fd86d8a0469a671d06fb3250f5afc566217"
+      },
+      "watch": {
+        "status": "SUCCESS",
+        "job": 125280574006,
+        "tests": 213,
+        "suites": 29,
+        "logSHA256": "952b2f60bed355d975c3d1affea5f900ab0dc653add1f9d6882db9939f61c80a"
+      },
+      "scope": "Existing automatic CI; no new local full run. Final later docs/image/proof commit changes no app/test inputs."
+    }
+  }
+}

@@ -216,3 +216,7 @@ T09 네이티브 최대 접근성 글씨는 원래 아이콘을 위로 옮겨 �
 ## T07 전체 데이터 상세 방향 · 2026-10-31
 
 [밝음·어두움 히어로와 날짜별 행 시안](themes/dune-all-data-detail-t07.html) · [16개 범주와 상태·배치 계약](../layout-map/all-data-detail-t07.html). T06의 불투명 `ScoreHeroPalette`를 범주 식별에만 사용하며 원래 SF Symbol·번역된 이름과 기존 “History”를 표시한다. 기존 정적 배경, `insetGrouped List`, 날짜 섹션·실제 시각/값, 제한 이력·빈 상태·페이징·시스템 back을 유지한다. 예시 값과 브라우저 기호는 앱 데이터나 SF Symbol 캡처가 아니며, 구현 전후 실제 화면은 별도 검증한다.
+
+## H02 웰니스 점수 상세 · 2026-10-31
+
+[밝음·어두움 표현 방향](themes/dune-h02-wellness-score-detail.html)과 [상태·배치 계약](../layout-map/h02-wellness-score-detail-proposal.md)은 T04/H01의 불투명 히어로 언어를 H02에 잇는다. 상태별 아이콘과 실제 점수·평가 시각·네 선택적 구성, 시간대 조정, 기간·추세·요약, 계산 설명을 보존한다. 시안의 93점·구성·차트·날짜는 모두 예시이며 네이티브 구현이나 실제 캡처 완료를 뜻하지 않는다.

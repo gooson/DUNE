@@ -613,12 +613,21 @@
     "H02": {
       "row_id": "H02",
       "evidence": "wellness-score-detail-screen",
-      "test": "WellnessRegressionTests/testWellnessRootRendersAndHeroOpensScoreDetail()",
-      "action": "tap wellness-hero-score",
-      "timestamp": 1791824058.971,
-      "image": "A5A74952-0E38-48D1-803B-3942E23B4010.png",
-      "screen": "screen-0-2064x2752-tap wellness-hero-score_0_0BBE5315-4E31-4B78-B6D8-EE9EDAF8DCA1.png",
-      "file": "H02.png"
+      "test": "DUNEUITests/WellnessScoreDetailRedesignTests/testActualScoreComponentsAndNativeBack",
+      "action": "H02-native-actual-score-components_0_D621ECB7-BDE1-4BAC-96EE-88DFF4F8F146.png",
+      "timestamp": 1793583798.968,
+      "timestamp_kind": "native-XCTest-attachment",
+      "image": "05314F91-FE27-4DAF-8CA6-DC702A65C5C9.png",
+      "screen": "H02-native-actual-score-components_0_D621ECB7-BDE1-4BAC-96EE-88DFF4F8F146.png",
+      "file": "H02.png",
+      "source_revision": "e83be1f5",
+      "source_worktree_dirty": false,
+      "device_udid": "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+      "sha256": "7b20d2991128251cb9724127ca69bdaf1cf8241a7f32c8ea3cbb158222d6e33b",
+      "source_json": "../../../full-redesign-map/review/h02-wellness-score-detail-native-2026-11-02/evidence.json",
+      "source_record": "pairs.ipad.after",
+      "capture_scope": "H02 actual score/status/optional components/composition and native Back; historical Phone exact passed case within failed group; finalglyphPhoneMAX separate noBack",
+      "pose_readback_verified": false
     },
     "W14": {
       "row_id": "W14",
