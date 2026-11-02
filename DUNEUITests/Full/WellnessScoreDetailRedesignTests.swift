@@ -58,8 +58,11 @@ final class WellnessScoreDetailRedesignTests: SeededUITestBaseCase {
         }
         addScreenshotAttachment(named: "H02-native-actual-score-components")
 
-        let back = app.navigationBars.buttons.firstMatch
-        XCTAssertTrue(back.exists && back.isHittable, "Native navigation back must be available")
+        let railBack = app.buttons["BackButton"].firstMatch
+        let back = railBack.exists && railBack.isHittable
+            ? railBack : app.navigationBars.buttons.firstMatch
+        XCTAssertTrue(back.waitForExistence(timeout: 5) && back.isHittable,
+                      "Native navigation back must be available")
         back.auditTap()
         XCTAssertTrue(root.waitForExistence(timeout: 8), "Back must return to the Wellness root")
         XCTAssertFalse(detail.exists)

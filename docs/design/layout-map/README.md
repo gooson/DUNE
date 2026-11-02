@@ -37,6 +37,10 @@ Life의 링 옆에는 현재 진행 상태를 설명하는 문장을 둔다. 히
 
 ## 화면별 맵 목록
 
+2026-10-31 [T13 알림 대상 없음 배치](notification-destination-unavailable-t13.html)는 기존 설명·뒤로 가기·실제 알림 ID를 유지하는 상세 화면의 한 열 계약이다. 정적 시안이며 실제 캡처가 아니다.
+
+2026-10-31 [T09 아침 브리핑 배치 계약](morning-briefing-proposal.md)은 일출 히어로 뒤에 회복·가이드·주간·조건부 날씨를 배치한다. [보존 시안](../theme-map/themes/dune-morning-briefing.html)은 예시로, 실제 앱 캡처와 구분한다.
+
 2026-10-31 [T02 iCloud 동기화 동의 배치](cloud-sync-consent-t02.html)는 앱 시작 시트의 히어로→세 설명→두 선택, 폭·큰 글씨·동작 계약을 정한다. HTML은 구현 기준 시안이며 실제 앱 캡처가 아니다.
 
 2026-10-30 [Siri 건강 정보 질의 SQ01–SQ14](siri-health-queries-proposal.md)와 [기능별 비주얼 시안](../theme-map/themes/dune-siri-health-queries.html)을 추가했다. 최근 운동·주간 운동량·세트·개인 기록·유산소·신체 최신값/추세·수면·컨디션·기간 비교·화면 문맥·메모 검색·보고서 공유·긴 분석의 V1/V2, 밝음/어두움, 폭·큰 글씨·데이터 상태를 비교한다. Watch 짧은 응답 3개를 함께 보존한다. 합성 데이터의 브라우저 제안이며 실제 Siri·앱 구현·실제 화면 캡처가 아니다.
@@ -139,3 +143,6 @@ Life Flow를 실제 앱에 반영했다. [검증 보고](../../reviews/2026-10-2
 [WLA01 골드 임팩트 · 종목별 지표 선택](live-activity-size-state-proposal.md) · [보존 시안](../theme-map/themes/dune-live-activity-size-state.html) · 네이티브 구현·검증 진행 중.
 
 - [T04 컨디션 상세 개편](condition-detail-redesign-proposal.md): 링·실측 기여·기간/차트/통계·단일 설명 펼침의 화면별 native 계약.
+
+- [T05 누적 스트레스 상세 개편](cumulative-stress-redesign-proposal.md): 동일 히어로·통합 기간/통계·요인 막대·하나의 계산 펼침.
+- [T06 건강 지표 상세 개편](health-metric-detail-redesign-proposal.md):16개 지표의 실제 단위/기능 보존, 통합 추세, 검증된 선택형 비교와 정확한 전후 화면 식별.

@@ -119,3 +119,11 @@ H02 전용 private hero를 `WellnessScoreDetailView` 안이나 H02 전용 작은
 
 - **Overall**: High for H02-local visual composition; Medium for any optional disclosure or new chart navigation.
 - **Reasoning**: Current H02 data/branch contract and H01/T04 palette/ring pattern are explicit. Existing seeded UI route supports a native original baseline without changing app data. The main uncertainty is layout/contrast at maximum text and cross-device states, to resolve by targeted native receipts and new H02 selectors.
+
+## Resumed minimum verification — 2026-11-02
+
+Restore exact public241 in isolated H02 checkout and integrate actual main9b90; retain all completed T11–T13 and unrelated shared data. H02 View remains5f43837e… exact241/validation3fac; VM, consumers, scoring model/use case and palette are unchanged. Main seed/provider differences are opt-in T05/T06 flags not passed by H02. Relevant strings match historical tested inputs; no catalog edit. Five actual source reviewers found P1=0/P2=0/P3=0; parent localization checks found no leak.
+
+Reuse Nov2 iPad normal+darkMAX2PASS at e83treec402=241, plus precise old Phone passed nodes and original same-ID conditional3PASS history. The old five-case Phone group remains FAILED2passed/3failed; do not relabel the whole group. No extra H02 allowance is inferred. New native scope is only Phone final-glyph MAX1 and Duo normal1 per pose, one owned device reused sequentially with strict SDK/active-display/ACK. No duplicate normalPhone/iPad/threepassedinteraction/VMunit/full/Watch.
+
+Before Duo execution, normal test now prefers existing+hittable native BackButton rail (known current native Duo hierarchy), falling back to the original nav-bar selector with bounded5s wait. Actual tap, Wellnessroot return and detail-absent assertions remain. This narrow test query changes no app behavior and was independently reviewed CLEAR. Historical normal results do not certify this added lookup; fresh Duo cases will. MAX remains unchanged and checks content reachability without tapping Back; visibility is not navigation coverage. Frozen validation checkpoint compiles the reviewed Back query alongside the separately reviewed T14 ID test-only correction; no T14 extra execution is authorized by H02 work. Native results, actual map, final quality, Compound and Ship remain pending until evidence exists.

@@ -1,0 +1,2854 @@
+{
+  "schema_version": 1,
+  "screen_family": "T06",
+  "prep_date": "2026-11-02",
+  "kind": "actual native HRV four-tier after evidence plus distinct historical iPad18identity matrix",
+  "metric_identity_count": 18,
+  "test_count_note": "Original17identities inONEpassingmethod;swimONEseparatemethod;f9matrix18 inONEmethod plusONEpeer=2PASS.61bundle2PASS1FAIL, distance methods only pass.",
+  "bundles": {
+    "before": {
+      "directory": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-original-before-current",
+      "provenance": {
+        "revision": "0dc77dc4",
+        "source_worktree_dirty": false,
+        "original_xcresult": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.31_10-19-11-+0900.xcresult",
+        "xcode": "Xcode 27.2\nBuild version 27B52",
+        "test_plan": "DUNEUITests-DesignCapture",
+        "execution_worktree": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health",
+        "device_udid": "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+        "classification": "ORIGINALbeforeT06;1passingmethodloops17identitiesincludingexercise-minandexercise-km"
+      },
+      "result": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/t06-ipad-original-before-0dc77dc4.log"
+      }
+    },
+    "swim": {
+      "directory": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-original-swimming-input-legacy-min",
+      "provenance": {
+        "revision": "f06d4a73",
+        "source_worktree_dirty": false,
+        "original_xcresult": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.31_10-57-53-+0900.xcresult",
+        "xcode": "Xcode 27.2\nBuild version 27B52",
+        "test_plan": "DUNEUITests-DesignCapture",
+        "execution_worktree": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health",
+        "tier": "iPadMiniA20C8",
+        "input": "syntheticSwimming1314m",
+        "native_title": "Swimming",
+        "exact_rendered_header": "Exercise, 1,314 min",
+        "classification": "frozenoriginallegacyunitbehavior;NOTcorrect-meter-displayPASS",
+        "protected_View_VM": "byteidenticaloriginal0dc"
+      },
+      "result": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/MetricDetailRedesignTests/testOriginalSwimmingMeterInputLegacyUnitAndCapture"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/t06-ipad-original-swimming-unit-f06d4a73.log"
+      }
+    },
+    "after": {
+      "directory": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current",
+      "provenance": {
+        "revision": "f9f1d852",
+        "source_worktree_dirty": false,
+        "original_xcresult": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.31_11-03-45-+0900.xcresult",
+        "xcode": "Xcode 27.2\nBuild version 27B52",
+        "test_plan": "DUNEUITests-DesignCapture",
+        "execution_worktree": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health",
+        "device_udid": "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+        "scope": "AFTER1methodloops18metricidentities+1peerCriteriaCancelApplyReferenceSource=2PASS;not18testcases",
+        "exact_meters": "Exercise,1,314m+Swimmingassertionpassedinside18matrix"
+      },
+      "result": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures",
+          "DUNEUITests/MetricDetailRedesignTests/testWeightPeerCriteriaCancelApplyAndSource"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 2,
+          "passed": 2,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 2,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/t06-ipad-metric-detail-f9f1d852.log"
+      }
+    },
+    "distance": {
+      "directory": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-highlight-units-peer-initial-failure",
+      "provenance": {
+        "revision": "61bdbf84",
+        "execution_worktree": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health",
+        "whole_bundle": "FAILED 2PASS1FAIL; never allPASS",
+        "passing_methods": [
+          "Running exact10.2km",
+          "Swimming exact1314m+Highest1.3km"
+        ],
+        "failed_method": "Peer at line285 initial Apply disabled assertion",
+        "same_cause_conditional_retries_remaining": 1,
+        "no_cause_claim_before_diagnosis": true
+      },
+      "result": {
+        "schema_version": 1,
+        "status": "failed",
+        "target": "DUNEUITests",
+        "run_exit_status": 65,
+        "requested_selectors": [
+          "DUNEUITests/MetricDetailRedesignTests/testSwimmingMeterValueUnitAndCapture",
+          "DUNEUITests/MetricDetailRedesignTests/testRunningKilometerHighlightUsesDistanceUnit",
+          "DUNEUITests/MetricDetailRedesignTests/testWeightPeerCriteriaCancelApplyAndSource"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 3,
+          "passed": 2,
+          "skipped": 0,
+          "failed": 1
+        },
+        "passed_cases": 2,
+        "failures": [
+          "6679: /Users/shanks/.codex/worktrees/detail-redesign-validation/Health/DUNEUITests/Full/MetricDetailRedesignTests.swift:285: error: -[DUNEUITests.MetricDetailRedesignTests testWeightPeerCriteriaCancelApplyAndSource] : XCTAssertFalse failed",
+          "6690: Test Case '-[DUNEUITests.MetricDetailRedesignTests testWeightPeerCriteriaCancelApplyAndSource]' failed (28.762 seconds).",
+          "6691: Test Suite 'MetricDetailRedesignTests' failed at 2026-10-31 11:42:57.875.",
+          "6693: Test Suite 'DUNEUITests.xctest' failed at 2026-10-31 11:42:57.881.",
+          "6695: Test Suite 'Selected tests' failed at 2026-10-31 11:42:57.881.",
+          "6707: ** TEST FAILED **",
+          "xcodebuild exited 65",
+          "UI test log reports 1 failures",
+          "requested UI test selector has no execution evidence"
+        ],
+        "required_selectors_missing": [
+          "DUNEUITests/MetricDetailRedesignTests/testWeightPeerCriteriaCancelApplyAndSource"
+        ],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/t06-ipad-highlight-units-peer-61bdbf84.log"
+      }
+    },
+    "peer": {
+      "directory": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-peer-conditional-current",
+      "provenance": {
+        "revision": "3d299a50",
+        "source_worktree_dirty": false,
+        "original_xcresult": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.31_11-55-53-+0900.xcresult",
+        "xcode": "Xcode 27.2\nBuild version 27B52",
+        "test_plan": "DUNEUITests-DesignCapture"
+      },
+      "result": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/MetricDetailRedesignTests/testWeightPeerCriteriaCancelApplyAndSource"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/t06-ipad-peer-isolated-3d299a50.log"
+      }
+    }
+  },
+  "metrics": [
+    {
+      "key": "hrv",
+      "title_ko": "심박변이도",
+      "expected_identity_from_f9_harness": {
+        "category": "hrv",
+        "title": "Heart Rate Variability",
+        "value": "75",
+        "unit": "ms"
+      },
+      "before_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-original-before-current/attachments/8D729315-E53D-4986-840C-B48CA87EE5C4.png",
+        "attachment_uuid_name": "8D729315-E53D-4986-840C-B48CA87EE5C4.png",
+        "attachment_label": "T06-hrv-initial_0_E4704655-85D1-43B6-9CD8-2253A182FBE2.png",
+        "action": "T06-hrv-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "0dc77dc4",
+        "capture_timestamp": 1793409685.661,
+        "capture_time_kst": "2026-10-31T10:21:25.661000+09:00",
+        "sha256": "24b8b6d1c0ebb20c5d087345229e325611f02f1cee43009f1c2efe9a9ffbc241",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-original-before-current",
+        "bundle_result": "passed",
+        "visual_inspection": "representative-inspected",
+        "image": "assets/hrv-before-initial.png"
+      },
+      "before_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-original-before-current/attachments/D62DA7B8-5FC6-4539-88EC-BE69ED0FC170.png",
+        "attachment_uuid_name": "D62DA7B8-5FC6-4539-88EC-BE69ED0FC170.png",
+        "attachment_label": "T06-hrv-lower_0_031DFF15-44F9-401E-B95E-5D2412982ABC.png",
+        "action": "T06-hrv-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "0dc77dc4",
+        "capture_timestamp": 1793409686.892,
+        "capture_time_kst": "2026-10-31T10:21:26.892000+09:00",
+        "sha256": "6f46b504ef1655b2fcc7aa95e590b798fbd72325f7c9a87f4ebf42ff9fe966a1",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-original-before-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/hrv-before-lower.png"
+      },
+      "after_matrix_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/B0E35B44-A579-42C0-A700-3BD4F313FC30.png",
+        "attachment_uuid_name": "B0E35B44-A579-42C0-A700-3BD4F313FC30.png",
+        "attachment_label": "T06-hrv-initial_0_16F176FF-F1AD-467F-B891-6862FB1A1E50.png",
+        "action": "T06-hrv-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412374.016,
+        "capture_time_kst": "2026-10-31T11:06:14.016000+09:00",
+        "sha256": "68fc1cfea1bd61548dcde212b73687f4242efce5768f4145dca7433e269c5255",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "representative-inspected",
+        "image": "assets/hrv-after-initial.png"
+      },
+      "after_matrix_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/B53D6663-F08D-4490-BDA0-EA4BF80C31AE.png",
+        "attachment_uuid_name": "B53D6663-F08D-4490-BDA0-EA4BF80C31AE.png",
+        "attachment_label": "T06-hrv-lower_0_3FFE7504-B0F4-4703-AFC7-A75FFA1C0C5C.png",
+        "action": "T06-hrv-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412375.509,
+        "capture_time_kst": "2026-10-31T11:06:15.509000+09:00",
+        "sha256": "8b56364aa7bf5fe65cda89e0f5304e71b4c07896a41b9d6b237c22e01adad1dd",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/hrv-after-lower.png"
+      },
+      "limitations": [],
+      "selected_after_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/B0E35B44-A579-42C0-A700-3BD4F313FC30.png",
+        "attachment_uuid_name": "B0E35B44-A579-42C0-A700-3BD4F313FC30.png",
+        "attachment_label": "T06-hrv-initial_0_16F176FF-F1AD-467F-B891-6862FB1A1E50.png",
+        "action": "T06-hrv-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412374.016,
+        "capture_time_kst": "2026-10-31T11:06:14.016000+09:00",
+        "sha256": "68fc1cfea1bd61548dcde212b73687f4242efce5768f4145dca7433e269c5255",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "representative-inspected",
+        "image": "assets/hrv-after-initial.png"
+      },
+      "selected_after_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/B53D6663-F08D-4490-BDA0-EA4BF80C31AE.png",
+        "attachment_uuid_name": "B53D6663-F08D-4490-BDA0-EA4BF80C31AE.png",
+        "attachment_label": "T06-hrv-lower_0_3FFE7504-B0F4-4703-AFC7-A75FFA1C0C5C.png",
+        "action": "T06-hrv-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412375.509,
+        "capture_time_kst": "2026-10-31T11:06:15.509000+09:00",
+        "sha256": "8b56364aa7bf5fe65cda89e0f5304e71b4c07896a41b9d6b237c22e01adad1dd",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/hrv-after-lower.png"
+      }
+    },
+    {
+      "key": "rhr",
+      "title_ko": "안정시 심박",
+      "expected_identity_from_f9_harness": {
+        "category": "rhr",
+        "title": "Resting Heart Rate",
+        "value": "52",
+        "unit": "bpm"
+      },
+      "before_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-original-before-current/attachments/59AEB8A6-DEF1-4281-B580-1B950A43CFBD.png",
+        "attachment_uuid_name": "59AEB8A6-DEF1-4281-B580-1B950A43CFBD.png",
+        "attachment_label": "T06-rhr-initial_0_A43CD7DF-F627-4840-ABA1-EA33D7AF9AA3.png",
+        "action": "T06-rhr-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "0dc77dc4",
+        "capture_timestamp": 1793409708.332,
+        "capture_time_kst": "2026-10-31T10:21:48.332000+09:00",
+        "sha256": "e5301750c8239c1a2179b54cab41f19742395581ad9efa0917601028238cf947",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-original-before-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/rhr-before-initial.png"
+      },
+      "before_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-original-before-current/attachments/B819BA68-A4A6-4A9C-82D8-B47513068479.png",
+        "attachment_uuid_name": "B819BA68-A4A6-4A9C-82D8-B47513068479.png",
+        "attachment_label": "T06-rhr-lower_0_5DEFA8BB-679A-4F87-B2C2-6C476E5CBCB2.png",
+        "action": "T06-rhr-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "0dc77dc4",
+        "capture_timestamp": 1793409709.596,
+        "capture_time_kst": "2026-10-31T10:21:49.596000+09:00",
+        "sha256": "ab80665f4aa55c0d40caa8a2bdec1c893cabc798678b64091bf8c403d3b2e310",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-original-before-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/rhr-before-lower.png"
+      },
+      "after_matrix_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/D51D3ADD-0322-41A1-81BA-EB39659B4E2B.png",
+        "attachment_uuid_name": "D51D3ADD-0322-41A1-81BA-EB39659B4E2B.png",
+        "attachment_label": "T06-rhr-initial_0_039BD618-9C7C-48F2-807A-2BC8BB55A2BA.png",
+        "action": "T06-rhr-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412400.03,
+        "capture_time_kst": "2026-10-31T11:06:40.030000+09:00",
+        "sha256": "d09009751b1201219f4b3d5c5eb9f46c6d03a900a2e3858f6a96441572967ff7",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/rhr-after-initial.png"
+      },
+      "after_matrix_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/45E28A6E-7446-41EF-AE2B-97682CA3D29C.png",
+        "attachment_uuid_name": "45E28A6E-7446-41EF-AE2B-97682CA3D29C.png",
+        "attachment_label": "T06-rhr-lower_0_70B452D5-6F38-4EBA-9D18-02FEEF43F270.png",
+        "action": "T06-rhr-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412401.441,
+        "capture_time_kst": "2026-10-31T11:06:41.441000+09:00",
+        "sha256": "ba9d7cbbbe93e03d7561b6256d0d6ebfd0adc0d407cd21757fa49f1cfc20ce50",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/rhr-after-lower.png"
+      },
+      "limitations": [],
+      "selected_after_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/D51D3ADD-0322-41A1-81BA-EB39659B4E2B.png",
+        "attachment_uuid_name": "D51D3ADD-0322-41A1-81BA-EB39659B4E2B.png",
+        "attachment_label": "T06-rhr-initial_0_039BD618-9C7C-48F2-807A-2BC8BB55A2BA.png",
+        "action": "T06-rhr-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412400.03,
+        "capture_time_kst": "2026-10-31T11:06:40.030000+09:00",
+        "sha256": "d09009751b1201219f4b3d5c5eb9f46c6d03a900a2e3858f6a96441572967ff7",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/rhr-after-initial.png"
+      },
+      "selected_after_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/45E28A6E-7446-41EF-AE2B-97682CA3D29C.png",
+        "attachment_uuid_name": "45E28A6E-7446-41EF-AE2B-97682CA3D29C.png",
+        "attachment_label": "T06-rhr-lower_0_70B452D5-6F38-4EBA-9D18-02FEEF43F270.png",
+        "action": "T06-rhr-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412401.441,
+        "capture_time_kst": "2026-10-31T11:06:41.441000+09:00",
+        "sha256": "ba9d7cbbbe93e03d7561b6256d0d6ebfd0adc0d407cd21757fa49f1cfc20ce50",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/rhr-after-lower.png"
+      }
+    },
+    {
+      "key": "heartRate",
+      "title_ko": "심박수",
+      "expected_identity_from_f9_harness": {
+        "category": "heartRate",
+        "title": "Heart Rate",
+        "value": "72",
+        "unit": "bpm"
+      },
+      "before_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-original-before-current/attachments/B052B6DC-72A4-46D0-9D7D-38BE68722372.png",
+        "attachment_uuid_name": "B052B6DC-72A4-46D0-9D7D-38BE68722372.png",
+        "attachment_label": "T06-heartRate-initial_0_4139047E-5C09-475F-B610-BA0A57213C7B.png",
+        "action": "T06-heartRate-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "0dc77dc4",
+        "capture_timestamp": 1793409723.151,
+        "capture_time_kst": "2026-10-31T10:22:03.151000+09:00",
+        "sha256": "aa7c81b25a5ba594b77a3bc7f9628b7cbabbb23b973c7669eb6fb883fcb5bb3b",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-original-before-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/heartRate-before-initial.png"
+      },
+      "before_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-original-before-current/attachments/CAE69D71-BD4E-4208-B6A4-A384EB9CE156.png",
+        "attachment_uuid_name": "CAE69D71-BD4E-4208-B6A4-A384EB9CE156.png",
+        "attachment_label": "T06-heartRate-lower_0_FF62841F-876A-4927-B290-5F8DB5CFBE8D.png",
+        "action": "T06-heartRate-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "0dc77dc4",
+        "capture_timestamp": 1793409724.357,
+        "capture_time_kst": "2026-10-31T10:22:04.357000+09:00",
+        "sha256": "2297355d95d809c89583d571c416c7e237d0df9c3981f5fa5027f5e95c5c70cc",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-original-before-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/heartRate-before-lower.png"
+      },
+      "after_matrix_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/986467FB-D301-4487-9971-521036AE3907.png",
+        "attachment_uuid_name": "986467FB-D301-4487-9971-521036AE3907.png",
+        "attachment_label": "T06-heartRate-initial_0_A166DA73-A8B2-4B17-89D0-DE0C149663CD.png",
+        "action": "T06-heartRate-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412425.244,
+        "capture_time_kst": "2026-10-31T11:07:05.244000+09:00",
+        "sha256": "09f05862f961dc80b5d32e2afe82acad64e01573d2fcc80d8a5751f5db4ba05f",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/heartRate-after-initial.png"
+      },
+      "after_matrix_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/C0B09C76-344A-4B8A-8941-B3A0E77C679F.png",
+        "attachment_uuid_name": "C0B09C76-344A-4B8A-8941-B3A0E77C679F.png",
+        "attachment_label": "T06-heartRate-lower_0_20F8C342-8C60-4278-94A2-8952511AA82F.png",
+        "action": "T06-heartRate-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412426.539,
+        "capture_time_kst": "2026-10-31T11:07:06.539000+09:00",
+        "sha256": "e7071cd1824afafb3d2f85c71894f9946d76872151db816969e8dde4bdceab2c",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/heartRate-after-lower.png"
+      },
+      "limitations": [],
+      "selected_after_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/986467FB-D301-4487-9971-521036AE3907.png",
+        "attachment_uuid_name": "986467FB-D301-4487-9971-521036AE3907.png",
+        "attachment_label": "T06-heartRate-initial_0_A166DA73-A8B2-4B17-89D0-DE0C149663CD.png",
+        "action": "T06-heartRate-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412425.244,
+        "capture_time_kst": "2026-10-31T11:07:05.244000+09:00",
+        "sha256": "09f05862f961dc80b5d32e2afe82acad64e01573d2fcc80d8a5751f5db4ba05f",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/heartRate-after-initial.png"
+      },
+      "selected_after_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/C0B09C76-344A-4B8A-8941-B3A0E77C679F.png",
+        "attachment_uuid_name": "C0B09C76-344A-4B8A-8941-B3A0E77C679F.png",
+        "attachment_label": "T06-heartRate-lower_0_20F8C342-8C60-4278-94A2-8952511AA82F.png",
+        "action": "T06-heartRate-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412426.539,
+        "capture_time_kst": "2026-10-31T11:07:06.539000+09:00",
+        "sha256": "e7071cd1824afafb3d2f85c71894f9946d76872151db816969e8dde4bdceab2c",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/heartRate-after-lower.png"
+      }
+    },
+    {
+      "key": "sleep",
+      "title_ko": "수면",
+      "expected_identity_from_f9_harness": {
+        "category": "sleep",
+        "title": "Sleep",
+        "value": "7h 54min",
+        "unit": ""
+      },
+      "before_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-original-before-current/attachments/EDBAA79F-440E-4362-94D7-1B18640B340A.png",
+        "attachment_uuid_name": "EDBAA79F-440E-4362-94D7-1B18640B340A.png",
+        "attachment_label": "T06-sleep-initial_0_F8464D51-FB5F-4364-8429-1EBF12095A0F.png",
+        "action": "T06-sleep-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "0dc77dc4",
+        "capture_timestamp": 1793409748.774,
+        "capture_time_kst": "2026-10-31T10:22:28.774000+09:00",
+        "sha256": "b23178c5982a3ba6d01d320d59933746bdb59e73aed74901c94f28e5dd5ae760",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-original-before-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/sleep-before-initial.png"
+      },
+      "before_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-original-before-current/attachments/C23BB914-9B55-44D9-9512-B64DA63ECF14.png",
+        "attachment_uuid_name": "C23BB914-9B55-44D9-9512-B64DA63ECF14.png",
+        "attachment_label": "T06-sleep-lower_0_7C3A9713-6DFC-4635-8110-AB29840BCB74.png",
+        "action": "T06-sleep-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "0dc77dc4",
+        "capture_timestamp": 1793409752.041,
+        "capture_time_kst": "2026-10-31T10:22:32.041000+09:00",
+        "sha256": "7b962279afc7a7d039aa7fbf3303d4661a2530136b07a3024ea2eeebd090b3f7",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-original-before-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/sleep-before-lower.png"
+      },
+      "after_matrix_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/06EA1512-12FA-4464-979D-095922810E5C.png",
+        "attachment_uuid_name": "06EA1512-12FA-4464-979D-095922810E5C.png",
+        "attachment_label": "T06-sleep-initial_0_49C2BE30-B218-42A6-8E91-937D01AE5268.png",
+        "action": "T06-sleep-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412455.927,
+        "capture_time_kst": "2026-10-31T11:07:35.927000+09:00",
+        "sha256": "e2807de49ba349079e077a1f07187566eeba4f311b7ba1c6fdc195c3c1278b2e",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/sleep-after-initial.png"
+      },
+      "after_matrix_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/B667DE42-552F-43A0-983C-CB4DCD2A113A.png",
+        "attachment_uuid_name": "B667DE42-552F-43A0-983C-CB4DCD2A113A.png",
+        "attachment_label": "T06-sleep-lower_0_540A8FE8-A529-45F2-B0FE-A4CCF23957A6.png",
+        "action": "T06-sleep-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412459.258,
+        "capture_time_kst": "2026-10-31T11:07:39.258000+09:00",
+        "sha256": "42b1fa9bfd247571d47e3febe1776a97f0ca0ee1a0456b283a684631cb014e1a",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/sleep-after-lower.png"
+      },
+      "limitations": [],
+      "selected_after_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/06EA1512-12FA-4464-979D-095922810E5C.png",
+        "attachment_uuid_name": "06EA1512-12FA-4464-979D-095922810E5C.png",
+        "attachment_label": "T06-sleep-initial_0_49C2BE30-B218-42A6-8E91-937D01AE5268.png",
+        "action": "T06-sleep-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412455.927,
+        "capture_time_kst": "2026-10-31T11:07:35.927000+09:00",
+        "sha256": "e2807de49ba349079e077a1f07187566eeba4f311b7ba1c6fdc195c3c1278b2e",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/sleep-after-initial.png"
+      },
+      "selected_after_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/B667DE42-552F-43A0-983C-CB4DCD2A113A.png",
+        "attachment_uuid_name": "B667DE42-552F-43A0-983C-CB4DCD2A113A.png",
+        "attachment_label": "T06-sleep-lower_0_540A8FE8-A529-45F2-B0FE-A4CCF23957A6.png",
+        "action": "T06-sleep-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412459.258,
+        "capture_time_kst": "2026-10-31T11:07:39.258000+09:00",
+        "sha256": "42b1fa9bfd247571d47e3febe1776a97f0ca0ee1a0456b283a684631cb014e1a",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/sleep-after-lower.png"
+      }
+    },
+    {
+      "key": "exercise-min",
+      "title_ko": "운동 시간",
+      "expected_identity_from_f9_harness": {
+        "category": "exercise",
+        "title": "Exercise",
+        "value": "42",
+        "unit": "min"
+      },
+      "before_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-original-before-current/attachments/3C2D4E2E-EE0A-4AA4-9B2B-0CADB0C9A6B0.png",
+        "attachment_uuid_name": "3C2D4E2E-EE0A-4AA4-9B2B-0CADB0C9A6B0.png",
+        "attachment_label": "T06-exercise-min-initial_0_DA7128E4-28F1-4E97-BAA7-20BFDB46BC0D.png",
+        "action": "T06-exercise-min-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "0dc77dc4",
+        "capture_timestamp": 1793409775.618,
+        "capture_time_kst": "2026-10-31T10:22:55.618000+09:00",
+        "sha256": "a089cc7ea3cf58dc9ebfcfe82a20ad51f4a47acecde35c93f1b52eac4f8bc29d",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-original-before-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/exercise-min-before-initial.png"
+      },
+      "before_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-original-before-current/attachments/1DEC141B-31C8-41AB-947C-8BF115B0091B.png",
+        "attachment_uuid_name": "1DEC141B-31C8-41AB-947C-8BF115B0091B.png",
+        "attachment_label": "T06-exercise-min-lower_0_88C10663-4A3E-4C8B-904F-3986CD97765E.png",
+        "action": "T06-exercise-min-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "0dc77dc4",
+        "capture_timestamp": 1793409776.907,
+        "capture_time_kst": "2026-10-31T10:22:56.907000+09:00",
+        "sha256": "01b53939fa4c1f912160178f94fb2cbb9dd3899b3e415dc217ab19ec82c6e2a1",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-original-before-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/exercise-min-before-lower.png"
+      },
+      "after_matrix_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/F5CC6200-9130-4A12-8DF5-9C91606AAF7B.png",
+        "attachment_uuid_name": "F5CC6200-9130-4A12-8DF5-9C91606AAF7B.png",
+        "attachment_label": "T06-exercise-min-initial_0_47A1D4BC-6D52-4A17-B915-A0EBB0994A4A.png",
+        "action": "T06-exercise-min-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412479.644,
+        "capture_time_kst": "2026-10-31T11:07:59.644000+09:00",
+        "sha256": "9acf4169f736a86a1ae8caf04df01022e14d70fb2125a5a11c413ab1797b46cf",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/exercise-min-after-initial.png"
+      },
+      "after_matrix_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/2687438D-D77F-4782-8AAC-6748BE70EB8F.png",
+        "attachment_uuid_name": "2687438D-D77F-4782-8AAC-6748BE70EB8F.png",
+        "attachment_label": "T06-exercise-min-lower_0_5F27D98C-2E20-4AE4-9CF9-11D855B7F217.png",
+        "action": "T06-exercise-min-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412481.033,
+        "capture_time_kst": "2026-10-31T11:08:01.033000+09:00",
+        "sha256": "e3709edfb65fc8f2ef6c850d2f54c51dc6f1c662a031bacba452a3a4bb5ed31c",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/exercise-min-after-lower.png"
+      },
+      "limitations": [],
+      "selected_after_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/F5CC6200-9130-4A12-8DF5-9C91606AAF7B.png",
+        "attachment_uuid_name": "F5CC6200-9130-4A12-8DF5-9C91606AAF7B.png",
+        "attachment_label": "T06-exercise-min-initial_0_47A1D4BC-6D52-4A17-B915-A0EBB0994A4A.png",
+        "action": "T06-exercise-min-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412479.644,
+        "capture_time_kst": "2026-10-31T11:07:59.644000+09:00",
+        "sha256": "9acf4169f736a86a1ae8caf04df01022e14d70fb2125a5a11c413ab1797b46cf",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/exercise-min-after-initial.png"
+      },
+      "selected_after_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/2687438D-D77F-4782-8AAC-6748BE70EB8F.png",
+        "attachment_uuid_name": "2687438D-D77F-4782-8AAC-6748BE70EB8F.png",
+        "attachment_label": "T06-exercise-min-lower_0_5F27D98C-2E20-4AE4-9CF9-11D855B7F217.png",
+        "action": "T06-exercise-min-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412481.033,
+        "capture_time_kst": "2026-10-31T11:08:01.033000+09:00",
+        "sha256": "e3709edfb65fc8f2ef6c850d2f54c51dc6f1c662a031bacba452a3a4bb5ed31c",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/exercise-min-after-lower.png"
+      }
+    },
+    {
+      "key": "exercise-km",
+      "title_ko": "러닝 거리",
+      "expected_identity_from_f9_harness": {
+        "category": "exercise",
+        "title": "Exercise",
+        "value": "10.2",
+        "unit": "km"
+      },
+      "before_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-original-before-current/attachments/16AF8C41-B9F7-4176-B86C-0521CF5E42DE.png",
+        "attachment_uuid_name": "16AF8C41-B9F7-4176-B86C-0521CF5E42DE.png",
+        "attachment_label": "T06-exercise-km-initial_0_2E756CB0-9BF0-4011-AB52-1AD99A507835.png",
+        "action": "T06-exercise-km-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "0dc77dc4",
+        "capture_timestamp": 1793409800.849,
+        "capture_time_kst": "2026-10-31T10:23:20.849000+09:00",
+        "sha256": "1b04ea40553fb255ef5eca15afa615b4f512e455dee76187d21a4b9c6e1da27b",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-original-before-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/exercise-km-before-initial.png"
+      },
+      "before_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-original-before-current/attachments/66D98C84-12C6-43B1-ADD5-989800FAFF20.png",
+        "attachment_uuid_name": "66D98C84-12C6-43B1-ADD5-989800FAFF20.png",
+        "attachment_label": "T06-exercise-km-lower_0_B69FCFB9-E7CA-43F9-A0D5-FEA642FA68FF.png",
+        "action": "T06-exercise-km-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "0dc77dc4",
+        "capture_timestamp": 1793409802.057,
+        "capture_time_kst": "2026-10-31T10:23:22.057000+09:00",
+        "sha256": "0d36a1a8b08910ed15f6ddf6f3b0c4df7e93e72ba6e5485e0718f44dd0ba17bf",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-original-before-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/exercise-km-before-lower.png"
+      },
+      "after_matrix_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/A8EF42AA-B10E-4B2D-AE2C-E6F6613A5E9E.png",
+        "attachment_uuid_name": "A8EF42AA-B10E-4B2D-AE2C-E6F6613A5E9E.png",
+        "attachment_label": "T06-exercise-km-initial_0_1DCC6593-8EFF-4BDD-ACBA-B124B29C3AD1.png",
+        "action": "T06-exercise-km-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412502.315,
+        "capture_time_kst": "2026-10-31T11:08:22.315000+09:00",
+        "sha256": "a065130684d3822f173eb28122e4a763a678f4ff762e002ab67835dc0b39e98e",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/exercise-km-after-f9-superseded-initial.png"
+      },
+      "after_matrix_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/0DE95471-90E4-47E0-A73E-2D77C84B873B.png",
+        "attachment_uuid_name": "0DE95471-90E4-47E0-A73E-2D77C84B873B.png",
+        "attachment_label": "T06-exercise-km-lower_0_D579C549-5208-4C43-8492-8B756AC67B65.png",
+        "action": "T06-exercise-km-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412503.618,
+        "capture_time_kst": "2026-10-31T11:08:23.618000+09:00",
+        "sha256": "974feb89fde0a2c0924e20a423167dd3062d194812868869091ee7a8398d7516",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/exercise-km-after-f9-superseded-lower.png"
+      },
+      "limitations": [
+        "f9 distance highlight incorrectly used min; f9 initial/lower retained as superseded process evidence, not final corrected display. Selected61 distance methods PASS inside whole bundle FAILED2PASS1FAIL(peer assertion)."
+      ],
+      "selected_after_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-highlight-units-peer-initial-failure/attachments/7BCD856B-6D72-4A0A-A4C2-00AA1EAD22CD.png",
+        "attachment_uuid_name": "7BCD856B-6D72-4A0A-A4C2-00AA1EAD22CD.png",
+        "attachment_label": "T06-exercise-km-initial_0_FFA76CAE-C65D-4A90-9426-03C5B01F43F1.png",
+        "action": "T06-exercise-km-initial",
+        "test_method": "MetricDetailRedesignTests/testRunningKilometerHighlightUsesDistanceUnit()",
+        "revision": "61bdbf84",
+        "capture_timestamp": 1793414498.974,
+        "capture_time_kst": "2026-10-31T11:41:38.974000+09:00",
+        "sha256": "580c712502118696356c478941e049d2bbaa974c1bb91379267d8244a47f5035",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-highlight-units-peer-initial-failure",
+        "bundle_result": "failed",
+        "visual_inspection": "representative-inspected",
+        "image": "assets/exercise-km-after-initial.png"
+      },
+      "selected_after_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-highlight-units-peer-initial-failure/attachments/7365BCF1-34B7-43FC-BD9A-10C2E1E3D80F.png",
+        "attachment_uuid_name": "7365BCF1-34B7-43FC-BD9A-10C2E1E3D80F.png",
+        "attachment_label": "T06-exercise-km-corrected-highest-distance_0_BDFE373C-CA38-409D-A828-C36A00B15134.png",
+        "action": "T06-exercise-km-corrected-highest-distance",
+        "test_method": "MetricDetailRedesignTests/testRunningKilometerHighlightUsesDistanceUnit()",
+        "revision": "61bdbf84",
+        "capture_timestamp": 1793414503.445,
+        "capture_time_kst": "2026-10-31T11:41:43.445000+09:00",
+        "sha256": "90f4498acb571583f82923426d46fa35ecc7248b165f7ef0660842651b47b919",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-highlight-units-peer-initial-failure",
+        "bundle_result": "failed",
+        "visual_inspection": "representative-inspected",
+        "image": "assets/exercise-km-after-lower.png"
+      },
+      "corrected_standard_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-highlight-units-peer-initial-failure/attachments/83B2F81C-948E-4ED2-8D16-4C80C30ADE4E.png",
+        "attachment_uuid_name": "83B2F81C-948E-4ED2-8D16-4C80C30ADE4E.png",
+        "attachment_label": "T06-exercise-km-lower_0_82E6CDAF-C9CD-49B2-AEC7-D146DA29034C.png",
+        "action": "T06-exercise-km-lower",
+        "test_method": "MetricDetailRedesignTests/testRunningKilometerHighlightUsesDistanceUnit()",
+        "revision": "61bdbf84",
+        "capture_timestamp": 1793414500.426,
+        "capture_time_kst": "2026-10-31T11:41:40.426000+09:00",
+        "sha256": "52d198f81667490f15a1f6f6f8f591da50bc58419ec21ce46b124a0440475713",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-highlight-units-peer-initial-failure",
+        "bundle_result": "failed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/exercise-km-after-corrected-standard-lower.png"
+      }
+    },
+    {
+      "key": "exercise-m",
+      "title_ko": "수영 거리",
+      "expected_identity_from_f9_harness": {
+        "category": "exercise",
+        "title": "Exercise",
+        "value": "1,314",
+        "unit": "m"
+      },
+      "before_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-original-swimming-input-legacy-min/attachments/776F8108-ADF5-48E0-B85B-777166C8EF5E.png",
+        "attachment_uuid_name": "776F8108-ADF5-48E0-B85B-777166C8EF5E.png",
+        "attachment_label": "T06-original-swimming-input-1314m-rendered-min_0_DFA68AFF-B38A-4F84-BF84-9B3C69E883E5.png",
+        "action": "T06-original-swimming-input-1314m-rendered-min",
+        "test_method": "MetricDetailRedesignTests/testOriginalSwimmingMeterInputLegacyUnitAndCapture()",
+        "revision": "f06d4a73",
+        "capture_timestamp": 1793412022.336,
+        "capture_time_kst": "2026-10-31T11:00:22.336000+09:00",
+        "sha256": "723d4e44426e506cf62e82b36994d0c074aeeacd6b3592e54e9546547e4b26b2",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-original-swimming-input-legacy-min",
+        "bundle_result": "passed",
+        "visual_inspection": "representative-inspected",
+        "image": "assets/exercise-m-before-initial.png"
+      },
+      "before_lower": null,
+      "after_matrix_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/E899DC82-76DF-4939-BB45-980A59EFC33B.png",
+        "attachment_uuid_name": "E899DC82-76DF-4939-BB45-980A59EFC33B.png",
+        "attachment_label": "T06-exercise-m-initial_0_9DBAF2F4-FD3E-4CCF-896A-53CBCF6E11F9.png",
+        "action": "T06-exercise-m-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412528.075,
+        "capture_time_kst": "2026-10-31T11:08:48.075000+09:00",
+        "sha256": "1cfdf86368be5073a747361e840db33e9b03a54d399da3b6951daf5b817512ea",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "representative-inspected",
+        "image": "assets/exercise-m-after-f9-superseded-initial.png"
+      },
+      "after_matrix_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/635A2F91-EB63-49C8-A4D7-11D98C154686.png",
+        "attachment_uuid_name": "635A2F91-EB63-49C8-A4D7-11D98C154686.png",
+        "attachment_label": "T06-exercise-m-lower_0_E1BA7CA9-3740-45C2-9939-8D3F4D1F75C7.png",
+        "action": "T06-exercise-m-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412529.352,
+        "capture_time_kst": "2026-10-31T11:08:49.352000+09:00",
+        "sha256": "3e912659f1d211c3002cc7c547fd5b253e8f5d761392837257fd724aa1a56f93",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/exercise-m-after-f9-superseded-lower.png"
+      },
+      "limitations": [
+        "f9 distance highlight incorrectly used min; f9 initial/lower retained as superseded process evidence, not final corrected display. Selected61 distance methods PASS inside whole bundle FAILED2PASS1FAIL(peer assertion).",
+        "Original f06 protected View/VM identical to0dc; synthetic1314m rendered legacy1314min. Only one original named image; no distinct original lower attachment. Do not fabricate before lower or call original unit correct."
+      ],
+      "selected_after_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-highlight-units-peer-initial-failure/attachments/13A8D0F6-9676-4BA2-8547-1185859E4F31.png",
+        "attachment_uuid_name": "13A8D0F6-9676-4BA2-8547-1185859E4F31.png",
+        "attachment_label": "T06-exercise-m-initial_0_53EA5452-6A85-405A-8542-8BB938400EBF.png",
+        "action": "T06-exercise-m-initial",
+        "test_method": "MetricDetailRedesignTests/testSwimmingMeterValueUnitAndCapture()",
+        "revision": "61bdbf84",
+        "capture_timestamp": 1793414532.662,
+        "capture_time_kst": "2026-10-31T11:42:12.662000+09:00",
+        "sha256": "e1610e4f921a3cfd26d83457dacc5a0113ac0e9f1bc2d64b8d4f5910a4c2e1ad",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-highlight-units-peer-initial-failure",
+        "bundle_result": "failed",
+        "visual_inspection": "representative-inspected",
+        "image": "assets/exercise-m-after-initial.png"
+      },
+      "selected_after_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-highlight-units-peer-initial-failure/attachments/A3DFF19F-6459-478A-A351-4A20FBC3E307.png",
+        "attachment_uuid_name": "A3DFF19F-6459-478A-A351-4A20FBC3E307.png",
+        "attachment_label": "T06-exercise-m-corrected-highest-distance_0_60C418D2-BEF5-4C16-82CB-0CF8E0B85A8C.png",
+        "action": "T06-exercise-m-corrected-highest-distance",
+        "test_method": "MetricDetailRedesignTests/testSwimmingMeterValueUnitAndCapture()",
+        "revision": "61bdbf84",
+        "capture_timestamp": 1793414536.752,
+        "capture_time_kst": "2026-10-31T11:42:16.752000+09:00",
+        "sha256": "d2143da66598eeab46fb54e1d20d7432fe7099d268ac31a0d664cd6f1cafdb38",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-highlight-units-peer-initial-failure",
+        "bundle_result": "failed",
+        "visual_inspection": "representative-inspected",
+        "image": "assets/exercise-m-after-lower.png"
+      },
+      "corrected_standard_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-highlight-units-peer-initial-failure/attachments/B73559ED-4F13-4FC1-8CD5-C25E83C5EE35.png",
+        "attachment_uuid_name": "B73559ED-4F13-4FC1-8CD5-C25E83C5EE35.png",
+        "attachment_label": "T06-exercise-m-lower_0_51D178A4-C6D4-4CD7-AE1A-C0D0B4E84E56.png",
+        "action": "T06-exercise-m-lower",
+        "test_method": "MetricDetailRedesignTests/testSwimmingMeterValueUnitAndCapture()",
+        "revision": "61bdbf84",
+        "capture_timestamp": 1793414533.925,
+        "capture_time_kst": "2026-10-31T11:42:13.925000+09:00",
+        "sha256": "fedf02d2a17f350314fafebe7750e6d531c9a6bbcae4eedafebd9fff5a726251",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-highlight-units-peer-initial-failure",
+        "bundle_result": "failed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/exercise-m-after-corrected-standard-lower.png"
+      }
+    },
+    {
+      "key": "steps",
+      "title_ko": "걸음 수",
+      "expected_identity_from_f9_harness": {
+        "category": "steps",
+        "title": "Steps",
+        "value": "8,200",
+        "unit": "steps"
+      },
+      "before_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-original-before-current/attachments/B62C1CAA-BE9D-432B-BA0B-423ADABA8D2A.png",
+        "attachment_uuid_name": "B62C1CAA-BE9D-432B-BA0B-423ADABA8D2A.png",
+        "attachment_label": "T06-steps-initial_0_6251D685-F810-4263-BF95-9F84DD40CF7B.png",
+        "action": "T06-steps-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "0dc77dc4",
+        "capture_timestamp": 1793409823.748,
+        "capture_time_kst": "2026-10-31T10:23:43.748000+09:00",
+        "sha256": "6a9fe2cd3816310ed2187f6b668c60782735268dc09ee2492808a98a03c49689",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-original-before-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/steps-before-initial.png"
+      },
+      "before_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-original-before-current/attachments/A6544B23-1A7F-4099-B58D-B7B26D81D420.png",
+        "attachment_uuid_name": "A6544B23-1A7F-4099-B58D-B7B26D81D420.png",
+        "attachment_label": "T06-steps-lower_0_0D0A85FB-401D-4374-BABB-55896AE5128D.png",
+        "action": "T06-steps-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "0dc77dc4",
+        "capture_timestamp": 1793409824.995,
+        "capture_time_kst": "2026-10-31T10:23:44.995000+09:00",
+        "sha256": "3b76c578aec48c96579a6e8333e6f0a2e85bafa68011f0b2d08544c3e8c5b787",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-original-before-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/steps-before-lower.png"
+      },
+      "after_matrix_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/DF07F04A-8B1F-438C-B804-539C285EC6D3.png",
+        "attachment_uuid_name": "DF07F04A-8B1F-438C-B804-539C285EC6D3.png",
+        "attachment_label": "T06-steps-initial_0_7893E720-591C-4566-8049-0EE9D4637128.png",
+        "action": "T06-steps-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412553.474,
+        "capture_time_kst": "2026-10-31T11:09:13.474000+09:00",
+        "sha256": "743118657e0691afb9deaba2159160e4eaeebf52dfa454b5f4c118bd57c40579",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/steps-after-initial.png"
+      },
+      "after_matrix_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/91FA88A5-0B82-47AF-B513-748FFC016456.png",
+        "attachment_uuid_name": "91FA88A5-0B82-47AF-B513-748FFC016456.png",
+        "attachment_label": "T06-steps-lower_0_9070C9EE-5EF8-4ADB-A197-E93E83D4C7B5.png",
+        "action": "T06-steps-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412554.953,
+        "capture_time_kst": "2026-10-31T11:09:14.953000+09:00",
+        "sha256": "c3fcbb9c90e485bacee164d15ec4a2705f632e223861b3a47ae66da81f5322b2",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/steps-after-lower.png"
+      },
+      "limitations": [],
+      "selected_after_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/DF07F04A-8B1F-438C-B804-539C285EC6D3.png",
+        "attachment_uuid_name": "DF07F04A-8B1F-438C-B804-539C285EC6D3.png",
+        "attachment_label": "T06-steps-initial_0_7893E720-591C-4566-8049-0EE9D4637128.png",
+        "action": "T06-steps-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412553.474,
+        "capture_time_kst": "2026-10-31T11:09:13.474000+09:00",
+        "sha256": "743118657e0691afb9deaba2159160e4eaeebf52dfa454b5f4c118bd57c40579",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/steps-after-initial.png"
+      },
+      "selected_after_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/91FA88A5-0B82-47AF-B513-748FFC016456.png",
+        "attachment_uuid_name": "91FA88A5-0B82-47AF-B513-748FFC016456.png",
+        "attachment_label": "T06-steps-lower_0_9070C9EE-5EF8-4ADB-A197-E93E83D4C7B5.png",
+        "action": "T06-steps-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412554.953,
+        "capture_time_kst": "2026-10-31T11:09:14.953000+09:00",
+        "sha256": "c3fcbb9c90e485bacee164d15ec4a2705f632e223861b3a47ae66da81f5322b2",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/steps-after-lower.png"
+      }
+    },
+    {
+      "key": "weight",
+      "title_ko": "체중",
+      "expected_identity_from_f9_harness": {
+        "category": "weight",
+        "title": "Weight",
+        "value": "78.4",
+        "unit": "kg"
+      },
+      "before_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-original-before-current/attachments/3DAF9B93-8CCB-4095-A6B3-3FAB6A6FF82F.png",
+        "attachment_uuid_name": "3DAF9B93-8CCB-4095-A6B3-3FAB6A6FF82F.png",
+        "attachment_label": "T06-weight-initial_0_EAD4745B-1734-4063-A4D5-9500956DEB3D.png",
+        "action": "T06-weight-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "0dc77dc4",
+        "capture_timestamp": 1793409849.415,
+        "capture_time_kst": "2026-10-31T10:24:09.415000+09:00",
+        "sha256": "ba25c37e964b9c0bd15e54b46e48bcf6ff46db66303022ae90bc46ab3bb77fae",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-original-before-current",
+        "bundle_result": "passed",
+        "visual_inspection": "representative-inspected",
+        "image": "assets/weight-before-initial.png"
+      },
+      "before_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-original-before-current/attachments/F9BAD12D-D332-4538-B012-ED00A7251E6D.png",
+        "attachment_uuid_name": "F9BAD12D-D332-4538-B012-ED00A7251E6D.png",
+        "attachment_label": "T06-weight-lower_0_B658CE50-37E1-482D-BE6A-CA57BBFAF315.png",
+        "action": "T06-weight-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "0dc77dc4",
+        "capture_timestamp": 1793409850.663,
+        "capture_time_kst": "2026-10-31T10:24:10.663000+09:00",
+        "sha256": "401fa2c83c61a4bd4443ab79fa6f9187158ac4b675fe1c6cd1b2f1c7d2ea3a1c",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-original-before-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/weight-before-lower.png"
+      },
+      "after_matrix_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/7E6370E7-04BB-4593-BB72-2C13095CF328.png",
+        "attachment_uuid_name": "7E6370E7-04BB-4593-BB72-2C13095CF328.png",
+        "attachment_label": "T06-weight-initial_0_A00DEEA2-934F-4767-89D7-ABB620D98132.png",
+        "action": "T06-weight-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412577.724,
+        "capture_time_kst": "2026-10-31T11:09:37.724000+09:00",
+        "sha256": "40b75c7e534737cef8b2e86d6b8e2ec07e2b47caa52811f4d66eca283ab598b2",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "representative-inspected",
+        "image": "assets/weight-after-initial.png"
+      },
+      "after_matrix_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/319E752B-4C85-4BD6-A919-7FED22967A62.png",
+        "attachment_uuid_name": "319E752B-4C85-4BD6-A919-7FED22967A62.png",
+        "attachment_label": "T06-weight-lower_0_EAE814DF-FFC4-4E07-A2D2-94072CCB6A55.png",
+        "action": "T06-weight-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412579.325,
+        "capture_time_kst": "2026-10-31T11:09:39.325000+09:00",
+        "sha256": "259bb578220f36f471b036093390e863591257d37243a72bd746384a3afa47bd",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "representative-inspected",
+        "image": "assets/weight-after-lower.png"
+      },
+      "limitations": [],
+      "selected_after_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/7E6370E7-04BB-4593-BB72-2C13095CF328.png",
+        "attachment_uuid_name": "7E6370E7-04BB-4593-BB72-2C13095CF328.png",
+        "attachment_label": "T06-weight-initial_0_A00DEEA2-934F-4767-89D7-ABB620D98132.png",
+        "action": "T06-weight-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412577.724,
+        "capture_time_kst": "2026-10-31T11:09:37.724000+09:00",
+        "sha256": "40b75c7e534737cef8b2e86d6b8e2ec07e2b47caa52811f4d66eca283ab598b2",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "representative-inspected",
+        "image": "assets/weight-after-initial.png"
+      },
+      "selected_after_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/319E752B-4C85-4BD6-A919-7FED22967A62.png",
+        "attachment_uuid_name": "319E752B-4C85-4BD6-A919-7FED22967A62.png",
+        "attachment_label": "T06-weight-lower_0_EAE814DF-FFC4-4E07-A2D2-94072CCB6A55.png",
+        "action": "T06-weight-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412579.325,
+        "capture_time_kst": "2026-10-31T11:09:39.325000+09:00",
+        "sha256": "259bb578220f36f471b036093390e863591257d37243a72bd746384a3afa47bd",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "representative-inspected",
+        "image": "assets/weight-after-lower.png"
+      }
+    },
+    {
+      "key": "bmi",
+      "title_ko": "BMI",
+      "expected_identity_from_f9_harness": {
+        "category": "bmi",
+        "title": "BMI",
+        "value": "24.7",
+        "unit": ""
+      },
+      "before_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-original-before-current/attachments/0D3104F6-46AB-49CA-AF65-CDD3996F0E99.png",
+        "attachment_uuid_name": "0D3104F6-46AB-49CA-AF65-CDD3996F0E99.png",
+        "attachment_label": "T06-bmi-initial_0_6AFB55FE-F3E1-4EB7-8C41-192E3B8428E0.png",
+        "action": "T06-bmi-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "0dc77dc4",
+        "capture_timestamp": 1793409874.378,
+        "capture_time_kst": "2026-10-31T10:24:34.378000+09:00",
+        "sha256": "86267af698ef72b976a68d6d69c87aa2a8b4e6de074a79917b59b2c0cd5f447d",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-original-before-current",
+        "bundle_result": "passed",
+        "visual_inspection": "representative-inspected",
+        "image": "assets/bmi-before-initial.png"
+      },
+      "before_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-original-before-current/attachments/434CBBFB-2A01-4AC4-85AE-DD2E6579E616.png",
+        "attachment_uuid_name": "434CBBFB-2A01-4AC4-85AE-DD2E6579E616.png",
+        "attachment_label": "T06-bmi-lower_0_A71FA497-F17B-485D-A8E1-0CD7DCF041A4.png",
+        "action": "T06-bmi-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "0dc77dc4",
+        "capture_timestamp": 1793409875.612,
+        "capture_time_kst": "2026-10-31T10:24:35.612000+09:00",
+        "sha256": "7b167fc6d026d527079a28e290a0ed761782e7c57fbc03ff11a1677456a8d015",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-original-before-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/bmi-before-lower.png"
+      },
+      "after_matrix_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/F702BD9D-3890-4A9A-AA92-7C1D38B498A1.png",
+        "attachment_uuid_name": "F702BD9D-3890-4A9A-AA92-7C1D38B498A1.png",
+        "attachment_label": "T06-bmi-initial_0_5E88B2EA-AE9F-4091-9127-81445211D08F.png",
+        "action": "T06-bmi-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412593.009,
+        "capture_time_kst": "2026-10-31T11:09:53.009000+09:00",
+        "sha256": "0aca8ef3919383d10ac5f6d47f22fb34f5f07eb1ff2bace5e4e67cc45053fe81",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "representative-inspected",
+        "image": "assets/bmi-after-initial.png"
+      },
+      "after_matrix_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/BB5CBF59-6D0E-4354-B3D3-C8A8D8889076.png",
+        "attachment_uuid_name": "BB5CBF59-6D0E-4354-B3D3-C8A8D8889076.png",
+        "attachment_label": "T06-bmi-lower_0_ACCCC45A-8F53-4BF6-8D70-D6BA35550771.png",
+        "action": "T06-bmi-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412594.604,
+        "capture_time_kst": "2026-10-31T11:09:54.604000+09:00",
+        "sha256": "8569c62e450a13f0054970e9b2680a808ffec449a1cc10b53b9e47544c27314f",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/bmi-after-lower.png"
+      },
+      "limitations": [],
+      "selected_after_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/F702BD9D-3890-4A9A-AA92-7C1D38B498A1.png",
+        "attachment_uuid_name": "F702BD9D-3890-4A9A-AA92-7C1D38B498A1.png",
+        "attachment_label": "T06-bmi-initial_0_5E88B2EA-AE9F-4091-9127-81445211D08F.png",
+        "action": "T06-bmi-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412593.009,
+        "capture_time_kst": "2026-10-31T11:09:53.009000+09:00",
+        "sha256": "0aca8ef3919383d10ac5f6d47f22fb34f5f07eb1ff2bace5e4e67cc45053fe81",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "representative-inspected",
+        "image": "assets/bmi-after-initial.png"
+      },
+      "selected_after_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/BB5CBF59-6D0E-4354-B3D3-C8A8D8889076.png",
+        "attachment_uuid_name": "BB5CBF59-6D0E-4354-B3D3-C8A8D8889076.png",
+        "attachment_label": "T06-bmi-lower_0_ACCCC45A-8F53-4BF6-8D70-D6BA35550771.png",
+        "action": "T06-bmi-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412594.604,
+        "capture_time_kst": "2026-10-31T11:09:54.604000+09:00",
+        "sha256": "8569c62e450a13f0054970e9b2680a808ffec449a1cc10b53b9e47544c27314f",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/bmi-after-lower.png"
+      }
+    },
+    {
+      "key": "bodyFat",
+      "title_ko": "체지방률",
+      "expected_identity_from_f9_harness": {
+        "category": "bodyFat",
+        "title": "Body Fat",
+        "value": "17.8",
+        "unit": "%"
+      },
+      "before_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-original-before-current/attachments/E1EF9152-D5DD-4AB7-80D8-595E35690F8C.png",
+        "attachment_uuid_name": "E1EF9152-D5DD-4AB7-80D8-595E35690F8C.png",
+        "attachment_label": "T06-bodyFat-initial_0_A4115000-998B-47C3-BC95-40963463D236.png",
+        "action": "T06-bodyFat-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "0dc77dc4",
+        "capture_timestamp": 1793409889.146,
+        "capture_time_kst": "2026-10-31T10:24:49.146000+09:00",
+        "sha256": "b2dbbc3a84e756d32bd3da004664f073c8b936c0b20a11d0685c71e9b0e0ddac",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-original-before-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/bodyFat-before-initial.png"
+      },
+      "before_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-original-before-current/attachments/E554CDA8-97AB-4129-84A5-D592E5469431.png",
+        "attachment_uuid_name": "E554CDA8-97AB-4129-84A5-D592E5469431.png",
+        "attachment_label": "T06-bodyFat-lower_0_DDA68994-D77D-4ECC-88C5-FD5DA59F4079.png",
+        "action": "T06-bodyFat-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "0dc77dc4",
+        "capture_timestamp": 1793409890.391,
+        "capture_time_kst": "2026-10-31T10:24:50.391000+09:00",
+        "sha256": "1521567cc606e07824c8eae4a2a5099c675a1e5d2e294c8244fd2ac224f1c44e",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-original-before-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/bodyFat-before-lower.png"
+      },
+      "after_matrix_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/D7FE86D7-3DB6-4C0D-AF5B-208FDF9C742D.png",
+        "attachment_uuid_name": "D7FE86D7-3DB6-4C0D-AF5B-208FDF9C742D.png",
+        "attachment_label": "T06-bodyFat-initial_0_9ED29C22-7B0A-4550-B1C9-E154D2EA1372.png",
+        "action": "T06-bodyFat-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412619.05,
+        "capture_time_kst": "2026-10-31T11:10:19.050000+09:00",
+        "sha256": "c31ed61b2890e63fea6b9b5cec0cdf83b678ebbcebd0aa5048d2dba4add470d7",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/bodyFat-after-initial.png"
+      },
+      "after_matrix_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/0C2F3010-5609-4DA5-8AAC-B54759C9BC39.png",
+        "attachment_uuid_name": "0C2F3010-5609-4DA5-8AAC-B54759C9BC39.png",
+        "attachment_label": "T06-bodyFat-lower_0_A53164C9-89B2-4171-9606-B855710FA6F6.png",
+        "action": "T06-bodyFat-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412620.621,
+        "capture_time_kst": "2026-10-31T11:10:20.621000+09:00",
+        "sha256": "ed6129ba0df78f1f5b636b381854261543e0639816ecdf6644eb16258e9bcbc9",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/bodyFat-after-lower.png"
+      },
+      "limitations": [],
+      "selected_after_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/D7FE86D7-3DB6-4C0D-AF5B-208FDF9C742D.png",
+        "attachment_uuid_name": "D7FE86D7-3DB6-4C0D-AF5B-208FDF9C742D.png",
+        "attachment_label": "T06-bodyFat-initial_0_9ED29C22-7B0A-4550-B1C9-E154D2EA1372.png",
+        "action": "T06-bodyFat-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412619.05,
+        "capture_time_kst": "2026-10-31T11:10:19.050000+09:00",
+        "sha256": "c31ed61b2890e63fea6b9b5cec0cdf83b678ebbcebd0aa5048d2dba4add470d7",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/bodyFat-after-initial.png"
+      },
+      "selected_after_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/0C2F3010-5609-4DA5-8AAC-B54759C9BC39.png",
+        "attachment_uuid_name": "0C2F3010-5609-4DA5-8AAC-B54759C9BC39.png",
+        "attachment_label": "T06-bodyFat-lower_0_A53164C9-89B2-4171-9606-B855710FA6F6.png",
+        "action": "T06-bodyFat-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412620.621,
+        "capture_time_kst": "2026-10-31T11:10:20.621000+09:00",
+        "sha256": "ed6129ba0df78f1f5b636b381854261543e0639816ecdf6644eb16258e9bcbc9",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/bodyFat-after-lower.png"
+      }
+    },
+    {
+      "key": "leanBodyMass",
+      "title_ko": "제지방량",
+      "expected_identity_from_f9_harness": {
+        "category": "leanBodyMass",
+        "title": "Lean Body Mass",
+        "value": "63.1",
+        "unit": "kg"
+      },
+      "before_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-original-before-current/attachments/FB940397-C9CD-455A-BD37-EBDFB5D6FDC6.png",
+        "attachment_uuid_name": "FB940397-C9CD-455A-BD37-EBDFB5D6FDC6.png",
+        "attachment_label": "T06-leanBodyMass-initial_0_51F893E0-CB38-41C8-AA50-585241FD6226.png",
+        "action": "T06-leanBodyMass-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "0dc77dc4",
+        "capture_timestamp": 1793409908.761,
+        "capture_time_kst": "2026-10-31T10:25:08.761000+09:00",
+        "sha256": "5f82b84741ec2032172c24582b643f69c445036890b15c9b5287ee31b7c4ad1f",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-original-before-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/leanBodyMass-before-initial.png"
+      },
+      "before_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-original-before-current/attachments/BA6C50A0-CAC8-4FB3-B07B-13FC0753D11A.png",
+        "attachment_uuid_name": "BA6C50A0-CAC8-4FB3-B07B-13FC0753D11A.png",
+        "attachment_label": "T06-leanBodyMass-lower_0_8E68C2FF-1F98-4A1F-A573-4810C275E944.png",
+        "action": "T06-leanBodyMass-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "0dc77dc4",
+        "capture_timestamp": 1793409909.99,
+        "capture_time_kst": "2026-10-31T10:25:09.990000+09:00",
+        "sha256": "efe040b243710c8e13eb27d4173b8e49bdda27b4c834f23257ccf3c46c62025a",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-original-before-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/leanBodyMass-before-lower.png"
+      },
+      "after_matrix_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/5AE76CE2-38D1-4468-B786-76FE1BF135A5.png",
+        "attachment_uuid_name": "5AE76CE2-38D1-4468-B786-76FE1BF135A5.png",
+        "attachment_label": "T06-leanBodyMass-initial_0_A86AD54B-68E8-44B1-9E82-87A888B9CD69.png",
+        "action": "T06-leanBodyMass-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412645.224,
+        "capture_time_kst": "2026-10-31T11:10:45.224000+09:00",
+        "sha256": "a4a81d1dafd9e2f730a9b931f477c613154c81f2f2c1780afecf8dbec07ce490",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/leanBodyMass-after-initial.png"
+      },
+      "after_matrix_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/150D8FCD-6FB4-451C-99AD-C013D6C06180.png",
+        "attachment_uuid_name": "150D8FCD-6FB4-451C-99AD-C013D6C06180.png",
+        "attachment_label": "T06-leanBodyMass-lower_0_4E79F2C9-BBF0-4F9E-B790-DC50A568E884.png",
+        "action": "T06-leanBodyMass-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412646.679,
+        "capture_time_kst": "2026-10-31T11:10:46.679000+09:00",
+        "sha256": "d9af9e6a7c6bcbbcae92e0834151fecc26c21d937ad27b5e4237a265472b221c",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/leanBodyMass-after-lower.png"
+      },
+      "limitations": [],
+      "selected_after_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/5AE76CE2-38D1-4468-B786-76FE1BF135A5.png",
+        "attachment_uuid_name": "5AE76CE2-38D1-4468-B786-76FE1BF135A5.png",
+        "attachment_label": "T06-leanBodyMass-initial_0_A86AD54B-68E8-44B1-9E82-87A888B9CD69.png",
+        "action": "T06-leanBodyMass-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412645.224,
+        "capture_time_kst": "2026-10-31T11:10:45.224000+09:00",
+        "sha256": "a4a81d1dafd9e2f730a9b931f477c613154c81f2f2c1780afecf8dbec07ce490",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/leanBodyMass-after-initial.png"
+      },
+      "selected_after_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/150D8FCD-6FB4-451C-99AD-C013D6C06180.png",
+        "attachment_uuid_name": "150D8FCD-6FB4-451C-99AD-C013D6C06180.png",
+        "attachment_label": "T06-leanBodyMass-lower_0_4E79F2C9-BBF0-4F9E-B790-DC50A568E884.png",
+        "action": "T06-leanBodyMass-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412646.679,
+        "capture_time_kst": "2026-10-31T11:10:46.679000+09:00",
+        "sha256": "d9af9e6a7c6bcbbcae92e0834151fecc26c21d937ad27b5e4237a265472b221c",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/leanBodyMass-after-lower.png"
+      }
+    },
+    {
+      "key": "spo2",
+      "title_ko": "혈중 산소",
+      "expected_identity_from_f9_harness": {
+        "category": "spo2",
+        "title": "Blood Oxygen",
+        "value": "98",
+        "unit": "%"
+      },
+      "before_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-original-before-current/attachments/BC8E07F5-CBA1-44EE-9BDE-312880CA200A.png",
+        "attachment_uuid_name": "BC8E07F5-CBA1-44EE-9BDE-312880CA200A.png",
+        "attachment_label": "T06-spo2-initial_0_A45D5719-B50C-4ECC-90A4-36ABAC6D7DF1.png",
+        "action": "T06-spo2-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "0dc77dc4",
+        "capture_timestamp": 1793409925.461,
+        "capture_time_kst": "2026-10-31T10:25:25.461000+09:00",
+        "sha256": "921914ad0d2b64e0e51b79b2b065c488301b326fbb32d788bca83ef18f7b6f18",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-original-before-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/spo2-before-initial.png"
+      },
+      "before_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-original-before-current/attachments/DC613C7D-656D-409E-B1AF-6B7DF07F662E.png",
+        "attachment_uuid_name": "DC613C7D-656D-409E-B1AF-6B7DF07F662E.png",
+        "attachment_label": "T06-spo2-lower_0_DE56C4E1-D18F-4E2C-8E64-A19A55887102.png",
+        "action": "T06-spo2-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "0dc77dc4",
+        "capture_timestamp": 1793409926.709,
+        "capture_time_kst": "2026-10-31T10:25:26.709000+09:00",
+        "sha256": "0cd27fd22196335c6a6bef07e127f3d580c9840aa4ae86f6950eacb92be00b53",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-original-before-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/spo2-before-lower.png"
+      },
+      "after_matrix_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/4706D135-A1E6-4761-8A95-49890EE42E05.png",
+        "attachment_uuid_name": "4706D135-A1E6-4761-8A95-49890EE42E05.png",
+        "attachment_label": "T06-spo2-initial_0_D65FDBAE-62B1-489D-9317-829CE6AC51AA.png",
+        "action": "T06-spo2-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412669.577,
+        "capture_time_kst": "2026-10-31T11:11:09.577000+09:00",
+        "sha256": "6343144b8b1f61c8b6bbef4458e46843aa19b4ebd766150794e34ee9423ab764",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/spo2-after-initial.png"
+      },
+      "after_matrix_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/6D1648B4-6C2E-492C-93E2-A2AF84DC4C32.png",
+        "attachment_uuid_name": "6D1648B4-6C2E-492C-93E2-A2AF84DC4C32.png",
+        "attachment_label": "T06-spo2-lower_0_821AF249-E44F-4EEA-B43E-D2D09AF4A2A9.png",
+        "action": "T06-spo2-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412670.885,
+        "capture_time_kst": "2026-10-31T11:11:10.885000+09:00",
+        "sha256": "fc2225a17c3c0e47d6e31bce27331cd17b4307486830cf352a30086280e734bc",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/spo2-after-lower.png"
+      },
+      "limitations": [],
+      "selected_after_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/4706D135-A1E6-4761-8A95-49890EE42E05.png",
+        "attachment_uuid_name": "4706D135-A1E6-4761-8A95-49890EE42E05.png",
+        "attachment_label": "T06-spo2-initial_0_D65FDBAE-62B1-489D-9317-829CE6AC51AA.png",
+        "action": "T06-spo2-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412669.577,
+        "capture_time_kst": "2026-10-31T11:11:09.577000+09:00",
+        "sha256": "6343144b8b1f61c8b6bbef4458e46843aa19b4ebd766150794e34ee9423ab764",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/spo2-after-initial.png"
+      },
+      "selected_after_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/6D1648B4-6C2E-492C-93E2-A2AF84DC4C32.png",
+        "attachment_uuid_name": "6D1648B4-6C2E-492C-93E2-A2AF84DC4C32.png",
+        "attachment_label": "T06-spo2-lower_0_821AF249-E44F-4EEA-B43E-D2D09AF4A2A9.png",
+        "action": "T06-spo2-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412670.885,
+        "capture_time_kst": "2026-10-31T11:11:10.885000+09:00",
+        "sha256": "fc2225a17c3c0e47d6e31bce27331cd17b4307486830cf352a30086280e734bc",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/spo2-after-lower.png"
+      }
+    },
+    {
+      "key": "respiratoryRate",
+      "title_ko": "호흡수",
+      "expected_identity_from_f9_harness": {
+        "category": "respiratoryRate",
+        "title": "Respiratory Rate",
+        "value": "15",
+        "unit": "breaths/min"
+      },
+      "before_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-original-before-current/attachments/23E966E4-929B-490A-B89B-39C71F6B149A.png",
+        "attachment_uuid_name": "23E966E4-929B-490A-B89B-39C71F6B149A.png",
+        "attachment_label": "T06-respiratoryRate-initial_0_2DFD587E-1D77-4AB5-98BA-3974B79AAC67.png",
+        "action": "T06-respiratoryRate-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "0dc77dc4",
+        "capture_timestamp": 1793409942.14,
+        "capture_time_kst": "2026-10-31T10:25:42.140000+09:00",
+        "sha256": "f8a8cb9daa2e4ca99c3c859bc0bbe0b0b574f639757152b0710af8f655e35170",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-original-before-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/respiratoryRate-before-initial.png"
+      },
+      "before_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-original-before-current/attachments/4E8DE9F4-15A7-4AC0-BAA5-BB99FD911551.png",
+        "attachment_uuid_name": "4E8DE9F4-15A7-4AC0-BAA5-BB99FD911551.png",
+        "attachment_label": "T06-respiratoryRate-lower_0_69AFB670-F60C-40DD-86B5-E8B95DC4FCB0.png",
+        "action": "T06-respiratoryRate-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "0dc77dc4",
+        "capture_timestamp": 1793409943.373,
+        "capture_time_kst": "2026-10-31T10:25:43.373000+09:00",
+        "sha256": "72c3f5de5d028ce1df5e77e939d42444b651aeb6f3206dbbdbdba4e2ac833279",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-original-before-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/respiratoryRate-before-lower.png"
+      },
+      "after_matrix_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/9AB8FCD1-CB56-43D3-823F-5AAE01637B8A.png",
+        "attachment_uuid_name": "9AB8FCD1-CB56-43D3-823F-5AAE01637B8A.png",
+        "attachment_label": "T06-respiratoryRate-initial_0_9DBCABE1-C5EF-478F-B373-2803B42F39B0.png",
+        "action": "T06-respiratoryRate-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412684.487,
+        "capture_time_kst": "2026-10-31T11:11:24.487000+09:00",
+        "sha256": "bc0341ba2693ade3dea4c0b6d9616e4c225ec4b01819e86301e01a6159b673e4",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/respiratoryRate-after-initial.png"
+      },
+      "after_matrix_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/BBD574E1-D2D8-47B4-B7C6-D87379A50ECF.png",
+        "attachment_uuid_name": "BBD574E1-D2D8-47B4-B7C6-D87379A50ECF.png",
+        "attachment_label": "T06-respiratoryRate-lower_0_5C14B13A-1F1D-4DD0-AF12-A3929599B3E4.png",
+        "action": "T06-respiratoryRate-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412685.809,
+        "capture_time_kst": "2026-10-31T11:11:25.809000+09:00",
+        "sha256": "e042eb5d38b7121215a6038323e82eb53a8587c29bd3b55885584d947a4a5daa",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/respiratoryRate-after-lower.png"
+      },
+      "limitations": [],
+      "selected_after_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/9AB8FCD1-CB56-43D3-823F-5AAE01637B8A.png",
+        "attachment_uuid_name": "9AB8FCD1-CB56-43D3-823F-5AAE01637B8A.png",
+        "attachment_label": "T06-respiratoryRate-initial_0_9DBCABE1-C5EF-478F-B373-2803B42F39B0.png",
+        "action": "T06-respiratoryRate-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412684.487,
+        "capture_time_kst": "2026-10-31T11:11:24.487000+09:00",
+        "sha256": "bc0341ba2693ade3dea4c0b6d9616e4c225ec4b01819e86301e01a6159b673e4",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/respiratoryRate-after-initial.png"
+      },
+      "selected_after_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/BBD574E1-D2D8-47B4-B7C6-D87379A50ECF.png",
+        "attachment_uuid_name": "BBD574E1-D2D8-47B4-B7C6-D87379A50ECF.png",
+        "attachment_label": "T06-respiratoryRate-lower_0_5C14B13A-1F1D-4DD0-AF12-A3929599B3E4.png",
+        "action": "T06-respiratoryRate-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412685.809,
+        "capture_time_kst": "2026-10-31T11:11:25.809000+09:00",
+        "sha256": "e042eb5d38b7121215a6038323e82eb53a8587c29bd3b55885584d947a4a5daa",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/respiratoryRate-after-lower.png"
+      }
+    },
+    {
+      "key": "vo2Max",
+      "title_ko": "VO₂ Max",
+      "expected_identity_from_f9_harness": {
+        "category": "vo2Max",
+        "title": "VO2 Max",
+        "value": "44.7",
+        "unit": "ml/kg/min"
+      },
+      "before_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-original-before-current/attachments/D440DC33-8A25-4437-B80D-B0D9232C0E32.png",
+        "attachment_uuid_name": "D440DC33-8A25-4437-B80D-B0D9232C0E32.png",
+        "attachment_label": "T06-vo2Max-initial_0_5E07557A-3924-4D28-B12D-A07B2C13D3BC.png",
+        "action": "T06-vo2Max-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "0dc77dc4",
+        "capture_timestamp": 1793409966.849,
+        "capture_time_kst": "2026-10-31T10:26:06.849000+09:00",
+        "sha256": "409b741eb846f4d542180bffa245d649e16f000fd9b0390727b888d9cb08f9e4",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-original-before-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/vo2Max-before-initial.png"
+      },
+      "before_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-original-before-current/attachments/620EC855-9BFF-431E-B201-7B846E2910A0.png",
+        "attachment_uuid_name": "620EC855-9BFF-431E-B201-7B846E2910A0.png",
+        "attachment_label": "T06-vo2Max-lower_0_492F3CF3-5EA9-4849-A41B-DB827B48482D.png",
+        "action": "T06-vo2Max-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "0dc77dc4",
+        "capture_timestamp": 1793409968.093,
+        "capture_time_kst": "2026-10-31T10:26:08.093000+09:00",
+        "sha256": "a9ebe2fd7af7290db57b216e5e5476ca1518ee7a7b755d2788a5b5a35fe7e1c8",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-original-before-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/vo2Max-before-lower.png"
+      },
+      "after_matrix_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/E441C474-BBBC-466B-9904-B84D5E107C89.png",
+        "attachment_uuid_name": "E441C474-BBBC-466B-9904-B84D5E107C89.png",
+        "attachment_label": "T06-vo2Max-initial_0_CA30C4D0-6118-4C76-84F1-25A5B4DA19B0.png",
+        "action": "T06-vo2Max-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412707.598,
+        "capture_time_kst": "2026-10-31T11:11:47.598000+09:00",
+        "sha256": "b1f8ee6e3ce4462c61130f23a5c5d636819090c1a0c8c1237858da1cde74f3d0",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/vo2Max-after-initial.png"
+      },
+      "after_matrix_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/CB380DEF-DCBB-496B-BABA-E738EDE5D3CE.png",
+        "attachment_uuid_name": "CB380DEF-DCBB-496B-BABA-E738EDE5D3CE.png",
+        "attachment_label": "T06-vo2Max-lower_0_37DBDAE1-79C0-49BB-A9F1-1BD39FE4BCAB.png",
+        "action": "T06-vo2Max-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412708.869,
+        "capture_time_kst": "2026-10-31T11:11:48.869000+09:00",
+        "sha256": "c2a1d98428347b0b2f25b34a1313a5db5a8b12eaedb689482bfce5a15ab8b34e",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/vo2Max-after-lower.png"
+      },
+      "limitations": [],
+      "selected_after_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/E441C474-BBBC-466B-9904-B84D5E107C89.png",
+        "attachment_uuid_name": "E441C474-BBBC-466B-9904-B84D5E107C89.png",
+        "attachment_label": "T06-vo2Max-initial_0_CA30C4D0-6118-4C76-84F1-25A5B4DA19B0.png",
+        "action": "T06-vo2Max-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412707.598,
+        "capture_time_kst": "2026-10-31T11:11:47.598000+09:00",
+        "sha256": "b1f8ee6e3ce4462c61130f23a5c5d636819090c1a0c8c1237858da1cde74f3d0",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/vo2Max-after-initial.png"
+      },
+      "selected_after_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/CB380DEF-DCBB-496B-BABA-E738EDE5D3CE.png",
+        "attachment_uuid_name": "CB380DEF-DCBB-496B-BABA-E738EDE5D3CE.png",
+        "attachment_label": "T06-vo2Max-lower_0_37DBDAE1-79C0-49BB-A9F1-1BD39FE4BCAB.png",
+        "action": "T06-vo2Max-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412708.869,
+        "capture_time_kst": "2026-10-31T11:11:48.869000+09:00",
+        "sha256": "c2a1d98428347b0b2f25b34a1313a5db5a8b12eaedb689482bfce5a15ab8b34e",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/vo2Max-after-lower.png"
+      }
+    },
+    {
+      "key": "heartRateRecovery",
+      "title_ko": "심박 회복",
+      "expected_identity_from_f9_harness": {
+        "category": "heartRateRecovery",
+        "title": "HR Recovery",
+        "value": "24",
+        "unit": "bpm"
+      },
+      "before_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-original-before-current/attachments/69265A97-EC09-4609-B9F7-1C3C103EFAFC.png",
+        "attachment_uuid_name": "69265A97-EC09-4609-B9F7-1C3C103EFAFC.png",
+        "attachment_label": "T06-heartRateRecovery-initial_0_A29A4599-AF41-40A8-ACF1-20715711D80D.png",
+        "action": "T06-heartRateRecovery-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "0dc77dc4",
+        "capture_timestamp": 1793409991.325,
+        "capture_time_kst": "2026-10-31T10:26:31.325000+09:00",
+        "sha256": "2a6b07d03acda9ce14f047db21d664e8d5e5cd5f1672c93ad277b1f6fb53b35e",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-original-before-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/heartRateRecovery-before-initial.png"
+      },
+      "before_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-original-before-current/attachments/D82E1D3F-7FC0-401E-BA95-8EC5FD549CE4.png",
+        "attachment_uuid_name": "D82E1D3F-7FC0-401E-BA95-8EC5FD549CE4.png",
+        "attachment_label": "T06-heartRateRecovery-lower_0_1868C886-B50C-465D-9525-D6BE4C04B5C3.png",
+        "action": "T06-heartRateRecovery-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "0dc77dc4",
+        "capture_timestamp": 1793409992.572,
+        "capture_time_kst": "2026-10-31T10:26:32.572000+09:00",
+        "sha256": "366759c02a7f11c79b0eb521d7d22ba93b2d276cc8f60fbccd903a6307d7f7f4",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-original-before-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/heartRateRecovery-before-lower.png"
+      },
+      "after_matrix_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/3647B8BB-759A-4628-A15A-A5A46B531F57.png",
+        "attachment_uuid_name": "3647B8BB-759A-4628-A15A-A5A46B531F57.png",
+        "attachment_label": "T06-heartRateRecovery-initial_0_B23A4168-331E-4354-A8E3-0B7ACE151F9F.png",
+        "action": "T06-heartRateRecovery-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412732.46,
+        "capture_time_kst": "2026-10-31T11:12:12.460000+09:00",
+        "sha256": "b026ce737a6550fc6510d470175df703930903c196e65375342f7f98f549d1b6",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/heartRateRecovery-after-initial.png"
+      },
+      "after_matrix_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/4208D54C-F97C-4E13-846A-35577C9B27D7.png",
+        "attachment_uuid_name": "4208D54C-F97C-4E13-846A-35577C9B27D7.png",
+        "attachment_label": "T06-heartRateRecovery-lower_0_46015357-04FF-4F89-9361-6B003B10E4B6.png",
+        "action": "T06-heartRateRecovery-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412733.76,
+        "capture_time_kst": "2026-10-31T11:12:13.760000+09:00",
+        "sha256": "580a6f478137869fb0a0dee461969fab4a7398af8e73082417c698c57ad46d1d",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/heartRateRecovery-after-lower.png"
+      },
+      "limitations": [],
+      "selected_after_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/3647B8BB-759A-4628-A15A-A5A46B531F57.png",
+        "attachment_uuid_name": "3647B8BB-759A-4628-A15A-A5A46B531F57.png",
+        "attachment_label": "T06-heartRateRecovery-initial_0_B23A4168-331E-4354-A8E3-0B7ACE151F9F.png",
+        "action": "T06-heartRateRecovery-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412732.46,
+        "capture_time_kst": "2026-10-31T11:12:12.460000+09:00",
+        "sha256": "b026ce737a6550fc6510d470175df703930903c196e65375342f7f98f549d1b6",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/heartRateRecovery-after-initial.png"
+      },
+      "selected_after_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/4208D54C-F97C-4E13-846A-35577C9B27D7.png",
+        "attachment_uuid_name": "4208D54C-F97C-4E13-846A-35577C9B27D7.png",
+        "attachment_label": "T06-heartRateRecovery-lower_0_46015357-04FF-4F89-9361-6B003B10E4B6.png",
+        "action": "T06-heartRateRecovery-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412733.76,
+        "capture_time_kst": "2026-10-31T11:12:13.760000+09:00",
+        "sha256": "580a6f478137869fb0a0dee461969fab4a7398af8e73082417c698c57ad46d1d",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/heartRateRecovery-after-lower.png"
+      }
+    },
+    {
+      "key": "wristTemperature",
+      "title_ko": "손목 온도",
+      "expected_identity_from_f9_harness": {
+        "category": "wristTemperature",
+        "title": "Wrist Temp",
+        "value": "-0.3",
+        "unit": "°C"
+      },
+      "before_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-original-before-current/attachments/053C5DA9-6BBF-4CC7-8F57-13B861CD5E8D.png",
+        "attachment_uuid_name": "053C5DA9-6BBF-4CC7-8F57-13B861CD5E8D.png",
+        "attachment_label": "T06-wristTemperature-initial_0_97CCCC29-4601-4E0B-BAF2-68BF000DC61B.png",
+        "action": "T06-wristTemperature-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "0dc77dc4",
+        "capture_timestamp": 1793410015.345,
+        "capture_time_kst": "2026-10-31T10:26:55.345000+09:00",
+        "sha256": "72b4c79fb91f87c520eb19629b01d195d2989cb3c9c915facf423609225bc307",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-original-before-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/wristTemperature-before-initial.png"
+      },
+      "before_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-original-before-current/attachments/C57910E1-348F-4B00-A8D7-E40A7532D013.png",
+        "attachment_uuid_name": "C57910E1-348F-4B00-A8D7-E40A7532D013.png",
+        "attachment_label": "T06-wristTemperature-lower_0_831E3994-9BC4-4CD6-8B83-C48AA507340A.png",
+        "action": "T06-wristTemperature-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "0dc77dc4",
+        "capture_timestamp": 1793410016.594,
+        "capture_time_kst": "2026-10-31T10:26:56.594000+09:00",
+        "sha256": "c58a0e43c4780bb404f4f8516db168acd3b2a338e9378c6cca7c54ae2f04c918",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-original-before-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/wristTemperature-before-lower.png"
+      },
+      "after_matrix_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/103074AB-BBCB-454A-B94C-1B8A72894301.png",
+        "attachment_uuid_name": "103074AB-BBCB-454A-B94C-1B8A72894301.png",
+        "attachment_label": "T06-wristTemperature-initial_0_AE512745-1EB9-4658-B409-3A94FD356E72.png",
+        "action": "T06-wristTemperature-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412756.667,
+        "capture_time_kst": "2026-10-31T11:12:36.667000+09:00",
+        "sha256": "fbff683725ff423f6e10330f05a00081db3b9de9da0dcd85dff673fe678d1ba2",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/wristTemperature-after-initial.png"
+      },
+      "after_matrix_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/28B5BB9A-B249-4810-8546-DA9C311C8FFF.png",
+        "attachment_uuid_name": "28B5BB9A-B249-4810-8546-DA9C311C8FFF.png",
+        "attachment_label": "T06-wristTemperature-lower_0_E6763158-D837-489C-A85A-A11CD53E4E29.png",
+        "action": "T06-wristTemperature-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412757.957,
+        "capture_time_kst": "2026-10-31T11:12:37.957000+09:00",
+        "sha256": "15c5fc2a59076cb26239fdb37159f3faf8f2639a9fe04da1630f7857bc21edb5",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/wristTemperature-after-lower.png"
+      },
+      "limitations": [],
+      "selected_after_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/103074AB-BBCB-454A-B94C-1B8A72894301.png",
+        "attachment_uuid_name": "103074AB-BBCB-454A-B94C-1B8A72894301.png",
+        "attachment_label": "T06-wristTemperature-initial_0_AE512745-1EB9-4658-B409-3A94FD356E72.png",
+        "action": "T06-wristTemperature-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412756.667,
+        "capture_time_kst": "2026-10-31T11:12:36.667000+09:00",
+        "sha256": "fbff683725ff423f6e10330f05a00081db3b9de9da0dcd85dff673fe678d1ba2",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/wristTemperature-after-initial.png"
+      },
+      "selected_after_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/28B5BB9A-B249-4810-8546-DA9C311C8FFF.png",
+        "attachment_uuid_name": "28B5BB9A-B249-4810-8546-DA9C311C8FFF.png",
+        "attachment_label": "T06-wristTemperature-lower_0_E6763158-D837-489C-A85A-A11CD53E4E29.png",
+        "action": "T06-wristTemperature-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412757.957,
+        "capture_time_kst": "2026-10-31T11:12:37.957000+09:00",
+        "sha256": "15c5fc2a59076cb26239fdb37159f3faf8f2639a9fe04da1630f7857bc21edb5",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/wristTemperature-after-lower.png"
+      }
+    },
+    {
+      "key": "breathingDisturbances",
+      "title_ko": "호흡 장애",
+      "expected_identity_from_f9_harness": {
+        "category": "breathingDisturbances",
+        "title": "Breathing Disturbances",
+        "value": "1.2",
+        "unit": "/hr"
+      },
+      "before_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-original-before-current/attachments/ED1E6444-D034-41C7-BC69-378D579826B3.png",
+        "attachment_uuid_name": "ED1E6444-D034-41C7-BC69-378D579826B3.png",
+        "attachment_label": "T06-breathingDisturbances-initial_0_97FA5586-4FE6-406C-B6D0-F4E3D3996904.png",
+        "action": "T06-breathingDisturbances-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "0dc77dc4",
+        "capture_timestamp": 1793410031.855,
+        "capture_time_kst": "2026-10-31T10:27:11.855000+09:00",
+        "sha256": "d78c10052644e7efc7a2500046e495b5b9aa3831d9e51642dbba806cceee20e4",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-original-before-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/breathingDisturbances-before-initial.png"
+      },
+      "before_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-original-before-current/attachments/8727309F-0B2B-4DE7-8A54-70D4DADD0821.png",
+        "attachment_uuid_name": "8727309F-0B2B-4DE7-8A54-70D4DADD0821.png",
+        "attachment_label": "T06-breathingDisturbances-lower_0_16312EE5-BF76-499D-B88D-4A7E934E1CA5.png",
+        "action": "T06-breathingDisturbances-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "0dc77dc4",
+        "capture_timestamp": 1793410033.348,
+        "capture_time_kst": "2026-10-31T10:27:13.348000+09:00",
+        "sha256": "62970d2861d883e33ebefdefd43a6349dacfcf02848f74ba45f7f6f71b0a9c1e",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-original-before-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/breathingDisturbances-before-lower.png"
+      },
+      "after_matrix_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/DD3B211D-F48E-412A-AC6E-4A876E9B9C73.png",
+        "attachment_uuid_name": "DD3B211D-F48E-412A-AC6E-4A876E9B9C73.png",
+        "attachment_label": "T06-breathingDisturbances-initial_0_0873F564-7777-452C-AE57-40976C9F0164.png",
+        "action": "T06-breathingDisturbances-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412781.478,
+        "capture_time_kst": "2026-10-31T11:13:01.478000+09:00",
+        "sha256": "f034a78b6b8b94d7a4abba68373f3be6fbf8adbe527d746203a049cc5ff54f5f",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/breathingDisturbances-after-initial.png"
+      },
+      "after_matrix_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/87764E54-CCB6-4558-863E-CEDD9C51BDBD.png",
+        "attachment_uuid_name": "87764E54-CCB6-4558-863E-CEDD9C51BDBD.png",
+        "attachment_label": "T06-breathingDisturbances-lower_0_58D7767B-3C87-48B8-8972-F780DA75C0A0.png",
+        "action": "T06-breathingDisturbances-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412782.968,
+        "capture_time_kst": "2026-10-31T11:13:02.968000+09:00",
+        "sha256": "242dfa7d2b314def5e1cc418760b6bfc26907d4452eae54cff4aa8431c38916e",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/breathingDisturbances-after-lower.png"
+      },
+      "limitations": [],
+      "selected_after_initial": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/DD3B211D-F48E-412A-AC6E-4A876E9B9C73.png",
+        "attachment_uuid_name": "DD3B211D-F48E-412A-AC6E-4A876E9B9C73.png",
+        "attachment_label": "T06-breathingDisturbances-initial_0_0873F564-7777-452C-AE57-40976C9F0164.png",
+        "action": "T06-breathingDisturbances-initial",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412781.478,
+        "capture_time_kst": "2026-10-31T11:13:01.478000+09:00",
+        "sha256": "f034a78b6b8b94d7a4abba68373f3be6fbf8adbe527d746203a049cc5ff54f5f",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/breathingDisturbances-after-initial.png"
+      },
+      "selected_after_lower": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/87764E54-CCB6-4558-863E-CEDD9C51BDBD.png",
+        "attachment_uuid_name": "87764E54-CCB6-4558-863E-CEDD9C51BDBD.png",
+        "attachment_label": "T06-breathingDisturbances-lower_0_58D7767B-3C87-48B8-8972-F780DA75C0A0.png",
+        "action": "T06-breathingDisturbances-lower",
+        "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+        "revision": "f9f1d852",
+        "capture_timestamp": 1793412782.968,
+        "capture_time_kst": "2026-10-31T11:13:02.968000+09:00",
+        "sha256": "242dfa7d2b314def5e1cc418760b6bfc26907d4452eae54cff4aa8431c38916e",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "bundle": "ui-ipad-after-matrix-peer-current",
+        "bundle_result": "passed",
+        "visual_inspection": "manifest-inventory-not-full-visual-review",
+        "image": "assets/breathingDisturbances-after-lower.png"
+      }
+    }
+  ],
+  "peer_source_panel": {
+    "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-peer-conditional-current/attachments/8C92B382-1568-4C12-B341-676F912691C7.png",
+    "attachment_uuid_name": "8C92B382-1568-4C12-B341-676F912691C7.png",
+    "attachment_label": "screen-0-1512x2316-before teardown -[MetricDetailRedesignTests testWeightPeerCriteriaCancelApplyAndSource]_0_A877B8C5-21F8-42B5-9F92-973D13B0724B.png",
+    "action": "screen-0-1512x2316-before teardown -[MetricDetailRedesignTests testWeightPeerCriteriaCancelApplyAndSource]",
+    "test_method": "MetricDetailRedesignTests/testWeightPeerCriteriaCancelApplyAndSource()",
+    "revision": "3d299a50",
+    "capture_timestamp": 1793415435.519,
+    "capture_time_kst": "2026-10-31T11:57:15.519000+09:00",
+    "sha256": "0f30a1454921f84e53419b78a90e8c952ddf72d0889e10008b3d34d9b8fb29e3",
+    "pixels": [
+      1512,
+      2316
+    ],
+    "bundle": "ui-ipad-peer-conditional-current",
+    "bundle_result": "passed",
+    "visual_inspection": "actual-source-panel-inspected",
+    "image": "assets/weight-peer-source-panel.png"
+  },
+  "canonical_hrv_before_replacement": {
+    "must_replace_wrong_sleep": true,
+    "use_metric_key": "hrv",
+    "candidate_asset": {
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-original-before-current/attachments/8D729315-E53D-4986-840C-B48CA87EE5C4.png",
+      "attachment_uuid_name": "8D729315-E53D-4986-840C-B48CA87EE5C4.png",
+      "attachment_label": "T06-hrv-initial_0_E4704655-85D1-43B6-9CD8-2253A182FBE2.png",
+      "action": "T06-hrv-initial",
+      "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+      "revision": "0dc77dc4",
+      "capture_timestamp": 1793409685.661,
+      "capture_time_kst": "2026-10-31T10:21:25.661000+09:00",
+      "sha256": "24b8b6d1c0ebb20c5d087345229e325611f02f1cee43009f1c2efe9a9ffbc241",
+      "pixels": [
+        1512,
+        2316
+      ],
+      "bundle": "ui-ipad-original-before-current",
+      "bundle_result": "passed",
+      "visual_inspection": "representative-inspected"
+    }
+  },
+  "publication": {
+    "directory": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/docs/design/full-redesign-map/review/t06-metric-matrix-native-2026-11-02",
+    "date": "2026-11-02",
+    "four_tier_scope": "HRV after only:Nov2Phone/Duo;Oct31iPad",
+    "historical_matrix_scope": "18identities iPadOct31 only",
+    "same_device_before_all_tiers": false,
+    "canonical_refreshed_screen": "T06/metric-detail-screen-hrv",
+    "base_for_other_rows_preserved": "a6f52495"
+  },
+  "historical_matrix_publication": {
+    "directory": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/docs/design/full-redesign-map/review/t06-metric-matrix-native-2026-11-02",
+    "created_date": "2026-11-02",
+    "caption": "2026년10월31일 iPad 실제 앱 기록 ·18개 지표별 비교",
+    "not_fresh_nov2_run": true,
+    "all_four_tiers": false,
+    "canonical_indices_modified": false,
+    "source_current_main_verified_here": false
+  },
+  "hrv_four_tier_after": {
+    "scope_note": "HRV75ms actualafterfourtiers;Phone5methodsPASS,Duoclosed/open1methodeachPASS;historicalOct31iPadf9matrix1of2methods.18identitymatrixisstilliPadonly.",
+    "shared_original_reference": {
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-original-before-current/attachments/8D729315-E53D-4986-840C-B48CA87EE5C4.png",
+      "attachment_uuid_name": "8D729315-E53D-4986-840C-B48CA87EE5C4.png",
+      "attachment_label": "T06-hrv-initial_0_E4704655-85D1-43B6-9CD8-2253A182FBE2.png",
+      "action": "T06-hrv-initial",
+      "test_method": "MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures()",
+      "revision": "0dc77dc4",
+      "capture_timestamp": 1793409685.661,
+      "capture_time_kst": "2026-10-31T10:21:25.661000+09:00",
+      "sha256": "24b8b6d1c0ebb20c5d087345229e325611f02f1cee43009f1c2efe9a9ffbc241",
+      "pixels": [
+        1512,
+        2316
+      ],
+      "bundle": "ui-ipad-original-before-current",
+      "bundle_result": "passed",
+      "visual_inspection": "representative-inspected",
+      "image": "assets/hrv-before-initial.png"
+    },
+    "shared_before_limitation": "Only genuine original iPadOct31HRV exists. Same iPad reference shown forPhone/Duo comparisons with explicit device/viewport/date caveat; no Phone/Duo historical before manufactured.",
+    "devices": {
+      "regular": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/pr879-phone-five-core-flows-final-2026-11-02/attachments/CB183561-BF9D-4DD8-8C68-F3E625C2A5CF.png",
+        "source_origin": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/pr879-phone-five-core-flows-final-2026-11-02",
+        "revision": "c0b51078",
+        "source_worktree_dirty": false,
+        "udid": "D7BDC13D-6BF8-4C69-B6B3-409D03298E12",
+        "selector": "DUNEUITests/MetricDetailRedesignTests/testSelectedMetricIdentityAndCapture",
+        "action": "T06-hrv-initial",
+        "timestamp": 1793600657.503,
+        "timestamp_kind": "native-XCTest-attachment",
+        "attachment_uuid_name": "CB183561-BF9D-4DD8-8C68-F3E625C2A5CF.png",
+        "attachment_label": "T06-hrv-initial_0_D58B6683-13DF-47C9-BB1C-36EDD0FC9C2F.png",
+        "official_result": {
+          "schema_version": 1,
+          "status": "passed",
+          "target": "DUNEUITests",
+          "run_exit_status": 0,
+          "requested_selectors": [
+            "DUNEUITests/MetricDetailRedesignTests/testSelectedMetricIdentityAndCapture",
+            "DUNEUITests/MetricDetailRedesignTests/testHRVPeriodSegmentsUpdateVisibleSummary",
+            "DUNEUITests/MetricDetailRedesignTests/testHRVIntegratedHistoryPagesAndKeepsStatistics",
+            "DUNEUITests/MetricDetailRedesignTests/testHRVDarkDetailReadability",
+            "DUNEUITests/MetricDetailRedesignTests/testWeightMaximumAccessibilitySizeKeepsContentReachable"
+          ],
+          "skipped_selectors": [],
+          "evidence_scope": {
+            "kind": "selector_execution",
+            "complete_test_inventory": false
+          },
+          "counts": {
+            "executed": 5,
+            "passed": 5,
+            "skipped": 0,
+            "failed": 0
+          },
+          "passed_cases": 5,
+          "failures": [],
+          "required_selectors_missing": [],
+          "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/t06-phone-core-flows-c0b51078.log"
+        },
+        "provenance": {
+          "revision": "c0b51078",
+          "source_worktree_dirty": false,
+          "original_xcresult": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.11.02_15-21-28-+0900.xcresult",
+          "xcode": "Xcode 27.2\nBuild version 27B52",
+          "test_plan": "DUNEUITests-DesignCapture",
+          "device_udid": "D7BDC13D-6BF8-4C69-B6B3-409D03298E12",
+          "execution_worktree": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health",
+          "scope": "5 focused Phone cases: HRV identity, five periods, paging, dark and weightMAX; actual5PASS notall18matrix"
+        },
+        "image": "assets/hrv-regular-after.png",
+        "sha256": "fcb145b45f193203aa904f7d9a0f5382d1bd8fdc9f8dd6bd54b033658ab5bb68",
+        "pixels": [
+          1320,
+          2868
+        ],
+        "capture_time_kst": "2026-11-02T15:24:17.503000+09:00",
+        "actual_visual_review": "parent-and-independent-viewed:75ms/HRVwaveform/noidentitymismatch",
+        "historical": false
+      },
+      "ipad": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current/attachments/B0E35B44-A579-42C0-A700-3BD4F313FC30.png",
+        "source_origin": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/ui-ipad-after-matrix-peer-current",
+        "revision": "f9f1d852",
+        "source_worktree_dirty": false,
+        "udid": "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+        "selector": "DUNEUITests/MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures",
+        "action": "T06-hrv-initial",
+        "timestamp": 1793412374.016,
+        "timestamp_kind": "native-XCTest-attachment",
+        "attachment_uuid_name": "B0E35B44-A579-42C0-A700-3BD4F313FC30.png",
+        "attachment_label": "T06-hrv-initial_0_16F176FF-F1AD-467F-B891-6862FB1A1E50.png",
+        "official_result": {
+          "schema_version": 1,
+          "status": "passed",
+          "target": "DUNEUITests",
+          "run_exit_status": 0,
+          "requested_selectors": [
+            "DUNEUITests/MetricDetailRedesignTests/testAllMetricIdentitiesAndCaptures",
+            "DUNEUITests/MetricDetailRedesignTests/testWeightPeerCriteriaCancelApplyAndSource"
+          ],
+          "skipped_selectors": [],
+          "evidence_scope": {
+            "kind": "selector_execution",
+            "complete_test_inventory": false
+          },
+          "counts": {
+            "executed": 2,
+            "passed": 2,
+            "skipped": 0,
+            "failed": 0
+          },
+          "passed_cases": 2,
+          "failures": [],
+          "required_selectors_missing": [],
+          "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/t06-ipad-metric-detail-f9f1d852.log"
+        },
+        "provenance": {
+          "revision": "f9f1d852",
+          "source_worktree_dirty": false,
+          "original_xcresult": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.31_11-03-45-+0900.xcresult",
+          "xcode": "Xcode 27.2\nBuild version 27B52",
+          "test_plan": "DUNEUITests-DesignCapture",
+          "execution_worktree": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health",
+          "device_udid": "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+          "scope": "AFTER1methodloops18metricidentities+1peerCriteriaCancelApplyReferenceSource=2PASS;not18testcases",
+          "exact_meters": "Exercise,1,314m+Swimmingassertionpassedinside18matrix"
+        },
+        "image": "assets/hrv-ipad-after.png",
+        "sha256": "68fc1cfea1bd61548dcde212b73687f4242efce5768f4145dca7433e269c5255",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "capture_time_kst": "2026-10-31T11:06:14.016000+09:00",
+        "actual_visual_review": "parent-and-independent-viewed:75ms/HRVwaveform/noidentitymismatch",
+        "historical": true
+      },
+      "duo": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/pr879-duo-closed-hrv-final-2026-11-02/paired-host/001-1398x2034.png",
+        "source_origin": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/pr879-duo-closed-hrv-final-2026-11-02",
+        "revision": "c0b51078",
+        "source_worktree_dirty": false,
+        "udid": "FB085D5F-FE6C-4DD2-9616-908C204FB50F",
+        "selector": "DUNEUITests/MetricDetailRedesignTests/testSelectedMetricIdentityAndCapture",
+        "action": "DUNE_VISUAL_AUDIT_READY root after setup -[MetricDetailRedesignTests testSelectedMetricIdentityAndCapture] [DUNEUITests/UITestBaseCase.swift:145] DEADLINE=1793600086.310931",
+        "timestamp": 1793600058.644877,
+        "timestamp_kind": "host-PNG-file-mtime",
+        "attachment_uuid_name": "001-1398x2034.png",
+        "pose": {
+          "revision": "c0b51078",
+          "target": 0.0,
+          "angle_before": 0.0,
+          "angle_after": 0.0,
+          "active_display": "LCD",
+          "script_sha256": "0e178ea0645a579cc83ace50631edf0bfef6846830abf478a3a9863d3144b559",
+          "captured_at": 1793600074.722293,
+          "native_visual_review": "pending-parent"
+        },
+        "pose_directory": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/pr879-duo-closed-hrv-final-2026-11-02/paired-host",
+        "strict_paired_checkpoints": 2,
+        "checkpoint_actions": [
+          "DUNE_VISUAL_AUDIT_READY root after setup -[MetricDetailRedesignTests testSelectedMetricIdentityAndCapture] [DUNEUITests/UITestBaseCase.swift:145] DEADLINE=1793600086.310931",
+          "DUNE_VISUAL_AUDIT_READY before teardown -[MetricDetailRedesignTests testSelectedMetricIdentityAndCapture] [DUNEUITests/UITestBaseCase.swift:120] DEADLINE=1793600098.900394"
+        ],
+        "official_result": {
+          "schema_version": 1,
+          "status": "passed",
+          "target": "DUNEUITests",
+          "run_exit_status": 0,
+          "requested_selectors": [
+            "DUNEUITests/MetricDetailRedesignTests/testSelectedMetricIdentityAndCapture"
+          ],
+          "skipped_selectors": [],
+          "evidence_scope": {
+            "kind": "selector_execution",
+            "complete_test_inventory": false
+          },
+          "counts": {
+            "executed": 1,
+            "passed": 1,
+            "skipped": 0,
+            "failed": 0
+          },
+          "passed_cases": 1,
+          "failures": [],
+          "required_selectors_missing": [],
+          "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/t06-duo-closed-c0b51078.log"
+        },
+        "provenance": {
+          "revision": "c0b51078",
+          "source_worktree_dirty": false,
+          "original_xcresult": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.11.02_15-13-46-+0900.xcresult",
+          "xcode": "Xcode 27.2\nBuild version 27B52",
+          "test_plan": "DUNEUITests-DuoAudit",
+          "device_udid": "FB085D5F-FE6C-4DD2-9616-908C204FB50F",
+          "scope": "one HRV identity case, initial/lower with strictroot/teardown pairs; notall18/periodinteractions/dark/MAX"
+        },
+        "scope": "HRV identity only; root/teardown strict display pairs, not18identities or period/dark/MAX flows",
+        "image": "assets/hrv-duo-after.png",
+        "sha256": "e83990ad8809df64073298cf882c83cc0febdda7c8a9bcbd2e07b56b9c3d957d",
+        "pixels": [
+          1398,
+          2034
+        ],
+        "capture_time_kst": "2026-11-02T15:14:18.644877+09:00",
+        "actual_visual_review": "parent-and-independent-viewed:75ms/HRVwaveform/noidentitymismatch",
+        "historical": false
+      },
+      "duo-open": {
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/pr879-duo-open-hrv-final-2026-11-02/paired-host/001-2007x2853.png",
+        "source_origin": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/pr879-duo-open-hrv-final-2026-11-02",
+        "revision": "c0b51078",
+        "source_worktree_dirty": false,
+        "udid": "FB085D5F-FE6C-4DD2-9616-908C204FB50F",
+        "selector": "DUNEUITests/MetricDetailRedesignTests/testSelectedMetricIdentityAndCapture",
+        "action": "DUNE_VISUAL_AUDIT_READY root after setup -[MetricDetailRedesignTests testSelectedMetricIdentityAndCapture] [DUNEUITests/UITestBaseCase.swift:145] DEADLINE=1793600214.657589",
+        "timestamp": 1793600185.5290165,
+        "timestamp_kind": "host-PNG-file-mtime",
+        "attachment_uuid_name": "001-2007x2853.png",
+        "pose": {
+          "revision": "c0b51078",
+          "target": 180.0,
+          "angle_before": 180.0,
+          "angle_after": 180.0,
+          "active_display": "LCD-1",
+          "script_sha256": "0e178ea0645a579cc83ace50631edf0bfef6846830abf478a3a9863d3144b559",
+          "captured_at": 1793600203.4083111,
+          "native_visual_review": "pending-parent"
+        },
+        "pose_directory": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t06/evidence/pr879-duo-open-hrv-final-2026-11-02/paired-host",
+        "strict_paired_checkpoints": 2,
+        "checkpoint_actions": [
+          "DUNE_VISUAL_AUDIT_READY root after setup -[MetricDetailRedesignTests testSelectedMetricIdentityAndCapture] [DUNEUITests/UITestBaseCase.swift:145] DEADLINE=1793600214.657589",
+          "DUNE_VISUAL_AUDIT_READY before teardown -[MetricDetailRedesignTests testSelectedMetricIdentityAndCapture] [DUNEUITests/UITestBaseCase.swift:120] DEADLINE=1793600227.5634809"
+        ],
+        "official_result": {
+          "schema_version": 1,
+          "status": "passed",
+          "target": "DUNEUITests",
+          "run_exit_status": 0,
+          "requested_selectors": [
+            "DUNEUITests/MetricDetailRedesignTests/testSelectedMetricIdentityAndCapture"
+          ],
+          "skipped_selectors": [],
+          "evidence_scope": {
+            "kind": "selector_execution",
+            "complete_test_inventory": false
+          },
+          "counts": {
+            "executed": 1,
+            "passed": 1,
+            "skipped": 0,
+            "failed": 0
+          },
+          "passed_cases": 1,
+          "failures": [],
+          "required_selectors_missing": [],
+          "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/t06-duo-open-c0b51078.log"
+        },
+        "provenance": {
+          "revision": "c0b51078",
+          "source_worktree_dirty": false,
+          "original_xcresult": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.11.02_15-16-09-+0900.xcresult",
+          "xcode": "Xcode 27.2\nBuild version 27B52",
+          "test_plan": "DUNEUITests-DuoAudit",
+          "device_udid": "FB085D5F-FE6C-4DD2-9616-908C204FB50F",
+          "scope": "one HRV identity case, initial/lower with strictroot/teardown pairs; notall18/periodinteractions/dark/MAX"
+        },
+        "scope": "HRV identity only; root/teardown strict display pairs, not18identities or period/dark/MAX flows",
+        "image": "assets/hrv-duo-open-after.png",
+        "sha256": "0ca9566d7ca61d286c8618359a4b155542fc7ebd8e0d6d3bc84d72afdaf34e0a",
+        "pixels": [
+          2853,
+          2007
+        ],
+        "capture_time_kst": "2026-11-02T15:16:25.529016+09:00",
+        "actual_visual_review": "parent-and-independent-viewed:75ms/HRVwaveform/noidentitymismatch",
+        "historical": false
+      }
+    }
+  },
+  "historical_matrix_capture_date": "2026-10-31",
+  "historical_matrix_tier": "iPad only",
+  "historical_matrix_limitations": [
+    "iPad1512×2316 only; no Phone/Duo tier coverage inferred.",
+    "Oct31historicalnativecaptures, notnewNov2executions.",
+    "18identityrows are not18independentpassingtestcases.",
+    "Only requested representative images directly visually inspected; remainingmapping is manifestinventory and assertedharnessidentity.",
+    "Originalswimlegacyunitbugpreservedtruthfully;missingbeforelowerisnull.",
+    "Distancefinalselected61 only; wholemixedfailedbundle remains failed.",
+    "No per-identity AX attachment generated by attach(name); unitidentityassertions are in actual executedharness.",
+    "No source-current-main equivalence or finalPRreadiness claimed."
+  ],
+  "limitations": [
+    "Four-tier after publication is HRV only, not18identities on all devices.",
+    "Phone/Duo after capturedNov2c0; iPad after is historicalOct31f9.",
+    "Only genuine original iPadHRV is used as shared reference; Phone/Duo same-devicebefore unavailable.",
+    "Each image retains actualsource/date/viewport/results; notallstates/themes/locales or newsourceequivalence claim.",
+    "Historical18identityiPad matrix and mixed61failedbundle remain separately scoped."
+  ]
+}

@@ -1,0 +1,672 @@
+{
+  "scope": "T10 PR882 read-only preparation; not final quality PASS",
+  "source_worktree_missing": true,
+  "source_branch": "codex/t10-daily-health-report-redesign",
+  "source_head": "dbea4ef09b82fd5e51f8007dadc5cff82dd8b1ac",
+  "main_reference": "59080c89c1e50bae39f81d22765045c353783dd9",
+  "merge_base": "672d5fdbcbc8eca70069ca3a8b328ed18f0c501f",
+  "blob_closure": {
+    "DUNE/Presentation/Dashboard/DailyDigestNotificationView.swift": {
+      "branch": "c487527f618edfd05d17ac413f704eb6a5b5df57",
+      "main590": "c354f2ea6717b28102aa09de4b6a233025475c13",
+      "validationHEAD": "c487527f618edfd05d17ac413f704eb6a5b5df57"
+    },
+    "DUNE/Presentation/Dashboard/DashboardViewModel.swift": {
+      "branch": "bed54a1906fd3cf77e7a99d20bbfac360a307f83",
+      "main590": "ce915ae260d617f6ae707ada3fee68be4055af95",
+      "validationHEAD": "ce915ae260d617f6ae707ada3fee68be4055af95"
+    },
+    "DUNE/Presentation/Dashboard/Components/DailyDigestCard.swift": {
+      "branch": "e8ec9020c353772d11e445e6049f082621f9b2ee",
+      "main590": "e8ec9020c353772d11e445e6049f082621f9b2ee",
+      "validationHEAD": "e8ec9020c353772d11e445e6049f082621f9b2ee"
+    },
+    "DUNEUITests/Visual/TodayReadingUITests.swift": {
+      "branch": "1947ce9c753a7b04b85b81282bf99c1592d15ae2",
+      "main590": "58c3a2c2a207b0b89b854170b12e9f5128200fd3",
+      "validationHEAD": "1947ce9c753a7b04b85b81282bf99c1592d15ae2"
+    },
+    "DUNEUITests/Full/NotificationRoutingRegressionTests.swift": {
+      "branch": "ed2a6e982c01d8e454c75856a504cd4ccc9d5cfa",
+      "main590": "bec2fb8dfc36f89fdb97460fe61a65d2008a242c",
+      "validationHEAD": "4023b695170f17dfab03ee6d9d4f45e7d29dea87"
+    },
+    "Shared/Resources/Localizable.xcstrings": {
+      "branch": "8e5ce8a9b278f195bb79ce4010cbdbe136639e08",
+      "main590": "e3f09a4e3ff4dc56975eb3bebc82877d10c60c00",
+      "validationHEAD": "66a96e8e9115114410b3e23a8c74cac52b38b01c"
+    }
+  },
+  "legacy_read_only_merge_conflicts": [
+    "docs/design/layout-map/index.html",
+    "docs/design/theme-map/README.md",
+    "docs/design/theme-map/index.html"
+  ],
+  "native_bundles": {
+    "ui-phone-initial-failure": {
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t10/evidence/ui-phone-initial-failure",
+      "provenance": {
+        "executed_revision": "d369a940",
+        "executed_worktree": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health",
+        "source_worktree": "/Users/shanks/.codex/worktrees/detail-redesign-t10/Health",
+        "source_dirty": false,
+        "test_plan": "DUNEUITests-DesignCapture",
+        "counts": {
+          "executed": 4,
+          "passed": 2,
+          "skipped": 0,
+          "failed": 2
+        },
+        "remaining_conditional_retry": 1
+      },
+      "result": {
+        "schema_version": 1,
+        "status": "failed",
+        "target": "DUNEUITests",
+        "run_exit_status": 65,
+        "requested_selectors": [
+          "DUNEUITests/NotificationResponseRoutingUITests/testNotificationResponseOpensSummaryAndBackReturnsToToday",
+          "DUNEUITests/DeferredDigestNotificationRoutingUITests/testSummaryWaitsForHealthKitReadinessWithoutShowingEmptyState",
+          "DUNEUITests/TodayReadingUITests/testNotificationDigestReportPreservesDataAndDisclosure",
+          "DUNEUITests/NotificationRoutingRegressionTests/testDigestAndChecklistRowsOpenTheirFeatures"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 4,
+          "passed": 2,
+          "skipped": 0,
+          "failed": 2
+        },
+        "passed_cases": 2,
+        "failures": [
+          "9095: /Users/shanks/.codex/worktrees/detail-redesign-validation/Health/DUNEUITests/Full/NotificationRoutingRegressionTests.swift:115: error: -[DUNEUITests.NotificationResponseRoutingUITests testNotificationResponseOpensSummaryAndBackReturnsToToday] : XCTAssertTrue failed",
+          "9106: Test Case '-[DUNEUITests.NotificationResponseRoutingUITests testNotificationResponseOpensSummaryAndBackReturnsToToday]' failed (12.880 seconds).",
+          "9107: Test Suite 'NotificationResponseRoutingUITests' failed at 2026-10-31 05:45:54.393.",
+          "9286: /Users/shanks/.codex/worktrees/detail-redesign-validation/Health/DUNEUITests/Visual/TodayReadingUITests.swift:324: error: -[DUNEUITests.TodayReadingUITests testNotificationDigestReportPreservesDataAndDisclosure] : XCTAssertTrue failed",
+          "9297: Test Case '-[DUNEUITests.TodayReadingUITests testNotificationDigestReportPreservesDataAndDisclosure]' failed (29.096 seconds).",
+          "9298: Test Suite 'TodayReadingUITests' failed at 2026-10-31 05:47:05.539.",
+          "9300: Test Suite 'DUNEUITests.xctest' failed at 2026-10-31 05:47:05.540.",
+          "9302: Test Suite 'Selected tests' failed at 2026-10-31 05:47:05.540.",
+          "9315: ** TEST FAILED **",
+          "xcodebuild exited 65",
+          "UI test log reports 2 failures",
+          "requested UI test selector has no execution evidence"
+        ],
+        "required_selectors_missing": [
+          "DUNEUITests/NotificationResponseRoutingUITests/testNotificationResponseOpensSummaryAndBackReturnsToToday",
+          "DUNEUITests/TodayReadingUITests/testNotificationDigestReportPreservesDataAndDisclosure"
+        ],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/t10-iphone-d369a940.log"
+      }
+    },
+    "ui-phone-report-current": {
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t10/evidence/ui-phone-report-current",
+      "provenance": {
+        "revision": "dbea4ef0",
+        "source_worktree_dirty": false,
+        "original_xcresult": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.31_05-58-32-+0900.xcresult",
+        "xcode": "Xcode 27.2\nBuild version 27B52",
+        "test_plan": "DUNEUITests-DesignCapture"
+      },
+      "result": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/NotificationResponseRoutingUITests/testNotificationResponseOpensSummaryAndBackReturnsToToday",
+          "DUNEUITests/TodayReadingUITests/testNotificationDigestReportPreservesDataAndDisclosure"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 2,
+          "passed": 2,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 2,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/t10-iphone-dbea4ef0.log"
+      }
+    }
+  },
+  "pipeline": {
+    "attempts": [
+      {
+        "after": "f3eabd81170eb1f8f6d0dd31316734bfd06ad063022526e8c0aedc0806e3ddf2",
+        "after_content": "4938aca2e5a9e03f10f35e74c430e4dacd4d2391723668e72d76fc867a96ecc3",
+        "before": "f3eabd81170eb1f8f6d0dd31316734bfd06ad063022526e8c0aedc0806e3ddf2",
+        "before_content": "4938aca2e5a9e03f10f35e74c430e4dacd4d2391723668e72d76fc867a96ecc3",
+        "child_pgid": 10497,
+        "child_pid": 10497,
+        "command": [
+          "scripts/test-ui.sh",
+          "--no-regen",
+          "--test-plan",
+          "DUNEUITests-DesignCapture",
+          "--simulator-udid",
+          "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "--only-testing",
+          "DUNEUITests/NotificationResponseRoutingUITests/testNotificationResponseOpensSummaryAndBackReturnsToToday",
+          "--only-testing",
+          "DUNEUITests/DeferredDigestNotificationRoutingUITests/testSummaryWaitsForHealthKitReadinessWithoutShowingEmptyState",
+          "--only-testing",
+          "DUNEUITests/TodayReadingUITests/testNotificationDigestReportPreservesDataAndDisclosure",
+          "--only-testing",
+          "DUNEUITests/NotificationRoutingRegressionTests/testDigestAndChecklistRowsOpenTheirFeatures",
+          "--log-file",
+          ".xcodebuild/t10-iphone-d369a940.log"
+        ],
+        "content_only": false,
+        "context": "Xcode27.2-validationWT-owned340663-d369a940-phone-EnglishRoutes-KoreanReport-light-darkAX-oneVM",
+        "ended": 1793393234.441895,
+        "exit_code": 65,
+        "log": "check-0255612eca710c2a72658616-4f1c43a94b5645ebad7c1ea11bcbd8d0.log",
+        "log_hash": "3a538d58a2e8d2f1e33a655a1b380acb2facd57e390cb9c7161dc4cef34f4f9c",
+        "scope": "T10-notification-response-back-healthreadiness-inbox-real-entry-report-data-disclosure-normal-and-darkmaxAX",
+        "started": 1793392864.662014,
+        "status": "failed"
+      },
+      {
+        "after": "4703108d5e4c2f0a1680c516f8c50b1552244bb0bb62ab7c75fa2a7a8f3f413b",
+        "after_content": "54414255837c348ce1f8b575f7e6276ea5cfebd4828288d1726ab7b8e6666ddd",
+        "before": "4703108d5e4c2f0a1680c516f8c50b1552244bb0bb62ab7c75fa2a7a8f3f413b",
+        "before_content": "54414255837c348ce1f8b575f7e6276ea5cfebd4828288d1726ab7b8e6666ddd",
+        "child_pgid": 36264,
+        "child_pid": 36264,
+        "command": [
+          "scripts/test-ui.sh",
+          "--no-regen",
+          "--test-plan",
+          "DUNEUITests-DesignCapture",
+          "--simulator-udid",
+          "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "--only-testing",
+          "DUNEUITests/NotificationResponseRoutingUITests/testNotificationResponseOpensSummaryAndBackReturnsToToday",
+          "--only-testing",
+          "DUNEUITests/TodayReadingUITests/testNotificationDigestReportPreservesDataAndDisclosure",
+          "--log-file",
+          ".xcodebuild/t10-iphone-dbea4ef0.log"
+        ],
+        "content_only": false,
+        "context": "Xcode27.2-validationWT-owned340663-dbea4ef0-phone-EnglishResponse-KoreanReport-light-darkAX-oneVM",
+        "ended": 1793394027.158873,
+        "exit_code": 0,
+        "log": "check-0255612eca710c2a72658616-07c991bfb61d487880a3937518c7139e.log",
+        "log_hash": "9a17ad494cb24463cb222ae9ea56e488195c029aa2f113f48d6a7c42011c1192",
+        "remediation": "explicit-containing-groups-preserve-leaf-IDs-and-resolve-observed-title-contrast-findings",
+        "retry_cause": "report-container-identifier-inheritance-confirmed-in-original-AX",
+        "retry_evidence": {
+          "file": ".codex-checks/t10/ui-retry-remediation.json",
+          "hash": "f8ed8f63af62cd6935aa5c75abe839915b6ee94ccb4efbd9e1c3b1169f22730b"
+        },
+        "scope": "T10-failed-AX-response-and-report-cases-after-containment-inline-title-and-semantic-heading-color",
+        "started": 1793393909.753794,
+        "status": "success"
+      }
+    ],
+    "id": "t10-ui-report",
+    "schema_version": 1,
+    "worktree": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health"
+  },
+  "before_canonical": {
+    "regular": {
+      "image": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/docs/design/phone-design-map/actual/regular/images/T10.png",
+      "sha256": "b03de4b48e33f6ed715d45afc67ab2c01771aa1b79054929e688ffc0eab6f2a2",
+      "capture": {
+        "row_id": "T10",
+        "evidence": "notification-daily-digest-screen",
+        "test": "NotificationResponseRoutingUITests/testNotificationResponseOpensSummaryAndBackReturnsToToday()",
+        "action": "root after setup -[NotificationResponseRoutingUITests testNotificationResponseOpensSummaryAndBackReturnsToToday]",
+        "timestamp": 1792066828.873,
+        "image": "8A5F83B8-2A2B-40A4-935F-A4F1C83F6FCC.png",
+        "screen": "screen-0-1320x2868-root after setup -[NotificationResponseRoutingUITests testNotificationResponseOpensSummaryAndBackReturnsToToday]_0_9601F290-6AAB-486E-A745-1BDBC9F8E333.png",
+        "file": "T10.png",
+        "source_revision": "1f49c921512a8fbf33eb26221c527d03c54b136f",
+        "source_worktree_dirty": true,
+        "xcresult": "/Users/shanks/.codex/worktrees/cccd/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.15_21-19-25-+0900.xcresult",
+        "sha256": "b03de4b48e33f6ed715d45afc67ab2c01771aa1b79054929e688ffc0eab6f2a2",
+        "visual_review": "accepted",
+        "source_test_result": "Passed"
+      },
+      "global_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "global_dirty": true
+    },
+    "ipad": {
+      "image": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/docs/design/phone-design-map/actual/ipad/images/T10.png",
+      "sha256": "b8656c52b26c0467fb56244726200571dcde5c4b18b437a02d6d10d529300b8b",
+      "capture": {
+        "row_id": "T10",
+        "evidence": "notification-daily-digest-screen",
+        "test": "NotificationResponseRoutingUITests/testNotificationResponseOpensSummaryAndBackReturnsToToday()",
+        "action": "root after setup -[NotificationResponseRoutingUITests testNotificationResponseOpensSummaryAndBackReturnsToToday]",
+        "timestamp": 1792066949.445,
+        "image": "CF43E685-F3A5-4786-A08E-8B9188080256.png",
+        "screen": "screen-0-2064x2752-root after setup -[NotificationResponseRoutingUITests testNotificationResponseOpensSummaryAndBackReturnsToToday]_0_5D7EFBEE-B934-4E23-AD20-F104815E850D.png",
+        "file": "T10.png",
+        "source_revision": "1f49c921512a8fbf33eb26221c527d03c54b136f",
+        "source_worktree_dirty": true,
+        "xcresult": "/Users/shanks/.codex/worktrees/cccd/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.15_21-21-36-+0900.xcresult",
+        "sha256": "b8656c52b26c0467fb56244726200571dcde5c4b18b437a02d6d10d529300b8b",
+        "visual_review": "accepted",
+        "source_test_result": "Passed"
+      },
+      "global_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "global_dirty": true
+    },
+    "duo": {
+      "image": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/docs/design/phone-design-map/actual/duo/images/T10.png",
+      "sha256": "9f7d4d71b6d5347545cf96d0a8389e7685814e3633cee667a292c91966f6d5ee",
+      "capture": {
+        "row_id": "T10",
+        "evidence": "notification-daily-digest-screen",
+        "test": "NotificationResponseRoutingUITests/testNotificationResponseOpensSummaryAndBackReturnsToToday()",
+        "action": "root after setup -[NotificationResponseRoutingUITests testNotificationResponseOpensSummaryAndBackReturnsToToday]",
+        "timestamp": 1791824239.204,
+        "image": "D4E0BBBE-C9BA-4E8D-AC1D-6ECA65EB8C01.png",
+        "screen": "screen-0-1398x2034-root after setup -[NotificationResponseRoutingUITests testNotificationResponseOpensSummaryAndBackReturnsToToday]_0_09663F17-31A0-47E3-9277-AE538B91DEE0.png",
+        "file": "T10.png",
+        "current_verification": "pending",
+        "current_verification_note": "T10의 이 기기 인덱스는 2026-10-15 변경 전 캡처를 보존합니다. 2026-10-27 최신 구현은 별도 전용 Duo 외부·내부에서 관련 검사를 각각2/2 통과했고 daily-summary-reading-2026-10-27 갤러리에 새 T03/T10 원본을 보존했습니다. 이 과거 기기의 이미지는 새 출처로 대체하지 않았습니다."
+      },
+      "global_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "global_dirty": true
+    },
+    "duo-open": {
+      "image": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/docs/design/phone-design-map/actual/duo-open/images/T10.png",
+      "sha256": "a0517e77eb50e50afc5190beda8fbf8fbeb40893aa56dceabd6304375f521f2c",
+      "capture": {
+        "row_id": "T10",
+        "evidence": "notification-daily-digest-screen",
+        "test": "NotificationResponseRoutingUITests/testNotificationResponseOpensSummaryAndBackReturnsToToday()",
+        "action": "root after setup -[NotificationResponseRoutingUITests testNotificationResponseOpensSummaryAndBackReturnsToToday]",
+        "timestamp": 1791827321.042,
+        "image": "2C5DF763-3B4D-447F-B6B6-04ED26553558.png",
+        "screen": "screen-1-2006x2852-root after setup -[NotificationResponseRoutingUITests testNotificationResponseOpensSummaryAndBackReturnsToToday]_1_9C4A0EB6-2C5D-4B13-9FB6-379E16AAA6F5.png",
+        "file": "T10.png",
+        "current_verification": "pending",
+        "current_verification_note": "T10의 이 기기 인덱스는 2026-10-15 변경 전 캡처를 보존합니다. 2026-10-27 최신 구현은 별도 전용 Duo 외부·내부에서 관련 검사를 각각2/2 통과했고 daily-summary-reading-2026-10-27 갤러리에 새 T03/T10 원본을 보존했습니다. 이 과거 기기의 이미지는 새 출처로 대체하지 않았습니다."
+      },
+      "global_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "global_dirty": true
+    }
+  },
+  "preferred_iPad_original": [
+    {
+      "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-briefing-digest-hub-message-current/attachments/5CC23FFD-2851-49FE-809B-A19D2970F59A.png",
+      "sha256": "fd73237661bb6215437073ad2c842f3869dc621275a2149f102fe16aa643cf48",
+      "native_attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+        "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-validation-644069bf7efc",
+        "exportedFileName": "5CC23FFD-2851-49FE-809B-A19D2970F59A.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "T03-notification-digest-expanded_0_6F976397-891F-4A9A-8D46-2B3D32E60CCF.png",
+        "timestamp": 1793419960.852
+      },
+      "revision": "1f7f9900",
+      "selector": "TodayReadingUITests/testNotificationDigestUsesSameExpandableCard()"
+    },
+    {
+      "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-briefing-digest-hub-message-current/attachments/4D786170-081D-4BFE-B378-1D4FCCA0A58A.png",
+      "sha256": "bcdbbc4adf5938e0853d0f51824706559cb00d3003079c8eb0d6fc2c01d0e940",
+      "native_attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+        "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-validation-644069bf7efc",
+        "exportedFileName": "4D786170-081D-4BFE-B378-1D4FCCA0A58A.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "T03-notification-digest-collapsed_0_80859D97-11F6-4D46-8191-7466E0F439F4.png",
+        "timestamp": 1793419955.826
+      },
+      "revision": "1f7f9900",
+      "selector": "TodayReadingUITests/testNotificationDigestUsesSameExpandableCard()"
+    }
+  ],
+  "Oct27_T10_original_alternatives": [
+    {
+      "file": "images/iphone-T03-notification-digest-expanded.png",
+      "sha256": "dd46d7e007dd93cd7ece2d0ea44cb5b6e29b2debb0fdfb20fdf9685b07dae51e",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "device": "iphone",
+      "screen": "T10",
+      "action": "T03-notification-digest-expanded",
+      "test": "TodayReadingUITests/testNotificationDigestUsesSameExpandableCard()",
+      "timestamp": 1793032891.935,
+      "udid": "3712F209-B644-45C4-9726-44D5BF835B0B",
+      "source_export_file": "1FB58829-E3E1-41DF-8519-CCCA6242D5DD.png",
+      "result_bundle": "Test-DUNEUITests-2026.10.27_01-38-33-+0900.xcresult",
+      "active": true,
+      "method": "XCTest app.screenshot attachment from passed selector",
+      "text_size": "default",
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/docs/design/full-redesign-map/review/daily-summary-reading-2026-10-27/images/iphone-T03-notification-digest-expanded.png"
+    },
+    {
+      "file": "images/iphone-T03-notification-digest-collapsed.png",
+      "sha256": "0a1735d2edd4984c1eb617f8b8f91f6ed4b8bbcd21e9e0a833871a272d34806a",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "device": "iphone",
+      "screen": "T10",
+      "action": "T03-notification-digest-collapsed",
+      "test": "TodayReadingUITests/testNotificationDigestUsesSameExpandableCard()",
+      "timestamp": 1793032887.164,
+      "udid": "3712F209-B644-45C4-9726-44D5BF835B0B",
+      "source_export_file": "8D8439BF-E363-43E1-BB9B-54A5DD77837A.png",
+      "result_bundle": "Test-DUNEUITests-2026.10.27_01-38-33-+0900.xcresult",
+      "active": true,
+      "method": "XCTest app.screenshot attachment from passed selector",
+      "text_size": "default",
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/docs/design/full-redesign-map/review/daily-summary-reading-2026-10-27/images/iphone-T03-notification-digest-collapsed.png"
+    },
+    {
+      "file": "images/ipad-T03-notification-digest-expanded.png",
+      "sha256": "2c16d089ed31d97b5e74104e834e13b1565e4feb773e3a626059c05e8e8b8d5a",
+      "pixels": [
+        2064,
+        2752
+      ],
+      "device": "ipad",
+      "screen": "T10",
+      "action": "T03-notification-digest-expanded",
+      "test": "TodayReadingUITests/testNotificationDigestUsesSameExpandableCard()",
+      "timestamp": 1793033480.259,
+      "udid": "B5F1F37C-3383-46DF-AC6F-8DB7081336CE",
+      "source_export_file": "5115C493-EE61-4F3A-89CF-62E061022DFA.png",
+      "result_bundle": "Test-DUNEUITests-2026.10.27_01-49-12-+0900.xcresult",
+      "active": true,
+      "method": "XCTest app.screenshot attachment from passed selector",
+      "text_size": "default",
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/docs/design/full-redesign-map/review/daily-summary-reading-2026-10-27/images/ipad-T03-notification-digest-expanded.png"
+    },
+    {
+      "file": "images/ipad-T03-notification-digest-collapsed.png",
+      "sha256": "eac30e6343bdc16e454ca512500af28cdaa94fc7b1ac03da9e2b60ec6b1dedd4",
+      "pixels": [
+        2064,
+        2752
+      ],
+      "device": "ipad",
+      "screen": "T10",
+      "action": "T03-notification-digest-collapsed",
+      "test": "TodayReadingUITests/testNotificationDigestUsesSameExpandableCard()",
+      "timestamp": 1793033474.246,
+      "udid": "B5F1F37C-3383-46DF-AC6F-8DB7081336CE",
+      "source_export_file": "A29C5A96-CD7F-4CE9-8BD6-3E47137CA4C9.png",
+      "result_bundle": "Test-DUNEUITests-2026.10.27_01-49-12-+0900.xcresult",
+      "active": true,
+      "method": "XCTest app.screenshot attachment from passed selector",
+      "text_size": "default",
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/docs/design/full-redesign-map/review/daily-summary-reading-2026-10-27/images/ipad-T03-notification-digest-collapsed.png"
+    },
+    {
+      "file": "images/duo-closed-007-1398x2034.png",
+      "sha256": "1bfc35c681d1c3234c3017e684fc43d8d7cec5bad0c98acc5d83ef774d0b1626",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "device": "duo-closed",
+      "screen": "T10",
+      "action": "T03-notification-digest-collapsed",
+      "test": "TodayReadingUITests/testNotificationDigestUsesSameExpandableCard",
+      "timestamp": 1793033728.9543586,
+      "udid": "082E3835-4ED0-4323-874A-17DC5FCB194C",
+      "active": true,
+      "method": "native simctl screenshot at held XCTest checkpoint; paired displays",
+      "runner_exit": 0,
+      "test_outcome": "passed",
+      "hierarchy": "proof/duo-closed-007-hierarchy.txt",
+      "window": "Window (Main), 0x104fea940, {{0.0, 0.0}, {466.0, 678.0}}",
+      "text_size": "default",
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/docs/design/full-redesign-map/review/daily-summary-reading-2026-10-27/images/duo-closed-007-1398x2034.png"
+    },
+    {
+      "file": "paired/duo-closed-007-2007x2853.png",
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e",
+      "pixels": [
+        2007,
+        2853
+      ],
+      "device": "duo-closed",
+      "screen": "T10",
+      "action": "T03-notification-digest-collapsed",
+      "test": "TodayReadingUITests/testNotificationDigestUsesSameExpandableCard",
+      "timestamp": 1793033728.4486728,
+      "udid": "082E3835-4ED0-4323-874A-17DC5FCB194C",
+      "active": false,
+      "method": "native simctl screenshot at held XCTest checkpoint; paired displays",
+      "runner_exit": 0,
+      "test_outcome": "passed",
+      "hierarchy": "proof/duo-closed-007-hierarchy.txt",
+      "window": "Window (Main), 0x104fea940, {{0.0, 0.0}, {466.0, 678.0}}",
+      "text_size": "default",
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/docs/design/full-redesign-map/review/daily-summary-reading-2026-10-27/paired/duo-closed-007-2007x2853.png"
+    },
+    {
+      "file": "images/duo-closed-008-1398x2034.png",
+      "sha256": "cc36daad75c56e1c7b38c11c55223386842987aae84be4f7bbd88bc4999b1e9b",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "device": "duo-closed",
+      "screen": "T10",
+      "action": "T03-notification-digest-expanded",
+      "test": "TodayReadingUITests/testNotificationDigestUsesSameExpandableCard",
+      "timestamp": 1793033736.887276,
+      "udid": "082E3835-4ED0-4323-874A-17DC5FCB194C",
+      "active": true,
+      "method": "native simctl screenshot at held XCTest checkpoint; paired displays",
+      "runner_exit": 0,
+      "test_outcome": "passed",
+      "hierarchy": "proof/duo-closed-008-hierarchy.txt",
+      "window": "Window (Main), 0x111f16300, {{0.0, 0.0}, {466.0, 678.0}}",
+      "text_size": "default",
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/docs/design/full-redesign-map/review/daily-summary-reading-2026-10-27/images/duo-closed-008-1398x2034.png"
+    },
+    {
+      "file": "paired/duo-closed-008-2007x2853.png",
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e",
+      "pixels": [
+        2007,
+        2853
+      ],
+      "device": "duo-closed",
+      "screen": "T10",
+      "action": "T03-notification-digest-expanded",
+      "test": "TodayReadingUITests/testNotificationDigestUsesSameExpandableCard",
+      "timestamp": 1793033736.3728569,
+      "udid": "082E3835-4ED0-4323-874A-17DC5FCB194C",
+      "active": false,
+      "method": "native simctl screenshot at held XCTest checkpoint; paired displays",
+      "runner_exit": 0,
+      "test_outcome": "passed",
+      "hierarchy": "proof/duo-closed-008-hierarchy.txt",
+      "window": "Window (Main), 0x111f16300, {{0.0, 0.0}, {466.0, 678.0}}",
+      "text_size": "default",
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/docs/design/full-redesign-map/review/daily-summary-reading-2026-10-27/paired/duo-closed-008-2007x2853.png"
+    },
+    {
+      "file": "paired/duo-open-007-1398x2034.png",
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+      "pixels": [
+        2034,
+        1398
+      ],
+      "device": "duo-open",
+      "screen": "T10",
+      "action": "T03-notification-digest-collapsed",
+      "test": "TodayReadingUITests/testNotificationDigestUsesSameExpandableCard",
+      "timestamp": 1793035482.0321207,
+      "udid": "082E3835-4ED0-4323-874A-17DC5FCB194C",
+      "active": false,
+      "method": "native simctl screenshot at held XCTest checkpoint; paired displays",
+      "runner_exit": 0,
+      "test_outcome": "passed",
+      "hierarchy": "proof/duo-open-007-hierarchy.txt",
+      "window": "Window, 0x11428a080, {{0.0, -0.0}, {951.0, 669.0}}",
+      "text_size": "default",
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/docs/design/full-redesign-map/review/daily-summary-reading-2026-10-27/paired/duo-open-007-1398x2034.png"
+    },
+    {
+      "file": "images/duo-open-007-2007x2853.png",
+      "sha256": "0e67aecc5b57e031a4e77ecd36a197fdd9058a6748b2eb66931f8c378325c963",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "device": "duo-open",
+      "screen": "T10",
+      "action": "T03-notification-digest-collapsed",
+      "test": "TodayReadingUITests/testNotificationDigestUsesSameExpandableCard",
+      "timestamp": 1793035482.676728,
+      "udid": "082E3835-4ED0-4323-874A-17DC5FCB194C",
+      "active": true,
+      "method": "native simctl screenshot at held XCTest checkpoint; paired displays",
+      "runner_exit": 0,
+      "test_outcome": "passed",
+      "hierarchy": "proof/duo-open-007-hierarchy.txt",
+      "window": "Window, 0x11428a080, {{0.0, -0.0}, {951.0, 669.0}}",
+      "text_size": "default",
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/docs/design/full-redesign-map/review/daily-summary-reading-2026-10-27/images/duo-open-007-2007x2853.png"
+    },
+    {
+      "file": "paired/duo-open-008-1398x2034.png",
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+      "pixels": [
+        2034,
+        1398
+      ],
+      "device": "duo-open",
+      "screen": "T10",
+      "action": "T03-notification-digest-expanded",
+      "test": "TodayReadingUITests/testNotificationDigestUsesSameExpandableCard",
+      "timestamp": 1793035491.9692137,
+      "udid": "082E3835-4ED0-4323-874A-17DC5FCB194C",
+      "active": false,
+      "method": "native simctl screenshot at held XCTest checkpoint; paired displays",
+      "runner_exit": 0,
+      "test_outcome": "passed",
+      "hierarchy": "proof/duo-open-008-hierarchy.txt",
+      "window": "Window, 0x1073d2bc0, {{0.0, -0.0}, {951.0, 669.0}}",
+      "text_size": "default",
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/docs/design/full-redesign-map/review/daily-summary-reading-2026-10-27/paired/duo-open-008-1398x2034.png"
+    },
+    {
+      "file": "images/duo-open-008-2007x2853.png",
+      "sha256": "152cd92510b2d8c35c6aaa75e811755380a107536e591169977d20a20b11c60a",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "device": "duo-open",
+      "screen": "T10",
+      "action": "T03-notification-digest-expanded",
+      "test": "TodayReadingUITests/testNotificationDigestUsesSameExpandableCard",
+      "timestamp": 1793035492.4983153,
+      "udid": "082E3835-4ED0-4323-874A-17DC5FCB194C",
+      "active": true,
+      "method": "native simctl screenshot at held XCTest checkpoint; paired displays",
+      "runner_exit": 0,
+      "test_outcome": "passed",
+      "hierarchy": "proof/duo-open-008-hierarchy.txt",
+      "window": "Window, 0x1073d2bc0, {{0.0, -0.0}, {951.0, 669.0}}",
+      "text_size": "default",
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/docs/design/full-redesign-map/review/daily-summary-reading-2026-10-27/images/duo-open-008-2007x2853.png"
+    }
+  ],
+  "Oct27_hinge_angle": "unverified",
+  "phone_after_native_images": [
+    {
+      "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t10/evidence/ui-phone-report-current/attachments/C4CEEC63-9B45-4F7B-8C97-A37A8B9E5411.png",
+      "sha256": "a2180232f0e3de2e5da53120fb579512772f68bcb676ca04c377228ad41965ad",
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+        "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+        "exportedFileName": "C4CEEC63-9B45-4F7B-8C97-A37A8B9E5411.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "T10-notification-report-dark-ax_0_8BE58D18-74DA-4493-B15F-8037D7EBBFB1.png",
+        "timestamp": 1793394014.519
+      },
+      "selector": "TodayReadingUITests/testNotificationDigestReportPreservesDataAndDisclosure()",
+      "revision": "dbea4ef0"
+    },
+    {
+      "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t10/evidence/ui-phone-report-current/attachments/2173C700-1A24-4528-8698-3B73EEC50446.png",
+      "sha256": "47062cfaed50138fec205fcb1c7fe314367774b788a56e1f0a8f4819e6ecb4f1",
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+        "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+        "exportedFileName": "2173C700-1A24-4528-8698-3B73EEC50446.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "T10-notification-report-dark-ax-control_0_BFF352CD-6BCA-4000-8B8E-66050E546103.png",
+        "timestamp": 1793394012.484
+      },
+      "selector": "TodayReadingUITests/testNotificationDigestReportPreservesDataAndDisclosure()",
+      "revision": "dbea4ef0"
+    },
+    {
+      "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t10/evidence/ui-phone-report-current/attachments/EB861F8E-261D-499D-BA92-1809B657EC52.png",
+      "sha256": "1acfe38830245c9a5c58135519913643f8715b59fa18bf56929ae12f7bf09435",
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+        "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+        "exportedFileName": "EB861F8E-261D-499D-BA92-1809B657EC52.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "T10-notification-report-dark-ax-title_0_2E37E925-9E7B-4525-8B13-D7BEA1C42ED0.png",
+        "timestamp": 1793394001.032
+      },
+      "selector": "TodayReadingUITests/testNotificationDigestReportPreservesDataAndDisclosure()",
+      "revision": "dbea4ef0"
+    },
+    {
+      "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t10/evidence/ui-phone-report-current/attachments/C4C73FF0-1BBB-422A-B6E1-B7B10F0CA95E.png",
+      "sha256": "fc4f346969abb0aa3e2e131e65d69d6ef5580173fc37d8e830ac6e2f58767505",
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+        "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+        "exportedFileName": "C4C73FF0-1BBB-422A-B6E1-B7B10F0CA95E.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "T10-notification-report-expanded_0_065ACAA1-ACFC-4554-9FBD-5E3459A72841.png",
+        "timestamp": 1793393991.126
+      },
+      "selector": "TodayReadingUITests/testNotificationDigestReportPreservesDataAndDisclosure()",
+      "revision": "dbea4ef0"
+    },
+    {
+      "file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t10/evidence/ui-phone-report-current/attachments/3ED6F541-E335-4C6A-9837-A813F43E7825.png",
+      "sha256": "40cc2ebc7d3f62e4ed9c752a875ced4140646ca5834cf99a77b345df9ea60629",
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+        "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+        "exportedFileName": "3ED6F541-E335-4C6A-9837-A813F43E7825.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "T10-notification-report-collapsed_0_F69A7ACA-FA1A-4C97-9506-2D56B56332BF.png",
+        "timestamp": 1793393986.288
+      },
+      "selector": "TodayReadingUITests/testNotificationDigestReportPreservesDataAndDisclosure()",
+      "revision": "dbea4ef0"
+    }
+  ],
+  "no_build_test_device_ci_git_mutation": true
+}
