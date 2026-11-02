@@ -133,12 +133,21 @@
     "T07": {
       "row_id": "T07",
       "evidence": "all-data-screen-sleep",
-      "test": "TodaySettingsRegressionTests/testSleepMetricOpensMetricDetailAndAllData()",
-      "action": "tap metric-detail-show-all-data",
-      "timestamp": 1791821012.867,
-      "image": "94E3726F-2E3F-4ED1-AA1E-1E4B6BBFA464.png",
-      "screen": "screen-0-2064x2752-tap metric-detail-show-all-data_0_D8ABCA6F-6FE2-4243-9012-C330A0228179.png",
-      "file": "T07.png"
+      "test": "DUNEUITests/AllDataDetailRedesignTests/testAllCategoryReadyRowsAndCaptures",
+      "action": "T07-sleep-native_0_346701D5-A937-49CB-B578-C19137E532B0.png",
+      "timestamp": 1793416758.444,
+      "timestamp_kind": "native-XCTest-attachment",
+      "image": "7912222C-04CB-4889-BC47-6BCB3E1DC67A.png",
+      "screen": "7912222C-04CB-4889-BC47-6BCB3E1DC67A.png",
+      "file": "T07.png",
+      "source_revision": "ed844d14",
+      "source_worktree_dirty": false,
+      "device_udid": "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+      "sha256": "8403057ad3ab337e789a5a347ea195e8c0d3b19a61c032c3fb1aa07aa0131442",
+      "source_json": "../../../full-redesign-map/review/t07-all-data-native-2026-11-02/evidence.json",
+      "source_record": "four_tier_after.ipad",
+      "capture_scope": "Historical Oct31 matrix, one method/16 categories",
+      "pose_readback_verified": false
     },
     "T06": {
       "row_id": "T06",
