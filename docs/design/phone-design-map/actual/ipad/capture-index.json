@@ -1027,12 +1027,21 @@
     "T13": {
       "row_id": "T13",
       "evidence": "notification-destination-unavailable-screen",
-      "test": "DesignMapNotificationDetailTests/testNotificationDestinationUnavailable()",
-      "action": "tap Unavailable Route Fixture",
-      "timestamp": 1791839153.094,
-      "image": "14B8BC20-54F8-40E2-9929-A09AD6BC7803.png",
-      "screen": "screen-0-2064x2752-tap Unavailable Route Fixture_0_81270874-B5DB-4FA7-8289-4FD64E06E178.png",
-      "file": "T13.png"
+      "test": "DUNEUITests/DesignMapNotificationDetailTests/testNotificationDestinationUnavailable",
+      "action": "screen-0-2064x2752-T13 unavailable destination verified before Back_0_E193BE6A-7E97-43EF-A68F-A8BA26598793.png",
+      "timestamp": 1793617604.373,
+      "timestamp_kind": "native-XCTest-attachment",
+      "image": "781055A4-B2F0-4DB3-988D-58ED4939E3BD.png",
+      "screen": "screen-0-2064x2752-T13 unavailable destination verified before Back_0_E193BE6A-7E97-43EF-A68F-A8BA26598793.png",
+      "file": "T13.png",
+      "source_revision": "3fac15d4",
+      "source_worktree_dirty": false,
+      "device_udid": "4F2B4B87-9F2F-4D06-976C-64B64A091399",
+      "sha256": "7c141c1e0b84ed495ef09a246f0d3836bf8fd135d3ddeca107535df53f02b258",
+      "source_json": "../../../full-redesign-map/review/t13-notification-unavailable-native-2026-11-02/evidence.json",
+      "source_record": "pairs.ipad.after",
+      "capture_scope": "T13 existing localized unavailable copy, actual inbox UUID and own GoBack; historical Phone normal+MAX separate from fresh normal cases",
+      "pose_readback_verified": false
     },
     "T16": {
       "row_id": "T16",

@@ -1,7 +1,7 @@
 ---
 tags: [notification, detail-redesign, swiftui, ios]
 date: 2026-10-31
-status: in-progress
+status: verified
 ---
 
 # T13 notification destination unavailable
@@ -38,3 +38,14 @@ Actual latest main a6ec9be1 contains completed T11/T12. The merged prefix preser
 Reuse clean734 Phone normal+dark/MAX2/2 PASS under this exact product/test/route/payload closure. Add only one existing normal case on iPad and one each on Duo closed/open, preserving explicit Go Back tap and actual hub return, exact original copy and real UUID assertions. Duo uses owned registration, SDK/active-display readbacks and strict native checkpoints; one device at a time, deadline1200 and no parallel heavy runner. No additional local unit/full UI/Watch or standalone duplicate build is warranted for this presentation-only change.
 
 Five distinct source reviews and UI test-design/source quality found zero actionable findings. Theme union10themes/23studies, Swift parse and source preservation checks passed. Historical iPad baseline group contains a separate bedtime failure; only the original T13 node passed, and it is a before image, not redesigned runtime proof. New iPad/Duo results and final comparisons/Compound/ship remain pending at this checkpoint.
+
+
+## Final native verification — 2026-11-02
+
+- Publicff68a35c preserves T11/T12 maina6ec and original734 T13. The shared NotificationHubView.swift file truly equals frozen3fac here; the full UI test file does not, but T13 block, common entry helper and launch configuration match. This is no whole-repository equality claim.
+- Historical clean734 Phone normal+dark/MAX2PASS reused. Fresh iPad normal1, Duo closed1 and open1 PASS; each Duo has strictACK7, before/after0°LCD or180°LCD-1. Original copy, UUID and actual Go Back/hub return remain verified. Actual Phone/iPad/Duo three-lens reviews found zero actionable issues. No extra local Phone/unit/full UI/Watch run.
+- Closed first attempt failed before UI on SDK inventory4s timeout; raw0-test failure is retained. Same owned Booted/available device inventory0.461s established recovery; SAMEcheckID retained exactly one conditional retry success. Two original attempts and recovery evidence remain; no runner/app edit or third same-cause execution. Open passed its single planned attempt.
+- [Installed native comparisons](../design/full-redesign-map/review/t13-notification-unavailable-native-2026-11-02/index.html):12 originalPNGs, fourT13-only rows/images and related rendered pages/Today boards; all other rows/images and Watch unchanged. UUIDs differ per fresh fixture launch, so this is a same-screen-family layout comparison, not one notification across devices. iPad mini/Pro13, historicaldates and oldDuo pose uncertainty are explicit. Old iPad baseline groupFAILED6/5/1bedtime is retained with exact T13 nodePASS; not a redesign PASS.
+- Five source reviews, UI test-design and actual native quality are zero. [Compound solution](../solutions/general/2026-11-02-notification-unavailable-recovery-surface.md) records semantics, recovery and provenance. Final integration review/PR state are tracked separately.
+- Currentff68 app build passed. Automatic full iOS CI subsequently completed: Swift Testing2734/302 suites and XCTest12 PASS, job125238631157; logs retained. Watch failed before tests with missing Destination id/exit64; its source/Shared/project/workflow/runner inputs are unchanged. Same unit inputs have T12iOS2734/302+XCTest12 and latest T11Watch213/29 PASS; necessary changed-scope verification uses current app/native/review evidence, not an added whole-suite rerun. Existing CI completion is followed separately.
+- One owned device at a time; iPad4F2B and DuoE9E4 deleted and registry empty. Original .claude configuration, common settings and test runners unchanged.
