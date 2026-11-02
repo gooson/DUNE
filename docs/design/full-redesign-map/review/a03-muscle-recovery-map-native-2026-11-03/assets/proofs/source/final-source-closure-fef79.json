@@ -1,0 +1,64 @@
+{
+  "public_head": "fef79bbf61eeb3e49c6dcf512c91c6647d1619a2",
+  "current_main": "a55e1104ede6b1121ad3256543e1c4819187fd6e",
+  "whole_tree_equal": false,
+  "current_sha256": {
+    "DUNE/Presentation/Activity/MuscleMap/MuscleMapDetailView.swift": "aa2398c0b27122bf19435dc9506aef7f968c96f8ab9572f695a373ecea115042",
+    "DUNEUITests/Full/ActivityMuscleMapRegressionTests.swift": "83ca254719be38cad07aa39c715b26f2fdbe8c63fbbaee376e63cfd01c131013",
+    "DUNE/Presentation/Activity/MuscleMap/MuscleMapDetailViewModel.swift": "761c8f13add5a8b32d2c9e0a8e9489daa3e5053a38e7268c16c19533efdf1964",
+    "DUNE/Presentation/Activity/Components/MuscleRecoveryMapView.swift": "879592ff94f37b508c6e534a87fd2bbfd47f4ec4ae0b69ac518af6be1c366965",
+    "DUNE/Presentation/Activity/Components/MuscleDetailPopover.swift": "53521393ad0c9f2c2599c204b7ce435cbddae82fa2f5be5f7c252edf5efca256",
+    "DUNE/Presentation/Activity/ActivityView.swift": "9f985b8a15aff300eae065162153060d2c5e8e7cba54213035b0bc5d2ba01cc2",
+    "DUNEUITests/Helpers/UITestBaseCase.swift": "1299e3efbe08b78ebcda033b0abf0b31d1d9635b2822e45a04b5df840b3f7f1e",
+    "DUNEUITests/Helpers/UITestHelpers.swift": "1543b51342c33b2d607f910fe4f43cbf382d578c9331623b911f96603b2cef6c"
+  },
+  "ipad": "a226 1/1 historical regular configuration; same initial Recovery mode and preserved regular content/input under compact-scroll extraction; no fresh fef iPad execution",
+  "evidence": [
+    "assets/proofs/source/compact-scroll-extraction-proof.json",
+    "assets/proofs/reviews/pr890-compact-scroll-architecture.md",
+    "assets/proofs/reviews/pr890-compact-mode-state-review.md"
+  ],
+  "limits": "separate fixed poses do not establish live fold transition or complete regression",
+  "comparison_to_main": {
+    "DUNE/Presentation/Activity/MuscleMap/MuscleMapDetailView.swift": {
+      "current_blob": "5db73ddcf745dcce9599140173c2df0a79a17ed3",
+      "main_blob": "c30d0a747e2fd22959204a81affa0bc7fe427a2e",
+      "equal": false
+    },
+    "DUNEUITests/Full/ActivityMuscleMapRegressionTests.swift": {
+      "current_blob": "515e55450d8fd4128ff6e88e9b41690649c76860",
+      "main_blob": "f4bedf38ac6bb86a4c043b0b8c828c91d9b14c78",
+      "equal": false
+    },
+    "DUNE/Presentation/Activity/MuscleMap/MuscleMapDetailViewModel.swift": {
+      "current_blob": "deacda3af4602d25a262d0a45c56a2cc1324e605",
+      "main_blob": "deacda3af4602d25a262d0a45c56a2cc1324e605",
+      "equal": true
+    },
+    "DUNE/Presentation/Activity/Components/MuscleRecoveryMapView.swift": {
+      "current_blob": "7639e39be22b260a560f68431a96d2333dc6ae99",
+      "main_blob": "476ecc1d12cbd7a2b6d2336992efc791c688deec",
+      "equal": false
+    },
+    "DUNE/Presentation/Activity/Components/MuscleDetailPopover.swift": {
+      "current_blob": "c5e1bbfd79395968df9896f446a2351375b85962",
+      "main_blob": "c5e1bbfd79395968df9896f446a2351375b85962",
+      "equal": true
+    },
+    "DUNE/Presentation/Activity/ActivityView.swift": {
+      "current_blob": "07c2d6a47a8f068ef7211f55c445a24fc3167185",
+      "main_blob": "07c2d6a47a8f068ef7211f55c445a24fc3167185",
+      "equal": true
+    },
+    "DUNEUITests/Helpers/UITestBaseCase.swift": {
+      "current_blob": "19071580e5de2b8b9645964e98ee514dcbdd01e8",
+      "main_blob": "19071580e5de2b8b9645964e98ee514dcbdd01e8",
+      "equal": true
+    },
+    "DUNEUITests/Helpers/UITestHelpers.swift": {
+      "current_blob": "3f0c39a5af7a7aa9230329fcd6755ed18173d9d4",
+      "main_blob": "3f0c39a5af7a7aa9230329fcd6755ed18173d9d4",
+      "equal": true
+    }
+  }
+}

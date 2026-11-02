@@ -1,0 +1,11 @@
+# A03 compact mode state recommendation
+
+Recommend the narrowly scoped parent-owned `@State MapMode` plus optional external binding on `MuscleRecoveryMapView`, default nil to retain its existing local state for Activity root. The compact/regular conditional changes SwiftUI structural identity; child-local `@State mode` can reset when the map is reconstructed during a size-class transition. The already parent-owned selected muscle does not protect that separate mode.
+
+Use one effective binding that reads and writes the supplied binding when present, otherwise the existing local `@State`, and use its wrapped value consistently for picker, animation, info-sheet choice, subtitle, legend and muscle colors (current mode references at lines 40, 65, 81, 99, 183 and 196). Avoid an external/local state pair that can drift or a fallback setter that silently writes only local state when an external binding exists. Existing caller gets nil/default and original semantics; A03 passes its parent binding. No global AdaptivePane change or presentation model is needed.
+
+This retains the selected Recovery/Sets value across parent-preserving size-class branch changes; it does not establish modal-sheet survival or survival after destruction of the parent view. Existing regular iPad normal image remains bounded historical pixel evidence for default recovery after source/input review, not execution of the new binding; fresh current open evidence and the changed compact views remain necessary. A real mode-switch then fold/unfold readback would specifically verify this continuity if within authorized native scope; separate fixed-pose default captures alone cannot prove it. Static recommendation only; no source edit, build, test or device action.
+
+## Implemented delta review
+
+CLEAR: no actionable finding in the actual two-View mode-binding delta. A03 supplies parent `$mapMode`; Picker writes `modeSelection ?? $mode`, and animation, info action, subtitle, legend and colors consistently read `selectedMode`. The nil default preserves the other consumer's local mode. This is static review only; parent reports Swift parse PASS. No target compile, runtime fold transition or modal-persistence claim is made. Historical iPad default pixels remain bounded recovery-state evidence, not a full-source match.
