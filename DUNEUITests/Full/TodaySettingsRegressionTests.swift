@@ -748,7 +748,9 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         let scrollFrame = scroll.frame.intersection(window)
         let navigation = briefing.descendants(matching: .navigationBar).firstMatch
         let done = app.buttons[AXID.dashboardMorningBriefingDismiss].firstMatch
-        let toolbarBottom = max(navigation.frame.maxY, done.frame.maxY)
+        let navigationBottom = navigation.exists ? navigation.frame.maxY : scrollFrame.minY
+        let doneBottom = done.exists ? done.frame.maxY : scrollFrame.minY
+        let toolbarBottom = max(navigationBottom, doneBottom)
         let top = max(scrollFrame.minY, toolbarBottom + 8)
         return CGRect(x: scrollFrame.minX, y: top, width: scrollFrame.width,
                       height: max(0, scrollFrame.maxY - top - 8))
@@ -781,7 +783,27 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
 
     private func assertBriefingDoneReachable() {
         let done = app.buttons[AXID.dashboardMorningBriefingDismiss].firstMatch
-        XCTAssertTrue(done.waitForExistence(timeout: 5))
+        let briefing = app.descendants(matching: .any)[AXID.dashboardMorningBriefingScreen].firstMatch
+        let scroll = briefing.scrollViews.firstMatch
+        // Compact sheets can collapse their toolbar while scrolling through the cards.
+        for _ in 0..<6 {
+            if done.exists && done.isHittable { break }
+            guard scroll.exists else { break }
+            let viewport = briefingContentViewport(in: briefing, scroll: scroll)
+            let scrollFrame = scroll.frame
+            guard viewport.height > 100, scrollFrame.height > 0 else { break }
+            let start = scroll.coordinate(withNormalizedOffset: CGVector(
+                dx: 0.5, dy: (viewport.minY + viewport.height * 0.35 - scrollFrame.minY) / scrollFrame.height
+            ))
+            let end = scroll.coordinate(withNormalizedOffset: CGVector(
+                dx: 0.5, dy: (viewport.minY + viewport.height * 0.65 - scrollFrame.minY) / scrollFrame.height
+            ))
+            start.press(forDuration: 0.05, thenDragTo: end)
+        }
+        guard done.waitForExistence(timeout: 5) else {
+            XCTFail("Done must exist after restoring the sheet toolbar")
+            return
+        }
         XCTAssertTrue(app.windows.firstMatch.frame.insetBy(dx: -2, dy: -2).contains(done.frame)
                       && done.isHittable, "Done must remain fully visible and tappable")
     }
