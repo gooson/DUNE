@@ -60,7 +60,7 @@ struct WorkoutReportDetailView: View {
 
             VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                 HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.sm) {
-                    heroIcon("dumbbell.fill")
+                    heroIcon("scalemass")
                     Text("Total Volume")
                         .font(.subheadline.weight(.semibold))
                 }
@@ -77,7 +77,7 @@ struct WorkoutReportDetailView: View {
                                identifier: "activity-weekly-report-sessions")
                     heroMetric("\(report.stats.activeDays)", label: "Active Days", icon: "calendar",
                                identifier: "activity-weekly-report-active-days")
-                    heroMetric("\(report.stats.totalDuration) min", label: "Total Duration", icon: "clock",
+                    heroMetric("\(report.stats.totalDuration) min", label: "Total Duration", icon: "timer",
                                identifier: "activity-weekly-report-duration")
                 }
             } else {
@@ -86,7 +86,7 @@ struct WorkoutReportDetailView: View {
                                identifier: "activity-weekly-report-sessions")
                     heroMetric("\(report.stats.activeDays)", label: "Active Days", icon: "calendar",
                                identifier: "activity-weekly-report-active-days")
-                    heroMetric("\(report.stats.totalDuration) min", label: "Total Duration", icon: "clock",
+                    heroMetric("\(report.stats.totalDuration) min", label: "Total Duration", icon: "timer",
                                identifier: "activity-weekly-report-duration")
                 }
             }
@@ -277,6 +277,12 @@ struct WorkoutReportDetailView: View {
                         ForEach(report.muscleBreakdown) { stat in
                             VStack(spacing: DS.Spacing.xs) {
                                 HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.sm) {
+                                    Image(systemName: stat.muscleGroup.iconName)
+                                        .font(dynamicTypeSize.isAccessibilitySize ? .system(size: 16) : .subheadline)
+                                        .frame(width: 26)
+                                        .clipped()
+                                        .foregroundStyle(DS.Color.activity)
+                                        .accessibilityHidden(true)
                                     Text(stat.muscleGroup.displayName)
                                         .font(.subheadline)
                                         .foregroundStyle(DS.Color.textSecondary)
