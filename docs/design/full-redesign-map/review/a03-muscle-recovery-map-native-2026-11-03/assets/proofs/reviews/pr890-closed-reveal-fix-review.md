@@ -1,0 +1,5 @@
+# A03 closed reveal test-only fix review
+
+CLEAR for the observed directional failure; no actionable P1/P2/P3. The actual delta replaces the unconditional upward swipe with at most eight short drags, scrolling down when the button lies above the viewport and up otherwise. It re-reads the button frame each iteration and retains the original full-frame containment and disabled assertions, selected-state capture, real calculation action, native grabber dismissal and Back assertions. It addresses the observed negative-Y overshoot without replacing visibility with mere existence.
+
+Static review only. The scroll/window intersection does not subtract overlay bars, so inspect actual selected-state pixels to establish unobscured visibility. The viewport is captured once, appropriate for the fixed-pose test but not evidence of live pose transition. Parent reports parse and diff-check PASS; no compile, native execution, device, source or Git mutation performed here. The original failed attempt remains failed; a separately permitted same-ID conditional retry must produce its own result.

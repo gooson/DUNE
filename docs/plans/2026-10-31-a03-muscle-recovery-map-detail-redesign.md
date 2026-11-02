@@ -1,7 +1,7 @@
 ---
 topic: a03-muscle-recovery-map-detail-2d-redesign
 date: 2026-10-31
-status: planned
+status: implemented
 confidence: medium
 related_solutions:
   - docs/solutions/architecture/2026-02-27-muscle-map-detail-view-integration.md
@@ -44,7 +44,7 @@ Use a local A03 presentation pass: an opaque, concise `Muscle Map` title context
 | Approach | Benefit | Cost | Decision |
 |---|---|---|---|
 | Replace map with new vector/3D art | Dramatic visual change | Loses current geometry, hit targets, status truth, A04 gate | Reject |
-| Recompute counts in View | New summary control | Duplicates model logic and risks 13-vs-observed denominator error | Reject |
+| Reimplement recovery or volume mathematics in View | New summary control | Duplicates model logic | Reject; derive a presentation cohort once from existing `.noData` and `.isRecovered` semantics after the observed-population review finding |
 | Local 2D composition and spacing | Preserves tested data/navigation with focused visual gain | Requires careful compact/regular and AX capture | Choose |
 
 ## Affected Files
@@ -114,3 +114,13 @@ Protected/non-target files: `MuscleMapDetailViewModel.swift` (SHA `761c8f13add5a
 ## Confidence Assessment
 
 - **Overall**: Medium. A04 source behavior, identities and phone default/selected states are verified. iPad/Duo source-matched baselines, native A03 layout and final focused tests remain future work.
+
+## Final implementation and bounded validation (2026-11-03)
+
+A03 keeps regular AdaptivePaneView and its two scrolls. Compact overrides the two stacked scroll containers with one continuous map-and-summary ScrollView, following direct inspection of a pre-fix Phone interaction pass that still cropped the map. Map mode belongs to the parent through an optional binding; other map callers keep local state. This does not claim a runtime-tested live fold transition.
+
+The recovery header, overview and subtitle derive a single observed cohort, excluding `.noData` while retaining the existing isRecovered rule. This resolves the reviewed mixed live/cached population defect. Full fatigue input still drives anatomy and volume; no retrieval, ViewModel, recovery mathematics, SVG or 3D asset changes occur.
+
+Current runtime source fef79bbf: Phone, Duo closed and Duo open each executed the exact original selection/calculation/native-grabber/Back selector once successfully. Duo checkpoints each have eight actual ACKs and pose/display readbacks before and after. The earlier closed 1b4 failed attempt remains preserved; only its direction-aware test reveal correction used a same-ID conditional retry. Historical regular iPad a226 approved-extra 1/1 PASS is reused under the reviewed unchanged regular content/input and initial Recovery configuration, not described as a fresh fef run. Original two iPad failures and consumed approval remain unchanged.
+
+Normal-text before/after gallery publication pairs the actual A04 disabled-entry baseline for each tier. Earlier Phone de559 remains diagnostic only. Source reviews and actual scoped native quality report no remaining actionable findings. Tests supply actual target compilation. No full regression, every mode/goal state, MAX, live VoiceOver or live fold continuity is claimed. Final publication and PR merge are recorded separately from implementation validation.
