@@ -1,0 +1,85 @@
+Attributes: Application, 0x104fda6c0, pid: 10700, label: 'DUNE'
+Element subtree:
+ →Application, 0x104fda6c0, pid: 10700, label: 'DUNE'
+    Window (Main), 0x104fd9a40, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x104fda940, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x104fd9180, {{0.0, 0.0}, {756.0, 1158.0}}
+        Other, 0x104fdb980, {{0.0, 0.0}, {756.0, 1158.0}}
+          Other, 0x104fda300, {{0.0, 0.0}, {756.0, 1158.0}}
+            Other, 0x104fd8c80, {{0.0, 0.0}, {756.0, 1158.0}}
+              Other, 0x104fdb480, {{0.0, 0.0}, {756.0, 1158.0}}
+                Other, 0x104fdaa80, {{0.0, 0.0}, {756.0, 1158.0}}
+                  Other, 0x104fd92c0, {{0.0, 0.0}, {756.0, 1158.0}}
+                    Other, 0x104fdb700, {{0.0, 0.0}, {756.0, 1158.0}}
+                      Other, 0x10818c000, {{0.0, 0.0}, {756.0, 1158.0}}
+                        Other, 0x10818c140, {{0.0, 0.0}, {756.0, 1158.0}}
+                          Other, 0x10818c280, {{0.0, 0.0}, {756.0, 1158.0}}
+                            NavigationBar, 0x10818c3c0, {{0.0, 96.0}, {756.0, 113.0}}, identifier: 'Injury Risk'
+                              Button, 0x10818c500, {{10.0, 96.0}, {44.0, 44.0}}, identifier: 'BackButton', label: 'Activity'
+                              StaticText, 0x10818fac0, {{328.0, 164.0}, {99.5, 26.0}}, label: 'Injury Risk'
+                            Other, 0x10818fc00, {{0.0, 0.0}, {756.0, 1158.0}}
+                              Other, 0x10818fd40, {{0.0, 0.0}, {756.0, 1158.0}}
+                                Other, 0x10818fe80, {{0.0, 0.0}, {756.0, 1158.0}}
+                                  Other, 0x10818ef80, {{0.0, 0.0}, {756.0, 1158.0}}
+                                    ScrollView, 0x10818f0c0, {{0.0, 0.0}, {756.0, 1158.0}}, identifier: 'activity-injury-risk-detail-screen'
+                                      Other, 0x10818f200, {{0.0, 0.0}, {756.0, 1158.0}}
+                                        Other, 0x10818f340, {{0.0, 0.0}, {756.0, 249.0}}
+                                      Other, 0x10818f480, {{0.0, 0.0}, {756.0, 1158.0}}
+                                      Other, 0x10818f5c0, {{0.0, 209.0}, {756.0, 1485.5}}
+                                        Other, 0x10818f700, {{54.0, 225.0}, {648.0, 324.0}}, identifier: 'activity-injury-risk-hero'
+                                          StaticText, 0x10818f840, {{74.0, 245.0}, {97.0, 51.5}}, label: 'RISK'
+                                          StaticText, 0x10818f980, {{74.0, 300.5}, {78.5, 72.0}}, identifier: 'activity-injury-risk-score', label: '42'
+                                          Image, 0x10819cb40, {{74.0, 388.5}, {32.0, 32.0}}, identifier: 'exclamationmark.shield', label: '방패 안에 있는 느낌표'
+                                          StaticText, 0x10819cdc0, {{114.0, 388.5}, {202.0, 66.0}}, identifier: 'activity-injury-risk-level', label: '보통 위험'
+                                          StaticText, 0x10819f700, {{74.0, 470.5}, {550.5, 58.5}}, label: '세션 사이 회복에 신경 쓰세요'
+                                        Other, 0x10819c3c0, {{54.0, 569.0}, {648.0, 608.5}}, identifier: 'activity-injury-risk-factors'
+                                          StaticText, 0x10819e300, {{54.0, 569.0}, {194.5, 63.5}}, label: '위험 요소'
+                                          Other, 0x10819ee40, {{54.0, 644.5}, {648.0, 291.5}}, identifier: 'activity-injury-risk-factor-muscleFatigue'
+                                            Image, 0x10819ef80, {{77.0, 664.0}, {13.5, 21.5}}, identifier: 'figure.walk', label: '걷기'
+                                            StaticText, 0x10819df40, {{110.0, 660.5}, {180.0, 58.5}}, label: '근육 피로'
+                                            StaticText, 0x10819f980, {{110.0, 723.0}, {94.0, 58.5}}, identifier: 'activity-injury-risk-contribution-muscleFatigue', label: '+24'
+                                            StaticText, 0x10819d680, {{110.0, 789.5}, {506.5, 116.5}}, label: 'Recent strength training load'
+                                            Other, 0x10819d540, {{110.0, 914.0}, {576.0, 6.0}}
+                                          Other, 0x10819ea80, {{54.0, 944.0}, {648.0, 233.5}}, identifier: 'activity-injury-risk-factor-sleepDeficit'
+                                            Image, 0x10819f840, {{76.0, 963.5}, {17.5, 21.0}}, identifier: 'moon.zzz', label: '다시 알림'
+                                            StaticText, 0x10819da40, {{110.0, 960.0}, {180.0, 58.5}}, label: '수면 부족'
+                                            StaticText, 0x10819c640, {{110.0, 1022.5}, {94.0, 58.5}}, identifier: 'activity-injury-risk-contribution-sleepDeficit', label: '+18'
+                                            StaticText, 0x10819f0c0, {{110.0, 1089.0}, {451.0, 58.5}}, label: 'Recent sleep duration'
+                                            Other, 0x10819ed00, {{110.0, 1155.5}, {576.0, 6.0}}
+                                        Other, 0x10819e080, {{54.0, 1197.5}, {648.0, 481.0}}, identifier: 'activity-injury-risk-recommendations'
+                                          StaticText, 0x10819e1c0, {{54.0, 1197.5}, {194.5, 63.5}}, label: '권장 조치'
+                                          Image, 0x10819d7c0, {{75.0, 1294.0}, {16.0, 16.0}}, identifier: 'arrow.right.circle.fill', label: '원형 오른쪽 화살표'
+                                          StaticText, 0x10819cc80, {{104.0, 1289.0}, {508.0, 116.5}}, identifier: 'activity-injury-risk-recommendation-0', label: '세션 간 충분한 휴식을 취하세요'
+                                          Image, 0x10819e440, {{75.0, 1422.5}, {16.0, 16.0}}, identifier: 'arrow.right.circle.fill', label: '원형 오른쪽 화살표'
+                                          StaticText, 0x10819db80, {{104.0, 1417.5}, {497.5, 116.5}}, identifier: 'activity-injury-risk-recommendation-1', label: '스트레칭과 가동성 운동을 포함하세요'
+                                          Image, 0x10819f5c0, {{75.0, 1551.0}, {16.0, 16.0}}, identifier: 'arrow.right.circle.fill', label: '원형 오른쪽 화살표'
+                                          StaticText, 0x10819dcc0, {{104.0, 1546.0}, {508.0, 116.5}}, identifier: 'activity-injury-risk-recommendation-2', label: '근육 통증을 주의 깊게 관찰하세요'
+                                      Other, 0x10819de00, {{723.0, 209.0}, {30.0, 902.0}}, label: '수직 스크롤 막대, 2페이지', value: 0%
+                                        Other, 0x10819c780, {{750.0, 153.0}, {3.0, 645.0}}
+                                      Other, 0x10819c8c0, {{723.0, 209.0}, {30.0, 902.0}}, label: '수직 스크롤 막대, 2페이지', value: 0%
+                                        Other, 0x10819cf00, {{750.0, 153.0}, {3.0, 645.0}}
+                            Toolbar, 0x10819d180, {{0.0, 0.0}, {756.0, 1158.0}}, identifier: 'Toolbar', label: '도구 막대'
+                              Other, 0x10819d2c0, {{0.0, 0.0}, {756.0, 1158.0}}
+                Other, 0x10819d040, {{0.0, 0.0}, {756.0, 1158.0}}
+                  Other, 0x10819d400, {{0.0, 28.0}, {756.0, 49.0}}
+                    Button, 0x10819f480, {{159.8, 32.0}, {61.5, 41.0}}, identifier: 'ToggleSideBar', label: '사이드바 토글'
+                    Button, 0x10819d900, {{221.2, 32.0}, {89.0, 41.0}}, identifier: 'tab-today', label: 'Today'
+                      Button, 0x10819e940, {{221.2, 32.0}, {89.0, 41.0}}, identifier: 'tab-today', label: 'Today'
+                    Button, 0x112414000, {{310.2, 32.0}, {103.0, 41.0}}, identifier: 'tab-activity', label: 'Activity', Selected
+                      Button, 0x112414140, {{310.2, 32.0}, {103.0, 41.0}}, identifier: 'tab-activity', label: 'Activity', Selected
+                    Button, 0x112414280, {{413.2, 32.0}, {116.5, 41.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                      Button, 0x1124143c0, {{413.2, 32.0}, {116.5, 41.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                    Button, 0x112414500, {{529.8, 32.0}, {66.5, 41.0}}, identifier: 'tab-life', label: 'Life'
+                      Button, 0x112414640, {{529.8, 32.0}, {66.5, 41.0}}, identifier: 'tab-life', label: 'Life'
+              Other, 0x112414780, {{0.0, 32.0}, {756.0, 1106.0}}
+              Other, 0x1124148c0, {{378.0, 585.0}, {0.0, 0.0}}
+    Window, 0x112414a00, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x112414b40, {{0.0, 0.0}, {756.0, 1158.0}}
+        Other, 0x112414c80, {{0.0, 0.0}, {756.0, 1158.0}}
+Path to element:
+ →Application, 0x104fda6c0, pid: 10700, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x112414dc0, pid: 10700, label: 'DUNE'
+  }

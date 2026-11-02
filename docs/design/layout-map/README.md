@@ -41,6 +41,8 @@ Life의 링 옆에는 현재 진행 상태를 설명하는 문장을 둔다. 히
 
 2026-10-31 [A07 운동 종류 상세 배치](activity-exercise-type-detail-a07.html)는 실제 유형별 시간·칼로리·세션, 조건부 거리/무게 볼륨, 4기간 분 추세, 건강 앱 최근 세션의 읽기 순서를 제안한다. 수치·도형은 설명용이며 원본 네이티브 Week/Month 캡처는 현재 확인 대기다. [테마 표현](../theme-map/themes/dune-exercise-type-detail-a07.html)은 별도 정적 시안이다.
 
+2026-10-31 [A08 부상 위험 상세 배치](activity-injury-risk-detail-a08.html)는 실제 평가 점수·단계, 공급된 요인과 최대 요인 대비 상대 막대, 원래 권장 문구 및 nil/0점 분기를 구분한다. [DUNE 밝음·어두움 표현](../theme-map/themes/dune-injury-risk-detail-a08.html)은 정적 제안이다. DEBUG 점수42/두 요인은 라우트 검증용이고 원본 네이티브 캡처는 아직 확인 대기다.
+
 ## 화면별 맵 목록
 
 2026-10-31 [A06 Training Volume 상세 배치](activity-training-volume-detail-a06.html)는 실제 네 기간·네 현재/이전 지표·1W 주간 목표 링과 긴 기간의 실제 활동일 건수/별도 주간 참고·한 날짜 범위·도넛 세 모드·분 단위 일별 차트와 조건부 하위 그래프를 보존하는 제안이다. HTML 숫자는 예시이며 실제 앱 캡처가 아니다. [구현 계획](../../plans/2026-10-31-a06-training-volume-detail-redesign.md)과 [테마 표현](../theme-map/themes/dune-training-volume-detail-a06.html)을 함께 본다.

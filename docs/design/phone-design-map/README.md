@@ -260,3 +260,6 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 
 
 2026-11-03 A07: [기기별 운동 종류 실제 화면과 출처](../full-redesign-map/review/a07-exercise-type-native-2026-11-03/index.html). 기존 맵 이미지의 정확한 기기·실행 버전은 미확인이며, 갤러리의 A20 원본 비교는 실행 기록으로 확인했다.
+
+
+2026-11-03 A08: [기기별 부상 위험 실제 화면과 출처](../full-redesign-map/review/a08-injury-risk-native-2026-11-03/index.html). 기존 맵 이미지의 정확한 기기·실행 버전은 미확인이며, 갤러리의 A20 원본 비교는 실행 기록으로 확인했다.
